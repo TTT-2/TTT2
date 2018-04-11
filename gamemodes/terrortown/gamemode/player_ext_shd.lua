@@ -19,7 +19,7 @@ AccessorFunc(plymeta, "role", "Role", FORCE_NUMBER)
 -- Role access
 -- basically traitor without special traitor roles (w/ teams)
 function plymeta:GetTraitor() 
-   return self:GetRole() == ROLES.TRAITOR.index 
+   return self:HasTeamRole(TEAM_TRAITOR) -- added compatibility with other addons
 end
 
 function plymeta:GetDetective() 
@@ -187,7 +187,7 @@ if CLIENT then
 
    local gmod_GetWeapons = plymeta.GetWeapons
    function plymeta:GetWeapons()
-      if self ~= LocalPlayer() then
+   
          return {}
       else
          return gmod_GetWeapons(self)
