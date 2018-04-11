@@ -83,7 +83,6 @@ ROLES.INNOCENT = {
   abbr = "inno",
   shop = false,
   team = TEAM_INNO,
-  moreThanOne = true,
   defaultEquipment = INNO_EQUIPMENT,
   buildin = true,
   scoreKillsMultiplier = 1,
@@ -100,7 +99,6 @@ ROLES.TRAITOR = {
   abbr = "traitor",
   shop = true,
   team = TEAM_TRAITOR,
-  moreThanOne = true,
   defaultEquipment = TRAITOR_EQUIPMENT,
   buildin = true,
   surviveBonus = 0.5,
@@ -118,7 +116,6 @@ ROLES.DETECTIVE = {
   abbr = "det",
   shop = true,
   team = TEAM_INNO,
-  moreThanOne = true,
   defaultEquipment = SPECIAL_EQUIPMENT,
   buildin = true,
   scoreKillsMultiplier = ROLES.INNOCENT.scoreKillsMultiplier,
@@ -128,25 +125,47 @@ ROLES.DETECTIVE = {
 -- TODO: export into another file !
 -- you should use this function to add roles to TTT2
 -- TODO: should only be on server file
-function AddCustomRole(name, roleData)
+function AddCustomRole(name, roleData, conVarData)
+    -- shared
+    if conVarData.togglable then
+        CreateClientConVar("ttt_avoid_" .. roleData.name, "0", true, true)
+    end
+    
+    -- client
+    ---- empty
+    
+    -- server
     if SERVER then
-        
-        -- count ROLES
-        local i = 1 -- start at 1 to directly get free slot
-        
-        for _, v in pairs(ROLES) do
-            i = i + 1
-        end
-
-        roleData.index = i
-        ROLES[name] = roleData
-        
-        -- update DefaultEquipment
-        DefaultEquipment = GetDefaultEquipment()
-        
-        print("[TTT2] Added '" .. name .. "' Role (index: " .. i .. ")")
-        
-        return i
+    
+        -- necessary to init roles in this way, because we need to wait until the ROLES array is initialized 
+	    -- and every important function works properly
+	    hook.Add("TTT2_RoleInit", "Add_" .. roleData.abbr .. "_Role", function() -- unique hook identifier please
+		    if not ROLES[name] then -- count ROLES
+                local i = 1 -- start at 1 to directly get free slot
+                
+                for _, v in pairs(ROLES) do
+                    i = i + 1
+                end
+                
+                roleData.index = i
+                ROLES[name] = roleData
+                
+                -- update DefaultEquipment
+                DefaultEquipment = GetDefaultEquipment()
+                
+                -- now add CVars
+	            CreateConVar("ttt_" .. roleData.name .. "_pct", tostring(conVarData.pct), FCVAR_NOTIFY)
+	            CreateConVar("ttt_" .. roleData.name .. "_max", tostring(conVarData.maximum))
+	            CreateConVar("ttt_" .. roleData.name .. "_min_players", tostring(conVarData.minPlayers))
+                
+                if conVarData.credits ~= nil then
+                    CreateConVar("ttt_" .. roleData.abbr .. "_credits_starting", tostring(conVarData.credits))
+                end
+                
+                -- spend an answer
+                print("[TTT2] Added '" .. name .. "' Role (index: " .. i .. ")")
+		    end
+	    end)
     end
 end
 

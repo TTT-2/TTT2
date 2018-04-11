@@ -1004,12 +1004,16 @@ local function GetEachRoleCount(ply_count, role_type)
 
    -- get number of role members: pct of players rounded down
    local role_count = math.floor(ply_count * GetConVar("ttt_" .. role_type .. "_pct"):GetFloat())
-
-   local role = GetRoleByName(role_type)
    
-   if role.moreThanOne then
+   local maxm = 1
+   
+   if ConVarExists("ttt_" .. role_type .. "_max") then
+      maxm = GetConVar("ttt_" .. role_type .. "_max"):GetInt()
+   end
+   
+   if maxm > 1 then
       -- make sure there is at least 1 of the role
-      role_count = math.Clamp(role_count, 1, GetConVar("ttt_" .. role_type .. "_max"):GetInt())
+      role_count = math.Clamp(role_count, 1, maxm)
    else
       -- there need to be max and min 1 player of this role
       --role_count = math.Clamp(role_count, 1, 1)
@@ -1072,7 +1076,7 @@ function SelectRoles()
          pply:SetRole(ROLES.TRAITOR.index)
 
          table.remove(choices, pick)
-         table.insert(traitorList, pick)
+         table.insert(traitorList, pply)
          
          ts = ts + 1
       end
