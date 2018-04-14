@@ -11,6 +11,8 @@ function ScoreInit()
       deaths = 0,
       suicides = 0,
       r = ROLES.INNOCENT.index,
+      k = 0,
+      tk = 0,
       roles = tmp,
       bonus = 0 -- non-kill points to add
    }
@@ -56,8 +58,9 @@ function ScoreEvent(e, scores, rolesTbl)
          end
       end
       
-      scores[vid].sameTeam = scores[vid].r == scores[aid].r
-      scores[aid].sameTeam = scores[vid].sameTeam
+      if scores[vid].r == scores[aid].r then
+         scores[aid].tk = scores[aid].tk + 1
+      end
 
       scores[vid].deaths = scores[vid].deaths + 1
 
@@ -67,6 +70,7 @@ function ScoreEvent(e, scores, rolesTbl)
          local roleData = GetRoleByIndex(scores[vid].r)
          
          scores[aid].roles[roleData.team] = scores[aid].roles[roleData.team] + 1
+         scores[aid].k = scores[aid].k + 1
       end
    elseif e.id == EVENT_BODYFOUND then 
       local sid = e.sid
@@ -170,7 +174,8 @@ function KillsToPoints(score)
    local roleData = GetRoleByIndex(score.r)
    return ((score.suicides * -1)
            + score.bonus
-           + (score.roles[roleData.team] * (score.sameTeam and roleData.scoreTeamKillsMultiplier or roleData.scoreKillsMultiplier))
+           + score.tk * roleData.scoreTeamKillsMultiplier
+           + score.k * roleData.scoreKillsMultiplier
            + (score.deaths == 0 and 1 or 0)) --effectively 2 due to team bonus
                                              --for your own survival
 end

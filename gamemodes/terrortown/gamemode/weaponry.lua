@@ -398,10 +398,11 @@ local function OrderEquipment(ply, cmd, args)
    
    for _, role in pairs(ROLES) do
       if role.shop then
-         local files, directories = file.Find("roleweapons/" .. role.printName .. "/*.txt", "DATA")
+         local roleName = string.lower(role.printName)
+         local files, directories = file.Find("roleweapons/" .. roleName .. "/*.txt", "DATA")
        
          for _, v in pairs(files) do 
-            local players = util.JSONToTable(file.Read("roleweapons/" .. role.printName .. "/" .. v, "DATA"))
+            local players = util.JSONToTable(file.Read("roleweapons/" .. roleName .. "/" .. v, "DATA"))
        
             for _, v in pairs(players) do 
                if swep_table ~= nil then

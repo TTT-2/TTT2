@@ -484,39 +484,36 @@ concommand.Add("Weaponshop", function(ply, cmd, args)
     net.Send(ply)
 end)
 
-for _, v in pairs(GetShopRoles()) do
-   util.AddNetworkString(v.printName .. "shop")
+util.AddNetworkString("shop")
+
+net.Receive("shop", function()
+   local role = string.lower(net.ReadString())
+   local weapon = net.ReadString()
+   local weaps = net.ReadTable()
    
-   net.Receive(v.printName .. "shop", function()
-      local roles = net.ReadString()
-      local namer = net.ReadString()
-      local Players = net.ReadTable()
+   if not file.Exists(weapon .. ".txt", "DATA/roleweapons/" .. role) then
+      local tab = util.TableToJSON(weaps) -- Convert the weapons table to JSON
+      local filename = "roleweapons/" .. role .. "/" .. weapon .. ".txt"
       
-      if not file.Exists(namer .. ".txt", "DATA/roleweapons/" .. v.printName) then
-         local tab = util.TableToJSON(Players) -- Convert the player table to JSON
-         
-         file.CreateDir("roleweapons") -- Create the directory
-         file.CreateDir("roleweapons/" .. v.printName) -- Create the directory
-         file.Write("roleweapons/" .. v.printName .. "/" .. namer .. ".txt", tab) -- Write to .txt
-         file.Write("../" .. namer .. ".txt", tab) -- Write to .txt
-      end
-   end)
-end
+      file.CreateDir("roleweapons") -- Create the directory
+      file.CreateDir("roleweapons/" .. role) -- Create the directory
+      file.Write(filename, tab) -- Write to .txt
+   end
+end)
 
--- TODO 
-for _, v in pairs(GetShopRoles()) do
-   util.AddNetworkString(v.abbr .. "weaponshopper")
-end
+util.AddNetworkString("weaponshopper")
 
-timer.Create("weaponshopperman", 0.5, 0,function()
+timer.Create("weaponshopperman", 0.5, 0, function()
    for _, v in pairs(GetShopRoles()) do
-      local files, dirs = file.Find("roleweapons/" .. v.printName .. "/*.txt", "DATA")
+      local role = string.lower(v.printName)
+      local files, dirs = file.Find("roleweapons/" .. role .. "/*.txt", "DATA")
 
       for _, l in pairs(files) do
-         local players = util.JSONToTable(file.Read("roleweapons/" .. v.printName .. "/" .. l, "DATA"))
+         local weaps = util.JSONToTable(file.Read("roleweapons/" .. role .. "/" .. l, "DATA"))
       
-         net.Start(v.abbr .. "weaponshopper")
-         net.WriteTable(players)
+         net.Start("weaponshopper")
+         net.WriteUInt(v.index - 1, ROLE_BITS)
+         net.WriteTable(weaps)
          net.Broadcast()
       end
    end

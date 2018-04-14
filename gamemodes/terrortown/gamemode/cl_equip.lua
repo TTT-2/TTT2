@@ -24,40 +24,26 @@ include("favorites_db.lua")
 
 realweaponsshop = {}
 
-shopRoles = GetShopRoles()
+net.Receive("weaponshopper", function()
+   local role = net.ReadUInt(ROLE_BITS) + 1
 
-hook.Add("TTT2_FinishedSync", "updateWeaponShps", function(first)
-   shopRoles = GetShopRoles()
-   
-   realweaponsshop = {}
-   
-   for _, v in pairs(shopRoles) do
-       realweaponsshop[v.index] = {}
+   if not realweaponsshop[role] then
+      realweaponsshop[role] = {}
    end
-
-   for _, v in pairs(shopRoles) do
-       net.Receive(v.abbr .. "weaponshopper", function()
-           local tbl = realweaponsshop[v.index]
-           
-           for _, c in pairs(net.ReadTable()) do
-               if not table.HasValue(tbl, c) then
-                   table.insert(tbl, c)
-               end
-           end
-       end)
+   
+   for _, c in pairs(net.ReadTable()) do
+      if not table.HasValue(realweaponsshop[role], c) then
+         table.insert(realweaponsshop[role], c)
+      end
    end
 end)
 
 local Equipment = nil
 
 function GetEquipmentForRole(role)
-	local Players = {}
-	local io = 0
-
-	local tab = util.TableToJSON(Players) -- Convert the player table to JSON
-    
-    for _, v in pairs(shopRoles) do
-        local tbl = realweaponsshop[v.index]
+    for _, v in pairs(GetShopRoles()) do
+        local tbl = realweaponsshop[v.index] or {}
+        
         for _, c in pairs(tbl) do 
             if not table.HasValue(weapons.GetStored(c.name).CanBuy, v.index) then
                 table.insert(weapons.GetStored(c.name).CanBuy, v.index)
@@ -221,9 +207,9 @@ local function DrawSelectedEquipment(pnl)
 end
 
 function PANEL:SelectPanel(pnl)
-	self.BaseClass.SelectPanel(self, pnl)
-    
 	if pnl then
+        self.BaseClass.SelectPanel(self, pnl)
+    
 		pnl.PaintOver = DrawSelectedEquipment
 	end
 end
@@ -649,84 +635,6 @@ local function ReceiveEquipment()
 end
 net.Receive("TTT_Equipment", ReceiveEquipment)
 
-local function ReceiveEquipment2()
-	local DermaPanel = vgui.Create("DFrame")
-	DermaPanel:SetPos(50,50)
-	DermaPanel:SetSize(500, 700)
-	DermaPanel:SetTitle("Testing Derma Stuff")
-	DermaPanel:SetVisible(true)
-	DermaPanel:SetDraggable(true)
-	DermaPanel:ShowCloseButton(true)
-	DermaPanel:MakePopup()
-
-	local DermaListView = vgui.Create("DListView")
-	DermaListView:SetParent(DermaPanel)
-	DermaListView:SetPos(25, 50)
-	DermaListView:SetSize(450, 500)
-	DermaListView:SetMultiSelect(false)
-	DermaListView:AddColumn("Name") -- Add column
-	DermaListView:AddColumn("In Game Name")
-
-	local menu = vgui.Create("DComboBox")
-	menu:SetParent(DermaPanel)
-	menu:SetPos(25, 560)
-    
-    local i = 0
-    for _, v in pairs(GetShopRoles()) do
-        i = i + 1
-        if i == 1 then
-            menu:SetValue(v.printName)
-        end
-        
-        menu:AddChoice(v.printName)
-    end
-
-	local TextEntry = vgui.Create("DTextEntry", frame) -- create the form as a child of frame
-	TextEntry:SetParent(DermaPanel)
-	TextEntry:SetSize(100, 25)
-	TextEntry:SetPos(390, 560)
-	TextEntry:SetText("Sample String")
-	TextEntry.OnEnter = function(self)
-		--	chat.AddText(self:GetValue())	-- print the form's text as server text
-	end
-
-	local button = vgui.Create("Button")
-	button:SetParent(DermaPanel)
-	button:SetSize(150, 30)
-	button:SetPos(175, 600)
-	button:SetVisible(true)
-	button:SetText("Click Me")
-	function button:DoClick()
-		local Players = {}
-		local io = 0
-        
-		for _, v in pairs(weapons.GetList()) do 
-			if v.ClassName == TextEntry:GetValue() then
-				io = io + 1
-				Players[v.PrintName] = {name = TextEntry:GetValue(), traitor = menu:GetValue()}
-                
-                local val = menu:GetValue()
-                
-                net.Start(val .. "shop")
-                net.WriteString(val)
-                net.WriteString(TextEntry:GetValue())
-                net.WriteTable(Players)
-                
-                print(TextEntry:GetValue())
-                
-                net.SendToServer()
-			end
-		end
-	end
-
-	for _, v in pairs(weapons.GetList()) do
-		if v.Base == "weapon_tttbase" then
-			DermaListView:AddLine(v.ClassName, v.PrintName) -- Add lines
-		end
-	end
-end
-net.Receive("weaponshopper", ReceiveEquipment2)
-
 local function ReceiveCredits()
 	local ply = LocalPlayer()
     
@@ -778,60 +686,51 @@ net.Receive("TTT_BoughtItem", ReceiveBoughtItem)
 
 local Equipmentnew = nil
 
-function GetEquipmentForRoleAll(role)
-	-- todo
-    
-    -- need to build equipment cache?
-	if not Equipmentnew then
-		-- start with all the non-weapon goodies
-		local tbl = table.Copy(EquipmentItems)
+function GetEquipmentForRoleAll()
+    -- start with all the non-weapon goodies
+    local tbl = {}
 
-		-- find buyable weapons to load info from
-		for _, v in pairs(weapons.GetList()) do
-			if v and v.CanBuy then
-				local data = v.EquipMenuData or {}
-				local base = {
-					id       = WEPS.GetClass(v),
-					name     = v.PrintName or "Unnamed",
-					limited  = v.LimitedStock,
-					kind     = v.Kind or WEAPON_NONE,
-					slot     = (v.Slot or 0) + 1,
-					material = v.Icon or "vgui/ttt/icon_id",
-					-- the below should be specified in EquipMenuData, in which case
-					-- these values are overwritten
-					type     = "Type not specified",
-					model    = "models/weapons/w_bugbait.mdl",
-					desc     = "No description specified."
-				}
+    -- find buyable weapons to load info from
+    for _, v in pairs(weapons.GetList()) do
+        if v and v.CanBuy then
+            local data = v.EquipMenuData or {}
+            local base = {
+                id       = WEPS.GetClass(v),
+                name     = v.PrintName or "Unnamed",
+                limited  = v.LimitedStock,
+                kind     = v.Kind or WEAPON_NONE,
+                slot     = (v.Slot or 0) + 1,
+                material = v.Icon or "vgui/ttt/icon_id",
+                -- the below should be specified in EquipMenuData, in which case
+                -- these values are overwritten
+                type     = "Type not specified",
+                model    = "models/weapons/w_bugbait.mdl",
+                desc     = "No description specified."
+            }
 
-				-- Force material to nil so that model key is used when we are
-				-- explicitly told to do so (ie. material is false rather than nil).
-				if data.modelicon then
-					base.material = nil
-				end
+            -- Force material to nil so that model key is used when we are
+            -- explicitly told to do so (ie. material is false rather than nil).
+            if data.modelicon then
+                base.material = nil
+            end
 
-				table.Merge(base, data)
+            table.Merge(base, data)
 
-				-- add this buyable weapon to all relevant equipment tables
-				for _, r in pairs(v.CanBuy) do
-					table.insert(tbl[r], base)
-				end
-			end
-		end
+            -- add this buyable weapon to all relevant equipment tables
+            if v.CanBuy then
+                table.insert(tbl, base)
+            end
+        end
+    end
 
-		-- mark custom items
-		for r, is in pairs(tbl) do
-			for _, i in pairs(is) do
-				if i and i.id then
-					i.custom = not table.HasValue(DefaultEquipment[r], i.id)
-				end
-			end
-		end
+    -- mark custom items
+    for _, i in pairs(tbl) do
+        if i and i.id then
+            i.custom = not table.HasValue(DefaultEquipment[r], i.id)
+        end
+    end
 
-		Equipmentnew = tbl
-	end
-
-	return Equipmentnew and Equipmentnew[role] or {}
+	return tbl or {}
 end
 
 net.Receive("newshop", function()
@@ -877,7 +776,7 @@ net.Receive("newshop", function()
 
 	local ply = LocalPlayer()
 
-	local items = GetEquipmentForRoleAll(ply:GetRole())
+	local items = GetEquipmentForRoleAll()
 
 	local to_select = nil
     
@@ -936,14 +835,7 @@ net.Receive("newshop", function()
 		ic:SetTooltip(tip)
 
 		-- If we cannot order this item, darken it
-		if (not can_order or
-		-- already owned
-		table.HasValue(owned_ids, item.id) or
-		tonumber(item.id) and ply:HasEquipmentItem(tonumber(item.id)) or
-		-- already carrying a weapon for this slot
-		ItemIsWeapon(item) and not CanCarryWeapon(item) or
-		-- already bought the item before
-		item.limited and ply:HasBought(tostring(item.id))) then
+		if not can_order then
 			ic:SetIconColor(color_darkened)
 		end
 
@@ -957,7 +849,7 @@ net.Receive("newshop", function()
 	-- margin
 	local m = 5
 
-	local dih = h - bh - m*5
+	local dih = h - bh - m * 5
 
 	local menu = vgui.Create("DComboBox")
 	menu:SetParent(DermaPanel)
@@ -980,9 +872,6 @@ net.Receive("newshop", function()
 	dfav:SetVisible(true)
 	dfav:SetText("Click Me")
 	dfav.DoClick = function()
-		local ply = LocalPlayer()
-		local role = ply:GetRole()
-		local guid = ply:SteamID()
 		local pnl = dlist.SelectedPanel
         
 		if not pnl or not pnl.item then return end
@@ -990,22 +879,20 @@ net.Receive("newshop", function()
 		local choice = pnl.item
 		local weapon = choice.id
 
-		local Players = {}
-		local io = 0
+		local weaps = {}
         
-		for _,v in pairs(weapons.GetList()) do 
+		for _, v in pairs(weapons.GetList()) do 
 			if v.ClassName == weapon then
-				io = io + 1
-				Players[v.PrintName] = {name = weapon, traitor = menu:GetValue()}
+				weaps[v.PrintName] = {name = weapon, traitor = menu:GetValue()}
                 
                 local val = menu:GetValue()
                 
-                net.Start(val .. "shop")
+                net.Start("shop")
                 net.WriteString(val)
                 net.WriteString(weapon)
-                net.WriteTable(Players)
+                net.WriteTable(weaps)
                 
-				print(weapon)
+				print("added '" .. weapon .. "' to " .. val)
                 
                 net.SendToServer()
 			end

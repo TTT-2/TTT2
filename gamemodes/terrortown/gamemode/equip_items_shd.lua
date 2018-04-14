@@ -46,7 +46,7 @@ function SetupEquipment(first)
    end
 
    for _, v in pairs(GetTeamRoles(TEAM_TRAITOR)) do
-      if EquipmentItems[v.index] == nil then
+      if not EquipmentItems[v.index] then
          EquipmentItems[v.index] = {
              -- body armor
              {  id       = EQUIP_ARMOR,
@@ -74,7 +74,7 @@ function SetupEquipment(first)
    end
 
    for _, v in pairs(GetShopRoles()) do
-      if v.team ~= TEAM_TRAITOR and EquipmentItems[v.index] == nil then
+      if v.team ~= TEAM_TRAITOR and not EquipmentItems[v.index] then
          EquipmentItems[v.index] = {
              -- body armor
              {  id       = EQUIP_ARMOR,

@@ -144,7 +144,7 @@ function CLSCORE:BuildScorePanel(dpanel)
    dlist:SetMultiSelect(false)
 
    -- TODO add other roles kills for player
-   local colnames = {"", "col_player", "col_role", "col_kills", "col_points", "col_team", "col_total"}
+   local colnames = {"", "col_player", "col_role", "col_kills1", "col_kills2", "col_points", "col_team", "col_total"}
    for _, name in pairs(colnames) do
       if name == "" then
          -- skull icon column
@@ -181,7 +181,7 @@ function CLSCORE:BuildScorePanel(dpanel)
          
          local roleData = GetRoleByIndex(s.r)
          
-         role = v and T(roleData.name)
+         role = roleData and T(roleData.name)
             
          local surv = ""
          
@@ -202,7 +202,7 @@ function CLSCORE:BuildScorePanel(dpanel)
          local points_team  = bonus[roleData.team]
          local points_total = points_own + points_team
 
-         local l = dlist:AddLine(surv, nicks[id], role, s[roleData.team], points_own, points_team, points_total)
+         local l = dlist:AddLine(surv, nicks[id], role, s.k, s.tk, points_own, points_team, points_total)
 
          -- center align
          for _, col in pairs(l.Columns) do
