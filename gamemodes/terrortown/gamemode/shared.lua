@@ -100,6 +100,7 @@ ROLES.TRAITOR = {
   shop = true,
   team = TEAM_TRAITOR,
   defaultEquipment = TRAITOR_EQUIPMENT,
+  visibleForTraitors = true, -- just for a better performance
   buildin = true,
   surviveBonus = 0.5,
   scoreKillsMultiplier = 5,

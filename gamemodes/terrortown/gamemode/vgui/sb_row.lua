@@ -114,7 +114,8 @@ function GM:TTTScoreboardRowColorForPlayer(ply)
       col.r = tmp.r
       col.g = tmp.g
       col.b = tmp.b
-      col.a = 30 -- set alpha to 30
+      --col.a = 30 -- set alpha to 30
+      col.a = 255
       
       return col
    end
@@ -223,7 +224,7 @@ function PANEL:UpdatePlayerData()
    self.sresult:SetVisible(ply.search_result ~= nil)
 
    -- more blue if a detective searched them
-   if ply.search_result and (LocalPlayer():IsDetective() or (not ply.search_result.show)) then
+   if ply.search_result and (LocalPlayer():IsDetective() or not ply.search_result.show) then
       self.sresult:SetImageColor(Color(200, 200, 255))
    end
 

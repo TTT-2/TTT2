@@ -114,6 +114,14 @@ function GetAllRolesFilterWOTeams(teamTbl, alive_only)
    end)
 end
 
+function GetSpecialRoleFilter(role, alive_only)
+   local roleData = GetRoleByIndex(role)
+
+   return GetPlayerFilter(function(p)
+      return (roleData.visibleForTraitors and not p:HasTeamRole(TEAM_TRAITOR) or not roleData.visibleForTraitors) and (not alive_only or p:IsTerror()) 
+   end)
+end
+
 ---- Communication control
 CreateConVar("ttt_limit_spectator_chat", "1", FCVAR_ARCHIVE + FCVAR_NOTIFY)
 CreateConVar("ttt_limit_spectator_voice", "1", FCVAR_ARCHIVE + FCVAR_NOTIFY)

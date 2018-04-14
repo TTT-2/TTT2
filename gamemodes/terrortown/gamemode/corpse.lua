@@ -83,6 +83,10 @@ local function IdentifyBody(ply, rag)
                   SendConfirmedTraitors(GetRoleFilter(v.index, false))
                end
                
+               if not v.specialRoleFilter and v.showOnConfirm then
+                  SendConfirmedSpecial(v.index, GetSpecialRoleFilter(v.index, false))
+               end
+               
                if v.specialRoleFilter then
                   hook.Run("TTT2_SpecialRoleFilter")
                end

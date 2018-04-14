@@ -677,6 +677,7 @@ local function ReceiveEquipment2()
         if i == 1 then
             menu:SetValue(v.printName)
         end
+        
         menu:AddChoice(v.printName)
     end
 
@@ -778,11 +779,9 @@ net.Receive("TTT_BoughtItem", ReceiveBoughtItem)
 local Equipmentnew = nil
 
 function GetEquipmentForRoleAll(role)
-	local Players = {}
-	local io = 0
-	local realweapons = {}
-
-	-- need to build equipment cache?
+	-- todo
+    
+    -- need to build equipment cache?
 	if not Equipmentnew then
 		-- start with all the non-weapon goodies
 		local tbl = table.Copy(EquipmentItems)
@@ -811,8 +810,12 @@ function GetEquipmentForRoleAll(role)
 					base.material = nil
 				end
 
+				table.Merge(base, data)
+
 				-- add this buyable weapon to all relevant equipment tables
-				table.insert(tbl[1], base)
+				for _, r in pairs(v.CanBuy) do
+					table.insert(tbl[r], base)
+				end
 			end
 		end
 
@@ -828,7 +831,7 @@ function GetEquipmentForRoleAll(role)
 		Equipmentnew = tbl
 	end
 
-	return Equipmentnew and Equipmentnew[1] or {}
+	return Equipmentnew and Equipmentnew[role] or {}
 end
 
 net.Receive("newshop", function()

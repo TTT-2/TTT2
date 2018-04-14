@@ -1169,7 +1169,7 @@ function SetRoleTypes(choices, prev_roles, roleCount, availableRoles)
          if choices_i <= type_count or not pply:GetAvoidRole(v.index) then
             pply:SetRole(v.index)
             
-            hook.Run("TTT2_RoleTypeSet")
+            hook.Run("TTT2_RoleTypeSet", pply)
             
             table.remove(choices, pick)
             choices_i = choices_i - 1

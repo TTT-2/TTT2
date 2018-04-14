@@ -71,7 +71,11 @@ function SendTeamRoleList(team, ply_or_rf, pred)
    for _, v in pairs(player.GetAll()) do
       if v:HasTeamRole(team) then
          if not pred or (pred and pred(v)) then
-            table.insert(role_ids[v:GetRole()], v:EntIndex())
+            if team == TEAM_TRAITOR and not v:GetRoleData().visibleForTraitors then
+               table.insert(role_ids[GetTeamRoles(team)[1].index], v:EntIndex())
+            else
+               table.insert(role_ids[v:GetRole()], v:EntIndex())
+            end
          end
       end
    end
@@ -146,14 +150,50 @@ function SendInnocentList(ply_or_rf)
    SendRoleListMessage(ROLES.INNOCENT.index, mergedList, GetAllRolesFilterWOTeams(tmpList))
 end
 
+function SendVisibleForTraitorList(ply_or_rf)
+   local visibleRoles = {}
+   
+   for _, v in pairs(ROLES) do
+      if v.team ~= TEAM_TRAITOR and v.visibleForTraitors then
+         table.insert(visibleRoles, v)
+      end
+   end
+
+   local tmp = {}
+
+   for _, v in pairs(visibleRoles) do
+      tmp[v.index] = {}
+   end
+   
+   for _, v in pairs(player.GetAll()) do
+      local roleData = GetRoleByIndex(v:GetRole())
+      
+      if roleData.team ~= TEAM_TRAITOR and roleData.visibleForTraitors then
+         table.insert(tmp[roleData.index], v:EntIndex())
+      end
+   end
+   
+   for _, v in pairs(visibleRoles) do
+      SendRoleListMessage(v.index, tmp[v.index], GetRoleTeamFilter(TEAM_TRAITOR))
+   end
+end
+
 function SendConfirmedTraitors(ply_or_rf)
    SendTeamRoleSilList(TEAM_TRAITOR, ply_or_rf, function(p) 
       return p:GetNWBool("body_found") 
    end)
 end
 
+function SendConfirmedSpecial(role, ply_or_rf)
+   SendRoleList(role, ply_or_rf, function(p) 
+      return p:GetNWBool("body_found")
+   end)
+end
+
 function SendFullStateUpdate()
    SendInnocentList()
+   
+   SendVisibleForTraitorList()
    
    -- TODO: Improve, not resending if current data is consistent
    
@@ -209,6 +249,9 @@ local function request_rolelist(ply)
    -- information after entities have been initialized (e.g. in InitPostEntity).
    if GetRoundState() ~= ROUND_WAIT then
       SendRoleReset(ply) -- reset every player for ply
+      
+      -- now everyone is inno
+      SendVisibleForTraitorList()
       
       -- just send detectives to all
       SendRoleList(ROLES.DETECTIVE.index, ply)
@@ -267,8 +310,8 @@ concommand.Add("ttt_force_detective", force_detective, nil, nil, FCVAR_CHEAT)
 
 local function force_role(ply, cmd, args, argStr)
    local role = tonumber(args[1])
-
    local i = 0
+   
    for _, v in pairs(ROLES) do
       i = i + 1
    end
