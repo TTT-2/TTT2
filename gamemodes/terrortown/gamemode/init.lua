@@ -107,9 +107,6 @@ CreateConVar("ttt_voice_drain_recharge", "0.05", FCVAR_NOTIFY)
 CreateConVar("ttt_namechange_kick", "1", FCVAR_NOTIFY)
 CreateConVar("ttt_namechange_bantime", "10")
 
---NewCommands
-CreateConVar("ttt_newroles_enabled", "1", FCVAR_ARCHIVE + FCVAR_NOTIFY + FCVAR_REPLICATED)
-
 local ttt_detective = CreateConVar("ttt_sherlock_mode", "1", FCVAR_ARCHIVE + FCVAR_NOTIFY)
 local ttt_minply = CreateConVar("ttt_minimum_players", "2", FCVAR_ARCHIVE + FCVAR_NOTIFY)
 
@@ -167,7 +164,11 @@ util.AddNetworkString("TTT2_RolesListSynced")
 function GM:Initialize()
    print("\n[TTT2] Server is ready to receive new roles...\n")
    
+   hook.Run("TTT2_PreRoleInit")
+   
    hook.Run("TTT2_RoleInit")
+   
+   hook.Run("TTT2_PostRoleInit")
    
    MsgN("Trouble In Terrorist Town gamemode initializing...")
    ShowVersion() 
@@ -1089,7 +1090,7 @@ function SelectRoles()
       local availableRoles = {}
       
       for _, v in pairs(ROLES) do
-         if v.team == TEAM_TRAITOR and v ~= ROLES.TRAITOR and not v.disabled then
+         if v.team == TEAM_TRAITOR and v ~= ROLES.TRAITOR and not GetConVar("ttt_" .. v.name .. "_enabled"):GetBool() then
             local tmp = GetEachRoleCount(choice_count, v.name)
             
             if tmp > 0 then
@@ -1112,7 +1113,7 @@ function SelectRoles()
    
    for _, v in pairs(ROLES) do
       if v == ROLES.DETECTIVE or newRolesEnabled then
-         if v ~= ROLES.INNOCENT and v.team ~= TEAM_TRAITOR and not v.disabled then
+         if v ~= ROLES.INNOCENT and v.team ~= TEAM_TRAITOR and not GetConVar("ttt_" .. v.name .. "_enabled"):GetBool() then
             local tmp = GetEachRoleCount(choice_count, v.name)
             
             if tmp > 0 then
@@ -1215,7 +1216,7 @@ function ToggleNewRoles(ply)
 	if ply:IsAdmin() then
 		local b = not GetConVar("ttt_newroles_enabled"):GetBool()
         
-		RunConsoleCommand("ttt_newroles_enabled", tostring(tonumber(b)))
+        GetConVar("ttt_newroles_enabled"):SetBool(b)
         
 		local word = "enabled"
         

@@ -124,12 +124,34 @@ ROLES.DETECTIVE = {
 }
 
 -- TODO: export into another file !
--- you should use this function to add roles to TTT2
--- TODO: should only be on server file
+CreateConVar("ttt_detective_enabled", "1")
+CreateConVar("ttt_newroles_enabled", "1", FCVAR_NOTIFY)
+
+-- you should only use this function to add roles to TTT2
 function AddCustomRole(name, roleData, conVarData)
     -- shared
-    if conVarData.togglable then
-        CreateClientConVar("ttt_avoid_" .. roleData.name, "0", true, true)
+    if not ROLES[name] then
+        if conVarData.togglable then
+            CreateClientConVar("ttt_avoid_" .. roleData.name, "0", true, true)
+        end
+        
+        CreateConVar("ttt_" .. roleData.name .. "_pct", tostring(conVarData.pct), FCVAR_NOTIFY)
+        CreateConVar("ttt_" .. roleData.name .. "_max", tostring(conVarData.maximum))
+        CreateConVar("ttt_" .. roleData.name .. "_min_players", tostring(conVarData.minPlayers))
+        
+        CreateConVar("ttt_" .. roleData.name .. "_enabled", "1")
+        
+        if conVarData.credits then
+            CreateConVar("ttt_" .. roleData.abbr .. "_credits_starting", tostring(conVarData.credits))
+        end
+        
+        if conVarData.creditsTraitorKill then
+            CreateConVar("ttt_" .. roleData.abbr .. "_credits_traitorkill", tostring(conVarData.creditsTraitorKill))
+        end
+        
+        if conVarData.creditsTraitorDead then
+            CreateConVar("ttt_" .. roleData.abbr .. "_credits_traitordead", tostring(conVarData.creditsTraitorDead))
+        end
     end
     
     -- client
@@ -154,15 +176,6 @@ function AddCustomRole(name, roleData, conVarData)
                 -- update DefaultEquipment
                 DefaultEquipment = GetDefaultEquipment()
                 
-                -- now add CVars
-	            CreateConVar("ttt_" .. roleData.name .. "_pct", tostring(conVarData.pct), FCVAR_NOTIFY)
-	            CreateConVar("ttt_" .. roleData.name .. "_max", tostring(conVarData.maximum))
-	            CreateConVar("ttt_" .. roleData.name .. "_min_players", tostring(conVarData.minPlayers))
-                
-                if conVarData.credits ~= nil then
-                    CreateConVar("ttt_" .. roleData.abbr .. "_credits_starting", tostring(conVarData.credits))
-                end
-                
                 -- spend an answer
                 print("[TTT2] Added '" .. name .. "' Role (index: " .. i .. ")")
 		    end
@@ -173,7 +186,7 @@ end
 -- if you add roles that can shop, modify DefaultEquipment at the end of this file
 -- TODO combine DefaultEquipment[x] and ROLES[x] !
 
--- override default settings of ttt
+-- override default settings of ttt to make it compatible with other addons
 -- Player roles
 ROLE_INNOCENT  	= ROLES.INNOCENT.index
 ROLE_TRAITOR   	= ROLES.TRAITOR.index
@@ -203,6 +216,14 @@ function GetRoleByName(name)
     end
     
     return ROLES.INNOCENT
+end
+
+function GetStartingCredits(abbr)
+    if abbr == ROLES.TRAITOR.abbr then
+        return GetConVar("ttt__credits_starting"):GetInt()
+    end
+    
+    return ConVarExists("ttt_" .. abbr .. "_credits_starting") and GetConVar("ttt_" .. abbr .. "_credits_starting"):GetInt() or 0
 end
 
 function GetShopRoles()

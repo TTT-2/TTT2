@@ -336,11 +336,11 @@ local function toggle_role(ply, cmd, args, argStr)
    if ply:IsAdmin() then
       local role = tonumber(args[1])
       local roleData = GetRoleByIndex(role)
-      local currentState = not roleData.disabled
+      local currentState = not GetConVar("ttt_" .. roleData.name .. "_enabled"):GetBool()
 
       local word = currentState and "disabled" or "enabled"
 
-      roleData.disabled = currentState
+      SetConVar("ttt_" .. roleData.name .. "_enabled"):SetBool(currentState)
 
       -- currently not necessary because [role].disabled is only relevant for the server
       --[[
