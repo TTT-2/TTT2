@@ -1090,7 +1090,7 @@ function SelectRoles()
       local availableRoles = {}
       
       for _, v in pairs(ROLES) do
-         if v.team == TEAM_TRAITOR and v ~= ROLES.TRAITOR and not GetConVar("ttt_" .. v.name .. "_enabled"):GetBool() then
+         if v.team == TEAM_TRAITOR and v ~= ROLES.TRAITOR and GetConVar("ttt_" .. v.name .. "_enabled"):GetBool() then
             local tmp = GetEachRoleCount(choice_count, v.name)
             
             if tmp > 0 then
@@ -1113,13 +1113,21 @@ function SelectRoles()
    
    for _, v in pairs(ROLES) do
       if v == ROLES.DETECTIVE or newRolesEnabled then
-         if v ~= ROLES.INNOCENT and v.team ~= TEAM_TRAITOR and not GetConVar("ttt_" .. v.name .. "_enabled"):GetBool() then
-            local tmp = GetEachRoleCount(choice_count, v.name)
+         if v ~= ROLES.INNOCENT and v.team ~= TEAM_TRAITOR and GetConVar("ttt_" .. v.name .. "_enabled"):GetBool() then
+            bool b = true
             
-            if tmp > 0 then
-               roleCount[v.index] = tmp
-               
-               table.insert(availableRoles, v)
+            if v.random then
+                b = math.random(1, 100) <= v.random
+            end
+            
+            if b then
+                local tmp = GetEachRoleCount(choice_count, v.name)
+                
+                if tmp > 0 then
+                   roleCount[v.index] = tmp
+                   
+                   table.insert(availableRoles, v)
+                end
             end
          end
       end
