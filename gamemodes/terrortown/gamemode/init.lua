@@ -158,6 +158,7 @@ util.AddNetworkString("TTT_Spectate")
 util.AddNetworkString("TTT2_Test_role")
 
 util.AddNetworkString("TTT2_SyncRolesList")
+util.AddNetworkString("TTT2_SyncSingleRole")
 util.AddNetworkString("TTT2_RolesListSynced")
 
 ---- Round mechanics
@@ -294,7 +295,7 @@ function UpdateRoleData(ply, first)
    -- this was necessary with user messages, now it's
    -- a just-in-case thing if a round somehow manages to be > 64K
    local cut = {}
-   local max = 65500
+   local max = 65499
    
    while #s ~= 0 do
       local bit = string.sub(s, 1, max - 1)
@@ -309,6 +310,44 @@ function UpdateRoleData(ply, first)
    for k, bit in pairs(cut) do
       net.Start("TTT2_SyncRolesList")
       net.WriteBool(first)
+      net.WriteBit((k ~= parts)) -- continuation bit, 1 if there's more coming
+      net.WriteString(bit)
+
+      if ply ~= nil then
+         net.Send(ply)
+      else
+         net.Broadcast()
+      end
+   end
+end
+
+function UpdateSingleRoleData(roleData, ply)
+   print("[TTT2] Sending updated role '" .. roleData.name .. "' to " .. ply:Nick() .. "...")
+   
+   local s = EncodeForStream(roleData)
+   
+   if not s then
+      return -- error occurred
+   end
+
+   -- divide into happy lil bits.
+   -- this was necessary with user messages, now it's
+   -- a just-in-case thing if a round somehow manages to be > 64K
+   local cut = {}
+   local max = 65500
+   
+   while #s ~= 0 do
+      local bit = string.sub(s, 1, max - 1)
+      
+      table.insert(cut, bit)
+
+      s = string.sub(s, max, -1)
+   end
+
+   local parts = #cut
+   
+   for k, bit in pairs(cut) do
+      net.Start("TTT2_SyncSingleRole")
       net.WriteBit((k ~= parts)) -- continuation bit, 1 if there's more coming
       net.WriteString(bit)
 
@@ -1114,9 +1153,9 @@ function SelectRoles()
    for _, v in pairs(ROLES) do
       if v == ROLES.DETECTIVE or newRolesEnabled then
          if v ~= ROLES.INNOCENT and v.team ~= TEAM_TRAITOR and GetConVar("ttt_" .. v.name .. "_enabled"):GetBool() then
-            bool b = true
+            local b = true
             
-            if v.random then
+            if v.random and v.random > 0 and v.random < 100 then
                 b = math.random(1, 100) <= v.random
             end
             

@@ -103,7 +103,7 @@ end
 
 -- this is purely to make sure last round's traitors/dets ALWAYS get reset
 -- not happy with this, but it'll do for now
-function SendInnocentList(ply_or_rf)
+function SendInnocentList()
    -- Send innocent and detectives a list of actual innocents + traitors, while
    -- sending traitors only a list of actual innocents.
    local tmp = {}
@@ -150,7 +150,7 @@ function SendInnocentList(ply_or_rf)
    SendRoleListMessage(ROLES.INNOCENT.index, mergedList, GetAllRolesFilterWOTeams(tmpList))
 end
 
-function SendVisibleForTraitorList(ply_or_rf)
+function SendVisibleForTraitorList()
    local visibleRoles = {}
    
    for _, v in pairs(ROLES) do
@@ -178,6 +178,34 @@ function SendVisibleForTraitorList(ply_or_rf)
    end
 end
 
+function SendNetworkingRolesList(role, rolesTbl)
+   local networkingRoles = {}
+   
+   for _, v in pairs(rolesTbl) do
+      if v and table.HasValue(ROLES, v) then -- theoretically not necessary, but safety first
+         table.insert(networkingRoles, v)
+      end
+   end
+
+   local tmp = {}
+
+   for _, v in pairs(networkingRoles) do
+      tmp[v.index] = {}
+   end
+   
+   for _, v in pairs(player.GetAll()) do
+      local roleData = GetRoleByIndex(v:GetRole())
+      
+      if table.HasValue(networkingRoles, roleData) then
+         table.insert(tmp[roleData.index], v:EntIndex())
+      end
+   end
+   
+   for _, v in pairs(networkingRoles) do
+      SendRoleListMessage(v.index, tmp[v.index], GetRoleFilter(role))
+   end
+end
+
 function SendConfirmedTraitors(ply_or_rf)
    SendTeamRoleSilList(TEAM_TRAITOR, ply_or_rf, function(p) 
       return p:GetNWBool("body_found") 
@@ -194,6 +222,13 @@ function SendFullStateUpdate()
    SendInnocentList()
    
    SendVisibleForTraitorList()
+   
+   -- easy role filtering method
+   for _, v in pairs(ROLES) do
+      if v.networkRoles then
+         SendNetworkingRolesList(v.index, v.networkRoles)
+      end
+   end
    
    -- TODO: Improve, not resending if current data is consistent
    
@@ -252,6 +287,13 @@ local function request_rolelist(ply)
       
       -- now everyone is inno
       SendVisibleForTraitorList()
+   
+      -- easy role filtering method
+      for _, v in pairs(ROLES) do
+         if v.networkRoles then
+            SendNetworkingRolesList(v.index, v.networkRoles)
+         end
+      end
       
       -- just send detectives to all
       SendRoleList(ROLES.DETECTIVE.index, ply)

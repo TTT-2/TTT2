@@ -183,6 +183,19 @@ function AddCustomRole(name, roleData, conVarData)
     end
 end
 
+function UpdateCustomRole(name, roleData)
+    if ROLES[name] then
+        -- necessary for networking!
+        roleData.name = ROLES[name].name
+        
+        table.Merge(ROLES[name], roleData)
+        
+        for _, v in pairs(player.GetAll()) do
+            UpdateSingleRoleData(roleData, v)
+        end
+    end
+end
+
 -- if you add roles that can shop, modify DefaultEquipment at the end of this file
 -- TODO combine DefaultEquipment[x] and ROLES[x] !
 

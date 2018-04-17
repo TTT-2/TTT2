@@ -124,6 +124,53 @@ local function ReceiveRolesTable(len)
 end
 net.Receive("TTT2_SyncRolesList", ReceiveRolesTable)
 
+local function ReceiveSingleRoleTable(len)
+   print("Received updated ROLE from server! Updating...")
+
+   local cont = net.ReadBit() == 1
+
+   buff = buff .. net.ReadString()
+
+   if cont then
+      return
+   else
+      -- do stuff with buffer contents
+
+      local json_roles = buff -- util.Decompress(buff)
+      
+      if not json_roles then
+         ErrorNoHalt("ROLE decompression failed!\n")
+      else
+         -- convert the json string back to a table
+         local tmp = util.JSONToTable(json_roles)
+
+         if istable(tmp) then
+            if tmp.name then
+               for k, v in pairs(ROLES) do
+                  if v.name == tmp.name then
+                     table.Merge(ROLES[k], tmp)
+                  end
+               end
+            end
+         else
+            ErrorNoHalt("ROLE decoding failed!\n")
+         end
+         
+         -- confirm update and process next updates
+         net.Start("TTT2_RolesListSynced")
+         net.WriteBool(false)
+         net.SendToServer()
+         
+         -- run client side
+         hook.Run("TTT2_FinishedSync", false)
+      end
+
+      -- flush
+      buff = ""
+   end
+end
+net.Receive("TTT2_SyncSingleRole", ReceiveSingleRoleTable)
+
 KARMA = {}
 
 function KARMA.IsEnabled() 
