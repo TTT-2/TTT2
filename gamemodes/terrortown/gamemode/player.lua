@@ -30,7 +30,7 @@ function GM:PlayerInitialSpawn(ply)
          if not v.specialRoleFilter then
             if v.team == TEAM_TRAITOR then
                SendRoleList(v.index, GetRoleTeamFilter(v.team))
-            elseif v ~= ROLES.INNOCENT and v ~= ROLES.DETECTIVE then
+            elseif v ~= ROLES.INNOCENT and v ~= ROLES.DETECTIVE and not v.unknownTeam then
                SendRoleList(v.index, GetRoleFilter(v.index))
             end
          else
@@ -522,7 +522,7 @@ end)
 function GM:PlayerDisconnected(ply)
    -- Prevent the disconnecter from being in the resends
    if IsValid(ply) then
-      ply:SetRole(ROLES.INNOCENT.index)
+      ply:UpdateRole(ROLES.INNOCENT.index)
    end
   
    if GetRoundState() ~= ROUND_PREP then
@@ -590,7 +590,6 @@ local deathsounds = {
    Sound("hostage/hpain/hpain5.wav"),
    Sound("hostage/hpain/hpain6.wav")
 }
-
 
 local function PlayDeathSound(victim)
    if not IsValid(victim) then return end

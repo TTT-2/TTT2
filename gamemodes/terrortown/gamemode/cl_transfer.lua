@@ -37,7 +37,7 @@ function CreateTransferMenu(parent)
    local roleData = LocalPlayer():GetRoleData()
    
    for _, p in pairs(player.GetAll()) do
-      if IsValid(p) and p:IsActive() and p:HasTeamRole(roleData.team) and p ~= LocalPlayer() then
+      if IsValid(p) and p:IsActive() and p ~= LocalPlayer() and (p:HasTeamRole(roleData.team) or hook.Run("TTT2_CanTransferToPlayer", p)) then
          dpick:AddChoice(p:Nick(), p:SteamID())
       end
    end

@@ -58,7 +58,12 @@ function ScoreEvent(e, scores, rolesTbl)
          end
       end
       
-      if scores[vid].r == scores[aid].r then
+      local roleData = GetRoleByIndex(scores[vid].r)
+      local rd = GetRoleByIndex(scores[aid].r)
+      
+      if scores[vid].r == scores[aid].r
+      or hook.Run("TTT2_ScoringGettingRole", vid) == scores[aid].r
+      or hook.Run("TTT2_ScoringGettingRole", aid) == scores[vid].r then
          scores[aid].tk = scores[aid].tk + 1
       end
 
@@ -67,8 +72,6 @@ function ScoreEvent(e, scores, rolesTbl)
       if aid == vid then
          scores[vid].suicides = scores[vid].suicides + 1
       elseif aid ~= -1 then
-         local roleData = GetRoleByIndex(scores[vid].r)
-         
          scores[aid].roles[roleData.team] = scores[aid].roles[roleData.team] + 1
          scores[aid].k = scores[aid].k + 1
       end

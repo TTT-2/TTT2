@@ -228,7 +228,11 @@ local function RoundStateChange(o, n)
 
    -- whatever round state we get, clear out the voice flags
    for _, v in pairs(player.GetAll()) do
-      v.traitor_gvoice = false
+      for _, r in pairs(ROLES) do
+         if not r.unknownTeam and r.team ~= TEAM_INNO then
+            v[r.team .. "_gvoice"] = false
+         end
+      end
    end
 end
 
@@ -261,9 +265,9 @@ local function ReceiveRole()
 
    -- after a mapswitch, server might have sent us this before we are even done
    -- loading our code
-   if not client.SetRole then return end
+   if not client.UpdateRole then return end
 
-   client:SetRole(role)
+   client:UpdateRole(role)
 
    Msg("You are: ")
    MsgN(string.upper(GetRoleByIndex(role).name))
@@ -282,11 +286,12 @@ local function ReceiveRoleList()
    for i = 1, num_ids do
       local eidx = net.ReadUInt(7) + 1 -- we - 1 worldspawn=0
       local ply = player.GetByID(eidx)
-      if IsValid(ply) and ply.SetRole then
-         ply:SetRole(role)
+      
+      if IsValid(ply) and ply.UpdateRole then
+         ply:UpdateRole(role)
 		 
-         if ply:HasTeamRole(TEAM_TRAITOR) then
-            ply.traitor_gvoice = false -- assume traitorchat by default
+         if not ply:HasTeamRole(TEAM_INNO) and not ply:GetRoleData().unknownTeam then
+            ply[ply:GetRoleData().team .. "_gvoice"] = false -- assume role's chat by default
          end
       end
    end
@@ -312,9 +317,9 @@ function GM:ClearClientState()
 
    local client = LocalPlayer()
    
-   if not client.SetRole then return end -- code not loaded yet
+   if not client.UpdateRole then return end -- code not loaded yet
 
-   client:SetRole(ROLES.INNOCENT.index)
+   client:UpdateRole(ROLES.INNOCENT.index)
 
    client.equipment_items = EQUIP_NONE
    client.equipment_credits = 0
@@ -328,7 +333,7 @@ function GM:ClearClientState()
    for _, p in pairs(player.GetAll()) do
       if IsValid(p) then
          p.sb_tag = nil
-         p:SetRole(ROLES.INNOCENT.index)
+         p:UpdateRole(ROLES.INNOCENT.index)
          p.search_result = nil
       end
    end

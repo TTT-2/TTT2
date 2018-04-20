@@ -186,6 +186,8 @@ function SendNetworkingRolesList(role, rolesTbl)
          table.insert(networkingRoles, v)
       end
    end
+   
+   if #networkRoles == 0 then return end
 
    local tmp = {}
 
@@ -229,6 +231,8 @@ function SendFullStateUpdate()
          SendNetworkingRolesList(v.index, v.networkRoles)
       end
    end
+   
+   hook.Run("TTT2_SendFullStateUpdate")
    
    -- TODO: Improve, not resending if current data is consistent
    
@@ -321,7 +325,7 @@ concommand.Add("_ttt_request_rolelist", request_rolelist)
 
 -- override
 local function force_terror(ply)
-   ply:SetRole(ROLES.INNOCENT.index)
+   ply:UpdateRole(ROLES.INNOCENT.index)
    ply:UnSpectate()
    ply:SetTeam(TEAM_TERROR)
 
@@ -336,7 +340,7 @@ concommand.Add("ttt_force_terror", force_terror, nil, nil, FCVAR_CHEAT)
 
 -- override
 local function force_traitor(ply)
-   ply:SetRole(ROLES.TRAITOR.index)
+   ply:UpdateRole(ROLES.TRAITOR.index)
 
    SendFullStateUpdate()
 end
@@ -344,7 +348,7 @@ concommand.Add("ttt_force_traitor", force_traitor, nil, nil, FCVAR_CHEAT)
 
 -- override
 local function force_detective(ply)
-   ply:SetRole(ROLES.DETECTIVE.index)
+   ply:UpdateRole(ROLES.DETECTIVE.index)
 
    SendFullStateUpdate()
 end
@@ -358,12 +362,14 @@ local function force_role(ply, cmd, args, argStr)
       i = i + 1
    end
    
-   if role ~= nil and role ~= 0 and role <= i then
-      ply:SetRole(role)
+   local rd = GetRoleByIndex(role)
+   
+   if role ~= nil and role ~= 0 and role <= i and not rd.notSelectable then
+      ply:UpdateRole(role)
 
       SendFullStateUpdate()
 
-      ply:ChatPrint("You changed to '" .. GetRoleByIndex(role).printName .. "' (role: " .. role .. ")")
+      ply:ChatPrint("You changed to '" .. rd.printName .. "' (role: " .. role .. ")")
    end
 end
 concommand.Add("ttt_force_role", force_role, nil, nil, FCVAR_CHEAT)

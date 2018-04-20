@@ -102,6 +102,10 @@ local function IconForInfoType(t, data)
    local mat = TypeToMat[t]
 
    if type(mat) == "table" then
+      if t == "role" then
+         data = hook.Run("TTT2_GetIconRoleIndex") or data
+      end
+      
       mat = mat[data]
    elseif type(mat) == "function" then
       mat = mat(data)
@@ -135,7 +139,10 @@ function PreprocSearch(raw)
          search[t].p = 1
          search[t].nick = d
       elseif t == "role" then
-         search[t].text = T("search_role_" .. GetRoleByIndex(d).abbr)
+         local rd = GetRoleByIndex(d)
+         local tmpStr = hook.Run("TTT2_SearchRoleMaterialString") or rd.abbr
+         
+         search[t].text = T("search_role_" .. tmpStr)
          search[t].p = 2
       elseif t == "words" then
          if d ~= "" then

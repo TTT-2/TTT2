@@ -130,7 +130,7 @@ CreateConVar("ttt_newroles_enabled", "1", FCVAR_NOTIFY)
 -- you should only use this function to add roles to TTT2
 function AddCustomRole(name, roleData, conVarData)
     -- shared
-    if not ROLES[name] then
+    if not ROLES[name] and not roleData.notSelectable then
         if conVarData.togglable then
             CreateClientConVar("ttt_avoid_" .. roleData.name, "0", true, true)
         end
@@ -184,7 +184,7 @@ function AddCustomRole(name, roleData, conVarData)
 end
 
 function UpdateCustomRole(name, roleData)
-    if ROLES[name] then
+    if SERVER and ROLES[name] then
         -- necessary for networking!
         roleData.name = ROLES[name].name
         
@@ -224,6 +224,16 @@ end
 function GetRoleByName(name)
     for _, v in pairs(ROLES) do
         if v.name == name then
+            return v
+        end
+    end
+    
+    return ROLES.INNOCENT
+end
+
+function GetRoleByAbbr(abbr)
+    for _, v in pairs(ROLES) do
+        if v.abbr == abbr then
             return v
         end
     end

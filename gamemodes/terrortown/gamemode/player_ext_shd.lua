@@ -16,6 +16,14 @@ end
 
 AccessorFunc(plymeta, "role", "Role", FORCE_NUMBER)
 
+function plymeta:UpdateRole(role)
+   self:SetRole(role)
+   
+   if SERVER then
+      hook.Run("TTT2_RoleTypeSet", self)
+   end
+end
+
 -- Role access
 -- basically traitor without special traitor roles (w/ teams)
 function plymeta:GetTraitor() 

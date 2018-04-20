@@ -127,7 +127,7 @@ util.AddNetworkString("TTT_RagdollSearch")
 util.AddNetworkString("TTT_GameMsg")
 util.AddNetworkString("TTT_GameMsgColor")
 util.AddNetworkString("TTT_RoleChat")
-util.AddNetworkString("TTT_TraitorVoiceState")
+util.AddNetworkString("TTT_RoleVoiceState")
 util.AddNetworkString("TTT_LastWordsMsg")
 util.AddNetworkString("TTT_RadioMsg")
 util.AddNetworkString("TTT_ReportStream")
@@ -1062,14 +1062,15 @@ local function GetEachRoleCount(ply_count, role_type)
 
    return role_count
 end
-
  
 function SelectRoles()
    local choices = {}
    local prev_roles = {}
 
    for _, v in pairs(ROLES) do
-      prev_roles[v.index] = {}
+      if not v.notSelectable then
+         prev_roles[v.index] = {}
+      end
    end
 
    if not GAMEMODE.LastRole then GAMEMODE.LastRole = {} end
@@ -1084,7 +1085,7 @@ function SelectRoles()
          table.insert(choices, v)
       end
 
-      v:SetRole(ROLES.INNOCENT.index)
+      v:UpdateRole(ROLES.INNOCENT.index)
    end
 
    -- determine how many of each role we want
@@ -1113,7 +1114,7 @@ function SelectRoles()
       -- a roll
       -- TODO why 30 percent chance to get traitor ? add traitor_pct CONVAR ! maybe not fair split !
       if IsValid(pply) and (not table.HasValue(prev_roles[ROLES.TRAITOR.index], pply) or math.random(1, 3) == 2) then
-         pply:SetRole(ROLES.TRAITOR.index)
+         pply:UpdateRole(ROLES.TRAITOR.index)
 
          table.remove(choices, pick)
          table.insert(traitorList, pply)
@@ -1129,7 +1130,7 @@ function SelectRoles()
       local availableRoles = {}
       
       for _, v in pairs(ROLES) do
-         if v.team == TEAM_TRAITOR and v ~= ROLES.TRAITOR and GetConVar("ttt_" .. v.name .. "_enabled"):GetBool() then
+         if not v.notSelectable and v.team == TEAM_TRAITOR and v ~= ROLES.TRAITOR and GetConVar("ttt_" .. v.name .. "_enabled"):GetBool() then
             local tmp = GetEachRoleCount(choice_count, v.name)
             
             if tmp > 0 then
@@ -1151,7 +1152,7 @@ function SelectRoles()
    local newRolesEnabled = GetConVar("ttt_newroles_enabled"):GetBool()
    
    for _, v in pairs(ROLES) do
-      if v == ROLES.DETECTIVE or newRolesEnabled then
+      if not v.notSelectable and (v == ROLES.DETECTIVE or newRolesEnabled) then
          if v ~= ROLES.INNOCENT and v.team ~= TEAM_TRAITOR and GetConVar("ttt_" .. v.name .. "_enabled"):GetBool() then
             local b = true
             
@@ -1215,13 +1216,11 @@ function SetRoleTypes(choices, prev_roles, roleCount, availableRoles)
          -- alternatives
          -- TODO improve that first the player get checked whether he could get ANOTHER special role (not disabled) instead just deleting him from list
          if choices_i <= type_count or not pply:GetAvoidRole(v.index) then
-            pply:SetRole(v.index)
-            
-            hook.Run("TTT2_RoleTypeSet", pply)
+            pply:UpdateRole(v.index)
             
             table.remove(choices, pick)
+            
             choices_i = choices_i - 1
-      
             roleCount[v.index] = (type_count - 1)
       
             if roleCount[v.index] <= 0 then

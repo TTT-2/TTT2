@@ -135,7 +135,7 @@ local function GiveLoadoutSpecial(ply)
          
          if not IsValid(hat) then return end
 
-         hat:SetPos(ply:GetPos() + Vector(0,0,70))
+         hat:SetPos(ply:GetPos() + Vector(0, 0, 70))
          hat:SetAngles(ply:GetAngles())
          hat:SetParent(ply)
 
@@ -255,14 +255,13 @@ local function DropActiveWeapon(ply)
 
    if not IsValid(wep) then return end
 
-   if wep.AllowDrop == false then
-      return
-   end
+   if not wep.AllowDrop then return end
 
    local tr = util.QuickTrace(ply:GetShootPos(), ply:GetAimVector() * 32, ply)
 
    if tr.HitWorld then
       LANG.Msg(ply, "drop_no_room")
+      
       return
    end
 
@@ -285,12 +284,12 @@ local function DropActiveAmmo(ply)
    
    if amt < 1 or amt <= (wep.Primary.ClipSize * 0.25) then
       LANG.Msg(ply, "drop_no_ammo")
+      
       return
    end
 
    local pos, ang = ply:GetShootPos(), ply:EyeAngles()
    local dir = (ang:Forward() * 32) + (ang:Right() * 6) + (ang:Up() * -5)
-
    local tr = util.QuickTrace(pos, dir, ply)
    
    if tr.HitWorld then return end
@@ -338,6 +337,7 @@ local function GiveEquipmentWeapon(sid, cls)
 
    if not IsValid(ply) or not ply:IsActiveSpecial() then
       timer.Remove(tmr)
+      
       return
    end
 
@@ -532,7 +532,7 @@ local function TransferCredits(ply, cmd, args)
    if sid and credits then
       local target = player.GetBySteamID(sid)
       
-      if not IsValid(target) or not target:IsActiveShopper() or target:GetRole() ~= ply:GetRole() or target == ply then
+      if not IsValid(target) or not target:IsActiveShopper() or target == ply or (target:GetRoleData().team ~= ply:GetRoleData().team or hook.Run("TTT2_CanTransferToPlayer", ply, target)) then
          LANG.Msg(ply, "xfer_no_recip")
          
          return

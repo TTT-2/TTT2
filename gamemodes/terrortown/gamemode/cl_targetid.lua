@@ -35,8 +35,9 @@ hook.Add("TTT2_FinishedSync", "updateRoleMat", function(first)
 
    for _, v in pairs(ROLES) do
       local mat
+      local tmpStr = hook.Run("TTT2_SearchBodyString") or v.abbr
       
-      mat = Material("vgui/ttt/sprite_" .. v.abbr)
+      mat = Material("vgui/ttt/sprite_" .. tmpStr)
       
       indicator_mat_tbl[v.index] = mat
    end
@@ -166,15 +167,10 @@ function GM:HUDDrawTargetID()
    local ent = trace.Entity
    
    if not IsValid(ent) or ent.NoTarget then return end
-
-   -- TODO modify - but why?
    
    -- some bools for caching what kind of ent we are looking at
-   local target_traitor = false
-   local target_detective = false
-   --[[
-      TODO: what with other teams?
-   ]]--
+   local target_roles = {}
+   
    local target_corpse = false
 
    local text = nil
@@ -214,11 +210,23 @@ function GM:HUDDrawTargetID()
          _, color = util.HealthToString(ent:Health(), ent:GetMaxHealth())
       end
 
-      if client:HasTeamRole(TEAM_TRAITOR) and GetRoundState() == ROUND_ACTIVE then
-         target_traitor = ent:HasTeamRole(TEAM_TRAITOR)
+      for _, v in pairs(ROLES) do
+         if GetRoundState() == ROUND_ACTIVE and v ~= ROLES.INNOCENT then
+            if client:HasTeamRole(TEAM_TRAITOR) and not v.visibleForTraitors then
+               if not target_roles[ROLES.TRAITOR.index] then
+                  target_roles[ROLES.TRAITOR.index] = ent:GetRole() == v.index
+               end
+            elseif v.visibleForTraitors then
+               if not target_roles[v.index] then
+                  target_roles[v.index] = ent:GetRole() == v.index
+               end
+            end
+         end
       end
+      
+      target_roles = hook.Run("TTT2_HUDDrawTargetID", target_roles) or target_roles
 
-      target_detective = GetRoundState() > ROUND_PREP and ent:IsDetective() or false
+      target_roles[ROLES.DETECTIVE] = GetRoundState() > ROUND_PREP and ent:IsDetective() or false
    elseif cls == "prop_ragdoll" then
       -- only show this if the ragdoll has a nick, else it could be a mattress
       if not CORPSE.GetPlayerNick(ent, false) then return end
@@ -242,14 +250,22 @@ function GM:HUDDrawTargetID()
 
    local w, h = 0, 0 -- text width/height, reused several times
 
-   if target_traitor or target_detective then -- TODO
+   local selR
+   
+   for k, v in pairs(target_roles) do
+      if v then
+         selR = k
+         
+         break
+      end
+   end
+   
+   if selR then
       surface.SetTexture(ring_tex)
 
-      if target_traitor then
-         surface.SetDrawColor(255, 0, 0, 200)
-      else
-         surface.SetDrawColor(0, 0, 255, 220)
-      end
+      local clr = GetRoleByIndex(selR).color
+      
+      surface.SetDrawColor(clr.r, clr.g, clr.b, 200)
       surface.DrawTexturedRect(x - 32, y - 32, 64, 64)
    end
 
@@ -340,20 +356,30 @@ function GM:HUDDrawTargetID()
    end
 
    text = nil
+   
+   local matched = false
+   
+   for k, v in pairs(target_roles) do
+      if v and k ~= ROLES.INNOCENT.index then
+         matched = true
+         
+         local rd = GetRoleByIndex(k)
+         
+         text = L["target_" .. rd.name]
+         clr = rd.color
+         
+         break
+      end
+   end
 
-   if target_traitor then
-      text = L.target_traitor
-      clr = COLOR_RED
-   elseif target_detective then
-      text = L.target_detective
-      clr = COLOR_BLUE
-   -- TODO add other classes
-   elseif ent.sb_tag and ent.sb_tag.txt ~= nil then
-      text = L[ent.sb_tag.txt]
-      clr = ent.sb_tag.color
-   elseif target_corpse and client:IsActive() and client:HasTeamRole(TEAM_TRAITOR) and CORPSE.GetCredits(ent, 0) > 0 then
-      text = L.target_credits
-      clr = COLOR_YELLOW
+   if not matched then
+      if ent.sb_tag and ent.sb_tag.txt ~= nil then
+         text = L[ent.sb_tag.txt]
+         clr = ent.sb_tag.color
+      elseif target_corpse and client:IsActive() and client:HasTeamRole(TEAM_TRAITOR) and CORPSE.GetCredits(ent, 0) > 0 then
+         text = L.target_credits
+         clr = COLOR_YELLOW
+      end
    end
 
    if text then

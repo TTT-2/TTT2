@@ -4,6 +4,7 @@ local plymeta = FindMetaTable("Player")
 
 if not plymeta then 
     Error("FAILED TO FIND PLAYER TABLE") 
+    
     return 
 end
 
@@ -152,7 +153,7 @@ end
 
 -- Sets all flags (force_spec, etc) to their default
 function plymeta:ResetStatus()
-   self:SetRole(ROLES.INNOCENT.index)
+   self:UpdateRole(ROLES.INNOCENT.index)
    self:SetRagdollSpec(false)
    self:SetForceSpec(false)
    self:ResetRoundFlags()
@@ -180,7 +181,12 @@ function plymeta:ResetRoundFlags()
 
    -- communication
    self.mute_team = -1
-   self.traitor_gvoice = false
+   
+   for _, v in pairs(ROLES) do
+      if v.team ~= TEAM_INNO and not v.unknownTeam then
+         self[v.team .. "_gvoice"] = false
+      end
+   end
 
    self:SetNWBool("disguised", false)
 

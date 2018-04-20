@@ -70,7 +70,7 @@ function ShowRoundStartPopup()
    end
 end
 
-local function GetPlayerFilter(pred)
+function GetPlayerFilter(pred)
    local filter = {}
 
    for _, v in pairs(player.GetAll()) do
@@ -260,29 +260,51 @@ function GM:PlayerCanHearPlayersVoice(listener, speaker)
    if speaker:IsSpec() and listener:IsSpec() then
       return true, false
    end
+   
+   -- custom post-settings
+   hook.Run("TTT2_PostPlayerCanHearPlayersVoice", listener, speaker)
 
    -- Traitors "team"chat by default, non-locationally
    if speaker:IsActive() and speaker:HasTeamRole(TEAM_TRAITOR) then
-      if speaker.traitor_gvoice then
+      if speaker[speaker:GetRoleData().team .. "_gvoice"] then
          return true, loc_voice:GetBool()
       elseif listener:IsActive() and listener:HasTeamRole(TEAM_TRAITOR) then
          return true, false
       else
-         -- unless traitor_gvoice is true, normal innos can't hear speaker
+         -- unless [TEAM_TRAITOR]_gvoice is true, normal innos can't hear speaker
          return false, false
+      end
+   end
+   
+   -- other roles can talk to each other mate if they also are able to see each other
+   local sRd = speaker:GetRoleData()
+   
+   if sRd.team ~= TEAM_TRAITOR and sRd.team ~= TEAM_INNO and not sRd.unknownTeam then
+      if speaker:IsActive() then
+         if speaker[sRd.team .. "_gvoice"] then
+            return true, loc_voice:GetBool()
+         elseif listener:IsActive() and listener:HasTeamRole(sRd.team) then
+            return true, false
+         else
+            -- unless [TEAM]_gvoice is true, normal innos can't hear speaker
+            return false, false
+         end
       end
    end
 
    return true, (loc_voice:GetBool() and GetRoundState() ~= ROUND_POST)
 end
 
-local function SendTraitorVoiceState(speaker, state)
+local function SendRoleVoiceState(speaker)
+   local team = speaker:GetRoleData().team
+   local state = speaker[team .. "_gvoice"]
+
    -- send umsg to living traitors that this is traitor-only talk
-   local rf = GetRoleTeamFilter(TEAM_TRAITOR, true)
+   local rf = GetRoleTeamFilter(team, true)
 
    -- make it as small as possible, to get there as fast as possible
    -- we can fit it into a mere byte by being cheeky.
-   net.Start("TTT_TraitorVoiceState")
+   net.Start("TTT_RoleVoiceState")
    net.WriteUInt(speaker:EntIndex() - 1, 7) -- player ids can only be 1-128
    net.WriteBit(state)
 
@@ -293,17 +315,22 @@ local function SendTraitorVoiceState(speaker, state)
    end
 end
 
-local function TraitorGlobalVoice(ply, cmd, args)
-   if not IsValid(ply) or not (ply:IsActive() and ply:HasTeamRole(TEAM_TRAITOR)) then return end
+local function RoleGlobalVoice(ply, cmd, args)
+   if not IsValid(ply) or not (ply:IsActive() and not ply:HasTeamRole(TEAM_INNO)) then return end
    
-   if not #args == 1 then return end
+   local rd = ply:GetRoleData()
+   
+   if rd.unknownTeam then return end
+   
+   if #args ~= 1 then return end
    
    local state = tonumber(args[1])
 
-   ply.traitor_gvoice = (state == 1)
-   SendTraitorVoiceState(ply, ply.traitor_gvoice)
+   ply[rd.team .. "_gvoice"] = (state == 1)
+   
+   SendRoleVoiceState(ply)
 end
-concommand.Add("tvog", TraitorGlobalVoice)
+concommand.Add("rvog", RoleGlobalVoice)
 
 local function MuteTeam(ply, cmd, args)
    if not IsValid(ply) then return end

@@ -260,7 +260,6 @@ function RADIO:GetTargetType()
    end
 end
 
-
 function RADIO.ToPrintable(target)
    if type(target) == "string" then
       return GetTranslation(target)
@@ -326,6 +325,7 @@ local function RadioCommand(ply, cmd, arg)
          
          text = msg.format and string.Interp(eng, {player = RADIO.ToPrintable(target)}) or eng
          msg_name = msg.text
+         
          break
       end
    end
@@ -361,7 +361,6 @@ local function RadioComplete(cmd, arg)
    return c
 end
 concommand.Add("ttt_radio", RadioCommand, RadioComplete)
-
 
 local function RadioMsgRecv()
    local sender = net.ReadEntity()
@@ -453,13 +452,15 @@ function GM:PlayerStartVoice(ply)
 
    -- Tell server this is global
    if client == ply then
-      if client:IsActive() and client:HasTeamRole(TEAM_TRAITOR) then
+      if client:IsActive() and not client:HasTeamRole(TEAM_INNO) and not client:GetRoleData().unknownTeam then
          if not client:KeyDown(IN_SPEED) and not client:KeyDownLast(IN_SPEED) then
-            client.traitor_gvoice = true
-            RunConsoleCommand("tvog", "1")
+            client[client:GetRoleData().team .. "_gvoice"] = true
+            
+            RunConsoleCommand("rvog", "1")
          else
-            client.traitor_gvoice = false
-            RunConsoleCommand("tvog", "0")
+            client[client:GetRoleData().team .. "_gvoice"] = false
+            
+            RunConsoleCommand("rvog", "0")
          end
       end
 
@@ -482,30 +483,37 @@ function GM:PlayerStartVoice(ply)
       if not IsValid(s.ply) then return end
       
       draw.RoundedBox(4, 0, 0, w, h, s.Color)
-      draw.RoundedBox(4, 1, 1, w-2, h-2, shade)
+      draw.RoundedBox(4, 1, 1, w - 2, h - 2, shade)
    end
-
-   if client:IsActive() and client:HasTeamRole(TEAM_TRAITOR) then
-      if ply == client then
-         if not client.traitor_gvoice then
-            pnl.Color = Color(200, 20, 20, 255)
-         end
-      elseif ply:IsActive() and ply:HasTeamRole(TEAM_TRAITOR) then
-         if not ply.traitor_gvoice then
-            pnl.Color = Color(200, 20, 20, 255)
+   
+   -- Traitor things
+   if client:IsActive() then
+      for _, v in pairs(GetTeamRoles(TEAM_TRAITOR)) do
+         if client:HasTeamRole(v.team) then
+            if ply == client then
+               if not client[client:GetRoleData().team .. "_gvoice"] then
+                  pnl.Color = Color(200, 20, 20, 255)
+               end
+            elseif ply:HasTeamRole(v.team) then
+               if not ply[ply:GetRoleData().team .. "_gvoice"] then
+                  pnl.Color = Color(200, 20, 20, 255)
+               end
+            end
          end
       end
    end
 
-   if ply:IsActive() and ply:GetRole() == ROLES.DETECTIVE.index then
-      pnl.Color = Color(20, 20, 200, 255)
+   -- other roles
+   if ply:IsActive() then
+      for _, v in pairs(ROLES) do
+         pnl.Color = v.color
+      end
    end
-   -- TODO add other roles for each team !
 
    PlayerVoicePanels[ply] = pnl
 
    -- run ear gesture
-   if not (ply:IsActive() and ply:HasTeamRole(TEAM_TRAITOR) and not ply.traitor_gvoice) then
+   if not (ply:IsActive() and not ply:HasTeamRole(TEAM_INNO) and not ply:GetRoleData().unknownTeam and not ply[ply:GetRoleData().team .. "_gvoice"]) then
       ply:AnimPerformGesture(ACT_GMOD_IN_CHAT)
    end
 end
@@ -517,19 +525,21 @@ local function ReceiveVoiceState()
    -- prevent glitching due to chat starting/ending across round boundary
    if GAMEMODE.round_state ~= ROUND_ACTIVE then return end
    
-   if not IsValid(LocalPlayer()) or not (LocalPlayer():IsActive() and LocalPlayer():HasTeamRole(TEAM_TRAITOR)) then return end
+   local lply = LocalPlayer()
+   
+   if not IsValid(lply) or not (lply:IsActive() and not lply:HasTeamRole(TEAM_INNO) and not lply:GetRoleData().unknownTeam) then return end
 
    local ply = player.GetByID(idx)
    
    if IsValid(ply) then
-      ply.traitor_gvoice = state
+      ply[ply:GetRoleData().team .. "_gvoice"] = state
 
       if IsValid(PlayerVoicePanels[ply]) then
-         PlayerVoicePanels[ply].Color = state and Color(0,200,0) or Color(200, 0, 0)
+         PlayerVoicePanels[ply].Color = state and Color(0, 200, 0) or Color(200, 0, 0)
       end
    end
 end
-net.Receive("TTT_TraitorVoiceState", ReceiveVoiceState)
+net.Receive("TTT_RoleVoiceState", ReceiveVoiceState)
 
 local function VoiceClean()
    for ply, pnl in pairs(PlayerVoicePanels) do
@@ -543,11 +553,12 @@ timer.Create("VoiceClean", 10, 0, VoiceClean)
 function GM:PlayerEndVoice(ply, no_reset)
    if IsValid(PlayerVoicePanels[ply]) then
       PlayerVoicePanels[ply]:Remove()
+      
       PlayerVoicePanels[ply] = nil
    end
 
    if IsValid(ply) and not no_reset then
-      ply.traitor_gvoice = false
+      ply[ply:GetRoleData().team .. "_gvoice"] = false
    end
 
    if ply == LocalPlayer() then
@@ -594,7 +605,9 @@ local mute_state = MUTE_NONE
 function VOICE.CycleMuteState(force_state)
    mute_state = force_state or next(MuteText, mute_state)
 
-   if not mute_state then mute_state = MUTE_NONE end
+   if not mute_state then 
+      mute_state = MUTE_NONE 
+   end
 
    SetMuteState(mute_state)
 
@@ -634,8 +647,8 @@ local function GetDrainRate()
    end
 end
 
-local function IsTraitorChatting(client)
-   return client:IsActive() and client:HasTeamRole(TEAM_TRAITOR) and not client.traitor_gvoice
+local function IsRoleChatting(client)
+   return client:IsActive() and not client:HasTeamRole(TEAM_INNO) and not client:GetRoleData().unknownTeam and not client[client:GetRoleData().team .. "_gvoice"]
 end
 
 function VOICE.Tick()
@@ -643,11 +656,12 @@ function VOICE.Tick()
 
    local client = LocalPlayer()
    
-   if VOICE.IsSpeaking() and not IsTraitorChatting(client) then
+   if VOICE.IsSpeaking() and not IsRoleChatting(client) then
       client.voice_battery = client.voice_battery - GetDrainRate()
 
       if not VOICE.CanSpeak() then
          client.voice_battery = 0
+         
          RunConsoleCommand("-voicerecord")
       end
    elseif client.voice_battery < battery_max then
@@ -667,7 +681,7 @@ end
 function VOICE.CanSpeak()
    if not GetGlobalBool("ttt_voice_drain", false) then return true end
 
-   return LocalPlayer().voice_battery > battery_min or IsTraitorChatting(LocalPlayer())
+   return LocalPlayer().voice_battery > battery_min or IsRoleChatting(LocalPlayer())
 end
 
 local speaker = surface.GetTextureID("voice/icntlk_sv")
