@@ -35,7 +35,7 @@ hook.Add("TTT2_FinishedSync", "updateRoleMat", function(first)
 
    for _, v in pairs(ROLES) do
       local mat
-      local tmpStr = hook.Run("TTT2_SearchBodyString") or v.abbr
+      local tmpStr = hook.Run("TTT2_SearchBodyString", LocalPlayer()) or v.abbr
       
       mat = Material("vgui/ttt/sprite_" .. tmpStr)
       
