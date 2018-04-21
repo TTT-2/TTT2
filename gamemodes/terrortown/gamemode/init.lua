@@ -1131,12 +1131,21 @@ function SelectRoles()
       
       for _, v in pairs(ROLES) do
          if not v.notSelectable and v.team == TEAM_TRAITOR and v ~= ROLES.TRAITOR and GetConVar("ttt_" .. v.name .. "_enabled"):GetBool() then
-            local tmp = GetEachRoleCount(choice_count, v.name)
+            local b = true
+            local r = ConVarExists("ttt_" .. v.name .. "_random") and GetConVar("ttt_" .. v.name .. "_random"):GetInt() or 0
             
-            if tmp > 0 then
-               roleCount[v.index] = tmp
+            if r > 0 and r < 100 then
+               b = math.random(1, 100) <= r
+            end
+            
+            if b then
+               local tmp = GetEachRoleCount(choice_count, v.name)
                
-               table.insert(availableRoles, v)
+               if tmp > 0 then
+                  roleCount[v.index] = tmp
+                  
+                  table.insert(availableRoles, v)
+               end
             end
          end
       end
@@ -1155,19 +1164,20 @@ function SelectRoles()
       if not v.notSelectable and (v == ROLES.DETECTIVE or newRolesEnabled) then
          if v ~= ROLES.INNOCENT and v.team ~= TEAM_TRAITOR and GetConVar("ttt_" .. v.name .. "_enabled"):GetBool() then
             local b = true
+            local r = ConVarExists("ttt_" .. v.name .. "_random") and GetConVar("ttt_" .. v.name .. "_random"):GetInt() or 0
             
-            if v.random and v.random > 0 and v.random < 100 then
-                b = math.random(1, 100) <= v.random
+            if r > 0 and r < 100 then
+               b = math.random(1, 100) <= r
             end
             
             if b then
-                local tmp = GetEachRoleCount(choice_count, v.name)
-                
-                if tmp > 0 then
-                   roleCount[v.index] = tmp
-                   
-                   table.insert(availableRoles, v)
-                end
+               local tmp = GetEachRoleCount(choice_count, v.name)
+               
+               if tmp > 0 then
+                  roleCount[v.index] = tmp
+                  
+                  table.insert(availableRoles, v)
+               end
             end
          end
       end

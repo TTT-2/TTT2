@@ -588,7 +588,7 @@ L.corpse_hint  = "Press {usekey} to search. {walkkey} + {usekey} to search cover
 L.target_disg  = " (DISGUISED)"
 L.target_unid  = "Unidentified body"
 
-L.target_traitor = "FELLOW TRAITOR"
+L.target_traitor = "TRAITOR"
 L.target_detective = "DETECTIVE"
 
 L.target_credits = "Search to receive unspent credits"

@@ -139,6 +139,10 @@ function AddCustomRole(name, roleData, conVarData)
         CreateConVar("ttt_" .. roleData.name .. "_max", tostring(conVarData.maximum))
         CreateConVar("ttt_" .. roleData.name .. "_min_players", tostring(conVarData.minPlayers))
         
+        if conVarData.random then
+            CreateConVar("ttt_" .. roleData.name .. "_random", tostring(conVarData.random))
+        end
+        
         CreateConVar("ttt_" .. roleData.name .. "_enabled", "1")
         
         if conVarData.credits then

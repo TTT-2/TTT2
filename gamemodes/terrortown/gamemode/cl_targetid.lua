@@ -213,20 +213,16 @@ function GM:HUDDrawTargetID()
       for _, v in pairs(ROLES) do
          if GetRoundState() == ROUND_ACTIVE and v ~= ROLES.INNOCENT then
             if client:HasTeamRole(TEAM_TRAITOR) and not v.visibleForTraitors then
-               if not target_roles[ROLES.TRAITOR.index] then
-                  target_roles[ROLES.TRAITOR.index] = ent:GetRole() == v.index
-               end
+               target_roles[ROLES.TRAITOR.index] = target_roles[ROLES.TRAITOR.index] or ent:GetRole() == v.index
             elseif v.visibleForTraitors then
-               if not target_roles[v.index] then
-                  target_roles[v.index] = ent:GetRole() == v.index
-               end
+               target_roles[v.index] = target_roles[v.index] or ent:GetRole() == v.index
             end
          end
       end
       
       target_roles = hook.Run("TTT2_HUDDrawTargetID", target_roles) or target_roles
 
-      target_roles[ROLES.DETECTIVE] = GetRoundState() > ROUND_PREP and ent:IsDetective() or false
+      target_roles[ROLES.DETECTIVE.index] = target_roles[ROLES.DETECTIVE.index] or GetRoundState() > ROUND_PREP and ent:IsDetective() or false
    elseif cls == "prop_ragdoll" then
       -- only show this if the ragdoll has a nick, else it could be a mattress
       if not CORPSE.GetPlayerNick(ent, false) then return end

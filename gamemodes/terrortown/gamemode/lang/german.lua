@@ -578,7 +578,7 @@ L.corpse_hint  = "Drücke {usekey} zum Durchsuchen. {walkkey} + {usekey} um verd
 L.target_disg  = " (GETARNT)"
 L.target_unid  = "Unidentifizierter Körper"
 
-L.target_traitor   = "VERRÄTER-KOLLEGE"
+L.target_traitor   = "VERRÄTER"
 L.target_detective = "DETEKTIV"
 
 L.target_credits = "Durchsuche, um ungenutzte Credits zu erhalten."

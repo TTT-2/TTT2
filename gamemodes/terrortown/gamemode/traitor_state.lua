@@ -187,7 +187,7 @@ function SendNetworkingRolesList(role, rolesTbl)
       end
    end
    
-   if #networkRoles == 0 then return end
+   if #networkingRoles == 0 then return end
 
    local tmp = {}
 
