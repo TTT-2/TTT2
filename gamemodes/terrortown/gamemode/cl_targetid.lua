@@ -30,16 +30,18 @@ end
 ---- "T" indicator above traitors
 indicator_mat_tbl = {}
 
-hook.Add("TTT2_FinishedSync", "updateRoleMat", function(first)
-   indicator_mat_tbl = {}
-
-   for _, v in pairs(ROLES) do
-      local mat
-      local tmpStr = hook.Run("TTT2_SearchBodyString", LocalPlayer()) or v.abbr
+hook.Add("TTT2_FinishedSync", "updateRoleMat", function(ply, first)
+   if first then
+      indicator_mat_tbl = {}
       
-      mat = Material("vgui/ttt/sprite_" .. tmpStr)
-      
-      indicator_mat_tbl[v.index] = mat
+      for _, v in pairs(ROLES) do
+         local mat
+         local tmpStr = hook.Run("TTT2_SearchBodyString", LocalPlayer()) or v.abbr
+         
+         mat = Material("vgui/ttt/sprite_" .. tmpStr)
+         
+         indicator_mat_tbl[v.index] = mat
+      end
    end
 end)
 

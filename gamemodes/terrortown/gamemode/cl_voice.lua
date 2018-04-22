@@ -14,9 +14,9 @@ local function LastWordsRecv()
   local nick = IsValid(sender) and sender:Nick() or "<Unknown>"
 
   chat.AddText(Color(150, 150, 150),
-    Format("(%s) ", string.upper(GetTranslation("last_words"))),
-    was_detective and Color(50, 200, 255) or Color(0, 200, 0), nick,
-    COLOR_WHITE, ": " .. words)
+     Format("(%s) ", string.upper(GetTranslation("last_words"))),
+     was_detective and Color(50, 200, 255) or Color(0, 200, 0), nick,
+     COLOR_WHITE, ": " .. words)
 end
 net.Receive("TTT_LastWordsMsg", LastWordsRecv)
 
@@ -486,27 +486,18 @@ function GM:PlayerStartVoice(ply)
       draw.RoundedBox(4, 1, 1, w - 2, h - 2, shade)
    end
    
-   -- Traitor things
-   if client:IsActive() then
-      for _, v in pairs(GetTeamRoles(TEAM_TRAITOR)) do
-         if client:HasTeamRole(v.team) then
-            if ply == client then
-               if not client[client:GetRoleData().team .. "_gvoice"] then
-                  pnl.Color = Color(200, 20, 20, 255)
-               end
-            elseif ply:HasTeamRole(v.team) then
-               if not ply[ply:GetRoleData().team .. "_gvoice"] then
-                  pnl.Color = Color(200, 20, 20, 255)
-               end
-            end
+   -- roles things
+   if client:IsActive() and not client:HasTeamRole(TEAM_INNO) and not client:GetRoleData().unknownTeam then
+      local rd = client:GetRoleData()
+      
+      if ply == client then
+         if not client[rd.team .. "_gvoice"] then
+            pnl.Color = rd.color
          end
-      end
-   end
-
-   -- other roles
-   if ply:IsActive() then
-      for _, v in pairs(ROLES) do
-         pnl.Color = v.color
+      elseif ply:HasTeamRole(v.team) then
+         if not ply[rd.team .. "_gvoice"] then
+            pnl.Color = rd.color
+         end
       end
    end
 

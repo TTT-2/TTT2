@@ -83,7 +83,7 @@ end
 local buff = ""
 
 local function ReceiveRolesTable(len)
-   print("Received new ROLES list from server! Updating...")
+   print("[TTT2][ROLE] Received new ROLES list from server! Updating...")
 
    local first = net.ReadBool()
    local cont = net.ReadBit() == 1
@@ -115,7 +115,7 @@ local function ReceiveRolesTable(len)
          net.SendToServer()
          
          -- run client side
-         hook.Run("TTT2_FinishedSync", first)
+         hook.Run("TTT2_FinishedSync", LocalPlayer(), first)
       end
 
       -- flush
@@ -125,7 +125,7 @@ end
 net.Receive("TTT2_SyncRolesList", ReceiveRolesTable)
 
 local function ReceiveSingleRoleTable(len)
-   print("Received updated ROLE from server! Updating...")
+   print("[TTT2][ROLE] Received updated ROLE from server! Updating...")
 
    local cont = net.ReadBit() == 1
 
@@ -162,7 +162,7 @@ local function ReceiveSingleRoleTable(len)
          net.SendToServer()
          
          -- run client side
-         hook.Run("TTT2_FinishedSync", false)
+         hook.Run("TTT2_FinishedSync", LocalPlayer(), false)
       end
 
       -- flush

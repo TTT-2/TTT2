@@ -163,13 +163,15 @@ util.AddNetworkString("TTT2_RolesListSynced")
 
 ---- Round mechanics
 function GM:Initialize()
-   print("\n[TTT2] Server is ready to receive new roles...\n")
+   print("\n[TTT2][ROLE] Server is ready to receive new roles...\n")
    
    hook.Run("TTT2_PreRoleInit")
    
    hook.Run("TTT2_RoleInit")
    
    hook.Run("TTT2_PostRoleInit")
+   
+   print()
    
    MsgN("Trouble In Terrorist Town gamemode initializing...")
    ShowVersion() 
@@ -283,7 +285,7 @@ local function EncodeForStream(tbl)
 end
 
 function UpdateRoleData(ply, first)
-   print("[TTT2] Sending new ROLES list to " .. ply:Nick() .. "...")
+   print("[TTT2][ROLE] Sending new ROLES list to " .. ply:Nick() .. "...")
    
    local s = EncodeForStream(ROLES)
    
@@ -322,7 +324,7 @@ function UpdateRoleData(ply, first)
 end
 
 function UpdateSingleRoleData(roleData, ply)
-   print("[TTT2] Sending updated role '" .. roleData.name .. "' to " .. ply:Nick() .. "...")
+   print("[TTT2][ROLE] Sending updated role '" .. roleData.name .. "' to " .. ply:Nick() .. "...")
    
    local s = EncodeForStream(roleData)
    
@@ -363,7 +365,7 @@ net.Receive("TTT2_RolesListSynced", function(len, ply)
    local first = net.ReadBool()
    
    -- run serverside
-   hook.Run("TTT2_FinishedSync", first)
+   hook.Run("TTT2_FinishedSync", ply, first)
 end)
 
 function GM:PlayerAuthed(ply, steamid, uniqueid)

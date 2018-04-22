@@ -98,8 +98,10 @@ end
 
 SetupEquipment(true)
 
-hook.Add("TTT2_FinishedSync", "updateEquRol", function(first)
-   SetupEquipment(false)
+hook.Add("TTT2_FinishedSync", "updateEquRol", function(ply, first)
+   if first then
+      SetupEquipment(false)
+   end
 end)
 
 -- Search if an item is in the equipment table of a given role, and return it if

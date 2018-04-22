@@ -124,8 +124,8 @@ ROLES.DETECTIVE = {
 }
 
 -- TODO: export into another file !
-CreateConVar("ttt_detective_enabled", "1")
-CreateConVar("ttt_newroles_enabled", "1", FCVAR_NOTIFY)
+CreateConVar("ttt_detective_enabled", "1", FCVAR_NOTIFY + FCVAR_ARCHIVE)
+CreateConVar("ttt_newroles_enabled", "1", FCVAR_NOTIFY + FCVAR_ARCHIVE)
 
 -- you should only use this function to add roles to TTT2
 function AddCustomRole(name, roleData, conVarData)
@@ -135,26 +135,26 @@ function AddCustomRole(name, roleData, conVarData)
             CreateClientConVar("ttt_avoid_" .. roleData.name, "0", true, true)
         end
         
-        CreateConVar("ttt_" .. roleData.name .. "_pct", tostring(conVarData.pct), FCVAR_NOTIFY)
-        CreateConVar("ttt_" .. roleData.name .. "_max", tostring(conVarData.maximum))
-        CreateConVar("ttt_" .. roleData.name .. "_min_players", tostring(conVarData.minPlayers))
+        CreateConVar("ttt_" .. roleData.name .. "_pct", tostring(conVarData.pct), FCVAR_NOTIFY + FCVAR_ARCHIVE + FCVAR_REPLICATED)
+        CreateConVar("ttt_" .. roleData.name .. "_max", tostring(conVarData.maximum), FCVAR_ARCHIVE + FCVAR_REPLICATED)
+        CreateConVar("ttt_" .. roleData.name .. "_min_players", tostring(conVarData.minPlayers), FCVAR_ARCHIVE + FCVAR_REPLICATED)
         
         if conVarData.random then
-            CreateConVar("ttt_" .. roleData.name .. "_random", tostring(conVarData.random))
+            CreateConVar("ttt_" .. roleData.name .. "_random", tostring(conVarData.random), FCVAR_ARCHIVE + FCVAR_REPLICATED)
         end
         
-        CreateConVar("ttt_" .. roleData.name .. "_enabled", "1")
+        CreateConVar("ttt_" .. roleData.name .. "_enabled", "1", FCVAR_NOTIFY + FCVAR_ARCHIVE + FCVAR_REPLICATED)
         
         if conVarData.credits then
-            CreateConVar("ttt_" .. roleData.abbr .. "_credits_starting", tostring(conVarData.credits))
+            CreateConVar("ttt_" .. roleData.abbr .. "_credits_starting", tostring(conVarData.credits), FCVAR_ARCHIVE + FCVAR_REPLICATED)
         end
         
         if conVarData.creditsTraitorKill then
-            CreateConVar("ttt_" .. roleData.abbr .. "_credits_traitorkill", tostring(conVarData.creditsTraitorKill))
+            CreateConVar("ttt_" .. roleData.abbr .. "_credits_traitorkill", tostring(conVarData.creditsTraitorKill), FCVAR_ARCHIVE + FCVAR_REPLICATED)
         end
         
         if conVarData.creditsTraitorDead then
-            CreateConVar("ttt_" .. roleData.abbr .. "_credits_traitordead", tostring(conVarData.creditsTraitorDead))
+            CreateConVar("ttt_" .. roleData.abbr .. "_credits_traitordead", tostring(conVarData.creditsTraitorDead), FCVAR_ARCHIVE + FCVAR_REPLICATED)
         end
     end
     
@@ -181,7 +181,7 @@ function AddCustomRole(name, roleData, conVarData)
                 DefaultEquipment = GetDefaultEquipment()
                 
                 -- spend an answer
-                print("[TTT2] Added '" .. name .. "' Role (index: " .. i .. ")")
+                print("[TTT2][ROLE] Added '" .. name .. "' Role (index: " .. i .. ")")
 		    end
 	    end)
     end
@@ -495,6 +495,8 @@ end
 DefaultEquipment = GetDefaultEquipment()
 
 -- should be exported !
-hook.Add("TTT2_FinishedSync", "updateDefEquRol", function(first)
-   DefaultEquipment = GetDefaultEquipment()
+hook.Add("TTT2_FinishedSync", "updateDefEquRol", function(ply, first)
+   if first then
+      DefaultEquipment = GetDefaultEquipment()
+   end
 end)

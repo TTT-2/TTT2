@@ -19,7 +19,7 @@ surface.CreateFont("HealthAmmo",   {font = "Trebuchet24", size = 24, weight = 75
 -- Color presets
 local bg_colors = {
 	background_main = Color(0, 0, 10, 200),
-	noround = Color(100,100,100,200)
+	noround = Color(100, 100, 100, 200)
 }
 local health_colors = {
 	border = COLOR_WHITE,
@@ -239,6 +239,7 @@ local function InfoPaint(client)
 
 	local traitor_y = y - 30
 	local text = nil
+    
 	if round_state == ROUND_ACTIVE then
 		text = L[client:GetRoleStringRaw()]
 	else

@@ -15,9 +15,11 @@ CLSCORE.Players = {}
 CLSCORE.StartTime = 0
 CLSCORE.Panel = nil
 
-hook.Add("TTT2_FinishedSync", "updateCLSCRo", function(first)
-   for _, v in pairs(ROLES) do
-      CLSCORE.Tbl[v.index] = {}
+hook.Add("TTT2_FinishedSync", "updateCLSCRo", function(ply, first)
+   if first then
+      for _, v in pairs(ROLES) do
+         CLSCORE.Tbl[v.index] = {}
+      end
    end
 end)
 
