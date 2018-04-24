@@ -1087,7 +1087,7 @@ function SelectRoles()
          table.insert(choices, v)
       end
 
-      v:UpdateRole(ROLES.INNOCENT.index)
+      v:SetRole(ROLES.INNOCENT.index)
    end
 
    -- determine how many of each role we want
@@ -1116,7 +1116,7 @@ function SelectRoles()
       -- a roll
       -- TODO why 30 percent chance to get traitor ? add traitor_pct CONVAR ! maybe not fair split !
       if IsValid(pply) and (not table.HasValue(prev_roles[ROLES.TRAITOR.index], pply) or math.random(1, 3) == 2) then
-         pply:UpdateRole(ROLES.TRAITOR.index)
+         pply:SetRole(ROLES.TRAITOR.index)
 
          table.remove(choices, pick)
          table.insert(traitorList, pply)
@@ -1195,6 +1195,8 @@ function SelectRoles()
 
       -- store a steamid -> role map
       GAMEMODE.LastRole[ply:SteamID()] = ply:GetRole()
+      
+      ply:UpdateRole(ply:GetRole()) -- just for some hooks and other special things
    end
 end
 
@@ -1228,7 +1230,7 @@ function SetRoleTypes(choices, prev_roles, roleCount, availableRoles)
          -- alternatives
          -- TODO improve that first the player get checked whether he could get ANOTHER special role (not disabled) instead just deleting him from list
          if choices_i <= type_count or not pply:GetAvoidRole(v.index) then
-            pply:UpdateRole(v.index)
+            pply:SetRole(v.index)
             
             table.remove(choices, pick)
             

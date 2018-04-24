@@ -205,6 +205,7 @@ end
 
 -- override default settings of ttt to make it compatible with other addons
 -- Player roles
+ROLE_NONE       = 0
 ROLE_INNOCENT  	= ROLES.INNOCENT.index
 ROLE_TRAITOR   	= ROLES.TRAITOR.index
 ROLE_DETECTIVE 	= ROLES.DETECTIVE.index

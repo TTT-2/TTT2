@@ -153,7 +153,7 @@ end
 
 -- Sets all flags (force_spec, etc) to their default
 function plymeta:ResetStatus()
-   self:UpdateRole(ROLES.INNOCENT.index)
+   self:SetRole(ROLES.INNOCENT.index)
    self:SetRagdollSpec(false)
    self:SetForceSpec(false)
    self:ResetRoundFlags()

@@ -19,9 +19,7 @@ AccessorFunc(plymeta, "role", "Role", FORCE_NUMBER)
 function plymeta:UpdateRole(role)
    self:SetRole(role)
    
-   if SERVER then
-      hook.Run("TTT2_RoleTypeSet", self)
-   end
+   hook.Run("TTT2_RoleTypeSet", self)
 end
 
 -- Role access

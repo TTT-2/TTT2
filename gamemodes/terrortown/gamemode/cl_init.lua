@@ -287,8 +287,8 @@ local function ReceiveRoleList()
       local eidx = net.ReadUInt(7) + 1 -- we - 1 worldspawn=0
       local ply = player.GetByID(eidx)
       
-      if IsValid(ply) and ply.UpdateRole then
-         ply:UpdateRole(role)
+      if IsValid(ply) and ply.SetRole then
+         ply:SetRole(role)
 		 
          if not ply:HasTeamRole(TEAM_INNO) and not ply:GetRoleData().unknownTeam then
             ply[ply:GetRoleData().team .. "_gvoice"] = false -- assume role's chat by default
@@ -317,9 +317,9 @@ function GM:ClearClientState()
 
    local client = LocalPlayer()
    
-   if not client.UpdateRole then return end -- code not loaded yet
+   if not client.SetRole then return end -- code not loaded yet
 
-   client:UpdateRole(ROLES.INNOCENT.index)
+   client:SetRole(ROLES.INNOCENT.index)
 
    client.equipment_items = EQUIP_NONE
    client.equipment_credits = 0
@@ -333,7 +333,7 @@ function GM:ClearClientState()
    for _, p in pairs(player.GetAll()) do
       if IsValid(p) then
          p.sb_tag = nil
-         p:UpdateRole(ROLES.INNOCENT.index)
+         p:SetRole(ROLES.INNOCENT.index)
          p.search_result = nil
       end
    end

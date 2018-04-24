@@ -522,23 +522,32 @@ end)
 function GM:PlayerDisconnected(ply)
    -- Prevent the disconnecter from being in the resends
    if IsValid(ply) then
-      ply:UpdateRole(ROLES.INNOCENT.index)
+      ply:SetRole(ROLE_NONE)
    end
+   
+   SendVisibleForTraitorList()
+   
+   -- easy role filtering method
+   for _, v in pairs(ROLES) do
+      if v.networkRoles then
+         SendNetworkingRolesList(v.index, v.networkRoles)
+      end
+   end
+   
+   hook.Run("TTT2_SendFullStateUpdate")
   
    if GetRoundState() ~= ROUND_PREP then
-      -- Keep traitor entindices in sync on traitor clients
-      for _, v in pairs(GetTeamRoles(TEAM_TRAITOR)) do
-         SendRoleList(v.index, GetRoleTeamFilter(v.team, false), nil)
-      end
-     
-      -- Same for confirmed traitors on innocent clients
-      for _, v in pairs(ROLES) do
-         if v.team ~= TEAM_TRAITOR and not v.specialRoleFilter then
-            SendConfirmedTraitors(GetRoleFilter(v.index, false))
-         end
-         
-         if v.specialRoleFilter then
-            hook.Run("TTT2_SpecialRoleFilter")
+      for _, v in pairs(player.GetAll()) do
+         if not v:GetRoleData().specialRoleFilter then
+            if v:HasTeamRole(TEAM_TRAITOR) then
+                -- Keep traitor entindices in sync on traitor clients
+               SendTeamRoleList(TEAM_TRAITOR, v)
+            else
+                -- Same for confirmed traitors on innocent clients
+               SendConfirmedTraitors(v)
+            end
+         else
+            hook.Run("TTT2_SpecialRoleFilter", v)
          end
       end
       
