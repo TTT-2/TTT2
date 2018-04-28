@@ -113,7 +113,7 @@ local function WasAvoidable(attacker, victim, dmginfo)
    local rdaTeam = hook.Run("TTT2_ScoringGettingTeam", attacker) or rda.team
    local rdvTeam = hook.Run("TTT2_ScoringGettingTeam", victim) or rdv.team
    
-   if rdaTeam == rdvTeam and (not rdv.unknownTeam or rdaTeam == TEAM_TRAITOR) and IsValid(infl) and infl.Avoidable then
+   if rdaTeam and rdaTeam == rdvTeam and (not rdv.unknownTeam or rdaTeam == TEAM_TRAITOR) and IsValid(infl) and infl.Avoidable then
       return true
    end
 
@@ -151,7 +151,7 @@ function KARMA.Hurt(attacker, victim, dmginfo)
       
    -- team kills own team
    elseif rdaTeam ~= nil and rdaTeam == rdvTeam then
-      if WasAvoidable(attacker, victim, dmginfo) then return end
+      if not WasAvoidable(attacker, victim, dmginfo) then return end
 
       local penalty = KARMA.GetHurtPenalty(victim:GetLiveKarma(), hurt_amount)
 
@@ -186,7 +186,7 @@ function KARMA.Killed(attacker, victim, dmginfo)
          
       -- team kills own team
       elseif rdaTeam ~= nil and rdaTeam == rdvTeam then
-         if WasAvoidable(attacker, victim, dmginfo) then return end
+         if not WasAvoidable(attacker, victim, dmginfo) then return end
       
          local penalty = KARMA.GetKillPenalty(victim:GetLiveKarma())
       

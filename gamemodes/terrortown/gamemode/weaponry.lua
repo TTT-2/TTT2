@@ -84,7 +84,9 @@ local function HasLoadoutWeapons(ply)
    local r = GetRoundState() == ROUND_PREP and ROLES.INNOCENT.index or ply:GetRole()
    local weps = GetLoadoutWeapons(r)
    
-   if not weps then return true end
+   if not weps then 
+      return true 
+   end
 
    for _, cls in pairs(weps) do
       if not ply:HasWeapon(cls) and ply:CanCarryType(WEPS.TypeForWeapon(cls)) then

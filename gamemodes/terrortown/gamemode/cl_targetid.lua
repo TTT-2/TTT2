@@ -71,8 +71,10 @@ function GM:PostDrawTranslucentRenderables()
          
          if ply ~= client then
 	         if ply:IsActive() and ply:HasTeamRole(TEAM_TRAITOR) then
-                render.SetMaterial(indicator_mat_tbl[role])
-		      	render.DrawQuadEasy(pos, dir, 8, 8, indicator_col, 180)
+                if indicator_mat_tbl[role] then
+                   render.SetMaterial(indicator_mat_tbl[role])
+                   render.DrawQuadEasy(pos, dir, 8, 8, indicator_col, 180)
+                end
 	         end
 	     end
       end

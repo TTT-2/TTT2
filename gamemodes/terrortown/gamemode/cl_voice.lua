@@ -494,7 +494,7 @@ function GM:PlayerStartVoice(ply)
          if not client[rd.team .. "_gvoice"] then
             pnl.Color = rd.color
          end
-      elseif ply:HasTeamRole(v.team) then
+      elseif ply:HasTeamRole(rd.team) then
          if not ply[rd.team .. "_gvoice"] then
             pnl.Color = rd.color
          end
