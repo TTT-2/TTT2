@@ -61,7 +61,7 @@ TRAITOR_EQUIPMENT = {
 }
 
 -- role teams to have an indentifier
-TEAM_INNO = "innocence"
+TEAM_INNO = "innocents"
 TEAM_TRAITOR = "traitors"
 
 -- max network bits to send roles numbers
