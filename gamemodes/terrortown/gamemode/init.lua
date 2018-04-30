@@ -365,7 +365,11 @@ net.Receive("TTT2_RolesListSynced", function(len, ply)
    local first = net.ReadBool()
    
    -- run serverside
+   hook.Run("TTT2_PreFinishedSync", ply, first)
+   
    hook.Run("TTT2_FinishedSync", ply, first)
+   
+   hook.Run("TTT2_PostFinishedSync", ply, first)
 end)
 
 function GM:PlayerAuthed(ply, steamid, uniqueid)
@@ -526,6 +530,7 @@ local function CleanUp()
    for _, v in pairs(player.GetAll()) do
       if IsValid(v) then
          v:StripWeapons()
+         v:SetRole(ROLES.INNOCENT.index)
       end
    end
 
@@ -655,7 +660,8 @@ function PrepareRound()
       MuteForRestart(false) 
    end)
 
-   net.Start("TTT_ClearClientState") net.Broadcast()
+   net.Start("TTT_ClearClientState") 
+   net.Broadcast()
 
    -- In case client's cleanup fails, make client set all players to innocent role
    timer.Simple(1, SendRoleReset)
@@ -702,6 +708,7 @@ function TellTraitorsAboutTraitors()
             end
             
             names = string.sub(names, 1, -3)
+            
             LANG.Msg(v, "round_traitors_more", {names = names})
          end
       end

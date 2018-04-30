@@ -162,7 +162,11 @@ local function ReceiveSingleRoleTable(len)
          net.SendToServer()
          
          -- run client side
+         hook.Run("TTT2_PreFinishedSync", LocalPlayer(), false)
+         
          hook.Run("TTT2_FinishedSync", LocalPlayer(), false)
+         
+         hook.Run("TTT2_PostFinishedSync", LocalPlayer(), false)
       end
 
       -- flush

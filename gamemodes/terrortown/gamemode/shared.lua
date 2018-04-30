@@ -141,6 +141,8 @@ function AddCustomRole(name, roleData, conVarData)
         
         if conVarData.random then
             CreateConVar("ttt_" .. roleData.name .. "_random", tostring(conVarData.random), FCVAR_ARCHIVE + FCVAR_REPLICATED)
+        else
+            CreateConVar("ttt_" .. roleData.name .. "_random", "100", FCVAR_ARCHIVE + FCVAR_REPLICATED)
         end
         
         CreateConVar("ttt_" .. roleData.name .. "_enabled", "1", FCVAR_NOTIFY + FCVAR_ARCHIVE + FCVAR_REPLICATED)
