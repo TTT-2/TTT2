@@ -11,6 +11,12 @@ L.last_words    = "Letzte Worte"
 L.terrorists = "Terroristen"
 L.spectators = "Zuschauer"
 
+-- role description
+L.ttt2_desc_none = "Du besitzt keine Rolle!"
+L.ttt2_desc_innocent = "Dein Ziel ist es zu überleben bzw. alle Verräter zu töten!"
+L.ttt2_desc_traitor = "Töte jede andere Rolle mithilfe des Traitorshops ([C])!"
+L.ttt2_desc_detective = "Du bist ein Unschuldiger! Helfe den anderen Unschuldigen zu überleben oder die Verräter zu finden!"
+
 --- Round status messages
 L.round_minplayers = "Zu wenig Spieler, um eine neue Runde zu beginnen..."
 L.round_voting     = "Es läuft eine Umfrage, verzögere neue Runde um {num} Sekunde(n)..."

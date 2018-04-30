@@ -11,6 +11,8 @@ CreateClientConVar("ttt_avoid_detective", "0", true, true)
 HELPSCRN = {}
 
 function HELPSCRN:Show()
+   local client = LocalPlayer()
+
    local margin = 15
    local w, h = 630, 470
    
@@ -154,6 +156,42 @@ function HELPSCRN:Show()
    dsettings:AddItem(dlanguage)
 
    dtabs:AddSheet(GetTranslation("help_settings"), dsettings, "icon16/wrench.png", false, false, GetTranslation("help_settings_tip"))
+   
+   -- role description
+   local roledesc_panel = vgui.Create("DPanelList", dtabs)
+   roledesc_panel:StretchToParent(0, 0, dtabs:GetPadding() * 2, 0)
+   roledesc_panel:EnableVerticalScrollbar(true)
+   roledesc_panel:SetPadding(10)
+   roledesc_panel:SetSpacing(10)
+   dtabs:AddSheet("TTT2", roledesc_panel, "icon16/information.png", false, false, "The TTT2 settings")
+   
+   local list = vgui.Create("DIconLayout", roledesc_panel)
+   list:SetSpaceX(5)
+   list:SetSpaceY(5)
+   list:Dock(FILL)
+   list:DockMargin(5, 5, 5, 5)
+   list:DockPadding(10, 10, 10, 10)
+   
+   local roledesc_tab = vgui.Create("DForm")
+   roledesc_tab:SetSpacing(10)
+   
+   if client:GetRole() ~= ROLE_NONE then
+       roledesc_tab:SetName("Current Role Description of " .. GetTranslation(client:GetRoleData().name))
+   else
+       roledesc_tab:SetName("Current Role Description")
+   end
+   
+   roledesc_tab:SetWide(roledesc_panel:GetWide() - 30)
+   roledesc_panel:AddItem(roledesc_tab)
+   
+   if client:GetRole() ~= ROLE_NONE then
+       roledesc_tab:Help(GetTranslation("ttt2_desc_" .. client:GetRoleData().name))
+   else
+       roledesc_tab:Help(GetTranslation("ttt2_desc_none"))
+   end
+   
+   roledesc_tab:SizeToContents()
+   -- end role description
 
    hook.Call("TTTSettingsTabs", GAMEMODE, dtabs)
 

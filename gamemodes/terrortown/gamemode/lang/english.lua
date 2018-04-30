@@ -11,6 +11,12 @@ L.last_words = "Last Words"
 L.terrorists = "Terrorists"
 L.spectators = "Spectators"
 
+-- role description
+L.ttt2_desc_none = "Currently you don't have a role!"
+L.ttt2_desc_innocent = "Your goal is to survive the Traitors!"
+L.ttt2_desc_traitor = "Kill every other role with the help of the Traitorshop ([C])!"
+L.ttt2_desc_detective = "You are an Innocent! Help the Innocents to survive or to find the Traitors!"
+
 --- Round status messages
 L.round_minplayers = "Not enough players to start a new round..."
 L.round_voting     = "Vote in progress, delaying new round by {num} seconds..."
