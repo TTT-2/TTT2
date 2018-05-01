@@ -31,17 +31,15 @@ end
 indicator_mat_tbl = {}
 
 hook.Add("TTT2_FinishedSync", "updateRoleMat", function(ply, first)
-   if first then
-      indicator_mat_tbl = {}
+   indicator_mat_tbl = {}
+   
+   for _, v in pairs(ROLES) do
+      local mat
+      local tmpStr = hook.Run("TTT2_SearchBodyString", LocalPlayer()) or v.abbr
       
-      for _, v in pairs(ROLES) do
-         local mat
-         local tmpStr = hook.Run("TTT2_SearchBodyString", LocalPlayer()) or v.abbr
-         
-         mat = Material("vgui/ttt/sprite_" .. tmpStr)
-         
-         indicator_mat_tbl[v.index] = mat
-      end
+      mat = Material("vgui/ttt/sprite_" .. tmpStr)
+      
+      indicator_mat_tbl[v.index] = mat
    end
 end)
 
