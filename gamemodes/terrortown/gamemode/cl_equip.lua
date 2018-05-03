@@ -45,8 +45,16 @@ function GetEquipmentForRole(role)
         local tbl = realweaponsshop[v.index] or {}
         
         for _, c in pairs(tbl) do 
-            if not table.HasValue(weapons.GetStored(c.name).CanBuy, v.index) then
-                table.insert(weapons.GetStored(c.name).CanBuy, v.index)
+            local wepTbl = weapons.GetStored(c.name)
+        
+            if wepTbl then
+                if not wepTbl.CanBuy then
+                    wepTbl.CanBuy = {}
+                end
+                
+                if not table.HasValue(wepTbl.CanBuy, v.index) then
+                    table.insert(wepTbl.CanBuy, v.index)
+                end
             end
         end
     end

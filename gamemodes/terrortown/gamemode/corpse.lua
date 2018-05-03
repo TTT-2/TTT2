@@ -84,14 +84,16 @@ local function IdentifyBody(ply, rag)
                if v.team ~= TEAM_TRAITOR and not v.specialRoleFilter then
                   SendConfirmedTraitors(GetRoleFilter(v.index, false))
                end
-               
-               if not v.specialRoleFilter and v.showOnConfirm then
-                  SendConfirmedSpecial(v.index, GetSpecialRoleFilter(v.index, false))
-               end
-               
-               if v.specialRoleFilter then
-                  hook.Run("TTT2_SpecialRoleFilter")
-               end
+            end
+         end
+         
+         for _, v in pairs(ROLES) do
+            if not v.specialRoleFilter and v.showOnConfirm then
+               SendConfirmedSpecial(v.index, GetSpecialRoleFilter(v.index, false))
+            end
+            
+            if v.specialRoleFilter then
+               hook.Run("TTT2_SpecialRoleFilter")
             end
          end
          
@@ -99,6 +101,7 @@ local function IdentifyBody(ply, rag)
       end
       
       hook.Call("TTTBodyFound", GAMEMODE, ply, deadply, rag)
+      
       CORPSE.SetFound(rag, true)
    else
       -- re-set because nwvars are unreliable

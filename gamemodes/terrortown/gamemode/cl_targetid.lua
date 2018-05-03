@@ -28,7 +28,7 @@ function GM:AddClassHint(cls, hint)
 end
 
 ---- "T" indicator above traitors
-indicator_mat_tbl = {}
+local indicator_mat_tbl = {}
 
 hook.Add("TTT2_FinishedSync", "updateRoleMat", function(ply, first)
    indicator_mat_tbl = {}

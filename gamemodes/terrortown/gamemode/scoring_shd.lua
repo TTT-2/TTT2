@@ -62,8 +62,8 @@ function ScoreEvent(e, scores, rolesTbl)
       local rd = GetRoleByIndex(scores[aid].r)
       
       if scores[vid].r == scores[aid].r
-      or hook.Run("TTT2_ScoringGettingRole", vid) == scores[aid].r
-      or hook.Run("TTT2_ScoringGettingRole", aid) == scores[vid].r then
+      or hook.Run("TTT2_ScoringGettingRole", player.GetBySteamID(vid)) == scores[aid].r
+      or hook.Run("TTT2_ScoringGettingRole", player.GetBySteamID(aid)) == scores[vid].r then
          scores[aid].tk = scores[aid].tk + 1
       end
 
