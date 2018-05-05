@@ -73,33 +73,19 @@ function SetupEquipment(first)
       end
    end
 
-   for _, v in pairs(GetShopRoles()) do
+   for _, v in pairs(ROLES) do
       if v.team ~= TEAM_TRAITOR and not EquipmentItems[v.index] then
-         EquipmentItems[v.index] = {
-             -- body armor
-             {  id       = EQUIP_ARMOR,
-                loadout  = true, -- default equipment for detectives
-                type     = "item_passive",
-                material = mat_dir .. "icon_armor",
-                name     = "item_armor",
-                desc     = "item_armor_desc"
-             },
-             -- radar
-             {  id       = EQUIP_RADAR,
-                type     = "item_active",
-                material = mat_dir .. "icon_radar",
-                name     = "item_radar",
-                desc     = "item_radar_desc"
-             }
-          }
+         EquipmentItems[v.index] = {}
       end
    end
+   
+   hook.Run("TTT2_SetupEquipment")
 end
 
 SetupEquipment(true)
 
 hook.Add("TTT2_FinishedSync", "updateEquRol", function(ply, first)
-   if first then
+   if first then -- TODO just do it on each client not everytime on Server too !
       SetupEquipment(false)
    end
 end)

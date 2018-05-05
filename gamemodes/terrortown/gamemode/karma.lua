@@ -142,7 +142,7 @@ function KARMA.Hurt(attacker, victim, dmginfo)
    local rdvTeam = hook.Run("TTT2_ScoringGettingTeam", victim) or rdv.team
   
    -- team kills another team
-   if rdaTeam == nil or rdaTeam ~= rdvTeam then
+   if not rdaTeam or rdaTeam ~= rdvTeam then
       local reward = KARMA.GetHurtReward(hurt_amount)
 
       reward = KARMA.GiveReward(attacker, reward)
@@ -150,7 +150,7 @@ function KARMA.Hurt(attacker, victim, dmginfo)
       print(Format("%s (%f) killed %s (%f) and gets REWARDED %f", attacker:Nick(), attacker:GetLiveKarma(), victim:Nick(), victim:GetLiveKarma(), reward))
       
    -- team kills own team
-   elseif rdaTeam ~= nil and rdaTeam == rdvTeam then
+   elseif rdaTeam and rdaTeam == rdvTeam then
       if not WasAvoidable(attacker, victim, dmginfo) then return end
 
       local penalty = KARMA.GetHurtPenalty(victim:GetLiveKarma(), hurt_amount)
@@ -177,7 +177,7 @@ function KARMA.Killed(attacker, victim, dmginfo)
   
    -- team kills another team
    if attacker:IsPlayer() then
-      if rdaTeam == nil or rdaTeam ~= rdvTeam then
+      if not rdaTeam or rdaTeam ~= rdvTeam then
          local reward = KARMA.GetKillReward()
          
          reward = KARMA.GiveReward(attacker, reward)
@@ -185,7 +185,7 @@ function KARMA.Killed(attacker, victim, dmginfo)
          print(Format("%s (%f) killed %s (%f) and gets REWARDED %f", attacker:Nick(), attacker:GetLiveKarma(), victim:Nick(), victim:GetLiveKarma(), reward))
          
       -- team kills own team
-      elseif rdaTeam ~= nil and rdaTeam == rdvTeam then
+      elseif rdaTeam and rdaTeam == rdvTeam then
          if not WasAvoidable(attacker, victim, dmginfo) then return end
       
          local penalty = KARMA.GetKillPenalty(victim:GetLiveKarma())
