@@ -104,6 +104,20 @@ function GetEquipmentItem(role, id)
    end
 end
 
+function GetEquipmentItemByID(id)
+   for _, v in pairs(ROLES) do
+      local tbl = EquipmentItems[v.index]
+      
+      if tbl then
+         for _, v2 in pairs(tbl) do
+            if v2 and v2.id == id then
+               return v2
+            end
+         end
+      end
+   end
+end
+
  -- Utility function to register a new Equipment ID
 function GenerateNewEquipmentID()
    EQUIP_MAX = EQUIP_MAX * 2

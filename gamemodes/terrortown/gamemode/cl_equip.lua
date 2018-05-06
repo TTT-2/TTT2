@@ -191,14 +191,18 @@ local function PreqLabels(parent, x, y)
 
 	return function(selected)
 		local allow = true
+        
 		for _, pnl in pairs(tbl) do
 			local result, text, tooltip = pnl:Check(selected)
+            
 			pnl:SetTextColor(result and COLOR_WHITE or color_bad)
 			pnl:SetText(text)
 			pnl:SizeToContents()
 			pnl:SetTooltip(tooltip)
+            
 			pnl.img:SetImageColor(result and COLOR_WHITE or color_bad)
 			pnl.img:SetTooltip(tooltip)
+            
 			allow = allow and result
 		end
         
@@ -338,15 +342,16 @@ local function TraitorMenuPopup()
                 -- Custom marker icon
                 local marker = vgui.Create("DImage")
                 marker:SetImage("vgui/ttt/custom_marker")
+                
                 marker.PerformLayout = function(s)
                     s:AlignBottom(2)
                     s:AlignRight(2)
                     s:SetSize(16, 16)
                 end
+                
                 marker:SetTooltip(GetTranslation("equip_custom"))
 
                 ic:AddLayer(marker)
-
                 ic:EnableMousePassthrough(marker)
             end
 
@@ -358,15 +363,19 @@ local function TraitorMenuPopup()
             if favorites then
                 if IsFavorite(favorites, item.id) then
                     ic.favorite = true
+                    
                     if showFavoriteVar:GetBool() then
                         local star = vgui.Create("DImage")
                         star:SetImage("icon16/star.png")
+                        
                         star.PerformLayout = function(s)
                             s:AlignTop(2)
                             s:AlignRight(2)
                             s:SetSize(12, 12)
                         end
+                        
                         star:SetTooltip("Favorite")
+                        
                         ic:AddLayer(star)
                         ic:EnableMousePassthrough(star)
                     end
@@ -379,9 +388,7 @@ local function TraitorMenuPopup()
                 slot:SetIcon("vgui/ttt/slotcap")
                 slot:SetIconColor(ply:GetRoleData().color or COLOR_GREY)
                 slot:SetIconSize(16)
-
                 slot:SetIconText(item.slot)
-
                 slot:SetIconProperties(COLOR_WHITE, "DefaultBold", {opacity = 220, offset = 1}, {10, 8})
 
                 ic:AddLayer(slot)
