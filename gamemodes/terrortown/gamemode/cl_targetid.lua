@@ -35,7 +35,7 @@ hook.Add("TTT2_FinishedSync", "updateRoleMat", function(ply, first)
    
    for _, v in pairs(ROLES) do
       local mat
-      local tmpStr = hook.Run("TTT2_SearchBodyString", LocalPlayer()) or v.abbr
+      local tmpStr = hook.Run("TTT2_SearchBodyString", ply) or v.abbr -- TODO: hook doesnt make sense
       
       mat = Material("vgui/ttt/sprite_" .. tmpStr)
       
@@ -213,10 +213,14 @@ function GM:HUDDrawTargetID()
       end
 
       for _, v in pairs(ROLES) do
-         if GetRoundState() == ROUND_ACTIVE and v ~= ROLES.INNOCENT then
-            if client:HasTeamRole(TEAM_TRAITOR) and not v.visibleForTraitors then
-               target_roles[ROLES.TRAITOR.index] = target_roles[ROLES.TRAITOR.index] or ent:GetRole() == v.index
-            elseif v.visibleForTraitors then
+         if GetRoundState() == ROUND_ACTIVE and v.team ~= TEAM_INNO then
+            if client:HasTeamRole(TEAM_TRAITOR) then
+               if not v.visibleForTraitors then
+                  target_roles[ROLES.TRAITOR.index] = target_roles[ROLES.TRAITOR.index] or ent:GetRole() == v.index
+               else
+                  target_roles[v.index] = target_roles[v.index] or ent:GetRole() == v.index
+               end
+            elseif client:HasTeamRole(v.team) or hook.Run("HUDDrawTargetCircleTex", ent) then
                target_roles[v.index] = target_roles[v.index] or ent:GetRole() == v.index
             end
          end
@@ -284,6 +288,7 @@ function GM:HUDDrawTargetID()
 
       -- for ragdolls searched by detectives, add icon
       if ent.search_result and client:IsDetective() then
+      
          -- if I am detective and I know a search result for this corpse, then I
          -- have searched it or another detective has
          surface.SetMaterial(magnifier_mat)
@@ -315,6 +320,7 @@ function GM:HUDDrawTargetID()
    font = "TargetIDSmall2"
 
    surface.SetFont(font)
+   
    w, h = surface.GetTextSize(text)
    x = x_orig - w / 2
 
@@ -349,6 +355,7 @@ function GM:HUDDrawTargetID()
       w, h = surface.GetTextSize(text)
       x = x_orig - w / 2
       y = y + h + 5
+      
       draw.SimpleText(text, font, x + 1, y + 1, COLOR_BLACK)
       draw.SimpleText(text, font, x, y, COLOR_LGRAY)
    end

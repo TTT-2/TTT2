@@ -105,7 +105,13 @@ local function IconForInfoType(t, data)
 
    if type(mat) == "table" then
       if t == "role" then
-         data = hook.Run("TTT2_GetIconRoleIndex") or data
+         if d and d.idx ~= -1 then
+            local ent = Entity(d.idx)
+            
+            if IsValid(ent) and ent:IsPlayer() then
+               data = hook.Run("TTT2_GetIconRoleIndex", ent) or data
+            end
+         end
       end
       
       mat = mat[data]
@@ -142,9 +148,8 @@ function PreprocSearch(raw)
          search[t].nick = d
       elseif t == "role" then
          local rd = GetRoleByIndex(d)
-         local tmpStr = hook.Run("TTT2_SearchRoleMaterialString") or rd.abbr
          
-         search[t].text = T("search_role_" .. tmpStr)
+         search[t].text = T("search_role_" .. rd.abbr)
          search[t].p = 2
       elseif t == "words" then
          if d ~= "" then
@@ -256,6 +261,13 @@ function PreprocSearch(raw)
       if search[t] then
          search[t].img = IconForInfoType(t, d)
       end
+   end
+   
+   local rd = GetRoleByIndex(raw.role)
+   local srms = hook.Run("TTT2_SearchRoleMaterialString", raw.Owner, rd.index) or rd.abbr
+   
+   if srms then
+      search.role.text = T("search_role_" .. srms)
    end
 
    hook.Call("TTTBodySearchPopulate", nil, search, raw)

@@ -250,7 +250,7 @@ end
 
 function GetStartingCredits(abbr)
     if abbr == ROLES.TRAITOR.abbr then
-        return GetConVar("ttt__credits_starting"):GetInt()
+        return GetConVar("ttt_credits_starting"):GetInt()
     end
     
     return ConVarExists("ttt_" .. abbr .. "_credits_starting") and GetConVar("ttt_" .. abbr .. "_credits_starting"):GetInt() or 0
