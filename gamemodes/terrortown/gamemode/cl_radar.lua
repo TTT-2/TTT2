@@ -1,4 +1,4 @@
--- Traitor radar rendering
+-- radar rendering
 
 local render = render
 local surface = surface
@@ -36,7 +36,7 @@ end
 function RADAR:Timeout()
    self:EndScan()
 
-   if self.repeating and LocalPlayer() and LocalPlayer():IsActiveSpecial() and LocalPlayer():HasEquipmentItem(EQUIP_RADAR) then
+   if self.repeating and LocalPlayer() and LocalPlayer():HasEquipmentItem(EQUIP_RADAR) then
       RunConsoleCommand("ttt_radar_scan")
    end
 end
@@ -106,10 +106,10 @@ local function DrawTarget(tgt, size, offset, no_shrink)
    end
 end
 
-local indicator   = surface.GetTextureID("effects/select_ring")
-local c4warn      = surface.GetTextureID("vgui/ttt/icon_c4warn")
+local indicator = surface.GetTextureID("effects/select_ring")
+local c4warn = surface.GetTextureID("vgui/ttt/icon_c4warn")
 local sample_scan = surface.GetTextureID("vgui/ttt/sample_scan")
-local det_beacon  = surface.GetTextureID("vgui/ttt/det_beacon")
+local det_beacon = surface.GetTextureID("vgui/ttt/det_beacon")
 
 local GetPTranslation = LANG.GetParamTranslation
 local FormatTime = util.SimpleTime
@@ -155,7 +155,7 @@ function RADAR:Draw(client)
    end
 
    -- Player radar
-   if not self.enable or not client:IsActiveSpecial() then return end
+   if not self.enable then return end
 
    surface.SetTexture(indicator)
 
@@ -169,34 +169,32 @@ function RADAR:Draw(client)
       alpha = alpha_base
 
       scrpos = tgt.pos:ToScreen()
-      if not scrpos.visible then
-         continue
+      if scrpos.visible then
+         md = mpos:Distance(Vector(scrpos.x, scrpos.y, 0))
+         if md < near_cursor_dist then
+            alpha = math.Clamp(alpha * (md / near_cursor_dist), 40, 230)
+         end
+         
+         role = tgt.role or ROLES.INNOCENT.index
+         local roleData = GetRoleByIndex(role)
+         
+         if role == ROLES.DETECTIVE.index then
+            surface.SetDrawColor(0, 0, 255, alpha)
+            surface.SetTextColor(0, 0, 255, alpha)
+         elseif role == ROLES.INNOCENT.index then
+            surface.SetDrawColor(0, 255, 0, alpha)
+            surface.SetTextColor(0, 255, 0, alpha)
+         elseif roleData.radarColor ~= nil then
+            local c = roleData.radarColor
+            surface.SetDrawColor(c.r, c.g, c.b, alpha)
+            surface.SetTextColor(c.r, c.g, c.b, alpha)
+         else
+            surface.SetDrawColor(255, 0, 0, alpha)
+            surface.SetTextColor(255, 0, 0, alpha)
+         end
+         
+         DrawTarget(tgt, 24, 0)
       end
-      
-      md = mpos:Distance(Vector(scrpos.x, scrpos.y, 0))
-      if md < near_cursor_dist then
-         alpha = math.Clamp(alpha * (md / near_cursor_dist), 40, 230)
-      end
-
-      role = tgt.role or ROLES.INNOCENT.index
-      local roleData = GetRoleByIndex(role)
-      
-      if role == ROLES.DETECTIVE.index then
-         surface.SetDrawColor(0, 0, 255, alpha)
-         surface.SetTextColor(0, 0, 255, alpha)
-      elseif role == ROLES.INNOCENT.index then
-         surface.SetDrawColor(0, 255, 0, alpha)
-         surface.SetTextColor(0, 255, 0, alpha)
-      elseif roleData.radarColor ~= nil then
-         local c = roleData.radarColor
-         surface.SetDrawColor(c.r, c.g, c.b, alpha)
-         surface.SetTextColor(c.r, c.g, c.b, alpha)
-      else
-         surface.SetDrawColor(255, 0, 0, alpha)
-         surface.SetTextColor(255, 0, 0, alpha)
-      end
-      
-      DrawTarget(tgt, 24, 0)
    end
 
    -- Time until next scan
@@ -239,7 +237,7 @@ local function ReceiveRadarScan()
 
    RADAR.targets = {}
    for i = 1, num_targets do
-      local r = net.ReadUInt(2)
+      local r = net.ReadUInt(ROLE_BITS)
 
       local pos = Vector()
       pos.x = net.ReadInt(32)

@@ -105,6 +105,7 @@ local function IconForInfoType(t, data)
 
    if type(mat) == "table" then
       if t == "role" then
+         -- TODO update
          if d and d.idx ~= -1 then
             local ent = Entity(d.idx)
             

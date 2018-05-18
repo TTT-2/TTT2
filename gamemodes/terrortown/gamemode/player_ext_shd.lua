@@ -149,9 +149,8 @@ function plymeta:CanCarryType(t)
 end
 
 function plymeta:IsDeadTerror()
-   return (self:IsSpec() and not self:Alive())
+   return self:IsSpec() and not self:Alive()
 end
-
 
 function plymeta:HasBought(id)
    return self.bought and table.HasValue(self.bought, id)

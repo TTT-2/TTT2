@@ -727,7 +727,6 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
          DamageLog(Format("KILL:\t <something/world> killed %s [%s]", ply:Nick(), ply:GetRoleString()))
       end
     
-    
       KARMA.Killed(attacker, ply, dmginfo)
    end
   
