@@ -115,7 +115,7 @@ function CLSCORE:BuildEventLogPanel(dpanel)
 
    local dlist = vgui.Create("DListView", dpanel)
    dlist:SetPos(0, 0)
-   dlist:SetSize(w, h - margin*2)
+   dlist:SetSize(w, h - margin * 2)
    dlist:SetSortable(true)
    dlist:SetMultiSelect(false)
 
@@ -200,8 +200,8 @@ function CLSCORE:BuildScorePanel(dpanel)
             skull:SetSize(18,18)
          end
 
-         local points_own   = KillsToPoints(s)
-         local points_team  = bonus[roleData.team]
+         local points_own = KillsToPoints(s)
+         local points_team = bonus[roleData.team]
          local points_total = points_own + points_team
 
          local l = dlist:AddLine(surv, nicks[id], role, s.k, s.tk, points_own, points_team, points_total)

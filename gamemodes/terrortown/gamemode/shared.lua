@@ -287,6 +287,16 @@ function GetWinRoles()
     return tmp
 end
 
+function GetWinningRole(team)
+    for _, v in pairs(GetWinRoles()) do
+        if v.team == team then
+            return v
+        end
+    end
+
+    return ROLES.INNOCENT
+end
+
 function GetTeamRoles(team)
     local teamRoles = {}
     

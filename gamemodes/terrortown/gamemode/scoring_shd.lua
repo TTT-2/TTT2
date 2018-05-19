@@ -3,8 +3,8 @@
 function ScoreInit()
    local tmp = {}
    
-   for _, v in pairs(GetWinRoles()) do
-      tmp[v.team] = 0
+   for _, v in pairs(ROLES) do
+      tmp[v.index] = 0
    end
 
    return {
@@ -25,45 +25,53 @@ function ScoreEvent(e, scores, rolesTbl)
 
       -- make sure a score table exists for this person
       -- he might have disconnected by now
-      if scores[vid] == nil then
+      if not scores[vid] then
          scores[vid] = ScoreInit()
       end
       
       -- normally we have the ply:GetTraitor stuff to base this on, but that
       -- won't do for disconnected players
       
-      if scores[aid] == nil then
+      if not scores[aid] then
          scores[aid] = ScoreInit()
       end
       
-      for role, sidTbl in pairs(rolesTbl) do
-         local t = 0
-         
-         for _, sid in pairs(sidTbl) do
-            if sid == e.att.sid then
-               scores[aid].r = role
-               t = t + 1
-            elseif sid == e.vic.sid then
-               scores[vid].r = role
-               t = t + 1
-            end
+      if not e.vic.r or not e.att.r then
+         for role, sidTbl in pairs(rolesTbl) do
+            local t = 0
             
+            for _, sid in pairs(sidTbl) do
+               if sid == e.att.sid then
+                  scores[aid].r = role
+                  t = t + 1
+               elseif sid == e.vic.sid then
+                  scores[vid].r = role
+                  t = t + 1
+               end
+               
+               if t == 2 then
+                  break
+               end
+            end
+               
             if t == 2 then
                break
             end
          end
-            
-         if t == 2 then
-            break
-         end
+      else
+         scores[aid].r = e.att.r
+         scores[vid].r = e.vic.r
       end
       
-      local roleData = GetRoleByIndex(scores[vid].r)
-      local rd = GetRoleByIndex(scores[aid].r)
+      local vrd = GetRoleByIndex(scores[vid].r)
+      local ard = GetRoleByIndex(scores[aid].r)
       
-      if scores[vid].r == scores[aid].r
-      or hook.Run("TTT2_ScoringGettingRole", player.GetBySteamID(vid)) == scores[aid].r
-      or hook.Run("TTT2_ScoringGettingRole", player.GetBySteamID(aid)) == scores[vid].r then
+      local h1 = hook.Run("TTT2_ScoringGettingRole", player.GetBySteamID(vid))
+      local h2 = hook.Run("TTT2_ScoringGettingRole", player.GetBySteamID(aid))
+      
+      if vrd.team == ard.team
+      or h1 and GetRoleByIndex(h1).team == ard.team
+      or h2 and GetRoleByIndex(h2).team == vrd.team then
          scores[aid].tk = scores[aid].tk + 1
       end
 
@@ -72,13 +80,13 @@ function ScoreEvent(e, scores, rolesTbl)
       if aid == vid then
          scores[vid].suicides = scores[vid].suicides + 1
       elseif aid ~= -1 then
-         scores[aid].roles[roleData.team] = scores[aid].roles[roleData.team] + 1
+         scores[aid].roles[ard.index] = scores[aid].roles[ard.index] + 1
          scores[aid].k = scores[aid].k + 1
       end
    elseif e.id == EVENT_BODYFOUND then 
       local sid = e.sid
       
-      if scores[sid] == nil then return end
+      if not scores[sid] then return end
       
       if GetRoleByIndex(scores[sid].r).team == TEAM_TRAITOR then return end
 
@@ -98,7 +106,7 @@ end
 -- scores should be table with SteamIDs as keys
 -- The method of finding these IDs differs between server and client
 function ScoreEventLog(events, scores, rolesTbl)  
-   for k, s in pairs(scores) do
+   for k, _ in pairs(scores) do
       scores[k] = ScoreInit()
    end
 
@@ -143,7 +151,7 @@ function ScoreTeamBonus(scores, wintype, winrole)
       end
    
       bonus[v.team] = alive[v.team] * 1
-      if v.surviveBonus ~= nil then -- theoretically not necessary
+      if v.surviveBonus then -- theoretically not necessary
          bonus[v.team] = bonus[v.team] + math.ceil(others * (v.surviveBonus or 0))
       end
       

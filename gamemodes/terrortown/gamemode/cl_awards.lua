@@ -142,14 +142,17 @@ local function FirstBlood(events, scores, players, traitors)
          if not award.nick or award.nick == "" then 
             return nil 
          end
+         
+         local vtr = GetRoleByIndex(e.vic.r).team == TEAM_TRAITOR
+         local atr = GetRoleByIndex(e.att.r).team == TEAM_TRAITOR
 
-         if e.att.tr and not e.vic.tr then -- traitor legit k
+         if atr and not vtr then -- traitor legit k
             award.title = T("aw_fst1_title")
             award.text = T("aw_fst1_text")
-         elseif e.att.tr and e.vic.tr then -- traitor tk
+         elseif atr and vtr then -- traitor tk
             award.title = T("aw_fst2_title")
             award.text = T("aw_fst2_text")
-         elseif not e.att.tr and not e.vic.tr then -- inno tk
+         elseif not atr and not vtr then -- inno tk
             award.title = T("aw_fst3_title")
             award.text = T("aw_fst3_text")
          else -- inno legit k
@@ -918,9 +921,9 @@ local function TimeOfDeath(events, scores, players, traitors)
 
       if e.id == EVENT_FINISH then
          time_near_end = e.t - near
-         traitor_win = (e.win == WIN_ROLE and e.wr == GetTeamRoles(TEAM_TRAITOR)[1].index)
+         traitor_win = (e.win == WIN_ROLE and e.wr == GetWinningRole(TEAM_TRAITOR).index)
       elseif e.id == EVENT_KILL and e.vic then
-         if time_near_end and e.t > time_near_end and e.vic.tr == traitor_win then
+         if time_near_end and e.t > time_near_end and (GetRoleByIndex(e.vic.r).team == TEAM_TRAITOR) == traitor_win then
             return {
                nick = e.vic.ni,
                title = T("aw_tod1_title"),

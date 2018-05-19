@@ -265,7 +265,7 @@ function PreprocSearch(raw)
    end
    
    local rd = GetRoleByIndex(raw.role)
-   local srms = hook.Run("TTT2_SearchRoleMaterialString", raw.Owner, rd.index) or rd.abbr
+   local srms = hook.Run("TTT2_SearchRoleMaterialString", raw.owner, rd.index) or rd.abbr
    
    if srms then
       search.role.text = T("search_role_" .. srms)

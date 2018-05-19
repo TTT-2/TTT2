@@ -57,22 +57,21 @@ local function CopyDmg(dmg)
 end
 
 function SCORE:HandleKill(victim, attacker, dmginfo)
-   if not (IsValid(victim) and victim:IsPlayer()) then return end
+   if not IsValid(victim) or not victim:IsPlayer() then return end
 
    local e = {
       id = EVENT_KILL,
-      att = {ni = "", sid = -1, tr = false},
-      vic = {ni = victim:Nick(), sid = victim:SteamID(), tr = false},
+      att = {ni = "", sid = -1, r = -1},
+      vic = {ni = victim:Nick(), sid = victim:SteamID(), r = victim:GetRole()},
       dmg = CopyDmg(dmginfo)
    }
 
    e.dmg.h = victim.was_headshot
-   e.vic.tr = victim:HasTeamRole(TEAM_TRAITOR)
 
    if IsValid(attacker) and attacker:IsPlayer() then
       e.att.ni = attacker:Nick()
       e.att.sid = attacker:SteamID()
-      e.att.tr = attacker:HasTeamRole(TEAM_TRAITOR)
+      e.att.r = attacker:GetRole()
 
       -- If a traitor gets himself killed by another traitor's C4, it's his own
       -- damn fault for ignoring the indicator.
@@ -237,6 +236,7 @@ local function EncodeForStream(events)
    local result = util.TableToJSON(events)
    if not result then
       ErrorNoHalt("Round report event encoding failed!\n")
+      
       return false
    else
       return result

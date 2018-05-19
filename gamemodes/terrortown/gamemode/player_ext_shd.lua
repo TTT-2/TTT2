@@ -74,6 +74,10 @@ function plymeta:HasTeamRole(team)
    return self:GetRoleData().team == team
 end
 
+function plymeta:GetWinningRole()
+   return GetWinningRole(self:GetRoleData().team)
+end
+
 function plymeta:IsActiveRole(role) 
    return self:IsActive() and self:IsRole(role)
 end
@@ -231,6 +235,7 @@ if CLIENT then
          -- just let this gesture play itself and get out of its way
          if w == 0 then
             ply:AnimApplyGesture(act, 1)
+            
             return 1
          else
             return 0
@@ -244,10 +249,12 @@ if CLIENT then
       -- sadly it's currently the only one
       [ACT_GMOD_IN_CHAT] = function (ply, w)
             local dest = ply:IsSpeaking() and 1 or 0
+            
             w = math.Approach(w, dest, FrameTime() * 10)
             if w > 0 then
                ply:AnimApplyGesture(ACT_GMOD_IN_CHAT, w)
             end
+            
             return w
          end
    }

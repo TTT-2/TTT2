@@ -34,10 +34,7 @@ hook.Add("TTT2_FinishedSync", "updateRoleMat", function(ply, first)
    indicator_mat_tbl = {}
    
    for _, v in pairs(ROLES) do
-      local mat
-      local tmpStr = hook.Run("TTT2_SearchBodyString", ply) or v.abbr -- TODO: hook doesnt make sense
-      
-      mat = Material("vgui/ttt/sprite_" .. tmpStr)
+      local mat = Material("vgui/ttt/sprite_" .. v.abbr)
       
       indicator_mat_tbl[v.index] = mat
    end
@@ -69,6 +66,8 @@ function GM:PostDrawTranslucentRenderables()
          
          if ply ~= client then
 	         if ply:IsActive() and ply:HasTeamRole(TEAM_TRAITOR) then
+                role = hook.Run("TTT2_SearchBodyRole", ply) or role
+                
                 if indicator_mat_tbl[role] then
                    render.SetMaterial(indicator_mat_tbl[role])
                    render.DrawQuadEasy(pos, dir, 8, 8, indicator_col, 180)

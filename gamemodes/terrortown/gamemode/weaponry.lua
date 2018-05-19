@@ -471,6 +471,7 @@ local function OrderEquipment(ply, cmd, args)
       -- is whitelisted and carryable
       if ply:CanCarryWeapon(swep_table) then
          GiveEquipmentWeapon(ply:SteamID(), id)
+         
          received = true
       end
    end
