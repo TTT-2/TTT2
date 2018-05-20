@@ -947,7 +947,7 @@ function EndRound(type, role)
 end
 
 function GM:MapTriggeredEnd(wintype, winrole)
-   if not (wintype ~= WIN_ROLE and winrole ~= nil) then
+   if not (wintype ~= WIN_ROLE and winrole) then
       self.MapWin = wintype
       self.MapWinRole = winrole
    else
@@ -978,7 +978,7 @@ function GM:TTTCheckForWin()
    -- initialize this is not necessary TODO
    for _, v in pairs(ROLES) do
       if not table.HasValue(team, v.team) then
-         if v.team ~= nil then
+         if v.team then
             table.insert(team, v.team)
          end
          
@@ -988,20 +988,22 @@ function GM:TTTCheckForWin()
    
    local b = 0
    local checkedTeams = {}
-   local innoTeam = GetTeamRoles(TEAM_INNO)[1].index
+   --local innoTeam = GetWinningRole(TEAM_INNO).index
    
    for _, v in pairs(player.GetAll()) do
       if v:IsTerror() then
          local roleData = GetRoleByIndex(v:GetRole())
          local i = roleData.index
          
-         if roleData.team ~= nil then
-            i = GetTeamRoles(roleData.team)[1].index
+         if roleData.team then
+            i = GetWinningRole(roleData.team).index
          end
          
          alive[i] = true
       end
    end
+   
+   hook.Run("TTT2_ModifyWinningAlives", alive)
 
    for _, v in pairs(GetWinRoles()) do
       local i = v.index

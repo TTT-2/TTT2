@@ -129,34 +129,41 @@ CreateConVar("ttt_newroles_enabled", "1", FCVAR_NOTIFY + FCVAR_ARCHIVE)
 
 -- you should only use this function to add roles to TTT2
 function AddCustomRole(name, roleData, conVarData)
+    conVarData = conVarData or {}
+    
     -- shared
-    if not ROLES[name] and not roleData.notSelectable then
-        if conVarData.togglable then
-            CreateClientConVar("ttt_avoid_" .. roleData.name, "0", true, true)
+    if not ROLES[name] then
+        if not roleData.notSelectable then
+            if conVarData.togglable then
+                CreateClientConVar("ttt_avoid_" .. roleData.name, "0", true, true)
+            end
+            
+            CreateConVar("ttt_" .. roleData.name .. "_pct", tostring(conVarData.pct), FCVAR_NOTIFY + FCVAR_ARCHIVE + FCVAR_REPLICATED)
+            CreateConVar("ttt_" .. roleData.name .. "_max", tostring(conVarData.maximum), FCVAR_ARCHIVE + FCVAR_REPLICATED)
+            CreateConVar("ttt_" .. roleData.name .. "_min_players", tostring(conVarData.minPlayers), FCVAR_ARCHIVE + FCVAR_REPLICATED)
+            
+            if conVarData.random then
+                CreateConVar("ttt_" .. roleData.name .. "_random", tostring(conVarData.random), FCVAR_ARCHIVE + FCVAR_REPLICATED)
+            else
+                CreateConVar("ttt_" .. roleData.name .. "_random", "100", FCVAR_ARCHIVE + FCVAR_REPLICATED)
+            end
+            
+            CreateConVar("ttt_" .. roleData.name .. "_enabled", "1", FCVAR_NOTIFY + FCVAR_ARCHIVE + FCVAR_REPLICATED)
         end
         
-        CreateConVar("ttt_" .. roleData.name .. "_pct", tostring(conVarData.pct), FCVAR_NOTIFY + FCVAR_ARCHIVE + FCVAR_REPLICATED)
-        CreateConVar("ttt_" .. roleData.name .. "_max", tostring(conVarData.maximum), FCVAR_ARCHIVE + FCVAR_REPLICATED)
-        CreateConVar("ttt_" .. roleData.name .. "_min_players", tostring(conVarData.minPlayers), FCVAR_ARCHIVE + FCVAR_REPLICATED)
-        
-        if conVarData.random then
-            CreateConVar("ttt_" .. roleData.name .. "_random", tostring(conVarData.random), FCVAR_ARCHIVE + FCVAR_REPLICATED)
-        else
-            CreateConVar("ttt_" .. roleData.name .. "_random", "100", FCVAR_ARCHIVE + FCVAR_REPLICATED)
-        end
-        
-        CreateConVar("ttt_" .. roleData.name .. "_enabled", "1", FCVAR_NOTIFY + FCVAR_ARCHIVE + FCVAR_REPLICATED)
-        
-        if conVarData.credits then
-            CreateConVar("ttt_" .. roleData.abbr .. "_credits_starting", tostring(conVarData.credits), FCVAR_ARCHIVE + FCVAR_REPLICATED)
-        end
-        
-        if conVarData.creditsTraitorKill then
-            CreateConVar("ttt_" .. roleData.abbr .. "_credits_traitorkill", tostring(conVarData.creditsTraitorKill), FCVAR_ARCHIVE + FCVAR_REPLICATED)
-        end
-        
-        if conVarData.creditsTraitorDead then
-            CreateConVar("ttt_" .. roleData.abbr .. "_credits_traitordead", tostring(conVarData.creditsTraitorDead), FCVAR_ARCHIVE + FCVAR_REPLICATED)
+        if roleData.shop then
+            conVarData.credits = conVarData.credits or 0
+            if conVarData.credits then
+                CreateConVar("ttt_" .. roleData.abbr .. "_credits_starting", tostring(conVarData.credits), FCVAR_ARCHIVE + FCVAR_REPLICATED)
+            end
+            
+            if conVarData.creditsTraitorKill then
+                CreateConVar("ttt_" .. roleData.abbr .. "_credits_traitorkill", tostring(conVarData.creditsTraitorKill), FCVAR_ARCHIVE + FCVAR_REPLICATED)
+            end
+            
+            if conVarData.creditsTraitorDead then
+                CreateConVar("ttt_" .. roleData.abbr .. "_credits_traitordead", tostring(conVarData.creditsTraitorDead), FCVAR_ARCHIVE + FCVAR_REPLICATED)
+            end
         end
     end
     

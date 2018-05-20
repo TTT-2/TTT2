@@ -24,7 +24,7 @@ end
 
 -- TTT Totem prevention
 function plymeta:GetRoleTable()
-    print("You have TTT Totem activated! You really should disable it!")
+    print("[TTT2][ERROR] You have TTT Totem activated! You really should disable it!\n-- Disable it by unsubscribe it! --\nI know, that's not nice, but there's no way. It's an internally problem of GMod...")
 end
 
 -- Role access

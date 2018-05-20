@@ -72,7 +72,7 @@ function SendTeamRoleList(team, ply_or_rf, pred)
       if v:HasTeamRole(team) then
          if not pred or (pred and pred(v)) then
             if team == TEAM_TRAITOR and not v:GetRoleData().visibleForTraitors then
-               table.insert(role_ids[GetTeamRoles(team)[1].index], v:EntIndex())
+               table.insert(role_ids[GetWinningRole(team).index], v:EntIndex())
             else
                table.insert(role_ids[v:GetRole()], v:EntIndex())
             end
@@ -98,7 +98,7 @@ function SendTeamRoleSilList(team, ply_or_rf, pred)
       end
    end
 
-   SendRoleListMessage(GetTeamRoles(team)[1].index, role_ids, ply_or_rf)
+   SendRoleListMessage(GetWinningRole(team).index, role_ids, ply_or_rf)
 end
 
 -- this is purely to make sure last round's traitors/dets ALWAYS get reset

@@ -187,8 +187,10 @@ function SCORE:ApplyEventLogScores(wintype, winrole)
    for sid, s in pairs(scored_log) do
       ply = player.GetBySteamID(sid)
       
+      local team = hook.Run("TTT2_ScoringGettingTeam", ply) or ply:GetRoleData().team
+      
       if ply and ply:ShouldScore() then
-         ply:AddFrags(bonus[ply:GetRoleData().team])
+         ply:AddFrags(bonus[team])
       end
    end
 
