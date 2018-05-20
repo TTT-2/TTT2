@@ -22,6 +22,11 @@ function plymeta:UpdateRole(role)
    hook.Run("TTT2_RoleTypeSet", self)
 end
 
+-- TTT Totem prevention
+function plymeta:GetRoleTable()
+    print("You have TTT Totem activated! You really should disable it!")
+end
+
 -- Role access
 -- basically traitor without special traitor roles (w/ teams)
 function plymeta:GetTraitor() 
@@ -41,7 +46,6 @@ function plymeta:GetRoleData()
     
     return ROLES.INNOCENT
 end
-
 
 plymeta.IsTraitor = plymeta.GetTraitor
 plymeta.IsDetective = plymeta.GetDetective
@@ -103,13 +107,21 @@ function plymeta:IsActiveShopper()
    return self:IsActive() and self:IsShopper()
 end
 
+function plymeta:IsTeamMember(ply)
+    local role = hook.Run("TTT2_SearchBodyRole", ply) or ply:GetRole()
+    local plyRd = GetRoleByIndex(role)
+    
+    local rd = self:GetRoleData()
+    
+    return rd.team ~= TEAM_INNO and rd.team == plyRd.team
+end
+
 local GetRTranslation = CLIENT and LANG.GetRawTranslation or util.passthrough
 
 -- Returns printable role
 function plymeta:GetRoleString()
    return GetRTranslation(self:GetRoleData().name) or "???"
 end
-
 
 -- Returns role language string id, caller must translate if desired
 function plymeta:GetRoleStringRaw()
