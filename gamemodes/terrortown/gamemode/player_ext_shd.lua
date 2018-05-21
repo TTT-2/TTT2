@@ -22,11 +22,6 @@ function plymeta:UpdateRole(role)
    hook.Run("TTT2_RoleTypeSet", self)
 end
 
--- TTT Totem prevention
-function plymeta:GetRoleTable()
-    print("[TTT2][ERROR] You have TTT Totem activated! You really should disable it!\n-- Disable it by unsubscribe it! --\nI know, that's not nice, but there's no way. It's an internally problem of GMod...")
-end
-
 -- Role access
 -- basically traitor without special traitor roles (w/ teams)
 function plymeta:GetTraitor() 
