@@ -538,7 +538,7 @@ function SWEPIsBuyable(wepCls)
       return true
    end
    
-   local name = "ttt2_item_" .. wepCls .. "_minPlayers"
+   local name = "t32_" .. wepCls .. "_imp"
    
    if ConVarExists(name) then
       local i = GetConVar(name):GetInt() or 0
