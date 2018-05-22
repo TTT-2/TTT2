@@ -38,6 +38,13 @@ include("cl_voice.lua")
 
 function GM:Initialize()
    MsgN("TTT Client initializing...")
+   
+   -- setup weapon ConVars and similar things
+   for _, wep in pairs(weapons.GetList()) do
+      if not wep.Doublicated then
+         RegisterNormalWeapon(wep)
+      end
+   end
 
    GAMEMODE.round_state = ROUND_WAIT
 
@@ -389,10 +396,11 @@ net.Receive("TTT_PlayerSpawned", PlayerSpawn)
 local function PlayerDeath()
    TIPS.Show()
 end
-
 net.Receive("TTT_PlayerDied", PlayerDeath)
 
-function GM:ShouldDrawLocalPlayer(ply) return false end
+function GM:ShouldDrawLocalPlayer(ply) 
+    return false 
+end
 
 local view = {origin = vector_origin, angles = angle_zero, fov = 0}
 
@@ -450,7 +458,6 @@ function GM:Tick()
       VOICE.Tick()
    end
 end
-
 
 -- Simple client-based idle checking
 local idle = {ang = nil, pos = nil, mx = 0, my = 0, t = 0}

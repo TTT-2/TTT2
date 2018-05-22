@@ -10,7 +10,7 @@ local function GetTextForRole(role)
    local roleData = GetRoleByIndex(role)
       
    if roleData.team ~= TEAM_TRAITOR then
-      if not roleData.shop then
+      if not roleData.shop or hook.Run("TTT2_PreventAccessShop", LocalPlayer()) then
          return GetTranslation("info_popup_" .. roleData.name)
       else
          return GetPTranslation("info_popup_" .. roleData.name, {menukey = Key("+menu_context", "C")})

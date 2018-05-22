@@ -1,5 +1,4 @@
 include("weaponry_shd.lua") -- inits WEPS tbl
-
 ---- Weapon system, pickup limits, etc
 
 local IsEquipment = WEPS.IsEquipment
@@ -26,6 +25,8 @@ function GM:PlayerCanPickupWeapon(ply, wep)
    
    -- Disallow picking up for ammo
    if ply:HasWeapon(wep:GetClass()) then
+      return false
+   elseif not SWEPIsBuyable(wep.ClassName) then
       return false
    elseif not ply:CanCarryWeapon(wep) then
       return false
@@ -330,7 +331,6 @@ local function DropActiveAmmo(ply)
 end
 concommand.Add("ttt_dropammo", DropActiveAmmo)
 
-
 -- Give a weapon to a player. If the initial attempt fails due to heisenbugs in
 -- the map, keep trying until the player has moved to a better spot where it
 -- does work.
@@ -396,7 +396,7 @@ local function OrderEquipment(ply, cmd, args)
 
    -- we use weapons.GetStored to save time on an unnecessary copy, we will not
    -- be modifying it
-   local swep_table = not is_item and weapons.GetStored(id) or nil
+   local swep_table = not is_item and weapons.GetStored(id)
    local Players = {}
    local io = 0
 
@@ -411,7 +411,7 @@ local function OrderEquipment(ply, cmd, args)
             local players = util.JSONToTable(file.Read("roleweapons/" .. roleName .. "/" .. v, "DATA"))
        
             for _, v in pairs(players) do 
-               if swep_table ~= nil then
+               if swep_table then
                   if swep_table.ClassName == v.name then
                      table.insert(swep_table.CanBuy, role.index)
                   end
@@ -466,6 +466,11 @@ local function OrderEquipment(ply, cmd, args)
          
          return
       end
+      
+      -- the item is just buyable if there is a special amount of players
+      if not SWEPIsBuyable(swep_table.ClassName) then
+         return
+      end
 
       -- no longer restricted to only WEAPON_EQUIP weapons, just anything that
       -- is whitelisted and carryable
@@ -479,7 +484,9 @@ local function OrderEquipment(ply, cmd, args)
 
    if received then
       ply:SubtractCredits(1)
+      
       LANG.Msg(ply, "buy_received")
+      
       ply:AddBought(id)
       
       timer.Simple(0.5, function()

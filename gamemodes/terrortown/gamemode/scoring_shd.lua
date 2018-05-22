@@ -31,7 +31,6 @@ function ScoreEvent(e, scores, rolesTbl)
       
       -- normally we have the ply:GetTraitor stuff to base this on, but that
       -- won't do for disconnected players
-      
       if not scores[aid] then
          scores[aid] = ScoreInit()
       end
@@ -93,7 +92,7 @@ function ScoreEvent(e, scores, rolesTbl)
       local find_bonus = 0
       
       for _, v in pairs(ROLES) do
-         if v.team ~= TEAM_TRAITOR and v.shop then
+         if v.team ~= TEAM_TRAITOR and v.shop then -- why just v.shop ???
             find_bonus = scores[sid].r == v.index and 3 or 1
          end
       end

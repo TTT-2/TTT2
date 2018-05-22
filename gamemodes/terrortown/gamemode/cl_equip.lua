@@ -38,7 +38,7 @@ net.Receive("weaponshopper", function()
    end
 end)
 
-local Equipment = nil
+local Equipment
 
 function GetEquipmentForRole(role)
     for _, v in pairs(GetShopRoles()) do
@@ -157,7 +157,7 @@ local function PreqLabels(parent, x, y)
 	tbl.owned.img:SetImage("vgui/ttt/equip/briefcase.png")
 
 	tbl.owned.Check = function(s, sel)
-		if ItemIsWeapon(sel) and not CanCarryWeapon(sel) then
+		if ItemIsWeapon(sel) and (not CanCarryWeapon(sel) or not SWEPIsBuyable(tostring(sel.id))) then -- TODO add indicator for "SWEPIsBuyable(wepCls)"
 			return false, sel.slot, GetPTranslation("equip_carry_slot", {slot = sel.slot})
 		elseif not ItemIsWeapon(sel) and LocalPlayer():HasEquipmentItem(sel.id) then
 			return false, "X", GetTranslation("equip_carry_own")
@@ -227,11 +227,8 @@ function PANEL:SelectPanel(pnl)
 end
 vgui.Register("EquipSelect", PANEL, "DPanelSelect")
 
-
 local SafeTranslate = LANG.TryTranslation
-
 local color_darkened = Color(255, 255, 255, 80)
-
 local eqframe = nil
 
 local function TraitorMenuPopup()
@@ -415,7 +412,7 @@ local function TraitorMenuPopup()
 		table.HasValue(owned_ids, item.id) or
 		tonumber(item.id) and ply:HasEquipmentItem(tonumber(item.id)) or
 		-- already carrying a weapon for this slot
-		ItemIsWeapon(item) and not CanCarryWeapon(item) or
+		ItemIsWeapon(item) and (not CanCarryWeapon(item) or not SWEPIsBuyable(tostring(item.id))) or
 		-- already bought the item before
 		item.limited and ply:HasBought(tostring(item.id))) then
 			ic:SetIconColor(color_darkened)
@@ -628,9 +625,10 @@ end
 concommand.Add("ttt_cl_traitorpopup_close", ForceCloseTraitorMenu)
 
 function GM:OnContextMenuOpen()
+    local client = LocalPlayer()
 	local r = GetRoundState()
     
-	if r == ROUND_ACTIVE and not LocalPlayer():IsShopper() then
+	if r == ROUND_ACTIVE and (not client:IsShopper() or hook.Run("TTT2_PreventAccessShop", client)) then
 		return
 	elseif r == ROUND_POST or r == ROUND_PREP then
 		CLSCORE:Reopen()

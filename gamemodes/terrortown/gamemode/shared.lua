@@ -260,7 +260,7 @@ function GetStartingCredits(abbr)
         return GetConVar("ttt_credits_starting"):GetInt()
     end
     
-    return ConVarExists("ttt_" .. abbr .. "_credits_starting") and GetConVar("ttt_" .. abbr .. "_credits_starting"):GetInt() or 0
+    return (ConVarExists("ttt_" .. abbr .. "_credits_starting") and GetConVar("ttt_" .. abbr .. "_credits_starting"):GetInt() or 0)
 end
 
 function GetShopRoles()
@@ -474,7 +474,7 @@ local ttt_playercolors = {
 
 CreateConVar("ttt_playercolor_mode", "1")
 function GM:TTTPlayerColor(model)
-   local mode = GetConVarNumber("ttt_playercolor_mode") or 0
+   local mode = (ConVarExists("ttt_playercolor_mode") and GetConVar("ttt_playercolor_mode"):GetInt() or 0)
    
    if mode == 1 then
       return table.Random(ttt_playercolors.serious)
@@ -520,3 +520,60 @@ hook.Add("TTT2_FinishedSync", "updateDefEquRol", function(ply, first)
       DefaultEquipment = GetDefaultEquipment()
    end
 end)
+
+TTTWEAPON_CVARS = {}
+
+function SWEPAddConVar(swep, tbl)
+   local cls = swep.ClassName
+
+   TTTWEAPON_CVARS[cls] = TTTWEAPON_CVARS[cls] or {}
+
+   table.insert(TTTWEAPON_CVARS[cls], tbl)
+
+   CreateConVar(tbl.cvar, tbl.value, tbl.flags)
+end
+
+function SWEPIsBuyable(wepCls)
+   if not wepCls then 
+      return true
+   end
+   
+   local name = "ttt2_item_" .. wepCls .. "_minPlayers"
+   
+   if ConVarExists(name) then
+      local i = GetConVar(name):GetInt() or 0
+      
+      if i == 0 then
+         return false
+      end
+      
+      local choices = {}
+      
+      for _, v in pairs(player.GetAll()) do
+         -- everyone on the spec team is in specmode
+         if IsValid(v) and not v:IsSpec() then
+            table.insert(choices, v)
+         end
+      end
+      
+      if #choices < i then
+         return false
+      end
+   end
+   
+   return true
+end
+
+function RegisterNormalWeapon(wep)
+   if wep.MinPlayers then
+      local tbl = {}
+      tbl.cvar = "t32_" .. wep.ClassName .. "_imp"
+      tbl.value = tostring(wep.MinPlayers)
+      tbl.flags = {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE}
+      tbl.slider = true
+      tbl.desc = "MinPlayers"
+      tbl.max = 100
+      
+      SWEPAddConVar(wep, tbl)
+   end
+end

@@ -64,15 +64,17 @@ end
 function plymeta:SetDefaultCredits()
    if self:IsShopper() then
       if self:HasTeamRole(TEAM_TRAITOR) then
-         local c = GetConVarNumber("ttt_credits_starting")
+         local c = (ConVarExists("ttt_credits_starting") and GetConVar("ttt_credits_starting"):GetInt() or 0)
          
          if CountTraitors() == 1 then
-            c = c + GetConVarNumber("ttt_credits_alonebonus")
+            c = c + (ConVarExists("ttt_credits_alonebonus") and GetConVar("ttt_credits_alonebonus"):GetInt() or 0)
          end
          
          self:SetCredits(math.ceil(c))
       else
-         self:SetCredits(math.ceil(GetConVarNumber("ttt_" .. self:GetRoleData().abbr .. "_credits_starting")))
+         local name = "ttt_" .. self:GetRoleData().abbr .. "_credits_starting"
+         
+         self:SetCredits(math.ceil((ConVarExists(name) and GetConVar(name):GetInt() or 0)))
       end
    else
       self:SetCredits(0)

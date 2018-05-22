@@ -172,7 +172,6 @@ function GM:Initialize()
    hook.Run("TTT2_PostRoleInit")
    
    print()
-   
    MsgN("Trouble In Terrorist Town gamemode initializing...")
    ShowVersion() 
 
@@ -232,6 +231,15 @@ function GM:Initialize()
    if not cstrike then
       ErrorNoHalt("TTT WARNING: CS:S does not appear to be mounted by GMod. Things may break in strange ways. Server admin? Check the TTT readme for help.\n")
    end
+   
+   -- setup weapon ConVars and similar things
+   for _, wep in pairs(weapons.GetList()) do
+      if not wep.Doublicated then
+         RegisterNormalWeapon(wep)
+      end
+   end
+   
+   hook.Run("PostInitialize")
 end
 
 -- Used to do this in Initialize, but server cfg has not always run yet by that
@@ -251,7 +259,7 @@ function GM:InitPostEntity()
    WEPS.ForcePrecache()
 end
 
--- Convar replication is broken in gmod, so we do this.
+-- ConVar replication is broken in GMod, so we do this.
 -- I don't like it any more than you do, dear reader.
 function GM:SyncGlobals()
    SetGlobalBool("ttt_detective", ttt_detective:GetBool())
@@ -400,7 +408,7 @@ end
 local function EnoughPlayers()
    local ready = 0
    
-   -- only count truly available players, ie. no forced specs
+   -- only count truly available players, i.e. no forced specs
    for _, ply in pairs(player.GetAll()) do
       if IsValid(ply) and ply:ShouldSpawn() then
          ready = ready + 1
@@ -558,7 +566,6 @@ local function SpawnEntities()
    SpawnWillingPlayers()
 end
 
-
 local function StopRoundTimers()
    -- remove all timers
    timer.Stop("wait2prep")
@@ -572,6 +579,7 @@ end
 local function CheckForAbort()
    if not EnoughPlayers() then
       LANG.Msg("round_minplayers")
+      
       StopRoundTimers()
       WaitForPlayers()
       
@@ -701,6 +709,7 @@ function TellTraitorsAboutTraitors()
             return
          else
             local names = ""
+            
             for _, name in pairs(traitornicks) do
                if name ~= v:Nick() then
                   names = names .. name .. ", "
@@ -1143,7 +1152,7 @@ function SelectRoles()
       for _, v in pairs(ROLES) do
          if not v.notSelectable and v.team == TEAM_TRAITOR and v ~= ROLES.TRAITOR and GetConVar("ttt_" .. v.name .. "_enabled"):GetBool() then
             local b = true
-            local r = ConVarExists("ttt_" .. v.name .. "_random") and GetConVar("ttt_" .. v.name .. "_random"):GetInt() or 0
+            local r = (ConVarExists("ttt_" .. v.name .. "_random") and GetConVar("ttt_" .. v.name .. "_random"):GetInt() or 0)
             
             if r > 0 and r < 100 then
                b = math.random(1, 100) <= r
@@ -1175,7 +1184,7 @@ function SelectRoles()
       if not v.notSelectable and (v == ROLES.DETECTIVE or newRolesEnabled) then
          if v ~= ROLES.INNOCENT and v.team ~= TEAM_TRAITOR and GetConVar("ttt_" .. v.name .. "_enabled"):GetBool() then
             local b = true
-            local r = ConVarExists("ttt_" .. v.name .. "_random") and GetConVar("ttt_" .. v.name .. "_random"):GetInt() or 0
+            local r = (ConVarExists("ttt_" .. v.name .. "_random") and GetConVar("ttt_" .. v.name .. "_random"):GetInt() or 0)
             
             if r > 0 and r < 100 then
                b = math.random(1, 100) <= r

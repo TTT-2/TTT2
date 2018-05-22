@@ -158,7 +158,7 @@ function LANG.SetActiveLanguage(lang_name)
 end
 
 function LANG.Init()
-   local lang_name = GetConVarString("ttt_language")
+   local lang_name = (ConVarExists("ttt_language") and GetConVar("ttt_language"):GetString() or "")
 
    -- if we want to use the server language, we'll be switching to it as soon as
    -- we hear from the server which one it is, for now use default

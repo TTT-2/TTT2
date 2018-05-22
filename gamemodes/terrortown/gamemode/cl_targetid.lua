@@ -142,7 +142,6 @@ local function DrawPropSpecLabels(client)
    end
 end
 
-
 ---- Crosshair affairs
 
 surface.CreateFont("TargetIDSmall2", {font = "TargetID", size = 16, weight = 1000})

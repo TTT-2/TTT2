@@ -476,7 +476,6 @@ local function SpecUseKey(ply, cmd, arg)
 end
 concommand.Add("ttt_spec_use", SpecUseKey)
 
-
 util.AddNetworkString("newshop")
 concommand.Add("Weaponshop", function(ply, cmd, args)
     net.Start("newshop")
@@ -485,7 +484,6 @@ concommand.Add("Weaponshop", function(ply, cmd, args)
 end)
 
 util.AddNetworkString("shop")
-
 net.Receive("shop", function()
    local role = string.lower(net.ReadString())
    local weapon = net.ReadString()
@@ -502,7 +500,6 @@ net.Receive("shop", function()
 end)
 
 util.AddNetworkString("weaponshopper")
-
 timer.Create("weaponshopperman", 0.5, 0, function()
    for _, v in pairs(GetShopRoles()) do
       local role = string.lower(v.printName)
@@ -614,7 +611,7 @@ local function CheckCreditAward(victim, attacker)
  
    -- DETECTIVE AWARD
    if IsValid(attacker) and attacker:IsPlayer() and attacker:IsActiveRole(ROLES.DETECTIVE.index) and victim:HasTeamRole(TEAM_TRAITOR) then
-      local amt = GetConVarNumber("ttt_det_credits_traitordead") or 1
+      local amt = (ConVarExists("ttt_det_credits_traitordead") and GetConVar("ttt_det_credits_traitordead"):GetInt() or 1)
       
       for _, ply in pairs(player.GetAll()) do
          if ply:IsActiveRole(ROLES.DETECTIVE.index) then
@@ -654,9 +651,9 @@ local function CheckCreditAward(victim, attacker)
       end
       
       local pct = terror_dead / terror_total
-      if pct >= GetConVarNumber("ttt_credits_award_pct") then
+      if not ConVarExists("ttt_credits_award_pct") or pct >= GetConVar("ttt_credits_award_pct"):GetInt() then
          -- Traitors have killed sufficient people to get an award
-         local amt = GetConVarNumber("ttt_credits_award_size")
+         local amt = (ConVarExists("ttt_credits_award_size") and GetConVar("ttt_credits_award_size"):GetInt() or 0)
          
          -- If size is 0, awards are off
          if amt > 0 then
@@ -754,11 +751,11 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
       
       -- if traitor team kills detective
       if attacker:IsActive() and attacker:HasTeamRole(TEAM_TRAITOR) and ply:GetRole() == ROLES.DETECTIVE.index then
-         reward = math.ceil(GetConVarNumber("ttt_credits_" .. ROLES.DETECTIVE.name .. "kill"))
+         reward = math.ceil((ConVarExists("ttt_credits_" .. ROLES.DETECTIVE.name .. "kill") and GetConVar("ttt_credits_" .. ROLES.DETECTIVE.name .. "kill"):GetInt() or 0))
       
       -- elseif shopper kills other teams
       elseif attacker:IsActive() and not attacker:HasTeamRole(TEAM_TRAITOR) and attacker:IsShopper() and ply:GetRoleData().team ~= attacker:GetRoleData().team then
-         reward = math.ceil(GetConVarNumber("ttt_det_credits_" .. ROLES.TRAITOR.name .. "kill"))
+         reward = math.ceil((ConVarExists("ttt_det_credits_" .. ROLES.TRAITOR.name .. "kill") and GetConVar("ttt_det_credits_" .. ROLES.TRAITOR.name .. "kill"):GetInt() or 0))
       end
       
       if reward > 0 then
@@ -1196,6 +1193,7 @@ end
 local tm = nil
 local ply = nil
 local plys = nil
+
 function GM:Tick()
    -- three cheers for micro-optimizations
    plys = player.GetAll()

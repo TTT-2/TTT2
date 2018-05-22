@@ -290,7 +290,7 @@ if CLIENT then
    -- Perform the gesture using the GestureRunner system. If custom_runner is
    -- non-nil, it will be used instead of the default runner for the act.
    function plymeta:AnimPerformGesture(act, custom_runner)
-      if GetConVarNumber("ttt_show_gestures") == 0 then return end
+      if not ConVarExists("ttt_show_gestures") or GetConVar("ttt_show_gestures"):GetInt() == 0 then return end
 
       local runner = custom_runner or act_runner[act]
       
