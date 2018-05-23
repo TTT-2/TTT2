@@ -176,7 +176,7 @@ function PreprocSearch(raw)
          end
       elseif t == "c4" then
          if d > 0 then
-            search[t].text= PT("search_c4", {num = d})
+            search[t].text = PT("search_c4", {num = d})
          end
       elseif t == "dmg" then
          search[t].text = DmgToText(d)
@@ -264,11 +264,14 @@ function PreprocSearch(raw)
       end
    end
    
-   local rd = GetRoleByIndex(raw.role)
-   local srms = hook.Run("TTT2_SearchRoleMaterialString", raw.owner, rd.index) or rd.abbr
-   
-   if srms then
-      search.role.text = T("search_role_" .. srms)
+   -- TODO rework, does not work
+   if raw.oldOwner and IsValid(raw.oldOwner) then
+      local rd = GetRoleByIndex(raw.role)
+	  
+	  local srms = hook.Run("TTT2_SearchRoleMaterialString", raw.oldOwner, rd.index)
+	  if srms then
+	     search.role.text = T("search_role_" .. srms)
+	  end
    end
 
    hook.Call("TTTBodySearchPopulate", nil, search, raw)
@@ -282,9 +285,11 @@ end
 local function SearchInfoController(search, dactive, dtext)
    return function(s, pold, pnew)
       local t = pnew.info_type
+	  
       local data = search[t]
       if not data then
          ErrorNoHalt("Search: data not found", t, data,"\n")
+		 
          return
       end
 
@@ -292,8 +297,8 @@ local function SearchInfoController(search, dactive, dtext)
       -- text that does not need wrapping. I long ago stopped wondering
       -- "why" when it comes to VGUI. Apply hack, move on.
       dtext:GetLabel():SetWrap(#data.text > 50)
-
       dtext:SetText(data.text)
+	  
       dactive:SetImage(data.img)
    end
 end
@@ -493,7 +498,11 @@ local function ReceiveRagdollSearch()
 
    -- Basic info
    search.eidx = net.ReadUInt(16)
-   search.owner = Entity(net.ReadUInt(8))
+   
+   local owner = Entity(net.ReadUInt(8))
+   
+   search.owner = owner
+   search.oldOwner = owner
 
    if not (IsValid(search.owner) and search.owner:IsPlayer() and not search.owner:IsTerror()) then
       search.owner = nil
@@ -552,6 +561,7 @@ local function ReceiveRagdollSearch()
    end
 
    StoreSearchResult(search)
+   
    search = nil
 end
 
