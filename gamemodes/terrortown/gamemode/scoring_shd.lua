@@ -62,15 +62,16 @@ function ScoreEvent(e, scores, rolesTbl)
          scores[vid].r = e.vic.r
       end
       
+      local h1 = hook.Run("TTT2_ScoringGettingRole", player.GetBySteamID(vid))
+	  scores[vid].r = h1 or scores[vid].r
+	  
+      local h2 = hook.Run("TTT2_ScoringGettingRole", player.GetBySteamID(aid))
+	  scores[aid].r = h2 or scores[aid].r
+      
       local vrd = GetRoleByIndex(scores[vid].r)
       local ard = GetRoleByIndex(scores[aid].r)
       
-      local h1 = hook.Run("TTT2_ScoringGettingRole", player.GetBySteamID(vid))
-      local h2 = hook.Run("TTT2_ScoringGettingRole", player.GetBySteamID(aid))
-      
-      if vrd.team == ard.team
-      or h1 and GetRoleByIndex(h1).team == ard.team
-      or h2 and GetRoleByIndex(h2).team == vrd.team then
+      if vrd.team == ard.team then
          scores[aid].tk = scores[aid].tk + 1
       end
 

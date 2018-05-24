@@ -104,17 +104,6 @@ local function IconForInfoType(t, data)
    local mat = TypeToMat[t]
 
    if type(mat) == "table" then
-      if t == "role" then
-         -- TODO update
-         if d and d.idx ~= -1 then
-            local ent = Entity(d.idx)
-            
-            if IsValid(ent) and ent:IsPlayer() then
-               data = hook.Run("TTT2_GetIconRoleIndex", ent) or data
-            end
-         end
-      end
-      
       mat = mat[data]
    elseif type(mat) == "function" then
       mat = mat(data)
@@ -262,16 +251,6 @@ function PreprocSearch(raw)
       if search[t] then
          search[t].img = IconForInfoType(t, d)
       end
-   end
-   
-   -- TODO rework, does not work
-   if raw.oldOwner and IsValid(raw.oldOwner) then
-      local rd = GetRoleByIndex(raw.role)
-	  
-	  local srms = hook.Run("TTT2_SearchRoleMaterialString", raw.oldOwner, rd.index)
-	  if srms then
-	     search.role.text = T("search_role_" .. srms)
-	  end
    end
 
    hook.Call("TTTBodySearchPopulate", nil, search, raw)

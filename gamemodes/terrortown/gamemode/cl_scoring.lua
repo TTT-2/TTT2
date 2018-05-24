@@ -510,8 +510,8 @@ end
 
 function CLSCORE:Init(events)
    -- Get start time and traitors
-   local starttime = nil
-   local tmp = nil
+   local starttime
+   local tmp
    
    for _, e in pairs(events) do
       if e.id == EVENT_GAME and e.state == ROUND_ACTIVE then

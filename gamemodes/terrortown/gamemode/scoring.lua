@@ -72,10 +72,14 @@ function SCORE:HandleKill(victim, attacker, dmginfo)
       e.att.ni = attacker:Nick()
       e.att.sid = attacker:SteamID()
       e.att.r = attacker:GetRole()
+   end
+   
+   hook.Run("TTT2_ModifyScoringEvent", e, {victim = victim, attacker = attacker, dmginfo = dmginfo})
 
+   if IsValid(attacker) and attacker:IsPlayer() then
       -- If a traitor gets himself killed by another traitor's C4, it's his own
       -- damn fault for ignoring the indicator.
-      if dmginfo:IsExplosionDamage() and attacker:HasTeamRole(TEAM_TRAITOR) and victim:HasTeamRole(TEAM_TRAITOR) then
+      if dmginfo:IsExplosionDamage() and GetRoleByIndex(e.att.r).team == TEAM_TRAITOR and GetRoleByIndex(e.vic.r).team == TEAM_TRAITOR then
          local infl = dmginfo:GetInflictor()
          
          if IsValid(infl) and infl:GetClass() == "ttt_c4" then
@@ -83,7 +87,7 @@ function SCORE:HandleKill(victim, attacker, dmginfo)
          end
       end
    end
-
+   
    self:AddEvent(e)
 end
 
@@ -103,7 +107,7 @@ function SCORE:HandleSelection()
    end
    
    for _, ply in pairs(player.GetAll()) do
-    -- no innos
+      -- no innos
       if ply:GetRole() ~= ROLES.INNOCENT.index then
          table.insert(tmp[ply:GetRole()], ply:SteamID())
       end
@@ -186,11 +190,14 @@ function SCORE:ApplyEventLogScores(wintype, winrole)
 
    for sid, s in pairs(scored_log) do
       ply = player.GetBySteamID(sid)
+	  
+	  if ply and IsValid(ply) then
+         local team = hook.Run("TTT2_ScoringGettingRole", ply) or ply:GetRoleData()
+	     team = team.team
       
-      local team = hook.Run("TTT2_ScoringGettingTeam", ply) or ply:GetRoleData().team
-      
-      if ply and ply:ShouldScore() then
-         ply:AddFrags(bonus[team])
+         if ply:ShouldScore() then
+            ply:AddFrags(bonus[team])
+         end
       end
    end
 
