@@ -1,194 +1,194 @@
 -- Server and client both need this for scoring event logs
 
 function ScoreInit()
-   local tmp = {}
-   
-   for _, v in pairs(ROLES) do
-      tmp[v.index] = 0
-   end
+	local tmp = {}
+	
+	for _, v in pairs(ROLES) do
+		tmp[v.index] = 0
+	end
 
-   return {
-      deaths = 0,
-      suicides = 0,
-      r = ROLES.INNOCENT.index,
-      k = 0,
-      tk = 0,
-      roles = tmp,
-      bonus = 0 -- non-kill points to add
-   }
+	return {
+		deaths = 0,
+		suicides = 0,
+		r = ROLES.INNOCENT.index,
+		k = 0,
+		tk = 0,
+		roles = tmp,
+		bonus = 0 -- non-kill points to add
+	}
 end
 
 function ScoreEvent(e, scores, rolesTbl)
-   if e.id == EVENT_KILL then
-      local aid = e.att.sid
-      local vid = e.vic.sid
+	if e.id == EVENT_KILL then
+		local aid = e.att.sid
+		local vid = e.vic.sid
 
-      -- make sure a score table exists for this person
-      -- he might have disconnected by now
-      if not scores[vid] then
-         scores[vid] = ScoreInit()
-      end
-      
-      -- normally we have the ply:GetTraitor stuff to base this on, but that
-      -- won't do for disconnected players
-      if not scores[aid] then
-         scores[aid] = ScoreInit()
-      end
-      
-      if not e.vic.r or not e.att.r then
-         for role, sidTbl in pairs(rolesTbl) do
-            local t = 0
-            
-            for _, sid in pairs(sidTbl) do
-               if sid == e.att.sid then
-                  scores[aid].r = role
-                  t = t + 1
-               elseif sid == e.vic.sid then
-                  scores[vid].r = role
-                  t = t + 1
-               end
-               
-               if t == 2 then
-                  break
-               end
-            end
-               
-            if t == 2 then
-               break
-            end
-         end
-      else
-         scores[aid].r = e.att.r
-         scores[vid].r = e.vic.r
-      end
-      
-      local h1 = hook.Run("TTT2_ScoringGettingRole", player.GetBySteamID(vid))
-	  scores[vid].r = h1 or scores[vid].r
-	  
-      local h2 = hook.Run("TTT2_ScoringGettingRole", player.GetBySteamID(aid))
-	  scores[aid].r = h2 or scores[aid].r
-      
-      local vrd = GetRoleByIndex(scores[vid].r)
-      local ard = GetRoleByIndex(scores[aid].r)
-      
-      if vrd.team == ard.team then
-         scores[aid].tk = scores[aid].tk + 1
-      end
+		-- make sure a score table exists for this person
+		-- he might have disconnected by now
+		if not scores[vid] then
+			scores[vid] = ScoreInit()
+		end
+		
+		-- normally we have the ply:GetTraitor stuff to base this on, but that
+		-- won't do for disconnected players
+		if not scores[aid] then
+			scores[aid] = ScoreInit()
+		end
+		
+		if not e.vic.r or not e.att.r then
+			for role, sidTbl in pairs(rolesTbl) do
+				local t = 0
+				
+				for _, sid in pairs(sidTbl) do
+					if sid == e.att.sid then
+						scores[aid].r = role
+						t = t + 1
+					elseif sid == e.vic.sid then
+						scores[vid].r = role
+						t = t + 1
+					end
+					
+					if t == 2 then
+						break
+					end
+				end
+					
+				if t == 2 then
+					break
+				end
+			end
+		else
+			scores[aid].r = e.att.r
+			scores[vid].r = e.vic.r
+		end
+		
+		local h1 = hook.Run("TTT2_ScoringGettingRole", player.GetBySteamID(vid))
+		scores[vid].r = h1 or scores[vid].r
+		
+		local h2 = hook.Run("TTT2_ScoringGettingRole", player.GetBySteamID(aid))
+		scores[aid].r = h2 or scores[aid].r
+		
+		local vrd = GetRoleByIndex(scores[vid].r)
+		local ard = GetRoleByIndex(scores[aid].r)
+		
+		if vrd.team == ard.team then
+			scores[aid].tk = scores[aid].tk + 1
+		end
 
-      scores[vid].deaths = scores[vid].deaths + 1
+		scores[vid].deaths = scores[vid].deaths + 1
 
-      if aid == vid then
-         scores[vid].suicides = scores[vid].suicides + 1
-      elseif aid ~= -1 then
-         scores[aid].roles[ard.index] = scores[aid].roles[ard.index] + 1
-         scores[aid].k = scores[aid].k + 1
-      end
-   elseif e.id == EVENT_BODYFOUND then 
-      local sid = e.sid
-      
-      if not scores[sid] then return end
-      
-      if GetRoleByIndex(scores[sid].r).team == TEAM_TRAITOR then return end
+		if aid == vid then
+			scores[vid].suicides = scores[vid].suicides + 1
+		elseif aid ~= -1 then
+			scores[aid].roles[ard.index] = scores[aid].roles[ard.index] + 1
+			scores[aid].k = scores[aid].k + 1
+		end
+	elseif e.id == EVENT_BODYFOUND then 
+		local sid = e.sid
+		
+		if not scores[sid] then return end
+		
+		if GetRoleByIndex(scores[sid].r).team == TEAM_TRAITOR then return end
 
-      local find_bonus = 0
-      
-      for _, v in pairs(ROLES) do
-         if v.team ~= TEAM_TRAITOR and v.shop then -- why just v.shop ???
-            find_bonus = scores[sid].r == v.index and 3 or 1
-         end
-      end
-      
-      scores[sid].bonus = scores[sid].bonus + find_bonus
-   end
+		local find_bonus = 0
+		
+		for _, v in pairs(ROLES) do
+			if v.team ~= TEAM_TRAITOR and v.shop then -- why just v.shop ???
+				find_bonus = scores[sid].r == v.index and 3 or 1
+			end
+		end
+		
+		scores[sid].bonus = scores[sid].bonus + find_bonus
+	end
 end
 
 -- events should be event log as generated by scoring.lua
 -- scores should be table with SteamIDs as keys
 -- The method of finding these IDs differs between server and client
-function ScoreEventLog(events, scores, rolesTbl)  
-   for k, _ in pairs(scores) do
-      scores[k] = ScoreInit()
-   end
+function ScoreEventLog(events, scores, rolesTbl)	
+	for k, _ in pairs(scores) do
+		scores[k] = ScoreInit()
+	end
 
-   local tmp = nil
-   
-   for _, e in pairs(events) do
-      ScoreEvent(e, scores, rolesTbl)
-   end
+	local tmp = nil
+	
+	for _, e in pairs(events) do
+		ScoreEvent(e, scores, rolesTbl)
+	end
 
-   return scores
+	return scores
 end
 
 function ScoreTeamBonus(scores, wintype, winrole)
-   -- TODO: whats with 'winrole' ?
+	-- TODO: whats with 'winrole' ?
 
-   local alive = {}
-   local dead = {}
-   
-   local winRoles = GetWinRoles()
-   
-   for _, v in pairs(winRoles) do
-      alive[v.team] = 0
-      dead[v.team] = 0
-   end
+	local alive = {}
+	local dead = {}
+	
+	local winRoles = GetWinRoles()
+	
+	for _, v in pairs(winRoles) do
+		alive[v.team] = 0
+		dead[v.team] = 0
+	end
 
-   for _, sc in pairs(scores) do
-      local state = (sc.deaths == 0) and alive or dead
-      local team = GetRoleByIndex(sc.r).team
-      
-      state[team] = state[team] + 1
-   end
+	for _, sc in pairs(scores) do
+		local state = (sc.deaths == 0) and alive or dead
+		local team = GetRoleByIndex(sc.r).team
+		
+		state[team] = state[team] + 1
+	end
 
-   local bonus = {}
-   
-   for _, v in pairs(winRoles) do
-      local others = 0
-      
-      for k, x in pairs(dead) do
-         if k ~= v.team then
-            others = others + x
-         end
-      end
-   
-      bonus[v.team] = alive[v.team] * 1
-      if v.surviveBonus then -- theoretically not necessary
-         bonus[v.team] = bonus[v.team] + math.ceil(others * (v.surviveBonus or 0))
-      end
-      
-      -- running down the clock must never be beneficial for traitors
-      if wintype == WIN_TIMELIMIT then
-         local alive_not_traitors = 0
-         local dead_not_traitors = 0
-         
-         for k, x in pairs(alive) do
-            if k ~= TEAM_TRAITOR then
-               alive_not_traitors = alive_not_traitors + x
-            end
-         end
-         
-         for k, x in pairs(dead) do
-            if k ~= TEAM_TRAITOR then
-               dead_not_traitors = dead_not_traitors + x
-            end
-         end
-         
-         bonus[TEAM_TRAITOR] = math.floor(alive_not_traitors * -0.5) + math.ceil(dead_not_traitors * 0.5)
-      end
-   end
+	local bonus = {}
+	
+	for _, v in pairs(winRoles) do
+		local others = 0
+		
+		for k, x in pairs(dead) do
+			if k ~= v.team then
+				others = others + x
+			end
+		end
+	
+		bonus[v.team] = alive[v.team] * 1
+		if v.surviveBonus then -- theoretically not necessary
+			bonus[v.team] = bonus[v.team] + math.ceil(others * (v.surviveBonus or 0))
+		end
+		
+		-- running down the clock must never be beneficial for traitors
+		if wintype == WIN_TIMELIMIT then
+			local alive_not_traitors = 0
+			local dead_not_traitors = 0
+			
+			for k, x in pairs(alive) do
+				if k ~= TEAM_TRAITOR then
+					alive_not_traitors = alive_not_traitors + x
+				end
+			end
+			
+			for k, x in pairs(dead) do
+				if k ~= TEAM_TRAITOR then
+					dead_not_traitors = dead_not_traitors + x
+				end
+			end
+			
+			bonus[TEAM_TRAITOR] = math.floor(alive_not_traitors * -0.5) + math.ceil(dead_not_traitors * 0.5)
+		end
+	end
 
-   return bonus
+	return bonus
 end
 
 -- Scores were initially calculated as points immediately, but not anymore, so
 -- we can convert them using this fn
 function KillsToPoints(score)
-   local roleData = GetRoleByIndex(score.r)
-   return ((score.suicides * -1)
-           + score.bonus
-           + score.tk * roleData.scoreTeamKillsMultiplier
-           + score.k * roleData.scoreKillsMultiplier
-           + (score.deaths == 0 and 1 or 0)) --effectively 2 due to team bonus
-                                             --for your own survival
+	local roleData = GetRoleByIndex(score.r)
+	return ((score.suicides * -1)
+			+ score.bonus
+			+ score.tk * roleData.scoreTeamKillsMultiplier
+			+ score.k * roleData.scoreKillsMultiplier
+			+ (score.deaths == 0 and 1 or 0)) --effectively 2 due to team bonus
+												--for your own survival
 end
 
 ---- Weapon AMMO_ enum stuff, used only in score.lua/cl_score.lua these days
@@ -230,44 +230,44 @@ AMMO_GLOCK = 72
 local WeaponNames = nil
 
 function GetWeaponClassNames()
-   if not WeaponNames then
-      local tbl = {}
-      
-      for _, v in pairs(weapons.GetList()) do
-         if v and v.WeaponID then
-            tbl[v.WeaponID] = WEPS.GetClass(v)
-         end
-      end
+	if not WeaponNames then
+		local tbl = {}
+		
+		for _, v in ipairs(weapons.GetList()) do
+			if v and v.WeaponID then
+				tbl[v.WeaponID] = WEPS.GetClass(v)
+			end
+		end
 
-      for _, v in pairs(scripted_ents.GetList()) do
-         local id = v and (v.WeaponID or (v.t and v.t.WeaponID))
-         
-         if id then
-            tbl[id] = WEPS.GetClass(v)
-         end
-      end
+		for _, v in pairs(scripted_ents.GetList()) do
+			local id = v and (v.WeaponID or (v.t and v.t.WeaponID))
+			
+			if id then
+				tbl[id] = WEPS.GetClass(v)
+			end
+		end
 
-      WeaponNames = tbl
-   end
+		WeaponNames = tbl
+	end
 
-   return WeaponNames
+	return WeaponNames
 end
 
 -- reverse lookup from enum to SWEP table
 function EnumToSWEP(ammo)
-   local e2w = GetWeaponClassNames() or {}
-   
-   if e2w[ammo] then
-      return util.WeaponForClass(e2w[ammo])
-   else
-      return nil
-   end
+	local e2w = GetWeaponClassNames() or {}
+	
+	if e2w[ammo] then
+		return util.WeaponForClass(e2w[ammo])
+	else
+		return
+	end
 end
 
 function EnumToSWEPKey(ammo, key)
-   local swep = EnumToSWEP(ammo)
-   
-   return swep and swep[key]
+	local swep = EnumToSWEP(ammo)
+	
+	return swep and swep[key]
 end
 
 -- something the client can display
@@ -275,12 +275,12 @@ end
 -- the weapon PrintNames. This means it is no longer usable from the server (not
 -- used there anyway), and means capitalization is slightly less pretty.
 function EnumToWep(ammo)
-   return EnumToSWEPKey(ammo, "PrintName")
+	return EnumToSWEPKey(ammo, "PrintName")
 end
 
 -- something cheap to send over the network
 function WepToEnum(wep)
-   if not IsValid(wep) then return end
+	if not IsValid(wep) then return end
 
-   return wep.WeaponID
+	return wep.WeaponID
 end

@@ -2,67 +2,69 @@
 local GetTranslation = LANG.GetTranslation
 
 function CreateTransferMenu(parent)
-   local dform = vgui.Create("DForm", parent)
-   dform:SetName(GetTranslation("xfer_menutitle"))
-   dform:StretchToParent(0, 0, 0, 0)
-   dform:SetAutoSize(false)
+	local client = LocalPlayer()
 
-   if LocalPlayer():GetCredits() <= 0 then
-      dform:Help(GetTranslation("xfer_no_credits"))
-      
-      return dform
-   end
+	local dform = vgui.Create("DForm", parent)
+	dform:SetName(GetTranslation("xfer_menutitle"))
+	dform:StretchToParent(0, 0, 0, 0)
+	dform:SetAutoSize(false)
 
-   local bw, bh = 100, 20
-   
-   local dsubmit = vgui.Create("DButton", dform)
-   dsubmit:SetSize(bw, bh)
-   dsubmit:SetDisabled(true)
-   dsubmit:SetText(GetTranslation("xfer_send"))
+	if client:GetCredits() <= 0 then
+		dform:Help(GetTranslation("xfer_no_credits"))
+		
+		return dform
+	end
 
-   local selected_sid = nil
+	local bw, bh = 100, 20
+	
+	local dsubmit = vgui.Create("DButton", dform)
+	dsubmit:SetSize(bw, bh)
+	dsubmit:SetDisabled(true)
+	dsubmit:SetText(GetTranslation("xfer_send"))
 
-   local dpick = vgui.Create("DComboBox", dform)
-   
-   dpick.OnSelect = function(s, idx, val, data)
-      if data then
-         selected_sid = data
-         dsubmit:SetDisabled(false)
-      end
-   end
+	local selected_sid
 
-   dpick:SetWide(250)
+	local dpick = vgui.Create("DComboBox", dform)
+	
+	dpick.OnSelect = function(s, idx, val, data)
+		if data then
+			selected_sid = data
+			dsubmit:SetDisabled(false)
+		end
+	end
 
-   -- fill combobox
-   local roleData = LocalPlayer():GetRoleData()
-   
-   for _, p in pairs(player.GetAll()) do
-      if IsValid(p) and p:IsActive() and p ~= LocalPlayer() and (p:HasTeamRole(roleData.team) or hook.Run("TTT2_CanTransferToPlayer", p)) then
-         dpick:AddChoice(p:Nick(), p:SteamID())
-      end
-   end
+	dpick:SetWide(250)
 
-   -- select first player by default
-   if dpick:GetOptionText(1) then 
-      dpick:ChooseOptionID(1) 
-   end
+	-- fill combobox
+	local roleData = client:GetRoleData()
+	
+	for _, p in ipairs(player.GetAll()) do
+		if IsValid(p) and p:IsActive() and p ~= client and p:IsTeamMember(client) then
+			dpick:AddChoice(p:Nick(), p:SteamID())
+		end
+	end
 
-   dsubmit.DoClick = function(s)
-      if selected_sid then
-         RunConsoleCommand("ttt_transfer_credits", selected_sid, "1")
-      end
-   end
+	-- select first player by default
+	if dpick:GetOptionText(1) then 
+		dpick:ChooseOptionID(1) 
+	end
 
-   dsubmit.Think = function(s)
-      if LocalPlayer():GetCredits() < 1 then
-         s:SetDisabled(true)
-      end
-   end
+	dsubmit.DoClick = function(s)
+		if selected_sid then
+			RunConsoleCommand("ttt_transfer_credits", selected_sid, "1")
+		end
+	end
 
-   dform:AddItem(dpick)
-   dform:AddItem(dsubmit)
+	dsubmit.Think = function(s)
+		if client:GetCredits() < 1 then
+			s:SetDisabled(true)
+		end
+	end
 
-   dform:Help(LANG.GetParamTranslation("xfer_help", {role = tostring(roleData.team)}))
+	dform:AddItem(dpick)
+	dform:AddItem(dsubmit)
 
-   return dform
+	dform:Help(LANG.GetParamTranslation("xfer_help", {role = tostring(roleData.team)}))
+
+	return dform
 end
