@@ -488,32 +488,54 @@ end)
 -- TODO rebuild with database handling instead of dini file creation like
 util.AddNetworkString("shop")
 net.Receive("shop", function(len, ply)
-	local r = net.ReadString()
+	local add = net.ReadBool()
+	local r = net.ReadUInt(ROLE_BITS) + 1
+	local rd = GetRoleByIndex(r)
 	local equip = GetEquipmentFileName(net.ReadString())
 	
-	local role = string.lower(r)
+	local role = string.lower(rd.name)
 	
-	if not file.Exists(equip .. ".txt", "DATA/roleweapons/" .. role) then
-		local filename = "roleweapons/" .. role .. "/" .. equip .. ".txt"
-		
-		file.CreateDir("roleweapons") -- Create the directory
-		file.CreateDir("roleweapons/" .. role) -- Create the directory
-		file.Write(filename, "") -- Write to .txt
-		
-		local is_item = GetEquipmentItemByFileName(equip)
-		local roleIndex = GetRoleByName(r).index
-		local wep = not is_item and GetWeaponNameByFileName(equip)
-		
-		local wepTbl = wep and weapons.GetStored(wep)
-		if wepTbl then
-			AddEquipmentWeaponToRole(roleIndex, wepTbl)
-		elseif is_item then
-			AddEquipmentItemToRole(roleIndex, is_item)
+	local filename = "roleweapons/" .. role .. "/" .. equip .. ".txt"
+	
+	if add then
+		if not file.Exists(filename, "DATA") then
+			file.CreateDir("roleweapons") -- Create the directory
+			file.CreateDir("roleweapons/" .. role) -- Create the directory
+			file.Write(filename, "") -- Write to .txt
+			
+			local is_item = GetEquipmentItemByFileName(equip)
+			local wep = not is_item and GetWeaponNameByFileName(equip)
+			
+			local wepTbl = wep and weapons.GetStored(wep)
+			if wepTbl then
+				AddEquipmentWeaponToRole(rd.index, wepTbl)
+			elseif is_item then
+				AddEquipmentItemToRole(rd.index, is_item)
+			end
+			
+			-- last but not least, notify each player
+			for _, v in pairs(player.GetAll()) do
+				v:ChatPrint("[TTT2][SHOP] " .. ply:Nick() .. " added '" .. equip .. "' into the shop of the " .. role)
+			end
 		end
-		
-		-- last but not least, notify each player
-		for _, v in pairs(player.GetAll()) do
-			v:ChatPrint("[TTT2][SHOP] " .. ply:Nick() .. " added '" .. equip .. "' into the shop of the " .. role)
+	else
+		if file.Exists(filename, "DATA") then
+			file.Delete(filename) -- Write to .txt
+			
+			local is_item = GetEquipmentItemByFileName(equip)
+			local wep = not is_item and GetWeaponNameByFileName(equip)
+			
+			local wepTbl = wep and weapons.GetStored(wep)
+			if wepTbl then
+				RemoveEquipmentWeaponFromRole(rd.index, wepTbl)
+			elseif is_item then
+				RemoveEquipmentItemFromRole(rd.index, is_item)
+			end
+			
+			-- last but not least, notify each player
+			for _, v in pairs(player.GetAll()) do
+				v:ChatPrint("[TTT2][SHOP] " .. ply:Nick() .. " removed '" .. equip .. "' from the shop of the " .. role)
+			end
 		end
 	end
 end)
@@ -666,20 +688,24 @@ local function CheckCreditAward(victim, attacker)
 	if GetRoundState() ~= ROUND_ACTIVE then return end
 	
 	if not IsValid(victim) then return end
+	
+	local ret = hook.Run("TTT2CheckCreditAward", victim, attacker)
+	if ret ~= nil and not ret then return end
+	
+	local rd = attacker:GetRoleData()
  
-	-- DETECTIVE AWARD
-	if IsValid(attacker) and attacker:IsPlayer() and attacker:IsActiveRole(ROLES.DETECTIVE.index) and victim:HasTeamRole(TEAM_TRAITOR) then
-		local amt = (ConVarExists("ttt_det_credits_traitordead") and GetConVar("ttt_det_credits_traitordead"):GetInt() or 1)
+	-- DET KILLED ANOTHER TEAM AWARD
+	if IsValid(attacker) and attacker:IsPlayer() and attacker:IsActiveRole(ROLES.DETECTIVE.index) and not victim:IsTeamMember(attacker) then
+		local amt = (ConVarExists("ttt_" .. rd.abbr .. "_credits_traitordead") and GetConVar("ttt_" .. rd.abbr .. "_credits_traitordead"):GetInt() or 1)
 		
 		for _, ply in ipairs(player.GetAll()) do
 			if ply:IsActiveRole(ROLES.DETECTIVE.index) then
 				ply:AddCredits(amt)
 			end
 		end
-		
+	
 		LANG.Msg(GetRoleFilter(ROLES.DETECTIVE.index, true), "credit_det_all", {num = amt})
 	end
- 
  
 	-- TRAITOR AWARD
 	if not victim:HasTeamRole(TEAM_TRAITOR) and (not GAMEMODE.AwardedCredits or GetConVar("ttt_credits_award_repeat"):GetBool()) then
@@ -716,11 +742,12 @@ local function CheckCreditAward(victim, attacker)
 			
 			-- If size is 0, awards are off
 			if amt > 0 then
-				LANG.Msg(GetRoleTeamFilter(TEAM_TRAITOR, true), "credit_tr_all", {num = amt})
-				
 				for _, ply in ipairs(player.GetAll()) do
-					if ply:IsActive() and ply:HasTeamRole(TEAM_TRAITOR) then
+					if ply:IsActive() and ply:HasTeamRole(TEAM_TRAITOR) and not ply:GetRoleData().preventKillCredits then
 						ply:AddCredits(amt)
+						
+						--LANG.Msg(GetRoleTeamFilter(TEAM_TRAITOR, true), "credit_tr_all", {num = amt})
+						LANG.Msg(ply, "credit_tr_all", {num = amt})
 					end
 				end
 			end
@@ -802,24 +829,36 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
 	end
 	
 	--- Credits
-	
 	CheckCreditAward(ply, attacker)
 	
-	-- Check for T killing D or vice versa
+	-- Check for TEAM killing ANOTHER TEAM
 	if IsValid(attacker) and attacker:IsPlayer() then
 		local reward = 0
+		local rd = attacker:GetRoleData()
 		
 		-- if traitor team kills detective
-		if attacker:IsActive() and attacker:HasTeamRole(TEAM_TRAITOR) and ply:GetRole() == ROLES.DETECTIVE.index then
-			reward = math.ceil((ConVarExists("ttt_credits_" .. ROLES.DETECTIVE.name .. "kill") and GetConVar("ttt_credits_" .. ROLES.DETECTIVE.name .. "kill"):GetInt() or 0))
-		
-		-- elseif shopper kills other teams
-		elseif attacker:IsActive() and not attacker:HasTeamRole(TEAM_TRAITOR) and attacker:IsShopper() and ply:GetRoleData().team ~= attacker:GetRoleData().team then
-			reward = math.ceil((ConVarExists("ttt_det_credits_" .. ROLES.TRAITOR.name .. "kill") and GetConVar("ttt_det_credits_" .. ROLES.TRAITOR.name .. "kill"):GetInt() or 0))
+		if attacker:IsActive() and attacker:IsShopper() and not attacker:IsTeamMember(ply) then
+			if attacker:HasTeamRole(TEAM_TRAITOR) then
+				reward = math.ceil((ConVarExists("ttt_credits_" .. rd.name .. "kill") and GetConVar("ttt_credits_" .. rd.name .. "kill"):GetInt() or 0))
+			else
+				local vrd = victim:GetRoleData()
+				local b = false
+				
+				if vrd ~= ROLES.TRAITOR then
+					b = ConVarExists("ttt_" .. rd.name .. "_credits_" .. vrd.name .. "kill")
+				end
+				
+				if b then -- special role killing award
+					reward = math.ceil((ConVarExists("ttt_" .. rd.name .. "_credits_" .. vrd.name .. "kill") and GetConVar("ttt_" .. rd.name .. "_credits_" .. vrd.name .. "kill"):GetInt() or 0))
+				else -- give traitor killing award if killing another role
+					reward = math.ceil((ConVarExists("ttt_" .. rd.name .. "_credits_" .. ROLES.TRAITOR.name .. "kill") and GetConVar("ttt_" .. rd.name .. "_credits_" .. ROLES.TRAITOR.name .. "kill"):GetInt() or 0))
+				end
+			end
 		end
 		
 		if reward > 0 then
 			attacker:AddCredits(reward)
+			
 			LANG.Msg(attacker, "credit_kill", {num = reward, role = LANG.NameParam(ply:GetRoleString())}) -- TODO rework
 		end
 	end

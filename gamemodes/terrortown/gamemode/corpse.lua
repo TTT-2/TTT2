@@ -242,9 +242,10 @@ function CORPSE.ShowSearch(ply, rag, covert, long_range)
 
 	local credits = CORPSE.GetCredits(rag, 0)
 	
-	if ply:IsActiveShopper() then
+	if ply:IsActiveShopper() and not ply:GetRoleData().preventFindCredits then
 		if credits > 0 and not long_range then
 			LANG.Msg(ply, "body_credits", {num = credits})
+			
 			ply:AddCredits(credits)
 
 			CORPSE.SetCredits(rag, 0)

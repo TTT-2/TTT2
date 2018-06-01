@@ -10,10 +10,11 @@ include("corpse_shd.lua")
 include("player_ext_shd.lua")
 include("weaponry_shd.lua")
 
-include("vgui/ColoredBox.lua")
-include("vgui/SimpleIcon.lua")
-include("vgui/ProgressBar.lua")
-include("vgui/ScrollLabel.lua")
+include("vgui/coloredbox.lua")
+include("vgui/simpleicon.lua")
+include("vgui/simpleclickicon.lua")
+include("vgui/progressbar.lua")
+include("vgui/scrolllabel.lua")
 
 include("cl_radio.lua")
 include("cl_disguise.lua")
@@ -101,7 +102,6 @@ local function ReceiveRolesTable(len)
 		return
 	else
 		-- do stuff with buffer contents
-
 		local json_roles = buff -- util.Decompress(buff)
 		
 		if not json_roles then
@@ -142,7 +142,6 @@ local function ReceiveSingleRoleTable(len)
 		return
 	else
 		-- do stuff with buffer contents
-
 		local json_roles = buff -- util.Decompress(buff)
 		
 		if not json_roles then

@@ -40,6 +40,7 @@ local mat_dir = "vgui/ttt/"
 
 EquipmentItems = {}
 SYNC_EQUIP = {}
+ALL_ITEMS = {}
 
 function SetupEquipment()
 	for _, v in pairs(GetTeamRoles(TEAM_TRAITOR)) do
@@ -101,25 +102,17 @@ function GetEquipmentItem(role, id)
 end
 
 function GetEquipmentItemByID(id)
-	for _, v in pairs(ROLES) do
-		local tbl = EquipmentItems[v.index]
-		
-		if tbl then
-			for _, v2 in pairs(tbl) do
-				if v2.id == id then
-					return v2
-				end
-			end
+	for _, eq in pairs(ALL_ITEMS) do
+		if eq.id == id then
+			return eq
 		end
 	end
 end
 
 function GetEquipmentItemByName(name)
-	for role, tbl in pairs(EquipmentItems) do
-		for _, equip in pairs(tbl) do
-			if string.lower(equip.name) == name then
-				return equip
-			end
+	for _, equip in pairs(ALL_ITEMS) do
+		if string.lower(equip.name) == name then
+			return equip
 		end
 	end
 end
@@ -128,7 +121,7 @@ function GetEquipmentFileName(name)
 	local newName = name
 
 	string.gsub(newName, "%W", "_") -- clean string
-	string.gsub(newName, " ", "_") -- clean string
+	string.gsub(newName, "%s", "_") -- clean string
 	
 	newName = string.lower(newName)
 	
@@ -136,11 +129,9 @@ function GetEquipmentFileName(name)
 end
 
 function GetEquipmentItemByFileName(name)
-	for role, tbl in pairs(EquipmentItems) do
-		for _, equip in pairs(tbl) do
-			if GetEquipmentFileName(equip.name) == name then
-				return equip
-			end
+	for _, equip in pairs(ALL_ITEMS) do
+		if GetEquipmentFileName(equip.name) == name then
+			return equip
 		end
 	end
 end
@@ -153,8 +144,6 @@ function GenerateNewEquipmentID()
 end
 
 function EquipmentTableHasValue(tbl, equip)
-	table.HasValue(tbl, equip)
-	
 	for _, eq in pairs(tbl) do
 		if eq.id == equip.id then
 			return true
@@ -164,24 +153,150 @@ function EquipmentTableHasValue(tbl, equip)
 	return false
 end
 
-if SERVER then
-	util.AddNetworkString("TTT2SyncEquipment")
-	function SyncEquipment(ply)
-		net.Start("TTT2SyncEquipment")
-		net.WriteTable(SYNC_EQUIP) -- todo handle like role update. What if there is huge data (>64kb)?
-		net.Send(ply)
+function SyncTableHasValue(tbl, equip)
+	for _, v in pairs(tbl) do
+		if v.equip == equip.equip and v.type == equip.type then
+			return true
+		end
 	end
 	
-	function SyncSingleEquipment(ply, role, equipTbl)
-		net.Start("TTT2SyncEquipment")
-		net.WriteTable({[role] = {equipTbl}}) -- todo handle like role update. What if there is huge data (>64kb)?
-		net.Send(ply)
+	return false
+end
+
+if SERVER then
+	util.AddNetworkString("TTT2SyncEquipment")
+	util.AddNetworkString("TTT2SyncAllEquipment")
+	
+	-- Sync Equipment
+	local function EncodeForStream(tbl)
+		-- may want to filter out data later
+		-- just serialize for now
+
+		local result = util.TableToJSON(tbl)
+		if not result then
+			ErrorNoHalt("Round report event encoding failed!\n")
+			
+			return false
+		else
+			return result
+		end
+	end
+
+	function SyncAllEquipment(ply)
+		add = add or true
+		
+		print("[TTT2][EQUIPMENT] Sending new EQUIPMENT list to " .. ply:Nick() .. "...")
+		
+		local s = EncodeForStream(ALL_ITEMS)
+		if not s then return end
+
+		-- divide into happy lil bits.
+		-- this was necessary with user messages, now it's
+		-- a just-in-case thing if a round somehow manages to be > 64K
+		local cut = {}
+		local max = 65499
+		
+		while #s ~= 0 do
+			local bit = string.sub(s, 1, max - 1)
+			
+			table.insert(cut, bit)
+
+			s = string.sub(s, max, -1)
+		end
+
+		local parts = #cut
+		
+		for k, bit in ipairs(cut) do
+			net.Start("TTT2SyncAllEquipment")
+			net.WriteBit((k ~= parts)) -- continuation bit, 1 if there's more coming
+			net.WriteString(bit)
+
+			if ply then
+				net.Send(ply)
+			else
+				net.Broadcast()
+			end
+		end
+	end
+	
+	function SyncEquipment(ply, add)
+		add = add or true
+	
+		print("[TTT2][SHOP] Sending new SHOP list to " .. ply:Nick() .. "...")
+		
+		local s = EncodeForStream(SYNC_EQUIP)
+		if not s then return end
+
+		-- divide into happy lil bits.
+		-- this was necessary with user messages, now it's
+		-- a just-in-case thing if a round somehow manages to be > 64K
+		local cut = {}
+		local max = 65499
+		
+		while #s ~= 0 do
+			local bit = string.sub(s, 1, max - 1)
+			
+			table.insert(cut, bit)
+
+			s = string.sub(s, max, -1)
+		end
+
+		local parts = #cut
+		
+		for k, bit in ipairs(cut) do
+			net.Start("TTT2SyncEquipment")
+			net.WriteBool(add)
+			net.WriteBit((k ~= parts)) -- continuation bit, 1 if there's more coming
+			net.WriteString(bit)
+
+			if ply then
+				net.Send(ply)
+			else
+				net.Broadcast()
+			end
+		end
+	end
+
+	function SyncSingleEquipment(ply, role, equipTbl, add)
+		print("[TTT2][SHOP] Sending updated equipment '" .. equipTbl.equip .. "' to " .. ply:Nick() .. "...")
+		
+		local s = EncodeForStream({[role] = {equipTbl}})
+		if not s then return end
+
+		-- divide into happy lil bits.
+		-- this was necessary with user messages, now it's
+		-- a just-in-case thing if a round somehow manages to be > 64K
+		local cut = {}
+		local max = 65500
+		
+		while #s ~= 0 do
+			local bit = string.sub(s, 1, max - 1)
+			
+			table.insert(cut, bit)
+
+			s = string.sub(s, max, -1)
+		end
+
+		local parts = #cut
+		
+		for k, bit in ipairs(cut) do
+			net.Start("TTT2SyncEquipment")
+			net.WriteBool(add)
+			net.WriteBit((k ~= parts)) -- continuation bit, 1 if there's more coming
+			net.WriteString(bit)
+
+			if ply then
+				net.Send(ply)
+			else
+				net.Broadcast()
+			end
+		end
 	end
 	
 	function AddEquipmentItemToRole(role, item)
 		EquipmentItems[role] = EquipmentItems[role] or {}
 		
-		if not table.HasValue(EquipmentItems[role], item) then
+		if not EquipmentTableHasValue(EquipmentItems[role], item) then
 			table.insert(EquipmentItems[role], item)
 		end
 		
@@ -189,13 +304,38 @@ if SERVER then
 		
 		local tbl = {equip = item.id, type = 1}
 		
-		if not table.HasValue(SYNC_EQUIP[role], tbl) then -- TODO fix
+		if not SyncTableHasValue(SYNC_EQUIP[role], tbl) then
 			table.insert(SYNC_EQUIP[role], tbl)
 		end
 		
 		for _, v in pairs(player.GetAll()) do
-			--SyncEquipment(v)
-			SyncSingleEquipment(v, role, tbl)
+			SyncSingleEquipment(v, role, tbl, true)
+		end
+	end
+	
+	function RemoveEquipmentItemFromRole(role, item)
+		EquipmentItems[role] = EquipmentItems[role] or {}
+		
+		for k, eq in pairs(EquipmentItems[role]) do
+			if eq.id == item.id then
+				table.remove(EquipmentItems[role], k)
+				
+				break
+			end
+		end
+		
+		SYNC_EQUIP[role] = SYNC_EQUIP[role] or {}
+		
+		local tbl = {equip = item.id, type = 1}
+		
+		for k, v in pairs(SYNC_EQUIP[role]) do
+			if v.equip == tbl.equip and v.type == tbl.type then
+				table.remove(SYNC_EQUIP[role], k)
+			end
+		end
+		
+		for _, v in pairs(player.GetAll()) do
+			SyncSingleEquipment(v, role, tbl, false)
 		end
 	end
 	
@@ -213,13 +353,41 @@ if SERVER then
 		
 		local tbl = {equip = swep_table.ClassName, type = 0}
 		
-		if not table.HasValue(SYNC_EQUIP[role], tbl) then -- TODO fix
+		if not SyncTableHasValue(SYNC_EQUIP[role], tbl) then
 			table.insert(SYNC_EQUIP[role], tbl)
 		end
 		
 		for _, v in pairs(player.GetAll()) do
-			--SyncEquipment(v)
-			SyncSingleEquipment(v, role, tbl)
+			SyncSingleEquipment(v, role, tbl, true)
+		end
+	end
+	
+	function RemoveEquipmentWeaponFromRole(role, swep_table)
+		if not swep_table.CanBuy then
+			swep_table.CanBuy = {}
+		else
+			for k, v in ipairs(swep_table.CanBuy) do
+				if v == role then
+					table.remove(swep_table.CanBuy, k)
+					
+					break
+				end
+			end
+		end
+		--
+		
+		SYNC_EQUIP[role] = SYNC_EQUIP[role] or {}
+		
+		local tbl = {equip = swep_table.ClassName, type = 0}
+		
+		for k, v in pairs(SYNC_EQUIP[role]) do
+			if v.equip == tbl.equip and v.type == tbl.type then
+				table.remove(SYNC_EQUIP[role], k)
+			end
+		end
+		
+		for _, v in pairs(player.GetAll()) do
+			SyncSingleEquipment(v, role, tbl, false)
 		end
 	end
 else -- CLIENT
@@ -242,7 +410,8 @@ else -- CLIENT
 					-- these values are overwritten
 					type	 = "Type not specified",
 					model	 = "models/weapons/w_bugbait.mdl",
-					desc	 = "No description specified."
+					desc	 = "No description specified.",
+					is_item  = false
 				}
 
 				-- Force material to nil so that model key is used when we are
@@ -254,9 +423,17 @@ else -- CLIENT
 				table.Merge(base, data)
 				
 				toadd = base
+				
+				if not table.HasValue(equip.CanBuy, role) then
+					table.insert(equip.CanBuy, role)
+				end
 			end
 		else
 			toadd = equip
+			
+			if not EquipmentTableHasValue(EquipmentItems[role], toadd) then
+				table.insert(EquipmentItems[role], toadd)
+			end
 		end
 
 		-- mark custom items
@@ -264,47 +441,159 @@ else -- CLIENT
 			toadd.custom = not table.HasValue(DefaultEquipment[role], toadd.id) -- TODO
 		end
 		
-		if not EquipmentTableHasValue(Equipment[role], toadd) then
+		if toadd and not EquipmentTableHasValue(Equipment[role], toadd) then
 			table.insert(Equipment[role], toadd)
 		end
-		
-		print("Added " .. toadd.id .. " to " .. role)
 	end
 	
-	net.Receive("TTT2SyncEquipment", function(len)
-		local additions = net.ReadTable()
-		
-		for role, tbl in pairs(additions) do
-			EquipmentItems[role] = EquipmentItems[role] or {}
-			
-			-- init
-			Equipment = Equipment or {}
-
-			if not Equipment[role] then
-				GetEquipmentForRole(role)
-			end
-		
-			for _, equip in pairs(tbl) do
-				if equip.type == 1 then
-					local item = GetEquipmentItemByID(equip.equip)
-					if item then
-						AddEquipmentToRoleEquipment(role, item, true)
-					end
-				else
-					local swep_table = weapons.GetStored(equip.equip)
-					if swep_table then
-						if not swep_table.CanBuy then
-							swep_table.CanBuy = {}
-						end
-						
-						if not table.HasValue(swep_table.CanBuy, role) then
-							table.insert(swep_table.CanBuy, role)
-						end
+	function RemoveEquipmentFromRoleEquipment(role, equip, item)
+		equip.id = item and equip.id or equip.name
+	
+		if item then
+			for k, eq in pairs(EquipmentItems[role]) do
+				if eq.id == equip.id then
+					table.remove(EquipmentItems[role], k)
 					
-						AddEquipmentToRoleEquipment(role, swep_table, false)
-					end
+					break
 				end
 			end
+		else
+			for k, v in ipairs(equip.CanBuy) do
+				if v == role then
+					table.remove(equip.CanBuy, k)
+					
+					break
+				end
+			end
+		end
+	
+		for k, eq in pairs(Equipment[role]) do
+			if eq.id == equip.id then
+				table.remove(Equipment[role], k)
+				
+				break
+			end
+		end
+	end
+	
+	-- sync ROLES
+	local buff = ""
+
+	net.Receive("TTT2SyncEquipment", function(len)
+		print("[TTT2][SHOP] Received new SHOP list from server! Updating...")
+
+		local add = net.ReadBool()
+		local cont = net.ReadBit() == 1
+
+		buff = buff .. net.ReadString()
+
+		if cont then
+			return
+		else
+			-- do stuff with buffer contents
+			local json_shop = buff -- util.Decompress(buff)
+			
+			if not json_shop then
+				ErrorNoHalt("SHOP decompression failed!\n")
+			else
+				-- convert the json string back to a table
+				local tmp = util.JSONToTable(json_shop)
+
+				if istable(tmp) then
+					for role, tbl in pairs(tmp) do
+						EquipmentItems[role] = EquipmentItems[role] or {}
+						
+						-- init
+						Equipment = Equipment or {}
+
+						if not Equipment[role] then
+							GetEquipmentForRole(role)
+						end
+					
+						for _, equip in pairs(tbl) do
+							if equip.type == 1 then
+								local item = GetEquipmentItemByID(equip.equip)
+								if item then
+									if add then
+										AddEquipmentToRoleEquipment(role, item, true)
+									else
+										RemoveEquipmentFromRoleEquipment(role, item, true)
+									end
+								end
+							else
+								local swep_table = weapons.GetStored(equip.equip)
+								if swep_table then
+									if not swep_table.CanBuy then
+										swep_table.CanBuy = {}
+									end
+								
+									if add then
+										AddEquipmentToRoleEquipment(role, swep_table, false)
+									else
+										RemoveEquipmentFromRoleEquipment(role, swep_table, false)
+									end
+								end
+							end
+						end
+					end
+				else
+					ErrorNoHalt("SHOP decoding failed!\n")
+				end
+			end
+
+			-- flush
+			buff = ""
+		end
+	end)
+	
+	net.Receive("TTT2SyncAllEquipment", function(len)
+		print("[TTT2][EQUIPMENT] Received new EQUIPMENT list from server! Updating...")
+
+		local cont = net.ReadBit() == 1
+
+		buff = buff .. net.ReadString()
+
+		if cont then
+			return
+		else
+			-- do stuff with buffer contents
+			local json_shop = buff -- util.Decompress(buff)
+			
+			if not json_shop then
+				ErrorNoHalt("EQUIPMENT decompression failed!\n")
+			else
+				-- convert the json string back to a table
+				local tmp = util.JSONToTable(json_shop)
+
+				if istable(tmp) then
+					ALL_ITEMS = tmp
+					
+					-- reset normal equipment tables
+					for _, role in pairs(ROLES) do
+						if EquipmentItems[role.index] then
+							for _, v in pairs(EquipmentItems[role.index]) do
+								v.defaultRole = role.index
+							end
+							
+							EquipmentItems[role.index] = {}
+							Equipment[role.index] = nil
+						end
+					end
+					
+					-- reset normal weapons equipment
+					for _, wep in ipairs(weapons.GetList()) do
+						local wepTbl = weapons.GetStored(wep.ClassName)
+						if wepTbl then
+							wepTbl.CanBuy = {}
+						end
+					end
+				else
+					ErrorNoHalt("EQUIPMENT decoding failed!\n")
+				end
+			end
+
+			-- flush
+			buff = ""
 		end
 	end)
 end

@@ -45,7 +45,8 @@ function GetEquipmentForRole(role)
 					-- these values are overwritten
 					type	 = "Type not specified",
 					model	 = "models/weapons/w_bugbait.mdl",
-					desc	 = "No description specified."
+					desc	 = "No description specified.",
+					is_item  = false
 				}
 
 				-- Force material to nil so that model key is used when we are
@@ -178,13 +179,15 @@ local function DrawSelectedEquipment(pnl)
 end
 
 function PANEL:SelectPanel(pnl)
+	if not IsValid(pnl) then return end
+
 	self.BaseClass.SelectPanel(self, pnl)
 	
 	if pnl then
 		pnl.PaintOver = DrawSelectedEquipment
 	end
 end
-vgui.Register("EquipSelect", PANEL, "DPanelSelect") --DIconLayout?
+vgui.Register("EquipSelect", PANEL, "DPanelSelect") -- DIconLayout?
 
 local SafeTranslate = LANG.TryTranslation
 local color_darkened = Color(255, 255, 255, 80)
@@ -242,6 +245,8 @@ local function TraitorMenuPopup()
 	local oldfunc = dsheet.SetActiveTab
 	
 	dsheet.SetActiveTab = function(self, new)
+		if not IsValid(new) then return end
+		
 		if self.m_pActiveTab ~= new and self.OnTabChanged then
 			self:OnTabChanged(self.m_pActiveTab, new)
 		end
@@ -482,11 +487,15 @@ local function TraitorMenuPopup()
 
 	-- couple panelselect with info
 	dlist.OnActivePanelChanged = function(self, _, new)
-		for k, v in pairs(new.item) do
-			if dfields[k] then
-				dfields[k]:SetText(SafeTranslate(v))
-				dfields[k]:SetAutoStretchVertical(true)
-				dfields[k]:SetWrap(true)
+		if not IsValid(new) then return end
+	
+		if new.item then
+			for k, v in pairs(new.item) do
+				if dfields[k] then
+					dfields[k]:SetText(SafeTranslate(v))
+					dfields[k]:SetAutoStretchVertical(true)
+					dfields[k]:SetWrap(true)
+				end
 			end
 		end
 
@@ -519,7 +528,7 @@ local function TraitorMenuPopup()
 	-- update some basic info, may have changed in another tab
 	-- specifically the number of credits in the preq list
 	dsheet.OnTabChanged = function(s, old, new)
-		if not IsValid(new) then return end
+		if not IsValid(new) or not IsValid(dlist.SelectedPanel) then return end
 
 		if new:GetPanel() == dequip then
 			can_order = update_preqs(dlist.SelectedPanel.item)
@@ -669,15 +678,7 @@ function GetEquipmentForRoleAll()
 	-- need to build equipment cache?
 	if not Equipmentnew then
 		-- start with all the non-weapon goodies
-		local tbl = {}
-		
-		for _, v in pairs(ROLES) do
-			for _, equip in pairs(EquipmentItems[v.index]) do
-				if not EquipmentTableHasValue(tbl, equip) then
-					table.insert(tbl, equip)
-				end
-			end
-		end
+		local tbl = ALL_ITEMS
 
 		local eject = {
 			"weapon_fists",
@@ -703,7 +704,8 @@ function GetEquipmentForRoleAll()
 					-- these values are overwritten
 					type	 = "Type not specified",
 					model	 = "models/weapons/w_bugbait.mdl",
-					desc	 = "No description specified."
+					desc	 = "No description specified.",
+					is_item  = false
 				}
 
 				-- Force material to nil so that model key is used when we are
@@ -724,10 +726,14 @@ function GetEquipmentForRoleAll()
 end
 
 net.Receive("newshop", function()
+	local sr = GetShopRoles()[1]
+	local selectedRole = sr.index
+	local w, h = 500, 450
+
 	local DermaPanel = vgui.Create("DFrame")
-	DermaPanel:SetPos(50,50)
-	DermaPanel:SetSize(500, 700)
-	DermaPanel:SetTitle("Weapon Shop Adder")
+	DermaPanel:SetPos(50, 50)
+	DermaPanel:SetSize(w, h)
+	DermaPanel:SetTitle("Weapon Shop Editor")
 	DermaPanel:SetVisible(true)
 	DermaPanel:SetDraggable(true)
 	DermaPanel:ShowCloseButton(true)
@@ -738,7 +744,7 @@ net.Receive("newshop", function()
 	end
 
 	local DScrollPanel = vgui.Create("DScrollPanel", DermaPanel)
-	DScrollPanel:SetSize(400, 250)
+	DScrollPanel:SetSize(400, h - 45)
 	DScrollPanel:Center()
 
 	local sbar = DScrollPanel:GetVBar()
@@ -754,16 +760,24 @@ net.Receive("newshop", function()
 	function sbar.btnGrip:Paint(w, h)
 		draw.RoundedBox(0, 0, 0, w, h, Color(100, 200, 0))
 	end
-
-	local w, h = 570, 412
-
+	
 	-- Construct icon listing
 	local dlist = vgui.Create("EquipSelect", DermaPanel)
-	dlist:SetPos(0,20)
-	dlist:SetSize(415, h - 75)
+	dlist:SetPos(0, 20)
+	dlist:SetSize(w, h - 45)
 	dlist:EnableVerticalScrollbar(true)
 	dlist:EnableHorizontal(true)
 	dlist:SetPadding(4)
+
+	local menu = vgui.Create("DComboBox")
+	menu:SetParent(DermaPanel)
+	menu:SetPos(0, h - 25)
+	menu:SetSize(w, 25)
+	menu:SetValue(sr.name)
+	
+	for _, v in pairs(GetShopRoles()) do
+		menu:AddChoice(v.name, v.index)
+	end
 
 	local ply = LocalPlayer()
 	local items = GetEquipmentForRoleAll()
@@ -774,14 +788,14 @@ net.Receive("newshop", function()
 		-- Create icon panel
 		if item.material then
 			if not ItemIsWeapon(item) then
-				ic = vgui.Create("SimpleIcon", dlist)
+				ic = vgui.Create("SimpleClickIcon", dlist)
 			else
-				ic = vgui.Create("LayeredIcon", dlist)
+				ic = vgui.Create("LayeredClickIcon", dlist)
 			end
 
 			-- Slot marker icon
 			if ItemIsWeapon(item) then
-				local slot = vgui.Create("SimpleIconLabelled")
+				local slot = vgui.Create("SimpleClickIconLabelled")
 				slot:SetIcon("vgui/ttt/slotcap")
 				slot:SetIconColor(GetShopRoles()[1].color or COLOR_GREY)
 				slot:SetIconSize(16)
@@ -802,6 +816,104 @@ net.Receive("newshop", function()
 		end
 
 		ic.item = item
+		
+		function ic:UpdateCheck()
+			if not selectedRole then return end
+			
+			local is_item = tonumber(ic.item.id)
+			if is_item then
+				EquipmentItems[selectedRole] = EquipmentItems[selectedRole] or {}
+			
+				if EquipmentTableHasValue(EquipmentItems[selectedRole], ic.item) then
+					ic:Toggle(true)
+				else
+					ic:Toggle(false)
+				end
+			else
+				local wepTbl = weapons.GetStored(ic.item.name)
+				if wepTbl then
+					wepTbl.CanBuy = wepTbl.CanBuy or {}
+					
+					if table.HasValue(wepTbl.CanBuy, selectedRole) then
+						ic:Toggle(true)
+					else
+						ic:Toggle(false)
+					end
+				end
+			end
+		end
+		
+		ic.OnClick = function()
+			if not selectedRole then return end
+			
+			local is_item = tonumber(ic.item.id)
+			if is_item then
+				EquipmentItems[selectedRole] = EquipmentItems[selectedRole] or {}
+			
+				if EquipmentTableHasValue(EquipmentItems[selectedRole], ic.item) then
+					for k, eq in pairs(EquipmentItems[selectedRole]) do
+						if eq.id == ic.item.id then
+							table.remove(EquipmentItems[selectedRole], k)
+							
+							break
+						end
+					end
+				
+					-- remove
+					net.Start("shop")
+					net.WriteBool(false)
+					net.WriteUInt(selectedRole - 1, ROLE_BITS)
+					net.WriteString(ic.item.name)
+					net.SendToServer()
+				else
+					table.insert(EquipmentItems[selectedRole], ic.item)
+					
+					-- add
+					net.Start("shop")
+					net.WriteBool(true)
+					net.WriteUInt(selectedRole - 1, ROLE_BITS)
+					net.WriteString(ic.item.name)
+					net.SendToServer()
+				end
+			else
+				local wepTbl = weapons.GetStored(ic.item.name)
+				if wepTbl then
+					wepTbl.CanBuy = wepTbl.CanBuy or {}
+					
+					if table.HasValue(wepTbl.CanBuy, selectedRole) then
+						for k, v in ipairs(wepTbl.CanBuy) do
+							if v == selectedRole then
+								table.remove(wepTbl.CanBuy, k)
+								
+								break
+							end
+						end
+					
+						-- remove
+						net.Start("shop")
+						net.WriteBool(false)
+						net.WriteUInt(selectedRole - 1, ROLE_BITS)
+						net.WriteString(ic.item.name)
+						net.SendToServer()
+					else
+						table.insert(wepTbl.CanBuy, selectedRole)
+						
+						-- add
+						net.Start("shop")
+						net.WriteBool(true)
+						net.WriteUInt(selectedRole - 1, ROLE_BITS)
+						net.WriteString(ic.item.name)
+						net.SendToServer()
+					end
+				end
+			end
+			
+			for _, v in pairs(dlist:GetItems()) do
+				if v.UpdateCheck then
+					v:UpdateCheck()
+				end
+			end
+		end
 
 		local tip = SafeTranslate(item.name) .. " (" .. SafeTranslate(item.type) .. ")"
 		
@@ -810,52 +922,20 @@ net.Receive("newshop", function()
 		dlist:AddPanel(ic)
 	end
 	
-	dlist:SelectPanel(dlist:GetItems()[1])
-
-	local bw, bh = 425, 25
-
-	-- margin
-	local m = 5
-	
-	local dih = h - bh - m * 5
-
-	local menu = vgui.Create("DComboBox")
-	menu:SetParent(DermaPanel)
-	menu:SetPos(25, 560)
-	
-	local b = true
-	
-	for _, v in pairs(GetShopRoles()) do
-		if b then
-			menu:SetValue(v.name)
-			
-			b = false
+	-- first init
+	for _, v in pairs(dlist:GetItems()) do
+		if v.UpdateCheck then
+			v:UpdateCheck()
 		end
-		
-		menu:AddChoice(v.name)
 	end
-
-	dlist:SelectPanel(dlist:GetItems()[1])
-
-	dfav = vgui.Create("DButton", DermaPanel)
-	dfav:SetSize(150, 30)
-	dfav:SetPos(175, 600)
-	dfav:SetVisible(true)
-	dfav:SetText("Add")
 	
-	dfav.DoClick = function()
-		local pnl = dlist.SelectedPanel
+	function menu:OnSelect(_, _, data)
+		selectedRole = data
 		
-		if not pnl or not pnl.item then return end
-		
-		local choice = pnl.item
-		local val = menu:GetValue()
-		
-		if not choice.name then return end
-		
-		net.Start("shop")
-		net.WriteString(val)
-		net.WriteString(choice.name)
-		net.SendToServer()
+		for _, v in pairs(dlist:GetItems()) do
+			if v.UpdateCheck then
+				v:UpdateCheck()
+			end
+		end
 	end
 end)

@@ -30,10 +30,11 @@ AddCSLuaFile("cl_disguise.lua")
 AddCSLuaFile("cl_transfer.lua")
 AddCSLuaFile("cl_search.lua")
 AddCSLuaFile("cl_targetid.lua")
-AddCSLuaFile("vgui/ColoredBox.lua")
-AddCSLuaFile("vgui/SimpleIcon.lua")
-AddCSLuaFile("vgui/ProgressBar.lua")
-AddCSLuaFile("vgui/ScrollLabel.lua")
+AddCSLuaFile("vgui/coloredbox.lua")
+AddCSLuaFile("vgui/simpleicon.lua")
+AddCSLuaFile("vgui/simpleclickicon.lua")
+AddCSLuaFile("vgui/progressbar.lua")
+AddCSLuaFile("vgui/scrolllabel.lua")
 AddCSLuaFile("vgui/sb_main.lua")
 AddCSLuaFile("vgui/sb_row.lua")
 AddCSLuaFile("vgui/sb_team.lua")
@@ -57,61 +58,64 @@ include("player_ext_shd.lua")
 include("player_ext.lua")
 include("player.lua")
 
-CreateConVar("ttt_roundtime_minutes", "10", FCVAR_NOTIFY)
-CreateConVar("ttt_preptime_seconds", "30", FCVAR_NOTIFY)
-CreateConVar("ttt_posttime_seconds", "30", FCVAR_NOTIFY)
-CreateConVar("ttt_firstpreptime", "60")
+local flag_all = {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED}
+local flag_save = {FCVAR_NOTIFY, FCVAR_ARCHIVE}
 
-local ttt_haste = CreateConVar("ttt_haste", "1", FCVAR_NOTIFY)
-CreateConVar("ttt_haste_starting_minutes", "5", FCVAR_NOTIFY)
-CreateConVar("ttt_haste_minutes_per_death", "0.5", FCVAR_NOTIFY)
+CreateConVar("ttt_roundtime_minutes", "10", flag_save)
+CreateConVar("ttt_preptime_seconds", "30", flag_save)
+CreateConVar("ttt_posttime_seconds", "30", flag_save)
+CreateConVar("ttt_firstpreptime", "60", flag_save)
+
+local ttt_haste = CreateConVar("ttt_haste", "1", flag_save)
+CreateConVar("ttt_haste_starting_minutes", "5", flag_save)
+CreateConVar("ttt_haste_minutes_per_death", "0.5", flag_save)
 
 CreateConVar("ttt_spawn_wave_interval", "0")
 
-CreateConVar("ttt_traitor_pct", "0.4")
-CreateConVar("ttt_traitor_max", "32")
-CreateConVar("ttt_traitor_min_players", "1")
+CreateConVar("ttt_traitor_pct", "0.4", flag_save)
+CreateConVar("ttt_traitor_max", "32", flag_save)
+CreateConVar("ttt_traitor_min_players", "1", flag_save)
 
-CreateConVar("ttt_detective_pct", "0.13", FCVAR_NOTIFY)
-CreateConVar("ttt_detective_max", "32")
-CreateConVar("ttt_detective_min_players", "8")
-CreateConVar("ttt_detective_karma_min", "600")
+CreateConVar("ttt_detective_pct", "0.13", flag_save)
+CreateConVar("ttt_detective_max", "32", flag_save)
+CreateConVar("ttt_detective_min_players", "8", flag_save)
+CreateConVar("ttt_detective_karma_min", "600", flag_save)
 
 -- Traitor credits
-CreateConVar("ttt_credits_starting", "2")
-CreateConVar("ttt_credits_award_pct", "0.35")
-CreateConVar("ttt_credits_award_size", "1")
-CreateConVar("ttt_credits_award_repeat", "1")
-CreateConVar("ttt_credits_detectivekill", "1")
+CreateConVar("ttt_credits_starting", "2", flag_save)
+CreateConVar("ttt_credits_award_pct", "0.35", flag_save)
+CreateConVar("ttt_credits_award_size", "1", flag_save)
+CreateConVar("ttt_credits_award_repeat", "1", flag_save)
+CreateConVar("ttt_credits_detectivekill", "1", flag_save)
 
-CreateConVar("ttt_credits_alonebonus", "1")
+CreateConVar("ttt_credits_alonebonus", "1", flag_save)
 
 -- Detective credits
-CreateConVar("ttt_det_credits_starting", "1")
-CreateConVar("ttt_det_credits_traitorkill", "0")
-CreateConVar("ttt_det_credits_traitordead", "1")
+CreateConVar("ttt_det_credits_starting", "1", flag_save)
+CreateConVar("ttt_det_credits_traitorkill", "0", flag_save)
+CreateConVar("ttt_det_credits_traitordead", "1", flag_save)
 
-CreateConVar("ttt_use_weapon_spawn_scripts", "1")
-CreateConVar("ttt_weapon_spawn_count", "0")
+CreateConVar("ttt_use_weapon_spawn_scripts", "1", flag_save)
+CreateConVar("ttt_weapon_spawn_count", "0", flag_save)
 
-CreateConVar("ttt_round_limit", "6", FCVAR_ARCHIVE + FCVAR_NOTIFY + FCVAR_REPLICATED)
-CreateConVar("ttt_time_limit_minutes", "75", FCVAR_NOTIFY + FCVAR_REPLICATED)
+CreateConVar("ttt_round_limit", "6", flag_all)
+CreateConVar("ttt_time_limit_minutes", "75", flag_all)
 
-CreateConVar("ttt_idle_limit", "180", FCVAR_NOTIFY)
+CreateConVar("ttt_idle_limit", "180", flag_save)
 
-CreateConVar("ttt_voice_drain", "0", FCVAR_NOTIFY)
-CreateConVar("ttt_voice_drain_normal", "0.2", FCVAR_NOTIFY)
-CreateConVar("ttt_voice_drain_admin", "0.05", FCVAR_NOTIFY)
-CreateConVar("ttt_voice_drain_recharge", "0.05", FCVAR_NOTIFY)
+CreateConVar("ttt_voice_drain", "0", flag_save)
+CreateConVar("ttt_voice_drain_normal", "0.2", flag_save)
+CreateConVar("ttt_voice_drain_admin", "0.05", flag_save)
+CreateConVar("ttt_voice_drain_recharge", "0.05", flag_save)
 
-CreateConVar("ttt_namechange_kick", "1", FCVAR_NOTIFY)
+CreateConVar("ttt_namechange_kick", "1", flag_save)
 CreateConVar("ttt_namechange_bantime", "10")
 
-local ttt_detective = CreateConVar("ttt_sherlock_mode", "1", FCVAR_ARCHIVE + FCVAR_NOTIFY)
-local ttt_minply = CreateConVar("ttt_minimum_players", "2", FCVAR_ARCHIVE + FCVAR_NOTIFY)
+local ttt_detective = CreateConVar("ttt_sherlock_mode", "1", flag_save)
+local ttt_minply = CreateConVar("ttt_minimum_players", "2", flag_save)
 
 -- debuggery
-local ttt_dbgwin = CreateConVar("ttt_debug_preventwin", "0")
+local ttt_dbgwin = CreateConVar("ttt_debug_preventwin", "0", flag_save)
 
 -- Localize stuff we use often. It's like Lua go-faster stripes.
 local math = math
@@ -238,10 +242,33 @@ function GM:Initialize()
 		if not wep.Doublicated then
 			RegisterNormalWeapon(wep)
 		end
+		
+		-- reset weapon equipment
+		local wepTbl = weapons.GetStored(wep.ClassName)
+		if wepTbl then
+			wepTbl.CanBuy = {}
+		end
 	end
 	
 	hook.Run("PostInitialize")
 	
+	-- initialize all items
+	for _, roleData in pairs(ROLES) do
+		if EquipmentItems[roleData.index] then
+			for _, eq in pairs(EquipmentItems[roleData.index]) do
+				if not EquipmentTableHasValue(ALL_ITEMS, eq) then
+					eq.defaultRole = roleData.index
+					
+					table.insert(ALL_ITEMS, eq)
+				end
+			end
+			
+			-- reset normal equipment tables
+			EquipmentItems[roleData.index] = {}
+		end
+	end
+	
+	-- initialize the equipment
 	LoadShopsEquipment()
 end
 
@@ -278,23 +305,6 @@ function GM:SyncGlobals()
 	SetGlobalFloat("ttt_voice_drain_recharge", GetConVar("ttt_voice_drain_recharge"):GetFloat())
 end
 
--- sync ROLES list
--- toggle first if you want to reinitialize EVERYTHING ! Should be avoided, there is a reason why this var exists...
-
-local function EncodeForStream(tbl)
-	-- may want to filter out data later
-	-- just serialize for now
-
-	local result = util.TableToJSON(tbl)
-	if not result then
-		ErrorNoHalt("Round report event encoding failed!\n")
-		
-		return false
-	else
-		return result
-	end
-end
-
 function LoadShopsEquipment()
 	-- initialize shop equipment
 	for _, role in pairs(ROLES) do
@@ -318,14 +328,26 @@ function LoadShopsEquipment()
 	end
 end
 
+-- sync ROLES list
+local function EncodeForStream(tbl)
+	-- may want to filter out data later
+	-- just serialize for now
+
+	local result = util.TableToJSON(tbl)
+	if not result then
+		ErrorNoHalt("Round report event encoding failed!\n")
+		
+		return false
+	else
+		return result
+	end
+end
+
 function UpdateRoleData(ply, first)
 	print("[TTT2][ROLE] Sending new ROLES list to " .. ply:Nick() .. "...")
 	
 	local s = EncodeForStream(ROLES)
-	
-	if not s then
-		return -- error occurred
-	end
+	if not s then return end
 
 	-- divide into happy lil bits.
 	-- this was necessary with user messages, now it's
@@ -349,7 +371,7 @@ function UpdateRoleData(ply, first)
 		net.WriteBit((k ~= parts)) -- continuation bit, 1 if there's more coming
 		net.WriteString(bit)
 
-		if ply ~= nil then
+		if ply then
 			net.Send(ply)
 		else
 			net.Broadcast()
@@ -361,10 +383,7 @@ function UpdateSingleRoleData(roleData, ply)
 	print("[TTT2][ROLE] Sending updated role '" .. roleData.name .. "' to " .. ply:Nick() .. "...")
 	
 	local s = EncodeForStream(roleData)
-	
-	if not s then
-		return -- error occurred
-	end
+	if not s then return end
 
 	-- divide into happy lil bits.
 	-- this was necessary with user messages, now it's
@@ -387,7 +406,7 @@ function UpdateSingleRoleData(roleData, ply)
 		net.WriteBit((k ~= parts)) -- continuation bit, 1 if there's more coming
 		net.WriteString(bit)
 
-		if ply ~= nil then
+		if ply then
 			net.Send(ply)
 		else
 			net.Broadcast()
@@ -407,6 +426,7 @@ net.Receive("TTT2_RolesListSynced", function(len, ply)
 end)
 
 function GM:PlayerAuthed(ply, steamid, uniqueid)
+	SyncAllEquipment(ply)
 	SyncEquipment(ply)
 	UpdateRoleData(ply, true)
 end
@@ -477,19 +497,18 @@ function FixSpectators()
 	end
 end
 
-
 -- Used to be in think, now a timer
 local function WinChecker()
-	local win, role = hook.Run("TTT2_PreWinChecker")
-
-	if win and win ~= WIN_NONE then
-		EndRound(win, role)
-	end
-
 	if GetRoundState() == ROUND_ACTIVE then
 		if CurTime() > GetGlobalFloat("ttt_round_end", 0) then
 			EndRound(WIN_TIMELIMIT, GetTeamRoles(TEAM_INNO)[1])
-		else
+		elseif not ttt_dbgwin:GetBool() then
+			win, role = hook.Run("TTT2_PreWinChecker")
+			
+			if win and win ~= WIN_NONE then
+				EndRound(win, role)
+			end
+			
 			win, role = hook.Call("TTTCheckForWin", GAMEMODE)
 			
 			if win ~= WIN_NONE then
@@ -1070,7 +1089,7 @@ function GM:TTTCheckForWin()
 	
 	-- if 2 teams alive: no one wins
 	if b > 1 then
-		return WIN_NONE --early out
+		return WIN_NONE -- early out
 	end
 	
 	if b == 0 then
