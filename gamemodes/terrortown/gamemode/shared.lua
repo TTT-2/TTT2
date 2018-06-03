@@ -1,9 +1,9 @@
 GM.Name = "[TTT2] Trouble in Terrorist Town 2 (Advanced Update) - by Alf21"
 GM.Author = "Bad King Urgrain && Alf21"
-GM.Email = "thegreenbunny@gmail.com, 4lf-mueller@gmx.de"
+GM.Email = "4lf-mueller@gmx.de"
 GM.Website = "ttt.badking.net, ttt2.informaskill.de"
 -- Date of latest changes (YYYY-MM-DD)
-GM.Version = "2018-03-27"
+GM.Version = "2018-06-03"
 
 GM.Customized = true
 
@@ -35,6 +35,9 @@ INNO_EQUIPMENT = {
 }
 
 SPECIAL_EQUIPMENT = {
+	"weapon_ttt_unarmed",
+	"weapon_zm_carry",
+	"weapon_zm_improvised",
 	"weapon_ttt_binoculars",
 	"weapon_ttt_defuser",
 	"weapon_ttt_health_station",
@@ -46,6 +49,9 @@ SPECIAL_EQUIPMENT = {
 }
 
 TRAITOR_EQUIPMENT = {
+	"weapon_ttt_unarmed",
+	"weapon_zm_carry",
+	"weapon_zm_improvised",
 	"weapon_ttt_c4",
 	"weapon_ttt_flaregun",
 	"weapon_ttt_knife",
@@ -130,6 +136,10 @@ local flag_rep = {FCVAR_ARCHIVE, FCVAR_REPLICATED}
 CreateConVar("ttt_detective_enabled", "1", flag_rep)
 CreateConVar("ttt_newroles_enabled", "1", flag_rep)
 
+-- shop fallbacks
+CreateConVar("ttt_" .. ROLES.TRAITOR.abbr .. "_shop_fallback", "UNSET", flag_all)
+CreateConVar("ttt_" .. ROLES.DETECTIVE.abbr .. "_shop_fallback", "UNSET", flag_all)
+
 -- you should only use this function to add roles to TTT2
 function AddCustomRole(name, roleData, conVarData)
 	conVarData = conVarData or {}
@@ -167,6 +177,8 @@ function AddCustomRole(name, roleData, conVarData)
 			if conVarData.creditsTraitorDead then
 				CreateConVar("ttt_" .. roleData.abbr .. "_credits_traitordead", tostring(conVarData.creditsTraitorDead), flag_rep)
 			end
+			
+			CreateConVar("ttt_" .. roleData.abbr .. "_shop_fallback", conVarData.shopFallback and tostring(conVarData.shopFallback) or "UNSET", flag_all)
 		end
 		
 		if conVarData.traitorKill then
@@ -221,10 +233,13 @@ end
 
 -- override default settings of ttt to make it compatible with other addons
 -- Player roles
-ROLE_NONE		= 0
-ROLE_INNOCENT		= ROLES.INNOCENT.index
-ROLE_TRAITOR		= ROLES.TRAITOR.index
-ROLE_DETECTIVE 	= ROLES.DETECTIVE.index
+ROLE_NONE = 0
+ROLE_INNOCENT = ROLES.INNOCENT.index
+ROLE_TRAITOR = ROLES.TRAITOR.index
+ROLE_DETECTIVE = ROLES.DETECTIVE.index
+
+SHOP_FALLBACK_TRAITOR = ROLES.TRAITOR.name
+SHOP_FALLBACK_DETECTIVE = ROLES.DETECTIVE.name
 
 function SortRolesTable(tbl)
 	table.sort(tbl, function(a, b)

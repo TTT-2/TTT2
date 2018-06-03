@@ -41,6 +41,8 @@ local mat_dir = "vgui/ttt/"
 EquipmentItems = {}
 SYNC_EQUIP = {}
 ALL_ITEMS = {}
+EQUIPMENT_DEFAULT_TRAITOR = {}
+EQUIPMENT_DEFAULT_DETECTIVE = {}
 
 function SetupEquipment()
 	for _, v in pairs(GetTeamRoles(TEAM_TRAITOR)) do
@@ -87,10 +89,49 @@ hook.Add("TTT2_FinishedSync", "updateEquRol", function()
 	SetupEquipment()
 end)
 
+function GetShopFallback(role)
+	local rd = GetRoleByIndex(role)
+	
+	if not rd.shop then
+		return role
+	end
+	
+	local shopFallback = GetConVar("ttt_" .. rd.abbr .. "_shop_fallback"):GetString()
+	
+	return GetRoleByName(shopFallback).index
+end
+
+function GetShopFallbackTable(role)
+	local rd = GetRoleByIndex(role)
+	
+	if not rd.shop then
+		return {}
+	end
+	
+	local fallback = GetShopFallback(role)
+	
+	-- test whether shop is linked with traitor or detective default shop
+	if fallback ~= ROLES.INNOCENT.index then
+		local tmp = GetShopFallback(fallback)
+		if tmp == ROLES.INNOCENT.index then
+			role = fallback
+			fallback = tmp
+		end
+	end
+
+	if fallback == ROLES.INNOCENT.index then -- fallback is "UNSET"
+		if role == ROLES.TRAITOR.index then
+			return EQUIPMENT_DEFAULT_TRAITOR
+		elseif role == ROLES.DETECTIVE.index then
+			return EQUIPMENT_DEFAULT_DETECTIVE
+		end
+	end
+end
+
 -- Search if an item is in the equipment table of a given role, and return it if
 -- it exists, else return nil.
 function GetEquipmentItem(role, id)
-	local tbl = EquipmentItems[role]
+	local tbl = GetShopFallbackTable(role) or EquipmentItems[GetShopFallback(role)]
 	
 	if not tbl then return end
 
@@ -144,6 +185,10 @@ function GenerateNewEquipmentID()
 end
 
 function EquipmentTableHasValue(tbl, equip)
+	if not tbl then 
+		return false 
+	end
+
 	for _, eq in pairs(tbl) do
 		if eq.id == equip.id then
 			return true
@@ -163,9 +208,117 @@ function SyncTableHasValue(tbl, equip)
 	return false
 end
 
+function InitDefaultEquipment()
+	-- set default equipment tables
+	
+-- TRAITOR
+	local tbl = table.Copy(EquipmentItems[ROLES.TRAITOR.index])
+
+	-- find buyable weapons to load info from
+	for _, v in ipairs(weapons.GetList()) do
+		if v and not v.Doublicated and v.CanBuy and table.HasValue(v.CanBuy, ROLES.TRAITOR.index) then
+			local data = v.EquipMenuData or {}
+			local base = {
+				id		 = WEPS.GetClass(v),
+				name	 = v.ClassName or "Unnamed",
+				limited	 = v.LimitedStock,
+				kind	 = v.Kind or WEAPON_NONE,
+				slot	 = (v.Slot or 0) + 1,
+				material = v.Icon or "vgui/ttt/icon_id",
+				-- the below should be specified in EquipMenuData, in which case
+				-- these values are overwritten
+				type	 = "Type not specified",
+				model	 = "models/weapons/w_bugbait.mdl",
+				desc	 = "No description specified."
+			}
+
+			-- Force material to nil so that model key is used when we are
+			-- explicitly told to do so (ie. material is false rather than nil).
+			if data.modelicon then
+				base.material = nil
+			end
+
+			table.Merge(base, data)
+			
+			base.id = v.ClassName,
+			
+			table.insert(tbl, base)
+		end
+	end
+
+	-- mark custom items
+	for _, i in pairs(tbl) do
+		if i and i.id then
+			i.custom = not table.HasValue(DefaultEquipment[ROLES.TRAITOR.index], i.id) -- TODO
+		end
+	end
+
+	EQUIPMENT_DEFAULT_TRAITOR = tbl
+	
+-- DETECTIVE
+	local tbl = table.Copy(EquipmentItems[ROLES.DETECTIVE.index])
+
+	-- find buyable weapons to load info from
+	for _, v in ipairs(weapons.GetList()) do
+		if v and not v.Doublicated and v.CanBuy and table.HasValue(v.CanBuy, ROLES.DETECTIVE.index) then
+			local data = v.EquipMenuData or {}
+			local base = {
+				id		 = WEPS.GetClass(v),
+				name	 = v.ClassName or "Unnamed",
+				limited	 = v.LimitedStock,
+				kind	 = v.Kind or WEAPON_NONE,
+				slot	 = (v.Slot or 0) + 1,
+				material = v.Icon or "vgui/ttt/icon_id",
+				-- the below should be specified in EquipMenuData, in which case
+				-- these values are overwritten
+				type	 = "Type not specified",
+				model	 = "models/weapons/w_bugbait.mdl",
+				desc	 = "No description specified."
+			}
+
+			-- Force material to nil so that model key is used when we are
+			-- explicitly told to do so (ie. material is false rather than nil).
+			if data.modelicon then
+				base.material = nil
+			end
+
+			table.Merge(base, data)
+			
+			base.id = v.ClassName,
+			
+			table.insert(tbl, base)
+		end
+	end
+
+	-- mark custom items
+	for _, i in pairs(tbl) do
+		if i and i.id then
+			i.custom = not table.HasValue(DefaultEquipment[ROLES.DETECTIVE.index], i.id) -- TODO
+		end
+	end
+
+	EQUIPMENT_DEFAULT_DETECTIVE = tbl
+end
+
+function InitAllItems()
+	for _, roleData in pairs(ROLES) do
+		if EquipmentItems[roleData.index] then
+			for _, eq in pairs(EquipmentItems[roleData.index]) do
+				if not EquipmentTableHasValue(ALL_ITEMS, eq) then
+					eq.defaultRole = roleData.index
+					
+					table.insert(ALL_ITEMS, eq)
+				end
+			end
+			
+			-- reset normal equipment tables
+			EquipmentItems[roleData.index] = {}
+		end
+	end
+end
+
 if SERVER then
 	util.AddNetworkString("TTT2SyncEquipment")
-	util.AddNetworkString("TTT2SyncAllEquipment")
 	
 	-- Sync Equipment
 	local function EncodeForStream(tbl)
@@ -179,43 +332,6 @@ if SERVER then
 			return false
 		else
 			return result
-		end
-	end
-
-	function SyncAllEquipment(ply)
-		add = add or true
-		
-		print("[TTT2][EQUIPMENT] Sending new EQUIPMENT list to " .. ply:Nick() .. "...")
-		
-		local s = EncodeForStream(ALL_ITEMS)
-		if not s then return end
-
-		-- divide into happy lil bits.
-		-- this was necessary with user messages, now it's
-		-- a just-in-case thing if a round somehow manages to be > 64K
-		local cut = {}
-		local max = 65499
-		
-		while #s ~= 0 do
-			local bit = string.sub(s, 1, max - 1)
-			
-			table.insert(cut, bit)
-
-			s = string.sub(s, max, -1)
-		end
-
-		local parts = #cut
-		
-		for k, bit in ipairs(cut) do
-			net.Start("TTT2SyncAllEquipment")
-			net.WriteBit((k ~= parts)) -- continuation bit, 1 if there's more coming
-			net.WriteString(bit)
-
-			if ply then
-				net.Send(ply)
-			else
-				net.Broadcast()
-			end
 		end
 	end
 	
@@ -431,6 +547,8 @@ else -- CLIENT
 		else
 			toadd = equip
 			
+			EquipmentItems[role] = EquipmentItems[role] or {}
+			
 			if not EquipmentTableHasValue(EquipmentItems[role], toadd) then
 				table.insert(EquipmentItems[role], toadd)
 			end
@@ -440,6 +558,8 @@ else -- CLIENT
 		if toadd and toadd.id then
 			toadd.custom = not table.HasValue(DefaultEquipment[role], toadd.id) -- TODO
 		end
+		
+		Equipment[role] = Equipment[role] or {}
 		
 		if toadd and not EquipmentTableHasValue(Equipment[role], toadd) then
 			table.insert(Equipment[role], toadd)
@@ -538,57 +658,6 @@ else -- CLIENT
 					end
 				else
 					ErrorNoHalt("SHOP decoding failed!\n")
-				end
-			end
-
-			-- flush
-			buff = ""
-		end
-	end)
-	
-	net.Receive("TTT2SyncAllEquipment", function(len)
-		print("[TTT2][EQUIPMENT] Received new EQUIPMENT list from server! Updating...")
-
-		local cont = net.ReadBit() == 1
-
-		buff = buff .. net.ReadString()
-
-		if cont then
-			return
-		else
-			-- do stuff with buffer contents
-			local json_shop = buff -- util.Decompress(buff)
-			
-			if not json_shop then
-				ErrorNoHalt("EQUIPMENT decompression failed!\n")
-			else
-				-- convert the json string back to a table
-				local tmp = util.JSONToTable(json_shop)
-
-				if istable(tmp) then
-					ALL_ITEMS = tmp
-					
-					-- reset normal equipment tables
-					for _, role in pairs(ROLES) do
-						if EquipmentItems[role.index] then
-							for _, v in pairs(EquipmentItems[role.index]) do
-								v.defaultRole = role.index
-							end
-							
-							EquipmentItems[role.index] = {}
-							Equipment[role.index] = nil
-						end
-					end
-					
-					-- reset normal weapons equipment
-					for _, wep in ipairs(weapons.GetList()) do
-						local wepTbl = weapons.GetStored(wep.ClassName)
-						if wepTbl then
-							wepTbl.CanBuy = {}
-						end
-					end
-				else
-					ErrorNoHalt("EQUIPMENT decoding failed!\n")
 				end
 			end
 

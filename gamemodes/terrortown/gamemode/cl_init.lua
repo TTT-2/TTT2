@@ -35,6 +35,7 @@ include("cl_scoring.lua")
 include("cl_scoring_events.lua")
 include("cl_popups.lua")
 include("cl_equip.lua")
+include("cl_weaponshop.lua")
 include("cl_voice.lua")
 
 function GM:Initialize()
@@ -44,6 +45,29 @@ function GM:Initialize()
 	for _, wep in ipairs(weapons.GetList()) do
 		if not wep.Doublicated then
 			RegisterNormalWeapon(wep)
+		end
+	end
+	
+	InitDefaultEquipment()
+	InitAllItems()
+
+	-- reset normal equipment tables
+	for _, role in pairs(ROLES) do
+		if EquipmentItems[role.index] then
+			for _, v in pairs(EquipmentItems[role.index]) do
+				v.defaultRole = role.index
+			end
+			
+			EquipmentItems[role.index] = {}
+			Equipment[role.index] = nil
+		end
+	end
+
+	-- reset normal weapons equipment
+	for _, wep in ipairs(weapons.GetList()) do
+		local wepTbl = weapons.GetStored(wep.ClassName)
+		if wepTbl then
+			wepTbl.CanBuy = {}
 		end
 	end
 

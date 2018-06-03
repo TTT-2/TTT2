@@ -477,126 +477,6 @@ local function SpecUseKey(ply, cmd, arg)
 end
 concommand.Add("ttt_spec_use", SpecUseKey)
 
--- replaced
-
-util.AddNetworkString("newshop")
-concommand.Add("Weaponshop", function(ply, cmd, args)
-	net.Start("newshop")
-	net.Send(ply)
-end)
-
--- TODO rebuild with database handling instead of dini file creation like
-util.AddNetworkString("shop")
-net.Receive("shop", function(len, ply)
-	local add = net.ReadBool()
-	local r = net.ReadUInt(ROLE_BITS) + 1
-	local rd = GetRoleByIndex(r)
-	local equip = GetEquipmentFileName(net.ReadString())
-	
-	local role = string.lower(rd.name)
-	
-	local filename = "roleweapons/" .. role .. "/" .. equip .. ".txt"
-	
-	if add then
-		if not file.Exists(filename, "DATA") then
-			file.CreateDir("roleweapons") -- Create the directory
-			file.CreateDir("roleweapons/" .. role) -- Create the directory
-			file.Write(filename, "") -- Write to .txt
-			
-			local is_item = GetEquipmentItemByFileName(equip)
-			local wep = not is_item and GetWeaponNameByFileName(equip)
-			
-			local wepTbl = wep and weapons.GetStored(wep)
-			if wepTbl then
-				AddEquipmentWeaponToRole(rd.index, wepTbl)
-			elseif is_item then
-				AddEquipmentItemToRole(rd.index, is_item)
-			end
-			
-			-- last but not least, notify each player
-			for _, v in pairs(player.GetAll()) do
-				v:ChatPrint("[TTT2][SHOP] " .. ply:Nick() .. " added '" .. equip .. "' into the shop of the " .. role)
-			end
-		end
-	else
-		if file.Exists(filename, "DATA") then
-			file.Delete(filename) -- Write to .txt
-			
-			local is_item = GetEquipmentItemByFileName(equip)
-			local wep = not is_item and GetWeaponNameByFileName(equip)
-			
-			local wepTbl = wep and weapons.GetStored(wep)
-			if wepTbl then
-				RemoveEquipmentWeaponFromRole(rd.index, wepTbl)
-			elseif is_item then
-				RemoveEquipmentItemFromRole(rd.index, is_item)
-			end
-			
-			-- last but not least, notify each player
-			for _, v in pairs(player.GetAll()) do
-				v:ChatPrint("[TTT2][SHOP] " .. ply:Nick() .. " removed '" .. equip .. "' from the shop of the " .. role)
-			end
-		end
-	end
-end)
-
--- end replaced
---[[
--- with
-
-util.AddNetworkString("TTTBEMEquipmentEditorItemBroadcast")
-util.AddNetworkString("TTTBEMEquipmentEditor")
-util.AddNetworkString("TTTBEMEquipmentEditorAddItem")
-util.AddNetworkString("TTTBEMEquipmentEditorRemoveItem")
-
-concommand.Add("ttt2_equipmenteditor", function(ply, cmd, args) -- new name!
-	net.Start("TTTBEMEquipmentEditor")
-	net.Send(ply)
-end)
-
-net.Receive("TTTBEMEquipmentEditorAddItem", function()
-	local role = string.lower(net.ReadString())
-	local weapon = net.ReadString()
-	local weaps = net.ReadTable()
-	
-	if not file.Exists(weapon .. ".txt", "DATA/roleweapons/" .. role) then
-		local tab = util.TableToJSON(weaps) -- Convert the weapons table to JSON
-		local filename = "roleweapons/" .. role .. "/" .. weapon .. ".txt"
-		
-		file.CreateDir("roleweapons") -- Create the directory
-		file.CreateDir("roleweapons/" .. role) -- Create the directory
-		file.Write(filename, tab) -- Write to .txt
-	end
-end)
-
-net.Receive("TTTBEMEquipmentEditorRemoveItem", function()
-	local role = string.lower(net.ReadString())
-	local weapon = net.ReadString()
-	local filename = "roleweapons/" .. role .. "/" .. weapon .. ".txt"
-	
-	if file.Exists(weapon .. ".txt", "roleweapons/" .. role) then
-		file.Delete(filename) -- Delete the file
-	end
-end)
-
-timer.Create("TTTBEMEquipmentEditorTimer", 0.5, 0, function()
-	for _, v in pairs(GetShopRoles()) do
-		local role = string.lower(v.printName)
-		local files, dirs = file.Find("roleweapons/" .. role .. "/*.txt", "DATA")
-
-		for _, l in ipairs(files) do
-			local weaps = util.JSONToTable(file.Read("roleweapons/" .. role .. "/" .. l, "DATA"))
-			
-			net.Start("TTTBEMEquipmentEditorItemBroadcast")
-			net.WriteUInt(v.index - 1, ROLE_BITS)
-			net.WriteTable(weaps)
-			net.Broadcast()
-		end
-	end
-end)
-]]--
--- end
-
 function GM:PlayerDisconnected(ply)
 	-- Prevent the disconnecter from being in the resends
 	if IsValid(ply) then
@@ -639,7 +519,6 @@ function GM:PlayerDisconnected(ply)
 end
 
 ---- Death affairs
-
 local function CreateDeathEffect(ent, marked)
 	local pos = ent:GetPos() + Vector(0, 0, 20)
 	local jit = 35.0
@@ -691,11 +570,10 @@ local function CheckCreditAward(victim, attacker)
 	
 	local ret = hook.Run("TTT2CheckCreditAward", victim, attacker)
 	if ret ~= nil and not ret then return end
-	
-	local rd = attacker:GetRoleData()
  
 	-- DET KILLED ANOTHER TEAM AWARD
 	if IsValid(attacker) and attacker:IsPlayer() and attacker:IsActiveRole(ROLES.DETECTIVE.index) and not victim:IsTeamMember(attacker) then
+		local rd = attacker:GetRoleData()
 		local amt = (ConVarExists("ttt_" .. rd.abbr .. "_credits_traitordead") and GetConVar("ttt_" .. rd.abbr .. "_credits_traitordead"):GetInt() or 1)
 		
 		for _, ply in ipairs(player.GetAll()) do
@@ -841,7 +719,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
 			if attacker:HasTeamRole(TEAM_TRAITOR) then
 				reward = math.ceil((ConVarExists("ttt_credits_" .. rd.name .. "kill") and GetConVar("ttt_credits_" .. rd.name .. "kill"):GetInt() or 0))
 			else
-				local vrd = victim:GetRoleData()
+				local vrd = ply:GetRoleData()
 				local b = false
 				
 				if vrd ~= ROLES.TRAITOR then
@@ -890,6 +768,12 @@ end
 -- kill hl2 beep
 function GM:PlayerDeathSound() 
 	return true 
+end
+
+function GM:PostPlayerDeath(ply)
+	if GetRoundState() == ROUND_PREP and GetConVar("ttt2_prep_respawn"):GetBool() then -- endless respawn player if he dies while preparing time
+		ply:SpawnForRound(true)
+	end
 end
 
 function GM:SpectatorThink(ply)
@@ -1140,7 +1024,6 @@ function GM:EntityTakeDamage(ent, dmginfo)
 end
 
 function GM:PlayerTakeDamage(ent, infl, att, amount, dmginfo)
-
 	-- Change damage attribution if necessary
 	if infl or att then
 		local hurter, owner, owner_time

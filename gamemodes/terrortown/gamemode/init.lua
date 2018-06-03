@@ -12,6 +12,7 @@ AddCSLuaFile("cl_scoring_events.lua")
 AddCSLuaFile("cl_scoring.lua")
 AddCSLuaFile("cl_popups.lua")
 AddCSLuaFile("cl_equip.lua")
+AddCSLuaFile("cl_weaponshop.lua")
 AddCSLuaFile("equip_items_shd.lua")
 AddCSLuaFile("cl_help.lua")
 AddCSLuaFile("cl_scoreboard.lua")
@@ -57,6 +58,7 @@ include("corpse.lua")
 include("player_ext_shd.lua")
 include("player_ext.lua")
 include("player.lua")
+include("weaponshop.lua")
 
 local flag_all = {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED}
 local flag_save = {FCVAR_NOTIFY, FCVAR_ARCHIVE}
@@ -113,6 +115,9 @@ CreateConVar("ttt_namechange_bantime", "10")
 
 local ttt_detective = CreateConVar("ttt_sherlock_mode", "1", flag_save)
 local ttt_minply = CreateConVar("ttt_minimum_players", "2", flag_save)
+
+-- respawn if dead in preparing time
+CreateConVar("ttt2_prep_respawn", "0", flag_all)
 
 -- debuggery
 local ttt_dbgwin = CreateConVar("ttt_debug_preventwin", "0", flag_save)
@@ -237,6 +242,8 @@ function GM:Initialize()
 		ErrorNoHalt("TTT WARNING: CS:S does not appear to be mounted by GMod. Things may break in strange ways. Server admin? Check the TTT readme for help.\n")
 	end
 	
+	InitDefaultEquipment()
+	
 	-- setup weapon ConVars and similar things
 	for _, wep in ipairs(weapons.GetList()) do
 		if not wep.Doublicated then
@@ -253,20 +260,7 @@ function GM:Initialize()
 	hook.Run("PostInitialize")
 	
 	-- initialize all items
-	for _, roleData in pairs(ROLES) do
-		if EquipmentItems[roleData.index] then
-			for _, eq in pairs(EquipmentItems[roleData.index]) do
-				if not EquipmentTableHasValue(ALL_ITEMS, eq) then
-					eq.defaultRole = roleData.index
-					
-					table.insert(ALL_ITEMS, eq)
-				end
-			end
-			
-			-- reset normal equipment tables
-			EquipmentItems[roleData.index] = {}
-		end
-	end
+	InitAllItems()
 	
 	-- initialize the equipment
 	LoadShopsEquipment()
@@ -279,7 +273,9 @@ function GM:InitCvars()
 
 	-- Initialize game state that is synced with client
 	SetGlobalInt("ttt_rounds_left", GetConVar("ttt_round_limit"):GetInt())
+	
 	GAMEMODE:SyncGlobals()
+	
 	KARMA.InitState()
 
 	self.cvar_init = true
@@ -426,7 +422,6 @@ net.Receive("TTT2_RolesListSynced", function(len, ply)
 end)
 
 function GM:PlayerAuthed(ply, steamid, uniqueid)
-	SyncAllEquipment(ply)
 	SyncEquipment(ply)
 	UpdateRoleData(ply, true)
 end
@@ -857,7 +852,6 @@ function BeginRound()
 
 	if CheckForAbort() then return end
 
-	AnnounceVersion()
 	InitRoundEndTime()
 
 	if CheckForAbort() then return end
@@ -1352,14 +1346,3 @@ function ToggleNewRoles(ply)
 	end
 end
 concommand.Add("ttt_toggle_newroles", ToggleNewRoles)
-
-function AnnounceVersion()
-	local text = Format("You are playing %s, version %s (modified by Alf21).\n", GAMEMODE.Name, GAMEMODE.Version)
-
-	-- announce to players
-	for _, ply in ipairs(player.GetAll()) do
-		if IsValid(ply) then
-			ply:PrintMessage(HUD_PRINTTALK, text)
-		end
-	end
-end
