@@ -45,9 +45,6 @@ function GetEquipmentForRoleAll()
 				end
 
 				table.Merge(base, data)
-				
-				base.id = v.ClassName,
-				
 				table.insert(tbl, base)
 			end
 		end
@@ -337,13 +334,15 @@ net.Receive("newshop", function()
 				end
 			end
 		else
-			state = true
-		
-			for _, v in pairs(dlist:GetItems()) do
-				if v.UpdateCheck then
-					v:UpdateCheck()
+			timer.Simple(2, function() -- wait 2 seconds for think. Not the best option, best the fastest at the moment => TODO rework asynchronously
+				state = true
+			
+				for _, v in pairs(dlist:GetItems()) do
+					if v.UpdateCheck then
+						v:UpdateCheck()
+					end
 				end
-			end
+			end)
 		end
 	end
 	
@@ -351,5 +350,66 @@ net.Receive("newshop", function()
 		selectedRole = data
 		
 		fbmenu:RefreshChoices()
+	end
+end)
+
+net.Receive("shopFallbackAnsw", function(len)
+	local role = net.ReadUInt(ROLE_BITS) + 1
+	
+	local rd = GetRoleByIndex(role)
+	local fallback = GetConVar("ttt_" .. rd.abbr .. "_shop_fallback"):GetString()
+		
+	-- reset everything
+	EquipmentItems[role] = {}
+	Equipment[role] = {}
+	
+	for _, v in ipairs(weapons.GetList()) do
+		if v.CanBuy then
+			for k, vi in ipairs(v.CanBuy) do
+				if vi == role then
+					table.remove(v.CanBuy, k) -- TODO does it work?
+					
+					break
+				end
+			end
+		end
+	end
+	
+	if fallback == "UNSET" then
+		if role == ROLES.TRAITOR.index then
+			-- set everything
+			for _, eq in ipairs(EQUIPMENT_DEFAULT_TRAITOR) do
+				local is_item = tonumber(eq.id)
+				if is_item then
+					table.insert(EquipmentItems[role], eq)
+				else
+					local wepTbl = weapons.GetStored(eq.id)
+					if wepTbl then
+						wepTbl.CanBuy = wepTbl.CanBuy or {}
+						
+						table.insert(wepTbl.CanBuy, role)
+					end
+				end
+				
+				table.insert(Equipment[role], eq)
+			end
+		elseif role == ROLES.DETECTIVE.index then
+			-- set everything
+			for _, eq in ipairs(EQUIPMENT_DEFAULT_DETECTIVE) do
+				local is_item = tonumber(eq.id)
+				if is_item then
+					table.insert(EquipmentItems[role], eq)
+				else
+					local wepTbl = weapons.GetStored(eq.id)
+					if wepTbl then
+						wepTbl.CanBuy = wepTbl.CanBuy or {}
+						
+						table.insert(wepTbl.CanBuy, role)
+					end
+				end
+				
+				table.insert(Equipment[role], eq)
+			end
+		end
 	end
 end)

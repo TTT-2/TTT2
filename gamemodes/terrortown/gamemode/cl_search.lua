@@ -82,16 +82,13 @@ local TypeToMat = {
 	dtime = "time",
 	stime = "wtester",
 	lastid = "lastid",
-	kills = "list"
+	kills = "list",
+	role = {}
 }
 
 -- add role abbr of each role for icons
-TypeToMat.role = {}
-
 hook.Add("TTT2_FinishedSync", "updateTpTMat", function(ply, first)
 	if first then
-		TypeToMat.role = {}
-		
 		for _, v in pairs(ROLES) do
 			TypeToMat.role[v.index] = v.abbr
 		end
@@ -489,7 +486,6 @@ local function ReceiveRagdollSearch()
 	local owner = Entity(net.ReadUInt(8))
 	
 	search.owner = owner
-	search.oldOwner = owner
 
 	if not (IsValid(search.owner) and search.owner:IsPlayer() and not search.owner:IsTerror()) then
 		search.owner = nil

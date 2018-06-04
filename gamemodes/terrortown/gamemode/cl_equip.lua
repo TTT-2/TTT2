@@ -62,9 +62,6 @@ function GetEquipmentForRole(role)
 				end
 
 				table.Merge(base, data)
-				
-				base.id = v.ClassName,
-				
 				table.insert(tbl, base)
 			end
 		end

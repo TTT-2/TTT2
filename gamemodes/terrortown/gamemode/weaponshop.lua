@@ -9,9 +9,14 @@ util.AddNetworkString("shop")
 net.Receive("shop", function(len, ply)
 	local add = net.ReadBool()
 	local r = net.ReadUInt(ROLE_BITS) + 1
-	local rd = GetRoleByIndex(r)
-	local equip = GetEquipmentFileName(net.ReadString())
+	local eq = net.ReadString()
 	
+	local equip = GetEquipmentFileName(eq)
+	local is_item = GetEquipmentItemByFileName(eq)
+	
+	equip = not is_item and eq or equip
+	
+	local rd = GetRoleByIndex(r)
 	local role = string.lower(rd.name)
 	
 	local filename = "roleweapons/" .. role .. "/" .. equip .. ".txt"
@@ -60,11 +65,23 @@ net.Receive("shop", function(len, ply)
 end)
 
 util.AddNetworkString("shopFallback")
+util.AddNetworkString("shopFallbackAnsw")
 net.Receive("shopFallback", function(len, ply)
 	local role = net.ReadUInt(ROLE_BITS) + 1
 	local fallback = net.ReadString()
 	
 	local rd = GetRoleByIndex(role)
+	local oldFallback = GetConVar("ttt_" .. rd.abbr .. "_shop_fallback"):GetString()
+	
+	if fallback == oldFallback then return end
 	
 	GetConVar("ttt_" .. rd.abbr .. "_shop_fallback"):SetString(fallback)
+	
+	net.Start("shopFallbackAnsw")
+	net.WriteUInt(role - 1, ROLE_BITS)
+	net.Broadcast()
+	
+	if fallback ~= "UNSET" and role == GetRoleByName(fallback).index then
+		LoadSingleShopEquipment(rd)
+	end
 end)

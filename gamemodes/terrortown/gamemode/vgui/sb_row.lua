@@ -108,7 +108,7 @@ function GM:TTTScoreboardRowColorForPlayer(ply)
 		return col
 	end
 	
-	--if ply:IsSpecial() then
+	if ply:IsSpecial() then
 		local tmp = ply:GetRoleData().color
 		
 		col.r = tmp.r
@@ -118,9 +118,9 @@ function GM:TTTScoreboardRowColorForPlayer(ply)
 		col.a = 255
 		
 		return col
-	--end
+	end
 
-	--return col
+	return col
 end
 
 local function ColorForPlayer(ply)

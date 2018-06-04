@@ -89,7 +89,7 @@ hook.Add("TTT2_FinishedSync", "updateEquRol", function()
 	SetupEquipment()
 end)
 
-function GetShopFallback(role)
+function GetShopFallback(role, tbl)
 	local rd = GetRoleByIndex(role)
 	
 	if not rd.shop then
@@ -97,8 +97,30 @@ function GetShopFallback(role)
 	end
 	
 	local shopFallback = GetConVar("ttt_" .. rd.abbr .. "_shop_fallback"):GetString()
+	local fb = GetRoleByName(shopFallback).index
 	
-	return GetRoleByName(shopFallback).index
+	if shopFallback == "UNSET" then
+		return role, fb
+	end
+	
+	if not tbl then
+		tbl = {role, fb}
+		
+		fb, role = GetShopFallback(fb, tbl)
+	elseif not table.HasValue(tbl, fb) then
+		table.insert(tbl, fb)
+	
+		local nfb
+		
+		nfb, role = GetShopFallback(fb, tbl)
+		
+		if nfb ~= fb then
+			role = fb
+			fb = nfb
+		end
+	end
+	
+	return fb, role -- return deepest value and the value before the deepest value
 end
 
 function GetShopFallbackTable(role)
@@ -108,17 +130,10 @@ function GetShopFallbackTable(role)
 		return {}
 	end
 	
-	local fallback = GetShopFallback(role)
+	local fallback
 	
-	-- test whether shop is linked with traitor or detective default shop
-	if fallback ~= ROLES.INNOCENT.index then
-		local tmp = GetShopFallback(fallback)
-		if tmp == ROLES.INNOCENT.index then
-			role = fallback
-			fallback = tmp
-		end
-	end
-
+	role, fallback = GetShopFallback(role)
+	
 	if fallback == ROLES.INNOCENT.index then -- fallback is "UNSET"
 		if role == ROLES.TRAITOR.index then
 			return EQUIPMENT_DEFAULT_TRAITOR
@@ -131,7 +146,12 @@ end
 -- Search if an item is in the equipment table of a given role, and return it if
 -- it exists, else return nil.
 function GetEquipmentItem(role, id)
-	local tbl = GetShopFallbackTable(role) or EquipmentItems[GetShopFallback(role)]
+	local tbl = GetShopFallbackTable(role) 
+	if not tbl then 
+		local fb = GetShopFallback(role)
+	
+		tbl = EquipmentItems[fb]
+	end
 	
 	if not tbl then return end
 
@@ -239,9 +259,6 @@ function InitDefaultEquipment()
 			end
 
 			table.Merge(base, data)
-			
-			base.id = v.ClassName,
-			
 			table.insert(tbl, base)
 		end
 	end
@@ -283,9 +300,6 @@ function InitDefaultEquipment()
 			end
 
 			table.Merge(base, data)
-			
-			base.id = v.ClassName,
-			
 			table.insert(tbl, base)
 		end
 	end
@@ -305,8 +319,6 @@ function InitAllItems()
 		if EquipmentItems[roleData.index] then
 			for _, eq in pairs(EquipmentItems[roleData.index]) do
 				if not EquipmentTableHasValue(ALL_ITEMS, eq) then
-					eq.defaultRole = roleData.index
-					
 					table.insert(ALL_ITEMS, eq)
 				end
 			end
@@ -406,6 +418,65 @@ if SERVER then
 			else
 				net.Broadcast()
 			end
+		end
+	end
+	
+	function LoadSingleShopEquipment(roleData)
+		local fallback = GetConVar("ttt_" .. roleData.abbr .. "_shop_fallback"):GetString()
+		local fb = GetRoleByName(fallback).index
+		
+		if fb ~= roleData.index then return end
+		
+		SYNC_EQUIP = SYNC_EQUIP or {}
+		SYNC_EQUIP[roleData.index] = {} -- reset
+		
+		local roleName = string.lower(roleData.name)
+		local files, directories = file.Find("roleweapons/" .. roleName .. "/*.txt", "DATA")
+
+		for _, v in pairs(files) do
+			local name = string.sub(v, 1, #v - 4) -- cut #".txt"
+			local is_item = GetEquipmentItemByFileName(name)
+			local wep = not is_item and GetWeaponNameByFileName(name)
+			
+			print(roleData.name .. "(" .. name .. ")" .. ": wep=" .. (wep and "true" or "false") .. " / item=" .. (is_item and "true" or "false"))
+
+			local swep_table = wep and weapons.GetStored(wep)
+			if swep_table then
+				if not swep_table.CanBuy then
+					swep_table.CanBuy = {}
+				end
+				
+				if not table.HasValue(swep_table.CanBuy, roleData.index) then
+					table.insert(swep_table.CanBuy, roleData.index)
+				end
+				--
+				
+				SYNC_EQUIP[roleData.index] = SYNC_EQUIP[roleData.index] or {}
+				
+				local tbl = {equip = swep_table.ClassName, type = 0}
+				
+				if not SyncTableHasValue(SYNC_EQUIP[roleData.index], tbl) then
+					table.insert(SYNC_EQUIP[roleData.index], tbl)
+				end
+			elseif is_item then
+				EquipmentItems[roleData.index] = EquipmentItems[roleData.index] or {}
+		
+				if not EquipmentTableHasValue(EquipmentItems[roleData.index], is_item) then
+					table.insert(EquipmentItems[roleData.index], is_item)
+				end
+				
+				SYNC_EQUIP[roleData.index] = SYNC_EQUIP[roleData.index] or {}
+				
+				local tbl = {equip = is_item.id, type = 1}
+				
+				if not SyncTableHasValue(SYNC_EQUIP[roleData.index], tbl) then
+					table.insert(SYNC_EQUIP[roleData.index], tbl)
+				end
+			end
+		end
+		
+		for _, ply in ipairs(player.GetAll()) do
+			SyncEquipment(ply, true)
 		end
 	end
 	
@@ -513,7 +584,13 @@ else -- CLIENT
 
 		-- find buyable weapons to load info from
 		if not item then
-			if equip and not equip.Doublicated and equip.CanBuy and table.HasValue(equip.CanBuy, role) then
+			equip.CanBuy = equip.CanBuy or {}
+		
+			if not table.HasValue(equip.CanBuy, role) then
+				table.insert(equip.CanBuy, role)
+			end
+				
+			if equip and not equip.Doublicated then
 				local data = equip.EquipMenuData or {}
 				local base = {
 					id		 = WEPS.GetClass(equip),
@@ -539,10 +616,6 @@ else -- CLIENT
 				table.Merge(base, data)
 				
 				toadd = base
-				
-				if not table.HasValue(equip.CanBuy, role) then
-					table.insert(equip.CanBuy, role)
-				end
 			end
 		else
 			toadd = equip

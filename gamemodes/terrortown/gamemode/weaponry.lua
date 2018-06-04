@@ -44,27 +44,28 @@ function GM:PlayerCanPickupWeapon(ply, wep)
 end
 
 -- Cache role -> default-weapons table
-local loadout_weapons = nil
+local loadout_weapons = {}
 
 local function GetLoadoutWeapons(r)
-	if not loadout_weapons then
-		-- TODO on new role: Reload !
-	
-		local tmp = {}
-	 
-		for _, v in pairs(ROLES) do
-			tmp[v.index] = {}
-		end
+	if not loadout_weapons[r] then
+		loadout_weapons[r] = loadout_weapons[r] or {}
 	
 		for _, w in ipairs(weapons.GetList()) do
-			if w and type(w.InLoadoutFor) == "table" then
-				for _, wrole in pairs(w.InLoadoutFor) do
-					table.insert(tmp[wrole], WEPS.GetClass(w))
+			if w and type(w.InLoadoutFor) == "table" and not w.Doublicated then
+				local cls = WEPS.GetClass(w)
+				
+				if table.HasValue(w.InLoadoutFor, r) then
+					table.insert(loadout_weapons[r], cls)
+				elseif table.HasValue(w.InLoadoutFor, ROLES.INNOCENT.index) then -- setup for new roles
+					local wepTbl = weapons.GetStored(cls)
+					if wepTbl then
+						table.insert(wepTbl.InLoadoutFor, r)
+					end
+					
+					table.insert(loadout_weapons[r], cls)
 				end
 			end
 		end
-
-		loadout_weapons = tmp
 	end
 
 	return loadout_weapons[r]
@@ -198,7 +199,7 @@ function GM:PlayerLoadout(ply)
 			MsgN("Could not spawn all loadout weapons for " .. ply:Nick() .. ", will retry.")
 			
 			timer.Create("lateloadout" .. ply:EntIndex(), 1, 0, function() 
-			LateLoadout(ply:EntIndex()) 
+				LateLoadout(ply:EntIndex()) 
 			end)
 		end
 	end
@@ -357,7 +358,7 @@ local function GiveEquipmentWeapon(sid, cls)
 	if not IsValid(w) or not ply:HasWeapon(cls) then
 		if not timer.Exists(tmr) then
 			timer.Create(tmr, 1, 0, function() 
-			GiveEquipmentWeapon(sid, cls) 
+				GiveEquipmentWeapon(sid, cls) 
 			end)
 		end
 
@@ -385,8 +386,10 @@ end
 -- Equipment buying
 local function OrderEquipment(ply, cmd, args)
 	if not IsValid(ply) or #args ~= 1 then return end
+	
+	local role = GetShopFallback(ply:GetRole())
 
-	if not ply:IsActiveShopper() then return end
+	if not ply:IsActive() or not GetRoleByIndex(role).shop then return end
 
 	-- no credits, can't happen when buying through menu as button will be off
 	if ply:GetCredits() < 1 then return end
@@ -415,8 +418,7 @@ local function OrderEquipment(ply, cmd, args)
 		id = tonumber(id)
 
 		-- item whitelist check
-		local allowed = GetEquipmentItem(ply:GetRole(), id)
-
+		local allowed = GetEquipmentItem(role, id)
 		if not allowed then
 			print(ply, "tried to buy item not buyable for his class:", id)
 			
@@ -424,7 +426,6 @@ local function OrderEquipment(ply, cmd, args)
 		end
 
 		-- ownership check and finalise
-
 		if id and EQUIP_NONE < id then
 			if not ply:HasEquipmentItem(id) then
 				ply:GiveEquipmentItem(id)
@@ -434,7 +435,7 @@ local function OrderEquipment(ply, cmd, args)
 		end
 	elseif swep_table then
 		-- weapon whitelist check
-		if not table.HasValue(swep_table.CanBuy, ply:GetRole()) then
+		if not table.HasValue(swep_table.CanBuy, role) then
 			print(ply, "tried to buy weapon his role is not permitted to buy")
 			
 			return
@@ -459,7 +460,6 @@ local function OrderEquipment(ply, cmd, args)
 			received = true
 		end
 	end
-
 
 	if received then
 		ply:SubtractCredits(1)

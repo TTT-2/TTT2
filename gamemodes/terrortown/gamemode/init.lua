@@ -303,23 +303,9 @@ end
 
 function LoadShopsEquipment()
 	-- initialize shop equipment
-	for _, role in pairs(ROLES) do
-		if role.shop then
-			local roleName = string.lower(role.name)
-			local files, directories = file.Find("roleweapons/" .. roleName .. "/*.txt", "DATA")
-		
-			for _, v in pairs(files) do
-				local name = string.sub(v, 1, #v - 4) -- cut #".txt"
-				local is_item = GetEquipmentItemByFileName(name)
-				local wep = not is_item and GetWeaponNameByFileName(name)
-		
-				local swep_table = wep and weapons.GetStored(wep)
-				if swep_table then
-					AddEquipmentWeaponToRole(role.index, swep_table)
-				elseif is_item then
-					AddEquipmentItemToRole(role.index, is_item)
-				end
-			end
+	for _, roleData in pairs(ROLES) do
+		if roleData.shop then
+			LoadSingleShopEquipment(roleData)
 		end
 	end
 end
