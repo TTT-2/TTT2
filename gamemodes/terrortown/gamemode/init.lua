@@ -264,6 +264,9 @@ function GM:Initialize()
 	
 	-- initialize the equipment
 	LoadShopsEquipment()
+	
+	-- initialize fallback shops
+	InitFallbackShops()
 end
 
 -- Used to do this in Initialize, but server cfg has not always run yet by that
@@ -1320,7 +1323,7 @@ function ToggleNewRoles(ply)
 	if ply:IsAdmin() then
 		local b = not GetConVar("ttt_newroles_enabled"):GetBool()
 		
-		GetConVar("ttt_newroles_enabled"):SetBool(b)
+		RunConsoleCommand("ttt_newroles_enabled", b and "1" or "0")
 		
 		local word = "enabled"
 		

@@ -178,7 +178,7 @@ function AddCustomRole(name, roleData, conVarData)
 				CreateConVar("ttt_" .. roleData.abbr .. "_credits_traitordead", tostring(conVarData.creditsTraitorDead), flag_rep)
 			end
 			
-			CreateConVar("ttt_" .. roleData.abbr .. "_shop_fallback", conVarData.shopFallback and tostring(conVarData.shopFallback) or "UNSET", flag_all)
+			CreateConVar("ttt_" .. roleData.abbr .. "_shop_fallback", conVarData.shopFallback and tostring(conVarData.shopFallback) or "DISABLED", flag_all)
 		end
 		
 		if conVarData.traitorKill then
@@ -332,7 +332,7 @@ function GetTeamRoles(team)
 	local i = 0
 	
 	for _, v in pairs(ROLES) do
-		if v.team ~= nil and v.team == team then
+		if v.team and v.team == team then
 			i = i + 1
 			teamRoles[i] = v
 		end

@@ -382,7 +382,7 @@ local function toggle_role(ply, cmd, args, argStr)
 
 		local word = currentState and "disabled" or "enabled"
 
-		GetConVar("ttt_" .. roleData.name .. "_enabled"):SetBool(currentState)
+		RunConsoleCommand("ttt_" .. roleData.name .. "_enabled", currentState and "1" or "0")
 
 		ply:ChatPrint("You " .. word .. " role with index '" .. role .. "(" .. roleData.printName .. ")'. This will take effect in the next role selection!")
 	end

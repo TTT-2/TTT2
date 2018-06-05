@@ -27,6 +27,7 @@ function GetEquipmentForRoleAll()
 				local base = {
 					id		 = v.ClassName,
 					name	 = v.ClassName or "Unnamed",
+					PrintName= data.name or v.PrintName or v.ClassName or "Unnamed",
 					limited	 = v.LimitedStock,
 					kind	 = v.Kind or WEAPON_NONE,
 					slot	 = (v.Slot or 0) + 1,
@@ -74,6 +75,10 @@ net.Receive("newshop", function()
 	function DermaPanel:Paint(w, h)
 		draw.RoundedBox(0, 0, 0, w, h, Color(100, 100, 100))
 	end
+	
+	function DermaPanel:OnClose()
+		LocalPlayer().weaponshopList = nil
+	end
 
 	local DScrollPanel = vgui.Create("DScrollPanel", DermaPanel)
 	DScrollPanel:SetSize(w - 100, h - 45)
@@ -100,6 +105,8 @@ net.Receive("newshop", function()
 	dlist:EnableVerticalScrollbar(true)
 	dlist:EnableHorizontal(true)
 	dlist:SetPadding(4)
+	
+	dlist.selectedRole = selectedRole
 
 	local menu = vgui.Create("DComboBox")
 	menu:SetParent(DermaPanel)
@@ -150,13 +157,13 @@ net.Receive("newshop", function()
 		ic.item = item
 		
 		function ic:UpdateCheck()
-			if not selectedRole then return end
+			if not dlist.selectedRole then return end
 			
 			local is_item = tonumber(ic.item.id)
 			if is_item then
-				EquipmentItems[selectedRole] = EquipmentItems[selectedRole] or {}
+				EquipmentItems[dlist.selectedRole] = EquipmentItems[dlist.selectedRole] or {}
 			
-				if EquipmentTableHasValue(EquipmentItems[selectedRole], ic.item) then
+				if EquipmentTableHasValue(EquipmentItems[dlist.selectedRole], ic.item) then
 					ic:Toggle(true)
 				else
 					ic:Toggle(false)
@@ -166,7 +173,7 @@ net.Receive("newshop", function()
 				if wepTbl then
 					wepTbl.CanBuy = wepTbl.CanBuy or {}
 					
-					if table.HasValue(wepTbl.CanBuy, selectedRole) then
+					if table.HasValue(wepTbl.CanBuy, dlist.selectedRole) then
 						ic:Toggle(true)
 					else
 						ic:Toggle(false)
@@ -176,16 +183,16 @@ net.Receive("newshop", function()
 		end
 		
 		ic.OnClick = function()
-			if not selectedRole or not state then return end
+			if not dlist.selectedRole or not state then return end
 			
 			local is_item = tonumber(ic.item.id)
 			if is_item then
-				EquipmentItems[selectedRole] = EquipmentItems[selectedRole] or {}
+				EquipmentItems[dlist.selectedRole] = EquipmentItems[dlist.selectedRole] or {}
 			
-				if EquipmentTableHasValue(EquipmentItems[selectedRole], ic.item) then
-					for k, eq in pairs(EquipmentItems[selectedRole]) do
+				if EquipmentTableHasValue(EquipmentItems[dlist.selectedRole], ic.item) then
+					for k, eq in pairs(EquipmentItems[dlist.selectedRole]) do
 						if eq.id == ic.item.id then
-							table.remove(EquipmentItems[selectedRole], k)
+							table.remove(EquipmentItems[dlist.selectedRole], k)
 							
 							break
 						end
@@ -194,16 +201,16 @@ net.Receive("newshop", function()
 					-- remove
 					net.Start("shop")
 					net.WriteBool(false)
-					net.WriteUInt(selectedRole - 1, ROLE_BITS)
+					net.WriteUInt(dlist.selectedRole - 1, ROLE_BITS)
 					net.WriteString(ic.item.name)
 					net.SendToServer()
 				else
-					table.insert(EquipmentItems[selectedRole], ic.item)
+					table.insert(EquipmentItems[dlist.selectedRole], ic.item)
 					
 					-- add
 					net.Start("shop")
 					net.WriteBool(true)
-					net.WriteUInt(selectedRole - 1, ROLE_BITS)
+					net.WriteUInt(dlist.selectedRole - 1, ROLE_BITS)
 					net.WriteString(ic.item.name)
 					net.SendToServer()
 				end
@@ -212,9 +219,9 @@ net.Receive("newshop", function()
 				if wepTbl then
 					wepTbl.CanBuy = wepTbl.CanBuy or {}
 					
-					if table.HasValue(wepTbl.CanBuy, selectedRole) then
+					if table.HasValue(wepTbl.CanBuy, dlist.selectedRole) then
 						for k, v in ipairs(wepTbl.CanBuy) do
-							if v == selectedRole then
+							if v == dlist.selectedRole then
 								table.remove(wepTbl.CanBuy, k)
 								
 								break
@@ -224,16 +231,16 @@ net.Receive("newshop", function()
 						-- remove
 						net.Start("shop")
 						net.WriteBool(false)
-						net.WriteUInt(selectedRole - 1, ROLE_BITS)
+						net.WriteUInt(dlist.selectedRole - 1, ROLE_BITS)
 						net.WriteString(ic.item.id)
 						net.SendToServer()
 					else
-						table.insert(wepTbl.CanBuy, selectedRole)
+						table.insert(wepTbl.CanBuy, dlist.selectedRole)
 						
 						-- add
 						net.Start("shop")
 						net.WriteBool(true)
-						net.WriteUInt(selectedRole - 1, ROLE_BITS)
+						net.WriteUInt(dlist.selectedRole - 1, ROLE_BITS)
 						net.WriteString(ic.item.id)
 						net.SendToServer()
 					end
@@ -247,12 +254,14 @@ net.Receive("newshop", function()
 			end
 		end
 
-		local tip = SafeTranslate(item.name) .. " (" .. SafeTranslate(item.type) .. ")"
+		local tip = SafeTranslate(item.PrintName or item.name) .. " (" .. SafeTranslate(item.type) .. ")"
 		
 		ic:SetTooltip(tip)
 
 		dlist:AddPanel(ic)
 	end
+	
+	ply.weaponshopList = dlist
 	
 	-- first init
 	for _, v in pairs(dlist:GetItems()) do
@@ -271,12 +280,12 @@ net.Receive("newshop", function()
 		-- clear old data
 		self:Clear()
 		
-		local rd = GetRoleByIndex(selectedRole)
+		local rd = GetRoleByIndex(dlist.selectedRole)
 		local fallback = GetConVar("ttt_" .. rd.abbr .. "_shop_fallback"):GetString()
 		local fb = GetRoleByName(fallback)
 		
 		-- update state
-		if fallback == "UNSET" and (selectedRole == ROLES.TRAITOR.index or selectedRole == ROLES.DETECTIVE.index) then
+		if fallback == "DISABLED" or fallback == "UNSET" and (dlist.selectedRole == ROLES.TRAITOR.index or dlist.selectedRole == ROLES.DETECTIVE.index) then
 			state = false
 		else
 			state = true
@@ -284,20 +293,24 @@ net.Receive("newshop", function()
 	
 		-- add linked or own shop choice
 		for _, v in pairs(GetShopRoles()) do
-			self:AddChoice(selectedRole == v.index and ("Use own shop") or ("Link with " .. v.name), {name = v.name, data = v.name})
+			self:AddChoice(dlist.selectedRole == v.index and ("Use own shop") or ("Link with " .. v.name), {name = v.name, data = v.name})
 		end
 		
 		-- add default choice
-		local b = selectedRole == ROLES.TRAITOR.index or selectedRole == ROLES.DETECTIVE.index
+		local b = dlist.selectedRole == ROLES.TRAITOR.index or dlist.selectedRole == ROLES.DETECTIVE.index
 		if b then
-			self:AddChoice("Default Role Equipment", {name = GetRoleByIndex(selectedRole).name, data = "UNSET"})
+			self:AddChoice("Default Role Equipment", {name = GetRoleByIndex(dlist.selectedRole).name, data = "UNSET"})
 		end
 		
+		self:AddChoice("Disable shop", {name = GetRoleByIndex(dlist.selectedRole).name, data = "DISABLED"})
+		
 		-- set default value
-		if not state then
+		if fallback == "DISABLED" then
+			self:SetValue("Disabled shop")
+		elseif not state then
 			self:SetValue("Default Role Equipment")
 		else
-			self:SetValue(selectedRole == fb.index and ("Using own shop") or ("Linked with " .. fb.name))
+			self:SetValue(dlist.selectedRole == fb.index and ("Using own shop") or ("Linked with " .. fb.name))
 		end
 		
 		-- generally update
@@ -308,7 +321,7 @@ net.Receive("newshop", function()
 		end
 		
 		-- disable if not needed
-		if not state or fb.index ~= selectedRole then
+		if not state or fb.index ~= dlist.selectedRole then
 			for _, v in pairs(dlist:GetItems()) do
 				if v.Toggle then
 					v:Toggle(false)
@@ -320,12 +333,17 @@ net.Receive("newshop", function()
 	fbmenu:RefreshChoices()
 	
 	function fbmenu:OnSelect(_, _, data)
-		net.Start("shopFallback")
-		net.WriteUInt(selectedRole - 1, ROLE_BITS)
-		net.WriteString(data.data)
-		net.SendToServer()
+		local rd = GetRoleByIndex(dlist.selectedRole)
+		local oldFallback = GetConVar("ttt_" .. rd.abbr .. "_shop_fallback"):GetString()
 		
-		if data.data == "UNSET" or data.data ~= GetRoleByIndex(selectedRole).name then
+		if fallback ~= oldFallback then
+			net.Start("shopFallback")
+			net.WriteUInt(dlist.selectedRole - 1, ROLE_BITS)
+			net.WriteString(data.data)
+			net.SendToServer()
+		end
+		
+		if data.data == "DISABLED" or data.data == "UNSET" or data.data ~= GetRoleByIndex(dlist.selectedRole).name then
 			state = false
 		
 			for _, v in pairs(dlist:GetItems()) do
@@ -334,20 +352,18 @@ net.Receive("newshop", function()
 				end
 			end
 		else
-			timer.Simple(2, function() -- wait 2 seconds for think. Not the best option, best the fastest at the moment => TODO rework asynchronously
-				state = true
+			state = true
 			
-				for _, v in pairs(dlist:GetItems()) do
-					if v.UpdateCheck then
-						v:UpdateCheck()
-					end
+			for _, v in pairs(dlist:GetItems()) do
+				if v.UpdateCheck then
+					v:UpdateCheck()
 				end
-			end)
+			end
 		end
 	end
 	
 	function menu:OnSelect(_, _, data)
-		selectedRole = data
+		dlist.selectedRole = data
 		
 		fbmenu:RefreshChoices()
 	end
@@ -358,7 +374,7 @@ net.Receive("shopFallbackAnsw", function(len)
 	
 	local rd = GetRoleByIndex(role)
 	local fallback = GetConVar("ttt_" .. rd.abbr .. "_shop_fallback"):GetString()
-		
+	
 	-- reset everything
 	EquipmentItems[role] = {}
 	Equipment[role] = {}
@@ -409,6 +425,39 @@ net.Receive("shopFallbackAnsw", function(len)
 				end
 				
 				table.insert(Equipment[role], eq)
+			end
+		end
+	end
+end)
+
+net.Receive("shopFallbackRefresh", function(len)
+	local wshop = LocalPlayer().weaponshopList
+	if wshop and wshop.GetItems then
+		if not wshop.selectedRole then return end
+			
+		for _, v in pairs(wshop:GetItems()) do
+			if v.item and v.UpdateCheck then
+				local is_item = tonumber(v.item.id)
+				if is_item then
+					EquipmentItems[wshop.selectedRole] = EquipmentItems[wshop.selectedRole] or {}
+				
+					if EquipmentTableHasValue(EquipmentItems[wshop.selectedRole], v.item) then
+						v:Toggle(true)
+					else
+						v:Toggle(false)
+					end
+				else
+					local wepTbl = weapons.GetStored(v.item.id)
+					if wepTbl then
+						wepTbl.CanBuy = wepTbl.CanBuy or {}
+						
+						if table.HasValue(wepTbl.CanBuy, wshop.selectedRole) then
+							v:Toggle(true)
+						else
+							v:Toggle(false)
+						end
+					end
+				end
 			end
 		end
 	end

@@ -44,6 +44,7 @@ function GetEquipmentForRole(role)
 				local base = {
 					id		 = WEPS.GetClass(v),
 					name	 = v.ClassName or "Unnamed",
+					PrintName= data.name or v.PrintName or v.ClassName or "Unnamed",
 					limited	 = v.LimitedStock,
 					kind	 = v.Kind or WEAPON_NONE,
 					slot	 = (v.Slot or 0) + 1,
@@ -202,6 +203,19 @@ local color_darkened = Color(255, 255, 255, 80)
 local eqframe
 
 local function TraitorMenuPopup()
+	local ply = LocalPlayer()
+	
+	if not IsValid(ply) or not ply:IsActiveShopper() then return end
+	
+	local role = ply:GetRole()
+	local fallbackRole = GetShopFallback(role)
+	local rd = GetRoleByIndex(fallbackRole)
+	
+	if not rd.shop then return end
+	
+	local fallback = GetConVar("ttt_" .. rd.abbr .. "_shop_fallback"):GetString()
+	if fallback == "DISABLED" then return end
+	
 	-- calculate dimensions
 	local numCols = serverColsVar:GetInt()
 	local numRows = serverRowsVar:GetInt()
@@ -223,10 +237,6 @@ local function TraitorMenuPopup()
 	-- frame size
 	local w = dlistw + diw + (m * 4)
 	local h = dlisth + 75
-
-	local ply = LocalPlayer()
-	
-	if not IsValid(ply) or not ply:IsActiveShopper() then return end
 
 	-- Close any existing traitor menu
 	if eqframe and IsValid(eqframe) then 
@@ -294,7 +304,6 @@ local function TraitorMenuPopup()
 	dlist:EnableVerticalScrollbar(true)
 	dlist:EnableHorizontal(true)
 	
-	local role = ply:GetRole()
 	local items = GetEquipmentForRole(role)
 	
 	if #items == 0 then
@@ -382,8 +391,8 @@ local function TraitorMenuPopup()
 		end
 
 		ic.item = item
-
-		local tip = SafeTranslate(item.name) .. " (" .. SafeTranslate(item.type) .. ")"
+		
+		local tip = SafeTranslate(item.PrintName or item.name) .. " (" .. SafeTranslate(item.type) .. ")"
 		ic:SetTooltip(tip)
 
 		-- If we cannot order this item, darken it

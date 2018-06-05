@@ -99,7 +99,7 @@ function GetShopFallback(role, tbl)
 	local shopFallback = GetConVar("ttt_" .. rd.abbr .. "_shop_fallback"):GetString()
 	local fb = GetRoleByName(shopFallback).index
 	
-	if shopFallback == "UNSET" then
+	if shopFallback == "UNSET" or shopFallback == "DISABLED" then
 		return role, fb
 	end
 	
@@ -181,10 +181,9 @@ end
 function GetEquipmentFileName(name)
 	local newName = name
 
-	string.gsub(newName, "%W", "_") -- clean string
-	string.gsub(newName, "%s", "_") -- clean string
-	
 	newName = string.lower(newName)
+	newName = string.gsub(newName, "%W", "_") -- clean string
+	newName = string.gsub(newName, "%s", "_") -- clean string
 	
 	return newName
 end
@@ -226,6 +225,35 @@ function SyncTableHasValue(tbl, equip)
 	end
 	
 	return false
+end
+
+function InitFallbackShops()
+	for _, v in ipairs{ROLES.TRAITOR, ROLES.DETECTIVE} do
+		local fallback = GetShopFallbackTable(role)
+		if fallback then
+			for _, eq in ipairs(fallback) do
+				local is_item = tonumber(eq.id)
+				local swep_table = not is_item and weapons.GetStored(eq.id)
+				
+				if swep_table then
+					if not swep_table.CanBuy then
+						swep_table.CanBuy = {}
+					end
+					
+					if not table.HasValue(swep_table.CanBuy, v.index) then
+						table.insert(swep_table.CanBuy, v.index)
+					end
+					--
+				elseif is_item then
+					EquipmentItems[v.index] = EquipmentItems[v.index] or {}
+			
+					if not EquipmentTableHasValue(EquipmentItems[v.index], is_item) then
+						table.insert(EquipmentItems[v.index], is_item)
+					end
+				end
+			end
+		end
+	end
 end
 
 function InitDefaultEquipment()
@@ -437,8 +465,6 @@ if SERVER then
 			local name = string.sub(v, 1, #v - 4) -- cut #".txt"
 			local is_item = GetEquipmentItemByFileName(name)
 			local wep = not is_item and GetWeaponNameByFileName(name)
-			
-			print(roleData.name .. "(" .. name .. ")" .. ": wep=" .. (wep and "true" or "false") .. " / item=" .. (is_item and "true" or "false"))
 
 			local swep_table = wep and weapons.GetStored(wep)
 			if swep_table then
@@ -595,6 +621,7 @@ else -- CLIENT
 				local base = {
 					id		 = WEPS.GetClass(equip),
 					name	 = equip.ClassName or "Unnamed",
+					PrintName= data.name or equip.PrintName or equip.ClassName or "Unnamed",
 					limited	 = equip.LimitedStock,
 					kind	 = equip.Kind or WEAPON_NONE,
 					slot	 = (equip.Slot or 0) + 1,

@@ -70,6 +70,9 @@ function GM:Initialize()
 			wepTbl.CanBuy = {}
 		end
 	end
+	
+	-- initialize fallback shops
+	InitFallbackShops()
 
 	GAMEMODE.round_state = ROUND_WAIT
 
