@@ -3,7 +3,7 @@ GM.Author = "Bad King Urgrain && Alf21"
 GM.Email = "4lf-mueller@gmx.de"
 GM.Website = "ttt.badking.net, ttt2.informaskill.de"
 -- Date of latest changes (YYYY-MM-DD)
-GM.Version = "2018-06-03"
+GM.Version = "v0.2.2.2b"
 
 GM.Customized = true
 
@@ -130,11 +130,10 @@ ROLES.DETECTIVE = {
 }
 
 local flag_all = {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED}
-local flag_rep = {FCVAR_ARCHIVE, FCVAR_REPLICATED}
 
 -- TODO: export into another file !
-CreateConVar("ttt_detective_enabled", "1", flag_rep)
-CreateConVar("ttt_newroles_enabled", "1", flag_rep)
+CreateConVar("ttt_detective_enabled", "1", flag_all)
+CreateConVar("ttt_newroles_enabled", "1", flag_all)
 
 -- shop fallbacks
 CreateConVar("ttt_" .. ROLES.TRAITOR.abbr .. "_shop_fallback", "UNSET", flag_all)
@@ -152,13 +151,13 @@ function AddCustomRole(name, roleData, conVarData)
 			end
 			
 			CreateConVar("ttt_" .. roleData.name .. "_pct", tostring(conVarData.pct), flag_all)
-			CreateConVar("ttt_" .. roleData.name .. "_max", tostring(conVarData.maximum), flag_rep)
-			CreateConVar("ttt_" .. roleData.name .. "_min_players", tostring(conVarData.minPlayers), flag_rep)
+			CreateConVar("ttt_" .. roleData.name .. "_max", tostring(conVarData.maximum), flag_all)
+			CreateConVar("ttt_" .. roleData.name .. "_min_players", tostring(conVarData.minPlayers), flag_all)
 			
 			if conVarData.random then
-				CreateConVar("ttt_" .. roleData.name .. "_random", tostring(conVarData.random), flag_rep)
+				CreateConVar("ttt_" .. roleData.name .. "_random", tostring(conVarData.random), flag_all)
 			else
-				CreateConVar("ttt_" .. roleData.name .. "_random", "100", flag_rep)
+				CreateConVar("ttt_" .. roleData.name .. "_random", "100", flag_all)
 			end
 			
 			CreateConVar("ttt_" .. roleData.name .. "_enabled", "1", flag_all)
@@ -167,22 +166,22 @@ function AddCustomRole(name, roleData, conVarData)
 		if roleData.shop then
 			conVarData.credits = conVarData.credits or 0
 			if conVarData.credits then
-				CreateConVar("ttt_" .. roleData.abbr .. "_credits_starting", tostring(conVarData.credits), flag_rep)
+				CreateConVar("ttt_" .. roleData.abbr .. "_credits_starting", tostring(conVarData.credits), flag_all)
 			end
 			
 			if conVarData.creditsTraitorKill then
-				CreateConVar("ttt_" .. roleData.abbr .. "_credits_traitorkill", tostring(conVarData.creditsTraitorKill), flag_rep)
+				CreateConVar("ttt_" .. roleData.abbr .. "_credits_traitorkill", tostring(conVarData.creditsTraitorKill), flag_all)
 			end
 			
 			if conVarData.creditsTraitorDead then
-				CreateConVar("ttt_" .. roleData.abbr .. "_credits_traitordead", tostring(conVarData.creditsTraitorDead), flag_rep)
+				CreateConVar("ttt_" .. roleData.abbr .. "_credits_traitordead", tostring(conVarData.creditsTraitorDead), flag_all)
 			end
 			
 			CreateConVar("ttt_" .. roleData.abbr .. "_shop_fallback", conVarData.shopFallback and tostring(conVarData.shopFallback) or "DISABLED", flag_all)
 		end
 		
 		if conVarData.traitorKill then
-			CreateConVar("ttt_credits_" .. roleData.name .. "kill", tostring(conVarData.traitorKill), flag_rep)
+			CreateConVar("ttt_credits_" .. roleData.name .. "kill", tostring(conVarData.traitorKill), flag_all)
 		end
 	end
 	
@@ -376,30 +375,42 @@ function table.Randomize(t)
 	t = out
 end
 
+function SortEquipmentTable(tbl)
+	local sort_func = function(a, b)
+		local aName = a.PrintName or a.name
+		local bName = b.PrintName or b.name
+		
+		return aName < bName
+	end
+	
+	table.sort(tbl, sort_func)
+	table.sort(tbl, sort_func)
+end
+
 -- Game event log defs
-EVENT_KILL		= 1
-EVENT_SPAWN		= 2
-EVENT_GAME		= 3
-EVENT_FINISH		= 4
-EVENT_SELECTED	= 5
+EVENT_KILL = 1
+EVENT_SPAWN = 2
+EVENT_GAME = 3
+EVENT_FINISH = 4
+EVENT_SELECTED = 5
 EVENT_BODYFOUND	= 6
-EVENT_C4PLANT	 = 7
+EVENT_C4PLANT = 7
 EVENT_C4EXPLODE	= 8
 EVENT_CREDITFOUND = 9
-EVENT_C4DISARM	= 10
+EVENT_C4DISARM = 10
 
-WIN_NONE			= 1
-WIN_ROLE			= 2
-WIN_TIMELIMIT	 = 3
-WIN_BEES			= 4
+WIN_NONE = 1
+WIN_ROLE = 2
+WIN_TIMELIMIT = 3
+WIN_BEES = 4
 
 -- Weapon categories, you can only carry one of each
 WEAPON_NONE	= 0
-WEAPON_MELEE	= 1
+WEAPON_MELEE = 1
 WEAPON_PISTOL = 2
-WEAPON_HEAVY	= 3
+WEAPON_HEAVY = 3
 WEAPON_NADE	= 4
-WEAPON_CARRY	= 5
+WEAPON_CARRY = 5
 WEAPON_EQUIP1 = 6
 WEAPON_EQUIP2 = 7
 WEAPON_ROLE	= 8
@@ -410,8 +421,8 @@ WEAPON_UNARMED = -1
 -- Kill types discerned by last words
 KILL_NORMAL	= 0
 KILL_SUICIDE = 1
-KILL_FALL	= 2
-KILL_BURN	= 3
+KILL_FALL = 2
+KILL_BURN = 3
 
 -- Entity types a crowbar might open
 OPEN_NO	= 0

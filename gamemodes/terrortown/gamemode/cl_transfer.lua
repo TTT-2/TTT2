@@ -39,7 +39,7 @@ function CreateTransferMenu(parent)
 	local roleData = client:GetRoleData()
 	
 	for _, p in ipairs(player.GetAll()) do
-		if IsValid(p) and p:IsActive() and p ~= client and p:IsTeamMember(client) then
+		if IsValid(p) and p:IsActive() and p ~= client and p:GetRoleData().team ~= TEAM_INNO and p:IsTeamMember(client) then
 			dpick:AddChoice(p:Nick(), p:SteamID())
 		end
 	end

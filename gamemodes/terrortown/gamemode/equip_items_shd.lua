@@ -125,10 +125,7 @@ end
 
 function GetShopFallbackTable(role)
 	local rd = GetRoleByIndex(role)
-	
-	if not rd.shop then
-		return {}
-	end
+	if not rd.shop then return end
 	
 	local fallback
 	
@@ -229,7 +226,7 @@ end
 
 function InitFallbackShops()
 	for _, v in ipairs{ROLES.TRAITOR, ROLES.DETECTIVE} do
-		local fallback = GetShopFallbackTable(role)
+		local fallback = GetShopFallbackTable(v.index)
 		if fallback then
 			for _, eq in ipairs(fallback) do
 				local is_item = tonumber(eq.id)
@@ -243,12 +240,11 @@ function InitFallbackShops()
 					if not table.HasValue(swep_table.CanBuy, v.index) then
 						table.insert(swep_table.CanBuy, v.index)
 					end
-					--
 				elseif is_item then
 					EquipmentItems[v.index] = EquipmentItems[v.index] or {}
 			
-					if not EquipmentTableHasValue(EquipmentItems[v.index], is_item) then
-						table.insert(EquipmentItems[v.index], is_item)
+					if not EquipmentTableHasValue(EquipmentItems[v.index], eq) then
+						table.insert(EquipmentItems[v.index], eq)
 					end
 				end
 			end
@@ -269,6 +265,7 @@ function InitDefaultEquipment()
 			local base = {
 				id		 = WEPS.GetClass(v),
 				name	 = v.ClassName or "Unnamed",
+				PrintName= data.name or data.PrintName or v.PrintName or v.ClassName or "Unnamed",
 				limited	 = v.LimitedStock,
 				kind	 = v.Kind or WEAPON_NONE,
 				slot	 = (v.Slot or 0) + 1,
@@ -310,6 +307,7 @@ function InitDefaultEquipment()
 			local base = {
 				id		 = WEPS.GetClass(v),
 				name	 = v.ClassName or "Unnamed",
+				PrintName= data.name or data.PrintName or v.PrintName or v.ClassName or "Unnamed",
 				limited	 = v.LimitedStock,
 				kind	 = v.Kind or WEAPON_NONE,
 				slot	 = (v.Slot or 0) + 1,
@@ -621,7 +619,7 @@ else -- CLIENT
 				local base = {
 					id		 = WEPS.GetClass(equip),
 					name	 = equip.ClassName or "Unnamed",
-					PrintName= data.name or equip.PrintName or equip.ClassName or "Unnamed",
+					PrintName= data.name or data.PrintName or equip.PrintName or equip.ClassName or "Unnamed",
 					limited	 = equip.LimitedStock,
 					kind	 = equip.Kind or WEAPON_NONE,
 					slot	 = (equip.Slot or 0) + 1,

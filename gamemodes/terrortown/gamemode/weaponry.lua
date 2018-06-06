@@ -525,7 +525,13 @@ local function TransferCredits(ply, cmd, args)
 	if sid and credits then
 		local target = player.GetBySteamID(sid)
 		
-		if not IsValid(target) or not target:IsActiveShopper() or target == ply or target:IsTeamMember(ply) then
+		if not IsValid(target) 
+		or not target:IsActiveShopper() 
+		or target == ply 
+		or target:GetRoleData().team == TEAM_INNO 
+		or ply:GetRoleData().team == TEAM_INNO 
+		or not target:IsTeamMember(ply) 
+		then
 			LANG.Msg(ply, "xfer_no_recip")
 			
 			return

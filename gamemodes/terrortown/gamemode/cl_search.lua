@@ -372,7 +372,7 @@ local function ShowSearchScreen(search_raw)
 	end
 
 	local dcall = vgui.Create("DButton", dcont)
-	dcall:SetPos(m*2 + bw, by)
+	dcall:SetPos(m * 2 + bw, by)
 	dcall:SetSize(bw, bh)
 	dcall:SetText(T("search_call"))
 	

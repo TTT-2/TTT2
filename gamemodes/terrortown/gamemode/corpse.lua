@@ -54,9 +54,7 @@ local function IdentifyBody(ply, rag)
 	
 	local traitor = (GetRoleByIndex(rag.was_role).team == TEAM_TRAITOR)
 	
-	if not hook.Run("TTTCanIdentifyCorpse", ply, rag, traitor) then
-		return
-	end
+	if not hook.Run("TTTCanIdentifyCorpse", ply, rag, traitor) then return end
 
 	local finder = ply:Nick()
 	local nick = CORPSE.GetPlayerNick(rag, "")
@@ -90,7 +88,7 @@ local function IdentifyBody(ply, rag)
 			end
 			
 			for _, v in pairs(ROLES) do
-				if not v.specialRoleFilter and v.showOnConfirm then
+				if not v.specialRoleFilter and not v.preventShowOnConfirm then
 					SendConfirmedSpecial(v.index, GetSpecialRoleFilter(v.index, false))
 				end
 				

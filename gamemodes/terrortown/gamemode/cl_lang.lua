@@ -94,9 +94,13 @@ end
 -- interest to consumers in draw/think hooks. Grabbing a translation directly
 -- from the table is very fast, and much simpler than a local caching solution.
 -- Modifying it would typically be a bad idea.
-function LANG.GetUnsafeLanguageTable() return cached_active end
+function LANG.GetUnsafeLanguageTable() 
+	return cached_active 
+end
 
-function LANG.GetUnsafeNamed(name) return LANG.Strings[name] end
+function LANG.GetUnsafeNamed(name) 
+	return LANG.Strings[name] 
+end
 
 -- Safe and slow access, not sure if it's ever useful.
 function LANG.GetLanguageTable(lang_name)

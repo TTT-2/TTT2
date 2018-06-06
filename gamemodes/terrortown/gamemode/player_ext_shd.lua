@@ -102,12 +102,12 @@ function plymeta:IsActiveShopper()
 end
 
 function plymeta:IsTeamMember(ply)
-	local role = hook.Run("TTT2_SearchBodyRole", ply) or ply:GetRole()
-	local plyRd = GetRoleByIndex(role)
+	local plyRole = hook.Run("TTT2_SearchBodyRole", ply) or ply:GetRole()
+	local plyRd = GetRoleByIndex(plyRole)
+	local role = hook.Run("TTT2_SearchBodyRole", self) or self:GetRole()
+	local roleRd = GetRoleByIndex(role)
 	
-	local rd = self:GetRoleData()
-	
-	return rd.team ~= TEAM_INNO and rd.team == plyRd.team
+	return roleRd.team == plyRd.team
 end
 
 local GetRTranslation = CLIENT and LANG.GetRawTranslation or util.passthrough

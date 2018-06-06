@@ -44,7 +44,7 @@ function GetEquipmentForRole(role)
 				local base = {
 					id		 = WEPS.GetClass(v),
 					name	 = v.ClassName or "Unnamed",
-					PrintName= data.name or v.PrintName or v.ClassName or "Unnamed",
+					PrintName= data.name or data.PrintName or v.PrintName or v.ClassName or "Unnamed",
 					limited	 = v.LimitedStock,
 					kind	 = v.Kind or WEAPON_NONE,
 					slot	 = (v.Slot or 0) + 1,
@@ -76,8 +76,6 @@ function GetEquipmentForRole(role)
 
 		Equipment[fallback] = tbl
 	end
-
-	-- TODO order by name?!
 	
 	return Equipment[fallback] or {}
 end
@@ -305,6 +303,8 @@ local function TraitorMenuPopup()
 	dlist:EnableHorizontal(true)
 	
 	local items = GetEquipmentForRole(role)
+	
+	SortEquipmentTable(items)
 	
 	if #items == 0 then
 		ply:ChatPrint("[TTT2][SHOP] You need to run 'weaponshop' in the developer console to create a shop for this role. Link it with another shop or click on the icons to add weapons and items to the shop.")

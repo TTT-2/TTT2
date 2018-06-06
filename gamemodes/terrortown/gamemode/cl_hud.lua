@@ -168,7 +168,9 @@ local function SpecHUDPaint(client)
 	local round_y = ScrH() - height - margin
 
 	-- move up a little on low resolutions to allow space for spectator hints
-	if ScrW() < 1000 then round_y = round_y - 15 end
+	if ScrW() < 1000 then 
+		round_y = round_y - 15 
+	end
 
 	local time_x = x + 170
 	local time_y = round_y + 4

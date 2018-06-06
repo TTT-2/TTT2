@@ -714,7 +714,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
 		local reward = 0
 		local rd = attacker:GetRoleData()
 		
-		-- if traitor team kills detective
+		-- if traitor team kills another team
 		if attacker:IsActive() and attacker:IsShopper() and not attacker:IsTeamMember(ply) then
 			if attacker:HasTeamRole(TEAM_TRAITOR) then
 				reward = math.ceil((ConVarExists("ttt_credits_" .. rd.name .. "kill") and GetConVar("ttt_credits_" .. rd.name .. "kill"):GetInt() or 0))

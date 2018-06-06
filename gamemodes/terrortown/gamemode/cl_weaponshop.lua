@@ -27,7 +27,7 @@ function GetEquipmentForRoleAll()
 				local base = {
 					id		 = v.ClassName,
 					name	 = v.ClassName or "Unnamed",
-					PrintName= data.name or v.PrintName or v.ClassName or "Unnamed",
+					PrintName= data.name or data.PrintName or v.PrintName or v.ClassName or "Unnamed",
 					limited	 = v.LimitedStock,
 					kind	 = v.Kind or WEAPON_NONE,
 					slot	 = (v.Slot or 0) + 1,
@@ -120,6 +120,8 @@ net.Receive("newshop", function()
 
 	local ply = LocalPlayer()
 	local items = GetEquipmentForRoleAll()
+	
+	SortEquipmentTable(items)
 	
 	for _, item in pairs(items) do
 		local ic
@@ -425,7 +427,7 @@ net.Receive("shopFallbackAnsw", function(len)
 				end
 				
 				table.insert(Equipment[role], eq)
-			end
+			end	
 		end
 	end
 end)
