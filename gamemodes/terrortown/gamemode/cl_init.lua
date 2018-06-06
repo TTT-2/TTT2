@@ -220,7 +220,6 @@ end
 
 local function RoundStateChange(o, n)
 	if n == ROUND_PREP then
-	
 		-- prep starts
 		GAMEMODE:ClearClientState()
 		GAMEMODE:CleanUpMap()
@@ -356,7 +355,6 @@ function GM:ClearClientState()
 	GAMEMODE:HUDClear()
 
 	local client = LocalPlayer()
-	
 	if not client.SetRole then return end -- code not loaded yet
 
 	client:SetRole(ROLES.INNOCENT.index)

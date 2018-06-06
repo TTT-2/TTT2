@@ -256,7 +256,12 @@ net.Receive("newshop", function()
 			end
 		end
 
-		local tip = SafeTranslate(item.PrintName or item.name) .. " (" .. SafeTranslate(item.type) .. ")"
+		local tl = SafeTranslate(item.name)
+		if tl == item.name and item.PrintName then
+			tl = item.PrintName
+		end
+		
+		local tip = tl .. " (" .. SafeTranslate(item.type) .. ")"
 		
 		ic:SetTooltip(tip)
 

@@ -3,7 +3,7 @@ GM.Author = "Bad King Urgrain && Alf21"
 GM.Email = "4lf-mueller@gmx.de"
 GM.Website = "ttt.badking.net, ttt2.informaskill.de"
 -- Date of latest changes (YYYY-MM-DD)
-GM.Version = "v0.2.2.2b"
+GM.Version = "v0.2.2.3b"
 
 GM.Customized = true
 
@@ -375,16 +375,26 @@ function table.Randomize(t)
 	t = out
 end
 
-function SortEquipmentTable(tbl)
-	local sort_func = function(a, b)
-		local aName = a.PrintName or a.name
-		local bName = b.PrintName or b.name
+if CLIENT then
+	function SortEquipmentTable(tbl)
+		local SafeTranslate = LANG.TryTranslation
 		
-		return aName < bName
+		local sort_func = function(a, b)
+			local aName = SafeTranslate(a.name)
+			if aName == a.name and a.PrintName then
+				aName = a.PrintName
+			end
+			
+			local bName = SafeTranslate(b.name)
+			if bName == b.name and b.PrintName then
+				bName = b.PrintName
+			end
+			
+			return aName < bName
+		end
+		
+		table.sort(tbl, sort_func)
 	end
-	
-	table.sort(tbl, sort_func)
-	table.sort(tbl, sort_func)
 end
 
 -- Game event log defs

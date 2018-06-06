@@ -671,6 +671,7 @@ function PrepareRound()
 	
 	if GAMEMODE.FirstRound then
 		ptime = GetConVar("ttt_firstpreptime"):GetInt()
+		
 		GAMEMODE.FirstRound = false
 	end
 
@@ -705,7 +706,7 @@ function PrepareRound()
 	timer.Simple(1, SendRoleReset)
 
 	-- Tell hooks and map we started prep
-	hook.Call("TTTPrepareRound")
+	hook.Call("TTTPrepareRound", GAMEMODE)
 
 	ents.TTT.TriggerRoundStateOutputs(ROUND_PREP)
 end
@@ -889,7 +890,7 @@ function BeginRound()
 
 	GAMEMODE:UpdatePlayerLoadouts() -- needs to happen when round_active
 
-	hook.Call("TTTBeginRound")
+	hook.Call("TTTBeginRound", GAMEMODE)
 
 	ents.TTT.TriggerRoundStateOutputs(ROUND_BEGIN)
 end

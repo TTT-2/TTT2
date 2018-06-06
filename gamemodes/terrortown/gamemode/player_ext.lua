@@ -62,6 +62,9 @@ end
 
 function plymeta:SetDefaultCredits()
 	if self:IsShopper() then
+		local rd = self:GetRoleData()
+		if rd.preventDefaultCredits then return end
+	
 		if self:HasTeamRole(TEAM_TRAITOR) then
 			local c = (ConVarExists("ttt_credits_starting") and GetConVar("ttt_credits_starting"):GetInt() or 0)
 			
@@ -71,7 +74,7 @@ function plymeta:SetDefaultCredits()
 			
 			self:SetCredits(math.ceil(c))
 		else
-			local name = "ttt_" .. self:GetRoleData().abbr .. "_credits_starting"
+			local name = "ttt_" .. rd.abbr .. "_credits_starting"
 			
 			self:SetCredits(math.ceil((ConVarExists(name) and GetConVar(name):GetInt() or 0)))
 		end

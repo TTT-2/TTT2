@@ -392,7 +392,13 @@ local function TraitorMenuPopup()
 
 		ic.item = item
 		
-		local tip = SafeTranslate(item.PrintName or item.name) .. " (" .. SafeTranslate(item.type) .. ")"
+		local tl = SafeTranslate(item.name)
+		if tl == item.name and item.PrintName then
+			tl = item.PrintName
+		end
+		
+		local tip = tl .. " (" .. SafeTranslate(item.type) .. ")"
+		
 		ic:SetTooltip(tip)
 
 		-- If we cannot order this item, darken it
