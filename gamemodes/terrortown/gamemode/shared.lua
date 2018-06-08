@@ -376,21 +376,28 @@ function table.Randomize(t)
 end
 
 if CLIENT then
-	function SortEquipmentTable(tbl)
-		local SafeTranslate = LANG.TryTranslation
+	local SafeTranslate
+
+	function GetEquipmentTranslation(name, printName)
+		SafeTranslate = SafeTranslate or LANG.TryTranslation
 		
+		local val = printName
+		local str = SafeTranslate(val)
+		if str == val and name then
+			val = name
+			str = SafeTranslate(val)
+		end
+		
+		if str == val and printName then
+			str = printName
+		end
+		
+		return str
+	end
+
+	function SortEquipmentTable(tbl)
 		local sort_func = function(a, b)
-			local aName = SafeTranslate(a.name)
-			if aName == a.name and a.PrintName then
-				aName = a.PrintName
-			end
-			
-			local bName = SafeTranslate(b.name)
-			if bName == b.name and b.PrintName then
-				bName = b.PrintName
-			end
-			
-			return aName < bName
+			return GetEquipmentTranslation(a.name, a.PrintName) < GetEquipmentTranslation(b.name, b.PrintName)
 		end
 		
 		table.sort(tbl, sort_func)

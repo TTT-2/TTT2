@@ -392,12 +392,7 @@ local function TraitorMenuPopup()
 
 		ic.item = item
 		
-		local tl = SafeTranslate(item.name)
-		if tl == item.name and item.PrintName then
-			tl = item.PrintName
-		end
-		
-		local tip = tl .. " (" .. SafeTranslate(item.type) .. ")"
+		local tip = GetEquipmentTranslation(item.name, item.PrintName) .. " (" .. SafeTranslate(item.type) .. ")"
 		
 		ic:SetTooltip(tip)
 
