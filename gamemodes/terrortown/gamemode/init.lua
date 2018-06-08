@@ -169,6 +169,7 @@ util.AddNetworkString("TTT2_Test_role")
 util.AddNetworkString("TTT2_SyncRolesList")
 util.AddNetworkString("TTT2_SyncSingleRole")
 util.AddNetworkString("TTT2_RolesListSynced")
+util.AddNetworkString("TTT2_SyncShopsWithServer")
 
 ---- Round mechanics
 function GM:Initialize()
@@ -242,6 +243,13 @@ function GM:Initialize()
 		ErrorNoHalt("TTT WARNING: CS:S does not appear to be mounted by GMod. Things may break in strange ways. Server admin? Check the TTT readme for help.\n")
 	end
 	
+	-- setup weapon ConVars and similar things
+	for _, wep in ipairs(weapons.GetList()) do
+		if not wep.Doublicated then
+			RegisterNormalWeapon(wep)
+		end
+	end
+	
 	hook.Run("PostInitialize")
 end
 
@@ -265,25 +273,12 @@ function GM:InitPostEntity()
 	
 	InitDefaultEquipment()
 	
-	-- setup weapon ConVars and similar things
-	for _, wep in ipairs(weapons.GetList()) do
-		if not wep.Doublicated then
-			RegisterNormalWeapon(wep)
-		end
-	end
-	
 	-- initialize all items
 	InitAllItems()
 
 	-- reset normal equipment tables
 	for _, role in pairs(ROLES) do
-		if EquipmentItems[role.index] then
-			for _, v in pairs(EquipmentItems[role.index]) do
-				v.defaultRole = role.index
-			end
-			
-			EquipmentItems[role.index] = {}
-		end
+		EquipmentItems[role.index] = {}
 	end
 
 	-- reset normal weapons equipment
@@ -426,9 +421,12 @@ net.Receive("TTT2_RolesListSynced", function(len, ply)
 end)
 
 function GM:PlayerAuthed(ply, steamid, uniqueid)
-	SyncEquipment(ply)
 	UpdateRoleData(ply, true)
 end
+
+net.Receive("TTT2_SyncShopsWithServer", function(len, ply)
+	SyncEquipment(ply)
+end)
 
 function SendRoundState(state, ply)
 	net.Start("TTT_RoundState")

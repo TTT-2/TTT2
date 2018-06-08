@@ -40,6 +40,13 @@ include("cl_voice.lua")
 
 function GM:Initialize()
 	MsgN("TTT Client initializing...")
+	
+	-- setup weapon ConVars and similar things
+	for _, wep in ipairs(weapons.GetList()) do
+		if not wep.Doublicated then
+			RegisterNormalWeapon(wep)
+		end
+	end
 
 	GAMEMODE.round_state = ROUND_WAIT
 
@@ -53,26 +60,13 @@ function GM:InitPostEntity()
 	
 	InitDefaultEquipment()
 	
-	-- setup weapon ConVars and similar things
-	for _, wep in ipairs(weapons.GetList()) do
-		if not wep.Doublicated then
-			RegisterNormalWeapon(wep)
-		end
-	end
-	
 	-- initialize all items
 	InitAllItems()
 
 	-- reset normal equipment tables
 	for _, role in pairs(ROLES) do
-		if EquipmentItems[role.index] then
-			for _, v in pairs(EquipmentItems[role.index]) do
-				v.defaultRole = role.index
-			end
-			
-			EquipmentItems[role.index] = {}
-			Equipment[role.index] = nil
-		end
+		EquipmentItems[role.index] = {}
+		Equipment[role.index] = nil
 	end
 
 	-- reset normal weapons equipment
@@ -85,6 +79,9 @@ function GM:InitPostEntity()
 	
 	-- initialize fallback shops
 	InitFallbackShops()
+	
+	net.Start("TTT2_SyncShopsWithServer")
+	net.SendToServer()
 
 	net.Start("TTT_Spectate")
 	net.WriteBool(GetConVar("ttt_spectator_mode"):GetBool())
