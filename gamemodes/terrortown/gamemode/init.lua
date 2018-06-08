@@ -242,31 +242,7 @@ function GM:Initialize()
 		ErrorNoHalt("TTT WARNING: CS:S does not appear to be mounted by GMod. Things may break in strange ways. Server admin? Check the TTT readme for help.\n")
 	end
 	
-	InitDefaultEquipment()
-	
-	-- setup weapon ConVars and similar things
-	for _, wep in ipairs(weapons.GetList()) do
-		if not wep.Doublicated then
-			RegisterNormalWeapon(wep)
-		end
-		
-		-- reset weapon equipment
-		local wepTbl = weapons.GetStored(wep.ClassName)
-		if wepTbl then
-			wepTbl.CanBuy = {}
-		end
-	end
-	
 	hook.Run("PostInitialize")
-	
-	-- initialize all items
-	InitAllItems()
-	
-	-- initialize the equipment
-	LoadShopsEquipment()
-	
-	-- initialize fallback shops
-	InitFallbackShops()
 end
 
 -- Used to do this in Initialize, but server cfg has not always run yet by that
@@ -285,6 +261,45 @@ function GM:InitCvars()
 end
 
 function GM:InitPostEntity()
+	MsgN("TTT Client post-init...")
+	
+	InitDefaultEquipment()
+	
+	-- setup weapon ConVars and similar things
+	for _, wep in ipairs(weapons.GetList()) do
+		if not wep.Doublicated then
+			RegisterNormalWeapon(wep)
+		end
+	end
+	
+	-- initialize all items
+	InitAllItems()
+
+	-- reset normal equipment tables
+	for _, role in pairs(ROLES) do
+		if EquipmentItems[role.index] then
+			for _, v in pairs(EquipmentItems[role.index]) do
+				v.defaultRole = role.index
+			end
+			
+			EquipmentItems[role.index] = {}
+		end
+	end
+
+	-- reset normal weapons equipment
+	for _, wep in ipairs(weapons.GetList()) do
+		local wepTbl = weapons.GetStored(wep.ClassName)
+		if wepTbl then
+			wepTbl.CanBuy = {}
+		end
+	end
+	
+	-- initialize fallback shops
+	InitFallbackShops()
+	
+	-- initialize the equipment
+	LoadShopsEquipment()
+	
 	WEPS.ForcePrecache()
 end
 

@@ -40,6 +40,18 @@ include("cl_voice.lua")
 
 function GM:Initialize()
 	MsgN("TTT Client initializing...")
+
+	GAMEMODE.round_state = ROUND_WAIT
+
+	LANG.Init()
+
+	self.BaseClass:Initialize()
+end
+
+function GM:InitPostEntity()
+	MsgN("TTT Client post-init...")
+	
+	InitDefaultEquipment()
 	
 	-- setup weapon ConVars and similar things
 	for _, wep in ipairs(weapons.GetList()) do
@@ -48,7 +60,7 @@ function GM:Initialize()
 		end
 	end
 	
-	InitDefaultEquipment()
+	-- initialize all items
 	InitAllItems()
 
 	-- reset normal equipment tables
@@ -74,16 +86,6 @@ function GM:Initialize()
 	-- initialize fallback shops
 	InitFallbackShops()
 
-	GAMEMODE.round_state = ROUND_WAIT
-
-	LANG.Init()
-
-	self.BaseClass:Initialize()
-end
-
-function GM:InitPostEntity()
-	MsgN("TTT Client post-init...")
-
 	net.Start("TTT_Spectate")
 	net.WriteBool(GetConVar("ttt_spectator_mode"):GetBool())
 	net.SendToServer()
@@ -92,9 +94,11 @@ function GM:InitPostEntity()
 		timer.Create("idlecheck", 5, 0, CheckIdle)
 	end
 
+	local client = LocalPlayer()
+	
 	-- make sure player class extensions are loaded up, and then do some
 	-- initialization on them
-	if IsValid(LocalPlayer()) and LocalPlayer().GetTraitor then
+	if IsValid(client) and client.GetTraitor then
 		GAMEMODE:ClearClientState()
 	end
 

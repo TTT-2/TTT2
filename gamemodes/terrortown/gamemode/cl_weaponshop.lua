@@ -127,7 +127,7 @@ net.Receive("newshop", function()
 		local ic
 
 		-- Create icon panel
-		if item.material then
+		if item.material and item.material ~= "vgui/ttt/icon_id" then
 			if not ItemIsWeapon(item) then
 				ic = vgui.Create("SimpleClickIcon", dlist)
 			else
@@ -149,82 +149,53 @@ net.Receive("newshop", function()
 
 			ic:SetIconSize(64)
 			ic:SetIcon(item.material)
-		elseif item.model then
+		elseif item.model and item.model ~= "models/weapons/w_bugbait.mdl" then
 			ic = vgui.Create("SpawnIcon", dlist)
 			ic:SetModel(item.model)
 		else
-			ErrorNoHalt("Equipment item does not have model or material specified: " .. tostring(item) .. "\n")
+			--ErrorNoHalt("Equipment item does not have model or material specified: " .. tostring(item) .. "\n")
 		end
-
-		ic.item = item
 		
-		function ic:UpdateCheck()
-			if not dlist.selectedRole then return end
+		if ic then
+			ic.item = item
 			
-			local is_item = tonumber(ic.item.id)
-			if is_item then
-				EquipmentItems[dlist.selectedRole] = EquipmentItems[dlist.selectedRole] or {}
-			
-				if EquipmentTableHasValue(EquipmentItems[dlist.selectedRole], ic.item) then
-					ic:Toggle(true)
-				else
-					ic:Toggle(false)
-				end
-			else
-				local wepTbl = weapons.GetStored(ic.item.id)
-				if wepTbl then
-					wepTbl.CanBuy = wepTbl.CanBuy or {}
-					
-					if table.HasValue(wepTbl.CanBuy, dlist.selectedRole) then
+			function ic:UpdateCheck()
+				if not dlist.selectedRole then return end
+				
+				local is_item = tonumber(ic.item.id)
+				if is_item then
+					EquipmentItems[dlist.selectedRole] = EquipmentItems[dlist.selectedRole] or {}
+				
+					if EquipmentTableHasValue(EquipmentItems[dlist.selectedRole], ic.item) then
 						ic:Toggle(true)
 					else
 						ic:Toggle(false)
 					end
-				end
-			end
-		end
-		
-		ic.OnClick = function()
-			if not dlist.selectedRole or not state then return end
-			
-			local is_item = tonumber(ic.item.id)
-			if is_item then
-				EquipmentItems[dlist.selectedRole] = EquipmentItems[dlist.selectedRole] or {}
-			
-				if EquipmentTableHasValue(EquipmentItems[dlist.selectedRole], ic.item) then
-					for k, eq in pairs(EquipmentItems[dlist.selectedRole]) do
-						if eq.id == ic.item.id then
-							table.remove(EquipmentItems[dlist.selectedRole], k)
-							
-							break
+				else
+					local wepTbl = weapons.GetStored(ic.item.id)
+					if wepTbl then
+						wepTbl.CanBuy = wepTbl.CanBuy or {}
+						
+						if table.HasValue(wepTbl.CanBuy, dlist.selectedRole) then
+							ic:Toggle(true)
+						else
+							ic:Toggle(false)
 						end
 					end
-				
-					-- remove
-					net.Start("shop")
-					net.WriteBool(false)
-					net.WriteUInt(dlist.selectedRole - 1, ROLE_BITS)
-					net.WriteString(ic.item.name)
-					net.SendToServer()
-				else
-					table.insert(EquipmentItems[dlist.selectedRole], ic.item)
-					
-					-- add
-					net.Start("shop")
-					net.WriteBool(true)
-					net.WriteUInt(dlist.selectedRole - 1, ROLE_BITS)
-					net.WriteString(ic.item.name)
-					net.SendToServer()
 				end
-			else
-				local wepTbl = weapons.GetStored(ic.item.id)
-				if wepTbl then
-					wepTbl.CanBuy = wepTbl.CanBuy or {}
-					
-					if table.HasValue(wepTbl.CanBuy, dlist.selectedRole) then
-						for k, v in ipairs(wepTbl.CanBuy) do
-							if v == dlist.selectedRole then
-								table.remove(wepTbl.CanBuy, k)
+			end
+			
+			ic.OnClick = function()
+				if not dlist.selectedRole or not state then return end
+				
+				local is_item = tonumber(ic.item.id)
+				if is_item then
+					EquipmentItems[dlist.selectedRole] = EquipmentItems[dlist.selectedRole] or {}
+				
+					if EquipmentTableHasValue(EquipmentItems[dlist.selectedRole], ic.item) then
+						for k, eq in pairs(EquipmentItems[dlist.selectedRole]) do
+							if eq.id == ic.item.id then
+								table.remove(EquipmentItems[dlist.selectedRole], k)
 								
 								break
 							end
@@ -234,33 +205,64 @@ net.Receive("newshop", function()
 						net.Start("shop")
 						net.WriteBool(false)
 						net.WriteUInt(dlist.selectedRole - 1, ROLE_BITS)
-						net.WriteString(ic.item.id)
+						net.WriteString(ic.item.name)
 						net.SendToServer()
 					else
-						table.insert(wepTbl.CanBuy, dlist.selectedRole)
+						table.insert(EquipmentItems[dlist.selectedRole], ic.item)
 						
 						-- add
 						net.Start("shop")
 						net.WriteBool(true)
 						net.WriteUInt(dlist.selectedRole - 1, ROLE_BITS)
-						net.WriteString(ic.item.id)
+						net.WriteString(ic.item.name)
 						net.SendToServer()
+					end
+				else
+					local wepTbl = weapons.GetStored(ic.item.id)
+					if wepTbl then
+						wepTbl.CanBuy = wepTbl.CanBuy or {}
+						
+						if table.HasValue(wepTbl.CanBuy, dlist.selectedRole) then
+							for k, v in ipairs(wepTbl.CanBuy) do
+								if v == dlist.selectedRole then
+									table.remove(wepTbl.CanBuy, k)
+									
+									break
+								end
+							end
+						
+							-- remove
+							net.Start("shop")
+							net.WriteBool(false)
+							net.WriteUInt(dlist.selectedRole - 1, ROLE_BITS)
+							net.WriteString(ic.item.id)
+							net.SendToServer()
+						else
+							table.insert(wepTbl.CanBuy, dlist.selectedRole)
+							
+							-- add
+							net.Start("shop")
+							net.WriteBool(true)
+							net.WriteUInt(dlist.selectedRole - 1, ROLE_BITS)
+							net.WriteString(ic.item.id)
+							net.SendToServer()
+						end
+					end
+				end
+				
+				for _, v in pairs(dlist:GetItems()) do
+					if v.UpdateCheck then
+						v:UpdateCheck()
 					end
 				end
 			end
+		
+			local tip = GetEquipmentTranslation(item.name, item.PrintName) .. " (" .. SafeTranslate(item.type) .. ")"
 			
-			for _, v in pairs(dlist:GetItems()) do
-				if v.UpdateCheck then
-					v:UpdateCheck()
-				end
-			end
-		end
-		
-		local tip = GetEquipmentTranslation(item.name, item.PrintName) .. " (" .. SafeTranslate(item.type) .. ")"
-		
-		ic:SetTooltip(tip)
+			ic:SetTooltip(tip)
 
-		dlist:AddPanel(ic)
+			dlist:AddPanel(ic)
+		end
 	end
 	
 	ply.weaponshopList = dlist

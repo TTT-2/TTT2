@@ -270,7 +270,7 @@ local function TraitorMenuPopup()
 		oldfunc(self, new)
 	end
 
-	dsheet:SetPos(0,0)
+	dsheet:SetPos(0, 0)
 	dsheet:StretchToParent(m, m + 25, m, m)
 
 	local padding = dsheet:GetPadding()
@@ -318,7 +318,7 @@ local function TraitorMenuPopup()
 		local ic
 
 		-- Create icon panel
-		if item.material then
+		if item.material and item.material ~= "vgui/ttt/icon_id" then
 			ic = vgui.Create("LayeredIcon", dlist)
 
 			if item.custom and showCustomVar:GetBool() then
@@ -380,38 +380,37 @@ local function TraitorMenuPopup()
 
 			ic:SetIconSize(itemSize)
 			ic:SetIcon(item.material)
-		elseif item.model then
+		elseif item.model and item.model ~= "models/weapons/w_bugbait.mdl" then
 			ic = vgui.Create("SpawnIcon", dlist)
 			ic:SetModel(item.model)
 		else
-			ErrorNoHalt("Equipment item does not have model or material specified: " .. tostring(item) .. "\n")
+			--ErrorNoHalt("Equipment item does not have model or material specified: " .. tostring(item) .. "\n")
+		end
+		
+		if ic then
+			ic.item = item
 			
-			ic = vgui.Create("SpawnIcon", dlist)
-			ic:SetModel("vgui/ttt/icon_id")
-		end
+			local tip = GetEquipmentTranslation(item.name, item.PrintName) .. " (" .. SafeTranslate(item.type) .. ")"
+			
+			ic:SetTooltip(tip)
 
-		ic.item = item
-		
-		local tip = GetEquipmentTranslation(item.name, item.PrintName) .. " (" .. SafeTranslate(item.type) .. ")"
-		
-		ic:SetTooltip(tip)
+			-- If we cannot order this item, darken it
+			if (not can_order or
+			-- already owned
+			table.HasValue(owned_ids, item.id) or
+			tonumber(item.id) and ply:HasEquipmentItem(tonumber(item.id)) or
+			-- already carrying a weapon for this slot
+			ItemIsWeapon(item) and (not CanCarryWeapon(item) or not SWEPIsBuyable(tostring(item.id))) or
+			-- already bought the item before
+			item.limited and ply:HasBought(tostring(item.id))) then
+				ic:SetIconColor(color_darkened)
+			end
 
-		-- If we cannot order this item, darken it
-		if (not can_order or
-		-- already owned
-		table.HasValue(owned_ids, item.id) or
-		tonumber(item.id) and ply:HasEquipmentItem(tonumber(item.id)) or
-		-- already carrying a weapon for this slot
-		ItemIsWeapon(item) and (not CanCarryWeapon(item) or not SWEPIsBuyable(tostring(item.id))) or
-		-- already bought the item before
-		item.limited and ply:HasBought(tostring(item.id))) then
-			ic:SetIconColor(color_darkened)
-		end
-
-		if ic.favorite then
-			paneltablefav[k] = ic
-		else
-			paneltable[k] = ic
+			if ic.favorite then
+				paneltablefav[k] = ic
+			else
+				paneltable[k] = ic
+			end
 		end
 	end
 
