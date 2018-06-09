@@ -111,10 +111,10 @@ local function WasAvoidable(attacker, victim, dmginfo)
 	local rda = attacker:GetRoleData()
 	local rdv = victim:GetRoleData()
 	
-	local rdaTeam = hook.Run("TTT2_ScoringGettingRole", attacker) or rda
+	local rdaTeam = hook.Run("TTT2_ModifyRole", attacker) or rda
 	rdaTeam = rdaTeam.team
 	
-	local rdvTeam = hook.Run("TTT2_ScoringGettingRole", victim) or rdv
+	local rdvTeam = hook.Run("TTT2_ModifyRole", victim) or rdv
 	rdvTeam = rdvTeam.team
 	
 	if rdaTeam and rdaTeam == rdvTeam and (not rdv.unknownTeam or rdaTeam == TEAM_TRAITOR) and IsValid(infl) and infl.Avoidable then
@@ -143,10 +143,10 @@ function KARMA.Hurt(attacker, victim, dmginfo)
 	local rda = attacker:GetRoleData()
 	local rdv = victim:GetRoleData()
 	
-	local rdaTeam = hook.Run("TTT2_ScoringGettingRole", attacker) or rda
+	local rdaTeam = hook.Run("TTT2_ModifyRole", attacker) or rda
 	rdaTeam = rdaTeam.team
 	
-	local rdvTeam = hook.Run("TTT2_ScoringGettingRole", victim) or rdv
+	local rdvTeam = hook.Run("TTT2_ModifyRole", victim) or rdv
 	rdvTeam = rdvTeam.team
 	
 	-- team kills another team
@@ -181,10 +181,10 @@ function KARMA.Killed(attacker, victim, dmginfo)
 	local rda = attacker:GetRoleData()
 	local rdv = victim:GetRoleData()
 	
-	local rdaTeam = hook.Run("TTT2_ScoringGettingRole", attacker) or rda
+	local rdaTeam = hook.Run("TTT2_ModifyRole", attacker) or rda
 	rdaTeam = rdaTeam.team
 	
-	local rdvTeam = hook.Run("TTT2_ScoringGettingRole", victim) or rdv
+	local rdvTeam = hook.Run("TTT2_ModifyRole", victim) or rdv
 	rdvTeam = rdvTeam.team
 	
 	-- team kills another team

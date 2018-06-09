@@ -28,7 +28,7 @@ function GM:AddClassHint(cls, hint)
 end
 
 ---- "T" indicator above traitors
-local indicator_mat_tbl = {}
+indicator_mat_tbl = {}
 
 hook.Add("TTT2_FinishedSync", "updateRoleMat", function(ply, first)
 	indicator_mat_tbl = {}
@@ -66,8 +66,6 @@ function GM:PostDrawTranslucentRenderables()
 			
 			if ply ~= client then
 				if ply:IsActive() and ply:HasTeamRole(TEAM_TRAITOR) then
-					role = hook.Run("TTT2_SearchBodyRole", ply) or role
-					
 					if indicator_mat_tbl[role] then
 						render.SetMaterial(indicator_mat_tbl[role])
 						render.DrawQuadEasy(pos, dir, 8, 8, indicator_col, 180)

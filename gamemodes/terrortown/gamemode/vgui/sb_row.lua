@@ -109,7 +109,7 @@ function GM:TTTScoreboardRowColorForPlayer(ply)
 	end
 	
 	if ply.GetRole and ply:GetRole() and ply:GetRole() > 0 and ply:IsSpecial() then
-		local tmp = ply:GetRoleData().color
+		local tmp = table.Copy(ply:GetRoleData().color)
 		
 		col.r = tmp.r
 		col.g = tmp.g

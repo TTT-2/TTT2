@@ -62,11 +62,13 @@ function ScoreEvent(e, scores, rolesTbl)
 			scores[vid].r = e.vic.r
 		end
 		
-		local h1 = hook.Run("TTT2_ScoringGettingRole", player.GetBySteamID(vid))
-		scores[vid].r = h1 or scores[vid].r
+		local victim = player.GetBySteamID(vid)
+		local h1 = victim and hook.Run("TTT2_ModifyRole", victim)
+		scores[vid].r = h1 and h1.index or scores[vid].r
 		
-		local h2 = hook.Run("TTT2_ScoringGettingRole", player.GetBySteamID(aid))
-		scores[aid].r = h2 or scores[aid].r
+		local attacker = player.GetBySteamID(aid)
+		local h2 = attacker and hook.Run("TTT2_ModifyRole", player.GetBySteamID(aid))
+		scores[aid].r = h2 and h2.index or scores[aid].r
 		
 		local vrd = GetRoleByIndex(scores[vid].r)
 		local ard = GetRoleByIndex(scores[aid].r)

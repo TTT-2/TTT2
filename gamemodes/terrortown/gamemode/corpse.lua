@@ -63,9 +63,7 @@ local function IdentifyBody(ply, rag)
 	if bodyfound:GetBool() and not CORPSE.GetFound(rag, false) then
 		local role = rag.was_role
 		local rd = GetRoleByIndex(role)
-		local change = hook.Run("TTT2_SearchBodyRole", ply)
-		local tmpStr = change and GetRoleByIndex(change).abbr or rd.abbr
-		local roletext = ("body_found_" .. tmpStr)
+		local roletext = ("body_found_" .. rd.abbr)
 
 		LANG.Msg("body_found", {finder = finder, victim = nick, role = LANG.Param(roletext)})
 	end

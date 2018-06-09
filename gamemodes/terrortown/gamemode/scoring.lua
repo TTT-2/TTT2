@@ -192,7 +192,7 @@ function SCORE:ApplyEventLogScores(wintype, winrole)
 		ply = player.GetBySteamID(sid)
 		
 		if ply and IsValid(ply) then
-			local team = hook.Run("TTT2_ScoringGettingRole", ply) or ply:GetRoleData()
+			local team = hook.Run("TTT2_ModifyRole", ply) or ply:GetRoleData()
 			team = team.team
 		
 			if ply:ShouldScore() then

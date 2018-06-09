@@ -973,6 +973,11 @@ function EndRound(type, role)
 
 	-- Stop checking for wins
 	StopWinChecks()
+	
+	-- send each client the role setup
+	for _, v in pairs(ROLES) do
+		SendRoleList(v.index, player.GetAll())
+	end
 
 	-- We may need to start a timer for a mapswitch, or start a vote
 	CheckForMapSwitch()
@@ -1258,6 +1263,8 @@ function SelectRoles()
 		GAMEMODE.LastRole[ply:SteamID()] = ply:GetRole()
 		
 		ply:UpdateRole(ply:GetRole()) -- just for some hooks and other special things
+		
+		SendFullStateUpdate() -- theoretically not needed
 	end
 end
 
