@@ -564,6 +564,7 @@ local function TraitorMenuPopup()
 	dcancel:SetSize(bw, bh)
 	dcancel:SetDisabled(false)
 	dcancel:SetText(GetTranslation("close"))
+	
 	dcancel.DoClick = function()
 		dframe:Close()
 	end

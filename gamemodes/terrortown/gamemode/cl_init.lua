@@ -539,7 +539,7 @@ function CheckIdle()
 				
 				RunConsoleCommand("ttt_cl_idlepopup")
 			end)
-		elseif CurTime() > (idle.t + (idle_limit / 2)) then
+		elseif CurTime() > (idle.t + idle_limit / 2) then
 			-- will repeat
 			LANG.Msg("idle_warning")
 		end

@@ -3,7 +3,7 @@ GM.Author = "Bad King Urgrain && Alf21"
 GM.Email = "4lf-mueller@gmx.de"
 GM.Website = "ttt.badking.net, ttt2.informaskill.de"
 -- Date of latest changes (YYYY-MM-DD)
-GM.Version = "v0.2.2.3b"
+GM.Version = "0.2.2.4b"
 
 GM.Customized = true
 
@@ -562,7 +562,7 @@ function GetDefaultEquipment()
 	local defaultEquipment = {}
 
 	for _, v in pairs(ROLES) do
-		if v.defaultEquipment ~= nil then
+		if v.defaultEquipment then
 			defaultEquipment[v.index] = v.defaultEquipment
 		end
 	end

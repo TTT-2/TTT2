@@ -361,14 +361,15 @@ function GM:KeyPress(ply, key)
 			ply:SpectateEntity(nil)
 		
 			local alive = util.GetAlivePlayers()
-		
 			if #alive < 1 then return end
 		
 			local target = table.Random(alive)
 			
 			if IsValid(target) then
-				ply:SetPos(target:EyePos())
-				ply:SetEyeAngles(target:EyeAngles())
+				--ply:SetPos(target:EyePos())
+				--ply:SetEyeAngles(target:EyeAngles())
+				ply:Spectate(OBS_MODE_IN_EYE)
+				ply:SpectateEntity(target)
 			end
 		elseif key == IN_ATTACK2 then
 			-- spectate either the next guy or a random guy in chase
@@ -763,6 +764,10 @@ function GM:PlayerDeath(victim, infl, attacker)
 	if HasteMode() and GetRoundState() == ROUND_ACTIVE then
 		IncRoundEnd(GetConVar("ttt_haste_minutes_per_death"):GetFloat() * 60)
 	end
+	
+	if IsValid(attacker) and attacker:IsPlayer() and attacker ~= victim and attacker:IsActive() then
+		victim.killerSpec = attacker
+	end
 end
 
 -- kill hl2 beep
@@ -794,16 +799,22 @@ function GM:SpectatorThink(ply)
 		
 			-- free roam mode
 			ply:SetRagdollSpec(false)
-			ply:Spectate(OBS_MODE_ROAMING)
-	
-			-- move to spectator spawn if mapper defined any
-			local spec_spawns = ents.FindByClass("ttt_spectator_spawn")
 			
-			if spec_spawns and #spec_spawns > 0 then
-				local spawn = table.Random(spec_spawns)
+			if ply.killerSpec and IsValid(ply.killerSpec) and ply.killerSpec:IsPlayer() and ply.killerSpec:IsActive() then
+				ply:Spectate(OBS_MODE_IN_EYE)
+				ply:SpectateEntity(ply.killerSpec)
+			else
+				ply:Spectate(OBS_MODE_ROAMING)
+		
+				-- move to spectator spawn if mapper defined any
+				local spec_spawns = ents.FindByClass("ttt_spectator_spawn")
 				
-				ply:SetPos(spawn:GetPos())
-				ply:SetEyeAngles(spawn:GetAngles())
+				if spec_spawns and #spec_spawns > 0 then
+					local spawn = table.Random(spec_spawns)
+					
+					ply:SetPos(spawn:GetPos())
+					ply:SetEyeAngles(spawn:GetAngles())
+				end
 			end
 		elseif m == OBS_MODE_IN_EYE and clicked and elapsed > to_switch or elapsed > to_chase then
 			-- start following ragdoll

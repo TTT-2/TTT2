@@ -93,7 +93,7 @@ SWEP.IsGrenade = false
 
 SWEP.Weight				= 5
 SWEP.AutoSwitchTo		= false
-SWEP.AutoSwitchFrom	 = false
+SWEP.AutoSwitchFrom	 	= false
 
 SWEP.Primary.Sound			= Sound("Weapon_Pistol.Empty")
 SWEP.Primary.Recoil			= 1.5
@@ -108,7 +108,7 @@ SWEP.Primary.Automatic		= false
 SWEP.Primary.Ammo			= "none"
 SWEP.Primary.ClipMax		= -1
 
-SWEP.Secondary.ClipSize	 = 1
+SWEP.Secondary.ClipSize	 	= 1
 SWEP.Secondary.DefaultClip	= 1
 SWEP.Secondary.Automatic	= false
 SWEP.Secondary.Ammo			= "none"
@@ -159,7 +159,7 @@ if CLIENT then
 		-- somehow it seems this can be called before my player metatable
 		-- additions have loaded
 		if client.GetRoleData then
-			local col = client:GetRoleData().color
+			local col = hook.Run("TTT2ModifyWeaponColors") or client:GetRoleData().color
 		
 			surface.SetDrawColor(col.r * bright, col.g * bright, col.b * bright, 255 * alpha)
 		else

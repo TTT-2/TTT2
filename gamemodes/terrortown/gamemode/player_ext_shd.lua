@@ -82,7 +82,7 @@ end
 
 -- basically traitor without special traitor roles (w/ teams)
 function plymeta:IsActiveTraitor() 
-	return self:IsActiveRole(ROLES.TRAITOR.index)	
+	return self:IsActive() and self:HasTeamRole(TEAM_TRAITOR)	
 end
 
 function plymeta:IsActiveDetective() 
@@ -117,7 +117,9 @@ local GetRTranslation = CLIENT and LANG.GetRawTranslation or util.passthrough
 
 -- Returns printable role
 function plymeta:GetRoleString()
-	return GetRTranslation(self:GetRoleData().name) or "???"
+	local name = self:GetRoleData().name
+
+	return GetRTranslation(name) or name
 end
 
 -- Returns role language string id, caller must translate if desired
