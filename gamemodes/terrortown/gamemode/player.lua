@@ -376,7 +376,7 @@ function GM:KeyPress(ply, key)
 			local target = util.GetNextAlivePlayer(ply:GetObserverTarget())
 		
 			if IsValid(target) then
-				ply:Spectate(ply.spec_mode or OBS_MODE_CHASE)
+				ply:Spectate(ply.spec_mode or OBS_MODE_IN_EYE)
 				ply:SpectateEntity(target)
 			end
 		elseif key == IN_DUCK then
@@ -408,10 +408,10 @@ function GM:KeyPress(ply, key)
 			
 			if not IsValid(tgt) or not tgt:IsPlayer() then return end
 			
-			if not ply.spec_mode or ply.spec_mode == OBS_MODE_CHASE then
-				ply.spec_mode = OBS_MODE_IN_EYE
-			elseif ply.spec_mode == OBS_MODE_IN_EYE then
+			if not ply.spec_mode or ply.spec_mode == OBS_MODE_IN_EYE then
 				ply.spec_mode = OBS_MODE_CHASE
+			elseif ply.spec_mode == OBS_MODE_CHASE then
+				ply.spec_mode = OBS_MODE_IN_EYE
 			end
 			-- roam stays roam
 			
@@ -424,10 +424,10 @@ function GM:KeyRelease(ply, key)
 	if key == IN_USE and IsValid(ply) and ply:IsTerror() then
 		-- see if we need to do some custom usekey overriding
 		local tr = util.TraceLine({
-			start	= ply:GetShootPos(),
+			start = ply:GetShootPos(),
 			endpos = ply:GetShootPos() + ply:GetAimVector() * 84,
 			filter = ply,
-			mask	= MASK_SHOT
+			mask = MASK_SHOT
 		})
 		
 		if tr.Hit and IsValid(tr.Entity) then
@@ -468,7 +468,7 @@ local function SpecUseKey(ply, cmd, arg)
 					ply:SpectateEntity(tr.Entity)
 				end
 			elseif tr.Entity:IsPlayer() and tr.Entity:IsActive() then
-				ply:Spectate(ply.spec_mode or OBS_MODE_CHASE)
+				ply:Spectate(ply.spec_mode or OBS_MODE_IN_EYE)
 				ply:SpectateEntity(tr.Entity)
 			else
 				PROPSPEC.Target(ply, tr.Entity)

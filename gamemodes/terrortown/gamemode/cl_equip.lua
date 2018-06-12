@@ -514,7 +514,12 @@ local function TraitorMenuPopup()
 		if new.item then
 			for k, v in pairs(new.item) do
 				if dfields[k] then
-					dfields[k]:SetText(SafeTranslate(v))
+					if k == "name" and new.item.PrintName then
+						dfields[k]:SetText(GetEquipmentTranslation(new.item.name, new.item.PrintName))
+					else
+						dfields[k]:SetText(SafeTranslate(v))
+					end
+					
 					dfields[k]:SetAutoStretchVertical(true)
 					dfields[k]:SetWrap(true)
 				end

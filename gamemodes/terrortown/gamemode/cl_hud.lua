@@ -110,7 +110,7 @@ local function DrawBg(x, y, width, height, client)
 	if GAMEMODE.round_state ~= ROUND_ACTIVE then
 		col = bg_colors.noround
 	elseif client:IsSpecial() then
-		col = client:GetRoleData().color
+		col = hook.Run("TTT2ModifyRoleBGColor") or client:GetRoleData().color
 	end
 
 	draw.RoundedBox(8, x, y, tw, th, col)
