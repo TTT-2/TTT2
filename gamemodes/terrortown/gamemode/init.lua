@@ -1015,6 +1015,8 @@ end
 
 -- The most basic win check is whether both sides have one dude alive
 function GM:TTTCheckForWin()
+	ttt_dbgwin = ttt_dbgwin or CreateConVar("ttt_debug_preventwin", "0", flag_save)
+
 	if ttt_dbgwin:GetBool() then 
 		return WIN_NONE
 	end
@@ -1095,7 +1097,8 @@ function GM:TTTCheckForWin()
 	end
 	
 	if b == 0 then
-		return WIN_BEES
+		--return WIN_BEES
+		return WIN_ROLE, ROLES.TRAITOR.index
 	elseif b == 1 then
 		return WIN_ROLE, checkedTeams[1]
 	end

@@ -53,7 +53,7 @@ function GM:PostDrawTranslucentRenderables()
 	client = LocalPlayer()
 	plys = GetPlayers()
 
-	if client:HasTeamRole(TEAM_TRAITOR) then
+	if client:IsSpecial() and client:IsActive() then
 		dir = (client:GetForward() * -1)
 
 		for i = 1, #plys do
@@ -65,7 +65,7 @@ function GM:PostDrawTranslucentRenderables()
 			pos.z = (pos.z + 74)
 			
 			if ply ~= client then
-				if ply:IsActive() and ply:HasTeamRole(TEAM_TRAITOR) then
+				if ply:IsActive() and ply:IsTeamMember(client) and not ply:GetRoleData().avoidTeamIcons then
 					if indicator_mat_tbl[role] then
 						render.SetMaterial(indicator_mat_tbl[role])
 						render.DrawQuadEasy(pos, dir, 8, 8, indicator_col, 180)
@@ -247,7 +247,7 @@ function GM:HUDDrawTargetID()
 		if CORPSE.GetFound(ent, false) or not DetectiveMode() then
 			text = CORPSE.GetPlayerNick(ent, "A Terrorist")
 		else
-			text	= L.target_unid
+			text = L.target_unid
 			color = COLOR_YELLOW
 		end
 	elseif not hint then
