@@ -389,7 +389,12 @@ local function OrderEquipment(ply, cmd, args)
 	
 	local role = GetShopFallback(ply:GetRole())
 
-	if not ply:IsActive() or not GetRoleByIndex(role).shop then return end
+	if not ply:IsActive() then return end
+	
+	local rd = GetRoleByIndex(role)
+	
+	local shopFallback = GetConVar("ttt_" .. rd.abbr .. "_shop_fallback"):GetString()
+	if shopFallback == SHOP_DISABLED then return end
 
 	-- no credits, can't happen when buying through menu as button will be off
 	if ply:GetCredits() < 1 then return end

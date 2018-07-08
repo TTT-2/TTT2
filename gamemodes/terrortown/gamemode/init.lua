@@ -296,6 +296,10 @@ function GM:InitPostEntity()
 	LoadShopsEquipment()
 	
 	WEPS.ForcePrecache()
+	
+	hook.Run("PostInitPostEntity")
+	
+	hook.Run("InitFallbackShops")
 end
 
 -- ConVar replication is broken in GMod, so we do this.
@@ -317,7 +321,8 @@ end
 function LoadShopsEquipment()
 	-- initialize shop equipment
 	for _, roleData in pairs(ROLES) do
-		if roleData.shop then
+		local shopFallback = GetConVar("ttt_" .. roleData.abbr .. "_shop_fallback"):GetString()
+		if shopFallback ~= SHOP_DISABLED then
 			LoadSingleShopEquipment(roleData)
 		end
 	end
@@ -409,6 +414,7 @@ function UpdateSingleRoleData(roleData, ply)
 	end
 end
 
+-- TODO just run on server once! not for every client
 net.Receive("TTT2_RolesListSynced", function(len, ply)
 	local first = net.ReadBool()
 	
@@ -921,7 +927,7 @@ function PrintResultMessage(type, role)
 		local roleData = GetRoleByIndex(role)
 
 		LANG.Msg("win_" .. roleData.team)
-		ServerLog("Result: " .. roleData.printName .. "s win.\n")
+		ServerLog("Result: " .. roleData.name .. "s win.\n")
 	else
 		ServerLog("Result: unknown victory condition!\n")
 	end
@@ -1038,7 +1044,7 @@ function GM:TTTCheckForWin()
 	for _, v in pairs(ROLES) do
 		if not table.HasValue(team, v.team) then
 			if v.team then
-			table.insert(team, v.team)
+				table.insert(team, v.team)
 			end
 			
 			alive[v.index] = false
@@ -1055,7 +1061,7 @@ function GM:TTTCheckForWin()
 			local i = roleData.index
 			
 			if roleData.team then
-			i = GetWinningRole(roleData.team).index
+				i = GetWinningRole(roleData.team).index
 			end
 			
 			alive[i] = true

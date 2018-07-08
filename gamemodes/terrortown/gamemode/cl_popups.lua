@@ -10,7 +10,8 @@ local function GetTextForRole(role)
 	local roleData = GetRoleByIndex(role)
 		
 	if roleData.team ~= TEAM_TRAITOR then
-		if not roleData.shop or hook.Run("TTT2_PreventAccessShop", LocalPlayer()) then
+		local fallback = GetConVar("ttt_" .. roleData.abbr .. "_shop_fallback"):GetString()
+		if fallback == SHOP_DISABLED or hook.Run("TTT2_PreventAccessShop", LocalPlayer()) then
 			return GetTranslation("info_popup_" .. roleData.name)
 		else
 			return GetPTranslation("info_popup_" .. roleData.name, {menukey = Key("+menu_context", "C")})
@@ -23,8 +24,6 @@ local function GetTextForRole(role)
 				table.insert(traitors, ply)
 			end
 		end
-
-		local text
 		
 		if #traitors > 1 then
 			local traitorlist = ""
@@ -35,12 +34,20 @@ local function GetTextForRole(role)
 				end
 			end
 
-			text = GetPTranslation("info_popup_" .. roleData.name, {menukey = menukey, traitorlist = traitorlist})
+			local fallback = GetConVar("ttt_" .. roleData.abbr .. "_shop_fallback"):GetString()
+			if fallback == SHOP_DISABLED or hook.Run("TTT2_PreventAccessShop", LocalPlayer()) then
+				return GetTranslation("info_popup_" .. roleData.name, {traitorlist = traitorlist})
+			else
+				return GetPTranslation("info_popup_" .. roleData.name, {menukey = menukey, traitorlist = traitorlist})
+			end
 		else
-			text = GetPTranslation("info_popup_" .. roleData.name .. "_alone", {menukey = menukey})
+			local fallback = GetConVar("ttt_" .. roleData.abbr .. "_shop_fallback"):GetString()
+			if fallback == SHOP_DISABLED or hook.Run("TTT2_PreventAccessShop", LocalPlayer()) then
+				return GetPTranslation("info_popup_" .. roleData.name .. "_alone")
+			else
+				return GetPTranslation("info_popup_" .. roleData.name .. "_alone", {menukey = menukey})
+			end
 		end
-		
-		return text
 	end
 end
 

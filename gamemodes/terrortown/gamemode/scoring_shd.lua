@@ -95,7 +95,7 @@ function ScoreEvent(e, scores, rolesTbl)
 		local find_bonus = 0
 		
 		for _, v in pairs(ROLES) do
-			if v.team ~= TEAM_TRAITOR and v.shop then -- why just v.shop ???
+			if v.team ~= TEAM_TRAITOR then
 				find_bonus = scores[sid].r == v.index and 3 or 1
 			end
 		end

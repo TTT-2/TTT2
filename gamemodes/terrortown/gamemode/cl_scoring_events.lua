@@ -52,7 +52,7 @@ Event(EVENT_FINISH, {
 	
 	icon = function(e)
 		if e.win == WIN_ROLE then
-			return star_icon, (GetRoleByIndex(e.wr).printName .. " won")
+			return star_icon, (GetRoleByIndex(e.wr).name .. " won")
 		elseif e.win == WIN_TIMELIMIT then
 			return star_icon, "Timelimit"
 		end

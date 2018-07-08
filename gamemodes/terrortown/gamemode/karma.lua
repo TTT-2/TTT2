@@ -77,6 +77,7 @@ end
 
 function KARMA.GiveReward(ply, reward)
 	reward = KARMA.DecayedMultiplier(ply) * reward
+	
 	ply:SetLiveKarma(math.min(ply:GetLiveKarma() + reward, config.max:GetFloat()))
 	
 	return reward
@@ -117,7 +118,7 @@ local function WasAvoidable(attacker, victim, dmginfo)
 	local rdvTeam = hook.Run("TTT2_ModifyRole", victim) or rdv
 	rdvTeam = rdvTeam.team
 	
-	if rdaTeam and rdaTeam == rdvTeam and (not rdv.unknownTeam or rdaTeam == TEAM_TRAITOR) and IsValid(infl) and infl.Avoidable then
+	if rdaTeam and rdaTeam == rdvTeam and (not rdv.unknownTeam or rdaTeam == TEAM_TRAITOR) and IsValid(infl) and (infl.Avoidable == nil or infl.Avoidable) then
 		return true
 	end
 

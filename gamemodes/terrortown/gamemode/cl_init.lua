@@ -103,6 +103,10 @@ function GM:InitPostEntity()
 
 	RunConsoleCommand("_ttt_request_serverlang")
 	RunConsoleCommand("_ttt_request_rolelist")
+	
+	hook.Run("PostInitPostEntity")
+	
+	hook.Run("InitFallbackShops")
 end
 
 function GM:DoCacheEnts()
@@ -150,7 +154,11 @@ local function ReceiveRolesTable(len)
 			net.SendToServer()
 			
 			-- run client side
+			hook.Run("TTT2_PreFinishedSync", LocalPlayer(), first)
+			
 			hook.Run("TTT2_FinishedSync", LocalPlayer(), first)
+			
+			hook.Run("TTT2_PostFinishedSync", LocalPlayer(), first)
 		end
 
 		-- flush
@@ -159,18 +167,20 @@ local function ReceiveRolesTable(len)
 end
 net.Receive("TTT2_SyncRolesList", ReceiveRolesTable)
 
+local buff2 = ""
+
 local function ReceiveSingleRoleTable(len)
 	print("[TTT2][ROLE] Received updated ROLE from server! Updating...")
 
 	local cont = net.ReadBit() == 1
 
-	buff = buff .. net.ReadString()
+	buff2 = buff2 .. net.ReadString()
 
 	if cont then
 		return
 	else
 		-- do stuff with buffer contents
-		local json_roles = buff -- util.Decompress(buff)
+		local json_roles = buff2 -- util.Decompress(buff2)
 		
 		if not json_roles then
 			ErrorNoHalt("ROLE decompression failed!\n")
@@ -204,7 +214,7 @@ local function ReceiveSingleRoleTable(len)
 		end
 
 		-- flush
-		buff = ""
+		buff2 = ""
 	end
 end
 net.Receive("TTT2_SyncSingleRole", ReceiveSingleRoleTable)

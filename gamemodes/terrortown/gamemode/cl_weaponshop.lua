@@ -289,7 +289,7 @@ net.Receive("newshop", function()
 		local fb = GetRoleByName(fallback)
 		
 		-- update state
-		if fallback == "DISABLED" or fallback == "UNSET" and (dlist.selectedRole == ROLES.TRAITOR.index or dlist.selectedRole == ROLES.DETECTIVE.index) then
+		if fallback == SHOP_DISABLED or fallback == SHOP_UNSET and rd.fallbackTable then
 			state = false
 		else
 			state = true
@@ -301,15 +301,15 @@ net.Receive("newshop", function()
 		end
 		
 		-- add default choice
-		local b = dlist.selectedRole == ROLES.TRAITOR.index or dlist.selectedRole == ROLES.DETECTIVE.index
-		if b then
-			self:AddChoice("Default Role Equipment", {name = GetRoleByIndex(dlist.selectedRole).name, data = "UNSET"})
+		local tmpRd = GetRoleByIndex(dlist.selectedRole)
+		if tmpRd.fallbackTable then
+			self:AddChoice("Default Role Equipment", {name = tmpRd.name, data = SHOP_UNSET})
 		end
 		
-		self:AddChoice("Disable shop", {name = GetRoleByIndex(dlist.selectedRole).name, data = "DISABLED"})
+		self:AddChoice("Disable shop", {name = tmpRd.name, data = SHOP_DISABLED})
 		
 		-- set default value
-		if fallback == "DISABLED" then
+		if fallback == SHOP_DISABLED then
 			self:SetValue("Disabled shop")
 		elseif not state then
 			self:SetValue("Default Role Equipment")
@@ -347,7 +347,7 @@ net.Receive("newshop", function()
 			net.SendToServer()
 		end
 		
-		if data.data == "DISABLED" or data.data == "UNSET" or data.data ~= GetRoleByIndex(dlist.selectedRole).name then
+		if data.data == SHOP_DISABLED or data.data == SHOP_UNSET or data.data ~= GetRoleByIndex(dlist.selectedRole).name then
 			state = false
 		
 			for _, v in pairs(dlist:GetItems()) do
@@ -395,10 +395,11 @@ net.Receive("shopFallbackAnsw", function(len)
 		end
 	end
 	
-	if fallback == "UNSET" then
-		if role == ROLES.TRAITOR.index then
+	if fallback == SHOP_UNSET then
+		local roleData = GetRoleByIndex(role)
+		if roleData.fallbackTable then
 			-- set everything
-			for _, eq in ipairs(EQUIPMENT_DEFAULT_TRAITOR) do
+			for _, eq in ipairs(roleData.fallbackTable) do
 				local is_item = tonumber(eq.id)
 				if is_item then
 					table.insert(EquipmentItems[role], eq)
@@ -413,23 +414,6 @@ net.Receive("shopFallbackAnsw", function(len)
 				
 				table.insert(Equipment[role], eq)
 			end
-		elseif role == ROLES.DETECTIVE.index then
-			-- set everything
-			for _, eq in ipairs(EQUIPMENT_DEFAULT_DETECTIVE) do
-				local is_item = tonumber(eq.id)
-				if is_item then
-					table.insert(EquipmentItems[role], eq)
-				else
-					local wepTbl = weapons.GetStored(eq.id)
-					if wepTbl then
-						wepTbl.CanBuy = wepTbl.CanBuy or {}
-						
-						table.insert(wepTbl.CanBuy, role)
-					end
-				end
-				
-				table.insert(Equipment[role], eq)
-			end	
 		end
 	end
 end)

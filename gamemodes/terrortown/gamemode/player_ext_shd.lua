@@ -94,7 +94,12 @@ function plymeta:IsActiveSpecial()
 end
 
 function plymeta:IsShopper()
-	return self:GetRoleData().shop
+	if self:GetRole() == ROLES.INNOCENT.index then 
+		return false 
+	end
+
+	local shopFallback = GetConVar("ttt_" .. self:GetRoleData().abbr .. "_shop_fallback"):GetString()
+	return shopFallback ~= SHOP_DISABLED
 end
 
 function plymeta:IsActiveShopper()

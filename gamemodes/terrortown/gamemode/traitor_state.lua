@@ -363,7 +363,7 @@ local function force_role(ply, cmd, args, argStr)
 
 		SendFullStateUpdate()
 
-		ply:ChatPrint("You changed to '" .. rd.printName .. "' (role: " .. role .. ")")
+		ply:ChatPrint("You changed to '" .. rd.name .. "' (role: " .. role .. ")")
 	end
 end
 concommand.Add("ttt_force_role", force_role, nil, nil, FCVAR_CHEAT)
@@ -384,7 +384,7 @@ local function toggle_role(ply, cmd, args, argStr)
 
 		RunConsoleCommand("ttt_" .. roleData.name .. "_enabled", currentState and "1" or "0")
 
-		ply:ChatPrint("You " .. word .. " role with index '" .. role .. "(" .. roleData.printName .. ")'. This will take effect in the next role selection!")
+		ply:ChatPrint("You " .. word .. " role with index '" .. role .. "(" .. roleData.name .. ")'. This will take effect in the next role selection!")
 	end
 end
 concommand.Add("ttt_toggle_role", toggle_role)
@@ -421,7 +421,7 @@ local function roles_index(ply)
 		ply:ChatPrint("[Role] | [Index]")
 		
 		for _, v in pairs(GetSortedRoles()) do
-			ply:ChatPrint(v.printName .. " | " .. v.index)
+			ply:ChatPrint(v.name .. " | " .. v.index)
 		end
 		
 		ply:ChatPrint("----------------")

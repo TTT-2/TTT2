@@ -21,6 +21,11 @@ local ClassHint = {
 	}
 }
 
+-- Access for servers to display hints using their own HUD/UI.
+function GM:GetClassHints()
+	return ClassHint
+end
+
 -- Basic access for servers to add/modify hints. They override hints stored on
 -- the entities themselves.
 function GM:AddClassHint(cls, hint)
@@ -65,7 +70,7 @@ function GM:PostDrawTranslucentRenderables()
 			pos.z = (pos.z + 74)
 			
 			if ply ~= client then
-				if ply:IsActive() and ply:IsTeamMember(client) and not ply:GetRoleData().avoidTeamIcons then
+				if ply:IsActive() and ply:IsSpecial() and ply:IsTeamMember(client) and not ply:GetRoleData().avoidTeamIcons then
 					if indicator_mat_tbl[role] then
 						render.SetMaterial(indicator_mat_tbl[role])
 						render.DrawQuadEasy(pos, dir, 8, 8, indicator_col, 180)

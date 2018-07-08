@@ -41,8 +41,6 @@ local mat_dir = "vgui/ttt/"
 EquipmentItems = {}
 SYNC_EQUIP = {}
 ALL_ITEMS = {}
-EQUIPMENT_DEFAULT_TRAITOR = {}
-EQUIPMENT_DEFAULT_DETECTIVE = {}
 
 function SetupEquipment()
 	for _, v in pairs(GetTeamRoles(TEAM_TRAITOR)) do
@@ -89,17 +87,62 @@ hook.Add("TTT2_FinishedSync", "updateEquRol", function()
 	SetupEquipment()
 end)
 
-function GetShopFallback(role, tbl)
-	local rd = GetRoleByIndex(role)
+function CreateEquipmentWeapon(eq)
+	if not eq.Doublicated then
+		local data = eq.EquipMenuData or {}
+		local base = {
+			id		 = WEPS.GetClass(eq),
+			name	 = eq.ClassName or "Unnamed",
+			PrintName= data.name or data.PrintName or eq.PrintName or eq.ClassName or "Unnamed",
+			limited	 = eq.LimitedStock,
+			kind	 = eq.Kind or WEAPON_NONE,
+			slot	 = (eq.Slot or 0) + 1,
+			material = eq.Icon or "vgui/ttt/icon_id",
+			-- the below should be specified in EquipMenuData, in which case
+			-- these values are overwritten
+			type	 = "Type not specified",
+			model	 = "models/weapons/w_bugbait.mdl",
+			desc	 = "No description specified."
+		}
+
+		-- Force material to nil so that model key is used when we are
+		-- explicitly told to do so (ie. material is false rather than nil).
+		if data.modelicon then
+			base.material = nil
+		end
+
+		table.Merge(base, data)
+		
+		return base
+	end
+end
+
+function AddWeaponIntoFallbackTable(wepClass, roleData)
+	if not roleData.fallbackTable then return end
+
+	local wep = weapons.GetStored(wepClass)
+	if not wep then return end
 	
-	if not rd.shop then
-		return role
+	wep.CanBuy = wep.CanBuy or {}
+	
+	if not table.HasValue(wep.CanBuy, roleData.index) then
+		table.insert(wep.CanBuy, roleData.index)
 	end
 	
+	local eq = CreateEquipmentWeapon(wep)
+	if not eq then return end
+	
+	if not table.HasValue(roleData.fallbackTable, eq) then
+		table.insert(roleData.fallbackTable, eq)
+	end
+end
+
+function GetShopFallback(role, tbl)
+	local rd = GetRoleByIndex(role)
 	local shopFallback = GetConVar("ttt_" .. rd.abbr .. "_shop_fallback"):GetString()
 	local fb = GetRoleByName(shopFallback).index
 	
-	if shopFallback == "UNSET" or shopFallback == "DISABLED" then
+	if shopFallback == SHOP_UNSET or shopFallback == SHOP_DISABLED then
 		return role, fb
 	end
 	
@@ -125,17 +168,19 @@ end
 
 function GetShopFallbackTable(role)
 	local rd = GetRoleByIndex(role)
-	if not rd.shop then return end
+	
+	local shopFallback = GetConVar("ttt_" .. rd.abbr .. "_shop_fallback"):GetString()
+	if shopFallback == SHOP_DISABLED then return end
 	
 	local fallback
 	
 	role, fallback = GetShopFallback(role)
 	
-	if fallback == ROLES.INNOCENT.index then -- fallback is "UNSET"
-		if role == ROLES.TRAITOR.index then
-			return EQUIPMENT_DEFAULT_TRAITOR
-		elseif role == ROLES.DETECTIVE.index then
-			return EQUIPMENT_DEFAULT_DETECTIVE
+	if fallback == ROLES.INNOCENT.index then -- fallback is SHOP_UNSET
+		rd = GetRoleByIndex(role)
+		
+		if rd.fallbackTable then
+			return rd.fallbackTable
 		end
 	end
 end
@@ -252,6 +297,58 @@ function InitFallbackShops()
 	end
 end
 
+function InitFallbackShop(roleData, fallbackTable)
+	roleData.fallbackTable = fallbackTable
+
+	for _, eq in ipairs(roleData.fallbackTable) do
+		local is_item = tonumber(eq.id)
+		local swep_table = not is_item and weapons.GetStored(eq.id)
+		
+		if swep_table then
+			if not swep_table.CanBuy then
+				swep_table.CanBuy = {}
+			end
+			
+			if not table.HasValue(swep_table.CanBuy, roleData.index) then
+				table.insert(swep_table.CanBuy, roleData.index)
+			end
+		elseif is_item then
+			EquipmentItems[roleData.index] = EquipmentItems[roleData.index] or {}
+	
+			if not EquipmentTableHasValue(EquipmentItems[roleData.index], eq) then
+				table.insert(EquipmentItems[roleData.index], eq)
+			end
+		end
+	end
+end
+
+function AddToShopFallback(fallback, role, eq)
+	if not table.HasValue(fallback, eq) then
+		table.insert(fallback, eq)
+	end
+	
+	if GetShopFallbackTable(role) then
+		local is_item = tonumber(eq.id)
+		local swep_table = not is_item and weapons.GetStored(eq.id)
+		
+		if swep_table then
+			if not swep_table.CanBuy then
+				swep_table.CanBuy = {}
+			end
+			
+			if not table.HasValue(swep_table.CanBuy, role) then
+				table.insert(swep_table.CanBuy, role)
+			end
+		elseif is_item then
+			EquipmentItems[role] = EquipmentItems[role] or {}
+	
+			if not EquipmentTableHasValue(EquipmentItems[role], eq) then
+				table.insert(EquipmentItems[role], eq)
+			end
+		end
+	end
+end
+
 function InitDefaultEquipment()
 	-- set default equipment tables
 	
@@ -295,7 +392,7 @@ function InitDefaultEquipment()
 		end
 	end
 
-	EQUIPMENT_DEFAULT_TRAITOR = tbl
+	ROLES.TRAITOR.fallbackTable = tbl
 	
 -- DETECTIVE
 	local tbl = table.Copy(EquipmentItems[ROLES.DETECTIVE.index])
@@ -337,7 +434,7 @@ function InitDefaultEquipment()
 		end
 	end
 
-	EQUIPMENT_DEFAULT_DETECTIVE = tbl
+	ROLES.DETECTIVE.fallbackTable = tbl
 end
 
 function InitAllItems()
@@ -451,15 +548,18 @@ if SERVER then
 		local fallback = GetConVar("ttt_" .. roleData.abbr .. "_shop_fallback"):GetString()
 		local fb = GetRoleByName(fallback).index
 		
-		if fb ~= roleData.index then return end
+		if fb ~= roleData.index then return end -- TODO why? remove and replace SHOP_UNSET with index of the current role
+		
+		hook.Run("TTT2_LoadSingleShopEquipment", roleData)
 		
 		SYNC_EQUIP = SYNC_EQUIP or {}
 		SYNC_EQUIP[roleData.index] = {} -- reset
 		
+		-- init files
 		local roleName = string.lower(roleData.name)
 		local files, directories = file.Find("roleweapons/" .. roleName .. "/*.txt", "DATA")
 
-		for _, v in pairs(files) do
+		for _, v in pairs(files) do -- TODO ipairs ?
 			local name = string.sub(v, 1, #v - 4) -- cut #".txt"
 			local is_item = GetEquipmentItemByFileName(name)
 			local wep = not is_item and GetWeaponNameByFileName(name)

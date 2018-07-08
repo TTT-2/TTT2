@@ -1,7 +1,7 @@
 "UnlitGeneric"
 {
-	"$basetexture" "vgui/ttt/icon_inno"
-	"$translucent" 1
-	"$vertexalpha" 1
-	"$vertexcolor" 1
+ "$basetexture" "vgui/ttt/icon_inno"
+ "$vertexcolor" 1
+ "$vertexalpha" 1
+ "$translucent" 1
 }

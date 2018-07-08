@@ -3,15 +3,15 @@ GM.Author = "Bad King Urgrain && Alf21"
 GM.Email = "4lf-mueller@gmx.de"
 GM.Website = "ttt.badking.net, ttt2.informaskill.de"
 -- Date of latest changes (YYYY-MM-DD)
-GM.Version = "0.2.2.4b"
+GM.Version = "0.2.2.5b"
 
 GM.Customized = true
 
 -- Round status consts
-ROUND_WAIT	= 1
-ROUND_PREP	= 2
+ROUND_WAIT = 1
+ROUND_PREP = 2
 ROUND_ACTIVE = 3
-ROUND_POST	= 4
+ROUND_POST = 4
 
 -- equipment setups
 INNO_EQUIPMENT = {
@@ -85,9 +85,7 @@ ROLES.INNOCENT = {
 	dkcolor = Color(60, 160, 50, 155),
 	bgcolor = Color(0, 50, 0, 200),
 	name = "innocent",
-	printName = "Innocent", -- theoretically not needed ! Translated through lang functions of TTT |- TODO remove
 	abbr = "inno",
-	shop = false,
 	team = TEAM_INNO,
 	defaultEquipment = INNO_EQUIPMENT,
 	buildin = true,
@@ -101,16 +99,15 @@ ROLES.TRAITOR = {
 	dkcolor = Color(160, 50, 60, 155),
 	bgcolor = Color(150, 0, 0, 200),
 	name = "traitor",
-	printName = "Traitor",
 	abbr = "traitor",
-	shop = true,
 	team = TEAM_TRAITOR,
 	defaultEquipment = TRAITOR_EQUIPMENT,
 	visibleForTraitors = true, -- just for a better performance
 	buildin = true,
 	surviveBonus = 0.5,
 	scoreKillsMultiplier = 5,
-	scoreTeamKillsMultiplier = -16
+	scoreTeamKillsMultiplier = -16,
+	fallbackTable = {}
 }
 
 ROLES.DETECTIVE = {
@@ -119,14 +116,13 @@ ROLES.DETECTIVE = {
 	dkcolor = Color(50, 60, 160, 155),
 	bgcolor = Color(0, 0, 150, 200),
 	name = "detective",
-	printName = "Detective",
 	abbr = "det",
-	shop = true,
 	team = TEAM_INNO,
 	defaultEquipment = SPECIAL_EQUIPMENT,
 	buildin = true,
 	scoreKillsMultiplier = ROLES.INNOCENT.scoreKillsMultiplier,
-	scoreTeamKillsMultiplier = ROLES.INNOCENT.scoreTeamKillsMultiplier
+	scoreTeamKillsMultiplier = ROLES.INNOCENT.scoreTeamKillsMultiplier,
+	fallbackTable = {}
 }
 
 local flag_all = {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED}
@@ -135,9 +131,13 @@ local flag_all = {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED}
 CreateConVar("ttt_detective_enabled", "1", flag_all)
 CreateConVar("ttt_newroles_enabled", "1", flag_all)
 
+SHOP_DISABLED = "DISABLED"
+SHOP_UNSET = "UNSET"
+
 -- shop fallbacks
-CreateConVar("ttt_" .. ROLES.TRAITOR.abbr .. "_shop_fallback", "UNSET", flag_all)
-CreateConVar("ttt_" .. ROLES.DETECTIVE.abbr .. "_shop_fallback", "UNSET", flag_all)
+CreateConVar("ttt_" .. ROLES.INNOCENT.abbr .. "_shop_fallback", SHOP_DISABLED, flag_all)
+CreateConVar("ttt_" .. ROLES.TRAITOR.abbr .. "_shop_fallback", SHOP_UNSET, flag_all)
+CreateConVar("ttt_" .. ROLES.DETECTIVE.abbr .. "_shop_fallback", SHOP_UNSET, flag_all)
 
 -- you should only use this function to add roles to TTT2
 function AddCustomRole(name, roleData, conVarData)
@@ -163,22 +163,23 @@ function AddCustomRole(name, roleData, conVarData)
 			CreateConVar("ttt_" .. roleData.name .. "_enabled", "1", flag_all)
 		end
 		
-		if roleData.shop then
-			conVarData.credits = conVarData.credits or 0
-			if conVarData.credits then
-				CreateConVar("ttt_" .. roleData.abbr .. "_credits_starting", tostring(conVarData.credits), flag_all)
-			end
-			
-			if conVarData.creditsTraitorKill then
-				CreateConVar("ttt_" .. roleData.abbr .. "_credits_traitorkill", tostring(conVarData.creditsTraitorKill), flag_all)
-			end
-			
-			if conVarData.creditsTraitorDead then
-				CreateConVar("ttt_" .. roleData.abbr .. "_credits_traitordead", tostring(conVarData.creditsTraitorDead), flag_all)
-			end
-			
-			CreateConVar("ttt_" .. roleData.abbr .. "_shop_fallback", conVarData.shopFallback and tostring(conVarData.shopFallback) or "DISABLED", flag_all)
+		conVarData.credits = conVarData.credits or 0
+		conVarData.creditsTraitorKill = conVarData.creditsTraitorKill or 0
+		conVarData.creditsTraitorDead = conVarData.creditsTraitorDead or 0
+		
+		CreateConVar("ttt_" .. roleData.abbr .. "_credits_starting", tostring(conVarData.credits), flag_all)
+		CreateConVar("ttt_" .. roleData.abbr .. "_credits_traitorkill", tostring(conVarData.creditsTraitorKill), flag_all)
+		CreateConVar("ttt_" .. roleData.abbr .. "_credits_traitordead", tostring(conVarData.creditsTraitorDead), flag_all)
+		
+		local shopFallbackValue
+		
+		if not conVarData.shopFallback and roleData.fallbackTable then
+			shopFallbackValue = SHOP_UNSET
+		else
+			shopFallbackValue = conVarData.shopFallback and tostring(conVarData.shopFallback) or SHOP_DISABLED
 		end
+		
+		CreateConVar("ttt_" .. roleData.abbr .. "_shop_fallback", shopFallbackValue, flag_all)
 		
 		if conVarData.traitorKill then
 			CreateConVar("ttt_credits_" .. roleData.name .. "kill", tostring(conVarData.traitorKill), flag_all)
@@ -290,9 +291,12 @@ function GetShopRoles()
 	local i = 0
 	
 	for _, v in pairs(ROLES) do
-		if v.shop then
-			i = i + 1
-			shopRoles[i] = v
+		if v ~= ROLES.INNOCENT then
+			local shopFallback = GetConVar("ttt_" .. v.abbr .. "_shop_fallback"):GetString()
+			if shopFallback ~= SHOP_DISABLED then
+				i = i + 1
+				shopRoles[i] = v
+			end
 		end
 	end
 	

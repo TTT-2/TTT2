@@ -209,10 +209,8 @@ local function TraitorMenuPopup()
 	local fallbackRole = GetShopFallback(role)
 	local rd = GetRoleByIndex(fallbackRole)
 	
-	if not rd.shop then return end
-	
 	local fallback = GetConVar("ttt_" .. rd.abbr .. "_shop_fallback"):GetString()
-	if fallback == "DISABLED" then return end
+	if fallback == SHOP_DISABLED then return end
 	
 	-- calculate dimensions
 	local numCols = serverColsVar:GetInt()
