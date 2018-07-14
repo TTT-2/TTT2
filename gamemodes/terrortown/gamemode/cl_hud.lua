@@ -72,10 +72,10 @@ local function PaintBar(x, y, w, h, colors, value)
 end
 
 local roundstate_string = {
-	[ROUND_WAIT]	= "round_wait",
-	[ROUND_PREP]	= "round_prep",
+	[ROUND_WAIT] = "round_wait",
+	[ROUND_PREP] = "round_prep",
 	[ROUND_ACTIVE] = "round_active",
-	[ROUND_POST]	= "round_post"
+	[ROUND_POST] = "round_post"
 }
 
 -- Returns player's ammo information

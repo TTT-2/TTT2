@@ -14,7 +14,6 @@
 -- Note that for existing items you can just do:
 --	table.insert(EquipmentItems[ROLES.DETECTIVE.index], GetEquipmentItem(ROLES.TRAITOR.index, EQUIP_ARMOR))
 
-
 -- Special equipment bitflags. Every unique piece of equipment needs its own
 -- id. 
 --

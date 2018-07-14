@@ -66,7 +66,10 @@ function GM:InitPostEntity()
 	-- reset normal equipment tables
 	for _, role in pairs(ROLES) do
 		EquipmentItems[role.index] = {}
-		Equipment[role.index] = nil
+		
+		if Equipment then
+			Equipment[role.index] = nil
+		end
 	end
 
 	-- reset normal weapons equipment

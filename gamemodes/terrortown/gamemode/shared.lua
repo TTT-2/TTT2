@@ -406,11 +406,23 @@ if CLIENT then
 	end
 
 	function SortEquipmentTable(tbl)
-		local sort_func = function(a, b)
+		--[[
+		table.sort(tbl, function(a, b)
 			return GetEquipmentTranslation(a.name, a.PrintName) < GetEquipmentTranslation(b.name, b.PrintName)
-		end
-		
-		table.sort(tbl, sort_func)
+		end)
+		]]--
+		table.sort(tbl, function(a, b) 
+			local a = a.id
+			local b = b.id
+			
+			if tonumber(a) and not tonumber(b) then
+				return true
+			elseif tonumber(b) and not tonumber(a) then
+				return false
+			else
+				return a < b
+			end
+		end) 
 	end
 end
 
