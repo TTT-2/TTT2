@@ -121,9 +121,7 @@ function ScoreEventLog(events, scores, rolesTbl)
 	return scores
 end
 
-function ScoreTeamBonus(scores, wintype, winrole)
-	-- TODO: whats with 'winrole' ?
-
+function ScoreTeamBonus(scores, wintype)
 	local alive = {}
 	local dead = {}
 	
@@ -153,6 +151,7 @@ function ScoreTeamBonus(scores, wintype, winrole)
 		end
 	
 		bonus[v.team] = alive[v.team] * 1
+		
 		if v.surviveBonus then -- theoretically not necessary
 			bonus[v.team] = bonus[v.team] + math.ceil(others * (v.surviveBonus or 0))
 		end

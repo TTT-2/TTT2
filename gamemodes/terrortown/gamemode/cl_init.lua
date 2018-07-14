@@ -154,6 +154,8 @@ local function ReceiveRolesTable(len)
 			net.SendToServer()
 			
 			-- run client side
+			SetupRoleGlobals()
+			
 			hook.Run("TTT2_PreFinishedSync", LocalPlayer(), first)
 			
 			hook.Run("TTT2_FinishedSync", LocalPlayer(), first)
@@ -206,6 +208,8 @@ local function ReceiveSingleRoleTable(len)
 			net.SendToServer()
 			
 			-- run client side
+			SetupRoleGlobals()
+			
 			hook.Run("TTT2_PreFinishedSync", LocalPlayer(), false)
 			
 			hook.Run("TTT2_FinishedSync", LocalPlayer(), false)

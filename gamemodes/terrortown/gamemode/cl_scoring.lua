@@ -160,14 +160,12 @@ function CLSCORE:BuildScorePanel(dpanel)
 
 	-- the type of win condition triggered is relevant for team bonus
 	local wintype = WIN_NONE
-	local winrole
 	
 	for i = #self.Events, 1, -1 do
 		local e = self.Events[i]
 		
 		if e.id == EVENT_FINISH then
 			wintype = e.win
-			winrole = e.wr
 			
 			break
 		end
@@ -175,7 +173,7 @@ function CLSCORE:BuildScorePanel(dpanel)
 
 	local scores = self.Scores
 	local nicks = self.Players
-	local bonus = ScoreTeamBonus(scores, wintype, winrole)
+	local bonus = ScoreTeamBonus(scores, wintype)
 
 	-- TODO draw scoreboard
 	for id, s in pairs(scores) do
@@ -272,7 +270,7 @@ end
 
 function CLSCORE:BuildHilitePanel(dpanel)
 	local w, h = dpanel:GetSize()
-	local teamRole = GetTeamRoles(TEAM_INNO)[1]
+	local teamRole = ROLES.INNOCENT
 	local title = {c = teamRole.color, txt = "hilite_win_" .. teamRole.name}
 	local endtime = self.StartTime
 
@@ -283,16 +281,16 @@ function CLSCORE:BuildHilitePanel(dpanel)
 			endtime = e.t
 
 			local wintype = e.win
-			local winrole = GetRoleByIndex(e.wr)
 			
 			-- when win is due to timeout, innocents win
 			if wintype == WIN_TIMELIMIT then 
-				wintype = WIN_ROLE
-				winrole = GetTeamRoles(TEAM_INNO)[1]
+				wintype = WIN_INNOCENT
 			end
 			
-			teamRole = GetTeamRoles(winrole.team)[1] -- TODO: just winrole should be enough
-			title = {c = teamRole.color, txt = "hilite_win_" .. teamRole.name}
+			if wintype > WIN_NONE then
+				teamRole = GetRoleByIndex(wintype)
+				title = {c = teamRole.color, txt = "hilite_win_" .. teamRole.name}
+			end
 			
 			break
 		end

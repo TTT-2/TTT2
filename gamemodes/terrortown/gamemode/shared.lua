@@ -143,8 +143,8 @@ CreateConVar("ttt_" .. ROLES.DETECTIVE.abbr .. "_shop_fallback", SHOP_UNSET, fla
 function AddCustomRole(name, roleData, conVarData)
 	conVarData = conVarData or {}
 	
-	-- shared
 	if not ROLES[name] then
+		-- shared
 		if not roleData.notSelectable then
 			if conVarData.togglable then
 				CreateClientConVar("ttt_avoid_" .. roleData.name, "0", true, true)
@@ -184,34 +184,33 @@ function AddCustomRole(name, roleData, conVarData)
 		if conVarData.traitorKill then
 			CreateConVar("ttt_credits_" .. roleData.name .. "kill", tostring(conVarData.traitorKill), flag_all)
 		end
-	end
 	
-	-- client
-	---- empty
-	
-	-- server
-	if SERVER then
-	
-		-- necessary to init roles in this way, because we need to wait until the ROLES array is initialized 
-		-- and every important function works properly
-		hook.Add("TTT2_RoleInit", "Add_" .. roleData.abbr .. "_Role", function() -- unique hook identifier please
-			if not ROLES[name] then -- count ROLES
-				local i = 1 -- start at 1 to directly get free slot
-				
-				for _, v in pairs(ROLES) do
-					i = i + 1
+		-- client
+		---- empty
+		
+		-- server
+		if SERVER then
+			-- necessary to init roles in this way, because we need to wait until the ROLES array is initialized 
+			-- and every important function works properly
+			hook.Add("TTT2_RoleInit", "Add_" .. roleData.abbr .. "_Role", function() -- unique hook identifier please
+				if not ROLES[name] then -- count ROLES
+					local i = 1 -- start at 1 to directly get free slot
+					
+					for _, v in pairs(ROLES) do
+						i = i + 1
+					end
+					
+					roleData.index = i
+					ROLES[name] = roleData
+					
+					-- update DefaultEquipment
+					DefaultEquipment = GetDefaultEquipment()
+					
+					-- spend an answer
+					print("[TTT2][ROLE] Added '" .. name .. "' Role (index: " .. i .. ")")
 				end
-				
-				roleData.index = i
-				ROLES[name] = roleData
-				
-				-- update DefaultEquipment
-				DefaultEquipment = GetDefaultEquipment()
-				
-				-- spend an answer
-				print("[TTT2][ROLE] Added '" .. name .. "' Role (index: " .. i .. ")")
-			end
-		end)
+			end)
+		end
 	end
 end
 
@@ -225,6 +224,13 @@ function UpdateCustomRole(name, roleData)
 		for _, v in ipairs(player.GetAll()) do
 			UpdateSingleRoleData(roleData, v)
 		end
+	end
+end
+
+function SetupRoleGlobals()
+	for _, v in pairs(ROLES) do
+		_G["ROLE_" .. string.upper(v.name)] = v.index
+		_G["WIN_" .. string.upper(v.name)] = v.index
 	end
 end
 
@@ -420,10 +426,11 @@ EVENT_C4EXPLODE	= 8
 EVENT_CREDITFOUND = 9
 EVENT_C4DISARM = 10
 
-WIN_NONE = 1
-WIN_ROLE = 2
-WIN_TIMELIMIT = 3
-WIN_BEES = 4
+WIN_NONE = ROLE_NONE
+WIN_INNOCENT = ROLE_INNOCENT
+WIN_TRAITOR = ROLE_TRAITOR
+WIN_DETECTIVE = ROLE_DETECTIVE
+WIN_TIMELIMIT = -1
 
 -- Weapon categories, you can only carry one of each
 WEAPON_NONE	= 0

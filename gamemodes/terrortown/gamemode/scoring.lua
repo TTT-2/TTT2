@@ -153,7 +153,7 @@ function SCORE:HandleCreditFound(finder, found_nick, credits)
 	self:AddEvent({id = EVENT_CREDITFOUND, ni = finder:Nick(), sid = finder:SteamID(), b = found_nick, cr = credits})
 end
 
-function SCORE:ApplyEventLogScores(wintype, winrole)
+function SCORE:ApplyEventLogScores(wintype)
 	local scores = {}
 	local tmp = {}
 
@@ -186,7 +186,7 @@ function SCORE:ApplyEventLogScores(wintype, winrole)
 	end
 
 	-- team scores
-	local bonus = ScoreTeamBonus(scored_log, wintype, winrole)
+	local bonus = ScoreTeamBonus(scored_log, wintype)
 
 	for sid, s in pairs(scored_log) do
 		ply = player.GetBySteamID(sid)
@@ -217,8 +217,8 @@ function SCORE:RoundStateChange(newstate)
 	self:AddEvent({id = EVENT_GAME, state = newstate})
 end
 
-function SCORE:RoundComplete(wintype, winrole)
-	self:AddEvent({id = EVENT_FINISH, win = wintype, wr = winrole})
+function SCORE:RoundComplete(wintype)
+	self:AddEvent({id = EVENT_FINISH, win = wintype})
 end
 
 function SCORE:Reset()

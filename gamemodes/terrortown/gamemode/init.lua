@@ -181,6 +181,8 @@ function GM:Initialize()
 	
 	hook.Run("TTT2_PostRoleInit")
 	
+	SetupRoleGlobals()
+	
 	print()
 	MsgN("Trouble In Terrorist Town gamemode initializing...")
 	ShowVersion() 
@@ -201,7 +203,6 @@ function GM:Initialize()
 	GAMEMODE.propspec_allow_named = true
 
 	GAMEMODE.MapWin = WIN_NONE
-	GAMEMODE.MapWinRole = nil
 	GAMEMODE.AwardedCredits = false
 	GAMEMODE.AwardedCreditsDead = 0
 
@@ -504,18 +505,18 @@ end
 local function WinChecker()
 	if GetRoundState() == ROUND_ACTIVE then
 		if CurTime() > GetGlobalFloat("ttt_round_end", 0) then
-			EndRound(WIN_TIMELIMIT, GetTeamRoles(TEAM_INNO)[1])
+			EndRound(WIN_TIMELIMIT)
 		elseif not ttt_dbgwin:GetBool() then
-			win, role = hook.Run("TTT2_PreWinChecker")
+			win = hook.Run("TTT2_PreWinChecker")
 			
 			if win and win ~= WIN_NONE then
-				EndRound(win, role)
+				EndRound(win)
 			end
 			
-			win, role = hook.Call("TTTCheckForWin", GAMEMODE)
+			win = hook.Call("TTTCheckForWin", GAMEMODE)
 			
 			if win ~= WIN_NONE then
-				EndRound(win, role)
+				EndRound(win)
 			end
 		end
 	end
@@ -670,7 +671,6 @@ function PrepareRound()
 	CleanUp()
 
 	GAMEMODE.MapWin = WIN_NONE
-	GAMEMODE.MapWinRole = nil
 	GAMEMODE.AwardedCredits = false
 	GAMEMODE.AwardedCreditsDead = 0
 
@@ -914,17 +914,17 @@ function BeginRound()
 	ents.TTT.TriggerRoundStateOutputs(ROUND_BEGIN)
 end
 
-function PrintResultMessage(type, role)
+function PrintResultMessage(type)
 	ServerLog("Round ended.\n")
 	
 	if type == WIN_TIMELIMIT then
 		LANG.Msg("win_time")
 		ServerLog("Result: timelimit reached, traitors lose.\n")
-	elseif type == WIN_BEES then
+	elseif type == WIN_NONE then
 		LANG.Msg("win_bees")
 		ServerLog("Result: The Bees win (Its a Draw).\n")
-	elseif type == WIN_ROLE then
-		local roleData = GetRoleByIndex(role)
+	elseif type > WIN_NONE then
+		local roleData = GetRoleByIndex(type)
 
 		LANG.Msg("win_" .. roleData.team)
 		ServerLog("Result: " .. roleData.name .. "s win.\n")
@@ -959,8 +959,8 @@ function CheckForMapSwitch()
 	end
 end
 
-function EndRound(type, role)
-	PrintResultMessage(type, role)
+function EndRound(type)
+	PrintResultMessage(type)
 
 	-- first handle round end
 	SetRoundState(ROUND_POST)
@@ -993,10 +993,10 @@ function EndRound(type, role)
 	-- now handle potentially error prone scoring stuff
 
 	-- register an end of round event
-	SCORE:RoundComplete(type, role)
+	SCORE:RoundComplete(type)
 
 	-- update player scores
-	SCORE:ApplyEventLogScores(type, role)
+	SCORE:ApplyEventLogScores(type)
 
 	-- send the clients the round log, players will be shown the report
 	SCORE:StreamToClients()
@@ -1004,18 +1004,17 @@ function EndRound(type, role)
 	-- server plugins might want to start a map vote here or something
 	-- these hooks are not used by TTT internally
 	-- possible incompatibility for other addons
-	hook.Call("TTTEndRound", GAMEMODE, type, role)
+	hook.Call("TTTEndRound", GAMEMODE, type)
 
-	ents.TTT.TriggerRoundStateOutputs(ROUND_POST, type, role)
+	ents.TTT.TriggerRoundStateOutputs(ROUND_POST, type)
 end
 
-function GM:MapTriggeredEnd(wintype, winrole)
-	if not (wintype ~= WIN_ROLE and winrole) then
+function GM:MapTriggeredEnd(wintype)
+	if wintype > WIN_NONE then
 		self.MapWin = wintype
-		self.MapWinRole = winrole
 	else
 		-- print alert and hint for contact
-		print("\n\nCalled hook 'GM:MapTriggeredEnd' with incorrect wintype - because of modified version of TTT by Alf21, the parameters has changed!\n\n")
+		print("\n\nCalled hook 'GM:MapTriggeredEnd' with incorrect wintype\n\n")
 	end
 end
 
@@ -1027,14 +1026,12 @@ function GM:TTTCheckForWin()
 		return WIN_NONE
 	end
 
-	if GAMEMODE.MapWin == WIN_ROLE then
+	if GAMEMODE.MapWin > WIN_NONE then -- a role wins
 		local mw = GAMEMODE.MapWin
-		local mwr = GAMEMODE.MapWinRole
 		
 		GAMEMODE.MapWin = WIN_NONE
-		GAMEMODE.MapWinRole = nil
 		
-		return mwr, mw
+		return mw
 	end
 	
 	local alive = {}
@@ -1078,7 +1075,7 @@ function GM:TTTCheckForWin()
 			-- BUT there are too many traitors and in worst case there wont be an inno because of custom roles of other teams
 			--[[
 			if v.team == TEAM_TRAITOR and not alive[innoTeam] then
-			return WIN_ROLE, i -- aim of the game is that traitors kill all innos
+				return i -- aim of the game is that traitors kill all innos
 			end
 			]]--
 			
@@ -1103,10 +1100,10 @@ function GM:TTTCheckForWin()
 	end
 	
 	if b == 0 then
-		--return WIN_BEES
-		return WIN_ROLE, ROLES.TRAITOR.index
+		--return WIN_NONE
+		return WIN_TRAITOR
 	elseif b == 1 then
-		return WIN_ROLE, checkedTeams[1]
+		return checkedTeams[1]
 	end
 end
 

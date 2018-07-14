@@ -165,7 +165,6 @@ function DamageLog(txt)
 	end
 end
 
-
 local ttt_bantype = CreateConVar("ttt_ban_type", "autodetect")
 
 local function DetectServerPlugin()
