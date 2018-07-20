@@ -34,7 +34,13 @@ include("cl_wepswitch.lua")
 include("cl_scoring.lua")
 include("cl_scoring_events.lua")
 include("cl_popups.lua")
-include("cl_equip.lua")
+
+if not hook.Run("TTT_PreventUseMainShopSystem") then
+	include("cl_equip_main.lua")
+else
+	include("cl_equip.lua")
+end
+
 include("cl_weaponshop.lua")
 include("cl_voice.lua")
 
