@@ -20,7 +20,7 @@ concommand.Add("ttt_radar_scan", function(ply, cmd, args)
 
 			local targets = {}
 			
-			for _, p in pairs(scan_ents) do
+			for _, p in ipairs(scan_ents) do
 				if IsValid(p) and ply ~= p then
 					if p:IsPlayer() and p:IsTerror() and not p:GetNWBool("disguised", false) or not p:IsPlayer() then
 						local pos = p:LocalToWorld(p:OBBCenter())

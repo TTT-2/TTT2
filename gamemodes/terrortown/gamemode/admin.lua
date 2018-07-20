@@ -41,7 +41,7 @@ function PrintTraitors(ply)
 		
 		table.sort(ps, TraitorSort)
 
-		for _, p in pairs(ps) do
+		for _, p in ipairs(ps) do
 			if IsValid(p) then
 				pr(p:GetTraitor() and "TRAITOR" or "Innocent", ":", p:Nick())
 			end

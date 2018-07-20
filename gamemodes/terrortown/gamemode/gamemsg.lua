@@ -3,7 +3,7 @@
 local net = net
 local string = string
 local table = table
-local pairs = pairs
+local ipairs = ipairs
 local IsValid = IsValid
 
 -- NOTE: most uses of the Msg functions here have been moved to the LANG
@@ -192,7 +192,7 @@ function GM:PlayerSay(ply, text, team_only)
 		if team and not DetectiveMode() then
 			local filtered = {}
 			
-			for _, v in pairs(string.Explode(" ", text)) do
+			for _, v in ipairs(string.Explode(" ", text)) do
 				-- grab word characters and whitelisted interpunction
 				-- necessary or leetspeek will be used (by trolls especially)
 				local word, interp = string.match(v, "(%a*)([%.,!%?]*)")
@@ -203,7 +203,7 @@ function GM:PlayerSay(ply, text, team_only)
 			end
 
 			-- make sure we have something to say
-			if table.Count(filtered) < 1 then
+			if #filtered < 1 then
 				table.insert(filtered, mumbles[math.random(1, #mumbles)])
 			end
 

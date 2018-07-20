@@ -233,15 +233,7 @@ function GM:Initialize()
 		RunConsoleCommand("sv_alltalk", "0")
 	end
 
-	local cstrike = false
-	
-	for _, g in pairs(engine.GetGames()) do
-		if g.folder == 'cstrike' then 
-			cstrike = true 
-		end
-	end
-	
-	if not cstrike then
+	if not IsMounted("cstrike") then
 		ErrorNoHalt("TTT WARNING: CS:S does not appear to be mounted by GMod. Things may break in strange ways. Server admin? Check the TTT readme for help.\n")
 	end
 	
@@ -531,7 +523,7 @@ local function NameChangeKick()
 	end
 
 	if GetRoundState() == ROUND_ACTIVE then
-		for _, ply in pairs(player.GetHumans()) do
+		for _, ply in ipairs(player.GetHumans()) do
 			if ply.spawn_nick then
 				if ply.has_spawned and ply.spawn_nick ~= ply:Nick() and not hook.Call("TTTNameChangeKick", GAMEMODE, ply) then
 					local t = GetConVar("ttt_namechange_bantime"):GetInt()
@@ -752,9 +744,11 @@ function TellTraitorsAboutTraitors()
 
 	-- This is ugly as hell, but it's kinda nice to filter out the names of the
 	-- traitors themselves in the messages to them
+	local traitornicks_min = #traitornicks < 2
+	
 	for _, v in ipairs(player.GetAll()) do
 		if v:HasTeamRole(TEAM_TRAITOR) then
-			if #traitornicks < 2 then
+			if traitornicks_min then
 				LANG.Msg(v, "round_traitors_one")
 				
 				return

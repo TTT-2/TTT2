@@ -51,7 +51,7 @@ local function GetLoadoutWeapons(r)
 		loadout_weapons[r] = loadout_weapons[r] or {}
 	
 		for _, w in ipairs(weapons.GetList()) do
-			if w and type(w.InLoadoutFor) == "table" and not w.Doublicated then
+			if type(w.InLoadoutFor) == "table" and not w.Doublicated then
 				local cls = WEPS.GetClass(w)
 				
 				if table.HasValue(w.InLoadoutFor, r) then

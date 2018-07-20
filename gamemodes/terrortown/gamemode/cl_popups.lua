@@ -28,7 +28,7 @@ local function GetTextForRole(role)
 		if #traitors > 1 then
 			local traitorlist = ""
 
-			for _, ply in pairs(traitors) do
+			for _, ply in ipairs(traitors) do
 				if ply ~= LocalPlayer() then
 					traitorlist = traitorlist .. string.rep(" ", 42) .. ply:Nick()	.. "\n"
 				end

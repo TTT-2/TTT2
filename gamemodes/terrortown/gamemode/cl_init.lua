@@ -413,7 +413,7 @@ net.Receive("TTT_ClearClientState", GM.ClearClientState)
 function GM:CleanUpMap()
 	-- Ragdolls sometimes stay around on clients. Deleting them can create issues
 	-- so all we can do is try to hide them.
-	for _, ent in pairs(ents.FindByClass("prop_ragdoll")) do
+	for _, ent in ipairs(ents.FindByClass("prop_ragdoll")) do
 		if IsValid(ent) and CORPSE.GetPlayerNick(ent, "") ~= "" then
 			ent:SetNoDraw(true)
 			ent:SetSolid(SOLID_NONE)

@@ -368,7 +368,7 @@ function GetSortedRoles()
 end
 
 function GetWeaponNameByFileName(name)
-	for _, v in pairs(weapons.GetList()) do
+	for _, v in ipairs(weapons.GetList()) do
 		if string.lower(v.ClassName) == name then
 			return v.ClassName
 		end
@@ -522,9 +522,10 @@ local ttt_playermodels = {
 	Model("models/player/guerilla.mdl"),
 	Model("models/player/leet.mdl")
 }
+local ttt_playermodels_count = #ttt_playermodels
 
 function GetRandomPlayerModel()
-	return table.Random(ttt_playermodels)
+	return ttt_playermodels[math.random(1, ttt_playermodels_count)]
 end
 
 local ttt_playercolors = {
@@ -552,15 +553,17 @@ local ttt_playercolors = {
 		COLOR_OLIVE
 	}
 }
+local ttt_playercolors_all_count = #ttt_playercolors.all
+local ttt_playercolors_serious_count = #ttt_playercolors.serious
 
 CreateConVar("ttt_playercolor_mode", "1")
 function GM:TTTPlayerColor(model)
 	local mode = (ConVarExists("ttt_playercolor_mode") and GetConVar("ttt_playercolor_mode"):GetInt() or 0)
 	
 	if mode == 1 then
-		return table.Random(ttt_playercolors.serious)
+		return ttt_playercolors.serious[math.random(1, ttt_playercolors_serious_count)]
 	elseif mode == 2 then
-		return table.Random(ttt_playercolors.all)
+		return ttt_playercolors.all[math.random(1, ttt_playercolors_all_count)]
 	elseif mode == 3 then
 		-- Full randomness
 		return Color(math.random(0, 255), math.random(0, 255), math.random(0, 255))

@@ -5,6 +5,7 @@ local table = table
 local player = player
 local timer = timer
 local pairs = pairs
+local ipairs = ipairs
 
 CreateConVar("ttt_bots_are_spectators", "0", FCVAR_ARCHIVE)
 CreateConVar("ttt_dyingshot", "0")
@@ -142,7 +143,7 @@ function GM:IsSpawnpointSuitable(ply, spwn, force, rigged)
 	
 	local blocking = ents.FindInBox(pos + Vector(-16, -16, 0), pos + Vector(16, 16, 64))
 	
-	for _, p in pairs(blocking) do
+	for _, p in ipairs(blocking) do
 		if IsValid(p) and p:IsPlayer() and p:IsTerror() and p:Alive() then
 			if force then
 				p:Kill()
@@ -171,7 +172,7 @@ function GetSpawnEnts(shuffled, force_all)
 	local tbl = {}
 	
 	for _, classname in ipairs(SpawnTypes) do
-		for _, e in pairs(ents.FindByClass(classname)) do
+		for _, e in ipairs(ents.FindByClass(classname)) do
 			if IsValid(e) and not e.BeingRemoved then
 				table.insert(tbl, e)
 			end
@@ -183,7 +184,7 @@ function GetSpawnEnts(shuffled, force_all)
 	-- uses it for observer starts that are in places where players cannot really
 	-- spawn well. At all.
 	if force_all or #tbl == 0 then
-		for _, e in pairs(ents.FindByClass("info_player_start")) do
+		for _, e in ipairs(ents.FindByClass("info_player_start")) do
 			if IsValid(e) and not e.BeingRemoved then
 				table.insert(tbl, e)
 			end
@@ -221,7 +222,9 @@ local function PointsAroundSpawn(spwn)
 end
 
 function GM:PlayerSelectSpawn(ply)
-	if not self.SpawnPoints or table.Count(self.SpawnPoints) == 0 or not IsTableOfEntitiesValid(self.SpawnPoints) then
+	local b = #self.SpawnPoints == 0
+	
+	if not self.SpawnPoints or b or not IsTableOfEntitiesValid(self.SpawnPoints) then
 		self.SpawnPoints = GetSpawnEnts(true, false)
 
 		-- One might think that we have to regenerate our spawnpoint
@@ -231,8 +234,7 @@ function GM:PlayerSelectSpawn(ply)
 		-- ones anyway.
 	end
 	
-	local num = table.Count(self.SpawnPoints)
-	if num == 0 then
+	if b then
 		Error("No spawn entity found!\n")
 
 		return
@@ -244,7 +246,7 @@ function GM:PlayerSelectSpawn(ply)
 	
 	-- Optimistic attempt: assume there are sufficient spawns for all and one is
 	-- free
-	for _, spwn in pairs(self.SpawnPoints) do
+	for _, spwn in ipairs(self.SpawnPoints) do
 		if self:IsSpawnpointSuitable(ply, spwn, false) then
 			return spwn
 		end
@@ -253,13 +255,13 @@ function GM:PlayerSelectSpawn(ply)
 	-- That did not work, so now look around spawns
 	local picked = nil
 	
-	for _, spwn in pairs(self.SpawnPoints) do
+	for _, spwn in ipairs(self.SpawnPoints) do
 		picked = spwn -- just to have something if all else fails
 	 
 		-- See if we can jury rig a spawn near this one
 		local rigged = PointsAroundSpawn(spwn)
 		
-		for _, rig in pairs(rigged) do
+		for _, rig in ipairs(rigged) do
 			if self:IsSpawnpointSuitable(ply, rig, false, true) then
 				local rig_spwn = ents.Create("info_player_terrorist")
 				
@@ -278,7 +280,7 @@ function GM:PlayerSelectSpawn(ply)
 	end
 	
 	-- Last attempt, force one
-	for _, spwn in pairs(self.SpawnPoints) do
+	for _, spwn in ipairs(self.SpawnPoints) do
 		if self:IsSpawnpointSuitable(ply, spwn, true) then
 			return spwn
 		end
@@ -361,9 +363,11 @@ function GM:KeyPress(ply, key)
 			ply:SpectateEntity(nil)
 		
 			local alive = util.GetAlivePlayers()
-			if #alive < 1 then return end
+			
+			local alive_count = #alive
+			if alive_count < 1 then return end
 		
-			local target = table.Random(alive)
+			local target = alive[math.random(1, alive_count)]
 			
 			if IsValid(target) then
 				--ply:SetPos(target:EyePos())
@@ -556,11 +560,12 @@ local deathsounds = {
 	Sound("hostage/hpain/hpain5.wav"),
 	Sound("hostage/hpain/hpain6.wav")
 }
+local deathsounds_count = #deathsounds
 
 local function PlayDeathSound(victim)
 	if not IsValid(victim) then return end
 	
-	sound.Play(table.Random(deathsounds), victim:GetShootPos(), 90, 100)
+	sound.Play(deathsounds[math.random(1, deathsounds_count)], victim:GetShootPos(), 90, 100)
 end
 
 -- See if we should award credits now
@@ -808,9 +813,10 @@ function GM:SpectatorThink(ply)
 		
 				-- move to spectator spawn if mapper defined any
 				local spec_spawns = ents.FindByClass("ttt_spectator_spawn")
+				local spec_spawns_count = #spec_spawns
 				
-				if spec_spawns and #spec_spawns > 0 then
-					local spawn = table.Random(spec_spawns)
+				if spec_spawns_count > 0 then
+					local spawn = spec_spawns[math.random(1, spec_spawns_count)]
 					
 					ply:SetPos(spawn:GetPos())
 					ply:SetEyeAngles(spawn:GetAngles())
@@ -923,6 +929,7 @@ local fallsounds = {
 	Sound("player/damage2.wav"),
 	Sound("player/damage3.wav")
 }
+local fallsounds_count = #fallsounds
 
 function GM:OnPlayerHitGround(ply, in_water, on_floater, speed)
 	if in_water or speed < 450 or not IsValid(ply) then return end
@@ -986,7 +993,7 @@ function GM:OnPlayerHitGround(ply, in_water, on_floater, speed)
  
 		-- play CS:S fall sound if we got somewhat significant damage
 		if damage > 5 then
-			sound.Play(table.Random(fallsounds), ply:GetShootPos(), 55 + math.Clamp(damage, 0, 50), 100)
+			sound.Play(fallsounds[math.random(1, fallsounds_count)], ply:GetShootPos(), 55 + math.Clamp(damage, 0, 50), 100)
 		end
 	end
 end

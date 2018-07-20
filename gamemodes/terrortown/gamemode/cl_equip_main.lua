@@ -68,7 +68,7 @@ function GetEquipmentForRole(role)
 		end
 
 		-- mark custom items
-		for _, i in pairs(tbl) do
+		for _, i in ipairs(tbl) do
 			if i and i.id then
 				i.custom = not table.HasValue(DefaultEquipment[fallback], i.id) -- TODO
 			end
@@ -312,7 +312,7 @@ local function TraitorMenuPopup()
 	local paneltablefav = {}
 	local paneltable = {}
 
-	for k, item in pairs(items) do
+	for k, item in ipairs(items) do
 		local ic
 
 		-- Create icon panel
@@ -441,7 +441,7 @@ local function TraitorMenuPopup()
 
 	local dfields = {}
 	
-	for _, k in pairs({"name", "type", "desc"}) do
+	for _, k in ipairs({"name", "type", "desc"}) do
 		dfields[k] = vgui.Create("DLabel", dinfo)
 		dfields[k]:SetTooltip(GetTranslation("equip_spec_" .. k))
 		dfields[k]:SetPos(m * 3, m * 2)

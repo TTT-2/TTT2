@@ -1,6 +1,7 @@
 --- Display of and interaction with ttt_traitor_button
 local surface = surface
 local pairs = pairs
+local ipairs = ipairs
 local math = math
 local abs = math.abs
 
@@ -25,10 +26,8 @@ function TBHUD:CacheEnts()
 	if IsValid(ply) and ply:IsActive() and ply:HasTeamRole(TEAM_TRAITOR) then
 		self.buttons = {}
 		
-		for _, ent in pairs(ents.FindByClass("ttt_traitor_button")) do
-			if IsValid(ent) then
-				self.buttons[ent:EntIndex()] = ent
-			end
+		for _, ent in ipairs(ents.FindByClass("ttt_traitor_button")) do
+			self.buttons[ent:EntIndex()] = ent
 		end
 	else
 		self.buttons = {}
