@@ -290,7 +290,7 @@ function GM:PlayerSelectSpawn(ply)
 end
 
 function GM:PlayerSetModel(ply)
-	if not hook.Run("UseCustomPlayerModels") then
+	if not hook.Run("TTT_UseCustomPlayerModels") then
 		local mdl = GAMEMODE.playermodel or "models/player/phoenix.mdl"
 		
 		util.PrecacheModel(mdl)
