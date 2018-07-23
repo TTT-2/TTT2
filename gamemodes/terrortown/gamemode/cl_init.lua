@@ -287,8 +287,8 @@ local function RoundStateChange(o, n)
 	end
 
 	-- whatever round state we get, clear out the voice flags
-	for _, v in ipairs(player.GetAll()) do
-		for _, r in pairs(ROLES) do
+	for _, r in pairs(GetWinRoles()) do
+		for _, v in ipairs(player.GetAll()) do
 			if not r.unknownTeam and r.team ~= TEAM_INNO then
 				v[r.team .. "_gvoice"] = false
 			end
@@ -582,7 +582,7 @@ function GM:OnEntityCreated(ent)
 
 			-- Copy the color for the PlayerColor matproxy
 			local playerColor = ply:GetPlayerColor()
-				
+			
 			ent.GetPlayerColor = function()
 				return playerColor
 			end

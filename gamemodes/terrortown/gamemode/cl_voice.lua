@@ -201,6 +201,7 @@ function RADIO:ShowRadioCommands(state)
 
 							s:SetText(s.id .. tgt)
 							s:SizeToContents()
+							
 							radioframe:ForceResize()
 						end
 					end
@@ -366,7 +367,7 @@ concommand.Add("ttt_radio", RadioCommand, RadioComplete)
 
 local function RadioMsgRecv()
 	local sender = net.ReadEntity()
-	local msg	= net.ReadString()
+	local msg = net.ReadString()
 	local param	= net.ReadString()
 
 	if not (IsValid(sender) and sender:IsPlayer()) then return end
@@ -435,7 +436,7 @@ local function VoiceNotifyThink(pnl)
 	
 	if not (GetGlobalBool("ttt_locational_voice", false) and not pnl.ply:IsSpec() and pnl.ply ~= client) then return end
 	
-	if client:IsActive() and client:HasTeamRole(TEAM_TRAITOR) and pnl.ply:IsActive() and pnl.ply:HasTeamRole(TEAM_TRAITOR) then return end
+	if client:IsActive() and pnl.ply:IsActive() and client:IsTeamMember(pnl.ply) then return end
 	
 	local d = client:GetPos():Distance(pnl.ply:GetPos())
 
@@ -448,15 +449,15 @@ function GM:PlayerStartVoice(ply)
 	local client = LocalPlayer()
 	
 	if not IsValid(g_VoicePanelList) or not IsValid(client) then return end
-
+	
 	-- There'd be an extra one if voice_loopback is on, so remove it.
 	GAMEMODE:PlayerEndVoice(ply, true)
-
+	
 	if not IsValid(ply) then return end
-
+	
 	-- Tell server this is global
 	if client == ply then
-		if client:IsActive() and not client:HasTeamRole(TEAM_INNO) and not client:GetRoleData().unknownTeam then
+		if client:IsActive() and not client:HasTeamRole(TEAM_INNO) and (not client:GetRoleData().unknownTeam or client:HasTeamRole(TEAM_TRAITOR)) then
 			if not client:KeyDown(IN_SPEED) and not client:KeyDownLast(IN_SPEED) then
 				client[client:GetRoleData().team .. "_gvoice"] = true
 				
@@ -476,8 +477,10 @@ function GM:PlayerStartVoice(ply)
 	pnl:Dock(TOP)
 	
 	local oldThink = pnl.Think
+	
 	pnl.Think = function(self)
 		oldThink(self)
+		
 		VoiceNotifyThink(self)
 	end
 
@@ -491,14 +494,14 @@ function GM:PlayerStartVoice(ply)
 	end
 	
 	-- roles things
-	if client:IsActive() and not client:HasTeamRole(TEAM_INNO) and not client:GetRoleData().unknownTeam then
+	if client:IsActive() and not client:HasTeamRole(TEAM_INNO) and (not client:GetRoleData().unknownTeam or client:HasTeamRole(TEAM_TRAITOR)) then
 		local rd = client:GetRoleData()
 		
 		if ply == client then
 			if not client[rd.team .. "_gvoice"] then
 				pnl.Color = rd.color
 			end
-		elseif ply:HasTeamRole(rd.team) then
+		elseif ply:IsTeamMember(client) then
 			if not ply[rd.team .. "_gvoice"] then
 				pnl.Color = rd.color
 			end
@@ -508,7 +511,7 @@ function GM:PlayerStartVoice(ply)
 	PlayerVoicePanels[ply] = pnl
 
 	-- run ear gesture
-	if not (ply:IsActive() and not ply:HasTeamRole(TEAM_INNO) and not ply:GetRoleData().unknownTeam and not ply[ply:GetRoleData().team .. "_gvoice"]) then
+	if not (ply:IsActive() and not ply:HasTeamRole(TEAM_INNO) and (not ply:GetRoleData().unknownTeam or ply:HasTeamRole(TEAM_TRAITOR)) and not ply[ply:GetRoleData().team .. "_gvoice"]) then
 		ply:AnimPerformGesture(ACT_GMOD_IN_CHAT)
 	end
 end

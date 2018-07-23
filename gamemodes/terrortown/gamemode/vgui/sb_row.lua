@@ -144,7 +144,6 @@ function PANEL:Paint(width, height)
 --	end
 
 	local ply = self.Player
-
 	local c = hook.Call("TTTScoreboardRowColorForPlayer", GAMEMODE, ply)
 
 	surface.SetDrawColor(c)

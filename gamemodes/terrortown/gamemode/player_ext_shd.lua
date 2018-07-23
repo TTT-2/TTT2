@@ -41,6 +41,10 @@ function plymeta:GetRoleData()
 	return ROLES.INNOCENT
 end
 
+function plymeta:GetBaseRoleData()
+	return GetWinningRole(self:GetRoleData().team)
+end
+
 plymeta.IsTraitor = plymeta.GetTraitor
 plymeta.IsDetective = plymeta.GetDetective
 

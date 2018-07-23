@@ -190,7 +190,7 @@ function plymeta:ResetRoundFlags()
 	-- communication
 	self.mute_team = -1
 	
-	for _, v in pairs(ROLES) do
+	for _, v in pairs(GetWinRoles()) do
 		if v.team ~= TEAM_INNO and not v.unknownTeam then
 			self[v.team .. "_gvoice"] = false
 		end

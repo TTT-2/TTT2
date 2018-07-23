@@ -222,9 +222,7 @@ local function PointsAroundSpawn(spwn)
 end
 
 function GM:PlayerSelectSpawn(ply)
-	local b = #self.SpawnPoints == 0
-	
-	if not self.SpawnPoints or b or not IsTableOfEntitiesValid(self.SpawnPoints) then
+	if not self.SpawnPoints or #self.SpawnPoints == 0 or not IsTableOfEntitiesValid(self.SpawnPoints) then
 		self.SpawnPoints = GetSpawnEnts(true, false)
 
 		-- One might think that we have to regenerate our spawnpoint
@@ -234,7 +232,7 @@ function GM:PlayerSelectSpawn(ply)
 		-- ones anyway.
 	end
 	
-	if b then
+	if #self.SpawnPoints == 0 then
 		Error("No spawn entity found!\n")
 
 		return
@@ -576,12 +574,15 @@ local function CheckCreditAward(victim, attacker)
 	
 	if not IsValid(victim) then return end
 	
+	if not IsValid(attacker) or not attacker:IsPlayer() or not attacker:IsActive() then return end
+	
 	local ret = hook.Run("TTT2CheckCreditAward", victim, attacker)
 	if ret ~= nil and not ret then return end
+	
+	local rd = attacker:GetRoleData()
  
 	-- DET KILLED ANOTHER TEAM AWARD
-	if IsValid(attacker) and attacker:IsPlayer() and attacker:IsActiveRole(ROLES.DETECTIVE.index) and not victim:IsTeamMember(attacker) then
-		local rd = attacker:GetRoleData()
+	if attacker:GetRole() == ROLES.DETECTIVE.index and not victim:IsTeamMember(attacker) then
 		local amt = (ConVarExists("ttt_" .. rd.abbr .. "_credits_traitordead") and GetConVar("ttt_" .. rd.abbr .. "_credits_traitordead"):GetInt() or 1)
 		
 		for _, ply in ipairs(player.GetAll()) do
@@ -594,13 +595,13 @@ local function CheckCreditAward(victim, attacker)
 	end
  
 	-- TRAITOR AWARD
-	if not victim:HasTeamRole(TEAM_TRAITOR) and (not GAMEMODE.AwardedCredits or GetConVar("ttt_credits_award_repeat"):GetBool()) then
+	if (rd.team == TEAM_TRAITOR or rd.traitorCreditAward) and not victim:IsTeamMember(attacker) and (not GAMEMODE.AwardedCredits or GetConVar("ttt_credits_award_repeat"):GetBool()) then
 		local terror_alive = 0
 		local terror_dead = 0
 		local terror_total = 0
 	 
 		for _, ply in ipairs(player.GetAll()) do
-			if not ply:HasTeamRole(TEAM_TRAITOR) then
+			if not ply:IsTeamMember(attacker) then
 				if ply:IsTerror() then
 					terror_alive = terror_alive + 1
 				elseif ply:IsDeadTerror() then
@@ -629,11 +630,11 @@ local function CheckCreditAward(victim, attacker)
 			-- If size is 0, awards are off
 			if amt > 0 then
 				for _, ply in ipairs(player.GetAll()) do
-					if ply:IsActive() and ply:HasTeamRole(TEAM_TRAITOR) and not ply:GetRoleData().preventKillCredits then
+					if ply:IsActive() and ply:IsTeamMember(attacker) and not ply:GetRoleData().preventKillCredits then
 						ply:AddCredits(amt)
 						
-						--LANG.Msg(GetRoleTeamFilter(TEAM_TRAITOR, true), "credit_tr_all", {num = amt})
-						LANG.Msg(ply, "credit_tr_all", {num = amt})
+						--LANG.Msg(GetRoleTeamFilter(TEAM_TRAITOR, true), "credit_kill_all", {num = amt})
+						LANG.Msg(ply, "credit_" .. ply:GetBaseRoleData().abbr .. "_all", {num = amt})
 					end
 				end
 			end

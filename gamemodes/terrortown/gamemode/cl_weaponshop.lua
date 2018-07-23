@@ -114,8 +114,10 @@ net.Receive("newshop", function()
 	menu:SetSize(w, 25)
 	menu:SetValue(sr.name)
 	
-	for _, v in pairs(GetShopRoles()) do
-		menu:AddChoice(v.name, v.index)
+	for _, v in pairs(ROLES) do
+		if v ~= ROLES.INNOCENT then
+			menu:AddChoice(v.name, v.index)
+		end
 	end
 
 	local ply = LocalPlayer()
