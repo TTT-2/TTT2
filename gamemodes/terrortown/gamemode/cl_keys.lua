@@ -45,7 +45,7 @@ function GM:PlayerBindPress(ply, bind, pressed)
 		-- steam overlay
 		ply[ply:GetRoleData().team .. "_gvoice"] = false
 		
-		RunConsoleCommand("tvog", "0")
+		RunConsoleCommand("rvog", "0")
 		
 		return true
 	elseif bind == "+use" and pressed then
@@ -117,7 +117,7 @@ function GM:KeyPress(ply, key)
 	if not IsValid(ply) or ply ~= LocalPlayer() then return end
 
 	--if key == IN_SPEED and ply:IsActiveTraitor() then
-	if key == IN_SPEED and ply:IsActive() then
+	if key == IN_SPEED and ply:IsActive() and not ply:HasTeamRole(TEAM_INNO) then
 		timer.Simple(0.05, function() 
 			RunConsoleCommand("+voicerecord") 
 		end)
@@ -130,7 +130,7 @@ function GM:KeyRelease(ply, key)
 	if not IsValid(ply) or ply ~= LocalPlayer() then return end
 
 	--if key == IN_SPEED and ply:IsActiveTraitor() then
-	if key == IN_SPEED and ply:IsActive() then
+	if key == IN_SPEED and ply:IsActive() and not ply:HasTeamRole(TEAM_INNO) then
 		timer.Simple(0.05, function() 
 			RunConsoleCommand("-voicerecord") 
 		end)

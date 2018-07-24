@@ -53,7 +53,7 @@ end
 
 -- Detectives have a blue name, in both chat and radio messages
 local function AddDetectiveText(ply, text)
-	chat.AddText(Color(50, 200, 255), ply:Nick(), Color(255,255,255), ": " .. text)
+	chat.AddText(Color(50, 200, 255), ply:Nick(), Color(255, 255, 255), ": " .. text)
 end
 
 function GM:OnPlayerChat(ply, text, teamchat, dead)
@@ -525,7 +525,7 @@ local function ReceiveVoiceState()
 	
 	local lply = LocalPlayer()
 	
-	if not IsValid(lply) or not (lply:IsActive() and not lply:HasTeamRole(TEAM_INNO) and not lply:GetRoleData().unknownTeam) then return end
+	if not IsValid(lply) or not (lply:IsActive() and not lply:HasTeamRole(TEAM_INNO) and (not lply:GetRoleData().unknownTeam or lply:HasTeamRole(TEAM_TRAITOR))) then return end
 
 	local ply = player.GetByID(idx)
 	
@@ -646,7 +646,7 @@ local function GetDrainRate()
 end
 
 local function IsRoleChatting(client)
-	return client:IsActive() and not client:HasTeamRole(TEAM_INNO) and not client:GetRoleData().unknownTeam and not client[client:GetRoleData().team .. "_gvoice"]
+	return client:IsActive() and not client:HasTeamRole(TEAM_INNO) and (not client:GetRoleData().unknownTeam or client:HasTeamRole(TEAM_TRAITOR)) and not client[client:GetRoleData().team .. "_gvoice"]
 end
 
 function VOICE.Tick()
