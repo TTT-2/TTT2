@@ -1,7 +1,6 @@
-First of all, thanks for your interesting in this project. 
+First of all, thanks for your interest in this project. 
 
-I'm happy to see new contributors to improve this project and fullfil all wishes of the users in TTT.
-Just submit your changes or open a new issue to request features or report bugs.
+I'm happy to see new contributors improving this project and fullfilling all wishes of the TTT playerbase.
+Just submit your changes as a pull request or open a new issue to request features or report bugs.
 
-If you also wanna discuss, why not joining our discord group?
-https://discord.gg/Fstwap
+If you want to discuss this and other addons just [join our discord server](https://discord.gg/Fstwap).
