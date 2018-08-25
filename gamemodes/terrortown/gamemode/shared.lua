@@ -3,7 +3,7 @@ GM.Author = "Bad King Urgrain && Alf21"
 GM.Email = "4lf-mueller@gmx.de"
 GM.Website = "ttt.badking.net, ttt2.informaskill.de"
 -- Date of latest changes (YYYY-MM-DD)
-GM.Version = "0.2.4b"
+GM.Version = "0.2.5b"
 
 GM.Customized = true
 
@@ -578,6 +578,28 @@ function GM:PlayerFootstep(ply, pos, foot, sound, volume, rf)
 	if IsValid(ply) and (ply:Crouching() or ply:GetMaxSpeed() < 150 or ply:IsSpec()) then
 		-- do not play anything, just prevent normal sounds from playing
 		return true
+	end
+end
+
+-- Predicted move speed changes
+function GM:Move(ply, mv)
+	if ply:IsTerror() then
+		local basemul = 1
+		local slowed = false
+		
+		-- Slow down ironsighters
+		local wep = ply:GetActiveWeapon()
+		
+		if IsValid(wep) and wep.GetIronsights and wep:GetIronsights() then
+			basemul = 120 / 220
+			slowed = true
+		end
+		
+		local mul = hook.Call("TTTPlayerSpeedModifier", GAMEMODE, ply, slowed, mv) or 1
+		mul = basemul * mul
+		
+		mv:SetMaxClientSpeed(mv:GetMaxClientSpeed() * mul)
+		mv:SetMaxSpeed(mv:GetMaxSpeed() * mul)
 	end
 end
 

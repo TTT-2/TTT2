@@ -303,7 +303,7 @@ function WSWITCH:ConfirmSelection(noHide)
 
 	for k, w in ipairs(self.WeaponCache) do
 		if k == self.Selected and IsValid(w) then
-			RunConsoleCommand("wepswitch", w:GetClass())
+			input.SelectWeapon(w)
 			
 			return
 		end

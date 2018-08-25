@@ -286,7 +286,8 @@ local function ShowSearchScreen(search_raw)
 
 	local m = 8
 	local bw, bh = 100, 25
-	local w, h = 410, 260
+	local bw_large = 125
+	local w, h = 425, 260
 
 	local rw, rh = (w - m * 2), (h - 25 - m * 2)
 	local rx, ry = 0, 0
@@ -362,7 +363,7 @@ local function ShowSearchScreen(search_raw)
 
 	local dident = vgui.Create("DButton", dcont)
 	dident:SetPos(m, by)
-	dident:SetSize(bw, bh)
+	dident:SetSize(bw_large, bh)
 	dident:SetText(T("search_confirm"))
 	
 	local id = search_raw.eidx + search_raw.dtime
@@ -372,8 +373,8 @@ local function ShowSearchScreen(search_raw)
 	end
 
 	local dcall = vgui.Create("DButton", dcont)
-	dcall:SetPos(m * 2 + bw, by)
-	dcall:SetSize(bw, bh)
+	dcall:SetPos(m * 2 + bw_large, by)
+	dcall:SetSize(bw_large, bh)
 	dcall:SetText(T("search_call"))
 	
 	dcall.DoClick = function(s)
