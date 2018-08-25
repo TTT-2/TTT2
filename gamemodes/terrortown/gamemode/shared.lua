@@ -3,7 +3,7 @@ GM.Author = "Bad King Urgrain && Alf21"
 GM.Email = "4lf-mueller@gmx.de"
 GM.Website = "ttt.badking.net, ttt2.informaskill.de"
 -- Date of latest changes (YYYY-MM-DD)
-GM.Version = "0.2.3.3b"
+GM.Version = "0.2.4b"
 
 GM.Customized = true
 
@@ -80,7 +80,7 @@ ROLE_BITS = 5
 ROLES = {}
 
 ROLES.INNOCENT = {
-	index = 1,
+	index = 0,
 	color = Color(55, 170, 50, 255),
 	dkcolor = Color(60, 160, 50, 155),
 	bgcolor = Color(0, 50, 0, 200),
@@ -94,7 +94,7 @@ ROLES.INNOCENT = {
 }
 
 ROLES.TRAITOR = {
-	index = 2,
+	index = 1,
 	color = Color(180, 50, 40, 255),
 	dkcolor = Color(160, 50, 60, 155),
 	bgcolor = Color(150, 0, 0, 200),
@@ -111,7 +111,7 @@ ROLES.TRAITOR = {
 }
 
 ROLES.DETECTIVE = {
-	index = 3,
+	index = 2,
 	color = Color(50, 60, 180, 255),
 	dkcolor = Color(50, 60, 160, 155),
 	bgcolor = Color(0, 0, 150, 200),
@@ -194,7 +194,7 @@ function AddCustomRole(name, roleData, conVarData)
 			-- and every important function works properly
 			hook.Add("TTT2_RoleInit", "Add_" .. roleData.abbr .. "_Role", function() -- unique hook identifier please
 				if not ROLES[name] then -- count ROLES
-					local i = 1 -- start at 1 to directly get free slot
+					local i = 0
 					
 					for _, v in pairs(ROLES) do
 						i = i + 1

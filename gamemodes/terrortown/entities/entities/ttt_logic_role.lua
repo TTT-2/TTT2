@@ -12,23 +12,10 @@ function ENT:KeyValue(key, value)
 	elseif key == "Role" then
 		self.Role = tonumber(value)
 		
-		ErrorNoHalt("ttt_logic_role: the value is: " .. (value or "nil"))
-
 		if not self.Role then
 			ErrorNoHalt("ttt_logic_role: bad value for Role key, not a number\n")
 			
-			self.Role = ROLE_NONE
-		--elseif self.Role == 3 then -- old ROLE_ANY fix
-		--	self.Role = ROLE_ANY
-		-- TODO check test
-		elseif self.Role >= 3 then
-			local rd = GetRoleByIndex(self.Role)
-			
-			if rd and rd.team == TEAM_TRAITOR then
-				self.Role = ROLE_TRAITOR
-			else
-				self.Role = ROLE_INNOCENT
-			end
+			self.Role = ROLE_ANY
 		end
 	end
 end

@@ -65,7 +65,7 @@ end
 util.AddNetworkString("shop")
 net.Receive("shop", function(len, ply)
 	local add = net.ReadBool()
-	local r = net.ReadUInt(ROLE_BITS) + 1
+	local r = net.ReadUInt(ROLE_BITS)
 	local eq = net.ReadString()
 	
 	local equip = GetEquipmentFileName(eq)
@@ -86,7 +86,7 @@ util.AddNetworkString("shopFallback")
 util.AddNetworkString("shopFallbackAnsw")
 util.AddNetworkString("shopFallbackRefresh")
 net.Receive("shopFallback", function(len, ply)
-	local role = net.ReadUInt(ROLE_BITS) + 1
+	local role = net.ReadUInt(ROLE_BITS)
 	local fallback = net.ReadString()
 	
 	local rd = GetRoleByIndex(role)
@@ -113,7 +113,7 @@ local function OnChangeCVar(role, fallback)
 	end
 	
 	net.Start("shopFallbackAnsw")
-	net.WriteUInt(role - 1, ROLE_BITS)
+	net.WriteUInt(role, ROLE_BITS)
 	net.Broadcast()
 	
 	if fallback ~= SHOP_DISABLED then

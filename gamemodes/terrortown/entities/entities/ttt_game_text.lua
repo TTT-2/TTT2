@@ -18,12 +18,7 @@ function ENT:KeyValue(key, value)
 	elseif key == "color" then
 		local mr, mg, mb = string.match(value, "(%d*) (%d*) (%d*)")
 
-		local c = Color(0,0,0)
-		c.r = tonumber(mr) or 255
-		c.g = tonumber(mg) or 255
-		c.b = tonumber(mb) or 255
-
-		self.Color = c
+		self.Color = Color(tonumber(mr) or 255, tonumber(mg) or 255, tonumber(mb) or 255)
 	elseif key == "receive" then
 		self.Receiver = tonumber(value)
 		

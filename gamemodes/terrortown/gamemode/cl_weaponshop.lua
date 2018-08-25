@@ -206,7 +206,7 @@ net.Receive("newshop", function()
 						-- remove
 						net.Start("shop")
 						net.WriteBool(false)
-						net.WriteUInt(dlist.selectedRole - 1, ROLE_BITS)
+						net.WriteUInt(dlist.selectedRole, ROLE_BITS)
 						net.WriteString(ic.item.name)
 						net.SendToServer()
 					else
@@ -215,7 +215,7 @@ net.Receive("newshop", function()
 						-- add
 						net.Start("shop")
 						net.WriteBool(true)
-						net.WriteUInt(dlist.selectedRole - 1, ROLE_BITS)
+						net.WriteUInt(dlist.selectedRole, ROLE_BITS)
 						net.WriteString(ic.item.name)
 						net.SendToServer()
 					end
@@ -236,7 +236,7 @@ net.Receive("newshop", function()
 							-- remove
 							net.Start("shop")
 							net.WriteBool(false)
-							net.WriteUInt(dlist.selectedRole - 1, ROLE_BITS)
+							net.WriteUInt(dlist.selectedRole, ROLE_BITS)
 							net.WriteString(ic.item.id)
 							net.SendToServer()
 						else
@@ -245,7 +245,7 @@ net.Receive("newshop", function()
 							-- add
 							net.Start("shop")
 							net.WriteBool(true)
-							net.WriteUInt(dlist.selectedRole - 1, ROLE_BITS)
+							net.WriteUInt(dlist.selectedRole, ROLE_BITS)
 							net.WriteString(ic.item.id)
 							net.SendToServer()
 						end
@@ -344,7 +344,7 @@ net.Receive("newshop", function()
 		
 		if fallback ~= oldFallback then
 			net.Start("shopFallback")
-			net.WriteUInt(dlist.selectedRole - 1, ROLE_BITS)
+			net.WriteUInt(dlist.selectedRole, ROLE_BITS)
 			net.WriteString(data.data)
 			net.SendToServer()
 		end
@@ -376,7 +376,7 @@ net.Receive("newshop", function()
 end)
 
 net.Receive("shopFallbackAnsw", function(len)
-	local role = net.ReadUInt(ROLE_BITS) + 1
+	local role = net.ReadUInt(ROLE_BITS)
 	
 	local rd = GetRoleByIndex(role)
 	local fallback = GetConVar("ttt_" .. rd.abbr .. "_shop_fallback"):GetString()

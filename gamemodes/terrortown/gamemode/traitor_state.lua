@@ -21,7 +21,7 @@ local function SendPlayerRoles()
 	for _, v in ipairs(player.GetAll()) do
 		if IsValid(v) and v.GetRole then -- prevention
 			net.Start("TTT_Role")
-			net.WriteUInt(v:GetRole() - 1, ROLE_BITS)
+			net.WriteUInt(v:GetRole(), ROLE_BITS)
 			net.Send(v)
 		end
 	end
@@ -29,7 +29,7 @@ end
 
 function SendRoleListMessage(role, role_ids, ply_or_rf)
 	net.Start("TTT_RoleList")
-	net.WriteUInt(role - 1, ROLE_BITS)
+	net.WriteUInt(role, ROLE_BITS)
 
 	-- list contents
 	local num_ids = #role_ids
@@ -261,7 +261,7 @@ function SendRoleReset(ply_or_rf)
 	local plys = player.GetAll()
 
 	net.Start("TTT_RoleList")
-	net.WriteUInt(ROLES.INNOCENT.index - 1, ROLE_BITS)
+	net.WriteUInt(ROLES.INNOCENT.index, ROLE_BITS)
 
 	net.WriteUInt(#plys, 8)
 	for _, v in ipairs(plys) do
@@ -310,7 +310,7 @@ local function request_rolelist(ply)
 		-- update own role for ply
 		if ply.GetRole then -- prevention
 			net.Start("TTT_Role")
-			net.WriteUInt(ply:GetRole() - 1, ROLE_BITS)
+			net.WriteUInt(ply:GetRole(), ROLE_BITS)
 			net.Send(ply)
 		end
 	end

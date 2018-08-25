@@ -54,7 +54,7 @@ end
 -- Traitorchat
 local function RoleChatMsg(sender, role, msg)
 	net.Start("TTT_RoleChat")
-	net.WriteUInt(role - 1, ROLE_BITS)
+	net.WriteUInt(role, ROLE_BITS)
 	net.WriteEntity(sender)
 	net.WriteString(msg)
 	net.Send(GetRoleFilter(role))

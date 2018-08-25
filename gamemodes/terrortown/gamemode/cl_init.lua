@@ -321,7 +321,7 @@ GM.TTTEndRound = PlaySoundCue
 
 local function ReceiveRole()
 	local client = LocalPlayer()
-	local role = net.ReadUInt(ROLE_BITS) + 1
+	local role = net.ReadUInt(ROLE_BITS)
 
 	-- after a mapswitch, server might have sent us this before we are even done
 	-- loading our code
@@ -342,7 +342,7 @@ net.Receive("TTT2_Test_role", function()
 end)
 
 local function ReceiveRoleList()
-	local role = net.ReadUInt(ROLE_BITS) + 1
+	local role = net.ReadUInt(ROLE_BITS)
 	local num_ids = net.ReadUInt(8)
 	
 	for i = 1, num_ids do
