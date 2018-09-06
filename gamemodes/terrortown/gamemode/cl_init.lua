@@ -42,6 +42,7 @@ else
 end
 
 include("cl_weaponshop.lua")
+include("cl_chat.lua")
 include("cl_voice.lua")
 
 function GM:Initialize()
