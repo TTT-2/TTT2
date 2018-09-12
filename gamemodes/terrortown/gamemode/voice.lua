@@ -21,10 +21,6 @@ function GM:PlayerCanHearPlayersVoice(listener, speaker)
 	if not IsValid(speaker) or not IsValid(listener) or listener == speaker then
 		return false, false
 	end
-	
-	if listener:HasTeamRole(TEAM_INNO) or speaker:HasTeamRole(TEAM_INNO) then
-		return false, false
-	end
 
 	-- limited if specific convar is on, or we're in detective mode -- TODO in TTT2 - Det speak with each other? Currently unavailable
 	local limit = DetectiveMode() or GetConVar("ttt_limit_spectator_voice"):GetBool()
@@ -48,19 +44,15 @@ function GM:PlayerCanHearPlayersVoice(listener, speaker)
 	hook.Run("TTT2_PostPlayerCanHearPlayersVoice", listener, speaker)
 
 	-- Traitors "team"chat by default, non-locationally
-	if (not speaker:GetRoleData().unknownTeam or speaker:HasTeamRole(TEAM_TRAITOR)) and speaker:IsActive() and speaker:IsTeamMember(listener) then
+	if (not speaker:GetRoleData().unknownTeam) and speaker:IsActive() and speaker:IsTeamMember(listener) and not speaker:HasTeamRole(TEAM_INNO) then
 		if speaker[speaker:GetRoleData().team .. "_gvoice"] then
 			return true, loc_voice:GetBool()
 		elseif listener:IsActive() and listener:IsTeamMember(speaker) then
 			return true, false
 		else
-			-- unless [TEAM_TRAITOR]_gvoice is true, normal innos can't hear speaker
+			-- unless <Team>_gvoice is true, other teams can't hear speaker
 			return false, false
 		end
-	end
-	
-	if not speaker:IsTeamMember(listener) or speaker:GetRoleData().unknownTeam then
-		return false, false
 	end
 
 	return true, (loc_voice:GetBool() and GetRoundState() ~= ROUND_POST)
