@@ -44,7 +44,7 @@ function GM:PlayerCanHearPlayersVoice(listener, speaker)
 	hook.Run("TTT2_PostPlayerCanHearPlayersVoice", listener, speaker)
 
 	-- Traitors "team"chat by default, non-locationally
-	if (not speaker:GetRoleData().unknownTeam) and speaker:IsActive() and speaker:IsTeamMember(listener) and not speaker:HasTeamRole(TEAM_INNO) then
+	if (not speaker:GetRoleData().unknownTeam or speaker:HasTeamRole(TEAM_TRAITOR)) and speaker:IsActive() and speaker:IsTeamMember(listener) and not speaker:HasTeamRole(TEAM_INNO) then
 		if speaker[speaker:GetRoleData().team .. "_gvoice"] then
 			return true, loc_voice:GetBool()
 		elseif listener:IsActive() and listener:IsTeamMember(speaker) then
