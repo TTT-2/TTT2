@@ -3,7 +3,6 @@
 include("sb_info.lua")
 
 local GetTranslation = LANG.GetTranslation
-local GetPTranslation = LANG.GetParamTranslation
 
 SB_ROW_HEIGHT = 24 --16
 
@@ -14,22 +13,22 @@ function PANEL:Init()
 	self.info = nil
 	self.open = false
 	self.cols = {}
-	
-	self:AddColumn(GetTranslation("sb_ping"), function(ply) 
-		return ply:Ping() 
+
+	self:AddColumn(GetTranslation("sb_ping"), function(ply)
+		return ply:Ping()
 	end)
-	
-	self:AddColumn(GetTranslation("sb_deaths"), function(ply) 
-		return ply:Deaths() 
+
+	self:AddColumn(GetTranslation("sb_deaths"), function(ply)
+		return ply:Deaths()
 	end)
-	
-	self:AddColumn(GetTranslation("sb_score"), function(ply) 
-		return ply:Frags() 
+
+	self:AddColumn(GetTranslation("sb_score"), function(ply)
+		return ply:Frags()
 	end)
 
 	if KARMA.IsEnabled() then
-		self:AddColumn(GetTranslation("sb_karma"), function(ply) 
-			return math.Round(ply:GetBaseKarma()) 
+		self:AddColumn(GetTranslation("sb_karma"), function(ply)
+			return math.Round(ply:GetBaseKarma())
 		end)
 	end
 
@@ -68,7 +67,7 @@ function PANEL:AddColumn(label, func, width)
 	lbl.Width = width or 50 -- Retain compatibility with existing code
 
 	table.insert(self.cols, lbl)
-	
+
 	return lbl
 end
 
@@ -77,7 +76,7 @@ end
 -- Exists only so the hook wont return an error if it tries to
 --	use the AddFakeColumn function of `sb_main`, which would
 --	cause this file to raise a `function not found` error or others
-function PANEL:AddFakeColumn() 
+function PANEL:AddFakeColumn()
 
 end
 
@@ -88,7 +87,7 @@ local namecolor = {
 }
 
 function GM:TTTScoreboardColorForPlayer(ply)
-	if not IsValid(ply) then 
+	if not IsValid(ply) then
 		return namecolor.default
 	end
 
@@ -97,20 +96,20 @@ function GM:TTTScoreboardColorForPlayer(ply)
 	elseif ply:IsAdmin() and GetGlobalBool("ttt_highlight_admins", true) then
 		return namecolor.admin
 	end
-	
+
 	return namecolor.default
 end
 
 function GM:TTTScoreboardRowColorForPlayer(ply)
 	local col = Color(0, 0, 0, 0)
 
-	if not IsValid(ply) then 
+	if not IsValid(ply) then
 		return col
 	end
-	
+
 	if ply.GetRole and ply:GetRole() and ply:GetRole() > 0 and ply:IsSpecial() then
 		local tmp = table.Copy(ply:GetRoleData().color)
-		
+
 		col.r = tmp.r
 		col.g = tmp.g
 		col.b = tmp.b
@@ -132,7 +131,7 @@ local function ColorForPlayer(ply)
 			ErrorNoHalt("TTTScoreboardColorForPlayer hook returned something that isn't a color!\n")
 		end
 	end
-	
+
 	return namecolor.default
 end
 
@@ -163,7 +162,7 @@ function PANEL:SetPlayer(ply)
 
 	if not self.info then
 		local g = ScoreGroup(ply)
-		
+
 		if g == GROUP_TERROR and ply ~= LocalPlayer() then
 			self.info = vgui.Create("TTTScorePlayerInfoTags", self)
 			self.info:SetPlayer(ply)
@@ -172,7 +171,7 @@ function PANEL:SetPlayer(ply)
 		elseif g == GROUP_FOUND or g == GROUP_NOTFOUND then
 			self.info = vgui.Create("TTTScorePlayerInfoSearch", self)
 			self.info:SetPlayer(ply)
-			
+
 			self:InvalidateLayout()
 		end
 	else
@@ -190,15 +189,15 @@ function PANEL:SetPlayer(ply)
 	self:UpdatePlayerData()
 end
 
-function PANEL:GetPlayer() 
-	return self.Player 
+function PANEL:GetPlayer()
+	return self.Player
 end
 
 function PANEL:UpdatePlayerData()
 	if not IsValid(self.Player) then return end
 
 	local ply = self.Player
-	
+
 	for i = 1, #self.cols do
 		-- Set text from function, passing the label along so stuff like text
 		-- color can be changed
@@ -210,7 +209,7 @@ function PANEL:UpdatePlayerData()
 	self.nick:SetTextColor(ColorForPlayer(ply))
 
 	local ptag = ply.sb_tag
-	
+
 	if ScoreGroup(ply) ~= GROUP_TERROR then
 		ptag = nil
 	end
@@ -234,7 +233,7 @@ function PANEL:UpdatePlayerData()
 
 	if self.Player ~= LocalPlayer() then
 		local muted = self.Player:IsMuted()
-		
+
 		self.voice:SetImage(muted and "icon16/sound_mute.png" or "icon16/sound.png")
 	else
 		self.voice:Hide()
@@ -260,19 +259,19 @@ end
 
 function PANEL:LayoutColumns()
 	local cx = self:GetWide()
-	
+
 	for _, v in ipairs(self.cols) do
 		v:SizeToContents()
-		
+
 		cx = cx - v.Width
-		
+
 		v:SetPos(cx - v:GetWide() / 2, (SB_ROW_HEIGHT - v:GetTall()) / 2)
 	end
 
 	self.tag:SizeToContents()
-	
+
 	cx = cx - 90
-	
+
 	self.tag:SetPos(cx - self.tag:GetWide() / 2, (SB_ROW_HEIGHT - self.tag:GetTall()) / 2)
 	self.sresult:SetPos(cx - 8, (SB_ROW_HEIGHT - 16) / 2)
 end
@@ -287,8 +286,8 @@ function PANEL:PerformLayout()
 	if not self.open then
 		self:SetSize(self:GetWide(), SB_ROW_HEIGHT)
 
-		if self.info then 
-			self.info:SetVisible(false) 
+		if self.info then
+			self.info:SetVisible(false)
 		end
 	elseif self.info then
 		self:SetSize(self:GetWide(), 100 + SB_ROW_HEIGHT)
@@ -335,10 +334,10 @@ function PANEL:DoRightClick()
 	menu.Player = self:GetPlayer()
 
 	local close = hook.Call("TTTScoreboardMenu", nil, menu)
-	if close then 
-		menu:Remove() 
-		
-		return 
+	if close then
+		menu:Remove()
+
+		return
 	end
 
 	menu:Open()

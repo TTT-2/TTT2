@@ -49,10 +49,10 @@ Event(EVENT_FINISH, {
 			return T("ev_win_time")
 		end
 	end,
-	
+
 	icon = function(e)
 		if e.win > WIN_NONE then
-			return star_icon, (GetRoleByIndex(e.win).name .. " won")
+			return star_icon, GetRoleByIndex(e.win).name .. " won"
 		elseif e.win == WIN_TIMELIMIT then
 			return star_icon, "Timelimit"
 		end
@@ -62,11 +62,11 @@ Event(EVENT_FINISH, {
 -- Round start event
 Event(EVENT_GAME, {
 	text = function(e)
-		if e.state == ROUND_ACTIVE then 
-			return T("ev_start") 
+		if e.state == ROUND_ACTIVE then
+			return T("ev_start")
 		end
 	end,
-	
+
 	icon = function(e)
 		return app_icon, "Game"
 	end
@@ -77,7 +77,7 @@ Event(EVENT_CREDITFOUND, {
 	text = function(e)
 		return PT("ev_credit", {finder = e.ni, num = e.cr, player = e.b})
 	end,
-	
+
 	icon = function(e)
 		return credit_icon, "Credit found"
 	end
@@ -87,7 +87,7 @@ Event(EVENT_BODYFOUND, {
 	text = function(e)
 		return PT("ev_body", {finder = e.ni, victim = e.b})
 	end,
-	
+
 	icon = function(e)
 		return magnifier_icon, "Body discovered"
 	end
@@ -98,7 +98,7 @@ Event(EVENT_C4DISARM, {
 	text = function(e)
 		return PT(e.s and "ev_c4_disarm1" or "ev_c4_disarm2", {player = e.ni, owner = e.own or "aliens"})
 	end,
-	
+
 	icon = function(e)
 		return wrench_icon, "C4 disarm"
 	end
@@ -108,7 +108,7 @@ Event(EVENT_C4EXPLODE, {
 	text = function(e)
 		return PT("ev_c4_boom", {player = e.ni})
 	end,
-	
+
 	icon = function(e)
 		return bomb_icon, "C4 exploded"
 	end
@@ -118,7 +118,7 @@ Event(EVENT_C4PLANT, {
 	text = function(e)
 		return PT("ev_c4_plant", {player = e.ni})
 	end,
-	
+
 	icon = function(e)
 		return bomb_icon, "C4 planted"
 	end
@@ -135,7 +135,7 @@ local function GetWeaponName(gun)
 		-- Custom weapons or ones that are otherwise ID-less are sent as
 		-- string
 		local wep = util.WeaponForClass(gun)
-		
+
 		wname = wep and wep.PrintName
 	end
 
@@ -147,13 +147,13 @@ end
 local function KillText(e)
 	local dmg = e.dmg
 	local trap = dmg.n
-	
-	if trap == "" then 
-		trap = nil 
+
+	if trap == "" then
+		trap = nil
 	end
 
 	local weapon = GetWeaponName(dmg.g)
-	
+
 	if weapon then
 		weapon = LANG.TryTranslation(weapon)
 	end
@@ -203,7 +203,7 @@ local function KillText(e)
 		end
 	elseif is_dmg(dmg.t, DMG_BULLET) then
 		txt = "ev_shot"
-		
+
 		using = true
 	elseif is_dmg(dmg.t, DMG_DROWN) then
 		txt = "ev_drown"
@@ -219,7 +219,7 @@ local function KillText(e)
 		txt = "ev_tele"
 	elseif is_dmg(dmg.t, DMG_PHYSGUN) then
 		txt = "ev_goomba"
-		
+
 		using = false
 	elseif is_dmg(dmg.t, DMG_CRUSH) then
 		txt = "ev_crush"
@@ -243,13 +243,13 @@ Event(EVENT_KILL, {
 
 		local atr = GetRoleByIndex(e.att.r)
 		local vtr = GetRoleByIndex(e.vic.r)
-		
+
 		if atr.team == vtr.team then
 			return wrong_icon, "Teamkill"
 		elseif atr.team == TEAM_TRAITOR then
 			return right_icon, "Traitor killed innocent"
 		else
-			return shield_icon, (atr.name .. " killed " .. vtr.name)
+			return shield_icon, atr.name .. " killed " .. vtr.name
 		end
 	end
 })

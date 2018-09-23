@@ -31,7 +31,7 @@ function PANEL:Paint()
 	-- Header bg
 	local txt = self.name .. " (" .. self.rowcount .. ")"
 	local w, h = surface.GetTextSize(txt)
-	
+
 	draw.RoundedBox(8, 0, 0, w + 24, 20, self.color)
 
 	-- Shadow
@@ -46,7 +46,7 @@ function PANEL:Paint()
 
 	-- Alternating row background
 	local y = 24
-	
+
 	for i, row in ipairs(self.rows_sorted) do
 		if i % 2 ~= 0 then
 			surface.SetDrawColor(75, 75, 75, 100)
@@ -58,15 +58,15 @@ function PANEL:Paint()
 
 	-- Column darkening
 	local scr = sboard_panel.ply_frame.scroll.Enabled and 16 or 0
-	
+
 	surface.SetDrawColor(0, 0, 0, 80)
-	
+
 	if sboard_panel.cols then
 		local cx = self:GetWide() - scr
-		
+
 		for k, v in ipairs(sboard_panel.cols) do
 			cx = cx - v.Width
-			
+
 			if k % 2 == 1 then -- Draw for odd numbered columns
 			surface.DrawRect(cx - v.Width / 2, 0, v.Width, self:GetTall())
 			end
@@ -83,7 +83,7 @@ function PANEL:AddPlayerRow(ply)
 	if ScoreGroup(ply) == self.group and not self.rows[ply] then
 		local row = vgui.Create("TTTScorePlayerRow", self)
 		row:SetPlayer(ply)
-		
+
 		self.rows[ply] = row
 		self.rowcount = table.Count(self.rows)
 
@@ -114,14 +114,14 @@ function PANEL:UpdateSortCache()
 		local plyb = rowb:GetPlayer()
 
 		if not IsValid(plya) then return false end
-		
+
 		if not IsValid(plyb) then return true end
 
 		local sort_mode = GetConVar("ttt_scoreboard_sorting"):GetString()
 		local sort_func = sboard_sort[sort_mode]
 
 		local comp = 0
-		
+
 		if sort_func ~= nil then
 			comp = sort_func(plya, plyb)
 		end
@@ -144,7 +144,7 @@ end
 
 function PANEL:UpdatePlayerData()
 	local to_remove = {}
-	
+
 	for k, v in pairs(self.rows) do
 		-- Player still belongs in this group?
 		if IsValid(v) and IsValid(v:GetPlayer()) and ScoreGroup(v:GetPlayer()) == self.group then
@@ -159,14 +159,14 @@ function PANEL:UpdatePlayerData()
 
 	for _, ply in ipairs(to_remove) do
 		local pnl = self.rows[ply]
-		
+
 		if IsValid(pnl) then
 			pnl:Remove()
 		end
 
 		self.rows[ply] = nil
 	end
-	
+
 	self.rowcount = table.Count(self.rows)
 
 	self:UpdateSortCache()
@@ -176,7 +176,7 @@ end
 function PANEL:PerformLayout()
 	if self.rowcount < 1 then
 		self:SetVisible(false)
-		
+
 		return
 	end
 
@@ -186,7 +186,7 @@ function PANEL:PerformLayout()
 	self:UpdateSortCache()
 
 	local y = 24
-	
+
 	for _, v in ipairs(self.rows_sorted) do
 		v:SetPos(0, y)
 		v:SetSize(self:GetWide(), v:GetTall())

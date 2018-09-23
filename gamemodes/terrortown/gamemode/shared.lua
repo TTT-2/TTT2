@@ -3,7 +3,7 @@ GM.Author = "Bad King Urgrain && Alf21"
 GM.Email = "4lf-mueller@gmx.de"
 GM.Website = "ttt.badking.net, ttt2.informaskill.de"
 -- Date of latest changes (YYYY-MM-DD)
-GM.Version = "0.2.5b"
+GM.Version = "0.2.6.2b"
 
 GM.Customized = true
 
@@ -142,70 +142,70 @@ CreateConVar("ttt_" .. ROLES.DETECTIVE.abbr .. "_shop_fallback", SHOP_UNSET, fla
 -- you should only use this function to add roles to TTT2
 function AddCustomRole(name, roleData, conVarData)
 	conVarData = conVarData or {}
-	
+
 	if not ROLES[name] then
 		-- shared
 		if not roleData.notSelectable then
 			if conVarData.togglable then
 				CreateClientConVar("ttt_avoid_" .. roleData.name, "0", true, true)
 			end
-			
+
 			CreateConVar("ttt_" .. roleData.name .. "_pct", tostring(conVarData.pct), flag_all)
 			CreateConVar("ttt_" .. roleData.name .. "_max", tostring(conVarData.maximum), flag_all)
 			CreateConVar("ttt_" .. roleData.name .. "_min_players", tostring(conVarData.minPlayers), flag_all)
-			
+
 			if conVarData.random then
 				CreateConVar("ttt_" .. roleData.name .. "_random", tostring(conVarData.random), flag_all)
 			else
 				CreateConVar("ttt_" .. roleData.name .. "_random", "100", flag_all)
 			end
-			
+
 			CreateConVar("ttt_" .. roleData.name .. "_enabled", "1", flag_all)
 		end
-		
+
 		conVarData.credits = conVarData.credits or 0
 		conVarData.creditsTraitorKill = conVarData.creditsTraitorKill or 0
 		conVarData.creditsTraitorDead = conVarData.creditsTraitorDead or 0
-		
+
 		CreateConVar("ttt_" .. roleData.abbr .. "_credits_starting", tostring(conVarData.credits), flag_all)
 		CreateConVar("ttt_" .. roleData.abbr .. "_credits_traitorkill", tostring(conVarData.creditsTraitorKill), flag_all)
 		CreateConVar("ttt_" .. roleData.abbr .. "_credits_traitordead", tostring(conVarData.creditsTraitorDead), flag_all)
-		
+
 		local shopFallbackValue
-		
+
 		if not conVarData.shopFallback and roleData.fallbackTable then
 			shopFallbackValue = SHOP_UNSET
 		else
 			shopFallbackValue = conVarData.shopFallback and tostring(conVarData.shopFallback) or SHOP_DISABLED
 		end
-		
+
 		CreateConVar("ttt_" .. roleData.abbr .. "_shop_fallback", shopFallbackValue, flag_all)
-		
+
 		if conVarData.traitorKill then
 			CreateConVar("ttt_credits_" .. roleData.name .. "kill", tostring(conVarData.traitorKill), flag_all)
 		end
-	
+
 		-- client
 		---- empty
-		
+
 		-- server
 		if SERVER then
-			-- necessary to init roles in this way, because we need to wait until the ROLES array is initialized 
+			-- necessary to init roles in this way, because we need to wait until the ROLES array is initialized
 			-- and every important function works properly
 			hook.Add("TTT2_RoleInit", "Add_" .. roleData.abbr .. "_Role", function() -- unique hook identifier please
 				if not ROLES[name] then -- count ROLES
 					local i = 1 -- start with "1" to prevent incompatibilities with ROLE_ANY
-					
+
 					for _, v in pairs(ROLES) do
 						i = i + 1
 					end
-					
+
 					roleData.index = i
 					ROLES[name] = roleData
-					
+
 					-- update DefaultEquipment
 					DefaultEquipment = GetDefaultEquipment()
-					
+
 					-- spend an answer
 					print("[TTT2][ROLE] Added '" .. name .. "' Role (index: " .. i .. ")")
 				end
@@ -218,9 +218,9 @@ function UpdateCustomRole(name, roleData)
 	if SERVER and ROLES[name] then
 		-- necessary for networking!
 		roleData.name = ROLES[name].name
-		
+
 		table.Merge(ROLES[name], roleData)
-		
+
 		for _, v in ipairs(player.GetAll()) do
 			UpdateSingleRoleData(roleData, v)
 		end
@@ -249,7 +249,7 @@ SHOP_FALLBACK_DETECTIVE = ROLES.DETECTIVE.name
 
 function SortRolesTable(tbl)
 	table.sort(tbl, function(a, b)
-		return (a.index < b.index)
+		return a.index < b.index
 	end)
 end
 
@@ -259,7 +259,7 @@ function GetRoleByIndex(index)
 			return v
 		end
 	end
-	
+
 	return ROLES.INNOCENT
 end
 
@@ -269,7 +269,7 @@ function GetRoleByName(name)
 			return v
 		end
 	end
-	
+
 	return ROLES.INNOCENT
 end
 
@@ -279,7 +279,7 @@ function GetRoleByAbbr(abbr)
 			return v
 		end
 	end
-	
+
 	return ROLES.INNOCENT
 end
 
@@ -287,15 +287,15 @@ function GetStartingCredits(abbr)
 	if abbr == ROLES.TRAITOR.abbr then
 		return GetConVar("ttt_credits_starting"):GetInt()
 	end
-	
-	return (ConVarExists("ttt_" .. abbr .. "_credits_starting") and GetConVar("ttt_" .. abbr .. "_credits_starting"):GetInt() or 0)
+
+	return ConVarExists("ttt_" .. abbr .. "_credits_starting") and GetConVar("ttt_" .. abbr .. "_credits_starting"):GetInt() or 0
 end
 
 function GetShopRoles()
 	local shopRoles = {}
 
 	local i = 0
-	
+
 	for _, v in pairs(ROLES) do
 		if v ~= ROLES.INNOCENT then
 			local shopFallback = GetConVar("ttt_" .. v.abbr .. "_shop_fallback"):GetString()
@@ -305,23 +305,23 @@ function GetShopRoles()
 			end
 		end
 	end
-	
+
 	SortRolesTable(shopRoles)
-	
+
 	return shopRoles
 end
 
 function GetWinRoles()
 	local tmp = {}
-	
+
 	for _, v in pairs(ROLES) do
 		local winRole = GetTeamRoles(v.team)[1]
-		
+
 		if not table.HasValue(tmp, winRole) then
 			table.insert(tmp, winRole)
 		end
 	end
-	
+
 	return tmp
 end
 
@@ -337,33 +337,33 @@ end
 
 function GetTeamRoles(team)
 	local teamRoles = {}
-	
+
 	local i = 0
-	
+
 	for _, v in pairs(ROLES) do
 		if v.team and v.team == team then
 			i = i + 1
 			teamRoles[i] = v
 		end
 	end
-	
+
 	SortRolesTable(teamRoles)
-	
+
 	return teamRoles
 end
 
 function GetSortedRoles()
 	local roles = {}
-	
+
 	local i = 0
-	
+
 	for _, v in pairs(ROLES) do
 		i = i + 1
 		roles[i] = v
 	end
-	
+
 	SortRolesTable(roles)
-	
+
 	return roles
 end
 
@@ -377,11 +377,11 @@ end
 
 function table.Randomize(t)
 	local out = {}
-	
+
 	while #t > 0 do
 		table.insert(out, table.remove(t, math.random(#t)))
 	end
-	
+
 	t = out
 end
 
@@ -390,18 +390,18 @@ if CLIENT then
 
 	function GetEquipmentTranslation(name, printName)
 		SafeTranslate = SafeTranslate or LANG.TryTranslation
-		
+
 		local val = printName
 		local str = SafeTranslate(val)
 		if str == val and name then
 			val = name
 			str = SafeTranslate(val)
 		end
-		
+
 		if str == val and printName then
 			str = printName
 		end
-		
+
 		return str
 	end
 
@@ -411,10 +411,10 @@ if CLIENT then
 			return GetEquipmentTranslation(a.name, a.PrintName) < GetEquipmentTranslation(b.name, b.PrintName)
 		end)
 		]]--
-		table.sort(tbl, function(a, b) 
-			local a = a.id
-			local b = b.id
-			
+		table.sort(tbl, function(adata, bdata)
+			a = adata.id
+			b = bdata.id
+
 			if tonumber(a) and not tonumber(b) then
 				return true
 			elseif tonumber(b) and not tonumber(a) then
@@ -422,7 +422,7 @@ if CLIENT then
 			else
 				return a < b
 			end
-		end) 
+		end)
 	end
 end
 
@@ -494,12 +494,12 @@ include("util.lua")
 include("lang_shd.lua") -- uses some of util
 include("equip_items_shd.lua")
 
-function DetectiveMode() 
+function DetectiveMode()
 	return GetGlobalBool("ttt_detective", false)
 end
 
-function HasteMode() 
-	return GetGlobalBool("ttt_haste", false) 
+function HasteMode()
+	return GetGlobalBool("ttt_haste", false)
 end
 
 -- Create teams
@@ -559,7 +559,7 @@ local ttt_playercolors_serious_count = #ttt_playercolors.serious
 CreateConVar("ttt_playercolor_mode", "1")
 function GM:TTTPlayerColor(model)
 	local mode = (ConVarExists("ttt_playercolor_mode") and GetConVar("ttt_playercolor_mode"):GetInt() or 0)
-	
+
 	if mode == 1 then
 		return ttt_playercolors.serious[math.random(1, ttt_playercolors_serious_count)]
 	elseif mode == 2 then
@@ -568,7 +568,7 @@ function GM:TTTPlayerColor(model)
 		-- Full randomness
 		return Color(math.random(0, 255), math.random(0, 255), math.random(0, 255))
 	end
-	
+
 	-- No coloring
 	return COLOR_WHITE
 end
@@ -586,18 +586,18 @@ function GM:Move(ply, mv)
 	if ply:IsTerror() then
 		local basemul = 1
 		local slowed = false
-		
+
 		-- Slow down ironsighters
 		local wep = ply:GetActiveWeapon()
-		
+
 		if IsValid(wep) and wep.GetIronsights and wep:GetIronsights() then
 			basemul = 120 / 220
 			slowed = true
 		end
-		
+
 		local mul = hook.Call("TTTPlayerSpeedModifier", GAMEMODE, ply, slowed, mv) or 1
 		mul = basemul * mul
-		
+
 		mv:SetMaxClientSpeed(mv:GetMaxClientSpeed() * mul)
 		mv:SetMaxSpeed(mv:GetMaxSpeed() * mul)
 	end
@@ -614,7 +614,7 @@ function GetDefaultEquipment()
 			defaultEquipment[v.index] = v.defaultEquipment
 		end
 	end
-	
+
 	return defaultEquipment
 end
 
@@ -640,33 +640,33 @@ function SWEPAddConVar(swep, tbl)
 end
 
 function SWEPIsBuyable(wepCls)
-	if not wepCls then 
+	if not wepCls then
 		return true
 	end
-	
+
 	local name = "t32_" .. wepCls .. "_imp"
-	
+
 	if ConVarExists(name) then
 		local i = GetConVar(name):GetInt() or 0
-		
+
 		if i == 0 then
 			return false
 		end
-		
+
 		local choices = {}
-		
+
 		for _, v in ipairs(player.GetAll()) do
 			-- everyone on the spec team is in specmode
 			if IsValid(v) and not v:IsSpec() then
 				table.insert(choices, v)
 			end
 		end
-		
+
 		if #choices < i then
 			return false
 		end
 	end
-	
+
 	return true
 end
 
@@ -679,7 +679,7 @@ function RegisterNormalWeapon(wep)
 		tbl.slider = true
 		tbl.desc = "MinPlayers"
 		tbl.max = 100
-		
+
 		SWEPAddConVar(wep, tbl)
 	end
 end

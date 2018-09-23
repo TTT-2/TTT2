@@ -24,12 +24,12 @@ local function RoleChatRecv()
 	-- virtually always our role, but future equipment might allow listening in
 	local role = net.ReadUInt(ROLE_BITS)
 	local sender = net.ReadEntity()
-	
+
 	if not IsValid(sender) then return end
 
 	local text = net.ReadString()
 	local roleData = GetRoleByIndex(role)
-	
+
 	chat.AddText(roleData.color, Format("(%s) ", string.upper(GetTranslation(roleData.name))),
 		Color(255, 200, 20), sender:Nick(),
 		Color(255, 255, 200), ": " .. text)
@@ -38,13 +38,11 @@ net.Receive("TTT_RoleChat", RoleChatRecv)
 
 -- special processing for certain special chat types
 function GM:ChatText(idx, name, text, type)
-	if type == "joinleave" then
-		if string.find(text, "Changed name during a round") then
-			-- prevent nick from showing up
-			chat.AddText(LANG.GetTranslation("name_kick"))
-			
-			return true
-		end
+	if type == "joinleave" and string.find(text, "Changed name during a round") then
+		-- prevent nick from showing up
+		chat.AddText(LANG.GetTranslation("name_kick"))
+
+		return true
 	end
 
 	return BaseClass.ChatText(self, idx, name, text, type)
@@ -57,22 +55,22 @@ local function AddDetectiveText(ply, text)
 end
 
 function GM:OnPlayerChat(ply, text, teamchat, dead)
-	if not IsValid(ply) then 
-		return BaseClass.OnPlayerChat(self, ply, text, teamchat, dead) 
-	end 
-	
+	if not IsValid(ply) then
+		return BaseClass.OnPlayerChat(self, ply, text, teamchat, dead)
+	end
+
 	if ply:IsActiveRole(ROLES.DETECTIVE.index) then
 		AddDetectiveText(ply, text)
-		
+
 		return true
 	end
-	
+
 	local team = ply:Team() == TEAM_SPEC
-	
+
 	if team and not dead then
 		dead = true
 	end
-	
+
 	if teamchat and (not team and not ply:IsSpecial() or team) then
 		teamchat = false
 	end
@@ -93,7 +91,7 @@ function ChatInterrupt()
 	local last_seen = IsValid(client.last_id) and client.last_id:EntIndex() or 0
 
 	local last_words = "."
-	
+
 	if last_chat == "" then
 		if RADIO.LastRadio.t > CurTime() - 2 then
 			last_words = RADIO.LastRadio.msg
@@ -140,7 +138,7 @@ function RADIO:ShowRadioCommands(state)
 		end
 	else
 		local client = LocalPlayer()
-		
+
 		if not IsValid(client) then return end
 
 		if not radioframe then
@@ -156,16 +154,18 @@ function RADIO:ShowRadioCommands(state)
 
 			-- ASS
 			radioframe.ForceResize = function(s)
-				local w, label = 0, nil
-				
+				w = 0
+
+				local label
+
 				for _, v in pairs(s.Items) do
 					label = v:GetChild(0)
-					
+
 					if label:GetWide() > w then
 						w = label:GetWide()
 					end
 				end
-				
+
 				s:SetWide(w + 20)
 			end
 
@@ -173,7 +173,7 @@ function RADIO:ShowRadioCommands(state)
 				local dlabel = vgui.Create("DLabel", radioframe)
 				local id = key .. ": "
 				local txt = id
-				
+
 				if command.format then
 					txt = txt .. GetPTranslation(command.text, {player = GetTranslation("quick_nobody")})
 				else
@@ -191,19 +191,19 @@ function RADIO:ShowRadioCommands(state)
 					dlabel.txt = GetTranslation(command.text)
 					dlabel.Think = function(s)
 						local tgt, v = RADIO:GetTarget()
-						
+
 						if s.target ~= tgt then
 							s.target = tgt
 
 							tgt = string.Interp(s.txt, {player = RADIO.ToPrintable(tgt)})
-							
+
 							if v then
 								tgt = util.Capitalize(tgt)
 							end
 
 							s:SetText(s.id .. tgt)
 							s:SizeToContents()
-							
+
 							radioframe:ForceResize()
 						end
 					end
@@ -224,8 +224,8 @@ function RADIO:ShowRadioCommands(state)
 		-- capture slot keys while we're open
 		self.Show = true
 
-		timer.Create("radiocmdshow", 3, 1, function() 
-			RADIO:ShowRadioCommands(false) 
+		timer.Create("radiocmdshow", 3, 1, function()
+			RADIO:ShowRadioCommands(false)
 		end)
 	end
 end
@@ -241,7 +241,7 @@ end
 
 function RADIO:GetTargetType()
 	if not IsValid(LocalPlayer()) then return end
-	
+
 	local trace = LocalPlayer():GetEyeTrace(MASK_SHOT)
 
 	if not trace or not trace.Hit or not IsValid(trace.Entity) then return end
@@ -277,27 +277,27 @@ end
 
 function RADIO:GetTarget()
 	local client = LocalPlayer()
-	
+
 	if IsValid(client) then
 		local current, vague = self:GetTargetType()
-		
-		if current then 
-			return current, vague 
+
+		if current then
+			return current, vague
 		end
 
 		local stored = self.StoredTarget
-		
+
 		if stored.target and stored.t > (CurTime() - 3) then
 			return stored.target, stored.vague
 		end
 	end
-	
+
 	return "quick_nobody", true
 end
 
 function RADIO:StoreTarget()
 	local current, vague = self:GetTargetType()
-	
+
 	if current then
 		self.StoredTarget.target = current
 		self.StoredTarget.vague = vague
@@ -310,7 +310,7 @@ end
 local function RadioCommand(ply, cmd, arg)
 	if not IsValid(ply) or #arg ~= 1 then
 		print("ttt_radio failed, too many arguments?")
-		
+
 		return
 	end
 
@@ -327,17 +327,17 @@ local function RadioCommand(ply, cmd, arg)
 	for _, msg in ipairs(RADIO.Commands) do
 		if msg.cmd == msg_type then
 			local eng = LANG.GetTranslationFromLanguage(msg.text, "english")
-			
+
 			text = msg.format and string.Interp(eng, {player = RADIO.ToPrintable(target)}) or eng
 			msg_name = msg.text
-			
+
 			break
 		end
 	end
 
 	if not text then
 		print("ttt_radio failed, argument not valid radiocommand")
-		
+
 		return
 	end
 
@@ -356,13 +356,11 @@ end
 
 local function RadioComplete(cmd, arg)
 	local c = {}
-	
-	for _, cmd in ipairs(RADIO.Commands) do
-		local rcmd = "ttt_radio " .. cmd.cmd
-		
-		table.insert(c, rcmd)
+
+	for _, cmd2 in ipairs(RADIO.Commands) do
+		table.insert(c, "ttt_radio " .. cmd2.cmd)
 	end
-	
+
 	return c
 end
 concommand.Add("ttt_radio", RadioCommand, RadioComplete)
@@ -379,7 +377,7 @@ local function RadioMsgRecv()
 	-- if param is a language string, translate it
 	-- else it's a nickname
 	local lang_param = LANG.GetNameParam(param)
-	
+
 	if lang_param then
 		if lang_param == "quick_corpse_id" then
 			-- special case where nested translation is needed
@@ -414,7 +412,7 @@ local radio_gestures = {
 
 function GM:PlayerSentRadioCommand(ply, name, target)
 	local act = radio_gestures[name]
-	
+
 	if act then
 		ply:AnimPerformGesture(act)
 	end

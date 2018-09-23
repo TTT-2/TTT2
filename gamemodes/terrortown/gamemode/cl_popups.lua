@@ -8,7 +8,7 @@ local GetPTranslation = LANG.GetParamTranslation
 local function GetTextForRole(role)
 	local menukey = Key("+menu_context", "C")
 	local roleData = GetRoleByIndex(role)
-		
+
 	if roleData.team ~= TEAM_TRAITOR then
 		local fallback = GetConVar("ttt_" .. roleData.abbr .. "_shop_fallback"):GetString()
 		if fallback == SHOP_DISABLED or hook.Run("TTT2_PreventAccessShop", LocalPlayer()) then
@@ -18,13 +18,13 @@ local function GetTextForRole(role)
 		end
 	else
 		local traitors = {}
-		
+
 		for _, ply in ipairs(player.GetAll()) do
 			if ply:HasTeamRole(TEAM_TRAITOR) then
 				table.insert(traitors, ply)
 			end
 		end
-		
+
 		if #traitors > 1 then
 			local traitorlist = ""
 
@@ -57,7 +57,7 @@ local function RoundStartPopup()
 	-- based on Derma_Message
 
 	if startshowtime:GetInt() <= 0 then return end
-	
+
 	if not LocalPlayer() then return end
 
 	local dframe = vgui.Create("Panel")
@@ -66,7 +66,7 @@ local function RoundStartPopup()
 	dframe:SetKeyboardInputEnabled(false)
 
 	local color = Color(0,0,0, 200)
-	
+
 	dframe.Paint = function(s)
 		draw.RoundedBox(8, 0, 0, s:GetWide(), s:GetTall(), color)
 	end
@@ -90,8 +90,8 @@ local function RoundStartPopup()
 
 	dframe:AlignBottom(10)
 
-	timer.Simple(startshowtime:GetInt(), function() 
-		dframe:Remove() 
+	timer.Simple(startshowtime:GetInt(), function()
+		dframe:Remove()
 	end)
 end
 concommand.Add("ttt_cl_startpopup", RoundStartPopup)
@@ -120,20 +120,20 @@ local function IdlePopup()
 
 	local bw, bh = 75, 25
 	local cancel = vgui.Create("DButton", dframe)
-	
+
 	cancel:SetPos(10, h - 40)
 	cancel:SetSize(bw, bh)
 	cancel:SetText(GetTranslation("idle_popup_close"))
-	
-	cancel.DoClick = function() 
-		dframe:Close() 
+
+	cancel.DoClick = function()
+		dframe:Close()
 	end
 
 	local disable = vgui.Create("DButton", dframe)
 	disable:SetPos(w - 185, h - 40)
 	disable:SetSize(175, bh)
 	disable:SetText(GetTranslation("idle_popup_off"))
-	
+
 	disable.DoClick = function()
 		RunConsoleCommand("ttt_spectator_mode", "0")
 		dframe:Close()

@@ -74,11 +74,11 @@ function WSWITCH:DrawBarBg(x, y, w, h, col)
 	surface.SetTexture(barcorner)
 
 	surface.SetDrawColor(c.r, c.g, c.b, c.a)
-	surface.DrawTexturedRectRotated(rx + bh , ry + bh, b, b, 0) 
-	surface.DrawTexturedRectRotated(rx + bh , ry + rh - bh, b, b, 90) 
+	surface.DrawTexturedRectRotated(rx + bh , ry + bh, b, b, 0)
+	surface.DrawTexturedRectRotated(rx + bh , ry + rh - bh, b, b, 90)
 	surface.DrawRect(rx, ry + b, b, rh - b * 2)
 	surface.DrawRect(rx + b, ry, h - 4, rh)
-	
+
 	-- Draw the remainder
 	-- Could just draw a full roundedrect bg and overdraw it with the tip, but
 	-- I don't have to do the hard work here anymore anyway
@@ -86,8 +86,8 @@ function WSWITCH:DrawBarBg(x, y, w, h, col)
 
 	surface.SetDrawColor(c.r, c.g, c.b, c.a)
 	surface.DrawRect(rx + b + h - 4, ry,	rw - (h - 4) - b * 2,	rh)
-	surface.DrawTexturedRectRotated(rx + rw - bh , ry + rh - bh, b, b, 180) 
-	surface.DrawTexturedRectRotated(rx + rw - bh , ry + bh, b, b, 270) 
+	surface.DrawTexturedRectRotated(rx + rw - bh , ry + rh - bh, b, b, 180)
+	surface.DrawTexturedRectRotated(rx + rw - bh , ry + bh, b, b, 270)
 	surface.DrawRect(rx + rw - b,	ry + b,	b,	rh - b * 2)
 end
 
@@ -108,13 +108,13 @@ function WSWITCH:DrawWeapon(x, y, c, wep)
 
 	-- Slot
 	local spec = {
-		text = wep.Slot + 1, 
-		font = "Trebuchet22", 
-		pos = {x + 4, y}, 
-		yalign = TEXT_ALIGN_CENTER, 
+		text = wep.Slot + 1,
+		font = "Trebuchet22",
+		pos = {x + 4, y},
+		yalign = TEXT_ALIGN_CENTER,
 		color = c.text
 	}
-	
+
 	draw.TextShadow(spec, 1, c.shadow)
 
 	-- Name
@@ -148,9 +148,9 @@ function WSWITCH:Draw(client)
 
 	local x = ScrW() - width - margin * 2
 	local y = ScrH() - (#weps * (height + margin))
-	
+
 	local col = col_dark
-	
+
 	for k, wep in ipairs(weps) do
 		if self.Selected == k then
 			col = col_active
@@ -175,12 +175,12 @@ end
 
 local function CopyVals(src, dest)
 	table.Empty(dest)
-	
+
 	for _, v in pairs(src) do
 		if IsValid(v) then
 			table.insert(dest, v)
 		end
-	end	
+	end
 end
 
 function WSWITCH:UpdateWeaponCache()
@@ -188,9 +188,9 @@ function WSWITCH:UpdateWeaponCache()
 	--	self.WeaponCache = LocalPlayer():GetWeapons()
 	-- So copy over the weapon refs
 	self.WeaponCache = {}
-	
+
 	CopyVals(LocalPlayer():GetWeapons(), self.WeaponCache)
-	
+
 	table.sort(self.WeaponCache, SlotSort)
 end
 
@@ -211,7 +211,7 @@ function WSWITCH:SelectNext()
 	end
 
 	self:DoSelect(s)
-	
+
 	self.NextSwitch = CurTime() + delay
 end
 
@@ -226,7 +226,7 @@ function WSWITCH:SelectPrev()
 	end
 
 	self:DoSelect(s)
-	
+
 	self.NextSwitch = CurTime() + delay
 end
 
@@ -237,7 +237,7 @@ function WSWITCH:DoSelect(idx)
 	if self.cv.fast:GetBool() then
 		-- immediately confirm if fastswitch is on
 		self:ConfirmSelection(self.cv.display:GetBool())
-	end	
+	end
 end
 
 -- Numeric key access to direct slots
@@ -251,17 +251,17 @@ function WSWITCH:SelectSlot(slot)
 
 	-- find which idx in the weapon table has the slot we want
 	local toselect = self.Selected
-	
+
 	for k, w in ipairs(self.WeaponCache) do
 		if w.Slot == slot then
 			toselect = k
-			
+
 			break
 		end
 	end
 
 	self:DoSelect(toselect)
-	
+
 	self.NextSwitch = CurTime() + delay
 end
 
@@ -276,15 +276,15 @@ function WSWITCH:Enable()
 
 		-- make our active weapon the initial selection
 		local toselect = 1
-		
+
 		for k, w in ipairs(self.WeaponCache) do
 			if w == wep_active then
 				toselect = k
-				
+
 				break
 			end
 		end
-		
+
 		self:SetSelected(toselect)
 	end
 
@@ -304,7 +304,7 @@ function WSWITCH:ConfirmSelection(noHide)
 	for k, w in ipairs(self.WeaponCache) do
 		if k == self.Selected and IsValid(w) then
 			input.SelectWeapon(w)
-			
+
 			return
 		end
 	end
@@ -340,14 +340,14 @@ local function QuickSlot(ply, cmd, args)
 	if not slot then return end
 
 	local wep = ply:GetActiveWeapon()
-	
+
 	if IsValid(wep) then
 		if wep.Slot == (slot - 1) then
 			RunConsoleCommand("lastinv")
 		else
 			WSWITCH:SelectAndConfirm(slot)
 		end
-	end	
+	end
 end
 concommand.Add("ttt_quickslot", QuickSlot)
 

@@ -47,7 +47,7 @@ include("cl_voice.lua")
 
 function GM:Initialize()
 	MsgN("TTT Client initializing...")
-	
+
 	-- setup weapon ConVars and similar things
 	for _, wep in ipairs(weapons.GetList()) do
 		if not wep.Doublicated then
@@ -64,16 +64,16 @@ end
 
 function GM:InitPostEntity()
 	MsgN("TTT Client post-init...")
-	
+
 	InitDefaultEquipment()
-	
+
 	-- initialize all items
 	InitAllItems()
 
 	-- reset normal equipment tables
 	for _, role in pairs(ROLES) do
 		EquipmentItems[role.index] = {}
-		
+
 		if Equipment then
 			Equipment[role.index] = nil
 		end
@@ -86,10 +86,10 @@ function GM:InitPostEntity()
 			wepTbl.CanBuy = {}
 		end
 	end
-	
+
 	-- initialize fallback shops
 	InitFallbackShops()
-	
+
 	net.Start("TTT2_SyncShopsWithServer")
 	net.SendToServer()
 
@@ -102,7 +102,7 @@ function GM:InitPostEntity()
 	end
 
 	local client = LocalPlayer()
-	
+
 	-- make sure player class extensions are loaded up, and then do some
 	-- initialization on them
 	if IsValid(client) and client.GetTraitor then
@@ -113,9 +113,9 @@ function GM:InitPostEntity()
 
 	RunConsoleCommand("_ttt_request_serverlang")
 	RunConsoleCommand("_ttt_request_rolelist")
-	
+
 	hook.Run("PostInitPostEntity")
-	
+
 	hook.Run("InitFallbackShops")
 end
 
@@ -145,7 +145,7 @@ local function ReceiveRolesTable(len)
 	else
 		-- do stuff with buffer contents
 		local json_roles = buff -- util.Decompress(buff)
-		
+
 		if not json_roles then
 			ErrorNoHalt("ROLES decompression failed!\n")
 		else
@@ -157,19 +157,19 @@ local function ReceiveRolesTable(len)
 			else
 				ErrorNoHalt("ROLES decoding failed!\n")
 			end
-			
+
 			-- confirm update and process next updates
 			net.Start("TTT2_RolesListSynced")
 			net.WriteBool(first)
 			net.SendToServer()
-			
+
 			-- run client side
 			SetupRoleGlobals()
-			
+
 			hook.Run("TTT2_PreFinishedSync", LocalPlayer(), first)
-			
+
 			hook.Run("TTT2_FinishedSync", LocalPlayer(), first)
-			
+
 			hook.Run("TTT2_PostFinishedSync", LocalPlayer(), first)
 		end
 
@@ -193,7 +193,7 @@ local function ReceiveSingleRoleTable(len)
 	else
 		-- do stuff with buffer contents
 		local json_roles = buff2 -- util.Decompress(buff2)
-		
+
 		if not json_roles then
 			ErrorNoHalt("ROLE decompression failed!\n")
 		else
@@ -211,19 +211,19 @@ local function ReceiveSingleRoleTable(len)
 			else
 				ErrorNoHalt("ROLE decoding failed!\n")
 			end
-			
+
 			-- confirm update and process next updates
 			net.Start("TTT2_RolesListSynced")
 			net.WriteBool(false)
 			net.SendToServer()
-			
+
 			-- run client side
 			SetupRoleGlobals()
-			
+
 			hook.Run("TTT2_PreFinishedSync", LocalPlayer(), false)
-			
+
 			hook.Run("TTT2_FinishedSync", LocalPlayer(), false)
-			
+
 			hook.Run("TTT2_PostFinishedSync", LocalPlayer(), false)
 		end
 
@@ -235,12 +235,12 @@ net.Receive("TTT2_SyncSingleRole", ReceiveSingleRoleTable)
 
 KARMA = {}
 
-function KARMA.IsEnabled() 
-	return GetGlobalBool("ttt_karma", false) 
+function KARMA.IsEnabled()
+	return GetGlobalBool("ttt_karma", false)
 end
 
-function GetRoundState() 
-	return GAMEMODE.round_state 
+function GetRoundState()
+	return GAMEMODE.round_state
 end
 
 local function RoundStateChange(o, n)
@@ -297,8 +297,8 @@ local function RoundStateChange(o, n)
 	end
 end
 
-concommand.Add("ttt_print_playercount", function() 
-	print(GAMEMODE.StartingPlayers) 
+concommand.Add("ttt_print_playercount", function()
+	print(GAMEMODE.StartingPlayers)
 end)
 
 --- optional sound cues on round start and end
@@ -345,14 +345,14 @@ end)
 local function ReceiveRoleList()
 	local role = net.ReadUInt(ROLE_BITS)
 	local num_ids = net.ReadUInt(8)
-	
+
 	for i = 1, num_ids do
 		local eidx = net.ReadUInt(7) + 1 -- we - 1 worldspawn=0
 		local ply = player.GetByID(eidx)
-		
+
 		if IsValid(ply) and ply.SetRole then
 			ply:SetRole(role)
-			
+
 			if not ply:HasTeamRole(TEAM_INNO) and not ply:GetRoleData().unknownTeam then
 				ply[ply:GetRoleData().team .. "_gvoice"] = false -- assume role's chat by default
 			end
@@ -364,7 +364,7 @@ net.Receive("TTT_RoleList", ReceiveRoleList)
 -- Round state comm
 local function ReceiveRoundState()
 	local o = GetRoundState()
-	
+
 	GAMEMODE.round_state = net.ReadUInt(3)
 
 	if o ~= GAMEMODE.round_state then
@@ -402,7 +402,7 @@ function GM:ClearClientState()
 	end
 
 	VOICE.CycleMuteState(MUTE_NONE)
-	
+
 	RunConsoleCommand("ttt_mute_team_check", "0")
 
 	if GAMEMODE.ForcedMouse then
@@ -438,7 +438,7 @@ local function PlayerSpawn()
 	else
 		TIPS.Hide()
 	end
-	
+
 	-- TTT Totem prevention
 	if LocalPlayer().GetRoleTable then
 		print("[TTT2][ERROR] You have TTT Totem activated! You really should disable it!\n-- Disable it by unsubscribe it! --\nI know, that's not nice, but there's no way. It's an internally problem of GMod...")
@@ -451,8 +451,8 @@ local function PlayerDeath()
 end
 net.Receive("TTT_PlayerDied", PlayerDeath)
 
-function GM:ShouldDrawLocalPlayer(ply) 
-	return false 
+function GM:ShouldDrawLocalPlayer(ply)
+	return false
 end
 
 local view = {origin = vector_origin, angles = angle_zero, fov = 0}
@@ -465,12 +465,12 @@ function GM:CalcView(ply, origin, angles, fov)
 	-- first person ragdolling
 	if ply:Team() == TEAM_SPEC and ply:GetObserverMode() == OBS_MODE_IN_EYE then
 		local tgt = ply:GetObserverTarget()
-		
+
 		if IsValid(tgt) and not tgt:IsPlayer() then
 			-- assume if we are in_eye and not speccing a player, we spec a ragdoll
 			local eyes = tgt:LookupAttachment("eyes") or 0
 			eyes = tgt:GetAttachment(eyes)
-			
+
 			if eyes then
 				view.origin = eyes.Pos
 				view.angles = eyes.Ang
@@ -479,10 +479,10 @@ function GM:CalcView(ply, origin, angles, fov)
 	end
 
 	local wep = ply:GetActiveWeapon()
-	
+
 	if IsValid(wep) then
 		local func = wep.CalcView
-		
+
 		if func then
 			view.origin, view.angles, view.fov = func(wep, ply, origin * 1, angles * 1, fov)
 		end
@@ -491,17 +491,17 @@ function GM:CalcView(ply, origin, angles, fov)
 	return view
 end
 
-function GM:AddDeathNotice() 
+function GM:AddDeathNotice()
 
 end
 
-function GM:DrawDeathNotice() 
+function GM:DrawDeathNotice()
 
 end
 
 function GM:Tick()
 	local client = LocalPlayer()
-	
+
 	if IsValid(client) then
 		if client:Alive() and client:Team() ~= TEAM_SPEC then
 			WSWITCH:Think()
@@ -517,7 +517,7 @@ local idle = {ang = nil, pos = nil, mx = 0, my = 0, t = 0}
 
 function CheckIdle()
 	local client = LocalPlayer()
-	
+
 	if not IsValid(client) then return end
 
 	if not idle.ang or not idle.pos then
@@ -533,9 +533,9 @@ function CheckIdle()
 
 	if GetRoundState() == ROUND_ACTIVE and client:IsTerror() and client:Alive() then
 		local idle_limit = GetGlobalInt("ttt_idle_limit", 300) or 300
-		
+
 		if idle_limit <= 0 then -- networking sucks sometimes
-			idle_limit = 300 
+			idle_limit = 300
 		end
 
 		if client:GetAngles() ~= idle.ang then
@@ -556,11 +556,11 @@ function CheckIdle()
 
 			timer.Simple(0.3, function()
 				RunConsoleCommand("ttt_spectator_mode", 1)
-				
+
 				net.Start("TTT_Spectate")
 				net.WriteBool(true)
 				net.SendToServer()
-				
+
 				RunConsoleCommand("ttt_cl_idlepopup")
 			end)
 		elseif CurTime() > (idle.t + idle_limit / 2) then
@@ -583,7 +583,7 @@ function GM:OnEntityCreated(ent)
 
 			-- Copy the color for the PlayerColor matproxy
 			local playerColor = ply:GetPlayerColor()
-			
+
 			ent.GetPlayerColor = function()
 				return playerColor
 			end

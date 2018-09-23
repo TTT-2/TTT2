@@ -1,21 +1,20 @@
 -- Body search popup
-local GetTranslation = LANG.GetTranslation
 local T = LANG.GetTranslation
 local PT = LANG.GetParamTranslation
 
 local is_dmg = util.BitSet
 
-local dtt = { 
-	search_dmg_crush = DMG_CRUSH, 
-	search_dmg_bullet = DMG_BULLET, 
-	search_dmg_fall = DMG_FALL, 
-	search_dmg_boom = DMG_BLAST, 
-	search_dmg_club = DMG_CLUB, 
-	search_dmg_drown = DMG_DROWN, 
-	search_dmg_stab = DMG_SLASH, 
-	search_dmg_burn = DMG_BURN, 
-	search_dmg_tele = DMG_SONIC, 
-	search_dmg_car = DMG_VEHICLE 
+local dtt = {
+	search_dmg_crush = DMG_CRUSH,
+	search_dmg_bullet = DMG_BULLET,
+	search_dmg_fall = DMG_FALL,
+	search_dmg_boom = DMG_BLAST,
+	search_dmg_club = DMG_CLUB,
+	search_dmg_drown = DMG_DROWN,
+	search_dmg_stab = DMG_SLASH,
+	search_dmg_burn = DMG_BURN,
+	search_dmg_tele = DMG_SONIC,
+	search_dmg_car = DMG_VEHICLE
 }
 
 -- "From his body you can tell XXX"
@@ -25,11 +24,11 @@ local function DmgToText(d)
 			return T(k)
 		end
 	end
-	
+
 	if is_dmg(d, DMG_DIRECT) then
 		return T("search_dmg_burn")
 	end
-	
+
 	return T("search_dmg_other")
 end
 
@@ -42,10 +41,10 @@ end
 -- as a function or a table.
 
 local dtm = {
-	bullet = DMG_BULLET, 
-	rock = DMG_CRUSH, 
-	splode = DMG_BLAST, 
-	fall = DMG_FALL, 
+	bullet = DMG_BULLET,
+	rock = DMG_CRUSH,
+	splode = DMG_BLAST,
+	fall = DMG_FALL,
 	fire = DMG_BURN
 }
 
@@ -55,7 +54,7 @@ local function DmgToMat(d)
 			return k
 		end
 	end
-	
+
 	if is_dmg(d, DMG_DIRECT) then
 		return "fire"
 	else
@@ -65,7 +64,7 @@ end
 
 local function WeaponToIcon(d)
 	local wep = util.WeaponForClass(d)
-	
+
 	return wep and wep.Icon or "vgui/ttt/icon_nades"
 end
 
@@ -121,11 +120,11 @@ end
 
 function PreprocSearch(raw)
 	local search = {}
-	
+
 	for t, d in pairs(raw) do
 		search[t] = {
-			img = nil, 
-			text = "", 
+			img = nil,
+			text = "",
 			p = 10
 		}
 
@@ -135,7 +134,7 @@ function PreprocSearch(raw)
 			search[t].nick = d
 		elseif t == "role" then
 			local rd = GetRoleByIndex(d)
-			
+
 			search[t].text = T("search_role_" .. rd.abbr)
 			search[t].p = 2
 		elseif t == "words" then
@@ -178,12 +177,12 @@ function PreprocSearch(raw)
 			if d then
 				search[t].text = T("search_head")
 			end
-			
+
 			search[t].p = 15
 		elseif t == "dtime" then
 			if d ~= 0 then
 				local ftime = util.SimpleTime(d, "%02i:%02i")
-				
+
 				search[t].text = PT("search_time", {time = ftime})
 				search[t].text_icon = ftime
 				search[t].p = 8
@@ -191,35 +190,35 @@ function PreprocSearch(raw)
 		elseif t == "stime" then
 			if d > 0 then
 				local ftime = util.SimpleTime(d, "%02i:%02i")
-				
+
 				search[t].text = PT("search_dna", {time = ftime})
 				search[t].text_icon = ftime
 			end
 		elseif t == "kills" then
 			local num = table.Count(d)
-			
+
 			if num == 1 then
 				local vic = Entity(d[1])
 				local dc = d[1] == -1 -- disconnected
-				
+
 				if dc or IsValid(vic) and vic:IsPlayer() then
-					search[t].text = PT("search_kills1", {player = (dc and "<Disconnected>" or vic:Nick())})
+					search[t].text = PT("search_kills1", {player = dc and "<Disconnected>" or vic:Nick()})
 				end
 			elseif num > 1 then
 				local txt = T("search_kills2") .. "\n"
 				local nicks = {}
-				
+
 				for k, idx in pairs(d) do
 					local vic = Entity(idx)
 					local dc = idx == -1
-					
+
 					if dc or IsValid(vic) and vic:IsPlayer() then
-						table.insert(nicks, (dc and "<Disconnected>" or vic:Nick()))
+						table.insert(nicks, dc and "<Disconnected>" or vic:Nick())
 					end
 				end
 
 				local last = #nicks
-				
+
 				txt = txt .. table.concat(nicks, "\n", 1, last)
 				search[t].text = txt
 			end
@@ -228,7 +227,7 @@ function PreprocSearch(raw)
 		elseif t == "lastid" then
 			if d and d.idx ~= -1 then
 				local ent = Entity(d.idx)
-				
+
 				if IsValid(ent) and ent:IsPlayer() then
 					search[t].text = PT("search_eyes", {player = ent:Nick()})
 					search[t].ply = ent
@@ -261,11 +260,11 @@ end
 local function SearchInfoController(search, dactive, dtext)
 	return function(s, pold, pnew)
 		local t = pnew.info_type
-		
+
 		local data = search[t]
 		if not data then
 			ErrorNoHalt("Search: data not found", t, data,"\n")
-			
+
 			return
 		end
 
@@ -274,14 +273,14 @@ local function SearchInfoController(search, dactive, dtext)
 		-- "why" when it comes to VGUI. Apply hack, move on.
 		dtext:GetLabel():SetWrap(#data.text > 50)
 		dtext:SetText(data.text)
-		
+
 		dactive:SetImage(data.img)
 	end
 end
 
 local function ShowSearchScreen(search_raw)
 	local client = LocalPlayer()
-	
+
 	if not IsValid(client) then return end
 
 	local m = 8
@@ -304,7 +303,7 @@ local function ShowSearchScreen(search_raw)
 
 	ry = ry + desch + m
 
-	local butx, buty = rx, ry
+	--local butx, buty = rx, ry
 
 	local dframe = vgui.Create("DFrame")
 	dframe:SetSize(w, h)
@@ -365,23 +364,23 @@ local function ShowSearchScreen(search_raw)
 	dident:SetPos(m, by)
 	dident:SetSize(bw_large, bh)
 	dident:SetText(T("search_confirm"))
-	
+
 	local id = search_raw.eidx + search_raw.dtime
-	
-	dident.DoClick = function() 
-		RunConsoleCommand("ttt_confirm_death", search_raw.eidx, id) 
+
+	dident.DoClick = function()
+		RunConsoleCommand("ttt_confirm_death", search_raw.eidx, id)
 	end
 
 	local dcall = vgui.Create("DButton", dcont)
 	dcall:SetPos(m * 2 + bw_large, by)
 	dcall:SetSize(bw_large, bh)
 	dcall:SetText(T("search_call"))
-	
+
 	dcall.DoClick = function(s)
 		client.called_corpses = client.called_corpses or {}
-		
+
 		table.insert(client.called_corpses, search_raw.eidx)
-		
+
 		s:SetDisabled(true)
 
 		RunConsoleCommand("ttt_call_detective", search_raw.eidx)
@@ -393,9 +392,9 @@ local function ShowSearchScreen(search_raw)
 	dconfirm:SetPos(rw - m - bw, by)
 	dconfirm:SetSize(bw, bh)
 	dconfirm:SetText(T("close"))
-	
-	dconfirm.DoClick = function() 
-		dframe:Close() 
+
+	dconfirm.DoClick = function()
+		dframe:Close()
 	end
 
 	-- Finalize search data, prune stuff that won't be shown etc
@@ -408,17 +407,17 @@ local function ShowSearchScreen(search_raw)
 	-- Create table of SimpleIcons, each standing for a piece of search
 	-- information.
 	local start_icon = nil
-	
+
 	for t, info in SortedPairsByMemberValue(search, "p") do
 		local ic = nil
-		
+
 		-- Certain items need a special icon conveying additional information
 		if t == "nick" then
 			local avply = IsValid(search_raw.owner) and search_raw.owner or nil
 
 			ic = vgui.Create("SimpleIconAvatar", dlist)
 			ic:SetPlayer(avply)
-			
+
 			start_icon = ic
 		elseif t == "lastid" then
 			ic = vgui.Create("SimpleIconAvatar", dlist)
@@ -433,16 +432,16 @@ local function ShowSearchScreen(search_raw)
 
 		ic:SetIconSize(64)
 		ic:SetIcon(info.img)
-		
+
 		ic.info_type = t
-		
+
 		dlist:AddPanel(ic)
-		
+
 		dscroll:AddPanel(ic)
 	end
 
 	dlist:SelectPanel(start_icon)
-	
+
 	dframe:MakePopup()
 end
 
@@ -451,13 +450,13 @@ local function StoreSearchResult(search)
 		-- if existing result was not ours, it was detective's, and should not
 		-- be overwritten
 		local ply = search.owner
-		
+
 		if not ply.search_result or ply.search_result.show then
 			ply.search_result = search
 
 			-- this is useful for targetid
 			local rag = Entity(search.eidx)
-			
+
 			if IsValid(rag) then
 				rag.search_result = search
 			end
@@ -467,12 +466,12 @@ end
 
 local function bitsRequired(num)
 	local bits, max = 0, 1
-	
+
 	while max <= num do
 		bits = bits + 1
 		max = max + max
 	end
-	
+
 	return bits
 end
 
@@ -483,9 +482,9 @@ local function ReceiveRagdollSearch()
 
 	-- Basic info
 	search.eidx = net.ReadUInt(16)
-	
+
 	local owner = Entity(net.ReadUInt(8))
-	
+
 	search.owner = owner
 
 	if not (IsValid(search.owner) and search.owner:IsPlayer() and not search.owner:IsTerror()) then
@@ -515,10 +514,10 @@ local function ReceiveRagdollSearch()
 
 	-- Players killed
 	local num_kills = net.ReadUInt(8)
-	
+
 	if num_kills > 0 then
 		search.kills = {}
-		
+
 		for i = 1, num_kills do
 			table.insert(search.kills, net.ReadUInt(8))
 		end
@@ -537,7 +536,7 @@ local function ReceiveRagdollSearch()
 	--
 	local words = net.ReadString()
 	search.words = (words ~= "") and words or nil
-	
+
 	hook.Call("TTTBodySearchEquipment", nil, search, eq)
 
 	if search.show then
@@ -545,7 +544,7 @@ local function ReceiveRagdollSearch()
 	end
 
 	StoreSearchResult(search)
-	
+
 	search = nil
 end
 net.Receive("TTT_RagdollSearch", ReceiveRagdollSearch)

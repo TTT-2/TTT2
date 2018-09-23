@@ -22,10 +22,10 @@ end
 
 function TBHUD:CacheEnts()
 	local ply = LocalPlayer()
-	
+
 	if IsValid(ply) and ply:IsActive() and ply:HasTeamRole(TEAM_TRAITOR) then
 		self.buttons = {}
-		
+
 		for _, ent in ipairs(ents.FindByClass("ttt_traitor_button")) do
 			self.buttons[ent:EntIndex()] = ent
 		end
@@ -38,7 +38,7 @@ end
 
 function TBHUD:PlayerIsFocused()
 	local ply = LocalPlayer()
-	
+
 	return IsValid(ply) and ply:IsActive() and ply:HasTeamRole(TEAM_TRAITOR) and IsValid(self.focus_ent)
 end
 
@@ -47,7 +47,7 @@ function TBHUD:UseFocused()
 		RunConsoleCommand("ttt_use_tbutton", tostring(self.focus_ent:EntIndex()))
 
 		self.focus_ent = nil
-		
+
 		return true
 	else
 		return false
@@ -63,13 +63,15 @@ function TBHUD.ReceiveUseConfirm()
 end
 net.Receive("TTT_ConfirmUseTButton", TBHUD.ReceiveUseConfirm)
 
+--[[
 local function ComputeRangeFactor(plypos, tgtpos)
 	local d = tgtpos - plypos
-	
+
 	d = d:Dot(d)
-	
+
 	return d / range
 end
+]]--
 
 local tbut_normal = surface.GetTextureID("vgui/ttt/tbut_hand_line")
 local tbut_focus = surface.GetTextureID("vgui/ttt/tbut_hand_filled")
@@ -105,7 +107,7 @@ function TBHUD:Draw(client)
 				if not IsOffScreen(scrpos) and but:IsUsable() then
 					d = pos - plypos
 					d = d:Dot(d) / (but:GetUsableRange() ^ 2)
-					
+
 					-- draw if this button is within range, with alpha based on distance
 					if d < 1 then
 						surface.SetDrawColor(255, 255, 255, 200 * (1 - d))
@@ -114,18 +116,16 @@ function TBHUD:Draw(client)
 						if d > focus_d then
 							local x = abs(scrpos.x - midscreen_x)
 							local y = abs(scrpos.y - midscreen_y)
-							
-							if x < focus_range 
-							and y < focus_range 
-							and x < focus_scrpos_x 
+
+							if x < focus_range
+							and y < focus_range
+							and x < focus_scrpos_x
 							and y < focus_scrpos_y
-							then
+							and (self.focus_stick < CurTime() or but == self.focus_ent) then
 								-- avoid constantly switching focus every frame causing
 								-- 2+ buttons to appear in focus, instead "stick" to one
 								-- ent for a very short time to ensure consistency
-								if self.focus_stick < CurTime() or but == self.focus_ent then
-									focus_ent = but
-								end
+								focus_ent = but
 							end
 						end
 					end
@@ -137,7 +137,7 @@ function TBHUD:Draw(client)
 				self.focus_ent = focus_ent
 				self.focus_stick = CurTime() + 0.1
 
-				local scrpos = focus_ent:GetPos():ToScreen()
+				scrpos = focus_ent:GetPos():ToScreen()
 				local sz = 16
 
 				-- redraw in-focus version of icon
@@ -151,14 +151,14 @@ function TBHUD:Draw(client)
 
 				local x = scrpos.x + sz + 10
 				local y = scrpos.y - sz - 3
-				
+
 				surface.SetTextPos(x, y)
 				surface.DrawText(focus_ent:GetDescription())
 
 				y = y + 12
-				
+
 				surface.SetTextPos(x, y)
-				
+
 				if focus_ent:GetDelay() < 0 then
 					surface.DrawText(GetTranslation("tbut_single"))
 				elseif focus_ent:GetDelay() == 0 then
@@ -168,7 +168,7 @@ function TBHUD:Draw(client)
 				end
 
 				y = y + 12
-				
+
 				surface.SetTextPos(x, y)
 				surface.DrawText(GetPTranslation("tbut_help", {key = use_key}))
 			end

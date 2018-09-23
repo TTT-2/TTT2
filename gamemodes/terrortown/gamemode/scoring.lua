@@ -21,7 +21,7 @@ SCORE.Events = SCORE.Events or {}
 
 function SCORE:AddEvent(entry, t_override)
 	entry["t"] = math.Round(t_override or CurTime(), 2)
-	
+
 	table.insert(self.Events, entry)
 end
 
@@ -48,7 +48,7 @@ local function CopyDmg(dmg)
 		end
 	else
 		local infl = dmg:GetInflictor()
-		
+
 		if IsValid(infl) and infl.ScoreName then
 			d.n = infl.ScoreName
 		end
@@ -74,21 +74,24 @@ function SCORE:HandleKill(victim, attacker, dmginfo)
 		e.att.sid = attacker:SteamID()
 		e.att.r = attacker:GetRole()
 	end
-	
+
 	hook.Run("TTT2_ModifyScoringEvent", e, {victim = victim, attacker = attacker, dmginfo = dmginfo})
 
-	if IsValid(attacker) and attacker:IsPlayer() then
+	if IsValid(attacker)
+	and attacker:IsPlayer()
+	and dmginfo:IsExplosionDamage()
+	and GetRoleByIndex(e.att.r).team == TEAM_TRAITOR
+	and GetRoleByIndex(e.vic.r).team == TEAM_TRAITOR
+	then
 		-- If a traitor gets himself killed by another traitor's C4, it's his own
 		-- damn fault for ignoring the indicator.
-		if dmginfo:IsExplosionDamage() and GetRoleByIndex(e.att.r).team == TEAM_TRAITOR and GetRoleByIndex(e.vic.r).team == TEAM_TRAITOR then
-			local infl = dmginfo:GetInflictor()
-			
-			if IsValid(infl) and infl:GetClass() == "ttt_c4" then
-				e.att = table.Copy(e.vic)
-			end
+		local infl = dmginfo:GetInflictor()
+
+		if IsValid(infl) and infl:GetClass() == "ttt_c4" then
+			e.att = table.Copy(e.vic)
 		end
 	end
-	
+
 	self:AddEvent(e)
 end
 
@@ -106,7 +109,7 @@ function SCORE:HandleSelection()
 			tmp[v.index] = {}
 		end
 	end
-	
+
 	for _, ply in ipairs(player.GetAll()) do
 		-- no innos
 		if ply:GetRole() ~= ROLES.INNOCENT.index then
@@ -123,7 +126,7 @@ end
 
 function SCORE:HandleC4Explosion(planter, arm_time, exp_time)
 	local nick = "Someone"
-	
+
 	if IsValid(planter) and planter:IsPlayer() then
 		nick = planter:Nick()
 	end
@@ -134,7 +137,7 @@ end
 
 function SCORE:HandleC4Disarm(disarmer, owner, success)
 	if disarmer == owner then return end
-	
+
 	if not IsValid(disarmer) then return end
 
 	local ev = {
@@ -163,10 +166,10 @@ function SCORE:ApplyEventLogScores(wintype)
 			tmp[v.index] = {}
 		end
 	end
-	
+
 	for _, ply in ipairs(player.GetAll()) do
 		scores[ply:SteamID()] = {}
-		
+
 		if ply:GetRole() ~= ROLES.INNOCENT.index then
 			table.insert(tmp[ply:GetRole()], ply:SteamID())
 		end
@@ -177,10 +180,10 @@ function SCORE:ApplyEventLogScores(wintype)
 	--local dead = {traitors = 0, not_traitors = 0}
 	local scored_log = ScoreEventLog(self.Events, scores, tmp)
 	local ply = nil
-	
+
 	for sid, s in pairs(scored_log) do
 		ply = player.GetBySteamID(sid)
-		
+
 		if ply and ply:ShouldScore() then
 			ply:AddFrags(KillsToPoints(s))
 		end
@@ -191,11 +194,11 @@ function SCORE:ApplyEventLogScores(wintype)
 
 	for sid, s in pairs(scored_log) do
 		ply = player.GetBySteamID(sid)
-		
+
 		if ply and IsValid(ply) then
 			local team = hook.Run("TTT2_ModifyRole", ply) or ply:GetRoleData()
 			team = team.team
-		
+
 			if ply:ShouldScore() then
 				ply:AddFrags(bonus[team])
 			end
@@ -206,7 +209,7 @@ function SCORE:ApplyEventLogScores(wintype)
 	for _, e in pairs(self.Events) do
 		if e.id == EVENT_KILL then
 			local victim = player.GetBySteamID(e.vic.sid)
-			
+
 			if IsValid(victim) and victim:ShouldScore() then
 				victim:AddDeaths(1)
 			end
@@ -230,10 +233,10 @@ local function SortEvents(events)
 	-- sort events on time
 	table.sort(events, function(a, b)
 		if not b or not a then return false end
-		
+
 		return a.t and b.t and a.t < b.t
 	end)
-	
+
 	return events
 end
 
@@ -246,7 +249,7 @@ local function EncodeForStream(events)
 	local result = util.TableToJSON(events)
 	if not result then
 		ErrorNoHalt("Round report event encoding failed!\n")
-		
+
 		return false
 	else
 		return result
@@ -255,7 +258,7 @@ end
 
 function SCORE:StreamToClients()
 	local s = EncodeForStream(self.Events)
-	
+
 	if not s then
 		return -- error occurred
 	end
@@ -265,20 +268,20 @@ function SCORE:StreamToClients()
 	-- a just-in-case thing if a round somehow manages to be > 64K
 	local cut = {}
 	local max = 65500
-	
+
 	while #s ~= 0 do
 		local bit = string.sub(s, 1, max - 1)
-		
+
 		table.insert(cut, bit)
 
 		s = string.sub(s, max, -1)
 	end
 
 	local parts = #cut
-	
+
 	for k, bit in ipairs(cut) do
 		net.Start("TTT_ReportStream")
-		net.WriteBit((k ~= parts)) -- continuation bit, 1 if there's more coming
+		net.WriteBit(k ~= parts) -- continuation bit, 1 if there's more coming
 		net.WriteString(bit)
 		net.Broadcast()
 	end

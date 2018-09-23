@@ -21,7 +21,7 @@ function PANEL:OnMousePressed(mcode)
 		if self.OnClick then
 			self:OnClick()
 		end
-		
+
 		self.animPress:Start(0.1)
 	end
 end
@@ -43,7 +43,7 @@ function PANEL:OnCursorEntered()
 end
 
 function PANEL:OnCursorExited()
-	
+
 end
 
 function PANEL:ApplySchemeSettings()
@@ -56,16 +56,16 @@ function PANEL:PaintOver()
 	if self.toggled then
 		surface.SetDrawColor(0, 200, 0, 255)
 		surface.SetMaterial(matHover)
-		
+
 		self:DrawTexturedRect()
 	end
 end
 
 function PANEL:PerformLayout()
 	if self.animPress:Active() then return end
-	
+
 	self:SetSize(self.m_iIconSize, self.m_iIconSize)
-	
+
 	self.Icon:StretchToParent(0, 0, 0, 0)
 end
 
@@ -90,12 +90,12 @@ function PANEL:PressedAnim(anim, delta, data)
 
 	if anim.Finished then
 		self.Icon:StretchToParent(0, 0, 0, 0)
-		
+
 		return
 	end
 
 	local border = math.sin(delta * math.pi) * (self.m_iIconSize * 0.05)
-	
+
 	self.Icon:StretchToParent(border, border, border, border)
 end
 
@@ -104,7 +104,7 @@ vgui.Register("SimpleClickIcon", PANEL, "Panel")
 ---
 
 -- reset
-local PANEL = {}
+PANEL = {}
 
 function PANEL:Init()
 	self.Layers = {}
@@ -124,9 +124,9 @@ end
 
 function PANEL:PerformLayout()
 	if self.animPress:Active() then return end
-	
+
 	self:SetSize(self.m_iIconSize, self.m_iIconSize)
-	
+
 	self.Icon:StretchToParent(0, 0, 0, 0)
 
 	for _, p in ipairs(self.Layers) do
@@ -138,16 +138,16 @@ end
 function PANEL:EnableMousePassthrough(pnl)
 	for _, p in ipairs(self.Layers) do
 		if p == pnl then
-			p.OnMousePressed = function(s, mc) 
-				s:GetParent():OnMousePressed(mc) 
+			p.OnMousePressed = function(s, mc)
+				s:GetParent():OnMousePressed(mc)
 			end
-			
-			p.OnCursorEntered = function(s) 
-				s:GetParent():OnCursorEntered() 
+
+			p.OnCursorEntered = function(s)
+				s:GetParent():OnCursorEntered()
 			end
-			
-			p.OnCursorExited = function(s) 
-				s:GetParent():OnCursorExited() 
+
+			p.OnCursorExited = function(s)
+				s:GetParent():OnCursorExited()
 			end
 
 			p:SetMouseInputEnabled(true)
@@ -160,7 +160,7 @@ function PANEL:OnMousePressed(mcode)
 		if self.OnClick then
 			self:OnClick()
 		end
-		
+
 		self.animPress:Start(0.1)
 	end
 end
@@ -168,15 +168,15 @@ end
 vgui.Register("LayeredClickIcon", PANEL, "SimpleClickIcon")
 
 -- Avatar icon
-local PANEL = {}
+PANEL = {}
 
 function PANEL:Init()
 	self.imgAvatar = vgui.Create("AvatarImage", self)
 	self.imgAvatar:SetMouseInputEnabled(false)
 	self.imgAvatar:SetKeyboardInputEnabled(false)
-	
-	self.imgAvatar.PerformLayout = function(s) 
-		s:Center() 
+
+	self.imgAvatar.PerformLayout = function(s)
+		s:Center()
 	end
 
 	self:SetAvatarSize(32)
@@ -197,7 +197,7 @@ function PANEL:OnMousePressed(mcode)
 		if self.OnClick then
 			self:OnClick()
 		end
-		
+
 		self.animPress:Start(0.1)
 	end
 end
@@ -205,7 +205,7 @@ end
 vgui.Register("SimpleClickIconAvatar", PANEL, "LayeredClickIcon")
 
 --- Labelled icon
-local PANEL = {}
+PANEL = {}
 
 AccessorFunc(PANEL, "IconText", "IconText")
 AccessorFunc(PANEL, "IconTextColor", "IconTextColor")
@@ -223,8 +223,8 @@ function PANEL:Init()
 	-- DPanelSelect loves to overwrite its children's PaintOver hooks and such,
 	-- so have to use a dummy panel to do some custom painting.
 	self.FakeLabel = vgui.Create("Panel", self)
-	self.FakeLabel.PerformLayout = function(s) 
-		s:StretchToParent(0, 0, 0, 0) 
+	self.FakeLabel.PerformLayout = function(s)
+		s:StretchToParent(0, 0, 0, 0)
 	end
 
 	self:AddLayer(self.FakeLabel)
@@ -266,7 +266,7 @@ function PANEL:OnMousePressed(mcode)
 		if self.OnClick then
 			self:OnClick()
 		end
-		
+
 		self.animPress:Start(0.1)
 	end
 end

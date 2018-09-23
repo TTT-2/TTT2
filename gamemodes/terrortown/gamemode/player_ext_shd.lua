@@ -5,30 +5,30 @@ if not plymeta then return end
 
 local math = math
 
-function plymeta:IsTerror() 
-	return self:Team() == TEAM_TERROR 
+function plymeta:IsTerror()
+	return self:Team() == TEAM_TERROR
 end
 
-function plymeta:IsSpec() 
-	return self:Team() == TEAM_SPEC 
+function plymeta:IsSpec()
+	return self:Team() == TEAM_SPEC
 end
 
 AccessorFunc(plymeta, "role", "Role", FORCE_NUMBER)
 
 function plymeta:UpdateRole(role)
 	self:SetRole(role)
-	
+
 	hook.Run("TTT2_RoleTypeSet", self)
 end
 
 -- Role access
 -- basically traitor without special traitor roles (w/ teams)
-function plymeta:GetTraitor() 
+function plymeta:GetTraitor()
 	return self:HasTeamRole(TEAM_TRAITOR) -- added compatibility with other addons
 end
 
-function plymeta:GetDetective() 
-	return self:GetRole() == ROLES.DETECTIVE.index 
+function plymeta:GetDetective()
+	return self:GetRole() == ROLES.DETECTIVE.index
 end
 
 function plymeta:GetRoleData()
@@ -37,7 +37,7 @@ function plymeta:GetRoleData()
 			return v
 		end
 	end
-	
+
 	return ROLES.INNOCENT
 end
 
@@ -48,17 +48,17 @@ end
 plymeta.IsTraitor = plymeta.GetTraitor
 plymeta.IsDetective = plymeta.GetDetective
 
-function plymeta:IsSpecial() 
+function plymeta:IsSpecial()
 	return self:GetRole() ~= ROLES.INNOCENT.index
 end
 
 -- Player is alive and in an active round
 function plymeta:IsActive()
-	return GetRoundState() == ROUND_ACTIVE and self:IsTerror() 
+	return GetRoundState() == ROUND_ACTIVE and self:IsTerror()
 end
 
 -- convenience functions for common patterns
-function plymeta:IsRole(role) 
+function plymeta:IsRole(role)
 	local typ = type(role)
 
 	if typ == "table" then
@@ -67,7 +67,7 @@ function plymeta:IsRole(role)
 		return self:GetRole() == role
 	else
 		print("Wrong access plymeta:IsRole(" .. tostring(role) .. ") => role is type of '" .. tostring(typ) .. "'")
-		
+
 		return "error" --	will be an error
 	end
 end
@@ -80,26 +80,26 @@ function plymeta:GetWinningRole()
 	return GetWinningRole(self:GetRoleData().team)
 end
 
-function plymeta:IsActiveRole(role) 
+function plymeta:IsActiveRole(role)
 	return self:IsActive() and self:IsRole(role)
 end
 
 -- basically traitor without special traitor roles (w/ teams)
-function plymeta:IsActiveTraitor() 
-	return self:IsActive() and self:HasTeamRole(TEAM_TRAITOR)	
+function plymeta:IsActiveTraitor()
+	return self:IsActive() and self:HasTeamRole(TEAM_TRAITOR)
 end
 
-function plymeta:IsActiveDetective() 
-	return self:IsActiveRole(ROLES.DETECTIVE.index)	
+function plymeta:IsActiveDetective()
+	return self:IsActiveRole(ROLES.DETECTIVE.index)
 end
 
-function plymeta:IsActiveSpecial() 
-	return self:IsActive() and self:IsSpecial()	
+function plymeta:IsActiveSpecial()
+	return self:IsActive() and self:IsSpecial()
 end
 
 function plymeta:IsShopper()
-	if self:GetRole() == ROLES.INNOCENT.index then 
-		return false 
+	if self:GetRole() == ROLES.INNOCENT.index then
+		return false
 	end
 
 	local shopFallback = GetConVar("ttt_" .. self:GetRoleData().abbr .. "_shop_fallback"):GetString()
@@ -114,11 +114,11 @@ function plymeta:IsTeamMember(ply)
 	local h1 = hook.Run("TTT2_ModifyRole", ply)
 	local plyRole = h1 and h1.index or ply:GetRole()
 	local plyRd = GetRoleByIndex(plyRole)
-	
+
 	local h2 = hook.Run("TTT2_ModifyRole", self)
 	local role = h2 and h2.index or self:GetRole()
 	local roleRd = GetRoleByIndex(role)
-	
+
 	return roleRd.team == plyRd.team
 end
 
@@ -136,8 +136,8 @@ function plymeta:GetRoleStringRaw()
 	return self:GetRoleData().name
 end
 
-function plymeta:GetBaseKarma() 
-	return self:GetNWFloat("karma", 1000) 
+function plymeta:GetBaseKarma()
+	return self:GetNWFloat("karma", 1000)
 end
 
 function plymeta:HasEquipmentWeapon()
@@ -151,16 +151,16 @@ function plymeta:HasEquipmentWeapon()
 end
 
 function plymeta:CanCarryWeapon(wep)
-	if not wep or not wep.Kind then 
-		return false 
+	if not wep or not wep.Kind then
+		return false
 	end
 
 	return self:CanCarryType(wep.Kind)
 end
 
 function plymeta:CanCarryType(t)
-	if not t then 
-		return false 
+	if not t then
+		return false
 	end
 
 	for _, w in pairs(self:GetWeapons()) do
@@ -168,7 +168,7 @@ function plymeta:CanCarryType(t)
 			return false
 		end
 	end
-	
+
 	return true
 end
 
@@ -180,12 +180,12 @@ function plymeta:HasBought(id)
 	return self.bought and table.HasValue(self.bought, id)
 end
 
-function plymeta:GetCredits() 
-	return self.equipment_credits or 0 
+function plymeta:GetCredits()
+	return self.equipment_credits or 0
 end
 
-function plymeta:GetEquipmentItems() 
-	return self.equipment_items or EQUIP_NONE 
+function plymeta:GetEquipmentItems()
+	return self.equipment_items or EQUIP_NONE
 end
 
 -- Given an equipment id, returns if player owns this. Given nil, returns if
@@ -216,7 +216,7 @@ if CLIENT then
 
 	local ply = LocalPlayer
 	local gmod_GetWeapons = plymeta.GetWeapons
-	
+
 	function plymeta:GetWeapons()
 		if self ~= ply() then
 			return {}
@@ -255,7 +255,7 @@ if CLIENT then
 			-- just let this gesture play itself and get out of its way
 			if w == 0 then
 				ply:AnimApplyGesture(act, 1)
-				
+
 				return 1
 			else
 				return 0
@@ -269,30 +269,30 @@ if CLIENT then
 		-- sadly it's currently the only one
 		[ACT_GMOD_IN_CHAT] = function (ply, w)
 			local dest = ply:IsSpeaking() and 1 or 0
-			
+
 			w = math.Approach(w, dest, FrameTime() * 10)
 			if w > 0 then
 				ply:AnimApplyGesture(ACT_GMOD_IN_CHAT, w)
 			end
-			
+
 			return w
 		end
 	}
 
 	-- Insert all the "simple" gestures that do not need weight control
 	for _, a in ipairs{
-		ACT_GMOD_GESTURE_AGREE, 
-		ACT_GMOD_GESTURE_DISAGREE, 
-		ACT_GMOD_GESTURE_WAVE, 
-		ACT_GMOD_GESTURE_BECON, 
-		ACT_GMOD_GESTURE_BOW, 
-		ACT_GMOD_GESTURE_SALUTE, 
-		ACT_GMOD_CHEER, 
-		ACT_SIGNAL_FORWARD, 
-		ACT_SIGNAL_HALT, 
-		ACT_SIGNAL_GROUP, 
-		ACT_ITEM_PLACE, 
-		ACT_ITEM_DROP, 
+		ACT_GMOD_GESTURE_AGREE,
+		ACT_GMOD_GESTURE_DISAGREE,
+		ACT_GMOD_GESTURE_WAVE,
+		ACT_GMOD_GESTURE_BECON,
+		ACT_GMOD_GESTURE_BOW,
+		ACT_GMOD_GESTURE_SALUTE,
+		ACT_GMOD_CHEER,
+		ACT_SIGNAL_FORWARD,
+		ACT_SIGNAL_HALT,
+		ACT_SIGNAL_GROUP,
+		ACT_ITEM_PLACE,
+		ACT_ITEM_DROP,
 		ACT_ITEM_GIVE
 	} do
 		act_runner[a] = MakeSimpleRunner(a)
@@ -306,9 +306,9 @@ if CLIENT then
 		if not ConVarExists("ttt_show_gestures") or GetConVar("ttt_show_gestures"):GetInt() == 0 then return end
 
 		local runner = custom_runner or act_runner[act]
-		
-		if not runner then 
-			return false 
+
+		if not runner then
+			return false
 		end
 
 		self.GestureWeight = 0
@@ -334,14 +334,14 @@ if CLIENT then
 		return self.BaseClass.UpdateAnimation(self, ply, vel, maxseqgroundspeed)
 	end
 
-	function GM:GrabEarAnimation(ply) 
-	
+	function GM:GrabEarAnimation(ply)
+
 	end
 
 	net.Receive("TTT_PerformGesture", function()
 		local ply = net.ReadEntity()
 		local act = net.ReadUInt(16)
-		
+
 		if IsValid(ply) and act then
 			ply:AnimPerformGesture(act)
 		end

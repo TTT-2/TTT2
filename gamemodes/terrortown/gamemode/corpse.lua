@@ -17,10 +17,10 @@ function CORPSE.SetPlayerNick(rag, ply_or_name)
 	-- don't have datatable strings, so use a dt entity for common case of
 	-- still-connected player, and if the player is gone, fall back to nw string
 	local name = ply_or_name
-	
+
 	if IsValid(ply_or_name) then
 		name = ply_or_name:Nick()
-		
+
 		rag:SetDTEntity(dti.ENT_PLAYER, ply_or_name)
 	end
 
@@ -48,17 +48,17 @@ local function IdentifyBody(ply, rag)
 	-- simplified case for those who die and get found during prep
 	if GetRoundState() == ROUND_PREP then
 		CORPSE.SetFound(rag, true)
-		
+
 		return
 	end
-	
+
 	local traitor = (GetRoleByIndex(rag.was_role).team == TEAM_TRAITOR)
-	
+
 	if not hook.Run("TTTCanIdentifyCorpse", ply, rag, traitor) then return end
 
 	local finder = ply:Nick()
 	local nick = CORPSE.GetPlayerNick(rag, "")
-	
+
 	-- Announce body
 	if bodyfound:GetBool() and not CORPSE.GetFound(rag, false) then
 		local role = rag.was_role
@@ -72,7 +72,7 @@ local function IdentifyBody(ply, rag)
 	if not CORPSE.GetFound(rag, false) then
 		-- will return either false or a valid ply
 		local deadply = player.GetBySteamID(rag.sid)
-		
+
 		if deadply then
 			deadply:SetNWBool("body_found", true)
 
@@ -84,27 +84,23 @@ local function IdentifyBody(ply, rag)
 					end
 				end
 			end
-			
+
 			for _, v in pairs(ROLES) do
 				if not v.specialRoleFilter and not v.preventShowOnConfirm then
 					SendConfirmedSpecial(v.index, GetSpecialRoleFilter(v.index, false))
 				end
-				
+
 				if v.specialRoleFilter then
 					hook.Run("TTT2_SpecialRoleFilter")
 				end
 			end
-			
+
 			SCORE:HandleBodyFound(ply, deadply)
 		end
-		
+
 		hook.Call("TTTBodyFound", GAMEMODE, ply, deadply, rag)
-		
+
 		CORPSE.SetFound(rag, true)
-	else
-		-- re-set because nwvars are unreliable
-		--CORPSE.SetFound(rag, true)
-		--CORPSE.SetPlayerNick(rag, nick)
 	end
 
 	-- Handle kill list
@@ -129,37 +125,35 @@ end
 
 concommand.Add("ttt_confirm_death", function(ply, cmd, args)
 	if not IsValid(ply) then return end
-	
+
 	if #args ~= 2 then return end
 
 	local eidx = tonumber(args[1])
 	local id = tonumber(args[2])
-	
+
 	if not eidx or not id then return end
 
 	if not ply.search_id or ply.search_id.id ~= id or ply.search_id.eidx ~= eidx then
 		ply.search_id = nil
-		
+
 		return
 	end
-	
+
 	ply.search_id = nil
 
 	local rag = Entity(eidx)
-	
-	if IsValid(rag) and rag:GetPos():Distance(ply:GetPos()) < 128 then
-		if CORPSE.GetFound(rag, false) then
-			IdentifyBody(ply, rag)
-		end
+
+	if IsValid(rag) and rag:GetPos():Distance(ply:GetPos()) < 128 and CORPSE.GetFound(rag, false) then
+		IdentifyBody(ply, rag)
 	end
 end)
 
 -- Call detectives to a corpse
 local function CallDetective(ply, cmd, args)
 	if not IsValid(ply) then return end
-	
+
 	if #args ~= 1 then return end
-	
+
 	if not ply:IsActive() then return end
 
 	local eidx = tonumber(args[1])
@@ -185,12 +179,12 @@ concommand.Add("ttt_call_detective", CallDetective)
 
 local function bitsRequired(num)
 	local bits, max = 0, 1
-	
+
 	while max <= num do
 		bits = bits + 1
 		max = max + max
 	end
-	
+
 	return bits
 end
 
@@ -205,12 +199,12 @@ function CORPSE.ShowSearch(ply, rag, covert, long_range)
 
 	if rag:IsOnFire() then
 		LANG.Msg(ply, "body_burning")
-		
+
 		return
 	end
-	
+
 	local traitor = GetRoleByIndex(rag.was_role).team == TEAM_TRAITOR
-	
+
 	if not hook.Run("TTTCanSearchCorpse", ply, rag, covert, long_range, traitor) then
 		return
 	end
@@ -225,7 +219,7 @@ function CORPSE.ShowSearch(ply, rag, covert, long_range)
 	local words = rag.last_words or ""
 	local hshot = rag.was_headshot or false
 	local dtime = rag.time or 0
-	
+
 	local owner = player.GetBySteamID(rag.sid)
 	owner = IsValid(owner) and owner:EntIndex() or -1
 
@@ -237,19 +231,17 @@ function CORPSE.ShowSearch(ply, rag, covert, long_range)
 	end
 
 	local credits = CORPSE.GetCredits(rag, 0)
-	
-	if ply:IsActiveShopper() and not ply:GetRoleData().preventFindCredits then
-		if credits > 0 and not long_range then
-			LANG.Msg(ply, "body_credits", {num = credits})
-			
-			ply:AddCredits(credits)
 
-			CORPSE.SetCredits(rag, 0)
+	if ply:IsActiveShopper() and not ply:GetRoleData().preventFindCredits and credits > 0 and not long_range then
+		LANG.Msg(ply, "body_credits", {num = credits})
 
-			ServerLog(ply:Nick() .. " took " .. credits .. " credits from the body of " .. nick .. "\n")
-			
-			SCORE:HandleCreditFound(ply, nick, credits)
-		end
+		ply:AddCredits(credits)
+
+		CORPSE.SetCredits(rag, 0)
+
+		ServerLog(ply:Nick() .. " took " .. credits .. " credits from the body of " .. nick .. "\n")
+
+		SCORE:HandleCreditFound(ply, nick, credits)
 	end
 
 	-- time of death relative to current time (saves bits)
@@ -262,23 +254,23 @@ function CORPSE.ShowSearch(ply, rag, covert, long_range)
 
 	-- time of dna sample decay relative to current time
 	local stime = 0
-	
+
 	if rag.killer_sample then
 		stime = math.max(0, rag.killer_sample.t - CurTime())
 	end
 
 	-- build list of people this traitor killed
 	local kill_entids = {}
-	
+
 	for _, vicsid in pairs(rag.kills) do
 		-- also send disconnected players as a marker
 		local vic = player.GetBySteamID(vicsid)
-		
+
 		table.insert(kill_entids, IsValid(vic) and vic:EntIndex() or -1)
 	end
 
 	local lastid = -1
-	
+
 	if rag.lastid and ply:IsActive() and ply:GetRole() == ROLES.DETECTIVE.index then
 		-- if the person this victim last id'd has since disconnected, send -1 to
 		-- indicate this
@@ -300,7 +292,7 @@ function CORPSE.ShowSearch(ply, rag, covert, long_range)
 	net.WriteInt(stime, 16)
 
 	net.WriteUInt(#kill_entids, 8)
-	
+
 	for _, idx in ipairs(kill_entids) do
 		net.WriteUInt(idx, 8) -- first game.MaxPlayers() of entities are for players.
 	end
@@ -355,10 +347,10 @@ local function GetKillerSample(victim, attacker, dmg)
 end
 
 local crimescene_keys = {
-	"Fraction", 
-	"HitBox", 
-	"Normal", 
-	"HitPos", 
+	"Fraction",
+	"HitBox",
+	"Normal",
+	"HitPos",
 	"StartPos"
 }
 local poseparams = {
@@ -473,10 +465,10 @@ function CORPSE.Create(ply, attacker, dmginfo)
 
 	for i = 0, num do
 		local bone = rag:GetPhysicsObjectNum(i)
-		
+
 		if IsValid(bone) then
 			local bp, ba = ply:GetBonePosition(rag:TranslatePhysBoneToBone(i))
-			
+
 			if bp and ba then
 				bone:SetPos(bp)
 				bone:SetAngles(ba)
@@ -491,12 +483,12 @@ function CORPSE.Create(ply, attacker, dmginfo)
 	if ply.effect_fn then
 		-- next frame, after physics is happy for this ragdoll
 		local efn = ply.effect_fn
-		
-		timer.Simple(0, function() 
-			efn(rag) 
+
+		timer.Simple(0, function()
+			efn(rag)
 		end)
 	end
-	
+
 	hook.Run("TTTOnCorpseCreated", rag, ply)
 
 	return rag -- we'll be speccing this

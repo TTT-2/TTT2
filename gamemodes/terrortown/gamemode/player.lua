@@ -3,7 +3,6 @@
 local math = math
 local table = table
 local player = player
-local timer = timer
 local pairs = pairs
 local ipairs = ipairs
 
@@ -18,13 +17,13 @@ function GM:PlayerInitialSpawn(ply)
 	if not GAMEMODE.cvar_init then
 		GAMEMODE:InitCvars()
 	end
-	
+
 	ply:InitialSpawn()
-	
+
 	local rstate = GetRoundState() or ROUND_WAIT
 	-- We should update the traitor list, if we are not about to send it
 	if rstate <= ROUND_PREP then
-		
+
 		-- update traitors in team (they know each other)
 		-- update each team without innos (default everybody is inno for them) and detectives (he will update later) in their own role
 		for _, v in pairs(ROLES) do
@@ -38,14 +37,14 @@ function GM:PlayerInitialSpawn(ply)
 				hook.Run("TTT2_SpecialRoleFilter")
 			end
 		end
-		
+
 		-- send everybody the confirmed traitors, but not the traitors (prevent reset)
 		for _, v in pairs(ROLES) do
 			if v.team ~= TEAM_TRAITOR and not v.specialRoleFilter then
 				SendConfirmedTraitors(GetRoleFilter(v.index))
 			end
 		end
-		
+
 		-- completely update
 		SendRoleList(ROLES.DETECTIVE.index)
 	end
@@ -54,7 +53,7 @@ function GM:PlayerInitialSpawn(ply)
 	if rstate ~= ROUND_WAIT then
 		SendRoundState(rstate, ply)
 		SendConfirmedTraitors(ply)
-		
+
 		-- completely update
 		SendRoleList(ROLES.DETECTIVE.index, ply)
 	end
@@ -71,7 +70,7 @@ function GM:NetworkIDValidated(name, steamid)
 	for _, p in ipairs(player.GetAll()) do
 		if IsValid(p) and p:SteamID() == steamid and p.delay_karma_recall then
 			KARMA.LateRecallAndSet(p)
-			
+
 			return
 		end
 	end
@@ -80,49 +79,49 @@ end
 function GM:PlayerSpawn(ply)
 	-- Some spawns may be tilted
 	ply:ResetViewRoll()
-	
+
 	-- Clear out stuff like whether we ordered guns or what bomb code we used
 	ply:ResetRoundFlags()
-	
+
 	-- latejoiner, send him some info
 	if GetRoundState() == ROUND_ACTIVE then
 		SendRoundState(GetRoundState(), ply)
 	end
-	
+
 	ply.spawn_nick = ply:Nick()
 	ply.has_spawned = true
-	
+
 	-- let the client do things on spawn
 	net.Start("TTT_PlayerSpawned")
 	net.WriteBit(ply:IsSpec())
 	net.Send(ply)
-	
+
 	if ply:IsSpec() then
 		ply:SetTeam(TEAM_SPEC)
 		ply:StripAll()
 		ply:Spectate(OBS_MODE_ROAMING)
-		
+
 		return
 	else
 		ply:SetTeam(TEAM_TERROR)
 	end
-	
+
 	ply:UnSpectate()
-	
+
 	-- ye olde hooks
 	hook.Call("PlayerLoadout", GAMEMODE, ply)
 	hook.Call("PlayerSetModel", GAMEMODE, ply)
 	hook.Call("TTTPlayerSetColor", GAMEMODE, ply)
-	
+
 	ply:SetupHands()
-	
+
 	SCORE:HandleSpawn(ply)
 end
 
 function GM:PlayerSetHandsModel(pl, ent)
 	local simplemodel = player_manager.TranslateToPlayerModelName(pl:GetModel())
 	local info = player_manager.TranslatePlayerHands(simplemodel)
-	
+
 	if info then
 		ent:SetModel(info.model)
 		ent:SetSkin(info.skin)
@@ -132,17 +131,17 @@ end
 
 function GM:IsSpawnpointSuitable(ply, spwn, force, rigged)
 	if not IsValid(ply) or not ply:IsTerror() then return true end
-	
+
 	if not rigged and (not IsValid(spwn) or not spwn:IsInWorld()) then return false end
-	
+
 	-- spwn is normally an ent, but we sometimes use a vector for jury rigged
 	-- positions
 	local pos = rigged and spwn or spwn:GetPos()
-	
+
 	if not util.IsInWorld(pos) then return false end
-	
+
 	local blocking = ents.FindInBox(pos + Vector(-16, -16, 0), pos + Vector(16, 16, 64))
-	
+
 	for _, p in ipairs(blocking) do
 		if IsValid(p) and p:IsPlayer() and p:IsTerror() and p:Alive() then
 			if force then
@@ -152,25 +151,25 @@ function GM:IsSpawnpointSuitable(ply, spwn, force, rigged)
 			end
 		end
 	end
-	
+
 	return true
 end
 
 local SpawnTypes = {
-	"info_player_deathmatch", 
+	"info_player_deathmatch",
 	"info_player_combine",
-	"info_player_rebel", 
-	"info_player_counterterrorist", 
+	"info_player_rebel",
+	"info_player_counterterrorist",
 	"info_player_terrorist",
-	"info_player_axis", 
-	"info_player_allies", 
+	"info_player_axis",
+	"info_player_allies",
 	"gmod_player_start",
 	"info_player_teamspawn"
 }
 
 function GetSpawnEnts(shuffled, force_all)
 	local tbl = {}
-	
+
 	for _, classname in ipairs(SpawnTypes) do
 		for _, e in ipairs(ents.FindByClass(classname)) do
 			if IsValid(e) and not e.BeingRemoved then
@@ -178,8 +177,8 @@ function GetSpawnEnts(shuffled, force_all)
 			end
 		end
 	end
-	
-	
+
+
 	-- Don't use info_player_start unless absolutely necessary, because eg. TF2
 	-- uses it for observer starts that are in places where players cannot really
 	-- spawn well. At all.
@@ -190,22 +189,23 @@ function GetSpawnEnts(shuffled, force_all)
 			end
 		end
 	end
-	
+
 	if shuffled then
 		table.Shuffle(tbl)
 	end
-	
+
 	return tbl
 end
 
 -- Generate points next to and above the spawn that we can test for suitability
 local function PointsAroundSpawn(spwn)
 	if not IsValid(spwn) then return {} end
-	
+
 	local pos = spwn:GetPos()
-	
-	local w, h = 36, 72 -- bit roomier than player hull
-	
+
+	local w = 36 -- bit roomier than player hull
+	--local h = 72
+
 	-- all rigged positions
 	-- could be done without typing them out, but would take about as much time
 	return {
@@ -231,17 +231,17 @@ function GM:PlayerSelectSpawn(ply)
 		-- round start will remove our rigged spawns, and we'll have to create new
 		-- ones anyway.
 	end
-	
+
 	if #self.SpawnPoints == 0 then
 		Error("No spawn entity found!\n")
 
 		return
 	end
-	
+
 	-- Just always shuffle, it's not that costly and should help spawn
 	-- randomness.
 	table.Shuffle(self.SpawnPoints)
-	
+
 	-- Optimistic attempt: assume there are sufficient spawns for all and one is
 	-- free
 	for _, spwn in ipairs(self.SpawnPoints) do
@@ -249,66 +249,66 @@ function GM:PlayerSelectSpawn(ply)
 			return spwn
 		end
 	end
-	
+
 	-- That did not work, so now look around spawns
 	local picked = nil
-	
+
 	for _, spwn in ipairs(self.SpawnPoints) do
 		picked = spwn -- just to have something if all else fails
-	 
+
 		-- See if we can jury rig a spawn near this one
 		local rigged = PointsAroundSpawn(spwn)
-		
+
 		for _, rig in ipairs(rigged) do
 			if self:IsSpawnpointSuitable(ply, rig, false, true) then
 				local rig_spwn = ents.Create("info_player_terrorist")
-				
+
 				if IsValid(rig_spwn) then
 					rig_spwn:SetPos(rig)
 					rig_spwn:Spawn()
-					
+
 					ErrorNoHalt("TTT WARNING: Map has too few spawn points, using a rigged spawn for ".. tostring(ply) .. "\n")
-					
+
 					self.HaveRiggedSpawn = true
-					
+
 					return rig_spwn
 				end
 			end
 		end
 	end
-	
+
 	-- Last attempt, force one
 	for _, spwn in ipairs(self.SpawnPoints) do
 		if self:IsSpawnpointSuitable(ply, spwn, true) then
 			return spwn
 		end
 	end
-	
+
 	return picked
 end
 
 function GM:PlayerSetModel(ply)
 	if not hook.Run("TTT_UseCustomPlayerModels") then
 		local mdl = GAMEMODE.playermodel or "models/player/phoenix.mdl"
-		
+
 		util.PrecacheModel(mdl)
 		ply:SetModel(mdl)
 	end
-	
+
 	-- Always clear color state, may later be changed in TTTPlayerSetColor
 	ply:SetColor(COLOR_WHITE)
 end
 
 function GM:TTTPlayerSetColor(ply)
 	local clr = COLOR_WHITE
-	
+
 	if GAMEMODE.playercolor then
 		-- If this player has a colorable model, always use the same color as all
 		-- other colorable players, so color will never be the factor that lets
 		-- you tell players apart.
 		clr = GAMEMODE.playercolor
 	end
-	
+
 	ply:SetPlayerColor(Vector(clr.r / 255.0, clr.g / 255.0, clr.b / 255.0))
 end
 
@@ -320,7 +320,7 @@ end
 
 function GM:PlayerSwitchFlashlight(ply, on)
 	if not IsValid(ply) then return false end
-	
+
 	-- add the flashlight "effect" here, and then deny the switch
 	-- this prevents the sound from playing, fixing the exploit
 	-- where weapon sound could be silenced using the flashlight sound
@@ -331,7 +331,7 @@ function GM:PlayerSwitchFlashlight(ply, on)
 			ply:RemoveEffects(EF_DIMLIGHT)
 		end
 	end
-	
+
 	return false
 end
 
@@ -353,22 +353,22 @@ function GM:KeyPress(ply, key)
 		if ply.propspec then
 			return PROPSPEC.Key(ply, key)
 		end
-		
+
 		ply:ResetViewRoll()
-		
+
 		if key == IN_ATTACK then
 			-- snap to random guy
 			ply:Spectate(OBS_MODE_ROAMING)
 			ply:SetEyeAngles(angle_zero) -- After exiting propspec, this could be set to awkward values
 			ply:SpectateEntity(nil)
-		
+
 			local alive = util.GetAlivePlayers()
-			
+
 			local alive_count = #alive
 			if alive_count < 1 then return end
-		
+
 			local target = alive[math.random(1, alive_count)]
-			
+
 			if IsValid(target) then
 				--ply:SetPos(target:EyePos())
 				--ply:SetEyeAngles(target:EyeAngles())
@@ -378,7 +378,7 @@ function GM:KeyPress(ply, key)
 		elseif key == IN_ATTACK2 then
 			-- spectate either the next guy or a random guy in chase
 			local target = util.GetNextAlivePlayer(ply:GetObserverTarget())
-		
+
 			if IsValid(target) then
 				ply:Spectate(ply.spec_mode or OBS_MODE_IN_EYE)
 				ply:SpectateEntity(target)
@@ -386,39 +386,39 @@ function GM:KeyPress(ply, key)
 		elseif key == IN_DUCK then
 			local pos = ply:GetPos()
 			local ang = ply:EyeAngles()
-		
+
 			local target = ply:GetObserverTarget()
-			
+
 			if IsValid(target) and target:IsPlayer() then
 				pos = target:EyePos()
 				ang = target:EyeAngles()
 			end
-		
+
 			-- reset
 			ply:Spectate(OBS_MODE_ROAMING)
 			ply:SpectateEntity(nil)
-		
+
 			ply:SetPos(pos)
 			ply:SetEyeAngles(ang)
-			
+
 			return true
 		elseif key == IN_JUMP then
 			-- unfuck if you're on a ladder etc
-			if not ply:GetMoveType() == MOVETYPE_NOCLIP then
+			if ply:GetMoveType() ~= MOVETYPE_NOCLIP then
 				ply:SetMoveType(MOVETYPE_NOCLIP)
 			end
 		elseif key == IN_RELOAD then
 			local tgt = ply:GetObserverTarget()
-			
+
 			if not IsValid(tgt) or not tgt:IsPlayer() then return end
-			
+
 			if not ply.spec_mode or ply.spec_mode == OBS_MODE_IN_EYE then
 				ply.spec_mode = OBS_MODE_CHASE
 			elseif ply.spec_mode == OBS_MODE_CHASE then
 				ply.spec_mode = OBS_MODE_IN_EYE
 			end
 			-- roam stays roam
-			
+
 			ply:Spectate(ply.spec_mode)
 		end
 	end
@@ -433,22 +433,22 @@ function GM:KeyRelease(ply, key)
 			filter = ply,
 			mask = MASK_SHOT
 		})
-		
+
 		if tr.Hit and IsValid(tr.Entity) then
 			if tr.Entity.CanUseKey and tr.Entity.UseOverride then
 				local phys = tr.Entity:GetPhysicsObject()
-				
+
 				if IsValid(phys) and not phys:HasGameFlag(FVPHYSICS_PLAYER_HELD) then
 					tr.Entity:UseOverride(ply)
-					
+
 					return true
 				else
 					-- do nothing, can't +use held objects
 					return true
 				end
 			elseif tr.Entity.player_ragdoll then
-				CORPSE.ShowSearch(ply, tr.Entity, (ply:KeyDown(IN_WALK) or ply:KeyDownLast(IN_WALK))) -- Body Corpse Search Identify TODO
-				
+				CORPSE.ShowSearch(ply, tr.Entity, ply:KeyDown(IN_WALK) or ply:KeyDownLast(IN_WALK)) -- Body Corpse Search Identify TODO
+
 				return true
 			end
 		end
@@ -462,7 +462,7 @@ local function SpecUseKey(ply, cmd, arg)
 	if IsValid(ply) and ply:IsSpec() then
 		-- longer range than normal use
 		local tr = util.QuickTrace(ply:GetShootPos(), ply:GetAimVector() * 128, ply)
-		
+
 		if tr.Hit and IsValid(tr.Entity) then
 			if tr.Entity.player_ragdoll then
 				if not ply:KeyDown(IN_WALK) then
@@ -487,18 +487,18 @@ function GM:PlayerDisconnected(ply)
 	if IsValid(ply) then
 		ply:SetRole(ROLE_NONE)
 	end
-	
+
 	SendVisibleForTraitorList()
-	
+
 	-- easy role filtering method
 	for _, v in pairs(ROLES) do
 		if v.networkRoles then
 			SendNetworkingRolesList(v.index, v.networkRoles)
 		end
 	end
-	
+
 	hook.Run("TTT2_SendFullStateUpdate")
-	
+
 	if GetRoundState() ~= ROUND_PREP then
 		for _, v in ipairs(player.GetAll()) do
 			if not v:GetRoleData().specialRoleFilter then
@@ -513,11 +513,11 @@ function GM:PlayerDisconnected(ply)
 				hook.Run("TTT2_SpecialRoleFilter", v)
 			end
 		end
-		
+
 		-- completely update
 		SendRoleList(ROLES.DETECTIVE.index)
 	end
-	
+
 	if KARMA.IsEnabled() then
 		KARMA.Remember(ply)
 	end
@@ -528,9 +528,9 @@ local function CreateDeathEffect(ent, marked)
 	local pos = ent:GetPos() + Vector(0, 0, 20)
 	local jit = 35.0
 	local jitter = Vector(math.Rand(-jit, jit), math.Rand(-jit, jit), 0)
-	
+
 	util.PaintDown(pos + jitter, "Blood", ent)
-	
+
 	if marked then
 		util.PaintDown(pos, "Cross", ent)
 	end
@@ -564,42 +564,42 @@ local deathsounds_count = #deathsounds
 
 local function PlayDeathSound(victim)
 	if not IsValid(victim) then return end
-	
+
 	sound.Play(deathsounds[math.random(1, deathsounds_count)], victim:GetShootPos(), 90, 100)
 end
 
 -- See if we should award credits now
 local function CheckCreditAward(victim, attacker)
 	if GetRoundState() ~= ROUND_ACTIVE then return end
-	
+
 	if not IsValid(victim) then return end
-	
+
 	if not IsValid(attacker) or not attacker:IsPlayer() or not attacker:IsActive() then return end
-	
+
 	local ret = hook.Run("TTT2CheckCreditAward", victim, attacker)
 	if ret ~= nil and not ret then return end
-	
+
 	local rd = attacker:GetRoleData()
- 
+
 	-- DET KILLED ANOTHER TEAM AWARD
 	if attacker:GetRole() == ROLES.DETECTIVE.index and not victim:IsTeamMember(attacker) then
 		local amt = (ConVarExists("ttt_" .. rd.abbr .. "_credits_traitordead") and GetConVar("ttt_" .. rd.abbr .. "_credits_traitordead"):GetInt() or 1)
-		
+
 		for _, ply in ipairs(player.GetAll()) do
 			if ply:IsActiveRole(ROLES.DETECTIVE.index) then
 				ply:AddCredits(amt)
 			end
 		end
-	
+
 		LANG.Msg(GetRoleFilter(ROLES.DETECTIVE.index, true), "credit_det_all", {num = amt})
 	end
- 
+
 	-- TRAITOR AWARD
 	if (rd.team == TEAM_TRAITOR or rd.traitorCreditAward) and not victim:IsTeamMember(attacker) and (not GAMEMODE.AwardedCredits or GetConVar("ttt_credits_award_repeat"):GetBool()) then
 		local terror_alive = 0
 		local terror_dead = 0
 		local terror_total = 0
-	 
+
 		for _, ply in ipairs(player.GetAll()) do
 			if not ply:IsTeamMember(attacker) then
 				if ply:IsTerror() then
@@ -609,36 +609,36 @@ local function CheckCreditAward(victim, attacker)
 				end
 			end
 		end
- 
+
 		-- we check this at the death of an innocent who is still technically
 		-- Alive(), so add one to dead count and sub one from living
 		terror_dead = terror_dead + 1
 		terror_alive = math.max(terror_alive - 1, 0)
 		terror_total = terror_dead + terror_alive
-		
+
 		-- Only repeat-award if we have reached the pct again since last time
 		if GAMEMODE.AwardedCredits then
 			terror_dead = terror_dead - GAMEMODE.AwardedCreditsDead
 		end
-		
+
 		local pct = terror_dead / terror_total
-		
+
 		if not ConVarExists("ttt_credits_award_pct") or pct >= GetConVar("ttt_credits_award_pct"):GetInt() then
 			-- Traitors have killed sufficient people to get an award
 			local amt = (ConVarExists("ttt_credits_award_size") and GetConVar("ttt_credits_award_size"):GetInt() or 0)
-			
+
 			-- If size is 0, awards are off
 			if amt > 0 then
 				for _, ply in ipairs(player.GetAll()) do
 					if ply:IsActive() and ply:IsTeamMember(attacker) and not ply:GetRoleData().preventKillCredits then
 						ply:AddCredits(amt)
-						
+
 						--LANG.Msg(GetRoleTeamFilter(TEAM_TRAITOR, true), "credit_kill_all", {num = amt})
 						LANG.Msg(ply, "credit_" .. ply:GetBaseRoleData().abbr .. "_all", {num = amt})
 					end
 				end
 			end
-			
+
 			GAMEMODE.AwardedCredits = true
 			GAMEMODE.AwardedCreditsDead = terror_dead + GAMEMODE.AwardedCreditsDead
 		end
@@ -647,105 +647,105 @@ end
 
 function GM:DoPlayerDeath(ply, attacker, dmginfo)
 	if ply:IsSpec() then return end
-	
+
 	-- Experimental: Fire a last shot if ironsighting and not headshot
 	if GetConVar("ttt_dyingshot"):GetBool() then
 		local wep = ply:GetActiveWeapon()
-		
+
 		if IsValid(wep) and wep.DyingShot and not ply.was_headshot and dmginfo:IsBulletDamage() then
 			local fired = wep:DyingShot()
-			
+
 			if fired then
 				return
 			end
 		end
-	
+
 		-- Note that funny things can happen here because we fire a gun while the
 		-- player is dead. Specifically, this DoPlayerDeath is run twice for
 		-- him. This is ugly, and we have to return the first one to prevent crazy
 		-- shit.
 	end
-	
+
 	-- Drop all weapons
 	for _, wep in pairs(ply:GetWeapons()) do
 		WEPS.DropNotifiedWeapon(ply, wep, true) -- with ammo in them
-		
+
 		wep:DampenDrop()
 	end
-	
+
 	if IsValid(ply.hat) then
 		ply.hat:Drop()
 	end
-	
+
 	-- Create ragdoll and hook up marking effects
 	local rag = CORPSE.Create(ply, attacker, dmginfo)
-	
+
 	ply.server_ragdoll = rag -- nil if clientside
-	
+
 	CreateDeathEffect(ply, false)
-	
+
 	util.StartBleeding(rag, dmginfo:GetDamage(), 15)
-	
+
 	-- Score only when there is a round active.
 	if GetRoundState() == ROUND_ACTIVE then
 		SCORE:HandleKill(ply, attacker, dmginfo)
-	
+
 		if IsValid(attacker) and attacker:IsPlayer() then
 			attacker:RecordKill(ply)
-		
+
 			DamageLog(Format("KILL:\t %s [%s] killed %s [%s]", attacker:Nick(), attacker:GetRoleString(), ply:Nick(), ply:GetRoleString()))
 		else
 			DamageLog(Format("KILL:\t <something/world> killed %s [%s]", ply:Nick(), ply:GetRoleString()))
 		end
-	
+
 		KARMA.Killed(attacker, ply, dmginfo)
 	end
-	
+
 	-- Clear out any weapon or equipment we still have
 	ply:StripAll()
-	
+
 	-- Tell the client to send their chat contents
 	ply:SendLastWords(dmginfo)
-	
+
 	local killwep = util.WeaponFromDamage(dmginfo)
-	
+
 	-- headshots, knife damage, and weapons tagged as silent all prevent death
 	-- sound from occurring
 	if not (ply.was_headshot or dmginfo:IsDamageType(DMG_SLASH) or IsValid(killwep) and killwep.IsSilent) then
 		PlayDeathSound(ply)
 	end
-	
+
 	--- Credits
 	CheckCreditAward(ply, attacker)
-	
+
 	-- Check for TEAM killing ANOTHER TEAM
 	if IsValid(attacker) and attacker:IsPlayer() then
 		local reward = 0
 		local rd = attacker:GetRoleData()
-		
+
 		-- if traitor team kills another team
 		if attacker:IsActive() and attacker:IsShopper() and not attacker:IsTeamMember(ply) then
 			if attacker:HasTeamRole(TEAM_TRAITOR) then
-				reward = math.ceil((ConVarExists("ttt_credits_" .. rd.name .. "kill") and GetConVar("ttt_credits_" .. rd.name .. "kill"):GetInt() or 0))
+				reward = math.ceil(ConVarExists("ttt_credits_" .. rd.name .. "kill") and GetConVar("ttt_credits_" .. rd.name .. "kill"):GetInt() or 0)
 			else
 				local vrd = ply:GetRoleData()
 				local b = false
-				
+
 				if vrd ~= ROLES.TRAITOR then
 					b = ConVarExists("ttt_" .. rd.name .. "_credits_" .. vrd.name .. "kill")
 				end
-				
+
 				if b then -- special role killing award
-					reward = math.ceil((ConVarExists("ttt_" .. rd.name .. "_credits_" .. vrd.name .. "kill") and GetConVar("ttt_" .. rd.name .. "_credits_" .. vrd.name .. "kill"):GetInt() or 0))
+					reward = math.ceil(ConVarExists("ttt_" .. rd.name .. "_credits_" .. vrd.name .. "kill") and GetConVar("ttt_" .. rd.name .. "_credits_" .. vrd.name .. "kill"):GetInt() or 0)
 				else -- give traitor killing award if killing another role
-					reward = math.ceil((ConVarExists("ttt_" .. rd.name .. "_credits_" .. ROLES.TRAITOR.name .. "kill") and GetConVar("ttt_" .. rd.name .. "_credits_" .. ROLES.TRAITOR.name .. "kill"):GetInt() or 0))
+					reward = math.ceil(ConVarExists("ttt_" .. rd.name .. "_credits_" .. ROLES.TRAITOR.name .. "kill") and GetConVar("ttt_" .. rd.name .. "_credits_" .. ROLES.TRAITOR.name .. "kill"):GetInt() or 0)
 				end
 			end
 		end
-		
+
 		if reward > 0 then
 			attacker:AddCredits(reward)
-			
+
 			LANG.Msg(attacker, "credit_kill", {num = reward, role = LANG.NameParam(ply:GetRoleString())}) -- TODO rework
 		end
 	end
@@ -754,33 +754,33 @@ end
 function GM:PlayerDeath(victim, infl, attacker)
 	-- tell no one
 	self:PlayerSilentDeath(victim)
-	
+
 	victim:SetTeam(TEAM_SPEC)
 	victim:Freeze(false)
 	victim:SetRagdollSpec(true)
 	victim:Spectate(OBS_MODE_IN_EYE)
-	
+
 	local rag_ent = victim.server_ragdoll or victim:GetRagdollEntity()
-	
+
 	victim:SpectateEntity(rag_ent)
 	victim:Flashlight(false)
 	victim:Extinguish()
-	
-	net.Start("TTT_PlayerDied") 
+
+	net.Start("TTT_PlayerDied")
 	net.Send(victim)
-	
+
 	if HasteMode() and GetRoundState() == ROUND_ACTIVE then
 		IncRoundEnd(GetConVar("ttt_haste_minutes_per_death"):GetFloat() * 60)
 	end
-	
+
 	if IsValid(attacker) and attacker:IsPlayer() and attacker ~= victim and attacker:IsActive() then
 		victim.killerSpec = attacker
 	end
 end
 
 -- kill hl2 beep
-function GM:PlayerDeathSound() 
-	return true 
+function GM:PlayerDeathSound()
+	return true
 end
 
 function GM:PostPlayerDeath(ply)
@@ -795,32 +795,32 @@ function GM:SpectatorThink(ply)
 		local to_switch, to_chase, to_roam = 2, 5, 8
 		local elapsed = CurTime() - ply.spec_ragdoll_start
 		local clicked = ply:KeyPressed(IN_ATTACK)
-	
+
 		-- After first click, go into chase cam, then after another click, to into
 		-- roam. If no clicks made, go into chase after X secs, and roam after Y.
 		-- Don't switch for a second in case the player was shooting when he died,
 		-- this would make him accidentally switch out of ragdoll cam.
-	
+
 		local m = ply:GetObserverMode()
-		
+
 		if m == OBS_MODE_CHASE and clicked or elapsed > to_roam then
-		
+
 			-- free roam mode
 			ply:SetRagdollSpec(false)
-			
+
 			if ply.killerSpec and IsValid(ply.killerSpec) and ply.killerSpec:IsPlayer() and ply.killerSpec:IsActive() then
 				ply:Spectate(OBS_MODE_IN_EYE)
 				ply:SpectateEntity(ply.killerSpec)
 			else
 				ply:Spectate(OBS_MODE_ROAMING)
-		
+
 				-- move to spectator spawn if mapper defined any
 				local spec_spawns = ents.FindByClass("ttt_spectator_spawn")
 				local spec_spawns_count = #spec_spawns
-				
+
 				if spec_spawns_count > 0 then
 					local spawn = spec_spawns[math.random(1, spec_spawns_count)]
-					
+
 					ply:SetPos(spawn:GetPos())
 					ply:SetEyeAngles(spawn:GetAngles())
 				end
@@ -829,20 +829,20 @@ function GM:SpectatorThink(ply)
 			-- start following ragdoll
 			ply:Spectate(OBS_MODE_CHASE)
 		end
-	
-		if not IsValid(ply.server_ragdoll) then 
-			ply:SetRagdollSpec(false) 
+
+		if not IsValid(ply.server_ragdoll) then
+			ply:SetRagdollSpec(false)
 		end
-	
+
 	-- when roaming and messing with ladders
 	elseif ply:GetMoveType() < MOVETYPE_NOCLIP and ply:GetMoveType() > 0 or ply:GetMoveType() == MOVETYPE_LADDER then
 		ply:Spectate(OBS_MODE_ROAMING)
 	end
-	
+
 	-- when speccing a player
 	if ply:GetObserverMode() ~= OBS_MODE_ROAMING and not ply.propspec and not ply:GetRagdollSpec() then
 		local tgt = ply:GetObserverTarget()
-		
+
 		if IsValid(tgt) and tgt:IsPlayer() then
 			if not tgt:IsTerror() or not tgt:Alive() then
 				-- stop speccing as soon as target dies
@@ -870,22 +870,18 @@ function GM:PlayerTraceAttack(ply, dmginfo, dir, trace)
 	return false
 end
 
-	
+
 function GM:OnDamagedByExplosion(ply, dmginfo)
- 
+
 end
 
 function GM:ScalePlayerDamage(ply, hitgroup, dmginfo)
-	if dmginfo:IsBulletDamage() then
-		if ply:HasEquipmentItem(EQUIP_ARMOR) then
-			dmginfo:ScaleDamage(0.7)
-		end
+	if dmginfo:IsBulletDamage() and ply:HasEquipmentItem(EQUIP_ARMOR) then
+		dmginfo:ScaleDamage(0.7)
 	end
-	
-	if ply:IsPlayer() and dmginfo:GetAttacker():IsPlayer() then
-		if GetRoundState() == 2 then
-			dmginfo:ScaleDamage(0)
-		end
+
+	if ply:IsPlayer() and dmginfo:GetAttacker():IsPlayer() and GetRoundState() == 2 then
+		dmginfo:ScaleDamage(0)
 	end
 
 	ply.was_headshot = false
@@ -898,14 +894,14 @@ function GM:ScalePlayerDamage(ply, hitgroup, dmginfo)
 
 		if IsValid(wep) then
 			local s = wep:GetHeadshotMultiplier(ply, dmginfo) or 2
-			
+
 			dmginfo:ScaleDamage(s)
 		end
 	elseif hitgroup == HITGROUP_LEFTARM
-	or hitgroup == HITGROUP_RIGHTARM 
+	or hitgroup == HITGROUP_RIGHTARM
 	or hitgroup == HITGROUP_LEFTLEG
 	or hitgroup == HITGROUP_RIGHTLEG
-	or hitgroup == HITGROUP_GEAR 
+	or hitgroup == HITGROUP_GEAR
 	then
 		dmginfo:ScaleDamage(0.55)
 	end
@@ -936,33 +932,31 @@ local fallsounds_count = #fallsounds
 
 function GM:OnPlayerHitGround(ply, in_water, on_floater, speed)
 	if in_water or speed < 450 or not IsValid(ply) then return end
- 
+
 	-- Everything over a threshold hurts you, rising exponentially with speed
 	local damage = math.pow(0.05 * (speed - 420), 1.75)
- 
+
 	-- I don't know exactly when on_floater is true, but it's probably when
 	-- landing on something that is in water.
 	if on_floater then damage = damage / 2 end
- 
+
 	-- if we fell on a dude, that hurts (him)
 	local ground = ply:GetGroundEntity()
-	
+
 	if IsValid(ground) and ground:IsPlayer() then
 		if math.floor(damage) > 0 then
 			local att = ply
- 
+
 			-- if the faller was pushed, that person should get attrib
 			local push = ply.was_pushed
-			
-			if push then
+
+			if push and math.max(push.t or 0, push.hurt or 0) > CurTime() - 4 then
 				-- TODO: move push time checking stuff into fn?
-				if math.max(push.t or 0, push.hurt or 0) > CurTime() - 4 then
-					att = push.att
-				end
+				att = push.att
 			end
- 
+
 			local dmg = DamageInfo()
- 
+
 			if att == ply then
 				-- hijack physgun damage as a marker of this type of kill
 				dmg:SetDamageType(DMG_CRUSH + DMG_PHYSGUN)
@@ -970,30 +964,30 @@ function GM:OnPlayerHitGround(ply, in_water, on_floater, speed)
 				-- if attributing to pusher, show more generic crush msg for now
 				dmg:SetDamageType(DMG_CRUSH)
 			end
- 
+
 			dmg:SetAttacker(att)
 			dmg:SetInflictor(att)
 			dmg:SetDamageForce(Vector(0, 0, -1))
 			dmg:SetDamage(damage)
- 
+
 			ground:TakeDamageInfo(dmg)
 		end
- 
+
 		-- our own falling damage is cushioned
 		damage = damage / 3
 	end
- 
+
 	if math.floor(damage) > 0 then
 		local dmg = DamageInfo()
-		
+
 		dmg:SetDamageType(DMG_FALL)
 		dmg:SetAttacker(game.GetWorld())
 		dmg:SetInflictor(game.GetWorld())
 		dmg:SetDamageForce(Vector(0, 0, 1))
 		dmg:SetDamage(damage)
- 
+
 		ply:TakeDamageInfo(dmg)
- 
+
 		-- play CS:S fall sound if we got somewhat significant damage
 		if damage > 5 then
 			sound.Play(fallsounds[math.random(1, fallsounds_count)], ply:GetShootPos(), 55 + math.Clamp(damage, 0, 50), 100)
@@ -1005,16 +999,17 @@ local ttt_postdm = CreateConVar("ttt_postround_dm", "0", FCVAR_NOTIFY)
 
 function GM:AllowPVP()
 	local rs = GetRoundState()
-	
+
 	return not (rs == ROUND_PREP or (rs == ROUND_POST and not ttt_postdm:GetBool()))
 end
 
-local rag_collide = CreateConVar("ttt_ragdoll_collide", "0")
+--local rag_collide = CreateConVar("ttt_ragdoll_collide", "0")
+CreateConVar("ttt_ragdoll_collide", "0")
 
 -- No damage during prep, etc
 function GM:EntityTakeDamage(ent, dmginfo)
 	if not IsValid(ent) then return end
-	
+
 	local att = dmginfo:GetAttacker()
 
 	if not GAMEMODE:AllowPVP() then
@@ -1076,9 +1071,9 @@ function GM:PlayerTakeDamage(ent, infl, att, amount, dmginfo)
 				-- push must be within the last 5 seconds, and must be done
 				-- after the trap was enabled (if any)
 				owner_time = owner_time or 0
-				
+
 				local t = math.max(push.t or 0, push.hurt or 0)
-				
+
 				if t > owner_time and t > CurTime() - 4 then
 					owner = push.att
 
@@ -1128,27 +1123,25 @@ function GM:PlayerTakeDamage(ent, infl, att, amount, dmginfo)
 	end
 
 	-- scale phys damage caused by props
-	if dmginfo:IsDamageType(DMG_CRUSH) and IsValid(att) then
+	if dmginfo:IsDamageType(DMG_CRUSH) and IsValid(att) and not dmginfo:IsDamageType(DMG_PHYSGUN) then
 		-- player falling on player, or player hurt by prop?
-		if not dmginfo:IsDamageType(DMG_PHYSGUN) then
-			-- this is prop-based physics damage
-			dmginfo:ScaleDamage(0.25)
+		-- this is prop-based physics damage
+		dmginfo:ScaleDamage(0.25)
 
-			-- if the prop is held, no damage
-			if IsValid(infl) and IsValid(infl:GetOwner()) and infl:GetOwner():IsPlayer() then
-				dmginfo:ScaleDamage(0)
-				dmginfo:SetDamage(0)
-			end
+		-- if the prop is held, no damage
+		if IsValid(infl) and IsValid(infl:GetOwner()) and infl:GetOwner():IsPlayer() then
+			dmginfo:ScaleDamage(0)
+			dmginfo:SetDamage(0)
 		end
 	end
 
 	-- handle fire attacker
 	if ent.ignite_info and dmginfo:IsDamageType(DMG_DIRECT) then
 		local datt = dmginfo:GetAttacker()
-		
+
 		if not IsValid(datt) or not datt:IsPlayer() then
 			local ignite = ent.ignite_info
-			
+
 			if IsValid(ignite.att) and IsValid(ignite.infl)then
 				dmginfo:SetAttacker(ignite.att)
 				dmginfo:SetInflictor(ignite.infl)
@@ -1160,7 +1153,7 @@ function GM:PlayerTakeDamage(ent, infl, att, amount, dmginfo)
 	-- some popular maps like dm_island17)
 	if ent.was_pushed and ent == att and dmginfo:GetDamageType() == DMG_GENERIC and util.BitSet(util.PointContents(dmginfo:GetDamagePosition()), CONTENTS_WATER) then
 		local t = math.max(ent.was_pushed.t or 0, ent.was_pushed.hurt or 0)
-		
+
 		if t > CurTime() - 3 then
 			dmginfo:SetAttacker(ent.was_pushed.att)
 			ent.was_pushed.hurt = CurTime()
@@ -1188,7 +1181,7 @@ function GM:PlayerTakeDamage(ent, infl, att, amount, dmginfo)
 end
 
 
-function GM:OnNPCKilled() 
+function GM:OnNPCKilled()
 
 end
 
@@ -1200,13 +1193,13 @@ local plys = nil
 function GM:Tick()
 	-- three cheers for micro-optimizations
 	plys = player.GetAll()
-	
+
 	for i = 1, #plys do
 		ply = plys[i]
 		tm = ply:Team()
-		
+
 		if tm == TEAM_TERROR and ply:Alive() then
-		
+
 			-- Drowning
 			if ply:WaterLevel() == 3 then
 				if ply:IsOnFire() then
@@ -1216,7 +1209,7 @@ function GM:Tick()
 				if ply.drowning then
 					if ply.drowning < CurTime() then
 						local dmginfo = DamageInfo()
-						
+
 						dmginfo:SetDamage(15)
 						dmginfo:SetDamageType(DMG_DROWN)
 						dmginfo:SetAttacker(game.GetWorld())
@@ -1258,35 +1251,35 @@ function GM:Tick()
 	end
 end
 
-function GM:ShowHelp(ply)
-	if IsValid(ply) then
-		ply:ConCommand("ttt_helpscreen")
+function GM:ShowHelp(p)
+	if IsValid(p) then
+		p:ConCommand("ttt_helpscreen")
 	end
 end
 
-function GM:PlayerRequestTeam(ply, teamid)
+function GM:PlayerRequestTeam(p, teamid)
 
 end
 
 -- Implementing stuff that should already be in gmod, chpt. 389
-function GM:PlayerEnteredVehicle(ply, vehicle, role)
+function GM:PlayerEnteredVehicle(p, vehicle, role)
 	if IsValid(vehicle) then
-		vehicle:SetNWEntity("ttt_driver", ply)
+		vehicle:SetNWEntity("ttt_driver", p)
 	end
 end
 
-function GM:PlayerLeaveVehicle(ply, vehicle)
+function GM:PlayerLeaveVehicle(p, vehicle)
 	if IsValid(vehicle) then
 		-- setting nil will not do anything, so bogusify
 		vehicle:SetNWEntity("ttt_driver", vehicle)
 	end
 end
 
-function GM:AllowPlayerPickup(ply, obj)
+function GM:AllowPlayerPickup(p, obj)
 	return false
 end
 
-function GM:PlayerShouldTaunt(ply, actid)
+function GM:PlayerShouldTaunt(p, actid)
 	-- Disable taunts, we don't have a system for them (camera freezing etc).
 	-- Mods/plugins that add such a system should override this.
 	return false

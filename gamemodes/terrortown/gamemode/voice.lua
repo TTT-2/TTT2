@@ -39,7 +39,7 @@ function GM:PlayerCanHearPlayersVoice(listener, speaker)
 	if speaker:IsSpec() and listener:IsSpec() then
 		return true, false
 	end
-	
+
 	-- custom post-settings
 	hook.Run("TTT2_PostPlayerCanHearPlayersVoice", listener, speaker)
 
@@ -55,7 +55,7 @@ function GM:PlayerCanHearPlayersVoice(listener, speaker)
 		end
 	end
 
-	return true, (loc_voice:GetBool() and GetRoundState() ~= ROUND_POST)
+	return true, loc_voice:GetBool() and GetRoundState() ~= ROUND_POST
 end
 
 local function SendRoleVoiceState(speaker)
@@ -70,38 +70,38 @@ local function SendRoleVoiceState(speaker)
 	net.WriteUInt(speaker:EntIndex() - 1, 7) -- player ids can only be 1-128
 	net.WriteBit(state)
 
-	if rf then 
+	if rf then
 		net.Send(rf)
-	else 
-		net.Broadcast() 
+	else
+		net.Broadcast()
 	end
 end
 
 local function RoleGlobalVoice(ply, cmd, args)
 	if not IsValid(ply) or not (ply:IsActive() and not ply:HasTeamRole(TEAM_INNO)) then return end
-	
+
 	local rd = ply:GetRoleData()
-	
+
 	if rd.unknownTeam then return end
-	
+
 	if #args ~= 1 then return end
-	
+
 	local state = tonumber(args[1])
 
 	ply[ply:GetRoleData().team .. "_gvoice"] = (state == 1)
-	
+
 	SendRoleVoiceState(ply)
 end
 concommand.Add("rvog", RoleGlobalVoice)
 
 local function MuteTeam(ply, cmd, args)
 	if not IsValid(ply) then return end
-	
+
 	if not #args == 1 and tonumber(args[1]) then return end
-	
+
 	if not ply:IsSpec() then
 		ply.mute_team = -1
-		
+
 		return
 	end
 

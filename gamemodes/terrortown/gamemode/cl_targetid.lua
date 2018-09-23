@@ -6,7 +6,7 @@ local GetPTranslation = LANG.GetParamTranslation
 local GetRaw = LANG.GetRawTranslation
 
 local key_params = {
-	usekey = Key("+use", "USE"), 
+	usekey = Key("+use", "USE"),
 	walkkey = Key("+walk", "WALK")
 }
 
@@ -15,8 +15,8 @@ local ClassHint = {
 		name = "corpse",
 		hint = "corpse_hint",
 
-		fmt = function(ent, txt) 
-			return GetPTranslation(txt, key_params) 
+		fmt = function(ent, txt)
+			return GetPTranslation(txt, key_params)
 		end
 	}
 }
@@ -37,17 +37,16 @@ indicator_mat_tbl = {}
 
 hook.Add("TTT2_FinishedSync", "updateRoleMat", function(ply, first)
 	indicator_mat_tbl = {}
-	
+
 	for _, v in pairs(ROLES) do
 		local mat = Material("vgui/ttt/sprite_" .. v.abbr)
-		
+
 		indicator_mat_tbl[v.index] = mat
 	end
 end)
 
 indicator_col = Color(255, 255, 255, 130)
 
-local client, plys, ply, pos, dir, tgt
 local GetPlayers = player.GetAll
 
 local propspec_outline = Material("models/props_combine/portalball001_sheet")
@@ -55,27 +54,28 @@ local propspec_outline = Material("models/props_combine/portalball001_sheet")
 -- using this hook instead of pre/postplayerdraw because playerdraw seems to
 -- happen before certain entities are drawn, which then clip over the sprite
 function GM:PostDrawTranslucentRenderables()
-	client = LocalPlayer()
-	plys = GetPlayers()
+	local client = LocalPlayer()
+	local plys = GetPlayers()
 
 	if client:IsSpecial() and client:IsActive() then
 		dir = (client:GetForward() * -1)
 
 		for i = 1, #plys do
-			ply = plys[i]
-			
+			local ply = plys[i]
 			local role = ply:GetRole()
 
-			pos = ply:GetPos()
+			local pos = ply:GetPos()
 			pos.z = (pos.z + 74)
-			
-			if ply ~= client then
-				if ply:IsActive() and ply:IsSpecial() and ply:IsTeamMember(client) and not ply:GetRoleData().avoidTeamIcons then
-					if indicator_mat_tbl[role] then
-						render.SetMaterial(indicator_mat_tbl[role])
-						render.DrawQuadEasy(pos, dir, 8, 8, indicator_col, 180)
-					end
-				end
+
+			if ply ~= client
+			and ply:IsActive()
+			and ply:IsSpecial()
+			and ply:IsTeamMember(client)
+			and not ply:GetRoleData().avoidTeamIcons
+			and indicator_mat_tbl[role]
+			then
+				render.SetMaterial(indicator_mat_tbl[role])
+				render.DrawQuadEasy(pos, dir, 8, 8, indicator_col, 180)
 			end
 		end
 	end
@@ -84,9 +84,9 @@ function GM:PostDrawTranslucentRenderables()
 		cam.Start3D(EyePos(), EyeAngles())
 
 		for i = 1, #plys do
-			ply = plys[i]
-			tgt = ply:GetObserverTarget()
-			
+			local ply = plys[i]
+			local tgt = ply:GetObserverTarget()
+
 			if IsValid(tgt) and tgt:GetNWEntity("spec_owner", nil) == ply then
 				render.MaterialOverride(propspec_outline)
 				render.SuppressEngineLighting(true)
@@ -111,9 +111,9 @@ local function DrawPropSpecLabels(client)
 
 	surface.SetFont("TabLarge")
 
-	local tgt = nil
-	local scrpos = nil
-	local text = nil
+	local tgt
+	local scrpos
+	local text
 	local w = 0
 
 	for _, ply in ipairs(player.GetAll()) do
@@ -128,10 +128,10 @@ local function DrawPropSpecLabels(client)
 			end
 		else
 			local _, healthcolor = util.HealthToString(ply:Health(), ply:GetMaxHealth())
-			surface.SetTextColor(clr(healthcolor))
+			surface.SetTextColor(healthcolor)
 
 			scrpos = ply:EyePos()
-			scrpos.z = scrpos.z + 20
+			scrpos.z = (scrpos.z + 20)
 			scrpos = scrpos:ToScreen()
 		end
 
@@ -169,7 +169,7 @@ function GM:HUDDrawTargetID()
 	end
 
 	local startpos = client:EyePos()
-	
+
 	local endpos = client:GetAimVector()
 	endpos:Mul(MAX_TRACE_LENGTH)
 	endpos:Add(startpos)
@@ -181,12 +181,12 @@ function GM:HUDDrawTargetID()
 		filter = client:GetObserverMode() == OBS_MODE_IN_EYE and {client, client:GetObserverTarget()} or client
 	})
 	local ent = trace.Entity
-	
+
 	if not IsValid(ent) or ent.NoTarget then return end
-	
+
 	-- some bools for caching what kind of ent we are looking at
 	local target_roles = {}
-	
+
 	local target_corpse = false
 
 	local text = nil
@@ -202,7 +202,7 @@ function GM:HUDDrawTargetID()
 	local cls = ent:GetClass()
 	local minimal = minimalist:GetBool()
 	local hint = not minimal and (ent.TargetIDHint or ClassHint[cls])
-	
+
 	if ent:IsPlayer() then
 		if ent:GetNWBool("disguised", false) then
 			client.last_id = nil
@@ -239,7 +239,7 @@ function GM:HUDDrawTargetID()
 				end
 			end
 		end
-		
+
 		target_roles = hook.Run("TTT2_HUDDrawTargetID", target_roles) or target_roles
 
 		target_roles[ROLES.DETECTIVE.index] = target_roles[ROLES.DETECTIVE.index] or GetRoundState() > ROUND_PREP and ent:IsDetective() or false
@@ -267,28 +267,28 @@ function GM:HUDDrawTargetID()
 	local w, h = 0, 0 -- text width/height, reused several times
 
 	local selR
-	
+
 	for k, v in pairs(target_roles) do
 		if v then
 			selR = k
-			
+
 			break
 		end
 	end
-	
+
 	if selR then
 		surface.SetTexture(ring_tex)
 
 		local clr = GetRoleByIndex(selR).color
-		
+
 		surface.SetDrawColor(clr.r, clr.g, clr.b, 200)
 		surface.DrawTexturedRect(x - 32, y - 32, 64, 64)
 	end
 
 	y = y + 30
-	
+
 	local font = "TargetID"
-	
+
 	surface.SetFont(font)
 
 	-- Draw main title, ie. nickname
@@ -302,7 +302,7 @@ function GM:HUDDrawTargetID()
 
 		-- for ragdolls searched by detectives, add icon
 		if ent.search_result and client:IsDetective() then
-		
+
 			-- if I am detective and I know a search result for this corpse, then I
 			-- have searched it or another detective has
 			surface.SetMaterial(magnifier_mat)
@@ -319,7 +319,7 @@ function GM:HUDDrawTargetID()
 
 	-- Draw subtitle: health or type
 	local clr = rag_color
-	
+
 	if ent:IsPlayer() then
 		text, clr = util.HealthToString(ent:Health(), ent:GetMaxHealth())
 
@@ -330,11 +330,11 @@ function GM:HUDDrawTargetID()
 	else
 		return
 	end
-	
+
 	font = "TargetIDSmall2"
 
 	surface.SetFont(font)
-	
+
 	w, h = surface.GetTextSize(text)
 	x = x_orig - w / 2
 
@@ -369,24 +369,24 @@ function GM:HUDDrawTargetID()
 		w, h = surface.GetTextSize(text)
 		x = x_orig - w / 2
 		y = y + h + 5
-		
+
 		draw.SimpleText(text, font, x + 1, y + 1, COLOR_BLACK)
 		draw.SimpleText(text, font, x, y, COLOR_LGRAY)
 	end
 
 	text = nil
-	
+
 	local matched = false
-	
+
 	for k, v in pairs(target_roles) do
 		if v and k ~= ROLES.INNOCENT.index then
 			matched = true
-			
+
 			local rd = GetRoleByIndex(k)
-			
+
 			text = L["target_" .. rd.name]
 			clr = rd.color
-			
+
 			break
 		end
 	end

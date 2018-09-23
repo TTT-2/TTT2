@@ -1,22 +1,22 @@
 -- serverside extensions to player table
 
 local plymeta = FindMetaTable("Player")
-if not plymeta then 
-	Error("FAILED TO FIND PLAYER TABLE") 
-	
-	return 
+if not plymeta then
+	Error("FAILED TO FIND PLAYER TABLE")
+
+	return
 end
 
 function plymeta:SetRagdollSpec(s)
 	if s then
 		self.spec_ragdoll_start = CurTime()
 	end
-	
+
 	self.spec_ragdoll = s
 end
 
-function plymeta:GetRagdollSpec() 
-	return self.spec_ragdoll 
+function plymeta:GetRagdollSpec()
+	return self.spec_ragdoll
 end
 
 AccessorFunc(plymeta, "force_spec", "ForceSpec", FORCE_BOOL)
@@ -56,27 +56,27 @@ function plymeta:AddCredits(amt)
 	self:SetCredits(self:GetCredits() + amt)
 end
 
-function plymeta:SubtractCredits(amt) 
-	self:AddCredits(-amt) 
+function plymeta:SubtractCredits(amt)
+	self:AddCredits(-amt)
 end
 
 function plymeta:SetDefaultCredits()
 	if self:IsShopper() then
 		local rd = self:GetRoleData()
 		if rd.preventDefaultCredits then return end
-	
+
 		if self:HasTeamRole(TEAM_TRAITOR) then
 			local c = (ConVarExists("ttt_credits_starting") and GetConVar("ttt_credits_starting"):GetInt() or 0)
-			
+
 			if CountTraitors() == 1 then
 				c = c + (ConVarExists("ttt_credits_alonebonus") and GetConVar("ttt_credits_alonebonus"):GetInt() or 0)
 			end
-			
+
 			self:SetCredits(math.ceil(c))
 		else
 			local name = "ttt_" .. rd.abbr .. "_credits_starting"
-			
-			self:SetCredits(math.ceil((ConVarExists(name) and GetConVar(name):GetInt() or 0)))
+
+			self:SetCredits(math.ceil(ConVarExists(name) and GetConVar(name):GetInt() or 0))
 		end
 	else
 		self:SetCredits(0)
@@ -92,13 +92,13 @@ end
 --- Equipment items
 function plymeta:AddEquipmentItem(id)
 	id = tonumber(id)
-	
+
 	if id then
 		self.equipment_items = bit.bor(self.equipment_items, id)
 		self:SendEquipment()
 	end
 end
- 
+
 -- We do this instead of an NW var in order to limit the info to just this ply
 function plymeta:SendEquipment()
 	net.Start("TTT_Equipment")
@@ -108,7 +108,7 @@ end
 
 function plymeta:ResetEquipment()
 	self.equipment_items = EQUIP_NONE
-	
+
 	self:SendEquipment()
 end
 
@@ -116,30 +116,30 @@ function plymeta:SendBought()
 	-- Send all as string, even though equipment are numbers, for simplicity
 	net.Start("TTT_Bought")
 	net.WriteUInt(#self.bought, 8)
-	
+
 	for _, v in ipairs(self.bought) do
 		net.WriteString(v)
 	end
-	
+
 	net.Send(self)
 end
 
 local function ResendBought(ply)
-	if IsValid(ply) then 
-		ply:SendBought() 
+	if IsValid(ply) then
+		ply:SendBought()
 	end
 end
 concommand.Add("ttt_resend_bought", ResendBought)
 
 function plymeta:ResetBought()
 	self.bought = {}
-	
+
 	self:SendBought()
 end
 
 function plymeta:AddBought(id)
-	if not self.bought then 
-		self.bought = {} 
+	if not self.bought then
+		self.bought = {}
 	end
 
 	table.insert(self.bought, tostring(id))
@@ -172,7 +172,7 @@ function plymeta:ResetRoundFlags()
 	-- equipment
 	self:ResetEquipment()
 	self:SetCredits(0)
-	
+
 	self:ResetBought()
 
 	-- equipment stuff
@@ -189,7 +189,7 @@ function plymeta:ResetRoundFlags()
 
 	-- communication
 	self.mute_team = -1
-	
+
 	for _, v in pairs(GetWinRoles()) do
 		if v.team ~= TEAM_INNO and not v.unknownTeam then
 			self[v.team .. "_gvoice"] = false
@@ -208,7 +208,7 @@ function plymeta:GiveEquipmentItem(id)
 		return false
 	elseif id and id > EQUIP_NONE then
 		self:AddEquipmentItem(id)
-		
+
 		return true
 	end
 end
@@ -241,7 +241,7 @@ end
 
 function plymeta:ResetLastWords()
 	if not IsValid(self) then return end -- timers are dangerous things
-	
+
 	self.last_words_id = nil
 end
 
@@ -251,7 +251,7 @@ function plymeta:SendLastWords(dmginfo)
 
 	-- See if the damage was interesting
 	local dtype = KILL_NORMAL
-	
+
 	if dmginfo:GetAttacker() == self or dmginfo:GetInflictor() == self then
 		dtype = KILL_SUICIDE
 	elseif dmginfo:IsDamageType(DMG_BURN) then
@@ -268,14 +268,14 @@ function plymeta:SendLastWords(dmginfo)
 
 	-- any longer than this and you're out of luck
 	local ply = self
-	
+
 	timer.Simple(2, function() ply:ResetLastWords() end)
 end
 
 
 function plymeta:ResetViewRoll()
 	local ang = self:EyeAngles()
-	
+
 	if ang.r ~= 0 then
 		ang.r = 0
 		self:SetEyeAngles(ang)
@@ -286,7 +286,7 @@ end
 function plymeta:ShouldSpawn()
 	-- do not spawn players who have not been through initspawn
 	if not self:IsSpec() and not self:IsTerror() then return false end
-	
+
 	-- do not spawn forced specs
 	if self:IsSpec() and self:GetForceSpec() then return false end
 
@@ -304,7 +304,7 @@ function plymeta:SpawnForRound(dead_only)
 	if dead_only and self:Alive() and not self:IsSpec() then
 		-- if the player does not need respawn, make sure he has full health
 		self:SetHealth(self:GetMaxHealth())
-		
+
 		return false
 	end
 
@@ -388,6 +388,6 @@ end
 
 function plymeta:GetAvoidRole(role)
 	local name = GetRoleByIndex(role).name
-	
+
 	return self:GetInfoNum("ttt_avoid_" .. name, 0) > 0
 end

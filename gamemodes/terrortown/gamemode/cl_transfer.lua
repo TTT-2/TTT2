@@ -11,12 +11,12 @@ function CreateTransferMenu(parent)
 
 	if client:GetCredits() <= 0 then
 		dform:Help(GetTranslation("xfer_no_credits"))
-		
+
 		return dform
 	end
 
 	local bw, bh = 100, 20
-	
+
 	local dsubmit = vgui.Create("DButton", dform)
 	dsubmit:SetSize(bw, bh)
 	dsubmit:SetDisabled(true)
@@ -25,7 +25,7 @@ function CreateTransferMenu(parent)
 	local selected_sid
 
 	local dpick = vgui.Create("DComboBox", dform)
-	
+
 	dpick.OnSelect = function(s, idx, val, data)
 		if data then
 			selected_sid = data
@@ -37,7 +37,7 @@ function CreateTransferMenu(parent)
 
 	-- fill combobox
 	local roleData = client:GetRoleData()
-	
+
 	for _, p in ipairs(player.GetAll()) do
 		if IsValid(p) and p:IsActive() and p ~= client and p:GetRoleData().team ~= TEAM_INNO and p:IsTeamMember(client) then
 			dpick:AddChoice(p:Nick(), p:SteamID())
@@ -45,8 +45,8 @@ function CreateTransferMenu(parent)
 	end
 
 	-- select first player by default
-	if dpick:GetOptionText(1) then 
-		dpick:ChooseOptionID(1) 
+	if dpick:GetOptionText(1) then
+		dpick:ChooseOptionID(1)
 	end
 
 	dsubmit.DoClick = function(s)

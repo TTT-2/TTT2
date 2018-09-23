@@ -26,9 +26,9 @@ function CustomMsg(ply_or_rf, msg, clr)
 	net.WriteUInt(clr.g, 8)
 	net.WriteUInt(clr.b, 8)
 
-	if ply_or_rf then 
+	if ply_or_rf then
 		net.Send(ply_or_rf)
-	else 
+	else
 		net.Broadcast()
 	end
 end
@@ -39,10 +39,10 @@ function PlayerMsg(ply_or_rf, msg, traitor_only)
 	net.WriteString(msg)
 	net.WriteBit(traitor_only)
 
-	if ply_or_rf then 
+	if ply_or_rf then
 		net.Send(ply_or_rf)
-	else 
-		net.Broadcast() 
+	else
+		net.Broadcast()
 	end
 end
 
@@ -78,7 +78,7 @@ function GetPlayerFilter(pred)
 			table.insert(filter, v)
 		end
 	end
-	
+
 	return filter
 end
 
@@ -97,26 +97,26 @@ end
 -- end fix
 
 function GetRoleFilter(role, alive_only)
-	return GetPlayerFilter(function(p) 
-		return p:IsRole(role) and (not alive_only or p:IsTerror()) 
+	return GetPlayerFilter(function(p)
+		return p:IsRole(role) and (not alive_only or p:IsTerror())
 	end)
 end
 
 function GetRoleTeamFilter(team, alive_only)
-	return GetPlayerFilter(function(p) 
-		return p:HasTeamRole(team) and (not alive_only or p:IsTerror()) 
+	return GetPlayerFilter(function(p)
+		return p:HasTeamRole(team) and (not alive_only or p:IsTerror())
 	end)
 end
 
 function GetTeamMemberFilter(ply, alive_only)
-	return GetPlayerFilter(function(p) 
-		return p:IsTeamMember(ply) and (not alive_only or p:IsTerror()) 
+	return GetPlayerFilter(function(p)
+		return p:IsTeamMember(ply) and (not alive_only or p:IsTerror())
 	end)
 end
 
 function GetAllRolesFilterWOTeams(teamTbl, alive_only)
-	return GetPlayerFilter(function(p) 
-		return not table.HasValue(teamTbl, p:GetRoleData().team) and (not alive_only or p:IsTerror()) 
+	return GetPlayerFilter(function(p)
+		return not table.HasValue(teamTbl, p:GetRoleData().team) and (not alive_only or p:IsTerror())
 	end)
 end
 
@@ -124,7 +124,7 @@ function GetSpecialRoleFilter(role, alive_only)
 	local roleData = GetRoleByIndex(role)
 
 	return GetPlayerFilter(function(p)
-		return (roleData.visibleForTraitors and not p:HasTeamRole(TEAM_TRAITOR) or not roleData.visibleForTraitors) and (not alive_only or p:IsTerror()) 
+		return (roleData.visibleForTraitors and not p:HasTeamRole(TEAM_TRAITOR) or not roleData.visibleForTraitors) and (not alive_only or p:IsTerror())
 	end)
 end
 
@@ -133,7 +133,7 @@ CreateConVar("ttt_limit_spectator_chat", "1", FCVAR_ARCHIVE + FCVAR_NOTIFY)
 
 function GM:PlayerCanSeePlayersChat(text, team_only, listener, speaker)
 	if not IsValid(listener) then return false end
-	
+
 	if not IsValid(speaker) then
 		if IsEntity(speaker) then
 			return true
@@ -158,30 +158,30 @@ function GM:PlayerCanSeePlayersChat(text, team_only, listener, speaker)
 end
 
 local mumbles = {
-	"mumble", 
-	"mm", 
-	"hmm", 
-	"hum", 
-	"mum", 
-	"mbm", 
-	"mble", 
-	"ham", 
-	"mammaries", 
-	"political situation", 
-	"mrmm", 
+	"mumble",
+	"mm",
+	"hmm",
+	"hum",
+	"mum",
+	"mbm",
+	"mble",
+	"ham",
+	"mammaries",
+	"political situation",
+	"mrmm",
 	"hrm",
-	"uzbekistan", 
-	"mumu", 
-	"cheese export", 
-	"hmhm", 
-	"mmh", 
-	"mumble", 
-	"mphrrt", 
-	"mrh", 
-	"hmm", 
-	"mumble", 
-	"mbmm", 
-	"hmml", 
+	"uzbekistan",
+	"mumu",
+	"cheese export",
+	"hmhm",
+	"mmh",
+	"mumble",
+	"mphrrt",
+	"mrh",
+	"hmm",
+	"mumble",
+	"mbmm",
+	"hmml",
 	"mfrrm"
 }
 
@@ -193,15 +193,15 @@ function GM:PlayerSay(ply, text, team_only)
 
 	if GetRoundState() == ROUND_ACTIVE then
 		local team = ply:Team() == TEAM_SPEC
-		
+
 		if team and not DetectiveMode() then
 			local filtered = {}
-			
+
 			for _, v in ipairs(string.Explode(" ", text)) do
 				-- grab word characters and whitelisted interpunction
 				-- necessary or leetspeek will be used (by trolls especially)
 				local word, interp = string.match(v, "(%a*)([%.,!%?]*)")
-				
+
 				if word ~= "" then
 					table.insert(filtered, mumbles[math.random(1, #mumbles)] .. interp)
 				end
@@ -213,11 +213,11 @@ function GM:PlayerSay(ply, text, team_only)
 			end
 
 			table.insert(filtered, 1, "[MUMBLED]")
-			
+
 			return table.concat(filtered, " ")
 		elseif team_only and not team and ply:IsSpecial() then
 			RoleChatMsg(ply, ply:GetRole(), text)
-			
+
 			return ""
 		end
 	end
@@ -250,7 +250,7 @@ end
 local function LastWords(ply, cmd, args)
 	if IsValid(ply) and not ply:Alive() and #args > 1 then
 		local id = tonumber(args[1])
-		
+
 		if id and ply.last_words_id and id == ply.last_words_id then
 			-- never allow multiple last word stuff
 			ply.last_words_id = nil
@@ -267,7 +267,7 @@ local function LastWords(ply, cmd, args)
 
 			if last_seen then
 				local ent = Entity(last_seen)
-				
+
 				if IsValid(ent) and ent:IsPlayer() and rag and not rag.lastid then
 					rag.lastid = {ent = ent, t = CurTime()}
 				end
@@ -315,7 +315,7 @@ local function RadioCommand(ply, cmd, args)
 		if tonumber(msg_target) then
 			-- player or corpse ent idx
 			local ent = Entity(tonumber(msg_target))
-			
+
 			if IsValid(ent) then
 				if ent:IsPlayer() then
 					name = ent:Nick()

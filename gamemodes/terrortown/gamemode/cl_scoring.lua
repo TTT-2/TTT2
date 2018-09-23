@@ -35,11 +35,11 @@ local PT = LANG.GetParamTranslation
 
 function CLSCORE:GetDisplay(key, event)
 	local displayfns = self.EventDisplay[event.id]
-	
+
 	if not displayfns then return end
-	
+
 	local keyfn = displayfns[key]
-	
+
 	if not keyfn then return end
 
 	return keyfn(event)
@@ -55,7 +55,7 @@ end
 
 function CLSCORE:TimeForEvent(e)
 	local t = e.t - self.StartTime
-	
+
 	if t >= 0 then
 		return util.SimpleTime(t, "%02i:%02i")
 	else
@@ -71,15 +71,15 @@ function CLSCORE.DeclareEventDisplay(event_id, event_fns)
 	if not tonumber(event_id) then
 		Error("Event ??? display: invalid event id\n")
 	end
-	
+
 	if not event_fns or type(event_fns) ~= "table" then
 		Error(Format("Event %d display: no display functions found.\n", event_id))
 	end
-	
+
 	if not event_fns.text then
 		Error(Format("Event %d display: no text display function found.\n", event_id))
 	end
-	
+
 	if not event_fns.icon then
 		Error(Format("Event %d display: no icon and tooltip display function found.\n", event_id))
 	end
@@ -96,7 +96,7 @@ function CLSCORE:FillDList(dlst)
 		if etxt then
 			if eicon then
 				local mat = eicon
-				
+
 				eicon = vgui.Create("DImage")
 				eicon:SetMaterial(mat)
 				eicon:SetTooltip(ttip)
@@ -136,7 +136,7 @@ function CLSCORE:BuildEventLogPanel(dpanel)
 end
 
 function CLSCORE:BuildScorePanel(dpanel)
-	local margin = 10
+	--local margin = 10
 	local w, h = dpanel:GetSize()
 
 	local dlist = vgui.Create("DListView", dpanel)
@@ -147,7 +147,7 @@ function CLSCORE:BuildScorePanel(dpanel)
 
 	-- TODO add other roles kills for player
 	local colnames = {"", "col_player", "col_role", "col_kills1", "col_kills2", "col_points", "col_team", "col_total"}
-	
+
 	for _, name in pairs(colnames) do
 		if name == "" then
 			-- skull icon column
@@ -160,13 +160,13 @@ function CLSCORE:BuildScorePanel(dpanel)
 
 	-- the type of win condition triggered is relevant for team bonus
 	local wintype = WIN_NONE
-	
+
 	for i = #self.Events, 1, -1 do
 		local e = self.Events[i]
-		
+
 		if e.id == EVENT_FINISH then
 			wintype = e.win
-			
+
 			break
 		end
 	end
@@ -179,13 +179,13 @@ function CLSCORE:BuildScorePanel(dpanel)
 	for id, s in pairs(scores) do
 		if id ~= -1 then
 			local role = nil
-			
+
 			local roleData = GetRoleByIndex(s.r)
-			
+
 			role = roleData and T(roleData.name)
-			
+
 			local surv = ""
-			
+
 			if s.deaths > 0 then
 				surv = vgui.Create("ColoredBox", dlist)
 				surv:SetColor(Color(150, 50, 50))
@@ -238,18 +238,18 @@ function CLSCORE:AddAward(y, pw, award, dpanel)
 	nicklbl:SetText(nick)
 	nicklbl:SetFont("DermaDefaultBold")
 	nicklbl:SizeToContents()
-	
+
 	local nw, nh = nicklbl:GetSize()
 
 	local txtlbl = vgui.Create("DLabel", dpanel)
 	txtlbl:SetText(text)
 	txtlbl:SetFont("DermaDefault")
 	txtlbl:SizeToContents()
-	
-	local tw, th = txtlbl:GetSize()
+
+	local tw = txtlbl:GetSize()
 
 	titlelbl:SetPos((pw - tiw) / 2, y)
-	
+
 	y = y + tih + 2
 
 	local fw = nw + tw + 5
@@ -257,7 +257,7 @@ function CLSCORE:AddAward(y, pw, award, dpanel)
 
 	nicklbl:SetPos(fx, y)
 	txtlbl:SetPos(fx + nw + 5, y)
-	
+
 	y = y + nh
 
 	return y
@@ -276,28 +276,28 @@ function CLSCORE:BuildHilitePanel(dpanel)
 
 	for i = #self.Events, 1, -1 do
 		local e = self.Events[i]
-		
+
 		if e.id == EVENT_FINISH then
 			endtime = e.t
 
 			local wintype = e.win
-			
+
 			-- when win is due to timeout, innocents win
-			if wintype == WIN_TIMELIMIT then 
+			if wintype == WIN_TIMELIMIT then
 				wintype = WIN_INNOCENT
 			end
-			
+
 			if wintype > WIN_NONE then
 				teamRole = GetRoleByIndex(wintype)
 				title = {c = teamRole.color, txt = "hilite_win_" .. teamRole.name}
 			end
-			
+
 			break
 		end
 	end
-	
+
 	local tr = {}
-	
+
 	for k, v in pairs(self.Tbl) do
 		if GetRoleByIndex(k).team == TEAM_TRAITOR then
 			table.Add(tr, v)
@@ -363,13 +363,13 @@ function CLSCORE:BuildHilitePanel(dpanel)
 
 	for _, afn in pairs(AWARDS) do
 		local a = afn(self.Events, self.Scores, self.Players, tr)
-		
+
 		if ValidAward(a) then
 			table.insert(award_choices, a)
 		end
 	end
 
-	local num_choices = #award_choices
+	--local num_choices = #award_choices
 	local max_awards = 5
 
 	-- sort descending by priority
@@ -400,7 +400,7 @@ function CLSCORE:ShowPanel()
 
 	-- keep it around so we can reopen easily
 	dpanel:SetDeleteOnClose(false)
-	
+
 	self.Panel = dpanel
 
 	local dbut = vgui.Create("DButton", dpanel)
@@ -409,8 +409,8 @@ function CLSCORE:ShowPanel()
 	dbut:SetSize(bw, bh)
 	dbut:SetPos(w - bw - margin, h - bh - margin / 2)
 	dbut:SetText(T("close"))
-	
-	dbut.DoClick = function() 
+
+	dbut.DoClick = function()
 		dpanel:Close()
 	end
 
@@ -431,16 +431,16 @@ function CLSCORE:ShowPanel()
 	local dtabhilite = vgui.Create("DPanel", dtabsheet)
 	dtabhilite:SetPaintBackground(false)
 	dtabhilite:StretchToParent(padding, padding, padding, padding)
-	
+
 	self:BuildHilitePanel(dtabhilite)
-	
+
 	dtabsheet:AddSheet(T("report_tab_hilite"), dtabhilite, "icon16/star.png", false, false, T("report_tab_hilite_tip"))
 
 	-- Event log tab
 	local dtabevents = vgui.Create("DPanel", dtabsheet)
 --	dtab1:SetSize(650, 450)
 	dtabevents:StretchToParent(padding, padding, padding, padding)
-	
+
 	self:BuildEventLogPanel(dtabevents)
 
 	dtabsheet:AddSheet(T("report_tab_events"), dtabevents, "icon16/application_view_detail.png", false, false, T("report_tab_events_tip"))
@@ -449,7 +449,7 @@ function CLSCORE:ShowPanel()
 	local dtabscores = vgui.Create("DPanel", dtabsheet)
 	dtabscores:SetPaintBackground(false)
 	dtabscores:StretchToParent(padding, padding, padding, padding)
-	
+
 	self:BuildScorePanel(dtabscores)
 
 	dtabsheet:AddSheet(T("report_tab_scores"), dtabscores, "icon16/user.png", false, false, T("report_tab_scores_tip"))
@@ -471,8 +471,8 @@ function CLSCORE:ClearPanel()
 
 		local pnl = self.Panel
 
-		timer.Simple(0, function() 
-			pnl:Remove() 
+		timer.Simple(0, function()
+			pnl:Remove()
 		end)
 	end
 end
@@ -480,12 +480,12 @@ end
 function CLSCORE:SaveLog()
 	if self.Events and #self.Events <= 0 then
 		chat.AddText(COLOR_WHITE, T("report_save_error"))
-		
+
 		return
 	end
 
 	local logdir = "ttt/logs"
-	
+
 	if not file.IsDir(logdir, "DATA") then
 		file.CreateDir(logdir)
 	end
@@ -499,14 +499,14 @@ function CLSCORE:SaveLog()
 		local etxt = self:TextForEvent(e)
 		local etime = self:TimeForEvent(e)
 		local _, etype = self:IconForEvent(e)
-		
+
 		if etxt then
 			log = log .. string.format("%s | %-25s | %s\n", etime, etype, etxt)
 		end
 	end
 
 	file.Write(logname, log)
-	
+
 	chat.AddText(COLOR_WHITE, T("report_save_result"), COLOR_GREEN, " /garrysmod/data/" .. logname)
 end
 
@@ -525,7 +525,7 @@ function CLSCORE:Init(events)
 	-- Get start time and traitors
 	local starttime
 	local tmp
-	
+
 	for _, e in pairs(events) do
 		if e.id == EVENT_GAME and e.state == ROUND_ACTIVE then
 			starttime = e.t
@@ -541,7 +541,7 @@ function CLSCORE:Init(events)
 	-- Get scores and players
 	local scores = {}
 	local nicks = {}
-	
+
 	for _, e in pairs(events) do
 		if e.id == EVENT_SPAWN then
 			scores[e.sid] = ScoreInit()
@@ -584,7 +584,7 @@ local function ReceiveReportStream(len)
 		-- do stuff with buffer contents
 
 		local json_events = buff -- util.Decompress(buff)
-		
+
 		if not json_events then
 			ErrorNoHalt("Round report decompression failed!\n")
 		else

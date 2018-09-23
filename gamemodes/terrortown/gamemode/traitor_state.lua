@@ -1,9 +1,9 @@
 function GetTraitors()
 	local trs = {}
-	
+
 	for _, v in ipairs(player.GetAll()) do
-		if v:HasTeamRole(TEAM_TRAITOR) then 
-			table.insert(trs, v) 
+		if v:HasTeamRole(TEAM_TRAITOR) then
+			table.insert(trs, v)
 		end
 	end
 
@@ -11,7 +11,7 @@ function GetTraitors()
 end
 
 function CountTraitors()
-	return #GetTraitors() 
+	return #GetTraitors()
 end
 
 ---- Role state communication
@@ -40,21 +40,19 @@ function SendRoleListMessage(role, role_ids, ply_or_rf)
 		net.WriteUInt(role_ids[i] - 1, 7)
 	end
 
-	if ply_or_rf then 
+	if ply_or_rf then
 		net.Send(ply_or_rf)
-	else 
-		net.Broadcast() 
+	else
+		net.Broadcast()
 	end
 end
 
 function SendRoleList(role, ply_or_rf, pred)
 	local role_ids = {}
-	
+
 	for _, v in ipairs(player.GetAll()) do
-		if v:IsRole(role) then
-			if not pred or (pred and pred(v)) then
-				table.insert(role_ids, v:EntIndex())
-			end
+		if v:IsRole(role) and (not pred or (pred and pred(v))) then
+			table.insert(role_ids, v:EntIndex())
 		end
 	end
 
@@ -63,23 +61,21 @@ end
 
 function SendTeamRoleList(team, ply_or_rf, pred)
 	local role_ids = {}
-	
+
 	for _, v in pairs(GetTeamRoles(team)) do
 		role_ids[v.index] = {}
 	end
-	
+
 	for _, v in ipairs(player.GetAll()) do
-		if v:HasTeamRole(team) then
-			if not pred or (pred and pred(v)) then
-				if team == TEAM_TRAITOR and not v:GetRoleData().visibleForTraitors then
-					table.insert(role_ids[GetWinningRole(team).index], v:EntIndex())
-				else
-					table.insert(role_ids[v:GetRole()], v:EntIndex())
-				end
+		if v:HasTeamRole(team) and (not pred or (pred and pred(v))) then
+			if team == TEAM_TRAITOR and not v:GetRoleData().visibleForTraitors then
+				table.insert(role_ids[GetWinningRole(team).index], v:EntIndex())
+			else
+				table.insert(role_ids[v:GetRole()], v:EntIndex())
 			end
 		end
 	end
-	
+
 	for k, v in pairs(role_ids) do
 		if v then
 			SendRoleListMessage(k, role_ids[k], ply_or_rf)
@@ -89,12 +85,10 @@ end
 
 function SendTeamRoleSilList(team, ply_or_rf, pred)
 	local role_ids = {}
-	
+
 	for _, v in ipairs(player.GetAll()) do
-		if v:HasTeamRole(team) then
-			if not pred or (pred and pred(v)) then
-				table.insert(role_ids, v:EntIndex())
-			end
+		if v:HasTeamRole(team) and (not pred or (pred and pred(v))) then
+			table.insert(role_ids, v:EntIndex())
 		end
 	end
 
@@ -111,41 +105,39 @@ function SendInnocentList()
 	for _, v in pairs(ROLES) do
 		tmp[v.index] = {}
 	end
-	
+
 	for _, v in ipairs(player.GetAll()) do
 		table.insert(tmp[v:GetRole()], v:EntIndex())
 	end
-	
+
 	local mergedList = {}
 	local mergedListForTraitor = {}
-	
+
 	for _, role in pairs(ROLES) do
 		if role ~= ROLES.DETECTIVE then -- never reset detectives -- will be later
 			table.Add(mergedList, tmp[role.index])
-			
+
 			-- maybe remove second check to enable traitors that other traitors cant see ?
 			if not role.visibleForTraitors and role.team ~= TEAM_TRAITOR then -- prevent resetting visible players and traitors for traitors
 				table.Add(mergedListForTraitor, tmp[role.index])
 			end
 		end
 	end
-	
+
 	table.Shuffle(mergedList)
 	table.Shuffle(mergedListForTraitor)
-	
+
 	-- traitors get actual innocent, so they do not reset their traitor mates to innocence
 	SendRoleListMessage(ROLES.INNOCENT.index, mergedListForTraitor, GetRoleTeamFilter(TEAM_TRAITOR))
-	
+
 	local tmpList = {}
-	
+
 	for _, v in pairs(ROLES) do
-		if v.team == TEAM_TRAITOR or v.specialRoleFilter then
-			if not table.HasValue(tmpList, v.team) then
-				table.insert(tmpList, v.team)
-			end
+		if (v.team == TEAM_TRAITOR or v.specialRoleFilter) and not table.HasValue(tmpList, v.team) then
+			table.insert(tmpList, v.team)
 		end
 	end
-	
+
 	-- update everyone as innocent w/ traitors and roles with special role filtering
 	SendRoleListMessage(ROLES.INNOCENT.index, mergedList, GetAllRolesFilterWOTeams(tmpList))
 end
@@ -153,24 +145,24 @@ end
 function SendVisibleForTraitorList()
 	local b = false
 	local tmp = {}
-	
+
 	for _, v in pairs(ROLES) do
 		if v.team ~= TEAM_TRAITOR and v.visibleForTraitors then
 			b = true
 			tmp[v.index] = {}
 		end
 	end
-	
+
 	if not b then return end
-	
+
 	for _, v in ipairs(player.GetAll()) do
 		local roleData = GetRoleByIndex(v:GetRole())
-		
+
 		if tmp[roleData.index] then
 			table.insert(tmp[roleData.index], v:EntIndex())
 		end
 	end
-	
+
 	for k, v in pairs(tmp) do
 		SendRoleListMessage(k, v, GetRoleTeamFilter(TEAM_TRAITOR))
 	end
@@ -179,57 +171,57 @@ end
 function SendNetworkingRolesList(role, rolesTbl)
 	local b = false
 	local tmp = {}
-	
+
 	for _, v in pairs(rolesTbl) do
 		if v and table.HasValue(ROLES, v) then -- theoretically not necessary, but safety first
 			b = true
 			tmp[v.index] = {}
 		end
 	end
-	
+
 	if not b then return end
-	
+
 	for _, v in ipairs(player.GetAll()) do
 		local roleData = GetRoleByIndex(v:GetRole())
-		
+
 		if tmp[roleData.index] then
 			table.insert(tmp[roleData.index], v:EntIndex())
 		end
 	end
-	
+
 	for k, v in pairs(tmp) do
 		SendRoleListMessage(k, v, GetRoleFilter(role))
 	end
 end
 
 function SendConfirmedTraitors(ply_or_rf)
-	SendTeamRoleSilList(TEAM_TRAITOR, ply_or_rf, function(p) 
-		return p:GetNWBool("body_found") 
+	SendTeamRoleSilList(TEAM_TRAITOR, ply_or_rf, function(p)
+		return p:GetNWBool("body_found")
 	end)
 end
 
 function SendConfirmedSpecial(role, ply_or_rf)
-	SendRoleList(role, ply_or_rf, function(p) 
+	SendRoleList(role, ply_or_rf, function(p)
 		return p:GetNWBool("body_found")
 	end)
 end
 
 function SendFullStateUpdate()
 	SendInnocentList()
-	
+
 	SendVisibleForTraitorList()
-	
+
 	-- easy role filtering method
 	for _, v in pairs(ROLES) do
 		if v.networkRoles then
 			SendNetworkingRolesList(v.index, v.networkRoles)
 		end
 	end
-	
+
 	hook.Run("TTT2_SendFullStateUpdate")
-	
+
 	-- TODO: Improve, not resending if current data is consistent
-	
+
 	-- send every traitor the specific role of traitor mates
 	--for _, v in pairs(GetTeamRoles(TEAM_TRAITOR)) do
 	--	SendRoleList(v.index, GetRoleTeamFilter(TEAM_TRAITOR))
@@ -249,10 +241,10 @@ function SendFullStateUpdate()
 			hook.Run("TTT2_SpecialRoleFilter", ply)
 		end
 	end
-	
+
 	-- everyone should know who is detective
 	SendRoleList(ROLES.DETECTIVE.index)
-	
+
 	-- update players at the end, because they were overwritten as innos, except traitors
 	SendPlayerRoles()
 end
@@ -268,10 +260,10 @@ function SendRoleReset(ply_or_rf)
 		net.WriteUInt(v:EntIndex() - 1, 7)
 	end
 
-	if ply_or_rf then 
+	if ply_or_rf then
 		net.Send(ply_or_rf)
-	else 
-		net.Broadcast() 
+	else
+		net.Broadcast()
 	end
 end
 
@@ -282,17 +274,17 @@ local function request_rolelist(ply)
 	-- information after entities have been initialized (e.g. in InitPostEntity).
 	if GetRoundState() ~= ROUND_WAIT then
 		SendRoleReset(ply) -- reset every player for ply
-		
+
 		-- now everyone is inno
 		SendVisibleForTraitorList()
-	
+
 		-- easy role filtering method
 		for _, v in pairs(ROLES) do
 			if v.networkRoles then
 			SendNetworkingRolesList(v.index, v.networkRoles)
 			end
 		end
-		
+
 		-- just send detectives to all
 		SendRoleList(ROLES.DETECTIVE.index, ply)
 
@@ -306,7 +298,7 @@ local function request_rolelist(ply)
 		else
 			hook.Run("TTT2_SpecialRoleFilter", ply)
 		end
-		
+
 		-- update own role for ply
 		if ply.GetRole then -- prevention
 			net.Start("TTT_Role")
@@ -351,13 +343,13 @@ concommand.Add("ttt_force_detective", force_detective, nil, nil, FCVAR_CHEAT)
 local function force_role(ply, cmd, args, argStr)
 	local role = tonumber(args[1])
 	local i = 0
-	
+
 	for _, v in pairs(ROLES) do
 		i = i + 1
 	end
-	
+
 	local rd = GetRoleByIndex(role)
-	
+
 	if role and role ~= 0 and role <= i and not rd.notSelectable then
 		ply:UpdateRole(role)
 
@@ -399,7 +391,7 @@ local function force_spectate(ply, cmd, arg)
 			end
 
 			GAMEMODE:PlayerSpawnAsSpectator(ply)
-			
+
 			ply:SetTeam(TEAM_SPEC)
 			ply:SetForceSpec(true)
 			ply:Spawn()
@@ -419,11 +411,11 @@ local function roles_index(ply)
 		ply:ChatPrint("[TTT2] roles_index...")
 		ply:ChatPrint("----------------")
 		ply:ChatPrint("[Role] | [Index]")
-		
+
 		for _, v in pairs(GetSortedRoles()) do
 			ply:ChatPrint(v.name .. " | " .. v.index)
 		end
-		
+
 		ply:ChatPrint("----------------")
 	end
 end

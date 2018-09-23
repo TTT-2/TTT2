@@ -29,8 +29,8 @@ KARMA.cv.bantime = CreateConVar("ttt_karma_low_ban_minutes", "60")
 
 local config = KARMA.cv
 
-local function IsDebug() 
-	return config.debug:GetBool() 
+local function IsDebug()
+	return config.debug:GetBool()
 end
 
 local math = math
@@ -77,9 +77,9 @@ end
 
 function KARMA.GiveReward(ply, reward)
 	reward = KARMA.DecayedMultiplier(ply) * reward
-	
+
 	ply:SetLiveKarma(math.min(ply:GetLiveKarma() + reward, config.max:GetFloat()))
-	
+
 	return reward
 end
 
@@ -90,7 +90,7 @@ function KARMA.ApplyKarma(ply)
 	-- need the penalty curve
 	if ply:GetBaseKarma() < 1000 then
 		local k = ply:GetBaseKarma() - 1000
-		
+
 		if config.strict:GetBool() then
 			-- this penalty curve sinks more quickly, less parabolic
 			df = 1 + (0.0007 * k) + (-0.000002 * (k ^ 2))
@@ -111,13 +111,13 @@ local function WasAvoidable(attacker, victim, dmginfo)
 	local infl = dmginfo:GetInflictor()
 	local rda = attacker:GetRoleData()
 	local rdv = victim:GetRoleData()
-	
+
 	local rdaTeam = hook.Run("TTT2_ModifyRole", attacker) or rda
 	rdaTeam = rdaTeam.team
-	
+
 	local rdvTeam = hook.Run("TTT2_ModifyRole", victim) or rdv
 	rdvTeam = rdvTeam.team
-	
+
 	if rdaTeam and rdaTeam == rdvTeam and (not rdv.unknownTeam or rdaTeam == TEAM_TRAITOR) and IsValid(infl) and (infl.Avoidable == nil or infl.Avoidable) then
 		return true
 	end
@@ -130,26 +130,26 @@ end
 -- damage factor of the attacker.
 function KARMA.Hurt(attacker, victim, dmginfo)
 	if not IsValid(attacker) or not IsValid(victim) then return end
-	
+
 	if attacker == victim then return end
 --	if not attacker:IsPlayer() or not victim:IsPlayer() then return end
 
 	-- Ignore excess damage
 	local hurt_amount = math.min(victim:Health(), dmginfo:GetDamage())
-	
+
 	if not attacker:IsPlayer() then return end
-	
+
 	if not victim:IsPlayer() then return end
-	
+
 	local rda = attacker:GetRoleData()
 	local rdv = victim:GetRoleData()
-	
+
 	local rdaTeam = hook.Run("TTT2_ModifyRole", attacker) or rda
 	rdaTeam = rdaTeam.team
-	
+
 	local rdvTeam = hook.Run("TTT2_ModifyRole", victim) or rdv
 	rdvTeam = rdvTeam.team
-	
+
 	-- team kills another team
 	if not rdaTeam or rdaTeam ~= rdvTeam then
 		local reward = KARMA.GetHurtReward(hurt_amount)
@@ -157,7 +157,7 @@ function KARMA.Hurt(attacker, victim, dmginfo)
 		reward = KARMA.GiveReward(attacker, reward)
 
 		print(Format("%s (%f) killed %s (%f) and gets REWARDED %f", attacker:Nick(), attacker:GetLiveKarma(), victim:Nick(), victim:GetLiveKarma(), reward))
-		
+
 	-- team kills own team
 	elseif rdaTeam and rdaTeam == rdvTeam then
 		if not WasAvoidable(attacker, victim, dmginfo) then return end
@@ -169,43 +169,43 @@ function KARMA.Hurt(attacker, victim, dmginfo)
 
 		print(Format("%s (%f) killed %s (%f) and gets penalised for %f", attacker:Nick(), attacker:GetLiveKarma(), victim:Nick(), victim:GetLiveKarma(), penalty))
 	end
-end 
+end
 
 -- Handle karma change due to one player killing another.
 function KARMA.Killed(attacker, victim, dmginfo)
 	if not IsValid(attacker) or not IsValid(victim) then return end
-	
+
 	if attacker == victim then return end
-	
+
 	if not attacker:IsPlayer() or not victim:IsPlayer() then return end
-	
+
 	local rda = attacker:GetRoleData()
 	local rdv = victim:GetRoleData()
-	
+
 	local rdaTeam = hook.Run("TTT2_ModifyRole", attacker) or rda
 	rdaTeam = rdaTeam.team
-	
+
 	local rdvTeam = hook.Run("TTT2_ModifyRole", victim) or rdv
 	rdvTeam = rdvTeam.team
-	
+
 	-- team kills another team
 	if attacker:IsPlayer() then
 		if not rdaTeam or rdaTeam ~= rdvTeam then
 			local reward = KARMA.GetKillReward()
-			
+
 			reward = KARMA.GiveReward(attacker, reward)
-			
+
 			print(Format("%s (%f) killed %s (%f) and gets REWARDED %f", attacker:Nick(), attacker:GetLiveKarma(), victim:Nick(), victim:GetLiveKarma(), reward))
-			
+
 		-- team kills own team
 		elseif rdaTeam and rdaTeam == rdvTeam then
 			if not WasAvoidable(attacker, victim, dmginfo) then return end
-		
+
 			local penalty = KARMA.GetKillPenalty(victim:GetLiveKarma())
-		
+
 			KARMA.GivePenalty(attacker, penalty, victim)
 			attacker:SetCleanRound(false)
-			
+
 			print(Format("%s (%f) killed %s (%f) and gets penalised for %f", attacker:Nick(), attacker:GetLiveKarma(), victim:Nick(), victim:GetLiveKarma(), penalty))
 		end
 	end
@@ -243,7 +243,7 @@ function KARMA.RoundIncrement()
 	for _, ply in ipairs(player.GetAll()) do
 		if ply:IsDeadTerror() and ply.death_type ~= KILL_SUICIDE or not ply:IsSpec() then
 			local bonus = healbonus + (ply:GetCleanRound() and cleanbonus or 0)
-			
+
 			KARMA.GiveReward(ply, bonus)
 
 			if IsDebug() then
@@ -276,7 +276,7 @@ end
 function KARMA.NotifyPlayer(ply)
 	local df = ply:GetDamageFactor() or 1
 	local k = math.Round(ply:GetBaseKarma())
-	
+
 	if df > 0.99 then
 		LANG.Msg(ply, "karma_dmg_full", {amount = k})
 	else
@@ -345,7 +345,7 @@ function KARMA.Recall(ply)
 
 		if ply:IsFullyAuthenticated() then
 			local k = tonumber(ply:GetPData("karma_stored", nil))
-			
+
 			if k then
 				return k
 			end
@@ -357,7 +357,7 @@ end
 
 function KARMA.LateRecallAndSet(ply)
 	local k = tonumber(ply:GetPData("karma_stored", KARMA.RememberedPlayers[ply:SteamID()]))
-	
+
 	if k and k < ply:GetLiveKarma() then
 		ply:SetBaseKarma(k)
 		ply:SetLiveKarma(k)
@@ -377,7 +377,7 @@ function KARMA.CheckAutoKick(ply)
 		if hook.Call("TTTKarmaLow", GAMEMODE, ply) == false then
 			return
 		end
-		
+
 		ServerLog(ply:Nick() .. " autokicked/banned for low karma.\n")
 
 		-- flag player as autokicked so we don't perform the normal player
@@ -386,7 +386,7 @@ function KARMA.CheckAutoKick(ply)
 
 		if config.persist:GetBool() then
 			local k = math.Clamp(config.starting:GetFloat() * 0.8, config.kicklevel:GetFloat() * 1.1, config.max:GetFloat())
-			
+
 			ply:SetPData("karma_stored", k)
 			KARMA.RememberedPlayers[ply:SteamID()] = k
 		end
@@ -403,7 +403,7 @@ function KARMA.PrintAll(printfn)
 	for _, ply in ipairs(player.GetAll()) do
 		printfn(Format("%s : Live = %f -- Base = %f -- Dmg = %f\n",
 			ply:Nick(),
-			ply:GetLiveKarma(), 
+			ply:GetLiveKarma(),
 			ply:GetBaseKarma(),
 			ply:GetDamageFactor() * 100
 		))

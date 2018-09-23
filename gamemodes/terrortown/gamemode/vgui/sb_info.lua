@@ -3,7 +3,6 @@
 local vgui = vgui
 
 local GetTranslation = LANG.GetTranslation
-local GetPTranslation = LANG.GetParamTranslation
 
 
 --- Base stuff
@@ -32,7 +31,7 @@ vgui.Register("TTTScorePlayerInfoBase", PANEL, "Panel")
 
 --- Dead player search results
 
-local PANEL = {}
+PANEL = {}
 
 function PANEL:Init()
 	self.List = vgui.Create("DPanelSelect", self)
@@ -68,10 +67,10 @@ end
 
 function PANEL:UpdatePlayerData()
 	if not IsValid(self.Player) then return end
-	
+
 	if not self.Player.search_result then
 		self.Help:SetVisible(true)
-		
+
 		return
 	end
 
@@ -139,7 +138,7 @@ local tags = {
 	{txt = "sb_tag_miss", color = Color(130, 190, 130, 255)}
 }
 
-local PANEL = {}
+PANEL = {}
 
 function PANEL:Init()
 	self.TagButtons = {}
@@ -184,7 +183,7 @@ function PANEL:PerformLayout()
 		btn:SetCursor("hand")
 		btn:SizeToContents()
 		btn:PerformLayout()
-		
+
 		x = (x + btn:GetWide() + margin)
 	end
 end
@@ -192,7 +191,7 @@ end
 vgui.Register("TTTScorePlayerInfoTags", PANEL, "TTTScorePlayerInfoBase")
 
 --- Tag button
-local PANEL = {}
+PANEL = {}
 
 function PANEL:Init()
 	self.Player = nil

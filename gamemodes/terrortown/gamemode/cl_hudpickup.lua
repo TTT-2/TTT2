@@ -25,7 +25,7 @@ function GM:HUDWeaponPickedUp(wep)
 	pickup.upper = true
 
 	surface.SetFont(pickup.font)
-	
+
 	local w, h = surface.GetTextSize(pickup.name)
 	pickup.height = h
 	pickup.width = w
@@ -35,7 +35,7 @@ function GM:HUDWeaponPickedUp(wep)
 	end
 
 	table.insert(self.PickupHistory, pickup)
-	
+
 	self.PickupHistoryLast = pickup.time
 end
 
@@ -56,7 +56,7 @@ function GM:HUDItemPickedUp(itemname)
 	pickup.upper = false
 
 	surface.SetFont(pickup.font)
-	
+
 	local w, h = surface.GetTextSize(pickup.name)
 	pickup.height = h
 	pickup.width	= w
@@ -66,7 +66,7 @@ function GM:HUDItemPickedUp(itemname)
 	end
 
 	table.insert(self.PickupHistory, pickup)
-	
+
 	self.PickupHistoryLast = pickup.time
 end
 
@@ -77,12 +77,12 @@ function GM:HUDAmmoPickedUp(itemname, amount)
 
 	if self.PickupHistory then
 		local localized_name = string.upper(itemname_trans)
-		
+
 		for _, v in pairs(self.PickupHistory) do
 			if v.name == localized_name then
 				v.amount = tostring(tonumber(v.amount) + amount)
 				v.time = CurTime() - v.fadein
-				
+
 				return
 			end
 		end
@@ -99,12 +99,12 @@ function GM:HUDAmmoPickedUp(itemname, amount)
 	pickup.amount	= tostring(amount)
 
 	surface.SetFont(pickup.font)
-	
+
 	local w, h = surface.GetTextSize(pickup.name)
 	pickup.height = h
-	pickup.width	= w
+	pickup.width = w
 
-	local w, h = surface.GetTextSize(pickup.amount)
+	w, h = surface.GetTextSize(pickup.amount)
 	pickup.xwidth = w
 	pickup.width = pickup.width + w + 16
 
@@ -113,7 +113,7 @@ function GM:HUDAmmoPickedUp(itemname, amount)
 	end
 
 	table.insert(self.PickupHistory, pickup)
-	
+
 	self.PickupHistoryLast = pickup.time
 end
 
@@ -127,8 +127,8 @@ function GM:HUDDrawPickupHistory()
 
 	for k, v in pairs(self.PickupHistory) do
 		if v.time < CurTime() then
-			if not v.y then 
-				v.y = y 
+			if not v.y then
+				v.y = y
 			end
 
 			v.y = (v.y * 5 + y) / 6
@@ -178,8 +178,8 @@ function GM:HUDDrawPickupHistory()
 			tall = tall + v.height + 18
 			wide = math.Max(wide, v.width + v.height + 24)
 
-			if alpha == 0 then 
-				self.PickupHistory[k] = nil 
+			if alpha == 0 then
+				self.PickupHistory[k] = nil
 			end
 		end
 	end

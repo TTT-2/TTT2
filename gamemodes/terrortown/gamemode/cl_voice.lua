@@ -20,11 +20,11 @@ local function VoiceNotifyThink(pnl)
 	local client = LocalPlayer()
 
 	if not (IsValid(pnl) and client and IsValid(pnl.ply)) then return end
-	
+
 	if not (GetGlobalBool("ttt_locational_voice", false) and not pnl.ply:IsSpec() and pnl.ply ~= client) then return end
-	
+
 	if client:IsActive() and pnl.ply:IsActive() and client:IsTeamMember(pnl.ply) then return end
-	
+
 	local d = client:GetPos():Distance(pnl.ply:GetPos())
 
 	pnl:SetAlpha(math.max(-0.1 * d + 255, 15))
@@ -34,24 +34,24 @@ local PlayerVoicePanels = {}
 
 function GM:PlayerStartVoice(ply)
 	local client = LocalPlayer()
-	
+
 	if not IsValid(g_VoicePanelList) or not IsValid(client) then return end
-	
+
 	-- There'd be an extra one if voice_loopback is on, so remove it.
 	GAMEMODE:PlayerEndVoice(ply, true)
-	
+
 	if not IsValid(ply) then return end
-	
+
 	-- Tell server this is global
 	if client == ply then
 		if client:IsActive() and not client:HasTeamRole(TEAM_INNO) and (not client:GetRoleData().unknownTeam or client:HasTeamRole(TEAM_TRAITOR)) then
 			if not client:KeyDown(IN_SPEED) and not client:KeyDownLast(IN_SPEED) then
 				client[client:GetRoleData().team .. "_gvoice"] = true
-				
+
 				RunConsoleCommand("rvog", "1")
 			else
 				client[client:GetRoleData().team .. "_gvoice"] = false
-				
+
 				RunConsoleCommand("rvog", "0")
 			end
 		end
@@ -62,28 +62,28 @@ function GM:PlayerStartVoice(ply)
 	local pnl = g_VoicePanelList:Add("VoiceNotify")
 	pnl:Setup(ply)
 	pnl:Dock(TOP)
-	
+
 	local oldThink = pnl.Think
-	
-	pnl.Think = function(self)
-		oldThink(self)
-		
-		VoiceNotifyThink(self)
+
+	pnl.Think = function(s)
+		oldThink(s)
+
+		VoiceNotifyThink(s)
 	end
 
 	local shade = Color(0, 0, 0, 150)
-	
+
 	pnl.Paint = function(s, w, h)
 		if not IsValid(s.ply) then return end
-		
+
 		draw.RoundedBox(4, 0, 0, w, h, s.Color)
 		draw.RoundedBox(4, 1, 1, w - 2, h - 2, shade)
 	end
-	
+
 	-- roles things
 	if client:IsActive() and not client:HasTeamRole(TEAM_INNO) and (not client:GetRoleData().unknownTeam or client:HasTeamRole(TEAM_TRAITOR)) then
 		local rd = client:GetRoleData()
-		
+
 		if ply == client then
 			if not client[rd.team .. "_gvoice"] then
 				pnl.Color = rd.color
@@ -109,13 +109,13 @@ local function ReceiveVoiceState()
 
 	-- prevent glitching due to chat starting/ending across round boundary
 	if GAMEMODE.round_state ~= ROUND_ACTIVE then return end
-	
+
 	local lply = LocalPlayer()
-	
+
 	if not IsValid(lply) or not (lply:IsActive() and not lply:HasTeamRole(TEAM_INNO) and (not lply:GetRoleData().unknownTeam or lply:HasTeamRole(TEAM_TRAITOR))) then return end
 
 	local ply = player.GetByID(idx)
-	
+
 	if IsValid(ply) then
 		ply[ply:GetRoleData().team .. "_gvoice"] = state
 
@@ -138,7 +138,7 @@ timer.Create("VoiceClean", 10, 0, VoiceClean)
 function GM:PlayerEndVoice(ply, no_reset)
 	if IsValid(PlayerVoicePanels[ply]) then
 		PlayerVoicePanels[ply]:Remove()
-		
+
 		PlayerVoicePanels[ply] = nil
 	end
 
@@ -169,7 +169,7 @@ local function CreateVoiceVGUI()
 end
 hook.Add("InitPostEntity", "CreateVoiceVGUI", CreateVoiceVGUI)
 
-local MuteStates = {MUTE_NONE, MUTE_TERROR, MUTE_ALL, MUTE_SPEC}
+--local MuteStates = {MUTE_NONE, MUTE_TERROR, MUTE_ALL, MUTE_SPEC}
 
 local MuteText = {
 	[MUTE_NONE]	= "",
@@ -190,8 +190,8 @@ local mute_state = MUTE_NONE
 function VOICE.CycleMuteState(force_state)
 	mute_state = force_state or next(MuteText, mute_state)
 
-	if not mute_state then 
-		mute_state = MUTE_NONE 
+	if not mute_state then
+		mute_state = MUTE_NONE
 	end
 
 	SetMuteState(mute_state)
@@ -208,11 +208,11 @@ end
 
 local function GetRechargeRate()
 	local r = GetGlobalFloat("ttt_voice_drain_recharge", 0.05)
-	
+
 	if LocalPlayer().voice_battery < battery_min then
 		r = r / 2
 	end
-	
+
 	return r
 end
 
@@ -220,9 +220,9 @@ local function GetDrainRate()
 	if not GetGlobalBool("ttt_voice_drain", false) then return 0 end
 
 	if GetRoundState() ~= ROUND_ACTIVE then return 0 end
-	
+
 	local ply = LocalPlayer()
-	
+
 	if not IsValid(ply) or ply:IsSpec() then return 0 end
 
 	if ply:IsAdmin() or ply:IsDetective() then
@@ -240,13 +240,13 @@ function VOICE.Tick()
 	if not GetGlobalBool("ttt_voice_drain", false) then return end
 
 	local client = LocalPlayer()
-	
+
 	if VOICE.IsSpeaking() and not IsRoleChatting(client) then
 		client.voice_battery = client.voice_battery - GetDrainRate()
 
 		if not VOICE.CanSpeak() then
 			client.voice_battery = 0
-			
+
 			RunConsoleCommand("-voicerecord")
 		end
 	elseif client.voice_battery < battery_max then
@@ -255,17 +255,17 @@ function VOICE.Tick()
 end
 
 -- Player:IsSpeaking() does not work for localplayer
-function VOICE.IsSpeaking() 
-	return LocalPlayer().speaking 
+function VOICE.IsSpeaking()
+	return LocalPlayer().speaking
 end
 
-function VOICE.SetSpeaking(state) 
-	LocalPlayer().speaking = state 
+function VOICE.SetSpeaking(state)
+	LocalPlayer().speaking = state
 end
 
 function VOICE.CanSpeak()
 	if not GetGlobalBool("ttt_voice_drain", false) then return true end
-	
+
 	local client = LocalPlayer()
 
 	return client.voice_battery > battery_min or IsRoleChatting(client)
@@ -275,7 +275,7 @@ local speaker = surface.GetTextureID("voice/icntlk_sv")
 
 function VOICE.Draw(client)
 	local b = client.voice_battery
-	
+
 	if b >= battery_max then return end
 
 	local x = 25
@@ -288,7 +288,7 @@ function VOICE.Draw(client)
 	else
 		surface.SetDrawColor(0, 200, 0, 255)
 	end
-	
+
 	surface.DrawOutlinedRect(x, y, w, h)
 
 	surface.SetTexture(speaker)

@@ -1,13 +1,10 @@
 -- HUD HUD HUD
 
-local table = table
 local surface = surface
 local draw = draw
 local math = math
 local string = string
 
-local GetTranslation = LANG.GetTranslation
-local GetPTranslation = LANG.GetParamTranslation
 local GetLang = LANG.GetUnsafeLanguageTable
 local interp = string.Interp
 
@@ -81,7 +78,7 @@ local roundstate_string = {
 -- Returns player's ammo information
 local function GetAmmo(ply)
 	local weap = ply:GetActiveWeapon()
-	
+
 	if not weap or not ply:Alive() then return -1 end
 
 	local ammo_inv = weap:Ammo1() or 0
@@ -106,7 +103,7 @@ local function DrawBg(x, y, width, height, client)
 
 	-- main border, traitor based
 	local col = ROLES.INNOCENT.color
-	
+
 	if GAMEMODE.round_state ~= ROUND_ACTIVE then
 		col = bg_colors.noround
 	elseif client:IsSpecial() then
@@ -116,7 +113,6 @@ local function DrawBg(x, y, width, height, client)
 	draw.RoundedBox(8, x, y, tw, th, col)
 end
 
-local sf = surface
 local dr = draw
 
 local function ShadowedText(text, font, x, y, color, xalign, yalign)
@@ -142,10 +138,10 @@ local function PunchPaint(client)
 	dr.SimpleText(L.punch_help, "TabLarge", ScrW() / 2, margin, COLOR_WHITE, TEXT_ALIGN_CENTER)
 
 	local bonus = client:GetNWInt("bonuspunches", 0)
-	
+
 	if bonus ~= 0 then
 		local text
-		
+
 		if bonus < 0 then
 			text = interp(L.punch_bonus, {num = bonus})
 		else
@@ -168,8 +164,8 @@ local function SpecHUDPaint(client)
 	local round_y = ScrH() - height - margin
 
 	-- move up a little on low resolutions to allow space for spectator hints
-	if ScrW() < 1000 then 
-		round_y = round_y - 15 
+	if ScrW() < 1000 then
+		round_y = round_y - 15
 	end
 
 	local time_x = x + 170
@@ -182,11 +178,11 @@ local function SpecHUDPaint(client)
 	ShadowedText(text, "TraitorState", x + margin, round_y, COLOR_WHITE)
 
 	-- Draw round/prep/post time remaining
-	local text = util.SimpleTime(math.max(0, GetGlobalFloat("ttt_round_end", 0) - CurTime()), "%02i:%02i")
+	text = util.SimpleTime(math.max(0, GetGlobalFloat("ttt_round_end", 0) - CurTime()), "%02i:%02i")
 	ShadowedText(text, "TimeLeft", time_x + margin, time_y, COLOR_WHITE)
 
 	local tgt = client:GetObserverTarget()
-	
+
 	if IsValid(tgt) and tgt:IsPlayer() then
 		ShadowedText(tgt:Nick(), "TimeLeft", ScrW() / 2, margin, COLOR_WHITE, TEXT_ALIGN_CENTER)
 	elseif IsValid(tgt) and tgt:GetNWEntity("spec_owner", nil) == client then
@@ -242,7 +238,7 @@ local function InfoPaint(client)
 
 	local traitor_y = y - 30
 	local text
-	
+
 	if round_state == ROUND_ACTIVE then
 		text = L[client:GetRoleStringRaw()]
 	else
@@ -257,7 +253,6 @@ local function InfoPaint(client)
 
 	local endtime = GetGlobalFloat("ttt_round_end", 0) - CurTime()
 
-	local text
 	local font = "TimeLeft"
 	local color = COLOR_WHITE
 	local rx = x + margin + 170
@@ -284,12 +279,12 @@ local function InfoPaint(client)
 		else
 			-- still in starting period
 			local t = hastetime
-			
+
 			if is_traitor and math.ceil(CurTime()) % 6 < 2 then
 				t = endtime
 				color = COLOR_RED
 			end
-			
+
 			text = util.SimpleTime(math.max(0, t), "%02i:%02i")
 		end
 	else
@@ -356,9 +351,9 @@ end
 
 -- Hide the standard HUD stuff
 local hud = {
-	["CHudHealth"] = true, 
-	["CHudBattery"] = true, 
-	["CHudAmmo"] = true, 
+	["CHudHealth"] = true,
+	["CHudBattery"] = true,
+	["CHudAmmo"] = true,
 	["CHudSecondaryAmmo"] = true
 }
 

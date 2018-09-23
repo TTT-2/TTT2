@@ -44,13 +44,13 @@ local function UntilMapChange()
 	local rounds_left = max(0, GetGlobalInt("ttt_rounds_left", 6))
 	local time_left = floor(max(0, (GetGlobalInt("ttt_time_limit_minutes") or 60) * 60 - CurTime()))
 	local h = floor(time_left / 3600)
-	
+
 	time_left = time_left - floor(h * 3600)
-	
+
 	local m = floor(time_left / 60)
-	
+
 	time_left = time_left - floor(m * 60)
-	
+
 	local s = floor(time_left)
 
 	return rounds_left, string.format("%02i:%02i:%02i", h, m, s)
@@ -64,20 +64,20 @@ GROUP_SPEC = 4
 GROUP_COUNT = 4
 
 function AddScoreGroup(name) -- Utility function to register a score group
-	if _G["GROUP_" .. name] then 
-		error("Group of name '" .. name .. "' already exists!") 
-		
-		return 
+	if _G["GROUP_" .. name] then
+		error("Group of name '" .. name .. "' already exists!")
+
+		return
 	end
-	
+
 	GROUP_COUNT = GROUP_COUNT + 1
-	
+
 	_G["GROUP_" .. name] = GROUP_COUNT
 end
 
 function ScoreGroup(p)
 	if not IsValid(p) then -- will not match any group panel
-		return -1 
+		return -1
 	end
 
 	local group = hook.Call("TTTScoreGroup", nil, p)
@@ -86,21 +86,20 @@ function ScoreGroup(p)
 		return group
 	end
 
-	if DetectiveMode() then
-		if p:IsSpec() and not p:Alive() then
-			if p:GetNWBool("body_found", false) then
-				return GROUP_FOUND
+	if DetectiveMode() and p:IsSpec() and not p:Alive() then
+		if p:GetNWBool("body_found", false) then
+			return GROUP_FOUND
+		else
+			local client = LocalPlayer()
+
+			-- To terrorists, missing players show as alive
+			if client:IsSpec()
+			or (client:IsActive() and client:HasTeamRole(TEAM_TRAITOR))
+			or (GAMEMODE.round_state ~= ROUND_ACTIVE and client:IsTerror())
+			then
+				return GROUP_NOTFOUND
 			else
-				local client = LocalPlayer()
-				
-				-- To terrorists, missing players show as alive
-				if client:IsSpec() or
-				(client:IsActive() and client:HasTeamRole(TEAM_TRAITOR)) or
-				(GAMEMODE.round_state ~= ROUND_ACTIVE and client:IsTerror()) then
-					return GROUP_NOTFOUND
-				else
-					return GROUP_TERROR
-				end
+				return GROUP_TERROR
 			end
 		end
 	end
@@ -172,12 +171,12 @@ function PANEL:Init()
 	if DetectiveMode() then
 		t = vgui.Create("TTTScoreGroup", self.ply_frame:GetCanvas())
 		t:SetGroupInfo(GetTranslation("sb_mia"), Color(130, 190, 130, 100), GROUP_NOTFOUND)
-		
+
 		self.ply_groups[GROUP_NOTFOUND] = t
 
 		t = vgui.Create("TTTScoreGroup", self.ply_frame:GetCanvas())
 		t:SetGroupInfo(GetTranslation("sb_confirmed"), Color(130, 170, 10, 100), GROUP_FOUND)
-		
+
 		self.ply_groups[GROUP_FOUND] = t
 	end
 
@@ -234,9 +233,9 @@ end
 local function column_label_work(self_, table_to_add, label, width, sort_identifier, sort_func)
 	local lbl = vgui.Create("DLabel", self_)
 	lbl:SetText(label)
-	
+
 	local can_sort = false
-	
+
 	lbl.IsHeading = true
 	lbl.Width = width or 50 -- Retain compatibility with existing code
 
@@ -262,7 +261,7 @@ local function column_label_work(self_, table_to_add, label, width, sort_identif
 	end
 
 	table.insert(table_to_add, lbl)
-	
+
 	return lbl
 end
 
@@ -280,7 +279,7 @@ function PANEL:StartUpdateTimer()
 	if not timer.Exists("TTTScoreboardUpdater") then
 		timer.Create("TTTScoreboardUpdater", 0.3, 0, function()
 			local pnl = GAMEMODE:GetScoreboardPanel()
-			
+
 			if IsValid(pnl) then
 				pnl:UpdateScoreboard()
 			end
@@ -311,18 +310,18 @@ end
 function PANEL:PerformLayout()
 	-- position groups and find their total size
 	local gy = 0
-	
+
 	-- can't just use pairs (undefined ordering) or ipairs (group 2 and 3 might not exist)
 	for i = 1, GROUP_COUNT do
 		local group = self.ply_groups[i]
-		
+
 		if IsValid(group) then
 			if group:HasRows() then
 				group:SetVisible(true)
 				group:SetPos(0, gy)
 				group:SetSize(self.ply_frame:GetWide(), group:GetTall())
 				group:InvalidateLayout()
-				
+
 				gy = gy + group:GetTall() + 5
 			else
 				group:SetVisible(false)
@@ -354,15 +353,15 @@ function PANEL:PerformLayout()
 	self.hostdesc:SetPos(w - self.hostdesc:GetWide() - 8, y_logo_off + 5)
 
 	local hw = w - 180 - 8
-	
+
 	self.hostname:SetSize(hw, 32)
 	self.hostname:SetPos(w - self.hostname:GetWide() - 8, y_logo_off + 27)
 
 	surface.SetFont("cool_large")
-	
+
 	local hname = self.hostname:GetValue()
 	local tw, _ = surface.GetTextSize(hname)
-	
+
 	while tw > hw do
 		hname = string.sub(hname, 1, -6) .. "..."
 		tw, th = surface.GetTextSize(hname)
@@ -376,7 +375,7 @@ function PANEL:PerformLayout()
 	-- score columns
 	local cy = y_logo_off + 90
 	local cx = w - 8 -(scrolling and 16 or 0)
-	
+
 	for _, v in ipairs(self.cols) do
 		v:SizeToContents()
 		cx = cx - v.Width
@@ -386,13 +385,13 @@ function PANEL:PerformLayout()
 	-- sort headers
 	-- reuse cy
 	-- cx = logo width + buffer space
-	local cx = 256 + 8
-	
+	cx = 256 + 8
+
 	for _, v in ipairs(self.sort_headers) do
 		v:SizeToContents()
-		
+
 		cx = cx + v.Width
-		
+
 		v:SetPos(cx - v:GetWide() / 2, cy)
 	end
 end
@@ -401,19 +400,19 @@ function PANEL:ApplySchemeSettings()
 	self.hostdesc:SetFont("cool_small")
 	self.hostname:SetFont("cool_large")
 	self.mapchange:SetFont("treb_small")
-	
+
 	self.hostdesc:SetTextColor(COLOR_WHITE)
 	self.hostname:SetTextColor(COLOR_BLACK)
 	self.mapchange:SetTextColor(COLOR_WHITE)
 
 	local sorting = GetConVar("ttt_scoreboard_sorting"):GetString()
-	
+
 	local highlight_color = Color(175, 175, 175, 255)
 	local default_color = COLOR_WHITE
 
 	for _, v in pairs(self.cols) do
 		v:SetFont("treb_small")
-		
+
 		if sorting == v.HeadingIdentifier then
 			v:SetTextColor(highlight_color)
 		else
@@ -423,7 +422,7 @@ function PANEL:ApplySchemeSettings()
 
 	for _, v in pairs(self.sort_headers) do
 		v:SetFont("treb_small")
-		
+
 		if sorting == v.HeadingIdentifier then
 			v:SetTextColor(highlight_color)
 		else
@@ -442,10 +441,10 @@ function PANEL:UpdateScoreboard(force)
 	for _, p in ipairs(player.GetAll()) do
 		if IsValid(p) then
 			local group = ScoreGroup(p)
-			
+
 			if self.ply_groups[group] and not self.ply_groups[group]:HasPlayerRow(p) then
 				self.ply_groups[group]:AddPlayerRow(p)
-				
+
 				layout = true
 			end
 		end
@@ -470,7 +469,7 @@ vgui.Register("TTTScoreboard", PANEL, "Panel")
 ---- PlayerFrame is defined in sandbox and is basically a little scrolling
 ---- hack. Just putting it here (slightly modified) because it's tiny.
 
-local PANEL = {}
+PANEL = {}
 
 function PANEL:Init()
 	self.pnlCanvas = vgui.Create("Panel", self)
@@ -479,8 +478,8 @@ function PANEL:Init()
 	self.scroll = vgui.Create("DVScrollBar", self)
 end
 
-function PANEL:GetCanvas() 
-	return self.pnlCanvas 
+function PANEL:GetCanvas()
+	return self.pnlCanvas
 end
 
 function PANEL:OnMouseWheeled(dlta)

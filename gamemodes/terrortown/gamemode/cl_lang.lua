@@ -19,7 +19,7 @@ local cached_default, cached_active
 
 function LANG.CreateLanguage(lang_name)
 	if not lang_name then return end
-	
+
 	lang_name = string.lower(lang_name)
 
 	if not LANG.IsLanguage(lang_name) then
@@ -94,12 +94,12 @@ end
 -- interest to consumers in draw/think hooks. Grabbing a translation directly
 -- from the table is very fast, and much simpler than a local caching solution.
 -- Modifying it would typically be a bad idea.
-function LANG.GetUnsafeLanguageTable() 
-	return cached_active 
+function LANG.GetUnsafeLanguageTable()
+	return cached_active
 end
 
-function LANG.GetUnsafeNamed(name) 
-	return LANG.Strings[name] 
+function LANG.GetUnsafeNamed(name)
+	return LANG.Strings[name]
 end
 
 -- Safe and slow access, not sure if it's ever useful.
@@ -107,17 +107,17 @@ function LANG.GetLanguageTable(lang_name)
 	lang_name = lang_name or LANG.ActiveLanguage
 
 	local cpy = table.Copy(LANG.Strings[lang_name])
-	
+
 	SetFallback(cpy)
 
 	return cpy
 end
 
 
-local function SetFallback(tbl)
+function SetFallback(tbl)
 	-- languages may deal with this themselves, or may already have the fallback
 	local m = getmetatable(tbl)
-	
+
 	if m and m.__index then return end
 
 	-- Set the __index of the metatable to use the default lang, which makes any
@@ -138,7 +138,7 @@ function LANG.SetActiveLanguage(lang_name)
 
 	if LANG.IsLanguage(lang_name) then
 		local old_name = LANG.ActiveLanguage
-		
+
 		LANG.ActiveLanguage = lang_name
 
 		-- cache ref to table to avoid hopping through LANG and Strings every time
@@ -175,13 +175,13 @@ end
 
 function LANG.IsServerDefault(lang_name)
 	lang_name = string.lower(lang_name)
-	
+
 	return lang_name == "server default" or lang_name == "auto"
 end
 
 function LANG.IsLanguage(lang_name)
 	lang_name = lang_name and string.lower(lang_name)
-	
+
 	return LANG.Strings[lang_name]
 end
 
@@ -204,11 +204,11 @@ concommand.Add("ttt_reloadlang", ForceReload)
 -- Get a copy of all available languages (keys in the Strings tbl)
 function LANG.GetLanguages()
 	local langs = {}
-	
+
 	for lang, strings in pairs(LANG.Strings) do
 		table.insert(langs, lang)
 	end
-	
+
 	return langs
 end
 
@@ -217,13 +217,13 @@ end
 LANG.Styles = {
 	default = function(text)
 		MSTACK:AddMessage(text)
-		
+
 		print("TTT:	" .. text)
 	end,
 
 	rolecolour = function(text)
 		MSTACK:AddColoredBgMessage(text, LocalPlayer():GetRoleData().color)
-		
+
 		print("TTT:	" .. text)
 	end,
 
@@ -266,19 +266,20 @@ function LANG.ProcessMsg(name, params)
 		-- some of our params may be string names themselves
 		for k, v in pairs(params) do
 			if type(v) == "string" then
-				local name = LANG.GetNameParam(v)
-				
-				if not name then
+				local name2 = LANG.GetNameParam(v)
+
+				--if not name2 then
 					-- TODO test, string to bool?
-				else
-					params[k] = LANG.GetTranslation(name)
+				--else
+				if name2 then
+					params[k] = LANG.GetTranslation(name2)
 				end
 			end
 		end
-		
+
 		text = interp(raw, params)
 	end
-	
+
 	LANG.ShowStyledMsg(text, LANG.GetStyle(name))
 end
 
@@ -302,7 +303,7 @@ local styledmessages = {
 		"buy_no_stock",
 		"buy_pending",
 		"buy_received",
-		
+
 		"xfer_no_recip",
 		"xfer_no_credits",
 		"xfer_success",

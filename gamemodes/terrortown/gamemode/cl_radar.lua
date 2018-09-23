@@ -1,9 +1,6 @@
 -- radar rendering
 
-local render = render
 local surface = surface
-local string = string
-local player = player
 local math = math
 
 RADAR = {}
@@ -35,7 +32,7 @@ end
 
 function RADAR:Timeout()
 	self:EndScan()
-	
+
 	local client = LocalPlayer()
 
 	if self.repeating and client and client:HasEquipmentItem(EQUIP_RADAR) then
@@ -57,7 +54,7 @@ function RADAR.CacheEnts()
 	-- Update bomb positions for those we know about
 	for idx, b in pairs(RADAR.bombs) do
 		local ent = Entity(idx)
-		
+
 		if IsValid(ent) then
 			b.pos = ent:GetPos()
 		end
@@ -77,7 +74,7 @@ local function DrawTarget(tgt, size, offset, no_shrink)
 
 	scrpos.x = math.Clamp(scrpos.x, sz, ScrW() - sz)
 	scrpos.y = math.Clamp(scrpos.y, sz, ScrH() - sz)
-	
+
 	if IsOffScreen(scrpos) then return end
 
 	surface.DrawTexturedRect(scrpos.x - sz, scrpos.y - sz, sz * 2, sz * 2)
@@ -137,11 +134,11 @@ function RADAR:Draw(client)
 
 	-- Corpse calls
 	local size = 0
-	
+
 	for k in pairs(self.called_corpses) do
 		size = size + 1
 	end
-	
+
 	if client:IsActiveRole(ROLES.DETECTIVE.index) and size > 0 then
 		surface.SetTexture(det_beacon)
 		surface.SetTextColor(255, 255, 255, 240)
@@ -171,25 +168,25 @@ function RADAR:Draw(client)
 	local remaining = math.max(0, RADAR.endtime - CurTime())
 	local alpha_base = 50 + 180 * (remaining / RADAR.duration)
 	local mpos = Vector(ScrW() / 2, ScrH() / 2, 0)
-	
+
 	local role, alpha, scrpos, md
-	
+
 	for _, tgt in pairs(RADAR.targets) do
 		alpha = alpha_base
 
 		scrpos = tgt.pos:ToScreen()
-		
+
 		if scrpos.visible then
 			md = mpos:Distance(Vector(scrpos.x, scrpos.y, 0))
-			
+
 			if md < near_cursor_dist then
 				alpha = math.Clamp(alpha * (md / near_cursor_dist), 40, 230)
 			end
-			
+
 			role = tgt.role or ROLES.INNOCENT.index
-			
+
 			local roleData = GetRoleByIndex(role)
-			
+
 			if role == ROLES.DETECTIVE.index then
 				surface.SetDrawColor(0, 0, 255, alpha)
 				surface.SetTextColor(0, 0, 255, alpha)
@@ -198,14 +195,14 @@ function RADAR:Draw(client)
 				surface.SetTextColor(0, 255, 0, alpha)
 			elseif roleData.radarColor then
 				local c = roleData.radarColor
-				
+
 				surface.SetDrawColor(c.r, c.g, c.b, alpha)
 				surface.SetTextColor(c.r, c.g, c.b, alpha)
 			else
 				surface.SetDrawColor(255, 0, 0, alpha)
 				surface.SetTextColor(255, 0, 0, alpha)
 			end
-			
+
 			DrawTarget(tgt, 24, 0)
 		end
 	end
@@ -215,7 +212,7 @@ function RADAR:Draw(client)
 	surface.SetTextColor(255, 0, 0, 230)
 
 	local text = GetPTranslation("radar_hud", {time = FormatTime(remaining, "%02i:%02i")})
-	local w, h = surface.GetTextSize(text)
+	local _, h = surface.GetTextSize(text)
 
 	surface.SetTextPos(36, ScrH() - 140 - h)
 	surface.DrawText(text)
@@ -240,7 +237,7 @@ net.Receive("TTT_C4Warn", ReceiveC4Warn)
 
 local function ReceiveCorpseCall()
 	local pos = net.ReadVector()
-	
+
 	table.insert(RADAR.called_corpses, {pos = pos, called = CurTime()})
 end
 net.Receive("TTT_CorpseCall", ReceiveCorpseCall)
@@ -264,8 +261,8 @@ local function ReceiveRadarScan()
 	RADAR.enable = true
 	RADAR.endtime = CurTime() + RADAR.duration
 
-	timer.Create("radartimeout", RADAR.duration + 1, 1, function() 
-		RADAR:Timeout() 
+	timer.Create("radartimeout", RADAR.duration + 1, 1, function()
+		RADAR:Timeout()
 	end)
 end
 net.Receive("TTT_Radar", ReceiveRadarScan)
@@ -273,7 +270,7 @@ net.Receive("TTT_Radar", ReceiveRadarScan)
 local GetTranslation = LANG.GetTranslation
 
 function RADAR.CreateMenu(parent, frame)
-	local w, h = parent:GetSize()
+	--local w, h = parent:GetSize()
 
 	local dform = vgui.Create("DForm", parent)
 	dform:SetName(GetTranslation("radar_menutitle"))
@@ -283,16 +280,16 @@ function RADAR.CreateMenu(parent, frame)
 	local owned = LocalPlayer():HasEquipmentItem(EQUIP_RADAR)
 	if not owned then
 		dform:Help(GetTranslation("radar_not_owned"))
-		
+
 		return dform
 	end
 
 	local bw, bh = 100, 25
-	
+
 	local dscan = vgui.Create("DButton", dform)
 	dscan:SetSize(bw, bh)
 	dscan:SetText(GetTranslation("radar_scan"))
-	
+
 	dscan.DoClick = function(s)
 		s:SetDisabled(true)
 		RunConsoleCommand("ttt_radar_scan")
@@ -300,25 +297,25 @@ function RADAR.CreateMenu(parent, frame)
 	end
 
 	dform:AddItem(dscan)
-	
+
 	local dlabel = vgui.Create("DLabel", dform)
 	dlabel:SetText(GetPTranslation("radar_help", {num = RADAR.duration}))
 	dlabel:SetWrap(true)
 	dlabel:SetTall(50)
-	
+
 	dform:AddItem(dlabel)
 
 	local dcheck = vgui.Create("DCheckBoxLabel", dform)
 	dcheck:SetText(GetTranslation("radar_auto"))
 	dcheck:SetIndent(5)
 	dcheck:SetValue(RADAR.repeating)
-	
+
 	dcheck.OnChange = function(s, val)
 		RADAR.repeating = val
 	end
 
 	dform:AddItem(dcheck)
-	
+
 	dform.Think = function(s)
 		if RADAR.enable or not owned then
 			dscan:SetDisabled(true)
@@ -328,6 +325,6 @@ function RADAR.CreateMenu(parent, frame)
 	end
 
 	dform:SetVisible(true)
-	
+
 	return dform
 end

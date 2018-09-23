@@ -1,8 +1,8 @@
 local Equipmentnew
 local SafeTranslate = LANG.TryTranslation
 
-local function ItemIsWeapon(item) 
-	return not tonumber(item.id) 
+local function ItemIsWeapon(item)
+	return not tonumber(item.id)
 end
 
 function GetEquipmentForRoleAll()
@@ -17,9 +17,9 @@ function GetEquipmentForRoleAll()
 			"weapon_zm_carry",
 			"bobs_blacklisted"
 		}
-		
+
 		hook.Run("TTT2_ModifyWepShopIgnoreWeps", eject) -- possibility to modify from externally
-		
+
 		-- find buyable weapons to load info from
 		for _, v in ipairs(weapons.GetList()) do
 			if v and not v.Doublicated and not string.match(v.ClassName, "base") and not string.match(v.ClassName, "event") and not table.HasValue(eject, v.ClassName) then
@@ -27,7 +27,7 @@ function GetEquipmentForRoleAll()
 				local base = {
 					id		 = v.ClassName,
 					name	 = v.ClassName or "Unnamed",
-					PrintName= data.name or data.PrintName or v.PrintName or v.ClassName or "Unnamed",
+					PrintName = data.name or data.PrintName or v.PrintName or v.ClassName or "Unnamed",
 					limited	 = v.LimitedStock,
 					kind	 = v.Kind or WEAPON_NONE,
 					slot	 = (v.Slot or 0) + 1,
@@ -71,11 +71,11 @@ net.Receive("newshop", function()
 	DermaPanel:SetDraggable(true)
 	DermaPanel:ShowCloseButton(true)
 	DermaPanel:MakePopup()
-	
-	function DermaPanel:Paint(w, h)
-		draw.RoundedBox(0, 0, 0, w, h, Color(100, 100, 100))
+
+	function DermaPanel:Paint(w2, h2)
+		draw.RoundedBox(0, 0, 0, w2, h2, Color(100, 100, 100))
 	end
-	
+
 	function DermaPanel:OnClose()
 		LocalPlayer().weaponshopList = nil
 	end
@@ -85,19 +85,19 @@ net.Receive("newshop", function()
 	DScrollPanel:Center()
 
 	local sbar = DScrollPanel:GetVBar()
-	function sbar:Paint(w, h)
-		draw.RoundedBox(0, 0, 0, w, h, Color(0, 0, 0, 100))
+	function sbar:Paint(w2, h2)
+		draw.RoundedBox(0, 0, 0, w2, h2, Color(0, 0, 0, 100))
 	end
-	function sbar.btnUp:Paint(w, h)
-		draw.RoundedBox(0, 0, 0, w, h, Color(200, 100, 0))
+	function sbar.btnUp:Paint(w2, h2)
+		draw.RoundedBox(0, 0, 0, w2, h2, Color(200, 100, 0))
 	end
-	function sbar.btnDown:Paint(w, h)
-		draw.RoundedBox(0, 0, 0, w, h, Color(200, 100, 0))
+	function sbar.btnDown:Paint(w2, h2)
+		draw.RoundedBox(0, 0, 0, w2, h2, Color(200, 100, 0))
 	end
-	function sbar.btnGrip:Paint(w, h)
-		draw.RoundedBox(0, 0, 0, w, h, Color(100, 200, 0))
+	function sbar.btnGrip:Paint(w2, h2)
+		draw.RoundedBox(0, 0, 0, w2, h2, Color(100, 200, 0))
 	end
-	
+
 	-- Construct icon listing
 	local dlist = vgui.Create("EquipSelect", DermaPanel)
 	dlist:SetPos(0, 20)
@@ -105,7 +105,7 @@ net.Receive("newshop", function()
 	dlist:EnableVerticalScrollbar(true)
 	dlist:EnableHorizontal(true)
 	dlist:SetPadding(4)
-	
+
 	dlist.selectedRole = selectedRole
 
 	local menu = vgui.Create("DComboBox")
@@ -113,7 +113,7 @@ net.Receive("newshop", function()
 	menu:SetPos(0, h - 25)
 	menu:SetSize(w, 25)
 	menu:SetValue(sr.name)
-	
+
 	for _, v in pairs(ROLES) do
 		if v ~= ROLES.INNOCENT then
 			menu:AddChoice(v.name, v.index)
@@ -122,9 +122,9 @@ net.Receive("newshop", function()
 
 	local ply = LocalPlayer()
 	local items = GetEquipmentForRoleAll()
-	
+
 	SortEquipmentTable(items)
-	
+
 	for _, item in pairs(items) do
 		local ic
 
@@ -154,20 +154,18 @@ net.Receive("newshop", function()
 		elseif item.model and item.model ~= "models/weapons/w_bugbait.mdl" then
 			ic = vgui.Create("SpawnIcon", dlist)
 			ic:SetModel(item.model)
-		else
-			--ErrorNoHalt("Equipment item does not have model or material specified: " .. tostring(item) .. "\n")
 		end
-		
+
 		if ic then
 			ic.item = item
-			
+
 			function ic:UpdateCheck()
 				if not dlist.selectedRole then return end
-				
+
 				local is_item = tonumber(ic.item.id)
 				if is_item then
 					EquipmentItems[dlist.selectedRole] = EquipmentItems[dlist.selectedRole] or {}
-				
+
 					if EquipmentTableHasValue(EquipmentItems[dlist.selectedRole], ic.item) then
 						ic:Toggle(true)
 					else
@@ -177,7 +175,7 @@ net.Receive("newshop", function()
 					local wepTbl = weapons.GetStored(ic.item.id)
 					if wepTbl then
 						wepTbl.CanBuy = wepTbl.CanBuy or {}
-						
+
 						if table.HasValue(wepTbl.CanBuy, dlist.selectedRole) then
 							ic:Toggle(true)
 						else
@@ -186,23 +184,23 @@ net.Receive("newshop", function()
 					end
 				end
 			end
-			
+
 			ic.OnClick = function()
 				if not dlist.selectedRole or not state then return end
-				
+
 				local is_item = tonumber(ic.item.id)
 				if is_item then
 					EquipmentItems[dlist.selectedRole] = EquipmentItems[dlist.selectedRole] or {}
-				
+
 					if EquipmentTableHasValue(EquipmentItems[dlist.selectedRole], ic.item) then
 						for k, eq in pairs(EquipmentItems[dlist.selectedRole]) do
 							if eq.id == ic.item.id then
 								table.remove(EquipmentItems[dlist.selectedRole], k)
-								
+
 								break
 							end
 						end
-					
+
 						-- remove
 						net.Start("shop")
 						net.WriteBool(false)
@@ -211,7 +209,7 @@ net.Receive("newshop", function()
 						net.SendToServer()
 					else
 						table.insert(EquipmentItems[dlist.selectedRole], ic.item)
-						
+
 						-- add
 						net.Start("shop")
 						net.WriteBool(true)
@@ -223,16 +221,16 @@ net.Receive("newshop", function()
 					local wepTbl = weapons.GetStored(ic.item.id)
 					if wepTbl then
 						wepTbl.CanBuy = wepTbl.CanBuy or {}
-						
+
 						if table.HasValue(wepTbl.CanBuy, dlist.selectedRole) then
 							for k, v in ipairs(wepTbl.CanBuy) do
 								if v == dlist.selectedRole then
 									table.remove(wepTbl.CanBuy, k)
-									
+
 									break
 								end
 							end
-						
+
 							-- remove
 							net.Start("shop")
 							net.WriteBool(false)
@@ -241,7 +239,7 @@ net.Receive("newshop", function()
 							net.SendToServer()
 						else
 							table.insert(wepTbl.CanBuy, dlist.selectedRole)
-							
+
 							-- add
 							net.Start("shop")
 							net.WriteBool(true)
@@ -251,81 +249,81 @@ net.Receive("newshop", function()
 						end
 					end
 				end
-				
+
 				for _, v in pairs(dlist:GetItems()) do
 					if v.UpdateCheck then
 						v:UpdateCheck()
 					end
 				end
 			end
-		
+
 			local tip = GetEquipmentTranslation(item.name, item.PrintName) .. " (" .. SafeTranslate(item.type) .. ")"
-			
+
 			ic:SetTooltip(tip)
 
 			dlist:AddPanel(ic)
 		end
 	end
-	
+
 	ply.weaponshopList = dlist
-	
+
 	-- first init
 	for _, v in pairs(dlist:GetItems()) do
 		if v.UpdateCheck then
 			v:UpdateCheck()
 		end
 	end
-	
+
 	-- draw settings
 	local fbmenu = vgui.Create("DComboBox")
 	fbmenu:SetParent(DermaPanel)
 	fbmenu:SetPos(5 + w, 25)
 	fbmenu:SetSize(descW - 10, 25)
-	
+
 	function fbmenu:RefreshChoices()
 		-- clear old data
 		self:Clear()
-		
+
 		local rd = GetRoleByIndex(dlist.selectedRole)
 		local fallback = GetConVar("ttt_" .. rd.abbr .. "_shop_fallback"):GetString()
 		local fb = GetRoleByName(fallback)
-		
+
 		-- update state
 		if fallback == SHOP_DISABLED or fallback == SHOP_UNSET and rd.fallbackTable then
 			state = false
 		else
 			state = true
 		end
-	
+
 		-- add linked or own shop choice
 		for _, v in pairs(GetShopRoles()) do
-			self:AddChoice(dlist.selectedRole == v.index and ("Use own shop") or ("Link with " .. v.name), {name = v.name, data = v.name})
+			self:AddChoice(dlist.selectedRole == v.index and "Use own shop" or ("Link with " .. v.name), {name = v.name, data = v.name})
 		end
-		
+
 		-- add default choice
 		local tmpRd = GetRoleByIndex(dlist.selectedRole)
 		if tmpRd.fallbackTable then
 			self:AddChoice("Default Role Equipment", {name = tmpRd.name, data = SHOP_UNSET})
 		end
-		
+
 		self:AddChoice("Disable shop", {name = tmpRd.name, data = SHOP_DISABLED})
-		
+
 		-- set default value
 		if fallback == SHOP_DISABLED then
 			self:SetValue("Disabled shop")
 		elseif not state then
 			self:SetValue("Default Role Equipment")
 		else
-			self:SetValue(dlist.selectedRole == fb.index and ("Using own shop") or ("Linked with " .. fb.name))
+			self:SetValue(dlist.selectedRole == fb.index and "Using own shop" or ("Linked with " .. fb.name))
 		end
-		
+
 		-- generally update
 		for _, v in pairs(dlist:GetItems()) do
 			if v.UpdateCheck then
 				v:UpdateCheck()
 			end
 		end
-		
+
 		-- disable if not needed
 		if not state or fb.index ~= dlist.selectedRole then
 			for _, v in pairs(dlist:GetItems()) do
@@ -335,23 +333,23 @@ net.Receive("newshop", function()
 			end
 		end
 	end
-	
+
 	fbmenu:RefreshChoices()
-	
+
 	function fbmenu:OnSelect(_, _, data)
 		local rd = GetRoleByIndex(dlist.selectedRole)
 		local oldFallback = GetConVar("ttt_" .. rd.abbr .. "_shop_fallback"):GetString()
-		
+
 		if fallback ~= oldFallback then
 			net.Start("shopFallback")
 			net.WriteUInt(dlist.selectedRole, ROLE_BITS)
 			net.WriteString(data.data)
 			net.SendToServer()
 		end
-		
+
 		if data.data == SHOP_DISABLED or data.data == SHOP_UNSET or data.data ~= GetRoleByIndex(dlist.selectedRole).name then
 			state = false
-		
+
 			for _, v in pairs(dlist:GetItems()) do
 				if v.Toggle then
 					v:Toggle(false)
@@ -359,7 +357,7 @@ net.Receive("newshop", function()
 			end
 		else
 			state = true
-			
+
 			for _, v in pairs(dlist:GetItems()) do
 				if v.UpdateCheck then
 					v:UpdateCheck()
@@ -367,37 +365,37 @@ net.Receive("newshop", function()
 			end
 		end
 	end
-	
+
 	function menu:OnSelect(_, _, data)
 		dlist.selectedRole = data
-		
+
 		fbmenu:RefreshChoices()
 	end
 end)
 
 net.Receive("shopFallbackAnsw", function(len)
 	local role = net.ReadUInt(ROLE_BITS)
-	
+
 	local rd = GetRoleByIndex(role)
-	local fallback = GetConVar("ttt_" .. rd.abbr .. "_shop_fallback"):GetString()
-	
+	local fb = GetConVar("ttt_" .. rd.abbr .. "_shop_fallback"):GetString()
+
 	-- reset everything
 	EquipmentItems[role] = {}
 	Equipment[role] = {}
-	
+
 	for _, v in ipairs(weapons.GetList()) do
 		if v.CanBuy then
 			for k, vi in ipairs(v.CanBuy) do
 				if vi == role then
 					table.remove(v.CanBuy, k) -- TODO does it work?
-					
+
 					break
 				end
 			end
 		end
 	end
-	
-	if fallback == SHOP_UNSET then
+
+	if fb == SHOP_UNSET then
 		local roleData = GetRoleByIndex(role)
 		if roleData.fallbackTable then
 			-- set everything
@@ -409,11 +407,11 @@ net.Receive("shopFallbackAnsw", function(len)
 					local wepTbl = weapons.GetStored(eq.id)
 					if wepTbl then
 						wepTbl.CanBuy = wepTbl.CanBuy or {}
-						
+
 						table.insert(wepTbl.CanBuy, role)
 					end
 				end
-				
+
 				table.insert(Equipment[role], eq)
 			end
 		end
@@ -424,13 +422,13 @@ net.Receive("shopFallbackRefresh", function(len)
 	local wshop = LocalPlayer().weaponshopList
 	if wshop and wshop.GetItems then
 		if not wshop.selectedRole then return end
-			
+
 		for _, v in pairs(wshop:GetItems()) do
 			if v.item and v.UpdateCheck then
 				local is_item = tonumber(v.item.id)
 				if is_item then
 					EquipmentItems[wshop.selectedRole] = EquipmentItems[wshop.selectedRole] or {}
-				
+
 					if EquipmentTableHasValue(EquipmentItems[wshop.selectedRole], v.item) then
 						v:Toggle(true)
 					else
@@ -440,7 +438,7 @@ net.Receive("shopFallbackRefresh", function(len)
 					local wepTbl = weapons.GetStored(v.item.id)
 					if wepTbl then
 						wepTbl.CanBuy = wepTbl.CanBuy or {}
-						
+
 						if table.HasValue(wepTbl.CanBuy, wshop.selectedRole) then
 							v:Toggle(true)
 						else

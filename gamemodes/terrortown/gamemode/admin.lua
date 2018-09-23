@@ -4,11 +4,11 @@ local function GetPrintFn(ply)
 	if IsValid(ply) then
 		return function(...)
 			local t = ""
-			
+
 			for _, a in ipairs({...}) do
 				t = t .. "\t" .. a
 			end
-			
+
 			ply:PrintMessage(HUD_PRINTCONSOLE, t)
 		end
 	else
@@ -17,16 +17,16 @@ local function GetPrintFn(ply)
 end
 
 local function TraitorSort(a,b)
-	if not IsValid(a) then 
-		return true 
-	end
-	
-	if not IsValid(b) then 
-		return false 
+	if not IsValid(a) then
+		return true
 	end
 
-	if a:HasTeamRole(TEAM_TRAITOR) and not b:HasTeamRole(TEAM_TRAITOR) then 
-		return true 
+	if not IsValid(b) then
+		return false
+	end
+
+	if a:HasTeamRole(TEAM_TRAITOR) and not b:HasTeamRole(TEAM_TRAITOR) then
+		return true
 	end
 
 	return false
@@ -38,7 +38,7 @@ function PrintTraitors(ply)
 
 		local pr = GetPrintFn(ply)
 		local ps = player.GetAll()
-		
+
 		table.sort(ps, TraitorSort)
 
 		for _, p in ipairs(ps) do
@@ -54,7 +54,7 @@ function PrintGroups(ply)
 	local pr = GetPrintFn(ply)
 
 	pr("User", "-", "Group")
-	
+
 	for _, p in ipairs(player.GetAll()) do
 		pr(p:Nick(), "-", p:GetNWString("UserGroup"))
 	end
@@ -73,7 +73,7 @@ function PrintReport(ply)
 					pr("<something> killed " .. e.vic.ni .. (GetRoleByIndex(e.vic.r).team == TEAM_TRAITOR and " [TRAITOR]" or " [inno.]"))
 				else
 					local tr = GetRoleByIndex(e.vic.r).team == TEAM_TRAITOR
-				
+
 					pr(e.att.ni .. (tr and " [TRAITOR]" or " [inno.]") .. " killed " .. e.vic.ni .. (tr and " [TRAITOR]" or " [inno.]"))
 				end
 			end
@@ -149,7 +149,7 @@ local function SaveDamageLog()
 	end
 
 	local fname = Format("ttt/logs/dmglog_%s_%d.txt", os.date("%d%b%Y_%H%M"), os.time())
-	
+
 	file.Write(fname, text)
 end
 hook.Add("TTTEndRound", "ttt_damagelog_save_hook", SaveDamageLog)
@@ -172,7 +172,7 @@ local function DetectServerPlugin()
 		return "ulx"
 	elseif evolve and evolve.Ban then
 		return "evolve"
-	elseif exsto and exsto.GetPlugin('administration') then
+	elseif exsto and exsto.GetPlugin("administration") then
 		return "exsto"
 	else
 		return "gmod"
@@ -181,7 +181,7 @@ end
 
 local function StandardBan(ply, length, reason)
 	RunConsoleCommand("banid", length, ply:UserID())
-	
+
 	ply:Kick(reason)
 end
 
@@ -197,8 +197,8 @@ local ban_functions = {
 	end,
 
 	exsto = function(p, l, r)
-		local adm = exsto.GetPlugin('administration')
-		
+		local adm = exsto.GetPlugin("administration")
+
 		if adm and adm.Ban then
 			adm:Ban(nil, p, l, r)
 		end
@@ -209,7 +209,7 @@ local ban_functions = {
 
 local function BanningFunction()
 	local bantype = string.lower(ttt_bantype:GetString())
-	
+
 	if bantype == "autodetect" then
 		bantype = DetectServerPlugin()
 	end

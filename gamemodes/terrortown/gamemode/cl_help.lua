@@ -1,7 +1,6 @@
 ---- Help screen
 
 local GetTranslation = LANG.GetTranslation
-local GetPTranslation = LANG.GetParamTranslation
 
 CreateConVar("ttt_spectator_mode", "0", FCVAR_ARCHIVE)
 CreateConVar("ttt_mute_team_check", "0")
@@ -15,7 +14,7 @@ function HELPSCRN:Show()
 
 	local margin = 15
 	local w, h = 630, 470
-	
+
 	local dframe = vgui.Create("DFrame")
 	dframe:SetSize(w, h)
 	dframe:Center()
@@ -23,14 +22,14 @@ function HELPSCRN:Show()
 	dframe:ShowCloseButton(true)
 
 	local bw, bh = 50, 25
-	
+
 	local dbut = vgui.Create("DButton", dframe)
 	dbut:SetSize(bw, bh)
 	dbut:SetPos(w - bw - margin, h - bh - margin/2)
 	dbut:SetText(GetTranslation("close"))
-	
-	dbut.DoClick = function() 
-		dframe:Close() 
+
+	dbut.DoClick = function()
+		dframe:Close()
 	end
 
 	local dtabs = vgui.Create("DPropertySheet", dframe)
@@ -62,19 +61,19 @@ function HELPSCRN:Show()
 	dgui:CheckBox(GetTranslation("set_tips"), "ttt_tips_enable")
 
 	local cb = dgui:NumSlider(GetTranslation("set_startpopup"), "ttt_startpopup_duration", 0, 60, 0)
-	
+
 	if cb.Label then
 		cb.Label:SetWrap(true)
 	end
-	
+
 	cb:SetTooltip(GetTranslation("set_startpopup_tip"))
 
 	cb = dgui:NumSlider(GetTranslation("set_cross_opacity"), "ttt_ironsights_crosshair_opacity", 0, 1, 1)
-	
+
 	if cb.Label then
 		cb.Label:SetWrap(true)
 	end
-	
+
 	cb:SetTooltip(GetTranslation("set_cross_opacity"))
 
 	cb = dgui:NumSlider(GetTranslation("set_cross_brightness"), "ttt_crosshair_brightness", 0, 1, 1)
@@ -83,7 +82,7 @@ function HELPSCRN:Show()
 	end
 
 	cb = dgui:NumSlider(GetTranslation("set_cross_size"), "ttt_crosshair_size", 0.1, 3, 1)
-	
+
 	if cb.Label then
 		cb.Label:SetWrap(true)
 	end
@@ -97,7 +96,7 @@ function HELPSCRN:Show()
 
 	cb = dgui:CheckBox(GetTranslation("set_fastsw"), "ttt_weaponswitcher_fast")
 	cb:SetTooltip(GetTranslation("set_fastsw_tip"))
-		
+
 	cb = dgui:CheckBox(GetTranslation("set_fastsw_menu"), "ttt_weaponswitcher_displayfast")
 	cb:SetTooltip(GetTranslation("set_fastswmenu_tip"))
 
@@ -138,16 +137,16 @@ function HELPSCRN:Show()
 	local dlang = vgui.Create("DComboBox", dlanguage)
 	dlang:SetConVar("ttt_language")
 	dlang:AddChoice("Server default", "auto")
-	
+
 	for _, lang in pairs(LANG.GetLanguages()) do
 		dlang:AddChoice(string.Capitalize(lang), lang)
 	end
-	
+
 	-- Why is DComboBox not updating the cvar by default?
 	dlang.OnSelect = function(idx, val, data)
 		RunConsoleCommand("ttt_language", data)
 	end
-	
+
 	dlang.Think = dlang.ConVarStringThink
 
 	dlanguage:Help(GetTranslation("set_lang"))
@@ -156,7 +155,7 @@ function HELPSCRN:Show()
 	dsettings:AddItem(dlanguage)
 
 	dtabs:AddSheet(GetTranslation("help_settings"), dsettings, "icon16/wrench.png", false, false, GetTranslation("help_settings_tip"))
-	
+
 	-- role description
 	local roledesc_panel = vgui.Create("DPanelList", dtabs)
 	roledesc_panel:StretchToParent(0, 0, dtabs:GetPadding() * 2, 0)
@@ -164,32 +163,32 @@ function HELPSCRN:Show()
 	roledesc_panel:SetPadding(10)
 	roledesc_panel:SetSpacing(10)
 	dtabs:AddSheet("TTT2", roledesc_panel, "icon16/information.png", false, false, "The TTT2 settings")
-	
+
 	local list = vgui.Create("DIconLayout", roledesc_panel)
 	list:SetSpaceX(5)
 	list:SetSpaceY(5)
 	list:Dock(FILL)
 	list:DockMargin(5, 5, 5, 5)
 	list:DockPadding(10, 10, 10, 10)
-	
+
 	local roledesc_tab = vgui.Create("DForm")
 	roledesc_tab:SetSpacing(10)
-	
+
 	if client:GetRole() ~= ROLE_NONE then
 		roledesc_tab:SetName("Current Role Description of " .. GetTranslation(client:GetRoleData().name))
 	else
 		roledesc_tab:SetName("Current Role Description")
 	end
-	
+
 	roledesc_tab:SetWide(roledesc_panel:GetWide() - 30)
 	roledesc_panel:AddItem(roledesc_tab)
-	
+
 	if client:GetRole() ~= ROLE_NONE then
 		roledesc_tab:Help(GetTranslation("ttt2_desc_" .. client:GetRoleData().name))
 	else
 		roledesc_tab:Help(GetTranslation("ttt2_desc_none"))
 	end
-	
+
 	roledesc_tab:SizeToContents()
 	-- end role description
 
@@ -207,7 +206,7 @@ concommand.Add("ttt_helpscreen", ShowTTTHelp)
 
 local function SpectateCallback(cv, old, new)
 	local num = tonumber(new)
-	
+
 	if num and (num == 0 or num == 1) then
 		RunConsoleCommand("ttt_spectate", num)
 	end
@@ -216,7 +215,7 @@ cvars.AddChangeCallback("ttt_spectator_mode", SpectateCallback)
 
 local function MuteTeamCallback(cv, old, new)
 	local num = tonumber(new)
-	
+
 	if num and (num == 0 or num == 1) then
 		RunConsoleCommand("ttt_mute_team", num)
 	end
@@ -229,8 +228,8 @@ local imgpath = "vgui/ttt/help/tut0%d"
 local tutorial_pages = 6
 
 function HELPSCRN:CreateTutorial(parent)
-	local w, h = parent:GetSize()
-	local m = 5
+	--local w, h = parent:GetSize()
+	--local m = 5
 
 	local bg = vgui.Create("ColoredBox", parent)
 	bg:StretchToParent(0, 0, 0, 0)
@@ -282,7 +281,7 @@ function HELPSCRN:CreateTutorial(parent)
 		if tut.current < tutorial_pages then
 			tut.current = tut.current + 1
 			tut:SetImage(Format(imgpath, tut.current))
-			
+
 			bar:SetValue(tut.current)
 		end
 	end
@@ -291,7 +290,7 @@ function HELPSCRN:CreateTutorial(parent)
 		if tut.current > 1 then
 			tut.current = tut.current - 1
 			tut:SetImage(Format(imgpath, tut.current))
-			
+
 			bar:SetValue(tut.current)
 		end
 	end
