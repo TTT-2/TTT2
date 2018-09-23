@@ -7,9 +7,11 @@ local gsub = string.gsub
 
 local function Borkify(word)
    local b = string.byte(word:sub(1, 1))
+
    if b > 64 and b < 91 then
       return "Bork"
    end
+
    return "bork"
 end
 
@@ -17,9 +19,10 @@ local realised = false
 -- Upon selection, borkify every english string.
 -- Even with all the string manipulation this only takes a few ms.
 local function LanguageChanged(old, new)
-   if realised or new != "swedish chef" then return end
+   if realised or new ~= "swedish chef" then return end
 
    local eng = LANG.GetUnsafeNamed("english")
+
    for k, v in pairs(eng) do
       L[k] = gsub(v, "[{}%w]+", Borkify)
    end
@@ -30,11 +33,8 @@ hook.Add("TTTLanguageChanged", "ActivateChef", LanguageChanged)
 
 -- As fallback, non-existent indices translated on the fly.
 local GetFrom = LANG.GetTranslationFromLanguage
-setmetatable(L,
-             {
-                __index = function(t, k)
-                             local w = GetFrom(k, "english") or "bork"
-
-                             return gsub(w, "[{}%w]+", "BORK")
-                          end
-             })
+setmetatable(L, {
+    __index = function(_, k)
+        return gsub(GetFrom(k, "english") or "bork", "[{}%w]+", "BORK")
+    end
+})

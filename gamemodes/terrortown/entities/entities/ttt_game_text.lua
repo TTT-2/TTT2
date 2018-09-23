@@ -9,6 +9,7 @@ local RECEIVE_ALL = 1
 local RECEIVE_DETECTIVE = 2
 local RECEIVE_TRAITOR = 3
 local RECEIVE_INNOCENT = 4
+-- TODO add RECEIVE_[CUSTOM_ROLE] for each custom role
 
 ENT.Receiver = RECEIVE_ACTIVATOR
 
@@ -21,10 +22,10 @@ function ENT:KeyValue(key, value)
 		self.Color = Color(tonumber(mr) or 255, tonumber(mg) or 255, tonumber(mb) or 255)
 	elseif key == "receive" then
 		self.Receiver = tonumber(value)
-		
+
 		if not (self.Receiver and self.Receiver >= 0 and self.Receiver <= 4) then
 			ErrorNoHalt("ERROR: ttt_game_text has invalid receiver value\n")
-			
+
 			self.Receiver = RECEIVE_ACTIVATOR
 		end
 	end

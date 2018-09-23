@@ -11,10 +11,10 @@ function ENT:KeyValue(key, value)
 		self:StoreOutput(key, value)
 	elseif key == "Role" then
 		self.Role = tonumber(value)
-		
+
 		if not self.Role then
 			ErrorNoHalt("ttt_logic_role: bad value for Role key, not a number\n")
-			
+
 			self.Role = ROLE_ANY
 		end
 	end
@@ -27,11 +27,11 @@ function ENT:AcceptInput(name, activator)
 
 			if self.Role == ROLE_ANY or self.Role == activator_role then
 				Dev(2, activator, "passed logic_role test of", self:GetName())
-				
+
 				self:TriggerOutput("OnPass", activator)
 			else
 				Dev(2, activator, "failed logic_role test of", self:GetName())
-				
+
 				self:TriggerOutput("OnFail", activator)
 			end
 		end

@@ -141,7 +141,7 @@ if CLIENT then
 		end
 
 		local client = LocalPlayer()
-		
+
 		if disable_crosshair:GetBool() or not IsValid(client) then return end
 
 		local sights = not self.NoSights and self:GetIronsights()
@@ -150,7 +150,7 @@ if CLIENT then
 		local scale = math.max(0.2,	10 * self:GetPrimaryCone())
 
 		local LastShootTime = self:LastShootTime()
-		
+
 		scale = scale * (2 - math.Clamp((CurTime() - LastShootTime) * 5, 0.0, 1.0))
 
 		local alpha = sights and sights_opacity:GetFloat() or 1
@@ -160,7 +160,7 @@ if CLIENT then
 		-- additions have loaded
 		if client.GetRoleData then
 			local col = hook.Run("TTT2ModifyWeaponColors") or client:GetRoleData().color
-		
+
 			surface.SetDrawColor(col.r * bright, col.g * bright, col.b * bright, 255 * alpha)
 		else
 			surface.SetDrawColor(0, 255 * bright, 0, 255 * alpha)
@@ -168,7 +168,7 @@ if CLIENT then
 
 		local gap = math.floor(20 * scale * (sights and 0.8 or 1))
 		local length = math.floor(gap + (25 * crosshair_size:GetFloat()) * scale)
-		
+
 		surface.DrawLine(x - length, y, x - gap, y)
 		surface.DrawLine(x + length, y, x + gap, y)
 		surface.DrawLine(x, y - length, x, y - gap)
@@ -193,7 +193,7 @@ if CLIENT then
 
 		help_spec.pos	= {ScrW() / 2.0, ScrH() - 40}
 		help_spec.text = secondary or primary
-		
+
 		draw.TextShadow(help_spec, 2)
 
 		-- if no secondary exists, primary is drawn at the bottom and no top line
@@ -242,7 +242,7 @@ function SWEP:PrimaryAttack(worldsnd)
 	self:TakePrimaryAmmo(1)
 
 	local owner = self:GetOwner()
-	
+
 	if not IsValid(owner) or owner:IsNPC() or not owner.ViewPunch then return end
 
 	owner:ViewPunch(Angle(util.SharedRandom(self:GetClass(), -0.2, -0.1, 0) * self.Primary.Recoil, util.SharedRandom(self:GetClass(), -0.1, 0.1, 1) * self.Primary.Recoil, 0))
@@ -263,10 +263,10 @@ function SWEP:CanPrimaryAttack()
 
 	if self:Clip1() <= 0 then
 		self:DryFire(self.SetNextPrimaryFire)
-		
+
 		return false
 	end
-	
+
 	return true
 end
 
@@ -275,10 +275,10 @@ function SWEP:CanSecondaryAttack()
 
 	if self:Clip2() <= 0 then
 		self:DryFire(self.SetNextSecondaryFire)
-		
+
 		return false
 	end
-	
+
 	return true
 end
 
@@ -287,14 +287,14 @@ local function Sparklies(attacker, tr, dmginfo)
 		local eff = EffectData()
 		eff:SetOrigin(tr.HitPos)
 		eff:SetNormal(tr.HitNormal)
-		
+
 		util.Effect("cball_bounce", eff)
 	end
 end
 
 function SWEP:ShootBullet(dmg, recoil, numbul, cone)
 	self:SendWeaponAnim(self.PrimaryAnim)
-	
+
 	self:GetOwner():MuzzleFlash()
 	self:GetOwner():SetAnimation(PLAYER_ATTACK1)
 
@@ -312,7 +312,7 @@ function SWEP:ShootBullet(dmg, recoil, numbul, cone)
 	bullet.TracerName = self.Tracer or "Tracer"
 	bullet.Force = 10
 	bullet.Damage = dmg
-	
+
 	if CLIENT and sparkle:GetBool() then
 		bullet.Callback = Sparklies
 	end
@@ -322,21 +322,21 @@ function SWEP:ShootBullet(dmg, recoil, numbul, cone)
 	-- Owner can die after firebullets
 	if not IsValid(self:GetOwner()) or not self:GetOwner():Alive() or self:GetOwner():IsNPC() then return end
 
-	if game.SinglePlayer() and SERVER 
+	if game.SinglePlayer() and SERVER
 	or not game.SinglePlayer() and CLIENT and IsFirstTimePredicted() then
 		-- reduce recoil if ironsighting
 		recoil = sights and (recoil * 0.6) or recoil
 
 		local eyeang = self:GetOwner():EyeAngles()
 		eyeang.pitch = eyeang.pitch - recoil
-		
+
 		self:GetOwner():SetEyeAngles(eyeang)
 	end
 end
 
 function SWEP:GetPrimaryCone()
 	local cone = self.Primary.Cone or 0.2
-	
+
 	-- 10% accuracy bonus when sighting
 	return self:GetIronsights() and (cone * 0.85) or cone
 end
@@ -360,13 +360,13 @@ end
 
 function SWEP:Deploy()
 	self:SetIronsights(false)
-	
+
 	return true
 end
 
 function SWEP:Reload()
 	if self:Clip1() == self.Primary.ClipSize or self:GetOwner():GetAmmoCount(self.Primary.Ammo) <= 0 then return end
-	
+
 	self:DefaultReload(self.ReloadAnim)
 	self:SetIronsights(false)
 end
@@ -408,7 +408,7 @@ function SWEP:DampenDrop()
 	-- to find a given corpse's weapon, so we override the velocity here and call
 	-- this when dropping guns on death.
 	local phys = self:GetPhysicsObject()
-	
+
 	if IsValid(phys) then
 		phys:SetVelocityInstantaneous(Vector(0, 0, -75) + phys:GetVelocity() * 0.001)
 		phys:AddAngleVelocity(phys:GetAngleVelocity() * -0.99)
@@ -445,7 +445,7 @@ function SWEP:Equip(newowner)
 		local given = math.min(self.StoredAmmo, self.Primary.ClipMax - ammo)
 
 		newowner:GiveAmmo(given, self.Primary.Ammo)
-		
+
 		self.StoredAmmo = 0
 	end
 end
@@ -460,7 +460,7 @@ function SWEP:SetIronsights(b)
 	if b ~= self:GetIronsights() then
 		self:SetIronsightsPredicted(b)
 		self:SetIronsightsTime(CurTime())
-		
+
 		if CLIENT then
 			self:CalcViewModel()
 		end
@@ -473,19 +473,19 @@ end
 
 --- Dummy functions that will be replaced when SetupDataTables runs. These are
 --- here for when that does not happen (due to e.g. stacking base classes)
-function SWEP:GetIronsightsTime() 
-	return -1 
+function SWEP:GetIronsightsTime()
+	return -1
 end
 
-function SWEP:SetIronsightsTime() 
+function SWEP:SetIronsightsTime()
 
 end
 
-function SWEP:GetIronsightsPredicted() 
-	return false 
+function SWEP:GetIronsightsPredicted()
+	return false
 end
 
-function SWEP:SetIronsightsPredicted() 
+function SWEP:SetIronsightsPredicted()
 
 end
 
@@ -515,7 +515,7 @@ end
 
 function SWEP:CalcViewModel()
 	if not CLIENT or not IsFirstTimePredicted() then return end
-	
+
 	self.bIron = self:GetIronsights()
 	self.fIronTime = self:GetIronsightsTime()
 	self.fCurrentTime = CurTime()
@@ -530,7 +530,7 @@ end
 
 function SWEP:DyingShot()
 	local fired = false
-	
+
 	if self:GetIronsights() then
 		self:SetIronsights(false)
 
@@ -570,8 +570,8 @@ local LOWER_POS = Vector(0, 0, -2)
 local IRONSIGHT_TIME = 0.25
 
 function SWEP:GetViewModelPosition(pos, ang)
-	if not self.IronSightsPos or self.bIron == nil then 
-		return pos, ang 
+	if not self.IronSightsPos or self.bIron == nil then
+		return pos, ang
 	end
 
 	local bIron = self.bIron
@@ -586,7 +586,7 @@ function SWEP:GetViewModelPosition(pos, ang)
 	end
 
 	local fIronTime = self.fIronTime
-	
+
 	if not bIron and fIronTime < time - IRONSIGHT_TIME then
 		return pos, ang
 	end
