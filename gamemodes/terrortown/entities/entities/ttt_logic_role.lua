@@ -1,7 +1,7 @@
 ENT.Type = "point"
 ENT.Base = "base_point"
 
-local ROLE_ANY = -1
+local ROLE_ANY = 3
 
 ENT.Role = ROLE_ANY
 
