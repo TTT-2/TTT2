@@ -197,7 +197,7 @@ function AddCustomRole(name, roleData, conVarData)
 					local i = 1
 					
 					for _, v in pairs(ROLES) do
-						i = i + 1
+						i = i + 1 -- start with "1" to prevent incompatibilities with ROLE_ANY
 					end
 					
 					roleData.index = i
