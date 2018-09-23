@@ -194,7 +194,7 @@ function AddCustomRole(name, roleData, conVarData)
 			-- and every important function works properly
 			hook.Add("TTT2_RoleInit", "Add_" .. roleData.abbr .. "_Role", function() -- unique hook identifier please
 				if not ROLES[name] then -- count ROLES
-					local i = 0
+					local i = 1
 					
 					for _, v in pairs(ROLES) do
 						i = i + 1
