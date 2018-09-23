@@ -1,8 +1,11 @@
 -- create serverside ConVars
 local allowChange = CreateConVar("ttt_bem_allow_change", 1, {FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE}, "Allow clients to change the look of the Traitor/Detective menu")
-local servercols = CreateConVar("ttt_bem_sv_cols", 4, {FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE}, "Sets the number of columns in the Traitor/Detective menu's item list (serverside)")
-local serverrow = CreateConVar("ttt_bem_sv_rows", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE}, "Sets the number of rows in the Traitor/Detective menu's item list (serverside)")
-local serversize = CreateConVar("ttt_bem_sv_size", 64, {FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE}, "Sets the item size in the Traitor/Detective menu's item list (serverside)")
+--local servercols = CreateConVar("ttt_bem_sv_cols", 4, {FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE}, "Sets the number of columns in the Traitor/Detective menu's item list (serverside)")
+CreateConVar("ttt_bem_sv_cols", 4, {FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE}, "Sets the number of columns in the Traitor/Detective menu's item list (serverside)")
+--local serverrow = CreateConVar("ttt_bem_sv_rows", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE}, "Sets the number of rows in the Traitor/Detective menu's item list (serverside)")
+CreateConVar("ttt_bem_sv_rows", 5, {FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE}, "Sets the number of rows in the Traitor/Detective menu's item list (serverside)")
+--local serversize = CreateConVar("ttt_bem_sv_size", 64, {FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE}, "Sets the item size in the Traitor/Detective menu's item list (serverside)")
+CreateConVar("ttt_bem_sv_size", 64, {FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE}, "Sets the item size in the Traitor/Detective menu's item list (serverside)")
 
 -- add Favourites DB functions
 AddCSLuaFile("favorites_db.lua")
