@@ -140,7 +140,7 @@ function GM:IsSpawnpointSuitable(ply, spwn, force, rigged)
 
 	if not util.IsInWorld(pos) then return false end
 
-	local blocking = ents.FindInBox(pos + Vector(-16, -16, 0), pos + Vector(16, 16, 64))
+	local blocking = ents.FindInBox(pos + Vector(-16, - 16, 0), pos + Vector(16, 16, 64))
 
 	for _, p in ipairs(blocking) do
 		if IsValid(p) and p:IsPlayer() and p:IsTerror() and p:Alive() then
@@ -213,10 +213,10 @@ local function PointsAroundSpawn(spwn)
 		pos + Vector(0, w, 0),
 		pos + Vector(w, w, 0),
 		pos + Vector(-w, 0, 0),
-		pos + Vector(0, -w, 0),
-		pos + Vector(-w, -w, 0),
+		pos + Vector(0, - w, 0),
+		pos + Vector(-w, - w, 0),
 		pos + Vector(-w, w, 0),
-		pos + Vector(w, -w, 0)
+		pos + Vector(w, - w, 0)
 		--pos + Vector(0,	0,	h) -- just in case we're outside
 	}
 end
@@ -834,7 +834,7 @@ function GM:SpectatorThink(ply)
 			ply:SetRagdollSpec(false)
 		end
 
-	-- when roaming and messing with ladders
+		-- when roaming and messing with ladders
 	elseif ply:GetMoveType() < MOVETYPE_NOCLIP and ply:GetMoveType() > 0 or ply:GetMoveType() == MOVETYPE_LADDER then
 		ply:Spectate(OBS_MODE_ROAMING)
 	end
@@ -898,389 +898,389 @@ function GM:ScalePlayerDamage(ply, hitgroup, dmginfo)
 			dmginfo:ScaleDamage(s)
 		end
 	elseif hitgroup == HITGROUP_LEFTARM
-	or hitgroup == HITGROUP_RIGHTARM
-	or hitgroup == HITGROUP_LEFTLEG
-	or hitgroup == HITGROUP_RIGHTLEG
-	or hitgroup == HITGROUP_GEAR
-	then
-		dmginfo:ScaleDamage(0.55)
+		or hitgroup == HITGROUP_RIGHTARM
+		or hitgroup == HITGROUP_LEFTLEG
+		or hitgroup == HITGROUP_RIGHTLEG
+		or hitgroup == HITGROUP_GEAR
+		then
+			dmginfo:ScaleDamage(0.55)
+		end
+
+		-- Keep ignite-burn damage etc on old levels
+		if dmginfo:IsDamageType(DMG_DIRECT)
+		or dmginfo:IsExplosionDamage()
+		or dmginfo:IsDamageType(DMG_FALL)
+		or dmginfo:IsDamageType(DMG_PHYSGUN)
+		then
+			dmginfo:ScaleDamage(2)
+		end
 	end
 
-	-- Keep ignite-burn damage etc on old levels
-	if dmginfo:IsDamageType(DMG_DIRECT)
-	or dmginfo:IsExplosionDamage()
-	or dmginfo:IsDamageType(DMG_FALL)
-	or dmginfo:IsDamageType(DMG_PHYSGUN)
-	then
-		dmginfo:ScaleDamage(2)
+	-- The GetFallDamage hook does not get called until around 600 speed, which is a
+	-- rather high drop already. Hence we do our own fall damage handling in
+	-- OnPlayerHitGround.
+	function GM:GetFallDamage(ply, speed)
+		return 0
 	end
-end
 
--- The GetFallDamage hook does not get called until around 600 speed, which is a
--- rather high drop already. Hence we do our own fall damage handling in
--- OnPlayerHitGround.
-function GM:GetFallDamage(ply, speed)
-	return 0
-end
+	local fallsounds = {
+		Sound("player/damage1.wav"),
+		Sound("player/damage2.wav"),
+		Sound("player/damage3.wav")
+	}
+	local fallsounds_count = #fallsounds
 
-local fallsounds = {
-	Sound("player/damage1.wav"),
-	Sound("player/damage2.wav"),
-	Sound("player/damage3.wav")
-}
-local fallsounds_count = #fallsounds
+	function GM:OnPlayerHitGround(ply, in_water, on_floater, speed)
+		if in_water or speed < 450 or not IsValid(ply) then return end
 
-function GM:OnPlayerHitGround(ply, in_water, on_floater, speed)
-	if in_water or speed < 450 or not IsValid(ply) then return end
+		-- Everything over a threshold hurts you, rising exponentially with speed
+		local damage = math.pow(0.05 * (speed - 420), 1.75)
 
-	-- Everything over a threshold hurts you, rising exponentially with speed
-	local damage = math.pow(0.05 * (speed - 420), 1.75)
+		-- I don't know exactly when on_floater is true, but it's probably when
+		-- landing on something that is in water.
+		if on_floater then damage = damage / 2 end
 
-	-- I don't know exactly when on_floater is true, but it's probably when
-	-- landing on something that is in water.
-	if on_floater then damage = damage / 2 end
+		-- if we fell on a dude, that hurts (him)
+		local ground = ply:GetGroundEntity()
 
-	-- if we fell on a dude, that hurts (him)
-	local ground = ply:GetGroundEntity()
+		if IsValid(ground) and ground:IsPlayer() then
+			if math.floor(damage) > 0 then
+				local att = ply
 
-	if IsValid(ground) and ground:IsPlayer() then
-		if math.floor(damage) > 0 then
-			local att = ply
+				-- if the faller was pushed, that person should get attrib
+				local push = ply.was_pushed
 
-			-- if the faller was pushed, that person should get attrib
-			local push = ply.was_pushed
+				if push and math.max(push.t or 0, push.hurt or 0) > CurTime() - 4 then
+					-- TODO: move push time checking stuff into fn?
+					att = push.att
+				end
 
-			if push and math.max(push.t or 0, push.hurt or 0) > CurTime() - 4 then
-				-- TODO: move push time checking stuff into fn?
-				att = push.att
+				local dmg = DamageInfo()
+
+				if att == ply then
+					-- hijack physgun damage as a marker of this type of kill
+					dmg:SetDamageType(DMG_CRUSH + DMG_PHYSGUN)
+				else
+					-- if attributing to pusher, show more generic crush msg for now
+					dmg:SetDamageType(DMG_CRUSH)
+				end
+
+				dmg:SetAttacker(att)
+				dmg:SetInflictor(att)
+				dmg:SetDamageForce(Vector(0, 0, - 1))
+				dmg:SetDamage(damage)
+
+				ground:TakeDamageInfo(dmg)
 			end
 
+			-- our own falling damage is cushioned
+			damage = damage / 3
+		end
+
+		if math.floor(damage) > 0 then
 			local dmg = DamageInfo()
 
-			if att == ply then
-				-- hijack physgun damage as a marker of this type of kill
-				dmg:SetDamageType(DMG_CRUSH + DMG_PHYSGUN)
-			else
-				-- if attributing to pusher, show more generic crush msg for now
-				dmg:SetDamageType(DMG_CRUSH)
-			end
-
-			dmg:SetAttacker(att)
-			dmg:SetInflictor(att)
-			dmg:SetDamageForce(Vector(0, 0, -1))
+			dmg:SetDamageType(DMG_FALL)
+			dmg:SetAttacker(game.GetWorld())
+			dmg:SetInflictor(game.GetWorld())
+			dmg:SetDamageForce(Vector(0, 0, 1))
 			dmg:SetDamage(damage)
 
-			ground:TakeDamageInfo(dmg)
-		end
+			ply:TakeDamageInfo(dmg)
 
-		-- our own falling damage is cushioned
-		damage = damage / 3
-	end
-
-	if math.floor(damage) > 0 then
-		local dmg = DamageInfo()
-
-		dmg:SetDamageType(DMG_FALL)
-		dmg:SetAttacker(game.GetWorld())
-		dmg:SetInflictor(game.GetWorld())
-		dmg:SetDamageForce(Vector(0, 0, 1))
-		dmg:SetDamage(damage)
-
-		ply:TakeDamageInfo(dmg)
-
-		-- play CS:S fall sound if we got somewhat significant damage
-		if damage > 5 then
-			sound.Play(fallsounds[math.random(1, fallsounds_count)], ply:GetShootPos(), 55 + math.Clamp(damage, 0, 50), 100)
+			-- play CS:S fall sound if we got somewhat significant damage
+			if damage > 5 then
+				sound.Play(fallsounds[math.random(1, fallsounds_count)], ply:GetShootPos(), 55 + math.Clamp(damage, 0, 50), 100)
+			end
 		end
 	end
-end
 
-local ttt_postdm = CreateConVar("ttt_postround_dm", "0", FCVAR_NOTIFY)
+	local ttt_postdm = CreateConVar("ttt_postround_dm", "0", FCVAR_NOTIFY)
 
-function GM:AllowPVP()
-	local rs = GetRoundState()
+	function GM:AllowPVP()
+		local rs = GetRoundState()
 
-	return not (rs == ROUND_PREP or (rs == ROUND_POST and not ttt_postdm:GetBool()))
-end
+		return not (rs == ROUND_PREP or (rs == ROUND_POST and not ttt_postdm:GetBool()))
+	end
 
---local rag_collide = CreateConVar("ttt_ragdoll_collide", "0")
-CreateConVar("ttt_ragdoll_collide", "0")
+	--local rag_collide = CreateConVar("ttt_ragdoll_collide", "0")
+	CreateConVar("ttt_ragdoll_collide", "0")
 
--- No damage during prep, etc
-function GM:EntityTakeDamage(ent, dmginfo)
-	if not IsValid(ent) then return end
+	-- No damage during prep, etc
+	function GM:EntityTakeDamage(ent, dmginfo)
+		if not IsValid(ent) then return end
 
-	local att = dmginfo:GetAttacker()
+		local att = dmginfo:GetAttacker()
 
-	if not GAMEMODE:AllowPVP() then
-		-- if player vs player damage, or if damage versus a prop, then zero
-		if ent:IsExplosive() or ent:IsPlayer() and IsValid(att) and att:IsPlayer() then
-			dmginfo:ScaleDamage(0)
+		if not GAMEMODE:AllowPVP() then
+			-- if player vs player damage, or if damage versus a prop, then zero
+			if ent:IsExplosive() or ent:IsPlayer() and IsValid(att) and att:IsPlayer() then
+				dmginfo:ScaleDamage(0)
+				dmginfo:SetDamage(0)
+			end
+		elseif ent:IsPlayer() then
+			GAMEMODE:PlayerTakeDamage(ent, dmginfo:GetInflictor(), att, dmginfo:GetDamage(), dmginfo)
+		elseif ent:IsExplosive() then
+			-- When a barrel hits a player, that player damages the barrel because
+			-- Source physics. This gives stupid results like a player who gets hit
+			-- with a barrel being blamed for killing himself or even his attacker.
+			if IsValid(att) and att:IsPlayer()
+			and dmginfo:IsDamageType(DMG_CRUSH)
+			and IsValid(ent:GetPhysicsAttacker())
+			then
+				dmginfo:SetAttacker(ent:GetPhysicsAttacker())
+				dmginfo:ScaleDamage(0)
+				dmginfo:SetDamage(0)
+			end
+		elseif ent.is_pinned and ent.OnPinnedDamage then
+			ent:OnPinnedDamage(dmginfo)
+
 			dmginfo:SetDamage(0)
 		end
-	elseif ent:IsPlayer() then
-		GAMEMODE:PlayerTakeDamage(ent, dmginfo:GetInflictor(), att, dmginfo:GetDamage(), dmginfo)
-	elseif ent:IsExplosive() then
-		-- When a barrel hits a player, that player damages the barrel because
-		-- Source physics. This gives stupid results like a player who gets hit
-		-- with a barrel being blamed for killing himself or even his attacker.
-		if IsValid(att) and att:IsPlayer()
-		and dmginfo:IsDamageType(DMG_CRUSH)
-		and IsValid(ent:GetPhysicsAttacker())
-		then
-			dmginfo:SetAttacker(ent:GetPhysicsAttacker())
-			dmginfo:ScaleDamage(0)
-			dmginfo:SetDamage(0)
-		end
-	elseif ent.is_pinned and ent.OnPinnedDamage then
-		ent:OnPinnedDamage(dmginfo)
-
-		dmginfo:SetDamage(0)
 	end
-end
 
-function GM:PlayerTakeDamage(ent, infl, att, amount, dmginfo)
-	-- Change damage attribution if necessary
-	if infl or att then
-		local hurter, owner, owner_time
+	function GM:PlayerTakeDamage(ent, infl, att, amount, dmginfo)
+		-- Change damage attribution if necessary
+		if infl or att then
+			local hurter, owner, owner_time
 
-		-- fall back to the attacker if there is no inflictor
-		if IsValid(infl) then
-			hurter = infl
-		elseif IsValid(att) then
-			hurter = att
+			-- fall back to the attacker if there is no inflictor
+			if IsValid(infl) then
+				hurter = infl
+			elseif IsValid(att) then
+				hurter = att
+			end
+
+			-- have a damage owner?
+			if hurter and IsValid(hurter:GetDamageOwner()) then
+				owner, owner_time = hurter:GetDamageOwner()
+
+				-- barrel bangs can hurt us even if we threw them, but that's our fault
+			elseif hurter and ent == hurter:GetPhysicsAttacker() and dmginfo:IsDamageType(DMG_BLAST) then
+				owner = ent
+			elseif hurter and hurter:IsVehicle() and IsValid(hurter:GetDriver()) then
+				owner = hurter:GetDriver()
+			end
+
+			-- if we were hurt by a trap OR by a non-ply ent, and we were pushed
+			-- recently, then our pusher is the attacker
+			if owner_time or not IsValid(att) or not att:IsPlayer() then
+				local push = ent.was_pushed
+
+				if push and IsValid(push.att) and push.t then
+					-- push must be within the last 5 seconds, and must be done
+					-- after the trap was enabled (if any)
+					owner_time = owner_time or 0
+
+					local t = math.max(push.t or 0, push.hurt or 0)
+
+					if t > owner_time and t > CurTime() - 4 then
+						owner = push.att
+
+						-- pushed by a trap?
+						if IsValid(push.infl) then
+							dmginfo:SetInflictor(push.infl)
+						end
+
+						-- for slow-hurting traps we do leech-like damage timing
+						push.hurt = CurTime()
+					end
+				end
+			end
+
+			-- if we are being hurt by a physics object, we will take damage from
+			-- the world entity as well, which screws with damage attribution so we
+			-- need to detect and work around that
+			if IsValid(owner) and dmginfo:IsDamageType(DMG_CRUSH) then
+				-- we should be able to use the push system for this, as the cases are
+				-- similar: event causes future damage but should still be attributed
+				-- physics traps can also push you to your death, for example
+				local push = ent.was_pushed or {}
+
+				-- if we already blamed this on a pusher, no need to do more
+				-- else we override whatever was in was_pushed with info pointing
+				-- at our damage owner
+				if push.att ~= owner then
+					owner_time = owner_time or CurTime()
+
+					push.att = owner
+					push.t = owner_time
+					push.hurt = CurTime()
+
+					-- store the current inflictor so that we can attribute it as the
+					-- trap used by the player in the event
+					if IsValid(infl) then
+						push.infl = infl
+					end
+					-- make sure this is set, for if we created a new table
+					ent.was_pushed = push
+				end
+			end
+
+			-- make the owner of the damage the attacker
+			att = IsValid(owner) and owner or att
+			dmginfo:SetAttacker(att)
 		end
 
-		-- have a damage owner?
-		if hurter and IsValid(hurter:GetDamageOwner()) then
-			owner, owner_time = hurter:GetDamageOwner()
+		-- scale phys damage caused by props
+		if dmginfo:IsDamageType(DMG_CRUSH) and IsValid(att) and not dmginfo:IsDamageType(DMG_PHYSGUN) then
+			-- player falling on player, or player hurt by prop?
+			-- this is prop-based physics damage
+			dmginfo:ScaleDamage(0.25)
 
-			-- barrel bangs can hurt us even if we threw them, but that's our fault
-		elseif hurter and ent == hurter:GetPhysicsAttacker() and dmginfo:IsDamageType(DMG_BLAST) then
-			owner = ent
-		elseif hurter and hurter:IsVehicle() and IsValid(hurter:GetDriver()) then
-			owner = hurter:GetDriver()
+			-- if the prop is held, no damage
+			if IsValid(infl) and IsValid(infl:GetOwner()) and infl:GetOwner():IsPlayer() then
+				dmginfo:ScaleDamage(0)
+				dmginfo:SetDamage(0)
+			end
 		end
 
-		-- if we were hurt by a trap OR by a non-ply ent, and we were pushed
-		-- recently, then our pusher is the attacker
-		if owner_time or not IsValid(att) or not att:IsPlayer() then
-			local push = ent.was_pushed
+		-- handle fire attacker
+		if ent.ignite_info and dmginfo:IsDamageType(DMG_DIRECT) then
+			local datt = dmginfo:GetAttacker()
 
-			if push and IsValid(push.att) and push.t then
-				-- push must be within the last 5 seconds, and must be done
-				-- after the trap was enabled (if any)
-				owner_time = owner_time or 0
+			if not IsValid(datt) or not datt:IsPlayer() then
+				local ignite = ent.ignite_info
 
-				local t = math.max(push.t or 0, push.hurt or 0)
+				if IsValid(ignite.att) and IsValid(ignite.infl)then
+					dmginfo:SetAttacker(ignite.att)
+					dmginfo:SetInflictor(ignite.infl)
+				end
+			end
+		end
 
-				if t > owner_time and t > CurTime() - 4 then
-					owner = push.att
+		-- try to work out if this was push-induced leech-water damage (common on
+		-- some popular maps like dm_island17)
+		if ent.was_pushed and ent == att and dmginfo:GetDamageType() == DMG_GENERIC and util.BitSet(util.PointContents(dmginfo:GetDamagePosition()), CONTENTS_WATER) then
+			local t = math.max(ent.was_pushed.t or 0, ent.was_pushed.hurt or 0)
 
-					-- pushed by a trap?
-					if IsValid(push.infl) then
-						dmginfo:SetInflictor(push.infl)
+			if t > CurTime() - 3 then
+				dmginfo:SetAttacker(ent.was_pushed.att)
+				ent.was_pushed.hurt = CurTime()
+			end
+		end
+
+		-- start painting blood decals
+		util.StartBleeding(ent, dmginfo:GetDamage(), 5)
+
+		-- general actions for pvp damage
+		if ent ~= att and IsValid(att) and att:IsPlayer() and GetRoundState() == ROUND_ACTIVE and math.floor(dmginfo:GetDamage()) > 0 then
+
+			-- scale everything to karma damage factor except the knife, because it
+			-- assumes a kill
+			if not dmginfo:IsDamageType(DMG_SLASH) then
+				dmginfo:ScaleDamage(att:GetDamageFactor())
+			end
+
+			-- process the effects of the damage on karma
+			KARMA.Hurt(att, ent, dmginfo)
+
+			DamageLog(Format("DMG: \t %s [%s] damaged %s [%s] for %d dmg", att:Nick(), att:GetRoleString(), ent:Nick(), ent:GetRoleString(), math.Round(dmginfo:GetDamage())))
+		end
+
+	end
+
+
+	function GM:OnNPCKilled()
+
+	end
+
+	-- Drowning and such
+	local tm = nil
+	local ply = nil
+	local plys = nil
+
+	function GM:Tick()
+		-- three cheers for micro-optimizations
+		plys = player.GetAll()
+
+		for i = 1, #plys do
+			ply = plys[i]
+			tm = ply:Team()
+
+			if tm == TEAM_TERROR and ply:Alive() then
+
+				-- Drowning
+				if ply:WaterLevel() == 3 then
+					if ply:IsOnFire() then
+						ply:Extinguish()
 					end
 
-					-- for slow-hurting traps we do leech-like damage timing
-					push.hurt = CurTime()
-				end
-			end
-		end
+					if ply.drowning then
+						if ply.drowning < CurTime() then
+							local dmginfo = DamageInfo()
 
-		-- if we are being hurt by a physics object, we will take damage from
-		-- the world entity as well, which screws with damage attribution so we
-		-- need to detect and work around that
-		if IsValid(owner) and dmginfo:IsDamageType(DMG_CRUSH) then
-			-- we should be able to use the push system for this, as the cases are
-			-- similar: event causes future damage but should still be attributed
-			-- physics traps can also push you to your death, for example
-			local push = ent.was_pushed or {}
+							dmginfo:SetDamage(15)
+							dmginfo:SetDamageType(DMG_DROWN)
+							dmginfo:SetAttacker(game.GetWorld())
+							dmginfo:SetInflictor(game.GetWorld())
+							dmginfo:SetDamageForce(Vector(0, 0, 1))
 
-			-- if we already blamed this on a pusher, no need to do more
-			-- else we override whatever was in was_pushed with info pointing
-			-- at our damage owner
-			if push.att ~= owner then
-				owner_time = owner_time or CurTime()
+							ply:TakeDamageInfo(dmginfo)
 
-				push.att = owner
-				push.t = owner_time
-				push.hurt = CurTime()
-
-				-- store the current inflictor so that we can attribute it as the
-				-- trap used by the player in the event
-			if IsValid(infl) then
-				push.infl = infl
-			end
-				-- make sure this is set, for if we created a new table
-				ent.was_pushed = push
-			end
-		end
-
-		-- make the owner of the damage the attacker
-		att = IsValid(owner) and owner or att
-		dmginfo:SetAttacker(att)
-	end
-
-	-- scale phys damage caused by props
-	if dmginfo:IsDamageType(DMG_CRUSH) and IsValid(att) and not dmginfo:IsDamageType(DMG_PHYSGUN) then
-		-- player falling on player, or player hurt by prop?
-		-- this is prop-based physics damage
-		dmginfo:ScaleDamage(0.25)
-
-		-- if the prop is held, no damage
-		if IsValid(infl) and IsValid(infl:GetOwner()) and infl:GetOwner():IsPlayer() then
-			dmginfo:ScaleDamage(0)
-			dmginfo:SetDamage(0)
-		end
-	end
-
-	-- handle fire attacker
-	if ent.ignite_info and dmginfo:IsDamageType(DMG_DIRECT) then
-		local datt = dmginfo:GetAttacker()
-
-		if not IsValid(datt) or not datt:IsPlayer() then
-			local ignite = ent.ignite_info
-
-			if IsValid(ignite.att) and IsValid(ignite.infl)then
-				dmginfo:SetAttacker(ignite.att)
-				dmginfo:SetInflictor(ignite.infl)
-			end
-		end
-	end
-
-	-- try to work out if this was push-induced leech-water damage (common on
-	-- some popular maps like dm_island17)
-	if ent.was_pushed and ent == att and dmginfo:GetDamageType() == DMG_GENERIC and util.BitSet(util.PointContents(dmginfo:GetDamagePosition()), CONTENTS_WATER) then
-		local t = math.max(ent.was_pushed.t or 0, ent.was_pushed.hurt or 0)
-
-		if t > CurTime() - 3 then
-			dmginfo:SetAttacker(ent.was_pushed.att)
-			ent.was_pushed.hurt = CurTime()
-		end
-	end
-
-	-- start painting blood decals
-	util.StartBleeding(ent, dmginfo:GetDamage(), 5)
-
-	-- general actions for pvp damage
-	if ent ~= att and IsValid(att) and att:IsPlayer() and GetRoundState() == ROUND_ACTIVE and math.floor(dmginfo:GetDamage()) > 0 then
-
-		-- scale everything to karma damage factor except the knife, because it
-		-- assumes a kill
-		if not dmginfo:IsDamageType(DMG_SLASH) then
-			dmginfo:ScaleDamage(att:GetDamageFactor())
-		end
-
-		-- process the effects of the damage on karma
-		KARMA.Hurt(att, ent, dmginfo)
-
-		DamageLog(Format("DMG: \t %s [%s] damaged %s [%s] for %d dmg", att:Nick(), att:GetRoleString(), ent:Nick(), ent:GetRoleString(), math.Round(dmginfo:GetDamage())))
-	end
-
-end
-
-
-function GM:OnNPCKilled()
-
-end
-
--- Drowning and such
-local tm = nil
-local ply = nil
-local plys = nil
-
-function GM:Tick()
-	-- three cheers for micro-optimizations
-	plys = player.GetAll()
-
-	for i = 1, #plys do
-		ply = plys[i]
-		tm = ply:Team()
-
-		if tm == TEAM_TERROR and ply:Alive() then
-
-			-- Drowning
-			if ply:WaterLevel() == 3 then
-				if ply:IsOnFire() then
-					ply:Extinguish()
-				end
-
-				if ply.drowning then
-					if ply.drowning < CurTime() then
-						local dmginfo = DamageInfo()
-
-						dmginfo:SetDamage(15)
-						dmginfo:SetDamageType(DMG_DROWN)
-						dmginfo:SetAttacker(game.GetWorld())
-						dmginfo:SetInflictor(game.GetWorld())
-						dmginfo:SetDamageForce(Vector(0,0,1))
-
-						ply:TakeDamageInfo(dmginfo)
-
-						-- have started drowning properly
-						ply.drowning = CurTime() + 1
+							-- have started drowning properly
+							ply.drowning = CurTime() + 1
+						end
+					else
+						-- will start drowning soon
+						ply.drowning = CurTime() + 8
 					end
 				else
-					-- will start drowning soon
-					ply.drowning = CurTime() + 8
+					ply.drowning = nil
 				end
-			else
-				ply.drowning = nil
-			end
 
-			-- Run DNA Scanner think also when it is not deployed
-			if IsValid(ply.scanner_weapon) and wep ~= ply.scanner_weapon then
-				ply.scanner_weapon:Think()
-			end
-		elseif tm == TEAM_SPEC then
-			if ply.propspec then
-				PROPSPEC.Recharge(ply)
-
-				if IsValid(ply:GetObserverTarget()) then
-					ply:SetPos(ply:GetObserverTarget():GetPos())
+				-- Run DNA Scanner think also when it is not deployed
+				if IsValid(ply.scanner_weapon) and wep ~= ply.scanner_weapon then
+					ply.scanner_weapon:Think()
 				end
-			end
+			elseif tm == TEAM_SPEC then
+				if ply.propspec then
+					PROPSPEC.Recharge(ply)
 
-			-- if spectators are alive, ie. they picked spectator mode, then
-			-- DeathThink doesn't run, so we have to SpecThink here
-			if ply:Alive() then
-				self:SpectatorThink(ply)
+					if IsValid(ply:GetObserverTarget()) then
+						ply:SetPos(ply:GetObserverTarget():GetPos())
+					end
+				end
+
+				-- if spectators are alive, ie. they picked spectator mode, then
+				-- DeathThink doesn't run, so we have to SpecThink here
+				if ply:Alive() then
+					self:SpectatorThink(ply)
+				end
 			end
 		end
 	end
-end
 
-function GM:ShowHelp(p)
-	if IsValid(p) then
-		p:ConCommand("ttt_helpscreen")
+	function GM:ShowHelp(p)
+		if IsValid(p) then
+			p:ConCommand("ttt_helpscreen")
+		end
 	end
-end
 
-function GM:PlayerRequestTeam(p, teamid)
+	function GM:PlayerRequestTeam(p, teamid)
 
-end
-
--- Implementing stuff that should already be in gmod, chpt. 389
-function GM:PlayerEnteredVehicle(p, vehicle, role)
-	if IsValid(vehicle) then
-		vehicle:SetNWEntity("ttt_driver", p)
 	end
-end
 
-function GM:PlayerLeaveVehicle(p, vehicle)
-	if IsValid(vehicle) then
-		-- setting nil will not do anything, so bogusify
-		vehicle:SetNWEntity("ttt_driver", vehicle)
+	-- Implementing stuff that should already be in gmod, chpt. 389
+	function GM:PlayerEnteredVehicle(p, vehicle, role)
+		if IsValid(vehicle) then
+			vehicle:SetNWEntity("ttt_driver", p)
+		end
 	end
-end
 
-function GM:AllowPlayerPickup(p, obj)
-	return false
-end
+	function GM:PlayerLeaveVehicle(p, vehicle)
+		if IsValid(vehicle) then
+			-- setting nil will not do anything, so bogusify
+			vehicle:SetNWEntity("ttt_driver", vehicle)
+		end
+	end
 
-function GM:PlayerShouldTaunt(p, actid)
-	-- Disable taunts, we don't have a system for them (camera freezing etc).
-	-- Mods/plugins that add such a system should override this.
-	return false
-end
+	function GM:AllowPlayerPickup(p, obj)
+		return false
+	end
+
+	function GM:PlayerShouldTaunt(p, actid)
+		-- Disable taunts, we don't have a system for them (camera freezing etc).
+		-- Mods/plugins that add such a system should override this.
+		return false
+	end

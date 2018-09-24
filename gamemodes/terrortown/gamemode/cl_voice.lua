@@ -172,10 +172,10 @@ hook.Add("InitPostEntity", "CreateVoiceVGUI", CreateVoiceVGUI)
 --local MuteStates = {MUTE_NONE, MUTE_TERROR, MUTE_ALL, MUTE_SPEC}
 
 local MuteText = {
-	[MUTE_NONE]	= "",
+	[MUTE_NONE] = "",
 	[MUTE_TERROR] = "mute_living",
-	[MUTE_ALL]	= "mute_all",
-	[MUTE_SPEC]	= "mute_specs"
+	[MUTE_ALL] = "mute_all",
+	[MUTE_SPEC] = "mute_specs"
 }
 
 local function SetMuteState(state)

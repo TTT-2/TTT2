@@ -25,7 +25,7 @@ function HELPSCRN:Show()
 
 	local dbut = vgui.Create("DButton", dframe)
 	dbut:SetSize(bw, bh)
-	dbut:SetPos(w - bw - margin, h - bh - margin/2)
+	dbut:SetPos(w - bw - margin, h - bh - margin / 2)
 	dbut:SetText(GetTranslation("close"))
 
 	dbut.DoClick = function()

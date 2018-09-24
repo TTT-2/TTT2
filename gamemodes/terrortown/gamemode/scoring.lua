@@ -143,7 +143,7 @@ function SCORE:HandleC4Disarm(disarmer, owner, success)
 	local ev = {
 		id = EVENT_C4DISARM,
 		ni = disarmer:Nick(),
-		s	= success
+		s = success
 	}
 
 	if IsValid(owner) then
@@ -274,7 +274,7 @@ function SCORE:StreamToClients()
 
 		table.insert(cut, bit)
 
-		s = string.sub(s, max, -1)
+		s = string.sub(s, max, - 1)
 	end
 
 	local parts = #cut

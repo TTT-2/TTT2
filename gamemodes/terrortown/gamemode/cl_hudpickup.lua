@@ -12,12 +12,12 @@ function GM:HUDWeaponPickedUp(wep)
 	local name = TryTranslation(wep.GetPrintName and wep:GetPrintName() or wep:GetClass() or "Unknown Weapon Name")
 
 	local pickup = {}
-	pickup.time		= CurTime()
-	pickup.name		= string.upper(name)
-	pickup.holdtime	= 5
-	pickup.font		= "DefaultBold"
-	pickup.fadein	= 0.04
-	pickup.fadeout	= 0.3
+	pickup.time = CurTime()
+	pickup.name = string.upper(name)
+	pickup.holdtime = 5
+	pickup.font = "DefaultBold"
+	pickup.fadein = 0.04
+	pickup.fadeout = 0.3
 
 	local role = LocalPlayer().GetRole and LocalPlayer():GetRole() or ROLES.INNOCENT.index
 	pickup.color = GetRoleByIndex(role).color
@@ -43,15 +43,15 @@ function GM:HUDItemPickedUp(itemname)
 	if not (IsValid(LocalPlayer()) and LocalPlayer():Alive()) then return end
 
 	local pickup = {}
-	pickup.time		= CurTime()
+	pickup.time = CurTime()
 	-- as far as I'm aware TTT does not use any "items", so better leave this to
 	-- source's localisation
-	pickup.name		= "#"..itemname
-	pickup.holdtime	= 5
-	pickup.font		= "DefaultBold"
-	pickup.fadein	= 0.04
-	pickup.fadeout	= 0.3
-	pickup.color	 = Color(255, 255, 255, 255)
+	pickup.name = "#"..itemname
+	pickup.holdtime = 5
+	pickup.font = "DefaultBold"
+	pickup.fadein = 0.04
+	pickup.fadeout = 0.3
+	pickup.color = Color(255, 255, 255, 255)
 
 	pickup.upper = false
 
@@ -59,7 +59,7 @@ function GM:HUDItemPickedUp(itemname)
 
 	local w, h = surface.GetTextSize(pickup.name)
 	pickup.height = h
-	pickup.width	= w
+	pickup.width = w
 
 	if self.PickupHistoryLast >= pickup.time then
 		pickup.time = self.PickupHistoryLast + 0.05
@@ -89,14 +89,14 @@ function GM:HUDAmmoPickedUp(itemname, amount)
 	end
 
 	local pickup = {}
-	pickup.time		= CurTime()
-	pickup.name		= string.upper(itemname_trans)
-	pickup.holdtime	= 5
-	pickup.font		= "DefaultBold"
-	pickup.fadein	= 0.04
-	pickup.fadeout	= 0.3
-	pickup.color 	= Color(205, 155, 0, 255)
-	pickup.amount	= tostring(amount)
+	pickup.time = CurTime()
+	pickup.name = string.upper(itemname_trans)
+	pickup.holdtime = 5
+	pickup.font = "DefaultBold"
+	pickup.fadein = 0.04
+	pickup.fadeout = 0.3
+	pickup.color = Color(205, 155, 0, 255)
+	pickup.amount = tostring(amount)
 
 	surface.SetFont(pickup.font)
 
@@ -153,17 +153,17 @@ function GM:HUDDrawPickupHistory()
 			surface.SetTexture(self.PickupHistoryCorner)
 
 			surface.SetDrawColor(v.color.r, v.color.g, v.color.b, alpha)
-			surface.DrawTexturedRectRotated(rx + bordersize / 2 , ry + bordersize / 2, bordersize, bordersize, 0)
-			surface.DrawTexturedRectRotated(rx + bordersize / 2 , ry + rh - bordersize / 2, bordersize, bordersize, 90)
-			surface.DrawRect(rx, ry + bordersize,	bordersize, rh - bordersize * 2)
+			surface.DrawTexturedRectRotated(rx + bordersize / 2, ry + bordersize / 2, bordersize, bordersize, 0)
+			surface.DrawTexturedRectRotated(rx + bordersize / 2, ry + rh - bordersize / 2, bordersize, bordersize, 90)
+			surface.DrawRect(rx, ry + bordersize, bordersize, rh - bordersize * 2)
 			surface.DrawRect(rx + bordersize, ry, v.height - 4, rh)
 
 			--surface.SetDrawColor(230*colordelta, 230*colordelta, 230*colordelta, alpha)
 			surface.SetDrawColor(20 * colordelta, 20 * colordelta, 20 * colordelta, math.Clamp(alpha, 0, 200))
 
 			surface.DrawRect(rx + bordersize + v.height - 4, ry, rw - (v.height - 4) - bordersize * 2, rh)
-			surface.DrawTexturedRectRotated(rx + rw - bordersize / 2 , ry + rh - bordersize / 2, bordersize, bordersize, 180)
-			surface.DrawTexturedRectRotated(rx + rw - bordersize / 2 , ry + bordersize / 2, bordersize, bordersize, 270)
+			surface.DrawTexturedRectRotated(rx + rw - bordersize / 2, ry + rh - bordersize / 2, bordersize, bordersize, 180)
+			surface.DrawTexturedRectRotated(rx + rw - bordersize / 2, ry + bordersize / 2, bordersize, bordersize, 270)
 			surface.DrawRect(rx + rw - bordersize, ry + bordersize, bordersize, rh - bordersize * 2)
 
 			draw.SimpleText(v.name, v.font, v.x + 2 + v.height + 8, v.y - (v.height / 2) + 2, Color(0, 0, 0, alpha * 0.75))

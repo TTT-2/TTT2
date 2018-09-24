@@ -238,7 +238,7 @@ local function NumKills_Inno(events, scores, players, traitors)
 	local ins = {}
 
 	for id, s in pairs(scores) do
-		if not table.HasValue(traitors, id) and  GetTraitors(s) > 0 then
+		if not table.HasValue(traitors, id) and GetTraitors(s) > 0 then
 			table.insert(ins, id)
 		end
 	end
@@ -762,8 +762,8 @@ local function Coroner(events, scores, players, traitors)
 	local award = {nick = nick, priority = m_num}
 
 	if m_num > 2 and m_num < 6 then
-		award.title =	T("aw_fnd1_title")
-		award.text =	PT("aw_fnd1_text", {num = m_num})
+		award.title = T("aw_fnd1_title")
+		award.text = PT("aw_fnd1_text", {num = m_num})
 	elseif m_num >= 6 and m_num < 10 then
 		award.title = T("aw_fnd2_title")
 		award.text = PT("aw_fnd2_text", {num = m_num})
@@ -816,7 +816,7 @@ local function TimeOfDeath(events, scores, players, traitors)
 
 	local time_near_end, traitor_win, e
 
-	for i = #events, 1, -1 do
+	for i = #events, 1, - 1 do
 		e = events[i]
 
 		if e.id == EVENT_FINISH then

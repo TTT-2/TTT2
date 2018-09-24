@@ -281,7 +281,7 @@ local function request_rolelist(ply)
 		-- easy role filtering method
 		for _, v in pairs(ROLES) do
 			if v.networkRoles then
-			SendNetworkingRolesList(v.index, v.networkRoles)
+				SendNetworkingRolesList(v.index, v.networkRoles)
 			end
 		end
 

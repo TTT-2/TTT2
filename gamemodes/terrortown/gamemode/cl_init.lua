@@ -2,7 +2,7 @@ include("shared.lua")
 
 -- Define GM12 fonts for compatibility
 surface.CreateFont("DefaultBold", {font = "Tahoma", size = 13, weight = 1000})
-surface.CreateFont("TabLarge",	{font = "Tahoma", size = 13, weight = 700, shadow = true, antialias = false})
+surface.CreateFont("TabLarge", {font = "Tahoma", size = 13, weight = 700, shadow = true, antialias = false})
 surface.CreateFont("Trebuchet22", {font = "Trebuchet MS", size = 22, weight = 900})
 
 include("scoring_shd.lua")
@@ -460,7 +460,7 @@ local view = {origin = vector_origin, angles = angle_zero, fov = 0}
 function GM:CalcView(ply, origin, angles, fov)
 	view.origin = origin
 	view.angles = angles
-	view.fov	= fov
+	view.fov = fov
 
 	-- first person ragdolling
 	if ply:Team() == TEAM_SPEC and ply:GetObserverMode() == OBS_MODE_IN_EYE then

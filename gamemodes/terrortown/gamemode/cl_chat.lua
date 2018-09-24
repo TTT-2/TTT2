@@ -8,15 +8,19 @@ local string = string
 
 local function LastWordsRecv()
 	local sender = net.ReadEntity()
-	local words	= net.ReadString()
+	local words = net.ReadString()
 
 	local was_detective = IsValid(sender) and sender:IsDetective()
 	local nick = IsValid(sender) and sender:Nick() or "<Unknown>"
 
-	chat.AddText(Color(150, 150, 150),
+	chat.AddText(
+		Color(150, 150, 150),
 		Format("(%s) ", string.upper(GetTranslation("last_words"))),
-		was_detective and Color(50, 200, 255) or Color(0, 200, 0), nick,
-		COLOR_WHITE, ": " .. words)
+		was_detective and Color(50, 200, 255) or Color(0, 200, 0),
+		nick,
+		COLOR_WHITE,
+		": " .. words
+	)
 end
 net.Receive("TTT_LastWordsMsg", LastWordsRecv)
 
@@ -32,7 +36,7 @@ local function RoleChatRecv()
 
 	chat.AddText(roleData.color, Format("(%s) ", string.upper(GetTranslation(roleData.name))),
 		Color(255, 200, 20), sender:Nick(),
-		Color(255, 255, 200), ": " .. text)
+	Color(255, 255, 200), ": " .. text)
 end
 net.Receive("TTT_RoleChat", RoleChatRecv)
 
@@ -114,15 +118,15 @@ RADIO.LastRadio = {msg = "", t = 0}
 
 -- [key] -> command
 RADIO.Commands = {
-	{cmd = "yes",		text = "quick_yes",		format = false},
-	{cmd = "no",		text = "quick_no",		format = false},
-	{cmd = "help",	 	text = "quick_help",	format = false},
-	{cmd = "imwith",	text = "quick_imwith",	format = true},
-	{cmd = "see",		text = "quick_see",		format = true},
-	{cmd = "suspect",	text = "quick_suspect",	format = true},
-	{cmd = "traitor",	text = "quick_traitor",	format = true},
-	{cmd = "innocent", 	text = "quick_inno",	format = true},
-	{cmd = "check", 	text = "quick_check",	format = false}
+	{cmd = "yes", text = "quick_yes", format = false},
+	{cmd = "no", text = "quick_no", format = false},
+	{cmd = "help", text = "quick_help", format = false},
+	{cmd = "imwith", text = "quick_imwith", format = true},
+	{cmd = "see", text = "quick_see", format = true},
+	{cmd = "suspect", text = "quick_suspect", format = true},
+	{cmd = "traitor", text = "quick_traitor", format = true},
+	{cmd = "innocent", text = "quick_inno", format = true},
+	{cmd = "check", text = "quick_check", format = false}
 }
 
 local radioframe = nil
@@ -368,7 +372,7 @@ concommand.Add("ttt_radio", RadioCommand, RadioComplete)
 local function RadioMsgRecv()
 	local sender = net.ReadEntity()
 	local msg = net.ReadString()
-	local param	= net.ReadString()
+	local param = net.ReadString()
 
 	if not (IsValid(sender) and sender:IsPlayer()) then return end
 
@@ -406,7 +410,7 @@ local radio_gestures = {
 	quick_yes = ACT_GMOD_GESTURE_AGREE,
 	quick_no = ACT_GMOD_GESTURE_DISAGREE,
 	quick_see = ACT_GMOD_GESTURE_WAVE,
-	quick_check	= ACT_SIGNAL_GROUP,
+	quick_check = ACT_SIGNAL_GROUP,
 	quick_suspect = ACT_SIGNAL_HALT
 }
 

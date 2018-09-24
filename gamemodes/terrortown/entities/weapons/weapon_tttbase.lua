@@ -78,41 +78,41 @@ SWEP.IsSilent = false
 ---- YE OLDE SWEP STUFF
 
 if CLIENT then
-	SWEP.DrawCrosshair	= false
-	SWEP.ViewModelFOV	= 82
-	SWEP.ViewModelFlip	= true
+	SWEP.DrawCrosshair = false
+	SWEP.ViewModelFOV = 82
+	SWEP.ViewModelFlip = true
 	SWEP.CSMuzzleFlashes = true
 end
 
 SWEP.Base = "weapon_base"
 
-SWEP.Category			= "TTT"
-SWEP.Spawnable			= false
+SWEP.Category = "TTT"
+SWEP.Spawnable = false
 
 SWEP.IsGrenade = false
 
-SWEP.Weight				= 5
-SWEP.AutoSwitchTo		= false
-SWEP.AutoSwitchFrom	 	= false
+SWEP.Weight = 5
+SWEP.AutoSwitchTo = false
+SWEP.AutoSwitchFrom = false
 
-SWEP.Primary.Sound			= Sound("Weapon_Pistol.Empty")
-SWEP.Primary.Recoil			= 1.5
-SWEP.Primary.Damage			= 1
-SWEP.Primary.NumShots		= 1
-SWEP.Primary.Cone			= 0.02
-SWEP.Primary.Delay			= 0.15
+SWEP.Primary.Sound = Sound("Weapon_Pistol.Empty")
+SWEP.Primary.Recoil = 1.5
+SWEP.Primary.Damage = 1
+SWEP.Primary.NumShots = 1
+SWEP.Primary.Cone = 0.02
+SWEP.Primary.Delay = 0.15
 
-SWEP.Primary.ClipSize		= -1
-SWEP.Primary.DefaultClip	= -1
-SWEP.Primary.Automatic		= false
-SWEP.Primary.Ammo			= "none"
-SWEP.Primary.ClipMax		= -1
+SWEP.Primary.ClipSize = -1
+SWEP.Primary.DefaultClip = -1
+SWEP.Primary.Automatic = false
+SWEP.Primary.Ammo = "none"
+SWEP.Primary.ClipMax = -1
 
-SWEP.Secondary.ClipSize	 	= 1
-SWEP.Secondary.DefaultClip	= 1
-SWEP.Secondary.Automatic	= false
-SWEP.Secondary.Ammo			= "none"
-SWEP.Secondary.ClipMax		= -1
+SWEP.Secondary.ClipSize = 1
+SWEP.Secondary.DefaultClip = 1
+SWEP.Secondary.Automatic = false
+SWEP.Secondary.Ammo = "none"
+SWEP.Secondary.ClipMax = -1
 
 SWEP.HeadshotMultiplier = 2.7
 
@@ -147,7 +147,7 @@ if CLIENT then
 		local sights = not self.NoSights and self:GetIronsights()
 		local x = math.floor(ScrW() / 2.0)
 		local y = math.floor(ScrH() / 2.0)
-		local scale = math.max(0.2,	10 * self:GetPrimaryCone())
+		local scale = math.max(0.2, 10 * self:GetPrimaryCone())
 
 		local LastShootTime = self:LastShootTime()
 
@@ -183,7 +183,7 @@ if CLIENT then
 		local data = self.HUDHelp
 
 		local translate = data.translatable
-		local primary	= data.primary
+		local primary = data.primary
 		local secondary = data.secondary
 
 		if translate then
@@ -191,7 +191,7 @@ if CLIENT then
 			secondary = secondary and GetPTranslation(secondary, data.translate_params)
 		end
 
-		help_spec.pos	= {ScrW() / 2.0, ScrH() - 40}
+		help_spec.pos = {ScrW() / 2.0, ScrH() - 40}
 		help_spec.text = secondary or primary
 
 		draw.TextShadow(help_spec, 2)
@@ -245,7 +245,7 @@ function SWEP:PrimaryAttack(worldsnd)
 
 	if not IsValid(owner) or owner:IsNPC() or not owner.ViewPunch then return end
 
-	owner:ViewPunch(Angle(util.SharedRandom(self:GetClass(), -0.2, -0.1, 0) * self.Primary.Recoil, util.SharedRandom(self:GetClass(), -0.1, 0.1, 1) * self.Primary.Recoil, 0))
+	owner:ViewPunch(Angle(util.SharedRandom(self:GetClass(), - 0.2, - 0.1, 0) * self.Primary.Recoil, util.SharedRandom(self:GetClass(), - 0.1, 0.1, 1) * self.Primary.Recoil, 0))
 end
 
 function SWEP:DryFire(setnext)
@@ -301,7 +301,7 @@ function SWEP:ShootBullet(dmg, recoil, numbul, cone)
 	local sights = self:GetIronsights()
 
 	numbul = numbul or 1
-	cone	= cone	or 0.01
+	cone = cone or 0.01
 
 	local bullet = {}
 	bullet.Num = numbul
@@ -410,8 +410,8 @@ function SWEP:DampenDrop()
 	local phys = self:GetPhysicsObject()
 
 	if IsValid(phys) then
-		phys:SetVelocityInstantaneous(Vector(0, 0, -75) + phys:GetVelocity() * 0.001)
-		phys:AddAngleVelocity(phys:GetAngleVelocity() * -0.99)
+		phys:SetVelocityInstantaneous(Vector(0, 0, - 75) + phys:GetVelocity() * 0.001)
+		phys:AddAngleVelocity(phys:GetAngleVelocity() * - 0.99)
 	end
 end
 
@@ -474,7 +474,7 @@ end
 --- Dummy functions that will be replaced when SetupDataTables runs. These are
 --- here for when that does not happen (due to e.g. stacking base classes)
 function SWEP:GetIronsightsTime()
-	return -1
+	return - 1
 end
 
 function SWEP:SetIronsightsTime()
@@ -565,7 +565,7 @@ end
 local ttt_lowered = CreateConVar("ttt_ironsights_lowered", "1", FCVAR_ARCHIVE)
 local host_timescale = GetConVar("host_timescale")
 
-local LOWER_POS = Vector(0, 0, -2)
+local LOWER_POS = Vector(0, 0, - 2)
 
 local IRONSIGHT_TIME = 0.25
 

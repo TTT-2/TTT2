@@ -77,7 +77,7 @@ end
 
 function ScoreGroup(p)
 	if not IsValid(p) then -- will not match any group panel
-		return -1
+		return - 1
 	end
 
 	local group = hook.Call("TTTScoreGroup", nil, p)
@@ -161,7 +161,7 @@ function PANEL:Init()
 	self.ply_groups = {}
 
 	local t = vgui.Create("TTTScoreGroup", self.ply_frame:GetCanvas())
-	t:SetGroupInfo(GetTranslation("terrorists"), Color(0,200,0,100), GROUP_TERROR)
+	t:SetGroupInfo(GetTranslation("terrorists"), Color(0, 200, 0, 100), GROUP_TERROR)
 	self.ply_groups[GROUP_TERROR] = t
 
 	t = vgui.Create("TTTScoreGroup", self.ply_frame:GetCanvas())
@@ -335,7 +335,7 @@ function PANEL:PerformLayout()
 
 	-- if we will have to clamp our height, enable the mouse so player can scroll
 	local scrolling = h > ScrH() * 0.95
---	gui.EnableScreenClicker(scrolling)
+	--	gui.EnableScreenClicker(scrolling)
 	self.ply_frame:SetScroll(scrolling)
 
 	h = math.Clamp(h, 110 + y_logo_off, ScrH() * 0.95)
@@ -363,7 +363,7 @@ function PANEL:PerformLayout()
 	local tw, _ = surface.GetTextSize(hname)
 
 	while tw > hw do
-		hname = string.sub(hname, 1, -6) .. "..."
+		hname = string.sub(hname, 1, - 6) .. "..."
 		tw, th = surface.GetTextSize(hname)
 	end
 
@@ -483,7 +483,7 @@ function PANEL:GetCanvas()
 end
 
 function PANEL:OnMouseWheeled(dlta)
-	self.scroll:AddScroll(dlta * -2)
+	self.scroll:AddScroll(dlta * - 2)
 
 	self:InvalidateLayout()
 end

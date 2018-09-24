@@ -25,18 +25,18 @@ function GetEquipmentForRoleAll()
 			if v and not v.Doublicated and not string.match(v.ClassName, "base") and not string.match(v.ClassName, "event") and not table.HasValue(eject, v.ClassName) then
 				local data = v.EquipMenuData or {}
 				local base = {
-					id		 = v.ClassName,
-					name	 = v.ClassName or "Unnamed",
+					id = v.ClassName,
+					name = v.ClassName or "Unnamed",
 					PrintName = data.name or data.PrintName or v.PrintName or v.ClassName or "Unnamed",
-					limited	 = v.LimitedStock,
-					kind	 = v.Kind or WEAPON_NONE,
-					slot	 = (v.Slot or 0) + 1,
+					limited = v.LimitedStock,
+					kind = v.Kind or WEAPON_NONE,
+					slot = (v.Slot or 0) + 1,
 					material = v.Icon or "vgui/ttt/icon_id",
 					-- the below should be specified in EquipMenuData, in which case
 					-- these values are overwritten
-					type	 = "Type not specified",
-					model	 = "models/weapons/w_bugbait.mdl",
-					desc	 = "No description specified."
+					type = "Type not specified",
+					model = "models/weapons/w_bugbait.mdl",
+					desc = "No description specified."
 				}
 
 				-- Force material to nil so that model key is used when we are

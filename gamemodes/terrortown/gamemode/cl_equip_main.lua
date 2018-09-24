@@ -42,18 +42,18 @@ function GetEquipmentForRole(role)
 			if v and not v.Doublicated and v.CanBuy and table.HasValue(v.CanBuy, fallback) then
 				local data = v.EquipMenuData or {}
 				local base = {
-					id		 = WEPS.GetClass(v),
-					name	 = v.ClassName or "Unnamed",
-					PrintName= data.name or data.PrintName or v.PrintName or v.ClassName or "Unnamed",
-					limited	 = v.LimitedStock,
-					kind	 = v.Kind or WEAPON_NONE,
-					slot	 = (v.Slot or 0) + 1,
+					id = WEPS.GetClass(v),
+					name = v.ClassName or "Unnamed",
+					PrintName = data.name or data.PrintName or v.PrintName or v.ClassName or "Unnamed",
+					limited = v.LimitedStock,
+					kind = v.Kind or WEAPON_NONE,
+					slot = (v.Slot or 0) + 1,
 					material = v.Icon or "vgui/ttt/icon_id",
 					-- the below should be specified in EquipMenuData, in which case
 					-- these values are overwritten
-					type	 = "Type not specified",
-					model	 = "models/weapons/w_bugbait.mdl",
-					desc	 = "No description specified."
+					type = "Type not specified",
+					model = "models/weapons/w_bugbait.mdl",
+					desc = "No description specified."
 				}
 
 				-- Force material to nil so that model key is used when we are
@@ -390,12 +390,12 @@ local function TraitorMenuPopup()
 
 			-- If we cannot order this item, darken it
 			if (not can_order or
-			-- already owned
-			table.HasValue(owned_ids, item.id) or
-			tonumber(item.id) and ply:HasEquipmentItem(tonumber(item.id)) or
-			-- already carrying a weapon for this slot
-			ItemIsWeapon(item) and (not CanCarryWeapon(item) or not SWEPIsBuyable(tostring(item.id))) or
-			-- already bought the item before
+				-- already owned
+				table.HasValue(owned_ids, item.id) or
+				tonumber(item.id) and ply:HasEquipmentItem(tonumber(item.id)) or
+				-- already carrying a weapon for this slot
+				ItemIsWeapon(item) and (not CanCarryWeapon(item) or not SWEPIsBuyable(tostring(item.id))) or
+				-- already bought the item before
 			item.limited and ply:HasBought(tostring(item.id))) then
 				ic:SetIconColor(color_darkened)
 			end

@@ -11,9 +11,9 @@ LANG.Strings = {}
 CreateConVar("ttt_language", "auto", FCVAR_ARCHIVE)
 
 LANG.DefaultLanguage = "english"
-LANG.ActiveLanguage	= LANG.DefaultLanguage
+LANG.ActiveLanguage = LANG.DefaultLanguage
 
-LANG.ServerLanguage	= "english"
+LANG.ServerLanguage = "english"
 
 local cached_default, cached_active
 
@@ -227,7 +227,7 @@ LANG.Styles = {
 		print("TTT:	" .. text)
 	end,
 
-	chat_warn	= function(text)
+	chat_warn = function(text)
 		chat.AddText(COLOR_RED, text)
 	end,
 
@@ -269,7 +269,7 @@ function LANG.ProcessMsg(name, params)
 				local name2 = LANG.GetNameParam(v)
 
 				--if not name2 then
-					-- TODO test, string to bool?
+				-- TODO test, string to bool?
 				--else
 				if name2 then
 					params[k] = LANG.GetTranslation(name2)

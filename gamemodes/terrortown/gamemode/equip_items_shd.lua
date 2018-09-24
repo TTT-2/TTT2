@@ -25,8 +25,8 @@
 -- The number should increase by a factor of two for every item (ie. ids
 -- should be powers of two).
 EQUIP_NONE = 0
-EQUIP_ARMOR	= 1
-EQUIP_RADAR	= 2
+EQUIP_ARMOR = 1
+EQUIP_RADAR = 2
 EQUIP_DISGUISE = 4
 
 EQUIP_MAX = 4
@@ -47,27 +47,27 @@ function SetupEquipment()
 			EquipmentItems[v.index] = {
 				-- body armor
 				{
-					id		 = EQUIP_ARMOR,
-					type	 = "item_passive",
+					id = EQUIP_ARMOR,
+					type = "item_passive",
 					material = mat_dir .. "icon_armor",
-					name	 = "item_armor",
-					desc	 = "item_armor_desc"
+					name = "item_armor",
+					desc = "item_armor_desc"
 				},
 				-- radar
 				{
-					id		 = EQUIP_RADAR,
-					type	 = "item_active",
+					id = EQUIP_RADAR,
+					type = "item_active",
 					material = mat_dir .. "icon_radar",
-					name	 = "item_radar",
-					desc	 = "item_radar_desc"
+					name = "item_radar",
+					desc = "item_radar_desc"
 				},
 				-- disguiser
 				{
-					id		 = EQUIP_DISGUISE,
-					type	 = "item_active",
+					id = EQUIP_DISGUISE,
+					type = "item_active",
 					material = mat_dir .. "icon_disguise",
-					name	 = "item_disg",
-					desc	 = "item_disg_desc"
+					name = "item_disg",
+					desc = "item_disg_desc"
 				}
 			}
 		end
@@ -90,18 +90,18 @@ function CreateEquipmentWeapon(eq)
 	if not eq.Doublicated then
 		local data = eq.EquipMenuData or {}
 		local base = {
-			id		 = WEPS.GetClass(eq),
-			name	 = eq.ClassName or "Unnamed",
+			id = WEPS.GetClass(eq),
+			name = eq.ClassName or "Unnamed",
 			PrintName = data.name or data.PrintName or eq.PrintName or eq.ClassName or "Unnamed",
-			limited	 = eq.LimitedStock,
-			kind	 = eq.Kind or WEAPON_NONE,
-			slot	 = (eq.Slot or 0) + 1,
+			limited = eq.LimitedStock,
+			kind = eq.Kind or WEAPON_NONE,
+			slot = (eq.Slot or 0) + 1,
 			material = eq.Icon or "vgui/ttt/icon_id",
 			-- the below should be specified in EquipMenuData, in which case
 			-- these values are overwritten
-			type	 = "Type not specified",
-			model	 = "models/weapons/w_bugbait.mdl",
-			desc	 = "No description specified."
+			type = "Type not specified",
+			model = "models/weapons/w_bugbait.mdl",
+			desc = "No description specified."
 		}
 
 		-- Force material to nil so that model key is used when we are
@@ -351,7 +351,7 @@ end
 function InitDefaultEquipment()
 	-- set default equipment tables
 
--- TRAITOR
+	-- TRAITOR
 	local tbl = table.Copy(EquipmentItems[ROLES.TRAITOR.index])
 
 	-- find buyable weapons to load info from
@@ -359,18 +359,18 @@ function InitDefaultEquipment()
 		if v and not v.Doublicated and v.CanBuy and table.HasValue(v.CanBuy, ROLES.TRAITOR.index) then
 			local data = v.EquipMenuData or {}
 			local base = {
-				id		 = WEPS.GetClass(v),
-				name	 = v.ClassName or "Unnamed",
+				id = WEPS.GetClass(v),
+				name = v.ClassName or "Unnamed",
 				PrintName = data.name or data.PrintName or v.PrintName or v.ClassName or "Unnamed",
-				limited	 = v.LimitedStock,
-				kind	 = v.Kind or WEAPON_NONE,
-				slot	 = (v.Slot or 0) + 1,
+				limited = v.LimitedStock,
+				kind = v.Kind or WEAPON_NONE,
+				slot = (v.Slot or 0) + 1,
 				material = v.Icon or "vgui/ttt/icon_id",
 				-- the below should be specified in EquipMenuData, in which case
 				-- these values are overwritten
-				type	 = "Type not specified",
-				model	 = "models/weapons/w_bugbait.mdl",
-				desc	 = "No description specified."
+				type = "Type not specified",
+				model = "models/weapons/w_bugbait.mdl",
+				desc = "No description specified."
 			}
 
 			-- Force material to nil so that model key is used when we are
@@ -393,7 +393,7 @@ function InitDefaultEquipment()
 
 	ROLES.TRAITOR.fallbackTable = tbl
 
--- DETECTIVE
+	-- DETECTIVE
 	tbl = table.Copy(EquipmentItems[ROLES.DETECTIVE.index])
 
 	-- find buyable weapons to load info from
@@ -401,18 +401,18 @@ function InitDefaultEquipment()
 		if v and not v.Doublicated and v.CanBuy and table.HasValue(v.CanBuy, ROLES.DETECTIVE.index) then
 			local data = v.EquipMenuData or {}
 			local base = {
-				id		 = WEPS.GetClass(v),
-				name	 = v.ClassName or "Unnamed",
+				id = WEPS.GetClass(v),
+				name = v.ClassName or "Unnamed",
 				PrintName = data.name or data.PrintName or v.PrintName or v.ClassName or "Unnamed",
-				limited	 = v.LimitedStock,
-				kind	 = v.Kind or WEAPON_NONE,
-				slot	 = (v.Slot or 0) + 1,
+				limited = v.LimitedStock,
+				kind = v.Kind or WEAPON_NONE,
+				slot = (v.Slot or 0) + 1,
 				material = v.Icon or "vgui/ttt/icon_id",
 				-- the below should be specified in EquipMenuData, in which case
 				-- these values are overwritten
-				type	 = "Type not specified",
-				model	 = "models/weapons/w_bugbait.mdl",
-				desc	 = "No description specified."
+				type = "Type not specified",
+				model = "models/weapons/w_bugbait.mdl",
+				desc = "No description specified."
 			}
 
 			-- Force material to nil so that model key is used when we are
@@ -488,7 +488,7 @@ if SERVER then
 
 			table.insert(cut, bit)
 
-			s = string.sub(s, max, -1)
+			s = string.sub(s, max, - 1)
 		end
 
 		local parts = #cut
@@ -524,7 +524,7 @@ if SERVER then
 
 			table.insert(cut, bit)
 
-			s = string.sub(s, max, -1)
+			s = string.sub(s, max, - 1)
 		end
 
 		local parts = #cut
@@ -716,19 +716,19 @@ else -- CLIENT
 			if equip and not equip.Doublicated then
 				local data = equip.EquipMenuData or {}
 				local base = {
-					id		 = WEPS.GetClass(equip),
-					name	 = equip.ClassName or "Unnamed",
+					id = WEPS.GetClass(equip),
+					name = equip.ClassName or "Unnamed",
 					PrintName = data.name or data.PrintName or equip.PrintName or equip.ClassName or "Unnamed",
-					limited	 = equip.LimitedStock,
-					kind	 = equip.Kind or WEAPON_NONE,
-					slot	 = (equip.Slot or 0) + 1,
+					limited = equip.LimitedStock,
+					kind = equip.Kind or WEAPON_NONE,
+					slot = (equip.Slot or 0) + 1,
 					material = equip.Icon or "vgui/ttt/icon_id",
 					-- the below should be specified in EquipMenuData, in which case
 					-- these values are overwritten
-					type	 = "Type not specified",
-					model	 = "models/weapons/w_bugbait.mdl",
-					desc	 = "No description specified.",
-					is_item  = false
+					type = "Type not specified",
+					model = "models/weapons/w_bugbait.mdl",
+					desc = "No description specified.",
+					is_item = false
 				}
 
 				-- Force material to nil so that model key is used when we are

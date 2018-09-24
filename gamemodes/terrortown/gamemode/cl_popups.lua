@@ -30,7 +30,7 @@ local function GetTextForRole(role)
 
 			for _, ply in ipairs(traitors) do
 				if ply ~= LocalPlayer() then
-					traitorlist = traitorlist .. string.rep(" ", 42) .. ply:Nick()	.. "\n"
+					traitorlist = traitorlist .. string.rep(" ", 42) .. ply:Nick() .. "\n"
 				end
 			end
 
@@ -65,7 +65,7 @@ local function RoundStartPopup()
 	dframe:SetMouseInputEnabled(false)
 	dframe:SetKeyboardInputEnabled(false)
 
-	local color = Color(0,0,0, 200)
+	local color = Color(0, 0, 0, 200)
 
 	dframe.Paint = function(s)
 		draw.RoundedBox(8, 0, 0, s:GetWide(), s:GetTall(), color)
@@ -116,7 +116,7 @@ local function IdlePopup()
 	text:SetWrap(true)
 	text:SetText(GetPTranslation("idle_popup", {num = idle_limit, helpkey = Key("gm_showhelp", "F1")}))
 	text:SetDark(true)
-	text:StretchToParent(10,5,10,5)
+	text:StretchToParent(10, 5, 10, 5)
 
 	local bw, bh = 75, 25
 	local cancel = vgui.Create("DButton", dframe)

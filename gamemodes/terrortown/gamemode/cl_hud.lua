@@ -39,13 +39,13 @@ local function RoundedMeter(bs, x, y, w, h, color)
 	surface.DrawRect(x, y + bs, bs, h - bs * 2)
 
 	surface.SetTexture(Tex_Corner8)
-	surface.DrawTexturedRectRotated(x + bs / 2 , y + bs / 2, bs, bs, 0)
-	surface.DrawTexturedRectRotated(x + bs / 2 , y + h - bs / 2, bs, bs, 90)
+	surface.DrawTexturedRectRotated(x + bs / 2, y + bs / 2, bs, bs, 0)
+	surface.DrawTexturedRectRotated(x + bs / 2, y + h - bs / 2, bs, bs, 90)
 
 	if w > 14 then
 		surface.DrawRect(x + w - bs, y + bs, bs, h - bs * 2)
-		surface.DrawTexturedRectRotated(x + w - bs / 2 , y + bs / 2, bs, bs, 270)
-		surface.DrawTexturedRectRotated(x + w - bs / 2 , y + h - bs / 2, bs, bs, 180)
+		surface.DrawTexturedRectRotated(x + w - bs / 2, y + bs / 2, bs, bs, 270)
+		surface.DrawTexturedRectRotated(x + w - bs / 2, y + h - bs / 2, bs, bs, 180)
 	else
 		surface.DrawRect(x + math.max(w - bs, bs), y, bs / 2, h)
 	end
@@ -79,7 +79,7 @@ local roundstate_string = {
 local function GetAmmo(ply)
 	local weap = ply:GetActiveWeapon()
 
-	if not weap or not ply:Alive() then return -1 end
+	if not weap or not ply:Alive() then return - 1 end
 
 	local ammo_inv = weap:Ammo1() or 0
 	local ammo_clip = weap:Clip1() or 0
@@ -160,7 +160,7 @@ local function SpecHUDPaint(client)
 	-- Draw round state
 	local x = margin
 	local height = 32
-	local width	= 250
+	local width = 250
 	local round_y = ScrH() - height - margin
 
 	-- move up a little on low resolutions to allow space for spectator hints

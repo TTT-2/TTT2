@@ -210,18 +210,18 @@ function CORPSE.ShowSearch(ply, rag, covert, long_range)
 	end
 
 	-- init a heap of data we'll be sending
-	local nick	= CORPSE.GetPlayerNick(rag)
-	local role	= rag.was_role
-	local eq	= rag.equipment or EQUIP_NONE
-	local c4	= rag.bomb_wire or -1
-	local dmg	= rag.dmgtype or DMG_GENERIC
-	local wep	= rag.dmgwep or ""
+	local nick = CORPSE.GetPlayerNick(rag)
+	local role = rag.was_role
+	local eq = rag.equipment or EQUIP_NONE
+	local c4 = rag.bomb_wire or - 1
+	local dmg = rag.dmgtype or DMG_GENERIC
+	local wep = rag.dmgwep or ""
 	local words = rag.last_words or ""
 	local hshot = rag.was_headshot or false
 	local dtime = rag.time or 0
 
 	local owner = player.GetBySteamID(rag.sid)
-	owner = IsValid(owner) and owner:EntIndex() or -1
+	owner = IsValid(owner) and owner:EntIndex() or - 1
 
 	-- basic sanity check
 	if not nick or not eq or not role then return end
@@ -266,7 +266,7 @@ function CORPSE.ShowSearch(ply, rag, covert, long_range)
 		-- also send disconnected players as a marker
 		local vic = player.GetBySteamID(vicsid)
 
-		table.insert(kill_entids, IsValid(vic) and vic:EntIndex() or -1)
+		table.insert(kill_entids, IsValid(vic) and vic:EntIndex() or - 1)
 	end
 
 	local lastid = -1
@@ -274,7 +274,7 @@ function CORPSE.ShowSearch(ply, rag, covert, long_range)
 	if rag.lastid and ply:IsActive() and ply:GetRole() == ROLES.DETECTIVE.index then
 		-- if the person this victim last id'd has since disconnected, send -1 to
 		-- indicate this
-		lastid = IsValid(rag.lastid.ent) and rag.lastid.ent:EntIndex() or -1
+		lastid = IsValid(rag.lastid.ent) and rag.lastid.ent:EntIndex() or - 1
 	end
 
 	-- Send a message with basic info
@@ -355,15 +355,15 @@ local crimescene_keys = {
 }
 local poseparams = {
 	"aim_yaw", "move_yaw", "aim_pitch",
---	"spine_yaw", "head_yaw", "head_pitch"
+	--	"spine_yaw", "head_yaw", "head_pitch"
 }
 
 local function GetSceneDataFromPlayer(ply)
 	local data = {
-		pos		= ply:GetPos(),
-		ang		= ply:GetAngles(),
+		pos = ply:GetPos(),
+		ang = ply:GetAngles(),
 		sequence = ply:GetSequence(),
-		cycle	= ply:GetCycle()
+		cycle = ply:GetCycle()
 	}
 
 	for _, param in ipairs(poseparams) do

@@ -58,7 +58,7 @@ function GM:PostDrawTranslucentRenderables()
 	local plys = GetPlayers()
 
 	if client:IsSpecial() and client:IsActive() then
-		dir = (client:GetForward() * -1)
+		dir = (client:GetForward() * - 1)
 
 		for i = 1, #plys do
 			local ply = plys[i]

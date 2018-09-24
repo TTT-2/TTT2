@@ -44,7 +44,7 @@ function PANEL:Init()
 	self.tag:SetMouseInputEnabled(false)
 
 	self.sresult = vgui.Create("DImage", self)
-	self.sresult:SetSize(16,16)
+	self.sresult:SetSize(16, 16)
 	self.sresult:SetMouseInputEnabled(false)
 
 	self.avatar = vgui.Create("AvatarImage", self)
@@ -138,9 +138,9 @@ end
 function PANEL:Paint(width, height)
 	if not IsValid(self.Player) then return end
 
---	if (self.Player:GetFriendStatus() == "friend") then
---		color = Color(236, 181, 113, 255)
---	end
+	--	if (self.Player:GetFriendStatus() == "friend") then
+	--		color = Color(236, 181, 113, 255)
+	--	end
 
 	local ply = self.Player
 	local c = hook.Call("TTTScoreboardRowColorForPlayer", GAMEMODE, ply)
@@ -278,7 +278,7 @@ end
 
 function PANEL:PerformLayout()
 	self.avatar:SetPos(0, 0)
-	self.avatar:SetSize(SB_ROW_HEIGHT,SB_ROW_HEIGHT)
+	self.avatar:SetSize(SB_ROW_HEIGHT, SB_ROW_HEIGHT)
 
 	local fw = sboard_panel.ply_frame:GetWide()
 	self:SetWide(sboard_panel.ply_frame.scroll.Enabled and fw - 16 or fw)

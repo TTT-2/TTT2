@@ -59,7 +59,7 @@ function PANEL:PerformLayout()
 	self.List:SetPadding(2)
 	self.List:SetPaintBackground(false)
 
-	self.Scroll:StretchToParent(3,3,3,3)
+	self.Scroll:StretchToParent(3, 3, 3, 3)
 
 	self.Help:SizeToContents()
 	self.Help:SetPos(5, 5)

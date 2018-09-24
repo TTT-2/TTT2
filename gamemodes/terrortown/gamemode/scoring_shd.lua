@@ -171,7 +171,7 @@ function ScoreTeamBonus(scores, wintype)
 				end
 			end
 
-			bonus[TEAM_TRAITOR] = math.floor(alive_not_traitors * -0.5) + math.ceil(dead_not_traitors * 0.5)
+			bonus[TEAM_TRAITOR] = math.floor(alive_not_traitors * - 0.5) + math.ceil(dead_not_traitors * 0.5)
 		end
 	end
 
@@ -182,11 +182,11 @@ end
 -- we can convert them using this fn
 function KillsToPoints(score)
 	local roleData = GetRoleByIndex(score.r)
-	return (score.suicides * -1)
-			+ score.bonus
-			+ score.tk * roleData.scoreTeamKillsMultiplier
-			+ score.k * roleData.scoreKillsMultiplier
-			+ (score.deaths == 0 and 1 or 0) -- effectively 2 due to team bonus for your own survival
+	return (score.suicides * - 1)
+	 + score.bonus
+	 + score.tk * roleData.scoreTeamKillsMultiplier
+	 + score.k * roleData.scoreKillsMultiplier
+	 + (score.deaths == 0 and 1 or 0) -- effectively 2 due to team bonus for your own survival
 end
 
 ---- Weapon AMMO_ enum stuff, used only in score.lua/cl_score.lua these days

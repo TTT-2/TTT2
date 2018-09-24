@@ -226,8 +226,8 @@ function GM:Initialize()
 	-- Delay reading of cvars until config has definitely loaded
 	GAMEMODE.cvar_init = false
 
-	SetGlobalFloat("ttt_round_end", -1)
-	SetGlobalFloat("ttt_haste_end", -1)
+	SetGlobalFloat("ttt_round_end", - 1)
+	SetGlobalFloat("ttt_haste_end", - 1)
 
 	-- For the paranoid
 	math.randomseed(os.time())
@@ -361,7 +361,7 @@ function UpdateRoleData(ply, first)
 
 		table.insert(cut, bit)
 
-		s = string.sub(s, max, -1)
+		s = string.sub(s, max, - 1)
 	end
 
 	local parts = #cut
@@ -397,7 +397,7 @@ function UpdateSingleRoleData(roleData, ply)
 
 		table.insert(cut, bit)
 
-		s = string.sub(s, max, -1)
+		s = string.sub(s, max, - 1)
 	end
 
 	local parts = #cut
@@ -765,7 +765,7 @@ function TellTraitorsAboutTraitors()
 					end
 				end
 
-				names = string.sub(names, 1, -3)
+				names = string.sub(names, 1, - 3)
 
 				LANG.Msg(v, "round_traitors_more", {names = names})
 			end
@@ -1284,7 +1284,7 @@ function SetRoleTypes(choices, prev_roles, roleCount, availableRoles)
 			choices_i <= type_count
 			or pply:GetBaseKarma() > min_karmas and table.HasValue(prev_roles[ROLES.INNOCENT.index], pply)
 			or math.random(1, 3) == 2
-		) and (
+			) and (
 			choices_i <= type_count
 			or not pply:GetAvoidRole(v.index)
 		) then

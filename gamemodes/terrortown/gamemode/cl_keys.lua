@@ -57,7 +57,7 @@ function GM:PlayerBindPress(ply, bind, pressed)
 			return TBHUD:UseFocused()
 		end
 	elseif string.sub(bind, 1, 4) == "slot" and pressed then
-		local idx = tonumber(string.sub(bind, 5, -1)) or 1
+		local idx = tonumber(string.sub(bind, 5, - 1)) or 1
 
 		-- if radiomenu is open, override weapon select
 		if RADIO.Show then

@@ -16,7 +16,7 @@ local function GetPrintFn(ply)
 	end
 end
 
-local function TraitorSort(a,b)
+local function TraitorSort(a, b)
 	if not IsValid(a) then
 		return true
 	end

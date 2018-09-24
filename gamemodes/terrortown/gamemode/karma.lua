@@ -95,7 +95,7 @@ function KARMA.ApplyKarma(ply)
 			-- this penalty curve sinks more quickly, less parabolic
 			df = 1 + (0.0007 * k) + (-0.000002 * (k ^ 2))
 		else
-			df = 1 + -0.0000025 * (k ^ 2)
+			df = 1 + - 0.0000025 * (k ^ 2)
 		end
 	end
 
@@ -132,7 +132,7 @@ function KARMA.Hurt(attacker, victim, dmginfo)
 	if not IsValid(attacker) or not IsValid(victim) then return end
 
 	if attacker == victim then return end
---	if not attacker:IsPlayer() or not victim:IsPlayer() then return end
+	--	if not attacker:IsPlayer() or not victim:IsPlayer() then return end
 
 	-- Ignore excess damage
 	local hurt_amount = math.min(victim:Health(), dmginfo:GetDamage())
@@ -158,7 +158,7 @@ function KARMA.Hurt(attacker, victim, dmginfo)
 
 		print(Format("%s (%f) killed %s (%f) and gets REWARDED %f", attacker:Nick(), attacker:GetLiveKarma(), victim:Nick(), victim:GetLiveKarma(), reward))
 
-	-- team kills own team
+		-- team kills own team
 	elseif rdaTeam and rdaTeam == rdvTeam then
 		if not WasAvoidable(attacker, victim, dmginfo) then return end
 
@@ -197,7 +197,7 @@ function KARMA.Killed(attacker, victim, dmginfo)
 
 			print(Format("%s (%f) killed %s (%f) and gets REWARDED %f", attacker:Nick(), attacker:GetLiveKarma(), victim:Nick(), victim:GetLiveKarma(), reward))
 
-		-- team kills own team
+			-- team kills own team
 		elseif rdaTeam and rdaTeam == rdvTeam then
 			if not WasAvoidable(attacker, victim, dmginfo) then return end
 
@@ -214,9 +214,9 @@ end
 local expdecay = math.ExponentialDecay
 
 function KARMA.DecayedMultiplier(ply)
-	local max	= config.max:GetFloat()
+	local max = config.max:GetFloat()
 	local start = config.starting:GetFloat()
-	local k	 = ply:GetLiveKarma()
+	local k = ply:GetLiveKarma()
 
 	if config.falloff:GetFloat() <= 0 or k < start then
 		return 1
@@ -224,8 +224,8 @@ function KARMA.DecayedMultiplier(ply)
 		-- if falloff is enabled, then if our karma is above the starting value,
 		-- our round bonus is going to start decreasing as our karma increases
 		local basediff = max - start
-		local plydiff	= k - start
-		local half	 = math.Clamp(config.falloff:GetFloat(), 0.01, 0.99)
+		local plydiff = k - start
+		local half = math.Clamp(config.falloff:GetFloat(), 0.01, 0.99)
 
 		-- exponentially decay the bonus such that when the player's excess karma
 		-- is at (basediff * half) the bonus is half of the original value

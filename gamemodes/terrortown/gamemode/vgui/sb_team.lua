@@ -68,7 +68,7 @@ function PANEL:Paint()
 			cx = cx - v.Width
 
 			if k % 2 == 1 then -- Draw for odd numbered columns
-			surface.DrawRect(cx - v.Width / 2, 0, v.Width, self:GetTall())
+				surface.DrawRect(cx - v.Width / 2, 0, v.Width, self:GetTall())
 			end
 		end
 	else
