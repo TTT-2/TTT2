@@ -829,20 +829,20 @@ local function TimeOfDeath(events, scores, players, traitors)
 					title = T("aw_tod1_title"),
 					text = T("aw_tod1_text"),
 					priority = (e.t - time_near_end) * 2
-					}
-				elseif e.t < time_near_start then
-					return {
-						nick = e.vic.ni,
-						title = T("aw_tod2_title"),
-						text = T("aw_tod2_text"),
-						priority = (time_near_start - e.t) * 2
-					}
-				end
+				}
+			elseif e.t < time_near_start then
+				return {
+					nick = e.vic.ni,
+					title = T("aw_tod2_title"),
+					text = T("aw_tod2_text"),
+					priority = (time_near_start - e.t) * 2
+				}
 			end
 		end
 	end
+end
 
 
-	-- New award functions must be added to this to be used by CLSCORE.
-	-- Note that AWARDS is global. You can just go: table.insert(AWARDS, myawardfn) in your SWEPs.
-	AWARDS = {FirstSuicide, ExplosiveGrant, ExplodedSelf, FirstBlood, AllKills, NumKills_Traitor, NumKills_Inno, FallDeath, Headshots, PistolUser, ShotgunUser, RifleUser, DeagleUser, MAC10User, CrowbarUser, TeamKiller, Burner, SilencedPistolUser, KnifeUser, FlareUser, Coroner, M249User, M16User, CreditFound, FallKill, TimeOfDeath}
+-- New award functions must be added to this to be used by CLSCORE.
+-- Note that AWARDS is global. You can just go: table.insert(AWARDS, myawardfn) in your SWEPs.
+AWARDS = {FirstSuicide, ExplosiveGrant, ExplodedSelf, FirstBlood, AllKills, NumKills_Traitor, NumKills_Inno, FallDeath, Headshots, PistolUser, ShotgunUser, RifleUser, DeagleUser, MAC10User, CrowbarUser, TeamKiller, Burner, SilencedPistolUser, KnifeUser, FlareUser, Coroner, M249User, M16User, CreditFound, FallKill, TimeOfDeath}
