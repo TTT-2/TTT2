@@ -145,12 +145,12 @@ end
 
 hook.Add("TTT2_FinishedSync", "WeaponShopChangeCVARInit", function(ply, first)
 	if first then
-	for _, v in pairs(ROLES) do
-		cvars.AddChangeCallback("ttt_" .. v.abbr .. "_shop_fallback", function(convar_name, value_old, value_new)
-			if value_old ~= value_new then
-			OnChangeCVar(v.index, value_new)
-		end
-	end)
-end
+		for _, v in pairs(ROLES) do
+			cvars.AddChangeCallback("ttt_" .. v.abbr .. "_shop_fallback", function(convar_name, value_old, value_new)
+				if value_old ~= value_new then
+				OnChangeCVar(v.index, value_new)
+			end
+		end)
+	end
 end
 end)

@@ -623,7 +623,7 @@ DefaultEquipment = GetDefaultEquipment()
 -- should be exported !
 hook.Add("TTT2_FinishedSync", "updateDefEquRol", function(ply, first)
 if first then
-DefaultEquipment = GetDefaultEquipment()
+	DefaultEquipment = GetDefaultEquipment()
 end
 end)
 
@@ -641,30 +641,30 @@ end
 
 function SWEPIsBuyable(wepCls)
 if not wepCls then
-return true
+	return true
 end
 
 local name = "t32_" .. wepCls .. "_imp"
 
 if ConVarExists(name) then
-local i = GetConVar(name):GetInt() or 0
+	local i = GetConVar(name):GetInt() or 0
 
-if i == 0 then
-	return false
-end
-
-local choices = {}
-
-for _, v in ipairs(player.GetAll()) do
-	-- everyone on the spec team is in specmode
-	if IsValid(v) and not v:IsSpec() then
-		table.insert(choices, v)
+	if i == 0 then
+		return false
 	end
-end
 
-if #choices < i then
-	return false
-end
+	local choices = {}
+
+	for _, v in ipairs(player.GetAll()) do
+		-- everyone on the spec team is in specmode
+		if IsValid(v) and not v:IsSpec() then
+			table.insert(choices, v)
+		end
+	end
+
+	if #choices < i then
+		return false
+	end
 end
 
 return true
@@ -672,14 +672,14 @@ end
 
 function RegisterNormalWeapon(wep)
 if wep.MinPlayers then
-local tbl = {}
-tbl.cvar = "t32_" .. wep.ClassName .. "_imp"
-tbl.value = tostring(wep.MinPlayers)
-tbl.flags = {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE}
-tbl.slider = true
-tbl.desc = "MinPlayers"
-tbl.max = 100
+	local tbl = {}
+	tbl.cvar = "t32_" .. wep.ClassName .. "_imp"
+	tbl.value = tostring(wep.MinPlayers)
+	tbl.flags = {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE}
+	tbl.slider = true
+	tbl.desc = "MinPlayers"
+	tbl.max = 100
 
-SWEPAddConVar(wep, tbl)
+	SWEPAddConVar(wep, tbl)
 end
 end

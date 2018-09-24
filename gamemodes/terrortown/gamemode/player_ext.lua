@@ -270,124 +270,124 @@ function plymeta:SendLastWords(dmginfo)
 	local ply = self
 
 	timer.Simple(2, function() ply:ResetLastWords() end)
-end
-
-
-function plymeta:ResetViewRoll()
-	local ang = self:EyeAngles()
-
-	if ang.r ~= 0 then
-		ang.r = 0
-		self:SetEyeAngles(ang)
-	end
-end
-
-
-function plymeta:ShouldSpawn()
-	-- do not spawn players who have not been through initspawn
-	if not self:IsSpec() and not self:IsTerror() then return false end
-
-	-- do not spawn forced specs
-	if self:IsSpec() and self:GetForceSpec() then return false end
-
-	return true
-end
-
--- Preps a player for a new round, spawning them if they should. If dead_only is
--- true, only spawns if player is dead, else just makes sure he is healed.
-function plymeta:SpawnForRound(dead_only)
-	hook.Call("PlayerSetModel", GAMEMODE, self)
-	hook.Call("TTTPlayerSetColor", GAMEMODE, self)
-
-	-- wrong alive status and not a willing spec who unforced after prep started
-	-- (and will therefore be "alive")
-	if dead_only and self:Alive() and not self:IsSpec() then
-		-- if the player does not need respawn, make sure he has full health
-		self:SetHealth(self:GetMaxHealth())
-
-		return false
 	end
 
-	if not self:ShouldSpawn() then return false end
 
-	-- reset propspec state that they may have gotten during prep
-	PROPSPEC.Clear(self)
+	function plymeta:ResetViewRoll()
+		local ang = self:EyeAngles()
 
-	-- respawn anyone else
-	if self:Team() == TEAM_SPEC then
-		self:UnSpectate()
+		if ang.r ~= 0 then
+			ang.r = 0
+			self:SetEyeAngles(ang)
+		end
 	end
 
-	self:StripAll()
-	self:SetTeam(TEAM_TERROR)
-	self:Spawn()
 
-	-- tell caller that we spawned
-	return true
-end
+	function plymeta:ShouldSpawn()
+		-- do not spawn players who have not been through initspawn
+		if not self:IsSpec() and not self:IsTerror() then return false end
 
-function plymeta:InitialSpawn()
-	self.has_spawned = false
+		-- do not spawn forced specs
+		if self:IsSpec() and self:GetForceSpec() then return false end
 
-	-- The team the player spawns on depends on the round state
-	self:SetTeam(GetRoundState() == ROUND_PREP and TEAM_TERROR or TEAM_SPEC)
-
-	-- Change some gmod defaults
-	self:SetCanZoom(false)
-	self:SetJumpPower(160)
-	self:SetCrouchedWalkSpeed(0.3)
-	self:SetRunSpeed(220)
-	self:SetWalkSpeed(220)
-	self:SetMaxSpeed(220)
-
-	-- Always spawn innocent initially, traitor will be selected later
-	self:ResetStatus()
-
-	-- Start off with clean, full karma (unless it can and should be loaded)
-	self:InitKarma()
-
-	-- We never have weapons here, but this inits our equipment state
-	self:StripAll()
-end
-
-function plymeta:KickBan(length, reason)
-	-- see admin.lua
-	PerformKickBan(self, length, reason)
-end
-
-local oldSpectate = plymeta.Spectate
-
-function plymeta:Spectate(type)
-	oldSpectate(self, type)
-
-	-- NPCs should never see spectators. A workaround for the fact that gmod NPCs
-	-- do not ignore them by default.
-	self:SetNoTarget(true)
-
-	if type == OBS_MODE_ROAMING then
-		self:SetMoveType(MOVETYPE_NOCLIP)
+		return true
 	end
-end
 
-local oldSpectateEntity = plymeta.SpectateEntity
+	-- Preps a player for a new round, spawning them if they should. If dead_only is
+	-- true, only spawns if player is dead, else just makes sure he is healed.
+	function plymeta:SpawnForRound(dead_only)
+		hook.Call("PlayerSetModel", GAMEMODE, self)
+		hook.Call("TTTPlayerSetColor", GAMEMODE, self)
 
-function plymeta:SpectateEntity(ent)
-	oldSpectateEntity(self, ent)
+		-- wrong alive status and not a willing spec who unforced after prep started
+		-- (and will therefore be "alive")
+		if dead_only and self:Alive() and not self:IsSpec() then
+			-- if the player does not need respawn, make sure he has full health
+			self:SetHealth(self:GetMaxHealth())
 
-	if IsValid(ent) and ent:IsPlayer() then
-		self:SetupHands(ent)
+			return false
+		end
+
+		if not self:ShouldSpawn() then return false end
+
+		-- reset propspec state that they may have gotten during prep
+		PROPSPEC.Clear(self)
+
+		-- respawn anyone else
+		if self:Team() == TEAM_SPEC then
+			self:UnSpectate()
+		end
+
+		self:StripAll()
+		self:SetTeam(TEAM_TERROR)
+		self:Spawn()
+
+		-- tell caller that we spawned
+		return true
 	end
-end
 
-local oldUnSpectate = plymeta.UnSpectate
+	function plymeta:InitialSpawn()
+		self.has_spawned = false
 
-function plymeta:UnSpectate()
-	oldUnSpectate(self)
-	self:SetNoTarget(false)
-end
+		-- The team the player spawns on depends on the round state
+		self:SetTeam(GetRoundState() == ROUND_PREP and TEAM_TERROR or TEAM_SPEC)
 
-function plymeta:GetAvoidRole(role)
-	local name = GetRoleByIndex(role).name
+		-- Change some gmod defaults
+		self:SetCanZoom(false)
+		self:SetJumpPower(160)
+		self:SetCrouchedWalkSpeed(0.3)
+		self:SetRunSpeed(220)
+		self:SetWalkSpeed(220)
+		self:SetMaxSpeed(220)
 
-	return self:GetInfoNum("ttt_avoid_" .. name, 0) > 0
-end
+		-- Always spawn innocent initially, traitor will be selected later
+		self:ResetStatus()
+
+		-- Start off with clean, full karma (unless it can and should be loaded)
+		self:InitKarma()
+
+		-- We never have weapons here, but this inits our equipment state
+		self:StripAll()
+	end
+
+	function plymeta:KickBan(length, reason)
+		-- see admin.lua
+		PerformKickBan(self, length, reason)
+	end
+
+	local oldSpectate = plymeta.Spectate
+
+	function plymeta:Spectate(type)
+		oldSpectate(self, type)
+
+		-- NPCs should never see spectators. A workaround for the fact that gmod NPCs
+		-- do not ignore them by default.
+		self:SetNoTarget(true)
+
+		if type == OBS_MODE_ROAMING then
+			self:SetMoveType(MOVETYPE_NOCLIP)
+		end
+	end
+
+	local oldSpectateEntity = plymeta.SpectateEntity
+
+	function plymeta:SpectateEntity(ent)
+		oldSpectateEntity(self, ent)
+
+		if IsValid(ent) and ent:IsPlayer() then
+			self:SetupHands(ent)
+		end
+	end
+
+	local oldUnSpectate = plymeta.UnSpectate
+
+	function plymeta:UnSpectate()
+		oldUnSpectate(self)
+		self:SetNoTarget(false)
+	end
+
+	function plymeta:GetAvoidRole(role)
+		local name = GetRoleByIndex(role).name
+
+		return self:GetInfoNum("ttt_avoid_" .. name, 0) > 0
+	end
