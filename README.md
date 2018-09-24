@@ -31,11 +31,11 @@ Commands: https://github.com/Alf21/TTT2/wiki/Commands
 - active support => request new features or report bugs to improve TTT2 and take part in development
 
 ## Credits:
-Credits by KingNJenssons (Inspiration as well as the basics of adding a custom role)
-Credits by the TTT Creators (this is just an addon for the TTT Gamemode)
-Credits by Bodysnatch Thunderpants (Created the [TTT] Better Equipment Menu addon)
-Credits by Mineotopia (created icons for the custom roles)
-Credits by Alf21 (created this addon)
+- by KingNJenssons (Inspiration as well as the basics of adding a custom role)
+- by the TTT Creators (this is just an addon for the TTT Gamemode)
+- by Bodysnatch Thunderpants (Created the [TTT] Better Equipment Menu addon)
+- by Mineotopia (created icons for the custom roles)
+- by Alf21 (created this addon)
 
 ## Acknowledgements:
 Special thanks to the following users that reported many bugs and made it possible to play TTT2:
