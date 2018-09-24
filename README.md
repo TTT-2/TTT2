@@ -50,5 +50,5 @@ Special thanks to the following users that reported many bugs and made it possib
 ## Furthermore:
 Discord: https://discord.gg/9njYXGY<br>
 Source: https://github.com/Alf21/TTT2<br>
-Wiki: https://github.com/Alf21/TTT2/wiki
+Wiki: https://github.com/Alf21/TTT2/wiki<br>
 GLua Beautifier: https://gist.github.com/Alf21/e86601521f67fcbb88ddc34bfa778727.js
