@@ -34,9 +34,14 @@ local function RoleChatRecv()
 	local text = net.ReadString()
 	local roleData = GetRoleByIndex(role)
 
-	chat.AddText(roleData.color, Format("(%s) ", string.upper(GetTranslation(roleData.name))),
-		Color(255, 200, 20), sender:Nick(),
-	Color(255, 255, 200), ": " .. text)
+	chat.AddText(
+		roleData.color,
+		Format("(%s) ", string.upper(GetTranslation(roleData.name))),
+		Color(255, 200, 20),
+		sender:Nick(),
+		Color(255, 255, 200),
+		": " .. text
+	)
 end
 net.Receive("TTT_RoleChat", RoleChatRecv)
 

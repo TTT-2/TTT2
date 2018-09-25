@@ -162,6 +162,7 @@ function WSWITCH:Draw(client)
 
 		if not self:DrawWeapon(x, y, col, wep) then
 			self:UpdateWeaponCache()
+
 			return
 		end
 
@@ -196,6 +197,7 @@ end
 
 function WSWITCH:SetSelected(idx)
 	self.Selected = idx
+
 	self:UpdateWeaponCache()
 end
 
