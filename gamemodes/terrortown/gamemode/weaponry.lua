@@ -329,9 +329,9 @@ local function DropActiveAmmo(ply)
 
 	timer.Simple(2, function()
 		if IsValid(box) then
-		box:SetOwner(nil)
-	end
-end)
+			box:SetOwner(nil)
+		end
+	end)
 end
 concommand.Add("ttt_dropammo", DropActiveAmmo)
 
@@ -339,246 +339,246 @@ concommand.Add("ttt_dropammo", DropActiveAmmo)
 -- the map, keep trying until the player has moved to a better spot where it
 -- does work.
 local function GiveEquipmentWeapon(sid, cls)
--- Referring to players by SteamID because a player may disconnect while his
--- unique timer still runs, in which case we want to be able to stop it. For
--- that we need its name, and hence his SteamID.
-local ply = player.GetBySteamID(sid)
-local tmr = "give_equipment" .. sid
+	-- Referring to players by SteamID because a player may disconnect while his
+	-- unique timer still runs, in which case we want to be able to stop it. For
+	-- that we need its name, and hence his SteamID.
+	local ply = player.GetBySteamID(sid)
+	local tmr = "give_equipment" .. sid
 
-if not IsValid(ply) or not ply:IsActiveSpecial() then
-	timer.Remove(tmr)
+	if not IsValid(ply) or not ply:IsActiveSpecial() then
+		timer.Remove(tmr)
 
-	return
-end
-
--- giving attempt, will fail if we're in a crazy spot in the map or perhaps
--- other glitchy cases
-local w = ply:Give(cls)
-
-if not IsValid(w) or not ply:HasWeapon(cls) then
-	if not timer.Exists(tmr) then
-		timer.Create(tmr, 1, 0, function()
-			GiveEquipmentWeapon(sid, cls)
-		end)
+		return
 	end
 
-	-- we will be retrying
-else
-	-- can stop retrying, if we were
-	timer.Remove(tmr)
+	-- giving attempt, will fail if we're in a crazy spot in the map or perhaps
+	-- other glitchy cases
+	local w = ply:Give(cls)
 
-	if w.WasBought then
-		-- some weapons give extra ammo after being bought, etc
-		w:WasBought(ply)
+	if not IsValid(w) or not ply:HasWeapon(cls) then
+		if not timer.Exists(tmr) then
+			timer.Create(tmr, 1, 0, function()
+				GiveEquipmentWeapon(sid, cls)
+			end)
+		end
+
+		-- we will be retrying
+	else
+		-- can stop retrying, if we were
+		timer.Remove(tmr)
+
+		if w.WasBought then
+			-- some weapons give extra ammo after being bought, etc
+			w:WasBought(ply)
+		end
 	end
-end
 end
 
 local function HasPendingOrder(ply)
-return timer.Exists("give_equipment" .. tostring(ply:SteamID()))
+	return timer.Exists("give_equipment" .. tostring(ply:SteamID()))
 end
 
 function GM:TTTCanOrderEquipment(ply, id, is_item)
---- return true to allow buying of an equipment item, false to disallow
-return true
+	--- return true to allow buying of an equipment item, false to disallow
+	return true
 end
 
 -- Equipment buying
 local function OrderEquipment(ply, cmd, args)
-if not IsValid(ply) or #args ~= 1 then return end
+	if not IsValid(ply) or #args ~= 1 then return end
 
-local role = GetShopFallback(ply:GetRole())
+	local role = GetShopFallback(ply:GetRole())
 
-if not ply:IsActive() then return end
+	if not ply:IsActive() then return end
 
-local rd = GetRoleByIndex(role)
+	local rd = GetRoleByIndex(role)
 
-local shopFallback = GetConVar("ttt_" .. rd.abbr .. "_shop_fallback"):GetString()
-if shopFallback == SHOP_DISABLED then return end
+	local shopFallback = GetConVar("ttt_" .. rd.abbr .. "_shop_fallback"):GetString()
+	if shopFallback == SHOP_DISABLED then return end
 
--- no credits, can't happen when buying through menu as button will be off
-if ply:GetCredits() < 1 then return end
+	-- no credits, can't happen when buying through menu as button will be off
+	if ply:GetCredits() < 1 then return end
 
--- it's an item if the arg is an id instead of an ent name
-local id = args[1]
-local is_item = tonumber(id)
+	-- it's an item if the arg is an id instead of an ent name
+	local id = args[1]
+	local is_item = tonumber(id)
 
-if not hook.Run("TTTCanOrderEquipment", ply, id, is_item) then return end
+	if not hook.Run("TTTCanOrderEquipment", ply, id, is_item) then return end
 
--- we use weapons.GetStored to save time on an unnecessary copy, we will not
--- be modifying it
-local swep_table = not is_item and weapons.GetStored(id)
+	-- we use weapons.GetStored to save time on an unnecessary copy, we will not
+	-- be modifying it
+	local swep_table = not is_item and weapons.GetStored(id)
 
--- some weapons can only be bought once per player per round, this used to be
--- defined in a table here, but is now in the SWEP's table
-if swep_table and swep_table.LimitedStock and ply:HasBought(id) then
-	LANG.Msg(ply, "buy_no_stock")
-
-	return
-end
-
-local received = false
-
-if is_item then
-	id = tonumber(id)
-
-	-- item whitelist check
-	local allowed = GetEquipmentItem(role, id)
-	if not allowed then
-		print(ply, "tried to buy item not buyable for his class:", id)
+	-- some weapons can only be bought once per player per round, this used to be
+	-- defined in a table here, but is now in the SWEP's table
+	if swep_table and swep_table.LimitedStock and ply:HasBought(id) then
+		LANG.Msg(ply, "buy_no_stock")
 
 		return
 	end
 
-	-- ownership check and finalise
-	if id and EQUIP_NONE < id and not ply:HasEquipmentItem(id) then
-		ply:GiveEquipmentItem(id)
+	local received = false
 
-		received = true
-	end
-elseif swep_table then
-	-- weapon whitelist check
-	if not table.HasValue(swep_table.CanBuy, role) then
-		print(ply, "tried to buy weapon his role is not permitted to buy")
+	if is_item then
+		id = tonumber(id)
 
-		return
-	end
+		-- item whitelist check
+		local allowed = GetEquipmentItem(role, id)
+		if not allowed then
+			print(ply, "tried to buy item not buyable for his class:", id)
 
-	-- if we have a pending order because we are in a confined space, don't
-	-- start a new one
-	if HasPendingOrder(ply) then
-		LANG.Msg(ply, "buy_pending")
-
-		return
-	end
-
-	-- the item is just buyable if there is a special amount of players
-	if not SWEPIsBuyable(swep_table.ClassName) then return end
-
-	-- no longer restricted to only WEAPON_EQUIP weapons, just anything that
-	-- is whitelisted and carryable
-	if ply:CanCarryWeapon(swep_table) then
-		GiveEquipmentWeapon(ply:SteamID(), id)
-
-		received = true
-	end
-end
-
-if received then
-	ply:SubtractCredits(1)
-
-	LANG.Msg(ply, "buy_received")
-
-	ply:AddBought(id)
-
-	timer.Simple(0.5, function()
-		if not IsValid(ply) then return end
-
-		net.Start("TTT_BoughtItem")
-		net.WriteBit(is_item)
-
-		if is_item then
-			net.WriteUInt(id, 16)
-		else
-			net.WriteString(id)
+			return
 		end
 
-		net.Send(ply)
-	end)
+		-- ownership check and finalise
+		if id and EQUIP_NONE < id and not ply:HasEquipmentItem(id) then
+			ply:GiveEquipmentItem(id)
 
-	hook.Call("TTTOrderedEquipment", GAMEMODE, ply, id, is_item)
-end
+			received = true
+		end
+	elseif swep_table then
+		-- weapon whitelist check
+		if not table.HasValue(swep_table.CanBuy, role) then
+			print(ply, "tried to buy weapon his role is not permitted to buy")
+
+			return
+		end
+
+		-- if we have a pending order because we are in a confined space, don't
+		-- start a new one
+		if HasPendingOrder(ply) then
+			LANG.Msg(ply, "buy_pending")
+
+			return
+		end
+
+		-- the item is just buyable if there is a special amount of players
+		if not SWEPIsBuyable(swep_table.ClassName) then return end
+
+		-- no longer restricted to only WEAPON_EQUIP weapons, just anything that
+		-- is whitelisted and carryable
+		if ply:CanCarryWeapon(swep_table) then
+			GiveEquipmentWeapon(ply:SteamID(), id)
+
+			received = true
+		end
+	end
+
+	if received then
+		ply:SubtractCredits(1)
+
+		LANG.Msg(ply, "buy_received")
+
+		ply:AddBought(id)
+
+		timer.Simple(0.5, function()
+			if not IsValid(ply) then return end
+
+			net.Start("TTT_BoughtItem")
+			net.WriteBit(is_item)
+
+			if is_item then
+				net.WriteUInt(id, 16)
+			else
+				net.WriteString(id)
+			end
+
+			net.Send(ply)
+		end)
+
+		hook.Call("TTTOrderedEquipment", GAMEMODE, ply, id, is_item)
+	end
 end
 concommand.Add("ttt_order_equipment", OrderEquipment)
 
 function GM:TTTToggleDisguiser(ply, state)
--- Can be used to prevent players from using this button.
--- return true to prevent it.
+	-- Can be used to prevent players from using this button.
+	-- return true to prevent it.
 end
 
 local function SetDisguise(ply, cmd, args)
-if not IsValid(ply) or not ply:IsActive() and ply:HasTeamRole(TEAM_TRAITOR) then return end
+	if not IsValid(ply) or not ply:IsActive() and ply:HasTeamRole(TEAM_TRAITOR) then return end
 
-if ply:HasEquipmentItem(EQUIP_DISGUISE) then
-	local state = #args == 1 and tobool(args[1])
+	if ply:HasEquipmentItem(EQUIP_DISGUISE) then
+		local state = #args == 1 and tobool(args[1])
 
-	if hook.Run("TTTToggleDisguiser", ply, state) then return end
+		if hook.Run("TTTToggleDisguiser", ply, state) then return end
 
-	ply:SetNWBool("disguised", state)
-	LANG.Msg(ply, state and "disg_turned_on" or "disg_turned_off")
-end
+		ply:SetNWBool("disguised", state)
+		LANG.Msg(ply, state and "disg_turned_on" or "disg_turned_off")
+	end
 end
 concommand.Add("ttt_set_disguise", SetDisguise)
 
 local function CheatCredits(ply)
-if IsValid(ply) then
-	ply:AddCredits(10)
-end
+	if IsValid(ply) then
+		ply:AddCredits(10)
+	end
 end
 concommand.Add("ttt_cheat_credits", CheatCredits, nil, nil, FCVAR_CHEAT)
 
 local function TransferCredits(ply, cmd, args)
-if not IsValid(ply) or not ply:IsActiveShopper() then return end
+	if not IsValid(ply) or not ply:IsActiveShopper() then return end
 
-if #args ~= 2 then return end
+	if #args ~= 2 then return end
 
-local sid = tostring(args[1])
-local credits = tonumber(args[2])
+	local sid = tostring(args[1])
+	local credits = tonumber(args[2])
 
-if sid and credits then
-	local target = player.GetBySteamID(sid)
+	if sid and credits then
+		local target = player.GetBySteamID(sid)
 
-	if not IsValid(target)
-	or not target:IsActiveShopper()
-	or target == ply
-	or target:GetRoleData().team == TEAM_INNO
-	or ply:GetRoleData().team == TEAM_INNO
-	or not target:IsTeamMember(ply)
-	then
-		LANG.Msg(ply, "xfer_no_recip")
+		if not IsValid(target)
+		or not target:IsActiveShopper()
+		or target == ply
+		or target:GetRoleData().team == TEAM_INNO
+		or ply:GetRoleData().team == TEAM_INNO
+		or not target:IsTeamMember(ply)
+		then
+			LANG.Msg(ply, "xfer_no_recip")
 
-		return
+			return
+		end
+
+		if ply:GetCredits() < credits then
+			LANG.Msg(ply, "xfer_no_credits")
+
+			return
+		end
+
+		credits = math.Clamp(credits, 0, ply:GetCredits())
+
+		if credits == 0 then return end
+
+		ply:SubtractCredits(credits)
+		target:AddCredits(credits)
+
+		LANG.Msg(ply, "xfer_success", {player = target:Nick()})
+		LANG.Msg(target, "xfer_received", {player = ply:Nick(), num = credits})
 	end
-
-	if ply:GetCredits() < credits then
-		LANG.Msg(ply, "xfer_no_credits")
-
-		return
-	end
-
-	credits = math.Clamp(credits, 0, ply:GetCredits())
-
-	if credits == 0 then return end
-
-	ply:SubtractCredits(credits)
-	target:AddCredits(credits)
-
-	LANG.Msg(ply, "xfer_success", {player = target:Nick()})
-	LANG.Msg(target, "xfer_received", {player = ply:Nick(), num = credits})
-end
 end
 concommand.Add("ttt_transfer_credits", TransferCredits)
 
 -- Protect against non-TTT weapons that may break the HUD
 function GM:WeaponEquip(wep)
-if IsValid(wep) and not wep.Kind then
-	-- only remove if they lack critical stuff
-	wep:Remove()
+	if IsValid(wep) and not wep.Kind then
+		-- only remove if they lack critical stuff
+		wep:Remove()
 
-	ErrorNoHalt("Equipped weapon " .. wep:GetClass() .. " is not compatible with TTT\n")
-end
+		ErrorNoHalt("Equipped weapon " .. wep:GetClass() .. " is not compatible with TTT\n")
+	end
 end
 
 -- non-cheat developer commands can reveal precaching the first time equipment
 -- is bought, so trigger it at the start of a round instead
 function WEPS.ForcePrecache()
-for _, w in ipairs(weapons.GetList()) do
-	if w.WorldModel then
-		util.PrecacheModel(w.WorldModel)
-	end
+	for _, w in ipairs(weapons.GetList()) do
+		if w.WorldModel then
+			util.PrecacheModel(w.WorldModel)
+		end
 
-	if w.ViewModel then
-		util.PrecacheModel(w.ViewModel)
+		if w.ViewModel then
+			util.PrecacheModel(w.ViewModel)
+		end
 	end
-end
 end
