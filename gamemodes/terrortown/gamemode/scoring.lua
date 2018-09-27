@@ -112,7 +112,7 @@ function SCORE:HandleSelection()
 
 	for _, ply in ipairs(player.GetAll()) do
 		-- no innos
-		if ply:GetRole() ~= ROLES.INNOCENT.index then
+		if ply:GetRole() ~= ROLE_INNOCENT then
 			table.insert(tmp[ply:GetRole()], ply:SteamID())
 		end
 	end
@@ -170,7 +170,7 @@ function SCORE:ApplyEventLogScores(wintype)
 	for _, ply in ipairs(player.GetAll()) do
 		scores[ply:SteamID()] = {}
 
-		if ply:GetRole() ~= ROLES.INNOCENT.index then
+		if ply:GetRole() ~= ROLE_INNOCENT then
 			table.insert(tmp[ply:GetRole()], ply:SteamID())
 		end
 	end

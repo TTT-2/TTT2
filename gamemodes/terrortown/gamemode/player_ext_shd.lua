@@ -28,7 +28,7 @@ function plymeta:GetTraitor()
 end
 
 function plymeta:GetDetective()
-	return self:GetRole() == ROLES.DETECTIVE.index
+	return self:GetRole() == ROLE_DETECTIVE
 end
 
 function plymeta:GetRoleData()
@@ -49,7 +49,7 @@ plymeta.IsTraitor = plymeta.GetTraitor
 plymeta.IsDetective = plymeta.GetDetective
 
 function plymeta:IsSpecial()
-	return self:GetRole() ~= ROLES.INNOCENT.index
+	return self:GetRole() ~= ROLE_INNOCENT
 end
 
 -- Player is alive and in an active round
@@ -90,7 +90,7 @@ function plymeta:IsActiveTraitor()
 end
 
 function plymeta:IsActiveDetective()
-	return self:IsActiveRole(ROLES.DETECTIVE.index)
+	return self:IsActiveRole(ROLE_DETECTIVE)
 end
 
 function plymeta:IsActiveSpecial()
@@ -98,7 +98,7 @@ function plymeta:IsActiveSpecial()
 end
 
 function plymeta:IsShopper()
-	if self:GetRole() == ROLES.INNOCENT.index then
+	if self:GetRole() == ROLE_INNOCENT then
 		return false
 	end
 

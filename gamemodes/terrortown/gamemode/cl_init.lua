@@ -382,7 +382,7 @@ function GM:ClearClientState()
 	local client = LocalPlayer()
 	if not client.SetRole then return end -- code not loaded yet
 
-	client:SetRole(ROLES.INNOCENT.index)
+	client:SetRole(ROLE_INNOCENT)
 
 	client.equipment_items = EQUIP_NONE
 	client.equipment_credits = 0
@@ -396,7 +396,7 @@ function GM:ClearClientState()
 	for _, p in ipairs(player.GetAll()) do
 		if IsValid(p) then
 			p.sb_tag = nil
-			p:SetRole(ROLES.INNOCENT.index)
+			p:SetRole(ROLE_INNOCENT)
 			p.search_result = nil
 		end
 	end

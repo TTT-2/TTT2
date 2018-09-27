@@ -46,7 +46,7 @@ function GM:PlayerInitialSpawn(ply)
 		end
 
 		-- completely update
-		SendRoleList(ROLES.DETECTIVE.index)
+		SendRoleList(ROLE_DETECTIVE)
 	end
 
 	-- Game has started, tell this guy where the round is at
@@ -55,7 +55,7 @@ function GM:PlayerInitialSpawn(ply)
 		SendConfirmedTraitors(ply)
 
 		-- completely update
-		SendRoleList(ROLES.DETECTIVE.index, ply)
+		SendRoleList(ROLE_DETECTIVE, ply)
 	end
 
 	-- Handle spec bots
@@ -515,7 +515,7 @@ function GM:PlayerDisconnected(ply)
 		end
 
 		-- completely update
-		SendRoleList(ROLES.DETECTIVE.index)
+		SendRoleList(ROLE_DETECTIVE)
 	end
 
 	if KARMA.IsEnabled() then
@@ -582,16 +582,16 @@ local function CheckCreditAward(victim, attacker)
 	local rd = attacker:GetRoleData()
 
 	-- DET KILLED ANOTHER TEAM AWARD
-	if attacker:GetRole() == ROLES.DETECTIVE.index and not victim:IsTeamMember(attacker) then
+	if attacker:GetRole() == ROLE_DETECTIVE and not victim:IsTeamMember(attacker) then
 		local amt = (ConVarExists("ttt_" .. rd.abbr .. "_credits_traitordead") and GetConVar("ttt_" .. rd.abbr .. "_credits_traitordead"):GetInt() or 1)
 
 		for _, ply in ipairs(player.GetAll()) do
-			if ply:IsActiveRole(ROLES.DETECTIVE.index) then
+			if ply:IsActiveRole(ROLE_DETECTIVE) then
 				ply:AddCredits(amt)
 			end
 		end
 
-		LANG.Msg(GetRoleFilter(ROLES.DETECTIVE.index, true), "credit_det_all", {num = amt})
+		LANG.Msg(GetRoleFilter(ROLE_DETECTIVE, true), "credit_det_all", {num = amt})
 	end
 
 	-- TRAITOR AWARD

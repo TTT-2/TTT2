@@ -68,7 +68,7 @@ function GM:OnPlayerChat(ply, text, teamchat, dead)
 		return BaseClass.OnPlayerChat(self, ply, text, teamchat, dead)
 	end
 
-	if ply:IsActiveRole(ROLES.DETECTIVE.index) then
+	if ply:IsActiveRole(ROLE_DETECTIVE) then
 		AddDetectiveText(ply, text)
 
 		return true

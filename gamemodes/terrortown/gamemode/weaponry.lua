@@ -5,9 +5,7 @@ local IsEquipment = WEPS.IsEquipment
 
 -- Prevent players from picking up multiple weapons of the same type etc
 function GM:PlayerCanPickupWeapon(ply, wep)
-	if not IsValid(wep) or not IsValid(ply) then
-		return
-	end
+	if not IsValid(wep) or not IsValid(ply) then return end
 
 	if ply:IsSpec() then
 		return false
@@ -46,35 +44,35 @@ end
 -- Cache role -> default-weapons table
 local loadout_weapons = {}
 
-local function GetLoadoutWeapons(r)
-	if not loadout_weapons[r] then
-		loadout_weapons[r] = loadout_weapons[r] or {}
+local function GetLoadoutWeapons(role)
+	if not loadout_weapons[role] then
+		loadout_weapons[role] = loadout_weapons[role] or {}
 
 		for _, w in ipairs(weapons.GetList()) do
 			if type(w.InLoadoutFor) == "table" and not w.Doublicated then
 				local cls = WEPS.GetClass(w)
 
-				if table.HasValue(w.InLoadoutFor, r) then
-					table.insert(loadout_weapons[r], cls)
-				elseif table.HasValue(w.InLoadoutFor, ROLES.INNOCENT.index) then -- setup for new roles
+				if table.HasValue(w.InLoadoutFor, role) then
+					table.insert(loadout_weapons[role], cls)
+				elseif table.HasValue(w.InLoadoutFor, ROLE_INNOCENT) then -- setup for new roles
 					local wepTbl = weapons.GetStored(cls)
 					if wepTbl then
-						table.insert(wepTbl.InLoadoutFor, r)
+						table.insert(wepTbl.InLoadoutFor, role)
 					end
 
-					table.insert(loadout_weapons[r], cls)
+					table.insert(loadout_weapons[role], cls)
 				end
 			end
 		end
 	end
 
-	return loadout_weapons[r]
+	return loadout_weapons[role]
 end
 
 -- Give player loadout weapons he should have for his role that he does not have
 -- yet
 local function GiveLoadoutWeapons(ply)
-	local r = GetRoundState() == ROUND_PREP and ROLES.INNOCENT.index or ply:GetRole()
+	local r = GetRoundState() == ROUND_PREP and ROLE_INNOCENT or ply:GetRole()
 	local weps = GetLoadoutWeapons(r)
 
 	if not weps then return end
@@ -89,7 +87,7 @@ end
 local function HasLoadoutWeapons(ply)
 	if ply:IsSpec() then return true end
 
-	local r = GetRoundState() == ROUND_PREP and ROLES.INNOCENT.index or ply:GetRole()
+	local r = GetRoundState() == ROUND_PREP and ROLE_INNOCENT or ply:GetRole()
 	local weps = GetLoadoutWeapons(r)
 
 	if not weps then
@@ -139,7 +137,7 @@ end
 CreateConVar("ttt_detective_hats", "0")
 -- Just hats right now
 local function GiveLoadoutSpecial(ply)
-	if ply:IsActive() and ply:GetRole() == ROLES.DETECTIVE.index and GetConVar("ttt_detective_hats"):GetBool() and CanWearHat(ply) then
+	if ply:IsActive() and ply:GetRole() == ROLE_DETECTIVE and GetConVar("ttt_detective_hats"):GetBool() and CanWearHat(ply) then
 		if not IsValid(ply.hat) then
 			local hat = ents.Create("ttt_hat_deerstalker")
 

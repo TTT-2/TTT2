@@ -9,10 +9,10 @@
 -- make sure the script is also run on the client.
 --
 -- For example:
---	table.insert(EquipmentItems[ROLES.DETECTIVE.index], { id = EQUIP_ARMOR, ... })
+--	table.insert(EquipmentItems[ROLE_DETECTIVE], { id = EQUIP_ARMOR, ... })
 --
 -- Note that for existing items you can just do:
---	table.insert(EquipmentItems[ROLES.DETECTIVE.index], GetEquipmentItem(ROLES.TRAITOR.index, EQUIP_ARMOR))
+--	table.insert(EquipmentItems[ROLE_DETECTIVE], GetEquipmentItem(ROLE_TRAITOR, EQUIP_ARMOR))
 
 -- Special equipment bitflags. Every unique piece of equipment needs its own
 -- id.
@@ -175,7 +175,7 @@ function GetShopFallbackTable(role)
 
 	role, fallback = GetShopFallback(role)
 
-	if fallback == ROLES.INNOCENT.index then -- fallback is SHOP_UNSET
+	if fallback == ROLE_INNOCENT then -- fallback is SHOP_UNSET
 		rd = GetRoleByIndex(role)
 
 		if rd.fallbackTable then
@@ -352,11 +352,11 @@ function InitDefaultEquipment()
 	-- set default equipment tables
 
 	-- TRAITOR
-	local tbl = table.Copy(EquipmentItems[ROLES.TRAITOR.index])
+	local tbl = table.Copy(EquipmentItems[ROLE_TRAITOR])
 
 	-- find buyable weapons to load info from
 	for _, v in ipairs(weapons.GetList()) do
-		if v and not v.Doublicated and v.CanBuy and table.HasValue(v.CanBuy, ROLES.TRAITOR.index) then
+		if v and not v.Doublicated and v.CanBuy and table.HasValue(v.CanBuy, ROLE_TRAITOR) then
 			local data = v.EquipMenuData or {}
 			local base = {
 				id = WEPS.GetClass(v),
@@ -387,18 +387,18 @@ function InitDefaultEquipment()
 	-- mark custom items
 	for _, i in pairs(tbl) do
 		if i and i.id then
-			i.custom = not table.HasValue(DefaultEquipment[ROLES.TRAITOR.index], i.id) -- TODO
+			i.custom = not table.HasValue(DefaultEquipment[ROLE_TRAITOR], i.id) -- TODO
 		end
 	end
 
 	ROLES.TRAITOR.fallbackTable = tbl
 
 	-- DETECTIVE
-	tbl = table.Copy(EquipmentItems[ROLES.DETECTIVE.index])
+	tbl = table.Copy(EquipmentItems[ROLE_DETECTIVE])
 
 	-- find buyable weapons to load info from
 	for _, v in ipairs(weapons.GetList()) do
-		if v and not v.Doublicated and v.CanBuy and table.HasValue(v.CanBuy, ROLES.DETECTIVE.index) then
+		if v and not v.Doublicated and v.CanBuy and table.HasValue(v.CanBuy, ROLE_DETECTIVE) then
 			local data = v.EquipMenuData or {}
 			local base = {
 				id = WEPS.GetClass(v),
@@ -429,7 +429,7 @@ function InitDefaultEquipment()
 	-- mark custom items
 	for _, i in pairs(tbl) do
 		if i and i.id then
-			i.custom = not table.HasValue(DefaultEquipment[ROLES.DETECTIVE.index], i.id) -- TODO
+			i.custom = not table.HasValue(DefaultEquipment[ROLE_DETECTIVE], i.id) -- TODO
 		end
 	end
 

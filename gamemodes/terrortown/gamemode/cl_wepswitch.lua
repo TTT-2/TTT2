@@ -67,7 +67,7 @@ function WSWITCH:DrawBarBg(x, y, w, h, col)
 	local b = 8 --bordersize
 	local bh = b / 2
 
-	local role = LocalPlayer():GetRole() or ROLES.INNOCENT.index
+	local role = LocalPlayer():GetRole() or ROLE_INNOCENT
 	local c = col.tip[role]
 
 	-- Draw the colour tip

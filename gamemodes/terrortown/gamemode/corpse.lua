@@ -167,7 +167,7 @@ local function CallDetective(ply, cmd, args)
 			-- show indicator to detectives
 			net.Start("TTT_CorpseCall")
 			net.WriteVector(rag:GetPos())
-			net.Send(GetRoleFilter(ROLES.DETECTIVE.index, true))
+			net.Send(GetRoleFilter(ROLE_DETECTIVE, true))
 
 			LANG.Msg("body_call", {player = ply:Nick(), victim = CORPSE.GetPlayerNick(rag, "someone")})
 		else
@@ -271,7 +271,7 @@ function CORPSE.ShowSearch(ply, rag, covert, long_range)
 
 	local lastid = -1
 
-	if rag.lastid and ply:IsActive() and ply:GetRole() == ROLES.DETECTIVE.index then
+	if rag.lastid and ply:IsActive() and ply:GetRole() == ROLE_DETECTIVE then
 		-- if the person this victim last id'd has since disconnected, send -1 to
 		-- indicate this
 		lastid = IsValid(rag.lastid.ent) and rag.lastid.ent:EntIndex() or - 1
@@ -308,7 +308,7 @@ function CORPSE.ShowSearch(ply, rag, covert, long_range)
 	-- 200
 
 	-- If found by detective, send to all, else just the finder
-	if ply:IsActiveRole(ROLES.DETECTIVE.index) then
+	if ply:IsActiveRole(ROLE_DETECTIVE) then
 		net.Broadcast()
 	else
 		net.Send(ply)

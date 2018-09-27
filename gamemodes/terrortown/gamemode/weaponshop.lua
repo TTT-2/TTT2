@@ -6,19 +6,19 @@ end)
 
 -- TODO rebuild with database handling instead of dini file creation like
 function WeaponshopHasEquipment(roleData, equip)
-	local role = string.lower(roleData.name)
-	local filename = "roleweapons/" .. role .. "/" .. equip .. ".txt"
+	local rolename = string.lower(roleData.name)
+	local filename = "roleweapons/" .. rolename .. "/" .. equip .. ".txt"
 
 	return file.Exists(filename, "DATA")
 end
 
 function AddToWeaponshop(ply, roleData, equip)
-	local role = string.lower(roleData.name)
-	local filename = "roleweapons/" .. role .. "/" .. equip .. ".txt"
+	local rolename = string.lower(roleData.name)
+	local filename = "roleweapons/" .. rolename .. "/" .. equip .. ".txt"
 
 	if not file.Exists(filename, "DATA") then
 		file.CreateDir("roleweapons") -- Create the directory
-		file.CreateDir("roleweapons/" .. role) -- Create the directory
+		file.CreateDir("roleweapons/" .. rolename) -- Create the directory
 		file.Write(filename, "") -- Write to .txt
 
 		local is_item = GetEquipmentItemByFileName(equip)
@@ -33,14 +33,14 @@ function AddToWeaponshop(ply, roleData, equip)
 
 		-- last but not least, notify each player
 		for _, v in ipairs(player.GetAll()) do
-			v:ChatPrint("[TTT2][SHOP] " .. ply:Nick() .. " added '" .. equip .. "' into the shop of the " .. role)
+			v:ChatPrint("[TTT2][SHOP] " .. ply:Nick() .. " added '" .. equip .. "' into the shop of the " .. rolename)
 		end
 	end
 end
 
 function RemoveFromWeaponshop(ply, roleData, equip)
-	local role = string.lower(roleData.name)
-	local filename = "roleweapons/" .. role .. "/" .. equip .. ".txt"
+	local rolename = string.lower(roleData.name)
+	local filename = "roleweapons/" .. rolename .. "/" .. equip .. ".txt"
 
 	if file.Exists(filename, "DATA") then
 		file.Delete(filename) -- Write to .txt
@@ -57,7 +57,7 @@ function RemoveFromWeaponshop(ply, roleData, equip)
 
 		-- last but not least, notify each player
 		for _, v in ipairs(player.GetAll()) do
-			v:ChatPrint("[TTT2][SHOP] " .. ply:Nick() .. " removed '" .. equip .. "' from the shop of the " .. role)
+			v:ChatPrint("[TTT2][SHOP] " .. ply:Nick() .. " removed '" .. equip .. "' from the shop of the " .. rolename)
 		end
 	end
 end
@@ -65,7 +65,7 @@ end
 util.AddNetworkString("shop")
 net.Receive("shop", function(len, ply)
 	local add = net.ReadBool()
-	local r = net.ReadUInt(ROLE_BITS)
+	local role = net.ReadUInt(ROLE_BITS)
 	local eq = net.ReadString()
 
 	local equip = GetEquipmentFileName(eq)
@@ -73,7 +73,7 @@ net.Receive("shop", function(len, ply)
 
 	equip = not is_item and eq or equip
 
-	local rd = GetRoleByIndex(r)
+	local rd = GetRoleByIndex(role)
 
 	if add then
 		AddToWeaponshop(ply, rd, equip)

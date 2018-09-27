@@ -92,7 +92,7 @@ function GetTraitorFilter(alive_only)
 end
 
 function GetDetectiveFilter(alive_only)
-	return GetRoleFilter(ROLES.DETECTIVE.index, alive_only)
+	return GetRoleFilter(ROLE_DETECTIVE, alive_only)
 end
 -- end fix
 

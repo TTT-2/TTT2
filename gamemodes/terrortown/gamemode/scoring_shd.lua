@@ -10,7 +10,7 @@ function ScoreInit()
 	return {
 		deaths = 0,
 		suicides = 0,
-		r = ROLES.INNOCENT.index,
+		r = ROLE_INNOCENT,
 		k = 0,
 		tk = 0,
 		roles = tmp,

@@ -128,7 +128,7 @@ function SendInnocentList()
 	table.Shuffle(mergedListForTraitor)
 
 	-- traitors get actual innocent, so they do not reset their traitor mates to innocence
-	SendRoleListMessage(ROLES.INNOCENT.index, mergedListForTraitor, GetRoleTeamFilter(TEAM_TRAITOR))
+	SendRoleListMessage(ROLE_INNOCENT, mergedListForTraitor, GetRoleTeamFilter(TEAM_TRAITOR))
 
 	local tmpList = {}
 
@@ -139,7 +139,7 @@ function SendInnocentList()
 	end
 
 	-- update everyone as innocent w/ traitors and roles with special role filtering
-	SendRoleListMessage(ROLES.INNOCENT.index, mergedList, GetAllRolesFilterWOTeams(tmpList))
+	SendRoleListMessage(ROLE_INNOCENT, mergedList, GetAllRolesFilterWOTeams(tmpList))
 end
 
 function SendVisibleForTraitorList()
@@ -243,7 +243,7 @@ function SendFullStateUpdate()
 	end
 
 	-- everyone should know who is detective
-	SendRoleList(ROLES.DETECTIVE.index)
+	SendRoleList(ROLE_DETECTIVE)
 
 	-- update players at the end, because they were overwritten as innos, except traitors
 	SendPlayerRoles()
@@ -253,7 +253,7 @@ function SendRoleReset(ply_or_rf)
 	local plys = player.GetAll()
 
 	net.Start("TTT_RoleList")
-	net.WriteUInt(ROLES.INNOCENT.index, ROLE_BITS)
+	net.WriteUInt(ROLE_INNOCENT, ROLE_BITS)
 
 	net.WriteUInt(#plys, 8)
 	for _, v in ipairs(plys) do
@@ -286,7 +286,7 @@ local function request_rolelist(ply)
 		end
 
 		-- just send detectives to all
-		SendRoleList(ROLES.DETECTIVE.index, ply)
+		SendRoleList(ROLE_DETECTIVE, ply)
 
 		-- update traitors
 		if not ply:GetRoleData().specialRoleFilter then
@@ -311,7 +311,7 @@ concommand.Add("_ttt_request_rolelist", request_rolelist)
 
 -- override
 local function force_terror(ply)
-	ply:UpdateRole(ROLES.INNOCENT.index)
+	ply:UpdateRole(ROLE_INNOCENT)
 	ply:UnSpectate()
 	ply:SetTeam(TEAM_TERROR)
 
@@ -326,7 +326,7 @@ concommand.Add("ttt_force_terror", force_terror, nil, nil, FCVAR_CHEAT)
 
 -- override
 local function force_traitor(ply)
-	ply:UpdateRole(ROLES.TRAITOR.index)
+	ply:UpdateRole(ROLE_TRAITOR)
 
 	SendFullStateUpdate()
 end
@@ -334,7 +334,7 @@ concommand.Add("ttt_force_traitor", force_traitor, nil, nil, FCVAR_CHEAT)
 
 -- override
 local function force_detective(ply)
-	ply:UpdateRole(ROLES.DETECTIVE.index)
+	ply:UpdateRole(ROLE_DETECTIVE)
 
 	SendFullStateUpdate()
 end

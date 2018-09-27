@@ -585,7 +585,7 @@ local function CleanUp()
 	for _, v in ipairs(player.GetAll()) do
 		if IsValid(v) then
 			v:StripWeapons()
-			v:SetRole(ROLES.INNOCENT.index)
+			v:SetRole(ROLE_INNOCENT)
 		end
 	end
 
@@ -1142,13 +1142,13 @@ function SelectRoles()
 		-- everyone on the spec team is in specmode
 		if IsValid(v) and not v:IsSpec() then
 			-- save previous role and sign up as possible traitor/detective
-			local r = GAMEMODE.LastRole[v:SteamID()] or v:GetRole() or ROLES.INNOCENT.index
+			local r = GAMEMODE.LastRole[v:SteamID()] or v:GetRole() or ROLE_INNOCENT
 
 			table.insert(prev_roles[r], v)
 			table.insert(choices, v)
 		end
 
-		v:SetRole(ROLES.INNOCENT.index)
+		v:SetRole(ROLE_INNOCENT)
 	end
 
 	-- determine how many of each role we want
@@ -1171,8 +1171,8 @@ function SelectRoles()
 		-- make this guy traitor if he was not a traitor last time, or if he makes
 		-- a roll
 		-- TODO why 30 percent chance to get traitor ? add traitor_pct CONVAR ! maybe not fair split !
-		if IsValid(pply) and (not table.HasValue(prev_roles[ROLES.TRAITOR.index], pply) or math.random(1, 3) == 2) then
-			pply:SetRole(ROLES.TRAITOR.index)
+		if IsValid(pply) and (not table.HasValue(prev_roles[ROLE_TRAITOR], pply) or math.random(1, 3) == 2) then
+			pply:SetRole(ROLE_TRAITOR)
 
 			table.remove(choices, pick)
 			table.insert(traitorList, pply)
@@ -1282,7 +1282,7 @@ function SetRoleTypes(choices, prev_roles, roleCount, availableRoles)
 		-- if player was last round innocent, he will be another role (if he has enough karma)
 		if IsValid(pply) and (
 			choices_i <= type_count
-			or pply:GetBaseKarma() > min_karmas and table.HasValue(prev_roles[ROLES.INNOCENT.index], pply)
+			or pply:GetBaseKarma() > min_karmas and table.HasValue(prev_roles[ROLE_INNOCENT], pply)
 			or math.random(1, 3) == 2
 			) and (
 			choices_i <= type_count

@@ -139,7 +139,7 @@ function RADAR:Draw(client)
 		size = size + 1
 	end
 
-	if client:IsActiveRole(ROLES.DETECTIVE.index) and size > 0 then
+	if client:IsActiveRole(ROLE_DETECTIVE) and size > 0 then
 		surface.SetTexture(det_beacon)
 		surface.SetTextColor(255, 255, 255, 240)
 		surface.SetDrawColor(255, 255, 255, 230)
@@ -183,14 +183,14 @@ function RADAR:Draw(client)
 				alpha = math.Clamp(alpha * (md / near_cursor_dist), 40, 230)
 			end
 
-			role = tgt.role or ROLES.INNOCENT.index
+			role = tgt.role or ROLE_INNOCENT
 
 			local roleData = GetRoleByIndex(role)
 
-			if role == ROLES.DETECTIVE.index then
+			if role == ROLE_DETECTIVE then
 				surface.SetDrawColor(0, 0, 255, alpha)
 				surface.SetTextColor(0, 0, 255, alpha)
-			elseif role == ROLES.INNOCENT.index then
+			elseif role == ROLE_INNOCENT then
 				surface.SetDrawColor(0, 255, 0, alpha)
 				surface.SetTextColor(0, 255, 0, alpha)
 			elseif roleData.radarColor then
