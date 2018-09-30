@@ -699,628 +699,628 @@ function PrepareRound()
 	-- Mute for a second around traitor selection, to counter a dumb exploit
 	-- related to traitor's mics cutting off for a second when they're selected.
 	timer.Create("selectmute", ptime - 1, 1, function()
-		MuteForRestart(true)
-	end)
+			MuteForRestart(true)
+		end)
 
-	LANG.Msg("round_begintime", {num = ptime})
+		LANG.Msg("round_begintime", {num = ptime})
 
-	SetRoundState(ROUND_PREP)
+		SetRoundState(ROUND_PREP)
 
-	-- Delay spawning until next frame to avoid ent overload
-	timer.Simple(0.01, SpawnEntities)
+		-- Delay spawning until next frame to avoid ent overload
+		timer.Simple(0.01, SpawnEntities)
 
-	-- Undo the roundrestart mute, though they will once again be muted for the
-	-- selectmute timer.
-	timer.Create("restartmute", 1, 1, function()
-		MuteForRestart(false)
-	end)
+		-- Undo the roundrestart mute, though they will once again be muted for the
+		-- selectmute timer.
+		timer.Create("restartmute", 1, 1, function()
+			MuteForRestart(false)
+		end)
 
-	net.Start("TTT_ClearClientState")
-	net.Broadcast()
+		net.Start("TTT_ClearClientState")
+		net.Broadcast()
 
-	-- In case client's cleanup fails, make client set all players to innocent role
-	timer.Simple(1, SendRoleReset)
+		-- In case client's cleanup fails, make client set all players to innocent role
+		timer.Simple(1, SendRoleReset)
 
-	-- Tell hooks and map we started prep
-	hook.Call("TTTPrepareRound", GAMEMODE)
+		-- Tell hooks and map we started prep
+		hook.Call("TTTPrepareRound", GAMEMODE)
 
-	ents.TTT.TriggerRoundStateOutputs(ROUND_PREP)
-end
+		ents.TTT.TriggerRoundStateOutputs(ROUND_PREP)
+	end
 
-function SetRoundEnd(endtime)
-	SetGlobalFloat("ttt_round_end", endtime)
-end
+	function SetRoundEnd(endtime)
+		SetGlobalFloat("ttt_round_end", endtime)
+	end
 
-function IncRoundEnd(incr)
-	SetRoundEnd(GetGlobalFloat("ttt_round_end", 0) + incr)
-end
+	function IncRoundEnd(incr)
+		SetRoundEnd(GetGlobalFloat("ttt_round_end", 0) + incr)
+	end
 
-function TellTraitorsAboutTraitors()
-	local traitornicks = {}
+	function TellTraitorsAboutTraitors()
+		local traitornicks = {}
 
-	hook.Run("TTT2_TellTraitors")
+		hook.Run("TTT2_TellTraitors")
 
-	for _, v in ipairs(player.GetAll()) do
-		if v:HasTeam(TEAM_TRAITOR) then
-			table.insert(traitornicks, v:Nick())
+		for _, v in ipairs(player.GetAll()) do
+			if v:HasTeam(TEAM_TRAITOR) then
+				table.insert(traitornicks, v:Nick())
+			end
+		end
+
+		-- This is ugly as hell, but it's kinda nice to filter out the names of the
+		-- traitors themselves in the messages to them
+		local traitornicks_min = #traitornicks < 2
+
+		for _, v in ipairs(player.GetAll()) do
+			if v:HasTeam(TEAM_TRAITOR) then
+				if traitornicks_min then
+					LANG.Msg(v, "round_traitors_one")
+
+					return
+				else
+					local names = ""
+
+					for _, name in ipairs(traitornicks) do
+						if name ~= v:Nick() then
+							names = names .. name .. ", "
+						end
+					end
+
+					names = string.sub(names, 1, - 3)
+
+					LANG.Msg(v, "round_traitors_more", {names = names})
+				end
+			end
 		end
 	end
 
-	-- This is ugly as hell, but it's kinda nice to filter out the names of the
-	-- traitors themselves in the messages to them
-	local traitornicks_min = #traitornicks < 2
+	function SpawnWillingPlayers(dead_only)
+		local plys = player.GetAll()
+		local wave_delay = GetConVar("ttt_spawn_wave_interval"):GetFloat()
 
-	for _, v in ipairs(player.GetAll()) do
-		if v:HasTeam(TEAM_TRAITOR) then
-			if traitornicks_min then
-				LANG.Msg(v, "round_traitors_one")
+		-- simple method, should make this a case of the other method once that has
+		-- been tested.
+		if wave_delay <= 0 or dead_only then
+			for _, ply in ipairs(player.GetAll()) do
+				if IsValid(ply) then
+					ply:SpawnForRound(dead_only)
+				end
+			end
+		else
+			-- wave method
+			local num_spawns = #GetSpawnEnts()
 
-				return
+			local to_spawn = {}
+
+			for _, ply in RandomPairs(plys) do
+				if IsValid(ply) and ply:ShouldSpawn() then
+					table.insert(to_spawn, ply)
+
+					GAMEMODE:PlayerSpawnAsSpectator(ply)
+				end
+			end
+
+			local sfn = function()
+				local c = 0
+				-- fill the available spawnpoints with players that need
+				-- spawning
+				while c < num_spawns and #to_spawn > 0 do
+					for k, ply in ipairs(to_spawn) do
+						if IsValid(ply) and ply:SpawnForRound() then
+							-- a spawn ent is now occupied
+							c = c + 1
+						end
+						-- Few possible cases:
+						-- 1) player has now been spawned
+						-- 2) player should remain spectator after all
+						-- 3) player has disconnected
+						-- In all cases we don't need to spawn them again.
+						table.remove(to_spawn, k)
+
+						-- all spawn ents are occupied, so the rest will have
+						-- to wait for next wave
+						if c >= num_spawns then
+							break
+						end
+					end
+				end
+
+				MsgN("Spawned " .. c .. " players in spawn wave.")
+
+				if #to_spawn == 0 then
+					timer.Remove("spawnwave")
+					MsgN("Spawn waves ending, all players spawned.")
+				end
+			end
+
+			MsgN("Spawn waves starting.")
+			timer.Create("spawnwave", wave_delay, 0, sfn)
+
+			-- already run one wave, which may stop the timer if everyone is spawned
+			-- in one go
+			sfn()
+		end
+	end
+
+	local function InitRoundEndTime()
+		-- Init round values
+		local endtime = CurTime() + (GetConVar("ttt_roundtime_minutes"):GetInt() * 60)
+
+		if HasteMode() then
+			endtime = CurTime() + (GetConVar("ttt_haste_starting_minutes"):GetInt() * 60)
+			-- this is a "fake" time shown to innocents, showing the end time if no
+			-- one would have been killed, it has no gameplay effect
+			SetGlobalFloat("ttt_haste_end", endtime)
+		end
+
+		SetRoundEnd(endtime)
+	end
+
+	function BeginRound()
+		GAMEMODE:SyncGlobals()
+
+		if CheckForAbort() then return end
+
+		InitRoundEndTime()
+
+		if CheckForAbort() then return end
+
+		-- Respawn dumb people who died during prep
+		SpawnWillingPlayers(true)
+
+		-- Remove their ragdolls
+		ents.TTT.RemoveRagdolls(true)
+
+		if CheckForAbort() then return end
+
+		-- Select traitors & co. This is where things really start so we can't abort
+		-- anymore.
+		SelectRoles()
+		LANG.Msg("round_selected")
+		SendFullStateUpdate()
+
+		-- Edge case where a player joins just as the round starts and is picked as
+		-- traitor, but for whatever reason does not get the traitor state msg. So
+		-- re-send after a second just to make sure everyone is getting it.
+		timer.Simple(1, SendFullStateUpdate)
+		timer.Simple(10, SendFullStateUpdate)
+
+		SCORE:HandleSelection() -- log traitors and detectives
+
+		-- Give the StateUpdate messages ample time to arrive
+		timer.Simple(1.5, TellTraitorsAboutTraitors)
+		timer.Simple(2.5, ShowRoundStartPopup)
+
+		-- Start the win condition check timer
+		StartWinChecks()
+		StartNameChangeChecks()
+
+		timer.Create("selectmute", 1, 1, function()
+			MuteForRestart(false)
+		end)
+
+		GAMEMODE.DamageLog = {}
+		GAMEMODE.RoundStartTime = CurTime()
+
+		-- Sound start alarm
+		SetRoundState(ROUND_ACTIVE)
+		LANG.Msg("round_started")
+		ServerLog("Round proper has begun...\n")
+
+		GAMEMODE:UpdatePlayerLoadouts() -- needs to happen when round_active
+
+		hook.Call("TTTBeginRound", GAMEMODE)
+
+		ents.TTT.TriggerRoundStateOutputs(ROUND_BEGIN)
+	end
+
+	function PrintResultMessage(type)
+		ServerLog("Round ended.\n")
+
+		if type == WIN_TIMELIMIT then
+			LANG.Msg("win_time")
+			ServerLog("Result: timelimit reached, traitors lose.\n")
+		elseif type == WIN_NONE then
+			LANG.Msg("win_bees")
+			ServerLog("Result: The Bees win (Its a Draw).\n")
+		elseif type > WIN_NONE then
+			local roleData = GetRoleByIndex(type)
+
+			LANG.Msg("win_" .. roleData.team)
+			ServerLog("Result: " .. roleData.name .. "s win.\n")
+		else
+			ServerLog("Result: unknown victory condition!\n")
+		end
+	end
+
+	function CheckForMapSwitch()
+		-- Check for mapswitch
+		local rounds_left = math.max(0, GetGlobalInt("ttt_rounds_left", 6) - 1)
+
+		SetGlobalInt("ttt_rounds_left", rounds_left)
+
+		local time_left = math.max(0, (GetConVar("ttt_time_limit_minutes"):GetInt() * 60) - CurTime())
+		local switchmap = false
+		local nextmap = string.upper(game.GetMapNext())
+
+		if rounds_left <= 0 then
+			LANG.Msg("limit_round", {mapname = nextmap})
+			switchmap = true
+		elseif time_left <= 0 then
+			LANG.Msg("limit_time", {mapname = nextmap})
+			switchmap = true
+		end
+
+		if switchmap then
+			timer.Stop("end2prep")
+			timer.Simple(15, game.LoadNextMap)
+		else
+			LANG.Msg("limit_left", {num = rounds_left, time = math.ceil(time_left / 60), mapname = nextmap})
+		end
+	end
+
+	function EndRound(type)
+		PrintResultMessage(type)
+
+		-- first handle round end
+		SetRoundState(ROUND_POST)
+
+		local ptime = math.max(5, GetConVar("ttt_posttime_seconds"):GetInt())
+
+		LANG.Msg("win_showreport", {num = ptime})
+		timer.Create("end2prep", ptime, 1, PrepareRound)
+
+		-- Piggyback on "round end" time global var to show end of phase timer
+		SetRoundEnd(CurTime() + ptime)
+
+		timer.Create("restartmute", ptime - 1, 1, function()
+				MuteForRestart(true)
+			end)
+
+			-- Stop checking for wins
+			StopWinChecks()
+
+			-- send each client the role setup
+			for _, v in pairs(ROLES) do
+				SendRoleList(v.index, player.GetAll())
+			end
+
+			-- We may need to start a timer for a mapswitch, or start a vote
+			CheckForMapSwitch()
+
+			KARMA.RoundEnd()
+
+			-- now handle potentially error prone scoring stuff
+
+			-- register an end of round event
+			SCORE:RoundComplete(type)
+
+			-- update player scores
+			SCORE:ApplyEventLogScores(type)
+
+			-- send the clients the round log, players will be shown the report
+			SCORE:StreamToClients()
+
+			-- server plugins might want to start a map vote here or something
+			-- these hooks are not used by TTT internally
+			-- possible incompatibility for other addons
+			hook.Call("TTTEndRound", GAMEMODE, type)
+
+			ents.TTT.TriggerRoundStateOutputs(ROUND_POST, type)
+		end
+
+		function GM:MapTriggeredEnd(wintype)
+			if wintype > WIN_NONE then
+				self.MapWin = wintype
 			else
-				local names = ""
+				-- print alert and hint for contact
+				print("\n\nCalled hook 'GM:MapTriggeredEnd' with incorrect wintype\n\n")
+			end
+		end
 
-				for _, name in ipairs(traitornicks) do
-					if name ~= v:Nick() then
-						names = names .. name .. ", "
+		-- The most basic win check is whether both sides have one dude alive
+		function GM:TTTCheckForWin()
+			ttt_dbgwin = ttt_dbgwin or CreateConVar("ttt_debug_preventwin", "0", flag_save)
+
+			if ttt_dbgwin:GetBool() then
+				return WIN_NONE
+			end
+
+			if GAMEMODE.MapWin > WIN_NONE then -- a role wins
+				local mw = GAMEMODE.MapWin
+
+				GAMEMODE.MapWin = WIN_NONE
+
+				return mw
+			end
+
+			local alive = {}
+			local b = 0
+
+			for _, v in ipairs(player.GetAll()) do
+				if v:IsTerror() then
+					alive[v:GetTeam()] = true
+				end
+			end
+
+			error("CHANGED WORK BEHAVIOUR OF hook TTT2TTT2_ModifyWinningAlives(alive)")
+			hook.Run("TTT2_ModifyWinningAlives", alive) -- TODO changed working
+
+			for _, v in pairs(GetWinRoles()) do
+				local team = v.team
+
+				if not table.HasValue(checkedTeams, team) and alive[team] and not v.preventWin then
+					-- prevent win of custom role -> maybe own win conditions
+					b = b + 1
+
+					-- irrelevant whether function inserts value properly...
+					table.insert(checkedTeams, team)
+				end
+
+				-- if 2 teams alive
+				if b == 2 then
+					break
+				end
+			end
+
+			-- if 2 teams alive: no one wins
+			if b > 1 then
+				return WIN_NONE -- early out
+			end
+
+			if b == 0 then
+				--return WIN_NONE
+				return WIN_TRAITOR
+			elseif b == 1 then
+				return checkedTeams[1]
+			end
+		end
+
+		local function GetEachRoleCount(ply_count, role_type)
+			if role_type == INNOCENT.name then
+				return 0
+			end
+
+			if ply_count < GetConVar("ttt_" .. role_type .. "_min_players"):GetInt() then
+				return 0
+			end
+
+			-- get number of role members: pct of players rounded down
+			local role_count = math.floor(ply_count * GetConVar("ttt_" .. role_type .. "_pct"):GetFloat())
+
+			local maxm = 1
+
+			if ConVarExists("ttt_" .. role_type .. "_max") then
+				maxm = GetConVar("ttt_" .. role_type .. "_max"):GetInt()
+			end
+
+			if maxm > 1 then
+				-- make sure there is at least 1 of the role
+				role_count = math.Clamp(role_count, 1, maxm)
+			else
+				-- there need to be max and min 1 player of this role
+				--role_count = math.Clamp(role_count, 1, 1)
+				role_count = 1
+			end
+
+			return role_count
+		end
+
+		function SelectRoles()
+			local choices = {}
+			local prev_roles = {}
+
+			for _, v in pairs(ROLES) do
+				if not v.notSelectable then
+					prev_roles[v.index] = {}
+				end
+			end
+
+			if not GAMEMODE.LastRole then GAMEMODE.LastRole = {} end
+
+			for _, v in ipairs(player.GetAll()) do
+				-- everyone on the spec team is in specmode
+				if IsValid(v) and not v:IsSpec() then
+					-- save previous role and sign up as possible traitor/detective
+					local r = GAMEMODE.LastRole[v:SteamID()] or v:GetSubRole() or ROLE_INNOCENT
+
+					table.insert(prev_roles[r], v)
+					table.insert(choices, v)
+				end
+
+				v:SetRole(ROLE_INNOCENT)
+			end
+
+			-- determine how many of each role we want
+			local choice_count = #choices
+			local traitor_count = GetEachRoleCount(choice_count, TRAITOR.name)
+
+			if choice_count == 0 then return end
+
+			local traitorList = {}
+
+			-- first select traitors
+			local ts = 0
+			while ts < traitor_count do
+				-- select random index in choices table
+				local pick = math.random(1, #choices)
+
+				-- the player we consider
+				local pply = choices[pick]
+
+				-- make this guy traitor if he was not a traitor last time, or if he makes
+				-- a roll
+				-- TODO why 30 percent chance to get traitor ? add traitor_pct CONVAR ! maybe not fair split !
+				if IsValid(pply) and (not table.HasValue(prev_roles[ROLE_TRAITOR], pply) or math.random(1, 3) == 2) then
+					pply:SetRole(ROLE_TRAITOR)
+
+					table.remove(choices, pick)
+					table.insert(traitorList, pply)
+
+					ts = ts + 1
+				end
+			end
+
+			if GetConVar("ttt_newroles_enabled"):GetBool() then
+
+				-- now upgrade traitors if there are other traitor roles
+				local roleCount = {}
+				local availableRoles = {}
+
+				for _, v in pairs(ROLES) do
+					if not v.notSelectable and v.team == TEAM_TRAITOR and v ~= TRAITOR and GetConVar("ttt_" .. v.name .. "_enabled"):GetBool() then
+						local b = true
+						local r = (ConVarExists("ttt_" .. v.name .. "_random") and GetConVar("ttt_" .. v.name .. "_random"):GetInt() or 0)
+
+						if r > 0 and r < 100 then
+							b = math.random(1, 100) <= r
+						end
+
+						if b then
+							local tmp = GetEachRoleCount(choice_count, v.name)
+
+							if tmp > 0 then
+								roleCount[v.index] = tmp
+
+								table.insert(availableRoles, v)
+							end
+						end
 					end
 				end
 
-				names = string.sub(names, 1, - 3)
+				SetRoleTypes(traitorList, prev_roles, roleCount, availableRoles)
+			end
 
-				LANG.Msg(v, "round_traitors_more", {names = names})
+			-- now select detectives, explicitly choosing from players who did not get
+			-- traitor, so becoming detective does not mean you lost a chance to be
+			-- traitor
+			local roleCount = {}
+			local availableRoles = {}
+			local newRolesEnabled = GetConVar("ttt_newroles_enabled"):GetBool()
+
+			for _, v in pairs(ROLES) do
+				if not v.notSelectable
+				and (v == DETECTIVE or newRolesEnabled)
+				and v ~= INNOCENT
+				and v.team ~= TEAM_TRAITOR
+				and GetConVar("ttt_" .. v.name .. "_enabled"):GetBool()
+				then
+					local b = true
+					local r = (ConVarExists("ttt_" .. v.name .. "_random") and GetConVar("ttt_" .. v.name .. "_random"):GetInt() or 0)
+
+					if r > 0 and r < 100 then
+						b = math.random(1, 100) <= r
+					end
+
+					if b then
+						local tmp = GetEachRoleCount(choice_count, v.name)
+
+						if tmp > 0 then
+							roleCount[v.index] = tmp
+
+							table.insert(availableRoles, v)
+						end
+					end
+				end
+			end
+
+			SetRoleTypes(choices, prev_roles, roleCount, availableRoles)
+
+			GAMEMODE.LastRole = {}
+
+			for _, ply in ipairs(player.GetAll()) do
+				-- initialize credit count for everyone based on their role
+				ply:SetDefaultCredits()
+
+				-- store a steamid -> role map
+				GAMEMODE.LastRole[ply:SteamID()] = ply:GetSubRole()
+
+				ply:UpdateRole(ply:GetSubRole()) -- just for some hooks and other special things
+
+				SendFullStateUpdate() -- theoretically not needed
 			end
 		end
-	end
-end
 
-function SpawnWillingPlayers(dead_only)
-	local plys = player.GetAll()
-	local wave_delay = GetConVar("ttt_spawn_wave_interval"):GetFloat()
+		function SetRoleTypes(choices, prev_roles, roleCount, availableRoles)
+			local choices_i = #choices
 
-	-- simple method, should make this a case of the other method once that has
-	-- been tested.
-	if wave_delay <= 0 or dead_only then
-		for _, ply in ipairs(player.GetAll()) do
+			while choices_i > 0 and #availableRoles > 0 do
+				local vpick = math.random(1, #availableRoles)
+				local v = availableRoles[vpick]
+
+				local type_count = roleCount[v.index]
+
+				local pick = math.random(1, choices_i)
+				local pply = choices[pick]
+
+				local min_karmas = 0
+
+				if ConVarExists("ttt_" .. v.name .. "_karma_min") then
+					min_karmas = GetConVar("ttt_" .. v.name .. "_karma_min"):GetInt() or 0
+				end
+
+				-- if player was last round innocent, he will be another role (if he has enough karma)
+				if IsValid(pply) and (
+					choices_i <= type_count
+					or pply:GetBaseKarma() > min_karmas and table.HasValue(prev_roles[ROLE_INNOCENT], pply)
+					or math.random(1, 3) == 2
+					) and (
+					choices_i <= type_count
+					or not pply:GetAvoidRole(v.index)
+				) then
+					pply:SetRole(v.index)
+
+					table.remove(choices, pick)
+
+					choices_i = choices_i - 1
+					roleCount[v.index] = (type_count - 1)
+
+					if roleCount[v.index] <= 0 then
+						table.remove(availableRoles, vpick)
+					end
+				end
+			end
+		end
+
+		local function ForceRoundRestart(ply, command, args)
+			-- ply is nil on dedicated server console
+			if not IsValid(ply) or ply:IsAdmin() or ply:IsSuperAdmin() or cvars.Bool("sv_cheats", 0) then
+				LANG.Msg("round_restart")
+
+				StopRoundTimers()
+
+				-- do prep
+				PrepareRound()
+			else
+				ply:PrintMessage(HUD_PRINTCONSOLE, "You must be a GMod Admin or SuperAdmin on the server to use this command, or sv_cheats must be enabled.")
+			end
+		end
+		concommand.Add("ttt_roundrestart", ForceRoundRestart)
+
+		-- Version announce also used in Initialize
+		function ShowVersion(ply)
+			local text = Format("This is [TTT2] Trouble in Terrorist Town 2 (Advanced Update) - by Alf21 (v%s)\n", GAMEMODE.Version)
+
 			if IsValid(ply) then
-				ply:SpawnForRound(dead_only)
+				ply:PrintMessage(HUD_PRINTNOTIFY, text)
+			else
+				Msg(text)
 			end
 		end
-	else
-		-- wave method
-		local num_spawns = #GetSpawnEnts()
+		concommand.Add("ttt_version", ShowVersion)
 
-		local to_spawn = {}
+		function ToggleNewRoles(ply)
+			if ply:IsAdmin() then
+				local b = not GetConVar("ttt_newroles_enabled"):GetBool()
 
-		for _, ply in RandomPairs(plys) do
-			if IsValid(ply) and ply:ShouldSpawn() then
-				table.insert(to_spawn, ply)
+				RunConsoleCommand("ttt_newroles_enabled", b and "1" or "0")
 
-				GAMEMODE:PlayerSpawnAsSpectator(ply)
-			end
-		end
+				local word = "enabled"
 
-		local sfn = function()
-			local c = 0
-			-- fill the available spawnpoints with players that need
-			-- spawning
-			while c < num_spawns and #to_spawn > 0 do
-				for k, ply in ipairs(to_spawn) do
-					if IsValid(ply) and ply:SpawnForRound() then
-						-- a spawn ent is now occupied
-						c = c + 1
-					end
-					-- Few possible cases:
-					-- 1) player has now been spawned
-					-- 2) player should remain spectator after all
-					-- 3) player has disconnected
-					-- In all cases we don't need to spawn them again.
-					table.remove(to_spawn, k)
-
-					-- all spawn ents are occupied, so the rest will have
-					-- to wait for next wave
-					if c >= num_spawns then
-						break
-					end
-				end
-			end
-
-			MsgN("Spawned " .. c .. " players in spawn wave.")
-
-			if #to_spawn == 0 then
-				timer.Remove("spawnwave")
-				MsgN("Spawn waves ending, all players spawned.")
-			end
-		end
-
-		MsgN("Spawn waves starting.")
-		timer.Create("spawnwave", wave_delay, 0, sfn)
-
-		-- already run one wave, which may stop the timer if everyone is spawned
-		-- in one go
-		sfn()
-	end
-end
-
-local function InitRoundEndTime()
-	-- Init round values
-	local endtime = CurTime() + (GetConVar("ttt_roundtime_minutes"):GetInt() * 60)
-
-	if HasteMode() then
-		endtime = CurTime() + (GetConVar("ttt_haste_starting_minutes"):GetInt() * 60)
-		-- this is a "fake" time shown to innocents, showing the end time if no
-		-- one would have been killed, it has no gameplay effect
-		SetGlobalFloat("ttt_haste_end", endtime)
-	end
-
-	SetRoundEnd(endtime)
-end
-
-function BeginRound()
-	GAMEMODE:SyncGlobals()
-
-	if CheckForAbort() then return end
-
-	InitRoundEndTime()
-
-	if CheckForAbort() then return end
-
-	-- Respawn dumb people who died during prep
-	SpawnWillingPlayers(true)
-
-	-- Remove their ragdolls
-	ents.TTT.RemoveRagdolls(true)
-
-	if CheckForAbort() then return end
-
-	-- Select traitors & co. This is where things really start so we can't abort
-	-- anymore.
-	SelectRoles()
-	LANG.Msg("round_selected")
-	SendFullStateUpdate()
-
-	-- Edge case where a player joins just as the round starts and is picked as
-	-- traitor, but for whatever reason does not get the traitor state msg. So
-	-- re-send after a second just to make sure everyone is getting it.
-	timer.Simple(1, SendFullStateUpdate)
-	timer.Simple(10, SendFullStateUpdate)
-
-	SCORE:HandleSelection() -- log traitors and detectives
-
-	-- Give the StateUpdate messages ample time to arrive
-	timer.Simple(1.5, TellTraitorsAboutTraitors)
-	timer.Simple(2.5, ShowRoundStartPopup)
-
-	-- Start the win condition check timer
-	StartWinChecks()
-	StartNameChangeChecks()
-
-	timer.Create("selectmute", 1, 1, function()
-		MuteForRestart(false)
-	end)
-
-	GAMEMODE.DamageLog = {}
-	GAMEMODE.RoundStartTime = CurTime()
-
-	-- Sound start alarm
-	SetRoundState(ROUND_ACTIVE)
-	LANG.Msg("round_started")
-	ServerLog("Round proper has begun...\n")
-
-	GAMEMODE:UpdatePlayerLoadouts() -- needs to happen when round_active
-
-	hook.Call("TTTBeginRound", GAMEMODE)
-
-	ents.TTT.TriggerRoundStateOutputs(ROUND_BEGIN)
-end
-
-function PrintResultMessage(type)
-	ServerLog("Round ended.\n")
-
-	if type == WIN_TIMELIMIT then
-		LANG.Msg("win_time")
-		ServerLog("Result: timelimit reached, traitors lose.\n")
-	elseif type == WIN_NONE then
-		LANG.Msg("win_bees")
-		ServerLog("Result: The Bees win (Its a Draw).\n")
-	elseif type > WIN_NONE then
-		local roleData = GetRoleByIndex(type)
-
-		LANG.Msg("win_" .. roleData.team)
-		ServerLog("Result: " .. roleData.name .. "s win.\n")
-	else
-		ServerLog("Result: unknown victory condition!\n")
-	end
-end
-
-function CheckForMapSwitch()
-	-- Check for mapswitch
-	local rounds_left = math.max(0, GetGlobalInt("ttt_rounds_left", 6) - 1)
-
-	SetGlobalInt("ttt_rounds_left", rounds_left)
-
-	local time_left = math.max(0, (GetConVar("ttt_time_limit_minutes"):GetInt() * 60) - CurTime())
-	local switchmap = false
-	local nextmap = string.upper(game.GetMapNext())
-
-	if rounds_left <= 0 then
-		LANG.Msg("limit_round", {mapname = nextmap})
-		switchmap = true
-	elseif time_left <= 0 then
-		LANG.Msg("limit_time", {mapname = nextmap})
-		switchmap = true
-	end
-
-	if switchmap then
-		timer.Stop("end2prep")
-		timer.Simple(15, game.LoadNextMap)
-	else
-		LANG.Msg("limit_left", {num = rounds_left, time = math.ceil(time_left / 60), mapname = nextmap})
-	end
-end
-
-function EndRound(type)
-	PrintResultMessage(type)
-
-	-- first handle round end
-	SetRoundState(ROUND_POST)
-
-	local ptime = math.max(5, GetConVar("ttt_posttime_seconds"):GetInt())
-
-	LANG.Msg("win_showreport", {num = ptime})
-	timer.Create("end2prep", ptime, 1, PrepareRound)
-
-	-- Piggyback on "round end" time global var to show end of phase timer
-	SetRoundEnd(CurTime() + ptime)
-
-	timer.Create("restartmute", ptime - 1, 1, function()
-		MuteForRestart(true)
-	end)
-
-	-- Stop checking for wins
-	StopWinChecks()
-
-	-- send each client the role setup
-	for _, v in pairs(ROLES) do
-		SendRoleList(v.index, player.GetAll())
-	end
-
-	-- We may need to start a timer for a mapswitch, or start a vote
-	CheckForMapSwitch()
-
-	KARMA.RoundEnd()
-
-	-- now handle potentially error prone scoring stuff
-
-	-- register an end of round event
-	SCORE:RoundComplete(type)
-
-	-- update player scores
-	SCORE:ApplyEventLogScores(type)
-
-	-- send the clients the round log, players will be shown the report
-	SCORE:StreamToClients()
-
-	-- server plugins might want to start a map vote here or something
-	-- these hooks are not used by TTT internally
-	-- possible incompatibility for other addons
-	hook.Call("TTTEndRound", GAMEMODE, type)
-
-	ents.TTT.TriggerRoundStateOutputs(ROUND_POST, type)
-end
-
-function GM:MapTriggeredEnd(wintype)
-	if wintype > WIN_NONE then
-		self.MapWin = wintype
-	else
-		-- print alert and hint for contact
-		print("\n\nCalled hook 'GM:MapTriggeredEnd' with incorrect wintype\n\n")
-	end
-end
-
--- The most basic win check is whether both sides have one dude alive
-function GM:TTTCheckForWin()
-	ttt_dbgwin = ttt_dbgwin or CreateConVar("ttt_debug_preventwin", "0", flag_save)
-
-	if ttt_dbgwin:GetBool() then
-		return WIN_NONE
-	end
-
-	if GAMEMODE.MapWin > WIN_NONE then -- a role wins
-		local mw = GAMEMODE.MapWin
-
-		GAMEMODE.MapWin = WIN_NONE
-
-		return mw
-	end
-
-	local alive = {}
-	local b = 0
-
-	for _, v in ipairs(player.GetAll()) do
-		if v:IsTerror() then
-			alive[v:GetTeam()] = true
-		end
-	end
-
-	error("CHANGED WORK BEHAVIOUR OF hook TTT2TTT2_ModifyWinningAlives(alive)")
-	hook.Run("TTT2_ModifyWinningAlives", alive) -- TODO changed working
-
-	for _, v in pairs(GetWinRoles()) do
-		local team = v.team
-
-		if not table.HasValue(checkedTeams, team) and alive[team] and not v.preventWin then
-			-- prevent win of custom role -> maybe own win conditions
-			b = b + 1
-
-			-- irrelevant whether function inserts value properly...
-			table.insert(checkedTeams, team)
-		end
-
-		-- if 2 teams alive
-		if b == 2 then
-			break
-		end
-	end
-
-	-- if 2 teams alive: no one wins
-	if b > 1 then
-		return WIN_NONE -- early out
-	end
-
-	if b == 0 then
-		--return WIN_NONE
-		return WIN_TRAITOR
-	elseif b == 1 then
-		return checkedTeams[1]
-	end
-end
-
-local function GetEachRoleCount(ply_count, role_type)
-	if role_type == INNOCENT.name then
-		return 0
-	end
-
-	if ply_count < GetConVar("ttt_" .. role_type .. "_min_players"):GetInt() then
-		return 0
-	end
-
-	-- get number of role members: pct of players rounded down
-	local role_count = math.floor(ply_count * GetConVar("ttt_" .. role_type .. "_pct"):GetFloat())
-
-	local maxm = 1
-
-	if ConVarExists("ttt_" .. role_type .. "_max") then
-		maxm = GetConVar("ttt_" .. role_type .. "_max"):GetInt()
-	end
-
-	if maxm > 1 then
-		-- make sure there is at least 1 of the role
-		role_count = math.Clamp(role_count, 1, maxm)
-	else
-		-- there need to be max and min 1 player of this role
-		--role_count = math.Clamp(role_count, 1, 1)
-		role_count = 1
-	end
-
-	return role_count
-end
-
-function SelectRoles()
-	local choices = {}
-	local prev_roles = {}
-
-	for _, v in pairs(ROLES) do
-		if not v.notSelectable then
-			prev_roles[v.index] = {}
-		end
-	end
-
-	if not GAMEMODE.LastRole then GAMEMODE.LastRole = {} end
-
-	for _, v in ipairs(player.GetAll()) do
-		-- everyone on the spec team is in specmode
-		if IsValid(v) and not v:IsSpec() then
-			-- save previous role and sign up as possible traitor/detective
-			local r = GAMEMODE.LastRole[v:SteamID()] or v:GetSubRole() or ROLE_INNOCENT
-
-			table.insert(prev_roles[r], v)
-			table.insert(choices, v)
-		end
-
-		v:SetRole(ROLE_INNOCENT)
-	end
-
-	-- determine how many of each role we want
-	local choice_count = #choices
-	local traitor_count = GetEachRoleCount(choice_count, TRAITOR.name)
-
-	if choice_count == 0 then return end
-
-	local traitorList = {}
-
-	-- first select traitors
-	local ts = 0
-	while ts < traitor_count do
-		-- select random index in choices table
-		local pick = math.random(1, #choices)
-
-		-- the player we consider
-		local pply = choices[pick]
-
-		-- make this guy traitor if he was not a traitor last time, or if he makes
-		-- a roll
-		-- TODO why 30 percent chance to get traitor ? add traitor_pct CONVAR ! maybe not fair split !
-		if IsValid(pply) and (not table.HasValue(prev_roles[ROLE_TRAITOR], pply) or math.random(1, 3) == 2) then
-			pply:SetRole(ROLE_TRAITOR)
-
-			table.remove(choices, pick)
-			table.insert(traitorList, pply)
-
-			ts = ts + 1
-		end
-	end
-
-	if GetConVar("ttt_newroles_enabled"):GetBool() then
-
-		-- now upgrade traitors if there are other traitor roles
-		local roleCount = {}
-		local availableRoles = {}
-
-		for _, v in pairs(ROLES) do
-			if not v.notSelectable and v.team == TEAM_TRAITOR and v ~= TRAITOR and GetConVar("ttt_" .. v.name .. "_enabled"):GetBool() then
-				local b = true
-				local r = (ConVarExists("ttt_" .. v.name .. "_random") and GetConVar("ttt_" .. v.name .. "_random"):GetInt() or 0)
-
-				if r > 0 and r < 100 then
-					b = math.random(1, 100) <= r
+				if not b then
+					word = "disabled"
 				end
 
-				if b then
-					local tmp = GetEachRoleCount(choice_count, v.name)
-
-					if tmp > 0 then
-						roleCount[v.index] = tmp
-
-						table.insert(availableRoles, v)
-					end
-				end
+				ply:PrintMessage(HUD_PRINTNOTIFY, "You " .. word .. " the new roles for TTT!")
 			end
 		end
-
-		SetRoleTypes(traitorList, prev_roles, roleCount, availableRoles)
-	end
-
-	-- now select detectives, explicitly choosing from players who did not get
-	-- traitor, so becoming detective does not mean you lost a chance to be
-	-- traitor
-	local roleCount = {}
-	local availableRoles = {}
-	local newRolesEnabled = GetConVar("ttt_newroles_enabled"):GetBool()
-
-	for _, v in pairs(ROLES) do
-		if not v.notSelectable
-		and (v == DETECTIVE or newRolesEnabled)
-		and v ~= INNOCENT
-		and v.team ~= TEAM_TRAITOR
-		and GetConVar("ttt_" .. v.name .. "_enabled"):GetBool()
-		then
-			local b = true
-			local r = (ConVarExists("ttt_" .. v.name .. "_random") and GetConVar("ttt_" .. v.name .. "_random"):GetInt() or 0)
-
-			if r > 0 and r < 100 then
-				b = math.random(1, 100) <= r
-			end
-
-			if b then
-				local tmp = GetEachRoleCount(choice_count, v.name)
-
-				if tmp > 0 then
-					roleCount[v.index] = tmp
-
-					table.insert(availableRoles, v)
-				end
-			end
-		end
-	end
-
-	SetRoleTypes(choices, prev_roles, roleCount, availableRoles)
-
-	GAMEMODE.LastRole = {}
-
-	for _, ply in ipairs(player.GetAll()) do
-		-- initialize credit count for everyone based on their role
-		ply:SetDefaultCredits()
-
-		-- store a steamid -> role map
-		GAMEMODE.LastRole[ply:SteamID()] = ply:GetSubRole()
-
-		ply:UpdateRole(ply:GetSubRole()) -- just for some hooks and other special things
-
-		SendFullStateUpdate() -- theoretically not needed
-	end
-end
-
-function SetRoleTypes(choices, prev_roles, roleCount, availableRoles)
-	local choices_i = #choices
-
-	while choices_i > 0 and #availableRoles > 0 do
-		local vpick = math.random(1, #availableRoles)
-		local v = availableRoles[vpick]
-
-		local type_count = roleCount[v.index]
-
-		local pick = math.random(1, choices_i)
-		local pply = choices[pick]
-
-		local min_karmas = 0
-
-		if ConVarExists("ttt_" .. v.name .. "_karma_min") then
-			min_karmas = GetConVar("ttt_" .. v.name .. "_karma_min"):GetInt() or 0
-		end
-
-		-- if player was last round innocent, he will be another role (if he has enough karma)
-		if IsValid(pply) and (
-			choices_i <= type_count
-			or pply:GetBaseKarma() > min_karmas and table.HasValue(prev_roles[ROLE_INNOCENT], pply)
-			or math.random(1, 3) == 2
-			) and (
-			choices_i <= type_count
-			or not pply:GetAvoidRole(v.index)
-		) then
-			pply:SetRole(v.index)
-
-			table.remove(choices, pick)
-
-			choices_i = choices_i - 1
-			roleCount[v.index] = (type_count - 1)
-
-			if roleCount[v.index] <= 0 then
-				table.remove(availableRoles, vpick)
-			end
-		end
-	end
-end
-
-local function ForceRoundRestart(ply, command, args)
-	-- ply is nil on dedicated server console
-	if not IsValid(ply) or ply:IsAdmin() or ply:IsSuperAdmin() or cvars.Bool("sv_cheats", 0) then
-		LANG.Msg("round_restart")
-
-		StopRoundTimers()
-
-		-- do prep
-		PrepareRound()
-	else
-		ply:PrintMessage(HUD_PRINTCONSOLE, "You must be a GMod Admin or SuperAdmin on the server to use this command, or sv_cheats must be enabled.")
-	end
-end
-concommand.Add("ttt_roundrestart", ForceRoundRestart)
-
--- Version announce also used in Initialize
-function ShowVersion(ply)
-	local text = Format("This is [TTT2] Trouble in Terrorist Town 2 (Advanced Update) - by Alf21 (v%s)\n", GAMEMODE.Version)
-
-	if IsValid(ply) then
-		ply:PrintMessage(HUD_PRINTNOTIFY, text)
-	else
-		Msg(text)
-	end
-end
-concommand.Add("ttt_version", ShowVersion)
-
-function ToggleNewRoles(ply)
-	if ply:IsAdmin() then
-		local b = not GetConVar("ttt_newroles_enabled"):GetBool()
-
-		RunConsoleCommand("ttt_newroles_enabled", b and "1" or "0")
-
-		local word = "enabled"
-
-		if not b then
-			word = "disabled"
-		end
-
-		ply:PrintMessage(HUD_PRINTNOTIFY, "You " .. word .. " the new roles for TTT!")
-	end
-end
-concommand.Add("ttt_toggle_newroles", ToggleNewRoles)
+		concommand.Add("ttt_toggle_newroles", ToggleNewRoles)

@@ -430,10 +430,10 @@ function GM:KeyRelease(ply, key)
 	if key == IN_USE and IsValid(ply) and ply:IsTerror() then
 		-- see if we need to do some custom usekey overriding
 		local tr = util.TraceLine({
-			start = ply:GetShootPos(),
-			endpos = ply:GetShootPos() + ply:GetAimVector() * 84,
-			filter = ply,
-			mask = MASK_SHOT
+				start = ply:GetShootPos(),
+				endpos = ply:GetShootPos() + ply:GetAimVector() * 84,
+				filter = ply,
+				mask = MASK_SHOT
 		})
 
 		if tr.Hit and IsValid(tr.Entity) then

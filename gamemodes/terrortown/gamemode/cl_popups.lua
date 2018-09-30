@@ -91,54 +91,54 @@ local function RoundStartPopup()
 	dframe:AlignBottom(10)
 
 	timer.Simple(startshowtime:GetInt(), function()
-		dframe:Remove()
-	end)
-end
-concommand.Add("ttt_cl_startpopup", RoundStartPopup)
-
---- Idle message
-local function IdlePopup()
-	local w, h = 300, 180
-
-	local dframe = vgui.Create("DFrame")
-	dframe:SetSize(w, h)
-	dframe:Center()
-	dframe:SetTitle(GetTranslation("idle_popup_title"))
-	dframe:SetVisible(true)
-	dframe:SetMouseInputEnabled(true)
-
-	local inner = vgui.Create("DPanel", dframe)
-	inner:StretchToParent(5, 25, 5, 45)
-
-	local idle_limit = GetGlobalInt("ttt_idle_limit", 300) or 300
-
-	local text = vgui.Create("DLabel", inner)
-	text:SetWrap(true)
-	text:SetText(GetPTranslation("idle_popup", {num = idle_limit, helpkey = Key("gm_showhelp", "F1")}))
-	text:SetDark(true)
-	text:StretchToParent(10, 5, 10, 5)
-
-	local bw, bh = 75, 25
-	local cancel = vgui.Create("DButton", dframe)
-
-	cancel:SetPos(10, h - 40)
-	cancel:SetSize(bw, bh)
-	cancel:SetText(GetTranslation("idle_popup_close"))
-
-	cancel.DoClick = function()
-		dframe:Close()
+			dframe:Remove()
+		end)
 	end
+	concommand.Add("ttt_cl_startpopup", RoundStartPopup)
 
-	local disable = vgui.Create("DButton", dframe)
-	disable:SetPos(w - 185, h - 40)
-	disable:SetSize(175, bh)
-	disable:SetText(GetTranslation("idle_popup_off"))
+	--- Idle message
+	local function IdlePopup()
+		local w, h = 300, 180
 
-	disable.DoClick = function()
-		RunConsoleCommand("ttt_spectator_mode", "0")
-		dframe:Close()
+		local dframe = vgui.Create("DFrame")
+		dframe:SetSize(w, h)
+		dframe:Center()
+		dframe:SetTitle(GetTranslation("idle_popup_title"))
+		dframe:SetVisible(true)
+		dframe:SetMouseInputEnabled(true)
+
+		local inner = vgui.Create("DPanel", dframe)
+		inner:StretchToParent(5, 25, 5, 45)
+
+		local idle_limit = GetGlobalInt("ttt_idle_limit", 300) or 300
+
+		local text = vgui.Create("DLabel", inner)
+		text:SetWrap(true)
+		text:SetText(GetPTranslation("idle_popup", {num = idle_limit, helpkey = Key("gm_showhelp", "F1")}))
+		text:SetDark(true)
+		text:StretchToParent(10, 5, 10, 5)
+
+		local bw, bh = 75, 25
+		local cancel = vgui.Create("DButton", dframe)
+
+		cancel:SetPos(10, h - 40)
+		cancel:SetSize(bw, bh)
+		cancel:SetText(GetTranslation("idle_popup_close"))
+
+		cancel.DoClick = function()
+			dframe:Close()
+		end
+
+		local disable = vgui.Create("DButton", dframe)
+		disable:SetPos(w - 185, h - 40)
+		disable:SetSize(175, bh)
+		disable:SetText(GetTranslation("idle_popup_off"))
+
+		disable.DoClick = function()
+			RunConsoleCommand("ttt_spectator_mode", "0")
+			dframe:Close()
+		end
+
+		dframe:MakePopup()
 	end
-
-	dframe:MakePopup()
-end
-concommand.Add("ttt_cl_idlepopup", IdlePopup)
+	concommand.Add("ttt_cl_idlepopup", IdlePopup)
