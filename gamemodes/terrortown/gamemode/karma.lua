@@ -369,10 +369,10 @@ end
 function KARMA.PrintAll(printfn)
 	for _, ply in ipairs(player.GetAll()) do
 		printfn(Format("%s : Live = %f -- Base = %f -- Dmg = %f\n",
-			ply:Nick(),
-			ply:GetLiveKarma(),
-			ply:GetBaseKarma(),
-			ply:GetDamageFactor() * 100
+				ply:Nick(),
+				ply:GetLiveKarma(),
+				ply:GetBaseKarma(),
+				ply:GetDamageFactor() * 100
 		))
 	end
 end
