@@ -175,10 +175,10 @@ function GM:HUDDrawTargetID()
 	endpos:Add(startpos)
 
 	local trace = util.TraceLine({
-		start = startpos,
-		endpos = endpos,
-		mask = MASK_SHOT,
-		filter = client:GetObserverMode() == OBS_MODE_IN_EYE and {client, client:GetObserverTarget()} or client
+			start = startpos,
+			endpos = endpos,
+			mask = MASK_SHOT,
+			filter = client:GetObserverMode() == OBS_MODE_IN_EYE and {client, client:GetObserverTarget()} or client
 	})
 	local ent = trace.Entity
 

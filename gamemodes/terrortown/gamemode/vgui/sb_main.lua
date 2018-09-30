@@ -13,21 +13,21 @@ local GetPTranslation = LANG.GetParamTranslation
 include("sb_team.lua")
 
 surface.CreateFont("cool_small", {
-	font = "coolvetica",
-	size = 20,
-	weight = 400
+		font = "coolvetica",
+		size = 20,
+		weight = 400
 })
 
 surface.CreateFont("cool_large", {
-	font = "coolvetica",
-	size = 24,
-	weight = 400
+		font = "coolvetica",
+		size = 24,
+		weight = 400
 })
 
 surface.CreateFont("treb_small", {
-	font = "Trebuchet18",
-	size = 14,
-	weight = 700
+		font = "Trebuchet18",
+		size = 14,
+		weight = 700
 })
 
 CreateClientConVar("ttt_scoreboard_sorting", "name", true, false, "name | role | karma | score | deaths | ping")
