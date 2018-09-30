@@ -1,3 +1,5 @@
+-- TODO REWORK
+error("REWORK cl_scoring.lua")
 -- Game report
 
 include("cl_awards.lua")
@@ -270,7 +272,7 @@ end
 
 function CLSCORE:BuildHilitePanel(dpanel)
 	local w, h = dpanel:GetSize()
-	local teamRole = ROLES.INNOCENT
+	local teamRole = INNOCENT
 	local title = {c = teamRole.color, txt = "hilite_win_" .. teamRole.name}
 	local endtime = self.StartTime
 

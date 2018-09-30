@@ -23,7 +23,7 @@ local function VoiceNotifyThink(pnl)
 
 	if not (GetGlobalBool("ttt_locational_voice", false) and not pnl.ply:IsSpec() and pnl.ply ~= client) then return end
 
-	if client:IsActive() and pnl.ply:IsActive() and client:IsTeamMember(pnl.ply) then return end
+	if client:IsActive() and pnl.ply:IsActive() and client:IsInTeam(pnl.ply) then return end
 
 	local d = client:GetPos():Distance(pnl.ply:GetPos())
 
@@ -34,6 +34,7 @@ local PlayerVoicePanels = {}
 
 function GM:PlayerStartVoice(ply)
 	local client = LocalPlayer()
+	local csrd = client:GetSubRoleData()
 
 	if not IsValid(g_VoicePanelList) or not IsValid(client) then return end
 
@@ -44,13 +45,13 @@ function GM:PlayerStartVoice(ply)
 
 	-- Tell server this is global
 	if client == ply then
-		if client:IsActive() and not client:HasTeamRole(TEAM_INNO) and (not client:GetRoleData().unknownTeam or client:HasTeamRole(TEAM_TRAITOR)) then
+		if client:IsActive() and not client:HasTeam(TEAM_INNO) and (not csrd.unknownTeam or client:HasTeam(TEAM_TRAITOR)) then
 			if not client:KeyDown(IN_SPEED) and not client:KeyDownLast(IN_SPEED) then
-				client[client:GetRoleData().team .. "_gvoice"] = true
+				client[client:GetTeam() .. "_gvoice"] = true
 
 				RunConsoleCommand("rvog", "1")
 			else
-				client[client:GetRoleData().team .. "_gvoice"] = false
+				client[client:GetTeam() .. "_gvoice"] = false
 
 				RunConsoleCommand("rvog", "0")
 			end
@@ -81,16 +82,15 @@ function GM:PlayerStartVoice(ply)
 	end
 
 	-- roles things
-	if client:IsActive() and not client:HasTeamRole(TEAM_INNO) and (not client:GetRoleData().unknownTeam or client:HasTeamRole(TEAM_TRAITOR)) then
-		local rd = client:GetRoleData()
-
+	-- TODO check if color is right. Maybe use color of ply instead of client if client ~= ply !
+	if client:IsActive() and not client:HasTeam(TEAM_INNO) and (not csrd.unknownTeam or client:HasTeam(TEAM_TRAITOR)) then
 		if ply == client then
-			if not client[rd.team .. "_gvoice"] then
-				pnl.Color = rd.color
+			if not client[client:GetTeam() .. "_gvoice"] then
+				pnl.Color = csrd.color
 			end
-		elseif ply:IsTeamMember(client) then
-			if not ply[rd.team .. "_gvoice"] then
-				pnl.Color = rd.color
+		elseif ply:IsInTeam(client) then
+			if not ply[client:GetTeam() .. "_gvoice"] then
+				pnl.Color = csrd.color
 			end
 		end
 	end
@@ -98,7 +98,8 @@ function GM:PlayerStartVoice(ply)
 	PlayerVoicePanels[ply] = pnl
 
 	-- run ear gesture
-	if not (ply:IsActive() and not ply:HasTeamRole(TEAM_INNO) and (not ply:GetRoleData().unknownTeam or ply:HasTeamRole(TEAM_TRAITOR)) and not ply[ply:GetRoleData().team .. "_gvoice"]) then
+	-- TODO why using ply here?
+	if not (ply:IsActive() and not ply:HasTeam(TEAM_INNO) and (not ply:GetSubRoleData().unknownTeam or ply:HasTeam(TEAM_TRAITOR)) and not ply[ply:GetTeam() .. "_gvoice"]) then
 		ply:AnimPerformGesture(ACT_GMOD_IN_CHAT)
 	end
 end
@@ -112,12 +113,12 @@ local function ReceiveVoiceState()
 
 	local lply = LocalPlayer()
 
-	if not IsValid(lply) or not (lply:IsActive() and not lply:HasTeamRole(TEAM_INNO) and (not lply:GetRoleData().unknownTeam or lply:HasTeamRole(TEAM_TRAITOR))) then return end
+	if not IsValid(lply) or not (lply:IsActive() and not lply:HasTeam(TEAM_INNO) and (not lply:GetSubRoleData().unknownTeam or lply:HasTeam(TEAM_TRAITOR))) then return end
 
 	local ply = player.GetByID(idx)
 
 	if IsValid(ply) then
-		ply[ply:GetRoleData().team .. "_gvoice"] = state
+		ply[ply:GetTeam() .. "_gvoice"] = state
 
 		if IsValid(PlayerVoicePanels[ply]) then
 			PlayerVoicePanels[ply].Color = state and Color(0, 200, 0) or Color(200, 0, 0)
@@ -143,7 +144,7 @@ function GM:PlayerEndVoice(ply, no_reset)
 	end
 
 	if IsValid(ply) and not no_reset then
-		ply[ply:GetRoleData().team .. "_gvoice"] = false
+		ply[ply:GetTeam() .. "_gvoice"] = false
 	end
 
 	if ply == LocalPlayer() then
@@ -232,8 +233,8 @@ local function GetDrainRate()
 	end
 end
 
-local function IsRoleChatting(client)
-	return client:IsActive() and not client:HasTeamRole(TEAM_INNO) and (not client:GetRoleData().unknownTeam or client:HasTeamRole(TEAM_TRAITOR)) and not client[client:GetRoleData().team .. "_gvoice"]
+local function IsRoleChatting(ply)
+	return ply:IsActive() and not ply:HasTeam(TEAM_INNO) and (not ply:GetSubRoleData().unknownTeam or ply:HasTeam(TEAM_TRAITOR)) and not ply[ply:GetTeam() .. "_gvoice"]
 end
 
 function VOICE.Tick()

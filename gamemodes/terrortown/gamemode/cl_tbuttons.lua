@@ -23,7 +23,7 @@ end
 function TBHUD:CacheEnts()
 	local ply = LocalPlayer()
 
-	if IsValid(ply) and ply:IsActive() and ply:HasTeamRole(TEAM_TRAITOR) then
+	if IsValid(ply) and ply:IsActive() and ply:HasTeam(TEAM_TRAITOR) then
 		self.buttons = {}
 
 		for _, ent in ipairs(ents.FindByClass("ttt_traitor_button")) do
@@ -39,7 +39,7 @@ end
 function TBHUD:PlayerIsFocused()
 	local ply = LocalPlayer()
 
-	return IsValid(ply) and ply:IsActive() and ply:HasTeamRole(TEAM_TRAITOR) and IsValid(self.focus_ent)
+	return IsValid(ply) and ply:IsActive() and ply:HasTeam(TEAM_TRAITOR) and IsValid(self.focus_ent)
 end
 
 function TBHUD:UseFocused()

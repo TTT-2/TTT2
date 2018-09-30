@@ -29,17 +29,17 @@ concommand.Add("ttt_radar_scan", function(ply, cmd, args)
 					pos.y = math.Round(pos.y)
 					pos.z = math.Round(pos.z)
 
-					local role = p:IsPlayer() and p:GetRole() or 0
+					local role = p:IsPlayer() and p:GetBaseRole() or 0
 
 					if not p:IsPlayer() then
 						-- Decoys appear as innocents for non-traitors
-						if ply:GetRoleData().team ~= TEAM_TRAITOR then
+						if not ply:HasTeam(TEAM_TRAITOR) then
 							role = ROLE_INNOCENT
 						end
 					elseif role ~= ROLE_INNOCENT then
 						local rd = GetRoleByIndex(role)
 
-						if ply:GetRoleData().team ~= TEAM_TRAITOR then
+						if not ply:HasTeam(TEAM_TRAITOR) then
 							role = ROLE_INNOCENT
 						elseif not rd.visibleForTraitors then
 							role = rd.team == TEAM_TRAITOR and ROLE_TRAITOR or ROLE_INNOCENT
@@ -66,3 +66,5 @@ concommand.Add("ttt_radar_scan", function(ply, cmd, args)
 		end
 	end
 end)
+
+-- TODO import everything with TTT_RADAR here !

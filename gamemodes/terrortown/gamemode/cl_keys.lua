@@ -43,7 +43,7 @@ function GM:PlayerBindPress(ply, bind, pressed)
 		-- set voice type here just in case shift is no longer down when the
 		-- PlayerStartVoice hook runs, which might be the case when switching to
 		-- steam overlay
-		ply[ply:GetRoleData().team .. "_gvoice"] = false
+		ply[ply:GetTeam() .. "_gvoice"] = false
 
 		RunConsoleCommand("rvog", "0")
 
@@ -117,7 +117,7 @@ function GM:KeyPress(ply, key)
 	if not IsValid(ply) or ply ~= LocalPlayer() then return end
 
 	--if key == IN_SPEED and ply:IsActiveTraitor() then
-	if key == IN_SPEED and ply:IsActive() and not ply:HasTeamRole(TEAM_INNO) then
+	if key == IN_SPEED and ply:IsActive() and not ply:HasTeam(TEAM_INNO) then
 		timer.Simple(0.05, function()
 			RunConsoleCommand("+voicerecord")
 		end)
@@ -130,7 +130,7 @@ function GM:KeyRelease(ply, key)
 	if not IsValid(ply) or ply ~= LocalPlayer() then return end
 
 	--if key == IN_SPEED and ply:IsActiveTraitor() then
-	if key == IN_SPEED and ply:IsActive() and not ply:HasTeamRole(TEAM_INNO) then
+	if key == IN_SPEED and ply:IsActive() and not ply:HasTeam(TEAM_INNO) then
 		timer.Simple(0.05, function()
 			RunConsoleCommand("-voicerecord")
 		end)

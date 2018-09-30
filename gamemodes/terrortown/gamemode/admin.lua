@@ -1,3 +1,4 @@
+-- TODO rework EVENT system
 --- Admin commands
 
 local function GetPrintFn(ply)
@@ -25,7 +26,7 @@ local function TraitorSort(a, b)
 		return false
 	end
 
-	if a:HasTeamRole(TEAM_TRAITOR) and not b:HasTeamRole(TEAM_TRAITOR) then
+	if a:HasTeam(TEAM_TRAITOR) and not b:HasTeam(TEAM_TRAITOR) then
 		return true
 	end
 
@@ -66,6 +67,7 @@ function PrintReport(ply)
 
 	if not IsValid(ply) or ply:IsSuperAdmin() then
 		ServerLog(Format("%s used ttt_print_adminreport\n", IsValid(ply) and ply:Nick() or "console"))
+		error("REWORK: PrintReport(ply)")
 
 		for _, e in pairs(SCORE.Events) do
 			if e.id == EVENT_KILL then

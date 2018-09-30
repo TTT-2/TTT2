@@ -65,7 +65,7 @@ end
 util.AddNetworkString("shop")
 net.Receive("shop", function(len, ply)
 	local add = net.ReadBool()
-	local role = net.ReadUInt(ROLE_BITS)
+	local subrole = net.ReadUInt(ROLE_BITS)
 	local eq = net.ReadString()
 
 	local equip = GetEquipmentFileName(eq)
@@ -73,7 +73,7 @@ net.Receive("shop", function(len, ply)
 
 	equip = not is_item and eq or equip
 
-	local rd = GetRoleByIndex(role)
+	local rd = GetRoleByIndex(subrole)
 
 	if add then
 		AddToWeaponshop(ply, rd, equip)
@@ -86,24 +86,24 @@ util.AddNetworkString("shopFallback")
 util.AddNetworkString("shopFallbackAnsw")
 util.AddNetworkString("shopFallbackRefresh")
 net.Receive("shopFallback", function(len, ply)
-	local role = net.ReadUInt(ROLE_BITS)
+	local subrole = net.ReadUInt(ROLE_BITS)
 	local fallback = net.ReadString()
 
-	local rd = GetRoleByIndex(role)
+	local rd = GetRoleByIndex(subrole)
 
 	RunConsoleCommand("ttt_" .. rd.abbr .. "_shop_fallback", fallback)
 end)
 
-local function OnChangeCVar(role, fallback)
-	local rd = GetRoleByIndex(role)
+local function OnChangeCVar(subrole, fallback)
+	local rd = GetRoleByIndex(subrole)
 
 	-- reset equipment
-	EquipmentItems[role] = {}
+	EquipmentItems[subrole] = {}
 
 	for _, v in ipairs(weapons.GetList()) do
 		if v.CanBuy then
 			for k, vi in ipairs(v.CanBuy) do
-				if vi == role then
+				if vi == subrole then
 					table.remove(v.CanBuy, k) -- TODO does it work?
 
 					break
@@ -113,11 +113,11 @@ local function OnChangeCVar(role, fallback)
 	end
 
 	net.Start("shopFallbackAnsw")
-	net.WriteUInt(role, ROLE_BITS)
+	net.WriteUInt(subrole, ROLE_BITS)
 	net.Broadcast()
 
 	if fallback ~= SHOP_DISABLED then
-		if fallback ~= SHOP_UNSET and role == GetRoleByName(fallback).index then
+		if fallback ~= SHOP_UNSET and subrole == GetRoleByName(fallback).index then
 			LoadSingleShopEquipment(rd)
 
 			net.Start("shopFallbackRefresh")
@@ -128,13 +128,13 @@ local function OnChangeCVar(role, fallback)
 				for _, eq in ipairs(rd.fallbackTable) do
 					local is_item = tonumber(eq.id)
 					if is_item then
-						table.insert(EquipmentItems[role], eq)
+						table.insert(EquipmentItems[subrole], eq)
 					else
 						local wepTbl = weapons.GetStored(eq.id)
 						if wepTbl then
 							wepTbl.CanBuy = wepTbl.CanBuy or {}
 
-							table.insert(wepTbl.CanBuy, role)
+							table.insert(wepTbl.CanBuy, subrole)
 						end
 					end
 				end

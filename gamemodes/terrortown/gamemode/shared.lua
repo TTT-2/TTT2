@@ -67,11 +67,18 @@ TRAITOR_EQUIPMENT = {
 }
 
 -- role teams to have an indentifier
-TEAM_INNO = "innocents"
-TEAM_TRAITOR = "traitors"
+TEAM_INNO = "innocent_team"
+TEAM_TRAITOR = "traitor_team"
 
 -- max network bits to send roles numbers
 ROLE_BITS = 5
+
+-- override default settings of ttt to make it compatible with other addons
+-- Player roles
+ROLE_INNOCENT = ROLE_INNOCENT or 0
+ROLE_TRAITOR = ROLE_TRAITOR or 1
+ROLE_DETECTIVE = ROLE_DETECTIVE or 2
+ROLE_NONE = ROLE_NONE or ROLE_INNOCENT
 
 -- ROLE_ARRAY
 -- need to have a team to be able to win as well as to receive karma
@@ -80,7 +87,7 @@ ROLE_BITS = 5
 ROLES = {}
 
 ROLES.INNOCENT = {
-	index = 0,
+	index = ROLE_INNOCENT,
 	color = Color(55, 170, 50, 255),
 	dkcolor = Color(60, 160, 50, 155),
 	bgcolor = Color(0, 50, 0, 200),
@@ -92,9 +99,10 @@ ROLES.INNOCENT = {
 	scoreKillsMultiplier = 1,
 	scoreTeamKillsMultiplier = -8
 }
+INNOCENT = ROLES.INNOCENT
 
 ROLES.TRAITOR = {
-	index = 1,
+	index = ROLE_TRAITOR,
 	color = Color(180, 50, 40, 255),
 	dkcolor = Color(160, 50, 60, 155),
 	bgcolor = Color(150, 0, 0, 200),
@@ -109,9 +117,10 @@ ROLES.TRAITOR = {
 	scoreTeamKillsMultiplier = -16,
 	fallbackTable = {}
 }
+TRAITOR = ROLES.TRAITOR
 
 ROLES.DETECTIVE = {
-	index = 2,
+	index = ROLE_DETECTIVE,
 	color = Color(50, 60, 180, 255),
 	dkcolor = Color(50, 60, 160, 155),
 	bgcolor = Color(0, 0, 150, 200),
@@ -120,10 +129,11 @@ ROLES.DETECTIVE = {
 	team = TEAM_INNO,
 	defaultEquipment = SPECIAL_EQUIPMENT,
 	buildin = true,
-	scoreKillsMultiplier = ROLES.INNOCENT.scoreKillsMultiplier,
-	scoreTeamKillsMultiplier = ROLES.INNOCENT.scoreTeamKillsMultiplier,
+	scoreKillsMultiplier = INNOCENT.scoreKillsMultiplier,
+	scoreTeamKillsMultiplier = INNOCENT.scoreTeamKillsMultiplier,
 	fallbackTable = {}
 }
+DETECTIVE = ROLES.DETECTIVE
 
 local flag_all = {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED}
 
@@ -135,9 +145,9 @@ SHOP_DISABLED = "DISABLED"
 SHOP_UNSET = "UNSET"
 
 -- shop fallbacks
-CreateConVar("ttt_" .. ROLES.INNOCENT.abbr .. "_shop_fallback", SHOP_DISABLED, flag_all)
-CreateConVar("ttt_" .. ROLES.TRAITOR.abbr .. "_shop_fallback", SHOP_UNSET, flag_all)
-CreateConVar("ttt_" .. ROLES.DETECTIVE.abbr .. "_shop_fallback", SHOP_UNSET, flag_all)
+CreateConVar("ttt_" .. INNOCENT.abbr .. "_shop_fallback", SHOP_DISABLED, flag_all)
+CreateConVar("ttt_" .. TRAITOR.abbr .. "_shop_fallback", SHOP_UNSET, flag_all)
+CreateConVar("ttt_" .. DETECTIVE.abbr .. "_shop_fallback", SHOP_UNSET, flag_all)
 
 -- you should only use this function to add roles to TTT2
 function AddCustomRole(name, roleData, conVarData)
@@ -194,7 +204,7 @@ function AddCustomRole(name, roleData, conVarData)
 			-- and every important function works properly
 			hook.Add("TTT2_RoleInit", "Add_" .. roleData.abbr .. "_Role", function() -- unique hook identifier please
 				if not ROLES[name] then -- count ROLES
-					local i = 1 -- start with "1" to prevent incompatibilities with ROLE_ANY
+					local i = 1 -- start with "1" to prevent incompatibilities with ROLE_ANY => new roles will start @ id: i(1)+3=4
 
 					for _, v in pairs(ROLES) do
 						i = i + 1
@@ -214,6 +224,24 @@ function AddCustomRole(name, roleData, conVarData)
 	end
 end
 
+function SetBaseRole(roleData, baserole)
+	if roleData.baserole then
+		error("ERROR: BaseRole of " .. roleData.name .. " already set (" .. roleData.baserole .. ")!")
+
+		return
+	else
+		local br = GetRoleByIndex(baserole)
+
+		if br.baserole then
+			error("ERROR: Your requested BaseRole can't be any BaseRole of another SubRole because it's a SubRole as well.")
+
+			return
+		end
+	end
+
+	roleData.baserole = baserole
+end
+
 function UpdateCustomRole(name, roleData)
 	if SERVER and ROLES[name] then
 		-- necessary for networking!
@@ -230,22 +258,33 @@ end
 function SetupRoleGlobals()
 	for _, v in pairs(ROLES) do
 		_G["ROLE_" .. string.upper(v.name)] = v.index
-		_G["WIN_" .. string.upper(v.name)] = v.index
+		_G[string.upper(v.name)] = v
+
+		local plymeta = FindMetaTable("Player")
+		if plymeta then
+			-- e.g. IsJackal() will match each subrole of the jackal as well as the jackal as the baserole
+			plymeta["Is" .. v.name:gsub("^%l", string.upper)] = function()
+				local baserole, subrole = plymeta:GetRole()
+
+				return v.baserole and subrole == v.index or baserole == v.index
+			end
+		end
+
+		if not v.baserole then
+			_G["TEAM" .. string.upper(v.name)] = v.name .. "_team"
+		end
+
+		if IsWinRole(v) then
+			_G["WIN_" .. string.upper(v.name)] = v.index -- TODO needed?
+		end
 	end
 end
 
 -- if you add roles that can shop, modify DefaultEquipment at the end of this file
 -- TODO combine DefaultEquipment[x] and ROLES[x] !
 
--- override default settings of ttt to make it compatible with other addons
--- Player roles
-ROLE_INNOCENT = ROLE_INNOCENT
-ROLE_TRAITOR = ROLE_TRAITOR
-ROLE_DETECTIVE = ROLE_DETECTIVE
-ROLE_NONE = ROLE_INNOCENT
-
-SHOP_FALLBACK_TRAITOR = ROLES.TRAITOR.name
-SHOP_FALLBACK_DETECTIVE = ROLES.DETECTIVE.name
+SHOP_FALLBACK_TRAITOR = TRAITOR.name
+SHOP_FALLBACK_DETECTIVE = DETECTIVE.name
 
 function SortRolesTable(tbl)
 	table.sort(tbl, function(a, b)
@@ -260,7 +299,7 @@ function GetRoleByIndex(index)
 		end
 	end
 
-	return ROLES.INNOCENT
+	return INNOCENT
 end
 
 function GetRoleByName(name)
@@ -270,7 +309,7 @@ function GetRoleByName(name)
 		end
 	end
 
-	return ROLES.INNOCENT
+	return INNOCENT
 end
 
 function GetRoleByAbbr(abbr)
@@ -280,11 +319,11 @@ function GetRoleByAbbr(abbr)
 		end
 	end
 
-	return ROLES.INNOCENT
+	return INNOCENT
 end
 
 function GetStartingCredits(abbr)
-	if abbr == ROLES.TRAITOR.abbr then
+	if abbr == TRAITOR.abbr then
 		return GetConVar("ttt_credits_starting"):GetInt()
 	end
 
@@ -297,7 +336,7 @@ function GetShopRoles()
 	local i = 0
 
 	for _, v in pairs(ROLES) do
-		if v ~= ROLES.INNOCENT then
+		if v ~= INNOCENT then
 			local shopFallback = GetConVar("ttt_" .. v.abbr .. "_shop_fallback"):GetString()
 			if shopFallback ~= SHOP_DISABLED then
 				i = i + 1
@@ -311,31 +350,39 @@ function GetShopRoles()
 	return shopRoles
 end
 
+function IsWinRole(roleData)
+	return not roleData.preventWin and not roleData.baserole
+end
+
 function GetWinRoles()
 	local tmp = {}
 
 	for _, v in pairs(ROLES) do
-		local winRole = GetTeamRoles(v.team)[1]
-
-		if not table.HasValue(tmp, winRole) then
-			table.insert(tmp, winRole)
+		if IsWinRole(v) and not table.HasValue(tmp, v) then
+			table.insert(tmp, v)
 		end
 	end
 
 	return tmp
 end
 
-function GetWinningRole(team)
-	for _, v in pairs(GetWinRoles()) do
-		if v.team == team then
-			return v
+function GetSubRoles(subrole)
+	local br = GetRoleByIndex(subrole).baserole or subrole
+	local tmp = {}
+
+	for _, v in pairs(ROLES) do
+		if v.baserole and v.baserole == br or v.index == br then
+			table.insert(tmp, v)
 		end
 	end
 
-	return ROLES.INNOCENT
+	return tmp
 end
 
+-- TODO remove? useless with new role logic
 function GetTeamRoles(team)
+	error("ERROR - func: GetTeamRoles(team)")
+
 	local teamRoles = {}
 
 	local i = 0
@@ -385,6 +432,7 @@ function table.Randomize(t)
 	t = out
 end
 
+-- TODO move to client file
 if CLIENT then
 	local SafeTranslate
 
@@ -438,8 +486,10 @@ EVENT_C4EXPLODE = 8
 EVENT_CREDITFOUND = 9
 EVENT_C4DISARM = 10
 
+-- TODO use positive ids?
 WIN_NONE = -1
 WIN_TIMELIMIT = -2
+-- TODO remove following? unnecessary
 WIN_INNOCENT = ROLE_INNOCENT
 WIN_TRAITOR = ROLE_TRAITOR
 WIN_DETECTIVE = ROLE_DETECTIVE
@@ -475,7 +525,7 @@ OPEN_NOTOGGLE = 4 -- movelinear
 MUTE_NONE = 0
 MUTE_TERROR = 1
 MUTE_ALL = 2
-MUTE_SPEC = 1002
+MUTE_SPEC = 1002 -- TODO why not 3?
 
 COLOR_WHITE = Color(255, 255, 255, 255)
 COLOR_BLACK = Color(0, 0, 0, 255)

@@ -122,7 +122,7 @@ function RADAR:Draw(client)
 	surface.SetFont("HudSelectionText")
 
 	-- C4 warnings
-	if self.bombs_count ~= 0 and client:IsActive() and client:HasTeamRole(TEAM_TRAITOR) then
+	if self.bombs_count ~= 0 and client:IsActive() and client:HasTeam(TEAM_TRAITOR) then
 		surface.SetTexture(c4warn)
 		surface.SetTextColor(200, 55, 55, 220)
 		surface.SetDrawColor(255, 255, 255, 200)

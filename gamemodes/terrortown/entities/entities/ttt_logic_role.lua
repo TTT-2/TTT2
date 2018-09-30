@@ -23,7 +23,7 @@ end
 function ENT:AcceptInput(name, activator)
 	if name == "TestActivator" then
 		if IsValid(activator) and activator:IsPlayer() then
-			local activator_role = (GetRoundState() == ROUND_PREP) and ROLE_INNOCENT or activator:GetRole()
+			local activator_role = (GetRoundState() == ROUND_PREP) and ROLE_INNOCENT or activator:GetBaseRole()
 
 			if self.Role == ROLE_ANY or self.Role == activator_role then
 				Dev(2, activator, "passed logic_role test of", self:GetName())

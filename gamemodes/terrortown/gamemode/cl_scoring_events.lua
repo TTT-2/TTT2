@@ -1,3 +1,5 @@
+-- TODO REWORK + Beautify
+error("REWORK + BEAUTIFY: cl_scoring_events.lua")
 ---- Event display information for Event Log in the Round Report
 
 ---- Usage:

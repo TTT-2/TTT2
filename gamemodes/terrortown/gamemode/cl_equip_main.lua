@@ -24,13 +24,13 @@ include("favorites_db.lua")
 
 Equipment = Equipment or {}
 
-function GetEquipmentForRole(role)
-	local fallbackTable = GetShopFallbackTable(role)
+function GetEquipmentForRole(subrole)
+	local fallbackTable = GetShopFallbackTable(subrole)
 	if fallbackTable then
 		return fallbackTable
 	end
 
-	local fallback = GetShopFallback(role)
+	local fallback = GetShopFallback(subrole)
 
 	-- need to build equipment cache?
 	if not Equipment[fallback] then
@@ -205,8 +205,8 @@ local function TraitorMenuPopup()
 
 	if not IsValid(ply) or not ply:IsActiveShopper() then return end
 
-	local role = ply:GetRole()
-	local fallbackRole = GetShopFallback(role)
+	local subrole = ply:GetSubRole()
+	local fallbackRole = GetShopFallback(subrole)
 	local rd = GetRoleByIndex(fallbackRole)
 
 	local fallback = GetConVar("ttt_" .. rd.abbr .. "_shop_fallback"):GetString()
@@ -300,7 +300,7 @@ local function TraitorMenuPopup()
 	dlist:EnableVerticalScrollbar(true)
 	dlist:EnableHorizontal(true)
 
-	local items = GetEquipmentForRole(role)
+	local items = GetEquipmentForRole(subrole)
 
 	SortEquipmentTable(items)
 
@@ -339,7 +339,7 @@ local function TraitorMenuPopup()
 			-- Favorites marker icon
 			ic.favorite = false
 
-			local favorites = GetFavorites(ply:SteamID(), ply:GetRole())
+			local favorites = GetFavorites(ply:SteamID(), ply:GetSubRole())
 
 			if favorites and IsFavorite(favorites, item.id) then
 				ic.favorite = true
@@ -365,7 +365,7 @@ local function TraitorMenuPopup()
 			if ItemIsWeapon(item) and showSlotVar:GetBool() then
 				local slot = vgui.Create("SimpleIconLabelled")
 				slot:SetIcon("vgui/ttt/slotcap")
-				slot:SetIconColor(ply:GetRoleData().color or COLOR_GREY)
+				slot:SetIconColor(ply:GetSubRoleData().color or COLOR_GREY)
 				slot:SetIconSize(16)
 				slot:SetIconText(item.slot)
 				slot:SetIconProperties(COLOR_WHITE, "DefaultBold", {opacity = 220, offset = 1}, {10, 8})
@@ -588,7 +588,7 @@ local function TraitorMenuPopup()
 
 	dfav.DoClick = function()
 		local ply2 = LocalPlayer()
-		local role2 = ply2:GetRole()
+		local subrole2 = ply2:GetSubRole()
 		local guid = ply2:SteamID()
 		local pnl = dlist.SelectedPanel
 
@@ -600,9 +600,9 @@ local function TraitorMenuPopup()
 		CreateFavTable()
 
 		if pnl.favorite then
-			RemoveFavorite(guid, role2, weapon)
+			RemoveFavorite(guid, subrole2, weapon)
 		else
-			AddFavorite(guid, role2, weapon)
+			AddFavorite(guid, subrole2, weapon)
 		end
 	end
 

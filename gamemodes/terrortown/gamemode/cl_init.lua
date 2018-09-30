@@ -322,16 +322,16 @@ GM.TTTEndRound = PlaySoundCue
 
 local function ReceiveRole()
 	local client = LocalPlayer()
-	local role = net.ReadUInt(ROLE_BITS)
+	local subrole = net.ReadUInt(ROLE_BITS)
 
 	-- after a mapswitch, server might have sent us this before we are even done
 	-- loading our code
 	if not client.UpdateRole then return end
 
-	client:UpdateRole(role)
+	client:UpdateRole(subrole)
 
 	Msg("You are: ")
-	MsgN(string.upper(GetRoleByIndex(role).name))
+	MsgN(string.upper(GetRoleByIndex(subrole).name))
 end
 net.Receive("TTT_Role", ReceiveRole)
 
@@ -339,11 +339,11 @@ net.Receive("TTT_Role", ReceiveRole)
 net.Receive("TTT2_Test_role", function()
 	local client = LocalPlayer()
 
-	client:ChatPrint("Your current role is: '" .. client:GetRoleData().name .. "'")
+	client:ChatPrint("Your current role is: '" .. client:GetSubRoleData().name .. "'")
 end)
 
 local function ReceiveRoleList()
-	local role = net.ReadUInt(ROLE_BITS)
+	local subrole = net.ReadUInt(ROLE_BITS)
 	local num_ids = net.ReadUInt(8)
 
 	for i = 1, num_ids do
@@ -351,10 +351,10 @@ local function ReceiveRoleList()
 		local ply = player.GetByID(eidx)
 
 		if IsValid(ply) and ply.SetRole then
-			ply:SetRole(role)
+			ply:SetRole(subrole)
 
-			if not ply:HasTeamRole(TEAM_INNO) and not ply:GetRoleData().unknownTeam then
-				ply[ply:GetRoleData().team .. "_gvoice"] = false -- assume role's chat by default
+			if not ply:HasTeam(TEAM_INNO) and not ply:GetSubRoleData().unknownTeam then
+				ply[ply:GetTeam() .. "_gvoice"] = false -- assume role's chat by default
 			end
 		end
 	end

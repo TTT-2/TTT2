@@ -741,7 +741,7 @@ function TellTraitorsAboutTraitors()
 	hook.Run("TTT2_TellTraitors")
 
 	for _, v in ipairs(player.GetAll()) do
-		if v:HasTeamRole(TEAM_TRAITOR) then
+		if v:HasTeam(TEAM_TRAITOR) then
 			table.insert(traitornicks, v:Nick())
 		end
 	end
@@ -751,7 +751,7 @@ function TellTraitorsAboutTraitors()
 	local traitornicks_min = #traitornicks < 2
 
 	for _, v in ipairs(player.GetAll()) do
-		if v:HasTeamRole(TEAM_TRAITOR) then
+		if v:HasTeam(TEAM_TRAITOR) then
 			if traitornicks_min then
 				LANG.Msg(v, "round_traitors_one")
 
@@ -1034,47 +1034,26 @@ function GM:TTTCheckForWin()
 	end
 
 	local alive = {}
-	local team = {}
-
-	-- initialize this is not necessary TODO
-	for _, v in pairs(ROLES) do
-		if not table.HasValue(team, v.team) then
-			if v.team then
-				table.insert(team, v.team)
-			end
-
-			alive[v.index] = false
-		end
-	end
-
 	local b = 0
-	local checkedTeams = {}
-	--local innoTeam = GetWinningRole(TEAM_INNO).index
 
 	for _, v in ipairs(player.GetAll()) do
 		if v:IsTerror() then
-			local roleData = GetRoleByIndex(v:GetRole())
-			local i = roleData.index
-
-			if roleData.team then
-				i = GetWinningRole(roleData.team).index
-			end
-
-			alive[i] = true
+			alive[v:GetTeam()] = true
 		end
 	end
 
-	hook.Run("TTT2_ModifyWinningAlives", alive)
+	error("CHANGED WORK BEHAVIOUR OF hook TTT2TTT2_ModifyWinningAlives(alive)")
+	hook.Run("TTT2_ModifyWinningAlives", alive) -- TODO changed working
 
 	for _, v in pairs(GetWinRoles()) do
-		local i = v.index
+		local team = v.team
 
-		if not table.HasValue(checkedTeams, i) and alive[i] and not v.preventWin then
+		if not table.HasValue(checkedTeams, team) and alive[team] and not v.preventWin then
 			-- prevent win of custom role -> maybe own win conditions
 			b = b + 1
 
 			-- irrelevant whether function inserts value properly...
-			table.insert(checkedTeams, i)
+			table.insert(checkedTeams, team)
 		end
 
 		-- if 2 teams alive
@@ -1097,7 +1076,7 @@ function GM:TTTCheckForWin()
 end
 
 local function GetEachRoleCount(ply_count, role_type)
-	if role_type == ROLES.INNOCENT.name then
+	if role_type == INNOCENT.name then
 		return 0
 	end
 
@@ -1142,7 +1121,7 @@ function SelectRoles()
 		-- everyone on the spec team is in specmode
 		if IsValid(v) and not v:IsSpec() then
 			-- save previous role and sign up as possible traitor/detective
-			local r = GAMEMODE.LastRole[v:SteamID()] or v:GetRole() or ROLE_INNOCENT
+			local r = GAMEMODE.LastRole[v:SteamID()] or v:GetSubRole() or ROLE_INNOCENT
 
 			table.insert(prev_roles[r], v)
 			table.insert(choices, v)
@@ -1153,7 +1132,7 @@ function SelectRoles()
 
 	-- determine how many of each role we want
 	local choice_count = #choices
-	local traitor_count = GetEachRoleCount(choice_count, ROLES.TRAITOR.name)
+	local traitor_count = GetEachRoleCount(choice_count, TRAITOR.name)
 
 	if choice_count == 0 then return end
 
@@ -1188,7 +1167,7 @@ function SelectRoles()
 		local availableRoles = {}
 
 		for _, v in pairs(ROLES) do
-			if not v.notSelectable and v.team == TEAM_TRAITOR and v ~= ROLES.TRAITOR and GetConVar("ttt_" .. v.name .. "_enabled"):GetBool() then
+			if not v.notSelectable and v.team == TEAM_TRAITOR and v ~= TRAITOR and GetConVar("ttt_" .. v.name .. "_enabled"):GetBool() then
 				local b = true
 				local r = (ConVarExists("ttt_" .. v.name .. "_random") and GetConVar("ttt_" .. v.name .. "_random"):GetInt() or 0)
 
@@ -1220,8 +1199,8 @@ function SelectRoles()
 
 	for _, v in pairs(ROLES) do
 		if not v.notSelectable
-		and (v == ROLES.DETECTIVE or newRolesEnabled)
-		and v ~= ROLES.INNOCENT
+		and (v == DETECTIVE or newRolesEnabled)
+		and v ~= INNOCENT
 		and v.team ~= TEAM_TRAITOR
 		and GetConVar("ttt_" .. v.name .. "_enabled"):GetBool()
 		then
@@ -1253,9 +1232,9 @@ function SelectRoles()
 		ply:SetDefaultCredits()
 
 		-- store a steamid -> role map
-		GAMEMODE.LastRole[ply:SteamID()] = ply:GetRole()
+		GAMEMODE.LastRole[ply:SteamID()] = ply:GetSubRole()
 
-		ply:UpdateRole(ply:GetRole()) -- just for some hooks and other special things
+		ply:UpdateRole(ply:GetSubRole()) -- just for some hooks and other special things
 
 		SendFullStateUpdate() -- theoretically not needed
 	end

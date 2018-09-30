@@ -41,39 +41,39 @@ function GM:PlayerCanPickupWeapon(ply, wep)
 	return true
 end
 
--- Cache role -> default-weapons table
+-- Cache subrole -> default-weapons table
 local loadout_weapons = {}
 
-local function GetLoadoutWeapons(role)
-	if not loadout_weapons[role] then
-		loadout_weapons[role] = loadout_weapons[role] or {}
+local function GetLoadoutWeapons(subrole)
+	if not loadout_weapons[subrole] then
+		loadout_weapons[subrole] = loadout_weapons[subrole] or {}
 
 		for _, w in ipairs(weapons.GetList()) do
 			if type(w.InLoadoutFor) == "table" and not w.Doublicated then
 				local cls = WEPS.GetClass(w)
 
-				if table.HasValue(w.InLoadoutFor, role) then
-					table.insert(loadout_weapons[role], cls)
+				if table.HasValue(w.InLoadoutFor, subrole) then
+					table.insert(loadout_weapons[subrole], cls)
 				elseif table.HasValue(w.InLoadoutFor, ROLE_INNOCENT) then -- setup for new roles
 					local wepTbl = weapons.GetStored(cls)
 					if wepTbl then
-						table.insert(wepTbl.InLoadoutFor, role)
+						table.insert(wepTbl.InLoadoutFor, subrole)
 					end
 
-					table.insert(loadout_weapons[role], cls)
+					table.insert(loadout_weapons[subrole], cls)
 				end
 			end
 		end
 	end
 
-	return loadout_weapons[role]
+	return loadout_weapons[subrole]
 end
 
--- Give player loadout weapons he should have for his role that he does not have
+-- Give player loadout weapons he should have for his subrole that he does not have
 -- yet
 local function GiveLoadoutWeapons(ply)
-	local r = GetRoundState() == ROUND_PREP and ROLE_INNOCENT or ply:GetRole()
-	local weps = GetLoadoutWeapons(r)
+	local subrole = GetRoundState() == ROUND_PREP and ROLE_INNOCENT or ply:GetSubRole()
+	local weps = GetLoadoutWeapons(subrole)
 
 	if not weps then return end
 
@@ -87,8 +87,8 @@ end
 local function HasLoadoutWeapons(ply)
 	if ply:IsSpec() then return true end
 
-	local r = GetRoundState() == ROUND_PREP and ROLE_INNOCENT or ply:GetRole()
-	local weps = GetLoadoutWeapons(r)
+	local subrole = GetRoundState() == ROUND_PREP and ROLE_INNOCENT or ply:GetSubRole()
+	local weps = GetLoadoutWeapons(subrole)
 
 	if not weps then
 		return true
@@ -105,7 +105,7 @@ end
 
 -- Give loadout items.
 local function GiveLoadoutItems(ply)
-	local items = EquipmentItems[ply:GetRole()]
+	local items = EquipmentItems[ply:GetSubRole()]
 
 	if items then
 		for _, item in pairs(items) do
@@ -137,7 +137,7 @@ end
 CreateConVar("ttt_detective_hats", "0")
 -- Just hats right now
 local function GiveLoadoutSpecial(ply)
-	if ply:IsActive() and ply:GetRole() == ROLE_DETECTIVE and GetConVar("ttt_detective_hats"):GetBool() and CanWearHat(ply) then
+	if ply:IsActive() and ply:GetBaseRole() == ROLE_DETECTIVE and GetConVar("ttt_detective_hats"):GetBool() and CanWearHat(ply) then
 		if not IsValid(ply.hat) then
 			local hat = ents.Create("ttt_hat_deerstalker")
 
@@ -211,12 +211,14 @@ end
 
 ---- Weapon switching
 local function ForceWeaponSwitch(ply, cmd, args)
-	if not ply:IsPlayer() or not args[1] then return end
+	if not ply:IsPlayer() then return end
+
+	local wepname = args[1]
+	if not wepname then return end
 
 	-- Turns out even SelectWeapon refuses to switch to empty guns, gah.
 	-- Worked around it by giving every weapon a single Clip2 round.
 	-- Works because no weapon uses those.
-	local wepname = args[1]
 	local wep = ply:GetWeapon(wepname)
 
 	if IsValid(wep) then
@@ -291,14 +293,14 @@ local function DropActiveAmmo(ply)
 
 	local amt = wep:Clip1()
 
-	if amt < 1 or amt <= (wep.Primary.ClipSize * 0.25) then
+	if amt < 1 or amt <= wep.Primary.ClipSize * 0.25 then
 		LANG.Msg(ply, "drop_no_ammo")
 
 		return
 	end
 
 	local pos, ang = ply:GetShootPos(), ply:EyeAngles()
-	local dir = (ang:Forward() * 32) + (ang:Right() * 6) + (ang:Up() * - 5)
+	local dir = ang:Forward() * 32 + ang:Right() * 6 + ang:Up() * -5
 	local tr = util.QuickTrace(pos, dir, ply)
 
 	if tr.HitWorld then return end
@@ -356,7 +358,7 @@ local function GiveEquipmentWeapon(sid, cls)
 	if not IsValid(w) or not ply:HasWeapon(cls) then
 		if not timer.Exists(tmr) then
 			timer.Create(tmr, 1, 0, function()
-				GiveEquipmentWeapon(sid, cls)
+				GiveEquipmentWeapon(sid, cls) -- TODO why not using ply obj
 			end)
 		end
 
@@ -385,11 +387,11 @@ end
 local function OrderEquipment(ply, cmd, args)
 	if not IsValid(ply) or #args ~= 1 then return end
 
-	local role = GetShopFallback(ply:GetRole())
+	local subrole = GetShopFallback(ply:GetSubRole())
 
 	if not ply:IsActive() then return end
 
-	local rd = GetRoleByIndex(role)
+	local rd = GetRoleByIndex(subrole)
 
 	local shopFallback = GetConVar("ttt_" .. rd.abbr .. "_shop_fallback"):GetString()
 	if shopFallback == SHOP_DISABLED then return end
@@ -421,7 +423,7 @@ local function OrderEquipment(ply, cmd, args)
 		id = tonumber(id)
 
 		-- item whitelist check
-		local allowed = GetEquipmentItem(role, id)
+		local allowed = GetEquipmentItem(subrole, id)
 		if not allowed then
 			print(ply, "tried to buy item not buyable for his class:", id)
 
@@ -436,8 +438,8 @@ local function OrderEquipment(ply, cmd, args)
 		end
 	elseif swep_table then
 		-- weapon whitelist check
-		if not table.HasValue(swep_table.CanBuy, role) then
-			print(ply, "tried to buy weapon his role is not permitted to buy")
+		if not table.HasValue(swep_table.CanBuy, subrole) then
+			print(ply, "tried to buy weapon his subrole is not permitted to buy")
 
 			return
 		end
@@ -489,13 +491,15 @@ local function OrderEquipment(ply, cmd, args)
 end
 concommand.Add("ttt_order_equipment", OrderEquipment)
 
+-- TODO why is this in here?
 function GM:TTTToggleDisguiser(ply, state)
 	-- Can be used to prevent players from using this button.
 	-- return true to prevent it.
 end
 
+-- TODO why is this in here?
 local function SetDisguise(ply, cmd, args)
-	if not IsValid(ply) or not ply:IsActive() and ply:HasTeamRole(TEAM_TRAITOR) then return end
+	if not IsValid(ply) or not ply:IsActive() and ply:HasTeam(TEAM_TRAITOR) then return end
 
 	if ply:HasEquipmentItem(EQUIP_DISGUISE) then
 		local state = #args == 1 and tobool(args[1])
@@ -503,11 +507,13 @@ local function SetDisguise(ply, cmd, args)
 		if hook.Run("TTTToggleDisguiser", ply, state) then return end
 
 		ply:SetNWBool("disguised", state)
+
 		LANG.Msg(ply, state and "disg_turned_on" or "disg_turned_off")
 	end
 end
 concommand.Add("ttt_set_disguise", SetDisguise)
 
+-- TODO why is this in here?
 local function CheatCredits(ply)
 	if IsValid(ply) then
 		ply:AddCredits(10)
@@ -515,6 +521,7 @@ local function CheatCredits(ply)
 end
 concommand.Add("ttt_cheat_credits", CheatCredits, nil, nil, FCVAR_CHEAT)
 
+-- TODO why is this in here?
 local function TransferCredits(ply, cmd, args)
 	if not IsValid(ply) or not ply:IsActiveShopper() then return end
 
@@ -529,9 +536,9 @@ local function TransferCredits(ply, cmd, args)
 		if not IsValid(target)
 		or not target:IsActiveShopper()
 		or target == ply
-		or target:GetRoleData().team == TEAM_INNO
-		or ply:GetRoleData().team == TEAM_INNO
-		or not target:IsTeamMember(ply)
+		or target:HasTeam(TEAM_INNO)
+		or ply:HasTeam(TEAM_INNO)
+		or not target:IsInTeam(ply)
 		then
 			LANG.Msg(ply, "xfer_no_recip")
 

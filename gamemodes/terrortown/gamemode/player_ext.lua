@@ -62,10 +62,10 @@ end
 
 function plymeta:SetDefaultCredits()
 	if self:IsShopper() then
-		local rd = self:GetRoleData()
+		local rd = self:GetSubRoleData()
 		if rd.preventDefaultCredits then return end
 
-		if self:HasTeamRole(TEAM_TRAITOR) then
+		if self:HasTeam(TEAM_TRAITOR) then
 			local c = (ConVarExists("ttt_credits_starting") and GetConVar("ttt_credits_starting"):GetInt() or 0)
 
 			if CountTraitors() == 1 then
@@ -190,8 +190,10 @@ function plymeta:ResetRoundFlags()
 	-- communication
 	self.mute_team = -1
 
+	-- TODO needed? new voicechat ?
+	error("REWORK: plymeta: ResetRoundFlags()")
 	for _, v in pairs(GetWinRoles()) do
-		if v.team ~= TEAM_INNO and not v.unknownTeam then
+		if v.index ~= TEAM_INNO and not v.unknownTeam then
 			self[v.team .. "_gvoice"] = false
 		end
 	end
@@ -269,7 +271,9 @@ function plymeta:SendLastWords(dmginfo)
 	-- any longer than this and you're out of luck
 	local ply = self
 
-	timer.Simple(2, function() ply:ResetLastWords() end)
+	timer.Simple(2, function()
+		ply:ResetLastWords()
+	end)
 end
 
 
@@ -278,6 +282,7 @@ function plymeta:ResetViewRoll()
 
 	if ang.r ~= 0 then
 		ang.r = 0
+
 		self:SetEyeAngles(ang)
 	end
 end
@@ -285,10 +290,14 @@ end
 
 function plymeta:ShouldSpawn()
 	-- do not spawn players who have not been through initspawn
-	if not self:IsSpec() and not self:IsTerror() then return false end
+	if not self:IsSpec() and not self:IsTerror() then
+		return false
+	end
 
 	-- do not spawn forced specs
-	if self:IsSpec() and self:GetForceSpec() then return false end
+	if self:IsSpec() and self:GetForceSpec() then
+		return false
+	end
 
 	return true
 end
@@ -383,11 +392,10 @@ local oldUnSpectate = plymeta.UnSpectate
 
 function plymeta:UnSpectate()
 	oldUnSpectate(self)
+
 	self:SetNoTarget(false)
 end
 
 function plymeta:GetAvoidRole(role)
-	local name = GetRoleByIndex(role).name
-
-	return self:GetInfoNum("ttt_avoid_" .. name, 0) > 0
+	return self:GetInfoNum("ttt_avoid_" .. GetRoleByIndex(role).name, 0) > 0
 end

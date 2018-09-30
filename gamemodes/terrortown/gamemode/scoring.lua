@@ -1,3 +1,5 @@
+-- TODO rework completely
+error("REWORK scoring.lua")
 ---- Customized scoring
 
 local math = math
@@ -63,7 +65,7 @@ function SCORE:HandleKill(victim, attacker, dmginfo)
 	local e = {
 		id = EVENT_KILL,
 		att = {ni = "", sid = -1, r = -1},
-		vic = {ni = victim:Nick(), sid = victim:SteamID(), r = victim:GetRole()},
+		vic = {ni = victim:Nick(), sid = victim:SteamID(), r = victim:GetSubRole()},
 		dmg = CopyDmg(dmginfo)
 	}
 
@@ -72,7 +74,7 @@ function SCORE:HandleKill(victim, attacker, dmginfo)
 	if IsValid(attacker) and attacker:IsPlayer() then
 		e.att.ni = attacker:Nick()
 		e.att.sid = attacker:SteamID()
-		e.att.r = attacker:GetRole()
+		e.att.r = attacker:GetSubRole()
 	end
 
 	hook.Run("TTT2_ModifyScoringEvent", e, {victim = victim, attacker = attacker, dmginfo = dmginfo})
@@ -105,15 +107,15 @@ function SCORE:HandleSelection()
 	local tmp = {}
 
 	for _, v in pairs(ROLES) do
-		if v ~= ROLES.INNOCENT then
+		if v ~= INNOCENT then
 			tmp[v.index] = {}
 		end
 	end
 
 	for _, ply in ipairs(player.GetAll()) do
 		-- no innos
-		if ply:GetRole() ~= ROLE_INNOCENT then
-			table.insert(tmp[ply:GetRole()], ply:SteamID())
+		if ply:GetSubRole() ~= ROLE_INNOCENT then
+			table.insert(tmp[ply:GetSubRole()], ply:SteamID())
 		end
 	end
 
@@ -162,7 +164,7 @@ function SCORE:ApplyEventLogScores(wintype)
 	local tmp = {}
 
 	for _, v in pairs(ROLES) do
-		if v ~= ROLES.INNOCENT then
+		if v ~= INNOCENT then
 			tmp[v.index] = {}
 		end
 	end
@@ -170,8 +172,8 @@ function SCORE:ApplyEventLogScores(wintype)
 	for _, ply in ipairs(player.GetAll()) do
 		scores[ply:SteamID()] = {}
 
-		if ply:GetRole() ~= ROLE_INNOCENT then
-			table.insert(tmp[ply:GetRole()], ply:SteamID())
+		if ply:GetSubRole() ~= ROLE_INNOCENT then
+			table.insert(tmp[ply:GetSubRole()], ply:SteamID())
 		end
 	end
 
@@ -196,7 +198,7 @@ function SCORE:ApplyEventLogScores(wintype)
 		ply = player.GetBySteamID(sid)
 
 		if ply and IsValid(ply) then
-			local team = hook.Run("TTT2_ModifyRole", ply) or ply:GetRoleData()
+			local team = hook.Run("TTT2_ModifyRole", ply) or ply:GetSubRoleData()
 			team = team.team
 
 			if ply:ShouldScore() then

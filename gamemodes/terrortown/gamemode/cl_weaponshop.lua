@@ -115,7 +115,7 @@ net.Receive("newshop", function()
 	menu:SetValue(sr.name)
 
 	for _, v in pairs(ROLES) do
-		if v ~= ROLES.INNOCENT then
+		if v ~= INNOCENT then
 			menu:AddChoice(v.name, v.index)
 		end
 	end
@@ -140,7 +140,7 @@ net.Receive("newshop", function()
 			if ItemIsWeapon(item) then
 				local slot = vgui.Create("SimpleClickIconLabelled")
 				slot:SetIcon("vgui/ttt/slotcap")
-				slot:SetIconColor(GetShopRoles()[1].color or COLOR_GREY)
+				slot:SetIconColor(sr.color or COLOR_GREY)
 				slot:SetIconSize(16)
 				slot:SetIconText(item.slot)
 				slot:SetIconProperties(COLOR_WHITE, "DefaultBold", {opacity = 220, offset = 1}, {10, 8})
@@ -374,19 +374,19 @@ net.Receive("newshop", function()
 end)
 
 net.Receive("shopFallbackAnsw", function(len)
-	local role = net.ReadUInt(ROLE_BITS)
+	local subrole = net.ReadUInt(ROLE_BITS)
 
-	local rd = GetRoleByIndex(role)
+	local rd = GetRoleByIndex(subrole)
 	local fb = GetConVar("ttt_" .. rd.abbr .. "_shop_fallback"):GetString()
 
 	-- reset everything
-	EquipmentItems[role] = {}
-	Equipment[role] = {}
+	EquipmentItems[subrole] = {}
+	Equipment[subrole] = {}
 
 	for _, v in ipairs(weapons.GetList()) do
 		if v.CanBuy then
 			for k, vi in ipairs(v.CanBuy) do
-				if vi == role then
+				if vi == subrole then
 					table.remove(v.CanBuy, k) -- TODO does it work?
 
 					break
@@ -396,23 +396,23 @@ net.Receive("shopFallbackAnsw", function(len)
 	end
 
 	if fb == SHOP_UNSET then
-		local roleData = GetRoleByIndex(role)
+		local roleData = GetRoleByIndex(subrole)
 		if roleData.fallbackTable then
 			-- set everything
 			for _, eq in ipairs(roleData.fallbackTable) do
 				local is_item = tonumber(eq.id)
 				if is_item then
-					table.insert(EquipmentItems[role], eq)
+					table.insert(EquipmentItems[subrole], eq)
 				else
 					local wepTbl = weapons.GetStored(eq.id)
 					if wepTbl then
 						wepTbl.CanBuy = wepTbl.CanBuy or {}
 
-						table.insert(wepTbl.CanBuy, role)
+						table.insert(wepTbl.CanBuy, subrole)
 					end
 				end
 
-				table.insert(Equipment[role], eq)
+				table.insert(Equipment[subrole], eq)
 			end
 		end
 	end

@@ -1,4 +1,5 @@
 -- TODO in TTT2 improve this file
+error("REWORK: cl_awards.lua")
 
 -- Award/highlight generator functions take the events and the scores as
 -- produced by SCORING/CLSCORING and return a table if successful, or nil if
@@ -11,6 +12,7 @@ local pairs = pairs
 local function GetInnos(score)
 	local i = 0
 
+	error("REWORK GetInnos(score)")
 	for k, v in pairs(score.roles) do
 		if GetRoleByIndex(k).team == TEAM_INNO then
 			i = i + 1
@@ -23,6 +25,7 @@ end
 local function GetTraitors(score)
 	local i = 0
 
+	error("REWORK GetTraitors(score)")
 	for k, v in pairs(score.roles) do
 		if GetRoleByIndex(k).team == TEAM_TRAITOR then
 			i = i + 1

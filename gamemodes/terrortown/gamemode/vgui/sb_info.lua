@@ -16,6 +16,7 @@ end
 
 function PANEL:SetPlayer(ply)
 	self.Player = ply
+
 	self:UpdatePlayerData()
 end
 
@@ -79,6 +80,7 @@ function PANEL:UpdatePlayerData()
 	if self.Search == self.Player.search_result then return end
 
 	self.List:Clear(true)
+
 	self.Scroll.Panels = {}
 
 	local search_raw = self.Player.search_result

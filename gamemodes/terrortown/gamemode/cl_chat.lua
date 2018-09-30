@@ -26,13 +26,13 @@ net.Receive("TTT_LastWordsMsg", LastWordsRecv)
 
 local function RoleChatRecv()
 	-- virtually always our role, but future equipment might allow listening in
-	local role = net.ReadUInt(ROLE_BITS)
+	local subrole = net.ReadUInt(ROLE_BITS)
 	local sender = net.ReadEntity()
 
 	if not IsValid(sender) then return end
 
 	local text = net.ReadString()
-	local roleData = GetRoleByIndex(role)
+	local roleData = GetRoleByIndex(subrole)
 
 	chat.AddText(
 		roleData.color,

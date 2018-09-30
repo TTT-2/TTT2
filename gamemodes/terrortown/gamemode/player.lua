@@ -1,3 +1,4 @@
+-- TODO rework
 ---- Player spawning/dying
 
 local math = math
@@ -23,15 +24,16 @@ function GM:PlayerInitialSpawn(ply)
 	local rstate = GetRoundState() or ROUND_WAIT
 	-- We should update the traitor list, if we are not about to send it
 	if rstate <= ROUND_PREP then
+		error("REWORK: player.lua -> GM:PlayerInitialSpawn(ply)")
 
 		-- update traitors in team (they know each other)
 		-- update each team without innos (default everybody is inno for them) and detectives (he will update later) in their own role
 		for _, v in pairs(ROLES) do
 			if not v.specialRoleFilter then
 				if v.team == TEAM_TRAITOR then
-					SendRoleList(v.index, GetRoleTeamFilter(v.team))
-				elseif v ~= ROLES.INNOCENT and v ~= ROLES.DETECTIVE and not v.unknownTeam then
-					SendRoleList(v.index, GetRoleFilter(v.index))
+					SendRoleList(ROLE_TRAITOR, v.index, GetRoleTeamFilter(v.team))
+				elseif v ~= INNOCENT and v ~= DETECTIVE and not v.unknownTeam then
+					SendRoleList(v.baserole or v.index, v.index, GetRoleFilter(v.index))
 				end
 			else
 				hook.Run("TTT2_SpecialRoleFilter")
@@ -41,12 +43,12 @@ function GM:PlayerInitialSpawn(ply)
 		-- send everybody the confirmed traitors, but not the traitors (prevent reset)
 		for _, v in pairs(ROLES) do
 			if v.team ~= TEAM_TRAITOR and not v.specialRoleFilter then
-				SendConfirmedTraitors(GetRoleFilter(v.index))
+				SendConfirmedTraitors(GetRoleFilter(v.index)) -- TODO baserole ?
 			end
 		end
 
 		-- completely update
-		SendRoleList(ROLE_DETECTIVE)
+		SendRoleList(ROLE_DETECTIVE) -- TODO baserole ?
 	end
 
 	-- Game has started, tell this guy where the round is at
@@ -55,7 +57,7 @@ function GM:PlayerInitialSpawn(ply)
 		SendConfirmedTraitors(ply)
 
 		-- completely update
-		SendRoleList(ROLE_DETECTIVE, ply)
+		SendRoleList(ROLE_DETECTIVE, ply) -- TODO baserole ?
 	end
 
 	-- Handle spec bots
@@ -501,8 +503,8 @@ function GM:PlayerDisconnected(ply)
 
 	if GetRoundState() ~= ROUND_PREP then
 		for _, v in ipairs(player.GetAll()) do
-			if not v:GetRoleData().specialRoleFilter then
-				if v:HasTeamRole(TEAM_TRAITOR) then
+			if not v:GetSubRoleData().specialRoleFilter then
+				if v:HasTeam(TEAM_TRAITOR) then
 					-- Keep traitor entindices in sync on traitor clients
 					SendTeamRoleList(TEAM_TRAITOR, v)
 				else
@@ -515,7 +517,7 @@ function GM:PlayerDisconnected(ply)
 		end
 
 		-- completely update
-		SendRoleList(ROLE_DETECTIVE)
+		SendRoleList(ROLE_DETECTIVE) -- TODO what with baserole ?
 	end
 
 	if KARMA.IsEnabled() then
@@ -579,29 +581,29 @@ local function CheckCreditAward(victim, attacker)
 	local ret = hook.Run("TTT2CheckCreditAward", victim, attacker)
 	if ret ~= nil and not ret then return end
 
-	local rd = attacker:GetRoleData()
+	local rd = attacker:GetSubRoleData()
 
 	-- DET KILLED ANOTHER TEAM AWARD
-	if attacker:GetRole() == ROLE_DETECTIVE and not victim:IsTeamMember(attacker) then
+	if attacker:GetBaseRole() == ROLE_DETECTIVE and not victim:IsInTeam(attacker) then
 		local amt = (ConVarExists("ttt_" .. rd.abbr .. "_credits_traitordead") and GetConVar("ttt_" .. rd.abbr .. "_credits_traitordead"):GetInt() or 1)
 
 		for _, ply in ipairs(player.GetAll()) do
-			if ply:IsActiveRole(ROLE_DETECTIVE) then
+			if ply:IsActive() and ply:GetBaseRole() == ROLE_DETECTIVE then
 				ply:AddCredits(amt)
 			end
 		end
 
-		LANG.Msg(GetRoleFilter(ROLE_DETECTIVE, true), "credit_det_all", {num = amt})
+		LANG.Msg(GetRoleFilter(ROLE_DETECTIVE, true), "credit_det_all", {num = amt}) -- TODO whats with baserole ?
 	end
 
 	-- TRAITOR AWARD
-	if (rd.team == TEAM_TRAITOR or rd.traitorCreditAward) and not victim:IsTeamMember(attacker) and (not GAMEMODE.AwardedCredits or GetConVar("ttt_credits_award_repeat"):GetBool()) then
+	if (attacker:HasTeam(TEAM_TRAITOR) or rd.traitorCreditAward) and not victim:IsInTeam(attacker) and (not GAMEMODE.AwardedCredits or GetConVar("ttt_credits_award_repeat"):GetBool()) then
 		local terror_alive = 0
 		local terror_dead = 0
 		local terror_total = 0
 
 		for _, ply in ipairs(player.GetAll()) do
-			if not ply:IsTeamMember(attacker) then
+			if not ply:IsInTeam(attacker) then
 				if ply:IsTerror() then
 					terror_alive = terror_alive + 1
 				elseif ply:IsDeadTerror() then
@@ -630,11 +632,11 @@ local function CheckCreditAward(victim, attacker)
 			-- If size is 0, awards are off
 			if amt > 0 then
 				for _, ply in ipairs(player.GetAll()) do
-					if ply:IsActive() and ply:IsTeamMember(attacker) and not ply:GetRoleData().preventKillCredits then
+					if ply:IsActive() and ply:IsInTeam(attacker) and not ply:GetSubRoleData().preventKillCredits then
 						ply:AddCredits(amt)
 
 						--LANG.Msg(GetRoleTeamFilter(TEAM_TRAITOR, true), "credit_kill_all", {num = amt})
-						LANG.Msg(ply, "credit_" .. ply:GetBaseRoleData().abbr .. "_all", {num = amt})
+						LANG.Msg(ply, "credit_" .. GetRoleByIndex(ply:GetBaseRole()).abbr .. "_all", {num = amt})
 					end
 				end
 			end
@@ -721,24 +723,24 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
 	-- Check for TEAM killing ANOTHER TEAM
 	if IsValid(attacker) and attacker:IsPlayer() then
 		local reward = 0
-		local rd = attacker:GetRoleData()
+		local rd = attacker:GetSubRoleData()
 
 		-- if traitor team kills another team
-		if attacker:IsActive() and attacker:IsShopper() and not attacker:IsTeamMember(ply) then
-			if attacker:HasTeamRole(TEAM_TRAITOR) then
+		if attacker:IsActive() and attacker:IsShopper() and not attacker:IsInTeam(ply) then
+			if attacker:HasTeam(TEAM_TRAITOR) then
 				reward = math.ceil(ConVarExists("ttt_credits_" .. rd.name .. "kill") and GetConVar("ttt_credits_" .. rd.name .. "kill"):GetInt() or 0)
 			else
-				local vrd = ply:GetRoleData()
+				local vrd = ply:GetSubRoleData()
 				local b = false
 
-				if vrd ~= ROLES.TRAITOR then
+				if vrd ~= TRAITOR then
 					b = ConVarExists("ttt_" .. rd.name .. "_credits_" .. vrd.name .. "kill")
 				end
 
 				if b then -- special role killing award
 					reward = math.ceil(ConVarExists("ttt_" .. rd.name .. "_credits_" .. vrd.name .. "kill") and GetConVar("ttt_" .. rd.name .. "_credits_" .. vrd.name .. "kill"):GetInt() or 0)
 				else -- give traitor killing award if killing another role
-					reward = math.ceil(ConVarExists("ttt_" .. rd.name .. "_credits_" .. ROLES.TRAITOR.name .. "kill") and GetConVar("ttt_" .. rd.name .. "_credits_" .. ROLES.TRAITOR.name .. "kill"):GetInt() or 0)
+					reward = math.ceil(ConVarExists("ttt_" .. rd.name .. "_credits_" .. TRAITOR.name .. "kill") and GetConVar("ttt_" .. rd.name .. "_credits_" .. TRAITOR.name .. "kill"):GetInt() or 0)
 				end
 			end
 		end

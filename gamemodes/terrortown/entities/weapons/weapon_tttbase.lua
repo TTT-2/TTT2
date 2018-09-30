@@ -158,8 +158,8 @@ if CLIENT then
 
 		-- somehow it seems this can be called before my player metatable
 		-- additions have loaded
-		if client.GetRoleData then
-			local col = hook.Run("TTT2ModifyWeaponColors") or client:GetRoleData().color
+		if client.GetSubRoleData then
+			local col = hook.Run("TTT2ModifyWeaponColors") or client:GetSubRoleData().color
 
 			surface.SetDrawColor(col.r * bright, col.g * bright, col.b * bright, 255 * alpha)
 		else
@@ -411,7 +411,7 @@ function SWEP:DampenDrop()
 
 	if IsValid(phys) then
 		phys:SetVelocityInstantaneous(Vector(0, 0, - 75) + phys:GetVelocity() * 0.001)
-		phys:AddAngleVelocity(phys:GetAngleVelocity() * - 0.99)
+		phys:AddAngleVelocity(phys:GetAngleVelocity() * -0.99)
 	end
 end
 

@@ -1,3 +1,5 @@
+-- TODO REWORK
+error("REWORK: corpse.lua")
 ---- Corpse functions
 
 -- namespaced because we have no ragdoll metatable
@@ -232,7 +234,7 @@ function CORPSE.ShowSearch(ply, rag, covert, long_range)
 
 	local credits = CORPSE.GetCredits(rag, 0)
 
-	if ply:IsActiveShopper() and not ply:GetRoleData().preventFindCredits and credits > 0 and not long_range then
+	if ply:IsActiveShopper() and not ply:GetSubRoleData().preventFindCredits and credits > 0 and not long_range then
 		LANG.Msg(ply, "body_credits", {num = credits})
 
 		ply:AddCredits(credits)
@@ -271,7 +273,7 @@ function CORPSE.ShowSearch(ply, rag, covert, long_range)
 
 	local lastid = -1
 
-	if rag.lastid and ply:IsActive() and ply:GetRole() == ROLE_DETECTIVE then
+	if rag.lastid and ply:IsActive() and ply:GetBaseRole() == ROLE_DETECTIVE then
 		-- if the person this victim last id'd has since disconnected, send -1 to
 		-- indicate this
 		lastid = IsValid(rag.lastid.ent) and rag.lastid.ent:EntIndex() or - 1
@@ -438,7 +440,7 @@ function CORPSE.Create(ply, attacker, dmginfo)
 	-- if someone searches this body they can find info on the victim and the
 	-- death circumstances
 	rag.equipment = ply:GetEquipmentItems()
-	rag.was_role = ply:GetRole()
+	rag.was_role = ply:GetSubRole()
 	rag.bomb_wire = ply.bomb_wire
 	rag.dmgtype = dmginfo:GetDamageType()
 

@@ -36,10 +36,8 @@ function CreateTransferMenu(parent)
 	dpick:SetWide(250)
 
 	-- fill combobox
-	local roleData = client:GetRoleData()
-
 	for _, p in ipairs(player.GetAll()) do
-		if IsValid(p) and p:IsActive() and p ~= client and p:GetRoleData().team ~= TEAM_INNO and p:IsTeamMember(client) then
+		if IsValid(p) and p:IsActive() and p ~= client and p:GetTeam() ~= TEAM_INNO and p:IsInTeam(client) then
 			dpick:AddChoice(p:Nick(), p:SteamID())
 		end
 	end
@@ -64,7 +62,7 @@ function CreateTransferMenu(parent)
 	dform:AddItem(dpick)
 	dform:AddItem(dsubmit)
 
-	dform:Help(LANG.GetParamTranslation("xfer_help", {role = tostring(roleData.team)}))
+	dform:Help(LANG.GetParamTranslation("xfer_help", {role = tostring(client:GetTeam())})) -- TODO add translation
 
 	return dform
 end

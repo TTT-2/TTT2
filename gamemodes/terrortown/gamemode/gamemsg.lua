@@ -1,3 +1,5 @@
+-- TODO fix
+error("REWORK: gamemsg.lua")
 ---- Communicating game state to players
 
 local net = net
@@ -52,12 +54,12 @@ function TraitorMsg(ply_or_rfilter, msg)
 end
 
 -- Traitorchat
-local function RoleChatMsg(sender, role, msg)
+local function RoleChatMsg(sender, subrole, msg)
 	net.Start("TTT_RoleChat")
-	net.WriteUInt(role, ROLE_BITS)
+	net.WriteUInt(subrole, ROLE_BITS)
 	net.WriteEntity(sender)
 	net.WriteString(msg)
-	net.Send(GetRoleFilter(role))
+	net.Send(GetRoleFilter(subrole))
 end
 
 
@@ -96,27 +98,27 @@ function GetDetectiveFilter(alive_only)
 end
 -- end fix
 
-function GetRoleFilter(role, alive_only)
+function GetRoleFilter(subrole, alive_only)
 	return GetPlayerFilter(function(p)
-		return p:IsRole(role) and (not alive_only or p:IsTerror())
+		return p:IsRole(subrole) and (not alive_only or p:IsTerror())
 	end)
 end
 
 function GetRoleTeamFilter(team, alive_only)
 	return GetPlayerFilter(function(p)
-		return p:HasTeamRole(team) and (not alive_only or p:IsTerror())
+		return p:HasTeam(team) and (not alive_only or p:IsTerror())
 	end)
 end
 
 function GetTeamMemberFilter(ply, alive_only)
 	return GetPlayerFilter(function(p)
-		return p:IsTeamMember(ply) and (not alive_only or p:IsTerror())
+		return p:IsInTeam(ply) and (not alive_only or p:IsTerror())
 	end)
 end
 
 function GetAllRolesFilterWOTeams(teamTbl, alive_only)
 	return GetPlayerFilter(function(p)
-		return not table.HasValue(teamTbl, p:GetRoleData().team) and (not alive_only or p:IsTerror())
+		return not table.HasValue(teamTbl, p:GetTeam()) and (not alive_only or p:IsTerror())
 	end)
 end
 
@@ -124,7 +126,7 @@ function GetSpecialRoleFilter(role, alive_only)
 	local roleData = GetRoleByIndex(role)
 
 	return GetPlayerFilter(function(p)
-		return (roleData.visibleForTraitors and not p:HasTeamRole(TEAM_TRAITOR) or not roleData.visibleForTraitors) and (not alive_only or p:IsTerror())
+		return (roleData.visibleForTraitors and not p:HasTeam(TEAM_TRAITOR) or not roleData.visibleForTraitors) and (not alive_only or p:IsTerror())
 	end)
 end
 
@@ -132,7 +134,9 @@ end
 CreateConVar("ttt_limit_spectator_chat", "1", FCVAR_ARCHIVE + FCVAR_NOTIFY)
 
 function GM:PlayerCanSeePlayersChat(text, team_only, listener, speaker)
-	if not IsValid(listener) then return false end
+	if not IsValid(listener) then
+		return false
+	end
 
 	if not IsValid(speaker) then
 		if IsEntity(speaker) then
@@ -145,12 +149,13 @@ function GM:PlayerCanSeePlayersChat(text, team_only, listener, speaker)
 	local sTeam = speaker:Team() == TEAM_SPEC
 	local lTeam = listener:Team() == TEAM_SPEC
 
-	if GetRoundState() ~= ROUND_ACTIVE or -- Round isn't active
-	not GetConVar("ttt_limit_spectator_chat"):GetBool() or -- Spectators can chat freely
-	not DetectiveMode() or -- Mumbling
-	not sTeam and (team_only and not speaker:IsSpecial() or not team_only) or -- If someone alive talks (and not a special role in teamchat's case)
-	not sTeam and team_only and speaker:GetRole() == listener:GetRole() or
-	sTeam and lTeam then -- If the speaker and listener are spectators
+	if GetRoundState() ~= ROUND_ACTIVE -- Round isn't active
+	or not GetConVar("ttt_limit_spectator_chat"):GetBool() -- Spectators can chat freely
+	or not DetectiveMode() -- Mumbling
+	or not sTeam and (team_only and not speaker:IsSpecial() or not team_only) -- If someone alive talks (and not a special role in teamchat's case)
+	or not sTeam and team_only and speaker:GetBaseRole() == listener:GetBaseRole()
+	or sTeam and lTeam then -- If the speaker and listener are spectators
+		-- TODO rework
 		return true
 	end
 
@@ -216,7 +221,7 @@ function GM:PlayerSay(ply, text, team_only)
 
 			return table.concat(filtered, " ")
 		elseif team_only and not team and ply:IsSpecial() then
-			RoleChatMsg(ply, ply:GetRole(), text)
+			RoleChatMsg(ply, ply:GetSubRole(), text)
 
 			return ""
 		end

@@ -94,7 +94,7 @@ function ScoreGroup(p)
 
 			-- To terrorists, missing players show as alive
 			if client:IsSpec()
-			or (client:IsActive() and client:HasTeamRole(TEAM_TRAITOR))
+			or (client:IsActive() and client:HasTeam(TEAM_TRAITOR))
 			or (GAMEMODE.round_state ~= ROUND_ACTIVE and client:IsTerror())
 			then
 				return GROUP_NOTFOUND
@@ -124,7 +124,7 @@ sboard_sort = {
 		return plya:Frags() - plyb:Frags()
 	end,
 	role = function (plya, plyb)
-		local comp = (plya:GetRole() or 0) - (plyb:GetRole() or 0)
+		local comp = (plya:GetSubRole() or 0) - (plyb:GetSubRole() or 0)
 		-- Reverse on purpose
 		--	otherwise the default ascending order puts boring innocents first
 		comp = 0 - comp
@@ -483,7 +483,7 @@ function PANEL:GetCanvas()
 end
 
 function PANEL:OnMouseWheeled(dlta)
-	self.scroll:AddScroll(dlta * - 2)
+	self.scroll:AddScroll(dlta * -2)
 
 	self:InvalidateLayout()
 end

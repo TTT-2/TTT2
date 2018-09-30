@@ -20,7 +20,7 @@ local function GetTextForRole(role)
 		local traitors = {}
 
 		for _, ply in ipairs(player.GetAll()) do
-			if ply:HasTeamRole(TEAM_TRAITOR) then
+			if ply:HasTeam(TEAM_TRAITOR) then
 				table.insert(traitors, ply)
 			end
 		end
@@ -71,7 +71,7 @@ local function RoundStartPopup()
 		draw.RoundedBox(8, 0, 0, s:GetWide(), s:GetTall(), color)
 	end
 
-	local text = GetTextForRole(LocalPlayer():GetRole())
+	local text = GetTextForRole(LocalPlayer():GetSubRole())
 
 	local dtext = vgui.Create("DLabel", dframe)
 	dtext:SetFont("TabLarge")

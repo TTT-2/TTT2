@@ -174,8 +174,10 @@ function HELPSCRN:Show()
 	local roledesc_tab = vgui.Create("DForm")
 	roledesc_tab:SetSpacing(10)
 
-	if client:GetRole() ~= ROLE_NONE then
-		roledesc_tab:SetName("Current Role Description of " .. GetTranslation(client:GetRoleData().name))
+	local subrole = client:GetSubRole()
+
+	if subrole ~= ROLE_NONE then
+		roledesc_tab:SetName("Current Role Description of " .. GetTranslation(client:GetSubRoleData().name))
 	else
 		roledesc_tab:SetName("Current Role Description")
 	end
@@ -183,8 +185,8 @@ function HELPSCRN:Show()
 	roledesc_tab:SetWide(roledesc_panel:GetWide() - 30)
 	roledesc_panel:AddItem(roledesc_tab)
 
-	if client:GetRole() ~= ROLE_NONE then
-		roledesc_tab:Help(GetTranslation("ttt2_desc_" .. client:GetRoleData().name))
+	if subrole ~= ROLE_NONE then
+		roledesc_tab:Help(GetTranslation("ttt2_desc_" .. client:GetSubRoleData().name))
 	else
 		roledesc_tab:Help(GetTranslation("ttt2_desc_none"))
 	end

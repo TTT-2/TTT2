@@ -102,12 +102,12 @@ local function DrawBg(x, y, width, height, client)
 	draw.RoundedBox(8, x, y, width, height, bg_colors.background_main)
 
 	-- main border, traitor based
-	local col = ROLES.INNOCENT.color
+	local col = INNOCENT.color
 
 	if GAMEMODE.round_state ~= ROUND_ACTIVE then
 		col = bg_colors.noround
 	elseif client:IsSpecial() then
-		col = hook.Run("TTT2ModifyRoleBGColor") or client:GetRoleData().color
+		col = hook.Run("TTT2ModifyRoleBGColor") or client:GetSubRoleData().color
 	end
 
 	draw.RoundedBox(8, x, y, tw, th, col)
@@ -249,7 +249,7 @@ local function InfoPaint(client)
 
 	-- Draw round time
 	local is_haste = HasteMode() and round_state == ROUND_ACTIVE
-	local is_traitor = client:IsActive() and client:HasTeamRole(TEAM_TRAITOR)
+	local is_traitor = client:IsActive() and client:HasTeam(TEAM_TRAITOR)
 
 	local endtime = GetGlobalFloat("ttt_round_end", 0) - CurTime()
 

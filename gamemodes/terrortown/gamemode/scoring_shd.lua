@@ -1,3 +1,5 @@
+-- TODO rework completely
+error("REWORKING scoring_shd.lua")
 -- Server and client both need this for scoring event logs
 
 function ScoreInit()
@@ -171,7 +173,7 @@ function ScoreTeamBonus(scores, wintype)
 				end
 			end
 
-			bonus[TEAM_TRAITOR] = math.floor(alive_not_traitors * - 0.5) + math.ceil(dead_not_traitors * 0.5)
+			bonus[TEAM_TRAITOR] = math.floor(alive_not_traitors * -0.5) + math.ceil(dead_not_traitors * 0.5)
 		end
 	end
 
@@ -182,7 +184,7 @@ end
 -- we can convert them using this fn
 function KillsToPoints(score)
 	local roleData = GetRoleByIndex(score.r)
-	return (score.suicides * - 1)
+	return (score.suicides * -1)
 	 + score.bonus
 	 + score.tk * roleData.scoreTeamKillsMultiplier
 	 + score.k * roleData.scoreKillsMultiplier

@@ -58,11 +58,11 @@ function GM:PostDrawTranslucentRenderables()
 	local plys = GetPlayers()
 
 	if client:IsSpecial() and client:IsActive() then
-		dir = (client:GetForward() * - 1)
+		dir = (client:GetForward() * -1)
 
 		for i = 1, #plys do
 			local ply = plys[i]
-			local role = ply:GetRole()
+			local subrole = ply:GetSubRole()
 
 			local pos = ply:GetPos()
 			pos.z = (pos.z + 74)
@@ -70,11 +70,11 @@ function GM:PostDrawTranslucentRenderables()
 			if ply ~= client
 			and ply:IsActive()
 			and ply:IsSpecial()
-			and ply:IsTeamMember(client)
-			and not ply:GetRoleData().avoidTeamIcons
-			and indicator_mat_tbl[role]
+			and ply:IsInTeam(client)
+			and not ply:GetSubRoleData().avoidTeamIcons
+			and indicator_mat_tbl[subrole]
 			then
-				render.SetMaterial(indicator_mat_tbl[role])
+				render.SetMaterial(indicator_mat_tbl[subrole])
 				render.DrawQuadEasy(pos, dir, 8, 8, indicator_col, 180)
 			end
 		end
@@ -207,7 +207,7 @@ function GM:HUDDrawTargetID()
 		if ent:GetNWBool("disguised", false) then
 			client.last_id = nil
 
-			if client:HasTeamRole(TEAM_TRAITOR) or client:IsSpec() then
+			if client:HasTeam(TEAM_TRAITOR) or client:IsSpec() then
 				text = ent:Nick() .. L.target_disg
 			else
 				-- Do not show anything
@@ -228,14 +228,14 @@ function GM:HUDDrawTargetID()
 
 		for _, v in pairs(ROLES) do
 			if GetRoundState() == ROUND_ACTIVE and v.team ~= TEAM_INNO then
-				if client:HasTeamRole(TEAM_TRAITOR) then
+				if client:HasTeam(TEAM_TRAITOR) then
 					if not v.visibleForTraitors then
-						target_roles[ROLE_TRAITOR] = target_roles[ROLE_TRAITOR] or ent:GetRole() == v.index
+						target_roles[ROLE_TRAITOR] = target_roles[ROLE_TRAITOR] or ent:GetSubRole() == v.index
 					else
-						target_roles[v.index] = target_roles[v.index] or ent:GetRole() == v.index
+						target_roles[v.index] = target_roles[v.index] or ent:GetSubRole() == v.index
 					end
-				elseif client:HasTeamRole(v.team) or hook.Run("HUDDrawTargetCircleTex", ent) then
-					target_roles[v.index] = target_roles[v.index] or ent:GetRole() == v.index
+				elseif client:HasTeam(v.team) or hook.Run("HUDDrawTargetCircleTex", ent) then
+					target_roles[v.index] = target_roles[v.index] or ent:GetSubRole() == v.index
 				end
 			end
 		end
@@ -395,7 +395,7 @@ function GM:HUDDrawTargetID()
 		if ent.sb_tag and ent.sb_tag.txt ~= nil then
 			text = L[ent.sb_tag.txt]
 			clr = ent.sb_tag.color
-		elseif target_corpse and client:IsActive() and client:HasTeamRole(TEAM_TRAITOR) and CORPSE.GetCredits(ent, 0) > 0 then
+		elseif target_corpse and client:IsActive() and client:HasTeam(TEAM_TRAITOR) and CORPSE.GetCredits(ent, 0) > 0 then
 			text = L.target_credits
 			clr = COLOR_YELLOW
 		end
