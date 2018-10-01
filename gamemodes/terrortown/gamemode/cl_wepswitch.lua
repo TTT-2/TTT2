@@ -46,15 +46,13 @@ local col_dark = {
 }
 
 -- update colors
-hook.Add("TTT2FinishedInit", "scoringUpdateColors", function(ply, first)
-	if first then
-		col_active.tip = {}
-		col_dark.tip = {}
+hook.Add("TTT2FinishedInit", "scoringUpdateColors", function()
+	col_active.tip = {}
+	col_dark.tip = {}
 
-		for _, v in pairs(ROLES) do
-			col_active.tip[v.index] = v.color
-			col_dark.tip[v.index] = v.dkcolor
-		end
+	for _, v in pairs(ROLES) do
+		col_active.tip[v.index] = v.color
+		col_dark.tip[v.index] = v.dkcolor
 	end
 end)
 

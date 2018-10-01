@@ -86,11 +86,9 @@ local TypeToMat = {
 }
 
 -- add role abbr of each role for icons
-hook.Add("TTT2FinishedInit", "updateTpTMat", function(ply, first)
-	if first then
-		for _, v in pairs(ROLES) do
-			TypeToMat.role[v.index] = v.abbr
-		end
+hook.Add("TTT2FinishedInit", "updateTpTMat", function()
+	for _, v in pairs(ROLES) do
+		TypeToMat.role[v.index] = v.abbr
 	end
 end)
 
