@@ -153,9 +153,8 @@ function GM:PlayerCanSeePlayersChat(text, team_only, listener, speaker)
 	or not GetConVar("ttt_limit_spectator_chat"):GetBool() -- Spectators can chat freely
 	or not DetectiveMode() -- Mumbling
 	or not sTeam and (team_only and not speaker:IsSpecial() or not team_only) -- If someone alive talks (and not a special role in teamchat's case)
-	or not sTeam and team_only and speaker:GetBaseRole() == listener:GetBaseRole()
+	or not sTeam and team_only and speaker:GetTeam() == listener:GetTeam()
 	or sTeam and lTeam then -- If the speaker and listener are spectators
-		-- TODO rework
 		return true
 	end
 

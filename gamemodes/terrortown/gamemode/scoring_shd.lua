@@ -16,6 +16,7 @@ function ScoreInit()
 		k = 0,
 		tk = 0,
 		roles = tmp,
+		team = "",
 		bonus = 0 -- non-kill points to add
 	}
 end
@@ -118,7 +119,7 @@ function ScoreTeamBonus(scores, wintype)
 
 	local winTeams = GetWinTeams()
 
-	for _, team in pairs(winTeams) do
+	for _, team in ipairs(winTeams) do
 		alive[team] = 0
 		dead[team] = 0
 	end
@@ -132,7 +133,7 @@ function ScoreTeamBonus(scores, wintype)
 
 	local bonus = {}
 
-	for _, team in pairs(winTeams) do
+	for _, team in ipairs(winTeams) do
 		local others = 0
 
 		for k, x in pairs(dead) do
@@ -141,7 +142,8 @@ function ScoreTeamBonus(scores, wintype)
 			end
 		end
 
-		bonus[team] = alive[team] + math.ceil(others * (v.surviveBonus or 0))
+		-- TODO rework with client
+		bonus[team] = alive[team] + math.ceil(others * (GetDefaultTeamRole(team).surviveBonus or 0))
 
 		-- running down the clock must never be beneficial for traitors
 		if wintype == WIN_TIMELIMIT then

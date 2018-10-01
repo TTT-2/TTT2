@@ -45,18 +45,18 @@ local is_dmg = util.BitSet
 -- Round end event
 Event(EVENT_FINISH, {
 		text = function(e)
-			if e.win > WIN_NONE then
-				return T("ev_win_" .. GetRoleByIndex(e.win).abbr)
-			elseif e.win == WIN_TIMELIMIT then
+			if e.win == WIN_TIMELIMIT then
 				return T("ev_win_time")
+			elseif e.win ~= WIN_NONE then
+				return T("ev_win_" .. e.win)
 			end
 		end,
 
 		icon = function(e)
-			if e.win > WIN_NONE then
-				return star_icon, GetRoleByIndex(e.win).name .. " won"
-			elseif e.win == WIN_TIMELIMIT then
+			if e.win == WIN_TIMELIMIT then
 				return star_icon, "Timelimit"
+			elseif e.win ~= WIN_NONE then
+				return star_icon, e.win .. " won"
 			end
 		end
 })

@@ -119,16 +119,6 @@ function plymeta:IsRole(subrole)
 	return rd.baserole and subrole == sr or rd.baserole == br
 end
 
-function plymeta:GetWinRole()
-	local rd = self:GetBaseRoleData()
-
-	if IsWinRole(rd) then
-		return rd
-	end
-
-	return INNOCENT
-end
-
 function plymeta:IsActiveRole(subrole)
 	return self:IsActive() and self:IsRole(subrole)
 end

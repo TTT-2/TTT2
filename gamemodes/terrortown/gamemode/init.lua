@@ -927,6 +927,14 @@ function PrintResultMessage(result)
 
 		return
 	else
+		if type(result) == "number" then
+			if result == WIN_TRAITOR then
+				result = TEAM_TRAITOR
+			elseif result == WIN_INNOCENT then
+				result = TEAM_INNO
+			end
+		end
+
 		LANG.Msg("win_" .. result) -- TODO translation
 		ServerLog("Result: " .. result .. " win.\n") -- TODO translation
 
@@ -962,8 +970,8 @@ function CheckForMapSwitch()
 	end
 end
 
-function EndRound(type)
-	PrintResultMessage(type)
+function EndRound(result)
+	PrintResultMessage(result)
 
 	-- first handle round end
 	SetRoundState(ROUND_POST)
@@ -996,10 +1004,10 @@ function EndRound(type)
 	-- now handle potentially error prone scoring stuff
 
 	-- register an end of round event
-	SCORE:RoundComplete(type)
+	SCORE:RoundComplete(result)
 
 	-- update player scores
-	SCORE:ApplyEventLogScores(type)
+	SCORE:ApplyEventLogScores(result)
 
 	-- send the clients the round log, players will be shown the report
 	SCORE:StreamToClients()
@@ -1007,13 +1015,13 @@ function EndRound(type)
 	-- server plugins might want to start a map vote here or something
 	-- these hooks are not used by TTT internally
 	-- possible incompatibility for other addons
-	hook.Call("TTTEndRound", GAMEMODE, type)
+	hook.Call("TTTEndRound", GAMEMODE, result)
 
-	ents.TTT.TriggerRoundStateOutputs(ROUND_POST, type)
+	ents.TTT.TriggerRoundStateOutputs(ROUND_POST, result)
 end
 
 function GM:MapTriggeredEnd(wintype)
-	if wintype > WIN_NONE then
+	if wintype ~= WIN_NONE then
 		self.MapWin = wintype
 	else
 		-- print alert and hint for contact
@@ -1029,7 +1037,7 @@ function GM:TTTCheckForWin()
 		return WIN_NONE
 	end
 
-	if GAMEMODE.MapWin > WIN_NONE then -- a role wins
+	if GAMEMODE.MapWin ~= WIN_NONE then -- a role wins
 		local mw = GAMEMODE.MapWin
 
 		GAMEMODE.MapWin = WIN_NONE
@@ -1049,7 +1057,7 @@ function GM:TTTCheckForWin()
 	error("CHANGED WORK BEHAVIOUR OF hook TTT2_ModifyWinningAlives(alive)")
 	hook.Run("TTT2_ModifyWinningAlives", alive) -- TODO changed working
 
-	for _, team in pairs(GetWinTeams()) do
+	for _, team in ipairs(GetWinTeams()) do
 		if not table.HasValue(checkedTeams, team) and alive[team] then
 			-- prevent win of custom role -> maybe own win conditions
 			b = b + 1

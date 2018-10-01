@@ -462,7 +462,7 @@ function CORPSE.Create(ply, attacker, dmginfo)
 	-- bullets have a lot of force, which feels better when shooting props,
 	-- but makes bodies fly, so dampen that here
 	if dmginfo:IsDamageType(DMG_BULLET) or dmginfo:IsDamageType(DMG_SLASH) then
-		v = (v / 5)
+		v = v / 5
 	end
 
 	for i = 0, num do

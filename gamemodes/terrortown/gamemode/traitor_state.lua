@@ -70,16 +70,21 @@ end
 function SendTeamRoleList(team, ply_or_rf, pred)
 	local role_ids = {}
 
-	for _, v in pairs(GetTeamRoles(team)) do
+	-- TODO
+	error("REWORK")
+	ERROR
+	for _, v in pairs(GetTeamRolesREMOVED(team)) do
 		role_ids[v.index] = {}
 	end
 
 	error("REWORK / TEST SendTeamRoleList(team, ply_or_rf, pred)")
 
 	for _, v in ipairs(player.GetAll()) do
+		REWORK
+
 		if v:HasTeam(team) and (not pred or (pred and pred(v))) then
 			if team == TEAM_TRAITOR and not v:GetSubRoleData().visibleForTraitors then
-				table.insert(role_ids[GetWinRole(team).index], v:EntIndex())
+				table.insert(role_ids[v:GetSubRole()], v:EntIndex())
 			else
 				table.insert(role_ids[v:GetBaseRole()], v:EntIndex())
 			end
@@ -104,14 +109,15 @@ function SendTeamRoleSilList(team, ply_or_rf, pred)
 
 	error("REWORK / TEST SendTeamRoleSilList(team, ply_or_rf, pred)")
 
-	SendRoleListMessage(GetWinRole(team).index, role_ids, ply_or_rf)
+	-- TODO just send to team
+	SendRoleListMessage(TEAM here, role_ids, ply_or_rf)
 end
 
 -- this is purely to make sure last round's traitors/dets ALWAYS get reset
 -- not happy with this, but it'll do for now
 function SendInnocentList()
-	-- Send innocent and detectives a list of actual innocents + traitors, while
-	-- sending traitors only a list of actual innocents.
+	-- Send innocent and detectives a list of current innocents + traitors, while
+	-- sending traitors only a list of current innocents.
 	local tmp = {}
 
 	for _, v in pairs(ROLES) do
@@ -119,7 +125,7 @@ function SendInnocentList()
 	end
 
 	for _, v in ipairs(player.GetAll()) do
-		table.insert(tmp[v:GetBaseRole()], v:EntIndex())
+		table.insert(tmp[v:GetSubRole()], v:EntIndex())
 	end
 
 	error("REWORK SendInnocentList()")
@@ -239,7 +245,8 @@ function SendFullStateUpdate()
 	-- TODO: Improve, not resending if current data is consistent
 
 	-- send every traitor the specific role of traitor mates
-	--for _, v in pairs(GetTeamRoles(TEAM_TRAITOR)) do
+	-- TODO replace GetTeamRolesREMOVED(TEAM_TRAITOR)
+	--for _, v in pairs(GetTeamRolesREMOVED(TEAM_TRAITOR)) do
 	--	SendRoleList(v.index, GetRoleTeamFilter(TEAM_TRAITOR))
 	--end
 	-- tell traitors who is traitor

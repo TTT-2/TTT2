@@ -289,8 +289,14 @@ function CLSCORE:BuildHilitePanel(dpanel)
 				wintype = WIN_INNOCENT
 			end
 
-			if wintype > WIN_NONE then
-				teamRole = GetRoleByIndex(wintype)
+			if wintype ~= WIN_NONE then
+				if wintype == WIN_TRAITOR then
+					wintype = TEAM_TRAITOR
+				elseif wintype == WIN_INNOCENT then
+					wintype = TEAM_INNO
+				end
+
+				teamRole = GetDefaultTeamRole(wintype)
 				title = {c = teamRole.color, txt = "hilite_win_" .. teamRole.name}
 			end
 

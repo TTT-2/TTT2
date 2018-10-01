@@ -42,7 +42,11 @@ SYNC_EQUIP = {}
 ALL_ITEMS = {}
 
 function SetupEquipment()
-	for _, v in pairs(GetTeamRoles(TEAM_TRAITOR)) do
+	-- TODO
+	error("REWORK")
+	ERROR
+
+	for _, v in pairs(GetTeamRolesREMOVED(TEAM_TRAITOR)) do
 		if not EquipmentItems[v.index] then
 			EquipmentItems[v.index] = {
 				-- body armor

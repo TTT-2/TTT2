@@ -288,10 +288,10 @@ local function RoundStateChange(o, n)
 	end
 
 	-- whatever round state we get, clear out the voice flags
-	for _, r in pairs(GetWinRoles()) do
-		for _, v in ipairs(player.GetAll()) do
-			if not r.unknownTeam and v:GetTeam() ~= TEAM_INNO then
-				v[v:GetTeam() .. "_gvoice"] = false
+	for _, v in ipairs(player.GetAll()) do
+		for _, team in ipairs(GetWinTeams()) do
+			if team ~= TEAM_INNO then
+				v[team .. "_gvoice"] = false
 			end
 		end
 	end

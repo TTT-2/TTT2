@@ -269,14 +269,6 @@ function SetupRoleGlobals()
 				return v.baserole and subrole == v.index or baserole == v.index
 			end
 		end
-
-		if not v.baserole then
-			_G["TEAM" .. string.upper(v.name)] = v.name .. "_team"
-		end
-
-		if IsWinRole(v) then
-			_G["WIN_" .. string.upper(v.name)] = v.index -- TODO needed?
-		end
 	end
 end
 
@@ -351,19 +343,7 @@ function GetShopRoles()
 end
 
 function IsWinRole(roleData)
-	return not roleData.preventWin and not roleData.baserole
-end
-
-function GetWinRoles()
-	local tmp = {}
-
-	for _, v in pairs(ROLES) do
-		if IsWinRole(v) and not table.HasValue(tmp, v) then
-			table.insert(tmp, v)
-		end
-	end
-
-	return tmp
+	return not roleData.preventWin and roleData.defaultTeam
 end
 
 function GetSubRoles(subrole)
@@ -379,17 +359,24 @@ function GetSubRoles(subrole)
 	return tmp
 end
 
--- TODO remove? useless with new role logic
+function GetDefaultTeamRole(team)
+	for _, v in pairs(ROLES) do
+		if not v.baserole and v.defaultTeam == team then
+			return v
+		end
+	end
+
+	return INNOCENT
+end
+
 function GetWinTeams()
 	local winTeams = {}
 
 	for _, v in pairs(ROLES) do
-		if IsWinRole(v.defaultTeam) then
-			table.insert(winTeams, v)
+		if not table.HasValue(winTeams, v.defaultTeam) and IsWinRole(v) then
+			table.insert(winTeams, v.defaultTeam)
 		end
 	end
-
-	SortRolesTable(winTeams)
 
 	return winTeams
 end
@@ -482,12 +469,10 @@ EVENT_CREDITFOUND = 9
 EVENT_C4DISARM = 10
 
 -- TODO use positive ids?
-WIN_NONE = -1
-WIN_TIMELIMIT = -2
--- TODO remove following? unnecessary
-WIN_INNOCENT = ROLE_INNOCENT
-WIN_TRAITOR = ROLE_TRAITOR
-WIN_DETECTIVE = ROLE_DETECTIVE
+WIN_NONE = WIN_NONE or 1
+WIN_TRAITOR = WIN_TRAITOR or 2
+WIN_INNOCENT = WIN_INNOCENT or 3
+WIN_TIMELIMIT = WIN_TIMELIMIT or 4
 
 -- Weapon categories, you can only carry one of each
 WEAPON_NONE = 0

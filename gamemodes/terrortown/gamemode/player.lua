@@ -636,7 +636,7 @@ local function CheckCreditAward(victim, attacker)
 						ply:AddCredits(amt)
 
 						--LANG.Msg(GetRoleTeamFilter(TEAM_TRAITOR, true), "credit_kill_all", {num = amt})
-						LANG.Msg(ply, "credit_" .. ply:GetBaseRoleData().abbr .. "_all", {num = amt})
+						LANG.Msg(ply, "credit_" .. TRAITOR.abbr .. "_all", {num = amt})
 					end
 				end
 			end
