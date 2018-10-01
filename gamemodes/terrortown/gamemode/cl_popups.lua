@@ -5,13 +5,13 @@ local GetPTranslation = LANG.GetParamTranslation
 
 ---- Round start
 
-local function GetTextForRole(role)
+local function GetTextForPlayer(ply)
 	local menukey = Key("+menu_context", "C")
-	local roleData = GetRoleByIndex(role)
+	local roleData = ply:GetSubRoleData()
 
-	if roleData.team ~= TEAM_TRAITOR then
+	if ply:GetTeam() ~= TEAM_TRAITOR then
 		local fallback = GetConVar("ttt_" .. roleData.abbr .. "_shop_fallback"):GetString()
-		if fallback == SHOP_DISABLED or hook.Run("TTT2_PreventAccessShop", LocalPlayer()) then
+		if fallback == SHOP_DISABLED or hook.Run("TTT2_PreventAccessShop", ply) then
 			return GetTranslation("info_popup_" .. roleData.name)
 		else
 			return GetPTranslation("info_popup_" .. roleData.name, {menukey = Key("+menu_context", "C")})
@@ -19,30 +19,30 @@ local function GetTextForRole(role)
 	else
 		local traitors = {}
 
-		for _, ply in ipairs(player.GetAll()) do
-			if ply:HasTeam(TEAM_TRAITOR) then
-				table.insert(traitors, ply)
+		for _, p in ipairs(player.GetAll()) do
+			if p:HasTeam(TEAM_TRAITOR) then
+				table.insert(traitors, p)
 			end
 		end
 
 		if #traitors > 1 then
 			local traitorlist = ""
 
-			for _, ply in ipairs(traitors) do
-				if ply ~= LocalPlayer() then
-					traitorlist = traitorlist .. string.rep(" ", 42) .. ply:Nick() .. "\n"
+			for _, p in ipairs(traitors) do
+				if p ~= ply then
+					traitorlist = traitorlist .. string.rep(" ", 42) .. p:Nick() .. "\n"
 				end
 			end
 
 			local fallback = GetConVar("ttt_" .. roleData.abbr .. "_shop_fallback"):GetString()
-			if fallback == SHOP_DISABLED or hook.Run("TTT2_PreventAccessShop", LocalPlayer()) then
+			if fallback == SHOP_DISABLED or hook.Run("TTT2_PreventAccessShop", ply) then
 				return GetTranslation("info_popup_" .. roleData.name, {traitorlist = traitorlist})
 			else
 				return GetPTranslation("info_popup_" .. roleData.name, {menukey = menukey, traitorlist = traitorlist})
 			end
 		else
 			local fallback = GetConVar("ttt_" .. roleData.abbr .. "_shop_fallback"):GetString()
-			if fallback == SHOP_DISABLED or hook.Run("TTT2_PreventAccessShop", LocalPlayer()) then
+			if fallback == SHOP_DISABLED or hook.Run("TTT2_PreventAccessShop", ply) then
 				return GetPTranslation("info_popup_" .. roleData.name .. "_alone")
 			else
 				return GetPTranslation("info_popup_" .. roleData.name .. "_alone", {menukey = menukey})
@@ -71,7 +71,7 @@ local function RoundStartPopup()
 		draw.RoundedBox(8, 0, 0, s:GetWide(), s:GetTall(), color)
 	end
 
-	local text = GetTextForRole(LocalPlayer():GetSubRole())
+	local text = GetTextForPlayer(LocalPlayer())
 
 	local dtext = vgui.Create("DLabel", dframe)
 	dtext:SetFont("TabLarge")

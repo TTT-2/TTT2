@@ -65,17 +65,14 @@ function ScoreEvent(e, scores, rolesTbl)
 		end
 
 		local victim = player.GetBySteamID(vid)
-		local h1 = victim and hook.Run("TTT2_ModifyRole", victim)
-		scores[vid].r = h1 and h1.index or scores[vid].r
+		scores[vid].r = victim and victim:GetSubRole() or scores[vid].r
+		scores[vid].team = victim and victim:GetTeam()
 
 		local attacker = player.GetBySteamID(aid)
-		local h2 = attacker and hook.Run("TTT2_ModifyRole", player.GetBySteamID(aid))
-		scores[aid].r = h2 and h2.index or scores[aid].r
+		scores[aid].r = attacker and attacker:GetSubRole() or scores[aid].r
+		scores[aid].team = attacker and attacker:GetTeam()
 
-		local vrd = GetRoleByIndex(scores[vid].r)
-		local ard = GetRoleByIndex(scores[aid].r)
-
-		if vrd.team == ard.team then
+		if IsValid(attacker) and IsValid(victim) and attacker:IsInTeam(victim) then
 			scores[aid].tk = scores[aid].tk + 1
 		end
 
@@ -84,7 +81,7 @@ function ScoreEvent(e, scores, rolesTbl)
 		if aid == vid then
 			scores[vid].suicides = scores[vid].suicides + 1
 		elseif aid ~= -1 then
-			scores[aid].roles[ard.index] = scores[aid].roles[ard.index] + 1
+			scores[aid].roles[attacker:GetSubRole()] = scores[aid].roles[attacker:GetSubRole()] + 1
 			scores[aid].k = scores[aid].k + 1
 		end
 	elseif e.id == EVENT_BODYFOUND then
@@ -92,15 +89,9 @@ function ScoreEvent(e, scores, rolesTbl)
 
 		if not scores[sid] then return end
 
-		if GetRoleByIndex(scores[sid].r).team == TEAM_TRAITOR then return end
+		if scores[sid].team == TEAM_TRAITOR then return end
 
-		local find_bonus = 0
-
-		for _, v in pairs(ROLES) do
-			if v.team ~= TEAM_TRAITOR then
-				find_bonus = scores[sid].r == v.index and 3 or 1
-			end
-		end
+		local find_bonus = scores[sid].team ~= TEAM_TRAITOR and 3 or 1
 
 		scores[sid].bonus = scores[sid].bonus + find_bonus
 	end
@@ -125,36 +116,32 @@ function ScoreTeamBonus(scores, wintype)
 	local alive = {}
 	local dead = {}
 
-	local winRoles = GetWinRoles()
+	local winTeams = GetWinTeams()
 
-	for _, v in pairs(winRoles) do
-		alive[v.team] = 0
-		dead[v.team] = 0
+	for _, team in pairs(winTeams) do
+		alive[team] = 0
+		dead[team] = 0
 	end
 
 	for _, sc in pairs(scores) do
 		local state = (sc.deaths == 0) and alive or dead
-		local team = GetRoleByIndex(sc.r).team
+		local team = sc.team
 
 		state[team] = state[team] + 1
 	end
 
 	local bonus = {}
 
-	for _, v in pairs(winRoles) do
+	for _, team in pairs(winTeams) do
 		local others = 0
 
 		for k, x in pairs(dead) do
-			if k ~= v.team then
+			if k ~= team then
 				others = others + x
 			end
 		end
 
-		bonus[v.team] = alive[v.team] * 1
-
-		if v.surviveBonus then -- theoretically not necessary
-			bonus[v.team] = bonus[v.team] + math.ceil(others * (v.surviveBonus or 0))
-		end
+		bonus[team] = alive[team] + math.ceil(others * (v.surviveBonus or 0))
 
 		-- running down the clock must never be beneficial for traitors
 		if wintype == WIN_TIMELIMIT then

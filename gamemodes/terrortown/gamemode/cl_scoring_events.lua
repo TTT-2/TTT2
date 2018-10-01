@@ -243,15 +243,15 @@ Event(EVENT_KILL, {
 				return smile_icon, "Suicide"
 			end
 
-			local atr = GetRoleByIndex(e.att.r)
-			local vtr = GetRoleByIndex(e.vic.r)
+			local atr = e.att.team
+			local vtr = e.vic.team
 
-			if atr.team == vtr.team then
+			if atr == vtr then
 				return wrong_icon, "Teamkill"
-			elseif atr.team == TEAM_TRAITOR then
+			elseif atr == TEAM_TRAITOR then
 				return right_icon, "Traitor killed innocent"
 			else
-				return shield_icon, atr.name .. " killed " .. vtr.name
+				return shield_icon, GetRoleByIndex(e.att.r).name .. " killed " .. GetRoleByIndex(e.vic.r).name
 			end
 		end
 })

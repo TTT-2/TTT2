@@ -66,9 +66,9 @@ TRAITOR_EQUIPMENT = {
 	EQUIP_DISGUISE
 }
 
--- role teams to have an indentifier
-TEAM_INNO = "innocent_team"
-TEAM_TRAITOR = "traitor_team"
+-- role teams to have an identifier
+TEAM_INNO = "innocents"
+TEAM_TRAITOR = "traitors"
 
 -- max network bits to send roles numbers
 ROLE_BITS = 5
@@ -93,7 +93,7 @@ ROLES.INNOCENT = {
 	bgcolor = Color(0, 50, 0, 200),
 	name = "innocent",
 	abbr = "inno",
-	team = TEAM_INNO,
+	defaultTeam = TEAM_INNO,
 	defaultEquipment = INNO_EQUIPMENT,
 	buildin = true,
 	scoreKillsMultiplier = 1,
@@ -108,7 +108,7 @@ ROLES.TRAITOR = {
 	bgcolor = Color(150, 0, 0, 200),
 	name = "traitor",
 	abbr = "traitor",
-	team = TEAM_TRAITOR,
+	defaultTeam = TEAM_TRAITOR,
 	defaultEquipment = TRAITOR_EQUIPMENT,
 	visibleForTraitors = true, -- just for a better performance
 	buildin = true,
@@ -126,7 +126,7 @@ ROLES.DETECTIVE = {
 	bgcolor = Color(0, 0, 150, 200),
 	name = "detective",
 	abbr = "det",
-	team = TEAM_INNO,
+	defaultTeam = TEAM_INNO,
 	defaultEquipment = SPECIAL_EQUIPMENT,
 	buildin = true,
 	scoreKillsMultiplier = INNOCENT.scoreKillsMultiplier,
@@ -380,23 +380,18 @@ function GetSubRoles(subrole)
 end
 
 -- TODO remove? useless with new role logic
-function GetTeamRoles(team)
-	error("ERROR - func: GetTeamRoles(team)")
-
-	local teamRoles = {}
-
-	local i = 0
+function GetWinTeams()
+	local winTeams = {}
 
 	for _, v in pairs(ROLES) do
-		if v.team and v.team == team then
-			i = i + 1
-			teamRoles[i] = v
+		if IsWinRole(v.defaultTeam) then
+			table.insert(winTeams, v)
 		end
 	end
 
-	SortRolesTable(teamRoles)
+	SortRolesTable(winTeams)
 
-	return teamRoles
+	return winTeams
 end
 
 function GetSortedRoles()

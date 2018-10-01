@@ -202,7 +202,7 @@ function CLSCORE:BuildScorePanel(dpanel)
 			end
 
 			local points_own = KillsToPoints(s)
-			local points_team = bonus[roleData.team]
+			local points_team = bonus[s.team]
 			local points_total = points_own + points_team
 
 			local l = dlist:AddLine(surv, nicks[id], role, s.k, s.tk, points_own, points_team, points_total)
@@ -301,7 +301,7 @@ function CLSCORE:BuildHilitePanel(dpanel)
 	local tr = {}
 
 	for k, v in pairs(self.Tbl) do
-		if GetRoleByIndex(k).team == TEAM_TRAITOR then
+		if GetRoleByIndex(k).defaultTeam == TEAM_TRAITOR then -- TODO fix
 			table.Add(tr, v)
 		end
 	end

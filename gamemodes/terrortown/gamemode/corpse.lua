@@ -54,7 +54,7 @@ local function IdentifyBody(ply, rag)
 		return
 	end
 
-	local traitor = (GetRoleByIndex(rag.was_role).team == TEAM_TRAITOR)
+	local traitor = (rag.was_team == TEAM_TRAITOR)
 
 	if not hook.Run("TTTCanIdentifyCorpse", ply, rag, traitor) then return end
 
@@ -80,8 +80,8 @@ local function IdentifyBody(ply, rag)
 
 			if traitor then
 				-- update innocent's list of traitors
-				for _, v in pairs(ROLES) do
-					if v.team ~= TEAM_TRAITOR and not v.specialRoleFilter then
+				for _, v in pairs(ROLES) do -- TODO rework for player
+					if v.defaultTeam ~= TEAM_TRAITOR and not v.specialRoleFilter then
 						SendConfirmedTraitors(GetRoleFilter(v.index, false))
 					end
 				end
@@ -205,7 +205,7 @@ function CORPSE.ShowSearch(ply, rag, covert, long_range)
 		return
 	end
 
-	local traitor = GetRoleByIndex(rag.was_role).team == TEAM_TRAITOR
+	local traitor = rag.was_team == TEAM_TRAITOR
 
 	if not hook.Run("TTTCanSearchCorpse", ply, rag, covert, long_range, traitor) then
 		return

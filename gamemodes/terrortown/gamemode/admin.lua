@@ -72,9 +72,9 @@ function PrintReport(ply)
 		for _, e in pairs(SCORE.Events) do
 			if e.id == EVENT_KILL then
 				if e.att.sid == -1 then
-					pr("<something> killed " .. e.vic.ni .. (GetRoleByIndex(e.vic.r).team == TEAM_TRAITOR and " [TRAITOR]" or " [inno.]"))
+					pr("<something> killed " .. e.vic.ni .. (e.vic.team == TEAM_TRAITOR and " [TRAITOR]" or " [inno.]"))
 				else
-					local tr = GetRoleByIndex(e.vic.r).team == TEAM_TRAITOR
+					local tr = e.vic.team == TEAM_TRAITOR
 
 					pr(e.att.ni .. (tr and " [TRAITOR]" or " [inno.]") .. " killed " .. e.vic.ni .. (tr and " [TRAITOR]" or " [inno.]"))
 				end

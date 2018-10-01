@@ -191,10 +191,9 @@ function plymeta:ResetRoundFlags()
 	self.mute_team = -1
 
 	-- TODO needed? new voicechat ?
-	error("REWORK: plymeta: ResetRoundFlags()")
-	for _, v in pairs(GetWinRoles()) do
-		if v.index ~= TEAM_INNO and not v.unknownTeam then
-			self[v.team .. "_gvoice"] = false
+	for _, team in pairs(GetWinTeams()) do
+		if team ~= TEAM_INNO then
+			self[team .. "_gvoice"] = false
 		end
 	end
 

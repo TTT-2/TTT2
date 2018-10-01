@@ -42,7 +42,7 @@ concommand.Add("ttt_radar_scan", function(ply, cmd, args)
 						if not ply:HasTeam(TEAM_TRAITOR) then
 							role = ROLE_INNOCENT
 						elseif not rd.visibleForTraitors then
-							role = rd.team == TEAM_TRAITOR and ROLE_TRAITOR or ROLE_INNOCENT
+							role = ROLE_TRAITOR
 						end
 					end
 

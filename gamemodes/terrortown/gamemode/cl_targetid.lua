@@ -227,14 +227,14 @@ function GM:HUDDrawTargetID()
 		end
 
 		for _, v in pairs(ROLES) do
-			if GetRoundState() == ROUND_ACTIVE and v.team ~= TEAM_INNO then
+			if GetRoundState() == ROUND_ACTIVE and v.defaultTeam ~= TEAM_INNO then
 				if client:HasTeam(TEAM_TRAITOR) then
 					if not v.visibleForTraitors then
 						target_roles[ROLE_TRAITOR] = target_roles[ROLE_TRAITOR] or ent:GetSubRole() == v.index
 					else
 						target_roles[v.index] = target_roles[v.index] or ent:GetSubRole() == v.index
 					end
-				elseif client:HasTeam(v.team) or hook.Run("HUDDrawTargetCircleTex", ent) then
+				elseif client:HasTeam(v.defaultTeam) or hook.Run("HUDDrawTargetCircleTex", ent) then
 					target_roles[v.index] = target_roles[v.index] or ent:GetSubRole() == v.index
 				end
 			end

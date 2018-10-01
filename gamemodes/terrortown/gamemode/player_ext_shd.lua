@@ -42,15 +42,15 @@ function plymeta:SetRole(subrole)
 	self.role = baserole
 	self.subrole = subrole
 
-	self:UpdateTeam(GetRoleByIndex(subrole).team)
+	self:UpdateTeam(GetRoleByIndex(subrole).defaultTeam)
 end
 
 function plymeta:GetTeam()
-	return self.team
+	return self.roleteam
 end
 
 function plymeta:UpdateTeam(team)
-	self.team = team
+	self.roleteam = team
 end
 
 function plymeta:HasTeam(team)

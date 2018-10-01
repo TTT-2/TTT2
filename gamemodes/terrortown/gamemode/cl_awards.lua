@@ -14,7 +14,7 @@ local function GetInnos(score)
 
 	error("REWORK GetInnos(score)")
 	for k, v in pairs(score.roles) do
-		if GetRoleByIndex(k).team == TEAM_INNO then
+		if GetRoleByIndex(k).defaultTeam == TEAM_INNO then
 			i = i + 1
 		end
 	end
@@ -27,7 +27,7 @@ local function GetTraitors(score)
 
 	error("REWORK GetTraitors(score)")
 	for k, v in pairs(score.roles) do
-		if GetRoleByIndex(k).team == TEAM_TRAITOR then
+		if GetRoleByIndex(k).defaultTeam == TEAM_TRAITOR then
 			i = i + 1
 		end
 	end
@@ -139,8 +139,8 @@ local function FirstBlood(events, scores, players, traitors)
 
 			if not award.nick or award.nick == "" then return end
 
-			local vtr = GetRoleByIndex(e.vic.r).team == TEAM_TRAITOR
-			local atr = GetRoleByIndex(e.att.r).team == TEAM_TRAITOR
+			local vtr = e.vic.team == TEAM_TRAITOR
+			local atr = e.att.team == TEAM_TRAITOR
 
 			if atr and not vtr then -- traitor legit k
 				award.title = T("aw_fst1_title")
@@ -826,7 +826,7 @@ local function TimeOfDeath(events, scores, players, traitors)
 			time_near_end = e.t - near
 			traitor_win = (e.win == WIN_TRAITOR)
 		elseif e.id == EVENT_KILL and e.vic then
-			if time_near_end and e.t > time_near_end and (GetRoleByIndex(e.vic.r).team == TEAM_TRAITOR) == traitor_win then
+			if time_near_end and e.t > time_near_end and (e.vic.team == TEAM_TRAITOR) == traitor_win then
 				return {
 					nick = e.vic.ni,
 					title = T("aw_tod1_title"),

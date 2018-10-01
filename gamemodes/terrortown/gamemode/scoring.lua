@@ -82,8 +82,8 @@ function SCORE:HandleKill(victim, attacker, dmginfo)
 	if IsValid(attacker)
 	and attacker:IsPlayer()
 	and dmginfo:IsExplosionDamage()
-	and GetRoleByIndex(e.att.r).team == TEAM_TRAITOR
-	and GetRoleByIndex(e.vic.r).team == TEAM_TRAITOR
+	and e.att.team == TEAM_TRAITOR
+	and e.vic.team == TEAM_TRAITOR
 	then
 		-- If a traitor gets himself killed by another traitor's C4, it's his own
 		-- damn fault for ignoring the indicator.
@@ -197,13 +197,8 @@ function SCORE:ApplyEventLogScores(wintype)
 	for sid, s in pairs(scored_log) do
 		ply = player.GetBySteamID(sid)
 
-		if ply and IsValid(ply) then
-			local team = hook.Run("TTT2_ModifyRole", ply) or ply:GetSubRoleData()
-			team = team.team
-
-			if ply:ShouldScore() then
-				ply:AddFrags(bonus[team])
-			end
+		if IsValid(ply) and ply:ShouldScore() then
+			ply:AddFrags(bonus[ply:GetTeam()])
 		end
 	end
 

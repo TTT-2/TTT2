@@ -132,7 +132,7 @@ function SendInnocentList()
 			table.Add(mergedList, tmp[role.index])
 
 			-- maybe remove second check to enable traitors that other traitors cant see ?
-			if not role.visibleForTraitors and role.team ~= TEAM_TRAITOR then -- prevent resetting visible players and traitors for traitors
+			if not role.visibleForTraitors and role.defaultTeam ~= TEAM_TRAITOR then -- prevent resetting visible players and traitors for traitors
 				table.Add(mergedListForTraitor, tmp[role.index])
 			end
 		end
@@ -147,8 +147,8 @@ function SendInnocentList()
 	local tmpList = {}
 
 	for _, v in pairs(ROLES) do
-		if (v.team == TEAM_TRAITOR or v.specialRoleFilter) and not table.HasValue(tmpList, v.team) then
-			table.insert(tmpList, v.team)
+		if (v.defaultTeam == TEAM_TRAITOR or v.specialRoleFilter) and not table.HasValue(tmpList, v.defaultTeam) then
+			table.insert(tmpList, v.defaultTeam)
 		end
 	end
 
@@ -163,7 +163,7 @@ function SendVisibleForTraitorList()
 	local tmp = {}
 
 	for _, v in pairs(ROLES) do
-		if v.team ~= TEAM_TRAITOR and v.visibleForTraitors then
+		if v.defaultTeam ~= TEAM_TRAITOR and v.visibleForTraitors then
 			b = true
 			tmp[v.index] = {}
 		end

@@ -913,23 +913,27 @@ function BeginRound()
 	ents.TTT.TriggerRoundStateOutputs(ROUND_BEGIN)
 end
 
-function PrintResultMessage(type)
+function PrintResultMessage(result)
 	ServerLog("Round ended.\n")
 
-	if type == WIN_TIMELIMIT then
+	if result == WIN_TIMELIMIT then
 		LANG.Msg("win_time")
 		ServerLog("Result: timelimit reached, traitors lose.\n")
-	elseif type == WIN_NONE then
+
+		return
+	elseif result == WIN_NONE then
 		LANG.Msg("win_bees")
 		ServerLog("Result: The Bees win (Its a Draw).\n")
-	elseif type > WIN_NONE then
-		local roleData = GetRoleByIndex(type)
 
-		LANG.Msg("win_" .. roleData.team)
-		ServerLog("Result: " .. roleData.name .. "s win.\n")
+		return
 	else
-		ServerLog("Result: unknown victory condition!\n")
+		LANG.Msg("win_" .. result) -- TODO translation
+		ServerLog("Result: " .. result .. " win.\n") -- TODO translation
+
+		return
 	end
+
+	ServerLog("Result: unknown victory condition!\n")
 end
 
 function CheckForMapSwitch()
@@ -1042,13 +1046,11 @@ function GM:TTTCheckForWin()
 		end
 	end
 
-	error("CHANGED WORK BEHAVIOUR OF hook TTT2TTT2_ModifyWinningAlives(alive)")
+	error("CHANGED WORK BEHAVIOUR OF hook TTT2_ModifyWinningAlives(alive)")
 	hook.Run("TTT2_ModifyWinningAlives", alive) -- TODO changed working
 
-	for _, v in pairs(GetWinRoles()) do
-		local team = v.team
-
-		if not table.HasValue(checkedTeams, team) and alive[team] and not v.preventWin then
+	for _, team in pairs(GetWinTeams()) do
+		if not table.HasValue(checkedTeams, team) and alive[team] then
 			-- prevent win of custom role -> maybe own win conditions
 			b = b + 1
 
@@ -1167,7 +1169,7 @@ function SelectRoles()
 		local availableRoles = {}
 
 		for _, v in pairs(ROLES) do
-			if not v.notSelectable and v.team == TEAM_TRAITOR and v ~= TRAITOR and GetConVar("ttt_" .. v.name .. "_enabled"):GetBool() then
+			if not v.notSelectable and v.defaultTeam == TEAM_TRAITOR and v ~= TRAITOR and GetConVar("ttt_" .. v.name .. "_enabled"):GetBool() then
 				local b = true
 				local r = (ConVarExists("ttt_" .. v.name .. "_random") and GetConVar("ttt_" .. v.name .. "_random"):GetInt() or 0)
 
@@ -1201,7 +1203,7 @@ function SelectRoles()
 		if not v.notSelectable
 		and (v == DETECTIVE or newRolesEnabled)
 		and v ~= INNOCENT
-		and v.team ~= TEAM_TRAITOR
+		and v.defaultTeam ~= TEAM_TRAITOR
 		and GetConVar("ttt_" .. v.name .. "_enabled"):GetBool()
 		then
 			local b = true

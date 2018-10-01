@@ -74,7 +74,7 @@ function SetupEquipment()
 	end
 
 	for _, v in pairs(ROLES) do
-		if v.team ~= TEAM_TRAITOR and not EquipmentItems[v.index] then
+		if v.defaultTeam ~= TEAM_TRAITOR and not EquipmentItems[v.index] then
 			EquipmentItems[v.index] = {}
 		end
 	end
