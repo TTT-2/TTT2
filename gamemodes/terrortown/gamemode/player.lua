@@ -30,8 +30,8 @@ function GM:PlayerInitialSpawn(ply)
 		-- update each team without innos (default everybody is inno for them) and detectives (he will update later) in their own role
 		for _, v in pairs(ROLES) do
 			if not v.specialRoleFilter then
-				if v.team == TEAM_TRAITOR then
-					SendRoleList(ROLE_TRAITOR, v.index, GetRoleTeamFilter(v.team))
+				if v.defaultTeam == TEAM_TRAITOR then
+					SendRoleList(ROLE_TRAITOR, v.index, GetRoleTeamFilter(v.defaultTeam))
 				elseif v ~= INNOCENT and v ~= DETECTIVE and not v.unknownTeam then
 					SendRoleList(v.baserole or v.index, v.index, GetRoleFilter(v.index))
 				end
@@ -43,7 +43,7 @@ function GM:PlayerInitialSpawn(ply)
 		-- send everybody the confirmed traitors, but not the traitors (prevent reset)
 		for _, v in pairs(ROLES) do
 			if v.team ~= TEAM_TRAITOR and not v.specialRoleFilter then
-				SendConfirmedTraitors(GetRoleFilter(v.index)) -- TODO baserole ?
+				SendConfirmedTeam(TEAM_TRAITOR, GetRoleFilter(v.index)) -- TODO baserole ?
 			end
 		end
 
@@ -54,7 +54,7 @@ function GM:PlayerInitialSpawn(ply)
 	-- Game has started, tell this guy where the round is at
 	if rstate ~= ROUND_WAIT then
 		SendRoundState(rstate, ply)
-		SendConfirmedTraitors(ply)
+		SendConfirmedTeam(TEAM_TRAITOR, ply)
 
 		-- completely update
 		SendRoleList(ROLE_DETECTIVE, ply) -- TODO baserole ?
@@ -490,14 +490,7 @@ function GM:PlayerDisconnected(ply)
 		ply:SetRole(ROLE_NONE)
 	end
 
-	SendVisibleForTraitorList()
-
-	-- easy role filtering method
-	for _, v in pairs(ROLES) do
-		if v.networkRoles then
-			SendNetworkingRolesList(v.index, v.networkRoles)
-		end
-	end
+	SendVisibleForTeamList(TEAM_TRAITOR)
 
 	hook.Run("TTT2SendFullStateUpdate")
 
@@ -506,10 +499,10 @@ function GM:PlayerDisconnected(ply)
 			if not v:GetSubRoleData().specialRoleFilter then
 				if v:HasTeam(TEAM_TRAITOR) then
 					-- Keep traitor entindices in sync on traitor clients
-					SendTeamRoleList(TEAM_TRAITOR, v)
+					SendTeamList(TEAM_TRAITOR, v)
 				else
 					-- Same for confirmed traitors on innocent clients
-					SendConfirmedTraitors(v)
+					SendConfirmedTeam(TEAM_TRAITOR, v)
 				end
 			else
 				hook.Run("TTT2SpecialRoleFilter", v)

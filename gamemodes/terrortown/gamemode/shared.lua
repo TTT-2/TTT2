@@ -215,25 +215,23 @@ function InitCustomRole(name, roleData, conVarData)
 		print("[TTT2][ROLE] Added '" .. name .. "' Role (index: " .. roleData.index .. ")")
 	end
 end
-
+-- usage: inside of e.g. this hook: hook.Add("TTT2BaseRoleInit", "TTT2ConnectBaseRole" .. baserole .. "With_" .. roleData.name, function() ... end)
 function SetBaseRole(roleData, baserole)
-	hook.Add("TTT2BaseRoleInit", "TTT2ConnectBaseRole" .. baserole .. "With_" .. roleData.name, function()
-		if roleData.baserole then
-			error("ERROR: BaseRole of " .. roleData.name .. " already set (" .. roleData.baserole .. ")!")
+	if roleData.baserole then
+		error("ERROR: BaseRole of " .. roleData.name .. " already set (" .. roleData.baserole .. ")!")
+
+		return
+	else
+		local br = GetRoleByIndex(baserole)
+
+		if br.baserole then
+			error("ERROR: Your requested BaseRole can't be any BaseRole of another SubRole because it's a SubRole as well.")
 
 			return
-		else
-			local br = GetRoleByIndex(baserole)
-
-			if br.baserole then
-				error("ERROR: Your requested BaseRole can't be any BaseRole of another SubRole because it's a SubRole as well.")
-
-				return
-			end
 		end
+	end
 
-		roleData.baserole = baserole
-	end)
+	roleData.baserole = baserole
 end
 
 function SetupRoleGlobals()
@@ -329,6 +327,11 @@ function IsWinRole(roleData)
 	return not roleData.preventWin and roleData.defaultTeam
 end
 
+function IsBaseRole(roleData)
+	return not roleData.baserole
+end
+
+-- includes baserole as well
 function GetSubRoles(subrole)
 	local br = GetRoleByIndex(subrole).baserole or subrole
 	local tmp = {}
@@ -350,6 +353,18 @@ function GetDefaultTeamRole(team)
 	end
 
 	return INNOCENT
+end
+
+function GetTeamMembers(team)
+	local tmp = {}
+
+	for _, v in ipairs(player.GetAll()) do
+		if v:HasTeam(team) then
+			table.insert(tmp, v)
+		end
+	end
+
+	return tmp
 end
 
 function GetWinTeams()
@@ -385,6 +400,24 @@ function GetWeaponNameByFileName(name)
 			return v.ClassName
 		end
 	end
+end
+
+-- default TTT fn
+function GetTraitors()
+	local trs = {}
+
+	for _, v in ipairs(player.GetAll()) do
+		if v:IsTraitor() then
+			table.insert(trs, v)
+		end
+	end
+
+	return trs
+end
+
+-- default TTT fn
+function CountTraitors()
+	return #GetTraitors()
 end
 
 function table.Randomize(t)

@@ -68,7 +68,7 @@ function plymeta:SetDefaultCredits()
 		if self:HasTeam(TEAM_TRAITOR) then
 			local c = (ConVarExists("ttt_credits_starting") and GetConVar("ttt_credits_starting"):GetInt() or 0)
 
-			if CountTraitors() == 1 then
+			if #GetTeamMembers(TEAM_TRAITOR) == 1 then
 				c = c + (ConVarExists("ttt_credits_alonebonus") and GetConVar("ttt_credits_alonebonus"):GetInt() or 0)
 			end
 

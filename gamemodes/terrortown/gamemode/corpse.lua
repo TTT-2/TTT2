@@ -82,14 +82,16 @@ local function IdentifyBody(ply, rag)
 				-- update innocent's list of traitors
 				for _, v in pairs(ROLES) do -- TODO rework for player
 					if v.defaultTeam ~= TEAM_TRAITOR and not v.specialRoleFilter then
-						SendConfirmedTraitors(GetRoleFilter(v.index, false))
+						SendConfirmedTeam(TEAM_TRAITOR, GetRoleFilter(v.index, false))
 					end
 				end
 			end
 
 			for _, v in pairs(ROLES) do
 				if not v.specialRoleFilter and not v.preventShowOnConfirm then
-					SendConfirmedSpecial(v.index, GetSpecialRoleFilter(v.index, false))
+					SendRoleList(v.index, GetSpecialRoleFilter(v.index, false), function(p)
+						return p:GetNWBool("body_found")
+					end)
 				end
 
 				if v.specialRoleFilter then
