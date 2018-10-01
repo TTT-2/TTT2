@@ -624,7 +624,7 @@ function GM:OnContextMenuOpen()
 	local client = LocalPlayer()
 	local r = GetRoundState()
 
-	if r == ROUND_ACTIVE and (not client:IsShopper() or hook.Run("TTT2_PreventAccessShop", client)) then
+	if r == ROUND_ACTIVE and (not client:IsShopper() or hook.Run("TTT2PreventAccessShop", client)) then
 		return
 	elseif r == ROUND_POST or r == ROUND_PREP then
 		CLSCORE:Toggle()

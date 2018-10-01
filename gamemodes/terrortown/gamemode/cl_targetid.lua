@@ -35,7 +35,7 @@ end
 ---- "T" indicator above traitors
 indicator_mat_tbl = {}
 
-hook.Add("TTT2_FinishedSync", "updateRoleMat", function(ply, first)
+hook.Add("TTT2FinishedInit", "updateRoleMat", function(ply, first)
 	indicator_mat_tbl = {}
 
 	for _, v in pairs(ROLES) do
@@ -240,7 +240,7 @@ function GM:HUDDrawTargetID()
 			end
 		end
 
-		target_roles = hook.Run("TTT2_HUDDrawTargetID", target_roles) or target_roles
+		target_roles = hook.Run("TTT2HUDDrawTargetID", target_roles) or target_roles
 
 		target_roles[ROLE_DETECTIVE] = target_roles[ROLE_DETECTIVE] or GetRoundState() > ROUND_PREP and ent:IsDetective() or false
 	elseif cls == "prop_ragdoll" then

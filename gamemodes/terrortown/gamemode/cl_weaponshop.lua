@@ -18,7 +18,7 @@ function GetEquipmentForRoleAll()
 			"bobs_blacklisted"
 		}
 
-		hook.Run("TTT2_ModifyWepShopIgnoreWeps", eject) -- possibility to modify from externally
+		hook.Run("TTT2ModifyWepShopIgnoreWeps", eject) -- possibility to modify from externally
 
 		-- find buyable weapons to load info from
 		for _, v in ipairs(weapons.GetList()) do

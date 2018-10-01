@@ -46,7 +46,7 @@ local col_dark = {
 }
 
 -- update colors
-hook.Add("TTT2_FinishedSync", "scoringUpdateColors", function(ply, first)
+hook.Add("TTT2FinishedInit", "scoringUpdateColors", function(ply, first)
 	if first then
 		col_active.tip = {}
 		col_dark.tip = {}

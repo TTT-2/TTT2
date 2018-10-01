@@ -1,4 +1,5 @@
 include("shared.lua")
+include("sh_init.lua")
 
 -- Define GM12 fonts for compatibility
 surface.CreateFont("DefaultBold", {font = "Tahoma", size = 13, weight = 1000})
@@ -48,18 +49,13 @@ include("cl_voice.lua")
 function GM:Initialize()
 	MsgN("TTT Client initializing...")
 
-	-- setup weapon ConVars and similar things
-	for _, wep in ipairs(weapons.GetList()) do
-		if not wep.Doublicated then
-			RegisterNormalWeapon(wep)
-		end
-	end
-
 	GAMEMODE.round_state = ROUND_WAIT
 
 	LANG.Init()
 
 	self.BaseClass:Initialize()
+
+	hook.Run("PostInitialize")
 end
 
 function GM:InitPostEntity()
@@ -90,7 +86,7 @@ function GM:InitPostEntity()
 	-- initialize fallback shops
 	InitFallbackShops()
 
-	net.Start("TTT2_SyncShopsWithServer")
+	net.Start("TTT2SyncShopsWithServer")
 	net.SendToServer()
 
 	net.Start("TTT_Spectate")
@@ -128,110 +124,6 @@ function GM:HUDClear()
 	RADAR:Clear()
 	TBHUD:Clear()
 end
-
--- sync ROLES
-local buff = ""
-
-local function ReceiveRolesTable(len)
-	print("[TTT2][ROLE] Received new ROLES list from server! Updating...")
-
-	local first = net.ReadBool()
-	local cont = net.ReadBit() == 1
-
-	buff = buff .. net.ReadString()
-
-	if cont then
-		return
-	else
-		-- do stuff with buffer contents
-		local json_roles = buff -- util.Decompress(buff)
-
-		if not json_roles then
-			ErrorNoHalt("ROLES decompression failed!\n")
-		else
-			-- convert the json string back to a table
-			local tmp = util.JSONToTable(json_roles)
-
-			if istable(tmp) then
-				ROLES = tmp
-			else
-				ErrorNoHalt("ROLES decoding failed!\n")
-			end
-
-			-- confirm update and process next updates
-			net.Start("TTT2_RolesListSynced")
-			net.WriteBool(first)
-			net.SendToServer()
-
-			-- run client side
-			SetupRoleGlobals()
-
-			hook.Run("TTT2_PreFinishedSync", LocalPlayer(), first)
-
-			hook.Run("TTT2_FinishedSync", LocalPlayer(), first)
-
-			hook.Run("TTT2_PostFinishedSync", LocalPlayer(), first)
-		end
-
-		-- flush
-		buff = ""
-	end
-end
-net.Receive("TTT2_SyncRolesList", ReceiveRolesTable)
-
-local buff2 = ""
-
-local function ReceiveSingleRoleTable(len)
-	print("[TTT2][ROLE] Received updated ROLE from server! Updating...")
-
-	local cont = net.ReadBit() == 1
-
-	buff2 = buff2 .. net.ReadString()
-
-	if cont then
-		return
-	else
-		-- do stuff with buffer contents
-		local json_roles = buff2 -- util.Decompress(buff2)
-
-		if not json_roles then
-			ErrorNoHalt("ROLE decompression failed!\n")
-		else
-			-- convert the json string back to a table
-			local tmp = util.JSONToTable(json_roles)
-
-			if istable(tmp) then
-				if tmp.name then
-					for k, v in pairs(ROLES) do
-						if v.name == tmp.name then
-							table.Merge(ROLES[k], tmp)
-						end
-					end
-				end
-			else
-				ErrorNoHalt("ROLE decoding failed!\n")
-			end
-
-			-- confirm update and process next updates
-			net.Start("TTT2_RolesListSynced")
-			net.WriteBool(false)
-			net.SendToServer()
-
-			-- run client side
-			SetupRoleGlobals()
-
-			hook.Run("TTT2_PreFinishedSync", LocalPlayer(), false)
-
-			hook.Run("TTT2_FinishedSync", LocalPlayer(), false)
-
-			hook.Run("TTT2_PostFinishedSync", LocalPlayer(), false)
-		end
-
-		-- flush
-		buff2 = ""
-	end
-end
-net.Receive("TTT2_SyncSingleRole", ReceiveSingleRoleTable)
 
 KARMA = {}
 
@@ -336,7 +228,7 @@ end
 net.Receive("TTT_Role", ReceiveRole)
 
 --- role test
-net.Receive("TTT2_Test_role", function()
+net.Receive("TTT2TestRole", function()
 	local client = LocalPlayer()
 
 	client:ChatPrint("Your current role is: '" .. client:GetSubRoleData().name .. "'")

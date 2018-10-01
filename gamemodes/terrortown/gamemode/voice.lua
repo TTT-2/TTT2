@@ -41,7 +41,7 @@ function GM:PlayerCanHearPlayersVoice(listener, speaker)
 	end
 
 	-- custom post-settings
-	hook.Run("TTT2_PostPlayerCanHearPlayersVoice", listener, speaker)
+	hook.Run("TTT2PostPlayerCanHearPlayersVoice", listener, speaker)
 
 	-- Traitors "team"chat by default, non-locationally
 	if not speaker:GetSubRoleData().unknownTeam and speaker:IsActive() and not speaker:HasTeam(TEAM_INNO) then

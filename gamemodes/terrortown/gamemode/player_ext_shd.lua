@@ -64,7 +64,7 @@ end
 function plymeta:UpdateRole(subrole, team)
 	self:SetRole(subrole)
 
-	hook.Run("TTT2_RoleTypeSet", self)
+	hook.Run("TTT2RoleTypeSet", self)
 end
 
 -- Role access

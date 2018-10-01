@@ -1,3 +1,5 @@
+-- This file contains all shared vars, tables and functions
+
 GM.Name = "[TTT2] Trouble in Terrorist Town 2 (Advanced Update) - by Alf21"
 GM.Author = "Bad King Urgrain && Alf21"
 GM.Email = "4lf-mueller@gmx.de"
@@ -137,7 +139,6 @@ DETECTIVE = ROLES.DETECTIVE
 
 local flag_all = {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED}
 
--- TODO: export into another file !
 CreateConVar("ttt_detective_enabled", "1", flag_all)
 CreateConVar("ttt_newroles_enabled", "1", flag_all)
 
@@ -149,8 +150,18 @@ CreateConVar("ttt_" .. INNOCENT.abbr .. "_shop_fallback", SHOP_DISABLED, flag_al
 CreateConVar("ttt_" .. TRAITOR.abbr .. "_shop_fallback", SHOP_UNSET, flag_all)
 CreateConVar("ttt_" .. DETECTIVE.abbr .. "_shop_fallback", SHOP_UNSET, flag_all)
 
+function GenerateNewRoleID()
+	local i = 1 -- start with "1" to prevent incompatibilities with ROLE_ANY => new roles will start @ id: i(1)+3=4
+
+	for _, v in pairs(ROLES) do
+		i = i + 1
+	end
+
+	return i
+end
+
 -- you should only use this function to add roles to TTT2
-function AddCustomRole(name, roleData, conVarData)
+function InitCustomRole(name, roleData, conVarData)
 	conVarData = conVarData or {}
 
 	if not ROLES[name] then
@@ -195,78 +206,50 @@ function AddCustomRole(name, roleData, conVarData)
 			CreateConVar("ttt_credits_" .. roleData.name .. "kill", tostring(conVarData.traitorKill), flag_all)
 		end
 
-		-- client
-		---- empty
+		-- set id
+		roleData.index = GenerateNewRoleID()
 
-		-- server
-		if SERVER then
-			-- necessary to init roles in this way, because we need to wait until the ROLES array is initialized
-			-- and every important function works properly
-			hook.Add("TTT2_RoleInit", "Add_" .. roleData.abbr .. "_Role", function() -- unique hook identifier please
-				if not ROLES[name] then -- count ROLES
-					local i = 1 -- start with "1" to prevent incompatibilities with ROLE_ANY => new roles will start @ id: i(1)+3=4
+		-- set data
+		ROLES[name] = roleData
 
-					for _, v in pairs(ROLES) do
-						i = i + 1
-					end
-
-					roleData.index = i
-					ROLES[name] = roleData
-
-					-- update DefaultEquipment
-					DefaultEquipment = GetDefaultEquipment()
-
-					-- spend an answer
-					print("[TTT2][ROLE] Added '" .. name .. "' Role (index: " .. i .. ")")
-				end
-			end)
-		end
+		print("[TTT2][ROLE] Added '" .. name .. "' Role (index: " .. roleData.index .. ")")
 	end
 end
 
 function SetBaseRole(roleData, baserole)
-	if roleData.baserole then
-		error("ERROR: BaseRole of " .. roleData.name .. " already set (" .. roleData.baserole .. ")!")
-
-		return
-	else
-		local br = GetRoleByIndex(baserole)
-
-		if br.baserole then
-			error("ERROR: Your requested BaseRole can't be any BaseRole of another SubRole because it's a SubRole as well.")
+	hook.Add("TTT2BaseRoleInit", "TTT2ConnectBaseRole" .. baserole .. "With_" .. roleData.name, function()
+		if roleData.baserole then
+			error("ERROR: BaseRole of " .. roleData.name .. " already set (" .. roleData.baserole .. ")!")
 
 			return
+		else
+			local br = GetRoleByIndex(baserole)
+
+			if br.baserole then
+				error("ERROR: Your requested BaseRole can't be any BaseRole of another SubRole because it's a SubRole as well.")
+
+				return
+			end
 		end
-	end
 
-	roleData.baserole = baserole
-end
-
-function UpdateCustomRole(name, roleData)
-	if SERVER and ROLES[name] then
-		-- necessary for networking!
-		roleData.name = ROLES[name].name
-
-		table.Merge(ROLES[name], roleData)
-
-		for _, v in ipairs(player.GetAll()) do
-			UpdateSingleRoleData(roleData, v)
-		end
-	end
+		roleData.baserole = baserole
+	end)
 end
 
 function SetupRoleGlobals()
 	for _, v in pairs(ROLES) do
-		_G["ROLE_" .. string.upper(v.name)] = v.index
-		_G[string.upper(v.name)] = v
+		if v ~= INNOCENT and v ~= TRAITOR and v ~= DETECTIVE then -- already set
+			_G["ROLE_" .. string.upper(v.name)] = v.index
+			_G[string.upper(v.name)] = v
 
-		local plymeta = FindMetaTable("Player")
-		if plymeta then
-			-- e.g. IsJackal() will match each subrole of the jackal as well as the jackal as the baserole
-			plymeta["Is" .. v.name:gsub("^%l", string.upper)] = function()
-				local baserole, subrole = plymeta:GetRole()
+			local plymeta = FindMetaTable("Player")
+			if plymeta then
+				-- e.g. IsJackal() will match each subrole of the jackal as well as the jackal as the baserole
+				plymeta["Is" .. v.name:gsub("^%l", string.upper)] = function()
+					local baserole, subrole = plymeta:GetRole()
 
-				return v.baserole and subrole == v.index or baserole == v.index
+					return v.baserole and subrole == v.index or baserole == v.index
+				end
 			end
 		end
 	end
@@ -468,7 +451,6 @@ EVENT_C4EXPLODE = 8
 EVENT_CREDITFOUND = 9
 EVENT_C4DISARM = 10
 
--- TODO use positive ids?
 WIN_NONE = WIN_NONE or 1
 WIN_TRAITOR = WIN_TRAITOR or 2
 WIN_INNOCENT = WIN_INNOCENT or 3
@@ -536,15 +518,6 @@ end
 TEAM_TERROR = 1
 TEAM_SPEC = TEAM_SPECTATOR
 
-function GM:CreateTeams()
-	team.SetUp(TEAM_TERROR, "Terrorists", Color(0, 200, 0, 255), false)
-	team.SetUp(TEAM_SPEC, "Spectators", Color(200, 200, 0, 255), true)
-
-	-- Not that we use this, but feels good
-	team.SetSpawnPoint(TEAM_TERROR, "info_player_deathmatch")
-	team.SetSpawnPoint(TEAM_SPEC, "info_player_deathmatch")
-end
-
 -- Everyone's model
 local ttt_playermodels = {
 	Model("models/player/phoenix.mdl"),
@@ -552,85 +525,11 @@ local ttt_playermodels = {
 	Model("models/player/guerilla.mdl"),
 	Model("models/player/leet.mdl")
 }
+
 local ttt_playermodels_count = #ttt_playermodels
 
 function GetRandomPlayerModel()
 	return ttt_playermodels[math.random(1, ttt_playermodels_count)]
-end
-
-local ttt_playercolors = {
-	all = {
-		COLOR_WHITE,
-		COLOR_BLACK,
-		COLOR_GREEN,
-		COLOR_DGREEN,
-		COLOR_RED,
-		COLOR_YELLOW,
-		COLOR_LGRAY,
-		COLOR_BLUE,
-		COLOR_NAVY,
-		COLOR_PINK,
-		COLOR_OLIVE,
-		COLOR_ORANGE
-	},
-
-	serious = {
-		COLOR_WHITE,
-		COLOR_BLACK,
-		COLOR_NAVY,
-		COLOR_LGRAY,
-		COLOR_DGREEN,
-		COLOR_OLIVE
-	}
-}
-local ttt_playercolors_all_count = #ttt_playercolors.all
-local ttt_playercolors_serious_count = #ttt_playercolors.serious
-
-CreateConVar("ttt_playercolor_mode", "1")
-function GM:TTTPlayerColor(model)
-	local mode = (ConVarExists("ttt_playercolor_mode") and GetConVar("ttt_playercolor_mode"):GetInt() or 0)
-
-	if mode == 1 then
-		return ttt_playercolors.serious[math.random(1, ttt_playercolors_serious_count)]
-	elseif mode == 2 then
-		return ttt_playercolors.all[math.random(1, ttt_playercolors_all_count)]
-	elseif mode == 3 then
-		-- Full randomness
-		return Color(math.random(0, 255), math.random(0, 255), math.random(0, 255))
-	end
-
-	-- No coloring
-	return COLOR_WHITE
-end
-
--- Kill footsteps on player and client
-function GM:PlayerFootstep(ply, pos, foot, sound, volume, rf)
-	if IsValid(ply) and (ply:Crouching() or ply:GetMaxSpeed() < 150 or ply:IsSpec()) then
-		-- do not play anything, just prevent normal sounds from playing
-		return true
-	end
-end
-
--- Predicted move speed changes
-function GM:Move(ply, mv)
-	if ply:IsTerror() then
-		local basemul = 1
-		local slowed = false
-
-		-- Slow down ironsighters
-		local wep = ply:GetActiveWeapon()
-
-		if IsValid(wep) and wep.GetIronsights and wep:GetIronsights() then
-			basemul = 120 / 220
-			slowed = true
-		end
-
-		local mul = hook.Call("TTTPlayerSpeedModifier", GAMEMODE, ply, slowed, mv) or 1
-		mul = basemul * mul
-
-		mv:SetMaxClientSpeed(mv:GetMaxClientSpeed() * mul)
-		mv:SetMaxSpeed(mv:GetMaxSpeed() * mul)
-	end
 end
 
 -- Weapons and items that come with TTT. Weapons that are not in this list will
@@ -649,13 +548,6 @@ function GetDefaultEquipment()
 end
 
 DefaultEquipment = GetDefaultEquipment()
-
--- should be exported !
-hook.Add("TTT2_FinishedSync", "updateDefEquRol", function(ply, first)
-	if first then
-		DefaultEquipment = GetDefaultEquipment()
-	end
-end)
 
 TTTWEAPON_CVARS = {}
 

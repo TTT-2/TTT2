@@ -77,7 +77,7 @@ function SCORE:HandleKill(victim, attacker, dmginfo)
 		e.att.r = attacker:GetSubRole()
 	end
 
-	hook.Run("TTT2_ModifyScoringEvent", e, {victim = victim, attacker = attacker, dmginfo = dmginfo})
+	hook.Run("TTT2ModifyScoringEvent", e, {victim = victim, attacker = attacker, dmginfo = dmginfo})
 
 	if IsValid(attacker)
 	and attacker:IsPlayer()

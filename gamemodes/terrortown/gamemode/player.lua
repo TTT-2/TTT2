@@ -36,7 +36,7 @@ function GM:PlayerInitialSpawn(ply)
 					SendRoleList(v.baserole or v.index, v.index, GetRoleFilter(v.index))
 				end
 			else
-				hook.Run("TTT2_SpecialRoleFilter")
+				hook.Run("TTT2SpecialRoleFilter")
 			end
 		end
 
@@ -499,7 +499,7 @@ function GM:PlayerDisconnected(ply)
 		end
 	end
 
-	hook.Run("TTT2_SendFullStateUpdate")
+	hook.Run("TTT2SendFullStateUpdate")
 
 	if GetRoundState() ~= ROUND_PREP then
 		for _, v in ipairs(player.GetAll()) do
@@ -512,7 +512,7 @@ function GM:PlayerDisconnected(ply)
 					SendConfirmedTraitors(v)
 				end
 			else
-				hook.Run("TTT2_SpecialRoleFilter", v)
+				hook.Run("TTT2SpecialRoleFilter", v)
 			end
 		end
 

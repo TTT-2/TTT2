@@ -240,7 +240,7 @@ function SendFullStateUpdate()
 		end
 	end
 
-	hook.Run("TTT2_SendFullStateUpdate")
+	hook.Run("TTT2SendFullStateUpdate")
 
 	-- TODO: Improve, not resending if current data is consistent
 
@@ -261,7 +261,7 @@ function SendFullStateUpdate()
 				SendConfirmedTraitors(ply)
 			end
 		else
-			hook.Run("TTT2_SpecialRoleFilter", ply)
+			hook.Run("TTT2SpecialRoleFilter", ply)
 		end
 	end
 
@@ -319,7 +319,7 @@ local function request_rolelist(ply)
 				SendConfirmedTraitors(ply)
 			end
 		else
-			hook.Run("TTT2_SpecialRoleFilter", ply)
+			hook.Run("TTT2SpecialRoleFilter", ply)
 		end
 
 		-- update own role for ply
@@ -384,7 +384,7 @@ end
 concommand.Add("ttt_force_role", force_role, nil, nil, FCVAR_CHEAT)
 
 local function get_role(ply)
-	net.Start("TTT2_Test_role")
+	net.Start("TTT2TestRole")
 	net.Send(ply)
 end
 concommand.Add("get_role", get_role)

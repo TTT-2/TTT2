@@ -93,7 +93,7 @@ local function IdentifyBody(ply, rag)
 				end
 
 				if v.specialRoleFilter then
-					hook.Run("TTT2_SpecialRoleFilter")
+					hook.Run("TTT2SpecialRoleFilter")
 				end
 			end
 

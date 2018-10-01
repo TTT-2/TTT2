@@ -86,7 +86,7 @@ end
 
 SetupEquipment() -- pre init to support normal TTT addons
 
-hook.Add("TTT2_FinishedSync", "updateEquRol", function()
+hook.Add("TTT2FinishedInit", "updateEquRol", function()
 	SetupEquipment()
 end)
 
@@ -547,7 +547,7 @@ if SERVER then
 
 		if fb ~= roleData.index then return end -- TODO why? remove and replace SHOP_UNSET with index of the current role
 
-		hook.Run("TTT2_LoadSingleShopEquipment", roleData)
+		hook.Run("TTT2LoadSingleShopEquipment", roleData)
 
 		SYNC_EQUIP = SYNC_EQUIP or {}
 		SYNC_EQUIP[roleData.index] = {} -- reset

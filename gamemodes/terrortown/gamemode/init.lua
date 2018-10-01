@@ -2,6 +2,7 @@
 
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
+AddCSLuaFile("sh_init.lua")
 AddCSLuaFile("cl_hud.lua")
 AddCSLuaFile("cl_msgstack.lua")
 AddCSLuaFile("cl_hudpickup.lua")
@@ -49,6 +50,7 @@ AddCSLuaFile("vgui/sb_team.lua")
 AddCSLuaFile("vgui/sb_info.lua")
 
 include("shared.lua")
+include("sh_init.lua")
 
 include("karma.lua")
 include("entity.lua")
@@ -172,26 +174,11 @@ util.AddNetworkString("TTT_FlareScorch")
 util.AddNetworkString("TTT_Radar")
 util.AddNetworkString("TTT_Spectate")
 
-util.AddNetworkString("TTT2_Test_role")
-
-util.AddNetworkString("TTT2_SyncRolesList")
-util.AddNetworkString("TTT2_SyncSingleRole")
-util.AddNetworkString("TTT2_RolesListSynced")
-util.AddNetworkString("TTT2_SyncShopsWithServer")
+util.AddNetworkString("TTT2TestRole")
+util.AddNetworkString("TTT2SyncShopsWithServer")
 
 ---- Round mechanics
 function GM:Initialize()
-	print("\n[TTT2][ROLE] Server is ready to receive new roles...\n")
-
-	hook.Run("TTT2_PreRoleInit")
-
-	hook.Run("TTT2_RoleInit")
-
-	hook.Run("TTT2_PostRoleInit")
-
-	SetupRoleGlobals()
-
-	print()
 	MsgN("Trouble In Terrorist Town gamemode initializing...")
 	ShowVersion()
 
@@ -242,13 +229,6 @@ function GM:Initialize()
 
 	if not IsMounted("cstrike") then
 		ErrorNoHalt("TTT WARNING: CS:S does not appear to be mounted by GMod. Things may break in strange ways. Server admin? Check the TTT readme for help.\n")
-	end
-
-	-- setup weapon ConVars and similar things
-	for _, wep in ipairs(weapons.GetList()) do
-		if not wep.Doublicated then
-			RegisterNormalWeapon(wep)
-		end
 	end
 
 	hook.Run("PostInitialize")
@@ -329,109 +309,7 @@ function LoadShopsEquipment()
 	end
 end
 
--- sync ROLES list
-local function EncodeForStream(tbl)
-	-- may want to filter out data later
-	-- just serialize for now
-
-	local result = util.TableToJSON(tbl)
-	if not result then
-		ErrorNoHalt("Round report event encoding failed!\n")
-
-		return false
-	else
-		return result
-	end
-end
-
-function UpdateRoleData(ply, first)
-	print("[TTT2][ROLE] Sending new ROLES list to " .. ply:Nick() .. "...")
-
-	local s = EncodeForStream(ROLES)
-	if not s then return end
-
-	-- divide into happy lil bits.
-	-- this was necessary with user messages, now it's
-	-- a just-in-case thing if a round somehow manages to be > 64K
-	local cut = {}
-	local max = 65499
-
-	while #s ~= 0 do
-		local bit = string.sub(s, 1, max - 1)
-
-		table.insert(cut, bit)
-
-		s = string.sub(s, max, - 1)
-	end
-
-	local parts = #cut
-
-	for k, bit in ipairs(cut) do
-		net.Start("TTT2_SyncRolesList")
-		net.WriteBool(first)
-		net.WriteBit(k ~= parts) -- continuation bit, 1 if there's more coming
-		net.WriteString(bit)
-
-		if ply then
-			net.Send(ply)
-		else
-			net.Broadcast()
-		end
-	end
-end
-
-function UpdateSingleRoleData(roleData, ply)
-	print("[TTT2][ROLE] Sending updated role '" .. roleData.name .. "' to " .. ply:Nick() .. "...")
-
-	local s = EncodeForStream(roleData)
-	if not s then return end
-
-	-- divide into happy lil bits.
-	-- this was necessary with user messages, now it's
-	-- a just-in-case thing if a round somehow manages to be > 64K
-	local cut = {}
-	local max = 65500
-
-	while #s ~= 0 do
-		local bit = string.sub(s, 1, max - 1)
-
-		table.insert(cut, bit)
-
-		s = string.sub(s, max, - 1)
-	end
-
-	local parts = #cut
-
-	for k, bit in ipairs(cut) do
-		net.Start("TTT2_SyncSingleRole")
-		net.WriteBit(k ~= parts) -- continuation bit, 1 if there's more coming
-		net.WriteString(bit)
-
-		if ply then
-			net.Send(ply)
-		else
-			net.Broadcast()
-		end
-	end
-end
-
--- TODO just run on server once! not for every client
-net.Receive("TTT2_RolesListSynced", function(len, ply)
-	local first = net.ReadBool()
-
-	-- run serverside
-	hook.Run("TTT2_PreFinishedSync", ply, first)
-
-	hook.Run("TTT2_FinishedSync", ply, first)
-
-	hook.Run("TTT2_PostFinishedSync", ply, first)
-end)
-
-function GM:PlayerAuthed(ply, steamid, uniqueid)
-	UpdateRoleData(ply, true)
-end
-
-net.Receive("TTT2_SyncShopsWithServer", function(len, ply)
+net.Receive("TTT2SyncShopsWithServer", function(len, ply)
 	SyncEquipment(ply)
 end)
 
@@ -504,7 +382,7 @@ local function WinChecker()
 		if CurTime() > GetGlobalFloat("ttt_round_end", 0) then
 			EndRound(WIN_TIMELIMIT)
 		elseif not ttt_dbgwin:GetBool() then
-			win = hook.Run("TTT2_PreWinChecker")
+			win = hook.Run("TTT2PreWinChecker")
 
 			if win and win ~= WIN_NONE then
 				EndRound(win)
@@ -738,7 +616,7 @@ end
 function TellTraitorsAboutTraitors()
 	local traitornicks = {}
 
-	hook.Run("TTT2_TellTraitors")
+	hook.Run("TTT2TellTraitors")
 
 	for _, v in ipairs(player.GetAll()) do
 		if v:HasTeam(TEAM_TRAITOR) then
@@ -1054,8 +932,8 @@ function GM:TTTCheckForWin()
 		end
 	end
 
-	error("CHANGED WORK BEHAVIOUR OF hook TTT2_ModifyWinningAlives(alive)")
-	hook.Run("TTT2_ModifyWinningAlives", alive) -- TODO changed working
+	error("CHANGED WORK BEHAVIOUR OF hook TTT2ModifyWinningAlives(alive)")
+	hook.Run("TTT2ModifyWinningAlives", alive) -- TODO changed working
 
 	for _, team in ipairs(GetWinTeams()) do
 		if not table.HasValue(checkedTeams, team) and alive[team] then
