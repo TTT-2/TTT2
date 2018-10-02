@@ -1,5 +1,3 @@
--- TODO REWORK
-error("REWORK: corpse.lua")
 ---- Corpse functions
 
 -- namespaced because we have no ragdoll metatable
@@ -39,8 +37,9 @@ end
 -- If detective mode, announce when someone's body is found
 local bodyfound = CreateConVar("ttt_announce_body_found", "1")
 
-function GM:TTTCanIdentifyCorpse(ply, corpse, was_traitor)
+function GM:TTTCanIdentifyCorpse(ply, corpse)
 	-- return true to allow corpse identification, false to disallow
+	-- TODO removed b"was_traitor". Team is available with corpse.was_team
 	return true
 end
 
@@ -54,50 +53,28 @@ local function IdentifyBody(ply, rag)
 		return
 	end
 
-	local traitor = (rag.was_team == TEAM_TRAITOR)
-
-	if not hook.Run("TTTCanIdentifyCorpse", ply, rag, traitor) then return end
+	if not hook.Run("TTTCanIdentifyCorpse", ply, rag) then return end
 
 	local finder = ply:Nick()
 	local nick = CORPSE.GetPlayerNick(rag, "")
 
 	-- Announce body
 	if bodyfound:GetBool() and not CORPSE.GetFound(rag, false) then
-		local role = rag.was_role
-		local rd = GetRoleByIndex(role)
+		local subrole = rag.was_role
+		local team = rag.was_team
+		local rd = GetRoleByIndex(subrole)
 		local roletext = ("body_found_" .. rd.abbr)
 
-		LANG.Msg("body_found", {finder = finder, victim = nick, role = LANG.Param(roletext)})
+		LANG.Msg("body_found", {finder = finder, victim = nick, role = LANG.Param(roletext), team = team})
 	end
 
 	-- Register find
-	if not CORPSE.GetFound(rag, false) then
-		-- will return either false or a valid ply
+	if not CORPSE.GetFound(rag, false) then -- will return either false or a valid ply
 		local deadply = player.GetBySteamID(rag.sid)
-
 		if deadply then
 			deadply:SetNWBool("body_found", true)
 
-			if traitor then
-				-- update innocent's list of traitors
-				for _, v in pairs(ROLES) do -- TODO rework for player
-					if v.defaultTeam ~= TEAM_TRAITOR and not v.specialRoleFilter then
-						SendConfirmedTeam(TEAM_TRAITOR, GetRoleFilter(v.index, false))
-					end
-				end
-			end
-
-			for _, v in pairs(ROLES) do
-				if not v.specialRoleFilter and not v.preventShowOnConfirm then
-					SendRoleList(v.index, GetSpecialRoleFilterREMOVED REMOVED(v.index, false), function(p)
-						return p:GetNWBool("body_found")
-					end)
-				end
-
-				if v.specialRoleFilter then
-					hook.Run("TTT2SpecialRoleFilter")
-				end
-			end
+			SendPlayerToEveryone(deadply) -- confirm player for everyone
 
 			SCORE:HandleBodyFound(ply, deadply)
 		end
@@ -107,6 +84,7 @@ local function IdentifyBody(ply, rag)
 		CORPSE.SetFound(rag, true)
 	end
 
+	-- TODO remove the kill list?
 	-- Handle kill list
 	for _, vicsid in pairs(rag.kills) do
 		-- filter out disconnected (and bots !)
@@ -116,8 +94,9 @@ local function IdentifyBody(ply, rag)
 		if IsValid(vic) and not vic:GetNWBool("body_found", false) then
 			LANG.Msg("body_confirm", {finder = finder, victim = vic:Nick()})
 
-			-- update scoreboard status
-			vic:SetNWBool("body_found", true)
+			SendPlayerToEveryone(vic) -- confirm player for everyone
+
+			vic:SetNWBool("body_found", true) -- update scoreboard status
 
 			-- however, do not mark body as found. This lets players find the
 			-- body later and get the benefits of that
@@ -153,7 +132,7 @@ concommand.Add("ttt_confirm_death", function(ply, cmd, args)
 end)
 
 -- Call detectives to a corpse
-local function CallDetective(ply, cmd, args)
+concommand.Add("ttt_call_detective", function(ply, cmd, args)
 	if not IsValid(ply) then return end
 
 	if #args ~= 1 then return end
@@ -168,7 +147,7 @@ local function CallDetective(ply, cmd, args)
 
 	if IsValid(rag) and rag:GetPos():Distance(ply:GetPos()) < 128 then
 		if CORPSE.GetFound(rag, false) then
-			-- show indicator to detectives
+			-- show indicator in radar to detectives
 			net.Start("TTT_CorpseCall")
 			net.WriteVector(rag:GetPos())
 			net.Send(GetRoleFilter(ROLE_DETECTIVE, true))
@@ -178,22 +157,22 @@ local function CallDetective(ply, cmd, args)
 			LANG.Msg(ply, "body_call_error")
 		end
 	end
-end
-concommand.Add("ttt_call_detective", CallDetective)
+end)
 
 local function bitsRequired(num)
 	local bits, max = 0, 1
 
 	while max <= num do
-		bits = bits + 1
-		max = max + max
+		bits = bits + 1 -- increase
+		max = max + max -- double
 	end
 
 	return bits
 end
 
-function GM:TTTCanSearchCorpse(ply, corpse, is_covert, is_long_range, was_traitor)
+function GM:TTTCanSearchCorpse(ply, corpse, is_covert, is_long_range)
 	-- return true to allow corpse search, false to disallow.
+	-- TODO removed last param is_traitor -> accessable with corpse.was_team
 	return true
 end
 
@@ -207,15 +186,12 @@ function CORPSE.ShowSearch(ply, rag, covert, long_range)
 		return
 	end
 
-	local traitor = rag.was_team == TEAM_TRAITOR
-
-	if not hook.Run("TTTCanSearchCorpse", ply, rag, covert, long_range, traitor) then
-		return
-	end
+	if not hook.Run("TTTCanSearchCorpse", ply, rag, covert, long_range) then return end
 
 	-- init a heap of data we'll be sending
 	local nick = CORPSE.GetPlayerNick(rag)
-	local role = rag.was_role
+	local subrole = rag.was_role
+	local team = rag.was_team
 	local eq = rag.equipment or EQUIP_NONE
 	local c4 = rag.bomb_wire or - 1
 	local dmg = rag.dmgtype or DMG_GENERIC
@@ -228,7 +204,7 @@ function CORPSE.ShowSearch(ply, rag, covert, long_range)
 	owner = IsValid(owner) and owner:EntIndex() or - 1
 
 	-- basic sanity check
-	if not nick or not eq or not role then return end
+	if not nick or not eq or not subrole or not team then return end
 
 	if DetectiveMode() and not covert then
 		IdentifyBody(ply, rag)
@@ -263,10 +239,10 @@ function CORPSE.ShowSearch(ply, rag, covert, long_range)
 		stime = math.max(0, rag.killer_sample.t - CurTime())
 	end
 
-	-- build list of people this traitor killed
+	-- build list of people this player killed
 	local kill_entids = {}
 
-	for _, vicsid in pairs(rag.kills) do
+	for _, vicsid in ipairs(rag.kills) do
 		-- also send disconnected players as a marker
 		local vic = player.GetBySteamID(vicsid)
 
@@ -287,7 +263,8 @@ function CORPSE.ShowSearch(ply, rag, covert, long_range)
 	net.WriteUInt(owner, 8) -- 128 max players. (8 bits)
 	net.WriteString(nick)
 	net.WriteUInt(eq, 16) -- Equipment (16 = max.)
-	net.WriteUInt(role, ROLE_BITS) -- (... bits)
+	net.WriteUInt(subrole, ROLE_BITS) -- (... bits)
+	net.WriteString(team)
 	net.WriteInt(c4, bitsRequired(C4_WIRE_COUNT) + 1) -- -1 -> 2^bits (default c4: 4 bits)
 	net.WriteUInt(dmg, 30) -- DMG_BUCKSHOT is the highest. (30 bits)
 	net.WriteString(wep)
@@ -324,11 +301,9 @@ end
 -- else returns nil
 local function GetKillerSample(victim, attacker, dmg)
 	-- only guns and melee damage, not explosions
-	if not (dmg:IsBulletDamage() or dmg:IsDamageType(DMG_SLASH) or dmg:IsDamageType(DMG_CLUB)) then
-		return nil
-	end
+	if not dmg:IsBulletDamage() and not dmg:IsDamageType(DMG_SLASH) and not dmg:IsDamageType(DMG_CLUB) then return end
 
-	if not (IsValid(victim) and IsValid(attacker) and attacker:IsPlayer()) then return end
+	if not IsValid(victim) or not IsValid(attacker) or not attacker:IsPlayer() then return end
 
 	-- NPCs for which a player is damage owner (meaning despite the NPC dealing
 	-- the damage, the attacker is a player) should not cause the player's DNA to
@@ -358,8 +333,9 @@ local crimescene_keys = {
 	"StartPos"
 }
 local poseparams = {
-	"aim_yaw", "move_yaw", "aim_pitch",
-	--	"spine_yaw", "head_yaw", "head_pitch"
+	"aim_yaw",
+	"move_yaw",
+	"aim_pitch"
 }
 
 local function GetSceneDataFromPlayer(ply)
@@ -408,6 +384,7 @@ local function GetSceneData(victim, attacker, dmginfo)
 end
 
 local rag_collide = CreateConVar("ttt_ragdoll_collide", "0")
+
 realdamageinfo = 0
 
 -- Creates client or server ragdoll depending on settings
@@ -416,7 +393,7 @@ function CORPSE.Create(ply, attacker, dmginfo)
 
 	local rag = ents.Create("prop_ragdoll")
 
-	if not IsValid(rag) then return nil end
+	if not IsValid(rag) then return end
 
 	rag:SetPos(ply:GetPos())
 	rag:SetModel(ply:GetModel())
@@ -443,6 +420,7 @@ function CORPSE.Create(ply, attacker, dmginfo)
 	-- death circumstances
 	rag.equipment = ply:GetEquipmentItems()
 	rag.was_role = ply:GetSubRole()
+	rag.was_team = ply:GetTeam()
 	rag.bomb_wire = ply.bomb_wire
 	rag.dmgtype = dmginfo:GetDamageType()
 

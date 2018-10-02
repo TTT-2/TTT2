@@ -95,6 +95,10 @@ function SendConfirmedTeam(team, ply_or_rf)
 	end)
 end
 
+function SendPlayerToEveryone(ply, ply_or_rf)
+	return SendRoleListMessage(ply:GetSubRole(), ply:GetTeam(), {ply:EntIndex()}, ply_or_rf)
+end
+
 -- TODO Improve, not resending if current data is consistent
 function SendFullStateUpdate()
 	SendRoleReset() -- reset every player; now everyone is inno

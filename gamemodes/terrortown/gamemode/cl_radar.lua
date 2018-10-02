@@ -235,12 +235,11 @@ local function ReceiveC4Warn()
 end
 net.Receive("TTT_C4Warn", ReceiveC4Warn)
 
-local function ReceiveCorpseCall()
+net.Receive("TTT_CorpseCall", function()
 	local pos = net.ReadVector()
 
 	table.insert(RADAR.called_corpses, {pos = pos, called = CurTime()})
-end
-net.Receive("TTT_CorpseCall", ReceiveCorpseCall)
+end)
 
 local function ReceiveRadarScan()
 	local num_targets = net.ReadUInt(8)

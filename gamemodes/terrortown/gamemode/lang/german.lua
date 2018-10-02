@@ -49,7 +49,7 @@ L.karma_dmg_full = "Dein Karma ist {amount}, also verteilst du diese Runde volle
 L.karma_dmg_other = "Dein Karma ist {amount}. Daher ist dein Schaden um {num}% reduziert!"
 
 --- Body identification messages
-L.body_found = "{finder} fand den Körper von {victim}. {role}"
+L.body_found = "{finder} fand den Körper von {victim}. {role} ({team})"
 
 -- The {role} in body_found will be replaced by one of the following:
 L.body_found_traitor = "Er war ein Verräter!"

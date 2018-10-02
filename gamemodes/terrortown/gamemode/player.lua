@@ -32,7 +32,7 @@ function GM:PlayerInitialSpawn(ply)
 			if not v.specialRoleFilter then
 				if v.defaultTeam == TEAM_TRAITOR then
 					SendRoleList(ROLE_TRAITOR, v.index, GetRoleTeamFilter(v.defaultTeam))
-				elseif v ~= INNOCENT and v ~= DETECTIVE and not v.unknownTeam then
+					elseif v ~= INNOCENT and v ~= DETECTIVE and not v.unknownTeam then
 					SendRoleList(v.baserole or v.index, v.index, GetRoleFilter(v.index))
 				end
 			else
@@ -377,7 +377,7 @@ function GM:KeyPress(ply, key)
 				ply:Spectate(OBS_MODE_IN_EYE)
 				ply:SpectateEntity(target)
 			end
-		elseif key == IN_ATTACK2 then
+			elseif key == IN_ATTACK2 then
 			-- spectate either the next guy or a random guy in chase
 			local target = util.GetNextAlivePlayer(ply:GetObserverTarget())
 
@@ -385,7 +385,7 @@ function GM:KeyPress(ply, key)
 				ply:Spectate(ply.spec_mode or OBS_MODE_IN_EYE)
 				ply:SpectateEntity(target)
 			end
-		elseif key == IN_DUCK then
+			elseif key == IN_DUCK then
 			local pos = ply:GetPos()
 			local ang = ply:EyeAngles()
 
@@ -404,19 +404,19 @@ function GM:KeyPress(ply, key)
 			ply:SetEyeAngles(ang)
 
 			return true
-		elseif key == IN_JUMP then
+			elseif key == IN_JUMP then
 			-- unfuck if you're on a ladder etc
 			if ply:GetMoveType() ~= MOVETYPE_NOCLIP then
 				ply:SetMoveType(MOVETYPE_NOCLIP)
 			end
-		elseif key == IN_RELOAD then
+			elseif key == IN_RELOAD then
 			local tgt = ply:GetObserverTarget()
 
 			if not IsValid(tgt) or not tgt:IsPlayer() then return end
 
 			if not ply.spec_mode or ply.spec_mode == OBS_MODE_IN_EYE then
 				ply.spec_mode = OBS_MODE_CHASE
-			elseif ply.spec_mode == OBS_MODE_CHASE then
+				elseif ply.spec_mode == OBS_MODE_CHASE then
 				ply.spec_mode = OBS_MODE_IN_EYE
 			end
 			-- roam stays roam
@@ -448,7 +448,7 @@ function GM:KeyRelease(ply, key)
 					-- do nothing, can't +use held objects
 					return true
 				end
-			elseif tr.Entity.player_ragdoll then
+				elseif tr.Entity.player_ragdoll then
 				CORPSE.ShowSearch(ply, tr.Entity, ply:KeyDown(IN_WALK) or ply:KeyDownLast(IN_WALK)) -- Body Corpse Search Identify TODO
 
 				return true
@@ -473,7 +473,7 @@ local function SpecUseKey(ply, cmd, arg)
 					ply:Spectate(OBS_MODE_IN_EYE)
 					ply:SpectateEntity(tr.Entity)
 				end
-			elseif tr.Entity:IsPlayer() and tr.Entity:IsActive() then
+				elseif tr.Entity:IsPlayer() and tr.Entity:IsActive() then
 				ply:Spectate(ply.spec_mode or OBS_MODE_IN_EYE)
 				ply:SpectateEntity(tr.Entity)
 			else
@@ -599,7 +599,7 @@ local function CheckCreditAward(victim, attacker)
 			if not ply:IsInTeam(attacker) then
 				if ply:IsTerror() then
 					terror_alive = terror_alive + 1
-				elseif ply:IsDeadTerror() then
+					elseif ply:IsDeadTerror() then
 					terror_dead = terror_dead + 1
 				end
 			end
@@ -650,9 +650,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
 		if IsValid(wep) and wep.DyingShot and not ply.was_headshot and dmginfo:IsBulletDamage() then
 			local fired = wep:DyingShot()
 
-			if fired then
-				return
-			end
+			if fired then return end
 		end
 
 		-- Note that funny things can happen here because we fire a gun while the
@@ -681,6 +679,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
 
 	util.StartBleeding(rag, dmginfo:GetDamage(), 15)
 
+	-- TODO NEXT ENTRYPOINT FOR REWORK SCORESYSTEM
 	-- Score only when there is a round active.
 	if GetRoundState() == ROUND_ACTIVE then
 		SCORE:HandleKill(ply, attacker, dmginfo)
@@ -706,14 +705,14 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
 
 	-- headshots, knife damage, and weapons tagged as silent all prevent death
 	-- sound from occurring
-	if not (ply.was_headshot or dmginfo:IsDamageType(DMG_SLASH) or IsValid(killwep) and killwep.IsSilent) then
+	if not ply.was_headshot and not dmginfo:IsDamageType(DMG_SLASH) and not (IsValid(killwep) and killwep.IsSilent) then
 		PlayDeathSound(ply)
 	end
 
 	--- Credits
 	CheckCreditAward(ply, attacker)
 
-	-- Check for TEAM killing ANOTHER TEAM
+	-- Check for TEAM killing ANOTHER TEAM to send credit rewards
 	if IsValid(attacker) and attacker:IsPlayer() then
 		local reward = 0
 		local rd = attacker:GetSubRoleData()
@@ -779,7 +778,7 @@ function GM:PlayerDeathSound()
 end
 
 function GM:PostPlayerDeath(ply)
-	if GetRoundState() == ROUND_PREP and GetConVar("ttt2_prep_respawn"):GetBool() then -- endless respawn player if he dies while preparing time
+	if GetRoundState() == ROUND_PREP and GetConVar("ttt2_prep_respawn"):GetBool() then -- endless respawn player if he dies in preparing time
 		ply:SpawnForRound(true)
 	end
 end
@@ -795,6 +794,7 @@ function GM:SpectatorThink(ply)
 		-- roam. If no clicks made, go into chase after X secs, and roam after Y.
 		-- Don't switch for a second in case the player was shooting when he died,
 		-- this would make him accidentally switch out of ragdoll cam.
+		-- TODO correct this description: Changed to force into eye mode
 
 		local m = ply:GetObserverMode()
 
@@ -820,7 +820,7 @@ function GM:SpectatorThink(ply)
 					ply:SetEyeAngles(spawn:GetAngles())
 				end
 			end
-		elseif m == OBS_MODE_IN_EYE and clicked and elapsed > to_switch or elapsed > to_chase then
+			elseif m == OBS_MODE_IN_EYE and clicked and elapsed > to_switch or elapsed > to_chase then
 			-- start following ragdoll
 			ply:Spectate(OBS_MODE_CHASE)
 		end
@@ -830,7 +830,7 @@ function GM:SpectatorThink(ply)
 		end
 
 		-- when roaming and messing with ladders
-	elseif ply:GetMoveType() < MOVETYPE_NOCLIP and ply:GetMoveType() > 0 or ply:GetMoveType() == MOVETYPE_LADDER then
+		elseif ply:GetMoveType() < MOVETYPE_NOCLIP and ply:GetMoveType() > 0 or ply:GetMoveType() == MOVETYPE_LADDER then
 		ply:Spectate(OBS_MODE_ROAMING)
 	end
 
@@ -843,7 +843,7 @@ function GM:SpectatorThink(ply)
 				-- stop speccing as soon as target dies
 				ply:Spectate(OBS_MODE_ROAMING)
 				ply:SpectateEntity(nil)
-			elseif GetRoundState() == ROUND_ACTIVE then
+				elseif GetRoundState() == ROUND_ACTIVE then
 				-- Sync position to target. Uglier than parenting, but unlike
 				-- parenting this is less sensitive to breakage: if we are
 				-- no longer spectating, we will never sync to their position.
@@ -892,7 +892,7 @@ function GM:ScalePlayerDamage(ply, hitgroup, dmginfo)
 
 			dmginfo:ScaleDamage(s)
 		end
-	elseif hitgroup == HITGROUP_LEFTARM
+		elseif hitgroup == HITGROUP_LEFTARM
 		or hitgroup == HITGROUP_RIGHTARM
 		or hitgroup == HITGROUP_LEFTLEG
 		or hitgroup == HITGROUP_RIGHTLEG
@@ -1013,9 +1013,9 @@ function GM:ScalePlayerDamage(ply, hitgroup, dmginfo)
 				dmginfo:ScaleDamage(0)
 				dmginfo:SetDamage(0)
 			end
-		elseif ent:IsPlayer() then
+			elseif ent:IsPlayer() then
 			GAMEMODE:PlayerTakeDamage(ent, dmginfo:GetInflictor(), att, dmginfo:GetDamage(), dmginfo)
-		elseif ent:IsExplosive() then
+			elseif ent:IsExplosive() then
 			-- When a barrel hits a player, that player damages the barrel because
 			-- Source physics. This gives stupid results like a player who gets hit
 			-- with a barrel being blamed for killing himself or even his attacker.
@@ -1027,7 +1027,7 @@ function GM:ScalePlayerDamage(ply, hitgroup, dmginfo)
 				dmginfo:ScaleDamage(0)
 				dmginfo:SetDamage(0)
 			end
-		elseif ent.is_pinned and ent.OnPinnedDamage then
+			elseif ent.is_pinned and ent.OnPinnedDamage then
 			ent:OnPinnedDamage(dmginfo)
 
 			dmginfo:SetDamage(0)
@@ -1042,7 +1042,7 @@ function GM:ScalePlayerDamage(ply, hitgroup, dmginfo)
 			-- fall back to the attacker if there is no inflictor
 			if IsValid(infl) then
 				hurter = infl
-			elseif IsValid(att) then
+				elseif IsValid(att) then
 				hurter = att
 			end
 
@@ -1051,9 +1051,9 @@ function GM:ScalePlayerDamage(ply, hitgroup, dmginfo)
 				owner, owner_time = hurter:GetDamageOwner()
 
 				-- barrel bangs can hurt us even if we threw them, but that's our fault
-			elseif hurter and ent == hurter:GetPhysicsAttacker() and dmginfo:IsDamageType(DMG_BLAST) then
+				elseif hurter and ent == hurter:GetPhysicsAttacker() and dmginfo:IsDamageType(DMG_BLAST) then
 				owner = ent
-			elseif hurter and hurter:IsVehicle() and IsValid(hurter:GetDriver()) then
+				elseif hurter and hurter:IsVehicle() and IsValid(hurter:GetDriver()) then
 				owner = hurter:GetDriver()
 			end
 
@@ -1228,7 +1228,7 @@ function GM:ScalePlayerDamage(ply, hitgroup, dmginfo)
 				if IsValid(ply.scanner_weapon) and wep ~= ply.scanner_weapon then
 					ply.scanner_weapon:Think()
 				end
-			elseif tm == TEAM_SPEC then
+				elseif tm == TEAM_SPEC then
 				if ply.propspec then
 					PROPSPEC.Recharge(ply)
 
