@@ -1,7 +1,9 @@
 util.AddNetworkString("newshop")
 concommand.Add("Weaponshop", function(ply, cmd, args)
-	net.Start("newshop")
-	net.Send(ply)
+	if ply:IsAdmin() then
+		net.Start("newshop")
+		net.Send(ply)
+	end
 end)
 
 -- TODO rebuild with database handling instead of dini file creation like

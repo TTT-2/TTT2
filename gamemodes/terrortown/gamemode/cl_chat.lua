@@ -1,5 +1,4 @@
 ---- radio commands, text chat stuff
-
 DEFINE_BASECLASS("gamemode_base")
 
 local GetTranslation = LANG.GetTranslation
@@ -24,15 +23,13 @@ local function LastWordsRecv()
 end
 net.Receive("TTT_LastWordsMsg", LastWordsRecv)
 
-local function RoleChatRecv()
-	-- virtually always our role, but future equipment might allow listening in
-	local subrole = net.ReadUInt(ROLE_BITS)
+net.Receive("TTT_RoleChat", function()
 	local sender = net.ReadEntity()
 
 	if not IsValid(sender) then return end
 
 	local text = net.ReadString()
-	local roleData = GetRoleByIndex(subrole)
+	local roleData = sender:GetSubRoleData() -- use cached role
 
 	chat.AddText(
 		roleData.color,
@@ -42,8 +39,7 @@ local function RoleChatRecv()
 		Color(255, 255, 200),
 		": " .. text
 	)
-end
-net.Receive("TTT_RoleChat", RoleChatRecv)
+end)
 
 -- special processing for certain special chat types
 function GM:ChatText(idx, name, text, type)
@@ -60,7 +56,7 @@ end
 
 -- Detectives have a blue name, in both chat and radio messages
 local function AddDetectiveText(ply, text)
-	chat.AddText(Color(50, 200, 255), ply:Nick(), Color(255, 255, 255), ": " .. text)
+	chat.AddText(DETECTIVE.color, ply:Nick(), Color(255, 255, 255), ": " .. text)
 end
 
 function GM:OnPlayerChat(ply, text, teamchat, dead)
@@ -80,11 +76,11 @@ function GM:OnPlayerChat(ply, text, teamchat, dead)
 		dead = true
 	end
 
-	if teamchat and (not team and not ply:IsSpecial() or team) then
+	if teamchat and (not team and ply:IsInnocent() or team) then
 		teamchat = false
 	end
 
-	return BaseClass.OnPlayerChat(self, ply, text, teamchat, dead) -- TODO
+	return BaseClass.OnPlayerChat(self, ply, text, teamchat, dead)
 end
 
 local last_chat = ""
@@ -249,9 +245,11 @@ function RADIO:SendCommand(slotidx)
 end
 
 function RADIO:GetTargetType()
-	if not IsValid(LocalPlayer()) then return end
+	local client = LocalPlayer()
 
-	local trace = LocalPlayer():GetEyeTrace(MASK_SHOT)
+	if not IsValid(client) then return end
+
+	local trace = client:GetEyeTrace(MASK_SHOT)
 
 	if not trace or not trace.Hit or not IsValid(trace.Entity) then return end
 
@@ -296,7 +294,7 @@ function RADIO:GetTarget()
 
 		local stored = self.StoredTarget
 
-		if stored.target and stored.t > (CurTime() - 3) then
+		if stored.target and stored.t > CurTime() - 3 then
 			return stored.target, stored.vague
 		end
 	end
@@ -358,7 +356,7 @@ local function RadioCommand(ply, cmd, arg)
 	RADIO.LastRadio.msg = text
 
 	-- target is either a lang string or an entity
-	target = type(target) == "string" and target or tostring(target:EntIndex())
+	target = type(target) == "string" and target or tostring(target:EntIndex()) -- TODO why EntIndex() ?
 
 	RunConsoleCommand("_ttt_radio_send", msg_name, tostring(target))
 end
@@ -406,7 +404,7 @@ local function RadioMsgRecv()
 	if sender:IsDetective() then
 		AddDetectiveText(sender, text)
 	else
-		chat.AddText(sender, COLOR_WHITE, ": " .. text) -- TODO
+		chat.AddText(sender, COLOR_WHITE, ": " .. text)
 	end
 end
 net.Receive("TTT_RadioMsg", RadioMsgRecv)

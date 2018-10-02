@@ -89,7 +89,7 @@ local function IdentifyBody(ply, rag)
 
 			for _, v in pairs(ROLES) do
 				if not v.specialRoleFilter and not v.preventShowOnConfirm then
-					SendRoleList(v.index, GetSpecialRoleFilter(v.index, false), function(p)
+					SendRoleList(v.index, GetSpecialRoleFilterREMOVED REMOVED(v.index, false), function(p)
 						return p:GetNWBool("body_found")
 					end)
 				end
