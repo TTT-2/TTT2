@@ -70,67 +70,64 @@ include("player_ext.lua")
 include("player.lua")
 include("weaponshop.lua")
 
-local flag_all = {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED}
-local flag_save = {FCVAR_NOTIFY, FCVAR_ARCHIVE}
+CreateConVar("ttt_roundtime_minutes", "10", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+CreateConVar("ttt_preptime_seconds", "30", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+CreateConVar("ttt_posttime_seconds", "30", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+CreateConVar("ttt_firstpreptime", "60", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
-CreateConVar("ttt_roundtime_minutes", "10", flag_save)
-CreateConVar("ttt_preptime_seconds", "30", flag_save)
-CreateConVar("ttt_posttime_seconds", "30", flag_save)
-CreateConVar("ttt_firstpreptime", "60", flag_save)
-
-local ttt_haste = CreateConVar("ttt_haste", "1", flag_save)
-CreateConVar("ttt_haste_starting_minutes", "5", flag_save)
-CreateConVar("ttt_haste_minutes_per_death", "0.5", flag_save)
+local ttt_haste = CreateConVar("ttt_haste", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+CreateConVar("ttt_haste_starting_minutes", "5", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+CreateConVar("ttt_haste_minutes_per_death", "0.5", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 CreateConVar("ttt_spawn_wave_interval", "0")
 
-CreateConVar("ttt_traitor_pct", "0.4", flag_save)
-CreateConVar("ttt_traitor_max", "32", flag_save)
-CreateConVar("ttt_traitor_min_players", "1", flag_save)
+CreateConVar("ttt_traitor_pct", "0.4", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+CreateConVar("ttt_traitor_max", "32", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+CreateConVar("ttt_traitor_min_players", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
-CreateConVar("ttt_detective_pct", "0.13", flag_save)
-CreateConVar("ttt_detective_max", "32", flag_save)
-CreateConVar("ttt_detective_min_players", "8", flag_save)
-CreateConVar("ttt_detective_karma_min", "600", flag_save)
+CreateConVar("ttt_detective_pct", "0.13", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+CreateConVar("ttt_detective_max", "32", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+CreateConVar("ttt_detective_min_players", "8", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+CreateConVar("ttt_detective_karma_min", "600", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 -- Traitor credits
-CreateConVar("ttt_credits_starting", "2", flag_save)
-CreateConVar("ttt_credits_award_pct", "0.35", flag_save)
-CreateConVar("ttt_credits_award_size", "1", flag_save)
-CreateConVar("ttt_credits_award_repeat", "1", flag_save)
-CreateConVar("ttt_credits_detectivekill", "1", flag_save)
+CreateConVar("ttt_credits_starting", "2", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+CreateConVar("ttt_credits_award_pct", "0.35", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+CreateConVar("ttt_credits_award_size", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+CreateConVar("ttt_credits_award_repeat", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+CreateConVar("ttt_credits_detectivekill", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
-CreateConVar("ttt_credits_alonebonus", "1", flag_save)
+CreateConVar("ttt_credits_alonebonus", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 -- Detective credits
-CreateConVar("ttt_det_credits_starting", "1", flag_save)
-CreateConVar("ttt_det_credits_traitorkill", "0", flag_save)
-CreateConVar("ttt_det_credits_traitordead", "1", flag_save)
+CreateConVar("ttt_det_credits_starting", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+CreateConVar("ttt_det_credits_traitorkill", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+CreateConVar("ttt_det_credits_traitordead", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
-CreateConVar("ttt_use_weapon_spawn_scripts", "1", flag_save)
-CreateConVar("ttt_weapon_spawn_count", "0", flag_save)
+CreateConVar("ttt_use_weapon_spawn_scripts", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+CreateConVar("ttt_weapon_spawn_count", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
-CreateConVar("ttt_round_limit", "6", flag_all)
-CreateConVar("ttt_time_limit_minutes", "75", flag_all)
+CreateConVar("ttt_round_limit", "6", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
+CreateConVar("ttt_time_limit_minutes", "75", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
 
-CreateConVar("ttt_idle_limit", "180", flag_save)
+CreateConVar("ttt_idle_limit", "180", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
-CreateConVar("ttt_voice_drain", "0", flag_save)
-CreateConVar("ttt_voice_drain_normal", "0.2", flag_save)
-CreateConVar("ttt_voice_drain_admin", "0.05", flag_save)
-CreateConVar("ttt_voice_drain_recharge", "0.05", flag_save)
+CreateConVar("ttt_voice_drain", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+CreateConVar("ttt_voice_drain_normal", "0.2", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+CreateConVar("ttt_voice_drain_admin", "0.05", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+CreateConVar("ttt_voice_drain_recharge", "0.05", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
-CreateConVar("ttt_namechange_kick", "1", flag_save)
+CreateConVar("ttt_namechange_kick", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 CreateConVar("ttt_namechange_bantime", "10")
 
-local ttt_detective = CreateConVar("ttt_sherlock_mode", "1", flag_save)
-local ttt_minply = CreateConVar("ttt_minimum_players", "2", flag_save)
+local ttt_detective = CreateConVar("ttt_sherlock_mode", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local ttt_minply = CreateConVar("ttt_minimum_players", "2", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 -- respawn if dead in preparing time
-CreateConVar("ttt2_prep_respawn", "0", flag_all)
+CreateConVar("ttt2_prep_respawn", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
 
 -- debuggery
-local ttt_dbgwin = CreateConVar("ttt_debug_preventwin", "0", flag_save)
+local ttt_dbgwin = CreateConVar("ttt_debug_preventwin", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 -- Localize stuff we use often. It's like Lua go-faster stripes.
 local math = math
@@ -917,7 +914,7 @@ end
 
 -- The most basic win check is whether both sides have one dude alive
 function GM:TTTCheckForWin()
-	ttt_dbgwin = ttt_dbgwin or CreateConVar("ttt_debug_preventwin", "0", flag_save)
+	ttt_dbgwin = ttt_dbgwin or CreateConVar("ttt_debug_preventwin", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 	if ttt_dbgwin:GetBool() then
 		return WIN_NONE

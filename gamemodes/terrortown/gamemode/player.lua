@@ -43,7 +43,7 @@ function GM:PlayerInitialSpawn(ply)
 
 		-- send everybody the confirmed traitors, but not the traitors (prevent reset)
 		for _, v in pairs(ROLES) do
-			if v.team ~= TEAM_TRAITOR and not v.specialRoleFilter then
+			if v.defaultTeam ~= TEAM_TRAITOR and not v.specialRoleFilter then
 				SendConfirmedTeam(TEAM_TRAITOR, GetRoleFilter(v.index)) -- TODO baserole ?
 			end
 		end

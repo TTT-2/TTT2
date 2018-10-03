@@ -656,7 +656,7 @@ local function TeamKiller(events, scores, players, traitors)
 			team = num_traitors - 1
 		end
 
-		if kills > 0 and (kills / team) > pct then
+		if kills > 0 and kills / team > pct then
 			pct = kills / team
 			tker = id
 		end
