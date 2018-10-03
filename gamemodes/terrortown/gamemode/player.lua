@@ -26,6 +26,7 @@ function GM:PlayerInitialSpawn(ply)
 	if rstate <= ROUND_PREP then
 		error("REWORK: player.lua -> GM:PlayerInitialSpawn(ply)")
 
+		ERROR NETWORKING?
 		-- update traitors in team (they know each other)
 		-- update each team without innos (default everybody is inno for them) and detectives (he will update later) in their own role
 		for _, v in pairs(ROLES) do
@@ -490,6 +491,7 @@ function GM:PlayerDisconnected(ply)
 		ply:SetRole(ROLE_NONE)
 	end
 
+	ERROR NETWORKING?
 	SendVisibleForTeamList(TEAM_TRAITOR)
 
 	hook.Run("TTT2SendFullStateUpdate")

@@ -16,22 +16,30 @@ function PANEL:Init()
 	self.open = false
 	self.cols = {}
 
-	self:AddColumn(GetTranslation("sb_ping"), function(ply)
+	local _func1 = function(ply)
 		return ply:Ping()
-	end)
+	end
 
-	self:AddColumn(GetTranslation("sb_deaths"), function(ply)
+	self:AddColumn(GetTranslation("sb_ping"), _func1)
+
+	local _func2 = function(ply)
 		return ply:Deaths()
-	end)
+	end
 
-	self:AddColumn(GetTranslation("sb_score"), function(ply)
+	self:AddColumn(GetTranslation("sb_deaths"), _func2)
+
+	local _func3 = function(ply)
 		return ply:Frags()
-	end)
+	end
+
+	self:AddColumn(GetTranslation("sb_score"), _func3)
 
 	if KARMA.IsEnabled() then
-		self:AddColumn(GetTranslation("sb_karma"), function(ply)
+		local _func4 = function(ply)
 			return math.Round(ply:GetBaseKarma())
-		end)
+		end
+
+		self:AddColumn(GetTranslation("sb_karma"), _func4)
 	end
 
 	-- Let hooks add their custom columns

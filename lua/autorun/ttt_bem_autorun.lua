@@ -12,7 +12,7 @@ AddCSLuaFile("favorites_db.lua")
 
 if CLIENT then
 	-- BEM Settings in F1 menu
-	hook.Add("TTTSettingsTabs", "BEM_TTTSettingsTab", function(dtabs)
+	local function TTTSettingsTabs(dtabs)
 		local padding = dtabs:GetPadding()
 		padding = padding * 2
 
@@ -54,5 +54,6 @@ if CLIENT then
 		dsettings:AddItem(dmarker)
 
 		dtabs:AddSheet("BEM settings", dsettings, "icon16/cog.png", false, false, "Better Equipment Menu Settings")
-	end)
+	end
+	hook.Add("TTTSettingsTabs", "BEM_TTTSettingsTab", TTTSettingsTabs)
 end

@@ -120,9 +120,11 @@ function GM:KeyPress(ply, key)
 
 	--if key == IN_SPEED and ply:IsActiveTraitor() then
 	if key == IN_SPEED and ply:IsActive() and not ply:HasTeam(TEAM_INNO) then
-		timer.Simple(0.05, function()
+		local _func = function()
 			RunConsoleCommand("+voicerecord")
-		end)
+		end
+
+		timer.Simple(0.05, _func)
 	end
 end
 
@@ -133,9 +135,11 @@ function GM:KeyRelease(ply, key)
 
 	--if key == IN_SPEED and ply:IsActiveTraitor() then
 	if key == IN_SPEED and ply:IsActive() and not ply:HasTeam(TEAM_INNO) then
-		timer.Simple(0.05, function()
+		local _func = function()
 			RunConsoleCommand("-voicerecord")
-		end)
+		end
+
+		timer.Simple(0.05, _func)
 	end
 end
 

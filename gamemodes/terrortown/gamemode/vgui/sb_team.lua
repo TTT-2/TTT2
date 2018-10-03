@@ -111,7 +111,7 @@ function PANEL:UpdateSortCache()
 		table.insert(self.rows_sorted, row)
 	end
 
-	table.sort(self.rows_sorted, function(rowa, rowb)
+	local _func = function(rowa, rowb)
 		local plya = rowa:GetPlayer()
 		local plyb = rowb:GetPlayer()
 
@@ -141,7 +141,9 @@ function PANEL:UpdateSortCache()
 		end
 
 		return ret
-	end)
+	end
+
+	table.sort(self.rows_sorted, _func)
 end
 
 function PANEL:UpdatePlayerData()

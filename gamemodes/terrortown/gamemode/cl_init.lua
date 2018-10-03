@@ -189,9 +189,10 @@ local function RoundStateChange(o, n)
 	end
 end
 
-concommand.Add("ttt_print_playercount", function()
+local function ttt_print_playercount()
 	print(GAMEMODE.StartingPlayers)
-end)
+end
+concommand.Add("ttt_print_playercount", ttt_print_playercount)
 
 --- optional sound cues on round start and end
 CreateConVar("ttt_cl_soundcues", "0", FCVAR_ARCHIVE)
@@ -230,11 +231,12 @@ end
 net.Receive("TTT_Role", ReceiveRole)
 
 --- role test
-net.Receive("TTT2TestRole", function()
+local function TTT2TestRole()
 	local client = LocalPlayer()
 
 	client:ChatPrint("Your current role is: '" .. client:GetSubRoleData().name .. "'")
-end)
+end
+net.Receive("TTT2TestRole", TTT2TestRole)
 
 local function ReceiveRoleList()
 	local subrole = net.ReadUInt(ROLE_BITS)
@@ -450,7 +452,7 @@ function CheckIdle()
 		elseif CurTime() > (idle.t + idle_limit) then
 			RunConsoleCommand("say", "(AUTOMATED MESSAGE) I have been moved to the Spectator team because I was idle/AFK.")
 
-			timer.Simple(0.3, function()
+			local _func = function()
 				RunConsoleCommand("ttt_spectator_mode", 1)
 
 				net.Start("TTT_Spectate")
@@ -458,7 +460,9 @@ function CheckIdle()
 				net.SendToServer()
 
 				RunConsoleCommand("ttt_cl_idlepopup")
-			end)
+			end
+
+			timer.Simple(0.3, _func)
 		elseif CurTime() > (idle.t + idle_limit / 2) then
 			-- will repeat
 			LANG.Msg("idle_warning")

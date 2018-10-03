@@ -18,11 +18,12 @@ CLSCORE.Players = {}
 CLSCORE.StartTime = 0
 CLSCORE.Panel = nil
 
-hook.Add("TTT2FinishedInit", "updateCLSCRo", function()
+local function TTT2FinishedInit()
 	for _, v in pairs(ROLES) do
 		CLSCORE.Tbl[v.index] = {}
 	end
-end)
+end
+hook.Add("TTT2FinishedInit", "updateCLSCRo", TTT2FinishedInit)
 
 CLSCORE.EventDisplay = {}
 
@@ -478,9 +479,11 @@ function CLSCORE:ClearPanel()
 
 		local pnl = self.Panel
 
-		timer.Simple(0, function()
+		local _func = function()
 			pnl:Remove()
-		end)
+		end
+
+		timer.Simple(0, _func)
 	end
 end
 

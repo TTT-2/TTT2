@@ -87,9 +87,10 @@ end
 
 SetupEquipment() -- pre init to support normal TTT addons
 
-hook.Add("TTT2FinishedInit", "updateEquRol", function()
+local function TTT2FinishedInit()
 	SetupEquipment()
-end)
+end
+hook.Add("TTT2FinishedInit", "updateEquRol", TTT2FinishedInit)
 
 function CreateEquipmentWeapon(eq)
 	if not eq.Doublicated then
@@ -795,7 +796,7 @@ else -- CLIENT
 	-- sync ROLES
 	local buff = ""
 
-	net.Receive("TTT2SyncEquipment", function(len)
+	local function TTT2SyncEquipment(len)
 		print("[TTT2][SHOP] Received new SHOP list from server! Updating...")
 
 		local add = net.ReadBool()
@@ -860,5 +861,6 @@ else -- CLIENT
 			-- flush
 			buff = ""
 		end
-	end)
+	end
+	net.Receive("TTT2SyncEquipment", TTT2SyncEquipment)
 end

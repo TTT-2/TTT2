@@ -313,9 +313,10 @@ function LoadShopsEquipment()
 	end
 end
 
-net.Receive("TTT2SyncShopsWithServer", function(len, ply)
+local function TTT2SyncShopsWithServer(len, ply)
 	SyncEquipment(ply)
-end)
+end
+net.Receive("TTT2SyncShopsWithServer", TTT2SyncShopsWithServer)
 
 function SendRoundState(state, ply)
 	net.Start("TTT_RoundState")
@@ -573,9 +574,11 @@ function PrepareRound()
 
 	-- Mute for a second around traitor selection, to counter a dumb exploit
 	-- related to traitor's mics cutting off for a second when they're selected.
-	timer.Create("selectmute", ptime - 1, 1, function()
+	local _func = function()
 		MuteForRestart(true)
-	end)
+	end
+
+	timer.Create("selectmute", ptime - 1, 1, _func)
 
 	LANG.Msg("round_begintime", {num = ptime})
 
@@ -586,9 +589,11 @@ function PrepareRound()
 
 	-- Undo the roundrestart mute, though they will once again be muted for the
 	-- selectmute timer.
-	timer.Create("restartmute", 1, 1, function()
+	local _func2 = function()
 		MuteForRestart(false)
-	end)
+	end
+
+	timer.Create("restartmute", 1, 1, _func2)
 
 	net.Start("TTT_ClearClientState")
 	net.Broadcast()
@@ -769,9 +774,11 @@ function BeginRound()
 	StartWinChecks()
 	StartNameChangeChecks()
 
-	timer.Create("selectmute", 1, 1, function()
+	local _func = function()
 		MuteForRestart(false)
-	end)
+	end
+
+	timer.Create("selectmute", 1, 1, _func)
 
 	GAMEMODE.DamageLog = {}
 	GAMEMODE.RoundStartTime = CurTime()
@@ -861,9 +868,11 @@ function EndRound(result)
 	-- Piggyback on "round end" time global var to show end of phase timer
 	SetRoundEnd(CurTime() + ptime)
 
-	timer.Create("restartmute", ptime - 1, 1, function()
+	local _func = function()
 		MuteForRestart(true)
-	end)
+	end
+
+	timer.Create("restartmute", ptime - 1, 1, _func)
 
 	-- Stop checking for wins
 	StopWinChecks()
@@ -1176,7 +1185,7 @@ function SetRoleTypes(choices, prev_roles, roleCount, availableRoles)
 	end
 end
 
-concommand.Add("ttt_roundrestart", function(ply, command, args)
+local function ttt_roundrestart(ply, command, args)
 	-- ply is nil on dedicated server console
 	if not IsValid(ply) or ply:IsAdmin() or ply:IsSuperAdmin() or cvars.Bool("sv_cheats", 0) then
 		LANG.Msg("round_restart")
@@ -1188,7 +1197,8 @@ concommand.Add("ttt_roundrestart", function(ply, command, args)
 	else
 		ply:PrintMessage(HUD_PRINTCONSOLE, "You must be a GMod Admin or SuperAdmin on the server to use this command, or sv_cheats must be enabled.")
 	end
-end)
+end
+concommand.Add("ttt_roundrestart", ttt_roundrestart)
 
 -- Version announce also used in Initialize
 function ShowVersion(ply)
@@ -1202,7 +1212,7 @@ function ShowVersion(ply)
 end
 concommand.Add("ttt_version", ShowVersion)
 
-concommand.Add("ttt_toggle_newroles", function(ply)
+local function ttt_toggle_newroles(ply)
 	if ply:IsAdmin() then
 		local b = not GetConVar("ttt_newroles_enabled"):GetBool()
 
@@ -1216,4 +1226,5 @@ concommand.Add("ttt_toggle_newroles", function(ply)
 
 		ply:PrintMessage(HUD_PRINTNOTIFY, "You " .. word .. " the new roles for TTT!")
 	end
-end)
+end
+concommand.Add("ttt_toggle_newroles", ttt_toggle_newroles)

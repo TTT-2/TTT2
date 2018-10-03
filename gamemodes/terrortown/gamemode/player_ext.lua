@@ -126,11 +126,12 @@ function plymeta:SendBought()
 	net.Send(self)
 end
 
-concommand.Add("ttt_resend_bought", function(ply)
+local function ttt_resend_bought(ply)
 	if IsValid(ply) then
 		ply:SendBought()
 	end
-end)
+end
+concommand.Add("ttt_resend_bought", ttt_resend_bought)
 
 function plymeta:ResetBought()
 	self.bought = {}
@@ -262,10 +263,11 @@ function plymeta:SendLastWords(dmginfo)
 
 	-- any longer than this and you're out of luck
 	local ply = self
-
-	timer.Simple(2, function()
+	local _func = function()
 		ply:ResetLastWords()
-	end)
+	end
+
+	timer.Simple(2, _func)
 end
 
 function plymeta:ResetViewRoll()

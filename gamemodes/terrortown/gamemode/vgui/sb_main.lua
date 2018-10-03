@@ -279,13 +279,15 @@ end
 
 function PANEL:StartUpdateTimer()
 	if not timer.Exists("TTTScoreboardUpdater") then
-		timer.Create("TTTScoreboardUpdater", 0.3, 0, function()
+		local _func = function()
 			local pnl = GAMEMODE:GetScoreboardPanel()
 
 			if IsValid(pnl) then
 				pnl:UpdateScoreboard()
 			end
-		end)
+		end
+
+		timer.Create("TTTScoreboardUpdater", 0.3, 0, _func)
 	end
 end
 

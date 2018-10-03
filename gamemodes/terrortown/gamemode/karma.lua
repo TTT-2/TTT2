@@ -35,9 +35,10 @@ end
 
 local math = math
 
-cvars.AddChangeCallback("ttt_karma_max", function(cvar, old, new)
+local function ttt_karma_max(cvar, old, new)
 	SetGlobalInt("ttt_karma_max", new)
-end)
+end
+cvars.AddChangeCallback("ttt_karma_max", ttt_karma_max)
 
 function KARMA.InitState()
 	SetGlobalBool("ttt_karma", config.enabled:GetBool())

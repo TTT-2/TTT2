@@ -196,9 +196,11 @@ function GM:PlayerLoadout(ply)
 		if not HasLoadoutWeapons(ply) then
 			MsgN("Could not spawn all loadout weapons for " .. ply:Nick() .. ", will retry.")
 
-			timer.Create("lateloadout" .. ply:EntIndex(), 1, 0, function()
+			local _func = function()
 				LateLoadout(ply:EntIndex())
-			end)
+			end
+
+			timer.Create("lateloadout" .. ply:EntIndex(), 1, 0, _func)
 		end
 	end
 end
@@ -327,11 +329,13 @@ local function DropActiveAmmo(ply)
 
 	box.AmmoAmount = amt
 
-	timer.Simple(2, function()
+	local _func = function()
 		if IsValid(box) then
 			box:SetOwner(nil)
 		end
-	end)
+	end
+
+	timer.Simple(2, _func)
 end
 concommand.Add("ttt_dropammo", DropActiveAmmo)
 
@@ -357,9 +361,11 @@ local function GiveEquipmentWeapon(sid, cls)
 
 	if not IsValid(w) or not ply:HasWeapon(cls) then
 		if not timer.Exists(tmr) then
-			timer.Create(tmr, 1, 0, function()
+			local _func = function()
 				GiveEquipmentWeapon(sid, cls) -- TODO why not using ply obj
-			end)
+			end
+
+			timer.Create(tmr, 1, 0, _func)
 		end
 
 		-- we will be retrying
@@ -471,7 +477,7 @@ local function OrderEquipment(ply, cmd, args)
 
 		ply:AddBought(id)
 
-		timer.Simple(0.5, function()
+		local _func = function()
 			if not IsValid(ply) then return end
 
 			net.Start("TTT_BoughtItem")
@@ -484,7 +490,9 @@ local function OrderEquipment(ply, cmd, args)
 			end
 
 			net.Send(ply)
-		end)
+		end
+
+		timer.Simple(0.5, _func)
 
 		hook.Call("TTTOrderedEquipment", GAMEMODE, ply, id, is_item)
 	end

@@ -215,7 +215,7 @@ function InitCustomRole(name, roleData, conVarData)
 		print("[TTT2][ROLE] Added '" .. name .. "' Role (index: " .. roleData.index .. ")")
 	end
 end
--- usage: inside of e.g. this hook: hook.Add("TTT2BaseRoleInit", "TTT2ConnectBaseRole" .. baserole .. "With_" .. roleData.name, function() ... end)
+-- usage: inside of e.g. this hook: hook.Add("TTT2BaseRoleInit", "TTT2ConnectBaseRole" .. baserole .. "With_" .. roleData.name, ...)
 function SetBaseRole(roleData, baserole)
 	if roleData.baserole then
 		error("ERROR: BaseRole of " .. roleData.name .. " already set (" .. roleData.baserole .. ")!")
@@ -260,9 +260,11 @@ SHOP_FALLBACK_TRAITOR = TRAITOR.name
 SHOP_FALLBACK_DETECTIVE = DETECTIVE.name
 
 function SortRolesTable(tbl)
-	table.sort(tbl, function(a, b)
+	local _func = function(a, b)
 		return a.index < b.index
-	end)
+	end
+
+	table.sort(tbl, _func)
 end
 
 function GetRoleByIndex(index)
@@ -452,12 +454,7 @@ if CLIENT then
 	end
 
 	function SortEquipmentTable(tbl)
-		--[[
-		table.sort(tbl, function(a, b)
-			return GetEquipmentTranslation(a.name, a.PrintName) < GetEquipmentTranslation(b.name, b.PrintName)
-		end)
-		]]--
-		table.sort(tbl, function(adata, bdata)
+		local _func = function(adata, bdata)
 			a = adata.id
 			b = bdata.id
 
@@ -468,7 +465,9 @@ if CLIENT then
 			else
 				return a < b
 			end
-		end)
+		end
+
+		table.sort(tbl, _func)
 	end
 end
 

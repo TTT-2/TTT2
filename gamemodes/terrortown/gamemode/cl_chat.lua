@@ -25,7 +25,7 @@ local function LastWordsRecv()
 end
 net.Receive("TTT_LastWordsMsg", LastWordsRecv)
 
-net.Receive("TTT_RoleChat", function()
+local function TTTRoleChat()
 	local sender = net.ReadEntity()
 
 	if not IsValid(sender) then return end
@@ -41,7 +41,8 @@ net.Receive("TTT_RoleChat", function()
 		Color(255, 255, 200),
 		": " .. text
 	)
-end)
+end
+net.Receive("TTT_RoleChat", TTT_RoleChat)
 
 -- special processing for certain special chat types
 function GM:ChatText(idx, name, text, type)
@@ -231,9 +232,11 @@ function RADIO:ShowRadioCommands(state)
 		-- capture slot keys while we're open
 		self.Show = true
 
-		timer.Create("radiocmdshow", 3, 1, function()
+		local _func = function()
 			RADIO:ShowRadioCommands(false)
-		end)
+		end
+
+		timer.Create("radiocmdshow", 3, 1, _func)
 	end
 end
 

@@ -1,12 +1,14 @@
 -- TODO fix syncing
 ERROR
 util.AddNetworkString("newshop")
-concommand.Add("Weaponshop", function(ply, cmd, args)
+
+local function Weaponshop(ply, cmd, args)
 	if ply:IsAdmin() then
 		net.Start("newshop")
 		net.Send(ply)
 	end
-end)
+end
+concommand.Add("Weaponshop", Weaponshop)
 
 -- TODO rebuild with database handling instead of dini file creation like
 function WeaponshopHasEquipment(roleData, equip)
@@ -67,7 +69,7 @@ function RemoveFromWeaponshop(ply, roleData, equip)
 end
 
 util.AddNetworkString("shop")
-net.Receive("shop", function(len, ply)
+local function shop(len, ply)
 	local add = net.ReadBool()
 	local subrole = net.ReadUInt(ROLE_BITS)
 	local eq = net.ReadString()
@@ -84,19 +86,21 @@ net.Receive("shop", function(len, ply)
 	else
 		RemoveFromWeaponshop(ply, rd, equip)
 	end
-end)
+end
+net.Receive("shop", shop)
 
 util.AddNetworkString("shopFallback")
 util.AddNetworkString("shopFallbackAnsw")
 util.AddNetworkString("shopFallbackRefresh")
-net.Receive("shopFallback", function(len, ply)
+local function shopFallback(len, ply)
 	local subrole = net.ReadUInt(ROLE_BITS)
 	local fallback = net.ReadString()
 
 	local rd = GetRoleByIndex(subrole)
 
 	RunConsoleCommand("ttt_" .. rd.abbr .. "_shop_fallback", fallback)
-end)
+end
+net.Receive("shopFallback", shopFallback)
 
 local function OnChangeCVar(subrole, fallback)
 	local rd = GetRoleByIndex(subrole)
@@ -147,12 +151,15 @@ local function OnChangeCVar(subrole, fallback)
 	end
 end
 
-hook.Add("TTT2FinishedInit", "WeaponShopChangeCVARInit", function()
+local function TTT2FinishedInit()
 	for _, v in pairs(ROLES) do
-		cvars.AddChangeCallback("ttt_" .. v.abbr .. "_shop_fallback", function(convar_name, value_old, value_new)
+		local _func = function(convar_name, value_old, value_new)
 			if value_old ~= value_new then
 				OnChangeCVar(v.index, value_new)
 			end
-		end)
+		end
+
+		cvars.AddChangeCallback("ttt_" .. v.abbr .. "_shop_fallback", _func)
 	end
-end)
+end
+hook.Add("TTT2FinishedInit", "WeaponShopChangeCVARInit", TTT2FinishedInit)

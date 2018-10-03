@@ -86,11 +86,12 @@ local TypeToMat = {
 }
 
 -- add role abbr of each role for icons
-hook.Add("TTT2FinishedInit", "updateTpTMat", function()
+local function TTT2FinishedInit()
 	for _, v in pairs(ROLES) do
 		TypeToMat.role[v.index] = v.abbr
 	end
-end)
+end
+hook.Add("TTT2FinishedInit", "updateTpTMat", TTT2FinishedInit)
 
 -- Accessor for better fail handling
 local function IconForInfoType(t, data)
@@ -483,7 +484,7 @@ end
 
 local search = {}
 
-net.Receive("TTT_RagdollSearch", function()
+local function TTT_RagdollSearch()
 	search = {}
 
 	-- Basic info
@@ -553,4 +554,5 @@ net.Receive("TTT_RagdollSearch", function()
 	StoreSearchResult(search)
 
 	search = nil
-end)
+end
+net.Receive("TTT_RagdollSearch", TTT_RagdollSearch)

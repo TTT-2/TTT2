@@ -37,7 +37,7 @@ end
 ---- "T" indicator above traitors
 indicator_mat_tbl = {}
 
-hook.Add("TTT2FinishedInit", "updateRoleMat", function()
+local function TTT2FinishedInit()
 	indicator_mat_tbl = {}
 
 	for _, v in pairs(ROLES) do
@@ -45,7 +45,8 @@ hook.Add("TTT2FinishedInit", "updateRoleMat", function()
 
 		indicator_mat_tbl[v.index] = mat
 	end
-end)
+end
+hook.Add("TTT2FinishedInit", "updateRoleMat", TTT2FinishedInit)
 
 indicator_col = Color(255, 255, 255, 130)
 

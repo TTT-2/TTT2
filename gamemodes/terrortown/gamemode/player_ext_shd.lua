@@ -367,14 +367,15 @@ if CLIENT then
 
 	end
 
-	net.Receive("TTT_PerformGesture", function()
+	local function TTT_PerformGesture()
 		local ply = net.ReadEntity()
 		local act = net.ReadUInt(16)
 
 		if IsValid(ply) and act then
 			ply:AnimPerformGesture(act)
 		end
-	end)
+	end
+	net.Receive("TTT_PerformGesture", TTT_PerformGesture)
 else -- SERVER
 	-- On the server, we just send the client a message that the player is
 	-- performing a gesture. This allows the client to decide whether it should

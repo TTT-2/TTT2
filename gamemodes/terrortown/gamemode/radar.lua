@@ -6,7 +6,7 @@ local chargetime = 30
 
 local math = math
 
-concommand.Add("ttt_radar_scan", function(ply, cmd, args)
+local function ttt_radar_scan(ply, cmd, args)
 	if IsValid(ply) and ply:IsTerror() then
 		if ply:HasEquipmentItem(EQUIP_RADAR) then
 			if ply.radar_charge > CurTime() then
@@ -67,6 +67,7 @@ concommand.Add("ttt_radar_scan", function(ply, cmd, args)
 			LANG.Msg(ply, "radar_not_owned")
 		end
 	end
-end)
+end
+concommand.Add("ttt_radar_scan", ttt_radar_scan)
 
 -- TODO import everything with TTT_RADAR here !

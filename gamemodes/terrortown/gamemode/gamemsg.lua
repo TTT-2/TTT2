@@ -234,7 +234,7 @@ local function LastWordsMsg(ply, words)
 	net.Broadcast()
 end
 
-concommand.Add("_deathrec", function(ply, cmd, args)
+local function deathrec(ply, cmd, args)
 	if IsValid(ply) and not ply:Alive() and #args > 1 then
 		local id = tonumber(args[1])
 
@@ -282,7 +282,8 @@ concommand.Add("_deathrec", function(ply, cmd, args)
 			ply.last_words_id = nil
 		end
 	end
-end)
+end
+concommand.Add("_deathrec", deathrec)
 
 -- Override or hook in plugin for spam prevention and whatnot. Return true
 -- to block a command.
@@ -290,7 +291,7 @@ function GM:TTTPlayerRadioCommand(ply, msg_name, msg_target)
 
 end
 
-concommand.Add("_ttt_radio_send", function(ply, cmd, args)
+local function ttt_radio_send(ply, cmd, args)
 	if IsValid(ply) and ply:IsTerror() and #args == 2 then
 		local msg_name = args[1]
 		local msg_target = args[2]
@@ -330,4 +331,5 @@ concommand.Add("_ttt_radio_send", function(ply, cmd, args)
 
 		net.Broadcast()
 	end
-end)
+end
+concommand.Add("_ttt_radio_send", ttt_radio_send)

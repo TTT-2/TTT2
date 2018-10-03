@@ -58,7 +58,7 @@ function GetEquipmentForRoleAll()
 	return Equipmentnew
 end
 
-net.Receive("newshop", function()
+local function newshop()
 	local sr = GetShopRoles()[1]
 	local selectedRole = sr.index
 	local state = true
@@ -373,9 +373,10 @@ net.Receive("newshop", function()
 
 		fbmenu:RefreshChoices()
 	end
-end)
+end
+net.Receive("newshop", newshop)
 
-net.Receive("shopFallbackAnsw", function(len)
+local function shopFallbackAnsw(len)
 	local subrole = net.ReadUInt(ROLE_BITS)
 
 	local rd = GetRoleByIndex(subrole)
@@ -418,9 +419,10 @@ net.Receive("shopFallbackAnsw", function(len)
 			end
 		end
 	end
-end)
+end
+net.Receive("shopFallbackAnsw", shopFallbackAnsw)
 
-net.Receive("shopFallbackRefresh", function(len)
+local function shopFallbackRefresh(len)
 	local wshop = LocalPlayer().weaponshopList
 	if wshop and wshop.GetItems then
 		if not wshop.selectedRole then return end
@@ -451,4 +453,5 @@ net.Receive("shopFallbackRefresh", function(len)
 			end
 		end
 	end
-end)
+end
+net.Receive("shopFallbackRefresh", shopFallbackRefresh)

@@ -106,7 +106,7 @@ local function IdentifyBody(ply, rag)
 	end
 end
 
-concommand.Add("ttt_confirm_death", function(ply, cmd, args)
+local function ttt_confirm_death(ply, cmd, args)
 	if not IsValid(ply) then return end
 
 	if #args ~= 2 then return end
@@ -129,10 +129,11 @@ concommand.Add("ttt_confirm_death", function(ply, cmd, args)
 	if IsValid(rag) and rag:GetPos():Distance(ply:GetPos()) < 128 and CORPSE.GetFound(rag, false) then
 		IdentifyBody(ply, rag)
 	end
-end)
+end
+concommand.Add("ttt_confirm_death", ttt_confirm_death)
 
 -- Call detectives to a corpse
-concommand.Add("ttt_call_detective", function(ply, cmd, args)
+local function ttt_call_detective(ply, cmd, args)
 	if not IsValid(ply) then return end
 
 	if #args ~= 1 then return end
@@ -157,7 +158,8 @@ concommand.Add("ttt_call_detective", function(ply, cmd, args)
 			LANG.Msg(ply, "body_call_error")
 		end
 	end
-end)
+end
+concommand.Add("ttt_call_detective", ttt_call_detective)
 
 local function bitsRequired(num)
 	local bits, max = 0, 1
@@ -466,9 +468,11 @@ function CORPSE.Create(ply, attacker, dmginfo)
 		-- next frame, after physics is happy for this ragdoll
 		local efn = ply.effect_fn
 
-		timer.Simple(0, function()
+		local _func = function()
 			efn(rag)
-		end)
+		end
+
+		timer.Simple(0, _func)
 	end
 
 	hook.Run("TTTOnCorpseCreated", rag, ply)
