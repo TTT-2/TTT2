@@ -23,42 +23,33 @@ function GM:PlayerInitialSpawn(ply)
 
 	local rstate = GetRoundState() or ROUND_WAIT
 	-- We should update the traitor list, if we are not about to send it
+	-- TODO why sending roles here? The game has not begun!
 	if rstate <= ROUND_PREP then
-		error("REWORK: player.lua -> GM:PlayerInitialSpawn(ply)")
-
-		ERROR NETWORKING?
-		-- update traitors in team (they know each other)
-		-- update each team without innos (default everybody is inno for them) and detectives (he will update later) in their own role
-		for _, v in pairs(ROLES) do
-			if not v.specialRoleFilter then
-				if v.defaultTeam == TEAM_TRAITOR then
-					SendRoleList(ROLE_TRAITOR, v.index, GetRoleTeamFilter(v.defaultTeam))
-				elseif v ~= INNOCENT and v ~= DETECTIVE and not v.unknownTeam then
-					SendRoleList(v.baserole or v.index, v.index, GetRoleFilter(v.index))
-				end
-			else
-				hook.Run("TTT2SpecialRoleFilter")
+		for _, v in ipairs(GetAvailableTeams()) do
+			if v ~= TEAM_INNO then
+				SendTeamList(v, GetTeamFilter(v))
+				SendConfirmedTeam(v)
 			end
 		end
 
-		-- send everybody the confirmed traitors, but not the traitors (prevent reset)
-		for _, v in pairs(ROLES) do
-			if v.defaultTeam ~= TEAM_TRAITOR and not v.specialRoleFilter then
-				SendConfirmedTeam(TEAM_TRAITOR, GetRoleFilter(v.index)) -- TODO baserole ?
-			end
-		end
+		SendRoleList(ROLE_DETECTIVE)
 
-		-- completely update
-		SendRoleList(ROLE_DETECTIVE) -- TODO baserole ?
+		hook.Run("TTT2SpecialRoleSyncing")
 	end
 
-	-- Game has started, tell this guy where the round is at
+	-- Game has started, tell this guy (spec) where the round is at
 	if rstate ~= ROUND_WAIT then
 		SendRoundState(rstate, ply)
-		SendConfirmedTeam(TEAM_TRAITOR, ply)
 
-		-- completely update
-		SendRoleList(ROLE_DETECTIVE, ply) -- TODO baserole ?
+		for _, v in ipairs(GetAvailableTeams()) do
+			if v ~= TEAM_INNO then
+				SendConfirmedTeam(v, ply)
+			end
+		end
+
+		SendRoleList(ROLE_DETECTIVE, ply)
+
+		hook.Run("TTT2SpecialRoleSyncing", ply)
 	end
 
 	-- Handle spec bots
@@ -322,17 +313,17 @@ function GM:CanPlayerSuicide(ply)
 end
 
 function GM:PlayerSwitchFlashlight(ply, on)
-	if not IsValid(ply) then return false end
+	if not IsValid(ply) then
+		return false
+	end
 
 	-- add the flashlight "effect" here, and then deny the switch
 	-- this prevents the sound from playing, fixing the exploit
 	-- where weapon sound could be silenced using the flashlight sound
-	if not on or ply:IsTerror() then
-		if on then
-			ply:AddEffects(EF_DIMLIGHT)
-		else
-			ply:RemoveEffects(EF_DIMLIGHT)
-		end
+	if on then
+		ply:AddEffects(EF_DIMLIGHT)
+	elseif ply:IsTerror() then
+		ply:RemoveEffects(EF_DIMLIGHT)
 	end
 
 	return false
@@ -491,28 +482,17 @@ function GM:PlayerDisconnected(ply)
 		ply:SetRole(ROLE_NONE)
 	end
 
-	ERROR NETWORKING?
-	SendVisibleForTeamList(TEAM_TRAITOR)
-
-	hook.Run("TTT2SendFullStateUpdate")
-
 	if GetRoundState() ~= ROUND_PREP then
-		for _, v in ipairs(player.GetAll()) do
-			if not v:GetSubRoleData().specialRoleFilter then
-				if v:HasTeam(TEAM_TRAITOR) then
-					-- Keep traitor entindices in sync on traitor clients
-					SendTeamList(TEAM_TRAITOR, v)
-				else
-					-- Same for confirmed traitors on innocent clients
-					SendConfirmedTeam(TEAM_TRAITOR, v)
-				end
-			else
-				hook.Run("TTT2SpecialRoleFilter", v)
+		for _, v in ipairs(GetAvailableTeams()) do
+			if v ~= TEAM_INNO then
+				SendTeamList(v, GetTeamFilter(v))
+				SendConfirmedTeam(v)
 			end
 		end
 
-		-- completely update
-		SendRoleList(ROLE_DETECTIVE) -- TODO what with baserole ?
+		SendRoleList(ROLE_DETECTIVE)
+
+		hook.Run("TTT2SpecialRoleSyncing")
 	end
 
 	if KARMA.IsEnabled() then

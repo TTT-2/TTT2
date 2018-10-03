@@ -379,6 +379,18 @@ function GetWinTeams()
 	return winTeams
 end
 
+function GetAvailableTeams()
+	local availableTeams = {}
+
+	for _, v in pairs(ROLES) do
+		if not table.HasValue(availableTeams, v.defaultTeam) then
+			availableTeams[#availableTeams + 1] = v.defaultTeam
+		end
+	end
+
+	return availableTeams
+end
+
 function GetSortedRoles()
 	local roles = {}
 

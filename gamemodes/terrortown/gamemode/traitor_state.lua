@@ -64,28 +64,8 @@ function SendTeamList(team, ply_or_rf, pred)
 		end
 	end
 
-	local filter = GetTeamFilter(team)
-
 	for subrole, ids in pairs(team_ids) do
-		SendRoleListMessage(subrole, team, ids, filter)
-	end
-end
-
-function SendVisibleForTeamList(team, ply_or_rf)
-	local tmp = {}
-
-	for _, v in ipairs(player.GetAll()) do
-		if v:HasTeam(team) then
-			local subrole = v:GetSubRole()
-
-			tmp[subrole] = tmp[subrole] or {} -- create table if it does not exists
-
-			table.insert(tmp[subrole], v:EntIndex())
-		end
-	end
-
-	for k, v in pairs(tmp) do
-		SendRoleListMessage(k, team, v, ply_or_rf or GetTeamFilter(team))
+		SendRoleListMessage(subrole, team, ids, ply_or_rf)
 	end
 end
 
@@ -104,10 +84,17 @@ end
 -- TODO Improve, not resending if current data is consistent
 function SendFullStateUpdate()
 	SendRoleReset() -- reset every player; now everyone is inno
-	SendVisibleForTeamList(TEAM_TRAITOR) -- send traitors
+
+	for _, v in ipairs(GetAvailableTeams()) do
+		if v ~= TEAM_INNO then
+			SendTeamList(v, GetTeamFilter(v))
+			SendConfirmedTeam(v)
+		end
+	end
+
 	SendRoleList(ROLE_DETECTIVE) -- everyone should know who is detective
 
-	hook.Run("TTT2SpecialRoleFilter") -- maybe some networking for a custom role
+	hook.Run("TTT2SpecialRoleSyncing") -- maybe some networking for a custom role
 
 	SendPlayerRoles() -- update players at the end, because they were overwritten as innos
 end
@@ -122,10 +109,17 @@ local function ttt_request_rolelist(ply)
 	-- information after entities have been initialized (e.g. in InitPostEntity).
 	if GetRoundState() ~= ROUND_WAIT then
 		SendRoleReset(ply) -- reset every player for ply; now everyone is inno
-		SendVisibleForTeamList(TEAM_TRAITOR, ply) -- send traitors to ply
+		SendTeamList(ply:GetTeam(), ply) -- send list of team to ply
+
+		for _, v in ipairs(GetAvailableTeams()) do
+			if v ~= TEAM_INNO then
+				SendConfirmedTeam(v, ply)
+			end
+		end
+
 		SendRoleList(ROLE_DETECTIVE, ply) -- just send detectives to ply
 
-		hook.Run("TTT2SpecialRoleFilter", ply) -- maybe some networking for a custom role
+		hook.Run("TTT2SpecialRoleSyncing", ply) -- maybe some networking for a custom role
 
 		-- update own role for ply because they were overwritten as innos
 		net.Start("TTT_Role")
