@@ -277,9 +277,7 @@ function InitFallbackShops()
 				local swep_table = not is_item and weapons.GetStored(eq.id)
 
 				if swep_table then
-					if not swep_table.CanBuy then
-						swep_table.CanBuy = {}
-					end
+					swep_table.CanBuy = swep_table.CanBuy or {}
 
 					if not table.HasValue(swep_table.CanBuy, v.index) then
 						table.insert(swep_table.CanBuy, v.index)
@@ -304,9 +302,7 @@ function InitFallbackShop(roleData, fallbackTable)
 		local swep_table = not is_item and weapons.GetStored(eq.id)
 
 		if swep_table then
-			if not swep_table.CanBuy then
-				swep_table.CanBuy = {}
-			end
+			swep_table.CanBuy = swep_table.CanBuy or {}
 
 			if not table.HasValue(swep_table.CanBuy, roleData.index) then
 				table.insert(swep_table.CanBuy, roleData.index)
@@ -331,9 +327,7 @@ function AddToShopFallback(fallback, subrole, eq)
 		local swep_table = not is_item and weapons.GetStored(eq.id)
 
 		if swep_table then
-			if not swep_table.CanBuy then
-				swep_table.CanBuy = {}
-			end
+			swep_table.CanBuy = swep_table.CanBuy or {}
 
 			if not table.HasValue(swep_table.CanBuy, subrole) then
 				table.insert(swep_table.CanBuy, subrole)
@@ -517,7 +511,7 @@ if SERVER then
 		-- this was necessary with user messages, now it's
 		-- a just-in-case thing if a round somehow manages to be > 64K
 		local cut = {}
-		local max = 65500
+		local max = 65499
 
 		while #s ~= 0 do
 			local bit = string.sub(s, 1, max - 1)
@@ -565,9 +559,7 @@ if SERVER then
 
 			local swep_table = wep and weapons.GetStored(wep)
 			if swep_table then
-				if not swep_table.CanBuy then
-					swep_table.CanBuy = {}
-				end
+				swep_table.CanBuy = swep_table.CanBuy or {}
 
 				if not table.HasValue(swep_table.CanBuy, roleData.index) then
 					table.insert(swep_table.CanBuy, roleData.index)
@@ -650,9 +642,7 @@ if SERVER then
 	end
 
 	function AddEquipmentWeaponToRole(subrole, swep_table)
-		if not swep_table.CanBuy then
-			swep_table.CanBuy = {}
-		end
+		swep_table.CanBuy = swep_table.CanBuy or {}
 
 		if not table.HasValue(swep_table.CanBuy, subrole) then
 			table.insert(swep_table.CanBuy, subrole)
@@ -840,9 +830,7 @@ else -- CLIENT
 							else
 								local swep_table = weapons.GetStored(equip.equip)
 								if swep_table then
-									if not swep_table.CanBuy then
-										swep_table.CanBuy = {}
-									end
+									swep_table.CanBuy = swep_table.CanBuy or {}
 
 									if add then
 										AddEquipmentToRoleEquipment(subrole, swep_table, false)

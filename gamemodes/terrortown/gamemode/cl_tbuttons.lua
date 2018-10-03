@@ -25,14 +25,12 @@ end
 function TBHUD:CacheEnts()
 	local ply = LocalPlayer()
 
-	if IsValid(ply) and ply:IsActive() and ply:HasTeam(TEAM_TRAITOR) then
-		self.buttons = {}
+	self.buttons = {}
 
+	if IsValid(ply) and ply:IsActive() and ply:HasTeam(TEAM_TRAITOR) then
 		for _, ent in ipairs(ents.FindByClass("ttt_traitor_button")) do
 			self.buttons[ent:EntIndex()] = ent
 		end
-	else
-		self.buttons = {}
 	end
 
 	self.buttons_count = table.Count(self.buttons)
