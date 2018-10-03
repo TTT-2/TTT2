@@ -1,5 +1,3 @@
--- TODO
-ERROR
 --- Display of and interaction with ttt_traitor_button
 local surface = surface
 local pairs = pairs
@@ -138,6 +136,7 @@ function TBHUD:Draw(client)
 				self.focus_stick = CurTime() + 0.1
 
 				scrpos = focus_ent:GetPos():ToScreen()
+
 				local sz = 16
 
 				-- redraw in-focus version of icon

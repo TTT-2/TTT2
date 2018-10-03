@@ -1,5 +1,3 @@
--- TODO
-ERROR
 --- Credit transfer tab for equipment menu
 local GetTranslation = LANG.GetTranslation
 
@@ -27,7 +25,6 @@ function CreateTransferMenu(parent)
 	local selected_sid
 
 	local dpick = vgui.Create("DComboBox", dform)
-
 	dpick.OnSelect = function(s, idx, val, data)
 		if data then
 			selected_sid = data
@@ -64,7 +61,7 @@ function CreateTransferMenu(parent)
 	dform:AddItem(dpick)
 	dform:AddItem(dsubmit)
 
-	dform:Help(LANG.GetParamTranslation("xfer_help", {role = tostring(client:GetTeam())})) -- TODO add translation
+	dform:Help(LANG.GetParamTranslation("xfer_help", {role = GetTranslation(client:GetTeam())}))
 
 	return dform
 end

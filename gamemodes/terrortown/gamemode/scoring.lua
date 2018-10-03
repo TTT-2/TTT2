@@ -276,7 +276,7 @@ function SCORE:StreamToClients()
 
 		table.insert(cut, bit)
 
-		s = string.sub(s, max, - 1)
+		s = string.sub(s, max, -1)
 	end
 
 	local parts = #cut
