@@ -1,3 +1,5 @@
+-- TODO
+ERROR
 ---- Traitor equipment menu
 local GetTranslation = LANG.GetTranslation
 local GetPTranslation = LANG.GetParamTranslation

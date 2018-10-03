@@ -1,3 +1,5 @@
+-- TODO
+ERROR
 -- Mute players when we are about to run map cleanup, because it might cause
 -- net buffer overflows on clients.
 local mute_all = false

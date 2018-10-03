@@ -49,6 +49,7 @@ end
 --- Equipment credits
 function plymeta:SetCredits(amt)
 	self.equipment_credits = amt
+
 	self:SendCredits()
 end
 
@@ -95,6 +96,7 @@ function plymeta:AddEquipmentItem(id)
 
 	if id then
 		self.equipment_items = bit.bor(self.equipment_items, id)
+
 		self:SendEquipment()
 	end
 end
@@ -124,12 +126,11 @@ function plymeta:SendBought()
 	net.Send(self)
 end
 
-local function ResendBought(ply)
+concommand.Add("ttt_resend_bought", function(ply)
 	if IsValid(ply) then
 		ply:SendBought()
 	end
-end
-concommand.Add("ttt_resend_bought", ResendBought)
+end)
 
 function plymeta:ResetBought()
 	self.bought = {}
@@ -138,9 +139,7 @@ function plymeta:ResetBought()
 end
 
 function plymeta:AddBought(id)
-	if not self.bought then
-		self.bought = {}
-	end
+	self.bought = self.bought or {}
 
 	table.insert(self.bought, tostring(id))
 
@@ -161,7 +160,7 @@ end
 
 -- Sets all flags (force_spec, etc) to their default
 function plymeta:ResetStatus()
-	self:SetRole(ROLE_INNOCENT)
+	self:SetRole(ROLE_INNOCENT) -- this will update the team automatically
 	self:SetRagdollSpec(false)
 	self:SetForceSpec(false)
 	self:ResetRoundFlags()
@@ -169,10 +168,8 @@ end
 
 -- Sets round-based misc flags to default position. Called at PlayerSpawn.
 function plymeta:ResetRoundFlags()
-	-- equipment
 	self:ResetEquipment()
 	self:SetCredits(0)
-
 	self:ResetBought()
 
 	-- equipment stuff
@@ -190,7 +187,6 @@ function plymeta:ResetRoundFlags()
 	-- communication
 	self.mute_team = -1
 
-	-- TODO needed? new voicechat ?
 	for _, team in ipairs(GetWinTeams()) do
 		if team ~= TEAM_INNO then
 			self[team .. "_gvoice"] = false
@@ -228,16 +224,13 @@ end
 function plymeta:RecordKill(victim)
 	if not IsValid(victim) then return end
 
-	if not self.kills then
-		self.kills = {}
-	end
+	self.kills = self.kills or {}
 
 	table.insert(self.kills, victim:SteamID())
 end
 
-
 function plymeta:SetSpeed(slowed)
-	error "Player:SetSpeed is deprecated - please remove this call and use the TTTPlayerSpeedModifier hook in both CLIENT and SERVER states"
+	error "Player:SetSpeed(slowed) is deprecated - please remove this call and use the TTTPlayerSpeedModifier hook in both CLIENT and SERVER states"
 end
 
 function plymeta:ResetLastWords()
@@ -274,7 +267,6 @@ function plymeta:SendLastWords(dmginfo)
 		ply:ResetLastWords()
 	end)
 end
-
 
 function plymeta:ResetViewRoll()
 	local ang = self:EyeAngles()
@@ -316,7 +308,9 @@ function plymeta:SpawnForRound(dead_only)
 		return false
 	end
 
-	if not self:ShouldSpawn() then return false end
+	if not self:ShouldSpawn() then
+		return false
+	end
 
 	-- reset propspec state that they may have gotten during prep
 	PROPSPEC.Clear(self)

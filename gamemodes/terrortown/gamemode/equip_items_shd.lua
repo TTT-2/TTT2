@@ -1,3 +1,4 @@
+-- TODO
 
 -- This table is used by the client to show items in the equipment menu, and by
 -- the server to check if a certain role is allowed to buy a certain item.

@@ -47,7 +47,7 @@ include("cl_chat.lua")
 include("cl_voice.lua")
 
 function GM:Initialize()
-	MsgN("TTT Client initializing...")
+	MsgN("TTT2 Client initializing...")
 
 	GAMEMODE.round_state = ROUND_WAIT
 

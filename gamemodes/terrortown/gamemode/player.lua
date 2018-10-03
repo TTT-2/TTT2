@@ -933,7 +933,9 @@ function GM:OnPlayerHitGround(ply, in_water, on_floater, speed)
 
 	-- I don't know exactly when on_floater is true, but it's probably when
 	-- landing on something that is in water.
-	if on_floater then damage = damage / 2 end
+	if on_floater then
+		damage = damage / 2
+	end
 
 	-- if we fell on a dude, that hurts (him)
 	local ground = ply:GetGroundEntity()
@@ -962,7 +964,7 @@ function GM:OnPlayerHitGround(ply, in_water, on_floater, speed)
 
 			dmg:SetAttacker(att)
 			dmg:SetInflictor(att)
-			dmg:SetDamageForce(Vector(0, 0, - 1))
+			dmg:SetDamageForce(Vector(0, 0, -1))
 			dmg:SetDamage(damage)
 
 			ground:TakeDamageInfo(dmg)
@@ -995,11 +997,8 @@ local ttt_postdm = CreateConVar("ttt_postround_dm", "0", FCVAR_NOTIFY)
 function GM:AllowPVP()
 	local rs = GetRoundState()
 
-	return not (rs == ROUND_PREP or (rs == ROUND_POST and not ttt_postdm:GetBool()))
+	return rs ~= ROUND_PREP and (rs ~= ROUND_POST or ttt_postdm:GetBool())
 end
-
---local rag_collide = CreateConVar("ttt_ragdoll_collide", "0")
-CreateConVar("ttt_ragdoll_collide", "0")
 
 -- No damage during prep, etc
 function GM:EntityTakeDamage(ent, dmginfo)
@@ -1019,7 +1018,8 @@ function GM:EntityTakeDamage(ent, dmginfo)
 		-- When a barrel hits a player, that player damages the barrel because
 		-- Source physics. This gives stupid results like a player who gets hit
 		-- with a barrel being blamed for killing himself or even his attacker.
-		if IsValid(att) and att:IsPlayer()
+		if IsValid(att)
+		and att:IsPlayer()
 		and dmginfo:IsDamageType(DMG_CRUSH)
 		and IsValid(ent:GetPhysicsAttacker())
 		then
@@ -1107,6 +1107,7 @@ function GM:PlayerTakeDamage(ent, infl, att, amount, dmginfo)
 				if IsValid(infl) then
 					push.infl = infl
 				end
+
 				-- make sure this is set, for if we created a new table
 				ent.was_pushed = push
 			end
@@ -1114,6 +1115,7 @@ function GM:PlayerTakeDamage(ent, infl, att, amount, dmginfo)
 
 		-- make the owner of the damage the attacker
 		att = IsValid(owner) and owner or att
+
 		dmginfo:SetAttacker(att)
 	end
 
@@ -1137,7 +1139,7 @@ function GM:PlayerTakeDamage(ent, infl, att, amount, dmginfo)
 		if not IsValid(datt) or not datt:IsPlayer() then
 			local ignite = ent.ignite_info
 
-			if IsValid(ignite.att) and IsValid(ignite.infl)then
+			if IsValid(ignite.att) and IsValid(ignite.infl) then
 				dmginfo:SetAttacker(ignite.att)
 				dmginfo:SetInflictor(ignite.infl)
 			end
@@ -1146,11 +1148,16 @@ function GM:PlayerTakeDamage(ent, infl, att, amount, dmginfo)
 
 	-- try to work out if this was push-induced leech-water damage (common on
 	-- some popular maps like dm_island17)
-	if ent.was_pushed and ent == att and dmginfo:GetDamageType() == DMG_GENERIC and util.BitSet(util.PointContents(dmginfo:GetDamagePosition()), CONTENTS_WATER) then
+	if ent.was_pushed
+	and ent == att
+	and dmginfo:GetDamageType() == DMG_GENERIC
+	and util.BitSet(util.PointContents(dmginfo:GetDamagePosition()), CONTENTS_WATER)
+	then
 		local t = math.max(ent.was_pushed.t or 0, ent.was_pushed.hurt or 0)
 
 		if t > CurTime() - 3 then
 			dmginfo:SetAttacker(ent.was_pushed.att)
+
 			ent.was_pushed.hurt = CurTime()
 		end
 	end
@@ -1172,18 +1179,14 @@ function GM:PlayerTakeDamage(ent, infl, att, amount, dmginfo)
 
 		DamageLog(Format("DMG: \t %s [%s] damaged %s [%s] for %d dmg", att:Nick(), att:GetRoleString(), ent:Nick(), ent:GetRoleString(), math.Round(dmginfo:GetDamage())))
 	end
-
 end
-
 
 function GM:OnNPCKilled()
 
 end
 
 -- Drowning and such
-local tm = nil
-local ply = nil
-local plys = nil
+local tm, ply, plys
 
 function GM:Tick()
 	-- three cheers for micro-optimizations

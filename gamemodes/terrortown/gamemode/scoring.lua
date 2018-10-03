@@ -1,4 +1,5 @@
 -- TODO rework completely
+ERROR
 error("REWORK scoring.lua")
 ---- Customized scoring
 

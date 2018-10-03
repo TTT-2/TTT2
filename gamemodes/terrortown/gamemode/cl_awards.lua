@@ -1,4 +1,5 @@
 -- TODO in TTT2 improve this file
+ERROR
 error("REWORK: cl_awards.lua")
 
 -- Award/highlight generator functions take the events and the scores as

@@ -1,3 +1,5 @@
+-- TODO
+ERROR
 ---- Player info panel, based on sandbox scoreboard's infocard
 
 local vgui = vgui

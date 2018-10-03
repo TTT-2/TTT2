@@ -1,3 +1,5 @@
+-- TODO
+ERROR
 --- Credit transfer tab for equipment menu
 local GetTranslation = LANG.GetTranslation
 

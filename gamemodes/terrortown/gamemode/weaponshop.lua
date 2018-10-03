@@ -1,3 +1,5 @@
+-- TODO fix syncing
+ERROR
 util.AddNetworkString("newshop")
 concommand.Add("Weaponshop", function(ply, cmd, args)
 	if ply:IsAdmin() then

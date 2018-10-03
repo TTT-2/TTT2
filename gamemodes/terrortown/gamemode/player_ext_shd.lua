@@ -31,6 +31,7 @@ function plymeta:GetRole()
 	return self.role, self.subrole
 end
 
+-- ply:UpdateTeam(team) should never be used BEFORE this function
 function plymeta:SetRole(subrole)
 	local rd = GetRoleByIndex(subrole)
 	local baserole = subrole

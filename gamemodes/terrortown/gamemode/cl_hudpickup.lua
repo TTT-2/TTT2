@@ -1,3 +1,5 @@
+-- TODO
+ERROR
 local TryTranslation = LANG.TryTranslation
 
 GM.PickupHistory = {}

@@ -1,4 +1,5 @@
 -- TODO REWORK
+ERROR
 error("REWORK cl_scoring.lua")
 -- Game report
 

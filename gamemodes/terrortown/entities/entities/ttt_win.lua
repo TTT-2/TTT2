@@ -11,4 +11,6 @@ function ENT:AcceptInput(name, activator, caller)
 
 		return true
 	end
+
+	-- TODO add more options
 end

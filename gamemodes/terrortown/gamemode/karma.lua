@@ -110,7 +110,7 @@ end
 local function WasAvoidable(attacker, victim, dmginfo)
 	local infl = dmginfo:GetInflictor()
 
-	if attacker:IsInTeam(victim) and (not victim:GetSubRoleData().unknownTeam or attacker:GetTeam() == TEAM_TRAITOR) and IsValid(infl) and (infl.Avoidable == nil or infl.Avoidable) then
+	if attacker:IsInTeam(victim) and (not victim:GetSubRoleData().unknownTeam or attacker:GetTeam() == TEAM_TRAITOR) and IsValid(infl) and infl.Avoidable ~= false then
 		return true
 	end
 
@@ -121,15 +121,10 @@ end
 -- been applied to the victim yet, but must have been scaled according to the
 -- damage factor of the attacker.
 function KARMA.Hurt(attacker, victim, dmginfo)
-	if not IsValid(attacker) or not IsValid(victim) then return end
-
-	if attacker == victim then return end
-	--	if not attacker:IsPlayer() or not victim:IsPlayer() then return end
+	if attacker == victim or not IsValid(attacker) or not IsValid(victim) or not attacker:IsPlayer() or not victim:IsPlayer() then return end
 
 	-- Ignore excess damage
 	local hurt_amount = math.min(victim:Health(), dmginfo:GetDamage())
-
-	if not attacker:IsPlayer() or not victim:IsPlayer() then return end
 
 	-- team kills another team
 	if not attacker:IsInTeam(victim) then
@@ -144,6 +139,7 @@ function KARMA.Hurt(attacker, victim, dmginfo)
 		local penalty = KARMA.GetHurtPenalty(victim:GetLiveKarma(), hurt_amount)
 
 		KARMA.GivePenalty(attacker, penalty, victim)
+
 		attacker:SetCleanRound(false)
 
 		print(Format("%s (%f) killed %s (%f) and gets penalised for %f", attacker:Nick(), attacker:GetLiveKarma(), victim:Nick(), victim:GetLiveKarma(), penalty))
@@ -152,11 +148,7 @@ end
 
 -- Handle karma change due to one player killing another.
 function KARMA.Killed(attacker, victim, dmginfo)
-	if not IsValid(attacker) or not IsValid(victim) then return end
-
-	if attacker == victim then return end
-
-	if not victim:IsPlayer() or not attacker:IsPlayer() then return end
+	if attacker == victim or not IsValid(attacker) or not IsValid(victim) or not victim:IsPlayer() or not attacker:IsPlayer() then return end
 
 	-- team kills another team
 	if not attacker:IsInTeam(victim) then
@@ -213,7 +205,7 @@ function KARMA.RoundIncrement()
 			KARMA.GiveReward(ply, bonus)
 
 			if IsDebug() then
-				print(ply, "gets roundincr", incr)
+				print(ply, "gets roundincr ", incr)
 			end
 		end
 	end
@@ -225,7 +217,7 @@ end
 function KARMA.Rebase()
 	for _, ply in ipairs(player.GetAll()) do
 		if IsDebug() then
-			print(ply, "rebased from", ply:GetBaseKarma(), "to", ply:GetLiveKarma())
+			print(ply, "rebased from ", ply:GetBaseKarma(), " to ", ply:GetLiveKarma())
 		end
 
 		ply:SetBaseKarma(ply:GetLiveKarma())
@@ -281,8 +273,7 @@ function KARMA.RoundBegin()
 end
 
 function KARMA.InitPlayer(ply)
-	local k = KARMA.Recall(ply) or config.starting:GetFloat()
-	k = math.Clamp(k, 0, config.max:GetFloat())
+	local k = math.Clamp(KARMA.Recall(ply) or config.starting:GetFloat(), 0, config.max:GetFloat())
 
 	ply:SetBaseKarma(k)
 	ply:SetLiveKarma(k)
@@ -311,7 +302,6 @@ function KARMA.Recall(ply)
 
 		if ply:IsFullyAuthenticated() then
 			local k = tonumber(ply:GetPData("karma_stored", nil))
-
 			if k then
 				return k
 			end
@@ -323,7 +313,6 @@ end
 
 function KARMA.LateRecallAndSet(ply)
 	local k = tonumber(ply:GetPData("karma_stored", KARMA.RememberedPlayers[ply:SteamID()]))
-
 	if k and k < ply:GetLiveKarma() then
 		ply:SetBaseKarma(k)
 		ply:SetLiveKarma(k)
@@ -340,9 +329,7 @@ local reason = "Karma too low"
 
 function KARMA.CheckAutoKick(ply)
 	if ply:GetBaseKarma() <= config.kicklevel:GetInt() then
-		if hook.Call("TTTKarmaLow", GAMEMODE, ply) == false then
-			return
-		end
+		if hook.Call("TTTKarmaLow", GAMEMODE, ply) == false then return end
 
 		ServerLog(ply:Nick() .. " autokicked/banned for low karma.\n")
 

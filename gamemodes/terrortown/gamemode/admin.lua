@@ -1,4 +1,5 @@
 -- TODO rework EVENT system
+ERROR
 --- Admin commands
 
 local function GetPrintFn(ply)

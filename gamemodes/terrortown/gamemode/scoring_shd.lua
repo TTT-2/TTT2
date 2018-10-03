@@ -1,4 +1,5 @@
 -- TODO rework completely
+ERROR
 error("REWORKING scoring_shd.lua")
 -- Server and client both need this for scoring event logs
 

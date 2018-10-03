@@ -1,3 +1,5 @@
+-- TODO fix syncing
+ERROR
 local Equipmentnew
 local SafeTranslate = LANG.TryTranslation
 

@@ -1,3 +1,5 @@
+-- TODO
+ERROR
 -- Some popup window stuff
 
 local GetTranslation = LANG.GetTranslation

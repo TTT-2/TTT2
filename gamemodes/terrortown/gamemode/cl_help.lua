@@ -1,3 +1,5 @@
+-- TODO
+ERROR
 ---- Help screen
 
 local GetTranslation = LANG.GetTranslation

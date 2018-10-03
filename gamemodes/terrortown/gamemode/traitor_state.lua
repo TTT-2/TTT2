@@ -125,7 +125,7 @@ concommand.Add("_ttt_request_rolelist", function(ply)
 
 		hook.Run("TTT2SpecialRoleFilter", ply) -- maybe some networking for a custom role
 
-		-- update own role for ply because they was overwritten as innos
+		-- update own role for ply because they were overwritten as innos
 		net.Start("TTT_Role")
 		net.WriteUInt(ply:GetSubRole(), ROLE_BITS)
 		net.WriteString(ply:GetTeam())

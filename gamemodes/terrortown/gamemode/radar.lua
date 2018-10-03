@@ -1,3 +1,5 @@
+-- TODO
+ERROR
 -- just server file
 
 local chargetime = 30

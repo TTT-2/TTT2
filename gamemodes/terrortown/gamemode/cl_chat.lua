@@ -1,3 +1,5 @@
+-- TODO
+ERROR
 ---- radio commands, text chat stuff
 DEFINE_BASECLASS("gamemode_base")
 
