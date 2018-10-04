@@ -96,7 +96,7 @@ function PANEL:PressedAnim(anim, delta, data)
 		return
 	end
 
-	local border = math.sin(delta * math.pi) * (self.m_iIconSize * 0.05)
+	local border = math.sin(delta * math.pi) * self.m_iIconSize * 0.05
 
 	self.Icon:StretchToParent(border, border, border, border)
 end

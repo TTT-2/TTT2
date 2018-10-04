@@ -331,9 +331,13 @@ function IsBaseRole(roleData)
 	return not roleData.baserole
 end
 
+function GetBaseRole(subrole)
+	return GetRoleByIndex(subrole).baserole or subrole
+end
+
 -- includes baserole as well
 function GetSubRoles(subrole)
-	local br = GetRoleByIndex(subrole).baserole or subrole
+	local br = GetBaseRole(subrole)
 	local tmp = {}
 
 	for _, v in pairs(ROLES) do
@@ -353,6 +357,10 @@ function GetDefaultTeamRole(team)
 	end
 
 	return INNOCENT
+end
+
+function GetDefaultTeamRoles(team)
+	return GetSubRoles(GetDefaultTeamRole(team).index)
 end
 
 function GetTeamMembers(team)

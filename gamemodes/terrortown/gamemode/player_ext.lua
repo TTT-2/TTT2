@@ -280,7 +280,6 @@ function plymeta:ResetViewRoll()
 	end
 end
 
-
 function plymeta:ShouldSpawn()
 	-- do not spawn players who have not been through initspawn
 	if not self:IsSpec() and not self:IsTerror() then

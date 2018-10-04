@@ -1,5 +1,3 @@
--- TODO
-
 -- This table is used by the client to show items in the equipment menu, and by
 -- the server to check if a certain role is allowed to buy a certain item.
 
@@ -43,44 +41,45 @@ SYNC_EQUIP = {}
 ALL_ITEMS = {}
 
 function SetupEquipment()
-	-- TODO
-	error("REWORK")
-	ERROR
+	local armor = {
+		id = EQUIP_ARMOR,
+		type = "item_passive",
+		material = mat_dir .. "icon_armor",
+		name = "item_armor",
+		desc = "item_armor_desc"
+	}
 
-	for _, v in pairs(GetTeamRolesREMOVED(TEAM_TRAITOR)) do
-		if not EquipmentItems[v.index] then
-			EquipmentItems[v.index] = {
-				-- body armor
-				{
-					id = EQUIP_ARMOR,
-					type = "item_passive",
-					material = mat_dir .. "icon_armor",
-					name = "item_armor",
-					desc = "item_armor_desc"
-				},
-				-- radar
-				{
-					id = EQUIP_RADAR,
-					type = "item_active",
-					material = mat_dir .. "icon_radar",
-					name = "item_radar",
-					desc = "item_radar_desc"
-				},
-				-- disguiser
-				{
-					id = EQUIP_DISGUISE,
-					type = "item_active",
-					material = mat_dir .. "icon_disguise",
-					name = "item_disg",
-					desc = "item_disg_desc"
-				}
-			}
-		end
-	end
+	local radar = {
+		id = EQUIP_RADAR,
+		type = "item_active",
+		material = mat_dir .. "icon_radar",
+		name = "item_radar",
+		desc = "item_radar_desc"
+	}
+
+	local disguiser = {
+		id = EQUIP_DISGUISE,
+		type = "item_active",
+		material = mat_dir .. "icon_disguise",
+		name = "item_disg",
+		desc = "item_disg_desc"
+	}
 
 	for _, v in pairs(ROLES) do
-		if v.defaultTeam ~= TEAM_TRAITOR and not EquipmentItems[v.index] then
-			EquipmentItems[v.index] = {}
+		if not EquipmentItems[v.index] then
+			local br = GetBaseRole(v.index)
+			if br == ROLE_TRAITOR then
+				EquipmentItems[v.index] = {armor, radar, disguiser}
+			elseif br == ROLE_DETECTIVE then
+				EquipmentItems[v.index] = {armor, radar}
+			else
+				local eqIt = GetRoleByIndex(v.index).EquipmentItems
+				if eqIt then
+					EquipmentItems[v.index] = eqIt
+				else
+					EquipmentItems[v.index] = {}
+				end
+			end
 		end
 	end
 end
@@ -198,9 +197,9 @@ function GetEquipmentItem(subrole, id)
 		local fb = GetShopFallback(subrole)
 
 		tbl = EquipmentItems[fb]
-	end
 
-	if not tbl then return end
+		if not tbl then return end
+	end
 
 	for _, v in pairs(tbl) do
 		if v and v.id == id then
@@ -269,7 +268,8 @@ function SyncTableHasValue(tbl, equip)
 end
 
 function InitFallbackShops()
-	for _, v in ipairs{TRAITOR, DETECTIVE} do
+	local tbl = {TRAITOR, DETECTIVE}
+	for _, v in ipairs(tbl) do
 		local fallback = GetShopFallbackTable(v.index)
 		if fallback then
 			for _, eq in ipairs(fallback) do

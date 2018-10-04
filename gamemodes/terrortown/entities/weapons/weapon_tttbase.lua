@@ -145,10 +145,9 @@ if CLIENT then
 		if disable_crosshair:GetBool() or not IsValid(client) then return end
 
 		local sights = not self.NoSights and self:GetIronsights()
-		local x = math.floor(ScrW() / 2.0)
-		local y = math.floor(ScrH() / 2.0)
+		local x = math.floor(ScrW() * 0.5)
+		local y = math.floor(ScrH() * 0.5)
 		local scale = math.max(0.2, 10 * self:GetPrimaryCone())
-
 		local LastShootTime = self:LastShootTime()
 
 		scale = scale * (2 - math.Clamp((CurTime() - LastShootTime) * 5, 0.0, 1.0))
@@ -167,7 +166,7 @@ if CLIENT then
 		end
 
 		local gap = math.floor(20 * scale * (sights and 0.8 or 1))
-		local length = math.floor(gap + (25 * crosshair_size:GetFloat()) * scale)
+		local length = math.floor(gap + 25 * crosshair_size:GetFloat() * scale)
 
 		surface.DrawLine(x - length, y, x - gap, y)
 		surface.DrawLine(x + length, y, x + gap, y)
@@ -181,7 +180,6 @@ if CLIENT then
 	local help_spec = {text = "", font = "TabLarge", xalign = TEXT_ALIGN_CENTER}
 	function SWEP:DrawHelp()
 		local data = self.HUDHelp
-
 		local translate = data.translatable
 		local primary = data.primary
 		local secondary = data.secondary
@@ -191,7 +189,7 @@ if CLIENT then
 			secondary = secondary and GetPTranslation(secondary, data.translate_params)
 		end
 
-		help_spec.pos = {ScrW() / 2.0, ScrH() - 40}
+		help_spec.pos = {ScrW() * 0.5, ScrH() - 40}
 		help_spec.text = secondary or primary
 
 		draw.TextShadow(help_spec, 2)
@@ -245,7 +243,7 @@ function SWEP:PrimaryAttack(worldsnd)
 
 	if not IsValid(owner) or owner:IsNPC() or not owner.ViewPunch then return end
 
-	owner:ViewPunch(Angle(util.SharedRandom(self:GetClass(), - 0.2, - 0.1, 0) * self.Primary.Recoil, util.SharedRandom(self:GetClass(), - 0.1, 0.1, 1) * self.Primary.Recoil, 0))
+	owner:ViewPunch(Angle(util.SharedRandom(self:GetClass(), -0.2, -0.1, 0) * self.Primary.Recoil, util.SharedRandom(self:GetClass(), -0.1, 0.1, 1) * self.Primary.Recoil, 0))
 end
 
 function SWEP:DryFire(setnext)
@@ -564,9 +562,7 @@ end
 
 local ttt_lowered = CreateConVar("ttt_ironsights_lowered", "1", FCVAR_ARCHIVE)
 local host_timescale = GetConVar("host_timescale")
-
-local LOWER_POS = Vector(0, 0, - 2)
-
+local LOWER_POS = Vector(0, 0, -2)
 local IRONSIGHT_TIME = 0.25
 
 function SWEP:GetViewModelPosition(pos, ang)
@@ -596,13 +592,15 @@ function SWEP:GetViewModelPosition(pos, ang)
 	if fIronTime > time - IRONSIGHT_TIME then
 		mul = math.Clamp((time - fIronTime) / IRONSIGHT_TIME, 0, 1)
 
-		if not bIron then mul = 1 - mul end
+		if not bIron then
+			mul = 1 - mul
+		end
 	end
 
 	local offset = self.IronSightsPos + (ttt_lowered:GetBool() and LOWER_POS or vector_origin)
 
 	if self.IronSightsAng then
-		ang = ang * 1
+		ang = Angle(ang)
 		ang:RotateAroundAxis(ang:Right(), self.IronSightsAng.x * mul)
 		ang:RotateAroundAxis(ang:Up(), self.IronSightsAng.y * mul)
 		ang:RotateAroundAxis(ang:Forward(), self.IronSightsAng.z * mul)

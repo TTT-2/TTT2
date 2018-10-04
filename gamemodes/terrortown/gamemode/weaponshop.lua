@@ -1,5 +1,3 @@
--- TODO fix syncing
-ERROR
 util.AddNetworkString("newshop")
 
 local function Weaponshop(ply, cmd, args)

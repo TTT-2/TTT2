@@ -1,5 +1,3 @@
--- TODO
-ERROR
 ---- radio commands, text chat stuff
 DEFINE_BASECLASS("gamemode_base")
 
@@ -25,7 +23,7 @@ local function LastWordsRecv()
 end
 net.Receive("TTT_LastWordsMsg", LastWordsRecv)
 
-local function TTTRoleChat()
+local function TTT_RoleChat()
 	local sender = net.ReadEntity()
 
 	if not IsValid(sender) then return end
@@ -55,7 +53,6 @@ function GM:ChatText(idx, name, text, type)
 
 	return BaseClass.ChatText(self, idx, name, text, type)
 end
-
 
 -- Detectives have a blue name, in both chat and radio messages
 local function AddDetectiveText(ply, text)
@@ -133,7 +130,7 @@ RADIO.Commands = {
 	{cmd = "check", text = "quick_check", format = false}
 }
 
-local radioframe = nil
+local radioframe
 
 function RADIO:ShowRadioCommands(state)
 	if not state then
@@ -326,7 +323,7 @@ local function RadioCommand(ply, cmd, arg)
 		return
 	end
 
-	if RADIO.LastRadio.t > (CurTime() - 0.5) then return end
+	if RADIO.LastRadio.t > CurTime() - 0.5 then return end
 
 	local msg_type = arg[1]
 	local target, vague = RADIO:GetTarget()
@@ -339,8 +336,9 @@ local function RadioCommand(ply, cmd, arg)
 	for _, msg in ipairs(RADIO.Commands) do
 		if msg.cmd == msg_type then
 			local eng = LANG.GetTranslationFromLanguage(msg.text, "english")
+			local _tmp = {player = RADIO.ToPrintable(target)}
 
-			text = msg.format and string.Interp(eng, {player = RADIO.ToPrintable(target)}) or eng
+			text = msg.format and string.Interp(eng, _tmp) or eng
 			msg_name = msg.text
 
 			break
@@ -361,7 +359,7 @@ local function RadioCommand(ply, cmd, arg)
 	RADIO.LastRadio.msg = text
 
 	-- target is either a lang string or an entity
-	target = type(target) == "string" and target or tostring(target:EntIndex()) -- TODO why EntIndex() ?
+	target = type(target) == "string" and target or tostring(target:EntIndex())
 
 	RunConsoleCommand("_ttt_radio_send", msg_name, tostring(target))
 end
@@ -382,14 +380,13 @@ local function RadioMsgRecv()
 	local msg = net.ReadString()
 	local param = net.ReadString()
 
-	if not (IsValid(sender) and sender:IsPlayer()) then return end
+	if not IsValid(sender) or not sender:IsPlayer() then return end
 
 	GAMEMODE:PlayerSentRadioCommand(sender, msg, param)
 
 	-- if param is a language string, translate it
 	-- else it's a nickname
 	local lang_param = LANG.GetNameParam(param)
-
 	if lang_param then
 		if lang_param == "quick_corpse_id" then
 			-- special case where nested translation is needed

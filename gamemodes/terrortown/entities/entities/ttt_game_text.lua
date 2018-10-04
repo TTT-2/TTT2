@@ -1,6 +1,3 @@
--- TODO
-ERROR
-
 ENT.Type = "point"
 ENT.Base = "base_point"
 
@@ -12,7 +9,7 @@ local RECEIVE_ALL = 1
 local RECEIVE_DETECTIVE = 2
 local RECEIVE_TRAITOR = 3
 local RECEIVE_INNOCENT = 4
--- TODO add RECEIVE_[CUSTOM_ROLE] for each custom role
+local RECEIVE_CUSTOMROLE = 5
 
 ENT.Receiver = RECEIVE_ACTIVATOR
 
@@ -26,7 +23,7 @@ function ENT:KeyValue(key, value)
 	elseif key == "receive" then
 		self.Receiver = tonumber(value)
 
-		if not (self.Receiver and self.Receiver >= 0 and self.Receiver <= 4) then
+		if not self.Receiver or self.Receiver < 0 or self.Receiver > 4 then
 			ErrorNoHalt("ERROR: ttt_game_text has invalid receiver value\n")
 
 			self.Receiver = RECEIVE_ACTIVATOR
@@ -42,17 +39,19 @@ function ENT:AcceptInput(name, activator)
 		if r == RECEIVE_ALL then
 			recv = nil
 		elseif r == RECEIVE_DETECTIVE then
-			recv = GetDetectiveFilter()
+			recv = GetRoleFilter(ROLE_DETECTIVE)
 		elseif r == RECEIVE_TRAITOR then
-			recv = GetTraitorFilter()
+			recv = GetTeamFilter(TEAM_TRAITOR)
 		elseif r == RECEIVE_INNOCENT then
-			recv = GetInnocentFilter()
+			recv = GetTeamFilter(TEAM_INNO)
 		elseif r == RECEIVE_ACTIVATOR then
 			if not IsValid(activator) or not activator:IsPlayer() then
 				ErrorNoHalt("ttt_game_text tried to show message to invalid !activator\n")
 
 				return true
 			end
+		elseif r == RECEIVE_CUSTOMROLE and self.teamReceiver then
+			recv = GetTeamFilter(self.teamReceiver)
 		end
 
 		CustomMsg(recv, self.Message, self.Color)
