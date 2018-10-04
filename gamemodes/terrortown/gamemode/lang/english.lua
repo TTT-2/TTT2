@@ -84,6 +84,7 @@ L.equip_help_carry = "You can only buy things for which you have room."
 L.equip_carry = "You can carry this equipment."
 L.equip_carry_own = "You are already carrying this item."
 L.equip_carry_slot = "You are already carrying a weapon in slot {slot}."
+L.equip_carry_minplayers = "There are not enough players on the server to enable this weapon."
 
 L.equip_help_stock = "Of certain items you can only buy one per round."
 L.equip_stock_deny = "This item is no longer in stock."
@@ -1055,8 +1056,8 @@ L.aw_tod2_text = "died right after the start of the round."
 
 
 --- v23
-L.set_avoid_det = "Avoid being selected as Detective"
-L.set_avoid_det_tip = "Enable this to ask the server not to select you as Detective if possible. Does not mean you are Traitor more often."
+L.set_avoid = "Avoid being selected as {role}."
+L.set_avoid_tip = "Enable this to ask the server not to select you as {role} if possible."
 
 --- v24
 L.drop_no_ammo = "Insufficient ammo in your weapon's clip to drop as an ammo box."

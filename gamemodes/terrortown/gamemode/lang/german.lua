@@ -84,6 +84,7 @@ L.equip_help_carry = "Du kannst nur das kaufen, für das du auch Platz hast."
 L.equip_carry = "Du kannst diese Ausrüstung tragen."
 L.equip_carry_own = "Du trägst dieses Teil bereits."
 L.equip_carry_slot = "Du trägst bereits eine Waffe in Slot {slot}."
+L.equip_carry_minplayers = "Es sind nicht genug Spieler auf dem Server um diese Waffe zu aktivieren."
 
 L.equip_help_stock = "Einige Teile kannst du nur einmal pro Runde kaufen."
 L.equip_stock_deny = "Dieses Teil ist nicht länger vorrätig."
@@ -1042,8 +1043,8 @@ L.aw_tod2_text = "starb direkt am Anfang der Runde."
 
 
 --- v23
-L.set_avoid_det = "Nicht als Detektiv ausgewählt werden"
-L.set_avoid_det_tip = "Aktiviere diese Funktion, damit du nicht als Detektiv ausgewählt wirst. Das heißt nicht, dass du öfter Verräter wirst..."
+L.set_avoid = "Nicht als {role} ausgewählt werden."
+L.set_avoid_tip = "Aktiviere diese Funktion, damit du nicht als {role} ausgewählt wirst, soweit dies möglich ist."
 
 --- v24
 L.drop_no_ammo = "Du hast zu wenig Munition im Magazin, um eine Munitionskiste fallenzulassen."

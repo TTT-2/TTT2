@@ -1,5 +1,3 @@
--- TODO
-ERROR
 -- Some popup window stuff
 
 local GetTranslation = LANG.GetTranslation
@@ -16,17 +14,10 @@ local function GetTextForPlayer(ply)
 		if fallback == SHOP_DISABLED or hook.Run("TTT2PreventAccessShop", ply) then
 			return GetTranslation("info_popup_" .. roleData.name)
 		else
-			return GetPTranslation("info_popup_" .. roleData.name, {menukey = Key("+menu_context", "C")})
+			return GetPTranslation("info_popup_" .. roleData.name, {menukey = menukey})
 		end
 	else
-		local traitors = {}
-
-		for _, p in ipairs(player.GetAll()) do
-			if p:HasTeam(TEAM_TRAITOR) then
-				table.insert(traitors, p)
-			end
-		end
-
+		local traitors = GetTeamMembers(TEAM_TRAITOR)
 		if #traitors > 1 then
 			local traitorlist = ""
 
@@ -45,7 +36,7 @@ local function GetTextForPlayer(ply)
 		else
 			local fallback = GetConVar("ttt_" .. roleData.abbr .. "_shop_fallback"):GetString()
 			if fallback == SHOP_DISABLED or hook.Run("TTT2PreventAccessShop", ply) then
-				return GetPTranslation("info_popup_" .. roleData.name .. "_alone")
+				return GetTranslation("info_popup_" .. roleData.name .. "_alone")
 			else
 				return GetPTranslation("info_popup_" .. roleData.name .. "_alone", {menukey = menukey})
 			end
@@ -57,23 +48,24 @@ local startshowtime = CreateConVar("ttt_startpopup_duration", "17", FCVAR_ARCHIV
 -- shows info about goal and fellow traitors (if any)
 local function RoundStartPopup()
 	-- based on Derma_Message
-
 	if startshowtime:GetInt() <= 0 then return end
 
-	if not LocalPlayer() then return end
+	local client = LocalPlayer()
+
+	if not client then return end
+
+	local color = Color(0, 0, 0, 200)
 
 	local dframe = vgui.Create("Panel")
 	dframe:SetDrawOnTop(true)
 	dframe:SetMouseInputEnabled(false)
 	dframe:SetKeyboardInputEnabled(false)
 
-	local color = Color(0, 0, 0, 200)
-
 	dframe.Paint = function(s)
 		draw.RoundedBox(8, 0, 0, s:GetWide(), s:GetTall(), color)
 	end
 
-	local text = GetTextForPlayer(LocalPlayer())
+	local text = GetTextForPlayer(client)
 
 	local dtext = vgui.Create("DLabel", dframe)
 	dtext:SetFont("TabLarge")
@@ -140,6 +132,7 @@ local function IdlePopup()
 
 	disable.DoClick = function()
 		RunConsoleCommand("ttt_spectator_mode", "0")
+
 		dframe:Close()
 	end
 
