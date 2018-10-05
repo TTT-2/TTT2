@@ -252,7 +252,7 @@ Event(EVENT_KILL, {
 			elseif atr == TEAM_TRAITOR then
 				return right_icon, "Traitor killed innocent"
 			else
-				return shield_icon, GetRoleByIndex(e.att.r).name .. " killed " .. GetRoleByIndex(e.vic.r).name
+				return shield_icon, ttt.GetRoleByIndex(e.att.r).name .. " killed " .. ttt.GetRoleByIndex(e.vic.r).name
 			end
 		end
 })

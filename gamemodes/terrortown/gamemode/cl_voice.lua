@@ -51,11 +51,11 @@ function GM:PlayerStartVoice(ply)
 			if not client:KeyDown(IN_SPEED) and not client:KeyDownLast(IN_SPEED) then
 				client[client:GetTeam() .. "_gvoice"] = true
 
-				RunConsoleCommand("rvog", "1")
+				RunConsoleCommand("tvog", "1")
 			else
 				client[client:GetTeam() .. "_gvoice"] = false
 
-				RunConsoleCommand("rvog", "0")
+				RunConsoleCommand("tvog", "0")
 			end
 		end
 

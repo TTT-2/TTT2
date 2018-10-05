@@ -19,7 +19,7 @@ CLSCORE.StartTime = 0
 CLSCORE.Panel = nil
 
 local function TTT2FinishedInit()
-	for _, v in pairs(ROLES) do
+	for _, v in pairs(ttt.GetRoles()) do
 		CLSCORE.Tbl[v.index] = {}
 	end
 end
@@ -182,7 +182,7 @@ function CLSCORE:BuildScorePanel(dpanel)
 		if id ~= -1 then
 			local role = nil
 
-			local roleData = GetRoleByIndex(s.r)
+			local roleData = ttt.GetRoleByIndex(s.r)
 
 			role = roleData and T(roleData.name)
 
@@ -296,7 +296,7 @@ function CLSCORE:BuildHilitePanel(dpanel)
 					wintype = TEAM_INNO
 				end
 
-				teamRole = GetDefaultTeamRole(wintype)
+				teamRole = ttt.GetDefaultTeamRole(wintype)
 				title = {c = teamRole.color, txt = "hilite_win_" .. teamRole.name}
 			end
 
@@ -307,7 +307,7 @@ function CLSCORE:BuildHilitePanel(dpanel)
 	local tr = {}
 
 	for k, v in pairs(self.Tbl) do
-		if GetRoleByIndex(k).defaultTeam == TEAM_TRAITOR then -- TODO fix
+		if ttt.GetRoleByIndex(k).defaultTeam == TEAM_TRAITOR then -- TODO fix
 			table.Add(tr, v)
 		end
 	end

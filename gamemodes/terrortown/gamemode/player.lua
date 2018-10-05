@@ -25,7 +25,7 @@ function GM:PlayerInitialSpawn(ply)
 	-- We should update the traitor list, if we are not about to send it
 	-- TODO why sending roles here? The game has not begun!
 	if rstate <= ROUND_PREP then
-		for _, v in ipairs(GetAvailableTeams()) do
+		for _, v in ipairs(ttt.GetAvailableTeams()) do
 			if v ~= TEAM_INNO then
 				SendTeamList(v, GetTeamFilter(v))
 				SendConfirmedTeam(v)
@@ -41,7 +41,7 @@ function GM:PlayerInitialSpawn(ply)
 	if rstate ~= ROUND_WAIT then
 		SendRoundState(rstate, ply)
 
-		for _, v in ipairs(GetAvailableTeams()) do
+		for _, v in ipairs(ttt.GetAvailableTeams()) do
 			if v ~= TEAM_INNO then
 				SendConfirmedTeam(v, ply)
 			end
@@ -483,7 +483,7 @@ function GM:PlayerDisconnected(ply)
 	end
 
 	if GetRoundState() ~= ROUND_PREP then
-		for _, v in ipairs(GetAvailableTeams()) do
+		for _, v in ipairs(ttt.GetAvailableTeams()) do
 			if v ~= TEAM_INNO then
 				SendTeamList(v, GetTeamFilter(v))
 				SendConfirmedTeam(v)

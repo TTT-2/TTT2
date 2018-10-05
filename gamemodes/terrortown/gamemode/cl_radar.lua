@@ -182,7 +182,7 @@ function RADAR:Draw(client)
 
 			subrole = tgt.subrole or ROLE_INNOCENT
 
-			local roleData = GetRoleByIndex(subrole)
+			local roleData = ttt.GetRoleByIndex(subrole)
 
 			if subrole == ROLE_DETECTIVE then
 				surface.SetDrawColor(0, 0, 255, alpha)

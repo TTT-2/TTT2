@@ -6,7 +6,7 @@ error("REWORKING scoring_shd.lua")
 function ScoreInit()
 	local tmp = {}
 
-	for _, v in pairs(ROLES) do
+	for _, v in pairs(ttt.GetRoles()) do
 		tmp[v.index] = 0
 	end
 
@@ -118,7 +118,7 @@ function ScoreTeamBonus(scores, wintype)
 	local alive = {}
 	local dead = {}
 
-	local winTeams = GetWinTeams()
+	local winTeams = ttt.GetWinTeams()
 
 	for _, team in ipairs(winTeams) do
 		alive[team] = 0
@@ -144,7 +144,7 @@ function ScoreTeamBonus(scores, wintype)
 		end
 
 		-- TODO rework with client
-		bonus[team] = alive[team] + math.ceil(others * (GetDefaultTeamRole(team).surviveBonus or 0))
+		bonus[team] = alive[team] + math.ceil(others * (ttt.GetDefaultTeamRole(team).surviveBonus or 0))
 
 		-- running down the clock must never be beneficial for traitors
 		if wintype == WIN_TIMELIMIT then
@@ -173,7 +173,7 @@ end
 -- Scores were initially calculated as points immediately, but not anymore, so
 -- we can convert them using this fn
 function KillsToPoints(score)
-	local roleData = GetRoleByIndex(score.r)
+	local roleData = ttt.GetRoleByIndex(score.r)
 	return (score.suicides * -1)
 	 + score.bonus
 	 + score.tk * roleData.scoreTeamKillsMultiplier

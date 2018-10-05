@@ -15,7 +15,7 @@ local function GetInnos(score)
 
 	error("REWORK GetInnos(score)")
 	for k, v in pairs(score.roles) do
-		if GetRoleByIndex(k).defaultTeam == TEAM_INNO then
+		if ttt.GetRoleByIndex(k).defaultTeam == TEAM_INNO then
 			i = i + 1
 		end
 	end
@@ -28,7 +28,7 @@ local function GetTraitors(score)
 
 	error("REWORK GetTraitors(score)")
 	for k, v in pairs(score.roles) do
-		if GetRoleByIndex(k).defaultTeam == TEAM_TRAITOR then
+		if ttt.GetRoleByIndex(k).defaultTeam == TEAM_TRAITOR then
 			i = i + 1
 		end
 	end

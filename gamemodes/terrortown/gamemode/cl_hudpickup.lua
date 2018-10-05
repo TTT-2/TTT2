@@ -13,7 +13,7 @@ function GM:HUDWeaponPickedUp(wep)
 
 	if not IsValid(client) or not client:Alive() then return end
 
-	local name = GetEquipmentTranslation(wep:GetClass(), wep:GetPrintName() or wep:GetClass())
+	local name = ttt.GetEquipmentTranslation(wep:GetClass(), wep:GetPrintName() or wep:GetClass())
 	--local name = TryTranslation(wep.GetPrintName and wep:GetPrintName() or wep:GetClass() or "Unknown Weapon Name")
 
 	local pickup = {}
@@ -26,7 +26,7 @@ function GM:HUDWeaponPickedUp(wep)
 
 	local subrole = client.GetSubRole and client:GetSubRole() or ROLE_INNOCENT
 
-	pickup.color = GetRoleByIndex(subrole).color
+	pickup.color = ttt.GetRoleByIndex(subrole).color
 	pickup.upper = true
 
 	surface.SetFont(pickup.font)

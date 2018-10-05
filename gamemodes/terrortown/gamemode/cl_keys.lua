@@ -1,5 +1,3 @@
--- TODO
-ERROR
 -- Key overrides for TTT specific keyboard functions
 
 local function SendWeaponDrop()
@@ -42,12 +40,17 @@ function GM:PlayerBindPress(ply, bind, pressed)
 			return true
 		end
 	elseif bind == "+sprint" then
-		-- set voice type here just in case shift is no longer down when the
-		-- PlayerStartVoice hook runs, which might be the case when switching to
-		-- steam overlay
-		ply[ply:GetTeam() .. "_gvoice"] = false
 
-		RunConsoleCommand("rvog", "0")
+		-- just run concommand if the player is able to use the voice chat
+		local team = ply:GetTeam()
+		if team ~= TEAM_INNO then
+			-- set voice type here just in case shift is no longer down when the
+			-- PlayerStartVoice hook runs, which might be the case when switching to
+			-- steam overlay
+			ply[team .. "_gvoice"] = false
+
+			RunConsoleCommand("tvog", "0")
+		end
 
 		return true
 	elseif bind == "+use" and pressed then

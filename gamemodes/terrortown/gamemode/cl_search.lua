@@ -87,7 +87,7 @@ local TypeToMat = {
 
 -- add role abbr of each role for icons
 local function TTT2FinishedInit()
-	for _, v in pairs(ROLES) do
+	for _, v in pairs(ttt.GetRoles()) do
 		TypeToMat.role[v.index] = v.abbr
 	end
 end
@@ -133,7 +133,7 @@ function PreprocSearch(raw)
 			search[t].p = 1
 			search[t].nick = d
 		elseif t == "role" then
-			local rd = GetRoleByIndex(d)
+			local rd = ttt.GetRoleByIndex(d)
 
 			search[t].text = T("search_role_" .. rd.abbr)
 			search[t].p = 2

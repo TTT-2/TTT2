@@ -1,5 +1,3 @@
--- TODO
-ERROR
 -- we need our own weapon switcher because the hl2 one skips empty weapons
 
 local math = math
@@ -8,7 +6,6 @@ local surface = surface
 local table = table
 
 WSWITCH = {}
-
 WSWITCH.Show = false
 WSWITCH.Selected = -1
 WSWITCH.NextSwitch = -1
@@ -21,11 +18,9 @@ WSWITCH.cv.display = CreateConVar("ttt_weaponswitcher_displayfast", "0", FCVAR_A
 
 local delay = 0.03
 local showtime = 3
-
 local margin = 10
 local width = 300
 local height = 20
-
 local barcorner = surface.GetTextureID("gui/corner8")
 
 -- Draw a bar in the style of the the weapon pickup ones
@@ -39,6 +34,7 @@ local col_active = {
 	shadow = 255,
 	tip = {}
 }
+
 local col_dark = {
 	bg = Color(20, 20, 20, 200),
 	text_empty = Color(200, 20, 20, 100),
@@ -52,7 +48,7 @@ local function TTT2FinishedInit()
 	col_active.tip = {}
 	col_dark.tip = {}
 
-	for _, v in pairs(ROLES) do
+	for _, v in pairs(ttt.GetRoles()) do
 		col_active.tip[v.index] = v.color
 		col_dark.tip[v.index] = v.dkcolor
 	end
@@ -61,12 +57,12 @@ hook.Add("TTT2FinishedInit", "scoringUpdateColors", TTT2FinishedInit)
 
 function WSWITCH:DrawBarBg(x, y, w, h, col)
 	local rx = round(x - 4)
-	local ry = round(y - (h / 2) - 4)
+	local ry = round(y - h * 0.5 - 4)
 	local rw = round(w + 9)
 	local rh = round(h + 8)
 
-	local b = 8 --bordersize
-	local bh = b / 2
+	local b = 8 -- bordersize
+	local bh = b * 0.5
 
 	local role = LocalPlayer():GetSubRole() or ROLE_INNOCENT
 	local c = col.tip[role]
@@ -95,7 +91,9 @@ end
 local TryTranslation = LANG.TryTranslation
 
 function WSWITCH:DrawWeapon(x, y, c, wep)
-	if not IsValid(wep) then return false end
+	if not IsValid(wep) then
+		return false
+	end
 
 	local name = TryTranslation(wep:GetPrintName() or wep.PrintName or "...")
 	local cl1, am1 = wep:Clip1(), wep:Ammo1()
@@ -108,10 +106,11 @@ function WSWITCH:DrawWeapon(x, y, c, wep)
 	end
 
 	-- Slot
+	local _tmp = {x + 4, y}
 	local spec = {
 		text = wep.Slot + 1,
 		font = "Trebuchet22",
-		pos = {x + 4, y},
+		pos = _tmp,
 		yalign = TEXT_ALIGN_CENTER,
 		color = c.text
 	}
@@ -122,20 +121,18 @@ function WSWITCH:DrawWeapon(x, y, c, wep)
 	spec.text = name
 	spec.font = "TimeLeft"
 	spec.pos[1] = x + 10 + height
+
 	draw.Text(spec)
 
 	if ammo then
-		local col = c.text
-
-		if wep:Clip1() == 0 and wep:Ammo1() == 0 then
-			col = c.text_empty
-		end
+		local col = (wep:Clip1() == 0 and wep:Ammo1() == 0) and c.text_empty or c.text
 
 		-- Ammo
 		spec.text = ammo
 		spec.pos[1] = ScrW() - margin * 3
 		spec.xalign = TEXT_ALIGN_RIGHT
 		spec.color = col
+
 		draw.Text(spec)
 	end
 
@@ -148,7 +145,7 @@ function WSWITCH:Draw(client)
 	local weps = self.WeaponCache
 
 	local x = ScrW() - width - margin * 2
-	local y = ScrH() - (#weps * (height + margin))
+	local y = ScrH() - #weps * (height + margin)
 
 	local col = col_dark
 
@@ -208,7 +205,6 @@ function WSWITCH:SelectNext()
 	self:Enable()
 
 	local s = self.Selected + 1
-
 	if s > #self.WeaponCache then
 		s = 1
 	end
@@ -302,7 +298,9 @@ end
 
 -- Switch to the currently selected weapon
 function WSWITCH:ConfirmSelection(noHide)
-	if not noHide then self:Disable() end
+	if not noHide then
+		self:Disable()
+	end
 
 	for k, w in ipairs(self.WeaponCache) do
 		if k == self.Selected and IsValid(w) then
@@ -345,7 +343,7 @@ local function QuickSlot(ply, cmd, args)
 	local wep = ply:GetActiveWeapon()
 
 	if IsValid(wep) then
-		if wep.Slot == (slot - 1) then
+		if wep.Slot == slot - 1 then
 			RunConsoleCommand("lastinv")
 		else
 			WSWITCH:SelectAndConfirm(slot)
@@ -355,6 +353,6 @@ end
 concommand.Add("ttt_quickslot", QuickSlot)
 
 local function SwitchToEquipment(ply, cmd, args)
-	RunConsoleCommand("ttt_quickslot", tostring(7))
+	RunConsoleCommand("ttt_quickslot", "7")
 end
 concommand.Add("ttt_equipswitch", SwitchToEquipment)

@@ -107,7 +107,7 @@ end
 function SCORE:HandleSelection()
 	local tmp = {}
 
-	for _, v in pairs(ROLES) do
+	for _, v in pairs(ttt.GetRoles()) do
 		if v ~= INNOCENT then
 			tmp[v.index] = {}
 		end
@@ -164,7 +164,7 @@ function SCORE:ApplyEventLogScores(wintype)
 	local scores = {}
 	local tmp = {}
 
-	for _, v in pairs(ROLES) do
+	for _, v in pairs(ttt.GetRoles()) do
 		if v ~= INNOCENT then
 			tmp[v.index] = {}
 		end

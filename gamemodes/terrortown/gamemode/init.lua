@@ -257,7 +257,7 @@ function GM:InitPostEntity()
 	InitAllItems()
 
 	-- reset normal equipment tables
-	for _, role in pairs(ROLES) do
+	for _, role in pairs(ttt.GetRoles()) do
 		EquipmentItems[role.index] = {}
 	end
 
@@ -302,7 +302,7 @@ end
 
 function LoadShopsEquipment()
 	-- initialize shop equipment
-	for _, roleData in pairs(ROLES) do
+	for _, roleData in pairs(ttt.GetRoles()) do
 		local shopFallback = GetConVar("ttt_" .. roleData.abbr .. "_shop_fallback"):GetString()
 		if shopFallback ~= SHOP_DISABLED then
 			LoadSingleShopEquipment(roleData)
@@ -875,7 +875,7 @@ function EndRound(result)
 	StopWinChecks()
 
 	-- send each client the role setup
-	for _, v in pairs(ROLES) do
+	for _, v in pairs(ttt.GetRoles()) do
 		SendRoleList(v.index, player.GetAll())
 	end
 
@@ -939,7 +939,7 @@ function GM:TTTCheckForWin()
 
 	hook.Run("TTT2ModifyWinningAlives", alive)
 
-	for _, team in ipairs(GetWinTeams()) do
+	for _, team in ipairs(ttt.GetWinTeams()) do
 		if not table.HasValue(checkedTeams, team) and alive[team] then
 			-- prevent win of custom role -> maybe own win conditions
 			b = b + 1
@@ -997,7 +997,7 @@ function SelectRoles(plys, max_plys)
 	local choices = {}
 	local prev_roles = {}
 
-	for _, v in pairs(ROLES) do
+	for _, v in pairs(ttt.GetRoles()) do
 		if not v.notSelectable then -- can't be selected in the beginning, e.g. important for Sidekick role
 			prev_roles[v.index] = {}
 		end
@@ -1066,7 +1066,7 @@ function SelectRoles(plys, max_plys)
 	if newRolesEnabled then
 
 		-- now upgrade traitors if there are other traitor roles
-		for _, v in pairs(ROLES) do
+		for _, v in pairs(ttt.GetRoles()) do
 			if not v.notSelectable and v.defaultTeam == TEAM_TRAITOR and v ~= TRAITOR and GetConVar("ttt_" .. v.name .. "_enabled"):GetBool() then
 				strTmp = "ttt_" .. v.name .. "_random"
 
@@ -1096,7 +1096,7 @@ function SelectRoles(plys, max_plys)
 	-- now select detectives, explicitly choosing from players who did not get
 	-- traitor, so becoming detective does not mean you lost a chance to be
 	-- traitor
-	local tbl = newRolesEnabled and ROLES or {DETECTIVE}
+	local tbl = newRolesEnabled and ttt.GetRoles() or {DETECTIVE}
 	for _, v in pairs(tbl) do
 		if not v.notSelectable
 		and v ~= INNOCENT

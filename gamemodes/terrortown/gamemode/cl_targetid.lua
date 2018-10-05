@@ -40,7 +40,7 @@ indicator_col = Color(255, 255, 255, 130)
 local function TTT2FinishedInit()
 	indicator_mat_tbl = {}
 
-	for _, v in pairs(ROLES) do
+	for _, v in pairs(ttt.GetRoles()) do
 		local mat = Material("vgui/ttt/sprite_" .. v.abbr)
 
 		indicator_mat_tbl[v.index] = mat
@@ -250,7 +250,7 @@ function GM:HUDDrawTargetID()
 	if target_role then
 		surface.SetTexture(ring_tex)
 
-		local clr = GetRoleByIndex(target_role).color
+		local clr = ttt.GetRoleByIndex(target_role).color
 
 		surface.SetDrawColor(clr.r, clr.g, clr.b, 200)
 		surface.DrawTexturedRect(x - 32, y - 32, 64, 64)
@@ -347,7 +347,7 @@ function GM:HUDDrawTargetID()
 	text = nil
 
 	if target_role then
-		local rd = GetRoleByIndex(target_role)
+		local rd = ttt.GetRoleByIndex(target_role)
 
 		text = L["target_" .. rd.name]
 		clr = rd.color

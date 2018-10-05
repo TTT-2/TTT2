@@ -3,7 +3,7 @@
 function GM:OnGamemodeLoaded()
 	hook.Run("TTT2BaseRoleInit")
 
-	SetupRoleGlobals()
+	ttt.SetupRoleGlobals()
 
 	DefaultEquipment = GetDefaultEquipment()
 
@@ -15,7 +15,7 @@ function GM:PostInitialize()
 	-- setup weapon ConVars and similar things
 	for _, wep in ipairs(weapons.GetList()) do
 		if not wep.Doublicated then
-			RegisterNormalWeapon(wep)
+			ttt.RegisterNormalWeapon(wep)
 		end
 	end
 end

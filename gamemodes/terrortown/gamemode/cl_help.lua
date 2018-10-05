@@ -107,7 +107,7 @@ function HELPSCRN:Show()
 	local dplay = vgui.Create("DForm", dsettings)
 	dplay:SetName(GetTranslation("set_title_play"))
 
-	for _, v in pairs(ROLES) do
+	for _, v in pairs(ttt.GetRoles()) do
 		if ConVarExists("ttt_avoid_" .. v.name) then
 			local rolename = GetTranslation(v.name)
 

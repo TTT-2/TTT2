@@ -1,5 +1,3 @@
--- TODO fix syncing
-ERROR
 local Equipmentnew
 local SafeTranslate = LANG.TryTranslation
 
@@ -24,7 +22,11 @@ function GetEquipmentForRoleAll()
 
 		-- find buyable weapons to load info from
 		for _, v in ipairs(weapons.GetList()) do
-			if v and not v.Doublicated and not string.match(v.ClassName, "base") and not string.match(v.ClassName, "event") and not table.HasValue(eject, v.ClassName) then
+			if v and not v.Doublicated
+			and not string.match(v.ClassName, "base")
+			and not string.match(v.ClassName, "event")
+			and not table.HasValue(eject, v.ClassName)
+			then
 				local data = v.EquipMenuData or {}
 				local base = {
 					id = v.ClassName,
@@ -59,7 +61,7 @@ function GetEquipmentForRoleAll()
 end
 
 local function newshop()
-	local sr = GetShopRoles()[1]
+	local sr = ttt.GetShopRoles()[1]
 	local selectedRole = sr.index
 	local state = true
 	local w, h = 500, 450
@@ -90,12 +92,15 @@ local function newshop()
 	function sbar:Paint(w2, h2)
 		draw.RoundedBox(0, 0, 0, w2, h2, Color(0, 0, 0, 100))
 	end
+
 	function sbar.btnUp:Paint(w2, h2)
 		draw.RoundedBox(0, 0, 0, w2, h2, Color(200, 100, 0))
 	end
+
 	function sbar.btnDown:Paint(w2, h2)
 		draw.RoundedBox(0, 0, 0, w2, h2, Color(200, 100, 0))
 	end
+
 	function sbar.btnGrip:Paint(w2, h2)
 		draw.RoundedBox(0, 0, 0, w2, h2, Color(100, 200, 0))
 	end
@@ -116,7 +121,7 @@ local function newshop()
 	menu:SetSize(w, 25)
 	menu:SetValue(sr.name)
 
-	for _, v in pairs(ROLES) do
+	for _, v in pairs(ttt.GetRoles()) do
 		if v ~= INNOCENT then
 			menu:AddChoice(v.name, v.index)
 		end
@@ -125,7 +130,7 @@ local function newshop()
 	local ply = LocalPlayer()
 	local items = GetEquipmentForRoleAll()
 
-	SortEquipmentTable(items)
+	ttt.SortEquipmentTable(items)
 
 	for _, item in pairs(items) do
 		local ic
@@ -259,7 +264,7 @@ local function newshop()
 				end
 			end
 
-			local tip = GetEquipmentTranslation(item.name, item.PrintName) .. " (" .. SafeTranslate(item.type) .. ")"
+			local tip = ttt.GetEquipmentTranslation(item.name, item.PrintName) .. " (" .. SafeTranslate(item.type) .. ")"
 
 			ic:SetTooltip(tip)
 
@@ -286,9 +291,9 @@ local function newshop()
 		-- clear old data
 		self:Clear()
 
-		local rd = GetRoleByIndex(dlist.selectedRole)
+		local rd = ttt.GetRoleByIndex(dlist.selectedRole)
 		local fallback = GetConVar("ttt_" .. rd.abbr .. "_shop_fallback"):GetString()
-		local fb = GetRoleByName(fallback)
+		local fb = ttt.GetRoleByName(fallback)
 
 		-- update state
 		if fallback == SHOP_DISABLED or fallback == SHOP_UNSET and rd.fallbackTable then
@@ -298,12 +303,12 @@ local function newshop()
 		end
 
 		-- add linked or own shop choice
-		for _, v in pairs(GetShopRoles()) do
+		for _, v in pairs(ttt.GetShopRoles()) do
 			self:AddChoice(dlist.selectedRole == v.index and "Use own shop" or ("Link with " .. v.name), {name = v.name, data = v.name})
 		end
 
 		-- add default choice
-		local tmpRd = GetRoleByIndex(dlist.selectedRole)
+		local tmpRd = ttt.GetRoleByIndex(dlist.selectedRole)
 		if tmpRd.fallbackTable then
 			self:AddChoice("Default Role Equipment", {name = tmpRd.name, data = SHOP_UNSET})
 		end
@@ -339,7 +344,7 @@ local function newshop()
 	fbmenu:RefreshChoices()
 
 	function fbmenu:OnSelect(_, _, data)
-		local rd = GetRoleByIndex(dlist.selectedRole)
+		local rd = ttt.GetRoleByIndex(dlist.selectedRole)
 		local oldFallback = GetConVar("ttt_" .. rd.abbr .. "_shop_fallback"):GetString()
 
 		if fallback ~= oldFallback then
@@ -349,7 +354,7 @@ local function newshop()
 			net.SendToServer()
 		end
 
-		if data.data == SHOP_DISABLED or data.data == SHOP_UNSET or data.data ~= GetRoleByIndex(dlist.selectedRole).name then
+		if data.data == SHOP_DISABLED or data.data == SHOP_UNSET or data.data ~= ttt.GetRoleByIndex(dlist.selectedRole).name then
 			state = false
 
 			for _, v in pairs(dlist:GetItems()) do
@@ -379,7 +384,7 @@ net.Receive("newshop", newshop)
 local function shopFallbackAnsw(len)
 	local subrole = net.ReadUInt(ROLE_BITS)
 
-	local rd = GetRoleByIndex(subrole)
+	local rd = ttt.GetRoleByIndex(subrole)
 	local fb = GetConVar("ttt_" .. rd.abbr .. "_shop_fallback"):GetString()
 
 	-- reset everything
@@ -399,7 +404,7 @@ local function shopFallbackAnsw(len)
 	end
 
 	if fb == SHOP_UNSET then
-		local roleData = GetRoleByIndex(subrole)
+		local roleData = ttt.GetRoleByIndex(subrole)
 		if roleData.fallbackTable then
 			-- set everything
 			for _, eq in ipairs(roleData.fallbackTable) do

@@ -94,7 +94,7 @@ local function RoleGlobalVoice(ply, cmd, args)
 
 	SendRoleVoiceState(ply)
 end
-concommand.Add("rvog", RoleGlobalVoice)
+concommand.Add("tvog", RoleGlobalVoice)
 
 local function MuteTeam(ply, cmd, args)
 	if not IsValid(ply) then return end
