@@ -1,5 +1,3 @@
--- TODO
-ERROR
 ---- Voicechat popup
 
 DEFINE_BASECLASS("gamemode_base")
@@ -10,6 +8,8 @@ local string = string
 --- voicechat stuff
 VOICE = {}
 
+local VP_GREEN = Color(0, 200, 0)
+local VP_RED = Color(200, 0, 0)
 local MutedState
 
 -- voice popups, copied from base gamemode and modified
@@ -21,11 +21,10 @@ g_VoicePanelList = nil
 local function VoiceNotifyThink(pnl)
 	local client = LocalPlayer()
 
-	if not (IsValid(pnl) and client and IsValid(pnl.ply)) then return end
-
-	if not (GetGlobalBool("ttt_locational_voice", false) and not pnl.ply:IsSpec() and pnl.ply ~= client) then return end
-
-	if client:IsActive() and pnl.ply:IsActive() and client:IsInTeam(pnl.ply) then return end
+	if not IsValid(pnl) or not IsValid(client) or not IsValid(pnl.ply)
+	or not GetGlobalBool("ttt_locational_voice", false) or pnl.ply:IsSpec() or pnl.ply == client
+	or client:IsActive() and pnl.ply:IsActive() and client:IsInTeam(pnl.ply) and not client:HasTeam(TEAM_INNO)
+	then return end
 
 	local d = client:GetPos():Distance(pnl.ply:GetPos())
 
@@ -35,6 +34,8 @@ end
 local PlayerVoicePanels = {}
 
 function GM:PlayerStartVoice(ply)
+	if not IsValid(ply) then return end
+
 	local client = LocalPlayer()
 	local csrd = client:GetSubRoleData()
 
@@ -43,11 +44,9 @@ function GM:PlayerStartVoice(ply)
 	-- There'd be an extra one if voice_loopback is on, so remove it.
 	GAMEMODE:PlayerEndVoice(ply, true)
 
-	if not IsValid(ply) then return end
-
 	-- Tell server this is global
 	if client == ply then
-		if client:IsActive() and not client:HasTeam(TEAM_INNO) and (not csrd.unknownTeam or client:HasTeam(TEAM_TRAITOR)) then
+		if client:IsActive() and not client:HasTeam(TEAM_INNO) then
 			if not client:KeyDown(IN_SPEED) and not client:KeyDownLast(IN_SPEED) then
 				client[client:GetTeam() .. "_gvoice"] = true
 
@@ -85,7 +84,7 @@ function GM:PlayerStartVoice(ply)
 
 	-- roles things
 	-- TODO check if color is right. Maybe use color of ply instead of client if client ~= ply !
-	if client:IsActive() and not client:HasTeam(TEAM_INNO) and (not csrd.unknownTeam or client:HasTeam(TEAM_TRAITOR)) then
+	if client:IsActive() and not client:HasTeam(TEAM_INNO) then
 		if ply == client then
 			if not client[client:GetTeam() .. "_gvoice"] then
 				pnl.Color = csrd.color
@@ -100,8 +99,7 @@ function GM:PlayerStartVoice(ply)
 	PlayerVoicePanels[ply] = pnl
 
 	-- run ear gesture
-	-- TODO why using ply here?
-	if not (ply:IsActive() and not ply:HasTeam(TEAM_INNO) and (not ply:GetSubRoleData().unknownTeam or ply:HasTeam(TEAM_TRAITOR)) and not ply[ply:GetTeam() .. "_gvoice"]) then
+	if not (ply:IsActive() and not ply:HasTeam(TEAM_INNO)) or ply[ply:GetTeam() .. "_gvoice"] then
 		ply:AnimPerformGesture(ACT_GMOD_IN_CHAT)
 	end
 end
@@ -115,16 +113,16 @@ local function ReceiveVoiceState()
 
 	local lply = LocalPlayer()
 
-	if not IsValid(lply) or not (lply:IsActive() and not lply:HasTeam(TEAM_INNO) and (not lply:GetSubRoleData().unknownTeam or lply:HasTeam(TEAM_TRAITOR))) then return end
+	if not IsValid(lply) then return end
 
 	local ply = player.GetByID(idx)
 
-	if IsValid(ply) then
-		ply[ply:GetTeam() .. "_gvoice"] = state
+	if not IsValid(ply) or not (ply:IsActive() and not ply:HasTeam(TEAM_INNO)) then return end
 
-		if IsValid(PlayerVoicePanels[ply]) then
-			PlayerVoicePanels[ply].Color = state and Color(0, 200, 0) or Color(200, 0, 0)
-		end
+	ply[ply:GetTeam() .. "_gvoice"] = state
+
+	if IsValid(PlayerVoicePanels[ply]) then
+		PlayerVoicePanels[ply].Color = state and VP_GREEN or VP_RED
 	end
 end
 net.Receive("TTT_RoleVoiceState", ReceiveVoiceState)
@@ -156,7 +154,6 @@ end
 
 local function CreateVoiceVGUI()
 	g_VoicePanelList = vgui.Create("DPanel")
-
 	g_VoicePanelList:ParentToHUD()
 	g_VoicePanelList:SetPos(25, 25)
 	g_VoicePanelList:SetSize(200, ScrH() - 200)
@@ -213,20 +210,18 @@ local function GetRechargeRate()
 	local r = GetGlobalFloat("ttt_voice_drain_recharge", 0.05)
 
 	if LocalPlayer().voice_battery < battery_min then
-		r = r / 2
+		r = r * 0.5
 	end
 
 	return r
 end
 
 local function GetDrainRate()
-	if not GetGlobalBool("ttt_voice_drain", false) then return 0 end
-
-	if GetRoundState() ~= ROUND_ACTIVE then return 0 end
-
 	local ply = LocalPlayer()
 
-	if not IsValid(ply) or ply:IsSpec() then return 0 end
+	if not IsValid(ply) or ply:IsSpec() or not GetGlobalBool("ttt_voice_drain", false) or GetRoundState() ~= ROUND_ACTIVE then
+		return 0
+	end
 
 	if ply:IsAdmin() or ply:IsDetective() then
 		return GetGlobalFloat("ttt_voice_drain_admin", 0)
@@ -236,7 +231,7 @@ local function GetDrainRate()
 end
 
 local function IsRoleChatting(ply)
-	return ply:IsActive() and not ply:HasTeam(TEAM_INNO) and (not ply:GetSubRoleData().unknownTeam or ply:HasTeam(TEAM_TRAITOR)) and not ply[ply:GetTeam() .. "_gvoice"]
+	return ply:IsActive() and not ply:HasTeam(TEAM_INNO) and not ply[ply:GetTeam() .. "_gvoice"]
 end
 
 function VOICE.Tick()
@@ -267,7 +262,9 @@ function VOICE.SetSpeaking(state)
 end
 
 function VOICE.CanSpeak()
-	if not GetGlobalBool("ttt_voice_drain", false) then return true end
+	if not GetGlobalBool("ttt_voice_drain", false) then
+		return true
+	end
 
 	local client = LocalPlayer()
 
@@ -281,10 +278,8 @@ function VOICE.Draw(client)
 
 	if b >= battery_max then return end
 
-	local x = 25
-	local y = 10
-	local w = 200
-	local h = 6
+	local x, y = 25, 10
+	local w, h = 200, 6
 
 	if b < battery_min and CurTime() % 0.2 < 0.1 then
 		surface.SetDrawColor(200, 0, 0, 155)

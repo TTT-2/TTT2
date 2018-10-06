@@ -1,9 +1,9 @@
--- TODO
-ERROR
 ---- Unlike sandbox, we have teams to deal with, so here's an extra panel in the
 ---- hierarchy that handles a set of player rows belonging to its team.
 
 include("sb_row.lua")
+
+local strlower = string.lower
 
 local PANEL = {}
 
@@ -37,12 +37,12 @@ function PANEL:Paint()
 	draw.RoundedBox(8, 0, 0, w + 24, 20, self.color)
 
 	-- Shadow
-	surface.SetTextPos(11, 11 - h / 2)
+	surface.SetTextPos(11, 11 - h * 0.5)
 	surface.SetTextColor(0, 0, 0, 200)
 	surface.DrawText(txt)
 
 	-- Text
-	surface.SetTextPos(10, 10 - h / 2)
+	surface.SetTextPos(10, 10 - h * 0.5)
 	surface.SetTextColor(255, 255, 255, 255)
 	surface.DrawText(txt)
 
@@ -55,7 +55,7 @@ function PANEL:Paint()
 			surface.DrawRect(0, y, self:GetWide(), row:GetTall())
 		end
 
-		y = (y + row:GetTall() + 1)
+		y = y + row:GetTall() + 1
 	end
 
 	-- Column darkening
@@ -70,7 +70,7 @@ function PANEL:Paint()
 			cx = cx - v.Width
 
 			if k % 2 == 1 then -- Draw for odd numbered columns
-				surface.DrawRect(cx - v.Width / 2, 0, v.Width, self:GetTall())
+				surface.DrawRect(cx - v.Width * 0.5, 0, v.Width, self:GetTall())
 			end
 		end
 	else
@@ -102,7 +102,41 @@ function PANEL:HasRows()
 	return self.rowcount > 0
 end
 
-local strlower = string.lower
+local _sortfunc = function(rowa, rowb)
+	local plya = rowa:GetPlayer()
+	local plyb = rowb:GetPlayer()
+
+	if not IsValid(plya) then
+		return false
+	end
+
+	if not IsValid(plyb) then
+		return true
+	end
+
+	local sort_mode = GetConVar("ttt_scoreboard_sorting"):GetString()
+	local sort_func = sboard_sort[sort_mode]
+
+	local comp = 0
+
+	if sort_func ~= nil then
+		comp = sort_func(plya, plyb)
+	end
+
+	local ret = true
+
+	if comp ~= 0 then
+		ret = comp > 0
+	else
+		ret = strlower(plya:GetName()) > strlower(plyb:GetName())
+	end
+
+	if GetConVar("ttt_scoreboard_ascending"):GetBool() then
+		ret = not ret
+	end
+
+	return ret
+end
 
 function PANEL:UpdateSortCache()
 	self.rows_sorted = {}
@@ -111,39 +145,7 @@ function PANEL:UpdateSortCache()
 		table.insert(self.rows_sorted, row)
 	end
 
-	local _func = function(rowa, rowb)
-		local plya = rowa:GetPlayer()
-		local plyb = rowb:GetPlayer()
-
-		if not IsValid(plya) then return false end
-
-		if not IsValid(plyb) then return true end
-
-		local sort_mode = GetConVar("ttt_scoreboard_sorting"):GetString()
-		local sort_func = sboard_sort[sort_mode]
-
-		local comp = 0
-
-		if sort_func ~= nil then
-			comp = sort_func(plya, plyb)
-		end
-
-		local ret = true
-
-		if comp ~= 0 then
-			ret = comp > 0
-		else
-			ret = strlower(plya:GetName()) > strlower(plyb:GetName())
-		end
-
-		if GetConVar("ttt_scoreboard_ascending"):GetBool() then
-			ret = not ret
-		end
-
-		return ret
-	end
-
-	table.sort(self.rows_sorted, _func)
+	table.sort(self.rows_sorted, _sortfunc)
 end
 
 function PANEL:UpdatePlayerData()

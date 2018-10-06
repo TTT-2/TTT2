@@ -1,5 +1,3 @@
--- TODO
-ERROR
 -- Mute players when we are about to run map cleanup, because it might cause
 -- net buffer overflows on clients.
 local mute_all = false
@@ -24,7 +22,7 @@ function GM:PlayerCanHearPlayersVoice(listener, speaker)
 		return false, false
 	end
 
-	-- limited if specific convar is on, or we're in detective mode -- TODO in TTT2 - Det speak with each other? Currently unavailable
+	-- limited if specific convar is on, or we're in detective mode
 	local limit = DetectiveMode() or GetConVar("ttt_limit_spectator_voice"):GetBool()
 
 	-- Spectators should not be heard by living players during round
@@ -43,10 +41,14 @@ function GM:PlayerCanHearPlayersVoice(listener, speaker)
 	end
 
 	-- custom post-settings
-	hook.Run("TTT2PostPlayerCanHearPlayersVoice", listener, speaker)
+	local res1, res2 = hook.Run("TTT2PostPlayerCanHearPlayersVoice", listener, speaker)
+
+	if res1 ~= nil then
+		return res1, res2 or false
+	end
 
 	-- Traitors "team"chat by default, non-locationally
-	if not speaker:GetSubRoleData().unknownTeam and speaker:IsActive() and not speaker:HasTeam(TEAM_INNO) then
+	if speaker:IsActive() and not speaker:HasTeam(TEAM_INNO) and not speaker:GetSubRoleData().unknownTeam then
 		if speaker[speaker:GetTeam() .. "_gvoice"] then
 			return true, loc_voice:GetBool()
 		elseif listener:IsActive() and listener:IsInTeam(speaker) then
@@ -80,26 +82,22 @@ local function SendRoleVoiceState(speaker)
 end
 
 local function RoleGlobalVoice(ply, cmd, args)
-	if not IsValid(ply) or not (ply:IsActive() and not ply:HasTeam(TEAM_INNO)) then return end
+	if not IsValid(ply) or not (ply:IsActive() and not ply:HasTeam(TEAM_INNO) and not ply:GetSubRoleData().unknownTeam) then return end
 
 	local rd = ply:GetSubRoleData()
 
-	if rd.unknownTeam then return end
-
-	if #args ~= 1 then return end
+	if rd.unknownTeam or #args ~= 1 then return end
 
 	local state = tonumber(args[1])
 
-	ply[ply:GetTeam() .. "_gvoice"] = (state == 1)
+	ply[ply:GetTeam() .. "_gvoice"] = state == 1
 
 	SendRoleVoiceState(ply)
 end
 concommand.Add("tvog", RoleGlobalVoice)
 
 local function MuteTeam(ply, cmd, args)
-	if not IsValid(ply) then return end
-
-	if not #args == 1 and tonumber(args[1]) then return end
+	if not IsValid(ply) or not #args == 1 and tonumber(args[1]) then return end
 
 	if not ply:IsSpec() then
 		ply.mute_team = -1

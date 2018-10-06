@@ -1,5 +1,3 @@
--- TODO
-ERROR
 ---- Scoreboard player score row, based on sandbox version
 
 include("sb_info.lua")
@@ -10,35 +8,33 @@ SB_ROW_HEIGHT = 24 --16
 
 local PANEL = {}
 
+local _func1 = function(ply)
+	return ply:Ping()
+end
+
+local _func2 = function(ply)
+	return ply:Deaths()
+end
+
+local _func3 = function(ply)
+	return ply:Frags()
+end
+
+local _func4 = function(ply)
+	return math.Round(ply:GetBaseKarma())
+end
+
 function PANEL:Init()
 	-- cannot create info card until player state is known
 	self.info = nil
 	self.open = false
 	self.cols = {}
 
-	local _func1 = function(ply)
-		return ply:Ping()
-	end
-
 	self:AddColumn(GetTranslation("sb_ping"), _func1)
-
-	local _func2 = function(ply)
-		return ply:Deaths()
-	end
-
 	self:AddColumn(GetTranslation("sb_deaths"), _func2)
-
-	local _func3 = function(ply)
-		return ply:Frags()
-	end
-
 	self:AddColumn(GetTranslation("sb_score"), _func3)
 
 	if KARMA.IsEnabled() then
-		local _func4 = function(ply)
-			return math.Round(ply:GetBaseKarma())
-		end
-
 		self:AddColumn(GetTranslation("sb_karma"), _func4)
 	end
 
@@ -97,37 +93,26 @@ local namecolor = {
 }
 
 function GM:TTTScoreboardColorForPlayer(ply)
-	if not IsValid(ply) then
-		return namecolor.default
-	end
-
-	if ply:SteamID() == "STEAM_0:0:1963640" or ply:SteamID() == "STEAM_1:1:44782680" then
-		return namecolor.dev
-	elseif ply:IsAdmin() and GetGlobalBool("ttt_highlight_admins", true) then
-		return namecolor.admin
+	if IsValid(ply) then
+		if ply:SteamID() == "STEAM_0:0:1963640" or ply:SteamID() == "STEAM_1:1:44782680" then
+			return namecolor.dev
+		elseif ply:IsAdmin() and GetGlobalBool("ttt_highlight_admins", true) then
+			return namecolor.admin
+		end
 	end
 
 	return namecolor.default
 end
 
 function GM:TTTScoreboardRowColorForPlayer(ply)
-	local col = Color(0, 0, 0, 0)
+	local col
 
-	if not IsValid(ply) then
-		return col
+	if IsValid(ply) and ply.GetSubRole and ply:GetSubRole() and ply:GetSubRole() > 0 and ply:IsSpecial() then
+		col = Color(ply:GetSubRoleData().color)
+		col.a = 255 -- old value: 30
 	end
 
-	if ply.GetSubRole and ply:GetSubRole() and ply:GetSubRole() > 0 and ply:IsSpecial() then
-		local tmp = table.Copy(ply:GetSubRoleData().color)
-
-		col.r = tmp.r
-		col.g = tmp.g
-		col.b = tmp.b
-		--col.a = 30 -- set alpha to 30
-		col.a = 255
-	end
-
-	return col
+	return col or Color(0, 0, 0, 0)
 end
 
 local function ColorForPlayer(ply)
@@ -172,6 +157,7 @@ function PANEL:SetPlayer(ply)
 
 	if not self.info then
 		local g = ScoreGroup(ply)
+		-- TODO add teams
 
 		if g == GROUP_TERROR and ply ~= LocalPlayer() then
 			self.info = vgui.Create("TTTScorePlayerInfoTags", self)
@@ -275,15 +261,15 @@ function PANEL:LayoutColumns()
 
 		cx = cx - v.Width
 
-		v:SetPos(cx - v:GetWide() / 2, (SB_ROW_HEIGHT - v:GetTall()) / 2)
+		v:SetPos(cx - v:GetWide() * 0.5, (SB_ROW_HEIGHT - v:GetTall()) * 0.5)
 	end
 
 	self.tag:SizeToContents()
 
 	cx = cx - 90
 
-	self.tag:SetPos(cx - self.tag:GetWide() / 2, (SB_ROW_HEIGHT - self.tag:GetTall()) / 2)
-	self.sresult:SetPos(cx - 8, (SB_ROW_HEIGHT - 16) / 2)
+	self.tag:SetPos(cx - self.tag:GetWide() * 0.5, (SB_ROW_HEIGHT - self.tag:GetTall()) * 0.5)
+	self.sresult:SetPos(cx - 8, (SB_ROW_HEIGHT - 16) * 0.5)
 end
 
 function PANEL:PerformLayout()
@@ -291,7 +277,8 @@ function PANEL:PerformLayout()
 	self.avatar:SetSize(SB_ROW_HEIGHT, SB_ROW_HEIGHT)
 
 	local fw = sboard_panel.ply_frame:GetWide()
-	self:SetWide(sboard_panel.ply_frame.scroll.Enabled and fw - 16 or fw)
+
+	self:SetWide(sboard_panel.ply_frame.scroll.Enabled and (fw - 16) or fw)
 
 	if not self.open then
 		self:SetSize(self:GetWide(), SB_ROW_HEIGHT)
@@ -311,7 +298,7 @@ function PANEL:PerformLayout()
 	end
 
 	self.nick:SizeToContents()
-	self.nick:SetPos(SB_ROW_HEIGHT + 10, (SB_ROW_HEIGHT - self.nick:GetTall()) / 2)
+	self.nick:SetPos(SB_ROW_HEIGHT + 10, (SB_ROW_HEIGHT - self.nick:GetTall()) * 0.5)
 
 	self:LayoutColumns()
 
@@ -336,6 +323,7 @@ function PANEL:SetOpen(o)
 
 	self:PerformLayout()
 	self:GetParent():PerformLayout()
+
 	sboard_panel:PerformLayout()
 end
 
