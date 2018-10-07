@@ -193,7 +193,7 @@ function PANEL:Init()
 	-- Reuse some translations
 	self:AddFakeColumn(GetTranslation("sb_sortby"), nil, nil, nil) -- "Sort by:"
 	self:AddFakeColumn(GetTranslation("equip_spec_name"), nil, nil, "name")
-	self:AddFakeColumn(GetTranslation("col_role"), nil, nil, "role")
+	self:AddFakeColumn(GetTranslation("col_roles"), nil, nil, "role")
 
 	-- Let hooks add their column headers (via AddColumn() or AddFakeColumn())
 	hook.Call("TTTScoreboardColumns", nil, self)

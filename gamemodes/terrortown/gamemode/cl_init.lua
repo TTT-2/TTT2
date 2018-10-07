@@ -463,7 +463,7 @@ function CheckIdle()
 			end
 
 			timer.Simple(0.3, _func)
-		elseif CurTime() > (idle.t + idle_limit / 2) then
+		elseif CurTime() > (idle.t + idle_limit * 0.5) then
 			-- will repeat
 			LANG.Msg("idle_warning")
 		end

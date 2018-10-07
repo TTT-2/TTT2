@@ -1,6 +1,3 @@
--- TODO REWORK + Beautify
-ERROR
-error("REWORK + BEAUTIFY: cl_scoring_events.lua")
 ---- Event display information for Event Log in the Round Report
 
 ---- Usage:
@@ -23,9 +20,11 @@ error("REWORK + BEAUTIFY: cl_scoring_events.lua")
 -- Note that custom events don't have to be in this file, just any file that is
 -- loaded on the client.
 
--- Translation helpers
+-- Translation helpers + Shorter name, using it lots
 local T = LANG.GetTranslation
 local PT = LANG.GetParamTranslation
+local Event = CLSCORE.DeclareEventDisplay
+local is_dmg = util.BitSet
 
 -- Icons we'll use
 local smile_icon = Material("icon16/emoticon_smile.png")
@@ -38,10 +37,6 @@ local star_icon = Material("icon16/star.png")
 local app_icon = Material("icon16/application.png")
 local credit_icon = Material("icon16/coins.png")
 local wrench_icon = Material("icon16/wrench.png")
-
--- Shorter name, using it lots
-local Event = CLSCORE.DeclareEventDisplay
-local is_dmg = util.BitSet
 
 -- Round end event
 Event(EVENT_FINISH, {
@@ -129,7 +124,7 @@ Event(EVENT_C4PLANT, {
 
 -- Helper fn for kill events
 local function GetWeaponName(gun)
-	local wname = nil
+	local wname
 
 	-- Standard TTT weapons are sent as numeric IDs to save bandwidth
 	if tonumber(gun) then
@@ -156,7 +151,6 @@ local function KillText(e)
 	end
 
 	local weapon = GetWeaponName(dmg.g)
-
 	if weapon then
 		weapon = LANG.TryTranslation(weapon)
 	end
@@ -164,8 +158,14 @@ local function KillText(e)
 	-- there is only ever one piece of equipment present in a language string,
 	-- all the different names like "trap", "tool" and "weapon" are aliases.
 	local eq = trap or weapon
-	local params = {victim = e.vic.ni, attacker = e.att.ni, trap = eq, tool = eq, weapon = eq}
-	local txt = nil
+	local txt
+
+	local params = {
+		victim = e.vic.ni,
+		attacker = e.att.ni,
+		trap = eq, tool = eq,
+		weapon = eq
+	}
 
 	if e.att.sid == e.vic.sid then
 		if is_dmg(dmg.t, DMG_BLAST) then
@@ -196,7 +196,7 @@ local function KillText(e)
 	end
 
 	-- typically the "_using" strings are only for traps
-	local using = (not weapon)
+	local using = not weapon
 
 	if is_dmg(dmg.t, DMG_FALL) then
 		if ply_attacker then
@@ -244,15 +244,13 @@ Event(EVENT_KILL, {
 				return smile_icon, "Suicide"
 			end
 
-			local atr = e.att.team
-			local vtr = e.vic.team
+			local at = e.att.t
+			local vt = e.vic.t
 
-			if atr == vtr then
+			if at == vt then
 				return wrong_icon, "Teamkill"
-			elseif atr == TEAM_TRAITOR then
-				return right_icon, "Traitor killed innocent"
 			else
-				return shield_icon, ttt.GetRoleByIndex(e.att.r).name .. " killed " .. ttt.GetRoleByIndex(e.vic.r).name
+				return (at == TEAM_TRAITOR) and right_icon or shield_icon, T(at) .. " killed " .. T(vt)
 			end
 		end
 })

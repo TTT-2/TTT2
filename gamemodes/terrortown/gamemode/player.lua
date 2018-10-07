@@ -554,7 +554,7 @@ local function CheckCreditAward(victim, attacker)
 	if not IsValid(attacker) or not attacker:IsPlayer() or not attacker:IsActive() then return end
 
 	local ret = hook.Run("TTT2CheckCreditAward", victim, attacker)
-	if ret ~= nil and not ret then return end
+	if ret == false then return end
 
 	local rd = attacker:GetSubRoleData()
 
@@ -563,12 +563,12 @@ local function CheckCreditAward(victim, attacker)
 		local amt = (ConVarExists("ttt_" .. rd.abbr .. "_credits_traitordead") and GetConVar("ttt_" .. rd.abbr .. "_credits_traitordead"):GetInt() or 1)
 
 		for _, ply in ipairs(player.GetAll()) do
-			if ply:IsActive() and ply:GetBaseRole() == ROLE_DETECTIVE then
+			if ply:IsActive() and ply:IsShopper() and ply:GetBaseRole() == ROLE_DETECTIVE then
 				ply:AddCredits(amt)
 			end
 		end
 
-		LANG.Msg(GetRoleFilter(ROLE_DETECTIVE, true), "credit_det_all", {num = amt}) -- TODO whats with baserole ?
+		LANG.Msg(GetRoleFilter(ROLE_DETECTIVE, true), "credit_det_all", {num = amt})
 	end
 
 	-- TRAITOR AWARD
@@ -607,7 +607,7 @@ local function CheckCreditAward(victim, attacker)
 			-- If size is 0, awards are off
 			if amt > 0 then
 				for _, ply in ipairs(player.GetAll()) do
-					if ply:IsActive() and ply:IsInTeam(attacker) and not ply:GetSubRoleData().preventKillCredits then
+					if ply:IsActive() and ply:IsShopper() and ply:IsInTeam(attacker) and not ply:GetSubRoleData().preventKillCredits then
 						ply:AddCredits(amt)
 
 						--LANG.Msg(GetRoleTeamFilter(TEAM_TRAITOR, true), "credit_kill_all", {num = amt})
@@ -661,7 +661,6 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
 
 	util.StartBleeding(rag, dmginfo:GetDamage(), 15)
 
-	-- TODO NEXT ENTRYPOINT FOR REWORK SCORESYSTEM
 	-- Score only when there is a round active.
 	if GetRoundState() == ROUND_ACTIVE then
 		SCORE:HandleKill(ply, attacker, dmginfo)
@@ -695,7 +694,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
 	CheckCreditAward(ply, attacker)
 
 	-- Check for TEAM killing ANOTHER TEAM to send credit rewards
-	if IsValid(attacker) and attacker:IsPlayer() then
+	if IsValid(attacker) and attacker:IsPlayer() and attacker:IsShopper() then
 		local reward = 0
 		local rd = attacker:GetSubRoleData()
 
