@@ -69,7 +69,7 @@ function plymeta:SetDefaultCredits()
 		if self:HasTeam(TEAM_TRAITOR) then
 			local c = (ConVarExists("ttt_credits_starting") and GetConVar("ttt_credits_starting"):GetInt() or 0)
 
-			if #ttt.GetTeamMembers(TEAM_TRAITOR) == 1 then
+			if #GetTeamMembers(TEAM_TRAITOR) == 1 then
 				c = c + (ConVarExists("ttt_credits_alonebonus") and GetConVar("ttt_credits_alonebonus"):GetInt() or 0)
 			end
 
@@ -188,7 +188,7 @@ function plymeta:ResetRoundFlags()
 	-- communication
 	self.mute_team = -1
 
-	for _, team in ipairs(ttt.GetWinTeams()) do
+	for _, team in ipairs(GetWinTeams()) do
 		if team ~= TEAM_INNO then
 			self[team .. "_gvoice"] = false
 		end
@@ -391,5 +391,5 @@ function plymeta:UnSpectate()
 end
 
 function plymeta:GetAvoidRole(role)
-	return self:GetInfoNum("ttt_avoid_" .. ttt.GetRoleByIndex(role).name, 0) > 0
+	return self:GetInfoNum("ttt_avoid_" .. GetRoleByIndex(role).name, 0) > 0
 end

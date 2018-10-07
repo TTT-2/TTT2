@@ -2,7 +2,7 @@ local TryTranslation = LANG.TryTranslation
 
 GM.PickupHistory = {}
 GM.PickupHistoryLast = 0
-GM.PickupHistoryTop = ScrH() / 2
+GM.PickupHistoryTop = ScrH() * 0.5
 GM.PickupHistoryWide = 300
 GM.PickupHistoryCorner = surface.GetTextureID("gui/corner8")
 
@@ -13,7 +13,7 @@ function GM:HUDWeaponPickedUp(wep)
 
 	if not IsValid(client) or not client:Alive() then return end
 
-	local name = ttt.GetEquipmentTranslation(wep:GetClass(), wep:GetPrintName() or wep:GetClass())
+	local name = GetEquipmentTranslation(wep:GetClass(), wep:GetPrintName() or wep:GetClass())
 	--local name = TryTranslation(wep.GetPrintName and wep:GetPrintName() or wep:GetClass() or "Unknown Weapon Name")
 
 	local pickup = {}
@@ -26,7 +26,7 @@ function GM:HUDWeaponPickedUp(wep)
 
 	local subrole = client.GetSubRole and client:GetSubRole() or ROLE_INNOCENT
 
-	pickup.color = ttt.GetRoleByIndex(subrole).color
+	pickup.color = GetRoleByIndex(subrole).color
 	pickup.upper = true
 
 	surface.SetFont(pickup.font)

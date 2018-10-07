@@ -65,15 +65,15 @@ function SetupEquipment()
 		desc = "item_disg_desc"
 	}
 
-	for _, v in pairs(ttt.GetRoles()) do
+	for _, v in pairs(GetRoles()) do
 		if not EquipmentItems[v.index] then
-			local br = ttt.GetBaseRole(v.index)
+			local br = GetBaseRole(v.index)
 			if br == ROLE_TRAITOR then
 				EquipmentItems[v.index] = {armor, radar, disguiser}
 			elseif br == ROLE_DETECTIVE then
 				EquipmentItems[v.index] = {armor, radar}
 			else
-				local eqIt = ttt.GetRoleByIndex(v.index).EquipmentItems
+				local eqIt = GetRoleByIndex(v.index).EquipmentItems
 				if eqIt then
 					EquipmentItems[v.index] = eqIt
 				else
@@ -142,9 +142,9 @@ function AddWeaponIntoFallbackTable(wepClass, roleData)
 end
 
 function GetShopFallback(subrole, tbl)
-	local rd = ttt.GetRoleByIndex(subrole)
+	local rd = GetRoleByIndex(subrole)
 	local shopFallback = GetConVar("ttt_" .. rd.abbr .. "_shop_fallback"):GetString()
-	local fb = ttt.GetRoleByName(shopFallback).index
+	local fb = GetRoleByName(shopFallback).index
 
 	if shopFallback == SHOP_UNSET or shopFallback == SHOP_DISABLED then
 		return subrole, fb
@@ -171,7 +171,7 @@ function GetShopFallback(subrole, tbl)
 end
 
 function GetShopFallbackTable(subrole)
-	local rd = ttt.GetRoleByIndex(subrole)
+	local rd = GetRoleByIndex(subrole)
 
 	local shopFallback = GetConVar("ttt_" .. rd.abbr .. "_shop_fallback"):GetString()
 	if shopFallback == SHOP_DISABLED then return end
@@ -181,7 +181,7 @@ function GetShopFallbackTable(subrole)
 	subrole, fallback = GetShopFallback(subrole)
 
 	if fallback == ROLE_INNOCENT then -- fallback is SHOP_UNSET
-		rd = ttt.GetRoleByIndex(subrole)
+		rd = GetRoleByIndex(subrole)
 
 		if rd.fallbackTable then
 			return rd.fallbackTable
@@ -431,7 +431,7 @@ function InitDefaultEquipment()
 end
 
 function InitAllItems()
-	for _, roleData in pairs(ttt.GetRoles()) do
+	for _, roleData in pairs(GetRoles()) do
 		if EquipmentItems[roleData.index] then
 			for _, eq in pairs(EquipmentItems[roleData.index]) do
 				if not EquipmentTableHasValue(ALL_ITEMS, eq) then
@@ -539,7 +539,7 @@ if SERVER then
 
 	function LoadSingleShopEquipment(roleData)
 		local fallback = GetConVar("ttt_" .. roleData.abbr .. "_shop_fallback"):GetString()
-		local fb = ttt.GetRoleByName(fallback).index
+		local fb = GetRoleByName(fallback).index
 
 		if fb ~= roleData.index then return end -- TODO why? remove and replace SHOP_UNSET with index of the current role
 
@@ -555,7 +555,7 @@ if SERVER then
 		for _, v in pairs(files) do -- TODO ipairs ?
 			local name = string.sub(v, 1, #v - 4) -- cut #".txt"
 			local is_item = GetEquipmentItemByFileName(name)
-			local wep = not is_item and ttt.GetWeaponNameByFileName(name)
+			local wep = not is_item and GetWeaponNameByFileName(name)
 
 			local swep_table = wep and weapons.GetStored(wep)
 			if swep_table then
@@ -783,7 +783,7 @@ else -- CLIENT
 		end
 	end
 
-	-- sync ttt.GetRoles()
+	-- sync GetRoles()
 	local buff = ""
 
 	local function TTT2SyncEquipment(len)

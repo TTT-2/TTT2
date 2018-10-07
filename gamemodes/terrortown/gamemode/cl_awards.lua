@@ -224,7 +224,7 @@ function AWARDS.Headshots(events, scores, players, traitors)
 
 	if not nick then return end
 
-	local award = {nick = nick, priority = m_num / 2}
+	local award = {nick = nick, priority = m_num * 0.5}
 	if m_num > 1 and m_num < 4 then
 		award.title = T("aw_hed1_title")
 		award.text = PT("aw_hed1_text", {num = m_num})
@@ -327,7 +327,7 @@ function AWARDS.ShotgunUser(events, scores, players, traitors)
 	if kills > 1 and kills < 4 then
 		award.title = T("aw_sgn1_title")
 		award.text = PT("aw_sgn1_text", {num = kills})
-		award.priority = math.Round(kills / 2)
+		award.priority = math.Round(kills * 0.5)
 	elseif kills >= 4 then
 		award.title = T("aw_sgn2_title")
 		award.text = PT("aw_sgn2_text", {num = kills})
@@ -353,7 +353,7 @@ function AWARDS.RifleUser(events, scores, players, traitors)
 	if kills > 1 and kills < 4 then
 		award.title = T("aw_rfl1_title")
 		award.text = PT("aw_rfl1_text", {num = kills})
-		award.priority = math.Round(kills / 2)
+		award.priority = math.Round(kills * 0.5)
 	elseif kills >= 4 then
 		award.title = T("aw_rfl2_title")
 		award.text = PT("aw_rfl2_text", {num = kills})
@@ -379,7 +379,7 @@ function AWARDS.DeagleUser(events, scores, players, traitors)
 	if kills > 1 and kills < 4 then
 		award.title = T("aw_dgl1_title")
 		award.text = PT("aw_dgl1_text", {num = kills})
-		award.priority = math.Round(kills / 2)
+		award.priority = math.Round(kills * 0.5)
 	elseif kills >= 4 then
 		award.title = T("aw_dgl2_title")
 		award.text = PT("aw_dgl2_text", {num = kills})
@@ -406,7 +406,7 @@ function AWARDS.MAC10User(events, scores, players, traitors)
 	if kills > 1 and kills < 4 then
 		award.title = T("aw_mac1_title")
 		award.text = PT("aw_mac1_text", {num = kills})
-		award.priority = math.Round(kills / 2)
+		award.priority = math.Round(kills * 0.5)
 	elseif kills >= 4 then
 		award.title = T("aw_mac2_title")
 		award.text = PT("aw_mac2_text", {num = kills})

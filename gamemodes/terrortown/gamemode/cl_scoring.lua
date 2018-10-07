@@ -182,7 +182,7 @@ function CLSCORE:BuildScorePanel(dpanel)
 				end
 
 				if not roles[ev.r] then
-					local roleData = ttt.GetRoleByIndex(ev.r)
+					local roleData = GetRoleByIndex(ev.r)
 
 					if role ~= "" then
 						role = role .. "/"
@@ -312,7 +312,7 @@ function CLSCORE:BuildHilitePanel(dpanel)
 					wintype = TEAM_INNO
 				end
 
-				teamRole = ttt.GetDefaultTeamRole(wintype)
+				teamRole = GetDefaultTeamRole(wintype)
 				title = {c = teamRole.color, txt = "hilite_win_" .. teamRole.name}
 			end
 
@@ -386,7 +386,7 @@ function CLSCORE:BuildHilitePanel(dpanel)
 	local award_choices = {}
 
 	for _, afn in pairs(AWARDS) do
-		local a = afn(self.Events, self.Scores, self.Players, tr)
+		local a = afn(self.Events, self.Scores, self.Players, tr) -- TODO: get this tr var out of scores.sid.lt == TEAM_TRAITOR
 
 		if ValidAward(a) then
 			table.insert(award_choices, a)

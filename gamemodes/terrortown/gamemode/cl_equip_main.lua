@@ -130,7 +130,7 @@ local function PreqLabels(parent, x, y)
 	tbl.owned.Check = function(s, sel)
 		if ItemIsWeapon(sel) and not CanCarryWeapon(sel) then
 			return false, sel.slot, GetPTranslation("equip_carry_slot", {slot = sel.slot})
-		elseif ItemIsWeapon(sel) and not ttt.SWEPIsBuyable(tostring(sel.id)) then -- TODO add own indicator image for "ttt.SWEPIsBuyable(wepCls)"
+		elseif ItemIsWeapon(sel) and not SWEPIsBuyable(tostring(sel.id)) then -- TODO add own indicator image for "SWEPIsBuyable(wepCls)"
 			return false, "?", GetTranslation("equip_carry_minplayers", {slot = sel.slot})
 		elseif not ItemIsWeapon(sel) and LocalPlayer():HasEquipmentItem(sel.id) then
 			return false, "X", GetTranslation("equip_carry_own")
@@ -212,7 +212,7 @@ local function TraitorMenuPopup()
 
 	local subrole = ply:GetSubRole()
 	local fallbackRole = GetShopFallback(subrole)
-	local rd = ttt.GetRoleByIndex(fallbackRole)
+	local rd = GetRoleByIndex(fallbackRole)
 
 	local fallback = GetConVar("ttt_" .. rd.abbr .. "_shop_fallback"):GetString()
 	if fallback == SHOP_DISABLED then return end
@@ -310,7 +310,7 @@ local function TraitorMenuPopup()
 
 	local items = GetEquipmentForRole(subrole)
 
-	ttt.SortEquipmentTable(items)
+	SortEquipmentTable(items)
 
 	if #items == 0 then
 		ply:ChatPrint("[TTT2][SHOP] You need to run 'weaponshop' as admin in the developer console to create a shop for this role. Link it with another shop or click on the icons to add weapons and items to the shop.")
@@ -394,7 +394,7 @@ local function TraitorMenuPopup()
 		if ic then
 			ic.item = item
 
-			local tip = ttt.GetEquipmentTranslation(item.name, item.PrintName) .. " (" .. SafeTranslate(item.type) .. ")"
+			local tip = GetEquipmentTranslation(item.name, item.PrintName) .. " (" .. SafeTranslate(item.type) .. ")"
 
 			ic:SetTooltip(tip)
 
@@ -404,7 +404,7 @@ local function TraitorMenuPopup()
 			table.HasValue(owned_ids, item.id) or
 			tonumber(item.id) and ply:HasEquipmentItem(tonumber(item.id)) or
 			-- already carrying a weapon for this slot
-			ItemIsWeapon(item) and (not CanCarryWeapon(item) or not ttt.SWEPIsBuyable(tostring(item.id))) or
+			ItemIsWeapon(item) and (not CanCarryWeapon(item) or not SWEPIsBuyable(tostring(item.id))) or
 			-- already bought the item before
 			item.limited and ply:HasBought(tostring(item.id))
 			then
@@ -519,7 +519,7 @@ local function TraitorMenuPopup()
 			for k, v in pairs(new.item) do
 				if dfields[k] then
 					if k == "name" and new.item.PrintName then
-						dfields[k]:SetText(ttt.GetEquipmentTranslation(new.item.name, new.item.PrintName))
+						dfields[k]:SetText(GetEquipmentTranslation(new.item.name, new.item.PrintName))
 					else
 						dfields[k]:SetText(SafeTranslate(v))
 					end

@@ -61,7 +61,7 @@ function GetEquipmentForRoleAll()
 end
 
 local function newshop()
-	local sr = ttt.GetShopRoles()[1]
+	local sr = GetShopRoles()[1]
 	local selectedRole = sr.index
 	local state = true
 	local w, h = 500, 450
@@ -121,7 +121,7 @@ local function newshop()
 	menu:SetSize(w, 25)
 	menu:SetValue(sr.name)
 
-	for _, v in pairs(ttt.GetRoles()) do
+	for _, v in pairs(GetRoles()) do
 		if v ~= INNOCENT then
 			menu:AddChoice(v.name, v.index)
 		end
@@ -130,7 +130,7 @@ local function newshop()
 	local ply = LocalPlayer()
 	local items = GetEquipmentForRoleAll()
 
-	ttt.SortEquipmentTable(items)
+	SortEquipmentTable(items)
 
 	for _, item in pairs(items) do
 		local ic
@@ -264,7 +264,7 @@ local function newshop()
 				end
 			end
 
-			local tip = ttt.GetEquipmentTranslation(item.name, item.PrintName) .. " (" .. SafeTranslate(item.type) .. ")"
+			local tip = GetEquipmentTranslation(item.name, item.PrintName) .. " (" .. SafeTranslate(item.type) .. ")"
 
 			ic:SetTooltip(tip)
 
@@ -291,9 +291,9 @@ local function newshop()
 		-- clear old data
 		self:Clear()
 
-		local rd = ttt.GetRoleByIndex(dlist.selectedRole)
+		local rd = GetRoleByIndex(dlist.selectedRole)
 		local fallback = GetConVar("ttt_" .. rd.abbr .. "_shop_fallback"):GetString()
-		local fb = ttt.GetRoleByName(fallback)
+		local fb = GetRoleByName(fallback)
 
 		-- update state
 		if fallback == SHOP_DISABLED or fallback == SHOP_UNSET and rd.fallbackTable then
@@ -303,12 +303,12 @@ local function newshop()
 		end
 
 		-- add linked or own shop choice
-		for _, v in pairs(ttt.GetShopRoles()) do
+		for _, v in pairs(GetShopRoles()) do
 			self:AddChoice(dlist.selectedRole == v.index and "Use own shop" or ("Link with " .. v.name), {name = v.name, data = v.name})
 		end
 
 		-- add default choice
-		local tmpRd = ttt.GetRoleByIndex(dlist.selectedRole)
+		local tmpRd = GetRoleByIndex(dlist.selectedRole)
 		if tmpRd.fallbackTable then
 			self:AddChoice("Default Role Equipment", {name = tmpRd.name, data = SHOP_UNSET})
 		end
@@ -344,7 +344,7 @@ local function newshop()
 	fbmenu:RefreshChoices()
 
 	function fbmenu:OnSelect(_, _, data)
-		local rd = ttt.GetRoleByIndex(dlist.selectedRole)
+		local rd = GetRoleByIndex(dlist.selectedRole)
 		local oldFallback = GetConVar("ttt_" .. rd.abbr .. "_shop_fallback"):GetString()
 
 		if fallback ~= oldFallback then
@@ -354,7 +354,7 @@ local function newshop()
 			net.SendToServer()
 		end
 
-		if data.data == SHOP_DISABLED or data.data == SHOP_UNSET or data.data ~= ttt.GetRoleByIndex(dlist.selectedRole).name then
+		if data.data == SHOP_DISABLED or data.data == SHOP_UNSET or data.data ~= GetRoleByIndex(dlist.selectedRole).name then
 			state = false
 
 			for _, v in pairs(dlist:GetItems()) do
@@ -384,7 +384,7 @@ net.Receive("newshop", newshop)
 local function shopFallbackAnsw(len)
 	local subrole = net.ReadUInt(ROLE_BITS)
 
-	local rd = ttt.GetRoleByIndex(subrole)
+	local rd = GetRoleByIndex(subrole)
 	local fb = GetConVar("ttt_" .. rd.abbr .. "_shop_fallback"):GetString()
 
 	-- reset everything
@@ -404,7 +404,7 @@ local function shopFallbackAnsw(len)
 	end
 
 	if fb == SHOP_UNSET then
-		local roleData = ttt.GetRoleByIndex(subrole)
+		local roleData = GetRoleByIndex(subrole)
 		if roleData.fallbackTable then
 			-- set everything
 			for _, eq in ipairs(roleData.fallbackTable) do

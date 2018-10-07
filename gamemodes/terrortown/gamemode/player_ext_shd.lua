@@ -33,7 +33,7 @@ end
 
 -- ply:UpdateTeam(team) should never be used BEFORE this function
 function plymeta:SetRole(subrole)
-	local rd = ttt.GetRoleByIndex(subrole)
+	local rd = GetRoleByIndex(subrole)
 	local baserole = subrole
 
 	if rd.baserole then
@@ -43,7 +43,7 @@ function plymeta:SetRole(subrole)
 	self.role = baserole
 	self.subrole = subrole
 
-	self:UpdateTeam(ttt.GetRoleByIndex(subrole).defaultTeam)
+	self:UpdateTeam(GetRoleByIndex(subrole).defaultTeam)
 end
 
 function plymeta:GetTeam()
@@ -79,7 +79,7 @@ function plymeta:GetDetective()
 end
 
 function plymeta:GetCustomRoleData()
-	for _, v in pairs(ttt.GetRoles()) do
+	for _, v in pairs(GetRoles()) do
 		if v.index == self:GetSubRole() then
 			return v
 		end
@@ -89,7 +89,7 @@ function plymeta:GetCustomRoleData()
 end
 
 function plymeta:GetBaseRoleData()
-	for _, v in pairs(ttt.GetRoles()) do
+	for _, v in pairs(GetRoles()) do
 		if v.index == self:GetBaseRole() then
 			return v
 		end
@@ -114,7 +114,7 @@ end
 -- will match if player has specific subrole or a general baserole if requested.
 -- To check whether a player have a specific baserole not a subrole, use ply:GetSubRole() == baserole
 function plymeta:IsRole(subrole)
-	local rd = ttt.GetRoleByIndex(subrole)
+	local rd = GetRoleByIndex(subrole)
 	local br, sr = self:GetRole()
 
 	return rd.baserole and subrole == sr or rd.baserole == br

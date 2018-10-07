@@ -26,7 +26,7 @@ function AddToWeaponshop(ply, roleData, equip)
 		file.Write(filename, "") -- Write to .txt
 
 		local is_item = GetEquipmentItemByFileName(equip)
-		local wep = not is_item and ttt.GetWeaponNameByFileName(equip)
+		local wep = not is_item and GetWeaponNameByFileName(equip)
 
 		local wepTbl = wep and weapons.GetStored(wep)
 		if wepTbl then
@@ -50,7 +50,7 @@ function RemoveFromWeaponshop(ply, roleData, equip)
 		file.Delete(filename) -- Write to .txt
 
 		local is_item = GetEquipmentItemByFileName(equip)
-		local wep = not is_item and ttt.GetWeaponNameByFileName(equip)
+		local wep = not is_item and GetWeaponNameByFileName(equip)
 
 		local wepTbl = wep and weapons.GetStored(wep)
 		if wepTbl then
@@ -77,7 +77,7 @@ local function shop(len, ply)
 
 	equip = not is_item and eq or equip
 
-	local rd = ttt.GetRoleByIndex(subrole)
+	local rd = GetRoleByIndex(subrole)
 
 	if add then
 		AddToWeaponshop(ply, rd, equip)
@@ -94,14 +94,14 @@ local function shopFallback(len, ply)
 	local subrole = net.ReadUInt(ROLE_BITS)
 	local fallback = net.ReadString()
 
-	local rd = ttt.GetRoleByIndex(subrole)
+	local rd = GetRoleByIndex(subrole)
 
 	RunConsoleCommand("ttt_" .. rd.abbr .. "_shop_fallback", fallback)
 end
 net.Receive("shopFallback", shopFallback)
 
 local function OnChangeCVar(subrole, fallback)
-	local rd = ttt.GetRoleByIndex(subrole)
+	local rd = GetRoleByIndex(subrole)
 
 	-- reset equipment
 	EquipmentItems[subrole] = {}
@@ -123,7 +123,7 @@ local function OnChangeCVar(subrole, fallback)
 	net.Broadcast()
 
 	if fallback ~= SHOP_DISABLED then
-		if fallback ~= SHOP_UNSET and subrole == ttt.GetRoleByName(fallback).index then
+		if fallback ~= SHOP_UNSET and subrole == GetRoleByName(fallback).index then
 			LoadSingleShopEquipment(rd)
 
 			net.Start("shopFallbackRefresh")
@@ -150,7 +150,7 @@ local function OnChangeCVar(subrole, fallback)
 end
 
 local function TTT2FinishedInit()
-	for _, v in pairs(ttt.GetRoles()) do
+	for _, v in pairs(GetRoles()) do
 		local _func = function(convar_name, value_old, value_new)
 			if value_old ~= value_new then
 				OnChangeCVar(v.index, value_new)

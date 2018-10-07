@@ -67,7 +67,7 @@ function GM:InitPostEntity()
 	InitAllItems()
 
 	-- reset normal equipment tables
-	for _, role in pairs(ttt.GetRoles()) do
+	for _, role in pairs(GetRoles()) do
 		EquipmentItems[role.index] = {}
 
 		if Equipment then
@@ -181,7 +181,7 @@ local function RoundStateChange(o, n)
 
 	-- whatever round state we get, clear out the voice flags
 	for _, v in ipairs(player.GetAll()) do
-		for _, team in ipairs(ttt.GetWinTeams()) do
+		for _, team in ipairs(GetWinTeams()) do
 			if team ~= TEAM_INNO then
 				v[team .. "_gvoice"] = false
 			end
@@ -226,7 +226,7 @@ local function ReceiveRole()
 	client:UpdateTeam(team)
 
 	Msg("You are: ")
-	MsgN(string.upper(ttt.GetRoleByIndex(subrole).name))
+	MsgN(string.upper(GetRoleByIndex(subrole).name))
 end
 net.Receive("TTT_Role", ReceiveRole)
 

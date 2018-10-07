@@ -159,7 +159,7 @@ function MSTACK:Draw(client)
 
 			-- Hurry up if we have too many
 			if k >= max_items then
-				delta = delta / 2
+				delta = delta * 0.5
 			end
 
 			local alpha = 255
@@ -186,7 +186,7 @@ function MSTACK:Draw(client)
 			for i = 1, #item.text do
 				spec.text = item.text[i]
 
-				local tx = top_x + (msg_width / 2)
+				local tx = top_x + (msg_width * 0.5)
 				local ty = y + margin + (i - 1) * (text_height + margin)
 				spec.pos = {tx, ty}
 

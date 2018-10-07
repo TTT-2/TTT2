@@ -86,10 +86,9 @@ ROLE_NONE = ROLE_NONE or ROLE_INNOCENT
 -- need to have a team to be able to win as well as to receive karma
 -- IMPORTANT: If adding traitor roles: enable 'shop' !
 -- just the following roles should be 'buildin' = true
-ttt = {}
-ttt.ROLES = {}
+ROLES = {}
 
-ttt.ROLES.INNOCENT = {
+ROLES.INNOCENT = {
 	index = ROLE_INNOCENT,
 	color = Color(55, 170, 50, 255),
 	dkcolor = Color(60, 160, 50, 155),
@@ -102,9 +101,9 @@ ttt.ROLES.INNOCENT = {
 	scoreKillsMultiplier = 1,
 	scoreTeamKillsMultiplier = -8
 }
-INNOCENT = ttt.ROLES.INNOCENT
+INNOCENT = ROLES.INNOCENT
 
-ttt.ROLES.TRAITOR = {
+ROLES.TRAITOR = {
 	index = ROLE_TRAITOR,
 	color = Color(180, 50, 40, 255),
 	dkcolor = Color(160, 50, 60, 155),
@@ -120,9 +119,9 @@ ttt.ROLES.TRAITOR = {
 	scoreTeamKillsMultiplier = -16,
 	fallbackTable = {}
 }
-TRAITOR = ttt.ROLES.TRAITOR
+TRAITOR = ROLES.TRAITOR
 
-ttt.ROLES.DETECTIVE = {
+ROLES.DETECTIVE = {
 	index = ROLE_DETECTIVE,
 	color = Color(50, 60, 180, 255),
 	dkcolor = Color(50, 60, 160, 155),
@@ -136,7 +135,7 @@ ttt.ROLES.DETECTIVE = {
 	scoreTeamKillsMultiplier = INNOCENT.scoreTeamKillsMultiplier,
 	fallbackTable = {}
 }
-DETECTIVE = ttt.ROLES.DETECTIVE
+DETECTIVE = ROLES.DETECTIVE
 
 CreateConVar("ttt_detective_enabled", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
 CreateConVar("ttt_newroles_enabled", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
@@ -149,14 +148,14 @@ CreateConVar("ttt_" .. INNOCENT.abbr .. "_shop_fallback", SHOP_DISABLED, {FCVAR_
 CreateConVar("ttt_" .. TRAITOR.abbr .. "_shop_fallback", SHOP_UNSET, {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
 CreateConVar("ttt_" .. DETECTIVE.abbr .. "_shop_fallback", SHOP_UNSET, {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
 
-function ttt.GetRoles()
-	return ttt.ROLES
+function GetRoles()
+	return ROLES
 end
 
-function ttt.GenerateNewRoleID()
+function GenerateNewRoleID()
 	local i = 1 -- start with "1" to prevent incompatibilities with ROLE_ANY => new roles will start @ id: i(1)+3=4
 
-	for _, v in pairs(ttt.GetRoles()) do
+	for _, v in pairs(GetRoles()) do
 		i = i + 1
 	end
 
@@ -164,10 +163,10 @@ function ttt.GenerateNewRoleID()
 end
 
 -- you should only use this function to add roles to TTT2
-function ttt.InitCustomRole(name, roleData, conVarData)
+function InitCustomRole(name, roleData, conVarData)
 	conVarData = conVarData or {}
 
-	if not ttt.GetRoles()[name] then
+	if not GetRoles()[name] then
 		-- shared
 		if not roleData.notSelectable then
 			if conVarData.togglable then
@@ -210,22 +209,22 @@ function ttt.InitCustomRole(name, roleData, conVarData)
 		end
 
 		-- set id
-		roleData.index = ttt.GenerateNewRoleID()
+		roleData.index = GenerateNewRoleID()
 
 		-- set data
-		ttt.GetRoles()[name] = roleData
+		GetRoles()[name] = roleData
 
 		print("[TTT2][ROLE] Added '" .. name .. "' Role (index: " .. roleData.index .. ")")
 	end
 end
 -- usage: inside of e.g. this hook: hook.Add("TTT2BaseRoleInit", "TTT2ConnectBaseRole" .. baserole .. "With_" .. roleData.name, ...)
-function ttt.SetBaseRole(roleData, baserole)
+function SetBaseRole(roleData, baserole)
 	if roleData.baserole then
 		error("ERROR: BaseRole of " .. roleData.name .. " already set (" .. roleData.baserole .. ")!")
 
 		return
 	else
-		local br = ttt.GetRoleByIndex(baserole)
+		local br = GetRoleByIndex(baserole)
 
 		if br.baserole then
 			error("ERROR: Your requested BaseRole can't be any BaseRole of another SubRole because it's a SubRole as well.")
@@ -237,8 +236,8 @@ function ttt.SetBaseRole(roleData, baserole)
 	roleData.baserole = baserole
 end
 
-function ttt.SetupRoleGlobals()
-	for _, v in pairs(ttt.GetRoles()) do
+function SetupRoleGlobals()
+	for _, v in pairs(GetRoles()) do
 		if v ~= INNOCENT and v ~= TRAITOR and v ~= DETECTIVE then -- already set
 			_G["ROLE_" .. string.upper(v.name)] = v.index
 			_G[string.upper(v.name)] = v
@@ -257,12 +256,12 @@ function ttt.SetupRoleGlobals()
 end
 
 -- if you add roles that can shop, modify DefaultEquipment at the end of this file
--- TODO combine DefaultEquipment[x] and ttt.GetRoles()[x] !
+-- TODO combine DefaultEquipment[x] and GetRoles()[x] !
 
 SHOP_FALLBACK_TRAITOR = TRAITOR.name
 SHOP_FALLBACK_DETECTIVE = DETECTIVE.name
 
-function ttt.SortRolesTable(tbl)
+function SortRolesTable(tbl)
 	local _func = function(a, b)
 		return a.index < b.index
 	end
@@ -270,8 +269,8 @@ function ttt.SortRolesTable(tbl)
 	table.sort(tbl, _func)
 end
 
-function ttt.GetRoleByIndex(index)
-	for _, v in pairs(ttt.GetRoles()) do
+function GetRoleByIndex(index)
+	for _, v in pairs(GetRoles()) do
 		if v.index == index then
 			return v
 		end
@@ -280,8 +279,8 @@ function ttt.GetRoleByIndex(index)
 	return INNOCENT
 end
 
-function ttt.GetRoleByName(name)
-	for _, v in pairs(ttt.GetRoles()) do
+function GetRoleByName(name)
+	for _, v in pairs(GetRoles()) do
 		if v.name == name then
 			return v
 		end
@@ -290,8 +289,8 @@ function ttt.GetRoleByName(name)
 	return INNOCENT
 end
 
-function ttt.GetRoleByAbbr(abbr)
-	for _, v in pairs(ttt.GetRoles()) do
+function GetRoleByAbbr(abbr)
+	for _, v in pairs(GetRoles()) do
 		if v.abbr == abbr then
 			return v
 		end
@@ -300,7 +299,7 @@ function ttt.GetRoleByAbbr(abbr)
 	return INNOCENT
 end
 
-function ttt.GetStartingCredits(abbr)
+function GetStartingCredits(abbr)
 	if abbr == TRAITOR.abbr then
 		return GetConVar("ttt_credits_starting"):GetInt()
 	end
@@ -308,12 +307,12 @@ function ttt.GetStartingCredits(abbr)
 	return ConVarExists("ttt_" .. abbr .. "_credits_starting") and GetConVar("ttt_" .. abbr .. "_credits_starting"):GetInt() or 0
 end
 
-function ttt.GetShopRoles()
+function GetShopRoles()
 	local shopRoles = {}
 
 	local i = 0
 
-	for _, v in pairs(ttt.GetRoles()) do
+	for _, v in pairs(GetRoles()) do
 		if v ~= INNOCENT then
 			local shopFallback = GetConVar("ttt_" .. v.abbr .. "_shop_fallback"):GetString()
 			if shopFallback ~= SHOP_DISABLED then
@@ -323,29 +322,29 @@ function ttt.GetShopRoles()
 		end
 	end
 
-	ttt.SortRolesTable(shopRoles)
+	SortRolesTable(shopRoles)
 
 	return shopRoles
 end
 
-function ttt.IsWinRole(roleData)
+function IsWinRole(roleData)
 	return not roleData.preventWin and roleData.defaultTeam
 end
 
-function ttt.IsBaseRole(roleData)
+function IsBaseRole(roleData)
 	return not roleData.baserole
 end
 
-function ttt.GetBaseRole(subrole)
-	return ttt.GetRoleByIndex(subrole).baserole or subrole
+function GetBaseRole(subrole)
+	return GetRoleByIndex(subrole).baserole or subrole
 end
 
 -- includes baserole as well
-function ttt.GetSubRoles(subrole)
-	local br = ttt.GetBaseRole(subrole)
+function GetSubRoles(subrole)
+	local br = GetBaseRole(subrole)
 	local tmp = {}
 
-	for _, v in pairs(ttt.GetRoles()) do
+	for _, v in pairs(GetRoles()) do
 		if v.baserole and v.baserole == br or v.index == br then
 			table.insert(tmp, v)
 		end
@@ -354,8 +353,8 @@ function ttt.GetSubRoles(subrole)
 	return tmp
 end
 
-function ttt.GetDefaultTeamRole(team)
-	for _, v in pairs(ttt.GetRoles()) do
+function GetDefaultTeamRole(team)
+	for _, v in pairs(GetRoles()) do
 		if not v.baserole and v.defaultTeam == team then
 			return v
 		end
@@ -364,11 +363,11 @@ function ttt.GetDefaultTeamRole(team)
 	return INNOCENT
 end
 
-function ttt.GetDefaultTeamRoles(team)
-	return ttt.GetSubRoles(ttt.GetDefaultTeamRole(team).index)
+function GetDefaultTeamRoles(team)
+	return GetSubRoles(GetDefaultTeamRole(team).index)
 end
 
-function ttt.GetTeamMembers(team)
+function GetTeamMembers(team)
 	local tmp = {}
 
 	for _, v in ipairs(player.GetAll()) do
@@ -380,11 +379,11 @@ function ttt.GetTeamMembers(team)
 	return tmp
 end
 
-function ttt.GetWinTeams()
+function GetWinTeams()
 	local winTeams = {}
 
-	for _, v in pairs(ttt.GetRoles()) do
-		if not table.HasValue(winTeams, v.defaultTeam) and ttt.IsWinRole(v) then
+	for _, v in pairs(GetRoles()) do
+		if not table.HasValue(winTeams, v.defaultTeam) and IsWinRole(v) then
 			table.insert(winTeams, v.defaultTeam)
 		end
 	end
@@ -392,10 +391,10 @@ function ttt.GetWinTeams()
 	return winTeams
 end
 
-function ttt.GetAvailableTeams()
+function GetAvailableTeams()
 	local availableTeams = {}
 
-	for _, v in pairs(ttt.GetRoles()) do
+	for _, v in pairs(GetRoles()) do
 		if not table.HasValue(availableTeams, v.defaultTeam) then
 			availableTeams[#availableTeams + 1] = v.defaultTeam
 		end
@@ -404,22 +403,22 @@ function ttt.GetAvailableTeams()
 	return availableTeams
 end
 
-function ttt.GetSortedRoles()
+function GetSortedRoles()
 	local roles = {}
 
 	local i = 0
 
-	for _, v in pairs(ttt.GetRoles()) do
+	for _, v in pairs(GetRoles()) do
 		i = i + 1
 		roles[i] = v
 	end
 
-	ttt.SortRolesTable(roles)
+	SortRolesTable(roles)
 
 	return roles
 end
 
-function ttt.GetWeaponNameByFileName(name)
+function GetWeaponNameByFileName(name)
 	for _, v in ipairs(weapons.GetList()) do
 		if string.lower(v.ClassName) == name then
 			return v.ClassName
@@ -459,7 +458,7 @@ end
 if CLIENT then
 	local SafeTranslate
 
-	function ttt.GetEquipmentTranslation(name, printName)
+	function GetEquipmentTranslation(name, printName)
 		SafeTranslate = SafeTranslate or LANG.TryTranslation
 
 		local val = printName
@@ -476,7 +475,7 @@ if CLIENT then
 		return str
 	end
 
-	function ttt.SortEquipmentTable(tbl)
+	function SortEquipmentTable(tbl)
 		local _func = function(adata, bdata)
 			a = adata.id
 			b = bdata.id
@@ -593,7 +592,7 @@ end
 function GetDefaultEquipment()
 	local defaultEquipment = {}
 
-	for _, v in pairs(ttt.GetRoles()) do
+	for _, v in pairs(GetRoles()) do
 		if v.defaultEquipment then
 			defaultEquipment[v.index] = v.defaultEquipment
 		end
@@ -606,7 +605,7 @@ DefaultEquipment = GetDefaultEquipment()
 
 TTTWEAPON_CVARS = {}
 
-function ttt.SWEPAddConVar(swep, tbl)
+function SWEPAddConVar(swep, tbl)
 	local cls = swep.ClassName
 
 	TTTWEAPON_CVARS[cls] = TTTWEAPON_CVARS[cls] or {}
@@ -616,7 +615,7 @@ function ttt.SWEPAddConVar(swep, tbl)
 	CreateConVar(tbl.cvar, tbl.value, tbl.flags)
 end
 
-function ttt.SWEPIsBuyable(wepCls)
+function SWEPIsBuyable(wepCls)
 	if not wepCls then
 		return true
 	end
@@ -647,7 +646,7 @@ function ttt.SWEPIsBuyable(wepCls)
 	return true
 end
 
-function ttt.RegisterNormalWeapon(wep)
+function RegisterNormalWeapon(wep)
 	if wep.MinPlayers then
 		local tbl = {}
 		tbl.cvar = "t32_" .. wep.ClassName .. "_imp"
@@ -657,6 +656,6 @@ function ttt.RegisterNormalWeapon(wep)
 		tbl.desc = "MinPlayers"
 		tbl.max = 100
 
-		ttt.SWEPAddConVar(wep, tbl)
+		SWEPAddConVar(wep, tbl)
 	end
 end

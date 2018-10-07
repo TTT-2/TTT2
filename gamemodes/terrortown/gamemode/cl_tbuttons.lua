@@ -75,7 +75,7 @@ local tbut_normal = surface.GetTextureID("vgui/ttt/tbut_hand_line")
 local tbut_focus = surface.GetTextureID("vgui/ttt/tbut_hand_filled")
 
 local size = 32
-local mid = size / 2
+local mid = size * 0.5
 local focus_range = 25
 
 local use_key = Key("+use", "USE")
@@ -90,8 +90,8 @@ function TBHUD:Draw(client)
 		-- we're doing slowish distance computation here, so lots of probably
 		-- ineffective micro-optimization
 		local plypos = client:GetPos()
-		local midscreen_x = ScrW() / 2
-		local midscreen_y = ScrH() / 2
+		local midscreen_x = ScrW() * 0.5
+		local midscreen_y = ScrH() * 0.5
 		local pos, scrpos, d
 		local focus_ent
 		local focus_d, focus_scrpos_x, focus_scrpos_y = 0, midscreen_x, midscreen_y

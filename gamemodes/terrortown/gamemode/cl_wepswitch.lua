@@ -48,7 +48,7 @@ local function TTT2FinishedInit()
 	col_active.tip = {}
 	col_dark.tip = {}
 
-	for _, v in pairs(ttt.GetRoles()) do
+	for _, v in pairs(GetRoles()) do
 		col_active.tip[v.index] = v.color
 		col_dark.tip[v.index] = v.dkcolor
 	end

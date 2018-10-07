@@ -40,7 +40,7 @@ indicator_col = Color(255, 255, 255, 130)
 local function TTT2FinishedInit()
 	indicator_mat_tbl = {}
 
-	for _, v in pairs(ttt.GetRoles()) do
+	for _, v in pairs(GetRoles()) do
 		local mat = Material("vgui/ttt/sprite_" .. v.abbr)
 
 		indicator_mat_tbl[v.index] = mat
@@ -138,7 +138,7 @@ local function DrawPropSpecLabels(client)
 			text = ply:Nick()
 			w = surface.GetTextSize(text)
 
-			surface.SetTextPos(scrpos.x - w / 2, scrpos.y)
+			surface.SetTextPos(scrpos.x - w * 0.5, scrpos.y)
 			surface.DrawText(text)
 		end
 	end
@@ -242,15 +242,15 @@ function GM:HUDDrawTargetID()
 		return
 	end
 
-	local x_orig = ScrW() / 2.0
+	local x_orig = ScrW() * 0.5
 	local x = x_orig
-	local y = ScrH() / 2.0
+	local y = ScrH() * 0.5
 	local w, h = 0, 0 -- text width/height, reused several times
 
 	if target_role then
 		surface.SetTexture(ring_tex)
 
-		local clr = ttt.GetRoleByIndex(target_role).color
+		local clr = GetRoleByIndex(target_role).color
 
 		surface.SetDrawColor(clr.r, clr.g, clr.b, 200)
 		surface.DrawTexturedRect(x - 32, y - 32, 64, 64)
@@ -265,7 +265,7 @@ function GM:HUDDrawTargetID()
 	-- Draw main title, ie. nickname
 	if text then
 		w, h = surface.GetTextSize(text)
-		x = x - w / 2
+		x = x - w * 0.5
 
 		draw.SimpleText(text, font, x + 1, y + 1, COLOR_BLACK)
 		draw.SimpleText(text, font, x, y, color)
@@ -306,7 +306,7 @@ function GM:HUDDrawTargetID()
 	surface.SetFont(font)
 
 	w, h = surface.GetTextSize(text)
-	x = x_orig - w / 2
+	x = x_orig - w * 0.5
 
 	draw.SimpleText(text, font, x + 1, y + 1, COLOR_BLACK)
 	draw.SimpleText(text, font, x, y, clr)
@@ -322,7 +322,7 @@ function GM:HUDDrawTargetID()
 
 		w, h = surface.GetTextSize(text)
 		y = y + h + 5
-		x = x_orig - w / 2
+		x = x_orig - w * 0.5
 
 		draw.SimpleText(text, font, x + 1, y + 1, COLOR_BLACK)
 		draw.SimpleText(text, font, x, y, clr)
@@ -337,7 +337,7 @@ function GM:HUDDrawTargetID()
 		end
 
 		w, h = surface.GetTextSize(text)
-		x = x_orig - w / 2
+		x = x_orig - w * 0.5
 		y = y + h + 5
 
 		draw.SimpleText(text, font, x + 1, y + 1, COLOR_BLACK)
@@ -347,7 +347,7 @@ function GM:HUDDrawTargetID()
 	text = nil
 
 	if target_role then
-		local rd = ttt.GetRoleByIndex(target_role)
+		local rd = GetRoleByIndex(target_role)
 
 		text = L["target_" .. rd.name]
 		clr = rd.color
@@ -363,7 +363,7 @@ function GM:HUDDrawTargetID()
 
 	if text then
 		w, h = surface.GetTextSize(text)
-		x = x_orig - w / 2
+		x = x_orig - w * 0.5
 		y = y + h + 5
 
 		draw.SimpleText(text, font, x + 1, y + 1, COLOR_BLACK)

@@ -85,7 +85,7 @@ end
 function SendFullStateUpdate()
 	SendRoleReset() -- reset every player; now everyone is inno
 
-	for _, v in ipairs(ttt.GetAvailableTeams()) do
+	for _, v in ipairs(GetAvailableTeams()) do
 		if v ~= TEAM_INNO then
 			SendTeamList(v, GetTeamFilter(v))
 			SendConfirmedTeam(v)
@@ -111,7 +111,7 @@ local function ttt_request_rolelist(ply)
 		SendRoleReset(ply) -- reset every player for ply; now everyone is inno
 		SendTeamList(ply:GetTeam(), ply) -- send list of team to ply
 
-		for _, v in ipairs(ttt.GetAvailableTeams()) do
+		for _, v in ipairs(GetAvailableTeams()) do
 			if v ~= TEAM_INNO then
 				SendConfirmedTeam(v, ply)
 			end
@@ -162,11 +162,11 @@ local function ttt_force_role(ply, cmd, args, argStr)
 	local role = tonumber(args[1])
 	local i = 1
 
-	for _, v in pairs(ttt.GetRoles()) do
+	for _, v in pairs(GetRoles()) do
 		i = i + 1
 	end
 
-	local rd = ttt.GetRoleByIndex(role)
+	local rd = GetRoleByIndex(role)
 
 	if role and role <= i and not rd.notSelectable then
 		ply:UpdateRole(role)
@@ -187,7 +187,7 @@ concommand.Add("get_role", get_role)
 local function ttt_toggle_role(ply, cmd, args, argStr)
 	if ply:IsAdmin() then
 		local role = tonumber(args[1])
-		local roleData = ttt.GetRoleByIndex(role)
+		local roleData = GetRoleByIndex(role)
 		local currentState = not GetConVar("ttt_" .. roleData.name .. "_enabled"):GetBool()
 
 		local word = currentState and "disabled" or "enabled"
@@ -231,7 +231,7 @@ local function ttt_roles_index(ply)
 		ply:ChatPrint("----------------")
 		ply:ChatPrint("[Role] | [Index]")
 
-		for _, v in pairs(ttt.GetSortedRoles()) do
+		for _, v in pairs(GetSortedRoles()) do
 			ply:ChatPrint(v.name .. " | " .. v.index)
 		end
 

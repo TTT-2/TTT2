@@ -100,7 +100,7 @@ function ScoreTeamBonus(scores, wintype)
 
 	for id, sc in pairs(scores) do
 		local team = sc.lt
-		local roleData = ttt.GetRoleByIndex(sc.lr)
+		local roleData = GetRoleByIndex(sc.lr)
 		local others = 0
 
 		for other, amount in pairs(dead) do
@@ -145,7 +145,7 @@ function KillsToPoints(score)
 	local sc = score.bonus - score.suicides + (score.deaths == 0 and 1 or 0)
 
 	for _, ev in ipairs(score.ev) do
-		local roleData = ttt.GetRoleByIndex(ev.r)
+		local roleData = GetRoleByIndex(ev.r)
 
 		if ev.t == ev.v then -- teamkill
 			sc = sc + roleData.scoreTeamKillsMultiplier
