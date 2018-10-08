@@ -55,6 +55,7 @@ function GM:Initialize()
 
 	self.BaseClass:Initialize()
 
+	hook.Run("TTT2Initialize")
 	hook.Run("PostInitialize")
 end
 

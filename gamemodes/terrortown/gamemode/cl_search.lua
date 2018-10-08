@@ -86,12 +86,12 @@ local TypeToMat = {
 }
 
 -- add role abbr of each role for icons
-local function TTT2FinishedInit()
+local function TTT2FinishedLoading()
 	for _, v in pairs(GetRoles()) do
 		TypeToMat.role[v.index] = v.abbr
 	end
 end
-hook.Add("TTT2FinishedInit", "updateTpTMat", TTT2FinishedInit)
+hook.Add("TTT2FinishedLoading", "updateTpTMat", TTT2FinishedLoading)
 
 -- Accessor for better fail handling
 local function IconForInfoType(t, data)
@@ -138,7 +138,7 @@ function PreprocSearch(raw)
 			search[t].text = T("search_role_" .. rd.abbr)
 			search[t].p = 2
 		elseif t == "team" then
-			search[t].text = T("search_team_" .. d) -- will be merged with role later
+			search[t].text = "Team: " .. d .. "." -- will be merged with role later
 		elseif t == "words" then
 			if d ~= "" then
 				-- only append "--" if there's no ending interpunction

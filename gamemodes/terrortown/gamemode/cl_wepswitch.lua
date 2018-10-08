@@ -44,7 +44,7 @@ local col_dark = {
 }
 
 -- update colors
-local function TTT2FinishedInit()
+local function TTT2FinishedLoading()
 	col_active.tip = {}
 	col_dark.tip = {}
 
@@ -53,7 +53,7 @@ local function TTT2FinishedInit()
 		col_dark.tip[v.index] = v.dkcolor
 	end
 end
-hook.Add("TTT2FinishedInit", "scoringUpdateColors", TTT2FinishedInit)
+hook.Add("TTT2FinishedLoading", "scoringUpdateColors", TTT2FinishedLoading)
 
 function WSWITCH:DrawBarBg(x, y, w, h, col)
 	local rx = round(x - 4)

@@ -168,19 +168,19 @@ end
 function InitCustomRole(name, roleData, conVarData)
 	conVarData = conVarData or {}
 
-	if not GetRoles()[name] then
+	if not ROLES[name] then
 		-- shared
 		if not roleData.notSelectable then
 			if conVarData.togglable then
 				CreateClientConVar("ttt_avoid_" .. roleData.name, "0", true, true)
 			end
 
-			CreateConVar("ttt_" .. roleData.name .. "_pct", tostring(conVarData.pct), {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
-			CreateConVar("ttt_" .. roleData.name .. "_max", tostring(conVarData.maximum), {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
-			CreateConVar("ttt_" .. roleData.name .. "_min_players", tostring(conVarData.minPlayers), {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
+			CreateConVar("ttt_" .. roleData.name .. "_pct", tostring(conVarData.pct or 1), {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
+			CreateConVar("ttt_" .. roleData.name .. "_max", tostring(conVarData.maximum or 1), {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
+			CreateConVar("ttt_" .. roleData.name .. "_min_players", tostring(conVarData.minPlayers or 1), {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
 
 			if conVarData.random then
-				CreateConVar("ttt_" .. roleData.name .. "_random", tostring(conVarData.random), {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
+				CreateConVar("ttt_" .. roleData.name .. "_random", tostring(conVarData.random or 100), {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
 			else
 				CreateConVar("ttt_" .. roleData.name .. "_random", "100", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
 			end
@@ -214,7 +214,20 @@ function InitCustomRole(name, roleData, conVarData)
 		roleData.index = GenerateNewRoleID()
 
 		-- set data
-		GetRoles()[name] = roleData
+		ROLES[name] = roleData
+
+		_G["ROLE_" .. string.upper(roleData.name)] = roleData.index
+		_G[string.upper(roleData.name)] = roleData
+
+		local plymeta = FindMetaTable("Player")
+		if plymeta then
+			-- e.g. IsJackal() will match each subrole of the jackal as well as the jackal as the baserole
+			plymeta["Is" .. roleData.name:gsub("^%l", string.upper)] = function(self)
+				local baserole, subrole = self:GetRole()
+
+				return roleData.baserole and subrole == roleData.index or baserole == roleData.index
+			end
+		end
 
 		print("[TTT2][ROLE] Added '" .. name .. "' Role (index: " .. roleData.index .. ")")
 	end
@@ -236,25 +249,6 @@ function SetBaseRole(roleData, baserole)
 	end
 
 	roleData.baserole = baserole
-end
-
-function SetupRoleGlobals()
-	for _, v in pairs(GetRoles()) do
-		if v ~= INNOCENT and v ~= TRAITOR and v ~= DETECTIVE then -- already set
-			_G["ROLE_" .. string.upper(v.name)] = v.index
-			_G[string.upper(v.name)] = v
-
-			local plymeta = FindMetaTable("Player")
-			if plymeta then
-				-- e.g. IsJackal() will match each subrole of the jackal as well as the jackal as the baserole
-				plymeta["Is" .. v.name:gsub("^%l", string.upper)] = function()
-					local baserole, subrole = plymeta:GetRole()
-
-					return v.baserole and subrole == v.index or baserole == v.index
-				end
-			end
-		end
-	end
 end
 
 -- if you add roles that can shop, modify DefaultEquipment at the end of this file

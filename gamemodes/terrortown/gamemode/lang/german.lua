@@ -837,8 +837,8 @@ L.ev_c4_disarm2 = "{player} hat beim Entschärfen des C4s von {owner} versagt"
 L.ev_credit = "{finder} fand {num} Credit(s) beim Leichnam von {player}"
 
 L.ev_start = "Die Runde hat begonnen"
-L.ev_win_traitor = "Die heimtückischen Verräter haben die Runde gewonnen!"
-L.ev_win_inno = "Die liebenswerten unschuldigen Terroristen haben die Runde gewonnen!"
+L.ev_win_traitors = "Die heimtückischen Verräter haben die Runde gewonnen!"
+L.ev_win_innocents = "Die liebenswerten unschuldigen Terroristen haben die Runde gewonnen!"
 L.ev_win_time = "Den Verrätern ist die Zeit ausgegangen und sie verloren!"
 
 --- Awards/highlights

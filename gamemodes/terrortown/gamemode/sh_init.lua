@@ -1,13 +1,11 @@
 -- This file contains all shared gamemode hooks needed when the gamemode initializes
 
-function GM:OnGamemodeLoaded()
+function GM:TTT2Initialize()
 	hook.Run("TTT2BaseRoleInit")
-
-	SetupRoleGlobals()
 
 	DefaultEquipment = GetDefaultEquipment()
 
-	hook.Run("TTT2FinishedInit")
+	hook.Run("TTT2FinishedLoading")
 end
 
 -- Create teams

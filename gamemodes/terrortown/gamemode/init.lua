@@ -181,6 +181,8 @@ function GM:Initialize()
 	MsgN("Trouble In Terrorist Town 2 gamemode initializing...")
 	ShowVersion()
 
+	hook.Run("TTT2Initialize")
+
 	-- Force friendly fire to be enabled. If it is off, we do not get lag compensation.
 	RunConsoleCommand("mp_friendlyfire", "1")
 
@@ -998,35 +1000,30 @@ function SelectRoles(plys, max_plys)
 
 	GAMEMODE.LastRole = GAMEMODE.LastRole or {}
 
-	local bTmp = false
-
-	if not max_plys then
-		max_plys = 0
-		bTmp = true
-	end
+	local tmp = {}
 
 	for _, v in ipairs(player.GetAll()) do
-		if IsValid(v) and not v:IsSpec() then -- everyone on the spec team is in specmode
-			if bTmp then
-				max_plys = max_plys + 1
+
+		-- everyone on the spec team is in specmode
+		if IsValid(v) and not v:IsSpec() and (not plys or table.HasValue(plys, v)) then
+			if not plys then
+				tmp[#tmp + 1] = v
 			end
 
-			if not plys or table.HasValue(plys, v) then
+			-- save previous role and sign up as possible traitor/detective
+			local r = GAMEMODE.LastRole[v:SteamID()] or v:GetSubRole() or ROLE_INNOCENT
 
-				-- save previous role and sign up as possible traitor/detective
-				local r = GAMEMODE.LastRole[v:SteamID()] or v:GetSubRole() or ROLE_INNOCENT
+			prev_roles[r][#prev_roles[r] + 1] = v
+			choices[#choices + 1] = v
 
-				prev_roles[r][#prev_roles[r] + 1] = v
-				choices[#choices + 1] = v
-
-				v:SetRole(ROLE_INNOCENT)
-			end
+			v:SetRole(ROLE_INNOCENT)
 		end
 	end
 
-	if max_plys < 2 then return end
+	plys = plys or tmp
+	max_plys = max_plys or #plys
 
-	plys = plys or player.GetAll()
+	if max_plys < 2 then return end
 
 	-- determine how many of each role we want
 	local traitor_count = GetEachRoleCount(max_plys, TRAITOR.name)
@@ -1073,9 +1070,9 @@ function SelectRoles(plys, max_plys)
 				end
 
 				if b then
-					local tmp = GetEachRoleCount(max_plys, v.name)
-					if tmp > 0 then
-						roleCount[v.index] = tmp
+					local tmp2 = GetEachRoleCount(max_plys, v.name)
+					if tmp2 > 0 then
+						roleCount[v.index] = tmp2
 						availableRoles[#availableRoles + 1] = v
 					end
 				end
@@ -1108,9 +1105,9 @@ function SelectRoles(plys, max_plys)
 			end
 
 			if b then
-				local tmp = GetEachRoleCount(choice_count, v.name)
-				if tmp > 0 then
-					roleCount[v.index] = tmp
+				local tmp2 = GetEachRoleCount(max_plys, v.name)
+				if tmp2 > 0 then
+					roleCount[v.index] = tmp2
 					availableRoles[#availableRoles + 1] = v
 				end
 			end
