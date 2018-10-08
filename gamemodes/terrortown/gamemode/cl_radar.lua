@@ -261,11 +261,9 @@ local function ReceiveRadarScan()
 	RADAR.enable = true
 	RADAR.endtime = CurTime() + RADAR.duration
 
-	local _func = function()
+	timer.Create("radartimeout", RADAR.duration + 1, 1, function()
 		RADAR:Timeout()
-	end
-
-	timer.Create("radartimeout", RADAR.duration + 1, 1, _func)
+	end)
 end
 net.Receive("TTT_Radar", ReceiveRadarScan)
 

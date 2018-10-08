@@ -320,10 +320,12 @@ function GM:PlayerSwitchFlashlight(ply, on)
 	-- add the flashlight "effect" here, and then deny the switch
 	-- this prevents the sound from playing, fixing the exploit
 	-- where weapon sound could be silenced using the flashlight sound
-	if on then
-		ply:AddEffects(EF_DIMLIGHT)
-	elseif ply:IsTerror() then
-		ply:RemoveEffects(EF_DIMLIGHT)
+	if not on or ply:IsTerror() then
+		if on then
+			ply:AddEffects(EF_DIMLIGHT)
+		else
+			ply:RemoveEffects(EF_DIMLIGHT)
+		end
 	end
 
 	return false

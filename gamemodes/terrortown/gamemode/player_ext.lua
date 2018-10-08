@@ -263,11 +263,10 @@ function plymeta:SendLastWords(dmginfo)
 
 	-- any longer than this and you're out of luck
 	local ply = self
-	local _func = function()
-		ply:ResetLastWords()
-	end
 
-	timer.Simple(2, _func)
+	timer.Simple(2, function()
+		ply:ResetLastWords()
+	end)
 end
 
 function plymeta:ResetViewRoll()

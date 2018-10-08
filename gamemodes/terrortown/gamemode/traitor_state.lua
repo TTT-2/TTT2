@@ -12,18 +12,18 @@ local function SendPlayerRoles()
 	end
 end
 
-function SendRoleListMessage(subrole, team, subrole_ids, ply_or_rf)
+function SendRoleListMessage(subrole, team, sids, ply_or_rf)
 	net.Start("TTT_RoleList")
 	net.WriteUInt(subrole, ROLE_BITS)
 	net.WriteString(team)
 
 	-- list contents
-	local num_ids = #subrole_ids
+	local num_ids = #sids
 
 	net.WriteUInt(num_ids, 8)
 
 	for i = 1, num_ids do
-		net.WriteUInt(subrole_ids[i] - 1, 7)
+		net.WriteUInt(sids[i] - 1, 7)
 	end
 
 	if ply_or_rf then
@@ -34,19 +34,19 @@ function SendRoleListMessage(subrole, team, subrole_ids, ply_or_rf)
 end
 
 function SendRoleList(subrole, ply_or_rf, pred)
-	local subrole_ids = {}
+	local team_ids = {}
 
 	for _, v in ipairs(player.GetAll()) do
 		if v:IsRole(subrole) and (not pred or (pred and pred(v))) then
 			local team = v:GetTeam()
 
-			subrole_ids[team] = subrole_ids[team] or {} -- create table if it does not exists
+			team_ids[team] = team_ids[team] or {} -- create table if it does not exists
 
-			table.insert(subrole_ids[team], v:EntIndex())
+			table.insert(team_ids[team], v:EntIndex())
 		end
 	end
 
-	for team, ids in pairs(subrole_ids) do
+	for team, ids in pairs(team_ids) do
 		SendRoleListMessage(subrole, team, ids, ply_or_rf)
 	end
 end
@@ -100,7 +100,13 @@ function SendFullStateUpdate()
 end
 
 function SendRoleReset(ply_or_rf)
-	SendRoleListMessage(ROLE_INNOCENT, TEAM_INNO, player.GetAll(), ply_or_rf)
+	local ids = {}
+
+	for _, ply in ipairs(player.GetAll()) do
+		table.insert(ids, ply:EntIndex())
+	end
+
+	SendRoleListMessage(ROLE_INNOCENT, TEAM_INNO, ids, ply_or_rf)
 end
 
 ---- Console commands

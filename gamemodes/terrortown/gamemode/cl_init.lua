@@ -449,10 +449,10 @@ function CheckIdle()
 			-- Even if players don't move their mouse, they might still walk
 			idle.pos = client:GetPos()
 			idle.t = CurTime()
-		elseif CurTime() > (idle.t + idle_limit) then
+		elseif CurTime() > idle.t + idle_limit then
 			RunConsoleCommand("say", "(AUTOMATED MESSAGE) I have been moved to the Spectator team because I was idle/AFK.")
 
-			local _func = function()
+			timer.Simple(0.3, function()
 				RunConsoleCommand("ttt_spectator_mode", 1)
 
 				net.Start("TTT_Spectate")
@@ -460,10 +460,8 @@ function CheckIdle()
 				net.SendToServer()
 
 				RunConsoleCommand("ttt_cl_idlepopup")
-			end
-
-			timer.Simple(0.3, _func)
-		elseif CurTime() > (idle.t + idle_limit * 0.5) then
+			end)
+		elseif CurTime() > idle.t + idle_limit * 0.5 then
 			-- will repeat
 			LANG.Msg("idle_warning")
 		end

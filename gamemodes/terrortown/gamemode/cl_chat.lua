@@ -229,11 +229,9 @@ function RADIO:ShowRadioCommands(state)
 		-- capture slot keys while we're open
 		self.Show = true
 
-		local _func = function()
+		timer.Create("radiocmdshow", 3, 1, function()
 			RADIO:ShowRadioCommands(false)
-		end
-
-		timer.Create("radiocmdshow", 3, 1, _func)
+		end)
 	end
 end
 

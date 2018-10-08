@@ -429,7 +429,7 @@ function CORPSE.Create(ply, attacker, dmginfo)
 	local wep = util.WeaponFromDamage(dmginfo)
 	rag.dmgwep = IsValid(wep) and wep:GetClass() or ""
 
-	rag.was_headshot = (ply.was_headshot and dmginfo:IsBulletDamage())
+	rag.was_headshot = ply.was_headshot and dmginfo:IsBulletDamage()
 	rag.time = CurTime()
 	rag.kills = table.Copy(ply.kills)
 	rag.killer_sample = GetKillerSample(ply, attacker, dmginfo)
@@ -468,11 +468,9 @@ function CORPSE.Create(ply, attacker, dmginfo)
 		-- next frame, after physics is happy for this ragdoll
 		local efn = ply.effect_fn
 
-		local _func = function()
+		timer.Simple(0, function()
 			efn(rag)
-		end
-
-		timer.Simple(0, _func)
+		end)
 	end
 
 	hook.Run("TTTOnCorpseCreated", rag, ply)

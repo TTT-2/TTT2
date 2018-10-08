@@ -196,11 +196,9 @@ function GM:PlayerLoadout(ply)
 		if not HasLoadoutWeapons(ply) then
 			MsgN("Could not spawn all loadout weapons for " .. ply:Nick() .. ", will retry.")
 
-			local _func = function()
+			timer.Create("lateloadout" .. ply:EntIndex(), 1, 0, function()
 				LateLoadout(ply:EntIndex())
-			end
-
-			timer.Create("lateloadout" .. ply:EntIndex(), 1, 0, _func)
+			end)
 		end
 	end
 end
@@ -329,13 +327,11 @@ local function DropActiveAmmo(ply)
 
 	box.AmmoAmount = amt
 
-	local _func = function()
+	timer.Simple(2, function()
 		if IsValid(box) then
 			box:SetOwner(nil)
 		end
-	end
-
-	timer.Simple(2, _func)
+	end)
 end
 concommand.Add("ttt_dropammo", DropActiveAmmo)
 
@@ -361,11 +357,9 @@ local function GiveEquipmentWeapon(sid, cls)
 
 	if not IsValid(w) or not ply:HasWeapon(cls) then
 		if not timer.Exists(tmr) then
-			local _func = function()
+			timer.Create(tmr, 1, 0, function()
 				GiveEquipmentWeapon(sid, cls) -- TODO why not using ply obj
-			end
-
-			timer.Create(tmr, 1, 0, _func)
+			end)
 		end
 
 		-- we will be retrying

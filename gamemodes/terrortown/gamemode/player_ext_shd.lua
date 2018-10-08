@@ -69,6 +69,10 @@ function plymeta:UpdateRole(subrole, team)
 end
 
 -- Role access
+function plymeta:GetInnocent()
+	return self:GetBaseRole() == ROLE_INNOCENT
+end
+
 -- basically traitor without special traitor roles (w/ teams)
 function plymeta:GetTraitor()
 	return self:GetBaseRole() == ROLE_TRAITOR
@@ -78,7 +82,7 @@ function plymeta:GetDetective()
 	return self:GetBaseRole() == ROLE_DETECTIVE
 end
 
-function plymeta:GetCustomRoleData()
+function plymeta:GetSubRoleData()
 	for _, v in pairs(GetRoles()) do
 		if v.index == self:GetSubRole() then
 			return v
@@ -98,6 +102,7 @@ function plymeta:GetBaseRoleData()
 	return INNOCENT
 end
 
+plymeta.IsInnocent = plymeta.GetInnocent
 plymeta.IsTraitor = plymeta.GetTraitor
 plymeta.IsDetective = plymeta.GetDetective
 
@@ -122,6 +127,10 @@ end
 
 function plymeta:IsActiveRole(subrole)
 	return self:IsActive() and self:IsRole(subrole)
+end
+
+function plymeta:IsActiveInnocent()
+	return self:IsActiveRole(ROLE_INNOCENT)
 end
 
 -- basically traitor without special traitor roles (w/ teams)

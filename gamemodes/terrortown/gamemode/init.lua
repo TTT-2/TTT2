@@ -571,11 +571,9 @@ function PrepareRound()
 
 	-- Mute for a second around traitor selection, to counter a dumb exploit
 	-- related to traitor's mics cutting off for a second when they're selected.
-	local _func = function()
+	timer.Create("selectmute", ptime - 1, 1, function()
 		MuteForRestart(true)
-	end
-
-	timer.Create("selectmute", ptime - 1, 1, _func)
+	end)
 
 	LANG.Msg("round_begintime", {num = ptime})
 
@@ -586,11 +584,9 @@ function PrepareRound()
 
 	-- Undo the roundrestart mute, though they will once again be muted for the
 	-- selectmute timer.
-	local _func2 = function()
+	timer.Create("restartmute", 1, 1, function()
 		MuteForRestart(false)
-	end
-
-	timer.Create("restartmute", 1, 1, _func2)
+	end)
 
 	net.Start("TTT_ClearClientState")
 	net.Broadcast()
@@ -771,11 +767,9 @@ function BeginRound()
 	StartWinChecks()
 	StartNameChangeChecks()
 
-	local _func = function()
+	timer.Create("selectmute", 1, 1, function()
 		MuteForRestart(false)
-	end
-
-	timer.Create("selectmute", 1, 1, _func)
+	end)
 
 	GAMEMODE.DamageLog = {}
 	GAMEMODE.RoundStartTime = CurTime()
@@ -865,11 +859,9 @@ function EndRound(result)
 	-- Piggyback on "round end" time global var to show end of phase timer
 	SetRoundEnd(CurTime() + ptime)
 
-	local _func = function()
+	timer.Create("restartmute", ptime - 1, 1, function()
 		MuteForRestart(true)
-	end
-
-	timer.Create("restartmute", ptime - 1, 1, _func)
+	end)
 
 	-- Stop checking for wins
 	StopWinChecks()
@@ -929,6 +921,7 @@ function GM:TTTCheckForWin()
 	end
 
 	local alive = {}
+	local checkedTeams = {}
 	local b = 0
 
 	for _, v in ipairs(player.GetAll()) do
@@ -1032,6 +1025,8 @@ function SelectRoles(plys, max_plys)
 	end
 
 	if max_plys < 2 then return end
+
+	plys = plys or player.GetAll()
 
 	-- determine how many of each role we want
 	local traitor_count = GetEachRoleCount(max_plys, TRAITOR.name)

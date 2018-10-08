@@ -41,8 +41,8 @@ function ScoreEvent(e, scores)
 		scores[aid] = scores[aid] or ScoreInit()
 
 		scores[vid].deaths = scores[vid].deaths + 1
-		scores[vid].lt = a.vic.t
-		scores[vid].lr = a.vic.r
+		scores[vid].lt = e.vic.t
+		scores[vid].lr = e.vic.r
 
 		if aid == vid then
 			scores[vid].suicides = scores[vid].suicides + 1
@@ -53,8 +53,8 @@ function ScoreEvent(e, scores)
 			eva.v = e.vic.t
 
 			scores[aid].ev[#scores[aid].ev] = eva
-			scores[aid].lt = a.att.t
-			scores[aid].lr = a.att.r
+			scores[aid].lt = e.att.t
+			scores[aid].lr = e.att.r
 		end
 	elseif e.id == EVENT_BODYFOUND then
 		local sid = e.sid
@@ -109,7 +109,7 @@ function ScoreTeamBonus(scores, wintype)
 			end
 		end
 
-		bonus[id] = alive[team] + math.ceil(others * (roleData.surviveBonus or 0))
+		bonus[id] = (alive[team] or 0) + math.ceil(others * (roleData.surviveBonus or 0))
 	end
 
 	-- running down the clock must never be beneficial for traitors

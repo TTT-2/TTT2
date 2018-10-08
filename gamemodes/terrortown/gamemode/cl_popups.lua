@@ -84,11 +84,9 @@ local function RoundStartPopup()
 
 	dframe:AlignBottom(10)
 
-	local _func = function()
+	timer.Simple(startshowtime:GetInt(), function()
 		dframe:Remove()
-	end
-
-	timer.Simple(startshowtime:GetInt(), _func)
+	end)
 end
 concommand.Add("ttt_cl_startpopup", RoundStartPopup)
 

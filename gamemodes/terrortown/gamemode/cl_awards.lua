@@ -35,7 +35,7 @@ local function FindHighest(tbl)
 	return m_id, m_num
 end
 
-function AWARDS.FirstSuicide(events, scores, players, traitors)
+function FirstSuicide(events, scores, players, traitors)
 	local fs
 	local fnum = 0
 
@@ -68,8 +68,9 @@ function AWARDS.FirstSuicide(events, scores, players, traitors)
 		return award
 	end
 end
+AWARDS.FirstSuicide = FirstSuicide
 
-function AWARDS.ExplosiveGrant(events, scores, players, traitors)
+function ExplosiveGrant(events, scores, players, traitors)
 	local bombers = {}
 
 	for _, e in pairs(events) do
@@ -98,16 +99,18 @@ function AWARDS.ExplosiveGrant(events, scores, players, traitors)
 		end
 	end
 end
+AWARDS.ExplosiveGrant = ExplosiveGrant
 
-function AWARDS.ExplodedSelf(events, scores, players, traitors)
+function ExplodedSelf(events, scores, players, traitors)
 	for _, e in pairs(events) do
 		if e.id == EVENT_KILL and is_dmg(e.dmg.t, DMG_BLAST) and e.att.sid == e.vic.sid then
 			return {title = T("aw_exp2_title"), text = T("aw_exp2_text"), nick = e.vic.ni, priority = math.random(1, 4)}
 		end
 	end
 end
+AWARDS.ExplodedSelf = ExplodedSelf
 
-function AWARDS.FirstBlood(events, scores, players, traitors)
+function FirstBlood(events, scores, players, traitors)
 	for _, e in pairs(events) do
 		if e.id == EVENT_KILL and e.att.sid ~= e.vic.sid and e.att.sid ~= -1 then
 			local award = {nick = e.att.ni}
@@ -142,8 +145,9 @@ function AWARDS.FirstBlood(events, scores, players, traitors)
 		end
 	end
 end
+AWARDS.FirstBlood = FirstBlood
 
-function AWARDS.AllKills(events, scores, players, traitors)
+function AllKills(events, scores, players, traitors)
 	-- see if there is one killer responsible for all kills of either team
 
 	local killed_traitors = {}
@@ -183,8 +187,9 @@ function AWARDS.AllKills(events, scores, players, traitors)
 		end
 	end
 end
+AWARDS.AllKills = AllKills
 
-function AWARDS.FallDeath(events, scores, players, traitors)
+function FallDeath(events, scores, players, traitors)
 	for _, e in pairs(events) do
 		if e.id == EVENT_KILL and is_dmg(e.dmg.t, DMG_FALL) then
 			if e.att.ni ~= "" then
@@ -195,16 +200,18 @@ function AWARDS.FallDeath(events, scores, players, traitors)
 		end
 	end
 end
+AWARDS.FallDeath = FallDeath
 
-function AWARDS.FallKill(events, scores, players, traitors)
+function FallKill(events, scores, players, traitors)
 	for _, e in pairs(events) do
 		if e.id == EVENT_KILL and is_dmg(e.dmg.t, DMG_CRUSH) and is_dmg(e.dmg.t, DMG_PHYSGUN) and e.att.ni ~= "" then
 			return {title = T("aw_fal3_title"), nick = e.att.ni, text = T("aw_fal3_text"), priority = math.random(10, 15)}
 		end
 	end
 end
+AWARDS.FallKill = FallKill
 
-function AWARDS.Headshots(events, scores, players, traitors)
+function Headshots(events, scores, players, traitors)
 	local hs = {}
 
 	for _, e in pairs(events) do
@@ -241,8 +248,9 @@ function AWARDS.Headshots(events, scores, players, traitors)
 
 	return award
 end
+AWARDS.Headshots = Headshots
 
-function AWARDS.UsedAmmoMost(events, ammotype)
+function UsedAmmoMost(events, ammotype)
 	local user = {}
 
 	for _, e in pairs(events) do
@@ -259,8 +267,9 @@ function AWARDS.UsedAmmoMost(events, ammotype)
 
 	return {sid = m_id, kills = m_num}
 end
+AWARDS.UsedAmmoMost = UsedAmmoMost
 
-function AWARDS.CrowbarUser(events, scores, players, traitors)
+function CrowbarUser(events, scores, players, traitors)
 	local most = UsedAmmoMost(events, AMMO_CROWBAR)
 
 	if not most then return end
@@ -285,8 +294,9 @@ function AWARDS.CrowbarUser(events, scores, players, traitors)
 
 	return award
 end
+AWARDS.CrowbarUser = CrowbarUser
 
-function AWARDS.PistolUser(events, scores, players, traitors)
+function PistolUser(events, scores, players, traitors)
 	local most = UsedAmmoMost(events, AMMO_PISTOL)
 
 	if not most then return end
@@ -311,8 +321,9 @@ function AWARDS.PistolUser(events, scores, players, traitors)
 
 	return award
 end
+AWARDS.PistolUser = PistolUser
 
-function AWARDS.ShotgunUser(events, scores, players, traitors)
+function ShotgunUser(events, scores, players, traitors)
 	local most = UsedAmmoMost(events, AMMO_SHOTGUN)
 
 	if not most then return end
@@ -337,8 +348,9 @@ function AWARDS.ShotgunUser(events, scores, players, traitors)
 
 	return award
 end
+AWARDS.ShotgunUser = ShotgunUser
 
-function AWARDS.RifleUser(events, scores, players, traitors)
+function RifleUser(events, scores, players, traitors)
 	local most = UsedAmmoMost(events, AMMO_RIFLE)
 
 	if not most then return end
@@ -363,8 +375,9 @@ function AWARDS.RifleUser(events, scores, players, traitors)
 
 	return award
 end
+AWARDS.RifleUser = RifleUser
 
-function AWARDS.DeagleUser(events, scores, players, traitors)
+function RDeagleUser(events, scores, players, traitors)
 	local most = UsedAmmoMost(events, AMMO_DEAGLE)
 
 	if not most then return end
@@ -390,8 +403,9 @@ function AWARDS.DeagleUser(events, scores, players, traitors)
 
 	return award
 end
+AWARDS.DeagleUser = DeagleUser
 
-function AWARDS.MAC10User(events, scores, players, traitors)
+function MAC10User(events, scores, players, traitors)
 	local most = UsedAmmoMost(events, AMMO_MAC10)
 
 	if not most then return end
@@ -416,8 +430,9 @@ function AWARDS.MAC10User(events, scores, players, traitors)
 
 	return award
 end
+AWARDS.MAC10User = MAC10User
 
-function AWARDS.SilencedPistolUser(events, scores, players, traitors)
+function SilencedPistolUser(events, scores, players, traitors)
 	local most = UsedAmmoMost(events, AMMO_SIPISTOL)
 
 	if not most then return end
@@ -441,8 +456,9 @@ function AWARDS.SilencedPistolUser(events, scores, players, traitors)
 
 	return award
 end
+AWARDS.SilencedPistolUser = SilencedPistolUser
 
-function AWARDS.KnifeUser(events, scores, players, traitors)
+function KnifeUser(events, scores, players, traitors)
 	local most = UsedAmmoMost(events, AMMO_KNIFE)
 
 	if not most then return end
@@ -476,8 +492,9 @@ function AWARDS.KnifeUser(events, scores, players, traitors)
 
 	return award
 end
+AWARDS.KnifeUser = KnifeUser
 
-function AWARDS.FlareUser(events, scores, players, traitors)
+function FlareUser(events, scores, players, traitors)
 	local most = UsedAmmoMost(events, AMMO_FLARE)
 
 	if not most then return end
@@ -501,8 +518,9 @@ function AWARDS.FlareUser(events, scores, players, traitors)
 
 	return award
 end
+AWARDS.FlareUser = FlareUser
 
-function AWARDS.M249User(events, scores, players, traitors)
+function M249User(events, scores, players, traitors)
 	local most = UsedAmmoMost(events, AMMO_M249)
 
 	if not most then return end
@@ -526,8 +544,9 @@ function AWARDS.M249User(events, scores, players, traitors)
 
 	return award
 end
+AWARDS.M249User = M249User
 
-function AWARDS.M16User(events, scores, players, traitors)
+function M16User(events, scores, players, traitors)
 	local most = UsedAmmoMost(events, AMMO_M16)
 
 	if not most then return end
@@ -551,8 +570,9 @@ function AWARDS.M16User(events, scores, players, traitors)
 
 	return award
 end
+AWARDS.M16User = M16User
 
-function AWARDS.TeamKiller(events, scores, players, traitors)
+function TeamKiller(events, scores, players, traitors)
 	local tker
 	local tktbl = {}
 	local pct, tka = 0, 0
@@ -621,8 +641,9 @@ function AWARDS.TeamKiller(events, scores, players, traitors)
 
 	return award
 end
+AWARDS.TeamKiller = TeamKiller
 
-function AWARDS.Burner(events, scores, players, traitors)
+function Burner(events, scores, players, traitors)
 	local brn = {}
 
 	for _, e in pairs(events) do
@@ -660,8 +681,9 @@ function AWARDS.Burner(events, scores, players, traitors)
 
 	return award
 end
+AWARDS.Burner = Burner
 
-function AWARDS.Coroner(events, scores, players, traitors)
+function Coroner(events, scores, players, traitors)
 	local finders = {}
 
 	for _, e in pairs(events) do
@@ -698,8 +720,9 @@ function AWARDS.Coroner(events, scores, players, traitors)
 
 	return award
 end
+AWARDS.Coroner = Coroner
 
-function AWARDS.CreditFound(events, scores, players, traitors)
+function CreditFound(events, scores, players, traitors)
 	local finders = {}
 
 	for _, e in pairs(events) do
@@ -730,8 +753,9 @@ function AWARDS.CreditFound(events, scores, players, traitors)
 
 	return award
 end
+AWARDS.CreditFound = CreditFound
 
-function AWARDS.TimeOfDeath(events, scores, players, traitors)
+function TimeOfDeath(events, scores, players, traitors)
 	local near = 10
 	local time_near_start = CLSCORE.StartTime + near
 
@@ -762,3 +786,4 @@ function AWARDS.TimeOfDeath(events, scores, players, traitors)
 		end
 	end
 end
+AWARDS.TimeOfDeath = TimeOfDeath

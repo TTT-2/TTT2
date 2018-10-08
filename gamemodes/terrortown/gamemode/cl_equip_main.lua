@@ -163,7 +163,7 @@ local function PreqLabels(parent, x, y)
 		pnl:SetFont("DermaLarge")
 	end
 
-	local _func = function(selected)
+	return function(selected)
 		local allow = true
 
 		for _, pnl in pairs(tbl) do
@@ -182,8 +182,6 @@ local function PreqLabels(parent, x, y)
 
 		return allow
 	end
-
-	return _func
 end
 
 -- quick, very basic override of DPanelSelect

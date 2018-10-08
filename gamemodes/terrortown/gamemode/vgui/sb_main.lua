@@ -12,15 +12,14 @@ local floor = math.floor
 local GetTranslation = LANG.GetTranslation
 local GetPTranslation = LANG.GetParamTranslation
 
-local PANEL = {}
-
-local logo = surface.GetTextureID("vgui/ttt/score_logo")
+include("sb_team.lua")
 
 -- TODO add Team!
 CreateClientConVar("ttt_scoreboard_sorting", "name", true, false, "name | role | karma | score | deaths | ping")
 CreateClientConVar("ttt_scoreboard_ascending", "1", true, false, "Should scoreboard ordering be in ascending order")
 
-include("sb_team.lua")
+local PANEL = {}
+local logo = surface.GetTextureID("vgui/ttt/score_logo")
 
 surface.CreateFont("cool_small", {
 		font = "coolvetica",
@@ -180,6 +179,7 @@ function PANEL:Init()
 
 	-- the various score column headers
 	self.cols = {}
+
 	self:AddColumn(GetTranslation("sb_ping"), nil, nil, "ping")
 	self:AddColumn(GetTranslation("sb_deaths"), nil, nil, "deaths")
 	self:AddColumn(GetTranslation("sb_score"), nil, nil, "score")
@@ -202,29 +202,27 @@ function PANEL:Init()
 	self:StartUpdateTimer()
 end
 
-local function _func(self_, lbl)
-	surface.PlaySound("ui/buttonclick.wav")
-
-	local sorting = GetConVar("ttt_scoreboard_sorting")
-	local ascending = GetConVar("ttt_scoreboard_ascending")
-
-	if lbl.HeadingIdentifier == sorting:GetString() then
-		ascending:SetBool(not ascending:GetBool())
-	else
-		sorting:SetString(lbl.HeadingIdentifier)
-		ascending:SetBool(true)
-	end
-
-	for _, scoregroup in pairs(self_.ply_groups) do
-		scoregroup:UpdateSortCache()
-		scoregroup:InvalidateLayout()
-	end
-
-	self_:ApplySchemeSettings()
-end
-
 local function sort_header_handler(self_, lbl)
-	return _func(self_, lbl)
+	return function()
+		surface.PlaySound("ui/buttonclick.wav")
+
+		local sorting = GetConVar("ttt_scoreboard_sorting")
+		local ascending = GetConVar("ttt_scoreboard_ascending")
+
+		if lbl.HeadingIdentifier == sorting:GetString() then
+			ascending:SetBool(not ascending:GetBool())
+		else
+			sorting:SetString(lbl.HeadingIdentifier)
+			ascending:SetBool(true)
+		end
+
+		for _, scoregroup in pairs(self_.ply_groups) do
+			scoregroup:UpdateSortCache()
+			scoregroup:InvalidateLayout()
+		end
+
+		self_:ApplySchemeSettings()
+	end
 end
 
 -- For headings only the label parameter is relevant, second param is included for

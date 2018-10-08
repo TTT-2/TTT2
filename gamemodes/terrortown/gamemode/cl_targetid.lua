@@ -56,7 +56,7 @@ function GM:PostDrawTranslucentRenderables()
 	local client = LocalPlayer()
 	local plys = GetPlayers()
 
-	if not client:IsInnocent() and client:IsActive() then
+	if client:IsActive() and not client:IsInnocent() then
 		dir = (client:GetForward() * -1)
 
 		for i = 1, #plys do

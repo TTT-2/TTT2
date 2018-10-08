@@ -367,7 +367,7 @@ local function ShowSearchScreen(search_raw)
 	dtext:SetText("...")
 
 	-- buttons
-	local by = rh - bh - (m * 0.5)
+	local by = rh - bh - m * 0.5
 
 	local dconfirm = vgui.Create("DButton", dcont)
 	dconfirm:SetPos(m, by)
@@ -415,14 +415,14 @@ local function ShowSearchScreen(search_raw)
 
 	-- Create table of SimpleIcons, each standing for a piece of search
 	-- information.
-	local start_icon = nil
+	local start_icon
 
 	for t, info in SortedPairsByMemberValue(search, "p") do
-		local ic = nil
+		local ic
 
 		-- Certain items need a special icon conveying additional information
 		if t == "nick" then
-			local avply = IsValid(search_raw.owner) and search_raw.owner
+			local avply = IsValid(search_raw.owner) and search_raw.owner or nil
 
 			ic = vgui.Create("SimpleIconAvatar", dlist)
 			ic:SetPlayer(avply)
@@ -542,7 +542,7 @@ local function TTT_RagdollSearch()
 	-- last words
 	--
 	local words = net.ReadString()
-	search.words = (words ~= "") and words
+	search.words = (words ~= "") and words or nil
 
 	hook.Call("TTTBodySearchEquipment", nil, search, eq)
 

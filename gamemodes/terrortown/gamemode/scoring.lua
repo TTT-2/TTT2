@@ -185,7 +185,17 @@ function SCORE:ApplyEventLogScores(wintype)
 		if ply and ply:ShouldScore() then
 			ply:AddFrags(KillsToPoints(s))
 			ply:AddFrags(bonus[sid])
-			victim:AddDeaths(s.deaths)
+		end
+	end
+
+	-- count deaths
+	for _, e in pairs(self.Events) do
+		if e.id == EVENT_KILL then
+			local victim = player.GetBySteamID(e.vic.sid)
+
+			if IsValid(victim) and victim:ShouldScore() then
+				victim:AddDeaths(1)
+			end
 		end
 	end
 end

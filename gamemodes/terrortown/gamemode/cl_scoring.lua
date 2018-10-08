@@ -495,11 +495,9 @@ function CLSCORE:ClearPanel()
 
 		local pnl = self.Panel
 
-		local _func = function()
+		timer.Simple(0, function()
 			pnl:Remove()
-		end
-
-		timer.Simple(0, _func)
+		end)
 	end
 end
 
