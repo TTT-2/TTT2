@@ -9,6 +9,8 @@ GM.Version = "0.3.0b"
 
 GM.Customized = true
 
+TTT2 = true -- identifier for TTT2. Just use "if TTT2 then ... end"
+
 -- Round status consts
 ROUND_WAIT = 1
 ROUND_PREP = 2
@@ -305,6 +307,13 @@ function GetStartingCredits(abbr)
 	end
 
 	return ConVarExists("ttt_" .. abbr .. "_credits_starting") and GetConVar("ttt_" .. abbr .. "_credits_starting"):GetInt() or 0
+end
+
+function IsShoppingRole(subrole)
+	local roleData = GetRoleByIndex(subrole)
+	local shopFallback = GetConVar("ttt_" .. roleData.abbr .. "_shop_fallback"):GetString()
+
+	return shopFallback ~= SHOP_DISABLED
 end
 
 function GetShopRoles()
