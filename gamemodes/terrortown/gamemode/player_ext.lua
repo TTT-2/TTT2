@@ -64,7 +64,6 @@ end
 function plymeta:SetDefaultCredits()
 	if self:IsShopper() then
 		local rd = self:GetSubRoleData()
-		if rd.preventDefaultCredits then return end
 
 		if self:HasTeam(TEAM_TRAITOR) then
 			local c = (ConVarExists("ttt_credits_starting") and GetConVar("ttt_credits_starting"):GetInt() or 0)
