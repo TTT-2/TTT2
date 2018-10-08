@@ -988,6 +988,98 @@ local function GetEachRoleCount(ply_count, role_type)
 	return role_count
 end
 
+-- TODO integrate GetSelectableRoles into SelectRoles
+function GetSelectableRoles(plys, max_plys)
+	local selectableRoles = {}
+	selectableRoles[INNOCENT] = -1
+
+	local choices = {}
+	local prev_roles = {}
+
+	for _, v in pairs(GetRoles()) do
+		if not v.notSelectable then -- can't be selected in the beginning, e.g. important for Sidekick role
+			prev_roles[v.index] = {}
+		end
+	end
+
+	GAMEMODE.LastRole = GAMEMODE.LastRole or {}
+
+	local tmp = {}
+
+	for _, v in ipairs(player.GetAll()) do
+
+		-- everyone on the spec team is in specmode
+		if IsValid(v) and not v:IsSpec() and (not plys or table.HasValue(plys, v)) then
+			if not plys then
+				tmp[#tmp + 1] = v
+			end
+
+			-- save previous role and sign up as possible traitor/detective
+			local r = GAMEMODE.LastRole[v:SteamID()] or v:GetSubRole() or ROLE_INNOCENT
+
+			prev_roles[r][#prev_roles[r] + 1] = v
+			choices[#choices + 1] = v
+		end
+	end
+
+	plys = plys or tmp
+	max_plys = max_plys or #plys
+
+	if max_plys < 2 then return end
+
+	-- determine how many of each role we want
+	selectableRoles[TRAITOR] = GetEachRoleCount(max_plys, TRAITOR.name)
+
+	local newRolesEnabled = GetConVar("ttt_newroles_enabled"):GetBool()
+	if newRolesEnabled then
+
+		-- now upgrade traitors if there are other traitor roles
+		for _, v in pairs(GetRoles()) do
+			if not v.notSelectable and v.defaultTeam == TEAM_TRAITOR and v ~= TRAITOR and GetConVar("ttt_" .. v.name .. "_enabled"):GetBool() then
+				strTmp = "ttt_" .. v.name .. "_random"
+
+				local b = true
+				local r = (ConVarExists(strTmp) and GetConVar(strTmp):GetInt()) or 0
+
+				if r > 0 and r < 100 then
+					b = math.random(1, 100) <= r
+				end
+
+				if b then
+					local tmp2 = GetEachRoleCount(max_plys, v.name)
+					if tmp2 > 0 then
+						selectableRoles[v] = tmp2
+					end
+				end
+			end
+		end
+	end
+
+	-- now select detectives, explicitly choosing from players who did not get
+	-- traitor, so becoming detective does not mean you lost a chance to be
+	-- traitor
+	local tbl = newRolesEnabled and GetRoles() or {DETECTIVE}
+	for _, v in pairs(tbl) do
+		if not v.notSelectable and v ~= INNOCENT and v.defaultTeam ~= TEAM_TRAITOR and GetConVar("ttt_" .. v.name .. "_enabled"):GetBool() then
+			strTmp = "ttt_" .. v.name .. "_random"
+
+			local b = true
+			local r = (ConVarExists(strTmp) and GetConVar(strTmp):GetInt()) or 0
+
+			if r > 0 and r < 100 then
+				b = math.random(1, 100) <= r
+			end
+
+			if b then
+				local tmp2 = GetEachRoleCount(max_plys, v.name)
+				if tmp2 > 0 then
+					selectableRoles[v] = tmp2
+				end
+			end
+		end
+	end
+end
+
 function SelectRoles(plys, max_plys)
 	local choices = {}
 	local prev_roles = {}

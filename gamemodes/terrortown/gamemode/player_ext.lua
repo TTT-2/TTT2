@@ -391,3 +391,93 @@ end
 function plymeta:GetAvoidRole(role)
 	return self:GetInfoNum("ttt_avoid_" .. GetRoleByIndex(role).name, 0) > 0
 end
+
+function plymeta:CanSelectRole(roleData, choice_count, role_count)
+	local min_karmas = (ConVarExists("ttt_" .. roleData.name .. "_karma_min") and GetConVar("ttt_" .. roleData.name .. "_karma_min"):GetInt()) or 0
+
+	return (
+		choice_count <= role_count
+		or self:GetBaseKarma() > min_karmas and GAMEMODE.LastRole[self:SteamID()] == ROLE_INNOCENT
+		or math.random(1, 3) == 2
+	) and (choice_count <= role_count or not self:GetAvoidRole(roleData.index))
+end
+
+--------------------------------------------------
+--			   MODIFIED EXTERN CODE
+--------------------------------------------------
+-- Code is basically from GameFreak's SecondChance
+
+local function FindCorpse(ply)
+	for _, ent in ipairs(ents.FindByClass("prop_ragdoll")) do
+		if ent.uqid == ply:UniqueID() and IsValid(ent) then
+			return ent or false
+		end
+	end
+end
+
+local Positions = {}
+
+-- Populate Around Player
+for i = 0, 360, 22.5 do
+	table.insert(Positions, Vector(math.cos(i), math.sin(i), 0))
+end
+
+table.insert(Positions, Vector(0, 0, 1)) -- Populate Above Player
+
+local function FindCorpsePosition(corpse)
+	local size = Vector(32, 32, 72)
+	local startPos = corpse:GetPos() + Vector(0, 0, size.z * 0.5)
+	local len = #Positions
+
+	for i = 1, len do
+		local v = Positions[i]
+		local pos = startPos + v * size * 1.5
+
+		local tr = {}
+		tr.start = pos
+		tr.endpos = pos
+		tr.mins = size * -0.5
+		tr.maxs = size * 0.5
+
+		local trace = util.TraceHull(tr)
+
+		if not trace.Hit then
+			return pos - Vector(0, 0, size.z * 0.5)
+		end
+	end
+
+	return false
+end
+
+function plymeta:Revive(delay)
+	timer.Create("TTT2RevivePlayer" .. self:EntIndex(), delay, 1, function()
+		local corpse = FindCorpse(self)
+
+		if not IsValid(corpse) or corpse:IsOnFire() then
+			timer.Remove("TTT2RevivePlayer" .. self:EntIndex())
+
+			return
+		end
+
+		if corpse then
+			local spawnPos = FindCorpsePosition(corpse)
+
+			if not spawnPos then return end
+
+			self:SpawnForRound(true)
+			self:SetPos(spawnPos)
+			self:SetEyeAngles(Angle(0, corpse:GetAngles().y, 0))
+		else
+			self:SpawnForRound(true)
+		end
+
+		self:SetMaxHealth(100)
+
+		local credits = CORPSE.GetCredits(corpse, 0)
+
+		self:SetCredits(credits)
+		corpse:Remove()
+
+		DamageLog("TTT2Revive: " .. self:Nick() .. " has been respawned.")
+	end)
+end
