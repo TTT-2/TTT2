@@ -5,7 +5,7 @@ GM.Author = "Bad King Urgrain && Alf21"
 GM.Email = "4lf-mueller@gmx.de"
 GM.Website = "ttt.badking.net, ttt2.informaskill.de"
 -- Date of latest changes (YYYY-MM-DD)
-GM.Version = "0.3.0b"
+GM.Version = "0.3.1b"
 
 GM.Customized = true
 
@@ -74,6 +74,9 @@ TRAITOR_EQUIPMENT = {
 TEAM_INNO = "innocents"
 TEAM_TRAITOR = "traitors"
 
+-- never use this as a team, its just a const to check something
+TEAM_NOCHANGE = "nochange"
+
 -- max network bits to send roles numbers
 ROLE_BITS = 5
 
@@ -84,9 +87,18 @@ ROLE_TRAITOR = ROLE_TRAITOR or 1
 ROLE_DETECTIVE = ROLE_DETECTIVE or 2
 ROLE_NONE = ROLE_NONE or ROLE_INNOCENT
 
+-- TEAM_ARRAY
+TEAMS = {
+	TEAM_INNO = {
+		icon = "vgui/ttt/icon_inno"
+	},
+	TEAM_TRAITOR = {
+		icon = "vgui/ttt/icon_traitor"
+	}
+}
+
 -- ROLE_ARRAY
 -- need to have a team to be able to win as well as to receive karma
--- IMPORTANT: If adding traitor roles: enable 'shop' !
 -- just the following roles should be 'buildin' = true
 ROLES = {}
 
@@ -149,6 +161,16 @@ SHOP_UNSET = "UNSET"
 CreateConVar("ttt_" .. INNOCENT.abbr .. "_shop_fallback", SHOP_DISABLED, {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
 CreateConVar("ttt_" .. TRAITOR.abbr .. "_shop_fallback", SHOP_UNSET, {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
 CreateConVar("ttt_" .. DETECTIVE.abbr .. "_shop_fallback", SHOP_UNSET, {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
+
+function InitCustomTeam(name, icon_path) -- creates global var "TEAM_[name]" and other required things
+	local teamname = string.lower(name) .. "s"
+
+	_G["TEAM_" .. name] = teamname
+
+	TEAMS[teamname] = {
+		icon = icon_path or "vgui/ttt/icon_id"
+	}
+end
 
 function GetRoles()
 	return ROLES
@@ -232,12 +254,11 @@ function InitCustomRole(name, roleData, conVarData)
 		print("[TTT2][ROLE] Added '" .. name .. "' Role (index: " .. roleData.index .. ")")
 	end
 end
+
 -- usage: inside of e.g. this hook: hook.Add("TTT2BaseRoleInit", "TTT2ConnectBaseRole" .. baserole .. "With_" .. roleData.name, ...)
 function SetBaseRole(roleData, baserole)
 	if roleData.baserole then
 		error("ERROR: BaseRole of " .. roleData.name .. " already set (" .. roleData.baserole .. ")!")
-
-		return
 	else
 		local br = GetRoleByIndex(baserole)
 
@@ -246,9 +267,10 @@ function SetBaseRole(roleData, baserole)
 
 			return
 		end
-	end
 
-	roleData.baserole = baserole
+		roleData.baserole = baserole
+		roleData.defaultTeam = br.defaultTeam
+	end
 end
 
 -- if you add roles that can shop, modify DefaultEquipment at the end of this file
@@ -304,6 +326,10 @@ function GetStartingCredits(abbr)
 end
 
 function IsShoppingRole(subrole)
+	if subrole == ROLE_INNOCENT then
+		return false
+	end
+
 	local roleData = GetRoleByIndex(subrole)
 	local shopFallback = GetConVar("ttt_" .. roleData.abbr .. "_shop_fallback"):GetString()
 
@@ -330,10 +356,6 @@ function GetShopRoles()
 	return shopRoles
 end
 
-function IsWinRole(roleData)
-	return not roleData.preventWin and roleData.defaultTeam
-end
-
 function IsBaseRole(roleData)
 	return not roleData.baserole
 end
@@ -358,7 +380,7 @@ end
 
 function GetDefaultTeamRole(team)
 	for _, v in pairs(GetRoles()) do
-		if not v.baserole and v.defaultTeam == team then
+		if not v.baserole and v.defaultTeam and v.defaultTeam == team then
 			return v
 		end
 	end
@@ -386,7 +408,7 @@ function GetWinTeams()
 	local winTeams = {}
 
 	for _, v in pairs(GetRoles()) do
-		if not table.HasValue(winTeams, v.defaultTeam) and IsWinRole(v) then
+		if v.defaultTeam and not table.HasValue(winTeams, v.defaultTeam) and not v.preventWin then
 			table.insert(winTeams, v.defaultTeam)
 		end
 	end
@@ -398,7 +420,7 @@ function GetAvailableTeams()
 	local availableTeams = {}
 
 	for _, v in pairs(GetRoles()) do
-		if not table.HasValue(availableTeams, v.defaultTeam) then
+		if v.defaultTeam and not table.HasValue(availableTeams, v.defaultTeam) then
 			availableTeams[#availableTeams + 1] = v.defaultTeam
 		end
 	end
@@ -628,15 +650,15 @@ function SWEPIsBuyable(wepCls)
 	if ConVarExists(name) then
 		local i = GetConVar(name):GetInt() or 0
 
-		if i == 0 then
-			return false
+		if i < 2 then
+			return true
 		end
 
 		local choices = {}
 
 		for _, v in ipairs(player.GetAll()) do
-			-- everyone on the spec team is in specmode
-			if IsValid(v) and not v:IsSpec() then
+			-- everyone on the forcespec team is in specmode
+			if IsValid(v) and not v:GetForceSpec() then
 				table.insert(choices, v)
 			end
 		end
@@ -656,7 +678,7 @@ function RegisterNormalWeapon(wep)
 		tbl.value = tostring(wep.MinPlayers)
 		tbl.flags = {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE}
 		tbl.slider = true
-		tbl.desc = "MinPlayers"
+		tbl.desc = "Available if there are more than ... players"
 		tbl.max = 100
 
 		SWEPAddConVar(wep, tbl)

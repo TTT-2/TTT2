@@ -449,7 +449,7 @@ local function FindCorpsePosition(corpse)
 	return false
 end
 
-function plymeta:Revive(delay)
+function plymeta:Revive(delay, fn)
 	timer.Create("TTT2RevivePlayer" .. self:EntIndex(), delay, 1, function()
 		local corpse = FindCorpse(self)
 
@@ -479,5 +479,9 @@ function plymeta:Revive(delay)
 		corpse:Remove()
 
 		DamageLog("TTT2Revive: " .. self:Nick() .. " has been respawned.")
+
+		if fn then
+			fn(self)
+		end
 	end)
 end

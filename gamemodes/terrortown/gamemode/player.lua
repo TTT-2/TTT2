@@ -317,6 +317,8 @@ function GM:PlayerSwitchFlashlight(ply, on)
 		return false
 	end
 
+	print("DEBUG::TTT2::PlayerSwitchFlashlight: ply:IsTerror() = " .. (ply:IsTerror() and "true" or "false") .. ", on = " .. (on and "true" or "false"))
+
 	-- add the flashlight "effect" here, and then deny the switch
 	-- this prevents the sound from playing, fixing the exploit
 	-- where weapon sound could be silenced using the flashlight sound

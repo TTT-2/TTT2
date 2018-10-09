@@ -32,7 +32,7 @@ function plymeta:GetRole()
 end
 
 -- ply:UpdateTeam(team) should never be used BEFORE this function
-function plymeta:SetRole(subrole)
+function plymeta:SetRole(subrole, team)
 	local rd = GetRoleByIndex(subrole)
 	local baserole = subrole
 
@@ -43,7 +43,13 @@ function plymeta:SetRole(subrole)
 	self.role = baserole
 	self.subrole = subrole
 
-	self:UpdateTeam(GetRoleByIndex(subrole).defaultTeam)
+	if team then
+		if team ~= TEAM_NOCHANGE then
+			self:UpdateTeam(team)
+		end
+	elseif rd.defaultTeam then
+		self:UpdateTeam(rd.defaultTeam)
+	end
 end
 
 function plymeta:GetTeam()
@@ -63,7 +69,7 @@ function plymeta:IsInTeam(ply)
 end
 
 function plymeta:UpdateRole(subrole, team)
-	self:SetRole(subrole)
+	self:SetRole(subrole, team)
 
 	hook.Run("TTT2RoleTypeSet", self)
 end
@@ -147,12 +153,7 @@ function plymeta:IsActiveSpecial()
 end
 
 function plymeta:IsShopper()
-	if not self:IsSpecial() then
-		return false
-	end
-
-	local shopFallback = GetConVar("ttt_" .. self:GetSubRoleData().abbr .. "_shop_fallback"):GetString()
-	return shopFallback ~= SHOP_DISABLED
+	return IsShoppingRole(self:GetSubRole())
 end
 
 function plymeta:IsActiveShopper()

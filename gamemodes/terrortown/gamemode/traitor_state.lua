@@ -92,6 +92,12 @@ function SendFullStateUpdate()
 		end
 	end
 
+	for _, v in pairs(GetRoles()) do
+		if v.visibleForTraitors then
+			SendRoleList(v.index, GetTeamFilter(TEAM_TRAITOR))
+		end
+	end
+
 	SendRoleList(ROLE_DETECTIVE) -- everyone should know who is detective
 
 	hook.Run("TTT2SpecialRoleSyncing") -- maybe some networking for a custom role
@@ -120,6 +126,12 @@ local function ttt_request_rolelist(ply)
 		for _, v in ipairs(GetAvailableTeams()) do
 			if v ~= TEAM_INNO then
 				SendConfirmedTeam(v, ply)
+			end
+		end
+
+		for _, v in pairs(GetRoles()) do
+			if v.visibleForTraitors then
+				SendRoleList(v.index, ply)
 			end
 		end
 
