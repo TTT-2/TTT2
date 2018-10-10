@@ -36,7 +36,7 @@ function CreateTransferMenu(parent)
 
 	-- fill combobox
 	for _, p in ipairs(player.GetAll()) do
-		if IsValid(p) and p:IsActive() and p ~= client and p:GetTeam() ~= TEAM_INNOCENT and p:IsInTeam(client) then
+		if IsValid(p) and p:IsActive() and p ~= client and not p:GetSubRoleData().unknownTeam and p:IsInTeam(client) then
 			dpick:AddChoice(p:Nick(), p:SteamID64())
 		end
 	end

@@ -26,10 +26,8 @@ function GM:PlayerInitialSpawn(ply)
 	-- TODO why sending roles here? The game has not begun!
 	if rstate <= ROUND_PREP then
 		for _, v in ipairs(GetAvailableTeams()) do
-			if v ~= TEAM_INNOCENT then
-				SendTeamList(v, GetTeamFilter(v))
-				SendConfirmedTeam(v)
-			end
+			SendTeamList(v, GetTeamFilter(v))
+			SendConfirmedTeam(v)
 		end
 
 		SendRoleList(ROLE_DETECTIVE)
@@ -42,9 +40,7 @@ function GM:PlayerInitialSpawn(ply)
 		SendRoundState(rstate, ply)
 
 		for _, v in ipairs(GetAvailableTeams()) do
-			if v ~= TEAM_INNOCENT then
-				SendConfirmedTeam(v, ply)
-			end
+			SendConfirmedTeam(v, ply)
 		end
 
 		SendRoleList(ROLE_DETECTIVE, ply)
@@ -484,10 +480,8 @@ function GM:PlayerDisconnected(ply)
 
 	if GetRoundState() ~= ROUND_PREP then
 		for _, v in ipairs(GetAvailableTeams()) do
-			if v ~= TEAM_INNOCENT then
-				SendTeamList(v, GetTeamFilter(v))
-				SendConfirmedTeam(v)
-			end
+			SendTeamList(v, GetTeamFilter(v))
+			SendConfirmedTeam(v)
 		end
 
 		SendRoleList(ROLE_DETECTIVE)

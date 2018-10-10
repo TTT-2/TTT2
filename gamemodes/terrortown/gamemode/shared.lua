@@ -89,11 +89,13 @@ ROLE_NONE = ROLE_NONE or ROLE_INNOCENT
 
 -- TEAM_ARRAY
 TEAMS = {
-	TEAM_INNOCENT = {
-		icon = "vgui/ttt/icon_inno"
+	[TEAM_INNOCENT] = {
+		icon = "vgui/ttt/icon_inno",
+		color = Color(55, 170, 50, 255)
 	},
-	TEAM_TRAITOR = {
-		icon = "vgui/ttt/icon_traitor"
+	[TEAM_TRAITOR] = {
+		icon = "vgui/ttt/icon_traitor",
+		color = Color(180, 50, 40, 255)
 	}
 }
 
@@ -113,7 +115,8 @@ ROLES.INNOCENT = {
 	defaultEquipment = INNO_EQUIPMENT,
 	buildin = true,
 	scoreKillsMultiplier = 1,
-	scoreTeamKillsMultiplier = -8
+	scoreTeamKillsMultiplier = -8,
+	unknownTeam = true
 }
 INNOCENT = ROLES.INNOCENT
 
@@ -147,7 +150,8 @@ ROLES.DETECTIVE = {
 	buildin = true,
 	scoreKillsMultiplier = INNOCENT.scoreKillsMultiplier,
 	scoreTeamKillsMultiplier = INNOCENT.scoreTeamKillsMultiplier,
-	fallbackTable = {}
+	fallbackTable = {},
+	unknownTeam = true
 }
 DETECTIVE = ROLES.DETECTIVE
 

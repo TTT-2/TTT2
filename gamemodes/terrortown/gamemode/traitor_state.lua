@@ -33,6 +33,24 @@ function SendRoleListMessage(subrole, team, sids, ply_or_rf)
 	end
 end
 
+function SendSubRoleList(subrole, ply_or_rf, pred)
+	local team_ids = {}
+
+	for _, v in ipairs(player.GetAll()) do
+		if v:GetSubRole() == subrole and (not pred or (pred and pred(v))) then
+			local team = v:GetTeam()
+
+			team_ids[team] = team_ids[team] or {} -- create table if it does not exists
+
+			table.insert(team_ids[team], v:EntIndex())
+		end
+	end
+
+	for team, ids in pairs(team_ids) do
+		SendRoleListMessage(subrole, team, ids, ply_or_rf)
+	end
+end
+
 function SendRoleList(subrole, ply_or_rf, pred)
 	local team_ids = {}
 
@@ -86,20 +104,18 @@ function SendFullStateUpdate()
 	SendRoleReset() -- reset every player; now everyone is inno
 
 	for _, v in ipairs(GetAvailableTeams()) do
-		if v ~= TEAM_INNOCENT then
-			SendTeamList(v, GetTeamFilter(v))
-			SendConfirmedTeam(v)
-		end
+		SendTeamList(v, GetTeamFilter(v))
+		SendConfirmedTeam(v)
 	end
 
 	for _, v in pairs(GetRoles()) do
 		if v.visibleForTraitors then
-			SendRoleList(v.index, GetTeamFilter(TEAM_TRAITOR))
+			SendSubRoleList(v.index, GetTeamFilter(TEAM_TRAITOR))
 		end
 
 		if v.networkRoles then
 			for _, roleData in ipairs(v.networkRoles) do
-				SendRoleList(roleData.index, GetRoleFilter(v.index))
+				SendSubRoleList(roleData.index, GetSubRoleFilter(v.index))
 			end
 		end
 	end
@@ -127,23 +143,24 @@ local function ttt_request_rolelist(ply)
 	-- information after entities have been initialized (e.g. in InitPostEntity).
 	if GetRoundState() ~= ROUND_WAIT then
 		SendRoleReset(ply) -- reset every player for ply; now everyone is inno
-		SendTeamList(ply:GetTeam(), ply) -- send list of team to ply
+
+		if not ply:GetSubRoleData().unknownTeam then
+			SendTeamList(ply:GetTeam(), ply) -- send list of team to ply
+		end
 
 		for _, v in ipairs(GetAvailableTeams()) do
-			if v ~= TEAM_INNOCENT then
-				SendConfirmedTeam(v, ply)
-			end
+			SendConfirmedTeam(v, ply)
 		end
 
 		local rd = ply:GetSubRoleData()
 
 		if rd.visibleForTraitors then
-			SendRoleList(rd.index, ply)
+			SendSubRoleList(rd.index, ply)
 		end
 
 		if rd.networkRoles then
 			for _, roleData in ipairs(rd.networkRoles) do
-				SendRoleList(roleData.index, ply)
+				SendSubRoleList(roleData.index, ply)
 			end
 		end
 

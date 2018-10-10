@@ -870,7 +870,7 @@ function EndRound(result)
 
 	-- send each client the role setup, reveal every player
 	for _, v in pairs(GetRoles()) do
-		SendRoleList(v.index)
+		SendSubRoleList(v.index)
 	end
 
 	-- We may need to start a timer for a mapswitch, or start a vote

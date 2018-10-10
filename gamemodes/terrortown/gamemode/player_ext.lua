@@ -192,9 +192,7 @@ function plymeta:ResetRoundFlags()
 	self.mute_team = -1
 
 	for _, team in ipairs(GetWinTeams()) do
-		if team ~= TEAM_INNOCENT then
-			self[team .. "_gvoice"] = false
-		end
+		self[team .. "_gvoice"] = false
 	end
 
 	self:SetNWBool("disguised", false)

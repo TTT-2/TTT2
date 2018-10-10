@@ -99,9 +99,15 @@ function GetRoleFilter(subrole, alive_only)
 	end)
 end
 
+function GetSubRoleFilter(subrole, alive_only)
+	return GetPlayerFilter(function(p)
+		return p:GetSubRole() == subrole and (not alive_only or p:IsTerror())
+	end)
+end
+
 function GetTeamFilter(team, alive_only)
 	return GetPlayerFilter(function(p)
-		return p:HasTeam(team) and (not alive_only or p:IsTerror())
+		return p:HasTeam(team) and not p:GetSubRoleData().unknownTeam and (not alive_only or p:IsTerror())
 	end)
 end
 
