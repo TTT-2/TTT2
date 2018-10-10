@@ -7,38 +7,37 @@ local math = math
 local string = string
 local vgui = vgui
 
+local max = math.max
+local floor = math.floor
 local GetTranslation = LANG.GetTranslation
 local GetPTranslation = LANG.GetParamTranslation
 
 include("sb_team.lua")
 
-surface.CreateFont("cool_small", {
-	font = "coolvetica",
-	size = 20,
-	weight = 400
-})
-
-surface.CreateFont("cool_large", {
-	font = "coolvetica",
-	size = 24,
-	weight = 400
-})
-
-surface.CreateFont("treb_small", {
-	font = "Trebuchet18",
-	size = 14,
-	weight = 700
-})
-
+-- TODO add Team!
 CreateClientConVar("ttt_scoreboard_sorting", "name", true, false, "name | role | karma | score | deaths | ping")
 CreateClientConVar("ttt_scoreboard_ascending", "1", true, false, "Should scoreboard ordering be in ascending order")
 
+local PANEL = {}
 local logo = surface.GetTextureID("vgui/ttt/score_logo")
 
-local PANEL = {}
+surface.CreateFont("cool_small", {
+		font = "coolvetica",
+		size = 20,
+		weight = 400
+})
 
-local max = math.max
-local floor = math.floor
+surface.CreateFont("cool_large", {
+		font = "coolvetica",
+		size = 24,
+		weight = 400
+})
+
+surface.CreateFont("treb_small", {
+		font = "Trebuchet18",
+		size = 14,
+		weight = 700
+})
 
 local function UntilMapChange()
 	local rounds_left = max(0, GetGlobalInt("ttt_rounds_left", 6))
@@ -94,8 +93,8 @@ function ScoreGroup(p)
 
 			-- To terrorists, missing players show as alive
 			if client:IsSpec()
-			or (client:IsActive() and client:HasTeamRole(TEAM_TRAITOR))
-			or (GAMEMODE.round_state ~= ROUND_ACTIVE and client:IsTerror())
+			or client:IsActive() and client:HasTeam(TEAM_TRAITOR)
+			or GetRoundState() ~= ROUND_ACTIVE and client:IsTerror()
 			then
 				return GROUP_NOTFOUND
 			else
@@ -110,27 +109,26 @@ end
 
 -- Comparison functions used to sort scoreboard
 sboard_sort = {
-	name = function (plya, plyb)
-		-- Automatically sorts by name if this returns 0
-		return 0
+	name = function(plya, plyb)
+		return 0 -- Automatically sorts by name if this returns 0
 	end,
-	ping = function (plya, plyb)
+	ping = function(plya, plyb)
 		return plya:Ping() - plyb:Ping()
 	end,
-	deaths = function (plya, plyb)
+	deaths = function(plya, plyb)
 		return plya:Deaths() - plyb:Deaths()
 	end,
-	score = function (plya, plyb)
+	score = function(plya, plyb)
 		return plya:Frags() - plyb:Frags()
 	end,
-	role = function (plya, plyb)
-		local comp = (plya:GetRole() or 0) - (plyb:GetRole() or 0)
+	role = function(plya, plyb)
+		local comp = (plya:GetSubRole() or 0) - (plyb:GetSubRole() or 0)
 		-- Reverse on purpose
 		--	otherwise the default ascending order puts boring innocents first
 		comp = 0 - comp
 		return comp
 	end,
-	karma = function (plya, plyb)
+	karma = function(plya, plyb)
 		return (plya:GetBaseKarma() or 0) - (plyb:GetBaseKarma() or 0)
 	end
 }
@@ -157,7 +155,6 @@ function PANEL:Init()
 	end
 
 	self.ply_frame = vgui.Create("TTTPlayerFrame", self)
-
 	self.ply_groups = {}
 
 	local t = vgui.Create("TTTScoreGroup", self.ply_frame:GetCanvas())
@@ -171,12 +168,10 @@ function PANEL:Init()
 	if DetectiveMode() then
 		t = vgui.Create("TTTScoreGroup", self.ply_frame:GetCanvas())
 		t:SetGroupInfo(GetTranslation("sb_mia"), Color(130, 190, 130, 100), GROUP_NOTFOUND)
-
 		self.ply_groups[GROUP_NOTFOUND] = t
 
 		t = vgui.Create("TTTScoreGroup", self.ply_frame:GetCanvas())
 		t:SetGroupInfo(GetTranslation("sb_confirmed"), Color(130, 170, 10, 100), GROUP_FOUND)
-
 		self.ply_groups[GROUP_FOUND] = t
 	end
 
@@ -184,6 +179,7 @@ function PANEL:Init()
 
 	-- the various score column headers
 	self.cols = {}
+
 	self:AddColumn(GetTranslation("sb_ping"), nil, nil, "ping")
 	self:AddColumn(GetTranslation("sb_deaths"), nil, nil, "deaths")
 	self:AddColumn(GetTranslation("sb_score"), nil, nil, "score")
@@ -193,10 +189,11 @@ function PANEL:Init()
 	end
 
 	self.sort_headers = {}
+
 	-- Reuse some translations
 	self:AddFakeColumn(GetTranslation("sb_sortby"), nil, nil, nil) -- "Sort by:"
 	self:AddFakeColumn(GetTranslation("equip_spec_name"), nil, nil, "name")
-	self:AddFakeColumn(GetTranslation("col_role"), nil, nil, "role")
+	self:AddFakeColumn(GetTranslation("col_roles"), nil, nil, "role")
 
 	-- Let hooks add their column headers (via AddColumn() or AddFakeColumn())
 	hook.Call("TTTScoreboardColumns", nil, self)
@@ -246,6 +243,7 @@ local function column_label_work(self_, table_to_add, label, width, sort_identif
 		if _G.sboard_sort[sort_identifier] == nil then
 			if sort_func == nil then
 				ErrorNoHalt("Sort ID provided without a sorting function, Label = ", label, " ; ID = ", sort_identifier)
+
 				can_sort = false
 			else
 				_G.sboard_sort[sort_identifier] = sort_func
@@ -256,6 +254,7 @@ local function column_label_work(self_, table_to_add, label, width, sort_identif
 	if can_sort then
 		lbl:SetMouseInputEnabled(true)
 		lbl:SetCursor("hand")
+
 		lbl.HeadingIdentifier = sort_identifier
 		lbl.DoClick = sort_header_handler(self_, lbl)
 	end
@@ -275,15 +274,17 @@ function PANEL:AddFakeColumn(label, _, width, sort_id, sort_func)
 	return column_label_work(self, self.sort_headers, label, width, sort_id, sort_func)
 end
 
+local function _sbfunc()
+	local pnl = GAMEMODE:GetScoreboardPanel()
+
+	if IsValid(pnl) then
+		pnl:UpdateScoreboard()
+	end
+end
+
 function PANEL:StartUpdateTimer()
 	if not timer.Exists("TTTScoreboardUpdater") then
-		timer.Create("TTTScoreboardUpdater", 0.3, 0, function()
-			local pnl = GAMEMODE:GetScoreboardPanel()
-
-			if IsValid(pnl) then
-				pnl:UpdateScoreboard()
-			end
-		end)
+		timer.Create("TTTScoreboardUpdater", 0.3, 0, _sbfunc)
 	end
 end
 
@@ -343,7 +344,7 @@ function PANEL:PerformLayout()
 	local w = math.max(ScrW() * 0.6, 640)
 
 	self:SetSize(w, h)
-	self:SetPos((ScrW() - w) / 2, math.min(72, (ScrH() - h) / 4))
+	self:SetPos((ScrW() - w) * 0.5, math.min(72, (ScrH() - h) * 0.25))
 
 	self.ply_frame:SetPos(8, y_logo_off + 109)
 	self.ply_frame:SetSize(self:GetWide() - 16, self:GetTall() - 109 - y_logo_off - 5)
@@ -360,7 +361,7 @@ function PANEL:PerformLayout()
 	surface.SetFont("cool_large")
 
 	local hname = self.hostname:GetValue()
-	local tw, _ = surface.GetTextSize(hname)
+	local tw = surface.GetTextSize(hname)
 
 	while tw > hw do
 		hname = string.sub(hname, 1, - 6) .. "..."
@@ -374,12 +375,14 @@ function PANEL:PerformLayout()
 
 	-- score columns
 	local cy = y_logo_off + 90
-	local cx = w - 8 -(scrolling and 16 or 0)
+	local cx = w - 8 - (scrolling and 16 or 0)
 
 	for _, v in ipairs(self.cols) do
 		v:SizeToContents()
+
 		cx = cx - v.Width
-		v:SetPos(cx - v:GetWide() / 2, cy)
+
+		v:SetPos(cx - v:GetWide() * 0.5, cy)
 	end
 
 	-- sort headers
@@ -392,7 +395,7 @@ function PANEL:PerformLayout()
 
 		cx = cx + v.Width
 
-		v:SetPos(cx - v:GetWide() / 2, cy)
+		v:SetPos(cx - v:GetWide() * 0.5, cy)
 	end
 end
 
@@ -406,7 +409,6 @@ function PANEL:ApplySchemeSettings()
 	self.mapchange:SetTextColor(COLOR_WHITE)
 
 	local sorting = GetConVar("ttt_scoreboard_sorting"):GetString()
-
 	local highlight_color = Color(175, 175, 175, 255)
 	local default_color = COLOR_WHITE
 
@@ -483,7 +485,7 @@ function PANEL:GetCanvas()
 end
 
 function PANEL:OnMouseWheeled(dlta)
-	self.scroll:AddScroll(dlta * - 2)
+	self.scroll:AddScroll(dlta * -2)
 
 	self:InvalidateLayout()
 end
@@ -500,6 +502,7 @@ function PANEL:PerformLayout()
 	self.scroll:SetSize(16, self:GetTall())
 
 	local was_on = self.scroll.Enabled
+
 	self.scroll:SetUp(self:GetTall(), self.pnlCanvas:GetTall())
 	self.scroll:SetEnabled(was_on) -- setup mangles enabled state
 

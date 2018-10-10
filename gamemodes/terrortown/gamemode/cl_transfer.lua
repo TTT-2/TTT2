@@ -25,7 +25,6 @@ function CreateTransferMenu(parent)
 	local selected_sid
 
 	local dpick = vgui.Create("DComboBox", dform)
-
 	dpick.OnSelect = function(s, idx, val, data)
 		if data then
 			selected_sid = data
@@ -36,11 +35,9 @@ function CreateTransferMenu(parent)
 	dpick:SetWide(250)
 
 	-- fill combobox
-	local roleData = client:GetRoleData()
-
 	for _, p in ipairs(player.GetAll()) do
-		if IsValid(p) and p:IsActive() and p ~= client and p:GetRoleData().team ~= TEAM_INNO and p:IsTeamMember(client) then
-			dpick:AddChoice(p:Nick(), p:SteamID())
+		if IsValid(p) and p:IsActive() and p ~= client and not p:GetSubRoleData().unknownTeam and p:IsInTeam(client) then
+			dpick:AddChoice(p:Nick(), p:SteamID64())
 		end
 	end
 
@@ -64,7 +61,7 @@ function CreateTransferMenu(parent)
 	dform:AddItem(dpick)
 	dform:AddItem(dsubmit)
 
-	dform:Help(LANG.GetParamTranslation("xfer_help", {role = tostring(roleData.team)}))
+	dform:Help(LANG.GetParamTranslation("xfer_help", {role = GetTranslation(client:GetTeam())}))
 
 	return dform
 end

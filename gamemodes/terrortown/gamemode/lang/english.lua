@@ -49,7 +49,7 @@ L.karma_dmg_full = "Your Karma is {amount}, so you deal full damage this round!"
 L.karma_dmg_other = "Your Karma is {amount}. As a result all damage you deal is reduced by {num}%"
 
 --- Body identification messages
-L.body_found = "{finder} found the body of {victim}. {role}"
+L.body_found = "{finder} found the body of {victim}. {role} ({team})"
 
 -- The {role} in body_found will be replaced by one of the following:
 L.body_found_traitor = "They were a Traitor!"
@@ -84,6 +84,7 @@ L.equip_help_carry = "You can only buy things for which you have room."
 L.equip_carry = "You can carry this equipment."
 L.equip_carry_own = "You are already carrying this item."
 L.equip_carry_slot = "You are already carrying a weapon in slot {slot}."
+L.equip_carry_minplayers = "There are not enough players on the server to enable this weapon."
 
 L.equip_help_stock = "Of certain items you can only buy one per round."
 L.equip_stock_deny = "This item is no longer in stock."
@@ -775,9 +776,9 @@ L.report_save_error = "No Event Log data to save."
 L.report_save_result = "The Event Log has been saved to:"
 
 -- Big title window
-L.hilite_win_traitor = "THE TRAITORS WIN"
+L.hilite_win_traitors = "THE TRAITORS WIN"
 L.hilite_win_bees = "THE BEES WIN"
-L.hilite_win_innocent = "THE INNOCENT WIN"
+L.hilite_win_innocents = "THE INNOCENTS WIN"
 
 L.hilite_players1 = "{numplayers} players took part, {numtraitors} were traitors"
 L.hilite_players2 = "{numplayers} players took part, one of them the traitor"
@@ -788,7 +789,8 @@ L.hilite_duration = "The round lasted {time}"
 L.col_time = "Time"
 L.col_event = "Event"
 L.col_player = "Player"
-L.col_role = "Role"
+L.col_roles = "Role(s)"
+L.col_teams = "Team(s)"
 L.col_kills1 = "Kills"
 L.col_kills2 = "Team kills"
 L.col_points = "Points"
@@ -848,8 +850,8 @@ L.ev_c4_disarm2 = "{player} failed to disarm C4 planted by {owner}"
 L.ev_credit = "{finder} found {num} credit(s) on the corpse of {player}"
 
 L.ev_start = "The round started"
-L.ev_win_traitor = "The dastardly traitors won the round!"
-L.ev_win_inno = "The lovable innocent terrorists won the round!"
+L.ev_win_traitors = "The dastardly traitors won the round!"
+L.ev_win_innocents = "The lovable innocent terrorists won the round!"
 L.ev_win_time = "The traitors ran out of time and lost!"
 
 --- Awards/highlights
@@ -1055,8 +1057,8 @@ L.aw_tod2_text = "died right after the start of the round."
 
 
 --- v23
-L.set_avoid_det = "Avoid being selected as Detective"
-L.set_avoid_det_tip = "Enable this to ask the server not to select you as Detective if possible. Does not mean you are Traitor more often."
+L.set_avoid = "Avoid being selected as {role}."
+L.set_avoid_tip = "Enable this to ask the server not to select you as {role} if possible."
 
 --- v24
 L.drop_no_ammo = "Insufficient ammo in your weapon's clip to drop as an ammo box."

@@ -1,6 +1,7 @@
 ---- Traitor equipment menu
 local GetTranslation = LANG.GetTranslation
 local GetPTranslation = LANG.GetParamTranslation
+local SafeTranslate = LANG.TryTranslation
 
 -- create ClientConVars
 local numColsVar = CreateClientConVar("ttt_bem_cols", 4, true, false, "Sets the number of columns in the Traitor/Detective menu's item list.")
@@ -19,18 +20,23 @@ local serverSizeVar = GetConVar("ttt_bem_sv_size")
 -- add favorites DB functions
 include("favorites_db.lua")
 
+local color_bad = Color(244, 67, 54, 255)
+--local color_good = Color(76, 175, 80, 255)
+local color_darkened = Color(255, 255, 255, 80)
+local eqframe
+
 -- Buyable weapons are loaded automatically. Buyable items are defined in
 -- equip_items_shd.lua
 
 Equipment = Equipment or {}
 
-function GetEquipmentForRole(role)
-	local fallbackTable = GetShopFallbackTable(role)
+function GetEquipmentForRole(subrole)
+	local fallbackTable = GetShopFallbackTable(subrole)
 	if fallbackTable then
 		return fallbackTable
 	end
 
-	local fallback = GetShopFallback(role)
+	local fallback = GetShopFallback(subrole)
 
 	-- need to build equipment cache?
 	if not Equipment[fallback] then
@@ -88,17 +94,14 @@ local function CanCarryWeapon(item)
 	return LocalPlayer():CanCarryType(item.kind)
 end
 
-local color_bad = Color(244, 67, 54, 255)
---local color_good = Color(76, 175, 80, 255)
-
 -- Creates tabel of labels showing the status of ordering prerequisites
 local function PreqLabels(parent, x, y)
 	local tbl = {}
-
 	tbl.credits = vgui.Create("DLabel", parent)
 	--tbl.credits:SetTooltip(GetTranslation("equip_help_cost"))
 	tbl.credits:SetPos(x, y)
 	-- coins icon
+
 	tbl.credits.img = vgui.Create("DImage", parent)
 	tbl.credits.img:SetSize(32, 32)
 	tbl.credits.img:CopyPos(tbl.credits)
@@ -116,6 +119,7 @@ local function PreqLabels(parent, x, y)
 	--tbl.owned:SetTooltip(GetTranslation("equip_help_carry"))
 	tbl.owned:CopyPos(tbl.credits)
 	tbl.owned:MoveRightOf(tbl.credits, y * 3)
+
 	-- carry icon
 	tbl.owned.img = vgui.Create("DImage", parent)
 	tbl.owned.img:SetSize(32, 32)
@@ -124,8 +128,10 @@ local function PreqLabels(parent, x, y)
 	tbl.owned.img:SetImage("vgui/ttt/equip/briefcase.png")
 
 	tbl.owned.Check = function(s, sel)
-		if ItemIsWeapon(sel) and (not CanCarryWeapon(sel) or not SWEPIsBuyable(tostring(sel.id))) then -- TODO add indicator for "SWEPIsBuyable(wepCls)"
+		if ItemIsWeapon(sel) and not CanCarryWeapon(sel) then
 			return false, sel.slot, GetPTranslation("equip_carry_slot", {slot = sel.slot})
+		elseif ItemIsWeapon(sel) and not SWEPIsBuyable(tostring(sel.id)) then -- TODO add own indicator image for "SWEPIsBuyable(wepCls)"
+			return false, "?", GetTranslation("equip_carry_minplayers", {slot = sel.slot})
 		elseif not ItemIsWeapon(sel) and LocalPlayer():HasEquipmentItem(sel.id) then
 			return false, "X", GetTranslation("equip_carry_own")
 		else
@@ -137,6 +143,7 @@ local function PreqLabels(parent, x, y)
 	--tbl.bought:SetTooltip(GetTranslation("equip_help_stock"))
 	tbl.bought:CopyPos(tbl.owned)
 	tbl.bought:MoveRightOf(tbl.owned, y * 3)
+
 	-- stock icon
 	tbl.bought.img = vgui.Create("DImage", parent)
 	tbl.bought.img:SetSize(32, 32)
@@ -196,17 +203,13 @@ function PANEL:SelectPanel(pnl)
 end
 vgui.Register("EquipSelect", PANEL, "DPanelSelect") -- DIconLayout?
 
-local SafeTranslate = LANG.TryTranslation
-local color_darkened = Color(255, 255, 255, 80)
-local eqframe
-
 local function TraitorMenuPopup()
 	local ply = LocalPlayer()
 
 	if not IsValid(ply) or not ply:IsActiveShopper() then return end
 
-	local role = ply:GetRole()
-	local fallbackRole = GetShopFallback(role)
+	local subrole = ply:GetSubRole()
+	local fallbackRole = GetShopFallback(subrole)
 	local rd = GetRoleByIndex(fallbackRole)
 
 	local fallback = GetConVar("ttt_" .. rd.abbr .. "_shop_fallback"):GetString()
@@ -225,13 +228,16 @@ local function TraitorMenuPopup()
 
 	-- margin
 	local m = 5
+
 	-- item list width
-	local dlistw = ((itemSize + 2) * numCols) - 2 + 15
-	local dlisth = ((itemSize + 2) * numRows) - 2 + 15
+	local dlistw = (itemSize + 2) * numCols - 2 + 15
+	local dlisth = (itemSize + 2) * numRows - 2 + 15
+
 	-- right column width
 	local diw = 270
+
 	-- frame size
-	local w = dlistw + diw + (m * 4)
+	local w = dlistw + diw + m * 4
 	local h = dlisth + 75
 
 	-- Close any existing traitor menu
@@ -300,17 +306,19 @@ local function TraitorMenuPopup()
 	dlist:EnableVerticalScrollbar(true)
 	dlist:EnableHorizontal(true)
 
-	local items = GetEquipmentForRole(role)
+	local items = GetEquipmentForRole(subrole)
 
 	SortEquipmentTable(items)
 
 	if #items == 0 then
-		ply:ChatPrint("[TTT2][SHOP] You need to run 'weaponshop' in the developer console to create a shop for this role. Link it with another shop or click on the icons to add weapons and items to the shop.")
+		ply:ChatPrint("[TTT2][SHOP] You need to run 'weaponshop' as admin in the developer console to create a shop for this role. Link it with another shop or click on the icons to add weapons and items to the shop.")
 	end
 
 	-- temp table for sorting
 	local paneltablefav = {}
 	local paneltable = {}
+	local steamid = ply:SteamID64()
+	local srd = ply:GetSubRoleData()
 
 	for k, item in ipairs(items) do
 		local ic
@@ -339,7 +347,7 @@ local function TraitorMenuPopup()
 			-- Favorites marker icon
 			ic.favorite = false
 
-			local favorites = GetFavorites(ply:SteamID(), ply:GetRole())
+			local favorites = GetFavorites(steamid, subrole)
 
 			if favorites and IsFavorite(favorites, item.id) then
 				ic.favorite = true
@@ -365,7 +373,7 @@ local function TraitorMenuPopup()
 			if ItemIsWeapon(item) and showSlotVar:GetBool() then
 				local slot = vgui.Create("SimpleIconLabelled")
 				slot:SetIcon("vgui/ttt/slotcap")
-				slot:SetIconColor(ply:GetRoleData().color or COLOR_GREY)
+				slot:SetIconColor(srd.color or COLOR_GREY)
 				slot:SetIconSize(16)
 				slot:SetIconText(item.slot)
 				slot:SetIconProperties(COLOR_WHITE, "DefaultBold", {opacity = 220, offset = 1}, {10, 8})
@@ -389,14 +397,15 @@ local function TraitorMenuPopup()
 			ic:SetTooltip(tip)
 
 			-- If we cannot order this item, darken it
-			if (not can_order or
-				-- already owned
-				table.HasValue(owned_ids, item.id) or
-				tonumber(item.id) and ply:HasEquipmentItem(tonumber(item.id)) or
-				-- already carrying a weapon for this slot
-				ItemIsWeapon(item) and (not CanCarryWeapon(item) or not SWEPIsBuyable(tostring(item.id))) or
-				-- already bought the item before
-			item.limited and ply:HasBought(tostring(item.id))) then
+			if not can_order or
+			-- already owned
+			table.HasValue(owned_ids, item.id) or
+			tonumber(item.id) and ply:HasEquipmentItem(tonumber(item.id)) or
+			-- already carrying a weapon for this slot
+			ItemIsWeapon(item) and (not CanCarryWeapon(item) or not SWEPIsBuyable(tostring(item.id))) or
+			-- already bought the item before
+			item.limited and ply:HasBought(tostring(item.id))
+			then
 				ic:SetIconColor(color_darkened)
 			end
 
@@ -421,7 +430,7 @@ local function TraitorMenuPopup()
 	local bw, bh = 100, 25
 
 	-- Whole right column
-	local dih = (h - bh - m * 5)
+	local dih = h - bh - m * 5
 
 	-- local diw = w - dlistw - m*6 - 2
 	local dinfobg = vgui.Create("DPanel", dequip)
@@ -436,8 +445,9 @@ local function TraitorMenuPopup()
 	dinfo:StretchToParent(0, 0, m * 2, 105)
 
 	local dfields = {}
+	local _tmp = {"name", "type", "desc"}
 
-	for _, k in ipairs({"name", "type", "desc"}) do
+	for _, k in ipairs(_tmp) do
 		dfields[k] = vgui.Create("DLabel", dinfo)
 		dfields[k]:SetTooltip(GetTranslation("equip_spec_" .. k))
 		dfields[k]:SetPos(m * 3, m * 2)
@@ -452,8 +462,6 @@ local function TraitorMenuPopup()
 	dfields.desc:SetFont("DermaDefaultBold")
 	dfields.desc:SetContentAlignment(7)
 	dfields.desc:MoveBelow(dfields.type, 1)
-
-	--local iw, ih = dinfo:GetSize()
 
 	local dhelp = vgui.Create("DPanel", dinfobg)
 	dhelp:SetPaintBackground(false)
@@ -549,13 +557,11 @@ local function TraitorMenuPopup()
 	-- update some basic info, may have changed in another tab
 	-- specifically the number of credits in the preq list
 	dsheet.OnTabChanged = function(s, old, new)
-		if not IsValid(new) or not IsValid(dlist.SelectedPanel) then return end
+		if not IsValid(new) or not IsValid(dlist.SelectedPanel) or new:GetPanel() ~= dequip then return end
 
-		if new:GetPanel() == dequip then
-			can_order = update_preqs(dlist.SelectedPanel.item)
+		can_order = update_preqs(dlist.SelectedPanel.item)
 
-			dconfirm:SetDisabled(not can_order)
-		end
+		dconfirm:SetDisabled(not can_order)
 	end
 
 	local dcancel = vgui.Create("DButton", dframe)
@@ -568,15 +574,6 @@ local function TraitorMenuPopup()
 		dframe:Close()
 	end
 
-	function file.AppendLine(filename, addme)
-		data = file.Read(filename)
-		if data then
-			file.Write(filename, data .. "\n" .. tostring(addme))
-		else
-			file.Write(filename, tostring(addme))
-		end
-	end
-
 	--add as favorite button
 	dfav = vgui.Create("DButton", dinfobg)
 	dfav:SetPos(0, dih - bh * 2)
@@ -587,9 +584,6 @@ local function TraitorMenuPopup()
 	dfav:SetImage("icon16/star.png")
 
 	dfav.DoClick = function()
-		local ply2 = LocalPlayer()
-		local role2 = ply2:GetRole()
-		local guid = ply2:SteamID()
 		local pnl = dlist.SelectedPanel
 
 		if not pnl or not pnl.item then return end
@@ -600,9 +594,9 @@ local function TraitorMenuPopup()
 		CreateFavTable()
 
 		if pnl.favorite then
-			RemoveFavorite(guid, role2, weapon)
+			RemoveFavorite(steamid, subrole, weapon)
 		else
-			AddFavorite(guid, role2, weapon)
+			AddFavorite(steamid, subrole, weapon)
 		end
 	end
 
@@ -624,7 +618,7 @@ function GM:OnContextMenuOpen()
 	local client = LocalPlayer()
 	local r = GetRoundState()
 
-	if r == ROUND_ACTIVE and (not client:IsShopper() or hook.Run("TTT2_PreventAccessShop", client)) then
+	if r == ROUND_ACTIVE and (not client:IsShopper() or hook.Run("TTT2PreventAccessShop", client)) then
 		return
 	elseif r == ROUND_POST or r == ROUND_PREP then
 		CLSCORE:Toggle()

@@ -1,10 +1,9 @@
 -- just server file
 
+local math = math
 local chargetime = 30
 
-local math = math
-
-concommand.Add("ttt_radar_scan", function(ply, cmd, args)
+local function ttt_radar_scan(ply, cmd, args)
 	if IsValid(ply) and ply:IsTerror() then
 		if ply:HasEquipmentItem(EQUIP_RADAR) then
 			if ply.radar_charge > CurTime() then
@@ -16,6 +15,7 @@ concommand.Add("ttt_radar_scan", function(ply, cmd, args)
 			ply.radar_charge = CurTime() + chargetime
 
 			local scan_ents = player.GetAll()
+
 			table.Add(scan_ents, ents.FindByClass("ttt_decoy"))
 
 			local targets = {}
@@ -29,24 +29,32 @@ concommand.Add("ttt_radar_scan", function(ply, cmd, args)
 					pos.y = math.Round(pos.y)
 					pos.z = math.Round(pos.z)
 
-					local role = p:IsPlayer() and p:GetRole() or 0
+					local subrole
 
 					if not p:IsPlayer() then
 						-- Decoys appear as innocents for non-traitors
-						if ply:GetRoleData().team ~= TEAM_TRAITOR then
-							role = ROLE_INNOCENT
+						if not ply:HasTeam(TEAM_TRAITOR) then
+							subrole = ROLE_INNOCENT
+						else
+							subrole = -1
 						end
-					elseif role ~= ROLE_INNOCENT then
-						local rd = GetRoleByIndex(role)
+					else
+						subrole = p:GetBaseRole()
 
-						if ply:GetRoleData().team ~= TEAM_TRAITOR then
-							role = ROLE_INNOCENT
-						elseif not rd.visibleForTraitors then
-							role = rd.team == TEAM_TRAITOR and ROLE_TRAITOR or ROLE_INNOCENT
+						if subrole ~= ROLE_INNOCENT then
+							if not ply:HasTeam(TEAM_TRAITOR) then
+								subrole = ROLE_INNOCENT
+							elseif not ply:GetSubRoleData().visibleForTraitors then
+								subrole = ROLE_TRAITOR
+							else
+								subrole = p:GetBaseRole()
+							end
 						end
 					end
 
-					table.insert(targets, {role = role, pos = pos})
+					local _tmp = {subrole = subrole, pos = pos}
+
+					table.insert(targets, _tmp)
 				end
 			end
 
@@ -54,7 +62,7 @@ concommand.Add("ttt_radar_scan", function(ply, cmd, args)
 			net.WriteUInt(#targets, 8)
 
 			for _, tgt in ipairs(targets) do
-				net.WriteUInt(tgt.role, ROLE_BITS)
+				net.WriteUInt(tgt.subrole, ROLE_BITS)
 				net.WriteInt(tgt.pos.x, 32)
 				net.WriteInt(tgt.pos.y, 32)
 				net.WriteInt(tgt.pos.z, 32)
@@ -65,4 +73,5 @@ concommand.Add("ttt_radar_scan", function(ply, cmd, args)
 			LANG.Msg(ply, "radar_not_owned")
 		end
 	end
-end)
+end
+concommand.Add("ttt_radar_scan", ttt_radar_scan)

@@ -86,13 +86,12 @@ local TypeToMat = {
 }
 
 -- add role abbr of each role for icons
-hook.Add("TTT2_FinishedSync", "updateTpTMat", function(ply, first)
-	if first then
-		for _, v in pairs(ROLES) do
-			TypeToMat.role[v.index] = v.abbr
-		end
+local function TTT2FinishedLoading()
+	for _, v in pairs(GetRoles()) do
+		TypeToMat.role[v.index] = v.abbr
 	end
-end)
+end
+hook.Add("TTT2FinishedLoading", "updateTpTMat", TTT2FinishedLoading)
 
 -- Accessor for better fail handling
 local function IconForInfoType(t, data)
@@ -118,6 +117,7 @@ local function IconForInfoType(t, data)
 	end
 end
 
+-- create a table with icons, text,... out of search_raw table
 function PreprocSearch(raw)
 	local search = {}
 
@@ -125,7 +125,7 @@ function PreprocSearch(raw)
 		search[t] = {
 			img = nil,
 			text = "",
-			p = 10
+			p = 10 -- sorting number
 		}
 
 		if t == "nick" then
@@ -137,6 +137,8 @@ function PreprocSearch(raw)
 
 			search[t].text = T("search_role_" .. rd.abbr)
 			search[t].p = 2
+		elseif t == "team" then
+			search[t].text = "Team: " .. d .. "." -- will be merged with role later
 		elseif t == "words" then
 			if d ~= "" then
 				-- only append "--" if there's no ending interpunction
@@ -243,6 +245,12 @@ function PreprocSearch(raw)
 			search[t] = nil
 		end
 
+		-- don't display an extra icon for the team. Merge with role desc
+		if search.role and search.team then
+			search.role.text = search.role.text .. " " .. search.team.text
+			search.team = nil
+		end
+
 		-- if there's still something here, we'll be showing it, so find an icon
 		if search[t] then
 			search[t].img = IconForInfoType(t, d)
@@ -333,6 +341,7 @@ local function ShowSearchScreen(search_raw)
 
 	if dlist.VBar then
 		dlist.VBar:Remove()
+
 		dlist.VBar = nil
 	end
 
@@ -358,16 +367,16 @@ local function ShowSearchScreen(search_raw)
 	dtext:SetText("...")
 
 	-- buttons
-	local by = rh - bh - (m / 2)
+	local by = rh - bh - m * 0.5
 
-	local dident = vgui.Create("DButton", dcont)
-	dident:SetPos(m, by)
-	dident:SetSize(bw_large, bh)
-	dident:SetText(T("search_confirm"))
+	local dconfirm = vgui.Create("DButton", dcont)
+	dconfirm:SetPos(m, by)
+	dconfirm:SetSize(bw_large, bh)
+	dconfirm:SetText(T("search_confirm"))
 
 	local id = search_raw.eidx + search_raw.dtime
 
-	dident.DoClick = function()
+	dconfirm.DoClick = function()
 		RunConsoleCommand("ttt_confirm_death", search_raw.eidx, id)
 	end
 
@@ -388,12 +397,12 @@ local function ShowSearchScreen(search_raw)
 
 	dcall:SetDisabled(client:IsSpec() or table.HasValue(client.called_corpses or {}, search_raw.eidx))
 
-	local dconfirm = vgui.Create("DButton", dcont)
-	dconfirm:SetPos(rw - m - bw, by)
-	dconfirm:SetSize(bw, bh)
-	dconfirm:SetText(T("close"))
+	local dclose = vgui.Create("DButton", dcont)
+	dclose:SetPos(rw - m - bw, by)
+	dclose:SetSize(bw, bh)
+	dclose:SetText(T("close"))
 
-	dconfirm.DoClick = function()
+	dclose.DoClick = function()
 		dframe:Close()
 	end
 
@@ -406,10 +415,10 @@ local function ShowSearchScreen(search_raw)
 
 	-- Create table of SimpleIcons, each standing for a piece of search
 	-- information.
-	local start_icon = nil
+	local start_icon
 
 	for t, info in SortedPairsByMemberValue(search, "p") do
-		local ic = nil
+		local ic
 
 		-- Certain items need a special icon conveying additional information
 		if t == "nick" then
@@ -436,12 +445,10 @@ local function ShowSearchScreen(search_raw)
 		ic.info_type = t
 
 		dlist:AddPanel(ic)
-
 		dscroll:AddPanel(ic)
 	end
 
 	dlist:SelectPanel(start_icon)
-
 	dframe:MakePopup()
 end
 
@@ -477,7 +484,7 @@ end
 
 local search = {}
 
-local function ReceiveRagdollSearch()
+local function TTT_RagdollSearch()
 	search = {}
 
 	-- Basic info
@@ -487,7 +494,7 @@ local function ReceiveRagdollSearch()
 
 	search.owner = owner
 
-	if not (IsValid(search.owner) and search.owner:IsPlayer() and not search.owner:IsTerror()) then
+	if not IsValid(search.owner) or not search.owner:IsPlayer() or search.owner:IsTerror() then
 		search.owner = nil
 	end
 
@@ -503,6 +510,7 @@ local function ReceiveRagdollSearch()
 
 	-- Traitor things
 	search.role = net.ReadUInt(ROLE_BITS)
+	search.team = net.ReadString()
 	search.c4 = net.ReadInt(bitsRequired(C4_WIRE_COUNT) + 1)
 
 	-- Kill info
@@ -514,7 +522,6 @@ local function ReceiveRagdollSearch()
 
 	-- Players killed
 	local num_kills = net.ReadUInt(8)
-
 	if num_kills > 0 then
 		search.kills = {}
 
@@ -529,7 +536,7 @@ local function ReceiveRagdollSearch()
 
 	-- should we show a menu for this result?
 	search.finder = net.ReadUInt(8)
-	search.show = (LocalPlayer():EntIndex() == search.finder)
+	search.show = LocalPlayer():EntIndex() == search.finder
 
 	--
 	-- last words
@@ -543,8 +550,9 @@ local function ReceiveRagdollSearch()
 		ShowSearchScreen(search)
 	end
 
+	-- cache search result in rag.search_result, e.g. useful for scoreboard
 	StoreSearchResult(search)
 
 	search = nil
 end
-net.Receive("TTT_RagdollSearch", ReceiveRagdollSearch)
+net.Receive("TTT_RagdollSearch", TTT_RagdollSearch)

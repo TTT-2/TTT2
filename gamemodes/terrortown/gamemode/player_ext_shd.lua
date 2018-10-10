@@ -1,7 +1,11 @@
 -- shared extensions to player table
 
 local plymeta = FindMetaTable("Player")
-if not plymeta then return end
+if not plymeta then
+	Error("FAILED TO FIND PLAYER TABLE")
+
+	return
+end
 
 local math = math
 
@@ -13,43 +17,107 @@ function plymeta:IsSpec()
 	return self:Team() == TEAM_SPEC
 end
 
-AccessorFunc(plymeta, "role", "Role", FORCE_NUMBER)
+function plymeta:GetForceSpec()
+	return self:GetNWBool("force_spec")
+end
 
-function plymeta:UpdateRole(role)
-	self:SetRole(role)
+AccessorFunc(plymeta, "subrole", "SubRole", FORCE_NUMBER)
 
-	hook.Run("TTT2_RoleTypeSet", self)
+function plymeta:GetBaseRole()
+	return self.role
+end
+
+function plymeta:SetBaseRole(baserole)
+	self.role = baserole
+end
+
+function plymeta:GetRole()
+	return self.role, self.subrole
+end
+
+-- ply:UpdateTeam(team) should never be used BEFORE this function
+function plymeta:SetRole(subrole, team)
+	local rd = GetRoleByIndex(subrole)
+	local baserole = subrole
+
+	if rd.baserole then
+		baserole = rd.baserole
+	end
+
+	self.role = baserole
+	self.subrole = subrole
+
+	if team then
+		if team ~= TEAM_NOCHANGE then
+			self:UpdateTeam(team)
+		end
+	elseif rd.defaultTeam then
+		self:UpdateTeam(rd.defaultTeam)
+	end
+end
+
+function plymeta:GetTeam()
+	return self.roleteam
+end
+
+function plymeta:UpdateTeam(team)
+	self.roleteam = team
+end
+
+function plymeta:HasTeam(team)
+	return self:GetTeam() == team
+end
+
+function plymeta:IsInTeam(ply)
+	return self:GetTeam() == ply:GetTeam()
+end
+
+function plymeta:UpdateRole(subrole, team)
+	self:SetRole(subrole, team)
+
+	hook.Run("TTT2RoleTypeSet", self)
 end
 
 -- Role access
+function plymeta:GetInnocent()
+	return self:GetBaseRole() == ROLE_INNOCENT
+end
+
 -- basically traitor without special traitor roles (w/ teams)
 function plymeta:GetTraitor()
-	return self:HasTeamRole(TEAM_TRAITOR) -- added compatibility with other addons
+	return self:GetBaseRole() == ROLE_TRAITOR
 end
 
 function plymeta:GetDetective()
-	return self:GetRole() == ROLES.DETECTIVE.index
+	return self:GetBaseRole() == ROLE_DETECTIVE
 end
 
-function plymeta:GetRoleData()
-	for _, v in pairs(ROLES) do
-		if v.index == self:GetRole() then
+function plymeta:GetSubRoleData()
+	for _, v in pairs(GetRoles()) do
+		if v.index == self:GetSubRole() then
 			return v
 		end
 	end
 
-	return ROLES.INNOCENT
+	return INNOCENT
 end
 
 function plymeta:GetBaseRoleData()
-	return GetWinningRole(self:GetRoleData().team)
+	for _, v in pairs(GetRoles()) do
+		if v.index == self:GetBaseRole() then
+			return v
+		end
+	end
+
+	return INNOCENT
 end
 
+plymeta.IsInnocent = plymeta.GetInnocent
 plymeta.IsTraitor = plymeta.GetTraitor
 plymeta.IsDetective = plymeta.GetDetective
 
 function plymeta:IsSpecial()
-	return self:GetRole() ~= ROLES.INNOCENT.index
+	return self:GetSubRole() ~= ROLE_INNOCENT
 end
 
 -- Player is alive and in an active round
@@ -58,39 +126,30 @@ function plymeta:IsActive()
 end
 
 -- convenience functions for common patterns
-function plymeta:IsRole(role)
-	local typ = type(role)
+-- will match if player has specific subrole or a general baserole if requested.
+-- To check whether a player have a specific baserole not a subrole, use ply:GetSubRole() == baserole
+function plymeta:IsRole(subrole)
+	local rd = GetRoleByIndex(subrole)
+	local br, sr = self:GetRole()
 
-	if typ == "table" then
-		return self:GetRole() == role.index
-	elseif typ == "number" then
-		return self:GetRole() == role
-	else
-		print("Wrong access plymeta:IsRole(" .. tostring(role) .. ") => role is type of '" .. tostring(typ) .. "'")
-
-		return "error" --	will be an error
-	end
+	return rd.baserole and subrole == sr or rd.baserole == br
 end
 
-function plymeta:HasTeamRole(team)
-	return self:GetRoleData().team == team
+function plymeta:IsActiveRole(subrole)
+	return self:IsActive() and self:IsRole(subrole)
 end
 
-function plymeta:GetWinningRole()
-	return GetWinningRole(self:GetRoleData().team)
-end
-
-function plymeta:IsActiveRole(role)
-	return self:IsActive() and self:IsRole(role)
+function plymeta:IsActiveInnocent()
+	return self:IsActiveRole(ROLE_INNOCENT)
 end
 
 -- basically traitor without special traitor roles (w/ teams)
 function plymeta:IsActiveTraitor()
-	return self:IsActive() and self:HasTeamRole(TEAM_TRAITOR)
+	return self:IsActiveRole(ROLE_TRAITOR)
 end
 
 function plymeta:IsActiveDetective()
-	return self:IsActiveRole(ROLES.DETECTIVE.index)
+	return self:IsActiveRole(ROLE_DETECTIVE)
 end
 
 function plymeta:IsActiveSpecial()
@@ -98,42 +157,25 @@ function plymeta:IsActiveSpecial()
 end
 
 function plymeta:IsShopper()
-	if self:GetRole() == ROLES.INNOCENT.index then
-		return false
-	end
-
-	local shopFallback = GetConVar("ttt_" .. self:GetRoleData().abbr .. "_shop_fallback"):GetString()
-	return shopFallback ~= SHOP_DISABLED
+	return IsShoppingRole(self:GetSubRole())
 end
 
 function plymeta:IsActiveShopper()
 	return self:IsActive() and self:IsShopper()
 end
 
-function plymeta:IsTeamMember(ply)
-	local h1 = hook.Run("TTT2_ModifyRole", ply)
-	local plyRole = h1 and h1.index or ply:GetRole()
-	local plyRd = GetRoleByIndex(plyRole)
-
-	local h2 = hook.Run("TTT2_ModifyRole", self)
-	local role = h2 and h2.index or self:GetRole()
-	local roleRd = GetRoleByIndex(role)
-
-	return roleRd.team == plyRd.team
-end
-
 local GetRTranslation = CLIENT and LANG.GetRawTranslation or util.passthrough
 
 -- Returns printable role
 function plymeta:GetRoleString()
-	local name = self:GetRoleData().name
+	local name = self:GetSubRoleData().name
 
 	return GetRTranslation(name) or name
 end
 
 -- Returns role language string id, caller must translate if desired
 function plymeta:GetRoleStringRaw()
-	return self:GetRoleData().name
+	return self:GetSubRoleData().name
 end
 
 function plymeta:GetBaseKarma()
@@ -244,6 +286,7 @@ function plymeta:GetEyeTrace(mask)
 	return self.PlayerTrace
 end
 
+-- TODO move this to client file
 if CLIENT then
 	function plymeta:AnimApplyGesture(act, weight)
 		self:AnimRestartGesture(GESTURE_SLOT_CUSTOM, act, true) -- true = autokill
@@ -338,14 +381,15 @@ if CLIENT then
 
 	end
 
-	net.Receive("TTT_PerformGesture", function()
+	local function TTT_PerformGesture()
 		local ply = net.ReadEntity()
 		local act = net.ReadUInt(16)
 
 		if IsValid(ply) and act then
 			ply:AnimPerformGesture(act)
 		end
-	end)
+	end
+	net.Receive("TTT_PerformGesture", TTT_PerformGesture)
 else -- SERVER
 	-- On the server, we just send the client a message that the player is
 	-- performing a gesture. This allows the client to decide whether it should

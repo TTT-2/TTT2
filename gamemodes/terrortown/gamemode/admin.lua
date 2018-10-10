@@ -1,5 +1,4 @@
 --- Admin commands
-
 local function GetPrintFn(ply)
 	if IsValid(ply) then
 		return function(...)
@@ -25,7 +24,7 @@ local function TraitorSort(a, b)
 		return false
 	end
 
-	if a:HasTeamRole(TEAM_TRAITOR) and not b:HasTeamRole(TEAM_TRAITOR) then
+	if a:HasTeam(TEAM_TRAITOR) and not b:HasTeam(TEAM_TRAITOR) then
 		return true
 	end
 
@@ -43,7 +42,7 @@ function PrintTraitors(ply)
 
 		for _, p in ipairs(ps) do
 			if IsValid(p) then
-				pr(p:GetTraitor() and "TRAITOR" or "Innocent", ":", p:Nick())
+				pr(string.upper(p:GetTeam()), ":", p:Nick())
 			end
 		end
 	end
@@ -70,11 +69,12 @@ function PrintReport(ply)
 		for _, e in pairs(SCORE.Events) do
 			if e.id == EVENT_KILL then
 				if e.att.sid == -1 then
-					pr("<something> killed " .. e.vic.ni .. (GetRoleByIndex(e.vic.r).team == TEAM_TRAITOR and " [TRAITOR]" or " [inno.]"))
+					pr("<something> killed " .. e.vic.ni .. "[" .. string.upper(e.vic.t) .. "]")
 				else
-					local tr = GetRoleByIndex(e.vic.r).team == TEAM_TRAITOR
+					local as = "[" .. string.upper(e.att.t) .. "]"
+					local vs = "[" .. string.upper(e.vic.t) .. "]"
 
-					pr(e.att.ni .. (tr and " [TRAITOR]" or " [inno.]") .. " killed " .. e.vic.ni .. (tr and " [TRAITOR]" or " [inno.]"))
+					pr(as .. e.att.ni .. " killed " .. vs .. e.vic.ni)
 				end
 			end
 		end
@@ -135,11 +135,11 @@ local function PrintDamageLog(ply)
 end
 concommand.Add("ttt_print_damagelog", PrintDamageLog)
 
-
 local function SaveDamageLog()
 	if not dmglog_save:GetBool() then return end
 
 	local text = ""
+
 	if #GAMEMODE.DamageLog == 0 then
 		text = "Damage log is empty."
 	else
@@ -158,6 +158,7 @@ function DamageLog(txt)
 	local t = math.max(0, CurTime() - GAMEMODE.RoundStartTime)
 
 	txt = util.SimpleTime(t, "%02i:%02i.%02i - ") .. txt
+
 	ServerLog(txt .. "\n")
 
 	if dmglog_console:GetBool() or dmglog_save:GetBool() then
@@ -187,15 +188,12 @@ end
 
 local ban_functions = {
 	ulx = ULib and ULib.kickban, -- has (ply, length, reason) signature
-
 	evolve = function(p, l, r)
 		evolve:Ban(p:UniqueID(), l * 60, r) -- time in seconds
 	end,
-
 	sm = function(p, l, r)
-		game.ConsoleCommand(Format("sm_ban \"#%s\" %d \"%s\"\n", p:SteamID(), l, r))
+		game.ConsoleCommand(Format("sm_ban \"#%s\" %d \"%s\"\n", p:SteamID64(), l, r))
 	end,
-
 	exsto = function(p, l, r)
 		local adm = exsto.GetPlugin("administration")
 
@@ -203,9 +201,8 @@ local ban_functions = {
 			adm:Ban(nil, p, l, r)
 		end
 	end,
-
 	gmod = StandardBan
-};
+}
 
 local function BanningFunction()
 	local bantype = string.lower(ttt_bantype:GetString())

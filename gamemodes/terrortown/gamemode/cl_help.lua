@@ -1,6 +1,7 @@
 ---- Help screen
 
 local GetTranslation = LANG.GetTranslation
+local GetPTranslation = LANG.GetParamTranslation
 
 CreateConVar("ttt_spectator_mode", "0", FCVAR_ARCHIVE)
 CreateConVar("ttt_mute_team_check", "0")
@@ -11,7 +12,6 @@ HELPSCRN = {}
 
 function HELPSCRN:Show()
 	local client = LocalPlayer()
-
 	local margin = 15
 	local w, h = 630, 470
 
@@ -25,7 +25,7 @@ function HELPSCRN:Show()
 
 	local dbut = vgui.Create("DButton", dframe)
 	dbut:SetSize(bw, bh)
-	dbut:SetPos(w - bw - margin, h - bh - margin / 2)
+	dbut:SetPos(w - bw - margin, h - bh - margin * 0.5)
 	dbut:SetText(GetTranslation("close"))
 
 	dbut.DoClick = function()
@@ -36,9 +36,7 @@ function HELPSCRN:Show()
 	dtabs:SetPos(margin, margin * 2)
 	dtabs:SetSize(w - margin * 2, h - margin * 3 - bh)
 
-	local padding = dtabs:GetPadding()
-
-	padding = padding * 2
+	local padding = (dtabs:GetPadding()) * 2
 
 	local tutparent = vgui.Create("DPanel", dtabs)
 	tutparent:SetPaintBackground(false)
@@ -61,7 +59,6 @@ function HELPSCRN:Show()
 	dgui:CheckBox(GetTranslation("set_tips"), "ttt_tips_enable")
 
 	local cb = dgui:NumSlider(GetTranslation("set_startpopup"), "ttt_startpopup_duration", 0, 60, 0)
-
 	if cb.Label then
 		cb.Label:SetWrap(true)
 	end
@@ -69,7 +66,6 @@ function HELPSCRN:Show()
 	cb:SetTooltip(GetTranslation("set_startpopup_tip"))
 
 	cb = dgui:NumSlider(GetTranslation("set_cross_opacity"), "ttt_ironsights_crosshair_opacity", 0, 1, 1)
-
 	if cb.Label then
 		cb.Label:SetWrap(true)
 	end
@@ -82,7 +78,6 @@ function HELPSCRN:Show()
 	end
 
 	cb = dgui:NumSlider(GetTranslation("set_cross_size"), "ttt_crosshair_size", 0.1, 3, 1)
-
 	if cb.Label then
 		cb.Label:SetWrap(true)
 	end
@@ -112,16 +107,19 @@ function HELPSCRN:Show()
 	local dplay = vgui.Create("DForm", dsettings)
 	dplay:SetName(GetTranslation("set_title_play"))
 
-	for _, v in pairs(ROLES) do
+	for _, v in pairs(GetRoles()) do
 		if ConVarExists("ttt_avoid_" .. v.name) then
-			cb = dplay:CheckBox(GetTranslation("set_avoid_" .. v.abbr), "ttt_avoid_" .. v.name)
-			cb:SetTooltip(GetTranslation("set_avoid_" .. v.abbr .. "_tip"))
+			local rolename = GetTranslation(v.name)
+
+			cb = dplay:CheckBox(GetPTranslation("set_avoid", rolename), "ttt_avoid_" .. v.name)
+			cb:SetTooltip(GetPTranslation("set_avoid_tip", rolename))
 		end
 	end
 
 	cb = dplay:CheckBox(GetTranslation("set_specmode"), "ttt_spectator_mode")
 	cb:SetTooltip(GetTranslation("set_specmode_tip"))
 
+	-- TODO what is the following reason?
 	-- For some reason this one defaulted to on, unlike other checkboxes, so
 	-- force it to the actual value of the cvar (which defaults to off)
 	local mute = dplay:CheckBox(GetTranslation("set_mute"), "ttt_mute_team_check")
@@ -162,6 +160,7 @@ function HELPSCRN:Show()
 	roledesc_panel:EnableVerticalScrollbar(true)
 	roledesc_panel:SetPadding(10)
 	roledesc_panel:SetSpacing(10)
+
 	dtabs:AddSheet("TTT2", roledesc_panel, "icon16/information.png", false, false, "The TTT2 settings")
 
 	local list = vgui.Create("DIconLayout", roledesc_panel)
@@ -174,8 +173,10 @@ function HELPSCRN:Show()
 	local roledesc_tab = vgui.Create("DForm")
 	roledesc_tab:SetSpacing(10)
 
-	if client:GetRole() ~= ROLE_NONE then
-		roledesc_tab:SetName("Current Role Description of " .. GetTranslation(client:GetRoleData().name))
+	local subrole = client:GetSubRole()
+
+	if subrole ~= ROLE_NONE then
+		roledesc_tab:SetName("Current Role Description of " .. GetTranslation(client:GetSubRoleData().name))
 	else
 		roledesc_tab:SetName("Current Role Description")
 	end
@@ -183,8 +184,8 @@ function HELPSCRN:Show()
 	roledesc_tab:SetWide(roledesc_panel:GetWide() - 30)
 	roledesc_panel:AddItem(roledesc_tab)
 
-	if client:GetRole() ~= ROLE_NONE then
-		roledesc_tab:Help(GetTranslation("ttt2_desc_" .. client:GetRoleData().name))
+	if subrole ~= ROLE_NONE then
+		roledesc_tab:Help(GetTranslation("ttt2_desc_" .. client:GetSubRoleData().name))
 	else
 		roledesc_tab:Help(GetTranslation("ttt2_desc_none"))
 	end
@@ -227,6 +228,7 @@ cvars.AddChangeCallback("ttt_mute_team_check", MuteTeamCallback)
 local imgpath = "vgui/ttt/help/tut0%d"
 local tutorial_pages = 6
 
+-- TODO update tutorial
 function HELPSCRN:CreateTutorial(parent)
 	--local w, h = parent:GetSize()
 	--local m = 5

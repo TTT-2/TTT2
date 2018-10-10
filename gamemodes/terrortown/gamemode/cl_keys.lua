@@ -40,12 +40,18 @@ function GM:PlayerBindPress(ply, bind, pressed)
 			return true
 		end
 	elseif bind == "+sprint" then
-		-- set voice type here just in case shift is no longer down when the
-		-- PlayerStartVoice hook runs, which might be the case when switching to
-		-- steam overlay
-		ply[ply:GetRoleData().team .. "_gvoice"] = false
 
-		RunConsoleCommand("rvog", "0")
+		-- just run concommand if the player is able to use the voice chat
+		if not ply:GetSubRoleData().unknownTeam then
+			local team = ply:GetTeam()
+
+			-- set voice type here just in case shift is no longer down when the
+			-- PlayerStartVoice hook runs, which might be the case when switching to
+			-- steam overlay
+			ply[team .. "_gvoice"] = false
+
+			RunConsoleCommand("tvog", "0")
+		end
 
 		return true
 	elseif bind == "+use" and pressed then
@@ -117,10 +123,12 @@ function GM:KeyPress(ply, key)
 	if not IsValid(ply) or ply ~= LocalPlayer() then return end
 
 	--if key == IN_SPEED and ply:IsActiveTraitor() then
-	if key == IN_SPEED and ply:IsActive() and not ply:HasTeamRole(TEAM_INNO) then
-		timer.Simple(0.05, function()
+	if key == IN_SPEED and ply:IsActive() and not ply:GetSubRoleData().unknownTeam then
+		local _func = function()
 			RunConsoleCommand("+voicerecord")
-		end)
+		end
+
+		timer.Simple(0.05, _func)
 	end
 end
 
@@ -130,10 +138,12 @@ function GM:KeyRelease(ply, key)
 	if not IsValid(ply) or ply ~= LocalPlayer() then return end
 
 	--if key == IN_SPEED and ply:IsActiveTraitor() then
-	if key == IN_SPEED and ply:IsActive() and not ply:HasTeamRole(TEAM_INNO) then
-		timer.Simple(0.05, function()
+	if key == IN_SPEED and ply:IsActive() and not ply:GetSubRoleData().unknownTeam then
+		local _func = function()
 			RunConsoleCommand("-voicerecord")
-		end)
+		end
+
+		timer.Simple(0.05, _func)
 	end
 end
 

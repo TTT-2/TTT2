@@ -23,14 +23,12 @@ end
 function TBHUD:CacheEnts()
 	local ply = LocalPlayer()
 
-	if IsValid(ply) and ply:IsActive() and ply:HasTeamRole(TEAM_TRAITOR) then
-		self.buttons = {}
+	self.buttons = {}
 
+	if IsValid(ply) and ply:IsActive() and ply:HasTeam(TEAM_TRAITOR) then
 		for _, ent in ipairs(ents.FindByClass("ttt_traitor_button")) do
 			self.buttons[ent:EntIndex()] = ent
 		end
-	else
-		self.buttons = {}
 	end
 
 	self.buttons_count = table.Count(self.buttons)
@@ -39,7 +37,7 @@ end
 function TBHUD:PlayerIsFocused()
 	local ply = LocalPlayer()
 
-	return IsValid(ply) and ply:IsActive() and ply:HasTeamRole(TEAM_TRAITOR) and IsValid(self.focus_ent)
+	return IsValid(ply) and ply:IsActive() and ply:HasTeam(TEAM_TRAITOR) and IsValid(self.focus_ent)
 end
 
 function TBHUD:UseFocused()
@@ -77,7 +75,7 @@ local tbut_normal = surface.GetTextureID("vgui/ttt/tbut_hand_line")
 local tbut_focus = surface.GetTextureID("vgui/ttt/tbut_hand_filled")
 
 local size = 32
-local mid = size / 2
+local mid = size * 0.5
 local focus_range = 25
 
 local use_key = Key("+use", "USE")
@@ -92,8 +90,8 @@ function TBHUD:Draw(client)
 		-- we're doing slowish distance computation here, so lots of probably
 		-- ineffective micro-optimization
 		local plypos = client:GetPos()
-		local midscreen_x = ScrW() / 2
-		local midscreen_y = ScrH() / 2
+		local midscreen_x = ScrW() * 0.5
+		local midscreen_y = ScrH() * 0.5
 		local pos, scrpos, d
 		local focus_ent
 		local focus_d, focus_scrpos_x, focus_scrpos_y = 0, midscreen_x, midscreen_y
@@ -138,6 +136,7 @@ function TBHUD:Draw(client)
 				self.focus_stick = CurTime() + 0.1
 
 				scrpos = focus_ent:GetPos():ToScreen()
+
 				local sz = 16
 
 				-- redraw in-focus version of icon

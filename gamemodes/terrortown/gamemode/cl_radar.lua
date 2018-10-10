@@ -2,6 +2,15 @@
 
 local surface = surface
 local math = math
+local GetTranslation = LANG.GetTranslation
+local GetPTranslation = LANG.GetParamTranslation
+local FormatTime = util.SimpleTime
+
+local indicator = surface.GetTextureID("effects/select_ring")
+local c4warn = surface.GetTextureID("vgui/ttt/icon_c4warn")
+local sample_scan = surface.GetTextureID("vgui/ttt/sample_scan")
+local det_beacon = surface.GetTextureID("vgui/ttt/det_beacon")
+local near_cursor_dist = 180
 
 RADAR = {}
 RADAR.targets = {}
@@ -13,7 +22,6 @@ RADAR.bombs_count = 0
 RADAR.repeating = true
 RADAR.samples = {}
 RADAR.samples_count = 0
-
 RADAR.called_corpses = {}
 
 function RADAR:EndScan()
@@ -25,7 +33,6 @@ function RADAR:Clear()
 	self:EndScan()
 	self.bombs = {}
 	self.samples = {}
-
 	self.bombs_count = 0
 	self.samples_count = 0
 end
@@ -44,7 +51,7 @@ end
 function RADAR.CacheEnts()
 	-- also do some corpse cleanup here
 	for k, corpse in pairs(RADAR.called_corpses) do
-		if (corpse.called + 45) < CurTime() then
+		if corpse.called + 45 < CurTime() then
 			RADAR.called_corpses[k] = nil -- will make # inaccurate, no big deal
 		end
 	end
@@ -70,7 +77,7 @@ hook.Add("TTTBoughtItem", "RadarBoughtItem", RADAR.Bought)
 
 local function DrawTarget(tgt, size, offset, no_shrink)
 	local scrpos = tgt.pos:ToScreen() -- sweet
-	local sz = (IsOffScreen(scrpos) and (not no_shrink)) and size / 2 or size
+	local sz = (IsOffScreen(scrpos) and not no_shrink) and (size * 0.5) or size
 
 	scrpos.x = math.Clamp(scrpos.x, sz, ScrW() - sz)
 	scrpos.y = math.Clamp(scrpos.y, sz, ScrH() - sz)
@@ -85,7 +92,7 @@ local function DrawTarget(tgt, size, offset, no_shrink)
 		local w, h = surface.GetTextSize(text)
 
 		-- Show range to target
-		surface.SetTextPos(scrpos.x - w / 2, scrpos.y + (offset * sz) - h / 2)
+		surface.SetTextPos(scrpos.x - w * 0.5, scrpos.y + offset * sz - h * 0.5)
 		surface.DrawText(text)
 
 		if tgt.t then
@@ -93,28 +100,18 @@ local function DrawTarget(tgt, size, offset, no_shrink)
 			text = util.SimpleTime(tgt.t - CurTime(), "%02i:%02i")
 			w, h = surface.GetTextSize(text)
 
-			surface.SetTextPos(scrpos.x - w / 2, scrpos.y + sz / 2)
+			surface.SetTextPos(scrpos.x - w * 0.5, scrpos.y + sz * 0.5)
 			surface.DrawText(text)
 		elseif tgt.nick then
 			-- Show nickname
 			text = tgt.nick
 			w, h = surface.GetTextSize(text)
 
-			surface.SetTextPos(scrpos.x - w / 2, scrpos.y + sz / 2)
+			surface.SetTextPos(scrpos.x - w * 0.5, scrpos.y + sz * 0.5)
 			surface.DrawText(text)
 		end
 	end
 end
-
-local indicator = surface.GetTextureID("effects/select_ring")
-local c4warn = surface.GetTextureID("vgui/ttt/icon_c4warn")
-local sample_scan = surface.GetTextureID("vgui/ttt/sample_scan")
-local det_beacon = surface.GetTextureID("vgui/ttt/det_beacon")
-
-local GetPTranslation = LANG.GetParamTranslation
-local FormatTime = util.SimpleTime
-
-local near_cursor_dist = 180
 
 function RADAR:Draw(client)
 	if not client then return end
@@ -122,7 +119,7 @@ function RADAR:Draw(client)
 	surface.SetFont("HudSelectionText")
 
 	-- C4 warnings
-	if self.bombs_count ~= 0 and client:IsActive() and client:HasTeamRole(TEAM_TRAITOR) then
+	if self.bombs_count ~= 0 and client:IsActive() and client:HasTeam(TEAM_TRAITOR) then
 		surface.SetTexture(c4warn)
 		surface.SetTextColor(200, 55, 55, 220)
 		surface.SetDrawColor(255, 255, 255, 200)
@@ -139,7 +136,7 @@ function RADAR:Draw(client)
 		size = size + 1
 	end
 
-	if client:IsActiveRole(ROLES.DETECTIVE.index) and size > 0 then
+	if client:IsActiveRole(ROLE_DETECTIVE) and size > 0 then
 		surface.SetTexture(det_beacon)
 		surface.SetTextColor(255, 255, 255, 240)
 		surface.SetDrawColor(255, 255, 255, 230)
@@ -167,9 +164,9 @@ function RADAR:Draw(client)
 
 	local remaining = math.max(0, RADAR.endtime - CurTime())
 	local alpha_base = 50 + 180 * (remaining / RADAR.duration)
-	local mpos = Vector(ScrW() / 2, ScrH() / 2, 0)
+	local mpos = Vector(ScrW() * 0.5, ScrH() * 0.5, 0)
 
-	local role, alpha, scrpos, md
+	local subrole, alpha, scrpos, md
 
 	for _, tgt in pairs(RADAR.targets) do
 		alpha = alpha_base
@@ -183,14 +180,14 @@ function RADAR:Draw(client)
 				alpha = math.Clamp(alpha * (md / near_cursor_dist), 40, 230)
 			end
 
-			role = tgt.role or ROLES.INNOCENT.index
+			subrole = tgt.subrole or ROLE_INNOCENT
 
-			local roleData = GetRoleByIndex(role)
+			local roleData = GetRoleByIndex(subrole)
 
-			if role == ROLES.DETECTIVE.index then
+			if subrole == ROLE_DETECTIVE then
 				surface.SetDrawColor(0, 0, 255, alpha)
 				surface.SetTextColor(0, 0, 255, alpha)
-			elseif role == ROLES.INNOCENT.index then
+			elseif subrole == ROLE_INNOCENT then
 				surface.SetDrawColor(0, 255, 0, alpha)
 				surface.SetTextColor(0, 255, 0, alpha)
 			elseif roleData.radarColor then
@@ -235,12 +232,13 @@ local function ReceiveC4Warn()
 end
 net.Receive("TTT_C4Warn", ReceiveC4Warn)
 
-local function ReceiveCorpseCall()
+local function TTT_CorpseCall()
 	local pos = net.ReadVector()
+	local _tmp = {pos = pos, called = CurTime()}
 
-	table.insert(RADAR.called_corpses, {pos = pos, called = CurTime()})
+	table.insert(RADAR.called_corpses, _tmp)
 end
-net.Receive("TTT_CorpseCall", ReceiveCorpseCall)
+net.Receive("TTT_CorpseCall", TTT_CorpseCall)
 
 local function ReceiveRadarScan()
 	local num_targets = net.ReadUInt(8)
@@ -248,14 +246,16 @@ local function ReceiveRadarScan()
 	RADAR.targets = {}
 
 	for i = 1, num_targets do
-		local r = net.ReadUInt(ROLE_BITS)
+		local sr = net.ReadUInt(ROLE_BITS)
 
 		local pos = Vector()
 		pos.x = net.ReadInt(32)
 		pos.y = net.ReadInt(32)
 		pos.z = net.ReadInt(32)
 
-		table.insert(RADAR.targets, {role = r, pos = pos})
+		local _tmp = {subrole = sr, pos = pos}
+
+		table.insert(RADAR.targets, _tmp)
 	end
 
 	RADAR.enable = true
@@ -266,8 +266,6 @@ local function ReceiveRadarScan()
 	end)
 end
 net.Receive("TTT_Radar", ReceiveRadarScan)
-
-local GetTranslation = LANG.GetTranslation
 
 function RADAR.CreateMenu(parent, frame)
 	--local w, h = parent:GetSize()
@@ -292,7 +290,9 @@ function RADAR.CreateMenu(parent, frame)
 
 	dscan.DoClick = function(s)
 		s:SetDisabled(true)
+
 		RunConsoleCommand("ttt_radar_scan")
+
 		frame:Close()
 	end
 

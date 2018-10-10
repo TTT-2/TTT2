@@ -34,7 +34,7 @@ hook.Add("TTTLanguageChanged", "ActivateChef", LanguageChanged)
 -- As fallback, non-existent indices translated on the fly.
 local GetFrom = LANG.GetTranslationFromLanguage
 setmetatable(L, {
-	__index = function(_, k)
-	return gsub(GetFrom(k, "english") or "bork", "[{}%w]+", "BORK")
-end
+		__index = function(_, k)
+			return gsub(GetFrom(k, "english") or "bork", "[{}%w]+", "BORK")
+		end
 })

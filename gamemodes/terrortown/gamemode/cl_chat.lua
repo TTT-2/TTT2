@@ -1,5 +1,4 @@
 ---- radio commands, text chat stuff
-
 DEFINE_BASECLASS("gamemode_base")
 
 local GetTranslation = LANG.GetTranslation
@@ -24,15 +23,13 @@ local function LastWordsRecv()
 end
 net.Receive("TTT_LastWordsMsg", LastWordsRecv)
 
-local function RoleChatRecv()
-	-- virtually always our role, but future equipment might allow listening in
-	local role = net.ReadUInt(ROLE_BITS)
+local function TTT_RoleChat()
 	local sender = net.ReadEntity()
 
 	if not IsValid(sender) then return end
 
 	local text = net.ReadString()
-	local roleData = GetRoleByIndex(role)
+	local roleData = sender:GetSubRoleData() -- use cached role
 
 	chat.AddText(
 		roleData.color,
@@ -43,7 +40,7 @@ local function RoleChatRecv()
 		": " .. text
 	)
 end
-net.Receive("TTT_RoleChat", RoleChatRecv)
+net.Receive("TTT_RoleChat", TTT_RoleChat)
 
 -- special processing for certain special chat types
 function GM:ChatText(idx, name, text, type)
@@ -57,10 +54,9 @@ function GM:ChatText(idx, name, text, type)
 	return BaseClass.ChatText(self, idx, name, text, type)
 end
 
-
 -- Detectives have a blue name, in both chat and radio messages
 local function AddDetectiveText(ply, text)
-	chat.AddText(Color(50, 200, 255), ply:Nick(), Color(255, 255, 255), ": " .. text)
+	chat.AddText(DETECTIVE.color, ply:Nick(), Color(255, 255, 255), ": " .. text)
 end
 
 function GM:OnPlayerChat(ply, text, teamchat, dead)
@@ -68,7 +64,7 @@ function GM:OnPlayerChat(ply, text, teamchat, dead)
 		return BaseClass.OnPlayerChat(self, ply, text, teamchat, dead)
 	end
 
-	if ply:IsActiveRole(ROLES.DETECTIVE.index) then
+	if ply:IsActiveRole(ROLE_DETECTIVE) then
 		AddDetectiveText(ply, text)
 
 		return true
@@ -80,11 +76,11 @@ function GM:OnPlayerChat(ply, text, teamchat, dead)
 		dead = true
 	end
 
-	if teamchat and (not team and not ply:IsSpecial() or team) then
+	if teamchat and (not team and ply:IsInnocent() or team) then
 		teamchat = false
 	end
 
-	return BaseClass.OnPlayerChat(self, ply, text, teamchat, dead) -- TODO
+	return BaseClass.OnPlayerChat(self, ply, text, teamchat, dead)
 end
 
 local last_chat = ""
@@ -134,7 +130,7 @@ RADIO.Commands = {
 	{cmd = "check", text = "quick_check", format = false}
 }
 
-local radioframe = nil
+local radioframe
 
 function RADIO:ShowRadioCommands(state)
 	if not state then
@@ -249,9 +245,11 @@ function RADIO:SendCommand(slotidx)
 end
 
 function RADIO:GetTargetType()
-	if not IsValid(LocalPlayer()) then return end
+	local client = LocalPlayer()
 
-	local trace = LocalPlayer():GetEyeTrace(MASK_SHOT)
+	if not IsValid(client) then return end
+
+	local trace = client:GetEyeTrace(MASK_SHOT)
 
 	if not trace or not trace.Hit or not IsValid(trace.Entity) then return end
 
@@ -296,7 +294,7 @@ function RADIO:GetTarget()
 
 		local stored = self.StoredTarget
 
-		if stored.target and stored.t > (CurTime() - 3) then
+		if stored.target and stored.t > CurTime() - 3 then
 			return stored.target, stored.vague
 		end
 	end
@@ -323,7 +321,7 @@ local function RadioCommand(ply, cmd, arg)
 		return
 	end
 
-	if RADIO.LastRadio.t > (CurTime() - 0.5) then return end
+	if RADIO.LastRadio.t > CurTime() - 0.5 then return end
 
 	local msg_type = arg[1]
 	local target, vague = RADIO:GetTarget()
@@ -336,8 +334,9 @@ local function RadioCommand(ply, cmd, arg)
 	for _, msg in ipairs(RADIO.Commands) do
 		if msg.cmd == msg_type then
 			local eng = LANG.GetTranslationFromLanguage(msg.text, "english")
+			local _tmp = {player = RADIO.ToPrintable(target)}
 
-			text = msg.format and string.Interp(eng, {player = RADIO.ToPrintable(target)}) or eng
+			text = msg.format and string.Interp(eng, _tmp) or eng
 			msg_name = msg.text
 
 			break
@@ -379,14 +378,13 @@ local function RadioMsgRecv()
 	local msg = net.ReadString()
 	local param = net.ReadString()
 
-	if not (IsValid(sender) and sender:IsPlayer()) then return end
+	if not IsValid(sender) or not sender:IsPlayer() then return end
 
 	GAMEMODE:PlayerSentRadioCommand(sender, msg, param)
 
 	-- if param is a language string, translate it
 	-- else it's a nickname
 	local lang_param = LANG.GetNameParam(param)
-
 	if lang_param then
 		if lang_param == "quick_corpse_id" then
 			-- special case where nested translation is needed
@@ -406,7 +404,7 @@ local function RadioMsgRecv()
 	if sender:IsDetective() then
 		AddDetectiveText(sender, text)
 	else
-		chat.AddText(sender, COLOR_WHITE, ": " .. text) -- TODO
+		chat.AddText(sender, COLOR_WHITE, ": " .. text)
 	end
 end
 net.Receive("TTT_RadioMsg", RadioMsgRecv)

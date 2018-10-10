@@ -62,8 +62,13 @@ function SCORE:HandleKill(victim, attacker, dmginfo)
 
 	local e = {
 		id = EVENT_KILL,
-		att = {ni = "", sid = -1, r = -1},
-		vic = {ni = victim:Nick(), sid = victim:SteamID(), r = victim:GetRole()},
+		att = {ni = "", sid = -1, r = -1, t = ""},
+		vic = {
+			ni = victim:Nick(),
+			sid = victim:SteamID64(),
+			r = victim:GetSubRole(),
+			t = victim:GetTeam()
+		},
 		dmg = CopyDmg(dmginfo)
 	}
 
@@ -71,17 +76,22 @@ function SCORE:HandleKill(victim, attacker, dmginfo)
 
 	if IsValid(attacker) and attacker:IsPlayer() then
 		e.att.ni = attacker:Nick()
-		e.att.sid = attacker:SteamID()
-		e.att.r = attacker:GetRole()
+		e.att.sid = attacker:SteamID64()
+		e.att.r = attacker:GetSubRole()
+		e.att.t = attacker:GetTeam()
 	end
 
-	hook.Run("TTT2_ModifyScoringEvent", e, {victim = victim, attacker = attacker, dmginfo = dmginfo})
+	hook.Run("TTT2ModifyScoringEvent", e, {
+			victim = victim,
+			attacker = attacker,
+			dmginfo = dmginfo
+	})
 
 	if IsValid(attacker)
 	and attacker:IsPlayer()
 	and dmginfo:IsExplosionDamage()
-	and GetRoleByIndex(e.att.r).team == TEAM_TRAITOR
-	and GetRoleByIndex(e.vic.r).team == TEAM_TRAITOR
+	and e.att.t == TEAM_TRAITOR
+	and victim:IsInTeam(attacker)
 	then
 		-- If a traitor gets himself killed by another traitor's C4, it's his own
 		-- damn fault for ignoring the indicator.
@@ -97,31 +107,33 @@ end
 
 function SCORE:HandleSpawn(ply)
 	if ply:Team() == TEAM_TERROR then
-		self:AddEvent({id = EVENT_SPAWN, ni = ply:Nick(), sid = ply:SteamID()})
+		self:AddEvent({id = EVENT_SPAWN, ni = ply:Nick(), sid = ply:SteamID64()})
 	end
 end
 
 function SCORE:HandleSelection()
 	local tmp = {}
-
-	for _, v in pairs(ROLES) do
-		if v ~= ROLES.INNOCENT then
-			tmp[v.index] = {}
-		end
-	end
+	local teams = {}
+	local subrole, team
 
 	for _, ply in ipairs(player.GetAll()) do
-		-- no innos
-		if ply:GetRole() ~= ROLES.INNOCENT.index then
-			table.insert(tmp[ply:GetRole()], ply:SteamID())
+		subrole = ply:GetSubRole()
+		team = ply:GetTeam()
+
+		if subrole ~= ROLE_INNOCENT then -- no innos
+			tmp[subrole] = tmp[subrole] or {}
+			teams[team] = teams[team] or {}
+
+			table.insert(tmp[subrole], ply:SteamID64())
+			table.insert(teams[team], ply:SteamID64())
 		end
 	end
 
-	self:AddEvent({id = EVENT_SELECTED, roleTbl = tmp})
+	self:AddEvent({id = EVENT_SELECTED, rt = tmp, tms = teams})
 end
 
 function SCORE:HandleBodyFound(finder, found)
-	self:AddEvent({id = EVENT_BODYFOUND, ni = finder:Nick(), sid = finder:SteamID(), b = found:Nick()})
+	self:AddEvent({id = EVENT_BODYFOUND, ni = finder:Nick(), sid = finder:SteamID64(), r = finder:GetBaseRole(), t = finder:GetTeam(), b = found:Nick()})
 end
 
 function SCORE:HandleC4Explosion(planter, arm_time, exp_time)
@@ -136,9 +148,7 @@ function SCORE:HandleC4Explosion(planter, arm_time, exp_time)
 end
 
 function SCORE:HandleC4Disarm(disarmer, owner, success)
-	if disarmer == owner then return end
-
-	if not IsValid(disarmer) then return end
+	if disarmer == owner or not IsValid(disarmer) then return end
 
 	local ev = {
 		id = EVENT_C4DISARM,
@@ -154,61 +164,34 @@ function SCORE:HandleC4Disarm(disarmer, owner, success)
 end
 
 function SCORE:HandleCreditFound(finder, found_nick, credits)
-	self:AddEvent({id = EVENT_CREDITFOUND, ni = finder:Nick(), sid = finder:SteamID(), b = found_nick, cr = credits})
+	self:AddEvent({id = EVENT_CREDITFOUND, ni = finder:Nick(), sid = finder:SteamID64(), b = found_nick, cr = credits})
 end
 
 function SCORE:ApplyEventLogScores(wintype)
 	local scores = {}
-	local tmp = {}
-
-	for _, v in pairs(ROLES) do
-		if v ~= ROLES.INNOCENT then
-			tmp[v.index] = {}
-		end
-	end
 
 	for _, ply in ipairs(player.GetAll()) do
-		scores[ply:SteamID()] = {}
-
-		if ply:GetRole() ~= ROLES.INNOCENT.index then
-			table.insert(tmp[ply:GetRole()], ply:SteamID())
-		end
+		scores[ply:SteamID64()] = {}
 	end
 
 	-- individual scores, and count those left alive
-	--local alive = {traitors = 0, not_traitors = 0}
-	--local dead = {traitors = 0, not_traitors = 0}
-	local scored_log = ScoreEventLog(self.Events, scores, tmp)
-	local ply = nil
+	local scored_log = ScoreEventLog(self.Events, scores)
+	local bonus = ScoreTeamBonus(scored_log, wintype)
+	local ply
 
 	for sid, s in pairs(scored_log) do
-		ply = player.GetBySteamID(sid)
+		ply = player.GetBySteamID64(sid)
 
 		if ply and ply:ShouldScore() then
 			ply:AddFrags(KillsToPoints(s))
-		end
-	end
-
-	-- team scores
-	local bonus = ScoreTeamBonus(scored_log, wintype)
-
-	for sid, s in pairs(scored_log) do
-		ply = player.GetBySteamID(sid)
-
-		if ply and IsValid(ply) then
-			local team = hook.Run("TTT2_ModifyRole", ply) or ply:GetRoleData()
-			team = team.team
-
-			if ply:ShouldScore() then
-				ply:AddFrags(bonus[team])
-			end
+			ply:AddFrags(bonus[sid])
 		end
 	end
 
 	-- count deaths
 	for _, e in pairs(self.Events) do
 		if e.id == EVENT_KILL then
-			local victim = player.GetBySteamID(e.vic.sid)
+			local victim = player.GetBySteamID64(e.vic.sid)
 
 			if IsValid(victim) and victim:ShouldScore() then
 				victim:AddDeaths(1)
@@ -229,13 +212,17 @@ function SCORE:Reset()
 	self.Events = {}
 end
 
+local function _sortfunc(a, b)
+	if not b or not a then
+		return false
+	end
+
+	return a.t and b.t and a.t < b.t
+end
+
 local function SortEvents(events)
 	-- sort events on time
-	table.sort(events, function(a, b)
-		if not b or not a then return false end
-
-		return a.t and b.t and a.t < b.t
-	end)
+	table.sort(events, _sortfunc)
 
 	return events
 end
@@ -258,10 +245,7 @@ end
 
 function SCORE:StreamToClients()
 	local s = EncodeForStream(self.Events)
-
-	if not s then
-		return -- error occurred
-	end
+	if not s then return end -- error occurred
 
 	-- divide into happy lil bits.
 	-- this was necessary with user messages, now it's
@@ -274,7 +258,7 @@ function SCORE:StreamToClients()
 
 		table.insert(cut, bit)
 
-		s = string.sub(s, max, - 1)
+		s = string.sub(s, max, -1)
 	end
 
 	local parts = #cut

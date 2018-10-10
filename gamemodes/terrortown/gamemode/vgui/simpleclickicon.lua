@@ -94,7 +94,7 @@ function PANEL:PressedAnim(anim, delta, data)
 		return
 	end
 
-	local border = math.sin(delta * math.pi) * (self.m_iIconSize * 0.05)
+	local border = math.sin(delta * math.pi) * self.m_iIconSize * 0.05
 
 	self.Icon:StretchToParent(border, border, border, border)
 end
@@ -180,7 +180,6 @@ function PANEL:Init()
 	end
 
 	self:SetAvatarSize(32)
-
 	self:AddLayer(self.imgAvatar)
 end
 
@@ -247,12 +246,18 @@ end
 
 function PANEL:SetLabelText(text, color, font, pos)
 	if self.FakeLabel then
-		local spec = {pos = pos, color = color, text = text, font = font, xalign = TEXT_ALIGN_CENTER, yalign = TEXT_ALIGN_CENTER}
+		local spec = {
+			pos = pos,
+			color = color,
+			text = text,
+			font = font,
+			xalign = TEXT_ALIGN_CENTER,
+			yalign = TEXT_ALIGN_CENTER
+		}
 
 		local shadow = self:GetIconTextShadow()
 		local opacity = shadow and shadow.opacity or 0
 		local offset = shadow and shadow.offset or 0
-
 		local drawfn = shadow and draw.TextShadow or draw.Text
 
 		self.FakeLabel.Paint = function()

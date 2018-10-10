@@ -7,25 +7,16 @@ local string = string
 local vgui = vgui
 local pairs = pairs
 
+local skull_icon = Material("HUD/killicons/default")
+
 CLSCORE = {}
 CLSCORE.Events = {}
 CLSCORE.Scores = {}
-CLSCORE.Tbl = {}
+CLSCORE.Tms = {}
 CLSCORE.Players = {}
+CLSCORE.EventDisplay = {}
 CLSCORE.StartTime = 0
 CLSCORE.Panel = nil
-
-hook.Add("TTT2_FinishedSync", "updateCLSCRo", function(ply, first)
-	if first then
-		for _, v in pairs(ROLES) do
-			CLSCORE.Tbl[v.index] = {}
-		end
-	end
-end)
-
-CLSCORE.EventDisplay = {}
-
-local skull_icon = Material("HUD/killicons/default")
 
 surface.CreateFont("WinHuge", {font = "Trebuchet24", size = 72, weight = 1000, shadow = true})
 
@@ -145,8 +136,7 @@ function CLSCORE:BuildScorePanel(dpanel)
 	dlist:SetSortable(true)
 	dlist:SetMultiSelect(false)
 
-	-- TODO add other roles kills for player
-	local colnames = {"", "col_player", "col_role", "col_kills1", "col_kills2", "col_points", "col_team", "col_total"}
+	local colnames = {"", "col_player", "col_roles", "col_teams", "col_kills1", "col_kills2", "col_points", "col_team", "col_total"}
 
 	for _, name in pairs(colnames) do
 		if name == "" then
@@ -161,7 +151,7 @@ function CLSCORE:BuildScorePanel(dpanel)
 	-- the type of win condition triggered is relevant for team bonus
 	local wintype = WIN_NONE
 
-	for i = #self.Events, 1, - 1 do
+	for i = #self.Events, 1, -1 do
 		local e = self.Events[i]
 
 		if e.id == EVENT_FINISH then
@@ -175,14 +165,42 @@ function CLSCORE:BuildScorePanel(dpanel)
 	local nicks = self.Players
 	local bonus = ScoreTeamBonus(scores, wintype)
 
-	-- TODO draw scoreboard
 	for id, s in pairs(scores) do
 		if id ~= -1 then
-			local role = nil
+			local role = ""
+			local team = ""
+			local roles = {}
+			local teams = {}
+			local kills = 0
+			local teamkills = 0
 
-			local roleData = GetRoleByIndex(s.r)
+			for _, ev in ipairs(s.ev) do
+				if ev.t ~= ev.v then
+					kills = kills + 1
+				else
+					teamkills = teamkills + 1
+				end
 
-			role = roleData and T(roleData.name)
+				if not roles[ev.r] then
+					local roleData = GetRoleByIndex(ev.r)
+
+					if role ~= "" then
+						role = role .. "/"
+					end
+
+					role = role .. T(roleData.name)
+					roles[ev.r] = true
+				end
+
+				if not teams[ev.t] then
+					if team ~= "" then
+						team = team .. "/"
+					end
+
+					team = team .. T(ev.t)
+					teams[ev.t] = true
+				end
+			end
 
 			local surv = ""
 
@@ -200,10 +218,10 @@ function CLSCORE:BuildScorePanel(dpanel)
 			end
 
 			local points_own = KillsToPoints(s)
-			local points_team = bonus[roleData.team]
+			local points_team = bonus[id]
 			local points_total = points_own + points_team
 
-			local l = dlist:AddLine(surv, nicks[id], role, s.k, s.tk, points_own, points_team, points_total)
+			local l = dlist:AddLine(surv, nicks[id], role, team, kills, teamkills, points_own, points_team, points_total)
 
 			-- center align
 			for _, col in pairs(l.Columns) do
@@ -248,12 +266,12 @@ function CLSCORE:AddAward(y, pw, award, dpanel)
 
 	local tw = txtlbl:GetSize()
 
-	titlelbl:SetPos((pw - tiw) / 2, y)
+	titlelbl:SetPos((pw - tiw) * 0.5, y)
 
 	y = y + tih + 2
 
 	local fw = nw + tw + 5
-	local fx = ((pw - fw) / 2)
+	local fx = (pw - fw) * 0.5
 
 	nicklbl:SetPos(fx, y)
 	txtlbl:SetPos(fx + nw + 5, y)
@@ -270,11 +288,10 @@ end
 
 function CLSCORE:BuildHilitePanel(dpanel)
 	local w, h = dpanel:GetSize()
-	local teamRole = ROLES.INNOCENT
-	local title = {c = teamRole.color, txt = "hilite_win_" .. teamRole.name}
+	local title = {c = TEAMS[TEAM_INNOCENT].color, txt = "hilite_win_" .. TEAM_INNOCENT}
 	local endtime = self.StartTime
 
-	for i = #self.Events, 1, - 1 do
+	for i = #self.Events, 1, -1 do
 		local e = self.Events[i]
 
 		if e.id == EVENT_FINISH then
@@ -287,9 +304,14 @@ function CLSCORE:BuildHilitePanel(dpanel)
 				wintype = WIN_INNOCENT
 			end
 
-			if wintype > WIN_NONE then
-				teamRole = GetRoleByIndex(wintype)
-				title = {c = teamRole.color, txt = "hilite_win_" .. teamRole.name}
+			if wintype ~= WIN_NONE then
+				if wintype == WIN_TRAITOR then
+					wintype = TEAM_TRAITOR
+				elseif wintype == WIN_INNOCENT then
+					wintype = TEAM_INNOCENT
+				end
+
+				title = {c = TEAMS[wintype].color or c, txt = "hilite_win_" .. wintype}
 			end
 
 			break
@@ -298,8 +320,8 @@ function CLSCORE:BuildHilitePanel(dpanel)
 
 	local tr = {}
 
-	for k, v in pairs(self.Tbl) do
-		if GetRoleByIndex(k).team == TEAM_TRAITOR then
+	for k, v in pairs(self.Tms) do
+		if k == TEAM_TRAITOR then
 			table.Add(tr, v)
 		end
 	end
@@ -319,7 +341,7 @@ function CLSCORE:BuildHilitePanel(dpanel)
 	winlbl:SetTextColor(COLOR_WHITE)
 	winlbl:SizeToContents()
 
-	local xwin = (w - winlbl:GetWide()) / 2
+	local xwin = (w - winlbl:GetWide()) * 0.5
 	local ywin = 30
 
 	winlbl:SetPos(xwin, ywin)
@@ -344,7 +366,7 @@ function CLSCORE:BuildHilitePanel(dpanel)
 	-- Awards
 	local wa = math.Round(w * 0.9)
 	local ha = h - ysubwin - 40
-	local xa = (w - wa) / 2
+	local xa = (w - wa) * 0.5
 	local ya = h - ha
 
 	local awardp = vgui.Create("DPanel", dpanel)
@@ -362,7 +384,7 @@ function CLSCORE:BuildHilitePanel(dpanel)
 	local award_choices = {}
 
 	for _, afn in pairs(AWARDS) do
-		local a = afn(self.Events, self.Scores, self.Players, tr)
+		local a = afn(self.Events, self.Scores, self.Players, tr) -- TODO: get this tr var out of scores.sid.lt == TEAM_TRAITOR
 
 		if ValidAward(a) then
 			table.insert(award_choices, a)
@@ -407,7 +429,7 @@ function CLSCORE:ShowPanel()
 	local bw, bh = 100, 25
 
 	dbut:SetSize(bw, bh)
-	dbut:SetPos(w - bw - margin, h - bh - margin / 2)
+	dbut:SetPos(w - bw - margin, h - bh - margin * 0.5)
 	dbut:SetText(T("close"))
 
 	dbut.DoClick = function()
@@ -416,7 +438,7 @@ function CLSCORE:ShowPanel()
 
 	local dsave = vgui.Create("DButton", dpanel)
 	dsave:SetSize(bw, bh)
-	dsave:SetPos(margin, h - bh - margin / 2)
+	dsave:SetPos(margin, h - bh - margin * 0.5)
 	dsave:SetText(T("report_save"))
 	dsave:SetTooltip(T("report_save_tip"))
 	dsave:SetConsoleCommand("ttt_save_events")
@@ -467,7 +489,7 @@ function CLSCORE:ClearPanel()
 		-- we need this hack as opposed to just calling Remove because gmod does
 		-- not offer a means of killing the tooltip, and doesn't clean it up
 		-- properly on Remove
-		input.SetCursorPos(ScrW() / 2, ScrH() / 2)
+		input.SetCursorPos(ScrW() * 0.5, ScrH() * 0.5)
 
 		local pnl = self.Panel
 
@@ -491,7 +513,7 @@ function CLSCORE:SaveLog()
 	end
 
 	local logname = logdir .. "/ttt_events_" .. os.time() .. ".txt"
-	local log = "Trouble in Terrorist Town - Round Events Log\n" .. string.rep("-", 50) .. "\n"
+	local log = "Trouble in Terrorist Town 2 - Round Events Log\n" .. string.rep("-", 50) .. "\n"
 
 	log = log .. string.format("%s | %-25s | %s\n", " TIME", "TYPE", "WHAT HAPPENED") .. string.rep("-", 50) .. "\n"
 
@@ -512,8 +534,7 @@ end
 
 function CLSCORE:Reset()
 	self.Events = {}
-	--self.StoredEvents = nil
-	self.Tbl = {}
+	self.Tms = {} -- team setup on round start
 	self.Scores = {}
 	self.Players = {}
 	self.RoundStarted = 0
@@ -524,18 +545,16 @@ end
 function CLSCORE:Init(events)
 	-- Get start time and traitors
 	local starttime
-	local tmp
+	local tms
 
 	for _, e in pairs(events) do
 		if e.id == EVENT_GAME and e.state == ROUND_ACTIVE then
 			starttime = e.t
 		elseif e.id == EVENT_SELECTED then
-			tmp = e.roleTbl
+			tms = e.tms
 		end
 
-		if starttime and tmp then
-			break
-		end
+		if starttime and tms then break end
 	end
 
 	-- Get scores and players
@@ -549,11 +568,11 @@ function CLSCORE:Init(events)
 		end
 	end
 
-	scores = ScoreEventLog(events, scores, tmp)
+	scores = ScoreEventLog(events, scores)
 
 	self.Players = nicks
 	self.Scores = scores
-	self.Tbl = tmp
+	self.Tms = tms
 	self.StartTime = starttime
 	self.Events = events
 end

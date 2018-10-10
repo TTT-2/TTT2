@@ -7,18 +7,18 @@ function CreateFavTable()
 	end
 end
 
-function AddFavorite(guid, role, weapon_id)
-	query = ("INSERT INTO ttt_bem_fav VALUES('" .. guid .. "','" .. role .. "','" .. weapon_id .. "')")
+function AddFavorite(guid, subrole, weapon_id)
+	query = ("INSERT INTO ttt_bem_fav VALUES('" .. guid .. "','" .. subrole .. "','" .. weapon_id .. "')")
 	result = sql.Query(query)
 end
 
-function RemoveFavorite(guid, role, weapon_id)
-	query = ("DELETE FROM ttt_bem_fav WHERE guid = '" .. guid .. "' AND role = '" .. role .. "' AND weapon_id = '" .. weapon_id .. "'")
+function RemoveFavorite(guid, subrole, weapon_id)
+	query = ("DELETE FROM ttt_bem_fav WHERE guid = '" .. guid .. "' AND role = '" .. subrole .. "' AND weapon_id = '" .. weapon_id .. "'")
 	result = sql.Query(query)
 end
 
-function GetFavorites(guid, role)
-	query = ("SELECT weapon_id FROM ttt_bem_fav WHERE guid = '" .. guid .. "' AND role = '" .. role .. "'")
+function GetFavorites(guid, subrole)
+	query = ("SELECT weapon_id FROM ttt_bem_fav WHERE guid = '" .. guid .. "' AND role = '" .. subrole .. "'")
 	result = sql.Query(query)
 
 	return result

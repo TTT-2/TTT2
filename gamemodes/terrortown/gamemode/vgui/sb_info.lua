@@ -1,9 +1,7 @@
 ---- Player info panel, based on sandbox scoreboard's infocard
 
 local vgui = vgui
-
 local GetTranslation = LANG.GetTranslation
-
 
 --- Base stuff
 local PANEL = {}
@@ -16,6 +14,7 @@ end
 
 function PANEL:SetPlayer(ply)
 	self.Player = ply
+
 	self:UpdatePlayerData()
 end
 
@@ -79,6 +78,7 @@ function PANEL:UpdatePlayerData()
 	if self.Search == self.Player.search_result then return end
 
 	self.List:Clear(true)
+
 	self.Scroll.Panels = {}
 
 	local search_raw = self.Player.search_result
@@ -108,7 +108,6 @@ function PANEL:UpdatePlayerData()
 
 		ic:SetIconSize(64)
 		ic:SetIcon(info.img)
-
 		ic:SetTooltip(info.text)
 
 		ic.info_type = t
@@ -124,7 +123,6 @@ function PANEL:UpdatePlayerData()
 
 	self:PerformLayout()
 end
-
 
 vgui.Register("TTTScorePlayerInfoSearch", PANEL, "TTTScorePlayerInfoBase")
 
@@ -167,7 +165,6 @@ end
 
 function PANEL:UpdateTag()
 	self:GetParent():UpdatePlayerData()
-
 	self:GetParent():SetOpen(false)
 end
 
@@ -175,16 +172,16 @@ function PANEL:PerformLayout()
 	self:SetSize(self:GetWide(), 30)
 
 	local margin = 10
-	local x = 250 --29
+	local x = 250 -- 29
 	local y = 0
 
-	for k, btn in ipairs(self.TagButtons) do
+	for _, btn in ipairs(self.TagButtons) do
 		btn:SetPos(x, y)
 		btn:SetCursor("hand")
 		btn:SizeToContents()
 		btn:PerformLayout()
 
-		x = (x + btn:GetWide() + margin)
+		x = x + btn:GetWide() + margin
 	end
 end
 

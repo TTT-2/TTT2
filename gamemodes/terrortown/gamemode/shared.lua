@@ -1,11 +1,15 @@
+-- This file contains all shared vars, tables and functions
+
 GM.Name = "[TTT2] Trouble in Terrorist Town 2 (Advanced Update) - by Alf21"
 GM.Author = "Bad King Urgrain && Alf21"
 GM.Email = "4lf-mueller@gmx.de"
 GM.Website = "ttt.badking.net, ttt2.informaskill.de"
 -- Date of latest changes (YYYY-MM-DD)
-GM.Version = "0.3.0b"
+GM.Version = "0.3.2b"
 
 GM.Customized = true
+
+TTT2 = true -- identifier for TTT2. Just use "if TTT2 then ... end"
 
 -- Round status consts
 ROUND_WAIT = 1
@@ -66,41 +70,64 @@ TRAITOR_EQUIPMENT = {
 	EQUIP_DISGUISE
 }
 
--- role teams to have an indentifier
-TEAM_INNO = "innocents"
+-- role teams to have an identifier
+TEAM_INNOCENT = "innocents"
 TEAM_TRAITOR = "traitors"
+
+-- never use this as a team, its just a const to check something
+TEAM_NOCHANGE = "nochange"
 
 -- max network bits to send roles numbers
 ROLE_BITS = 5
 
+-- override default settings of ttt to make it compatible with other addons
+-- Player roles
+ROLE_INNOCENT = ROLE_INNOCENT or 0
+ROLE_TRAITOR = ROLE_TRAITOR or 1
+ROLE_DETECTIVE = ROLE_DETECTIVE or 2
+ROLE_NONE = ROLE_NONE or ROLE_INNOCENT
+
+-- TEAM_ARRAY
+TEAMS = {
+	[TEAM_INNOCENT] = {
+		icon = "vgui/ttt/icon_inno",
+		color = Color(55, 170, 50, 255)
+	},
+	[TEAM_TRAITOR] = {
+		icon = "vgui/ttt/icon_traitor",
+		color = Color(180, 50, 40, 255)
+	}
+}
+
 -- ROLE_ARRAY
 -- need to have a team to be able to win as well as to receive karma
--- IMPORTANT: If adding traitor roles: enable 'shop' !
 -- just the following roles should be 'buildin' = true
 ROLES = {}
 
 ROLES.INNOCENT = {
-	index = 0,
+	index = ROLE_INNOCENT,
 	color = Color(55, 170, 50, 255),
 	dkcolor = Color(60, 160, 50, 155),
 	bgcolor = Color(0, 50, 0, 200),
 	name = "innocent",
 	abbr = "inno",
-	team = TEAM_INNO,
+	defaultTeam = TEAM_INNOCENT,
 	defaultEquipment = INNO_EQUIPMENT,
 	buildin = true,
 	scoreKillsMultiplier = 1,
-	scoreTeamKillsMultiplier = -8
+	scoreTeamKillsMultiplier = -8,
+	unknownTeam = true
 }
+INNOCENT = ROLES.INNOCENT
 
 ROLES.TRAITOR = {
-	index = 1,
+	index = ROLE_TRAITOR,
 	color = Color(180, 50, 40, 255),
 	dkcolor = Color(160, 50, 60, 155),
 	bgcolor = Color(150, 0, 0, 200),
 	name = "traitor",
 	abbr = "traitor",
-	team = TEAM_TRAITOR,
+	defaultTeam = TEAM_TRAITOR,
 	defaultEquipment = TRAITOR_EQUIPMENT,
 	visibleForTraitors = true, -- just for a better performance
 	buildin = true,
@@ -109,38 +136,60 @@ ROLES.TRAITOR = {
 	scoreTeamKillsMultiplier = -16,
 	fallbackTable = {}
 }
+TRAITOR = ROLES.TRAITOR
 
 ROLES.DETECTIVE = {
-	index = 2,
+	index = ROLE_DETECTIVE,
 	color = Color(50, 60, 180, 255),
 	dkcolor = Color(50, 60, 160, 155),
 	bgcolor = Color(0, 0, 150, 200),
 	name = "detective",
 	abbr = "det",
-	team = TEAM_INNO,
+	defaultTeam = TEAM_INNOCENT,
 	defaultEquipment = SPECIAL_EQUIPMENT,
 	buildin = true,
-	scoreKillsMultiplier = ROLES.INNOCENT.scoreKillsMultiplier,
-	scoreTeamKillsMultiplier = ROLES.INNOCENT.scoreTeamKillsMultiplier,
-	fallbackTable = {}
+	scoreKillsMultiplier = INNOCENT.scoreKillsMultiplier,
+	scoreTeamKillsMultiplier = INNOCENT.scoreTeamKillsMultiplier,
+	fallbackTable = {},
+	unknownTeam = true
 }
+DETECTIVE = ROLES.DETECTIVE
 
-local flag_all = {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED}
-
--- TODO: export into another file !
-CreateConVar("ttt_detective_enabled", "1", flag_all)
-CreateConVar("ttt_newroles_enabled", "1", flag_all)
+CreateConVar("ttt_detective_enabled", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
+CreateConVar("ttt_newroles_enabled", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
 
 SHOP_DISABLED = "DISABLED"
 SHOP_UNSET = "UNSET"
 
 -- shop fallbacks
-CreateConVar("ttt_" .. ROLES.INNOCENT.abbr .. "_shop_fallback", SHOP_DISABLED, flag_all)
-CreateConVar("ttt_" .. ROLES.TRAITOR.abbr .. "_shop_fallback", SHOP_UNSET, flag_all)
-CreateConVar("ttt_" .. ROLES.DETECTIVE.abbr .. "_shop_fallback", SHOP_UNSET, flag_all)
+CreateConVar("ttt_" .. INNOCENT.abbr .. "_shop_fallback", SHOP_DISABLED, {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
+CreateConVar("ttt_" .. TRAITOR.abbr .. "_shop_fallback", SHOP_UNSET, {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
+CreateConVar("ttt_" .. DETECTIVE.abbr .. "_shop_fallback", SHOP_UNSET, {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
+
+function InitCustomTeam(name, data) -- creates global var "TEAM_[name]" and other required things
+	local teamname = string.lower(name) .. "s"
+
+	_G["TEAM_" .. name] = teamname
+
+	TEAMS[teamname] = data
+end
+
+function GetRoles()
+	return ROLES
+end
+
+function GenerateNewRoleID()
+	local i = 1 -- start with "1" to prevent incompatibilities with ROLE_ANY => new roles will start @ id: i(1)+3=4
+
+	for _, v in pairs(GetRoles()) do
+		i = i + 1
+	end
+
+	return i
+end
 
 -- you should only use this function to add roles to TTT2
-function AddCustomRole(name, roleData, conVarData)
+function InitCustomRole(name, roleData, conVarData)
 	conVarData = conVarData or {}
 
 	if not ROLES[name] then
@@ -150,26 +199,26 @@ function AddCustomRole(name, roleData, conVarData)
 				CreateClientConVar("ttt_avoid_" .. roleData.name, "0", true, true)
 			end
 
-			CreateConVar("ttt_" .. roleData.name .. "_pct", tostring(conVarData.pct), flag_all)
-			CreateConVar("ttt_" .. roleData.name .. "_max", tostring(conVarData.maximum), flag_all)
-			CreateConVar("ttt_" .. roleData.name .. "_min_players", tostring(conVarData.minPlayers), flag_all)
+			CreateConVar("ttt_" .. roleData.name .. "_pct", tostring(conVarData.pct or 1), {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
+			CreateConVar("ttt_" .. roleData.name .. "_max", tostring(conVarData.maximum or 1), {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
+			CreateConVar("ttt_" .. roleData.name .. "_min_players", tostring(conVarData.minPlayers or 1), {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
 
 			if conVarData.random then
-				CreateConVar("ttt_" .. roleData.name .. "_random", tostring(conVarData.random), flag_all)
+				CreateConVar("ttt_" .. roleData.name .. "_random", tostring(conVarData.random or 100), {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
 			else
-				CreateConVar("ttt_" .. roleData.name .. "_random", "100", flag_all)
+				CreateConVar("ttt_" .. roleData.name .. "_random", "100", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
 			end
 
-			CreateConVar("ttt_" .. roleData.name .. "_enabled", "1", flag_all)
+			CreateConVar("ttt_" .. roleData.name .. "_enabled", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
 		end
 
 		conVarData.credits = conVarData.credits or 0
 		conVarData.creditsTraitorKill = conVarData.creditsTraitorKill or 0
 		conVarData.creditsTraitorDead = conVarData.creditsTraitorDead or 0
 
-		CreateConVar("ttt_" .. roleData.abbr .. "_credits_starting", tostring(conVarData.credits), flag_all)
-		CreateConVar("ttt_" .. roleData.abbr .. "_credits_traitorkill", tostring(conVarData.creditsTraitorKill), flag_all)
-		CreateConVar("ttt_" .. roleData.abbr .. "_credits_traitordead", tostring(conVarData.creditsTraitorDead), flag_all)
+		CreateConVar("ttt_" .. roleData.abbr .. "_credits_starting", tostring(conVarData.credits), {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
+		CreateConVar("ttt_" .. roleData.abbr .. "_credits_traitorkill", tostring(conVarData.creditsTraitorKill), {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
+		CreateConVar("ttt_" .. roleData.abbr .. "_credits_traitordead", tostring(conVarData.creditsTraitorDead), {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
 
 		local shopFallbackValue
 
@@ -179,116 +228,116 @@ function AddCustomRole(name, roleData, conVarData)
 			shopFallbackValue = conVarData.shopFallback and tostring(conVarData.shopFallback) or SHOP_DISABLED
 		end
 
-		CreateConVar("ttt_" .. roleData.abbr .. "_shop_fallback", shopFallbackValue, flag_all)
+		CreateConVar("ttt_" .. roleData.abbr .. "_shop_fallback", shopFallbackValue, {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
 
 		if conVarData.traitorKill then
-			CreateConVar("ttt_credits_" .. roleData.name .. "kill", tostring(conVarData.traitorKill), flag_all)
+			CreateConVar("ttt_credits_" .. roleData.name .. "kill", tostring(conVarData.traitorKill), {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
 		end
 
-		-- client
-		---- empty
+		-- set id
+		roleData.index = GenerateNewRoleID()
 
-		-- server
-		if SERVER then
-			-- necessary to init roles in this way, because we need to wait until the ROLES array is initialized
-			-- and every important function works properly
-			hook.Add("TTT2_RoleInit", "Add_" .. roleData.abbr .. "_Role", function() -- unique hook identifier please
-				if not ROLES[name] then -- count ROLES
-					local i = 1 -- start with "1" to prevent incompatibilities with ROLE_ANY
+		-- set data
+		ROLES[name] = roleData
 
-					for _, v in pairs(ROLES) do
-						i = i + 1
-					end
+		_G["ROLE_" .. string.upper(roleData.name)] = roleData.index
+		_G[string.upper(roleData.name)] = roleData
 
-					roleData.index = i
-					ROLES[name] = roleData
+		local plymeta = FindMetaTable("Player")
+		if plymeta then
+			-- e.g. IsJackal() will match each subrole of the jackal as well as the jackal as the baserole
+			plymeta["Is" .. roleData.name:gsub("^%l", string.upper)] = function(self)
+				local baserole, subrole = self:GetRole()
 
-					-- update DefaultEquipment
-					DefaultEquipment = GetDefaultEquipment()
-
-					-- spend an answer
-					print("[TTT2][ROLE] Added '" .. name .. "' Role (index: " .. i .. ")")
-				end
-			end)
+				return roleData.baserole and subrole == roleData.index or baserole == roleData.index
+			end
 		end
+
+		print("[TTT2][ROLE] Added '" .. name .. "' role (index: " .. roleData.index .. ")")
 	end
 end
 
-function UpdateCustomRole(name, roleData)
-	if SERVER and ROLES[name] then
-		-- necessary for networking!
-		roleData.name = ROLES[name].name
+-- usage: inside of e.g. this hook: hook.Add("TTT2BaseRoleInit", "TTT2ConnectBaseRole" .. baserole .. "With_" .. roleData.name, ...)
+function SetBaseRole(roleData, baserole)
+	if roleData.baserole then
+		error("[TTT2][ROLE-SYSTEM][ERROR] BaseRole of " .. roleData.name .. " already set (" .. roleData.baserole .. ")!")
+	else
+		local br = GetRoleByIndex(baserole)
 
-		table.Merge(ROLES[name], roleData)
+		if br.baserole then
+			error("[TTT2][ROLE-SYSTEM][ERROR] Your requested BaseRole can't be any BaseRole of another SubRole because it's a SubRole as well.")
 
-		for _, v in ipairs(player.GetAll()) do
-			UpdateSingleRoleData(roleData, v)
+			return
 		end
-	end
-end
 
-function SetupRoleGlobals()
-	for _, v in pairs(ROLES) do
-		_G["ROLE_" .. string.upper(v.name)] = v.index
-		_G["WIN_" .. string.upper(v.name)] = v.index
+		roleData.baserole = baserole
+		roleData.defaultTeam = br.defaultTeam
+
+		print("[TTT2][ROLE-SYSTEM] Connected '" .. roleData.name .. "' subrole with baserole '" .. br.name .. "')")
 	end
 end
 
 -- if you add roles that can shop, modify DefaultEquipment at the end of this file
--- TODO combine DefaultEquipment[x] and ROLES[x] !
+-- TODO combine DefaultEquipment[x] and GetRoles()[x] !
 
--- override default settings of ttt to make it compatible with other addons
--- Player roles
-ROLE_INNOCENT = ROLES.INNOCENT.index
-ROLE_TRAITOR = ROLES.TRAITOR.index
-ROLE_DETECTIVE = ROLES.DETECTIVE.index
-ROLE_NONE = ROLE_INNOCENT
-
-SHOP_FALLBACK_TRAITOR = ROLES.TRAITOR.name
-SHOP_FALLBACK_DETECTIVE = ROLES.DETECTIVE.name
+SHOP_FALLBACK_TRAITOR = TRAITOR.name
+SHOP_FALLBACK_DETECTIVE = DETECTIVE.name
 
 function SortRolesTable(tbl)
-	table.sort(tbl, function(a, b)
+	local _func = function(a, b)
 		return a.index < b.index
-	end)
+	end
+
+	table.sort(tbl, _func)
 end
 
 function GetRoleByIndex(index)
-	for _, v in pairs(ROLES) do
+	for _, v in pairs(GetRoles()) do
 		if v.index == index then
 			return v
 		end
 	end
 
-	return ROLES.INNOCENT
+	return INNOCENT
 end
 
 function GetRoleByName(name)
-	for _, v in pairs(ROLES) do
+	for _, v in pairs(GetRoles()) do
 		if v.name == name then
 			return v
 		end
 	end
 
-	return ROLES.INNOCENT
+	return INNOCENT
 end
 
 function GetRoleByAbbr(abbr)
-	for _, v in pairs(ROLES) do
+	for _, v in pairs(GetRoles()) do
 		if v.abbr == abbr then
 			return v
 		end
 	end
 
-	return ROLES.INNOCENT
+	return INNOCENT
 end
 
 function GetStartingCredits(abbr)
-	if abbr == ROLES.TRAITOR.abbr then
+	if abbr == TRAITOR.abbr then
 		return GetConVar("ttt_credits_starting"):GetInt()
 	end
 
 	return ConVarExists("ttt_" .. abbr .. "_credits_starting") and GetConVar("ttt_" .. abbr .. "_credits_starting"):GetInt() or 0
+end
+
+function IsShoppingRole(subrole)
+	if subrole == ROLE_INNOCENT then
+		return false
+	end
+
+	local roleData = GetRoleByIndex(subrole)
+	local shopFallback = GetConVar("ttt_" .. roleData.abbr .. "_shop_fallback"):GetString()
+
+	return shopFallback ~= SHOP_DISABLED
 end
 
 function GetShopRoles()
@@ -296,8 +345,8 @@ function GetShopRoles()
 
 	local i = 0
 
-	for _, v in pairs(ROLES) do
-		if v ~= ROLES.INNOCENT then
+	for _, v in pairs(GetRoles()) do
+		if v ~= INNOCENT then
 			local shopFallback = GetConVar("ttt_" .. v.abbr .. "_shop_fallback"):GetString()
 			if shopFallback ~= SHOP_DISABLED then
 				i = i + 1
@@ -311,45 +360,76 @@ function GetShopRoles()
 	return shopRoles
 end
 
-function GetWinRoles()
+function IsBaseRole(roleData)
+	return not roleData.baserole
+end
+
+function GetBaseRole(subrole)
+	return GetRoleByIndex(subrole).baserole or subrole
+end
+
+-- includes baserole as well
+function GetSubRoles(subrole)
+	local br = GetBaseRole(subrole)
 	local tmp = {}
 
-	for _, v in pairs(ROLES) do
-		local winRole = GetTeamRoles(v.team)[1]
-
-		if not table.HasValue(tmp, winRole) then
-			table.insert(tmp, winRole)
+	for _, v in pairs(GetRoles()) do
+		if v.baserole and v.baserole == br or v.index == br then
+			table.insert(tmp, v)
 		end
 	end
 
 	return tmp
 end
 
-function GetWinningRole(team)
-	for _, v in pairs(GetWinRoles()) do
-		if v.team == team then
+function GetDefaultTeamRole(team)
+	for _, v in pairs(GetRoles()) do
+		if not v.baserole and v.defaultTeam and v.defaultTeam == team then
 			return v
 		end
 	end
 
-	return ROLES.INNOCENT
+	return INNOCENT
 end
 
-function GetTeamRoles(team)
-	local teamRoles = {}
+function GetDefaultTeamRoles(team)
+	return GetSubRoles(GetDefaultTeamRole(team).index)
+end
 
-	local i = 0
+function GetTeamMembers(team)
+	local tmp = {}
 
-	for _, v in pairs(ROLES) do
-		if v.team and v.team == team then
-			i = i + 1
-			teamRoles[i] = v
+	for _, v in ipairs(player.GetAll()) do
+		if v:HasTeam(team) then
+			table.insert(tmp, v)
 		end
 	end
 
-	SortRolesTable(teamRoles)
+	return tmp
+end
 
-	return teamRoles
+function GetWinTeams()
+	local winTeams = {}
+
+	for _, v in pairs(GetRoles()) do
+		if v.defaultTeam and not table.HasValue(winTeams, v.defaultTeam) and not v.preventWin then
+			table.insert(winTeams, v.defaultTeam)
+		end
+	end
+
+	return winTeams
+end
+
+function GetAvailableTeams()
+	local availableTeams = {}
+
+	for _, v in pairs(GetRoles()) do
+		if v.defaultTeam and not table.HasValue(availableTeams, v.defaultTeam) then
+			availableTeams[#availableTeams + 1] = v.defaultTeam
+		end
+	end
+
+	return availableTeams
 end
 
 function GetSortedRoles()
@@ -357,7 +437,7 @@ function GetSortedRoles()
 
 	local i = 0
 
-	for _, v in pairs(ROLES) do
+	for _, v in pairs(GetRoles()) do
 		i = i + 1
 		roles[i] = v
 	end
@@ -375,6 +455,24 @@ function GetWeaponNameByFileName(name)
 	end
 end
 
+-- default TTT fn
+function GetTraitors()
+	local trs = {}
+
+	for _, v in ipairs(player.GetAll()) do
+		if v:IsTraitor() then
+			table.insert(trs, v)
+		end
+	end
+
+	return trs
+end
+
+-- default TTT fn
+function CountTraitors()
+	return #GetTraitors()
+end
+
 function table.Randomize(t)
 	local out = {}
 
@@ -385,6 +483,7 @@ function table.Randomize(t)
 	t = out
 end
 
+-- TODO move to client file
 if CLIENT then
 	local SafeTranslate
 
@@ -406,12 +505,7 @@ if CLIENT then
 	end
 
 	function SortEquipmentTable(tbl)
-		--[[
-		table.sort(tbl, function(a, b)
-			return GetEquipmentTranslation(a.name, a.PrintName) < GetEquipmentTranslation(b.name, b.PrintName)
-		end)
-		]]--
-		table.sort(tbl, function(adata, bdata)
+		local _func = function(adata, bdata)
 			a = adata.id
 			b = bdata.id
 
@@ -422,7 +516,9 @@ if CLIENT then
 			else
 				return a < b
 			end
-		end)
+		end
+
+		table.sort(tbl, _func)
 	end
 end
 
@@ -438,11 +534,10 @@ EVENT_C4EXPLODE = 8
 EVENT_CREDITFOUND = 9
 EVENT_C4DISARM = 10
 
-WIN_NONE = -1
-WIN_TIMELIMIT = -2
-WIN_INNOCENT = ROLE_INNOCENT
-WIN_TRAITOR = ROLE_TRAITOR
-WIN_DETECTIVE = ROLE_DETECTIVE
+WIN_NONE = WIN_NONE or 1
+WIN_TRAITOR = WIN_TRAITOR or 2
+WIN_INNOCENT = WIN_INNOCENT or 3
+WIN_TIMELIMIT = WIN_TIMELIMIT or 4
 
 -- Weapon categories, you can only carry one of each
 WEAPON_NONE = 0
@@ -475,7 +570,7 @@ OPEN_NOTOGGLE = 4 -- movelinear
 MUTE_NONE = 0
 MUTE_TERROR = 1
 MUTE_ALL = 2
-MUTE_SPEC = 1002
+MUTE_SPEC = 1002 -- TODO why not 3?
 
 COLOR_WHITE = Color(255, 255, 255, 255)
 COLOR_BLACK = Color(0, 0, 0, 255)
@@ -506,15 +601,6 @@ end
 TEAM_TERROR = 1
 TEAM_SPEC = TEAM_SPECTATOR
 
-function GM:CreateTeams()
-	team.SetUp(TEAM_TERROR, "Terrorists", Color(0, 200, 0, 255), false)
-	team.SetUp(TEAM_SPEC, "Spectators", Color(200, 200, 0, 255), true)
-
-	-- Not that we use this, but feels good
-	team.SetSpawnPoint(TEAM_TERROR, "info_player_deathmatch")
-	team.SetSpawnPoint(TEAM_SPEC, "info_player_deathmatch")
-end
-
 -- Everyone's model
 local ttt_playermodels = {
 	Model("models/player/phoenix.mdl"),
@@ -522,85 +608,11 @@ local ttt_playermodels = {
 	Model("models/player/guerilla.mdl"),
 	Model("models/player/leet.mdl")
 }
+
 local ttt_playermodels_count = #ttt_playermodels
 
 function GetRandomPlayerModel()
 	return ttt_playermodels[math.random(1, ttt_playermodels_count)]
-end
-
-local ttt_playercolors = {
-	all = {
-		COLOR_WHITE,
-		COLOR_BLACK,
-		COLOR_GREEN,
-		COLOR_DGREEN,
-		COLOR_RED,
-		COLOR_YELLOW,
-		COLOR_LGRAY,
-		COLOR_BLUE,
-		COLOR_NAVY,
-		COLOR_PINK,
-		COLOR_OLIVE,
-		COLOR_ORANGE
-	},
-
-	serious = {
-		COLOR_WHITE,
-		COLOR_BLACK,
-		COLOR_NAVY,
-		COLOR_LGRAY,
-		COLOR_DGREEN,
-		COLOR_OLIVE
-	}
-}
-local ttt_playercolors_all_count = #ttt_playercolors.all
-local ttt_playercolors_serious_count = #ttt_playercolors.serious
-
-CreateConVar("ttt_playercolor_mode", "1")
-function GM:TTTPlayerColor(model)
-	local mode = (ConVarExists("ttt_playercolor_mode") and GetConVar("ttt_playercolor_mode"):GetInt() or 0)
-
-	if mode == 1 then
-		return ttt_playercolors.serious[math.random(1, ttt_playercolors_serious_count)]
-	elseif mode == 2 then
-		return ttt_playercolors.all[math.random(1, ttt_playercolors_all_count)]
-	elseif mode == 3 then
-		-- Full randomness
-		return Color(math.random(0, 255), math.random(0, 255), math.random(0, 255))
-	end
-
-	-- No coloring
-	return COLOR_WHITE
-end
-
--- Kill footsteps on player and client
-function GM:PlayerFootstep(ply, pos, foot, sound, volume, rf)
-	if IsValid(ply) and (ply:Crouching() or ply:GetMaxSpeed() < 150 or ply:IsSpec()) then
-		-- do not play anything, just prevent normal sounds from playing
-		return true
-	end
-end
-
--- Predicted move speed changes
-function GM:Move(ply, mv)
-	if ply:IsTerror() then
-		local basemul = 1
-		local slowed = false
-
-		-- Slow down ironsighters
-		local wep = ply:GetActiveWeapon()
-
-		if IsValid(wep) and wep.GetIronsights and wep:GetIronsights() then
-			basemul = 120 / 220
-			slowed = true
-		end
-
-		local mul = hook.Call("TTTPlayerSpeedModifier", GAMEMODE, ply, slowed, mv) or 1
-		mul = basemul * mul
-
-		mv:SetMaxClientSpeed(mv:GetMaxClientSpeed() * mul)
-		mv:SetMaxSpeed(mv:GetMaxSpeed() * mul)
-	end
 end
 
 -- Weapons and items that come with TTT. Weapons that are not in this list will
@@ -609,7 +621,7 @@ end
 function GetDefaultEquipment()
 	local defaultEquipment = {}
 
-	for _, v in pairs(ROLES) do
+	for _, v in pairs(GetRoles()) do
 		if v.defaultEquipment then
 			defaultEquipment[v.index] = v.defaultEquipment
 		end
@@ -619,13 +631,6 @@ function GetDefaultEquipment()
 end
 
 DefaultEquipment = GetDefaultEquipment()
-
--- should be exported !
-hook.Add("TTT2_FinishedSync", "updateDefEquRol", function(ply, first)
-	if first then
-		DefaultEquipment = GetDefaultEquipment()
-	end
-end)
 
 TTTWEAPON_CVARS = {}
 
@@ -649,15 +654,15 @@ function SWEPIsBuyable(wepCls)
 	if ConVarExists(name) then
 		local i = GetConVar(name):GetInt() or 0
 
-		if i == 0 then
-			return false
+		if i < 2 then
+			return true
 		end
 
 		local choices = {}
 
 		for _, v in ipairs(player.GetAll()) do
-			-- everyone on the spec team is in specmode
-			if IsValid(v) and not v:IsSpec() then
+			-- everyone on the forcespec team is in specmode
+			if IsValid(v) and not v:GetForceSpec() then
 				table.insert(choices, v)
 			end
 		end
@@ -677,7 +682,7 @@ function RegisterNormalWeapon(wep)
 		tbl.value = tostring(wep.MinPlayers)
 		tbl.flags = {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE}
 		tbl.slider = true
-		tbl.desc = "MinPlayers"
+		tbl.desc = "Available if there are more than ... players"
 		tbl.max = 100
 
 		SWEPAddConVar(wep, tbl)

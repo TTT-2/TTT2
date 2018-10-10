@@ -49,7 +49,7 @@ L.karma_dmg_full = "Dein Karma ist {amount}, also verteilst du diese Runde volle
 L.karma_dmg_other = "Dein Karma ist {amount}. Daher ist dein Schaden um {num}% reduziert!"
 
 --- Body identification messages
-L.body_found = "{finder} fand den Körper von {victim}. {role}"
+L.body_found = "{finder} fand den Körper von {victim}. {role} ({team})"
 
 -- The {role} in body_found will be replaced by one of the following:
 L.body_found_traitor = "Er war ein Verräter!"
@@ -84,6 +84,7 @@ L.equip_help_carry = "Du kannst nur das kaufen, für das du auch Platz hast."
 L.equip_carry = "Du kannst diese Ausrüstung tragen."
 L.equip_carry_own = "Du trägst dieses Teil bereits."
 L.equip_carry_slot = "Du trägst bereits eine Waffe in Slot {slot}."
+L.equip_carry_minplayers = "Es sind nicht genug Spieler auf dem Server um diese Waffe zu aktivieren."
 
 L.equip_help_stock = "Einige Teile kannst du nur einmal pro Runde kaufen."
 L.equip_stock_deny = "Dieses Teil ist nicht länger vorrätig."
@@ -775,7 +776,8 @@ L.hilite_duration = "Die Runde dauerte {time}."
 L.col_time = "Dauer"
 L.col_event = "Ereignis"
 L.col_player = "Spieler"
-L.col_role = "Rolle"
+L.col_roles = "Rolle(n)"
+L.col_teams = "Team(s)"
 L.col_kills1 = "Kills"
 L.col_kills2 = "Teamkills"
 L.col_points = "Punkte"
@@ -835,8 +837,8 @@ L.ev_c4_disarm2 = "{player} hat beim Entschärfen des C4s von {owner} versagt"
 L.ev_credit = "{finder} fand {num} Credit(s) beim Leichnam von {player}"
 
 L.ev_start = "Die Runde hat begonnen"
-L.ev_win_traitor = "Die heimtückischen Verräter haben die Runde gewonnen!"
-L.ev_win_inno = "Die liebenswerten unschuldigen Terroristen haben die Runde gewonnen!"
+L.ev_win_traitors = "Die heimtückischen Verräter haben die Runde gewonnen!"
+L.ev_win_innocents = "Die liebenswerten unschuldigen Terroristen haben die Runde gewonnen!"
 L.ev_win_time = "Den Verrätern ist die Zeit ausgegangen und sie verloren!"
 
 --- Awards/highlights
@@ -1042,8 +1044,8 @@ L.aw_tod2_text = "starb direkt am Anfang der Runde."
 
 
 --- v23
-L.set_avoid_det = "Nicht als Detektiv ausgewählt werden"
-L.set_avoid_det_tip = "Aktiviere diese Funktion, damit du nicht als Detektiv ausgewählt wirst. Das heißt nicht, dass du öfter Verräter wirst..."
+L.set_avoid = "Nicht als {role} ausgewählt werden."
+L.set_avoid_tip = "Aktiviere diese Funktion, damit du nicht als {role} ausgewählt wirst, soweit dies möglich ist."
 
 --- v24
 L.drop_no_ammo = "Du hast zu wenig Munition im Magazin, um eine Munitionskiste fallenzulassen."

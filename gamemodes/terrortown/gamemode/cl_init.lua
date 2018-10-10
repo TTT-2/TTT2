@@ -1,4 +1,5 @@
 include("shared.lua")
+include("sh_init.lua")
 
 -- Define GM12 fonts for compatibility
 surface.CreateFont("DefaultBold", {font = "Tahoma", size = 13, weight = 1000})
@@ -46,20 +47,16 @@ include("cl_chat.lua")
 include("cl_voice.lua")
 
 function GM:Initialize()
-	MsgN("TTT Client initializing...")
-
-	-- setup weapon ConVars and similar things
-	for _, wep in ipairs(weapons.GetList()) do
-		if not wep.Doublicated then
-			RegisterNormalWeapon(wep)
-		end
-	end
+	MsgN("TTT2 Client initializing...")
 
 	GAMEMODE.round_state = ROUND_WAIT
 
 	LANG.Init()
 
 	self.BaseClass:Initialize()
+
+	hook.Run("TTT2Initialize")
+	hook.Run("PostInitialize")
 end
 
 function GM:InitPostEntity()
@@ -71,7 +68,7 @@ function GM:InitPostEntity()
 	InitAllItems()
 
 	-- reset normal equipment tables
-	for _, role in pairs(ROLES) do
+	for _, role in pairs(GetRoles()) do
 		EquipmentItems[role.index] = {}
 
 		if Equipment then
@@ -90,7 +87,7 @@ function GM:InitPostEntity()
 	-- initialize fallback shops
 	InitFallbackShops()
 
-	net.Start("TTT2_SyncShopsWithServer")
+	net.Start("TTT2SyncShopsWithServer")
 	net.SendToServer()
 
 	net.Start("TTT_Spectate")
@@ -128,110 +125,6 @@ function GM:HUDClear()
 	RADAR:Clear()
 	TBHUD:Clear()
 end
-
--- sync ROLES
-local buff = ""
-
-local function ReceiveRolesTable(len)
-	print("[TTT2][ROLE] Received new ROLES list from server! Updating...")
-
-	local first = net.ReadBool()
-	local cont = net.ReadBit() == 1
-
-	buff = buff .. net.ReadString()
-
-	if cont then
-		return
-	else
-		-- do stuff with buffer contents
-		local json_roles = buff -- util.Decompress(buff)
-
-		if not json_roles then
-			ErrorNoHalt("ROLES decompression failed!\n")
-		else
-			-- convert the json string back to a table
-			local tmp = util.JSONToTable(json_roles)
-
-			if istable(tmp) then
-				ROLES = tmp
-			else
-				ErrorNoHalt("ROLES decoding failed!\n")
-			end
-
-			-- confirm update and process next updates
-			net.Start("TTT2_RolesListSynced")
-			net.WriteBool(first)
-			net.SendToServer()
-
-			-- run client side
-			SetupRoleGlobals()
-
-			hook.Run("TTT2_PreFinishedSync", LocalPlayer(), first)
-
-			hook.Run("TTT2_FinishedSync", LocalPlayer(), first)
-
-			hook.Run("TTT2_PostFinishedSync", LocalPlayer(), first)
-		end
-
-		-- flush
-		buff = ""
-	end
-end
-net.Receive("TTT2_SyncRolesList", ReceiveRolesTable)
-
-local buff2 = ""
-
-local function ReceiveSingleRoleTable(len)
-	print("[TTT2][ROLE] Received updated ROLE from server! Updating...")
-
-	local cont = net.ReadBit() == 1
-
-	buff2 = buff2 .. net.ReadString()
-
-	if cont then
-		return
-	else
-		-- do stuff with buffer contents
-		local json_roles = buff2 -- util.Decompress(buff2)
-
-		if not json_roles then
-			ErrorNoHalt("ROLE decompression failed!\n")
-		else
-			-- convert the json string back to a table
-			local tmp = util.JSONToTable(json_roles)
-
-			if istable(tmp) then
-				if tmp.name then
-					for k, v in pairs(ROLES) do
-						if v.name == tmp.name then
-							table.Merge(ROLES[k], tmp)
-						end
-					end
-				end
-			else
-				ErrorNoHalt("ROLE decoding failed!\n")
-			end
-
-			-- confirm update and process next updates
-			net.Start("TTT2_RolesListSynced")
-			net.WriteBool(false)
-			net.SendToServer()
-
-			-- run client side
-			SetupRoleGlobals()
-
-			hook.Run("TTT2_PreFinishedSync", LocalPlayer(), false)
-
-			hook.Run("TTT2_FinishedSync", LocalPlayer(), false)
-
-			hook.Run("TTT2_PostFinishedSync", LocalPlayer(), false)
-		end
-
-		-- flush
-		buff2 = ""
-	end
-end
-net.Receive("TTT2_SyncSingleRole", ReceiveSingleRoleTable)
 
 KARMA = {}
 
@@ -288,18 +181,17 @@ local function RoundStateChange(o, n)
 	end
 
 	-- whatever round state we get, clear out the voice flags
-	for _, r in pairs(GetWinRoles()) do
-		for _, v in ipairs(player.GetAll()) do
-			if not r.unknownTeam and r.team ~= TEAM_INNO then
-				v[r.team .. "_gvoice"] = false
-			end
+	for _, v in ipairs(player.GetAll()) do
+		for _, team in ipairs(GetWinTeams()) do
+			v[team .. "_gvoice"] = false
 		end
 	end
 end
 
-concommand.Add("ttt_print_playercount", function()
+local function ttt_print_playercount()
 	print(GAMEMODE.StartingPlayers)
-end)
+end
+concommand.Add("ttt_print_playercount", ttt_print_playercount)
 
 --- optional sound cues on round start and end
 CreateConVar("ttt_cl_soundcues", "0", FCVAR_ARCHIVE)
@@ -322,39 +214,44 @@ GM.TTTEndRound = PlaySoundCue
 
 local function ReceiveRole()
 	local client = LocalPlayer()
-	local role = net.ReadUInt(ROLE_BITS)
+	local subrole = net.ReadUInt(ROLE_BITS)
+	local team = net.ReadString()
 
 	-- after a mapswitch, server might have sent us this before we are even done
 	-- loading our code
 	if not client.UpdateRole then return end
 
-	client:UpdateRole(role)
+	client:UpdateRole(subrole)
+	client:UpdateTeam(team)
 
 	Msg("You are: ")
-	MsgN(string.upper(GetRoleByIndex(role).name))
+	MsgN(string.upper(GetRoleByIndex(subrole).name))
 end
 net.Receive("TTT_Role", ReceiveRole)
 
 --- role test
-net.Receive("TTT2_Test_role", function()
+local function TTT2TestRole()
 	local client = LocalPlayer()
 
-	client:ChatPrint("Your current role is: '" .. client:GetRoleData().name .. "'")
-end)
+	client:ChatPrint("Your current role is: '" .. client:GetSubRoleData().name .. "'")
+end
+net.Receive("TTT2TestRole", TTT2TestRole)
 
 local function ReceiveRoleList()
-	local role = net.ReadUInt(ROLE_BITS)
+	local subrole = net.ReadUInt(ROLE_BITS)
+	local team = net.ReadString()
 	local num_ids = net.ReadUInt(8)
 
 	for i = 1, num_ids do
 		local eidx = net.ReadUInt(7) + 1 -- we - 1 worldspawn=0
 		local ply = player.GetByID(eidx)
 
-		if IsValid(ply) and ply.SetRole then
-			ply:SetRole(role)
+		if IsValid(ply) and ply.UpdateRole then
+			ply:UpdateRole(subrole)
+			ply:UpdateTeam(team)
 
-			if not ply:HasTeamRole(TEAM_INNO) and not ply:GetRoleData().unknownTeam then
-				ply[ply:GetRoleData().team .. "_gvoice"] = false -- assume role's chat by default
+			if not ply:GetSubRoleData().unknownTeam then
+				ply[ply:GetTeam() .. "_gvoice"] = false -- assume role's chat by default
 			end
 		end
 	end
@@ -382,7 +279,7 @@ function GM:ClearClientState()
 	local client = LocalPlayer()
 	if not client.SetRole then return end -- code not loaded yet
 
-	client:SetRole(ROLES.INNOCENT.index)
+	client:SetRole(ROLE_INNOCENT)
 
 	client.equipment_items = EQUIP_NONE
 	client.equipment_credits = 0
@@ -396,7 +293,7 @@ function GM:ClearClientState()
 	for _, p in ipairs(player.GetAll()) do
 		if IsValid(p) then
 			p.sb_tag = nil
-			p:SetRole(ROLES.INNOCENT.index)
+			p:SetRole(ROLE_INNOCENT)
 			p.search_result = nil
 		end
 	end
@@ -551,7 +448,7 @@ function CheckIdle()
 			-- Even if players don't move their mouse, they might still walk
 			idle.pos = client:GetPos()
 			idle.t = CurTime()
-		elseif CurTime() > (idle.t + idle_limit) then
+		elseif CurTime() > idle.t + idle_limit then
 			RunConsoleCommand("say", "(AUTOMATED MESSAGE) I have been moved to the Spectator team because I was idle/AFK.")
 
 			timer.Simple(0.3, function()
@@ -563,7 +460,7 @@ function CheckIdle()
 
 				RunConsoleCommand("ttt_cl_idlepopup")
 			end)
-		elseif CurTime() > (idle.t + idle_limit / 2) then
+		elseif CurTime() > idle.t + idle_limit * 0.5 then
 			-- will repeat
 			LANG.Msg("idle_warning")
 		end

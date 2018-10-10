@@ -1,5 +1,3 @@
--- TODO in TTT2 improve this file
-
 -- Award/highlight generator functions take the events and the scores as
 -- produced by SCORING/CLSCORING and return a table if successful, or nil if
 -- not and another one should be tried.
@@ -8,29 +6,13 @@
 local table = table
 local pairs = pairs
 
-local function GetInnos(score)
-	local i = 0
+-- so much text here I'm using shorter names than usual
+local T = LANG.GetTranslation
+local PT = LANG.GetParamTranslation
 
-	for k, v in pairs(score.roles) do
-		if GetRoleByIndex(k).team == TEAM_INNO then
-			i = i + 1
-		end
-	end
-
-	return i
-end
-
-local function GetTraitors(score)
-	local i = 0
-
-	for k, v in pairs(score.roles) do
-		if GetRoleByIndex(k).team == TEAM_TRAITOR then
-			i = i + 1
-		end
-	end
-
-	return i
-end
+-- New award functions must be added to this to be used by CLSCORE.
+-- Note that AWARDS is global. You can just go: table.insert(AWARDS, myawardfn) in your SWEPs.
+AWARDS = {}
 
 local is_dmg = function(dmg_t, bit)
 	-- deal with large-number workaround for TableToJSON by
@@ -38,14 +20,10 @@ local is_dmg = function(dmg_t, bit)
 	return util.BitSet(tonumber(dmg_t), bit)
 end
 
--- so much text here I'm using shorter names than usual
-local T = LANG.GetTranslation
-local PT = LANG.GetParamTranslation
-
 -- a common pattern
 local function FindHighest(tbl)
 	local m_num = 0
-	local m_id = nil
+	local m_id
 
 	for id, num in pairs(tbl) do
 		if num > m_num then
@@ -57,7 +35,7 @@ local function FindHighest(tbl)
 	return m_id, m_num
 end
 
-local function FirstSuicide(events, scores, players, traitors)
+function FirstSuicide(events, scores, players, traitors)
 	local fs
 	local fnum = 0
 
@@ -90,8 +68,9 @@ local function FirstSuicide(events, scores, players, traitors)
 		return award
 	end
 end
+AWARDS.FirstSuicide = FirstSuicide
 
-local function ExplosiveGrant(events, scores, players, traitors)
+function ExplosiveGrant(events, scores, players, traitors)
 	local bombers = {}
 
 	for _, e in pairs(events) do
@@ -120,63 +99,72 @@ local function ExplosiveGrant(events, scores, players, traitors)
 		end
 	end
 end
+AWARDS.ExplosiveGrant = ExplosiveGrant
 
-local function ExplodedSelf(events, scores, players, traitors)
+function ExplodedSelf(events, scores, players, traitors)
 	for _, e in pairs(events) do
 		if e.id == EVENT_KILL and is_dmg(e.dmg.t, DMG_BLAST) and e.att.sid == e.vic.sid then
 			return {title = T("aw_exp2_title"), text = T("aw_exp2_text"), nick = e.vic.ni, priority = math.random(1, 4)}
 		end
 	end
 end
+AWARDS.ExplodedSelf = ExplodedSelf
 
-local function FirstBlood(events, scores, players, traitors)
+function FirstBlood(events, scores, players, traitors)
 	for _, e in pairs(events) do
 		if e.id == EVENT_KILL and e.att.sid ~= e.vic.sid and e.att.sid ~= -1 then
 			local award = {nick = e.att.ni}
 
 			if not award.nick or award.nick == "" then return end
 
-			local vtr = GetRoleByIndex(e.vic.r).team == TEAM_TRAITOR
-			local atr = GetRoleByIndex(e.att.r).team == TEAM_TRAITOR
+			local vtr = e.vic.t
+			local atr = e.att.t
 
-			if atr and not vtr then -- traitor legit k
-				award.title = T("aw_fst1_title")
-				award.text = T("aw_fst1_text")
-			elseif atr and vtr then -- traitor tk
-				award.title = T("aw_fst2_title")
-				award.text = T("aw_fst2_text")
-			elseif not atr and not vtr then -- inno tk
-				award.title = T("aw_fst3_title")
-				award.text = T("aw_fst3_text")
-			else -- inno legit k
-				award.title = T("aw_fst4_title")
-				award.text = T("aw_fst4_text")
+			if atr == TEAM_TRAITOR then
+				if atr ~= vtr then -- traitor legit k
+					award.title = T("aw_fst1_title")
+					award.text = T("aw_fst1_text")
+				else -- traitor tk
+					award.title = T("aw_fst2_title")
+					award.text = T("aw_fst2_text")
+				end
+			else
+				if atr == vtr then -- inno tk
+					award.title = T("aw_fst3_title")
+					award.text = T("aw_fst3_text")
+				else -- inno legit k
+					award.title = T("aw_fst4_title")
+					award.text = T("aw_fst4_text")
+				end
 			end
 
 			-- more interesting if there were many players and therefore many kills
-			award.priority = math.random(-3, math.Round(table.Count(players) / 4))
+			award.priority = math.random(-3, math.Round(table.Count(players) * 0.25))
 
 			return award
 		end
 	end
 end
+AWARDS.FirstBlood = FirstBlood
 
-local function AllKills(events, scores, players, traitors)
+function AllKills(events, scores, players, traitors)
 	-- see if there is one killer responsible for all kills of either team
 
-	local tr_killers = {}
-	local in_killers = {}
+	local killed_traitors = {}
+	local killed_not_traitors = {}
 
 	for id, s in pairs(scores) do
-		if GetInnos(s) > 0 then
-			table.insert(in_killers, id)
-		elseif GetTraitors(s) > 0 then
-			table.insert(tr_killers, id)
+		for _, ev in ipairs(s.ev) do
+			if ev.v == TEAM_TRAITOR and not table.HasValue(killed_traitors, id) then
+				table.insert(killed_traitors, id)
+			elseif ev.v ~= TEAM_TRAITOR and not table.HasValue(killed_not_traitors, id) then
+				table.insert(killed_not_traitors, id)
+			end
 		end
 	end
 
-	if #tr_killers == 1 then
-		local id = tr_killers[1]
+	if #killed_traitors == 1 then
+		local id = killed_traitors[1]
 
 		if not table.HasValue(traitors, id) then
 			local killer = players[id]
@@ -187,8 +175,8 @@ local function AllKills(events, scores, players, traitors)
 		end
 	end
 
-	if #in_killers == 1 then
-		local id = in_killers[1]
+	if #killed_not_traitors == 1 then
+		local id = killed_not_traitors[1]
 
 		if table.HasValue(traitors, id) then
 			local killer = players[id]
@@ -199,75 +187,9 @@ local function AllKills(events, scores, players, traitors)
 		end
 	end
 end
+AWARDS.AllKills = AllKills
 
-local function NumKills_Traitor(events, scores, players, traitors)
-	local trs = {}
-
-	for id, s in pairs(scores) do
-		if table.HasValue(traitors, id) and GetInnos(s) > 0 then
-			table.insert(trs, id)
-		end
-	end
-
-	local choices = #trs
-	if choices > 0 then
-		-- award a random killer
-		local pick = math.random(1, choices)
-		local sid = trs[pick]
-		local nick = players[sid]
-
-		if not nick then return end
-
-		local kills = GetInnos(scores[sid])
-
-		if kills == 1 then
-			return {title = T("aw_nkt1_title"), nick = nick, text = T("aw_nkt1_text"), priority = 0}
-		elseif kills == 2 then
-			return {title = T("aw_nkt2_title"), nick = nick, text = T("aw_nkt2_text"), priority = 1}
-		elseif kills == 3 then
-			return {title = T("aw_nkt3_title"), nick = nick, text = T("aw_nkt3_text"), priority = kills}
-		elseif kills >= 4 and kills < 7 then
-			return {title = T("aw_nkt4_title"), nick = nick, text = PT("aw_nkt4_text", {num = kills}), priority = kills + 2}
-		elseif kills >= 7 then
-			return {title = T("aw_nkt5_title"), nick = nick, text = T("aw_nkt5_text"), priority = kills + 5}
-		end
-	end
-end
-
-local function NumKills_Inno(events, scores, players, traitors)
-	local ins = {}
-
-	for id, s in pairs(scores) do
-		if not table.HasValue(traitors, id) and GetTraitors(s) > 0 then
-			table.insert(ins, id)
-		end
-	end
-
-	local choices = #ins
-
-	if choices > 0 then
-		-- award a random killer
-		local pick = math.random(1, choices)
-		local sid = ins[pick]
-		local nick = players[sid]
-
-		if not nick then return end
-
-		local kills = GetTraitors(scores[sid])
-
-		if kills == 1 then
-			return {title = T("aw_nki1_title"), nick = nick, text = T("aw_nki1_text"), priority = 0}
-		elseif kills == 2 then
-			return {title = T("aw_nki2_title"), nick = nick, text = T("aw_nki2_text"), priority = 1}
-		elseif kills == 3 then
-			return {title = T("aw_nki3_title"), nick = nick, text = T("aw_nki3_text"), priority = 5}
-		elseif kills >= 4 then
-			return {title = T("aw_nki4_title"), nick = nick, text = T("aw_nki4_text"), priority = kills + 10}
-		end
-	end
-end
-
-local function FallDeath(events, scores, players, traitors)
+function FallDeath(events, scores, players, traitors)
 	for _, e in pairs(events) do
 		if e.id == EVENT_KILL and is_dmg(e.dmg.t, DMG_FALL) then
 			if e.att.ni ~= "" then
@@ -278,16 +200,18 @@ local function FallDeath(events, scores, players, traitors)
 		end
 	end
 end
+AWARDS.FallDeath = FallDeath
 
-local function FallKill(events, scores, players, traitors)
+function FallKill(events, scores, players, traitors)
 	for _, e in pairs(events) do
 		if e.id == EVENT_KILL and is_dmg(e.dmg.t, DMG_CRUSH) and is_dmg(e.dmg.t, DMG_PHYSGUN) and e.att.ni ~= "" then
 			return {title = T("aw_fal3_title"), nick = e.att.ni, text = T("aw_fal3_text"), priority = math.random(10, 15)}
 		end
 	end
 end
+AWARDS.FallKill = FallKill
 
-local function Headshots(events, scores, players, traitors)
+function Headshots(events, scores, players, traitors)
 	local hs = {}
 
 	for _, e in pairs(events) do
@@ -307,7 +231,7 @@ local function Headshots(events, scores, players, traitors)
 
 	if not nick then return end
 
-	local award = {nick = nick, priority = m_num / 2}
+	local award = {nick = nick, priority = m_num * 0.5}
 	if m_num > 1 and m_num < 4 then
 		award.title = T("aw_hed1_title")
 		award.text = PT("aw_hed1_text", {num = m_num})
@@ -324,8 +248,9 @@ local function Headshots(events, scores, players, traitors)
 
 	return award
 end
+AWARDS.Headshots = Headshots
 
-local function UsedAmmoMost(events, ammotype)
+function UsedAmmoMost(events, ammotype)
 	local user = {}
 
 	for _, e in pairs(events) do
@@ -342,8 +267,9 @@ local function UsedAmmoMost(events, ammotype)
 
 	return {sid = m_id, kills = m_num}
 end
+AWARDS.UsedAmmoMost = UsedAmmoMost
 
-local function CrowbarUser(events, scores, players, traitors)
+function CrowbarUser(events, scores, players, traitors)
 	local most = UsedAmmoMost(events, AMMO_CROWBAR)
 
 	if not most then return end
@@ -368,8 +294,9 @@ local function CrowbarUser(events, scores, players, traitors)
 
 	return award
 end
+AWARDS.CrowbarUser = CrowbarUser
 
-local function PistolUser(events, scores, players, traitors)
+function PistolUser(events, scores, players, traitors)
 	local most = UsedAmmoMost(events, AMMO_PISTOL)
 
 	if not most then return end
@@ -394,8 +321,9 @@ local function PistolUser(events, scores, players, traitors)
 
 	return award
 end
+AWARDS.PistolUser = PistolUser
 
-local function ShotgunUser(events, scores, players, traitors)
+function ShotgunUser(events, scores, players, traitors)
 	local most = UsedAmmoMost(events, AMMO_SHOTGUN)
 
 	if not most then return end
@@ -410,7 +338,7 @@ local function ShotgunUser(events, scores, players, traitors)
 	if kills > 1 and kills < 4 then
 		award.title = T("aw_sgn1_title")
 		award.text = PT("aw_sgn1_text", {num = kills})
-		award.priority = math.Round(kills / 2)
+		award.priority = math.Round(kills * 0.5)
 	elseif kills >= 4 then
 		award.title = T("aw_sgn2_title")
 		award.text = PT("aw_sgn2_text", {num = kills})
@@ -420,8 +348,9 @@ local function ShotgunUser(events, scores, players, traitors)
 
 	return award
 end
+AWARDS.ShotgunUser = ShotgunUser
 
-local function RifleUser(events, scores, players, traitors)
+function RifleUser(events, scores, players, traitors)
 	local most = UsedAmmoMost(events, AMMO_RIFLE)
 
 	if not most then return end
@@ -436,7 +365,7 @@ local function RifleUser(events, scores, players, traitors)
 	if kills > 1 and kills < 4 then
 		award.title = T("aw_rfl1_title")
 		award.text = PT("aw_rfl1_text", {num = kills})
-		award.priority = math.Round(kills / 2)
+		award.priority = math.Round(kills * 0.5)
 	elseif kills >= 4 then
 		award.title = T("aw_rfl2_title")
 		award.text = PT("aw_rfl2_text", {num = kills})
@@ -446,8 +375,9 @@ local function RifleUser(events, scores, players, traitors)
 
 	return award
 end
+AWARDS.RifleUser = RifleUser
 
-local function DeagleUser(events, scores, players, traitors)
+function RDeagleUser(events, scores, players, traitors)
 	local most = UsedAmmoMost(events, AMMO_DEAGLE)
 
 	if not most then return end
@@ -462,7 +392,7 @@ local function DeagleUser(events, scores, players, traitors)
 	if kills > 1 and kills < 4 then
 		award.title = T("aw_dgl1_title")
 		award.text = PT("aw_dgl1_text", {num = kills})
-		award.priority = math.Round(kills / 2)
+		award.priority = math.Round(kills * 0.5)
 	elseif kills >= 4 then
 		award.title = T("aw_dgl2_title")
 		award.text = PT("aw_dgl2_text", {num = kills})
@@ -473,8 +403,9 @@ local function DeagleUser(events, scores, players, traitors)
 
 	return award
 end
+AWARDS.DeagleUser = DeagleUser
 
-local function MAC10User(events, scores, players, traitors)
+function MAC10User(events, scores, players, traitors)
 	local most = UsedAmmoMost(events, AMMO_MAC10)
 
 	if not most then return end
@@ -489,7 +420,7 @@ local function MAC10User(events, scores, players, traitors)
 	if kills > 1 and kills < 4 then
 		award.title = T("aw_mac1_title")
 		award.text = PT("aw_mac1_text", {num = kills})
-		award.priority = math.Round(kills / 2)
+		award.priority = math.Round(kills * 0.5)
 	elseif kills >= 4 then
 		award.title = T("aw_mac2_title")
 		award.text = PT("aw_mac2_text", {num = kills})
@@ -499,8 +430,9 @@ local function MAC10User(events, scores, players, traitors)
 
 	return award
 end
+AWARDS.MAC10User = MAC10User
 
-local function SilencedPistolUser(events, scores, players, traitors)
+function SilencedPistolUser(events, scores, players, traitors)
 	local most = UsedAmmoMost(events, AMMO_SIPISTOL)
 
 	if not most then return end
@@ -524,8 +456,9 @@ local function SilencedPistolUser(events, scores, players, traitors)
 
 	return award
 end
+AWARDS.SilencedPistolUser = SilencedPistolUser
 
-local function KnifeUser(events, scores, players, traitors)
+function KnifeUser(events, scores, players, traitors)
 	local most = UsedAmmoMost(events, AMMO_KNIFE)
 
 	if not most then return end
@@ -559,8 +492,9 @@ local function KnifeUser(events, scores, players, traitors)
 
 	return award
 end
+AWARDS.KnifeUser = KnifeUser
 
-local function FlareUser(events, scores, players, traitors)
+function FlareUser(events, scores, players, traitors)
 	local most = UsedAmmoMost(events, AMMO_FLARE)
 
 	if not most then return end
@@ -584,8 +518,9 @@ local function FlareUser(events, scores, players, traitors)
 
 	return award
 end
+AWARDS.FlareUser = FlareUser
 
-local function M249User(events, scores, players, traitors)
+function M249User(events, scores, players, traitors)
 	local most = UsedAmmoMost(events, AMMO_M249)
 
 	if not most then return end
@@ -609,8 +544,9 @@ local function M249User(events, scores, players, traitors)
 
 	return award
 end
+AWARDS.M249User = M249User
 
-local function M16User(events, scores, players, traitors)
+function M16User(events, scores, players, traitors)
 	local most = UsedAmmoMost(events, AMMO_M16)
 
 	if not most then return end
@@ -634,27 +570,33 @@ local function M16User(events, scores, players, traitors)
 
 	return award
 end
+AWARDS.M16User = M16User
 
-local function TeamKiller(events, scores, players, traitors)
-	local num_traitors = table.Count(traitors)
-	local num_inno = table.Count(players) - num_traitors
+function TeamKiller(events, scores, players, traitors)
+	local tker
+	local tktbl = {}
+	local pct, tka = 0, 0
 
 	-- find biggest tker
-	local tker
-	local pct = 0
-
 	for id, s in pairs(scores) do
-		local kills = GetInnos(s)
-		local team = num_inno - 1
+		for _, ev in ipairs(s.ev) do
+			tktbl[id] = tktbl[id] or {}
 
-		if table.HasValue(traitors, id) then
-			kills = GetTraitors(s)
-			team = num_traitors - 1
+			if ev.t ~= ev.v then
+				tktbl[id].k = (tktbl[id].k or 0) + 1
+			else
+				tktbl[id].tk = (tktbl[id].tk or 0) + 1
+			end
 		end
+	end
 
-		if kills > 0 and (kills / team) > pct then
-			pct = kills / team
+	for tk, tbl in pairs(tktbl) do
+		local tmp = tbl.tk / tbl.k
+
+		if tmp > pct then
 			tker = id
+			tka = tbl.tk
+			pct = tmp
 		end
 	end
 
@@ -666,31 +608,30 @@ local function TeamKiller(events, scores, players, traitors)
 	if not nick then return end
 
 	local was_traitor = table.HasValue(traitors, tker)
-	local kills = (was_traitor and GetTraitors(scores[tker]) > 0 and GetTraitors(scores[tker])) or (GetInnos(scores[tker]) > 0 and GetInnos(scores[tker])) or 0
-	local award = {nick = nick, priority = kills}
+	local award = {nick = nick, priority = tka}
 
-	if kills == 1 then
+	if tka == 1 then
 		award.title = T("aw_tkl1_title")
 		award.text = T("aw_tkl1_text")
 		award.priority = 0
-	elseif kills == 2 then
+	elseif tka == 2 then
 		award.title = T("aw_tkl2_title")
 		award.text = T("aw_tkl2_text")
-	elseif kills == 3 then
+	elseif tka == 3 then
 		award.title = T("aw_tkl3_title")
 		award.text = T("aw_tkl3_text")
 	elseif pct >= 1.0 then
 		award.title = T("aw_tkl4_title")
 		award.text = T("aw_tkl4_text")
-		award.priority = kills + math.random(3, 6)
+		award.priority = tka + math.random(3, 6)
 	elseif pct >= 0.75 and not was_traitor then
 		award.title = T("aw_tkl5_title")
 		award.text = T("aw_tkl5_text")
-		award.priority = kills + 10
+		award.priority = tka + 10
 	elseif pct > 0.5 then
 		award.title = T("aw_tkl6_title")
 		award.text = T("aw_tkl6_text")
-		award.priority = kills + math.random(2, 7)
+		award.priority = tka + math.random(2, 7)
 	elseif pct >= 0.25 then
 		award.title = T("aw_tkl7_title")
 		award.text = T("aw_tkl7_text")
@@ -700,8 +641,9 @@ local function TeamKiller(events, scores, players, traitors)
 
 	return award
 end
+AWARDS.TeamKiller = TeamKiller
 
-local function Burner(events, scores, players, traitors)
+function Burner(events, scores, players, traitors)
 	local brn = {}
 
 	for _, e in pairs(events) do
@@ -739,8 +681,9 @@ local function Burner(events, scores, players, traitors)
 
 	return award
 end
+AWARDS.Burner = Burner
 
-local function Coroner(events, scores, players, traitors)
+function Coroner(events, scores, players, traitors)
 	local finders = {}
 
 	for _, e in pairs(events) do
@@ -777,8 +720,9 @@ local function Coroner(events, scores, players, traitors)
 
 	return award
 end
+AWARDS.Coroner = Coroner
 
-local function CreditFound(events, scores, players, traitors)
+function CreditFound(events, scores, players, traitors)
 	local finders = {}
 
 	for _, e in pairs(events) do
@@ -809,21 +753,22 @@ local function CreditFound(events, scores, players, traitors)
 
 	return award
 end
+AWARDS.CreditFound = CreditFound
 
-local function TimeOfDeath(events, scores, players, traitors)
+function TimeOfDeath(events, scores, players, traitors)
 	local near = 10
 	local time_near_start = CLSCORE.StartTime + near
 
 	local time_near_end, traitor_win, e
 
-	for i = #events, 1, - 1 do
+	for i = #events, 1, -1 do
 		e = events[i]
 
 		if e.id == EVENT_FINISH then
 			time_near_end = e.t - near
-			traitor_win = (e.win == WIN_TRAITOR)
+			traitor_win = e.win == WIN_TRAITOR or e.win == TEAM_TRAITOR
 		elseif e.id == EVENT_KILL and e.vic then
-			if time_near_end and e.t > time_near_end and (GetRoleByIndex(e.vic.r).team == TEAM_TRAITOR) == traitor_win then
+			if time_near_end and e.t > time_near_end and (e.vic.t == TEAM_TRAITOR) == traitor_win then
 				return {
 					nick = e.vic.ni,
 					title = T("aw_tod1_title"),
@@ -841,8 +786,4 @@ local function TimeOfDeath(events, scores, players, traitors)
 		end
 	end
 end
-
-
--- New award functions must be added to this to be used by CLSCORE.
--- Note that AWARDS is global. You can just go: table.insert(AWARDS, myawardfn) in your SWEPs.
-AWARDS = {FirstSuicide, ExplosiveGrant, ExplodedSelf, FirstBlood, AllKills, NumKills_Traitor, NumKills_Inno, FallDeath, Headshots, PistolUser, ShotgunUser, RifleUser, DeagleUser, MAC10User, CrowbarUser, TeamKiller, Burner, SilencedPistolUser, KnifeUser, FlareUser, Coroner, M249User, M16User, CreditFound, FallKill, TimeOfDeath}
+AWARDS.TimeOfDeath = TimeOfDeath

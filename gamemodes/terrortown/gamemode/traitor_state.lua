@@ -1,43 +1,29 @@
-function GetTraitors()
-	local trs = {}
-
-	for _, v in ipairs(player.GetAll()) do
-		if v:HasTeamRole(TEAM_TRAITOR) then
-			table.insert(trs, v)
-		end
-	end
-
-	return trs
-end
-
-function CountTraitors()
-	return #GetTraitors()
-end
-
 ---- Role state communication
 
--- Send every player their role
+-- Send every player the subrole
 local function SendPlayerRoles()
 	for _, v in ipairs(player.GetAll()) do
-		if IsValid(v) and v.GetRole then -- prevention
+		if IsValid(v) and v.GetSubRole then -- prevention
 			net.Start("TTT_Role")
-			net.WriteUInt(v:GetRole(), ROLE_BITS)
+			net.WriteUInt(v:GetSubRole(), ROLE_BITS)
+			net.WriteString(v:GetTeam())
 			net.Send(v)
 		end
 	end
 end
 
-function SendRoleListMessage(role, role_ids, ply_or_rf)
+function SendRoleListMessage(subrole, team, sids, ply_or_rf)
 	net.Start("TTT_RoleList")
-	net.WriteUInt(role, ROLE_BITS)
+	net.WriteUInt(subrole, ROLE_BITS)
+	net.WriteString(team)
 
 	-- list contents
-	local num_ids = #role_ids
+	local num_ids = #sids
 
 	net.WriteUInt(num_ids, 8)
 
 	for i = 1, num_ids do
-		net.WriteUInt(role_ids[i] - 1, 7)
+		net.WriteUInt(sids[i] - 1, 7)
 	end
 
 	if ply_or_rf then
@@ -47,271 +33,152 @@ function SendRoleListMessage(role, role_ids, ply_or_rf)
 	end
 end
 
-function SendRoleList(role, ply_or_rf, pred)
-	local role_ids = {}
+function SendSubRoleList(subrole, ply_or_rf, pred)
+	local team_ids = {}
 
 	for _, v in ipairs(player.GetAll()) do
-		if v:IsRole(role) and (not pred or (pred and pred(v))) then
-			table.insert(role_ids, v:EntIndex())
+		if v:GetSubRole() == subrole and (not pred or (pred and pred(v))) then
+			local team = v:GetTeam()
+
+			team_ids[team] = team_ids[team] or {} -- create table if it does not exists
+
+			table.insert(team_ids[team], v:EntIndex())
 		end
 	end
 
-	SendRoleListMessage(role, role_ids, ply_or_rf)
-end
-
-function SendTeamRoleList(team, ply_or_rf, pred)
-	local role_ids = {}
-
-	for _, v in pairs(GetTeamRoles(team)) do
-		role_ids[v.index] = {}
-	end
-
-	for _, v in ipairs(player.GetAll()) do
-		if v:HasTeamRole(team) and (not pred or (pred and pred(v))) then
-			if team == TEAM_TRAITOR and not v:GetRoleData().visibleForTraitors then
-				table.insert(role_ids[GetWinningRole(team).index], v:EntIndex())
-			else
-				table.insert(role_ids[v:GetRole()], v:EntIndex())
-			end
-		end
-	end
-
-	for k, v in pairs(role_ids) do
-		if v then
-			SendRoleListMessage(k, role_ids[k], ply_or_rf)
-		end
+	for team, ids in pairs(team_ids) do
+		SendRoleListMessage(subrole, team, ids, ply_or_rf)
 	end
 end
 
-function SendTeamRoleSilList(team, ply_or_rf, pred)
-	local role_ids = {}
+function SendRoleList(subrole, ply_or_rf, pred)
+	local team_ids = {}
 
 	for _, v in ipairs(player.GetAll()) do
-		if v:HasTeamRole(team) and (not pred or (pred and pred(v))) then
-			table.insert(role_ids, v:EntIndex())
+		if v:IsRole(subrole) and (not pred or (pred and pred(v))) then
+			local team = v:GetTeam()
+
+			team_ids[team] = team_ids[team] or {} -- create table if it does not exists
+
+			table.insert(team_ids[team], v:EntIndex())
 		end
 	end
 
-	SendRoleListMessage(GetWinningRole(team).index, role_ids, ply_or_rf)
-end
-
--- this is purely to make sure last round's traitors/dets ALWAYS get reset
--- not happy with this, but it'll do for now
-function SendInnocentList()
-	-- Send innocent and detectives a list of actual innocents + traitors, while
-	-- sending traitors only a list of actual innocents.
-	local tmp = {}
-
-	for _, v in pairs(ROLES) do
-		tmp[v.index] = {}
-	end
-
-	for _, v in ipairs(player.GetAll()) do
-		table.insert(tmp[v:GetRole()], v:EntIndex())
-	end
-
-	local mergedList = {}
-	local mergedListForTraitor = {}
-
-	for _, role in pairs(ROLES) do
-		if role ~= ROLES.DETECTIVE then -- never reset detectives -- will be later
-			table.Add(mergedList, tmp[role.index])
-
-			-- maybe remove second check to enable traitors that other traitors cant see ?
-			if not role.visibleForTraitors and role.team ~= TEAM_TRAITOR then -- prevent resetting visible players and traitors for traitors
-				table.Add(mergedListForTraitor, tmp[role.index])
-			end
-		end
-	end
-
-	table.Shuffle(mergedList)
-	table.Shuffle(mergedListForTraitor)
-
-	-- traitors get actual innocent, so they do not reset their traitor mates to innocence
-	SendRoleListMessage(ROLES.INNOCENT.index, mergedListForTraitor, GetRoleTeamFilter(TEAM_TRAITOR))
-
-	local tmpList = {}
-
-	for _, v in pairs(ROLES) do
-		if (v.team == TEAM_TRAITOR or v.specialRoleFilter) and not table.HasValue(tmpList, v.team) then
-			table.insert(tmpList, v.team)
-		end
-	end
-
-	-- update everyone as innocent w/ traitors and roles with special role filtering
-	SendRoleListMessage(ROLES.INNOCENT.index, mergedList, GetAllRolesFilterWOTeams(tmpList))
-end
-
-function SendVisibleForTraitorList()
-	local b = false
-	local tmp = {}
-
-	for _, v in pairs(ROLES) do
-		if v.team ~= TEAM_TRAITOR and v.visibleForTraitors then
-			b = true
-			tmp[v.index] = {}
-		end
-	end
-
-	if not b then return end
-
-	for _, v in ipairs(player.GetAll()) do
-		local roleData = GetRoleByIndex(v:GetRole())
-
-		if tmp[roleData.index] then
-			table.insert(tmp[roleData.index], v:EntIndex())
-		end
-	end
-
-	for k, v in pairs(tmp) do
-		SendRoleListMessage(k, v, GetRoleTeamFilter(TEAM_TRAITOR))
+	for team, ids in pairs(team_ids) do
+		SendRoleListMessage(subrole, team, ids, ply_or_rf)
 	end
 end
 
-function SendNetworkingRolesList(role, rolesTbl)
-	local b = false
-	local tmp = {}
-
-	for _, v in pairs(rolesTbl) do
-		if v and table.HasValue(ROLES, v) then -- theoretically not necessary, but safety first
-			b = true
-			tmp[v.index] = {}
-		end
-	end
-
-	if not b then return end
+function SendTeamList(team, ply_or_rf, pred)
+	local team_ids = {}
 
 	for _, v in ipairs(player.GetAll()) do
-		local roleData = GetRoleByIndex(v:GetRole())
+		if v:HasTeam(team) and (not pred or (pred and pred(v))) then
+			local subrole = v:GetSubRole()
 
-		if tmp[roleData.index] then
-			table.insert(tmp[roleData.index], v:EntIndex())
+			team_ids[subrole] = team_ids[subrole] or {} -- create table if it does not exists
+
+			table.insert(team_ids[subrole], v:EntIndex())
 		end
 	end
 
-	for k, v in pairs(tmp) do
-		SendRoleListMessage(k, v, GetRoleFilter(role))
+	for subrole, ids in pairs(team_ids) do
+		SendRoleListMessage(subrole, team, ids, ply_or_rf)
 	end
 end
 
-function SendConfirmedTraitors(ply_or_rf)
-	SendTeamRoleSilList(TEAM_TRAITOR, ply_or_rf, function(p)
+function SendConfirmedTeam(team, ply_or_rf)
+	local _func = function(p)
 		return p:GetNWBool("body_found")
-	end)
+	end
+
+	return SendTeamList(team, ply_or_rf, _func)
 end
 
-function SendConfirmedSpecial(role, ply_or_rf)
-	SendRoleList(role, ply_or_rf, function(p)
-		return p:GetNWBool("body_found")
-	end)
+function SendPlayerToEveryone(ply, ply_or_rf)
+	return SendRoleListMessage(ply:GetSubRole(), ply:GetTeam(), {ply:EntIndex()}, ply_or_rf)
 end
 
+-- TODO Improve, not resending if current data is consistent
 function SendFullStateUpdate()
-	SendInnocentList()
+	SendRoleReset() -- reset every player; now everyone is inno
 
-	SendVisibleForTraitorList()
+	for _, v in ipairs(GetAvailableTeams()) do
+		SendTeamList(v, GetTeamFilter(v))
+		SendConfirmedTeam(v)
+	end
 
-	-- easy role filtering method
-	for _, v in pairs(ROLES) do
+	for _, v in pairs(GetRoles()) do
+		if v.visibleForTraitors then
+			SendSubRoleList(v.index, GetTeamFilter(TEAM_TRAITOR))
+		end
+
 		if v.networkRoles then
-			SendNetworkingRolesList(v.index, v.networkRoles)
-		end
-	end
-
-	hook.Run("TTT2_SendFullStateUpdate")
-
-	-- TODO: Improve, not resending if current data is consistent
-
-	-- send every traitor the specific role of traitor mates
-	--for _, v in pairs(GetTeamRoles(TEAM_TRAITOR)) do
-	--	SendRoleList(v.index, GetRoleTeamFilter(TEAM_TRAITOR))
-	--end
-	-- tell traitors who is traitor
-	-- SendTeamRoleList(TEAM_TRAITOR, GetRoleTeamFilter(TEAM_TRAITOR))
-	-- not useful to sync confirmed traitors here, so following to prevent
-	-- issue if traitor had been updated as inno
-	for _, ply in ipairs(player.GetAll()) do
-		if not ply:GetRoleData().specialRoleFilter then
-			if ply:HasTeamRole(TEAM_TRAITOR) then
-				SendTeamRoleList(TEAM_TRAITOR, ply)
-			else
-				SendConfirmedTraitors(ply)
+			for _, roleData in ipairs(v.networkRoles) do
+				SendSubRoleList(roleData.index, GetSubRoleFilter(v.index))
 			end
-		else
-			hook.Run("TTT2_SpecialRoleFilter", ply)
 		end
 	end
 
-	-- everyone should know who is detective
-	SendRoleList(ROLES.DETECTIVE.index)
+	SendRoleList(ROLE_DETECTIVE) -- everyone should know who is detective
 
-	-- update players at the end, because they were overwritten as innos, except traitors
-	SendPlayerRoles()
+	hook.Run("TTT2SpecialRoleSyncing") -- maybe some networking for a custom role
+
+	SendPlayerRoles() -- update players at the end, because they were overwritten as innos
 end
 
 function SendRoleReset(ply_or_rf)
-	local plys = player.GetAll()
+	local ids = {}
 
-	net.Start("TTT_RoleList")
-	net.WriteUInt(ROLES.INNOCENT.index, ROLE_BITS)
-
-	net.WriteUInt(#plys, 8)
-	for _, v in ipairs(plys) do
-		net.WriteUInt(v:EntIndex() - 1, 7)
+	for _, ply in ipairs(player.GetAll()) do
+		table.insert(ids, ply:EntIndex())
 	end
 
-	if ply_or_rf then
-		net.Send(ply_or_rf)
-	else
-		net.Broadcast()
-	end
+	SendRoleListMessage(ROLE_INNOCENT, TEAM_INNOCENT, ids, ply_or_rf)
 end
 
 ---- Console commands
-
-local function request_rolelist(ply)
+local function ttt_request_rolelist(ply)
 	-- Client requested a state update. Note that the client can only use this
 	-- information after entities have been initialized (e.g. in InitPostEntity).
 	if GetRoundState() ~= ROUND_WAIT then
-		SendRoleReset(ply) -- reset every player for ply
+		SendRoleReset(ply) -- reset every player for ply; now everyone is inno
 
-		-- now everyone is inno
-		SendVisibleForTraitorList()
+		if not ply:GetSubRoleData().unknownTeam then
+			SendTeamList(ply:GetTeam(), ply) -- send list of team to ply
+		end
 
-		-- easy role filtering method
-		for _, v in pairs(ROLES) do
-			if v.networkRoles then
-				SendNetworkingRolesList(v.index, v.networkRoles)
+		for _, v in ipairs(GetAvailableTeams()) do
+			SendConfirmedTeam(v, ply)
+		end
+
+		local rd = ply:GetSubRoleData()
+
+		if rd.visibleForTraitors then
+			SendSubRoleList(rd.index, ply)
+		end
+
+		if rd.networkRoles then
+			for _, roleData in ipairs(rd.networkRoles) do
+				SendSubRoleList(roleData.index, ply)
 			end
 		end
 
-		-- just send detectives to all
-		SendRoleList(ROLES.DETECTIVE.index, ply)
+		SendRoleList(ROLE_DETECTIVE, ply) -- just send detectives to ply
 
-		-- update traitors
-		if not ply:GetRoleData().specialRoleFilter then
-			if ply:HasTeamRole(TEAM_TRAITOR) then
-				SendTeamRoleList(TEAM_TRAITOR, ply)
-			else
-				SendConfirmedTraitors(ply)
-			end
-		else
-			hook.Run("TTT2_SpecialRoleFilter", ply)
-		end
+		hook.Run("TTT2SpecialRoleSyncing", ply) -- maybe some networking for a custom role
 
-		-- update own role for ply
-		if ply.GetRole then -- prevention
-			net.Start("TTT_Role")
-			net.WriteUInt(ply:GetRole(), ROLE_BITS)
-			net.Send(ply)
-		end
+		-- update own role for ply because they were overwritten as innos
+		net.Start("TTT_Role")
+		net.WriteUInt(ply:GetSubRole(), ROLE_BITS)
+		net.WriteString(ply:GetTeam())
+		net.Send(ply)
 	end
 end
-concommand.Add("_ttt_request_rolelist", request_rolelist)
+concommand.Add("_ttt_request_rolelist", ttt_request_rolelist)
 
--- override
-local function force_terror(ply)
-	ply:UpdateRole(ROLES.INNOCENT.index)
+local function ttt_force_terror(ply)
+	ply:UpdateRole(ROLE_INNOCENT)
 	ply:UnSpectate()
 	ply:SetTeam(TEAM_TERROR)
 
@@ -322,35 +189,33 @@ local function force_terror(ply)
 
 	SendFullStateUpdate()
 end
-concommand.Add("ttt_force_terror", force_terror, nil, nil, FCVAR_CHEAT)
+concommand.Add("ttt_force_terror", ttt_force_terror, nil, nil, FCVAR_CHEAT)
 
--- override
-local function force_traitor(ply)
-	ply:UpdateRole(ROLES.TRAITOR.index)
-
-	SendFullStateUpdate()
-end
-concommand.Add("ttt_force_traitor", force_traitor, nil, nil, FCVAR_CHEAT)
-
--- override
-local function force_detective(ply)
-	ply:UpdateRole(ROLES.DETECTIVE.index)
+local function ttt_force_traitor(ply)
+	ply:UpdateRole(ROLE_TRAITOR)
 
 	SendFullStateUpdate()
 end
-concommand.Add("ttt_force_detective", force_detective, nil, nil, FCVAR_CHEAT)
+concommand.Add("ttt_force_traitor", ttt_force_traitor, nil, nil, FCVAR_CHEAT)
 
-local function force_role(ply, cmd, args, argStr)
+local function ttt_force_detective(ply)
+	ply:UpdateRole(ROLE_DETECTIVE)
+
+	SendFullStateUpdate()
+end
+concommand.Add("ttt_force_detective", ttt_force_detective, nil, nil, FCVAR_CHEAT)
+
+local function ttt_force_role(ply, cmd, args, argStr)
 	local role = tonumber(args[1])
-	local i = 0
+	local i = 1
 
-	for _, v in pairs(ROLES) do
+	for _, v in pairs(GetRoles()) do
 		i = i + 1
 	end
 
 	local rd = GetRoleByIndex(role)
 
-	if role and role ~= 0 and role <= i and not rd.notSelectable then
+	if role and role <= i and not rd.notSelectable then
 		ply:UpdateRole(role)
 
 		SendFullStateUpdate()
@@ -358,15 +223,15 @@ local function force_role(ply, cmd, args, argStr)
 		ply:ChatPrint("You changed to '" .. rd.name .. "' (role: " .. role .. ")")
 	end
 end
-concommand.Add("ttt_force_role", force_role, nil, nil, FCVAR_CHEAT)
+concommand.Add("ttt_force_role", ttt_force_role, nil, nil, FCVAR_CHEAT)
 
 local function get_role(ply)
-	net.Start("TTT2_Test_role")
+	net.Start("TTT2TestRole")
 	net.Send(ply)
 end
 concommand.Add("get_role", get_role)
 
-local function toggle_role(ply, cmd, args, argStr)
+local function ttt_toggle_role(ply, cmd, args, argStr)
 	if ply:IsAdmin() then
 		local role = tonumber(args[1])
 		local roleData = GetRoleByIndex(role)
@@ -379,7 +244,7 @@ local function toggle_role(ply, cmd, args, argStr)
 		ply:ChatPrint("You " .. word .. " role with index '" .. role .. "(" .. roleData.name .. ")'. This will take effect in the next role selection!")
 	end
 end
-concommand.Add("ttt_toggle_role", toggle_role)
+concommand.Add("ttt_toggle_role", ttt_toggle_role)
 
 local function force_spectate(ply, cmd, arg)
 	if IsValid(ply) then
@@ -402,11 +267,12 @@ local function force_spectate(ply, cmd, arg)
 end
 concommand.Add("ttt_spectate", force_spectate)
 
-net.Receive("TTT_Spectate", function(l, pl)
+local function TTT_Spectate(l, pl)
 	force_spectate(pl, nil, {net.ReadBool() and 1 or 0})
-end)
+end
+net.Receive("TTT_Spectate", TTT_Spectate)
 
-local function roles_index(ply)
+local function ttt_roles_index(ply)
 	if ply:IsAdmin() then
 		ply:ChatPrint("[TTT2] roles_index...")
 		ply:ChatPrint("----------------")
@@ -419,4 +285,4 @@ local function roles_index(ply)
 		ply:ChatPrint("----------------")
 	end
 end
-concommand.Add("ttt_roles_index", roles_index)
+concommand.Add("ttt_roles_index", ttt_roles_index)

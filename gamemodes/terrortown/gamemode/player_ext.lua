@@ -19,7 +19,11 @@ function plymeta:GetRagdollSpec()
 	return self.spec_ragdoll
 end
 
-AccessorFunc(plymeta, "force_spec", "ForceSpec", FORCE_BOOL)
+function plymeta:SetForceSpec(state)
+	self.force_spec = state -- compatibility with other addons
+
+	self:SetNWBool("force_spec", state)
+end
 
 --- Karma
 
@@ -49,6 +53,7 @@ end
 --- Equipment credits
 function plymeta:SetCredits(amt)
 	self.equipment_credits = amt
+
 	self:SendCredits()
 end
 
@@ -62,13 +67,12 @@ end
 
 function plymeta:SetDefaultCredits()
 	if self:IsShopper() then
-		local rd = self:GetRoleData()
-		if rd.preventDefaultCredits then return end
+		local rd = self:GetSubRoleData()
 
-		if self:HasTeamRole(TEAM_TRAITOR) then
+		if self:HasTeam(TEAM_TRAITOR) then
 			local c = (ConVarExists("ttt_credits_starting") and GetConVar("ttt_credits_starting"):GetInt() or 0)
 
-			if CountTraitors() == 1 then
+			if #GetTeamMembers(TEAM_TRAITOR) == 1 then
 				c = c + (ConVarExists("ttt_credits_alonebonus") and GetConVar("ttt_credits_alonebonus"):GetInt() or 0)
 			end
 
@@ -95,6 +99,7 @@ function plymeta:AddEquipmentItem(id)
 
 	if id then
 		self.equipment_items = bit.bor(self.equipment_items, id)
+
 		self:SendEquipment()
 	end
 end
@@ -124,12 +129,12 @@ function plymeta:SendBought()
 	net.Send(self)
 end
 
-local function ResendBought(ply)
+local function ttt_resend_bought(ply)
 	if IsValid(ply) then
 		ply:SendBought()
 	end
 end
-concommand.Add("ttt_resend_bought", ResendBought)
+concommand.Add("ttt_resend_bought", ttt_resend_bought)
 
 function plymeta:ResetBought()
 	self.bought = {}
@@ -138,9 +143,7 @@ function plymeta:ResetBought()
 end
 
 function plymeta:AddBought(id)
-	if not self.bought then
-		self.bought = {}
-	end
+	self.bought = self.bought or {}
 
 	table.insert(self.bought, tostring(id))
 
@@ -161,7 +164,7 @@ end
 
 -- Sets all flags (force_spec, etc) to their default
 function plymeta:ResetStatus()
-	self:SetRole(ROLES.INNOCENT.index)
+	self:SetRole(ROLE_INNOCENT) -- this will update the team automatically
 	self:SetRagdollSpec(false)
 	self:SetForceSpec(false)
 	self:ResetRoundFlags()
@@ -169,10 +172,8 @@ end
 
 -- Sets round-based misc flags to default position. Called at PlayerSpawn.
 function plymeta:ResetRoundFlags()
-	-- equipment
 	self:ResetEquipment()
 	self:SetCredits(0)
-
 	self:ResetBought()
 
 	-- equipment stuff
@@ -190,10 +191,8 @@ function plymeta:ResetRoundFlags()
 	-- communication
 	self.mute_team = -1
 
-	for _, v in pairs(GetWinRoles()) do
-		if v.team ~= TEAM_INNO and not v.unknownTeam then
-			self[v.team .. "_gvoice"] = false
-		end
+	for _, team in ipairs(GetWinTeams()) do
+		self[team .. "_gvoice"] = false
 	end
 
 	self:SetNWBool("disguised", false)
@@ -227,16 +226,13 @@ end
 function plymeta:RecordKill(victim)
 	if not IsValid(victim) then return end
 
-	if not self.kills then
-		self.kills = {}
-	end
+	self.kills = self.kills or {}
 
-	table.insert(self.kills, victim:SteamID())
+	table.insert(self.kills, victim:SteamID64())
 end
 
-
 function plymeta:SetSpeed(slowed)
-	error "Player:SetSpeed is deprecated - please remove this call and use the TTTPlayerSpeedModifier hook in both CLIENT and SERVER states"
+	error "Player:SetSpeed(slowed) is deprecated - please remove this call and use the TTTPlayerSpeedModifier hook in both CLIENT and SERVER states"
 end
 
 function plymeta:ResetLastWords()
@@ -269,26 +265,31 @@ function plymeta:SendLastWords(dmginfo)
 	-- any longer than this and you're out of luck
 	local ply = self
 
-	timer.Simple(2, function() ply:ResetLastWords() end)
+	timer.Simple(2, function()
+		ply:ResetLastWords()
+	end)
 end
-
 
 function plymeta:ResetViewRoll()
 	local ang = self:EyeAngles()
 
 	if ang.r ~= 0 then
 		ang.r = 0
+
 		self:SetEyeAngles(ang)
 	end
 end
 
-
 function plymeta:ShouldSpawn()
 	-- do not spawn players who have not been through initspawn
-	if not self:IsSpec() and not self:IsTerror() then return false end
+	if not self:IsSpec() and not self:IsTerror() then
+		return false
+	end
 
 	-- do not spawn forced specs
-	if self:IsSpec() and self:GetForceSpec() then return false end
+	if self:IsSpec() and self:GetForceSpec() then
+		return false
+	end
 
 	return true
 end
@@ -308,7 +309,9 @@ function plymeta:SpawnForRound(dead_only)
 		return false
 	end
 
-	if not self:ShouldSpawn() then return false end
+	if not self:ShouldSpawn() then
+		return false
+	end
 
 	-- reset propspec state that they may have gotten during prep
 	PROPSPEC.Clear(self)
@@ -383,11 +386,104 @@ local oldUnSpectate = plymeta.UnSpectate
 
 function plymeta:UnSpectate()
 	oldUnSpectate(self)
+
 	self:SetNoTarget(false)
 end
 
 function plymeta:GetAvoidRole(role)
-	local name = GetRoleByIndex(role).name
+	return self:GetInfoNum("ttt_avoid_" .. GetRoleByIndex(role).name, 0) > 0
+end
 
-	return self:GetInfoNum("ttt_avoid_" .. name, 0) > 0
+function plymeta:CanSelectRole(roleData, choice_count, role_count)
+	local min_karmas = (ConVarExists("ttt_" .. roleData.name .. "_karma_min") and GetConVar("ttt_" .. roleData.name .. "_karma_min"):GetInt()) or 0
+
+	return (
+		choice_count <= role_count
+		or self:GetBaseKarma() > min_karmas and GAMEMODE.LastRole[self:SteamID64()] == ROLE_INNOCENT
+		or math.random(1, 3) == 2
+	) and (choice_count <= role_count or not self:GetAvoidRole(roleData.index))
+end
+
+--------------------------------------------------
+--			   MODIFIED EXTERN CODE
+--------------------------------------------------
+-- Code is basically from GameFreak's SecondChance
+
+local function FindCorpse(ply)
+	for _, ent in ipairs(ents.FindByClass("prop_ragdoll")) do
+		if ent.uqid == ply:UniqueID() and IsValid(ent) then
+			return ent or false
+		end
+	end
+end
+
+local Positions = {}
+
+-- Populate Around Player
+for i = 0, 360, 22.5 do
+	table.insert(Positions, Vector(math.cos(i), math.sin(i), 0))
+end
+
+table.insert(Positions, Vector(0, 0, 1)) -- Populate Above Player
+
+local function FindCorpsePosition(corpse)
+	local size = Vector(32, 32, 72)
+	local startPos = corpse:GetPos() + Vector(0, 0, size.z * 0.5)
+	local len = #Positions
+
+	for i = 1, len do
+		local v = Positions[i]
+		local pos = startPos + v * size * 1.5
+
+		local tr = {}
+		tr.start = pos
+		tr.endpos = pos
+		tr.mins = size * -0.5
+		tr.maxs = size * 0.5
+
+		local trace = util.TraceHull(tr)
+
+		if not trace.Hit then
+			return pos - Vector(0, 0, size.z * 0.5)
+		end
+	end
+
+	return false
+end
+
+function plymeta:Revive(delay, fn)
+	timer.Create("TTT2RevivePlayer" .. self:EntIndex(), delay, 1, function()
+		local corpse = FindCorpse(self)
+
+		if not IsValid(corpse) or corpse:IsOnFire() then
+			timer.Remove("TTT2RevivePlayer" .. self:EntIndex())
+
+			return
+		end
+
+		if corpse then
+			local spawnPos = FindCorpsePosition(corpse)
+
+			if not spawnPos then return end
+
+			self:SpawnForRound(true)
+			self:SetPos(spawnPos)
+			self:SetEyeAngles(Angle(0, corpse:GetAngles().y, 0))
+		else
+			self:SpawnForRound(true)
+		end
+
+		self:SetMaxHealth(100)
+
+		local credits = CORPSE.GetCredits(corpse, 0)
+
+		self:SetCredits(credits)
+		corpse:Remove()
+
+		DamageLog("TTT2Revive: " .. self:Nick() .. " has been respawned.")
+
+		if fn then
+			fn(self)
+		end
+	end)
 end

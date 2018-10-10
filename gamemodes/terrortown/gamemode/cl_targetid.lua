@@ -1,9 +1,10 @@
 local util = util
 local surface = surface
 local draw = draw
-
 local GetPTranslation = LANG.GetParamTranslation
 local GetRaw = LANG.GetRawTranslation
+local GetLang = LANG.GetUnsafeLanguageTable
+local GetPlayers = player.GetAll
 
 local key_params = {
 	usekey = Key("+use", "USE"),
@@ -34,20 +35,18 @@ end
 
 ---- "T" indicator above traitors
 indicator_mat_tbl = {}
+indicator_col = Color(255, 255, 255, 130)
 
-hook.Add("TTT2_FinishedSync", "updateRoleMat", function(ply, first)
+local function TTT2FinishedLoading()
 	indicator_mat_tbl = {}
 
-	for _, v in pairs(ROLES) do
+	for _, v in pairs(GetRoles()) do
 		local mat = Material("vgui/ttt/sprite_" .. v.abbr)
 
 		indicator_mat_tbl[v.index] = mat
 	end
-end)
-
-indicator_col = Color(255, 255, 255, 130)
-
-local GetPlayers = player.GetAll
+end
+hook.Add("TTT2FinishedLoading", "updateRoleMat", TTT2FinishedLoading)
 
 local propspec_outline = Material("models/props_combine/portalball001_sheet")
 
@@ -57,24 +56,24 @@ function GM:PostDrawTranslucentRenderables()
 	local client = LocalPlayer()
 	local plys = GetPlayers()
 
-	if client:IsSpecial() and client:IsActive() then
-		dir = (client:GetForward() * - 1)
+	if client:IsActive() and not client:IsInnocent() then
+		dir = (client:GetForward() * -1)
 
 		for i = 1, #plys do
 			local ply = plys[i]
-			local role = ply:GetRole()
+			local subrole = ply:GetSubRole()
 
 			local pos = ply:GetPos()
-			pos.z = (pos.z + 74)
+			pos.z = pos.z + 74
 
 			if ply ~= client
 			and ply:IsActive()
-			and ply:IsSpecial()
-			and ply:IsTeamMember(client)
-			and not ply:GetRoleData().avoidTeamIcons
-			and indicator_mat_tbl[role]
+			and not ply:IsInnocent()
+			and ply:IsInTeam(client)
+			and not ply:GetSubRoleData().avoidTeamIcons
+			and indicator_mat_tbl[subrole]
 			then
-				render.SetMaterial(indicator_mat_tbl[role])
+				render.SetMaterial(indicator_mat_tbl[subrole])
 				render.DrawQuadEasy(pos, dir, 8, 8, indicator_col, 180)
 			end
 		end
@@ -111,14 +110,13 @@ local function DrawPropSpecLabels(client)
 
 	surface.SetFont("TabLarge")
 
-	local tgt
-	local scrpos
-	local text
+	local tgt, scrpos, text
 	local w = 0
 
 	for _, ply in ipairs(player.GetAll()) do
 		if ply:IsSpec() then
 			surface.SetTextColor(220, 200, 0, 120)
+
 			tgt = ply:GetObserverTarget()
 
 			if IsValid(tgt) and tgt:GetNWEntity("spec_owner", nil) == ply then
@@ -128,18 +126,19 @@ local function DrawPropSpecLabels(client)
 			end
 		else
 			local _, healthcolor = util.HealthToString(ply:Health(), ply:GetMaxHealth())
+
 			surface.SetTextColor(healthcolor)
 
 			scrpos = ply:EyePos()
-			scrpos.z = (scrpos.z + 20)
+			scrpos.z = scrpos.z + 20
 			scrpos = scrpos:ToScreen()
 		end
 
 		if scrpos and not IsOffScreen(scrpos) then
 			text = ply:Nick()
-			w, _ = surface.GetTextSize(text)
+			w = surface.GetTextSize(text)
 
-			surface.SetTextPos(scrpos.x - w / 2, scrpos.y)
+			surface.SetTextPos(scrpos.x - w * 0.5, scrpos.y)
 			surface.DrawText(text)
 		end
 	end
@@ -150,14 +149,9 @@ end
 surface.CreateFont("TargetIDSmall2", {font = "TargetID", size = 16, weight = 1000})
 
 local minimalist = CreateConVar("ttt_minimal_targetid", "0", FCVAR_ARCHIVE)
-
 local magnifier_mat = Material("icon16/magnifier.png")
 local ring_tex = surface.GetTextureID("effects/select_ring")
-
 local rag_color = Color(200, 200, 200, 255)
-
-local GetLang = LANG.GetUnsafeLanguageTable
-
 local MAX_TRACE_LENGTH = math.sqrt(3) * 32768
 
 function GM:HUDDrawTargetID()
@@ -175,20 +169,18 @@ function GM:HUDDrawTargetID()
 	endpos:Add(startpos)
 
 	local trace = util.TraceLine({
-		start = startpos,
-		endpos = endpos,
-		mask = MASK_SHOT,
-		filter = client:GetObserverMode() == OBS_MODE_IN_EYE and {client, client:GetObserverTarget()} or client
+			start = startpos,
+			endpos = endpos,
+			mask = MASK_SHOT,
+			filter = client:GetObserverMode() == OBS_MODE_IN_EYE and {client, client:GetObserverTarget()} or client
 	})
 	local ent = trace.Entity
 
 	if not IsValid(ent) or ent.NoTarget then return end
 
 	-- some bools for caching what kind of ent we are looking at
-	local target_roles = {}
-
+	local target_role
 	local target_corpse = false
-
 	local text = nil
 	local color = COLOR_WHITE
 
@@ -207,7 +199,7 @@ function GM:HUDDrawTargetID()
 		if ent:GetNWBool("disguised", false) then
 			client.last_id = nil
 
-			if client:HasTeamRole(TEAM_TRAITOR) or client:IsSpec() then
+			if client:HasTeam(TEAM_TRAITOR) or client:IsSpec() then
 				text = ent:Nick() .. L.target_disg
 			else
 				-- Do not show anything
@@ -226,23 +218,13 @@ function GM:HUDDrawTargetID()
 			_, color = util.HealthToString(ent:Health(), ent:GetMaxHealth())
 		end
 
-		for _, v in pairs(ROLES) do
-			if GetRoundState() == ROUND_ACTIVE and v.team ~= TEAM_INNO then
-				if client:HasTeamRole(TEAM_TRAITOR) then
-					if not v.visibleForTraitors then
-						target_roles[ROLES.TRAITOR.index] = target_roles[ROLES.TRAITOR.index] or ent:GetRole() == v.index
-					else
-						target_roles[v.index] = target_roles[v.index] or ent:GetRole() == v.index
-					end
-				elseif client:HasTeamRole(v.team) or hook.Run("HUDDrawTargetCircleTex", ent) then
-					target_roles[v.index] = target_roles[v.index] or ent:GetRole() == v.index
-				end
-			end
+		local rstate = GetRoundState()
+
+		if rstate > ROUND_PREP and ent:IsDetective() then
+			target_role = ent:GetSubRole()
+		elseif rstate == ROUND_ACTIVE and ent:IsSpecial() then
+			target_role = ent:GetSubRole()
 		end
-
-		target_roles = hook.Run("TTT2_HUDDrawTargetID", target_roles) or target_roles
-
-		target_roles[ROLES.DETECTIVE.index] = target_roles[ROLES.DETECTIVE.index] or GetRoundState() > ROUND_PREP and ent:IsDetective() or false
 	elseif cls == "prop_ragdoll" then
 		-- only show this if the ragdoll has a nick, else it could be a mattress
 		if not CORPSE.GetPlayerNick(ent, false) then return end
@@ -260,26 +242,15 @@ function GM:HUDDrawTargetID()
 		return
 	end
 
-	local x_orig = ScrW() / 2.0
+	local x_orig = ScrW() * 0.5
 	local x = x_orig
-	local y = ScrH() / 2.0
-
+	local y = ScrH() * 0.5
 	local w, h = 0, 0 -- text width/height, reused several times
 
-	local selR
-
-	for k, v in pairs(target_roles) do
-		if v then
-			selR = k
-
-			break
-		end
-	end
-
-	if selR then
+	if target_role then
 		surface.SetTexture(ring_tex)
 
-		local clr = GetRoleByIndex(selR).color
+		local clr = GetRoleByIndex(target_role).color
 
 		surface.SetDrawColor(clr.r, clr.g, clr.b, 200)
 		surface.DrawTexturedRect(x - 32, y - 32, 64, 64)
@@ -294,8 +265,7 @@ function GM:HUDDrawTargetID()
 	-- Draw main title, ie. nickname
 	if text then
 		w, h = surface.GetTextSize(text)
-
-		x = (x - w / 2)
+		x = x - w * 0.5
 
 		draw.SimpleText(text, font, x + 1, y + 1, COLOR_BLACK)
 		draw.SimpleText(text, font, x, y, color)
@@ -336,7 +306,7 @@ function GM:HUDDrawTargetID()
 	surface.SetFont(font)
 
 	w, h = surface.GetTextSize(text)
-	x = x_orig - w / 2
+	x = x_orig - w * 0.5
 
 	draw.SimpleText(text, font, x + 1, y + 1, COLOR_BLACK)
 	draw.SimpleText(text, font, x, y, clr)
@@ -352,7 +322,7 @@ function GM:HUDDrawTargetID()
 
 		w, h = surface.GetTextSize(text)
 		y = y + h + 5
-		x = x_orig - w / 2
+		x = x_orig - w * 0.5
 
 		draw.SimpleText(text, font, x + 1, y + 1, COLOR_BLACK)
 		draw.SimpleText(text, font, x, y, clr)
@@ -367,7 +337,7 @@ function GM:HUDDrawTargetID()
 		end
 
 		w, h = surface.GetTextSize(text)
-		x = x_orig - w / 2
+		x = x_orig - w * 0.5
 		y = y + h + 5
 
 		draw.SimpleText(text, font, x + 1, y + 1, COLOR_BLACK)
@@ -376,26 +346,16 @@ function GM:HUDDrawTargetID()
 
 	text = nil
 
-	local matched = false
+	if target_role then
+		local rd = GetRoleByIndex(target_role)
 
-	for k, v in pairs(target_roles) do
-		if v and k ~= ROLES.INNOCENT.index then
-			matched = true
+		text = L["target_" .. rd.name]
+		clr = rd.color
 
-			local rd = GetRoleByIndex(k)
-
-			text = L["target_" .. rd.name]
-			clr = rd.color
-
-			break
-		end
-	end
-
-	if not matched then
-		if ent.sb_tag and ent.sb_tag.txt ~= nil then
+		if ent.sb_tag and ent.sb_tag.txt then
 			text = L[ent.sb_tag.txt]
 			clr = ent.sb_tag.color
-		elseif target_corpse and client:IsActive() and client:HasTeamRole(TEAM_TRAITOR) and CORPSE.GetCredits(ent, 0) > 0 then
+		elseif target_corpse and client:IsActive() and client:IsShopper() and CORPSE.GetCredits(ent, 0) > 0 then
 			text = L.target_credits
 			clr = COLOR_YELLOW
 		end
@@ -403,7 +363,7 @@ function GM:HUDDrawTargetID()
 
 	if text then
 		w, h = surface.GetTextSize(text)
-		x = x_orig - w / 2
+		x = x_orig - w * 0.5
 		y = y + h + 5
 
 		draw.SimpleText(text, font, x + 1, y + 1, COLOR_BLACK)

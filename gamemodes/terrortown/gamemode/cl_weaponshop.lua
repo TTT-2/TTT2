@@ -18,11 +18,15 @@ function GetEquipmentForRoleAll()
 			"bobs_blacklisted"
 		}
 
-		hook.Run("TTT2_ModifyWepShopIgnoreWeps", eject) -- possibility to modify from externally
+		hook.Run("TTT2ModifyWepShopIgnoreWeps", eject) -- possibility to modify from externally
 
 		-- find buyable weapons to load info from
 		for _, v in ipairs(weapons.GetList()) do
-			if v and not v.Doublicated and not string.match(v.ClassName, "base") and not string.match(v.ClassName, "event") and not table.HasValue(eject, v.ClassName) then
+			if v and not v.Doublicated
+			and not string.match(v.ClassName, "base")
+			and not string.match(v.ClassName, "event")
+			and not table.HasValue(eject, v.ClassName)
+			then
 				local data = v.EquipMenuData or {}
 				local base = {
 					id = v.ClassName,
@@ -56,7 +60,7 @@ function GetEquipmentForRoleAll()
 	return Equipmentnew
 end
 
-net.Receive("newshop", function()
+local function newshop()
 	local sr = GetShopRoles()[1]
 	local selectedRole = sr.index
 	local state = true
@@ -88,12 +92,15 @@ net.Receive("newshop", function()
 	function sbar:Paint(w2, h2)
 		draw.RoundedBox(0, 0, 0, w2, h2, Color(0, 0, 0, 100))
 	end
+
 	function sbar.btnUp:Paint(w2, h2)
 		draw.RoundedBox(0, 0, 0, w2, h2, Color(200, 100, 0))
 	end
+
 	function sbar.btnDown:Paint(w2, h2)
 		draw.RoundedBox(0, 0, 0, w2, h2, Color(200, 100, 0))
 	end
+
 	function sbar.btnGrip:Paint(w2, h2)
 		draw.RoundedBox(0, 0, 0, w2, h2, Color(100, 200, 0))
 	end
@@ -114,8 +121,8 @@ net.Receive("newshop", function()
 	menu:SetSize(w, 25)
 	menu:SetValue(sr.name)
 
-	for _, v in pairs(ROLES) do
-		if v ~= ROLES.INNOCENT then
+	for _, v in pairs(GetRoles()) do
+		if v ~= INNOCENT then
 			menu:AddChoice(v.name, v.index)
 		end
 	end
@@ -140,7 +147,7 @@ net.Receive("newshop", function()
 			if ItemIsWeapon(item) then
 				local slot = vgui.Create("SimpleClickIconLabelled")
 				slot:SetIcon("vgui/ttt/slotcap")
-				slot:SetIconColor(GetShopRoles()[1].color or COLOR_GREY)
+				slot:SetIconColor(sr.color or COLOR_GREY)
 				slot:SetIconSize(16)
 				slot:SetIconText(item.slot)
 				slot:SetIconProperties(COLOR_WHITE, "DefaultBold", {opacity = 220, offset = 1}, {10, 8})
@@ -371,22 +378,23 @@ net.Receive("newshop", function()
 
 		fbmenu:RefreshChoices()
 	end
-end)
+end
+net.Receive("newshop", newshop)
 
-net.Receive("shopFallbackAnsw", function(len)
-	local role = net.ReadUInt(ROLE_BITS)
+local function shopFallbackAnsw(len)
+	local subrole = net.ReadUInt(ROLE_BITS)
 
-	local rd = GetRoleByIndex(role)
+	local rd = GetRoleByIndex(subrole)
 	local fb = GetConVar("ttt_" .. rd.abbr .. "_shop_fallback"):GetString()
 
 	-- reset everything
-	EquipmentItems[role] = {}
-	Equipment[role] = {}
+	EquipmentItems[subrole] = {}
+	Equipment[subrole] = {}
 
 	for _, v in ipairs(weapons.GetList()) do
 		if v.CanBuy then
 			for k, vi in ipairs(v.CanBuy) do
-				if vi == role then
+				if vi == subrole then
 					table.remove(v.CanBuy, k) -- TODO does it work?
 
 					break
@@ -396,29 +404,30 @@ net.Receive("shopFallbackAnsw", function(len)
 	end
 
 	if fb == SHOP_UNSET then
-		local roleData = GetRoleByIndex(role)
+		local roleData = GetRoleByIndex(subrole)
 		if roleData.fallbackTable then
 			-- set everything
 			for _, eq in ipairs(roleData.fallbackTable) do
 				local is_item = tonumber(eq.id)
 				if is_item then
-					table.insert(EquipmentItems[role], eq)
+					table.insert(EquipmentItems[subrole], eq)
 				else
 					local wepTbl = weapons.GetStored(eq.id)
 					if wepTbl then
 						wepTbl.CanBuy = wepTbl.CanBuy or {}
 
-						table.insert(wepTbl.CanBuy, role)
+						table.insert(wepTbl.CanBuy, subrole)
 					end
 				end
 
-				table.insert(Equipment[role], eq)
+				table.insert(Equipment[subrole], eq)
 			end
 		end
 	end
-end)
+end
+net.Receive("shopFallbackAnsw", shopFallbackAnsw)
 
-net.Receive("shopFallbackRefresh", function(len)
+local function shopFallbackRefresh(len)
 	local wshop = LocalPlayer().weaponshopList
 	if wshop and wshop.GetItems then
 		if not wshop.selectedRole then return end
@@ -449,4 +458,5 @@ net.Receive("shopFallbackRefresh", function(len)
 			end
 		end
 	end
-end)
+end
+net.Receive("shopFallbackRefresh", shopFallbackRefresh)
