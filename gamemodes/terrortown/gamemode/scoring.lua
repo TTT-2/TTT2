@@ -65,7 +65,7 @@ function SCORE:HandleKill(victim, attacker, dmginfo)
 		att = {ni = "", sid = -1, r = -1, t = ""},
 		vic = {
 			ni = victim:Nick(),
-			sid = victim:SteamID(),
+			sid = victim:SteamID64(),
 			r = victim:GetSubRole(),
 			t = victim:GetTeam()
 		},
@@ -76,7 +76,7 @@ function SCORE:HandleKill(victim, attacker, dmginfo)
 
 	if IsValid(attacker) and attacker:IsPlayer() then
 		e.att.ni = attacker:Nick()
-		e.att.sid = attacker:SteamID()
+		e.att.sid = attacker:SteamID64()
 		e.att.r = attacker:GetSubRole()
 		e.att.t = attacker:GetTeam()
 	end
@@ -107,7 +107,7 @@ end
 
 function SCORE:HandleSpawn(ply)
 	if ply:Team() == TEAM_TERROR then
-		self:AddEvent({id = EVENT_SPAWN, ni = ply:Nick(), sid = ply:SteamID()})
+		self:AddEvent({id = EVENT_SPAWN, ni = ply:Nick(), sid = ply:SteamID64()})
 	end
 end
 
@@ -124,8 +124,8 @@ function SCORE:HandleSelection()
 			tmp[subrole] = tmp[subrole] or {}
 			teams[team] = teams[team] or {}
 
-			table.insert(tmp[subrole], ply:SteamID())
-			table.insert(teams[team], ply:SteamID())
+			table.insert(tmp[subrole], ply:SteamID64())
+			table.insert(teams[team], ply:SteamID64())
 		end
 	end
 
@@ -133,7 +133,7 @@ function SCORE:HandleSelection()
 end
 
 function SCORE:HandleBodyFound(finder, found)
-	self:AddEvent({id = EVENT_BODYFOUND, ni = finder:Nick(), sid = finder:SteamID(), r = finder:GetBaseRole(), t = finder:GetTeam(), b = found:Nick()})
+	self:AddEvent({id = EVENT_BODYFOUND, ni = finder:Nick(), sid = finder:SteamID64(), r = finder:GetBaseRole(), t = finder:GetTeam(), b = found:Nick()})
 end
 
 function SCORE:HandleC4Explosion(planter, arm_time, exp_time)
@@ -164,14 +164,14 @@ function SCORE:HandleC4Disarm(disarmer, owner, success)
 end
 
 function SCORE:HandleCreditFound(finder, found_nick, credits)
-	self:AddEvent({id = EVENT_CREDITFOUND, ni = finder:Nick(), sid = finder:SteamID(), b = found_nick, cr = credits})
+	self:AddEvent({id = EVENT_CREDITFOUND, ni = finder:Nick(), sid = finder:SteamID64(), b = found_nick, cr = credits})
 end
 
 function SCORE:ApplyEventLogScores(wintype)
 	local scores = {}
 
 	for _, ply in ipairs(player.GetAll()) do
-		scores[ply:SteamID()] = {}
+		scores[ply:SteamID64()] = {}
 	end
 
 	-- individual scores, and count those left alive
@@ -180,7 +180,7 @@ function SCORE:ApplyEventLogScores(wintype)
 	local ply
 
 	for sid, s in pairs(scored_log) do
-		ply = player.GetBySteamID(sid)
+		ply = player.GetBySteamID64(sid)
 
 		if ply and ply:ShouldScore() then
 			ply:AddFrags(KillsToPoints(s))
@@ -191,7 +191,7 @@ function SCORE:ApplyEventLogScores(wintype)
 	-- count deaths
 	for _, e in pairs(self.Events) do
 		if e.id == EVENT_KILL then
-			local victim = player.GetBySteamID(e.vic.sid)
+			local victim = player.GetBySteamID64(e.vic.sid)
 
 			if IsValid(victim) and victim:ShouldScore() then
 				victim:AddDeaths(1)

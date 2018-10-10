@@ -86,7 +86,7 @@ function SendFullStateUpdate()
 	SendRoleReset() -- reset every player; now everyone is inno
 
 	for _, v in ipairs(GetAvailableTeams()) do
-		if v ~= TEAM_INNO then
+		if v ~= TEAM_INNOCENT then
 			SendTeamList(v, GetTeamFilter(v))
 			SendConfirmedTeam(v)
 		end
@@ -95,6 +95,12 @@ function SendFullStateUpdate()
 	for _, v in pairs(GetRoles()) do
 		if v.visibleForTraitors then
 			SendRoleList(v.index, GetTeamFilter(TEAM_TRAITOR))
+		end
+
+		if v.networkRoles then
+			for _, roleData in ipairs(v.networkRoles) do
+				SendRoleList(roleData.index, GetRoleFilter(v.index))
+			end
 		end
 	end
 
@@ -112,7 +118,7 @@ function SendRoleReset(ply_or_rf)
 		table.insert(ids, ply:EntIndex())
 	end
 
-	SendRoleListMessage(ROLE_INNOCENT, TEAM_INNO, ids, ply_or_rf)
+	SendRoleListMessage(ROLE_INNOCENT, TEAM_INNOCENT, ids, ply_or_rf)
 end
 
 ---- Console commands
@@ -124,14 +130,20 @@ local function ttt_request_rolelist(ply)
 		SendTeamList(ply:GetTeam(), ply) -- send list of team to ply
 
 		for _, v in ipairs(GetAvailableTeams()) do
-			if v ~= TEAM_INNO then
+			if v ~= TEAM_INNOCENT then
 				SendConfirmedTeam(v, ply)
 			end
 		end
 
-		for _, v in pairs(GetRoles()) do
-			if v.visibleForTraitors then
-				SendRoleList(v.index, ply)
+		local rd = ply:GetSubRoleData()
+
+		if rd.visibleForTraitors then
+			SendRoleList(rd.index, ply)
+		end
+
+		if rd.networkRoles then
+			for _, roleData in ipairs(rd.networkRoles) do
+				SendRoleList(roleData.index, ply)
 			end
 		end
 

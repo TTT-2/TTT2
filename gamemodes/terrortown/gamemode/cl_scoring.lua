@@ -288,8 +288,7 @@ end
 
 function CLSCORE:BuildHilitePanel(dpanel)
 	local w, h = dpanel:GetSize()
-	local teamRole = INNOCENT
-	local title = {c = teamRole.color, txt = "hilite_win_" .. teamRole.name}
+	local title = {c = TEAMS[TEAM_INNOCENT].color, txt = "hilite_win_" .. TEAM_INNOCENT}
 	local endtime = self.StartTime
 
 	for i = #self.Events, 1, -1 do
@@ -309,11 +308,10 @@ function CLSCORE:BuildHilitePanel(dpanel)
 				if wintype == WIN_TRAITOR then
 					wintype = TEAM_TRAITOR
 				elseif wintype == WIN_INNOCENT then
-					wintype = TEAM_INNO
+					wintype = TEAM_INNOCENT
 				end
 
-				teamRole = GetDefaultTeamRole(wintype)
-				title = {c = teamRole.color, txt = "hilite_win_" .. teamRole.name}
+				title = {c = TEAMS[wintype].color or c, txt = "hilite_win_" .. wintype}
 			end
 
 			break

@@ -183,7 +183,7 @@ local function RoundStateChange(o, n)
 	-- whatever round state we get, clear out the voice flags
 	for _, v in ipairs(player.GetAll()) do
 		for _, team in ipairs(GetWinTeams()) do
-			if team ~= TEAM_INNO then
+			if team ~= TEAM_INNOCENT then
 				v[team .. "_gvoice"] = false
 			end
 		end
@@ -252,7 +252,7 @@ local function ReceiveRoleList()
 			ply:UpdateRole(subrole)
 			ply:UpdateTeam(team)
 
-			if not ply:HasTeam(TEAM_INNO) and not ply:GetSubRoleData().unknownTeam then
+			if not ply:HasTeam(TEAM_INNOCENT) and not ply:GetSubRoleData().unknownTeam then
 				ply[ply:GetTeam() .. "_gvoice"] = false -- assume role's chat by default
 			end
 		end

@@ -192,7 +192,7 @@ local ban_functions = {
 		evolve:Ban(p:UniqueID(), l * 60, r) -- time in seconds
 	end,
 	sm = function(p, l, r)
-		game.ConsoleCommand(Format("sm_ban \"#%s\" %d \"%s\"\n", p:SteamID(), l, r))
+		game.ConsoleCommand(Format("sm_ban \"#%s\" %d \"%s\"\n", p:SteamID64(), l, r))
 	end,
 	exsto = function(p, l, r)
 		local adm = exsto.GetPlugin("administration")

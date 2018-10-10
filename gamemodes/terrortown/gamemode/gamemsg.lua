@@ -82,7 +82,7 @@ function GetPlayerFilter(pred)
 end
 
 function GetInnocentFilter(alive_only)
-	return GetTeamFilter(TEAM_INNO, alive_only)
+	return GetTeamFilter(TEAM_INNOCENT, alive_only)
 end
 
 function GetTraitorFilter(alive_only)

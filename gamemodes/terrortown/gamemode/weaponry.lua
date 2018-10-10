@@ -339,10 +339,10 @@ concommand.Add("ttt_dropammo", DropActiveAmmo)
 -- the map, keep trying until the player has moved to a better spot where it
 -- does work.
 local function GiveEquipmentWeapon(sid, cls)
-	-- Referring to players by SteamID because a player may disconnect while his
+	-- Referring to players by SteamID64 because a player may disconnect while his
 	-- unique timer still runs, in which case we want to be able to stop it. For
-	-- that we need its name, and hence his SteamID.
-	local ply = player.GetBySteamID(sid)
+	-- that we need its name, and hence his SteamID64.
+	local ply = player.GetBySteamID64(sid)
 	local tmr = "give_equipment" .. sid
 
 	if not IsValid(ply) or not ply:IsActiveSpecial() then
@@ -375,7 +375,7 @@ local function GiveEquipmentWeapon(sid, cls)
 end
 
 local function HasPendingOrder(ply)
-	return timer.Exists("give_equipment" .. tostring(ply:SteamID()))
+	return timer.Exists("give_equipment" .. tostring(ply:SteamID64()))
 end
 
 function GM:TTTCanOrderEquipment(ply, id, is_item)
@@ -458,7 +458,7 @@ local function OrderEquipment(ply, cmd, args)
 		-- no longer restricted to only WEAPON_EQUIP weapons, just anything that
 		-- is whitelisted and carryable
 		if ply:CanCarryWeapon(swep_table) then
-			GiveEquipmentWeapon(ply:SteamID(), id)
+			GiveEquipmentWeapon(ply:SteamID64(), id)
 
 			received = true
 		end
@@ -533,13 +533,13 @@ local function TransferCredits(ply, cmd, args)
 	local credits = tonumber(args[2])
 
 	if sid and credits then
-		local target = player.GetBySteamID(sid)
+		local target = player.GetBySteamID64(sid)
 
 		if not IsValid(target)
 		or not target:IsActiveShopper()
 		or target == ply
-		or target:HasTeam(TEAM_INNO)
-		or ply:HasTeam(TEAM_INNO)
+		or target:HasTeam(TEAM_INNOCENT)
+		or ply:HasTeam(TEAM_INNOCENT)
 		or not target:IsInTeam(ply)
 		then
 			LANG.Msg(ply, "xfer_no_recip")

@@ -43,7 +43,7 @@ function ENT:AcceptInput(name, activator)
 		elseif r == RECEIVE_TRAITOR then
 			recv = GetTeamFilter(TEAM_TRAITOR)
 		elseif r == RECEIVE_INNOCENT then
-			recv = GetTeamFilter(TEAM_INNO)
+			recv = GetTeamFilter(TEAM_INNOCENT)
 		elseif r == RECEIVE_ACTIVATOR then
 			if not IsValid(activator) or not activator:IsPlayer() then
 				ErrorNoHalt("ttt_game_text tried to show message to invalid !activator\n")

@@ -17,6 +17,10 @@ function plymeta:IsSpec()
 	return self:Team() == TEAM_SPEC
 end
 
+function plymeta:GetForceSpec()
+	return self:GetNWBool("force_spec")
+end
+
 AccessorFunc(plymeta, "subrole", "SubRole", FORCE_NUMBER)
 
 function plymeta:GetBaseRole()

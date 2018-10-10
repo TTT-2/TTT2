@@ -26,7 +26,7 @@ function GM:PlayerInitialSpawn(ply)
 	-- TODO why sending roles here? The game has not begun!
 	if rstate <= ROUND_PREP then
 		for _, v in ipairs(GetAvailableTeams()) do
-			if v ~= TEAM_INNO then
+			if v ~= TEAM_INNOCENT then
 				SendTeamList(v, GetTeamFilter(v))
 				SendConfirmedTeam(v)
 			end
@@ -42,7 +42,7 @@ function GM:PlayerInitialSpawn(ply)
 		SendRoundState(rstate, ply)
 
 		for _, v in ipairs(GetAvailableTeams()) do
-			if v ~= TEAM_INNO then
+			if v ~= TEAM_INNOCENT then
 				SendConfirmedTeam(v, ply)
 			end
 		end
@@ -62,7 +62,7 @@ end
 function GM:NetworkIDValidated(name, steamid)
 	-- edge case where player authed after initspawn
 	for _, p in ipairs(player.GetAll()) do
-		if IsValid(p) and p:SteamID() == steamid and p.delay_karma_recall then
+		if IsValid(p) and p:SteamID64() == steamid and p.delay_karma_recall then
 			KARMA.LateRecallAndSet(p)
 
 			return
@@ -317,17 +317,13 @@ function GM:PlayerSwitchFlashlight(ply, on)
 		return false
 	end
 
-	print("DEBUG::TTT2::PlayerSwitchFlashlight: ply:IsTerror() = " .. (ply:IsTerror() and "true" or "false") .. ", on = " .. (on and "true" or "false"))
-
 	-- add the flashlight "effect" here, and then deny the switch
 	-- this prevents the sound from playing, fixing the exploit
 	-- where weapon sound could be silenced using the flashlight sound
-	if not on or ply:IsTerror() then
-		if on then
-			ply:AddEffects(EF_DIMLIGHT)
-		else
-			ply:RemoveEffects(EF_DIMLIGHT)
-		end
+	if on and ply:IsTerror() then
+		ply:AddEffects(EF_DIMLIGHT)
+	else
+		ply:RemoveEffects(EF_DIMLIGHT)
 	end
 
 	return false
@@ -488,7 +484,7 @@ function GM:PlayerDisconnected(ply)
 
 	if GetRoundState() ~= ROUND_PREP then
 		for _, v in ipairs(GetAvailableTeams()) do
-			if v ~= TEAM_INNO then
+			if v ~= TEAM_INNOCENT then
 				SendTeamList(v, GetTeamFilter(v))
 				SendConfirmedTeam(v)
 			end

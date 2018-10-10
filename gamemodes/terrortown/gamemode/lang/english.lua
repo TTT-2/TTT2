@@ -776,9 +776,9 @@ L.report_save_error = "No Event Log data to save."
 L.report_save_result = "The Event Log has been saved to:"
 
 -- Big title window
-L.hilite_win_traitor = "THE TRAITORS WIN"
+L.hilite_win_traitors = "THE TRAITORS WIN"
 L.hilite_win_bees = "THE BEES WIN"
-L.hilite_win_innocent = "THE INNOCENT WIN"
+L.hilite_win_innocents = "THE INNOCENTS WIN"
 
 L.hilite_players1 = "{numplayers} players took part, {numtraitors} were traitors"
 L.hilite_players2 = "{numplayers} players took part, one of them the traitor"

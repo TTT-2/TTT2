@@ -317,7 +317,7 @@ local function TraitorMenuPopup()
 	-- temp table for sorting
 	local paneltablefav = {}
 	local paneltable = {}
-	local steamid = ply:SteamID()
+	local steamid = ply:SteamID64()
 	local srd = ply:GetSubRoleData()
 
 	for k, item in ipairs(items) do

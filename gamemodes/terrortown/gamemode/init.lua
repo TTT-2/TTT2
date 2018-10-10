@@ -806,7 +806,7 @@ function PrintResultMessage(result)
 			if result == WIN_TRAITOR then
 				result = TEAM_TRAITOR
 			elseif result == WIN_INNOCENT then
-				result = TEAM_INNO
+				result = TEAM_INNOCENT
 			end
 		end
 
@@ -868,9 +868,9 @@ function EndRound(result)
 	-- Stop checking for wins
 	StopWinChecks()
 
-	-- send each client the role setup
+	-- send each client the role setup, reveal every player
 	for _, v in pairs(GetRoles()) do
-		SendRoleList(v.index, player.GetAll())
+		SendRoleList(v.index)
 	end
 
 	-- We may need to start a timer for a mapswitch, or start a vote
@@ -1015,7 +1015,7 @@ function GetSelectableRoles(plys, max_plys)
 			end
 
 			-- save previous role and sign up as possible traitor/detective
-			local r = GAMEMODE.LastRole[v:SteamID()] or v:GetSubRole() or ROLE_INNOCENT
+			local r = GAMEMODE.LastRole[v:SteamID64()] or v:GetSubRole() or ROLE_INNOCENT
 
 			prev_roles[r][#prev_roles[r] + 1] = v
 			choices[#choices + 1] = v
@@ -1078,6 +1078,8 @@ function GetSelectableRoles(plys, max_plys)
 			end
 		end
 	end
+
+	return selectableRoles
 end
 
 function SelectRoles(plys, max_plys)
@@ -1103,7 +1105,7 @@ function SelectRoles(plys, max_plys)
 			end
 
 			-- save previous role and sign up as possible traitor/detective
-			local r = GAMEMODE.LastRole[v:SteamID()] or v:GetSubRole() or ROLE_INNOCENT
+			local r = GAMEMODE.LastRole[v:SteamID64()] or v:GetSubRole() or ROLE_INNOCENT
 
 			prev_roles[r][#prev_roles[r] + 1] = v
 			choices[#choices + 1] = v
@@ -1217,7 +1219,7 @@ function SelectRoles(plys, max_plys)
 		local subrole = ply:GetSubRole()
 
 		-- store a steamid -> role map
-		GAMEMODE.LastRole[ply:SteamID()] = subrole
+		GAMEMODE.LastRole[ply:SteamID64()] = subrole
 
 		ply:UpdateRole(subrole) -- just for some hooks and other special things
 	end

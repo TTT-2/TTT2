@@ -5,7 +5,7 @@ GM.Author = "Bad King Urgrain && Alf21"
 GM.Email = "4lf-mueller@gmx.de"
 GM.Website = "ttt.badking.net, ttt2.informaskill.de"
 -- Date of latest changes (YYYY-MM-DD)
-GM.Version = "0.3.1b"
+GM.Version = "0.3.2b"
 
 GM.Customized = true
 
@@ -71,7 +71,7 @@ TRAITOR_EQUIPMENT = {
 }
 
 -- role teams to have an identifier
-TEAM_INNO = "innocents"
+TEAM_INNOCENT = "innocents"
 TEAM_TRAITOR = "traitors"
 
 -- never use this as a team, its just a const to check something
@@ -89,7 +89,7 @@ ROLE_NONE = ROLE_NONE or ROLE_INNOCENT
 
 -- TEAM_ARRAY
 TEAMS = {
-	TEAM_INNO = {
+	TEAM_INNOCENT = {
 		icon = "vgui/ttt/icon_inno"
 	},
 	TEAM_TRAITOR = {
@@ -109,7 +109,7 @@ ROLES.INNOCENT = {
 	bgcolor = Color(0, 50, 0, 200),
 	name = "innocent",
 	abbr = "inno",
-	defaultTeam = TEAM_INNO,
+	defaultTeam = TEAM_INNOCENT,
 	defaultEquipment = INNO_EQUIPMENT,
 	buildin = true,
 	scoreKillsMultiplier = 1,
@@ -142,7 +142,7 @@ ROLES.DETECTIVE = {
 	bgcolor = Color(0, 0, 150, 200),
 	name = "detective",
 	abbr = "det",
-	defaultTeam = TEAM_INNO,
+	defaultTeam = TEAM_INNOCENT,
 	defaultEquipment = SPECIAL_EQUIPMENT,
 	buildin = true,
 	scoreKillsMultiplier = INNOCENT.scoreKillsMultiplier,
@@ -162,14 +162,12 @@ CreateConVar("ttt_" .. INNOCENT.abbr .. "_shop_fallback", SHOP_DISABLED, {FCVAR_
 CreateConVar("ttt_" .. TRAITOR.abbr .. "_shop_fallback", SHOP_UNSET, {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
 CreateConVar("ttt_" .. DETECTIVE.abbr .. "_shop_fallback", SHOP_UNSET, {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
 
-function InitCustomTeam(name, icon_path) -- creates global var "TEAM_[name]" and other required things
+function InitCustomTeam(name, data) -- creates global var "TEAM_[name]" and other required things
 	local teamname = string.lower(name) .. "s"
 
 	_G["TEAM_" .. name] = teamname
 
-	TEAMS[teamname] = {
-		icon = icon_path or "vgui/ttt/icon_id"
-	}
+	TEAMS[teamname] = data
 end
 
 function GetRoles()
@@ -251,25 +249,27 @@ function InitCustomRole(name, roleData, conVarData)
 			end
 		end
 
-		print("[TTT2][ROLE] Added '" .. name .. "' Role (index: " .. roleData.index .. ")")
+		print("[TTT2][ROLE] Added '" .. name .. "' role (index: " .. roleData.index .. ")")
 	end
 end
 
 -- usage: inside of e.g. this hook: hook.Add("TTT2BaseRoleInit", "TTT2ConnectBaseRole" .. baserole .. "With_" .. roleData.name, ...)
 function SetBaseRole(roleData, baserole)
 	if roleData.baserole then
-		error("ERROR: BaseRole of " .. roleData.name .. " already set (" .. roleData.baserole .. ")!")
+		error("[TTT2][ROLE-SYSTEM][ERROR] BaseRole of " .. roleData.name .. " already set (" .. roleData.baserole .. ")!")
 	else
 		local br = GetRoleByIndex(baserole)
 
 		if br.baserole then
-			error("ERROR: Your requested BaseRole can't be any BaseRole of another SubRole because it's a SubRole as well.")
+			error("[TTT2][ROLE-SYSTEM][ERROR] Your requested BaseRole can't be any BaseRole of another SubRole because it's a SubRole as well.")
 
 			return
 		end
 
 		roleData.baserole = baserole
 		roleData.defaultTeam = br.defaultTeam
+
+		print("[TTT2][ROLE-SYSTEM] Connected '" .. roleData.name .. "' subrole with baserole '" .. br.name .. "')")
 	end
 end
 

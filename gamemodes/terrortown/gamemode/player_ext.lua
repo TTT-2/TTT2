@@ -19,7 +19,11 @@ function plymeta:GetRagdollSpec()
 	return self.spec_ragdoll
 end
 
-AccessorFunc(plymeta, "force_spec", "ForceSpec", FORCE_BOOL)
+function plymeta:SetForceSpec(state)
+	self.force_spec = state -- compatibility with other addons
+
+	self:SetNWBool("force_spec", state)
+end
 
 --- Karma
 
@@ -188,7 +192,7 @@ function plymeta:ResetRoundFlags()
 	self.mute_team = -1
 
 	for _, team in ipairs(GetWinTeams()) do
-		if team ~= TEAM_INNO then
+		if team ~= TEAM_INNOCENT then
 			self[team .. "_gvoice"] = false
 		end
 	end
@@ -226,7 +230,7 @@ function plymeta:RecordKill(victim)
 
 	self.kills = self.kills or {}
 
-	table.insert(self.kills, victim:SteamID())
+	table.insert(self.kills, victim:SteamID64())
 end
 
 function plymeta:SetSpeed(slowed)
@@ -397,7 +401,7 @@ function plymeta:CanSelectRole(roleData, choice_count, role_count)
 
 	return (
 		choice_count <= role_count
-		or self:GetBaseKarma() > min_karmas and GAMEMODE.LastRole[self:SteamID()] == ROLE_INNOCENT
+		or self:GetBaseKarma() > min_karmas and GAMEMODE.LastRole[self:SteamID64()] == ROLE_INNOCENT
 		or math.random(1, 3) == 2
 	) and (choice_count <= role_count or not self:GetAvoidRole(roleData.index))
 end
