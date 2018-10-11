@@ -5,6 +5,8 @@ local draw = draw
 local surface = surface
 local table = table
 
+local TryTranslation = LANG.TryTranslation
+
 WSWITCH = {}
 WSWITCH.Show = false
 WSWITCH.Selected = -1
@@ -53,7 +55,7 @@ local function TTT2FinishedLoading()
 		col_dark.tip[v.index] = v.dkcolor
 	end
 end
-hook.Add("TTT2FinishedLoading", "scoringUpdateColors", TTT2FinishedLoading)
+hook.Add("TTT2FinishedLoading", "ttt2wepUpdateColors", TTT2FinishedLoading)
 
 function WSWITCH:DrawBarBg(x, y, w, h, col)
 	local rx = round(x - 4)
@@ -65,7 +67,7 @@ function WSWITCH:DrawBarBg(x, y, w, h, col)
 	local bh = b * 0.5
 
 	local role = LocalPlayer():GetSubRole() or ROLE_INNOCENT
-	local c = col.tip[role]
+	local c = col.tip[role] or (col == col_active and INNOCENT.color or INNOCENT.dkcolor)
 
 	-- Draw the colour tip
 	surface.SetTexture(barcorner)
@@ -87,8 +89,6 @@ function WSWITCH:DrawBarBg(x, y, w, h, col)
 	surface.DrawTexturedRectRotated(rx + rw - bh, ry + bh, b, b, 270)
 	surface.DrawRect(rx + rw - b, ry + b, b, rh - b * 2)
 end
-
-local TryTranslation = LANG.TryTranslation
 
 function WSWITCH:DrawWeapon(x, y, c, wep)
 	if not IsValid(wep) then
