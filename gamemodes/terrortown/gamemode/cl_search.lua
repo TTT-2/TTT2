@@ -86,12 +86,11 @@ local TypeToMat = {
 }
 
 -- add role abbr of each role for icons
-local function TTT2FinishedLoading()
+hook.Add("TTT2Initialize", "updateTpTMat", function()
 	for _, v in pairs(GetRoles()) do
 		TypeToMat.role[v.index] = v.abbr
 	end
-end
-hook.Add("TTT2FinishedLoading", "updateTpTMat", TTT2FinishedLoading)
+end)
 
 -- Accessor for better fail handling
 local function IconForInfoType(t, data)

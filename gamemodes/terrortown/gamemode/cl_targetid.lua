@@ -37,7 +37,7 @@ end
 indicator_mat_tbl = {}
 indicator_col = Color(255, 255, 255, 130)
 
-local function TTT2FinishedLoading()
+hook.Add("TTT2Initialize", "updateRoleMat", function()
 	indicator_mat_tbl = {}
 
 	for _, v in pairs(GetRoles()) do
@@ -45,8 +45,7 @@ local function TTT2FinishedLoading()
 
 		indicator_mat_tbl[v.index] = mat
 	end
-end
-hook.Add("TTT2FinishedLoading", "updateRoleMat", TTT2FinishedLoading)
+end)
 
 local propspec_outline = Material("models/props_combine/portalball001_sheet")
 

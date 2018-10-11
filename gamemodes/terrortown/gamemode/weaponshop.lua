@@ -149,7 +149,7 @@ local function OnChangeCVar(subrole, fallback)
 	end
 end
 
-local function TTT2FinishedLoading()
+function SetupWeaponshopCVars()
 	for _, v in pairs(GetRoles()) do
 		local _func = function(convar_name, value_old, value_new)
 			if value_old ~= value_new then
@@ -160,4 +160,3 @@ local function TTT2FinishedLoading()
 		cvars.AddChangeCallback("ttt_" .. v.abbr .. "_shop_fallback", _func)
 	end
 end
-hook.Add("TTT2FinishedLoading", "WeaponShopChangeCVARInit", TTT2FinishedLoading)

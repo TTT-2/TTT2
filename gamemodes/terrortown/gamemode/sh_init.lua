@@ -5,7 +5,7 @@ function GM:TTT2Initialize()
 
 	DefaultEquipment = GetDefaultEquipment()
 
-	hook.Run("TTT2FinishedLoading")
+	SetupEquipment()
 end
 
 -- Create teams

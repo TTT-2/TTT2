@@ -86,11 +86,6 @@ end
 
 SetupEquipment() -- pre init to support normal TTT addons
 
-local function TTT2FinishedLoading()
-	SetupEquipment()
-end
-hook.Add("TTT2FinishedLoading", "updateEquRol", TTT2FinishedLoading)
-
 function CreateEquipmentWeapon(eq)
 	if not eq.Doublicated then
 		local data = eq.EquipMenuData or {}

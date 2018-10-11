@@ -181,7 +181,11 @@ function GM:Initialize()
 	MsgN("Trouble In Terrorist Town 2 gamemode initializing...")
 	ShowVersion()
 
+	SetupWeaponshopCVars()
+
 	hook.Run("TTT2Initialize")
+
+	hook.Run("TTT2FinishedLoading")
 
 	-- Force friendly fire to be enabled. If it is off, we do not get lag compensation.
 	RunConsoleCommand("mp_friendlyfire", "1")

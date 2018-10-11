@@ -49,13 +49,16 @@ include("cl_voice.lua")
 function GM:Initialize()
 	MsgN("TTT2 Client initializing...")
 
+	hook.Run("TTT2Initialize")
+
 	GAMEMODE.round_state = ROUND_WAIT
 
 	LANG.Init()
 
 	self.BaseClass:Initialize()
 
-	hook.Run("TTT2Initialize")
+	hook.Run("TTT2FinishedLoading")
+
 	hook.Run("PostInitialize")
 end
 

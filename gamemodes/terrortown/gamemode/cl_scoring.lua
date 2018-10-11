@@ -288,7 +288,7 @@ end
 
 function CLSCORE:BuildHilitePanel(dpanel)
 	local w, h = dpanel:GetSize()
-	local title = {c = TEAMS[TEAM_INNOCENT].color, txt = "hilite_win_" .. TEAM_INNOCENT}
+	local title = {c = TEAMS[TEAM_INNOCENT].color or INNOCENT.color, txt = "hilite_win_" .. TEAM_INNOCENT}
 	local endtime = self.StartTime
 
 	for i = #self.Events, 1, -1 do
