@@ -21,9 +21,16 @@ function ENT:KeyValue(key, value)
 
 		self.Color = Color(tonumber(mr) or 255, tonumber(mg) or 255, tonumber(mb) or 255)
 	elseif key == "receive" then
+		self.teamReceiver = nil
+
+		if type(value) == "string" and _G[value] then
+			self.teamReceiver = _G[value]
+			value = RECEIVE_CUSTOMROLE
+		end
+
 		self.Receiver = tonumber(value)
 
-		if not self.Receiver or self.Receiver < 0 or self.Receiver > 4 then
+		if not self.Receiver or self.Receiver < 0 or self.Receiver > 5 then
 			ErrorNoHalt("ERROR: ttt_game_text has invalid receiver value\n")
 
 			self.Receiver = RECEIVE_ACTIVATOR

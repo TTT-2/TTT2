@@ -10,6 +10,10 @@ function ENT:KeyValue(key, value)
 		-- this is our output, so handle it as such
 		self:StoreOutput(key, value)
 	elseif key == "Role" then
+		if type(value) == "string" then
+			value = _G[value] or value
+		end
+
 		self.Role = tonumber(value)
 
 		if not self.Role then

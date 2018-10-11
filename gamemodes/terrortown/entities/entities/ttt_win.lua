@@ -10,7 +10,13 @@ function ENT:AcceptInput(name, activator, caller)
 		GAMEMODE:MapTriggeredEnd(WIN_INNOCENT)
 
 		return true
-	end
+	elseif string.len(name) > 3 and string.sub(name, -3) == "Win" then
+		name = "TEAM_" .. string.upper(string.sub(name, 1, -4))
 
-	-- TODO add more options
+		if TEAMS[name] then
+			GAMEMODE:MapTriggeredEnd(name)
+
+			return true
+		end
+	end
 end
