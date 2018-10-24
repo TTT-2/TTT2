@@ -107,8 +107,8 @@ CreateConVar("ttt_det_credits_traitordead", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 CreateConVar("ttt_use_weapon_spawn_scripts", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 CreateConVar("ttt_weapon_spawn_count", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
-CreateConVar("ttt_round_limit", "6", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
-CreateConVar("ttt_time_limit_minutes", "75", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
+CreateConVar("ttt_round_limit", "6", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE})
+CreateConVar("ttt_time_limit_minutes", "75", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE})
 
 CreateConVar("ttt_idle_limit", "180", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
@@ -124,7 +124,7 @@ local ttt_detective = CreateConVar("ttt_sherlock_mode", "1", {FCVAR_NOTIFY, FCVA
 local ttt_minply = CreateConVar("ttt_minimum_players", "2", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 -- respawn if dead in preparing time
-CreateConVar("ttt2_prep_respawn", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
+CreateConVar("ttt2_prep_respawn", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 -- debuggery
 local ttt_dbgwin = CreateConVar("ttt_debug_preventwin", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
@@ -278,14 +278,14 @@ function GM:InitPostEntity()
 	-- initialize fallback shops
 	InitFallbackShops()
 
+	hook.Run("PostInitPostEntity")
+
+	hook.Run("InitFallbackShops")
+
 	-- initialize the equipment
 	LoadShopsEquipment()
 
 	WEPS.ForcePrecache()
-
-	hook.Run("PostInitPostEntity")
-
-	hook.Run("InitFallbackShops")
 end
 
 -- ConVar replication is broken in GMod, so we do this.
@@ -931,8 +931,10 @@ function GM:TTTCheckForWin()
 	local b = 0
 
 	for _, v in ipairs(player.GetAll()) do
-		if v:IsTerror() and not v:GetSubRoleData().preventWin then
-			alive[v:GetTeam()] = true
+		local tm = v:GetTeam()
+
+		if v:IsTerror() and not v:GetSubRoleData().preventWin and tm then
+			alive[tm] = true
 		end
 	end
 

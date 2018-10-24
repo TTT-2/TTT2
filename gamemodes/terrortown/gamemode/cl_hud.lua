@@ -76,6 +76,14 @@ local roundstate_string = {
 	[ROUND_POST] = "round_post"
 }
 
+local margin = 10
+local dmargin = margin * 2
+local smargin = 2
+local maxheight = 90
+local maxwidth = 240 + maxheight + margin
+local hastewidth = 80
+local bgheight = 30
+
 -- Returns player's ammo information
 local function GetAmmo(ply)
 	local weap = ply:GetActiveWeapon()
@@ -93,8 +101,8 @@ end
 
 local function DrawBg(x, y, width, height, client)
 	-- Traitor area sizes
-	local th = 30
-	local tw = 170
+	local th = bgheight
+	local tw = width - hastewidth - bgheight - smargin * 2 -- height = team icon
 
 	-- Adjust for these
 	y = y - th
@@ -110,10 +118,8 @@ local function DrawBg(x, y, width, height, client)
 	if GAMEMODE.round_state ~= ROUND_ACTIVE then
 		col = bg_colors.noround
 	elseif client:IsSpecial() then
-		col = hook.Run("TTT2ModifyRoleBGColor") or client:GetSubRoleData().color
+		col = hook.Run("TTT2ModifyRoleBGColor") or client:GetSubRoleData().color -- TODO cache instead of calling hook all the time
 	end
-
-	-- TODO add baserole indicator and team indicator
 
 	draw.RoundedBox(8, x, y, tw, th, col)
 end
@@ -124,8 +130,6 @@ local function ShadowedText(text, font, x, y, color, xalign, yalign)
 	dr.SimpleText(text, font, x + 2, y + 2, COLOR_BLACK, xalign, yalign)
 	dr.SimpleText(text, font, x, y, color, xalign, yalign)
 end
-
-local margin = 10
 
 -- Paint punch-o-meter
 local function PunchPaint(client)
@@ -163,8 +167,8 @@ local function SpecHUDPaint(client)
 
 	-- Draw round state
 	local x = margin
-	local height = 32
-	local width = 250
+	local height = bgheight
+	local width = maxwidth
 	local round_y = ScrH() - height - margin
 
 	-- move up a little on low resolutions to allow space for spectator hints
@@ -172,19 +176,19 @@ local function SpecHUDPaint(client)
 		round_y = round_y - 15
 	end
 
-	local time_x = x + 170
+	local time_x = width - hastewidth
 	local time_y = round_y + 4
 
-	draw.RoundedBox(8, x, round_y, width, height, bg_colors.background_main)
-	draw.RoundedBox(8, x, round_y, time_x - x, height, bg_colors.noround)
+	dr.RoundedBox(8, x, round_y, width, height, bg_colors.background_main)
+	dr.RoundedBox(8, x, round_y, time_x, height, bg_colors.noround)
 
 	-- Draw current round state
 	local text = L[roundstate_string[GAMEMODE.round_state]]
-	ShadowedText(text, "TraitorState", x + margin, round_y, COLOR_WHITE)
+	ShadowedText(text, "TraitorState", x + (width - hastewidth) * 0.5, round_y, COLOR_WHITE, TEXT_ALIGN_CENTER)
 
 	-- Draw round/prep/post time remaining
 	text = util.SimpleTime(math.max(0, GetGlobalFloat("ttt_round_end", 0) - CurTime()), "%02i:%02i")
-	ShadowedText(text, "TimeLeft", time_x + margin, time_y, COLOR_WHITE)
+	ShadowedText(text, "TimeLeft", x + time_x + smargin + hastewidth * 0.5, time_y, COLOR_WHITE, TEXT_ALIGN_CENTER)
 
 	local tgt = client:GetObserverTarget()
 
@@ -201,15 +205,15 @@ local ttt_health_label = CreateClientConVar("ttt_health_label", "0", true)
 
 local function InfoPaint(client)
 	local L = GetLang()
-	local width = 250
-	local height = 90
+	local width = maxwidth
+	local height = maxheight
 	local x = margin
 	local y = ScrH() - margin - height
 
 	DrawBg(x, y, width, height, client)
 
 	local bar_height = 25
-	local bar_width = width - margin * 2
+	local bar_width = width - dmargin
 
 	-- Draw health
 	local health = math.max(0, client:Health())
@@ -236,7 +240,8 @@ local function InfoPaint(client)
 		end
 	end
 
-	-- TODO add baserole indicator and team indicator
+	local tmp = width - hastewidth - bgheight - smargin * 2
+
 	-- Draw the current role
 	local round_state = GAMEMODE.round_state
 	local traitor_y = y - 30
@@ -248,7 +253,18 @@ local function InfoPaint(client)
 		text = L[roundstate_string[round_state]]
 	end
 
-	ShadowedText(text, "TraitorState", x + margin + 73, traitor_y, COLOR_WHITE, TEXT_ALIGN_CENTER)
+	ShadowedText(text, "TraitorState", x + tmp * 0.5, traitor_y, COLOR_WHITE, TEXT_ALIGN_CENTER)
+
+	-- Draw team icon
+	local team = client:GetTeam()
+
+	if team and round_state == ROUND_ACTIVE then
+		local mat = Material(TEAMS[team].icon)
+
+		surface.SetDrawColor(255, 255, 255, 255)
+		surface.SetMaterial(mat)
+		surface.DrawTexturedRect(x + tmp + smargin, traitor_y, bgheight, bgheight)
+	end
 
 	-- Draw round time
 	local is_haste = HasteMode() and round_state == ROUND_ACTIVE
@@ -256,7 +272,8 @@ local function InfoPaint(client)
 	local endtime = GetGlobalFloat("ttt_round_end", 0) - CurTime()
 	local font = "TimeLeft"
 	local color = COLOR_WHITE
-	local rx = x + margin + 170
+	tmp = width + x - hastewidth + smargin + hastewidth * 0.5
+	local rx = tmp
 	local ry = traitor_y + 3
 
 	-- Time displays differently depending on whether haste mode is on,
@@ -294,10 +311,10 @@ local function InfoPaint(client)
 		text = util.SimpleTime(math.max(0, endtime), "%02i:%02i")
 	end
 
-	ShadowedText(text, font, rx, ry, color)
+	ShadowedText(text, font, rx, ry, color, TEXT_ALIGN_CENTER)
 
 	if is_haste then
-		dr.SimpleText(L.hastemode, "TabLarge", x + margin + 165, traitor_y - 8)
+		dr.SimpleText(L.hastemode, "TabLarge", tmp, traitor_y - 8, COLOR_WHITE, TEXT_ALIGN_CENTER)
 	end
 end
 

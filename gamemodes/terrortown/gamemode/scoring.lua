@@ -122,10 +122,14 @@ function SCORE:HandleSelection()
 
 		if subrole ~= ROLE_INNOCENT then -- no innos
 			tmp[subrole] = tmp[subrole] or {}
-			teams[team] = teams[team] or {}
 
 			table.insert(tmp[subrole], ply:SteamID64())
-			table.insert(teams[team], ply:SteamID64())
+
+			if team then
+				teams[team] = teams[team] or {}
+
+				table.insert(teams[team], ply:SteamID64())
+			end
 		end
 	end
 

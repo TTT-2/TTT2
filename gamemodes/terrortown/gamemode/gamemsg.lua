@@ -53,10 +53,13 @@ end
 
 -- Teamchat
 local function RoleChatMsg(sender, msg)
-	net.Start("TTT_RoleChat")
-	net.WriteEntity(sender)
-	net.WriteString(msg)
-	net.Send(GetTeamFilter(sender:GetTeam()))
+	local tm = sender:GetTeam()
+	if tm then
+		net.Start("TTT_RoleChat")
+		net.WriteEntity(sender)
+		net.WriteString(msg)
+		net.Send(GetTeamFilter(tm))
+	end
 end
 
 
@@ -140,7 +143,7 @@ function GM:PlayerCanSeePlayersChat(text, team_only, listener, speaker)
 	or not GetConVar("ttt_limit_spectator_chat"):GetBool() -- Spectators can chat freely
 	or not DetectiveMode() -- Mumbling
 	or not sTeam and (team_only and speaker:IsInnocent() or not team_only) -- If someone alive talks (and not a special role in teamchat's case)
-	or not sTeam and team_only and speaker:GetTeam() == listener:GetTeam() -- if the speaker and listener are in same team
+	or not sTeam and team_only and speaker:IsInTeam(listener) -- if the speaker and listener are in same team
 	or sTeam and lTeam then -- If the speaker and listener are spectators
 		return true
 	end

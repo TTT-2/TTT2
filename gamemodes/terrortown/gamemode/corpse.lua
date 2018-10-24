@@ -65,7 +65,7 @@ local function IdentifyBody(ply, rag)
 		local rd = GetRoleByIndex(subrole)
 		local roletext = ("body_found_" .. rd.abbr)
 
-		LANG.Msg("body_found", {finder = finder, victim = nick, role = LANG.Param(roletext), team = team})
+		LANG.Msg("body_found", {finder = finder, victim = nick, role = LANG.Param(roletext), team = team or "no team"})
 	end
 
 	-- Register find
@@ -206,7 +206,7 @@ function CORPSE.ShowSearch(ply, rag, covert, long_range)
 	owner = IsValid(owner) and owner:EntIndex() or - 1
 
 	-- basic sanity check
-	if not nick or not eq or not subrole or not team then return end
+	if not nick or not eq or not subrole then return end
 
 	if DetectiveMode() and not covert then
 		IdentifyBody(ply, rag)
@@ -266,7 +266,7 @@ function CORPSE.ShowSearch(ply, rag, covert, long_range)
 	net.WriteString(nick)
 	net.WriteUInt(eq, 16) -- Equipment (16 = max.)
 	net.WriteUInt(subrole, ROLE_BITS) -- (... bits)
-	net.WriteString(team)
+	net.WriteString(team or "")
 	net.WriteInt(c4, bitsRequired(C4_WIRE_COUNT) + 1) -- -1 -> 2^bits (default c4: 4 bits)
 	net.WriteUInt(dmg, 30) -- DMG_BUCKSHOT is the highest. (30 bits)
 	net.WriteString(wep)

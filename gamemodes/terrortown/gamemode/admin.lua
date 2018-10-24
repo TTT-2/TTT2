@@ -42,7 +42,7 @@ function PrintTraitors(ply)
 
 		for _, p in ipairs(ps) do
 			if IsValid(p) then
-				pr(string.upper(p:GetTeam()), ":", p:Nick())
+				pr(string.upper(p:GetTeam() or "NO_TEAM"), ":", p:Nick())
 			end
 		end
 	end
@@ -69,10 +69,10 @@ function PrintReport(ply)
 		for _, e in pairs(SCORE.Events) do
 			if e.id == EVENT_KILL then
 				if e.att.sid == -1 then
-					pr("<something> killed " .. e.vic.ni .. "[" .. string.upper(e.vic.t) .. "]")
+					pr("<something> killed " .. e.vic.ni .. "[" .. string.upper(e.vic.t or "no team") .. "]")
 				else
-					local as = "[" .. string.upper(e.att.t) .. "]"
-					local vs = "[" .. string.upper(e.vic.t) .. "]"
+					local as = "[" .. string.upper(e.att.t or "no team") .. "]"
+					local vs = "[" .. string.upper(e.vic.t or "no team") .. "]"
 
 					pr(as .. e.att.ni .. " killed " .. vs .. e.vic.ni)
 				end

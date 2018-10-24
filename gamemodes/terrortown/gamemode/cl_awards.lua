@@ -128,7 +128,7 @@ function FirstBlood(events, scores, players, traitors)
 					award.title = T("aw_fst2_title")
 					award.text = T("aw_fst2_text")
 				end
-			else
+			elseif atr then
 				if atr == vtr then -- inno tk
 					award.title = T("aw_fst3_title")
 					award.text = T("aw_fst3_text")
@@ -582,7 +582,7 @@ function TeamKiller(events, scores, players, traitors)
 		for _, ev in ipairs(s.ev) do
 			tktbl[id] = tktbl[id] or {}
 
-			if ev.t ~= ev.v then
+			if not ev.t or ev.t ~= ev.v then
 				tktbl[id].k = (tktbl[id].k or 0) + 1
 			else
 				tktbl[id].tk = (tktbl[id].tk or 0) + 1
@@ -786,4 +786,4 @@ function TimeOfDeath(events, scores, players, traitors)
 		end
 	end
 end
-AWARDS.TimeOfDeath = TimeOfDeath
+AWARDS.TimeOfDeath = TimeOfDeath

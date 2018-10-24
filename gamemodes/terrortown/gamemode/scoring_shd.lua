@@ -91,9 +91,11 @@ function ScoreTeamBonus(scores, wintype)
 	-- who's alive, who dead?
 	for _, sc in pairs(scores) do
 		local state = (sc.deaths == 0) and alive or dead
-		local team = sc.lt
 
-		state[team] = (state[team] or 0) + 1
+		local team = sc.lt
+		if team then
+			state[team] = (state[team] or 0) + 1
+		end
 	end
 
 	local bonus = {}
@@ -104,7 +106,7 @@ function ScoreTeamBonus(scores, wintype)
 		local others = 0
 
 		for other, amount in pairs(dead) do
-			if team ~= other then
+			if team and team ~= other then
 				others = others + amount
 			end
 		end
@@ -147,7 +149,7 @@ function KillsToPoints(score)
 	for _, ev in ipairs(score.ev) do
 		local roleData = GetRoleByIndex(ev.r)
 
-		if ev.t == ev.v then -- teamkill
+		if ev.t and ev.t == ev.v then -- teamkill
 			sc = sc + roleData.scoreTeamKillsMultiplier
 		else -- legit kill
 			sc = sc + roleData.scoreKillsMultiplier

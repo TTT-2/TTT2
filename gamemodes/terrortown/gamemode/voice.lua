@@ -48,8 +48,10 @@ function GM:PlayerCanHearPlayersVoice(listener, speaker)
 	end
 
 	-- Traitors "team"chat by default, non-locationally
-	if speaker:IsActive() and not speaker:GetSubRoleData().unknownTeam then
-		if speaker[speaker:GetTeam() .. "_gvoice"] then
+	local tm = speaker:GetTeam()
+
+	if tm and speaker:IsActive() and not speaker:GetSubRoleData().unknownTeam then
+		if speaker[tm .. "_gvoice"] then
 			return true, loc_voice:GetBool()
 		elseif listener:IsActive() and listener:IsInTeam(speaker) then
 			return true, false
@@ -63,7 +65,10 @@ function GM:PlayerCanHearPlayersVoice(listener, speaker)
 end
 
 local function SendRoleVoiceState(speaker)
-	local state = speaker[speaker:GetTeam() .. "_gvoice"]
+	local tm = speaker:GetTeam()
+	if not tm then return end
+
+	local state = speaker[tm .. "_gvoice"]
 
 	-- send umsg to living traitors that this is traitor-only talk
 	local rf = GetTeamMemberFilter(speaker, true)
@@ -84,13 +89,16 @@ end
 local function RoleGlobalVoice(ply, cmd, args)
 	if not IsValid(ply) or not (ply:IsActive() and not ply:GetSubRoleData().unknownTeam) then return end
 
+	local tm = ply:GetTeam()
+	if not tm then return end
+
 	local rd = ply:GetSubRoleData()
 
 	if rd.unknownTeam or #args ~= 1 then return end
 
 	local state = tonumber(args[1])
 
-	ply[ply:GetTeam() .. "_gvoice"] = state == 1
+	ply[tm .. "_gvoice"] = state == 1
 
 	SendRoleVoiceState(ply)
 end

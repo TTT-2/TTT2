@@ -72,8 +72,10 @@ function GM:PostDrawTranslucentRenderables()
 			and not ply:GetSubRoleData().avoidTeamIcons
 			and indicator_mat_tbl[subrole]
 			then
+				local incol = hook.Run("TTT2ModifyRoleIconColor") or indicator_col
+
 				render.SetMaterial(indicator_mat_tbl[subrole])
-				render.DrawQuadEasy(pos, dir, 8, 8, indicator_col, 180)
+				render.DrawQuadEasy(pos, dir, 8, 8, incol, 180)
 			end
 		end
 	end

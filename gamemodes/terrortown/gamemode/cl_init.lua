@@ -90,6 +90,10 @@ function GM:InitPostEntity()
 	-- initialize fallback shops
 	InitFallbackShops()
 
+	hook.Run("PostInitPostEntity")
+
+	hook.Run("InitFallbackShops")
+
 	net.Start("TTT2SyncShopsWithServer")
 	net.SendToServer()
 
@@ -113,10 +117,6 @@ function GM:InitPostEntity()
 
 	RunConsoleCommand("_ttt_request_serverlang")
 	RunConsoleCommand("_ttt_request_rolelist")
-
-	hook.Run("PostInitPostEntity")
-
-	hook.Run("InitFallbackShops")
 end
 
 function GM:DoCacheEnts()
@@ -220,6 +220,10 @@ local function ReceiveRole()
 	local subrole = net.ReadUInt(ROLE_BITS)
 	local team = net.ReadString()
 
+	if team == "" then
+		team = nil
+	end
+
 	-- after a mapswitch, server might have sent us this before we are even done
 	-- loading our code
 	if not client.UpdateRole then return end
@@ -245,6 +249,10 @@ local function ReceiveRoleList()
 	local team = net.ReadString()
 	local num_ids = net.ReadUInt(8)
 
+	if team == "" then
+		team = nil
+	end
+
 	for i = 1, num_ids do
 		local eidx = net.ReadUInt(7) + 1 -- we - 1 worldspawn=0
 		local ply = player.GetByID(eidx)
@@ -253,8 +261,8 @@ local function ReceiveRoleList()
 			ply:UpdateRole(subrole)
 			ply:UpdateTeam(team)
 
-			if not ply:GetSubRoleData().unknownTeam then
-				ply[ply:GetTeam() .. "_gvoice"] = false -- assume role's chat by default
+			if team and not ply:GetSubRoleData().unknownTeam then
+				ply[team .. "_gvoice"] = false -- assume role's chat by default
 			end
 		end
 	end

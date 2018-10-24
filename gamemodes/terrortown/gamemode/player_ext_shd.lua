@@ -38,20 +38,15 @@ end
 -- ply:UpdateTeam(team) should never be used BEFORE this function
 function plymeta:SetRole(subrole, team)
 	local rd = GetRoleByIndex(subrole)
-	local baserole = subrole
 
-	if rd.baserole then
-		baserole = rd.baserole
-	end
-
-	self.role = baserole
+	self.role = rd.baserole or subrole
 	self.subrole = subrole
 
 	if team then
 		if team ~= TEAM_NOCHANGE then
 			self:UpdateTeam(team)
 		end
-	elseif rd.defaultTeam then
+	else
 		self:UpdateTeam(rd.defaultTeam)
 	end
 end
@@ -69,7 +64,7 @@ function plymeta:HasTeam(team)
 end
 
 function plymeta:IsInTeam(ply)
-	return self:GetTeam() == ply:GetTeam()
+	return self:GetTeam() and self:GetTeam() == ply:GetTeam()
 end
 
 function plymeta:UpdateRole(subrole, team)

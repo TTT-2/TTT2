@@ -6,7 +6,7 @@ local function SendPlayerRoles()
 		if IsValid(v) and v.GetSubRole then -- prevention
 			net.Start("TTT_Role")
 			net.WriteUInt(v:GetSubRole(), ROLE_BITS)
-			net.WriteString(v:GetTeam())
+			net.WriteString(v:GetTeam() or "")
 			net.Send(v)
 		end
 	end
@@ -15,7 +15,7 @@ end
 function SendRoleListMessage(subrole, team, sids, ply_or_rf)
 	net.Start("TTT_RoleList")
 	net.WriteUInt(subrole, ROLE_BITS)
-	net.WriteString(team)
+	net.WriteString(team or "")
 
 	-- list contents
 	local num_ids = #sids
@@ -39,10 +39,11 @@ function SendSubRoleList(subrole, ply_or_rf, pred)
 	for _, v in ipairs(player.GetAll()) do
 		if v:GetSubRole() == subrole and (not pred or (pred and pred(v))) then
 			local team = v:GetTeam()
+			if team then
+				team_ids[team] = team_ids[team] or {} -- create table if it does not exists
 
-			team_ids[team] = team_ids[team] or {} -- create table if it does not exists
-
-			table.insert(team_ids[team], v:EntIndex())
+				table.insert(team_ids[team], v:EntIndex())
+			end
 		end
 	end
 
@@ -57,10 +58,11 @@ function SendRoleList(subrole, ply_or_rf, pred)
 	for _, v in ipairs(player.GetAll()) do
 		if v:IsRole(subrole) and (not pred or (pred and pred(v))) then
 			local team = v:GetTeam()
+			if team then
+				team_ids[team] = team_ids[team] or {} -- create table if it does not exists
 
-			team_ids[team] = team_ids[team] or {} -- create table if it does not exists
-
-			table.insert(team_ids[team], v:EntIndex())
+				table.insert(team_ids[team], v:EntIndex())
+			end
 		end
 	end
 
@@ -70,6 +72,8 @@ function SendRoleList(subrole, ply_or_rf, pred)
 end
 
 function SendTeamList(team, ply_or_rf, pred)
+	if not team then return end
+
 	local team_ids = {}
 
 	for _, v in ipairs(player.GetAll()) do
@@ -171,7 +175,7 @@ local function ttt_request_rolelist(ply)
 		-- update own role for ply because they were overwritten as innos
 		net.Start("TTT_Role")
 		net.WriteUInt(ply:GetSubRole(), ROLE_BITS)
-		net.WriteString(ply:GetTeam())
+		net.WriteString(ply:GetTeam() or "")
 		net.Send(ply)
 	end
 end

@@ -111,7 +111,7 @@ end
 local function WasAvoidable(attacker, victim, dmginfo)
 	local infl = dmginfo:GetInflictor()
 
-	if attacker:IsInTeam(victim) and (not victim:GetSubRoleData().unknownTeam or attacker:GetTeam() == TEAM_TRAITOR) and IsValid(infl) and infl.Avoidable ~= false then
+	if attacker:IsInTeam(victim) and (not victim:GetSubRoleData().unknownTeam or attacker:HasTeam(TEAM_TRAITOR)) and IsValid(infl) and infl.Avoidable ~= false then
 		return true
 	end
 
@@ -134,9 +134,7 @@ function KARMA.Hurt(attacker, victim, dmginfo)
 		reward = KARMA.GiveReward(attacker, reward)
 
 		print(Format("%s (%f) killed %s (%f) and gets REWARDED %f", attacker:Nick(), attacker:GetLiveKarma(), victim:Nick(), victim:GetLiveKarma(), reward))
-
-		-- team kills own team
-	elseif WasAvoidable(attacker, victim, dmginfo) then
+	elseif WasAvoidable(attacker, victim, dmginfo) then -- team kills own team
 		local penalty = KARMA.GetHurtPenalty(victim:GetLiveKarma(), hurt_amount)
 
 		KARMA.GivePenalty(attacker, penalty, victim)

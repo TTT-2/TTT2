@@ -175,7 +175,7 @@ function CLSCORE:BuildScorePanel(dpanel)
 			local teamkills = 0
 
 			for _, ev in ipairs(s.ev) do
-				if ev.t ~= ev.v then
+				if not ev.t or ev.t ~= ev.v then
 					kills = kills + 1
 				else
 					teamkills = teamkills + 1
@@ -192,7 +192,7 @@ function CLSCORE:BuildScorePanel(dpanel)
 					roles[ev.r] = true
 				end
 
-				if not teams[ev.t] then
+				if ev.t and not teams[ev.t] then
 					if team ~= "" then
 						team = team .. "/"
 					end

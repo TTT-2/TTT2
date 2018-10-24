@@ -42,8 +42,9 @@ function GM:PlayerBindPress(ply, bind, pressed)
 	elseif bind == "+sprint" then
 
 		-- just run concommand if the player is able to use the voice chat
-		if not ply:GetSubRoleData().unknownTeam then
-			local team = ply:GetTeam()
+		local team = ply:GetTeam()
+
+		if team and not ply:GetSubRoleData().unknownTeam then
 
 			-- set voice type here just in case shift is no longer down when the
 			-- PlayerStartVoice hook runs, which might be the case when switching to
