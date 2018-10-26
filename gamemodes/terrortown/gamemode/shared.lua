@@ -82,10 +82,10 @@ ROLE_BITS = 5
 
 -- override default settings of ttt to make it compatible with other addons
 -- Player roles
-ROLE_INNOCENT = ROLE_INNOCENT or 0
-ROLE_TRAITOR = ROLE_TRAITOR or 1
-ROLE_DETECTIVE = ROLE_DETECTIVE or 2
-ROLE_NONE = ROLE_NONE or ROLE_INNOCENT
+ROLE_INNOCENT = 0
+ROLE_TRAITOR = 1
+ROLE_DETECTIVE = 2
+ROLE_NONE = ROLE_INNOCENT
 
 -- TEAM_ARRAY
 TEAMS = {
