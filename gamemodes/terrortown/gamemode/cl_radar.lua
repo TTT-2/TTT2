@@ -31,6 +31,7 @@ end
 
 function RADAR:Clear()
 	self:EndScan()
+
 	self.bombs = {}
 	self.samples = {}
 	self.bombs_count = 0
@@ -183,18 +184,17 @@ function RADAR:Draw(client)
 			subrole = tgt.subrole or ROLE_INNOCENT
 
 			local roleData = GetRoleByIndex(subrole)
+			local c = roleData.radarColor
 
-			if subrole == ROLE_DETECTIVE then
-				surface.SetDrawColor(0, 0, 255, alpha)
-				surface.SetTextColor(0, 0, 255, alpha)
-			elseif subrole == ROLE_INNOCENT then
-				surface.SetDrawColor(0, 255, 0, alpha)
-				surface.SetTextColor(0, 255, 0, alpha)
-			elseif roleData.radarColor then
-				local c = roleData.radarColor
-
+			if c then
 				surface.SetDrawColor(c.r, c.g, c.b, alpha)
 				surface.SetTextColor(c.r, c.g, c.b, alpha)
+			elseif subrole == ROLE_DETECTIVE or roleData.baserole == ROLE_DETECTIVE then
+				surface.SetDrawColor(0, 0, 255, alpha)
+				surface.SetTextColor(0, 0, 255, alpha)
+			elseif subrole == ROLE_INNOCENT or roleData.baserole == ROLE_INNOCENT then
+				surface.SetDrawColor(0, 255, 0, alpha)
+				surface.SetTextColor(0, 255, 0, alpha)
 			else
 				surface.SetDrawColor(255, 0, 0, alpha)
 				surface.SetTextColor(255, 0, 0, alpha)

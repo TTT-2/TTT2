@@ -56,15 +56,15 @@ function plymeta:GetTeam()
 end
 
 function plymeta:UpdateTeam(team)
-	self.roleteam = team
+	self.roleteam = team or TEAM_NONE
 end
 
 function plymeta:HasTeam(team)
-	return self:GetTeam() == team
+	return not team and self.roleteam ~= TEAM_NONE or team and self:GetTeam() == team
 end
 
 function plymeta:IsInTeam(ply)
-	return self:GetTeam() and self:GetTeam() == ply:GetTeam()
+	return self:GetTeam() ~= TEAM_NONE and self:GetTeam() == ply:GetTeam()
 end
 
 function plymeta:UpdateRole(subrole, team)

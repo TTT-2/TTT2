@@ -5,7 +5,7 @@ GM.Author = "Bad King Urgrain && Alf21"
 GM.Email = "4lf-mueller@gmx.de"
 GM.Website = "ttt.badking.net, ttt2.informaskill.de"
 -- Date of latest changes (YYYY-MM-DD)
-GM.Version = "0.3.3b"
+GM.Version = "0.3.4b"
 
 GM.Customized = true
 
@@ -71,6 +71,7 @@ TRAITOR_EQUIPMENT = {
 }
 
 -- role teams to have an identifier
+TEAM_NONE = "noteam"
 TEAM_INNOCENT = "innocents"
 TEAM_TRAITOR = "traitors"
 
@@ -237,6 +238,9 @@ function InitCustomRole(name, roleData, conVarData)
 		-- set id
 		roleData.index = GenerateNewRoleID()
 
+		-- fix defaultTeam
+		roleData.defaultTeam = roleData.defaultTeam or TEAM_NONE
+
 		-- set data
 		ROLES[name] = roleData
 
@@ -384,8 +388,10 @@ function GetSubRoles(subrole)
 end
 
 function GetDefaultTeamRole(team)
+	if team == TEAM_NONE then return end
+
 	for _, v in pairs(GetRoles()) do
-		if not v.baserole and v.defaultTeam and v.defaultTeam == team then
+		if not v.baserole and v.defaultTeam ~= TEAM_NONE and v.defaultTeam == team then
 			return v
 		end
 	end
@@ -394,10 +400,14 @@ function GetDefaultTeamRole(team)
 end
 
 function GetDefaultTeamRoles(team)
+	if team == TEAM_NONE then return end
+
 	return GetSubRoles(GetDefaultTeamRole(team).index)
 end
 
 function GetTeamMembers(team)
+	if team == TEAM_NONE then return end
+
 	local tmp = {}
 
 	for _, v in ipairs(player.GetAll()) do
@@ -413,7 +423,7 @@ function GetWinTeams()
 	local winTeams = {}
 
 	for _, v in pairs(GetRoles()) do
-		if v.defaultTeam and not table.HasValue(winTeams, v.defaultTeam) and not v.preventWin then
+		if v.defaultTeam ~= TEAM_NONE and not table.HasValue(winTeams, v.defaultTeam) and not v.preventWin then
 			table.insert(winTeams, v.defaultTeam)
 		end
 	end
@@ -425,7 +435,7 @@ function GetAvailableTeams()
 	local availableTeams = {}
 
 	for _, v in pairs(GetRoles()) do
-		if v.defaultTeam and not table.HasValue(availableTeams, v.defaultTeam) then
+		if v.defaultTeam ~= TEAM_NONE and not table.HasValue(availableTeams, v.defaultTeam) then
 			availableTeams[#availableTeams + 1] = v.defaultTeam
 		end
 	end

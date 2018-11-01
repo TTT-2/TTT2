@@ -933,7 +933,7 @@ function GM:TTTCheckForWin()
 	for _, v in ipairs(player.GetAll()) do
 		local tm = v:GetTeam()
 
-		if v:IsTerror() and not v:GetSubRoleData().preventWin and tm then
+		if v:IsTerror() and not v:GetSubRoleData().preventWin and tm ~= TEAM_NONE then
 			alive[tm] = true
 		end
 	end

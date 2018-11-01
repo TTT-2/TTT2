@@ -48,7 +48,7 @@ function GM:PlayerStartVoice(ply)
 	if client == ply then
 		if client:IsActive() and not client:GetSubRoleData().unknownTeam then
 			local tm = client:GetTeam()
-			if tm then
+			if tm ~= TEAM_NONE then
 				if not client:KeyDown(IN_SPEED) and not client:KeyDownLast(IN_SPEED) then
 					client[tm .. "_gvoice"] = true
 
@@ -88,7 +88,7 @@ function GM:PlayerStartVoice(ply)
 	-- roles things
 	-- TODO check if color is right. Maybe use color of ply instead of client if client ~= ply !
 	local tm = client:GetTeam()
-	if client:IsActive() and tm and not client:GetSubRoleData().unknownTeam then
+	if client:IsActive() and tm ~= TEAM_NONE and not client:GetSubRoleData().unknownTeam then
 		if ply == client then
 			if not client[tm .. "_gvoice"] then
 				pnl.Color = csrd.color
@@ -103,7 +103,7 @@ function GM:PlayerStartVoice(ply)
 	PlayerVoicePanels[ply] = pnl
 
 	-- run ear gesture
-	if not (ply:IsActive() and not ply:GetSubRoleData().unknownTeam) or tm and ply[tm .. "_gvoice"] then
+	if not (ply:IsActive() and not ply:GetSubRoleData().unknownTeam) or tm ~= TEAM_NONE and ply[tm .. "_gvoice"] then
 		ply:AnimPerformGesture(ACT_GMOD_IN_CHAT)
 	end
 end
@@ -125,7 +125,7 @@ local function ReceiveVoiceState()
 
 	local tm = ply:GetTeam()
 
-	if not tm then return end
+	if tm == TEAM_NONE then return end
 
 	ply[tm .. "_gvoice"] = state
 
@@ -153,7 +153,7 @@ function GM:PlayerEndVoice(ply, no_reset)
 
 	if IsValid(ply) and not no_reset then
 		local tm = ply:GetTeam()
-		if tm then
+		if tm ~= TEAM_NONE then
 			ply[tm .. "_gvoice"] = false
 		end
 	end
@@ -244,7 +244,7 @@ end
 local function IsRoleChatting(ply)
 	local tm = ply:GetTeam()
 
-	return ply:IsActive() and not ply:GetSubRoleData().unknownTeam and tm and not ply[tm .. "_gvoice"]
+	return ply:IsActive() and not ply:GetSubRoleData().unknownTeam and tm ~= TEAM_NONE and not ply[tm .. "_gvoice"]
 end
 
 function VOICE.Tick()

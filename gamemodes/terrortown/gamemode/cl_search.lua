@@ -512,10 +512,6 @@ local function TTT_RagdollSearch()
 	search.team = net.ReadString()
 	search.c4 = net.ReadInt(bitsRequired(C4_WIRE_COUNT) + 1)
 
-	if search.team == "" then
-		search.team = nil
-	end
-
 	-- Kill info
 	search.dmg = net.ReadUInt(30)
 	search.wep = net.ReadString()

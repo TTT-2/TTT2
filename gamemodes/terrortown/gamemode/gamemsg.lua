@@ -54,7 +54,7 @@ end
 -- Teamchat
 local function RoleChatMsg(sender, msg)
 	local tm = sender:GetTeam()
-	if tm then
+	if tm ~= TEAM_NONE then
 		net.Start("TTT_RoleChat")
 		net.WriteEntity(sender)
 		net.WriteString(msg)
@@ -110,7 +110,7 @@ end
 
 function GetTeamFilter(team, alive_only)
 	return GetPlayerFilter(function(p)
-		return p:HasTeam(team) and not p:GetSubRoleData().unknownTeam and (not alive_only or p:IsTerror())
+		return team ~= TEAM_NONE and p:HasTeam(team) and not p:GetSubRoleData().unknownTeam and (not alive_only or p:IsTerror())
 	end)
 end
 

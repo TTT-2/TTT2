@@ -63,7 +63,7 @@ function CreateTransferMenu(parent)
 
 	local tm = client:GetTeam()
 
-	dform:Help(LANG.GetParamTranslation("xfer_help", {role = tm and GetTranslation(tm) or "no team"}))
+	dform:Help(LANG.GetParamTranslation("xfer_help", {role = GetTranslation(tm)}))
 
 	return dform
 end

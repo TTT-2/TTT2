@@ -125,7 +125,7 @@ function SCORE:HandleSelection()
 
 			table.insert(tmp[subrole], ply:SteamID64())
 
-			if team then
+			if team ~= TEAM_NONE then
 				teams[team] = teams[team] or {}
 
 				table.insert(teams[team], ply:SteamID64())

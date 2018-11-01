@@ -11,6 +11,10 @@ L.last_words = "Letzte Worte"
 L.terrorists = "Terroristen"
 L.spectators = "Zuschauer"
 
+L.noteam = "Kein TEAM"
+L.innocents = "TEAM Unschuldige"
+L.traitors = "TEAM Verräter"
+
 -- role description
 L.ttt2_desc_none = "Du besitzt keine Rolle!"
 L.ttt2_desc_innocent = "Dein Ziel ist es zu überleben bzw. alle Verräter zu töten!"

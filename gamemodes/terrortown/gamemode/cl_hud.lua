@@ -258,7 +258,7 @@ local function InfoPaint(client)
 	-- Draw team icon
 	local team = client:GetTeam()
 
-	if team and round_state == ROUND_ACTIVE then
+	if team ~= TEAM_NONE and round_state == ROUND_ACTIVE then
 		local mat = Material(TEAMS[team].icon)
 
 		surface.SetDrawColor(255, 255, 255, 255)
