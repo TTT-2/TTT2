@@ -127,7 +127,7 @@ function plymeta:IsRole(subrole)
 	local rd = GetRoleByIndex(subrole)
 	local br, sr = self:GetRole()
 
-	return rd.baserole and subrole == sr or rd.baserole == br
+	return subrole == sr or subrole == br
 end
 
 function plymeta:IsActiveRole(subrole)
