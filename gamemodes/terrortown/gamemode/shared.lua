@@ -247,9 +247,10 @@ function InitCustomRole(name, roleData, conVarData)
 		if plymeta then
 			-- e.g. IsJackal() will match each subrole of the jackal as well as the jackal as the baserole
 			plymeta["Is" .. roleData.name:gsub("^%l", string.upper)] = function(self)
-				local baserole, subrole = self:GetRole()
+				local br = self:GetBaseRole()
+				local sr = self:GetSubRole()
 
-				return roleData.baserole and subrole == roleData.index or baserole == roleData.index
+				return roleData.baserole and sr == roleData.index or not roleData.baserole and br == roleData.index
 			end
 		end
 

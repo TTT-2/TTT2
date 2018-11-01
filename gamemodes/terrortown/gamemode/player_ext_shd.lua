@@ -32,7 +32,7 @@ function plymeta:SetBaseRole(baserole)
 end
 
 function plymeta:GetRole()
-	return self.role, self.subrole
+	return self.role
 end
 
 -- ply:UpdateTeam(team) should never be used BEFORE this function
@@ -124,8 +124,8 @@ end
 -- will match if player has specific subrole or a general baserole if requested.
 -- To check whether a player have a specific baserole not a subrole, use ply:GetSubRole() == baserole
 function plymeta:IsRole(subrole)
-	local rd = GetRoleByIndex(subrole)
-	local br, sr = self:GetRole()
+	local br = self:GetBaseRole()
+	local sr = self:GetSubRole()
 
 	return subrole == sr or subrole == br
 end
