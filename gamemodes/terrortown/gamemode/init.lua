@@ -175,6 +175,7 @@ util.AddNetworkString("TTT_Spectate")
 
 util.AddNetworkString("TTT2TestRole")
 util.AddNetworkString("TTT2SyncShopsWithServer")
+util.AddNetworkString("TTT2ModifyRoleSyncing")
 
 ---- Round mechanics
 function GM:Initialize()

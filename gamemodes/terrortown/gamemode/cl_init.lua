@@ -275,6 +275,11 @@ local function ReceiveRoundState()
 end
 net.Receive("TTT_RoundState", ReceiveRoundState)
 
+local function TTT2ModifyRoleSyncing()
+	hook.Run("TTT2ModifyRoleSyncing")
+end
+net.Receive("TTT2ModifyRoleSyncing", TTT2ModifyRoleSyncing)
+
 -- Cleanup at start of new round
 function GM:ClearClientState()
 	GAMEMODE:HUDClear()

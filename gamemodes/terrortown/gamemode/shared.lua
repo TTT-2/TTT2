@@ -657,7 +657,7 @@ end
 
 function SWEPIsBuyable(wepCls)
 	if not wepCls then
-		return true
+		return false
 	end
 
 	local name = "t32_" .. wepCls .. "_imp"
@@ -694,7 +694,7 @@ function RegisterNormalWeapon(wep)
 		tbl.flags = {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE}
 		tbl.slider = true
 		tbl.desc = "Available if there are more than ... players"
-		tbl.max = 100
+		tbl.max = 128
 
 		SWEPAddConVar(wep, tbl)
 	end
