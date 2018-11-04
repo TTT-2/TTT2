@@ -128,7 +128,7 @@ local function DrawPropSpecLabels(client)
 		else
 			local _, healthcolor = util.HealthToString(ply:Health(), ply:GetMaxHealth())
 
-			surface.SetTextColor(healthcolor)
+			surface.SetTextColor(clr(healthcolor))
 
 			scrpos = ply:EyePos()
 			scrpos.z = scrpos.z + 20
@@ -251,9 +251,9 @@ function GM:HUDDrawTargetID()
 	if target_role then
 		surface.SetTexture(ring_tex)
 
-		local clr = GetRoleByIndex(target_role).color
+		local c = GetRoleByIndex(target_role).color
 
-		surface.SetDrawColor(clr.r, clr.g, clr.b, 200)
+		surface.SetDrawColor(c.r, c.g, c.b, 200)
 		surface.DrawTexturedRect(x - 32, y - 32, 64, 64)
 	end
 
@@ -289,10 +289,10 @@ function GM:HUDDrawTargetID()
 	if minimal then return end
 
 	-- Draw subtitle: health or type
-	local clr = rag_color
+	local c = rag_color
 
 	if ent:IsPlayer() then
-		text, clr = util.HealthToString(ent:Health(), ent:GetMaxHealth())
+		text, c = util.HealthToString(ent:Health(), ent:GetMaxHealth())
 
 		-- HealthToString returns a string id, need to look it up
 		text = L[text]
@@ -310,14 +310,14 @@ function GM:HUDDrawTargetID()
 	x = x_orig - w * 0.5
 
 	draw.SimpleText(text, font, x + 1, y + 1, COLOR_BLACK)
-	draw.SimpleText(text, font, x, y, clr)
+	draw.SimpleText(text, font, x, y, c)
 
 	font = "TargetIDSmall"
 	surface.SetFont(font)
 
 	-- Draw second subtitle: karma
 	if ent:IsPlayer() and KARMA.IsEnabled() then
-		text, clr = util.KarmaToString(ent:GetBaseKarma())
+		text, c = util.KarmaToString(ent:GetBaseKarma())
 
 		text = L[text]
 
@@ -326,7 +326,7 @@ function GM:HUDDrawTargetID()
 		x = x_orig - w * 0.5
 
 		draw.SimpleText(text, font, x + 1, y + 1, COLOR_BLACK)
-		draw.SimpleText(text, font, x, y, clr)
+		draw.SimpleText(text, font, x, y, c)
 	end
 
 	-- Draw key hint
@@ -351,14 +351,14 @@ function GM:HUDDrawTargetID()
 		local rd = GetRoleByIndex(target_role)
 
 		text = L["target_" .. rd.name]
-		clr = rd.color
+		c = rd.color
 
 		if ent.sb_tag and ent.sb_tag.txt then
 			text = L[ent.sb_tag.txt]
-			clr = ent.sb_tag.color
+			c = ent.sb_tag.color
 		elseif target_corpse and client:IsActive() and client:IsShopper() and CORPSE.GetCredits(ent, 0) > 0 then
 			text = L.target_credits
-			clr = COLOR_YELLOW
+			c = COLOR_YELLOW
 		end
 	end
 
@@ -368,6 +368,6 @@ function GM:HUDDrawTargetID()
 		y = y + h + 5
 
 		draw.SimpleText(text, font, x + 1, y + 1, COLOR_BLACK)
-		draw.SimpleText(text, font, x, y, clr)
+		draw.SimpleText(text, font, x, y, c)
 	end
 end

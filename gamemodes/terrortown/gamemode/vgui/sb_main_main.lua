@@ -12,7 +12,7 @@ local floor = math.floor
 local GetTranslation = LANG.GetTranslation
 local GetPTranslation = LANG.GetParamTranslation
 
-include("sb_team.lua")
+ttt_include("vgui__sb_team", true)
 
 -- TODO add Team!
 CreateClientConVar("ttt_scoreboard_sorting", "name", true, false, "name | role | karma | score | deaths | ping")

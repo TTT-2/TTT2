@@ -1,6 +1,6 @@
 ---- Scoreboard player score row, based on sandbox version
 
-include("sb_info.lua")
+ttt_include("vgui__sb_info", true)
 
 local GetTranslation = LANG.GetTranslation
 
@@ -140,7 +140,7 @@ function PANEL:Paint(width, height)
 	local ply = self.Player
 	local c = hook.Call("TTTScoreboardRowColorForPlayer", GAMEMODE, ply)
 
-	surface.SetDrawColor(c)
+	surface.SetDrawColor(clr(c))
 	surface.DrawRect(0, 0, width, SB_ROW_HEIGHT)
 
 	if ply == LocalPlayer() then

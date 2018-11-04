@@ -129,10 +129,6 @@ function SendFullStateUpdate()
 	SendRoleList(ROLE_DETECTIVE) -- everyone should know who is detective
 
 	hook.Run("TTT2SpecialRoleSyncing") -- maybe some networking for a custom role
-	hook.Run("TTT2ModifyRoleSyncing") -- TODO not the best way, because data is already send, but best performance
-
-	net.Start("TTT2ModifyRoleSyncing") -- TODO not the best way, because data is already send, but best performance
-	net.Broadcast()
 
 	SendPlayerRoles() -- update players at the end, because they were overwritten as innos
 end

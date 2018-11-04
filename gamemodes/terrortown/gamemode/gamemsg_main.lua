@@ -17,14 +17,14 @@ function GameMsg(msg)
 	net.Broadcast()
 end
 
-function CustomMsg(ply_or_rf, msg, clr)
-	clr = clr or COLOR_WHITE
+function CustomMsg(ply_or_rf, msg, c)
+	c = c or COLOR_WHITE
 
 	net.Start("TTT_GameMsgColor")
 	net.WriteString(msg)
-	net.WriteUInt(clr.r, 8)
-	net.WriteUInt(clr.g, 8)
-	net.WriteUInt(clr.b, 8)
+	net.WriteUInt(c.r, 8)
+	net.WriteUInt(c.g, 8)
+	net.WriteUInt(c.b, 8)
 
 	if ply_or_rf then
 		net.Send(ply_or_rf)
