@@ -18,9 +18,7 @@ end
 
 function PANEL:OnMousePressed(mcode)
 	if mcode == MOUSE_LEFT then
-		if self.OnClick then
-			self:OnClick()
-		end
+		self:DoClick()
 
 		self.animPress:Start(0.1)
 	end
@@ -30,19 +28,11 @@ function PANEL:OnMouseReleased()
 
 end
 
-function PANEL:Toggle(b)
-	self.toggled = b
+function PANEL:DoClick()
+
 end
 
 function PANEL:OpenMenu()
-
-end
-
-function PANEL:OnCursorEntered()
-
-end
-
-function PANEL:OnCursorExited()
 
 end
 
@@ -50,15 +40,24 @@ function PANEL:ApplySchemeSettings()
 
 end
 
-function PANEL:PaintOver()
+function PANEL:OnCursorEntered()
+	self.PaintOverOld = self.PaintOver
+	self.PaintOver = self.PaintOverHovered
+end
+
+function PANEL:OnCursorExited()
+	if self.PaintOver == self.PaintOverHovered then
+		self.PaintOver = self.PaintOverOld
+	end
+end
+
+function PANEL:PaintOverHovered()
 	if self.animPress:Active() then return end
 
-	if self.toggled then
-		surface.SetDrawColor(0, 200, 0, 255)
-		surface.SetMaterial(matHover)
+	surface.SetDrawColor(255, 255, 255, 80)
+	surface.SetMaterial(matHover)
 
-		self:DrawTexturedRect()
-	end
+	self:DrawTexturedRect()
 end
 
 function PANEL:PerformLayout()
@@ -77,8 +76,8 @@ function PANEL:GetIcon()
 	return self.Icon:GetImage()
 end
 
-function PANEL:SetIconColor(clr)
-	self.Icon:SetImageColor(clr)
+function PANEL:SetIconColor(c)
+	self.Icon:SetImageColor(c)
 end
 
 function PANEL:Think()
@@ -94,16 +93,15 @@ function PANEL:PressedAnim(anim, delta, data)
 		return
 	end
 
-	local border = math.sin(delta * math.pi) * self.m_iIconSize * 0.05
+	local border = math.sin(delta * math.pi) * (self.m_iIconSize * 0.05)
 
 	self.Icon:StretchToParent(border, border, border, border)
 end
 
-vgui.Register("SimpleClickIcon", PANEL, "Panel")
+vgui.Register("SimpleIcon", PANEL, "Panel")
 
 ---
 
--- reset
 PANEL = {}
 
 function PANEL:Init()
@@ -115,7 +113,6 @@ function PANEL:AddLayer(pnl)
 	if not IsValid(pnl) then return end
 
 	pnl:SetParent(self)
-
 	pnl:SetMouseInputEnabled(false)
 	pnl:SetKeyboardInputEnabled(false)
 
@@ -136,7 +133,7 @@ function PANEL:PerformLayout()
 end
 
 function PANEL:EnableMousePassthrough(pnl)
-	for _, p in ipairs(self.Layers) do
+	for _, p in pairs(self.Layers) do
 		if p == pnl then
 			p.OnMousePressed = function(s, mc)
 				s:GetParent():OnMousePressed(mc)
@@ -155,17 +152,7 @@ function PANEL:EnableMousePassthrough(pnl)
 	end
 end
 
-function PANEL:OnMousePressed(mcode)
-	if mcode == MOUSE_LEFT then
-		if self.OnClick then
-			self:OnClick()
-		end
-
-		self.animPress:Start(0.1)
-	end
-end
-
-vgui.Register("LayeredClickIcon", PANEL, "SimpleClickIcon")
+vgui.Register("LayeredIcon", PANEL, "SimpleIcon")
 
 -- Avatar icon
 PANEL = {}
@@ -174,13 +161,13 @@ function PANEL:Init()
 	self.imgAvatar = vgui.Create("AvatarImage", self)
 	self.imgAvatar:SetMouseInputEnabled(false)
 	self.imgAvatar:SetKeyboardInputEnabled(false)
-
-	self.imgAvatar.PerformLayout = function(s)
-		s:Center()
-	end
+	self.imgAvatar.PerformLayout = function(s) s:Center() end
 
 	self:SetAvatarSize(32)
+
 	self:AddLayer(self.imgAvatar)
+
+	--return self.BaseClass.Init(self)
 end
 
 function PANEL:SetAvatarSize(s)
@@ -191,19 +178,11 @@ function PANEL:SetPlayer(ply)
 	self.imgAvatar:SetPlayer(ply)
 end
 
-function PANEL:OnMousePressed(mcode)
-	if mcode == MOUSE_LEFT then
-		if self.OnClick then
-			self:OnClick()
-		end
+vgui.Register("SimpleIconAvatar", PANEL, "LayeredIcon")
 
-		self.animPress:Start(0.1)
-	end
-end
-
-vgui.Register("SimpleClickIconAvatar", PANEL, "LayeredClickIcon")
 
 --- Labelled icon
+
 PANEL = {}
 
 AccessorFunc(PANEL, "IconText", "IconText")
@@ -222,9 +201,7 @@ function PANEL:Init()
 	-- DPanelSelect loves to overwrite its children's PaintOver hooks and such,
 	-- so have to use a dummy panel to do some custom painting.
 	self.FakeLabel = vgui.Create("Panel", self)
-	self.FakeLabel.PerformLayout = function(s)
-		s:StretchToParent(0, 0, 0, 0)
-	end
+	self.FakeLabel.PerformLayout = function(s) s:StretchToParent(0, 0, 0, 0) end
 
 	self:AddLayer(self.FakeLabel)
 
@@ -246,15 +223,7 @@ end
 
 function PANEL:SetLabelText(text, color, font, pos)
 	if self.FakeLabel then
-		local spec = {
-			pos = pos,
-			color = color,
-			text = text,
-			font = font,
-			xalign = TEXT_ALIGN_CENTER,
-			yalign = TEXT_ALIGN_CENTER
-		}
-
+		local spec = {pos = pos, color = color, text = text, font = font, xalign = TEXT_ALIGN_CENTER, yalign = TEXT_ALIGN_CENTER}
 		local shadow = self:GetIconTextShadow()
 		local opacity = shadow and shadow.opacity or 0
 		local offset = shadow and shadow.offset or 0
@@ -266,14 +235,4 @@ function PANEL:SetLabelText(text, color, font, pos)
 	end
 end
 
-function PANEL:OnMousePressed(mcode)
-	if mcode == MOUSE_LEFT then
-		if self.OnClick then
-			self:OnClick()
-		end
-
-		self.animPress:Start(0.1)
-	end
-end
-
-vgui.Register("SimpleClickIconLabelled", PANEL, "LayeredClickIcon")
+vgui.Register("SimpleIconLabelled", PANEL, "LayeredIcon")

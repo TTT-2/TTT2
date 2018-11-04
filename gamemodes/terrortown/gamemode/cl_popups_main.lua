@@ -72,7 +72,7 @@ local function RoundStartPopup()
 	dtext:SetText(text)
 	dtext:SizeToContents()
 	dtext:SetContentAlignment(5)
-	dtext:SetTextColor(color_white)
+	dtext:SetTextColor(COLOR_WHITE)
 
 	local w, h = dtext:GetSize()
 	local m = 10

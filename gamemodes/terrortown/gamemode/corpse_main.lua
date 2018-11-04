@@ -3,7 +3,7 @@
 -- namespaced because we have no ragdoll metatable
 CORPSE = {}
 
-include("corpse_shd.lua")
+ttt_include("corpse_shd")
 
 --- networked data abstraction layer
 local dti = CORPSE.dti

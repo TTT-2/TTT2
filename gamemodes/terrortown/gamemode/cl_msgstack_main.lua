@@ -44,10 +44,10 @@ local msgcolors = {
 -- Total width we take up on screen, for other elements to read
 MSTACK.width = msg_width + margin
 
-function MSTACK:AddColoredMessage(text, clr)
+function MSTACK:AddColoredMessage(text, c)
 	local item = {}
 	item.text = text
-	item.col = clr
+	item.col = c
 	item.bg = msgcolors.generic_bg
 
 	self:AddMessageEx(item)
@@ -215,14 +215,14 @@ net.Receive("TTT_GameMsg", ReceiveGameMsg)
 
 local function ReceiveCustomMsg()
 	local text = net.ReadString()
-	local clr = Color(255, 255, 255)
+	local c = Color(255, 255, 255)
 
-	clr.r = net.ReadUInt(8)
-	clr.g = net.ReadUInt(8)
-	clr.b = net.ReadUInt(8)
+	c.r = net.ReadUInt(8)
+	c.g = net.ReadUInt(8)
+	c.b = net.ReadUInt(8)
 
 	print(text)
 
-	MSTACK:AddColoredMessage(text, clr)
+	MSTACK:AddColoredMessage(text, c)
 end
 net.Receive("TTT_GameMsgColor", ReceiveCustomMsg)

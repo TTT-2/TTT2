@@ -1,6 +1,6 @@
 -- Game report
 
-include("cl_awards.lua")
+ttt_include("cl_awards")
 
 local table = table
 local string = string

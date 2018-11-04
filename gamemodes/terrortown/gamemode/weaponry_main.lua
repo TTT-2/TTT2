@@ -1,4 +1,4 @@
-include("weaponry_shd.lua") -- inits WEPS tbl
+ttt_include("weaponry_shd") -- inits WEPS tbl
 ---- Weapon system, pickup limits, etc
 
 local IsEquipment = WEPS.IsEquipment

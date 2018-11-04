@@ -5,7 +5,7 @@ GM.Author = "Bad King Urgrain && Alf21"
 GM.Email = "4lf-mueller@gmx.de"
 GM.Website = "ttt.badking.net, ttt2.informaskill.de"
 -- Date of latest changes (YYYY-MM-DD)
-GM.Version = "0.3.4b"
+GM.Version = "0.3.5b"
 
 GM.Customized = true
 
@@ -596,9 +596,9 @@ COLOR_PINK = Color(255, 0, 255, 255)
 COLOR_ORANGE = Color(250, 100, 0, 255)
 COLOR_OLIVE = Color(100, 100, 0, 255)
 
-include("util.lua")
-include("lang_shd.lua") -- uses some of util
-include("equip_items_shd.lua")
+ttt_include("util")
+ttt_include("lang_shd")
+ttt_include("equip_items_shd")
 
 function DetectiveMode()
 	return GetGlobalBool("ttt_detective", false)
