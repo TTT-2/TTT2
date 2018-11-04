@@ -102,7 +102,7 @@ end
 local function DrawBg(x, y, width, height, client)
 	-- Traitor area sizes
 	local th = bgheight
-	local tw = width - hastewidth - bgheight - smargin * 2 -- height = team icon
+	local tw = width - hastewidth - bgheight - smargin * 2 -- bgheight = team icon
 
 	-- Adjust for these
 	y = y - th

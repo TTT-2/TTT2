@@ -43,9 +43,7 @@ function plymeta:SetRole(subrole, team)
 	self.subrole = subrole
 
 	if team then
-		if team ~= TEAM_NOCHANGE then
-			self:UpdateTeam(team)
-		end
+		self:UpdateTeam(team)
 	else
 		self:UpdateTeam(rd.defaultTeam)
 	end
@@ -56,7 +54,9 @@ function plymeta:GetTeam()
 end
 
 function plymeta:UpdateTeam(team)
-	self.roleteam = team or TEAM_NONE
+	if not team or team ~= TEAM_NOCHANGE then
+		self.roleteam = team or TEAM_NONE
+	end
 end
 
 function plymeta:HasTeam(team)

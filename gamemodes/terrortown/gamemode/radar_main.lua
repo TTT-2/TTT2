@@ -39,16 +39,14 @@ local function ttt_radar_scan(ply, cmd, args)
 							subrole = -1
 						end
 					else
-						subrole = p:GetBaseRole()
+						local tmp = hook.Run("TTT2ModifyRadarRole", ply, p)
 
-						if subrole ~= ROLE_INNOCENT then
-							if not ply:HasTeam(TEAM_TRAITOR) then
-								subrole = ROLE_INNOCENT
-							elseif not ply:GetSubRoleData().visibleForTraitors then
-								subrole = ROLE_TRAITOR
-							else
-								subrole = p:GetBaseRole()
-							end
+						if tmp then
+							subrole = tmp
+						elseif not ply:HasTeam(TEAM_TRAITOR) then
+							subrole = ROLE_INNOCENT
+						else
+							subrole = (p:IsInTeam(ply) or p:GetSubRoleData().visibleForTraitors) and p:GetSubRole() or ROLE_INNOCENT
 						end
 					end
 

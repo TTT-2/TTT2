@@ -219,8 +219,7 @@ local function ReceiveRole()
 	-- loading our code
 	if not client.UpdateRole then return end
 
-	client:UpdateRole(subrole)
-	client:UpdateTeam(team)
+	client:UpdateRole(subrole, team)
 
 	Msg("You are: ")
 	MsgN(string.upper(GetRoleByIndex(subrole).name))
@@ -245,8 +244,7 @@ local function ReceiveRoleList()
 		local ply = player.GetByID(eidx)
 
 		if IsValid(ply) and ply.UpdateRole then
-			ply:UpdateRole(subrole)
-			ply:UpdateTeam(team)
+			ply:UpdateRole(subrole, team)
 
 			if team ~= TEAM_NONE and not ply:GetSubRoleData().unknownTeam then
 				ply[team .. "_gvoice"] = false -- assume role's chat by default
