@@ -289,7 +289,9 @@ function GM:ClearClientState()
 	for _, p in ipairs(player.GetAll()) do
 		if IsValid(p) then
 			p.sb_tag = nil
+
 			p:SetRole(ROLE_INNOCENT)
+
 			p.search_result = nil
 		end
 	end

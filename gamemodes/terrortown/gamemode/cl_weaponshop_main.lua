@@ -302,18 +302,21 @@ local function newshop()
 			state = true
 		end
 
+		self:AddChoice("Use own shop", {name = rd.name, data = rd.name})
+
 		-- add linked or own shop choice
 		for _, v in pairs(GetShopRoles()) do
-			self:AddChoice(dlist.selectedRole == v.index and "Use own shop" or ("Link with " .. v.name), {name = v.name, data = v.name})
+			if v.index ~= dlist.selectedRole then
+				self:AddChoice("Link with " .. v.name, {name = v.name, data = v.name})
+			end
 		end
 
 		-- add default choice
-		local tmpRd = GetRoleByIndex(dlist.selectedRole)
-		if tmpRd.fallbackTable then
-			self:AddChoice("Default Role Equipment", {name = tmpRd.name, data = SHOP_UNSET})
+		if rd.fallbackTable then
+			self:AddChoice("Default Role Equipment", {name = rd.name, data = SHOP_UNSET})
 		end
 
-		self:AddChoice("Disable shop", {name = tmpRd.name, data = SHOP_DISABLED})
+		self:AddChoice("Disable shop", {name = rd.name, data = SHOP_DISABLED})
 
 		-- set default value
 		if fallback == SHOP_DISABLED then

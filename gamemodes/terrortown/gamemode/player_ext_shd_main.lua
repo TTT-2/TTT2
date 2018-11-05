@@ -50,7 +50,7 @@ function plymeta:SetRole(subrole, team)
 end
 
 function plymeta:GetTeam()
-	return self.roleteam
+	return self.roleteam or TEAM_NONE
 end
 
 function plymeta:UpdateTeam(team)
