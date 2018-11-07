@@ -451,39 +451,43 @@ local function FindCorpsePosition(corpse)
 	return false
 end
 
-function plymeta:Revive(delay, fn)
-	timer.Create("TTT2RevivePlayer" .. self:EntIndex(), delay, 1, function()
-		local corpse = FindCorpse(self)
+function plymeta:Revive(delay, fn, check)
+	local ply = self
 
-		if not IsValid(corpse) or corpse:IsOnFire() then
-			timer.Remove("TTT2RevivePlayer" .. self:EntIndex())
+	timer.Create("TTT2RevivePlayer" .. ply:EntIndex(), delay, 1, function()
+		if not check or check(ply) then
+			local corpse = FindCorpse(ply)
 
-			return
-		end
+			if not IsValid(corpse) or corpse:IsOnFire() then
+				timer.Remove("TTT2RevivePlayer" .. ply:EntIndex())
 
-		if corpse then
-			local spawnPos = FindCorpsePosition(corpse)
+				return
+			end
 
-			if not spawnPos then return end
+			if corpse then
+				local spawnPos = FindCorpsePosition(corpse)
 
-			self:SpawnForRound(true)
-			self:SetPos(spawnPos)
-			self:SetEyeAngles(Angle(0, corpse:GetAngles().y, 0))
-		else
-			self:SpawnForRound(true)
-		end
+				if not spawnPos then return end
 
-		self:SetMaxHealth(100)
+				ply:SpawnForRound(true)
+				ply:SetPos(spawnPos)
+				ply:SetEyeAngles(Angle(0, corpse:GetAngles().y, 0))
+			else
+				ply:SpawnForRound(true)
+			end
 
-		local credits = CORPSE.GetCredits(corpse, 0)
+			ply:SetMaxHealth(100)
 
-		self:SetCredits(credits)
-		corpse:Remove()
+			local credits = CORPSE.GetCredits(corpse, 0)
 
-		DamageLog("TTT2Revive: " .. self:Nick() .. " has been respawned.")
+			ply:SetCredits(credits)
+			corpse:Remove()
 
-		if fn then
-			fn(self)
+			DamageLog("TTT2Revive: " .. ply:Nick() .. " has been respawned.")
+
+			if fn then
+				fn(ply)
+			end
 		end
 	end)
 end

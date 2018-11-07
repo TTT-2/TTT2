@@ -21,14 +21,36 @@ function plymeta:GetForceSpec()
 	return self:GetNWBool("force_spec")
 end
 
-AccessorFunc(plymeta, "subrole", "SubRole", FORCE_NUMBER)
+function plymeta:GetSubRole()
+	return self.subrole
+end
+
+function plymeta:SetSubRole(subrole)
+	local oldSubrole = self:GetSubRole()
+
+	self.subrole = subrole
+
+	local newSubrole = self:GetSubRole()
+
+	if oldSubrole ~= newSubrole then
+		hook.Run("TTT2UpdateSubrole", oldSubrole, newSubrole)
+	end
+end
 
 function plymeta:GetBaseRole()
 	return self.role
 end
 
 function plymeta:SetBaseRole(baserole)
+	local oldRole = self:GetBaseRole()
+
 	self.role = baserole
+
+	local newRole = self:GetBaseRole()
+
+	if oldRole ~= newRole then
+		hook.Run("TTT2UpdateBaserole", oldRole, newRole)
+	end
 end
 
 function plymeta:GetRole()
@@ -37,15 +59,30 @@ end
 
 -- ply:UpdateTeam(team) should never be used BEFORE this function
 function plymeta:SetRole(subrole, team)
+	local oldRole = self:GetBaseRole()
+	local oldSubrole = self:GetSubRole()
+	local oldTeam = self:GetTeam()
 	local rd = GetRoleByIndex(subrole)
 
 	self.role = rd.baserole or subrole
 	self.subrole = subrole
 
-	if team then
-		self:UpdateTeam(team)
-	else
-		self:UpdateTeam(rd.defaultTeam)
+	self:UpdateTeam(team or rd.defaultTeam or TEAM_NONE)
+
+	local newRole = self:GetBaseRole()
+	local newSubrole = self:GetSubRole()
+	local newTeam = self:GetTeam()
+
+	if oldRole ~= newRole then
+		hook.Run("TTT2UpdateBaserole", oldRole, newRole)
+	end
+
+	if oldSubrole ~= newSubrole then
+		hook.Run("TTT2UpdateSubrole", oldSubrole, newSubrole)
+	end
+
+	if oldTeam ~= newTeam then
+		hook.Run("TTT2UpdateTeam", oldTeam, newTeam)
 	end
 end
 
@@ -55,7 +92,15 @@ end
 
 function plymeta:UpdateTeam(team)
 	if not team or team ~= TEAM_NOCHANGE then
+		local oldTeam = self:GetTeam()
+
 		self.roleteam = team or TEAM_NONE
+
+		local newTeam = self:GetTeam()
+
+		if oldTeam ~= newTeam then
+			hook.Run("TTT2UpdateTeam", oldTeam, newTeam)
+		end
 	end
 end
 
