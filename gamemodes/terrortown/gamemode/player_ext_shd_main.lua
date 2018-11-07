@@ -33,7 +33,7 @@ function plymeta:SetSubRole(subrole)
 	local newSubrole = self:GetSubRole()
 
 	if oldSubrole ~= newSubrole then
-		hook.Run("TTT2UpdateSubrole", oldSubrole, newSubrole)
+		hook.Run("TTT2UpdateSubrole", self, oldSubrole, newSubrole)
 	end
 end
 
@@ -49,7 +49,7 @@ function plymeta:SetBaseRole(baserole)
 	local newRole = self:GetBaseRole()
 
 	if oldRole ~= newRole then
-		hook.Run("TTT2UpdateBaserole", oldRole, newRole)
+		hook.Run("TTT2UpdateBaserole", self, oldRole, newRole)
 	end
 end
 
@@ -74,15 +74,15 @@ function plymeta:SetRole(subrole, team)
 	local newTeam = self:GetTeam()
 
 	if oldRole ~= newRole then
-		hook.Run("TTT2UpdateBaserole", oldRole, newRole)
+		hook.Run("TTT2UpdateBaserole", self, oldRole, newRole)
 	end
 
 	if oldSubrole ~= newSubrole then
-		hook.Run("TTT2UpdateSubrole", oldSubrole, newSubrole)
+		hook.Run("TTT2UpdateSubrole", self, oldSubrole, newSubrole)
 	end
 
 	if oldTeam ~= newTeam then
-		hook.Run("TTT2UpdateTeam", oldTeam, newTeam)
+		hook.Run("TTT2UpdateTeam", self, oldTeam, newTeam)
 	end
 end
 
@@ -99,7 +99,7 @@ function plymeta:UpdateTeam(team)
 		local newTeam = self:GetTeam()
 
 		if oldTeam ~= newTeam then
-			hook.Run("TTT2UpdateTeam", oldTeam, newTeam)
+			hook.Run("TTT2UpdateTeam", self, oldTeam, newTeam)
 		end
 	end
 end

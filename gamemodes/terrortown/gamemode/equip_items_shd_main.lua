@@ -289,6 +289,7 @@ function InitFallbackShops()
 	end
 end
 
+-- TODO exclude doubled items / weapons
 function InitFallbackShop(roleData, fallbackTable)
 	roleData.fallbackTable = fallbackTable
 
