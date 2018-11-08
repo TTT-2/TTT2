@@ -173,10 +173,6 @@ local function ttt_request_rolelist(ply)
 		SendRoleList(ROLE_DETECTIVE, ply) -- just send detectives to ply
 
 		hook.Run("TTT2SpecialRoleSyncing", ply) -- maybe some networking for a custom role
-		hook.Run("TTT2ModifyRoleSyncing", ply) -- TODO not the best way, because data is already send, but best performance
-
-		net.Start("TTT2ModifyRoleSyncing") -- TODO not the best way, because data is already send, but best performance
-		net.Send(ply)
 
 		-- update own role for ply because they were overwritten as innos
 		net.Start("TTT_Role")
