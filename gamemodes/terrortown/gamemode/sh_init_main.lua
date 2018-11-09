@@ -9,7 +9,7 @@ function GM:TTT2Initialize()
 end
 
 -- Create teams
-function GM:PostInitialize()
+function GM:TTT2Initialize()
 	-- setup weapon ConVars and similar things
 	for _, wep in ipairs(weapons.GetList()) do
 		if not wep.Doublicated then
