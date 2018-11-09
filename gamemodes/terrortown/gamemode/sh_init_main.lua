@@ -6,10 +6,7 @@ function GM:TTT2Initialize()
 	DefaultEquipment = GetDefaultEquipment()
 
 	SetupEquipment()
-end
 
--- Create teams
-function GM:TTT2Initialize()
 	-- setup weapon ConVars and similar things
 	for _, wep in ipairs(weapons.GetList()) do
 		if not wep.Doublicated then
@@ -18,6 +15,7 @@ function GM:TTT2Initialize()
 	end
 end
 
+-- Create teams
 function GM:CreateTeams()
 	team.SetUp(TEAM_TERROR, "Terrorists", Color(0, 200, 0, 255), false)
 	team.SetUp(TEAM_SPEC, "Spectators", Color(200, 200, 0, 255), true)
@@ -72,7 +70,6 @@ local ttt_playercolors = {
 		COLOR_OLIVE,
 		COLOR_ORANGE
 	},
-
 	serious = {
 		COLOR_WHITE,
 		COLOR_BLACK,
