@@ -113,9 +113,17 @@ function plymeta:IsInTeam(ply)
 end
 
 function plymeta:UpdateRole(subrole, team)
+	local oldBaserole = self:GetBaseRole()
+	local oldSubrole = self:GetSubRole()
+
 	self:SetRole(subrole, team)
 
-	hook.Run("TTT2RoleTypeSet", self)
+	local newBaserole = self:GetBaseRole()
+	local newSubrole = self:GetSubRole()
+
+	if oldBaserole ~= newBaserole or oldSubrole ~= newSubrole then
+		hook.Run("TTT2RoleTypeSet", self)
+	end
 end
 
 -- Role access
