@@ -244,7 +244,7 @@ function EquipmentTableHasValue(tbl, equip)
 	end
 
 	for _, eq in pairs(tbl) do
-		if eq.id == equip.id then
+		if eq.id == equip.id or eq.name == equip.name then
 			return true
 		end
 	end

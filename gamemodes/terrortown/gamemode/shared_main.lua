@@ -4,9 +4,7 @@ GM.Name = "[TTT2] Trouble in Terrorist Town 2 (Advanced Update) - by Alf21"
 GM.Author = "Bad King Urgrain && Alf21"
 GM.Email = "4lf-mueller@gmx.de"
 GM.Website = "ttt.badking.net, ttt2.informaskill.de"
--- Date of latest changes (YYYY-MM-DD)
 GM.Version = "0.3.5.3b"
-
 GM.Customized = true
 
 TTT2 = true -- identifier for TTT2. Just use "if TTT2 then ... end"
