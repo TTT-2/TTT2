@@ -112,7 +112,7 @@ end
 	the button. Returns KEY_NONE if no button is found.
 -----------------------------------------------------------]]
 function bind.Find(name)
-	for btn, tbl in ipairs(Bindings) do
+	for btn, tbl in pairs(Bindings) do
 		for _, id in ipairs(tbl) do
 			if id == name then
 				return btn
@@ -144,7 +144,7 @@ function bind.Remove(btn, name)
 end
 
 hook.Add("Think", "TTT2CallBindings", function()
-	for btn, tbl in ipairs(Bindings) do
+	for btn, tbl in pairs(Bindings) do
 		local cache = input.IsButtonDown(btn)
 
 		if cache and FirstPressed[btn] then
