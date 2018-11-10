@@ -199,8 +199,8 @@ function RADAR:Draw(client)
 				surface.SetDrawColor(255, 0, 0, alpha)
 				surface.SetTextColor(255, 0, 0, alpha)
 			else
-				surface.SetDrawColor(120, 120, 120, alpha)
-				surface.SetTextColor(120, 120, 120, alpha)
+				surface.SetDrawColor(150, 150, 150, alpha)
+				surface.SetTextColor(150, 150, 150, alpha)
 			end
 
 			DrawTarget(tgt, 24, 0)

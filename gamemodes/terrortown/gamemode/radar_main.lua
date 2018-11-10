@@ -14,45 +14,55 @@ local function ttt_radar_scan(ply, cmd, args)
 
 			ply.radar_charge = CurTime() + chargetime
 
-			local scan_ents = player.GetAll()
+			local targets, customradar
 
-			table.Add(scan_ents, ents.FindByClass("ttt_decoy"))
+			if ply:GetSubRoleData() and ply:GetSubRoleData().CustomRadar then
+				customradar = ply:GetSubRoleData().CustomRadar(ply)
+			end
 
-			local targets = {}
+			if istable(customradar) then
+				targets = table.Copy(customradar)
+			else -- if we get no value we use default radar
+				targets = {}
 
-			for _, p in ipairs(scan_ents) do
-				if IsValid(p) and ply ~= p and (p:IsPlayer() and p:IsTerror() and not p:GetNWBool("disguised", false) or not p:IsPlayer()) then
-					local pos = p:LocalToWorld(p:OBBCenter())
+				local scan_ents = player.GetAll()
 
-					-- Round off, easier to send and inaccuracy does not matter
-					pos.x = math.Round(pos.x)
-					pos.y = math.Round(pos.y)
-					pos.z = math.Round(pos.z)
+				table.Add(scan_ents, ents.FindByClass("ttt_decoy"))
 
-					local subrole
+				for _, p in ipairs(scan_ents) do
+					if IsValid(p) and ply ~= p and (p:IsPlayer() and p:IsTerror() and not p:GetNWBool("disguised", false) or not p:IsPlayer()) then
+						local pos = p:LocalToWorld(p:OBBCenter())
 
-					if not p:IsPlayer() then
-						-- Decoys appear as innocents for non-traitors
-						if not ply:HasTeam(TEAM_TRAITOR) then
-							subrole = ROLE_INNOCENT
+						-- Round off, easier to send and inaccuracy does not matter
+						pos.x = math.Round(pos.x)
+						pos.y = math.Round(pos.y)
+						pos.z = math.Round(pos.z)
+
+						local subrole
+
+						if not p:IsPlayer() then
+							-- Decoys appear as innocents for non-traitors
+							if not ply:HasTeam(TEAM_TRAITOR) then
+								subrole = ROLE_INNOCENT
+							else
+								subrole = -1
+							end
 						else
-							subrole = -1
-						end
-					else
-						local tmp = hook.Run("TTT2ModifyRadarRole", ply, p)
+							local tmp = hook.Run("TTT2ModifyRadarRole", ply, p)
 
-						if tmp then
-							subrole = tmp
-						elseif not ply:HasTeam(TEAM_TRAITOR) then
-							subrole = ROLE_INNOCENT
-						else
-							subrole = (p:IsInTeam(ply) or p:GetSubRoleData().visibleForTraitors) and p:GetSubRole() or ROLE_INNOCENT
+							if tmp then
+								subrole = tmp
+							elseif not ply:HasTeam(TEAM_TRAITOR) then
+								subrole = ROLE_INNOCENT
+							else
+								subrole = (p:IsInTeam(ply) or p:GetSubRoleData().visibleForTraitors) and p:GetSubRole() or ROLE_INNOCENT
+							end
 						end
+
+						local _tmp = {subrole = subrole, pos = pos}
+
+						table.insert(targets, _tmp)
 					end
-
-					local _tmp = {subrole = subrole, pos = pos}
-
-					table.insert(targets, _tmp)
 				end
 			end
 
