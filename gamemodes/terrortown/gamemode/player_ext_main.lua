@@ -491,3 +491,21 @@ function plymeta:Revive(delay, fn, check)
 		end
 	end)
 end
+
+function plymeta:GiveItem(id)
+	self:GiveEquipmentItem(id)
+	self:AddBought(id)
+
+	local ply = self
+
+	timer.Simple(0.5, function()
+		if not IsValid(ply) then return end
+
+		net.Start("TTT_BoughtItem")
+		net.WriteBit(true)
+		net.WriteUInt(id, 16)
+		net.Send(ply)
+	end)
+
+	hook.Run("TTTOrderedEquipment", self, id, id) -- hook.Run("TTTOrderedEquipment", self, id, true) -- i know, looks stupid but thats the way TTT does
+end
