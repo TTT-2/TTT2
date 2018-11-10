@@ -113,7 +113,7 @@ end
 -----------------------------------------------------------]]
 function bind.Find(name)
 	for btn, tbl in pairs(Bindings) do
-		for _, id in ipairs(tbl) do
+		for _, id in pairs(tbl) do
 			if id == name then
 				return btn
 			end
@@ -136,9 +136,9 @@ function bind.Remove(btn, name)
 
 	print("[TTT2][BIND] removing")
 
-	for i, v in ipairs(Bindings[btn]) do
+	for i, v in pairs(Bindings[btn]) do
 		if v == name then
-			table.remove(Bindings[btn], i)
+			Bindings[btn][i] = nil
 		end
 	end
 end
@@ -148,7 +148,7 @@ hook.Add("Think", "TTT2CallBindings", function()
 		local cache = input.IsButtonDown(btn)
 
 		if cache and FirstPressed[btn] then
-			for _, name in ipairs(tbl) do
+			for _, name in pairs(tbl) do
 				if isfunction(Registry[name]) then
 					Registry[name]()
 				end

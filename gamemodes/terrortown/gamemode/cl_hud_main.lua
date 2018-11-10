@@ -7,6 +7,9 @@ local string = string
 local GetLang = LANG.GetUnsafeLanguageTable
 local interp = string.Interp
 
+local hudWidth = CreateClientConVar("ttt2_base_hud_width", "0")
+local hudTeamicon = CreateClientConVar("ttt2_base_hud_teamicon", "1")
+
 -- Fonts
 surface.CreateFont("TraitorState", {font = "Trebuchet24", size = 28, weight = 1000})
 surface.CreateFont("TimeLeft", {font = "Trebuchet24", size = 24, weight = 800})
@@ -80,7 +83,7 @@ local margin = 10
 local dmargin = margin * 2
 local smargin = 2
 local maxheight = 90
-local maxwidth = 240 + maxheight + margin
+local maxwidth = hudWidth:GetInt() + maxheight + margin + 170
 local hastewidth = 80
 local bgheight = 30
 
@@ -102,7 +105,7 @@ end
 local function DrawBg(x, y, width, height, client)
 	-- Traitor area sizes
 	local th = bgheight
-	local tw = width - hastewidth - bgheight - smargin * 2 -- bgheight = team icon
+	local tw = width - hastewidth - (hudTeamicon:GetBool() and bgheight or 0) - smargin * 2 -- bgheight = team icon
 
 	-- Adjust for these
 	y = y - th
@@ -240,7 +243,7 @@ local function InfoPaint(client)
 		end
 	end
 
-	local tmp = width - hastewidth - bgheight - smargin * 2
+	local tmp = width - hastewidth - (hudTeamicon:GetBool() and bgheight or 0) - smargin * 2
 
 	-- Draw the current role
 	local round_state = GAMEMODE.round_state
@@ -256,14 +259,16 @@ local function InfoPaint(client)
 	ShadowedText(text, "TraitorState", x + tmp * 0.5, traitor_y, COLOR_WHITE, TEXT_ALIGN_CENTER)
 
 	-- Draw team icon
-	local team = client:GetTeam()
+	if hudTeamicon:GetBool() then
+		local team = client:GetTeam()
 
-	if team ~= TEAM_NONE and round_state == ROUND_ACTIVE then
-		local mat = Material(TEAMS[team].icon)
+		if team ~= TEAM_NONE and round_state == ROUND_ACTIVE then
+			local mat = Material(TEAMS[team].icon)
 
-		surface.SetDrawColor(255, 255, 255, 255)
-		surface.SetMaterial(mat)
-		surface.DrawTexturedRect(x + tmp + smargin, traitor_y, bgheight, bgheight)
+			surface.SetDrawColor(255, 255, 255, 255)
+			surface.SetMaterial(mat)
+			surface.DrawTexturedRect(x + tmp + smargin, traitor_y, bgheight, bgheight)
+		end
 	end
 
 	-- Draw round time
@@ -383,3 +388,35 @@ function GM:HUDShouldDraw(name)
 
 	return self.BaseClass.HUDShouldDraw(self, name)
 end
+
+hook.Add("TTTSettingsTabs", "TTT2HudSettings", function(dtabs)
+	local settings_panel = vgui.Create("DPanelList", dtabs)
+	settings_panel:StretchToParent(0, 0, dtabs:GetPadding() * 2, 0)
+	settings_panel:EnableVerticalScrollbar(true)
+	settings_panel:SetPadding(10)
+	settings_panel:SetSpacing(10)
+	dtabs:AddSheet("HUD Settings", settings_panel, "icon16/user_red.png", false, false, "The HUD settings")
+
+	local list = vgui.Create("DIconLayout", settings_panel)
+	list:SetSpaceX(5)
+	list:SetSpaceY(5)
+	list:Dock(FILL)
+	list:DockMargin(5, 5, 5, 5)
+	list:DockPadding(10, 10, 10, 10)
+
+	local settings_tab = vgui.Create("DForm")
+	settings_tab:SetSpacing(10)
+	settings_tab:SetName("HUD Position")
+	settings_tab:SetWide(settings_panel:GetWide() - 30)
+
+	settings_tab:NumSlider("HUD width", "ttt2_base_hud_width", 0, ScrW(), 2)
+	settings_tab:CheckBox("Team icon", "ttt2_base_hud_teamicon", 0, ScrW(), 2)
+
+	settings_panel:AddItem(settings_tab)
+
+	settings_tab:SizeToContents()
+end)
+
+cvars.AddChangeCallback(hudWidth:GetName(), function(name, old, new)
+	maxwidth = tonumber(new) + maxheight + margin + 170
+end)

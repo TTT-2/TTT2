@@ -46,7 +46,7 @@ local loadout_weapons = {}
 
 local function GetLoadoutWeapons(subrole)
 	if not loadout_weapons[subrole] then
-		loadout_weapons[subrole] = loadout_weapons[subrole] or {}
+		loadout_weapons[subrole] = {}
 
 		for _, w in ipairs(weapons.GetList()) do
 			if type(w.InLoadoutFor) == "table" and not w.Doublicated then
@@ -82,6 +82,18 @@ local function GiveLoadoutWeapons(ply)
 			ply:Give(cls)
 		end
 	end
+
+	local defaultWeps = {
+		"weapon_zm_improvised",
+		"weapon_zm_carry",
+		"weapon_ttt_unarmed"
+	}
+
+	for _, wep in ipairs(defaultWeps) do
+		if not ply:HasWeapon(wep) then
+			ply:Give(wep)
+		end
+	end
 end
 
 local function HasLoadoutWeapons(ply)
@@ -110,7 +122,7 @@ local function GiveLoadoutItems(ply)
 	if items then
 		for _, item in pairs(items) do
 			if item.loadout and item.id then
-				ply:GiveEquipmentItem(item.id)
+				ply:GiveItem(item.id)
 			end
 		end
 	end
