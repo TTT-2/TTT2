@@ -221,9 +221,7 @@ function GM:HUDDrawTargetID()
 
 		local rstate = GetRoundState()
 
-		if rstate > ROUND_PREP and ent:IsDetective() then
-			target_role = ent:GetSubRole()
-		elseif rstate == ROUND_ACTIVE and ent:IsSpecial() then
+		if rstate > ROUND_PREP and ent:IsDetective() or rstate == ROUND_ACTIVE and ent:IsSpecial() then
 			target_role = ent:GetSubRole()
 		end
 	elseif cls == "prop_ragdoll" then
@@ -352,14 +350,14 @@ function GM:HUDDrawTargetID()
 
 		text = L["target_" .. rd.name]
 		c = rd.color
+	end
 
-		if ent.sb_tag and ent.sb_tag.txt then
-			text = L[ent.sb_tag.txt]
-			c = ent.sb_tag.color
-		elseif target_corpse and client:IsActive() and client:IsShopper() and CORPSE.GetCredits(ent, 0) > 0 then
-			text = L.target_credits
-			c = COLOR_YELLOW
-		end
+	if ent.sb_tag and ent.sb_tag.txt then
+		text = L[ent.sb_tag.txt]
+		c = ent.sb_tag.color
+	elseif target_corpse and client:IsActive() and client:IsShopper() and CORPSE.GetCredits(ent, 0) > 0 then
+		text = L.target_credits
+		c = COLOR_YELLOW
 	end
 
 	if text then
