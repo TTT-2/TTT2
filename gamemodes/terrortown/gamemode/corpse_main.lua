@@ -208,7 +208,7 @@ function CORPSE.ShowSearch(ply, rag, covert, long_range)
 	-- basic sanity check
 	if not nick or not eq or not subrole then return end
 
-	if DetectiveMode() and not covert then
+	if GetConVar("ttt_identify_body_woconfirm"):GetBool() and DetectiveMode() and not covert then
 		IdentifyBody(ply, rag)
 	end
 

@@ -375,7 +375,7 @@ local function ShowSearchScreen(search_raw)
 
 	local id = search_raw.eidx + search_raw.dtime
 
-	dconfirm.DoClick = function()
+	dconfirm.DoClick = function(s)
 		RunConsoleCommand("ttt_confirm_death", search_raw.eidx, id)
 	end
 
