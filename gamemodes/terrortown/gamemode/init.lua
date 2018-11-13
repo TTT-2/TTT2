@@ -237,6 +237,8 @@ function GM:InitPostEntity()
 
 	hook.Run("InitFallbackShops")
 
+	hook.Run("LoadedFallbackShops")
+
 	-- initialize the equipment
 	LoadShopsEquipment()
 

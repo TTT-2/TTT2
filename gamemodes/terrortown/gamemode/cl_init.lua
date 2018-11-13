@@ -89,6 +89,8 @@ function GM:InitPostEntity()
 
 	hook.Run("InitFallbackShops")
 
+	hook.Run("LoadedFallbackShops")
+
 	net.Start("TTT2SyncShopsWithServer")
 	net.SendToServer()
 
