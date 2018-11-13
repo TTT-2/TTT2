@@ -153,6 +153,8 @@ function SetupWeaponshopCVars()
 	for _, v in pairs(GetRoles()) do
 		local _func = function(convar_name, value_old, value_new)
 			if value_old ~= value_new then
+				SetGlobalString("ttt_" .. v.abbr .. "_shop_fallback", value_new)
+
 				OnChangeCVar(v.index, value_new)
 			end
 		end

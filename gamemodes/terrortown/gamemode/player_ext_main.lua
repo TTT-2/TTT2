@@ -453,13 +453,16 @@ end
 
 function plymeta:Revive(delay, fn, check)
 	local ply = self
+	local name = "TTT2RevivePlayer" .. ply:EntIndex()
 
-	timer.Create("TTT2RevivePlayer" .. ply:EntIndex(), delay, 1, function()
+	if timer.Exists(name) then return end
+
+	timer.Create(name, delay, 1, function()
 		if not check or check(ply) then
 			local corpse = FindCorpse(ply)
 
 			if not IsValid(corpse) or corpse:IsOnFire() then
-				timer.Remove("TTT2RevivePlayer" .. ply:EntIndex())
+				timer.Remove(name)
 
 				return
 			end

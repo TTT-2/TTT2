@@ -1,35 +1,61 @@
 ---- Role state communication
+TTT2NETTABLE = {}
 
--- Send every player the subrole
-local function SendPlayerRoles()
-	for _, v in ipairs(player.GetAll()) do
-		if IsValid(v) and v.GetSubRole then -- prevention
-			net.Start("TTT_Role")
-			net.WriteUInt(v:GetSubRole(), ROLE_BITS)
-			net.WriteString(v:GetTeam())
-			net.Send(v)
-		end
-	end
-end
-
+-- TODO improve, e.g. if sending every role to everyone on RoundEnd()!
 function SendRoleListMessage(subrole, team, sids, ply_or_rf)
-	net.Start("TTT_RoleList")
-	net.WriteUInt(subrole, ROLE_BITS)
-	net.WriteString(team)
+	-- TODO add role hacking
 
-	-- list contents
-	local num_ids = #sids
+	local tmp = ply_or_rf or player.GetAll()
 
-	net.WriteUInt(num_ids, 8)
-
-	for i = 1, num_ids do
-		net.WriteUInt(sids[i] - 1, 7)
+	if not istable(tmp) then
+		tmp = {ply_or_rf}
 	end
 
-	if ply_or_rf then
-		net.Send(ply_or_rf)
-	else
-		net.Broadcast()
+	for _, ply in ipairs(tmp) do
+		local adds = {}
+		local localPly = false
+		local num_ids = #sids
+
+		TTT2NETTABLE[ply] = TTT2NETTABLE[ply] or {}
+
+		for i = 1, num_ids do
+			local eidx = sids[i]
+			local p = Entity(eidx)
+
+			if not TTT2NETTABLE[ply][p] or TTT2NETTABLE[ply][p][1] ~= subrole or TTT2NETTABLE[ply][p][2] ~= team then
+				TTT2NETTABLE[ply][p] = {subrole, team}
+
+				if p ~= ply then
+					table.insert(adds, eidx)
+				else
+					localPly = true
+				end
+			end
+		end
+
+		num_ids = #adds
+
+		if num_ids > 0 then
+			net.Start("TTT_RoleList")
+			net.WriteUInt(subrole, ROLE_BITS)
+			net.WriteString(team)
+
+			-- list contents
+			net.WriteUInt(num_ids, 8)
+
+			for i = 1, num_ids do
+				net.WriteUInt(adds[i] - 1, 7)
+			end
+
+			net.Send(ply)
+		end
+
+		if localPly then
+			net.Start("TTT_Role")
+			net.WriteUInt(subrole, ROLE_BITS)
+			net.WriteString(team)
+			net.Send(ply)
+		end
 	end
 end
 
@@ -105,42 +131,86 @@ function SendPlayerToEveryone(ply, ply_or_rf)
 	return SendRoleListMessage(ply:GetSubRole(), ply:GetTeam(), {ply:EntIndex()}, ply_or_rf)
 end
 
--- TODO Improve, not resending if current data is consistent
+-- TODO Improve, merging data to send netmsg for players that will receive same data
 function SendFullStateUpdate()
-	SendRoleReset() -- reset every player; now everyone is inno
+	local syncTbl = {}
+	local localPly = false
+	local players = player.GetAll()
 
-	for _, v in ipairs(GetAvailableTeams()) do
-		SendTeamList(v, GetTeamFilter(v))
-		SendConfirmedTeam(v)
-	end
+	for _, ply in ipairs(players) do
+		local tmp = {}
+		local team = ply:GetTeam()
+		local roleData = ply:GetSubRoleData()
 
-	for _, v in pairs(GetRoles()) do
-		if v.visibleForTraitors then
-			SendSubRoleList(v.index, GetTeamFilter(TEAM_TRAITOR))
-		end
+		for _, v in ipairs(players) do
+			local rd = v:GetSubRoleData()
 
-		if v.networkRoles then
-			for _, roleData in ipairs(v.networkRoles) do
-				SendSubRoleList(roleData.index, GetSubRoleFilter(v.index))
+			if not roleData.unknownTeam and v:HasTeam(team)
+			or v:GetNWBool("body_found")
+			or team == TEAM_TRAITOR and rd.visibleForTraitors
+			or roleData.networkRoles and table.HasValue(roleData.networkRoles, rd)
+			or v:GetBaseRole() == ROLE_DETECTIVE
+			or ply == v
+			then
+				tmp[v] = {v:GetSubRole(), v:GetTeam()}
+			else
+				tmp[v] = {ROLE_INNOCENT, TEAM_INNOCENT}
 			end
 		end
+
+		hook.Run("TTT2SpecialRoleSyncing", ply, tmp) -- maybe some networking for custom roles or role hacking
+
+		syncTbl[ply] = {}
+
+		TTT2NETTABLE[ply] = TTT2NETTABLE[ply] or {}
+
+		for p, t in pairs(tmp) do
+			if p ~= ply then
+				syncTbl[ply][t[2]] = syncTbl[ply][t[2]] or {}
+				syncTbl[ply][t[2]][t[1]] = syncTbl[ply][t[2]][t[1]] or {}
+
+				table.insert(syncTbl[ply][t[2]][t[1]], p:EntIndex())
+			elseif not TTT2NETTABLE[ply][p] or TTT2NETTABLE[ply][p][1] ~= t[1] or TTT2NETTABLE[ply][p][2] ~= t[2] then
+				localPly = true
+			end
+		end
+
+		for tm, t in pairs(syncTbl[ply]) do
+			for sr, sids in pairs(t) do
+				SendRoleListMessage(sr, tm, sids, ply)
+			end
+		end
+
+		-- update own subrole for ply
+		if localPly then
+			TTT2NETTABLE[ply][ply] = {tmp[ply][1], tmp[ply][2]}
+
+			net.Start("TTT_Role")
+			net.WriteUInt(tmp[ply][1], ROLE_BITS)
+			net.WriteString(tmp[ply][2])
+			net.Send(ply)
+		end
 	end
-
-	SendRoleList(ROLE_DETECTIVE) -- everyone should know who is detective
-
-	hook.Run("TTT2SpecialRoleSyncing") -- maybe some networking for a custom role
-
-	SendPlayerRoles() -- update players at the end, because they were overwritten as innos
 end
 
 function SendRoleReset(ply_or_rf)
-	local ids = {}
+	local players = player.GetAll()
 
-	for _, ply in ipairs(player.GetAll()) do
-		table.insert(ids, ply:EntIndex())
+	for _, ply in ipairs(players) do
+		TTT2NETTABLE[ply] = TTT2NETTABLE[ply] or {}
+
+		for _, p in ipairs(players) do
+			TTT2NETTABLE[ply][p] = {ROLE_INNOCENT, TEAM_INNOCENT}
+		end
 	end
 
-	SendRoleListMessage(ROLE_INNOCENT, TEAM_INNOCENT, ids, ply_or_rf)
+	net.Start("TTT_RoleReset")
+
+	if ply_or_rf then
+		net.Send(ply_or_rf)
+	else
+		net.Broadcast()
+	end
 end
 
 ---- Console commands
@@ -148,37 +218,59 @@ local function ttt_request_rolelist(ply)
 	-- Client requested a state update. Note that the client can only use this
 	-- information after entities have been initialized (e.g. in InitPostEntity).
 	if GetRoundState() ~= ROUND_WAIT then
-		SendRoleReset(ply) -- reset every player for ply; now everyone is inno
+		local localPly = false
+		local tmp = {}
+		local team = ply:GetTeam()
+		local roleData = ply:GetSubRoleData()
 
-		if not ply:GetSubRoleData().unknownTeam then
-			SendTeamList(ply:GetTeam(), ply) -- send list of team to ply
-		end
+		for _, v in ipairs(player.GetAll()) do
+			local rd = v:GetSubRoleData()
 
-		for _, v in ipairs(GetAvailableTeams()) do
-			SendConfirmedTeam(v, ply)
-		end
-
-		local rd = ply:GetSubRoleData()
-
-		if rd.visibleForTraitors then
-			SendSubRoleList(rd.index, ply)
-		end
-
-		if rd.networkRoles then
-			for _, roleData in ipairs(rd.networkRoles) do
-				SendSubRoleList(roleData.index, ply)
+			if not ply:GetSubRoleData().unknownTeam and v:HasTeam(team)
+			or v:GetNWBool("body_found")
+			or team == TEAM_TRAITOR and rd.visibleForTraitors
+			or roleData.networkRoles and table.HasValue(roleData.networkRoles, rd)
+			or v:GetBaseRole() == ROLE_DETECTIVE
+			or ply == v
+			then
+				tmp[v] = {v:GetSubRole(), v:GetTeam()}
+			else
+				tmp[v] = {ROLE_INNOCENT, TEAM_INNOCENT}
 			end
 		end
 
-		SendRoleList(ROLE_DETECTIVE, ply) -- just send detectives to ply
+		hook.Run("TTT2SpecialRoleSyncing", ply, tmp) -- maybe some networking for custom roles or role hacking
 
-		hook.Run("TTT2SpecialRoleSyncing", ply) -- maybe some networking for a custom role
+		local tbl = {}
 
-		-- update own role for ply because they were overwritten as innos
-		net.Start("TTT_Role")
-		net.WriteUInt(ply:GetSubRole(), ROLE_BITS)
-		net.WriteString(ply:GetTeam())
-		net.Send(ply)
+		TTT2NETTABLE[ply] = TTT2NETTABLE[ply] or {}
+
+		for p, t in pairs(tmp) do
+			if p ~= ply then
+				tbl[t[2]] = tbl[t[2]] or {}
+				tbl[t[2]][t[1]] = tbl[t[2]][t[1]] or {}
+
+				table.insert(tbl[t[2]][t[1]], p:EntIndex())
+			elseif not TTT2NETTABLE[ply][p] or TTT2NETTABLE[ply][p][1] ~= t[1] or TTT2NETTABLE[ply][p][2] ~= t[2] then
+				localPly = true
+			end
+		end
+
+		for tm, t in pairs(tbl) do
+			for sr, sids in pairs(t) do
+				SendRoleListMessage(sr, tm, sids, ply)
+			end
+		end
+
+		-- update own subrole for ply
+		if localPly then
+			TTT2NETTABLE[ply][ply] = {tmp[ply][1], tmp[ply][2]}
+
+			net.Start("TTT_Role")
+			net.WriteUInt(tmp[ply][1], ROLE_BITS)
+			net.WriteString(tmp[ply][2])
+			net.Send(ply)
+		end
 	end
 end
 concommand.Add("_ttt_request_rolelist", ttt_request_rolelist)

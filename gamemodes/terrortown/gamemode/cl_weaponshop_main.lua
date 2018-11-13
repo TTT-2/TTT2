@@ -292,7 +292,7 @@ local function newshop()
 		self:Clear()
 
 		local rd = GetRoleByIndex(dlist.selectedRole)
-		local fallback = GetConVar("ttt_" .. rd.abbr .. "_shop_fallback"):GetString()
+		local fallback = GetGlobalString("ttt_" .. rd.abbr .. "_shop_fallback")
 		local fb = GetRoleByName(fallback)
 
 		-- update state
@@ -348,7 +348,7 @@ local function newshop()
 
 	function fbmenu:OnSelect(_, _, data)
 		local rd = GetRoleByIndex(dlist.selectedRole)
-		local oldFallback = GetConVar("ttt_" .. rd.abbr .. "_shop_fallback"):GetString()
+		local oldFallback = GetGlobalString("ttt_" .. rd.abbr .. "_shop_fallback")
 
 		if fallback ~= oldFallback then
 			net.Start("shopFallback")
@@ -388,7 +388,7 @@ local function shopFallbackAnsw(len)
 	local subrole = net.ReadUInt(ROLE_BITS)
 
 	local rd = GetRoleByIndex(subrole)
-	local fb = GetConVar("ttt_" .. rd.abbr .. "_shop_fallback"):GetString()
+	local fb = GetGlobalString("ttt_" .. rd.abbr .. "_shop_fallback")
 
 	-- reset everything
 	EquipmentItems[subrole] = {}

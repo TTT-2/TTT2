@@ -4,7 +4,7 @@ GM.Name = "[TTT2] Trouble in Terrorist Town 2 (Advanced Update) - by Alf21"
 GM.Author = "Bad King Urgrain && Alf21"
 GM.Email = "4lf-mueller@gmx.de"
 GM.Website = "ttt.badking.net, ttt2.informaskill.de"
-GM.Version = "0.3.5.3b"
+GM.Version = "0.3.5.4b"
 GM.Customized = true
 
 TTT2 = true -- identifier for TTT2. Just use "if TTT2 then ... end"
@@ -154,16 +154,16 @@ ROLES.DETECTIVE = {
 }
 DETECTIVE = ROLES.DETECTIVE
 
-CreateConVar("ttt_detective_enabled", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE})
-CreateConVar("ttt_newroles_enabled", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE})
+CreateConVar("ttt_detective_enabled", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+CreateConVar("ttt_newroles_enabled", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 SHOP_DISABLED = "DISABLED"
 SHOP_UNSET = "UNSET"
 
 -- shop fallbacks
-CreateConVar("ttt_" .. INNOCENT.abbr .. "_shop_fallback", SHOP_DISABLED, {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE})
-CreateConVar("ttt_" .. TRAITOR.abbr .. "_shop_fallback", SHOP_UNSET, {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE})
-CreateConVar("ttt_" .. DETECTIVE.abbr .. "_shop_fallback", SHOP_UNSET, {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE})
+CreateConVar("ttt_" .. INNOCENT.abbr .. "_shop_fallback", SHOP_DISABLED, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+CreateConVar("ttt_" .. TRAITOR.abbr .. "_shop_fallback", SHOP_UNSET, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+CreateConVar("ttt_" .. DETECTIVE.abbr .. "_shop_fallback", SHOP_UNSET, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 function InitCustomTeam(name, data) -- creates global var "TEAM_[name]" and other required things
 	local teamname = string.lower(name) .. "s"
@@ -198,26 +198,26 @@ function InitCustomRole(name, roleData, conVarData)
 				CreateClientConVar("ttt_avoid_" .. roleData.name, "0", true, true)
 			end
 
-			CreateConVar("ttt_" .. roleData.name .. "_pct", tostring(conVarData.pct or 1), {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE})
-			CreateConVar("ttt_" .. roleData.name .. "_max", tostring(conVarData.maximum or 1), {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE})
-			CreateConVar("ttt_" .. roleData.name .. "_min_players", tostring(conVarData.minPlayers or 1), {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE})
+			CreateConVar("ttt_" .. roleData.name .. "_pct", tostring(conVarData.pct or 1), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+			CreateConVar("ttt_" .. roleData.name .. "_max", tostring(conVarData.maximum or 1), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+			CreateConVar("ttt_" .. roleData.name .. "_min_players", tostring(conVarData.minPlayers or 1), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 			if conVarData.random then
-				CreateConVar("ttt_" .. roleData.name .. "_random", tostring(conVarData.random or 100), {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE})
+				CreateConVar("ttt_" .. roleData.name .. "_random", tostring(conVarData.random or 100), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 			else
-				CreateConVar("ttt_" .. roleData.name .. "_random", "100", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE})
+				CreateConVar("ttt_" .. roleData.name .. "_random", "100", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 			end
 
-			CreateConVar("ttt_" .. roleData.name .. "_enabled", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE})
+			CreateConVar("ttt_" .. roleData.name .. "_enabled", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 		end
 
 		conVarData.credits = conVarData.credits or 0
 		conVarData.creditsTraitorKill = conVarData.creditsTraitorKill or 0
 		conVarData.creditsTraitorDead = conVarData.creditsTraitorDead or 0
 
-		CreateConVar("ttt_" .. roleData.abbr .. "_credits_starting", tostring(conVarData.credits), {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE})
-		CreateConVar("ttt_" .. roleData.abbr .. "_credits_traitorkill", tostring(conVarData.creditsTraitorKill), {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE})
-		CreateConVar("ttt_" .. roleData.abbr .. "_credits_traitordead", tostring(conVarData.creditsTraitorDead), {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE})
+		CreateConVar("ttt_" .. roleData.abbr .. "_credits_starting", tostring(conVarData.credits), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+		CreateConVar("ttt_" .. roleData.abbr .. "_credits_traitorkill", tostring(conVarData.creditsTraitorKill), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+		CreateConVar("ttt_" .. roleData.abbr .. "_credits_traitordead", tostring(conVarData.creditsTraitorDead), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 		local shopFallbackValue
 
@@ -227,10 +227,10 @@ function InitCustomRole(name, roleData, conVarData)
 			shopFallbackValue = conVarData.shopFallback and tostring(conVarData.shopFallback) or SHOP_DISABLED
 		end
 
-		CreateConVar("ttt_" .. roleData.abbr .. "_shop_fallback", shopFallbackValue, {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE})
+		CreateConVar("ttt_" .. roleData.abbr .. "_shop_fallback", shopFallbackValue, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 		if conVarData.traitorKill then
-			CreateConVar("ttt_credits_" .. roleData.name .. "kill", tostring(conVarData.traitorKill), {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE})
+			CreateConVar("ttt_credits_" .. roleData.name .. "kill", tostring(conVarData.traitorKill), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 		end
 
 		-- set id
@@ -338,7 +338,7 @@ function IsShoppingRole(subrole)
 	end
 
 	local roleData = GetRoleByIndex(subrole)
-	local shopFallback = GetConVar("ttt_" .. roleData.abbr .. "_shop_fallback"):GetString()
+	local shopFallback = GetGlobalString("ttt_" .. roleData.abbr .. "_shop_fallback")
 
 	return shopFallback ~= SHOP_DISABLED
 end
@@ -350,7 +350,7 @@ function GetShopRoles()
 
 	for _, v in pairs(GetRoles()) do
 		if v ~= INNOCENT then
-			local shopFallback = GetConVar("ttt_" .. v.abbr .. "_shop_fallback"):GetString()
+			local shopFallback = GetGlobalString("ttt_" .. v.abbr .. "_shop_fallback")
 			if shopFallback ~= SHOP_DISABLED then
 				i = i + 1
 				shopRoles[i] = v

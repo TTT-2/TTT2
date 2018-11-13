@@ -23,29 +23,16 @@ function GM:PlayerInitialSpawn(ply)
 
 	local rstate = GetRoundState() or ROUND_WAIT
 	-- We should update the traitor list, if we are not about to send it
-	-- TODO why sending roles here? The game has not begun!
+	-- sending roles for spectators
 	if rstate <= ROUND_PREP then
-		for _, v in ipairs(GetAvailableTeams()) do
-			SendTeamList(v, GetTeamFilter(v))
-			SendConfirmedTeam(v)
-		end
-
-		SendRoleList(ROLE_DETECTIVE)
-
-		hook.Run("TTT2SpecialRoleSyncing")
+		SendFullStateUpdate() -- TODO needed?
 	end
 
 	-- Game has started, tell this guy (spec) where the round is at
 	if rstate ~= ROUND_WAIT then
 		SendRoundState(rstate, ply)
 
-		for _, v in ipairs(GetAvailableTeams()) do
-			SendConfirmedTeam(v, ply)
-		end
-
-		SendRoleList(ROLE_DETECTIVE, ply)
-
-		hook.Run("TTT2SpecialRoleSyncing", ply)
+		SendFullStateUpdate()
 	end
 
 	-- Handle spec bots
@@ -479,14 +466,9 @@ function GM:PlayerDisconnected(ply)
 	end
 
 	if GetRoundState() ~= ROUND_PREP then
-		for _, v in ipairs(GetAvailableTeams()) do
-			SendTeamList(v, GetTeamFilter(v))
-			SendConfirmedTeam(v)
-		end
+		TTT2NETTABLE[ply] = nil
 
-		SendRoleList(ROLE_DETECTIVE)
-
-		hook.Run("TTT2SpecialRoleSyncing")
+		SendFullStateUpdate()
 	end
 
 	if KARMA.IsEnabled() then

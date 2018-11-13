@@ -226,6 +226,13 @@ local function ReceiveRole()
 end
 net.Receive("TTT_Role", ReceiveRole)
 
+local function ReceiveRoleReset()
+	for _, ply in ipairs(player.GetAll()) do
+		ply:UpdateRole(ROLE_INNOCENT, TEAM_INNOCENT)
+	end
+end
+net.Receive("TTT_RoleReset", ReceiveRoleReset)
+
 --- role test
 local function TTT2TestRole()
 	local client = LocalPlayer()

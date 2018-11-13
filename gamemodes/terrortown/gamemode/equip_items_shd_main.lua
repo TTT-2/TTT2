@@ -138,7 +138,7 @@ end
 
 function GetShopFallback(subrole, tbl)
 	local rd = GetRoleByIndex(subrole)
-	local shopFallback = GetConVar("ttt_" .. rd.abbr .. "_shop_fallback"):GetString()
+	local shopFallback = GetGlobalString("ttt_" .. rd.abbr .. "_shop_fallback")
 	local fb = GetRoleByName(shopFallback).index
 
 	if shopFallback == SHOP_UNSET or shopFallback == SHOP_DISABLED then
@@ -168,7 +168,7 @@ end
 function GetShopFallbackTable(subrole)
 	local rd = GetRoleByIndex(subrole)
 
-	local shopFallback = GetConVar("ttt_" .. rd.abbr .. "_shop_fallback"):GetString()
+	local shopFallback = GetGlobalString("ttt_" .. rd.abbr .. "_shop_fallback")
 	if shopFallback == SHOP_DISABLED then return end
 
 	local fallback
@@ -534,7 +534,7 @@ if SERVER then
 	end
 
 	function LoadSingleShopEquipment(roleData)
-		local fallback = GetConVar("ttt_" .. roleData.abbr .. "_shop_fallback"):GetString()
+		local fallback = GetGlobalString("ttt_" .. roleData.abbr .. "_shop_fallback")
 		local fb = GetRoleByName(fallback).index
 
 		if fb ~= roleData.index then return end -- TODO why? remove and replace SHOP_UNSET with index of the current role

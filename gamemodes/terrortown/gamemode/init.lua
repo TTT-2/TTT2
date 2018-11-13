@@ -61,8 +61,8 @@ CreateConVar("ttt_det_credits_traitordead", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 CreateConVar("ttt_use_weapon_spawn_scripts", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 CreateConVar("ttt_weapon_spawn_count", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
-CreateConVar("ttt_round_limit", "6", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE})
-CreateConVar("ttt_time_limit_minutes", "75", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE})
+CreateConVar("ttt_round_limit", "6", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+CreateConVar("ttt_time_limit_minutes", "75", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 CreateConVar("ttt_idle_limit", "180", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
@@ -117,6 +117,7 @@ util.AddNetworkString("TTT_ClearClientState")
 util.AddNetworkString("TTT_PerformGesture")
 util.AddNetworkString("TTT_Role")
 util.AddNetworkString("TTT_RoleList")
+util.AddNetworkString("TTT_RoleReset")
 util.AddNetworkString("TTT_ConfirmUseTButton")
 util.AddNetworkString("TTT_C4Config")
 util.AddNetworkString("TTT_C4DisarmResult")
@@ -257,7 +258,9 @@ function GM:SyncGlobals()
 	SetGlobalFloat("ttt_voice_drain_admin", GetConVar("ttt_voice_drain_admin"):GetFloat())
 	SetGlobalFloat("ttt_voice_drain_recharge", GetConVar("ttt_voice_drain_recharge"):GetFloat())
 
-	-- TODO add weaponshop syncing
+	for _, v in pairs(GetRoles()) do
+		SetGlobalString("ttt_" .. v.abbr .. "_shop_fallback", GetConVar("ttt_" .. v.abbr .. "_shop_fallback"):GetString())
+	end
 end
 
 function LoadShopsEquipment()

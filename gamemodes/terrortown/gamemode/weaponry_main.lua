@@ -405,7 +405,7 @@ local function OrderEquipment(ply, cmd, args)
 
 	local rd = GetRoleByIndex(subrole)
 
-	local shopFallback = GetConVar("ttt_" .. rd.abbr .. "_shop_fallback"):GetString()
+	local shopFallback = GetGlobalString("ttt_" .. rd.abbr .. "_shop_fallback")
 	if shopFallback == SHOP_DISABLED then return end
 
 	-- no credits, can't happen when buying through menu as button will be off
