@@ -47,29 +47,33 @@ function GetEquipmentForRole(subrole)
 		for _, v in ipairs(weapons.GetList()) do
 			if v and not v.Doublicated and v.CanBuy and table.HasValue(v.CanBuy, fallback) then
 				local data = v.EquipMenuData or {}
-				local base = {
-					id = WEPS.GetClass(v),
-					name = v.ClassName or "Unnamed",
-					PrintName = data.name or data.PrintName or v.PrintName or v.ClassName or "Unnamed",
-					limited = v.LimitedStock,
-					kind = v.Kind or WEAPON_NONE,
-					slot = (v.Slot or 0) + 1,
-					material = v.Icon or "vgui/ttt/icon_id",
-					-- the below should be specified in EquipMenuData, in which case
-					-- these values are overwritten
-					type = "Type not specified",
-					model = "models/weapons/w_bugbait.mdl",
-					desc = "No description specified."
-				}
+				local name = WEPS.GetClass(v)
 
-				-- Force material to nil so that model key is used when we are
-				-- explicitly told to do so (ie. material is false rather than nil).
-				if data.modelicon then
-					base.material = nil
+				if name then
+					local base = {
+						id = name,
+						name = name,
+						PrintName = data.name or data.PrintName or v.PrintName or name,
+						limited = v.LimitedStock,
+						kind = v.Kind or WEAPON_NONE,
+						slot = (v.Slot or 0) + 1,
+						material = v.Icon or "vgui/ttt/icon_id",
+						-- the below should be specified in EquipMenuData, in which case
+						-- these values are overwritten
+						type = "Type not specified",
+						model = "models/weapons/w_bugbait.mdl",
+						desc = "No description specified."
+					}
+
+					-- Force material to nil so that model key is used when we are
+					-- explicitly told to do so (ie. material is false rather than nil).
+					if data.modelicon then
+						base.material = nil
+					end
+
+					table.Merge(base, data)
+					table.insert(tbl, base)
 				end
-
-				table.Merge(base, data)
-				table.insert(tbl, base)
 			end
 		end
 
@@ -288,7 +292,7 @@ local function TraitorMenuPopup()
 
 	for _, wep in pairs(ply:GetWeapons()) do
 		if IsValid(wep) and wep:IsEquipment() then
-			table.insert(owned_ids, wep.ClassName)
+			table.insert(owned_ids, WEPS.GetClass(wep))
 		end
 	end
 

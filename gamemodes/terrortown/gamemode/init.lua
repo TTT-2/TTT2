@@ -213,7 +213,7 @@ function GM:InitCvars()
 end
 
 function GM:InitPostEntity()
-	MsgN("TTT2 Client post-init...")
+	MsgN("[TTT2][INFO] Client post-init...")
 
 	InitDefaultEquipment()
 
@@ -227,7 +227,7 @@ function GM:InitPostEntity()
 
 	-- reset normal weapons equipment
 	for _, wep in ipairs(weapons.GetList()) do
-		local wepTbl = weapons.GetStored(wep.ClassName)
+		local wepTbl = weapons.GetStored(WEPS.GetClass(wep))
 		if wepTbl then
 			wepTbl.CanBuy = {}
 		end
@@ -244,6 +244,8 @@ function GM:InitPostEntity()
 
 	-- initialize the equipment
 	LoadShopsEquipment()
+
+	MsgN("[TTT2][INFO] Shops initialized...")
 
 	WEPS.ForcePrecache()
 end
@@ -272,13 +274,17 @@ function LoadShopsEquipment()
 	-- initialize shop equipment
 	for _, roleData in pairs(GetRoles()) do
 		local shopFallback = GetConVar("ttt_" .. roleData.abbr .. "_shop_fallback"):GetString()
-		if shopFallback ~= SHOP_DISABLED then
+		if shopFallback == roleData.name then
 			LoadSingleShopEquipment(roleData)
 		end
 	end
 end
 
 local function TTT2SyncShopsWithServer(len, ply)
+	-- reset and set if it's a fallback
+	net.Start("shopFallbackReset")
+	net.Send(ply)
+
 	SyncEquipment(ply)
 end
 net.Receive("TTT2SyncShopsWithServer", TTT2SyncShopsWithServer)

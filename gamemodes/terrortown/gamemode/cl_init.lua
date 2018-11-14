@@ -76,13 +76,15 @@ function GM:InitPostEntity()
 
 	-- reset normal weapons equipment
 	for _, wep in ipairs(weapons.GetList()) do
-		local wepTbl = weapons.GetStored(wep.ClassName)
+		local wepTbl = weapons.GetStored(WEPS.GetClass(wep))
 		if wepTbl then
 			wepTbl.CanBuy = {}
 		end
 	end
 
 	-- initialize fallback shops
+	-- will get overriden, but just incase to have some data
+	-- TODO rewrite to save performance
 	InitFallbackShops()
 
 	hook.Run("PostInitPostEntity")

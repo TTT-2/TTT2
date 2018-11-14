@@ -22,16 +22,18 @@ function GetEquipmentForRoleAll()
 
 		-- find buyable weapons to load info from
 		for _, v in ipairs(weapons.GetList()) do
-			if v and not v.Doublicated
-			and not string.match(v.ClassName, "base")
-			and not string.match(v.ClassName, "event")
-			and not table.HasValue(eject, v.ClassName)
+			local name = WEPS.GetClass(v)
+			if name
+			and not v.Doublicated
+			and not string.match(name, "base")
+			and not string.match(name, "event")
+			and not table.HasValue(eject, name)
 			then
 				local data = v.EquipMenuData or {}
 				local base = {
-					id = v.ClassName,
-					name = v.ClassName or "Unnamed",
-					PrintName = data.name or data.PrintName or v.PrintName or v.ClassName or "Unnamed",
+					id = name,
+					name = name,
+					PrintName = data.name or data.PrintName or v.PrintName or name,
 					limited = v.LimitedStock,
 					kind = v.Kind or WEAPON_NONE,
 					slot = (v.Slot or 0) + 1,
@@ -429,6 +431,52 @@ local function shopFallbackAnsw(len)
 	end
 end
 net.Receive("shopFallbackAnsw", shopFallbackAnsw)
+
+local function shopFallbackReset(len)
+	for _, rd in pairs(GetRoles()) do
+		local subrole = rd.index
+		local fb = GetGlobalString("ttt_" .. rd.abbr .. "_shop_fallback")
+
+		-- reset everything
+		EquipmentItems[subrole] = {}
+		Equipment[subrole] = {}
+
+		for _, v in ipairs(weapons.GetList()) do
+			if v.CanBuy then
+				for k, vi in ipairs(v.CanBuy) do
+					if vi == subrole then
+						table.remove(v.CanBuy, k) -- TODO does it work?
+
+						break
+					end
+				end
+			end
+		end
+
+		if fb == SHOP_UNSET then
+			local roleData = GetRoleByIndex(subrole)
+			if roleData.fallbackTable then
+				-- set everything
+				for _, eq in ipairs(roleData.fallbackTable) do
+					local is_item = tonumber(eq.id)
+					if is_item then
+						table.insert(EquipmentItems[subrole], eq)
+					else
+						local wepTbl = weapons.GetStored(eq.id)
+						if wepTbl then
+							wepTbl.CanBuy = wepTbl.CanBuy or {}
+
+							table.insert(wepTbl.CanBuy, subrole)
+						end
+					end
+
+					table.insert(Equipment[subrole], eq)
+				end
+			end
+		end
+	end
+end
+net.Receive("shopFallbackReset", shopFallbackReset)
 
 local function shopFallbackRefresh(len)
 	local wshop = LocalPlayer().weaponshopList

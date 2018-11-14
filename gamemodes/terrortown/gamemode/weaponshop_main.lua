@@ -73,10 +73,6 @@ local function shop(len, ply)
 	local eq = net.ReadString()
 
 	local equip = GetEquipmentFileName(eq)
-	local is_item = GetEquipmentItemByFileName(equip)
-
-	equip = not is_item and eq or equip
-
 	local rd = GetRoleByIndex(subrole)
 
 	if add then
@@ -89,6 +85,7 @@ net.Receive("shop", shop)
 
 util.AddNetworkString("shopFallback")
 util.AddNetworkString("shopFallbackAnsw")
+util.AddNetworkString("shopFallbackReset")
 util.AddNetworkString("shopFallbackRefresh")
 local function shopFallback(len, ply)
 	local subrole = net.ReadUInt(ROLE_BITS)
@@ -100,11 +97,12 @@ local function shopFallback(len, ply)
 end
 net.Receive("shopFallback", shopFallback)
 
-local function OnChangeCVar(subrole, fallback)
+function OnChangeWSCVar(subrole, fallback, ply_or_rf)
 	local rd = GetRoleByIndex(subrole)
 
 	-- reset equipment
 	EquipmentItems[subrole] = {}
+	SYNC_EQUIP[subrole] = {}
 
 	for _, v in ipairs(weapons.GetList()) do
 		if v.CanBuy then
@@ -118,16 +116,37 @@ local function OnChangeCVar(subrole, fallback)
 		end
 	end
 
+	-- reset and set if it's a fallback
 	net.Start("shopFallbackAnsw")
 	net.WriteUInt(subrole, ROLE_BITS)
-	net.Broadcast()
+
+	if ply_or_rf then
+		net.Send(ply_or_rf)
+	else
+		net.Broadcast()
+	end
 
 	if fallback ~= SHOP_DISABLED then
-		if fallback ~= SHOP_UNSET and subrole == GetRoleByName(fallback).index then
+		if fallback ~= SHOP_UNSET and fallback == rd.name then
 			LoadSingleShopEquipment(rd)
 
+			ply_or_rf = ply_or_rf or player.GetAll()
+
+			if not istable(ply_or_rf) then
+				ply_or_rf = {ply_or_rf}
+			end
+
+			for _, ply in ipairs(ply_or_rf) do
+				SyncEquipment(ply)
+			end
+
 			net.Start("shopFallbackRefresh")
-			net.Broadcast()
+
+			if ply_or_rf then
+				net.Send(ply_or_rf)
+			else
+				net.Broadcast()
+			end
 		elseif fallback == SHOP_UNSET then
 			if rd.fallbackTable then
 				-- set everything
@@ -155,7 +174,7 @@ function SetupWeaponshopCVars()
 			if value_old ~= value_new then
 				SetGlobalString("ttt_" .. v.abbr .. "_shop_fallback", value_new)
 
-				OnChangeCVar(v.index, value_new)
+				OnChangeWSCVar(v.index, value_new)
 			end
 		end
 

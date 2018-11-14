@@ -89,30 +89,34 @@ SetupEquipment() -- pre init to support normal TTT addons
 function CreateEquipmentWeapon(eq)
 	if not eq.Doublicated then
 		local data = eq.EquipMenuData or {}
-		local base = {
-			id = WEPS.GetClass(eq),
-			name = eq.ClassName or "Unnamed",
-			PrintName = data.name or data.PrintName or eq.PrintName or eq.ClassName or "Unnamed",
-			limited = eq.LimitedStock,
-			kind = eq.Kind or WEAPON_NONE,
-			slot = (eq.Slot or 0) + 1,
-			material = eq.Icon or "vgui/ttt/icon_id",
-			-- the below should be specified in EquipMenuData, in which case
-			-- these values are overwritten
-			type = "Type not specified",
-			model = "models/weapons/w_bugbait.mdl",
-			desc = "No description specified."
-		}
+		local name = WEPS.GetClass(eq)
 
-		-- Force material to nil so that model key is used when we are
-		-- explicitly told to do so (ie. material is false rather than nil).
-		if data.modelicon then
-			base.material = nil
+		if name then
+			local base = {
+				id = name,
+				name = name,
+				PrintName = data.name or data.PrintName or eq.PrintName or name,
+				limited = eq.LimitedStock,
+				kind = eq.Kind or WEAPON_NONE,
+				slot = (eq.Slot or 0) + 1,
+				material = eq.Icon or "vgui/ttt/icon_id",
+				-- the below should be specified in EquipMenuData, in which case
+				-- these values are overwritten
+				type = "Type not specified",
+				model = "models/weapons/w_bugbait.mdl",
+				desc = "No description specified."
+			}
+
+			-- Force material to nil so that model key is used when we are
+			-- explicitly told to do so (ie. material is false rather than nil).
+			if data.modelicon then
+				base.material = nil
+			end
+
+			table.Merge(base, data)
+
+			return base
 		end
-
-		table.Merge(base, data)
-
-		return base
 	end
 end
 
@@ -254,7 +258,7 @@ end
 
 function SyncTableHasValue(tbl, equip)
 	for _, v in pairs(tbl) do
-		if v.equip == equip.equip and v.type == equip.type then
+		if (v.equip == equip.equip or v.name and equip.name and v.name == equip.name) and v.type == equip.type then
 			return true
 		end
 	end
@@ -263,25 +267,26 @@ function SyncTableHasValue(tbl, equip)
 end
 
 function InitFallbackShops()
-	local tbl = {TRAITOR, DETECTIVE}
-	for _, v in ipairs(tbl) do
-		local fallback = GetShopFallbackTable(v.index)
-		if fallback then
-			for _, eq in ipairs(fallback) do
-				local is_item = tonumber(eq.id)
-				local swep_table = not is_item and weapons.GetStored(eq.id)
+	for _, v in pairs(GetRoles()) do
+		if v ~= INNOCENT then
+			local fallback = GetShopFallbackTable(v.index)
+			if fallback then
+				for _, eq in ipairs(fallback) do
+					local is_item = tonumber(eq.id)
+					local swep_table = not is_item and weapons.GetStored(eq.id)
 
-				if swep_table then
-					swep_table.CanBuy = swep_table.CanBuy or {}
+					if swep_table then
+						swep_table.CanBuy = swep_table.CanBuy or {}
 
-					if not table.HasValue(swep_table.CanBuy, v.index) then
-						table.insert(swep_table.CanBuy, v.index)
-					end
-				elseif is_item then
-					EquipmentItems[v.index] = EquipmentItems[v.index] or {}
+						if not table.HasValue(swep_table.CanBuy, v.index) then
+							table.insert(swep_table.CanBuy, v.index)
+						end
+					elseif is_item then
+						EquipmentItems[v.index] = EquipmentItems[v.index] or {}
 
-					if not EquipmentTableHasValue(EquipmentItems[v.index], eq) then
-						table.insert(EquipmentItems[v.index], eq)
+						if not EquipmentTableHasValue(EquipmentItems[v.index], eq) then
+							table.insert(EquipmentItems[v.index], eq)
+						end
 					end
 				end
 			end
@@ -289,7 +294,6 @@ function InitFallbackShops()
 	end
 end
 
--- TODO exclude doubled items / weapons
 function InitFallbackShop(roleData, fallbackTable)
 	roleData.fallbackTable = fallbackTable
 
@@ -348,29 +352,33 @@ function InitDefaultEquipment()
 	for _, v in ipairs(weapons.GetList()) do
 		if v and not v.Doublicated and v.CanBuy and table.HasValue(v.CanBuy, ROLE_TRAITOR) then
 			local data = v.EquipMenuData or {}
-			local base = {
-				id = WEPS.GetClass(v),
-				name = v.ClassName or "Unnamed",
-				PrintName = data.name or data.PrintName or v.PrintName or v.ClassName or "Unnamed",
-				limited = v.LimitedStock,
-				kind = v.Kind or WEAPON_NONE,
-				slot = (v.Slot or 0) + 1,
-				material = v.Icon or "vgui/ttt/icon_id",
-				-- the below should be specified in EquipMenuData, in which case
-				-- these values are overwritten
-				type = "Type not specified",
-				model = "models/weapons/w_bugbait.mdl",
-				desc = "No description specified."
-			}
+			local name = WEPS.GetClass(v)
 
-			-- Force material to nil so that model key is used when we are
-			-- explicitly told to do so (ie. material is false rather than nil).
-			if data.modelicon then
-				base.material = nil
+			if name then
+				local base = {
+					id = name,
+					name = name,
+					PrintName = data.name or data.PrintName or v.PrintName or name,
+					limited = v.LimitedStock,
+					kind = v.Kind or WEAPON_NONE,
+					slot = (v.Slot or 0) + 1,
+					material = v.Icon or "vgui/ttt/icon_id",
+					-- the below should be specified in EquipMenuData, in which case
+					-- these values are overwritten
+					type = "Type not specified",
+					model = "models/weapons/w_bugbait.mdl",
+					desc = "No description specified."
+				}
+
+				-- Force material to nil so that model key is used when we are
+				-- explicitly told to do so (ie. material is false rather than nil).
+				if data.modelicon then
+					base.material = nil
+				end
+
+				table.Merge(base, data)
+				table.insert(tbl, base)
 			end
-
-			table.Merge(base, data)
-			table.insert(tbl, base)
 		end
 	end
 
@@ -390,29 +398,33 @@ function InitDefaultEquipment()
 	for _, v in ipairs(weapons.GetList()) do
 		if v and not v.Doublicated and v.CanBuy and table.HasValue(v.CanBuy, ROLE_DETECTIVE) then
 			local data = v.EquipMenuData or {}
-			local base = {
-				id = WEPS.GetClass(v),
-				name = v.ClassName or "Unnamed",
-				PrintName = data.name or data.PrintName or v.PrintName or v.ClassName or "Unnamed",
-				limited = v.LimitedStock,
-				kind = v.Kind or WEAPON_NONE,
-				slot = (v.Slot or 0) + 1,
-				material = v.Icon or "vgui/ttt/icon_id",
-				-- the below should be specified in EquipMenuData, in which case
-				-- these values are overwritten
-				type = "Type not specified",
-				model = "models/weapons/w_bugbait.mdl",
-				desc = "No description specified."
-			}
+			local name = WEPS.GetClass(v)
 
-			-- Force material to nil so that model key is used when we are
-			-- explicitly told to do so (ie. material is false rather than nil).
-			if data.modelicon then
-				base.material = nil
+			if name then
+				local base = {
+					id = name,
+					name = name,
+					PrintName = data.name or data.PrintName or v.PrintName or name,
+					limited = v.LimitedStock,
+					kind = v.Kind or WEAPON_NONE,
+					slot = (v.Slot or 0) + 1,
+					material = v.Icon or "vgui/ttt/icon_id",
+					-- the below should be specified in EquipMenuData, in which case
+					-- these values are overwritten
+					type = "Type not specified",
+					model = "models/weapons/w_bugbait.mdl",
+					desc = "No description specified."
+				}
+
+				-- Force material to nil so that model key is used when we are
+				-- explicitly told to do so (ie. material is false rather than nil).
+				if data.modelicon then
+					base.material = nil
+				end
+
+				table.Merge(base, data)
+				table.insert(tbl, base)
 			end
-
-			table.Merge(base, data)
-			table.insert(tbl, base)
 		end
 	end
 
@@ -488,12 +500,7 @@ if SERVER then
 			net.WriteBool(add)
 			net.WriteBit(k ~= parts) -- continuation bit, 1 if there's more coming
 			net.WriteString(bit)
-
-			if ply then
-				net.Send(ply)
-			else
-				net.Broadcast()
-			end
+			net.Send(ply)
 		end
 	end
 
@@ -507,7 +514,7 @@ if SERVER then
 		-- this was necessary with user messages, now it's
 		-- a just-in-case thing if a round somehow manages to be > 64K
 		local cut = {}
-		local max = 65499
+		local max = 65498
 
 		while #s ~= 0 do
 			local bit = string.sub(s, 1, max - 1)
@@ -524,20 +531,14 @@ if SERVER then
 			net.WriteBool(add)
 			net.WriteBit(k ~= parts) -- continuation bit, 1 if there's more coming
 			net.WriteString(bit)
-
-			if ply then
-				net.Send(ply)
-			else
-				net.Broadcast()
-			end
+			net.Send(ply)
 		end
 	end
 
 	function LoadSingleShopEquipment(roleData)
 		local fallback = GetGlobalString("ttt_" .. roleData.abbr .. "_shop_fallback")
-		local fb = GetRoleByName(fallback).index
 
-		if fb ~= roleData.index then return end -- TODO why? remove and replace SHOP_UNSET with index of the current role
+		if fallback ~= roleData.name then return end -- TODO why? remove and replace SHOP_UNSET with index of the current role
 
 		hook.Run("TTT2LoadSingleShopEquipment", roleData)
 
@@ -564,7 +565,7 @@ if SERVER then
 
 				SYNC_EQUIP[roleData.index] = SYNC_EQUIP[roleData.index] or {}
 
-				local tbl = {equip = swep_table.ClassName, type = 0}
+				local tbl = {equip = WEPS.GetClass(swep_table), type = 0}
 
 				if not SyncTableHasValue(SYNC_EQUIP[roleData.index], tbl) then
 					table.insert(SYNC_EQUIP[roleData.index], tbl)
@@ -578,16 +579,12 @@ if SERVER then
 
 				SYNC_EQUIP[roleData.index] = SYNC_EQUIP[roleData.index] or {}
 
-				local tbl = {equip = is_item.id, type = 1}
+				local tbl = {equip = is_item.id, type = 1, name = is_item.name}
 
 				if not SyncTableHasValue(SYNC_EQUIP[roleData.index], tbl) then
 					table.insert(SYNC_EQUIP[roleData.index], tbl)
 				end
 			end
-		end
-
-		for _, ply in ipairs(player.GetAll()) do
-			SyncEquipment(ply, true)
 		end
 	end
 
@@ -600,7 +597,7 @@ if SERVER then
 
 		SYNC_EQUIP[subrole] = SYNC_EQUIP[subrole] or {}
 
-		local tbl = {equip = item.id, type = 1}
+		local tbl = {equip = item.id, type = 1, name = item.name}
 
 		if not SyncTableHasValue(SYNC_EQUIP[subrole], tbl) then
 			table.insert(SYNC_EQUIP[subrole], tbl)
@@ -632,7 +629,7 @@ if SERVER then
 			end
 		end
 
-		for _, v in pairs(player.GetAll()) do
+		for _, v in ipairs(player.GetAll()) do
 			SyncSingleEquipment(v, subrole, tbl, false)
 		end
 	end
@@ -647,13 +644,13 @@ if SERVER then
 
 		SYNC_EQUIP[subrole] = SYNC_EQUIP[subrole] or {}
 
-		local tbl = {equip = swep_table.ClassName, type = 0}
+		local tbl = {equip = WEPS.GetClass(swep_table), type = 0}
 
 		if not SyncTableHasValue(SYNC_EQUIP[subrole], tbl) then
 			table.insert(SYNC_EQUIP[subrole], tbl)
 		end
 
-		for _, v in pairs(player.GetAll()) do
+		for _, v in ipairs(player.GetAll()) do
 			SyncSingleEquipment(v, subrole, tbl, true)
 		end
 	end
@@ -674,7 +671,7 @@ if SERVER then
 
 		SYNC_EQUIP[subrole] = SYNC_EQUIP[subrole] or {}
 
-		local tbl = {equip = swep_table.ClassName, type = 0}
+		local tbl = {equip = WEPS.GetClass(swep_table), type = 0}
 
 		for k, v in pairs(SYNC_EQUIP[subrole]) do
 			if v.equip == tbl.equip and v.type == tbl.type then
@@ -682,7 +679,7 @@ if SERVER then
 			end
 		end
 
-		for _, v in pairs(player.GetAll()) do
+		for _, v in ipairs(player.GetAll()) do
 			SyncSingleEquipment(v, subrole, tbl, false)
 		end
 	end
@@ -701,31 +698,35 @@ else -- CLIENT
 
 			if equip and not equip.Doublicated then
 				local data = equip.EquipMenuData or {}
-				local base = {
-					id = WEPS.GetClass(equip),
-					name = equip.ClassName or "Unnamed",
-					PrintName = data.name or data.PrintName or equip.PrintName or equip.ClassName or "Unnamed",
-					limited = equip.LimitedStock,
-					kind = equip.Kind or WEAPON_NONE,
-					slot = (equip.Slot or 0) + 1,
-					material = equip.Icon or "vgui/ttt/icon_id",
-					-- the below should be specified in EquipMenuData, in which case
-					-- these values are overwritten
-					type = "Type not specified",
-					model = "models/weapons/w_bugbait.mdl",
-					desc = "No description specified.",
-					is_item = false
-				}
+				local name = WEPS.GetClass(equip)
 
-				-- Force material to nil so that model key is used when we are
-				-- explicitly told to do so (ie. material is false rather than nil).
-				if data.modelicon then
-					base.material = nil
+				if name then
+					local base = {
+						id = name,
+						name = name,
+						PrintName = data.name or data.PrintName or equip.PrintName or name,
+						limited = equip.LimitedStock,
+						kind = equip.Kind or WEAPON_NONE,
+						slot = (equip.Slot or 0) + 1,
+						material = equip.Icon or "vgui/ttt/icon_id",
+						-- the below should be specified in EquipMenuData, in which case
+						-- these values are overwritten
+						type = "Type not specified",
+						model = "models/weapons/w_bugbait.mdl",
+						desc = "No description specified.",
+						is_item = false
+					}
+
+					-- Force material to nil so that model key is used when we are
+					-- explicitly told to do so (ie. material is false rather than nil).
+					if data.modelicon then
+						base.material = nil
+					end
+
+					table.Merge(base, data)
+
+					toadd = base
 				end
-
-				table.Merge(base, data)
-
-				toadd = base
 			end
 		else
 			toadd = equip
@@ -750,7 +751,7 @@ else -- CLIENT
 	end
 
 	function RemoveEquipmentFromRoleEquipment(subrole, equip, item)
-		equip.id = item and equip.id or equip.name
+		equip.id = equip.id or WEPS.GetClass(equip)
 
 		if item then
 			for k, eq in pairs(EquipmentItems[subrole]) do

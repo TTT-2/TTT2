@@ -24,7 +24,7 @@ function GM:PlayerCanPickupWeapon(ply, wep)
 	-- Disallow picking up for ammo
 	if ply:HasWeapon(wep:GetClass()) then
 		return false
-	elseif not SWEPIsBuyable(wep.ClassName) then
+	elseif not SWEPIsBuyable(WEPS.GetClass(wep)) then
 		return false
 	elseif not ply:CanCarryWeapon(wep) then
 		return false
@@ -465,7 +465,7 @@ local function OrderEquipment(ply, cmd, args)
 		end
 
 		-- the item is just buyable if there is a special amount of players
-		if not SWEPIsBuyable(swep_table.ClassName) then return end
+		if not SWEPIsBuyable(WEPS.GetClass(swep_table)) then return end
 
 		-- no longer restricted to only WEAPON_EQUIP weapons, just anything that
 		-- is whitelisted and carryable

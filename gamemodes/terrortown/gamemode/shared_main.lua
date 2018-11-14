@@ -4,7 +4,7 @@ GM.Name = "[TTT2] Trouble in Terrorist Town 2 (Advanced Update) - by Alf21"
 GM.Author = "Bad King Urgrain && Alf21"
 GM.Email = "4lf-mueller@gmx.de"
 GM.Website = "ttt.badking.net, ttt2.informaskill.de"
-GM.Version = "0.3.5.4b"
+GM.Version = "0.3.5.5b"
 GM.Customized = true
 
 TTT2 = true -- identifier for TTT2. Just use "if TTT2 then ... end"
@@ -105,9 +105,9 @@ ROLES = {}
 
 ROLES.INNOCENT = {
 	index = ROLE_INNOCENT,
-	color = Color(55, 170, 50, 255),
-	dkcolor = Color(60, 160, 50, 155),
-	bgcolor = Color(0, 50, 0, 200),
+	color = Color(25, 200, 25, 255),
+	dkcolor = Color(25, 200, 25, 255),
+	bgcolor = Color(10, 50, 10, 255),
 	name = "innocent",
 	abbr = "inno",
 	defaultTeam = TEAM_INNOCENT,
@@ -121,9 +121,9 @@ INNOCENT = ROLES.INNOCENT
 
 ROLES.TRAITOR = {
 	index = ROLE_TRAITOR,
-	color = Color(180, 50, 40, 255),
-	dkcolor = Color(160, 50, 60, 155),
-	bgcolor = Color(150, 0, 0, 200),
+	color = Color(200, 25, 25, 255),
+	dkcolor = Color(159, 20, 20, 255),
+	bgcolor = Color(50, 10, 10, 255),
 	name = "traitor",
 	abbr = "traitor",
 	defaultTeam = TEAM_TRAITOR,
@@ -139,9 +139,9 @@ TRAITOR = ROLES.TRAITOR
 
 ROLES.DETECTIVE = {
 	index = ROLE_DETECTIVE,
-	color = Color(50, 60, 180, 255),
-	dkcolor = Color(50, 60, 160, 155),
-	bgcolor = Color(0, 0, 150, 200),
+	color = Color(25, 25, 200, 255),
+	dkcolor = Color(20, 20, 159, 255),
+	bgcolor = Color(0, 50, 50, 255),
 	name = "detective",
 	abbr = "det",
 	defaultTeam = TEAM_INNOCENT,
@@ -161,9 +161,10 @@ SHOP_DISABLED = "DISABLED"
 SHOP_UNSET = "UNSET"
 
 -- shop fallbacks
-CreateConVar("ttt_" .. INNOCENT.abbr .. "_shop_fallback", SHOP_DISABLED, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-CreateConVar("ttt_" .. TRAITOR.abbr .. "_shop_fallback", SHOP_UNSET, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-CreateConVar("ttt_" .. DETECTIVE.abbr .. "_shop_fallback", SHOP_UNSET, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+SetGlobalString("ttt_" .. INNOCENT.abbr .. "_shop_fallback", CreateConVar("ttt_" .. INNOCENT.abbr .. "_shop_fallback", SHOP_DISABLED, {FCVAR_NOTIFY, FCVAR_ARCHIVE}):GetString())
+SetGlobalString("ttt_" .. TRAITOR.abbr .. "_shop_fallback", CreateConVar("ttt_" .. TRAITOR.abbr .. "_shop_fallback", SHOP_UNSET, {FCVAR_NOTIFY, FCVAR_ARCHIVE}):GetString())
+SetGlobalString("ttt_" .. DETECTIVE.abbr .. "_shop_fallback", CreateConVar("ttt_" .. DETECTIVE.abbr .. "_shop_fallback", SHOP_UNSET, {FCVAR_NOTIFY, FCVAR_ARCHIVE}):GetString())
+
 
 function InitCustomTeam(name, data) -- creates global var "TEAM_[name]" and other required things
 	local teamname = string.lower(name) .. "s"
@@ -227,7 +228,8 @@ function InitCustomRole(name, roleData, conVarData)
 			shopFallbackValue = conVarData.shopFallback and tostring(conVarData.shopFallback) or SHOP_DISABLED
 		end
 
-		CreateConVar("ttt_" .. roleData.abbr .. "_shop_fallback", shopFallbackValue, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+		SetGlobalString("ttt_" .. roleData.abbr .. "_shop_fallback", CreateConVar("ttt_" .. roleData.abbr .. "_shop_fallback", shopFallbackValue, {FCVAR_NOTIFY, FCVAR_ARCHIVE}):GetString())
 
 		if conVarData.traitorKill then
 			CreateConVar("ttt_credits_" .. roleData.name .. "kill", tostring(conVarData.traitorKill), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
@@ -458,8 +460,10 @@ end
 
 function GetWeaponNameByFileName(name)
 	for _, v in ipairs(weapons.GetList()) do
-		if string.lower(v.ClassName) == name then
-			return v.ClassName
+		local n = WEPS.GetClass(v)
+
+		if string.lower(n) == name then
+			return n
 		end
 	end
 end
@@ -644,7 +648,7 @@ DefaultEquipment = GetDefaultEquipment()
 TTTWEAPON_CVARS = {}
 
 function SWEPAddConVar(swep, tbl)
-	local cls = swep.ClassName
+	local cls = WEPS.GetClass(swep)
 
 	TTTWEAPON_CVARS[cls] = TTTWEAPON_CVARS[cls] or {}
 
@@ -687,7 +691,7 @@ end
 function RegisterNormalWeapon(wep)
 	if wep.MinPlayers then
 		local tbl = {}
-		tbl.cvar = "t32_" .. wep.ClassName .. "_imp"
+		tbl.cvar = "t32_" .. WEPS.GetClass(wep) .. "_imp"
 		tbl.value = tostring(wep.MinPlayers)
 		tbl.flags = {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED, FCVAR_SERVER_CAN_EXECUTE}
 		tbl.slider = true
