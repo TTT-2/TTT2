@@ -52,7 +52,7 @@ function ScoreEvent(e, scores)
 			eva.t = e.att.t
 			eva.v = e.vic.t
 
-			scores[aid].ev[#scores[aid].ev] = eva
+			scores[aid].ev[#scores[aid].ev + 1] = eva
 			scores[aid].lt = e.att.t
 			scores[aid].lr = e.att.r
 		end
