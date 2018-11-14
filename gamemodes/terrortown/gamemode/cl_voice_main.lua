@@ -86,7 +86,6 @@ function GM:PlayerStartVoice(ply)
 	end
 
 	-- roles things
-	-- TODO check if color is right. Maybe use color of ply instead of client if client ~= ply !
 	local tm = client:GetTeam()
 	if client:IsActive() and tm ~= TEAM_NONE and not client:GetSubRoleData().unknownTeam then
 		if ply == client then
@@ -99,6 +98,12 @@ function GM:PlayerStartVoice(ply)
 			end
 		end
 	end
+
+	if ply:IsActive() and ply:GetBaseRole() == ROLE_DETECTIVE then
+		pnl.Color = DETECTIVE.color
+	end
+
+	pnl.Color = hook.Run("TTT2ModifyVoiceChatColor", ply) or pnl.Color
 
 	PlayerVoicePanels[ply] = pnl
 

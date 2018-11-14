@@ -111,7 +111,7 @@ end
 local function WasAvoidable(attacker, victim, dmginfo)
 	local infl = dmginfo:GetInflictor()
 
-	if attacker:IsInTeam(victim) and (not victim:GetSubRoleData().unknownTeam or attacker:HasTeam(TEAM_TRAITOR)) and IsValid(infl) and infl.Avoidable ~= false then
+	if attacker:IsInTeam(victim) and not victim:GetSubRoleData().unknownTeam and IsValid(infl) and infl.Avoidable ~= false then
 		return true
 	end
 
