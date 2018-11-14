@@ -591,12 +591,14 @@ function TeamKiller(events, scores, players, traitors)
 	end
 
 	for tk, tbl in pairs(tktbl) do
-		local tmp = tbl.tk / tbl.k
+		if tbl.tk and tbl.k then
+			local tmp = tbl.tk / tbl.k
 
-		if tmp > pct then
-			tker = id
-			tka = tbl.tk
-			pct = tmp
+			if tmp > pct then
+				tker = id
+				tka = tbl.tk
+				pct = tmp
+			end
 		end
 	end
 

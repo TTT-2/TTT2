@@ -55,11 +55,7 @@ local function GetLoadoutWeapons(subrole)
 				if table.HasValue(w.InLoadoutFor, subrole) then
 					table.insert(loadout_weapons[subrole], cls)
 				elseif table.HasValue(w.InLoadoutFor, ROLE_INNOCENT) then -- setup for new roles
-					local wepTbl = weapons.GetStored(cls)
-					if wepTbl then
-						table.insert(wepTbl.InLoadoutFor, subrole)
-					end
-
+					table.insert(w.InLoadoutFor, subrole)
 					table.insert(loadout_weapons[subrole], cls)
 				end
 			end

@@ -119,6 +119,7 @@ function OnChangeWSCVar(subrole, fallback, ply_or_rf)
 	-- reset and set if it's a fallback
 	net.Start("shopFallbackAnsw")
 	net.WriteUInt(subrole, ROLE_BITS)
+	net.WriteString(fallback)
 
 	if ply_or_rf then
 		net.Send(ply_or_rf)
@@ -172,8 +173,8 @@ function SetupWeaponshopCVars()
 	for _, v in pairs(GetRoles()) do
 		local _func = function(convar_name, value_old, value_new)
 			if value_old ~= value_new then
+				print(convar_name .. ": Changing fallback from " .. value_old .. " to " .. value_new)
 				SetGlobalString("ttt_" .. v.abbr .. "_shop_fallback", value_new)
-
 				OnChangeWSCVar(v.index, value_new)
 			end
 		end

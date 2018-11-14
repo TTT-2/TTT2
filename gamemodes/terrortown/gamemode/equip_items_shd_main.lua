@@ -267,26 +267,24 @@ function SyncTableHasValue(tbl, equip)
 end
 
 function InitFallbackShops()
-	for _, v in pairs(GetRoles()) do
-		if v ~= INNOCENT then
-			local fallback = GetShopFallbackTable(v.index)
-			if fallback then
-				for _, eq in ipairs(fallback) do
-					local is_item = tonumber(eq.id)
-					local swep_table = not is_item and weapons.GetStored(eq.id)
+	for _, v in pairs({TRAITOR, DETECTIVE}) do
+		local fallback = GetShopFallbackTable(v.index)
+		if fallback then
+			for _, eq in ipairs(fallback) do
+				local is_item = tonumber(eq.id)
+				local swep_table = not is_item and weapons.GetStored(eq.id)
 
-					if swep_table then
-						swep_table.CanBuy = swep_table.CanBuy or {}
+				if swep_table then
+					swep_table.CanBuy = swep_table.CanBuy or {}
 
-						if not table.HasValue(swep_table.CanBuy, v.index) then
-							table.insert(swep_table.CanBuy, v.index)
-						end
-					elseif is_item then
-						EquipmentItems[v.index] = EquipmentItems[v.index] or {}
+					if not table.HasValue(swep_table.CanBuy, v.index) then
+						table.insert(swep_table.CanBuy, v.index)
+					end
+				elseif is_item then
+					EquipmentItems[v.index] = EquipmentItems[v.index] or {}
 
-						if not EquipmentTableHasValue(EquipmentItems[v.index], eq) then
-							table.insert(EquipmentItems[v.index], eq)
-						end
+					if not EquipmentTableHasValue(EquipmentItems[v.index], eq) then
+						table.insert(EquipmentItems[v.index], eq)
 					end
 				end
 			end

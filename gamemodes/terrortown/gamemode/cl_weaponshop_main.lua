@@ -352,27 +352,21 @@ local function newshop()
 		local rd = GetRoleByIndex(dlist.selectedRole)
 		local oldFallback = GetGlobalString("ttt_" .. rd.abbr .. "_shop_fallback")
 
-		if fallback ~= oldFallback then
+		if data.data ~= oldFallback then
 			net.Start("shopFallback")
 			net.WriteUInt(dlist.selectedRole, ROLE_BITS)
 			net.WriteString(data.data)
 			net.SendToServer()
-		end
 
-		if data.data == SHOP_DISABLED or data.data == SHOP_UNSET or data.data ~= GetRoleByIndex(dlist.selectedRole).name then
-			state = false
+			if data.data == SHOP_DISABLED or data.data == SHOP_UNSET or data.data ~= GetRoleByIndex(dlist.selectedRole).name then
+				state = false
+			else
+				state = true
+			end
 
 			for _, v in pairs(dlist:GetItems()) do
 				if v.Toggle then
 					v:Toggle(false)
-				end
-			end
-		else
-			state = true
-
-			for _, v in pairs(dlist:GetItems()) do
-				if v.UpdateCheck then
-					v:UpdateCheck()
 				end
 			end
 		end
@@ -388,9 +382,7 @@ net.Receive("newshop", newshop)
 
 local function shopFallbackAnsw(len)
 	local subrole = net.ReadUInt(ROLE_BITS)
-
-	local rd = GetRoleByIndex(subrole)
-	local fb = GetGlobalString("ttt_" .. rd.abbr .. "_shop_fallback")
+	local fb = net.ReadString()
 
 	-- reset everything
 	EquipmentItems[subrole] = {}
@@ -433,6 +425,10 @@ end
 net.Receive("shopFallbackAnsw", shopFallbackAnsw)
 
 local function shopFallbackReset(len)
+	for _, v in ipairs(weapons.GetList()) do
+		v.CanBuy = {}
+	end
+
 	for _, rd in pairs(GetRoles()) do
 		local subrole = rd.index
 		local fb = GetGlobalString("ttt_" .. rd.abbr .. "_shop_fallback")
@@ -440,18 +436,6 @@ local function shopFallbackReset(len)
 		-- reset everything
 		EquipmentItems[subrole] = {}
 		Equipment[subrole] = {}
-
-		for _, v in ipairs(weapons.GetList()) do
-			if v.CanBuy then
-				for k, vi in ipairs(v.CanBuy) do
-					if vi == subrole then
-						table.remove(v.CanBuy, k) -- TODO does it work?
-
-						break
-					end
-				end
-			end
-		end
 
 		if fb == SHOP_UNSET then
 			local roleData = GetRoleByIndex(subrole)
