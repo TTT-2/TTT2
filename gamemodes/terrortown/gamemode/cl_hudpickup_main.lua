@@ -13,7 +13,7 @@ function GM:HUDWeaponPickedUp(wep)
 
 	if not IsValid(client) or not client:Alive() then return end
 
-	local name = GetEquipmentTranslation(wep:GetClass(), wep:GetPrintName() or wep:GetClass())
+	local name = GetEquipmentTranslation(wep:GetClass(), (wep.GetPrintName and wep:GetPrintName()) or wep:GetClass())
 	--local name = TryTranslation(wep.GetPrintName and wep:GetPrintName() or wep:GetClass() or "Unknown Weapon Name")
 
 	local pickup = {}
