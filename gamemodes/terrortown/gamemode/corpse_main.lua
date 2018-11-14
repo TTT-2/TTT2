@@ -126,7 +126,7 @@ local function ttt_confirm_death(ply, cmd, args)
 
 	local rag = Entity(eidx)
 
-	if IsValid(rag) and rag:GetPos():Distance(ply:GetPos()) < 128 and CORPSE.GetFound(rag, false) then
+	if IsValid(rag) and rag:GetPos():Distance(ply:GetPos()) < 128 and not CORPSE.GetFound(rag, false) then
 		IdentifyBody(ply, rag)
 	end
 end

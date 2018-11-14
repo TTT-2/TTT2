@@ -150,14 +150,49 @@ function CLSCORE:BuildScorePanel(dpanel)
 
 	-- the type of win condition triggered is relevant for team bonus
 	local wintype = WIN_NONE
+	local events = self.Events
+	local roles = {}
+	local teams = {}
+	local role = {}
+	local team = {}
 
-	for i = #self.Events, 1, -1 do
-		local e = self.Events[i]
+	for i = #events, 1, -1 do
+		local e = events[i]
 
 		if e.id == EVENT_FINISH then
 			wintype = e.win
+		elseif e.id == EVENT_SELECTED then
+			local subroles = e.rt
+			local tms = e.tms
 
-			break
+			for sr, id in ipairs(subroles) do
+				roles[id] = roles[id] or {}
+				teams[id] = teams[id] or {}
+				role[id] = role[id] or ""
+				team[id] = team[id] or ""
+
+				if not roles[id][sr] then
+					local roleData = GetRoleByIndex(sr)
+
+					if role[id] ~= "" then
+						role[id] = role[id] .. "/"
+					end
+
+					role[id] = role[id] .. T(roleData.name)
+					roles[id][sr] = true
+				end
+			end
+
+			for tm, id in ipairs(tms) do
+				if tm ~= TEAM_NONE and not teams[id][tm] then
+					if team[id] ~= "" then
+						team[id] = team[id] .. "/"
+					end
+
+					team[id] = team[id] .. T(tm)
+					teams[id][tm] = true
+				end
+			end
 		end
 	end
 
@@ -167,38 +202,41 @@ function CLSCORE:BuildScorePanel(dpanel)
 
 	for id, s in pairs(scores) do
 		if id ~= -1 then
-			local role = ""
-			local team = ""
-			local roles = {}
-			local teams = {}
 			local kills = 0
 			local teamkills = 0
 
-			for _, ev in ipairs(s.ev) do
-				if ev.t == TEAM_NONE or ev.t ~= ev.v then
-					kills = kills + 1
-				else
-					teamkills = teamkills + 1
-				end
+			roles[id] = roles[id] or {}
+			teams[id] = teams[id] or {}
+			role[id] = role[id] or ""
+			team[id] = team[id] or ""
 
-				if not roles[ev.r] then
-					local roleData = GetRoleByIndex(ev.r)
-
-					if role ~= "" then
-						role = role .. "/"
+			if s.ev then
+				for _, ev in ipairs(s.ev) do
+					if ev.t == TEAM_NONE or ev.t ~= ev.v then
+						kills = kills + 1
+					else
+						teamkills = teamkills + 1
 					end
 
-					role = role .. T(roleData.name)
-					roles[ev.r] = true
-				end
+					if not roles[id][ev.r] then
+						local roleData = GetRoleByIndex(ev.r)
 
-				if ev.t ~= TEAM_NONE and not teams[ev.t] then
-					if team ~= "" then
-						team = team .. "/"
+						if role[id] ~= "" then
+							role[id] = role[id] .. "/"
+						end
+
+						role[id] = role[id] .. T(roleData.name)
+						roles[id][ev.r] = true
 					end
 
-					team = team .. T(ev.t)
-					teams[ev.t] = true
+					if ev.t ~= TEAM_NONE and not teams[id][ev.t] then
+						if team[id] ~= "" then
+							team[id] = team[id] .. "/"
+						end
+
+						team[id] = team[id] .. T(ev.t)
+						teams[id][ev.t] = true
+					end
 				end
 			end
 
@@ -221,7 +259,7 @@ function CLSCORE:BuildScorePanel(dpanel)
 			local points_team = bonus[id]
 			local points_total = points_own + points_team
 
-			local l = dlist:AddLine(surv, nicks[id], role, team, kills, teamkills, points_own, points_team, points_total)
+			local l = dlist:AddLine(surv, nicks[id], role[id], team[id], kills, teamkills, points_own, points_team, points_total)
 
 			-- center align
 			for _, col in pairs(l.Columns) do
