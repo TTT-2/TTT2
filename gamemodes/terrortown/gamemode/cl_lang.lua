@@ -325,8 +325,7 @@ local styledmessages = {
 		"dna_object",
 		"dna_gone",
 
-		"credit_det_all",
-		"credit_tr_all",
+		"credit_all",
 		"credit_kill"
 	},
 

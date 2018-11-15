@@ -544,7 +544,7 @@ local function CheckCreditAward(victim, attacker)
 			end
 		end
 
-		LANG.Msg(GetRoleChatFilter(ROLE_DETECTIVE, true), "credit_det_all", {num = amt})
+		LANG.Msg(GetRoleChatFilter(ROLE_DETECTIVE, true), "credit_all", {num = amt})
 	end
 
 	-- TRAITOR AWARD
@@ -578,7 +578,7 @@ local function CheckCreditAward(victim, attacker)
 
 		if not ConVarExists("ttt_credits_award_pct") or pct >= GetConVar("ttt_credits_award_pct"):GetInt() then
 			-- Traitors have killed sufficient people to get an award
-			local amt = (ConVarExists("ttt_credits_award_size") and GetConVar("ttt_credits_award_size"):GetInt() or 0)
+			local amt = (ConVarExists("ttt_credits_award_size") and GetConVar("ttt_credits_award_size"):GetInt()) or 0
 
 			-- If size is 0, awards are off
 			if amt > 0 then
@@ -587,7 +587,7 @@ local function CheckCreditAward(victim, attacker)
 						ply:AddCredits(amt)
 
 						--LANG.Msg(GetRoleTeamFilter(TEAM_TRAITOR, true), "credit_kill_all", {num = amt})
-						LANG.Msg(ply, "credit_" .. TRAITOR.abbr .. "_all", {num = amt})
+						LANG.Msg(ply, "credit_all", {num = amt})
 					end
 				end
 			end

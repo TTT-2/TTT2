@@ -43,8 +43,7 @@ L.limit_time = "Time limit reached. {mapname} will load soon."
 L.limit_left = "{num} round(s) or {time} minutes remaining before the map changes to {mapname}."
 
 --- Credit awards
-L.credit_det_all = "Detectives, you have been awarded {num} equipment credit(s) for your performance."
-L.credit_traitor_all = "Traitors, you have been awarded {num} equipment credit(s) for your performance."
+L.credit_all = "Your team have been awarded {num} equipment credit(s) for your performance."
 
 L.credit_kill = "You have received {num} credit(s) for killing a {role}."
 

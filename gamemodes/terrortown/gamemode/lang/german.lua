@@ -43,8 +43,7 @@ L.limit_time = "Zeitlimit erreicht. {mapname} wird bald geladen."
 L.limit_left = "{num} Runde(n) oder {time} Minute(n) verbleibend bis die Map zu {mapname} gewechselt wird."
 
 --- Credit awards
-L.credit_det_all = "Detektive, euch wurde(n) {num} Ausrüstungs-Credit(s) für eure Leistung gegeben."
-L.credit_traitor_all = "Verräter, euch wurde(n) {num} Ausrüstungs-Credit(s) für eure Leistung gegeben."
+L.credit_all = "Deinem Team wurde(n) {num} Ausrüstungs-Credit(s) für eure Leistung gegeben."
 
 L.credit_kill = "Dir wurde(n) {num} Credit(s) gegeben, da du einen {role} getötet hast."
 
