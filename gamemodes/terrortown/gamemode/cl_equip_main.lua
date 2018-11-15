@@ -291,7 +291,7 @@ local function TraitorMenuPopup()
 	local owned_ids = {}
 
 	for _, wep in pairs(ply:GetWeapons()) do
-		if IsValid(wep) and wep:IsEquipment() then
+		if IsValid(wep) and WEPS.IsEquipment(wep) then
 			table.insert(owned_ids, WEPS.GetClass(wep))
 		end
 	end

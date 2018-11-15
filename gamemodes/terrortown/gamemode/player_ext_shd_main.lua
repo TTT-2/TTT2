@@ -232,7 +232,7 @@ end
 
 function plymeta:HasEquipmentWeapon()
 	for _, wep in pairs(self:GetWeapons()) do
-		if IsValid(wep) and wep:IsEquipment() then
+		if IsValid(wep) and WEPS.IsEquipment(wep) then
 			return true
 		end
 	end

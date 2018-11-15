@@ -231,7 +231,7 @@ function GM:PlayerSay(ply, text, team_only)
 			table.insert(filtered, 1, "[MUMBLED]")
 
 			return table.concat(filtered, " ")
-		elseif team_only and not team and not ply:IsInnocent() then
+		elseif team_only and not team and ply:IsSpecial() then
 			RoleChatMsg(ply, text)
 
 			return ""

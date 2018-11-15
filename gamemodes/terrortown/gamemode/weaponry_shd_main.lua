@@ -9,7 +9,7 @@ end
 -- You'd expect this to go on the weapon entity, but we need to be able to call
 -- it on a swep table as well.
 function WEPS.IsEquipment(wep)
-	return wep.Kind and wep.Kind >= WEAPON_EQUIP
+	return wep and wep.Kind and wep.Kind >= WEAPON_EQUIP
 end
 
 function WEPS.GetClass(wep)
