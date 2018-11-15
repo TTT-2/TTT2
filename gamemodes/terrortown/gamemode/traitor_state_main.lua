@@ -26,6 +26,10 @@ function SendRoleListMessage(subrole, team, sids, ply_or_rf)
 				TTT2NETTABLE[ply][p] = {subrole, team}
 
 				if p ~= ply then
+					local rs = GetRoundState()
+
+					if p:GetSubRoleData().disableSync and rs == ROUND_ACTIVE and not p:GetNWBool("body_found", false) then continue end
+
 					table.insert(adds, eidx)
 				else
 					localPly = true
