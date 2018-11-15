@@ -31,7 +31,7 @@ function SendRoleListMessage(subrole, team, sids, ply_or_rf)
 					if p:GetSubRoleData().disableSync
 					and rs == ROUND_ACTIVE
 					and not p:GetNWBool("body_found", false)
-					and not hook.Run("TTT2OverrideDisabledSync", p)
+					and not hook.Run("TTT2OverrideDisabledSync", ply, p)
 					then continue end
 
 					table.insert(adds, eidx)
