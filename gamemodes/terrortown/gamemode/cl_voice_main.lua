@@ -145,7 +145,7 @@ local function ReceiveVoiceState()
 	ply[tm .. "_gvoice"] = state
 
 	if IsValid(PlayerVoicePanels[ply]) then
-		PlayerVoicePanels[ply].Color = state and VP_GREEN or VP_RED
+		PlayerVoicePanels[ply].Color = state and VP_GREEN or (hook.Run("TTT2ModifyVoiceChatColor", ply) or ply:GetSubRoleData().color or VP_RED)
 	end
 end
 net.Receive("TTT_RoleVoiceState", ReceiveVoiceState)

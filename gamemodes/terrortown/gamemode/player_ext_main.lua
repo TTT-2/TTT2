@@ -66,10 +66,12 @@ function plymeta:SubtractCredits(amt)
 end
 
 function plymeta:SetDefaultCredits()
+	if hook.Run("TTT2SetDefaultCredits", self) then return end
+
 	if self:IsShopper() then
 		local rd = self:GetSubRoleData()
 
-		if self:HasTeam(TEAM_TRAITOR) then
+		if self:HasTeam(TEAM_TRAITOR) and not rd.avoidDefaultTraitorCredits then
 			local c = (ConVarExists("ttt_credits_starting") and GetConVar("ttt_credits_starting"):GetInt() or 0)
 
 			if #GetTeamMembers(TEAM_TRAITOR) == 1 then

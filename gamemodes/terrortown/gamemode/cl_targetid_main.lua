@@ -55,7 +55,7 @@ function GM:PostDrawTranslucentRenderables()
 	local client = LocalPlayer()
 	local plys = GetPlayers()
 
-	if client:IsActive() and not client:IsInnocent() then
+	if client:IsActive() and client:IsSpecial() then
 		dir = (client:GetForward() * -1)
 
 		for i = 1, #plys do
@@ -67,7 +67,7 @@ function GM:PostDrawTranslucentRenderables()
 
 			if ply ~= client
 			and ply:IsActive()
-			and not ply:IsInnocent()
+			and ply:IsSpecial()
 			and ply:IsInTeam(client)
 			and not ply:GetSubRoleData().avoidTeamIcons
 			and indicator_mat_tbl[subrole]
