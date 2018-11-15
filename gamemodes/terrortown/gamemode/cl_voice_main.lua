@@ -23,8 +23,12 @@ local function VoiceNotifyThink(pnl)
 
 	if not IsValid(pnl) or not IsValid(client) or not IsValid(pnl.ply)
 	or not GetGlobalBool("ttt_locational_voice", false) or pnl.ply:IsSpec() or pnl.ply == client
-	or client:IsActive() and pnl.ply:IsActive() and client:IsInTeam(pnl.ply) and not client:GetSubRoleData().unknownTeam
-	then return end
+	or client:IsActive() and pnl.ply:IsActive() and (
+		client:IsInTeam(pnl.ply)
+		and not pnl.ply:GetSubRoleData().unknownTeam
+		and not pnl.ply:GetSubRoleData().disabledTeamVoice
+		and not client:GetSubRoleData().disabledTeamVoiceRecv
+	) then return end
 
 	local d = client:GetPos():Distance(pnl.ply:GetPos())
 
@@ -37,7 +41,6 @@ function GM:PlayerStartVoice(ply)
 	if not IsValid(ply) then return end
 
 	local client = LocalPlayer()
-	local csrd = client:GetSubRoleData()
 
 	if not IsValid(g_VoicePanelList) or not IsValid(client) then return end
 
@@ -46,7 +49,9 @@ function GM:PlayerStartVoice(ply)
 
 	-- Tell server this is global
 	if client == ply then
-		if client:IsActive() and not client:GetSubRoleData().unknownTeam then
+		local clrd = client:GetSubRoleData()
+
+		if client:IsActive() and not clrd.unknownTeam and not clrd.disabledTeamVoice then
 			local tm = client:GetTeam()
 			if tm ~= TEAM_NONE then
 				if not client:KeyDown(IN_SPEED) and not client:KeyDownLast(IN_SPEED) then
@@ -87,14 +92,16 @@ function GM:PlayerStartVoice(ply)
 
 	-- roles things
 	local tm = client:GetTeam()
-	if client:IsActive() and tm ~= TEAM_NONE and not client:GetSubRoleData().unknownTeam then
+	local clrd = client:GetSubRoleData()
+
+	if client:IsActive() and tm ~= TEAM_NONE and not clrd.unknownTeam and not clrd.disabledTeamVoice then
 		if ply == client then
 			if not client[tm .. "_gvoice"] then
-				pnl.Color = csrd.color
+				pnl.Color = clrd.color
 			end
-		elseif ply:IsInTeam(client) then
+		elseif ply:IsInTeam(client) and not (ply:GetSubRoleData().disabledTeamVoice or clrd.disabledTeamVoiceRecv) then
 			if not ply[tm .. "_gvoice"] then
-				pnl.Color = csrd.color
+				pnl.Color = ply:GetSubRoleData().color
 			end
 		end
 	end
@@ -107,8 +114,10 @@ function GM:PlayerStartVoice(ply)
 
 	PlayerVoicePanels[ply] = pnl
 
+	local plyrd = ply:GetSubRoleData()
+
 	-- run ear gesture
-	if not (ply:IsActive() and not ply:GetSubRoleData().unknownTeam) or tm ~= TEAM_NONE and ply[tm .. "_gvoice"] then
+	if not (ply:IsActive() and not plyrd.unknownTeam and not plyrd.disabledTeamVoice and not clrd.disabledTeamVoiceRecv) or tm ~= TEAM_NONE and ply[tm .. "_gvoice"] then
 		ply:AnimPerformGesture(ACT_GMOD_IN_CHAT)
 	end
 end
@@ -125,8 +134,9 @@ local function ReceiveVoiceState()
 	if not IsValid(lply) then return end
 
 	local ply = player.GetByID(idx)
+	local plyrd = ply:GetSubRoleData()
 
-	if not IsValid(ply) or not ply:IsActive() or ply:GetSubRoleData().unknownTeam then return end
+	if not IsValid(ply) or not ply:IsActive() or plyrd.unknownTeam or plyrd.disabledTeamVoice or lply:GetSubRoleData().disabledTeamVoiceRecv then return end
 
 	local tm = ply:GetTeam()
 
@@ -248,8 +258,14 @@ end
 
 local function IsRoleChatting(ply)
 	local tm = ply:GetTeam()
+	local plyrd = ply:GetSubRoleData()
 
-	return ply:IsActive() and not ply:GetSubRoleData().unknownTeam and tm ~= TEAM_NONE and not ply[tm .. "_gvoice"]
+	return ply:IsActive()
+	and not plyrd.unknownTeam
+	and not plyrd.disabledTeamVoice
+	and not LocalPlayer():GetSubRoleData().disabledTeamVoiceRecv
+	and tm ~= TEAM_NONE
+	and not ply[tm .. "_gvoice"]
 end
 
 function VOICE.Tick()

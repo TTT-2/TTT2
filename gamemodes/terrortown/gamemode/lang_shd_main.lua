@@ -35,7 +35,7 @@ if SERVER then
 		if type(arg1) == "string" then
 			LANG.ProcessMsg(nil, arg1, arg2)
 		elseif type(arg1) == "number" then
-			LANG.ProcessMsg(GetRoleFilter(arg1), arg2, arg3)
+			LANG.ProcessMsg(GetRoleChatFilter(arg1), arg2, arg3)
 		else
 			LANG.ProcessMsg(arg1, arg2, arg3)
 		end
@@ -44,7 +44,7 @@ if SERVER then
 	function LANG.ProcessMsg(send_to, name, params)
 		-- don't want to send to null ents, but can't just IsValid send_to because
 		-- it may be a recipientfilter, so type check first
-		if type(send_to) == "Player" and (not IsValid(send_to)) then return end
+		if type(send_to) == "Player" and not IsValid(send_to) then return end
 
 		-- number of keyval param pairs to send
 		local c = params and count(params) or 0
@@ -84,9 +84,7 @@ if SERVER then
 	end
 
 	concommand.Add("_ttt_request_serverlang", ServerLangRequest)
-
 else -- CLIENT
-
 	local function RecvMsg()
 		local name = net.ReadString()
 		local c = net.ReadUInt(8)

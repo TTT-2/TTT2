@@ -43,8 +43,9 @@ function GM:PlayerBindPress(ply, bind, pressed)
 
 		-- just run concommand if the player is able to use the voice chat
 		local team = ply:GetTeam()
+		local plyrd = ply:GetSubRoleData()
 
-		if team ~= TEAM_NONE and not ply:GetSubRoleData().unknownTeam then
+		if team ~= TEAM_NONE and not plyrd.unknownTeam and not plyrd.disabledTeamVoice then
 
 			-- set voice type here just in case shift is no longer down when the
 			-- PlayerStartVoice hook runs, which might be the case when switching to
@@ -119,12 +120,12 @@ end
 -- Note that for some reason KeyPress and KeyRelease are called multiple times
 -- for the same key event in multiplayer.
 function GM:KeyPress(ply, key)
-	if not IsFirstTimePredicted() then return end
+	if not IsFirstTimePredicted() or not IsValid(ply) or ply ~= LocalPlayer() then return end
 
-	if not IsValid(ply) or ply ~= LocalPlayer() then return end
+	local plyrd = ply:GetSubRoleData()
 
 	--if key == IN_SPEED and ply:IsActiveTraitor() then
-	if key == IN_SPEED and ply:IsActive() and not ply:GetSubRoleData().unknownTeam then
+	if key == IN_SPEED and ply:IsActive() and not plyrd.unknownTeam and not plyrd.disabledTeamVoice then
 		local _func = function()
 			RunConsoleCommand("+voicerecord")
 		end
@@ -134,12 +135,12 @@ function GM:KeyPress(ply, key)
 end
 
 function GM:KeyRelease(ply, key)
-	if not IsFirstTimePredicted() then return end
+	if not IsFirstTimePredicted() or not IsValid(ply) or ply ~= LocalPlayer() then return end
 
-	if not IsValid(ply) or ply ~= LocalPlayer() then return end
+	local plyrd = ply:GetSubRoleData()
 
 	--if key == IN_SPEED and ply:IsActiveTraitor() then
-	if key == IN_SPEED and ply:IsActive() and not ply:GetSubRoleData().unknownTeam then
+	if key == IN_SPEED and ply:IsActive() and not plyrd.unknownTeam and not plyrd.disabledTeamVoice then
 		local _func = function()
 			RunConsoleCommand("-voicerecord")
 		end

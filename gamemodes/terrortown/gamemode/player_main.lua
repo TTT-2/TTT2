@@ -544,7 +544,7 @@ local function CheckCreditAward(victim, attacker)
 			end
 		end
 
-		LANG.Msg(GetRoleFilter(ROLE_DETECTIVE, true), "credit_det_all", {num = amt})
+		LANG.Msg(GetRoleChatFilter(ROLE_DETECTIVE, true), "credit_det_all", {num = amt})
 	end
 
 	-- TRAITOR AWARD

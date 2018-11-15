@@ -252,7 +252,9 @@ local function ReceiveRoleList()
 		if IsValid(ply) and ply.UpdateRole then
 			ply:UpdateRole(subrole, team)
 
-			if team ~= TEAM_NONE and not ply:GetSubRoleData().unknownTeam then
+			local plyrd = ply:GetSubRoleData()
+
+			if team ~= TEAM_NONE and not plyrd.unknownTeam and not plyrd.disabledTeamVoice then
 				ply[team .. "_gvoice"] = false -- assume role's chat by default
 			end
 		end

@@ -115,7 +115,11 @@ ROLES.INNOCENT = {
 	buildin = true,
 	scoreKillsMultiplier = 1,
 	scoreTeamKillsMultiplier = -8,
-	unknownTeam = true
+	unknownTeam = true,
+	disabledTeamVoice = true,
+	disabledTeamVoiceRecv = true,
+	disabledTeamChat = true,
+	disabledTeamChatRecv = true
 }
 INNOCENT = ROLES.INNOCENT
 
@@ -150,7 +154,8 @@ ROLES.DETECTIVE = {
 	scoreKillsMultiplier = INNOCENT.scoreKillsMultiplier,
 	scoreTeamKillsMultiplier = INNOCENT.scoreTeamKillsMultiplier,
 	fallbackTable = {},
-	unknownTeam = true
+	disabledTeamVoice = true,
+	disabledTeamVoiceRecv = true
 }
 DETECTIVE = ROLES.DETECTIVE
 

@@ -76,7 +76,7 @@ function GM:OnPlayerChat(ply, text, teamchat, dead)
 		dead = true
 	end
 
-	if teamchat and (not team and ply:IsInnocent() or team) then
+	if teamchat and (not team and not ply:IsSpecial() or team) then
 		teamchat = false
 	end
 

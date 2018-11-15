@@ -54,11 +54,11 @@ end
 -- Teamchat
 local function RoleChatMsg(sender, msg)
 	local tm = sender:GetTeam()
-	if tm ~= TEAM_NONE then
+	if tm ~= TEAM_NONE and not sender:GetSubRoleData().disabledTeamChat then
 		net.Start("TTT_RoleChat")
 		net.WriteEntity(sender)
 		net.WriteString(msg)
-		net.Send(GetTeamFilter(tm))
+		net.Send(GetTeamChatFilter(tm))
 	end
 end
 
@@ -102,6 +102,16 @@ function GetRoleFilter(subrole, alive_only)
 	end)
 end
 
+function GetRoleChatFilter(subrole, alive_only)
+	if GetRoleByIndex(subrole).disabledTeamChat then
+		return {}
+	end
+
+	return GetPlayerFilter(function(p)
+		return p:IsRole(subrole) and not p:GetSubRoleData().disabledTeamChatRec and (not alive_only or p:IsTerror())
+	end)
+end
+
 function GetSubRoleFilter(subrole, alive_only)
 	return GetPlayerFilter(function(p)
 		return p:GetSubRole() == subrole and (not alive_only or p:IsTerror())
@@ -111,6 +121,12 @@ end
 function GetTeamFilter(team, alive_only)
 	return GetPlayerFilter(function(p)
 		return team ~= TEAM_NONE and p:HasTeam(team) and not p:GetSubRoleData().unknownTeam and (not alive_only or p:IsTerror())
+	end)
+end
+
+function GetTeamChatFilter(team, alive_only)
+	return GetPlayerFilter(function(p)
+		return team ~= TEAM_NONE and p:HasTeam(team) and not p:GetSubRoleData().unknownTeam and not p:GetSubRoleData().disabledTeamChatRec and (not alive_only or p:IsTerror())
 	end)
 end
 
@@ -142,9 +158,13 @@ function GM:PlayerCanSeePlayersChat(text, team_only, listener, speaker)
 	if GetRoundState() ~= ROUND_ACTIVE -- Round isn't active
 	or not GetConVar("ttt_limit_spectator_chat"):GetBool() -- Spectators can chat freely
 	or not DetectiveMode() -- Mumbling
-	or not sTeam and (team_only and speaker:IsInnocent() or not team_only) -- If someone alive talks (and not a special role in teamchat's case)
-	or not sTeam and team_only and speaker:IsInTeam(listener) -- if the speaker and listener are in same team
-	or sTeam and lTeam then -- If the speaker and listener are spectators
+	or not sTeam and (team_only and not speaker:IsSpecial() or not team_only) -- If someone alive talks (and not a special role in teamchat's case)
+	or not sTeam and team_only and (
+		speaker:IsInTeam(listener)
+		and not speaker:GetSubRoleData().unknownTeam
+		and not speaker:GetSubRoleData().disabledTeamChat
+		and not listener:GetSubRoleData().disabledTeamChatRecv -- if the speaker and listener are in same team
+	) or sTeam and lTeam then -- If the speaker and listener are spectators
 		return true
 	end
 

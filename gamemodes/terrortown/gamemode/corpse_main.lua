@@ -151,7 +151,7 @@ local function ttt_call_detective(ply, cmd, args)
 			-- show indicator in radar to detectives
 			net.Start("TTT_CorpseCall")
 			net.WriteVector(rag:GetPos())
-			net.Send(GetRoleFilter(ROLE_DETECTIVE, true))
+			net.Send(GetRoleChatFilter(ROLE_DETECTIVE, true))
 
 			LANG.Msg("body_call", {player = ply:Nick(), victim = CORPSE.GetPlayerNick(rag, "someone")})
 		else

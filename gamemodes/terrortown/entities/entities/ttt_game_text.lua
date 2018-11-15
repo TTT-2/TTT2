@@ -46,11 +46,11 @@ function ENT:AcceptInput(name, activator)
 		if r == RECEIVE_ALL then
 			recv = nil
 		elseif r == RECEIVE_DETECTIVE then
-			recv = GetRoleFilter(ROLE_DETECTIVE)
+			recv = GetRoleChatFilter(ROLE_DETECTIVE)
 		elseif r == RECEIVE_TRAITOR then
-			recv = GetTeamFilter(TEAM_TRAITOR)
+			recv = GetTeamChatFilter(TEAM_TRAITOR)
 		elseif r == RECEIVE_INNOCENT then
-			recv = GetTeamFilter(TEAM_INNOCENT)
+			recv = GetTeamChatFilter(TEAM_INNOCENT)
 		elseif r == RECEIVE_ACTIVATOR then
 			if not IsValid(activator) or not activator:IsPlayer() then
 				ErrorNoHalt("ttt_game_text tried to show message to invalid !activator\n")
@@ -58,7 +58,7 @@ function ENT:AcceptInput(name, activator)
 				return true
 			end
 		elseif r == RECEIVE_CUSTOMROLE and self.teamReceiver then
-			recv = GetTeamFilter(self.teamReceiver)
+			recv = GetTeamChatFilter(self.teamReceiver)
 		end
 
 		CustomMsg(recv, self.Message, self.Color)
