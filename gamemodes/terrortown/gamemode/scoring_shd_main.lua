@@ -29,8 +29,8 @@ end
 
 function ScoreEvent(e, scores)
 	if e.id == EVENT_KILL then
-		local aid = e.att.sid
-		local vid = e.vic.sid
+		local aid = e.att.sid64
+		local vid = e.vic.sid64
 
 		-- make sure a score table exists for this person
 		-- he might have disconnected by now
@@ -57,15 +57,15 @@ function ScoreEvent(e, scores)
 			scores[aid].lr = e.att.r
 		end
 	elseif e.id == EVENT_BODYFOUND then
-		local sid = e.sid
+		local sid64 = e.sid64
 
-		scores[sid] = scores[sid] or ScoreInit()
+		scores[sid64] = scores[sid64] or ScoreInit()
 
 		if e.t == TEAM_TRAITOR then return end
 
 		local find_bonus = e.r == ROLE_DETECTIVE and 3 or 1
 
-		scores[sid].bonus = scores[sid].bonus + find_bonus
+		scores[sid64].bonus = scores[sid64].bonus + find_bonus
 	end
 end
 

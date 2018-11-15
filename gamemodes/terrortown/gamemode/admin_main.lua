@@ -68,7 +68,7 @@ function PrintReport(ply)
 
 		for _, e in pairs(SCORE.Events) do
 			if e.id == EVENT_KILL then
-				if e.att.sid == -1 then
+				if e.att.sid64 == -1 then
 					pr("<something> killed " .. e.vic.ni .. "[" .. string.upper(e.vic.t) .. "]")
 				else
 					local as = "[" .. string.upper(e.att.t) .. "]"

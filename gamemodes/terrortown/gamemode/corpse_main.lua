@@ -70,7 +70,7 @@ local function IdentifyBody(ply, rag)
 
 	-- Register find
 	if not CORPSE.GetFound(rag, false) then -- will return either false or a valid ply
-		local deadply = player.GetBySteamID64(rag.sid)
+		local deadply = player.GetBySteamID64(rag.sid64)
 		if deadply then
 			deadply:SetNWBool("body_found", true)
 
@@ -202,7 +202,7 @@ function CORPSE.ShowSearch(ply, rag, covert, long_range)
 	local hshot = rag.was_headshot or false
 	local dtime = rag.time or 0
 
-	local owner = player.GetBySteamID64(rag.sid)
+	local owner = player.GetBySteamID64(rag.sid64)
 	owner = IsValid(owner) and owner:EntIndex() or - 1
 
 	-- basic sanity check
@@ -411,8 +411,9 @@ function CORPSE.Create(ply, attacker, dmginfo)
 
 	-- flag this ragdoll as being a player's
 	rag.player_ragdoll = true
-	rag.sid = ply:SteamID64()
-	rag.uqid = ply:UniqueID() -- backwards compatibility use rag.sid instead
+	rag.sid = ply:SteamID()
+	rag.sid64 = ply:SteamID64()
+	rag.uqid = ply:UniqueID() -- backwards compatibility use rag.sid64 instead
 
 	-- network data
 	CORPSE.SetPlayerNick(rag, ply)

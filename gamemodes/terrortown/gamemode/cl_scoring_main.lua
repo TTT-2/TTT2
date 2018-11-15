@@ -422,7 +422,7 @@ function CLSCORE:BuildHilitePanel(dpanel)
 	local award_choices = {}
 
 	for _, afn in pairs(AWARDS) do
-		local a = afn(self.Events, self.Scores, self.Players, tr) -- TODO: get this tr var out of scores.sid.lt == TEAM_TRAITOR
+		local a = afn(self.Events, self.Scores, self.Players, tr) -- TODO: get this tr var out of scores.sid64.lt == TEAM_TRAITOR
 
 		if ValidAward(a) then
 			table.insert(award_choices, a)
@@ -601,8 +601,8 @@ function CLSCORE:Init(events)
 
 	for _, e in pairs(events) do
 		if e.id == EVENT_SPAWN then
-			scores[e.sid] = ScoreInit()
-			nicks[e.sid] = e.ni
+			scores[e.sid64] = ScoreInit()
+			nicks[e.sid64] = e.ni
 		end
 	end
 
