@@ -463,7 +463,7 @@ function plymeta:Revive(delay, fn, check)
 			local corpse = FindCorpse(ply)
 
 			if not IsValid(corpse) or corpse:IsOnFire() then
-				timer.Remove(name)
+				timer.Remove(name) -- TODO needed?
 
 				return
 			end

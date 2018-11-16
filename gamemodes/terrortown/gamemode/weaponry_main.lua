@@ -38,20 +38,31 @@ local loadout_weapons = {}
 
 local function GetLoadoutWeapons(subrole)
 	if not loadout_weapons[subrole] then
-		loadout_weapons[subrole] = {}
+		loadout_weapons[subrole] = { -- default loadout
+			"weapon_zm_improvised",
+			"weapon_zm_carry",
+			"weapon_ttt_unarmed"
+		}
 
 		for _, w in ipairs(weapons.GetList()) do
 			if type(w.InLoadoutFor) == "table" and not w.Doublicated then
 				local cls = WEPS.GetClass(w)
 
 				if table.HasValue(w.InLoadoutFor, subrole) then
-					table.insert(loadout_weapons[subrole], cls)
+					if not table.HasValue(loadout_weapons[subrole], cls) then
+						table.insert(loadout_weapons[subrole], cls)
+					end
 				elseif table.HasValue(w.InLoadoutFor, ROLE_INNOCENT) then -- setup for new roles
 					table.insert(w.InLoadoutFor, subrole)
-					table.insert(loadout_weapons[subrole], cls)
+
+					if not table.HasValue(loadout_weapons[subrole], cls) then
+						table.insert(loadout_weapons[subrole], cls)
+					end
 				end
 			end
 		end
+
+		hook.Run("TTT2ModifyDefaultLoadout", loadout_weapons, subrole)
 	end
 
 	return loadout_weapons[subrole]
@@ -68,18 +79,6 @@ local function GiveLoadoutWeapons(ply)
 	for _, cls in ipairs(weps) do
 		if not ply:HasWeapon(cls) and ply:CanCarryType(WEPS.TypeForWeapon(cls)) then
 			ply:Give(cls)
-		end
-	end
-
-	local defaultWeps = {
-		"weapon_zm_improvised",
-		"weapon_zm_carry",
-		"weapon_ttt_unarmed"
-	}
-
-	for _, wep in ipairs(defaultWeps) do
-		if not ply:HasWeapon(wep) then
-			ply:Give(wep)
 		end
 	end
 end
