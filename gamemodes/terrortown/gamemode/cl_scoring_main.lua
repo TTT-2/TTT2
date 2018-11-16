@@ -165,7 +165,7 @@ function CLSCORE:BuildScorePanel(dpanel)
 			local subroles = e.rt
 			local tms = e.tms
 
-			for sr, id in ipairs(subroles) do
+			for sr, id in pairs(subroles) do
 				roles[id] = roles[id] or {}
 				teams[id] = teams[id] or {}
 				role[id] = role[id] or ""
@@ -183,7 +183,7 @@ function CLSCORE:BuildScorePanel(dpanel)
 				end
 			end
 
-			for tm, id in ipairs(tms) do
+			for tm, id in pairs(tms) do
 				if tm ~= TEAM_NONE and not teams[id][tm] then
 					if team[id] ~= "" then
 						team[id] = team[id] .. "/"
