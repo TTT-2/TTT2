@@ -11,20 +11,12 @@ function GM:PlayerCanPickupWeapon(ply, wep)
 		return false
 	end
 
-	if GetRoundState() == ROUND_WAIT or GetRoundState() == ROUND_PREP then
-		if wep:GetClass() == "weapon_zm_molotov" then
-			return false
-		end
-
-		if wep:GetClass() == "weapon_ttt_confgrenade" then
-			return false
-		end
-	end
+	local wepClass = WEPS.GetClass(wep)
 
 	-- Disallow picking up for ammo
-	if ply:HasWeapon(wep:GetClass()) then
+	if ply:HasWeapon(wepClass) then
 		return false
-	elseif not SWEPIsBuyable(WEPS.GetClass(wep)) then
+	elseif not SWEPIsBuyable(wepClass) then
 		return false
 	elseif not ply:CanCarryWeapon(wep) then
 		return false

@@ -165,37 +165,41 @@ function CLSCORE:BuildScorePanel(dpanel)
 			local subroles = e.rt
 			local tms = e.tms
 
-			for sr, id in pairs(subroles) do
-				roles[id] = roles[id] or {}
-				teams[id] = teams[id] or {}
-				role[id] = role[id] or ""
-				team[id] = team[id] or ""
+			for sr, ids in pairs(subroles) do
+				for _, id in ipairs(ids) do
+					roles[id] = roles[id] or {}
+					teams[id] = teams[id] or {}
+					role[id] = role[id] or ""
+					team[id] = team[id] or ""
 
-				if not roles[id][sr] then
-					local roleData = GetRoleByIndex(sr)
+					if not roles[id][sr] then
+						local roleData = GetRoleByIndex(sr)
 
-					if role[id] ~= "" then
-						role[id] = role[id] .. "/"
+						if role[id] ~= "" then
+							role[id] = role[id] .. "/"
+						end
+
+						role[id] = role[id] .. T(roleData.name)
+						roles[id][sr] = true
 					end
-
-					role[id] = role[id] .. T(roleData.name)
-					roles[id][sr] = true
 				end
 			end
 
-			for tm, id in pairs(tms) do
-				roles[id] = roles[id] or {}
-				teams[id] = teams[id] or {}
-				role[id] = role[id] or ""
-				team[id] = team[id] or ""
+			for tm, ids in pairs(tms) do
+				for _, id in ipairs(ids) do
+					roles[id] = roles[id] or {}
+					teams[id] = teams[id] or {}
+					role[id] = role[id] or ""
+					team[id] = team[id] or ""
 
-				if tm ~= TEAM_NONE and not teams[id][tm] then
-					if team[id] ~= "" then
-						team[id] = team[id] .. "/"
+					if tm ~= TEAM_NONE and not teams[id][tm] then
+						if team[id] ~= "" then
+							team[id] = team[id] .. "/"
+						end
+
+						team[id] = team[id] .. T(tm)
+						teams[id][tm] = true
 					end
-
-					team[id] = team[id] .. T(tm)
-					teams[id][tm] = true
 				end
 			end
 		end

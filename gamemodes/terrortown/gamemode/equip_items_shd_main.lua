@@ -472,7 +472,7 @@ if SERVER then
 	function SyncEquipment(ply, add)
 		add = add or true
 
-		print("[TTT2][SHOP] Sending new SHOP list to " .. ply:Nick() .. "...")
+		--print("[TTT2][SHOP] Sending new SHOP list to " .. ply:Nick() .. "...")
 
 		local s = EncodeForStream(SYNC_EQUIP)
 		if not s then return end
@@ -503,7 +503,7 @@ if SERVER then
 	end
 
 	function SyncSingleEquipment(ply, role, equipTbl, add)
-		print("[TTT2][SHOP] Sending updated equipment '" .. equipTbl.equip .. "' to " .. ply:Nick() .. "...")
+		--print("[TTT2][SHOP] Sending updated equipment '" .. equipTbl.equip .. "' to " .. ply:Nick() .. "...")
 
 		local s = EncodeForStream({[role] = {equipTbl}})
 		if not s then return end
@@ -782,7 +782,7 @@ else -- CLIENT
 	local buff = ""
 
 	local function TTT2SyncEquipment(len)
-		print("[TTT2][SHOP] Received new SHOP list from server! Updating...")
+		--print("[TTT2][SHOP] Received new SHOP list from server! Updating...")
 
 		local add = net.ReadBool()
 		local cont = net.ReadBit() == 1

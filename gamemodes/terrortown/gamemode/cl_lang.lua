@@ -218,13 +218,13 @@ LANG.Styles = {
 	default = function(text)
 		MSTACK:AddMessage(text)
 
-		print("TTT:	" .. text)
+		print("[TTT2]:	" .. text)
 	end,
 
 	rolecolour = function(text)
 		MSTACK:AddColoredBgMessage(text, LocalPlayer():GetSubRoleData().color)
 
-		print("TTT:	" .. text)
+		print("[TTT2]:	" .. text)
 	end,
 
 	chat_warn = function(text)
