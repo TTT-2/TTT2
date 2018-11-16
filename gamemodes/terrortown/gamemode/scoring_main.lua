@@ -121,17 +121,14 @@ function SCORE:HandleSelection()
 	for _, ply in ipairs(player.GetAll()) do
 		subrole = ply:GetSubRole()
 		team = ply:GetTeam()
+		tmp[subrole] = tmp[subrole] or {}
 
-		if subrole ~= ROLE_INNOCENT then -- no innos
-			tmp[subrole] = tmp[subrole] or {}
+		table.insert(tmp[subrole], ply:SteamID64())
 
-			table.insert(tmp[subrole], ply:SteamID64())
+		if team ~= TEAM_NONE then
+			teams[team] = teams[team] or {}
 
-			if team ~= TEAM_NONE then
-				teams[team] = teams[team] or {}
-
-				table.insert(teams[team], ply:SteamID64())
-			end
+			table.insert(teams[team], ply:SteamID64())
 		end
 	end
 
