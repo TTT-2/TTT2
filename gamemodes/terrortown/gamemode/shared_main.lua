@@ -171,7 +171,7 @@ SetGlobalString("ttt_" .. DETECTIVE.abbr .. "_shop_fallback", CreateConVar("ttt_
 
 
 function InitCustomTeam(name, data) -- creates global var "TEAM_[name]" and other required things
-	local teamname = string.lower(name) .. "s"
+	local teamname = string.Trim(string.lower(name)) .. "s"
 
 	_G["TEAM_" .. name] = teamname
 
