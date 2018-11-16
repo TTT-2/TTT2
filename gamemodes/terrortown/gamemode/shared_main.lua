@@ -200,12 +200,8 @@ function InitCustomRole(name, roleData, conVarData)
 	name = string.Trim(string.lower(name))
 
 	if not ROLES[name] then
-		-- unique name always is lower case
-		if roleData.name then
-			roleData.name = string.Trim(string.lower(roleData.name))
-		else
-			roleData.name = name
-		end
+		-- unique name, so create or override it
+		roleData.name = name
 
 		-- shared
 		if not roleData.notSelectable then
