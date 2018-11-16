@@ -194,9 +194,19 @@ end
 
 -- you should only use this function to add roles to TTT2
 function InitCustomRole(name, roleData, conVarData)
+	if not name or not roleData then return end
+
 	conVarData = conVarData or {}
+	name = string.Trim(string.lower(name))
 
 	if not ROLES[name] then
+		-- unique name always is lower case
+		if roleData.name then
+			roleData.name = string.Trim(string.lower(roleData.name))
+		else
+			roleData.name = name
+		end
+
 		-- shared
 		if not roleData.notSelectable then
 			if conVarData.togglable then
