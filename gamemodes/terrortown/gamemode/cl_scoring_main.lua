@@ -184,6 +184,11 @@ function CLSCORE:BuildScorePanel(dpanel)
 			end
 
 			for tm, id in pairs(tms) do
+				roles[id] = roles[id] or {}
+				teams[id] = teams[id] or {}
+				role[id] = role[id] or ""
+				team[id] = team[id] or ""
+
 				if tm ~= TEAM_NONE and not teams[id][tm] then
 					if team[id] ~= "" then
 						team[id] = team[id] .. "/"
