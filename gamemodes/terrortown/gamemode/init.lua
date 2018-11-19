@@ -103,6 +103,7 @@ local ConVarExists = ConVarExists
 local strTmp = ""
 
 PLYFORCEDROLES = {}
+PLYFINALROLES = {}
 
 -- Pool some network names.
 util.AddNetworkString("TTT_RoundState")
@@ -1020,7 +1021,7 @@ function GetSelectableRoles(plys, max_plys)
 	return selectableRoles
 end
 
-function GetPreSelectedRole(subrole, finalRoles)
+function GetPreSelectedRole(subrole)
 	local tmp = 0
 
 	if GetRoundState() == ROUND_ACTIVE then
@@ -1029,8 +1030,8 @@ function GetPreSelectedRole(subrole, finalRoles)
 				tmp = tmp + 1
 			end
 		end
-	elseif finalRoles then
-		for ply, sr in pairs(finalRoles) do
+	elseif PLYFINALROLES then
+		for ply, sr in pairs(PLYFINALROLES) do
 			if sr == subrole then
 				tmp = tmp + 1
 			end
@@ -1040,7 +1041,7 @@ function GetPreSelectedRole(subrole, finalRoles)
 	return tmp
 end
 
-local function SetRoleTypes(choices, prev_roles, roleCount, availableRoles, finalRoles)
+local function SetRoleTypes(choices, prev_roles, roleCount, availableRoles)
 	local choices_i = #choices
 	local availableRoles_i = #availableRoles
 
@@ -1062,7 +1063,7 @@ local function SetRoleTypes(choices, prev_roles, roleCount, availableRoles, fina
 			or not pply:GetAvoidRole(v.index)
 			and (pply:GetBaseKarma() > min_karmas and table.HasValue(prev_roles[ROLE_INNOCENT], pply) or math.random(1, 3) == 2)
 			then
-				finalRoles[pply] = v.index
+				PLYFINALROLES[pply] = PLYFINALROLES[pply] or v.index
 
 				table.remove(choices, pick)
 
@@ -1078,9 +1079,13 @@ local function SetRoleTypes(choices, prev_roles, roleCount, availableRoles, fina
 			end
 		end
 	end
+
+	for _, ply in ipairs(choices) do
+		PLYFINALROLES[ply] = PLYFINALROLES[ply] or ROLE_TRAITOR
+	end
 end
 
-local function SelectForcedRoles(plys, max_plys, finalRoles, allSelectableRoles, choices)
+local function SelectForcedRoles(plys, max_plys, allSelectableRoles, choices)
 	local transformed = {}
 
 	for id, subrole in pairs(PLYFORCEDROLES) do
@@ -1098,7 +1103,7 @@ local function SelectForcedRoles(plys, max_plys, finalRoles, allSelectableRoles,
 		local rd = GetRoleByIndex(subrole)
 
 		if table.HasValue(allSelectableRoles, rd) then
-			local role_count = GetEachRoleCount(max_plys, rd.name) - GetPreSelectedRole(rd.index, finalRoles)
+			local role_count = GetEachRoleCount(max_plys, rd.name) - GetPreSelectedRole(rd.index)
 			local c = 0
 			local a = #ps
 
@@ -1110,7 +1115,7 @@ local function SelectForcedRoles(plys, max_plys, finalRoles, allSelectableRoles,
 					table.remove(transformed[subrole], pick)
 
 					PLYFORCEDROLES[ply:UniqueID()] = nil
-					finalRoles[ply] = subrole
+					PLYFINALROLES[ply] = subrole
 					c = c + 1
 
 					for k, p in ipairs(choices) do
@@ -1140,7 +1145,6 @@ end
 function SelectRoles(plys, max_plys)
 	local choices = {}
 	local prev_roles = {}
-	local finalRoles = {}
 
 	for _, v in pairs(GetRoles()) do
 		if not v.notSelectable then -- can't be selected in the beginning, e.g. important for Sidekick role
@@ -1165,7 +1169,7 @@ function SelectRoles(plys, max_plys)
 
 			prev_roles[r][#prev_roles[r] + 1] = v
 			choices[#choices + 1] = v
-			finalRoles[v] = ROLE_INNOCENT
+			PLYFINALROLES[v] = PLYFINALROLES[v] or ROLE_INNOCENT
 		end
 	end
 
@@ -1199,7 +1203,7 @@ function SelectRoles(plys, max_plys)
 			end
 
 			if b then
-				local tmp2 = GetEachRoleCount(max_plys, v.name) - GetPreSelectedRole(v.index, finalRoles)
+				local tmp2 = GetEachRoleCount(max_plys, v.name) - GetPreSelectedRole(v.index)
 				if tmp2 > 0 then
 					allSelectableRoles[#allSelectableRoles + 1] = v
 					roleCount[v.index] = tmp2
@@ -1208,10 +1212,10 @@ function SelectRoles(plys, max_plys)
 		end
 	end
 
-	SelectForcedRoles(plys, max_plys, finalRoles, allSelectableRoles, choices)
+	SelectForcedRoles(plys, max_plys, allSelectableRoles, choices)
 
 	-- determine how many of each role we want
-	local traitor_count = GetEachRoleCount(max_plys, TRAITOR.name) - GetPreSelectedRole(ROLE_TRAITOR, finalRoles)
+	local traitor_count = GetEachRoleCount(max_plys, TRAITOR.name) - GetPreSelectedRole(ROLE_TRAITOR)
 	local traitorList = {}
 
 	-- first select traitors
@@ -1227,8 +1231,6 @@ function SelectRoles(plys, max_plys)
 		-- a roll
 		-- TODO why 30 percent chance to get traitor ? add traitor_pct CONVAR ! maybe not fair split !
 		if IsValid(pply) and (not table.HasValue(prev_roles[ROLE_TRAITOR], pply) or math.random(1, 3) == 2) then
-			finalRoles[pply] = ROLE_TRAITOR
-
 			table.remove(choices, pick)
 			traitorList[#traitorList + 1] = pply
 
@@ -1247,7 +1249,7 @@ function SelectRoles(plys, max_plys)
 			end
 		end
 
-		SetRoleTypes(traitorList, prev_roles, roleCount, availableRoles, finalRoles)
+		SetRoleTypes(traitorList, prev_roles, roleCount, availableRoles)
 	end
 
 	availableRoles = {}
@@ -1261,11 +1263,11 @@ function SelectRoles(plys, max_plys)
 		end
 	end
 
-	SetRoleTypes(choices, prev_roles, roleCount, availableRoles, finalRoles)
+	SetRoleTypes(choices, prev_roles, roleCount, availableRoles)
 
 	GAMEMODE.LastRole = {}
 
-	for ply, subrole in pairs(finalRoles) do
+	for ply, subrole in pairs(PLYFINALROLES) do
 		ply:SetRole(subrole)
 
 		-- initialize credit count for everyone based on their role
@@ -1274,6 +1276,8 @@ function SelectRoles(plys, max_plys)
 		-- store a steamid -> role map
 		GAMEMODE.LastRole[ply:SteamID64()] = subrole
 	end
+
+	PLYFINALROLES = {}
 
 	SendFullStateUpdate() -- theoretically not needed
 end
