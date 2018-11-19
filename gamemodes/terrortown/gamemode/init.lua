@@ -84,7 +84,7 @@ CreateConVar("ttt2_prep_respawn", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 CreateConVar("ttt_identify_body_woconfirm", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Toggles whether ragdolls should be confirmed in DetectiveMode() without clicking on confirm espacially")
 
 -- show team of confirmed player
-CreateConVar("ttt2_confirm_team", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+CreateConVar("ttt2_confirm_team", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 -- confirm players in kill list
 CreateConVar("ttt2_confirm_killlist", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
