@@ -88,24 +88,25 @@ local function IdentifyBody(ply, rag)
 		CORPSE.SetFound(rag, true)
 	end
 
-	-- TODO remove the kill list?
-	-- Handle kill list
-	for _, vicsid in pairs(rag.kills) do
-		-- filter out disconnected (and bots !)
-		local vic = player.GetBySteamID64(vicsid)
+	if GetConVar("ttt2_confirm_killlist"):GetBool() then
+		-- Handle kill list
+		for _, vicsid in pairs(rag.kills) do
+			-- filter out disconnected (and bots !)
+			local vic = player.GetBySteamID64(vicsid)
 
-		-- is this an unconfirmed dead?
-		if IsValid(vic) and not vic:GetNWBool("body_found", false) then
-			LANG.Msg("body_confirm", {finder = finder, victim = vic:Nick()})
+			-- is this an unconfirmed dead?
+			if IsValid(vic) and not vic:GetNWBool("body_found", false) then
+				LANG.Msg("body_confirm", {finder = finder, victim = vic:Nick()})
 
-			SendPlayerToEveryone(vic) -- confirm player for everyone
+				SendPlayerToEveryone(vic) -- confirm player for everyone
 
-			vic:SetNWBool("body_found", true) -- update scoreboard status
+				vic:SetNWBool("body_found", true) -- update scoreboard status
 
-			-- however, do not mark body as found. This lets players find the
-			-- body later and get the benefits of that
-			--local vicrag = vic.server_ragdoll
-			--CORPSE.SetFound(vicrag, true)
+				-- however, do not mark body as found. This lets players find the
+				-- body later and get the benefits of that
+				--local vicrag = vic.server_ragdoll
+				--CORPSE.SetFound(vicrag, true)
+			end
 		end
 	end
 end

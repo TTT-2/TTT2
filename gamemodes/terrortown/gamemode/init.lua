@@ -86,6 +86,9 @@ CreateConVar("ttt_identify_body_woconfirm", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, 
 -- show team of confirmed player
 CreateConVar("ttt2_confirm_team", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
+-- confirm players in kill list
+CreateConVar("ttt2_confirm_killlist", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
 -- debuggery
 local ttt_dbgwin = CreateConVar("ttt_debug_preventwin", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
