@@ -279,7 +279,7 @@ function SetBaseRole(roleData, baserole)
 		roleData.baserole = baserole
 		roleData.defaultTeam = br.defaultTeam
 
-		print("[TTT2][ROLE-SYSTEM] Connected '" .. roleData.name .. "' subrole with baserole '" .. br.name .. "')")
+		print("[TTT2][ROLE-SYSTEM] Connected '" .. roleData.name .. "' subrole with baserole '" .. br.name .. "'")
 	end
 end
 

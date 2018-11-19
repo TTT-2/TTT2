@@ -491,13 +491,6 @@ function GM:TTTDelayRoundStartForVote()
 end
 
 function PrepareRound()
-	-- give default weapons
-	for _, v in ipairs(player.GetAll()) do
-		v:Give("weapon_zm_improvised")
-		v:Give("weapon_zm_carry")
-		v:Give("weapon_ttt_unarmed")
-	end
-
 	-- Check playercount
 	if CheckForAbort() then return end
 
