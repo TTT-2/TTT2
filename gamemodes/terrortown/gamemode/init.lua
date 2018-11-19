@@ -1115,7 +1115,7 @@ local function SelectForcedRoles(plys, max_plys, allSelectableRoles, choices)
 					table.remove(transformed[subrole], pick)
 
 					PLYFORCEDROLES[ply:UniqueID()] = nil
-					PLYFINALROLES[ply] = subrole
+					PLYFINALROLES[ply] = PLYFINALROLES[ply] or subrole
 					c = c + 1
 
 					for k, p in ipairs(choices) do
@@ -1169,7 +1169,6 @@ function SelectRoles(plys, max_plys)
 
 			prev_roles[r][#prev_roles[r] + 1] = v
 			choices[#choices + 1] = v
-			PLYFINALROLES[v] = PLYFINALROLES[v] or ROLE_INNOCENT
 		end
 	end
 
@@ -1267,7 +1266,9 @@ function SelectRoles(plys, max_plys)
 
 	GAMEMODE.LastRole = {}
 
-	for ply, subrole in pairs(PLYFINALROLES) do
+	for _, ply in ipairs(plys) do
+		local subrole = PLYFINALROLES[ply] or ROLE_INNOCENT
+
 		ply:SetRole(subrole)
 
 		-- initialize credit count for everyone based on their role
