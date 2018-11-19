@@ -246,7 +246,10 @@ function PreprocSearch(raw)
 
 		-- don't display an extra icon for the team. Merge with role desc
 		if search.role and search.team then
-			search.role.text = search.role.text .. " " .. search.team.text
+			if GetGlobalBool("ttt2_confirm_team") then
+				search.role.text = search.role.text .. " " .. search.team.text
+			end
+
 			search.team = nil
 		end
 

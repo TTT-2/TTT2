@@ -284,7 +284,7 @@ end
 concommand.Add("_ttt_request_rolelist", ttt_request_rolelist)
 
 local function ttt_force_terror(ply)
-	ply:UpdateRole(ROLE_INNOCENT)
+	ply:SetRole(ROLE_INNOCENT)
 	ply:UnSpectate()
 	ply:SetTeam(TEAM_TERROR)
 
@@ -298,14 +298,14 @@ end
 concommand.Add("ttt_force_terror", ttt_force_terror, nil, nil, FCVAR_CHEAT)
 
 local function ttt_force_traitor(ply)
-	ply:UpdateRole(ROLE_TRAITOR)
+	ply:SetRole(ROLE_TRAITOR)
 
 	SendFullStateUpdate()
 end
 concommand.Add("ttt_force_traitor", ttt_force_traitor, nil, nil, FCVAR_CHEAT)
 
 local function ttt_force_detective(ply)
-	ply:UpdateRole(ROLE_DETECTIVE)
+	ply:SetRole(ROLE_DETECTIVE)
 
 	SendFullStateUpdate()
 end
@@ -322,7 +322,7 @@ local function ttt_force_role(ply, cmd, args, argStr)
 	local rd = GetRoleByIndex(role)
 
 	if role and role <= i and not rd.notSelectable then
-		ply:UpdateRole(role)
+		ply:SetRole(role)
 
 		SendFullStateUpdate()
 

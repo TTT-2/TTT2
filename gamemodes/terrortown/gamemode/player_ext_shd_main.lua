@@ -73,6 +73,12 @@ function plymeta:SetRole(subrole, team)
 	local newSubrole = self:GetSubRole()
 	local newTeam = self:GetTeam()
 
+	if SERVER and newSubrole ~= oldSubrole then
+		hook.Call("PlayerLoadout", GAMEMODE, self)
+		hook.Call("PlayerSetModel", GAMEMODE, self)
+		hook.Call("TTTPlayerSetColor", GAMEMODE, self)
+	end
+
 	if oldRole ~= newRole then
 		hook.Run("TTT2UpdateBaserole", self, oldRole, newRole)
 	end
@@ -110,20 +116,6 @@ end
 
 function plymeta:IsInTeam(ply)
 	return self:GetTeam() ~= TEAM_NONE and self:GetTeam() == ply:GetTeam()
-end
-
-function plymeta:UpdateRole(subrole, team)
-	local oldBaserole = self:GetBaseRole()
-	local oldSubrole = self:GetSubRole()
-
-	self:SetRole(subrole, team)
-
-	local newBaserole = self:GetBaseRole()
-	local newSubrole = self:GetSubRole()
-
-	if oldBaserole ~= newBaserole or oldSubrole ~= newSubrole then
-		hook.Run("TTT2RoleTypeSet", self)
-	end
 end
 
 -- Role access

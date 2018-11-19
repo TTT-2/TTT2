@@ -69,7 +69,8 @@ SWEP.IsSilent = false
 
 -- If this weapon should be given to players upon spawning, set a table of the
 -- roles this should happen for here
---	SWEP.InLoadoutFor = { ROLE_TRAITOR, ROLE_DETECTIVE, ROLE_INNOCENT }
+--	SWEP.InLoadoutFor = {ROLE_TRAITOR, ROLE_DETECTIVE, ROLE_INNOCENT}
+-- use the Initialize hook to be able to use custom ROLE_XXX vars
 
 -- DO NOT set SWEP.WeaponID. Only the standard TTT weapons can have it. Custom
 -- SWEPs do not need it for anything.

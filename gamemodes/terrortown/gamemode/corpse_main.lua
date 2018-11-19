@@ -65,7 +65,11 @@ local function IdentifyBody(ply, rag)
 		local rd = GetRoleByIndex(subrole)
 		local roletext = ("body_found_" .. rd.abbr)
 
-		LANG.Msg("body_found", {finder = finder, victim = nick, role = LANG.Param(roletext), team = team})
+		if GetGlobalBool("ttt2_confirm_team") then
+			LANG.Msg("body_found_team", {finder = finder, victim = nick, role = LANG.Param(roletext), team = LANG.Param(team)})
+		else
+			LANG.Msg("body_found", {finder = finder, victim = nick, role = LANG.Param(roletext)})
+		end
 	end
 
 	-- Register find

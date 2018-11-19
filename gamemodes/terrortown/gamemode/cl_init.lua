@@ -216,9 +216,9 @@ local function ReceiveRole()
 
 	-- after a mapswitch, server might have sent us this before we are even done
 	-- loading our code
-	if not client.UpdateRole then return end
+	if not client.SetRole then return end
 
-	client:UpdateRole(subrole, team)
+	client:SetRole(subrole, team)
 
 	Msg("You are: ")
 	MsgN(string.upper(GetRoleByIndex(subrole).name))
@@ -227,7 +227,7 @@ net.Receive("TTT_Role", ReceiveRole)
 
 local function ReceiveRoleReset()
 	for _, ply in ipairs(player.GetAll()) do
-		ply:UpdateRole(ROLE_INNOCENT, TEAM_INNOCENT)
+		ply:SetRole(ROLE_INNOCENT, TEAM_INNOCENT)
 	end
 end
 net.Receive("TTT_RoleReset", ReceiveRoleReset)
@@ -249,8 +249,8 @@ local function ReceiveRoleList()
 		local eidx = net.ReadUInt(7) + 1 -- we - 1 worldspawn=0
 		local ply = player.GetByID(eidx)
 
-		if IsValid(ply) and ply.UpdateRole then
-			ply:UpdateRole(subrole, team)
+		if IsValid(ply) and ply.SetRole then
+			ply:SetRole(subrole, team)
 
 			local plyrd = ply:GetSubRoleData()
 

@@ -83,6 +83,9 @@ CreateConVar("ttt2_prep_respawn", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 -- toggle whether ragdolls should be confirmed in DetectiveMode() without clicking on "confirm" espacially
 CreateConVar("ttt_identify_body_woconfirm", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Toggles whether ragdolls should be confirmed in DetectiveMode() without clicking on confirm espacially")
 
+-- show team of confirmed player
+CreateConVar("ttt2_confirm_team", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
 -- debuggery
 local ttt_dbgwin = CreateConVar("ttt_debug_preventwin", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
@@ -265,6 +268,8 @@ function GM:SyncGlobals()
 	for _, v in pairs(GetRoles()) do
 		SetGlobalString("ttt_" .. v.abbr .. "_shop_fallback", GetConVar("ttt_" .. v.abbr .. "_shop_fallback"):GetString())
 	end
+
+	SetGlobalBool("ttt2_confirm_team", GetConVar("ttt2_confirm_team"):GetBool())
 end
 
 function LoadShopsEquipment()
@@ -1192,7 +1197,7 @@ function SelectRoles(plys, max_plys)
 		-- store a steamid -> role map
 		GAMEMODE.LastRole[ply:SteamID64()] = subrole
 
-		ply:UpdateRole(subrole) -- just for some hooks and other special things
+		ply:SetRole(subrole) -- just for some hooks and other special things
 	end
 
 	SendFullStateUpdate() -- theoretically not needed
