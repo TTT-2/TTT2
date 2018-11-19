@@ -78,7 +78,9 @@ local function GiveLoadoutWeapons(ply)
 
 	for _, cls in ipairs(weps) do
 		if not ply:HasWeapon(cls) and ply:CanCarryType(WEPS.TypeForWeapon(cls)) then
-			ply:Give(cls)
+			local wep = ply:Give(cls)
+
+			wep:SetNWBool("loadoutWeapon", true)
 		end
 	end
 end
