@@ -212,23 +212,14 @@ function InitCustomRole(name, roleData, conVarData)
 			CreateConVar("ttt_" .. roleData.name .. "_pct", tostring(conVarData.pct or 1), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 			CreateConVar("ttt_" .. roleData.name .. "_max", tostring(conVarData.maximum or 1), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 			CreateConVar("ttt_" .. roleData.name .. "_min_players", tostring(conVarData.minPlayers or 1), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
-			if conVarData.random then
-				CreateConVar("ttt_" .. roleData.name .. "_random", tostring(conVarData.random or 100), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-			else
-				CreateConVar("ttt_" .. roleData.name .. "_random", "100", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-			end
+			CreateConVar("ttt_" .. roleData.name .. "_random", tostring(conVarData.random or 100), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 			CreateConVar("ttt_" .. roleData.name .. "_enabled", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 		end
 
-		conVarData.credits = conVarData.credits or 0
-		conVarData.creditsTraitorKill = conVarData.creditsTraitorKill or 0
-		conVarData.creditsTraitorDead = conVarData.creditsTraitorDead or 0
-
-		CreateConVar("ttt_" .. roleData.abbr .. "_credits_starting", tostring(conVarData.credits), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-		CreateConVar("ttt_" .. roleData.abbr .. "_credits_traitorkill", tostring(conVarData.creditsTraitorKill), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-		CreateConVar("ttt_" .. roleData.abbr .. "_credits_traitordead", tostring(conVarData.creditsTraitorDead), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+		CreateConVar("ttt_" .. roleData.abbr .. "_credits_starting", tostring(conVarData.credits or 0), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+		CreateConVar("ttt_" .. roleData.abbr .. "_credits_traitorkill", tostring(conVarData.creditsTraitorKill or 0), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+		CreateConVar("ttt_" .. roleData.abbr .. "_credits_traitordead", tostring(conVarData.creditsTraitorDead or 0), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 		local shopFallbackValue
 
