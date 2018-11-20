@@ -1041,7 +1041,7 @@ function GetPreSelectedRole(subrole)
 	return tmp
 end
 
-local function SetRoleTypes(choices, prev_roles, roleCount, availableRoles)
+local function SetRoleTypes(choices, prev_roles, roleCount, availableRoles, defaultRole)
 	local choices_i = #choices
 	local availableRoles_i = #availableRoles
 
@@ -1080,8 +1080,10 @@ local function SetRoleTypes(choices, prev_roles, roleCount, availableRoles)
 		end
 	end
 
-	for _, ply in ipairs(choices) do
-		PLYFINALROLES[ply] = PLYFINALROLES[ply] or ROLE_TRAITOR
+	if defaultRole then
+		for _, ply in ipairs(choices) do
+			PLYFINALROLES[ply] = PLYFINALROLES[ply] or defaultRole
+		end
 	end
 end
 
@@ -1248,7 +1250,7 @@ function SelectRoles(plys, max_plys)
 			end
 		end
 
-		SetRoleTypes(traitorList, prev_roles, roleCount, availableRoles)
+		SetRoleTypes(traitorList, prev_roles, roleCount, availableRoles, ROLE_TRAITOR)
 	end
 
 	availableRoles = {}
@@ -1262,7 +1264,7 @@ function SelectRoles(plys, max_plys)
 		end
 	end
 
-	SetRoleTypes(choices, prev_roles, roleCount, availableRoles)
+	SetRoleTypes(choices, prev_roles, roleCount, availableRoles, ROLE_INNOCENT)
 
 	GAMEMODE.LastRole = {}
 

@@ -50,3 +50,5 @@ Temporary Items
 .ftpconfig
 .glualint.json
 todo.txt
+addon.json
+*.gma
