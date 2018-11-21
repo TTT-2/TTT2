@@ -183,7 +183,9 @@ function GetRoles()
 end
 
 function GenerateNewRoleID()
-	local i = 1 -- start with "1" to prevent incompatibilities with ROLE_ANY => new roles will start @ id: i(1)+3=4
+	-- start with "1" to prevent incompatibilities with ROLE_ANY => new roles will start @ id: i(1)+3=4
+	-- edit: add 3 more nop (1+3=4) to use it later -> new roles will start @ id: i(4)+3=7
+	local i = 4
 
 	for _, v in pairs(GetRoles()) do
 		i = i + 1
