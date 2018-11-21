@@ -992,7 +992,7 @@ function GetSelectableRoles(plys, max_plys)
 	-- determine how many of each role we want
 	selectableRoles[TRAITOR] = GetEachRoleCount(max_plys, TRAITOR.name) - GetPreSelectedRole(ROLE_TRAITOR)
 
-	if RoleIsSelectable(DETECTIVE) then
+	if IsRoleSelectable(DETECTIVE) then
 		selectableRoles[DETECTIVE] = GetEachRoleCount(max_plys, DETECTIVE.name) - GetPreSelectedRole(ROLE_DETECTIVE)
 	end
 
@@ -1001,7 +1001,7 @@ function GetSelectableRoles(plys, max_plys)
 
 		-- now upgrade traitors if there are other traitor roles
 		for _, v in pairs(GetRoles()) do
-			if not selectableRoles[v] and RoleIsSelectable(v) then
+			if not selectableRoles[v] and IsRoleSelectable(v) then
 				strTmp = "ttt_" .. v.name .. "_random"
 
 				local b = true
@@ -1192,7 +1192,7 @@ function SelectRoles(plys, max_plys)
 	end
 
 	for _, v in pairs(GetRoles()) do
-		if v ~= TRAITOR and v ~= INNOCENT and RoleIsSelectable(v) then
+		if v ~= TRAITOR and v ~= INNOCENT and IsRoleSelectable(v) then
 			local forced = forcedRolesTbl[v.index] -- add forced role definitely, randomness doesn't matter
 			local b = true
 
