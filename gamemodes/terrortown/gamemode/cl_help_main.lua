@@ -203,7 +203,11 @@ function HELPSCRN:Show()
 end
 
 local function ShowTTTHelp(ply, cmd, args)
-	HELPSCRN:Show()
+	if IsValid(dframe) then
+		dframe:Close()
+	else
+		HELPSCRN:Show()
+	end
 end
 concommand.Add("ttt_helpscreen", ShowTTTHelp)
 
