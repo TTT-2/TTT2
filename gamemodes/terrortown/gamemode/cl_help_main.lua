@@ -27,7 +27,10 @@ function HELPSCRN:Show()
 	dframe:SetSize(w, h)
 	dframe:Center()
 	dframe:SetTitle(GetTranslation("help_title"))
+	dframe:SetVisible(true)
 	dframe:ShowCloseButton(true)
+	dframe:SetMouseInputEnabled(true)
+	dframe:SetDeleteOnClose(true)
 
 	local bw, bh = 50, 25
 
@@ -204,6 +207,7 @@ function HELPSCRN:Show()
 	hook.Call("TTTSettingsTabs", GAMEMODE, dtabs)
 
 	dframe:MakePopup()
+	dframe:SetKeyboardInputEnabled(false)
 
 	helpframe = dframe
 end
