@@ -10,10 +10,14 @@ CreateClientConVar("ttt_avoid_detective", "0", true, true)
 
 HELPSCRN = {}
 
-local dframe
+local helpframe
 
 function HELPSCRN:Show()
-	if IsValid(dframe) then return end
+	if helpframe and IsValid(helpframe) then
+		helpframe:Close()
+
+		return
+	end
 
 	local client = LocalPlayer()
 	local margin = 15
@@ -200,14 +204,12 @@ function HELPSCRN:Show()
 	hook.Call("TTTSettingsTabs", GAMEMODE, dtabs)
 
 	dframe:MakePopup()
+
+	helpframe = dframe
 end
 
 local function ShowTTTHelp(ply, cmd, args)
-	if IsValid(dframe) then
-		dframe:Close()
-	else
-		HELPSCRN:Show()
-	end
+	HELPSCRN:Show()
 end
 concommand.Add("ttt_helpscreen", ShowTTTHelp)
 
