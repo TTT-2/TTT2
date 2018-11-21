@@ -373,6 +373,13 @@ function GetBaseRole(subrole)
 	return GetRoleByIndex(subrole).baserole or subrole
 end
 
+function RoleIsSelectable(roleData)
+	return (GetConVar("ttt_newroles_enabled"):GetBool() or roleData == DETECTIVE)
+	and not roleData.notSelectable
+	and GetConVar("ttt_" .. roleData.name .. "_enabled"):GetBool()
+	and not hook.Run("TTT2RoleNotSelectable", roleData)
+end
+
 -- includes baserole as well
 function GetSubRoles(subrole)
 	local br = GetBaseRole(subrole)

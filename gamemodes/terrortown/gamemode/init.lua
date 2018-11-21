@@ -991,14 +991,17 @@ function GetSelectableRoles(plys, max_plys)
 
 	-- determine how many of each role we want
 	selectableRoles[TRAITOR] = GetEachRoleCount(max_plys, TRAITOR.name) - GetPreSelectedRole(ROLE_TRAITOR)
-	selectableRoles[DETECTIVE] = GetEachRoleCount(max_plys, DETECTIVE.name) - GetPreSelectedRole(ROLE_DETECTIVE)
+
+	if RoleIsSelectable(DETECTIVE) then
+		selectableRoles[DETECTIVE] = GetEachRoleCount(max_plys, DETECTIVE.name) - GetPreSelectedRole(ROLE_DETECTIVE)
+	end
 
 	local newRolesEnabled = GetConVar("ttt_newroles_enabled"):GetBool()
 	if newRolesEnabled then
 
 		-- now upgrade traitors if there are other traitor roles
 		for _, v in pairs(GetRoles()) do
-			if not v.notSelectable and not selectableRoles[v] and GetConVar("ttt_" .. v.name .. "_enabled"):GetBool() then
+			if not selectableRoles[v] and RoleIsSelectable(v) then
 				strTmp = "ttt_" .. v.name .. "_random"
 
 				local b = true
@@ -1189,7 +1192,7 @@ function SelectRoles(plys, max_plys)
 	end
 
 	for _, v in pairs(GetRoles()) do
-		if v ~= TRAITOR and v ~= INNOCENT and (newRolesEnabled or v == DETECTIVE) and not v.notSelectable and GetConVar("ttt_" .. v.name .. "_enabled"):GetBool() then
+		if v ~= TRAITOR and v ~= INNOCENT and RoleIsSelectable(v) then
 			local forced = forcedRolesTbl[v.index] -- add forced role definitely, randomness doesn't matter
 			local b = true
 
