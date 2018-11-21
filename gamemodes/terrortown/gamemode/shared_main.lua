@@ -373,12 +373,14 @@ function GetBaseRole(subrole)
 	return GetRoleByIndex(subrole).baserole or subrole
 end
 
-function IsRoleSelectable(roleData)
-	return roleData == INNOCENT or roleData == TRAITOR
-	or (GetConVar("ttt_newroles_enabled"):GetBool() or roleData == DETECTIVE)
-	and not roleData.notSelectable
-	and GetConVar("ttt_" .. roleData.name .. "_enabled"):GetBool()
-	and not hook.Run("TTT2RoleNotSelectable", roleData)
+if SERVER then
+	function IsRoleSelectable(roleData)
+		return roleData == INNOCENT or roleData == TRAITOR
+		or (GetConVar("ttt_newroles_enabled"):GetBool() or roleData == DETECTIVE)
+		and not roleData.notSelectable
+		and GetConVar("ttt_" .. roleData.name .. "_enabled"):GetBool()
+		and not hook.Run("TTT2RoleNotSelectable", roleData)
+	end
 end
 
 -- includes baserole as well
