@@ -5,22 +5,18 @@ local IsEquipment = WEPS.IsEquipment
 
 -- Prevent players from picking up multiple weapons of the same type etc
 function GM:PlayerCanPickupWeapon(ply, wep)
-	if not IsValid(wep) or not IsValid(ply) then return end
-
-	if ply:IsSpec() then
+	if not IsValid(wep) or not IsValid(ply) or ply:IsSpec() then
 		return false
 	end
 
 	local wepClass = WEPS.GetClass(wep)
 
 	-- Disallow picking up for ammo
-	if ply:HasWeapon(wepClass) then
-		return false
-	elseif not SWEPIsBuyable(wepClass) then
-		return false
-	elseif not ply:CanCarryWeapon(wep) then
-		return false
-	elseif IsEquipment(wep) and wep.IsDropped and not ply:KeyDown(IN_USE) then
+	if ply:HasWeapon(wepClass)
+	or not SWEPIsBuyable(wepClass)
+	or not ply:CanCarryWeapon(wep)
+	or IsEquipment(wep) and wep.IsDropped and not ply:KeyDown(IN_USE)
+	then
 		return false
 	end
 
@@ -81,6 +77,16 @@ local function GiveLoadoutWeapons(ply)
 			local wep = ply:Give(cls)
 
 			wep:SetNWBool("loadoutWeapon", true)
+		end
+	end
+end
+
+local function ResetLoadoutWeapons(ply)
+	for _, wep in pairs(ply:GetWeapons()) do
+		local cls = WEPS.GetClass(wep)
+
+		if wep:GetNWBool("loadoutWeapon") and cls ~= "weapon_ttt_unarmed" then
+			ply:StripWeapon(cls)
 		end
 	end
 end
@@ -188,6 +194,8 @@ function GM:PlayerLoadout(ply)
 
 		-- give default items
 		GiveLoadoutItems(ply)
+
+		ResetLoadoutWeapons(ply)
 
 		-- hand out weaponry
 		GiveLoadoutWeapons(ply)

@@ -74,12 +74,6 @@ function plymeta:SetRole(subrole, team)
 	local newTeam = self:GetTeam()
 
 	if SERVER and newSubrole ~= oldSubrole then
-		for _, wep in pairs(self:GetWeapons()) do
-			if wep:GetNWBool("loadoutWeapon") then
-				self:StripWeapon(WEPS.GetClass(wep))
-			end
-		end
-
 		hook.Call("PlayerLoadout", GAMEMODE, self)
 		hook.Call("PlayerSetModel", GAMEMODE, self)
 		hook.Call("TTTPlayerSetColor", GAMEMODE, self)
