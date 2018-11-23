@@ -313,20 +313,25 @@ concommand.Add("ttt_force_detective", ttt_force_detective, nil, nil, FCVAR_CHEAT
 
 local function ttt_force_role(ply, cmd, args, argStr)
 	local role = tonumber(args[1])
-	local i = 1
+
+	if not role then return end
+
+	local rd
 
 	for _, v in pairs(GetRoles()) do
-		i = i + 1
+		if v.index == role then
+			rd = v
+
+			break
+		end
 	end
 
-	local rd = GetRoleByIndex(role)
-
-	if role and role <= i and not rd.notSelectable then
+	if rd and not rd.notSelectable then
 		ply:SetRole(role)
 
 		SendFullStateUpdate()
 
-		ply:ChatPrint("You changed to '" .. rd.name .. "' (role: " .. role .. ")")
+		ply:ChatPrint("You changed to '" .. rd.name .. "' (index: " .. role .. ")")
 	end
 end
 concommand.Add("ttt_force_role", ttt_force_role, nil, nil, FCVAR_CHEAT)

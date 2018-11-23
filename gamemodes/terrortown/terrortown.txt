@@ -4,6 +4,7 @@
 	"title"		"Trouble in Terrorist Town 2"
 	"maps"		"^ttt_"
 	"menusystem"	"1"
+	"workshopid"	"1357204556"
 
 	"settings"
 	{
@@ -14,7 +15,7 @@
 			"type"		"CheckBox"
 			"default"	"0"
 		}
-		
+
 		2
 		{
 			"name"		"ttt_haste"
@@ -22,7 +23,7 @@
 			"type"		"CheckBox"
 			"default"	"1"
 		}
-		
+
 		5
 		{
 			"name"		"ttt_time_limit_minutes"
@@ -30,7 +31,7 @@
 			"type"		"Numeric"
 			"default"	"75"
 		}
-		
+
 		6
 		{
 			"name"		"ttt_firstpreptime"
@@ -38,7 +39,7 @@
 			"type"		"Numeric"
 			"default"	"60"
 		}
-		
+
 		7
 		{
 			"name"		"ttt_preptime_seconds"
@@ -46,7 +47,7 @@
 			"type"		"Numeric"
 			"default"	"30"
 		}
-		
+
 		8
 		{
 			"name"		"ttt_posttime_seconds"
@@ -54,7 +55,7 @@
 			"type"		"Numeric"
 			"default"	"30"
 		}
-		
+
 		9
 		{
 			"name"		"ttt_round_limit"
@@ -62,7 +63,7 @@
 			"type"		"Numeric"
 			"default"	"6"
 		}
-		
+
 		10
 		{
 			"name"		"ttt_roundtime_minutes"
@@ -70,7 +71,7 @@
 			"type"		"Numeric"
 			"default"	"10"
 		}
-		
+
 		11
 		{
 			"name"		"ttt_haste_starting_minutes"
@@ -78,7 +79,7 @@
 			"type"		"Numeric"
 			"default"	"5"
 		}
-		
+
 		12
 		{
 			"name"		"ttt_haste_minutes_per_death"
@@ -86,7 +87,7 @@
 			"type"		"Numeric"
 			"default"	".5"
 		}
-		
+
 		13
 		{
 			"name"		"ttt_postround_dm"
@@ -94,7 +95,7 @@
 			"type"		"CheckBox"
 			"default"	"0"
 		}
-		
+
 		14
 		{
 			"name"		"ttt_traitor_max"
@@ -102,7 +103,7 @@
 			"type"		"Numeric"
 			"default"	"32"
 		}
-		
+
 		15
 		{
 			"name"		"ttt_traitor_pct"
@@ -110,7 +111,7 @@
 			"type"		"Numeric"
 			"default"	"0.25"
 		}
-		
+
 		16
 		{
 			"name"		"ttt_credits_starting"
@@ -118,7 +119,7 @@
 			"type"		"Numeric"
 			"default"	"2"
 		}
-		
+
 		17
 		{
 			"name"		"ttt_detective_max"
@@ -126,7 +127,7 @@
 			"type"		"Numeric"
 			"default"	"32"
 		}
-		
+
 		18
 		{
 			"name"		"ttt_detective_pct"
@@ -134,7 +135,7 @@
 			"type"		"Numeric"
 			"default"	"0.125"
 		}
-		
+
 		19
 		{
 			"name"		"ttt_det_credits_starting"
@@ -142,7 +143,7 @@
 			"type"		"Numeric"
 			"default"	"1"
 		}
-		
+
 		20
 		{
 			"name"		"ttt_detective_min_players"
@@ -150,7 +151,7 @@
 			"type"		"Numeric"
 			"default"	"8"
 		}
-		
+
 		21
 		{
 			"name"		"ttt_detective_karma_min"
@@ -158,7 +159,7 @@
 			"type"		"Numeric"
 			"default"	"600"
 		}
-		
+
 		22
 		{
 			"name"		"ttt_detective_hats"
@@ -166,7 +167,7 @@
 			"type"		"CheckBox"
 			"default"	"0"
 		}
-		
+
 		23
 		{
 			"name"		"ttt_allow_discomb_jump"
@@ -174,7 +175,7 @@
 			"type"		"CheckBox"
 			"default"	"0"
 		}
-		
+
 		24
 		{
 			"name"		"ttt_no_nade_throw_during_prep"
@@ -182,7 +183,7 @@
 			"type"		"CheckBox"
 			"default"	"0"
 		}
-		
+
 		25
 		{
 			"name"		"ttt_teleport_telefrags"
@@ -190,7 +191,7 @@
 			"type"		"CheckBox"
 			"default"	"0"
 		}
-		
+
 		26
 		{
 			"name"		"ttt_ragdoll_pinning"
@@ -198,7 +199,7 @@
 			"type"		"CheckBox"
 			"default"	"1"
 		}
-		
+
 		27
 		{
 			"name"		"ttt_ragdoll_pinning_innocents"
@@ -206,7 +207,7 @@
 			"type"		"CheckBox"
 			"default"	"0"
 		}
-		
+
 		30
 		{
 			"name"		"ttt_namechange_kick"
@@ -214,7 +215,7 @@
 			"type"		"CheckBox"
 			"default"	"1"
 		}
-		
+
 		31
 		{
 			"name"		"ttt_namechange_bantime"
@@ -222,6 +223,6 @@
 			"type"		"Numeric"
 			"default"	"10"
 		}
-		
+
 	}
 }
