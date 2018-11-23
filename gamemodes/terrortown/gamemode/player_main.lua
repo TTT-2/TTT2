@@ -706,27 +706,29 @@ function GM:PlayerDeath(victim, infl, attacker)
 	-- tell no one
 	self:PlayerSilentDeath(victim)
 
-	victim:SetTeam(TEAM_SPEC)
-	victim:Freeze(false)
-	victim:SetRagdollSpec(true)
-	victim:Spectate(OBS_MODE_IN_EYE)
+	timer.Simple(0, function()
+		victim:SetTeam(TEAM_SPEC)
+		victim:Freeze(false)
+		victim:SetRagdollSpec(true)
+		victim:Spectate(OBS_MODE_IN_EYE)
 
-	local rag_ent = victim.server_ragdoll or victim:GetRagdollEntity()
+		local rag_ent = victim.server_ragdoll or victim:GetRagdollEntity()
 
-	victim:SpectateEntity(rag_ent)
-	victim:Flashlight(false)
-	victim:Extinguish()
+		victim:SpectateEntity(rag_ent)
+		victim:Flashlight(false)
+		victim:Extinguish()
 
-	net.Start("TTT_PlayerDied")
-	net.Send(victim)
+		net.Start("TTT_PlayerDied")
+		net.Send(victim)
 
-	if HasteMode() and GetRoundState() == ROUND_ACTIVE then
-		IncRoundEnd(GetConVar("ttt_haste_minutes_per_death"):GetFloat() * 60)
-	end
+		if HasteMode() and GetRoundState() == ROUND_ACTIVE then
+			IncRoundEnd(GetConVar("ttt_haste_minutes_per_death"):GetFloat() * 60)
+		end
 
-	if IsValid(attacker) and attacker:IsPlayer() and attacker ~= victim and attacker:IsActive() then
-		victim.killerSpec = attacker
-	end
+		if IsValid(attacker) and attacker:IsPlayer() and attacker ~= victim and attacker:IsActive() then
+			victim.killerSpec = attacker
+		end
+	end)
 end
 
 -- kill hl2 beep
