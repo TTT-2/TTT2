@@ -1164,7 +1164,7 @@ function SelectRoles(plys, max_plys)
 	for _, v in ipairs(player.GetAll()) do
 
 		-- everyone on the spec team is in specmode
-		if IsValid(v) and not v:GetForceSpec() and (not plys or table.HasValue(plys, v)) and not (v.AutoslaysLeft and tonumber(v.AutoslaysLeft) > 0) then
+		if IsValid(v) and not v:GetForceSpec() and (not plys or table.HasValue(plys, v)) and (Damagelog and Damagelog.ULX_Autoslay_ForceRole and not (v.AutoslaysLeft and tonumber(v.AutoslaysLeft) > 0)) then
 			if not plys then
 				tmp[#tmp + 1] = v
 			end
