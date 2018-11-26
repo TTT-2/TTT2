@@ -111,11 +111,15 @@ end
 local function WasAvoidable(attacker, victim, dmginfo)
 	local infl = dmginfo:GetInflictor()
 
-	if attacker:IsInTeam(victim) and not victim:GetSubRoleData().unknownTeam and IsValid(infl) and infl.Avoidable ~= false then
-		return true
+	if attacker:IsInTeam(victim) and IsValid(infl) and infl.Avoidable ~= false then
+		if not victim:GetSubRoleData().unknownTeam then
+			return 2
+		else
+			return 1
+		end
 	end
 
-	return false
+	return 0
 end
 
 -- Handle karma change due to one player damaging another. Damage must not have
@@ -134,8 +138,9 @@ function KARMA.Hurt(attacker, victim, dmginfo)
 		reward = KARMA.GiveReward(attacker, reward)
 
 		print(Format("%s (%f) killed %s (%f) and gets REWARDED %f", attacker:Nick(), attacker:GetLiveKarma(), victim:Nick(), victim:GetLiveKarma(), reward))
-	elseif WasAvoidable(attacker, victim, dmginfo) then -- team kills own team
-		local penalty = KARMA.GetHurtPenalty(victim:GetLiveKarma(), hurt_amount)
+	else -- team kills own team
+		local multiplicator = WasAvoidable(attacker, victim, dmginfo)
+		local penalty = KARMA.GetHurtPenalty(victim:GetLiveKarma(), hurt_amount) * multiplicator
 
 		KARMA.GivePenalty(attacker, penalty, victim)
 
@@ -149,19 +154,18 @@ end
 function KARMA.Killed(attacker, victim, dmginfo)
 	if attacker == victim or not IsValid(attacker) or not IsValid(victim) or not victim:IsPlayer() or not attacker:IsPlayer() then return end
 
-	-- team kills another team
-	if not attacker:IsInTeam(victim) then
+	if not attacker:IsInTeam(victim) then -- team kills another team
 		local reward = KARMA.GetKillReward()
 
 		reward = KARMA.GiveReward(attacker, reward)
 
 		print(Format("%s (%f) killed %s (%f) and gets REWARDED %f", attacker:Nick(), attacker:GetLiveKarma(), victim:Nick(), victim:GetLiveKarma(), reward))
-
-		-- team kills own team
-	elseif not WasAvoidable(attacker, victim, dmginfo) then
-		local penalty = KARMA.GetKillPenalty(victim:GetLiveKarma())
+	else -- team kills own team
+		local multiplicator = WasAvoidable(attacker, victim, dmginfo)
+		local penalty = KARMA.GetKillPenalty(victim:GetLiveKarma()) * multiplicator
 
 		KARMA.GivePenalty(attacker, penalty, victim)
+
 		attacker:SetCleanRound(false)
 
 		print(Format("%s (%f) killed %s (%f) and gets penalised for %f", attacker:Nick(), attacker:GetLiveKarma(), victim:Nick(), victim:GetLiveKarma(), penalty))
