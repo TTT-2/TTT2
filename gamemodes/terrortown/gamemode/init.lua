@@ -1034,7 +1034,7 @@ function GetSelectableRoles(plys, max_plys)
 	for _, v in ipairs(player.GetAll()) do
 
 		-- everyone on the spec team is in specmode
-		if IsValid(v) and not v:GetForceSpec() and (not plys or table.HasValue(plys, v)) then
+		if IsValid(v) and not v:GetForceSpec() and (not plys or table.HasValue(plys, v)) and not hook.Run("TTT2DisableRoleSelection", v) then
 			if not plys then
 				tmp[#tmp + 1] = v
 			end
@@ -1223,7 +1223,7 @@ function SelectRoles(plys, max_plys)
 	for _, v in ipairs(player.GetAll()) do
 
 		-- everyone on the spec team is in specmode
-		if IsValid(v) and not v:GetForceSpec() and (not plys or table.HasValue(plys, v)) then
+		if IsValid(v) and not v:GetForceSpec() and (not plys or table.HasValue(plys, v)) and not hook.Run("TTT2DisableRoleSelection", v) then
 			if not plys then
 				tmp[#tmp + 1] = v
 			end
