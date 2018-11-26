@@ -143,6 +143,37 @@ util.AddNetworkString("TTT_Spectate")
 util.AddNetworkString("TTT2TestRole")
 util.AddNetworkString("TTT2SyncShopsWithServer")
 
+local buggyAddons = {
+	["656662924"] = "1367128301", -- Killer Notifier by nerzlakai96
+	["167547072"] = "1367128301", -- Killer Notifier by StarFox
+	["649273679"] = "1367128301", -- Role Counter by Zaratusa
+	["1531794562"] = "1367128301", -- Killer Info by wurffl
+	["257624318"] = "1367128301", -- Killer info by DerRene
+	["308966836"] = "1473581448", -- Death Faker by Exho
+	["922007616"] = "1473581448", -- Death Faker by BocciardoLight
+	["785423990"] = "1473581448", -- Death Faker by markusmarkusz
+	["236217898"] = "1473581448", -- Death Faker by jayjayjay1
+	["912181642"] = "1473581448", -- Death Faker by w4rum
+	["254779132"] = "810154456", -- Death Ringer by Porter
+	["1315377462"] = "810154456", -- Death Ringer by MuratYilderimTM
+	["240281783"] = "810154456", -- Death Ringer by Niandra
+	["305101059"] = "", -- ID Bomb by MolagA
+	["663328966"] = "", -- damagelogs by Hundreth
+	["404599106"] = "", -- SpectatorDeathmatch by P4sca1 [EGM]
+	["127865722"] = "1362430347", -- TTT ULX Commands by Bender180
+	["253737047"] = "1398388611", -- Golden Deagle by Zaratusa
+	["637848943"] = "1398388611", -- Golden Deagle by Zaratusa
+	["1376434172"] = "1398388611", -- Golden Deagle by DaniX_Chile
+	["1434026961"] = "1398388611", -- Golden Deagle by Mangonaut
+	["303535203"] = "1398388611", -- Golden Deagle by Navusaur
+	["1325415810"] = "1398388611", -- Golden Deagle by Faedon | Max
+	["648505481"] = "1398388611", -- Golden Deagle by TypicalRookie
+	["659643589"] = "1398388611", -- Golden Deagle by 中國是同性戀
+	["828347015"] = "1566390281", -- TTT Totem
+	["1092556189"] = "", -- Town of Terror by Jenssons
+	["1215502383"] = "" -- Custom Roles by Noxx
+}
+
 ---- Round mechanics
 function GM:Initialize()
 	MsgN("Trouble In Terrorist Town 2 gamemode initializing...")
@@ -209,7 +240,7 @@ end
 -- Used to do this in Initialize, but server cfg has not always run yet by that
 -- point.
 function GM:InitCvars()
-	MsgN("TTT2 initializing convar settings...")
+	MsgN("TTT2 initializing ConVar settings...")
 
 	-- Initialize game state that is synced with client
 	SetGlobalInt("ttt_rounds_left", GetConVar("ttt_round_limit"):GetInt())
@@ -254,6 +285,34 @@ function GM:InitPostEntity()
 	MsgN("[TTT2][INFO] Shops initialized...")
 
 	WEPS.ForcePrecache()
+
+	timer.Simple(0, function()
+		hook.Run("TTT2ModifyIncompatibleAddons", buggyAddons)
+
+		local c = 0
+
+		for _, addon in ipairs(engine.GetAddons()) do
+			local key = tostring(addon.wsid)
+			local tmp = buggyAddons[key]
+
+			if tmp then
+				c = c + 1
+				buggyAddons[key] = nil
+
+				if tmp ~= "" then
+					tmp = " There is a compatible Add-On with the following id: '" .. tmp .. "'."
+				end
+
+				ErrorNoHalt((c == 1 and "\n\n" or "") .. "[TTT2][ERROR]Incompatible Add-On detected: " .. addon.title .. " (WS-ID: '" .. addon.wsid .. "')." .. tmp .. "\n\n")
+			end
+		end
+
+		buggyAddons = nil -- delete
+	end)
+end
+
+function GM:PostGamemodeLoaded()
+
 end
 
 -- ConVar replication is broken in GMod, so we do this.

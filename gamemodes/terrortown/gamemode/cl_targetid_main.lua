@@ -175,6 +175,7 @@ function GM:HUDDrawTargetID()
 			mask = MASK_SHOT,
 			filter = client:GetObserverMode() == OBS_MODE_IN_EYE and {client, client:GetObserverTarget()} or client
 	})
+
 	local ent = trace.Entity
 
 	if not IsValid(ent) or ent.NoTarget then return end
@@ -222,7 +223,7 @@ function GM:HUDDrawTargetID()
 
 		local rstate = GetRoundState()
 
-		if rstate > ROUND_PREP and ent:IsDetective() or rstate == ROUND_ACTIVE and ent:IsSpecial() then
+		if rstate > ROUND_PREP and ent.GetSubRole and ent:IsDetective() or rstate == ROUND_ACTIVE and ent:IsSpecial() then
 			target_role = ent:GetSubRole()
 		end
 	elseif cls == "prop_ragdoll" then

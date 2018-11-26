@@ -6,6 +6,19 @@ GM.Email = "4lf-mueller@gmx.de"
 GM.Website = "ttt.badking.net, ttt2.informaskill.de"
 GM.Version = "0.3.5.8b"
 GM.Customized = true
+GM.Credits = {
+	["Alf21"] = {text = "Developer", link = "https://steamcommunity.com/id/alf21"},
+	["SchokoShampoo"] = {text = "Developer", link = "https://steamcommunity.com/id/schokoshampoo"},
+	["Mineotopia"] = {text = "Designer", link = "https://steamcommunity.com/id/mineotopia"},
+	["dok441"] = {text = "Bug Reporter #1", link = "https://steamcommunity.com/id/spylony/"},
+	["Avalon"] = {text = "Bug Reporter #2", link = "https://steamcommunity.com/id/NoAvalon"},
+	["Pekusuii | Shu"] = {text = "Bug Reporter #3", link = "https://steamcommunity.com/profiles/76561198066951681/"},
+	["Kanjuro"] = {text = "BETA Tester", link = "https://steamcommunity.com/id/Siques"},
+	["Remph"] = {text = "BETA Tester", link = "https://steamcommunity.com/id/remphnick"},
+	["Desteny"] = {text = "BETA Tester", link = "https://steamcommunity.com/profiles/76561198119065689"},
+	["CelleYTV"] = {text = "BETA Tester", link = "https://steamcommunity.com/profiles/76561198077207352"},
+	["Trystan"] = {text = "BETA Tester", link = "https://steamcommunity.com/id/bailbondsh"},
+}
 
 TTT2 = true -- identifier for TTT2. Just use "if TTT2 then ... end"
 
