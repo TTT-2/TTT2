@@ -40,6 +40,10 @@ function GM:PlayerInitialSpawn(ply)
 		ply:SetTeam(TEAM_SPEC)
 		ply:SetForceSpec(true)
 	end
+
+	-- maybe show credits
+	net.Start("TTT2DevChanges")
+	net.Send(ply)
 end
 
 function GM:NetworkIDValidated(name, steamid)

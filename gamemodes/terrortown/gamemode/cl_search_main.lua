@@ -85,19 +85,16 @@ local TypeToMat = {
 	role = {}
 }
 
--- add role abbr of each role for icons
-hook.Add("TTT2Initialize", "updateTpTMat", function()
-	for _, v in pairs(GetRoles()) do
-		TypeToMat.role[v.index] = v.abbr
-	end
-end)
-
 -- Accessor for better fail handling
 local function IconForInfoType(t, data)
 	local base = "vgui/ttt/icon_"
 	local mat = TypeToMat[t]
 
 	if type(mat) == "table" then
+		if t == "role" and not mat[data] then
+			TypeToMat.role[data] = GetRoleByIndex(data).abbr
+		end
+
 		mat = mat[data]
 	elseif type(mat) == "function" then
 		mat = mat(data)
@@ -135,6 +132,7 @@ function PreprocSearch(raw)
 			local rd = GetRoleByIndex(d)
 
 			search[t].text = T("search_role_" .. rd.abbr)
+			search[t].color = rd.color
 			search[t].p = 2
 		elseif t == "team" then
 			search[t].text = "Team: " .. d .. "." -- will be merged with role later
@@ -284,7 +282,20 @@ local function SearchInfoController(search, dactive, dtext)
 		dtext:GetLabel():SetWrap(#data.text > 50)
 		dtext:SetText(data.text)
 
-		dactive:SetImage(data.img)
+		local icon = data.img
+
+		if t == "role" then
+			dactive:SetImage2("vgui/ttt/dynamic/base")
+			dactive:SetImage3(icon)
+
+			icon = "vgui/ttt/dynamic/icon_base"
+		else
+			dactive:UnloadImage2()
+			dactive:UnloadImage3()
+		end
+
+		dactive:SetImage(icon)
+		dactive:SetImageColor(data.color or Color(255, 255, 255, 255))
 	end
 end
 
@@ -357,7 +368,7 @@ local function ShowSearchScreen(search_raw)
 	ddesc:SetPos(descx, descy)
 	ddesc:SetSize(descw, desch)
 
-	local dactive = vgui.Create("DImage", ddesc)
+	local dactive = vgui.Create("DRoleImage", ddesc)
 	dactive:SetImage("vgui/ttt/icon_id")
 	dactive:SetPos(m, m)
 	dactive:SetSize(64, 64)
@@ -421,6 +432,7 @@ local function ShowSearchScreen(search_raw)
 
 	for t, info in SortedPairsByMemberValue(search, "p") do
 		local ic
+		local icon = info.img
 
 		-- Certain items need a special icon conveying additional information
 		if t == "nick" then
@@ -437,12 +449,33 @@ local function ShowSearchScreen(search_raw)
 		elseif info.text_icon then
 			ic = vgui.Create("SimpleIconLabelled", dlist)
 			ic:SetIconText(info.text_icon)
+		elseif t == "role" then
+			ic = vgui.Create("LayeredIcon", dlist)
+
+			local layer = vgui.Create("SimpleIcon", ic)
+			layer:SetIconSize(56)
+			layer:SetPos(4, 4)
+			layer:SetIcon("vgui/ttt/dynamic/base")
+
+			ic:AddLayer(layer)
+
+			local layer2 = vgui.Create("SimpleIcon", ic)
+			layer2:SetIconSize(64)
+			layer2:SetIcon(icon)
+
+			ic:AddLayer(layer2)
+
+			icon = "vgui/ttt/dynamic/icon_base"
 		else
 			ic = vgui.Create("SimpleIcon", dlist)
 		end
 
 		ic:SetIconSize(64)
-		ic:SetIcon(info.img)
+		ic:SetIcon(icon)
+
+		if info.color then
+			ic:SetIconColor(info.color)
+		end
 
 		ic.info_type = t
 

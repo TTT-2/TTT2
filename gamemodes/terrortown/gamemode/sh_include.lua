@@ -1,7 +1,9 @@
 TTTFiles = {
 	corpse_shd = {file = "corpse_shd_main.lua", on = "shared"},
 	cl_awards = {file = "cl_awards_main.lua", on = "client"},
+	cl_changes = {file = "cl_changes_main.lua", on = "client"},
 	cl_chat = {file = "cl_chat_main.lua", on = "client"},
+	cl_credits = {file = "cl_credits_main.lua", on = "client"},
 	cl_disguise = {file = "cl_disguise_main.lua", on = "client"},
 	cl_equip = {file = "cl_equip_main.lua", on = "client"},
 	cl_help = {file = "cl_help_main.lua", on = "client"},
@@ -32,6 +34,7 @@ TTTFiles = {
 	shared = {file = "shared_main.lua", on = "shared"},
 	util = {file = "util_main.lua", on = "shared"},
 	vgui__coloredbox = {file = "vgui/coloredbox_main.lua", on = "client"},
+	vgui__droleimage = {file = "vgui/droleimage_main.lua", on = "client"},
 	vgui__simpleicon = {file = "vgui/simpleicon_main.lua", on = "client"},
 	vgui__simpleclickicon = {file = "vgui/simpleclickicon_main.lua", on = "client"},
 	vgui__progressbar = {file = "vgui/progressbar_main.lua", on = "client"},

@@ -92,7 +92,8 @@ function PANEL:UpdatePlayerData()
 	-- Create table of SimpleIcons, each standing for a piece of search
 	-- information.
 	for t, info in SortedPairsByMemberValue(search, "p") do
-		local ic = nil
+		local ic
+		local icon = info.img
 
 		-- Certain items need a special icon conveying additional information
 		if t == "lastid" then
@@ -102,12 +103,34 @@ function PANEL:UpdatePlayerData()
 		elseif t == "dtime" then
 			ic = vgui.Create("SimpleIconLabelled", self.List)
 			ic:SetIconText(info.text_icon)
+		elseif t == "role" then
+			ic = vgui.Create("LayeredIcon", self.List)
+
+			local layer = vgui.Create("SimpleIcon", ic)
+			layer:SetIconSize(56)
+			layer:SetPos(4, 4)
+			layer:SetIcon("vgui/ttt/dynamic/base")
+
+			ic:AddLayer(layer)
+
+			local layer2 = vgui.Create("SimpleIcon", ic)
+			layer2:SetIconSize(64)
+			layer2:SetIcon(icon)
+
+			ic:AddLayer(layer2)
+
+			icon = "vgui/ttt/dynamic/icon_base"
 		else
 			ic = vgui.Create("SimpleIcon", self.List)
 		end
 
 		ic:SetIconSize(64)
-		ic:SetIcon(info.img)
+		ic:SetIcon(icon)
+
+		if info.color then
+			ic:SetIconColor(info.color)
+		end
+
 		ic:SetTooltip(info.text)
 
 		ic.info_type = t

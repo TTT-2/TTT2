@@ -142,6 +142,7 @@ util.AddNetworkString("TTT_Spectate")
 
 util.AddNetworkString("TTT2TestRole")
 util.AddNetworkString("TTT2SyncShopsWithServer")
+util.AddNetworkString("TTT2DevChanges")
 
 local buggyAddons = {
 	["656662924"] = "1367128301", -- Killer Notifier by nerzlakai96
@@ -170,6 +171,7 @@ local buggyAddons = {
 	["648505481"] = "1398388611", -- Golden Deagle by TypicalRookie
 	["659643589"] = "1398388611", -- Golden Deagle by 中國是同性戀
 	["828347015"] = "1566390281", -- TTT Totem
+	["644532564"] = "", -- TTT Totem content
 	["1092556189"] = "", -- Town of Terror by Jenssons
 	["1215502383"] = "" -- Custom Roles by Noxx
 }
