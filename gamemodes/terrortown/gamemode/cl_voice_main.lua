@@ -134,9 +134,12 @@ local function ReceiveVoiceState()
 	if not IsValid(lply) then return end
 
 	local ply = player.GetByID(idx)
+
+	if not IsValid(ply) or not ply.GetSubRoleData then return end
+
 	local plyrd = ply:GetSubRoleData()
 
-	if not IsValid(ply) or not ply:IsActive() or plyrd.unknownTeam or plyrd.disabledTeamVoice or lply:GetSubRoleData().disabledTeamVoiceRecv then return end
+	if not ply:IsActive() or plyrd.unknownTeam or plyrd.disabledTeamVoice or lply:GetSubRoleData().disabledTeamVoiceRecv then return end
 
 	local tm = ply:GetTeam()
 
