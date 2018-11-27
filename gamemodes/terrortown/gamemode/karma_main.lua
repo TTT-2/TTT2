@@ -139,6 +139,8 @@ function KARMA.Hurt(attacker, victim, dmginfo)
 
 		print(Format("%s (%f) killed %s (%f) and gets REWARDED %f", attacker:Nick(), attacker:GetLiveKarma(), victim:Nick(), victim:GetLiveKarma(), reward))
 	else -- team kills own team
+		if not victim:GetCleanRound() then return end
+
 		local multiplicator = WasAvoidable(attacker, victim, dmginfo)
 		local penalty = KARMA.GetHurtPenalty(victim:GetLiveKarma(), hurt_amount) * multiplicator
 
@@ -161,6 +163,8 @@ function KARMA.Killed(attacker, victim, dmginfo)
 
 		print(Format("%s (%f) killed %s (%f) and gets REWARDED %f", attacker:Nick(), attacker:GetLiveKarma(), victim:Nick(), victim:GetLiveKarma(), reward))
 	else -- team kills own team
+		if not victim:GetCleanRound() then return end
+
 		local multiplicator = WasAvoidable(attacker, victim, dmginfo)
 		local penalty = KARMA.GetKillPenalty(victim:GetLiveKarma()) * multiplicator
 
