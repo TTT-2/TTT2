@@ -35,7 +35,7 @@ end
 --- ragdoll creation and search
 
 -- If detective mode, announce when someone's body is found
-local bodyfound = CreateConVar("ttt_announce_body_found", "1")
+local bodyfound = CreateConVar("ttt_announce_body_found", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 function GM:TTTCanIdentifyCorpse(ply, corpse)
 	-- return true to allow corpse identification, false to disallow
@@ -391,7 +391,7 @@ local function GetSceneData(victim, attacker, dmginfo)
 	return scene
 end
 
-local rag_collide = CreateConVar("ttt_ragdoll_collide", "0")
+local rag_collide = CreateConVar("ttt_ragdoll_collide", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 realdamageinfo = 0
 

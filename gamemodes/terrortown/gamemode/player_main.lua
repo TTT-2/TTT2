@@ -7,11 +7,11 @@ local player = player
 local pairs = pairs
 local ipairs = ipairs
 
-CreateConVar("ttt_bots_are_spectators", "0", FCVAR_ARCHIVE)
-CreateConVar("ttt_dyingshot", "0")
+CreateConVar("ttt_bots_are_spectators", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+CreateConVar("ttt_dyingshot", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
-CreateConVar("ttt_killer_dna_range", "550")
-CreateConVar("ttt_killer_dna_basetime", "100")
+CreateConVar("ttt_killer_dna_range", "550", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+CreateConVar("ttt_killer_dna_basetime", "100", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 -- First spawn on the server
 function GM:PlayerInitialSpawn(ply)
@@ -957,7 +957,7 @@ function GM:OnPlayerHitGround(ply, in_water, on_floater, speed)
 	end
 end
 
-local ttt_postdm = CreateConVar("ttt_postround_dm", "0", FCVAR_NOTIFY)
+local ttt_postdm = CreateConVar("ttt_postround_dm", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 function GM:AllowPVP()
 	local rs = GetRoundState()

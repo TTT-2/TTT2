@@ -82,7 +82,7 @@ local ttt_playercolors = {
 local ttt_playercolors_all_count = #ttt_playercolors.all
 local ttt_playercolors_serious_count = #ttt_playercolors.serious
 
-CreateConVar("ttt_playercolor_mode", "1")
+CreateConVar("ttt_playercolor_mode", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 function GM:TTTPlayerColor(model)
 	local mode = (ConVarExists("ttt_playercolor_mode") and GetConVar("ttt_playercolor_mode"):GetInt() or 0)
 
