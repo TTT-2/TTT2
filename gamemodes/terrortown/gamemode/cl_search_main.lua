@@ -91,8 +91,10 @@ local function IconForInfoType(t, data)
 	local mat = TypeToMat[t]
 
 	if type(mat) == "table" then
-		if t == "role" and not mat[data] then
-			TypeToMat.role[data] = GetRoleByIndex(data).abbr
+		if t == "role" then
+			if not mat[data] then
+				TypeToMat.role[data] = GetRoleByIndex(data).abbr
+			end
 
 			base = "vgui/ttt/dynamic/roles/icon_"
 		end
