@@ -95,7 +95,7 @@ local function GetAmmo(ply)
 		return - 1
 	end
 
-	local ammo_inv = weap:Ammo1() or 0
+	local ammo_inv = (weap.Ammo1 and weap:Ammo1()) or 0
 	local ammo_clip = weap:Clip1() or 0
 	local ammo_max = weap.Primary.ClipSize or 0
 
@@ -263,11 +263,29 @@ local function InfoPaint(client)
 		local team = client:GetTeam()
 
 		if team ~= TEAM_NONE and round_state == ROUND_ACTIVE then
-			local mat = Material(TEAMS[team].icon)
+			local t = TEAMS[team]
+			local icon = Material(t.icon)
+
+			if not icon then return end
+
+			local c = t.color or Color(0, 0, 0, 255)
+
+			local base = Material("vgui/ttt/dynamic/base")
+			local base_overlay = Material("vgui/ttt/dynamic/base_overlay")
+
+			local tx = x + tmp + smargin
+
+			surface.SetDrawColor(c.r, c.g, c.b, c.a)
+			surface.SetMaterial(base)
+			surface.DrawTexturedRect(tx, traitor_y, bgheight, bgheight)
+
+			surface.SetDrawColor(c.r, c.g, c.b, c.a)
+			surface.SetMaterial(base_overlay)
+			surface.DrawTexturedRect(tx, traitor_y, bgheight, bgheight)
 
 			surface.SetDrawColor(255, 255, 255, 255)
-			surface.SetMaterial(mat)
-			surface.DrawTexturedRect(x + tmp + smargin, traitor_y, bgheight, bgheight)
+			surface.SetMaterial(icon)
+			surface.DrawTexturedRect(tx, traitor_y, bgheight, bgheight)
 		end
 	end
 

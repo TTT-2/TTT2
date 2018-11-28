@@ -34,18 +34,7 @@ function GM:AddClassHint(cls, hint)
 end
 
 ---- "T" indicator above traitors
-indicator_mat_tbl = {}
 indicator_col = Color(255, 255, 255, 130)
-
-hook.Add("TTT2Initialize", "updateRoleMat", function()
-	indicator_mat_tbl = {}
-
-	for _, v in pairs(GetRoles()) do
-		local mat = Material("vgui/ttt/sprite_" .. v.abbr)
-
-		indicator_mat_tbl[v.index] = mat
-	end
-end)
 
 local propspec_outline = Material("models/props_combine/portalball001_sheet")
 
@@ -60,22 +49,35 @@ function GM:PostDrawTranslucentRenderables()
 
 		for i = 1, #plys do
 			local ply = plys[i]
-			local subrole = ply:GetSubRole()
+			local rd = ply:GetSubRoleData()
 
 			local pos = ply:GetPos()
-			pos.z = pos.z + 74
+			pos.z = pos.z + 80
 
 			if ply ~= client
 			and ply:IsActive()
 			and ply:IsSpecial()
 			and ply:IsInTeam(client)
 			and not ply:GetSubRoleData().avoidTeamIcons
-			and indicator_mat_tbl[subrole]
 			then
-				local incol = hook.Run("TTT2ModifyRoleIconColor", ply) or indicator_col
+				local base = Material("vgui/ttt/dynamic/sprite_base")
+				local base_overlay = Material("vgui/ttt/dynamic/sprite_base_overlay")
+				local icon = Material("vgui/ttt/dynamic/roles/icon_" .. rd.abbr)
 
-				render.SetMaterial(indicator_mat_tbl[subrole])
+				local incol = hook.Run("TTT2ModifyRoleIconColor", ply) or rd.color
+
+				render.SetMaterial(base)
 				render.DrawQuadEasy(pos, dir, 8, 8, incol, 180)
+
+				render.SetMaterial(base_overlay)
+				render.DrawQuadEasy(pos, dir, 8, 8, incol, 180)
+
+				pos.x = pos.x
+				pos.y = pos.y
+				pos.z = pos.z + 0.5
+
+				render.SetMaterial(icon)
+				render.DrawQuadEasy(pos, dir, 7, 7, Color(255, 255, 255, 255), 180)
 			end
 		end
 	end

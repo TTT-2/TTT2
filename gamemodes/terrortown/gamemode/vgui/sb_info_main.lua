@@ -104,20 +104,11 @@ function PANEL:UpdatePlayerData()
 			ic = vgui.Create("SimpleIconLabelled", self.List)
 			ic:SetIconText(info.text_icon)
 		elseif t == "role" then
-			ic = vgui.Create("LayeredIcon", self.List)
+			ic = vgui.Create("SimpleRoleIcon", self.List)
 
-			local layer = vgui.Create("SimpleIcon", ic)
-			layer:SetIconSize(56)
-			layer:SetPos(4, 4)
-			layer:SetIcon("vgui/ttt/dynamic/base")
-
-			ic:AddLayer(layer)
-
-			local layer2 = vgui.Create("SimpleIcon", ic)
-			layer2:SetIconSize(64)
-			layer2:SetIcon(icon)
-
-			ic:AddLayer(layer2)
+			ic.Icon:SetImage2("vgui/ttt/dynamic/icon_base_base")
+			ic.Icon:SetImageOverlay("vgui/ttt/dynamic/icon_base_base_overlay")
+			ic.Icon:SetRoleIconImage(icon)
 
 			icon = "vgui/ttt/dynamic/icon_base"
 		else

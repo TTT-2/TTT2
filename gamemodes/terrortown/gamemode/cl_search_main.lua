@@ -93,6 +93,8 @@ local function IconForInfoType(t, data)
 	if type(mat) == "table" then
 		if t == "role" and not mat[data] then
 			TypeToMat.role[data] = GetRoleByIndex(data).abbr
+
+			base = "vgui/ttt/dynamic/roles/icon_"
 		end
 
 		mat = mat[data]
@@ -285,13 +287,15 @@ local function SearchInfoController(search, dactive, dtext)
 		local icon = data.img
 
 		if t == "role" then
-			dactive:SetImage2("vgui/ttt/dynamic/base")
-			dactive:SetImage3(icon)
+			dactive:SetImage2("vgui/ttt/dynamic/icon_base_base")
+			dactive:SetImageOverlay("vgui/ttt/dynamic/icon_base_base_overlay")
+			dactive:SetRoleIconImage(icon)
 
 			icon = "vgui/ttt/dynamic/icon_base"
 		else
 			dactive:UnloadImage2()
-			dactive:UnloadImage3()
+			dactive:UnloadImageOverlay()
+			dactive:UnloadRoleIconImage()
 		end
 
 		dactive:SetImage(icon)
@@ -450,20 +454,11 @@ local function ShowSearchScreen(search_raw)
 			ic = vgui.Create("SimpleIconLabelled", dlist)
 			ic:SetIconText(info.text_icon)
 		elseif t == "role" then
-			ic = vgui.Create("LayeredIcon", dlist)
+			ic = vgui.Create("SimpleRoleIcon", dlist)
 
-			local layer = vgui.Create("SimpleIcon", ic)
-			layer:SetIconSize(56)
-			layer:SetPos(4, 4)
-			layer:SetIcon("vgui/ttt/dynamic/base")
-
-			ic:AddLayer(layer)
-
-			local layer2 = vgui.Create("SimpleIcon", ic)
-			layer2:SetIconSize(64)
-			layer2:SetIcon(icon)
-
-			ic:AddLayer(layer2)
+			ic.Icon:SetImage2("vgui/ttt/dynamic/icon_base_base")
+			ic.Icon:SetImageOverlay("vgui/ttt/dynamic/icon_base_base_overlay")
+			ic.Icon:SetRoleIconImage(icon)
 
 			icon = "vgui/ttt/dynamic/icon_base"
 		else
