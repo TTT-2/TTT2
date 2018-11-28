@@ -7,9 +7,9 @@ function MuteForRestart(state)
 end
 
 ---- Communication control
-CreateConVar("ttt_limit_spectator_voice", "1", FCVAR_ARCHIVE + FCVAR_NOTIFY)
+CreateConVar("ttt_limit_spectator_voice", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
-local loc_voice = CreateConVar("ttt_locational_voice", "0")
+local loc_voice = CreateConVar("ttt_locational_voice", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 -- Of course voice has to be limited as well
 function GM:PlayerCanHearPlayersVoice(listener, speaker)

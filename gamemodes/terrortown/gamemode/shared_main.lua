@@ -4,21 +4,8 @@ GM.Name = "[TTT2] Trouble in Terrorist Town 2 (Advanced Update) - by Alf21"
 GM.Author = "Bad King Urgrain && Alf21"
 GM.Email = "4lf-mueller@gmx.de"
 GM.Website = "ttt.badking.net, ttt2.informaskill.de"
-GM.Version = "0.3.5.8b"
+GM.Version = "0.3.6b"
 GM.Customized = true
-GM.Credits = {
-	["Alf21"] = {text = "Developer", link = "https://steamcommunity.com/id/alf21"},
-	["SchokoShampoo"] = {text = "Developer", link = "https://steamcommunity.com/id/schokoshampoo"},
-	["Mineotopia"] = {text = "Designer", link = "https://steamcommunity.com/id/mineotopia"},
-	["dok441"] = {text = "Bug Reporter #1", link = "https://steamcommunity.com/id/spylony/"},
-	["Avalon"] = {text = "Bug Reporter #2", link = "https://steamcommunity.com/id/NoAvalon"},
-	["Pekusuii | Shu"] = {text = "Bug Reporter #3", link = "https://steamcommunity.com/profiles/76561198066951681/"},
-	["Kanjuro"] = {text = "BETA Tester", link = "https://steamcommunity.com/id/Siques"},
-	["Remph"] = {text = "BETA Tester", link = "https://steamcommunity.com/id/remphnick"},
-	["Desteny"] = {text = "BETA Tester", link = "https://steamcommunity.com/profiles/76561198119065689"},
-	["CelleYTV"] = {text = "BETA Tester", link = "https://steamcommunity.com/profiles/76561198077207352"},
-	["Trystan"] = {text = "BETA Tester", link = "https://steamcommunity.com/id/bailbondsh"},
-}
 
 TTT2 = true -- identifier for TTT2. Just use "if TTT2 then ... end"
 
@@ -102,12 +89,12 @@ ROLE_NONE = ROLE_INNOCENT
 -- TEAM_ARRAY
 TEAMS = {
 	[TEAM_INNOCENT] = {
-		icon = "vgui/ttt/sprite_inno",
-		color = Color(55, 170, 50, 255)
+		icon = "vgui/ttt/dynamic/roles/icon_inno",
+		color = Color(80, 173, 59, 255)
 	},
 	[TEAM_TRAITOR] = {
-		icon = "vgui/ttt/sprite_traitor",
-		color = Color(180, 50, 40, 255)
+		icon = "vgui/ttt/dynamic/roles/icon_traitor",
+		color = Color(209, 43, 39, 255)
 	}
 }
 
@@ -118,9 +105,9 @@ ROLES = {}
 
 ROLES.INNOCENT = {
 	index = ROLE_INNOCENT,
-	color = Color(25, 200, 25, 255),
-	dkcolor = Color(25, 200, 25, 255),
-	bgcolor = Color(10, 50, 10, 255),
+	color = Color(80, 173, 59, 255),
+	dkcolor = Color(28, 116, 10, 255),
+	bgcolor = Color(200, 68, 81, 255),
 	name = "innocent",
 	abbr = "inno",
 	defaultTeam = TEAM_INNOCENT,
@@ -138,9 +125,9 @@ INNOCENT = ROLES.INNOCENT
 
 ROLES.TRAITOR = {
 	index = ROLE_TRAITOR,
-	color = Color(200, 25, 25, 255),
-	dkcolor = Color(159, 20, 20, 255),
-	bgcolor = Color(50, 10, 10, 255),
+	color = Color(209, 43, 39, 255),
+	dkcolor = Color(127, 3, 0, 255),
+	bgcolor = Color(31, 164, 40, 255),
 	name = "traitor",
 	abbr = "traitor",
 	defaultTeam = TEAM_TRAITOR,
@@ -156,9 +143,9 @@ TRAITOR = ROLES.TRAITOR
 
 ROLES.DETECTIVE = {
 	index = ROLE_DETECTIVE,
-	color = Color(25, 25, 200, 255),
-	dkcolor = Color(20, 20, 159, 255),
-	bgcolor = Color(0, 50, 50, 255),
+	color = Color(31, 77, 191, 255),
+	dkcolor = Color(10, 42, 123, 255),
+	bgcolor = Color(255, 177, 16, 255),
 	name = "detective",
 	abbr = "det",
 	defaultTeam = TEAM_INNOCENT,

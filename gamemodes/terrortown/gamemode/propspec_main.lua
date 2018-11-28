@@ -5,10 +5,10 @@ local math = math
 
 PROPSPEC = {}
 
-local propspec_toggle = CreateConVar("ttt_spec_prop_control", "1")
-local propspec_base = CreateConVar("ttt_spec_prop_base", "8")
-local propspec_min = CreateConVar("ttt_spec_prop_maxpenalty", "-6")
-local propspec_max = CreateConVar("ttt_spec_prop_maxbonus", "16")
+local propspec_toggle = CreateConVar("ttt_spec_prop_control", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local propspec_base = CreateConVar("ttt_spec_prop_base", "8", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local propspec_min = CreateConVar("ttt_spec_prop_maxpenalty", "-6", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local propspec_max = CreateConVar("ttt_spec_prop_maxbonus", "16", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 function PROPSPEC.Start(ply, ent)
 	ply:Spectate(OBS_MODE_CHASE)
@@ -73,7 +73,7 @@ function PROPSPEC.End(ply)
 	end)
 end
 
-local propspec_force = CreateConVar("ttt_spec_prop_force", "110")
+local propspec_force = CreateConVar("ttt_spec_prop_force", "110", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 function PROPSPEC.Key(ply, key)
 	local ent = ply.propspec.ent
@@ -145,7 +145,7 @@ function PROPSPEC.Key(ply, key)
 	return true
 end
 
-local propspec_retime = CreateConVar("ttt_spec_prop_rechargetime", "1")
+local propspec_retime = CreateConVar("ttt_spec_prop_rechargetime", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 function PROPSPEC.Recharge(ply)
 	local pr = ply.propspec

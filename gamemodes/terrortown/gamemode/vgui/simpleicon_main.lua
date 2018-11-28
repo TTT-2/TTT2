@@ -201,7 +201,9 @@ function PANEL:Init()
 	-- DPanelSelect loves to overwrite its children's PaintOver hooks and such,
 	-- so have to use a dummy panel to do some custom painting.
 	self.FakeLabel = vgui.Create("Panel", self)
-	self.FakeLabel.PerformLayout = function(s) s:StretchToParent(0, 0, 0, 0) end
+	self.FakeLabel.PerformLayout = function(s)
+		s:StretchToParent(0, 0, 0, 0)
+	end
 
 	self:AddLayer(self.FakeLabel)
 

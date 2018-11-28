@@ -95,7 +95,7 @@ function WSWITCH:DrawWeapon(x, y, c, wep)
 	end
 
 	local name = TryTranslation(wep:GetPrintName() or wep.PrintName or "...")
-	local cl1, am1 = wep:Clip1(), wep:Ammo1()
+	local cl1, am1 = wep:Clip1(), (wep.Ammo1 and wep:Ammo1() or false)
 	local ammo = false
 
 	-- Clip1 will be -1 if a melee weapon

@@ -102,14 +102,15 @@ local function PrintKarma(ply)
 end
 concommand.Add("ttt_print_karma", PrintKarma)
 
-CreateConVar("ttt_highlight_admins", "1")
+CreateConVar("ttt_highlight_admins", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
 local function ApplyHighlightAdmins(cv, old, new)
 	SetGlobalBool("ttt_highlight_admins", tobool(tonumber(new)))
 end
 cvars.AddChangeCallback("ttt_highlight_admins", ApplyHighlightAdmins)
 
-local dmglog_console = CreateConVar("ttt_log_damage_for_console", "1")
-local dmglog_save = CreateConVar("ttt_damagelog_save", "0")
+local dmglog_console = CreateConVar("ttt_log_damage_for_console", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local dmglog_save = CreateConVar("ttt_damagelog_save", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 local function PrintDamageLog(ply)
 	local pr = GetPrintFn(ply)
@@ -166,7 +167,7 @@ function DamageLog(txt)
 	end
 end
 
-local ttt_bantype = CreateConVar("ttt_ban_type", "autodetect")
+local ttt_bantype = CreateConVar("ttt_ban_type", "autodetect", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 local function DetectServerPlugin()
 	if ULib and ULib.kickban then

@@ -23,7 +23,7 @@ function HELPSCRN:Show()
 	local margin = 15
 	local w, h = 630, 470
 
-	dframe = vgui.Create("DFrame")
+	local dframe = vgui.Create("DFrame")
 	dframe:SetSize(w, h)
 	dframe:Center()
 	dframe:SetTitle(GetTranslation("help_title"))
@@ -166,20 +166,13 @@ function HELPSCRN:Show()
 	dtabs:AddSheet(GetTranslation("help_settings"), dsettings, "icon16/wrench.png", false, false, GetTranslation("help_settings_tip"))
 
 	-- role description
-	local roledesc_panel = vgui.Create("DPanelList", dtabs)
-	roledesc_panel:StretchToParent(0, 0, dtabs:GetPadding() * 2, 0)
-	roledesc_panel:EnableVerticalScrollbar(true)
-	roledesc_panel:SetPadding(10)
-	roledesc_panel:SetSpacing(10)
+	local ttt2_panel = vgui.Create("DPanelList", dtabs)
+	ttt2_panel:StretchToParent(0, 0, dtabs:GetPadding() * 2, 0)
+	ttt2_panel:EnableVerticalScrollbar(true)
+	ttt2_panel:SetPadding(10)
+	ttt2_panel:SetSpacing(10)
 
-	dtabs:AddSheet("TTT2", roledesc_panel, "icon16/information.png", false, false, "The TTT2 settings")
-
-	local list = vgui.Create("DIconLayout", roledesc_panel)
-	list:SetSpaceX(5)
-	list:SetSpaceY(5)
-	list:Dock(FILL)
-	list:DockMargin(5, 5, 5, 5)
-	list:DockPadding(10, 10, 10, 10)
+	dtabs:AddSheet("TTT2", ttt2_panel, "icon16/information.png", false, false, "The TTT2 settings")
 
 	local roledesc_tab = vgui.Create("DForm")
 	roledesc_tab:SetSpacing(10)
@@ -192,8 +185,8 @@ function HELPSCRN:Show()
 		roledesc_tab:SetName("Current Role Description")
 	end
 
-	roledesc_tab:SetWide(roledesc_panel:GetWide() - 30)
-	roledesc_panel:AddItem(roledesc_tab)
+	roledesc_tab:SetWide(ttt2_panel:GetWide() - 30)
+	ttt2_panel:AddItem(roledesc_tab)
 
 	if subrole ~= ROLE_NONE then
 		roledesc_tab:Help(GetTranslation("ttt2_desc_" .. client:GetSubRoleData().name))
@@ -203,6 +196,26 @@ function HELPSCRN:Show()
 
 	roledesc_tab:SizeToContents()
 	-- end role description
+
+	-- changes
+	local changesButton = vgui.Create("DButton")
+	changesButton:SetText("Changes")
+
+	ttt2_panel:AddItem(changesButton)
+
+	changesButton.DoClick = function(btn)
+		ShowChanges()
+	end
+
+	-- credits
+	local creditsButton = vgui.Create("DButton")
+	creditsButton:SetText("Credits")
+
+	ttt2_panel:AddItem(creditsButton)
+
+	creditsButton.DoClick = function(btn)
+		ShowCredits()
+	end
 
 	hook.Call("TTTSettingsTabs", GAMEMODE, dtabs)
 

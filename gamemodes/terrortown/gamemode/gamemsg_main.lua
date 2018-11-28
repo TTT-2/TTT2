@@ -241,7 +241,7 @@ function GM:PlayerSay(ply, text, team_only)
 	return text or ""
 end
 
-local ttt_lastwords = CreateConVar("ttt_lastwords_chatprint", "0")
+local ttt_lastwords = CreateConVar("ttt_lastwords_chatprint", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 local LastWordContext = {
 	[KILL_NORMAL] = "",
