@@ -22,7 +22,7 @@ local credits = {
 	[4] = {
 		name = "Bug Reporter #2",
 		users = {
-			["Avalon"] = "https://steamcommunity.com/id/NoAvalon"
+			["TheSuspect"] = "https://steamcommunity.com/id/RangKingTheSuspect/"
 		}
 	},
 	[5] = {
@@ -38,7 +38,8 @@ local credits = {
 			["Remph"] = "https://steamcommunity.com/id/remphnick",
 			["Desteny"] = "https://steamcommunity.com/profiles/76561198119065689",
 			["CelleYTV"] = "https://steamcommunity.com/profiles/76561198077207352",
-			["Trystan"] = "https://steamcommunity.com/id/bailbondsh"
+			["Trystan"] = "https://steamcommunity.com/id/bailbondsh",
+			["Avalon"] = "https://steamcommunity.com/id/NoAvalon"
 		}
 	}
 }
