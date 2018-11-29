@@ -126,7 +126,7 @@ end
 -- been applied to the victim yet, but must have been scaled according to the
 -- damage factor of the attacker.
 function KARMA.Hurt(attacker, victim, dmginfo)
-	if attacker == victim or not IsValid(attacker) or not IsValid(victim) or not attacker:IsPlayer() or not victim:IsPlayer() then return end
+	if attacker == victim or not IsValid(attacker) or not IsValid(victim) or not attacker:IsPlayer() or not victim:IsPlayer() or dmginfo:GetDamage() <= 0 then return end
 
 	-- Ignore excess damage
 	local hurt_amount = math.min(victim:Health(), dmginfo:GetDamage())
