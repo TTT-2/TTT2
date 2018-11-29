@@ -225,7 +225,7 @@ function GM:HUDDrawTargetID()
 
 		local rstate = GetRoundState()
 
-		if rstate > ROUND_PREP and ent.GetSubRole and ent:IsDetective() or rstate == ROUND_ACTIVE and ent:IsSpecial() then
+		if ent.GetSubRole and (rstate > ROUND_PREP and ent:IsDetective() or rstate == ROUND_ACTIVE and ent:IsSpecial()) then
 			target_role = ent:GetSubRole()
 		end
 	elseif cls == "prop_ragdoll" then
