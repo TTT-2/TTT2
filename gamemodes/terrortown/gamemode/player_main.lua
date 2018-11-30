@@ -725,7 +725,7 @@ function GM:PlayerDeath(victim, infl, attacker)
 		net.Start("TTT_PlayerDied")
 		net.Send(victim)
 
-		if HasteMode() and GetRoundState() == ROUND_ACTIVE then
+		if HasteMode() and GetRoundState() == ROUND_ACTIVE and not hook.Run("TTT2ShouldSkipHaste", victim, attacker) then
 			IncRoundEnd(GetConVar("ttt_haste_minutes_per_death"):GetFloat() * 60)
 		end
 
