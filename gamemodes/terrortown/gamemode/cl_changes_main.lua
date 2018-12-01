@@ -48,6 +48,14 @@ function CreateChanges()
 	- added RoleVote support
 	- added new multilayed icons (+ multilayer system)
 	]])
+
+	AddChange("0.3.7b", [[
+	- fixed TTT spec label issue
+	- removed Player:SetSubRole() and Player:SetBaseRole()
+	- added hook TTT2ToggleRole
+	- renamed hook "TTT_UseCustomPlayerModels" into "TTTUseCustomPlayerModels"
+	- added GetActiveRoles() 
+	]])
 end
 
 function ShowChanges()
