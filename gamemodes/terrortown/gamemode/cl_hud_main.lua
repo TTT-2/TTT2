@@ -206,6 +206,23 @@ end
 
 local ttt_health_label = CreateClientConVar("ttt_health_label", "0", true)
 
+function DrawHudIcon(x, y, w, h, icon, color)
+	local base = Material("vgui/ttt/dynamic/base")
+	local base_overlay = Material("vgui/ttt/dynamic/base_overlay")
+
+	surface.SetDrawColor(color.r, color.g, color.b, color.a)
+	surface.SetMaterial(base)
+	surface.DrawTexturedRect(x, y, w, h)
+
+	surface.SetDrawColor(color.r, color.g, color.b, color.a)
+	surface.SetMaterial(base_overlay)
+	surface.DrawTexturedRect(x, y, w, h)
+
+	surface.SetDrawColor(255, 255, 255, 255)
+	surface.SetMaterial(icon)
+	surface.DrawTexturedRect(x, y, w, h)
+end
+
 local function InfoPaint(client)
 	local L = GetLang()
 	local width = maxwidth
@@ -266,26 +283,12 @@ local function InfoPaint(client)
 			local t = TEAMS[team]
 			local icon = Material(t.icon)
 
-			if not icon then return end
+			if icon then
+				local c = t.color or Color(0, 0, 0, 255)
+				local tx = x + tmp + smargin
 
-			local c = t.color or Color(0, 0, 0, 255)
-
-			local base = Material("vgui/ttt/dynamic/base")
-			local base_overlay = Material("vgui/ttt/dynamic/base_overlay")
-
-			local tx = x + tmp + smargin
-
-			surface.SetDrawColor(c.r, c.g, c.b, c.a)
-			surface.SetMaterial(base)
-			surface.DrawTexturedRect(tx, traitor_y, bgheight, bgheight)
-
-			surface.SetDrawColor(c.r, c.g, c.b, c.a)
-			surface.SetMaterial(base_overlay)
-			surface.DrawTexturedRect(tx, traitor_y, bgheight, bgheight)
-
-			surface.SetDrawColor(255, 255, 255, 255)
-			surface.SetMaterial(icon)
-			surface.DrawTexturedRect(tx, traitor_y, bgheight, bgheight)
+				DrawHudIcon(tx, traitor_y, bgheight, bgheight, icon, c)
+			end
 		end
 	end
 
