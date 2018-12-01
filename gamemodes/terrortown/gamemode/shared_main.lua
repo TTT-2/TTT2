@@ -4,7 +4,7 @@ GM.Name = "[TTT2] Trouble in Terrorist Town 2 (Advanced Update) - by Alf21"
 GM.Author = "Bad King Urgrain && Alf21"
 GM.Email = "4lf-mueller@gmx.de"
 GM.Website = "ttt.badking.net, ttt2.informaskill.de"
-GM.Version = "0.3.6b"
+GM.Version = "0.3.7b"
 GM.Customized = true
 
 TTT2 = true -- identifier for TTT2. Just use "if TTT2 then ... end"
@@ -157,6 +157,8 @@ ROLES.DETECTIVE = {
 	unknownTeam = true
 }
 DETECTIVE = ROLES.DETECTIVE
+
+ACTIVEROLES = {}
 
 CreateConVar("ttt_detective_enabled", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 CreateConVar("ttt_newroles_enabled", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
@@ -478,6 +480,18 @@ function GetWeaponNameByFileName(name)
 			return n
 		end
 	end
+end
+
+function GetActiveRoles()
+	return ACTIVEROLES
+end
+
+function GetActiveRolesCount(rd)
+	return ACTIVEROLES[rd] or 0
+end
+
+function SetActiveRolesCount(rd, count)
+	ACTIVEROLES[rd] = count == 0 and nil or count
 end
 
 -- default TTT fn

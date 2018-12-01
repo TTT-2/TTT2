@@ -200,7 +200,11 @@ function GM:HUDDrawTargetID()
 	local hint = not minimal and (ent.TargetIDHint or ClassHint[cls])
 
 	if ent:IsPlayer() then
-		if ent:GetNWBool("disguised", false) then
+		local obsTgt = client:GetObserverTarget()
+
+		if client:IsSpec() and IsValid(obsTgt) and ent == obsTgt then
+			return
+		elseif ent:GetNWBool("disguised", false) then
 			client.last_id = nil
 
 			if client:HasTeam(TEAM_TRAITOR) or client:IsSpec() then
