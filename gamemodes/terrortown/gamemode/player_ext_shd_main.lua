@@ -66,8 +66,8 @@ function plymeta:SetRole(subrole, team)
 		local ar = GetActiveRolesCount(rd) + 1
 		local oar = GetActiveRolesCount(ord) - 1
 
-		SetActiveRolesCount(ar)
-		SetActiveRolesCount(oar)
+		SetActiveRolesCount(rd, ar)
+		SetActiveRolesCount(ord, oar)
 
 		if ar > 0 then
 			hook.Run("TTT2ToggleRole", rd, true)
