@@ -496,7 +496,20 @@ function plymeta:Revive(delay, fn, check, needcorpse)
 	end)
 end
 
+local pendingItems = {}
+
 function plymeta:GiveItem(id)
+	id = tonumber(id)
+
+	if not id then return end
+
+	if GetRoundState() == ROUND_PREP then
+		pendingItems[self] = pendingItems[self] or {}
+		pendingItems[self][#pendingItems[self] + 1] = id
+
+		return
+	end
+
 	self:GiveEquipmentItem(id)
 	self:AddBought(id)
 
@@ -513,3 +526,15 @@ function plymeta:GiveItem(id)
 
 	hook.Run("TTTOrderedEquipment", self, id, id) -- hook.Run("TTTOrderedEquipment", self, id, true) -- i know, looks stupid but thats the way TTT does
 end
+
+hook.Add("TTTBeginRound", "TTT2GivePendingItems", function()
+	for ply, tbl in pairs(pendingItems) do
+		if IsValid(ply) then
+			for _, item in ipairs(tbl) do
+				ply:GiveItem(item)
+			end
+		end
+	end
+
+	pendingItems = {}
+end)
