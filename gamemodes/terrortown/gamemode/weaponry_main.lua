@@ -94,7 +94,9 @@ local function ResetLoadoutWeapons(ply)
 end
 
 local function HasLoadoutWeapons(ply)
-	if ply:IsSpec() then return true end
+	if ply:IsSpec() then
+		return true
+	end
 
 	local subrole = GetRoundState() == ROUND_PREP and ROLE_INNOCENT or ply:GetSubRole()
 	local weps = GetLoadoutWeapons(subrole)
@@ -189,10 +191,14 @@ local function LateLoadout(id)
 end
 
 -- Note that this is called both when a player spawns and when a round starts
-function GM:PlayerLoadout(ply)
+function GM:PlayerLoadout(ply, avoidReset)
 	if IsValid(ply) and not ply:IsSpec() then
-		-- clear out equipment flags
-		ply:ResetEquipment()
+		if not avoidReset then
+			-- clear out equipment flags
+			ply:ResetEquipment()
+			--else
+			--ResetLoadoutItems(ply) TODO
+		end
 
 		-- give default items
 		GiveLoadoutItems(ply)

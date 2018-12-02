@@ -381,7 +381,7 @@ function PANEL:PaintAt(x, y, dw, dh)
 		end
 
 		if self.m_MaterialOverlay then
-			surface.SetDrawColor(255, 255, 255, 255)
+			surface.SetDrawColor(self.m_Color.r, self.m_Color.g, self.m_Color.b, self.m_Color.a)
 			surface.SetMaterial(self.m_MaterialOverlay)
 			surface.DrawTexturedRect(tx, ty, w, h)
 		end
@@ -404,7 +404,7 @@ function PANEL:PaintAt(x, y, dw, dh)
 	end
 
 	if self.m_MaterialOverlay then
-		surface.SetDrawColor(255, 255, 255, 255)
+		surface.SetDrawColor(self.m_Color.r, self.m_Color.g, self.m_Color.b, self.m_Color.a)
 		surface.SetMaterial(self.m_MaterialOverlay)
 		surface.DrawTexturedRect(x, y, dw, dh)
 	end
