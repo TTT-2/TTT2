@@ -298,6 +298,7 @@ end
 -- Preps a player for a new round, spawning them if they should. If dead_only is
 -- true, only spawns if player is dead, else just makes sure he is healed.
 function plymeta:SpawnForRound(dead_only)
+	hook.Call("PlayerLoadout", GAMEMODE, self)
 	hook.Call("PlayerSetModel", GAMEMODE, self)
 	hook.Call("TTTPlayerSetColor", GAMEMODE, self)
 
@@ -458,7 +459,11 @@ function plymeta:Revive(delay, fn, check, needcorpse)
 
 	if timer.Exists(name) then return end
 
+	ply.reviving = true
+
 	timer.Create(name, delay, 1, function()
+		ply.reviving = nil
+
 		if not check or check(ply) then
 			local corpse = FindCorpse(ply)
 
