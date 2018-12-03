@@ -782,9 +782,13 @@ function BeginRound()
 
 	-- Select traitors & co. This is where things really start so we can't abort
 	-- anymore.
+	print("DEB_000000")
 	SelectRoles()
+	print("DEB_000001")
 	LANG.Msg("round_selected")
+	print("DEB_000002")
 	SendFullStateUpdate()
+	print("DEB_000003")
 
 	-- Edge case where a player joins just as the round starts and is picked as
 	-- traitor, but for whatever reason does not get the traitor state msg. So
@@ -1154,6 +1158,8 @@ end
 local function SelectForcedRoles(plys, max_plys, allSelectableRoles, choices)
 	local transformed = {}
 
+	print("DEB_00001E")
+
 	for id, subrole in pairs(PLYFORCEDROLES) do
 		local ply = player.GetByUniqueID(id)
 
@@ -1164,6 +1170,8 @@ local function SelectForcedRoles(plys, max_plys, allSelectableRoles, choices)
 			transformed[subrole][#transformed[subrole] + 1] = ply
 		end
 	end
+
+	print("DEB_00001F")
 
 	for subrole, ps in pairs(transformed) do
 		local rd = GetRoleByIndex(subrole)
@@ -1198,6 +1206,8 @@ local function SelectForcedRoles(plys, max_plys, allSelectableRoles, choices)
 		end
 	end
 
+	print("DEB_000020")
+
 	for id, subrole in pairs(PLYFORCEDROLES) do
 		local ply = player.GetByUniqueID(id)
 		local rd = GetRoleByIndex(subrole)
@@ -1206,11 +1216,15 @@ local function SelectForcedRoles(plys, max_plys, allSelectableRoles, choices)
 
 		PLYFORCEDROLES = {}
 	end
+
+	print("DEB_000021")
 end
 
 function SelectRoles(plys, max_plys)
 	local choices = {}
 	local prev_roles = {}
+
+	print("DEB_000004")
 
 	for _, v in pairs(GetRoles()) do
 		if not v.notSelectable then -- can't be selected in the beginning, e.g. important for Sidekick role
@@ -1218,11 +1232,14 @@ function SelectRoles(plys, max_plys)
 		end
 	end
 
+	print("DEB_000005")
+
 	GAMEMODE.LastRole = GAMEMODE.LastRole or {}
 
 	local tmp = {}
 
 	for _, v in ipairs(player.GetAll()) do
+		print("DEB_000006")
 
 		-- everyone on the spec team is in specmode
 		if IsValid(v) and not v:GetForceSpec() and (not plys or table.HasValue(plys, v)) and not hook.Run("TTT2DisableRoleSelection", v) then
@@ -1238,10 +1255,14 @@ function SelectRoles(plys, max_plys)
 		end
 	end
 
+	print("DEB_000007")
+
 	plys = plys or tmp
 	max_plys = max_plys or #plys
 
 	if max_plys < 2 then return end
+
+	print("DEB_000008")
 
 	local allSelectableRoles = {INNOCENT, TRAITOR}
 	local newRolesEnabled = GetConVar("ttt_newroles_enabled"):GetBool()
@@ -1252,20 +1273,30 @@ function SelectRoles(plys, max_plys)
 		forcedRolesTbl[subrole] = true
 	end
 
+	print("DEB_000009")
+
 	for _, v in pairs(GetRoles()) do
+		print("DEB_00000A")
+
 		if v ~= TRAITOR and v ~= INNOCENT and IsRoleSelectable(v) then
 			local forced = forcedRolesTbl[v.index] -- add forced role definitely, randomness doesn't matter
 			local b = true
 
 			if not forced then
+				print("DEB_00000B")
+
 				strTmp = "ttt_" .. v.name .. "_random"
 
 				local r = (ConVarExists(strTmp) and GetConVar(strTmp):GetInt()) or 0
+
+				print("DEB_00000C")
 
 				if r > 0 and r < 100 then
 					b = math.random(1, 100) <= r
 				end
 			end
+
+			print("DEB_00000D")
 
 			if b then
 				local tmp2 = GetEachRoleCount(max_plys, v.name) - GetPreSelectedRole(v.index)
@@ -1274,18 +1305,27 @@ function SelectRoles(plys, max_plys)
 					roleCount[v.index] = tmp2
 				end
 			end
+			print("DEB_00000E")
 		end
 	end
 
+	print("DEB_00000F")
+
 	SelectForcedRoles(plys, max_plys, allSelectableRoles, choices)
+
+	print("DEB_000010")
 
 	-- determine how many of each role we want
 	local traitor_count = GetEachRoleCount(max_plys, TRAITOR.name) - GetPreSelectedRole(ROLE_TRAITOR)
 	local traitorList = {}
 
+	print("DEB_000011")
+
 	-- first select traitors
 	local ts = 0
 	while ts < traitor_count do
+		print("DEB_000012")
+
 		-- select random index in choices table
 		local pick = math.random(1, #choices)
 
@@ -1303,19 +1343,31 @@ function SelectRoles(plys, max_plys)
 		end
 	end
 
+	print("DEB_000013")
+
 	local availableRoles = {}
 
 	if newRolesEnabled then
 
+		print("DEB_000014")
+
 		-- now upgrade traitors if there are other traitor roles
 		for _, v in ipairs(allSelectableRoles) do
+			print("DEB_000015")
+
 			if v.defaultTeam == TEAM_TRAITOR and v ~= TRAITOR then
 				availableRoles[#availableRoles + 1] = v
 			end
 		end
 
+		print("DEB_000016")
+
 		SetRoleTypes(traitorList, prev_roles, roleCount, availableRoles, ROLE_TRAITOR)
+
+		print("DEB_000017")
 	end
+
+	print("DEB_000018")
 
 	availableRoles = {}
 
@@ -1328,11 +1380,17 @@ function SelectRoles(plys, max_plys)
 		end
 	end
 
+	print("DEB_000019")
+
 	SetRoleTypes(choices, prev_roles, roleCount, availableRoles, ROLE_INNOCENT)
+
+	print("DEB_00001A")
 
 	GAMEMODE.LastRole = {}
 
 	for _, ply in ipairs(plys) do
+		print("DEB_00001B")
+
 		local subrole = PLYFINALROLES[ply] or ROLE_INNOCENT
 
 		ply:SetRole(subrole)
@@ -1344,9 +1402,13 @@ function SelectRoles(plys, max_plys)
 		GAMEMODE.LastRole[ply:SteamID64()] = subrole
 	end
 
+	print("DEB_00001C")
+
 	PLYFINALROLES = {}
 
 	SendFullStateUpdate() -- theoretically not needed
+
+	print("DEB_00001D")
 end
 
 local function ttt_roundrestart(ply, command, args)
