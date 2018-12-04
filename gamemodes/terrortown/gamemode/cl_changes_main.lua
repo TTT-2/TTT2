@@ -54,7 +54,24 @@ function CreateChanges()
 	- removed Player:SetSubRole() and Player:SetBaseRole()
 	- added hook TTT2ToggleRole
 	- renamed hook "TTT_UseCustomPlayerModels" into "TTTUseCustomPlayerModels"
-	- added GetActiveRoles() 
+	- added GetActiveRoles()
+	]])
+
+	AddChange("0.3.7.1b", [[
+	- improved external icon addon support
+	- added possibility to disable roundend if a player is reviving
+	- added own Item Info functions
+	- added Player:RemoveEquipmentItem(id) and Player:RemoveItem(id) / Player:RemoveBought(id)
+	- fixed loadout bug
+	- fixed loadout item reset bug
+	- fixed respawn loadout issue
+	- fixed bug that items were removed on changing the role
+	- fixed search icon display issue
+	- fixed model reset bug on changing role
+	- fixed Player:GiveItem bug used on round start
+	- fixed dete glasses bug
+	- fixed rare corpse bug
+	- Some more small fixes
 	]])
 end
 
