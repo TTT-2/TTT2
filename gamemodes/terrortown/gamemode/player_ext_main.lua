@@ -506,7 +506,7 @@ function plymeta:Revive(delay, fn, check, needcorpse, force)
 				return
 			end
 
-			if corpse then
+			if IsValid(corpse) then
 				local spawnPos = FindCorpsePosition(corpse)
 
 				if not spawnPos then return end
@@ -525,7 +525,10 @@ function plymeta:Revive(delay, fn, check, needcorpse, force)
 			local credits = CORPSE.GetCredits(corpse, 0)
 
 			ply:SetCredits(credits)
-			corpse:Remove()
+
+			if IsValid(corpse) then
+				corpse:Remove()
+			end
 
 			DamageLog("TTT2Revive: " .. ply:Nick() .. " has been respawned.")
 
