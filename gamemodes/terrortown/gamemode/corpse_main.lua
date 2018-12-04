@@ -114,7 +114,7 @@ end
 local function ttt_confirm_death(ply, cmd, args)
 	if not IsValid(ply) then return end
 
-	if #args ~= 2 then return end
+	if #args < 2 then return end
 
 	local eidx = tonumber(args[1])
 	local id = tonumber(args[2])
