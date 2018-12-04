@@ -118,7 +118,7 @@ local function ttt_confirm_death(ply, cmd, args)
 
 	local eidx = tonumber(args[1])
 	local id = tonumber(args[2])
-	local long_range = tobool(args[3] or 0)
+	local long_range = (args[3] and tonumber(args[3]) == 1) and true or false
 
 	if not eidx or not id then return end
 
