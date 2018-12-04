@@ -208,7 +208,7 @@ function GetEquipmentItem(subrole, id)
 end
 
 function GetEquipmentItemByID(id)
-	for _, eq in pairs(ALL_ITEMS) do
+	for _, eq in ipairs(ALL_ITEMS) do
 		if eq.id == id then
 			return eq
 		end
@@ -216,7 +216,7 @@ function GetEquipmentItemByID(id)
 end
 
 function GetEquipmentItemByName(name)
-	for _, equip in pairs(ALL_ITEMS) do
+	for _, equip in ipairs(ALL_ITEMS) do
 		if string.lower(equip.name) == name then
 			return equip
 		end
@@ -228,7 +228,7 @@ function GetEquipmentFileName(name)
 end
 
 function GetEquipmentItemByFileName(name)
-	for _, equip in pairs(ALL_ITEMS) do
+	for _, equip in ipairs(ALL_ITEMS) do
 		if GetEquipmentFileName(equip.name) == name then
 			return equip
 		end
@@ -441,7 +441,7 @@ function InitAllItems()
 		if EquipmentItems[roleData.index] then
 			for _, eq in pairs(EquipmentItems[roleData.index]) do
 				if not EquipmentTableHasValue(ALL_ITEMS, eq) then
-					table.insert(ALL_ITEMS, eq)
+					ALL_ITEMS[#ALL_ITEMS + 1] = eq
 				end
 			end
 

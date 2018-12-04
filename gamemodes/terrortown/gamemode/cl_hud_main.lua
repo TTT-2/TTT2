@@ -352,13 +352,14 @@ function AddHUDItem(id, material)
 	HUD_ITEMS[#HUD_ITEMS + 1] = {id = id, material = material}
 end
 
-function getYCoordinate(currentPerkID)
+local function getYCoordinate(currentPerkID)
 	local amount, i, perk = 0, 1
+	local client = LocalPlayer()
 
 	while i < currentPerkID do
 		perk = GetEquipmentItemByID(i)
 
-		if istable(perk) and perk.hud and LocalPlayer():HasEquipmentItem(perk.id) then
+		if istable(perk) and perk.hud and client:HasEquipmentItem(perk.id) then
 			amount = amount + 1
 		end
 

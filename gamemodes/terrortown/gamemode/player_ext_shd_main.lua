@@ -50,7 +50,7 @@ function plymeta:SetRole(subrole, team)
 	local newTeam = self:GetTeam()
 
 	if SERVER and newSubrole ~= oldSubrole then
-		hook.Call("PlayerLoadout", GAMEMODE, self, true)
+		hook.Call("PlayerLoadout", GAMEMODE, self)
 	end
 
 	if oldRole ~= newRole then

@@ -127,6 +127,18 @@ local function GiveLoadoutItems(ply)
 	end
 end
 
+local function ResetLoadoutItems(ply)
+	local items = EquipmentItems[ply:GetSubRole()]
+
+	if items then
+		for _, item in pairs(items) do
+			if item.loadout and item.id then
+				ply:RemoveItem(item.id)
+			end
+		end
+	end
+end
+
 -- Quick hack to limit hats to models that fit them well
 local Hattables = {
 	"phoenix.mdl",
@@ -191,14 +203,9 @@ local function LateLoadout(id)
 end
 
 -- Note that this is called both when a player spawns and when a round starts
-function GM:PlayerLoadout(ply, avoidReset)
+function GM:PlayerLoadout(ply)
 	if IsValid(ply) and not ply:IsSpec() then
-		if not avoidReset then
-			-- clear out equipment flags
-			ply:ResetEquipment()
-			--else
-			--ResetLoadoutItems(ply) TODO
-		end
+		ResetLoadoutItems(ply)
 
 		-- give default items
 		GiveLoadoutItems(ply)
@@ -488,7 +495,7 @@ local function OrderEquipment(ply, cmd, args)
 
 		ply:AddBought(id)
 
-		local _func = function()
+		timer.Simple(0.5, function()
 			if not IsValid(ply) then return end
 
 			net.Start("TTT_BoughtItem")
@@ -501,9 +508,7 @@ local function OrderEquipment(ply, cmd, args)
 			end
 
 			net.Send(ply)
-		end
-
-		timer.Simple(0.5, _func)
+		end)
 
 		hook.Call("TTTOrderedEquipment", GAMEMODE, ply, id, is_item)
 	end

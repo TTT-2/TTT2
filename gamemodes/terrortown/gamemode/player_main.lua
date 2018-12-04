@@ -745,6 +745,8 @@ function GM:PostPlayerDeath(ply)
 	if GetRoundState() == ROUND_PREP and GetConVar("ttt2_prep_respawn"):GetBool() then -- endless respawn player if he dies in preparing time
 		timer.Simple(1, function()
 			ply:SpawnForRound(true)
+
+			hook.Call("PlayerLoadout", GAMEMODE, self)
 		end)
 	end
 end

@@ -105,6 +105,16 @@ function plymeta:AddEquipmentItem(id)
 	end
 end
 
+function plymeta:RemoveEquipmentItem(id)
+	id = tonumber(id)
+
+	if id then
+		self.equipment_items = bit.bxor(self.equipment_items, id)
+
+		self:SendEquipment()
+	end
+end
+
 -- We do this instead of an NW var in order to limit the info to just this ply
 function plymeta:SendEquipment()
 	net.Start("TTT_Equipment")
@@ -151,6 +161,25 @@ function plymeta:AddBought(id)
 	self:SendBought()
 end
 
+function plymeta:RemoveBought(id)
+	local key
+
+	self.bought = self.bought or {}
+
+	for k, iid in ipairs(self.bought) do
+		if iid == tostring(id) then
+			key = k
+
+			break
+		end
+	end
+
+	if key then
+		table.remove(self.bought, key)
+
+		self:SendBought()
+	end
+end
 
 -- Strips player of all equipment
 function plymeta:StripAll()
@@ -297,8 +326,7 @@ end
 
 -- Preps a player for a new round, spawning them if they should. If dead_only is
 -- true, only spawns if player is dead, else just makes sure he is healed.
-function plymeta:SpawnForRound(dead_only)
-	hook.Call("PlayerLoadout", GAMEMODE, self)
+function plymeta:SpawnForRound(dead_only, avoidRest)
 	hook.Call("PlayerSetModel", GAMEMODE, self)
 	hook.Call("TTTPlayerSetColor", GAMEMODE, self)
 
@@ -490,6 +518,8 @@ function plymeta:Revive(delay, fn, check, needcorpse, force)
 				ply:SpawnForRound(true)
 			end
 
+			hook.Call("PlayerLoadout", GAMEMODE, self)
+
 			ply:SetMaxHealth(100)
 
 			local credits = CORPSE.GetCredits(corpse, 0)
@@ -535,6 +565,15 @@ function plymeta:GiveItem(id)
 	end)
 
 	hook.Run("TTTOrderedEquipment", self, id, id) -- hook.Run("TTTOrderedEquipment", self, id, true) -- i know, looks stupid but thats the way TTT does
+end
+
+function plymeta:RemoveItem(id)
+	id = tonumber(id)
+
+	if not id then return end
+
+	self:RemoveEquipmentItem(id)
+	self:RemoveBought(id)
 end
 
 hook.Add("TTTBeginRound", "TTT2GivePendingItems", function()
