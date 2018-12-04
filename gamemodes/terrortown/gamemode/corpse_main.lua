@@ -90,7 +90,7 @@ local function IdentifyBody(ply, rag)
 
 	if GetConVar("ttt2_confirm_killlist"):GetBool() then
 		-- Handle kill list
-		for _, vicsid in pairs(rag.kills) do
+		for _, vicsid in ipairs(rag.kills) do
 			-- filter out disconnected (and bots !)
 			local vic = player.GetBySteamID64(vicsid)
 
