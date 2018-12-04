@@ -961,26 +961,27 @@ function GM:TTTCheckForWin()
 	end
 
 	local alive = {}
-	local checkedTeams = {}
-	local b = 0
 
 	for _, v in ipairs(player.GetAll()) do
 		local tm = v:GetTeam()
 
-		if v:IsTerror() and not v:GetSubRoleData().preventWin and tm ~= TEAM_NONE then
-			alive[tm] = true
+		if (v:IsTerror() or v.forceRevive) and not v:GetSubRoleData().preventWin and tm ~= TEAM_NONE then
+			alive[#alive + 1] = tm
 		end
 	end
 
 	hook.Run("TTT2ModifyWinningAlives", alive)
 
-	for _, team in ipairs(GetWinTeams()) do
-		if not table.HasValue(checkedTeams, team) and alive[team] then
+	local checkedTeams = {}
+	local b = 0
+
+	for _, team in ipairs(alive) do
+		if checkedTeams[team] then
 			-- prevent win of custom role -> maybe own win conditions
 			b = b + 1
 
-			-- irrelevant whether function inserts value properly...
-			table.insert(checkedTeams, team)
+			-- check
+			checkedTeams[team] = true
 		end
 
 		-- if 2 teams alive
@@ -990,7 +991,7 @@ function GM:TTTCheckForWin()
 	if b > 1 then -- if >= 2 teams alive: no one wins
 		return WIN_NONE -- early out
 	elseif b == 1 then -- just 1 team is alive
-		return checkedTeams[1]
+		return alive[1]
 	else -- rare case: nobody is alive, e.g. because of an explosion
 		--return WIN_NONE -- bees_win
 		return WIN_TRAITOR

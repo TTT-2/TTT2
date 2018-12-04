@@ -453,15 +453,20 @@ local function FindCorpsePosition(corpse)
 	return false
 end
 
-function plymeta:Revive(delay, fn, check, needcorpse)
+function plymeta:Revive(delay, fn, check, needcorpse, force)
 	local ply = self
 	local name = "TTT2RevivePlayer" .. ply:EntIndex()
 
-	if timer.Exists(name) then return end
+	if timer.Exists(name) or ply.reviving then return end
+
+	if force then
+		ply.forceRevive = true
+	end
 
 	ply.reviving = true
 
 	timer.Create(name, delay, 1, function()
+		ply.forceRevive = nil
 		ply.reviving = nil
 
 		if not check or check(ply) then
