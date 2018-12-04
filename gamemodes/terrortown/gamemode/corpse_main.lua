@@ -118,6 +118,7 @@ local function ttt_confirm_death(ply, cmd, args)
 
 	local eidx = tonumber(args[1])
 	local id = tonumber(args[2])
+	local long_range = tobool(args[3] or 0)
 
 	if not eidx or not id then return end
 
@@ -131,7 +132,7 @@ local function ttt_confirm_death(ply, cmd, args)
 
 	local rag = Entity(eidx)
 
-	if IsValid(rag) and rag:GetPos():Distance(ply:GetPos()) < 128 and not CORPSE.GetFound(rag, false) then
+	if IsValid(rag) and (rag:GetPos():Distance(ply:GetPos()) < 128 or long_range) and not CORPSE.GetFound(rag, false) then
 		IdentifyBody(ply, rag)
 	end
 end
@@ -292,8 +293,10 @@ function CORPSE.ShowSearch(ply, rag, covert, long_range)
 	net.WriteUInt(ply:EntIndex(), 8)
 	net.WriteString(words)
 
-	-- 133 + string data + #kill_entids * 8
-	-- 200
+	net.WriteBit(long_range)
+
+	-- 133 + string data + #kill_entids * 8 + team + 1
+	-- 200 + ?
 
 	-- If found by detective, send to all, else just the finder
 	if ply:IsActiveRole(ROLE_DETECTIVE) then

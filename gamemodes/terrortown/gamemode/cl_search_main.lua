@@ -396,7 +396,7 @@ local function ShowSearchScreen(search_raw)
 	local id = search_raw.eidx + search_raw.dtime
 
 	dconfirm.DoClick = function(s)
-		RunConsoleCommand("ttt_confirm_death", search_raw.eidx, id)
+		RunConsoleCommand("ttt_confirm_death", search_raw.eidx, id, search_raw.lrng)
 	end
 
 	local dcall = vgui.Create("DButton", dcont)
@@ -575,6 +575,9 @@ local function TTT_RagdollSearch()
 	--
 	local words = net.ReadString()
 	search.words = (words ~= "") and words or nil
+
+	-- long range
+	search.lrng = net.ReadBit()
 
 	hook.Call("TTTBodySearchEquipment", nil, search, eq)
 
