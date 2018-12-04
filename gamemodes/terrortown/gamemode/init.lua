@@ -976,7 +976,7 @@ function GM:TTTCheckForWin()
 	local b = 0
 
 	for _, team in ipairs(alive) do
-		if checkedTeams[team] then
+		if not checkedTeams[team] then
 			-- prevent win of custom role -> maybe own win conditions
 			b = b + 1
 
