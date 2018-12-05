@@ -40,6 +40,8 @@ function GetEquipmentForRole(subrole)
 
 	-- need to build equipment cache?
 	if not Equipment[fallback] then
+		EquipmentItems[fallback] = EquipmentItems[fallback] or {}
+
 		-- start with all the non-weapon goodies
 		local tbl = table.Copy(EquipmentItems[fallback])
 

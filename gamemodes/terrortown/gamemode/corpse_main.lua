@@ -63,7 +63,7 @@ local function IdentifyBody(ply, rag)
 		local subrole = rag.was_role
 		local team = rag.was_team
 		local rd = GetRoleByIndex(subrole)
-		local roletext = ("body_found_" .. rd.abbr)
+		local roletext = "body_found_" .. rd.abbr
 
 		if GetGlobalBool("ttt2_confirm_team") then
 			LANG.Msg("body_found_team", {finder = finder, victim = nick, role = LANG.Param(roletext), team = LANG.Param(team)})
@@ -212,7 +212,7 @@ function CORPSE.ShowSearch(ply, rag, covert, long_range)
 	owner = IsValid(owner) and owner:EntIndex() or - 1
 
 	-- basic sanity check
-	if not nick or not eq or not subrole then return end
+	if not nick or not eq or not subrole or not team then return end
 
 	if GetConVar("ttt_identify_body_woconfirm"):GetBool() and DetectiveMode() and not covert then
 		IdentifyBody(ply, rag)
