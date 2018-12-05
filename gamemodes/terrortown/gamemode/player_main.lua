@@ -581,9 +581,9 @@ local function CheckCreditAward(victim, attacker)
 
 		local pct = terror_dead / terror_total
 
-		if not ConVarExists("ttt_credits_award_pct") or pct >= GetConVarNumber("ttt_credits_award_pct") then
+		if not ConVarExists("ttt_credits_award_pct") or pct >= GetConVar("ttt_credits_award_pct"):GetFloat() then
 			-- Traitors have killed sufficient people to get an award
-			local amt = (ConVarExists("ttt_credits_award_size") and GetConVarNumber("ttt_credits_award_size")) or 0
+			local amt = (ConVarExists("ttt_credits_award_size") and GetConVar("ttt_credits_award_size"):GetFloat()) or 0
 
 			-- If size is 0, awards are off
 			if amt > 0 then
