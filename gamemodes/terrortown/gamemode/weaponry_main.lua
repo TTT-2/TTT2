@@ -442,6 +442,7 @@ local function OrderEquipment(ply, cmd, args)
 	end
 
 	local received = false
+	local credits
 
 	if is_item then
 		id = tonumber(id)
@@ -460,6 +461,8 @@ local function OrderEquipment(ply, cmd, args)
 
 			received = true
 		end
+
+		credits = allowed.credits
 	elseif swep_table then
 		-- weapon whitelist check
 		if not table.HasValue(swep_table.CanBuy, subrole) then
@@ -486,10 +489,12 @@ local function OrderEquipment(ply, cmd, args)
 
 			received = true
 		end
+
+		credits = swep_table.credits
 	end
 
 	if received then
-		ply:SubtractCredits(1)
+		ply:SubtractCredits(credits or 1)
 
 		LANG.Msg(ply, "buy_received")
 

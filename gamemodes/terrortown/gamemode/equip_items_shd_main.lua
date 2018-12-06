@@ -86,26 +86,32 @@ end
 
 SetupEquipment() -- pre init to support normal TTT addons
 
+function GetEquipmentWeaponBase(data, eq, name)
+	return {
+		id = name,
+		name = name,
+		PrintName = data.name or data.PrintName or eq.PrintName or name,
+		limited = eq.LimitedStock,
+		kind = eq.Kind or WEAPON_NONE,
+		slot = (eq.Slot or 0) + 1,
+		material = eq.Icon or "vgui/ttt/icon_id",
+		-- the below should be specified in EquipMenuData, in which case
+		-- these values are overwritten
+		type = "Type not specified",
+		model = "models/weapons/w_bugbait.mdl",
+		desc = "No description specified.",
+		is_item = false,
+		credits = data.credits or eq.credits
+	}
+end
+
 function CreateEquipmentWeapon(eq)
 	if not eq.Doublicated then
 		local data = eq.EquipMenuData or {}
 		local name = WEPS.GetClass(eq)
 
 		if name then
-			local base = {
-				id = name,
-				name = name,
-				PrintName = data.name or data.PrintName or eq.PrintName or name,
-				limited = eq.LimitedStock,
-				kind = eq.Kind or WEAPON_NONE,
-				slot = (eq.Slot or 0) + 1,
-				material = eq.Icon or "vgui/ttt/icon_id",
-				-- the below should be specified in EquipMenuData, in which case
-				-- these values are overwritten
-				type = "Type not specified",
-				model = "models/weapons/w_bugbait.mdl",
-				desc = "No description specified."
-			}
+			local base = GetEquipmentWeaponBase(data, eq, name)
 
 			-- Force material to nil so that model key is used when we are
 			-- explicitly told to do so (ie. material is false rather than nil).
@@ -353,20 +359,7 @@ function InitDefaultEquipment()
 			local name = WEPS.GetClass(v)
 
 			if name then
-				local base = {
-					id = name,
-					name = name,
-					PrintName = data.name or data.PrintName or v.PrintName or name,
-					limited = v.LimitedStock,
-					kind = v.Kind or WEAPON_NONE,
-					slot = (v.Slot or 0) + 1,
-					material = v.Icon or "vgui/ttt/icon_id",
-					-- the below should be specified in EquipMenuData, in which case
-					-- these values are overwritten
-					type = "Type not specified",
-					model = "models/weapons/w_bugbait.mdl",
-					desc = "No description specified."
-				}
+				local base = GetEquipmentWeaponBase(data, v, name)
 
 				-- Force material to nil so that model key is used when we are
 				-- explicitly told to do so (ie. material is false rather than nil).
@@ -399,20 +392,7 @@ function InitDefaultEquipment()
 			local name = WEPS.GetClass(v)
 
 			if name then
-				local base = {
-					id = name,
-					name = name,
-					PrintName = data.name or data.PrintName or v.PrintName or name,
-					limited = v.LimitedStock,
-					kind = v.Kind or WEAPON_NONE,
-					slot = (v.Slot or 0) + 1,
-					material = v.Icon or "vgui/ttt/icon_id",
-					-- the below should be specified in EquipMenuData, in which case
-					-- these values are overwritten
-					type = "Type not specified",
-					model = "models/weapons/w_bugbait.mdl",
-					desc = "No description specified."
-				}
+				local base = GetEquipmentWeaponBase(data, v, name)
 
 				-- Force material to nil so that model key is used when we are
 				-- explicitly told to do so (ie. material is false rather than nil).
@@ -699,21 +679,7 @@ else -- CLIENT
 				local name = WEPS.GetClass(equip)
 
 				if name then
-					local base = {
-						id = name,
-						name = name,
-						PrintName = data.name or data.PrintName or equip.PrintName or name,
-						limited = equip.LimitedStock,
-						kind = equip.Kind or WEAPON_NONE,
-						slot = (equip.Slot or 0) + 1,
-						material = equip.Icon or "vgui/ttt/icon_id",
-						-- the below should be specified in EquipMenuData, in which case
-						-- these values are overwritten
-						type = "Type not specified",
-						model = "models/weapons/w_bugbait.mdl",
-						desc = "No description specified.",
-						is_item = false
-					}
+					local base = GetEquipmentWeaponBase(data, equip, name)
 
 					-- Force material to nil so that model key is used when we are
 					-- explicitly told to do so (ie. material is false rather than nil).
