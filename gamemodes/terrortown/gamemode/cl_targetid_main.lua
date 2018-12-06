@@ -207,7 +207,7 @@ function GM:HUDDrawTargetID()
 		elseif ent:GetNWBool("disguised", false) then
 			client.last_id = nil
 
-			if client:HasTeam(TEAM_TRAITOR) or client:IsSpec() then
+			if client:IsInTeam(ent) and not client:GetSubRoleData().unknownTeam or client:IsSpec() then
 				text = ent:Nick() .. L.target_disg
 			else
 				-- Do not show anything

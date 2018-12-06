@@ -34,7 +34,7 @@ function DISGUISE.CreateMenu(parent)
 end
 
 function DISGUISE.Draw(client)
-	if not client or not client:IsActiveTraitor() or not client:GetNWBool("disguised", false) then return end
+	if not client or not client:IsActive() or not client:GetNWBool("disguised", false) then return end
 
 	surface.SetFont("TabLarge")
 	surface.SetTextColor(255, 0, 0, 230)
