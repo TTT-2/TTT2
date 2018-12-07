@@ -279,7 +279,7 @@ local function InfoPaint(client)
 	if hudTeamicon:GetBool() then
 		local team = client:GetTeam()
 
-		if team ~= TEAM_NONE and round_state == ROUND_ACTIVE then
+		if team ~= TEAM_NONE and round_state == ROUND_ACTIVE and not TEAMS[team].alone then
 			local t = TEAMS[team]
 			local icon = Material(t.icon)
 

@@ -247,7 +247,7 @@ Event(EVENT_KILL, {
 			local at = e.att.t
 			local vt = e.vic.t
 
-			if at ~= TEAM_NONE and at == vt then
+			if at ~= TEAM_NONE and at == vt and not TEAMS[at].alone then
 				return wrong_icon, "Teamkill"
 			else
 				return (at == TEAM_TRAITOR) and right_icon or shield_icon, T(at) .. " killed " .. T(vt)

@@ -53,7 +53,7 @@ function GM:PlayerStartVoice(ply)
 
 		if client:IsActive() and not clrd.unknownTeam and not clrd.disabledTeamVoice then
 			local tm = client:GetTeam()
-			if tm ~= TEAM_NONE then
+			if tm ~= TEAM_NONE and not TEAMS[tm].alone then
 				if not client:KeyDown(IN_SPEED) and not client:KeyDownLast(IN_SPEED) then
 					client[tm .. "_gvoice"] = true
 
@@ -94,7 +94,7 @@ function GM:PlayerStartVoice(ply)
 	local tm = client:GetTeam()
 	local clrd = client:GetSubRoleData()
 
-	if client:IsActive() and tm ~= TEAM_NONE and not clrd.unknownTeam and not clrd.disabledTeamVoice then
+	if client:IsActive() and tm ~= TEAM_NONE and not clrd.unknownTeam and not clrd.disabledTeamVoice and not TEAMS[tm].alone then
 		if ply == client then
 			if not client[tm .. "_gvoice"] then
 				pnl.Color = clrd.color
@@ -117,7 +117,7 @@ function GM:PlayerStartVoice(ply)
 	local plyrd = ply:GetSubRoleData()
 
 	-- run ear gesture
-	if not (ply:IsActive() and not plyrd.unknownTeam and not plyrd.disabledTeamVoice and not clrd.disabledTeamVoiceRecv) or tm ~= TEAM_NONE and ply[tm .. "_gvoice"] then
+	if not (ply:IsActive() and not plyrd.unknownTeam and not plyrd.disabledTeamVoice and not clrd.disabledTeamVoiceRecv) or (tm ~= TEAM_NONE and not TEAMS[tm].alone) and ply[tm .. "_gvoice"] then
 		ply:AnimPerformGesture(ACT_GMOD_IN_CHAT)
 	end
 end
@@ -143,7 +143,7 @@ local function ReceiveVoiceState()
 
 	local tm = ply:GetTeam()
 
-	if tm == TEAM_NONE then return end
+	if tm == TEAM_NONE or TEAMS[tm].alone then return end
 
 	ply[tm .. "_gvoice"] = state
 
@@ -171,7 +171,7 @@ function GM:PlayerEndVoice(ply, no_reset)
 
 	if IsValid(ply) and not no_reset then
 		local tm = ply:GetTeam()
-		if tm ~= TEAM_NONE then
+		if tm ~= TEAM_NONE and not TEAMS[tm].alone then
 			ply[tm .. "_gvoice"] = false
 		end
 	end
@@ -267,7 +267,7 @@ local function IsRoleChatting(ply)
 	and not plyrd.unknownTeam
 	and not plyrd.disabledTeamVoice
 	and not LocalPlayer():GetSubRoleData().disabledTeamVoiceRecv
-	and tm ~= TEAM_NONE
+	and tm ~= TEAM_NONE and not TEAMS[tm].alone
 	and not ply[tm .. "_gvoice"]
 end
 

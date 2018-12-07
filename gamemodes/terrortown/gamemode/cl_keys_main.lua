@@ -45,7 +45,7 @@ function GM:PlayerBindPress(ply, bind, pressed)
 		local team = ply:GetTeam()
 		local plyrd = ply:GetSubRoleData()
 
-		if team ~= TEAM_NONE and not plyrd.unknownTeam and not plyrd.disabledTeamVoice then
+		if team ~= TEAM_NONE and not plyrd.unknownTeam and not plyrd.disabledTeamVoice and not TEAMS[team].alone then
 
 			-- set voice type here just in case shift is no longer down when the
 			-- PlayerStartVoice hook runs, which might be the case when switching to

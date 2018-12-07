@@ -104,7 +104,7 @@ function plymeta:HasTeam(team)
 end
 
 function plymeta:IsInTeam(ply)
-	return self:GetTeam() ~= TEAM_NONE and self:GetTeam() == ply:GetTeam()
+	return self:GetTeam() ~= TEAM_NONE and not TEAMS[self:GetTeam()].alone and self:GetTeam() == ply:GetTeam()
 end
 
 -- Role access

@@ -221,7 +221,7 @@ function CLSCORE:BuildScorePanel(dpanel)
 
 			if s.ev then
 				for _, ev in ipairs(s.ev) do
-					if ev.t == TEAM_NONE or ev.t ~= ev.v then
+					if ev.t == TEAM_NONE or ev.t ~= ev.v or TEAMS[ev.t].alone then
 						kills = kills + 1
 					else
 						teamkills = teamkills + 1

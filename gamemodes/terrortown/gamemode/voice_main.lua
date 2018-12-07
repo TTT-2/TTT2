@@ -51,7 +51,7 @@ function GM:PlayerCanHearPlayersVoice(listener, speaker)
 	local tm = speaker:GetTeam()
 	local sprd = speaker:GetSubRoleData()
 
-	if tm ~= TEAM_NONE and speaker:IsActive() and not sprd.unknownTeam and not sprd.disabledTeamVoice and not listener:GetSubRoleData().disabledTeamVoiceRecv then
+	if tm ~= TEAM_NONE and speaker:IsActive() and not sprd.unknownTeam and not sprd.disabledTeamVoice and not listener:GetSubRoleData().disabledTeamVoiceRecv and not TEAMS[tm].alone then
 		if speaker[tm .. "_gvoice"] then
 			return true, loc_voice:GetBool()
 		elseif listener:IsActive() and listener:IsInTeam(speaker) then
@@ -67,7 +67,7 @@ end
 
 local function SendRoleVoiceState(speaker)
 	local tm = speaker:GetTeam()
-	if tm == TEAM_NONE then return end
+	if tm == TEAM_NONE or TEAMS[tm].alone then return end
 
 	local state = speaker[tm .. "_gvoice"]
 
@@ -91,7 +91,7 @@ local function RoleGlobalVoice(ply, cmd, args)
 	if not IsValid(ply) or not ply:IsActive() or ply:GetSubRoleData().unknownTeam or ply:GetSubRoleData().disabledTeamVoice then return end
 
 	local tm = ply:GetTeam()
-	if tm == TEAM_NONE then return end
+	if tm == TEAM_NONE or TEAMS[tm].alone then return end
 
 	if #args ~= 1 then return end
 

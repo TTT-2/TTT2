@@ -582,7 +582,7 @@ function TeamKiller(events, scores, players, traitors)
 		for _, ev in ipairs(s.ev) do
 			tktbl[id] = tktbl[id] or {}
 
-			if ev.t == TEAM_NONE or ev.t ~= ev.v then
+			if ev.t == TEAM_NONE or ev.t ~= ev.v or TEAMS[ev.t].alone then
 				tktbl[id].k = (tktbl[id].k or 0) + 1
 			else
 				tktbl[id].tk = (tktbl[id].tk or 0) + 1

@@ -73,7 +73,7 @@ function SendSubRoleList(subrole, ply_or_rf, pred)
 	for _, v in ipairs(player.GetAll()) do
 		if v:GetSubRole() == subrole and (not pred or (pred and pred(v))) then
 			local team = v:GetTeam()
-			if team ~= TEAM_NONE then
+			if team ~= TEAM_NONE and not TEAMS[team].alone then
 				team_ids[team] = team_ids[team] or {} -- create table if it does not exists
 
 				table.insert(team_ids[team], v:EntIndex())
@@ -92,7 +92,7 @@ function SendRoleList(subrole, ply_or_rf, pred)
 	for _, v in ipairs(player.GetAll()) do
 		if v:IsRole(subrole) and (not pred or (pred and pred(v))) then
 			local team = v:GetTeam()
-			if team ~= TEAM_NONE then
+			if team ~= TEAM_NONE and not TEAMS[team].alone then
 				team_ids[team] = team_ids[team] or {} -- create table if it does not exists
 
 				table.insert(team_ids[team], v:EntIndex())
@@ -106,7 +106,7 @@ function SendRoleList(subrole, ply_or_rf, pred)
 end
 
 function SendTeamList(team, ply_or_rf, pred)
-	if team == TEAM_NONE then return end
+	if team == TEAM_NONE or TEAMS[team].alone then return end
 
 	local team_ids = {}
 
@@ -126,7 +126,7 @@ function SendTeamList(team, ply_or_rf, pred)
 end
 
 function SendConfirmedTeam(team, ply_or_rf)
-	if team == TEAM_NONE then return end
+	if team == TEAM_NONE or TEAMS[team].alone then return end
 
 	local _func = function(p)
 		return p:GetNWBool("body_found")
