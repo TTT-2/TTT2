@@ -62,6 +62,7 @@ function CreateChanges()
 	- added possibility to disable roundend if a player is reviving
 	- added own Item Info functions
 	- added debugging function
+	- added TEAM param .alone
 	- added possibility to set the cost (credits) for any equipment
 	- added Player:RemoveEquipmentItem(id) and Player:RemoveItem(id) / Player:RemoveBought(id)
 	- added possibility to change velocity with hook "TTT2ModifyRagdollVelocity"
