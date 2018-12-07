@@ -454,8 +454,10 @@ function CORPSE.Create(ply, attacker, dmginfo)
 	-- bullets have a lot of force, which feels better when shooting props,
 	-- but makes bodies fly, so dampen that here
 	if dmginfo:IsDamageType(DMG_BULLET) or dmginfo:IsDamageType(DMG_SLASH) then
-		v = v * 0.2
+		v:Mul(0.2)
 	end
+
+	hook.Run("TTT2ModifyRagdollVelocity", ply, rag, v)
 
 	for i = 0, num do
 		local bone = rag:GetPhysicsObjectNum(i)
