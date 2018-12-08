@@ -518,7 +518,7 @@ function plymeta:Revive(delay, fn, check, needcorpse, force)
 				ply:SpawnForRound(true)
 			end
 
-			hook.Call("PlayerLoadout", GAMEMODE, self)
+			hook.Call("PlayerLoadout", GAMEMODE, ply)
 
 			ply:SetMaxHealth(100)
 
