@@ -13,23 +13,20 @@ local SettingsBindings = {}
 
 -------------------------]]-----
 local function DBCreateTable()
-	local tblname = tablename
-	if not sql.TableExists(tblname) then
-		local result = sql.Query("CREATE TABLE " .. tblname .. " (guid TEXT, name TEXT, button TEXT)")
+	if not sql.TableExists(tablename) then
+		local result = sql.Query("CREATE TABLE " .. tablename .. " (guid TEXT, name TEXT, button TEXT)")
 		if result == false then
 			return false
 		end
-
-		return true
-	else
-		return true
 	end
+
+	return true
 end
 
 local function SaveBinding(name, button)
 	if DBCreateTable() then
-		local result = sql.Query("INSERT INTO " .. tablename .. " VALUES('" .. LocalPlayer():SteamID64() .. "','" .. name .. "','" .. button .. "')")
-		if result then
+		local result = sql.Query("INSERT INTO " .. tablename .. " VALUES('" .. LocalPlayer():SteamID64() .. "', '" .. name .. "', '" .. button .. "')")
+		if result ~= false then
 			print("[TTT2][BIND] Saved binding...")
 		else
 			print("[TTT2][BIND][ERROR] Wasn't able to save binding...")
@@ -42,7 +39,7 @@ local function DBRemoveBinding(name, button)
 
 	if DBCreateTable() then
 		local result = sql.Query("DELETE FROM " .. tablename .. " WHERE guid = '" .. LocalPlayer():SteamID64() .. "' AND name = '" .. name .. "' AND button = '" .. button .. "'")
-		if result then
+		if result ~= false then
 			print("[TTT2][BIND] Removed binding...")
 		else
 			print("[TTT2][BIND][ERROR] Wasn't able to remove binding...")
