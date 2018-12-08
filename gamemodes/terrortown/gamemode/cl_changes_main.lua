@@ -58,7 +58,6 @@ function CreateChanges()
 	]])
 
 	AddChange("0.3.7.1b", [[
-	- improved external icon addon support
 	- added possibility to disable roundend if a player is reviving
 	- added own Item Info functions
 	- added debugging function
@@ -66,6 +65,8 @@ function CreateChanges()
 	- added possibility to set the cost (credits) for any equipment
 	- added Player:RemoveEquipmentItem(id) and Player:RemoveItem(id) / Player:RemoveBought(id)
 	- added possibility to change velocity with hook "TTT2ModifyRagdollVelocity"
+	- improved external icon addon support
+	- improved binding system
 	- fixed loadout bug
 	- fixed loadout item reset bug
 	- fixed respawn loadout issue

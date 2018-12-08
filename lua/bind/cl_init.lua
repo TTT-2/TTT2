@@ -5,6 +5,7 @@ local tablename = "ttt2_bindings"
 local Bindings = {}
 local Registry = {}
 local FirstPressed = {}
+local SettingsBindings = {}
 
 --[[----------------------------
 
@@ -141,6 +142,15 @@ function bind.Remove(btn, name)
 			Bindings[btn][i] = nil
 		end
 	end
+end
+
+-- TTT2 default settings bindings
+function bind.AddSettingsBinding(name, label)
+	SettingsBindings[#SettingsBindings + 1] = {name = name, label = label}
+end
+
+function bind.GetSettingsBindings()
+	return SettingsBindings
 end
 
 hook.Add("Think", "TTT2CallBindings", function()

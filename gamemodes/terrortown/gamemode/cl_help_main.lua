@@ -165,7 +165,7 @@ function HELPSCRN:Show()
 
 	dtabs:AddSheet(GetTranslation("help_settings"), dsettings, "icon16/wrench.png", false, false, GetTranslation("help_settings_tip"))
 
-	-- role description
+	-- role description, bindings and co
 	local ttt2_panel = vgui.Create("DPanelList", dtabs)
 	ttt2_panel:StretchToParent(0, 0, dtabs:GetPadding() * 2, 0)
 	ttt2_panel:EnableVerticalScrollbar(true)
@@ -216,6 +216,38 @@ function HELPSCRN:Show()
 	creditsButton.DoClick = function(btn)
 		ShowCredits()
 	end
+
+	--- binding area
+	local dbindings = vgui.Create("DForm", ttt2_panel)
+	dbindings:SetName("TTT2 Bindings")
+
+	for _, binding in ipairs(bind.GetSettingsBindings()) do
+		local dPlabel = vgui.Create("DLabel")
+		dPlabel:SetText(binding.label)
+
+		local dPBinder = vgui.Create("DBinder")
+		dPBinder:SetSize(170, 30)
+
+		local curBinding = bind.Find(binding.name)
+		dPBinder:SetValue(curBinding)
+
+		function dPBinder:OnChange(num)
+			if num == 0 then
+				bind.Remove(curBinding, binding.name)
+			else
+				bind.Remove(curBinding, binding.name)
+				bind.Add(num, binding.name, true)
+
+				LocalPlayer():ChatPrint("New bound key for '" .. binding.name .. "': " .. input.GetKeyName(num))
+			end
+
+			curBinding = num
+		end
+
+		dgui:AddItem(dPlabel, dPBinder)
+	end
+
+	ttt2_panel:AddItem(dbindings)
 
 	hook.Call("TTTSettingsTabs", GAMEMODE, dtabs)
 

@@ -746,7 +746,7 @@ function GM:PostPlayerDeath(ply)
 		timer.Simple(1, function()
 			ply:SpawnForRound(true)
 
-			hook.Call("PlayerLoadout", GAMEMODE, self)
+			hook.Call("PlayerLoadout", GAMEMODE, ply)
 		end)
 	end
 end
