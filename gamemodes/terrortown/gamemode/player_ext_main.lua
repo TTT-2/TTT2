@@ -68,16 +68,22 @@ end
 function plymeta:SetDefaultCredits()
 	if hook.Run("TTT2SetDefaultCredits", self) then return end
 
+	timer.Simple(0, function()
 	if self:IsShopper() then
 		local rd = self:GetSubRoleData()
 		local name = rd.index == ROLE_TRAITOR and "ttt_credits_starting" or "ttt_" .. rd.abbr .. "_credits_starting"
 
 		if self:HasTeam(TEAM_TRAITOR) then
 			local c = (ConVarExists(name) and GetConVar(name):GetInt()) or 0
-
 			if not rd.preventTraitorAloneCredits and #GetTeamMembers(TEAM_TRAITOR) == 1 then
 				c = c + (ConVarExists("ttt_credits_alonebonus") and GetConVar("ttt_credits_alonebonus"):GetInt()) or 0
 			end
+			
+			if #GetTeamMembers(TEAM_TRAITOR) > 1 then
+				c = c - (#GetTeamMembers(TEAM_TRAITOR)-1)
+			end
+			
+			if c <= 0 then c = 1 end
 
 			self:SetCredits(math.ceil(c))
 		else
@@ -86,6 +92,8 @@ function plymeta:SetDefaultCredits()
 	else
 		self:SetCredits(0)
 	end
+	end)
+
 end
 
 function plymeta:SendCredits()
