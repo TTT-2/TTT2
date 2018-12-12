@@ -68,7 +68,6 @@ end
 function plymeta:SetDefaultCredits()
 	if hook.Run("TTT2SetDefaultCredits", self) then return end
 
-	timer.Simple(0, function()
 	if self:IsShopper() then
 		local rd = self:GetSubRoleData()
 		local name = rd.index == ROLE_TRAITOR and "ttt_credits_starting" or "ttt_" .. rd.abbr .. "_credits_starting"
@@ -92,7 +91,6 @@ function plymeta:SetDefaultCredits()
 	else
 		self:SetCredits(0)
 	end
-	end)
 
 end
 
