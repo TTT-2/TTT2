@@ -74,20 +74,20 @@ function plymeta:SetDefaultCredits()
 
 		if self:HasTeam(TEAM_TRAITOR) then
 			local c = (ConVarExists(name) and GetConVar(name):GetFloat()) or 0
-			local member_count = #GetTeamMembers(TEAM_TRAITOR) 
-			
+			local member_count = #GetTeamMembers(TEAM_TRAITOR)
+
 			if not rd.preventTraitorAloneCredits and member_count == 1 then
 				c = c + (ConVarExists("ttt_credits_alonebonus") and GetConVar("ttt_credits_alonebonus"):GetFloat()) or 0
 			end
-			
+
 			c = math.ceil(c)
-			
+
 			if member_count > 1 then
 				c = c + 1 - member_count
 			end
-			
-			if c <= 0 then 
-				c = 1 
+
+			if c <= 0 then
+				c = 1
 			end
 
 			self:SetCredits(c)
