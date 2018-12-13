@@ -44,7 +44,7 @@ function GM:PostDrawTranslucentRenderables()
 	local client = LocalPlayer()
 	local plys = GetPlayers()
 
-	--if client:IsActive() and client:IsSpecial() then
+	if client:IsSpecial() then
 		dir = (client:GetForward() * -1)
 
 		for i = 1, #plys do
@@ -57,7 +57,6 @@ function GM:PostDrawTranslucentRenderables()
 			if ply ~= client
 			and ply:IsActive()
 			and ply:IsSpecial()
-			and (ply:IsInTeam(client) or ply:GetRole() == ROLE_DETECTIVE)
 			and not ply:GetSubRoleData().avoidTeamIcons
 			then
 				local base = Material("vgui/ttt/dynamic/sprite_base")
@@ -80,7 +79,7 @@ function GM:PostDrawTranslucentRenderables()
 				render.DrawQuadEasy(pos, dir, 7, 7, Color(255, 255, 255, 255), 180)
 			end
 		end
-	--end
+	end
 
 	if client:Team() == TEAM_SPEC then
 		cam.Start3D(EyePos(), EyeAngles())
