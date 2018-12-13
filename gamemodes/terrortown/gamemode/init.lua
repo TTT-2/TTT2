@@ -784,7 +784,6 @@ function BeginRound()
 	-- anymore.
 	DEBUGP("000000")
 	SelectRoles()
-	SendDefaultCredits()
 	DEBUGP("000001")
 	LANG.Msg("round_selected")
 	DEBUGP("000002")
@@ -1400,6 +1399,11 @@ function SelectRoles(plys, max_plys)
 		-- store a steamid -> role map
 		GAMEMODE.LastRole[ply:SteamID64()] = subrole
 	end
+	
+	-- just set the credits after all roles were selected (to fix alone traitor bug)
+	for _, ply in ipairs(plys) do
+		ply:SetDefaultCredits()
+	end
 
 	DEBUGP("00001C")
 
@@ -1408,14 +1412,6 @@ function SelectRoles(plys, max_plys)
 	SendFullStateUpdate() -- theoretically not needed
 
 	DEBUGP("00001D")
-end
-
-function SendDefaultCredits()
-	for _, v in ipairs(player.GetAll()) do
-		if IsValid(v) then
-			v:SetDefaultCredits()
-		end
-	end
 end
 
 local function ttt_roundrestart(ply, command, args)
