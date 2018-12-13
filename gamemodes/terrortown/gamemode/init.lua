@@ -1396,11 +1396,13 @@ function SelectRoles(plys, max_plys)
 
 		ply:SetRole(subrole)
 
-		-- initialize credit count for everyone based on their role
-		ply:SetDefaultCredits()
-
 		-- store a steamid -> role map
 		GAMEMODE.LastRole[ply:SteamID64()] = subrole
+	end
+	
+	-- just set the credits after all roles were selected (to fix alone traitor bug)
+	for _, ply in ipairs(plys) do
+		ply:SetDefaultCredits()
 	end
 
 	DEBUGP("00001C")
