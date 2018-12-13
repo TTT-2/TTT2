@@ -79,6 +79,12 @@ function CreateChanges()
 	- fixed Disguiser
 	- Some more small fixes
 	]])
+
+	AddChange("0.3.7.2b", [[
+	- reworked the credit system (Thanks to Nick!)
+	- added possibility to override the init.lua and cl_init.lua file in TTT2
+	- fixed server errors in combination with TTT Totem (now, TTT2 will just not work)
+	]])
 end
 
 function ShowChanges()
