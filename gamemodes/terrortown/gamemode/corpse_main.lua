@@ -415,7 +415,8 @@ function CORPSE.Create(ply, attacker, dmginfo)
 	rag:Activate()
 
 	-- nonsolid to players, but can be picked up and shot
-	rag:SetCollisionGroup(rag_collide:GetBool() and COLLISION_GROUP_WEAPON or COLLISION_GROUP_DEBRIS_TRIGGER)
+	rag:SetCollisionGroup(COLLISION_GROUP_WEAPON)
+	rag:SetCustomCollisionCheck(true)
 
 	-- flag this ragdoll as being a player's
 	rag.player_ragdoll = true
@@ -489,3 +490,15 @@ function CORPSE.Create(ply, attacker, dmginfo)
 
 	return rag -- we'll be speccing this
 end
+
+hook.Add("ShouldCollide", "TTT2RagdollCollide", function(ent1, ent2)
+	if rag_collide:GetBool() then return end
+
+	if IsValid(ent1) and IsValid(ent2)
+	and ent1:IsRagdoll() and ent2:IsRagdoll()
+	and ent1.GetCollisionGroup and ent1:GetCollisionGroup() == COLLISION_GROUP_WEAPON
+	and ent2.GetCollisionGroup and ent2:GetCollisionGroup() == COLLISION_GROUP_WEAPON
+	then
+		return false
+	end
+end)

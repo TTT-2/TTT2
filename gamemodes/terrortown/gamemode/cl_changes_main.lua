@@ -84,6 +84,7 @@ function CreateChanges()
 	- reworked the credit system (Thanks to Nick!)
 	- added possibility to override the init.lua and cl_init.lua file in TTT2
 	- fixed server errors in combination with TTT Totem (now, TTT2 will just not work)
+	- fixed ragdoll collision server crash (issue is still in the normal TTT)
 	]])
 end
 
