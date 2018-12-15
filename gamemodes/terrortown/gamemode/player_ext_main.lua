@@ -555,7 +555,7 @@ function plymeta:SelectRandomRole(avoidRoles)
 	local availableRoles = {}
 
 	for _, v in pairs(selectableRoles) do
-		if not avoidRoles[v] then
+		if not avoidRoles or not avoidRoles[v] then
 			availableRoles[#availableRoles + 1] = v
 		end
 	end

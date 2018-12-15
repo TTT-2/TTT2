@@ -86,8 +86,11 @@ CreateConVar("ttt2_confirm_team", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 CreateConVar("ttt2_confirm_killlist", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 -- innos min pct
-CreateConVar("ttt_min_inno_pct", "0.47", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-CreateConVar("ttt_max_roles", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+CreateConVar("ttt_min_inno_pct", "0.47", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Minimum multiplicator for each player to calculate the minimum amount of innocents")
+CreateConVar("ttt_max_roles", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different roles")
+CreateConVar("ttt_max_roles_pct", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different roles based on player amount. ttt_max_roles needs to be 0")
+CreateConVar("ttt_max_baseroles", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different baseroles")
+CreateConVar("ttt_max_baseroles_pct", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different baseroles based on player amount. ttt_max_baseroles needs to be 0")
 
 -- debuggery
 local ttt_dbgwin = CreateConVar("ttt_debug_preventwin", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
@@ -1071,17 +1074,6 @@ function GetSelectableRoles(plys, max_plys)
 
 	DEBUGP("000009_2")
 
-	local roles_count = 2
-
-	local max_roles = GetConVar("ttt_max_roles")
-	if max_roles then
-		max_roles = max_roles:GetInt()
-
-		if max_roles == 0 then
-			max_roles = nil
-		end
-	end
-
 	local tmpTbl = {}
 	local iTmpTbl = {}
 	local checked = {
@@ -1170,6 +1162,39 @@ function GetSelectableRoles(plys, max_plys)
 		end
 	end
 
+	local roles_count = 2
+	local baseroles_count = 2
+
+	-- yea it begins
+	local max_roles = GetConVar("ttt_max_roles")
+	if max_roles then
+		max_roles = max_roles:GetInt()
+		if max_roles == 0 then
+			max_roles = GetConVar("ttt_max_roles_pct")
+			if max_roles then
+				max_roles = math.floor(max_roles:GetFloat() * max_plys)
+				if max_roles == 0 then
+					max_roles = nil
+				end
+			end
+		end
+	end
+
+	-- damn, not again
+	local max_baseroles = GetConVar("ttt_max_baseroles")
+	if max_baseroles then
+		max_baseroles = max_baseroles:GetInt()
+		if max_baseroles == 0 then
+			max_baseroles = GetConVar("ttt_max_baseroles_pct")
+			if max_baseroles then
+				max_baseroles = math.floor(max_baseroles:GetFloat() * max_plys)
+				if max_baseroles == 0 then
+					max_baseroles = nil
+				end
+			end
+		end
+	end
+
 	for i = 1, #iTmpTbl do
 		if max_roles and roles_count >= max_roles then break end
 
@@ -1180,16 +1205,23 @@ function GetSelectableRoles(plys, max_plys)
 			local br = GetRoleByIndex(v.baserole)
 
 			if not selectableRoles[br] then
+				if max_baseroles and baseroles_count >= max_baseroles then continue end
+
 				selectableRoles[br] = tmpTbl[br]
 				roles_count = roles_count + 1
-			end
+				baseroles_count = baseroles_count + 1
 
-			if max_roles and roles_count >= max_roles then break end
+				if max_roles and roles_count >= max_roles then break end
+			end
 		end
 
 		if not selectableRoles[v] then
 			selectableRoles[v] = tmpTbl[v]
 			roles_count = roles_count + 1
+
+			if not v.baserole then
+				baseroles_count = baseroles_count + 1
+			end
 		end
 	end
 
