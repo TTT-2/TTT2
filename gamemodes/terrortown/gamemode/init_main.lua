@@ -1340,8 +1340,8 @@ function SelectRoles(plys, max_plys)
 	local roleCount = {}
 	local selectableRoles = GetSelectableRoles(plys, max_plys) -- update SELECTABLEROLES table
 
-	for v, c in pairs(selectableRoles) do
-		roleCount[v.index] = c
+	for _, v in pairs(GetRoles()) do
+		roleCount[v.index] = selectableRoles[v] or 0
 	end
 
 	DEBUGP("000009")
