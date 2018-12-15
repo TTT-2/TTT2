@@ -104,7 +104,7 @@ local strTmp = ""
 
 PLYFORCEDROLES = {}
 PLYFINALROLES = {}
-SELECTABLEROLES = {}
+SELECTABLEROLES = nil
 
 -- Pool some network names.
 util.AddNetworkString("TTT_RoundState")
@@ -783,7 +783,7 @@ function BeginRound()
 
 	-- Select traitors & co. This is where things really start so we can't abort
 	-- anymore.
-	SELECTABLEROLES = {}
+	SELECTABLEROLES = nil
 	DEBUGP("000000")
 	SelectRoles()
 	DEBUGP("000001")
