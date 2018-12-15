@@ -57,6 +57,7 @@ function GM:PostDrawTranslucentRenderables()
 			if ply ~= client
 			and ply:IsActive()
 			and ply:IsSpecial()
+			and (not client:IsActive() or ply:IsInTeam(client))
 			and not ply:GetSubRoleData().avoidTeamIcons
 			then
 				local base = Material("vgui/ttt/dynamic/sprite_base")
