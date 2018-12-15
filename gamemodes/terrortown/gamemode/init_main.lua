@@ -1082,12 +1082,63 @@ function GetSelectableRoles(plys, max_plys)
 		end
 	end
 
+	local tmpTbl = {}
+	local iTmpTbl = {}
+	local checked = {
+		[ROLE_INNOCENT] = true,
+		[ROLE_TRAITOR] = true
+	}
+
 	for _, v in pairs(GetRoles()) do
 		DEBUGP("00000A")
 
-		if max_roles and roles_count < max_roles then break end
+		if checked[v.index] then continue end
+
+		checked[v.index] = true
 
 		if v ~= INNOCENT and v ~= TRAITOR and (newRolesEnabled or v == DETECTIVE) and IsRoleSelectable(v) then
+			if v.baserole then
+				local rd = GetRoleByIndex(v.baserole)
+
+				if not checked[v.baserole] then
+					local forced = forcedRolesTbl[v.baserole] -- add forced role definitely, randomness doesn't matter
+					local b = true
+
+					checked[v.baserole] = true
+
+					if not forced then
+						DEBUGP("00000B_2")
+
+						strTmp = "ttt_" .. rd.name .. "_random"
+
+						local r = (ConVarExists(strTmp) and GetConVar(strTmp):GetInt()) or 0
+
+						DEBUGP("00000C_2")
+
+						if r > 0 and r < 100 then
+							b = math.random(1, 100) <= r
+						end
+					end
+
+					DEBUGP("00000D_2")
+
+					if b then
+						local tmp2 = GetEachRoleCount(max_plys, rd.name) - GetPreSelectedRole(rd.index)
+						if tmp2 > 0 then
+							tmpTbl[rd] = tmp2
+							iTmpTbl[#iTmpTbl + 1] = rd
+						end
+					end
+
+					DEBUGP("00000E_2")
+				end
+
+				local base_count = tmpTbl[rd]
+				if not base_count or base_count < 1 then
+					continue
+				end
+			end
+
 			local forced = forcedRolesTbl[v.index] -- add forced role definitely, randomness doesn't matter
 			local b = true
 
@@ -1110,12 +1161,35 @@ function GetSelectableRoles(plys, max_plys)
 			if b then
 				local tmp2 = GetEachRoleCount(max_plys, v.name) - GetPreSelectedRole(v.index)
 				if tmp2 > 0 then
-					selectableRoles[v] = tmp2
-					roles_count = roles_count + 1
+					tmpTbl[v] = tmp2
+					iTmpTbl[#iTmpTbl + 1] = v
 				end
 			end
 
 			DEBUGP("00000E")
+		end
+	end
+
+	for i = 1, #iTmpTbl do
+		if max_roles and roles_count >= max_roles then break end
+
+		local rnd = math.random(1, #iTmpTbl)
+		local v = iTmpTbl[rnd]
+
+		if v.baserole then
+			local br = GetRoleByIndex(v.baserole)
+
+			if not selectableRoles[br] then
+				selectableRoles[br] = tmpTbl[br]
+				roles_count = roles_count + 1
+			end
+
+			if max_roles and roles_count >= max_roles then break end
+		end
+
+		if not selectableRoles[v] then
+			selectableRoles[v] = tmpTbl[v]
+			roles_count = roles_count + 1
 		end
 	end
 
