@@ -86,6 +86,10 @@ function CreateChanges()
 	- fixed server errors in combination with TTT Totem (now, TTT2 will just not work)
 	- fixed ragdoll collision server crash (issue is still in the normal TTT)
 	]])
+
+	AddChange("0.3.7.3b", [[
+	- reworked the selection system (balancing and bugfixes)
+	]])
 end
 
 function ShowChanges()
