@@ -550,6 +550,21 @@ function plymeta:Revive(delay, fn, check, needcorpse, force)
 	end)
 end
 
+function plymeta:SelectRandomRole(avoidRoles)
+	local selectableRoles = GetSelectableRoles()
+	local availableRoles = {}
+
+	for _, v in pairs(selectableRoles) do
+		if not avoidRoles[v] then
+			availableRoles[#availableRoles + 1] = v
+		end
+	end
+
+	self:SetRole(availableRoles[math.random(1, #availableRoles)].index)
+
+	SendFullStateUpdate()
+end
+
 local pendingItems = {}
 
 function plymeta:GiveItem(id)
