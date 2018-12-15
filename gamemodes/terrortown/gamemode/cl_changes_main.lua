@@ -131,6 +131,8 @@ function ShowChanges()
 		chng:SizeToContents()
 	end
 
+	ttt2_changes:EnableVerticalScrollbar()
+
 	frame:MakePopup()
 	frame:SetKeyboardInputEnabled(false)
 

@@ -541,7 +541,7 @@ local function CheckCreditAward(victim, attacker)
 
 	-- DET KILLED ANOTHER TEAM AWARD
 	if attacker:GetBaseRole() == ROLE_DETECTIVE and not victim:IsInTeam(attacker) then
-		local amt = (ConVarExists("ttt_" .. rd.abbr .. "_credits_traitordead") and GetConVar("ttt_" .. rd.abbr .. "_credits_traitordead"):GetInt() or 1)
+		local amt = (ConVarExists("ttt_" .. rd.abbr .. "_credits_traitordead") and GetConVar("ttt_" .. rd.abbr .. "_credits_traitordead"):GetInt()) or 1
 
 		for _, ply in ipairs(player.GetAll()) do
 			if ply:IsActive() and ply:IsShopper() and ply:GetBaseRole() == ROLE_DETECTIVE then

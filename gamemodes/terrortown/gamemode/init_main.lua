@@ -1355,6 +1355,7 @@ function SelectRoles(plys, max_plys)
 		[1] = TRAITOR,
 		[2] = INNOCENT
 	}
+	local tmpTbl = {}
 
 	-- get selectable baseroles (except traitor and innocent)
 	for _, v in pairs(GetRoles()) do
