@@ -78,21 +78,18 @@ function GM:PlayerSpawn(ply)
 	net.Send(ply)
 
 	if ply:IsSpec() then
-		ply:SetTeam(TEAM_SPEC)
 		ply:StripAll()
 		ply:Spectate(OBS_MODE_ROAMING)
 
 		return
-	else
-		ply:SetTeam(TEAM_TERROR)
 	end
 
 	ply:UnSpectate()
 
 	-- ye olde hooks
-	hook.Call("PlayerLoadout", GAMEMODE, ply)
-	hook.Call("PlayerSetModel", GAMEMODE, ply)
-	hook.Call("TTTPlayerSetColor", GAMEMODE, ply)
+	hook.Run("PlayerLoadout", ply)
+	hook.Run("PlayerSetModel", ply)
+	hook.Run("TTTPlayerSetColor", ply)
 
 	ply:SetupHands()
 
@@ -111,15 +108,21 @@ function GM:PlayerSetHandsModel(pl, ent)
 end
 
 function GM:IsSpawnpointSuitable(ply, spwn, force, rigged)
-	if not IsValid(ply) or not ply:IsTerror() then return true end
+	if not IsValid(ply) or not ply:IsTerror() then
+		return true
+	end
 
-	if not rigged and (not IsValid(spwn) or not spwn:IsInWorld()) then return false end
+	if not rigged and (not IsValid(spwn) or not spwn:IsInWorld()) then
+		return false
+	end
 
 	-- spwn is normally an ent, but we sometimes use a vector for jury rigged
 	-- positions
 	local pos = rigged and spwn or spwn:GetPos()
 
-	if not util.IsInWorld(pos) then return false end
+	if not util.IsInWorld(pos) then
+		return false
+	end
 
 	local blocking = ents.FindInBox(pos + Vector(-16, - 16, 0), pos + Vector(16, 16, 64))
 
@@ -248,7 +251,7 @@ function GM:PlayerSelectSpawn(ply)
 					rig_spwn:SetPos(rig)
 					rig_spwn:Spawn()
 
-					ErrorNoHalt("TTT WARNING: Map has too few spawn points, using a rigged spawn for ".. tostring(ply) .. "\n")
+					ErrorNoHalt("TTT2 WARNING: Map has too few spawn points, using a rigged spawn for ".. tostring(ply) .. "\n")
 
 					self.HaveRiggedSpawn = true
 
