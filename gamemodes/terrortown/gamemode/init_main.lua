@@ -1280,7 +1280,7 @@ local function SetRoleTypes(choices, prev_roles, roleCount, availableRoles, defa
 	end
 end
 
-local function SelectForcedRoles(_, max_plys, roleCount, allSelectableRoles, choices)
+local function SelectForcedRoles(max_plys, roleCount, allSelectableRoles, choices)
 	local transformed = {}
 
 	DEBUGP("00001E")
@@ -1452,7 +1452,7 @@ function SelectRoles(plys, max_plys)
 
 	DEBUGP("000009")
 
-	SelectForcedRoles(plys, max_plys, selectableRoles, choices)
+	SelectForcedRoles(max_plys, roleCount, selectableRoles, choices)
 
 	DEBUGP("000011")
 
