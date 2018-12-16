@@ -90,6 +90,8 @@ function CreateChanges()
 	AddChange("0.3.7.3b", [[
 	- reworked the selection system (balancing and bugfixes)
 	- fixed playermodel issue
+	- fixed toggling role issue
+	- fixed loadout doubling issue
 	]])
 end
 
