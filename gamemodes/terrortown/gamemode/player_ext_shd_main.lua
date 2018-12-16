@@ -34,7 +34,7 @@ function plymeta:GetRole()
 end
 
 -- ply:UpdateTeam(team) should never be used BEFORE this function
-function plymeta:SetRole(subrole, team)
+function plymeta:SetRole(subrole, team, forceHooks)
 	local oldRole = self:GetBaseRole()
 	local oldSubrole = self:GetSubRole()
 	local oldTeam = self:GetTeam()
@@ -49,17 +49,7 @@ function plymeta:SetRole(subrole, team)
 	local newSubrole = self:GetSubRole()
 	local newTeam = self:GetTeam()
 
-	if SERVER and newSubrole ~= oldSubrole then
-		hook.Call("PlayerLoadout", GAMEMODE, self)
-	end
-
-	if oldRole ~= newRole then
-		hook.Run("TTT2UpdateBaserole", self, oldRole, newRole)
-	end
-
 	if oldSubrole ~= newSubrole then
-		hook.Run("TTT2UpdateSubrole", self, oldSubrole, newSubrole)
-
 		local ord = GetRoleByIndex(oldSubrole)
 		local ar = GetActiveRolesCount(rd) + 1
 		local oar = GetActiveRolesCount(ord) - 1
@@ -76,8 +66,20 @@ function plymeta:SetRole(subrole, team)
 		end
 	end
 
-	if oldTeam ~= newTeam then
+	if oldRole ~= newRole or forceHooks then
+		hook.Run("TTT2UpdateBaserole", self, oldRole, newRole)
+	end
+
+	if oldSubrole ~= newSubrole or forceHooks then
+		hook.Run("TTT2UpdateSubrole", self, oldSubrole, newSubrole)
+	end
+
+	if oldTeam ~= newTeam or forceHooks then
 		hook.Run("TTT2UpdateTeam", self, oldTeam, newTeam)
+	end
+
+	if SERVER and (newSubrole ~= oldSubrole or forceHooks) then
+		hook.Run("PlayerLoadout", self)
 	end
 end
 

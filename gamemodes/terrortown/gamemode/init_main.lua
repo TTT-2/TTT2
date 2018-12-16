@@ -555,6 +555,14 @@ local function CheckForAbort()
 	return false
 end
 
+function SetRoundEnd(endtime)
+	SetGlobalFloat("ttt_round_end", endtime)
+end
+
+function IncRoundEnd(incr)
+	SetRoundEnd(GetGlobalFloat("ttt_round_end", 0) + incr)
+end
+
 function GM:TTTDelayRoundStartForVote()
 	-- Can be used for custom voting systems
 	--return true, 30
@@ -605,7 +613,13 @@ function PrepareRound()
 	end
 
 	-- Piggyback on "round end" time global var to show end of phase timer
-	SetRoundEnd(CurTime() + ptime)
+	local tm = CurTime() + ptime
+
+	SetRoundEnd(tm)
+
+	timer.Simple(1, function()
+		SetRoundEnd(tm)
+	end)
 
 	timer.Create("prep2begin", ptime, 1, BeginRound)
 
@@ -638,14 +652,6 @@ function PrepareRound()
 	hook.Call("TTTPrepareRound", GAMEMODE)
 
 	ents.TTT.TriggerRoundStateOutputs(ROUND_PREP)
-end
-
-function SetRoundEnd(endtime)
-	SetGlobalFloat("ttt_round_end", endtime)
-end
-
-function IncRoundEnd(incr)
-	SetRoundEnd(GetGlobalFloat("ttt_round_end", 0) + incr)
 end
 
 function TellTraitorsAboutTraitors()
@@ -1514,7 +1520,7 @@ function SelectRoles(plys, max_plys)
 
 		local subrole = PLYFINALROLES[ply] or ROLE_INNOCENT
 
-		ply:SetRole(subrole)
+		ply:SetRole(subrole, nil, true)
 
 		-- store a steamid -> role map
 		GAMEMODE.LastRole[ply:SteamID64()] = subrole

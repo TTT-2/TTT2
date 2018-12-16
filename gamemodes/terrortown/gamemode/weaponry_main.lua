@@ -36,11 +36,7 @@ local loadout_weapons = {}
 
 local function GetLoadoutWeapons(subrole)
 	if not loadout_weapons[subrole] then
-		loadout_weapons[subrole] = { -- default loadout
-			"weapon_zm_improvised",
-			"weapon_zm_carry",
-			"weapon_ttt_unarmed"
-		}
+		loadout_weapons[subrole] = {}
 
 		for _, w in ipairs(weapons.GetList()) do
 			if type(w.InLoadoutFor) == "table" and not w.Doublicated then
@@ -60,6 +56,19 @@ local function GetLoadoutWeapons(subrole)
 			end
 		end
 
+		-- default loadout, insert it at the end
+		local default = {
+			"weapon_zm_carry",
+			"weapon_ttt_unarmed",
+			"weapon_zm_improvised"
+		}
+
+		for _, def in ipairs(default) do
+			if not table.HasValue(loadout_weapons[subrole], def) then
+				table.insert(loadout_weapons[subrole], def)
+			end
+		end
+
 		hook.Run("TTT2ModifyDefaultLoadout", loadout_weapons, subrole)
 	end
 
@@ -68,6 +77,20 @@ end
 
 -- Give player loadout weapons he should have for his subrole that he does not have
 -- yet
+local function GiveLoadoutWeapon(ply, cls)
+	if not ply:HasWeapon(cls) and ply:CanCarryType(WEPS.TypeForWeapon(cls)) then
+		local wep = ply:Give(cls)
+
+		ply.loadoutWeps = ply.loadoutWeps or {}
+
+		if not table.HasValue(ply.loadoutWeps, cls) then
+			ply.loadoutWeps[#ply.loadoutWeps + 1] = cls
+		end
+
+		return wep
+	end
+end
+
 local function GiveLoadoutWeapons(ply)
 	local subrole = GetRoundState() == ROUND_PREP and ROLE_INNOCENT or ply:GetSubRole()
 	local weps = GetLoadoutWeapons(subrole)
@@ -76,21 +99,39 @@ local function GiveLoadoutWeapons(ply)
 
 	for _, cls in ipairs(weps) do
 		if not ply:HasWeapon(cls) and ply:CanCarryType(WEPS.TypeForWeapon(cls)) then
-			local wep = ply:Give(cls)
-
-			wep:SetNWBool("loadoutWeapon", true)
+			GiveLoadoutWeapon(ply, cls)
 		end
 	end
 end
 
-local function ResetLoadoutWeapons(ply)
+local function GetGiveLoadoutWeapons(ply)
+	local subrole = GetRoundState() == ROUND_PREP and ROLE_INNOCENT or ply:GetSubRole()
+	local weps = GetLoadoutWeapons(subrole)
+	local tmp = {}
+
+	if weps then
+		for _, cls in ipairs(weps) do
+			tmp[#tmp + 1] = cls
+		end
+	end
+
+	return tmp
+end
+
+local function GetResetLoadoutWeapons(ply)
+	local tmp = {}
+
+	ply.loadoutWeps = ply.loadoutWeps or {}
+
 	for _, wep in pairs(ply:GetWeapons()) do
 		local cls = WEPS.GetClass(wep)
 
-		if wep:GetNWBool("loadoutWeapon") and cls ~= "weapon_ttt_unarmed" then
-			ply:StripWeapon(cls)
+		if table.HasValue(ply.loadoutWeps, cls) and cls ~= "weapon_ttt_unarmed" then
+			tmp[#tmp + 1] = cls
 		end
 	end
+
+	return tmp
 end
 
 local function HasLoadoutWeapons(ply)
@@ -185,7 +226,7 @@ end
 -- calling this function is used to get them the weapons anyway as soon as
 -- possible.
 local function LateLoadout(id)
-	local ply = player.GetByID(id)
+	local ply = Entity(id)
 
 	if not IsValid(ply) then
 		timer.Remove("lateloadout" .. id)
@@ -199,37 +240,79 @@ local function LateLoadout(id)
 		if HasLoadoutWeapons(ply) then
 			timer.Remove("lateloadout" .. id)
 		end
+	else
+		timer.Remove("lateloadout" .. id)
 	end
 end
 
 -- Note that this is called both when a player spawns and when a round starts
 function GM:PlayerLoadout(ply)
-	if IsValid(ply) and not ply:IsSpec() then
-		ResetLoadoutItems(ply)
+	timer.Simple(0, function()
+		if IsValid(ply) and not ply:IsSpec() then
+			ResetLoadoutItems(ply)
 
-		-- give default items
-		GiveLoadoutItems(ply)
+			-- give default items
+			GiveLoadoutItems(ply)
 
-		ResetLoadoutWeapons(ply)
+			-- reset default loadout
+			local reset = GetResetLoadoutWeapons(ply)
 
-		-- hand out weaponry
-		GiveLoadoutWeapons(ply)
+			-- hand out weaponry
+			local give = GetGiveLoadoutWeapons(ply)
 
-		GiveLoadoutSpecial(ply)
+			local tmp = {}
 
-		if not HasLoadoutWeapons(ply) then
-			MsgN("Could not spawn all loadout weapons for " .. ply:Nick() .. ", will retry.")
+			-- check which weapon the player should get/loose
+			for k, cls in ipairs(reset) do
+				local has = false
 
-			timer.Create("lateloadout" .. ply:EntIndex(), 1, 0, function()
-				LateLoadout(ply:EntIndex())
-			end)
+				for k2, cls2 in ipairs(give) do
+					if cls == cls2 then
+						has = true
+
+						table.remove(give, k2)
+
+						break
+					end
+				end
+
+				if not has then
+					tmp[#tmp + 1] = cls
+				end
+			end
+
+			for _, cls in ipairs(tmp) do
+				ply:StripWeapon(cls)
+
+				for k, v in ipairs(ply.loadoutWeps) do
+					if cls == v then
+						table.remove(ply.loadoutWeps, k)
+
+						break
+					end
+				end
+			end
+
+			for _, cls in ipairs(give) do
+				GiveLoadoutWeapon(ply, cls)
+			end
+
+			GiveLoadoutSpecial(ply)
+
+			if not HasLoadoutWeapons(ply) then
+				MsgN("Could not spawn all loadout weapons for " .. ply:Nick() .. ", will retry.")
+
+				timer.Create("lateloadout" .. ply:EntIndex(), 1, 0, function()
+					LateLoadout(ply:EntIndex())
+				end)
+			end
 		end
-	end
+	end)
 end
 
 function GM:UpdatePlayerLoadouts()
 	for _, ply in ipairs(player.GetAll()) do
-		hook.Call("PlayerLoadout", GAMEMODE, ply)
+		hook.Run("PlayerLoadout", ply)
 	end
 end
 
