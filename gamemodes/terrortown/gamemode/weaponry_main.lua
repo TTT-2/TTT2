@@ -452,7 +452,7 @@ local function GiveEquipmentWeapon(sid64, cls)
 	local ply = player.GetBySteamID64(sid64)
 	local tmr = "give_equipment" .. sid64
 
-	if not IsValid(ply) or not ply:IsActiveSpecial() then
+	if not IsValid(ply) or not ply:IsActive() then
 		timer.Remove(tmr)
 
 		return
