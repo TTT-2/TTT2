@@ -89,6 +89,7 @@ function CreateChanges()
 
 	AddChange("0.3.7.3b", [[
 	- reworked the selection system (balancing and bugfixes)
+	- fixed playermodel issue
 	]])
 end
 
