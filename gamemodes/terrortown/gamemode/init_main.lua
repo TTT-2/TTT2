@@ -613,12 +613,10 @@ function PrepareRound()
 	end
 
 	-- Piggyback on "round end" time global var to show end of phase timer
-	local tm = CurTime() + ptime
-
-	SetRoundEnd(tm)
+	SetRoundEnd(CurTime() + ptime)
 
 	timer.Simple(1, function()
-		SetRoundEnd(tm)
+		SetRoundEnd(CurTime() + ptime - 1)
 	end)
 
 	timer.Create("prep2begin", ptime, 1, BeginRound)
@@ -1082,10 +1080,7 @@ function GetSelectableRoles(plys, max_plys)
 
 	local tmpTbl = {}
 	local iTmpTbl = {}
-	local checked = {
-		[ROLE_INNOCENT] = true,
-		[ROLE_TRAITOR] = true
-	}
+	local checked = {}
 
 	for _, v in pairs(GetRoles()) do
 		DEBUGP("00000A")
@@ -1095,7 +1090,7 @@ function GetSelectableRoles(plys, max_plys)
 		checked[v.index] = true
 
 		if v ~= INNOCENT and v ~= TRAITOR and (newRolesEnabled or v == DETECTIVE) and IsRoleSelectable(v) then
-			if v.baserole then
+			if v.baserole and v.baserole ~= ROLE_INNOCENT and v.baserole ~= ROLE_TRAITOR then
 				local rd = GetRoleByIndex(v.baserole)
 
 				if not checked[v.baserole] then
