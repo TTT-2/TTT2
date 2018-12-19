@@ -78,8 +78,11 @@ function plymeta:SetRole(subrole, team, forceHooks)
 		hook.Run("TTT2UpdateTeam", self, oldTeam, newTeam)
 	end
 
+	-- ye olde hooks
 	if SERVER and (newSubrole ~= oldSubrole or forceHooks) then
 		hook.Run("PlayerLoadout", self)
+		hook.Run("PlayerSetModel", self)
+		hook.Run("TTTPlayerSetColor", self)
 	end
 end
 

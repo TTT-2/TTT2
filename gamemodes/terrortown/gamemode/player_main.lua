@@ -277,7 +277,8 @@ function GM:PlayerSetModel(ply)
 		util.PrecacheModel(srm)
 
 		ply:SetModel(srm)
-	elseif not hook.Run("TTTUseCustomPlayerModels") and not ply._OldModel then
+	elseif not hook.Run("TTTUseCustomPlayerModels") and not ply._OldModel
+	or not ply:GetModel() or ply:GetModel() == "models/player.mdl" then
 		local mdl = GAMEMODE.playermodel or "models/player/phoenix.mdl"
 
 		util.PrecacheModel(mdl)
