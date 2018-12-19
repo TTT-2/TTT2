@@ -7,6 +7,7 @@ TTTFiles = {
 	cl_disguise = {file = "cl_disguise_main.lua", on = "client"},
 	cl_equip = {file = "cl_equip_main.lua", on = "client"},
 	cl_help = {file = "cl_help_main.lua", on = "client"},
+	cl_hud_item = {file = "cl_hud_item_main.lua", on = "client"},
 	cl_hud = {file = "cl_hud_main.lua", on = "client"},
 	cl_hudpickup = {file = "cl_hudpickup_main.lua", on = "client"},
 	cl_init = {file = "cl_init_main.lua", on = "client"},

@@ -298,7 +298,9 @@ local function InfoPaint(client)
 	local endtime = GetGlobalFloat("ttt_round_end", 0) - CurTime()
 	local font = "TimeLeft"
 	local color = COLOR_WHITE
+
 	tmp = width + x - hastewidth + smargin + hastewidth * 0.5
+
 	local rx = tmp
 	local ry = traitor_y + 3
 
@@ -341,48 +343,6 @@ local function InfoPaint(client)
 
 	if is_haste then
 		dr.SimpleText(L.hastemode, "TabLarge", tmp, traitor_y - 8, COLOR_WHITE, TEXT_ALIGN_CENTER)
-	end
-end
-
--- item info
-local HUD_ITEMS = {}
-local defaultY = ScrH() * 0.5 + 20
-
-function AddHUDItem(id, material)
-	HUD_ITEMS[#HUD_ITEMS + 1] = {id = id, material = material}
-end
-
-local function getYCoordinate(currentPerkID)
-	local amount, i, perk = 0, 1
-	local client = LocalPlayer()
-
-	while i < currentPerkID do
-		perk = GetEquipmentItemByID(i)
-
-		if istable(perk) and perk.hud and client:HasEquipmentItem(perk.id) then
-			amount = amount + 1
-		end
-
-		i = i * 2
-	end
-
-	return defaultY - 80 * amount
-end
-
-local function ItemInfo(client)
-	for k, itemData in ipairs(HUD_ITEMS) do
-		if client:HasEquipmentItem(itemData.id) then
-			local y = itemData.y
-
-			if not y then
-				y = client:HasEquipmentItem(itemData.id) and getYCoordinate(itemData.id) or defaultY
-				HUD_ITEMS[k].y = y
-			end
-
-			surface.SetMaterial(itemData.material)
-			surface.SetDrawColor(255, 255, 255, 255)
-			surface.DrawTexturedRect(20, y, 64, 64)
-		end
 	end
 end
 
@@ -433,11 +393,6 @@ function GM:HUDPaint()
 	-- Draw bottom left info panel
 	if hook.Call("HUDShouldDraw", GAMEMODE, "TTTInfoPanel") then
 		InfoPaint(client)
-	end
-
-	-- Draw owned Item info
-	if hook.Call("HUDShouldDraw", GAMEMODE, "TTT2ItemInfo") then
-		ItemInfo(client)
 	end
 end
 
