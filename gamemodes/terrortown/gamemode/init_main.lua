@@ -1108,7 +1108,9 @@ function GetSelectableRoles(plys, max_plys)
 
 						DEBUGP("00000C_2")
 
-						if r > 0 and r < 100 then
+						if r <= 0 then
+							b = false
+						elseif r < 100 then
 							b = math.random(1, 100) <= r
 						end
 					end
@@ -1144,7 +1146,9 @@ function GetSelectableRoles(plys, max_plys)
 
 				DEBUGP("00000C")
 
-				if r > 0 and r < 100 then
+				if r <= 0 then
+					b = false
+				elseif r < 100 then
 					b = math.random(1, 100) <= r
 				end
 			end
@@ -1201,6 +1205,8 @@ function GetSelectableRoles(plys, max_plys)
 
 		local rnd = math.random(1, #iTmpTbl)
 		local v = iTmpTbl[rnd]
+
+		table.remove(iTmpTbl, rnd)
 
 		if v.baserole then
 			local br = GetRoleByIndex(v.baserole)
