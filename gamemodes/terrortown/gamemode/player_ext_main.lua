@@ -492,6 +492,8 @@ local function FindCorpsePosition(corpse)
 	return false
 end
 
+AccessorFunc(plymeta, "subroleModel", "SubRoleModel", FORCE_BOOL)
+
 function plymeta:Revive(delay, fn, check, needcorpse, force)
 	local ply = self
 	local name = "TTT2RevivePlayer" .. ply:EntIndex()

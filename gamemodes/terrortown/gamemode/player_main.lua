@@ -272,7 +272,12 @@ function GM:PlayerSelectSpawn(ply)
 end
 
 function GM:PlayerSetModel(ply)
-	if not hook.Run("TTTUseCustomPlayerModels") then
+	local srm = ply:GetSubRoleModel()
+	if srm then
+		util.PrecacheModel(srm)
+
+		ply:SetModel(srm)
+	elseif not hook.Run("TTTUseCustomPlayerModels") and not ply._OldModel then
 		local mdl = GAMEMODE.playermodel or "models/player/phoenix.mdl"
 
 		util.PrecacheModel(mdl)
