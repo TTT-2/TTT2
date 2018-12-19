@@ -228,7 +228,7 @@ end
 local function LateLoadout(id)
 	local ply = Entity(id)
 
-	if not IsValid(ply) then
+	if not IsValid(ply) or not ply:IsPlayer() then
 		timer.Remove("lateloadout" .. id)
 
 		return

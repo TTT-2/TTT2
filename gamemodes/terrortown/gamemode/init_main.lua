@@ -1483,10 +1483,12 @@ function SelectRoles(plys, max_plys)
 	for _, roleData in ipairs(list) do
 		if #choices == 0 then break end
 
+		-- if roleData == INNOCENT then just remove the random ply from choices
 		local ls = SelectBaseRole(choices, prev_roles, roleCount, roleData)
 
 		DEBUGP("000013")
 
+		-- upgrade innos and players without any role later
 		if roleData ~= INNOCENT then
 			UpgradeRoles(ls, prev_roles, roleCount, selectableRoles, roleData)
 		end
@@ -1501,6 +1503,8 @@ function SelectRoles(plys, max_plys)
 
 		if PLYFINALROLES[ply] == ROLE_INNOCENT then
 			innos[#innos + 1] = ply
+
+			PLYFINALROLES[ply] = nil -- reset it to update it in UpgradeRoles
 		end
 	end
 
