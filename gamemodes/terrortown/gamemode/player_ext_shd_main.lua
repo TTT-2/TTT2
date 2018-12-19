@@ -81,9 +81,25 @@ function plymeta:SetRole(subrole, team, forceHooks)
 	-- ye olde hooks
 	if SERVER and (newSubrole ~= oldSubrole or forceHooks) then
 		hook.Call("PlayerLoadout", GAMEMODE, self)
-		hook.Call("PlayerSetModel", GAMEMODE, self)
-		hook.Run("TTTPlayerSetColor", self)
+
+		if self:GetSubRoleModel() or self.nonsubroleModel then
+			hook.Call("PlayerSetModel", GAMEMODE, self, true)
+			hook.Run("TTTPlayerSetColor", self)
+		end
 	end
+end
+
+if CLIENT then
+	net.Receive("TTT2SyncModel", function()
+		local mdl = net.ReadString()
+		local ply = net.ReadEntity()
+
+		if IsValid(ply) then
+			util.PrecacheModel(mdl)
+
+			ply:SetModel(mdl)
+		end
+	end)
 end
 
 function plymeta:GetTeam()

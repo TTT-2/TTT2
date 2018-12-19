@@ -339,7 +339,6 @@ end
 -- true, only spawns if player is dead, else just makes sure he is healed.
 function plymeta:SpawnForRound(dead_only)
 	hook.Call("PlayerSetModel", GAMEMODE, self)
-
 	hook.Run("TTTPlayerSetColor", self)
 
 	-- wrong alive status and not a willing spec who unforced after prep started
@@ -493,7 +492,19 @@ local function FindCorpsePosition(corpse)
 	return false
 end
 
-AccessorFunc(plymeta, "subroleModel", "SubRoleModel", FORCE_BOOL)
+function plymeta:GetSubRoleModel()
+	return self.subroleModel
+end
+
+function plymeta:SetSubRoleModel(mdl)
+	if mdl then
+		self.nonsubroleModel = self.nonsubroleModel or self:GetModel()
+		self.subroleModel = mdl
+	else
+		self.nonsubroleModel = nil
+		self.subroleModel = nil
+	end
+end
 
 function plymeta:Revive(delay, fn, check, needcorpse, force)
 	local ply = self
