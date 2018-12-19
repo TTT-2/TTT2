@@ -338,7 +338,8 @@ end
 -- Preps a player for a new round, spawning them if they should. If dead_only is
 -- true, only spawns if player is dead, else just makes sure he is healed.
 function plymeta:SpawnForRound(dead_only)
-	hook.Run("PlayerSetModel", self)
+	hook.Call("PlayerSetModel", GAMEMODE, self)
+
 	hook.Run("TTTPlayerSetColor", self)
 
 	-- wrong alive status and not a willing spec who unforced after prep started
@@ -531,7 +532,7 @@ function plymeta:Revive(delay, fn, check, needcorpse, force)
 				ply:SpawnForRound(true)
 			end
 
-			hook.Run("PlayerLoadout", ply)
+			hook.Call("PlayerLoadout", GAMEMODE, ply)
 
 			ply:SetMaxHealth(100)
 

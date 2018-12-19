@@ -310,7 +310,7 @@ end
 
 function GM:UpdatePlayerLoadouts()
 	for _, ply in ipairs(player.GetAll()) do
-		hook.Run("PlayerLoadout", ply)
+		hook.Call("PlayerLoadout", GAMEMODE, ply)
 	end
 end
 
