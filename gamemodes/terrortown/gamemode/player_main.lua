@@ -290,7 +290,7 @@ function GM:PlayerSetModel(ply, forced)
 	if not mdl or mdl == "models/player.mdl" then
 		if forced then return end
 
-		if PS and ply:GetModel() and ply:GetModel() ~= "models/player.mdl" then -- pointshop activated?
+		if (PS or Pointshop2) and ply:GetModel() and ply:GetModel() ~= "models/player.mdl" then -- pointshop activated?
 			mdl = ply:GetModel()
 		else
 			mdl = GAMEMODE.playermodel or "models/player/phoenix.mdl"
