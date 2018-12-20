@@ -499,11 +499,9 @@ end
 function plymeta:SetSubRoleModel(mdl)
 	if mdl then
 		self.nonsubroleModel = self.nonsubroleModel or self:GetModel()
-		self.subroleModel = mdl
-	else
-		self.nonsubroleModel = nil
-		self.subroleModel = nil
 	end
+
+	self.subroleModel = mdl
 end
 
 function plymeta:Revive(delay, fn, check, needcorpse, force)
