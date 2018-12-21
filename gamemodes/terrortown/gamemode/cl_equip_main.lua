@@ -317,7 +317,7 @@ local function TraitorMenuPopup()
 	SortEquipmentTable(items)
 
 	if #items == 0 then
-		ply:ChatPrint("[TTT2][SHOP] You need to run 'weaponshop' as admin in the developer console to create a shop for this role. Link it with another shop or click on the icons to add weapons and items to the shop.")
+		ply:ChatPrint("[TTT2][SHOP] You need to run 'shopeditor' as admin in the developer console to create a shop for this role. Link it with another shop or click on the icons to add weapons and items to the shop.")
 	end
 
 	-- temp table for sorting

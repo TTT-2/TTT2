@@ -1,22 +1,22 @@
 util.AddNetworkString("newshop")
 
-local function Weaponshop(ply, cmd, args)
+local function ShopEditor(ply, cmd, args)
 	if ply:IsAdmin() then
 		net.Start("newshop")
 		net.Send(ply)
 	end
 end
-concommand.Add("Weaponshop", Weaponshop)
+concommand.Add("ShopEditor", ShopEditor)
 
 -- TODO rebuild with database handling instead of dini file creation like
-function WeaponshopHasEquipment(roleData, equip)
+function ShopEditorHasEquipment(roleData, equip)
 	local rolename = string.lower(roleData.name)
 	local filename = "roleweapons/" .. rolename .. "/" .. equip .. ".txt"
 
 	return file.Exists(filename, "DATA")
 end
 
-function AddToWeaponshop(ply, roleData, equip)
+function AddToShopEditor(ply, roleData, equip)
 	local rolename = string.lower(roleData.name)
 	local filename = "roleweapons/" .. rolename .. "/" .. equip .. ".txt"
 
@@ -42,7 +42,7 @@ function AddToWeaponshop(ply, roleData, equip)
 	end
 end
 
-function RemoveFromWeaponshop(ply, roleData, equip)
+function RemoveFromShopEditor(ply, roleData, equip)
 	local rolename = string.lower(roleData.name)
 	local filename = "roleweapons/" .. rolename .. "/" .. equip .. ".txt"
 
@@ -76,9 +76,9 @@ local function shop(len, ply)
 	local rd = GetRoleByIndex(subrole)
 
 	if add then
-		AddToWeaponshop(ply, rd, equip)
+		AddToShopEditor(ply, rd, equip)
 	else
-		RemoveFromWeaponshop(ply, rd, equip)
+		RemoveFromShopEditor(ply, rd, equip)
 	end
 end
 net.Receive("shop", shop)
@@ -169,7 +169,7 @@ function OnChangeWSCVar(subrole, fallback, ply_or_rf)
 	end
 end
 
-function SetupWeaponshopCVars()
+function SetupShopEditorCVars()
 	for _, v in pairs(GetRoles()) do
 		local _func = function(convar_name, value_old, value_new)
 			if value_old ~= value_new then

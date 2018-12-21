@@ -26,7 +26,7 @@ TTTFiles = {
 	cl_transfer = {file = "cl_transfer_main.lua", on = "client"},
 	cl_voice = {file = "cl_voice_main.lua", on = "client"},
 	cl_wepswitch = {file = "cl_wepswitch_main.lua", on = "client"},
-	cl_weaponshop = {file = "cl_weaponshop_main.lua", on = "client"},
+	cl_shopeditor = {file = "cl_shopeditor_main.lua", on = "client"},
 	equip_items_shd = {file = "equip_items_shd_main.lua", on = "shared"},
 	lang_shd = {file = "lang_shd_main.lua", on = "shared"},
 	player_ext_shd = {file = "player_ext_shd_main.lua", on = "shared"},
@@ -64,7 +64,7 @@ if SERVER then
 		traitor_state = {file = "traitor_state_main.lua", on = "server"},
 		voice = {file = "voice_main.lua", on = "server"},
 		weaponry = {file = "weaponry_main.lua", on = "server"},
-		weaponshop = {file = "weaponshop_main.lua", on = "server"}
+		shopeditor = {file = "shopeditor_main.lua", on = "server"}
 	}
 
 	table.Merge(TTTFiles, tmp)

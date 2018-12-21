@@ -1,11 +1,12 @@
 local Equipmentnew
 local SafeTranslate = LANG.TryTranslation
+local ShopEditor = {}
 
-local function ItemIsWeapon(item)
+function ShopEditor.ItemIsWeapon(item)
 	return not tonumber(item.id)
 end
 
-function GetEquipmentForRoleAll()
+function ShopEditor.GetEquipmentForRoleAll()
 	-- need to build equipment cache?
 	if not Equipmentnew then
 		-- start with all the non-weapon goodies
@@ -18,11 +19,12 @@ function GetEquipmentForRoleAll()
 			"bobs_blacklisted"
 		}
 
-		hook.Run("TTT2ModifyWepShopIgnoreWeps", eject) -- possibility to modify from externally
+		hook.Run("TTT2ModifyShopEditorIgnoreSWEPs", eject) -- possibility to modify from externally
 
 		-- find buyable weapons to load info from
 		for _, v in ipairs(weapons.GetList()) do
 			local name = WEPS.GetClass(v)
+
 			if name
 			and not v.Doublicated
 			and not string.match(name, "base")
@@ -62,7 +64,51 @@ function GetEquipmentForRoleAll()
 	return Equipmentnew
 end
 
-local function newshop()
+function ShopEditor.CreateShopEditor()
+	local w, h = 500, 450
+
+	local frame = vgui.Create("DFrame")
+	frame:SetPos(50, 50)
+	frame:SetSize(w, h)
+	frame:SetTitle("Shop Editor")
+	frame:SetVisible(true)
+	frame:SetDraggable(true)
+	frame:ShowCloseButton(true)
+	frame:MakePopup()
+
+	function frame:Paint(w2, h2)
+		draw.RoundedBox(0, 0, 0, w2, h2, Color(100, 100, 100))
+	end
+
+	local wMul = w / 3
+
+	local buttonEditItems = vgui.Create("DButton", frame)
+	buttonEditItems:SetText("Edit Items")
+	buttonEditItems:SetPos(0, 0)
+	buttonEditItems:SetSize(wMul, 450)
+	buttonEditItems.DoClick = function()
+		RunConsoleCommand("say", "Hi")
+	end
+
+	local buttonOptions = vgui.Create("DButton", frame)
+	buttonOptions:SetText("Options")
+	buttonOptions:SetPos(wMul, 0)
+	buttonOptions:SetSize(wMul, 450)
+	buttonOptions.DoClick = function()
+		RunConsoleCommand("say", "Hi")
+	end
+
+	local buttonLinkShops = vgui.Create("DButton", frame)
+	buttonLinkShops:SetText("Link / Disable / Create")
+	buttonLinkShops:SetPos(wMul * 2, 0)
+	buttonLinkShops:SetSize(wMul, 450)
+	buttonLinkShops.DoClick = function()
+		RunConsoleCommand("say", "Hi")
+	end
+end
+net.Receive("newshop", ShopEditor.CreateShopEditor)
+
+function ShopEditor.newshop()
 	local sr = GetShopRoles()[1]
 	local selectedRole = sr.index
 	local state = true
@@ -72,7 +118,7 @@ local function newshop()
 	local DermaPanel = vgui.Create("DFrame")
 	DermaPanel:SetPos(50, 50)
 	DermaPanel:SetSize(w + descW, h)
-	DermaPanel:SetTitle("Weapon Shop Editor")
+	DermaPanel:SetTitle("Shop Editor")
 	DermaPanel:SetVisible(true)
 	DermaPanel:SetDraggable(true)
 	DermaPanel:ShowCloseButton(true)
@@ -83,7 +129,7 @@ local function newshop()
 	end
 
 	function DermaPanel:OnClose()
-		LocalPlayer().weaponshopList = nil
+		LocalPlayer().shopeditor = nil
 	end
 
 	local DScrollPanel = vgui.Create("DScrollPanel", DermaPanel)
@@ -130,7 +176,7 @@ local function newshop()
 	end
 
 	local ply = LocalPlayer()
-	local items = GetEquipmentForRoleAll()
+	local items = ShopEditor.GetEquipmentForRoleAll()
 
 	SortEquipmentTable(items)
 
@@ -139,14 +185,14 @@ local function newshop()
 
 		-- Create icon panel
 		if item.material and item.material ~= "vgui/ttt/icon_id" then
-			if not ItemIsWeapon(item) then
+			if not ShopEditor.ItemIsWeapon(item) then
 				ic = vgui.Create("SimpleClickIcon", dlist)
 			else
 				ic = vgui.Create("LayeredClickIcon", dlist)
 			end
 
 			-- Slot marker icon
-			if ItemIsWeapon(item) then
+			if ShopEditor.ItemIsWeapon(item) then
 				local slot = vgui.Create("SimpleClickIconLabelled")
 				slot:SetIcon("vgui/ttt/slotcap")
 				slot:SetIconColor(sr.color or COLOR_GREY)
@@ -274,7 +320,7 @@ local function newshop()
 		end
 	end
 
-	ply.weaponshopList = dlist
+	ply.shopeditor = dlist
 
 	-- first init
 	for _, v in pairs(dlist:GetItems()) do
@@ -378,9 +424,9 @@ local function newshop()
 		fbmenu:RefreshChoices()
 	end
 end
-net.Receive("newshop", newshop)
+--net.Receive("newshop", ShopEditor.newshop)
 
-local function shopFallbackAnsw(len)
+function ShopEditor.shopFallbackAnsw(len)
 	local subrole = net.ReadUInt(ROLE_BITS)
 	local fb = net.ReadString()
 
@@ -422,9 +468,9 @@ local function shopFallbackAnsw(len)
 		end
 	end
 end
-net.Receive("shopFallbackAnsw", shopFallbackAnsw)
+net.Receive("shopFallbackAnsw", ShopEditor.shopFallbackAnsw)
 
-local function shopFallbackReset(len)
+function ShopEditor.shopFallbackReset(len)
 	for _, v in ipairs(weapons.GetList()) do
 		v.CanBuy = {}
 	end
@@ -460,10 +506,11 @@ local function shopFallbackReset(len)
 		end
 	end
 end
-net.Receive("shopFallbackReset", shopFallbackReset)
+net.Receive("shopFallbackReset", ShopEditor.shopFallbackReset)
 
-local function shopFallbackRefresh(len)
-	local wshop = LocalPlayer().weaponshopList
+function ShopEditor.shopFallbackRefresh(len)
+	local wshop = LocalPlayer().shopeditor
+
 	if wshop and wshop.GetItems then
 		if not wshop.selectedRole then return end
 
@@ -494,4 +541,4 @@ local function shopFallbackRefresh(len)
 		end
 	end
 end
-net.Receive("shopFallbackRefresh", shopFallbackRefresh)
+net.Receive("shopFallbackRefresh", ShopEditor.shopFallbackRefresh)

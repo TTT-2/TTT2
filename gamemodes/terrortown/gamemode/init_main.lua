@@ -18,7 +18,7 @@ ttt_include("corpse")
 ttt_include("player_ext_shd")
 ttt_include("player_ext")
 ttt_include("player")
-ttt_include("weaponshop")
+ttt_include("shopeditor")
 
 CreateConVar("ttt_roundtime_minutes", "10", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 CreateConVar("ttt_preptime_seconds", "30", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
@@ -187,7 +187,7 @@ function GM:Initialize()
 	MsgN("Trouble In Terrorist Town 2 gamemode initializing...")
 	ShowVersion()
 
-	SetupWeaponshopCVars()
+	SetupShopEditorCVars()
 
 	hook.Run("TTT2Initialize")
 
