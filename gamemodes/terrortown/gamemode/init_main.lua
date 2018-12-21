@@ -1061,6 +1061,21 @@ function GetPreSelectedRole(subrole)
 end
 
 function GetSelectableRoles(plys, max_plys)
+	if not plys then
+		local tmp = {}
+
+		for _, v in ipairs(player.GetAll()) do
+			-- everyone on the spec team is in specmode
+			if IsValid(v) and not v:GetForceSpec() and (not plys or table.HasValue(plys, v)) and not hook.Run("TTT2DisableRoleSelection", v) then
+				tmp[#tmp + 1] = v
+			end
+		end
+
+		plys = tmp
+	end
+
+	max_plys = max_plys or #plys
+
 	if max_plys < 2 then return end
 
 	if SELECTABLEROLES then
