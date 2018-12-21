@@ -1121,7 +1121,7 @@ function GetSelectableRoles(plys, max_plys)
 
 						strTmp = "ttt_" .. rd.name .. "_random"
 
-						local r = (ConVarExists(strTmp) and GetConVar(strTmp):GetInt()) or 0
+						local r = ConVarExists(strTmp) and GetConVar(strTmp):GetInt() or 0
 
 						DEBUGP("00000C_2")
 
@@ -1159,7 +1159,7 @@ function GetSelectableRoles(plys, max_plys)
 
 				strTmp = "ttt_" .. v.name .. "_random"
 
-				local r = (ConVarExists(strTmp) and GetConVar(strTmp):GetInt()) or 0
+				local r = ConVarExists(strTmp) and GetConVar(strTmp):GetInt() or 0
 
 				DEBUGP("00000C")
 
@@ -1271,7 +1271,7 @@ local function SetRoleTypes(choices, prev_roles, roleCount, availableRoles, defa
 
 			strTmp = "ttt_" .. v.name .. "_karma_min"
 
-			local min_karmas = (ConVarExists(strTmp) and GetConVar(strTmp):GetInt()) or 0
+			local min_karmas = ConVarExists(strTmp) and GetConVar(strTmp):GetInt() or 0
 
 			-- if player was last round innocent, he will be another role (if he has enough karma)
 			if choices_i <= type_count or (
@@ -1407,7 +1407,7 @@ local function SelectBaseRole(choices, prev_roles, roleCount, roleData)
 
 		strTmp = "ttt_" .. roleData.name .. "_karma_min"
 
-		local min_karmas = (ConVarExists(strTmp) and GetConVar(strTmp):GetInt()) or 0
+		local min_karmas = ConVarExists(strTmp) and GetConVar(strTmp):GetInt() or 0
 
 		-- give this guy the role if he was not this role last time, or if he makes
 		-- a roll

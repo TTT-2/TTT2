@@ -95,7 +95,7 @@ local function GetAmmo(ply)
 		return - 1
 	end
 
-	local ammo_inv = (weap.Ammo1 and weap:Ammo1()) or 0
+	local ammo_inv = weap.Ammo1 and weap:Ammo1() or 0
 	local ammo_clip = weap:Clip1() or 0
 	local ammo_max = weap.Primary.ClipSize or 0
 

@@ -93,6 +93,14 @@ function CreateChanges()
 	- fixed toggling role issue
 	- fixed loadout doubling issue
 	]])
+
+	AddChange("0.3.7.4b", [[
+	- fixed playermodel reset bug (+ compatibility with PointShop 1)
+	- fixed external HUD support
+	- fixed credits bug
+	- fixed detective hat bug
+	- fixed selection and jester selection bug
+	]])
 end
 
 function ShowChanges()

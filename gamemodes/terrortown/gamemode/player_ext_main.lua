@@ -73,11 +73,11 @@ function plymeta:SetDefaultCredits()
 		local name = rd.index == ROLE_TRAITOR and "ttt_credits_starting" or "ttt_" .. rd.abbr .. "_credits_starting"
 
 		if self:HasTeam(TEAM_TRAITOR) then
-			local c = (ConVarExists(name) and GetConVar(name):GetFloat()) or 0
+			local c = ConVarExists(name) and GetConVar(name):GetFloat() or 0
 			local member_count = #GetTeamMembers(TEAM_TRAITOR)
 
 			if not rd.preventTraitorAloneCredits and member_count == 1 then
-				c = c + (ConVarExists("ttt_credits_alonebonus") and GetConVar("ttt_credits_alonebonus"):GetFloat()) or 0
+				c = c + (ConVarExists("ttt_credits_alonebonus") and GetConVar("ttt_credits_alonebonus"):GetFloat() or 0)
 			end
 
 			c = math.ceil(c)
@@ -92,7 +92,7 @@ function plymeta:SetDefaultCredits()
 
 			self:SetCredits(c)
 		else
-			self:SetCredits(math.ceil((ConVarExists(name) and GetConVar(name):GetFloat()) or 0))
+			self:SetCredits(math.ceil(ConVarExists(name) and GetConVar(name):GetFloat() or 0))
 		end
 	else
 		self:SetCredits(0)
@@ -436,7 +436,7 @@ function plymeta:GetAvoidRole(role)
 end
 
 function plymeta:CanSelectRole(roleData, choice_count, role_count)
-	local min_karmas = (ConVarExists("ttt_" .. roleData.name .. "_karma_min") and GetConVar("ttt_" .. roleData.name .. "_karma_min"):GetInt()) or 0
+	local min_karmas = ConVarExists("ttt_" .. roleData.name .. "_karma_min") and GetConVar("ttt_" .. roleData.name .. "_karma_min"):GetInt() or 0
 
 	return (
 		choice_count <= role_count

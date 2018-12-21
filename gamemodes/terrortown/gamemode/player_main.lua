@@ -570,7 +570,7 @@ local function CheckCreditAward(victim, attacker)
 
 	-- DET KILLED ANOTHER TEAM AWARD
 	if attacker:GetBaseRole() == ROLE_DETECTIVE and not victim:IsInTeam(attacker) then
-		local amt = (ConVarExists("ttt_" .. rd.abbr .. "_credits_traitordead") and GetConVar("ttt_" .. rd.abbr .. "_credits_traitordead"):GetInt()) or 1
+		local amt = math.ceil(ConVarExists("ttt_" .. rd.abbr .. "_credits_traitordead") and GetConVar("ttt_" .. rd.abbr .. "_credits_traitordead"):GetInt() or 1)
 
 		for _, ply in ipairs(player.GetAll()) do
 			if ply:IsActive() and ply:IsShopper() and ply:GetBaseRole() == ROLE_DETECTIVE then
@@ -612,7 +612,7 @@ local function CheckCreditAward(victim, attacker)
 
 		if not ConVarExists("ttt_credits_award_pct") or pct >= GetConVar("ttt_credits_award_pct"):GetFloat() then
 			-- Traitors have killed sufficient people to get an award
-			local amt = (ConVarExists("ttt_credits_award_size") and GetConVar("ttt_credits_award_size"):GetFloat()) or 0
+			local amt = math.ceil(ConVarExists("ttt_credits_award_size") and GetConVar("ttt_credits_award_size"):GetFloat() or 0)
 
 			-- If size is 0, awards are off
 			if amt > 0 then
