@@ -5,6 +5,7 @@ surface.CreateFont("Trebuchet22", {font = "Trebuchet MS", size = 22, weight = 90
 
 ttt_include("shared")
 ttt_include("sh_init")
+ttt_include("sh_shopeditor")
 ttt_include("scoring_shd")
 ttt_include("corpse_shd")
 ttt_include("player_ext_shd")
@@ -66,6 +67,15 @@ function GM:InitPostEntity()
 
 	-- initialize all items
 	InitAllItems()
+
+	-- initialize the default data
+	for _, eq in ipairs(ALL_ITEMS) do
+		ShopEditor.InitDefaultData(eq)
+	end
+
+	for _, wep in ipairs(weapons.GetList()) do
+		ShopEditor.InitDefaultData(wep)
+	end
 
 	-- reset normal equipment tables
 	for _, role in pairs(GetRoles()) do

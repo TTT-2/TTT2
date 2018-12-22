@@ -1,6 +1,6 @@
 util.AddNetworkString("newshop")
 
-local function ShopEditor(ply, cmd, args)
+function ShopEditor.ShopEditor(ply, cmd, args)
 	if ply:IsAdmin() then
 		net.Start("newshop")
 		net.Send(ply)
@@ -9,14 +9,14 @@ end
 concommand.Add("ShopEditor", ShopEditor)
 
 -- TODO rebuild with database handling instead of dini file creation like
-function ShopEditorHasEquipment(roleData, equip)
+function ShopEditor.ShopEditorHasEquipment(roleData, equip)
 	local rolename = string.lower(roleData.name)
 	local filename = "roleweapons/" .. rolename .. "/" .. equip .. ".txt"
 
 	return file.Exists(filename, "DATA")
 end
 
-function AddToShopEditor(ply, roleData, equip)
+function ShopEditor.AddToShopEditor(ply, roleData, equip)
 	local rolename = string.lower(roleData.name)
 	local filename = "roleweapons/" .. rolename .. "/" .. equip .. ".txt"
 
@@ -42,7 +42,7 @@ function AddToShopEditor(ply, roleData, equip)
 	end
 end
 
-function RemoveFromShopEditor(ply, roleData, equip)
+function ShopEditor.RemoveFromShopEditor(ply, roleData, equip)
 	local rolename = string.lower(roleData.name)
 	local filename = "roleweapons/" .. rolename .. "/" .. equip .. ".txt"
 
@@ -76,9 +76,9 @@ local function shop(len, ply)
 	local rd = GetRoleByIndex(subrole)
 
 	if add then
-		AddToShopEditor(ply, rd, equip)
+		ShopEditor.AddToShopEditor(ply, rd, equip)
 	else
-		RemoveFromShopEditor(ply, rd, equip)
+		ShopEditor.RemoveFromShopEditor(ply, rd, equip)
 	end
 end
 net.Receive("shop", shop)
@@ -107,7 +107,7 @@ local function TTT2SESaveItem(_, ply)
 	net.WriteUInt(credits, 16)
 	net.Broadcast()
 
-	-- TODO SAVE items here and LOAD items on init
+	ShopEditor.SaveItem(equip, item, {"credits"})
 end
 net.Receive("TTT2SESaveItem", TTT2SESaveItem)
 

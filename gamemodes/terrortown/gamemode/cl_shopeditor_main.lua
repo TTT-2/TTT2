@@ -4,7 +4,6 @@ local COLOR_GREY = COLOR_GREY or Color(120, 120, 120, 255)
 
 local Equipmentnew
 local SafeTranslate = LANG.TryTranslation
-local ShopEditor = {}
 
 function ShopEditor.ItemIsWeapon(item)
 	return not tonumber(item.id)

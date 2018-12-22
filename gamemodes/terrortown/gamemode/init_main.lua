@@ -1,6 +1,7 @@
 ---- Trouble in Terrorist Town 2
 ttt_include("shared")
 ttt_include("sh_init")
+ttt_include("sh_shopeditor")
 
 ttt_include("karma")
 ttt_include("entity")
@@ -18,6 +19,7 @@ ttt_include("corpse")
 ttt_include("player_ext_shd")
 ttt_include("player_ext")
 ttt_include("player")
+ttt_include("shopeditor_sql")
 ttt_include("shopeditor")
 
 CreateConVar("ttt_roundtime_minutes", "10", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
@@ -267,6 +269,42 @@ function GM:InitPostEntity()
 
 	-- initialize all items
 	InitAllItems()
+
+	-- load and initialize all SWEPS and all items from database
+	if ShopEditor.CreateSqlTable() then
+		local savedKeys = {
+			"credits",
+			"limited"
+		}
+
+		for _, eq in ipairs(ALL_ITEMS) do
+			local name = GetEquipmentFileName(eq.id)
+
+			ShopEditor.InitDefaultData(eq)
+
+			local loaded, changed = ShopEditor.LoadItem(name, eq, savedKeys)
+
+			if not loaded then
+				ShopEditor.InitItem(name, eq, savedKeys)
+			elseif changed then
+				-- TODO sync with client
+			end
+		end
+
+		for _, wep in ipairs(weapons.GetList()) do
+			local name = GetEquipmentFileName(wep.name)
+
+			ShopEditor.InitDefaultData(wep)
+
+			local loaded, changed = ShopEditor.LoadItem(name, wep, savedKeys)
+
+			if not loaded then
+				ShopEditor.InitItem(name, wep, savedKeys)
+			elseif changed then
+				-- TODO sync with client
+			end
+		end
+	end
 
 	-- reset normal equipment tables
 	for _, role in pairs(GetRoles()) do
