@@ -151,6 +151,7 @@ util.AddNetworkString("TTT_Spectate")
 util.AddNetworkString("TTT2TestRole")
 util.AddNetworkString("TTT2SyncShopsWithServer")
 util.AddNetworkString("TTT2DevChanges")
+util.AddNetworkString("TTT2SyncDBItems")
 
 local buggyAddons = {
 	["656662924"] = "1367128301", -- Killer Notifier by nerzlakai96
@@ -287,7 +288,10 @@ function GM:InitPostEntity()
 			if not loaded then
 				ShopEditor.InitItem(name, eq, savedKeys)
 			elseif changed then
-				-- TODO sync with client
+				net.Start("TTT2SyncDBItems")
+				net.WriteString(name)
+				net.WriteUInt(eq.credits, 16)
+				net.Broadcast()
 			end
 		end
 
@@ -301,7 +305,10 @@ function GM:InitPostEntity()
 			if not loaded then
 				ShopEditor.InitItem(name, wep, savedKeys)
 			elseif changed then
-				-- TODO sync with client
+				net.Start("TTT2SyncDBItems")
+				net.WriteString(name)
+				net.WriteUInt(wep.credits, 16)
+				net.Broadcast()
 			end
 		end
 	end
