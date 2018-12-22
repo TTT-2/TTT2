@@ -3,7 +3,7 @@
 
 if SERVER then
 	-- logo
-	resource.AddFile("materials/vgui/ttt/score_logo.vmt")
+	resource.AddFile("materials/vgui/ttt/score_logo_2.vmt")
 
 	-- BEM
 	resource.AddFile("materials/vgui/ttt/equip/coin.png")

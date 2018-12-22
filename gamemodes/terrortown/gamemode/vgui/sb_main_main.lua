@@ -19,7 +19,7 @@ CreateClientConVar("ttt_scoreboard_sorting", "name", true, false, "name | role |
 CreateClientConVar("ttt_scoreboard_ascending", "1", true, false, "Should scoreboard ordering be in ascending order")
 
 local PANEL = {}
-local logo = surface.GetTextureID("vgui/ttt/score_logo")
+local logo = surface.GetTextureID("vgui/ttt/score_logo_2")
 
 surface.CreateFont("cool_small", {
 		font = "coolvetica",
