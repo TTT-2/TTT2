@@ -185,6 +185,8 @@ local buggyAddons = {
 	["1215502383"] = "" -- Custom Roles by Noxx
 }
 
+CHANGED_EQUIPMENT = {}
+
 ---- Round mechanics
 function GM:Initialize()
 	MsgN("Trouble In Terrorist Town 2 gamemode initializing...")
@@ -288,14 +290,11 @@ function GM:InitPostEntity()
 			if not loaded then
 				ShopEditor.InitItem(name, eq, savedKeys)
 			elseif changed then
-				net.Start("TTT2SyncDBItems")
-				net.WriteString(name)
-				net.WriteUInt(eq.credits, 16)
-				net.Broadcast()
+				CHANGED_EQUIPMENT[#CHANGED_EQUIPMENT + 1] = eq
 			end
 		end
 
-		for _, wep in ipairs(weapons.GetList()) do
+		for _, wep in ipairs(ALL_WEAPONS) do
 			local name = GetEquipmentFileName(wep.name)
 
 			ShopEditor.InitDefaultData(wep)
@@ -305,10 +304,7 @@ function GM:InitPostEntity()
 			if not loaded then
 				ShopEditor.InitItem(name, wep, savedKeys)
 			elseif changed then
-				net.Start("TTT2SyncDBItems")
-				net.WriteString(name)
-				net.WriteUInt(wep.credits, 16)
-				net.Broadcast()
+				CHANGED_EQUIPMENT[#CHANGED_EQUIPMENT + 1] = wep
 			end
 		end
 	end

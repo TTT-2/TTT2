@@ -39,6 +39,7 @@ local mat_dir = "vgui/ttt/"
 EquipmentItems = {}
 SYNC_EQUIP = {}
 ALL_ITEMS = {}
+ALL_WEAPONS = {}
 
 function SetupEquipment()
 	local armor = {
@@ -87,7 +88,13 @@ end
 SetupEquipment() -- pre init to support normal TTT addons
 
 function GetEquipmentWeaponBase(data, eq, name)
-	return {
+	for _, wep in ipairs(ALL_WEAPONS) do
+		if wep.name == name then
+			return wep
+		end
+	end
+
+	local tbl = {
 		id = name,
 		name = name,
 		PrintName = data.name or data.PrintName or eq.PrintName or name,
@@ -103,6 +110,10 @@ function GetEquipmentWeaponBase(data, eq, name)
 		is_item = false,
 		credits = data.credits or eq.credits
 	}
+
+	ALL_WEAPONS[#ALL_WEAPONS + 1] = tbl
+
+	return tbl
 end
 
 function CreateEquipmentWeapon(eq)

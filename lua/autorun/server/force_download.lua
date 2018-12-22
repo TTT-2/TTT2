@@ -2,6 +2,10 @@
 -- If you are distributing those files via FastDL, comment out the line below.
 
 if SERVER then
+	-- logo
+	resource.AddFile("materials/vgui/ttt/score_logo.vmt")
+
+	-- BEM
 	resource.AddFile("materials/vgui/ttt/equip/coin.png")
 	resource.AddFile("materials/vgui/ttt/equip/briefcase.png")
 	resource.AddFile("materials/vgui/ttt/equip/package.png")

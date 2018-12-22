@@ -85,29 +85,12 @@ net.Receive("shop", shop)
 
 util.AddNetworkString("TTT2SESaveItem")
 local function TTT2SESaveItem(_, ply)
-	local eq = net.ReadString()
-	local equip = GetEquipmentFileName(eq)
-
-	local item = GetEquipmentItemByFileName(equip)
-	if not item then
-		item = GetWeaponNameByFileName(equip)
-		if item then
-			item = weapons.GetStored(item)
-		end
-	end
+	local name, item = ShopEditor.ReadItemData()
 
 	if not item then return end
 
-	local credits = net.ReadUInt(16)
-
-	item.credits = credits
-
-	net.Start("TTT2SESaveItem")
-	net.WriteString(eq)
-	net.WriteUInt(credits, 16)
-	net.Broadcast()
-
-	ShopEditor.SaveItem(equip, item, {"credits"})
+	ShopEditor.WriteItemData("TTT2SESaveItem", item)
+	ShopEditor.SaveItem(name, item, ShopEditor.savingKeys)
 end
 net.Receive("TTT2SESaveItem", TTT2SESaveItem)
 

@@ -21,6 +21,10 @@ function GM:PlayerInitialSpawn(ply)
 
 	ply:InitialSpawn()
 
+	for _, equip in ipairs(CHANGED_EQUIPMENT) do
+		ShopEditor.WriteItemData("TTT2SyncDBItems", equip)
+	end
+
 	local rstate = GetRoundState() or ROUND_WAIT
 	-- We should update the traitor list, if we are not about to send it
 	-- sending roles for spectators

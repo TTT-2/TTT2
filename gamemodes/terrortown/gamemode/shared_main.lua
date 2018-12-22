@@ -684,39 +684,12 @@ end
 
 DefaultEquipment = GetDefaultEquipment()
 
-TTTWEAPON_CVARS = {}
-
-function SWEPAddConVar(swep, tbl)
-	local cls = WEPS.GetClass(swep)
-
-	if SERVER then
-		CreateConVar(tbl.cvar, tbl.value, tbl.flags)
-	end
-
-	TTTWEAPON_CVARS[cls] = TTTWEAPON_CVARS[cls] or {}
-
-	table.insert(TTTWEAPON_CVARS[cls], tbl)
-end
-
 function SWEPIsBuyable(wepCls)
 	if not wepCls then
 		return false
 	end
 
-	local name = "t32_" .. wepCls .. "_imp"
-
-	if CLIENT then
-		name = "rep_" .. name
-	end
-
-	local cv = GetConVar(name)
-	if cv then
-		local i = cv:GetInt() or 0
-
-		if i < 2 then
-			return true
-		end
-
+	if wepCls.minPlayers and wepCls.minPlayers > 1 then
 		local choices = {}
 
 		for _, v in ipairs(player.GetAll()) do
@@ -726,24 +699,10 @@ function SWEPIsBuyable(wepCls)
 			end
 		end
 
-		if #choices < i then
+		if #choices < wepCls.minPlayers then
 			return false
 		end
 	end
 
 	return true
-end
-
-function RegisterNormalWeapon(wep)
-	if wep.MinPlayers then
-		local tbl = {}
-		tbl.cvar = "t32_" .. WEPS.GetClass(wep) .. "_imp"
-		tbl.value = tostring(wep.MinPlayers)
-		tbl.flags = {FCVAR_NOTIFY, FCVAR_ARCHIVE}
-		tbl.slider = true
-		tbl.desc = "Available if there are more than ... players"
-		tbl.max = 64
-
-		SWEPAddConVar(wep, tbl)
-	end
 end

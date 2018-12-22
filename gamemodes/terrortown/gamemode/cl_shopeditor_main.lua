@@ -178,16 +178,15 @@ function ShopEditor.EditItem(item)
 	saveButton:SizeToContents()
 
 	saveButton.DoClick = function()
-		net.Start("TTT2SESaveItem")
+		local wTable = {
+			id = item.id,
+			name = item.name,
+			credits = credits,
+			minPlayers = item.minPlayers,
+			limited = item.limited
+		}
 
-		if tonumber(item.id) then
-			net.WriteString(item.name)
-		else
-			net.WriteString(item.id)
-		end
-
-		net.WriteUInt(credits, 16)
-		net.SendToServer()
+		ShopEditor.WriteItemData("TTT2SESaveItem", wTable)
 	end
 
 	frame:MakePopup()

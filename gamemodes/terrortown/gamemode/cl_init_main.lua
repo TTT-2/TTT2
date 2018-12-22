@@ -346,22 +346,7 @@ function GM:CleanUpMap()
 end
 
 net.Receive("TTT2SyncDBItems", function()
-	local eq = net.ReadString()
-	local equip = GetEquipmentFileName(eq)
-
-	local item = GetEquipmentItemByFileName(equip)
-	if not item then
-		item = GetWeaponNameByFileName(equip)
-		if item then
-			item = weapons.GetStored(item)
-		end
-	end
-
-	if not item then return end
-
-	local credits = net.ReadUInt(16)
-
-	item.credits = credits
+	ShopEditor.ReadItemData()
 end)
 
 -- server tells us to call this when our LocalPlayer has spawned
