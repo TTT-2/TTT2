@@ -192,7 +192,7 @@ function GM:Initialize()
 	MsgN("Trouble In Terrorist Town 2 gamemode initializing...")
 	ShowVersion()
 
-	SetupShopEditorCVars()
+	ShopEditor.SetupShopEditorCVars()
 
 	hook.Run("TTT2Initialize")
 

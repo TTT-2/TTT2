@@ -6,7 +6,7 @@ function ShopEditor.ShopEditor(ply, cmd, args)
 		net.Send(ply)
 	end
 end
-concommand.Add("ShopEditor", ShopEditor)
+concommand.Add("shopeditor", ShopEditor.ShopEditor)
 
 -- TODO rebuild with database handling instead of dini file creation like
 function ShopEditor.ShopEditorHasEquipment(roleData, equip)
@@ -108,7 +108,7 @@ local function shopFallback(len, ply)
 end
 net.Receive("shopFallback", shopFallback)
 
-function OnChangeWSCVar(subrole, fallback, ply_or_rf)
+function ShopEditor.OnChangeWSCVar(subrole, fallback, ply_or_rf)
 	local rd = GetRoleByIndex(subrole)
 
 	-- reset equipment
@@ -180,13 +180,13 @@ function OnChangeWSCVar(subrole, fallback, ply_or_rf)
 	end
 end
 
-function SetupShopEditorCVars()
+function ShopEditor.SetupShopEditorCVars()
 	for _, v in pairs(GetRoles()) do
 		local _func = function(convar_name, value_old, value_new)
 			if value_old ~= value_new then
 				print(convar_name .. ": Changing fallback from " .. value_old .. " to " .. value_new)
 				SetGlobalString("ttt_" .. v.abbr .. "_shop_fallback", value_new)
-				OnChangeWSCVar(v.index, value_new)
+				ShopEditor.OnChangeWSCVar(v.index, value_new)
 			end
 		end
 
