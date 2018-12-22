@@ -37,6 +37,7 @@ TTTFiles = {
 	vgui__coloredbox = {file = "vgui/coloredbox_main.lua", on = "client"},
 	vgui__droleimage = {file = "vgui/droleimage_main.lua", on = "client"},
 	vgui__simpleicon = {file = "vgui/simpleicon_main.lua", on = "client"},
+	vgui__shopeditor_buttons = {file = "vgui/shopeditor_buttons_main.lua", on = "client"},
 	vgui__simpleclickicon = {file = "vgui/simpleclickicon_main.lua", on = "client"},
 	vgui__progressbar = {file = "vgui/progressbar_main.lua", on = "client"},
 	vgui__scrolllabel = {file = "vgui/scrolllabel_main.lua", on = "client"},

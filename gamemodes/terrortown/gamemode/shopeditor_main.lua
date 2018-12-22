@@ -83,6 +83,34 @@ local function shop(len, ply)
 end
 net.Receive("shop", shop)
 
+util.AddNetworkString("TTT2SESaveItem")
+local function TTT2SESaveItem(_, ply)
+	local eq = net.ReadString()
+	local equip = GetEquipmentFileName(eq)
+
+	local item = GetEquipmentItemByFileName(equip)
+	if not item then
+		item = GetWeaponNameByFileName(equip)
+		if item then
+			item = weapons.GetStored(item)
+		end
+	end
+
+	if not item then return end
+
+	local credits = net.ReadUInt(16)
+
+	item.credits = credits
+
+	net.Start("TTT2SESaveItem")
+	net.WriteString(eq)
+	net.WriteUInt(credits, 16)
+	net.Broadcast()
+
+	-- TODO SAVE items here and LOAD items on init
+end
+net.Receive("TTT2SESaveItem", TTT2SESaveItem)
+
 util.AddNetworkString("shopFallback")
 util.AddNetworkString("shopFallbackAnsw")
 util.AddNetworkString("shopFallbackReset")

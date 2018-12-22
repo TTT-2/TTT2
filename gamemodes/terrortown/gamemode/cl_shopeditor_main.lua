@@ -1,3 +1,7 @@
+ttt_include("vgui__shopeditor_buttons")
+
+local COLOR_GREY = COLOR_GREY or Color(120, 120, 120, 255)
+
 local Equipmentnew
 local SafeTranslate = LANG.TryTranslation
 local ShopEditor = {}
@@ -64,47 +68,266 @@ function ShopEditor.GetEquipmentForRoleAll()
 	return Equipmentnew
 end
 
-function ShopEditor.CreateShopEditor()
-	local w, h = 500, 450
+function ShopEditor.CreateItemList(frame, w, h, fn)
+	-- Construct icon listing
+	local dlist = vgui.Create("EquipSelect", frame)
+	dlist:SetPos(0, 25)
+	dlist:SetSize(w, h - 45)
+	dlist:EnableVerticalScrollbar(true)
+	dlist:EnableHorizontal(true)
+	dlist:SetPadding(4)
+
+	local items = ShopEditor.GetEquipmentForRoleAll()
+
+	SortEquipmentTable(items)
+
+	for _, item in pairs(items) do
+		local ic
+
+		-- Create icon panel
+		if item.material and item.material ~= "vgui/ttt/icon_id" then
+			if not ShopEditor.ItemIsWeapon(item) then
+				ic = vgui.Create("SimpleClickIcon", dlist)
+			else
+				ic = vgui.Create("LayeredClickIcon", dlist)
+			end
+
+			-- Slot marker icon
+			if ShopEditor.ItemIsWeapon(item) then
+				local slot = vgui.Create("SimpleClickIconLabelled")
+				slot:SetIcon("vgui/ttt/slotcap")
+				slot:SetIconColor(COLOR_GREY)
+				slot:SetIconSize(16)
+				slot:SetIconText(item.slot)
+				slot:SetIconProperties(COLOR_WHITE, "DefaultBold", {opacity = 220, offset = 1}, {10, 8})
+
+				ic:AddLayer(slot)
+				ic:EnableMousePassthrough(slot)
+			end
+
+			ic:SetIconSize(64)
+			ic:SetIcon(item.material)
+		elseif item.model and item.model ~= "models/weapons/w_bugbait.mdl" then
+			ic = vgui.Create("SpawnIcon", dlist)
+			ic:SetModel(item.model)
+		end
+
+		if ic then
+			ic.item = item
+
+			ic.OnClick = function(s)
+				fn(s)
+			end
+
+			local tip = GetEquipmentTranslation(item.name, item.PrintName) .. " (" .. SafeTranslate(item.type) .. ")"
+
+			ic:SetTooltip(tip)
+
+			dlist:AddPanel(ic)
+		end
+	end
+
+	return dlist
+end
+
+function ShopEditor.EditItem(item)
+	local ply = LocalPlayer()
+
+	if IsValid(ply.shopeditor_itemframes) then
+		ply.shopeditor_itemframes:Close()
+	end
+
+	local w, h = ScrW() / 4, ScrH() / 4
 
 	local frame = vgui.Create("DFrame")
-	frame:SetPos(50, 50)
 	frame:SetSize(w, h)
-	frame:SetTitle("Shop Editor")
+	frame:Center()
+	frame:SetTitle("Item Editor")
 	frame:SetVisible(true)
 	frame:SetDraggable(true)
 	frame:ShowCloseButton(true)
-	frame:MakePopup()
+	frame:SetMouseInputEnabled(true)
 
 	function frame:Paint(w2, h2)
 		draw.RoundedBox(0, 0, 0, w2, h2, Color(100, 100, 100))
 	end
 
+	function frame:OnClose()
+		ply.shopeditor_itemframes = nil
+	end
+
+	-- credits (price) slider
+	local credits = item.credits or 1
+
+	local priceSlider = vgui.Create("DNumSlider", frame)
+	priceSlider:SetSize(w, 20)
+	priceSlider:SetPos(0, 35)
+	priceSlider:SetText("Credits (Price)")
+	priceSlider:SetMin(0)
+	priceSlider:SetMax(12)
+	priceSlider:SetValue(credits)
+	priceSlider:SetDecimals(0)
+
+	function priceSlider:OnValueChanged(value)
+		credits = value
+	end
+
+	-- save button
+	local saveButton = vgui.Create("DButton", frame)
+	saveButton:SetFont("Trebuchet22")
+	saveButton:SetText("Save")
+	saveButton:SizeToContents()
+
+	saveButton.DoClick = function()
+		net.Start("TTT2SESaveItem")
+
+		if tonumber(item.id) then
+			net.WriteString(item.name)
+		else
+			net.WriteString(item.id)
+		end
+
+		net.WriteUInt(credits, 16)
+		net.SendToServer()
+	end
+
+	frame:MakePopup()
+	frame:SetKeyboardInputEnabled(false)
+
+	ply.shopeditor_itemframes = frame
+end
+
+net.Receive("TTT2SESaveItem", function()
+	local eq = net.ReadString()
+	local equip = GetEquipmentFileName(eq)
+
+	local item = GetEquipmentItemByFileName(equip)
+	if not item then
+		item = GetWeaponNameByFileName(equip)
+		if item then
+			item = weapons.GetStored(item)
+		end
+	end
+
+	if not item then return end
+
+	local credits = net.ReadUInt(16)
+
+	item.credits = credits
+end)
+
+function ShopEditor.CreateItemEditor()
+	local ply = LocalPlayer()
+	local w, h = ScrW() - 100, ScrH() - 100
+
+	local frame = vgui.Create("ShopEditorChildFrame")
+	frame:SetPrevFunc(function()
+		if IsValid(ply.shopeditor_frame) then
+			ply.shopeditor_frame:Close()
+		end
+
+		ply.shopeditor_frame = nil
+
+		ShopEditor.CreateShopEditor()
+	end)
+	frame:SetSize(w, h)
+	frame:Center()
+	frame:SetTitle("Shop Editor")
+	frame:SetVisible(true)
+	frame:SetDraggable(true)
+	frame:ShowCloseButton(true)
+	frame:SetMouseInputEnabled(true)
+
+	function frame:Paint(w2, h2)
+		draw.RoundedBox(0, 0, 0, w2, h2, Color(100, 100, 100))
+	end
+
+	function frame:OnClose()
+		ply.shopeditor_frame = nil
+
+		if IsValid(ply.shopeditor_itemframes) then
+			ply.shopeditor_itemframes:Close()
+		end
+
+		ply.shopeditor_itemframes = nil
+	end
+
+	ShopEditor.CreateItemList(frame, w, h, function(s)
+		ShopEditor.EditItem(s.item)
+	end)
+
+	frame:MakePopup()
+	frame:SetKeyboardInputEnabled(false)
+
+	ply.shopeditor_frame = frame
+end
+
+function ShopEditor.CreateShopEditor()
+	local ply = LocalPlayer()
+
+	if IsValid(ply.shopeditor_frame) then
+		ply.shopeditor_frame:Close()
+
+		return
+	end
+
+	local w, h = ScrW() - 100, 200
+	local topP = 25
+
+	local frame = vgui.Create("DFrame")
+	frame:SetSize(w, h)
+	frame:Center()
+	frame:SetTitle("Shop Editor")
+	frame:SetVisible(true)
+	frame:SetDraggable(true)
+	frame:ShowCloseButton(true)
+	frame:SetMouseInputEnabled(true)
+
+	function frame:Paint(w2, h2)
+		draw.RoundedBox(0, 0, 0, w2, h2, Color(100, 100, 100))
+	end
+
+	function frame:OnClose()
+		ply.shopeditor_frame = nil
+	end
+
+	h = h - topP
+
 	local wMul = w / 3
 
 	local buttonEditItems = vgui.Create("DButton", frame)
-	buttonEditItems:SetText("Edit Items")
-	buttonEditItems:SetPos(0, 0)
-	buttonEditItems:SetSize(wMul, 450)
+	buttonEditItems:SetText("Edit Items / Weapons")
+	buttonEditItems:SetPos(0, topP)
+	buttonEditItems:SetSize(wMul, h)
+
 	buttonEditItems.DoClick = function()
-		RunConsoleCommand("say", "Hi")
+		frame:Close()
+
+		ShopEditor.CreateItemEditor()
+	end
+
+	local buttonLinkShops = vgui.Create("DButton", frame)
+	buttonLinkShops:SetText("Edit Shops")
+	buttonLinkShops:SetPos(wMul * 2, topP)
+	buttonLinkShops:SetSize(wMul, h)
+
+	buttonLinkShops.DoClick = function()
+		frame:Close()
 	end
 
 	local buttonOptions = vgui.Create("DButton", frame)
 	buttonOptions:SetText("Options")
-	buttonOptions:SetPos(wMul, 0)
-	buttonOptions:SetSize(wMul, 450)
+	buttonOptions:SetPos(wMul, topP)
+	buttonOptions:SetSize(wMul, h)
+
 	buttonOptions.DoClick = function()
-		RunConsoleCommand("say", "Hi")
+		frame:Close()
 	end
 
-	local buttonLinkShops = vgui.Create("DButton", frame)
-	buttonLinkShops:SetText("Link / Disable / Create")
-	buttonLinkShops:SetPos(wMul * 2, 0)
-	buttonLinkShops:SetSize(wMul, 450)
-	buttonLinkShops.DoClick = function()
-		RunConsoleCommand("say", "Hi")
-	end
+	frame:MakePopup()
+	frame:SetKeyboardInputEnabled(false)
+
+	ply.shopeditor_frame = frame
 end
 net.Receive("newshop", ShopEditor.CreateShopEditor)
 
