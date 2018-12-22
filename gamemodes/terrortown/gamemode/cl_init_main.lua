@@ -73,7 +73,7 @@ function GM:InitPostEntity()
 		ShopEditor.InitDefaultData(eq)
 	end
 
-	for _, wep in ipairs(weapons.GetList()) do
+	for _, wep in ipairs(ALL_WEAPONS) do
 		ShopEditor.InitDefaultData(wep)
 	end
 

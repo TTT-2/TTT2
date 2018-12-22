@@ -1,13 +1,13 @@
 ShopEditor = ShopEditor or {}
 ShopEditor.savingKeys = {
 	"credits",
-	"limited",
+	"globalLimited",
 	"minPlayers"
 }
 
 function ShopEditor.InitDefaultData(item)
 	item.credits = item.credits or 1
-	item.limited = item.limited or 0
+	item.globalLimited = item.globalLimited or 0
 	item.minPlayers = item.minPlayers or 0
 end
 
@@ -26,7 +26,7 @@ function ShopEditor.WriteItemData(messageName, item, plys)
 
 	net.WriteString(name)
 	net.WriteUInt(item.credits, 16)
-	net.WriteBit(item.limited == 1)
+	net.WriteBit(item.globalLimited == 1)
 	net.WriteUInt(item.minPlayers, 16)
 
 	if SERVER then
@@ -57,7 +57,7 @@ function ShopEditor.ReadItemData()
 	end
 
 	item.credits = net.ReadUInt(16)
-	item.limited = tonumber(net.ReadBit())
+	item.globalLimited = tonumber(net.ReadBit())
 	item.minPlayers = net.ReadUInt(16)
 
 	return equip, item

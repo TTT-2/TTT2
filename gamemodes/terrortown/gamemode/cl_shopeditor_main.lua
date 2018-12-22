@@ -183,7 +183,7 @@ function ShopEditor.EditItem(item)
 			name = item.name,
 			credits = credits,
 			minPlayers = item.minPlayers,
-			limited = item.limited
+			globalLimited = item.globalLimited
 		}
 
 		ShopEditor.WriteItemData("TTT2SESaveItem", wTable)

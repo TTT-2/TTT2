@@ -3,7 +3,7 @@ local tableName = "ttt2_items"
 local db_version = CreateConVar("ttt2_item_db_version", "1", {FCVAR_ARCHIVE})
 
 function ShopEditor.BuildInsertString(name, item, keys)
-	keys = keys or {}
+	keys = keys or ShopEditor.savingKeys
 
 	local tmp = {}
 
@@ -31,7 +31,7 @@ function ShopEditor.BuildInsertString(name, item, keys)
 end
 
 function ShopEditor.BuildUpdateString(name, item, keys)
-	keys = keys or {}
+	keys = keys or ShopEditor.savingKeys
 
 	local tmp = {}
 
@@ -83,7 +83,7 @@ function ShopEditor.SaveItem(name, item, keys)
 end
 
 function ShopEditor.LoadItem(name, item, keys)
-	keys = keys or {}
+	keys = keys or ShopEditor.savingKeys
 
 	local result = sql.Query("SELECT * FROM " .. tableName .. " WHERE name = '" .. name .. "'")
 

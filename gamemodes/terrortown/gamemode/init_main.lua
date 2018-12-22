@@ -275,20 +275,15 @@ function GM:InitPostEntity()
 
 	-- load and initialize all SWEPS and all items from database
 	if ShopEditor.CreateSqlTable() then
-		local savedKeys = {
-			"credits",
-			"limited"
-		}
-
 		for _, eq in ipairs(ALL_ITEMS) do
 			local name = GetEquipmentFileName(eq.id)
 
 			ShopEditor.InitDefaultData(eq)
 
-			local loaded, changed = ShopEditor.LoadItem(name, eq, savedKeys)
+			local loaded, changed = ShopEditor.LoadItem(name, eq)
 
 			if not loaded then
-				ShopEditor.InitItem(name, eq, savedKeys)
+				ShopEditor.InitItem(name, eq)
 			elseif changed then
 				CHANGED_EQUIPMENT[#CHANGED_EQUIPMENT + 1] = eq
 			end
@@ -299,10 +294,10 @@ function GM:InitPostEntity()
 
 			ShopEditor.InitDefaultData(wep)
 
-			local loaded, changed = ShopEditor.LoadItem(name, wep, savedKeys)
+			local loaded, changed = ShopEditor.LoadItem(name, wep)
 
 			if not loaded then
-				ShopEditor.InitItem(name, wep, savedKeys)
+				ShopEditor.InitItem(name, wep)
 			elseif changed then
 				CHANGED_EQUIPMENT[#CHANGED_EQUIPMENT + 1] = wep
 			end
