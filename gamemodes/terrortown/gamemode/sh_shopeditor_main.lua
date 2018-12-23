@@ -14,6 +14,8 @@ end
 function ShopEditor.WriteItemData(messageName, name, item, plys)
 	name = GetEquipmentFileName(name)
 
+	if not name or not item then return end
+
 	net.Start(messageName)
 
 	net.WriteString(name)
@@ -22,15 +24,15 @@ function ShopEditor.WriteItemData(messageName, name, item, plys)
 	net.WriteUInt(item.minPlayers, 16)
 
 	if SERVER then
-		local key
+		local matched = false
 
 		for k, tbl in ipairs(CHANGED_EQUIPMENT) do
 			if tbl[1] == name then
-				key = k
+				matched = true
 			end
 		end
 
-		if not key then
+		if not matched then
 			CHANGED_EQUIPMENT[#CHANGED_EQUIPMENT + 1] = {name, item}
 		end
 

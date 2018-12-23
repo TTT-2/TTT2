@@ -87,13 +87,13 @@ function ShopEditor.LoadItem(name, item, keys)
 
 	local result = sql.Query("SELECT * FROM " .. tableName .. " WHERE name = '" .. name .. "'")
 
-	if not result then
+	if not result or not result[1] then
 		return false, false
 	end
 
 	local changed = false
 
-	for k, v in pairs(result) do
+	for k, v in pairs(result[1]) do
 		for _, key in ipairs(keys) do
 			if k == key and (not item[k] or item[k] ~= v) then
 				item[k] = v

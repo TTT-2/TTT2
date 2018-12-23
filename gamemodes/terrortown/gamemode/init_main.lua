@@ -3,6 +3,8 @@ ttt_include("shared")
 ttt_include("sh_init")
 ttt_include("sh_shopeditor")
 
+ttt_include("shopeditor_sql")
+ttt_include("shopeditor")
 ttt_include("karma")
 ttt_include("entity")
 ttt_include("scoring_shd")
@@ -19,8 +21,6 @@ ttt_include("corpse")
 ttt_include("player_ext_shd")
 ttt_include("player_ext")
 ttt_include("player")
-ttt_include("shopeditor_sql")
-ttt_include("shopeditor")
 
 CreateConVar("ttt_roundtime_minutes", "10", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 CreateConVar("ttt_preptime_seconds", "30", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
@@ -276,7 +276,7 @@ function GM:InitPostEntity()
 	-- load and initialize all SWEPS and all items from database
 	if ShopEditor.CreateSqlTable() then
 		for _, eq in ipairs(ALL_ITEMS) do
-			local name = GetEquipmentFileName(eq.id)
+			local name = GetEquipmentFileName(eq.name)
 
 			ShopEditor.InitDefaultData(eq)
 
@@ -290,7 +290,7 @@ function GM:InitPostEntity()
 		end
 
 		for _, wep in ipairs(ALL_WEAPONS) do
-			local name = GetEquipmentFileName(wep.name)
+			local name = GetEquipmentFileName(wep.id)
 
 			ShopEditor.InitDefaultData(wep)
 
@@ -392,6 +392,11 @@ function LoadShopsEquipment()
 end
 
 local function TTT2SyncShopsWithServer(len, ply)
+	-- at first, sync items
+	for _, tbl in ipairs(CHANGED_EQUIPMENT) do
+		ShopEditor.WriteItemData("TTT2SyncDBItems", tbl[1], tbl[2])
+	end
+
 	-- reset and set if it's a fallback
 	net.Start("shopFallbackReset")
 	net.Send(ply)

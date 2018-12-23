@@ -132,21 +132,14 @@ function ShopEditor.EditItem(item)
 		ply.shopeditor_itemframes = nil
 	end
 
-	-- credits (price) slider
-	local credits = item.credits
-
 	local priceSlider = vgui.Create("DNumSlider", frame)
 	priceSlider:SetSize(w, 20)
 	priceSlider:SetPos(0, 35)
 	priceSlider:SetText("Credits (Price)")
 	priceSlider:SetMin(0)
 	priceSlider:SetMax(12)
-	priceSlider:SetValue(credits)
+	priceSlider:SetValue(item.credits)
 	priceSlider:SetDecimals(0)
-
-	function priceSlider:OnValueChanged(value)
-		credits = value
-	end
 
 	-- save button
 	local saveButton = vgui.Create("DButton", frame)
@@ -158,7 +151,7 @@ function ShopEditor.EditItem(item)
 		local wTable = {
 			id = item.id,
 			name = item.name,
-			credits = credits,
+			credits = math.Round(priceSlider:GetValue()),
 			globalLimited = item.globalLimited,
 			minPlayers = item.minPlayers
 		}
