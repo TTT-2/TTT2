@@ -101,6 +101,13 @@ function CreateChanges()
 	- fixed detective hat bug
 	- fixed selection and jester selection bug
 	]])
+
+	AddChange("0.3.8b", [[
+	- added new TTT2 Logo
+	- added ShopEditor missing icons (by Mineotopia)
+	- reworked weaponshop -> ShopEditor
+	- changed file based shopsystem into sql
+	]])
 end
 
 function ShowChanges()
