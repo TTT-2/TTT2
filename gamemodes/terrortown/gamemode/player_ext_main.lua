@@ -62,12 +62,12 @@ function plymeta:AddCredits(amt)
 end
 
 function plymeta:SubtractCredits(amt)
-	local tmp = -amt
+	local tmp = self:GetCredits() - amt
 	if tmp < 0 then
 		tmp = 0
 	end
 
-	self:AddCredits(tmp)
+	self:SetCredits(tmp)
 end
 
 function plymeta:SetDefaultCredits()
