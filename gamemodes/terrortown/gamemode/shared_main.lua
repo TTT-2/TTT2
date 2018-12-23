@@ -689,7 +689,13 @@ function SWEPIsBuyable(wepCls)
 		return false
 	end
 
-	if wepCls.minPlayers and wepCls.minPlayers > 1 then
+	local wep = weapons.GetStored(wepCls)
+
+	if not wep then
+		return false
+	end
+
+	if wep.minPlayers and wep.minPlayers > 1 then
 		local choices = {}
 
 		for _, v in ipairs(player.GetAll()) do
@@ -699,7 +705,7 @@ function SWEPIsBuyable(wepCls)
 			end
 		end
 
-		if #choices < wepCls.minPlayers then
+		if #choices < wep.minPlayers then
 			return false
 		end
 	end

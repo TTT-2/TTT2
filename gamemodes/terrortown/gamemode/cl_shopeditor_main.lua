@@ -35,20 +35,7 @@ function ShopEditor.GetEquipmentForRoleAll()
 			and not table.HasValue(eject, name)
 			then
 				local data = v.EquipMenuData or {}
-				local base = {
-					id = name,
-					name = name,
-					PrintName = data.name or data.PrintName or v.PrintName or name,
-					limited = v.LimitedStock,
-					kind = v.Kind or WEAPON_NONE,
-					slot = (v.Slot or 0) + 1,
-					material = v.Icon or "vgui/ttt/icon_id",
-					-- the below should be specified in EquipMenuData, in which case
-					-- these values are overwritten
-					type = "Type not specified",
-					model = "models/weapons/w_bugbait.mdl",
-					desc = "No description specified."
-				}
+				local base = GetEquipmentWeaponBase(data, v, name)
 
 				-- Force material to nil so that model key is used when we are
 				-- explicitly told to do so (ie. material is false rather than nil).
@@ -156,7 +143,7 @@ function ShopEditor.EditItem(item)
 	end
 
 	-- credits (price) slider
-	local credits = item.credits or 1
+	local credits = item.credits
 
 	local priceSlider = vgui.Create("DNumSlider", frame)
 	priceSlider:SetSize(w, 20)
@@ -182,8 +169,8 @@ function ShopEditor.EditItem(item)
 			id = item.id,
 			name = item.name,
 			credits = credits,
-			minPlayers = item.minPlayers,
-			globalLimited = item.globalLimited
+			globalLimited = item.globalLimited,
+			minPlayers = item.minPlayers
 		}
 
 		ShopEditor.WriteItemData("TTT2SESaveItem", wTable)

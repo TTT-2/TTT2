@@ -62,7 +62,7 @@ function ShopEditor.CreateSqlTable()
 	local result
 
 	if not sql.TableExists(tableName) then
-		result = sql.Query("CREATE TABLE " .. tableName .. " (name TEXT PRIMARY KEY, credits INTEGER, limited INTEGER)")
+		result = sql.Query("CREATE TABLE " .. tableName .. " (name TEXT PRIMARY KEY, credits INTEGER, globalLimited INTEGER, minPlayers INTEGER)")
 	else
 		local version = db_version:GetInt()
 
