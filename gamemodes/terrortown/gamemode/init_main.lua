@@ -1,7 +1,10 @@
 ---- Trouble in Terrorist Town 2
 ttt_include("shared")
 ttt_include("sh_init")
+ttt_include("sh_shopeditor")
 
+ttt_include("shopeditor_sql")
+ttt_include("shopeditor")
 ttt_include("karma")
 ttt_include("entity")
 ttt_include("scoring_shd")
@@ -18,7 +21,6 @@ ttt_include("corpse")
 ttt_include("player_ext_shd")
 ttt_include("player_ext")
 ttt_include("player")
-ttt_include("weaponshop")
 
 CreateConVar("ttt_roundtime_minutes", "10", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 CreateConVar("ttt_preptime_seconds", "30", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
@@ -149,6 +151,7 @@ util.AddNetworkString("TTT_Spectate")
 util.AddNetworkString("TTT2TestRole")
 util.AddNetworkString("TTT2SyncShopsWithServer")
 util.AddNetworkString("TTT2DevChanges")
+util.AddNetworkString("TTT2SyncDBItems")
 
 local buggyAddons = {
 	["656662924"] = "1367128301", -- Killer Notifier by nerzlakai96
@@ -182,16 +185,19 @@ local buggyAddons = {
 	["1215502383"] = "" -- Custom Roles by Noxx
 }
 
+CHANGED_EQUIPMENT = {}
+
 ---- Round mechanics
 function GM:Initialize()
 	MsgN("Trouble In Terrorist Town 2 gamemode initializing...")
 	ShowVersion()
 
-	SetupWeaponshopCVars()
-
 	hook.Run("TTT2Initialize")
 
 	hook.Run("TTT2FinishedLoading")
+
+	ShopEditor.SetupShopEditorCVars()
+	ShopEditor.CreateShopDBs()
 
 	-- Force friendly fire to be enabled. If it is off, we do not get lag compensation.
 	RunConsoleCommand("mp_friendlyfire", "1")
@@ -267,6 +273,37 @@ function GM:InitPostEntity()
 
 	-- initialize all items
 	InitAllItems()
+
+	-- load and initialize all SWEPS and all items from database
+	if ShopEditor.CreateSqlTable() then
+		for _, eq in ipairs(ALL_ITEMS) do
+			local name = GetEquipmentFileName(eq.name)
+
+			ShopEditor.InitDefaultData(eq)
+
+			local loaded, changed = ShopEditor.LoadItem(name, eq)
+
+			if not loaded then
+				ShopEditor.InitItem(name, eq)
+			elseif changed then
+				CHANGED_EQUIPMENT[#CHANGED_EQUIPMENT + 1] = {name, eq}
+			end
+		end
+
+		for _, wep in ipairs(ALL_WEAPONS) do
+			local name = GetEquipmentFileName(wep.id)
+
+			ShopEditor.InitDefaultData(wep)
+
+			local loaded, changed = ShopEditor.LoadItem(name, wep)
+
+			if not loaded then
+				ShopEditor.InitItem(name, wep)
+			elseif changed then
+				CHANGED_EQUIPMENT[#CHANGED_EQUIPMENT + 1] = {name, wep}
+			end
+		end
+	end
 
 	-- reset normal equipment tables
 	for _, role in pairs(GetRoles()) do
@@ -356,6 +393,11 @@ function LoadShopsEquipment()
 end
 
 local function TTT2SyncShopsWithServer(len, ply)
+	-- at first, sync items
+	for _, tbl in ipairs(CHANGED_EQUIPMENT) do
+		ShopEditor.WriteItemData("TTT2SyncDBItems", tbl[1], tbl[2])
+	end
+
 	-- reset and set if it's a fallback
 	net.Start("shopFallbackReset")
 	net.Send(ply)

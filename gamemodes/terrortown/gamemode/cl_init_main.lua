@@ -5,6 +5,7 @@ surface.CreateFont("Trebuchet22", {font = "Trebuchet MS", size = 22, weight = 90
 
 ttt_include("shared")
 ttt_include("sh_init")
+ttt_include("sh_shopeditor")
 ttt_include("scoring_shd")
 ttt_include("corpse_shd")
 ttt_include("player_ext_shd")
@@ -37,7 +38,7 @@ ttt_include("cl_scoring")
 ttt_include("cl_scoring_events")
 ttt_include("cl_popups")
 ttt_include("cl_equip")
-ttt_include("cl_weaponshop")
+ttt_include("cl_shopeditor")
 ttt_include("cl_chat")
 ttt_include("cl_voice")
 ttt_include("cl_changes")
@@ -66,6 +67,15 @@ function GM:InitPostEntity()
 
 	-- initialize all items
 	InitAllItems()
+
+	-- initialize the default data
+	for _, eq in ipairs(ALL_ITEMS) do
+		ShopEditor.InitDefaultData(eq)
+	end
+
+	for _, wep in ipairs(ALL_WEAPONS) do
+		ShopEditor.InitDefaultData(wep)
+	end
 
 	-- reset normal equipment tables
 	for _, role in pairs(GetRoles()) do
@@ -334,6 +344,10 @@ function GM:CleanUpMap()
 	-- This cleans up decals since GMod v100
 	game.CleanUpMap()
 end
+
+net.Receive("TTT2SyncDBItems", function()
+	ShopEditor.ReadItemData()
+end)
 
 -- server tells us to call this when our LocalPlayer has spawned
 local function PlayerSpawn()

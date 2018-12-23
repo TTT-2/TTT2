@@ -6,13 +6,6 @@ function GM:TTT2Initialize()
 	DefaultEquipment = GetDefaultEquipment()
 
 	SetupEquipment()
-
-	-- setup weapon ConVars and similar things
-	for _, wep in ipairs(weapons.GetList()) do
-		if not wep.Doublicated then
-			RegisterNormalWeapon(wep)
-		end
-	end
 end
 
 -- Create teams

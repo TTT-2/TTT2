@@ -4,7 +4,7 @@ GM.Name = "[TTT2] Trouble in Terrorist Town 2 (Advanced Update) - by Alf21"
 GM.Author = "Bad King Urgrain && Alf21"
 GM.Email = "4lf-mueller@gmx.de"
 GM.Website = "ttt.badking.net, ttt2.informaskill.de"
-GM.Version = "0.3.7.4b"
+GM.Version = "0.3.8b"
 GM.Customized = true
 
 TTT2 = true -- identifier for TTT2. Just use "if TTT2 then ... end"
@@ -684,39 +684,18 @@ end
 
 DefaultEquipment = GetDefaultEquipment()
 
-TTTWEAPON_CVARS = {}
-
-function SWEPAddConVar(swep, tbl)
-	local cls = WEPS.GetClass(swep)
-
-	if SERVER then
-		CreateConVar(tbl.cvar, tbl.value, tbl.flags)
-	end
-
-	TTTWEAPON_CVARS[cls] = TTTWEAPON_CVARS[cls] or {}
-
-	table.insert(TTTWEAPON_CVARS[cls], tbl)
-end
-
 function SWEPIsBuyable(wepCls)
 	if not wepCls then
 		return false
 	end
 
-	local name = "t32_" .. wepCls .. "_imp"
+	local wep = weapons.GetStored(wepCls)
 
-	if CLIENT then
-		name = "rep_" .. name
+	if not wep then
+		return false
 	end
 
-	local cv = GetConVar(name)
-	if cv then
-		local i = cv:GetInt() or 0
-
-		if i < 2 then
-			return true
-		end
-
+	if wep.minPlayers and wep.minPlayers > 1 then
 		local choices = {}
 
 		for _, v in ipairs(player.GetAll()) do
@@ -726,24 +705,10 @@ function SWEPIsBuyable(wepCls)
 			end
 		end
 
-		if #choices < i then
+		if #choices < wep.minPlayers then
 			return false
 		end
 	end
 
 	return true
-end
-
-function RegisterNormalWeapon(wep)
-	if wep.MinPlayers then
-		local tbl = {}
-		tbl.cvar = "t32_" .. WEPS.GetClass(wep) .. "_imp"
-		tbl.value = tostring(wep.MinPlayers)
-		tbl.flags = {FCVAR_NOTIFY, FCVAR_ARCHIVE}
-		tbl.slider = true
-		tbl.desc = "Available if there are more than ... players"
-		tbl.max = 64
-
-		SWEPAddConVar(wep, tbl)
-	end
 end

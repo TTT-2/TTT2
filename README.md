@@ -15,7 +15,7 @@ If you want to play some of my roles, look at this collection: https://steamcomm
 
 This addon is based on sourcecode of the "TOT Addon" by KingNJenssons and of the originally TTT gamemode (everything was extremely edited by me).
 
-If you want to add new items to the shop of a new role, you need to run the command `weaponshop` in the developer console. Chose the role and click an equipment icon. Additionally it is possible to connect shops with each other.
+If you want to add new items to the shop of a new role, you need to run the command `shopeditor` in the developer console. Chose the role and click an equipment icon. Additionally it is possible to connect shops with each other.
 
 Take a look at this wiki to get more information about "how to create a custom role for TTT": https://github.com/Alf21/TTT2/wiki
 
@@ -23,7 +23,7 @@ Commands: https://github.com/Alf21/TTT2/wiki/Commands
 
 
 ## Features:
-- custom weaponshop => possible to create an own custom shop, toggle shops or link them together
+- custom shopeditor => possible to create an own custom shop, toggle shops or link them together
 - custom roles => add as much TTT2 roles as you want into TTT
 - custom ULX addon => control your server with the custom TTT(2/C) ULX addon
 - better performance => TTT got improved

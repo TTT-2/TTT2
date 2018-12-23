@@ -14,7 +14,7 @@ end
 
 function WEPS.GetClass(wep)
 	if type(wep) == "table" then
-		return wep.ClassName or wep.Classname
+		return wep.ClassName or wep.Classname or wep.id or wep.name
 	elseif IsValid(wep) then
 		return wep:GetClass()
 	end

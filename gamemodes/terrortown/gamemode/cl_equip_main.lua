@@ -49,31 +49,9 @@ function GetEquipmentForRole(subrole)
 		for _, v in ipairs(weapons.GetList()) do
 			if v and not v.Doublicated and v.CanBuy and table.HasValue(v.CanBuy, fallback) then
 				local data = v.EquipMenuData or {}
-				local name = WEPS.GetClass(v)
 
-				if name then
-					local base = {
-						id = name,
-						name = name,
-						PrintName = data.name or data.PrintName or v.PrintName or name,
-						limited = v.LimitedStock,
-						kind = v.Kind or WEAPON_NONE,
-						slot = (v.Slot or 0) + 1,
-						material = v.Icon or "vgui/ttt/icon_id",
-						-- the below should be specified in EquipMenuData, in which case
-						-- these values are overwritten
-						type = "Type not specified",
-						model = "models/weapons/w_bugbait.mdl",
-						desc = "No description specified."
-					}
-
-					-- Force material to nil so that model key is used when we are
-					-- explicitly told to do so (ie. material is false rather than nil).
-					if data.modelicon then
-						base.material = nil
-					end
-
-					table.Merge(base, data)
+				local base = GetEquipmentWeaponBase(data, v)
+				if base then
 					table.insert(tbl, base)
 				end
 			end
@@ -317,7 +295,7 @@ local function TraitorMenuPopup()
 	SortEquipmentTable(items)
 
 	if #items == 0 then
-		ply:ChatPrint("[TTT2][SHOP] You need to run 'weaponshop' as admin in the developer console to create a shop for this role. Link it with another shop or click on the icons to add weapons and items to the shop.")
+		ply:ChatPrint("[TTT2][SHOP] You need to run 'shopeditor' as admin in the developer console to create a shop for this role. Link it with another shop or click on the icons to add weapons and items to the shop.")
 	end
 
 	-- temp table for sorting

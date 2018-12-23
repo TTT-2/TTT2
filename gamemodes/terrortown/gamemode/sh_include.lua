@@ -26,17 +26,19 @@ TTTFiles = {
 	cl_transfer = {file = "cl_transfer_main.lua", on = "client"},
 	cl_voice = {file = "cl_voice_main.lua", on = "client"},
 	cl_wepswitch = {file = "cl_wepswitch_main.lua", on = "client"},
-	cl_weaponshop = {file = "cl_weaponshop_main.lua", on = "client"},
+	cl_shopeditor = {file = "cl_shopeditor_main.lua", on = "client"},
 	equip_items_shd = {file = "equip_items_shd_main.lua", on = "shared"},
 	lang_shd = {file = "lang_shd_main.lua", on = "shared"},
 	player_ext_shd = {file = "player_ext_shd_main.lua", on = "shared"},
 	scoring_shd = {file = "scoring_shd_main.lua", on = "shared"},
 	sh_init = {file = "sh_init_main.lua", on = "shared"},
+	sh_shopeditor = {file = "sh_shopeditor_main.lua", on = "shared"},
 	shared = {file = "shared_main.lua", on = "shared"},
 	util = {file = "util_main.lua", on = "shared"},
 	vgui__coloredbox = {file = "vgui/coloredbox_main.lua", on = "client"},
 	vgui__droleimage = {file = "vgui/droleimage_main.lua", on = "client"},
 	vgui__simpleicon = {file = "vgui/simpleicon_main.lua", on = "client"},
+	vgui__shopeditor_buttons = {file = "vgui/shopeditor_buttons_main.lua", on = "client"},
 	vgui__simpleclickicon = {file = "vgui/simpleclickicon_main.lua", on = "client"},
 	vgui__progressbar = {file = "vgui/progressbar_main.lua", on = "client"},
 	vgui__scrolllabel = {file = "vgui/scrolllabel_main.lua", on = "client"},
@@ -64,7 +66,8 @@ if SERVER then
 		traitor_state = {file = "traitor_state_main.lua", on = "server"},
 		voice = {file = "voice_main.lua", on = "server"},
 		weaponry = {file = "weaponry_main.lua", on = "server"},
-		weaponshop = {file = "weaponshop_main.lua", on = "server"}
+		shopeditor = {file = "shopeditor_main.lua", on = "server"},
+		shopeditor_sql = {file = "shopeditor_sql_main.lua", on = "server"}
 	}
 
 	table.Merge(TTTFiles, tmp)
