@@ -87,9 +87,13 @@ end
 
 SetupEquipment() -- pre init to support normal TTT addons
 
-function GetEquipmentWeaponBase(data, eq, name)
+function GetEquipmentWeaponBase(data, eq)
+	local name = WEPS.GetClass(eq)
+
+	if not name then return end
+
 	for _, wep in ipairs(ALL_WEAPONS) do
-		if wep.name == name then
+		if WEPS.GetClass(wep) == name then
 			return wep
 		end
 	end
@@ -108,8 +112,18 @@ function GetEquipmentWeaponBase(data, eq, name)
 		model = "models/weapons/w_bugbait.mdl",
 		desc = "No description specified.",
 		is_item = false,
-		credits = data.credits or eq.credits
+		credits = data.credits or eq.credits,
+		minPlayers = data.minPlayers or eq.minPlayers,
+		globalLimited = data.globalLimited or eq.globalLimited
 	}
+
+	-- Force material to nil so that model key is used when we are
+	-- explicitly told to do so (ie. material is false rather than nil).
+	if data.modelicon then
+		tbl.material = nil
+	end
+
+	table.Merge(tbl, data)
 
 	ALL_WEAPONS[#ALL_WEAPONS + 1] = tbl
 
@@ -119,21 +133,8 @@ end
 function CreateEquipmentWeapon(eq)
 	if not eq.Doublicated then
 		local data = eq.EquipMenuData or {}
-		local name = WEPS.GetClass(eq)
 
-		if name then
-			local base = GetEquipmentWeaponBase(data, eq, name)
-
-			-- Force material to nil so that model key is used when we are
-			-- explicitly told to do so (ie. material is false rather than nil).
-			if data.modelicon then
-				base.material = nil
-			end
-
-			table.Merge(base, data)
-
-			return base
-		end
+		return GetEquipmentWeaponBase(data, eq)
 	end
 end
 
@@ -367,18 +368,9 @@ function InitDefaultEquipment()
 	for _, v in ipairs(weapons.GetList()) do
 		if v and not v.Doublicated and v.CanBuy and table.HasValue(v.CanBuy, ROLE_TRAITOR) then
 			local data = v.EquipMenuData or {}
-			local name = WEPS.GetClass(v)
 
-			if name then
-				local base = GetEquipmentWeaponBase(data, v, name)
-
-				-- Force material to nil so that model key is used when we are
-				-- explicitly told to do so (ie. material is false rather than nil).
-				if data.modelicon then
-					base.material = nil
-				end
-
-				table.Merge(base, data)
+			local base = GetEquipmentWeaponBase(data, v)
+			if base then
 				table.insert(tbl, base)
 			end
 		end
@@ -400,18 +392,9 @@ function InitDefaultEquipment()
 	for _, v in ipairs(weapons.GetList()) do
 		if v and not v.Doublicated and v.CanBuy and table.HasValue(v.CanBuy, ROLE_DETECTIVE) then
 			local data = v.EquipMenuData or {}
-			local name = WEPS.GetClass(v)
 
-			if name then
-				local base = GetEquipmentWeaponBase(data, v, name)
-
-				-- Force material to nil so that model key is used when we are
-				-- explicitly told to do so (ie. material is false rather than nil).
-				if data.modelicon then
-					base.material = nil
-				end
-
-				table.Merge(base, data)
+			local base = GetEquipmentWeaponBase(data, v)
+			if base then
 				table.insert(tbl, base)
 			end
 		end
@@ -439,6 +422,11 @@ function InitAllItems()
 			-- reset normal equipment tables
 			EquipmentItems[roleData.index] = {}
 		end
+	end
+
+	-- init weapons
+	for _, wep in ipairs(weapons.GetList()) do
+		CreateEquipmentWeapon(wep)
 	end
 end
 
@@ -687,19 +675,9 @@ else -- CLIENT
 
 			if equip and not equip.Doublicated then
 				local data = equip.EquipMenuData or {}
-				local name = WEPS.GetClass(equip)
 
-				if name then
-					local base = GetEquipmentWeaponBase(data, equip, name)
-
-					-- Force material to nil so that model key is used when we are
-					-- explicitly told to do so (ie. material is false rather than nil).
-					if data.modelicon then
-						base.material = nil
-					end
-
-					table.Merge(base, data)
-
+				local base = GetEquipmentWeaponBase(data, equip)
+				if base then
 					toadd = base
 				end
 			end

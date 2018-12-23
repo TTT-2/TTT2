@@ -89,8 +89,8 @@ local function TTT2SESaveItem(_, ply)
 
 	if not item then return end
 
-	ShopEditor.WriteItemData("TTT2SESaveItem", item)
-	ShopEditor.SaveItem(name, item, ShopEditor.savingKeys)
+	ShopEditor.WriteItemData("TTT2SESaveItem", name, item)
+	ShopEditor.SaveItem(name, item)
 end
 net.Receive("TTT2SESaveItem", TTT2SESaveItem)
 

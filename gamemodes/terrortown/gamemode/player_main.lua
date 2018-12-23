@@ -21,8 +21,8 @@ function GM:PlayerInitialSpawn(ply)
 
 	ply:InitialSpawn()
 
-	for _, equip in ipairs(CHANGED_EQUIPMENT) do
-		ShopEditor.WriteItemData("TTT2SyncDBItems", equip)
+	for _, tbl in ipairs(CHANGED_EQUIPMENT) do
+		ShopEditor.WriteItemData("TTT2SyncDBItems", tbl[1], tbl[2])
 	end
 
 	local rstate = GetRoundState() or ROUND_WAIT

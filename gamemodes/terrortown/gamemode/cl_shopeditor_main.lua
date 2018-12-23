@@ -25,7 +25,7 @@ function ShopEditor.GetEquipmentForRoleAll()
 		hook.Run("TTT2ModifyShopEditorIgnoreSWEPs", eject) -- possibility to modify from externally
 
 		-- find buyable weapons to load info from
-		for _, v in ipairs(weapons.GetList()) do
+		for _, v in ipairs(ALL_WEAPONS) do
 			local name = WEPS.GetClass(v)
 
 			if name
@@ -34,17 +34,7 @@ function ShopEditor.GetEquipmentForRoleAll()
 			and not string.match(name, "event")
 			and not table.HasValue(eject, name)
 			then
-				local data = v.EquipMenuData or {}
-				local base = GetEquipmentWeaponBase(data, v, name)
-
-				-- Force material to nil so that model key is used when we are
-				-- explicitly told to do so (ie. material is false rather than nil).
-				if data.modelicon then
-					base.material = nil
-				end
-
-				table.Merge(base, data)
-				table.insert(tbl, base)
+				table.insert(tbl, v)
 			end
 		end
 
@@ -173,7 +163,17 @@ function ShopEditor.EditItem(item)
 			minPlayers = item.minPlayers
 		}
 
-		ShopEditor.WriteItemData("TTT2SESaveItem", wTable)
+		local name
+
+		if tonumber(wTable.id) then
+			name = wTable.name
+		else
+			name = wTable.id
+		end
+
+		if name then
+			ShopEditor.WriteItemData("TTT2SESaveItem", name, wTable)
+		end
 	end
 
 	frame:MakePopup()

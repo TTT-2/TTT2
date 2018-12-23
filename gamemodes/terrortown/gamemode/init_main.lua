@@ -285,7 +285,7 @@ function GM:InitPostEntity()
 			if not loaded then
 				ShopEditor.InitItem(name, eq)
 			elseif changed then
-				CHANGED_EQUIPMENT[#CHANGED_EQUIPMENT + 1] = eq
+				CHANGED_EQUIPMENT[#CHANGED_EQUIPMENT + 1] = {name, eq}
 			end
 		end
 
@@ -299,7 +299,7 @@ function GM:InitPostEntity()
 			if not loaded then
 				ShopEditor.InitItem(name, wep)
 			elseif changed then
-				CHANGED_EQUIPMENT[#CHANGED_EQUIPMENT + 1] = wep
+				CHANGED_EQUIPMENT[#CHANGED_EQUIPMENT + 1] = {name, wep}
 			end
 		end
 	end

@@ -11,15 +11,7 @@ function ShopEditor.InitDefaultData(item)
 	item.minPlayers = item.minPlayers or 0
 end
 
-function ShopEditor.WriteItemData(messageName, item, plys)
-	local name
-
-	if tonumber(item.id) then
-		name = item.name
-	else
-		name = item.id
-	end
-
+function ShopEditor.WriteItemData(messageName, name, item, plys)
 	name = GetEquipmentFileName(name)
 
 	net.Start(messageName)
@@ -30,6 +22,18 @@ function ShopEditor.WriteItemData(messageName, item, plys)
 	net.WriteUInt(item.minPlayers, 16)
 
 	if SERVER then
+		local key
+
+		for k, tbl in ipairs(CHANGED_EQUIPMENT) do
+			if tbl[1] == name then
+				key = k
+			end
+		end
+
+		if not key then
+			CHANGED_EQUIPMENT[#CHANGED_EQUIPMENT + 1] = {name, item}
+		end
+
 		if plys then
 			net.Send(plys)
 		else
