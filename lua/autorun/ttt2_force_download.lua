@@ -10,6 +10,7 @@ if SERVER then
 	resource.AddFile("materials/vgui/ttt/equip/briefcase.png")
 	resource.AddFile("materials/vgui/ttt/equip/package.png")
 
+	resource.AddFile("materials/vgui/ttt/dynamic/roles/icon_disabled.vmt")
 	resource.AddFile("materials/vgui/ttt/dynamic/roles/icon_inno.vmt")
 	resource.AddFile("materials/vgui/ttt/dynamic/roles/icon_traitor.vmt")
 	resource.AddFile("materials/vgui/ttt/dynamic/roles/icon_det.vmt")

@@ -44,7 +44,11 @@ function ShopEditor.GetEquipmentForRoleAll()
 	return Equipmentnew
 end
 
-function ShopEditor.CreateItemList(frame, w, h, fn)
+function ShopEditor.CreateItemList(frame, w, h, items, onClick, updateListItems)
+	if not items or not onClick and not updateListItems then return end
+
+	local ply = LocalPlayer()
+
 	-- Construct icon listing
 	local dlist = vgui.Create("EquipSelect", frame)
 	dlist:SetPos(0, 25)
@@ -52,10 +56,6 @@ function ShopEditor.CreateItemList(frame, w, h, fn)
 	dlist:EnableVerticalScrollbar(true)
 	dlist:EnableHorizontal(true)
 	dlist:SetPadding(4)
-
-	local items = ShopEditor.GetEquipmentForRoleAll()
-
-	SortEquipmentTable(items)
 
 	for _, item in pairs(items) do
 		local ic
@@ -92,7 +92,13 @@ function ShopEditor.CreateItemList(frame, w, h, fn)
 			ic.item = item
 
 			ic.OnClick = function(s)
-				fn(s)
+				if onClick then
+					onClick(s)
+				end
+
+				if updateListItems then
+					updateListItems(dlist)
+				end
 			end
 
 			local tip = GetEquipmentTranslation(item.name, item.PrintName) .. " (" .. SafeTranslate(item.type) .. ")"
@@ -103,8 +109,12 @@ function ShopEditor.CreateItemList(frame, w, h, fn)
 		end
 	end
 
+	ply.shopeditor = dlist
+
 	return dlist
 end
+
+-- ITEM EDITOR
 
 function ShopEditor.EditItem(item)
 	local ply = LocalPlayer()
@@ -210,7 +220,7 @@ function ShopEditor.CreateItemEditor()
 	end)
 	frame:SetSize(w, h)
 	frame:Center()
-	frame:SetTitle("Shop Editor")
+	frame:SetTitle("Shop Editor -> Edit Items")
 	frame:SetVisible(true)
 	frame:SetDraggable(true)
 	frame:ShowCloseButton(true)
@@ -228,9 +238,14 @@ function ShopEditor.CreateItemEditor()
 		end
 
 		ply.shopeditor_itemframes = nil
+		ply.shopeditor = nil
 	end
 
-	ShopEditor.CreateItemList(frame, w, h, function(s)
+	local items = ShopEditor.GetEquipmentForRoleAll()
+
+	SortEquipmentTable(items)
+
+	ShopEditor.CreateItemList(frame, w, h, items, function(s)
 		ShopEditor.EditItem(s.item)
 	end)
 
@@ -240,22 +255,288 @@ function ShopEditor.CreateItemEditor()
 	ply.shopeditor_frame = frame
 end
 
-function ShopEditor.CreateShopEditor()
-	local ply = LocalPlayer()
+-- SHOP LINKER
+function ShopEditor.CreateRolesList(frame, w, h, roles, onClick, defaultRoleData)
+	-- Construct icon listing
+	local dlist = vgui.Create("EquipSelect", frame)
+	dlist:SetPos(0, 25)
+	dlist:SetSize(w, h - 45)
+	dlist:EnableVerticalScrollbar(true)
+	dlist:EnableHorizontal(true)
+	dlist:SetPadding(4)
 
-	if IsValid(ply.shopeditor_frame) then
-		ply.shopeditor_frame:Close()
+	for _, roleData in pairs(roles) do
+		local ic = vgui.Create("SimpleRoleIcon", dlist)
 
-		return
+		ic:SetIcon("vgui/ttt/dynamic/icon_base")
+		ic:SetIconSize(64)
+		ic:SetIconColor(roleData.color)
+
+		ic.Icon:SetImage2("vgui/ttt/dynamic/icon_base_base")
+		ic.Icon:SetImageOverlay("vgui/ttt/dynamic/icon_base_base_overlay")
+		ic.Icon:SetRoleIconImage("vgui/ttt/dynamic/roles/icon_" .. roleData.abbr)
+
+		ic.roleData = roleData
+
+		if defaultRoleData and roleData == defaultRoleData then
+			ic:SetTooltip(SafeTranslate("OwnShop"))
+		else
+			ic:SetTooltip(SafeTranslate(roleData.name))
+		end
+
+		dlist:AddPanel(ic)
+
+		local oldFn = ic.OnMousePressed
+		function ic:OnMousePressed(mcode)
+			if mcode == MOUSE_LEFT then
+				onClick(self)
+			end
+
+			oldFn(self)
+		end
 	end
 
-	local w, h = ScrW() - 100, 200
-	local topP = 25
+	return dlist
+end
 
-	local frame = vgui.Create("DFrame")
+function ShopEditor.CreateOwnShopEditor(roleData, onCreate)
+	local ply = LocalPlayer()
+	local w, h = ScrW() - 100, ScrH() - 100
+
+	local frame = vgui.Create("ShopEditorChildFrame")
+	frame:SetPrevFunc(function()
+		if IsValid(ply.shopeditor_frame) then
+			ply.shopeditor_frame:Close()
+		end
+
+		ply.shopeditor_frame = nil
+
+		ShopEditor.CreateLinkWithRole(roleData)
+	end)
 	frame:SetSize(w, h)
 	frame:Center()
-	frame:SetTitle("Shop Editor")
+	frame:SetTitle("Shop Editor -> Selected " .. roleData.name .. " -> Create Own Shop")
+	frame:SetVisible(true)
+	frame:SetDraggable(true)
+	frame:ShowCloseButton(true)
+	frame:SetMouseInputEnabled(true)
+
+	function frame:Paint(w2, h2)
+		draw.RoundedBox(0, 0, 0, w2, h2, Color(100, 100, 100))
+	end
+
+	function frame:OnClose()
+		ply.shopeditor_frame = nil
+		ply.shopeditor = nil
+	end
+
+	local items = ShopEditor.GetEquipmentForRoleAll()
+
+	SortEquipmentTable(items)
+
+	ShopEditor.CreateItemList(frame, w, h, items, function(slf)
+		if tonumber(slf.item.id) then -- is item ?
+			EquipmentItems[roleData.index] = EquipmentItems[roleData.index] or {}
+
+			if EquipmentTableHasValue(EquipmentItems[roleData.index], slf.item) then
+				for k, eq in pairs(EquipmentItems[roleData.index]) do
+					if eq.id == slf.item.id then
+						table.remove(EquipmentItems[roleData.index], k)
+
+						break
+					end
+				end
+
+				-- remove
+				net.Start("shop")
+				net.WriteBool(false)
+				net.WriteUInt(roleData.index, ROLE_BITS)
+				net.WriteString(slf.item.name)
+				net.SendToServer()
+			else
+				table.insert(EquipmentItems[roleData.index], slf.item)
+
+				-- add
+				net.Start("shop")
+				net.WriteBool(true)
+				net.WriteUInt(roleData.index, ROLE_BITS)
+				net.WriteString(slf.item.name)
+				net.SendToServer()
+			end
+		else
+			local wepTbl = weapons.GetStored(slf.item.id)
+			if wepTbl then
+				wepTbl.CanBuy = wepTbl.CanBuy or {}
+
+				if table.HasValue(wepTbl.CanBuy, roleData.index) then
+					for k, v in ipairs(wepTbl.CanBuy) do
+						if v == roleData.index then
+							table.remove(wepTbl.CanBuy, k)
+
+							break
+						end
+					end
+
+					-- remove
+					net.Start("shop")
+					net.WriteBool(false)
+					net.WriteUInt(roleData.index, ROLE_BITS)
+					net.WriteString(slf.item.id)
+					net.SendToServer()
+				else
+					table.insert(wepTbl.CanBuy, roleData.index)
+
+					-- add
+					net.Start("shop")
+					net.WriteBool(true)
+					net.WriteUInt(roleData.index, ROLE_BITS)
+					net.WriteString(slf.item.id)
+					net.SendToServer()
+				end
+			end
+		end
+	end,
+	function(slf)
+		for _, v in pairs(slf:GetItems()) do
+			local is_item = tonumber(v.item.id)
+			if is_item then
+				EquipmentItems[roleData.index] = EquipmentItems[roleData.index] or {}
+
+				if EquipmentTableHasValue(EquipmentItems[roleData.index], v.item) then
+					v:Toggle(true)
+				else
+					v:Toggle(false)
+				end
+			else
+				local wepTbl = weapons.GetStored(v.item.id)
+				if wepTbl then
+					wepTbl.CanBuy = wepTbl.CanBuy or {}
+
+					if table.HasValue(wepTbl.CanBuy, roleData.index) then
+						v:Toggle(true)
+					else
+						v:Toggle(false)
+					end
+				end
+			end
+		end
+	end)
+
+	if ply.shopeditor then
+		ply.shopeditor.selectedRole = roleData.index
+	end
+
+	frame:MakePopup()
+	frame:SetKeyboardInputEnabled(false)
+
+	if onCreate then
+		onCreate()
+	end
+
+	ply.shopeditor_frame = frame
+end
+
+function ShopEditor.CreateLinkWithRole(roleData)
+	local ply = LocalPlayer()
+	local w, h = ScrW() - 100, ScrH() / 3
+
+	local frame = vgui.Create("ShopEditorChildFrame")
+	frame:SetPrevFunc(function()
+		if IsValid(ply.shopeditor_frame) then
+			ply.shopeditor_frame:Close()
+		end
+
+		ply.shopeditor_frame = nil
+
+		ShopEditor.CreateShopLinker()
+	end)
+	frame:SetSize(w, h)
+	frame:Center()
+	frame:SetTitle("Shop Editor -> Selected " .. roleData.name .. " -> Edit Shop")
+	frame:SetVisible(true)
+	frame:SetDraggable(true)
+	frame:ShowCloseButton(true)
+	frame:SetMouseInputEnabled(true)
+
+	function frame:Paint(w2, h2)
+		draw.RoundedBox(0, 0, 0, w2, h2, Color(100, 100, 100))
+	end
+
+	function frame:OnClose()
+		ply.shopeditor_frame = nil
+		ply.shopeditor = nil
+	end
+
+	local roles = GetSortedRoles()
+
+	table.insert(roles, 1, {name = SHOP_UNSET, abbr = "ownshop", color = Color(255, 255, 255, 255)})
+	table.insert(roles, 1, {name = SHOP_DISABLED, abbr = "disable", color = Color(255, 255, 255, 255)})
+
+	local key
+
+	for k, v in ipairs(roles) do
+		if v == INNOCENT then
+			key = k
+		end
+	end
+
+	table.remove(roles, key)
+
+	ShopEditor.CreateRolesList(frame, w, h, roles, function(s)
+		local oldFallback = GetGlobalString("ttt_" .. roleData.abbr .. "_shop_fallback")
+
+		if s.roleData.name == SHOP_DISABLED or s.roleData.name == SHOP_UNSET or s.roleData.name ~= roleData.name then
+			if s.roleData.name ~= oldFallback then
+				net.Start("shopFallback")
+				net.WriteUInt(roleData.index, ROLE_BITS)
+				net.WriteString(s.roleData.name)
+				net.SendToServer()
+			end
+
+			if IsValid(frame) then
+				frame:Close()
+			end
+
+			ShopEditor.CreateShopEditor()
+		else -- own shop
+			if IsValid(frame) then
+				frame:Close()
+			end
+
+			ShopEditor.CreateOwnShopEditor(roleData, function()
+				if s.roleData.name ~= oldFallback then
+					net.Start("shopFallback")
+					net.WriteUInt(roleData.index, ROLE_BITS)
+					net.WriteString(s.roleData.name)
+					net.SendToServer()
+				end
+			end)
+		end
+	end, roleData)
+
+	frame:MakePopup()
+	frame:SetKeyboardInputEnabled(false)
+
+	ply.shopeditor_frame = frame
+end
+
+function ShopEditor.CreateShopLinker()
+	local ply = LocalPlayer()
+	local w, h = ScrW() - 100, ScrH() / 3
+
+	local frame = vgui.Create("ShopEditorChildFrame")
+	frame:SetPrevFunc(function()
+		if IsValid(ply.shopeditor_frame) then
+			ply.shopeditor_frame:Close()
+		end
+
+		ply.shopeditor_frame = nil
+
+		ShopEditor.CreateShopEditor()
+	end)
+	frame:SetSize(w, h)
+	frame:Center()
+	frame:SetTitle("Shop Editor -> Select Role")
 	frame:SetVisible(true)
 	frame:SetDraggable(true)
 	frame:ShowCloseButton(true)
@@ -269,363 +550,31 @@ function ShopEditor.CreateShopEditor()
 		ply.shopeditor_frame = nil
 	end
 
-	h = h - topP
+	local roles = GetSortedRoles()
 
-	local wMul = w / 3
+	local key
 
-	local buttonEditItems = vgui.Create("DButton", frame)
-	buttonEditItems:SetText("Edit Items / Weapons")
-	buttonEditItems:SetPos(0, topP)
-	buttonEditItems:SetSize(wMul, h)
-
-	buttonEditItems.DoClick = function()
-		frame:Close()
-
-		ShopEditor.CreateItemEditor()
+	for k, v in ipairs(roles) do
+		if v == INNOCENT then
+			key = k
+		end
 	end
 
-	local buttonLinkShops = vgui.Create("DButton", frame)
-	buttonLinkShops:SetText("Edit Shops")
-	buttonLinkShops:SetPos(wMul * 2, topP)
-	buttonLinkShops:SetSize(wMul, h)
+	table.remove(roles, key)
 
-	buttonLinkShops.DoClick = function()
-		frame:Close()
-	end
+	ShopEditor.CreateRolesList(frame, w, h, roles, function(s)
+		if IsValid(ply.shopeditor_frame) then
+			ply.shopeditor_frame:Close()
+		end
 
-	local buttonOptions = vgui.Create("DButton", frame)
-	buttonOptions:SetText("Options")
-	buttonOptions:SetPos(wMul, topP)
-	buttonOptions:SetSize(wMul, h)
-
-	buttonOptions.DoClick = function()
-		frame:Close()
-	end
+		ShopEditor.CreateLinkWithRole(s.roleData)
+	end)
 
 	frame:MakePopup()
 	frame:SetKeyboardInputEnabled(false)
 
 	ply.shopeditor_frame = frame
 end
-net.Receive("newshop", ShopEditor.CreateShopEditor)
-
-function ShopEditor.newshop()
-	local sr = GetShopRoles()[1]
-	local selectedRole = sr.index
-	local state = true
-	local w, h = 500, 450
-	local descW = 300
-
-	local DermaPanel = vgui.Create("DFrame")
-	DermaPanel:SetPos(50, 50)
-	DermaPanel:SetSize(w + descW, h)
-	DermaPanel:SetTitle("Shop Editor")
-	DermaPanel:SetVisible(true)
-	DermaPanel:SetDraggable(true)
-	DermaPanel:ShowCloseButton(true)
-	DermaPanel:MakePopup()
-
-	function DermaPanel:Paint(w2, h2)
-		draw.RoundedBox(0, 0, 0, w2, h2, Color(100, 100, 100))
-	end
-
-	function DermaPanel:OnClose()
-		LocalPlayer().shopeditor = nil
-	end
-
-	local DScrollPanel = vgui.Create("DScrollPanel", DermaPanel)
-	DScrollPanel:SetSize(w - 100, h - 45)
-	DScrollPanel:Center()
-
-	local sbar = DScrollPanel:GetVBar()
-	function sbar:Paint(w2, h2)
-		draw.RoundedBox(0, 0, 0, w2, h2, Color(0, 0, 0, 100))
-	end
-
-	function sbar.btnUp:Paint(w2, h2)
-		draw.RoundedBox(0, 0, 0, w2, h2, Color(200, 100, 0))
-	end
-
-	function sbar.btnDown:Paint(w2, h2)
-		draw.RoundedBox(0, 0, 0, w2, h2, Color(200, 100, 0))
-	end
-
-	function sbar.btnGrip:Paint(w2, h2)
-		draw.RoundedBox(0, 0, 0, w2, h2, Color(100, 200, 0))
-	end
-
-	-- Construct icon listing
-	local dlist = vgui.Create("EquipSelect", DermaPanel)
-	dlist:SetPos(0, 20)
-	dlist:SetSize(w, h - 45)
-	dlist:EnableVerticalScrollbar(true)
-	dlist:EnableHorizontal(true)
-	dlist:SetPadding(4)
-
-	dlist.selectedRole = selectedRole
-
-	local menu = vgui.Create("DComboBox")
-	menu:SetParent(DermaPanel)
-	menu:SetPos(0, h - 25)
-	menu:SetSize(w, 25)
-	menu:SetValue(sr.name)
-
-	for _, v in pairs(GetRoles()) do
-		if v ~= INNOCENT then
-			menu:AddChoice(v.name, v.index)
-		end
-	end
-
-	local ply = LocalPlayer()
-	local items = ShopEditor.GetEquipmentForRoleAll()
-
-	SortEquipmentTable(items)
-
-	for _, item in pairs(items) do
-		local ic
-
-		-- Create icon panel
-		if item.material and item.material ~= "vgui/ttt/icon_id" then
-			if not ShopEditor.ItemIsWeapon(item) then
-				ic = vgui.Create("SimpleClickIcon", dlist)
-			else
-				ic = vgui.Create("LayeredClickIcon", dlist)
-			end
-
-			-- Slot marker icon
-			if ShopEditor.ItemIsWeapon(item) then
-				local slot = vgui.Create("SimpleClickIconLabelled")
-				slot:SetIcon("vgui/ttt/slotcap")
-				slot:SetIconColor(sr.color or COLOR_GREY)
-				slot:SetIconSize(16)
-				slot:SetIconText(item.slot)
-				slot:SetIconProperties(COLOR_WHITE, "DefaultBold", {opacity = 220, offset = 1}, {10, 8})
-
-				ic:AddLayer(slot)
-				ic:EnableMousePassthrough(slot)
-			end
-
-			ic:SetIconSize(64)
-			ic:SetIcon(item.material)
-		elseif item.model and item.model ~= "models/weapons/w_bugbait.mdl" then
-			ic = vgui.Create("SpawnIcon", dlist)
-			ic:SetModel(item.model)
-		end
-
-		if ic then
-			ic.item = item
-
-			function ic:UpdateCheck()
-				if not dlist.selectedRole then return end
-
-				local is_item = tonumber(ic.item.id)
-				if is_item then
-					EquipmentItems[dlist.selectedRole] = EquipmentItems[dlist.selectedRole] or {}
-
-					if EquipmentTableHasValue(EquipmentItems[dlist.selectedRole], ic.item) then
-						ic:Toggle(true)
-					else
-						ic:Toggle(false)
-					end
-				else
-					local wepTbl = weapons.GetStored(ic.item.id)
-					if wepTbl then
-						wepTbl.CanBuy = wepTbl.CanBuy or {}
-
-						if table.HasValue(wepTbl.CanBuy, dlist.selectedRole) then
-							ic:Toggle(true)
-						else
-							ic:Toggle(false)
-						end
-					end
-				end
-			end
-
-			ic.OnClick = function()
-				if not dlist.selectedRole or not state then return end
-
-				local is_item = tonumber(ic.item.id)
-				if is_item then
-					EquipmentItems[dlist.selectedRole] = EquipmentItems[dlist.selectedRole] or {}
-
-					if EquipmentTableHasValue(EquipmentItems[dlist.selectedRole], ic.item) then
-						for k, eq in pairs(EquipmentItems[dlist.selectedRole]) do
-							if eq.id == ic.item.id then
-								table.remove(EquipmentItems[dlist.selectedRole], k)
-
-								break
-							end
-						end
-
-						-- remove
-						net.Start("shop")
-						net.WriteBool(false)
-						net.WriteUInt(dlist.selectedRole, ROLE_BITS)
-						net.WriteString(ic.item.name)
-						net.SendToServer()
-					else
-						table.insert(EquipmentItems[dlist.selectedRole], ic.item)
-
-						-- add
-						net.Start("shop")
-						net.WriteBool(true)
-						net.WriteUInt(dlist.selectedRole, ROLE_BITS)
-						net.WriteString(ic.item.name)
-						net.SendToServer()
-					end
-				else
-					local wepTbl = weapons.GetStored(ic.item.id)
-					if wepTbl then
-						wepTbl.CanBuy = wepTbl.CanBuy or {}
-
-						if table.HasValue(wepTbl.CanBuy, dlist.selectedRole) then
-							for k, v in ipairs(wepTbl.CanBuy) do
-								if v == dlist.selectedRole then
-									table.remove(wepTbl.CanBuy, k)
-
-									break
-								end
-							end
-
-							-- remove
-							net.Start("shop")
-							net.WriteBool(false)
-							net.WriteUInt(dlist.selectedRole, ROLE_BITS)
-							net.WriteString(ic.item.id)
-							net.SendToServer()
-						else
-							table.insert(wepTbl.CanBuy, dlist.selectedRole)
-
-							-- add
-							net.Start("shop")
-							net.WriteBool(true)
-							net.WriteUInt(dlist.selectedRole, ROLE_BITS)
-							net.WriteString(ic.item.id)
-							net.SendToServer()
-						end
-					end
-				end
-
-				for _, v in pairs(dlist:GetItems()) do
-					if v.UpdateCheck then
-						v:UpdateCheck()
-					end
-				end
-			end
-
-			local tip = GetEquipmentTranslation(item.name, item.PrintName) .. " (" .. SafeTranslate(item.type) .. ")"
-
-			ic:SetTooltip(tip)
-
-			dlist:AddPanel(ic)
-		end
-	end
-
-	ply.shopeditor = dlist
-
-	-- first init
-	for _, v in pairs(dlist:GetItems()) do
-		if v.UpdateCheck then
-			v:UpdateCheck()
-		end
-	end
-
-	-- draw settings
-	local fbmenu = vgui.Create("DComboBox")
-	fbmenu:SetParent(DermaPanel)
-	fbmenu:SetPos(5 + w, 25)
-	fbmenu:SetSize(descW - 10, 25)
-
-	function fbmenu:RefreshChoices()
-		-- clear old data
-		self:Clear()
-
-		local rd = GetRoleByIndex(dlist.selectedRole)
-		local fallback = GetGlobalString("ttt_" .. rd.abbr .. "_shop_fallback")
-		local fb = GetRoleByName(fallback)
-
-		-- update state
-		if fallback == SHOP_DISABLED or fallback == SHOP_UNSET and rd.fallbackTable then
-			state = false
-		else
-			state = true
-		end
-
-		self:AddChoice("Use own shop", {name = rd.name, data = rd.name})
-
-		-- add linked or own shop choice
-		for _, v in pairs(GetShopRoles()) do
-			if v.index ~= dlist.selectedRole then
-				self:AddChoice("Link with " .. v.name, {name = v.name, data = v.name})
-			end
-		end
-
-		-- add default choice
-		if rd.fallbackTable then
-			self:AddChoice("Default Role Equipment", {name = rd.name, data = SHOP_UNSET})
-		end
-
-		self:AddChoice("Disable shop", {name = rd.name, data = SHOP_DISABLED})
-
-		-- set default value
-		if fallback == SHOP_DISABLED then
-			self:SetValue("Disabled shop")
-		elseif not state then
-			self:SetValue("Default Role Equipment")
-		else
-			self:SetValue(dlist.selectedRole == fb.index and "Using own shop" or ("Linked with " .. fb.name))
-		end
-
-		-- generally update
-		for _, v in pairs(dlist:GetItems()) do
-			if v.UpdateCheck then
-				v:UpdateCheck()
-			end
-		end
-
-		-- disable if not needed
-		if not state or fb.index ~= dlist.selectedRole then
-			for _, v in pairs(dlist:GetItems()) do
-				if v.Toggle then
-					v:Toggle(false)
-				end
-			end
-		end
-	end
-
-	fbmenu:RefreshChoices()
-
-	function fbmenu:OnSelect(_, _, data)
-		local rd = GetRoleByIndex(dlist.selectedRole)
-		local oldFallback = GetGlobalString("ttt_" .. rd.abbr .. "_shop_fallback")
-
-		if data.data ~= oldFallback then
-			net.Start("shopFallback")
-			net.WriteUInt(dlist.selectedRole, ROLE_BITS)
-			net.WriteString(data.data)
-			net.SendToServer()
-
-			if data.data == SHOP_DISABLED or data.data == SHOP_UNSET or data.data ~= GetRoleByIndex(dlist.selectedRole).name then
-				state = false
-			else
-				state = true
-			end
-
-			for _, v in pairs(dlist:GetItems()) do
-				if v.Toggle then
-					v:Toggle(false)
-				end
-			end
-		end
-	end
-
-	function menu:OnSelect(_, _, data)
-		dlist.selectedRole = data
-
-		fbmenu:RefreshChoices()
-	end
-end
---net.Receive("newshop", ShopEditor.newshop)
 
 function ShopEditor.shopFallbackAnsw(len)
 	local subrole = net.ReadUInt(ROLE_BITS)
@@ -716,7 +665,7 @@ function ShopEditor.shopFallbackRefresh(len)
 		if not wshop.selectedRole then return end
 
 		for _, v in pairs(wshop:GetItems()) do
-			if v.item and v.UpdateCheck then
+			if v.item then
 				local is_item = tonumber(v.item.id)
 				if is_item then
 					EquipmentItems[wshop.selectedRole] = EquipmentItems[wshop.selectedRole] or {}
@@ -743,3 +692,76 @@ function ShopEditor.shopFallbackRefresh(len)
 	end
 end
 net.Receive("shopFallbackRefresh", ShopEditor.shopFallbackRefresh)
+
+-- MAIN WINDOW
+
+function ShopEditor.CreateShopEditor()
+	local ply = LocalPlayer()
+
+	if IsValid(ply.shopeditor_frame) then
+		ply.shopeditor_frame:Close()
+
+		return
+	end
+
+	local w, h = ScrW() - 100, 200
+	local topP = 25
+
+	local frame = vgui.Create("DFrame")
+	frame:SetSize(w, h)
+	frame:Center()
+	frame:SetTitle("Shop Editor")
+	frame:SetVisible(true)
+	frame:SetDraggable(true)
+	frame:ShowCloseButton(true)
+	frame:SetMouseInputEnabled(true)
+
+	function frame:Paint(w2, h2)
+		draw.RoundedBox(0, 0, 0, w2, h2, Color(100, 100, 100))
+	end
+
+	function frame:OnClose()
+		ply.shopeditor_frame = nil
+	end
+
+	h = h - topP
+
+	local wMul = w / 3
+
+	local buttonEditItems = vgui.Create("DButton", frame)
+	buttonEditItems:SetText("Edit Items / Weapons")
+	buttonEditItems:SetPos(0, topP)
+	buttonEditItems:SetSize(wMul, h)
+
+	buttonEditItems.DoClick = function()
+		frame:Close()
+
+		ShopEditor.CreateItemEditor()
+	end
+
+	local buttonLinkShops = vgui.Create("DButton", frame)
+	buttonLinkShops:SetText("Edit Shops")
+	buttonLinkShops:SetPos(wMul, topP)
+	buttonLinkShops:SetSize(wMul, h)
+
+	buttonLinkShops.DoClick = function()
+		frame:Close()
+
+		ShopEditor.CreateShopLinker()
+	end
+
+	local buttonOptions = vgui.Create("DButton", frame)
+	buttonOptions:SetText("Options (WIP)")
+	buttonOptions:SetPos(wMul * 2, topP)
+	buttonOptions:SetSize(wMul, h)
+
+	buttonOptions.DoClick = function()
+		--frame:Close()
+	end
+
+	frame:MakePopup()
+	frame:SetKeyboardInputEnabled(false)
+
+	ply.shopeditor_frame = frame
+end
+net.Receive("newshop", ShopEditor.CreateShopEditor)
