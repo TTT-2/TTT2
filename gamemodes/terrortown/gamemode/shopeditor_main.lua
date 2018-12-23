@@ -1,5 +1,7 @@
 util.AddNetworkString("newshop")
 
+ShopEditor.ShopTablePre = "ttt2_shop_"
+
 function ShopEditor.ShopEditor(ply, cmd, args)
 	if ply:IsAdmin() then
 		net.Start("newshop")
@@ -8,61 +10,73 @@ function ShopEditor.ShopEditor(ply, cmd, args)
 end
 concommand.Add("shopeditor", ShopEditor.ShopEditor)
 
--- TODO rebuild with database handling instead of dini file creation like
-function ShopEditor.ShopEditorHasEquipment(roleData, equip)
-	local rolename = string.lower(roleData.name)
-	local filename = "roleweapons/" .. rolename .. "/" .. equip .. ".txt"
+function ShopEditor.CreateShopDB(name)
+	local result
 
-	return file.Exists(filename, "DATA")
+	if not sql.TableExists(ShopEditor.ShopTablePre .. name) then
+		result = sql.Query("CREATE TABLE " .. ShopEditor.ShopTablePre .. name .. " (name TEXT PRIMARY KEY)")
+	end
+
+	return result ~= false
 end
 
-function ShopEditor.AddToShopEditor(ply, roleData, equip)
-	local rolename = string.lower(roleData.name)
-	local filename = "roleweapons/" .. rolename .. "/" .. equip .. ".txt"
-
-	if not file.Exists(filename, "DATA") then
-		file.CreateDir("roleweapons") -- Create the directory
-		file.CreateDir("roleweapons/" .. rolename) -- Create the directory
-		file.Write(filename, "") -- Write to .txt
-
-		local is_item = GetEquipmentItemByFileName(equip)
-		local wep = not is_item and GetWeaponNameByFileName(equip)
-
-		local wepTbl = wep and weapons.GetStored(wep)
-		if wepTbl then
-			AddEquipmentWeaponToRole(roleData.index, wepTbl)
-		elseif is_item then
-			AddEquipmentItemToRole(roleData.index, is_item)
-		end
-
-		-- last but not least, notify each player
-		for _, v in ipairs(player.GetAll()) do
-			v:ChatPrint("[TTT2][SHOP] " .. ply:Nick() .. " added '" .. equip .. "' into the shop of the " .. rolename)
+function ShopEditor.CreateShopDBs()
+	for _, v in pairs(GetRoles()) do
+		if v ~= INNOCENT then
+			ShopEditor.CreateShopDB(v.name)
 		end
 	end
 end
 
+function ShopEditor.GetShopEquipments(roleData)
+	if roleData == INNOCENT then
+		return {}
+	end
+
+	local result = sql.Query("SELECT * FROM " .. ShopEditor.ShopTablePre .. roleData.name)
+
+	if not result or not istable(result) then
+		result = {}
+	end
+
+	return result
+end
+
+function ShopEditor.AddToShopEditor(ply, roleData, equip)
+	sql.Query("INSERT INTO " .. ShopEditor.ShopTablePre .. roleData.name .. " VALUES ('" .. equip .. "')")
+
+	local is_item = GetEquipmentItemByFileName(equip)
+	local wep = not is_item and GetWeaponNameByFileName(equip)
+
+	local wepTbl = wep and weapons.GetStored(wep)
+	if wepTbl then
+		AddEquipmentWeaponToRole(roleData.index, wepTbl)
+	elseif is_item then
+		AddEquipmentItemToRole(roleData.index, is_item)
+	end
+
+	-- last but not least, notify each player
+	for _, v in ipairs(player.GetAll()) do
+		v:ChatPrint("[TTT2][SHOP] " .. ply:Nick() .. " added '" .. equip .. "' into the shop of the " .. roleData.name)
+	end
+end
+
 function ShopEditor.RemoveFromShopEditor(ply, roleData, equip)
-	local rolename = string.lower(roleData.name)
-	local filename = "roleweapons/" .. rolename .. "/" .. equip .. ".txt"
+	sql.Query("DELETE FROM " .. ShopEditor.ShopTablePre .. roleData.name .. " WHERE name='" .. equip .. "'")
 
-	if file.Exists(filename, "DATA") then
-		file.Delete(filename) -- Write to .txt
+	local is_item = GetEquipmentItemByFileName(equip)
+	local wep = not is_item and GetWeaponNameByFileName(equip)
 
-		local is_item = GetEquipmentItemByFileName(equip)
-		local wep = not is_item and GetWeaponNameByFileName(equip)
+	local wepTbl = wep and weapons.GetStored(wep)
+	if wepTbl then
+		RemoveEquipmentWeaponFromRole(roleData.index, wepTbl)
+	elseif is_item then
+		RemoveEquipmentItemFromRole(roleData.index, is_item)
+	end
 
-		local wepTbl = wep and weapons.GetStored(wep)
-		if wepTbl then
-			RemoveEquipmentWeaponFromRole(roleData.index, wepTbl)
-		elseif is_item then
-			RemoveEquipmentItemFromRole(roleData.index, is_item)
-		end
-
-		-- last but not least, notify each player
-		for _, v in ipairs(player.GetAll()) do
-			v:ChatPrint("[TTT2][SHOP] " .. ply:Nick() .. " removed '" .. equip .. "' from the shop of the " .. rolename)
-		end
+	-- last but not least, notify each player
+	for _, v in ipairs(player.GetAll()) do
+		v:ChatPrint("[TTT2][SHOP] " .. ply:Nick() .. " removed '" .. equip .. "' from the shop of the " .. roleData.name)
 	end
 end
 

@@ -469,6 +469,20 @@ function PANEL:ApplySchemeSettings()
 
 end
 
+local oldPaintOver = PANEL.PaintOver
+function PANEL:PaintOver(w, h)
+	if self.toggled then
+		surface.SetDrawColor(0, 200, 0, 255)
+		surface.SetMaterial(matHover)
+
+		self:DrawTexturedRect()
+	end
+
+	if isfunction(oldPaintOver) then
+		oldPaintOver(self, w, h)
+	end
+end
+
 function PANEL:OnCursorEntered()
 	self.PaintOverOld = self.PaintOver
 	self.PaintOver = self.PaintOverHovered
@@ -481,7 +495,7 @@ function PANEL:OnCursorExited()
 end
 
 function PANEL:PaintOverHovered()
-	if self.animPress:Active() then return end
+	if self.animPress:Active() or self.toggled then return end
 
 	surface.SetDrawColor(255, 255, 255, 80)
 	surface.SetMaterial(matHover)
@@ -525,6 +539,10 @@ function PANEL:PressedAnim(anim, delta, data)
 	local border = math.sin(delta * math.pi) * (self.m_iIconSize * 0.05)
 
 	self.Icon:StretchToParent(border, border, border, border)
+end
+
+function PANEL:Toggle(b)
+	self.toggled = b
 end
 
 vgui.Register("SimpleRoleIcon", PANEL, "Panel")

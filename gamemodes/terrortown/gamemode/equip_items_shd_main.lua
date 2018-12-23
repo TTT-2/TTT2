@@ -522,14 +522,12 @@ if SERVER then
 		SYNC_EQUIP = SYNC_EQUIP or {}
 		SYNC_EQUIP[roleData.index] = {} -- reset
 
-		-- init files
-		local roleName = string.lower(roleData.name)
-		local files = file.Find("roleweapons/" .. roleName .. "/*.txt", "DATA")
+		-- init equipment
+		local result = ShopEditor.GetShopEquipments(roleData)
 
-		for _, v in pairs(files) do -- TODO ipairs ?
-			local name = string.sub(v, 1, #v - 4) -- cut #".txt"
-			local is_item = GetEquipmentItemByFileName(name)
-			local wep = not is_item and GetWeaponNameByFileName(name)
+		for _, v in ipairs(result) do
+			local is_item = GetEquipmentItemByFileName(v.name)
+			local wep = not is_item and GetWeaponNameByFileName(v.name)
 
 			local swep_table = wep and weapons.GetStored(wep)
 			if swep_table then

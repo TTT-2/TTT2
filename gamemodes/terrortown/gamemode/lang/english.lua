@@ -1098,3 +1098,9 @@ L.binoc_zoom_level = "LEVEL"
 L.binoc_body = "BODY DETECTED"
 
 L.idle_popup_title = "Idle"
+
+-- ttt2
+L.create_own_shop = "Create own shop"
+L.shop_link = "Link with"
+L.shop_disabled = "Disable shop"
+L.shop_default = "Use default shop"

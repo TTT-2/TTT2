@@ -274,14 +274,23 @@ function ShopEditor.CreateRolesList(frame, w, h, roles, onClick, defaultRoleData
 
 		ic.Icon:SetImage2("vgui/ttt/dynamic/icon_base_base")
 		ic.Icon:SetImageOverlay("vgui/ttt/dynamic/icon_base_base_overlay")
-		ic.Icon:SetRoleIconImage("vgui/ttt/dynamic/roles/icon_" .. roleData.abbr)
 
 		ic.roleData = roleData
 
 		if defaultRoleData and roleData == defaultRoleData then
-			ic:SetTooltip(SafeTranslate("OwnShop"))
+			ic.Icon:SetRoleIconImage("vgui/ttt/dynamic/roles/icon_shop_custom")
+			ic:SetTooltip(SafeTranslate("create_own_shop"))
 		else
-			ic:SetTooltip(SafeTranslate(roleData.name))
+			if roleData.name == SHOP_DISABLED then
+				ic.Icon:SetRoleIconImage("vgui/ttt/dynamic/roles/icon_disabled")
+				ic:SetTooltip(SafeTranslate("shop_disabled"))
+			elseif roleData.name == SHOP_UNSET then
+				ic.Icon:SetRoleIconImage("vgui/ttt/dynamic/roles/icon_shop_default")
+				ic:SetTooltip(SafeTranslate("shop_default"))
+			else
+				ic.Icon:SetRoleIconImage("vgui/ttt/dynamic/roles/icon_" .. roleData.abbr)
+				ic:SetTooltip(SafeTranslate("shop_link") .. ": " .. SafeTranslate(roleData.name))
+			end
 		end
 
 		dlist:AddPanel(ic)
@@ -469,9 +478,10 @@ function ShopEditor.CreateLinkWithRole(roleData)
 
 	local roles = GetSortedRoles()
 
-	table.insert(roles, 1, {name = SHOP_UNSET, abbr = "ownshop", color = Color(255, 255, 255, 255)})
-	table.insert(roles, 1, {name = SHOP_DISABLED, abbr = "disable", color = Color(255, 255, 255, 255)})
+	table.insert(roles, 1, {name = SHOP_UNSET, abbr = "shop_default", color = roleData.color})
+	table.insert(roles, 1, {name = SHOP_DISABLED, abbr = "disable", color = roleData.color})
 
+	-- remove innocents
 	local key
 
 	for k, v in ipairs(roles) do
@@ -482,7 +492,18 @@ function ShopEditor.CreateLinkWithRole(roleData)
 
 	table.remove(roles, key)
 
-	ShopEditor.CreateRolesList(frame, w, h, roles, function(s)
+	-- change position of own shop
+	for k, v in ipairs(roles) do
+		if v == roleData then
+			key = k
+		end
+	end
+
+	table.remove(roles, key)
+
+	table.insert(roles, 1, roleData)
+
+	local dlist = ShopEditor.CreateRolesList(frame, w, h, roles, function(s)
 		local oldFallback = GetGlobalString("ttt_" .. roleData.abbr .. "_shop_fallback")
 
 		if s.roleData.name == SHOP_DISABLED or s.roleData.name == SHOP_UNSET or s.roleData.name ~= roleData.name then
@@ -513,6 +534,16 @@ function ShopEditor.CreateLinkWithRole(roleData)
 			end)
 		end
 	end, roleData)
+
+	if dlist then
+		local oldFallback = GetGlobalString("ttt_" .. roleData.abbr .. "_shop_fallback")
+
+		for _, v in pairs(dlist:GetItems()) do
+			if v.roleData.name == oldFallback then
+				v:Toggle(true)
+			end
+		end
+	end
 
 	frame:MakePopup()
 	frame:SetKeyboardInputEnabled(false)
