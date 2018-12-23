@@ -530,6 +530,8 @@ function ShopEditor.CreateLinkWithRole(roleData)
 					net.WriteUInt(roleData.index, ROLE_BITS)
 					net.WriteString(s.roleData.name)
 					net.SendToServer()
+				else
+					ShopEditor.shopFallbackRefresh()
 				end
 			end)
 		end
@@ -689,7 +691,7 @@ function ShopEditor.shopFallbackReset(len)
 end
 net.Receive("shopFallbackReset", ShopEditor.shopFallbackReset)
 
-function ShopEditor.shopFallbackRefresh(len)
+function ShopEditor.shopFallbackRefresh()
 	local wshop = LocalPlayer().shopeditor
 
 	if wshop and wshop.GetItems then
