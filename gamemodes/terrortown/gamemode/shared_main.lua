@@ -4,7 +4,7 @@ GM.Name = "[TTT2] Trouble in Terrorist Town 2 (Advanced Update) - by Alf21"
 GM.Author = "Bad King Urgrain && Alf21"
 GM.Email = "4lf-mueller@gmx.de"
 GM.Website = "ttt.badking.net, ttt2.informaskill.de"
-GM.Version = "0.3.8b"
+GM.Version = "0.3.8.1b"
 GM.Customized = true
 
 TTT2 = true -- identifier for TTT2. Just use "if TTT2 then ... end"
@@ -485,16 +485,6 @@ function GetSortedRoles()
 	return roles
 end
 
-function GetWeaponNameByFileName(name)
-	for _, v in ipairs(weapons.GetList()) do
-		local n = WEPS.GetClass(v)
-
-		if string.lower(n) == name then
-			return n
-		end
-	end
-end
-
 function GetActiveRoles()
 	return ACTIVEROLES
 end
@@ -640,6 +630,12 @@ COLOR_OLIVE = Color(100, 100, 0, 255)
 ttt_include("util")
 ttt_include("lang_shd")
 ttt_include("equip_items_shd")
+
+function GetWeaponByName(name)
+	name = GetEquipmentFileName(name)
+
+	return weapons.GetStored(name), name
+end
 
 function DetectiveMode()
 	return GetGlobalBool("ttt_detective", false)

@@ -1,8 +1,8 @@
 ShopEditor = ShopEditor or {}
 ShopEditor.savingKeys = {
-	"credits",
-	"globalLimited",
-	"minPlayers"
+	{key = "credits", typ = "number"},
+	{key = "globalLimited", typ = "number"},
+	{key = "minPlayers", typ = "number"}
 }
 
 function ShopEditor.InitDefaultData(item)
@@ -47,24 +47,17 @@ function ShopEditor.WriteItemData(messageName, name, item, plys)
 end
 
 function ShopEditor.ReadItemData()
-	local eq = net.ReadString()
-	local equip = GetEquipmentFileName(eq)
+	local item, wep, name = GetEquipmentByName(net.ReadString())
 
-	local item = GetEquipmentItemByFileName(equip)
-	if not item then
-		item = GetWeaponNameByFileName(equip)
-		if item then
-			item = weapons.GetStored(item)
-		end
-	end
+	item = item or wep
 
 	if not item then
-		return equip
+		return name
 	end
 
 	item.credits = net.ReadUInt(16)
 	item.globalLimited = tonumber(net.ReadBit())
 	item.minPlayers = net.ReadUInt(16)
 
-	return equip, item
+	return name, item
 end

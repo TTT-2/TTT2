@@ -73,8 +73,11 @@ function GM:InitPostEntity()
 		ShopEditor.InitDefaultData(eq)
 	end
 
-	for _, wep in ipairs(ALL_WEAPONS) do
+	-- init and reset normal weapons equipment
+	for _, wep in ipairs(weapons.GetList()) do
 		ShopEditor.InitDefaultData(wep)
+
+		wep.CanBuy = {}
 	end
 
 	-- reset normal equipment tables
@@ -84,11 +87,6 @@ function GM:InitPostEntity()
 		if Equipment then
 			Equipment[role.index] = {}
 		end
-	end
-
-	-- reset normal weapons equipment
-	for _, wep in ipairs(weapons.GetList()) do
-		wep.CanBuy = {}
 	end
 
 	-- initialize fallback shops

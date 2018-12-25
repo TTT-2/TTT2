@@ -108,6 +108,14 @@ function CreateChanges()
 	- reworked weaponshop -> ShopEditor
 	- changed file based shopsystem into sql
 	]])
+
+	AddChange("0.3.8.1b", [[
+	- fixed credit issue in ShopEditor (all Data will load and save correct now)
+	- small performance improvements
+	- cleaned up some useless functions
+	- removed ALL_WEAPONS table (SWEP will cache the initialized data now in it's own table / entity data)
+	- some function renaming
+	]])
 end
 
 function ShowChanges()

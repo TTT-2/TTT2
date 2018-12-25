@@ -45,14 +45,11 @@ end
 function ShopEditor.AddToShopEditor(ply, roleData, equip)
 	sql.Query("INSERT INTO " .. ShopEditor.ShopTablePre .. roleData.name .. " VALUES ('" .. equip .. "')")
 
-	local is_item = GetEquipmentItemByFileName(equip)
-	local wep = not is_item and GetWeaponNameByFileName(equip)
-
-	local wepTbl = wep and weapons.GetStored(wep)
-	if wepTbl then
-		AddEquipmentWeaponToRole(roleData.index, wepTbl)
-	elseif is_item then
-		AddEquipmentItemToRole(roleData.index, is_item)
+	local item, wep = GetEquipmentByName(equip)
+	if wep then
+		AddEquipmentWeaponToRole(roleData.index, wep)
+	elseif item then
+		AddEquipmentItemToRole(roleData.index, item)
 	end
 
 	-- last but not least, notify each player
@@ -64,14 +61,11 @@ end
 function ShopEditor.RemoveFromShopEditor(ply, roleData, equip)
 	sql.Query("DELETE FROM " .. ShopEditor.ShopTablePre .. roleData.name .. " WHERE name='" .. equip .. "'")
 
-	local is_item = GetEquipmentItemByFileName(equip)
-	local wep = not is_item and GetWeaponNameByFileName(equip)
-
-	local wepTbl = wep and weapons.GetStored(wep)
-	if wepTbl then
-		RemoveEquipmentWeaponFromRole(roleData.index, wepTbl)
-	elseif is_item then
-		RemoveEquipmentItemFromRole(roleData.index, is_item)
+	local item, wep = GetEquipmentByName(equip)
+	if wep then
+		RemoveEquipmentWeaponFromRole(roleData.index, wep)
+	elseif item then
+		RemoveEquipmentItemFromRole(roleData.index, item)
 	end
 
 	-- last but not least, notify each player

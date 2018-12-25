@@ -8,8 +8,8 @@ function ShopEditor.BuildInsertString(name, item, keys)
 	local tmp = {}
 
 	for _, key in ipairs(keys) do
-		if item[key] then
-			tmp[key] = item[key]
+		if item[key.key] then
+			tmp[key.key] = item[key.key]
 		end
 	end
 
@@ -36,8 +36,8 @@ function ShopEditor.BuildUpdateString(name, item, keys)
 	local tmp = {}
 
 	for _, key in ipairs(keys) do
-		if item[key] then
-			tmp[key] = item[key]
+		if item[key.key] then
+			tmp[key.key] = item[key.key]
 		end
 	end
 
@@ -95,8 +95,12 @@ function ShopEditor.LoadItem(name, item, keys)
 
 	for k, v in pairs(result[1]) do
 		for _, key in ipairs(keys) do
-			if k == key and (not item[k] or item[k] ~= v) then
-				item[k] = v
+			if k == key.key and (not item[k] or item[k] ~= v) then
+				if key.typ == "number" then
+					item[k] = tonumber(v)
+				else
+					item[k] = v
+				end
 
 				changed = true
 			end

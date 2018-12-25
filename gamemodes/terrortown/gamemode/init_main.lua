@@ -290,7 +290,7 @@ function GM:InitPostEntity()
 			end
 		end
 
-		for _, wep in ipairs(ALL_WEAPONS) do
+		for _, wep in ipairs(weapons.GetList()) do
 			local name = GetEquipmentFileName(wep.id)
 
 			ShopEditor.InitDefaultData(wep)

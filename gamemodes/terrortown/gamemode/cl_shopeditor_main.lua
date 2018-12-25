@@ -25,7 +25,7 @@ function ShopEditor.GetEquipmentForRoleAll()
 		hook.Run("TTT2ModifyShopEditorIgnoreSWEPs", eject) -- possibility to modify from externally
 
 		-- find buyable weapons to load info from
-		for _, v in ipairs(ALL_WEAPONS) do
+		for _, v in ipairs(weapons.GetList()) do
 			local name = WEPS.GetClass(v)
 
 			if name
@@ -186,22 +186,7 @@ function ShopEditor.EditItem(item)
 end
 
 net.Receive("TTT2SESaveItem", function()
-	local eq = net.ReadString()
-	local equip = GetEquipmentFileName(eq)
-
-	local item = GetEquipmentItemByFileName(equip)
-	if not item then
-		item = GetWeaponNameByFileName(equip)
-		if item then
-			item = weapons.GetStored(item)
-		end
-	end
-
-	if not item then return end
-
-	local credits = net.ReadUInt(16)
-
-	item.credits = credits
+	ShopEditor.ReadItemData()
 end)
 
 function ShopEditor.CreateItemEditor()
@@ -373,14 +358,14 @@ function ShopEditor.CreateOwnShopEditor(roleData, onCreate)
 				net.SendToServer()
 			end
 		else
-			local wepTbl = weapons.GetStored(slf.item.id)
-			if wepTbl then
-				wepTbl.CanBuy = wepTbl.CanBuy or {}
+			local wep = weapons.GetStored(slf.item.id)
+			if wep then
+				wep.CanBuy = wep.CanBuy or {}
 
-				if table.HasValue(wepTbl.CanBuy, roleData.index) then
-					for k, v in ipairs(wepTbl.CanBuy) do
+				if table.HasValue(wep.CanBuy, roleData.index) then
+					for k, v in ipairs(wep.CanBuy) do
 						if v == roleData.index then
-							table.remove(wepTbl.CanBuy, k)
+							table.remove(wep.CanBuy, k)
 
 							break
 						end
@@ -390,16 +375,16 @@ function ShopEditor.CreateOwnShopEditor(roleData, onCreate)
 					net.Start("shop")
 					net.WriteBool(false)
 					net.WriteUInt(roleData.index, ROLE_BITS)
-					net.WriteString(slf.item.id)
+					net.WriteString(wep.id)
 					net.SendToServer()
 				else
-					table.insert(wepTbl.CanBuy, roleData.index)
+					table.insert(wep.CanBuy, roleData.index)
 
 					-- add
 					net.Start("shop")
 					net.WriteBool(true)
 					net.WriteUInt(roleData.index, ROLE_BITS)
-					net.WriteString(slf.item.id)
+					net.WriteString(wep.id)
 					net.SendToServer()
 				end
 			end
@@ -417,11 +402,11 @@ function ShopEditor.CreateOwnShopEditor(roleData, onCreate)
 					v:Toggle(false)
 				end
 			else
-				local wepTbl = weapons.GetStored(v.item.id)
-				if wepTbl then
-					wepTbl.CanBuy = wepTbl.CanBuy or {}
+				local wep = weapons.GetStored(v.item.id)
+				if wep then
+					wep.CanBuy = wep.CanBuy or {}
 
-					if table.HasValue(wepTbl.CanBuy, roleData.index) then
+					if table.HasValue(wep.CanBuy, roleData.index) then
 						v:Toggle(true)
 					else
 						v:Toggle(false)
@@ -638,11 +623,11 @@ function ShopEditor.shopFallbackAnsw(len)
 				if is_item then
 					table.insert(EquipmentItems[subrole], eq)
 				else
-					local wepTbl = weapons.GetStored(eq.id)
-					if wepTbl then
-						wepTbl.CanBuy = wepTbl.CanBuy or {}
+					local wep = weapons.GetStored(eq.id)
+					if wep then
+						wep.CanBuy = wep.CanBuy or {}
 
-						table.insert(wepTbl.CanBuy, subrole)
+						table.insert(wep.CanBuy, subrole)
 					end
 				end
 
@@ -709,11 +694,11 @@ function ShopEditor.shopFallbackRefresh()
 						v:Toggle(false)
 					end
 				else
-					local wepTbl = weapons.GetStored(v.item.id)
-					if wepTbl then
-						wepTbl.CanBuy = wepTbl.CanBuy or {}
+					local wep = weapons.GetStored(v.item.id)
+					if wep then
+						wep.CanBuy = wep.CanBuy or {}
 
-						if table.HasValue(wepTbl.CanBuy, wshop.selectedRole) then
+						if table.HasValue(wep.CanBuy, wshop.selectedRole) then
 							v:Toggle(true)
 						else
 							v:Toggle(false)
