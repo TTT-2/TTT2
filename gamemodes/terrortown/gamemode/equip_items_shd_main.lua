@@ -109,10 +109,14 @@ function GetEquipmentWeaponBase(data, eq)
 		model = "models/weapons/w_bugbait.mdl",
 		desc = "No description specified.",
 		is_item = false,
-		credits = data.credits or eq.credits,
-		minPlayers = data.minPlayers or eq.minPlayers,
-		globalLimited = data.globalLimited or eq.globalLimited
+		inited = true
 	}
+
+	for key in pairs(ShopEditor.savingKeys) do
+		if not tbl[key] then
+			tbl[key] = data[key] or eq[key]
+		end
+	end
 
 	-- Force material to nil so that model key is used when we are
 	-- explicitly told to do so (ie. material is false rather than nil).
@@ -125,8 +129,6 @@ function GetEquipmentWeaponBase(data, eq)
 	for k, v in pairs(tbl) do
 		eq[k] = v
 	end
-
-	eq.inited = true
 
 	return tbl
 end

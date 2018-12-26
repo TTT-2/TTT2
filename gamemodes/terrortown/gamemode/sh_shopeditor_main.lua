@@ -1,14 +1,25 @@
 ShopEditor = ShopEditor or {}
 ShopEditor.savingKeys = {
-	{key = "credits", typ = "number"},
-	{key = "globalLimited", typ = "number"},
-	{key = "minPlayers", typ = "number"}
+	credits = {typ = "number", bits = 8, default = 1}, -- from 0 to 255 (2^8 - 1)
+	globalLimited = {typ = "bool"}, -- 0 and 1
+	minPlayers = {typ = "number", bits = 6} -- from 0 to 63 (2^6 - 1)
 }
+-- TODO generate settings out of these informations
 
 function ShopEditor.InitDefaultData(item)
-	item.credits = item.credits or 1
-	item.globalLimited = item.globalLimited or 0
-	item.minPlayers = item.minPlayers or 0
+	if not item then return end
+
+	for key, data in pairs(ShopEditor.savingKeys) do
+		if not item[key] then
+			if data.typ == "number" then
+				item[key] = data.default or 0
+			elseif data.typ == "bool" then
+				item[key] = data.default or false
+			else
+				item[key] = data.default or ""
+			end
+		end
+	end
 end
 
 function ShopEditor.WriteItemData(messageName, name, item, plys)
@@ -17,11 +28,17 @@ function ShopEditor.WriteItemData(messageName, name, item, plys)
 	if not name or not item then return end
 
 	net.Start(messageName)
-
 	net.WriteString(name)
-	net.WriteUInt(item.credits, 16)
-	net.WriteBit(item.globalLimited == 1)
-	net.WriteUInt(item.minPlayers, 16)
+
+	for key, data in pairs(ShopEditor.savingKeys) do
+		if data.typ == "number" then
+			net.WriteUInt(item[key], data.bits or 16)
+		elseif data.typ == "bool" then
+			net.WriteBit(item[key])
+		else
+			net.WriteString(item[key])
+		end
+	end
 
 	if SERVER then
 		local matched = false
@@ -55,9 +72,15 @@ function ShopEditor.ReadItemData()
 		return name
 	end
 
-	item.credits = net.ReadUInt(16)
-	item.globalLimited = tonumber(net.ReadBit())
-	item.minPlayers = net.ReadUInt(16)
+	for key, data in pairs(ShopEditor.savingKeys) do
+		if data.typ == "number" then
+			item[key] = net.ReadUInt(data.bits or 16)
+		elseif data.typ == "bool" then
+			item[key] = tobool(net.ReadBit())
+		else
+			item[key] = net.ReadString()
+		end
+	end
 
 	return name, item
 end

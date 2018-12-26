@@ -7,9 +7,15 @@ function ShopEditor.BuildInsertString(name, item, keys)
 
 	local tmp = {}
 
-	for _, key in ipairs(keys) do
-		if item[key.key] then
-			tmp[key.key] = item[key.key]
+	for key, data in pairs(keys) do
+		if item[key] then
+			local dat = item[key]
+
+			if data.typ == "bool" then
+				dat = dat and 1 or 0
+			end
+
+			tmp[key] = dat
 		end
 	end
 
@@ -35,9 +41,15 @@ function ShopEditor.BuildUpdateString(name, item, keys)
 
 	local tmp = {}
 
-	for _, key in ipairs(keys) do
-		if item[key.key] then
-			tmp[key.key] = item[key.key]
+	for key, data in pairs(keys) do
+		if item[key] then
+			local dat = item[key]
+
+			if data.typ == "bool" then
+				dat = dat and 1 or 0
+			end
+
+			tmp[key] = dat
 		end
 	end
 
@@ -94,10 +106,12 @@ function ShopEditor.LoadItem(name, item, keys)
 	local changed = false
 
 	for k, v in pairs(result[1]) do
-		for _, key in ipairs(keys) do
-			if k == key.key and (not item[k] or item[k] ~= v) then
-				if key.typ == "number" then
+		for key, data in pairs(keys) do
+			if k == key and (not item[k] or item[k] ~= v) then
+				if data.typ == "number" then
 					item[k] = tonumber(v)
+				elseif data.typ == "bool" then
+					item[k] = tobool(v)
 				else
 					item[k] = v
 				end

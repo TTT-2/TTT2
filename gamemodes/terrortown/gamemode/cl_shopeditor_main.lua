@@ -1,4 +1,5 @@
 ttt_include("vgui__shopeditor_buttons")
+ttt_include("vgui__shopeditor_slider")
 
 local COLOR_GREY = COLOR_GREY or Color(120, 120, 120, 255)
 
@@ -142,14 +143,39 @@ function ShopEditor.EditItem(item)
 		ply.shopeditor_itemframes = nil
 	end
 
-	local priceSlider = vgui.Create("DNumSlider", frame)
-	priceSlider:SetSize(w, 20)
-	priceSlider:SetPos(0, 35)
-	priceSlider:SetText("Credits (Price)")
-	priceSlider:SetMin(0)
-	priceSlider:SetMax(12)
-	priceSlider:SetValue(item.credits)
-	priceSlider:SetDecimals(0)
+	local tmp = {}
+
+	for key, data in pairs(ShopEditor.savingKeys) do
+		local el
+
+		if data.typ == "number" then
+			local max = data.bits and (2 ^ data.bits - 1) or 65535
+
+			local slider = vgui.Create("DNumSliderWang", frame)
+			slider:SetSize(w, 20)
+			slider:SetMin(0)
+			slider:SetMax(max)
+			slider:SetDecimals(0)
+			slider:SetAutoFocus(true)
+
+			el = slider
+		elseif data.typ == "bool" then
+			local checkbox = vgui.Create("DCheckBoxLabel", frame)
+
+			el = checkbox
+		end
+
+		el:SetText("." .. key)
+		el:SetValue(item[key])
+		el:Dock(TOP)
+		el:DockMargin(4, 0, 0, 0)
+
+		if data.typ == "bool" then
+			el:SizeToContents()
+		end
+
+		tmp[key] = el
+	end
 
 	-- save button
 	local saveButton = vgui.Create("DButton", frame)
@@ -160,11 +186,24 @@ function ShopEditor.EditItem(item)
 	saveButton.DoClick = function()
 		local wTable = {
 			id = item.id,
-			name = item.name,
-			credits = math.Round(priceSlider:GetValue()),
-			globalLimited = item.globalLimited,
-			minPlayers = item.minPlayers
+			name = item.name
 		}
+
+		for key, data in pairs(ShopEditor.savingKeys) do
+			if not wTable[key] then
+				if IsValid(tmp[key]) then
+					if data.typ == "number" then
+						wTable[key] = math.Round(tmp[key]:GetValue())
+					elseif data.typ == "bool" then
+						wTable[key] = tmp[key]:GetChecked()
+					else
+						wTable[key] = tmp[key]:GetValue()
+					end
+				else
+					wTable[key] = item[key]
+				end
+			end
+		end
 
 		local name
 
