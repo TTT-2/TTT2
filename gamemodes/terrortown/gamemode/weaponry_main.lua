@@ -15,7 +15,6 @@ function GM:PlayerCanPickupWeapon(ply, wep)
 
 	-- Disallow picking up for ammo
 	if ply:HasWeapon(wepClass)
-	or not SWEPIsBuyable(wepClass)
 	or not ply:CanCarryWeapon(wep)
 	or IsEquipment(wep) and wep.IsDropped and not ply:KeyDown(IN_USE)
 	then
@@ -536,6 +535,9 @@ local function OrderEquipment(ply, cmd, args)
 			return
 		end
 
+		-- the item is just buyable if there is a special amount of players
+		if not EquipmentIsBuyable(allowed) then return end
+
 		-- ownership check and finalise
 		if id and EQUIP_NONE < id and not ply:HasEquipmentItem(id) then
 			ply:GiveEquipmentItem(id)
@@ -561,7 +563,7 @@ local function OrderEquipment(ply, cmd, args)
 		end
 
 		-- the item is just buyable if there is a special amount of players
-		if not SWEPIsBuyable(WEPS.GetClass(swep_table)) then return end
+		if not EquipmentIsBuyable(swep_table) then return end
 
 		-- no longer restricted to only WEAPON_EQUIP weapons, just anything that
 		-- is whitelisted and carryable
@@ -572,6 +574,12 @@ local function OrderEquipment(ply, cmd, args)
 		end
 
 		credits = swep_table.credits
+	end
+
+	if credits > ply:GetCredits() then
+		print(ply, "tried to buy item/weapon, but didn't had enough credits")
+
+		return
 	end
 
 	if received then

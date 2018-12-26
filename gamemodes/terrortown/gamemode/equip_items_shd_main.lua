@@ -40,31 +40,34 @@ EquipmentItems = {}
 SYNC_EQUIP = {}
 ALL_ITEMS = {}
 
+local armor = {
+	id = EQUIP_ARMOR,
+	type = "item_passive",
+	material = mat_dir .. "icon_armor",
+	name = "item_armor",
+	desc = "item_armor_desc"
+}
+
+local radar = {
+	id = EQUIP_RADAR,
+	type = "item_active",
+	material = mat_dir .. "icon_radar",
+	name = "item_radar",
+	desc = "item_radar_desc"
+}
+
+local disguiser = {
+	id = EQUIP_DISGUISE,
+	type = "item_active",
+	material = mat_dir .. "icon_disguise",
+	name = "item_disg",
+	desc = "item_disg_desc"
+}
+
+EquipmentItems[ROLE_TRAITOR] = {armor, radar, disguiser}
+EquipmentItems[ROLE_DETECTIVE] = {armor, radar}
+
 function SetupEquipment()
-	local armor = {
-		id = EQUIP_ARMOR,
-		type = "item_passive",
-		material = mat_dir .. "icon_armor",
-		name = "item_armor",
-		desc = "item_armor_desc"
-	}
-
-	local radar = {
-		id = EQUIP_RADAR,
-		type = "item_active",
-		material = mat_dir .. "icon_radar",
-		name = "item_radar",
-		desc = "item_radar_desc"
-	}
-
-	local disguiser = {
-		id = EQUIP_DISGUISE,
-		type = "item_active",
-		material = mat_dir .. "icon_disguise",
-		name = "item_disg",
-		desc = "item_disg_desc"
-	}
-
 	for _, v in pairs(GetRoles()) do
 		if not EquipmentItems[v.index] then
 			local br = GetBaseRole(v.index)
@@ -112,12 +115,6 @@ function GetEquipmentWeaponBase(data, eq)
 		inited = true
 	}
 
-	for key in pairs(ShopEditor.savingKeys) do
-		if not tbl[key] then
-			tbl[key] = data[key] or eq[key]
-		end
-	end
-
 	-- Force material to nil so that model key is used when we are
 	-- explicitly told to do so (ie. material is false rather than nil).
 	if data.modelicon then
@@ -126,11 +123,17 @@ function GetEquipmentWeaponBase(data, eq)
 
 	table.Merge(tbl, data)
 
+	for key in pairs(ShopEditor.savingKeys) do
+		if not tbl[key] then
+			tbl[key] = eq[key]
+		end
+	end
+
 	for k, v in pairs(tbl) do
 		eq[k] = v
 	end
 
-	return tbl
+	return eq
 end
 
 function CreateEquipmentWeapon(eq)
@@ -365,12 +368,17 @@ end
 
 function InitDefaultEquipment()
 	-- set default equipment tables
+	local sweps = weapons.GetList()
 
 	-- TRAITOR
-	local tbl = table.Copy(EquipmentItems[ROLE_TRAITOR])
+	local tbl = {}
+
+	for k in pairs(EquipmentItems[ROLE_TRAITOR]) do
+		tbl[k] = EquipmentItems[ROLE_TRAITOR][k]
+	end
 
 	-- find buyable weapons to load info from
-	for _, v in ipairs(weapons.GetList()) do
+	for _, v in ipairs(sweps) do
 		if v and not v.Doublicated and v.CanBuy and table.HasValue(v.CanBuy, ROLE_TRAITOR) then
 			local data = v.EquipMenuData or {}
 
@@ -391,28 +399,32 @@ function InitDefaultEquipment()
 	TRAITOR.fallbackTable = tbl
 
 	-- DETECTIVE
-	tbl = table.Copy(EquipmentItems[ROLE_DETECTIVE])
+	local tbl2 = {}
+
+	for k in pairs(EquipmentItems[ROLE_DETECTIVE]) do
+		tbl2[k] = EquipmentItems[ROLE_DETECTIVE][k]
+	end
 
 	-- find buyable weapons to load info from
-	for _, v in ipairs(weapons.GetList()) do
+	for _, v in ipairs(sweps) do
 		if v and not v.Doublicated and v.CanBuy and table.HasValue(v.CanBuy, ROLE_DETECTIVE) then
 			local data = v.EquipMenuData or {}
 
 			local base = GetEquipmentWeaponBase(data, v)
 			if base then
-				table.insert(tbl, base)
+				table.insert(tbl2, base)
 			end
 		end
 	end
 
 	-- mark custom items
-	for _, i in pairs(tbl) do
+	for _, i in pairs(tbl2) do
 		if i and i.id then
 			i.custom = not table.HasValue(DefaultEquipment[ROLE_DETECTIVE], i.id) -- TODO
 		end
 	end
 
-	DETECTIVE.fallbackTable = tbl
+	DETECTIVE.fallbackTable = tbl2
 end
 
 function InitAllItems()

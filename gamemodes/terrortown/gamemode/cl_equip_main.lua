@@ -43,7 +43,11 @@ function GetEquipmentForRole(subrole)
 		EquipmentItems[fallback] = EquipmentItems[fallback] or {}
 
 		-- start with all the non-weapon goodies
-		local tbl = table.Copy(EquipmentItems[fallback])
+		local tbl = {}
+
+		for k in pairs(EquipmentItems[fallback]) do
+			tbl[k] = EquipmentItems[fallback][k]
+		end
 
 		-- find buyable weapons to load info from
 		for _, v in ipairs(weapons.GetList()) do
@@ -95,8 +99,9 @@ local function PreqLabels(parent, x, y)
 	-- remaining credits text
 	tbl.credits.Check = function(s, sel)
 		local credits = LocalPlayer():GetCredits()
+		local cr = sel and sel.credits or 1
 
-		return credits > 0, " " .. credits, GetPTranslation("equip_cost", {num = credits})
+		return credits >= cr, " " .. cr .. " / " .. credits, GetPTranslation("equip_cost", {num = credits})
 	end
 
 	tbl.owned = vgui.Create("DLabel", parent)
@@ -114,7 +119,7 @@ local function PreqLabels(parent, x, y)
 	tbl.owned.Check = function(s, sel)
 		if ItemIsWeapon(sel) and not CanCarryWeapon(sel) then
 			return false, sel.slot, GetPTranslation("equip_carry_slot", {slot = sel.slot})
-		elseif ItemIsWeapon(sel) and not SWEPIsBuyable(tostring(sel.id)) then -- TODO add own indicator image for "SWEPIsBuyable(wepCls)"
+		elseif not EquipmentIsBuyable(sel) then
 			return false, "?", GetTranslation("equip_carry_minplayers", {slot = sel.slot})
 		elseif not ItemIsWeapon(sel) and LocalPlayer():HasEquipmentItem(sel.id) then
 			return false, "X", GetTranslation("equip_carry_own")
@@ -386,9 +391,11 @@ local function TraitorMenuPopup()
 			table.HasValue(owned_ids, item.id) or
 			tonumber(item.id) and ply:HasEquipmentItem(tonumber(item.id)) or
 			-- already carrying a weapon for this slot
-			ItemIsWeapon(item) and (not CanCarryWeapon(item) or not SWEPIsBuyable(tostring(item.id))) or
+			ItemIsWeapon(item) and not CanCarryWeapon(item) or
+			not EquipmentIsBuyable(item) or
 			-- already bought the item before
-			item.limited and ply:HasBought(tostring(item.id))
+			item.limited and ply:HasBought(tostring(item.id)) or
+			(item.credits or 1) > ply:GetCredits()
 			then
 				ic:SetIconColor(color_darkened)
 			end

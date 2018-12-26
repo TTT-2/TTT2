@@ -4,7 +4,7 @@ GM.Name = "[TTT2] Trouble in Terrorist Town 2 (Advanced Update) - by Alf21"
 GM.Author = "Bad King Urgrain && Alf21"
 GM.Email = "4lf-mueller@gmx.de"
 GM.Website = "ttt.badking.net, ttt2.informaskill.de"
-GM.Version = "0.3.8.1b"
+GM.Version = "0.3.8.1.1b"
 GM.Customized = true
 
 TTT2 = true -- identifier for TTT2. Just use "if TTT2 then ... end"
@@ -680,18 +680,12 @@ end
 
 DefaultEquipment = GetDefaultEquipment()
 
-function SWEPIsBuyable(wepCls)
-	if not wepCls then
+function EquipmentIsBuyable(tbl)
+	if not tbl then
 		return false
 	end
 
-	local wep = weapons.GetStored(wepCls)
-
-	if not wep then
-		return false
-	end
-
-	if wep.minPlayers and wep.minPlayers > 1 then
+	if tbl.minPlayers and tbl.minPlayers > 1 then
 		local choices = {}
 
 		for _, v in ipairs(player.GetAll()) do
@@ -701,7 +695,7 @@ function SWEPIsBuyable(wepCls)
 			end
 		end
 
-		if #choices < wep.minPlayers then
+		if #choices < tbl.minPlayers then
 			return false
 		end
 	end

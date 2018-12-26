@@ -111,6 +111,9 @@ function CreateChanges()
 
 	AddChange("0.3.8.1b", [[
 	- fixed credit issue in ShopEditor (all Data will load and save correct now)
+	- fixed item credits and minPlayers issue
+	- fixed radar, disguiser and armor issue in ItemEditor
+	- fixed shop syncing issue with ShopEditor
 	- small performance improvements
 	- cleaned up some useless functions
 	- removed ALL_WEAPONS table (SWEP will cache the initialized data now in it's own table / entity data)
