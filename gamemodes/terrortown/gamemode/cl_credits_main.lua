@@ -34,7 +34,7 @@ local credits = {
 	[6] = {
 		name = "Translator",
 		users = {
-			["Satton2 (Russian)"] = "#"
+			["Satton(RU)"] = "https://steamcommunity.com/id/Satton/"
 		}
 	},
 	[7] = {
