@@ -114,20 +114,24 @@ function ShopEditor.LoadItem(name, item, keys)
 
 	for k, v in pairs(result[1]) do
 		for key, data in pairs(keys) do
-			if k == key and (not item[k] or item[k] ~= v) then
+			if k == key then
+				local val = v
+
 				if data.typ == "number" then
-					if v == "NULL" then
-						item[k] = 0
+					if val == "NULL" then
+						val = 0
 					else
-						item[k] = tonumber(v)
+						val = tonumber(v)
 					end
 				elseif data.typ == "bool" then
-					item[k] = v == "1"
-				else
-					item[k] = v
+					val = val == "1"
 				end
 
-				changed = true
+				if not item[k] or item[k] ~= val then
+					item[k] = val
+
+					changed = true
+				end
 			end
 		end
 	end
