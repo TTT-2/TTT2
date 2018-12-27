@@ -116,9 +116,13 @@ function ShopEditor.LoadItem(name, item, keys)
 		for key, data in pairs(keys) do
 			if k == key and (not item[k] or item[k] ~= v) then
 				if data.typ == "number" then
-					item[k] = tonumber(v)
+					if v == "NULL" then
+						item[k] = 0
+					else
+						item[k] = tonumber(v)
+					end
 				elseif data.typ == "bool" then
-					item[k] = tobool(v)
+					item[k] = v == "1"
 				else
 					item[k] = v
 				end
