@@ -128,7 +128,11 @@ function ShopEditor.LoadItem(name, item, keys)
 				end
 
 				if not item[k] or item[k] ~= val then
-					item[k] = val
+					if v == "NULL" then
+						item[k] = item[k] or val -- keep old or init new
+					else
+						item[k] = val -- override with saved one
+					end
 
 					changed = true
 				end
