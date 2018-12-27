@@ -1,6 +1,7 @@
 local tableName = "ttt2_items"
 
-local db_version = CreateConVar("ttt2_item_db_version", "1", {FCVAR_ARCHIVE})
+local newestVersion = 2
+local db_version = CreateConVar("ttt2_item_db_version", tostring(newestVersion), {FCVAR_ARCHIVE})
 
 function ShopEditor.BuildInsertString(name, item, keys)
 	keys = keys or ShopEditor.savingKeys
@@ -74,12 +75,18 @@ function ShopEditor.CreateSqlTable()
 	local result
 
 	if not sql.TableExists(tableName) then
-		result = sql.Query("CREATE TABLE " .. tableName .. " (name TEXT PRIMARY KEY, credits INTEGER, globalLimited INTEGER, minPlayers INTEGER)")
+		result = sql.Query("CREATE TABLE " .. tableName .. " (name TEXT PRIMARY KEY, credits INTEGER, globalLimited INTEGER, minPlayers INTEGER, limited INTEGER)")
 	else
 		local version = db_version:GetInt()
 
-		if version < 1 or version > 1 then
+		if version < 1 or version > newestVersion then
 			print("[TTT2][SQL] There is an error with your sql table...")
+		elseif version < newestVersion then
+			if version < 2 then -- add limited column
+				sql.Query("ALTER TABLE " .. tableName .. " ADD limited INTEGER")
+			end
+
+			RunConsoleCommand("ttt2_item_db_version", tostring(newestVersion))
 		end
 	end
 

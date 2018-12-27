@@ -107,7 +107,7 @@ local function PreqLabels(parent, x, y)
 	tbl.owned = vgui.Create("DLabel", parent)
 	--tbl.owned:SetTooltip(GetTranslation("equip_help_carry"))
 	tbl.owned:CopyPos(tbl.credits)
-	tbl.owned:MoveRightOf(tbl.credits, y * 3)
+	tbl.owned:MoveRightOf(tbl.credits, y * 5)
 
 	-- carry icon
 	tbl.owned.img = vgui.Create("DImage", parent)
@@ -119,8 +119,6 @@ local function PreqLabels(parent, x, y)
 	tbl.owned.Check = function(s, sel)
 		if ItemIsWeapon(sel) and not CanCarryWeapon(sel) then
 			return false, sel.slot, GetPTranslation("equip_carry_slot", {slot = sel.slot})
-		elseif not EquipmentIsBuyable(sel) then
-			return false, "?", GetTranslation("equip_carry_minplayers", {slot = sel.slot})
 		elseif not ItemIsWeapon(sel) and LocalPlayer():HasEquipmentItem(sel.id) then
 			return false, "X", GetTranslation("equip_carry_own")
 		else
@@ -128,10 +126,11 @@ local function PreqLabels(parent, x, y)
 		end
 	end
 
+	-- TODO add global limited
 	tbl.bought = vgui.Create("DLabel", parent)
 	--tbl.bought:SetTooltip(GetTranslation("equip_help_stock"))
-	tbl.bought:CopyPos(tbl.owned)
-	tbl.bought:MoveRightOf(tbl.owned, y * 3)
+	tbl.bought:CopyPos(tbl.credits)
+	tbl.bought:MoveBelow(tbl.credits, y * 2)
 
 	-- stock icon
 	tbl.bought.img = vgui.Create("DImage", parent)
@@ -146,6 +145,23 @@ local function PreqLabels(parent, x, y)
 		else
 			return true, "✔", GetTranslation("equip_stock_ok")
 		end
+	end
+
+	-- custom info
+	tbl.info = vgui.Create("DLabel", parent)
+	--tbl.info:SetTooltip(GetTranslation("equip_help_stock"))
+	tbl.info:CopyPos(tbl.bought)
+	tbl.info:MoveRightOf(tbl.bought, y * 5)
+
+	-- stock icon
+	tbl.info.img = vgui.Create("DImage", parent)
+	tbl.info.img:SetSize(32, 32)
+	tbl.info.img:CopyPos(tbl.info)
+	tbl.info.img:MoveLeftOf(tbl.info)
+	tbl.info.img:SetImage("vgui/ttt/equip/icon_info")
+
+	tbl.info.Check = function(s, sel)
+		return EquipmentIsBuyable(sel)
 	end
 
 	for _, pnl in pairs(tbl) do
@@ -223,7 +239,7 @@ local function TraitorMenuPopup()
 	local dlisth = (itemSize + 2) * numRows - 2 + 15
 
 	-- right column width
-	local diw = 270
+	local diw = 240
 
 	-- frame size
 	local w = dlistw + diw + m * 4
@@ -433,7 +449,7 @@ local function TraitorMenuPopup()
 	local dinfo = vgui.Create("ColoredBox", dinfobg)
 	dinfo:SetColor(Color(90, 90, 95))
 	dinfo:SetPos(0, 0)
-	dinfo:StretchToParent(0, 0, m * 2, 105)
+	dinfo:StretchToParent(0, 0, m * 2, 150)
 
 	local dfields = {}
 	local _tmp = {"name", "type", "desc"}
@@ -456,7 +472,7 @@ local function TraitorMenuPopup()
 
 	local dhelp = vgui.Create("DPanel", dinfobg)
 	dhelp:SetPaintBackground(false)
-	dhelp:SetSize(diw, 64)
+	dhelp:SetSize(diw, 128)
 	dhelp:MoveBelow(dinfo, m)
 
 	local update_preqs = PreqLabels(dhelp, m * 7, m * 2)
@@ -501,7 +517,7 @@ local function TraitorMenuPopup()
 	hook.Run("TTTEquipmentTabs", dsheet)
 
 	-- couple panelselect with info
-	dlist.OnActivePanelChanged = function(self, _, new)
+	dlist.OnActivePanelChanged = function(_, _, new)
 		if not IsValid(new) then return end
 
 		if new.item then
@@ -547,7 +563,7 @@ local function TraitorMenuPopup()
 
 	-- update some basic info, may have changed in another tab
 	-- specifically the number of credits in the preq list
-	dsheet.OnTabChanged = function(s, old, new)
+	dsheet.OnTabChanged = function(_, _, new)
 		if not IsValid(new) or not IsValid(dlist.SelectedPanel) or new:GetPanel() ~= dequip then return end
 
 		can_order = update_preqs(dlist.SelectedPanel.item)

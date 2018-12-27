@@ -32,6 +32,12 @@ local credits = {
 		}
 	},
 	[6] = {
+		name = "Translator",
+		users = {
+			["Satton2 (Russian)"] = "#"
+		}
+	},
+	[7] = {
 		name = "BETA Tester",
 		users = {
 			["Kanjuro"] = "https://steamcommunity.com/id/Siques",

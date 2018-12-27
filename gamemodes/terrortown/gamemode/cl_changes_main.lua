@@ -119,6 +119,12 @@ function CreateChanges()
 	- removed ALL_WEAPONS table (SWEP will cache the initialized data now in it's own table / entity data)
 	- some function renaming
 	]])
+
+	AddChange("0.3.8.2b", [[
+	- added russian translation (by Satton2)
+	- added minPlayers indicator for the shop
+	- replaced globalLimited param with limited param to toggle whether an item is just one time per round buyable for each player
+	]])
 end
 
 function ShowChanges()
