@@ -1,4 +1,5 @@
 ---- Player info panel, based on sandbox scoreboard's infocard
+TTTScoreboard = TTTScoreboard or {}
 
 local vgui = vgui
 local GetTranslation = LANG.GetTranslation
@@ -142,7 +143,7 @@ vgui.Register("TTTScorePlayerInfoSearch", PANEL, "TTTScorePlayerInfoBase")
 
 --- Living player, tags etc
 
-local tags = {
+TTTScoreboard.Tags = {
 	{txt = "sb_tag_friend", color = COLOR_GREEN},
 	{txt = "sb_tag_susp", color = COLOR_YELLOW},
 	{txt = "sb_tag_avoid", color = Color(255, 150, 0, 255)},
@@ -155,7 +156,7 @@ PANEL = {}
 function PANEL:Init()
 	self.TagButtons = {}
 
-	for k, tag in ipairs(tags) do
+	for k, tag in ipairs(TTTScoreboard.Tags) do
 		self.TagButtons[k] = vgui.Create("TagButton", self)
 		self.TagButtons[k]:SetupTag(tag)
 	end

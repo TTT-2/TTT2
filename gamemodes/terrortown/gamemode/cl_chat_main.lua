@@ -110,6 +110,7 @@ end
 net.Receive("TTT_InterruptChat", ChatInterrupt)
 
 --- Radio
+-- modified with https://github.com/Exho1/TTT-ScoreboardTagging/blob/master/lua/client/ttt_scoreboardradiocmd.lua
 
 RADIO = {}
 RADIO.Show = false
@@ -129,6 +130,21 @@ RADIO.Commands = {
 	{cmd = "innocent", text = "quick_inno", format = true},
 	{cmd = "check", text = "quick_check", format = false}
 }
+
+local cmdToTag = {
+	["innocent"] = TTTScoreboard.Tags[1],
+	["suspect"] = TTTScoreboard.Tags[2],
+	--[""] = TTTScoreboard.Tags[3],
+	["traitor"] = TTTScoreboard.Tags[4]
+	--[""] = TTTScoreboard.Tags[5]
+}
+
+local function tagPlayer(ply, rCmd)
+	if not isstring(ply) and IsValid(ply) and ply:IsPlayer() and cmdToTag[rCmd] then
+		-- If the radio command is one of the ones I track, tag the player
+		ply.sb_tag = cmdToTag[rCmd]
+	end
+end
 
 local radioframe
 
@@ -239,6 +255,8 @@ function RADIO:SendCommand(slotidx)
 	local c = self.Commands[slotidx]
 	if c then
 		RunConsoleCommand("ttt_radio", c.cmd)
+
+		tagPlayer(self:GetTarget(), c.cmd)
 
 		self:ShowRadioCommands(false)
 	end
@@ -356,10 +374,12 @@ local function RadioCommand(ply, cmd, arg)
 	RADIO.LastRadio.t = CurTime()
 	RADIO.LastRadio.msg = text
 
+	tagPlayer(target, msg_type)
+
 	-- target is either a lang string or an entity
 	target = type(target) == "string" and target or tostring(target:EntIndex())
 
-	RunConsoleCommand("_ttt_radio_send", msg_name, tostring(target))
+	RunConsoleCommand("_ttt_radio_send", msg_name, target)
 end
 
 local function RadioComplete(cmd, arg)

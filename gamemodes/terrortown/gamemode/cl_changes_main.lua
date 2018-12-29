@@ -125,6 +125,11 @@ function CreateChanges()
 	- added minPlayers indicator for the shop
 	- replaced globalLimited param with limited param to toggle whether an item is just one time per round buyable for each player
 	]])
+
+	AddChange("0.3.8.3b", [[
+	- ammoboxes will store the correct amount of ammo now
+	- connected radio commands with scoreboard #tagging (https://github.com/Exho1/TTT-ScoreboardTagging/blob/master/lua/client/ttt_scoreboardradiocmd.lua)
+	]])
 end
 
 function ShowChanges()
