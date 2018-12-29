@@ -1,5 +1,6 @@
 ---- VGUI panel version of the scoreboard, based on TEAM GARRY's sandbox mode
 ---- scoreboard.
+TTTScoreboard = TTTScoreboard or {}
 
 local surface = surface
 local draw = draw
@@ -19,7 +20,7 @@ CreateClientConVar("ttt_scoreboard_sorting", "name", true, false, "name | role |
 CreateClientConVar("ttt_scoreboard_ascending", "1", true, false, "Should scoreboard ordering be in ascending order")
 
 local PANEL = {}
-local logo = surface.GetTextureID("vgui/ttt/score_logo_2")
+TTTScoreboard.Logo = surface.GetTextureID("vgui/ttt/score_logo_2")
 
 surface.CreateFont("cool_small", {
 		font = "coolvetica",
@@ -303,7 +304,7 @@ function PANEL:Paint()
 	draw.RoundedBox(8, 0, y_logo_off + 25, self:GetWide(), 32, colors.bar)
 
 	-- TTT Logo
-	surface.SetTexture(logo)
+	surface.SetTexture(TTTScoreboard.Logo)
 	surface.SetDrawColor(255, 255, 255, 255)
 	surface.DrawTexturedRect(5, 0, 256, 256)
 end
