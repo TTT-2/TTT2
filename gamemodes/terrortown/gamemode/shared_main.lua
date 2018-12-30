@@ -1,6 +1,6 @@
 -- This file contains all shared vars, tables and functions
 
-GM.Name = "[TTT2] Trouble in Terrorist Town 2 (Advanced Update) - by Alf21"
+GM.Name = "TTT2 (Advanced Update)"
 GM.Author = "Bad King Urgrain && Alf21"
 GM.Email = "4lf-mueller@gmx.de"
 GM.Website = "ttt.badking.net, ttt2.informaskill.de"
