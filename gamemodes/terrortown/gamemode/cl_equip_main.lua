@@ -253,7 +253,7 @@ local function TraitorMenuPopup()
 	end
 
 	local credits = ply:GetCredits()
-	local can_order = credits > 0
+	local can_order = true
 
 	local dframe = vgui.Create("DFrame")
 	dframe:SetSize(w, h)

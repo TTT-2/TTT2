@@ -32,7 +32,7 @@ function GM:PlayerInitialSpawn(ply)
 	if rstate ~= ROUND_WAIT then
 		SendRoundState(rstate, ply)
 
-		SendFullStateUpdate()
+		timer.Simple(1, SendFullStateUpdate)
 	end
 
 	-- Handle spec bots

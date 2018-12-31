@@ -500,9 +500,6 @@ local function OrderEquipment(ply, cmd, args)
 	local shopFallback = GetGlobalString("ttt_" .. rd.abbr .. "_shop_fallback")
 	if shopFallback == SHOP_DISABLED then return end
 
-	-- no credits, can't happen when buying through menu as button will be off
-	if ply:GetCredits() < 1 then return end
-
 	-- it's an item if the arg is an id instead of an ent name
 	local id = args[1]
 	local is_item = tonumber(id)
