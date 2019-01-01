@@ -1,6 +1,8 @@
 ENT.Type = "point"
 ENT.Base = "base_point"
 
+local IsValid = IsValid
+
 local ROLE_ANY = 3
 
 ENT.Role = ROLE_ANY

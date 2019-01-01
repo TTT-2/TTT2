@@ -3,6 +3,12 @@
 ttt_include("vgui__sb_info", true)
 
 local GetTranslation = LANG.GetTranslation
+local math = math
+local table = table
+local ipairs = ipairs
+local IsValid = IsValid
+local surface = surface
+local vgui = vgui
 
 SB_ROW_HEIGHT = 24 --16
 

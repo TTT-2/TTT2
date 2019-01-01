@@ -2,6 +2,12 @@
 local GetTranslation = LANG.GetTranslation
 local GetPTranslation = LANG.GetParamTranslation
 local SafeTranslate = LANG.TryTranslation
+local table = table
+local net = net
+local pairs = pairs
+local ipairs = ipairs
+local IsValid = IsValid
+local hook = hook
 
 -- create ClientConVars
 local numColsVar = CreateClientConVar("ttt_bem_cols", 4, true, false, "Sets the number of columns in the Traitor/Detective menu's item list.")

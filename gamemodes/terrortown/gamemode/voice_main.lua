@@ -2,6 +2,10 @@
 -- net buffer overflows on clients.
 local mute_all = false
 
+local IsValid = IsValid
+local hook = hook
+local net = net
+
 function MuteForRestart(state)
 	mute_all = state
 end

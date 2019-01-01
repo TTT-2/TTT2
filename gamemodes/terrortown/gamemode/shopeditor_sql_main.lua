@@ -1,5 +1,8 @@
 local tableName = "ttt2_items"
 
+local pairs = pairs
+local sql = sql
+
 local newestVersion = 2
 local db_version = CreateConVar("ttt2_item_db_version", tostring(newestVersion), {FCVAR_ARCHIVE})
 

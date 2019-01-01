@@ -1,6 +1,12 @@
 -- Body search popup
 local T = LANG.GetTranslation
 local PT = LANG.GetParamTranslation
+local table = table
+local net = net
+local pairs = pairs
+local util = util
+local IsValid = IsValid
+local hook = hook
 
 local is_dmg = util.BitSet
 

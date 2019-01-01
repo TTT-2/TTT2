@@ -1,6 +1,8 @@
 ENT.Type = "point"
 ENT.Base = "base_point"
 
+local string = string
+
 function ENT:AcceptInput(name, activator, caller)
 	if name == "TraitorWin" then
 		GAMEMODE:MapTriggeredEnd(WIN_TRAITOR)

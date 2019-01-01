@@ -5,6 +5,11 @@ local math = math
 local GetTranslation = LANG.GetTranslation
 local GetPTranslation = LANG.GetParamTranslation
 local FormatTime = util.SimpleTime
+local table = table
+local net = net
+local pairs = pairs
+local timer = timer
+local IsValid = IsValid
 
 local indicator = surface.GetTextureID("effects/select_ring")
 local c4warn = surface.GetTextureID("vgui/ttt/icon_c4warn")

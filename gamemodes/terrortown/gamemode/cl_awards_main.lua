@@ -5,6 +5,9 @@
 -- some globals we'll use a lot
 local table = table
 local pairs = pairs
+local math = math
+local ipairs = ipairs
+local util = util
 
 -- so much text here I'm using shorter names than usual
 local T = LANG.GetTranslation

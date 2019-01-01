@@ -133,7 +133,8 @@ function CreateChanges()
 
 	AddChange("0.3.9b", [[
 	- agreed to all these unaccepted PullRequest of TTT on GitHub:
-		- <a href='https://github.com/Facepunch/garrysmod/pull/1376'>https://github.com/Facepunch/garrysmod/pull/1376</a>
+		- <a href='https://github.com/Facepunch/garrysmod/pull/1376/'>https://github.com/Facepunch/garrysmod/pull/1376/</a> by nubpro
+		- Performance improvements with the help of <a href='https://github.com/Facepunch/garrysmod/pull/1287'>https://github.com/Facepunch/garrysmod/pull/1287/</a> by markusmarkusz and Alf21
 	]])
 end
 

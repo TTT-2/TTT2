@@ -1,4 +1,17 @@
 -- Define GM12 fonts for compatibility
+
+local math = math
+local net = net
+local player = player
+local pairs = pairs
+local ipairs = ipairs
+local timer = timer
+local util = util
+local IsValid = IsValid
+local surface = surface
+local CreateConVar = CreateConVar
+local hook = hook
+
 surface.CreateFont("DefaultBold", {font = "Tahoma", size = 13, weight = 1000})
 surface.CreateFont("TabLarge", {font = "Tahoma", size = 13, weight = 700, shadow = true, antialias = false})
 surface.CreateFont("Trebuchet22", {font = "Trebuchet MS", size = 22, weight = 900})
@@ -215,7 +228,7 @@ local cues = {
 
 local function PlaySoundCue()
 	if GetConVar("ttt_cl_soundcues"):GetBool() then
-		surface.PlaySound(table.Random(cues))
+		surface.PlaySound(cues[math.random(1, #cues)])
 	end
 end
 

@@ -3,6 +3,11 @@
 local math = math
 local chargetime = 30
 
+local net = net
+local table = table
+local ipairs = ipairs
+local IsValid = IsValid
+
 local function ttt_radar_scan(ply, cmd, args)
 	if IsValid(ply) and ply:IsTerror() then
 		if ply:HasEquipmentItem(EQUIP_RADAR) then

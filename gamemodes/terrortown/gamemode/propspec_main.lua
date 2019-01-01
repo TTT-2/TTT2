@@ -2,6 +2,8 @@
 
 local string = string
 local math = math
+local IsValid = IsValid
+local timer = timer
 
 PROPSPEC = {}
 

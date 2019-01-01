@@ -1,4 +1,7 @@
 -- This file contains all shared gamemode hooks needed when the gamemode initializes
+local IsValid = IsValid
+local hook = hook
+local team = team
 
 function GM:TTT2Initialize()
 	hook.Run("TTT2BaseRoleInit")
@@ -75,9 +78,9 @@ local ttt_playercolors = {
 local ttt_playercolors_all_count = #ttt_playercolors.all
 local ttt_playercolors_serious_count = #ttt_playercolors.serious
 
-CreateConVar("ttt_playercolor_mode", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local colormode = CreateConVar("ttt_playercolor_mode", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 function GM:TTTPlayerColor(model)
-	local mode = (ConVarExists("ttt_playercolor_mode") and GetConVar("ttt_playercolor_mode"):GetInt() or 0)
+	local mode = colormode:GetInt()
 
 	if mode == 1 then
 		return ttt_playercolors.serious[math.random(1, ttt_playercolors_serious_count)]

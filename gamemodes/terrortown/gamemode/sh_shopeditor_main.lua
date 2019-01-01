@@ -6,6 +6,10 @@ ShopEditor.savingKeys = {
 	limited = {typ = "bool"}, -- 0 and 1
 }
 
+local net = net
+local pairs = pairs
+local ipairs = ipairs
+
 function ShopEditor.InitDefaultData(item)
 	if not item then return end
 

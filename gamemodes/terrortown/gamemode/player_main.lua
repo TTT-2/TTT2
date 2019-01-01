@@ -6,6 +6,9 @@ local table = table
 local player = player
 local pairs = pairs
 local ipairs = ipairs
+local net = net
+local IsValid = IsValid
+local hook = hook
 
 CreateConVar("ttt_bots_are_spectators", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 CreateConVar("ttt_dyingshot", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
@@ -156,8 +159,8 @@ function GetSpawnEnts(shuffled, force_all)
 
 	for _, classname in ipairs(SpawnTypes) do
 		for _, e in ipairs(ents.FindByClass(classname)) do
-			if IsValid(e) and not e.BeingRemoved then
-				table.insert(tbl, e)
+			if not e.BeingRemoved then
+				tbl[#tbl + 1] = e
 			end
 		end
 	end
@@ -168,8 +171,8 @@ function GetSpawnEnts(shuffled, force_all)
 	-- spawn well. At all.
 	if force_all or #tbl == 0 then
 		for _, e in ipairs(ents.FindByClass("info_player_start")) do
-			if IsValid(e) and not e.BeingRemoved then
-				table.insert(tbl, e)
+			if not e.BeingRemoved then
+				tbl[#tbl + 1] = e
 			end
 		end
 	end

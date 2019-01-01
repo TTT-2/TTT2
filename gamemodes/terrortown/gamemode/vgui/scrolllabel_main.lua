@@ -2,6 +2,10 @@
 
 PANEL = {}
 
+local timer = timer
+local IsValid = IsValid
+local vgui = vgui
+
 function PANEL:Init()
 	self.Label = vgui.Create("DLabel", self)
 	self.Label:SetPos(0, 0)

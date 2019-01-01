@@ -1,6 +1,8 @@
 -- Removed in GM13, still need it
 local PANEL = {}
 
+local surface = surface
+
 AccessorFunc(PANEL, "m_bBorder", "Border")
 AccessorFunc(PANEL, "m_Color", "Color")
 

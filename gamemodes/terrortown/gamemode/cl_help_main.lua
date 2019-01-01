@@ -2,6 +2,11 @@
 
 local GetTranslation = LANG.GetTranslation
 local GetPTranslation = LANG.GetParamTranslation
+local pairs = pairs
+local ipairs = ipairs
+local IsValid = IsValid
+local ConVarExists = ConVarExists
+local CreateConVar = CreateConVar
 
 CreateConVar("ttt_spectator_mode", "0", FCVAR_ARCHIVE)
 CreateConVar("ttt_mute_team_check", "0")

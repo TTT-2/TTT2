@@ -1,4 +1,6 @@
 local GetTranslation = LANG.GetTranslation
+local math = math
+local vgui = vgui
 
 -- Altered version of gmod's SpawnIcon
 -- This panel does not deal with models and such

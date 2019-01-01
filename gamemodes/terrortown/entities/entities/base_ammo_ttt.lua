@@ -1,6 +1,9 @@
 -- Ammo override base
 AddCSLuaFile()
 
+local util = util
+local hook = hook
+
 ENT.Type = "anim"
 
 -- Override these values

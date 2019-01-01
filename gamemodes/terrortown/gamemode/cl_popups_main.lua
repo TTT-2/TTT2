@@ -2,6 +2,9 @@
 
 local GetTranslation = LANG.GetTranslation
 local GetPTranslation = LANG.GetParamTranslation
+local ipairs = ipairs
+local timer = timer
+local CreateConVar = CreateConVar
 
 ---- Round start
 

@@ -6,6 +6,12 @@ local table = table
 local string = string
 local vgui = vgui
 local pairs = pairs
+local math = math
+local net = net
+local ipairs = ipairs
+local timer = timer
+local util = util
+local IsValid = IsValid
 
 local skull_icon = Material("HUD/killicons/default")
 

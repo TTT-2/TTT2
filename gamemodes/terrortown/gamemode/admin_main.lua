@@ -1,4 +1,14 @@
 --- Admin commands
+
+local math = math
+local table = table
+local player = player
+local pairs = pairs
+local ipairs = ipairs
+local util = util
+local IsValid = IsValid
+local CreateConVar = CreateConVar
+
 local function GetPrintFn(ply)
 	if IsValid(ply) then
 		return function(...)
@@ -41,9 +51,7 @@ function PrintTraitors(ply)
 		table.sort(ps, TraitorSort)
 
 		for _, p in ipairs(ps) do
-			if IsValid(p) then
-				pr(string.upper(p:GetTeam()), ":", p:Nick())
-			end
+			pr(string.upper(p:GetTeam()), ":", p:Nick())
 		end
 	end
 end

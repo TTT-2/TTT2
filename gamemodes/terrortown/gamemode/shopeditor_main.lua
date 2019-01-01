@@ -1,5 +1,11 @@
 util.AddNetworkString("newshop")
 
+local net = net
+local table = table
+local pairs = pairs
+local ipairs = ipairs
+local sql = sql
+
 ShopEditor.ShopTablePre = "ttt2_shop_"
 
 function ShopEditor.ShopEditor(ply, cmd, args)

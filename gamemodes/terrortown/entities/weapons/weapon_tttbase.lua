@@ -1,4 +1,12 @@
 -- Custom weapon base, used to derive from CS one, still very similar
+local math = math
+local table = table
+local pairs = pairs
+local util = util
+local IsValid = IsValid
+local CreateConVar = CreateConVar
+local surface = surface
+local draw = draw
 
 if SERVER then
 	AddCSLuaFile()

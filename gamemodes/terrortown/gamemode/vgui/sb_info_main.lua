@@ -1,6 +1,9 @@
 ---- Player info panel, based on sandbox scoreboard's infocard
 TTTScoreboard = TTTScoreboard or {}
 
+local ipairs = ipairs
+local IsValid = IsValid
+local surface = surface
 local vgui = vgui
 local GetTranslation = LANG.GetTranslation
 

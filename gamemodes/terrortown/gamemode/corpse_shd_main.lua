@@ -2,6 +2,8 @@
 
 CORPSE = CORPSE or {}
 
+local IsValid = IsValid
+
 -- Manual datatable indexing
 CORPSE.dti = {
 	BOOL_FOUND = 0,

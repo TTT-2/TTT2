@@ -6,6 +6,9 @@ local math = math
 local string = string
 local GetLang = LANG.GetUnsafeLanguageTable
 local interp = string.Interp
+local util = util
+local IsValid = IsValid
+local hook = hook
 
 local hudWidth = CreateClientConVar("ttt2_base_hud_width", "0")
 local hudTeamicon = CreateClientConVar("ttt2_base_hud_teamicon", "1")
