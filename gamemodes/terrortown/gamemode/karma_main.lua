@@ -116,9 +116,12 @@ local function WasAvoidable(attacker, victim, dmginfo)
 	local infl = dmginfo:GetInflictor()
 
 	if attacker:IsInTeam(victim) and IsValid(infl) and infl.Avoidable ~= false then
-		if not victim:GetSubRoleData().unknownTeam then
+		local ret = hook.Run("TTT2KarmaPenaltyMultiplier", attacker, victim, dmginfo)
+		if ret then
+			return ret
+		elseif attacker:GetBaseRole() == ROLE_DETECTIVE then
 			return 2
-		else
+		elseif not attacker:GetSubRoleData().unknownTeam then
 			return 1
 		end
 	end
@@ -137,11 +140,13 @@ function KARMA.Hurt(attacker, victim, dmginfo)
 
 	-- team kills another team
 	if not attacker:IsInTeam(victim) then
-		local reward = KARMA.GetHurtReward(hurt_amount)
+		if attacker:GetSubRoleData().unknownTeam then
+			local reward = KARMA.GetHurtReward(hurt_amount)
 
-		reward = KARMA.GiveReward(attacker, reward)
+			reward = KARMA.GiveReward(attacker, reward)
 
-		print(Format("%s (%f) killed %s (%f) and gets REWARDED %f", attacker:Nick(), attacker:GetLiveKarma(), victim:Nick(), victim:GetLiveKarma(), reward))
+			print(Format("%s (%f) killed %s (%f) and gets REWARDED %f", attacker:Nick(), attacker:GetLiveKarma(), victim:Nick(), victim:GetLiveKarma(), reward))
+		end
 	else -- team kills own team
 		if not victim:GetCleanRound() then return end
 
@@ -161,11 +166,13 @@ function KARMA.Killed(attacker, victim, dmginfo)
 	if attacker == victim or not IsValid(attacker) or not IsValid(victim) or not victim:IsPlayer() or not attacker:IsPlayer() then return end
 
 	if not attacker:IsInTeam(victim) then -- team kills another team
-		local reward = KARMA.GetKillReward()
+		if attacker:GetSubRoleData().unknownTeam then
+			local reward = KARMA.GetKillReward()
 
-		reward = KARMA.GiveReward(attacker, reward)
+			reward = KARMA.GiveReward(attacker, reward)
 
-		print(Format("%s (%f) killed %s (%f) and gets REWARDED %f", attacker:Nick(), attacker:GetLiveKarma(), victim:Nick(), victim:GetLiveKarma(), reward))
+			print(Format("%s (%f) killed %s (%f) and gets REWARDED %f", attacker:Nick(), attacker:GetLiveKarma(), victim:Nick(), victim:GetLiveKarma(), reward))
+		end
 	else -- team kills own team
 		if not victim:GetCleanRound() then return end
 

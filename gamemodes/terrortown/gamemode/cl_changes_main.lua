@@ -132,9 +132,11 @@ function CreateChanges()
 	]])
 
 	AddChange("0.3.9b", [[
-	- agreed to all these nice unaccepted PullRequest for TTT on GitHub:
+	- reimplemented all these nice unaccepted PullRequest for TTT on GitHub:
 		- Custom Crosshairs [F1 -> Settings]: 'https://github.com/Facepunch/garrysmod/pull/1376/' by nubpro
 		- Performance improvements with the help of 'https://github.com/Facepunch/garrysmod/pull/1287' by markusmarkusz and Alf21
+	- added possibility to use random shops! (ShopEditor -> Options)
+	- balanced karma system (Roles that are aware of their teammates can't earn karma anymore. This will lower teamkilling)
 	]])
 end
 
