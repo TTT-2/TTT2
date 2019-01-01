@@ -2,7 +2,7 @@ ShopEditor = ShopEditor or {}
 ShopEditor.savingKeys = {
 	credits = {typ = "number", bits = 8, default = 1}, -- from 0 to 255 (2^8 - 1)
 	minPlayers = {typ = "number", bits = 6}, -- from 0 to 63 (2^6 - 1)
-	--globalLimited = {typ = "bool"}, -- 0 and 1
+	globalLimited = {typ = "bool"}, -- 0 and 1
 	limited = {typ = "bool"}, -- 0 and 1
 }
 

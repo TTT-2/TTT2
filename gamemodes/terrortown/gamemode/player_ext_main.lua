@@ -181,6 +181,8 @@ function plymeta:AddBought(id)
 
 	table.insert(self.bought, tostring(id))
 
+	BUYTABLE[id] = true
+
 	self:SendBought()
 end
 

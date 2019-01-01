@@ -679,6 +679,8 @@ local function ReceiveBought()
 
 		if s ~= "" then
 			table.insert(ply.bought, s)
+
+			BUYTABLE[s] = true
 		end
 	end
 

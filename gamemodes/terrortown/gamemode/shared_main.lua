@@ -87,7 +87,7 @@ ROLE_DETECTIVE = 2
 ROLE_NONE = ROLE_INNOCENT
 
 -- TEAM_ARRAY
-TEAMS = {
+TEAMS = TEAMS or {
 	[TEAM_INNOCENT] = {
 		icon = "vgui/ttt/dynamic/roles/icon_inno",
 		color = Color(80, 173, 59, 255)
@@ -101,7 +101,7 @@ TEAMS = {
 -- ROLE_ARRAY
 -- need to have a team to be able to win as well as to receive karma
 -- just the following roles should be 'buildin' = true
-ROLES = {}
+ROLES = ROLES or {}
 
 ROLES.INNOCENT = {
 	index = ROLE_INNOCENT,
@@ -158,7 +158,7 @@ ROLES.DETECTIVE = {
 }
 DETECTIVE = ROLES.DETECTIVE
 
-ACTIVEROLES = {}
+ACTIVEROLES = ACTIVEROLES or {}
 
 CreateConVar("ttt_detective_enabled", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 CreateConVar("ttt_newroles_enabled", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
@@ -667,6 +667,12 @@ end
 
 DefaultEquipment = GetDefaultEquipment()
 
+BUYTABLE = BUYTABLE or {}
+
+hook.Add("TTTPrepareRound", "GlobalLimitateEquipment", function()
+	BUYTABLE = {}
+end)
+
 function EquipmentIsBuyable(tbl)
 	if not tbl then
 		return false, "X", "error"
@@ -685,6 +691,10 @@ function EquipmentIsBuyable(tbl)
 		if #choices < tbl.minPlayers then
 			return false, " " .. #choices .. " / " .. tbl.minPlayers, "Minimum amount of active players needed."
 		end
+	end
+
+	if tbl.globalLimited and BUYTABLE[tbl.id] then
+		return false, "X", "This equipment is limited and is already bought."
 	end
 
 	return true, "✔", "ok"
