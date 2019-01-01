@@ -1,6 +1,8 @@
 -- Version of DProgressBar I can mess around with
 
 local PANEL = {}
+local surface = surface
+local vgui = vgui
 
 AccessorFunc(PANEL, "m_iMin", "Min")
 AccessorFunc(PANEL, "m_iMax", "Max")

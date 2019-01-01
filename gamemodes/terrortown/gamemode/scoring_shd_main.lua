@@ -1,5 +1,9 @@
 -- Server and client both need this for scoring event logs
 
+local pairs = pairs
+local ipairs = ipairs
+local IsValid = IsValid
+
 function ScoreInit()
 	local _tbl = {
 		deaths = 0,

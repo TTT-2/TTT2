@@ -12,6 +12,8 @@ local table = table
 local surface = surface
 local draw = draw
 local pairs = pairs
+local math = math
+local net = net
 
 -- Constants for configuration
 local msgfont = "DefaultBold"

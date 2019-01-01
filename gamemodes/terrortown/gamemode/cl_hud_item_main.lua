@@ -2,6 +2,8 @@
 local HUD_ITEMS = {}
 local defaultY = ScrH() * 0.5 + 20
 
+local ipairs = ipairs
+
 function AddHUDItem(id, material)
 	HUD_ITEMS[#HUD_ITEMS + 1] = {id = id, material = material}
 end

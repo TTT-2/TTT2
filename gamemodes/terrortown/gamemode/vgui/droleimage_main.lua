@@ -1,5 +1,9 @@
 local PANEL = {}
 
+local math = math
+local surface = surface
+local vgui = vgui
+
 AccessorFunc(PANEL, "m_Material", "Material")
 AccessorFunc(PANEL, "m_Material2", "Material2")
 AccessorFunc(PANEL, "m_MaterialOverlay", "MaterialOverlay")

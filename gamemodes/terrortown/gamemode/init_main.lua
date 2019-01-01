@@ -22,16 +22,32 @@ ttt_include("player_ext_shd")
 ttt_include("player_ext")
 ttt_include("player")
 
-CreateConVar("ttt_roundtime_minutes", "10", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-CreateConVar("ttt_preptime_seconds", "30", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-CreateConVar("ttt_posttime_seconds", "30", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-CreateConVar("ttt_firstpreptime", "60", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+-- Localize stuff we use often. It's like Lua go-faster stripes.
+local math = math
+local table = table
+local net = net
+local player = player
+local pairs = pairs
+local ipairs = ipairs
+local timer = timer
+local util = util
+local IsValid = IsValid
+local ConVarExists = ConVarExists
+local CreateConVar = CreateConVar
+local hook = hook
+
+local strTmp = ""
+
+local roundtime = CreateConVar("ttt_roundtime_minutes", "10", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local preptime = CreateConVar("ttt_preptime_seconds", "30", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local posttime = CreateConVar("ttt_posttime_seconds", "30", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local firstpreptime = CreateConVar("ttt_firstpreptime", "60", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 local ttt_haste = CreateConVar("ttt_haste", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-CreateConVar("ttt_haste_starting_minutes", "5", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local haste_starting = CreateConVar("ttt_haste_starting_minutes", "5", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 CreateConVar("ttt_haste_minutes_per_death", "0.5", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
-CreateConVar("ttt_spawn_wave_interval", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local spawnwaveint = CreateConVar("ttt_spawn_wave_interval", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 CreateConVar("ttt_traitor_pct", "0.4", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 CreateConVar("ttt_traitor_max", "32", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
@@ -59,18 +75,18 @@ CreateConVar("ttt_det_credits_traitordead", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 CreateConVar("ttt_use_weapon_spawn_scripts", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 CreateConVar("ttt_weapon_spawn_count", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
-CreateConVar("ttt_round_limit", "6", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
-CreateConVar("ttt_time_limit_minutes", "75", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
+local round_limit = CreateConVar("ttt_round_limit", "6", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
+local time_limit = CreateConVar("ttt_time_limit_minutes", "75", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
 
-CreateConVar("ttt_idle_limit", "180", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local idle_time = CreateConVar("ttt_idle_limit", "180", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
-CreateConVar("ttt_voice_drain", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-CreateConVar("ttt_voice_drain_normal", "0.2", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-CreateConVar("ttt_voice_drain_admin", "0.05", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-CreateConVar("ttt_voice_drain_recharge", "0.05", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local voice_drain = CreateConVar("ttt_voice_drain", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local voice_drain_normal = CreateConVar("ttt_voice_drain_normal", "0.2", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local voice_drain_admin = CreateConVar("ttt_voice_drain_admin", "0.05", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local voice_drain_recharge = CreateConVar("ttt_voice_drain_recharge", "0.05", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
-CreateConVar("ttt_namechange_kick", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-CreateConVar("ttt_namechange_bantime", "10", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local namechangekick = CreateConVar("ttt_namechange_kick", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local namechangebtime = CreateConVar("ttt_namechange_bantime", "10", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 local ttt_detective = CreateConVar("ttt_sherlock_mode", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 local ttt_minply = CreateConVar("ttt_minimum_players", "2", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
@@ -82,7 +98,7 @@ CreateConVar("ttt2_prep_respawn", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 CreateConVar("ttt_identify_body_woconfirm", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Toggles whether ragdolls should be confirmed in DetectiveMode() without clicking on confirm espacially")
 
 -- show team of confirmed player
-CreateConVar("ttt2_confirm_team", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local confirm_team = CreateConVar("ttt2_confirm_team", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 -- confirm players in kill list
 CreateConVar("ttt2_confirm_killlist", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
@@ -98,16 +114,6 @@ CreateConVar("ttt_detective_random", "100", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 -- debuggery
 local ttt_dbgwin = CreateConVar("ttt_debug_preventwin", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
--- Localize stuff we use often. It's like Lua go-faster stripes.
-local math = math
-local table = table
-local net = net
-local player = player
-local timer = timer
-local util = util
-local ConVarExists = ConVarExists
-local strTmp = ""
 
 PLYFORCEDROLES = {}
 PLYFINALROLES = {}
@@ -257,13 +263,17 @@ function GM:InitCvars()
 	MsgN("TTT2 initializing ConVar settings...")
 
 	-- Initialize game state that is synced with client
-	SetGlobalInt("ttt_rounds_left", GetConVar("ttt_round_limit"):GetInt())
+	SetGlobalInt("ttt_rounds_left", round_limit:GetInt())
 
 	GAMEMODE:SyncGlobals()
 
 	KARMA.InitState()
 
 	self.cvar_init = true
+end
+
+function GM:GetGameDescription()
+	return self.Name
 end
 
 function GM:InitPostEntity()
@@ -367,21 +377,21 @@ end
 function GM:SyncGlobals()
 	SetGlobalBool("ttt_detective", ttt_detective:GetBool())
 	SetGlobalBool("ttt_haste", ttt_haste:GetBool())
-	SetGlobalInt("ttt_time_limit_minutes", GetConVar("ttt_time_limit_minutes"):GetInt())
+	SetGlobalInt("ttt_time_limit_minutes", time_limit:GetInt())
 	SetGlobalBool("ttt_highlight_admins", GetConVar("ttt_highlight_admins"):GetBool())
 	SetGlobalBool("ttt_locational_voice", GetConVar("ttt_locational_voice"):GetBool())
-	SetGlobalInt("ttt_idle_limit", GetConVar("ttt_idle_limit"):GetInt())
+	SetGlobalInt("ttt_idle_limit", idle_time:GetInt())
 
-	SetGlobalBool("ttt_voice_drain", GetConVar("ttt_voice_drain"):GetBool())
-	SetGlobalFloat("ttt_voice_drain_normal", GetConVar("ttt_voice_drain_normal"):GetFloat())
-	SetGlobalFloat("ttt_voice_drain_admin", GetConVar("ttt_voice_drain_admin"):GetFloat())
-	SetGlobalFloat("ttt_voice_drain_recharge", GetConVar("ttt_voice_drain_recharge"):GetFloat())
+	SetGlobalBool("ttt_voice_drain", voice_drain:GetBool())
+	SetGlobalFloat("ttt_voice_drain_normal", voice_drain_normal:GetFloat())
+	SetGlobalFloat("ttt_voice_drain_admin", voice_drain_admin:GetFloat())
+	SetGlobalFloat("ttt_voice_drain_recharge", voice_drain_recharge:GetFloat())
 
 	for _, v in pairs(GetRoles()) do
 		SetGlobalString("ttt_" .. v.abbr .. "_shop_fallback", GetConVar("ttt_" .. v.abbr .. "_shop_fallback"):GetString())
 	end
 
-	SetGlobalBool("ttt2_confirm_team", GetConVar("ttt2_confirm_team"):GetBool())
+	SetGlobalBool("ttt2_confirm_team", confirm_team:GetBool())
 end
 
 function LoadShopsEquipment()
@@ -486,7 +496,7 @@ local function WinChecker()
 end
 
 local function NameChangeKick()
-	if not GetConVar("ttt_namechange_kick"):GetBool() then
+	if not namechangekick:GetBool() then
 		timer.Remove("namecheck")
 
 		return
@@ -496,7 +506,7 @@ local function NameChangeKick()
 		for _, ply in ipairs(player.GetHumans()) do
 			if ply.spawn_nick then
 				if ply.has_spawned and ply.spawn_nick ~= ply:Nick() and not hook.Call("TTTNameChangeKick", GAMEMODE, ply) then
-					local t = GetConVar("ttt_namechange_bantime"):GetInt()
+					local t = namechangebtime:GetInt()
 					local msg = "Changed name during a round"
 
 					if t > 0 then
@@ -513,7 +523,7 @@ local function NameChangeKick()
 end
 
 function StartNameChangeChecks()
-	if not GetConVar("ttt_namechange_kick"):GetBool() then return end
+	if not namechangekick:GetBool() then return end
 
 	-- bring nicks up to date, may have been changed during prep/post
 	for _, ply in ipairs(player.GetAll()) do
@@ -535,24 +545,21 @@ function StopWinChecks()
 	timer.Stop("winchecker")
 end
 
+function GM:PreCleanupMap()
+	ents.TTT.FixParentedPreCleanup()
+end
+
+function GM:PostCleanupMap()
+	ents.TTT.FixParentedPostCleanup()
+end
+
 local function CleanUp()
-	local et = ents.TTT
-
-	-- if we are going to import entities, it's no use replacing HL2DM ones as
-	-- soon as they spawn, because they'll be removed anyway
-	et.SetReplaceChecking(not et.CanImportEntities(game.GetMap()))
-	et.FixParentedPreCleanup()
-
 	game.CleanUpMap()
-
-	et.FixParentedPostCleanup()
 
 	-- Strip players now, so that their weapons are not seen by ReplaceEntities
 	for _, v in ipairs(player.GetAll()) do
-		if IsValid(v) then
-			v:StripWeapons()
-			v:SetRole(ROLE_INNOCENT) -- will reset team automatically
-		end
+		v:StripWeapons()
+		v:SetRole(ROLE_INNOCENT) -- will reset team automatically
 	end
 
 	-- a different kind of cleanup
@@ -632,6 +639,12 @@ function PrepareRound()
 	end
 
 	-- Cleanup
+	if GAMEMODE.FirstRound then
+		-- if we are going to import entities, it's no use replacing HL2DM ones as
+		-- soon as they spawn, because they'll be removed anyway
+		ents.TTT.SetReplaceChecking(not ents.TTT.CanImportEntities(game.GetMap()))
+	end
+
 	CleanUp()
 
 	GAMEMODE.MapWin = WIN_NONE
@@ -650,10 +663,10 @@ function PrepareRound()
 	if CheckForAbort() then return end
 
 	-- Schedule round start
-	local ptime = GetConVar("ttt_preptime_seconds"):GetInt()
+	local ptime = preptime:GetInt()
 
 	if GAMEMODE.FirstRound then
-		ptime = GetConVar("ttt_firstpreptime"):GetInt()
+		ptime = firstpreptime:GetInt()
 
 		GAMEMODE.FirstRound = false
 	end
@@ -738,25 +751,22 @@ end
 
 function SpawnWillingPlayers(dead_only)
 	local plys = player.GetAll()
-	local wave_delay = GetConVar("ttt_spawn_wave_interval"):GetFloat()
+	local wave_delay = spawnwaveint:GetFloat()
 
 	-- simple method, should make this a case of the other method once that has
 	-- been tested.
 	if wave_delay <= 0 or dead_only then
-		for _, ply in ipairs(player.GetAll()) do
-			if IsValid(ply) then
-				ply:SpawnForRound(dead_only)
-			end
+		for _, ply in ipairs(plys) do
+			ply:SpawnForRound(dead_only)
 		end
 	else
 		-- wave method
 		local num_spawns = #GetSpawnEnts()
-
 		local to_spawn = {}
 
 		for _, ply in RandomPairs(plys) do
-			if IsValid(ply) and ply:ShouldSpawn() then
-				table.insert(to_spawn, ply)
+			if ply:ShouldSpawn() then
+				to_spawn[#to_spawn + 1] = ply
 
 				GAMEMODE:PlayerSpawnAsSpectator(ply)
 			end
@@ -804,10 +814,10 @@ end
 
 local function InitRoundEndTime()
 	-- Init round values
-	local endtime = CurTime() + GetConVar("ttt_roundtime_minutes"):GetInt() * 60
+	local endtime = CurTime() + roundtime:GetInt() * 60
 
 	if HasteMode() then
-		endtime = CurTime() + GetConVar("ttt_haste_starting_minutes"):GetInt() * 60
+		endtime = CurTime() + haste_starting:GetInt() * 60
 
 		-- this is a "fake" time shown to innocents, showing the end time if no
 		-- one would have been killed, it has no gameplay effect
@@ -837,11 +847,10 @@ function BeginRound()
 	-- Select traitors & co. This is where things really start so we can't abort
 	-- anymore.
 	SELECTABLEROLES = nil
-	DEBUGP("000000")
+
 	SelectRoles()
-	DEBUGP("000001")
+
 	LANG.Msg("round_selected")
-	DEBUGP("000002")
 
 	-- Edge case where a player joins just as the round starts and is picked as
 	-- traitor, but for whatever reason does not get the traitor state msg. So
@@ -916,7 +925,7 @@ function CheckForMapSwitch()
 
 	SetGlobalInt("ttt_rounds_left", rounds_left)
 
-	local time_left = math.max(0, GetConVar("ttt_time_limit_minutes"):GetInt() * 60 - CurTime())
+	local time_left = math.max(0, time_limit:GetInt() * 60 - CurTime())
 	local switchmap = false
 	local nextmap = string.upper(game.GetMapNext())
 
@@ -944,7 +953,7 @@ function EndRound(result)
 	-- first handle round end
 	SetRoundState(ROUND_POST)
 
-	local ptime = math.max(5, GetConVar("ttt_posttime_seconds"):GetInt())
+	local ptime = math.max(5, posttime:GetInt())
 
 	LANG.Msg("win_showreport", {num = ptime})
 	timer.Create("end2prep", ptime, 1, PrepareRound)
@@ -1137,15 +1146,11 @@ function GetSelectableRoles(plys, max_plys)
 		forcedRolesTbl[subrole] = true
 	end
 
-	DEBUGP("000009_2")
-
 	local tmpTbl = {}
 	local iTmpTbl = {}
 	local checked = {}
 
 	for _, v in pairs(GetRoles()) do
-		DEBUGP("00000A")
-
 		if checked[v.index] then continue end
 
 		checked[v.index] = true
@@ -1161,13 +1166,9 @@ function GetSelectableRoles(plys, max_plys)
 					checked[v.baserole] = true
 
 					if not forced then
-						DEBUGP("00000B_2")
-
 						strTmp = "ttt_" .. rd.name .. "_random"
 
 						local r = ConVarExists(strTmp) and GetConVar(strTmp):GetInt() or 0
-
-						DEBUGP("00000C_2")
 
 						if r <= 0 then
 							b = false
@@ -1176,8 +1177,6 @@ function GetSelectableRoles(plys, max_plys)
 						end
 					end
 
-					DEBUGP("00000D_2")
-
 					if b then
 						local tmp2 = GetEachRoleCount(max_plys, rd.name) - GetPreSelectedRole(rd.index)
 						if tmp2 > 0 then
@@ -1185,8 +1184,6 @@ function GetSelectableRoles(plys, max_plys)
 							iTmpTbl[#iTmpTbl + 1] = rd
 						end
 					end
-
-					DEBUGP("00000E_2")
 				end
 
 				local base_count = tmpTbl[rd]
@@ -1199,13 +1196,9 @@ function GetSelectableRoles(plys, max_plys)
 			local b = true
 
 			if not forced then
-				DEBUGP("00000B")
-
 				strTmp = "ttt_" .. v.name .. "_random"
 
 				local r = ConVarExists(strTmp) and GetConVar(strTmp):GetInt() or 0
-
-				DEBUGP("00000C")
 
 				if r <= 0 then
 					b = false
@@ -1214,8 +1207,6 @@ function GetSelectableRoles(plys, max_plys)
 				end
 			end
 
-			DEBUGP("00000D")
-
 			if b then
 				local tmp2 = GetEachRoleCount(max_plys, v.name) - GetPreSelectedRole(v.index)
 				if tmp2 > 0 then
@@ -1223,8 +1214,6 @@ function GetSelectableRoles(plys, max_plys)
 					iTmpTbl[#iTmpTbl + 1] = v
 				end
 			end
-
-			DEBUGP("00000E")
 		end
 	end
 
@@ -1293,8 +1282,6 @@ function GetSelectableRoles(plys, max_plys)
 		end
 	end
 
-	DEBUGP("00000F")
-
 	SELECTABLEROLES = selectableRoles
 
 	return selectableRoles
@@ -1351,8 +1338,6 @@ end
 local function SelectForcedRoles(max_plys, roleCount, allSelectableRoles, choices)
 	local transformed = {}
 
-	DEBUGP("00001E")
-
 	for id, subrole in pairs(PLYFORCEDROLES) do
 		local ply = player.GetByUniqueID(id)
 
@@ -1363,8 +1348,6 @@ local function SelectForcedRoles(max_plys, roleCount, allSelectableRoles, choice
 			transformed[subrole][#transformed[subrole] + 1] = ply
 		end
 	end
-
-	DEBUGP("00001F")
 
 	for subrole, ps in pairs(transformed) do
 		local rd = GetRoleByIndex(subrole)
@@ -1399,8 +1382,6 @@ local function SelectForcedRoles(max_plys, roleCount, allSelectableRoles, choice
 		end
 	end
 
-	DEBUGP("000020")
-
 	for id, subrole in pairs(PLYFORCEDROLES) do
 		local ply = player.GetByUniqueID(id)
 		local rd = GetRoleByIndex(subrole)
@@ -1409,30 +1390,20 @@ local function SelectForcedRoles(max_plys, roleCount, allSelectableRoles, choice
 	end
 
 	PLYFORCEDROLES = {}
-
-	DEBUGP("000021")
 end
 
 local function UpgradeRoles(plys, prev_roles, roleCount, selectableRoles, roleData)
 	if roleData == INNOCENT or roleData == TRAITOR or roleData == DETECTIVE or GetConVar("ttt_newroles_enabled"):GetBool() then
 		local availableRoles = {}
 
-		DEBUGP("000014")
-
 		-- now upgrade this role if there are other subroles
 		for v in pairs(selectableRoles) do
-			DEBUGP("000015")
-
 			if v.baserole == roleData.index then
 				availableRoles[#availableRoles + 1] = v
 			end
 		end
 
-		DEBUGP("000016")
-
 		SetRoleTypes(plys, prev_roles, roleCount, availableRoles, roleData.index)
-
-		DEBUGP("000017")
 	end
 end
 
@@ -1441,8 +1412,6 @@ local function SelectBaseRole(choices, prev_roles, roleCount, roleData)
 	local ls = {}
 
 	while rs < roleCount[roleData.index] and #choices > 0 do
-		DEBUGP("000012")
-
 		-- select random index in choices table
 		local pick = math.random(1, #choices)
 
@@ -1480,15 +1449,11 @@ function SelectRoles(plys, max_plys)
 	local prev_roles = {}
 	local tmp = {}
 
-	DEBUGP("000005")
-
 	GAMEMODE.LastRole = GAMEMODE.LastRole or {}
 
 	for _, v in ipairs(player.GetAll()) do
-		DEBUGP("000006")
-
 		-- everyone on the spec team is in specmode
-		if IsValid(v) and not v:GetForceSpec() and (not plys or table.HasValue(plys, v)) and not hook.Run("TTT2DisableRoleSelection", v) then
+		if not v:GetForceSpec() and (not plys or table.HasValue(plys, v)) and not hook.Run("TTT2DisableRoleSelection", v) then
 			if not plys then
 				tmp[#tmp + 1] = v
 			end
@@ -1502,14 +1467,10 @@ function SelectRoles(plys, max_plys)
 		end
 	end
 
-	DEBUGP("000007")
-
 	plys = plys or tmp
 	max_plys = max_plys or #plys
 
 	if max_plys < 2 then return end
-
-	DEBUGP("000008")
 
 	local roleCount = {}
 	local selectableRoles = GetSelectableRoles(plys, max_plys) -- update SELECTABLEROLES table
@@ -1518,11 +1479,7 @@ function SelectRoles(plys, max_plys)
 		roleCount[v.index] = selectableRoles[v] or 0
 	end
 
-	DEBUGP("000009")
-
 	SelectForcedRoles(max_plys, roleCount, selectableRoles, choices)
-
-	DEBUGP("000011")
 
 	-- first select traitors, then innos, then the other roles
 	local list = {
@@ -1553,14 +1510,10 @@ function SelectRoles(plys, max_plys)
 		-- if roleData == INNOCENT then just remove the random ply from choices
 		local ls = SelectBaseRole(choices, prev_roles, roleCount, roleData)
 
-		DEBUGP("000013")
-
 		-- upgrade innos and players without any role later
 		if roleData ~= INNOCENT then
 			UpgradeRoles(ls, prev_roles, roleCount, selectableRoles, roleData)
 		end
-
-		DEBUGP("000018")
 	end
 
 	-- last but not least, upgrade the innos and players without any role to special/normal innos
@@ -1577,13 +1530,9 @@ function SelectRoles(plys, max_plys)
 
 	UpgradeRoles(innos, prev_roles, roleCount, selectableRoles, INNOCENT)
 
-	DEBUGP("00001A")
-
 	GAMEMODE.LastRole = {}
 
 	for _, ply in ipairs(plys) do
-		DEBUGP("00001B")
-
 		local subrole = PLYFINALROLES[ply] or ROLE_INNOCENT
 
 		ply:SetRole(subrole, nil, true)
@@ -1597,13 +1546,9 @@ function SelectRoles(plys, max_plys)
 		ply:SetDefaultCredits()
 	end
 
-	DEBUGP("00001C")
-
 	PLYFINALROLES = {}
 
 	SendFullStateUpdate()
-
-	DEBUGP("00001D")
 end
 
 local function ttt_roundrestart(ply, command, args)

@@ -1,4 +1,10 @@
 ---- Tips panel shown to specs
+local math = math
+local table = table
+local pairs = pairs
+local timer = timer
+local IsValid = IsValid
+local CreateConVar = CreateConVar
 
 CreateConVar("ttt_tips_enable", "1", FCVAR_ARCHIVE)
 

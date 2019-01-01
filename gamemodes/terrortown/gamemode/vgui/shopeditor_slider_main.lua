@@ -1,5 +1,9 @@
 local PANEL = {}
 
+local math = math
+local table = table
+local vgui = vgui
+
 AccessorFunc(PANEL, "m_fDefaultValue", "DefaultValue")
 AccessorFunc(PANEL, "m_autoFocus", "AutoFocus")
 

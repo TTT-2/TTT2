@@ -1,6 +1,9 @@
 -- Ammo override base
 AddCSLuaFile()
 
+local util = util
+local hook = hook
+
 ENT.Type = "anim"
 
 -- Override these values
@@ -71,9 +74,9 @@ function ENT:CheckForWeapon(ply)
 		-- create a cache of what weapon classes use this ammo
 		local tbl = {}
 
-		for k, v in pairs(weapons.GetList()) do
-			if v and v.AmmoEnt == self:GetClass() then
-				table.insert(tbl, WEPS.GetClass(v))
+		for k, v in ipairs(weapons.GetList()) do
+			if v.AmmoEnt == self:GetClass() then
+				tbl[#tbl + 1] = WEPS.GetClass(v)
 			end
 		end
 
@@ -83,7 +86,7 @@ function ENT:CheckForWeapon(ply)
 	-- Check if player has a weapon that we know needs us. This is called in
 	-- Touch, which is called many a time, so we use the cache here to avoid
 	-- looping through every weapon the player has to check their AmmoEnt.
-	for _, w in pairs(self.CachedWeapons) do
+	for _, w in ipairs(self.CachedWeapons) do
 		if ply:HasWeapon(w) then
 			return true
 		end

@@ -4,6 +4,13 @@
 ttt_include("vgui__sb_row", true)
 
 local strlower = string.lower
+local table = table
+local pairs = pairs
+local ipairs = ipairs
+local IsValid = IsValid
+local surface = surface
+local draw = draw
+local vgui = vgui
 
 local PANEL = {}
 

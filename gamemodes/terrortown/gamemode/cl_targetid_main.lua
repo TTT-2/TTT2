@@ -5,6 +5,12 @@ local GetPTranslation = LANG.GetParamTranslation
 local GetRaw = LANG.GetRawTranslation
 local GetLang = LANG.GetUnsafeLanguageTable
 local GetPlayers = player.GetAll
+local math = math
+local table = table
+local ipairs = ipairs
+local IsValid = IsValid
+local CreateConVar = CreateConVar
+local hook = hook
 
 local key_params = {
 	usekey = Key("+use", "USE"),

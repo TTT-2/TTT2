@@ -6,6 +6,13 @@ local COLOR_GREY = COLOR_GREY or Color(120, 120, 120, 255)
 local Equipmentnew
 local SafeTranslate = LANG.TryTranslation
 
+local math = math
+local table = table
+local net = net
+local pairs = pairs
+local ipairs = ipairs
+local IsValid = IsValid
+
 function ShopEditor.ItemIsWeapon(item)
 	return not tonumber(item.id)
 end

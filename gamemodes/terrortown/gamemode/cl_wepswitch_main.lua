@@ -1,9 +1,14 @@
 -- we need our own weapon switcher because the hl2 one skips empty weapons
 
-local math = math
 local draw = draw
 local surface = surface
+local math = math
 local table = table
+local pairs = pairs
+local ipairs = ipairs
+local IsValid = IsValid
+local CreateConVar = CreateConVar
+local hook = hook
 
 local TryTranslation = LANG.TryTranslation
 

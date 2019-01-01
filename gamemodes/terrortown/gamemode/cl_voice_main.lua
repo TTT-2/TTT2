@@ -4,6 +4,13 @@ DEFINE_BASECLASS("gamemode_base")
 
 local GetTranslation = LANG.GetTranslation
 local string = string
+local math = math
+local net = net
+local player = player
+local pairs = pairs
+local timer = timer
+local IsValid = IsValid
+local hook = hook
 
 --- voicechat stuff
 VOICE = {}

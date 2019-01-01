@@ -8,6 +8,11 @@
 
 LANG.Strings = {}
 
+local table = table
+local pairs = pairs
+local ConVarExists = ConVarExists
+local CreateConVar = CreateConVar
+
 CreateConVar("ttt_language", "auto", FCVAR_ARCHIVE)
 
 LANG.DefaultLanguage = "english"

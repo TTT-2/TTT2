@@ -1,5 +1,11 @@
 ttt_include("weaponry_shd") -- inits WEPS tbl
 ---- Weapon system, pickup limits, etc
+local ipairs = ipairs
+local IsValid = IsValid
+local table = table
+local timer = timer
+local net = net
+local hook = hook
 
 local IsEquipment = WEPS.IsEquipment
 

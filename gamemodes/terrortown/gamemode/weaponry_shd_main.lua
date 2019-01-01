@@ -1,5 +1,7 @@
 WEPS = {}
 
+local IsValid = IsValid
+
 function WEPS.TypeForWeapon(class)
 	local tbl = util.WeaponForClass(class)
 

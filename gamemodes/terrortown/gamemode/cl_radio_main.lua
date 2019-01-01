@@ -2,6 +2,9 @@
 
 TRADIO = {}
 
+local ipairs = ipairs
+local IsValid = IsValid
+
 local sound_names = {
 	scream = "radio_button_scream",
 	explosion = "radio_button_expl",

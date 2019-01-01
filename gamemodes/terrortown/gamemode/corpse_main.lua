@@ -3,6 +3,18 @@
 -- namespaced because we have no ragdoll metatable
 CORPSE = {}
 
+local math = math
+local table = table
+local net = net
+local player = player
+local ipairs = ipairs
+local timer = timer
+local util = util
+local IsValid = IsValid
+local ConVarExists = ConVarExists
+local CreateConVar = CreateConVar
+local hook = hook
+
 ttt_include("corpse_shd")
 
 --- networked data abstraction layer

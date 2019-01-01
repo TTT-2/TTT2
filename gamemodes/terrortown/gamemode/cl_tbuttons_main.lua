@@ -4,6 +4,9 @@ local pairs = pairs
 local ipairs = ipairs
 local math = math
 local abs = math.abs
+local table = table
+local net = net
+local IsValid = IsValid
 
 TBHUD = {}
 TBHUD.buttons = {}

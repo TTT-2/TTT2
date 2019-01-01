@@ -1,6 +1,14 @@
 ---- Role state communication
 TTT2NETTABLE = {}
 
+local net = net
+local table = table
+local pairs = pairs
+local ipairs = ipairs
+local IsValid = IsValid
+local player = player
+local hook = hook
+
 -- TODO improve, e.g. if sending every role to everyone on RoundEnd()!
 function SendRoleListMessage(subrole, team, sids, ply_or_rf)
 	-- TODO add role hacking

@@ -1,5 +1,12 @@
 -- serverside extensions to player table
 
+local net = net
+local table = table
+local pairs = pairs
+local ipairs = ipairs
+local IsValid = IsValid
+local hook = hook
+
 local plymeta = FindMetaTable("Player")
 if not plymeta then
 	Error("FAILED TO FIND PLAYER TABLE")

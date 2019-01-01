@@ -4,7 +4,7 @@ GM.Name = "TTT2 (Advanced Update)"
 GM.Author = "Bad King Urgrain && Alf21"
 GM.Email = "4lf-mueller@gmx.de"
 GM.Website = "ttt.badking.net, ttt2.informaskill.de"
-GM.Version = "0.3.8.3b"
+GM.Version = "0.3.9b"
 GM.Customized = true
 
 TTT2 = true -- identifier for TTT2. Just use "if TTT2 then ... end"
@@ -292,19 +292,6 @@ end
 SHOP_FALLBACK_TRAITOR = TRAITOR.name
 SHOP_FALLBACK_DETECTIVE = DETECTIVE.name
 
-local ttt2_debugp = CreateConVar("ttt2_debugp", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-local ttt2_debug = ttt2_debugp:GetBool()
-
-cvars.AddChangeCallback("ttt2_debugp", function(old, new)
-	ttt2_debug = tostring(new) == "1" and true or false
-end)
-
-function DEBUGP(str)
-	if ttt2_debug then
-		print("DEB_" .. str)
-	end
-end
-
 function SortRolesTable(tbl)
 	local _func = function(a, b)
 		return a.index < b.index
@@ -503,7 +490,7 @@ function GetTraitors()
 
 	for _, v in ipairs(player.GetAll()) do
 		if v:IsTraitor() then
-			table.insert(trs, v)
+			trs[#trs + 1] = v
 		end
 	end
 

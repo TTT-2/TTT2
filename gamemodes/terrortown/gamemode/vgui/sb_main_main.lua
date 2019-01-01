@@ -7,11 +7,16 @@ local draw = draw
 local math = math
 local string = string
 local vgui = vgui
-
 local max = math.max
 local floor = math.floor
 local GetTranslation = LANG.GetTranslation
 local GetPTranslation = LANG.GetParamTranslation
+local table = table
+local player = player
+local pairs = pairs
+local ipairs = ipairs
+local timer = timer
+local IsValid = IsValid
 
 ttt_include("vgui__sb_team", true)
 

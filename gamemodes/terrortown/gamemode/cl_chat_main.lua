@@ -118,6 +118,12 @@ RADIO.Show = false
 RADIO.StoredTarget = {nick = "", t = 0}
 RADIO.LastRadio = {msg = "", t = 0}
 
+local table = table
+local pairs = pairs
+local ipairs = ipairs
+local timer = timer
+local util = util
+
 -- [key] -> command
 RADIO.Commands = {
 	{cmd = "yes", text = "quick_yes", format = false},

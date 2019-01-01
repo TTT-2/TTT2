@@ -1,5 +1,12 @@
 -- This table is used by the client to show items in the equipment menu, and by
--- the server to check if a certain role is allowed to buy a certain item.
+-- the server to check if a certain role is allowed to buy a certain item.local math = math
+local table = table
+local net = net
+local player = player
+local pairs = pairs
+local ipairs = ipairs
+local util = util
+local hook = hook
 
 
 -- If you have custom items you want to add, consider using a separate lua
@@ -593,7 +600,7 @@ if SERVER then
 			table.insert(SYNC_EQUIP[subrole], tbl)
 		end
 
-		for _, v in pairs(player.GetAll()) do
+		for _, v in ipairs(player.GetAll()) do
 			SyncSingleEquipment(v, subrole, tbl, true)
 		end
 	end
