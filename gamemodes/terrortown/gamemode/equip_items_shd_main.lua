@@ -43,9 +43,11 @@ local mat_dir = "vgui/ttt/"
 -- Stick to around 35 characters per description line, and add a "\n" where you
 -- want a new line to start.
 
-EquipmentItems = {}
-SYNC_EQUIP = {}
-ALL_ITEMS = {}
+Equipment = Equipment or {}
+EquipmentItems = EquipmentItems or {}
+SYNC_EQUIP = SYNC_EQUIP or {}
+ALL_ITEMS = ALL_ITEMS or {}
+RANDOMSHOP = RANDOMSHOP or {}
 
 local armor = {
 	id = EQUIP_ARMOR,
@@ -219,14 +221,230 @@ function GetShopFallbackTable(subrole)
 	end
 end
 
+function GetEquipmentForRole(subrole)
+	local fallbackTable = GetModifiedEquipment(subrole, GetShopFallbackTable(subrole))
+	if fallbackTable then
+		return fallbackTable
+	end
+
+	local fallback = GetShopFallback(subrole)
+
+	-- need to build equipment cache?
+	if not Equipment[fallback] then
+		EquipmentItems[fallback] = EquipmentItems[fallback] or {}
+
+		-- start with all the non-weapon goodies
+		local tbl = {}
+
+		for k in pairs(EquipmentItems[fallback]) do
+			tbl[k] = EquipmentItems[fallback][k]
+		end
+
+		-- find buyable weapons to load info from
+		for _, v in ipairs(weapons.GetList()) do
+			if v and not v.Doublicated and v.CanBuy and table.HasValue(v.CanBuy, fallback) then
+				local data = v.EquipMenuData or {}
+
+				local base = GetEquipmentWeaponBase(data, v)
+				if base then
+					table.insert(tbl, base)
+				end
+			end
+		end
+
+		-- mark custom items
+		for _, i in ipairs(tbl) do
+			if i and i.id then
+				i.custom = not table.HasValue(DefaultEquipment[fallback], i.id) -- TODO
+			end
+		end
+
+		Equipment[fallback] = tbl
+	end
+
+	return GetModifiedEquipment(fallback, Equipment[fallback] or {})
+end
+
+-- Sync Equipment
+local function EncodeForStream(tbl)
+	-- may want to filter out data later
+	-- just serialize for now
+
+	local result = util.TableToJSON(tbl)
+	if not result then
+		ErrorNoHalt("Round report event encoding failed!\n")
+
+		return false
+	else
+		return result
+	end
+end
+
 -- Search if an item is in the equipment table of a given subrole, and return it if
 -- it exists, else return nil.
+if SERVER then
+	local random_shops = CreateConVar("ttt2_random_shops", "0", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_SERVER_CAN_EXECUTE}, "Set to 0 to disable")
+
+	util.AddNetworkString("TTT2SyncRandomShops")
+
+	local function SyncRandomShops(plys)
+		local s = EncodeForStream(RANDOMSHOP)
+		if not s then return end
+
+		-- divide into happy lil bits.
+		-- this was necessary with user messages, now it's
+		-- a just-in-case thing if a round somehow manages to be > 64K
+		local cut = {}
+		local max = 64000
+
+		while #s ~= 0 do
+			local bit = string.sub(s, 1, max - 1)
+
+			table.insert(cut, bit)
+
+			s = string.sub(s, max, - 1)
+		end
+
+		local parts = #cut
+
+		for k, bit in ipairs(cut) do
+			net.Start("TTT2SyncRandomShops")
+			net.WriteBit(k ~= parts) -- continuation bit, 1 if there's more coming
+			net.WriteString(bit)
+
+			if plys then
+				net.Send(plys)
+			else
+				net.Broadcast()
+			end
+		end
+	end
+
+	function UpdateRandomShops(plys, amount)
+		RANDOMSHOP = {} -- reset
+
+		for _, rd in pairs(GetShopRoles()) do
+			local fallback = GetShopFallback(rd.index)
+
+			if not RANDOMSHOP[fallback] then
+				RANDOMSHOP[fallback] = {}
+
+				local tmp = {}
+
+				for _, equip in pairs(GetEquipmentForRole(fallback)) do
+					tmp[#tmp + 1] = equip
+				end
+
+				local length = #tmp
+
+				amount = math.Clamp(amount, 0, length)
+
+				if amount == length then
+					RANDOMSHOP[fallback] = tmp
+				else
+					for i = 1, amount do
+						local rndm = math.random(1, #tmp)
+
+						RANDOMSHOP[fallback][#RANDOMSHOP[fallback] + 1] = tmp[rndm]
+
+						table.remove(tmp, rndm)
+					end
+				end
+			end
+		end
+
+		SyncRandomShops(plys)
+	end
+
+	cvars.AddChangeCallback("ttt2_random_shops", function(name, old, new)
+		local tmp = tonumber(new)
+
+		SetGlobalInt("ttt2_random_shops", tmp)
+
+		if tmp > 0 then
+			UpdateRandomShops(nil, tmp)
+		end
+	end)
+
+	hook.Add("TTTPrepareRound", "TTT2InitRandomShops", function()
+		local amount = random_shops:GetInt()
+
+		if amount > 0 then
+			UpdateRandomShops(nil, amount)
+		end
+	end)
+
+	hook.Add("PlayerInitialSpawn", "TTT2InitRandomShops", function(ply)
+		local amount = random_shops:GetInt()
+
+		SetGlobalInt("ttt2_random_shops", amount)
+
+		if amount > 0 then
+			SyncRandomShops(ply)
+		end
+	end)
+else
+	local buff = ""
+
+	local function TTT2SyncRandomShops(len)
+		local cont = net.ReadBit() == 1
+
+		buff = buff .. net.ReadString()
+
+		if cont then
+			return
+		else
+			-- do stuff with buffer contents
+			local json_shop = buff -- util.Decompress(buff)
+
+			if not json_shop then
+				ErrorNoHalt("RANDOMSHOP decompression failed!\n")
+			else
+				-- convert the json string back to a table
+				local tmp = util.JSONToTable(json_shop)
+
+				if istable(tmp) then
+					RANDOMSHOP = tmp
+				else
+					ErrorNoHalt("RANDOMSHOP decoding failed!\n")
+				end
+			end
+
+			-- flush
+			buff = ""
+		end
+	end
+	net.Receive("TTT2SyncRandomShops", TTT2SyncRandomShops)
+end
+
+function GetModifiedEquipment(subrole, fallback)
+	local fb = GetShopFallback(subrole)
+
+	if GetGlobalInt("ttt2_random_shops") > 0 and RANDOMSHOP[fb] then
+		local tmp = {}
+
+		for _, equip in ipairs(RANDOMSHOP[fb]) do
+			for _, eq in pairs(fallback) do
+				if eq.id == equip.id then
+					tmp[#tmp + 1] = eq
+				end
+			end
+		end
+
+		if #tmp > 0 then
+			return tmp
+		end
+	end
+
+	return fallback
+end
+
 function GetEquipmentItem(subrole, id)
-	local tbl = GetShopFallbackTable(subrole)
+	local tbl = GetModifiedEquipment(subrole, GetShopFallbackTable(subrole))
 	if not tbl then
 		local fb = GetShopFallback(subrole)
 
-		tbl = EquipmentItems[fb]
+		tbl = GetModifiedEquipment(fb, Equipment[fb])
 
 		if not tbl then return end
 	end
@@ -303,7 +521,7 @@ function SyncTableHasValue(tbl, equip)
 end
 
 function InitFallbackShops()
-	for _, v in pairs({TRAITOR, DETECTIVE}) do
+	for _, v in ipairs({TRAITOR, DETECTIVE}) do
 		local fallback = GetShopFallbackTable(v.index)
 		if fallback then
 			for _, eq in ipairs(fallback) do
@@ -327,10 +545,12 @@ function InitFallbackShops()
 	end
 end
 
-function InitFallbackShop(roleData, fallbackTable)
-	roleData.fallbackTable = fallbackTable
+function InitFallbackShop(roleData, fallbackTable, avoidSet)
+	if not avoidSet then
+		roleData.fallbackTable = fallbackTable
+	end
 
-	for _, eq in ipairs(roleData.fallbackTable) do
+	for _, eq in ipairs(fallbackTable) do
 		local item, wep = GetEquipmentByName(eq.id)
 
 		if wep then
@@ -456,21 +676,6 @@ end
 
 if SERVER then
 	util.AddNetworkString("TTT2SyncEquipment")
-
-	-- Sync Equipment
-	local function EncodeForStream(tbl)
-		-- may want to filter out data later
-		-- just serialize for now
-
-		local result = util.TableToJSON(tbl)
-		if not result then
-			ErrorNoHalt("Round report event encoding failed!\n")
-
-			return false
-		else
-			return result
-		end
-	end
 
 	function SyncEquipment(ply, add)
 		add = add or true

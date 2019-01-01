@@ -162,7 +162,8 @@ end
 
 -- Give loadout items.
 local function GiveLoadoutItems(ply)
-	local items = EquipmentItems[ply:GetSubRole()]
+	local sr = ply:GetSubRole()
+	local items = GetModifiedEquipment(sr, EquipmentItems[sr])
 
 	if items then
 		for _, item in pairs(items) do
@@ -174,7 +175,8 @@ local function GiveLoadoutItems(ply)
 end
 
 local function ResetLoadoutItems(ply)
-	local items = EquipmentItems[ply:GetSubRole()]
+	local sr = ply:GetSubRole()
+	local items = GetModifiedEquipment(sr, EquipmentItems[sr])
 
 	if items then
 		for _, item in pairs(items) do
@@ -583,6 +585,24 @@ local function OrderEquipment(ply, cmd, args)
 		print(ply, "tried to buy item/weapon, but didn't had enough credits")
 
 		return
+	end
+
+	if GetGlobalInt("ttt2_random_shops") > 0 and RANDOMSHOP[subrole] and #RANDOMSHOP[subrole] > 0 then
+		local key = false
+
+		for _, equip in ipairs(RANDOMSHOP[subrole]) do
+			if equip.id == id then
+				key = true
+
+				break
+			end
+		end
+
+		if not key then
+			print(ply, "tried to buy item/weapon, but didn't allowed to do so!")
+
+			return
+		end
 	end
 
 	if received then

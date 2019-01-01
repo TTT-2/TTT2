@@ -1,10 +1,16 @@
-util.AddNetworkString("newshop")
-
 local net = net
 local table = table
 local pairs = pairs
 local ipairs = ipairs
 local sql = sql
+local util = util
+
+util.AddNetworkString("newshop")
+util.AddNetworkString("TTT2UpdateCVar")
+
+net.Receive("TTT2UpdateCVar", function()
+	RunConsoleCommand(net.ReadString(), net.ReadString())
+end)
 
 ShopEditor.ShopTablePre = "ttt2_shop_"
 
@@ -175,6 +181,7 @@ function ShopEditor.OnChangeWSCVar(subrole, fallback, ply_or_rf)
 			end
 		elseif fallback == SHOP_UNSET then
 			if rd.fallbackTable then
+
 				-- set everything
 				for _, eq in ipairs(rd.fallbackTable) do
 					local is_item = tonumber(eq.id)

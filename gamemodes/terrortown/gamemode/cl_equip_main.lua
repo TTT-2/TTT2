@@ -36,50 +36,6 @@ local eqframe
 
 Equipment = Equipment or {}
 
-function GetEquipmentForRole(subrole)
-	local fallbackTable = GetShopFallbackTable(subrole)
-	if fallbackTable then
-		return fallbackTable
-	end
-
-	local fallback = GetShopFallback(subrole)
-
-	-- need to build equipment cache?
-	if not Equipment[fallback] then
-		EquipmentItems[fallback] = EquipmentItems[fallback] or {}
-
-		-- start with all the non-weapon goodies
-		local tbl = {}
-
-		for k in pairs(EquipmentItems[fallback]) do
-			tbl[k] = EquipmentItems[fallback][k]
-		end
-
-		-- find buyable weapons to load info from
-		for _, v in ipairs(weapons.GetList()) do
-			if v and not v.Doublicated and v.CanBuy and table.HasValue(v.CanBuy, fallback) then
-				local data = v.EquipMenuData or {}
-
-				local base = GetEquipmentWeaponBase(data, v)
-				if base then
-					table.insert(tbl, base)
-				end
-			end
-		end
-
-		-- mark custom items
-		for _, i in ipairs(tbl) do
-			if i and i.id then
-				i.custom = not table.HasValue(DefaultEquipment[fallback], i.id) -- TODO
-			end
-		end
-
-		Equipment[fallback] = tbl
-	end
-
-	return Equipment[fallback] or {}
-end
-
 local function ItemIsWeapon(item)
 	return not tonumber(item.id)
 end
@@ -260,11 +216,16 @@ local function TraitorMenuPopup()
 
 	local credits = ply:GetCredits()
 	local can_order = true
+	local name = GetTranslation("equip_title")
+
+	if GetGlobalInt("ttt2_random_shops") > 0 then
+		name = name .. " (RANDOM)"
+	end
 
 	local dframe = vgui.Create("DFrame")
 	dframe:SetSize(w, h)
 	dframe:Center()
-	dframe:SetTitle(GetTranslation("equip_title"))
+	dframe:SetTitle(name)
 	dframe:SetVisible(true)
 	dframe:ShowCloseButton(true)
 	dframe:SetMouseInputEnabled(true)

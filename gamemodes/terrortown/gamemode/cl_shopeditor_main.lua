@@ -757,6 +757,105 @@ function ShopEditor.shopFallbackRefresh()
 end
 net.Receive("shopFallbackRefresh", ShopEditor.shopFallbackRefresh)
 
+-- OPTION WINDOW
+function ShopEditor.ShowOptions()
+	local ply = LocalPlayer()
+	local w, h = ScrW() * 0.5, ScrH() * 0.5
+
+	local frame = vgui.Create("ShopEditorChildFrame")
+	frame:SetPrevFunc(function()
+		if IsValid(ply.shopeditor_frame) then
+			ply.shopeditor_frame:Close()
+		end
+
+		ply.shopeditor_frame = nil
+
+		ShopEditor.CreateShopEditor()
+	end)
+	frame:SetSize(w, h)
+	frame:Center()
+	frame:SetTitle("Shop Editor -> Options")
+	frame:SetVisible(true)
+	frame:SetDraggable(true)
+	frame:ShowCloseButton(true)
+	frame:SetMouseInputEnabled(true)
+
+	function frame:Paint(w2, h2)
+		draw.RoundedBox(0, 0, 0, w2, h2, Color(100, 100, 100))
+	end
+
+	function frame:OnClose()
+		ply.shopeditor_frame = nil
+	end
+
+	local tmp = {}
+	local tbl = {
+		ttt2_random_shops = {typ = "number"}
+	}
+
+	for key, data in pairs(tbl) do
+		local el
+
+		if data.typ == "number" then
+			local max = data.bits and (2 ^ data.bits - 1) or 65535
+
+			local slider = vgui.Create("DNumSliderWang", frame)
+			slider:SetSize(w, 20)
+			slider:SetMin(0)
+			slider:SetMax(max)
+			slider:SetDecimals(0)
+			slider:SetAutoFocus(true)
+
+			el = slider
+		elseif data.typ == "bool" then
+			local checkbox = vgui.Create("DCheckBoxLabel", frame)
+
+			el = checkbox
+		end
+
+		el:SetText("ConVar: " .. key)
+		el:SetValue(GetGlobalInt(key))
+		el:Dock(TOP)
+		el:DockMargin(4, 0, 0, 0)
+
+		if data.typ == "bool" then
+			el:SizeToContents()
+		end
+
+		tmp[key] = el
+	end
+
+	-- save button
+	local saveButton = vgui.Create("DButton", frame)
+	saveButton:SetFont("Trebuchet22")
+	saveButton:SetText("Save")
+	saveButton:Dock(BOTTOM)
+
+	saveButton.DoClick = function()
+		for key, data in pairs(tbl) do
+			net.Start("TTT2UpdateCVar")
+			net.WriteString(key)
+
+			if IsValid(tmp[key]) then
+				if data.typ == "number" then
+					net.WriteString(tostring(math.Round(tmp[key]:GetValue())))
+				elseif data.typ == "bool" then
+					net.WriteString(tostring(tonumber(tmp[key]:GetChecked())))
+				else
+					net.WriteString(tmp[key]:GetValue())
+				end
+			end
+
+			net.SendToServer()
+		end
+	end
+
+	frame:MakePopup()
+	frame:SetKeyboardInputEnabled(false)
+
+	ply.shopeditor_frame = frame
+end
+
 -- MAIN WINDOW
 
 function ShopEditor.CreateShopEditor()
@@ -815,12 +914,12 @@ function ShopEditor.CreateShopEditor()
 	end
 
 	local buttonOptions = vgui.Create("DButton", frame)
-	buttonOptions:SetText("Options (WIP)")
+	buttonOptions:SetText("Options")
 	buttonOptions:SetPos(wMul * 2, topP)
 	buttonOptions:SetSize(wMul, h)
 
 	buttonOptions.DoClick = function()
-		--frame:Close()
+		ShopEditor.ShowOptions()
 	end
 
 	frame:MakePopup()
