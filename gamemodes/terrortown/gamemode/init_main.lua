@@ -764,7 +764,7 @@ function SpawnWillingPlayers(dead_only)
 		local num_spawns = #GetSpawnEnts()
 		local to_spawn = {}
 
-		for _, ply in util.RandomPairs(plys) do
+		for _, ply in RandomPairs(plys) do
 			if ply:ShouldSpawn() then
 				to_spawn[#to_spawn + 1] = ply
 

@@ -408,18 +408,3 @@ function util.SimpleTime(seconds, fmt)
 
 	return string.format(fmt, m, s, ms)
 end
-
-function util.RandomPairs(tab)
-	local keys = table.GetKeys(tab)
-	local count = #keys
-
-	return function()
-		if count == 0 then return end
-
-		local index = table.remove(keys, math.random(1, count))
-
-		count = count - 1
-
-		return index, tab[index]
-	end
-end
