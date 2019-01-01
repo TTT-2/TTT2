@@ -1076,6 +1076,20 @@ L.binoc_body = "ОБНАРУЖЕНО ТЕЛО"
 
 L.idle_popup_title = "Бездействие"
 
+-- 6-22-17 (Crosshair)
+L.set_title_cross = "Настройки перекрестия"
+
+L.set_cross_color_enable = "Включить пользовательский цвет перекрестия"
+L.set_cross_color = "Пользовательский цвет перекрестия"
+L.set_cross_gap_enable = "Включить пользовательский зазор в перекрестии"
+L.set_cross_gap = "Таможенный зазор в перекрестии"
+L.set_cross_static_enable = "Включить статическое перекрестие"
+L.set_ironsight_cross_opacity = "Прозрачность прицела Ironsight"
+L.set_cross_weaponscale_enable = "Включить шкалу прицела оружия"
+L.set_cross_thickness = "Толщина перекрестия"
+L.set_cross_outlinethickness = "Толщина контура перекрестия"
+L.set_cross_dot_enable = "Включить точку перекрестия"
+
 -- ttt2
 L.create_own_shop = "Создай свой магазин"
 L.shop_link = "Связь с"

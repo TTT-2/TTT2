@@ -1086,6 +1086,20 @@ L.binoc_body = "BODY DETECTED"
 
 L.idle_popup_title = "Idle"
 
+-- 6-22-17 (Crosshair)
+L.set_title_cross = "Fadenkreuz Einstellungen"
+
+L.set_cross_color_enable = "Aktiviere benutzerdefinierte Fadenkreuz-Farben"
+L.set_cross_color = "Benutzerdefinierte Fadenkreuz-Farben"
+L.set_cross_gap_enable = "Aktiviere benutzerdefinierte Fadenkreuz-Lücke"
+L.set_cross_gap = "Benutzerdefinierte Fadenkreuz-Lücke"
+L.set_cross_static_enable = "Aktiviere statisches Fadenkreuz"
+L.set_ironsight_cross_opacity = "Durchlässigkeit des Fadenkreuz-Visiers"
+L.set_cross_weaponscale_enable = "Aktiviere die Skallierung des Fadenkreuz"
+L.set_cross_thickness = "Fadenkreuz-Dicke"
+L.set_cross_outlinethickness = "Dicke der Umrandung des Fadenkreuzes"
+L.set_cross_dot_enable = "Aktiviere Fadenkreuz-Punkt"
+
 -- ttt2
 L.create_own_shop = "Erstelle einen eigenen Shop"
 L.shop_link = "Verlinke mit"

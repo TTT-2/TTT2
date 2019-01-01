@@ -130,6 +130,11 @@ function CreateChanges()
 	- ammoboxes will store the correct amount of ammo now
 	- connected radio commands with scoreboard #tagging (https://github.com/Exho1/TTT-ScoreboardTagging/blob/master/lua/client/ttt_scoreboardradiocmd.lua)
 	]])
+
+	AddChange("0.3.9b", [[
+	- agreed to all these unaccepted PullRequest of TTT on GitHub:
+		- <a href='https://github.com/Facepunch/garrysmod/pull/1376'>https://github.com/Facepunch/garrysmod/pull/1376</a>
+	]])
 end
 
 function ShowChanges()

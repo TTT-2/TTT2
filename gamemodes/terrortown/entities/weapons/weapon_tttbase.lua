@@ -135,6 +135,20 @@ if CLIENT then
 	local crosshair_brightness = CreateConVar("ttt_crosshair_brightness", "1.0", FCVAR_ARCHIVE)
 	local crosshair_size = CreateConVar("ttt_crosshair_size", "1.0", FCVAR_ARCHIVE)
 	local disable_crosshair = CreateConVar("ttt_disable_crosshair", "0", FCVAR_ARCHIVE)
+	local enable_color_crosshair = CreateConVar("ttt_crosshair_color_enable", "0", FCVAR_ARCHIVE)
+	local crosshair_color_r = CreateConVar("ttt_crosshair_color_r", "30", FCVAR_ARCHIVE)
+	local crosshair_color_g = CreateConVar("ttt_crosshair_color_g", "160", FCVAR_ARCHIVE)
+	local crosshair_color_b = CreateConVar("ttt_crosshair_color_b", "160", FCVAR_ARCHIVE)
+
+	local enable_gap_crosshair = CreateConVar("ttt_crosshair_gap_enable", "0", FCVAR_ARCHIVE)
+	local crosshair_gap = CreateConVar("ttt_crosshair_gap", "0", FCVAR_ARCHIVE)
+
+	local crosshair_opacity = CreateConVar("ttt_crosshair_opacity", "1", FCVAR_ARCHIVE)
+	local crosshair_static = CreateConVar("ttt_crosshair_static", "0", FCVAR_ARCHIVE)
+	local crosshair_weaponscale = CreateConVar("ttt_crosshair_weaponscale", "1", FCVAR_ARCHIVE)
+	local crosshair_thickness = CreateConVar("ttt_crosshair_thickness", "1", FCVAR_ARCHIVE)
+	local crosshair_outlinethickness = CreateConVar("ttt_crosshair_outlinethickness", "0", FCVAR_ARCHIVE)
+	local enable_dot_crosshair = CreateConVar("ttt_crosshair_dot", "0", FCVAR_ARCHIVE)
 
 	function SWEP:DrawHUD()
 		if self.HUDHelp then
@@ -148,31 +162,52 @@ if CLIENT then
 		local sights = not self.NoSights and self:GetIronsights()
 		local x = math.floor(ScrW() * 0.5)
 		local y = math.floor(ScrH() * 0.5)
-		local scale = math.max(0.2, 10 * self:GetPrimaryCone())
-		local LastShootTime = self:LastShootTime()
+		local scale = crosshair_weaponscale:GetBool() and math.max(0.2, 10 * self:GetPrimaryCone()) or 1
+		local timescale = 1
 
-		scale = scale * (2 - math.Clamp((CurTime() - LastShootTime) * 5, 0.0, 1.0))
-
-		local alpha = sights and sights_opacity:GetFloat() or 1
-		local bright = crosshair_brightness:GetFloat() or 1
-
-		-- somehow it seems this can be called before my player metatable
-		-- additions have loaded
-		if client.GetSubRoleData then
-			local col = hook.Run("TTT2ModifyWeaponColors") or client:GetSubRoleData().color
-
-			surface.SetDrawColor(col.r * bright, col.g * bright, col.b * bright, 255 * alpha)
-		else
-			surface.SetDrawColor(0, 255 * bright, 0, 255 * alpha)
+		if not crosshair_static:GetBool() then
+			timescale = (2 - math.Clamp((CurTime() - self:LastShootTime()) * 5, 0.0, 1.0))
 		end
 
-		local gap = math.floor(20 * scale * (sights and 0.8 or 1))
-		local length = math.floor(gap + 25 * crosshair_size:GetFloat() * scale)
+		local alpha = sights and sights_opacity:GetFloat() or crosshair_opacity:GetFloat()
+		local bright = crosshair_brightness:GetFloat() or 1
+		local gap = enable_gap_crosshair:GetBool() and math.floor(timescale * crosshair_gap:GetFloat()) or math.floor(20 * scale * timescale * (sights and 0.8 or 1))
+		local thickness = crosshair_thickness:GetFloat()
+		local outline = math.floor(crosshair_outlinethickness:GetFloat())
+		local length = math.floor(gap + 25 * crosshair_size:GetFloat() * scale * timescale)
+		local offset = thickness * 0.5
 
-		surface.DrawLine(x - length, y, x - gap, y)
-		surface.DrawLine(x + length, y, x + gap, y)
-		surface.DrawLine(x, y - length, x, y - gap)
-		surface.DrawLine(x, y + length, x, y + gap)
+		if outline > 0 then
+			surface.SetDrawColor(0, 0, 0, 255 * alpha)
+			surface.DrawRect(x - length - outline, y - offset - outline, length - gap + outline * 2, thickness + outline * 2)
+			surface.DrawRect(x + gap - outline, y - offset - outline, length - gap + outline * 2, thickness + outline * 2)
+			surface.DrawRect(x - offset - outline, y - length - outline, thickness + outline * 2, length - gap + outline * 2)
+			surface.DrawRect(x - offset - outline, y + gap - outline, thickness + outline * 2, length - gap + outline * 2)
+		end
+
+		if enable_color_crosshair:GetBool() then
+			surface.SetDrawColor(crosshair_color_r:GetInt() * bright, crosshair_color_g:GetInt() * bright, crosshair_color_b:GetInt() * bright, 255 * alpha)
+		else
+			-- somehow it seems this can be called before my player metatable
+			-- additions have loaded
+			if client.GetSubRoleData then
+				local col = hook.Run("TTT2ModifyWeaponColors") or client:GetSubRoleData().color
+
+				surface.SetDrawColor(col.r * bright, col.g * bright, col.b * bright, 255 * alpha)
+			else
+				surface.SetDrawColor(0, 255 * bright, 0, 255 * alpha)
+			end
+		end
+
+		-- draw crosshair dot
+		if enable_dot_crosshair:GetBool() then
+			surface.DrawRect(x - thickness * 0.5, y - thickness * 0.5, thickness, thickness)
+		end
+
+		surface.DrawRect(x - length, y - offset, length - gap, thickness)
+		surface.DrawRect(x + gap, y - offset, length - gap, thickness)
+		surface.DrawRect(x - offset, y - length, thickness, length - gap)
+		surface.DrawRect(x - offset, y + gap, thickness, length - gap)
 	end
 
 	local GetPTranslation = LANG.GetParamTranslation
