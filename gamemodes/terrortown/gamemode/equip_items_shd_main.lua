@@ -43,7 +43,7 @@ local mat_dir = "vgui/ttt/"
 -- Stick to around 35 characters per description line, and add a "\n" where you
 -- want a new line to start.
 
-Equipment = Equipment or {}
+Equipment = CLIENT and (Equipment or {}) or nil
 EquipmentItems = EquipmentItems or {}
 SYNC_EQUIP = SYNC_EQUIP or {}
 ALL_ITEMS = ALL_ITEMS or {}
@@ -221,21 +221,25 @@ function GetShopFallbackTable(subrole)
 	end
 end
 
-function GetEquipmentForRole(subrole)
-	local fallbackTable = GetModifiedEquipment(subrole, GetShopFallbackTable(subrole))
+function GetEquipmentForRole(subrole, noModification)
+	local fallbackTable = GetShopFallbackTable(subrole)
+
+	if not noModification then
+		fallbackTable = GetModifiedEquipment(subrole, fallbackTable)
+	end
+
 	if fallbackTable then
 		return fallbackTable
 	end
 
 	local fallback = GetShopFallback(subrole)
+	local tbl = {}
 
 	-- need to build equipment cache?
-	if not Equipment[fallback] then
+	if not Equipment or not Equipment[fallback] then
 		EquipmentItems[fallback] = EquipmentItems[fallback] or {}
 
 		-- start with all the non-weapon goodies
-		local tbl = {}
-
 		for k in pairs(EquipmentItems[fallback]) do
 			tbl[k] = EquipmentItems[fallback][k]
 		end
@@ -259,10 +263,12 @@ function GetEquipmentForRole(subrole)
 			end
 		end
 
-		Equipment[fallback] = tbl
+		if CLIENT then
+			Equipment[fallback] = tbl
+		end
 	end
 
-	return GetModifiedEquipment(fallback, Equipment[fallback] or {})
+	return noModification and tbl or GetModifiedEquipment(fallback, tbl)
 end
 
 -- Sync Equipment
@@ -343,7 +349,7 @@ if SERVER then
 
 				local tmp = {}
 
-				for _, equip in pairs(GetEquipmentForRole(fallback)) do
+				for _, equip in pairs(GetEquipmentForRole(fallback, true)) do
 					tmp[#tmp + 1] = equip
 				end
 
@@ -488,11 +494,11 @@ function GetEquipmentItem(subrole, id)
 	if not tbl then
 		local fb = GetShopFallback(subrole)
 
-		if not Equipment[fb] then
-			GetEquipmentForRole(fb)
+		if not Equipment or not Equipment[fb] then
+			tbl = GetEquipmentForRole(fb)
+		else
+			tbl = GetModifiedEquipment(fb, Equipment[fb])
 		end
-
-		tbl = GetModifiedEquipment(fb, Equipment[fb])
 
 		if not tbl then return end
 	end
