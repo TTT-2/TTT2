@@ -113,8 +113,8 @@ end
 function GM:TTTScoreboardRowColorForPlayer(ply)
 	local col
 
-	if IsValid(ply) and ply.GetSubRole and ply:GetSubRole() and ply:GetSubRole() > 0 and ply:IsSpecial() then
-		col = table.Copy(ply:GetSubRoleData().color)
+	if IsValid(ply) and ply.GetRoleColor and ply:GetRoleColor() and ply:IsSpecial() then
+		col = table.Copy(ply:GetRoleColor())
 		col.a = 255 -- old value: 30
 	end
 

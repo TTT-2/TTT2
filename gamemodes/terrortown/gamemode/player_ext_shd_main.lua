@@ -86,14 +86,44 @@ function plymeta:SetRole(subrole, team, forceHooks)
 	end
 
 	-- ye olde hooks
-	if SERVER and (newSubrole ~= oldSubrole or forceHooks) then
-		hook.Call("PlayerLoadout", GAMEMODE, self)
+	if newSubrole ~= oldSubrole or forceHooks then
+		self:SetRoleColor(rd.color)
+		self:SetRoleDkColor(rd.dkcolor)
+		self:SetRoleBgColor(rd.bgcolor)
 
-		if self:GetSubRoleModel() or self.nonsubroleModel then
-			hook.Call("PlayerSetModel", GAMEMODE, self, true)
-			hook.Run("TTTPlayerSetColor", self)
+		if SERVER then
+			hook.Call("PlayerLoadout", GAMEMODE, self)
+
+			if self:GetSubRoleModel() or self.nonsubroleModel then
+				hook.Call("PlayerSetModel", GAMEMODE, self, true)
+				hook.Run("TTTPlayerSetColor", self)
+			end
 		end
 	end
+end
+
+function plymeta:GetRoleColor()
+	return self.roleColor or INNOCENT.color
+end
+
+function plymeta:SetRoleColor(col)
+	self.roleColor = hook.Run("TTT2ModifyRoleColor", self, col) or col
+end
+
+function plymeta:GetRoleDkColor()
+	return self.roleDkColor or INNOCENT.dkcolor
+end
+
+function plymeta:SetRoleDkColor(col)
+	self.roleDkColor = hook.Run("TTT2ModifyRoleDkColor", self, col) or col
+end
+
+function plymeta:GetRoleBgColor()
+	return self.roleBgColor or INNOCENT.bgcolor
+end
+
+function plymeta:SetRoleBgColor(col)
+	self.roleBgColor = hook.Run("TTT2ModifyRoleBgColor", self, col) or col
 end
 
 if CLIENT then

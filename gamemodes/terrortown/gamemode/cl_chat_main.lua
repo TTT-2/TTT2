@@ -32,7 +32,7 @@ local function TTT_RoleChat()
 	local roleData = sender:GetSubRoleData() -- use cached role
 
 	chat.AddText(
-		roleData.color,
+		sender:GetRoleColor(),
 		Format("(%s) ", string.upper(GetTranslation(roleData.name))),
 		Color(255, 200, 20),
 		sender:Nick(),

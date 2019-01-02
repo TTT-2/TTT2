@@ -27,10 +27,7 @@ function GM:HUDWeaponPickedUp(wep)
 	pickup.font = "DefaultBold"
 	pickup.fadein = 0.04
 	pickup.fadeout = 0.3
-
-	local subrole = client.GetSubRole and client:GetSubRole() or ROLE_INNOCENT
-
-	pickup.color = GetRoleByIndex(subrole).color
+	pickup.color = client.GetRoleColor and client:GetRoleColor() or INNOCENT.color
 	pickup.upper = true
 
 	surface.SetFont(pickup.font)

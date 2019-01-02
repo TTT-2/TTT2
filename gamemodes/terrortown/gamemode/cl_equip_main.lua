@@ -290,7 +290,7 @@ local function TraitorMenuPopup()
 	local paneltablefav = {}
 	local paneltable = {}
 	local steamid = ply:SteamID64()
-	local srd = ply:GetSubRoleData()
+	local col = ply:GetRoleColor()
 
 	for k, item in ipairs(items) do
 		local ic
@@ -345,7 +345,7 @@ local function TraitorMenuPopup()
 			if ItemIsWeapon(item) and showSlotVar:GetBool() then
 				local slot = vgui.Create("SimpleIconLabelled")
 				slot:SetIcon("vgui/ttt/slotcap")
-				slot:SetIconColor(srd.color or COLOR_GREY)
+				slot:SetIconColor(col or COLOR_GREY)
 				slot:SetIconSize(16)
 				slot:SetIconText(item.slot)
 				slot:SetIconProperties(COLOR_WHITE, "DefaultBold", {opacity = 220, offset = 1}, {10, 8})

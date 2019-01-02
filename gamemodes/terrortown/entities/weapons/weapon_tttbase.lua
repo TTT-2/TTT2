@@ -199,7 +199,7 @@ if CLIENT then
 			-- somehow it seems this can be called before my player metatable
 			-- additions have loaded
 			if client.GetSubRoleData then
-				local col = hook.Run("TTT2ModifyWeaponColors") or client:GetSubRoleData().color
+				local col = client:GetRoleColor()
 
 				surface.SetDrawColor(col.r * bright, col.g * bright, col.b * bright, 255 * alpha)
 			else

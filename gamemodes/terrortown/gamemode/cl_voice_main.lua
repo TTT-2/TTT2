@@ -104,11 +104,11 @@ function GM:PlayerStartVoice(ply)
 	if client:IsActive() and tm ~= TEAM_NONE and not clrd.unknownTeam and not clrd.disabledTeamVoice and not TEAMS[tm].alone then
 		if ply == client then
 			if not client[tm .. "_gvoice"] then
-				pnl.Color = clrd.color
+				pnl.Color = TEAMS[tm].color
 			end
 		elseif ply:IsInTeam(client) and not (ply:GetSubRoleData().disabledTeamVoice or clrd.disabledTeamVoiceRecv) then
 			if not ply[tm .. "_gvoice"] then
-				pnl.Color = ply:GetSubRoleData().color
+				pnl.Color = TEAMS[tm].color
 			end
 		end
 	end
@@ -155,7 +155,7 @@ local function ReceiveVoiceState()
 	ply[tm .. "_gvoice"] = state
 
 	if IsValid(PlayerVoicePanels[ply]) then
-		PlayerVoicePanels[ply].Color = state and VP_GREEN or (hook.Run("TTT2ModifyVoiceChatColor", ply) or ply:GetSubRoleData().color or VP_RED)
+		PlayerVoicePanels[ply].Color = state and VP_GREEN or (ply:GetRoleColor() or VP_RED)
 	end
 end
 net.Receive("TTT_RoleVoiceState", ReceiveVoiceState)

@@ -8,7 +8,6 @@ local pairs = pairs
 local ipairs = ipairs
 local IsValid = IsValid
 local CreateConVar = CreateConVar
-local hook = hook
 
 local TryTranslation = LANG.TryTranslation
 
@@ -38,28 +37,15 @@ local col_active = {
 	bg = Color(20, 20, 20, 250),
 	text_empty = Color(200, 20, 20, 255),
 	text = Color(255, 255, 255, 255),
-	shadow = 255,
-	tip = {}
+	shadow = 255
 }
 
 local col_dark = {
 	bg = Color(20, 20, 20, 200),
 	text_empty = Color(200, 20, 20, 100),
 	text = Color(255, 255, 255, 100),
-	shadow = 100,
-	tip = {}
+	shadow = 100
 }
-
--- update colors
-hook.Add("TTT2Initialize", "ttt2wepUpdateColors", function()
-	col_active.tip = {}
-	col_dark.tip = {}
-
-	for _, v in pairs(GetRoles()) do
-		col_active.tip[v.index] = v.color
-		col_dark.tip[v.index] = v.dkcolor
-	end
-end)
 
 function WSWITCH:DrawBarBg(x, y, w, h, col)
 	local rx = round(x - 4)
@@ -70,8 +56,8 @@ function WSWITCH:DrawBarBg(x, y, w, h, col)
 	local b = 8 -- bordersize
 	local bh = b * 0.5
 
-	local role = LocalPlayer():GetSubRole() or ROLE_INNOCENT
-	local c = col.tip[role] or (col == col_active and INNOCENT.color or INNOCENT.dkcolor)
+	local ply = LocalPlayer()
+	local c = (col == col_active and ply:GetRoleColor() or ply:GetRoleDkColor()) or (col == col_active and INNOCENT.color or INNOCENT.dkcolor)
 
 	-- Draw the colour tip
 	surface.SetTexture(barcorner)
