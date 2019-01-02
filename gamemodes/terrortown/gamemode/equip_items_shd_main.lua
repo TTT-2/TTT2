@@ -288,7 +288,19 @@ if SERVER then
 	util.AddNetworkString("TTT2SyncRandomShops")
 
 	local function SyncRandomShops(plys)
-		local s = EncodeForStream(RANDOMSHOP)
+		if not RANDOMSHOP then return end
+
+		local tmp = {}
+
+		for k, tbl in pairs(RANDOMSHOP) do
+			tmp[k] = {}
+
+			for _, equip in ipairs(tbl) do
+				tmp[k][#tmp[k] + 1] = equip.id
+			end
+		end
+
+		local s = EncodeForStream(tmp)
 		if not s then return end
 
 		-- divide into happy lil bits.
@@ -404,7 +416,25 @@ else
 				local tmp = util.JSONToTable(json_shop)
 
 				if istable(tmp) then
-					RANDOMSHOP = tmp
+					local tmp2 = {}
+
+					for k, tbl in pairs(tmp) do
+						tmp2[k] = {}
+
+						for _, id in ipairs(tbl) do
+							local equip
+
+							if tonumber(id) then
+								equip = GetEquipmentItemByID(id)
+							else
+								equip = weapons.GetStored(id)
+							end
+
+							tmp2[k][#tmp2[k] + 1] = equip
+						end
+					end
+
+					RANDOMSHOP = tmp2
 				else
 					ErrorNoHalt("RANDOMSHOP decoding failed!\n")
 				end
