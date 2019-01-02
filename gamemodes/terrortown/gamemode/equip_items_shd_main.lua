@@ -488,6 +488,10 @@ function GetEquipmentItem(subrole, id)
 	if not tbl then
 		local fb = GetShopFallback(subrole)
 
+		if not Equipment[fb] then
+			GetEquipmentForRole(fb)
+		end
+
 		tbl = GetModifiedEquipment(fb, Equipment[fb])
 
 		if not tbl then return end

@@ -535,7 +535,7 @@ local function OrderEquipment(ply, cmd, args)
 		-- item whitelist check
 		local allowed = GetEquipmentItem(subrole, id)
 		if not allowed then
-			print(ply, "tried to buy item not buyable for his class:", id)
+			print(ply, "tried to buy item not buyable for his class:", id, subrole)
 
 			return
 		end

@@ -109,42 +109,6 @@ function PANEL:HasRows()
 	return self.rowcount > 0
 end
 
-local _sortfunc = function(rowa, rowb)
-	local plya = rowa:GetPlayer()
-	local plyb = rowb:GetPlayer()
-
-	if not IsValid(plya) then
-		return false
-	end
-
-	if not IsValid(plyb) then
-		return true
-	end
-
-	local sort_mode = GetConVar("ttt_scoreboard_sorting"):GetString()
-	local sort_func = sboard_sort[sort_mode]
-
-	local comp = 0
-
-	if sort_func ~= nil then
-		comp = sort_func(plya, plyb)
-	end
-
-	local ret = true
-
-	if comp ~= 0 then
-		ret = comp > 0
-	else
-		ret = strlower(plya:GetName()) > strlower(plyb:GetName())
-	end
-
-	if GetConVar("ttt_scoreboard_ascending"):GetBool() then
-		ret = not ret
-	end
-
-	return ret
-end
-
 function PANEL:UpdateSortCache()
 	self.rows_sorted = {}
 
@@ -152,7 +116,41 @@ function PANEL:UpdateSortCache()
 		table.insert(self.rows_sorted, row)
 	end
 
-	table.sort(self.rows_sorted, _sortfunc)
+	table.sort(self.rows_sorted, function(rowa, rowb)
+		local plya = rowa:GetPlayer()
+		local plyb = rowb:GetPlayer()
+
+		if not IsValid(plya) then
+			return false
+		end
+
+		if not IsValid(plyb) then
+			return true
+		end
+
+		local sort_mode = GetConVar("ttt_scoreboard_sorting"):GetString()
+		local sort_func = sboard_sort[sort_mode]
+
+		local comp = 0
+
+		if isfunction(sort_func) then
+			comp = sort_func(plya, plyb)
+		end
+
+		local ret = true
+
+		if comp ~= 0 then
+			ret = comp > 0
+		else
+			ret = strlower(plya:GetName()) > strlower(plyb:GetName())
+		end
+
+		if GetConVar("ttt_scoreboard_ascending"):GetBool() then
+			ret = not ret
+		end
+
+		return ret
+	end)
 end
 
 function PANEL:UpdatePlayerData()
