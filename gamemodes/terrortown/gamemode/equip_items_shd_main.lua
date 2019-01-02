@@ -464,7 +464,7 @@ end
 function GetModifiedEquipment(subrole, fallback)
 	local fb = GetShopFallback(subrole)
 
-	if GetGlobalInt("ttt2_random_shops") > 0 and RANDOMSHOP[fb] then
+	if fallback and GetGlobalInt("ttt2_random_shops") > 0 and RANDOMSHOP[fb] then
 		local tmp = {}
 
 		for _, equip in ipairs(RANDOMSHOP[fb]) do
@@ -825,7 +825,7 @@ if SERVER then
 
 				SYNC_EQUIP[roleData.index] = SYNC_EQUIP[roleData.index] or {}
 
-				local tbl = {equip = item.id, type = 1, name = item.name}
+				local tbl = {equip = item.id, type = 1}
 
 				if not SyncTableHasValue(SYNC_EQUIP[roleData.index], tbl) then
 					table.insert(SYNC_EQUIP[roleData.index], tbl)
@@ -843,7 +843,7 @@ if SERVER then
 
 		SYNC_EQUIP[subrole] = SYNC_EQUIP[subrole] or {}
 
-		local tbl = {equip = item.id, type = 1, name = item.name}
+		local tbl = {equip = item.id, type = 1}
 
 		if not SyncTableHasValue(SYNC_EQUIP[subrole], tbl) then
 			table.insert(SYNC_EQUIP[subrole], tbl)
@@ -872,6 +872,8 @@ if SERVER then
 		for k, v in pairs(SYNC_EQUIP[subrole]) do
 			if v.equip == tbl.equip and v.type == tbl.type then
 				table.remove(SYNC_EQUIP[subrole], k)
+
+				break
 			end
 		end
 
@@ -922,6 +924,8 @@ if SERVER then
 		for k, v in pairs(SYNC_EQUIP[subrole]) do
 			if v.equip == tbl.equip and v.type == tbl.type then
 				table.remove(SYNC_EQUIP[subrole], k)
+
+				break
 			end
 		end
 

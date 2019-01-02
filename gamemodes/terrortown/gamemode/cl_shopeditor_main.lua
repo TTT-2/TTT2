@@ -188,7 +188,7 @@ function ShopEditor.EditItem(item)
 	local saveButton = vgui.Create("DButton", frame)
 	saveButton:SetFont("Trebuchet22")
 	saveButton:SetText("Save")
-	saveButton:SizeToContents()
+	saveButton:Dock(BOTTOM)
 
 	saveButton.DoClick = function()
 		local wTable = {
@@ -919,6 +919,8 @@ function ShopEditor.CreateShopEditor()
 	buttonOptions:SetSize(wMul, h)
 
 	buttonOptions.DoClick = function()
+		frame:Close()
+
 		ShopEditor.ShowOptions()
 	end
 
