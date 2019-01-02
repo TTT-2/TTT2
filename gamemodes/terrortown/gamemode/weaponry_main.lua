@@ -534,7 +534,17 @@ local function OrderEquipment(ply, cmd, args)
 
 		-- item whitelist check
 		local allowed = GetEquipmentItem(subrole, id)
-		if not allowed then
+		local random = GetGlobalInt("ttt2_random_shops") > 0
+
+		if random and allowed then
+			for _, v in ipairs(RANDOMSHOP[GetShopFallback(subrole)] or {}) do
+				if v.id == allowed.id then
+					random = false
+				end
+			end
+		end
+
+		if not allowed or random then
 			print(ply, "tried to buy item not buyable for his class:", id, subrole)
 
 			return

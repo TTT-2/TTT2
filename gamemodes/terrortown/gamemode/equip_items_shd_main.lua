@@ -221,54 +221,55 @@ function GetShopFallbackTable(subrole)
 	end
 end
 
-function GetEquipmentForRole(subrole, noModification)
-	local fallbackTable = GetShopFallbackTable(subrole)
+if CLIENT then
+	function GetEquipmentForRole(subrole, noModification)
+		local fallbackTable = GetShopFallbackTable(subrole)
 
-	if not noModification then
-		fallbackTable = GetModifiedEquipment(subrole, fallbackTable)
-	end
-
-	if fallbackTable then
-		return fallbackTable
-	end
-
-	local fallback = GetShopFallback(subrole)
-	local tbl = {}
-
-	-- need to build equipment cache?
-	if not Equipment or not Equipment[fallback] then
-		EquipmentItems[fallback] = EquipmentItems[fallback] or {}
-
-		-- start with all the non-weapon goodies
-		for k in pairs(EquipmentItems[fallback]) do
-			tbl[k] = EquipmentItems[fallback][k]
+		if not noModification then
+			fallbackTable = GetModifiedEquipment(subrole, fallbackTable)
 		end
 
-		-- find buyable weapons to load info from
-		for _, v in ipairs(weapons.GetList()) do
-			if v and not v.Doublicated and v.CanBuy and table.HasValue(v.CanBuy, fallback) then
-				local data = v.EquipMenuData or {}
+		if fallbackTable then
+			return fallbackTable
+		end
 
-				local base = GetEquipmentWeaponBase(data, v)
-				if base then
-					table.insert(tbl, base)
+		local fallback = GetShopFallback(subrole)
+
+		-- need to build equipment cache?
+		if not Equipment[fallback] then
+			EquipmentItems[fallback] = EquipmentItems[fallback] or {}
+
+			local tbl = {}
+
+			-- start with all the non-weapon goodies
+			for k in pairs(EquipmentItems[fallback]) do
+				tbl[#tbl + 1] = EquipmentItems[fallback][k]
+			end
+
+			-- find buyable weapons to load info from
+			for _, v in ipairs(weapons.GetList()) do
+				if v and not v.Doublicated and v.CanBuy and table.HasValue(v.CanBuy, fallback) then
+					local data = v.EquipMenuData or {}
+
+					local base = GetEquipmentWeaponBase(data, v)
+					if base then
+						table.insert(tbl, base)
+					end
 				end
 			end
-		end
 
-		-- mark custom items
-		for _, i in ipairs(tbl) do
-			if i and i.id then
-				i.custom = not table.HasValue(DefaultEquipment[fallback], i.id) -- TODO
+			-- mark custom items
+			for _, i in ipairs(tbl) do
+				if i and i.id then
+					i.custom = not table.HasValue(DefaultEquipment[fallback], i.id) -- TODO
+				end
 			end
-		end
 
-		if CLIENT then
 			Equipment[fallback] = tbl
 		end
-	end
 
-	return noModification and tbl or GetModifiedEquipment(fallback, tbl)
+		return not noModification and GetModifiedEquipment(fallback, Equipment[fallback]) or Equipment[fallback]
+	end
 end
 
 -- Sync Equipment
@@ -349,15 +350,19 @@ if SERVER then
 
 				local tmp = {}
 
-				for _, equip in pairs(GetEquipmentForRole(fallback, true)) do
-					tmp[#tmp + 1] = equip
+				for k in pairs(EquipmentItems[fallback]) do
+					tmp[#tmp + 1] = EquipmentItems[fallback][k]
+				end
+
+				for _, equip in ipairs(weapons.GetList()) do
+					if equip.CanBuy and table.HasValue(equip.CanBuy, fallback) then
+						tmp[#tmp + 1] = equip
+					end
 				end
 
 				local length = #tmp
 
-				amount = math.Clamp(amount, 0, length)
-
-				if amount == length then
+				if amount >= length then
 					RANDOMSHOP[fallback] = tmp
 				else
 					local tmp2 = {}
@@ -490,15 +495,11 @@ function GetModifiedEquipment(subrole, fallback)
 end
 
 function GetEquipmentItem(subrole, id)
-	local tbl = GetModifiedEquipment(subrole, GetShopFallbackTable(subrole))
+	local tbl = GetShopFallbackTable(subrole)
 	if not tbl then
 		local fb = GetShopFallback(subrole)
 
-		if not Equipment or not Equipment[fb] then
-			tbl = GetEquipmentForRole(fb)
-		else
-			tbl = GetModifiedEquipment(fb, Equipment[fb])
-		end
+		tbl = EquipmentItems[fb]
 
 		if not tbl then return end
 	end
@@ -604,20 +605,23 @@ function InitFallbackShop(roleData, fallbackTable, avoidSet)
 		roleData.fallbackTable = fallbackTable
 	end
 
-	for _, eq in ipairs(fallbackTable) do
-		local item, wep = GetEquipmentByName(eq.id)
+	local fallback = GetShopFallbackTable(roleData.index)
+	if fallback then
+		for _, eq in ipairs(fallbackTable) do
+			local item, wep = GetEquipmentByName(eq.id)
 
-		if wep then
-			wep.CanBuy = wep.CanBuy or {}
+			if wep then
+				wep.CanBuy = wep.CanBuy or {}
 
-			if not table.HasValue(wep.CanBuy, roleData.index) then
-				table.insert(wep.CanBuy, roleData.index)
-			end
-		elseif item then
-			EquipmentItems[roleData.index] = EquipmentItems[roleData.index] or {}
+				if not table.HasValue(wep.CanBuy, roleData.index) then
+					table.insert(wep.CanBuy, roleData.index)
+				end
+			elseif item then
+				EquipmentItems[roleData.index] = EquipmentItems[roleData.index] or {}
 
-			if not EquipmentTableHasValue(EquipmentItems[roleData.index], eq) then
-				table.insert(EquipmentItems[roleData.index], eq)
+				if not EquipmentTableHasValue(EquipmentItems[roleData.index], eq) then
+					table.insert(EquipmentItems[roleData.index], eq)
+				end
 			end
 		end
 	end
