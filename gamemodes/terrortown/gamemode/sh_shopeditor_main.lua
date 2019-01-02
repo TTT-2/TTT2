@@ -4,6 +4,7 @@ ShopEditor.savingKeys = {
 	minPlayers = {typ = "number", bits = 6}, -- from 0 to 63 (2^6 - 1)
 	globalLimited = {typ = "bool"}, -- 0 and 1
 	limited = {typ = "bool"}, -- 0 and 1
+	NoRandom = {typ = "bool"}, -- 0 and 1
 }
 
 local net = net

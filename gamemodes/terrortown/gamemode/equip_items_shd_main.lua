@@ -354,23 +354,25 @@ if SERVER then
 				if amount == length then
 					RANDOMSHOP[fallback] = tmp
 				else
+					local tmp2 = {}
+
 					for k, equip in ipairs(tmp) do
 						if equip.NoRandom then
 							amount = amount - 1
 
 							RANDOMSHOP[fallback][#RANDOMSHOP[fallback] + 1] = tmp[k]
-
-							table.remove(tmp, k)
+						else
+							tmp2[#tmp2 + 1] = tmp[k]
 						end
 					end
 
 					if amount > 0 then
 						for i = 1, amount do
-							local rndm = math.random(1, #tmp)
+							local rndm = math.random(1, #tmp2)
 
-							RANDOMSHOP[fallback][#RANDOMSHOP[fallback] + 1] = tmp[rndm]
+							RANDOMSHOP[fallback][#RANDOMSHOP[fallback] + 1] = tmp2[rndm]
 
-							table.remove(tmp, rndm)
+							table.remove(tmp2, rndm)
 						end
 					end
 				end
