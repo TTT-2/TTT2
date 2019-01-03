@@ -123,6 +123,8 @@ local function WasAvoidable(attacker, victim, dmginfo)
 			return 2
 		elseif not attacker:GetSubRoleData().unknownTeam then
 			return 1
+		else
+			return 0.5
 		end
 	end
 
