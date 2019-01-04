@@ -350,8 +350,10 @@ if SERVER then
 
 				local tmp = {}
 
-				for k in pairs(EquipmentItems[fallback]) do
-					tmp[#tmp + 1] = EquipmentItems[fallback][k]
+				for k, item in pairs(EquipmentItems[fallback]) do
+					if not item.notBuyable then
+						tmp[#tmp + 1] = EquipmentItems[fallback][k]
+					end
 				end
 
 				for _, equip in ipairs(weapons.GetList()) do
