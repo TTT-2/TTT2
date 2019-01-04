@@ -320,7 +320,7 @@ local speaker = surface.GetTextureID("voice/icntlk_sv")
 function VOICE.Draw(client)
 	local b = client.voice_battery
 
-	if b >= battery_max then return end
+	if not b or not battery_max or b >= battery_max then return end
 
 	local x, y = 25, 10
 	local w, h = 200, 6
