@@ -351,9 +351,7 @@ if SERVER then
 				local tmp = {}
 
 				for k, item in pairs(EquipmentItems[fallback]) do
-					if not item.notBuyable then
-						tmp[#tmp + 1] = EquipmentItems[fallback][k]
-					end
+					tmp[#tmp + 1] = EquipmentItems[fallback][k]
 				end
 
 				for _, equip in ipairs(weapons.GetList()) do
@@ -370,12 +368,14 @@ if SERVER then
 					local tmp2 = {}
 
 					for k, equip in ipairs(tmp) do
-						if equip.NoRandom then
-							amount = amount - 1
+						if not equip.notBuyable then
+							if equip.NoRandom then
+								amount = amount - 1
 
-							RANDOMSHOP[fallback][#RANDOMSHOP[fallback] + 1] = tmp[k]
-						else
-							tmp2[#tmp2 + 1] = tmp[k]
+								RANDOMSHOP[fallback][#RANDOMSHOP[fallback] + 1] = tmp[k]
+							else
+								tmp2[#tmp2 + 1] = tmp[k]
+							end
 						end
 					end
 
