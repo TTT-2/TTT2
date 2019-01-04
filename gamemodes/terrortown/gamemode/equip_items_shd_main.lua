@@ -348,26 +348,30 @@ if SERVER then
 			if not RANDOMSHOP[fallback] then
 				RANDOMSHOP[fallback] = {}
 
-				local tmp = {}
+				local fallbackTable = GetShopFallbackTable(fallback)
 
-				for _, item in pairs(EquipmentItems[fallback]) do
-					tmp[#tmp + 1] = item
-				end
+				if not fallbackTable then
+					fallbackTable = {}
 
-				for _, equip in ipairs(weapons.GetList()) do
-					if equip.CanBuy and table.HasValue(equip.CanBuy, fallback) then
-						tmp[#tmp + 1] = equip
+					for _, item in pairs(EquipmentItems[fallback]) do
+						fallbackTable[#fallbackTable + 1] = item
+					end
+
+					for _, equip in ipairs(weapons.GetList()) do
+						if equip.CanBuy and table.HasValue(equip.CanBuy, fallback) then
+							fallbackTable[#fallbackTable + 1] = equip
+						end
 					end
 				end
 
-				local length = #tmp
+				local length = #fallbackTable
 
 				if amount >= length then
-					RANDOMSHOP[fallback] = tmp
+					RANDOMSHOP[fallback] = fallbackTable
 				else
 					local tmp2 = {}
 
-					for _, equip in ipairs(tmp) do
+					for _, equip in ipairs(fallbackTable) do
 						if not equip.notBuyable then
 							if equip.NoRandom then
 								amount = amount - 1
@@ -403,7 +407,7 @@ if SERVER then
 		if tmp > 0 then
 			UpdateRandomShops(nil, tmp)
 		end
-	end)
+	end, "ttt2changeshops")
 
 	hook.Add("TTTPrepareRound", "TTT2InitRandomShops", function()
 		local amount = random_shops:GetInt()
