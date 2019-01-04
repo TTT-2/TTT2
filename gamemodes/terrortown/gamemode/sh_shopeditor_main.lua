@@ -5,6 +5,7 @@ ShopEditor.savingKeys = {
 	globalLimited = {typ = "bool"}, -- 0 and 1
 	limited = {typ = "bool"}, -- 0 and 1
 	NoRandom = {typ = "bool"}, -- 0 and 1
+	notBuyable = {typ = "bool"} -- 0 and 1
 }
 
 local net = net

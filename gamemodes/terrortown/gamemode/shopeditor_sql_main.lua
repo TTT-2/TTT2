@@ -3,7 +3,7 @@ local tableName = "ttt2_items"
 local pairs = pairs
 local sql = sql
 
-local newestVersion = 3
+local newestVersion = 4
 local db_version = CreateConVar("ttt2_item_db_version", tostring(newestVersion), {FCVAR_ARCHIVE})
 
 function ShopEditor.BuildInsertString(name, item, keys)
@@ -78,7 +78,7 @@ function ShopEditor.CreateSqlTable()
 	local result
 
 	if not sql.TableExists(tableName) then
-		result = sql.Query("CREATE TABLE " .. tableName .. " (name TEXT PRIMARY KEY, credits INTEGER, globalLimited INTEGER, minPlayers INTEGER, limited INTEGER, NoRandom INTEGER)")
+		result = sql.Query("CREATE TABLE " .. tableName .. " (name TEXT PRIMARY KEY, credits INTEGER, globalLimited INTEGER, minPlayers INTEGER, limited INTEGER, NoRandom INTEGER, notBuyable INTEGER)")
 	else
 		local version = db_version:GetInt()
 
@@ -89,8 +89,12 @@ function ShopEditor.CreateSqlTable()
 				sql.Query("ALTER TABLE " .. tableName .. " ADD limited INTEGER")
 			end
 
-			if version < 3 then -- add limited column
+			if version < 3 then -- add NoRandom column
 				sql.Query("ALTER TABLE " .. tableName .. " ADD NoRandom INTEGER")
+			end
+
+			if version < 4 then -- add notBuyable column
+				sql.Query("ALTER TABLE " .. tableName .. " ADD notBuyable INTEGER")
 			end
 
 			RunConsoleCommand("ttt2_item_db_version", tostring(newestVersion))

@@ -278,7 +278,14 @@ local function TraitorMenuPopup()
 	dlist:EnableVerticalScrollbar(true)
 	dlist:EnableHorizontal(true)
 
-	local items = GetEquipmentForRole(subrole)
+	local items = {}
+	local tmp = GetEquipmentForRole(subrole)
+
+	for k, v in ipairs(tmp) do
+		if not v.notBuyable then
+			items[#items + 1] = tmp[k]
+		end
+	end
 
 	SortEquipmentTable(items)
 

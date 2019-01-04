@@ -544,7 +544,7 @@ local function OrderEquipment(ply, cmd, args)
 			end
 		end
 
-		if not allowed or random then
+		if not allowed or random or allowed.notBuyable then
 			print(ply, "tried to buy item not buyable for his class:", id, subrole)
 
 			return
@@ -563,7 +563,7 @@ local function OrderEquipment(ply, cmd, args)
 		credits = allowed.credits
 	elseif swep_table then
 		-- weapon whitelist check
-		if not table.HasValue(swep_table.CanBuy, subrole) then
+		if not table.HasValue(swep_table.CanBuy, subrole) or swep_table.notBuyable then
 			print(ply, "tried to buy weapon his subrole is not permitted to buy")
 
 			return
