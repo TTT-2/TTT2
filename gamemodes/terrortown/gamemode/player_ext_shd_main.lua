@@ -103,7 +103,11 @@ function plymeta:SetRole(subrole, team, forceHooks)
 end
 
 function plymeta:GetRoleColor()
-	return self.roleColor or INNOCENT.color
+	if not self.roleColor then
+		self.roleColor = INNOCENT.color
+	end
+
+	return self.roleColor
 end
 
 function plymeta:SetRoleColor(col)
