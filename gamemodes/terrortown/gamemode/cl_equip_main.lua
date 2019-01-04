@@ -283,7 +283,7 @@ local function TraitorMenuPopup()
 
 	for k, v in ipairs(tmp) do
 		if not v.notBuyable then
-			items[#items + 1] = tmp[k]
+			items[#items + 1] = v
 		end
 	end
 

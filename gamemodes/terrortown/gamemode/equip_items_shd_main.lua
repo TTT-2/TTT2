@@ -242,8 +242,8 @@ if CLIENT then
 			local tbl = {}
 
 			-- start with all the non-weapon goodies
-			for k in pairs(EquipmentItems[fallback]) do
-				tbl[#tbl + 1] = EquipmentItems[fallback][k]
+			for _, v in pairs(EquipmentItems[fallback]) do
+				tbl[#tbl + 1] = v
 			end
 
 			-- find buyable weapons to load info from
@@ -350,8 +350,8 @@ if SERVER then
 
 				local tmp = {}
 
-				for k, item in pairs(EquipmentItems[fallback]) do
-					tmp[#tmp + 1] = EquipmentItems[fallback][k]
+				for _, item in pairs(EquipmentItems[fallback]) do
+					tmp[#tmp + 1] = item
 				end
 
 				for _, equip in ipairs(weapons.GetList()) do
@@ -367,14 +367,14 @@ if SERVER then
 				else
 					local tmp2 = {}
 
-					for k, equip in ipairs(tmp) do
+					for _, equip in ipairs(tmp) do
 						if not equip.notBuyable then
 							if equip.NoRandom then
 								amount = amount - 1
 
-								RANDOMSHOP[fallback][#RANDOMSHOP[fallback] + 1] = tmp[k]
+								RANDOMSHOP[fallback][#RANDOMSHOP[fallback] + 1] = equip
 							else
-								tmp2[#tmp2 + 1] = tmp[k]
+								tmp2[#tmp2 + 1] = equip
 							end
 						end
 					end
@@ -660,8 +660,8 @@ function InitDefaultEquipment()
 	-- TRAITOR
 	local tbl = {}
 
-	for k in pairs(EquipmentItems[ROLE_TRAITOR]) do
-		tbl[k] = EquipmentItems[ROLE_TRAITOR][k]
+	for _, v in pairs(EquipmentItems[ROLE_TRAITOR]) do
+		tbl[#tbl + 1] = v
 	end
 
 	-- find buyable weapons to load info from
@@ -671,7 +671,7 @@ function InitDefaultEquipment()
 
 			local base = GetEquipmentWeaponBase(data, v)
 			if base then
-				table.insert(tbl, base)
+				tbl[#tbl + 1] = base
 			end
 		end
 	end
@@ -688,8 +688,8 @@ function InitDefaultEquipment()
 	-- DETECTIVE
 	local tbl2 = {}
 
-	for k in pairs(EquipmentItems[ROLE_DETECTIVE]) do
-		tbl2[k] = EquipmentItems[ROLE_DETECTIVE][k]
+	for _, v in pairs(EquipmentItems[ROLE_DETECTIVE]) do
+		tbl2[#tbl2 + 1] = v
 	end
 
 	-- find buyable weapons to load info from
@@ -699,13 +699,13 @@ function InitDefaultEquipment()
 
 			local base = GetEquipmentWeaponBase(data, v)
 			if base then
-				table.insert(tbl2, base)
+				tbl2[#tbl2 + 1] = base
 			end
 		end
 	end
 
 	-- mark custom items
-	for _, i in pairs(tbl2) do
+	for _, i in ipairs(tbl2) do
 		if i and i.id then
 			i.custom = not table.HasValue(DefaultEquipment[ROLE_DETECTIVE], i.id) -- TODO
 		end
