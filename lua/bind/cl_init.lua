@@ -47,7 +47,7 @@ local function DBRemoveBinding(name, button)
 	end
 end
 
-hook.Add("InitPostEntity", "TTT2LoadBindings", function()
+local function TTT2LoadBindings()
 	if DBCreateTable() then
 		local result = sql.Query("SELECT * FROM " .. tablename .. " WHERE guid = '" .. LocalPlayer():SteamID64() .. "'")
 		if istable(result) then
@@ -62,7 +62,29 @@ hook.Add("InitPostEntity", "TTT2LoadBindings", function()
 			print("[TTT2][BIND] Loaded bindings...")
 		end
 	end
-end)
+end
+
+local function TTT2BindCheckThink()
+	-- Make sure the user is currently not typing anything, to prevent unwanted execution of a binding.
+	if vgui.GetKeyboardFocus() ~= nil then return end
+
+	for btn, tbl in pairs(Bindings) do
+		local cache = input.IsButtonDown(btn)
+
+		if cache and FirstPressed[btn] then
+			for _, name in pairs(tbl) do
+				if isfunction(Registry[name]) then
+					Registry[name]()
+				end
+			end
+		end
+
+		FirstPressed[btn] = not cache
+	end
+end
+
+hook.Add("Think", "TTT2CallBindings", TTT2BindCheckThink)
+hook.Add("InitPostEntity", "TTT2LoadBindings", TTT2LoadBindings)
 
 --[[---------------------------------------------------------
 
@@ -141,27 +163,18 @@ function bind.Remove(btn, name)
 	end
 end
 
--- TTT2 default settings bindings
+--[[---------------------------------------------------------
+    AddSettingsBinding( string name, string label )
+    Adds an entry to the SettingsBindings table, to easily present them eg. in a GUI.
+-----------------------------------------------------------]]
 function bind.AddSettingsBinding(name, label)
 	SettingsBindings[#SettingsBindings + 1] = {name = name, label = label}
 end
 
+--[[---------------------------------------------------------
+    GetSettingsBinding()
+    Returns the SettingsBindings table.
+-----------------------------------------------------------]]
 function bind.GetSettingsBindings()
 	return SettingsBindings
 end
-
-hook.Add("Think", "TTT2CallBindings", function()
-	for btn, tbl in pairs(Bindings) do
-		local cache = input.IsButtonDown(btn)
-
-		if cache and FirstPressed[btn] then
-			for _, name in pairs(tbl) do
-				if isfunction(Registry[name]) then
-					Registry[name]()
-				end
-			end
-		end
-
-		FirstPressed[btn] = not cache
-	end
-end)
