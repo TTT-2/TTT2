@@ -62,32 +62,6 @@ local function CanCarryWeapon(item)
 end
 
 -- ----------------------------------
--- PANEL OVERRIDES
--- quick, very basic override of DPanelSelect
--- ----------------------------------
-
-local PANEL = {}
-
-local function DrawSelectedEquipment(pnl)
-	surface.SetDrawColor(255, 200, 0, 255)
-	surface.DrawOutlinedRect(0, 0, pnl:GetWide(), pnl:GetTall())
-end
-
-function PANEL:SelectPanel(pnl)
-	if not pnl then return end
-
-	pnl.PaintOver = nil
-
-	self.BaseClass.SelectPanel(self, pnl)
-
-	if pnl then
-		pnl.PaintOver = DrawSelectedEquipment
-	end
-end
-vgui.Register("EquipSelect", PANEL, "DPanelSelect")
-
-
--- ----------------------------------
 -- Creates tabel of labels showing the status of ordering prerequisites
 -- ----------------------------------
 
@@ -196,6 +170,31 @@ local function PreqLabels(parent, x, y)
 		return allow
 	end
 end
+
+-- ----------------------------------
+-- PANEL OVERRIDES
+-- quick, very basic override of DPanelSelect
+-- ----------------------------------
+
+local PANEL = {}
+
+local function DrawSelectedEquipment(pnl)
+	surface.SetDrawColor(255, 200, 0, 255)
+	surface.DrawOutlinedRect(0, 0, pnl:GetWide(), pnl:GetTall())
+end
+
+function PANEL:SelectPanel(pnl)
+	if not pnl then return end
+
+	pnl.PaintOver = nil
+
+	self.BaseClass.SelectPanel(self, pnl)
+
+	if pnl then
+		pnl.PaintOver = DrawSelectedEquipment
+	end
+end
+vgui.Register("EquipSelect", PANEL, "DPanelSelect")
 
 -- ----------------------------------
 --- Create Equipment GUI / refresh
