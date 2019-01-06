@@ -121,7 +121,7 @@ end
 function plymeta:RemoveEquipmentItem(id)
 	id = tonumber(id)
 
-	if id then
+	if id and util.BitSet(self.equipment_items, id) then
 		self.equipment_items = bit.bxor(self.equipment_items, id)
 
 		self:SendEquipment()

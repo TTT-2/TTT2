@@ -853,7 +853,7 @@ function GM:OnContextMenuOpen()
 	--local rs = GetRoundState()
 
 	--if rs == ROUND_POST or rs == ROUND_PREP then
-		--CLSCORE:Toggle()
+	--CLSCORE:Toggle()
 	--end
 
 	if hook.Run("TTT2PreventAccessShop", client) then
