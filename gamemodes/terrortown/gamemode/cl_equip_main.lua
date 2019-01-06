@@ -10,8 +10,8 @@ local IsValid = IsValid
 local hook = hook
 
 -- create ClientConVars
-local numColsVar = CreateClientConVar("ttt_bem_cols", 4, true, false, "Sets the number of columns in the Traitor/Detective menu's item list.")
-local numRowsVar = CreateClientConVar("ttt_bem_rows", 5, true, false, "Sets the number of rows in the Traitor/Detective menu's item list.")
+local numColsVar = CreateClientConVar("ttt_bem_cols", 5, true, false, "Sets the number of columns in the Traitor/Detective menu's item list.")
+local numRowsVar = CreateClientConVar("ttt_bem_rows", 6, true, false, "Sets the number of rows in the Traitor/Detective menu's item list.")
 local itemSizeVar = CreateClientConVar("ttt_bem_size", 64, true, false, "Sets the item size in the Traitor/Detective menu's item list.")
 local showCustomVar = CreateClientConVar("ttt_bem_marker_custom", 1, true, false, "Should custom items get a marker?")
 local showFavoriteVar = CreateClientConVar("ttt_bem_marker_fav", 1, true, false, "Should favorite items get a marker?")
@@ -29,12 +29,29 @@ include("favorites_db.lua")
 local color_bad = Color(244, 67, 54, 255)
 --local color_good = Color(76, 175, 80, 255)
 local color_darkened = Color(255, 255, 255, 80)
-local eqframe
 
 -- Buyable weapons are loaded automatically. Buyable items are defined in
 -- equip_items_shd.lua
 
+local eqframe
+local dlist = nil
+local curSearch = nil
+
 Equipment = Equipment or {}
+
+-- ----------------------------------
+--     GENERAL HELPER FUNCTIONS
+-- ----------------------------------
+
+local function RolenameToRole(val)
+	for _, v in pairs(GetRoles()) do
+		if SafeTranslate(v.name) == val then
+			return v.index
+		end
+	end
+
+	return 0
+end
 
 local function ItemIsWeapon(item)
 	return not tonumber(item.id)
@@ -44,14 +61,17 @@ local function CanCarryWeapon(item)
 	return LocalPlayer():CanCarryType(item.kind)
 end
 
+-- ----------------------------------
 -- Creates tabel of labels showing the status of ordering prerequisites
+-- ----------------------------------
+
 local function PreqLabels(parent, x, y)
 	local tbl = {}
 	tbl.credits = vgui.Create("DLabel", parent)
 	--tbl.credits:SetTooltip(GetTranslation("equip_help_cost"))
 	tbl.credits:SetPos(x, y)
-	-- coins icon
 
+	-- coins icon
 	tbl.credits.img = vgui.Create("DImage", parent)
 	tbl.credits.img:SetSize(32, 32)
 	tbl.credits.img:CopyPos(tbl.credits)
@@ -128,6 +148,7 @@ local function PreqLabels(parent, x, y)
 
 	for _, pnl in pairs(tbl) do
 		pnl:SetFont("DermaLarge")
+		pnl:SetText("-")
 	end
 
 	return function(selected)
@@ -151,7 +172,11 @@ local function PreqLabels(parent, x, y)
 	end
 end
 
+-- ----------------------------------
+-- PANEL OVERRIDES
 -- quick, very basic override of DPanelSelect
+-- ----------------------------------
+
 local PANEL = {}
 
 local function DrawSelectedEquipment(pnl)
@@ -160,7 +185,9 @@ local function DrawSelectedEquipment(pnl)
 end
 
 function PANEL:SelectPanel(pnl)
-	if not IsValid(pnl) then return end
+	if not pnl then return end
+
+	pnl.PaintOver = nil
 
 	self.BaseClass.SelectPanel(self, pnl)
 
@@ -168,19 +195,222 @@ function PANEL:SelectPanel(pnl)
 		pnl.PaintOver = DrawSelectedEquipment
 	end
 end
-vgui.Register("EquipSelect", PANEL, "DPanelSelect") -- DIconLayout?
+vgui.Register("EquipSelect", PANEL, "DPanelSelect")
 
-local function TraitorMenuPopup()
+-- ----------------------------------
+--- Create Equipment GUI / refresh
+-- ----------------------------------
+
+local function CreateEquipmentList(t)
+	if not t then
+		t = {}
+	end
+
+	setmetatable(t, {__index = {search = nil, role = nil, notalive = false}})
+
+	if t.search == "Search..." or t.search == "" then
+		t.search = nil
+	end
+
+	local ply = LocalPlayer()
+	local currole = t.role or ply:GetSubRole()
+	local credits = ply:GetCredits()
+	local can_order = credits > 0
+
+	local itemSize = 64
+
+	if allowChangeVar:GetBool() then
+		itemSize = itemSizeVar:GetInt()
+	end
+
+	--- icon size = 64 x 64
+	if IsValid(dlist) then
+		dlist:Clear()
+	else
+		TraitorMenuPopup() --TODO Check
+
+		return
+	end
+
+	-- Determine if we already have equipment
+	local owned_ids = {}
+
+	for _, wep in pairs(ply:GetWeapons()) do
+		if IsValid(wep) and wep:IsEquipment() then
+			table.insert(owned_ids, wep:GetClass())
+		end
+	end
+
+	-- Stick to one value for no equipment
+	if #owned_ids == 0 then
+		owned_ids = nil
+	end
+
+	local items = {}
+	local tmp = GetEquipmentForRole(currole, t.notalive)
+
+	for _, v in ipairs(tmp) do
+		if not v.notBuyable then
+			items[#items + 1] = v
+		end
+	end
+
+	if #items == 0 and not t.notalive then
+		ply:ChatPrint("[TTT2][SHOP] You need to run 'shopeditor' as admin in the developer console to create a shop for this role. Link it with another shop or click on the icons to add weapons and items to the shop.")
+	end
+
+	-- temp table for sorting
+	local paneltablefav = {}
+	local paneltable = {}
+	local steamid = ply:SteamID64()
+	local col = ply:GetRoleColor()
+
+	for k, item in pairs(items) do
+		if (t.search and string.find(string.lower(item.name), string.lower(t.search))) or not t.search then
+			local ic = nil
+
+			-- Create icon panel
+			if item.material and item.material ~= "vgui/ttt/icon_id" then
+				ic = vgui.Create("LayeredIcon", dlist)
+
+				if item.custom and showCustomVar:GetBool() then
+					-- Custom marker icon
+					local marker = vgui.Create("DImage")
+					marker:SetImage("vgui/ttt/custom_marker")
+
+					marker.PerformLayout = function(s)
+						s:AlignBottom(2)
+						s:AlignRight(2)
+						s:SetSize(16, 16)
+					end
+					marker:SetTooltip(GetTranslation("equip_custom"))
+
+					ic:AddLayer(marker)
+					ic:EnableMousePassthrough(marker)
+				end
+
+				-- Favorites marker icon
+				ic.favorite = false
+
+				local favorites = GetFavorites(steamid, currole)
+
+				if favorites and IsFavorite(favorites, item.id) then
+					ic.favorite = true
+
+					if showFavoriteVar:GetBool() then
+						local star = vgui.Create("DImage")
+						star:SetImage("icon16/star.png")
+
+						star.PerformLayout = function(s)
+							s:AlignTop(2)
+							s:AlignRight(2)
+							s:SetSize(12, 12)
+						end
+
+						star:SetTooltip("Favorite")
+
+						ic:AddLayer(star)
+						ic:EnableMousePassthrough(star)
+					end
+				end
+
+				-- Slot marker icon
+				if ItemIsWeapon(item) and showSlotVar:GetBool() then
+					local slot = vgui.Create("SimpleIconLabelled")
+					slot:SetIcon("vgui/ttt/slotcap")
+					slot:SetIconColor(col or COLOR_GREY)
+					slot:SetIconSize(16)
+					slot:SetIconText(item.slot)
+					slot:SetIconProperties(COLOR_WHITE,
+						"DefaultBold",
+						{opacity = 220, offset = 1},
+						{10, 8}
+					)
+
+					ic:AddLayer(slot)
+					ic:EnableMousePassthrough(slot)
+				end
+
+				ic:SetIconSize(itemSize or 64)
+				ic:SetIcon(item.material)
+			elseif item.model and item.model ~= "models/weapons/w_bugbait.mdl" then
+				ic = vgui.Create("SpawnIcon", dlist)
+				ic:SetModel(item.model)
+			else
+				ErrorNoHalt("Equipment item does not have model or material specified: " .. tostring(item) .. "\n")
+			end
+
+			if ic then
+				ic.item = item
+
+				local tip = GetEquipmentTranslation(item.name, item.PrintName) .. " (" .. SafeTranslate(item.type) .. ")"
+
+				ic:SetTooltip(tip)
+
+				-- If we cannot order this item, darken it
+				if not t.role and (((not can_order)
+						-- already owned
+						or table.HasValue(owned_ids, item.id)
+						or (tonumber(item.id) and ply:HasEquipmentItem(tonumber(item.id)))
+						-- already carrying a weapon for this slot
+						or (ItemIsWeapon(item) and (not CanCarryWeapon(item)))
+						or not EquipmentIsBuyable(item, ply:GetTeam())
+						-- already bought the item before
+						or (item.limited and ply:HasBought(tostring(item.id)))
+					) or (item.credits or 1) > ply:GetCredits()
+				) then
+					ic:SetIconColor(color_darkened)
+				end
+
+				if ic.favorite then
+					paneltablefav[k] = ic
+				else
+					paneltable[k] = ic
+				end
+			end
+		end
+	end
+
+	-- add favorites first
+	for _, panel in pairs(paneltablefav) do
+		dlist:AddPanel(panel)
+	end
+	-- non favorites second
+	for _, panel in pairs(paneltable) do
+		dlist:AddPanel(panel)
+	end
+end
+
+-- ----------------------------------
+-- Create/Show Shop frame
+-- ----------------------------------
+--  dframe
+--   \-> dsheet
+--      \-> dequip
+--         \-> dlist
+--         \-> depanel
+--            \-> dsearch
+--         \-> dbtnpnl
+--         \-> dinfobg
+--            \-> dhelp
+--
+-- -----------------------------------
+
+function TraitorMenuPopup()
 	local ply = LocalPlayer()
 
-	if not IsValid(ply) or not ply:IsActiveShopper() then return end
+	if not IsValid(ply) then
+		return
+	end
 
 	local subrole = ply:GetSubRole()
 	local fallbackRole = GetShopFallback(subrole)
 	local rd = GetRoleByIndex(fallbackRole)
+	local notalive = false
+	local rnd = GetRoundState()
 
 	local fallback = GetGlobalString("ttt_" .. rd.abbr .. "_shop_fallback")
-	if fallback == SHOP_DISABLED then return end
+	if rnd == ROUND_ACTIVE and fallback == SHOP_DISABLED then return end
 
 	-- calculate dimensions
 	local numCols = serverColsVar:GetInt()
@@ -201,17 +431,27 @@ local function TraitorMenuPopup()
 	local dlisth = (itemSize + 2) * numRows - 2 + 15
 
 	-- right column width
-	local diw = 240
+	local diw = 270
 
 	-- frame size
 	local w = dlistw + diw + m * 4
 	local h = dlisth + 75
 
-	-- Close any existing traitor menu
+	-- Close shop if player clicks button again
 	if eqframe and IsValid(eqframe) then
 		eqframe:Close()
 
 		return
+	end
+
+	-- if the round is not active let the players choose their shop
+	if rnd ~= ROUND_ACTIVE or not ply:IsTerror() then
+		notalive = true
+	end
+
+	-- Close any existing traitor menu
+	if eqframe and IsValid(eqframe) then
+		eqframe:Close()
 	end
 
 	local credits = ply:GetCredits()
@@ -255,175 +495,125 @@ local function TraitorMenuPopup()
 	dequip:SetPaintBackground(false)
 	dequip:StretchToParent(padding, padding, padding, padding)
 
-	-- Determine if we already have equipment
-	local owned_ids = {}
-
-	for _, wep in pairs(ply:GetWeapons()) do
-		if IsValid(wep) and WEPS.IsEquipment(wep) then
-			table.insert(owned_ids, WEPS.GetClass(wep))
-		end
-	end
-
-	-- Stick to one value for no equipment
-	if #owned_ids == 0 then
-		owned_ids = nil
-	end
-
 	--- Construct icon listing
 	--- icon size = 64 x 64
-	local dlist = vgui.Create("EquipSelect", dequip)
+	dlist = vgui.Create("EquipSelect", dequip)
 	-- local dlistw = 288
 	dlist:SetPos(0, 0)
 	dlist:SetSize(dlistw, dlisth)
 	dlist:EnableVerticalScrollbar(true)
 	dlist:EnableHorizontal(true)
 
-	local items = {}
-	local tmp = GetEquipmentForRole(subrole)
+	CreateEquipmentList({notalive = notalive})
 
-	for k, v in ipairs(tmp) do
-		if not v.notBuyable then
-			items[#items + 1] = v
-		end
-	end
+	local bw, bh = 100, 25 -- button size
+	local dsph = 30 -- search panel height
+	local drsh = 30 -- role select DComboBox height
+	local depw = diw - m -- dequip panel width
 
-	SortEquipmentTable(items)
+	local depanel = vgui.Create("DPanel", dequip)
+	depanel:SetSize(depw, dsph + m * 2)
+	depanel:SetPos(dlistw + m, 0)
+	depanel:SetMouseInputEnabled(true)
+	depanel:SetPaintBackground(false)
 
-	if #items == 0 then
-		ply:ChatPrint("[TTT2][SHOP] You need to run 'shopeditor' as admin in the developer console to create a shop for this role. Link it with another shop or click on the icons to add weapons and items to the shop.")
-	end
+	local dsearch = vgui.Create("DTextEntry", depanel)
+	dsearch:SetSize(depw - 10, dsph)
+	dsearch:SetPos(5, 5)
+	dsearch:SetUpdateOnType(true)
+	dsearch:SetEditable(true)
+	dsearch:SetText("Search...")
 
-	-- temp table for sorting
-	local paneltablefav = {}
-	local paneltable = {}
-	local steamid = ply:SteamID64()
-	local col = ply:GetRoleColor()
+	dsearch.selectAll = true
 
-	for k, item in ipairs(items) do
-		local ic
+	local dbph = bh + m
+	local dbpw = bw + bh + m * 2
 
-		-- Create icon panel
-		if item.material and item.material ~= "vgui/ttt/icon_id" then
-			ic = vgui.Create("LayeredIcon", dlist)
+	local dbtnpnl = vgui.Create("DPanel", dequip)
+	dbtnpnl:SetSize(dbpw, dbph)
+	dbtnpnl:SetPos(dlistw + m, dlisth - dbph + 2)
+	dbtnpnl:SetPaintBackground(false)
 
-			if item.custom and showCustomVar:GetBool() then
-				-- Custom marker icon
-				local marker = vgui.Create("DImage")
-				marker:SetImage("vgui/ttt/custom_marker")
+	local dconfirm = vgui.Create("DButton", dbtnpnl)
+	dconfirm:SetPos(m, m)
+	dconfirm:SetSize(bw, bh)
+	dconfirm:SetDisabled(true)
+	dconfirm:SetText(GetTranslation("equip_confirm"))
 
-				marker.PerformLayout = function(s)
-					s:AlignBottom(2)
-					s:AlignRight(2)
-					s:SetSize(16, 16)
-				end
+	--add a favorite button
+	dfav = vgui.Create("DButton", dbtnpnl)
+	dfav:CopyPos(dconfirm)
+	dfav:MoveRightOf(dconfirm)
+	dfav:SetSize(bh, bh)
+	dfav:SetDisabled(false)
+	dfav:SetText("")
+	dfav:SetImage("icon16/star.png")
 
-				marker:SetTooltip(GetTranslation("equip_custom"))
+	--add a cancel button
+	local dcancel = vgui.Create("DButton", dframe)
+	dcancel:SetPos(w - m * 3 - bw, h - bh - m * 3)
+	dcancel:SetSize(bw, bh)
+	dcancel:SetDisabled(false)
+	dcancel:SetText(GetTranslation("close"))
 
-				ic:AddLayer(marker)
-				ic:EnableMousePassthrough(marker)
-			end
+	local _, bpy = dbtnpnl:GetPos()
 
-			-- Favorites marker icon
-			ic.favorite = false
-
-			local favorites = GetFavorites(steamid, subrole)
-
-			if favorites and IsFavorite(favorites, item.id) then
-				ic.favorite = true
-
-				if showFavoriteVar:GetBool() then
-					local star = vgui.Create("DImage")
-					star:SetImage("icon16/star.png")
-
-					star.PerformLayout = function(s)
-						s:AlignTop(2)
-						s:AlignRight(2)
-						s:SetSize(12, 12)
-					end
-
-					star:SetTooltip("Favorite")
-
-					ic:AddLayer(star)
-					ic:EnableMousePassthrough(star)
-				end
-			end
-
-			-- Slot marker icon
-			if ItemIsWeapon(item) and showSlotVar:GetBool() then
-				local slot = vgui.Create("SimpleIconLabelled")
-				slot:SetIcon("vgui/ttt/slotcap")
-				slot:SetIconColor(col or COLOR_GREY)
-				slot:SetIconSize(16)
-				slot:SetIconText(item.slot)
-				slot:SetIconProperties(COLOR_WHITE, "DefaultBold", {opacity = 220, offset = 1}, {10, 8})
-
-				ic:AddLayer(slot)
-				ic:EnableMousePassthrough(slot)
-			end
-
-			ic:SetIconSize(itemSize)
-			ic:SetIcon(item.material)
-		elseif item.model and item.model ~= "models/weapons/w_bugbait.mdl" then
-			ic = vgui.Create("SpawnIcon", dlist)
-			ic:SetModel(item.model)
-		end
-
-		if ic then
-			ic.item = item
-
-			local tip = GetEquipmentTranslation(item.name, item.PrintName) .. " (" .. SafeTranslate(item.type) .. ")"
-
-			ic:SetTooltip(tip)
-
-			-- If we cannot order this item, darken it
-			if not can_order or
-			-- already owned
-			table.HasValue(owned_ids, item.id) or
-			tonumber(item.id) and ply:HasEquipmentItem(tonumber(item.id)) or
-			-- already carrying a weapon for this slot
-			ItemIsWeapon(item) and not CanCarryWeapon(item) or
-			not EquipmentIsBuyable(item, ply:GetTeam()) or
-			-- already bought the item before
-			item.limited and ply:HasBought(tostring(item.id)) or
-			(item.credits or 1) > ply:GetCredits()
-			then
-				ic:SetIconColor(color_darkened)
-			end
-
-			if ic.favorite then
-				paneltablefav[k] = ic
-			else
-				paneltable[k] = ic
-			end
-		end
-	end
-
-	-- add favorites first
-	for _, panel in pairs(paneltablefav) do
-		dlist:AddPanel(panel)
-	end
-
-	-- non favorites second
-	for _, panel in pairs(paneltable) do
-		dlist:AddPanel(panel)
-	end
-
-	local bw, bh = 100, 25
-
-	-- Whole right column
-	local dih = h - bh - m * 5
-
-	-- local diw = w - dlistw - m*6 - 2
 	local dinfobg = vgui.Create("DPanel", dequip)
 	dinfobg:SetPaintBackground(false)
-	dinfobg:SetSize(diw - m, dih)
-	dinfobg:SetPos(dlistw + m, 0)
+	dinfobg:SetPos(dlistw + m, 40)
+
+	local drolesel = nil
+
+	if notalive then
+		depanel:SetSize(depanel:GetWide(), depanel:GetTall() + drsh + m)
+
+		drolesel = vgui.Create("DComboBox", depanel)
+		drolesel:SetSize(depw - 20, drsh)
+		drolesel:SetPos(m, dsph + m * 2)
+		drolesel:MoveBelow(dsearch, m)
+
+		for _, v in pairs(GetRoles()) do
+			if IsShoppingRole(v.index) then
+				drolesel:AddChoice(SafeTranslate(v.name))
+			end
+		end
+
+		drolesel:SetValue("Select a role...")
+
+		drolesel.OnSelect = function(panel, index, value)
+			print(value .."'s shop was selected!")
+
+			CreateEquipmentList({role = RolenameToRole(value), search = dsearch:GetValue(), notalive = notalive})
+		end
+
+		dinfobg:MoveBelow(depanel, m)
+	end
+
+	local _, ibgy = dinfobg:GetPos()
+
+	dinfobg:SetSize(diw - m, bpy - ibgy - 120) -- -90 to let the help panel have more size
+
+	function dsearch:OnValueChange(text)
+		if text == "" then
+			text = nil
+		end
+
+		curSearch = text
+
+		local crole
+
+		if drolesel then
+			crole = RolenameToRole(drolesel:GetValue())
+		end
+
+		CreateEquipmentList({search = text, role = crole, notalive = notalive})
+	end
 
 	-- item info pane
 	local dinfo = vgui.Create("ColoredBox", dinfobg)
-	dinfo:SetColor(Color(90, 90, 95))
+	dinfo:SetColor(Color(90, 90, 95, 255))
 	dinfo:SetPos(0, 0)
-	dinfo:StretchToParent(0, 0, m * 2, 150)
+	dinfo:StretchToParent(0, 0, m * 2, m * 2)
 
 	local dfields = {}
 	local _tmp = {"name", "type", "desc"}
@@ -433,6 +623,7 @@ local function TraitorMenuPopup()
 		dfields[k]:SetTooltip(GetTranslation("equip_spec_" .. k))
 		dfields[k]:SetPos(m * 3, m * 2)
 		dfields[k]:SetWidth(diw - m * 6)
+		dfields[k]:SetText("")
 	end
 
 	dfields.name:SetFont("TabLarge")
@@ -444,20 +635,15 @@ local function TraitorMenuPopup()
 	dfields.desc:SetContentAlignment(7)
 	dfields.desc:MoveBelow(dfields.type, 1)
 
-	local dhelp = vgui.Create("DPanel", dinfobg)
+	local dhelp = vgui.Create("DPanel", dequip)
 	dhelp:SetPaintBackground(false)
-	dhelp:SetSize(diw, 128)
-	dhelp:MoveBelow(dinfo, m)
+	dhelp:SetSize(diw, 116)
+	dhelp:SetPos(dlistw + m, 0)
+	dhelp:MoveBelow(dinfobg, 0)
 
 	local update_preqs = PreqLabels(dhelp, m * 7, m * 2)
 
 	dhelp:SizeToContents()
-
-	local dconfirm = vgui.Create("DButton", dinfobg)
-	dconfirm:SetPos(0, dih - bh * 2)
-	dconfirm:SetSize(bw, bh)
-	dconfirm:SetDisabled(true)
-	dconfirm:SetText(GetTranslation("equip_confirm"))
 
 	dsheet:AddSheet(GetTranslation("equip_tabtitle"), dequip, "icon16/bomb.png", false, false, GetTranslation("equip_tooltip_main"))
 
@@ -545,40 +731,30 @@ local function TraitorMenuPopup()
 		dconfirm:SetDisabled(not can_order)
 	end
 
-	local dcancel = vgui.Create("DButton", dframe)
-	dcancel:SetPos(w - 13 - bw, h - bh - 16)
-	dcancel:SetSize(bw, bh)
-	dcancel:SetDisabled(false)
-	dcancel:SetText(GetTranslation("close"))
-
 	dcancel.DoClick = function()
 		dframe:Close()
 	end
 
-	--add as favorite button
-	dfav = vgui.Create("DButton", dinfobg)
-	dfav:SetPos(0, dih - bh * 2)
-	dfav:MoveRightOf(dconfirm)
-	dfav:SetSize(bh, bh)
-	dfav:SetDisabled(false)
-	dfav:SetText("")
-	dfav:SetImage("icon16/star.png")
-
 	dfav.DoClick = function()
 		local pnl = dlist.SelectedPanel
+		local role = drolesel and RolenameToRole(drolesel:GetValue()) or ply:GetSubRole()
 
 		if not pnl or not pnl.item then return end
 
 		local choice = pnl.item
 		local weapon = choice.id
+		local steamid = ply:SteamID64()
 
 		CreateFavTable()
 
 		if pnl.favorite then
-			RemoveFavorite(steamid, subrole, weapon)
+			RemoveFavorite(steamid, role, weapon)
 		else
-			AddFavorite(steamid, subrole, weapon)
+			AddFavorite(steamid, role, weapon)
 		end
+
+		-- Reload item list
+		CreateEquipmentList({role = role, search = curSearch, notalive = notalive})
 	end
 
 	dframe:MakePopup()
@@ -588,6 +764,10 @@ local function TraitorMenuPopup()
 end
 concommand.Add("ttt_cl_traitorpopup", TraitorMenuPopup)
 
+-- ----------------------------------
+-- Force closes the menu
+-- ----------------------------------
+
 local function ForceCloseTraitorMenu(ply, cmd, args)
 	if IsValid(eqframe) then
 		eqframe:Close()
@@ -595,24 +775,9 @@ local function ForceCloseTraitorMenu(ply, cmd, args)
 end
 concommand.Add("ttt_cl_traitorpopup_close", ForceCloseTraitorMenu)
 
-function GM:OnContextMenuOpen()
-	local client = LocalPlayer()
-	local r = GetRoundState()
-
-	if r == ROUND_ACTIVE and (not client:IsShopper() or hook.Run("TTT2PreventAccessShop", client)) then
-		return
-	elseif r == ROUND_POST or r == ROUND_PREP then
-		CLSCORE:Toggle()
-
-		return
-	end
-
-	if IsValid(eqframe) then
-		eqframe:Close()
-	else
-		RunConsoleCommand("ttt_cl_traitorpopup")
-	end
-end
+-- ----------------------------------
+-- NET RELATED STUFF:
+-- ----------------------------------
 
 local function ReceiveEquipment()
 	local ply = LocalPlayer()
@@ -679,3 +844,57 @@ local function ReceiveBoughtItem()
 	hook.Run("TTTBoughtItem", is_item, id)
 end
 net.Receive("TTT_BoughtItem", ReceiveBoughtItem)
+
+-- ----------------------------------
+-- HOOKS / GAMEMODE RELATED STUFF:
+-- ----------------------------------
+
+function GM:OnContextMenuOpen()
+	--local rs = GetRoundState()
+
+	--if rs == ROUND_POST or rs == ROUND_PREP then
+		--CLSCORE:Toggle()
+	--end
+
+	if hook.Run("TTT2PreventAccessShop", client) then
+		return
+	end
+
+	if IsValid(eqframe) then
+		eqframe:Close()
+	else
+		RunConsoleCommand("ttt_cl_traitorpopup")
+	end
+end
+
+-- Closes menu when roles are selected
+hook.Add("TTTBeginRound", "TTTBEMCleanUp", function()
+	if IsValid(eqframe) then
+		eqframe:Close()
+	end
+end)
+
+-- Closes menu when round is overwritten
+hook.Add("TTTEndRound", "TTTBEMCleanUp", function()
+	if IsValid(eqframe) then
+		eqframe:Close()
+	end
+end)
+
+-- Search text field focus hooks
+local function getKeyboardFocus(pnl)
+	if eqframe and IsValid(eqframe) and pnl:HasParent(eqframe) then
+		eqframe:SetKeyboardInputEnabled(true)
+	end
+	if pnl.selectAll then
+		pnl:SelectAllText()
+	end
+end
+hook.Add("OnTextEntryGetFocus", "BEM_GetKeyboardFocus", getKeyboardFocus)
+
+local function loseKeyboardFocus(pnl)
+	if eqframe and IsValid(eqframe) and pnl:HasParent(eqframe) then
+		eqframe:SetKeyboardInputEnabled(false)
+	end
+end
+hook.Add("OnTextEntryLoseFocus", "BEM_LoseKeyboardFocus", loseKeyboardFocus)
