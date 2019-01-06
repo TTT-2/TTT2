@@ -539,7 +539,7 @@ local function TTT_RagdollSearch()
 	search.nick = net.ReadString()
 
 	-- Equipment
-	local eq = net.ReadUInt(16)
+	local eq = net.ReadUInt(EQUIPMENT_BITS)
 
 	-- All equipment pieces get their own icon
 	search.eq_armor = util.BitSet(eq, EQUIP_ARMOR)

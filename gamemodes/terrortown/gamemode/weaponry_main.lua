@@ -629,7 +629,7 @@ local function OrderEquipment(ply, cmd, args)
 			net.WriteBit(is_item)
 
 			if is_item then
-				net.WriteUInt(id, 16)
+				net.WriteUInt(id, EQUIPMENT_BITS)
 			else
 				net.WriteString(id)
 			end

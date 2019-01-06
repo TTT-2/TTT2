@@ -619,7 +619,7 @@ local function ReceiveEquipment()
 
 	if not IsValid(ply) then return end
 
-	ply.equipment_items = net.ReadUInt(16)
+	ply.equipment_items = net.ReadUInt(EQUIPMENT_BITS)
 end
 net.Receive("TTT_Equipment", ReceiveEquipment)
 
@@ -668,7 +668,7 @@ net.Receive("TTT_Bought", ReceiveBought)
 -- Player received the item he has just bought, so run clientside init
 local function ReceiveBoughtItem()
 	local is_item = net.ReadBit() == 1
-	local id = is_item and net.ReadUInt(16) or net.ReadString()
+	local id = is_item and net.ReadUInt(EQUIPMENT_BITS) or net.ReadString()
 
 	-- I can imagine custom equipment wanting this, so making a hook
 	hook.Run("TTTBoughtItem", is_item, id)
