@@ -551,7 +551,7 @@ local function OrderEquipment(ply, cmd, args)
 		end
 
 		-- the item is just buyable if there is a special amount of players
-		if not EquipmentIsBuyable(allowed) then return end
+		if not EquipmentIsBuyable(allowed, ply:GetTeam()) then return end
 
 		-- ownership check and finalise
 		if id and EQUIP_NONE < id and not ply:HasEquipmentItem(id) then
@@ -578,7 +578,7 @@ local function OrderEquipment(ply, cmd, args)
 		end
 
 		-- the item is just buyable if there is a special amount of players
-		if not EquipmentIsBuyable(swep_table) then return end
+		if not EquipmentIsBuyable(swep_table, ply:GetTeam()) then return end
 
 		-- no longer restricted to only WEAPON_EQUIP weapons, just anything that
 		-- is whitelisted and carryable

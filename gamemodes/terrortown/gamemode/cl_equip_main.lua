@@ -123,7 +123,7 @@ local function PreqLabels(parent, x, y)
 	tbl.info.img:SetImage("vgui/ttt/equip/icon_info")
 
 	tbl.info.Check = function(s, sel)
-		return EquipmentIsBuyable(sel)
+		return EquipmentIsBuyable(sel, LocalPlayer():GetTeam())
 	end
 
 	for _, pnl in pairs(tbl) do
@@ -382,7 +382,7 @@ local function TraitorMenuPopup()
 			tonumber(item.id) and ply:HasEquipmentItem(tonumber(item.id)) or
 			-- already carrying a weapon for this slot
 			ItemIsWeapon(item) and not CanCarryWeapon(item) or
-			not EquipmentIsBuyable(item) or
+			not EquipmentIsBuyable(item, ply:GetTeam()) or
 			-- already bought the item before
 			item.limited and ply:HasBought(tostring(item.id)) or
 			(item.credits or 1) > ply:GetCredits()
@@ -649,6 +649,11 @@ local function ReceiveBought()
 			table.insert(ply.bought, s)
 
 			BUYTABLE[s] = true
+
+			local team = ply:GetTeam()
+			if team and TEAMBUYTABLE[team] then
+				TEAMBUYTABLE[team][s] = true
+			end
 		end
 	end
 

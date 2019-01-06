@@ -671,14 +671,16 @@ end
 DefaultEquipment = GetDefaultEquipment()
 
 BUYTABLE = BUYTABLE or {}
+TEAMBUYTABLE = TEAMBUYTABLE or {}
 
 hook.Add("TTTPrepareRound", "TTT2SharedPrepareRound", function()
 	BUYTABLE = {}
+	TEAMBUYTABLE = {}
 
 	math.randomseed(os.time())
 end)
 
-function EquipmentIsBuyable(tbl)
+function EquipmentIsBuyable(tbl, team)
 	if not tbl then
 		return false, "X", "error"
 	end
@@ -698,7 +700,7 @@ function EquipmentIsBuyable(tbl)
 		end
 	end
 
-	if tbl.globalLimited and BUYTABLE[tbl.id] then
+	if tbl.globalLimited and BUYTABLE[tbl.id] or team and tbl.teamLimited and TEAMBUYTABLE[team] and TEAMBUYTABLE[team][tbl.id] then
 		return false, "X", "This equipment is limited and is already bought."
 	end
 

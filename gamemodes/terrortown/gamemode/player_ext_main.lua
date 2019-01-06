@@ -173,6 +173,11 @@ function plymeta:AddBought(id)
 
 	BUYTABLE[id] = true
 
+	local team = self:GetTeam()
+	if team and TEAMBUYTABLE[team] then
+		TEAMBUYTABLE[team][id] = true
+	end
+
 	self:SendBought()
 end
 
