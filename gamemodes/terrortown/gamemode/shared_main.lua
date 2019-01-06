@@ -672,8 +672,10 @@ DefaultEquipment = GetDefaultEquipment()
 
 BUYTABLE = BUYTABLE or {}
 
-hook.Add("TTTPrepareRound", "GlobalLimitateEquipment", function()
+hook.Add("TTTPrepareRound", "TTT2SharedPrepareRound", function()
 	BUYTABLE = {}
+
+	math.randomseed(os.time())
 end)
 
 function EquipmentIsBuyable(tbl)
