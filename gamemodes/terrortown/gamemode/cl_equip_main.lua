@@ -36,6 +36,7 @@ local color_darkened = Color(255, 255, 255, 80)
 local eqframe
 local dlist = nil
 local curSearch = nil
+
 Equipment = Equipment or {}
 
 -- ----------------------------------
@@ -43,11 +44,12 @@ Equipment = Equipment or {}
 -- ----------------------------------
 
 local function RolenameToRole(val)
-	for k, v in pairs(GetRoles()) do
+	for _, v in pairs(GetRoles()) do
 		if SafeTranslate(v.name) == val then
 			return v.index
 		end
 	end
+
 	return 0
 end
 
@@ -65,6 +67,7 @@ end
 -- ----------------------------------
 
 local PANEL = {}
+
 local function DrawSelectedEquipment(pnl)
 	surface.SetDrawColor(255, 200, 0, 255)
 	surface.DrawOutlinedRect(0, 0, pnl:GetWide(), pnl:GetTall())
@@ -72,8 +75,11 @@ end
 
 function PANEL:SelectPanel(pnl)
 	if not pnl then return end
+
 	pnl.PaintOver = nil
+
 	self.BaseClass.SelectPanel(self, pnl)
+
 	if pnl then
 		pnl.PaintOver = DrawSelectedEquipment
 	end
@@ -87,10 +93,10 @@ vgui.Register("EquipSelect", PANEL, "DPanelSelect")
 
 local function PreqLabels(parent, x, y)
 	local tbl = {}
-
 	tbl.credits = vgui.Create("DLabel", parent)
 	--tbl.credits:SetTooltip(GetTranslation("equip_help_cost"))
 	tbl.credits:SetPos(x, y)
+
 	-- coins icon
 	tbl.credits.img = vgui.Create("DImage", parent)
 	tbl.credits.img:SetSize(32, 32)
@@ -102,6 +108,7 @@ local function PreqLabels(parent, x, y)
 	tbl.credits.Check = function(s, sel)
 		local credits = LocalPlayer():GetCredits()
 		local cr = sel and sel.credits or 1
+
 		return credits >= cr, " " .. cr .. " / " .. credits, GetPTranslation("equip_cost", {num = credits})
 	end
 
@@ -195,15 +202,26 @@ end
 -- ----------------------------------
 
 local function CreateEquipmentList(t)
-	if not t then t = {} end
+	if not t then
+		t = {}
+	end
+
 	setmetatable(t, {__index = {search = nil, role = nil}})
-	if t.search == "Search..." or t.search == "" then t.search = nil end
+
+	if t.search == "Search..." or t.search == "" then
+		t.search = nil
+	end
+
 	local ply = LocalPlayer()
 	local currole = t.role
 	local credits = ply:GetCredits()
 	local can_order = credits > 0
 
-	if not currole then currole = ply:GetSubRole() end
+	if not currole then
+		currole = ply:GetSubRole()
+	end
+
+	local itemSize
 
 	if allowChangeVar:GetBool() then
 		itemSize = itemSizeVar:GetInt()
@@ -214,11 +232,13 @@ local function CreateEquipmentList(t)
 		dlist:Clear()
 	else
 		TraitorMenuPopup() --TODO Check
+
 		return
 	end
 
 	-- Determine if we already have equipment
 	local owned_ids = {}
+
 	for _, wep in pairs(ply:GetWeapons()) do
 		if IsValid(wep) and wep:IsEquipment() then
 			table.insert(owned_ids, wep:GetClass())
@@ -233,7 +253,7 @@ local function CreateEquipmentList(t)
 	local items = {}
 	local tmp = GetEquipmentForRole(currole)
 
-	for k, v in ipairs(tmp) do
+	for _, v in ipairs(tmp) do
 		if not v.notBuyable then
 			items[#items + 1] = v
 		end
@@ -280,67 +300,70 @@ local function CreateEquipmentList(t)
 
 				if favorites and IsFavorite(favorites, item.id) then
 					ic.favorite = true
+
 					if showFavoriteVar:GetBool() then
 						local star = vgui.Create("DImage")
 						star:SetImage("icon16/star.png")
+
 						star.PerformLayout = function(s)
 							s:AlignTop(2)
 							s:AlignRight(2)
 							s:SetSize(12, 12)
 						end
+
 						star:SetTooltip("Favorite")
+
 						ic:AddLayer(star)
 						ic:EnableMousePassthrough(star)
 					end
 				end
 
 				-- Slot marker icon
-				if ItemIsWeapon( item ) && showSlotVar:GetBool() then
-					local slot = vgui.Create( "SimpleIconLabelled" )
-					slot:SetIcon( "vgui/ttt/slotcap" )
-					slot:SetIconColor( col or COLOR_GREY )
-					slot:SetIconSize( 16 )
-
-					slot:SetIconText( item.slot )
-
+				if ItemIsWeapon(item) and showSlotVar:GetBool() then
+					local slot = vgui.Create("SimpleIconLabelled")
+					slot:SetIcon("vgui/ttt/slotcap")
+					slot:SetIconColor(col or COLOR_GREY)
+					slot:SetIconSize(16)
+					slot:SetIconText(item.slot)
 					slot:SetIconProperties(COLOR_WHITE,
 						"DefaultBold",
 						{opacity = 220, offset = 1},
-					{10, 8})
+						{10, 8}
+					)
 
-					ic:AddLayer( slot )
-					ic:EnableMousePassthrough( slot )
+					ic:AddLayer(slot)
+					ic:EnableMousePassthrough(slot)
 				end
 
-				ic:SetIconSize( itemSize )
-				ic:SetIcon( item.material )
+				ic:SetIconSize(itemSize or 64)
+				ic:SetIcon(item.material)
 			elseif item.model and item.model ~= "models/weapons/w_bugbait.mdl" then
-				ic = vgui.Create( "SpawnIcon", dlist )
-				ic:SetModel( item.model )
+				ic = vgui.Create("SpawnIcon", dlist)
+				ic:SetModel(item.model)
 			else
-				ErrorNoHalt( "Equipment item does not have model or material specified: " .. tostring(item) .. "\n" )
+				ErrorNoHalt("Equipment item does not have model or material specified: " .. tostring(item) .. "\n")
 			end
 
 			if ic then
 				ic.item = item
 
 				local tip = GetEquipmentTranslation(item.name, item.PrintName) .. " (" .. SafeTranslate(item.type) .. ")"
+
 				ic:SetTooltip(tip)
 
 				-- If we cannot order this item, darken it
-				if not t.role then
-					if (( not can_order ) or
+				if not t.role and (((not can_order)
 						-- already owned
-						table.HasValue(owned_ids, item.id) or
-						(tonumber(item.id) and ply:HasEquipmentItem(tonumber(item.id))) or
+						or table.HasValue(owned_ids, item.id)
+						or (tonumber(item.id) and ply:HasEquipmentItem(tonumber(item.id)))
 						-- already carrying a weapon for this slot
-						(ItemIsWeapon(item) and (not CanCarryWeapon(item))) or
-						not EquipmentIsBuyable(item, ply:GetTeam()) or
+						or (ItemIsWeapon(item) and (not CanCarryWeapon(item)))
+						or not EquipmentIsBuyable(item, ply:GetTeam())
 						-- already bought the item before
-					(item.limited and ply:HasBought(tostring(item.id)))) or
-					(item.credits or 1) > ply:GetCredits() then
-						ic:SetIconColor(color_darkened)
-					end
+						or (item.limited and ply:HasBought(tostring(item.id)))
+					) or (item.credits or 1) > ply:GetCredits()
+				) then
+					ic:SetIconColor(color_darkened)
 				end
 
 				if ic.favorite then
@@ -377,9 +400,10 @@ end
 --
 -- -----------------------------------
 
-local function TraitorMenuPopup()
-
+function TraitorMenuPopup()
 	local ply = LocalPlayer()
+
+	if not IsValid(ply) or not ply:IsActiveShopper() then return end
 
 	local subrole = ply:GetSubRole()
 	local fallbackRole = GetShopFallback(subrole)
@@ -415,9 +439,10 @@ local function TraitorMenuPopup()
 	local w = dlistw + diw + m * 4
 	local h = dlisth + 75
 
-	-- Close shop if player is in round and should not be able to buy anything
-	if rnd == ROUND_ACTIVE and IsValid(ply) and not ply:IsActiveShopper() then
-		if eqframe and IsValid(eqframe) then eqframe:Close() end
+	-- Close shop if player clicks button again
+	if eqframe and IsValid(eqframe) then
+		eqframe:Close()
+
 		return
 	end
 
@@ -427,7 +452,9 @@ local function TraitorMenuPopup()
 	end
 
 	-- Close any existing traitor menu
-	if eqframe and IsValid(eqframe) then eqframe:Close() end
+	if eqframe and IsValid(eqframe) then
+		eqframe:Close()
+	end
 
 	local credits = ply:GetCredits()
 	local can_order = true
@@ -482,48 +509,48 @@ local function TraitorMenuPopup()
 	CreateEquipmentList()
 
 	local bw, bh = 100, 25
-
 	local dsph = 30
 	local drsh = 30
 	local depw = diw - m
 
-	local depanel = vgui.Create( "DPanel", dequip )
-	depanel:SetSize( depw, dsph + m * 2 )
-	depanel:SetPos( dlistw + m, 0 )
-	depanel:SetMouseInputEnabled( true )
-	depanel:SetPaintBackground( false )
+	local depanel = vgui.Create("DPanel", dequip)
+	depanel:SetSize(depw, dsph + m * 2)
+	depanel:SetPos(dlistw + m, 0)
+	depanel:SetMouseInputEnabled(true)
+	depanel:SetPaintBackground(false)
 
-	local dsearch = vgui.Create( "DTextEntry", depanel )
-	dsearch:SetSize( depw - 20, dsph )
-	dsearch:SetPos( 5, 5 )
-	dsearch:SetUpdateOnType( true )
-	dsearch:SetEditable( true )
-	dsearch:SetText( "Search..." )
-	dsearch:SetText( "" )
+	local dsearch = vgui.Create("DTextEntry", depanel)
+	dsearch:SetSize(depw - 20, dsph)
+	dsearch:SetPos(5, 5)
+	dsearch:SetUpdateOnType(true)
+	dsearch:SetEditable(true)
+	dsearch:SetText("Search...")
+	dsearch:SetText("")
+
 	dsearch.selectAll = true
 
 	local dbph = bh + m * 2
 	local dbpw = bw + bh + m * 2
-	local dbtnpnl = vgui.Create( "DPanel", dequip )
-	dbtnpnl:SetSize( dbpw, dbph )
-	dbtnpnl:SetPos( dlistw + m, dequip:GetTall() - dbph - m )
-	dbtnpnl:SetPaintBackground( false )
 
+	local dbtnpnl = vgui.Create("DPanel", dequip)
+	dbtnpnl:SetSize(dbpw, dbph)
+	dbtnpnl:SetPos(dlistw + m, dequip:GetTall() - dbph - m)
+	dbtnpnl:SetPaintBackground(false)
 
-	local dconfirm = vgui.Create( "DButton", dbtnpnl )
-	dconfirm:SetPos( m, m )
-	dconfirm:SetSize( bw, bh )
-	dconfirm:SetDisabled( true )
-	dconfirm:SetText( GetTranslation( "equip_confirm" ) )
+	local dconfirm = vgui.Create("DButton", dbtnpnl)
+	dconfirm:SetPos(m, m)
+	dconfirm:SetSize(bw, bh)
+	dconfirm:SetDisabled(true)
+	dconfirm:SetText(GetTranslation("equip_confirm"))
 
 	--add a favorite button
-	dfav = vgui.Create( "DButton", dbtnpnl )
-	dfav:CopyPos( dconfirm )
-	dfav:MoveRightOf( dconfirm )
-	dfav:SetSize( bh, bh )
-	dfav:SetDisabled( false )
-	dfav:SetText( "" )
-	dfav:SetImage( "icon16/star.png" )
+	dfav = vgui.Create("DButton", dbtnpnl)
+	dfav:CopyPos(dconfirm)
+	dfav:MoveRightOf(dconfirm)
+	dfav:SetSize(bh, bh)
+	dfav:SetDisabled(false)
+	dfav:SetText("")
+	dfav:SetImage("icon16/star.png")
 
 	--add a cancel button
 	local dcancel = vgui.Create("DButton", dframe)
@@ -532,7 +559,8 @@ local function TraitorMenuPopup()
 	dcancel:SetDisabled(false)
 	dcancel:SetText(GetTranslation("close"))
 
-	local bpx, bpy = dbtnpnl:GetPos()
+	local _, bpy = dbtnpnl:GetPos()
+
 	local dinfobg = vgui.Create("DPanel", dequip)
 	dinfobg:SetPaintBackground(false)
 	dinfobg:SetPos(dlistw + m, 40)
@@ -542,36 +570,46 @@ local function TraitorMenuPopup()
 	if nonply then
 		depanel:SetSize(depanel:GetWide(), depanel:GetTall() + drsh + m)
 
-		drolesel = vgui.Create( "DComboBox", depanel )
-		drolesel:SetSize( depw - 20, drsh )
-		drolesel:SetPos( m, dsph + m * 2 )
-		drolesel:MoveBelow( dsearch, m )
+		drolesel = vgui.Create("DComboBox", depanel)
+		drolesel:SetSize(depw - 20, drsh)
+		drolesel:SetPos(m, dsph + m * 2)
+		drolesel:MoveBelow(dsearch, m)
 
-		for k, v in pairs(GetRoles()) do
+		for _, v in pairs(GetRoles()) do
 			if IsShoppingRole(v.index) then
-				drolesel:AddChoice( SafeTranslate(v.name) )
+				drolesel:AddChoice(SafeTranslate(v.name))
 			end
 		end
 
-		drolesel:SetValue( "Select a role..." )
+		drolesel:SetValue("Select a role...")
 
-		drolesel.OnSelect = function( panel, index, value )
-			print( value .."'s shop was selected!" )
-			CreateEquipmentList( {role = RolenameToRole(value), search = dsearch:GetValue()} )
+		drolesel.OnSelect = function(panel, index, value)
+			print(value .."'s shop was selected!")
+
+			CreateEquipmentList({role = RolenameToRole(value), search = dsearch:GetValue()})
 		end
 
-		dinfobg:MoveBelow( depanel, m )
+		dinfobg:MoveBelow(depanel, m)
 	end
 
 	local _, ibgy = dinfobg:GetPos()
-	dinfobg:SetSize( diw - m, bpy - ibgy )
 
-	function dsearch:OnValueChange( text )
-		if text == "" then text = nil end
+	dinfobg:SetSize(diw - m, bpy - ibgy)
+
+	function dsearch:OnValueChange(text)
+		if text == "" then
+			text = nil
+		end
+
 		curSearch = text
-		local crole = nil
-		if drolesel then crole = RolenameToRole( drolesel:GetValue() ) end
-		CreateEquipmentList( {search = text, role = crole} )
+
+		local crole
+
+		if drolesel then
+			crole = RolenameToRole(drolesel:GetValue())
+		end
+
+		CreateEquipmentList({search = text, role = crole})
 	end
 
 	-- item info pane
@@ -700,7 +738,8 @@ local function TraitorMenuPopup()
 
 	dfav.DoClick = function()
 		local pnl = dlist.SelectedPanel
-		local role = drolesel and RolenameToRole( drolesel:GetValue() ) or ply:GetSubRole()
+		local role = drolesel and RolenameToRole(drolesel:GetValue()) or ply:GetSubRole()
+
 		if not pnl or not pnl.item then return end
 
 		local choice = pnl.item
@@ -716,11 +755,12 @@ local function TraitorMenuPopup()
 		end
 
 		-- Reload item list
-		CreateEquipmentList( {role = role, search = curSearch} )
+		CreateEquipmentList({role = role, search = curSearch})
 	end
 
 	dframe:MakePopup()
-	dframe:SetKeyboardInputEnabled( false )
+	dframe:SetKeyboardInputEnabled(false)
+
 	eqframe = dframe
 end
 concommand.Add("ttt_cl_traitorpopup", TraitorMenuPopup)
@@ -811,6 +851,14 @@ net.Receive("TTT_BoughtItem", ReceiveBoughtItem)
 -- ----------------------------------
 
 function GM:OnContextMenuOpen()
+	local rs = GetRoundState()
+
+	if rs == ROUND_POST or rs == ROUND_PREP then
+		CLSCORE:Toggle()
+
+		return
+	end
+
 	if hook.Run("TTT2PreventAccessShop", client) then
 		return
 	end
@@ -823,33 +871,33 @@ function GM:OnContextMenuOpen()
 end
 
 -- Closes menu when roles are selected
-hook.Add( "TTTBeginRound", "TTTBEMCleanUp", function()
+hook.Add("TTTBeginRound", "TTTBEMCleanUp", function()
 	if IsValid(eqframe) then
 		eqframe:Close()
 	end
-end )
+end)
 
 -- Closes menu when round is overwritten
-hook.Add( "TTTEndRound", "TTTBEMCleanUp", function()
+hook.Add("TTTEndRound", "TTTBEMCleanUp", function()
 	if IsValid(eqframe) then
 		eqframe:Close()
 	end
-end )
+end)
 
 -- Search text field focus hooks
-local function getKeyboardFocus( pnl )
-	if eqframe and IsValid(eqframe) and pnl:HasParent( eqframe ) then
-		eqframe:SetKeyboardInputEnabled( true )
+local function getKeyboardFocus(pnl)
+	if eqframe and IsValid(eqframe) and pnl:HasParent(eqframe) then
+		eqframe:SetKeyboardInputEnabled(true)
 	end
 	if pnl.selectAll then
 		pnl:SelectAllText()
 	end
 end
-hook.Add( "OnTextEntryGetFocus", "BEM_GetKeyboardFocus", getKeyboardFocus )
+hook.Add("OnTextEntryGetFocus", "BEM_GetKeyboardFocus", getKeyboardFocus)
 
-local function loseKeyboardFocus( pnl )
-	if eqframe and IsValid(eqframe) and pnl:HasParent( eqframe ) then
-		eqframe:SetKeyboardInputEnabled( false )
+local function loseKeyboardFocus(pnl)
+	if eqframe and IsValid(eqframe) and pnl:HasParent(eqframe) then
+		eqframe:SetKeyboardInputEnabled(false)
 	end
 end
-hook.Add( "OnTextEntryLoseFocus", "BEM_LoseKeyboardFocus", loseKeyboardFocus )
+hook.Add("OnTextEntryLoseFocus", "BEM_LoseKeyboardFocus", loseKeyboardFocus)
