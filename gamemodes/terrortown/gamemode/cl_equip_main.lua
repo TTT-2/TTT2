@@ -148,6 +148,7 @@ local function PreqLabels(parent, x, y)
 
 	for _, pnl in pairs(tbl) do
 		pnl:SetFont("DermaLarge")
+		pnl:SetText("-")
 	end
 
 	return function(selected)
@@ -205,22 +206,18 @@ local function CreateEquipmentList(t)
 		t = {}
 	end
 
-	setmetatable(t, {__index = {search = nil, role = nil}})
+	setmetatable(t, {__index = {search = nil, role = nil, notalive = false}})
 
 	if t.search == "Search..." or t.search == "" then
 		t.search = nil
 	end
 
 	local ply = LocalPlayer()
-	local currole = t.role
+	local currole = t.role or ply:GetSubRole()
 	local credits = ply:GetCredits()
 	local can_order = credits > 0
 
-	if not currole then
-		currole = ply:GetSubRole()
-	end
-
-	local itemSize
+	local itemSize = 64
 
 	if allowChangeVar:GetBool() then
 		itemSize = itemSizeVar:GetInt()
@@ -250,7 +247,7 @@ local function CreateEquipmentList(t)
 	end
 
 	local items = {}
-	local tmp = GetEquipmentForRole(currole)
+	local tmp = GetEquipmentForRole(currole, t.notalive)
 
 	for _, v in ipairs(tmp) do
 		if not v.notBuyable then
@@ -258,7 +255,7 @@ local function CreateEquipmentList(t)
 		end
 	end
 
-	if #items == 0 then
+	if #items == 0 and not t.notalive then
 		ply:ChatPrint("[TTT2][SHOP] You need to run 'shopeditor' as admin in the developer console to create a shop for this role. Link it with another shop or click on the icons to add weapons and items to the shop.")
 	end
 
@@ -402,12 +399,14 @@ end
 function TraitorMenuPopup()
 	local ply = LocalPlayer()
 
-	if not IsValid(ply) or not ply:IsActiveShopper() then return end
+	if not IsValid(ply) then
+		return
+	end
 
 	local subrole = ply:GetSubRole()
 	local fallbackRole = GetShopFallback(subrole)
 	local rd = GetRoleByIndex(fallbackRole)
-	local nonply = false
+	local notalive = false
 	local rnd = GetRoundState()
 
 	local fallback = GetGlobalString("ttt_" .. rd.abbr .. "_shop_fallback")
@@ -447,7 +446,7 @@ function TraitorMenuPopup()
 
 	-- if the round is not active let the players choose their shop
 	if rnd ~= ROUND_ACTIVE or not ply:IsTerror() then
-		nonply = true
+		notalive = true
 	end
 
 	-- Close any existing traitor menu
@@ -505,12 +504,12 @@ function TraitorMenuPopup()
 	dlist:EnableVerticalScrollbar(true)
 	dlist:EnableHorizontal(true)
 
-	CreateEquipmentList()
+	CreateEquipmentList({notalive = notalive})
 
-	local bw, bh = 100, 25
-	local dsph = 30
-	local drsh = 30
-	local depw = diw - m
+	local bw, bh = 100, 25 -- button size
+	local dsph = 30 -- search panel height
+	local drsh = 30 -- role select DComboBox height
+	local depw = diw - m -- dequip panel width
 
 	local depanel = vgui.Create("DPanel", dequip)
 	depanel:SetSize(depw, dsph + m * 2)
@@ -519,21 +518,20 @@ function TraitorMenuPopup()
 	depanel:SetPaintBackground(false)
 
 	local dsearch = vgui.Create("DTextEntry", depanel)
-	dsearch:SetSize(depw - 20, dsph)
+	dsearch:SetSize(depw - 10, dsph)
 	dsearch:SetPos(5, 5)
 	dsearch:SetUpdateOnType(true)
 	dsearch:SetEditable(true)
 	dsearch:SetText("Search...")
-	dsearch:SetText("")
 
 	dsearch.selectAll = true
 
-	local dbph = bh + m * 2
+	local dbph = bh + m
 	local dbpw = bw + bh + m * 2
 
 	local dbtnpnl = vgui.Create("DPanel", dequip)
 	dbtnpnl:SetSize(dbpw, dbph)
-	dbtnpnl:SetPos(dlistw + m, dequip:GetTall() - dbph - m)
+	dbtnpnl:SetPos(dlistw + m, dlisth - dbph + 2)
 	dbtnpnl:SetPaintBackground(false)
 
 	local dconfirm = vgui.Create("DButton", dbtnpnl)
@@ -553,7 +551,7 @@ function TraitorMenuPopup()
 
 	--add a cancel button
 	local dcancel = vgui.Create("DButton", dframe)
-	dcancel:SetPos(w - m * 3 - bw, h - bh - m * 3 - 3)
+	dcancel:SetPos(w - m * 3 - bw, h - bh - m * 3)
 	dcancel:SetSize(bw, bh)
 	dcancel:SetDisabled(false)
 	dcancel:SetText(GetTranslation("close"))
@@ -566,7 +564,7 @@ function TraitorMenuPopup()
 
 	local drolesel = nil
 
-	if nonply then
+	if notalive then
 		depanel:SetSize(depanel:GetWide(), depanel:GetTall() + drsh + m)
 
 		drolesel = vgui.Create("DComboBox", depanel)
@@ -585,7 +583,7 @@ function TraitorMenuPopup()
 		drolesel.OnSelect = function(panel, index, value)
 			print(value .."'s shop was selected!")
 
-			CreateEquipmentList({role = RolenameToRole(value), search = dsearch:GetValue()})
+			CreateEquipmentList({role = RolenameToRole(value), search = dsearch:GetValue(), notalive = notalive})
 		end
 
 		dinfobg:MoveBelow(depanel, m)
@@ -593,7 +591,7 @@ function TraitorMenuPopup()
 
 	local _, ibgy = dinfobg:GetPos()
 
-	dinfobg:SetSize(diw - m, bpy - ibgy)
+	dinfobg:SetSize(diw - m, bpy - ibgy - 120) -- -90 to let the help panel have more size
 
 	function dsearch:OnValueChange(text)
 		if text == "" then
@@ -608,14 +606,14 @@ function TraitorMenuPopup()
 			crole = RolenameToRole(drolesel:GetValue())
 		end
 
-		CreateEquipmentList({search = text, role = crole})
+		CreateEquipmentList({search = text, role = crole, notalive = notalive})
 	end
 
 	-- item info pane
 	local dinfo = vgui.Create("ColoredBox", dinfobg)
 	dinfo:SetColor(Color(90, 90, 95, 255))
 	dinfo:SetPos(0, 0)
-	dinfo:StretchToParent(0, 0, m * 2, m + 64)
+	dinfo:StretchToParent(0, 0, m * 2, m * 2)
 
 	local dfields = {}
 	local _tmp = {"name", "type", "desc"}
@@ -625,6 +623,7 @@ function TraitorMenuPopup()
 		dfields[k]:SetTooltip(GetTranslation("equip_spec_" .. k))
 		dfields[k]:SetPos(m * 3, m * 2)
 		dfields[k]:SetWidth(diw - m * 6)
+		dfields[k]:SetText("")
 	end
 
 	dfields.name:SetFont("TabLarge")
@@ -636,10 +635,11 @@ function TraitorMenuPopup()
 	dfields.desc:SetContentAlignment(7)
 	dfields.desc:MoveBelow(dfields.type, 1)
 
-	local dhelp = vgui.Create("DPanel", dinfobg)
+	local dhelp = vgui.Create("DPanel", dequip)
 	dhelp:SetPaintBackground(false)
-	dhelp:SetSize(diw, 96)
-	dhelp:MoveBelow(dinfo, m)
+	dhelp:SetSize(diw, 116)
+	dhelp:SetPos(dlistw + m, 0)
+	dhelp:MoveBelow(dinfobg, 0)
 
 	local update_preqs = PreqLabels(dhelp, m * 7, m * 2)
 
@@ -754,7 +754,7 @@ function TraitorMenuPopup()
 		end
 
 		-- Reload item list
-		CreateEquipmentList({role = role, search = curSearch})
+		CreateEquipmentList({role = role, search = curSearch, notalive = notalive})
 	end
 
 	dframe:MakePopup()
@@ -850,13 +850,11 @@ net.Receive("TTT_BoughtItem", ReceiveBoughtItem)
 -- ----------------------------------
 
 function GM:OnContextMenuOpen()
-	local rs = GetRoundState()
+	--local rs = GetRoundState()
 
-	if rs == ROUND_POST or rs == ROUND_PREP then
-		CLSCORE:Toggle()
-
-		return
-	end
+	--if rs == ROUND_POST or rs == ROUND_PREP then
+		--CLSCORE:Toggle()
+	--end
 
 	if hook.Run("TTT2PreventAccessShop", client) then
 		return
