@@ -518,7 +518,7 @@ function TraitorMenuPopup()
 	depanel:SetPaintBackground(false)
 
 	local dsearch = vgui.Create("DTextEntry", depanel)
-	dsearch:SetSize(depw - 10, dsph)
+	dsearch:SetSize(depw - 20, dsph)
 	dsearch:SetPos(5, 5)
 	dsearch:SetUpdateOnType(true)
 	dsearch:SetEditable(true)
@@ -852,9 +852,11 @@ net.Receive("TTT_BoughtItem", ReceiveBoughtItem)
 function GM:OnContextMenuOpen()
 	--local rs = GetRoundState()
 
-	--if rs == ROUND_POST or rs == ROUND_PREP then
-	--CLSCORE:Toggle()
-	--end
+	-- this will close the CLSCORE panel if its currently visible
+	if IsValid(CLSCORE.Panel) and CLSCORE.Panel:IsVisible() then
+		CLSCORE.Panel:SetVisible(false)
+		return
+	end
 
 	if hook.Run("TTT2PreventAccessShop", client) then
 		return
