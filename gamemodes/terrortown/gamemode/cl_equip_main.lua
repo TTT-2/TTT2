@@ -16,6 +16,7 @@ local itemSizeVar = CreateClientConVar("ttt_bem_size", 64, true, false, "Sets th
 local showCustomVar = CreateClientConVar("ttt_bem_marker_custom", 1, true, false, "Should custom items get a marker?")
 local showFavoriteVar = CreateClientConVar("ttt_bem_marker_fav", 1, true, false, "Should favorite items get a marker?")
 local showSlotVar = CreateClientConVar("ttt_bem_marker_slot", 1, true, false, "Should items get a slot-marker?")
+local alwaysShowShopVar = CreateClientConVar("ttt_bem_always_show_shop", 1, true, false, "Should the shop be opened/closed instead of the score menu during preparing / at the end of a round?")
 
 -- get serverside ConVars
 local allowChangeVar = GetConVar("ttt_bem_allow_change")
@@ -850,7 +851,12 @@ net.Receive("TTT_BoughtItem", ReceiveBoughtItem)
 -- ----------------------------------
 
 function GM:OnContextMenuOpen()
-	--local rs = GetRoundState()
+	local rs = GetRoundState()
+
+	if (rs == ROUND_PREP or rs == ROUND_END) and not alwaysShowShopVar:GetBool() then
+		CLSCORE:Toggle()
+		return
+	end
 
 	-- this will close the CLSCORE panel if its currently visible
 	if IsValid(CLSCORE.Panel) and CLSCORE.Panel:IsVisible() then

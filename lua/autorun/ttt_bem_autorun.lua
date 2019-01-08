@@ -28,6 +28,14 @@ if CLIENT then
 		dlabel:SetTextColor(Color(0, 0, 0, 255))
 		dsettings:AddItem(dlabel)
 
+		-- general settings section
+		local dgeneral = vgui.Create("DForm", dsettings)
+		dgeneral:SetName("General")
+
+		dgeneral:CheckBox("Should the shop be opened/closed instead of the score menu during preparing / at the end of a round?", "ttt_bem_always_show_shop")
+
+		dsettings:AddItem(dgeneral)
+
 		-- layout section
 		local dlayout = vgui.Create("DForm", dsettings)
 		dlayout:SetName("Item List Layout")
