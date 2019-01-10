@@ -168,7 +168,7 @@ function SendFullStateUpdate()
 			or v:GetBaseRole() == ROLE_DETECTIVE
 			or ply == v
 			then
-				tmp[v] = {v:GetSubRole(), v:GetTeam()}
+				tmp[v] = {v:GetSubRole() or ROLE_INNOCENT, v:GetTeam() or TEAM_INNOCENT}
 			else
 				tmp[v] = {ROLE_INNOCENT, TEAM_INNOCENT}
 			end

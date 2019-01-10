@@ -29,15 +29,15 @@ function plymeta:GetForceSpec()
 end
 
 function plymeta:GetSubRole()
-	return self.subrole
+	return self.subrole or ROLE_INNOCENT
 end
 
 function plymeta:GetBaseRole()
-	return self.role
+	return self.role or ROLE_INNOCENT
 end
 
 function plymeta:GetRole()
-	return self.role
+	return self.role or ROLE_INNOCENT
 end
 
 -- ply:UpdateTeam(team) should never be used BEFORE this function
