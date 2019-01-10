@@ -853,7 +853,7 @@ net.Receive("TTT_BoughtItem", ReceiveBoughtItem)
 function GM:OnContextMenuOpen()
 	local rs = GetRoundState()
 
-	if (rs == ROUND_PREP or rs == ROUND_END) and not alwaysShowShopVar:GetBool() then
+	if (rs == ROUND_PREP or rs == ROUND_POST) and not alwaysShowShopVar:GetBool() then
 		CLSCORE:Toggle()
 		return
 	end
