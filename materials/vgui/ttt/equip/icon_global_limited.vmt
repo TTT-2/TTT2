@@ -1,6 +1,6 @@
 "UnlitGeneric"
 {
-	"$basetexture" "vgui/ttt/icon_global_limited"
+	"$basetexture" "vgui/ttt/equip/icon_global_limited"
 	"$translucent" 1
 	"$vertexalpha" 1
 	"$vertexcolor" 1
