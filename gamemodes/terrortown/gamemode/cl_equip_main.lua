@@ -214,7 +214,7 @@ local function CreateEquipmentList(t)
 	end
 
 	local ply = LocalPlayer()
-	local currole = t.role or ply:GetSubRole()
+	local currole = ply:GetSubRole()
 	local credits = ply:GetCredits()
 	local can_order = credits > 0
 
@@ -222,6 +222,11 @@ local function CreateEquipmentList(t)
 
 	if allowChangeVar:GetBool() then
 		itemSize = itemSizeVar:GetInt()
+	end
+
+	-- make sure that the players old role is not used anymore
+	if t.notalive then
+		currole = t.role or ROLE_INNOCENT
 	end
 
 	--- icon size = 64 x 64
@@ -411,7 +416,7 @@ function TraitorMenuPopup()
 	local rnd = GetRoundState()
 
 	local fallback = GetGlobalString("ttt_" .. rd.abbr .. "_shop_fallback")
-	if rnd == ROUND_ACTIVE and fallback == SHOP_DISABLED then return end
+	if ply:IsActive() and fallback == SHOP_DISABLED then return end
 
 	-- calculate dimensions
 	local numCols = serverColsVar:GetInt()
@@ -445,8 +450,8 @@ function TraitorMenuPopup()
 		return
 	end
 
-	-- if the round is not active let the players choose their shop
-	if rnd ~= ROUND_ACTIVE or not ply:IsTerror() then
+	-- if the player is not active let the him choose his shop
+	if not ply:IsActive() then
 		notalive = true
 	end
 
