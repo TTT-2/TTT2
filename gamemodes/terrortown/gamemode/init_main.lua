@@ -1475,6 +1475,8 @@ function SelectRoles(plys, max_plys)
 	local roleCount = {}
 	local selectableRoles = GetSelectableRoles(plys, max_plys) -- update SELECTABLEROLES table
 
+	hook.Run("TTT2ModifySelectableRoles", selectableRoles)
+
 	for _, v in pairs(GetRoles()) do
 		roleCount[v.index] = selectableRoles[v] or 0
 	end
