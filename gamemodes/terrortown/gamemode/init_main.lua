@@ -158,6 +158,9 @@ util.AddNetworkString("TTT2TestRole")
 util.AddNetworkString("TTT2SyncShopsWithServer")
 util.AddNetworkString("TTT2DevChanges")
 util.AddNetworkString("TTT2SyncDBItems")
+util.AddNetworkString("TTT2ReceiveTBEq")
+util.AddNetworkString("TTT2ReceiveGBEq")
+util.AddNetworkString("TTT2ResetTBEq")
 
 local buggyAddons = {
 	["656662924"] = "1367128301", -- Killer Notifier by nerzlakai96
@@ -415,6 +418,29 @@ local function TTT2SyncShopsWithServer(len, ply)
 	net.Send(ply)
 
 	SyncEquipment(ply)
+
+	-- sync bought sweps
+	if BUYTABLE then
+		for id in pairs(BUYTABLE) do
+			net.Start("TTT2ReceiveGBEq")
+			net.WriteString(id)
+			net.Send(ply)
+		end
+	end
+
+	if TEAMBUYTABLE then
+		local team = ply:GetTeam()
+
+		if team and team ~= TEAM_NONE and not TEAMS[team].alone and TEAMBUYTABLE[team] then
+			local filter = GetTeamMemberFilter(team)
+
+			for id in pairs(TEAMBUYTABLE[team]) do
+				net.Start("TTT2ReceiveTBEq")
+				net.WriteString(id)
+				net.Send(filter)
+			end
+		end
+	end
 end
 net.Receive("TTT2SyncShopsWithServer", TTT2SyncShopsWithServer)
 

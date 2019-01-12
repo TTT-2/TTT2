@@ -953,7 +953,53 @@ if SERVER then
 			SyncSingleEquipment(v, subrole, tbl, false)
 		end
 	end
+
+	hook.Add("TTT2UpdateTeam", "TTT2SyncTeambuyEquipment", function(ply, oldTeam, team)
+		if TEAMBUYTABLE then
+			if oldTeam and oldTeam ~= TEAM_NONE then
+				net.Start("TTT2ResetTBEq")
+				net.WriteString(oldTeam)
+				net.Send(ply)
+			end
+
+			if team and team ~= TEAM_NONE and not TEAMS[team].alone and TEAMBUYTABLE[team] then
+				local filter = GetTeamMemberFilter(team)
+
+				for id in pairs(TEAMBUYTABLE[team]) do
+					net.Start("TTT2ReceiveTBEq")
+					net.WriteString(id)
+					net.Send(filter)
+				end
+			end
+		end
+	end)
 else -- CLIENT
+	local function ReceiveTeambuyEquipment()
+		local s = net.ReadString()
+		local team = LocalPlayer():GetTeam()
+
+		if team and team ~= TEAM_NONE and not TEAMS[team].alone and TEAMBUYTABLE[team] then
+			TEAMBUYTABLE[team][s] = true
+		end
+	end
+	net.Receive("TTT2ReceiveTBEq", ReceiveTeambuyEquipment)
+
+	local function ReceiveGlobalbuyEquipment()
+		local s = net.ReadString()
+
+		BUYTABLE[s] = true
+	end
+	net.Receive("TTT2ReceiveGBEq", ReceiveGlobalbuyEquipment)
+
+	local function ResetTeambuyEquipment()
+		local s = net.ReadString()
+
+		if not s or s == TEAM_NONE then return end
+
+		TEAMBUYTABLE[s] = nil
+	end
+	net.Receive("TTT2ResetTBEq", ResetTeambuyEquipment)
+
 	function AddEquipmentToRoleEquipment(subrole, equip, item)
 		-- start with all the non-weapon goodies
 		local toadd

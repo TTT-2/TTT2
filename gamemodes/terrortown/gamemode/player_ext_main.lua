@@ -173,9 +173,20 @@ function plymeta:AddBought(id)
 
 	BUYTABLE[id] = true
 
+	net.Start("TTT2ReceiveGBEq")
+	net.WriteString(id)
+	net.Broadcast()
+
 	local team = self:GetTeam()
-	if team and TEAMBUYTABLE[team] then
+
+	if team and team ~= TEAM_NONE and not TEAMS[team].alone and TEAMBUYTABLE[team] then
 		TEAMBUYTABLE[team][id] = true
+
+		if SERVER then
+			net.Start("TTT2ReceiveTBEq")
+			net.WriteString(id)
+			net.Send(GetTeamMemberFilter(team))
+		end
 	end
 
 	self:SendBought()

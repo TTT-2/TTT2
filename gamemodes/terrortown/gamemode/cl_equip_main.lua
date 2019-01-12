@@ -413,7 +413,6 @@ function TraitorMenuPopup()
 	local fallbackRole = GetShopFallback(subrole)
 	local rd = GetRoleByIndex(fallbackRole)
 	local notalive = false
-	local rnd = GetRoundState()
 
 	local fallback = GetGlobalString("ttt_" .. rd.abbr .. "_shop_fallback")
 	if ply:IsActive() and fallback == SHOP_DISABLED then return end
@@ -860,18 +859,18 @@ function GM:OnContextMenuOpen()
 
 	if (rs == ROUND_PREP or rs == ROUND_POST) and not alwaysShowShopVar:GetBool() then
 		CLSCORE:Toggle()
+
 		return
 	end
 
 	-- this will close the CLSCORE panel if its currently visible
 	if IsValid(CLSCORE.Panel) and CLSCORE.Panel:IsVisible() then
 		CLSCORE.Panel:SetVisible(false)
+
 		return
 	end
 
-	if hook.Run("TTT2PreventAccessShop", client) then
-		return
-	end
+	if hook.Run("TTT2PreventAccessShop", client) then return end
 
 	if IsValid(eqframe) then
 		eqframe:Close()
