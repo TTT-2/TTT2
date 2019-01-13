@@ -299,7 +299,7 @@ local colors = {
 	bar = Color(220, 180, 0, 255)
 }
 
-local y_logo_off = 72
+local y_logo_off = 89
 
 function PANEL:Paint()
 	-- Logo sticks out, so always offset bg
