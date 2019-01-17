@@ -678,6 +678,7 @@ hook.Add("TTTPrepareRound", "TTT2SharedPrepareRound", function()
 	TEAMBUYTABLE = {}
 
 	math.randomseed(os.time())
+	math.random(); math.random(); math.random() -- warming up
 end)
 
 function EquipmentIsBuyable(tbl, team)

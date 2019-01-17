@@ -431,6 +431,7 @@ function CLSCORE:BuildHilitePanel(dpanel)
 	-- clients. We can do this using the round start time. To make it a bit more
 	-- random, involve the round's duration too.
 	math.randomseed(self.StartTime + endtime)
+	math.random(); math.random(); math.random() -- warming up
 
 	-- Attempt to generate every award, then sort the succeeded ones based on
 	-- priority/interestingness
