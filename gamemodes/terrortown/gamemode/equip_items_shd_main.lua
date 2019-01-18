@@ -339,10 +339,11 @@ if SERVER then
 		end
 	end
 
-	function UpdateRandomShops(plys, amount)
+	function UpdateRandomShops(plys, val)
 		RANDOMSHOP = {} -- reset
 
 		for _, rd in pairs(GetShopRoles()) do
+			local amount = val
 			local fallback = GetShopFallback(rd.index)
 
 			if not RANDOMSHOP[fallback] then
@@ -420,7 +421,9 @@ if SERVER then
 	hook.Add("PlayerInitialSpawn", "TTT2InitRandomShops", function(ply)
 		local amount = random_shops:GetInt()
 
-		SetGlobalInt("ttt2_random_shops", amount)
+		if not GetGlobalInt("ttt2_random_shops", nil) then
+			SetGlobalInt("ttt2_random_shops", amount)
+		end
 
 		if amount > 0 then
 			SyncRandomShops(ply)
