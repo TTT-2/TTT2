@@ -421,9 +421,7 @@ if SERVER then
 	hook.Add("PlayerInitialSpawn", "TTT2InitRandomShops", function(ply)
 		local amount = random_shops:GetInt()
 
-		if not GetGlobalInt("ttt2_random_shops", nil) then
-			SetGlobalInt("ttt2_random_shops", amount)
-		end
+		SetGlobalInt("ttt2_random_shops", amount)
 
 		if amount > 0 then
 			SyncRandomShops(ply)
