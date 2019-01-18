@@ -821,7 +821,8 @@ local function ReceiveBought()
 			BUYTABLE[s] = true
 
 			local team = ply:GetTeam()
-			if team and TEAMBUYTABLE[team] then
+			if team then
+				TEAMBUYTABLE[team] = TEAMBUYTABLE[team] or {}
 				TEAMBUYTABLE[team][s] = true
 			end
 		end

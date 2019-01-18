@@ -701,7 +701,7 @@ function EquipmentIsBuyable(tbl, team)
 		end
 	end
 
-	if tbl.globalLimited and BUYTABLE[tbl.id] or team and tbl.teamLimited and TEAMBUYTABLE[team] and TEAMBUYTABLE[team][tbl.id] and not TEAMS[team].alone then
+	if tbl.globalLimited and BUYTABLE[tbl.id] or team and tbl.teamLimited and not TEAMS[team].alone and TEAMBUYTABLE[team] and TEAMBUYTABLE[team][tbl.id] then
 		return false, "X", "This equipment is limited and is already bought."
 	end
 

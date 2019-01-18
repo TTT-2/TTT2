@@ -179,7 +179,8 @@ function plymeta:AddBought(id)
 
 	local team = self:GetTeam()
 
-	if team and team ~= TEAM_NONE and not TEAMS[team].alone and TEAMBUYTABLE[team] then
+	if team and team ~= TEAM_NONE and not TEAMS[team].alone then
+		TEAMBUYTABLE[team] = TEAMBUYTABLE[team] or {}
 		TEAMBUYTABLE[team][id] = true
 
 		if SERVER then
