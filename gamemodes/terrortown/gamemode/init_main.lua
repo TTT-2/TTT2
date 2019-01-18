@@ -433,7 +433,7 @@ local function TTT2SyncShopsWithServer(len, ply)
 		local team = ply:GetTeam()
 
 		if team and team ~= TEAM_NONE and not TEAMS[team].alone and TEAMBUYTABLE[team] then
-			local filter = GetTeamMemberFilter(team)
+			local filter = GetTeamFilter(team)
 
 			for id in pairs(TEAMBUYTABLE[team]) do
 				net.Start("TTT2ReceiveTBEq")

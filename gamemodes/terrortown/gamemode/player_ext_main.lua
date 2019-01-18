@@ -186,7 +186,7 @@ function plymeta:AddBought(id)
 		if SERVER then
 			net.Start("TTT2ReceiveTBEq")
 			net.WriteString(id)
-			net.Send(GetTeamMemberFilter(team))
+			net.Send(GetTeamFilter(team))
 		end
 	end
 
