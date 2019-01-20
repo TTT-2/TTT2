@@ -525,7 +525,7 @@ function plymeta:SetSubRoleModel(mdl)
 	self.subroleModel = mdl
 end
 
-function plymeta:Revive(delay, fn, check, needcorpse, force)
+function plymeta:Revive(delay, fn, check, needcorpse, force, onFail)
 	local ply = self
 	local name = "TTT2RevivePlayer" .. ply:EntIndex()
 
@@ -538,46 +538,52 @@ function plymeta:Revive(delay, fn, check, needcorpse, force)
 	ply.reviving = true
 
 	timer.Create(name, delay, 1, function()
-		ply.forceRevive = nil
-		ply.reviving = nil
+		if IsValid(ply) then
+			ply.forceRevive = nil
+			ply.reviving = nil
 
-		if not check or check(ply) then
-			local corpse = FindCorpse(ply)
+			if not isfunction(check) or check(ply) then
+				local corpse = FindCorpse(ply)
 
-			if needcorpse and (not IsValid(corpse) or corpse:IsOnFire()) then
-				timer.Remove(name) -- TODO needed?
+				if needcorpse and (not IsValid(corpse) or corpse:IsOnFire()) then
+					ply:ChatPrint("You have not been revived because your body no longer exists.")
 
-				return
-			end
+					timer.Remove(name) -- TODO needed?
 
-			if IsValid(corpse) then
-				local spawnPos = FindCorpsePosition(corpse)
-
-				if not spawnPos then return end
+					return
+				end
 
 				ply:SpawnForRound(true)
-				ply:SetPos(spawnPos)
-				ply:SetEyeAngles(Angle(0, corpse:GetAngles().y, 0))
-			else
-				ply:SpawnForRound(true)
-			end
 
-			hook.Call("PlayerLoadout", GAMEMODE, ply)
+				if IsValid(corpse) then
+					local spawnPos = FindCorpsePosition(corpse)
+					if spawnPos then
+						ply:SetPos(spawnPos)
+						ply:SetEyeAngles(Angle(0, corpse:GetAngles().y, 0))
+					end
+				end
 
-			ply:SetMaxHealth(100)
+				hook.Call("PlayerLoadout", GAMEMODE, ply)
 
-			local credits = CORPSE.GetCredits(corpse, 0)
+				ply:SetMaxHealth(100)
 
-			ply:SetCredits(credits)
+				local credits = CORPSE.GetCredits(corpse, 0)
 
-			if IsValid(corpse) then
-				corpse:Remove()
-			end
+				ply:SetCredits(credits)
 
-			DamageLog("TTT2Revive: " .. ply:Nick() .. " has been respawned.")
+				if IsValid(corpse) then
+					corpse:Remove()
+				end
 
-			if fn then
-				fn(ply)
+				DamageLog("TTT2Revive: " .. ply:Nick() .. " has been respawned.")
+
+				if isfunction(fn) then
+					fn(ply)
+				end
+			elseif isfunction(onFail) then
+				ply:ChatPrint("Revive failed...")
+
+				onFail(ply)
 			end
 		end
 	end)
