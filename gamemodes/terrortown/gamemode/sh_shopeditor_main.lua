@@ -41,7 +41,7 @@ function ShopEditor.WriteItemData(messageName, name, item, plys)
 		if data.typ == "number" then
 			net.WriteUInt(item[key], data.bits or 16)
 		elseif data.typ == "bool" then
-			net.WriteBit(item[key])
+			net.WriteBool(item[key])
 		else
 			net.WriteString(item[key])
 		end
@@ -83,7 +83,7 @@ function ShopEditor.ReadItemData()
 		if data.typ == "number" then
 			item[key] = net.ReadUInt(data.bits or 16)
 		elseif data.typ == "bool" then
-			item[key] = tobool(net.ReadBit())
+			item[key] = net.ReadBool()
 		else
 			item[key] = net.ReadString()
 		end

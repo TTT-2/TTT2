@@ -104,7 +104,7 @@ end
 net.Receive("shop", shop)
 
 util.AddNetworkString("TTT2SESaveItem")
-local function TTT2SESaveItem(_, ply)
+local function TTT2SESaveItem()
 	local name, item = ShopEditor.ReadItemData()
 
 	if not item then return end

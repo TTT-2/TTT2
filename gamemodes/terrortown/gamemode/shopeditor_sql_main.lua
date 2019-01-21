@@ -12,7 +12,7 @@ function ShopEditor.BuildInsertString(name, item, keys)
 	local tmp = {}
 
 	for key, data in pairs(keys) do
-		if item[key] then
+		if item[key] ~= nil then
 			local dat = item[key]
 
 			if data.typ == "bool" then
@@ -46,7 +46,7 @@ function ShopEditor.BuildUpdateString(name, item, keys)
 	local tmp = {}
 
 	for key, data in pairs(keys) do
-		if item[key] then
+		if item[key] ~= nil then
 			local dat = item[key]
 
 			if data.typ == "bool" then
@@ -142,7 +142,7 @@ function ShopEditor.LoadItem(name, item, keys)
 					val = val == "1"
 				end
 
-				if not item[k] or item[k] ~= val then
+				if item[k] == nil or item[k] ~= val then
 					if v == "NULL" then
 						item[k] = item[k] or val -- keep old or init new
 					else
