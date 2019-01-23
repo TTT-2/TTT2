@@ -15,7 +15,7 @@ Equipment = CLIENT and (Equipment or {}) or nil
 SYNC_EQUIP = SYNC_EQUIP or {}
 RANDOMSHOP = RANDOMSHOP or {}
 
-function GetEquipmentWeaponBase(data, eq)
+function GetEquipmentBase(data, eq)
 	if not eq or eq.inited then
 		return eq
 	end
@@ -66,7 +66,7 @@ function CreateEquipmentWeapon(eq)
 	if not eq.Doublicated then
 		local data = eq.EquipMenuData or {}
 
-		return GetEquipmentWeaponBase(data, eq)
+		return GetEquipmentBase(data, eq)
 	end
 end
 
@@ -161,7 +161,7 @@ if CLIENT then
 				if v and not v.Doublicated and v.CanBuy and table.HasValue(v.CanBuy, fallback) then
 					local data = v.EquipMenuData or {}
 
-					local base = GetEquipmentItemBase(data, v)
+					local base = GetEquipmentBase(data, v)
 					if base then
 						table.insert(tbl, base)
 					end
@@ -173,7 +173,7 @@ if CLIENT then
 				if v and not v.Doublicated and v.CanBuy and table.HasValue(v.CanBuy, fallback) then
 					local data = v.EquipMenuData or {}
 
-					local base = GetEquipmentWeaponBase(data, v)
+					local base = GetEquipmentBase(data, v)
 					if base then
 						table.insert(tbl, base)
 					end

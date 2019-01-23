@@ -178,3 +178,48 @@ function GetList()
 
 	return result
 end
+
+--[[---------------------------------------------------------
+	Name: IsItem( tbl )
+	Desc: checks whether the input is an ITEM
+-----------------------------------------------------------]]
+function IsItem(tbl)
+	local cls = WEPS.GetClass(tbl)
+
+	for _, v in ipairs(ItemList) do
+		if WEPS.GetClass(v) == cls then
+			return true
+		end
+	end
+
+	return false
+end
+
+--[[---------------------------------------------------------
+	Name: GetRoleItems( subrole )
+	Desc: get all items for this role
+-----------------------------------------------------------]]
+function GetRoleItems(subrole)
+	local itms = GetList()
+	local tbl = {}
+
+	for _, item in ipairs(itms) do
+		if item and item.CanBuy and table.HasValue(item.CanBuy, subrole) then
+			tbl[#tbl + 1] = item
+		end
+	end
+
+	return tbl
+end
+
+--[[---------------------------------------------------------
+	Name: GetRoleItem( subrole, id )
+	Desc: get a role item if it's available for this role
+-----------------------------------------------------------]]
+function GetRoleItem(subrole, id)
+	local item = GetStored(id)
+
+	if item and item.CanBuy and table.HasValue(item.CanBuy, subrole) then
+		return item
+	end
+end

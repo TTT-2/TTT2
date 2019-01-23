@@ -52,8 +52,8 @@ function ShopEditor.GetEquipmentForRoleAll()
 	return Equipmentnew
 end
 
-function ShopEditor.CreateItemList(frame, w, h, items, onClick, updateListItems)
-	if not items or not onClick and not updateListItems then return end
+function ShopEditor.CreateItemList(frame, w, h, itms, onClick, updateListItems)
+	if not itms or not onClick and not updateListItems then return end
 
 	local ply = LocalPlayer()
 
@@ -65,7 +65,7 @@ function ShopEditor.CreateItemList(frame, w, h, items, onClick, updateListItems)
 	dlist:EnableHorizontal(true)
 	dlist:SetPadding(4)
 
-	for _, item in pairs(items) do
+	for _, item in pairs(itms) do
 		local ic
 
 		-- Create icon panel
@@ -272,11 +272,11 @@ function ShopEditor.CreateItemEditor()
 		ply.shopeditor = nil
 	end
 
-	local items = ShopEditor.GetEquipmentForRoleAll()
+	local itms = ShopEditor.GetEquipmentForRoleAll()
 
-	SortEquipmentTable(items)
+	SortEquipmentTable(itms)
 
-	ShopEditor.CreateItemList(frame, w, h, items, function(s)
+	ShopEditor.CreateItemList(frame, w, h, itms, function(s)
 		ShopEditor.EditItem(s.item)
 	end)
 
@@ -650,6 +650,10 @@ end
 net.Receive("shopFallbackAnsw", ShopEditor.shopFallbackAnsw)
 
 function ShopEditor.shopFallbackReset(len)
+	for _, v in ipairs(items.GetList()) do
+		v.CanBuy = {}
+	end
+
 	for _, v in ipairs(weapons.GetList()) do
 		v.CanBuy = {}
 	end

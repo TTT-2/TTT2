@@ -86,8 +86,13 @@ function GM:InitPostEntity()
 	end
 
 	-- init items
-	for _, wep in ipairs(itms) do
-		CreateEquipmentItem(wep)
+	for _, eq in ipairs(itms) do
+		CreateEquipmentItem(eq)
+	end
+
+	-- reset normal items equipment
+	for _, eq in ipairs(itms) do
+		eq.CanBuy = {}
 	end
 
 	local sweps = weapons.GetList()
@@ -100,11 +105,6 @@ function GM:InitPostEntity()
 	-- init weapons
 	for _, wep in ipairs(sweps) do
 		CreateEquipmentWeapon(wep)
-	end
-
-	-- reset normal weapons equipment
-	for _, wep in ipairs(itms) do
-		wep.CanBuy = {}
 	end
 
 	-- reset normal weapons equipment

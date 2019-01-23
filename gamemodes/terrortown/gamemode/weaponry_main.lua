@@ -160,26 +160,70 @@ local function HasLoadoutWeapons(ply)
 	return true
 end
 
--- Give loadout items.
-local function GiveLoadoutItems(ply)
-	local sr = ply:GetSubRole()
-	local items = GetModifiedEquipment(sr, items.GetRoleItems(sr))
+-- Get loadout items.
+local function GetLoadoutItems(subrole)
+	if not loadout_items[subrole] then
+		loadout_items[subrole] = {}
 
-	if items then
-		for _, item in ipairs(items) do
-			if item.loadout then
-				ply:GiveItem(item.id)
+		for _, w in ipairs(items.GetList()) do
+			if type(w.InLoadoutFor) == "table" and not w.Doublicated then
+				local cls = w.id
+
+				if table.HasValue(w.InLoadoutFor, subrole) then
+					if not table.HasValue(loadout_items[subrole], cls) then
+						table.insert(loadout_items[subrole], cls)
+					end
+				elseif table.HasValue(w.InLoadoutFor, ROLE_INNOCENT) then -- setup for new roles
+					table.insert(w.InLoadoutFor, subrole)
+
+					if not table.HasValue(loadout_items[subrole], cls) then
+						table.insert(loadout_items[subrole], cls)
+					end
+				end
 			end
+		end
+
+		hook.Run("TTT2ModifyDefaultLoadout", loadout_items, subrole)
+	end
+
+	return loadout_items[subrole]
+end
+
+-- Give player loadout items he should have for his subrole that he does not have
+-- yet
+local function GiveLoadoutItem(ply, cls)
+	if not ply:HasEquipmentItem(cls) then
+		local item = ply:GiveItem(cls)
+
+		ply.loadoutItems = ply.loadoutItems or {}
+
+		if not table.HasValue(ply.loadoutItems, cls) then
+			ply.loadoutItems[#ply.loadoutItems + 1] = cls
+		end
+
+		return item
+	end
+end
+
+local function GiveLoadoutItems(ply)
+	local subrole = GetRoundState() == ROUND_PREP and ROLE_INNOCENT or ply:GetSubRole()
+	local itms = GetLoadoutItems(subrole)
+
+	if not itms then return end
+
+	for _, cls in ipairs(itms) do
+		if not ply:HasEquipmentItem(cls) then
+			GiveLoadoutItem(ply, cls)
 		end
 	end
 end
 
 local function ResetLoadoutItems(ply)
 	local sr = ply:GetSubRole()
-	local items = GetModifiedEquipment(sr, items.GetRoleItems(sr))
+	local itms = GetModifiedEquipment(sr, items.GetRoleItems(sr))
 
-	if items then
-		for _, item in ipairs(items) do
+	if itms then
+		for _, item in ipairs(itms) do
 			if item.loadout then
 				ply:RemoveItem(item.id)
 			end
