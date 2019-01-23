@@ -8,35 +8,6 @@ local ipairs = ipairs
 local util = util
 local hook = hook
 
-
--- If you have custom items you want to add, consider using a separate lua
--- script that uses table.insert to add an entry to this table. This method
--- means you won't have to add your code back in after every TTT update. Just
--- make sure the script is also run on the client.
---
--- For example:
---	table.insert(EquipmentItems[ROLE_DETECTIVE], { id = EQUIP_ARMOR, ... })
---
--- Note that for existing items you can just do:
---	table.insert(EquipmentItems[ROLE_DETECTIVE], GetEquipmentItem(ROLE_TRAITOR, EQUIP_ARMOR))
-
--- Special equipment bitflags. Every unique piece of equipment needs its own
--- id.
---
--- Use the GenerateNewEquipmentID function (see below) to get a unique ID for
--- your equipment. This is guaranteed not to clash with other addons (as long
--- as they use the same safe method).
---
--- Details you shouldn't need:
--- The number should increase by a factor of two for every item (ie. ids
--- should be powers of two).
-EQUIP_NONE = 0
-EQUIP_ARMOR = 1
-EQUIP_RADAR = 2
-EQUIP_DISGUISE = 4
-
-EQUIP_MAX = 4
-
 -- Icon doesn't have to be in this dir, but all default ones are in here
 local mat_dir = "vgui/ttt/"
 

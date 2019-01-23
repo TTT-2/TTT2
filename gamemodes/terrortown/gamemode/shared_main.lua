@@ -79,9 +79,6 @@ TEAM_NOCHANGE = "nochange"
 -- max networking bits to send roles numbers
 ROLE_BITS = 5
 
--- max networking bits to send equipment ids
-EQUIPMENT_BITS = EQUIPMENT_BITS or 16
-
 -- override default settings of ttt to make it compatible with other addons
 -- Player roles
 ROLE_INNOCENT = 0

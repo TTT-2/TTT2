@@ -109,20 +109,18 @@ end
 
 --- Equipment items
 function plymeta:AddEquipmentItem(id)
-	id = tonumber(id)
-
-	if id then
-		self.equipment_items = bit.bor(self.equipment_items, id)
+	if not self:HasEquipmentItem(id) then
+		self.equipment_items = self.equipment_items or {}
+		self.equipment_items[#self.equipment_items + 1] = id
 
 		self:SendEquipment()
 	end
 end
 
 function plymeta:RemoveEquipmentItem(id)
-	id = tonumber(id)
-
-	if id and util.BitSet(self.equipment_items, id) then
-		self.equipment_items = bit.bxor(self.equipment_items, id)
+	if self:HasEquipmentItem(id) then
+		self.equipment_items = self.equipment_items or {}
+		self.equipment_items[#self.equipment_items + 1] = id
 
 		self:SendEquipment()
 	end
@@ -130,13 +128,20 @@ end
 
 -- We do this instead of an NW var in order to limit the info to just this ply
 function plymeta:SendEquipment()
+	local arr = self:GetEquipmentItems()
+
 	net.Start("TTT_Equipment")
-	net.WriteUInt(self.equipment_items, EQUIPMENT_BITS)
+	net.WriteUInt(#arr, 16)
+
+	for _, item in ipairs(arr) do
+		net.WriteString(item)
+	end
+
 	net.Send(self)
 end
 
 function plymeta:ResetEquipment()
-	self.equipment_items = EQUIP_NONE
+	self.equipment_items = {}
 
 	self:SendEquipment()
 end
@@ -267,7 +272,7 @@ end
 function plymeta:GiveEquipmentItem(id)
 	if self:HasEquipmentItem(id) then
 		return false
-	elseif id and id > EQUIP_NONE then
+	elseif id then
 		self:AddEquipmentItem(id)
 
 		return true

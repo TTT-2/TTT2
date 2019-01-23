@@ -554,7 +554,7 @@ local function OrderEquipment(ply, cmd, args)
 		if not EquipmentIsBuyable(allowed, ply:GetTeam()) then return end
 
 		-- ownership check and finalise
-		if id and EQUIP_NONE < id and not ply:HasEquipmentItem(id) then
+		if id and not ply:HasEquipmentItem(id) then
 			ply:GiveEquipmentItem(id)
 
 			received = true

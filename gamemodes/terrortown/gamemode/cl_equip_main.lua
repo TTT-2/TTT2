@@ -789,7 +789,13 @@ local function ReceiveEquipment()
 
 	if not IsValid(ply) then return end
 
-	ply.equipment_items = net.ReadUInt(EQUIPMENT_BITS)
+	local eqAmount = net.ReadUInt(16)
+
+	ply.equipment_items = {}
+
+	for i = 1, eqAmount do
+		ply.equipment_items[#ply.equipment_items + 1] = net.ReadString()
+	end
 end
 net.Receive("TTT_Equipment", ReceiveEquipment)
 

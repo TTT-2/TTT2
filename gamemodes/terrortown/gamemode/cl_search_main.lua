@@ -539,12 +539,16 @@ local function TTT_RagdollSearch()
 	search.nick = net.ReadString()
 
 	-- Equipment
-	local eq = net.ReadUInt(EQUIPMENT_BITS)
+	local eq = {}
 
-	-- All equipment pieces get their own icon
-	search.eq_armor = util.BitSet(eq, EQUIP_ARMOR)
-	search.eq_radar = util.BitSet(eq, EQUIP_RADAR)
-	search.eq_disg = util.BitSet(eq, EQUIP_DISGUISE)
+	local eqAmount = net.ReadUInt(16)
+
+	for i = 1, eqAmount do
+		local eqStr = net.ReadString()
+
+		eq[#eq + 1] = eqStr
+		search["eq_" .. eqStr] = true
+	end
 
 	-- Traitor things
 	search.role = net.ReadUInt(ROLE_BITS)

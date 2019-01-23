@@ -27,7 +27,7 @@ hook.Add("HUDPaint", "TTT2ItemHud", function()
 	end
 end)
 
-hook.Add("TTTBodySearchPopulate", "TTT2InitHUDItems", function(search, raw)
+hook.Add("TTTBodySearchPopulate", "TTT2ItemHUDIcon", function(search, raw)
 	for _, item in ipairs(items.GetList()) do
 		if not raw["eq_" .. item.id] then return end
 
@@ -41,7 +41,7 @@ hook.Add("TTTBodySearchPopulate", "TTT2InitHUDItems", function(search, raw)
 	end
 end)
 
-hook.Add("TTTBodySearchEquipment", "TTTSpeedrunCorpseIcon", function(search, eq)
+hook.Add("TTTBodySearchEquipment", "TTT2ItemHUDCorpseIcon", function(search, eq)
 	for _, item in ipairs(items.GetList()) do
 		search["eq_" .. item.id] = table.HasValue(eq, item.id)
 	end
