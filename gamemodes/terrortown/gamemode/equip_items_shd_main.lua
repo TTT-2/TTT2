@@ -8,66 +8,12 @@ local ipairs = ipairs
 local util = util
 local hook = hook
 
--- Icon doesn't have to be in this dir, but all default ones are in here
-local mat_dir = "vgui/ttt/"
-
 -- Stick to around 35 characters per description line, and add a "\n" where you
 -- want a new line to start.
 
 Equipment = CLIENT and (Equipment or {}) or nil
-EquipmentItems = EquipmentItems or {}
 SYNC_EQUIP = SYNC_EQUIP or {}
-ALL_ITEMS = ALL_ITEMS or {}
 RANDOMSHOP = RANDOMSHOP or {}
-
-local armor = {
-	id = EQUIP_ARMOR,
-	type = "item_passive",
-	material = mat_dir .. "icon_armor",
-	name = "item_armor",
-	desc = "item_armor_desc"
-}
-
-local radar = {
-	id = EQUIP_RADAR,
-	type = "item_active",
-	material = mat_dir .. "icon_radar",
-	name = "item_radar",
-	desc = "item_radar_desc"
-}
-
-local disguiser = {
-	id = EQUIP_DISGUISE,
-	type = "item_active",
-	material = mat_dir .. "icon_disguise",
-	name = "item_disg",
-	desc = "item_disg_desc"
-}
-
-EquipmentItems[ROLE_TRAITOR] = {armor, radar, disguiser}
-EquipmentItems[ROLE_DETECTIVE] = {armor, radar}
-
-function SetupEquipment()
-	for _, v in pairs(GetRoles()) do
-		if not EquipmentItems[v.index] then
-			local br = GetBaseRole(v.index)
-			if br == ROLE_TRAITOR then
-				EquipmentItems[v.index] = {armor, radar, disguiser}
-			elseif br == ROLE_DETECTIVE then
-				EquipmentItems[v.index] = {armor, radar}
-			else
-				local eqIt = GetRoleByIndex(v.index).EquipmentItems
-				if eqIt then
-					EquipmentItems[v.index] = eqIt
-				else
-					EquipmentItems[v.index] = {}
-				end
-			end
-		end
-	end
-end
-
-SetupEquipment() -- pre init to support normal TTT addons
 
 function GetEquipmentWeaponBase(data, eq)
 	if not eq or eq.inited then
@@ -208,13 +154,18 @@ if CLIENT then
 
 		-- need to build equipment cache?
 		if not Equipment[fallback] then
-			EquipmentItems[fallback] = EquipmentItems[fallback] or {}
-
 			local tbl = {}
 
-			-- start with all the non-weapon goodies
-			for _, v in pairs(EquipmentItems[fallback]) do
-				tbl[#tbl + 1] = v
+			-- find buyable items to load info from
+			for _, v in ipairs(items.GetList()) do
+				if v and not v.Doublicated and v.CanBuy and table.HasValue(v.CanBuy, fallback) then
+					local data = v.EquipMenuData or {}
+
+					local base = GetEquipmentItemBase(data, v)
+					if base then
+						table.insert(tbl, base)
+					end
+				end
 			end
 
 			-- find buyable weapons to load info from
@@ -325,8 +276,10 @@ if SERVER then
 				if not fallbackTable then
 					fallbackTable = {}
 
-					for _, item in pairs(EquipmentItems[fallback]) do
-						fallbackTable[#fallbackTable + 1] = item
+					for _, equip in ipairs(items.GetList()) do
+						if equip.CanBuy and table.HasValue(equip.CanBuy, fallback) then
+							fallbackTable[#fallbackTable + 1] = equip
+						end
 					end
 
 					for _, equip in ipairs(weapons.GetList()) do
@@ -472,6 +425,7 @@ function GetModifiedEquipment(subrole, fallback)
 	return fallback
 end
 
+REM
 function GetEquipmentItem(subrole, id)
 	local tbl = GetShopFallbackTable(subrole)
 	if not tbl then
@@ -489,8 +443,9 @@ function GetEquipmentItem(subrole, id)
 	end
 end
 
+DAFUQ
 function GetEquipmentItemByID(id)
-	for _, eq in ipairs(ALL_ITEMS) do
+	for _, eq in ipairs(items.GetList()) do
 		if eq.id == id then
 			return eq
 		end
@@ -501,10 +456,11 @@ function GetEquipmentFileName(name)
 	return string.gsub(string.lower(name), "[%W%s]", "_") -- clean string
 end
 
+KAk
 function GetEquipmentItemByName(name)
 	name = GetEquipmentFileName(name)
 
-	for _, equip in ipairs(ALL_ITEMS) do
+	for _, equip in ipairs(items.GetList()) do
 		if GetEquipmentFileName(equip.name) == name then
 			return equip, name
 		end
@@ -522,6 +478,7 @@ function GetEquipmentByName(name)
 	return nil, GetWeaponByName(name), nm
 end
 
+REMREM
 -- Utility function to register a new Equipment ID
 function GenerateNewEquipmentID()
 	EQUIP_MAX = EQUIP_MAX * 2
@@ -529,6 +486,7 @@ function GenerateNewEquipmentID()
 	return EQUIP_MAX
 end
 
+NOW
 function EquipmentTableHasValue(tbl, equip)
 	if not tbl then
 		return false
@@ -690,11 +648,12 @@ function InitDefaultEquipment()
 	DETECTIVE.fallbackTable = tbl2
 end
 
+KIIIIILL
 function InitAllItems()
 	for _, roleData in pairs(GetRoles()) do
 		if EquipmentItems[roleData.index] then
 			for _, eq in pairs(EquipmentItems[roleData.index]) do
-				if not EquipmentTableHasValue(ALL_ITEMS, eq) then
+				if not EquipmentTableHasValue(items.GetList(), eq) then
 					ALL_ITEMS[#ALL_ITEMS + 1] = eq
 				end
 			end

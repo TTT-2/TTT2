@@ -7,8 +7,6 @@ function GM:TTT2Initialize()
 	hook.Run("TTT2BaseRoleInit")
 
 	DefaultEquipment = GetDefaultEquipment()
-
-	SetupEquipment()
 end
 
 -- Create teams

@@ -292,7 +292,7 @@ function GM:InitPostEntity()
 
 	-- load and initialize all SWEPS and all items from database
 	if ShopEditor.CreateSqlTable() then
-		for _, eq in ipairs(ALL_ITEMS) do
+		for _, eq in ipairs(items.GetList()) do
 			local name = GetEquipmentFileName(eq.name)
 
 			ShopEditor.InitDefaultData(eq)

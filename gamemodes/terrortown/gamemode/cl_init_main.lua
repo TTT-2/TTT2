@@ -82,7 +82,7 @@ function GM:InitPostEntity()
 	InitAllItems()
 
 	-- initialize the default data
-	for _, eq in ipairs(ALL_ITEMS) do
+	for _, eq in ipairs(items.GetList()) do
 		ShopEditor.InitDefaultData(eq)
 	end
 
@@ -100,8 +100,6 @@ function GM:InitPostEntity()
 
 	-- reset normal equipment tables
 	for _, role in pairs(GetRoles()) do
-		EquipmentItems[role.index] = {}
-
 		if Equipment then
 			Equipment[role.index] = {}
 		end
