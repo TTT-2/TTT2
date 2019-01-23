@@ -163,11 +163,11 @@ end
 -- Give loadout items.
 local function GiveLoadoutItems(ply)
 	local sr = ply:GetSubRole()
-	local items = GetModifiedEquipment(sr, EquipmentItems[sr])
+	local items = GetModifiedEquipment(sr, items.GetRoleItems(sr))
 
 	if items then
-		for _, item in pairs(items) do
-			if item.loadout and item.id then
+		for _, item in ipairs(items) do
+			if item.loadout then
 				ply:GiveItem(item.id)
 			end
 		end
@@ -176,11 +176,11 @@ end
 
 local function ResetLoadoutItems(ply)
 	local sr = ply:GetSubRole()
-	local items = GetModifiedEquipment(sr, EquipmentItems[sr])
+	local items = GetModifiedEquipment(sr, items.GetRoleItems(sr))
 
 	if items then
-		for _, item in pairs(items) do
-			if item.loadout and item.id then
+		for _, item in ipairs(items) do
+			if item.loadout then
 				ply:RemoveItem(item.id)
 			end
 		end
@@ -533,7 +533,7 @@ local function OrderEquipment(ply, cmd, args)
 		id = tonumber(id)
 
 		-- item whitelist check
-		local allowed = GetEquipmentItem(subrole, id)
+		local allowed = items.GetRoleItem(subrole, id)
 		local random = GetGlobalInt("ttt2_random_shops") > 0
 
 		if random and allowed then

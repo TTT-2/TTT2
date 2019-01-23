@@ -78,12 +78,16 @@ function GM:InitPostEntity()
 
 	InitDefaultEquipment()
 
-	-- initialize all items
-	InitAllItems()
+	local itms = items.GetList()
 
 	-- initialize the default data
-	for _, eq in ipairs(items.GetList()) do
+	for _, eq in ipairs(itms) do
 		ShopEditor.InitDefaultData(eq)
+	end
+
+	-- init items
+	for _, wep in ipairs(itms) do
+		CreateEquipmentItem(wep)
 	end
 
 	local sweps = weapons.GetList()
@@ -91,6 +95,16 @@ function GM:InitPostEntity()
 	-- init normal weapons equipment
 	for _, wep in ipairs(sweps) do
 		ShopEditor.InitDefaultData(wep)
+	end
+
+	-- init weapons
+	for _, wep in ipairs(sweps) do
+		CreateEquipmentWeapon(wep)
+	end
+
+	-- reset normal weapons equipment
+	for _, wep in ipairs(itms) do
+		wep.CanBuy = {}
 	end
 
 	-- reset normal weapons equipment

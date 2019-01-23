@@ -378,13 +378,7 @@ else
 						tmp2[k] = {}
 
 						for _, id in ipairs(tbl) do
-							local equip
-
-							if tonumber(id) then
-								equip = GetEquipmentItemByID(id)
-							else
-								equip = weapons.GetStored(id)
-							end
+							local equip = not items.IsItem(id) and weapons.GetStored(id) or items.GetStored(id)
 
 							tmp2[k][#tmp2[k] + 1] = equip
 						end
@@ -425,68 +419,11 @@ function GetModifiedEquipment(subrole, fallback)
 	return fallback
 end
 
-REM
-function GetEquipmentItem(subrole, id)
-	local tbl = GetShopFallbackTable(subrole)
-	if not tbl then
-		local fb = GetShopFallback(subrole)
-
-		tbl = EquipmentItems[fb]
-
-		if not tbl then return end
-	end
-
-	for _, v in pairs(tbl) do
-		if v and v.id == id then
-			return v
-		end
-	end
-end
-
-DAFUQ
-function GetEquipmentItemByID(id)
-	for _, eq in ipairs(items.GetList()) do
-		if eq.id == id then
-			return eq
-		end
-	end
-end
-
-function GetEquipmentFileName(name)
-	return string.gsub(string.lower(name), "[%W%s]", "_") -- clean string
-end
-
-KAk
-function GetEquipmentItemByName(name)
-	name = GetEquipmentFileName(name)
-
-	for _, equip in ipairs(items.GetList()) do
-		if GetEquipmentFileName(equip.name) == name then
-			return equip, name
-		end
-	end
-
-	return nil, name
-end
-
-function GetEquipmentByName(name)
-	local item, nm = GetEquipmentItemByName(name)
-	if item then
-		return item, nil, nm
-	end
-
-	return nil, GetWeaponByName(name), nm
-end
-
-REMREM
 -- Utility function to register a new Equipment ID
 function GenerateNewEquipmentID()
-	EQUIP_MAX = EQUIP_MAX * 2
-
-	return EQUIP_MAX
+	error("TTT2 doesn't support old items since they are limited to an amount of 16. Use the new items system instead.")
 end
 
-NOW
 function EquipmentTableHasValue(tbl, equip)
 	if not tbl then
 		return false
@@ -501,34 +438,17 @@ function EquipmentTableHasValue(tbl, equip)
 	return false
 end
 
-function SyncTableHasValue(tbl, equip)
-	for _, v in pairs(tbl) do
-		if (v.equip == equip.equip or v.name and equip.name and v.name == equip.name) and v.type == equip.type then
-			return true
-		end
-	end
-
-	return false
-end
-
 function InitFallbackShops()
 	for _, v in ipairs({TRAITOR, DETECTIVE}) do
 		local fallback = GetShopFallbackTable(v.index)
 		if fallback then
 			for _, eq in ipairs(fallback) do
-				local item, wep = GetEquipmentByName(eq.id)
+				local equip = GetEquipmentByName(eq.id)
+				if equip then
+					equip.CanBuy = equip.CanBuy or {}
 
-				if wep then
-					wep.CanBuy = wep.CanBuy or {}
-
-					if not table.HasValue(wep.CanBuy, v.index) then
-						table.insert(wep.CanBuy, v.index)
-					end
-				elseif item then
-					EquipmentItems[v.index] = EquipmentItems[v.index] or {}
-
-					if not EquipmentTableHasValue(EquipmentItems[v.index], eq) then
-						table.insert(EquipmentItems[v.index], eq)
+					if not table.HasValue(equip.CanBuy, v.index) then
+						table.insert(equip.CanBuy, v.index)
 					end
 				end
 			end
@@ -544,19 +464,12 @@ function InitFallbackShop(roleData, fallbackTable, avoidSet)
 	local fallback = GetShopFallbackTable(roleData.index)
 	if fallback then
 		for _, eq in ipairs(fallbackTable) do
-			local item, wep = GetEquipmentByName(eq.id)
+			local equip = GetEquipmentByName(eq.id)
+			if equip then
+				equip.CanBuy = equip.CanBuy or {}
 
-			if wep then
-				wep.CanBuy = wep.CanBuy or {}
-
-				if not table.HasValue(wep.CanBuy, roleData.index) then
-					table.insert(wep.CanBuy, roleData.index)
-				end
-			elseif item then
-				EquipmentItems[roleData.index] = EquipmentItems[roleData.index] or {}
-
-				if not EquipmentTableHasValue(EquipmentItems[roleData.index], eq) then
-					table.insert(EquipmentItems[roleData.index], eq)
+				if not table.HasValue(equip.CanBuy, roleData.index) then
+					table.insert(equip.CanBuy, roleData.index)
 				end
 			end
 		end
@@ -569,41 +482,43 @@ function AddToShopFallback(fallback, subrole, eq)
 	end
 
 	if GetShopFallbackTable(subrole) then
-		local item, wep = GetEquipmentByName(eq.id)
+		local equip = GetEquipmentByName(eq.id)
+		if equip then
+			equip.CanBuy = equip.CanBuy or {}
 
-		if wep then
-			wep.CanBuy = wep.CanBuy or {}
-
-			if not table.HasValue(wep.CanBuy, subrole) then
-				table.insert(wep.CanBuy, subrole)
-			end
-		elseif item then
-			EquipmentItems[subrole] = EquipmentItems[subrole] or {}
-
-			if not EquipmentTableHasValue(EquipmentItems[subrole], eq) then
-				table.insert(EquipmentItems[subrole], eq)
+			if not table.HasValue(equip.CanBuy, subrole) then
+				table.insert(equip.CanBuy, subrole)
 			end
 		end
 	end
 end
 
-function InitDefaultEquipment()
+local function InitDefaultEquipmentForRole(roleData)
 	-- set default equipment tables
+	local itms = items.GetList()
 	local sweps = weapons.GetList()
 
 	-- TRAITOR
 	local tbl = {}
 
-	for _, v in pairs(EquipmentItems[ROLE_TRAITOR]) do
-		tbl[#tbl + 1] = v
+	-- find buyable items to load info from
+	for _, v in ipairs(itms) do
+		if v and not v.Doublicated and v.CanBuy and table.HasValue(v.CanBuy, roleData.index) then
+			local data = v.EquipMenuData or {}
+
+			local base = GetEquipmentBase(data, v)
+			if base then
+				tbl[#tbl + 1] = base
+			end
+		end
 	end
 
 	-- find buyable weapons to load info from
 	for _, v in ipairs(sweps) do
-		if v and not v.Doublicated and v.CanBuy and table.HasValue(v.CanBuy, ROLE_TRAITOR) then
+		if v and not v.Doublicated and v.CanBuy and table.HasValue(v.CanBuy, roleData.index) then
 			local data = v.EquipMenuData or {}
 
-			local base = GetEquipmentWeaponBase(data, v)
+			local base = GetEquipmentBase(data, v)
 			if base then
 				tbl[#tbl + 1] = base
 			end
@@ -613,60 +528,16 @@ function InitDefaultEquipment()
 	-- mark custom items
 	for _, i in pairs(tbl) do
 		if i and i.id then
-			i.custom = not table.HasValue(DefaultEquipment[ROLE_TRAITOR], i.id) -- TODO
+			i.custom = not table.HasValue(DefaultEquipment[roleData.index], i.id) -- TODO
 		end
 	end
 
-	TRAITOR.fallbackTable = tbl
-
-	-- DETECTIVE
-	local tbl2 = {}
-
-	for _, v in pairs(EquipmentItems[ROLE_DETECTIVE]) do
-		tbl2[#tbl2 + 1] = v
-	end
-
-	-- find buyable weapons to load info from
-	for _, v in ipairs(sweps) do
-		if v and not v.Doublicated and v.CanBuy and table.HasValue(v.CanBuy, ROLE_DETECTIVE) then
-			local data = v.EquipMenuData or {}
-
-			local base = GetEquipmentWeaponBase(data, v)
-			if base then
-				tbl2[#tbl2 + 1] = base
-			end
-		end
-	end
-
-	-- mark custom items
-	for _, i in ipairs(tbl2) do
-		if i and i.id then
-			i.custom = not table.HasValue(DefaultEquipment[ROLE_DETECTIVE], i.id) -- TODO
-		end
-	end
-
-	DETECTIVE.fallbackTable = tbl2
+	roleData.fallbackTable = tbl
 end
 
-KIIIIILL
-function InitAllItems()
-	for _, roleData in pairs(GetRoles()) do
-		if EquipmentItems[roleData.index] then
-			for _, eq in pairs(EquipmentItems[roleData.index]) do
-				if not EquipmentTableHasValue(items.GetList(), eq) then
-					ALL_ITEMS[#ALL_ITEMS + 1] = eq
-				end
-			end
-
-			-- reset normal equipment tables
-			EquipmentItems[roleData.index] = {}
-		end
-	end
-
-	-- init weapons
-	for _, wep in ipairs(weapons.GetList()) do
-		CreateEquipmentWeapon(wep)
-	end
+function InitDefaultEquipment()
+	InitDefaultEquipmentForRole(TRAITOR)
+	InitDefaultEquipmentForRole(DETECTIVE)
 end
 
 if SERVER then
@@ -750,117 +621,50 @@ if SERVER then
 		local result = ShopEditor.GetShopEquipments(roleData)
 
 		for _, v in ipairs(result) do
-			local item, wep = GetEquipmentByName(v.name)
+			local equip = GetEquipmentByName(v.name)
+			if equip then
+				equip.CanBuy = equip.CanBuy or {}
 
-			if wep then
-				wep.CanBuy = wep.CanBuy or {}
-
-				if not table.HasValue(wep.CanBuy, roleData.index) then
-					table.insert(wep.CanBuy, roleData.index)
+				if not table.HasValue(equip.CanBuy, roleData.index) then
+					table.insert(equip.CanBuy, roleData.index)
 				end
 				--
 
 				SYNC_EQUIP[roleData.index] = SYNC_EQUIP[roleData.index] or {}
 
-				local tbl = {equip = WEPS.GetClass(wep), type = 0}
-
-				if not SyncTableHasValue(SYNC_EQUIP[roleData.index], tbl) then
-					table.insert(SYNC_EQUIP[roleData.index], tbl)
-				end
-			elseif item then
-				EquipmentItems[roleData.index] = EquipmentItems[roleData.index] or {}
-
-				if not EquipmentTableHasValue(EquipmentItems[roleData.index], item) then
-					table.insert(EquipmentItems[roleData.index], item)
-				end
-
-				SYNC_EQUIP[roleData.index] = SYNC_EQUIP[roleData.index] or {}
-
-				local tbl = {equip = item.id, type = 1}
-
-				if not SyncTableHasValue(SYNC_EQUIP[roleData.index], tbl) then
-					table.insert(SYNC_EQUIP[roleData.index], tbl)
+				if not table.HasValue(SYNC_EQUIP[roleData.index], equip.id) then
+					table.insert(SYNC_EQUIP[roleData.index], equip.id)
 				end
 			end
 		end
 	end
 
-	function AddEquipmentItemToRole(subrole, item)
-		EquipmentItems[subrole] = EquipmentItems[subrole] or {}
+	function AddEquipmentToRole(subrole, equip_table)
+		equip_table.CanBuy = equip_table.CanBuy or {}
 
-		if not EquipmentTableHasValue(EquipmentItems[subrole], item) then
-			table.insert(EquipmentItems[subrole], item)
-		end
-
-		SYNC_EQUIP[subrole] = SYNC_EQUIP[subrole] or {}
-
-		local tbl = {equip = item.id, type = 1}
-
-		if not SyncTableHasValue(SYNC_EQUIP[subrole], tbl) then
-			table.insert(SYNC_EQUIP[subrole], tbl)
-		end
-
-		for _, v in ipairs(player.GetAll()) do
-			SyncSingleEquipment(v, subrole, tbl, true)
-		end
-	end
-
-	function RemoveEquipmentItemFromRole(subrole, item)
-		EquipmentItems[subrole] = EquipmentItems[subrole] or {}
-
-		for k, eq in pairs(EquipmentItems[subrole]) do
-			if eq.id == item.id then
-				table.remove(EquipmentItems[subrole], k)
-
-				break
-			end
-		end
-
-		SYNC_EQUIP[subrole] = SYNC_EQUIP[subrole] or {}
-
-		local tbl = {equip = item.id, type = 1}
-
-		for k, v in pairs(SYNC_EQUIP[subrole]) do
-			if v.equip == tbl.equip and v.type == tbl.type then
-				table.remove(SYNC_EQUIP[subrole], k)
-
-				break
-			end
-		end
-
-		for _, v in ipairs(player.GetAll()) do
-			SyncSingleEquipment(v, subrole, tbl, false)
-		end
-	end
-
-	function AddEquipmentWeaponToRole(subrole, swep_table)
-		swep_table.CanBuy = swep_table.CanBuy or {}
-
-		if not table.HasValue(swep_table.CanBuy, subrole) then
-			table.insert(swep_table.CanBuy, subrole)
+		if not table.HasValue(equip_table.CanBuy, subrole) then
+			table.insert(equip_table.CanBuy, subrole)
 		end
 		--
 
 		SYNC_EQUIP[subrole] = SYNC_EQUIP[subrole] or {}
 
-		local tbl = {equip = WEPS.GetClass(swep_table), type = 0}
-
-		if not SyncTableHasValue(SYNC_EQUIP[subrole], tbl) then
-			table.insert(SYNC_EQUIP[subrole], tbl)
+		if not table.HasValue(SYNC_EQUIP[subrole], equip_table.id) then
+			table.insert(SYNC_EQUIP[subrole], equip_table.id)
 		end
 
 		for _, v in ipairs(player.GetAll()) do
-			SyncSingleEquipment(v, subrole, tbl, true)
+			SyncSingleEquipment(v, subrole, equip_table.id, true)
 		end
 	end
 
-	function RemoveEquipmentWeaponFromRole(subrole, swep_table)
-		if not swep_table.CanBuy then
-			swep_table.CanBuy = {}
+	function RemoveEquipmentFromRole(subrole, equip_table)
+		if not equip_table.CanBuy then
+			equip_table.CanBuy = {}
 		else
-			for k, v in ipairs(swep_table.CanBuy) do
+			for k, v in ipairs(equip_table.CanBuy) do
 				if v == subrole then
-					table.remove(swep_table.CanBuy, k)
+					table.remove(equip_table.CanBuy, k)
 
 					break
 				end
@@ -870,10 +674,8 @@ if SERVER then
 
 		SYNC_EQUIP[subrole] = SYNC_EQUIP[subrole] or {}
 
-		local tbl = {equip = WEPS.GetClass(swep_table), type = 0}
-
 		for k, v in pairs(SYNC_EQUIP[subrole]) do
-			if v.equip == tbl.equip and v.type == tbl.type then
+			if v.equip == equip_table.id then
 				table.remove(SYNC_EQUIP[subrole], k)
 
 				break
@@ -881,7 +683,7 @@ if SERVER then
 		end
 
 		for _, v in ipairs(player.GetAll()) do
-			SyncSingleEquipment(v, subrole, tbl, false)
+			SyncSingleEquipment(v, subrole, equip_table.id, false)
 		end
 	end
 
@@ -932,33 +734,23 @@ else -- CLIENT
 	end
 	net.Receive("TTT2ResetTBEq", ResetTeambuyEquipment)
 
-	function AddEquipmentToRoleEquipment(subrole, equip, item)
+	function AddEquipmentToRoleEquipment(subrole, equip)
 		-- start with all the non-weapon goodies
 		local toadd
 
-		-- find buyable weapons to load info from
-		if not item then
-			equip.CanBuy = equip.CanBuy or {}
+		-- find buyable equip to load info from
+		equip.CanBuy = equip.CanBuy or {}
 
-			if not table.HasValue(equip.CanBuy, subrole) then
-				table.insert(equip.CanBuy, subrole)
-			end
+		if not table.HasValue(equip.CanBuy, subrole) then
+			table.insert(equip.CanBuy, subrole)
+		end
 
-			if equip and not equip.Doublicated then
-				local data = equip.EquipMenuData or {}
+		if equip and not equip.Doublicated then
+			local data = equip.EquipMenuData or {}
 
-				local base = GetEquipmentWeaponBase(data, equip)
-				if base then
-					toadd = base
-				end
-			end
-		else
-			toadd = equip
-
-			EquipmentItems[subrole] = EquipmentItems[subrole] or {}
-
-			if not EquipmentTableHasValue(EquipmentItems[subrole], toadd) then
-				table.insert(EquipmentItems[subrole], toadd)
+			local base = GetEquipmentBase(data, equip)
+			if base then
+				toadd = base
 			end
 		end
 
@@ -974,24 +766,12 @@ else -- CLIENT
 		end
 	end
 
-	function RemoveEquipmentFromRoleEquipment(subrole, equip, item)
-		equip.id = equip.id or WEPS.GetClass(equip)
+	function RemoveEquipmentFromRoleEquipment(subrole, equip)
+		for k, v in ipairs(equip.CanBuy) do
+			if v == subrole then
+				table.remove(equip.CanBuy, k)
 
-		if item then
-			for k, eq in pairs(EquipmentItems[subrole]) do
-				if eq.id == equip.id then
-					table.remove(EquipmentItems[subrole], k)
-
-					break
-				end
-			end
-		else
-			for k, v in ipairs(equip.CanBuy) do
-				if v == subrole then
-					table.remove(equip.CanBuy, k)
-
-					break
-				end
+				break
 			end
 		end
 
@@ -1029,8 +809,6 @@ else -- CLIENT
 
 				if istable(tmp) then
 					for subrole, tbl in pairs(tmp) do
-						EquipmentItems[subrole] = EquipmentItems[subrole] or {}
-
 						-- init
 						Equipment = Equipment or {}
 
@@ -1039,25 +817,14 @@ else -- CLIENT
 						end
 
 						for _, equip in pairs(tbl) do
-							if equip.type == 1 then
-								local item = GetEquipmentItemByID(equip.equip)
-								if item then
-									if add then
-										AddEquipmentToRoleEquipment(subrole, item, true)
-									else
-										RemoveEquipmentFromRoleEquipment(subrole, item, true)
-									end
-								end
-							else
-								local swep_table = weapons.GetStored(equip.equip)
-								if swep_table then
-									swep_table.CanBuy = swep_table.CanBuy or {}
+							local equip_table = not items.IsItem(equip.equip) and weapons.GetStored(equip.equip) or items.GetStored(equip.equip)
+							if equip_table then
+								equip_table.CanBuy = equip_table.CanBuy or {}
 
-									if add then
-										AddEquipmentToRoleEquipment(subrole, swep_table, false)
-									else
-										RemoveEquipmentFromRoleEquipment(subrole, swep_table, false)
-									end
+								if add then
+									AddEquipmentToRoleEquipment(subrole, equip_table)
+								else
+									RemoveEquipmentFromRoleEquipment(subrole, equip_table)
 								end
 							end
 						end

@@ -618,10 +618,14 @@ ttt_include("util")
 ttt_include("lang_shd")
 ttt_include("equip_items_shd")
 
-function GetWeaponByName(name)
+function GetEquipmentFileName(name)
+	return string.gsub(string.lower(name), "[%W%s]", "_") -- clean string
+end
+
+function GetEquipmentByName(name)
 	name = GetEquipmentFileName(name)
 
-	return weapons.GetStored(name), name
+	return not items.IsItem(name) and weapons.GetStored(name) or items.GetStored(name), name
 end
 
 function DetectiveMode()

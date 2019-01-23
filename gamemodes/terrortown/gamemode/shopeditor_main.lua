@@ -57,12 +57,9 @@ end
 function ShopEditor.AddToShopEditor(ply, roleData, equip)
 	sql.Query("INSERT INTO " .. ShopEditor.ShopTablePre .. roleData.name .. " VALUES ('" .. equip .. "')")
 
-	local item, wep = GetEquipmentByName(equip)
-	if wep then
-		AddEquipmentWeaponToRole(roleData.index, wep)
-	elseif item then
-		AddEquipmentItemToRole(roleData.index, item)
-	end
+	local eq = GetEquipmentByName(equip)
+
+	AddEquipmentToRole(roleData.index, eq)
 
 	-- last but not least, notify each player
 	for _, v in ipairs(player.GetAll()) do
@@ -73,12 +70,9 @@ end
 function ShopEditor.RemoveFromShopEditor(ply, roleData, equip)
 	sql.Query("DELETE FROM " .. ShopEditor.ShopTablePre .. roleData.name .. " WHERE name='" .. equip .. "'")
 
-	local item, wep = GetEquipmentByName(equip)
-	if wep then
-		RemoveEquipmentWeaponFromRole(roleData.index, wep)
-	elseif item then
-		RemoveEquipmentItemFromRole(roleData.index, item)
-	end
+	local eq = GetEquipmentByName(equip)
+
+	RemoveEquipmentFromRole(roleData.index, eq)
 
 	-- last but not least, notify each player
 	for _, v in ipairs(player.GetAll()) do
@@ -131,15 +125,26 @@ net.Receive("shopFallback", shopFallback)
 function ShopEditor.OnChangeWSCVar(subrole, fallback, ply_or_rf)
 	local rd = GetRoleByIndex(subrole)
 
-	-- reset equipment
-	EquipmentItems[subrole] = {}
 	SYNC_EQUIP[subrole] = {}
+
+	-- reset equipment
+	for _, v in ipairs(items.GetList()) do
+		if v.CanBuy then
+			for k, vi in ipairs(v.CanBuy) do
+				if vi == subrole then
+					table.remove(v.CanBuy, k)
+
+					break
+				end
+			end
+		end
+	end
 
 	for _, v in ipairs(weapons.GetList()) do
 		if v.CanBuy then
 			for k, vi in ipairs(v.CanBuy) do
 				if vi == subrole then
-					table.remove(v.CanBuy, k) -- TODO does it work?
+					table.remove(v.CanBuy, k)
 
 					break
 				end
@@ -184,16 +189,11 @@ function ShopEditor.OnChangeWSCVar(subrole, fallback, ply_or_rf)
 
 				-- set everything
 				for _, eq in ipairs(rd.fallbackTable) do
-					local is_item = tonumber(eq.id)
-					if is_item then
-						table.insert(EquipmentItems[subrole], eq)
-					else
-						local wepTbl = weapons.GetStored(eq.id)
-						if wepTbl then
-							wepTbl.CanBuy = wepTbl.CanBuy or {}
+					local eqTbl = not items.IsItem(eq.id) and weapons.GetStored(eq.id) or items.GetStored(eq.id)
+					if eqTbl then
+						eqTbl.CanBuy = eqTbl.CanBuy or {}
 
-							table.insert(wepTbl.CanBuy, subrole)
-						end
+						table.insert(eqTbl.CanBuy, subrole)
 					end
 				end
 			end
