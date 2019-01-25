@@ -39,6 +39,6 @@ function ITEM:OnReset()
 
 end
 
-function ITEMS:IsEquipment()
+function ITEM:IsEquipment()
 	return WEPS.IsEquipment(self)
 end
