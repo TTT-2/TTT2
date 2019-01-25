@@ -11,11 +11,11 @@ function GM:TTT2Initialize()
 	for subrole, tbl in pairs(EquipmentItems or {}) do
 		for _, v in ipairs(tbl) do
 			if tonumber(v.id) then
-				local name = (v.name or WEPS.GetClass(v))
+				local name = (v.ClassName or v.name or WEPS.GetClass(v))
 				if name then
-					local ITEMDATA = tavle.Copy(v)
+					local ITEMDATA = table.Copy(v)
 					ITEMDATA.oldId = v.id
-					ITEMDATA.id = v.ClassName or v.name
+					ITEMDATA.id = name
 					ITEMDATA.EquipMenuData = v.EquipMenuData or {
 						type = v.type,
 						name = v.name,
