@@ -2,8 +2,8 @@
 
 local surface = surface
 local math = math
-local GetTranslation = LANG.GetTranslation
-local GetPTranslation = LANG.GetParamTranslation
+local GetTranslation
+local GetPTranslation
 local FormatTime = util.SimpleTime
 local table = table
 local net = net
@@ -121,6 +121,8 @@ end
 
 function RADAR:Draw(client)
 	if not client then return end
+
+	GetPTranslation = GetPTranslation or LANG.GetParamTranslation
 
 	surface.SetFont("HudSelectionText")
 
@@ -276,6 +278,8 @@ end
 net.Receive("TTT_Radar", ReceiveRadarScan)
 
 function RADAR.CreateMenu(parent, frame)
+	GetTranslation = GetTranslation or LANG.GetTranslation
+	GetPTranslation = GetPTranslation or LANG.GetParamTranslation
 	--local w, h = parent:GetSize()
 
 	local dform = vgui.Create("DForm", parent)

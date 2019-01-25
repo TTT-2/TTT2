@@ -1,5 +1,9 @@
 module("items", package.seeall)
 
+if SERVER then
+	AddCSLuaFile()
+end
+
 local ItemList = {}
 
 --[[---------------------------------------------------------

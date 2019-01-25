@@ -15,9 +15,11 @@ ITEM.CanBuy = {ROLE_TRAITOR}
 if CLIENT then
 	DISGUISE = {}
 
-	local trans = LANG.GetTranslation
+	local trans
 
 	function DISGUISE.CreateMenu(parent)
+		trans = trans or LANG.GetTranslation
+
 		local dform = vgui.Create("DForm", parent)
 		dform:SetName(trans("disg_menutitle"))
 		dform:StretchToParent(0, 0, 0, 0)
@@ -50,6 +52,8 @@ if CLIENT then
 
 	function DISGUISE.Draw(client)
 		if not client or not client:IsActive() or not client:GetNWBool("disguised", false) then return end
+
+		trans = trans or LANG.GetTranslation
 
 		surface.SetFont("TabLarge")
 		surface.SetTextColor(255, 0, 0, 230)
