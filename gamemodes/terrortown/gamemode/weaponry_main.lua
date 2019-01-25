@@ -497,12 +497,11 @@ concommand.Add("ttt_dropammo", DropActiveAmmo)
 -- Give a weapon to a player. If the initial attempt fails due to heisenbugs in
 -- the map, keep trying until the player has moved to a better spot where it
 -- does work.
-local function GiveEquipmentWeapon(sid64, cls)
+local function GiveEquipmentWeapon(ply, cls)
 	-- Referring to players by SteamID64 because a player may disconnect while his
 	-- unique timer still runs, in which case we want to be able to stop it. For
 	-- that we need its name, and hence his SteamID64.
-	local ply = player.GetBySteamID64(sid64)
-	local tmr = "give_equipment" .. sid64
+	local tmr = "give_equipment" .. ply:UniqueID()
 
 	if not IsValid(ply) or not ply:IsActive() then
 		timer.Remove(tmr)
@@ -517,7 +516,9 @@ local function GiveEquipmentWeapon(sid64, cls)
 	if not IsValid(w) or not ply:HasWeapon(cls) then
 		if not timer.Exists(tmr) then
 			timer.Create(tmr, 1, 0, function()
-				GiveEquipmentWeapon(sid64, cls) -- TODO why not using ply obj
+				if IsValid(ply) then
+					GiveEquipmentWeapon(ply, cls)
+				end
 			end)
 		end
 
@@ -534,7 +535,7 @@ local function GiveEquipmentWeapon(sid64, cls)
 end
 
 local function HasPendingOrder(ply)
-	return timer.Exists("give_equipment" .. tostring(ply:SteamID64()))
+	return timer.Exists("give_equipment" .. ply:UniqueID())
 end
 
 function GM:TTTCanOrderEquipment(ply, id)
@@ -598,8 +599,14 @@ local function OrderEquipment(ply, cmd, args)
 
 		-- no longer restricted to only WEAPON_EQUIP weapons, just anything that
 		-- is whitelisted and carryable
-		if not is_item and ply:CanCarryWeapon(equip_table) then
-			GiveEquipmentWeapon(ply:SteamID64(), id)
+		if not is_item then
+			if ply:CanCarryWeapon(equip_table) then
+				GiveEquipmentWeapon(ply, id)
+
+				received = true
+			end
+		else
+			GiveEquipmentItem(ply, id)
 
 			received = true
 		end
@@ -647,7 +654,7 @@ local function OrderEquipment(ply, cmd, args)
 
 			local item = items.GetStored(id)
 			if item then
-				item:Bought()
+				item:Bought(ply)
 			end
 
 			net.Start("TTT_BoughtItem")

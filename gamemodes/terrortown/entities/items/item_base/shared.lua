@@ -19,7 +19,7 @@ ITEM.Category = "TTT"
 	Name: Reset
 	Desc: Called just before entity is deleted
 -----------------------------------------------------------]]
-function ITEM:Reset()
+function ITEM:Reset(ply)
 
 end
 
@@ -27,7 +27,15 @@ end
 	Name: Equip
 	Desc: A player or NPC has picked the item up
 -----------------------------------------------------------]]
-function ITEM:Equip(newOwner)
+function ITEM:Equip(ply)
+
+end
+
+--[[---------------------------------------------------------
+	Name: Bought
+	Desc: A player or NPC has bought the item
+-----------------------------------------------------------]]
+function ITEM:Bought(ply)
 
 end
 

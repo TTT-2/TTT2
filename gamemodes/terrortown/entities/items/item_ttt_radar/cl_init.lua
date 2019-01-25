@@ -74,7 +74,7 @@ function RADAR.CacheEnts()
 	end
 end
 
-function ITEM:Equip()
+function ITEM:Equip(ply)
 	RunConsoleCommand("ttt_radar_scan")
 end
 

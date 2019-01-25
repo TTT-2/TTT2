@@ -115,7 +115,7 @@ function plymeta:AddEquipmentItem(id)
 
 		local item = items.GetStored(id)
 		if item then
-			item:Equip()
+			item:Equip(self)
 		end
 
 		self:SendEquipment()
@@ -658,7 +658,7 @@ function plymeta:GiveItem(id)
 
 		local item = items.GetStored(id)
 		if item then
-			item:Bought()
+			item:Bought(ply)
 		end
 
 		net.Start("TTT_BoughtItem")

@@ -815,7 +815,7 @@ local function ReceiveEquipment()
 
 			local item = items.GetStored(v)
 			if item and not table.HasValue(tmp, v) then
-				item:Equip()
+				item:Equip(ply)
 			end
 		end
 	end
