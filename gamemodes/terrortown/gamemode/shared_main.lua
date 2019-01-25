@@ -46,8 +46,8 @@ SPECIAL_EQUIPMENT = {
 	"weapon_ttt_stungun",
 	"weapon_ttt_cse",
 	"weapon_ttt_teleport",
-	EQUIP_ARMOR,
-	EQUIP_RADAR
+	"item_ttt_armor",
+	"item_ttt_radar"
 }
 
 TRAITOR_EQUIPMENT = {
@@ -63,9 +63,9 @@ TRAITOR_EQUIPMENT = {
 	"weapon_ttt_sipistol",
 	"weapon_ttt_teleport",
 	"weapon_ttt_decoy",
-	EQUIP_ARMOR,
-	EQUIP_RADAR,
-	EQUIP_DISGUISE
+	"item_ttt_armor",
+	"item_ttt_radar",
+	"item_ttt_disguiser"
 }
 
 -- role teams to have an identifier

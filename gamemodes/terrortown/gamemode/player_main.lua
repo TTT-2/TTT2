@@ -871,10 +871,6 @@ function GM:OnDamagedByExplosion(ply, dmginfo)
 end
 
 function GM:ScalePlayerDamage(ply, hitgroup, dmginfo)
-	if dmginfo:IsBulletDamage() and ply:HasEquipmentItem(EQUIP_ARMOR) then
-		dmginfo:ScaleDamage(0.7)
-	end
-
 	if ply:IsPlayer() and dmginfo:GetAttacker():IsPlayer() and GetRoundState() == 2 then
 		dmginfo:ScaleDamage(0)
 	end

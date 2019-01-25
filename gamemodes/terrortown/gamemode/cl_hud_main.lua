@@ -407,10 +407,6 @@ function GM:HUDPaint()
 		VOICE.Draw(client)
 	end
 
-	if hook.Call("HUDShouldDraw", GAMEMODE, "TTTDisguise") then
-		DISGUISE.Draw(client)
-	end
-
 	if hook.Call("HUDShouldDraw", GAMEMODE, "TTTPickupHistory") then
 		hook.Call("HUDDrawPickupHistory", GAMEMODE)
 	end

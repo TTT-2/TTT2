@@ -693,22 +693,6 @@ function GM:TTTToggleDisguiser(ply, state)
 end
 
 -- TODO why is this in here?
-local function SetDisguise(ply, cmd, args)
-	if not IsValid(ply) or not ply:IsActive() and ply:HasTeam(TEAM_TRAITOR) then return end
-
-	if ply:HasEquipmentItem(EQUIP_DISGUISE) then
-		local state = #args == 1 and tobool(args[1])
-
-		if hook.Run("TTTToggleDisguiser", ply, state) then return end
-
-		ply:SetNWBool("disguised", state)
-
-		LANG.Msg(ply, state and "disg_turned_on" or "disg_turned_off")
-	end
-end
-concommand.Add("ttt_set_disguise", SetDisguise)
-
--- TODO why is this in here?
 local function CheatCredits(ply)
 	if IsValid(ply) then
 		ply:AddCredits(10)

@@ -61,4 +61,35 @@ if CLIENT then
 		surface.DrawText(text)
 	end
 	concommand.Add("ttt_toggle_disguise", WEPS.DisguiseToggle)
+
+	hook.Add("HUDPaint", "TTTItemDisguiser", function()
+		local client = LocalPlayer()
+
+		if client:Alive() and client:Team() ~= TEAM_SPEC and hook.Call("HUDShouldDraw", GAMEMODE, "TTTDisguise") then
+			DISGUISE.Draw(client)
+		end
+	end)
+
+	hook.Add("TTTEquipmentTabs", "TTTItemDisguiser", function(dsheet)
+		if LocalPlayer():HasEquipmentItem(EQUIP_DISGUISE) then
+			local ddisguise = DISGUISE.CreateMenu(dsheet)
+
+			dsheet:AddSheet(GetTranslation("disg_name"), ddisguise, "icon16/user.png", false, false, GetTranslation("equip_tooltip_disguise"))
+		end
+	end)
+else
+	local function SetDisguise(ply, cmd, args)
+		if not IsValid(ply) or not ply:IsActive() and ply:HasTeam(TEAM_TRAITOR) then return end
+
+		if ply:HasEquipmentItem(EQUIP_DISGUISE) then
+			local state = #args == 1 and tobool(args[1])
+
+			if hook.Run("TTTToggleDisguiser", ply, state) then return end
+
+			ply:SetNWBool("disguised", state)
+
+			LANG.Msg(ply, state and "disg_turned_on" or "disg_turned_off")
+		end
+	end
+	concommand.Add("ttt_set_disguise", SetDisguise)
 end

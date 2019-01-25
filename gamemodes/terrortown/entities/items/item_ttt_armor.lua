@@ -11,3 +11,11 @@ ITEM.EquipMenuData = {
 	desc = "item_armor_desc"
 }
 ITEM.CanBuy = {ROLE_TRAITOR, ROLE_DETECTIVE}
+
+if SERVER then
+	hook.Add("ScalePlayerDamage", "TTTItemArmor", function(ply, hitgroup, dmginfo)
+		if dmginfo:IsBulletDamage() and ply:HasEquipmentItem(EQUIP_ARMOR) then
+			dmginfo:ScaleDamage(0.7)
+		end
+	end)
+end

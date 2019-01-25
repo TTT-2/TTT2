@@ -659,12 +659,6 @@ function TraitorMenuPopup()
 		dsheet:AddSheet(GetTranslation("radar_name"), dradar, "icon16/magnifier.png", false, false, GetTranslation("equip_tooltip_radar"))
 	end
 
-	if ply:HasEquipmentItem(EQUIP_DISGUISE) then
-		local ddisguise = DISGUISE.CreateMenu(dsheet)
-
-		dsheet:AddSheet(GetTranslation("disg_name"), ddisguise, "icon16/user.png", false, false, GetTranslation("equip_tooltip_disguise"))
-	end
-
 	-- Weapon/item control
 	if IsValid(ply.radio) or ply:HasWeapon("weapon_ttt_radio") then
 		local dradio = TRADIO.CreateMenu(dsheet)
