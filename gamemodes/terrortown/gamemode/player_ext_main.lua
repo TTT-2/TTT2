@@ -113,6 +113,11 @@ function plymeta:AddEquipmentItem(id)
 		self.equipment_items = self.equipment_items or {}
 		self.equipment_items[#self.equipment_items + 1] = id
 
+		local item = items.GetStored(id)
+		if item then
+			item:Equip()
+		end
+
 		self:SendEquipment()
 	end
 end
@@ -120,7 +125,19 @@ end
 function plymeta:RemoveEquipmentItem(id)
 	if self:HasEquipmentItem(id) then
 		self.equipment_items = self.equipment_items or {}
-		self.equipment_items[#self.equipment_items + 1] = id
+
+		local item = items.GetStored(id)
+		if item then
+			item:Reset()
+		end
+
+		for k, v in ipairs(self.equipment_items) do
+			if v == id then
+				table.remove(self.equipment_items, k)
+
+				break
+			end
+		end
 
 		self:SendEquipment()
 	end
@@ -141,6 +158,13 @@ function plymeta:SendEquipment()
 end
 
 function plymeta:ResetEquipment()
+	for _, id in ipairs(self.equipment_items) do
+		local item = items.GetStored(id)
+		if item then
+			item:Reset()
+		end
+	end
+
 	self.equipment_items = {}
 
 	self:SendEquipment()
@@ -633,6 +657,11 @@ function plymeta:GiveItem(id)
 
 	timer.Simple(0.5, function()
 		if not IsValid(ply) then return end
+
+		local item = items.GetStored(id)
+		if item then
+			item:Bought()
+		end
 
 		net.Start("TTT_BoughtItem")
 		net.WriteString(id)

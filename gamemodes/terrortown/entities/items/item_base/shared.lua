@@ -16,26 +16,18 @@ ITEM.CanBuy = nil
 ITEM.Category = "TTT"
 
 --[[---------------------------------------------------------
-	Name: ITEM:Initialize()
-	Desc: Called when the item is first loaded
------------------------------------------------------------]]
-function ITEM:Initialize()
-
-end
-
---[[---------------------------------------------------------
-	Name: ITEM:Think()
-	Desc: Called every frame
------------------------------------------------------------]]
-function ITEM:Think()
-
-end
-
---[[---------------------------------------------------------
-	Name: OnRemove
+	Name: Reset
 	Desc: Called just before entity is deleted
 -----------------------------------------------------------]]
-function ITEM:OnReset()
+function ITEM:Reset()
+
+end
+
+--[[---------------------------------------------------------
+	Name: Equip
+	Desc: A player or NPC has picked the item up
+-----------------------------------------------------------]]
+function ITEM:Equip(newOwner)
 
 end
 

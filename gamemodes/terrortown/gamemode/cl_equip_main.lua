@@ -784,12 +784,45 @@ local function ReceiveEquipment()
 	if not IsValid(ply) then return end
 
 	local eqAmount = net.ReadUInt(16)
-
-	ply.equipment_items = {}
+	local tmp = {}
+	local toRem = {}
 
 	for i = 1, eqAmount do
-		ply.equipment_items[#ply.equipment_items + 1] = net.ReadString()
+		tmp[#tmp + 1] = net.ReadString()
 	end
+
+	ply.equipment_items = ply.equipment_items or {}
+
+	-- reset all old items
+	for k, v in ipairs(ply.equipment_items) do
+		if not table.HasValue(tmp, v) then
+			local item = items.GetStored(v)
+			if item then
+				item:Reset()
+			end
+
+			table.insert(toRem, 1, k)
+		end
+	end
+
+	-- remove finally
+	for _, key in ipairs(toRem) do
+		table.remove(ply.equipment_items, key)
+	end
+
+	-- now equip the items the player doesn't own
+	for _, v in ipairs(tmp) do
+		if not table.HasValue(ply.equipment_items, v) then
+			ply.equipment_items[#ply.equipment_items + 1] = v
+
+			local item = items.GetStored(v)
+			if item and not table.HasValue(tmp, v) then
+				item:Equip()
+			end
+		end
+	end
+
+	ply.equipment_items = newTbl
 end
 net.Receive("TTT_Equipment", ReceiveEquipment)
 
@@ -847,7 +880,7 @@ local function ReceiveBoughtItem()
 
 	local item = items.GetStored(id)
 	if item then
-		item:Equip()
+		item:Bought()
 	end
 
 	-- I can imagine custom equipment wanting this, so making a hook

@@ -645,6 +645,11 @@ local function OrderEquipment(ply, cmd, args)
 		timer.Simple(0.5, function()
 			if not IsValid(ply) then return end
 
+			local item = items.GetStored(id)
+			if item then
+				item:Bought()
+			end
+
 			net.Start("TTT_BoughtItem")
 			net.WriteString(id)
 			net.Send(ply)
