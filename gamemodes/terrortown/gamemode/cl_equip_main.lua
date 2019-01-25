@@ -653,7 +653,7 @@ function TraitorMenuPopup()
 	dsheet:AddSheet(GetTranslation("equip_tabtitle"), dequip, "icon16/bomb.png", false, false, GetTranslation("equip_tooltip_main"))
 
 	-- Item control
-	if ply:HasEquipmentItem(EQUIP_RADAR) then
+	if ply:HasEquipmentItem("item_ttt_radar") then
 		local dradar = RADAR.CreateMenu(dsheet, dframe)
 
 		dsheet:AddSheet(GetTranslation("radar_name"), dradar, "icon16/magnifier.png", false, false, GetTranslation("equip_tooltip_radar"))
@@ -843,11 +843,15 @@ net.Receive("TTT_Bought", ReceiveBought)
 
 -- Player received the item he has just bought, so run clientside init
 local function ReceiveBoughtItem()
-	local is_item = net.ReadBit() == 1
-	local id = is_item and net.ReadUInt(EQUIPMENT_BITS) or net.ReadString()
+	local id = net.ReadString()
+
+	local item = items.GetStored(id)
+	if item then
+		item:Equip()
+	end
 
 	-- I can imagine custom equipment wanting this, so making a hook
-	hook.Run("TTTBoughtItem", is_item, id)
+	hook.Run("TTTBoughtItem", id)
 end
 net.Receive("TTT_BoughtItem", ReceiveBoughtItem)
 

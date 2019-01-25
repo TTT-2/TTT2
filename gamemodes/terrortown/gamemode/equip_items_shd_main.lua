@@ -37,7 +37,6 @@ function GetEquipmentBase(data, eq)
 		type = "Type not specified",
 		model = "models/weapons/w_bugbait.mdl",
 		desc = "No description specified.",
-		is_item = false,
 		inited = true
 	}
 

@@ -619,10 +619,6 @@ end
 local pendingItems = {}
 
 function plymeta:GiveItem(id)
-	id = tonumber(id)
-
-	if not id then return end
-
 	if GetRoundState() == ROUND_PREP then
 		pendingItems[self] = pendingItems[self] or {}
 		pendingItems[self][#pendingItems[self] + 1] = id
@@ -639,12 +635,11 @@ function plymeta:GiveItem(id)
 		if not IsValid(ply) then return end
 
 		net.Start("TTT_BoughtItem")
-		net.WriteBit(true)
-		net.WriteUInt(id, EQUIPMENT_BITS)
+		net.WriteString(id)
 		net.Send(ply)
 	end)
 
-	hook.Run("TTTOrderedEquipment", self, id, id) -- hook.Run("TTTOrderedEquipment", self, id, true) -- i know, looks stupid but thats the way TTT does
+	hook.Run("TTTOrderedEquipment", self, id)
 end
 
 function plymeta:RemoveItem(id)

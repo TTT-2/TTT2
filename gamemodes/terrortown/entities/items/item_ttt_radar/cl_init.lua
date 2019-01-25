@@ -48,7 +48,7 @@ function RADAR:Timeout()
 
 	local client = LocalPlayer()
 
-	if self.repeating and client and client:HasEquipmentItem(EQUIP_RADAR) then
+	if self.repeating and client and client:HasEquipmentItem("item_ttt_radar") then
 		RunConsoleCommand("ttt_radar_scan")
 	end
 end
@@ -74,12 +74,9 @@ function RADAR.CacheEnts()
 	end
 end
 
-function RADAR.Bought(is_item, id)
-	if is_item and id == EQUIP_RADAR then
-		RunConsoleCommand("ttt_radar_scan")
-	end
+function ITEM:Equip()
+	RunConsoleCommand("ttt_radar_scan")
 end
-hook.Add("TTTBoughtItem", "RadarBoughtItem", RADAR.Bought)
 
 local function DrawTarget(tgt, size, offset, no_shrink)
 	local scrpos = tgt.pos:ToScreen() -- sweet
@@ -287,7 +284,7 @@ function RADAR.CreateMenu(parent, frame)
 	dform:StretchToParent(0, 0, 0, 0)
 	dform:SetAutoSize(false)
 
-	local owned = LocalPlayer():HasEquipmentItem(EQUIP_RADAR)
+	local owned = LocalPlayer():HasEquipmentItem("item_ttt_radar")
 	if not owned then
 		dform:Help(GetTranslation("radar_not_owned"))
 

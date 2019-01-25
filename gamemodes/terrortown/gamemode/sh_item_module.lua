@@ -1,3 +1,6 @@
+-- include modules
+require("items")
+
 ITEM = {}
 
 -- include base item files
@@ -7,8 +10,9 @@ else
 	include("terrortown/entities/items/item_base/cl_init.lua")
 end
 
--- include modules
-require("items")
+items.Register(ITEM, "item_base")
+
+ITEM = {}
 
 -- load items
 local itemsPre = "terrortown/entities/items/"
@@ -49,8 +53,8 @@ for _, folder in ipairs(itemsFolders) do
 			end
 		end
 
-		ITEM = {}
-
 		items.Register(ITEM, folder)
+
+		ITEM = {}
 	end
 end

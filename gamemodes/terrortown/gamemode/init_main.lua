@@ -1,5 +1,9 @@
 ---- Trouble in Terrorist Town 2
 ttt_include("shared")
+
+AddCSLuaFile("sh_item_module.lua")
+include("sh_item_module.lua")
+
 ttt_include("sh_init")
 ttt_include("sh_shopeditor")
 

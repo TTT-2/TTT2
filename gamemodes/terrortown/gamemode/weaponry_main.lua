@@ -537,7 +537,7 @@ local function HasPendingOrder(ply)
 	return timer.Exists("give_equipment" .. tostring(ply:SteamID64()))
 end
 
-function GM:TTTCanOrderEquipment(ply, id, is_item)
+function GM:TTTCanOrderEquipment(ply, id)
 	--- return true to allow buying of an equipment item, false to disallow
 	return true
 end
@@ -557,17 +557,18 @@ local function OrderEquipment(ply, cmd, args)
 
 	-- it's an item if the arg is an id instead of an ent name
 	local id = args[1]
-	local is_item = tonumber(id)
 
-	if not hook.Run("TTTCanOrderEquipment", ply, id, is_item) then return end
+	if not hook.Run("TTTCanOrderEquipment", ply, id) then return end
+
+	local is_item = items.IsItem(id)
 
 	-- we use weapons.GetStored to save time on an unnecessary copy, we will not
 	-- be modifying it
-	local swep_table = not is_item and weapons.GetStored(id)
+	local equip_table = not is_item and weapons.GetStored(id) or items.GetStored(id)
 
 	-- some weapons can only be bought once per player per round, this used to be
 	-- defined in a table here, but is now in the SWEP's table
-	if swep_table and swep_table.LimitedStock and ply:HasBought(id) then
+	if equip_table and equip_table.LimitedStock and ply:HasBought(id) then
 		LANG.Msg(ply, "buy_no_stock")
 
 		return
@@ -576,42 +577,10 @@ local function OrderEquipment(ply, cmd, args)
 	local received = false
 	local credits
 
-	if is_item then
-		id = tonumber(id)
-
-		-- item whitelist check
-		local allowed = items.GetRoleItem(subrole, id)
-		local random = GetGlobalInt("ttt2_random_shops") > 0
-
-		if random and allowed then
-			for _, v in ipairs(RANDOMSHOP[GetShopFallback(subrole)] or {}) do
-				if v.id == allowed.id then
-					random = false
-				end
-			end
-		end
-
-		if not allowed or random or allowed.notBuyable then
-			print(ply, "tried to buy item not buyable for his class:", id, subrole)
-
-			return
-		end
-
-		-- the item is just buyable if there is a special amount of players
-		if not EquipmentIsBuyable(allowed, ply:GetTeam()) then return end
-
-		-- ownership check and finalise
-		if id and not ply:HasEquipmentItem(id) then
-			ply:GiveEquipmentItem(id)
-
-			received = true
-		end
-
-		credits = allowed.credits
-	elseif swep_table then
+	if equip_table then
 		-- weapon whitelist check
-		if not table.HasValue(swep_table.CanBuy, subrole) or swep_table.notBuyable then
-			print(ply, "tried to buy weapon his subrole is not permitted to buy")
+		if not table.HasValue(equip_table.CanBuy, subrole) or equip_table.notBuyable then
+			print(ply, "tried to buy equip his subrole is not permitted to buy")
 
 			return
 		end
@@ -625,17 +594,21 @@ local function OrderEquipment(ply, cmd, args)
 		end
 
 		-- the item is just buyable if there is a special amount of players
-		if not EquipmentIsBuyable(swep_table, ply:GetTeam()) then return end
+		if not EquipmentIsBuyable(equip_table, ply:GetTeam()) then return end
 
 		-- no longer restricted to only WEAPON_EQUIP weapons, just anything that
 		-- is whitelisted and carryable
-		if ply:CanCarryWeapon(swep_table) then
+		if not is_item and ply:CanCarryWeapon(equip_table) then
 			GiveEquipmentWeapon(ply:SteamID64(), id)
 
 			received = true
 		end
 
-		credits = swep_table.credits
+		credits = equip_table.credits
+	else
+		print(ply, "tried to buy equip that doesn't exists", id)
+
+		return
 	end
 
 	if credits > ply:GetCredits() then
@@ -673,18 +646,11 @@ local function OrderEquipment(ply, cmd, args)
 			if not IsValid(ply) then return end
 
 			net.Start("TTT_BoughtItem")
-			net.WriteBit(is_item)
-
-			if is_item then
-				net.WriteUInt(id, EQUIPMENT_BITS)
-			else
-				net.WriteString(id)
-			end
-
+			net.WriteString(id)
 			net.Send(ply)
 		end)
 
-		hook.Call("TTTOrderedEquipment", GAMEMODE, ply, id, is_item)
+		hook.Call("TTTOrderedEquipment", GAMEMODE, ply, id)
 	end
 end
 concommand.Add("ttt_order_equipment", OrderEquipment)

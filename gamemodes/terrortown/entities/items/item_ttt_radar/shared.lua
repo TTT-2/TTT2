@@ -2,8 +2,6 @@ if SERVER then
 	AddCSLuaFile()
 end
 
-ITEM.Base = "item_base"
-
 ITEM.Icon = "vgui/ttt/icon_radar"
 ITEM.EquipMenuData = {
 	type = "item_active",

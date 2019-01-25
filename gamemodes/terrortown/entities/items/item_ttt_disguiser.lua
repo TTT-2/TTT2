@@ -2,8 +2,6 @@ if SERVER then
 	AddCSLuaFile()
 end
 
-ITEM.Base = "item_base"
-
 ITEM.Icon = "vgui/ttt/icon_disguise"
 ITEM.EquipMenuData = {
 	type = "item_active",
@@ -25,7 +23,7 @@ if CLIENT then
 		dform:StretchToParent(0, 0, 0, 0)
 		dform:SetAutoSize(false)
 
-		local owned = LocalPlayer():HasEquipmentItem(EQUIP_DISGUISE)
+		local owned = LocalPlayer():HasEquipmentItem("item_ttt_disguiser")
 
 		if not owned then
 			dform:Help(trans("disg_not_owned"))
@@ -74,7 +72,7 @@ if CLIENT then
 	end)
 
 	hook.Add("TTTEquipmentTabs", "TTTItemDisguiser", function(dsheet)
-		if LocalPlayer():HasEquipmentItem(EQUIP_DISGUISE) then
+		if LocalPlayer():HasEquipmentItem("item_ttt_disguiser") then
 			local ddisguise = DISGUISE.CreateMenu(dsheet)
 
 			dsheet:AddSheet(GetTranslation("disg_name"), ddisguise, "icon16/user.png", false, false, GetTranslation("equip_tooltip_disguise"))
@@ -84,7 +82,7 @@ else
 	local function SetDisguise(ply, cmd, args)
 		if not IsValid(ply) or not ply:IsActive() and ply:HasTeam(TEAM_TRAITOR) then return end
 
-		if ply:HasEquipmentItem(EQUIP_DISGUISE) then
+		if ply:HasEquipmentItem("item_ttt_disguiser") then
 			local state = #args == 1 and tobool(args[1])
 
 			if hook.Run("TTTToggleDisguiser", ply, state) then return end
