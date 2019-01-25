@@ -64,7 +64,6 @@ if CLIENT then
 		surface.SetTextPos(36, ScrH() - 160 - h)
 		surface.DrawText(text)
 	end
-	concommand.Add("ttt_toggle_disguise", WEPS.DisguiseToggle)
 
 	hook.Add("HUDPaint", "TTTItemDisguiser", function()
 		local client = LocalPlayer()

@@ -31,3 +31,4 @@ function WEPS.DisguiseToggle(ply)
 		end
 	end
 end
+concommand.Add("ttt_toggle_disguise", WEPS.DisguiseToggle)
