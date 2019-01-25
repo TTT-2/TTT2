@@ -14,7 +14,7 @@ local ipairs = ipairs
 local IsValid = IsValid
 
 function ShopEditor.ItemIsWeapon(item)
-	return not tonumber(item.id)
+	return not items.IsItem(item.id)
 end
 
 function ShopEditor.GetEquipmentForRoleAll()
@@ -212,17 +212,7 @@ function ShopEditor.EditItem(item)
 			end
 		end
 
-		local name
-
-		if tonumber(wTable.id) then
-			name = wTable.name
-		else
-			name = wTable.id
-		end
-
-		if name then
-			ShopEditor.WriteItemData("TTT2SESaveItem", name, wTable)
-		end
+		ShopEditor.WriteItemData("TTT2SESaveItem", wTable.id, wTable)
 	end
 
 	frame:MakePopup()

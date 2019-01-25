@@ -55,7 +55,7 @@ local function RolenameToRole(val)
 end
 
 local function ItemIsWeapon(item)
-	return not tonumber(item.id)
+	return not items.IsItem(item.id)
 end
 
 local function CanCarryWeapon(item)
@@ -252,16 +252,16 @@ local function CreateEquipmentList(t)
 		owned_ids = nil
 	end
 
-	local items = {}
+	local itms = {}
 	local tmp = GetEquipmentForRole(currole, t.notalive)
 
 	for _, v in ipairs(tmp) do
 		if not v.notBuyable then
-			items[#items + 1] = v
+			itms[#itms + 1] = v
 		end
 	end
 
-	if #items == 0 and not t.notalive then
+	if #itms == 0 and not t.notalive then
 		ply:ChatPrint("[TTT2][SHOP] You need to run 'shopeditor' as admin in the developer console to create a shop for this role. Link it with another shop or click on the icons to add weapons and items to the shop.")
 	end
 
@@ -271,8 +271,8 @@ local function CreateEquipmentList(t)
 	local steamid = ply:SteamID64()
 	local col = ply:GetRoleColor()
 
-	for k, item in pairs(items) do
-		if (t.search and string.find(string.lower(item.name), string.lower(t.search))) or not t.search then
+	for k, item in ipairs(itms) do
+		if t.search and string.find(string.lower(item.name), string.lower(t.search)) or not t.search then
 			local ic = nil
 
 			-- Create icon panel
@@ -354,15 +354,15 @@ local function CreateEquipmentList(t)
 				ic:SetTooltip(tip)
 
 				-- If we cannot order this item, darken it
-				if not t.role and (((not can_order)
+				if not t.role and ((not can_order
 						-- already owned
 						or table.HasValue(owned_ids, item.id)
-						or (tonumber(item.id) and ply:HasEquipmentItem(tonumber(item.id)))
+						or items.IsItem(item.id) and ply:HasEquipmentItem(item.id)
 						-- already carrying a weapon for this slot
-						or (ItemIsWeapon(item) and (not CanCarryWeapon(item)))
+						or ItemIsWeapon(item) and not CanCarryWeapon(item)
 						or not EquipmentIsBuyable(item, ply:GetTeam())
 						-- already bought the item before
-						or (item.limited and ply:HasBought(tostring(item.id)))
+						or item.limited and ply:HasBought(item.id)
 					) or (item.credits or 1) > ply:GetCredits()
 				) then
 					ic:SetIconColor(color_darkened)

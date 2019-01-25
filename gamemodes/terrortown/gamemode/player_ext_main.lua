@@ -670,10 +670,6 @@ function plymeta:GiveItem(id)
 end
 
 function plymeta:RemoveItem(id)
-	id = tonumber(id)
-
-	if not id then return end
-
 	self:RemoveEquipmentItem(id)
 	self:RemoveBought(id)
 end
