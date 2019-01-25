@@ -124,14 +124,12 @@ end
 
 function plymeta:RemoveEquipmentItem(id)
 	if self:HasEquipmentItem(id) then
-		self.equipment_items = self.equipment_items or {}
-
 		local item = items.GetStored(id)
 		if item then
 			item:Reset()
 		end
 
-		for k, v in ipairs(self.equipment_items) do
+		for k, v in ipairs(self:GetEquipmentItems()) do
 			if v == id then
 				table.remove(self.equipment_items, k)
 
@@ -158,7 +156,7 @@ function plymeta:SendEquipment()
 end
 
 function plymeta:ResetEquipment()
-	for _, id in ipairs(self.equipment_items) do
+	for _, id in ipairs(self:GetEquipmentItems()) do
 		local item = items.GetStored(id)
 		if item then
 			item:Reset()

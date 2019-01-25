@@ -791,10 +791,8 @@ local function ReceiveEquipment()
 		tmp[#tmp + 1] = net.ReadString()
 	end
 
-	ply.equipment_items = ply.equipment_items or {}
-
 	-- reset all old items
-	for k, v in ipairs(ply.equipment_items) do
+	for k, v in ipairs(ply:GetEquipmentItems()) do
 		if not table.HasValue(tmp, v) then
 			local item = items.GetStored(v)
 			if item then
@@ -807,12 +805,12 @@ local function ReceiveEquipment()
 
 	-- remove finally
 	for _, key in ipairs(toRem) do
-		table.remove(ply.equipment_items, key)
+		table.remove(ply:GetEquipmentItems(), key)
 	end
 
 	-- now equip the items the player doesn't own
 	for _, v in ipairs(tmp) do
-		if not table.HasValue(ply.equipment_items, v) then
+		if not table.HasValue(ply:GetEquipmentItems(), v) then
 			ply.equipment_items[#ply.equipment_items + 1] = v
 
 			local item = items.GetStored(v)
@@ -821,8 +819,6 @@ local function ReceiveEquipment()
 			end
 		end
 	end
-
-	ply.equipment_items = newTbl
 end
 net.Receive("TTT_Equipment", ReceiveEquipment)
 
