@@ -85,7 +85,7 @@ function GM:InitPostEntity()
 
 	-- init items
 	for _, eq in ipairs(itms) do
-		CreateEquipmentItem(eq)
+		CreateEquipment(eq)
 	end
 
 	-- reset normal items equipment
@@ -102,7 +102,7 @@ function GM:InitPostEntity()
 
 	-- init weapons
 	for _, wep in ipairs(sweps) do
-		CreateEquipmentWeapon(wep)
+		CreateEquipment(wep)
 	end
 
 	-- reset normal weapons equipment

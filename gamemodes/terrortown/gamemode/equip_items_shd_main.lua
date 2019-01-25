@@ -62,11 +62,9 @@ function GetEquipmentBase(data, eq)
 	return eq
 end
 
-function CreateEquipmentWeapon(eq)
+function CreateEquipment(eq)
 	if not eq.Doublicated then
-		local data = eq.EquipMenuData or {}
-
-		return GetEquipmentBase(data, eq)
+		return GetEquipmentBase(eq.EquipMenuData or {}, eq)
 	end
 end
 
@@ -82,7 +80,7 @@ function AddWeaponIntoFallbackTable(wepClass, roleData)
 		table.insert(wep.CanBuy, roleData.index)
 	end
 
-	local eq = CreateEquipmentWeapon(wep)
+	local eq = CreateEquipment(wep)
 	if not eq then return end
 
 	if not table.HasValue(roleData.fallbackTable, eq) then

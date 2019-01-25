@@ -291,10 +291,9 @@ function GM:InitPostEntity()
 	-- load and initialize all SWEPS and all items from database
 	if ShopEditor.CreateSqlTable() then
 		for _, eq in ipairs(itms) do
-			local name = GetEquipmentFileName(eq.name)
-
 			ShopEditor.InitDefaultData(eq)
 
+			local name = GetEquipmentFileName(WEPS.GetClass(eq))
 			local loaded, changed = ShopEditor.LoadItem(name, eq)
 
 			if not loaded then
@@ -305,10 +304,9 @@ function GM:InitPostEntity()
 		end
 
 		for _, wep in ipairs(sweps) do
-			local name = GetEquipmentFileName(wep.id)
-
 			ShopEditor.InitDefaultData(wep)
 
+			local name = GetEquipmentFileName(WEPS.GetClass(wep))
 			local loaded, changed = ShopEditor.LoadItem(name, wep)
 
 			if not loaded then
@@ -321,12 +319,12 @@ function GM:InitPostEntity()
 
 	-- init items
 	for _, wep in ipairs(itms) do
-		CreateEquipmentItem(wep)
+		CreateEquipment(wep)
 	end
 
 	-- init weapons
 	for _, wep in ipairs(sweps) do
-		CreateEquipmentWeapon(wep)
+		CreateEquipment(wep)
 	end
 
 	-- reset normal weapons equipment
