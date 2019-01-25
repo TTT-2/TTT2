@@ -9,3 +9,4 @@ ITEM.EquipMenuData = {
 	desc = "item_radar_desc"
 }
 ITEM.CanBuy = {ROLE_TRAITOR, ROLE_DETECTIVE}
+ITEM.oldId = EQUIP_RADAR

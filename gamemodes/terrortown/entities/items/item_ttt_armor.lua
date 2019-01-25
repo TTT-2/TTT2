@@ -9,6 +9,7 @@ ITEM.EquipMenuData = {
 	desc = "item_armor_desc"
 }
 ITEM.CanBuy = {ROLE_TRAITOR, ROLE_DETECTIVE}
+ITEM.oldId = EQUIP_ARMOR
 
 if SERVER then
 	hook.Add("ScalePlayerDamage", "TTTItemArmor", function(ply, _, dmginfo)

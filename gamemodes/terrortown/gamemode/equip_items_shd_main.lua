@@ -8,6 +8,16 @@ local ipairs = ipairs
 local util = util
 local hook = hook
 
+-- Details you shouldn't need:
+-- The number should increase by a factor of two for every item (ie. ids
+-- should be powers of two).
+EQUIP_NONE = 0
+EQUIP_ARMOR = 1
+EQUIP_RADAR = 2
+EQUIP_DISGUISE = 4
+
+EQUIP_MAX = 4
+
 -- Stick to around 35 characters per description line, and add a "\n" where you
 -- want a new line to start.
 
@@ -424,6 +434,10 @@ end
 -- Utility function to register a new Equipment ID
 function GenerateNewEquipmentID()
 	ErrorNoHalt("TTT2 doesn't support old items completely since they are limited to an amount of 16. If the items doesn't work as intended, modify the old item and use the new items system instead.")
+
+	EQUIP_MAX = EQUIP_MAX * 2
+
+	return EQUIP_MAX
 end
 
 function EquipmentTableHasValue(tbl, equip)

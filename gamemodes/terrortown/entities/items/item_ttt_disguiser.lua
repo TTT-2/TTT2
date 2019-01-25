@@ -9,6 +9,7 @@ ITEM.EquipMenuData = {
 	desc = "item_disg_desc"
 }
 ITEM.CanBuy = {ROLE_TRAITOR}
+ITEM.oldId = EQUIP_DISGUISE
 
 if CLIENT then
 	DISGUISE = {}
