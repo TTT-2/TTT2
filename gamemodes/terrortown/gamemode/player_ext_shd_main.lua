@@ -327,7 +327,18 @@ function plymeta:HasEquipmentItem(id)
 	if not id then
 		return #self:GetEquipmentItems() > 0
 	else
-		return table.HasValue(self:GetEquipmentItems(), id)
+		if table.HasValue(self:GetEquipmentItems(), id) then
+			return true
+		end
+
+		for _, itemId in ipairs(self:GetEquipmentItems()) do
+			local item = items.GetStored(itemId)
+			if item and item.oldId and item.oldId == id then
+				return true
+			end
+		end
+
+		return false
 	end
 end
 

@@ -7,6 +7,30 @@ function GM:TTT2Initialize()
 	hook.Run("TTT2BaseRoleInit")
 
 	DefaultEquipment = GetDefaultEquipment()
+
+	for subrole, tbl in pairs(EquipmentItems or {}) do
+		for _, v in ipairs(tbl) do
+			if tonumber(v.id) then
+				local name = (v.name or WEPS.GetClass(v))
+				if name then
+					local ITEMDATA = {}
+					ITEMDATA.oldId = v.id
+					ITEMDATA.loadout = v.loadout
+					ITEMDATA.EquipMenuData = v.EquipMenuData or {
+						type = v.type,
+						name = v.name,
+						desc = v.desc,
+						material = v.material
+					}
+
+					items.Register(ITEMDATA, name)
+				end
+			end
+		end
+	end
+
+	-- reset this old var to print errors for incompatible add-ons
+	EquipmentItems = nil
 end
 
 -- Create teams

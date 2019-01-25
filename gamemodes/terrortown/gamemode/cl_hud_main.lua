@@ -356,8 +356,8 @@ local function ItemInfo(client)
 	local y = defaultY
 
 	for _, item in ipairs(items.GetList()) do
-		if item.icon and client:HasEquipmentItem(item.id) then
-			surface.SetMaterial(item.icon)
+		if item.Icon and client:HasEquipmentItem(item.id) then
+			surface.SetMaterial(item.Icon)
 			surface.SetDrawColor(255, 255, 255, 255)
 			surface.DrawTexturedRect(20, y, 64, 64)
 

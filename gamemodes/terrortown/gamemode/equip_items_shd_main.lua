@@ -15,6 +15,11 @@ Equipment = CLIENT and (Equipment or {}) or nil
 SYNC_EQUIP = SYNC_EQUIP or {}
 RANDOMSHOP = RANDOMSHOP or {}
 
+-- JUST used to convert old items to new ones
+EquipmentItems = EquipmentItems or {}
+EquipmentItems[ROLE_TRAITOR] = EquipmentItems[ROLE_TRAITOR] or {}
+EquipmentItems[ROLE_DETECTIVE] = EquipmentItems[ROLE_DETECTIVE] or {}
+
 function GetEquipmentBase(data, eq)
 	if not eq or eq.inited then
 		return eq
@@ -418,7 +423,7 @@ end
 
 -- Utility function to register a new Equipment ID
 function GenerateNewEquipmentID()
-	error("TTT2 doesn't support old items since they are limited to an amount of 16. Use the new items system instead.")
+	ErrorNoHalt("TTT2 doesn't support old items completely since they are limited to an amount of 16. If the items doesn't work as intended, modify the old item and use the new items system instead.")
 end
 
 function EquipmentTableHasValue(tbl, equip)
