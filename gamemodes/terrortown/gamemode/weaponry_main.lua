@@ -606,7 +606,7 @@ local function OrderEquipment(ply, cmd, args)
 				received = true
 			end
 		else
-			GiveEquipmentItem(ply, id)
+			ply:GiveEquipmentItem(id)
 
 			received = true
 		end

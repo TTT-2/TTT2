@@ -184,16 +184,24 @@ function GetList()
 end
 
 --[[---------------------------------------------------------
-	Name: IsItem( tbl )
+	Name: IsItem( val )
 	Desc: checks whether the input is an ITEM
 -----------------------------------------------------------]]
-function IsItem(tbl)
-	local cls = WEPS.GetClass(tbl)
+function IsItem(val)
+	if not val then
+		return false
+	end
 
-	for _, v in pairs(ItemList) do
-		if WEPS.GetClass(v) == cls then
-			return true
+	if IsValid(val) or istable(val) then
+		local cls = WEPS.GetClass(val)
+
+		for _, v in pairs(ItemList) do
+			if WEPS.GetClass(v) == cls then
+				return true
+			end
 		end
+	else
+		return items.GetStored(val) ~= nil
 	end
 
 	return false
