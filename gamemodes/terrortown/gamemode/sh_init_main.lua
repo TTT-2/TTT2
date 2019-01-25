@@ -13,9 +13,9 @@ function GM:TTT2Initialize()
 			if tonumber(v.id) then
 				local name = (v.name or WEPS.GetClass(v))
 				if name then
-					local ITEMDATA = {}
+					local ITEMDATA = tavle.Copy(v)
 					ITEMDATA.oldId = v.id
-					ITEMDATA.loadout = v.loadout
+					ITEMDATA.id = v.ClassName or v.name
 					ITEMDATA.EquipMenuData = v.EquipMenuData or {
 						type = v.type,
 						name = v.name,
