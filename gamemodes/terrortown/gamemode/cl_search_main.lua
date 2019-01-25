@@ -267,6 +267,18 @@ function PreprocSearch(raw)
 		end
 	end
 
+	for _, item in ipairs(items.GetList()) do
+		if not raw["eq_" .. item.id] then return end
+
+		local highest = 0
+
+		for _, v in pairs(search) do
+			highest = math.max(highest, v.p)
+		end
+
+		search["eq_" .. item.id] = {img = item.material, text = item.desc, p = highest + 1}
+	end
+
 	hook.Call("TTTBodySearchPopulate", nil, search, raw)
 
 	return search
@@ -588,6 +600,10 @@ local function TTT_RagdollSearch()
 
 	-- long range
 	search.lrng = net.ReadBit()
+
+	for _, item in ipairs(items.GetList()) do
+		search["eq_" .. item.id] = table.HasValue(eq, item.id)
+	end
 
 	hook.Call("TTTBodySearchEquipment", nil, search, eq)
 

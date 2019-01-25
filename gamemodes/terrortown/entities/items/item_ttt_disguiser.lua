@@ -1,9 +1,13 @@
-local disguiser = {
-	id = EQUIP_DISGUISE,
+if SERVER then
+	AddCSLuaFile()
+end
+
+ITEM.Base = "item_base"
+
+ITEM.Icon = "vgui/ttt/icon_disguise"
+ITEM.EquipMenuData = {
 	type = "item_active",
-	material = mat_dir .. "icon_disguise",
 	name = "item_disg",
 	desc = "item_disg_desc"
 }
-
-traitor
+ITEM.CanBuy = {ROLE_TRAITOR}

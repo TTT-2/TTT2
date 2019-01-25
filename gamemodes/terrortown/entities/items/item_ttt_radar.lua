@@ -1,10 +1,13 @@
-local radar = {
-	id = EQUIP_RADAR,
+if SERVER then
+	AddCSLuaFile()
+end
+
+ITEM.Base = "item_base"
+
+ITEM.Icon = "vgui/ttt/icon_radar"
+ITEM.EquipMenuData = {
 	type = "item_active",
-	material = mat_dir .. "icon_radar",
 	name = "item_radar",
 	desc = "item_radar_desc"
 }
-
-traitor
-det
+ITEM.CanBuy = {ROLE_TRAITOR, ROLE_DETECTIVE}
