@@ -172,7 +172,7 @@ end
 function GetList()
 	local result = {}
 
-	for _, v in ipairs(ItemList) do
+	for _, v in pairs(ItemList) do
 		result[#result + 1] = v
 	end
 
@@ -186,7 +186,7 @@ end
 function IsItem(tbl)
 	local cls = WEPS.GetClass(tbl)
 
-	for _, v in ipairs(ItemList) do
+	for _, v in pairs(ItemList) do
 		if WEPS.GetClass(v) == cls then
 			return true
 		end
