@@ -160,6 +160,9 @@ local function HasLoadoutWeapons(ply)
 	return true
 end
 
+-- Cache subrole -> default-items table
+local loadout_items = {}
+
 -- Get loadout items.
 local function GetLoadoutItems(subrole)
 	if not loadout_items[subrole] then
