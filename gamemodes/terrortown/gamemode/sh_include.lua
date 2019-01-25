@@ -4,7 +4,6 @@ TTTFiles = {
 	cl_changes = {file = "cl_changes_main.lua", on = "client"},
 	cl_chat = {file = "cl_chat_main.lua", on = "client"},
 	cl_credits = {file = "cl_credits_main.lua", on = "client"},
-	cl_disguise = {file = "cl_disguise_main.lua", on = "client"},
 	cl_equip = {file = "cl_equip_main.lua", on = "client"},
 	cl_help = {file = "cl_help_main.lua", on = "client"},
 	cl_hud = {file = "cl_hud_main.lua", on = "client"},
