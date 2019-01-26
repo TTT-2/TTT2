@@ -148,8 +148,8 @@ function plymeta:SendEquipment()
 	net.Start("TTT_Equipment")
 	net.WriteUInt(#arr, 16)
 
-	for _, item in ipairs(arr) do
-		net.WriteString(item)
+	for i = 1, #arr do
+		net.WriteString(arr[i])
 	end
 
 	net.Send(self)

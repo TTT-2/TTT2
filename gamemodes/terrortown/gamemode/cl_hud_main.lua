@@ -355,8 +355,9 @@ local defaultY = ScrH() * 0.5 + 20
 local function ItemInfo(client)
 	local y = defaultY
 
-	for _, item in ipairs(items.GetList()) do
-		if item.Icon and client:HasEquipmentItem(item.id) then
+	for _, itemCls in ipairs(client:GetEquipmentItems()) do
+		local item = items.GetStored(itemCls)
+		if item and item.Icon then
 			surface.SetMaterial(item.Icon)
 			surface.SetDrawColor(255, 255, 255, 255)
 			surface.DrawTexturedRect(20, y, 64, 64)
@@ -387,7 +388,7 @@ function GM:HUDPaint()
 	end
 
 	-- Draw owned Item info
-	if hook.Call("HUDShouldDraw", GAMEMODE, "TTT2ItemInfo") then
+	if hook.Call("HUDShouldDraw", GAMEMODE, "TTTItemHUDDisplay") then
 		ItemInfo(client)
 	end
 
