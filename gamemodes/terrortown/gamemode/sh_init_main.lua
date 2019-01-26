@@ -56,7 +56,7 @@ function GM:TTT2Initialize()
 		},
 		{
 			__index = function(tbl, key)
-				ErrorNoHalt("[TTT2][WARNING] You are using an add-on that is trying to access an unsupported var ('" .. key .. "'). This will lead to error!")
+				ErrorNoHalt("\n[TTT2][WARNING] You are using an add-on that is trying to access an unsupported var ('" .. key .. "'). This will lead to error!\n\n")
 			end
 		}
 	)
