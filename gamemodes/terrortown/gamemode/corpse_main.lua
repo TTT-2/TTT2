@@ -285,8 +285,8 @@ function CORPSE.ShowSearch(ply, rag, covert, long_range)
 
 	net.WriteUInt(#eq, 16) -- Equipment (16 = max.)
 
-	for _, item in ipairs(eq) do
-		net.WriteString(item.id)
+	for _, itemCls in ipairs(eq) do
+		net.WriteString(itemCls)
 	end
 
 	net.WriteUInt(subrole, ROLE_BITS) -- (... bits)
