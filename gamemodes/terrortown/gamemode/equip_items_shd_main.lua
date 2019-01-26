@@ -46,7 +46,7 @@ function GetEquipmentBase(data, eq)
 		limited = eq.LimitedStock,
 		kind = eq.Kind or WEAPON_NONE,
 		slot = (eq.Slot or 0) + 1,
-		material = eq.Icon or "vgui/ttt/icon_id",
+		material = eq.Icon or eq.material or "vgui/ttt/icon_id",
 		-- the below should be specified in EquipMenuData, in which case
 		-- these values are overwritten
 		type = "Type not specified",
@@ -54,12 +54,6 @@ function GetEquipmentBase(data, eq)
 		desc = "No description specified.",
 		inited = true
 	}
-
-	-- Force material to nil so that model key is used when we are
-	-- explicitly told to do so (ie. material is false rather than nil).
-	if data.modelicon then
-		tbl.material = nil
-	end
 
 	table.Merge(tbl, data)
 

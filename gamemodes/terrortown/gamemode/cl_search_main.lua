@@ -77,9 +77,6 @@ end
 local TypeToMat = {
 	nick = "id",
 	words = "halp",
-	eq_armor = "armor",
-	eq_radar = "radar",
-	eq_disg = "disguise",
 	c4 = "code",
 	dmg = DmgToMat,
 	wep = WeaponToIcon,
@@ -152,21 +149,6 @@ function PreprocSearch(raw)
 				local final = string.match(d, "[\\.\\!\\?]$") ~= nil
 
 				search[t].text = PT("search_words", {lastwords = d .. (final and "" or "--.")})
-			end
-		elseif t == "eq_armor" then
-			if d then
-				search[t].text = T("search_armor")
-				search[t].p = 17
-			end
-		elseif t == "eq_disg" then
-			if d then
-				search[t].text = T("search_disg")
-				search[t].p = 18
-			end
-		elseif t == "eq_radar" then
-			if d then
-				search[t].text = T("search_radar")
-				search[t].p = 19
 			end
 		elseif t == "c4" then
 			if d > 0 then

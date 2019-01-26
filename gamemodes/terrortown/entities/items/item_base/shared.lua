@@ -34,7 +34,7 @@ if CLIENT then
 
 	-- This sets the icon shown for the item in the DNA sampler, search window,
 	-- equipment menu (if buyable), etc.
-	ITEM.Icon = "vgui/ttt/icon_nades" -- most generic icon I guess
+	ITEM.material = "vgui/ttt/icon_nades" -- most generic icon I guess
 
 	-- You can make your own item icon using the template in:
 	--   /garrysmod/gamemodes/terrortown/template/
