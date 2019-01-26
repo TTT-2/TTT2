@@ -49,17 +49,27 @@ function GM:TTT2Initialize()
 	items.OnLoaded() -- init baseclasses
 
 	-- reset this old var to print errors for incompatible add-ons
+	local itemMt = {
+		__newindex = function(tbl, key, val)
+			ErrorNoHalt("\n[TTT2][WARNING] You are using an add-on that is trying to add a new item ('" .. key .. "' = '" .. val .. "') in the wrong way. This will not be available in the shop and lead to errors!\n\n")
+		end
+	}
+
 	EquipmentItems = setmetatable(
 		{
-			[ROLE_TRAITOR] = {},
-			[ROLE_DETECTIVE] = {}
+			[ROLE_TRAITOR] = setmetatable({}, itemMt),
+			[ROLE_DETECTIVE] = setmetatable({}, itemMt)
 		},
 		{
 			__index = function(tbl, key)
-				ErrorNoHalt("\n[TTT2][WARNING] You are using an add-on that is trying to access an unsupported var ('" .. key .. "'). This will lead to error!\n\n")
+				ErrorNoHalt("\n[TTT2][WARNING] You are using an add-on that is trying to access an unsupported var ('" .. key .. "'). This will lead to errors!\n\n")
 			end,
 			__newindex = function(tbl, key, val)
-				ErrorNoHalt("\n[TTT2][WARNING] You are using an add-on that is trying to add a new item ('" .. key .. "' = '" .. val .. "') in the wrong way. This will not be available in the shop and lead to error!\n\n")
+				ErrorNoHalt("\n[TTT2][WARNING] You are using an add-on that is trying to add a new role ('" .. key .. "' = '" .. val .. "') to an unsupported var. This will lead to errors!\n\n")
+
+				if istable(val) then
+					tbl[key] = setmetatable(val, itemMt)
+				end
 			end
 		}
 	)
