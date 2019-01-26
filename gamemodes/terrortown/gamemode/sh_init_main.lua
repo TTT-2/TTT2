@@ -13,21 +13,36 @@ function GM:TTT2Initialize()
 			if tonumber(v.id) then
 				local name = (v.ClassName or v.name or WEPS.GetClass(v))
 				if name then
-					local ITEMDATA = table.Copy(v)
-					ITEMDATA.oldId = v.id
-					ITEMDATA.id = name
-					ITEMDATA.EquipMenuData = v.EquipMenuData or {
-						type = v.type,
-						name = v.name,
-						desc = v.desc,
-						material = v.material
-					}
+					local item = items.GetStored(name)
+					if not item then
+						local ITEMDATA = table.Copy(v)
+						ITEMDATA.oldId = v.id
+						ITEMDATA.id = name
+						ITEMDATA.EquipMenuData = v.EquipMenuData or {
+							type = v.type,
+							name = v.name,
+							desc = v.desc
+						}
+						ITEMDATA.type = nil
+						ITEMDATA.desc = nil
+						ITEMDATA.name = name
+						ITEMDATA.material = v.material
+						ITEMDATA.CanBuy = {subrole}
+					else
+						item.CanBuy = item.CanBuy or {}
+
+						if not table.HasValue(item.CanBuy, subrole) then
+							item.CanBuy[#item.CanBuy + 1] = subrole
+						end
+					end
 
 					items.Register(ITEMDATA, name)
 				end
 			end
 		end
 	end
+
+	items.OnLoaded() -- init baseclasses
 
 	-- reset this old var to print errors for incompatible add-ons
 	EquipmentItems = nil

@@ -152,7 +152,7 @@ function Get(name, retTbl)
 		local base = Get(retval.Base)
 
 		if not base then
-			Msg("ERROR: Trying to derive item " .. tostring(name) .. " from non existant ITEM " .. tostring(SEntList[name].Base) .. "!\n")
+			Msg("ERROR: Trying to derive item " .. tostring(name) .. " from non existant ITEM " .. tostring((SEntList and SEntList[name] and SEntList[name].Base) or name) .. "!\n")
 		else
 			retval = TableInherit(retval, base)
 		end

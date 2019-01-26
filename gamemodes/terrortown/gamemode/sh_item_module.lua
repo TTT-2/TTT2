@@ -1,14 +1,14 @@
+ITEM = {}
+
 -- include modules
 require("items")
 
-ITEM = {}
-
 -- include base item files
 if SERVER then
-	include("terrortown/entities/items/item_base/init.lua")
-else
-	include("terrortown/entities/items/item_base/cl_init.lua")
+	AddCSLuaFile("terrortown/entities/items/item_base/shared.lua")
 end
+
+include("terrortown/entities/items/item_base/shared.lua")
 
 items.Register(ITEM, "item_base")
 
