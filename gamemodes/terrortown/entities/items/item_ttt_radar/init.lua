@@ -10,7 +10,7 @@ local IsValid = IsValid
 
 local function ttt_radar_scan(ply, cmd, args)
 	if IsValid(ply) and ply:IsTerror() then
-		if ply:HasEquipmentItem(EQUIP_RADAR) then
+		if ply:HasEquipmentItem("item_ttt_radar") then
 			if ply.radar_charge > CurTime() then
 				LANG.Msg(ply, "radar_charging")
 

@@ -71,23 +71,21 @@ function ShopEditor.WriteItemData(messageName, name, item, plys)
 end
 
 function ShopEditor.ReadItemData()
-	local item, wep, name = GetEquipmentByName(net.ReadString())
+	local equip, name = GetEquipmentByName(net.ReadString())
 
-	item = item or wep
-
-	if not item then
+	if not equip then
 		return name
 	end
 
 	for key, data in pairs(ShopEditor.savingKeys) do
 		if data.typ == "number" then
-			item[key] = net.ReadUInt(data.bits or 16)
+			equip[key] = net.ReadUInt(data.bits or 16)
 		elseif data.typ == "bool" then
-			item[key] = net.ReadBool()
+			equip[key] = net.ReadBool()
 		else
-			item[key] = net.ReadString()
+			equip[key] = net.ReadString()
 		end
 	end
 
-	return name, item
+	return name, equip
 end

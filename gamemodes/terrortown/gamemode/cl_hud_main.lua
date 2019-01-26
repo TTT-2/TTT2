@@ -349,6 +349,24 @@ local function InfoPaint(client)
 	end
 end
 
+-- item info
+local defaultY = ScrH() * 0.5 + 20
+
+local function ItemInfo(client)
+	local y = defaultY
+
+	for _, itemCls in ipairs(client:GetEquipmentItems()) do
+		local item = items.GetStored(itemCls)
+		if item and item.hud then
+			surface.SetMaterial(item.hud)
+			surface.SetDrawColor(255, 255, 255, 255)
+			surface.DrawTexturedRect(20, y, 64, 64)
+
+			y = y - 80
+		end
+	end
+end
+
 -- Paints player status HUD element in the bottom left
 function GM:HUDPaint()
 	local client = LocalPlayer()
@@ -369,6 +387,11 @@ function GM:HUDPaint()
 		return
 	end
 
+	-- Draw owned Item info
+	if hook.Call("HUDShouldDraw", GAMEMODE, "TTTItemHUDDisplay") then
+		ItemInfo(client)
+	end
+
 	if hook.Call("HUDShouldDraw", GAMEMODE, "TTTRadar") then
 		RADAR:Draw(client)
 	end
@@ -383,10 +406,6 @@ function GM:HUDPaint()
 
 	if hook.Call("HUDShouldDraw", GAMEMODE, "TTTVoice") then
 		VOICE.Draw(client)
-	end
-
-	if hook.Call("HUDShouldDraw", GAMEMODE, "TTTDisguise") then
-		DISGUISE.Draw(client)
 	end
 
 	if hook.Call("HUDShouldDraw", GAMEMODE, "TTTPickupHistory") then

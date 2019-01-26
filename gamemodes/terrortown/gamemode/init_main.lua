@@ -1,5 +1,9 @@
 ---- Trouble in Terrorist Town 2
 ttt_include("shared")
+
+AddCSLuaFile("sh_item_module.lua")
+include("sh_item_module.lua")
+
 ttt_include("sh_init")
 ttt_include("sh_shopeditor")
 
@@ -285,18 +289,15 @@ function GM:InitPostEntity()
 
 	InitDefaultEquipment()
 
-	-- initialize all items
-	InitAllItems()
-
+	local itms = items.GetList()
 	local sweps = weapons.GetList()
 
 	-- load and initialize all SWEPS and all items from database
 	if ShopEditor.CreateSqlTable() then
-		for _, eq in ipairs(ALL_ITEMS) do
-			local name = GetEquipmentFileName(eq.name)
-
+		for _, eq in ipairs(itms) do
 			ShopEditor.InitDefaultData(eq)
 
+			local name = GetEquipmentFileName(WEPS.GetClass(eq))
 			local loaded, changed = ShopEditor.LoadItem(name, eq)
 
 			if not loaded then
@@ -307,10 +308,9 @@ function GM:InitPostEntity()
 		end
 
 		for _, wep in ipairs(sweps) do
-			local name = GetEquipmentFileName(wep.id)
-
 			ShopEditor.InitDefaultData(wep)
 
+			local name = GetEquipmentFileName(WEPS.GetClass(wep))
 			local loaded, changed = ShopEditor.LoadItem(name, wep)
 
 			if not loaded then
@@ -321,9 +321,19 @@ function GM:InitPostEntity()
 		end
 	end
 
-	-- reset normal equipment tables
-	for _, role in pairs(GetRoles()) do
-		EquipmentItems[role.index] = {}
+	-- init items
+	for _, wep in ipairs(itms) do
+		CreateEquipment(wep)
+	end
+
+	-- init weapons
+	for _, wep in ipairs(sweps) do
+		CreateEquipment(wep)
+	end
+
+	-- reset normal weapons equipment
+	for _, item in ipairs(itms) do
+		item.CanBuy = {}
 	end
 
 	-- reset normal weapons equipment

@@ -2,8 +2,8 @@
 
 local surface = surface
 local math = math
-local GetTranslation = LANG.GetTranslation
-local GetPTranslation = LANG.GetParamTranslation
+local GetTranslation
+local GetPTranslation
 local FormatTime = util.SimpleTime
 local table = table
 local net = net
@@ -48,7 +48,7 @@ function RADAR:Timeout()
 
 	local client = LocalPlayer()
 
-	if self.repeating and client and client:HasEquipmentItem(EQUIP_RADAR) then
+	if self.repeating and client and client:HasEquipmentItem("item_ttt_radar") then
 		RunConsoleCommand("ttt_radar_scan")
 	end
 end
@@ -74,12 +74,9 @@ function RADAR.CacheEnts()
 	end
 end
 
-function RADAR.Bought(is_item, id)
-	if is_item and id == EQUIP_RADAR then
-		RunConsoleCommand("ttt_radar_scan")
-	end
+function ITEM:Equip(ply)
+	RunConsoleCommand("ttt_radar_scan")
 end
-hook.Add("TTTBoughtItem", "RadarBoughtItem", RADAR.Bought)
 
 local function DrawTarget(tgt, size, offset, no_shrink)
 	local scrpos = tgt.pos:ToScreen() -- sweet
@@ -120,7 +117,9 @@ local function DrawTarget(tgt, size, offset, no_shrink)
 end
 
 function RADAR:Draw(client)
-	if not client then return end
+	if not client or not client:HasEquipmentItem("item_ttt_radar") then return end
+
+	GetPTranslation = GetPTranslation or LANG.GetParamTranslation
 
 	surface.SetFont("HudSelectionText")
 
@@ -276,6 +275,8 @@ end
 net.Receive("TTT_Radar", ReceiveRadarScan)
 
 function RADAR.CreateMenu(parent, frame)
+	GetTranslation = GetTranslation or LANG.GetTranslation
+	GetPTranslation = GetPTranslation or LANG.GetParamTranslation
 	--local w, h = parent:GetSize()
 
 	local dform = vgui.Create("DForm", parent)
@@ -283,7 +284,7 @@ function RADAR.CreateMenu(parent, frame)
 	dform:StretchToParent(0, 0, 0, 0)
 	dform:SetAutoSize(false)
 
-	local owned = LocalPlayer():HasEquipmentItem(EQUIP_RADAR)
+	local owned = LocalPlayer():HasEquipmentItem("item_ttt_radar")
 	if not owned then
 		dform:Help(GetTranslation("radar_not_owned"))
 

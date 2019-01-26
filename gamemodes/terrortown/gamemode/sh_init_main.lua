@@ -8,7 +8,71 @@ function GM:TTT2Initialize()
 
 	DefaultEquipment = GetDefaultEquipment()
 
-	SetupEquipment()
+	for subrole, tbl in pairs(EquipmentItems or {}) do
+		for _, v in ipairs(tbl) do
+			if tonumber(v.id) then
+				local name = (v.ClassName or v.name or WEPS.GetClass(v))
+				if name then
+					local item = items.GetStored(name)
+					if not item then
+						local ITEMDATA = table.Copy(v)
+						ITEMDATA.oldId = v.id
+						ITEMDATA.id = name
+						ITEMDATA.EquipMenuData = v.EquipMenuData or {
+							type = v.type,
+							name = v.name,
+							desc = v.desc
+						}
+						ITEMDATA.type = nil
+						ITEMDATA.desc = nil
+						ITEMDATA.name = name
+						ITEMDATA.material = v.material
+						ITEMDATA.CanBuy = {subrole}
+
+						if ITEMDATA.hud == true then
+							ITEMDATA.hud = nil
+						end
+					else
+						item.CanBuy = item.CanBuy or {}
+
+						if not table.HasValue(item.CanBuy, subrole) then
+							item.CanBuy[#item.CanBuy + 1] = subrole
+						end
+					end
+
+					items.Register(ITEMDATA, name)
+				end
+			end
+		end
+	end
+
+	items.OnLoaded() -- init baseclasses
+
+	-- reset this old var to print errors for incompatible add-ons
+	local itemMt = {
+		__newindex = function(tbl, key, val)
+			ErrorNoHalt("\n[TTT2][WARNING] You are using an add-on that is trying to add a new item ('" .. key .. "' = '" .. val .. "') in the wrong way. This will not be available in the shop and lead to errors!\n\n")
+		end
+	}
+
+	EquipmentItems = setmetatable(
+		{
+			[ROLE_TRAITOR] = setmetatable({}, itemMt),
+			[ROLE_DETECTIVE] = setmetatable({}, itemMt)
+		},
+		{
+			__index = function(tbl, key)
+				ErrorNoHalt("\n[TTT2][WARNING] You are using an add-on that is trying to access an unsupported var ('" .. key .. "'). This will lead to errors!\n\n")
+			end,
+			__newindex = function(tbl, key, val)
+				ErrorNoHalt("\n[TTT2][WARNING] You are using an add-on that is trying to add a new role ('" .. key .. "' = '" .. val .. "') to an unsupported var. This will lead to errors!\n\n")
+
+				if istable(val) then
+					tbl[key] = setmetatable(val, itemMt)
+				end
+			end
+		}
+	)
 end
 
 -- Create teams
