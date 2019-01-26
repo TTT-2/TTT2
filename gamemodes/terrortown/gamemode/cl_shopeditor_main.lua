@@ -30,7 +30,7 @@ function ShopEditor.GetEquipmentForRoleAll()
 			"bobs_blacklisted"
 		}
 
-		hook.Run("TTT2ModifyShopEditorIgnoreSWEPs", eject) -- possibility to modify from externally
+		hook.Run("TTT2ModifyShopEditorIgnoreEquip", eject) -- possibility to modify from externally
 
 		-- find buyable weapons to load info from
 		for _, v in ipairs(weapons.GetList()) do
@@ -40,6 +40,19 @@ function ShopEditor.GetEquipmentForRoleAll()
 			and not v.Doublicated
 			and not string.match(name, "base")
 			and not string.match(name, "event")
+			and not table.HasValue(eject, name)
+			then
+				table.insert(tbl, v)
+			end
+		end
+
+		-- find buyable weapons to load info from
+		for _, v in ipairs(items.GetList()) do
+			local name = WEPS.GetClass(v)
+
+			if name
+			and not v.Doublicated
+			and not string.match(name, "base")
 			and not table.HasValue(eject, name)
 			then
 				table.insert(tbl, v)
