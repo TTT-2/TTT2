@@ -202,7 +202,9 @@ function IsItem(val)
 		return false
 	end
 
-	if IsValid(val) or istable(val) then
+	if isstring(val) then
+		return items.GetStored(val) ~= nil
+	elseif IsValid(val) or istable(val) then
 		local cls = WEPS.GetClass(val)
 
 		for _, v in pairs(ItemList) do
@@ -210,8 +212,6 @@ function IsItem(val)
 				return true
 			end
 		end
-	else
-		return items.GetStored(val) ~= nil
 	end
 
 	return false
