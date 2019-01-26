@@ -21,7 +21,7 @@ function ShopEditor.GetEquipmentForRoleAll()
 	-- need to build equipment cache?
 	if not Equipmentnew then
 		-- start with all the non-weapon goodies
-		local tbl = items.GetList()
+		local tbl = {}
 
 		local eject = {
 			"weapon_fists",
@@ -32,6 +32,19 @@ function ShopEditor.GetEquipmentForRoleAll()
 
 		hook.Run("TTT2ModifyShopEditorIgnoreEquip", eject) -- possibility to modify from externally
 
+		-- find buyable items to load info from
+		for _, v in ipairs(items.GetList()) do
+			local name = WEPS.GetClass(v)
+
+			if name
+			and not v.Doublicated
+			and not string.match(name, "base")
+			and not table.HasValue(eject, name)
+			then
+				table.insert(tbl, v)
+			end
+		end
+
 		-- find buyable weapons to load info from
 		for _, v in ipairs(weapons.GetList()) do
 			local name = WEPS.GetClass(v)
@@ -40,19 +53,6 @@ function ShopEditor.GetEquipmentForRoleAll()
 			and not v.Doublicated
 			and not string.match(name, "base")
 			and not string.match(name, "event")
-			and not table.HasValue(eject, name)
-			then
-				table.insert(tbl, v)
-			end
-		end
-
-		-- find buyable weapons to load info from
-		for _, v in ipairs(items.GetList()) do
-			local name = WEPS.GetClass(v)
-
-			if name
-			and not v.Doublicated
-			and not string.match(name, "base")
 			and not table.HasValue(eject, name)
 			then
 				table.insert(tbl, v)
