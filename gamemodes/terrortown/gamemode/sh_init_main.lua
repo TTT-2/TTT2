@@ -9,7 +9,7 @@ function GM:TTT2Initialize()
 	DefaultEquipment = GetDefaultEquipment()
 end
 
-hook.Add("PostInitPostEntity", "InitTTT2OldItems", function()
+hook.Add("InitPostEntity", "InitTTT2OldItems", function()
 	for subrole, tbl in pairs(EquipmentItems or {}) do
 		for _, v in ipairs(tbl) do
 			local name = v.ClassName or v.name or WEPS.GetClass(v)

@@ -250,15 +250,15 @@ function PreprocSearch(raw)
 	end
 
 	for _, item in ipairs(items.GetList()) do
-		if not raw["eq_" .. item.id] then continue end
+		if raw["eq_" .. item.id] then
+			local highest = 0
 
-		local highest = 0
+			for _, v in pairs(search) do
+				highest = math.max(highest, v.p)
+			end
 
-		for _, v in pairs(search) do
-			highest = math.max(highest, v.p)
+			search["eq_" .. item.id] = {img = item.corpseIcon or item.material, text = item.corpseDesc or item.desc, p = highest + 1}
 		end
-
-		search["eq_" .. item.id] = {img = item.material, text = item.desc, p = highest + 1}
 	end
 
 	hook.Call("TTTBodySearchPopulate", nil, search, raw)

@@ -38,8 +38,6 @@ local eqframe
 local dlist = nil
 local curSearch = nil
 
-Equipment = Equipment or {}
-
 -- ----------------------------------
 --     GENERAL HELPER FUNCTIONS
 -- ----------------------------------
