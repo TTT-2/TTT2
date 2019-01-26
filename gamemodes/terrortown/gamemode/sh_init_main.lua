@@ -7,43 +7,43 @@ function GM:TTT2Initialize()
 	hook.Run("TTT2BaseRoleInit")
 
 	DefaultEquipment = GetDefaultEquipment()
+end
 
+hook.Add("PostInitPostEntity", "InitTTT2OldItems", function()
 	for subrole, tbl in pairs(EquipmentItems or {}) do
 		for _, v in ipairs(tbl) do
-			if tonumber(v.id) then
-				local name = (v.ClassName or v.name or WEPS.GetClass(v))
-				if name then
-					local item = items.GetStored(name)
-					if not item then
-						local ITEMDATA = table.Copy(v)
-						ITEMDATA.oldId = v.id
-						ITEMDATA.id = name
-						ITEMDATA.EquipMenuData = v.EquipMenuData or {
-							type = v.type,
-							name = v.name,
-							desc = v.desc
-						}
-						ITEMDATA.type = nil
-						ITEMDATA.desc = nil
-						ITEMDATA.name = name
-						ITEMDATA.material = v.material
-						ITEMDATA.CanBuy = {subrole}
+			local name = v.ClassName or v.name or WEPS.GetClass(v)
+			if name then
+				local item = items.GetStored(name)
+				if not item then
+					local ITEMDATA = table.Copy(v)
+					ITEMDATA.oldId = v.id
+					ITEMDATA.id = name
+					ITEMDATA.EquipMenuData = v.EquipMenuData or {
+						type = v.type,
+						name = v.name,
+						desc = v.desc
+					}
+					ITEMDATA.type = nil
+					ITEMDATA.desc = nil
+					ITEMDATA.name = name
+					ITEMDATA.material = v.material
+					ITEMDATA.CanBuy = {subrole}
 
-						if ITEMDATA.hud == true then
-							ITEMDATA.hud = nil
-						end
+					if ITEMDATA.hud == true then
+						ITEMDATA.hud = nil
+					end
 
-						items.Register(ITEMDATA, name)
+					items.Register(ITEMDATA, name)
 
-						timer.Simple(0, function()
-							print("[TTT2][WARNING] Added incompatible add-on", name, ITEMDATA.oldId)
-						end)
-					else
-						item.CanBuy = item.CanBuy or {}
+					timer.Simple(0, function()
+						print("[TTT2][WARNING] Added incompatible add-on", name, ITEMDATA.oldId)
+					end)
+				else
+					item.CanBuy = item.CanBuy or {}
 
-						if not table.HasValue(item.CanBuy, subrole) then
-							item.CanBuy[#item.CanBuy + 1] = subrole
-						end
+					if not table.HasValue(item.CanBuy, subrole) then
+						item.CanBuy[#item.CanBuy + 1] = subrole
 					end
 				end
 			end
@@ -77,7 +77,7 @@ function GM:TTT2Initialize()
 			end
 		}
 	)
-end
+end)
 
 -- Create teams
 function GM:CreateTeams()

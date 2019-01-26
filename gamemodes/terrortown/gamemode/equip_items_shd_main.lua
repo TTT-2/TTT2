@@ -440,7 +440,7 @@ function GenerateNewEquipmentID()
 			end
 		end
 
-		print("\n[TTT2][WARNING] TTT2 doesn't support old items completely since they are limited to an amount of 16. If the item with id '" .. val .. "' doesn't work as intended, modify the old item and use the new items system instead.", name, "\n\n")
+		print("[TTT2][WARNING] TTT2 doesn't support old items completely since they are limited to an amount of 16. If the item with id '" .. val .. "' doesn't work as intended, modify the old item and use the new items system instead.", name)
 	end)
 
 	return EQUIP_MAX
