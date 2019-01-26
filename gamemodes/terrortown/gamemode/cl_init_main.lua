@@ -17,6 +17,9 @@ surface.CreateFont("TabLarge", {font = "Tahoma", size = 13, weight = 700, shadow
 surface.CreateFont("Trebuchet22", {font = "Trebuchet MS", size = 22, weight = 900})
 
 ttt_include("shared")
+
+include("sh_item_module.lua")
+
 ttt_include("sh_init")
 ttt_include("sh_shopeditor")
 ttt_include("scoring_shd")
@@ -32,7 +35,6 @@ ttt_include("vgui__progressbar")
 ttt_include("vgui__scrolllabel")
 
 ttt_include("cl_radio")
-ttt_include("cl_disguise")
 ttt_include("cl_transfer")
 ttt_include("cl_targetid")
 ttt_include("cl_search")
@@ -42,7 +44,6 @@ ttt_include("cl_scoreboard")
 ttt_include("cl_tips")
 ttt_include("cl_help")
 ttt_include("cl_hud")
-ttt_include("cl_hud_item")
 ttt_include("cl_msgstack")
 ttt_include("cl_hudpickup")
 ttt_include("cl_keys")
@@ -78,12 +79,21 @@ function GM:InitPostEntity()
 
 	InitDefaultEquipment()
 
-	-- initialize all items
-	InitAllItems()
+	local itms = items.GetList()
 
 	-- initialize the default data
-	for _, eq in ipairs(ALL_ITEMS) do
+	for _, eq in ipairs(itms) do
 		ShopEditor.InitDefaultData(eq)
+	end
+
+	-- init items
+	for _, eq in ipairs(itms) do
+		CreateEquipment(eq)
+	end
+
+	-- reset normal items equipment
+	for _, eq in ipairs(itms) do
+		eq.CanBuy = {}
 	end
 
 	local sweps = weapons.GetList()
@@ -93,6 +103,11 @@ function GM:InitPostEntity()
 		ShopEditor.InitDefaultData(wep)
 	end
 
+	-- init weapons
+	for _, wep in ipairs(sweps) do
+		CreateEquipment(wep)
+	end
+
 	-- reset normal weapons equipment
 	for _, wep in ipairs(sweps) do
 		wep.CanBuy = {}
@@ -100,8 +115,6 @@ function GM:InitPostEntity()
 
 	-- reset normal equipment tables
 	for _, role in pairs(GetRoles()) do
-		EquipmentItems[role.index] = {}
-
 		if Equipment then
 			Equipment[role.index] = {}
 		end
@@ -313,7 +326,7 @@ function GM:ClearClientState()
 
 	client:SetRole(ROLE_INNOCENT)
 
-	client.equipment_items = EQUIP_NONE
+	client.equipment_items = {}
 	client.equipment_credits = 0
 	client.bought = {}
 	client.last_id = nil

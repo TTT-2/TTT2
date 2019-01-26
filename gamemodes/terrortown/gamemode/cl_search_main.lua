@@ -77,9 +77,6 @@ end
 local TypeToMat = {
 	nick = "id",
 	words = "halp",
-	eq_armor = "armor",
-	eq_radar = "radar",
-	eq_disg = "disguise",
 	c4 = "code",
 	dmg = DmgToMat,
 	wep = WeaponToIcon,
@@ -152,21 +149,6 @@ function PreprocSearch(raw)
 				local final = string.match(d, "[\\.\\!\\?]$") ~= nil
 
 				search[t].text = PT("search_words", {lastwords = d .. (final and "" or "--.")})
-			end
-		elseif t == "eq_armor" then
-			if d then
-				search[t].text = T("search_armor")
-				search[t].p = 17
-			end
-		elseif t == "eq_disg" then
-			if d then
-				search[t].text = T("search_disg")
-				search[t].p = 18
-			end
-		elseif t == "eq_radar" then
-			if d then
-				search[t].text = T("search_radar")
-				search[t].p = 19
 			end
 		elseif t == "c4" then
 			if d > 0 then
@@ -265,6 +247,18 @@ function PreprocSearch(raw)
 		if search[t] then
 			search[t].img = IconForInfoType(t, d)
 		end
+	end
+
+	for _, item in ipairs(items.GetList()) do
+		if not raw["eq_" .. item.id] then return end
+
+		local highest = 0
+
+		for _, v in pairs(search) do
+			highest = math.max(highest, v.p)
+		end
+
+		search["eq_" .. item.id] = {img = item.material, text = item.desc, p = highest + 1}
 	end
 
 	hook.Call("TTTBodySearchPopulate", nil, search, raw)
@@ -539,12 +533,16 @@ local function TTT_RagdollSearch()
 	search.nick = net.ReadString()
 
 	-- Equipment
-	local eq = net.ReadUInt(EQUIPMENT_BITS)
+	local eq = {}
 
-	-- All equipment pieces get their own icon
-	search.eq_armor = util.BitSet(eq, EQUIP_ARMOR)
-	search.eq_radar = util.BitSet(eq, EQUIP_RADAR)
-	search.eq_disg = util.BitSet(eq, EQUIP_DISGUISE)
+	local eqAmount = net.ReadUInt(16)
+
+	for i = 1, eqAmount do
+		local eqStr = net.ReadString()
+
+		eq[#eq + 1] = eqStr
+		search["eq_" .. eqStr] = true
+	end
 
 	-- Traitor things
 	search.role = net.ReadUInt(ROLE_BITS)
@@ -584,6 +582,10 @@ local function TTT_RagdollSearch()
 
 	-- long range
 	search.lrng = net.ReadBit()
+
+	for _, item in ipairs(items.GetList()) do
+		search["eq_" .. item.id] = table.HasValue(eq, item.id)
+	end
 
 	hook.Call("TTTBodySearchEquipment", nil, search, eq)
 

@@ -212,7 +212,7 @@ function CORPSE.ShowSearch(ply, rag, covert, long_range)
 	local nick = CORPSE.GetPlayerNick(rag)
 	local subrole = rag.was_role
 	local team = rag.was_team
-	local eq = rag.equipment or EQUIP_NONE
+	local eq = rag.equipment or {}
 	local c4 = rag.bomb_wire or - 1
 	local dmg = rag.dmgtype or DMG_GENERIC
 	local wep = rag.dmgwep or ""
@@ -282,7 +282,13 @@ function CORPSE.ShowSearch(ply, rag, covert, long_range)
 	net.WriteUInt(rag:EntIndex(), 16) -- 16 bits
 	net.WriteUInt(owner, 8) -- 128 max players. (8 bits)
 	net.WriteString(nick)
-	net.WriteUInt(eq, EQUIPMENT_BITS) -- Equipment (16 = max.)
+
+	net.WriteUInt(#eq, 16) -- Equipment (16 = max.)
+
+	for _, item in ipairs(eq) do
+		net.WriteString(item.id)
+	end
+
 	net.WriteUInt(subrole, ROLE_BITS) -- (... bits)
 	net.WriteString(team)
 	net.WriteInt(c4, bitsRequired(C4_WIRE_COUNT) + 1) -- -1 -> 2^bits (default c4: 4 bits)

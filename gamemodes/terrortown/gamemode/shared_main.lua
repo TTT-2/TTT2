@@ -46,8 +46,8 @@ SPECIAL_EQUIPMENT = {
 	"weapon_ttt_stungun",
 	"weapon_ttt_cse",
 	"weapon_ttt_teleport",
-	EQUIP_ARMOR,
-	EQUIP_RADAR
+	"item_ttt_armor",
+	"item_ttt_radar"
 }
 
 TRAITOR_EQUIPMENT = {
@@ -63,9 +63,9 @@ TRAITOR_EQUIPMENT = {
 	"weapon_ttt_sipistol",
 	"weapon_ttt_teleport",
 	"weapon_ttt_decoy",
-	EQUIP_ARMOR,
-	EQUIP_RADAR,
-	EQUIP_DISGUISE
+	"item_ttt_armor",
+	"item_ttt_radar",
+	"item_ttt_disguiser"
 }
 
 -- role teams to have an identifier
@@ -78,9 +78,6 @@ TEAM_NOCHANGE = "nochange"
 
 -- max networking bits to send roles numbers
 ROLE_BITS = 5
-
--- max networking bits to send equipment ids
-EQUIPMENT_BITS = EQUIPMENT_BITS or 16
 
 -- override default settings of ttt to make it compatible with other addons
 -- Player roles
@@ -621,10 +618,14 @@ ttt_include("util")
 ttt_include("lang_shd")
 ttt_include("equip_items_shd")
 
-function GetWeaponByName(name)
+function GetEquipmentFileName(name)
+	return string.gsub(string.lower(name), "[%W%s]", "_") -- clean string
+end
+
+function GetEquipmentByName(name)
 	name = GetEquipmentFileName(name)
 
-	return weapons.GetStored(name), name
+	return not items.IsItem(name) and weapons.GetStored(name) or items.GetStored(name), name
 end
 
 function DetectiveMode()

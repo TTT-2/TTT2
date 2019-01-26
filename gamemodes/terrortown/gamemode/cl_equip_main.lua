@@ -55,7 +55,7 @@ local function RolenameToRole(val)
 end
 
 local function ItemIsWeapon(item)
-	return not tonumber(item.id)
+	return not items.IsItem(item.id)
 end
 
 local function CanCarryWeapon(item)
@@ -252,16 +252,16 @@ local function CreateEquipmentList(t)
 		owned_ids = nil
 	end
 
-	local items = {}
+	local itms = {}
 	local tmp = GetEquipmentForRole(currole, t.notalive)
 
 	for _, v in ipairs(tmp) do
 		if not v.notBuyable then
-			items[#items + 1] = v
+			itms[#itms + 1] = v
 		end
 	end
 
-	if #items == 0 and not t.notalive then
+	if #itms == 0 and not t.notalive then
 		ply:ChatPrint("[TTT2][SHOP] You need to run 'shopeditor' as admin in the developer console to create a shop for this role. Link it with another shop or click on the icons to add weapons and items to the shop.")
 	end
 
@@ -271,8 +271,8 @@ local function CreateEquipmentList(t)
 	local steamid = ply:SteamID64()
 	local col = ply:GetRoleColor()
 
-	for k, item in pairs(items) do
-		if (t.search and string.find(string.lower(item.name), string.lower(t.search))) or not t.search then
+	for k, item in ipairs(itms) do
+		if t.search and string.find(string.lower(item.name), string.lower(t.search)) or not t.search then
 			local ic = nil
 
 			-- Create icon panel
@@ -354,15 +354,15 @@ local function CreateEquipmentList(t)
 				ic:SetTooltip(tip)
 
 				-- If we cannot order this item, darken it
-				if not t.role and (((not can_order)
+				if not t.role and ((not can_order
 						-- already owned
 						or table.HasValue(owned_ids, item.id)
-						or (tonumber(item.id) and ply:HasEquipmentItem(tonumber(item.id)))
+						or items.IsItem(item.id) and ply:HasEquipmentItem(item.id)
 						-- already carrying a weapon for this slot
-						or (ItemIsWeapon(item) and (not CanCarryWeapon(item)))
+						or ItemIsWeapon(item) and not CanCarryWeapon(item)
 						or not EquipmentIsBuyable(item, ply:GetTeam())
 						-- already bought the item before
-						or (item.limited and ply:HasBought(tostring(item.id)))
+						or item.limited and ply:HasBought(item.id)
 					) or (item.credits or 1) > ply:GetCredits()
 				) then
 					ic:SetIconColor(color_darkened)
@@ -653,16 +653,10 @@ function TraitorMenuPopup()
 	dsheet:AddSheet(GetTranslation("equip_tabtitle"), dequip, "icon16/bomb.png", false, false, GetTranslation("equip_tooltip_main"))
 
 	-- Item control
-	if ply:HasEquipmentItem(EQUIP_RADAR) then
+	if ply:HasEquipmentItem("item_ttt_radar") then
 		local dradar = RADAR.CreateMenu(dsheet, dframe)
 
 		dsheet:AddSheet(GetTranslation("radar_name"), dradar, "icon16/magnifier.png", false, false, GetTranslation("equip_tooltip_radar"))
-	end
-
-	if ply:HasEquipmentItem(EQUIP_DISGUISE) then
-		local ddisguise = DISGUISE.CreateMenu(dsheet)
-
-		dsheet:AddSheet(GetTranslation("disg_name"), ddisguise, "icon16/user.png", false, false, GetTranslation("equip_tooltip_disguise"))
 	end
 
 	-- Weapon/item control
@@ -789,7 +783,42 @@ local function ReceiveEquipment()
 
 	if not IsValid(ply) then return end
 
-	ply.equipment_items = net.ReadUInt(EQUIPMENT_BITS)
+	local eqAmount = net.ReadUInt(16)
+	local tmp = {}
+	local toRem = {}
+
+	for i = 1, eqAmount do
+		tmp[#tmp + 1] = net.ReadString()
+	end
+
+	-- reset all old items
+	for k, v in ipairs(ply:GetEquipmentItems()) do
+		if not table.HasValue(tmp, v) then
+			local item = items.GetStored(v)
+			if item then
+				item:Reset()
+			end
+
+			table.insert(toRem, 1, k)
+		end
+	end
+
+	-- remove finally
+	for _, key in ipairs(toRem) do
+		table.remove(ply:GetEquipmentItems(), key)
+	end
+
+	-- now equip the items the player doesn't own
+	for _, v in ipairs(tmp) do
+		if not table.HasValue(ply:GetEquipmentItems(), v) then
+			ply.equipment_items[#ply.equipment_items + 1] = v
+
+			local item = items.GetStored(v)
+			if item then
+				item:Equip(ply)
+			end
+		end
+	end
 end
 net.Receive("TTT_Equipment", ReceiveEquipment)
 
@@ -843,11 +872,15 @@ net.Receive("TTT_Bought", ReceiveBought)
 
 -- Player received the item he has just bought, so run clientside init
 local function ReceiveBoughtItem()
-	local is_item = net.ReadBit() == 1
-	local id = is_item and net.ReadUInt(EQUIPMENT_BITS) or net.ReadString()
+	local id = net.ReadString()
+
+	local item = items.GetStored(id)
+	if item then
+		item:Bought()
+	end
 
 	-- I can imagine custom equipment wanting this, so making a hook
-	hook.Run("TTTBoughtItem", is_item, id)
+	hook.Run("TTTBoughtItem", id)
 end
 net.Receive("TTT_BoughtItem", ReceiveBoughtItem)
 

@@ -109,20 +109,33 @@ end
 
 --- Equipment items
 function plymeta:AddEquipmentItem(id)
-	id = tonumber(id)
+	if not self:HasEquipmentItem(id) then
+		self.equipment_items = self.equipment_items or {}
+		self.equipment_items[#self.equipment_items + 1] = id
 
-	if id then
-		self.equipment_items = bit.bor(self.equipment_items, id)
+		local item = items.GetStored(id)
+		if item then
+			item:Equip(self)
+		end
 
 		self:SendEquipment()
 	end
 end
 
 function plymeta:RemoveEquipmentItem(id)
-	id = tonumber(id)
+	if self:HasEquipmentItem(id) then
+		local item = items.GetStored(id)
+		if item then
+			item:Reset()
+		end
 
-	if id and util.BitSet(self.equipment_items, id) then
-		self.equipment_items = bit.bxor(self.equipment_items, id)
+		for k, v in ipairs(self:GetEquipmentItems()) do
+			if v == id then
+				table.remove(self.equipment_items, k)
+
+				break
+			end
+		end
 
 		self:SendEquipment()
 	end
@@ -130,13 +143,27 @@ end
 
 -- We do this instead of an NW var in order to limit the info to just this ply
 function plymeta:SendEquipment()
+	local arr = self:GetEquipmentItems()
+
 	net.Start("TTT_Equipment")
-	net.WriteUInt(self.equipment_items, EQUIPMENT_BITS)
+	net.WriteUInt(#arr, 16)
+
+	for i = 1, #arr do
+		net.WriteString(arr[i])
+	end
+
 	net.Send(self)
 end
 
 function plymeta:ResetEquipment()
-	self.equipment_items = EQUIP_NONE
+	for _, id in ipairs(self:GetEquipmentItems()) do
+		local item = items.GetStored(id)
+		if item then
+			item:Reset()
+		end
+	end
+
+	self.equipment_items = {}
 
 	self:SendEquipment()
 end
@@ -267,7 +294,7 @@ end
 function plymeta:GiveEquipmentItem(id)
 	if self:HasEquipmentItem(id) then
 		return false
-	elseif id and id > EQUIP_NONE then
+	elseif id then
 		self:AddEquipmentItem(id)
 
 		return true
@@ -614,10 +641,6 @@ end
 local pendingItems = {}
 
 function plymeta:GiveItem(id)
-	id = tonumber(id)
-
-	if not id then return end
-
 	if GetRoundState() == ROUND_PREP then
 		pendingItems[self] = pendingItems[self] or {}
 		pendingItems[self][#pendingItems[self] + 1] = id
@@ -633,20 +656,20 @@ function plymeta:GiveItem(id)
 	timer.Simple(0.5, function()
 		if not IsValid(ply) then return end
 
+		local item = items.GetStored(id)
+		if item then
+			item:Bought(ply)
+		end
+
 		net.Start("TTT_BoughtItem")
-		net.WriteBit(true)
-		net.WriteUInt(id, EQUIPMENT_BITS)
+		net.WriteString(id)
 		net.Send(ply)
 	end)
 
-	hook.Run("TTTOrderedEquipment", self, id, id) -- hook.Run("TTTOrderedEquipment", self, id, true) -- i know, looks stupid but thats the way TTT does
+	hook.Run("TTTOrderedEquipment", self, id)
 end
 
 function plymeta:RemoveItem(id)
-	id = tonumber(id)
-
-	if not id then return end
-
 	self:RemoveEquipmentItem(id)
 	self:RemoveBought(id)
 end
