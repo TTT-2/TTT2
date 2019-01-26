@@ -250,7 +250,7 @@ function PreprocSearch(raw)
 	end
 
 	for _, item in ipairs(items.GetList()) do
-		if not raw["eq_" .. item.id] then return end
+		if not raw["eq_" .. item.id] then continue end
 
 		local highest = 0
 
