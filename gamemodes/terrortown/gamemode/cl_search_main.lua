@@ -250,14 +250,14 @@ function PreprocSearch(raw)
 	end
 
 	for _, item in ipairs(items.GetList()) do
-		if raw["eq_" .. item.id] then
+		if not item.noCorpseSearch and raw["eq_" .. item.id] then
 			local highest = 0
 
 			for _, v in pairs(search) do
 				highest = math.max(highest, v.p)
 			end
 
-			search["eq_" .. item.id] = {img = item.corpseIcon or item.material, text = item.corpseDesc or item.desc, p = highest + 1}
+			search["eq_" .. item.id] = {img = item.corpseIcon or item.material, text = item.corpseDesc or item.desc or (item.EquipMenuData and item.EquipMenuData.desc), p = highest + 1}
 		end
 	end
 
