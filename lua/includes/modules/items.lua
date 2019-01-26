@@ -62,6 +62,8 @@ function Register(t, name)
 	local old = ItemList[name]
 
 	t.ClassName = name
+	t.id = name
+
 	ItemList[name] = t
 
 	--baseclass.Set(name, t)
