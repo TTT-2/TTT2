@@ -1,10 +1,15 @@
+local baseclass = baseclass
+local list = list
+local duplicator = duplicator
+local pairs = pairs
+
 module("items", package.seeall)
 
 if SERVER then
 	AddCSLuaFile()
 end
 
-local ItemList = {}
+local ItemList = ItemList or {}
 
 --[[---------------------------------------------------------
 	Name: TableInherit( t, base )
@@ -19,7 +24,7 @@ local function TableInherit(t, base)
 		end
 	end
 
-	t["BaseClass"] = base
+	t.BaseClass = base
 
 	return t
 end
@@ -52,6 +57,8 @@ end
 	Desc: Used to register your ITEM with the engine
 -----------------------------------------------------------]]
 function Register(t, name)
+	name = string.lower(name)
+
 	local old = ItemList[name]
 
 	t.ClassName = name
@@ -121,7 +128,10 @@ function OnLoaded()
 	-- could cause some entities to load before their bases!
 	--
 	for k in pairs(ItemList) do
-		baseclass.Set(k, Get(k))
+		local newTable = Get(k)
+		ItemList[k] = newTable
+
+		baseclass.Set(k, newTable)
 	end
 end
 
@@ -152,7 +162,7 @@ function Get(name, retTbl)
 		local base = Get(retval.Base)
 
 		if not base then
-			Msg("ERROR: Trying to derive item " .. tostring(name) .. " from non existant ITEM " .. tostring((SEntList and SEntList[name] and SEntList[name].Base) or name) .. "!\n")
+			Msg("ERROR: Trying to derive item " .. tostring(name) .. " from non existant ITEM " .. tostring(retval.Base) .. "!\n")
 		else
 			retval = TableInherit(retval, base)
 		end
