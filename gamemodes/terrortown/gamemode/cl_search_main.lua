@@ -583,10 +583,6 @@ local function TTT_RagdollSearch()
 	-- long range
 	search.lrng = net.ReadBit()
 
-	for _, item in ipairs(items.GetList()) do
-		search["eq_" .. item.id] = table.HasValue(eq, item.id)
-	end
-
 	hook.Call("TTTBodySearchEquipment", nil, search, eq)
 
 	if search.show then

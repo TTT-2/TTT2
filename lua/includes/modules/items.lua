@@ -68,6 +68,7 @@ function Register(t, name)
 
 	list.Set("Item", name, {
 			ClassName = name,
+			id = name,
 			PrintName = t.PrintName or t.ClassName,
 			Category = t.Category or "Other",
 			Spawnable = t.Spawnable,
