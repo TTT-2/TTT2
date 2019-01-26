@@ -205,19 +205,13 @@ function IsItem(val)
 		return false
 	end
 
-	if isstring(val) then
-		return items.GetStored(val) ~= nil
-	elseif IsValid(val) or istable(val) then
-		local cls = WEPS.GetClass(val)
+	local tmp = val
 
-		for _, v in pairs(ItemList) do
-			if WEPS.GetClass(v) == cls then
-				return true
-			end
-		end
+	if not isstring(val) and (IsValid(val) or istable(val)) then
+		tmp = WEPS.GetClass(val)
 	end
 
-	return false
+	return items.GetStored(tmp) ~= nil
 end
 
 --[[---------------------------------------------------------
@@ -229,25 +223,23 @@ function TableHasItem(tbl, val)
 		return false
 	end
 
-	if IsValid(val) or istable(val) then
-		local cls = WEPS.GetClass(val)
+	local tmp = val
 
-		for _, v in pairs(ItemList) do
-			if WEPS.GetClass(v) == cls then
-				return true
+	if not isstring(val) then
+		if tonumber(val) then -- still support the old item system
+			for _, item in pairs(ItemList) do
+				if item.oldId and item.oldId == val then
+					tmp = item.id
+
+					break
+				end
 			end
+		elseif IsValid(val) or istable(val) then
+			tmp = WEPS.GetClass(val)
 		end
-	elseif tonumber(val) then -- still support the old item system
-		for _, item in pairs(ItemList) do
-			if item.oldId and item.oldId == val then
-				return true
-			end
-		end
-	else
-		return items.GetStored(val) ~= nil
 	end
 
-	return false
+	return table.HasValue(tbl, tmp)
 end
 
 --[[---------------------------------------------------------
