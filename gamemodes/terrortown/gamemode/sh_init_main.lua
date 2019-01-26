@@ -57,6 +57,9 @@ function GM:TTT2Initialize()
 		{
 			__index = function(tbl, key)
 				ErrorNoHalt("\n[TTT2][WARNING] You are using an add-on that is trying to access an unsupported var ('" .. key .. "'). This will lead to error!\n\n")
+			end,
+			__newindex = function(tbl, key, val)
+				ErrorNoHalt("\n[TTT2][WARNING] You are using an add-on that is trying to add a new item ('" .. key .. "' = '" .. val .. "') in the wrong way. This will not be available in the shop and lead to error!\n\n")
 			end
 		}
 	)
