@@ -49,7 +49,17 @@ function GM:TTT2Initialize()
 	items.OnLoaded() -- init baseclasses
 
 	-- reset this old var to print errors for incompatible add-ons
-	EquipmentItems = nil
+	EquipmentItems = setmetatable(
+		{
+			[ROLE_TRAITOR] = {},
+			[ROLE_DETECTIVE] = {}
+		},
+		{
+			__index = function(tbl, key)
+				ErrorNoHalt("[TTT2][WARNING] You are using an add-on that is trying to access an unsupported var ('" .. key .. "'). This will lead to error!")
+			end
+		}
+	)
 end
 
 -- Create teams
