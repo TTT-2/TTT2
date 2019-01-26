@@ -429,7 +429,7 @@ end
 function GenerateNewEquipmentID()
 	EQUIP_MAX = EQUIP_MAX * 2
 
-	ErrorNoHalt("\nTTT2 doesn't support old items completely since they are limited to an amount of 16. If the item with id '" .. EQUIP_MAX .. "' doesn't work as intended, modify the old item and use the new items system instead.\n\n")
+	ErrorNoHalt("\n[TTT2][WARNING] TTT2 doesn't support old items completely since they are limited to an amount of 16. If the item with id '" .. EQUIP_MAX .. "' doesn't work as intended, modify the old item and use the new items system instead.\n\n")
 
 	return EQUIP_MAX
 end

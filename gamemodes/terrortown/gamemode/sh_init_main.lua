@@ -32,6 +32,8 @@ function GM:TTT2Initialize()
 						if ITEMDATA.hud == true then
 							ITEMDATA.hud = nil
 						end
+
+						ErrorNoHalt("\n[TTT2][WARNING] Added incompatible add-on", name, ITEMDATA.oldId, "\n\n")
 					else
 						item.CanBuy = item.CanBuy or {}
 
