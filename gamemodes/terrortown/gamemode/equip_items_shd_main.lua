@@ -429,7 +429,19 @@ end
 function GenerateNewEquipmentID()
 	EQUIP_MAX = EQUIP_MAX * 2
 
-	ErrorNoHalt("\n[TTT2][WARNING] TTT2 doesn't support old items completely since they are limited to an amount of 16. If the item with id '" .. EQUIP_MAX .. "' doesn't work as intended, modify the old item and use the new items system instead.\n\n")
+	local val = EQUIP_MAX
+
+	timer.Simple(0, function()
+		local name = ""
+
+		for _, v in ipairs(items.GetList()) do
+			if v.oldId == val then
+				name = v.id
+			end
+		end
+
+		print("\n[TTT2][WARNING] TTT2 doesn't support old items completely since they are limited to an amount of 16. If the item with id '" .. val .. "' doesn't work as intended, modify the old item and use the new items system instead.", name, "\n\n")
+	end)
 
 	return EQUIP_MAX
 end
