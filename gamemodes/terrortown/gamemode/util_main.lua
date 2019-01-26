@@ -328,6 +328,10 @@ end
 local band = bit.band
 
 function util.BitSet(val, bit2)
+	if istable(val) then
+		return items.TableHasItem(val, bit2)
+	end
+
 	return band(val, bit2) == bit2
 end
 

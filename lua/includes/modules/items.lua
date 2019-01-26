@@ -218,6 +218,36 @@ function IsItem(val)
 end
 
 --[[---------------------------------------------------------
+	Name: TableHasItem( val )
+	Desc: checks whether the input table has a specific ITEM
+-----------------------------------------------------------]]
+function TableHasItem(tbl, val)
+	if not tbl or not val then
+		return false
+	end
+
+	if IsValid(val) or istable(val) then
+		local cls = WEPS.GetClass(val)
+
+		for _, v in pairs(ItemList) do
+			if WEPS.GetClass(v) == cls then
+				return true
+			end
+		end
+	elseif tonumber(val) then -- still support the old item system
+		for _, item in pairs(ItemList) do
+			if item.oldId and item.oldId == val then
+				return true
+			end
+		end
+	else
+		return items.GetStored(val) ~= nil
+	end
+
+	return false
+end
+
+--[[---------------------------------------------------------
 	Name: GetRoleItems( subrole )
 	Desc: get all items for this role
 -----------------------------------------------------------]]
