@@ -2,12 +2,13 @@ if SERVER then
 	AddCSLuaFile()
 end
 
-ITEM.Icon = "vgui/ttt/icon_disguise"
+ITEM.hud = Material("vgui/ttt/icon_disguise")
 ITEM.EquipMenuData = {
 	type = "item_active",
 	name = "item_disg",
 	desc = "item_disg_desc"
 }
+ITEM.material = "vgui/ttt/icon_disguise"
 ITEM.CanBuy = {ROLE_TRAITOR}
 ITEM.oldId = EQUIP_DISGUISE
 

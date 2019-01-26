@@ -357,8 +357,8 @@ local function ItemInfo(client)
 
 	for _, itemCls in ipairs(client:GetEquipmentItems()) do
 		local item = items.GetStored(itemCls)
-		if item and item.Icon then
-			surface.SetMaterial(item.Icon)
+		if item and item.hud then
+			surface.SetMaterial(item.hud)
 			surface.SetDrawColor(255, 255, 255, 255)
 			surface.DrawTexturedRect(20, y, 64, 64)
 

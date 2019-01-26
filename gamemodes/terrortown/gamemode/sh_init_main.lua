@@ -28,6 +28,10 @@ function GM:TTT2Initialize()
 						ITEMDATA.name = name
 						ITEMDATA.material = v.material
 						ITEMDATA.CanBuy = {subrole}
+
+						if ITEMDATA.hud == true then
+							ITEMDATA.hud = nil
+						end
 					else
 						item.CanBuy = item.CanBuy or {}
 
