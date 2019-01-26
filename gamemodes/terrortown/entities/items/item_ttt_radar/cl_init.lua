@@ -117,7 +117,7 @@ local function DrawTarget(tgt, size, offset, no_shrink)
 end
 
 function RADAR:Draw(client)
-	if not client then return end
+	if not client or not client:HasEquipmentItem("item_ttt_radar") then return end
 
 	GetPTranslation = GetPTranslation or LANG.GetParamTranslation
 
