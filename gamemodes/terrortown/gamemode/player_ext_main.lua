@@ -110,8 +110,8 @@ end
 --- Equipment items
 function plymeta:AddEquipmentItem(id)
 	if not self:HasEquipmentItem(id) then
-		self.equipment_items = self.equipment_items or {}
-		self.equipment_items[#self.equipment_items + 1] = id
+		self.equipmentItems = self.equipmentItems or {}
+		self.equipmentItems[#self.equipmentItems + 1] = id
 
 		local item = items.GetStored(id)
 		if item then
@@ -131,7 +131,7 @@ function plymeta:RemoveEquipmentItem(id)
 
 		for k, v in ipairs(self:GetEquipmentItems()) do
 			if v == id then
-				table.remove(self.equipment_items, k)
+				table.remove(self.equipmentItems, k)
 
 				break
 			end
@@ -163,7 +163,7 @@ function plymeta:ResetEquipment()
 		end
 	end
 
-	self.equipment_items = {}
+	self.equipmentItems = {}
 
 	self:SendEquipment()
 end

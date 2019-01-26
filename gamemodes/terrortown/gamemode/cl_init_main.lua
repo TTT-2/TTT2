@@ -326,7 +326,7 @@ function GM:ClearClientState()
 
 	client:SetRole(ROLE_INNOCENT)
 
-	client.equipment_items = {}
+	client.equipmentItems = {}
 	client.equipment_credits = 0
 	client.bought = {}
 	client.last_id = nil

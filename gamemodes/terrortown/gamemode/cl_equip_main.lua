@@ -811,7 +811,7 @@ local function ReceiveEquipment()
 	-- now equip the items the player doesn't own
 	for _, v in ipairs(tmp) do
 		if not table.HasValue(ply:GetEquipmentItems(), v) then
-			ply.equipment_items[#ply.equipment_items + 1] = v
+			ply.equipmentItems[#ply.equipmentItems + 1] = v
 
 			local item = items.GetStored(v)
 			if item then

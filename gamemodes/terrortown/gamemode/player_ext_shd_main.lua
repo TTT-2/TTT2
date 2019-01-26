@@ -318,7 +318,7 @@ function plymeta:GetCredits()
 end
 
 function plymeta:GetEquipmentItems()
-	return self.equipment_items or {}
+	return self.equipmentItems or {}
 end
 
 -- Given an equipment id, returns if player owns this. Given nil, returns if
@@ -327,11 +327,13 @@ function plymeta:HasEquipmentItem(id)
 	if not id then
 		return #self:GetEquipmentItems() > 0
 	else
-		if table.HasValue(self:GetEquipmentItems(), id) then
+		local itms = self:GetEquipmentItems()
+
+		if table.HasValue(itms, id) then
 			return true
 		end
 
-		for _, itemId in ipairs(self:GetEquipmentItems()) do
+		for _, itemId in ipairs(itms) do
 			local item = items.GetStored(itemId)
 			if item and item.oldId and item.oldId == id then
 				return true
