@@ -33,7 +33,11 @@ function GM:TTT2Initialize()
 							ITEMDATA.hud = nil
 						end
 
-						ErrorNoHalt("\n[TTT2][WARNING] Added incompatible add-on", name, ITEMDATA.oldId, "\n\n")
+						items.Register(ITEMDATA, name)
+
+						timer.Simple(0, function()
+							print("[TTT2][WARNING] Added incompatible add-on", name, ITEMDATA.oldId)
+						end)
 					else
 						item.CanBuy = item.CanBuy or {}
 
@@ -41,8 +45,6 @@ function GM:TTT2Initialize()
 							item.CanBuy[#item.CanBuy + 1] = subrole
 						end
 					end
-
-					items.Register(ITEMDATA, name)
 				end
 			end
 		end
