@@ -423,9 +423,7 @@ local function DropActiveWeapon(ply)
 
 	local wep = ply:GetActiveWeapon()
 
-	if not IsValid(wep) then return end
-
-	if not wep.AllowDrop then return end
+	if not IsValid(wep) or not wep.AllowDrop then return end
 
 	local tr = util.QuickTrace(ply:GetShootPos(), ply:GetAimVector() * 32, ply)
 

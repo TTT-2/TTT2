@@ -74,10 +74,12 @@ if CLIENT then
 	end)
 
 	hook.Add("TTTEquipmentTabs", "TTTItemDisguiser", function(dsheet)
+		trans = trans or LANG.GetTranslation
+
 		if LocalPlayer():HasEquipmentItem("item_ttt_disguiser") then
 			local ddisguise = DISGUISE.CreateMenu(dsheet)
 
-			dsheet:AddSheet(GetTranslation("disg_name"), ddisguise, "icon16/user.png", false, false, GetTranslation("equip_tooltip_disguise"))
+			dsheet:AddSheet(trans("disg_name"), ddisguise, "icon16/user.png", false, false, trans("equip_tooltip_disguise"))
 		end
 	end)
 else
