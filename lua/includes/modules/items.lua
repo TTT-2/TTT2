@@ -264,6 +264,18 @@ end
 	Desc: get a role item if it's available for this role
 -----------------------------------------------------------]]
 function GetRoleItem(subrole, id)
+	if tonumber(id) then
+		for _, item in pairs(ItemList) do
+			if item.oldId and item.oldId == id then
+				id = item.id
+
+				break
+			end
+		end
+
+		if tonumber(id) then return end
+	end
+
 	local item = GetStored(id)
 
 	if item and item.CanBuy and table.HasValue(item.CanBuy, subrole) then

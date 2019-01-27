@@ -287,6 +287,8 @@ end
 function GM:InitPostEntity()
 	MsgN("[TTT2][INFO] Client post-init...")
 
+	hook.Run("TTTInitPostEntity")
+
 	InitDefaultEquipment()
 
 	local itms = items.GetList()

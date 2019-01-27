@@ -862,3 +862,8 @@ else -- CLIENT
 	end
 	net.Receive("TTT2SyncEquipment", TTT2SyncEquipment)
 end
+
+-- support this old item system too
+function GetEquipmentItem(role, id)
+	return items.GetRoleItem(role, id)
+end
