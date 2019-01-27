@@ -695,7 +695,7 @@ if SERVER then
 		SYNC_EQUIP[subrole] = SYNC_EQUIP[subrole] or {}
 
 		for k, v in pairs(SYNC_EQUIP[subrole]) do
-			if v.equip == equip_table.id then
+			if v == equip_table.id then
 				table.remove(SYNC_EQUIP[subrole], k)
 
 				break
