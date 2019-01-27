@@ -207,7 +207,13 @@ function IsItem(val)
 
 	local tmp = val
 
-	if not isstring(val) and (IsValid(val) or istable(val)) then
+	if tonumber(val) then
+		for _, item in pairs(ItemList) do
+			if item.oldId and item.oldId == val then
+				return true
+			end
+		end
+	elseif not isstring(val) and (IsValid(val) or istable(val)) then
 		tmp = WEPS.GetClass(val)
 	end
 
