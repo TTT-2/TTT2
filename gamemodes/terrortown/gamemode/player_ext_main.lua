@@ -666,7 +666,7 @@ function plymeta:GiveItem(id)
 		net.Send(ply)
 	end)
 
-	hook.Run("TTTOrderedEquipment", self, id)
+	hook.Run("TTTOrderedEquipment", self, id, items.IsItem(id) and id or false)
 end
 
 function plymeta:RemoveItem(id)

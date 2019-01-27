@@ -662,7 +662,7 @@ local function OrderEquipment(ply, cmd, args)
 			net.Send(ply)
 		end)
 
-		hook.Call("TTTOrderedEquipment", GAMEMODE, ply, id)
+		hook.Call("TTTOrderedEquipment", GAMEMODE, ply, id, items.IsItem(id) and id or false)
 	end
 end
 concommand.Add("ttt_order_equipment", OrderEquipment)
