@@ -598,10 +598,8 @@ if SERVER then
 		end
 	end
 
-	function SyncSingleEquipment(ply, role, equipTbl, add)
-		--print("[TTT2][SHOP] Sending updated equipment '" .. equipTbl.equip .. "' to " .. ply:Nick() .. "...")
-
-		local s = EncodeForStream({[role] = {equipTbl}})
+	function SyncSingleEquipment(ply, role, equipId, add)
+		local s = EncodeForStream({[role] = {equipId}})
 		if not s then return end
 
 		-- divide into happy lil bits.
@@ -839,7 +837,7 @@ else -- CLIENT
 						end
 
 						for _, equip in pairs(tbl) do
-							local equip_table = not items.IsItem(equip.equip) and weapons.GetStored(equip.equip) or items.GetStored(equip.equip)
+							local equip_table = not items.IsItem(equip) and weapons.GetStored(equip) or items.GetStored(equip)
 							if equip_table then
 								equip_table.CanBuy = equip_table.CanBuy or {}
 
