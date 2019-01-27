@@ -163,6 +163,8 @@ ACTIVEROLES = ACTIVEROLES or {}
 CreateConVar("ttt_detective_enabled", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 CreateConVar("ttt_newroles_enabled", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
+local ttt2_custom_models = CreateConVar("ttt2_custom_models", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
 SHOP_DISABLED = "DISABLED"
 SHOP_UNSET = "UNSET"
 
@@ -651,7 +653,11 @@ local ttt_playermodels = {
 local ttt_playermodels_count = #ttt_playermodels
 
 function GetRandomPlayerModel()
-	return ttt_playermodels[math.random(1, ttt_playermodels_count)]
+	if not ttt2_custom_models:GetBool() then
+		return ttt_playermodels[math.random(1, ttt_playermodels_count)]
+	else
+		return ttt_playermodels[1]
+	end
 end
 
 -- Weapons and items that come with TTT. Weapons that are not in this list will
