@@ -30,9 +30,13 @@ hook.Add("InitPostEntity", "InitTTT2OldItems", function()
 					ITEMDATA.material = v.material
 					ITEMDATA.CanBuy = {subrole}
 
+					-- reset this old hud bool
 					if ITEMDATA.hud == true then
 						ITEMDATA.hud = nil
 					end
+
+					-- don't add icon and desc to the search panel if it's not intended
+					ITEMDATA.noCorpseSearch = ITEMDATA.noCorpseSearch or true
 
 					items.Register(ITEMDATA, name)
 

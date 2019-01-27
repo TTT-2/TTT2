@@ -257,7 +257,7 @@ function PreprocSearch(raw)
 				highest = math.max(highest, v.p)
 			end
 
-			search["eq_" .. item.id] = {img = item.corpseIcon or item.material, text = item.corpseDesc or item.desc or (item.EquipMenuData and item.EquipMenuData.desc), p = highest + 1}
+			search["eq_" .. item.id] = {img = item.corpseIcon or item.material, text = item.corpseDesc or (item.desc and LANG.TryTranslation(item.desc)) or (item.EquipMenuData and item.EquipMenuData.desc and LANG.TryTranslation(item.EquipMenuData.desc)), p = highest + 1}
 		end
 	end
 
