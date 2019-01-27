@@ -793,7 +793,7 @@ local function ReceiveEquipment()
 	for k, v in ipairs(ply:GetEquipmentItems()) do
 		if not table.HasValue(tmp, v) then
 			local item = items.GetStored(v)
-			if item then
+			if item and isfunction(item.Reset) then
 				item:Reset(ply)
 			end
 
@@ -812,7 +812,7 @@ local function ReceiveEquipment()
 			ply.equipmentItems[#ply.equipmentItems + 1] = v
 
 			local item = items.GetStored(v)
-			if item then
+			if item and isfunction(item.Equip) then
 				item:Equip(ply)
 			end
 		end
@@ -873,7 +873,7 @@ local function ReceiveBoughtItem()
 	local id = net.ReadString()
 
 	local item = items.GetStored(id)
-	if item then
+	if item and isfunction(item.Bought) then
 		item:Bought(LocalPlayer())
 	end
 

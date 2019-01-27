@@ -653,7 +653,7 @@ local function OrderEquipment(ply, cmd, args)
 			if not IsValid(ply) then return end
 
 			local item = items.GetStored(id)
-			if item then
+			if item and isfunction(item.Bought) then
 				item:Bought(ply)
 			end
 

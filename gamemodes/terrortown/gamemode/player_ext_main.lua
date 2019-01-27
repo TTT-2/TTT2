@@ -114,7 +114,7 @@ function plymeta:AddEquipmentItem(id)
 		self.equipmentItems[#self.equipmentItems + 1] = id
 
 		local item = items.GetStored(id)
-		if item then
+		if item and isfunction(item.Equip) then
 			item:Equip(self)
 		end
 
@@ -125,7 +125,7 @@ end
 function plymeta:RemoveEquipmentItem(id)
 	if self:HasEquipmentItem(id) then
 		local item = items.GetStored(id)
-		if item then
+		if item and isfunction(item.Reset) then
 			item:Reset(self)
 		end
 
@@ -158,7 +158,7 @@ end
 function plymeta:ResetEquipment()
 	for _, id in ipairs(self:GetEquipmentItems()) do
 		local item = items.GetStored(id)
-		if item then
+		if item and isfunction(item.Reset) then
 			item:Reset(self)
 		end
 	end
@@ -657,7 +657,7 @@ function plymeta:GiveItem(id)
 		if not IsValid(ply) then return end
 
 		local item = items.GetStored(id)
-		if item then
+		if item and isfunction(item.Bought) then
 			item:Bought(ply)
 		end
 
