@@ -3,7 +3,7 @@ local changesVersion = CreateClientConVar("changes_version", "v0.0.0.0")
 local changesPanel
 local changes
 
-local function AddChange(version, text)
+function AddChange(version, text)
 	changes = changes or {}
 
 	table.insert(changes, 1, {version = version, text = text})
@@ -154,6 +154,8 @@ function CreateChanges()
 	- added auto-converter for old items
 	- huge amount of fixes
 	]])
+
+	hook.Run("TTT2AddChange")
 end
 
 function ShowChanges()
