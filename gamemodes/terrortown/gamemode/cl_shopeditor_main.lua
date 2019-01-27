@@ -696,7 +696,7 @@ function ShopEditor.shopFallbackRefresh()
 
 		for _, v in pairs(wshop:GetItems()) do
 			if v.item then
-				local equip = not items.IsItem(eq.id) and weapons.GetStored(v.item.id) or items.GetStored(v.item.id)
+				local equip = not items.IsItem(v.item.id) and weapons.GetStored(v.item.id) or items.GetStored(v.item.id)
 				if equip then
 					equip.CanBuy = equip.CanBuy or {}
 
