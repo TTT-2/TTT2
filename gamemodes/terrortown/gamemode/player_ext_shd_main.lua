@@ -339,9 +339,9 @@ function plymeta:HasEquipmentItem(id)
 				return true
 			end
 		end
-
-		return false
 	end
+
+	return false
 end
 
 function plymeta:HasEquipment()
