@@ -794,7 +794,7 @@ local function ReceiveEquipment()
 		if not table.HasValue(tmp, v) then
 			local item = items.GetStored(v)
 			if item then
-				item:Reset()
+				item:Reset(ply)
 			end
 
 			table.insert(toRem, 1, k)
@@ -874,7 +874,7 @@ local function ReceiveBoughtItem()
 
 	local item = items.GetStored(id)
 	if item then
-		item:Bought()
+		item:Bought(LocalPlayer())
 	end
 
 	-- I can imagine custom equipment wanting this, so making a hook

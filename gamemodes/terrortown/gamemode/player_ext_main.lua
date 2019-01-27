@@ -126,7 +126,7 @@ function plymeta:RemoveEquipmentItem(id)
 	if self:HasEquipmentItem(id) then
 		local item = items.GetStored(id)
 		if item then
-			item:Reset()
+			item:Reset(self)
 		end
 
 		for k, v in ipairs(self:GetEquipmentItems()) do
@@ -159,7 +159,7 @@ function plymeta:ResetEquipment()
 	for _, id in ipairs(self:GetEquipmentItems()) do
 		local item = items.GetStored(id)
 		if item then
-			item:Reset()
+			item:Reset(self)
 		end
 	end
 
