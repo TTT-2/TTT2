@@ -138,6 +138,22 @@ function CreateChanges()
 	- added possibility to use random shops! (ShopEditor -> Options)
 	- balanced karma system (Roles that are aware of their teammates can't earn karma anymore. This will lower teamkilling)
 	]])
+
+	AddChange("0.4.0b", [[
+	- ShopEditor:
+		- added .notBuyable param to hide item in the shops
+		- added .globalLimited and teamLimited params to limit equipment
+	- added new shop (by tkindanight)
+		- you can toggle the shop everytime (your role doesn't matter)
+		- the shop will update in real time
+	- added new icons
+	- decreased speed modification lags
+	- improved performance
+	- added warming up for randomness to make things happen... yea... random
+	- implemented new item system! TTT2 now supports more than 16 passive items!
+	- added auto-converter for old items
+	- huge amount of fixes
+	]])
 end
 
 function ShowChanges()
