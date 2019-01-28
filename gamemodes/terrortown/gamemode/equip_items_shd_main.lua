@@ -26,9 +26,30 @@ SYNC_EQUIP = SYNC_EQUIP or {}
 RANDOMSHOP = RANDOMSHOP or {}
 
 -- JUST used to convert old items to new ones
-EquipmentItems = EquipmentItems or {}
-EquipmentItems[ROLE_TRAITOR] = EquipmentItems[ROLE_TRAITOR] or {}
-EquipmentItems[ROLE_DETECTIVE] = EquipmentItems[ROLE_DETECTIVE] or {}
+local itemMt = {
+	__newindex = function(tbl, key, val)
+		ErrorNoHalt("\n[TTT2][INFO] You are using an add-on that is trying to add a new ITEM ('" .. key .. "' = '" .. val .. "') in the wrong way. This will not be available in the shop and lead to errors!\n\n")
+	end
+}
+
+EquipmentItems = EquipmentItems or setmetatable(
+	{
+		[ROLE_TRAITOR] = setmetatable({}, itemMt),
+		[ROLE_DETECTIVE] = setmetatable({}, itemMt)
+	},
+	{
+		__index = function(tbl, key)
+			ErrorNoHalt("\n[TTT2][WARNING] You are using an add-on that is trying to access an unsupported var ('" .. key .. "'). This will lead to errors!\n\n")
+		end,
+		__newindex = function(tbl, key, val)
+			ErrorNoHalt("\n[TTT2][WARNING] You are using an add-on that is trying to add a new role ('" .. key .. "' = '" .. val .. "') to an unsupported var. This will lead to errors!\n\n")
+
+			if istable(val) then
+				tbl[key] = setmetatable(val, itemMt)
+			end
+		end
+	}
+)
 
 function GetEquipmentBase(data, eq)
 	if not eq or eq.inited then

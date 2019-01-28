@@ -33,8 +33,12 @@ hook.Add("TTTInitPostEntity", "InitTTT2OldItems", function()
 
 						-- reset this old hud bool
 						if ITEMDATA.hud == true then
+							ITEMDATA.oldHud = true
 							ITEMDATA.hud = nil
 						end
+
+						-- set the converted indicator
+						ITEMDATA.converted = true
 
 						-- don't add icon and desc to the search panel if it's not intended
 						ITEMDATA.noCorpseSearch = ITEMDATA.noCorpseSearch or true
@@ -42,7 +46,7 @@ hook.Add("TTTInitPostEntity", "InitTTT2OldItems", function()
 						items.Register(ITEMDATA, name)
 
 						timer.Simple(0, function()
-							print("[TTT2][WARNING] Added incompatible add-on", name, ITEMDATA.oldId)
+							print("[TTT2][INFO] Automatically converted not adjusted ITEM", name, ITEMDATA.oldId)
 						end)
 					else
 						item.CanBuy = item.CanBuy or {}
@@ -57,32 +61,6 @@ hook.Add("TTTInitPostEntity", "InitTTT2OldItems", function()
 	end
 
 	items.OnLoaded() -- init baseclasses
-
-	-- reset this old var to print errors for incompatible add-ons
-	local itemMt = {
-		__newindex = function(tbl, key, val)
-			ErrorNoHalt("\n[TTT2][WARNING] You are using an add-on that is trying to add a new item ('" .. key .. "' = '" .. val .. "') in the wrong way. This will not be available in the shop and lead to errors!\n\n")
-		end
-	}
-
-	EquipmentItems = setmetatable(
-		{
-			[ROLE_TRAITOR] = setmetatable({}, itemMt),
-			[ROLE_DETECTIVE] = setmetatable({}, itemMt)
-		},
-		{
-			__index = function(tbl, key)
-				ErrorNoHalt("\n[TTT2][WARNING] You are using an add-on that is trying to access an unsupported var ('" .. key .. "'). This will lead to errors!\n\n")
-			end,
-			__newindex = function(tbl, key, val)
-				ErrorNoHalt("\n[TTT2][WARNING] You are using an add-on that is trying to add a new role ('" .. key .. "' = '" .. val .. "') to an unsupported var. This will lead to errors!\n\n")
-
-				if istable(val) then
-					tbl[key] = setmetatable(val, itemMt)
-				end
-			end
-		}
-	)
 end)
 
 -- Create teams
