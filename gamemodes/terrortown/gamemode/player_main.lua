@@ -768,6 +768,8 @@ function GM:PlayerDeath(victim, infl, attacker)
 			victim.killerSpec = attacker
 		end
 	end)
+
+	hook.Run("TTT2PostPlayerDeath", victim, infl, attacker)
 end
 
 -- kill hl2 beep
