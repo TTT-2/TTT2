@@ -10,7 +10,7 @@ ITEM.EquipMenuData = {
 }
 ITEM.material = "vgui/ttt/icon_disguise"
 ITEM.CanBuy = {ROLE_TRAITOR}
-ITEM.oldId = EQUIP_DISGUISE
+ITEM.oldId = EQUIP_DISGUISE or 4
 
 if CLIENT then
 	DISGUISE = {}

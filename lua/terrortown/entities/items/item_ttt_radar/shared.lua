@@ -10,4 +10,4 @@ ITEM.EquipMenuData = {
 }
 ITEM.material = "vgui/ttt/icon_radar"
 ITEM.CanBuy = {ROLE_TRAITOR, ROLE_DETECTIVE}
-ITEM.oldId = EQUIP_RADAR
+ITEM.oldId = EQUIP_RADAR or 2
