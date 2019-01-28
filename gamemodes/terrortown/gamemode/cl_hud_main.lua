@@ -354,10 +354,10 @@ local defaultY = ScrH() * 0.5 + 20
 
 local function ItemInfo(client)
 	local y = defaultY
-	local items = client:GetEquipmentItems()
+	local itms = client:GetEquipmentItems()
 
 	-- at first, calculate old items because they doesn't take care of the new ones
-	for _, itemCls in ipairs(items) do
+	for _, itemCls in ipairs(itms) do
 		local item = items.GetStored(itemCls)
 		if item and item.oldHud then
 			y = y - 80
@@ -365,7 +365,7 @@ local function ItemInfo(client)
 	end
 
 	-- now draw our new items automatically
-	for _, itemCls in ipairs(items) do
+	for _, itemCls in ipairs(itms) do
 		local item = items.GetStored(itemCls)
 		if item and item.hud then
 			surface.SetMaterial(item.hud)
