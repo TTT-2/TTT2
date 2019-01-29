@@ -594,6 +594,8 @@ local function OrderEquipment(ply, cmd, args)
 		-- the item is just buyable if there is a special amount of players
 		if not EquipmentIsBuyable(equip_table, ply:GetTeam()) then return end
 
+		credits = equip_table.credits or 1
+
 		if credits > ply:GetCredits() then
 			print(ply, "tried to buy item/weapon, but didn't had enough credits")
 
@@ -629,15 +631,13 @@ local function OrderEquipment(ply, cmd, args)
 		else
 			ply:GiveEquipmentItem(id)
 		end
-
-		credits = equip_table.credits or 1
 	else
 		print(ply, "tried to buy equip that doesn't exists", id)
 
 		return
 	end
 
-	ply:SubtractCredits(credits or 1)
+	ply:SubtractCredits(credits)
 
 	LANG.Msg(ply, "buy_received")
 
