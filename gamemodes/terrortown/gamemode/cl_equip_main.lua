@@ -878,7 +878,7 @@ local function ReceiveBoughtItem()
 	end
 
 	-- I can imagine custom equipment wanting this, so making a hook
-	hook.Run("TTTBoughtItem", id)
+	hook.Run("TTTBoughtItem", item ~= nil, (item and item.oldId or nil) or id)
 end
 net.Receive("TTT_BoughtItem", ReceiveBoughtItem)
 

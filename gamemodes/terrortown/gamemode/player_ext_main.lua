@@ -651,15 +651,15 @@ function plymeta:GiveItem(id)
 	self:GiveEquipmentItem(id)
 	self:AddBought(id)
 
+	local item = items.GetStored(id)
+	if item and isfunction(item.Bought) then
+		item:Bought(self)
+	end
+
 	local ply = self
 
 	timer.Simple(0.5, function()
 		if not IsValid(ply) then return end
-
-		local item = items.GetStored(id)
-		if item and isfunction(item.Bought) then
-			item:Bought(ply)
-		end
 
 		net.Start("TTT_BoughtItem")
 		net.WriteString(id)

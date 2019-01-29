@@ -567,7 +567,7 @@ local function OrderEquipment(ply, cmd, args)
 
 	-- some weapons can only be bought once per player per round, this used to be
 	-- defined in a table here, but is now in the SWEP's table
-	if equip_table and equip_table.LimitedStock and ply:HasBought(id) then
+	if equip_table and (equip_table.LimitedStock or equip_table.limited) and ply:HasBought(id) then
 		LANG.Msg(ply, "buy_no_stock")
 
 		return
@@ -609,7 +609,7 @@ local function OrderEquipment(ply, cmd, args)
 			received = true
 		end
 
-		credits = equip_table.credits
+		credits = equip_table.credits or 1
 	else
 		print(ply, "tried to buy equip that doesn't exists", id)
 
@@ -650,17 +650,19 @@ local function OrderEquipment(ply, cmd, args)
 		timer.Simple(0.5, function()
 			if not IsValid(ply) then return end
 
-			local item = items.GetStored(id)
-			if item and isfunction(item.Bought) then
-				item:Bought(ply)
-			end
-
 			net.Start("TTT_BoughtItem")
 			net.WriteString(id)
 			net.Send(ply)
 		end)
 
-		hook.Call("TTTOrderedEquipment", GAMEMODE, ply, id, items.IsItem(id) and id or false)
+		if is_item and equip_table and isfunction(equip_table.Bought) then
+			equip_table:Bought(ply)
+		end
+
+		-- still support old items
+		local id2 = (is_item and equip_table.oldId or nil) or id
+
+		hook.Call("TTTOrderedEquipment", GAMEMODE, ply, id2, is_item and id2 or false)
 	end
 end
 concommand.Add("ttt_order_equipment", OrderEquipment)
