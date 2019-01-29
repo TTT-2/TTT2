@@ -258,7 +258,28 @@ function PreprocSearch(raw)
 				highest = math.max(highest, v.p)
 			end
 
-			search["eq_" .. item.id] = {img = item.corpseIcon or item.material, text = item.corpseDesc or (item.desc and RT(item.desc) or nil) or ((item.EquipMenuData and item.EquipMenuData.desc) and RT(item.EquipMenuData.desc) or nil) or "", p = highest + 1}
+			local text
+
+			if item.corpseDesc then
+				text = RT(item.corpseDesc) or item.corpseDesc
+			else
+				if item.desc then
+					text = RT(item.desc)
+				end
+
+				local tmpText
+
+				if not text and item.EquipMenuData and item.EquipMenuData.desc then
+					tmpText = item.EquipMenuData.desc
+					text = RT(tmpText)
+				end
+
+				if not text then
+					text = item.desc or tmpText or ""
+				end
+			end
+
+			search["eq_" .. item.id] = {img = item.corpseIcon or item.material, text = text, p = highest + 1}
 		end
 	end
 
