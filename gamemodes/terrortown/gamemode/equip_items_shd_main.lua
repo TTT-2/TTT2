@@ -64,7 +64,7 @@ function GetEquipmentBase(data, eq)
 		id = name,
 		name = name,
 		PrintName = data.name or data.PrintName or eq.PrintName or name,
-		limited = eq.LimitedStock or eq.limited,
+		limited = eq.limited or eq.LimitedStock,
 		kind = eq.Kind or WEAPON_NONE,
 		slot = (eq.Slot or 0) + 1,
 		material = eq.Icon or eq.material or "vgui/ttt/icon_id",

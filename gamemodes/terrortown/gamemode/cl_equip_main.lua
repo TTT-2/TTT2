@@ -930,6 +930,7 @@ local function getKeyboardFocus(pnl)
 	if eqframe and IsValid(eqframe) and pnl:HasParent(eqframe) then
 		eqframe:SetKeyboardInputEnabled(true)
 	end
+
 	if pnl.selectAll then
 		pnl:SelectAllText()
 	end

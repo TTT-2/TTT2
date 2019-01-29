@@ -567,13 +567,12 @@ local function OrderEquipment(ply, cmd, args)
 
 	-- some weapons can only be bought once per player per round, this used to be
 	-- defined in a table here, but is now in the SWEP's table
-	if equip_table and (equip_table.LimitedStock or equip_table.limited) and ply:HasBought(id) then
+	if equip_table and equip_table.limited and ply:HasBought(id) then
 		LANG.Msg(ply, "buy_no_stock")
 
 		return
 	end
 
-	local received = false
 	local credits
 
 	if equip_table then
@@ -595,18 +594,40 @@ local function OrderEquipment(ply, cmd, args)
 		-- the item is just buyable if there is a special amount of players
 		if not EquipmentIsBuyable(equip_table, ply:GetTeam()) then return end
 
+		if credits > ply:GetCredits() then
+			print(ply, "tried to buy item/weapon, but didn't had enough credits")
+
+			return
+		end
+
+		if GetGlobalInt("ttt2_random_shops") > 0 and RANDOMSHOP[subrole] and #RANDOMSHOP[subrole] > 0 then
+			local key = false
+
+			for _, equip in ipairs(RANDOMSHOP[subrole]) do
+				if equip.id == id then
+					key = true
+
+					break
+				end
+			end
+
+			if not key then
+				print(ply, "tried to buy item/weapon, but didn't allowed to do so!")
+
+				return
+			end
+		end
+
 		-- no longer restricted to only WEAPON_EQUIP weapons, just anything that
 		-- is whitelisted and carryable
 		if not is_item then
 			if ply:CanCarryWeapon(equip_table) then
 				GiveEquipmentWeapon(ply, id)
-
-				received = true
+			else
+				return
 			end
 		else
 			ply:GiveEquipmentItem(id)
-
-			received = true
 		end
 
 		credits = equip_table.credits or 1
@@ -616,54 +637,28 @@ local function OrderEquipment(ply, cmd, args)
 		return
 	end
 
-	if credits > ply:GetCredits() then
-		print(ply, "tried to buy item/weapon, but didn't had enough credits")
+	ply:SubtractCredits(credits or 1)
 
-		return
+	LANG.Msg(ply, "buy_received")
+
+	ply:AddBought(id)
+
+	timer.Simple(0.5, function()
+		if not IsValid(ply) then return end
+
+		net.Start("TTT_BoughtItem")
+		net.WriteString(id)
+		net.Send(ply)
+	end)
+
+	if is_item and equip_table and isfunction(equip_table.Bought) then
+		equip_table:Bought(ply)
 	end
 
-	if GetGlobalInt("ttt2_random_shops") > 0 and RANDOMSHOP[subrole] and #RANDOMSHOP[subrole] > 0 then
-		local key = false
+	-- still support old items
+	local id2 = (is_item and equip_table.oldId or nil) or id
 
-		for _, equip in ipairs(RANDOMSHOP[subrole]) do
-			if equip.id == id then
-				key = true
-
-				break
-			end
-		end
-
-		if not key then
-			print(ply, "tried to buy item/weapon, but didn't allowed to do so!")
-
-			return
-		end
-	end
-
-	if received then
-		ply:SubtractCredits(credits or 1)
-
-		LANG.Msg(ply, "buy_received")
-
-		ply:AddBought(id)
-
-		timer.Simple(0.5, function()
-			if not IsValid(ply) then return end
-
-			net.Start("TTT_BoughtItem")
-			net.WriteString(id)
-			net.Send(ply)
-		end)
-
-		if is_item and equip_table and isfunction(equip_table.Bought) then
-			equip_table:Bought(ply)
-		end
-
-		-- still support old items
-		local id2 = (is_item and equip_table.oldId or nil) or id
-
-		hook.Call("TTTOrderedEquipment", GAMEMODE, ply, id2, is_item and id2 or false)
-	end
+	hook.Call("TTTOrderedEquipment", GAMEMODE, ply, id2, is_item and id2 or false)
 end
 concommand.Add("ttt_order_equipment", OrderEquipment)
 
