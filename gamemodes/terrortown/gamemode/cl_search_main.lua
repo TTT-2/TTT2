@@ -1,6 +1,7 @@
 -- Body search popup
 local T = LANG.GetTranslation
 local PT = LANG.GetParamTranslation
+local RT = LANG.GetRawTranslation
 local table = table
 local net = net
 local pairs = pairs
@@ -257,7 +258,7 @@ function PreprocSearch(raw)
 				highest = math.max(highest, v.p)
 			end
 
-			search["eq_" .. item.id] = {img = item.corpseIcon or item.material, text = item.corpseDesc or (item.desc and T(item.desc) or nil) or ((item.EquipMenuData and item.EquipMenuData.desc) and T(item.EquipMenuData.desc) or nil) or "", p = highest + 1}
+			search["eq_" .. item.id] = {img = item.corpseIcon or item.material, text = item.corpseDesc or (item.desc and RT(item.desc) or nil) or ((item.EquipMenuData and item.EquipMenuData.desc) and RT(item.EquipMenuData.desc) or nil) or "", p = highest + 1}
 		end
 	end
 
