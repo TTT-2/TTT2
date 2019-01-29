@@ -28,7 +28,7 @@ RANDOMSHOP = RANDOMSHOP or {}
 -- JUST used to convert old items to new ones
 local itemMt = {
 	__newindex = function(tbl, key, val)
-		ErrorNoHalt("\n[TTT2][INFO] You are using an add-on that is trying to add a new ITEM ('" .. key .. "' = '" .. val .. "') in the wrong way. This will not be available in the shop and lead to errors!\n\n")
+		print("[TTT2][INFO] You are using an add-on that is trying to add a new ITEM ('" .. key .. "' = '" .. val .. "') in the wrong way. This will not be available in the shop and lead to errors!")
 	end
 }
 
