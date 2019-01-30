@@ -69,7 +69,7 @@ function GM:PostDrawTranslucentRenderables()
 				local base = Material("vgui/ttt/dynamic/sprite_base")
 				local base_overlay = Material("vgui/ttt/dynamic/sprite_base_overlay")
 				local icon = Material("vgui/ttt/dynamic/roles/icon_" .. rd.abbr)
-				local incol = ply:GetRoleColor()
+				local incol = hook.Run("TTT2ModifyRoleIconColor", ply) or ply:GetRoleColor()
 
 				render.SetMaterial(base)
 				render.DrawQuadEasy(pos, dir, 8, 8, incol, 180)
@@ -363,6 +363,7 @@ function GM:HUDDrawTargetID()
 
 		text = L["target_" .. rd.name]
 		c = IsValid(ent) and ent:GetRoleColor() or rd.color
+		c = hook.Run("TTT2ModifyTargetIDColor", ent) or c
 	end
 
 	if ent.sb_tag and ent.sb_tag.txt then
