@@ -6,7 +6,7 @@ if LANG then return end
 
 LANG = {}
 
-util.IncludeClientFile("cl_lang.lua")
+util.IncludeClientFile("terrortown/gamemode/client/cl_lang.lua")
 
 local net = net
 local table = table
@@ -26,7 +26,6 @@ for _, fname in pairs(files) do
 		MsgN("Included TTT language file: " .. fname)
 	end
 end
-
 
 if SERVER then
 	local count = table.Count

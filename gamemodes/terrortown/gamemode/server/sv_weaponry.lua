@@ -1,4 +1,5 @@
-ttt_include("weaponry_shd") -- inits WEPS tbl
+ttt_include("sh_weaponry") -- inits WEPS tbl
+
 ---- Weapon system, pickup limits, etc
 local ipairs = ipairs
 local IsValid = IsValid

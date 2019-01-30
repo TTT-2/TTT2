@@ -1,0 +1,104 @@
+TTT2DIR = "terrortown/gamemode/"
+
+TTTFiles = {
+	-- client files
+	cl_awards = {file = "cl_awards.lua", on = "client"},
+	cl_changes = {file = "cl_changes.lua", on = "client"},
+	cl_chat = {file = "cl_chat.lua", on = "client"},
+	cl_credits = {file = "cl_credits.lua", on = "client"},
+	cl_equip = {file = "cl_equip.lua", on = "client"},
+	cl_help = {file = "cl_help.lua", on = "client"},
+	cl_hud = {file = "cl_hud.lua", on = "client"},
+	cl_hudpickup = {file = "cl_hudpickup.lua", on = "client"},
+	cl_keys = {file = "cl_keys.lua", on = "client"},
+	cl_main = {file = "cl_main.lua", on = "client"},
+	cl_msgstack = {file = "cl_msgstack.lua", on = "client"},
+	cl_popups = {file = "cl_popups.lua", on = "client"},
+	cl_radio = {file = "cl_radio.lua", on = "client"},
+	cl_scoreboard = {file = "cl_scoreboard.lua", on = "client"},
+	cl_scoring = {file = "cl_scoring.lua", on = "client"},
+	cl_scoring_events = {file = "cl_scoring_events.lua", on = "client"},
+	cl_search = {file = "cl_search.lua", on = "client"},
+	cl_targetid = {file = "cl_targetid.lua", on = "client"},
+	cl_tbuttons = {file = "cl_tbuttons.lua", on = "client"},
+	cl_tips = {file = "cl_tips.lua", on = "client"},
+	cl_transfer = {file = "cl_transfer.lua", on = "client"},
+	cl_voice = {file = "cl_voice.lua", on = "client"},
+	cl_wepswitch = {file = "cl_wepswitch.lua", on = "client"},
+	cl_shopeditor = {file = "cl_shopeditor.lua", on = "client"},
+
+	-- shared files
+	sh_corpse = {file = "sh_corpse.lua", on = "shared"},
+	sh_equip_items = {file = "sh_equip_items.lua", on = "shared"},
+	sh_init = {file = "sh_init.lua", on = "shared"},
+	sh_lang = {file = "sh_lang.lua", on = "shared"},
+	sh_main = {file = "sh_main.lua", on = "shared"},
+	sh_player_ext = {file = "sh_player_ext.lua", on = "shared"},
+	sh_scoring = {file = "sh_scoring.lua", on = "shared"},
+	sh_shopeditor = {file = "sh_shopeditor.lua", on = "shared"},
+	sh_util = {file = "sh_util.lua", on = "shared"},
+	sh_weaponry = {file = "sh_weaponry.lua", on = "shared"},
+
+	-- vgui client files
+	vgui__coloredbox = {file = "vgui/coloredbox.lua", on = "client"},
+	vgui__droleimage = {file = "vgui/droleimage.lua", on = "client"},
+	vgui__simpleicon = {file = "vgui/simpleicon.lua", on = "client"},
+	vgui__shopeditor_buttons = {file = "vgui/shopeditor_buttons.lua", on = "client"},
+	vgui__shopeditor_slider = {file = "vgui/shopeditor_slider.lua", on = "client"},
+	vgui__simpleclickicon = {file = "vgui/simpleclickicon.lua", on = "client"},
+	vgui__progressbar = {file = "vgui/progressbar.lua", on = "client"},
+	vgui__scrolllabel = {file = "vgui/scrolllabel.lua", on = "client"},
+	vgui__sb_main = {file = "vgui/sb_main.lua", on = "client"},
+	vgui__sb_row = {file = "vgui/sb_row.lua", on = "client"},
+	vgui__sb_team = {file = "vgui/sb_team.lua", on = "client"},
+	vgui__sb_info = {file = "vgui/sb_info.lua", on = "client"}
+}
+
+if SERVER then
+	local tmp = { -- server files, don't show them for the client
+		sv_admin = {file = "sv_admin.lua", on = "server"},
+		sv_corpse = {file = "sv_corpse.lua", on = "server"},
+		sv_ent_replace = {file = "sv_ent_replace.lua", on = "server"},
+		sv_entity = {file = "sv_entity.lua", on = "server"},
+		sv_gamemsg = {file = "sv_gamemsg.lua", on = "server"},
+		sv_main = {file = "sv_main.lua", on = "server"},
+		sv_karma = {file = "sv_karma.lua", on = "server"},
+		sv_player_ext = {file = "sv_player_ext.lua", on = "server"},
+		sv_player = {file = "sv_player.lua", on = "server"},
+		sv_propspec = {file = "sv_propspec.lua", on = "server"},
+		sv_scoring = {file = "sv_scoring.lua", on = "server"},
+		sv_traitor_state = {file = "sv_traitor_state.lua", on = "server"},
+		sv_voice = {file = "sv_voice.lua", on = "server"},
+		sv_weaponry = {file = "sv_weaponry.lua", on = "server"},
+		sv_shopeditor = {file = "sv_shopeditor.lua", on = "server"},
+		sv_shopeditor_sql = {file = "sv_shopeditor_sql.lua", on = "server"}
+	}
+
+	table.Merge(TTTFiles, tmp)
+end
+
+hook.Run("TTT2ModifyFiles", TTTFiles)
+
+if SERVER then
+	for _, inc in pairs(TTTFiles) do
+		if inc.on == "client" or inc.on == "shared" then
+			AddCSLuaFile(TTT2DIR .. inc.on .. "/" .. inc.file)
+		end
+	end
+end
+
+function ttt_include(filename, relative)
+	local fd = TTTFiles[filename]
+	local file = fd.file
+
+	if relative then
+		local splits = string.Explode("/", file)
+		file = splits[#splits]
+	elseif file then
+		file = TTT2DIR .. fd.on .. "/" .. file
+	end
+
+	if not file then return end
+
+	include(file)
+end

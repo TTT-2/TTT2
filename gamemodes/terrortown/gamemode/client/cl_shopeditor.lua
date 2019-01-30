@@ -1,5 +1,5 @@
-ttt_include("vgui__shopeditor_buttons")
-ttt_include("vgui__shopeditor_slider")
+ttt_include("vgui__shopeditor_buttons", true)
+ttt_include("vgui__shopeditor_slider", true)
 
 local COLOR_GREY = COLOR_GREY or Color(120, 120, 120, 255)
 

@@ -15,7 +15,7 @@ local ConVarExists = ConVarExists
 local CreateConVar = CreateConVar
 local hook = hook
 
-ttt_include("corpse_shd")
+ttt_include("sh_corpse")
 
 --- networked data abstraction layer
 local dti = CORPSE.dti

@@ -1,5 +1,5 @@
-AddCSLuaFile("sh_include.lua")
+AddCSLuaFile("shared/sh_include.lua")
 
-include("sh_include.lua")
+include("shared/sh_include.lua")
 
-ttt_include("init")
+ttt_include("main")
