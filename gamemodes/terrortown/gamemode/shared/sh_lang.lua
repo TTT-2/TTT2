@@ -14,10 +14,10 @@ local pairs = pairs
 
 -- Add all lua files in our /lang/ dir
 local dir = GM.FolderName or "terrortown"
-local files = file.Find(dir .. "/gamemode/lang/*.lua", "LUA")
+local files = file.Find(dir .. "/gamemode/shared/lang/*.lua", "LUA")
 
 for _, fname in pairs(files) do
-	local path = dir .. "/gamemode/lang/" .. fname
+	local path = dir .. "/gamemode/shared/lang/" .. fname
 
 	-- filter out directories and temp files (like .lua~)
 	if string.Right(fname, 3) == "lua" then
