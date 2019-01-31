@@ -17,7 +17,7 @@ hook.Add("TTTInitPostEntity", "InitTTT2OldItems", function()
 				if name then
 					local item = items.GetStored(GetEquipmentFileName(name))
 					if not item then
-						local ITEMDATA = {}
+						local ITEMDATA = table.Copy(v)
 						ITEMDATA.oldId = v.id
 						ITEMDATA.id = name
 						ITEMDATA.EquipMenuData = v.EquipMenuData or {
@@ -32,7 +32,7 @@ hook.Add("TTTInitPostEntity", "InitTTT2OldItems", function()
 						ITEMDATA.CanBuy = {subrole}
 
 						-- reset this old hud bool
-						if v.hud == true then
+						if ITEMDATA.hud == true then
 							ITEMDATA.oldHud = true
 							ITEMDATA.hud = nil
 						end
@@ -41,7 +41,7 @@ hook.Add("TTTInitPostEntity", "InitTTT2OldItems", function()
 						ITEMDATA.converted = true
 
 						-- don't add icon and desc to the search panel if it's not intended
-						ITEMDATA.noCorpseSearch = v.noCorpseSearch or true
+						ITEMDATA.noCorpseSearch = ITEMDATA.noCorpseSearch or true
 
 						items.Register(ITEMDATA, GetEquipmentFileName(name))
 
