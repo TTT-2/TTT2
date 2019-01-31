@@ -16,23 +16,23 @@ surface.CreateFont("DefaultBold", {font = "Tahoma", size = 13, weight = 1000})
 surface.CreateFont("TabLarge", {font = "Tahoma", size = 13, weight = 700, shadow = true, antialias = false})
 surface.CreateFont("Trebuchet22", {font = "Trebuchet MS", size = 22, weight = 900})
 
-ttt_include("shared")
-
-include("sh_item_module.lua")
-
 ttt_include("sh_init")
-ttt_include("sh_shopeditor")
-ttt_include("scoring_shd")
-ttt_include("corpse_shd")
-ttt_include("player_ext_shd")
-ttt_include("weaponry_shd")
 
-ttt_include("vgui__coloredbox")
-ttt_include("vgui__droleimage")
-ttt_include("vgui__simpleicon")
-ttt_include("vgui__simpleclickicon")
-ttt_include("vgui__progressbar")
-ttt_include("vgui__scrolllabel")
+include("terrortown/gamemode/shared/sh_item_module.lua")
+
+ttt_include("sh_main")
+ttt_include("sh_shopeditor")
+ttt_include("sh_scoring")
+ttt_include("sh_corpse")
+ttt_include("sh_player_ext")
+ttt_include("sh_weaponry")
+
+ttt_include("vgui__cl_coloredbox")
+ttt_include("vgui__cl_droleimage")
+ttt_include("vgui__cl_simpleicon")
+ttt_include("vgui__cl_simpleclickicon")
+ttt_include("vgui__cl_progressbar")
+ttt_include("vgui__cl_scrolllabel")
 
 ttt_include("cl_radio")
 ttt_include("cl_transfer")

@@ -66,8 +66,6 @@ function Register(t, name)
 
 	ItemList[name] = t
 
-	--baseclass.Set(name, t)
-
 	list.Set("Item", name, {
 			ClassName = name,
 			id = name,
