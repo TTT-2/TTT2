@@ -1,3 +1,3 @@
-include("sh_include.lua")
+include("shared/sh_include.lua")
 
-ttt_include("cl_init")
+ttt_include("cl_main")

@@ -1,29 +1,33 @@
 ---- Trouble in Terrorist Town 2
-ttt_include("shared")
-
-AddCSLuaFile("sh_item_module.lua")
-include("sh_item_module.lua")
-
 ttt_include("sh_init")
+
+AddCSLuaFile("terrortown/gamemode/shared/sh_item_module.lua")
+include("terrortown/gamemode/shared/sh_item_module.lua")
+
+ttt_include("sh_main")
 ttt_include("sh_shopeditor")
 
-ttt_include("shopeditor_sql")
-ttt_include("shopeditor")
-ttt_include("karma")
-ttt_include("entity")
-ttt_include("scoring_shd")
-ttt_include("admin")
-ttt_include("traitor_state")
-ttt_include("propspec")
-ttt_include("weaponry")
-ttt_include("gamemsg")
-ttt_include("voice")
-ttt_include("ent_replace")
-ttt_include("scoring")
-ttt_include("corpse")
-ttt_include("player_ext_shd")
-ttt_include("player_ext")
-ttt_include("player")
+ttt_include("sv_shopeditor_sql")
+ttt_include("sv_shopeditor")
+ttt_include("sv_karma")
+ttt_include("sv_entity")
+
+ttt_include("sh_scoring")
+
+ttt_include("sv_admin")
+ttt_include("sv_traitor_state")
+ttt_include("sv_propspec")
+ttt_include("sv_weaponry")
+ttt_include("sv_gamemsg")
+ttt_include("sv_voice")
+ttt_include("sv_ent_replace")
+ttt_include("sv_scoring")
+ttt_include("sv_corpse")
+
+ttt_include("sh_player_ext")
+
+ttt_include("sv_player_ext")
+ttt_include("sv_player")
 
 -- Localize stuff we use often. It's like Lua go-faster stripes.
 local math = math
