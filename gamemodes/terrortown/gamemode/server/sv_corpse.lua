@@ -56,7 +56,7 @@ function GM:TTTCanIdentifyCorpse(ply, corpse)
 end
 
 local function IdentifyBody(ply, rag)
-	if not ply:IsTerror() then return end
+	if not ply:IsTerror() or not ply:Alive() then return end
 
 	-- simplified case for those who die and get found during prep
 	if GetRoundState() == ROUND_PREP then
