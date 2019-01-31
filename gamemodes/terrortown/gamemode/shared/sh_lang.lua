@@ -6,7 +6,7 @@ if LANG then return end
 
 LANG = {}
 
-util.IncludeClientFile("terrortown/gamemode/client/cl_lang.lua")
+util.IncludeClientFile("terrortown/gamemode/cl_lang.lua")
 
 local net = net
 local table = table
@@ -14,10 +14,10 @@ local pairs = pairs
 
 -- Add all lua files in our /lang/ dir
 local dir = GM.FolderName or "terrortown"
-local files = file.Find(dir .. "/gamemode/client/lang/*.lua", "LUA")
+local files = file.Find(dir .. "/gamemode/lang/*.lua", "LUA")
 
 for _, fname in pairs(files) do
-	local path = dir .. "/gamemode/client/lang/" .. fname
+	local path = dir .. "/gamemode/lang/" .. fname
 
 	-- filter out directories and temp files (like .lua~)
 	if string.Right(fname, 3) == "lua" then

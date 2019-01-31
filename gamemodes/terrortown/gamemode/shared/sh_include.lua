@@ -40,18 +40,18 @@ TTTFiles = {
 	sh_weaponry = {file = "sh_weaponry.lua", on = "shared"},
 
 	-- vgui client files
-	vgui__coloredbox = {file = "vgui/coloredbox.lua", on = "client"},
-	vgui__droleimage = {file = "vgui/droleimage.lua", on = "client"},
-	vgui__simpleicon = {file = "vgui/simpleicon.lua", on = "client"},
-	vgui__shopeditor_buttons = {file = "vgui/shopeditor_buttons.lua", on = "client"},
-	vgui__shopeditor_slider = {file = "vgui/shopeditor_slider.lua", on = "client"},
-	vgui__simpleclickicon = {file = "vgui/simpleclickicon.lua", on = "client"},
-	vgui__progressbar = {file = "vgui/progressbar.lua", on = "client"},
-	vgui__scrolllabel = {file = "vgui/scrolllabel.lua", on = "client"},
-	vgui__sb_main = {file = "vgui/sb_main.lua", on = "client"},
-	vgui__sb_row = {file = "vgui/sb_row.lua", on = "client"},
-	vgui__sb_team = {file = "vgui/sb_team.lua", on = "client"},
-	vgui__sb_info = {file = "vgui/sb_info.lua", on = "client"}
+	vgui__cl_coloredbox = {file = "vgui/cl_coloredbox.lua", on = "client"},
+	vgui__cl_droleimage = {file = "vgui/cl_droleimage.lua", on = "client"},
+	vgui__cl_simpleicon = {file = "vgui/cl_simpleicon.lua", on = "client"},
+	vgui__cl_shopeditor_buttons = {file = "vgui/cl_shopeditor_buttons.lua", on = "client"},
+	vgui__cl_shopeditor_slider = {file = "vgui/cl_shopeditor_slider.lua", on = "client"},
+	vgui__cl_simpleclickicon = {file = "vguicl_/simpleclickicon.lua", on = "client"},
+	vgui__cl_progressbar = {file = "vgui/cl_progressbar.lua", on = "client"},
+	vgui__cl_scrolllabel = {file = "vgui/cl_scrolllabel.lua", on = "client"},
+	vgui__cl_sb_main = {file = "vgui/cl_sb_main.lua", on = "client"},
+	vgui__cl_sb_row = {file = "vgui/cl_sb_row.lua", on = "client"},
+	vgui__cl_sb_team = {file = "vgui/cl_sb_team.lua", on = "client"},
+	vgui__cl_sb_info = {file = "vgui/cl_sb_info.lua", on = "client"}
 }
 
 if SERVER then
