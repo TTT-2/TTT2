@@ -1,6 +1,6 @@
 -- Game report
 
-ttt_include("cl_awards", true)
+ttt_include("cl_awards")
 
 local table = table
 local string = string

@@ -6,7 +6,7 @@ if LANG then return end
 
 LANG = {}
 
-util.IncludeClientFile("terrortown/gamemode/cl_lang.lua")
+util.IncludeClientFile("terrortown/gamemode/client/cl_lang.lua")
 
 local net = net
 local table = table

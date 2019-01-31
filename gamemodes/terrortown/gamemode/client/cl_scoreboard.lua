@@ -1,6 +1,6 @@
 -- a much requested darker scoreboard
 
-ttt_include("vgui__cl_sb_main", true)
+ttt_include("vgui__cl_sb_main")
 
 sboard_panel = nil
 

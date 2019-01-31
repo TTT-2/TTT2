@@ -616,9 +616,9 @@ COLOR_PINK = Color(255, 0, 255, 255)
 COLOR_ORANGE = Color(250, 100, 0, 255)
 COLOR_OLIVE = Color(100, 100, 0, 255)
 
-ttt_include("sh_util", true)
-ttt_include("sh_lang", true)
-ttt_include("sh_equip_items", true)
+ttt_include("sh_util")
+ttt_include("sh_lang")
+ttt_include("sh_equip_items")
 
 function GetEquipmentFileName(name)
 	return string.gsub(string.lower(name), "[%W%s]", "_") -- clean string

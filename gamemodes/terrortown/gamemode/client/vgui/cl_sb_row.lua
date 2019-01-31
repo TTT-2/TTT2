@@ -1,6 +1,6 @@
 ---- Scoreboard player score row, based on sandbox version
 
-ttt_include("vgui__cl_sb_info", true)
+ttt_include("vgui__cl_sb_info")
 
 local GetTranslation = LANG.GetTranslation
 local math = math

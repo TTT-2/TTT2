@@ -18,7 +18,7 @@ local ipairs = ipairs
 local timer = timer
 local IsValid = IsValid
 
-ttt_include("vgui__cl_sb_team", true)
+ttt_include("vgui__cl_sb_team")
 
 -- TODO add Team!
 CreateClientConVar("ttt_scoreboard_sorting", "name", true, false, "name | role | karma | score | deaths | ping")

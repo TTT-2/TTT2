@@ -87,14 +87,16 @@ if SERVER then
 	end
 end
 
-function ttt_include(filename, relative)
+function ttt_include(filename)
 	local fd = TTTFiles[filename]
+
+	if not fd then
+		error("[TTT2][ERROR] Tried to include a not existant file", filename)
+	end
+
 	local file = fd.file
 
-	if relative then
-		local splits = string.Explode("/", file)
-		file = splits[#splits]
-	elseif file then
+	if file then
 		file = TTT2DIR .. fd.on .. "/" .. file
 	end
 
