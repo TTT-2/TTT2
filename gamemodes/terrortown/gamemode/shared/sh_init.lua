@@ -4,7 +4,7 @@ GM.Name = "TTT2 (Advanced Update)"
 GM.Author = "Bad King Urgrain && Alf21"
 GM.Email = "4lf-mueller@gmx.de"
 GM.Website = "ttt.badking.net, ttt2.informaskill.de"
-GM.Version = "0.4.0b"
+GM.Version = "0.4.1b"
 GM.Customized = true
 
 TTT2 = true -- identifier for TTT2. Just use "if TTT2 then ... end"
@@ -616,9 +616,9 @@ COLOR_PINK = Color(255, 0, 255, 255)
 COLOR_ORANGE = Color(250, 100, 0, 255)
 COLOR_OLIVE = Color(100, 100, 0, 255)
 
-ttt_include("util")
-ttt_include("lang_shd")
-ttt_include("equip_items_shd")
+ttt_include("sh_util")
+ttt_include("sh_lang")
+ttt_include("sh_equip_items")
 
 function GetEquipmentFileName(name)
 	return string.gsub(string.lower(name), "[%W%s]", "_") -- clean string
