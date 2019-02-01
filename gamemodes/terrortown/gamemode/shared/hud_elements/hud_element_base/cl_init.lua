@@ -1,25 +1,25 @@
-local pos = {
+HUDELEMENT.pos = {
 	x = 0,
 	y = 0
 }
 
-function HUDMODULE:Initialize()
+function HUDELEMENT:Initialize()
 
 end
 
-function HUDMODULE:Draw()
+function HUDELEMENT:Draw()
 
 end
 
-function HUDMODULE:PerformLayout()
+function HUDELEMENT:PerformLayout()
 
 end
 
-function HUDMODULE:GetPos()
+function HUDELEMENT:GetPos()
 	return pos
 end
 
-function HUDMODULE:SetPos(x, y)
-	pos.x = x
-	pos.y = y
+function HUDELEMENT:SetPos(x, y)
+	self.x = x
+	self.y = y
 end
