@@ -61,6 +61,7 @@ else
 
 		t.ClassName = name
 		t.id = name
+		t.shouldDrawHook = t.shouldDrawHook or name
 
 		hud.hudmodules[name] = t
 
