@@ -53,7 +53,7 @@ end
 
 --[[---------------------------------------------------------
 	Name: Register( table, string )
-	Desc: Used to register your HUD Elements with the engine
+	Desc: Used to register your HUD Element with the engine
 -----------------------------------------------------------]]
 function Register(t, name)
 	if not t.type then return end

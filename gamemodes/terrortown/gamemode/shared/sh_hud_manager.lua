@@ -17,7 +17,11 @@ for _, savedFolder in ipairs(autoload) do
 
 	-- include HUD Elements files
 	for _, fl in ipairs(hudelementsFiles) do
-		HUDELEMENT = {}
+		if savedFolder == "hud_elements" then
+			HUDELEMENT = {}
+		elseif savedFolder == "huds" then
+			HUD = {}
+		end
 
 		if SERVER then
 			AddCSLuaFile(pathBase .. fl)
@@ -27,9 +31,15 @@ for _, savedFolder in ipairs(autoload) do
 
 		local cls = string.sub(fl, 0, #fl - 4)
 
-		hudelements.Register(HUDELEMENT, cls)
+		if savedFolder == "hud_elements" then
+			hudelements.Register(HUDELEMENT, cls)
 
-		HUDELEMENT = nil
+			HUDELEMENT = nil
+		elseif savedFolder == "huds" then
+			huds.Register(HUD, cls)
+
+			HUD = nil
+		end
 	end
 
 	-- include HUD Elements folders
