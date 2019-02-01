@@ -140,7 +140,7 @@ function PreprocSearch(raw)
 			local rd = GetRoleByIndex(d)
 
 			search[t].text = T("search_role_" .. rd.abbr)
-			search[t].color = raw["owner"] and raw["owner"]:GetRoleColor() or rd.color
+			search[t].color = raw["role_color"] or rd.color
 			search[t].p = 2
 		elseif t == "team" then
 			search[t].text = "Team: " .. d .. "." -- will be merged with role later
@@ -554,6 +554,8 @@ local function TTT_RagdollSearch()
 
 	search.nick = net.ReadString()
 
+	search.role_color = net.ReadColor()
+	
 	-- Equipment
 	local eq = {}
 
