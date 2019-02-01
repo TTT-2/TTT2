@@ -7,9 +7,9 @@ if SERVER then
 	AddCSLuaFile()
 end
 
-module("huds", package.seeall)
+module("hudelements", package.seeall)
 
-local HUDList = HUDList or {}
+local HUDElementList = HUDElementList or {}
 
 --[[---------------------------------------------------------
 	Name: TableInherit( t, base )
@@ -53,19 +53,22 @@ end
 
 --[[---------------------------------------------------------
 	Name: Register( table, string )
-	Desc: Used to register your HUD Element with the engine
+	Desc: Used to register your HUD Elements with the engine
 -----------------------------------------------------------]]
 function Register(t, name)
+	if not t.type then return end
+
 	name = string.lower(name)
 
-	local old = HUDList[name]
+	local old = HUDElementList[name]
 
 	t.ClassName = name
 	t.id = name
+	t.shouldDrawHook = t.shouldDrawHook or name
 
-	HUDList[name] = t
+	HUDElementList[name] = t
 
-	list.Set("HUD", name, {
+	list.Set("HUDElement", name, {
 			ClassName = name,
 			id = name
 	})
@@ -122,9 +125,9 @@ function OnLoaded()
 	-- - we have to wait until they're all setup because load order
 	-- could cause some entities to load before their bases!
 	--
-	for k in pairs(HUDList) do
+	for k in pairs(HUDElementList) do
 		local newTable = Get(k)
-		HUDList[k] = newTable
+		HUDElementList[k] = newTable
 
 		baseclass.Set(k, newTable)
 	end
@@ -149,7 +152,7 @@ function Get(name, retTbl)
 		end
 	end
 
-	retval.Base = retval.Base or "hud_base"
+	retval.Base = retval.Base or "hud_element_base"
 
 	-- If we're not derived from ourselves (a base HUD element)
 	-- then derive from our 'Base' HUD element.
@@ -157,7 +160,7 @@ function Get(name, retTbl)
 		local base = Get(retval.Base)
 
 		if not base then
-			Msg("ERROR: Trying to derive HUD " .. tostring(name) .. " from non existant HUD " .. tostring(retval.Base) .. "!\n")
+			Msg("ERROR: Trying to derive HUD Element " .. tostring(name) .. " from non existant HUD Element " .. tostring(retval.Base) .. "!\n")
 		else
 			retval = TableInherit(retval, base)
 		end
@@ -171,7 +174,7 @@ end
 	Desc: Gets the REAL HUD elements table, not a copy
 -----------------------------------------------------------]]
 function GetStored(name)
-	return HUDList[name]
+	return HUDElementList[name]
 end
 
 --[[---------------------------------------------------------
@@ -181,7 +184,7 @@ end
 function GetList()
 	local result = {}
 
-	for _, v in pairs(HUDList) do
+	for _, v in pairs(HUDElementList) do
 		result[#result + 1] = v
 	end
 
