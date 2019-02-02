@@ -29,7 +29,7 @@ function HUD:Initialize()
 
 	-- Use this method to set the elements default positions etc
 	-- Initialize elements default values
-	for _, v in ipairs(hud:GetHUDElements()) do
+	for _, v in ipairs(self:GetHUDElements()) do
 		local elem = hudelements.GetStored(v)
 		if elem then
 			elem:Initialize()
