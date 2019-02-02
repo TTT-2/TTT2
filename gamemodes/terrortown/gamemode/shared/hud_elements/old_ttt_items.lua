@@ -4,7 +4,7 @@ HUDELEMENT.type = "TTTItemHUDDisplay"
 local x = 0
 local y = 0
 
-function HUDElement:Initialize()
+function HUDELEMENT:Initialize()
 	HUDELEMENT:SetPos(20, 20)
 
 	self.BaseClass:Initialize()
