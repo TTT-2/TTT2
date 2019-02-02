@@ -11,6 +11,19 @@ if CLIENT then
 	local ttt_health_label = CreateClientConVar("ttt_health_label", "0", true)
 	local hudTeamicon = CreateClientConVar("ttt2_base_hud_teamicon", "1")
 
+	local x = 0
+	local y = 0
+
+	function HUDElement:Initialize()
+		HUDELEMENT:SetPos(self.margin, self.margin + self.maxheight)
+		self:PerformLayout()
+	end
+
+	function HUDELEMENT:PerformLayout()
+		x = self.pos.x
+		y = ScrH() - self.pos.y
+	end
+
 	function HUDELEMENT:Draw()
 		local client = LocalPlayer()
 		local L = GetLang()
@@ -18,8 +31,7 @@ if CLIENT then
 		local width = maxwidth
 		local height = maxheight
 		local margin = self.margin
-		local x = margin
-		local y = ScrH() - margin - height
+
 
 		self:DrawBg(x, y, width, height, client)
 
@@ -81,7 +93,7 @@ if CLIENT then
 					local c = t.color or Color(0, 0, 0, 255)
 					local tx = x + tmp + smargin
 
-					DrawHudIcon(tx, traitor_y, bgheight, bgheight, icon, c)
+					DrawOldRoleIcon(tx, traitor_y, bgheight, bgheight, icon, c)
 				end
 			end
 		end
