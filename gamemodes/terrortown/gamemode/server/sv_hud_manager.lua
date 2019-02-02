@@ -1,5 +1,3 @@
-if not HUDManager then return end
-
 HUDManager.restrictedHUDs = {}
 
 util.AddNetworkString("TTT2RequestHUD")
