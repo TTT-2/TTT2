@@ -1,20 +1,27 @@
 ----------------------------------------------
 -- HUD Base class
 ----------------------------------------------
-local elements = {}
+HUD.elements = {}
+HUD.hiddenElements = {}
 
 function HUD:AddHUDElement( elementID )
-	if not elements[elementID] then
-		elements[elementID] = true
+	local elem = hudelements.Get(elementID)
+
+	if not HUD.elements[elem.type] then
+		HUD.elements[elem.type] = elementID
 	end
 end
 
 function HUD:GetHUDElements()
-	return elements
+	return HUD.elements
 end
 
-function HUD:HideHUDElement( elementID )
-	elements[elementID] = false
+function HUD:HideHUDType( elementType )
+	table.insert( hiddenElements, elementType )
+end
+
+function HUD:ShouldShow( elementType )
+	return table.HasValue(hiddenElements, elementType)
 end
 
 function HUD:Initialize()
