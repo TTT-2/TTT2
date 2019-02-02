@@ -3,8 +3,17 @@ local IsValid = IsValid
 local hook = hook
 local team = team
 
+require("hudelements")
+require("huds")
+
 function GM:TTT2Initialize()
 	hook.Run("TTT2BaseRoleInit")
+
+	-- load all HUD elements
+	hudelements.OnLoaded()
+
+	-- load all HUDs
+	huds.OnLoaded()
 
 	DefaultEquipment = GetDefaultEquipment()
 end
