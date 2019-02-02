@@ -137,5 +137,3 @@ net.Receive("TTT2RequestHUD", function(len)
 
 	SetLocalHUD(newHUD)
 end)
-
-HUDManager.SetHUD(currentHUD)

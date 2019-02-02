@@ -67,6 +67,11 @@ function GM:Initialize()
 
 	self.BaseClass:Initialize()
 
+	net.Start("TTT2RequestHUD")
+	net.WriteString(currentHUD)
+	net.WriteString(currentHUD)
+	net.SendToServer()
+
 	hook.Run("TTT2FinishedLoading")
 
 	hook.Run("PostInitialize")
