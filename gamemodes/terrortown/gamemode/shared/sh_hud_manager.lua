@@ -1,5 +1,9 @@
+if HUDManager then return end
+
 require("huds")
 require("hudelements")
+
+HUDManager = {}
 
 -----------------------------------------
 -- now load the HUDs and the HUD Elements
@@ -80,4 +84,10 @@ for _, savedFolder in ipairs(autoload) do
 			HUD = nil
 		end
 	end
+end
+
+if SERVER then
+	ttt_include("sv_hud_manager")
+else
+	ttt_include("cl_hud_manager")
 end
