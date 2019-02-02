@@ -16,8 +16,7 @@ if CLIENT then
 
 	function HUDELEMENT:Initialize()
 		self:SetPos(self.margin, self.margin + self.maxheight)
-
-		self.BaseClass:Initialize()
+		self:PerformLayout()
 	end
 
 	function HUDELEMENT:PerformLayout()

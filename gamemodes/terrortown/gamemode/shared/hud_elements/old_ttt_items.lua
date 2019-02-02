@@ -6,8 +6,7 @@ local y = 0
 
 function HUDELEMENT:Initialize()
 	self:SetPos(20, 20)
-
-	self.BaseClass:Initialize()
+	self:PerformLayout()
 end
 
 function HUDELEMENT:PerformLayout()
