@@ -1,8 +1,15 @@
 if not HUDManager then return end
 
-local current_hud = CreateClientConVar("ttt2_current_hud", "old_ttt", true, true)
+local current_hud = CreateClientConVar("ttt2_current_hud", "__DEFAULT__", true, true)
 
 local currentHUD = current_hud:GetString()
+if currentHUD == "__DEFAULT__" then
+	currentHUD = HUDManager.defaultHUD
+end
+
+function HUDManager.SetDefaultHUD()
+	HUDManager.SetHUD(HUDManager.defaultHUD)
+end
 
 function HUDManager.GetHUD()
 	if not huds.GetStored(currentHUD) then

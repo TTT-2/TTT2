@@ -4,6 +4,7 @@ require("huds")
 require("hudelements")
 
 HUDManager = {}
+HUDManager.defaultHUD = "old_ttt"
 
 -----------------------------------------
 -- now load the HUDs and the HUD Elements
