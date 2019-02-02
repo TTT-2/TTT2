@@ -1,26 +1,37 @@
-if HUDManager then
-	return
-end
+if HUDManager then return end
+
+local current_hud = CreateClientConVar("ttt2_current_hud", "old_ttt", true, true)
 
 HUDManager = {}
 
-HUDManager.currentHUD = "old_ttt"
+local currentHUD = current_hud:GetString()
 
-function HUDManager:SetHUD( name )
+function HUDManager:GetHUD()
+	if not huds.GetStored(currentHUD) then
+		currentHUD = "old_ttt"
+	end
+
+	return currentHUD
+end
+
+function HUDManager:SetHUD(name)
 	-- TODO add permission checks here
 
-	local hud = huds.Get(name)
+	local hud = huds.GetStored(name)
 
 	if not hud then
 		Msg("Error: HUD with name " .. name .. " was not found!\n")
+
 		return
 	end
 
-	HUDManager.currentHUD = name
+	RunConsoleCommand(current_hud:GetName(), name)
+
+	currentHUD = name
 
 	-- Initialize elements default values
-	for k, v in pairs(hud:GetElements()) do
-		local elem = hudelements.Get(v)
+	for _, v in pairs(hud:GetHUDElements()) do
+		local elem = hudelements.GetStored(v)
 		if elem then
 			elem:Initialize()
 		else
@@ -33,23 +44,21 @@ function HUDManager:SetHUD( name )
 end
 
 function HUDManager:DrawHUD()
-	local hud = huds.GetStored(HUDManager.currentHUD)
+	local hud = huds.GetStored(currentHUD)
 
 	if not hud then return end
 
 	local hudelems = hud:GetElements()
 
-	-- loop through all types and if the hud does not provide an element take the first found instance for the type
-	for _, type in ipairs(hudelements.GetElementTypes()) do
-		local elem = hudelems[type] or hudelements.GetTypeElement(type)
-		if hud:ShouldShow(elem) and hook.Call("HUDShouldDraw", GAMEMODE, type) then
+	-- loop through all types and if the hud does not provide an element take the first found instance for the typ
+	for _, typ in ipairs(hudelements.GetElementTypes()) do
+		local elem = hudelems[typ] or hudelements.GetTypeElement(typ)
+
+		if hud:ShouldShow(elem) and hook.Call("HUDShouldDraw", GAMEMODE, typ) then
 			elem:Draw()
 		end
 	end
-
 end
-
-
 
 -- Paints player status HUD element in the bottom left
 function GM:HUDPaint()
