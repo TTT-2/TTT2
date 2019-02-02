@@ -52,7 +52,8 @@ function HUDManager.DrawHUD()
 
 	if not hud then return end
 
-	for _, elem in ipairs(hud:GetHUDElements()) do
+	for _, elemName in ipairs(hud:GetHUDElements()) do
+		local elem = hudelements.GetStored(elemName)
 		if hud:ShouldShow(elem.type) and hook.Call("HUDShouldDraw", GAMEMODE, elem.type) then
 			elem:Draw()
 		end
