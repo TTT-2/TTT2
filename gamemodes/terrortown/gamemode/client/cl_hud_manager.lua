@@ -55,6 +55,10 @@ function HUDManager.DrawHUD()
 
 	for _, elemName in ipairs(hud:GetHUDElements()) do
 		local elem = hudelements.GetStored(elemName)
+		if not elem then
+			Msg("Error: Hudelement with name " .. elemName .. " not found!")
+			return
+		end
 		if hud:ShouldShow(elem.type) and hook.Call("HUDShouldDraw", GAMEMODE, elem.type) then
 			elem:Draw()
 		end
