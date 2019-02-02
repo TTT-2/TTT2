@@ -1,7 +1,3 @@
-if cl_HUDManager then return end
-
-cl_HUDManager = true
-
 local current_hud = CreateClientConVar("ttt2_current_hud", "__DEFAULT__", true, true)
 
 local currentHUD = current_hud:GetString()
