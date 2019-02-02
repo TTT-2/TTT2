@@ -123,6 +123,8 @@ function GM:InitPostEntity()
 	-- initialize fallback shops
 	InitFallbackShops()
 
+	HUDManager.SetHUD(HUDManager.defaultHUD)
+
 	hook.Run("PostInitPostEntity")
 
 	hook.Run("InitFallbackShops")

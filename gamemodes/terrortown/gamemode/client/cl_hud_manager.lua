@@ -9,17 +9,6 @@ if currentHUD == "__DEFAULT__" then
 	currentHUD = HUDManager.defaultHUD
 end
 
-function HUDManager.SetDefaultHUD()
-	print()
-	print("REQUESTING DEFAULT HUD")
-	print()
-
-	net.Start("TTT2RequestHUD")
-	net.WriteString(HUDManager.defaultHUD)
-	net.WriteString(currentHUD)
-	net.SendToServer()
-end
-
 function HUDManager.GetHUD()
 	if not huds.GetStored(currentHUD) then
 		currentHUD = "old_ttt"
@@ -29,8 +18,6 @@ function HUDManager.GetHUD()
 end
 
 function HUDManager.SetHUD(name)
-	if name == currentHUD then return end
-
 	net.Start("TTT2RequestHUD")
 	net.WriteString(name)
 	net.WriteString(currentHUD)
