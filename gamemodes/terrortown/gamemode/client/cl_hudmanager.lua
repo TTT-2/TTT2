@@ -6,7 +6,7 @@ HUDManager = {}
 
 local currentHUD = current_hud:GetString()
 
-function HUDManager:GetHUD()
+function HUDManager.GetHUD()
 	if not huds.GetStored(currentHUD) then
 		currentHUD = "old_ttt"
 	end
@@ -14,7 +14,9 @@ function HUDManager:GetHUD()
 	return currentHUD
 end
 
-function HUDManager:SetHUD(name)
+function HUDManager.SetHUD(name)
+	if name == currentHUD then return end
+
 	-- TODO add permission checks here
 
 	local hud = huds.GetStored(name)
@@ -43,7 +45,7 @@ function HUDManager:SetHUD(name)
 	hud:Initialize()
 end
 
-function HUDManager:DrawHUD()
+function HUDManager.DrawHUD()
 	local hud = huds.GetStored(currentHUD)
 
 	if not hud then return end
@@ -72,7 +74,7 @@ function GM:HUDPaint()
 		MSTACK:Draw(client)
 	end
 
-	HUDManager:DrawHUD()
+	HUDManager.DrawHUD()
 
 	if not client:Alive() or client:Team() == TEAM_SPEC then return end
 
@@ -112,3 +114,10 @@ function GM:HUDShouldDraw(name)
 
 	return self.BaseClass.HUDShouldDraw(self, name)
 end
+
+-- if forced or requested, modified by server restrictions
+net.Receive("TTT2RequestHUD", function(len)
+	local newHUD = net.ReadString()
+
+	HUDManager.SetHUD(newHUD)
+end)

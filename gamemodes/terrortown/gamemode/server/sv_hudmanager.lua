@@ -1,7 +1,8 @@
 util.AddNetworkString("TTT2RequestHUD")
 
 net.Receive("TTT2RequestHUD", function(len, ply)
-	local hudname = net.ReadString()
+	local hudname = net.ReadString() -- new requested HUD
+	local oldHUD = net.ReadString() -- current HUD as fallback
 
 	local restrictions = {}
 	local restricted
@@ -17,7 +18,7 @@ net.Receive("TTT2RequestHUD", function(len, ply)
 	if restricted then
 		restricted = nil
 
-		hudname = ply:GetSavedHUD()
+		hudname = oldHUD
 
 		for _, v in ipairs(restrictions) do
 			if v == hudname then
@@ -31,8 +32,6 @@ net.Receive("TTT2RequestHUD", function(len, ply)
 	if restricted then
 		hudname = "old_ttt"
 	end
-
-	ply:SaveHUD(hudname)
 
 	net.Start("TTT2RequestHUD")
 	net.WriteString(hudname)
