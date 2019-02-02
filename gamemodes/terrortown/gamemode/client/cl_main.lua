@@ -19,7 +19,6 @@ surface.CreateFont("Trebuchet22", {font = "Trebuchet MS", size = 22, weight = 90
 ttt_include("sh_init")
 
 include("terrortown/gamemode/shared/sh_item_module.lua")
-include("terrortown/gamemode/shared/sh_hud_module.lua")
 
 ttt_include("sh_main")
 ttt_include("sh_shopeditor")
