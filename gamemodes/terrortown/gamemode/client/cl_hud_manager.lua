@@ -10,6 +10,10 @@ if currentHUD == "__DEFAULT__" then
 end
 
 function HUDManager.SetDefaultHUD()
+	print()
+	print("REQUESTING DEFAULT HUD")
+	print()
+
 	net.Start("TTT2RequestHUD")
 	net.WriteString(HUDManager.defaultHUD)
 	net.WriteString(currentHUD)
@@ -22,23 +26,6 @@ function HUDManager.GetHUD()
 	end
 
 	return currentHUD
-end
-
-local function SetLocalHUD(name)
-	local hud = huds.GetStored(name)
-
-	if not hud then
-		Msg("Error: HUD with name " .. name .. " was not found!\n")
-
-		return
-	end
-
-	RunConsoleCommand(current_hud:GetName(), name)
-
-	currentHUD = name
-
-	-- Initialize elements
-	hud:Initialize()
 end
 
 function HUDManager.SetHUD(name)
@@ -59,8 +46,10 @@ function HUDManager.DrawHUD()
 		local elem = hudelements.GetStored(elemName)
 		if not elem then
 			Msg("Error: Hudelement with name " .. elemName .. " not found!")
+
 			return
 		end
+
 		if elem.type and hud:ShouldShow(elem.type) and hook.Call("HUDShouldDraw", GAMEMODE, elem.type) then
 			elem:Draw()
 		end
@@ -141,7 +130,23 @@ end
 
 -- if forced or requested, modified by server restrictions
 net.Receive("TTT2RequestHUD", function(len)
-	local newHUD = net.ReadString()
+	print()
+	print("RECEIVED DEFAULT HUD")
+	print()
 
-	SetLocalHUD(newHUD)
+	local name = net.ReadString()
+	local hudEl = huds.GetStored(name)
+
+	if not hudEl then
+		Msg("Error: HUD with name " .. name .. " was not found!\n")
+
+		return
+	end
+
+	RunConsoleCommand(current_hud:GetName(), name)
+
+	currentHUD = name
+
+	-- Initialize elements
+	hudEl:Initialize()
 end)
