@@ -15,6 +15,27 @@ if CLIENT then
 	end
 
 	function HUDELEMENT:Draw()
-		self:DrawBg(x, y, 200, 150, Color(150, 100, 200))
+		--local scrW = ScrW()
+		--local scrH = ScrH()
+
+		local w = 365
+		local h = 146
+
+		-- draw bg and shadow
+		self:DrawBg(x, y, w, h, Color(49, 71, 94))
+
+		-- draw left panel
+		local c = LocalPlayer():GetRoleColor()
+		local lpw = 44
+
+		surface.SetDrawColor(clr(c))
+		surface.DrawRect(x, y, lpw, h)
+
+		-- draw dark bottom overlay
+		surface.SetDrawColor(0, 0, 0, 90)
+		surface.DrawRect(x, y + lpw, w, h - lpw)
+
+		-- draw lines
+		self:DrawLines(x, y, w, h)
 	end
 end
