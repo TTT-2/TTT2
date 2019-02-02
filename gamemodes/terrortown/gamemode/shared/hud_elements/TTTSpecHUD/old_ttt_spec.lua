@@ -7,7 +7,6 @@ local IsValid = IsValid
 local draw = draw
 
 HUDELEMENT.Base = "old_ttt_element"
-HUDELEMENT.type = "TTTSpecHUD"
 
 if CLIENT then
 

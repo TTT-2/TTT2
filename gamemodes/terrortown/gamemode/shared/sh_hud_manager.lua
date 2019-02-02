@@ -6,26 +6,19 @@ if not HUDManager then
 	HUDManager.defaultHUD = "old_ttt"
 
 	-----------------------------------------
-	-- now load the HUDs and the HUD Elements
+	-- load HUD Elements
 	-----------------------------------------
 
-	local autoload = {
-		"hud_elements",
-		"huds"
-	}
+	local pathBase = "terrortown/gamemode/shared/hud_elements/"
 
-	for _, savedFolder in ipairs(autoload) do
-		local pathBase = "terrortown/gamemode/shared/" .. savedFolder .. "/"
+	local _, pathFolders = file.Find(pathBase .. "*", "LUA")
 
-		local hudelementsFiles = file.Find(pathBase .. "*.lua", "LUA")
+	for _, typ in ipairs(pathFolders) do
+		local pathFiles = file.Find(pathBase .. "*.lua", "LUA")
 
 		-- include HUD Elements files
-		for _, fl in ipairs(hudelementsFiles) do
-			if savedFolder == "hud_elements" then
-				HUDELEMENT = {}
-			elseif savedFolder == "huds" then
-				HUD = {}
-			end
+		for _, fl in ipairs(pathFiles) do
+			HUDELEMENT = {}
 
 			if SERVER then
 				AddCSLuaFile(pathBase .. fl)
@@ -35,26 +28,20 @@ if not HUDManager then
 
 			local cls = string.sub(fl, 0, #fl - 4)
 
-			if savedFolder == "hud_elements" then
-				hudelements.Register(HUDELEMENT, cls)
-
-				HUDELEMENT = nil
-			elseif savedFolder == "huds" then
-				huds.Register(HUD, cls)
-
-				HUD = nil
+			if typ ~= "base_elements" then
+				HUDELEMENT.type = typ
 			end
+
+			hudelements.Register(HUDELEMENT, cls)
+
+			HUDELEMENT = nil
 		end
 
 		-- include HUD Elements folders
 		local _, subFolders = file.Find(pathBase .. "*", "LUA")
 
 		for _, folder in ipairs(subFolders) do
-			if savedFolder == "hud_elements" then
-				HUDELEMENT = {}
-			elseif savedFolder == "huds" then
-				HUD = {}
-			end
+			HUDELEMENT = {}
 
 			local subFiles = file.Find(pathBase .. folder .. "/*.lua", "LUA")
 
@@ -74,16 +61,68 @@ if not HUDManager then
 				end
 			end
 
-			if savedFolder == "hud_elements" then
-				hudelements.Register(HUDELEMENT, folder)
+			if typ ~= "base_elements" then
+				HUDELEMENT.type = typ
+			end
 
-				HUDELEMENT = nil
-			elseif savedFolder == "huds" then
-				huds.Register(HUD, folder)
+			hudelements.Register(HUDELEMENT, folder)
 
-				HUD = nil
+			HUDELEMENT = nil
+		end
+	end
+
+	-----------------------------------------
+	-- load HUDs
+	-----------------------------------------
+
+	pathBase = "terrortown/gamemode/shared/huds/"
+
+	local pathFiles = file.Find(pathBase .. "*.lua", "LUA")
+
+	-- include HUD Elements files
+	for _, fl in ipairs(pathFiles) do
+		HUD = {}
+
+		if SERVER then
+			AddCSLuaFile(pathBase .. fl)
+		end
+
+		include(pathBase .. fl)
+
+		local cls = string.sub(fl, 0, #fl - 4)
+
+		hudelements.Register(HUD, cls)
+
+		HUD = nil
+	end
+
+	-- include HUD Elements folders
+	local _, subFolders = file.Find(pathBase .. "*", "LUA")
+
+	for _, folder in ipairs(subFolders) do
+		HUD = {}
+
+		local subFiles = file.Find(pathBase .. folder .. "/*.lua", "LUA")
+
+		for _, fl in ipairs(subFiles) do
+			local filename = pathBase .. folder .. "/" .. fl
+
+			if SERVER then
+				AddCSLuaFile(filename)
+			end
+
+			if CLIENT and fl == "cl_init.lua" then
+				include(filename)
+			elseif SERVER and fl == "init.lua" then
+				include(filename)
+			elseif fl == "shared.lua" then
+				include(filename)
 			end
 		end
+
+		hudelements.Register(HUD, folder)
+
+		HUD = nil
 	end
 end
 

@@ -5,7 +5,6 @@ local GetLang = LANG.GetUnsafeLanguageTable
 local util = util
 
 HUDELEMENT.Base = "old_ttt_element"
-HUDELEMENT.type = "TTTInfoPanel"
 
 if CLIENT then
 	local ttt_health_label = CreateClientConVar("ttt_health_label", "0", true)
