@@ -24,6 +24,18 @@ function HUD:ShouldShow( elementType )
 	return not table.HasValue(hiddenElements, elementType)
 end
 
+function HUD:PerformLayout()
+	for _, elemName in ipairs(self:GetHUDElements()) do
+		local elem = hudelements.GetStored(elemName)
+		if elem then
+			elem:PerformLayout()
+		else
+			Msg("Error: Hudelement not found during PerformLayout: " .. elemName)
+			return
+		end
+	end
+end
+
 function HUD:Initialize()
 	print("Called HUD", self.id or "?")
 
@@ -34,7 +46,7 @@ function HUD:Initialize()
 		if elem then
 			elem:Initialize()
 		else
-			Msg("Error: HUD has unkown element named " .. v .. "\n")
+			Msg("Error: HUD " .. self.id or "?" ..  " has unkown element named " .. v .. "\n")
 		end
 	end
 end

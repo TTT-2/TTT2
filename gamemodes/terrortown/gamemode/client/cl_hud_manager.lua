@@ -57,7 +57,12 @@ function HUDManager.DrawHUD()
 
 	if not hud then return end
 
-	for _, elem in ipairs(hud:GetHUDElements()) do
+	for _, elemName in ipairs(hud:GetHUDElements()) do
+		local elem = hudelements.GetStored(elemName)
+		if not elem then
+			Msg("Error: Hudelement with name " .. elemName .. " not found!")
+			return
+		end
 		if elem.type and hud:ShouldShow(elem.type) and hook.Call("HUDShouldDraw", GAMEMODE, elem.type) then
 			elem:Draw()
 		end
@@ -76,10 +81,7 @@ function GM:HUDPaint()
 	if client.oldScrW and client.oldScrW ~= scrW and client.oldScrH and client.oldScrH ~= scrH then
 		local hud = huds.GetStored(currentHUD)
 		if hud then
-			for _, elem in ipairs(hud:GetHUDElements()) do
-				elem:PerformLayout()
-			end
-
+			hud:PerformLayout()
 			changed = true
 		end
 	end
