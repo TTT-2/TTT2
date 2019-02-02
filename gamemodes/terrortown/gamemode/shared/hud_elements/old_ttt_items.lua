@@ -16,6 +16,9 @@ end
 
 function HUDELEMENT:Draw()
 	local client = LocalPlayer()
+
+	if not client:Alive() or client:Team() ~= TEAM_TERROR then return end
+
 	local itms = client:GetEquipmentItems()
 	local curY = y
 

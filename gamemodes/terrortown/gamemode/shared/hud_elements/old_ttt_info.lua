@@ -30,12 +30,14 @@ if CLIENT then
 
 	function HUDELEMENT:Draw()
 		local client = LocalPlayer()
+
+		if not client:Alive() or client:Team() ~= TEAM_TERROR then return end
+
 		local L = GetLang()
 		local maxwidth = self.maxwidth
 		local width = maxwidth
 		local height = self.maxheight
 		local margin = self.margin
-
 
 		self:DrawBg(x, y, width, height, client)
 
