@@ -117,10 +117,6 @@ end
 
 -- if forced or requested, modified by server restrictions
 net.Receive("TTT2ReceiveHUD", function(len)
-	print()
-	print("RECEIVED DEFAULT HUD")
-	print()
-
 	local name = net.ReadString()
 	local hudEl = huds.GetStored(name)
 

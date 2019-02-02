@@ -7,10 +7,6 @@ net.Receive("TTT2RequestHUD", function(len, ply)
 	local hudname = net.ReadString() -- new requested HUD
 	local oldHUD = net.ReadString() -- current HUD as fallback
 
-	print()
-	print("Received HUD REQUEST from " .. ply:Nick())
-	print()
-
 	if HUDManager.forcedHUD and not huds.GetStored(HUDManager.forcedHUD) then
 		HUDManager.forcedHUD = nil
 	end
