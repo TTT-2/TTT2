@@ -6,9 +6,10 @@ if currentHUD == "__DEFAULT__" then
 end
 
 function HUDManager.SetDefaultHUD()
-	currentHUD = "__DEFAULT__"
-
-	HUDManager.SetHUD(HUDManager.defaultHUD)
+	net.Start("TTT2RequestHUD")
+	net.WriteString(HUDManager.defaultHUD)
+	net.WriteString(currentHUD)
+	net.SendToServer()
 end
 
 function HUDManager.GetHUD()
