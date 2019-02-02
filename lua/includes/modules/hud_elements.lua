@@ -187,3 +187,33 @@ function GetList()
 
 	return result
 end
+
+--[[---------------------------------------------------------
+	Name: GetElementTypes()
+	Desc: Get a list of all the registered HUD element types
+-----------------------------------------------------------]]
+function GetElementTypes()
+	local typetbl = {}
+
+	for _, v in pairs(HUDElementList) do
+		if not table.HasValue(typetbl, v.type) then
+			table.insert(typetbl, v.type)
+		end
+	end
+
+	return typetbl
+end
+
+--[[---------------------------------------------------------
+	Name: GetTypeElement( type )
+	Desc: Gets the first element matching the type of all the registered HUD elements
+-----------------------------------------------------------]]
+function GetTypeElement( type )
+	for k, v in pairs(HUDElementList) do
+		if v.type == type then
+			return v
+		end
+	end
+
+	return nil
+end
