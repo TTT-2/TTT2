@@ -8,7 +8,7 @@ TTTFiles = {
 	cl_credits = {file = "cl_credits.lua", on = "client"},
 	cl_equip = {file = "cl_equip.lua", on = "client"},
 	cl_help = {file = "cl_help.lua", on = "client"},
-	cl_hud = {file = "cl_hud.lua", on = "client"},
+	cl_hudmanager = {file = "cl_hudmanager.lua", on = "client"},
 	cl_hudpickup = {file = "cl_hudpickup.lua", on = "client"},
 	cl_keys = {file = "cl_keys.lua", on = "client"},
 	cl_main = {file = "cl_main.lua", on = "client"},
