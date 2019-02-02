@@ -6,8 +6,12 @@ if CLIENT then
 	local x = 0
 	local y = 0
 
+	local w = 365 -- width
+	local h = 146 -- height
+	local pad = 14 -- padding
+
 	function HUDELEMENT:Initialize()
-		self:SetPos(500, 500)
+		self:SetPos(10, ScrH() - 10 - h)
 		self:PerformLayout()
 	end
 
@@ -38,10 +42,6 @@ if CLIENT then
 
 		--local scrW = ScrW()
 		--local scrH = ScrH()
-
-		local w = 365 -- width
-		local h = 146 -- height
-		local pad = 14 -- padding
 
 		-- draw bg and shadow
 		self:DrawBg(x, y, w, h, Color(49, 71, 94))
