@@ -27,7 +27,7 @@ if CLIENT then
 
 		if round_state ~= ROUND_ACTIVE then return end
 
-		local iconSize = h - pad
+		local iconSize = h - pad * 2
 		local mpw = w - h -- mid panel width
 		local c -- icon color
 		local icon -- team icon
@@ -114,7 +114,7 @@ if CLIENT then
 		self:ShadowedText(text, font, rx, ry, color, TEXT_ALIGN_CENTER)
 
 		if is_haste then
-			draw.SimpleText(L.hastemode, "TabLarge", tmpx, tmpy, COLOR_WHITE, TEXT_ALIGN_CENTER)
+			draw.SimpleText(L.hastemode, "TabLarge", tmpx, y + 14, COLOR_WHITE, TEXT_ALIGN_CENTER)
 		end
 
 		-- draw lines around the element
