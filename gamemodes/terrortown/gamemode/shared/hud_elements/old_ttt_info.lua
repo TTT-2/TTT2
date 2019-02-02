@@ -14,9 +14,10 @@ if CLIENT then
 	local x = 0
 	local y = 0
 
-	function HUDElement:Initialize()
+	function HUDELEMENT:Initialize()
 		HUDELEMENT:SetPos(self.margin, self.margin + self.maxheight)
-		self:PerformLayout()
+
+		self.BaseClass:Initialize()
 	end
 
 	function HUDELEMENT:PerformLayout()
