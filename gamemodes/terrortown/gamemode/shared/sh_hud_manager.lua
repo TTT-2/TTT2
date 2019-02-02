@@ -14,17 +14,17 @@ if not HUDManager then
 	local _, pathFolders = file.Find(pathBase .. "*", "LUA")
 
 	for _, typ in ipairs(pathFolders) do
-		local pathFiles = file.Find(pathBase .. "*.lua", "LUA")
+		local pathFiles = file.Find(pathBase .. typ .. "/" .. "*.lua", "LUA")
 
 		-- include HUD Elements files
 		for _, fl in ipairs(pathFiles) do
 			HUDELEMENT = {}
 
 			if SERVER then
-				AddCSLuaFile(pathBase .. fl)
+				AddCSLuaFile(pathBase .. typ .. "/" .. fl)
 			end
 
-			include(pathBase .. fl)
+			include(pathBase .. typ .. "/" .. fl)
 
 			local cls = string.sub(fl, 0, #fl - 4)
 
@@ -38,15 +38,15 @@ if not HUDManager then
 		end
 
 		-- include HUD Elements folders
-		local _, subFolders = file.Find(pathBase .. "*", "LUA")
+		local _, subFolders = file.Find(pathBase .. typ .. "/" .. "*", "LUA")
 
 		for _, folder in ipairs(subFolders) do
 			HUDELEMENT = {}
 
-			local subFiles = file.Find(pathBase .. folder .. "/*.lua", "LUA")
+			local subFiles = file.Find(pathBase .. typ .. "/" .. folder .. "/*.lua", "LUA")
 
 			for _, fl in ipairs(subFiles) do
-				local filename = pathBase .. folder .. "/" .. fl
+				local filename = pathBase .. typ .. "/" .. folder .. "/" .. fl
 
 				if SERVER then
 					AddCSLuaFile(filename)
