@@ -30,7 +30,7 @@ if CLIENT then
 		local L = GetLang()
 		local maxwidth = self.maxwidth
 		local width = maxwidth
-		local height = maxheight
+		local height = self.maxheight
 		local margin = self.margin
 
 
