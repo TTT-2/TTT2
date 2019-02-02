@@ -173,7 +173,6 @@ SetGlobalString("ttt_" .. INNOCENT.abbr .. "_shop_fallback", CreateConVar("ttt_"
 SetGlobalString("ttt_" .. TRAITOR.abbr .. "_shop_fallback", CreateConVar("ttt_" .. TRAITOR.abbr .. "_shop_fallback", SHOP_UNSET, {FCVAR_NOTIFY, FCVAR_ARCHIVE}):GetString())
 SetGlobalString("ttt_" .. DETECTIVE.abbr .. "_shop_fallback", CreateConVar("ttt_" .. DETECTIVE.abbr .. "_shop_fallback", SHOP_UNSET, {FCVAR_NOTIFY, FCVAR_ARCHIVE}):GetString())
 
-
 function InitCustomTeam(name, data) -- creates global var "TEAM_[name]" and other required things
 	local teamname = string.Trim(string.lower(name)) .. "s"
 
@@ -618,6 +617,7 @@ COLOR_OLIVE = Color(100, 100, 0, 255)
 
 ttt_include("sh_util")
 ttt_include("sh_lang")
+ttt_include("sh_hud_manager")
 ttt_include("sh_equip_items")
 
 function GetEquipmentFileName(name)

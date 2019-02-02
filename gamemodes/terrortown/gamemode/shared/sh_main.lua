@@ -3,8 +3,6 @@ local IsValid = IsValid
 local hook = hook
 local team = team
 
-ttt_include("sh_hud_manager")
-
 function GM:TTT2Initialize()
 	hook.Run("TTT2BaseRoleInit")
 
