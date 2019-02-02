@@ -7,6 +7,9 @@ HUDManager.restrictedHUDs = HUDManager.restrictedHUDs or {}
 util.AddNetworkString("TTT2RequestHUD")
 
 net.Receive("TTT2RequestHUD", function(len, ply)
+	local hudname = net.ReadString() -- new requested HUD
+	local oldHUD = net.ReadString() -- current HUD as fallback
+
 	if IsValid(ply) then
 		ply:ChatPrint("You requested a new HUD")
 	end
@@ -16,8 +19,6 @@ net.Receive("TTT2RequestHUD", function(len, ply)
 	end
 
 	if not HUDManager.forcedHUD then
-		local hudname = net.ReadString() -- new requested HUD
-		local oldHUD = net.ReadString() -- current HUD as fallback
 
 		local restrictions = HUDManager.restrictedHUDs
 		local restricted
