@@ -196,7 +196,7 @@ function GetElementTypes()
 	local typetbl = {}
 
 	for _, v in pairs(HUDElementList) do
-		if not table.HasValue(typetbl, v.type) then
+		if v.type and not table.HasValue(typetbl, v.type) then
 			table.insert(typetbl, v.type)
 		end
 	end
@@ -210,10 +210,10 @@ end
 -----------------------------------------------------------]]
 function GetTypeElement( type )
 	for k, v in pairs(HUDElementList) do
-		if v.type == type then
+		if v.type and v.type == type then
 			return v
 		end
 	end
 
-	return nil
+	return
 end
