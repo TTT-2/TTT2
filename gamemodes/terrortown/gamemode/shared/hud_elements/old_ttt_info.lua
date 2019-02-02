@@ -45,7 +45,7 @@ if CLIENT then
 		local health_y = y + margin
 
 		self:PaintBar(x + margin, health_y, bar_width, bar_height, self.health_colors, health / client:GetMaxHealth())
-		self:ShadowedText(tostring(health), "HealthAmmo", x + margin + bar_width, health_y, COLOR_WHITE, TEXT_ALIGN_RIGHT, TEXT_ALIGN_RIGHT)
+		self:ShadowedText(tostring(health), "HealthAmmo", x + bar_width, health_y, COLOR_WHITE, TEXT_ALIGN_RIGHT, TEXT_ALIGN_RIGHT)
 
 		if ttt_health_label:GetBool() then
 			local health_status = util.HealthToString(health, client:GetMaxHealth())
@@ -61,7 +61,7 @@ if CLIENT then
 				local text = string.format("%i + %02i", ammo_clip, ammo_inv)
 
 				self:PaintBar(x + margin, ammo_y, bar_width, bar_height, self.ammo_colors, ammo_clip / ammo_max)
-				self:ShadowedText(text, "HealthAmmo", x + margin + bar_width, ammo_y, COLOR_WHITE, TEXT_ALIGN_RIGHT, TEXT_ALIGN_RIGHT)
+				self:ShadowedText(text, "HealthAmmo", x + bar_width, ammo_y, COLOR_WHITE, TEXT_ALIGN_RIGHT, TEXT_ALIGN_RIGHT)
 			end
 		end
 
