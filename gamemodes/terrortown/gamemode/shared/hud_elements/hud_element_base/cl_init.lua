@@ -4,6 +4,8 @@ HUDELEMENT.pos = {
 }
 
 function HUDELEMENT:Initialize()
+	print("Called HUDELEMENT", self.id or "?")
+
 	self:PerformLayout()
 end
 
@@ -12,6 +14,7 @@ function HUDELEMENT:Draw()
 end
 
 function HUDELEMENT:PerformLayout()
+	print("Called PerformLayout", self.id or "?")
 
 end
 

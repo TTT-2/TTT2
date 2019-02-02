@@ -23,6 +23,8 @@ function DrawOldRoleIcon(x, y, w, h, icon, color)
 end
 
 function HUD:Initialize()
+	print("Called HUD", self.id or "?")
+
 	HUD:ForceHUDElement("old_ttt_info")
 	HUD:ForceHUDElement("old_ttt_spec")
 	HUD:ForceHUDElement("old_ttt_items")

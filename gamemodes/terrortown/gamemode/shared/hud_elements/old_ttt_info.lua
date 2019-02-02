@@ -15,11 +15,15 @@ if CLIENT then
 	local y = 0
 
 	function HUDELEMENT:Initialize()
+		print("Called HUDELEMENT", self.id or "?")
+
 		self:SetPos(self.margin, self.margin + self.maxheight)
 		self:PerformLayout()
 	end
 
 	function HUDELEMENT:PerformLayout()
+		print("Called PerformLayout", self.id or "?")
+
 		x = self.pos.x
 		y = ScrH() - self.pos.y
 	end

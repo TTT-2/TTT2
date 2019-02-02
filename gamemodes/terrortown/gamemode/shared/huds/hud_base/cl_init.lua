@@ -25,6 +25,8 @@ function HUD:ShouldShow( elementType )
 end
 
 function HUD:Initialize()
+	print("Called HUD", self.id or "?")
+
 	-- Use this method to set the elements default positions etc
 	-- Initialize elements default values
 	for _, v in ipairs(hud:GetHUDElements()) do
