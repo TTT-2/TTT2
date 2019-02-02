@@ -7,6 +7,10 @@ HUDManager.restrictedHUDs = HUDManager.restrictedHUDs or {}
 util.AddNetworkString("TTT2RequestHUD")
 
 net.Receive("TTT2RequestHUD", function(len, ply)
+	if IsValid(ply) then
+		ply:ChatPrint("You requested a new HUD")
+	end
+
 	if HUDManager.forcedHUD and not huds.GetStored(HUDManager.forcedHUD) then
 		HUDManager.forcedHUD = nil
 	end
