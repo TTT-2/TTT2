@@ -17,7 +17,7 @@ function GM:HUDPaint()
 	for hudelement, draw in pairs(hud:GetHUDElements()) do
 		local el = hudelements.GetStored(hudelement)
 		if el then
-			if draw and hook.Call("HUDShouldDraw", GAMEMODE, el.type) then
+			if draw and el.type and hook.Call("HUDShouldDraw", GAMEMODE, el.type) then
 				el:Draw()
 			end
 

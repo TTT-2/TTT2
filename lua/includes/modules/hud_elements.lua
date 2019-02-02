@@ -56,8 +56,6 @@ end
 	Desc: Used to register your HUD Element with the engine
 -----------------------------------------------------------]]
 function Register(t, name)
-	if not t.type then return end
-
 	name = string.lower(name)
 
 	local old = HUDElementList[name]
