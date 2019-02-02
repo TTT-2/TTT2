@@ -1,3 +1,6 @@
+-- include modules
+require("items")
+
 -- load items
 local itemsPre = "terrortown/entities/items/"
 local itemsFiles = file.Find(itemsPre .. "*.lua", "LUA")

@@ -3,11 +3,11 @@ local list = list
 local duplicator = duplicator
 local pairs = pairs
 
+module("hudelements", package.seeall)
+
 if SERVER then
 	AddCSLuaFile()
 end
-
-module("hudelements", package.seeall)
 
 local HUDElementList = HUDElementList or {}
 
