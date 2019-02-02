@@ -7,13 +7,13 @@ HUD.hiddenElements = {}
 function HUD:ForceHUDElement( elementID )
 	local elem = hudelements.Get(elementID)
 
-	if elem.type and not HUD.elements[elem.type] then
-		HUD.elements[elem.type] = elementID
+	if elem.type and not self.elements[elem.type] then
+		self.elements[elem.type] = elementID
 	end
 end
 
 function HUD:GetForcedHUDElements()
-	return HUD.elements
+	return self.elements
 end
 
 function HUD:HideHUDType( elementType )
