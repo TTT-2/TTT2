@@ -64,7 +64,6 @@ function Register(t, name)
 
 	t.ClassName = name
 	t.id = name
-	t.shouldDrawHook = t.shouldDrawHook or name
 
 	HUDElementList[name] = t
 
