@@ -129,7 +129,7 @@ function GM:HUDShouldDraw(name)
 end
 
 -- if forced or requested, modified by server restrictions
-net.Receive("TTT2RequestHUD", function(len)
+net.Receive("TTT2ReceiveHUD", function(len)
 	print()
 	print("RECEIVED DEFAULT HUD")
 	print()

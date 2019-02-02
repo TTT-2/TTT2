@@ -1,4 +1,5 @@
 util.AddNetworkString("TTT2RequestHUD")
+util.AddNetworkString("TTT2ReceiveHUD")
 
 HUDManager.restrictedHUDs = HUDManager.restrictedHUDs or {}
 
@@ -50,7 +51,7 @@ net.Receive("TTT2RequestHUD", function(len, ply)
 		end
 	end
 
-	net.Start("TTT2RequestHUD")
+	net.Start("TTT2ReceiveHUD")
 	net.WriteString(HUDManager.forcedHUD or hudname)
 	net.Send(ply)
 end)
