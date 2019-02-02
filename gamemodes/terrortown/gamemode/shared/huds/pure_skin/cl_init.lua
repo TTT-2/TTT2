@@ -5,7 +5,7 @@ surface.CreateFont("PureSkinRole", {font = "Trebuchet24", size = 18, weight = 10
 surface.CreateFont("PureSkinBar", {font = "Trebuchet24", size = 12, weight = 800})
 
 function HUD:Initialize()
-	--self:ForceHUDElement("old_ttt_info")
+	self:ForceHUDElement("pure_skin_info")
 	--self:ForceHUDElement("old_ttt_spec")
 	--self:ForceHUDElement("old_ttt_items")
 
