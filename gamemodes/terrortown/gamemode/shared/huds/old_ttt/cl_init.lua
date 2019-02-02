@@ -26,6 +26,7 @@ function HUD:Initialize()
 	HUD:ForceHUDElement("old_ttt_info")
 	HUD:ForceHUDElement("old_ttt_spec")
 	HUD:ForceHUDElement("old_ttt_items")
+
 	-- important to call the base initialize, to set default values for all elements
 	self.BaseClass:Initialize()
 end
