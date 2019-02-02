@@ -58,7 +58,7 @@ if CLIENT then
 				local ammo_y = health_y + bar_height + margin
 				local text = string.format("%i + %02i", ammo_clip, ammo_inv)
 
-				self:PaintBar(x + margin, ammo_y, bar_width, bar_height, ammo_colors, ammo_clip / ammo_max)
+				self:PaintBar(x + margin, ammo_y, bar_width, bar_height, self.ammo_colors, ammo_clip / ammo_max)
 				self:ShadowedText(text, "HealthAmmo", bar_width, ammo_y, COLOR_WHITE, TEXT_ALIGN_RIGHT, TEXT_ALIGN_RIGHT)
 			end
 		end
