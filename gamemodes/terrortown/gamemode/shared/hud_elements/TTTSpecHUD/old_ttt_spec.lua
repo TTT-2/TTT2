@@ -71,10 +71,12 @@ if CLIENT then
 
 		-- Draw current round state
 		local text = L[self.roundstate_string[GAMEMODE.round_state]]
+
 		self:ShadowedText(text, "TraitorState", x + (width - hastewidth) * 0.5, round_y, COLOR_WHITE, TEXT_ALIGN_CENTER)
 
 		-- Draw round/prep/post time remaining
 		text = util.SimpleTime(math.max(0, GetGlobalFloat("ttt_round_end", 0) - CurTime()), "%02i:%02i")
+
 		self:ShadowedText(text, "TimeLeft", x + time_x + smargin + hastewidth * 0.5, time_y, COLOR_WHITE, TEXT_ALIGN_CENTER)
 
 		local tgt = client:GetObserverTarget()

@@ -55,6 +55,7 @@ if CLIENT then
 		-- Draw ammo
 		if client:GetActiveWeapon().Primary then
 			local ammo_clip, ammo_max, ammo_inv = self:GetAmmo(client)
+
 			if ammo_clip ~= -1 then
 				local ammo_y = health_y + bar_height + margin
 				local text = string.format("%i + %02i", ammo_clip, ammo_inv)
