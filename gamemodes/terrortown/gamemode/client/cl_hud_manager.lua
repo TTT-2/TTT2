@@ -67,7 +67,7 @@ function HUDManager.DrawHUD()
 	if not hud then return end
 
 	for _, elem in ipairs(hud:GetHUDElements()) do
-		if hud:ShouldShow(elem) and hook.Call("HUDShouldDraw", GAMEMODE, elem.type) then
+		if hud:ShouldShow(elem.type) and hook.Call("HUDShouldDraw", GAMEMODE, elem.type) then
 			elem:Draw()
 		end
 	end
