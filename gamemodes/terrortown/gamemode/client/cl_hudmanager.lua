@@ -1,5 +1,8 @@
 if HUDManager then return end
 
+require("huds")
+require("hudelements")
+
 local current_hud = CreateClientConVar("ttt2_current_hud", "old_ttt", true, true)
 
 HUDManager = {}
