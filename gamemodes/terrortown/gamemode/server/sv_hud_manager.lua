@@ -1,4 +1,4 @@
-HUDManager.restrictedHUDs = {}
+HUDManager.restrictedHUDs = HUDManager.restrictedHUDs or {}
 
 util.AddNetworkString("TTT2RequestHUD")
 

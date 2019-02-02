@@ -208,8 +208,8 @@ end
 	Name: GetTypeElement( type )
 	Desc: Gets the first element matching the type of all the registered HUD elements
 -----------------------------------------------------------]]
-function GetTypeElement( type )
-	for k, v in pairs(HUDElementList) do
+function GetTypeElement(type)
+	for _, v in pairs(HUDElementList) do
 		if v.type and v.type == type then
 			return v
 		end
