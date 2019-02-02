@@ -1,3 +1,56 @@
+if HUDManager then
+	return
+end
+
+HUDManager = {}
+
+HUDManager.currentHUD = "old_ttt"
+
+function HUDManager:SetHUD( name )
+	-- TODO add permission checks here
+
+	local hud = huds.Get(name)
+
+	if not hud then
+		Msg("Error: HUD with name " .. name .. " was not found!\n")
+		return
+	end
+
+	HUDManager.currentHUD = name
+
+	-- Initialize elements default values
+	for k, v in pairs(hud:GetElements()) do
+		local elem = hudelements.Get(v)
+		if elem then
+			elem:Initialize()
+		else
+			Msg("Error: HUD has unkown element named " .. v .. "\n")
+		end
+	end
+
+	-- Overwrite default values with HUDs adjustments
+	hud:Initialize()
+end
+
+function HUDManager:DrawHUD()
+	local hud = huds.GetStored(HUDManager.currentHUD)
+
+	if not hud then return end
+
+	local hudelems = hud:GetElements()
+
+	-- loop through all types and if the hud does not provide an element take the first found instance for the type
+	for _, type in ipairs(hudelements.GetElementTypes()) do
+		local elem = hudelems[type] or hudelements.GetTypeElement(type)
+		if hud:ShouldShow(elem) and hook.Call("HUDShouldDraw", GAMEMODE, type) then
+			elem:Draw()
+		end
+	end
+
+end
+
+
+
 -- Paints player status HUD element in the bottom left
 function GM:HUDPaint()
 	local client = LocalPlayer()
@@ -10,27 +63,7 @@ function GM:HUDPaint()
 		MSTACK:Draw(client)
 	end
 
-	local hud = huds.GetStored(client:GetHUD())
-
-	local checkedTbl = {}
-
-	for hudelement, draw in pairs(hud:GetHUDElements()) do
-		local el = hudelements.GetStored(hudelement)
-		if el then
-			if draw and el.type and hook.Call("HUDShouldDraw", GAMEMODE, el.type) then
-				el:Draw()
-			end
-
-			checkedTbl[el.type] = true
-		end
-	end
-
-	-- get all available element types
-	for _, typ in ipairs(hudelements.GetElementTypes()) do
-		if not checkedTbl[typ] then
-			hudelements.GetTypeElement(typ):Draw()
-		end
-	end
+	HUDManager:DrawHUD()
 
 	if not client:Alive() or client:Team() == TEAM_SPEC then return end
 
