@@ -71,7 +71,7 @@ if CLIENT then
 		draw.RoundedBox(8, x, round_y, time_x, height, bg_colors.noround)
 
 		-- Draw current round state
-		local text = L[roundstate_string[GAMEMODE.round_state]]
+		local text = L[self.roundstate_string[GAMEMODE.round_state]]
 		self:ShadowedText(text, "TraitorState", x + (width - hastewidth) * 0.5, round_y, COLOR_WHITE, TEXT_ALIGN_CENTER)
 
 		-- Draw round/prep/post time remaining

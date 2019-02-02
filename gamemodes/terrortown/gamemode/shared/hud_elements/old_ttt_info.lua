@@ -77,7 +77,7 @@ if CLIENT then
 		if round_state == ROUND_ACTIVE then
 			text = L[client:GetSubRoleData().name]
 		else
-			text = L[roundstate_string[round_state]]
+			text = L[self.roundstate_string[round_state]]
 		end
 
 		self:ShadowedText(text, "TraitorState", x + tmp * 0.5, traitor_y, COLOR_WHITE, TEXT_ALIGN_CENTER)
