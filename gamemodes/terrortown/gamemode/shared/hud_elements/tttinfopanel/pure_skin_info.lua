@@ -11,7 +11,7 @@ if CLIENT then
 	local pad = 14 -- padding
 
 	function HUDELEMENT:Initialize()
-		self:SetPos(10, ScrH() - 10 - h)
+		self:SetPos(10, 10 + h)
 		self:PerformLayout()
 	end
 
