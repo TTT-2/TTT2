@@ -1,7 +1,7 @@
 if HUDManager then return end
 
-require("huds")
 require("hudelements")
+require("huds")
 
 HUDManager = {}
 HUDManager.defaultHUD = "old_ttt"
