@@ -48,17 +48,13 @@ local function SetLocalHUD(name)
 	hud:Initialize()
 end
 
-function HUDManager.SetHUD(name, force)
+function HUDManager.SetHUD(name)
 	if name == currentHUD then return end
 
-	if not force then
-		net.Start("TTT2RequestHUD")
-		net.WriteString(name)
-		net.WriteString(currentHUD)
-		net.SendToServer()
-	else
-		SetLocalHUD(name)
-	end
+	net.Start("TTT2RequestHUD")
+	net.WriteString(name)
+	net.WriteString(currentHUD)
+	net.SendToServer()
 end
 
 function HUDManager.DrawHUD()
