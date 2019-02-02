@@ -25,8 +25,6 @@ function HUDManager.GetHUD()
 end
 
 local function SetLocalHUD(name)
-	if name == currentHUD then return end
-
 	local hud = huds.GetStored(name)
 
 	if not hud then
@@ -82,8 +80,9 @@ function GM:HUDPaint()
 		local hud = huds.GetStored(currentHUD)
 		if hud then
 			hud:PerformLayout()
-			changed = true
 		end
+
+		changed = true
 	end
 
 	if changed or not client.oldScrW or not client.oldScrH then
