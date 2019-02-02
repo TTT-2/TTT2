@@ -7,7 +7,7 @@ HUD.hiddenElements = {}
 function HUD:AddHUDElement( elementID )
 	local elem = hudelements.Get(elementID)
 
-	if not HUD.elements[elem.type] then
+	if elem.type and not HUD.elements[elem.type] then
 		HUD.elements[elem.type] = elementID
 	end
 end
