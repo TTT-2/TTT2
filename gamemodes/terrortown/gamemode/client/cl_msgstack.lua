@@ -12,28 +12,19 @@ local table = table
 local surface = surface
 local draw = draw
 local pairs = pairs
-local math = math
 local net = net
 
--- Constants for configuration
-local msgfont = "DefaultBold"
+MSTACK.margin = 6
+MSTACK.msg_width = 400
 
-local margin = 6
-local msg_width = 400
+MSTACK.msgfont = "DefaultBold"
 
-local text_width = msg_width - margin * 3 -- three margins for a little more room
-local text_height = draw.GetFontHeight(msgfont)
+-- Total width we take up on screen, for other elements to read
+MSTACK.width = MSTACK.msg_width + MSTACK.margin
 
-local top_y = margin
-local top_x = ScrW() - margin - msg_width
+local text_width = MSTACK.msg_width - MSTACK.margin * 3 -- three margins for a little more room
+local text_height = draw.GetFontHeight(MSTACK.msgfont)
 
-local staytime = 12
-local max_items = 8
-
-local fadein = 0.1
-local fadeout = 0.6
-
-local movespeed = 2
 
 -- Text colors to render the messages in
 local msgcolors = {
@@ -42,9 +33,6 @@ local msgcolors = {
 
 	generic_bg = Color(0, 0, 0, 200)
 }
-
--- Total width we take up on screen, for other elements to read
-MSTACK.width = msg_width + margin
 
 function MSTACK:AddColoredMessage(text, c)
 	local item = {}
@@ -76,7 +64,7 @@ function MSTACK:AddMessageEx(item)
 
 	-- Height depends on number of lines, which is equal to number of table
 	-- elements of the wrapped item.text
-	item.height = #item.text * text_height + margin * (1 + #item.text)
+	item.height = #item.text * text_height + MSTACK.margin * (1 + #item.text)
 
 	item.time = CurTime()
 	item.sounded = false
@@ -104,7 +92,7 @@ end
 -- Oh joy, I get to write my own wrapping function. Thanks Lua!
 -- Splits a string into a table of strings that are under the given width.
 function MSTACK:WrapText(text, width)
-	surface.SetFont(msgfont)
+	surface.SetFont(MSTACK.msgfont)
 
 	-- Any wrapping required?
 	local w, _ = surface.GetTextSize(text)
@@ -130,78 +118,6 @@ function MSTACK:WrapText(text, width)
 	end
 
 	return lines
-end
-
-local msg_sound = Sound("Hud.Hint")
-local base_spec = {
-	font = msgfont,
-	xalign = TEXT_ALIGN_CENTER,
-	yalign = TEXT_ALIGN_TOP
-}
-
-function MSTACK:Draw(client)
-	if next(self.msgs) == nil then return end -- fast empty check
-
-	local running_y = top_y
-	for k, item in pairs(self.msgs) do
-		if item.time < CurTime() then
-			if item.sounded == false then
-				client:EmitSound(msg_sound, 80, 250)
-
-				item.sounded = true
-			end
-
-			-- Apply move effects to y
-			local y = running_y + margin + item.move_y
-
-			item.move_y = (item.move_y < 0) and item.move_y + movespeed or 0
-
-			local delta = item.time + staytime - CurTime()
-			delta = delta / staytime -- pct of staytime left
-
-			-- Hurry up if we have too many
-			if k >= max_items then
-				delta = delta * 0.5
-			end
-
-			local alpha = 255
-			-- These somewhat arcane delta and alpha equations are from gmod's
-			-- HUDPickup stuff
-			if delta > 1 - fadein then
-				alpha = math.Clamp((1.0 - delta) * (255 / fadein), 0, 255)
-			elseif delta < fadeout then
-				alpha = math.Clamp(delta * (255 / fadeout), 0, 255)
-			end
-
-			local height = item.height
-
-			-- Background box
-			item.bg.a = math.Clamp(alpha, 0, item.bg.a_max)
-			draw.RoundedBox(8, top_x, y, msg_width, height, item.bg)
-
-			-- Text
-			item.col.a = math.Clamp(alpha, 0, item.col.a_max)
-
-			local spec = base_spec
-			spec.color = item.col
-
-			for i = 1, #item.text do
-				spec.text = item.text[i]
-
-				local tx = top_x + (msg_width * 0.5)
-				local ty = y + margin + (i - 1) * (text_height + margin)
-				spec.pos = {tx, ty}
-
-				draw.TextShadow(spec, 1, alpha)
-			end
-
-			if alpha == 0 then
-				self.msgs[k] = nil
-			end
-
-			running_y = y + height
-		end
-	end
 end
 
 -- Game state message channel

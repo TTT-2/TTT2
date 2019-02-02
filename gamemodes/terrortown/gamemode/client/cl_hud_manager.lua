@@ -66,10 +66,6 @@ function GM:HUDPaint()
 		hook.Call("HUDDrawTargetID", GAMEMODE)
 	end
 
-	if hook.Call("HUDShouldDraw", GAMEMODE, "TTTMStack") then
-		MSTACK:Draw(client)
-	end
-
 	HUDManager.DrawHUD()
 
 	if not client:Alive() or client:Team() == TEAM_SPEC then return end
