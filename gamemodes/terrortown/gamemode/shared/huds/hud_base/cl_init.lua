@@ -4,10 +4,10 @@
 HUD.elements = {}
 HUD.hiddenElements = {}
 
-function HUD:ForceHUDElement( elementID )
-	local elem = hudelements.Get(elementID)
+function HUD:ForceHUDElement(elementID)
+	local elem = hudelements.GetStored(elementID)
 
-	if elem.type and not self.elements[elem.type] then
+	if elem and elem.type and not self.elements[elem.type] then
 		self.elements[elem.type] = elementID
 	end
 end
@@ -16,12 +16,12 @@ function HUD:GetForcedHUDElements()
 	return self.elements
 end
 
-function HUD:HideHUDType( elementType )
-	table.insert( hiddenElements, elementType )
+function HUD:HideHUDType(elementType)
+	table.insert(self.hiddenElements, elementType)
 end
 
-function HUD:ShouldShow( elementType )
-	return not table.HasValue(hiddenElements, elementType)
+function HUD:ShouldShow(elementType)
+	return not table.HasValue(self.hiddenElements, elementType)
 end
 
 function HUD:PerformLayout()
@@ -31,6 +31,7 @@ function HUD:PerformLayout()
 			elem:PerformLayout()
 		else
 			Msg("Error: Hudelement not found during PerformLayout: " .. elemName)
+
 			return
 		end
 	end
@@ -46,7 +47,7 @@ function HUD:Initialize()
 		if elem then
 			elem:Initialize()
 		else
-			Msg("Error: HUD " .. self.id or "?" ..  " has unkown element named " .. v .. "\n")
+			Msg("Error: HUD " .. (self.id or "?") ..  " has unkown element named " .. v .. "\n")
 		end
 	end
 end
