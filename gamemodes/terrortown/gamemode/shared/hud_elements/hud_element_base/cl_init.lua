@@ -23,6 +23,6 @@ function HUDELEMENT:GetPos()
 end
 
 function HUDELEMENT:SetPos(x, y)
-	self.x = x
-	self.y = y
+	self.pos.x = x
+	self.pos.y = y
 end
