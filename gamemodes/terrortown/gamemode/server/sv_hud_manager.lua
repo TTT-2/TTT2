@@ -1,10 +1,6 @@
-if sv_HUDManager then return end
-
-sv_HUDManager = true
+util.AddNetworkString("TTT2RequestHUD")
 
 HUDManager.restrictedHUDs = HUDManager.restrictedHUDs or {}
-
-util.AddNetworkString("TTT2RequestHUD")
 
 net.Receive("TTT2RequestHUD", function(len, ply)
 	local hudname = net.ReadString() -- new requested HUD
