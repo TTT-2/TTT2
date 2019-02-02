@@ -4,7 +4,7 @@ HUDELEMENT.pos = {
 }
 
 function HUDELEMENT:Initialize()
-
+	self:PerformLayout()
 end
 
 function HUDELEMENT:Draw()

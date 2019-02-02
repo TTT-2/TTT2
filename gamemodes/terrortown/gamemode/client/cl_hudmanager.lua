@@ -64,13 +64,8 @@ function HUDManager.DrawHUD()
 
 	if not hud then return end
 
-	local hudelems = hud:GetElements()
-
-	-- loop through all types and if the hud does not provide an element take the first found instance for the typ
-	for _, typ in ipairs(hudelements.GetElementTypes()) do
-		local elem = hudelems[typ] or hudelements.GetTypeElement(typ)
-
-		if hud:ShouldShow(elem) and hook.Call("HUDShouldDraw", GAMEMODE, typ) then
+	for _, elem in ipairs(hud:GetHUDElements()) do
+		if hud:ShouldShow(elem) and hook.Call("HUDShouldDraw", GAMEMODE, elem.typ) then
 			elem:Draw()
 		end
 	end
@@ -79,6 +74,27 @@ end
 -- Paints player status HUD element in the bottom left
 function GM:HUDPaint()
 	local client = LocalPlayer()
+
+	-- Perform Layout
+	local scrW = ScrW()
+	local scrH = ScrH()
+	local changed = false
+
+	if client.oldScrW and client.oldScrW ~= scrW and client.oldScrH and client.oldScrH ~= scrH then
+		local hud = huds.GetStored(currentHUD)
+		if hud then
+			for _, elem in ipairs(hud:GetHUDElements()) do
+				elem:PerformLayout()
+			end
+
+			changed = true
+		end
+	end
+
+	if changed or not client.oldScrW or not client.oldScrH then
+		client.oldScrW = scrW
+		client.oldScrH = scrH
+	end
 
 	if hook.Call("HUDShouldDraw", GAMEMODE, "TTTTargetID") then
 		hook.Call("HUDDrawTargetID", GAMEMODE)
