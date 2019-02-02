@@ -1,3 +1,7 @@
+if sv_HUDManager then return end
+
+sv_HUDManager = true
+
 HUDManager.restrictedHUDs = HUDManager.restrictedHUDs or {}
 
 util.AddNetworkString("TTT2RequestHUD")
