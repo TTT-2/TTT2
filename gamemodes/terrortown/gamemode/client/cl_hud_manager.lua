@@ -34,17 +34,7 @@ local function SetLocalHUD(name)
 
 	currentHUD = name
 
-	-- Initialize elements default values
-	for _, v in pairs(hud:GetHUDElements()) do
-		local elem = hudelements.GetStored(v)
-		if elem then
-			elem:Initialize()
-		else
-			Msg("Error: HUD has unkown element named " .. v .. "\n")
-		end
-	end
-
-	-- Overwrite default values with HUDs adjustments
+	-- Initialize elements
 	hud:Initialize()
 end
 

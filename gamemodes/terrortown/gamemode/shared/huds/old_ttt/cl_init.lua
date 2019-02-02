@@ -23,7 +23,9 @@ function DrawOldRoleIcon(x, y, w, h, icon, color)
 end
 
 function HUD:Initialize()
-	HUD:AddHUDElement("old_ttt_info")
-	HUD:AddHUDElement("old_ttt_spec")
-	HUD:AddHUDElement("old_ttt_items")
+	HUD:ForceHUDElement("old_ttt_info")
+	HUD:ForceHUDElement("old_ttt_spec")
+	HUD:ForceHUDElement("old_ttt_items")
+	-- important to call the base initialize, to set default values for all elements
+	self.BaseClass:Initialize()
 end
