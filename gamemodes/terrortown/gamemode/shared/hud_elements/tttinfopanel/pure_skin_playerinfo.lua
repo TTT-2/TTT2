@@ -11,13 +11,13 @@ if CLIENT then
 	local pad = 14 -- padding
 
 	function HUDELEMENT:Initialize()
-		self:SetPos(10, 10 + h)
+		self:SetPos(10, ScrH() - (10 + h))
 		self:PerformLayout()
 	end
 
 	function HUDELEMENT:PerformLayout()
 		x = self.pos.x
-		y = ScrH() - self.pos.y
+		y = self.pos.y
 	end
 
 	-- Returns player's ammo information
@@ -40,11 +40,8 @@ if CLIENT then
 		local L = GetLang()
 		local round_state = GAMEMODE.round_state
 
-		--local scrW = ScrW()
-		--local scrH = ScrH()
-
 		-- draw bg and shadow
-		self:DrawBg(x, y, w, h, Color(49, 71, 94))
+		self:DrawBg(x, y, w, h, self.basecolor)
 
 		-- draw left panel
 		local c

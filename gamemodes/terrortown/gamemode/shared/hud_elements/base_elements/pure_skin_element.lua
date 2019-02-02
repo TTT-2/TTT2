@@ -32,4 +32,6 @@ if CLIENT then
 		[ROUND_ACTIVE] = "round_active",
 		[ROUND_POST] = "round_post"
 	}
+
+	HUDELEMENT.basecolor = Color(49, 71, 94)
 end

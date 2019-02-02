@@ -28,6 +28,8 @@ function HUD:Initialize()
 	self:ForceHUDElement("old_ttt_items")
 	self:ForceHUDElement("old_ttt_mstack")
 
+	self:HideHUDType("tttroundinfo")
+
 	-- important to call the base initialize, to set default values for all elements
 	self.BaseClass:Initialize()
 end
