@@ -17,10 +17,8 @@ function HUDManager.GetHUD()
 	return currentHUD
 end
 
-function HUDManager.SetHUD(name)
+local function SetLocalHUD(name)
 	if name == currentHUD then return end
-
-	-- TODO add permission checks here
 
 	local hud = huds.GetStored(name)
 
@@ -46,6 +44,19 @@ function HUDManager.SetHUD(name)
 
 	-- Overwrite default values with HUDs adjustments
 	hud:Initialize()
+end
+
+function HUDManager.SetHUD(name, force)
+	if name == currentHUD then return end
+
+	if not force then
+		net.Start("TTT2RequestHUD")
+		net.WriteString(name)
+		net.WriteString(currentHUD)
+		net.SendToServer()
+	else
+		SetLocalHUD(name)
+	end
 end
 
 function HUDManager.DrawHUD()
@@ -122,5 +133,5 @@ end
 net.Receive("TTT2RequestHUD", function(len)
 	local newHUD = net.ReadString()
 
-	HUDManager.SetHUD(newHUD)
+	SetLocalHUD(newHUD)
 end)
