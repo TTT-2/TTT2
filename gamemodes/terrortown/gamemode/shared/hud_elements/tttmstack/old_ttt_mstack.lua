@@ -8,15 +8,15 @@ if CLIENT then
 	-- Constants for configuration
 	local msg_sound = Sound("Hud.Hint")
 	local base_spec = {
-		font = MSTACK.msgfont,
+		font = "DefaultBold",
 		xalign = TEXT_ALIGN_CENTER,
 		yalign = TEXT_ALIGN_TOP
 	}
 
-	local text_height = draw.GetFontHeight(MSTACK.msgfont)
+	local text_height = 0
 
-	local top_y = MSTACK.margin
-	local top_x = ScrW() - MSTACK.margin - MSTACK.msg_width
+	local top_y = 0
+	local top_x = 0
 
 	local staytime = 12
 	local max_items = 8
@@ -27,6 +27,15 @@ if CLIENT then
 
 	function HUDELEMENT:Initialize()
 		self:SetPos(MSTACK.margin - MSTACK.msg_width, MSTACK.margin)
+		top_y = MSTACK.margin
+		top_x = ScrW() - MSTACK.margin - MSTACK.msg_width
+		text_height = draw.GetFontHeight(MSTACK.msgfont)
+
+		base_spec = {
+			font = MSTACK.msgfont,
+			xalign = TEXT_ALIGN_CENTER,
+			yalign = TEXT_ALIGN_TOP
+		}
 	end
 
 	function HUDELEMENT:PerformLayout()
