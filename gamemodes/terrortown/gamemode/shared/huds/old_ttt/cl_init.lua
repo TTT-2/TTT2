@@ -25,9 +25,9 @@ end
 function HUD:Initialize()
 	print("Called HUD", self.id or "?")
 
-	HUD:ForceHUDElement("old_ttt_info")
-	HUD:ForceHUDElement("old_ttt_spec")
-	HUD:ForceHUDElement("old_ttt_items")
+	self:ForceHUDElement("old_ttt_info")
+	self:ForceHUDElement("old_ttt_spec")
+	self:ForceHUDElement("old_ttt_items")
 
 	-- important to call the base initialize, to set default values for all elements
 	self.BaseClass:Initialize()
