@@ -6,6 +6,8 @@ if currentHUD == "__DEFAULT__" then
 end
 
 function HUDManager.SetDefaultHUD()
+	currentHUD = "__DEFAULT__"
+
 	HUDManager.SetHUD(HUDManager.defaultHUD)
 end
 

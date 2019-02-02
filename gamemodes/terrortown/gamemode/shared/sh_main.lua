@@ -14,6 +14,10 @@ function GM:TTT2Initialize()
 	-- load all HUDs
 	huds.OnLoaded()
 
+	if CLIENT then
+		HUDManager.SetDefaultHUD()
+	end
+
 	DefaultEquipment = GetDefaultEquipment()
 end
 
