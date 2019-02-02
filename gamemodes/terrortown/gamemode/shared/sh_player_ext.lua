@@ -392,7 +392,7 @@ end
 
 function plymeta:GetHUD()
 	if not self.hud then
-		self.hud = "hud_base"
+		self.hud = "old_ttt"
 	end
 
 	return self.hud
