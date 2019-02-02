@@ -21,7 +21,7 @@ function HUD:HideHUDType( elementType )
 end
 
 function HUD:ShouldShow( elementType )
-	return table.HasValue(hiddenElements, elementType)
+	return not table.HasValue(hiddenElements, elementType)
 end
 
 function HUD:Initialize()
