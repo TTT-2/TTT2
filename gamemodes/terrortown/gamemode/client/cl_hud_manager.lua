@@ -1,3 +1,5 @@
+if not HUDManager then return end
+
 local current_hud = CreateClientConVar("ttt2_current_hud", "old_ttt", true, true)
 
 local currentHUD = current_hud:GetString()

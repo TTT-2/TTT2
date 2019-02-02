@@ -1,24 +1,20 @@
+if not HUDManager then return end
+
+HUDManager.restrictedHUDs = {}
+
 util.AddNetworkString("TTT2RequestHUD")
 
 net.Receive("TTT2RequestHUD", function(len, ply)
-	local hudname = net.ReadString() -- new requested HUD
-	local oldHUD = net.ReadString() -- current HUD as fallback
-
-	local restrictions = {}
-	local restricted
-
-	for _, v in ipairs(restrictions) do
-		if v == hudname then
-			restricted = true
-
-			break
-		end
+	if HUDManager.forcedHUD and not huds.GetStored(HUDManager.forcedHUD) then
+		HUDManager.forcedHUD = nil
 	end
 
-	if restricted then
-		restricted = nil
+	if not HUDManager.forcedHUD then
+		local hudname = net.ReadString() -- new requested HUD
+		local oldHUD = net.ReadString() -- current HUD as fallback
 
-		hudname = oldHUD
+		local restrictions = HUDManager.restrictedHUDs
+		local restricted
 
 		for _, v in ipairs(restrictions) do
 			if v == hudname then
@@ -27,13 +23,27 @@ net.Receive("TTT2RequestHUD", function(len, ply)
 				break
 			end
 		end
-	end
 
-	if restricted then
-		hudname = "old_ttt"
+		if restricted then
+			restricted = nil
+
+			hudname = oldHUD
+
+			for _, v in ipairs(restrictions) do
+				if v == hudname then
+					restricted = true
+
+					break
+				end
+			end
+		end
+
+		if restricted then
+			hudname = "old_ttt"
+		end
 	end
 
 	net.Start("TTT2RequestHUD")
-	net.WriteString(hudname)
+	net.WriteString(HUDManager.forcedHUD or hudname)
 	net.Send(ply)
 end)
