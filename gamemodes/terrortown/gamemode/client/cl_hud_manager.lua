@@ -5,8 +5,6 @@ if currentHUD == "__DEFAULT__" then
 	currentHUD = HUDManager.defaultHUD
 end
 
-HUDManager.SetHUD(currentHUD)
-
 function HUDManager.SetDefaultHUD()
 	HUDManager.SetHUD(HUDManager.defaultHUD)
 end
@@ -139,3 +137,5 @@ net.Receive("TTT2RequestHUD", function(len)
 
 	SetLocalHUD(newHUD)
 end)
+
+HUDManager.SetHUD(currentHUD)
