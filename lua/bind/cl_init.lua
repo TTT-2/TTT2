@@ -114,14 +114,14 @@ end
     Register( any identifier, function func, function onPressed, function onReleased )
     Register a function to run when the button for a specific binding is pressed.
 -----------------------------------------------------------]]
-function bind.Register(name, onPressed, onReleased)
-	if not isfunction(onPressed) and not isfunction(onReleased) then
+function bind.Register(name, onPressedFunc, onReleasedFunc)
+	if not isfunction(onPressedFunc) and not isfunction(onReleasedFunc) then
 		return
 	end
 
 	Registry[name] = {
-		onPressed  = onPressed,
-		onReleased = onReleased
+		onPressed  = onPressedFunc,
+		onReleased = onReleasedFunc
 	}
 end
 
