@@ -390,20 +390,6 @@ function plymeta:GetEyeTrace(mask)
 	return self.PlayerTrace
 end
 
-function plymeta:GetHUD()
-	if not self.hud then
-		self.hud = "old_ttt"
-	end
-
-	return self.hud
-end
-
-function plymeta:SetHUD(name)
-	if not huds.GetStored(name) then return end
-
-	self.hud = name
-end
-
 -- TODO move this to client file
 if CLIENT then
 	function plymeta:AnimApplyGesture(act, weight)

@@ -52,7 +52,7 @@ else
 
 		if bool and not GetGlobalBool("ttt2_sprint_enabled", true) or not bool and not client.isSprinting then return end
 
-		client.oldSprintProgress = client.sprintProgress
+		client.oldSprintProgress = client.sprintProgress or 1
 		client.sprintMultiplier = bool and (1 + GetGlobalFloat("ttt2_sprint_max", 0)) or nil
 		client.isSprinting = bool
 		client.sprintTS = CurTime()

@@ -98,8 +98,8 @@ function GM:PlayerStartVoice(ply)
 		draw.RoundedBox(4, 1, 1, w - 2, h - 2, shade)
 	end
 
-	if huds then
-		local hud = huds.GetStored(client.GetHUD())
+	if huds and HUDManager then
+		local hud = huds.GetStored(HUDManager.GetHUD())
 		if hud then
 			paintFn = hud.voicePaint or paintFn
 		end
