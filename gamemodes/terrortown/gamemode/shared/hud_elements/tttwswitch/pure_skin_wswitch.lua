@@ -76,7 +76,7 @@ if CLIENT then
 
 		-- Name
 		spec.text = name
-		spec.font = "PureSkinBar"
+		spec.font = "PureSkinWep"
 		spec.pos[1] = x + 10 + self.height
 		spec.xalign = nil
 
