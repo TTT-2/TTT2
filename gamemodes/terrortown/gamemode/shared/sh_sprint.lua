@@ -52,7 +52,7 @@ else
 
 		if bool and not GetGlobalBool("ttt2_sprint_enabled", true) or not bool and not client.isSprinting then return end
 
-		client.oldSprintProgress = client.sprintProgress or 1
+		client.oldSprintProgress = client.sprintProgress
 		client.sprintMultiplier = bool and (1 + GetGlobalFloat("ttt2_sprint_max", 0)) or nil
 		client.isSprinting = bool
 		client.sprintTS = CurTime()
@@ -105,6 +105,8 @@ hook.Add("Think", "TTT2PlayerSprinting", function()
 		else
 			ply.sprintProgress = math.max(ply.oldSprintProgress - timeElapsed * GetGlobalFloat("ttt2_sprint_stamina_consumption"), 0)
 		end
+
+		print(ply.sprintProgress)
 
 		if ply.sprintProgress == 1 then
 			ply.sprintTS = nil
