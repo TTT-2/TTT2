@@ -11,10 +11,12 @@ local function PlayerSprint(bool)
 
 	if bool then
 		if GetGlobalBool("ttt2_sprint_crosshair", true) then
-			RunConsoleCommand("ttt_crosshair_size", "0")
+			client.oldCrosshairSize = GetConVar("ttt_crosshair_size"):GetFloat()
+
+			RunConsoleCommand("ttt_crosshair_size", 0)
 		end
 	else
-		RunConsoleCommand("ttt_crosshair_size", "1")
+		RunConsoleCommand("ttt_crosshair_size", client.oldCrosshairSize or 1)
 	end
 
 	client.isSprinting = bool
@@ -41,7 +43,7 @@ hook.Add("Think", "TTT2PlayerSprinting", function()
 	if not client.isSprinting then
 		local regeneration = GetGlobalFloat("ttt2_sprint_stamina_regeneration", 0.15)
 
-		client.sprintProgress = math.max(client.sprintProgress + (timeElapsed * regeneration * 250), 1)
+		client.sprintProgress = math.min(client.sprintProgress + (timeElapsed * regeneration * 0.025), 1)
 
 		if client.sprintProgress == 1 then
 			client.sprintTS = nil
@@ -50,6 +52,6 @@ hook.Add("Think", "TTT2PlayerSprinting", function()
 	else
 		local consumption = GetGlobalFloat("ttt2_sprint_stamina_consumption", 0.3)
 
-		client.sprintProgress = math.max(client.sprintProgress - (timeElapsed * consumption * 250), 0)
+		client.sprintProgress = math.max(client.sprintProgress - (timeElapsed * consumption * 0.025), 0)
 	end
 end)

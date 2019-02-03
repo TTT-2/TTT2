@@ -43,17 +43,19 @@ hook.Add("Think", "TTT2PlayerSprinting", function()
 	for _, ply in ipairs(player.GetAll()) do
 		if not ply.sprintTS then return end
 
-		local timeElapsed = CurTime() - client.sprintTS
+		local timeElapsed = CurTime() - ply.sprintTS
 
-		if not client.sprintMultiplier then
-			client.sprintProgress = math.max(client.sprintProgress + (timeElapsed * stamreg:GetFloat() * 250), 1)
+		ply.sprintProgress = ply.sprintProgress or 1
 
-			if client.sprintProgress == 1 then
-				client.sprintTS = nil
-				client.isSprinting = nil
+		if not ply.sprintMultiplier then
+			ply.sprintProgress = math.min(ply.sprintProgress + (timeElapsed * stamreg:GetFloat() * 250), 1)
+
+			if ply.sprintProgress == 1 then
+				ply.sprintTS = nil
+				ply.isSprinting = nil
 			end
 		else
-			client.sprintProgress = math.max(client.sprintProgress - (timeElapsed * consumption:GetFloat() * 250), 0)
+			ply.sprintProgress = math.max(ply.sprintProgress - (timeElapsed * consumption:GetFloat() * 250), 0)
 		end
 	end
 end)
