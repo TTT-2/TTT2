@@ -25,8 +25,10 @@ if CLIENT then
 		local L = GetLang()
 		local round_state = GAMEMODE.round_state
 
-		local iconSize = h - pad * 2
-		local mpw = w - h -- mid panel width
+		local x2, y2, w2, h2 = x, y, w, h -- caching
+
+		local iconSize = h2 - pad * 2
+		local mpw = w2 - h2 -- mid panel width
 		local c -- icon color
 		local icon -- team icon
 
@@ -40,28 +42,28 @@ if CLIENT then
 		end
 
 		if not c then
-			x = x + h
-			w = mpw
+			x2 = x2 + h2
+			w2 = mpw
 		end
 
 		-- draw bg and shadow
-		self:DrawBg(x, y, w, h, self.basecolor)
+		self:DrawBg(x2, y2, w2, h2, self.basecolor)
 
 		if c then
 			surface.SetDrawColor(0, 0, 0, 90)
-			surface.DrawRect(x, y, h, h)
+			surface.DrawRect(x2, y2, h2, h2)
 
 			surface.SetDrawColor(clr(c))
-			surface.DrawRect(x + pad, y + pad, iconSize, iconSize)
+			surface.DrawRect(x2 + pad, y2 + pad, iconSize, iconSize)
 
 			if icon then
 				surface.SetDrawColor(255, 255, 255, 255)
 				surface.SetMaterial(icon)
-				surface.DrawTexturedRect(x + pad, y + pad, iconSize, iconSize)
+				surface.DrawTexturedRect(x2 + pad, y2 + pad, iconSize, iconSize)
 			end
 
 			-- draw lines around the element
-			self:DrawLines(x + pad, y + pad, iconSize, iconSize)
+			self:DrawLines(x2 + pad, y2 + pad, iconSize, iconSize)
 		end
 
 		-- draw haste / time
@@ -72,8 +74,8 @@ if CLIENT then
 		local font = "TimeLeft"
 		local color = COLOR_WHITE
 
-		local tmpx = x + h + mpw * 0.5
-		local tmpy = y + h * 0.5
+		local tmpx = x2 + h2 + mpw * 0.5
+		local tmpy = y2 + h2 * 0.5
 
 		local rx = tmpx
 		local ry = tmpy
@@ -115,10 +117,10 @@ if CLIENT then
 		self:ShadowedText(text, font, rx, ry, color, TEXT_ALIGN_CENTER)
 
 		if is_haste then
-			draw.SimpleText(L.hastemode, "TabLarge", tmpx, y + 14, COLOR_WHITE, TEXT_ALIGN_CENTER)
+			draw.SimpleText(L.hastemode, "TabLarge", tmpx, y2 + 14, COLOR_WHITE, TEXT_ALIGN_CENTER)
 		end
 
 		-- draw lines around the element
-		self:DrawLines(x, y, w, h)
+		self:DrawLines(x2, y2, w2, h2)
 	end
 end

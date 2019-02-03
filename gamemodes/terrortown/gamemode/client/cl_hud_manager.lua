@@ -15,9 +15,11 @@ function HUDManager.GetHUD()
 end
 
 function HUDManager.SetHUD(name)
+	local curHUD = HUDManager.GetHUD()
+
 	net.Start("TTT2RequestHUD")
-	net.WriteString(name)
-	net.WriteString(HUDManager.GetHUD())
+	net.WriteString(name or curHUD)
+	net.WriteString(curHUD)
 	net.SendToServer()
 end
 
@@ -114,8 +116,6 @@ net.Receive("TTT2ReceiveHUD", function()
 
 		return
 	end
-
-	print("set", current_hud:GetName(), "=", name)
 
 	RunConsoleCommand(current_hud:GetName(), name)
 

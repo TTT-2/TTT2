@@ -79,7 +79,7 @@ function GM:InitPostEntity()
 
 	hook.Run("TTTInitPostEntity")
 
-	HUDManager.SetHUD(HUDManager.defaultHUD)
+	HUDManager.SetHUD()
 
 	InitDefaultEquipment()
 

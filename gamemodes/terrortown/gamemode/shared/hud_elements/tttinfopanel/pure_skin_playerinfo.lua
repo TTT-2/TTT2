@@ -73,37 +73,39 @@ if CLIENT then
 		end
 
 		surface.SetDrawColor(clr(c))
-		surface.DrawRect(x, y, lpw, h)
+		surface.DrawRect(x2, y2, lpw, h2)
 
 		local ry = y2 + lpw * 0.5
 		local ty = y2 + lpw + pad -- new y
 		local nx = x2 + lpw + pad -- new x
 
-		-- player informations
-		if cactive then
-
-			-- draw role icon
-			local rd = client:GetSubRoleData()
-			if rd then
+		-- draw role icon
+		local rd = client:GetSubRoleData()
+		if rd then
+			if cactive then
 				local icon = Material("vgui/ttt/dynamic/roles/icon_" .. rd.abbr)
 				if icon then
 					surface.SetDrawColor(255, 255, 255, 255)
 					surface.SetMaterial(icon)
 					surface.DrawTexturedRect(x2 + 4, y2 + 4, lpw - 8, lpw - 8)
 				end
-
-				-- draw role string name
-				local text
-				local round_state = GAMEMODE.round_state
-
-				if cactive then
-					text = L[rd.name]
-				else
-					text = L[self.roundstate_string[round_state]]
-				end
-
-				self:ShadowedText(text, "PureSkinRole", nx, ry, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
+
+			-- draw role string name
+			local text
+			local round_state = GAMEMODE.round_state
+
+			if cactive then
+				text = L[rd.name]
+			else
+				text = L[self.roundstate_string[round_state]]
+			end
+
+			self:ShadowedText(text, "PureSkinRole", nx, ry, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		end
+
+		-- player informations
+		if cactive then
 
 			-- TODO rework calculation
 			-- draw secondary role information
