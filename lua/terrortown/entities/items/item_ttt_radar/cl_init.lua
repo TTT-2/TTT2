@@ -117,7 +117,7 @@ local function DrawTarget(tgt, size, offset, no_shrink)
 end
 
 function RADAR:Draw(client)
-	if not client or not client:HasEquipmentItem("item_ttt_radar") then return end
+	if not IsValid(client) then return end
 
 	GetPTranslation = GetPTranslation or LANG.GetParamTranslation
 
@@ -135,11 +135,7 @@ function RADAR:Draw(client)
 	end
 
 	-- Corpse calls
-	local size = 0
-
-	for k in pairs(self.called_corpses) do
-		size = size + 1
-	end
+	local size = table.Count(self.called_corpses)
 
 	if client:IsActiveRole(ROLE_DETECTIVE) and size > 0 then
 		surface.SetTexture(det_beacon)
