@@ -62,8 +62,8 @@ else
 		net.SendToServer()
 
 		if bool then
-			if GetGlobalBool("ttt2_sprint_crosshair", true) then
-				client.oldCrosshairSize = GetConVar("ttt_crosshair_size"):GetFloat()
+			if not GetGlobalBool("ttt2_sprint_crosshair", true) then
+				client.oldCrosshairSize = GetConVar("ttt_crosshair_size"):GetFloat() or 1
 
 				RunConsoleCommand("ttt_crosshair_size", 0)
 			end
@@ -96,16 +96,22 @@ hook.Add("Think", "TTT2PlayerSprinting", function()
 	local plys = client and {client} or player.GetAll()
 
 	for _, ply in ipairs(plys) do
-		if not ply.sprintTS or not ply.oldSprintProgress then continue end
+		if not ply.sprintTS then continue end
 
 		local timeElapsed = CurTime() - ply.sprintTS
 
-		print(ply.sprintProgress)
+		local oldSprP = ply.sprintProgress
 
 		if not ply.sprintMultiplier then
 			ply.sprintProgress = math.min(ply.oldSprintProgress + timeElapsed * GetGlobalFloat("ttt2_sprint_stamina_regeneration"), 1)
 		else
 			ply.sprintProgress = math.max(ply.oldSprintProgress - timeElapsed * GetGlobalFloat("ttt2_sprint_stamina_consumption"), 0)
+		end
+
+		print(oldSprP, " -> ", ply.sprintProgress)
+
+		if ply.sprintProgress == 1 then
+			ply.sprintTS = nil
 		end
 	end
 end)
