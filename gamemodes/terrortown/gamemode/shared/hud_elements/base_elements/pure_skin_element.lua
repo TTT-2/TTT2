@@ -22,7 +22,7 @@ if CLIENT then
 	end
 
 	function HUDELEMENT:ShadowedText(text, font, x, y, color, xalign, yalign)
-		draw.SimpleText(text, font, x + 2, y + 2, COLOR_BLACK, xalign, yalign)
+		draw.SimpleText(text, font, x + 1, y + 1, COLOR_BLACK, xalign, yalign)
 		draw.SimpleText(text, font, x, y, color, xalign, yalign)
 	end
 
