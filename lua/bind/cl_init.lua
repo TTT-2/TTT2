@@ -5,6 +5,7 @@ local tablename = "ttt2_bindings"
 local Bindings = {}
 local Registry = {}
 local FirstPressed = {}
+local WasPressed = {}
 local SettingsBindings = {}
 
 --[[----------------------------
@@ -73,12 +74,21 @@ local function TTT2BindCheckThink()
 
 		if cache and FirstPressed[btn] then
 			for _, name in pairs(tbl) do
-				if isfunction(Registry[name]) then
-					Registry[name]()
+				if isfunction(Registry[name].onPressed) then
+					Registry[name].onPressed()
 				end
 			end
 		end
 
+		if not cache and WasPressed[btn] then
+			for _, name in pairs(tbl) do
+				if isfunction(Registry[name].onReleased) then
+					Registry[name].onReleased()
+				end
+			end
+		end
+
+		WasPressed[btn] = cache
 		FirstPressed[btn] = not cache
 	end
 end
@@ -101,13 +111,18 @@ function bind.GetTable()
 end
 
 --[[---------------------------------------------------------
-    Register( any identifier, function func )
+    Register( any identifier, function func, function onPressed, function onReleased )
     Register a function to run when the button for a specific binding is pressed.
 -----------------------------------------------------------]]
-function bind.Register(name, func)
-	if not isfunction(func) then return end
+function bind.Register(name, onPressed, onReleased)
+	if not isfunction(onPressed) and not isfunction(onReleased) then
+		return
+	end
 
-	Registry[name] = func
+	Registry[name] = {
+		onPressed  = onPressed,
+		onReleased = onReleased
+	}
 end
 
 --[[---------------------------------------------------------
