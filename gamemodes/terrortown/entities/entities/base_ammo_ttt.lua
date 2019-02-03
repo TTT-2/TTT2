@@ -10,6 +10,7 @@ ENT.Type = "anim"
 ENT.AmmoType = "Pistol"
 ENT.AmmoAmount = 1
 ENT.AmmoMax = 10
+ENT.AmmoEntMax = 1
 ENT.Model = Model("models/items/boxsrounds.mdl")
 
 -- bw compat
@@ -37,6 +38,8 @@ function ENT:Initialize()
 		self:SetTrigger(true)
 	end
 
+	self.tickRemoval = false
+
 	-- this made the ammo get physics'd too early, meaning it would fall
 	-- through physics surfaces it was lying on on the client, leading to
 	-- inconsistencies
@@ -44,6 +47,8 @@ function ENT:Initialize()
 	--	if (phys:IsValid()) then
 	--		phys:Wake()
 	--	end
+
+	self.AmmoEntMax = self.AmmoAmount
 end
 
 -- Pseudo-clone of SDK's UTIL_ItemCanBeTouchedByPlayer
@@ -74,7 +79,7 @@ function ENT:CheckForWeapon(ply)
 		-- create a cache of what weapon classes use this ammo
 		local tbl = {}
 
-		for k, v in ipairs(weapons.GetList()) do
+		for _, v in ipairs(weapons.GetList()) do
 			if v.AmmoEnt == self:GetClass() then
 				tbl[#tbl + 1] = WEPS.GetClass(v)
 			end
@@ -107,7 +112,7 @@ function ENT:Touch(ent)
 
 			self.AmmoAmount = self.AmmoAmount - given
 
-			if self.AmmoAmount <= 0 then
+			if self.AmmoAmount <= 0 or math.ceil(self.AmmoEntMax * 0.25) > self.AmmoAmount then
 				self.tickRemoval = true
 
 				self:Remove()
