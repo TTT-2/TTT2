@@ -71,11 +71,14 @@ function HUD:GetHUDElementByType(typ)
 
 	local hudelem = self:GetForcedHUDElements()[typ]
 	if hudelem then
-		return hudelem
+		hudelem = hudelements.GetStored(hudelem)
+		if hudelem then
+			return hudelem
+		end
 	end
 
 	local allelems = hudelements.GetTypeElement(typ)
 	if allelems then
-		return allelems.id
+		return allelems
 	end
 end
