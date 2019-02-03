@@ -74,7 +74,7 @@ local function TTT2BindCheckThink()
 
 		if cache and FirstPressed[btn] then
 			for _, name in pairs(tbl) do
-				if isfunction(Registry[name].onPressed) then
+				if Registry[name] and isfunction(Registry[name].onPressed) then
 					Registry[name].onPressed()
 				end
 			end
@@ -82,7 +82,7 @@ local function TTT2BindCheckThink()
 
 		if not cache and WasPressed[btn] then
 			for _, name in pairs(tbl) do
-				if isfunction(Registry[name].onReleased) then
+				if Registry[name] and isfunction(Registry[name].onReleased) then
 					Registry[name].onReleased()
 				end
 			end
