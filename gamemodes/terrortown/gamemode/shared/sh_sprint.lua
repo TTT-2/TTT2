@@ -2,10 +2,10 @@ if SERVER then
 	util.AddNetworkString("TTT2SprintToggle")
 
 	-- Set ConVars
-	local sprintEnabled = CreateConVar("ttt2_sprint_enabled", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "The maximum speed modifier the player will receive (Def: 0.5)")
+	local sprintEnabled = CreateConVar("ttt2_sprint_enabled", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "Toggle Sprint (Def: 0.5)")
 	local maxSprintMul = CreateConVar("ttt2_sprint_max", "0.5", {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "The maximum speed modifier the player will receive (Def: 0.5)")
-	local consumption = CreateConVar("ttt2_sprint_stamina_consumption", "0.3", {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "The speed of the stamina consumption (Def: 0.3)")
-	local stamreg = CreateConVar("ttt2_sprint_stamina_regeneration", "0.2", {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "The regeneration time of the stamina (Def: 0.15)")
+	local consumption = CreateConVar("ttt2_sprint_stamina_consumption", "30", {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "The speed of the stamina consumption (per second; Def: 30)")
+	local stamreg = CreateConVar("ttt2_sprint_stamina_regeneration", "20", {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "The regeneration time of the stamina (per second; Def: 20)")
 	local showCrosshair = CreateConVar("ttt2_sprint_crosshair", "0", {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "Should the Crosshair be visible while sprinting? (Def: 1)")
 
 	hook.Add("SyncGlobals", "AddSprintGlobals", function()
@@ -42,6 +42,7 @@ if SERVER then
 		local bool = net.ReadBool()
 
 		ply.sprintTS = CurTime()
+		ply.oldSprintProgress = ply.sprintProgress
 		ply.sprintMultiplier = bool and (1 + maxSprintMul:GetFloat()) or nil
 		ply.isSprinting = bool
 	end)
@@ -52,7 +53,9 @@ else
 		if bool and not GetGlobalBool("ttt2_sprint_enabled", true) or not bool and not client.isSprinting then return end
 
 		client.sprintTS = CurTime()
+		client.oldSprintProgress = client.sprintProgress
 		client.sprintMultiplier = bool and (1 + GetGlobalFloat("ttt2_sprint_max", 0)) or nil
+		client.isSprinting = bool
 
 		net.Start("TTT2SprintToggle")
 		net.WriteBool(bool)
@@ -67,8 +70,6 @@ else
 		else
 			RunConsoleCommand("ttt_crosshair_size", client.oldCrosshairSize or 1)
 		end
-
-		client.isSprinting = bool
 	end
 
 	bind.Register("ttt2_sprint", function()
@@ -100,18 +101,18 @@ hook.Add("Think", "TTT2PlayerSprinting", function()
 		local timeElapsed = CurTime() - ply.sprintTS
 
 		ply.sprintProgress = ply.sprintProgress or 1
+		ply.oldSprintProgress = ply.oldSprintProgress or ply.sprintProgress
 
 		if not ply.sprintMultiplier then
-			ply.sprintProgress = math.min(ply.sprintProgress + (timeElapsed * GetGlobalFloat("ttt2_sprint_stamina_regeneration") * 2.5), 1)
+			ply.sprintProgress = math.min(ply.oldSprintProgress + timeElapsed * GetGlobalFloat("ttt2_sprint_stamina_regeneration"), 1)
 		else
-			ply.sprintProgress = math.max(ply.sprintProgress - (timeElapsed * GetGlobalFloat("ttt2_sprint_stamina_consumption") * 2.5), 0)
+			ply.sprintProgress = math.max(ply.oldSprintProgress - timeElapsed * GetGlobalFloat("ttt2_sprint_stamina_consumption"), 0)
 		end
 
 		if ply.sprintProgress == 1 then
 			ply.sprintTS = nil
 			ply.isSprinting = nil
-		else
-			ply.sprintTS = CurTime()
+			ply.oldSprintProgress = nil
 		end
 	end
 end)
