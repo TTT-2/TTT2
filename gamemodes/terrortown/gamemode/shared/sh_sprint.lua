@@ -101,6 +101,9 @@ hook.Add("Think", "TTT2PlayerSprinting", function()
 		local timeElapsed = CurTime() - ply.sprintTS
 
 		ply.sprintProgress = ply.sprintProgress or 1
+
+		print(ply.sprintProgress)
+
 		ply.oldSprintProgress = ply.oldSprintProgress or ply.sprintProgress
 
 		if not ply.sprintMultiplier then
