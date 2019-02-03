@@ -77,7 +77,7 @@ if CLIENT then
 				if icon then
 					surface.SetDrawColor(255, 255, 255, 255)
 					surface.SetMaterial(icon)
-					surface.DrawTexturedRect(x, y, lpw, lpw)
+					surface.DrawTexturedRect(x + 4, y + 4, lpw - 8, lpw - 8)
 				end
 			end
 
@@ -106,9 +106,17 @@ if CLIENT then
 				local sri_width = sri_text_width + sri_text_width_padding * 2
 				local sri_xoffset = w - sri_width - sri_margin_right
 
+				local nx = x + sri_xoffset
+				local ny = y + sri_margin_top_bottom
+				local nh = lpw - sri_margin_top_bottom * 2
+
 				surface.SetDrawColor(clr(secInfoTbl.color))
-				surface.DrawRect(x + sri_xoffset, y + sri_margin_top_bottom, sri_width, lpw - sri_margin_top_bottom * 2)
-				self:ShadowedText(secInfoTbl.text, "PureSkinRole", x + sri_xoffset + sri_text_width_padding, y + sri_margin_top_bottom + sri_padding_inner_top_bottom + sri_text_height, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				surface.DrawRect(nx, ny, sri_width, nh)
+
+				self:ShadowedText(secInfoTbl.text, "PureSkinRole", nx + sri_text_width_padding, ny + sri_padding_inner_top_bottom + sri_text_height, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+
+				-- draw lines around the element
+				self:DrawLines(nx, ny, sri_width, nh)
 			end
 		end
 

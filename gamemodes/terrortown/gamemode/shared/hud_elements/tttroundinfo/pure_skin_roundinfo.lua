@@ -61,6 +61,9 @@ if CLIENT then
 				surface.SetMaterial(icon)
 				surface.DrawTexturedRect(x + pad, y + pad, iconSize, iconSize)
 			end
+
+			-- draw lines around the element
+			self:DrawLines(x + pad, y + pad, iconSize, iconSize)
 		end
 
 		-- draw haste / time
