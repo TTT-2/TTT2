@@ -413,6 +413,8 @@ function GM:SyncGlobals()
 	end
 
 	SetGlobalBool("ttt2_confirm_team", confirm_team:GetBool())
+
+	hook.Run("TTT2SyncGlobals")
 end
 
 function LoadShopsEquipment()

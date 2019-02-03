@@ -8,7 +8,7 @@ if SERVER then
 	local stamreg = CreateConVar("ttt2_sprint_stamina_regeneration", "0.5", {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "The regeneration time of the stamina (per second; Def: 0.5)")
 	local showCrosshair = CreateConVar("ttt2_sprint_crosshair", "0", {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "Should the Crosshair be visible while sprinting? (Def: 1)")
 
-	hook.Add("SyncGlobals", "AddSprintGlobals", function()
+	hook.Add("TTT2SyncGlobals", "AddSprintGlobals", function()
 		SetGlobalBool(sprintEnabled:GetName(), sprintEnabled:GetBool())
 		SetGlobalFloat(maxSprintMul:GetName(), maxSprintMul:GetFloat())
 		SetGlobalFloat(consumption:GetName(), consumption:GetFloat())
@@ -105,8 +105,6 @@ hook.Add("Think", "TTT2PlayerSprinting", function()
 		else
 			ply.sprintProgress = math.max(ply.oldSprintProgress - timeElapsed * GetGlobalFloat("ttt2_sprint_stamina_consumption"), 0)
 		end
-
-		print(ply.sprintProgress)
 
 		if ply.sprintProgress == 1 then
 			ply.sprintTS = nil
