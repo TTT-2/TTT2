@@ -4,8 +4,8 @@ if SERVER then
 	-- Set ConVars
 	local sprintEnabled = CreateConVar("ttt2_sprint_enabled", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "Toggle Sprint (Def: 0.5)")
 	local maxSprintMul = CreateConVar("ttt2_sprint_max", "0.5", {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "The maximum speed modifier the player will receive (Def: 0.5)")
-	local consumption = CreateConVar("ttt2_sprint_stamina_consumption", "30", {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "The speed of the stamina consumption (per second; Def: 30)")
-	local stamreg = CreateConVar("ttt2_sprint_stamina_regeneration", "20", {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "The regeneration time of the stamina (per second; Def: 20)")
+	local consumption = CreateConVar("ttt2_sprint_stamina_consumption", "1.2", {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "The speed of the stamina consumption (per second; Def: 1.2)")
+	local stamreg = CreateConVar("ttt2_sprint_stamina_regeneration", "0.5", {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "The regeneration time of the stamina (per second; Def: 0.5)")
 	local showCrosshair = CreateConVar("ttt2_sprint_crosshair", "0", {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "Should the Crosshair be visible while sprinting? (Def: 1)")
 
 	hook.Add("SyncGlobals", "AddSprintGlobals", function()
@@ -100,15 +100,11 @@ hook.Add("Think", "TTT2PlayerSprinting", function()
 
 		local timeElapsed = CurTime() - ply.sprintTS
 
-		local oldSprP = ply.sprintProgress
-
 		if not ply.sprintMultiplier then
 			ply.sprintProgress = math.min(ply.oldSprintProgress + timeElapsed * GetGlobalFloat("ttt2_sprint_stamina_regeneration"), 1)
 		else
 			ply.sprintProgress = math.max(ply.oldSprintProgress - timeElapsed * GetGlobalFloat("ttt2_sprint_stamina_consumption"), 0)
 		end
-
-		print(oldSprP, " -> ", ply.sprintProgress)
 
 		if ply.sprintProgress == 1 then
 			ply.sprintTS = nil
