@@ -46,8 +46,10 @@ function HUD:Initialize()
 		local elem = hudelements.GetStored(v)
 		if elem then
 			elem:Initialize()
+
+			elem.initialized = true
 		else
-			Msg("Error: HUD " .. (self.id or "?") ..  " has unkown element named " .. v .. "\n")
+			Msg("Error: HUD " .. (self.id or "?") .. " has unkown element named " .. v .. "\n")
 		end
 	end
 end

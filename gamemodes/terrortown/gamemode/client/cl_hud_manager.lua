@@ -33,7 +33,7 @@ function HUDManager.DrawHUD()
 			return
 		end
 
-		if elem.type and hud:ShouldShow(elem.type) and hook.Call("HUDShouldDraw", GAMEMODE, elem.type) then
+		if elem.initialized and elem.type and hud:ShouldShow(elem.type) and hook.Call("HUDShouldDraw", GAMEMODE, elem.type) then
 			elem:Draw()
 		end
 	end
