@@ -25,8 +25,6 @@ if CLIENT then
 		local L = GetLang()
 		local round_state = GAMEMODE.round_state
 
-		if round_state ~= ROUND_ACTIVE then return end
-
 		local iconSize = h - pad * 2
 		local mpw = w - h -- mid panel width
 		local c -- icon color
@@ -36,7 +34,7 @@ if CLIENT then
 		local team = client:GetTeam()
 		local tm = TEAMS[team]
 
-		if team ~= TEAM_NONE and tm and not tm.alone then
+		if round_state == ROUND_ACTIVE and team ~= TEAM_NONE and tm and not tm.alone then
 			icon = Material(tm.icon)
 			c = tm.color or Color(0, 0, 0, 255)
 		end

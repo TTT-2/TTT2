@@ -67,6 +67,7 @@ if CLIENT then
 			text = wep.Slot + 1,
 			font = "Trebuchet22",
 			pos = _tmp,
+			xalign = TEXT_ALIGN_CENTER,
 			yalign = TEXT_ALIGN_CENTER,
 			color = c.text
 		}
@@ -75,8 +76,9 @@ if CLIENT then
 
 		-- Name
 		spec.text = name
-		spec.font = "TimeLeft"
+		spec.font = "PureSkinBar"
 		spec.pos[1] = x + 10 + self.height
+		spec.xalign = nil
 
 		draw.Text(spec)
 
