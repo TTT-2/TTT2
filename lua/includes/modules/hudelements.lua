@@ -217,3 +217,19 @@ function GetTypeElement(type)
 
 	return
 end
+
+--[[---------------------------------------------------------
+	Name: GetAllTypeElements( type )
+	Desc: Gets all elements matching the type of all the registered HUD elements
+-----------------------------------------------------------]]
+function GetAllTypeElements(type)
+	local retTbl = {}
+
+	for _, v in pairs(HUDElementList) do
+		if v.type and v.type == type then
+			table.insert(retTbl, v)
+		end
+	end
+
+	return retTbl
+end
