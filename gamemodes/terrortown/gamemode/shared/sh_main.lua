@@ -106,6 +106,10 @@ function GM:Move(ply, mv)
 		local mul = hook.Call("TTTPlayerSpeedModifier", GAMEMODE, ply, slowed, mv, noLag) or 1
 		mul = basemul * mul * noLag[1]
 
+		if ply.sprintMultiplier then
+			mul = mul * ply.sprintMultiplier
+		end
+
 		mv:SetMaxClientSpeed(mv:GetMaxClientSpeed() * mul)
 		mv:SetMaxSpeed(mv:GetMaxSpeed() * mul)
 	end

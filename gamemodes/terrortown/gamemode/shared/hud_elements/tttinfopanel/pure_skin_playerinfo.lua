@@ -41,7 +41,7 @@ if CLIENT then
 		This function expects to receive a function as a parameter which later returns a table with the following keys: { text: "", color: Color }
 		The function should also take care of managing the visibility by returning nil to tell the UI that nothing should be displayed
 	]]--
-	function HUDELEMENT:SetSecondaryRoleInfoFunction( func )
+	function HUDELEMENT:SetSecondaryRoleInfoFunction(func)
 		if func and isfunction(func) then
 			secondaryRoleInformationFunc = func
 		end
@@ -96,14 +96,15 @@ if CLIENT then
 		-- draw secondary role information
 		if round_state == ROUND_ACTIVE and secondaryRoleInformationFunc then
 			local secInfoTbl = secondaryRoleInformationFunc()
-
 			if secInfoTbl then
 				local sri_text_width = surface.GetTextSize()
 				local sri_margin_inner = 2
 				local sri_margin = 4
 				local sri_xoffset = w - sri_text_width - sri_margin
+
 				surface.SetDrawColor(clr(secInfoTbl.color))
 				surface.DrawRect(x + sri_xoffset , y + sri_margin, sri_text_width + sri_margin_inner * 2, lpw - sri_margin * 2)
+
 				self:ShadowedText(secInfoTbl.text, "PureSkinRole", x + sri_xoffset + sri_margin_inner, y + lpw - sri_margin - sri_margin_inner, COLOR_WHITE, TEXT_ALIGN_CENTER)
 			end
 		end
@@ -118,7 +119,6 @@ if CLIENT then
 		local bw = w - lpw - pad * 2 -- bar width
 		local bh = 26 --  bar height
 		local sbh = 8 -- spring bar height
-		local p = 1 -- progress
 		local spc = 7 -- space between bars
 
 		-- health bar
@@ -142,7 +142,10 @@ if CLIENT then
 
 		-- sprint bar
 		ty = ty + bh + spc
-		self:DrawBar(nx, ty, bw, sbh, Color(36, 154, 198), p)
+
+		if GetGlobalBool("ttt2_sprint_enabled", true) then
+			self:DrawBar(nx, ty, bw, sbh, Color(36, 154, 198), client.sprintProgress)
+		end
 
 		-- draw lines around the element
 		self:DrawLines(x, y, w, h)
