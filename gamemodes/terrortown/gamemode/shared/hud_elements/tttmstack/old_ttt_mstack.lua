@@ -27,6 +27,7 @@ if CLIENT then
 
 	function HUDELEMENT:Initialize()
 		self:SetPos(MSTACK.margin - MSTACK.msg_width, MSTACK.margin)
+
 		top_y = MSTACK.margin
 		top_x = ScrW() - MSTACK.margin - MSTACK.msg_width
 		text_height = draw.GetFontHeight(MSTACK.msgfont)

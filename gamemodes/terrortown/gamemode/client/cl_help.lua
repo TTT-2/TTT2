@@ -294,7 +294,7 @@ function HELPSCRN:Show()
 			curBinding = num
 		end
 
-		dgui:AddItem(dPlabel, dPBinder)
+		dbindings:AddItem(dPlabel, dPBinder)
 	end
 
 	ttt2_panel:AddItem(dbindings)

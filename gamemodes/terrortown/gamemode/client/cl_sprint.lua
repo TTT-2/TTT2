@@ -29,7 +29,7 @@ function()
 	PlayerSprint(false)
 end)
 
-bind.AddSettingsBinding(name, label)
+bind.AddSettingsBinding("ttt2_sprint", "TTT2 Sprint")
 
 hook.Add("Think", "TTT2PlayerSprinting", function()
 	local client = LocalPlayer()
@@ -41,7 +41,7 @@ hook.Add("Think", "TTT2PlayerSprinting", function()
 	if not client.isSprinting then
 		local regeneration = GetGlobalFloat("ttt2_sprint_stamina_regeneration", 0.15)
 
-		client.sprintProgress = client.sprintProgress + (timeElapsed * regeneration * 250)
+		client.sprintProgress = math.max(client.sprintProgress + (timeElapsed * regeneration * 250), 1)
 
 		if client.sprintProgress == 1 then
 			client.sprintTS = nil
@@ -50,6 +50,6 @@ hook.Add("Think", "TTT2PlayerSprinting", function()
 	else
 		local consumption = GetGlobalFloat("ttt2_sprint_stamina_consumption", 0.3)
 
-		client.sprintProgress = client.sprintProgress - (timeElapsed * consumption * 250)
+		client.sprintProgress = math.max(client.sprintProgress - (timeElapsed * consumption * 250), 0)
 	end
 end)

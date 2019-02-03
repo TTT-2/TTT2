@@ -11,10 +11,10 @@ if CLIENT then
 	function HUDELEMENT:DrawBar(x, y, w, h, c, p, t)
 		if p ~= 0 then
 			surface.SetDrawColor(clr(c))
-			surface.DrawRect(x, y, w * p, h)
+			surface.DrawRect(x, y, w * (p or 1), h)
 
 			-- draw lines around this bar
-			self:DrawLines(x, y, w * p, h)
+			self:DrawLines(x, y, w * (p or 1), h)
 		end
 
 		-- draw text

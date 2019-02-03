@@ -35,5 +35,25 @@ net.Receive("TTT2SprintToggle", function(_, ply)
 
 	local bool = net.ReadBool()
 
+	ply.sprintTS = CurTime()
 	ply.sprintMultiplier = bool and (1 + maxSprintMul:GetFloat()) or nil
+end)
+
+hook.Add("Think", "TTT2PlayerSprinting", function()
+	for _, ply in ipairs(player.GetAll()) do
+		if not ply.sprintTS then return end
+
+		local timeElapsed = CurTime() - client.sprintTS
+
+		if not client.sprintMultiplier then
+			client.sprintProgress = math.max(client.sprintProgress + (timeElapsed * stamreg:GetFloat() * 250), 1)
+
+			if client.sprintProgress == 1 then
+				client.sprintTS = nil
+				client.isSprinting = nil
+			end
+		else
+			client.sprintProgress = math.max(client.sprintProgress - (timeElapsed * consumption:GetFloat() * 250), 0)
+		end
+	end
 end)

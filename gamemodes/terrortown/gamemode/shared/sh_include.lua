@@ -19,13 +19,14 @@ TTTFiles = {
 	cl_scoring = {file = "cl_scoring.lua", on = "client"},
 	cl_scoring_events = {file = "cl_scoring_events.lua", on = "client"},
 	cl_search = {file = "cl_search.lua", on = "client"},
+	cl_shopeditor = {file = "cl_shopeditor.lua", on = "client"},
+	cl_sprint = {file = "cl_sprint.lua", on = "client"},
 	cl_targetid = {file = "cl_targetid.lua", on = "client"},
 	cl_tbuttons = {file = "cl_tbuttons.lua", on = "client"},
 	cl_tips = {file = "cl_tips.lua", on = "client"},
 	cl_transfer = {file = "cl_transfer.lua", on = "client"},
 	cl_voice = {file = "cl_voice.lua", on = "client"},
 	cl_wepswitch = {file = "cl_wepswitch.lua", on = "client"},
-	cl_shopeditor = {file = "cl_shopeditor.lua", on = "client"},
 
 	-- shared files
 	sh_corpse = {file = "sh_corpse.lua", on = "shared"},
@@ -52,7 +53,7 @@ TTTFiles = {
 	vgui__cl_sb_main = {file = "vgui/cl_sb_main.lua", on = "client"},
 	vgui__cl_sb_row = {file = "vgui/cl_sb_row.lua", on = "client"},
 	vgui__cl_sb_team = {file = "vgui/cl_sb_team.lua", on = "client"},
-	vgui__cl_sb_info = {file = "vgui/cl_sb_info.lua", on = "client"}
+	vgui__cl_sb_info = {file = "vgui/cl_sb_info.lua", on = "client"},
 }
 
 if SERVER then
@@ -69,11 +70,12 @@ if SERVER then
 		sv_player = {file = "sv_player.lua", on = "server"},
 		sv_propspec = {file = "sv_propspec.lua", on = "server"},
 		sv_scoring = {file = "sv_scoring.lua", on = "server"},
+		sv_shopeditor = {file = "sv_shopeditor.lua", on = "server"},
+		sv_sprint = {file = "sv_sprint.lua", on = "server"},
+		sv_shopeditor_sql = {file = "sv_shopeditor_sql.lua", on = "server"},
 		sv_traitor_state = {file = "sv_traitor_state.lua", on = "server"},
 		sv_voice = {file = "sv_voice.lua", on = "server"},
 		sv_weaponry = {file = "sv_weaponry.lua", on = "server"},
-		sv_shopeditor = {file = "sv_shopeditor.lua", on = "server"},
-		sv_shopeditor_sql = {file = "sv_shopeditor_sql.lua", on = "server"}
 	}
 
 	table.Merge(TTTFiles, tmp)

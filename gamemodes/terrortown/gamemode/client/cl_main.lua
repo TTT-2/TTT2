@@ -56,6 +56,8 @@ ttt_include("cl_voice")
 ttt_include("cl_changes")
 ttt_include("cl_credits")
 
+ttt_include("cl_sprint")
+
 function GM:Initialize()
 	MsgN("TTT2 Client initializing...")
 
@@ -76,6 +78,8 @@ function GM:InitPostEntity()
 	MsgN("TTT Client post-init...")
 
 	hook.Run("TTTInitPostEntity")
+
+	HUDManager.SetHUD(HUDManager.defaultHUD)
 
 	InitDefaultEquipment()
 
@@ -122,8 +126,6 @@ function GM:InitPostEntity()
 
 	-- initialize fallback shops
 	InitFallbackShops()
-
-	HUDManager.SetHUD(HUDManager.defaultHUD)
 
 	hook.Run("PostInitPostEntity")
 
@@ -334,6 +336,7 @@ function GM:ClearClientState()
 	client.last_id = nil
 	client.radio = nil
 	client.called_corpses = {}
+	client.sprintProgress = 1
 
 	VOICE.InitBattery()
 
