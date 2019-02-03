@@ -3,6 +3,7 @@ local function PlayerSprint(bool)
 
 	if bool and not GetGlobalBool("ttt2_sprint_enabled", true) or not bool and not client.isSprinting then return end
 
+	client.sprintMultiplier = bool and (1 + GetGlobalFloat("ttt2_sprint_max", 0)) or nil
 	client.sprintTS = CurTime()
 
 	net.Start("TTT2SprintToggle")
@@ -43,15 +44,17 @@ hook.Add("Think", "TTT2PlayerSprinting", function()
 	if not client.isSprinting then
 		local regeneration = GetGlobalFloat("ttt2_sprint_stamina_regeneration", 0.15)
 
-		client.sprintProgress = math.min(client.sprintProgress + (timeElapsed * regeneration * 0.025), 1)
-
-		if client.sprintProgress == 1 then
-			client.sprintTS = nil
-			client.isSprinting = nil
-		end
+		client.sprintProgress = math.min(client.sprintProgress + (timeElapsed * regeneration * 250), 1)
 	else
 		local consumption = GetGlobalFloat("ttt2_sprint_stamina_consumption", 0.3)
 
-		client.sprintProgress = math.max(client.sprintProgress - (timeElapsed * consumption * 0.025), 0)
+		client.sprintProgress = math.max(client.sprintProgress - (timeElapsed * consumption * 250), 0)
+	end
+
+	if client.sprintProgress == 1 then
+		client.sprintTS = nil
+		client.isSprinting = nil
+	else
+		client.sprintTS = CurTime()
 	end
 end)
