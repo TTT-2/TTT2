@@ -14,7 +14,7 @@ if CLIENT then
 
 		local w2 = w * (p or 1)
 
-		surface.SetDrawColor(0, 0, 0, 115)
+		surface.SetDrawColor(0, 0, 0, 165)
 		surface.DrawRect(x + w2, y, w - w2, h)
 
 		-- draw lines around this bar
