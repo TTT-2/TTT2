@@ -50,6 +50,7 @@ if CLIENT then
 
 	function HUDELEMENT:Draw()
 		local client = LocalPlayer()
+		local calive = client:Alive()
 		local cactive = client:IsActive()
 		local L = GetLang()
 
@@ -105,11 +106,11 @@ if CLIENT then
 		end
 
 		-- player informations
-		if cactive then
+		if calive then
 
 			-- TODO rework calculation
 			-- draw secondary role information
-			if secondaryRoleInformationFunc then
+			if cactive and secondaryRoleInformationFunc then
 				local secInfoTbl = secondaryRoleInformationFunc()
 
 				if secInfoTbl and secInfoTbl.color and secInfoTbl.text then

@@ -41,10 +41,10 @@ if SERVER then
 
 		local bool = net.ReadBool()
 
-		ply.sprintTS = CurTime()
 		ply.oldSprintProgress = ply.sprintProgress
 		ply.sprintMultiplier = bool and (1 + maxSprintMul:GetFloat()) or nil
 		ply.isSprinting = bool
+		ply.sprintTS = CurTime()
 	end)
 else
 	local function PlayerSprint(bool)
@@ -52,10 +52,10 @@ else
 
 		if bool and not GetGlobalBool("ttt2_sprint_enabled", true) or not bool and not client.isSprinting then return end
 
-		client.sprintTS = CurTime()
 		client.oldSprintProgress = client.sprintProgress
 		client.sprintMultiplier = bool and (1 + GetGlobalFloat("ttt2_sprint_max", 0)) or nil
 		client.isSprinting = bool
+		client.sprintTS = CurTime()
 
 		net.Start("TTT2SprintToggle")
 		net.WriteBool(bool)
@@ -96,26 +96,16 @@ hook.Add("Think", "TTT2PlayerSprinting", function()
 	local plys = client and {client} or player.GetAll()
 
 	for _, ply in ipairs(plys) do
-		if not ply.sprintTS then continue end
+		if not ply.sprintTS or not ply.oldSprintProgress then continue end
 
 		local timeElapsed = CurTime() - ply.sprintTS
 
-		ply.sprintProgress = ply.sprintProgress or 1
-
 		print(ply.sprintProgress)
-
-		ply.oldSprintProgress = ply.oldSprintProgress or ply.sprintProgress
 
 		if not ply.sprintMultiplier then
 			ply.sprintProgress = math.min(ply.oldSprintProgress + timeElapsed * GetGlobalFloat("ttt2_sprint_stamina_regeneration"), 1)
 		else
 			ply.sprintProgress = math.max(ply.oldSprintProgress - timeElapsed * GetGlobalFloat("ttt2_sprint_stamina_consumption"), 0)
-		end
-
-		if ply.sprintProgress == 1 then
-			ply.sprintTS = nil
-			ply.isSprinting = nil
-			ply.oldSprintProgress = nil
 		end
 	end
 end)
