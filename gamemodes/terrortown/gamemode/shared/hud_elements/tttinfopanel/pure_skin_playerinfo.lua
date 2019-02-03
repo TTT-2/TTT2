@@ -99,7 +99,7 @@ if CLIENT then
 
 			if secInfoTbl and secInfoTbl.color and secInfoTbl.text then
 				local sri_text_width, sri_text_height = surface.GetTextSize(secInfoTbl.text)
-				local sri_padding_inner_top_bottom = 10
+				local sri_padding_inner_top_bottom = 0
 				local sri_text_width_padding = 20
 				local sri_margin_top_bottom = 6
 				local sri_margin_right = 16
