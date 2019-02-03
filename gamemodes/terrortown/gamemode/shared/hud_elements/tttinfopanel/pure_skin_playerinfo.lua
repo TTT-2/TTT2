@@ -10,6 +10,8 @@ if CLIENT then
 	local h = 146 -- height
 	local pad = 14 -- padding
 
+	local secondaryRoleInformationFunc = nil
+
 	function HUDELEMENT:Initialize()
 		self:SetPos(10, ScrH() - (10 + h))
 		self:PerformLayout()
@@ -33,6 +35,16 @@ if CLIENT then
 		local ammo_max = weap.Primary.ClipSize or 0
 
 		return ammo_clip, ammo_max, ammo_inv
+	end
+
+	--[[
+		This function expects to receive a function as a parameter which later returns a table with the following keys: { text: "", color: Color }
+		The function should also take care of managing the visibility by returning nil to tell the UI that nothing should be displayed
+	]]--
+	function HUDELEMENT:SetSecondaryRoleInfoFunction( func )
+		if func and isfunction(func) then
+			secondaryRoleInformationFunc = func
+		end
 	end
 
 	function HUDELEMENT:Draw()
@@ -79,6 +91,21 @@ if CLIENT then
 			end
 
 			self:ShadowedText(text, "PureSkinRole", x + lpw + pad, y + pad, COLOR_WHITE, TEXT_ALIGN_LEFT)
+		end
+
+		-- draw secondary role information
+		if round_state == ROUND_ACTIVE and secondaryRoleInformationFunc then
+			local secInfoTbl = secondaryRoleInformationFunc()
+
+			if secInfoTbl then
+				local sri_text_width = surface.GetTextSize()
+				local sri_margin_inner = 2
+				local sri_margin = 4
+				local sri_xoffset = w - sri_text_width - sri_margin
+				surface.SetDrawColor(clr(secInfoTbl.color))
+				surface.DrawRect(x + sri_xoffset , y + sri_margin, sri_text_width + sri_margin_inner * 2, lpw - sri_margin * 2)
+				self:ShadowedText(secInfoTbl.text, "PureSkinRole", x + sri_xoffset + sri_margin_inner, y + lpw - sri_margin - sri_margin_inner, COLOR_WHITE, TEXT_ALIGN_CENTER)
+			end
 		end
 
 		-- draw dark bottom overlay
