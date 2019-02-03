@@ -65,3 +65,17 @@ function HUD:GetHUDElements()
 
 	return tbl
 end
+
+function HUD:GetHUDElementByType(typ)
+	if not typ then return end
+
+	local hudelem = self:GetForcedHUDElements()[typ]
+	if hudelem then
+		return hudelem
+	end
+
+	local allelems = hudelements.GetTypeElement(typ)
+	if allelems then
+		return allelems.id
+	end
+end
