@@ -1,11 +1,12 @@
-local current_hud = CreateClientConVar("ttt2_current_hud", "__DEFAULT__", true, true)
+local current_hud = CreateClientConVar("ttt2_current_hud", HUDManager.defaultHUD, true, true)
 
-local currentHUD = current_hud:GetString()
-if currentHUD == "__DEFAULT__" then
-	currentHUD = HUDManager.defaultHUD
-end
+local currentHUD
 
 function HUDManager.GetHUD()
+	if not currentHUD then
+		currentHUD = current_hud:GetString()
+	end
+
 	if not huds.GetStored(currentHUD) then
 		currentHUD = "old_ttt"
 	end
@@ -16,12 +17,12 @@ end
 function HUDManager.SetHUD(name)
 	net.Start("TTT2RequestHUD")
 	net.WriteString(name)
-	net.WriteString(currentHUD)
+	net.WriteString(HUDManager.GetHUD())
 	net.SendToServer()
 end
 
 function HUDManager.DrawHUD()
-	local hud = huds.GetStored(currentHUD)
+	local hud = huds.GetStored(HUDManager.GetHUD())
 
 	if not hud then return end
 
@@ -49,7 +50,7 @@ function GM:HUDPaint()
 	local changed = false
 
 	if client.oldScrW and client.oldScrW ~= scrW and client.oldScrH and client.oldScrH ~= scrH then
-		local hud = huds.GetStored(currentHUD)
+		local hud = huds.GetStored(HUDManager.GetHUD())
 		if hud then
 			hud:PerformLayout()
 		end
@@ -78,10 +79,6 @@ function GM:HUDPaint()
 		TBHUD:Draw(client)
 	end
 
-	if hook.Call("HUDShouldDraw", GAMEMODE, "TTTWSwitch") then
-		WSWITCH:Draw(client)
-	end
-
 	if hook.Call("HUDShouldDraw", GAMEMODE, "TTTVoice") then
 		VOICE.Draw(client)
 	end
@@ -108,7 +105,7 @@ function GM:HUDShouldDraw(name)
 end
 
 -- if forced or requested, modified by server restrictions
-net.Receive("TTT2ReceiveHUD", function(len)
+net.Receive("TTT2ReceiveHUD", function()
 	local name = net.ReadString()
 	local hudEl = huds.GetStored(name)
 
@@ -118,7 +115,7 @@ net.Receive("TTT2ReceiveHUD", function(len)
 		return
 	end
 
-	current_hud:SetString(name)
+	RunConsoleCommand(current_hud:GetName(), name)
 
 	currentHUD = name
 

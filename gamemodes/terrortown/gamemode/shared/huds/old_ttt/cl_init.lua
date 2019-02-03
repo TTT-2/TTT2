@@ -27,6 +27,7 @@ function HUD:Initialize()
 	self:ForceHUDElement("old_ttt_spec")
 	self:ForceHUDElement("old_ttt_items")
 	self:ForceHUDElement("old_ttt_mstack")
+	self:ForceHUDElement("old_ttt_wswitch")
 
 	self:HideHUDType("tttroundinfo")
 
