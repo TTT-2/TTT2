@@ -108,7 +108,7 @@ if CLIENT then
 
 				surface.SetDrawColor(clr(secInfoTbl.color))
 				surface.DrawRect(x + sri_xoffset, y + sri_margin_top_bottom, sri_width, lpw - sri_margin_top_bottom * 2)
-				self:ShadowedText(secInfoTbl.text, "PureSkinRole", x + sri_xoffset + sri_text_width_padding, y + sri_margin_top_bottom - sri_padding_inner_top_bottom, COLOR_WHITE, TEXT_ALIGN_CENTER)
+				self:ShadowedText(secInfoTbl.text, "PureSkinRole", x + sri_xoffset + sri_text_width_padding, y + sri_margin_top_bottom - sri_padding_inner_top_bottom, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
 		end
 
