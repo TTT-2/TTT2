@@ -20,7 +20,6 @@ TTTFiles = {
 	cl_scoring_events = {file = "cl_scoring_events.lua", on = "client"},
 	cl_search = {file = "cl_search.lua", on = "client"},
 	cl_shopeditor = {file = "cl_shopeditor.lua", on = "client"},
-	cl_sprint = {file = "cl_sprint.lua", on = "client"},
 	cl_targetid = {file = "cl_targetid.lua", on = "client"},
 	cl_tbuttons = {file = "cl_tbuttons.lua", on = "client"},
 	cl_tips = {file = "cl_tips.lua", on = "client"},
@@ -38,6 +37,7 @@ TTTFiles = {
 	sh_player_ext = {file = "sh_player_ext.lua", on = "shared"},
 	sh_scoring = {file = "sh_scoring.lua", on = "shared"},
 	sh_shopeditor = {file = "sh_shopeditor.lua", on = "shared"},
+	sh_sprint = {file = "sh_sprint.lua", on = "shared"},
 	sh_util = {file = "sh_util.lua", on = "shared"},
 	sh_weaponry = {file = "sh_weaponry.lua", on = "shared"},
 
@@ -71,7 +71,6 @@ if SERVER then
 		sv_propspec = {file = "sv_propspec.lua", on = "server"},
 		sv_scoring = {file = "sv_scoring.lua", on = "server"},
 		sv_shopeditor = {file = "sv_shopeditor.lua", on = "server"},
-		sv_sprint = {file = "sv_sprint.lua", on = "server"},
 		sv_shopeditor_sql = {file = "sv_shopeditor_sql.lua", on = "server"},
 		sv_traitor_state = {file = "sv_traitor_state.lua", on = "server"},
 		sv_voice = {file = "sv_voice.lua", on = "server"},

@@ -56,7 +56,7 @@ ttt_include("cl_voice")
 ttt_include("cl_changes")
 ttt_include("cl_credits")
 
-ttt_include("cl_sprint")
+ttt_include("sh_sprint")
 
 function GM:Initialize()
 	MsgN("TTT2 Client initializing...")
