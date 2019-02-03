@@ -98,7 +98,7 @@ if CLIENT then
 			local secInfoTbl = secondaryRoleInformationFunc()
 
 			if secInfoTbl and secInfoTbl.color and secInfoTbl.text then
-				local sri_text_width = surface.GetTextSize(secInfoTbl.text)
+				local sri_text_width, sri_text_height = surface.GetTextSize(secInfoTbl.text)
 				local sri_padding_inner_top_bottom = 4
 				local sri_text_width_padding = 10
 				local sri_margin_top_bottom = 6
@@ -108,7 +108,7 @@ if CLIENT then
 
 				surface.SetDrawColor(clr(secInfoTbl.color))
 				surface.DrawRect(x + sri_xoffset, y + sri_margin_top_bottom, sri_width, lpw - sri_margin_top_bottom * 2)
-				self:ShadowedText(secInfoTbl.text, "PureSkinRole", x + sri_xoffset + sri_text_width_padding, y + sri_margin_top_bottom - sri_padding_inner_top_bottom, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				self:ShadowedText(secInfoTbl.text, "PureSkinRole", x + sri_xoffset + sri_text_width_padding, y + sri_margin_top_bottom + sri_padding_inner_top_bottom + sri_text_height, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
 		end
 
