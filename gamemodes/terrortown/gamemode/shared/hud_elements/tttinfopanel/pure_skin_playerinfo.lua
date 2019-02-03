@@ -96,8 +96,9 @@ if CLIENT then
 		-- draw secondary role information
 		if round_state == ROUND_ACTIVE and secondaryRoleInformationFunc then
 			local secInfoTbl = secondaryRoleInformationFunc()
-			if secInfoTbl then
-				local sri_text_width = surface.GetTextSize()
+
+			if secInfoTbl and secInfoTbl.color and secInfoTbl.text then
+				local sri_text_width = surface.GetTextSize(secInfoTbl.text)
 				local sri_margin_inner = 2
 				local sri_margin = 4
 				local sri_xoffset = w - sri_text_width - sri_margin
