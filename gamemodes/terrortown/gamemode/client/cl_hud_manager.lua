@@ -118,7 +118,7 @@ net.Receive("TTT2ReceiveHUD", function(len)
 		return
 	end
 
-	RunConsoleCommand(current_hud:GetName(), name)
+	current_hud:SetString(name)
 
 	currentHUD = name
 
