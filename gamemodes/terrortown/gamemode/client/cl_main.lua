@@ -570,23 +570,23 @@ if not BSHADOWS then
 	BSHADOWS.RenderTarget = GetRenderTarget("bshadows_original", ScrW(), ScrH())
 
 	--The shadow layer
-	BSHADOWS.RenderTarget2 = GetRenderTarget("bshadows_shadow",  ScrW(), ScrH())
+	BSHADOWS.RenderTarget2 = GetRenderTarget("bshadows_shadow", ScrW(), ScrH())
 
 	--The matarial to draw the render targets on
 	BSHADOWS.ShadowMaterial = CreateMaterial("bshadows", "UnlitGeneric", {
-		["$translucent"] = 1,
-		["$vertexalpha"] = 1,
-		["alpha"] = 1
+			["$translucent"] = 1,
+			["$vertexalpha"] = 1,
+			["alpha"] = 1
 	})
 
 	--When we copy the rendertarget it retains color, using this allows up to force any drawing to be black
 	--Then we can blur it to create the shadow effect
 	BSHADOWS.ShadowMaterialGrayscale = CreateMaterial("bshadows_grayscale", "UnlitGeneric", {
-		["$translucent"] = 1,
-		["$vertexalpha"] = 1,
-		["$alpha"] = 1,
-		["$color"] = "0 0 0",
-		["$color2"] = "0 0 0"
+			["$translucent"] = 1,
+			["$vertexalpha"] = 1,
+			["$alpha"] = 1,
+			["$color"] = "0 0 0",
+			["$color2"] = "0 0 0"
 	})
 
 	--Call this to begin drawing a shadow
@@ -643,7 +643,7 @@ if not BSHADOWS then
 
 		render.SetMaterial(BSHADOWS.ShadowMaterialGrayscale)
 
-		for i = 1 , math.ceil(intensity) do
+		for i = 1, math.ceil(intensity) do
 			render.DrawScreenQuadEx(xOffset, yOffset, ScrW(), ScrH())
 		end
 
@@ -691,7 +691,7 @@ if not BSHADOWS then
 
 		render.SetMaterial(BSHADOWS.ShadowMaterialGrayscale)
 
-		for i = 1 , math.ceil(intensity) do
+		for i = 1, math.ceil(intensity) do
 			render.DrawScreenQuadEx(xOffset, yOffset, ScrW(), ScrH())
 		end
 
@@ -708,12 +708,19 @@ end
 
 -- TODO REM
 function DrawHUDElementBg(x, y, w, h, c)
-	BSHADOWS.BeginShadow()
+	local client = LocalPlayer()
+	local shadows = client.shadows
+
+	if shadows then
+		BSHADOWS.BeginShadow()
+	end
 
 	surface.SetDrawColor(clr(c))
 	surface.DrawRect(x, y, w, h)
 
-	BSHADOWS.EndShadow(3, 0, 5, 125)
+	if shadows then
+		BSHADOWS.EndShadow(3, 0, 5, 125)
+	end
 end
 
 function DrawHUDElementLines(x, y, w, h)

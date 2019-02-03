@@ -43,7 +43,7 @@ if CLIENT then
 		local c = (col == self.col_active and ply:GetRoleColor() or ply:GetRoleDkColor()) or (col == self.col_active and INNOCENT.color or INNOCENT.dkcolor)
 
 		-- Draw the colour tip
-		surface.SetTexture(barcorner)
+		surface.SetTexture(self.barcorner)
 
 		surface.SetDrawColor(c.r, c.g, c.b, c.a)
 		surface.DrawTexturedRectRotated(rx + bh, ry + bh, b, b, 0)

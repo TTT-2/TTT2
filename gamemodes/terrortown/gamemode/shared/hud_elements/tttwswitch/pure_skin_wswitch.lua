@@ -9,6 +9,7 @@ if CLIENT then
 	HUDELEMENT.margin = 5
 	HUDELEMENT.width = 365
 	HUDELEMENT.height = 28
+	HUDELEMENT.lpw = 22 -- left panel width
 
 	-- Draw a bar in the style of the the weapon pickup ones
 
@@ -26,8 +27,6 @@ if CLIENT then
 	}
 
 	function HUDELEMENT:DrawBarBg(x, y, w, h, col)
-		local lpw = 22 -- left panel width
-
 		local ply = LocalPlayer()
 		local c = (col == self.col_active and ply:GetRoleColor() or ply:GetRoleDkColor()) or Color(100, 100, 100)
 
@@ -41,7 +40,7 @@ if CLIENT then
 
 		-- Draw the colour tip
 		surface.SetDrawColor(c.r, c.g, c.b, c.a)
-		surface.DrawRect(x, y, lpw, h)
+		surface.DrawRect(x, y, self.lpw, h)
 
 		-- draw lines around the element
 		self:DrawLines(x, y, w, h)
@@ -63,7 +62,7 @@ if CLIENT then
 		end
 
 		-- Slot
-		local _tmp = {x + 4, y}
+		local _tmp = {x + self.lpw * 0.5, y + self.height * 0.5}
 		local spec = {
 			text = wep.Slot + 1,
 			font = "Trebuchet22",
@@ -102,7 +101,7 @@ if CLIENT then
 		local weps = WSWITCH.WeaponCache
 
 		local x = ScrW() - self.width - self.margin * 2
-		local y = ScrH() - #weps * (self.height + self.margin)
+		local y = ScrH() - #weps * (self.height + self.margin) - self.margin
 
 		local col = self.col_dark
 

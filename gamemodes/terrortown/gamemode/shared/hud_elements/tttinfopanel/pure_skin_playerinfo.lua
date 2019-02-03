@@ -90,16 +90,17 @@ if CLIENT then
 				text = L[self.roundstate_string[round_state]]
 			end
 
-			self:ShadowedText(text, "PureSkinRole", x + lpw + pad, y + pad, COLOR_WHITE, TEXT_ALIGN_LEFT)
+			self:ShadowedText(text, "PureSkinRole", x + lpw + pad * 0.5, y + pad * 0.5, COLOR_WHITE, TEXT_ALIGN_LEFT)
 		end
 
+		-- TODO rework calculation
 		-- draw secondary role information
 		if round_state == ROUND_ACTIVE and secondaryRoleInformationFunc then
 			local secInfoTbl = secondaryRoleInformationFunc()
 
 			if secInfoTbl and secInfoTbl.color and secInfoTbl.text then
 				local sri_text_width, sri_text_height = surface.GetTextSize(secInfoTbl.text)
-				local sri_padding_inner_top_bottom = 0
+				local sri_padding_inner_top_bottom = -5
 				local sri_text_width_padding = 20
 				local sri_margin_top_bottom = 6
 				local sri_margin_right = 16
@@ -113,7 +114,7 @@ if CLIENT then
 				surface.SetDrawColor(clr(secInfoTbl.color))
 				surface.DrawRect(nx, ny, sri_width, nh)
 
-				self:ShadowedText(secInfoTbl.text, "PureSkinRole", nx + sri_text_width_padding, ny + sri_padding_inner_top_bottom + sri_text_height, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				self:ShadowedText(secInfoTbl.text, "PureSkinBar", nx + sri_text_width_padding, ny + sri_padding_inner_top_bottom + sri_text_height, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 
 				-- draw lines around the element
 				self:DrawLines(nx, ny, sri_width, nh)
