@@ -90,12 +90,22 @@ function GM:PlayerStartVoice(ply)
 
 	local shade = Color(0, 0, 0, 150)
 
-	pnl.Paint = function(s, w, h)
+	-- TODO recreate all voice panels on HUD switch
+	local paintFn = function(s, w, h)
 		if not IsValid(s.ply) then return end
 
 		draw.RoundedBox(4, 0, 0, w, h, s.Color)
 		draw.RoundedBox(4, 1, 1, w - 2, h - 2, shade)
 	end
+
+	if huds then
+		local hud = huds.GetStored(client.GetHUD())
+		if hud then
+			paintFn = hud.voicePaint or paintFn
+		end
+	end
+
+	pnl.Paint = paintFn
 
 	-- roles things
 	local tm = client:GetTeam()
@@ -235,17 +245,17 @@ function VOICE.CycleMuteState(force_state)
 	return mute_state
 end
 
-local battery_max = 100
-local battery_min = 10
+VOICE.battery_max = 100
+VOICE.battery_min = 10
 
 function VOICE.InitBattery()
-	LocalPlayer().voice_battery = battery_max
+	LocalPlayer().voice_battery = VOICE.battery_max
 end
 
 local function GetRechargeRate()
 	local r = GetGlobalFloat("ttt_voice_drain_recharge", 0.05)
 
-	if LocalPlayer().voice_battery < battery_min then
+	if LocalPlayer().voice_battery < VOICE.battery_min then
 		r = r * 0.5
 	end
 
@@ -291,7 +301,7 @@ function VOICE.Tick()
 
 			RunConsoleCommand("-voicerecord")
 		end
-	elseif client.voice_battery < battery_max then
+	elseif client.voice_battery < VOICE.battery_max then
 		client.voice_battery = client.voice_battery + GetRechargeRate()
 	end
 end
@@ -312,7 +322,7 @@ function VOICE.CanSpeak()
 
 	local client = LocalPlayer()
 
-	return client.voice_battery > battery_min or IsRoleChatting(client)
+	return client.voice_battery > VOICE.battery_min or IsRoleChatting(client)
 end
 
 local speaker = surface.GetTextureID("voice/icntlk_sv")
@@ -320,12 +330,12 @@ local speaker = surface.GetTextureID("voice/icntlk_sv")
 function VOICE.Draw(client)
 	local b = client.voice_battery
 
-	if not b or not battery_max or b >= battery_max then return end
+	if not b or not VOICE.battery_max or b >= VOICE.battery_max then return end
 
 	local x, y = 25, 10
 	local w, h = 200, 6
 
-	if b < battery_min and CurTime() % 0.2 < 0.1 then
+	if b < VOICE.battery_min and CurTime() % 0.2 < 0.1 then
 		surface.SetDrawColor(200, 0, 0, 155)
 	else
 		surface.SetDrawColor(0, 200, 0, 255)

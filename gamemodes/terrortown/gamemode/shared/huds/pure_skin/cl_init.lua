@@ -15,3 +15,6 @@ function HUD:Initialize()
 	-- important to call the base initialize, to set default values for all elements
 	self.BaseClass:Initialize()
 end
+
+-- Voice overriding
+include("cl_voice.lua")
