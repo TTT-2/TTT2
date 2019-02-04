@@ -12,6 +12,9 @@ if CLIENT then
 	HUDELEMENT.height = 20
 	HUDELEMENT.barcorner = surface.GetTextureID("gui/corner8")
 
+	local x = 0
+	local y = 0
+
 	-- Draw a bar in the style of the the weapon pickup ones
 	local round = math.Round
 
@@ -112,13 +115,22 @@ if CLIENT then
 		return true
 	end
 
-	function HUDELEMENT:Draw(client)
+	function HUDELEMENT:Initialize()
+		self:SetPos(self.width + self.margin * 2, self.margin)
+		self:PerformLayout()
+	end
+
+	function HUDELEMENT:PerformLayout()
+		x = ScrW() - self.pos.x
+		y = ScrH() - self.pos.y
+	end
+
+	function HUDELEMENT:Draw()
 		if not WSWITCH.Show then return end
 
 		local weps = WSWITCH.WeaponCache
 
-		local x = ScrW() - self.width - self.margin * 2
-		local y = ScrH() - #weps * (self.height + self.margin)
+		local y_elem = y - #weps * (self.height + self.margin)
 
 		local col = self.col_dark
 
@@ -129,15 +141,15 @@ if CLIENT then
 				col = self.col_dark
 			end
 
-			self:DrawBarBg(x, y, self.width, self.height, col)
+			self:DrawBarBg(x, y_elem, self.width, self.height, col)
 
-			if not self:DrawWeapon(x, y, col, wep) then
+			if not self:DrawWeapon(x, y_elem, col, wep) then
 				WSWITCH:UpdateWeaponCache()
 
 				return
 			end
 
-			y = y + self.height + self.margin
+			y_elem = y_elem + self.height + self.margin
 		end
 	end
 end
