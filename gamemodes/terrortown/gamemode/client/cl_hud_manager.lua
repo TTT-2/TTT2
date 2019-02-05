@@ -96,17 +96,12 @@ hook.Add("Think", "HudElementMoving", function()
 	local elem = client.activeElement
 
 	if input.IsMouseDown(MOUSE_LEFT) then
-		print("1")
 		if not elem then
-			print("2")
 			local hud = huds.GetStored(HUDManager.GetHUD())
 			if hud then
-				print("3")
 				for _, el in ipairs(hud:GetHUDElements()) do
-					print("4")
 					local elObj = hudelements.GetStored(el)
 					if elObj and elObj:IsInPos(x, y) then
-						print("5")
 						elem = elObj
 
 						break
@@ -114,10 +109,8 @@ hook.Add("Think", "HudElementMoving", function()
 				end
 			end
 		end
-		print("6")
 
 		if elem and (client.oldMX and client.oldMX ~= x or client.oldMY and client.oldMY ~= y) then
-			print("7")
 			elem:SetPos(x, y)
 			elem:PerformLayout()
 		end
