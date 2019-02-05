@@ -87,6 +87,7 @@ CreateConVar("ttt_weapon_spawn_count", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 local round_limit = CreateConVar("ttt_round_limit", "6", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
 local time_limit = CreateConVar("ttt_time_limit_minutes", "75", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
 
+local idle_enabled = CreateConVar("ttt_idle", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 local idle_time = CreateConVar("ttt_idle_limit", "180", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 local voice_drain = CreateConVar("ttt_voice_drain", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
@@ -402,6 +403,7 @@ function GM:SyncGlobals()
 	SetGlobalBool("ttt_highlight_admins", GetConVar("ttt_highlight_admins"):GetBool())
 	SetGlobalBool("ttt_locational_voice", GetConVar("ttt_locational_voice"):GetBool())
 	SetGlobalInt("ttt_idle_limit", idle_time:GetInt())
+	SetGlobalBool("ttt_idle", idle_enabled:GetBool())
 
 	SetGlobalBool("ttt_voice_drain", voice_drain:GetBool())
 	SetGlobalFloat("ttt_voice_drain_normal", voice_drain_normal:GetFloat())

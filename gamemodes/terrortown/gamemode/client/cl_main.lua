@@ -469,6 +469,8 @@ end
 local idle = {ang = nil, pos = nil, mx = 0, my = 0, t = 0}
 
 function CheckIdle()
+	if not GetGlobalBool("ttt_idle", false) then return end
+	
 	local client = LocalPlayer()
 
 	if not IsValid(client) then return end
