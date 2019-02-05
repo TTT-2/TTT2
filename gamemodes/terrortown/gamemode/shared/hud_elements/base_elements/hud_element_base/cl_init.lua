@@ -26,7 +26,7 @@ function HUDELEMENT:PerformLayout()
 end
 
 function HUDELEMENT:GetPos()
-	return pos
+	return self.pos
 end
 
 function HUDELEMENT:SetPos(x, y)
