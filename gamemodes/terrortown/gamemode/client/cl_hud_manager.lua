@@ -94,10 +94,6 @@ hook.Add("Think", "HudElementMoving", function()
 	local client = LocalPlayer()
 	local x, y = math.Round(gui.MouseX()), math.Round(gui.MouseY())
 	local elem = client.activeElement
-	local difPos = client.difPos or {
-		x = x,
-		y = y
-	}
 
 	if input.IsMouseDown(MOUSE_LEFT) then
 		if not elem then
@@ -108,8 +104,9 @@ hook.Add("Think", "HudElementMoving", function()
 					if elObj and elObj:IsInPos(x, y) then
 						elem = elObj
 
-						difPos = elem:GetPos()
-						client.difPos = difPos
+						local difPos = elem:GetPos()
+						client.difX = difPos.x
+						client.difY = difPos.y
 
 						break
 					end
@@ -117,13 +114,17 @@ hook.Add("Think", "HudElementMoving", function()
 			end
 		end
 
+		local difX = client.difX or x
+		local difY = client.difY or y
+
 		if elem and (client.oldMX and client.oldMX ~= x or client.oldMY and client.oldMY ~= y) then
-			elem:SetPos(x + x - difPos.x, y + y - difPos.y)
+			elem:SetPos(x + x - difX, y + y - difY)
 			elem:PerformLayout()
 		end
 	else
 		elem = nil
-		client.difPos = nil
+		client.difX = nil
+		client.difY = nil
 	end
 
 	client.oldMX = x
