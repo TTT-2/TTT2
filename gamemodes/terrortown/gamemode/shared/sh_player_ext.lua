@@ -291,10 +291,8 @@ function plymeta:CanCarryWeapon(wep)
 	--appeareantly TTT can't handle two times the same weapon
 	for k, v in pairs(self:GetWeapons()) do
 		if IsValid(wep) and IsValid(v) and v:GetClass() == wep:GetClass() then
-			print("same")
 			return false
 		elseif istable(wep) and IsValid(v) and v:GetClass() == wep.ClassName then
-			print("same")
 			return false
 		end
 	end
