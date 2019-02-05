@@ -90,6 +90,41 @@ function GM:HUDPaint()
 	end
 end
 
+function GM:InputMouseApply(cmd)
+	local client = LocalPlayer()
+	local x, y = math.Round(cmd:GetMouseX()), math.Round(cmd:GetMouseY())
+	local elem = client.activeElement
+
+	if input.IsMouseDown(MOUSE_LEFT) then
+		if not IsValid(elem) then
+			local hud = HUDManager.GetHUD()
+
+			if IsValid(hud) then
+				for _, el in ipairs(hud:GetHUDElements()) do
+					local elObj = hudelements.GetStored(el)
+
+					if IsValid(elObj) and elObj:IsInPos(x, y) then
+						elem = elObj
+					end
+				end
+			end
+		end
+	else
+		elem = nil
+	end
+
+	if IsValid(elem) and client.oldMX and client.oldMX ~= x or client.oldMY and client.oldMY ~= y then
+		elem:SetPos(x, y)
+		elem:PerformLayout()
+	end
+
+	client.oldMX = x
+	client.oldMY = y
+	client.activeElement = elem
+
+	return true
+end
+
 -- Hide the standard HUD stuff
 local hud = {
 	["CHudHealth"] = true,

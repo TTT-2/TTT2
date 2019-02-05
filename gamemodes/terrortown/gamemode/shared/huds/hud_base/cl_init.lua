@@ -60,7 +60,9 @@ function HUD:GetHUDElements()
 
 	-- loop through all types and if the hud does not provide an element take the first found instance for the type
 	for _, typ in ipairs(hudelements.GetElementTypes()) do
-		tbl[#tbl + 1] = hudelems[typ] or hudelements.GetTypeElement(typ).id
+		if self:ShouldShow(typ) then
+			tbl[#tbl + 1] = hudelems[typ] or hudelements.GetTypeElement(typ).id
+		end
 	end
 
 	return tbl
