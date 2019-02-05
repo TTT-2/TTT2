@@ -119,7 +119,7 @@ hook.Add("Think", "HudElementMoving", function()
 		local difY = client.difY or 0
 
 		if elem and (client.oldMX and client.oldMX ~= x or client.oldMY and client.oldMY ~= y) then
-			elem:SetPos(x + difX, y + difY)
+			elem:SetPos(x - difX, y - difY)
 			elem:PerformLayout()
 		end
 	else
