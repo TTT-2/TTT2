@@ -90,7 +90,9 @@ local function IdentifyBody(ply, rag)
 		if deadply then
 			deadply:SetNWBool("body_found", true)
 
-			SendPlayerToEveryone(deadply) -- confirm player for everyone
+			if not deadply:Alive() then
+				SendPlayerToEveryone(deadply) -- confirm player for everyone
+			end
 
 			SCORE:HandleBodyFound(ply, deadply)
 		end
