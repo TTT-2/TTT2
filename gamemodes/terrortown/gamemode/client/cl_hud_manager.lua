@@ -94,7 +94,7 @@ hook.Add("Think", "HudElementMoving", function()
 	local client = LocalPlayer()
 	local x, y = math.Round(gui.MouseX()), math.Round(gui.MouseY())
 	local elem = client.activeElement
-	local difPos = {
+	local difPos = client.difPos or {
 		x = x,
 		y = y
 	}
@@ -109,6 +109,7 @@ hook.Add("Think", "HudElementMoving", function()
 						elem = elObj
 
 						difPos = elem:GetPos()
+						client.difPos = difPos
 
 						break
 					end
@@ -122,6 +123,7 @@ hook.Add("Think", "HudElementMoving", function()
 		end
 	else
 		elem = nil
+		client.difPos = nil
 	end
 
 	client.oldMX = x
