@@ -97,7 +97,7 @@ function GM:InputMouseApply(cmd)
 
 	if input.IsMouseDown(MOUSE_LEFT) then
 		if not IsValid(elem) then
-			local hud = HUDManager.GetHUD()
+			local hud = huds.GetStored(HUDManager.GetHUD())
 
 			if IsValid(hud) then
 				for _, el in ipairs(hud:GetHUDElements()) do
@@ -121,8 +121,6 @@ function GM:InputMouseApply(cmd)
 	client.oldMX = x
 	client.oldMY = y
 	client.activeElement = elem
-
-	return true
 end
 
 -- Hide the standard HUD stuff
