@@ -90,9 +90,9 @@ function GM:HUDPaint()
 	end
 end
 
-function GM:InputMouseApply(cmd)
+hook.Add("Think", "HudElementMoving", function()
 	local client = LocalPlayer()
-	local x, y = math.Round(cmd:GetMouseX()), math.Round(cmd:GetMouseY())
+	local x, y = math.Round(gui.MouseX()), math.Round(gui.MouseY())
 	local elem = client.activeElement
 
 	if input.IsMouseDown(MOUSE_LEFT) then
@@ -130,7 +130,7 @@ function GM:InputMouseApply(cmd)
 	client.oldMX = x
 	client.oldMY = y
 	client.activeElement = elem
-end
+end)
 
 -- Hide the standard HUD stuff
 local hud = {
