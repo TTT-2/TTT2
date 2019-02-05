@@ -287,7 +287,18 @@ function plymeta:CanCarryWeapon(wep)
 	if not wep or not wep.Kind then
 		return false
 	end
-
+	
+	--appeareantly TTT can't handle two times the same weapon
+	for k, v in pairs(self:GetWeapons()) do
+		if IsValid(wep) and IsValid(v) and v:GetClass() == wep:GetClass() then
+			print("same")
+			return false
+		elseif istable(wep) and IsValid(v) and v:GetClass() == wep.ClassName then
+			print("same")
+			return false
+		end
+	end
+	
 	return self:CanCarryType(wep.Kind)
 end
 
@@ -295,14 +306,8 @@ function plymeta:CanCarryType(t)
 	if not t then
 		return false
 	end
-
-	for _, w in pairs(self:GetWeapons()) do
-		if w.Kind and w.Kind == t then
-			return false
-		end
-	end
-
-	return true
+	
+	return InventorySlotFree(self, t)
 end
 
 function plymeta:IsDeadTerror()

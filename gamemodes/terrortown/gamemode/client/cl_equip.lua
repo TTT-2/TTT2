@@ -57,7 +57,7 @@ local function ItemIsWeapon(item)
 end
 
 local function CanCarryWeapon(item)
-	return LocalPlayer():CanCarryType(item.kind)
+	return LocalPlayer():CanCarryWeapon(item)
 end
 
 -- ----------------------------------
