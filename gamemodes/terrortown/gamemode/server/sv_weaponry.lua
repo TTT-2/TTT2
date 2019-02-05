@@ -309,10 +309,8 @@ end
 function GM:PlayerLoadout(ply)
 	if IsValid(ply) and not ply:IsSpec() then
 		CleanupInventory(ply)
-		timer.Simple(0.1, function() 
-			net.Start("TTT2CleanupInventory")
-			net.Send(ply)
-		end)
+		net.Start("TTT2CleanupInventory")
+		net.Send(ply)
 	
 		ResetLoadoutItems(ply)
 
