@@ -24,6 +24,12 @@ if CLIENT then
 		fill = Color(205, 155, 0, 255)
 	}
 
+	HUDELEMENT.sprint_colors = {
+		border = COLOR_WHITE,
+		background = Color(10, 50, 73, 222),
+		fill = Color(36, 154, 198, 255)
+	}
+
 	-- Modified RoundedBox
 	HUDELEMENT.Tex_Corner8 = surface.GetTextureID("gui/corner8")
 

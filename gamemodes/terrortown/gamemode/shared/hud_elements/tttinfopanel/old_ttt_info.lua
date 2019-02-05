@@ -53,16 +53,24 @@ if CLIENT then
 		end
 
 		-- Draw ammo
+		local ammo_y = health_y + bar_height + margin
 		if client:GetActiveWeapon().Primary then
 			local ammo_clip, ammo_max, ammo_inv = self:GetAmmo(client)
 
 			if ammo_clip ~= -1 then
-				local ammo_y = health_y + bar_height + margin
+
 				local text = string.format("%i + %02i", ammo_clip, ammo_inv)
 
 				self:PaintBar(x + margin, ammo_y, bar_width, bar_height, self.ammo_colors, ammo_clip / ammo_max)
 				self:ShadowedText(text, "HealthAmmo", x + bar_width, ammo_y, COLOR_WHITE, TEXT_ALIGN_RIGHT, TEXT_ALIGN_RIGHT)
 			end
+		end
+
+		-- sprint bar
+		local sbh = 8 -- spring bar height
+		if GetGlobalBool("ttt2_sprint_enabled", true) then
+			local sprint_y = ammo_y + bar_height + 5
+			self:PaintBar(x + margin, sprint_y, bar_width, sbh, self.sprint_colors, client.sprintProgress)
 		end
 
 		local hastewidth = self.hastewidth
