@@ -117,9 +117,8 @@ if CLIENT then
 					local sri_text_width = surface.GetTextSize(secInfoTbl.text)
 					local sri_text_width_padding = 8
 					local sri_margin_top_bottom = 8
-					local sri_margin_right = 16
 					local sri_width = sri_text_width + sri_text_width_padding * 2
-					local sri_xoffset = w2 - sri_width - sri_margin_right
+					local sri_xoffset = w2 - sri_width - pad
 
 					local nx2 = x2 + sri_xoffset
 					local ny = y2 + sri_margin_top_bottom
