@@ -211,7 +211,7 @@ function CORPSE.ShowSearch(ply, rag, covert, long_range)
 	-- init a heap of data we'll be sending
 	local nick = CORPSE.GetPlayerNick(rag)
 	local subrole = rag.was_role
-	local role_color = rag.role_color or GetRoleByIndex(subrole).color
+	local role_color = rag.role_color
 	local team = rag.was_team
 	local eq = rag.equipment or {}
 	local c4 = rag.bomb_wire or - 1
