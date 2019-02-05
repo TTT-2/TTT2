@@ -96,26 +96,35 @@ function GM:InputMouseApply(cmd)
 	local elem = client.activeElement
 
 	if input.IsMouseDown(MOUSE_LEFT) then
+		print("1")
 		if not IsValid(elem) then
+			print("2")
 			local hud = huds.GetStored(HUDManager.GetHUD())
 
 			if IsValid(hud) then
+				print("3")
 				for _, el in ipairs(hud:GetHUDElements()) do
+					print("4")
 					local elObj = hudelements.GetStored(el)
 
 					if IsValid(elObj) and elObj:IsInPos(x, y) then
+						print("5")
 						elem = elObj
+
+						break
 					end
 				end
 			end
 		end
+		print("6")
+
+		if IsValid(elem) and client.oldMX and client.oldMX ~= x or client.oldMY and client.oldMY ~= y then
+			print("7")
+			elem:SetPos(x, y)
+			elem:PerformLayout()
+		end
 	else
 		elem = nil
-	end
-
-	if IsValid(elem) and client.oldMX and client.oldMX ~= x or client.oldMY and client.oldMY ~= y then
-		elem:SetPos(x, y)
-		elem:PerformLayout()
 	end
 
 	client.oldMX = x

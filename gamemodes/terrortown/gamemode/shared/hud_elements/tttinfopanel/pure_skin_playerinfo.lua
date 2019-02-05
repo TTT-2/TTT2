@@ -21,11 +21,6 @@ if CLIENT then
 	function HUDELEMENT:PerformLayout()
 		x = self.pos.x
 		y = self.pos.y
-
-		self.minPos.x = x
-		self.minPos.y = y
-		self.maxPos.x = x + w
-		self.maxPos.y = y + h
 	end
 
 	-- Returns player's ammo information
@@ -65,6 +60,11 @@ if CLIENT then
 			y2 = y2 + h2 - lpw
 			h2 = lpw
 		end
+
+		self.minPos.x = x2
+		self.minPos.y = y2
+		self.maxPos.x = x2 + w2
+		self.maxPos.y = y2 + h2
 
 		-- draw bg and shadow
 		self:DrawBg(x2, y2, w2, h2, self.basecolor)
