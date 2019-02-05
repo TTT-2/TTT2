@@ -118,7 +118,7 @@ hook.Add("Think", "HudElementMoving", function()
 		end
 		print("6")
 
-		if IsValid(elem) and client.oldMX and client.oldMX ~= x or client.oldMY and client.oldMY ~= y then
+		if IsValid(elem) and (client.oldMX and client.oldMX ~= x or client.oldMY and client.oldMY ~= y) then
 			print("7")
 			elem:SetPos(x, y)
 			elem:PerformLayout()
