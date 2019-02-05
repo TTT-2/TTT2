@@ -100,6 +100,7 @@ hook.Add("Think", "HudElementMoving", function()
 		if not IsValid(elem) then
 			print("2")
 			local hud = huds.GetStored(HUDManager.GetHUD())
+			print(HUDManager.GetHUD())
 
 			if IsValid(hud) then
 				print("3")
