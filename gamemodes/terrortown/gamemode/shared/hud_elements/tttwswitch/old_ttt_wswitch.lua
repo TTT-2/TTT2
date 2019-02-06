@@ -159,6 +159,6 @@ if CLIENT then
 			y_elem = y_elem + height + self.margin
 		end
 
-		self:SetSize(width, -y_elem)
+		self:SetSize(width, -y - y_elem)
 	end
 end
