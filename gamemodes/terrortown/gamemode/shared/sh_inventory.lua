@@ -15,7 +15,7 @@ end
 
 --we appeareantly need to have that, because added and removed entities are sometimes broken on client side and need to get updated later
 --additionally spawn can be called when a player is alive in which case he doesn't loose weapons beforehand
-local function CleanupInventoryIfDirty(ply)
+function CleanupInventoryIfDirty(ply)
 	if !ply.inventory || ply.refresh_inventory_cache then
 		ply.refresh_inventory_cache = false
 		CleanupInventory(ply)

@@ -308,6 +308,56 @@ function plymeta:CanCarryType(t)
 	return InventorySlotFree(self, t)
 end
 
+function plymeta:GetInventory()
+	CleanupInventoryIfDirty(self)
+	
+	return self.inventory
+end
+
+function plymeta:GetWeaponsOnSlot(slot)
+	if slot > WEAPON_EXTRA then
+		return
+	end
+	
+	CleanupInventoryIfDirty(self)
+	
+	if istable(self.inventory) then
+		if istable(self.inventory[slot]) then
+			return self.inventory[slot]
+		else
+			return self.inventory[slot]
+		end
+	end
+end
+
+function plymeta:GetMeleeWeapon()
+	return self:GetWeaponsOnSlot(WEAPON_MELEE)
+end
+
+function plymeta:GetPrimaryWeapon()
+	return self:GetWeaponsOnSlot(WEAPON_HEAVY)
+end
+
+function plymeta:GetSecondaryWeapon()
+	return self:GetWeaponsOnSlot(WEAPON_PISTOL)
+end
+
+function plymeta:GetNade()
+	return self:GetWeaponsOnSlot(WEAPON_NADE)
+end
+
+function plymeta:GetCarryWeapon()
+	return self:GetWeaponsOnSlot(WEAPON_CARRY)
+end
+
+function plymeta:GetSpecialWeapons()
+	return self:GetWeaponsOnSlot(WEAPON_SPECIAL)
+end
+
+function plymeta:GetExtraWeapons()
+	return self:GetWeaponsOnSlot(WEAPON_EXTRA)
+end
+
 function plymeta:IsDeadTerror()
 	return self:IsSpec() and not self:Alive()
 end

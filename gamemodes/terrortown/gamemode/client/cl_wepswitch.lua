@@ -47,6 +47,22 @@ local col_dark = {
 	shadow = 100
 }
 
+local function SlotnumberFromKind(kind)
+	local UNARMED_SLOT = WEAPON_CARRY + 1
+	local SPECIAL_SLOT = UNARMED_SLOT + 1
+	local EXTRA_SLOT = SPECIAL_SLOT + GetConVar("ttt2_max_special_slots"):GetInt()
+	
+	if kind >= WEAPON_MELEE && kind <= WEAPON_CARRY then
+		return kind
+	elseif kind == WEAPON_UNARMED then
+		return UNARMED_SLOT
+	elseif kind == WEAPON_SPECIAL then 
+		return SPECIAL_SLOT
+	else
+		return EXTRA_SLOT
+	end
+end
+
 function WSWITCH:DrawBarBg(x, y, w, h, col)
 	local rx = round(x - 4)
 	local ry = round(y - h * 0.5 - 4)
@@ -80,7 +96,7 @@ function WSWITCH:DrawBarBg(x, y, w, h, col)
 	surface.DrawRect(rx + rw - b, ry + b, b, rh - b * 2)
 end
 
-function WSWITCH:DrawWeapon(x, y, c, wep)
+function WSWITCH:DrawWeapon(x, y, c, wep, slot)
 	if not IsValid(wep) then
 		return false
 	end
@@ -98,7 +114,7 @@ function WSWITCH:DrawWeapon(x, y, c, wep)
 	-- Slot
 	local _tmp = {x + 4, y}
 	local spec = {
-		text = wep.Slot + 1,
+		text = slot,
 		font = "Trebuchet22",
 		pos = _tmp,
 		yalign = TEXT_ALIGN_CENTER,
@@ -148,7 +164,7 @@ function WSWITCH:Draw(client)
 
 		self:DrawBarBg(x, y, width, height, col)
 
-		if not self:DrawWeapon(x, y, col, wep) then
+		if not self:DrawWeapon(x, y, col, wep[1], wep[2]) then
 			self:UpdateWeaponCache()
 
 			return
@@ -158,29 +174,28 @@ function WSWITCH:Draw(client)
 	end
 end
 
-local function SlotSort(a, b)
-	return a and b and a.Slot and b.Slot and a.Slot < b.Slot
-end
-
-local function CopyVals(src, dest)
-	table.Empty(dest)
-
-	for _, v in pairs(src) do
-		if IsValid(v) then
-			table.insert(dest, v)
-		end
+local function InsertIfValid(dest, wep, slot)
+	if IsValid(wep) then
+		table.insert(dest, {wep, slot})
 	end
 end
 
 function WSWITCH:UpdateWeaponCache()
-	-- GetWeapons does not always return a proper numeric table it seems
-	--	self.WeaponCache = LocalPlayer():GetWeapons()
-	-- So copy over the weapon refs
 	self.WeaponCache = {}
-
-	CopyVals(LocalPlayer():GetWeapons(), self.WeaponCache)
-
-	table.sort(self.WeaponCache, SlotSort)
+	
+	local inventory = LocalPlayer():GetInventory()
+	InsertIfValid(self.WeaponCache, inventory[WEAPON_MELEE], SlotnumberFromKind(WEAPON_MELEE))
+	InsertIfValid(self.WeaponCache, inventory[WEAPON_PISTOL], SlotnumberFromKind(WEAPON_PISTOL))
+	InsertIfValid(self.WeaponCache, inventory[WEAPON_HEAVY], SlotnumberFromKind(WEAPON_HEAVY))
+	InsertIfValid(self.WeaponCache, inventory[WEAPON_NADE], SlotnumberFromKind(WEAPON_NADE))
+	InsertIfValid(self.WeaponCache, inventory[WEAPON_CARRY], SlotnumberFromKind(WEAPON_CARRY))
+	InsertIfValid(self.WeaponCache, inventory[WEAPON_UNARMED], SlotnumberFromKind(WEAPON_UNARMED))
+	for k,v in pairs(inventory[WEAPON_SPECIAL]) do
+		InsertIfValid(self.WeaponCache, v, SlotnumberFromKind(WEAPON_SPECIAL) + k - 1)
+	end
+	for k,v in pairs(inventory[WEAPON_EXTRA]) do
+		InsertIfValid(self.WeaponCache, v, SlotnumberFromKind(WEAPON_EXTRA) + k - 1)
+	end
 end
 
 function WSWITCH:SetSelected(idx)
@@ -236,13 +251,13 @@ function WSWITCH:SelectSlot(slot)
 	self:Enable()
 	self:UpdateWeaponCache()
 
-	slot = slot - 1
+	--slot = slot - 1
 
 	-- find which idx in the weapon table has the slot we want
 	local toselect = self.Selected
 
 	for k, w in ipairs(self.WeaponCache) do
-		if w.Slot == slot then
+		if w[2] == slot then
 			toselect = k
 
 			break
@@ -267,7 +282,7 @@ function WSWITCH:Enable()
 		local toselect = 1
 
 		for k, w in ipairs(self.WeaponCache) do
-			if w == wep_active then
+			if w[1] == wep_active then
 				toselect = k
 
 				break
@@ -293,8 +308,8 @@ function WSWITCH:ConfirmSelection(noHide)
 	end
 
 	for k, w in ipairs(self.WeaponCache) do
-		if k == self.Selected and IsValid(w) then
-			input.SelectWeapon(w)
+		if k == self.Selected and IsValid(w[1]) then
+			input.SelectWeapon(w[1])
 
 			return
 		end
