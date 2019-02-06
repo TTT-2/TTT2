@@ -44,6 +44,8 @@ function HUDELEMENT:IsInPos(x, y)
 	local minX, minY = self.pos.x, self.pos.y
 	local maxX, maxY = x + self.size.w, y + self.size.h
 
+	print("playerinfo", x, y, "-", minX, minY, "-", maxX, maxY)
+
 	return x <= maxX and x >= minX and y <= maxY and y >= minY
 end
 

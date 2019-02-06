@@ -27,8 +27,6 @@ if CLIENT then
 		y = pos.y
 		w = size.w
 		h = size.h
-
-		print("playerinfo", x, y, w, h)
 	end
 
 	-- Returns player's ammo information
