@@ -6,26 +6,11 @@ local TryTranslation = LANG.TryTranslation
 HUDELEMENT.Base = "pure_skin_element"
 
 if CLIENT then
+	local width = 365
+	local height = 28
+
 	HUDELEMENT.margin = 5
-	HUDELEMENT.width = 365
-	HUDELEMENT.height = 28
 	HUDELEMENT.lpw = 22 -- left panel width
-
-	local x = 0
-	local y = 0
-
-	-- color defines
-	HUDELEMENT.col_active = {
-		text_empty = Color(200, 20, 20, 255),
-		text = Color(255, 255, 255, 255),
-		shadow = 255
-	}
-
-	HUDELEMENT.col_dark = {
-		text_empty = Color(200, 20, 20, 100),
-		text = Color(255, 255, 255, 100),
-		shadow = 100
-	}
 
 	function HUDELEMENT:DrawBarBg(x, y, w, h, col)
 		local ply = LocalPlayer()
@@ -63,7 +48,7 @@ if CLIENT then
 		end
 
 		-- Slot
-		local _tmp = {x + self.lpw * 0.5, y + self.height * 0.5}
+		local _tmp = {x + self.lpw * 0.5, y + height * 0.5}
 		local spec = {
 			text = wep.Slot + 1,
 			font = "Trebuchet22",
@@ -78,7 +63,7 @@ if CLIENT then
 		-- Name
 		spec.text = name
 		spec.font = "PureSkinWep"
-		spec.pos[1] = x + 10 + self.height
+		spec.pos[1] = x + 10 + height
 		spec.xalign = nil
 
 		draw.Text(spec)
@@ -98,14 +83,36 @@ if CLIENT then
 		return true
 	end
 
+	local x = 0
+	local y = 0
+
+	-- color defines
+	HUDELEMENT.col_active = {
+		text_empty = Color(200, 20, 20, 255),
+		text = Color(255, 255, 255, 255),
+		shadow = 255
+	}
+
+	HUDELEMENT.col_dark = {
+		text_empty = Color(200, 20, 20, 100),
+		text = Color(255, 255, 255, 100),
+		shadow = 100
+	}
+
 	function HUDELEMENT:Initialize()
-		self:SetPos(self.width + self.margin * 2, self.margin)
+		self:SetPos(ScrW() - (width + self.margin * 2), ScrH() - self.margin)
+		self:SetSize(width, height)
 		self:PerformLayout()
 	end
 
 	function HUDELEMENT:PerformLayout()
-		x = ScrW() - self.pos.x
-		y = ScrH() - self.pos.y
+		local pos = self:GetPos()
+		local size = self:GetSize()
+
+		x = pos.x
+		y = pos.y
+		w = size.w
+		h = size.h
 	end
 
 	function HUDELEMENT:Draw()
@@ -113,7 +120,7 @@ if CLIENT then
 
 		local weps = WSWITCH.WeaponCache
 
-		local y_elem = y - #weps * (self.height + self.margin)
+		local y_elem = y - #weps * (height + self.margin)
 
 		local col = self.col_dark
 
@@ -124,7 +131,7 @@ if CLIENT then
 				col = self.col_dark
 			end
 
-			self:DrawBarBg(x, y_elem, self.width, self.height, col)
+			self:DrawBarBg(x, y_elem, width, height, col)
 
 			if not self:DrawWeapon(x, y_elem, col, wep) then
 				WSWITCH:UpdateWeaponCache()
@@ -132,7 +139,7 @@ if CLIENT then
 				return
 			end
 
-			y_elem = y_elem + self.height + self.margin
+			y_elem = y_elem + height + self.margin
 		end
 	end
 end

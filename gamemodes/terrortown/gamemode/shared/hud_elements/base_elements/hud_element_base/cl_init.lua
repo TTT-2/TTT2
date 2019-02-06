@@ -1,16 +1,13 @@
+local surface = surface
+
 HUDELEMENT.pos = {
 	x = 0,
 	y = 0
 }
 
-HUDELEMENT.maxPos = {
-	x = 0,
-	y = 0
-}
-
-HUDELEMENT.minPos = {
-	x = 0,
-	y = 0
+HUDELEMENT.size = {
+	w = 0,
+	h = 0
 }
 
 function HUDELEMENT:Initialize()
@@ -34,6 +31,26 @@ function HUDELEMENT:SetPos(x, y)
 	self.pos.y = y
 end
 
+function HUDELEMENT:GetSize()
+	return self.size
+end
+
+function HUDELEMENT:SetSize(w, h)
+	self.size.w = w
+	self.size.h = h
+end
+
 function HUDELEMENT:IsInPos(x, y)
-	return self.maxPos.x >= x and self.minPos.x <= x and self.maxPos.y >= y and self.minPos.y <= y
+	local minX, minY = self.pos.x, self.pos.y
+	local maxX, maxY = x + self.size.w, y + self.size.h
+
+	return maxX >= x and minX <= x and maxY >= y and minY <= y
+end
+
+function HUDELEMENT:DrawSize()
+	surface.SetDrawColor(255, 0, 0, 255)
+	surface.DrawLine(x - 1, y - 1, x + w + 1, y - 1) -- top
+	surface.DrawLine(x + w + 1, y - 1, x + w + 1, y + h + 1) -- right
+	surface.DrawLine(x - 1, y + h + 1, x + w + 1, y + h + 1) -- bottom
+	surface.DrawLine(x - 1, y - 1, x - 1, y + h + 1) -- left
 end

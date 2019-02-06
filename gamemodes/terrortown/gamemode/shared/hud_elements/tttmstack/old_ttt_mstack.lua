@@ -26,11 +26,14 @@ if CLIENT then
 	local movespeed = 2
 
 	function HUDELEMENT:Initialize()
-		self:SetPos(MSTACK.margin - MSTACK.msg_width, MSTACK.margin)
+		local width = MSTACK.msg_width
 
 		top_y = MSTACK.margin
-		top_x = ScrW() - MSTACK.margin - MSTACK.msg_width
+		top_x = ScrW() - MSTACK.margin - width
 		text_height = draw.GetFontHeight(MSTACK.msgfont)
+
+		self:SetPos(top_x, top_y)
+		self:SetSize(width, 80)
 
 		base_spec = {
 			font = MSTACK.msgfont,
@@ -40,7 +43,7 @@ if CLIENT then
 	end
 
 	function HUDELEMENT:PerformLayout()
-		top_x = ScrW() - self.pos.x
+		top_x = self.pos.x
 		top_y = self.pos.y
 
 		text_height = draw.GetFontHeight(MSTACK.msgfont)
@@ -97,6 +100,7 @@ if CLIENT then
 
 					local tx = top_x + (MSTACK.msg_width * 0.5)
 					local ty = y + MSTACK.margin + (i - 1) * (text_height + MSTACK.margin)
+
 					spec.pos = {tx, ty}
 
 					draw.TextShadow(spec, 1, alpha)
@@ -110,5 +114,4 @@ if CLIENT then
 			end
 		end
 	end
-
 end

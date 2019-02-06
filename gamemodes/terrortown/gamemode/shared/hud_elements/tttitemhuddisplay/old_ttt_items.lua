@@ -41,5 +41,7 @@ if CLIENT then
 				curY = curY - 80
 			end
 		end
+
+		self:SetSize(64, curY - y)
 	end
 end

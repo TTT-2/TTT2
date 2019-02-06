@@ -7,13 +7,11 @@ local TryTranslation = LANG.TryTranslation
 HUDELEMENT.Base = "old_ttt_element"
 
 if CLIENT then
-	HUDELEMENT.margin = 10
-	HUDELEMENT.width = 300
-	HUDELEMENT.height = 20
-	HUDELEMENT.barcorner = surface.GetTextureID("gui/corner8")
+	local width = 300
+	local height = 20
 
-	local x = 0
-	local y = 0
+	HUDELEMENT.margin = 10
+	HUDELEMENT.barcorner = surface.GetTextureID("gui/corner8")
 
 	-- Draw a bar in the style of the the weapon pickup ones
 	local round = math.Round
@@ -96,7 +94,7 @@ if CLIENT then
 		-- Name
 		spec.text = name
 		spec.font = "TimeLeft"
-		spec.pos[1] = x + 10 + self.height
+		spec.pos[1] = x + 10 + height
 
 		draw.Text(spec)
 
@@ -115,14 +113,23 @@ if CLIENT then
 		return true
 	end
 
+	local x = 0
+	local y = 0
+
 	function HUDELEMENT:Initialize()
-		self:SetPos(self.width + self.margin * 2, self.margin)
+		self:SetPos(ScrW() - (width + self.margin * 2), ScrH() - self.margin)
+		self:SetSize(width, height)
 		self:PerformLayout()
 	end
 
 	function HUDELEMENT:PerformLayout()
-		x = ScrW() - self.pos.x
-		y = ScrH() - self.pos.y
+		local pos = self:GetPos()
+		local size = self:GetSize()
+
+		x = pos.x
+		y = pos.y
+		w = size.w
+		h = size.h
 	end
 
 	function HUDELEMENT:Draw()
@@ -130,7 +137,7 @@ if CLIENT then
 
 		local weps = WSWITCH.WeaponCache
 
-		local y_elem = y - #weps * (self.height + self.margin)
+		local y_elem = y - #weps * (height + self.margin)
 
 		local col = self.col_dark
 
@@ -141,7 +148,7 @@ if CLIENT then
 				col = self.col_dark
 			end
 
-			self:DrawBarBg(x, y_elem, self.width, self.height, col)
+			self:DrawBarBg(x, y_elem, width, height, col)
 
 			if not self:DrawWeapon(x, y_elem, col, wep) then
 				WSWITCH:UpdateWeaponCache()
@@ -149,7 +156,7 @@ if CLIENT then
 				return
 			end
 
-			y_elem = y_elem + self.height + self.margin
+			y_elem = y_elem + height + self.margin
 		end
 	end
 end

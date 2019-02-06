@@ -15,12 +15,18 @@ if CLIENT then
 
 	function HUDELEMENT:Initialize()
 		self:SetPos(10, ScrH() - (10 + h))
+		self:SetSize(w, h)
 		self:PerformLayout()
 	end
 
 	function HUDELEMENT:PerformLayout()
-		x = self.pos.x
-		y = self.pos.y
+		local pos = self:GetPos()
+		local size = self:GetSize()
+
+		x = pos.x
+		y = pos.y
+		w = size.w
+		h = size.h
 	end
 
 	-- Returns player's ammo information
@@ -60,11 +66,6 @@ if CLIENT then
 			y2 = y2 + h2 - lpw
 			h2 = lpw
 		end
-
-		self.minPos.x = x2
-		self.minPos.y = y2
-		self.maxPos.x = x2 + w2
-		self.maxPos.y = y2 + h2
 
 		-- draw bg and shadow
 		self:DrawBg(x2, y2, w2, h2, self.basecolor)

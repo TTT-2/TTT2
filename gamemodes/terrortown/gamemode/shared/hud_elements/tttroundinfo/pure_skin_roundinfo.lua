@@ -12,12 +12,18 @@ if CLIENT then
 
 	function HUDELEMENT:Initialize()
 		self:SetPos(math.Round(ScrW() * 0.5 - w * 0.5), 4)
+		self:SetSize(w, h)
 		self:PerformLayout()
 	end
 
 	function HUDELEMENT:PerformLayout()
-		x = self.pos.x
-		y = self.pos.y
+		local pos = self:GetPos()
+		local size = self:GetSize()
+
+		x = pos.x
+		y = pos.y
+		w = size.w
+		h = size.h
 	end
 
 	function HUDELEMENT:Draw()
