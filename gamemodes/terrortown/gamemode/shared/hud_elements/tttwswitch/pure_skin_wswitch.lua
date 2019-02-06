@@ -101,7 +101,7 @@ if CLIENT then
 
 	function HUDELEMENT:Initialize()
 		self:SetPos(ScrW() - (width + self.margin * 2), ScrH() - self.margin)
-		self:SetSize(width, height)
+		self:SetSize(width, -height)
 		self:PerformLayout()
 	end
 
@@ -141,5 +141,7 @@ if CLIENT then
 
 			y_elem = y_elem + height + self.margin
 		end
+
+		self:SetSize(width, y_elem)
 	end
 end
