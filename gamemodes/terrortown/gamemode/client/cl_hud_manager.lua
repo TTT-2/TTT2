@@ -28,6 +28,8 @@ function HUDManager.DrawHUD()
 
 	if not hud then return end
 
+	local client = LocalPlayer()
+
 	for _, elemName in ipairs(hud:GetHUDElements()) do
 		local elem = hudelements.GetStored(elemName)
 		if not elem then
@@ -38,6 +40,10 @@ function HUDManager.DrawHUD()
 
 		if elem.initialized and elem.type and hud:ShouldShow(elem.type) and hook.Call("HUDShouldDraw", GAMEMODE, elem.type) then
 			elem:Draw()
+
+			if elem == client.activeElement then
+				elem:DrawSize()
+			end
 		end
 	end
 end
@@ -121,10 +127,6 @@ hook.Add("Think", "HudElementMoving", function()
 		if elem and (client.oldMX and client.oldMX ~= x or client.oldMY and client.oldMY ~= y) then
 			elem:SetPos(x - difX, y - difY)
 			elem:PerformLayout()
-		end
-
-		if elem then
-			elem:DrawSize()
 		end
 	else
 		elem = nil
