@@ -48,6 +48,8 @@ function HUDELEMENT:IsInPos(x, y)
 end
 
 function HUDELEMENT:DrawSize()
+	local x, y, w, h = self.pos.x, self.pos.y, self.size.w, self.size.h
+
 	surface.SetDrawColor(255, 0, 0, 255)
 	surface.DrawLine(x - 1, y - 1, x + w + 1, y - 1) -- top
 	surface.DrawLine(x + w + 1, y - 1, x + w + 1, y + h + 1) -- right
