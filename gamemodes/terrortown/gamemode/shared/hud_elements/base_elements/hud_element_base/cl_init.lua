@@ -44,7 +44,7 @@ function HUDELEMENT:IsInPos(x, y)
 	local minX, minY = self.pos.x, self.pos.y
 	local maxX, maxY = x + self.size.w, y + self.size.h
 
-	return maxX >= x and minX <= x and maxY >= y and minY <= y
+	return x <= maxX and x >= minX and y <= maxY and y >= minY
 end
 
 function HUDELEMENT:DrawSize()

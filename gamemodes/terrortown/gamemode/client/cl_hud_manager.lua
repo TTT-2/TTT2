@@ -122,6 +122,10 @@ hook.Add("Think", "HudElementMoving", function()
 			elem:SetPos(x - difX, y - difY)
 			elem:PerformLayout()
 		end
+
+		if elem then
+			elem:DrawSize()
+		end
 	else
 		elem = nil
 		client.difX = nil
