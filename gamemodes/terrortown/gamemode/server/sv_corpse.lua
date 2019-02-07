@@ -87,7 +87,7 @@ local function IdentifyBody(ply, rag)
 	-- Register find
 	if not CORPSE.GetFound(rag, false) then -- will return either false or a valid ply
 		local deadply = player.GetBySteamID64(rag.sid64)
-		if deadply then
+		if deadply and not deadply:Alive() then
 			deadply:SetNWBool("body_found", true)
 
 			SendPlayerToEveryone(deadply) -- confirm player for everyone
