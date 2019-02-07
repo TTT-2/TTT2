@@ -113,11 +113,7 @@ function ShopEditor.InitItem(name, item, keys)
 end
 
 function ShopEditor.SaveItem(name, item, keys)
-	local str = ShopEditor.BuildUpdateString(name, item, keys)
-
-	print(saved, item, str)
-
-	return sql.Query(str)
+	return sql.Query(ShopEditor.BuildUpdateString(name, item, keys))
 end
 
 function ShopEditor.LoadItem(name, item, keys)
