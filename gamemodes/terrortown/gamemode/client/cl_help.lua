@@ -269,7 +269,7 @@ function HELPSCRN:Show()
 
 	-- HUD edit button
 	local hudSwitchButton = vgui.Create("DButton")
-	hudSwitchButton:SetTeam("HUD Switcher")
+	hudSwitchButton:SetText("HUD Switcher")
 
 	ttt2_panel:AddItem(hudSwitchButton)
 
@@ -279,7 +279,7 @@ function HELPSCRN:Show()
 
 	-- HUD edit button
 	local hudEditorButton = vgui.Create("DButton")
-	hudEditorButton:SetTeam("HUD Editor")
+	hudEditorButton:SetText("HUD Editor")
 
 	ttt2_panel:AddItem(hudEditorButton)
 
