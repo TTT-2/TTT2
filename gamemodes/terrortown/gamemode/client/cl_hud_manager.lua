@@ -48,11 +48,11 @@ function EditLocalHUD()
 end
 
 function HUDManager.EditHUD(bool)
+	gui.EnableScreenClicker(bool)
+
 	if bool then
-		gui.EnableScreenClicker(true)
 		hook.Add("Think", "TTT2EditHUD", EditLocalHUD())
 	else
-		gui.EnableScreenClicker(false)
 		hook.Remove("Think", "TTT2EditHUD")
 	end
 
