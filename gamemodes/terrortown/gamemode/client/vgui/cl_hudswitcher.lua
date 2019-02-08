@@ -56,6 +56,13 @@ function PANEL:Init()
 			surface.DrawTexturedRect(0, 0, w, h)
 		end
 
+		local oldClick = leftBtn.DoClick
+		leftBtn.DoClick = function(slf)
+			oldClick(slf)
+
+			HUDManager.SetHUD(hud.id)
+		end
+
 		if hud.id == currentHUD then
 			sheet:SetActiveButton(leftBtn)
 		end
