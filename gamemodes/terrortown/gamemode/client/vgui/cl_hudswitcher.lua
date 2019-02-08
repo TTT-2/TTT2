@@ -33,14 +33,9 @@ function PANEL:Init()
 		draw.RoundedBox(4, 0, 0, w, h, Color(0, 128, 255))
 	end
 
-	local ret = sheet:AddSheet("LeftPanel", panel1, "icon16/cross.png")
-	local leftBtn = ret.Tab
-	if leftBtn then
-		leftBtn.Paint = function(slf, w, h)
+	local leftBtn = sheet:AddSheet("LeftPanel", panel1, "icon16/cross.png").Button
+	leftBtn.Paint = function(slf, w, h)
 
-		end
-	else
-		PrintTable(ret)
 	end
 
 	local panel2 = vgui.Create("DPanel", sheet)
@@ -50,11 +45,9 @@ function PANEL:Init()
 		draw.RoundedBox(4, 0, 0, w, h, Color(255, 128, 0))
 	end
 
-	local rightBtn = sheet:AddSheet("RightPanel", panel2, "icon16/tick.png").Tab
-	if rightBtn then
-		rightBtn.Paint = function(slf, w, h)
+	local rightBtn = sheet:AddSheet("RightPanel", panel2, "icon16/tick.png").Button
+	rightBtn.Paint = function(slf, w, h)
 
-		end
 	end
 end
 
