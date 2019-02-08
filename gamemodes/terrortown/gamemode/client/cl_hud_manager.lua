@@ -57,25 +57,25 @@ function HUDManager.EditHUD(bool)
 	if bool then
 		if IsValid(client.hudswitcher) then
 			client.hudswitcher:Hide()
-
-			local helper = vgui.Create("DFrame")
-			helper:SetSize(100, 80)
-			helper:Center()
-			helper:SetTitle("HUD Editor")
-			helper:SetVisible(true)
-			helper:ShowCloseButton(true)
-			helper:SetDeleteOnClose(true)
-
-			helper.OnClose = function(slf)
-				if not slf.forceClosing then
-					HUDManager.EditHUD(false)
-				end
-			end
-
-			helper:MakePopup()
-
-			client.hudeditorHelp = helper
 		end
+
+		local helper = vgui.Create("DFrame")
+		helper:SetSize(100, 80)
+		helper:Center()
+		helper:SetTitle("HUD Editor")
+		helper:SetVisible(true)
+		helper:ShowCloseButton(true)
+		helper:SetDeleteOnClose(true)
+
+		helper.OnClose = function(slf)
+			if not slf.forceClosing then
+				HUDManager.EditHUD(false)
+			end
+		end
+
+		helper:MakePopup()
+
+		client.hudeditorHelp = helper
 
 		hook.Add("Think", "TTT2EditHUD", EditLocalHUD())
 	else

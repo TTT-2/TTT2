@@ -33,9 +33,7 @@ function PANEL:Init()
 		draw.RoundedBox(4, 0, 0, w, h, Color(0, 128, 255))
 	end
 
-	local leftRet = sheet:AddSheet("LeftPanel", panel1, "icon16/cross.png")
-	local leftBtn = leftRet.Tab
-
+	local leftBtn = sheet:AddSheet("LeftPanel", panel1, "icon16/cross.png").Tab
 	leftBtn.Paint = function(slf, w, h)
 
 	end
@@ -47,9 +45,7 @@ function PANEL:Init()
 		draw.RoundedBox(4, 0, 0, w, h, Color(255, 128, 0))
 	end
 
-	local rightRet = sheet:AddSheet("RightPanel", panel2, "icon16/tick.png")
-	local rightBtn = rightRet.Tab
-
+	local rightBtn = sheet:AddSheet("RightPanel", panel2, "icon16/tick.png").Tab
 	rightBtn.Paint = function(slf, w, h)
 
 	end
