@@ -63,6 +63,7 @@ function HUDManager.EditHUD(bool)
 		helper:SetSize(100, 80)
 		helper:Center()
 		helper:SetTitle("HUD Editor")
+		helper:SetVisible(true)
 		helper:ShowCloseButton(true)
 		helper:SetDeleteOnClose(true)
 
@@ -72,7 +73,7 @@ function HUDManager.EditHUD(bool)
 			end
 		end
 
-		helper:SetVisible(true)
+		helper:MakePopup()
 
 		client.hudeditorHelp = helper
 
