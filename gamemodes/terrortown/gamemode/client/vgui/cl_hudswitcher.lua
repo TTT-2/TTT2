@@ -34,8 +34,10 @@ function PANEL:Init()
 	end
 
 	local leftBtn = sheet:AddSheet("LeftPanel", panel1, "icon16/cross.png").Tab
-	leftBtn.Paint = function(slf, w, h)
+	if leftBtn then
+		leftBtn.Paint = function(slf, w, h)
 
+		end
 	end
 
 	local panel2 = vgui.Create("DPanel", sheet)
@@ -46,8 +48,10 @@ function PANEL:Init()
 	end
 
 	local rightBtn = sheet:AddSheet("RightPanel", panel2, "icon16/tick.png").Tab
-	rightBtn.Paint = function(slf, w, h)
+	if rightBtn then
+		rightBtn.Paint = function(slf, w, h)
 
+		end
 	end
 end
 

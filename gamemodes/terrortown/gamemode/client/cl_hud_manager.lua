@@ -73,7 +73,7 @@ function HUDManager.EditHUD(bool)
 			end
 		end
 
-		helper:MakePopup()
+		helper:SetVisible(true)
 
 		client.hudeditorHelp = helper
 
@@ -106,7 +106,7 @@ function HUDManager.ShowHUDSwitcher(bool)
 
 	if bool then
 		client.hudswitcher = vgui.Create("HUDSwitcher")
-		client.hudswitcher:MakePopup()
+		client.hudswitcher:SetVisible(true)
 	end
 end
 
