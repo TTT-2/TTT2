@@ -2,6 +2,63 @@ local current_hud = CreateClientConVar("ttt2_current_hud", HUDManager.defaultHUD
 
 local currentHUD
 
+HUDManager.IsEditing = false
+
+function EditLocalHUD()
+	local client = LocalPlayer()
+	local x, y = math.Round(gui.MouseX()), math.Round(gui.MouseY())
+	local elem = client.activeElement
+
+	if input.IsMouseDown(MOUSE_LEFT) then
+		if not elem then
+			local hud = huds.GetStored(HUDManager.GetHUD())
+			if hud then
+				for _, el in ipairs(hud:GetHUDElements()) do
+					local elObj = hudelements.GetStored(el)
+					if elObj and elObj:IsInPos(x, y) then
+						elem = elObj
+
+						local difPos = elem:GetPos()
+
+						client.difX = x - difPos.x
+						client.difY = y - difPos.y
+
+						break
+					end
+				end
+			end
+		end
+
+		local difX = client.difX or 0
+		local difY = client.difY or 0
+
+		if elem and (client.oldMX and client.oldMX ~= x or client.oldMY and client.oldMY ~= y) then
+			elem:SetPos(x - difX, y - difY)
+			elem:PerformLayout()
+		end
+	else
+		elem = nil
+		client.difX = nil
+		client.difY = nil
+	end
+
+	client.oldMX = x
+	client.oldMY = y
+	client.activeElement = elem
+end
+
+function HUDManager.EditHUD(bool)
+	if bool then
+		gui.EnableScreenClicker(true)
+		hook.Add("Think", "TTT2EditHUD", EditLocalHUD())
+	else
+		gui.EnableScreenClicker(false)
+		hook.Remove("Think", "TTT2EditHUD")
+	end
+
+	HUDManager.IsEditing = bool
+end
+
 function HUDManager.GetHUD()
 	if not currentHUD then
 		currentHUD = current_hud:GetString()
@@ -95,49 +152,6 @@ function GM:HUDPaint()
 		hook.Call("HUDDrawPickupHistory", GAMEMODE)
 	end
 end
-
-hook.Add("Think", "HudElementMoving", function()
-	local client = LocalPlayer()
-	local x, y = math.Round(gui.MouseX()), math.Round(gui.MouseY())
-	local elem = client.activeElement
-
-	if input.IsMouseDown(MOUSE_LEFT) then
-		if not elem then
-			local hud = huds.GetStored(HUDManager.GetHUD())
-			if hud then
-				for _, el in ipairs(hud:GetHUDElements()) do
-					local elObj = hudelements.GetStored(el)
-					if elObj and elObj:IsInPos(x, y) then
-						elem = elObj
-
-						local difPos = elem:GetPos()
-
-						client.difX = x - difPos.x
-						client.difY = y - difPos.y
-
-						break
-					end
-				end
-			end
-		end
-
-		local difX = client.difX or 0
-		local difY = client.difY or 0
-
-		if elem and (client.oldMX and client.oldMX ~= x or client.oldMY and client.oldMY ~= y) then
-			elem:SetPos(x - difX, y - difY)
-			elem:PerformLayout()
-		end
-	else
-		elem = nil
-		client.difX = nil
-		client.difY = nil
-	end
-
-	client.oldMX = x
-	client.oldMY = y
-	client.activeElement = elem
-end)
 
 -- Hide the standard HUD stuff
 local hud = {

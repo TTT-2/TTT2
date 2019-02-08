@@ -133,7 +133,7 @@ if CLIENT then
 	end
 
 	function HUDELEMENT:Draw()
-		if not WSWITCH.Show then return end
+		if not WSWITCH.Show and not HUDManager.IsEditing then return end
 
 		local weps = WSWITCH.WeaponCache
 
