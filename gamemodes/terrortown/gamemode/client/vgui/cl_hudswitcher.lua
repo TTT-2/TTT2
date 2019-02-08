@@ -22,6 +22,8 @@ function PANEL:Init()
 	local sheet = vgui.Create("DColumnSheet", self)
 	sheet:Dock(FILL)
 
+	sheet.Navigation:SetWidth(256)
+
 	sheet.OnActiveTabChanged = function(old, new)
 
 	end
@@ -55,11 +57,9 @@ function PANEL:Init()
 		end
 
 		if hud.id == currentHUD then
-			sheet:SetActiveTab(leftBtn)
+			sheet:SetActiveButton(leftBtn)
 		end
 	end
-
-	sheet:SizeToContentWidth()
 end
 
 derma.DefineControl("HUDSwitcher", "", PANEL, "DFrame")
