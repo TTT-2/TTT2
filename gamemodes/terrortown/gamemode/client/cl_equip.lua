@@ -34,9 +34,9 @@ local color_darkened = Color(255, 255, 255, 80)
 -- Buyable weapons are loaded automatically. Buyable items are defined in
 -- equip_items_shd.lua
 
-local eqframe
-local dlist = nil
-local curSearch = nil
+local eqframe = eqframe
+local dlist = dlist
+local curSearch = curSearch
 
 -- ----------------------------------
 --     GENERAL HELPER FUNCTIONS
