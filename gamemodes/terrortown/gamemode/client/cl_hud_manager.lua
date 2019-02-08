@@ -6,7 +6,7 @@ local currentHUD
 
 HUDManager.IsEditing = false
 
-function EditLocalHUD()
+local function EditLocalHUD()
 	local client = LocalPlayer()
 	local x, y = math.Round(gui.MouseX()), math.Round(gui.MouseY())
 	local elem = client.activeElement
@@ -63,7 +63,6 @@ function HUDManager.EditHUD(bool)
 		helper:SetSize(100, 80)
 		helper:Center()
 		helper:SetTitle("HUD Editor")
-		helper:SetVisible(true)
 		helper:ShowCloseButton(true)
 		helper:SetDeleteOnClose(true)
 
@@ -77,7 +76,7 @@ function HUDManager.EditHUD(bool)
 
 		client.hudeditorHelp = helper
 
-		hook.Add("Think", "TTT2EditHUD", EditLocalHUD())
+		hook.Add("Think", "TTT2EditHUD", EditLocalHUD)
 	else
 		if IsValid(client.hudswitcher) then
 			client.hudswitcher:Show()
