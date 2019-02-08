@@ -23,7 +23,7 @@ function HUDELEMENT:Draw()
 end
 
 function HUDELEMENT:PerformLayout()
-	for elem in self.children do
+	for elem in ipairs(self.children) do
 		local elemtbl = hudelements.GetStored(elem)
 		if elemtbl then
 			elemtbl:PerformLayout()
