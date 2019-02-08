@@ -137,7 +137,8 @@ if CLIENT then
 
 		local weps = WSWITCH.WeaponCache
 
-		local y_elem = y - #weps * (height + self.margin)
+		local ytmp = #weps * (height + self.margin)
+		local y_elem = y - ytmp
 
 		local col = self.col_dark
 
@@ -159,6 +160,6 @@ if CLIENT then
 			y_elem = y_elem + height + self.margin
 		end
 
-		self:SetSize(width, y_elem - y)
+		self:SetSize(width, -ytmp)
 	end
 end
