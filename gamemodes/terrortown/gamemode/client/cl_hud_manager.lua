@@ -1,3 +1,5 @@
+ttt_include("vgui__cl_hudswitcher")
+
 local current_hud = CreateClientConVar("ttt2_current_hud", HUDManager.defaultHUD, true, true)
 
 local currentHUD
@@ -48,15 +50,64 @@ function EditLocalHUD()
 end
 
 function HUDManager.EditHUD(bool)
+	local client = LocalPlayer()
+
 	gui.EnableScreenClicker(bool)
 
 	if bool then
+		if IsValid(client.hudswitcher) then
+			client.hudswitcher:Hide()
+
+			local helper = vgui.Create("DFrame")
+			helper:SetSize(100, 80)
+			helper:Center()
+			helper:SetTitle("HUD Editor")
+			helper:SetVisible(true)
+			helper:ShowCloseButton(true)
+			helper:SetDeleteOnClose(true)
+
+			helper.OnClose = function(slf)
+				if not slf.forceClosing then
+					HUDManager.EditHUD(false)
+				end
+			end
+
+			helper:MakePopup()
+
+			client.hudeditorHelp = helper
+		end
+
 		hook.Add("Think", "TTT2EditHUD", EditLocalHUD())
 	else
+		if IsValid(client.hudswitcher) then
+			client.hudswitcher:Show()
+		end
+
+		if IsValid(client.hudeditorHelp) then
+			client.hudeditorHelp.forceClosing = true
+
+			client.hudeditorHelp:Remove()
+		end
+
 		hook.Remove("Think", "TTT2EditHUD")
 	end
 
 	HUDManager.IsEditing = bool
+end
+
+function HUDManager.ShowHUDSwitcher(bool)
+	local client = LocalPlayer()
+
+	if IsValid(client.hudswitcher) then
+		client.hudswitcher.forceClosing = true
+
+		client.hudswitcher:Remove()
+	end
+
+	if bool then
+		client.hudswitcher = vgui.Create("HUDSwitcher")
+		client.hudswitcher:MakePopup()
+	end
 end
 
 function HUDManager.GetHUD()

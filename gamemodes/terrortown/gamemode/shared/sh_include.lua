@@ -44,6 +44,7 @@ TTTFiles = {
 	-- vgui client files
 	vgui__cl_coloredbox = {file = "vgui/cl_coloredbox.lua", on = "client"},
 	vgui__cl_droleimage = {file = "vgui/cl_droleimage.lua", on = "client"},
+	vgui__cl_hudswitcher = {file = "vgui/cl_hudswitcher.lua", on = "client"},
 	vgui__cl_simpleicon = {file = "vgui/cl_simpleicon.lua", on = "client"},
 	vgui__cl_shopeditor_buttons = {file = "vgui/cl_shopeditor_buttons.lua", on = "client"},
 	vgui__cl_shopeditor_slider = {file = "vgui/cl_shopeditor_slider.lua", on = "client"},

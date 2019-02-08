@@ -267,6 +267,26 @@ function HELPSCRN:Show()
 		ShowCredits()
 	end
 
+	-- HUD edit button
+	local hudSwitchButton = vgui.Create("DButton")
+	hudSwitchButton:SetTeam("HUD Switcher")
+
+	ttt2_panel:AddItem(hudSwitchButton)
+
+	hudSwitchButton.DoClick = function(btn)
+		HUDManager.ShowHUDSwitcher(true)
+	end
+
+	-- HUD edit button
+	local hudEditorButton = vgui.Create("DButton")
+	hudEditorButton:SetTeam("HUD Editor")
+
+	ttt2_panel:AddItem(hudEditorButton)
+
+	hudEditorButton.DoClick = function(btn)
+		HUDManager.EditHUD(true)
+	end
+
 	--- binding area
 	local dbindings = vgui.Create("DForm", ttt2_panel)
 	dbindings:SetName("TTT2 Bindings")
