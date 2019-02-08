@@ -55,9 +55,11 @@ function PANEL:Init()
 		end
 
 		if hud.id == currentHUD then
-			sheet:SetActiveTab(panel)
+			sheet:SetActiveTab(leftBtn)
 		end
 	end
+
+	sheet:SizeToContentWidth()
 end
 
 derma.DefineControl("HUDSwitcher", "", PANEL, "DFrame")

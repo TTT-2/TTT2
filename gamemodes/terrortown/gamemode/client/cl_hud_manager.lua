@@ -106,7 +106,7 @@ function HUDManager.ShowHUDSwitcher(bool)
 
 	if bool then
 		client.hudswitcher = vgui.Create("HUDSwitcher")
-		client.hudswitcher:SetVisible(true)
+		client.hudswitcher:MakePopup()
 	end
 end
 
