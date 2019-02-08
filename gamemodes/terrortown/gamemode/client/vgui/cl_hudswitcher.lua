@@ -33,11 +33,14 @@ function PANEL:Init()
 		draw.RoundedBox(4, 0, 0, w, h, Color(0, 128, 255))
 	end
 
-	local leftBtn = sheet:AddSheet("LeftPanel", panel1, "icon16/cross.png").Tab
+	local ret = sheet:AddSheet("LeftPanel", panel1, "icon16/cross.png")
+	local leftBtn = ret.Tab
 	if leftBtn then
 		leftBtn.Paint = function(slf, w, h)
 
 		end
+	else
+		PrintTable(ret)
 	end
 
 	local panel2 = vgui.Create("DPanel", sheet)
