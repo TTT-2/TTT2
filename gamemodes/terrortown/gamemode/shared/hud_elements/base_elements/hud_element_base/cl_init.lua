@@ -15,13 +15,17 @@ HUDELEMENT.parent_is_type = nil
 HUDELEMENT.children = {}
 
 function HUDELEMENT:Initialize()
-	self:PerformLayout()
+	-- Use this to set default values or set child relations.
 end
 
 function HUDELEMENT:Draw()
-
+	-- Override this function to draw your element
 end
 
+--[[------------------------------
+	PerformLayout()
+	Desc: This function is called after all Initialize() functions.
+--]]-------------------------------
 function HUDELEMENT:PerformLayout()
 	for elem in ipairs(self.children) do
 		local elemtbl = hudelements.GetStored(elem)
@@ -53,6 +57,12 @@ function HUDELEMENT:GetParent()
 	return self.parent, self.parent_is_type
 end
 
+--[[------------------------------
+	SetParent()
+	Desc: This function is used internally and only has the full effect if called by the
+		  hudelements.RegisterChildRelation() function.
+		  INTERNAL FUNCTION!!!
+--]]-------------------------------
 function HUDELEMENT:SetParent(parent, is_type)
 	self.parent = parent
 	self.parent_is_type = is_type

@@ -16,7 +16,6 @@ if CLIENT then
 	function HUDELEMENT:Initialize()
 		self:SetPos(10, ScrH() - (10 + h))
 		self:SetSize(w, h)
-		self:PerformLayout()
 	end
 
 	function HUDELEMENT:PerformLayout()

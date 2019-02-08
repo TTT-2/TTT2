@@ -6,7 +6,6 @@ if CLIENT then
 
 	function HUDELEMENT:Initialize()
 		self:SetPos(20, 20)
-		self:PerformLayout()
 	end
 
 	function HUDELEMENT:PerformLayout()

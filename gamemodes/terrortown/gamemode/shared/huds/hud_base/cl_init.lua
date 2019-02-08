@@ -56,6 +56,8 @@ function HUD:Initialize()
 			Msg("Error: HUD " .. (self.id or "?") .. " has unkown element named " .. v .. "\n")
 		end
 	end
+
+	self:PerformLayout()
 end
 
 function HUD:GetHUDElements()
