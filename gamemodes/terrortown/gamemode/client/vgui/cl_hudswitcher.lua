@@ -26,12 +26,17 @@ function PANEL:Init()
 
 	end
 
+	local currentHUD = HUDManager.GetHUD()
+
 	for _, hud in ipairs(huds.GetList()) do
+		if hud.id == "hud_base" then continue end
+
 		local panel = vgui.Create("DPanel", sheet)
 		panel:Dock(FILL)
 
 		panel.Paint = function(slf, w, h)
 			draw.RoundedBox(4, 0, 0, w, h, Color(0, 128, 255))
+			draw.DrawText(hud.id, "DermaDefault", w * 0.5, h * 0.5, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 
 		local leftBtn = sheet:AddSheet("", panel).Button
@@ -39,8 +44,18 @@ function PANEL:Init()
 
 		leftBtn.Paint = function(slf, w, h)
 			surface.SetMaterial(hud.previewImage)
-			surface.SetDrawColor(255, 255, 255, 255)
+
+			if hud.id == HUDManager.GetHUD() then
+				surface.SetDrawColor(255, 255, 255, 255)
+			else
+				surface.SetDrawColor(255, 255, 255, 100)
+			end
+
 			surface.DrawTexturedRect(0, 0, w, h)
+		end
+
+		if hud.id == currentHUD then
+			sheet:SetActiveTab(panel)
 		end
 	end
 end
