@@ -10,6 +10,10 @@ HUDELEMENT.size = {
 	h = 0
 }
 
+HUDELEMENT.parent = nil
+HUDELEMENT.parent_is_type = nil
+HUDELEMENT.children = {}
+
 function HUDELEMENT:Initialize()
 	self:PerformLayout()
 end
@@ -19,7 +23,12 @@ function HUDELEMENT:Draw()
 end
 
 function HUDELEMENT:PerformLayout()
-
+	for elem in self.children do
+		local elemtbl = hudelements.GetStored(elem)
+		if elemtbl then
+			elemtbl:PerformLayout()
+		end
+	end
 end
 
 function HUDELEMENT:GetPos()
@@ -38,6 +47,33 @@ end
 function HUDELEMENT:SetSize(w, h)
 	self.size.w = w
 	self.size.h = h
+end
+
+function HUDELEMENT:GetParent()
+	return self.parent, self.parent_is_type
+end
+
+function HUDELEMENT:SetParent(parent, is_type)
+	self.parent = parent
+	self.parent_is_type = is_type
+end
+
+function HUDELEMENT:AddChild(elementid)
+	if not table.HasValue(self.children, elementid) then
+		table.insert(self.children, elementid)
+	end
+end
+
+function HUDELEMENT:IsChild()
+	return self.parent ~= nil
+end
+
+function HUDELEMENT:IsParent()
+	return #self.children > 0
+end
+
+function HUDELEMENT:GetChildren()
+	return self.children
 end
 
 function HUDELEMENT:IsInPos(x, y)

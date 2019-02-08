@@ -30,7 +30,9 @@ function HUD:PerformLayout()
 	for _, elemName in ipairs(self:GetHUDElements()) do
 		local elem = hudelements.GetStored(elemName)
 		if elem then
-			elem:PerformLayout()
+			if not elem:IsChild() then
+				elem:PerformLayout()
+			end
 		else
 			Msg("Error: Hudelement not found during PerformLayout: " .. elemName)
 

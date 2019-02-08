@@ -47,6 +47,7 @@ if CLIENT then
 		top_y = self.pos.y
 
 		text_height = draw.GetFontHeight(MSTACK.msgfont)
+		self.BaseClass:PerformLayout()
 	end
 
 	function HUDELEMENT:Draw()

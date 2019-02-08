@@ -27,6 +27,7 @@ if CLIENT then
 		y = pos.y
 		w = size.w
 		h = size.h
+		self.BaseClass:PerformLayout()
 	end
 
 	-- Returns player's ammo information

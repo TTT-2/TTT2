@@ -233,3 +233,35 @@ function GetAllTypeElements(type)
 
 	return retTbl
 end
+
+--[[---------------------------------------------------------
+	Name: RegisterChildRelation( childid, parentid, parent_is_type )
+	Desc: Sets the child relation on all objects that have to be informed / are involved. This can either be a single parent <-> child relation or
+		  a parents <-> child relation, if the parent is a type. This function then will register the childid as a child to all elements with that type.
+		  A parent element is responsible for calling PerformLayout on its child elements!
+		  !! This should be called in the Initialize method !!
+-----------------------------------------------------------]]
+function RegisterChildRelation(childid, parentid, parent_is_type)
+	local child = GetStored(childid)
+	if not child then
+		MsgN("Error: Cannot add child " .. childid .. " to " .. parent .. ". Child element instance was not found or registered yet!")
+		return
+	end
+
+	if not parent_is_type then
+		local parent = GetStored(parentid)
+		if not parent then
+			MsgN("Error: Cannot add child " .. childid .. " to " .. parentid .. ". Parent element was not found or registered yet!")
+			return
+		end
+
+		parent:AddChild(childid)
+	else
+		local elems = GetAllTypeElements(parentid)
+		for elem in elems do
+			elem:AddChild(childid)
+		end
+	end
+
+	child:SetParent(parentid, parent_is_type)
+end
