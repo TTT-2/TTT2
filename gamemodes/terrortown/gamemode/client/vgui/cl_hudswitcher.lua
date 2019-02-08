@@ -26,28 +26,22 @@ function PANEL:Init()
 
 	end
 
-	local panel1 = vgui.Create("DPanel", sheet)
-	panel1:Dock(FILL)
+	for _, hud in ipairs(huds.GetList()) do
+		local panel = vgui.Create("DPanel", sheet)
+		panel:Dock(FILL)
 
-	panel1.Paint = function(slf, w, h)
-		draw.RoundedBox(4, 0, 0, w, h, Color(0, 128, 255))
-	end
+		panel.Paint = function(slf, w, h)
+			draw.RoundedBox(4, 0, 0, w, h, Color(0, 128, 255))
+		end
 
-	local leftBtn = sheet:AddSheet("LeftPanel", panel1, "icon16/cross.png").Button
-	leftBtn.Paint = function(slf, w, h)
+		local leftBtn = sheet:AddSheet("", panel).Button
+		leftBtn:SetSize(256, 256)
 
-	end
-
-	local panel2 = vgui.Create("DPanel", sheet)
-	panel2:Dock(FILL)
-
-	panel2.Paint = function(slf, w, h)
-		draw.RoundedBox(4, 0, 0, w, h, Color(255, 128, 0))
-	end
-
-	local rightBtn = sheet:AddSheet("RightPanel", panel2, "icon16/tick.png").Button
-	rightBtn.Paint = function(slf, w, h)
-
+		leftBtn.Paint = function(slf, w, h)
+			surface.SetMaterial(hud.previewImage)
+			surface.SetDrawColor(255, 255, 255, 255)
+			surface.DrawTexturedRect(0, 0, w, h)
+		end
 	end
 end
 

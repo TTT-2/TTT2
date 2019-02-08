@@ -4,6 +4,8 @@
 HUD.elements = {}
 HUD.hiddenElements = {}
 
+HUD.previewImage = Material("vgui/ttt/score_logo_2")
+
 function HUD:ForceHUDElement(elementID)
 	local elem = hudelements.GetStored(elementID)
 
