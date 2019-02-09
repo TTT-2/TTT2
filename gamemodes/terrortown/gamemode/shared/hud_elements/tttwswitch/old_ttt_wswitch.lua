@@ -144,6 +144,8 @@ if CLIENT then
 
 		y = ScrH() - self.margin - h
 
+		local y_elem = y
+
 		self:SetSize(width, h)
 
 		local col = self.col_dark
