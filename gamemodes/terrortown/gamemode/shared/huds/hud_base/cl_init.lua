@@ -41,13 +41,11 @@ function HUD:PerformLayout()
 	end
 end
 
-HUD.savingKeys = {}
-
 function HUD:Initialize()
 	print("Called HUD", self.id or "?")
 
 	-- load and initialize all HUD data from database
-	if SQL.CreateSqlTable("ttt2_huds", self.savingKeys) then
+	if self.savingKeys and SQL.CreateSqlTable("ttt2_huds", self.savingKeys) then
 		local loaded = SQL.Load("ttt2_huds", self.id, self, self.savingKeys)
 
 		if not loaded then
