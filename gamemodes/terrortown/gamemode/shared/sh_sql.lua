@@ -13,33 +13,31 @@ function SQL.GetParsedData(key, data, res)
 
 	local val = res[key]
 
-	if val then
-		if data.typ == "number" then
-			if val == "NULL" then
-				val = 0
-			else
-				val = tonumber(val)
-			end
-		elseif data.typ == "bool" then
-			val = val == "1"
-		elseif data.typ == "pos" then
-			val = {
-				x = res[key .. "_x"],
-				y = res[key .. "_y"]
-			}
-		elseif data.typ == "size" then
-			val = {
-				w = res[key .. "_w"],
-				h = res[key .. "_h"]
-			}
-		elseif data.typ == "color" then
-			val = {
-				r = res[key .. "_r"],
-				g = res[key .. "_g"],
-				b = res[key .. "_b"],
-				a = res[key .. "_a"]
-			}
+	if data.typ == "number" then
+		if val == "NULL" then
+			val = 0
+		else
+			val = tonumber(val)
 		end
+	elseif data.typ == "bool" then
+		val = val == "1"
+	elseif data.typ == "pos" then
+		val = {
+			x = res[key .. "_x"],
+			y = res[key .. "_y"]
+		}
+	elseif data.typ == "size" then
+		val = {
+			w = res[key .. "_w"],
+			h = res[key .. "_h"]
+		}
+	elseif data.typ == "color" then
+		val = {
+			r = res[key .. "_r"],
+			g = res[key .. "_g"],
+			b = res[key .. "_b"],
+			a = res[key .. "_a"]
+		}
 	end
 
 	return val
@@ -198,19 +196,17 @@ function SQL.Load(tableName, name, tbl, keys)
 	local changed = false
 
 	for key, data in pairs(keys) do
-		local nres = res[key]
-		if nres then
-			local val = SQL.GetParsedData(key, data, res)
+		if key == "BaseClass" then continue end
 
-			if tbl[key] == nil or tbl[key] ~= val then
-				if nres == "NULL" then
-					tbl[key] = tbl[key] or val -- keep old or init new
-				else
-					tbl[key] = val -- override with saved one
-				end
-
-				changed = true
+		local nres = SQL.GetParsedData(key, data, res)
+		if nres and (tbl[key] == nil or tbl[key] ~= nres) then
+			if nres == "NULL" then
+				tbl[key] = tbl[key] or nres -- keep old or init new
+			else
+				tbl[key] = nres -- override with saved one
 			end
+
+			changed = true
 		end
 	end
 
