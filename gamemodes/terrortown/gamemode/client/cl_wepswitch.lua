@@ -80,7 +80,7 @@ function WSWITCH:DrawBarBg(x, y, w, h, col)
 	surface.DrawRect(rx + rw - b, ry + b, b, rh - b * 2)
 end
 
-function WSWITCH:DrawWeapon(x, y, c, wep, slot)
+function WSWITCH:DrawWeapon(x, y, c, wep)
 	if not IsValid(wep) then
 		return false
 	end
@@ -98,7 +98,7 @@ function WSWITCH:DrawWeapon(x, y, c, wep, slot)
 	-- Slot
 	local _tmp = {x + 4, y}
 	local spec = {
-		text = slot,
+		text = wep.Kind,
 		font = "Trebuchet22",
 		pos = _tmp,
 		yalign = TEXT_ALIGN_CENTER,
@@ -148,7 +148,7 @@ function WSWITCH:Draw(client)
 
 		self:DrawBarBg(x, y, width, height, col)
 
-		if not self:DrawWeapon(x, y, col, wep, wep.Kind) then
+		if not self:DrawWeapon(x, y, col, wep) then
 			self:UpdateWeaponCache()
 
 			return
