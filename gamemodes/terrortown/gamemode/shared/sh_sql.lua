@@ -61,9 +61,9 @@ function SQL.ParseDataString(key, data)
 	if data.typ == "bool" or data.typ == "number" then
 		return key .. " INTEGER"
 	elseif data.typ == "pos" then
-		return key .. "_x INTEGER, " .. key .. "_y INTEGER"
+		return key .. "_x INTEGER," .. key .. "_y INTEGER"
 	elseif data.typ == "size" then
-		return key .. "_w INTEGER, " .. key .. "_h INTEGER"
+		return key .. "_w INTEGER," .. key .. "_h INTEGER"
 	end
 
 	return key .. " TEXT"
@@ -139,7 +139,7 @@ function SQL.CreateSqlTable(tableName, keys)
 			end
 
 			if not exists then
-				sql.Query("ALTER TABLE " .. tableName .. " ADD" .. SQL.ParseDataString(key, data))
+				sql.Query("ALTER TABLE " .. tableName .. " ADD " .. SQL.ParseDataString(key, data))
 			end
 		end
 	end
