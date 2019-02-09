@@ -121,10 +121,14 @@ if CLIENT then
 	function HUDELEMENT:Draw()
 		if not WSWITCH.Show and not HUDManager.IsEditing then return end
 
+		local client = LocalPlayer()
 		local weps = WSWITCH.WeaponCache
-		local h = #weps * (height + self.margin)
+		local count = #weps
+		local h = (count - client.oldWSWeps) * (height + self.margin)
 
-		y = ScrH() - self.margin - h
+		client.oldWSWeps = count
+
+		y = y + h
 
 		local y_elem = y
 
