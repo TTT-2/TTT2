@@ -25,6 +25,13 @@ function SQL.GetParsedData(key, data, res)
 				w = res[key .. "_w"],
 				h = res[key .. "_h"]
 			}
+		elseif data.typ == "color" then
+			val = {
+				r = res[key .. "_r"],
+				g = res[key .. "_g"],
+				b = res[key .. "_b"],
+				a = res[key .. "_a"]
+			}
 		end
 	end
 
@@ -48,6 +55,11 @@ function SQL.ParseData(tbl, keys)
 			elseif data.typ == "size" then
 				tmp[key .. "_w"] = dat.w
 				tmp[key .. "_h"] = dat.h
+			elseif data.typ == "color" then
+				tmp[key .. "_r"] = dat.r
+				tmp[key .. "_g"] = dat.g
+				tmp[key .. "_b"] = dat.b
+				tmp[key .. "_a"] = dat.a or 255
 			else
 				tmp[key] = dat
 			end
@@ -64,6 +76,8 @@ function SQL.ParseDataString(key, data)
 		return key .. "_x INTEGER," .. key .. "_y INTEGER"
 	elseif data.typ == "size" then
 		return key .. "_w INTEGER," .. key .. "_h INTEGER"
+	elseif data.typ == "color" then
+		return key .. "_r INTEGER," .. key .. "_g INTEGER," .. key .. "_b INTEGER," .. key .. "_a INTEGER"
 	end
 
 	return key .. " TEXT"
