@@ -99,8 +99,12 @@ if CLIENT then
 	}
 
 	function HUDELEMENT:Initialize()
+		local client = LocalPlayer()
 		local weps = WSWITCH.WeaponCache
-		local h = #weps * (height + self.margin)
+		local count = #weps
+		local h = count * (height + self.margin)
+
+		client.oldWSWeps = count
 
 		self:SetPos(ScrW() - (width + self.margin * 2), ScrH() - self.margin - h)
 		self:SetSize(width, h)
