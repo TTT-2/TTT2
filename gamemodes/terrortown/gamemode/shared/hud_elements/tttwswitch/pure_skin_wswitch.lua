@@ -73,7 +73,7 @@ if CLIENT then
 
 			-- Ammo
 			spec.text = ammo
-			spec.pos[1] = ScrW() - self.margin * 3
+			spec.pos[1] = x + width - self.margin * 3
 			spec.xalign = TEXT_ALIGN_RIGHT
 			spec.color = col
 
