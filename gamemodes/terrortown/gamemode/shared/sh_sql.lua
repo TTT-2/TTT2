@@ -129,10 +129,16 @@ function SQL.CreateSqlTable(tableName, keys)
 	else
 		local clmns = sql.Query("PRAGMA table_info(" .. tableName .. ")")
 
-		PrintTable(clmns)
-
 		for key, data in pairs(keys) do
-			if not clmns[key] then
+			local exists = false
+
+			for _, col in ipairs(clmns) do
+				if col.name == key then
+					exists = true
+				end
+			end
+
+			if not exists then
 				sql.Query("ALTER TABLE " .. tableName .. " ADD" .. SQL.ParseDataString(key, data))
 			end
 		end
