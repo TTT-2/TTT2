@@ -132,7 +132,7 @@ if CLIENT then
 
 		client.oldWSWeps = count
 
-		y = y + h
+		y = y - h
 
 		local y_elem = y
 
