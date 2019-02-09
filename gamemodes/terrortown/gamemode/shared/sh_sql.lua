@@ -50,15 +50,15 @@ function SQL.ParseData(tbl, keys)
 
 				tmp[key] = dat
 			elseif data.typ == "pos" then
-				tmp[key .. "_x"] = dat.x
-				tmp[key .. "_y"] = dat.y
+				tmp[key .. "_x"] = dat.x or 0
+				tmp[key .. "_y"] = dat.y or 0
 			elseif data.typ == "size" then
-				tmp[key .. "_w"] = dat.w
-				tmp[key .. "_h"] = dat.h
+				tmp[key .. "_w"] = dat.w or 0
+				tmp[key .. "_h"] = dat.h or 0
 			elseif data.typ == "color" then
-				tmp[key .. "_r"] = dat.r
-				tmp[key .. "_g"] = dat.g
-				tmp[key .. "_b"] = dat.b
+				tmp[key .. "_r"] = dat.r or 255
+				tmp[key .. "_g"] = dat.g or 255
+				tmp[key .. "_b"] = dat.b or 255
 				tmp[key .. "_a"] = dat.a or 255
 			else
 				tmp[key] = dat
