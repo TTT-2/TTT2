@@ -89,6 +89,34 @@ function HUDManager.EditHUD(bool)
 			end
 		end
 
+		local reset = vgui.Create("DButton", helper)
+		reset:SetSize(45, 40)
+		reset:Dock(LEFT)
+		reset:SetText("RESET")
+
+		reset.DoClick = function(slf)
+			local hud = huds.GetStored(HUDManager.GetHUD())
+			if hud then
+				for _, elem in ipairs(hud:GetHUDElements()) do
+					local el = hudelements.GetStored(elem)
+					if el then
+						el:Reset()
+					end
+				end
+			end
+		end
+
+		local close = vgui.Create("DButton", helper)
+		close:SetSize(45, 40)
+		close:Dock(RIGHT)
+		close:SetText("CLOSE")
+
+		close.DoClick = function(slf)
+			if not slf.forceClosing then
+				HUDManager.EditHUD(false)
+			end
+		end
+
 		helper:MakePopup()
 
 		client.hudeditorHelp = helper
@@ -108,7 +136,6 @@ function HUDManager.EditHUD(bool)
 		hook.Remove("Think", "TTT2EditHUD")
 
 		local hud = huds.GetStored(HUDManager.GetHUD())
-
 		if hud then
 			for _, elem in ipairs(hud:GetHUDElements()) do
 				local el = hudelements.GetStored(elem)

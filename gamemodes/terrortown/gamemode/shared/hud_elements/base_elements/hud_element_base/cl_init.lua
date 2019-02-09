@@ -119,6 +119,8 @@ function HUDELEMENT:Reset()
 
 	self:SetPos(defaultPos.x, defaultPos.y)
 	self:SetSize(defaultSize.w, defaultSize.h)
+
+	self:PerformLayout()
 end
 
 HUDELEMENT.savingKeys = {
