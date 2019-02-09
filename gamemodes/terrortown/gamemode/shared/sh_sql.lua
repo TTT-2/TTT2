@@ -3,7 +3,14 @@ local sql = sql
 
 SQL = {}
 
+----------------------------------------------------------
+----------------------------------------------------------
+----------------------------------------------------------
+----------------------------------------------------------
+
 function SQL.GetParsedData(key, data, res)
+	if key == "BaseClass" then return end
+
 	local val = res[key]
 
 	if val then
@@ -42,6 +49,8 @@ function SQL.ParseData(tbl, keys)
 	local tmp = {}
 
 	for key, data in pairs(keys) do
+		if key == "BaseClass" then continue end
+
 		if tbl[key] ~= nil then
 			local dat = tbl[key]
 
@@ -70,6 +79,8 @@ function SQL.ParseData(tbl, keys)
 end
 
 function SQL.ParseDataString(key, data)
+	if key == "BaseClass" then return end
+
 	if data.typ == "bool" or data.typ == "number" then
 		return key .. " INTEGER"
 	elseif data.typ == "pos" then
@@ -82,6 +93,11 @@ function SQL.ParseDataString(key, data)
 
 	return key .. " TEXT"
 end
+
+----------------------------------------------------------
+----------------------------------------------------------
+----------------------------------------------------------
+----------------------------------------------------------
 
 function SQL.BuildInsertString(tableName, name, tbl, keys)
 	if not keys then return end
