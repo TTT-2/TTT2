@@ -141,6 +141,8 @@ if CLIENT then
 		local ytmp = #weps * (height + self.margin)
 		local y_elem = y - ytmp
 
+		self:SetSize(width, -ytmp)
+
 		local col = self.col_dark
 
 		for k, wep in ipairs(weps) do
@@ -160,7 +162,5 @@ if CLIENT then
 
 			y_elem = y_elem + height + self.margin
 		end
-
-		self:SetSize(width, -ytmp)
 	end
 end
