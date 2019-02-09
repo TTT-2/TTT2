@@ -10,6 +10,11 @@ HUDELEMENT.size = {
 	h = 0
 }
 
+HUDELEMENT.defaults = {
+	pos = table.Copy(HUDELEMENT.pos),
+	size = table.Copy(HUDELEMENT.size)
+}
+
 HUDELEMENT.parent = nil
 HUDELEMENT.parent_is_type = nil
 HUDELEMENT.children = {}
@@ -101,4 +106,30 @@ function HUDELEMENT:DrawSize()
 	surface.DrawLine(x + w + 1, y - 1, x + w + 1, y + h + 1) -- right
 	surface.DrawLine(x - 1, y + h + 1, x + w + 1, y + h + 1) -- bottom
 	surface.DrawLine(x - 1, y - 1, x - 1, y + h + 1) -- left
+end
+
+function HUDELEMENT:SetDefaults()
+	self.defaults.pos = table.Copy(self.pos)
+	self.defaults.size = table.Copy(self.size)
+end
+
+function HUDELEMENT:Reset()
+	local defaultPos = self.defaults.pos
+	local defaultSize = self.defaults.size
+
+	self:SetPos(defaultPos.x, defaultPos.y)
+	self:SetSize(defaultSize.w, defaultSize.h)
+end
+
+HUDELEMENT.savingKeys = {
+	pos = {typ = "pos"},
+	size = {typ = "size"}
+}
+
+function HUDELEMENT:Save()
+
+end
+
+function HUDELEMENT:Load()
+
 end

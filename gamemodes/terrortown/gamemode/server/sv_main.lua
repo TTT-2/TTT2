@@ -7,7 +7,6 @@ include("terrortown/gamemode/shared/sh_item_module.lua")
 ttt_include("sh_main")
 ttt_include("sh_shopeditor")
 
-ttt_include("sv_shopeditor_sql")
 ttt_include("sv_shopeditor")
 ttt_include("sv_karma")
 ttt_include("sv_entity")
@@ -300,16 +299,16 @@ function GM:InitPostEntity()
 	local itms = items.GetList()
 	local sweps = weapons.GetList()
 
-	-- load and initialize all SWEPS and all items from database
-	if ShopEditor.CreateSqlTable() then
+	-- load and initialize all SWEPs and all ITEMs from database
+	if SQL.CreateSqlTable("ttt2_items", ShopEditor.savingKeys) then
 		for _, eq in ipairs(itms) do
 			ShopEditor.InitDefaultData(eq)
 
 			local name = GetEquipmentFileName(WEPS.GetClass(eq))
-			local loaded, changed = ShopEditor.LoadItem(name, eq)
+			local loaded, changed = SQL.Load("ttt2_items", name, eq, ShopEditor.savingKeys)
 
 			if not loaded then
-				ShopEditor.InitItem(name, eq)
+				SQL.Init("ttt2_items", name, eq, ShopEditor.savingKeys)
 			elseif changed then
 				CHANGED_EQUIPMENT[#CHANGED_EQUIPMENT + 1] = {name, eq}
 			end
@@ -319,10 +318,10 @@ function GM:InitPostEntity()
 			ShopEditor.InitDefaultData(wep)
 
 			local name = GetEquipmentFileName(WEPS.GetClass(wep))
-			local loaded, changed = ShopEditor.LoadItem(name, wep)
+			local loaded, changed = SQL.Load("ttt2_items", name, wep, ShopEditor.savingKeys)
 
 			if not loaded then
-				ShopEditor.InitItem(name, wep)
+				SQL.Init("ttt2_items", name, wep, ShopEditor.savingKeys)
 			elseif changed then
 				CHANGED_EQUIPMENT[#CHANGED_EQUIPMENT + 1] = {name, wep}
 			end

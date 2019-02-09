@@ -41,8 +41,19 @@ function HUD:PerformLayout()
 	end
 end
 
+HUD.savingKeys = {}
+
 function HUD:Initialize()
 	print("Called HUD", self.id or "?")
+
+	-- load and initialize all HUD data from database
+	if SQL.CreateSqlTable("ttt2_huds", self.savingKeys) then
+		local loaded = SQL.Load("ttt2_huds", self.id, self, self.savingKeys)
+
+		if not loaded then
+			SQL.Init("ttt2_huds", self.id, self, self.savingKeys)
+		end
+	end
 
 	-- Use this method to set the elements default positions etc
 	-- Initialize elements default values
@@ -50,6 +61,18 @@ function HUD:Initialize()
 		local elem = hudelements.GetStored(v)
 		if elem then
 			elem:Initialize()
+			elem:SetDefaults()
+
+			-- load and initialize all HUDELEMENT data from database
+			if SQL.CreateSqlTable("ttt2_hudelements", elem.savingKeys) then
+				local loaded = SQL.Load("ttt2_hudelements", elem.id, elem, elem.savingKeys)
+
+				if not loaded then
+					SQL.Init("ttt2_hudelements", elem.id, elem, elem.savingKeys)
+				end
+			end
+
+			elem:Load()
 
 			elem.initialized = true
 		else

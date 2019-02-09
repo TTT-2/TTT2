@@ -106,6 +106,19 @@ function HUDManager.EditHUD(bool)
 		end
 
 		hook.Remove("Think", "TTT2EditHUD")
+
+		local hud = huds.GetStored(HUDManager.GetHUD())
+
+		if hud then
+			for _, elem in ipairs(hud.GetHUDElements()) do
+				local el = hudelements.GetStored(elem)
+				if el then
+					SQL.Save("ttt2_hudelements", elem, el, el.savingKeys)
+
+					el:Save()
+				end
+			end
+		end
 	end
 
 	HUDManager.IsEditing = bool

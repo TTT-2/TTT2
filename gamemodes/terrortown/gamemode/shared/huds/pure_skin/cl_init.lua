@@ -6,6 +6,9 @@ surface.CreateFont("PureSkinBar", {font = "Trebuchet24", size = 18, weight = 100
 surface.CreateFont("PureSkinWep", {font = "Trebuchet24", size = 20, weight = 1600})
 
 HUD.previewImage = Material("vgui/ttt/huds/pure_skin/preview.png")
+HUD.savingKeys = {
+	-- basecolor TODO
+}
 
 function HUD:Initialize()
 	self:ForceHUDElement("pure_skin_playerinfo")
