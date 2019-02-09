@@ -35,7 +35,23 @@ local function EditLocalHUD()
 		local difY = client.difY or 0
 
 		if elem and (client.oldMX and client.oldMX ~= x or client.oldMY and client.oldMY ~= y) then
-			elem:SetPos(x - difX, y - difY)
+			local nx = x - difX
+			local ny = y - difY
+			local size = elem:GetSize()
+
+			if nx < 0 then
+				nx = 0
+			elseif nx + size.w > ScrW() then
+				nx = ScrW() - size.w
+			end
+
+			if ny < 0 then
+				ny = 0
+			elseif ny + size.h > ScrH() then
+				ny = ScrH() - size.h
+			end
+
+			elem:SetPos(nx, ny)
 			elem:PerformLayout()
 		end
 	else
