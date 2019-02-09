@@ -84,7 +84,6 @@ if CLIENT then
 	end
 
 	local x = 0
-	local y = 0
 
 	-- color defines
 	HUDELEMENT.col_active = {
@@ -100,18 +99,21 @@ if CLIENT then
 	}
 
 	function HUDELEMENT:Initialize()
-		self:SetPos(ScrW() - (width + self.margin * 2), ScrH() - self.margin)
-		self:SetSize(width, -height)
+		local weps = WSWITCH.WeaponCache
+		local h = #weps * (height + self.margin)
+
+		self:SetPos(ScrW() - (width + self.margin * 2), ScrH() - self.margin - h)
+		self:SetSize(width, h)
 	end
 
 	function HUDELEMENT:PerformLayout()
 		local pos = self:GetPos()
-		local size = self:GetSize()
+		--local size = self:GetSize()
 
 		x = pos.x
 		y = pos.y
-		w = size.w
-		h = size.h
+		--w = size.w
+		--h = size.h
 
 		self.BaseClass:PerformLayout()
 	end
@@ -120,11 +122,11 @@ if CLIENT then
 		if not WSWITCH.Show and not HUDManager.IsEditing then return end
 
 		local weps = WSWITCH.WeaponCache
+		local h = #weps * (height + self.margin)
 
-		local ytmp = #weps * (height + self.margin)
-		local y_elem = y - ytmp
+		y = ScrH() - self.margin - h
 
-		self:SetSize(width, -ytmp)
+		self:SetSize(width, h)
 
 		local col = self.col_dark
 
