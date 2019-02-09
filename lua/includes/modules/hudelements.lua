@@ -244,7 +244,8 @@ end
 function RegisterChildRelation(childid, parentid, parent_is_type)
 	local child = GetStored(childid)
 	if not child then
-		MsgN("Error: Cannot add child " .. childid .. " to " .. parent .. ". Child element instance was not found or registered yet!")
+		MsgN("Error: Cannot add child " .. childid .. " to " .. parentid .. ". Child element instance was not found or registered yet!")
+
 		return
 	end
 
@@ -252,13 +253,15 @@ function RegisterChildRelation(childid, parentid, parent_is_type)
 		local parent = GetStored(parentid)
 		if not parent then
 			MsgN("Error: Cannot add child " .. childid .. " to " .. parentid .. ". Parent element was not found or registered yet!")
+
 			return
 		end
 
 		parent:AddChild(childid)
 	else
 		local elems = GetAllTypeElements(parentid)
-		for elem in elems do
+
+		for elem in ipairs(elems) do
 			elem:AddChild(childid)
 		end
 	end
