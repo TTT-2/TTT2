@@ -1,5 +1,4 @@
 ttt_include("sh_weaponry") -- inits WEPS tbl
-ttt_include("sh_inventory")
 
 util.AddNetworkString("TTT2CleanupInventory")
 util.AddNetworkString("TTT2AddWeaponToInventory")
@@ -308,9 +307,7 @@ end
 -- Note that this is called both when a player spawns and when a round starts
 function GM:PlayerLoadout(ply)
 	if IsValid(ply) and not ply:IsSpec() then
-		CleanupInventory(ply)
-		net.Start("TTT2CleanupInventory")
-		net.Send(ply)
+		CleanupInventoryAndNotifyClient(ply)
 	
 		ResetLoadoutItems(ply)
 
@@ -738,28 +735,19 @@ function GM:WeaponEquip(wep, ply)
 	end
 	
 	if IsValid(ply) and wep.Kind then
-		AddWeaponToInventory(ply, wep)
-		net.Start("TTT2AddWeaponToInventory")
-		net.WriteEntity(wep)
-		net.Send(ply)
+		AddWeaponToInventoryAndNotifyClient(ply, wep)
 	end
 end
 
 function GM:PlayerDroppedWeapon(ply, wep)
 	if IsValid(wep) and IsValid(ply) and wep.Kind then
-		RemoveWeaponFromInventory(ply, wep)
-		net.Start("TTT2RemoveWeaponFromInventory")
-		net.WriteEntity(wep)
-		net.Send(ply)
+		RemoveWeaponFromInventoryAndNotifyClient(ply, wep)
 	end
 end
 
 function GM:EntityRemoved(ent)
 	if IsValid(ent) and IsValid(ent:GetOwner()) and ent:IsWeapon() and ent.Kind then
-		RemoveWeaponFromInventory(ent:GetOwner(), ent)
-		net.Start("TTT2RemoveWeaponFromInventory")
-		net.WriteEntity(ent)
-		net.Send(ent:GetOwner())
+		RemoveWeaponFromInventoryAndNotifyClient(ent:GetOwner(), ent)
 	end
 end
 

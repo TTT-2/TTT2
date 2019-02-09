@@ -290,9 +290,7 @@ function plymeta:CanCarryWeapon(wep)
 	
 	--appeareantly TTT can't handle two times the same weapon
 	for k, v in pairs(self:GetWeapons()) do
-		if IsValid(wep) and IsValid(v) and v:GetClass() == wep:GetClass() then
-			return false
-		elseif istable(wep) and IsValid(v) and v:GetClass() == wep.ClassName then
+		if WEPS.GetClass(wep) == v:GetClass() then
 			return false
 		end
 	end
@@ -319,15 +317,7 @@ function plymeta:GetWeaponsOnSlot(slot)
 		return
 	end
 	
-	CleanupInventoryIfDirty(self)
-	
-	if istable(self.inventory) then
-		if istable(self.inventory[slot]) then
-			return self.inventory[slot]
-		else
-			return self.inventory[slot]
-		end
-	end
+	return GetInventory()[slot]
 end
 
 function plymeta:GetMeleeWeapon()

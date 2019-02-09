@@ -63,6 +63,7 @@ if SERVER then
 		sv_ent_replace = {file = "sv_ent_replace.lua", on = "server"},
 		sv_entity = {file = "sv_entity.lua", on = "server"},
 		sv_gamemsg = {file = "sv_gamemsg.lua", on = "server"},
+		sv_inventory = {file = "sv_inventory.lua", on = "server"},
 		sv_main = {file = "sv_main.lua", on = "server"},
 		sv_karma = {file = "sv_karma.lua", on = "server"},
 		sv_player_ext = {file = "sv_player_ext.lua", on = "server"},

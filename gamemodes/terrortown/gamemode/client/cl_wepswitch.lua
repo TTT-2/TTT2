@@ -47,22 +47,6 @@ local col_dark = {
 	shadow = 100
 }
 
-local function SlotnumberFromKind(kind)
-	local UNARMED_SLOT = WEAPON_CARRY + 1
-	local SPECIAL_SLOT = UNARMED_SLOT + 1
-	local EXTRA_SLOT = SPECIAL_SLOT + GetConVar("ttt2_max_special_slots"):GetInt()
-	
-	if kind >= WEAPON_MELEE && kind <= WEAPON_CARRY then
-		return kind
-	elseif kind == WEAPON_UNARMED then
-		return UNARMED_SLOT
-	elseif kind == WEAPON_SPECIAL then 
-		return SPECIAL_SLOT
-	else
-		return EXTRA_SLOT
-	end
-end
-
 function WSWITCH:DrawBarBg(x, y, w, h, col)
 	local rx = round(x - 4)
 	local ry = round(y - h * 0.5 - 4)
@@ -164,7 +148,7 @@ function WSWITCH:Draw(client)
 
 		self:DrawBarBg(x, y, width, height, col)
 
-		if not self:DrawWeapon(x, y, col, wep[1], wep[2]) then
+		if not self:DrawWeapon(x, y, col, wep, wep.Kind) then
 			self:UpdateWeaponCache()
 
 			return
@@ -174,9 +158,9 @@ function WSWITCH:Draw(client)
 	end
 end
 
-local function InsertIfValid(dest, wep, slot)
+local function InsertIfValid(dest, wep)
 	if IsValid(wep) then
-		table.insert(dest, {wep, slot})
+		table.insert(dest, wep)
 	end
 end
 
@@ -184,17 +168,11 @@ function WSWITCH:UpdateWeaponCache()
 	self.WeaponCache = {}
 	
 	local inventory = LocalPlayer():GetInventory()
-	InsertIfValid(self.WeaponCache, inventory[WEAPON_MELEE], SlotnumberFromKind(WEAPON_MELEE))
-	InsertIfValid(self.WeaponCache, inventory[WEAPON_PISTOL], SlotnumberFromKind(WEAPON_PISTOL))
-	InsertIfValid(self.WeaponCache, inventory[WEAPON_HEAVY], SlotnumberFromKind(WEAPON_HEAVY))
-	InsertIfValid(self.WeaponCache, inventory[WEAPON_NADE], SlotnumberFromKind(WEAPON_NADE))
-	InsertIfValid(self.WeaponCache, inventory[WEAPON_CARRY], SlotnumberFromKind(WEAPON_CARRY))
-	InsertIfValid(self.WeaponCache, inventory[WEAPON_UNARMED], SlotnumberFromKind(WEAPON_UNARMED))
-	for k,v in pairs(inventory[WEAPON_SPECIAL]) do
-		InsertIfValid(self.WeaponCache, v, SlotnumberFromKind(WEAPON_SPECIAL) + k - 1)
-	end
-	for k,v in pairs(inventory[WEAPON_EXTRA]) do
-		InsertIfValid(self.WeaponCache, v, SlotnumberFromKind(WEAPON_EXTRA) + k - 1)
+	
+	for kind, convar in ipairs(ORDERED_SLOT_TABLE) do
+		for k,wep in pairs(inventory[kind]) do
+			InsertIfValid(self.WeaponCache, wep)
+		end
 	end
 end
 
@@ -257,7 +235,7 @@ function WSWITCH:SelectSlot(slot)
 	local toselect = self.Selected
 
 	for k, w in ipairs(self.WeaponCache) do
-		if w[2] == slot then
+		if w.Kind == slot then
 			toselect = k
 
 			break
@@ -282,7 +260,7 @@ function WSWITCH:Enable()
 		local toselect = 1
 
 		for k, w in ipairs(self.WeaponCache) do
-			if w[1] == wep_active then
+			if w == wep_active then
 				toselect = k
 
 				break
@@ -308,8 +286,8 @@ function WSWITCH:ConfirmSelection(noHide)
 	end
 
 	for k, w in ipairs(self.WeaponCache) do
-		if k == self.Selected and IsValid(w[1]) then
-			input.SelectWeapon(w[1])
+		if k == self.Selected and IsValid(w) then
+			input.SelectWeapon(w)
 
 			return
 		end
@@ -341,14 +319,14 @@ end
 local function QuickSlot(ply, cmd, args)
 	if not IsValid(ply) or not args or #args ~= 1 then return end
 
-	local slot = tonumber(args[1])
+	local slot = tonumber(args)
 
 	if not slot then return end
 
 	local wep = ply:GetActiveWeapon()
 
 	if IsValid(wep) then
-		if wep.Slot == slot - 1 then
+		if wep.Kind == slot - 1 then
 			RunConsoleCommand("lastinv")
 		else
 			WSWITCH:SelectAndConfirm(slot)
