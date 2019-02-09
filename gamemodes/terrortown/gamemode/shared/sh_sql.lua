@@ -23,20 +23,20 @@ function SQL.GetParsedData(key, data, res)
 		val = val == "1"
 	elseif data.typ == "pos" then
 		val = {
-			x = res[key .. "_x"],
-			y = res[key .. "_y"]
+			x = tonumber(res[key .. "_x"]),
+			y = tonumber(res[key .. "_y"])
 		}
 	elseif data.typ == "size" then
 		val = {
-			w = res[key .. "_w"],
-			h = res[key .. "_h"]
+			w = tonumber(res[key .. "_w"]),
+			h = tonumber(res[key .. "_h"])
 		}
 	elseif data.typ == "color" then
 		val = {
-			r = res[key .. "_r"],
-			g = res[key .. "_g"],
-			b = res[key .. "_b"],
-			a = res[key .. "_a"]
+			r = tonumber(res[key .. "_r"]),
+			g = tonumber(res[key .. "_g"]),
+			b = tonumber(res[key .. "_b"]),
+			a = tonumber(res[key .. "_a"])
 		}
 	end
 
