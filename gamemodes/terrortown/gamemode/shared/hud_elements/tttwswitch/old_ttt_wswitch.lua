@@ -117,12 +117,11 @@ if CLIENT then
 	--local y = 0
 
 	function HUDELEMENT:Initialize()
-		local client = LocalPlayer()
 		local weps = WSWITCH.WeaponCache
 		local count = #weps
 		local h = count * (height + self.margin)
 
-		client.oldWSWeps = count
+		LocalPlayer().oldWSWeps = count
 
 		self:SetPos(ScrW() - (width + self.margin * 2), ScrH() - self.margin - h)
 		self:SetSize(width, h)
@@ -146,15 +145,18 @@ if CLIENT then
 		local client = LocalPlayer()
 		local weps = WSWITCH.WeaponCache
 		local count = #weps
-		local h = (count - client.oldWSWeps) * (height + self.margin)
+		local tmp = height + self.margin
+		local h = count * tmp
+		local difH = client.oldWSWeps * tmp
 
 		client.oldWSWeps = count
 
-		y = y - h
+		y = y - (h - difH)
+
+		self:SetPos(x, y)
+		self:SetSize(width, h)
 
 		local y_elem = y
-
-		self:SetSize(width, h)
 
 		local col = self.col_dark
 
