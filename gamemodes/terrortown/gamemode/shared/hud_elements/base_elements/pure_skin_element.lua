@@ -12,7 +12,7 @@ if CLIENT then
 		surface.SetDrawColor(clr(c))
 		surface.DrawRect(x, y, w, h)
 
-		local w2 = w * (p or 1)
+		local w2 = math.Round(w * (p or 1))
 
 		surface.SetDrawColor(0, 0, 0, 165)
 		surface.DrawRect(x + w2, y, w - w2, h)
