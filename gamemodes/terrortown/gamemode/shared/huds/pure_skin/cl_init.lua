@@ -27,6 +27,7 @@ function HUD:Initialize()
 	self:ForceHUDElement("pure_skin_playerinfo")
 	self:ForceHUDElement("pure_skin_roundinfo")
 	self:ForceHUDElement("pure_skin_wswitch")
+	self:ForceHUDElement("pure_skin_drowning")
 	--self:ForceHUDElement("old_ttt_spec")
 	--self:ForceHUDElement("old_ttt_items")
 

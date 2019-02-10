@@ -1197,6 +1197,7 @@ function GM:Tick()
 		tm = ply:Team()
 
 		if tm == TEAM_TERROR and ply:Alive() then
+			local drowningTime = ply.drowningTime or 8
 
 			-- Drowning
 			if ply:WaterLevel() == 3 then
@@ -1205,6 +1206,10 @@ function GM:Tick()
 				end
 
 				if ply.drowning then
+					ply.drowningProgress = (ply.drowning - CurTime()) * (1 / drowningTime)
+
+					ply:SetNWFloat("drowningProgress", ply.drowningProgress)
+
 					if ply.drowning < CurTime() then
 						local dmginfo = DamageInfo()
 
@@ -1221,10 +1226,16 @@ function GM:Tick()
 					end
 				else
 					-- will start drowning soon
-					ply.drowning = CurTime() + 8
+					ply.drowning = CurTime() + drowningTime
+					ply.drowningProgress = 1
+
+					ply:SetNWFloat("drowningProgress", ply.drowningProgress)
 				end
 			else
 				ply.drowning = nil
+				ply.drowningProgress = -1
+
+				ply:SetNWFloat("drowningProgress", ply.drowningProgress)
 			end
 
 			-- Run DNA Scanner think also when it is not deployed

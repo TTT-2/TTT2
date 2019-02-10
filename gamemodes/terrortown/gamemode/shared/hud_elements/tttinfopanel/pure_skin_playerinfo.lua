@@ -114,7 +114,6 @@ if CLIENT then
 		-- player informations
 		if calive then
 
-			-- TODO rework calculation
 			-- draw secondary role information
 			if cactive and secondaryRoleInformationFunc then
 				local secInfoTbl = secondaryRoleInformationFunc()
