@@ -1,9 +1,9 @@
 local surface = surface
 
 -- Fonts
-surface.CreateFont("PureSkinRole", {font = "Trebuchet24", size = 24, weight = 1200})
-surface.CreateFont("PureSkinBar", {font = "Trebuchet24", size = 18, weight = 1000})
-surface.CreateFont("PureSkinWep", {font = "Trebuchet24", size = 20, weight = 1600})
+surface.CreateFont("PureSkinRole", {font = "Trebuchet24", size = 30, weight = 800})
+surface.CreateFont("PureSkinBar", {font = "Trebuchet24", size = 22, weight = 1500})
+surface.CreateFont("PureSkinWep", {font = "Trebuchet24", size = 21, weight = 1500})
 
 HUD.previewImage = Material("vgui/ttt/huds/pure_skin/preview.png")
 HUD.savingKeys = {

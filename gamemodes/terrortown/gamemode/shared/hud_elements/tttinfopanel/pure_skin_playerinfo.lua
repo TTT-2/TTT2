@@ -108,7 +108,7 @@ if CLIENT then
 				text = L[self.roundstate_string[round_state]]
 			end
 
-			self:ShadowedText(text, "PureSkinRole", nx, ry, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			self:ShadowedText(string.upper(text), "PureSkinRole", nx, ry, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 		end
 
 		-- player informations
@@ -152,7 +152,7 @@ if CLIENT then
 			-- health bar
 			local health = math.max(0, client:Health())
 
-			self:DrawBar(nx, ty, bw, bh, Color(234, 41, 41), health / client:GetMaxHealth(), "Health: " .. health)
+			self:DrawBar(nx, ty, bw, bh, Color(234, 41, 41), health / client:GetMaxHealth(), "HEALTH: " .. health)
 
 			-- ammo bar
 			ty = ty + bh + spc
