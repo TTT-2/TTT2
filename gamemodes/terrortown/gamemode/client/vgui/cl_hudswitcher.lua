@@ -37,16 +37,20 @@ function PANEL:Init()
 		panel:Dock(FILL)
 
 		panel.Paint = function(slf, w, h)
-			draw.RoundedBox(4, 0, 0, w, h, Color(255, 255, 255))
+			draw.RoundedBox(4, 0, 0, w, h, hud.disableHUDEditor and Color(255, 0, 0) or Color(255, 255, 255))
 
-			draw.DrawText(hud.id, "DermaDefault", w * 0.5, 10, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			if hud.disableHUDEditor then
+				draw.DrawText("! THIS HUD DOESN'T SUPPORT THE HUD EDITOR !", "DermaDefault", w * 0.5, 10, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			end
 		end
 
-		HUDManager.AddHUDSettings(panel, hud)
+		if not hud.disableHUDEditor then
+			HUDManager.AddHUDSettings(panel, hud)
 
-		panel.OnRemove = function(slf)
-			if hud.id then
-				SQL.Save("ttt2_huds", hud.id, hud, hud.savingKeys)
+			panel.OnRemove = function(slf)
+				if hud.id then
+					SQL.Save("ttt2_huds", hud.id, hud, hud.savingKeys)
+				end
 			end
 		end
 
@@ -69,6 +73,8 @@ function PANEL:Init()
 
 		local oldClick = leftBtn.DoClick
 		leftBtn.DoClick = function(slf)
+			if hud.id == HUDManager.GetHUD() then return end
+
 			oldClick(slf)
 
 			mainPanel:SetTitle("HUD Switcher - " .. hud.id)

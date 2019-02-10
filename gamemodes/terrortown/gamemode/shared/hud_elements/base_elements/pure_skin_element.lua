@@ -1,4 +1,6 @@
 if CLIENT then
+	local defaultColor = Color(49, 71, 94)
+
 	function HUDELEMENT:DrawBg(x, y, w, h, c)
 		DrawHUDElementBg(x, y, w, h, c)
 	end
@@ -41,5 +43,17 @@ if CLIENT then
 		size = {typ = "size"}
 	}
 
-	HUDELEMENT.basecolor = Color(49, 71, 94)
+	HUDELEMENT.basecolor = defaultColor
+
+	function HUDELEMENT:Reset()
+		self.basecolor = defaultColor
+
+		local defaultPos = self.defaults.pos
+		local defaultSize = self.defaults.size
+
+		self:SetPos(defaultPos.x, defaultPos.y)
+		self:SetSize(defaultSize.w, defaultSize.h)
+
+		self:PerformLayout()
+	end
 end

@@ -5,6 +5,8 @@ surface.CreateFont("PureSkinRole", {font = "Trebuchet24", size = 30, weight = 80
 surface.CreateFont("PureSkinBar", {font = "Trebuchet24", size = 22, weight = 1500})
 surface.CreateFont("PureSkinWep", {font = "Trebuchet24", size = 21, weight = 1500})
 
+local defaultColor = Color(49, 71, 94)
+
 HUD.previewImage = Material("vgui/ttt/huds/pure_skin/preview.png")
 HUD.savingKeys = {
 	basecolor = {
@@ -21,7 +23,7 @@ HUD.savingKeys = {
 	}
 }
 
-HUD.basecolor = Color(49, 71, 94)
+HUD.basecolor = defaultColor
 
 function HUD:Initialize()
 	self:ForceHUDElement("pure_skin_playerinfo")
@@ -31,8 +33,31 @@ function HUD:Initialize()
 	--self:ForceHUDElement("old_ttt_spec")
 	--self:ForceHUDElement("old_ttt_items")
 
-	-- important to call the base initialize, to set default values for all elements
-	self.BaseClass:Initialize()
+	-- Initialize elements default values
+	for _, v in ipairs(self:GetHUDElements()) do
+		local elem = hudelements.GetStored(v)
+		if elem then
+			elem:Initialize()
+			elem:SetDefaults()
+
+			-- load and initialize all HUDELEMENT data from database
+			if SQL.CreateSqlTable("ttt2_hudelements", elem.savingKeys) then
+				local loaded = SQL.Load("ttt2_hudelements", elem.id, elem, elem.savingKeys)
+
+				if not loaded then
+					SQL.Init("ttt2_hudelements", elem.id, elem, elem.savingKeys)
+				end
+			end
+
+			elem:Load()
+
+			elem.initialized = true
+		else
+			Msg("Error: HUD " .. (self.id or "?") .. " has unkown element named " .. v .. "\n")
+		end
+	end
+
+	self:PerformLayout()
 end
 
 function HUD:Loaded()
@@ -42,6 +67,10 @@ function HUD:Loaded()
 			el.basecolor = self.basecolor
 		end
 	end
+end
+
+function HUD:Reset()
+	self.basecolor = defaultColor
 end
 
 -- Voice overriding
