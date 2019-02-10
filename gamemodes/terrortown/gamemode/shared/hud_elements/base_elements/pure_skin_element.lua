@@ -48,6 +48,6 @@ if CLIENT then
 	function HUDELEMENT:Reset()
 		self.basecolor = defaultColor
 
-		self.BaseClass:Initialize()
+		self.BaseClass:Reset()
 	end
 end
