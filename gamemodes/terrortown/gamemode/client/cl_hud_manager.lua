@@ -187,15 +187,10 @@ function HUDManager.SetHUD(name)
 	net.SendToServer()
 end
 
-function HUDManager.AddHUDSettings(panel)
-	if not IsValid(panel) then return end
+function HUDManager.AddHUDSettings(panel, hudEl)
+	if not IsValid(panel) or not hudEl then return end
 
-	local hud = HUDManager.GetHUD()
-
-	local hudEl = huds.GetStored(hud)
-	if not hudEl then return end
-
-	local tmp = hudEl.savingKeys or {}
+	local tmp = table.Copy(hudEl.savingKeys) or {}
 	tmp.el_pos = {typ = "el_pos", desc = "Change element's position"}
 
 	for key, data in pairs(tmp) do

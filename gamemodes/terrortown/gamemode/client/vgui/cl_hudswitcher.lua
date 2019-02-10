@@ -42,7 +42,7 @@ function PANEL:Init()
 			draw.DrawText(hud.id, "DermaDefault", w * 0.5, 10, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 
-		HUDManager.AddHUDSettings(panel)
+		HUDManager.AddHUDSettings(panel, hud)
 
 		panel.OnRemove = function(slf)
 			if hud.id then
