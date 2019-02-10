@@ -9,13 +9,11 @@ end
 function AddWeaponToInventoryAndNotifyClient(ply, wep)
 	AddWeaponToInventory(ply, wep)
 	net.Start("TTT2AddWeaponToInventory")
-	net.WriteEntity(wep)
 	net.Send(ply)
 end
 
 function RemoveWeaponFromInventoryAndNotifyClient(ply, wep)
 	RemoveWeaponFromInventory(ply, wep)
 	net.Start("TTT2RemoveWeaponFromInventory")
-	net.WriteEntity(wep)
 	net.Send(ply)
 end
