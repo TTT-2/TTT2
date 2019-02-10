@@ -163,13 +163,19 @@ function HUDManager.EditHUD(bool, hud)
 
 	if bool then
 		if IsValid(client.hudswitcher) then
-			client.hudswitcher:Hide()
+			client.hudswitcherShown = true
 		end
+
+		HUDManager.ShowHUDSwitcher(false)
+
+		client:ChatPrint("[TTT2][INFO] Press the right mouse-key -> 'close' to exit the HUD editor!")
 
 		hook.Add("Think", "TTT2EditHUD", EditLocalHUD)
 	else
-		if IsValid(client.hudswitcher) then
-			client.hudswitcher:Show()
+		if client.hudswitcherShown then
+			client.hudswitcherShown = nil
+
+			HUDManager.ShowHUDSwitcher(true)
 		end
 
 		hook.Remove("Think", "TTT2EditHUD")
@@ -269,6 +275,8 @@ function HUDManager.AddHUDSettings(panel, hudEl)
 
 					SQL.Save("ttt2_huds", hudEl.id, hudEl, hudEl.savingKeys)
 				end
+
+				HUDManager.ShowHUDSwitcher(true)
 			end
 		elseif data.typ == "color" then
 			el = vgui.Create("DColorMixer")
