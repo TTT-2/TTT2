@@ -99,11 +99,17 @@ local function PreqLabels(parent, x, y)
 
 	tbl.owned.Check = function(s, sel)
 		if ItemIsWeapon(sel) and not CanCarryWeapon(sel) then
-			return false, sel.slot, GetPTranslation("equip_carry_slot", {slot = sel.slot})
+			return false, MakeKindValid(sel.Kind), GetPTranslation("equip_carry_slot", {slot = MakeKindValid(sel.Kind)})
 		elseif not ItemIsWeapon(sel) and LocalPlayer():HasEquipmentItem(sel.id) then
 			return false, "X", GetTranslation("equip_carry_own")
 		else
-			return true, "✔", GetTranslation("equip_carry")
+			if ItemIsWeapon(sel) then
+				local maxCount = GetConVar(ORDERED_SLOT_TABLE[MakeKindValid(sel.Kind)]):GetInt()
+				maxCount = maxCount < 0 and "∞" or maxCount
+				return true, " " .. #LocalPlayer():GetWeaponsOnSlot(MakeKindValid(sel.Kind)) .. " / " .. maxCount, GetTranslation("equip_carry")
+			else
+				return true, "✔", GetTranslation("equip_carry")
+			end
 		end
 	end
 
@@ -324,7 +330,7 @@ local function CreateEquipmentList(t)
 					slot:SetIcon("vgui/ttt/slotcap")
 					slot:SetIconColor(col or COLOR_GREY)
 					slot:SetIconSize(16)
-					slot:SetIconText(item.slot)
+					slot:SetIconText(MakeKindValid(item.Kind))
 					slot:SetIconProperties(COLOR_WHITE,
 						"DefaultBold",
 						{opacity = 220, offset = 1},

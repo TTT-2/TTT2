@@ -317,26 +317,26 @@ function plymeta:GetWeaponsOnSlot(slot)
 		return
 	end
 	
-	return GetInventory()[slot]
+	return self:GetInventory()[slot]
 end
 
-function plymeta:GetMeleeWeapon()
+function plymeta:GetMeleeWeapons()
 	return self:GetWeaponsOnSlot(WEAPON_MELEE)
 end
 
-function plymeta:GetPrimaryWeapon()
+function plymeta:GetPrimaryWeapons()
 	return self:GetWeaponsOnSlot(WEAPON_HEAVY)
 end
 
-function plymeta:GetSecondaryWeapon()
+function plymeta:GetSecondaryWeapons()
 	return self:GetWeaponsOnSlot(WEAPON_PISTOL)
 end
 
-function plymeta:GetNade()
+function plymeta:GetNades()
 	return self:GetWeaponsOnSlot(WEAPON_NADE)
 end
 
-function plymeta:GetCarryWeapon()
+function plymeta:GetCarryWeapons()
 	return self:GetWeaponsOnSlot(WEAPON_CARRY)
 end
 

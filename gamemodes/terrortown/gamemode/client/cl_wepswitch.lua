@@ -98,7 +98,7 @@ function WSWITCH:DrawWeapon(x, y, c, wep)
 	-- Slot
 	local _tmp = {x + 4, y}
 	local spec = {
-		text = wep.Kind,
+		text = MakeKindValid(wep.Kind),
 		font = "Trebuchet22",
 		pos = _tmp,
 		yalign = TEXT_ALIGN_CENTER,
@@ -235,7 +235,7 @@ function WSWITCH:SelectSlot(slot)
 	local toselect = self.Selected
 
 	for k, w in ipairs(self.WeaponCache) do
-		if w.Kind == slot then
+		if MakeKindValid(w.Kind) == slot then
 			toselect = k
 
 			break
@@ -326,7 +326,7 @@ local function QuickSlot(ply, cmd, args)
 	local wep = ply:GetActiveWeapon()
 
 	if IsValid(wep) then
-		if wep.Kind == slot - 1 then
+		if MakeKindValid(wep.Kind) == slot - 1 then
 			RunConsoleCommand("lastinv")
 		else
 			WSWITCH:SelectAndConfirm(slot)

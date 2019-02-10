@@ -18,7 +18,7 @@ ORDERED_SLOT_TABLE = {
 	[WEAPON_EXTRA] = "ttt2_max_extra_slots"
 }
 
-local function MakeKindValid(kind)
+function MakeKindValid(kind)
 	if kind > WEAPON_EXTRA or kind < WEAPON_MELEE then
 		return WEAPON_EXTRA
 	else
@@ -30,13 +30,13 @@ end
 --additionally spawn can be called when a player is alive in which case he doesn't loose weapons beforehand
 function CleanupInventoryIfDirty(ply)
 	if not ply.inventory or ply.refresh_inventory_cache then
-		ply.refresh_inventory_cache = false
 		CleanupInventory(ply)
 	end
 end
 
 function CleanupInventory(ply)
 	if not IsValid(ply) then return end
+	ply.refresh_inventory_cache = false
 	
 	ply.inventory = {}
 	for k, v in pairs(ORDERED_SLOT_TABLE) do
