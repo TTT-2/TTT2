@@ -120,7 +120,7 @@ function HUDELEMENT:DrawSize()
 	surface.DrawLine(x - 1, y - 1, x - 1, y + h + 1) -- left
 	surface.DrawLine(x - 2, y - 2, x - 2, y + h + 2) -- left
 
-	draw.DrawText(self.id, "DermaDefault", x + w * 0.5, y + h * 0.5 - 10, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+	draw.DrawText(self.id, "DermaDefault", x + w * 0.5, y + h * 0.5 - 7, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 end
 
 function HUDELEMENT:SetDefaults()

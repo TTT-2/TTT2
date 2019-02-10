@@ -24,7 +24,6 @@ local function CreateEditOptions(x, y)
 	local editSize = menu:AddOption("Size")
 	editSize.OnMousePressed = function(slf, keyCode)
 		LocalPlayer().hudEditMode = 1
-		LocalPlayer():ChatPrint("HEEEEEEEEEEEEEY")
 
 		menu:Remove()
 	end
