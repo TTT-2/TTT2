@@ -168,7 +168,7 @@ function HUDManager.EditHUD(bool, hud)
 
 		HUDManager.ShowHUDSwitcher(false)
 
-		client:ChatPrint("[TTT2][INFO] Press the right mouse-key -> 'close' to exit the HUD editor!")
+		client:ChatPrint("[TTT2][INFO] Press [RMB] (right mouse-button) -> 'close' to exit the HUD editor!")
 
 		hook.Add("Think", "TTT2EditHUD", EditLocalHUD)
 	else
