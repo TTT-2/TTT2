@@ -40,6 +40,8 @@ local function CreateEditOptions(x, y)
 					el:Reset()
 				end
 			end
+
+			hud:Reset()
 		end
 
 		menu:Remove()
@@ -152,8 +154,10 @@ local function EditLocalHUD()
 	client.activeElement = elem
 end
 
-function HUDManager.EditHUD(bool)
+function HUDManager.EditHUD(bool, hud)
 	local client = LocalPlayer()
+
+	hud = hud or huds.GetStored(HUDManager.GetHUD())
 
 	gui.EnableScreenClicker(bool)
 
@@ -170,7 +174,6 @@ function HUDManager.EditHUD(bool)
 
 		hook.Remove("Think", "TTT2EditHUD")
 
-		local hud = huds.GetStored(HUDManager.GetHUD())
 		if hud then
 			for _, elem in ipairs(hud:GetHUDElements()) do
 				local el = hudelements.GetStored(elem)
@@ -181,6 +184,8 @@ function HUDManager.EditHUD(bool)
 				end
 			end
 		end
+
+		SQL.Save("ttt2_huds", hud.id, hud, hud.savingKeys)
 	end
 
 	HUDManager.IsEditing = bool
@@ -227,6 +232,7 @@ function HUDManager.AddHUDSettings(panel, hudEl)
 
 	local tmp = table.Copy(hudEl.savingKeys) or {}
 	tmp.el_pos = {typ = "el_pos", desc = "Change element's\nposition and size"}
+	tmp.reset = {typ = "reset", desc = "Reset HUD's data"}
 
 	for key, data in pairs(tmp) do
 		local el
@@ -238,7 +244,31 @@ function HUDManager.AddHUDSettings(panel, hudEl)
 			el:SizeToContents()
 
 			el.DoClick = function(btn)
-				HUDManager.EditHUD(true)
+				HUDManager.EditHUD(true, hudEl)
+			end
+		elseif data.typ == "reset" then
+			el = vgui.Create("DButton")
+			el:SetTextColor(Color(255, 0, 0))
+			el:SetText("- Reset -")
+			el:SizeToContents()
+
+			el.DoClick = function(btn)
+				if hudEl then
+					for _, elem in ipairs(hudEl:GetHUDElements()) do
+						local tel = hudelements.GetStored(elem)
+						if tel then
+							tel:Reset()
+
+							SQL.Save("ttt2_hudelements", elem, tel, tel.savingKeys)
+
+							tel:Save()
+						end
+					end
+
+					hudEl:Reset()
+
+					SQL.Save("ttt2_huds", hudEl.id, hudEl, hudEl.savingKeys)
+				end
 			end
 		elseif data.typ == "color" then
 			el = vgui.Create("DColorMixer")

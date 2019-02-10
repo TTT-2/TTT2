@@ -73,6 +73,8 @@ function PANEL:Init()
 
 		local oldClick = leftBtn.DoClick
 		leftBtn.DoClick = function(slf)
+			if hud.id == HUDManager.GetHUD() then return end
+
 			oldClick(slf)
 
 			mainPanel:SetTitle("HUD Switcher - " .. hud.id)

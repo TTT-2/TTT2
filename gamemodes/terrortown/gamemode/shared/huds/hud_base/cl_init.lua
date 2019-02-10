@@ -81,3 +81,7 @@ end
 function HUD:Loaded()
 
 end
+
+function HUD:Reset()
+
+end
