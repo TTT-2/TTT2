@@ -6,10 +6,40 @@ local currentHUD
 
 HUDManager.IsEditing = false
 
+local function CreateEditOptions(x, y)
+	local client = LocalPlayer()
+
+	client.editOptionsX = x
+	client.editOptionsY = y
+
+	local menu = DermaMenu()
+
+	local editPos = menu:AddOption("Position")
+	editPos.OnMousePressed = function(slf, keyCode)
+		LocalPlayer().hudEditMode = 0
+
+		menu:Remove()
+	end
+
+	local editSize = menu:AddOption("Size")
+	editSize.OnMousePressed = function(slf, keyCode)
+		LocalPlayer().hudEditMode = 1
+		LocalPlayer():ChatPrint("HEEEEEEEEEEEEEY")
+
+		menu:Remove()
+	end
+
+	-- Open the menu
+	menu:Open()
+
+	client.editOptions = menu
+end
+
 local function EditLocalHUD()
 	local client = LocalPlayer()
 	local x, y = math.Round(gui.MouseX()), math.Round(gui.MouseY())
 	local elem = client.activeElement
+	local mode = client.hudEditMode or 0
 
 	if input.IsMouseDown(MOUSE_LEFT) then
 		if not elem then
@@ -21,9 +51,12 @@ local function EditLocalHUD()
 						elem = elObj
 
 						local difPos = elem:GetPos()
+						local difSize = elem:GetSize()
 
 						client.difX = x - difPos.x
 						client.difY = y - difPos.y
+						client.difW = x - difSize.w
+						client.difH = y - difSize.h
 
 						break
 					end
@@ -33,31 +66,54 @@ local function EditLocalHUD()
 
 		local difX = client.difX or 0
 		local difY = client.difY or 0
+		local difW = client.difW or 0
+		local difH = client.difH or 0
 
 		if elem and (client.oldMX and client.oldMX ~= x or client.oldMY and client.oldMY ~= y) then
-			local nx = x - difX
-			local ny = y - difY
 			local size = elem:GetSize()
 
-			if nx < 0 then
-				nx = 0
-			elseif nx + size.w > ScrW() then
-				nx = ScrW() - size.w
+			if mode == 0 then
+				local nx = x - difX
+				local ny = y - difY
+
+				if nx < 0 then
+					nx = 0
+				elseif nx + size.w > ScrW() then
+					nx = ScrW() - size.w
+				end
+
+				if ny < 0 then
+					ny = 0
+				elseif ny + size.h > ScrH() then
+					ny = ScrH() - size.h
+				end
+
+				elem:SetPos(nx, ny)
+			elseif mode == 1 then
+				local nw = x - difW
+				local nh = y - difH
+
+				elem:SetSize(nw, nh)
 			end
 
-			if ny < 0 then
-				ny = 0
-			elseif ny + size.h > ScrH() then
-				ny = ScrH() - size.h
-			end
-
-			elem:SetPos(nx, ny)
 			elem:PerformLayout()
 		end
 	else
 		elem = nil
 		client.difX = nil
 		client.difY = nil
+	end
+
+	if input.IsMouseDown(MOUSE_RIGHT) and (client.editOptionsX ~= x or client.editOptionsY ~= y) then
+		if IsValid(client.editOptions) then
+			client.editOptions:Remove()
+		end
+
+		CreateEditOptions(x, y)
+	elseif input.IsMouseDown(MOUSE_LEFT) then
+		if IsValid(client.editOptions) then
+			client.editOptions:Remove()
+		end
 	end
 
 	client.oldMX = x
@@ -191,7 +247,7 @@ function HUDManager.AddHUDSettings(panel, hudEl)
 	if not IsValid(panel) or not hudEl then return end
 
 	local tmp = table.Copy(hudEl.savingKeys) or {}
-	tmp.el_pos = {typ = "el_pos", desc = "Change element's position"}
+	tmp.el_pos = {typ = "el_pos", desc = "Change element's\nposition and size"}
 
 	for key, data in pairs(tmp) do
 		local el
@@ -287,7 +343,7 @@ function HUDManager.DrawHUD()
 		if elem.initialized and elem.type and hud:ShouldShow(elem.type) and hook.Call("HUDShouldDraw", GAMEMODE, elem.type) then
 			elem:Draw()
 
-			if elem == client.activeElement then
+			if HUDManager.IsEditing and not client.activeElement then
 				elem:DrawSize()
 			end
 		end

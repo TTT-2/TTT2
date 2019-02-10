@@ -91,11 +91,17 @@ function HUDELEMENT:GetChildren()
 	return self.children
 end
 
-function HUDELEMENT:IsInPos(x, y)
+function HUDELEMENT:IsInRange(x, y, range)
+	range = range or 0
+
 	local minX, minY = self.pos.x, self.pos.y
 	local maxX, maxY = minX + self.size.w, minY + self.size.h
 
-	return x <= maxX and x >= minX and y <= maxY and y >= minY
+	return x - range <= maxX and x + range >= minX and y - range <= maxY and y + range >= minY
+end
+
+function HUDELEMENT:IsInPos(x, y)
+	return self:IsInRange(x, y)
 end
 
 function HUDELEMENT:DrawSize()
@@ -103,9 +109,18 @@ function HUDELEMENT:DrawSize()
 
 	surface.SetDrawColor(255, 0, 0, 255)
 	surface.DrawLine(x - 1, y - 1, x + w + 1, y - 1) -- top
+	surface.DrawLine(x - 2, y - 2, x + w + 2, y - 2) -- top
+
 	surface.DrawLine(x + w + 1, y - 1, x + w + 1, y + h + 1) -- right
+	surface.DrawLine(x + w + 2, y - 2, x + w + 2, y + h + 2) -- right
+
 	surface.DrawLine(x - 1, y + h + 1, x + w + 1, y + h + 1) -- bottom
+	surface.DrawLine(x - 2, y + h + 2, x + w + 2, y + h + 2) -- bottom
+
 	surface.DrawLine(x - 1, y - 1, x - 1, y + h + 1) -- left
+	surface.DrawLine(x - 2, y - 2, x - 2, y + h + 2) -- left
+
+	draw.DrawText(self.id, "DermaDefault", x + w * 0.5, y + h * 0.5 - 10, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 end
 
 function HUDELEMENT:SetDefaults()
