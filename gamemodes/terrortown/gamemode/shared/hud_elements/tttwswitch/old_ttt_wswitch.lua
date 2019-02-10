@@ -137,12 +137,18 @@ if CLIENT then
 		x = pos.x
 		y = pos.y
 
+		local client = LocalPlayer()
 		local weps = WSWITCH.WeaponCache
 		local count = #weps
-		local h = count * (height + self.margin)
+		local tmp = height + self.margin
+		local h = count * tmp
+		local difH = client.oldWSWeps * tmp
 
-		LocalPlayer().oldWSWeps = count
+		client.oldWSWeps = count
 
+		y = y - (h - difH)
+
+		self:SetPos(x, y)
 		self:SetSize(width, h)
 
 		self.BaseClass:PerformLayout()
