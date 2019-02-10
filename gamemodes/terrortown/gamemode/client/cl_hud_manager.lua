@@ -28,6 +28,30 @@ local function CreateEditOptions(x, y)
 		menu:Remove()
 	end
 
+	menu:AddSpacer()
+
+	local editReset = menu:AddOption("Reset")
+	editReset.OnMousePressed = function(slf, keyCode)
+		local hud = huds.GetStored(HUDManager.GetHUD())
+		if hud then
+			for _, elem in ipairs(hud:GetHUDElements()) do
+				local el = hudelements.GetStored(elem)
+				if el then
+					el:Reset()
+				end
+			end
+		end
+
+		menu:Remove()
+	end
+
+	local editClose = menu:AddOption("Close")
+	editClose.OnMousePressed = function(slf, keyCode)
+		HUDManager.EditHUD(false)
+
+		menu:Remove()
+	end
+
 	-- Open the menu
 	menu:Open()
 
@@ -92,6 +116,14 @@ local function EditLocalHUD()
 				local nw = x - difW
 				local nh = y - difH
 
+				if nw < 1 then
+					nw = 1
+				end
+
+				if nh < 1 then
+					nh = 1
+				end
+
 				elem:SetSize(nw, nh)
 			end
 
@@ -130,62 +162,10 @@ function HUDManager.EditHUD(bool)
 			client.hudswitcher:Hide()
 		end
 
-		local helper = vgui.Create("DFrame")
-		helper:SetSize(100, 80)
-		helper:Center()
-		helper:SetTitle("HUD Editor")
-		helper:SetVisible(true)
-		helper:ShowCloseButton(true)
-		helper:SetDeleteOnClose(true)
-
-		helper.OnClose = function(slf)
-			if not slf.forceClosing then
-				HUDManager.EditHUD(false)
-			end
-		end
-
-		local reset = vgui.Create("DButton", helper)
-		reset:SetSize(45, 40)
-		reset:Dock(LEFT)
-		reset:SetText("RESET")
-
-		reset.DoClick = function(slf)
-			local hud = huds.GetStored(HUDManager.GetHUD())
-			if hud then
-				for _, elem in ipairs(hud:GetHUDElements()) do
-					local el = hudelements.GetStored(elem)
-					if el then
-						el:Reset()
-					end
-				end
-			end
-		end
-
-		local close = vgui.Create("DButton", helper)
-		close:SetSize(45, 40)
-		close:Dock(RIGHT)
-		close:SetText("CLOSE")
-
-		close.DoClick = function(slf)
-			if not slf.forceClosing then
-				HUDManager.EditHUD(false)
-			end
-		end
-
-		helper:MakePopup()
-
-		client.hudeditorHelp = helper
-
 		hook.Add("Think", "TTT2EditHUD", EditLocalHUD)
 	else
 		if IsValid(client.hudswitcher) then
 			client.hudswitcher:Show()
-		end
-
-		if IsValid(client.hudeditorHelp) then
-			client.hudeditorHelp.forceClosing = true
-
-			client.hudeditorHelp:Remove()
 		end
 
 		hook.Remove("Think", "TTT2EditHUD")

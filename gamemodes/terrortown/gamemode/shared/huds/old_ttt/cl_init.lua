@@ -24,6 +24,8 @@ function DrawOldRoleIcon(x, y, w, h, icon, color)
 	surface.DrawTexturedRect(x, y, w, h)
 end
 
+HUD.disableHUDEditor = true
+
 function HUD:Initialize()
 	self:ForceHUDElement("old_ttt_info")
 	self:ForceHUDElement("old_ttt_spec")
