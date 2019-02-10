@@ -48,6 +48,12 @@ if CLIENT then
 	function HUDELEMENT:Reset()
 		self.basecolor = defaultColor
 
-		self.BaseClass:Reset()
+		local defaultPos = self.defaults.pos
+		local defaultSize = self.defaults.size
+
+		self:SetPos(defaultPos.x, defaultPos.y)
+		self:SetSize(defaultSize.w, defaultSize.h)
+
+		self:PerformLayout()
 	end
 end
