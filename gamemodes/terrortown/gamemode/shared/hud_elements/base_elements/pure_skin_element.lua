@@ -36,5 +36,10 @@ if CLIENT then
 		[ROUND_POST] = "round_post"
 	}
 
+	HUDELEMENT.savingKeys = {
+		pos = {typ = "pos"},
+		size = {typ = "size"}
+	}
+
 	HUDELEMENT.basecolor = Color(49, 71, 94)
 end

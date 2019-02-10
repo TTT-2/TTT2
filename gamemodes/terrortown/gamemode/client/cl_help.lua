@@ -267,7 +267,7 @@ function HELPSCRN:Show()
 		ShowCredits()
 	end
 
-	-- HUD edit button
+	-- HUD switcher button
 	local hudSwitchButton = vgui.Create("DButton")
 	hudSwitchButton:SetText("HUD Switcher")
 
@@ -275,16 +275,6 @@ function HELPSCRN:Show()
 
 	hudSwitchButton.DoClick = function(btn)
 		HUDManager.ShowHUDSwitcher(true)
-	end
-
-	-- HUD edit button
-	local hudEditorButton = vgui.Create("DButton")
-	hudEditorButton:SetText("HUD Editor")
-
-	ttt2_panel:AddItem(hudEditorButton)
-
-	hudEditorButton.DoClick = function(btn)
-		HUDManager.EditHUD(true)
 	end
 
 	--- binding area

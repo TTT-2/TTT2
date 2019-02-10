@@ -26,18 +26,30 @@ function SQL.GetParsedData(key, data, res)
 			x = tonumber(res[key .. "_x"]),
 			y = tonumber(res[key .. "_y"])
 		}
+
+		if not val.x or not val.y then
+			val = nil
+		end
 	elseif data.typ == "size" then
 		val = {
 			w = tonumber(res[key .. "_w"]),
 			h = tonumber(res[key .. "_h"])
 		}
+
+		if not val.w or not val.h then
+			val = nil
+		end
 	elseif data.typ == "color" then
-		val = {
-			r = tonumber(res[key .. "_r"]),
-			g = tonumber(res[key .. "_g"]),
-			b = tonumber(res[key .. "_b"]),
-			a = tonumber(res[key .. "_a"])
-		}
+		val = Color(
+			tonumber(res[key .. "_r"]),
+			tonumber(res[key .. "_g"]),
+			tonumber(res[key .. "_b"]),
+			tonumber(res[key .. "_a"] or 255)
+		)
+
+		if not val.r or not val.g or not val.b then
+			val = nil
+		end
 	end
 
 	return val
@@ -167,7 +179,15 @@ function SQL.CreateSqlTable(tableName, keys)
 			end
 
 			if not exists then
-				sql.Query("ALTER TABLE " .. tableName .. " ADD " .. SQL.ParseDataString(key, data))
+				local res = SQL.ParseDataString(key, data)
+
+				if not res then continue end
+
+				local resArr = string.Explode(",", res)
+
+				for _, query in ipairs(resArr) do
+					sql.Query("ALTER TABLE " .. tableName .. " ADD " .. query)
+				end
 			end
 		end
 	end
@@ -176,15 +196,27 @@ function SQL.CreateSqlTable(tableName, keys)
 end
 
 function SQL.Init(tableName, name, tbl, keys)
-	return sql.Query(SQL.BuildInsertString(tableName, name, tbl, keys))
+	if not keys or table.Count(keys) == 0 then return end
+
+	local query = SQL.BuildInsertString(tableName, name, tbl, keys)
+
+	if not query then return end
+
+	return sql.Query(query)
 end
 
 function SQL.Save(tableName, name, tbl, keys)
-	return sql.Query(SQL.BuildUpdateString(tableName, name, tbl, keys))
+	if not keys or table.Count(keys) == 0 then return end
+
+	local query = SQL.BuildUpdateString(tableName, name, tbl, keys)
+
+	if not query then return end
+
+	return sql.Query(query)
 end
 
 function SQL.Load(tableName, name, tbl, keys)
-	if not keys then return end
+	if not keys or table.Count(keys) == 0 then return end
 
 	local result = sql.Query("SELECT * FROM " .. tableName .. " WHERE name = '" .. name .. "'")
 

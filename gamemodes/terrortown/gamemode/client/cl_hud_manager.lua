@@ -187,6 +187,93 @@ function HUDManager.SetHUD(name)
 	net.SendToServer()
 end
 
+function HUDManager.AddHUDSettings(panel)
+	if not IsValid(panel) then return end
+
+	local hud = HUDManager.GetHUD()
+
+	local hudEl = huds.GetStored(hud)
+	if not hudEl then return end
+
+	local tmp = hudEl.savingKeys or {}
+	tmp.el_pos = {typ = "el_pos", desc = "Change element's position"}
+
+	for key, data in pairs(tmp) do
+		local el
+		local container
+
+		if data.typ == "el_pos" then -- HUD edit button
+			el = vgui.Create("DButton")
+			el:SetText("Position Editor")
+			el:SizeToContents()
+
+			el.DoClick = function(btn)
+				HUDManager.EditHUD(true)
+			end
+		elseif data.typ == "color" then
+			el = vgui.Create("DColorMixer")
+			el:SetSize(267, 186)
+
+			if hudEl[key] then
+				el:SetColor(hudEl[key])
+			end
+
+			function el:ValueChanged(col)
+				hudEl[key] = col
+
+				if isfunction(data.OnChange) then
+					data.OnChange(hudEl, col)
+				end
+			end
+		end
+
+		if el then
+			local add = false
+
+			if not container then
+				container = vgui.Create("DPanel")
+				add = true
+			end
+
+			local label = vgui.Create("DLabel", container)
+			label:SetText((data.desc or key) .. ":")
+			label:SetTextColor(COLOR_BLACK)
+			label:SetContentAlignment(5) -- center
+			label:SizeToContents()
+			label:DockMargin(20, 0, 0, 0)
+			label:DockPadding(10, 0, 10, 0)
+			label:Dock(LEFT)
+
+			if add then
+				el:SetParent(container)
+			end
+
+			el:DockPadding(10, 0, 10, 0)
+			el:DockMargin(20, 0, 0, 0)
+			el:Dock(LEFT)
+
+			local w, h = el:GetSize()
+			local lw, lh = label:GetSize()
+
+			w = w + 10
+			h = h + 10
+			lw = lw + 10
+			lh = lh + 10
+
+			if w < lw then
+				w = lw
+			end
+
+			h = h + lh
+
+			container:SetSize(w, h)
+			container:SetParent(panel)
+			container:DockPadding(0, 10, 0, 10)
+			container:Dock(TOP)
+		end
+	end
+end
+
 function HUDManager.DrawHUD()
 	local hud = huds.GetStored(HUDManager.GetHUD())
 
@@ -293,4 +380,15 @@ net.Receive("TTT2ReceiveHUD", function()
 
 	-- Initialize elements
 	hudEl:Initialize()
+
+	-- load and initialize all HUD data from database
+	if SQL.CreateSqlTable("ttt2_huds", hudEl.savingKeys) then
+		local loaded = SQL.Load("ttt2_huds", hudEl.id, hudEl, hudEl.savingKeys)
+
+		if not loaded then
+			SQL.Init("ttt2_huds", hudEl.id, hudEl, hudEl.savingKeys)
+		end
+	end
+
+	hudEl:Loaded()
 end)

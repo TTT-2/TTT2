@@ -7,8 +7,21 @@ surface.CreateFont("PureSkinWep", {font = "Trebuchet24", size = 20, weight = 160
 
 HUD.previewImage = Material("vgui/ttt/huds/pure_skin/preview.png")
 HUD.savingKeys = {
-	-- basecolor TODO
+	basecolor = {
+		typ = "color",
+		desc = "BaseColor",
+		OnChange = function(slf, col)
+			for _, elem in ipairs(slf:GetHUDElements()) do
+				local el = hudelements.GetStored(elem)
+				if el then
+					el.basecolor = col
+				end
+			end
+		end
+	}
 }
+
+HUD.basecolor = Color(49, 71, 94)
 
 function HUD:Initialize()
 	self:ForceHUDElement("pure_skin_playerinfo")
@@ -19,6 +32,15 @@ function HUD:Initialize()
 
 	-- important to call the base initialize, to set default values for all elements
 	self.BaseClass:Initialize()
+end
+
+function HUD:Loaded()
+	for _, elem in ipairs(self:GetHUDElements()) do
+		local el = hudelements.GetStored(elem)
+		if el then
+			el.basecolor = self.basecolor
+		end
+	end
 end
 
 -- Voice overriding

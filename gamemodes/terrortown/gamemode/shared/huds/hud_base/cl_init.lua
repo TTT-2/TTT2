@@ -6,6 +6,8 @@ HUD.hiddenElements = {}
 
 HUD.previewImage = Material("vgui/ttt/score_logo_2")
 
+HUD.savingKeys = {}
+
 function HUD:ForceHUDElement(elementID)
 	local elem = hudelements.GetStored(elementID)
 
@@ -42,17 +44,6 @@ function HUD:PerformLayout()
 end
 
 function HUD:Initialize()
-	print("Called HUD", self.id or "?")
-
-	-- load and initialize all HUD data from database
-	if self.savingKeys and SQL.CreateSqlTable("ttt2_huds", self.savingKeys) then
-		local loaded = SQL.Load("ttt2_huds", self.id, self, self.savingKeys)
-
-		if not loaded then
-			SQL.Init("ttt2_huds", self.id, self, self.savingKeys)
-		end
-	end
-
 	-- Use this method to set the elements default positions etc
 	-- Initialize elements default values
 	for _, v in ipairs(self:GetHUDElements()) do
@@ -110,4 +101,8 @@ function HUD:GetHUDElementByType(typ)
 	if allelems then
 		return allelems
 	end
+end
+
+function HUD:Loaded()
+
 end

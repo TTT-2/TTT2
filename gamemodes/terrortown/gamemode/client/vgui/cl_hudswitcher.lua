@@ -5,9 +5,11 @@ AccessorFunc(PANEL, "m_bBorder", "Border")
 AccessorFunc(PANEL, "m_Color", "Color")
 
 function PANEL:Init()
+	local currentHUD = HUDManager.GetHUD()
+
 	self:SetSize(ScrW() * 0.8, ScrH() * 0.8)
 	self:Center()
-	self:SetTitle("HUDSwitcher")
+	self:SetTitle("HUDSwitcher - " .. currentHUD)
 	self:SetVisible(true)
 	self:ShowCloseButton(true)
 	self:SetMouseInputEnabled(true)
@@ -28,8 +30,6 @@ function PANEL:Init()
 
 	end
 
-	local currentHUD = HUDManager.GetHUD()
-
 	for _, hud in ipairs(huds.GetList()) do
 		if hud.id == "hud_base" then continue end
 
@@ -37,8 +37,17 @@ function PANEL:Init()
 		panel:Dock(FILL)
 
 		panel.Paint = function(slf, w, h)
-			draw.RoundedBox(4, 0, 0, w, h, Color(0, 128, 255))
-			draw.DrawText(hud.id, "DermaDefault", w * 0.5, h * 0.5, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.RoundedBox(4, 0, 0, w, h, Color(255, 255, 255))
+
+			draw.DrawText(hud.id, "DermaDefault", w * 0.5, 10, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		end
+
+		HUDManager.AddHUDSettings(panel)
+
+		panel.OnRemove = function(slf)
+			if hud.id then
+				SQL.Save("ttt2_huds", hud.id, hud, hud.savingKeys)
+			end
 		end
 
 		local leftBtn = sheet:AddSheet("", panel).Button
@@ -50,16 +59,19 @@ function PANEL:Init()
 			if hud.id == HUDManager.GetHUD() then
 				surface.SetDrawColor(255, 255, 255, 255)
 			else
-				surface.SetDrawColor(255, 255, 255, 100)
+				surface.SetDrawColor(255, 255, 255, 125)
 			end
 
 			surface.DrawTexturedRect(0, 0, w, h)
 		end
 
+		local mainPanel = self
+
 		local oldClick = leftBtn.DoClick
 		leftBtn.DoClick = function(slf)
 			oldClick(slf)
 
+			mainPanel:SetTitle("HUD Switcher - " .. hud.id)
 			HUDManager.SetHUD(hud.id)
 		end
 
