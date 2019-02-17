@@ -158,3 +158,72 @@ function GM:TTTPlayerColor(model)
 	-- No coloring
 	return COLOR_WHITE
 end
+
+-- Drowning and such
+local tm, ply, plys
+
+function GM:Tick()
+	local client = CLIENT and LocalPlayer()
+
+	-- three cheers for micro-optimizations
+	plys = client and {client} or player.GetAll()
+
+	for i = 1, #plys do
+		ply = plys[i]
+		tm = ply:Team()
+
+		if tm == TEAM_TERROR and ply:Alive() then
+			if ply:WaterLevel() == 3 then -- Drowning
+				if SERVER and ply:IsOnFire() then
+					ply:Extinguish()
+				end
+
+				local drowningTime = ply.drowningTime or 8
+
+				if ply.drowning then
+					ply.drowningProgress = (ply.drowning - CurTime()) * (1 / drowningTime)
+
+					if ply.drowning < CurTime() then
+						if SERVER then
+							local dmginfo = DamageInfo()
+
+							dmginfo:SetDamage(15)
+							dmginfo:SetDamageType(DMG_DROWN)
+							dmginfo:SetAttacker(game.GetWorld())
+							dmginfo:SetInflictor(game.GetWorld())
+							dmginfo:SetDamageForce(Vector(0, 0, 1))
+
+							ply:TakeDamageInfo(dmginfo)
+						end
+
+						-- have started drowning properly
+						ply:StartDrowning(true, CurTime() + 1, drowningTime)
+					end
+				else
+					ply:StartDrowning(true, CurTime() + drowningTime, drowningTime)
+				end
+			else
+				ply:StartDrowning(false)
+			end
+
+			-- Run DNA Scanner think also when it is not deployed
+			if SERVER and IsValid(ply.scanner_weapon) and wep ~= ply.scanner_weapon then
+				ply.scanner_weapon:Think()
+			end
+		elseif SERVER and tm == TEAM_SPEC then
+			if ply.propspec then
+				PROPSPEC.Recharge(ply)
+
+				if IsValid(ply:GetObserverTarget()) then
+					ply:SetPos(ply:GetObserverTarget():GetPos())
+				end
+			end
+
+			-- if spectators are alive, ie. they picked spectator mode, then
+			-- DeathThink doesn't run, so we have to SpecThink here
+			if ply:Alive() then
+				self:SpectatorThink(ply)
+			end
+		end
+	end
+end

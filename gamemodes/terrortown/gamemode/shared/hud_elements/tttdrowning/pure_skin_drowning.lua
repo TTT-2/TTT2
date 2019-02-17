@@ -29,9 +29,7 @@ if CLIENT then
 	function HUDELEMENT:Draw()
 		local client = LocalPlayer()
 
-		client.drowningProgress = client:GetNWFloat("drowningProgress", -1)
-
-		if not client:Alive() or client.drowningProgress == -1 then return end
+		if not client.drowningProgress or not client:Alive() or client.drowningProgress == -1 then return end
 
 		-- draw bg and shadow
 		self:DrawBg(x, y, w, h, self.basecolor)
