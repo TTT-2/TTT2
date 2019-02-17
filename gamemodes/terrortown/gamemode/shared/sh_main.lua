@@ -197,10 +197,10 @@ function GM:Tick()
 						ply:TakeDamageInfo(dmginfo)
 
 						-- have started drowning properly
-						ply:StartDrowning(true, CurTime() + 1, drowningTime)
+						ply:StartDrowning(true, 1, drowningTime)
 					end
 				elseif SERVER then
-					ply:StartDrowning(true, CurTime() + drowningTime, drowningTime)
+					ply:StartDrowning(true, drowningTime, drowningTime)
 				end
 			elseif SERVER then
 				ply:StartDrowning(false)
