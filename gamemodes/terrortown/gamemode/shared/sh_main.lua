@@ -15,7 +15,7 @@ hook.Add("TTTInitPostEntity", "InitTTT2OldItems", function()
 			if not v.avoidTTT2 then
 				local name = v.ClassName or v.name or WEPS.GetClass(v)
 				if name then
-					local item = items.GetStored(name)
+					local item = items.GetStored(GetEquipmentFileName(name))
 					if not item then
 						local ITEMDATA = table.Copy(v)
 						ITEMDATA.oldId = v.id
@@ -43,7 +43,7 @@ hook.Add("TTTInitPostEntity", "InitTTT2OldItems", function()
 						-- don't add icon and desc to the search panel if it's not intended
 						ITEMDATA.noCorpseSearch = ITEMDATA.noCorpseSearch or true
 
-						items.Register(ITEMDATA, name)
+						items.Register(ITEMDATA, GetEquipmentFileName(name))
 
 						timer.Simple(0, function()
 							print("[TTT2][INFO] Automatically converted not adjusted ITEM", name, ITEMDATA.oldId)
@@ -59,7 +59,6 @@ hook.Add("TTTInitPostEntity", "InitTTT2OldItems", function()
 			end
 		end
 	end
-
 	items.OnLoaded() -- init baseclasses
 end)
 
