@@ -517,7 +517,7 @@ function plymeta:StartDrowning(bool, time, duration)
 		-- will start drowning soon
 		self.drowning = CurTime() + time
 		self.drowningTime = duration
-		self.drowningProgress = time * (1 / duration)
+		self.drowningProgress = math.max(0, time * (1 / duration))
 	else
 		self.drowning = nil
 		self.drowningTime = nil

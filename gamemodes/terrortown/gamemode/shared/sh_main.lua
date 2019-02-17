@@ -183,7 +183,7 @@ function GM:Tick()
 				local drowningTime = ply.drowningTime or 8
 
 				if ply.drowning then
-					ply.drowningProgress = (ply.drowning - CurTime()) * (1 / drowningTime)
+					ply.drowningProgress = math.max(0, (ply.drowning - CurTime()) * (1 / drowningTime))
 
 					if SERVER and ply.drowning < CurTime() then
 						local dmginfo = DamageInfo()
