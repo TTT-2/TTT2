@@ -541,6 +541,6 @@ if CLIENT then
 	net.Receive("StartDrowning", function()
 		local bool = net.ReadBool()
 
-		LocalPlayer():StartDrowning(bool, bool and (CurTime() + net.ReadUInt(16)), bool and net.ReadUInt(16))
+		LocalPlayer():StartDrowning(bool, bool and net.ReadUInt(16), bool and net.ReadUInt(16))
 	end)
 end
