@@ -18,7 +18,7 @@ ORDERED_SLOT_TABLE = {
 	[WEAPON_EXTRA] = "ttt2_max_extra_slots"
 }
 
-local function MakeKindValid(kind)
+function MakeKindValid(kind)
 	if kind > WEAPON_EXTRA or kind < WEAPON_MELEE then
 		return WEAPON_EXTRA
 	else
