@@ -516,12 +516,12 @@ function plymeta:StartDrowning(bool, startTime, duration)
 	if bool then
 		-- will start drowning soon
 		self.drowning = startTime
-		self.drowningProgress = 1
 		self.drowningTime = duration
+		self.drowningProgress = (startTime - CurTime()) * (1 / duration)
 	else
-		self.drowningProgress = -1
 		self.drowning = nil
 		self.drowningTime = nil
+		self.drowningProgress = -1
 	end
 
 	if SERVER then
@@ -529,7 +529,7 @@ function plymeta:StartDrowning(bool, startTime, duration)
 		net.WriteBool(bool)
 
 		if bool then
-			net.WriteUInt(startTime + 1, 32)
+			net.WriteUInt(startTime, 32)
 		end
 
 		net.Send(self)
