@@ -287,7 +287,14 @@ function plymeta:CanCarryWeapon(wep)
 	if not wep or not wep.Kind then
 		return false
 	end
-
+	
+	--appeareantly TTT can't handle two times the same weapon
+	for k, v in pairs(self:GetWeapons()) do
+		if WEPS.GetClass(wep) == v:GetClass() then
+			return false
+		end
+	end
+	
 	return self:CanCarryType(wep.Kind)
 end
 
@@ -295,14 +302,50 @@ function plymeta:CanCarryType(t)
 	if not t then
 		return false
 	end
+	
+	return InventorySlotFree(self, t)
+end
 
-	for _, w in pairs(self:GetWeapons()) do
-		if w.Kind and w.Kind == t then
-			return false
-		end
+function plymeta:GetInventory()
+	CleanupInventoryIfDirty(self)
+	
+	return self.inventory
+end
+
+function plymeta:GetWeaponsOnSlot(slot)
+	if slot > WEAPON_EXTRA then
+		return
 	end
+	
+	return self:GetInventory()[slot]
+end
 
-	return true
+function plymeta:GetMeleeWeapons()
+	return self:GetWeaponsOnSlot(WEAPON_MELEE)
+end
+
+function plymeta:GetPrimaryWeapons()
+	return self:GetWeaponsOnSlot(WEAPON_HEAVY)
+end
+
+function plymeta:GetSecondaryWeapons()
+	return self:GetWeaponsOnSlot(WEAPON_PISTOL)
+end
+
+function plymeta:GetNades()
+	return self:GetWeaponsOnSlot(WEAPON_NADE)
+end
+
+function plymeta:GetCarryWeapons()
+	return self:GetWeaponsOnSlot(WEAPON_CARRY)
+end
+
+function plymeta:GetSpecialWeapons()
+	return self:GetWeaponsOnSlot(WEAPON_SPECIAL)
+end
+
+function plymeta:GetExtraWeapons()
+	return self:GetWeaponsOnSlot(WEAPON_EXTRA)
 end
 
 function plymeta:IsDeadTerror()

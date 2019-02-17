@@ -11,6 +11,7 @@ ttt_include("sv_shopeditor_sql")
 ttt_include("sv_shopeditor")
 ttt_include("sv_karma")
 ttt_include("sv_entity")
+ttt_include("sv_inventory")
 
 ttt_include("sh_scoring")
 

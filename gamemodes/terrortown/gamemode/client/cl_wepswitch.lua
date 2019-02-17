@@ -98,7 +98,7 @@ function WSWITCH:DrawWeapon(x, y, c, wep)
 	-- Slot
 	local _tmp = {x + 4, y}
 	local spec = {
-		text = wep.Slot + 1,
+		text = MakeKindValid(wep.Kind),
 		font = "Trebuchet22",
 		pos = _tmp,
 		yalign = TEXT_ALIGN_CENTER,
@@ -158,29 +158,22 @@ function WSWITCH:Draw(client)
 	end
 end
 
-local function SlotSort(a, b)
-	return a and b and a.Slot and b.Slot and a.Slot < b.Slot
-end
-
-local function CopyVals(src, dest)
-	table.Empty(dest)
-
-	for _, v in pairs(src) do
-		if IsValid(v) then
-			table.insert(dest, v)
-		end
+local function InsertIfValid(dest, wep)
+	if IsValid(wep) then
+		table.insert(dest, wep)
 	end
 end
 
 function WSWITCH:UpdateWeaponCache()
-	-- GetWeapons does not always return a proper numeric table it seems
-	--	self.WeaponCache = LocalPlayer():GetWeapons()
-	-- So copy over the weapon refs
 	self.WeaponCache = {}
-
-	CopyVals(LocalPlayer():GetWeapons(), self.WeaponCache)
-
-	table.sort(self.WeaponCache, SlotSort)
+	
+	local inventory = LocalPlayer():GetInventory()
+	
+	for kind, convar in ipairs(ORDERED_SLOT_TABLE) do
+		for k,wep in pairs(inventory[kind]) do
+			InsertIfValid(self.WeaponCache, wep)
+		end
+	end
 end
 
 function WSWITCH:SetSelected(idx)
@@ -236,13 +229,13 @@ function WSWITCH:SelectSlot(slot)
 	self:Enable()
 	self:UpdateWeaponCache()
 
-	slot = slot - 1
+	--slot = slot - 1
 
 	-- find which idx in the weapon table has the slot we want
 	local toselect = self.Selected
 
 	for k, w in ipairs(self.WeaponCache) do
-		if w.Slot == slot then
+		if MakeKindValid(w.Kind) == slot then
 			toselect = k
 
 			break
@@ -326,14 +319,14 @@ end
 local function QuickSlot(ply, cmd, args)
 	if not IsValid(ply) or not args or #args ~= 1 then return end
 
-	local slot = tonumber(args[1])
+	local slot = tonumber(args)
 
 	if not slot then return end
 
 	local wep = ply:GetActiveWeapon()
 
 	if IsValid(wep) then
-		if wep.Slot == slot - 1 then
+		if MakeKindValid(wep.Kind) == slot - 1 then
 			RunConsoleCommand("lastinv")
 		else
 			WSWITCH:SelectAndConfirm(slot)

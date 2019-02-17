@@ -1,5 +1,9 @@
 ttt_include("sh_weaponry") -- inits WEPS tbl
 
+util.AddNetworkString("TTT2CleanupInventory")
+util.AddNetworkString("TTT2AddWeaponToInventory")
+util.AddNetworkString("TTT2RemoveWeaponFromInventory")
+
 ---- Weapon system, pickup limits, etc
 local ipairs = ipairs
 local IsValid = IsValid
@@ -303,6 +307,8 @@ end
 -- Note that this is called both when a player spawns and when a round starts
 function GM:PlayerLoadout(ply)
 	if IsValid(ply) and not ply:IsSpec() then
+		CleanupInventoryAndNotifyClient(ply)
+	
 		ResetLoadoutItems(ply)
 
 		-- give default items
@@ -720,12 +726,28 @@ end
 concommand.Add("ttt_transfer_credits", TransferCredits)
 
 -- Protect against non-TTT weapons that may break the HUD
-function GM:WeaponEquip(wep)
+function GM:WeaponEquip(wep, ply)
 	if IsValid(wep) and not wep.Kind then
 		-- only remove if they lack critical stuff
 		wep:Remove()
 
 		ErrorNoHalt("Equipped weapon " .. wep:GetClass() .. " is not compatible with TTT\n")
+	end
+	
+	if IsValid(ply) and wep.Kind then
+		AddWeaponToInventoryAndNotifyClient(ply, wep)
+	end
+end
+
+function GM:PlayerDroppedWeapon(ply, wep)
+	if IsValid(wep) and IsValid(ply) and wep.Kind then
+		RemoveWeaponFromInventoryAndNotifyClient(ply, wep)
+	end
+end
+
+function GM:EntityRemoved(ent)
+	if IsValid(ent) and IsValid(ent:GetOwner()) and ent:IsWeapon() and ent.Kind then
+		RemoveWeaponFromInventoryAndNotifyClient(ent:GetOwner(), ent)
 	end
 end
 
