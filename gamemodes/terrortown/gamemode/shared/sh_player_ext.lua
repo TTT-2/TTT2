@@ -529,7 +529,7 @@ function plymeta:StartDrowning(bool, startTime, duration)
 		net.WriteBool(bool)
 
 		if bool then
-			net.WriteUInt(startTime, 32)
+			net.WriteUInt(startTime + 1, 32)
 		end
 
 		net.Send(self)
