@@ -10,6 +10,7 @@ if CLIENT then
 	local h = 146 -- height
 	local pad = 14 -- padding
 	local lpw = 44 -- left panel width
+	local sri_text_width_padding = 8 --secondary role information padding (needed for size calculations)
 
 	local secondaryRoleInformationFunc = nil
 
@@ -107,20 +108,51 @@ if CLIENT then
 			else
 				text = L[self.roundstate_string[round_state]]
 			end
-
-			self:ShadowedText(string.upper(text), "PureSkinRole", nx, ry, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			
+			text = "NECROMANCER"
+			
+			--calculate the scale multplier for role text
+			surface.SetFont("PureSkinRole")
+			local role_text_width = surface.GetTextSize(string.upper(text))
+			local sri_text_width = 0
+			--if calive and cactive and secondaryRoleInformationFunc then
+				--local secInfoTbl = secondaryRoleInformationFunc()
+				secInfoTbl = {}
+				secInfoTbl.text = "RESISTANCE"
+				surface.SetFont("PureSkinBar")
+				sri_text_width = surface.GetTextSize(string.upper(secInfoTbl.text))
+			--end		
+			local role_scale_multiplier = (w - sri_text_width - lpw - 2 * pad - 3 * sri_text_width_padding) / role_text_width 
+			role_scale_multiplier = math.Clamp(role_scale_multiplier, 0.4, 1.0)
+			
+			--create scaling matrix for the text
+			local mat = Matrix()
+			mat:Translate( Vector( nx, ry ) )
+			mat:Scale( Vector( role_scale_multiplier, role_scale_multiplier, role_scale_multiplier ) )
+			mat:Translate( -Vector( nx, ry ) )
+			
+			render.PushFilterMag( TEXFILTER.ANISOTROPIC )
+			render.PushFilterMin( TEXFILTER.ANISOTROPIC )
+			cam.PushModelMatrix( mat )
+				self:ShadowedText(string.upper(text), "PureSkinRole", nx, ry, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)	
+			cam.PopModelMatrix( mat )
+			render.PopFilterMag()
+			render.PopFilterMin()
 		end
 
 		-- player informations
 		if calive then
 
 			-- draw secondary role information
-			if cactive and secondaryRoleInformationFunc then
-				local secInfoTbl = secondaryRoleInformationFunc()
+			--if cactive and secondaryRoleInformationFunc then
+				--local secInfoTbl = secondaryRoleInformationFunc()
+				secInfoTbl = {}
+				secInfoTbl.text = "RESISTANCE"
+				secInfoTbl.color = Color(100, 100, 200, 255)
 
 				if secInfoTbl and secInfoTbl.color and secInfoTbl.text then
-					local sri_text_width = surface.GetTextSize(secInfoTbl.text)
-					local sri_text_width_padding = 8
+					surface.SetFont("PureSkinBar")
+					local sri_text_width = surface.GetTextSize(string.upper(secInfoTbl.text))
 					local sri_margin_top_bottom = 8
 					local sri_width = sri_text_width + sri_text_width_padding * 2
 					local sri_xoffset = w2 - sri_width - pad
@@ -132,12 +164,12 @@ if CLIENT then
 					surface.SetDrawColor(clr(secInfoTbl.color))
 					surface.DrawRect(nx2, ny, sri_width, nh)
 
-					self:ShadowedText(secInfoTbl.text, "PureSkinBar", nx2 + sri_width * 0.5, ry, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					self:ShadowedText(string.upper(secInfoTbl.text), "PureSkinBar", nx2 + sri_width * 0.5, ry, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
 					-- draw lines around the element
 					self:DrawLines(nx2, ny, sri_width, nh)
 				end
-			end
+			--end
 
 			-- draw dark bottom overlay
 			surface.SetDrawColor(0, 0, 0, 90)

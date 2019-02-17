@@ -51,7 +51,7 @@ if CLIENT then
 		local _tmp = {x + self.lpw * 0.5, y + height * 0.5}
 		local spec = {
 			text = wep.Slot + 1,
-			font = "PureSkinWep",
+			font = "PureSkinWepNum",
 			pos = _tmp,
 			xalign = TEXT_ALIGN_CENTER,
 			yalign = TEXT_ALIGN_CENTER,

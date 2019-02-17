@@ -1,9 +1,10 @@
 local surface = surface
 
 -- Fonts
-surface.CreateFont("PureSkinRole", {font = "Trebuchet24", size = 30, weight = 800})
-surface.CreateFont("PureSkinBar", {font = "Trebuchet24", size = 22, weight = 1500})
-surface.CreateFont("PureSkinWep", {font = "Trebuchet24", size = 21, weight = 1500})
+surface.CreateFont("PureSkinRole", {font = "Trebuchet24", size = 30, weight = 700})
+surface.CreateFont("PureSkinBar", {font = "Trebuchet24", size = 21, weight = 1000})
+surface.CreateFont("PureSkinWep", {font = "Trebuchet24", size = 21, weight = 1000})
+surface.CreateFont("PureSkinWepNum", {font = "Trebuchet24", size = 21, weight = 700})
 
 local defaultColor = Color(49, 71, 94)
 
