@@ -226,4 +226,15 @@ function GM:Tick()
 			end
 		end
 	end
+
+	if CLIENT then
+		if IsValid(client) then
+			if client:Alive() and client:Team() ~= TEAM_SPEC then
+				WSWITCH:Think()
+				RADIO:StoreTarget()
+			end
+
+			VOICE.Tick()
+		end
+	end
 end
