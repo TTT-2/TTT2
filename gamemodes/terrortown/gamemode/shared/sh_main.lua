@@ -185,26 +185,24 @@ function GM:Tick()
 				if ply.drowning then
 					ply.drowningProgress = (ply.drowning - CurTime()) * (1 / drowningTime)
 
-					if ply.drowning < CurTime() then
-						if SERVER then
-							local dmginfo = DamageInfo()
+					if SERVER and ply.drowning < CurTime() then
+						local dmginfo = DamageInfo()
 
-							dmginfo:SetDamage(15)
-							dmginfo:SetDamageType(DMG_DROWN)
-							dmginfo:SetAttacker(game.GetWorld())
-							dmginfo:SetInflictor(game.GetWorld())
-							dmginfo:SetDamageForce(Vector(0, 0, 1))
+						dmginfo:SetDamage(15)
+						dmginfo:SetDamageType(DMG_DROWN)
+						dmginfo:SetAttacker(game.GetWorld())
+						dmginfo:SetInflictor(game.GetWorld())
+						dmginfo:SetDamageForce(Vector(0, 0, 1))
 
-							ply:TakeDamageInfo(dmginfo)
-						end
+						ply:TakeDamageInfo(dmginfo)
 
 						-- have started drowning properly
 						ply:StartDrowning(true, CurTime() + 1, drowningTime)
 					end
-				else
+				elseif SERVER then
 					ply:StartDrowning(true, CurTime() + drowningTime, drowningTime)
 				end
-			else
+			elseif SERVER then
 				ply:StartDrowning(false)
 			end
 
