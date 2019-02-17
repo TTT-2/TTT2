@@ -56,6 +56,8 @@ ttt_include("cl_voice")
 ttt_include("cl_changes")
 ttt_include("cl_credits")
 
+ttt_include("sh_sprint")
+
 function GM:Initialize()
 	MsgN("TTT2 Client initializing...")
 
@@ -76,6 +78,8 @@ function GM:InitPostEntity()
 	MsgN("TTT Client post-init...")
 
 	hook.Run("TTTInitPostEntity")
+
+	HUDManager.SetHUD()
 
 	InitDefaultEquipment()
 
@@ -122,8 +126,6 @@ function GM:InitPostEntity()
 
 	-- initialize fallback shops
 	InitFallbackShops()
-
-	HUDManager.SetHUD(HUDManager.defaultHUD)
 
 	hook.Run("PostInitPostEntity")
 
@@ -334,6 +336,7 @@ function GM:ClearClientState()
 	client.last_id = nil
 	client.radio = nil
 	client.called_corpses = {}
+	client.sprintProgress = 1
 
 	VOICE.InitBattery()
 
@@ -449,23 +452,12 @@ function GM:DrawDeathNotice()
 
 end
 
-function GM:Tick()
-	local client = LocalPlayer()
-
-	if IsValid(client) then
-		if client:Alive() and client:Team() ~= TEAM_SPEC then
-			WSWITCH:Think()
-			RADIO:StoreTarget()
-		end
-
-		VOICE.Tick()
-	end
-end
-
 -- Simple client-based idle checking
 local idle = {ang = nil, pos = nil, mx = 0, my = 0, t = 0}
 
 function CheckIdle()
+	if not GetGlobalBool("ttt_idle", false) then return end
+
 	local client = LocalPlayer()
 
 	if not IsValid(client) then return end
@@ -541,4 +533,38 @@ function GM:OnEntityCreated(ent)
 	end
 
 	return self.BaseClass.OnEntityCreated(self, ent)
+end
+
+-------------------------------------
+-------------------------------------
+-------------------------------------
+
+-- TODO REM
+function DrawHUDElementBg(x, y, w, h, c)
+	surface.SetDrawColor(clr(c))
+	surface.DrawRect(x, y, w, h)
+end
+
+function DrawHUDElementLines(x, y, w, h)
+	-- draw borders
+	-- top, left
+	surface.SetDrawColor(255, 255, 255, 40)
+	surface.DrawLine(x, y, x + w, y)
+	surface.DrawLine(x, y + 1, x, y + h)
+
+	-- top, left
+	surface.SetDrawColor(255, 255, 255, 20)
+	surface.DrawLine(x + 1, y + 1, x + w, y + 1)
+	surface.DrawLine(x + 1, y + 2, x + 1, y + h)
+
+	-- draw borders
+	-- bottom, right
+	surface.SetDrawColor(0, 0, 0, 125)
+	surface.DrawLine(x, y + h - 1, x + w - 1, y + h - 1)
+	surface.DrawLine(x + w - 1, y, x + w - 1, y + h)
+
+	-- bottom, right
+	surface.SetDrawColor(0, 0, 0, 60)
+	surface.DrawLine(x + 1, y + h - 2, x + w - 2, y + h - 2)
+	surface.DrawLine(x + w - 2, y + 1, x + w - 2, y + h - 1)
 end

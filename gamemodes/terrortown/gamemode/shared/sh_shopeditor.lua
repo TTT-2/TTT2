@@ -17,7 +17,7 @@ function ShopEditor.InitDefaultData(item)
 	if not item then return end
 
 	for key, data in pairs(ShopEditor.savingKeys) do
-		if not item[key] then
+		if item[key] == nil then
 			if data.typ == "number" then
 				item[key] = data.default or 0
 			elseif data.typ == "bool" then

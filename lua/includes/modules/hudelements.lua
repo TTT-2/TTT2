@@ -19,7 +19,7 @@ local function TableInherit(t, base)
 	for k, v in pairs(base) do
 		if t[k] == nil then
 			t[k] = v
-		elseif k ~= "BaseClass" and istable(t[k]) then
+		elseif k ~= "BaseClass" and istable(t[k]) and istable(v[k]) then
 			TableInherit(t[k], v)
 		end
 	end
@@ -216,4 +216,55 @@ function GetTypeElement(type)
 	end
 
 	return
+end
+
+--[[---------------------------------------------------------
+	Name: GetAllTypeElements( type )
+	Desc: Gets all elements matching the type of all the registered HUD elements
+-----------------------------------------------------------]]
+function GetAllTypeElements(type)
+	local retTbl = {}
+
+	for _, v in pairs(HUDElementList) do
+		if v.type and v.type == type then
+			table.insert(retTbl, v)
+		end
+	end
+
+	return retTbl
+end
+
+--[[---------------------------------------------------------
+	Name: RegisterChildRelation( childid, parentid, parent_is_type )
+	Desc: Sets the child relation on all objects that have to be informed / are involved. This can either be a single parent <-> child relation or
+		  a parents <-> child relation, if the parent is a type. This function then will register the childid as a child to all elements with that type.
+		  A parent element is responsible for calling PerformLayout on its child elements!
+		  !! This should be called in the Initialize method !!
+-----------------------------------------------------------]]
+function RegisterChildRelation(childid, parentid, parent_is_type)
+	local child = GetStored(childid)
+	if not child then
+		MsgN("Error: Cannot add child " .. childid .. " to " .. parentid .. ". Child element instance was not found or registered yet!")
+
+		return
+	end
+
+	if not parent_is_type then
+		local parent = GetStored(parentid)
+		if not parent then
+			MsgN("Error: Cannot add child " .. childid .. " to " .. parentid .. ". Parent element was not found or registered yet!")
+
+			return
+		end
+
+		parent:AddChild(childid)
+	else
+		local elems = GetAllTypeElements(parentid)
+
+		for elem in ipairs(elems) do
+			elem:AddChild(childid)
+		end
+	end
+
+	child:SetParent(parentid, parent_is_type)
 end

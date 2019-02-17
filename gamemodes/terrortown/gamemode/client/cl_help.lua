@@ -267,6 +267,16 @@ function HELPSCRN:Show()
 		ShowCredits()
 	end
 
+	-- HUD switcher button
+	local hudSwitchButton = vgui.Create("DButton")
+	hudSwitchButton:SetText("HUD Switcher")
+
+	ttt2_panel:AddItem(hudSwitchButton)
+
+	hudSwitchButton.DoClick = function(btn)
+		HUDManager.ShowHUDSwitcher(true)
+	end
+
 	--- binding area
 	local dbindings = vgui.Create("DForm", ttt2_panel)
 	dbindings:SetName("TTT2 Bindings")
@@ -294,7 +304,7 @@ function HELPSCRN:Show()
 			curBinding = num
 		end
 
-		dgui:AddItem(dPlabel, dPBinder)
+		dbindings:AddItem(dPlabel, dPBinder)
 	end
 
 	ttt2_panel:AddItem(dbindings)

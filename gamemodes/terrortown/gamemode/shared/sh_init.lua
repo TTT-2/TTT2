@@ -617,6 +617,7 @@ COLOR_OLIVE = Color(100, 100, 0, 255)
 
 ttt_include("sh_util")
 ttt_include("sh_lang")
+ttt_include("sh_sql")
 ttt_include("sh_hud_manager")
 ttt_include("sh_equip_items")
 

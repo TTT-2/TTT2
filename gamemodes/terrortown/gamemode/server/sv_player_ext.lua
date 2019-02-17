@@ -435,6 +435,9 @@ function plymeta:InitialSpawn()
 	-- Always spawn innocent initially, traitor will be selected later
 	self:ResetStatus()
 
+	-- Always reset sprint
+	self.sprintProgress = 1
+
 	-- Start off with clean, full karma (unless it can and should be loaded)
 	self:InitKarma()
 

@@ -7,7 +7,6 @@ include("terrortown/gamemode/shared/sh_item_module.lua")
 ttt_include("sh_main")
 ttt_include("sh_shopeditor")
 
-ttt_include("sv_shopeditor_sql")
 ttt_include("sv_shopeditor")
 ttt_include("sv_karma")
 ttt_include("sv_entity")
@@ -28,6 +27,8 @@ ttt_include("sh_player_ext")
 
 ttt_include("sv_player_ext")
 ttt_include("sv_player")
+
+ttt_include("sh_sprint")
 
 -- Localize stuff we use often. It's like Lua go-faster stripes.
 local math = math
@@ -85,6 +86,7 @@ CreateConVar("ttt_weapon_spawn_count", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 local round_limit = CreateConVar("ttt_round_limit", "6", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
 local time_limit = CreateConVar("ttt_time_limit_minutes", "75", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
 
+local idle_enabled = CreateConVar("ttt_idle", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 local idle_time = CreateConVar("ttt_idle_limit", "180", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 local voice_drain = CreateConVar("ttt_voice_drain", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
@@ -297,16 +299,16 @@ function GM:InitPostEntity()
 	local itms = items.GetList()
 	local sweps = weapons.GetList()
 
-	-- load and initialize all SWEPS and all items from database
-	if ShopEditor.CreateSqlTable() then
+	-- load and initialize all SWEPs and all ITEMs from database
+	if SQL.CreateSqlTable("ttt2_items", ShopEditor.savingKeys) then
 		for _, eq in ipairs(itms) do
 			ShopEditor.InitDefaultData(eq)
 
 			local name = GetEquipmentFileName(WEPS.GetClass(eq))
-			local loaded, changed = ShopEditor.LoadItem(name, eq)
+			local loaded, changed = SQL.Load("ttt2_items", name, eq, ShopEditor.savingKeys)
 
 			if not loaded then
-				ShopEditor.InitItem(name, eq)
+				SQL.Init("ttt2_items", name, eq, ShopEditor.savingKeys)
 			elseif changed then
 				CHANGED_EQUIPMENT[#CHANGED_EQUIPMENT + 1] = {name, eq}
 			end
@@ -316,10 +318,10 @@ function GM:InitPostEntity()
 			ShopEditor.InitDefaultData(wep)
 
 			local name = GetEquipmentFileName(WEPS.GetClass(wep))
-			local loaded, changed = ShopEditor.LoadItem(name, wep)
+			local loaded, changed = SQL.Load("ttt2_items", name, wep, ShopEditor.savingKeys)
 
 			if not loaded then
-				ShopEditor.InitItem(name, wep)
+				SQL.Init("ttt2_items", name, wep, ShopEditor.savingKeys)
 			elseif changed then
 				CHANGED_EQUIPMENT[#CHANGED_EQUIPMENT + 1] = {name, wep}
 			end
@@ -400,6 +402,7 @@ function GM:SyncGlobals()
 	SetGlobalBool("ttt_highlight_admins", GetConVar("ttt_highlight_admins"):GetBool())
 	SetGlobalBool("ttt_locational_voice", GetConVar("ttt_locational_voice"):GetBool())
 	SetGlobalInt("ttt_idle_limit", idle_time:GetInt())
+	SetGlobalBool("ttt_idle", idle_enabled:GetBool())
 
 	SetGlobalBool("ttt_voice_drain", voice_drain:GetBool())
 	SetGlobalFloat("ttt_voice_drain_normal", voice_drain_normal:GetFloat())
@@ -411,6 +414,8 @@ function GM:SyncGlobals()
 	end
 
 	SetGlobalBool("ttt2_confirm_team", confirm_team:GetBool())
+
+	hook.Run("TTT2SyncGlobals")
 end
 
 function LoadShopsEquipment()

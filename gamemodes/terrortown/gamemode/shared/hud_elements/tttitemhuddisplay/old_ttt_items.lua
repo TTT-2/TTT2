@@ -6,12 +6,12 @@ if CLIENT then
 
 	function HUDELEMENT:Initialize()
 		self:SetPos(20, 20)
-		self:PerformLayout()
 	end
 
 	function HUDELEMENT:PerformLayout()
 		x = self.pos.x
 		y = ScrH() * 0.5 + self.pos.y
+		self.BaseClass:PerformLayout()
 	end
 
 	function HUDELEMENT:Draw()
@@ -41,5 +41,7 @@ if CLIENT then
 				curY = curY - 80
 			end
 		end
+
+		self:SetSize(64, curY - y)
 	end
 end

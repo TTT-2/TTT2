@@ -1,8 +1,6 @@
-local math = math
 local string = string
 local GetLang = LANG.GetUnsafeLanguageTable
 local interp = string.Interp
-local util = util
 local IsValid = IsValid
 local draw = draw
 
@@ -50,35 +48,6 @@ if CLIENT then
 
 		-- Draw round state
 		local margin = self.margin
-		local smargin = self.smargin
-		local x = margin
-		local height = self.bgheight
-		local width = self.maxwidth
-		local hastewidth = self.hastewidth
-		local bg_colors = self.bg_colors
-		local round_y = ScrH() - height - margin
-
-		-- move up a little on low resolutions to allow space for spectator hints
-		if ScrW() < 1000 then
-			round_y = round_y - 15
-		end
-
-		local time_x = width - hastewidth
-		local time_y = round_y + 4
-
-		draw.RoundedBox(8, x, round_y, width, height, bg_colors.background_main)
-		draw.RoundedBox(8, x, round_y, time_x, height, bg_colors.noround)
-
-		-- Draw current round state
-		local text = L[self.roundstate_string[GAMEMODE.round_state]]
-
-		self:ShadowedText(text, "TraitorState", x + (width - hastewidth) * 0.5, round_y, COLOR_WHITE, TEXT_ALIGN_CENTER)
-
-		-- Draw round/prep/post time remaining
-		text = util.SimpleTime(math.max(0, GetGlobalFloat("ttt_round_end", 0) - CurTime()), "%02i:%02i")
-
-		self:ShadowedText(text, "TimeLeft", x + time_x + smargin + hastewidth * 0.5, time_y, COLOR_WHITE, TEXT_ALIGN_CENTER)
-
 		local tgt = client:GetObserverTarget()
 
 		if IsValid(tgt) and tgt:IsPlayer() then
