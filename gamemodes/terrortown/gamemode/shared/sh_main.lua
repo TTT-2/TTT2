@@ -165,6 +165,8 @@ local tm, ply, plys
 function GM:Tick()
 	local client = CLIENT and LocalPlayer()
 
+	if client and not IsValid(client) then return end
+
 	-- three cheers for micro-optimizations
 	plys = client and {client} or player.GetAll()
 
@@ -228,13 +230,11 @@ function GM:Tick()
 	end
 
 	if CLIENT then
-		if IsValid(client) then
-			if client:Alive() and client:Team() ~= TEAM_SPEC then
-				WSWITCH:Think()
-				RADIO:StoreTarget()
-			end
-
-			VOICE.Tick()
+		if client:Alive() and client:Team() ~= TEAM_SPEC then
+			WSWITCH:Think()
+			RADIO:StoreTarget()
 		end
+
+		VOICE.Tick()
 	end
 end
