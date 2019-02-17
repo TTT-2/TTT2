@@ -530,6 +530,7 @@ function plymeta:StartDrowning(bool, startTime, duration)
 
 		if bool then
 			net.WriteUInt(startTime, 32)
+			net.WriteUInt(duration, 16)
 		end
 
 		net.Send(self)
@@ -540,6 +541,6 @@ if CLIENT then
 	net.Receive("StartDrowning", function()
 		local bool = net.ReadBool()
 
-		LocalPlayer():StartDrowning(bool, bool and net.ReadUInt(32))
+		LocalPlayer():StartDrowning(bool, bool and net.ReadUInt(32), bool and net.ReadUInt(16))
 	end)
 end
