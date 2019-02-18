@@ -507,3 +507,40 @@ else -- SERVER
 		net.Broadcast()
 	end
 end
+
+if SERVER then
+	util.AddNetworkString("StartDrowning")
+end
+
+function plymeta:StartDrowning(bool, time, duration)
+	if bool then
+		-- will start drowning soon
+		self.drowning = CurTime() + time
+		self.drowningTime = duration
+		self.drowningProgress = math.max(0, time * (1 / duration))
+	else
+		self.drowning = nil
+		self.drowningTime = nil
+		self.drowningProgress = -1
+	end
+
+	if SERVER then
+		net.Start("StartDrowning")
+		net.WriteBool(bool)
+
+		if bool then
+			net.WriteUInt(time, 16)
+			net.WriteUInt(self.drowningTime, 16)
+		end
+
+		net.Send(self)
+	end
+end
+
+if CLIENT then
+	net.Receive("StartDrowning", function()
+		local bool = net.ReadBool()
+
+		LocalPlayer():StartDrowning(bool, bool and net.ReadUInt(16), bool and net.ReadUInt(16))
+	end)
+end

@@ -452,19 +452,6 @@ function GM:DrawDeathNotice()
 
 end
 
-function GM:Tick()
-	local client = LocalPlayer()
-
-	if IsValid(client) then
-		if client:Alive() and client:Team() ~= TEAM_SPEC then
-			WSWITCH:Think()
-			RADIO:StoreTarget()
-		end
-
-		VOICE.Tick()
-	end
-end
-
 -- Simple client-based idle checking
 local idle = {ang = nil, pos = nil, mx = 0, my = 0, t = 0}
 
