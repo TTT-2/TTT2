@@ -109,21 +109,22 @@ if CLIENT then
 				text = L[self.roundstate_string[round_state]]
 			end
 			
-			text = "NECROMANCER"
-			
 			--calculate the scale multplier for role text
 			surface.SetFont("PureSkinRole")
 			local role_text_width = surface.GetTextSize(string.upper(text))
-			local sri_text_width = 0
-			--if calive and cactive and secondaryRoleInformationFunc then
-				--local secInfoTbl = secondaryRoleInformationFunc()
-				secInfoTbl = {}
-				secInfoTbl.text = "RESISTANCE"
-				surface.SetFont("PureSkinBar")
-				sri_text_width = surface.GetTextSize(string.upper(secInfoTbl.text))
-			--end		
-			local role_scale_multiplier = (w - sri_text_width - lpw - 2 * pad - 3 * sri_text_width_padding) / role_text_width 
-			role_scale_multiplier = math.Clamp(role_scale_multiplier, 0.4, 1.0)
+			local role_scale_multiplier = (w - lpw - 2 * pad) / role_text_width 
+			if calive and cactive and secondaryRoleInformationFunc then
+				local secInfoTbl = secondaryRoleInformationFunc()
+				
+				if secInfoTbl and secInfoTbl.text then
+					surface.SetFont("PureSkinBar")
+					local sri_text_width = surface.GetTextSize(string.upper(secInfoTbl.text))
+					role_scale_multiplier = (w - sri_text_width - lpw - 2 * pad - 3 * sri_text_width_padding) / role_text_width 
+				end
+			end		
+			 
+			role_scale_multiplier = math.Clamp(role_scale_multiplier, 0.55, 0.92)
+			
 			
 			--create scaling matrix for the text
 			local mat = Matrix()
@@ -144,11 +145,8 @@ if CLIENT then
 		if calive then
 
 			-- draw secondary role information
-			--if cactive and secondaryRoleInformationFunc then
-				--local secInfoTbl = secondaryRoleInformationFunc()
-				secInfoTbl = {}
-				secInfoTbl.text = "RESISTANCE"
-				secInfoTbl.color = Color(100, 100, 200, 255)
+			if cactive and secondaryRoleInformationFunc then
+				local secInfoTbl = secondaryRoleInformationFunc()
 
 				if secInfoTbl and secInfoTbl.color and secInfoTbl.text then
 					surface.SetFont("PureSkinBar")
@@ -169,7 +167,7 @@ if CLIENT then
 					-- draw lines around the element
 					self:DrawLines(nx2, ny, sri_width, nh)
 				end
-			--end
+			end
 
 			-- draw dark bottom overlay
 			surface.SetDrawColor(0, 0, 0, 90)
