@@ -1,5 +1,6 @@
 if CLIENT then
 	local defaultColor = Color(49, 71, 94)
+	local shadowColor = Color(0, 0, 0, 220)
 
 	function HUDELEMENT:DrawBg(x, y, w, h, c)
 		DrawHUDElementBg(x, y, w, h, c)
@@ -27,7 +28,7 @@ if CLIENT then
 	end
 
 	function HUDELEMENT:ShadowedText(text, font, x, y, color, xalign, yalign)
-		draw.SimpleText(text, font, x + 1, y + 1, Color(0, 0, 0, 220), xalign, yalign)
+		draw.SimpleText(text, font, x + 2, y + 2, shadowColor, xalign, yalign)
 		draw.SimpleText(text, font, x, y, color, xalign, yalign)
 	end
 

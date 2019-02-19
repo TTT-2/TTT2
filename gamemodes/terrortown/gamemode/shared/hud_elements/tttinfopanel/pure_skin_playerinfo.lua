@@ -113,7 +113,7 @@ if CLIENT then
 			surface.SetFont("PureSkinRole")
 			local role_text_width = surface.GetTextSize(string.upper(text))
 			local role_scale_multiplier = (w - lpw - 2 * pad) / role_text_width 
-			if calive and cactive and secondaryRoleInformationFunc then
+			if calive and cactive and isfunction(secondaryRoleInformationFunc) then
 				local secInfoTbl = secondaryRoleInformationFunc()
 				
 				if secInfoTbl and secInfoTbl.text then
@@ -145,12 +145,13 @@ if CLIENT then
 		if calive then
 
 			-- draw secondary role information
-			if cactive and secondaryRoleInformationFunc then
+			if cactive and isfunction(secondaryRoleInformationFunc) then
 				local secInfoTbl = secondaryRoleInformationFunc()
 
 				if secInfoTbl and secInfoTbl.color and secInfoTbl.text then
 					surface.SetFont("PureSkinBar")
-					local sri_text_width = surface.GetTextSize(string.upper(secInfoTbl.text))
+					local sri_text_caps = string.upper(secInfoTbl.text)
+					local sri_text_width = surface.GetTextSize(sri_text_caps)
 					local sri_margin_top_bottom = 8
 					local sri_width = sri_text_width + sri_text_width_padding * 2
 					local sri_xoffset = w2 - sri_width - pad
@@ -162,7 +163,7 @@ if CLIENT then
 					surface.SetDrawColor(clr(secInfoTbl.color))
 					surface.DrawRect(nx2, ny, sri_width, nh)
 
-					self:ShadowedText(string.upper(secInfoTbl.text), "PureSkinBar", nx2 + sri_width * 0.5, ry, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					self:ShadowedText(sri_text_caps, "PureSkinBar", nx2 + sri_width * 0.5, ry, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
 					-- draw lines around the element
 					self:DrawLines(nx2, ny, sri_width, nh)
