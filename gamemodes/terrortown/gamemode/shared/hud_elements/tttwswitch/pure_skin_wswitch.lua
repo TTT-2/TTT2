@@ -51,22 +51,23 @@ if CLIENT then
 		local _tmp = {x + self.lpw * 0.5, y + height * 0.5}
 		local spec = {
 			text = wep.Slot + 1,
-			font = "Trebuchet22",
+			font = "PureSkinWepNum",
 			pos = _tmp,
 			xalign = TEXT_ALIGN_CENTER,
 			yalign = TEXT_ALIGN_CENTER,
 			color = c.text
 		}
 
-		draw.TextShadow(spec, 1, c.shadow)
+		draw.TextShadow(spec, 2, c.shadow)
 
 		-- Name
-		spec.text = name
+		spec.text = string.upper(name)
 		spec.font = "PureSkinWep"
 		spec.pos[1] = x + 10 + height
 		spec.xalign = nil
 
-		draw.Text(spec)
+		--draw.Text(spec)
+		draw.TextShadow(spec, 2, c.shadow)
 
 		if ammo then
 			local col = (wep:Clip1() == 0 and wep:Ammo1() == 0) and c.text_empty or c.text

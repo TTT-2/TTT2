@@ -10,6 +10,7 @@ if CLIENT then
 	local h = 146 -- height
 	local pad = 14 -- padding
 	local lpw = 44 -- left panel width
+	local sri_text_width_padding = 8 --secondary role information padding (needed for size calculations)
 
 	local secondaryRoleInformationFunc = nil
 
@@ -107,20 +108,50 @@ if CLIENT then
 			else
 				text = L[self.roundstate_string[round_state]]
 			end
-
-			self:ShadowedText(text, "PureSkinRole", nx, ry, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			
+			--calculate the scale multplier for role text
+			surface.SetFont("PureSkinRole")
+			local role_text_width = surface.GetTextSize(string.upper(text))
+			local role_scale_multiplier = (w - lpw - 2 * pad) / role_text_width 
+			if calive and cactive and isfunction(secondaryRoleInformationFunc) then
+				local secInfoTbl = secondaryRoleInformationFunc()
+				
+				if secInfoTbl and secInfoTbl.text then
+					surface.SetFont("PureSkinBar")
+					local sri_text_width = surface.GetTextSize(string.upper(secInfoTbl.text))
+					role_scale_multiplier = (w - sri_text_width - lpw - 2 * pad - 3 * sri_text_width_padding) / role_text_width 
+				end
+			end		
+			 
+			role_scale_multiplier = math.Clamp(role_scale_multiplier, 0.55, 0.92)
+			
+			
+			--create scaling matrix for the text
+			local mat = Matrix()
+			mat:Translate( Vector( nx, ry ) )
+			mat:Scale( Vector( role_scale_multiplier, role_scale_multiplier, role_scale_multiplier ) )
+			mat:Translate( -Vector( nx, ry ) )
+			
+			render.PushFilterMag( TEXFILTER.ANISOTROPIC )
+			render.PushFilterMin( TEXFILTER.ANISOTROPIC )
+			cam.PushModelMatrix( mat )
+				self:ShadowedText(string.upper(text), "PureSkinRole", nx, ry, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)	
+			cam.PopModelMatrix( mat )
+			render.PopFilterMag()
+			render.PopFilterMin()
 		end
 
 		-- player informations
 		if calive then
 
 			-- draw secondary role information
-			if cactive and secondaryRoleInformationFunc then
+			if cactive and isfunction(secondaryRoleInformationFunc) then
 				local secInfoTbl = secondaryRoleInformationFunc()
 
 				if secInfoTbl and secInfoTbl.color and secInfoTbl.text then
-					local sri_text_width = surface.GetTextSize(secInfoTbl.text)
-					local sri_text_width_padding = 8
+					surface.SetFont("PureSkinBar")
+					local sri_text_caps = string.upper(secInfoTbl.text)
+					local sri_text_width = surface.GetTextSize(sri_text_caps)
 					local sri_margin_top_bottom = 8
 					local sri_width = sri_text_width + sri_text_width_padding * 2
 					local sri_xoffset = w2 - sri_width - pad
@@ -132,7 +163,7 @@ if CLIENT then
 					surface.SetDrawColor(clr(secInfoTbl.color))
 					surface.DrawRect(nx2, ny, sri_width, nh)
 
-					self:ShadowedText(secInfoTbl.text, "PureSkinBar", nx2 + sri_width * 0.5, ry, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					self:ShadowedText(sri_text_caps, "PureSkinBar", nx2 + sri_width * 0.5, ry, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
 					-- draw lines around the element
 					self:DrawLines(nx2, ny, sri_width, nh)
@@ -152,7 +183,7 @@ if CLIENT then
 			-- health bar
 			local health = math.max(0, client:Health())
 
-			self:DrawBar(nx, ty, bw, bh, Color(234, 41, 41), health / client:GetMaxHealth(), "Health: " .. health)
+			self:DrawBar(nx, ty, bw, bh, Color(234, 41, 41), health / client:GetMaxHealth(), "HEALTH: " .. health)
 
 			-- ammo bar
 			ty = ty + bh + spc
