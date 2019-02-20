@@ -745,7 +745,7 @@ function ShopEditor.ShowOptions()
 
 	local tmp = {}
 	local tbl = {
-		ttt2_random_shops = {typ = "number"}
+		ttt2_random_shops = {typ = "number"},
 		ttt2_random_team_shops = {typ = "bool"}
 	}
 
