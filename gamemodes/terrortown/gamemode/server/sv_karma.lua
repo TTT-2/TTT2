@@ -119,7 +119,7 @@ local function WasAvoidable(attacker, victim, dmginfo)
 		local ret = hook.Run("TTT2KarmaPenaltyMultiplier", attacker, victim, dmginfo)
 		if ret then
 			return ret
-		elseif attacker:GetBaseRole() == ROLE_DETECTIVE then
+		elseif victim:GetBaseRole() == ROLE_DETECTIVE then
 			return 2
 		elseif not attacker:GetSubRoleData().unknownTeam then
 			return 1
