@@ -251,7 +251,7 @@ local function CreateEquipmentList(t)
 	end
 
 	local itms = {}
-	local tmp = GetEquipmentForRole(currole, t.notalive)
+	local tmp = GetEquipmentForRole(ply, currole, t.notalive)
 
 	for _, v in ipairs(tmp) do
 		if not v.notBuyable then

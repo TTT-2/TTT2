@@ -166,11 +166,11 @@ function GetShopFallbackTable(subrole)
 end
 
 if CLIENT then
-	function GetEquipmentForRole(subrole, noModification)
+	function GetEquipmentForRole(ply, subrole, noModification)
 		local fallbackTable = GetShopFallbackTable(subrole)
 
 		if not noModification then
-			fallbackTable = GetModifiedEquipment(subrole, fallbackTable)
+			fallbackTable = GetModifiedEquipment(ply, fallbackTable)
 		end
 
 		if fallbackTable then
@@ -217,7 +217,7 @@ if CLIENT then
 			Equipment[fallback] = tbl
 		end
 
-		return not noModification and GetModifiedEquipment(fallback, Equipment[fallback]) or Equipment[fallback]
+		return not noModification and GetModifiedEquipment(ply, Equipment[fallback]) or Equipment[fallback]
 	end
 end
 
@@ -240,64 +240,72 @@ end
 -- it exists, else return nil.
 if SERVER then
 	local random_shops = CreateConVar("ttt2_random_shops", "0", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_SERVER_CAN_EXECUTE}, "Set to 0 to disable")
+	local random_team_shops = CreateConVar("ttt2_random_team_shops", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_SERVER_CAN_EXECUTE}, "Set to 0 to disable")
 
 	util.AddNetworkString("TTT2SyncRandomShops")
 
 	local function SyncRandomShops(plys)
 		if not RANDOMSHOP then return end
 
-		local tmp = {}
+		for ply, tbl in pairs(RANDOMSHOP) do
+			if plys and not table.HasValue(plys, ply) then continue end
 
-		for k, tbl in pairs(RANDOMSHOP) do
-			tmp[k] = {}
+			local tmp = {}
 
 			for _, equip in ipairs(tbl) do
-				tmp[k][#tmp[k] + 1] = equip.id
+				tmp[#tmp + 1] = equip.id
 			end
-		end
 
-		local s = EncodeForStream(tmp)
-		if not s then return end
+			if #tmp <= 0 then continue end
 
-		-- divide into happy lil bits.
-		-- this was necessary with user messages, now it's
-		-- a just-in-case thing if a round somehow manages to be > 64K
-		local cut = {}
-		local max = 64000
+			local s = EncodeForStream(tmp)
+			if not s then continue end
 
-		while #s ~= 0 do
-			local bit = string.sub(s, 1, max - 1)
+			-- divide into happy lil bits.
+			-- this was necessary with user messages, now it's
+			-- a just-in-case thing if a round somehow manages to be > 64K
+			local cut = {}
+			local max = 64000
 
-			table.insert(cut, bit)
+			while #s ~= 0 do
+				local bit = string.sub(s, 1, max - 1)
 
-			s = string.sub(s, max, - 1)
-		end
+				table.insert(cut, bit)
 
-		local parts = #cut
+				s = string.sub(s, max, - 1)
+			end
 
-		for k, bit in ipairs(cut) do
-			net.Start("TTT2SyncRandomShops")
-			net.WriteBit(k ~= parts) -- continuation bit, 1 if there's more coming
-			net.WriteString(bit)
+			local parts = #cut
 
-			if plys then
-				net.Send(plys)
-			else
-				net.Broadcast()
+			for k, bit in ipairs(cut) do
+				net.Start("TTT2SyncRandomShops")
+				net.WriteBit(k ~= parts) -- continuation bit, 1 if there's more coming
+				net.WriteString(bit)
+				net.Send(ply)
 			end
 		end
 	end
 
-	function UpdateRandomShops(plys, val)
-		RANDOMSHOP = {} -- reset
+	function UpdateRandomShops(plys, val, team)
+		if plys then
+			for _, ply in ipairs(plys) do
+				RANDOMSHOP[ply] = {} -- reset ply
+			end
+		else
+			RANDOMSHOP = {} -- reset everyone
+		end
 
-		for _, rd in pairs(GetShopRoles()) do
-			local amount = val
+		local teamshops = {}
+		local tbl = GetShopRoles()
+
+		-- at first, get all available equipment per team
+		for _, rd in pairs(tbl) do
 			local fallback = GetShopFallback(rd.index)
 
-			if not RANDOMSHOP[fallback] then
-				RANDOMSHOP[fallback] = {}
+			if not teamshops[fallback] then
+				teamshops[fallback] = {}
 
+				local amount = val
 				local fallbackTable = GetShopFallbackTable(fallback)
 
 				if not fallbackTable then
@@ -318,8 +326,8 @@ if SERVER then
 
 				local length = #fallbackTable
 
-				if amount >= length then
-					RANDOMSHOP[fallback] = fallbackTable
+				if not team or amount >= length then
+					teamshops[fallback] = fallbackTable
 				else
 					local tmp2 = {}
 
@@ -328,7 +336,7 @@ if SERVER then
 							if equip.NoRandom then
 								amount = amount - 1
 
-								RANDOMSHOP[fallback][#RANDOMSHOP[fallback] + 1] = equip
+								teamshops[fallback][#teamshops[fallback] + 1] = equip
 							else
 								tmp2[#tmp2 + 1] = equip
 							end
@@ -339,10 +347,46 @@ if SERVER then
 						for i = 1, amount do
 							local rndm = math.random(1, #tmp2)
 
-							RANDOMSHOP[fallback][#RANDOMSHOP[fallback] + 1] = tmp2[rndm]
+							teamshops[fallback][#teamshops[fallback] + 1] = tmp2[rndm]
 
 							table.remove(tmp2, rndm)
 						end
+					end
+				end
+			end
+		end
+
+		-- now set the individual random shop
+		if team then -- the shop is synced with the team
+			for _, ply in ipairs(plys and plys or player.GetAll()) do
+				RANDOMSHOP[ply] = teamshops[GetShopFallback(ply:GetSubRole())]
+			end
+		else -- every player has his own shop
+			for _, ply in ipairs(plys and plys or player.GetAll()) do
+				local fallbackTable = teamshops[GetShopFallback(ply:GetSubRole())]
+				local length = #fallbackTable
+				local amount = val
+				local tmp2 = {}
+
+				for _, equip in ipairs(fallbackTable) do
+					if not equip.notBuyable then
+						if equip.NoRandom then
+							amount = amount - 1
+
+							RANDOMSHOP[ply][#RANDOMSHOP[ply] + 1] = equip
+						else
+							tmp2[#tmp2 + 1] = equip
+						end
+					end
+				end
+
+				if amount > 0 then
+					for i = 1, amount do
+						local rndm = math.random(1, #tmp2)
+
+						RANDOMSHOP[ply][#RANDOMSHOP[ply] + 1] = tmp2[rndm]
+
+						table.remove(tmp2, rndm)
 					end
 				end
 			end
@@ -357,15 +401,32 @@ if SERVER then
 		SetGlobalInt("ttt2_random_shops", tmp)
 
 		if tmp > 0 then
-			UpdateRandomShops(nil, tmp)
+			UpdateRandomShops(nil, tmp, GetGlobalBool("ttt2_random_team_shops", true))
 		end
 	end, "ttt2changeshops")
 
-	hook.Add("TTTPrepareRound", "TTT2InitRandomShops", function()
-		local amount = random_shops:GetInt()
+	cvars.AddChangeCallback("ttt2_random_team_shops", function(name, old, new)
+		local tmp = tobool(new)
+		local amount = GetGlobalInt("ttt2_random_shops")
 
+		SetGlobalBool("ttt2_random_team_shops", tmp)
+
+		if new ~= old and amount > 0 then
+			UpdateRandomShops(nil, amount, tmp)
+		end
+	end, "ttt2changeteamshops")
+
+	hook.Add("TTTPrepareRound", "TTT2InitRandomShops", function()
+		local amount = GetGlobalInt("ttt2_random_shops")
 		if amount > 0 then
-			UpdateRandomShops(nil, amount)
+			UpdateRandomShops(nil, amount, GetGlobalBool("ttt2_random_team_shops", true))
+		end
+	end)
+
+	hook.Add("TTT2UpdateSubrole", "TTT2UpdateRandomShop", function(ply)
+		local amount = GetGlobalInt("ttt2_random_shops")
+		if amount > 0 then
+			UpdateRandomShops({ply}, amount, GetGlobalBool("ttt2_random_team_shops", true))
 		end
 	end)
 
@@ -373,6 +434,7 @@ if SERVER then
 		local amount = random_shops:GetInt()
 
 		SetGlobalInt("ttt2_random_shops", amount)
+		SetGlobalBool("ttt2_random_team_shops", random_team_shops:GetBool())
 
 		if amount > 0 then
 			SyncRandomShops(ply)
@@ -401,17 +463,13 @@ else
 				if istable(tmp) then
 					local tmp2 = {}
 
-					for k, tbl in pairs(tmp) do
-						tmp2[k] = {}
+					for _, id in ipairs(tmp) do
+						local equip = not items.IsItem(id) and weapons.GetStored(id) or items.GetStored(id)
 
-						for _, id in ipairs(tbl) do
-							local equip = not items.IsItem(id) and weapons.GetStored(id) or items.GetStored(id)
-
-							tmp2[k][#tmp2[k] + 1] = equip
-						end
+						tmp2[#tmp2 + 1] = equip
 					end
 
-					RANDOMSHOP = tmp2
+					RANDOMSHOP[LocalPlayer()] = tmp2
 				else
 					ErrorNoHalt("RANDOMSHOP decoding failed!\n")
 				end
@@ -424,13 +482,11 @@ else
 	net.Receive("TTT2SyncRandomShops", TTT2SyncRandomShops)
 end
 
-function GetModifiedEquipment(subrole, fallback)
-	local fb = GetShopFallback(subrole)
-
-	if fallback and GetGlobalInt("ttt2_random_shops") > 0 and RANDOMSHOP[fb] then
+function GetModifiedEquipment(ply, fallback)
+	if ply and fallback and RANDOMSHOP[ply] and GetGlobalInt("ttt2_random_shops") > 0 then
 		local tmp = {}
 
-		for _, equip in ipairs(RANDOMSHOP[fb]) do
+		for _, equip in ipairs(RANDOMSHOP[ply]) do
 			for _, eq in pairs(fallback) do
 				if eq.id == equip.id then
 					tmp[#tmp + 1] = eq
@@ -852,7 +908,7 @@ else -- CLIENT
 						Equipment = Equipment or {}
 
 						if not Equipment[subrole] then
-							GetEquipmentForRole(subrole)
+							GetEquipmentForRole(nil, subrole, true) -- TODO test
 						end
 
 						for _, equip in pairs(tbl) do

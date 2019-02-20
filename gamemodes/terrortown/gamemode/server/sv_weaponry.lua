@@ -223,9 +223,7 @@ local function GiveLoadoutItems(ply)
 end
 
 local function ResetLoadoutItems(ply)
-	local sr = ply:GetSubRole()
-	local itms = GetModifiedEquipment(sr, items.GetRoleItems(sr))
-
+	local itms = GetModifiedEquipment(ply, items.GetRoleItems(ply:GetSubRole()))
 	if itms then
 		for _, item in ipairs(itms) do
 			if item.loadout then
@@ -603,10 +601,10 @@ local function OrderEquipment(ply, cmd, args)
 			return
 		end
 
-		if GetGlobalInt("ttt2_random_shops") > 0 and RANDOMSHOP[subrole] and #RANDOMSHOP[subrole] > 0 then
+		if GetGlobalInt("ttt2_random_shops") > 0 and RANDOMSHOP[ply] and #RANDOMSHOP[ply] > 0 then
 			local key = false
 
-			for _, equip in ipairs(RANDOMSHOP[subrole]) do
+			for _, equip in ipairs(RANDOMSHOP[ply]) do
 				if equip.id == id then
 					key = true
 
