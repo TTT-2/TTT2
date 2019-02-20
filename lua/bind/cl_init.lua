@@ -183,6 +183,15 @@ end
     Adds an entry to the SettingsBindings table, to easily present them eg. in a GUI.
 -----------------------------------------------------------]]
 function bind.AddSettingsBinding(name, label)
+	-- check if it already exists
+	for _, tbl in ipairs(SettingsBindings) do
+		if tbl.name == name then
+			tbl.label = label -- update
+
+			return -- don't insert again
+		end
+	end
+
 	SettingsBindings[#SettingsBindings + 1] = {name = name, label = label}
 end
 
