@@ -134,7 +134,7 @@ if CLIENT then
 		self:SetPos(x, y)
 		self:SetSize(width, h)
 
-		self.BaseClass:PerformLayout()
+		self.BaseClass.PerformLayout(self)
 	end
 
 	function HUDELEMENT:Draw()

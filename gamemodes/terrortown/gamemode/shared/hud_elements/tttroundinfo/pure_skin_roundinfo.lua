@@ -24,7 +24,7 @@ if CLIENT then
 		w = size.w
 		h = size.h
 
-		self.BaseClass:PerformLayout()
+		self.BaseClass.PerformLayout(self)
 	end
 
 	function HUDELEMENT:Draw()
