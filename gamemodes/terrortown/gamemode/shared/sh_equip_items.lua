@@ -23,7 +23,9 @@ EQUIP_MAX = 4
 
 Equipment = CLIENT and (Equipment or {}) or nil
 SYNC_EQUIP = SYNC_EQUIP or {}
-RANDOMSHOP = RANDOMSHOP or {}
+RANDOMSHOP = RANDOMSHOP or {} -- player equipment
+RANDOMTEAMSHOPS = RANDOMTEAMSHOPS or {} -- team equipment
+RANDOMSAVEDSHOPS = RANDOMSAVEDSHOPS or {} -- saved random shops
 
 -- JUST used to convert old items to new ones
 local itemMt = {
@@ -293,17 +295,18 @@ if SERVER then
 			end
 		else
 			RANDOMSHOP = {} -- reset everyone
+			RANDOMTEAMSHOPS = {} -- reset team equipment
+			RANDOMSAVEDSHOPS = {} -- reset saved shops
 		end
 
-		local teamshops = {}
 		local tbl = GetShopRoles()
 
 		-- at first, get all available equipment per team
 		for _, rd in pairs(tbl) do
 			local fallback = GetShopFallback(rd.index)
 
-			if not teamshops[fallback] then
-				teamshops[fallback] = {}
+			if not RANDOMSAVEDSHOPS[fallback] then
+				RANDOMSAVEDSHOPS[fallback] = {}
 
 				local amount = val
 				local fallbackTable = GetShopFallbackTable(fallback)
@@ -326,31 +329,35 @@ if SERVER then
 
 				local length = #fallbackTable
 
-				if not team or amount >= length then
-					teamshops[fallback] = fallbackTable
-				else
-					local tmp2 = {}
+				RANDOMSAVEDSHOPS[fallback] = fallbackTable
 
-					for _, equip in ipairs(fallbackTable) do
-						if not equip.notBuyable then
-							if equip.NoRandom then
-								amount = amount - 1
+				if team and not RANDOMTEAMSHOPS[fallback] then
+					if amount < length then
+						local tmp2 = {}
 
-								teamshops[fallback][#teamshops[fallback] + 1] = equip
-							else
-								tmp2[#tmp2 + 1] = equip
+						for _, equip in ipairs(fallbackTable) do
+							if not equip.notBuyable then
+								if equip.NoRandom then
+									amount = amount - 1
+
+									RANDOMTEAMSHOPS[fallback][#RANDOMTEAMSHOPS[fallback] + 1] = equip
+								else
+									tmp2[#tmp2 + 1] = equip
+								end
 							end
 						end
-					end
 
-					if amount > 0 then
-						for i = 1, amount do
-							local rndm = math.random(1, #tmp2)
+						if amount > 0 then
+							for i = 1, amount do
+								local rndm = math.random(1, #tmp2)
 
-							teamshops[fallback][#teamshops[fallback] + 1] = tmp2[rndm]
+								RANDOMTEAMSHOPS[fallback][#RANDOMTEAMSHOPS[fallback] + 1] = tmp2[rndm]
 
-							table.remove(tmp2, rndm)
+								table.remove(tmp2, rndm)
+							end
 						end
+					else
+						RANDOMTEAMSHOPS[fallback] = fallbackTable
 					end
 				end
 			end
@@ -363,7 +370,7 @@ if SERVER then
 
 				if not IsShoppingRole(sr) then continue end
 
-				RANDOMSHOP[ply] = teamshops[GetShopFallback(sr)]
+				RANDOMSHOP[ply] = RANDOMTEAMSHOPS[GetShopFallback(sr)]
 			end
 		else -- every player has his own shop
 			for _, ply in ipairs(plys and plys or player.GetAll()) do
@@ -371,7 +378,7 @@ if SERVER then
 
 				if not IsShoppingRole(sr) then continue end
 
-				local fallbackTable = teamshops[GetShopFallback(sr)]
+				local fallbackTable = RANDOMSAVEDSHOPS[GetShopFallback(sr)]
 				local length = #fallbackTable
 				local amount = val
 				local tmp2 = {}
