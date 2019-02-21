@@ -306,8 +306,6 @@ if SERVER then
 			local fallback = GetShopFallback(rd.index)
 
 			if not RANDOMSAVEDSHOPS[fallback] then
-				RANDOMSAVEDSHOPS[fallback] = {}
-
 				local amount = val
 				local fallbackTable = GetShopFallbackTable(fallback)
 
@@ -327,12 +325,14 @@ if SERVER then
 					end
 				end
 
-				local length = #fallbackTable
-
 				RANDOMSAVEDSHOPS[fallback] = fallbackTable
+
+				local length = #fallbackTable
 
 				if team and not RANDOMTEAMSHOPS[fallback] then
 					if amount < length then
+						RANDOMTEAMSHOPS[fallback] = {}
+
 						local tmp2 = {}
 
 						for _, equip in ipairs(fallbackTable) do
@@ -383,7 +383,7 @@ if SERVER then
 				local amount = val
 				local tmp2 = {}
 
-				RANDOMSHOP[ply] = RANDOMSHOP[ply] or {}
+				RANDOMSHOP[ply] = {}
 
 				for _, equip in ipairs(fallbackTable) do
 					if not equip.notBuyable then
