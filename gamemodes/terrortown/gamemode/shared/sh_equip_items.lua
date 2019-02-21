@@ -376,6 +376,8 @@ if SERVER then
 				local amount = val
 				local tmp2 = {}
 
+				RANDOMSHOP[ply] = RANDOMSHOP[ply] or {}
+
 				for _, equip in ipairs(fallbackTable) do
 					if not equip.notBuyable then
 						if equip.NoRandom then
