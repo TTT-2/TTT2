@@ -359,11 +359,19 @@ if SERVER then
 		-- now set the individual random shop
 		if team then -- the shop is synced with the team
 			for _, ply in ipairs(plys and plys or player.GetAll()) do
-				RANDOMSHOP[ply] = teamshops[GetShopFallback(ply:GetSubRole())]
+				local sr = ply:GetSubRole()
+
+				if not IsShoppingRole(sr) then continue end
+
+				RANDOMSHOP[ply] = teamshops[GetShopFallback(sr)]
 			end
 		else -- every player has his own shop
 			for _, ply in ipairs(plys and plys or player.GetAll()) do
-				local fallbackTable = teamshops[GetShopFallback(ply:GetSubRole())]
+				local sr = ply:GetSubRole()
+
+				if not IsShoppingRole(sr) then continue end
+
+				local fallbackTable = teamshops[GetShopFallback(sr)]
 				local length = #fallbackTable
 				local amount = val
 				local tmp2 = {}
@@ -437,7 +445,7 @@ if SERVER then
 		SetGlobalBool("ttt2_random_team_shops", random_team_shops:GetBool())
 
 		if amount > 0 then
-			SyncRandomShops(ply)
+			SyncRandomShops({ply})
 		end
 	end)
 else
