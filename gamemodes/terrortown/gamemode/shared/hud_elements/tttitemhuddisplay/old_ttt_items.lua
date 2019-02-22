@@ -44,17 +44,18 @@ if CLIENT then
 
 				if isfunction(item.DrawInfo) then
 					local info = item:DrawInfo()
+					if info then
+						-- right bottom corner
+						local tx = x + 64
+						local ty = curY + 64
 
-					-- right bottom corner
-					local tx = x + 64
-					local ty = curY + 64
+						surface.SetFont("ItemInfoFont")
 
-					surface.SetFont("ItemInfoFont")
+						local infoW, infoH = surface.GetTextSize(info)
 
-					local infoW, infoH = surface.GetTextSize(info)
-
-					draw.RoundedBox(4, tx - infoW * 0.5 + 10, ty - infoH * 0.5, infoW, infoH, COLOR_DARKGREY)
-					draw.DrawText(info, "ItemInfoFont", tx, ty - info * 0.5, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+						draw.RoundedBox(4, tx - infoW * 0.5 + 10, ty - infoH * 0.5, infoW, infoH, COLOR_DARKGREY)
+						draw.DrawText(info, "ItemInfoFont", tx, ty - infoH * 0.5, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					end
 				end
 
 				curY = curY - 80
