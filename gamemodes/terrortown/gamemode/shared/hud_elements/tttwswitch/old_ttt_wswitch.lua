@@ -113,9 +113,6 @@ if CLIENT then
 		return true
 	end
 
-	local x = 0
-	--local y = 0
-
 	function HUDELEMENT:Initialize()
 		WSWITCH:UpdateWeaponCache()
 
@@ -133,7 +130,6 @@ if CLIENT then
 		WSWITCH:UpdateWeaponCache()
 
 		local pos = self:GetPos()
-
 		x = pos.x
 		y = pos.y
 
@@ -157,6 +153,9 @@ if CLIENT then
 	function HUDELEMENT:Draw()
 		if not WSWITCH.Show and not HUDManager.IsEditing then return end
 
+		local pos = self:GetPos()
+		local y = pos.y
+		local x = pos.x
 		local client = LocalPlayer()
 		local weps = WSWITCH.WeaponCache
 		local count = #weps
@@ -166,10 +165,12 @@ if CLIENT then
 
 		client.oldWSWeps = count
 
-		y = y - (h - difH)
-
-		self:SetPos(x, y)
-		self:SetSize(width, h)
+		if h - difH ~= 0 then
+			y = y - (h - difH)
+			self:SetPos(x, y)
+			self:SetSize(width, h)
+			MsgN("weapon switch pos changed: h=" .. h .. ", difH=" .. difH .. ", y=" .. y .. ", count=" .. count .. "!" )
+		end
 
 		local y_elem = y
 

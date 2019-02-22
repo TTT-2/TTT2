@@ -84,8 +84,6 @@ if CLIENT then
 		return true
 	end
 
-	local x = 0
-
 	-- color defines
 	HUDELEMENT.col_active = {
 		text_empty = Color(200, 20, 20, 255),
@@ -116,9 +114,8 @@ if CLIENT then
 		WSWITCH:UpdateWeaponCache()
 
 		local pos = self:GetPos()
-
-		x = pos.x
-		y = pos.y
+		local x = pos.x
+		local y = pos.y
 
 		local client = LocalPlayer()
 		local weps = WSWITCH.WeaponCache
@@ -140,6 +137,9 @@ if CLIENT then
 	function HUDELEMENT:Draw()
 		if not WSWITCH.Show and not HUDManager.IsEditing then return end
 
+		local pos = self:GetPos()
+		local y = pos.y
+		local x = pos.x
 		local client = LocalPlayer()
 		local weps = WSWITCH.WeaponCache
 		local count = #weps
@@ -149,10 +149,12 @@ if CLIENT then
 
 		client.oldWSWeps = count
 
-		y = y - (h - difH)
-
-		self:SetPos(x, y)
-		self:SetSize(width, h)
+		if(h - difH != 0) then
+			y = y - (h - difH)
+			MsgN("weapon switch pos changed: h=" .. h .. ", difH=" .. difH .. ", y=" .. y .. ", count=" .. count .. "!" )
+			self:SetPos(x, y)
+			self:SetSize(width, h)
+		end
 
 		local y_elem = y
 
