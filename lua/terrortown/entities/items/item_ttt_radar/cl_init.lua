@@ -79,7 +79,7 @@ function ITEM:Equip(ply)
 end
 
 function ITEM:DrawInfo()
-	return tostring(math.round(math.max(0, RADAR.endtime - CurTime())))
+	return tostring(math.Round(math.max(0, RADAR.endtime - CurTime())))
 end
 
 local function DrawTarget(tgt, size, offset, no_shrink)
