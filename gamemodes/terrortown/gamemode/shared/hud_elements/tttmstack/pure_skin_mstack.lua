@@ -111,7 +111,7 @@ if CLIENT then
 				if item.image then
 					surface.SetMaterial(item.image)
 					surface.SetDrawColor(255, 255, 255, 255)
-					surface.DrawTexturedRect(top_x + item.imagePad, y + item.imagePad, item.size2, item.size2)
+					surface.DrawTexturedRect(top_x + item.imagePad, y + item.imagePad, item.imageSize, item.imageSize)
 				end
 
 				self:DrawLines(top_x, y, MSTACK.msg_width, height, item.bg.a / 255)
