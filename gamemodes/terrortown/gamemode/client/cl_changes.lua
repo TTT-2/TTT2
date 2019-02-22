@@ -2,11 +2,14 @@ local changesVersion = CreateClientConVar("changes_version", "v0.0.0.0")
 
 local changesPanel
 local changes
+local currentVersion
 
 function AddChange(version, text)
 	changes = changes or {}
 
 	table.insert(changes, 1, {version = version, text = text})
+
+	currentVersion = version
 end
 
 function CreateChanges()
@@ -187,6 +190,7 @@ function CreateChanges()
 	- added possibility to modify the time a player can dive
 	- added Blue's BShadow library
 	- added parameter to the bindings to detect if a player released a key
+	- added possibility to switch between team-synced and individual random shops
 
 	- fixed TTT2 binding system
 	- fixed Ammo pickup
@@ -210,10 +214,8 @@ function ShowChanges()
 
 	CreateChanges()
 
-	local w = 630
-
 	local frame = vgui.Create("DFrame")
-	frame:SetSize(w, ScrH() - 50)
+	frame:SetSize(ScrW() * 0.8, ScrH() * 0.8)
 	frame:Center()
 	frame:SetTitle("TTT2 Changes")
 	frame:SetVisible(true)
@@ -222,25 +224,41 @@ function ShowChanges()
 	frame:SetMouseInputEnabled(true)
 	frame:SetDeleteOnClose(true)
 
-	local ttt2_changes = vgui.Create("DPanelList", frame)
-	ttt2_changes:Dock(FILL)
-	ttt2_changes:SetPadding(10)
-	ttt2_changes:SetSpacing(10)
+	local sheet = vgui.Create("DColumnSheet", frame)
+	sheet:Dock(FILL)
+
+	sheet.Navigation:SetWidth(256)
 
 	for _, change in ipairs(changes) do
-		local chng = vgui.Create("DForm")
-		chng:SetSpacing(10)
-		chng:SetName("Update " .. change.version)
-		chng:SetWide(ttt2_changes:GetWide() - 30)
+		local panel = vgui.Create("DPanel", sheet)
+		panel:Dock(FILL)
 
-		ttt2_changes:AddItem(chng)
+		panel.Paint = function(slf, w, h)
+			draw.RoundedBox(4, 0, 0, w, h, Color(255, 255, 255))
+		end
 
-		chng:Help(change.text)
+		local label = vgui.Create("DLabel", panel)
+		label:SetText(change.text)
+		label:Dock(FILL)
+		label:SizeToContents()
 
-		chng:SizeToContents()
+		local leftBtn = sheet:AddSheet("Update " .. change.version, panel).Button
+
+		local oldClick = leftBtn.DoClick
+		leftBtn.DoClick = function(slf)
+			if currentVersion == change.version then return end
+
+			oldClick(slf)
+
+			frame:SetTitle("TTT2 Update - " .. change.version)
+
+			currentVersion = change.version
+		end
+
+		if change.version == currentVersion then
+			sheet:SetActiveButton(leftBtn)
+		end
 	end
-
-	ttt2_changes:EnableVerticalScrollbar()
 
 	frame:MakePopup()
 	frame:SetKeyboardInputEnabled(false)
