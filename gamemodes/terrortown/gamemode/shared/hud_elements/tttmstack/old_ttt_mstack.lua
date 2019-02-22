@@ -98,12 +98,19 @@ if CLIENT then
 				for i = 1, #item.text do
 					spec.text = item.text[i]
 
-					local tx = top_x + (MSTACK.msg_width * 0.5)
+					local tx = top_x + ((MSTACK.msg_width - (item.subWidth or 0)) * 0.5) + (item.subWidth or 0)
 					local ty = y + MSTACK.margin + (i - 1) * (text_height + MSTACK.margin)
 
 					spec.pos = {tx, ty}
 
 					draw.TextShadow(spec, 1, alpha)
+				end
+
+				-- image
+				if item.image then
+					surface.SetMaterial(item.image)
+					surface.SetDrawColor(255, 255, 255, 255)
+					surface.DrawTexturedRect(top_x + item.pad, y + item.pad, item.size2, item.size2)
 				end
 
 				if alpha == 0 then

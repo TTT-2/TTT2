@@ -25,6 +25,8 @@ MSTACK.width = MSTACK.msg_width + MSTACK.margin
 local text_width = MSTACK.msg_width - MSTACK.margin * 3 -- three margins for a little more room
 local text_height = draw.GetFontHeight(MSTACK.msgfont)
 
+local pad = 7
+
 -- Text colors to render the messages in
 local msgcolors = {
 	traitor_text = COLOR_RED,
@@ -51,6 +53,34 @@ function MSTACK:AddColoredBgMessage(text, bg_clr)
 	self:AddMessageEx(item)
 end
 
+function MSTACK:AddImagedMessage(text, c, image, size2)
+	local item = {}
+	item.text = text
+	item.col = c
+	item.bg = msgcolors.generic_bg
+	item.image = image
+	item.imageSize = size2
+	item.imagePad = pad
+	item.minHeight = size2 + 2 * pad
+	item.subWidth = size2 + 2 * pad
+
+	self:AddMessageEx(item)
+end
+
+function MSTACK:AddColoredBgMessage(text, bg_clr, image, size2)
+	local item = {}
+	item.text = text
+	item.col = msgcolors.generic_text
+	item.bg = bg_clr
+	item.image = image
+	item.imageSize = size2
+	item.imagePad = pad
+	item.minHeight = size2 + 2 * pad
+	item.subWidth = size2 + 2 * pad
+
+	self:AddMessageEx(item)
+end
+
 -- Internal
 function MSTACK:AddMessageEx(item)
 	item.col = table.Copy(item.col or msgcolors.generic_text)
@@ -59,11 +89,15 @@ function MSTACK:AddMessageEx(item)
 	item.bg = table.Copy(item.bg or msgcolors.generic_bg)
 	item.bg.a_max = item.bg.a
 
-	item.text = self:WrapText(item.text, text_width)
+	item.text = self:WrapText(item.text, text_width - (item.subWidth or 0))
 
 	-- Height depends on number of lines, which is equal to number of table
 	-- elements of the wrapped item.text
 	item.height = #item.text * text_height + MSTACK.margin * (1 + #item.text)
+
+	if item.minHeight then
+		item.height = math.max(item.height, item.minHeight)
+	end
 
 	item.time = CurTime()
 	item.sounded = false
