@@ -67,7 +67,7 @@ function MSTACK:AddImagedMessage(text, c, image, size2)
 	self:AddMessageEx(item)
 end
 
-function MSTACK:AddColoredBgMessage(text, bg_clr, image, size2)
+function MSTACK:AddColoredImagedMessage(text, bg_clr, image, size2)
 	local item = {}
 	item.text = text
 	item.col = msgcolors.generic_text
