@@ -1,7 +1,7 @@
 -- item info
 surface.CreateFont("ItemInfoFont", {font = "Trebuchet24", size = 10, weight = 700})
 
-COLOR_DARKGREY = COLOR_DARKGREY or Color(0, 0, 0, 200)
+COLOR_DARKGREY = COLOR_DARKGREY or Color(100, 100, 100, 255)
 
 if CLIENT then
 	local x = 0
@@ -53,7 +53,7 @@ if CLIENT then
 
 					local infoW, infoH = surface.GetTextSize(info)
 
-					draw.RoundedBox(8, tx - infoW * 0.5, ty - infoH * 0.5, infoW, infoH, COLOR_DARKGREY)
+					draw.RoundedBox(8, tx - infoW * 0.5, ty + infoH * 0.5, infoW, infoH, COLOR_DARKGREY)
 					draw.DrawText(info, "ItemInfoFont", tx, ty, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				end
 
