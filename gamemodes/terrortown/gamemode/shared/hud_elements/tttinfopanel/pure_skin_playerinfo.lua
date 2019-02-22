@@ -27,7 +27,8 @@ if CLIENT then
 		y = pos.y
 		w = size.w
 		h = size.h
-		self.BaseClass:PerformLayout()
+		
+		self.BaseClass.PerformLayout(self)
 	end
 
 	-- Returns player's ammo information
@@ -108,34 +109,33 @@ if CLIENT then
 			else
 				text = L[self.roundstate_string[round_state]]
 			end
-			
+
 			--calculate the scale multplier for role text
 			surface.SetFont("PureSkinRole")
 			local role_text_width = surface.GetTextSize(string.upper(text))
-			local role_scale_multiplier = (w - lpw - 2 * pad) / role_text_width 
+			local role_scale_multiplier = (w - lpw - 2 * pad) / role_text_width
 			if calive and cactive and isfunction(secondaryRoleInformationFunc) then
 				local secInfoTbl = secondaryRoleInformationFunc()
-				
+
 				if secInfoTbl and secInfoTbl.text then
 					surface.SetFont("PureSkinBar")
 					local sri_text_width = surface.GetTextSize(string.upper(secInfoTbl.text))
-					role_scale_multiplier = (w - sri_text_width - lpw - 2 * pad - 3 * sri_text_width_padding) / role_text_width 
+					role_scale_multiplier = (w - sri_text_width - lpw - 2 * pad - 3 * sri_text_width_padding) / role_text_width
 				end
-			end		
-			 
+			end
+
 			role_scale_multiplier = math.Clamp(role_scale_multiplier, 0.55, 0.92)
-			
-			
+
 			--create scaling matrix for the text
 			local mat = Matrix()
 			mat:Translate( Vector( nx, ry ) )
 			mat:Scale( Vector( role_scale_multiplier, role_scale_multiplier, role_scale_multiplier ) )
 			mat:Translate( -Vector( nx, ry ) )
-			
+
 			render.PushFilterMag( TEXFILTER.ANISOTROPIC )
 			render.PushFilterMin( TEXFILTER.ANISOTROPIC )
 			cam.PushModelMatrix( mat )
-				self:ShadowedText(string.upper(text), "PureSkinRole", nx, ry, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)	
+				self:ShadowedText(string.upper(text), "PureSkinRole", nx, ry, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			cam.PopModelMatrix( mat )
 			render.PopFilterMag()
 			render.PopFilterMin()
