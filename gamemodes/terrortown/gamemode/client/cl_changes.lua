@@ -188,7 +188,6 @@ function CreateChanges()
 	- added a drowning indicator into TTT2
 	- added possibility to toggle auto afk
 	- added possibility to modify the time a player can dive
-	- added Blue's BShadow library
 	- added parameter to the bindings to detect if a player released a key
 	- added possibility to switch between team-synced and individual random shops
 
@@ -199,6 +198,7 @@ function CreateChanges()
 	- fixed loading issue in the items module
 	- fixed critical bug in the process of saving the items data
 
+	- improved the changelog (as you see :D)
 	- reworked sql and created a sql library
 	]])
 
