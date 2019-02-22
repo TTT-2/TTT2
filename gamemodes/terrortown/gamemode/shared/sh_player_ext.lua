@@ -539,8 +539,12 @@ end
 
 if CLIENT then
 	net.Receive("StartDrowning", function()
+		local client = LocalPlayer()
+
+		if not IsValid(client) then return end
+
 		local bool = net.ReadBool()
 
-		LocalPlayer():StartDrowning(bool, bool and net.ReadUInt(16), bool and net.ReadUInt(16))
+		client:StartDrowning(bool, bool and net.ReadUInt(16), bool and net.ReadUInt(16))
 	end)
 end
