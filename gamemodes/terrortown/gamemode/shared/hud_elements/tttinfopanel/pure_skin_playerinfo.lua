@@ -27,7 +27,7 @@ if CLIENT then
 		y = pos.y
 		w = size.w
 		h = size.h
-		
+
 		self.BaseClass.PerformLayout(self)
 	end
 
@@ -58,7 +58,7 @@ if CLIENT then
 
 	function HUDELEMENT:Draw()
 		local client = LocalPlayer()
-		local calive = client:Alive()
+		local calive = client:Alive() and client:IsTerror()
 		local cactive = client:IsActive()
 		local L = GetLang()
 
