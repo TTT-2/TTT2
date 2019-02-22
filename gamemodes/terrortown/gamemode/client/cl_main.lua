@@ -16,6 +16,15 @@ surface.CreateFont("DefaultBold", {font = "Tahoma", size = 13, weight = 1000})
 surface.CreateFont("TabLarge", {font = "Tahoma", size = 13, weight = 700, shadow = true, antialias = false})
 surface.CreateFont("Trebuchet22", {font = "Trebuchet MS", size = 22, weight = 900})
 
+local edge_bottom = Material( "vgui/ttt/dynamic/hud_components/edge_bottom.png" )
+local edge_left = Material( "vgui/ttt/dynamic/hud_components/edge_left.png" )
+local edge_right = Material( "vgui/ttt/dynamic/hud_components/edge_right.png" )
+local edge_top = Material( "vgui/ttt/dynamic/hud_components/edge_top" )
+local vertices_bottom_left = Material( "vgui/ttt/dynamic/hud_components/vertices_bottom_left.png" )
+local vertices_bottom_right = Material( "vgui/ttt/dynamic/hud_components/vertices_bottom_right.png" )
+local vertices_top_left = Material( "vgui/ttt/dynamic/hud_components/vertices_top_left.png" )
+local vertices_top_right = Material( "vgui/ttt/dynamic/hud_components/vertices_top_right.png" )
+
 ttt_include("sh_init")
 
 include("terrortown/gamemode/shared/sh_item_module.lua")
@@ -540,31 +549,39 @@ end
 -------------------------------------
 
 -- TODO REM
-function DrawHUDElementBg(x, y, w, h, c)
+function DrawHUDElementBg(x, y, w, h, c)	
 	surface.SetDrawColor(clr(c))
 	surface.DrawRect(x, y, w, h)
 end
 
 function DrawHUDElementLines(x, y, w, h)
-	-- draw borders
-	-- top, left
-	surface.SetDrawColor(255, 255, 255, 40)
-	surface.DrawLine(x, y, x + w, y)
-	surface.DrawLine(x, y + 1, x, y + h)
+	local corner_size = 7
+	local shadow_size = 4
+	local edge_size = 3
 
-	-- top, left
-	surface.SetDrawColor(255, 255, 255, 20)
-	surface.DrawLine(x + 1, y + 1, x + w, y + 1)
-	surface.DrawLine(x + 1, y + 2, x + 1, y + h)
-
-	-- draw borders
-	-- bottom, right
-	surface.SetDrawColor(0, 0, 0, 125)
-	surface.DrawLine(x, y + h - 1, x + w - 1, y + h - 1)
-	surface.DrawLine(x + w - 1, y, x + w - 1, y + h)
-
-	-- bottom, right
-	surface.SetDrawColor(0, 0, 0, 60)
-	surface.DrawLine(x + 1, y + h - 2, x + w - 2, y + h - 2)
-	surface.DrawLine(x + w - 2, y + 1, x + w - 2, y + h - 1)
+	surface.SetDrawColor( 255, 255, 255, 255 )
+	
+	surface.SetMaterial( vertices_bottom_left	)
+	surface.DrawTexturedRect( x - shadow_size, y + h - edge_size, corner_size, corner_size )
+	
+	surface.SetMaterial( vertices_bottom_right	)
+	surface.DrawTexturedRect( x + w - edge_size, y + h - edge_size, corner_size, corner_size )
+	
+	surface.SetMaterial( vertices_top_left	)
+	surface.DrawTexturedRect( x - shadow_size, y - shadow_size, corner_size, corner_size )
+	
+	surface.SetMaterial( vertices_top_right	)
+	surface.DrawTexturedRect( x  + w - edge_size, y - shadow_size, corner_size, corner_size )
+	
+	surface.SetMaterial( edge_bottom	)
+	surface.DrawTexturedRect( x + edge_size, y + h - edge_size, w - 2 * edge_size, corner_size )
+	
+	surface.SetMaterial( edge_left	)
+	surface.DrawTexturedRect( x - shadow_size, y + edge_size, corner_size, h - 2 * edge_size )
+	
+	surface.SetMaterial( edge_right	)
+	surface.DrawTexturedRect( x + w - edge_size, y + edge_size, corner_size, h - 2 * edge_size )
+	
+	surface.SetMaterial( edge_top	)
+	surface.DrawTexturedRect( x + edge_size, y - shadow_size, w - 2 * edge_size, corner_size )
 end
