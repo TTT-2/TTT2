@@ -11,7 +11,7 @@ MSTACK.last = 0
 local table = table
 local surface = surface
 local draw = draw
-local pairs = pairs
+local ipairs = ipairs
 local net = net
 
 MSTACK.margin = 6
@@ -24,7 +24,6 @@ MSTACK.width = MSTACK.msg_width + MSTACK.margin
 
 local text_width = MSTACK.msg_width - MSTACK.margin * 3 -- three margins for a little more room
 local text_height = draw.GetFontHeight(MSTACK.msgfont)
-
 
 -- Text colors to render the messages in
 local msgcolors = {
@@ -95,7 +94,8 @@ function MSTACK:WrapText(text, width)
 	surface.SetFont(MSTACK.msgfont)
 
 	-- Any wrapping required?
-	local w, _ = surface.GetTextSize(text)
+	local w = surface.GetTextSize(text)
+
 	if w <= width then
 		return {text} -- Nope, but wrap in table for uniformity
 	end
@@ -103,17 +103,17 @@ function MSTACK:WrapText(text, width)
 	local words = string.Explode(" ", text) -- No spaces means you're screwed
 
 	local lines = {""}
-	for i, wrd in pairs(words) do
+
+	for i, wrd in ipairs(words) do
 		local l = #lines
 		local added = lines[l] .. " " .. wrd
-		w, _ = surface.GetTextSize(added)
+
+		w = surface.GetTextSize(added)
 
 		if w > text_width then
-			-- New line needed
-			table.insert(lines, wrd)
+			table.insert(lines, wrd) -- New line needed
 		else
-			-- Safe to tack it on
-			lines[l] = added
+			lines[l] = added -- Safe to tack it on
 		end
 	end
 
