@@ -79,7 +79,16 @@ function ITEM:Equip(ply)
 end
 
 function ITEM:DrawInfo()
-	return FormatTime(math.max(0, RADAR.endtime - CurTime()), "%02i:%02i")
+	local text
+	local time = math.max(0, RADAR.endtime - CurTime())
+
+	if time > 60 then
+		text = FormatTime(time, "%02i:%02i")
+	else
+		text = FormatTime(time, "%02i")
+	end
+
+	return text
 end
 
 local function DrawTarget(tgt, size, offset, no_shrink)

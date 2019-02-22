@@ -1,5 +1,5 @@
 -- item info
-surface.CreateFont("ItemInfoFont", {font = "Trebuchet24", size = 12, weight = 700})
+surface.CreateFont("ItemInfoFont", {font = "Trebuchet24", size = 14, weight = 700})
 
 COLOR_DARKGREY = COLOR_DARKGREY or Color(100, 100, 100, 255)
 
