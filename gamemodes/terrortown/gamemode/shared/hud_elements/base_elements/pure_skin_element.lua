@@ -6,8 +6,8 @@ if CLIENT then
 		DrawHUDElementBg(x, y, w, h, c)
 	end
 
-	function HUDELEMENT:DrawLines(x, y, w, h)
-		DrawHUDElementLines(x, y, w, h)
+	function HUDELEMENT:DrawLines(x, y, w, h, a)
+		DrawHUDElementLines(x, y, w, h, a)
 	end
 
 	-- x, y, width, height, color, progress, text

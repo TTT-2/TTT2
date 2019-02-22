@@ -6,6 +6,9 @@ surface.CreateFont("PureSkinBar", {font = "Trebuchet24", size = 21, weight = 100
 surface.CreateFont("PureSkinWep", {font = "Trebuchet24", size = 21, weight = 1000})
 surface.CreateFont("PureSkinWepNum", {font = "Trebuchet24", size = 21, weight = 700})
 
+-- base drawing functions
+include("cl_drawing_functions.lua")
+
 local defaultColor = Color(49, 71, 94)
 
 HUD.previewImage = Material("vgui/ttt/huds/pure_skin/preview.png")
@@ -31,6 +34,7 @@ function HUD:Initialize()
 	self:ForceHUDElement("pure_skin_roundinfo")
 	self:ForceHUDElement("pure_skin_wswitch")
 	self:ForceHUDElement("pure_skin_drowning")
+	self:ForceHUDElement("pure_skin_mstack")
 	--self:ForceHUDElement("old_ttt_spec")
 	--self:ForceHUDElement("old_ttt_items")
 

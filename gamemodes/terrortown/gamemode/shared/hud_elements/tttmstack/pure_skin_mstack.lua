@@ -1,4 +1,4 @@
-HUDELEMENT.Base = "old_ttt_element"
+HUDELEMENT.Base = "pure_skin_element"
 
 if CLIENT then
 	local draw = draw
@@ -87,7 +87,8 @@ if CLIENT then
 
 				-- Background box
 				item.bg.a = math.Clamp(alpha, 0, item.bg.a_max)
-				draw.RoundedBox(8, top_x, y, MSTACK.msg_width, height, item.bg)
+
+				self:DrawBg(top_x, y, MSTACK.msg_width, height, item.bg)
 
 				-- Text
 				item.col.a = math.Clamp(alpha, 0, item.col.a_max)
@@ -105,6 +106,8 @@ if CLIENT then
 
 					draw.TextShadow(spec, 1, alpha)
 				end
+
+				self:DrawLines(top_x, y, MSTACK.msg_width, height, item.bg.a / 255)
 
 				if alpha == 0 then
 					MSTACK.msgs[k] = nil
