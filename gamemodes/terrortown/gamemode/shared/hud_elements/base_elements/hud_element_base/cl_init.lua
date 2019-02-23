@@ -181,8 +181,12 @@ function HUDELEMENT:Reset()
 	local defaultPos = defs.basepos
 	local defaultSize = defs.size
 
-	self:SetBasePos(defaultPos.x, defaultPos.y)
-	self:SetSize(defaultSize.w, defaultSize.h)
+	if defaultPos then
+		self:SetBasePos(defaultPos.x, defaultPos.y)
+	end
+	if defaultSize then
+		self:SetSize(defaultSize.w, defaultSize.h)
+	end
 
 	self:PerformLayout()
 end
