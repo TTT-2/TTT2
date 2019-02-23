@@ -167,8 +167,10 @@ if CLIENT then
 
 		if h - difH ~= 0 then
 			y = y - (h - difH)
+
 			self:SetPos(x, y)
 			self:SetSize(width, h)
+
 			MsgN("weapon switch pos changed: h=" .. h .. ", difH=" .. difH .. ", y=" .. y .. ", count=" .. count .. "!" )
 		end
 

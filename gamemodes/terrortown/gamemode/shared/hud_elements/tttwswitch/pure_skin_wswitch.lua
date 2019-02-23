@@ -149,9 +149,11 @@ if CLIENT then
 
 		client.oldWSWeps = count
 
-		if(h - difH != 0) then
+		if h - difH ~= 0 then
 			y = y - (h - difH)
+
 			MsgN("weapon switch pos changed: h=" .. h .. ", difH=" .. difH .. ", y=" .. y .. ", count=" .. count .. "!" )
+
 			self:SetPos(x, y)
 			self:SetSize(width, h)
 		end
