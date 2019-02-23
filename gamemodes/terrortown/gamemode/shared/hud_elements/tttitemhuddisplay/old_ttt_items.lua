@@ -6,6 +6,7 @@ COLOR_DARKGREY = COLOR_DARKGREY or Color(100, 100, 100, 255)
 if CLIENT then
 	local x = 0
 	local y = 0
+	local size = 64
 
 	function HUDELEMENT:Initialize()
 		self:SetPos(20, 20)
