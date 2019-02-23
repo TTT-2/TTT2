@@ -47,6 +47,9 @@ if CLIENT then
 		for _, itemCls in ipairs(itms) do
 			local item = items.GetStored(itemCls)
 			if item and item.hud then
+				surface.SetDrawColor(36, 115, 51, 255)
+				surface.DrawRect(pos.x, curY, size, size)
+
 				surface.SetMaterial(item.hud)
 				surface.SetDrawColor(255, 255, 255, 255)
 				surface.DrawTexturedRect(pos.x, curY, size, size)
@@ -72,6 +75,8 @@ if CLIENT then
 
 					self:DrawLines(bx, by, bw, infoH)
 				end
+
+				self:DrawLines(pos.x, curY, size, size)
 
 				curY = curY - (size + size * 0.25)
 			end
