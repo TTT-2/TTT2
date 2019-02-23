@@ -37,7 +37,7 @@ end
 	Desc: This function is called after all Initialize() functions.
 --]]-------------------------------
 function HUDELEMENT:PerformLayout()
-	for elem in ipairs(self.children) do
+	for _, elem in ipairs(self.children) do
 		local elemtbl = hudelements.GetStored(elem)
 		if elemtbl then
 			elemtbl:PerformLayout()
