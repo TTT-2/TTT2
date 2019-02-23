@@ -35,7 +35,6 @@ if CLIENT then
 
 	function HUDELEMENT:Draw()
 		local client = LocalPlayer()
-		local L = GetLang()
 		local round_state = GAMEMODE.round_state
 
 		local players = util.GetFilteredPlayers(function (ply) return ply:IsTerror() end)
