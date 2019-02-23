@@ -72,4 +72,20 @@ if CLIENT then
 
 		self:SetSize(size, curY - pos.y)
 	end
+
+	local defaults
+
+	function HUDELEMENT:GetDefaults()
+		if not defaults then
+			local bclass = baseclass.Get(base)
+
+			defaults = table.Copy(bclass.GetDefaults(self))
+			defaults.minWidth = size
+			defaults.minHeight = size
+			defaults.resizeableX = false
+			defaults.resizeableY = false
+		end
+
+		return defaults
+	end
 end

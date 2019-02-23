@@ -153,4 +153,18 @@ if CLIENT then
 			y_elem = y_elem + height + self.margin
 		end
 	end
+
+	local defaults
+
+	function HUDELEMENT:GetDefaults()
+		if not defaults then
+			local bclass = baseclass.Get(base)
+
+			defaults = table.Copy(bclass.GetDefaults(self))
+			defaults.resizeableY = false
+			defaults.minHeight = height
+		end
+
+		return defaults
+	end
 end

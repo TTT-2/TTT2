@@ -215,4 +215,17 @@ if CLIENT then
 		-- draw lines around the element
 		self:DrawLines(x2, y2, w2, h2)
 	end
+
+	local defaults
+
+	function HUDELEMENT:GetDefaults()
+		if not defaults then
+			local bclass = baseclass.Get(base)
+
+			defaults = table.Copy(bclass.GetDefaults(self))
+			defaults.resizeableY = false
+		end
+
+		return defaults
+	end
 end

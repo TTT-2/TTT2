@@ -126,7 +126,7 @@ local function EditLocalHUD()
 					nh = 1
 				end
 
-				elem:SetSize(nw, nh)
+				elem:SetSize(elem:GetDefaults().resizeableX and nw or difW, elem:GetDefaults().resizeableY and nh or difH)
 			end
 
 			elem:PerformLayout()

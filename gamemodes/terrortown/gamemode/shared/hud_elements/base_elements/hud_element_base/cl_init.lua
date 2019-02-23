@@ -1,24 +1,26 @@
 local surface = surface
 
-HUDELEMENT.basepos = {
+local zero_tbl = {
 	x = 0,
 	y = 0
 }
 
-HUDELEMENT.pos = {
-	x = 0,
-	y = 0
+HUDELEMENT.basepos = table.Copy(zero_tbl)
+HUDELEMENT.pos = table.Copy(zero_tbl)
+HUDELEMENT.size = table.Copy(zero_tbl)
+
+local defaults = {
+	basepos = table.Copy(zero_tbl),
+	size = table.Copy(zero_tbl),
+	minHeight = 0,
+	minWidth = 0,
+	resizeableX = true,
+	resizeableY = true
 }
 
-HUDELEMENT.size = {
-	w = 0,
-	h = 0
-}
-
-HUDELEMENT.defaults = {
-	basepos = table.Copy(HUDELEMENT.basepos),
-	size = table.Copy(HUDELEMENT.size)
-}
+function HUDELEMENT:GetDefaults()
+	return defaults
+end
 
 HUDELEMENT.parent = nil
 HUDELEMENT.parent_is_type = nil
@@ -71,19 +73,29 @@ end
 
 function HUDELEMENT:SetSize(w, h)
 	local nw, nh = w < 0, h < 0
+
+	if nw then
+		w = -w
+	end
+
+	if nh then
+		h = -h
+	end
+
+	local defs = self:GetDefaults()
+
+	w = math.max(defs.minWidth, w)
+	h = math.max(defs.minHeight, h)
+
 	if nw or nh then
 		local basepos = self:GetBasePos()
 		local pos = self:GetPos()
 
 		if nw then
-			w = -w
-
 			self:SetPos(basepos.x - w, pos.y)
 		end
 
 		if nh then
-			h = -h
-
 			self:SetPos(pos.x, basepos.y - h)
 		end
 	end
@@ -158,13 +170,16 @@ function HUDELEMENT:DrawSize()
 end
 
 function HUDELEMENT:SetDefaults()
-	self.defaults.basepos = table.Copy(self.basepos)
-	self.defaults.size = table.Copy(self.size)
+	local defs = self:GetDefaults()
+
+	defs.basepos = table.Copy(self.basepos)
+	defs.size = table.Copy(self.size)
 end
 
 function HUDELEMENT:Reset()
-	local defaultPos = self.defaults.basepos
-	local defaultSize = self.defaults.size
+	local defs = self:GetDefaults()
+	local defaultPos = defs.basepos
+	local defaultSize = defs.size
 
 	self:SetBasePos(defaultPos.x, defaultPos.y)
 	self:SetSize(defaultSize.w, defaultSize.h)

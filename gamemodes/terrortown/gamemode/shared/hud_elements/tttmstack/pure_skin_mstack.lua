@@ -129,4 +129,18 @@ if CLIENT then
 			end
 		end
 	end
+
+	local defaults
+
+	function HUDELEMENT:GetDefaults()
+		if not defaults then
+			local bclass = baseclass.Get(base)
+
+			defaults = table.Copy(bclass.GetDefaults(self))
+			defaults.resizeableX = false
+			defaults.resizeableY = false
+		end
+
+		return defaults
+	end
 end
