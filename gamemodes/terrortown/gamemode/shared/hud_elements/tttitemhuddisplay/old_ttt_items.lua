@@ -18,7 +18,7 @@ if CLIENT then
 	function HUDELEMENT:PerformLayout()
 		local basepos = self:GetBasePos()
 
-		self:SetPos(basepos.x, ScrH() * 0.5 + basepos.y)
+		self:SetPos(basepos.x, basepos.y)
 		self:SetSize(size, -size)
 
 		local bclass = baseclass.Get(base)

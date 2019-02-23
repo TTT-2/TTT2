@@ -118,36 +118,15 @@ if CLIENT then
 	function HUDELEMENT:Initialize()
 		WSWITCH:UpdateWeaponCache()
 
-		local weps = WSWITCH.WeaponCache
-		local count = #weps
-		local h = count * (height + self.margin)
-
-		LocalPlayer().oldWSWeps = count
-
-		self:SetBasePos(ScrW() - (width + self.margin * 2), ScrH() - self.margin - h)
-		self:SetSize(width, h)
+		self:SetBasePos(ScrW() - (width + self.margin * 2), ScrH() - self.margin)
+		self:SetSize(width, -height)
 	end
 
 	function HUDELEMENT:PerformLayout()
-		WSWITCH:UpdateWeaponCache()
+		local basepos = self:GetBasePos()
 
-		--local pos = self:GetPos()
-		--local x = pos.x
-		--local y = pos.y
-
-		local client = LocalPlayer()
-		local weps = WSWITCH.WeaponCache
-		local count = #weps
-		local tmp = height + self.margin
-		local h = count * tmp
-		local difH = client.oldWSWeps * tmp
-
-		client.oldWSWeps = count
-
-		--y = y - (h - difH)
-
-		--self:SetPos(x, y)
-		self:SetSize(width, h)
+		self:SetPos(basepos.x, basepos.y)
+		self:SetSize(width, -height)
 
 		local bclass = baseclass.Get(base)
 
@@ -157,28 +136,19 @@ if CLIENT then
 	function HUDELEMENT:Draw()
 		if not WSWITCH.Show and not HUDManager.IsEditing then return end
 
-		local pos = self:GetPos()
-		local y = pos.y
-		local x = pos.x
 		local client = LocalPlayer()
 		local weps = WSWITCH.WeaponCache
 		local count = #weps
 		local tmp = height + self.margin
 		local h = count * tmp
-		local difH = client.oldWSWeps * tmp
+		local basepos = self:GetBasePos()
 
-		client.oldWSWeps = count
+		self:SetPos(basepos.x, basepos.y)
+		self:SetSize(width, -h)
 
-		if h - difH ~= 0 then
-			y = y - (h - difH)
-
-			self:SetPos(x, y)
-			self:SetSize(width, h)
-
-			MsgN("weapon switch pos changed: h=" .. h .. ", difH=" .. difH .. ", y=" .. y .. ", count=" .. count .. "!" )
-		end
-
-		local y_elem = y
+		local pos = self:GetPos()
+		local x_elem = pos.x
+		local y_elem = pos.y
 		local col = self.col_dark
 
 		for k, wep in ipairs(weps) do
@@ -188,9 +158,9 @@ if CLIENT then
 				col = self.col_dark
 			end
 
-			self:DrawBarBg(x, y_elem, width, height, col)
+			self:DrawBarBg(x_elem, y_elem, width, height, col)
 
-			if not self:DrawWeapon(x, y_elem, col, wep) then
+			if not self:DrawWeapon(x_elem, y_elem, col, wep) then
 				WSWITCH:UpdateWeaponCache()
 
 				return
