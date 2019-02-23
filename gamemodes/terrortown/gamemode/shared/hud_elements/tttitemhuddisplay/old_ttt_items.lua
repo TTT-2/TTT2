@@ -13,13 +13,16 @@ if CLIENT then
 	local size = 64
 
 	function HUDELEMENT:Initialize()
-		self:SetBasePos(20, 20)
+		self:SetBasePos(self.pos.x, ScrH() * 0.5 + self.pos.y)
 		self:SetSize(size, -size)
 	end
 
 	function HUDELEMENT:PerformLayout()
 		x = self.pos.x
 		y = ScrH() * 0.5 + self.pos.y
+
+		self:SetBasePos(x, y)
+		self:SetSize(size, -size)
 
 		local bclass = baseclass.Get(base)
 
