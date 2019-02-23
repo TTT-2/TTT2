@@ -75,13 +75,16 @@ local function EditLocalHUD()
 					if elObj and elObj:IsInPos(x, y) then
 						elem = elObj
 
-						local difPos = elem:GetBasePos()
+						local difPos = elem:GetPos()
+						local difBasePos = elem:GetBasePos()
 						local difSize = elem:GetSize()
 
 						client.difX = x - difPos.x
 						client.difY = y - difPos.y
 						client.difW = x - difSize.w
 						client.difH = y - difSize.h
+						client.difBaseX = difBasePos.x - difPos.x
+						client.difBaseY = difBasePos.y - difPos.y
 
 						break
 					end
@@ -113,7 +116,7 @@ local function EditLocalHUD()
 					ny = ScrH() - size.h
 				end
 
-				elem:SetBasePos(nx, ny)
+				elem:SetBasePos(nx + client.difBaseX, ny + client.difBaseY)
 			elseif mode == 1 then
 				local nw = x - difW
 				local nh = y - difH
