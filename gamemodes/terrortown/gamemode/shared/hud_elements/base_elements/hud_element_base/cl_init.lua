@@ -171,11 +171,13 @@ function HUDELEMENT:Reset()
 	self:PerformLayout()
 end
 
+local savingKeys = {
+	basepos = {typ = "basepos"},
+	size = {typ = "size"}
+}
+
 function HUDELEMENT:GetSavingKeys()
-	return {
-		basepos = {typ = "basepos"},
-		size = {typ = "size"}
-	}
+	return savingKeys
 end
 
 function HUDELEMENT:Save()
