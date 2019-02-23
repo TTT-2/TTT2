@@ -1,5 +1,10 @@
 local surface = surface
 
+HUDELEMENT.basepos = {
+	x = 0,
+	y = 0
+}
+
 HUDELEMENT.pos = {
 	x = 0,
 	y = 0
@@ -40,6 +45,15 @@ function HUDELEMENT:PerformLayout()
 	end
 end
 
+function HUDELEMENT:GetBasePos()
+	return self.basepos
+end
+
+function HUDELEMENT:SetBasePos(x, y)
+	self.basepos.x = x
+	self.basepos.y = y
+end
+
 function HUDELEMENT:GetPos()
 	return self.pos
 end
@@ -54,6 +68,24 @@ function HUDELEMENT:GetSize()
 end
 
 function HUDELEMENT:SetSize(w, h)
+	if w < 0 then
+		w = -w
+
+		local basepos = self:GetBasePos()
+		local pos = self:GetPos()
+
+		self:SetPos(basepos.x - w, pos.y)
+	end
+
+	if h < 0 then
+		h = -h
+
+		local basepos = self:GetBasePos()
+		local pos = self:GetPos()
+
+		self:SetPos(pos.x, basepos.y - h)
+	end
+
 	self.size.w = w
 	self.size.h = h
 end
@@ -97,16 +129,6 @@ function HUDELEMENT:IsInRange(x, y, range)
 	local x, y = self.pos.x, self.pos.y
 	local w, h = self.size.w, self.size.h
 
-	if w < 0 then
-		w = -w
-		x = x - w
-	end
-
-	if h < 0 then
-		h = -h
-		y = y - h
-	end
-
 	return x - range <= x + w and x + range >= x and y - range <= y + h and y + range >= y
 end
 
@@ -116,16 +138,6 @@ end
 
 function HUDELEMENT:DrawSize()
 	local x, y, w, h = self.pos.x, self.pos.y, self.size.w, self.size.h
-
-	if w < 0 then
-		w = -w
-		x = x - w
-	end
-
-	if h < 0 then
-		h = -h
-		y = y - h
-	end
 
 	surface.SetDrawColor(255, 0, 0, 255)
 	surface.DrawLine(x - 1, y - 1, x + w + 1, y - 1) -- top
