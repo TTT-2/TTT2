@@ -16,14 +16,8 @@ surface.CreateFont("DefaultBold", {font = "Tahoma", size = 13, weight = 1000})
 surface.CreateFont("TabLarge", {font = "Tahoma", size = 13, weight = 700, shadow = true, antialias = false})
 surface.CreateFont("Trebuchet22", {font = "Trebuchet MS", size = 22, weight = 900})
 
-local edge_bottom = Material( "vgui/ttt/dynamic/hud_components/edge_bottom.png" )
-local edge_left = Material( "vgui/ttt/dynamic/hud_components/edge_left.png" )
-local edge_right = Material( "vgui/ttt/dynamic/hud_components/edge_right.png" )
-local edge_top = Material( "vgui/ttt/dynamic/hud_components/edge_top" )
-local vertices_bottom_left = Material( "vgui/ttt/dynamic/hud_components/vertices_bottom_left.png" )
-local vertices_bottom_right = Material( "vgui/ttt/dynamic/hud_components/vertices_bottom_right.png" )
-local vertices_top_left = Material( "vgui/ttt/dynamic/hud_components/vertices_top_left.png" )
-local vertices_top_right = Material( "vgui/ttt/dynamic/hud_components/vertices_top_right.png" )
+local shadow_border = Material("vgui/ttt/dynamic/hud_components/shadow_border.png" )
+shadow_border = surface.GetTextureID("vgui/ttt/dynamic/hud_components/shadow_border")
 
 ttt_include("sh_init")
 
@@ -560,28 +554,23 @@ function DrawHUDElementLines(x, y, w, h)
 	local edge_size = 3
 
 	surface.SetDrawColor( 255, 255, 255, 255 )
+	--surface.SetMaterial( shadow_border )
+	surface.SetTexture( shadow_border )
 	
-	surface.SetMaterial( vertices_bottom_left	)
-	surface.DrawTexturedRect( x - shadow_size, y + h - edge_size, corner_size, corner_size )
+	surface.DrawTexturedRectUV( x - shadow_size, y + h - edge_size, corner_size, corner_size, 3/63, 52/63,  10/63, 59/63 )
 	
-	surface.SetMaterial( vertices_bottom_right	)
-	surface.DrawTexturedRect( x + w - edge_size, y + h - edge_size, corner_size, corner_size )
+	surface.DrawTexturedRectUV( x + w - edge_size, y + h - edge_size, corner_size, corner_size, 52/63, 52/63,  59/63, 59/63 )
 	
-	surface.SetMaterial( vertices_top_left	)
-	surface.DrawTexturedRect( x - shadow_size, y - shadow_size, corner_size, corner_size )
+	surface.DrawTexturedRectUV( x - shadow_size, y - shadow_size, corner_size, corner_size, 3/63, 3/63,  10/63, 10/63)
 	
-	surface.SetMaterial( vertices_top_right	)
-	surface.DrawTexturedRect( x  + w - edge_size, y - shadow_size, corner_size, corner_size )
+	surface.DrawTexturedRectUV( x  + w - edge_size, y - shadow_size, corner_size, corner_size, 52/63, 3/63,  59/63, 10/63 )
 	
-	surface.SetMaterial( edge_bottom	)
-	surface.DrawTexturedRect( x + edge_size, y + h - edge_size, w - 2 * edge_size, corner_size )
+	surface.DrawTexturedRectUV( x + edge_size, y + h - edge_size, w - 2 * edge_size, corner_size, 32/63, 52/63,  33/63, 59/63 )
 	
-	surface.SetMaterial( edge_left	)
-	surface.DrawTexturedRect( x - shadow_size, y + edge_size, corner_size, h - 2 * edge_size )
+	surface.DrawTexturedRectUV( x - shadow_size, y + edge_size, corner_size, h - 2 * edge_size, 3/63, 32/63,  10/63, 33/63 )
 	
-	surface.SetMaterial( edge_right	)
-	surface.DrawTexturedRect( x + w - edge_size, y + edge_size, corner_size, h - 2 * edge_size )
+	surface.DrawTexturedRectUV( x + w - edge_size, y + edge_size, corner_size, h - 2 * edge_size, 52/63, 32/63,  59/63, 33/63 )
 	
-	surface.SetMaterial( edge_top	)
-	surface.DrawTexturedRect( x + edge_size, y - shadow_size, w - 2 * edge_size, corner_size )
+	surface.DrawTexturedRectUV( x + edge_size, y - shadow_size, w - 2 * edge_size, corner_size, 32/63, 3/63,  33/63, 10/63 )
+	
 end
