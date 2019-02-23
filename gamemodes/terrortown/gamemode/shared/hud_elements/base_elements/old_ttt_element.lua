@@ -2,9 +2,11 @@ local surface = surface
 local draw = draw
 local math = math
 
-HUDELEMENT.Base = "hud_element_base"
+local base = "hud_element_base"
 
 DEFINE_BASECLASS(base)
+
+HUDELEMENT.Base = base
 
 if CLIENT then
 	local hudWidth = CreateClientConVar("ttt2_base_hud_width", "0")
