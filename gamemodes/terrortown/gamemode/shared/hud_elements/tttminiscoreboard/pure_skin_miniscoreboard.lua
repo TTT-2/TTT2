@@ -31,7 +31,7 @@ if CLIENT then
 		self:SetPos(parent_pos.x + parent_size.w, parent_pos.y)
 		self:SetSize(width, height)
 
-		baseclass.get("").PerformLayout(self)
+		BaseClass.PerformLayout(self)
 	end
 
 	function HUDELEMENT:Draw()
@@ -47,7 +47,7 @@ if CLIENT then
 		self:DrawBg(self.pos.x, self.pos.y, self.size.w, self.size.h, self.basecolor)
 		local tmp_x, tmp_y = self.pos.x, self.pos.y
 		for i, p in ipairs(players) do
-			tmp_x = self.pos.x + (margin + ply_ind_size) * i * (i % row_count)
+			tmp_x = self.pos.x + (margin + ply_ind_size) * math.floor(i * 0.5)
 			tmp_y = self.pos.y + margin + (margin + ply_ind_size) * (i % row_count)
 			ply_color = p:GetRoleColor()
 			surface.SetDrawColor(clr(ply_color))
