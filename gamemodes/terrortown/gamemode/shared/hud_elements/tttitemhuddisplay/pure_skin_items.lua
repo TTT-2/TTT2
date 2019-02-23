@@ -31,6 +31,10 @@ if CLIENT then
 
 		if not client:Alive() or client:Team() ~= TEAM_TERROR then return end
 
+		local basepos = self:GetBasePos()
+
+		self:SetPos(basepos.x, basepos.y)
+
 		local itms = client:GetEquipmentItems()
 		local pos = self:GetPos()
 		local curY = pos.y
