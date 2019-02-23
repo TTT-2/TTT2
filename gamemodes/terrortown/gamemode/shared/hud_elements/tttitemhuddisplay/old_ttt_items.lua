@@ -7,6 +7,10 @@ local base = "old_ttt_element"
 
 HUDELEMENT.Base = base
 
+if SERVER then
+	resource.AddFile("materials/vgui/ttt/perks/old_ttt_bg.png")
+end
+
 if CLIENT then
 	local size = 64
 
@@ -25,6 +29,8 @@ if CLIENT then
 
 		bclass.PerformLayout(self)
 	end
+
+	local old_ttt_bg = Material("vgui/ttt/perks/old_ttt_bg.png")
 
 	function HUDELEMENT:Draw()
 		local client = LocalPlayer()
@@ -51,6 +57,10 @@ if CLIENT then
 		for _, itemCls in ipairs(itms) do
 			local item = items.GetStored(itemCls)
 			if item and item.hud then
+				surface.SetMaterial(old_ttt_bg)
+				surface.SetDrawColor(255, 255, 255, 255)
+				surface.DrawTexturedRect(pos.x, curY, size, size)
+
 				surface.SetMaterial(item.hud)
 				surface.SetDrawColor(255, 255, 255, 255)
 				surface.DrawTexturedRect(pos.x, curY, size, size)
