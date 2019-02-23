@@ -99,7 +99,7 @@ if CLIENT then
 				for i = 1, #item.text do
 					spec.text = item.text[i]
 
-					local tx = top_x + (item.subWidth or 0)
+					local tx = top_x + (item.subWidth or 5)
 					local ty = y + MSTACK.margin + (i - 1) * (text_height + MSTACK.margin)
 
 					spec.pos = {tx, ty}
