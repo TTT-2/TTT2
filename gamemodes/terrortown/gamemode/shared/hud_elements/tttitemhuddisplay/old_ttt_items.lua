@@ -9,6 +9,7 @@ if CLIENT then
 
 	function HUDELEMENT:Initialize()
 		self:SetPos(20, 20)
+		self:SetSize(size, -size)
 	end
 
 	function HUDELEMENT:PerformLayout()
@@ -40,13 +41,13 @@ if CLIENT then
 			if item and item.hud then
 				surface.SetMaterial(item.hud)
 				surface.SetDrawColor(255, 255, 255, 255)
-				surface.DrawTexturedRect(x, curY, 64, 64)
+				surface.DrawTexturedRect(x, curY, size, size)
 
 				local info = item:DrawInfo()
 				if info then
 					-- right bottom corner
-					local tx = x + 64
-					local ty = curY + 64
+					local tx = x + size
+					local ty = curY + size
 					local pad = 5
 
 					surface.SetFont("ItemInfoFont")
@@ -57,10 +58,10 @@ if CLIENT then
 					draw.DrawText(info, "ItemInfoFont", tx, ty - infoH * 0.5, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				end
 
-				curY = curY - 80
+				curY = curY - (size + size * 0.25)
 			end
 		end
 
-		self:SetSize(64, curY - y)
+		self:SetSize(size, curY - y)
 	end
 end

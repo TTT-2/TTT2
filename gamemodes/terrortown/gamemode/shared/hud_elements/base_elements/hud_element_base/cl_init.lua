@@ -94,10 +94,20 @@ end
 function HUDELEMENT:IsInRange(x, y, range)
 	range = range or 0
 
-	local minX, minY = self.pos.x, self.pos.y
-	local maxX, maxY = minX + self.size.w, minY + self.size.h
+	local x, y = self.pos.x, self.pos.y
+	local w, h = self.size.w, self.size.h
 
-	return x - range <= maxX and x + range >= minX and y - range <= maxY and y + range >= minY
+	if w < 0 then
+		w = -w
+		x = x - w
+	end
+
+	if h < 0 then
+		h = -h
+		y = y - h
+	end
+
+	return x - range <= x + w and x + range >= x and y - range <= y + h and y + range >= y
 end
 
 function HUDELEMENT:IsInPos(x, y)
@@ -106,6 +116,16 @@ end
 
 function HUDELEMENT:DrawSize()
 	local x, y, w, h = self.pos.x, self.pos.y, self.size.w, self.size.h
+
+	if w < 0 then
+		w = -w
+		x = x - w
+	end
+
+	if h < 0 then
+		h = -h
+		y = y - h
+	end
 
 	surface.SetDrawColor(255, 0, 0, 255)
 	surface.DrawLine(x - 1, y - 1, x + w + 1, y - 1) -- top
