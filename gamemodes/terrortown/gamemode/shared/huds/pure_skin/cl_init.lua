@@ -33,6 +33,9 @@ function HUD:GetSavingKeys()
 		}
 	end
 
+	print("saving keys: ", savingKeys)
+	PrintTable(savingKeys or {ret = "nil"})
+
 	return savingKeys
 end
 
