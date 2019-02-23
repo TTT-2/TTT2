@@ -43,7 +43,7 @@ if CLIENT then
 		end
 
 		-- draw bg and shadow
-		self:DrawBg(self.pos.x, self.pos.y, width, heigth, self.basecolor)
+		self:DrawBg(self.pos.x, self.pos.y, self.size.w, self.size.h, self.basecolor)
 		local tmp_x, tmp_y = self.pos.x, self.pos.y
 		for i, p in ipairs(players) do
 			tmp_x = self.pos.x + (margin + ply_ind_size) * i * (i % row_count)
