@@ -129,9 +129,9 @@ if CLIENT then
 	function HUDELEMENT:PerformLayout()
 		WSWITCH:UpdateWeaponCache()
 
-		local pos = self:GetPos()
-		x = pos.x
-		y = pos.y
+		--local pos = self:GetPos()
+		--local x = pos.x
+		--local y = pos.y
 
 		local client = LocalPlayer()
 		local weps = WSWITCH.WeaponCache
@@ -142,9 +142,9 @@ if CLIENT then
 
 		client.oldWSWeps = count
 
-		y = y - (h - difH)
+		--y = y - (h - difH)
 
-		self:SetPos(x, y)
+		--self:SetPos(x, y)
 		self:SetSize(width, h)
 
 		self.BaseClass.PerformLayout(self)
@@ -175,7 +175,6 @@ if CLIENT then
 		end
 
 		local y_elem = y
-
 		local col = self.col_dark
 
 		for k, wep in ipairs(weps) do
