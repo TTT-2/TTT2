@@ -16,18 +16,8 @@ HUD.previewImage = Material("vgui/ttt/huds/pure_skin/preview.png")
 local savingKeys
 
 function HUD:GetSavingKeys()
-	print("1")
-
 	if not savingKeys then
-		print("2")
-		local tmp = self.BaseClass.GetSavingKeys(self)
-
-		print("saving keys prep: ", tmp)
-		PrintTable(tmp or {ret = "nil"})
-
-		local savingKeys = table.Copy(tmp)
-
-		print("3")
+		savingKeys = table.Copy(self.BaseClass.GetSavingKeys(self))
 		savingKeys.basecolor = {
 			typ = "color",
 			desc = "BaseColor",
@@ -41,10 +31,6 @@ function HUD:GetSavingKeys()
 			end
 		}
 	end
-	print("4")
-
-	print("saving keys: ", savingKeys)
-	PrintTable(savingKeys or {ret = "nil"})
 
 	return savingKeys
 end
