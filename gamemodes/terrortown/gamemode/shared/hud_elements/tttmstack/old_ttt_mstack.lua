@@ -109,7 +109,7 @@ if CLIENT then
 				-- image
 				if item.image then
 					surface.SetMaterial(item.image)
-					surface.SetDrawColor(255, 255, 255, 255)
+					surface.SetDrawColor(255, 255, 255, item.bg.a)
 					surface.DrawTexturedRect(top_x + item.imagePad, y + item.imagePad, item.imageSize, item.imageSize)
 				end
 
