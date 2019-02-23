@@ -125,6 +125,10 @@ function OnLoaded()
 		HUDElementList[k] = newTable
 
 		baseclass.Set(k, newTable)
+
+		if CLIENT then
+			newTable:Initialize()
+		end
 	end
 end
 
