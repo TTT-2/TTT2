@@ -6,8 +6,8 @@ local zero_tbl_pos = {
 }
 
 local zero_tbl_size = {
-	x = 0,
-	y = 0
+	w = 0,
+	h = 0
 }
 
 HUDELEMENT.basepos = table.Copy(zero_tbl_pos)
