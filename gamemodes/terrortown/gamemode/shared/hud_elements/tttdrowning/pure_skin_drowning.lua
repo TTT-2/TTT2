@@ -1,4 +1,8 @@
-HUDELEMENT.Base = "pure_skin_element"
+local base = "pure_skin_element"
+
+DEFINE_BASECLASS(base)
+
+HUDELEMENT.Base = base
 
 if CLIENT then
 	local x = 0
@@ -10,8 +14,10 @@ if CLIENT then
 	local pad = 14 -- padding
 
 	function HUDELEMENT:Initialize()
-		self:SetPos(math.Round(ScrW() * 0.5 - w * 0.5), ScrH() - pad - h)
+		self:SetBasePos(math.Round(ScrW() * 0.5 - w * 0.5), ScrH() - pad - h)
 		self:SetSize(w, h)
+
+		BaseClass.Initialize(self)
 	end
 
 	function HUDELEMENT:PerformLayout()
@@ -23,7 +29,7 @@ if CLIENT then
 		w = size.w
 		h = size.h
 
-		self.BaseClass.PerformLayout(self)
+		BaseClass.PerformLayout(self)
 	end
 
 	function HUDELEMENT:Draw()
@@ -38,5 +44,16 @@ if CLIENT then
 
 		-- draw lines around the element
 		self:DrawLines(x, y, w, h)
+	end
+
+	local defaults
+
+	function HUDELEMENT:GetDefaults()
+		if not defaults then
+			defaults = BaseClass.GetDefaults(self)
+			defaults.resizeableY = false
+		end
+
+		return table.Copy(defaults)
 	end
 end

@@ -124,7 +124,7 @@ function GetShopFallback(subrole, tbl)
 	local shopFallback = GetGlobalString("ttt_" .. rd.abbr .. "_shop_fallback")
 	local fb = GetRoleByName(shopFallback).index
 
-	if shopFallback == SHOP_UNSET or shopFallback == SHOP_DISABLED then
+	if not fb or shopFallback == SHOP_UNSET or shopFallback == SHOP_DISABLED then
 		return subrole, fb
 	end
 
@@ -180,6 +180,8 @@ if CLIENT then
 		end
 
 		local fallback = GetShopFallback(subrole)
+
+		Equipment = Equipment or {}
 
 		-- need to build equipment cache?
 		if not Equipment[fallback] then

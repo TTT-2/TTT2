@@ -3,15 +3,11 @@ surface.CreateFont("ItemInfoFont", {font = "Trebuchet24", size = 14, weight = 70
 
 COLOR_DARKGREY = COLOR_DARKGREY or Color(100, 100, 100, 255)
 
-local base = "old_ttt_element"
+local base = "pure_skin_element"
 
 DEFINE_BASECLASS(base)
 
 HUDELEMENT.Base = base
-
-if SERVER then
-	resource.AddFile("materials/vgui/ttt/perks/old_ttt_bg.png")
-end
 
 if CLIENT then
 	local size = 64
@@ -31,8 +27,6 @@ if CLIENT then
 
 		BaseClass.PerformLayout(self)
 	end
-
-	local old_ttt_bg = Material("vgui/ttt/perks/old_ttt_bg.png")
 
 	function HUDELEMENT:Draw()
 		local client = LocalPlayer()
@@ -59,13 +53,14 @@ if CLIENT then
 		for _, itemCls in ipairs(itms) do
 			local item = items.GetStored(itemCls)
 			if item and item.hud then
-				surface.SetMaterial(old_ttt_bg)
-				surface.SetDrawColor(255, 255, 255, 255)
-				surface.DrawTexturedRect(pos.x, curY, size, size)
+				surface.SetDrawColor(36, 115, 51, 255)
+				surface.DrawRect(pos.x, curY, size, size)
 
 				surface.SetMaterial(item.hud)
 				surface.SetDrawColor(255, 255, 255, 255)
 				surface.DrawTexturedRect(pos.x, curY, size, size)
+
+				self:DrawLines(pos.x, curY, size, size)
 
 				local info = item:DrawInfo()
 				if info then
@@ -78,8 +73,15 @@ if CLIENT then
 
 					local infoW, infoH = surface.GetTextSize(info)
 
-					draw.RoundedBox(4, tx - infoW * 0.5 - pad, ty - infoH * 0.5, infoW + pad * 2, infoH, COLOR_DARKGREY)
+					local bx = tx - infoW * 0.5 - pad
+					local by = ty - infoH * 0.5
+					local bw = infoW + pad * 2
+
+					self:DrawBg(bx, by, bw, infoH, COLOR_DARKGREY)
+
 					draw.DrawText(info, "ItemInfoFont", tx, ty - infoH * 0.5, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+
+					self:DrawLines(bx, by, bw, infoH)
 				end
 
 				curY = curY - (size + size * 0.25)

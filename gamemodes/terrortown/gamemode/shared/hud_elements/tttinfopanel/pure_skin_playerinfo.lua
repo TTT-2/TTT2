@@ -1,4 +1,8 @@
-HUDELEMENT.Base = "pure_skin_element"
+local base = "pure_skin_element"
+
+DEFINE_BASECLASS(base)
+
+HUDELEMENT.Base = base
 
 if CLIENT then
 	local GetLang = LANG.GetUnsafeLanguageTable
@@ -15,8 +19,10 @@ if CLIENT then
 	local secondaryRoleInformationFunc = nil
 
 	function HUDELEMENT:Initialize()
-		self:SetPos(10, ScrH() - (10 + h))
+		self:SetBasePos(10, ScrH() - (10 + h))
 		self:SetSize(w, h)
+
+		BaseClass.Initialize(self)
 	end
 
 	function HUDELEMENT:PerformLayout()
@@ -27,8 +33,8 @@ if CLIENT then
 		y = pos.y
 		w = size.w
 		h = size.h
-		
-		self.BaseClass.PerformLayout(self)
+
+		BaseClass.PerformLayout(self)
 	end
 
 	-- Returns player's ammo information
@@ -58,7 +64,7 @@ if CLIENT then
 
 	function HUDELEMENT:Draw()
 		local client = LocalPlayer()
-		local calive = client:Alive()
+		local calive = client:Alive() and client:IsTerror()
 		local cactive = client:IsActive()
 		local L = GetLang()
 
@@ -209,5 +215,16 @@ if CLIENT then
 
 		-- draw lines around the element
 		self:DrawLines(x2, y2, w2, h2)
+	end
+
+	local defaults
+
+	function HUDELEMENT:GetDefaults()
+		if not defaults then
+			defaults = BaseClass.GetDefaults(self)
+			defaults.resizeableY = false
+		end
+
+		return table.Copy(defaults)
 	end
 end

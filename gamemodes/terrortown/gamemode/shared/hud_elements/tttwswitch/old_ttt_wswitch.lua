@@ -4,7 +4,11 @@ local math = math
 local IsValid = IsValid
 local TryTranslation = LANG.TryTranslation
 
-HUDELEMENT.Base = "old_ttt_element"
+local base = "old_ttt_element"
+
+DEFINE_BASECLASS(base)
+
+HUDELEMENT.Base = base
 
 if CLIENT then
 	local width = 300
@@ -116,64 +120,37 @@ if CLIENT then
 	function HUDELEMENT:Initialize()
 		WSWITCH:UpdateWeaponCache()
 
-		local weps = WSWITCH.WeaponCache
-		local count = #weps
-		local h = count * (height + self.margin)
+		self:SetBasePos(ScrW() - (width + self.margin * 2), ScrH() - self.margin)
+		self:SetSize(width, -height)
 
-		LocalPlayer().oldWSWeps = count
-
-		self:SetPos(ScrW() - (width + self.margin * 2), ScrH() - self.margin - h)
-		self:SetSize(width, h)
+		BaseClass.Initialize(self)
 	end
 
 	function HUDELEMENT:PerformLayout()
-		WSWITCH:UpdateWeaponCache()
+		local basepos = self:GetBasePos()
 
-		local pos = self:GetPos()
-		x = pos.x
-		y = pos.y
+		self:SetPos(basepos.x, basepos.y)
+		self:SetSize(width, -height)
 
-		local client = LocalPlayer()
-		local weps = WSWITCH.WeaponCache
-		local count = #weps
-		local tmp = height + self.margin
-		local h = count * tmp
-		local difH = client.oldWSWeps * tmp
-
-		client.oldWSWeps = count
-
-		y = y - (h - difH)
-
-		self:SetPos(x, y)
-		self:SetSize(width, h)
-
-		self.BaseClass.PerformLayout(self)
+		BaseClass.PerformLayout(self)
 	end
 
 	function HUDELEMENT:Draw()
 		if not WSWITCH.Show and not HUDManager.IsEditing then return end
 
-		local pos = self:GetPos()
-		local y = pos.y
-		local x = pos.x
 		local client = LocalPlayer()
 		local weps = WSWITCH.WeaponCache
 		local count = #weps
 		local tmp = height + self.margin
 		local h = count * tmp
-		local difH = client.oldWSWeps * tmp
+		local basepos = self:GetBasePos()
 
-		client.oldWSWeps = count
+		self:SetPos(basepos.x, basepos.y)
+		self:SetSize(width, -h)
 
-		if h - difH ~= 0 then
-			y = y - (h - difH)
-			self:SetPos(x, y)
-			self:SetSize(width, h)
-			MsgN("weapon switch pos changed: h=" .. h .. ", difH=" .. difH .. ", y=" .. y .. ", count=" .. count .. "!" )
-		end
-
-		local y_elem = y
-
+		local pos = self:GetPos()
+		local x_elem = pos.x
+		local y_elem = pos.y
 		local col = self.col_dark
 
 		for k, wep in ipairs(weps) do
@@ -183,9 +160,9 @@ if CLIENT then
 				col = self.col_dark
 			end
 
-			self:DrawBarBg(x, y_elem, width, height, col)
+			self:DrawBarBg(x_elem, y_elem, width, height, col)
 
-			if not self:DrawWeapon(x, y_elem, col, wep) then
+			if not self:DrawWeapon(x_elem, y_elem, col, wep) then
 				WSWITCH:UpdateWeaponCache()
 
 				return
@@ -193,5 +170,17 @@ if CLIENT then
 
 			y_elem = y_elem + height + self.margin
 		end
+	end
+
+	local defaults
+
+	function HUDELEMENT:GetDefaults()
+		if not defaults then
+			defaults = BaseClass.GetDefaults(self)
+			defaults.resizeableY = false
+			defaults.minHeight = height
+		end
+
+		return table.Copy(defaults)
 	end
 end

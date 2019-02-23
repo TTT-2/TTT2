@@ -49,7 +49,7 @@ function PANEL:Init()
 
 			panel.OnRemove = function(slf)
 				if hud.id then
-					SQL.Save("ttt2_huds", hud.id, hud, hud.savingKeys)
+					SQL.Save("ttt2_huds", hud.id, hud, hud:GetSavingKeys())
 				end
 			end
 		end

@@ -24,8 +24,6 @@ local function TableInherit(t, base)
 		end
 	end
 
-	t.BaseClass = base
-
 	return t
 end
 
@@ -127,6 +125,10 @@ function OnLoaded()
 		HUDElementList[k] = newTable
 
 		baseclass.Set(k, newTable)
+
+		if CLIENT then
+			newTable:Initialize()
+		end
 	end
 end
 

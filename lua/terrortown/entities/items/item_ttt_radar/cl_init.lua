@@ -78,6 +78,10 @@ function ITEM:Equip(ply)
 	RunConsoleCommand("ttt_radar_scan")
 end
 
+function ITEM:DrawInfo()
+	return tostring(math.Round(math.max(0, RADAR.endtime - CurTime())))
+end
+
 local function DrawTarget(tgt, size, offset, no_shrink)
 	local scrpos = tgt.pos:ToScreen() -- sweet
 	local sz = (IsOffScreen(scrpos) and not no_shrink) and (size * 0.5) or size
@@ -206,16 +210,6 @@ function RADAR:Draw(client)
 			DrawTarget(tgt, 24, 0)
 		end
 	end
-
-	-- Time until next scan
-	surface.SetFont("TabLarge")
-	surface.SetTextColor(255, 0, 0, 230)
-
-	local text = GetPTranslation("radar_hud", {time = FormatTime(remaining, "%02i:%02i")})
-	local _, h = surface.GetTextSize(text)
-
-	surface.SetTextPos(36, ScrH() - 140 - h)
-	surface.DrawText(text)
 end
 
 local function ReceiveC4Warn()

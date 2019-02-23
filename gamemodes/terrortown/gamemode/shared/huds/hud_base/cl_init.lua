@@ -6,7 +6,11 @@ HUD.hiddenElements = {}
 
 HUD.previewImage = Material("vgui/ttt/score_logo_2")
 
-HUD.savingKeys = {}
+local savingKeys = {}
+
+function HUD:GetSavingKeys()
+	return savingKeys
+end
 
 function HUD:ForceHUDElement(elementID)
 	local elem = hudelements.GetStored(elementID)
@@ -44,7 +48,32 @@ function HUD:PerformLayout()
 end
 
 function HUD:Initialize()
-	-- Use this method to set the elements default positions etc
+	-- Initialize elements default values
+	for _, v in ipairs(self:GetHUDElements()) do
+		local elem = hudelements.GetStored(v)
+		if elem then
+			elem:SetDefaults()
+
+			local skeys = elem:GetSavingKeys()
+
+			-- load and initialize all HUDELEMENT data from database
+			if SQL.CreateSqlTable("ttt2_hudelements", skeys) then
+				local loaded = SQL.Load("ttt2_hudelements", elem.id, elem, skeys)
+
+				if not loaded then
+					SQL.Init("ttt2_hudelements", elem.id, elem, skeys)
+				end
+			end
+
+			elem:Load()
+
+			elem.initialized = true
+		else
+			Msg("Error: HUD " .. (self.id or "?") .. " has unkown element named " .. v .. "\n")
+		end
+	end
+
+	self:PerformLayout()
 end
 
 function HUD:GetHUDElements()

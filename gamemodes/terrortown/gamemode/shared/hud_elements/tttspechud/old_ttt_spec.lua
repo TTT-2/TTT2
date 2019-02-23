@@ -4,7 +4,11 @@ local interp = string.Interp
 local IsValid = IsValid
 local draw = draw
 
-HUDELEMENT.Base = "old_ttt_element"
+local base = "old_ttt_element"
+
+HUDELEMENT.Base = base
+
+DEFINE_BASECLASS(base)
 
 if CLIENT then
 

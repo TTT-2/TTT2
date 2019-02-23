@@ -1,8 +1,10 @@
 if SERVER then
 	AddCSLuaFile()
+
+	resource.AddFile("materials/vgui/ttt/perks/hud_disguiser.png")
 end
 
-ITEM.hud = Material("vgui/ttt/icon_disguise")
+ITEM.hud = Material("vgui/ttt/perks/hud_disguiser.png")
 ITEM.EquipMenuData = {
 	type = "item_active",
 	name = "item_disg",

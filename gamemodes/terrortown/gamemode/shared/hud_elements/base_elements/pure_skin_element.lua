@@ -1,13 +1,26 @@
+local base = "hud_element_base"
+
+DEFINE_BASECLASS(base)
+
+HUDELEMENT.Base = base
+
 if CLIENT then
 	local defaultColor = Color(49, 71, 94)
 	local shadowColor = Color(0, 0, 0, 200)
+
+	function HUDELEMENT:Initialize()
+		local defs = self:GetDefaults()
+
+		defs.size = self:GetSize()
+		defs.basepos = self:GetBasePos()
+	end
 
 	function HUDELEMENT:DrawBg(x, y, w, h, c)
 		DrawHUDElementBg(x, y, w, h, c)
 	end
 
-	function HUDELEMENT:DrawLines(x, y, w, h)
-		DrawHUDElementLines(x, y, w, h)
+	function HUDELEMENT:DrawLines(x, y, w, h, a)
+		DrawHUDElementLines(x, y, w, h, a)
 	end
 
 	-- x, y, width, height, color, progress, text
@@ -40,22 +53,11 @@ if CLIENT then
 		[ROUND_POST] = "round_post"
 	}
 
-	HUDELEMENT.savingKeys = {
-		pos = {typ = "pos"},
-		size = {typ = "size"}
-	}
-
 	HUDELEMENT.basecolor = defaultColor
 
 	function HUDELEMENT:Reset()
 		self.basecolor = defaultColor
 
-		local defaultPos = self.defaults.pos
-		local defaultSize = self.defaults.size
-
-		self:SetPos(defaultPos.x, defaultPos.y)
-		self:SetSize(defaultSize.w, defaultSize.h)
-
-		self:PerformLayout()
+		BaseClass.Reset(self)
 	end
 end

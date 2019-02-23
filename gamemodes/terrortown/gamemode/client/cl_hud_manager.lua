@@ -76,12 +76,15 @@ local function EditLocalHUD()
 						elem = elObj
 
 						local difPos = elem:GetPos()
+						local difBasePos = elem:GetBasePos()
 						local difSize = elem:GetSize()
 
 						client.difX = x - difPos.x
 						client.difY = y - difPos.y
 						client.difW = x - difSize.w
 						client.difH = y - difSize.h
+						client.difBaseX = difBasePos.x - difPos.x
+						client.difBaseY = difBasePos.y - difPos.y
 
 						break
 					end
@@ -113,7 +116,7 @@ local function EditLocalHUD()
 					ny = ScrH() - size.h
 				end
 
-				elem:SetPos(nx, ny)
+				elem:SetBasePos(nx + client.difBaseX, ny + client.difBaseY)
 			elseif mode == 1 then
 				local nw = x - difW
 				local nh = y - difH
@@ -126,7 +129,9 @@ local function EditLocalHUD()
 					nh = 1
 				end
 
-				elem:SetSize(nw, nh)
+				local defs = elem:GetDefaults()
+
+				elem:SetSize(defs.resizeableX and nw or size.w, defs.resizeableY and nh or size.h)
 			end
 
 			elem:PerformLayout()
@@ -184,14 +189,14 @@ function HUDManager.EditHUD(bool, hud)
 			for _, elem in ipairs(hud:GetHUDElements()) do
 				local el = hudelements.GetStored(elem)
 				if el then
-					SQL.Save("ttt2_hudelements", elem, el, el.savingKeys)
+					SQL.Save("ttt2_hudelements", elem, el, el:GetSavingKeys())
 
 					el:Save()
 				end
 			end
 		end
 
-		SQL.Save("ttt2_huds", hud.id, hud, hud.savingKeys)
+		SQL.Save("ttt2_huds", hud.id, hud, hud:GetSavingKeys())
 	end
 
 	HUDManager.IsEditing = bool
@@ -236,7 +241,7 @@ end
 function HUDManager.AddHUDSettings(panel, hudEl)
 	if not IsValid(panel) or not hudEl then return end
 
-	local tmp = table.Copy(hudEl.savingKeys) or {}
+	local tmp = table.Copy(hudEl:GetSavingKeys()) or {}
 	tmp.el_pos = {typ = "el_pos", desc = "Change element's\nposition and size"}
 	tmp.reset = {typ = "reset", desc = "Reset HUD's data"}
 
@@ -265,7 +270,7 @@ function HUDManager.AddHUDSettings(panel, hudEl)
 						if tel then
 							tel:Reset()
 
-							SQL.Save("ttt2_hudelements", elem, tel, tel.savingKeys)
+							SQL.Save("ttt2_hudelements", elem, tel, tel:GetSavingKeys())
 
 							tel:Save()
 						end
@@ -273,7 +278,7 @@ function HUDManager.AddHUDSettings(panel, hudEl)
 
 					hudEl:Reset()
 
-					SQL.Save("ttt2_huds", hudEl.id, hudEl, hudEl.savingKeys)
+					SQL.Save("ttt2_huds", hudEl.id, hudEl, hudEl:GetSavingKeys())
 				end
 
 				HUDManager.ShowHUDSwitcher(true)
@@ -449,12 +454,14 @@ net.Receive("TTT2ReceiveHUD", function()
 	-- Initialize elements
 	hudEl:Initialize()
 
+	local skeys = hudEl:GetSavingKeys()
+
 	-- load and initialize all HUD data from database
-	if SQL.CreateSqlTable("ttt2_huds", hudEl.savingKeys) then
-		local loaded = SQL.Load("ttt2_huds", hudEl.id, hudEl, hudEl.savingKeys)
+	if SQL.CreateSqlTable("ttt2_huds", skeys) then
+		local loaded = SQL.Load("ttt2_huds", hudEl.id, hudEl, skeys)
 
 		if not loaded then
-			SQL.Init("ttt2_huds", hudEl.id, hudEl, hudEl.savingKeys)
+			SQL.Init("ttt2_huds", hudEl.id, hudEl, skeys)
 		end
 	end
 

@@ -11,7 +11,7 @@ MSTACK.last = 0
 local table = table
 local surface = surface
 local draw = draw
-local pairs = pairs
+local ipairs = ipairs
 local net = net
 
 MSTACK.margin = 6
@@ -25,6 +25,7 @@ MSTACK.width = MSTACK.msg_width + MSTACK.margin
 local text_width = MSTACK.msg_width - MSTACK.margin * 3 -- three margins for a little more room
 local text_height = draw.GetFontHeight(MSTACK.msgfont)
 
+local pad = 7
 
 -- Text colors to render the messages in
 local msgcolors = {
@@ -52,6 +53,34 @@ function MSTACK:AddColoredBgMessage(text, bg_clr)
 	self:AddMessageEx(item)
 end
 
+function MSTACK:AddImagedMessage(text, c, image, size2)
+	local item = {}
+	item.text = text
+	item.col = c
+	item.bg = msgcolors.generic_bg
+	item.image = image
+	item.imageSize = size2
+	item.imagePad = pad
+	item.minHeight = size2 + 2 * pad
+	item.subWidth = size2 + 2 * pad
+
+	self:AddMessageEx(item)
+end
+
+function MSTACK:AddColoredImagedMessage(text, bg_clr, image, size2)
+	local item = {}
+	item.text = text
+	item.col = msgcolors.generic_text
+	item.bg = bg_clr
+	item.image = image
+	item.imageSize = size2
+	item.imagePad = pad
+	item.minHeight = size2 + 2 * pad
+	item.subWidth = size2 + 2 * pad
+
+	self:AddMessageEx(item)
+end
+
 -- Internal
 function MSTACK:AddMessageEx(item)
 	item.col = table.Copy(item.col or msgcolors.generic_text)
@@ -60,11 +89,15 @@ function MSTACK:AddMessageEx(item)
 	item.bg = table.Copy(item.bg or msgcolors.generic_bg)
 	item.bg.a_max = item.bg.a
 
-	item.text = self:WrapText(item.text, text_width)
+	item.text = self:WrapText(item.text, text_width - (item.subWidth or 0))
 
 	-- Height depends on number of lines, which is equal to number of table
 	-- elements of the wrapped item.text
 	item.height = #item.text * text_height + MSTACK.margin * (1 + #item.text)
+
+	if item.minHeight then
+		item.height = math.max(item.height, item.minHeight)
+	end
 
 	item.time = CurTime()
 	item.sounded = false
@@ -95,25 +128,25 @@ function MSTACK:WrapText(text, width)
 	surface.SetFont(MSTACK.msgfont)
 
 	-- Any wrapping required?
-	local w, _ = surface.GetTextSize(text)
+	local w = surface.GetTextSize(text)
+
 	if w <= width then
 		return {text} -- Nope, but wrap in table for uniformity
 	end
 
 	local words = string.Explode(" ", text) -- No spaces means you're screwed
-
 	local lines = {""}
-	for i, wrd in pairs(words) do
+
+	for i, wrd in ipairs(words) do
 		local l = #lines
 		local added = lines[l] .. " " .. wrd
-		w, _ = surface.GetTextSize(added)
+
+		w = surface.GetTextSize(added)
 
 		if w > text_width then
-			-- New line needed
-			table.insert(lines, wrd)
+			table.insert(lines, wrd) -- New line needed
 		else
-			-- Safe to tack it on
-			lines[l] = added
+			lines[l] = added -- Safe to tack it on
 		end
 	end
 

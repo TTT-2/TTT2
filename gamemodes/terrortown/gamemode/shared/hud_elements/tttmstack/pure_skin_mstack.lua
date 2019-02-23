@@ -1,4 +1,4 @@
-local base = "old_ttt_element"
+local base = "pure_skin_element"
 
 DEFINE_BASECLASS(base)
 
@@ -42,7 +42,7 @@ if CLIENT then
 
 		base_spec = {
 			font = MSTACK.msgfont,
-			xalign = TEXT_ALIGN_CENTER,
+			xalign = TEXT_ALIGN_LEFT,
 			yalign = TEXT_ALIGN_TOP
 		}
 	end
@@ -94,7 +94,8 @@ if CLIENT then
 
 				-- Background box
 				item.bg.a = math.Clamp(alpha, 0, item.bg.a_max)
-				draw.RoundedBox(8, top_x, y, MSTACK.msg_width, height, item.bg)
+
+				self:DrawBg(top_x, y, MSTACK.msg_width, height, item.bg)
 
 				-- Text
 				item.col.a = math.Clamp(alpha, 0, item.col.a_max)
@@ -105,7 +106,7 @@ if CLIENT then
 				for i = 1, #item.text do
 					spec.text = item.text[i]
 
-					local tx = top_x + ((MSTACK.msg_width - (item.subWidth or 0)) * 0.5) + (item.subWidth or 0)
+					local tx = top_x + (item.subWidth or 0) + 5
 					local ty = y + MSTACK.margin + (i - 1) * (text_height + MSTACK.margin)
 
 					spec.pos = {tx, ty}
@@ -120,6 +121,8 @@ if CLIENT then
 					surface.DrawTexturedRect(top_x + item.imagePad, y + item.imagePad, item.imageSize, item.imageSize)
 				end
 
+				self:DrawLines(top_x, y, MSTACK.msg_width, height, item.bg.a / 255)
+
 				if alpha == 0 then
 					MSTACK.msgs[k] = nil
 				end
@@ -127,5 +130,17 @@ if CLIENT then
 				running_y = y + height
 			end
 		end
+	end
+
+	local defaults
+
+	function HUDELEMENT:GetDefaults()
+		if not defaults then
+			defaults = BaseClass.GetDefaults(self)
+			defaults.resizeableX = false
+			defaults.resizeableY = false
+		end
+
+		return table.Copy(defaults)
 	end
 end

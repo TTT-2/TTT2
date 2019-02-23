@@ -4,7 +4,11 @@ local string = string
 local GetLang = LANG.GetUnsafeLanguageTable
 local util = util
 
-HUDELEMENT.Base = "old_ttt_element"
+local base = "old_ttt_element"
+
+DEFINE_BASECLASS(base)
+
+HUDELEMENT.Base = base
 
 if CLIENT then
 	local ttt_health_label = CreateClientConVar("ttt_health_label", "0", true)
@@ -14,15 +18,17 @@ if CLIENT then
 	local y = 0
 
 	function HUDELEMENT:Initialize()
-		self:SetPos(self.margin, self.margin + self.maxheight)
+		self:SetBasePos(self.margin, self.margin + self.maxheight)
 		self:SetSize(self.maxwidth, self.maxheight)
+
+		BaseClass.Initialize(self)
 	end
 
 	function HUDELEMENT:PerformLayout()
 		x = self.pos.x
 		y = ScrH() - self.pos.y
-		
-		self.BaseClass.PerformLayout(self)
+
+		BaseClass.PerformLayout(self)
 	end
 
 	function HUDELEMENT:Draw()
