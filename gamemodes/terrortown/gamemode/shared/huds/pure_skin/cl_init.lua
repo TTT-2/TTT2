@@ -50,6 +50,7 @@ function HUD:Initialize()
 	self:ForceHUDElement("pure_skin_drowning")
 	self:ForceHUDElement("pure_skin_mstack")
 	self:ForceHUDElement("pure_skin_items")
+	self:ForceHUDElement("pure_skin_miniscoreboard")
 	--self:ForceHUDElement("old_ttt_spec")
 
 	-- Initialize elements default values
