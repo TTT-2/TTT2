@@ -123,7 +123,13 @@ function OnLoaded()
 	-- could cause some entities to load before their bases!
 	--
 	for k in pairs(HUDElementList) do
-		baseclass.Set(k, Get(k))
+		local tmp = Get(k)
+
+		baseclass.Set(k, tmp)
+
+		tmp.BaseClass = baseclass.Get(tmp.Base)
+
+		HUDElementList[k] = tmp
 	end
 end
 
