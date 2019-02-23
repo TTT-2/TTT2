@@ -172,7 +172,7 @@ function HUDELEMENT:Reset()
 end
 
 local savingKeys = {
-	basepos = {typ = "basepos"},
+	basepos = {typ = "pos"},
 	size = {typ = "size"}
 }
 
