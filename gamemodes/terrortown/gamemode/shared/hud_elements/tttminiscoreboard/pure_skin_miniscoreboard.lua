@@ -48,7 +48,7 @@ if CLIENT then
 		local tmp_x, tmp_y = self.pos.x, self.pos.y
 		for i, p in ipairs(players) do
 			tmp_x = self.pos.x + margin + (margin + ply_ind_size) * math.floor(i * 0.5)
-			tmp_y = self.pos.y + margin + (margin + ply_ind_size) * (i % row_count)
+			tmp_y = self.pos.y + margin + (margin + ply_ind_size) * ((i - 1) % row_count)
 			ply_color = p:GetRoleColor()
 			surface.SetDrawColor(clr(ply_color))
 			surface.DrawRect(tmp_x, tmp_y, ply_ind_size, ply_ind_size)
