@@ -1,4 +1,5 @@
 HUDELEMENT.Base = "pure_skin_element"
+DEFINE_BASECLASS("pure_skin_element")
 
 if CLIENT then
 	local parentInstance = nil
@@ -30,7 +31,7 @@ if CLIENT then
 		self:SetPos(parent_pos.x + parent_size.w, parent_pos.y)
 		self:SetSize(width, height)
 
-		self.BaseClass.PerformLayout(self)
+		baseclass.get("").PerformLayout(self)
 	end
 
 	function HUDELEMENT:Draw()
