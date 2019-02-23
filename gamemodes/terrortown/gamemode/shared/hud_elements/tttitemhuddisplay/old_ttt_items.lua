@@ -13,7 +13,7 @@ if CLIENT then
 	local size = 64
 
 	function HUDELEMENT:Initialize()
-		self:SetPos(20, 20)
+		self:SetBasePos(20, 20)
 		self:SetSize(size, -size)
 	end
 

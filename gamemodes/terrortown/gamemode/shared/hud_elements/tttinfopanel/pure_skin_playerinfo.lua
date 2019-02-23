@@ -17,7 +17,7 @@ if CLIENT then
 	local secondaryRoleInformationFunc = nil
 
 	function HUDELEMENT:Initialize()
-		self:SetPos(10, ScrH() - (10 + h))
+		self:SetBasePos(10, ScrH() - (10 + h))
 		self:SetSize(w, h)
 	end
 

@@ -33,7 +33,7 @@ if CLIENT then
 		top_x = ScrW() - MSTACK.margin - width
 		text_height = draw.GetFontHeight(MSTACK.msgfont)
 
-		self:SetPos(top_x, top_y)
+		self:SetBasePos(top_x, top_y)
 		self:SetSize(width, 80)
 
 		base_spec = {

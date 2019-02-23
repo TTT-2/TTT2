@@ -124,7 +124,7 @@ if CLIENT then
 
 		LocalPlayer().oldWSWeps = count
 
-		self:SetPos(ScrW() - (width + self.margin * 2), ScrH() - self.margin - h)
+		self:SetBasePos(ScrW() - (width + self.margin * 2), ScrH() - self.margin - h)
 		self:SetSize(width, h)
 	end
 

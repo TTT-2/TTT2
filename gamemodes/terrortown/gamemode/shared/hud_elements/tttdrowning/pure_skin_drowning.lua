@@ -12,7 +12,7 @@ if CLIENT then
 	local pad = 14 -- padding
 
 	function HUDELEMENT:Initialize()
-		self:SetPos(math.Round(ScrW() * 0.5 - w * 0.5), ScrH() - pad - h)
+		self:SetBasePos(math.Round(ScrW() * 0.5 - w * 0.5), ScrH() - pad - h)
 		self:SetSize(w, h)
 	end
 

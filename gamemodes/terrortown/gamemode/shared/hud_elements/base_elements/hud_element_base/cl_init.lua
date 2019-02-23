@@ -52,6 +52,8 @@ end
 function HUDELEMENT:SetBasePos(x, y)
 	self.basepos.x = x
 	self.basepos.y = y
+
+	self:SetPos(x, y)
 end
 
 function HUDELEMENT:GetPos()
@@ -165,7 +167,6 @@ function HUDELEMENT:Reset()
 	local defaultSize = self.defaults.size
 
 	self:SetBasePos(defaultPos.x, defaultPos.y)
-	self:SetPos(defaultPos.x, defaultPos.y)
 	self:SetSize(defaultSize.w, defaultSize.h)
 
 	self:PerformLayout()
