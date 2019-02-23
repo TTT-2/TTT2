@@ -9,6 +9,10 @@ surface.CreateFont("PureSkinWepNum", {font = "Trebuchet24", size = 21, weight = 
 -- base drawing functions
 include("cl_drawing_functions.lua")
 
+local base = "hud_base"
+
+HUD.Base = base
+
 local defaultColor = Color(49, 71, 94)
 
 HUD.previewImage = Material("vgui/ttt/huds/pure_skin/preview.png")
@@ -17,7 +21,7 @@ local savingKeys
 
 function HUD:GetSavingKeys()
 	if not savingKeys then
-		local bclass = baseclass.Get("hud_base")
+		local bclass = baseclass.Get(base)
 
 		savingKeys = table.Copy(bclass.GetSavingKeys(self))
 		savingKeys.basecolor = {

@@ -3,7 +3,9 @@ local surface = surface
 local IsValid = IsValid
 local TryTranslation = LANG.TryTranslation
 
-HUDELEMENT.Base = "pure_skin_element"
+local base = "pure_skin_element"
+
+HUDELEMENT.Base = base
 
 if CLIENT then
 	local width = 365
@@ -131,7 +133,7 @@ if CLIENT then
 		--self:SetPos(x, y)
 		self:SetSize(width, h)
 
-		local bclass = baseclass.Get("pure_skin_element")
+		local bclass = baseclass.Get(base)
 
 		bclass.PerformLayout(self)
 	end

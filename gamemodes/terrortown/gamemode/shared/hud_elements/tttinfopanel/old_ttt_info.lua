@@ -4,7 +4,9 @@ local string = string
 local GetLang = LANG.GetUnsafeLanguageTable
 local util = util
 
-HUDELEMENT.Base = "old_ttt_element"
+local base = "old_ttt_element"
+
+HUDELEMENT.Base = base
 
 if CLIENT then
 	local ttt_health_label = CreateClientConVar("ttt_health_label", "0", true)
@@ -22,7 +24,7 @@ if CLIENT then
 		x = self.pos.x
 		y = ScrH() - self.pos.y
 
-		local bclass = baseclass.Get("old_ttt_element")
+		local bclass = baseclass.Get(base)
 
 		bclass.PerformLayout(self)
 	end

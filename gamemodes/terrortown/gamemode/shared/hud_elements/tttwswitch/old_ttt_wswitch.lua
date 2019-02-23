@@ -4,7 +4,9 @@ local math = math
 local IsValid = IsValid
 local TryTranslation = LANG.TryTranslation
 
-HUDELEMENT.Base = "old_ttt_element"
+local base = "old_ttt_element"
+
+HUDELEMENT.Base = base
 
 if CLIENT then
 	local width = 300
@@ -147,7 +149,7 @@ if CLIENT then
 		--self:SetPos(x, y)
 		self:SetSize(width, h)
 
-		local bclass = baseclass.Get("old_ttt_element")
+		local bclass = baseclass.Get(base)
 
 		bclass.PerformLayout(self)
 	end

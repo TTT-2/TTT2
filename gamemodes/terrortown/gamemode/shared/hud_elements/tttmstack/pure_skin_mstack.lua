@@ -1,4 +1,6 @@
-HUDELEMENT.Base = "pure_skin_element"
+local base = "pure_skin_element"
+
+HUDELEMENT.Base = base
 
 if CLIENT then
 	local draw = draw
@@ -47,7 +49,7 @@ if CLIENT then
 
 		text_height = draw.GetFontHeight(MSTACK.msgfont)
 
-		local bclass = baseclass.Get("pure_skin_element")
+		local bclass = baseclass.Get(base)
 
 		bclass.PerformLayout(self)
 	end

@@ -1,4 +1,6 @@
-HUDELEMENT.Base = "old_ttt_element"
+local base = "old_ttt_element"
+
+HUDELEMENT.Base = base
 
 if CLIENT then
 	local draw = draw
@@ -47,7 +49,7 @@ if CLIENT then
 
 		text_height = draw.GetFontHeight(MSTACK.msgfont)
 
-		local bclass = baseclass.Get("old_ttt_element")
+		local bclass = baseclass.Get(base)
 
 		bclass.PerformLayout(self)
 	end

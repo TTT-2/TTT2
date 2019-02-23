@@ -1,4 +1,6 @@
-HUDELEMENT.Base = "hud_element_base"
+local base = "hud_element_base"
+
+HUDELEMENT.Base = base
 
 if CLIENT then
 	local defaultColor = Color(49, 71, 94)
@@ -46,7 +48,7 @@ if CLIENT then
 	function HUDELEMENT:Reset()
 		self.basecolor = defaultColor
 
-		local bclass = baseclass.Get("hud_element_base")
+		local bclass = baseclass.Get(base)
 
 		bclass.Reset(self)
 	end
