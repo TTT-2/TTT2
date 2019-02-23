@@ -28,7 +28,9 @@ if CLIENT then
 		w = size.w
 		h = size.h
 
-		self.BaseClass.PerformLayout(self)
+		local bclass = baseclass.Get("pure_skin_element")
+
+		bclass.PerformLayout(self)
 	end
 
 	-- Returns player's ammo information

@@ -46,7 +46,10 @@ if CLIENT then
 		top_y = self.pos.y
 
 		text_height = draw.GetFontHeight(MSTACK.msgfont)
-		self.BaseClass.PerformLayout(self)
+
+		local bclass = baseclass.Get("pure_skin_element")
+
+		bclass.PerformLayout(self)
 	end
 
 	function HUDELEMENT:Draw()

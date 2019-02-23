@@ -46,8 +46,8 @@ if CLIENT then
 	function HUDELEMENT:Reset()
 		self.basecolor = defaultColor
 
-		print(self.ClassName, self.BaseClass and self.BaseClass.ClassName, "reset")
+		local bclass = baseclass.Get("hud_element_base")
 
-		self.BaseClass.Reset(self)
+		bclass.Reset(self)
 	end
 end

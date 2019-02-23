@@ -24,8 +24,6 @@ local function TableInherit(t, base)
 		end
 	end
 
-	t.BaseClass = base
-
 	return t
 end
 

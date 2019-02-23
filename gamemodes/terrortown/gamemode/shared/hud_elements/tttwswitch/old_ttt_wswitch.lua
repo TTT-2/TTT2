@@ -147,7 +147,9 @@ if CLIENT then
 		--self:SetPos(x, y)
 		self:SetSize(width, h)
 
-		self.BaseClass.PerformLayout(self)
+		local bclass = baseclass.Get("old_ttt_element")
+
+		bclass.PerformLayout(self)
 	end
 
 	function HUDELEMENT:Draw()

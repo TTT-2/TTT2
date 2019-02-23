@@ -131,7 +131,9 @@ if CLIENT then
 		--self:SetPos(x, y)
 		self:SetSize(width, h)
 
-		self.BaseClass.PerformLayout(self)
+		local bclass = baseclass.Get("pure_skin_element")
+
+		bclass.PerformLayout(self)
 	end
 
 	function HUDELEMENT:Draw()

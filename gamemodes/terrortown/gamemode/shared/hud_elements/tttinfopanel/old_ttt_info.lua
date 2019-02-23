@@ -21,8 +21,10 @@ if CLIENT then
 	function HUDELEMENT:PerformLayout()
 		x = self.pos.x
 		y = ScrH() - self.pos.y
-		
-		self.BaseClass.PerformLayout(self)
+
+		local bclass = baseclass.Get("old_ttt_element")
+
+		bclass.PerformLayout(self)
 	end
 
 	function HUDELEMENT:Draw()

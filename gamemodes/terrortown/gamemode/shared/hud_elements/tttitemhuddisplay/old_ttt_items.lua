@@ -3,6 +3,8 @@ surface.CreateFont("ItemInfoFont", {font = "Trebuchet24", size = 14, weight = 70
 
 COLOR_DARKGREY = COLOR_DARKGREY or Color(100, 100, 100, 255)
 
+HUDELEMENT.Base = "old_ttt_element"
+
 if CLIENT then
 	local x = 0
 	local y = 0
@@ -17,7 +19,9 @@ if CLIENT then
 		x = self.pos.x
 		y = ScrH() * 0.5 + self.pos.y
 
-		self.BaseClass.PerformLayout(self)
+		local bclass = baseclass.Get("old_ttt_element")
+
+		bclass.PerformLayout(self)
 	end
 
 	function HUDELEMENT:Draw()
