@@ -135,18 +135,10 @@ function MSTACK:WrapText(text, width)
 	end
 
 	local words = string.Explode(" ", text) -- No spaces means you're screwed
-
 	local lines = {""}
 
 	for i, wrd in ipairs(words) do
 		local l = #lines
-
-		if wrd == "\n" then
-			table.insert(lines, "") -- New line needed
-
-			continue
-		end
-
 		local added = lines[l] .. " " .. wrd
 
 		w = surface.GetTextSize(added)
