@@ -15,8 +15,8 @@ HUDELEMENT.pos = table.Copy(zero_tbl_pos)
 HUDELEMENT.size = table.Copy(zero_tbl_size)
 
 local defaults = {
-	basepos = table.Copy(zero_tbl_pos),
-	size = table.Copy(zero_tbl_size),
+	--basepos = table.Copy(zero_tbl_pos),
+	--size = table.Copy(zero_tbl_size),
 	minHeight = 0,
 	minWidth = 0,
 	resizeableX = true,
@@ -189,6 +189,7 @@ function HUDELEMENT:Reset()
 	if defaultPos then
 		self:SetBasePos(defaultPos.x, defaultPos.y)
 	end
+
 	if defaultSize then
 		self:SetSize(defaultSize.w, defaultSize.h)
 	end
