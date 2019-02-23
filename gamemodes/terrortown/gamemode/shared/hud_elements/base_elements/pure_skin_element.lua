@@ -1,3 +1,5 @@
+HUDELEMENT.Base = "hud_element_base"
+
 if CLIENT then
 	local defaultColor = Color(49, 71, 94)
 	local shadowColor = Color(0, 0, 0, 220)

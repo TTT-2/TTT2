@@ -2,6 +2,8 @@ local surface = surface
 local draw = draw
 local math = math
 
+HUDELEMENT.Base = "hud_element_base"
+
 if CLIENT then
 	local hudWidth = CreateClientConVar("ttt2_base_hud_width", "0")
 	local hudTeamicon = CreateClientConVar("ttt2_base_hud_teamicon", "1")
