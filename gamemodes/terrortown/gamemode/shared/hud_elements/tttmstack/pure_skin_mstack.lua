@@ -36,7 +36,7 @@ if CLIENT then
 
 		base_spec = {
 			font = MSTACK.msgfont,
-			xalign = TEXT_ALIGN_CENTER,
+			xalign = TEXT_ALIGN_LEFT,
 			yalign = TEXT_ALIGN_TOP
 		}
 	end
@@ -99,7 +99,7 @@ if CLIENT then
 				for i = 1, #item.text do
 					spec.text = item.text[i]
 
-					local tx = top_x + ((MSTACK.msg_width - (item.subWidth or 0)) * 0.5) + (item.subWidth or 0)
+					local tx = top_x + (item.subWidth or 0)
 					local ty = y + MSTACK.margin + (i - 1) * (text_height + MSTACK.margin)
 
 					spec.pos = {tx, ty}
