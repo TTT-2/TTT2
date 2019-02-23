@@ -164,6 +164,7 @@ function HUDELEMENT:Reset()
 	local defaultPos = self.defaults.pos
 	local defaultSize = self.defaults.size
 
+	self:SetBasePos(defaultPos.x, defaultPos.y)
 	self:SetPos(defaultPos.x, defaultPos.y)
 	self:SetSize(defaultSize.w, defaultSize.h)
 
@@ -180,5 +181,7 @@ function HUDELEMENT:Save()
 end
 
 function HUDELEMENT:Load()
-
+	local pos = self:GetPos()
+	
+	self:SetBasePos(pos.x, pos.y)
 end
