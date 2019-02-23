@@ -19,7 +19,7 @@ local function TableInherit(t, base)
 	for k, v in pairs(base) do
 		if t[k] == nil then
 			t[k] = v
-		elseif k ~= "BaseClass" and istable(t[k]) and istable(v[k]) then
+		elseif k ~= "BaseClass" and istable(t[k]) then
 			TableInherit(t[k], v)
 		end
 	end
@@ -123,10 +123,7 @@ function OnLoaded()
 	-- could cause some entities to load before their bases!
 	--
 	for k in pairs(HUDElementList) do
-		local newTable = Get(k)
-		HUDElementList[k] = newTable
-
-		baseclass.Set(k, newTable)
+		baseclass.Set(k, Get(k))
 	end
 end
 
