@@ -128,10 +128,10 @@ end
 function HUDELEMENT:IsInRange(x, y, range)
 	range = range or 0
 
-	local x, y = self.pos.x, self.pos.y
-	local w, h = self.size.w, self.size.h
+	local minX, minY = self.pos.x, self.pos.y
+	local maxX, maxY = minX + self.size.w, minY + self.size.h
 
-	return x - range <= x + w and x + range >= x and y - range <= y + h and y + range >= y
+	return x - range <= maxX and x + range >= minX and y - range <= maxY and y + range >= minY
 end
 
 function HUDELEMENT:IsInPos(x, y)
