@@ -82,7 +82,7 @@ if CLIENT then
 			end
 		end
 
-		self:SetSize(size, curY - pos.y)
+		self:SetSize(size, curY - self:GetBasePos().y)
 	end
 
 	local defaults
