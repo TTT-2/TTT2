@@ -23,7 +23,7 @@ function HUD:GetSavingKeys()
 	if not savingKeys then
 		local bclass = baseclass.Get(base)
 
-		savingKeys = table.Copy(bclass.GetSavingKeys(self))
+		savingKeys = bclass.GetSavingKeys(self)
 		savingKeys.basecolor = {
 			typ = "color",
 			desc = "BaseColor",
@@ -38,7 +38,7 @@ function HUD:GetSavingKeys()
 		}
 	end
 
-	return savingKeys
+	return table.Copy(savingKeys)
 end
 
 HUD.basecolor = defaultColor

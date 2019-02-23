@@ -50,10 +50,10 @@ if CLIENT then
 		if not defaults then
 			local bclass = baseclass.Get(base)
 
-			defaults = table.Copy(bclass.GetDefaults(self))
+			defaults = bclass.GetDefaults(self)
 			defaults.resizeableY = false
 		end
 
-		return defaults
+		return table.Copy(defaults)
 	end
 end

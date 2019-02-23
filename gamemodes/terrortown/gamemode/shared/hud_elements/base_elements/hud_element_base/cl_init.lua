@@ -19,7 +19,7 @@ local defaults = {
 }
 
 function HUDELEMENT:GetDefaults()
-	return defaults
+	return table.Copy(defaults)
 end
 
 HUDELEMENT.parent = nil
@@ -193,7 +193,7 @@ local savingKeys = {
 }
 
 function HUDELEMENT:GetSavingKeys()
-	return savingKeys
+	return table.Copy(savingKeys)
 end
 
 function HUDELEMENT:Save()
