@@ -39,11 +39,6 @@ if CLIENT then
 		[ROUND_POST] = "round_post"
 	}
 
-	HUDELEMENT.savingKeys = {
-		pos = {typ = "pos"},
-		size = {typ = "size"}
-	}
-
 	HUDELEMENT.basecolor = defaultColor
 
 	function HUDELEMENT:Reset()

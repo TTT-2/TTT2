@@ -43,11 +43,11 @@ function HUD:Initialize()
 			elem:SetDefaults()
 
 			-- load and initialize all HUDELEMENT data from database
-			if SQL.CreateSqlTable("ttt2_hudelements", elem.savingKeys) then
-				local loaded = SQL.Load("ttt2_hudelements", elem.id, elem, elem.savingKeys)
+			if SQL.CreateSqlTable("ttt2_hudelements", elem:GetSavingKeys()) then
+				local loaded = SQL.Load("ttt2_hudelements", elem.id, elem, elem:GetSavingKeys())
 
 				if not loaded then
-					SQL.Init("ttt2_hudelements", elem.id, elem, elem.savingKeys)
+					SQL.Init("ttt2_hudelements", elem.id, elem, elem:GetSavingKeys())
 				end
 			end
 

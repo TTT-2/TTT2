@@ -12,8 +12,10 @@ include("cl_drawing_functions.lua")
 local defaultColor = Color(49, 71, 94)
 
 HUD.previewImage = Material("vgui/ttt/huds/pure_skin/preview.png")
-HUD.savingKeys = {
-	basecolor = {
+
+function HUD:GetSavingKeys()
+	local tmp = self.BaseClass.GetSavingKeys(self)
+	tmp.basecolor = {
 		typ = "color",
 		desc = "BaseColor",
 		OnChange = function(slf, col)
@@ -25,7 +27,9 @@ HUD.savingKeys = {
 			end
 		end
 	}
-}
+
+	return tmp
+end
 
 HUD.basecolor = defaultColor
 
@@ -46,11 +50,11 @@ function HUD:Initialize()
 			elem:SetDefaults()
 
 			-- load and initialize all HUDELEMENT data from database
-			if SQL.CreateSqlTable("ttt2_hudelements", elem.savingKeys) then
-				local loaded = SQL.Load("ttt2_hudelements", elem.id, elem, elem.savingKeys)
+			if SQL.CreateSqlTable("ttt2_hudelements", elem:GetSavingKeys()) then
+				local loaded = SQL.Load("ttt2_hudelements", elem.id, elem, elem:GetSavingKeys())
 
 				if not loaded then
-					SQL.Init("ttt2_hudelements", elem.id, elem, elem.savingKeys)
+					SQL.Init("ttt2_hudelements", elem.id, elem, elem:GetSavingKeys())
 				end
 			end
 
