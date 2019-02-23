@@ -1,5 +1,7 @@
 local base = "pure_skin_element"
 
+DEFINE_BASECLASS(base)
+
 HUDELEMENT.Base = base
 
 if CLIENT then
@@ -14,6 +16,8 @@ if CLIENT then
 	function HUDELEMENT:Initialize()
 		self:SetBasePos(math.Round(ScrW() * 0.5 - w * 0.5), ScrH() - pad - h)
 		self:SetSize(w, h)
+
+		BaseClass.Initialize(self)
 	end
 
 	function HUDELEMENT:PerformLayout()
@@ -25,9 +29,7 @@ if CLIENT then
 		w = size.w
 		h = size.h
 
-		local bclass = baseclass.Get(base)
-
-		bclass.PerformLayout(self)
+		BaseClass.PerformLayout(self)
 	end
 
 	function HUDELEMENT:Draw()
@@ -48,9 +50,7 @@ if CLIENT then
 
 	function HUDELEMENT:GetDefaults()
 		if not defaults then
-			local bclass = baseclass.Get(base)
-
-			defaults = bclass.GetDefaults(self)
+			defaults = BaseClass.GetDefaults(self)
 			defaults.resizeableY = false
 		end
 

@@ -1,5 +1,8 @@
-HUDELEMENT.Base = "pure_skin_element"
-DEFINE_BASECLASS("pure_skin_element")
+local base = "pure_skin_element"
+
+HUDELEMENT.Base = base
+
+DEFINE_BASECLASS(base)
 
 if CLIENT then
 	local parentInstance = nil
@@ -31,6 +34,11 @@ if CLIENT then
 
 		self:SetPos(parent_pos.x + parent_size.w, parent_pos.y)
 		self:SetSize(width, height)
+
+		local defs = self:GetDefaults()
+
+		defs.size = self:GetSize()
+		defs.basepos = self:GetBasePos()
 
 		BaseClass.PerformLayout(self)
 	end

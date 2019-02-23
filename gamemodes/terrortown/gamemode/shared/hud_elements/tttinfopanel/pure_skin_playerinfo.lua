@@ -1,5 +1,7 @@
 local base = "pure_skin_element"
 
+DEFINE_BASECLASS(base)
+
 HUDELEMENT.Base = base
 
 if CLIENT then
@@ -19,6 +21,8 @@ if CLIENT then
 	function HUDELEMENT:Initialize()
 		self:SetBasePos(10, ScrH() - (10 + h))
 		self:SetSize(w, h)
+
+		BaseClass.Initialize(self)
 	end
 
 	function HUDELEMENT:PerformLayout()
@@ -30,9 +34,7 @@ if CLIENT then
 		w = size.w
 		h = size.h
 
-		local bclass = baseclass.Get(base)
-
-		bclass.PerformLayout(self)
+		BaseClass.PerformLayout(self)
 	end
 
 	-- Returns player's ammo information
@@ -220,9 +222,7 @@ if CLIENT then
 
 	function HUDELEMENT:GetDefaults()
 		if not defaults then
-			local bclass = baseclass.Get(base)
-
-			defaults = bclass.GetDefaults(self)
+			defaults = BaseClass.GetDefaults(self)
 			defaults.resizeableY = false
 		end
 

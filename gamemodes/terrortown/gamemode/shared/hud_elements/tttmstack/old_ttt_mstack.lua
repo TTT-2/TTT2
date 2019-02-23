@@ -1,5 +1,7 @@
 local base = "old_ttt_element"
 
+DEFINE_BASECLASS(base)
+
 HUDELEMENT.Base = base
 
 if CLIENT then
@@ -36,6 +38,8 @@ if CLIENT then
 		self:SetBasePos(top_x, top_y)
 		self:SetSize(width, 80)
 
+		BaseClass.Initialize(self)
+
 		base_spec = {
 			font = MSTACK.msgfont,
 			xalign = TEXT_ALIGN_CENTER,
@@ -49,9 +53,7 @@ if CLIENT then
 
 		text_height = draw.GetFontHeight(MSTACK.msgfont)
 
-		local bclass = baseclass.Get(base)
-
-		bclass.PerformLayout(self)
+		BaseClass.PerformLayout(self)
 	end
 
 	function HUDELEMENT:Draw()

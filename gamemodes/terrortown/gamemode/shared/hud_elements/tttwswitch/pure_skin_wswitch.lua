@@ -5,6 +5,8 @@ local TryTranslation = LANG.TryTranslation
 
 local base = "pure_skin_element"
 
+DEFINE_BASECLASS(base)
+
 HUDELEMENT.Base = base
 
 if CLIENT then
@@ -104,6 +106,8 @@ if CLIENT then
 
 		self:SetBasePos(ScrW() - (width + self.margin * 2), ScrH() - self.margin)
 		self:SetSize(width, -height)
+
+		BaseClass.Initialize(self)
 	end
 
 	function HUDELEMENT:PerformLayout()
@@ -112,9 +116,7 @@ if CLIENT then
 		self:SetPos(basepos.x, basepos.y)
 		self:SetSize(width, -height)
 
-		local bclass = baseclass.Get(base)
-
-		bclass.PerformLayout(self)
+		BaseClass.PerformLayout(self)
 	end
 
 	function HUDELEMENT:Draw()
@@ -158,9 +160,7 @@ if CLIENT then
 
 	function HUDELEMENT:GetDefaults()
 		if not defaults then
-			local bclass = baseclass.Get(base)
-
-			defaults = bclass.GetDefaults(self)
+			defaults = BaseClass.GetDefaults(self)
 			defaults.resizeableY = false
 			defaults.minHeight = height
 		end

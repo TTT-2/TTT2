@@ -4,9 +4,18 @@ local math = math
 
 HUDELEMENT.Base = "hud_element_base"
 
+DEFINE_BASECLASS(base)
+
 if CLIENT then
 	local hudWidth = CreateClientConVar("ttt2_base_hud_width", "0")
 	local hudTeamicon = CreateClientConVar("ttt2_base_hud_teamicon", "1")
+
+	function HUDELEMENT:Initialize()
+		local defs = self:GetDefaults()
+
+		defs.size = self:GetSize()
+		defs.basepos = self:GetBasePos()
+	end
 
 	-- Color presets
 	HUDELEMENT.bg_colors = {

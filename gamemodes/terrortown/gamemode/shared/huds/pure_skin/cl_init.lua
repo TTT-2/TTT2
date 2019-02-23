@@ -11,6 +11,8 @@ include("cl_drawing_functions.lua")
 
 local base = "hud_base"
 
+DEFINE_BASECLASS(base)
+
 HUD.Base = base
 
 local defaultColor = Color(49, 71, 94)
@@ -21,9 +23,7 @@ local savingKeys
 
 function HUD:GetSavingKeys()
 	if not savingKeys then
-		local bclass = baseclass.Get(base)
-
-		savingKeys = bclass.GetSavingKeys(self)
+		savingKeys = BaseClass.GetSavingKeys(self)
 		savingKeys.basecolor = {
 			typ = "color",
 			desc = "BaseColor",

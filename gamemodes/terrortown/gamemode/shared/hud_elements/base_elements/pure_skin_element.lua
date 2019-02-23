@@ -1,10 +1,19 @@
 local base = "hud_element_base"
 
+DEFINE_BASECLASS(base)
+
 HUDELEMENT.Base = base
 
 if CLIENT then
 	local defaultColor = Color(49, 71, 94)
 	local shadowColor = Color(0, 0, 0, 220)
+
+	function HUDELEMENT:Initialize()
+		local defs = self:GetDefaults()
+
+		defs.size = self:GetSize()
+		defs.basepos = self:GetBasePos()
+	end
 
 	function HUDELEMENT:DrawBg(x, y, w, h, c)
 		DrawHUDElementBg(x, y, w, h, c)
@@ -48,8 +57,6 @@ if CLIENT then
 	function HUDELEMENT:Reset()
 		self.basecolor = defaultColor
 
-		local bclass = baseclass.Get(base)
-
-		bclass.Reset(self)
+		BaseClass.Reset(self)
 	end
 end

@@ -1,5 +1,7 @@
 local base = "pure_skin_element"
 
+DEFINE_BASECLASS(base)
+
 HUDELEMENT.Base = base
 
 if CLIENT then
@@ -36,6 +38,8 @@ if CLIENT then
 		self:SetBasePos(top_x, top_y)
 		self:SetSize(width, 80)
 
+		BaseClass.Initialize(self)
+
 		base_spec = {
 			font = MSTACK.msgfont,
 			xalign = TEXT_ALIGN_LEFT,
@@ -49,9 +53,7 @@ if CLIENT then
 
 		text_height = draw.GetFontHeight(MSTACK.msgfont)
 
-		local bclass = baseclass.Get(base)
-
-		bclass.PerformLayout(self)
+		BaseClass.PerformLayout(self)
 	end
 
 	function HUDELEMENT:Draw()
@@ -134,9 +136,7 @@ if CLIENT then
 
 	function HUDELEMENT:GetDefaults()
 		if not defaults then
-			local bclass = baseclass.Get(base)
-
-			defaults = bclass.GetDefaults(self)
+			defaults = BaseClass.GetDefaults(self)
 			defaults.resizeableX = false
 			defaults.resizeableY = false
 		end

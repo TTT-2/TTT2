@@ -6,6 +6,8 @@ local util = util
 
 local base = "old_ttt_element"
 
+DEFINE_BASECLASS(base)
+
 HUDELEMENT.Base = base
 
 if CLIENT then
@@ -18,15 +20,15 @@ if CLIENT then
 	function HUDELEMENT:Initialize()
 		self:SetBasePos(self.margin, self.margin + self.maxheight)
 		self:SetSize(self.maxwidth, self.maxheight)
+
+		BaseClass.Initialize(self)
 	end
 
 	function HUDELEMENT:PerformLayout()
 		x = self.pos.x
 		y = ScrH() - self.pos.y
 
-		local bclass = baseclass.Get(base)
-
-		bclass.PerformLayout(self)
+		BaseClass.PerformLayout(self)
 	end
 
 	function HUDELEMENT:Draw()

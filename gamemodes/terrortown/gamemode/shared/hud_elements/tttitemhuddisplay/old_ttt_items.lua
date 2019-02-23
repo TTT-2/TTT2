@@ -5,6 +5,8 @@ COLOR_DARKGREY = COLOR_DARKGREY or Color(100, 100, 100, 255)
 
 local base = "old_ttt_element"
 
+DEFINE_BASECLASS(base)
+
 HUDELEMENT.Base = base
 
 if SERVER then
@@ -17,6 +19,8 @@ if CLIENT then
 	function HUDELEMENT:Initialize()
 		self:SetBasePos(20, ScrH() * 0.5)
 		self:SetSize(size, -size)
+
+		BaseClass.Initialize(self)
 	end
 
 	function HUDELEMENT:PerformLayout()
@@ -25,9 +29,7 @@ if CLIENT then
 		self:SetPos(basepos.x, basepos.y)
 		self:SetSize(size, -size)
 
-		local bclass = baseclass.Get(base)
-
-		bclass.PerformLayout(self)
+		BaseClass.PerformLayout(self)
 	end
 
 	local old_ttt_bg = Material("vgui/ttt/perks/old_ttt_bg.png")
@@ -91,9 +93,7 @@ if CLIENT then
 
 	function HUDELEMENT:GetDefaults()
 		if not defaults then
-			local bclass = baseclass.Get(base)
-
-			defaults = bclass.GetDefaults(self)
+			defaults = BaseClass.GetDefaults(self)
 			defaults.minWidth = size
 			defaults.minHeight = size
 			defaults.resizeableX = false
