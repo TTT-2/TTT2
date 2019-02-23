@@ -13,22 +13,27 @@ local defaultColor = Color(49, 71, 94)
 
 HUD.previewImage = Material("vgui/ttt/huds/pure_skin/preview.png")
 
+local savingKeys
+
 function HUD:GetSavingKeys()
-	local tmp = self.BaseClass.GetSavingKeys(self)
-	tmp.basecolor = {
-		typ = "color",
-		desc = "BaseColor",
-		OnChange = function(slf, col)
-			for _, elem in ipairs(slf:GetHUDElements()) do
-				local el = hudelements.GetStored(elem)
-				if el then
-					el.basecolor = col
+	if not savingKeys then
+		local savingKeys = table.Copy(self.BaseClass.GetSavingKeys(self))
+
+		savingKeys.basecolor = {
+			typ = "color",
+			desc = "BaseColor",
+			OnChange = function(slf, col)
+				for _, elem in ipairs(slf:GetHUDElements()) do
+					local el = hudelements.GetStored(elem)
+					if el then
+						el.basecolor = col
+					end
 				end
 			end
-		end
-	}
+		}
+	end
 
-	return tmp
+	return savingKeys
 end
 
 HUD.basecolor = defaultColor
@@ -49,12 +54,14 @@ function HUD:Initialize()
 			elem:Initialize()
 			elem:SetDefaults()
 
+			local skeys = elem:GetSavingKeys()
+
 			-- load and initialize all HUDELEMENT data from database
-			if SQL.CreateSqlTable("ttt2_hudelements", elem:GetSavingKeys()) then
-				local loaded = SQL.Load("ttt2_hudelements", elem.id, elem, elem:GetSavingKeys())
+			if SQL.CreateSqlTable("ttt2_hudelements", skeys) then
+				local loaded = SQL.Load("ttt2_hudelements", elem.id, elem, skeys)
 
 				if not loaded then
-					SQL.Init("ttt2_hudelements", elem.id, elem, elem:GetSavingKeys())
+					SQL.Init("ttt2_hudelements", elem.id, elem, skeys)
 				end
 			end
 

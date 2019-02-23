@@ -449,12 +449,14 @@ net.Receive("TTT2ReceiveHUD", function()
 	-- Initialize elements
 	hudEl:Initialize()
 
+	local skeys = hudEl:GetSavingKeys()
+
 	-- load and initialize all HUD data from database
-	if SQL.CreateSqlTable("ttt2_huds", hudEl:GetSavingKeys()) then
-		local loaded = SQL.Load("ttt2_huds", hudEl.id, hudEl, hudEl:GetSavingKeys())
+	if SQL.CreateSqlTable("ttt2_huds", skeys) then
+		local loaded = SQL.Load("ttt2_huds", hudEl.id, hudEl, skeys)
 
 		if not loaded then
-			SQL.Init("ttt2_huds", hudEl.id, hudEl, hudEl:GetSavingKeys())
+			SQL.Init("ttt2_huds", hudEl.id, hudEl, skeys)
 		end
 	end
 

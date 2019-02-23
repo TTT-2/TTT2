@@ -42,12 +42,14 @@ function HUD:Initialize()
 			elem:Initialize()
 			elem:SetDefaults()
 
+			local skeys = elem:GetSavingKeys()
+
 			-- load and initialize all HUDELEMENT data from database
-			if SQL.CreateSqlTable("ttt2_hudelements", elem:GetSavingKeys()) then
-				local loaded = SQL.Load("ttt2_hudelements", elem.id, elem, elem:GetSavingKeys())
+			if SQL.CreateSqlTable("ttt2_hudelements", skeys) then
+				local loaded = SQL.Load("ttt2_hudelements", elem.id, elem, skeys)
 
 				if not loaded then
-					SQL.Init("ttt2_hudelements", elem.id, elem, elem:GetSavingKeys())
+					SQL.Init("ttt2_hudelements", elem.id, elem, skeys)
 				end
 			end
 

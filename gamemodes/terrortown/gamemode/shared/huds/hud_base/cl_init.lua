@@ -6,8 +6,10 @@ HUD.hiddenElements = {}
 
 HUD.previewImage = Material("vgui/ttt/score_logo_2")
 
+local savingKeys = {}
+
 function HUD:GetSavingKeys()
-	return {}
+	return savingKeys
 end
 
 function HUD:ForceHUDElement(elementID)
