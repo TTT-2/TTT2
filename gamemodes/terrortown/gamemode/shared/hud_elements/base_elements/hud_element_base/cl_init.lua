@@ -76,13 +76,13 @@ function HUDELEMENT:SetSize(w, h)
 		local pos = self:GetPos()
 
 		if nw then
-			w = w * -1
+			w = -w
 
 			self:SetPos(basepos.x - w, pos.y)
 		end
 
 		if nh then
-			h = h * -1
+			h = -h
 
 			self:SetPos(pos.x, basepos.y - h)
 		end
