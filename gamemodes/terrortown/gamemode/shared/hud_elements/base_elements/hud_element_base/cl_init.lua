@@ -1,17 +1,22 @@
 local surface = surface
 
-local zero_tbl = {
+local zero_tbl_pos = {
 	x = 0,
 	y = 0
 }
 
-HUDELEMENT.basepos = table.Copy(zero_tbl)
-HUDELEMENT.pos = table.Copy(zero_tbl)
-HUDELEMENT.size = table.Copy(zero_tbl)
+local zero_tbl_size = {
+	x = 0,
+	y = 0
+}
+
+HUDELEMENT.basepos = table.Copy(zero_tbl_pos)
+HUDELEMENT.pos = table.Copy(zero_tbl_pos)
+HUDELEMENT.size = table.Copy(zero_tbl_size)
 
 local defaults = {
-	basepos = table.Copy(zero_tbl),
-	size = table.Copy(zero_tbl),
+	basepos = table.Copy(zero_tbl_pos),
+	size = table.Copy(zero_tbl_size),
 	minHeight = 0,
 	minWidth = 0,
 	resizeableX = true,
