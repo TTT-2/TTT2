@@ -16,7 +16,7 @@ HUDELEMENT.size = {
 }
 
 HUDELEMENT.defaults = {
-	pos = table.Copy(HUDELEMENT.pos),
+	pos = table.Copy(HUDELEMENT.basepos),
 	size = table.Copy(HUDELEMENT.size)
 }
 
@@ -68,22 +68,22 @@ function HUDELEMENT:GetSize()
 end
 
 function HUDELEMENT:SetSize(w, h)
-	if w < 0 then
-		w = -w
-
+	local nw, nh = w < 0, h < 0
+	if nw or nh then
 		local basepos = self:GetBasePos()
 		local pos = self:GetPos()
 
-		self:SetPos(basepos.x - w, pos.y)
-	end
+		if nw then
+			w = -w
 
-	if h < 0 then
-		h = -h
+			self:SetPos(basepos.x - w, pos.y)
+		end
 
-		local basepos = self:GetBasePos()
-		local pos = self:GetPos()
+		if nh then
+			h = -h
 
-		self:SetPos(pos.x, basepos.y - h)
+			self:SetPos(pos.x, basepos.y - h)
+		end
 	end
 
 	self.size.w = w
@@ -156,12 +156,12 @@ function HUDELEMENT:DrawSize()
 end
 
 function HUDELEMENT:SetDefaults()
-	self.defaults.pos = table.Copy(self.pos)
+	self.defaults.pos = table.Copy(self.basepos)
 	self.defaults.size = table.Copy(self.size)
 end
 
 function HUDELEMENT:Reset()
-	local defaultPos = self.defaults.pos
+	local defaultPos = self.defaults.basepos
 	local defaultSize = self.defaults.size
 
 	self:SetBasePos(defaultPos.x, defaultPos.y)
@@ -172,7 +172,7 @@ function HUDELEMENT:Reset()
 end
 
 HUDELEMENT.savingKeys = {
-	pos = {typ = "pos"},
+	basepos = {typ = "basepos"},
 	size = {typ = "size"}
 }
 
@@ -181,7 +181,7 @@ function HUDELEMENT:Save()
 end
 
 function HUDELEMENT:Load()
-	local pos = self:GetPos()
-	
-	self:SetBasePos(pos.x, pos.y)
+	local basepos = self:GetBasePos()
+
+	self:SetPos(basepos.x, basepos.y)
 end
