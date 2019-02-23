@@ -127,8 +127,6 @@ function OnLoaded()
 
 		baseclass.Set(k, tmp)
 
-		tmp.BaseClass = baseclass.Get(tmp.Base)
-
 		HUDElementList[k] = tmp
 	end
 end
