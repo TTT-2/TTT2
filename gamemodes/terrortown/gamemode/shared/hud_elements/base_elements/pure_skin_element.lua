@@ -46,7 +46,7 @@ if CLIENT then
 	function HUDELEMENT:Reset()
 		self.basecolor = defaultColor
 
-		print(self, "reset")
+		print(self.ClassName, self.BaseClass and self.BaseClass.ClassName, "reset")
 
 		self.BaseClass.Reset(self)
 	end
