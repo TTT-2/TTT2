@@ -16,7 +16,7 @@ HUDELEMENT.size = {
 }
 
 HUDELEMENT.defaults = {
-	pos = table.Copy(HUDELEMENT.basepos),
+	basepos = table.Copy(HUDELEMENT.basepos),
 	size = table.Copy(HUDELEMENT.size)
 }
 
@@ -156,7 +156,7 @@ function HUDELEMENT:DrawSize()
 end
 
 function HUDELEMENT:SetDefaults()
-	self.defaults.pos = table.Copy(self.basepos)
+	self.defaults.basepos = table.Copy(self.basepos)
 	self.defaults.size = table.Copy(self.size)
 end
 
