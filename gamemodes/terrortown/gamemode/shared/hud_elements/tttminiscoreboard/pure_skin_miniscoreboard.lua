@@ -19,12 +19,12 @@ if CLIENT then
 		local parent_size = parentInstance:GetSize()
 
 		local height = parent_size.h
-		ply_ind_size = Math.Round((height - margin * 3) / 2)
+		ply_ind_size = math.Round((height - margin * 3) / 2)
 
 		local players = util.GetFilteredPlayers(function (ply) return ply:IsTerror() end)
 		curPlayerCount = #players
 
-		column_count = Math.Round(#players / 2)
+		column_count = math.Round(#players / 2)
 		local width = (margin + ply_ind_size) * column_count + margin
 
 		self:SetPos(parent_pos.x + parent_size.w, parent_pos.y)
