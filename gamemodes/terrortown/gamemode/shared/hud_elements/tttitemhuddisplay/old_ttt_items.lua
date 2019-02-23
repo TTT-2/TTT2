@@ -8,20 +8,17 @@ local base = "old_ttt_element"
 HUDELEMENT.Base = base
 
 if CLIENT then
-	local x = 0
-	local y = 0
 	local size = 64
 
 	function HUDELEMENT:Initialize()
-		self:SetBasePos(self.pos.x, ScrH() * 0.5 + self.pos.y)
+		self:SetBasePos(20, ScrH() * 0.5)
 		self:SetSize(size, -size)
 	end
 
 	function HUDELEMENT:PerformLayout()
-		x = self.pos.x
-		y = ScrH() * 0.5 + self.pos.y
+		local basepos = self:GetBasePos()
 
-		self:SetBasePos(x, y)
+		self:SetPos(basepos.x, ScrH() * 0.5 + basepos.y)
 		self:SetSize(size, -size)
 
 		local bclass = baseclass.Get(base)
@@ -35,7 +32,8 @@ if CLIENT then
 		if not client:Alive() or client:Team() ~= TEAM_TERROR then return end
 
 		local itms = client:GetEquipmentItems()
-		local curY = y
+		local pos = self:GetPos()
+		local curY = pos.y
 
 		-- at first, calculate old items because they don't take care of the new ones
 		for _, itemCls in ipairs(itms) do
@@ -51,12 +49,12 @@ if CLIENT then
 			if item and item.hud then
 				surface.SetMaterial(item.hud)
 				surface.SetDrawColor(255, 255, 255, 255)
-				surface.DrawTexturedRect(x, curY, size, size)
+				surface.DrawTexturedRect(pos.x, curY, size, size)
 
 				local info = item:DrawInfo()
 				if info then
 					-- right bottom corner
-					local tx = x + size
+					local tx = pos.x + size
 					local ty = curY + size
 					local pad = 5
 
@@ -72,6 +70,6 @@ if CLIENT then
 			end
 		end
 
-		self:SetSize(size, curY - y)
+		self:SetSize(size, curY - pos.y)
 	end
 end
