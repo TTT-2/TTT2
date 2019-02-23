@@ -72,6 +72,15 @@ function ITEM:Bought(ply)
 
 end
 
+--[[---------------------------------------------------------
+	Name: DrawInfo
+	Desc: Draw some information in a small box next to the icon
+-----------------------------------------------------------]]
+function ITEM:DrawInfo()
+
+end
+
+-- useable, but do not modify this!
 function ITEM:IsEquipment()
 	return WEPS.IsEquipment(self)
 end
