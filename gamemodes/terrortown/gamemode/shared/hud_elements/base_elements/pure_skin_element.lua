@@ -46,6 +46,10 @@ if CLIENT then
 	function HUDELEMENT:Reset()
 		self.basecolor = defaultColor
 
+		if self.BaseClass == self then
+			error("WTF, the system is broken")
+		end
+
 		self.BaseClass.Reset(self)
 	end
 end
