@@ -49,8 +49,8 @@ function HUD:Initialize()
 	self:ForceHUDElement("pure_skin_wswitch")
 	self:ForceHUDElement("pure_skin_drowning")
 	self:ForceHUDElement("pure_skin_mstack")
+	self:ForceHUDElement("pure_skin_items")
 	--self:ForceHUDElement("old_ttt_spec")
-	--self:ForceHUDElement("old_ttt_items")
 
 	-- Initialize elements default values
 	for _, v in ipairs(self:GetHUDElements()) do
