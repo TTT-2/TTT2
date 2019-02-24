@@ -71,6 +71,7 @@ function PANEL:Init()
 	self.vip = vgui.Create("DImage", self)
 	self.vip:SetSize(16, 16)
 	self.vip:SetMouseInputEnabled(false)
+	self.vip:SetKeepAspect(true)
 
 	self.avatar = vgui.Create("AvatarImage", self)
 	self.avatar:SetSize(SB_ROW_HEIGHT, SB_ROW_HEIGHT)
@@ -276,7 +277,7 @@ function PANEL:ApplySchemeSettings()
 	self.sresult:SetImageColor(Color(170, 170, 170, 150))
 
 	self.vip:SetImage(ttt2_vip_indicator)
-	self.vip:SetImageColor(Color(255, 255, 255, 255))
+	--self.vip:SetImageColor(COLOR_WHITE)
 end
 
 function PANEL:LayoutColumns()
