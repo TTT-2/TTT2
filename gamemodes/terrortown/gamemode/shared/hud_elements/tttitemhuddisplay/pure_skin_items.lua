@@ -67,26 +67,28 @@ if CLIENT then
 
 				self:DrawLines(pos.x, curY, size, size, 255)
 
-				local info = item:DrawInfo()
-				if info then
-					-- right bottom corner
-					local tx = pos.x + size
-					local ty = curY + size
-					local pad = 5
+				if isfunction(item.DrawInfo) then
+					local info = item:DrawInfo()
+					if info then
+						-- right bottom corner
+						local tx = pos.x + size
+						local ty = curY + size
+						local pad = 5
 
-					surface.SetFont("ItemInfoFont")
+						surface.SetFont("ItemInfoFont")
 
-					local infoW, infoH = surface.GetTextSize(info)
+						local infoW, infoH = surface.GetTextSize(info)
 
-					local bx = tx - infoW * 0.5 - pad
-					local by = ty - infoH * 0.5
-					local bw = infoW + pad * 2
+						local bx = tx - infoW * 0.5 - pad
+						local by = ty - infoH * 0.5
+						local bw = infoW + pad * 2
 
-					self:DrawBg(bx, by, bw, infoH, COLOR_DARKGREY)
+						self:DrawBg(bx, by, bw, infoH, COLOR_DARKGREY)
 
-					draw.DrawText(info, "ItemInfoFont", tx, ty - infoH * 0.5, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+						draw.DrawText(info, "ItemInfoFont", tx, ty - infoH * 0.5, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
-					self:DrawLines(bx, by, bw, infoH, 255)
+						self:DrawLines(bx, by, bw, infoH, 255)
+					end
 				end
 
 				curY = curY - (size + size * 0.25)

@@ -68,19 +68,21 @@ if CLIENT then
 				surface.SetDrawColor(255, 255, 255, 255)
 				surface.DrawTexturedRect(pos.x, curY, size, size)
 
-				local info = item:DrawInfo()
-				if info then
-					-- right bottom corner
-					local tx = pos.x + size
-					local ty = curY + size
-					local pad = 5
+				if isfunction(item.DrawInfo) then
+					local info = item:DrawInfo()
+					if info then
+						-- right bottom corner
+						local tx = pos.x + size
+						local ty = curY + size
+						local pad = 5
 
-					surface.SetFont("ItemInfoFont")
+						surface.SetFont("ItemInfoFont")
 
-					local infoW, infoH = surface.GetTextSize(info)
+						local infoW, infoH = surface.GetTextSize(info)
 
-					draw.RoundedBox(4, tx - infoW * 0.5 - pad, ty - infoH * 0.5, infoW + pad * 2, infoH, COLOR_DARKGREY)
-					draw.DrawText(info, "ItemInfoFont", tx, ty - infoH * 0.5, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+						draw.RoundedBox(4, tx - infoW * 0.5 - pad, ty - infoH * 0.5, infoW + pad * 2, infoH, COLOR_DARKGREY)
+						draw.DrawText(info, "ItemInfoFont", tx, ty - infoH * 0.5, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					end
 				end
 
 				curY = curY - (size + size * 0.25)

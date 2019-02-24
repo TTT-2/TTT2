@@ -46,6 +46,14 @@ if CLIENT then
 	-- if the files are different, it only looks at the name. I recommend you
 	-- create your own directory so that this does not happen,
 	-- eg. /materials/vgui/ttt/mycoolserver/mygun.vmt
+
+	--[[---------------------------------------------------------
+		Name: DrawInfo
+		Desc: Draw some information in a small box next to the icon
+	-----------------------------------------------------------]]
+	function ITEM:DrawInfo()
+
+	end
 end
 
 --[[---------------------------------------------------------
@@ -69,14 +77,6 @@ end
 	Desc: A player or NPC has bought the item
 -----------------------------------------------------------]]
 function ITEM:Bought(ply)
-
-end
-
---[[---------------------------------------------------------
-	Name: DrawInfo
-	Desc: Draw some information in a small box next to the icon
------------------------------------------------------------]]
-function ITEM:DrawInfo()
 
 end
 
