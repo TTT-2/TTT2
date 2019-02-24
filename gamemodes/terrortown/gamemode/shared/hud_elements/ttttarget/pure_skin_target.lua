@@ -1,10 +1,8 @@
 if SERVER then
 	AddCSLuaFile()
-
-	util.AddNetworkString("TTTHTargetHit")
 end
 
-local base = "old_ttt_element"
+local base = "pure_skin_element"
 
 DEFINE_BASECLASS(base)
 
