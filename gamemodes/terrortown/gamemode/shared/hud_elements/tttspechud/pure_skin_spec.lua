@@ -25,7 +25,7 @@ if CLIENT then
 	local margin = 14
 
 	-- Paint punch-o-meter
-	local function HUDELEMENT:PunchPaint()
+	function HUDELEMENT:PunchPaint()
 		local client = LocalPlayer()
 		local L = GetLang()
 		local punch = client:GetNWFloat("specpunches", 0)
