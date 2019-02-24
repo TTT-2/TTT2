@@ -48,7 +48,8 @@ if CLIENT then
 		local ret_color = Color(0, 0, 0, 130)
 
 		if ply:GetNWBool("body_found", false) then
-			ret_color = ply:GetRoleColor()
+			color = ply:GetRoleColor()
+			ret_color = Color(ret_color.r, ret_color.g, ret_color.b, 155) -- make color a bit transparent
 		end
 
 		return ret_color
@@ -67,6 +68,12 @@ if CLIENT then
 
 		-- draw bg and shadow
 		self:DrawBg(self.pos.x, self.pos.y, self.size.w, self.size.h, self.basecolor)
+		
+		-- draw dark bottom overlay
+		surface.SetDrawColor(0, 0, 0, 90)
+		surface.DrawRect(self.pos.x, self.pos.y, self.size.w, self.size.h)
+		
+		-- draw squares
 		local tmp_x, tmp_y = self.pos.x, self.pos.y
 		for i, p in ipairs(players) do
 			tmp_x = self.pos.x + margin + (element_margin + ply_ind_size) * math.floor((i - 1) * 0.5)
