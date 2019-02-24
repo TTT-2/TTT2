@@ -29,7 +29,22 @@ function HUD:HideHUDType(elementType)
 end
 
 function HUD:ShouldShow(elementType)
-	return not table.HasValue(self.hiddenElements, elementType)
+	if table.HasValue(self.hiddenElements, elementType) then
+		return false
+	end
+
+	-- hide element if its parent element is hidden
+	local element = hudelems[typ] or hudelements.GetTypeElement(typ).id
+	local elementTbl = hudelemens.GetStored(element)
+	if elementTbl then
+		local parent = elementTbl:GetParent()
+		if elementTbl:IsChild() and parent then
+			return self:ShouldShow(parent)
+		end
+		return true
+	else
+		return false
+	end
 end
 
 function HUD:PerformLayout()
@@ -78,7 +93,7 @@ function HUD:GetHUDElements()
 	-- loop through all types and if the hud does not provide an element take the first found instance for the type
 	for _, typ in ipairs(hudelements.GetElementTypes()) do
 		if self:ShouldShow(typ) then
-			tbl[#tbl + 1] = hudelems[typ] or hudelements.GetTypeElement(typ).id
+			tbl[#tbl + 1] = hudelements[typ] or hudelements.GetTypeElement(typ).id
 		end
 	end
 
