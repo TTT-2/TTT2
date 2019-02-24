@@ -58,6 +58,8 @@ if CLIENT then
 		local client = LocalPlayer()
 		local round_state = GAMEMODE.round_state
 
+		if round_state ~= ROUND_ACTIVE then return end
+
 		local players = util.GetFilteredPlayers(function (ply) return ply:IsTerror() or ply:IsDeadTerror() end)
 		if #players ~= curPlayerCount then
 			self:PerformLayout()
