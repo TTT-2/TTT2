@@ -460,10 +460,10 @@ function PANEL:PerformLayout()
 	local ty = (SB_ROW_HEIGHT - self.nick:GetTall()) * 0.5
 
 	self.nick2:SizeToContents()
-	self.nick2:SetPos(SB_ROW_HEIGHT + 12, ty + 2)
+	self.nick2:SetPos(SB_ROW_HEIGHT + 11, ty + 1)
 
 	self.nick3:SizeToContents()
-	self.nick3:SetPos(SB_ROW_HEIGHT + 8, ty - 2)
+	self.nick3:SetPos(SB_ROW_HEIGHT + 10, ty)
 
 	self.nick:SizeToContents()
 	self.nick:SetPos(SB_ROW_HEIGHT + 10, ty)
