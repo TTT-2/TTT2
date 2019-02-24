@@ -54,7 +54,6 @@ ttt_include("cl_shopeditor")
 ttt_include("cl_chat")
 ttt_include("cl_voice")
 ttt_include("cl_changes")
-ttt_include("cl_credits")
 
 ttt_include("sh_sprint")
 
