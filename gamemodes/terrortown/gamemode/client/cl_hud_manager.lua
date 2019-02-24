@@ -268,7 +268,7 @@ function HUDManager.AddHUDSettings(panel, hudEl)
 
 							SQL.Save("ttt2_hudelements", elem, tel, tel:GetSavingKeys())
 
-							tel:Save()
+							tel:SaveData()
 						end
 					end
 
