@@ -380,6 +380,7 @@ function GM:HUDPaint()
 	if client.oldScrW and client.oldScrW ~= scrW and client.oldScrH and client.oldScrH ~= scrH then
 		local hud = huds.GetStored(HUDManager.GetHUD())
 		if hud then
+			hud:ResolutionChanged()
 			hud:PerformLayout()
 		end
 

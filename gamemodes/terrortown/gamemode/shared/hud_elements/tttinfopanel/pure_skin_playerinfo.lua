@@ -17,9 +17,9 @@ if CLIENT then
 	local sri_text_width_padding = 8 --secondary role information padding (needed for size calculations)
 
 	local secondaryRoleInformationFunc = nil
-
+	
 	function HUDELEMENT:Initialize()
-		self:SetBasePos(10, ScrH() - (10 + h))
+		self:RecalculateBasePos()
 		self:SetSize(w, h)
 
 		BaseClass.Initialize(self)
@@ -27,10 +27,14 @@ if CLIENT then
 		self.defaults.resizeableY = false
 	end
 
+	function HUDELEMENT:RecalculateBasePos()
+		self:SetBasePos(10, ScrH() - (10 + h))
+	end
+	
 	function HUDELEMENT:PerformLayout()
 		local pos = self:GetPos()
 		local size = self:GetSize()
-
+	
 		x = pos.x
 		y = pos.y
 		w = size.w

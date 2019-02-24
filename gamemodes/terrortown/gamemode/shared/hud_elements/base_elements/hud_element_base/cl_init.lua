@@ -64,6 +64,23 @@ function HUDELEMENT:PerformLayout()
 	end
 end
 
+function HUDELEMENT:ResolutionChanged()
+	self:RecalculateBasePos()
+	self:SetDefaults()
+	for _, elem in ipairs(self.children) do
+		local elemtbl = hudelements.GetStored(elem)
+		if elemtbl then
+			elemtbl:ResolutionChanged()
+		else
+			Msg("Error: HUDElement " .. (self.id or "?") .. " has unkown child element named " .. elem .. " when calling ResolutionChanged \n")
+		end
+	end
+end
+
+function HUDELEMENT:RecalculateBasePos()
+	-- Use this to intialize/reinitialize your basePos (take ScrH()/ScrW() as reference to support different resolutions)
+end
+
 function HUDELEMENT:GetBasePos()
 	return self.basepos
 end

@@ -75,6 +75,21 @@ function HUD:PerformLayout()
 	end
 end
 
+function HUD:ResolutionChanged()
+	for _, elemName in ipairs(self:GetHUDElements()) do
+		local elem = hudelements.GetStored(elemName)
+		if elem then
+			if not elem:IsChild() then
+				elem:ResolutionChanged()
+			end
+		else
+			Msg("Error: Hudelement not found during ResolutionChanged: " .. elemName)
+
+			return
+		end
+	end
+end
+
 function HUD:Initialize()
 	-- Initialize elements default values
 	for _, v in ipairs(self:GetHUDElements()) do

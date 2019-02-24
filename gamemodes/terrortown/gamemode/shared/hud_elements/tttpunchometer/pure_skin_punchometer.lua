@@ -11,19 +11,22 @@ HUDELEMENT.Base = base
 DEFINE_BASECLASS(base)
 
 if CLIENT then
+	local width, height = 200, 40
 	local draw_col = Color(205, 155, 0, 255)
 	local pad = 7
 	local margin = 14
 
 	function HUDELEMENT:Initialize()
-		local width, height = 200, 40
-
-		self:SetBasePos(ScrW() * 0.5 - width * 0.5, margin * 2 + 72)
+		self:RecalculateBasePos()
 		self:SetSize(width, height)
 
 		BaseClass.Initialize(self)
 
 		self.defaults.resizeableY = false
+	end
+	
+	function HUDELEMENT:RecalculateBasePos()
+		self:SetBasePos(ScrW() * 0.5 - width * 0.5, margin * 2 + 72)
 	end
 
 	-- Paint punch-o-meter

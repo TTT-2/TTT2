@@ -12,17 +12,20 @@ if CLIENT then -- CLIENT
 	-- Creating Font
 	surface.CreateFont("HUDFont", {font = "Trebuchet24", size = 24, weight = 750})
 
+	local width, height = 365, 32
 	local pad = 14 -- padding
 	local iconSize = 64
 	local target_icon = Material("vgui/ttt/target_icon")
 
 	function HUDELEMENT:Initialize()
-		local width, height = 365, 32
-
-	    self:SetBasePos(10, ScrH() - height - 146 - pad - 10)
+	    self:RecalculateBasePos()
 		self:SetSize(width, height)
 
 		BaseClass.Initialize(self)
+	end
+	
+	function HUDELEMENT:RecalculateBasePos()
+	    self:SetBasePos(10, ScrH() - height - 146 - pad - 10)
 	end
 
 	function HUDELEMENT:DrawComponent(name)
