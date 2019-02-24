@@ -36,4 +36,7 @@ if SERVER then
 
 	-- old ttt hud items background
 	resource.AddFile("materials/vgui/ttt/perks/old_ttt_bg.png")
+
+	-- ttt vip indicator
+	resource.AddFile("materials/vgui/ttt/ttt2_vip_indicator.vmt")
 end

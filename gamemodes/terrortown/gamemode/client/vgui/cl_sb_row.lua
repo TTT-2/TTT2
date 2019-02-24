@@ -10,6 +10,15 @@ local IsValid = IsValid
 local surface = surface
 local vgui = vgui
 
+local ttt2_vip_indicator = "vgui/ttt/ttt2_vip_indicator"
+
+local vip_tbl = {
+	["76561197964193008"] = true,
+	["76561198049831089"] = true,
+	["76561198058039701"] = true,
+	["76561198047819379"] = true
+}
+
 SB_ROW_HEIGHT = 24 --16
 
 local PANEL = {}
@@ -59,6 +68,10 @@ function PANEL:Init()
 	self.sresult:SetSize(16, 16)
 	self.sresult:SetMouseInputEnabled(false)
 
+	self.vip = vgui.Create("DImage", self)
+	self.vip:SetSize(16, 16)
+	self.vip:SetMouseInputEnabled(false)
+
 	self.avatar = vgui.Create("AvatarImage", self)
 	self.avatar:SetSize(SB_ROW_HEIGHT, SB_ROW_HEIGHT)
 	self.avatar:SetMouseInputEnabled(false)
@@ -95,14 +108,15 @@ end
 local namecolor = {
 	default = COLOR_WHITE,
 	admin = Color(220, 180, 0, 255),
-	dev = Color(100, 240, 105, 255)
+	vip = Color(100, 240, 105, 255)
 }
 
 function GM:TTTScoreboardColorForPlayer(ply)
 	if IsValid(ply) then
-		local steamid = ply:SteamID64()
-		if steamid == "76561197964193008" or steamid == "76561198049831089" or steamid == "76561198058039701" or steamid == "76561198047819379" then
-			return namecolor.dev
+		local steamid = tostring(ply:SteamID64())
+
+		if vip_tbl[steamid] then
+			return namecolor.vip
 		elseif ply:IsAdmin() and GetGlobalBool("ttt_highlight_admins", true) then
 			return namecolor.admin
 		end
@@ -211,6 +225,8 @@ function PANEL:UpdatePlayerData()
 	self.nick:SizeToContents()
 	self.nick:SetTextColor(ColorForPlayer(ply))
 
+	self.vip:SetVisible(vip_tbl[tostring(ply:SteamID64())] == true)
+
 	local ptag = ply.sb_tag
 
 	if ScoreGroup(ply) ~= GROUP_TERROR then
@@ -258,6 +274,9 @@ function PANEL:ApplySchemeSettings()
 
 	self.sresult:SetImage("icon16/magnifier.png")
 	self.sresult:SetImageColor(Color(170, 170, 170, 150))
+
+	self.vip:SetImage(ttt2_vip_indicator)
+	self.vip:SetImageColor(Color(255, 255, 255, 255))
 end
 
 function PANEL:LayoutColumns()
@@ -276,7 +295,13 @@ function PANEL:LayoutColumns()
 	cx = cx - 90
 
 	self.tag:SetPos(cx - self.tag:GetWide() * 0.5, (SB_ROW_HEIGHT - self.tag:GetTall()) * 0.5)
+
 	self.sresult:SetPos(cx - 8, (SB_ROW_HEIGHT - 16) * 0.5)
+
+	local pos = self.nick:GetPos()
+	local size = self.nick:GetSize()
+
+	self.vip:SetPos(pos.x + size.w + 20, (SB_ROW_HEIGHT - 16) * 0.5)
 end
 
 function PANEL:PerformLayout()
