@@ -36,7 +36,7 @@ if CLIENT then
 		curPlayerCount = #players
 
 		column_count = math.Round(#players / 2)
-		local width = element_margin + (column_count-1) + ply_ind_size * column_count + 2*margin
+		local width = element_margin * (column_count-1) + ply_ind_size * column_count + 2*margin
 
 		self:SetPos(parent_pos.x + parent_size.w, parent_pos.y)
 		self:SetSize(width, height)
