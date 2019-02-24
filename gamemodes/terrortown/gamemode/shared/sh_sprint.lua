@@ -63,12 +63,12 @@ else
 
 		if bool then
 			if not GetGlobalBool("ttt2_sprint_crosshair", true) then
-				client.oldCrosshairSize = GetConVar("ttt_crosshair_size"):GetFloat() or 1
+				client.oldCrosshair = GetConVar("ttt_disable_crosshair"):GetBool() and 1 or 0
 
-				RunConsoleCommand("ttt_crosshair_size", 0)
+				RunConsoleCommand("ttt_disable_crosshair", 1)
 			end
 		else
-			RunConsoleCommand("ttt_crosshair_size", client.oldCrosshairSize or 1)
+			RunConsoleCommand("ttt_disable_crosshair", client.oldCrosshair or 0)
 		end
 	end
 
