@@ -52,13 +52,10 @@ function HUD:Initialize()
 	for _, v in ipairs(self:GetHUDElements()) do
 		local elem = hudelements.GetStored(v)
 		if elem and not elem:IsChild() then
+			elem:Initialize()
 			elem:SetDefaults()
 			elem:LoadData()
 			elem.initialized = true
-
-			for _, v in ipairs(elem:GetChildren()) do
-
-			end
 		else
 			Msg("Error: HUD " .. (self.id or "?") .. " has unkown element named " .. v .. "\n")
 		end

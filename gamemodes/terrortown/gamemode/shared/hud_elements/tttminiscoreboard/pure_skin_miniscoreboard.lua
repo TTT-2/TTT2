@@ -22,6 +22,7 @@ if CLIENT then
 
 	function HUDELEMENT:Initialize()
 		parentInstance = hudelements.GetStored(self.parent)
+		BaseClass.Initialze(self)
 	end
 
 	function HUDELEMENT:PerformLayout()
