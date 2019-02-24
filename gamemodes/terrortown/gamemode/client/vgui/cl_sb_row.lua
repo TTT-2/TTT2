@@ -30,7 +30,9 @@ local vip_tbl = {
 	["76561198033468770"] = true  -- Dok441
 }
 
-local addondev_tbl = {}
+local addondev_tbl = {
+	["76561198052323988"] = true -- LeBroomer
+}
 
 function AddTTT2AddonDev(steamid)
 	if not steamid then return end
