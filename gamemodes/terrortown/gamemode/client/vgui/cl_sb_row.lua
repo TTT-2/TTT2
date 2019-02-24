@@ -10,7 +10,7 @@ local IsValid = IsValid
 local surface = surface
 local vgui = vgui
 
-local ttt2_vip_indicator = "vgui/ttt/ttt2_vip_indicator"
+local ttt2_indicator_dev = "vgui/ttt/ttt2_indicator_dev"
 
 local vip_tbl = {
 	["76561197964193008"] = true,
@@ -284,7 +284,7 @@ function PANEL:ApplySchemeSettings()
 	self.sresult:SetImage("icon16/magnifier.png")
 	self.sresult:SetImageColor(Color(170, 170, 170, 150))
 
-	self.vip:SetImage(ttt2_vip_indicator)
+	self.vip:SetImage(ttt2_indicator_dev)
 	self.vip:SetImageColor(namecolor.vip)
 end
 

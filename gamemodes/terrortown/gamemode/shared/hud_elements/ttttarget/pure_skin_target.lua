@@ -12,16 +12,20 @@ if CLIENT then -- CLIENT
 	-- Creating Font
 	surface.CreateFont("HUDFont", {font = "Trebuchet24", size = 24, weight = 750})
 
-	function HUDELEMENT:Initialize()
-		local width, height = self.maxwidth, 45
+	local pad = 14 -- padding
+	local iconSize = 64
+	local target_icon = Material("vgui/ttt/target_icon")
 
-	    self:SetBasePos(15, ScrH() - height - self.maxheight - self.margin)
+	function HUDELEMENT:Initialize()
+		local width, height = 365, 32
+
+	    self:SetBasePos(pad, ScrH() - height - 146 - pad)
 		self:SetSize(width, height)
 
 		BaseClass.Initialize(self)
 	end
 
-	function HUDELEMENT:DrawComponent(name, col, val)
+	function HUDELEMENT:DrawComponent(name)
 		local client = LocalPlayer()
 
 		local pos = self:GetPos()
@@ -29,25 +33,14 @@ if CLIENT then -- CLIENT
 		local x, y = pos.x, pos.y
 		local width, height = size.w, size.h
 
-		draw.RoundedBox(8, x, y, width, height, self.bg_colors.background_main)
+		self:DrawBg(x, y, width, height, self.basecolor)
+		self:ShadowedText(name, "HealthAmmo", x + iconSize + pad, y + height * 0.5, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		self:DrawLines(x, y, width, height)
 
-		local bar_width = width - self.dmargin
-		local bar_height = height - self.dmargin
-
-		local tx = x + self.margin
-		local ty = y + self.margin
-
-		self:PaintBar(tx, ty, bar_width, bar_height, col)
-		self:ShadowedText(name, "HealthAmmo", tx + bar_width * 0.5, ty + bar_height * 0.5, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-
-		draw.SimpleText("Target", "TabLarge", x + self.margin * 2, y, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		surface.SetDrawColor(255, 255, 255, 255)
+		surface.SetMaterial(target_icon)
+		surface.DrawTexturedRect(x + 4, y + 4, iconSize - 8, iconSize - 8)
 	end
-
-	local edit_colors = {
-		border = COLOR_WHITE,
-		background = Color(0, 0, 10, 200),
-		fill = Color(100, 100, 100, 255)
-	}
 
 	function HUDELEMENT:Draw()
 		local ply = LocalPlayer()
@@ -57,15 +50,9 @@ if CLIENT then -- CLIENT
 		local tgt = ply:GetTargetPlayer()
 
 		if HUDManager.IsEditing then
-			self:DrawComponent("TARGET", edit_colors, "- TARGET -")
+			self:DrawComponent("- TARGET -")
 		elseif IsValid(tgt) and ply:IsActive() then
-			local col_tbl = {
-				border = COLOR_WHITE,
-				background = tgt:GetRoleDkColor(),
-				fill = tgt:GetRoleColor()
-			}
-
-			self:DrawComponent("TARGET", col_tbl, tgt:Nick())
+			self:DrawComponent(tgt:Nick())
 		end
 	end
 end

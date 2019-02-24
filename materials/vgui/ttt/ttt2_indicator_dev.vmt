@@ -1,6 +1,6 @@
 "UnlitGeneric"
 {
-	"$basetexture" "vgui/ttt/ttt2_vip_indicator"
+	"$basetexture" "vgui/ttt/ttt2_indicator_dev"
 	"$translucent" 1
 	"$vertexalpha" 1
 	"$vertexcolor" 1
