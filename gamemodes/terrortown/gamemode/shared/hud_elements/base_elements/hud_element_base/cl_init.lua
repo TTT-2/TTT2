@@ -33,15 +33,17 @@ end
 
 function HUDELEMENT:Initialize()
 	-- use this to set default values and dont forget to call BaseClass.Initialze(self)!!
+	self:SetDefaults()
+	self:LoadData()
 	for _, elem in ipairs(self.children) do
 		local elemtbl = hudelements.GetStored(elem)
 		if elemtbl then
 			elemtbl:Initialize()
-			elemtbl:SetDefaults()
-			elemtbl:LoadData()
-			elemtbl.initialized = true
+		else
+			Msg("Error: HUDElement " .. (self.id or "?") .. " has unkown child element named " .. elem .. " when calling Initialize \n")
 		end
 	end
+	self.initialized = true
 end
 
 function HUDELEMENT:Draw()
@@ -57,6 +59,8 @@ function HUDELEMENT:PerformLayout()
 		local elemtbl = hudelements.GetStored(elem)
 		if elemtbl then
 			elemtbl:PerformLayout()
+		else
+			Msg("Error: HUDElement " .. (self.id or "?") .. " has unkown child element named " .. elem .. " when calling PerformLayout \n")
 		end
 	end
 end
