@@ -132,13 +132,12 @@ if CLIENT then
 				end
 			end
 
-			role_scale_multiplier = math.Clamp(role_scale_multiplier, 0.55, 0.92)
-
+			role_scale_multiplier = math.Clamp(role_scale_multiplier, 0.55, 0.85)
 
 			--create scaling matrix for the text
 			local mat = Matrix()
 			mat:Translate( Vector( nx, ry ) )
-			mat:Scale( Vector( role_scale_multiplier, role_scale_multiplier, role_scale_multiplier ) )
+			mat:Scale( Vector( role_scale_multiplier * 0.9, role_scale_multiplier, role_scale_multiplier ) )
 			mat:Translate( -Vector( nx, ry ) )
 
 			render.PushFilterMag( TEXFILTER.ANISOTROPIC )
