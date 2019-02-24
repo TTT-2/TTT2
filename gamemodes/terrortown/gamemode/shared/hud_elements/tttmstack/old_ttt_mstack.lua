@@ -16,7 +16,6 @@ if CLIENT then
 		yalign = TEXT_ALIGN_TOP
 	}
 
-	local leftPad = 15
 	local text_height = 0
 
 	local top_y = 0

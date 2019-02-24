@@ -15,7 +15,7 @@ local ipairs = ipairs
 local net = net
 
 MSTACK.margin = 6
-MSTACK.title_margin = 10
+MSTACK.title_margin = 8
 MSTACK.msg_width = 400
 
 MSTACK.msgfont = "DefaultBold"
@@ -103,7 +103,7 @@ function MSTACK:AddMessageEx(item)
 	-- Height depends on number of lines, which is equal to number of table
 	-- elements of the wrapped item.text
 	item.height = #item.text * text_height + MSTACK.margin * (1 + #item.text)
-	
+
 	if #item.title > 0 then
 		item.height = item.height + MSTACK.title_margin + #item.title * text_height + MSTACK.margin * (1 + #item.title)
 	end
