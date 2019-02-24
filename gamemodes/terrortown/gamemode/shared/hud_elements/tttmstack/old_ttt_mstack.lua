@@ -102,11 +102,26 @@ if CLIENT then
 				local spec = base_spec
 				spec.color = item.col
 
+				for i = 1, #item.title do
+					spec.text = item.title[i]
+
+					local tx = top_x + (item.subWidth or 0) + leftPad
+					local ty = y + MSTACK.margin + (i - 1) * (text_height + MSTACK.margin)
+
+					spec.pos = {tx, ty}
+
+					draw.TextShadow(spec, 1, alpha)
+				end
+
 				for i = 1, #item.text do
 					spec.text = item.text[i]
 
-					local tx = top_x + ((MSTACK.msg_width - (item.subWidth or 0)) * 0.5) + (item.subWidth or 0)
+					local tx = top_x + (item.subWidth or 0) + leftPad
 					local ty = y + MSTACK.margin + (i - 1) * (text_height + MSTACK.margin)
+
+					if #item.title != 0 then
+						ty = ty + title_margin + MSTACK.margin + #item.title * (text_height + MSTACK.margin)
+					end
 
 					spec.pos = {tx, ty}
 

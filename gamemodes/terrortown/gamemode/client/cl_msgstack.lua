@@ -53,9 +53,10 @@ function MSTACK:AddColoredBgMessage(text, bg_clr)
 	self:AddMessageEx(item)
 end
 
-function MSTACK:AddImagedMessage(text, c, image, size2)
+function MSTACK:AddImagedMessage(text, c, image, size2, title)
 	local item = {}
 	item.text = text
+	item.title = title
 	item.col = c
 	item.bg = msgcolors.generic_bg
 	item.image = image
@@ -67,9 +68,10 @@ function MSTACK:AddImagedMessage(text, c, image, size2)
 	self:AddMessageEx(item)
 end
 
-function MSTACK:AddColoredImagedMessage(text, bg_clr, image, size2)
+function MSTACK:AddColoredImagedMessage(text, bg_clr, image, size2, title)
 	local item = {}
 	item.text = text
+	item.title = title
 	item.col = msgcolors.generic_text
 	item.bg = bg_clr
 	item.image = image
@@ -91,9 +93,15 @@ function MSTACK:AddMessageEx(item)
 
 	item.text = self:WrapText(item.text, text_width - (item.subWidth or 0))
 
+	if item.title then
+		item.title = self:WrapText(item.title, text_width - (item.subWidth or 0))
+	else
+		item.title = {}
+	end
+
 	-- Height depends on number of lines, which is equal to number of table
 	-- elements of the wrapped item.text
-	item.height = #item.text * text_height + MSTACK.margin * (1 + #item.text)
+	item.height = #item.text * text_height + MSTACK.margin * (1 + #item.text) + title_margin + #item.title * text_height + MSTACK.margin * (1 + #item.title)
 
 	if item.minHeight then
 		item.height = math.max(item.height, item.minHeight)
