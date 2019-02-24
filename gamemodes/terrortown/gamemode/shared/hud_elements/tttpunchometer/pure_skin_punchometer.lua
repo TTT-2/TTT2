@@ -40,7 +40,7 @@ if CLIENT then
 		self:DrawBar(x + pad, y + pad, width - pad * 2, height - pad * 2, draw_col, punch, L.punch_title)
 		self:DrawLines(x, y, width, height, self.basecolor.a)
 
-		draw.SimpleText(L.punch_help, "TabLarge", x, y + margin + 20, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(L.punch_help, "TabLarge", x + width * 0.5, y, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
 		local bonus = client:GetNWInt("bonuspunches", 0)
 		if bonus ~= 0 then
