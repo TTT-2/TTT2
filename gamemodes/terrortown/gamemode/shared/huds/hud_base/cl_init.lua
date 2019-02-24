@@ -47,7 +47,8 @@ function HUD:ShouldShow(elementType)
 	if elementTbl then
 		local parent = elementTbl:GetParent()
 		if elementTbl:IsChild() and parent then
-			return self:ShouldShow(parent)
+			local parentTbl = hudelements.GetStored(parent)
+			return self:ShouldShow(parentTbl.type)
 		end
 		return true
 	else
