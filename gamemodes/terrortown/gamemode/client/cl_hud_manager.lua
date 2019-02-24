@@ -129,9 +129,7 @@ local function EditLocalHUD()
 					nh = 1
 				end
 
-				local defs = elem:GetDefaults()
-
-				elem:SetSize(defs.resizeableX and nw or size.w, defs.resizeableY and nh or size.h)
+				elem:SetSize(elem.defaults.resizeableX and nw or size.w, elem.defaults.resizeableY and nh or size.h)
 			end
 
 			elem:PerformLayout()
@@ -189,9 +187,7 @@ function HUDManager.EditHUD(bool, hud)
 			for _, elem in ipairs(hud:GetHUDElements()) do
 				local el = hudelements.GetStored(elem)
 				if el then
-					SQL.Save("ttt2_hudelements", elem, el, el:GetSavingKeys())
-
-					el:Save()
+					el:SaveData()
 				end
 			end
 		end
@@ -272,7 +268,7 @@ function HUDManager.AddHUDSettings(panel, hudEl)
 
 							SQL.Save("ttt2_hudelements", elem, tel, tel:GetSavingKeys())
 
-							tel:Save()
+							tel:SaveData()
 						end
 					end
 

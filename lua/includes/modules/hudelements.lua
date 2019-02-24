@@ -68,11 +68,6 @@ function Register(t, name)
 			id = name
 	})
 
-	-- Allow all HUD Elements to be duplicated, unless specified
-	if not t.DisableDuplicator then
-		duplicator.Allow(name)
-	end
-
 	--
 	-- If we're reloading this entity class
 	-- then refresh all the existing entities.
@@ -125,6 +120,13 @@ function OnLoaded()
 		HUDElementList[k] = newTable
 
 		baseclass.Set(k, newTable)
+	end
+
+	if CLIENT then
+		-- Call PreInitialize on all hudelements
+		for _, v in pairs(HUDElementList) do
+			v:PreInitialize()
+		end
 	end
 end
 

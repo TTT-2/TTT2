@@ -51,23 +51,8 @@ function HUD:Initialize()
 	-- Initialize elements default values
 	for _, v in ipairs(self:GetHUDElements()) do
 		local elem = hudelements.GetStored(v)
-		if elem then
-			elem:SetDefaults()
-
-			local skeys = elem:GetSavingKeys()
-
-			-- load and initialize all HUDELEMENT data from database
-			if SQL.CreateSqlTable("ttt2_hudelements", skeys) then
-				local loaded = SQL.Load("ttt2_hudelements", elem.id, elem, skeys)
-
-				if not loaded then
-					SQL.Init("ttt2_hudelements", elem.id, elem, skeys)
-				end
-			end
-
-			elem:Load()
-
-			elem.initialized = true
+		if elem and not elem:IsChild() then
+			elem:Initialize()
 		else
 			Msg("Error: HUD " .. (self.id or "?") .. " has unkown element named " .. v .. "\n")
 		end

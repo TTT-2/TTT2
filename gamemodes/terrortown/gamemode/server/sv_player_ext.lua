@@ -496,11 +496,9 @@ function plymeta:CanSelectRole(roleData, choice_count, role_count)
 	) and (choice_count <= role_count or not self:GetAvoidRole(roleData.index))
 end
 
---------------------------------------------------
---			   MODIFIED EXTERN CODE
---------------------------------------------------
--- Code is basically from GameFreak's SecondChance
-
+-- ----------------------
+-- Function taken from Trouble in Terrorist Town Commands (https://github.com/bender180/Trouble-in-Terrorist-Town-ULX-Commands)
+-- ----------------------
 local function FindCorpse(ply)
 	for _, ent in ipairs(ents.FindByClass("prop_ragdoll")) do
 		if ent.uqid == ply:UniqueID() and IsValid(ent) then

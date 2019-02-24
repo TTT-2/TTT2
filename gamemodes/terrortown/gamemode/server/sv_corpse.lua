@@ -110,8 +110,6 @@ local function IdentifyBody(ply, rag)
 			if IsValid(vic) and not vic:GetNWBool("body_found", false) then
 				LANG.Msg("body_confirm", {finder = finder, victim = vic:Nick()})
 
-				SendPlayerToEveryone(vic) -- confirm player for everyone
-
 				vic:SetNWBool("body_found", true) -- update scoreboard status
 
 				-- however, do not mark body as found. This lets players find the

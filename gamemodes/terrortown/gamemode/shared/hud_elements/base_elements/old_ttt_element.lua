@@ -12,13 +12,6 @@ if CLIENT then
 	local hudWidth = CreateClientConVar("ttt2_base_hud_width", "0")
 	local hudTeamicon = CreateClientConVar("ttt2_base_hud_teamicon", "1")
 
-	function HUDELEMENT:Initialize()
-		local defs = self:GetDefaults()
-
-		defs.size = self:GetSize()
-		defs.basepos = self:GetBasePos()
-	end
-
 	-- Color presets
 	HUDELEMENT.bg_colors = {
 		background_main = Color(0, 0, 10, 200),

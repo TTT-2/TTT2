@@ -40,15 +40,16 @@ function SQL.GetParsedData(key, data, res)
 			val = nil
 		end
 	elseif data.typ == "color" then
-		val = Color(
-			tonumber(res[key .. "_r"]),
-			tonumber(res[key .. "_g"]),
-			tonumber(res[key .. "_b"]),
-			tonumber(res[key .. "_a"] or 255)
-		)
+		val = {}
+		val.r = tonumber(res[key .. "_r"])
+		val.g = tonumber(res[key .. "_g"])
+		val.b = tonumber(res[key .. "_b"])
+		val.a = tonumber(res[key .. "_a"] or 255)
 
 		if not val.r or not val.g or not val.b then
 			val = nil
+		else
+			val = Color(val.r, val.g, val.b, val.a)
 		end
 	end
 

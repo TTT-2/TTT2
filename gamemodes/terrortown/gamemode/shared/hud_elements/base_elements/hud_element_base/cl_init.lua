@@ -14,25 +14,36 @@ HUDELEMENT.basepos = table.Copy(zero_tbl_pos)
 HUDELEMENT.pos = table.Copy(zero_tbl_pos)
 HUDELEMENT.size = table.Copy(zero_tbl_size)
 
-local defaults = {
-	--basepos = table.Copy(zero_tbl_pos),
-	--size = table.Copy(zero_tbl_size),
+HUDELEMENT.defaults = {
+	basepos = table.Copy(HUDELEMENT.basepos),
+	size = table.Copy(HUDELEMENT.size),
 	minHeight = 0,
 	minWidth = 0,
 	resizeableX = true,
 	resizeableY = true
 }
 
-function HUDELEMENT:GetDefaults()
-	return table.Copy(defaults)
-end
-
 HUDELEMENT.parent = nil
 HUDELEMENT.parent_is_type = nil
 HUDELEMENT.children = {}
 
+function HUDELEMENT:PreInitialize()
+	-- Use this to set child<->parent relations etc, this is called before Initialized and other objects can still be uninitialized!
+end
+
 function HUDELEMENT:Initialize()
-	-- Use this to set default values or set child relations.
+	-- use this to set default values and dont forget to call BaseClass.Initialze(self)!!
+	self:SetDefaults()
+	self:LoadData()
+	for _, elem in ipairs(self.children) do
+		local elemtbl = hudelements.GetStored(elem)
+		if elemtbl then
+			elemtbl:Initialize()
+		else
+			Msg("Error: HUDElement " .. (self.id or "?") .. " has unkown child element named " .. elem .. " when calling Initialize \n")
+		end
+	end
+	self.initialized = true
 end
 
 function HUDELEMENT:Draw()
@@ -48,6 +59,8 @@ function HUDELEMENT:PerformLayout()
 		local elemtbl = hudelements.GetStored(elem)
 		if elemtbl then
 			elemtbl:PerformLayout()
+		else
+			Msg("Error: HUDElement " .. (self.id or "?") .. " has unkown child element named " .. elem .. " when calling PerformLayout \n")
 		end
 	end
 end
@@ -87,10 +100,8 @@ function HUDELEMENT:SetSize(w, h)
 		h = -h
 	end
 
-	local defs = self:GetDefaults()
-
-	w = math.max(defs.minWidth, w)
-	h = math.max(defs.minHeight, h)
+	w = math.max(self.defaults.minWidth, w)
+	h = math.max(self.defaults.minHeight, h)
 
 	if nw or nh then
 		local basepos = self:GetBasePos()
@@ -175,16 +186,13 @@ function HUDELEMENT:DrawSize()
 end
 
 function HUDELEMENT:SetDefaults()
-	local defs = self:GetDefaults()
-
-	defs.basepos = table.Copy(self.basepos)
-	defs.size = table.Copy(self.size)
+	self.defaults.basepos = table.Copy(self.basepos)
+	self.defaults.size = table.Copy(self.size)
 end
 
 function HUDELEMENT:Reset()
-	local defs = self:GetDefaults()
-	local defaultPos = defs.basepos
-	local defaultSize = defs.size
+	local defaultPos = self.defaults.basepos
+	local defaultSize = self.defaults.size
 
 	if defaultPos then
 		self:SetBasePos(defaultPos.x, defaultPos.y)
@@ -206,12 +214,23 @@ function HUDELEMENT:GetSavingKeys()
 	return table.Copy(savingKeys)
 end
 
-function HUDELEMENT:Save()
-
+function HUDELEMENT:SaveData()
+	SQL.Save("ttt2_hudelements", self.id, self, self:GetSavingKeys())
 end
 
-function HUDELEMENT:Load()
-	local basepos = self:GetBasePos()
+function HUDELEMENT:LoadData()
+	local skeys = self:GetSavingKeys()
 
+	-- load and initialize the elements data from database
+	if SQL.CreateSqlTable("ttt2_hudelements", skeys) then
+		local loaded = SQL.Load("ttt2_hudelements", self.id, self, skeys)
+
+		if not loaded then
+			SQL.Init("ttt2_hudelements", self.id, self, skeys)
+		end
+	end
+
+	-- set position to loaded position
+	local basepos = self:GetBasePos()
 	self:SetPos(basepos.x, basepos.y)
 end

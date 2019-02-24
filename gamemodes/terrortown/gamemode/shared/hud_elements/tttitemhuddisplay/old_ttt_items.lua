@@ -1,6 +1,4 @@
 -- item info
-surface.CreateFont("ItemInfoFont", {font = "Trebuchet24", size = 14, weight = 700})
-
 COLOR_DARKGREY = COLOR_DARKGREY or Color(100, 100, 100, 255)
 
 local base = "old_ttt_element"
@@ -9,11 +7,9 @@ DEFINE_BASECLASS(base)
 
 HUDELEMENT.Base = base
 
-if SERVER then
-	resource.AddFile("materials/vgui/ttt/perks/old_ttt_bg.png")
-end
-
 if CLIENT then
+	surface.CreateFont("ItemInfoFont", {font = "Trebuchet24", size = 14, weight = 700})
+
 	local size = 64
 
 	function HUDELEMENT:Initialize()
@@ -21,6 +17,11 @@ if CLIENT then
 		self:SetSize(size, -size)
 
 		BaseClass.Initialize(self)
+
+		self.defaults.minWidth = size
+		self.defaults.minHeight = size
+		self.defaults.resizeableX = false
+		self.defaults.resizeableY = false
 	end
 
 	function HUDELEMENT:PerformLayout()
@@ -87,19 +88,5 @@ if CLIENT then
 		end
 
 		self:SetSize(size, curY - basepos.y)
-	end
-
-	local defaults
-
-	function HUDELEMENT:GetDefaults()
-		if not defaults then
-			defaults = BaseClass.GetDefaults(self)
-			defaults.minWidth = size
-			defaults.minHeight = size
-			defaults.resizeableX = false
-			defaults.resizeableY = false
-		end
-
-		return table.Copy(defaults)
 	end
 end

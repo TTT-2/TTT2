@@ -73,7 +73,14 @@ function PANEL:Init()
 
 		local oldClick = leftBtn.DoClick
 		leftBtn.DoClick = function(slf)
-			if hud.id == HUDManager.GetHUD() then return end
+			local oldHUD = HUDManager.GetHUD()
+
+			if hud.id == oldHUD then return end
+
+			local oldHUDEl = huds.GetStored(oldHUD)
+			if oldHUDEl then
+				SQL.Save("ttt2_huds", oldHUD, oldHUDEl, oldHUDEl:GetSavingKeys())
+			end
 
 			oldClick(slf)
 

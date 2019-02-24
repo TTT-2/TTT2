@@ -12,10 +12,11 @@ if CLIENT then
 	local msg_sound = Sound("Hud.Hint")
 	local base_spec = {
 		font = "DefaultBold",
-		xalign = TEXT_ALIGN_CENTER,
+		xalign = TEXT_ALIGN_LEFT,
 		yalign = TEXT_ALIGN_TOP
 	}
 
+	local leftPad = 15
 	local text_height = 0
 
 	local top_y = 0
@@ -29,7 +30,7 @@ if CLIENT then
 	local movespeed = 2
 
 	function HUDELEMENT:Initialize()
-		local width = MSTACK.msg_width
+		local width = MSTACK.msg_width + leftPad
 
 		top_y = MSTACK.margin
 		top_x = ScrW() - MSTACK.margin - width
@@ -39,6 +40,9 @@ if CLIENT then
 		self:SetSize(width, 80)
 
 		BaseClass.Initialize(self)
+
+		self.defaults.resizeableX = false
+		self.defaults.resizeableY = false
 
 		base_spec = {
 			font = MSTACK.msgfont,
@@ -95,7 +99,7 @@ if CLIENT then
 				-- Background box
 				item.bg.a = math.Clamp(alpha, 0, item.bg.a_max)
 
-				self:DrawBg(top_x, y, MSTACK.msg_width, height, item.bg)
+				self:DrawBg(top_x, y, MSTACK.msg_width + leftPad, height, item.bg)
 
 				-- Text
 				item.col.a = math.Clamp(alpha, 0, item.col.a_max)
@@ -106,7 +110,7 @@ if CLIENT then
 				for i = 1, #item.text do
 					spec.text = item.text[i]
 
-					local tx = top_x + (item.subWidth or 0) + 5
+					local tx = top_x + (item.subWidth or 0) + leftPad
 					local ty = y + MSTACK.margin + (i - 1) * (text_height + MSTACK.margin)
 
 					spec.pos = {tx, ty}
@@ -121,7 +125,7 @@ if CLIENT then
 					surface.DrawTexturedRect(top_x + item.imagePad, y + item.imagePad, item.imageSize, item.imageSize)
 				end
 
-				self:DrawLines(top_x, y, MSTACK.msg_width, height, item.bg.a / 255)
+				self:DrawLines(top_x, y, MSTACK.msg_width + leftPad, height, item.bg.a / 255)
 
 				if alpha == 0 then
 					MSTACK.msgs[k] = nil
@@ -130,17 +134,5 @@ if CLIENT then
 				running_y = y + height
 			end
 		end
-	end
-
-	local defaults
-
-	function HUDELEMENT:GetDefaults()
-		if not defaults then
-			defaults = BaseClass.GetDefaults(self)
-			defaults.resizeableX = false
-			defaults.resizeableY = false
-		end
-
-		return table.Copy(defaults)
 	end
 end
