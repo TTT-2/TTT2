@@ -45,6 +45,10 @@ function HUD:ShouldShow(elementType)
 	end
 
 	if elementTbl then
+		if elementTbl.disabledUnlessForced then
+			return table.HasValue(hudelems, elementTbl.id)
+		end
+
 		local parent = elementTbl:GetParent()
 		if elementTbl:IsChild() and parent then
 			local parentTbl = hudelements.GetStored(parent)

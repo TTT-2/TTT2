@@ -40,7 +40,5 @@ function HUD:Initialize()
 	self:ForceHUDElement("old_ttt_wswitch")
 	self:ForceHUDElement("old_ttt_target")
 
-	self:HideHUDType("tttroundinfo")
-
 	BaseClass.Initialize(self)
 end
