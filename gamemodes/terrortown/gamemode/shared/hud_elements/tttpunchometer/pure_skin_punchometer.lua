@@ -18,7 +18,7 @@ if CLIENT then
 	function HUDELEMENT:Initialize()
 		local width, height = 200, 40
 
-		self:SetBasePos(ScrW() * 0.5, margin + height)
+		self:SetBasePos(ScrW() * 0.5 - width * 0.5, margin * 2 + 72)
 		self:SetSize(width, height)
 
 		BaseClass.Initialize(self)
@@ -37,7 +37,7 @@ if CLIENT then
 		local x, y = pos.x, pos.y
 
 		self:DrawBg(x, y, width, height, self.basecolor)
-		self:DrawBar(x + pad, y + pad, width - pad * 0.5, height - pad * 0.5, draw_col, punch, L.punch_title)
+		self:DrawBar(x + pad, y + pad, width - pad 2, height - pad 2, draw_col, punch, L.punch_title)
 		self:DrawLines(x, y, width, height, self.basecolor.a)
 
 		draw.SimpleText(L.punch_help, "TabLarge", x, y + margin + 20, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
