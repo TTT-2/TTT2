@@ -25,7 +25,8 @@ local dev_tbl = {
 local vip_tbl = {
 	["76561198378608300"] = true, -- SirKadeeka
 	["76561198102780049"] = true, -- Nick
-	["76561198052323988"] = true -- LeBroomer
+	["76561198052323988"] = true, -- LeBroomer
+	["76561198020955880"] = true  -- V3kta
 }
 
 TTT2ADDONDEVS = {
@@ -91,7 +92,7 @@ function PANEL:Init()
 	self.sresult:SetMouseInputEnabled(false)
 
 	self.dev = vgui.Create("DImage", self)
-	self.dev:SetSize(iconSizes, iconSizes)
+	self.dev:SetSize(iconSizes, iconSizes)								
 	self.dev:SetMouseInputEnabled(true)
 	self.dev:SetKeepAspect(true)
 	self.dev:SetTooltip("TTT2 Creator")
@@ -100,16 +101,19 @@ function PANEL:Init()
 	self.vip:SetSize(iconSizes, iconSizes)
 	self.vip:SetMouseInputEnabled(false)
 	self.vip:SetKeepAspect(true)
+	self.vip:SetTooltip("TTT2 VIP")
 
 	self.addondev = vgui.Create("DImage", self)
 	self.addondev:SetSize(iconSizes, iconSizes)
 	self.addondev:SetMouseInputEnabled(false)
 	self.addondev:SetKeepAspect(true)
+	self.addondev:SetTooltip("TTT2 Addondev")
 
 	self.admin = vgui.Create("DImage", self)
 	self.admin:SetSize(iconSizes, iconSizes)
 	self.admin:SetMouseInputEnabled(false)
 	self.admin:SetKeepAspect(true)
+	self.admin:SetTooltip("Server Admin")
 
 	self.avatar = vgui.Create("AvatarImage", self)
 	self.avatar:SetSize(SB_ROW_HEIGHT, SB_ROW_HEIGHT)
