@@ -36,7 +36,7 @@ if CLIENT then
 		curPlayerCount = #players
 
 		column_count = math.Round(#players / 2)
-		local width = (margin + ply_ind_size) * column_count + margin
+		local width = element_margin + (column_count-1) + ply_ind_size * column_count + 2*margin
 
 		self:SetPos(parent_pos.x + parent_size.w, parent_pos.y)
 		self:SetSize(width, height)
@@ -49,7 +49,7 @@ if CLIENT then
 
 		if ply:GetNWBool("body_found", false) then
 			color = ply:GetRoleColor()
-			ret_color = Color(ret_color.r, ret_color.g, ret_color.b, 155) -- make color a bit transparent
+			ret_color = Color(color.r, color.g, color.b, 155) -- make color a bit transparent
 		end
 
 		return ret_color
