@@ -42,7 +42,7 @@ if CLIENT then
 		-- draw bg and shadow
 		self:DrawBg(x, y, w, h, self.basecolor)
 
-		self:DrawBar(x + pad, y + pad, w - pad * 2, bh, Color(36, 154, 198), client.drowningProgress or 1)
+		self:DrawBar(x + pad, y + pad, w - pad * 2, bh, Color(36, 154, 198), HUDManager.IsEditing and 1 or (client.drowningProgress or 1))
 
 		-- draw lines around the element
 		self:DrawLines(x, y, w, h, self.basecolor.a)
