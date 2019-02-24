@@ -26,7 +26,8 @@ local vip_tbl = {
 	["76561198378608300"] = true, -- SirKadeeka
 	["76561198102780049"] = true, -- Nick
 	["76561198052323988"] = true, -- LeBroomer
-	["76561198020955880"] = true  -- V3kta
+	["76561198020955880"] = true, -- V3kta
+	["76561198033468770"] = true  -- Dok441
 }
 
 TTT2ADDONDEVS = {
