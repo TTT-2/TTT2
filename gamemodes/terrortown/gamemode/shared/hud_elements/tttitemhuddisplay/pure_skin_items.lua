@@ -1,6 +1,4 @@
 -- item info
-surface.CreateFont("ItemInfoFont", {font = "Trebuchet24", size = 14, weight = 700})
-
 COLOR_DARKGREY = COLOR_DARKGREY or Color(100, 100, 100, 255)
 
 local base = "pure_skin_element"
@@ -10,6 +8,8 @@ DEFINE_BASECLASS(base)
 HUDELEMENT.Base = base
 
 if CLIENT then
+	surface.CreateFont("ItemInfoFont", {font = "Trebuchet24", size = 14, weight = 700})
+
 	local size = 64
 
 	function HUDELEMENT:Initialize()
