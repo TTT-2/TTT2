@@ -54,15 +54,15 @@ if CLIENT then -- CLIENT
 	end
 
 	function HUDELEMENT:DrawComponent(name, col, val)
-		local size = self:GetSize()
-		local pos = self:GetPos()
-		local width, height = size.w, size.h
 		local client = LocalPlayer()
+
+		local pos = self:GetPos()
+		local size = self:GetSize()
+		local x, y = pos.x, pos.y
+		local width, height = size.w, size.h
 
 		self:DrawBg(x, y, width, height, client)
 
-		local x = pos.x
-		local y = pos.y
 		local bar_width = width - self.dmargin
 		local bar_height = height - self.dmargin
 
