@@ -208,7 +208,7 @@ function HUDELEMENT:GetSavingKeys()
 end
 
 function HUDELEMENT:SaveData()
-	SQL.Save("ttt2_hudelements", self, self.id, self:GetSavingKeys())
+	SQL.Save("ttt2_hudelements", self.id, self, self:GetSavingKeys())
 end
 
 function HUDELEMENT:LoadData()
