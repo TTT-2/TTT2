@@ -26,10 +26,6 @@ if CLIENT then
 		self.defaults.resizeableY = false
 	end
 
-	function HUDELEMENT:PerformLayout()
-		self:SetSize(width, height)
-	end
-
 	-- Paint punch-o-meter
 	function HUDELEMENT:PunchPaint()
 		local client = LocalPlayer()
