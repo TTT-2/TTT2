@@ -64,6 +64,8 @@ if CLIENT then
 		end
 	end
 
+	local watching_icon = Material("vgui/ttt/dynamic/roles/icon_inno")
+
 	function HUDELEMENT:Draw()
 		local client = LocalPlayer()
 		local calive = client:Alive() and client:IsTerror()
@@ -99,6 +101,8 @@ if CLIENT then
 		-- draw role icon
 		local rd = client:GetSubRoleData()
 		if rd then
+			local tgt = client:GetObserverTarget()
+
 			if cactive then
 				local icon = Material("vgui/ttt/dynamic/roles/icon_" .. rd.abbr)
 				if icon then
@@ -106,6 +110,10 @@ if CLIENT then
 					surface.SetMaterial(icon)
 					surface.DrawTexturedRect(x2 + 4, y2 + 4, lpw - 8, lpw - 8)
 				end
+			elseif IsValid(tgt) and tgt:IsPlayer() then
+				surface.SetDrawColor(255, 255, 255, 255)
+				surface.SetMaterial(watching_icon)
+				surface.DrawTexturedRect(x2 + 4, y2 + 4, lpw - 8, lpw - 8)
 			end
 
 			-- draw role string name
@@ -115,7 +123,11 @@ if CLIENT then
 			if cactive then
 				text = L[rd.name]
 			else
-				text = L[self.roundstate_string[round_state]]
+				if IsValid(tgt) and tgt:IsPlayer() then
+					text = tgt:Nick()
+				else
+					text = L[self.roundstate_string[round_state]]
+				end
 			end
 
 			--calculate the scale multplier for role text
