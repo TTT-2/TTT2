@@ -257,16 +257,6 @@ function HELPSCRN:Show()
 		ShowChanges()
 	end
 
-	-- credits
-	local creditsButton = vgui.Create("DButton")
-	creditsButton:SetText("Credits")
-
-	ttt2_panel:AddItem(creditsButton)
-
-	creditsButton.DoClick = function(btn)
-		ShowCredits()
-	end
-
 	-- HUD switcher button
 	local hudSwitchButton = vgui.Create("DButton")
 	hudSwitchButton:SetText("HUD Switcher")
