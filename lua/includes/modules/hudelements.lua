@@ -68,11 +68,6 @@ function Register(t, name)
 			id = name
 	})
 
-	-- Allow all HUD Elements to be duplicated, unless specified
-	if not t.DisableDuplicator then
-		duplicator.Allow(name)
-	end
-
 	--
 	-- If we're reloading this entity class
 	-- then refresh all the existing entities.
