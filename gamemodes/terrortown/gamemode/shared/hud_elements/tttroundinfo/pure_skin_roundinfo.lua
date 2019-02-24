@@ -16,6 +16,8 @@ if CLIENT then
 
 	function HUDELEMENT:Initialize()
 		self:RecalculateBasePos()
+		self.disabledUnlessForced = true
+		
 		self:SetSize(w, h)
 
 		BaseClass.Initialize(self)

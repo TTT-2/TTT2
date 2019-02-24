@@ -40,7 +40,7 @@ net.Receive("TTT2RequestHUD", function(len, ply)
 		if restricted then
 			local defaultHUD = huds.GetStored(HUDManager.defaultHUD)
 			if not defaultHUD then
-				HUDManager.defaultHUD = "old_ttt"
+				HUDManager.defaultHUD = "pure_skin"
 			end
 
 			hudname = HUDManager.defaultHUD

@@ -3,7 +3,7 @@ if not HUDManager then
 	require("huds")
 
 	HUDManager = {}
-	HUDManager.defaultHUD = "old_ttt"
+	HUDManager.defaultHUD = "pure_skin"
 
 	-----------------------------------------
 	-- load HUD Elements

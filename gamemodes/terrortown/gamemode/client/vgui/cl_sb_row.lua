@@ -25,12 +25,18 @@ local dev_tbl = {
 local vip_tbl = {
 	["76561198378608300"] = true, -- SirKadeeka
 	["76561198102780049"] = true, -- Nick
-	["76561198052323988"] = true -- LeBroomer
+	["76561198052323988"] = true, -- LeBroomer
+	["76561198020955880"] = true, -- V3kta
+	["76561198033468770"] = true  -- Dok441
 }
 
-TTT2ADDONDEVS = {
+local addondev_tbl = {}
 
-}
+function AddTTT2AddonDev(steamid)
+	if not steamid then return end
+
+	addondev_tbl[tostring(steamid)] = true
+end
 
 local namecolor = {
 	default = COLOR_WHITE,
@@ -41,6 +47,7 @@ local namecolor = {
 }
 
 SB_ROW_HEIGHT = 24 --16
+
 local iconSizes = 16
 
 local PANEL = {}
@@ -92,27 +99,37 @@ function PANEL:Init()
 
 	self.dev = vgui.Create("DImage", self)
 	self.dev:SetSize(iconSizes, iconSizes)
-	self.dev:SetMouseInputEnabled(false)
+	self.dev:SetMouseInputEnabled(true)
 	self.dev:SetKeepAspect(true)
+	self.dev:SetTooltip("TTT2 Creator")
 
 	self.vip = vgui.Create("DImage", self)
 	self.vip:SetSize(iconSizes, iconSizes)
-	self.vip:SetMouseInputEnabled(false)
+	self.vip:SetMouseInputEnabled(true)
 	self.vip:SetKeepAspect(true)
+	self.vip:SetTooltip("TTT2 VIP")
 
 	self.addondev = vgui.Create("DImage", self)
 	self.addondev:SetSize(iconSizes, iconSizes)
-	self.addondev:SetMouseInputEnabled(false)
+	self.addondev:SetMouseInputEnabled(true)
 	self.addondev:SetKeepAspect(true)
+	self.addondev:SetTooltip("TTT2 Addondev")
 
 	self.admin = vgui.Create("DImage", self)
 	self.admin:SetSize(iconSizes, iconSizes)
-	self.admin:SetMouseInputEnabled(false)
+	self.admin:SetMouseInputEnabled(true)
 	self.admin:SetKeepAspect(true)
+	self.admin:SetTooltip("Server Admin")
 
 	self.avatar = vgui.Create("AvatarImage", self)
 	self.avatar:SetSize(SB_ROW_HEIGHT, SB_ROW_HEIGHT)
 	self.avatar:SetMouseInputEnabled(false)
+
+	self.nick2 = vgui.Create("DLabel", self)
+	self.nick2:SetMouseInputEnabled(false)
+
+	self.nick3 = vgui.Create("DLabel", self)
+	self.nick3:SetMouseInputEnabled(false)
 
 	self.nick = vgui.Create("DLabel", self)
 	self.nick:SetMouseInputEnabled(false)
@@ -155,7 +172,7 @@ function GM:TTTScoreboardColorForPlayer(ply)
 				return namecolor.dev
 			elseif vip_tbl[steamid] then
 				return namecolor.vip
-			elseif TTT2ADDONDEVS[steamid] then
+			elseif addondev_tbl[steamid] then
 				return namecolor.addondev
 			end
 		end
@@ -264,6 +281,14 @@ function PANEL:UpdatePlayerData()
 		self.cols[i]:SetText(self.cols[i].GetPlayerText(ply, self.cols[i]))
 	end
 
+	self.nick2:SetText(ply:Nick())
+	self.nick2:SizeToContents()
+	self.nick2:SetTextColor(COLOR_BLACK)
+
+	self.nick3:SetText(ply:Nick())
+	self.nick3:SizeToContents()
+	self.nick3:SetTextColor(COLOR_BLACK)
+
 	self.nick:SetText(ply:Nick())
 	self.nick:SizeToContents()
 	self.nick:SetTextColor(ColorForPlayer(ply))
@@ -279,7 +304,7 @@ function PANEL:UpdatePlayerData()
 
 	if not isdev then
 		self.vip:SetVisible(steamid and vip_tbl[steamid] == true or false)
-		self.addondev:SetVisible(steamid and TTT2ADDONDEVS[steamid] == true or false)
+		self.addondev:SetVisible(steamid and addondev_tbl[steamid] == true or false)
 	else
 		self.vip:SetVisible(false)
 		self.addondev:SetVisible(false)
@@ -324,6 +349,12 @@ function PANEL:ApplySchemeSettings()
 		v:SetFont("treb_small")
 		v:SetTextColor(COLOR_WHITE)
 	end
+
+	self.nick2:SetFont("treb_small")
+	self.nick2:SetTextColor(COLOR_BLACK)
+
+	self.nick3:SetFont("treb_small")
+	self.nick3:SetTextColor(COLOR_BLACK)
 
 	self.nick:SetFont("treb_small")
 	self.nick:SetTextColor(ColorForPlayer(self.Player))
@@ -426,8 +457,16 @@ function PANEL:PerformLayout()
 		self:SetSize(self:GetWide(), SB_ROW_HEIGHT + self.info:GetTall())
 	end
 
+	local ty = (SB_ROW_HEIGHT - self.nick:GetTall()) * 0.5
+
+	self.nick2:SizeToContents()
+	self.nick2:SetPos(SB_ROW_HEIGHT + 11, ty + 1)
+
+	self.nick3:SizeToContents()
+	self.nick3:SetPos(SB_ROW_HEIGHT + 10, ty)
+
 	self.nick:SizeToContents()
-	self.nick:SetPos(SB_ROW_HEIGHT + 10, (SB_ROW_HEIGHT - self.nick:GetTall()) * 0.5)
+	self.nick:SetPos(SB_ROW_HEIGHT + 10, ty)
 
 	self:LayoutColumns()
 

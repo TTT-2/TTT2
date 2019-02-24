@@ -77,6 +77,9 @@ if CLIENT then
 		if #players ~= curPlayerCount then
 			self:PerformLayout()
 		end
+		
+		-- sort playerlist: confirmed players should be in the first position
+		table.sort(players, function(a, b) a:GetNWBool("body_found", false) and not b:GetNWBool("body_found", false) end)
 
 		-- draw bg and shadow
 		self:DrawBg(self.pos.x, self.pos.y, self.size.w, self.size.h, self.basecolor)

@@ -1,6 +1,6 @@
 ttt_include("vgui__cl_hudswitcher")
 
-local current_hud = CreateClientConVar("ttt2_current_hud", HUDManager.defaultHUD, true, true)
+local current_hud = CreateClientConVar("ttt2_current_hud", HUDManager.defaultHUD or "pure_skin", true, true)
 
 local currentHUD
 
@@ -219,7 +219,7 @@ function HUDManager.GetHUD()
 	end
 
 	if not huds.GetStored(currentHUD) then
-		currentHUD = "old_ttt"
+		currentHUD = "pure_skin"
 	end
 
 	return currentHUD

@@ -22,7 +22,6 @@ if CLIENT then
 	local top_y = 0
 	local top_x = 0
 
-	local title_margin = 10
 	local staytime = 12
 	local max_items = 8
 
@@ -131,7 +130,7 @@ if CLIENT then
 					local tx = top_x + (item.subWidth or 0) + leftPad
 					local ty = y + MSTACK.margin + (i - 1) * (text_height + MSTACK.margin)
 
-					if #item.title != 0 then
+					if #item.title > 0 then
 						ty = ty + MSTACK.title_margin + MSTACK.margin + #item.title * (text_height + MSTACK.margin)
 					end
 

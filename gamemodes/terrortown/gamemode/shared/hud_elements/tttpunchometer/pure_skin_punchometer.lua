@@ -26,7 +26,7 @@ if CLIENT then
 	end
 	
 	function HUDELEMENT:RecalculateBasePos()
-		self:SetBasePos(ScrW() * 0.5, margin + height)
+		self:SetBasePos(ScrW() * 0.5 - width * 0.5, margin * 2 + 72)
 	end
 
 	-- Paint punch-o-meter
@@ -40,10 +40,10 @@ if CLIENT then
 		local x, y = pos.x, pos.y
 
 		self:DrawBg(x, y, width, height, self.basecolor)
-		self:DrawBar(x + pad, y + pad, width - pad * 0.5, height - pad * 0.5, draw_col, punch, L.punch_title)
+		self:DrawBar(x + pad, y + pad, width - pad * 2, height - pad * 2, draw_col, punch, L.punch_title)
 		self:DrawLines(x, y, width, height, self.basecolor.a)
 
-		draw.SimpleText(L.punch_help, "TabLarge", x, y + margin + 20, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(L.punch_help, "TabLarge", x + width * 0.5, y, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
 		local bonus = client:GetNWInt("bonuspunches", 0)
 		if bonus ~= 0 then
@@ -74,9 +74,7 @@ if CLIENT then
 		local pos = self:GetPos()
 		local x, y = pos.x, pos.y
 
-		if IsValid(tgt) and tgt:IsPlayer() then
-			self:ShadowedText(tgt:Nick(), "TimeLeft", x, y, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER) -- draw name of the spectators target
-		elseif IsValid(tgt) and tgt:GetNWEntity("spec_owner", nil) == client then
+		if IsValid(tgt) and not tgt:IsPlayer() and tgt:GetNWEntity("spec_owner", nil) == client then
 			self:PunchPaint() -- punch bar if you are spectator and inside of an entity
 		else
 			self:ShadowedText(interp(L.spec_help, key_params), "TabLarge", x, y, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)

@@ -29,7 +29,35 @@ function HUD:HideHUDType(elementType)
 end
 
 function HUD:ShouldShow(elementType)
-	return not table.HasValue(self.hiddenElements, elementType)
+	if table.HasValue(self.hiddenElements, elementType) then
+		return false
+	end
+
+	local hudelems = self:GetForcedHUDElements()
+
+	-- hide element if its parent element is hidden
+	local element = hudelems[elementType]
+	local elementTbl = nil
+	if not element then
+		elementTbl = hudelements.GetTypeElement(elementType)
+	else
+		elementTbl = hudelements.GetStored(element)
+	end
+
+	if elementTbl then
+		if elementTbl.disabledUnlessForced then
+			return table.HasValue(hudelems, elementTbl.id)
+		end
+
+		local parent = elementTbl:GetParent()
+		if elementTbl:IsChild() and parent then
+			local parentTbl = hudelements.GetStored(parent)
+			return self:ShouldShow(parentTbl.type)
+		end
+		return true
+	else
+		return false
+	end
 end
 
 function HUD:PerformLayout()
