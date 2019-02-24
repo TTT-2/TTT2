@@ -33,9 +33,17 @@ function HUD:ShouldShow(elementType)
 		return false
 	end
 
+	local hudelems = self:GetForcedHUDElements()
+
 	-- hide element if its parent element is hidden
-	local element = hudelems[typ] or hudelements.GetTypeElement(typ).id
-	local elementTbl = hudelemens.GetStored(element)
+	local element = hudelems[elementType]
+	local elementTbl = nil
+	if not element then
+		elementTbl = hudelements.GetTypeElement(elementType)
+	else
+		elementTbl = hudelements.GetStored(element)
+	end
+
 	if elementTbl then
 		local parent = elementTbl:GetParent()
 		if elementTbl:IsChild() and parent then
