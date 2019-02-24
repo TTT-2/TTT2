@@ -52,6 +52,7 @@ function HUD:Initialize()
 	self:ForceHUDElement("pure_skin_items")
 	self:ForceHUDElement("pure_skin_miniscoreboard")
 	self:ForceHUDElement("pure_skin_spec")
+	self:ForceHUDElement("pure_skin_target")
 
 	BaseClass.Initialize(self)
 end

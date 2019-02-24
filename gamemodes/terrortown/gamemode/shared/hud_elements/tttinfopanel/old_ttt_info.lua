@@ -25,8 +25,10 @@ if CLIENT then
 	end
 
 	function HUDELEMENT:PerformLayout()
-		x = self.pos.x
-		y = ScrH() - self.pos.y
+		local basepos = self:GetBasePos()
+
+		x = basepos.x
+		y = ScrH() - basepos.y
 
 		BaseClass.PerformLayout(self)
 	end
