@@ -43,6 +43,16 @@ if CLIENT then
 		BaseClass.PerformLayout(self)
 	end
 
+	local function GetMSBColorForPlayer(ply)
+		local ret_color = Color(0, 0, 0, 130)
+
+		if ply:GetNWBool("body_found", false) then
+			ret_color = ply:GetRoleColor()
+		end
+
+		return ret_color
+	end
+
 	function HUDELEMENT:Draw()
 		local client = LocalPlayer()
 		local round_state = GAMEMODE.round_state
@@ -58,9 +68,11 @@ if CLIENT then
 		for i, p in ipairs(players) do
 			tmp_x = self.pos.x + margin + (element_margin + ply_ind_size) * math.floor((i - 1) * 0.5)
 			tmp_y = self.pos.y + margin + (element_margin + ply_ind_size) * ((i - 1) % row_count)
-			ply_color = p:GetRoleColor()
-			surface.SetDrawColor(clr(ply_color))
+			local ply_color = GetMSBColorForPlayer(p)
+			surface.SetDrawColor(ply_color)
 			surface.DrawRect(tmp_x, tmp_y, ply_ind_size, ply_ind_size)
+			-- draw lines around the element
+			self:DrawLines(tmp_x, tmp_y, ply_ind_size, ply_ind_size)
 		end
 		-- draw lines around the element
 		self:DrawLines(self.pos.x, self.pos.y, self.size.w, self.size.h)
