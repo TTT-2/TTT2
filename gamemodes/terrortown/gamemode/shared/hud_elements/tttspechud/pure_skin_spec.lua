@@ -4,7 +4,7 @@ local interp = string.Interp
 local IsValid = IsValid
 local draw = draw
 
-local base = "old_ttt_element"
+local base = "pure_skin_element"
 
 HUDELEMENT.Base = base
 
