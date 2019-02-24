@@ -120,14 +120,18 @@ if CLIENT then
 
 			--calculate the scale multplier for role text
 			surface.SetFont("PureSkinRole")
+
 			local role_text_width = surface.GetTextSize(string.upper(text))
 			local role_scale_multiplier = (w - lpw - 2 * pad) / role_text_width
+
 			if calive and cactive and isfunction(secondaryRoleInformationFunc) then
 				local secInfoTbl = secondaryRoleInformationFunc()
 
 				if secInfoTbl and secInfoTbl.text then
 					surface.SetFont("PureSkinBar")
+
 					local sri_text_width = surface.GetTextSize(string.upper(secInfoTbl.text))
+
 					role_scale_multiplier = (w - sri_text_width - lpw - 2 * pad - 3 * sri_text_width_padding) / role_text_width
 				end
 			end
@@ -136,15 +140,19 @@ if CLIENT then
 
 			--create scaling matrix for the text
 			local mat = Matrix()
-			mat:Translate( Vector( nx, ry ) )
-			mat:Scale( Vector( role_scale_multiplier * 0.9, role_scale_multiplier, role_scale_multiplier ) )
-			mat:Translate( -Vector( nx, ry ) )
+			mat:Translate(Vector(nx, ry))
+			mat:Scale(Vector(role_scale_multiplier * 0.9, role_scale_multiplier, role_scale_multiplier))
+			mat:Translate(-Vector(nx, ry))
 
-			render.PushFilterMag( TEXFILTER.ANISOTROPIC )
-			render.PushFilterMin( TEXFILTER.ANISOTROPIC )
-			cam.PushModelMatrix( mat )
-				self:ShadowedText(string.upper(text), "PureSkinRole", nx, ry, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-			cam.PopModelMatrix( mat )
+			render.PushFilterMag(TEXFILTER.ANISOTROPIC)
+			render.PushFilterMin(TEXFILTER.ANISOTROPIC)
+
+			cam.PushModelMatrix(mat)
+
+			self:ShadowedText(string.upper(text), "PureSkinRole", nx, ry, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+
+			cam.PopModelMatrix(mat)
+
 			render.PopFilterMag()
 			render.PopFilterMin()
 		end
@@ -158,6 +166,7 @@ if CLIENT then
 
 				if secInfoTbl and secInfoTbl.color and secInfoTbl.text then
 					surface.SetFont("PureSkinBar")
+
 					local sri_text_caps = string.upper(secInfoTbl.text)
 					local sri_text_width = surface.GetTextSize(sri_text_caps)
 					local sri_margin_top_bottom = 8
@@ -174,7 +183,7 @@ if CLIENT then
 					self:ShadowedText(sri_text_caps, "PureSkinBar", nx2 + sri_width * 0.5, ry, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
 					-- draw lines around the element
-					self:DrawLines(nx2, ny, sri_width, nh)
+					self:DrawLines(nx2, ny, sri_width, nh, secInfoTbl.color.a)
 				end
 			end
 
@@ -216,6 +225,6 @@ if CLIENT then
 		end
 
 		-- draw lines around the element
-		self:DrawLines(x2, y2, w2, h2)
+		self:DrawLines(x2, y2, w2, h2, self.basecolor.a)
 	end
 end

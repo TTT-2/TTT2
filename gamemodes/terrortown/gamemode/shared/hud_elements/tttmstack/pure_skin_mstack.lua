@@ -141,7 +141,7 @@ if CLIENT then
 					surface.DrawTexturedRect(top_x + item.imagePad, y + item.imagePad, item.imageSize, item.imageSize)
 				end
 
-				self:DrawLines(top_x, y, MSTACK.msg_width + leftPad, height, item.bg.a / 255)
+				self:DrawLines(top_x, y, MSTACK.msg_width + leftPad, height, item.bg.a)
 
 				if alpha == 0 then
 					MSTACK.msgs[k] = nil

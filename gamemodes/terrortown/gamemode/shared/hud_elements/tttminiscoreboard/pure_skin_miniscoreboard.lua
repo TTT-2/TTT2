@@ -22,6 +22,7 @@ if CLIENT then
 
 	function HUDELEMENT:Initialize()
 		parentInstance = hudelements.GetStored(self.parent)
+
 		BaseClass.Initialize(self)
 	end
 
@@ -30,13 +31,18 @@ if CLIENT then
 		local parent_size = parentInstance:GetSize()
 
 		local height = parent_size.h
-		ply_ind_size = math.Round((height - element_margin - margin * 2 ) / 2)
 
-		local players = util.GetFilteredPlayers(function (ply) return ply:IsTerror() or ply:IsDeadTerror() end)
+		ply_ind_size = math.Round((height - element_margin - margin * 2) * 0.5)
+
+		local players = util.GetFilteredPlayers(function (ply)
+			return ply:IsTerror() or ply:IsDeadTerror()
+		end)
+
 		curPlayerCount = #players
 
-		column_count = math.Round(#players / 2)
-		local width = element_margin * (column_count-1) + ply_ind_size * column_count + 2*margin
+		column_count = math.Round(#players * 0.5)
+
+		local width = element_margin * (column_count - 1) + ply_ind_size * column_count + 2 * margin
 
 		self:SetPos(parent_pos.x + parent_size.w, parent_pos.y)
 		self:SetSize(width, height)
@@ -61,30 +67,37 @@ if CLIENT then
 
 		if round_state ~= ROUND_ACTIVE then return end
 
-		local players = util.GetFilteredPlayers(function (ply) return ply:IsTerror() or ply:IsDeadTerror() end)
+		local players = util.GetFilteredPlayers(function (ply)
+			return ply:IsTerror() or ply:IsDeadTerror()
+		end)
+
 		if #players ~= curPlayerCount then
 			self:PerformLayout()
 		end
 
 		-- draw bg and shadow
 		self:DrawBg(self.pos.x, self.pos.y, self.size.w, self.size.h, self.basecolor)
-		
+
 		-- draw dark bottom overlay
 		surface.SetDrawColor(0, 0, 0, 90)
 		surface.DrawRect(self.pos.x, self.pos.y, self.size.w, self.size.h)
-		
+
 		-- draw squares
 		local tmp_x, tmp_y = self.pos.x, self.pos.y
+
 		for i, p in ipairs(players) do
 			tmp_x = self.pos.x + margin + (element_margin + ply_ind_size) * math.floor((i - 1) * 0.5)
 			tmp_y = self.pos.y + margin + (element_margin + ply_ind_size) * ((i - 1) % row_count)
+
 			local ply_color = GetMSBColorForPlayer(p)
-			surface.SetDrawColor(ply_color)
+
+			surface.SetDrawColor(clr(ply_color))
 			surface.DrawRect(tmp_x, tmp_y, ply_ind_size, ply_ind_size)
+
 			-- draw lines around the element
-			self:DrawLines(tmp_x, tmp_y, ply_ind_size, ply_ind_size)
+			self:DrawLines(tmp_x, tmp_y, ply_ind_size, ply_ind_size, ply_color.a)
 		end
 		-- draw lines around the element
-		self:DrawLines(self.pos.x, self.pos.y, self.size.w, self.size.h)
+		self:DrawLines(self.pos.x, self.pos.y, self.size.w, self.size.h, self.basecolor.a)
 	end
 end

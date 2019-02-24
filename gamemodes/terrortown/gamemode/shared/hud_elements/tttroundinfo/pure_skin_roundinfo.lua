@@ -76,7 +76,7 @@ if CLIENT then
 			end
 
 			-- draw lines around the element
-			self:DrawLines(x2 + pad, y2 + pad, iconSize, iconSize)
+			self:DrawLines(x2 + pad, y2 + pad, iconSize, iconSize, 255)
 		end
 
 		-- draw haste / time
@@ -134,6 +134,6 @@ if CLIENT then
 		end
 
 		-- draw lines around the element
-		self:DrawLines(x2, y2, w2, h2)
+		self:DrawLines(x2, y2, w2, h2, self.basecolor.a)
 	end
 end

@@ -33,7 +33,7 @@ if CLIENT then
 		surface.DrawRect(x, y, self.lpw, h)
 
 		-- draw lines around the element
-		self:DrawLines(x, y, w, h)
+		self:DrawLines(x, y, w, h, self.basecolor.a)
 	end
 
 	function HUDELEMENT:DrawWeapon(x, y, c, wep)

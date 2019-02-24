@@ -38,7 +38,7 @@ if CLIENT then
 
 		self:DrawBg(x, y, width, height, self.basecolor)
 		self:DrawBar(x + pad, y + pad, width - pad * 0.5, height - pad * 0.5, draw_col, punch, L.punch_title)
-		self:DrawLines(x, y, width, height)
+		self:DrawLines(x, y, width, height, self.basecolor.a)
 
 		draw.SimpleText(L.punch_help, "TabLarge", x, y + margin + 20, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 

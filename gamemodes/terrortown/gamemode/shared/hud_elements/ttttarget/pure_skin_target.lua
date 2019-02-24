@@ -35,7 +35,7 @@ if CLIENT then -- CLIENT
 
 		self:DrawBg(x, y, width, height, self.basecolor)
 		self:ShadowedText(name, "HealthAmmo", x + iconSize + pad, y + height * 0.5, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-		self:DrawLines(x, y, width, height)
+		self:DrawLines(x, y, width, height, self.basecolor.a)
 
 		local nSize = iconSize - 8
 

@@ -65,7 +65,7 @@ if CLIENT then
 				surface.SetDrawColor(255, 255, 255, 255)
 				surface.DrawTexturedRect(pos.x, curY, size, size)
 
-				self:DrawLines(pos.x, curY, size, size)
+				self:DrawLines(pos.x, curY, size, size, 255)
 
 				local info = item:DrawInfo()
 				if info then
@@ -86,7 +86,7 @@ if CLIENT then
 
 					draw.DrawText(info, "ItemInfoFont", tx, ty - infoH * 0.5, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
-					self:DrawLines(bx, by, bw, infoH)
+					self:DrawLines(bx, by, bw, infoH, 255)
 				end
 
 				curY = curY - (size + size * 0.25)

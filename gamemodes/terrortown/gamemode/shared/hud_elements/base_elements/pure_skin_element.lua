@@ -13,11 +13,13 @@ if CLIENT then
 	end
 
 	function HUDELEMENT:DrawLines(x, y, w, h, a)
+		a = a or 255
+
 		DrawHUDElementLines(x, y, w, h, a)
 	end
 
 	-- x, y, width, height, color, progress, text
-	function HUDELEMENT:DrawBar(x, y, w, h, c, p, t)		
+	function HUDELEMENT:DrawBar(x, y, w, h, c, p, t)
 		surface.SetDrawColor(clr(c))
 		surface.DrawRect(x, y, w, h)
 
@@ -27,8 +29,8 @@ if CLIENT then
 		surface.DrawRect(x + w2, y, w - w2, h)
 
 		-- draw lines around this bar
-		self:DrawLines(x, y, w, h)
-		
+		self:DrawLines(x, y, w, h, c.a)
+
 		-- draw text
 		self:ShadowedText(t or "", "PureSkinBar", x + 14, y + 1, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT)
 	end

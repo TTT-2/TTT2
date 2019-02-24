@@ -45,6 +45,6 @@ if CLIENT then
 		self:DrawBar(x + pad, y + pad, w - pad * 2, bh, Color(36, 154, 198), client.drowningProgress)
 
 		-- draw lines around the element
-		self:DrawLines(x, y, w, h)
+		self:DrawLines(x, y, w, h, self.basecolor.a)
 	end
 end
