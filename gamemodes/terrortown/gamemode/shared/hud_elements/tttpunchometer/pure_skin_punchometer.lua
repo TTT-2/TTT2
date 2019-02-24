@@ -69,12 +69,13 @@ if CLIENT then
 		local tgt = client:GetObserverTarget()
 
 		local pos = self:GetPos()
+		local size = self:GetSize()
 		local x, y = pos.x, pos.y
 
 		if IsValid(tgt) and not tgt:IsPlayer() and tgt:GetNWEntity("spec_owner", nil) == client then
 			self:PunchPaint() -- punch bar if you are spectator and inside of an entity
 		else
-			self:ShadowedText(interp(L.spec_help, key_params), "TabLarge", x, y, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			self:ShadowedText(interp(L.spec_help, key_params), "TabLarge", x + size.w  * 0.5, y, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 	end
 end
