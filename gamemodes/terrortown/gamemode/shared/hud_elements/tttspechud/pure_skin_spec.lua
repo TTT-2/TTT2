@@ -16,14 +16,18 @@ if CLIENT then
 	local margin = 14
 
 	function HUDELEMENT:Initialize()
-		local width, height = 200, 25
+		local width, height = 200, 40
 
-		self:SetBasePos(ScrW() * 0.5 - width * 0.5, margin + height)
+		self:SetBasePos(ScrW() * 0.5, margin + height)
 		self:SetSize(width, height)
 
 		BaseClass.Initialize(self)
 
 		self.defaults.resizeableY = false
+	end
+
+	function HUDELEMENT:PerformLayout()
+		self:SetSize(width, height)
 	end
 
 	-- Paint punch-o-meter
@@ -40,7 +44,7 @@ if CLIENT then
 		self:DrawBar(x + pad, y + pad, width - pad * 0.5, height - pad * 0.5, draw_col, punch, L.punch_title)
 		self:DrawLines(x, y, width, height)
 
-		draw.SimpleText(L.punch_help, "TabLarge", x, y + margin + 10, COLOR_WHITE, TEXT_ALIGN_CENTER)
+		draw.SimpleText(L.punch_help, "TabLarge", x, y + margin + 20, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
 		local bonus = client:GetNWInt("bonuspunches", 0)
 		if bonus ~= 0 then
@@ -52,7 +56,7 @@ if CLIENT then
 				text = interp(L.punch_malus, {num = bonus})
 			end
 
-			draw.SimpleText(text, "TabLarge", x, y + margin * 2 + 10, COLOR_WHITE, TEXT_ALIGN_CENTER)
+			draw.SimpleText(text, "TabLarge", x, y + margin * 2 + 20, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 	end
 
@@ -72,11 +76,11 @@ if CLIENT then
 		local x, y = pos.x, pos.y
 
 		if IsValid(tgt) and tgt:IsPlayer() then
-			self:ShadowedText(tgt:Nick(), "TimeLeft", x, y, COLOR_WHITE, TEXT_ALIGN_CENTER) -- draw name of the spectators target
+			self:ShadowedText(tgt:Nick(), "TimeLeft", x, y, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER) -- draw name of the spectators target
 		elseif IsValid(tgt) and tgt:GetNWEntity("spec_owner", nil) == client then
 			self:PunchPaint() -- punch bar if you are spectator and inside of an entity
 		else
-			self:ShadowedText(interp(L.spec_help, key_params), "TabLarge", x, y, COLOR_WHITE, TEXT_ALIGN_CENTER)
+			self:ShadowedText(interp(L.spec_help, key_params), "TabLarge", x, y, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 	end
 end
