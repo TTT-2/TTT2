@@ -302,7 +302,7 @@ function PANEL:LayoutColumns()
 	local x = self.nick:GetPos()
 	local w = self.nick:GetSize()
 
-	self.vip:SetPos(x + w + 16, (SB_ROW_HEIGHT - 16) * 0.5)
+	self.vip:SetPos(x + w + 10, (SB_ROW_HEIGHT - 16) * 0.5)
 end
 
 function PANEL:PerformLayout()
