@@ -37,9 +37,11 @@ if CLIENT then -- CLIENT
 		self:ShadowedText(name, "HealthAmmo", x + iconSize + pad, y + height * 0.5, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 		self:DrawLines(x, y, width, height)
 
+		local nSize = iconSize - 8
+
 		surface.SetDrawColor(255, 255, 255, 255)
 		surface.SetMaterial(target_icon)
-		surface.DrawTexturedRect(x + 4, y + 4, iconSize - 8, iconSize - 8)
+		surface.DrawTexturedRect(x + 4, y - 4 - (nSize - height), nSize, nSize)
 	end
 
 	function HUDELEMENT:Draw()
