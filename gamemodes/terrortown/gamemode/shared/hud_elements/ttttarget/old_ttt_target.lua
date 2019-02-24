@@ -45,7 +45,7 @@ if CLIENT then -- CLIENT
 	surface.CreateFont("HUDFont", {font = "Trebuchet24", size = 24, weight = 750})
 
 	function HUDELEMENT:Initialize()
-		local height = 45
+		local width, height = self.maxwidth, 45
 
 	    self:SetBasePos(15, ScrH() - height - self.maxheight - self.margin)
 		self:SetSize(width, height)
