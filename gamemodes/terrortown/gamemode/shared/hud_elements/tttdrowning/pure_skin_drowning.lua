@@ -37,12 +37,12 @@ if CLIENT then
 	function HUDELEMENT:Draw()
 		local client = LocalPlayer()
 
-		if not client.drowningProgress or not client:Alive() or client.drowningProgress == -1 then return end
+		if not HUDManager.IsEditing and (not client.drowningProgress or not client:Alive() or client.drowningProgress == -1) then return end
 
 		-- draw bg and shadow
 		self:DrawBg(x, y, w, h, self.basecolor)
 
-		self:DrawBar(x + pad, y + pad, w - pad * 2, bh, Color(36, 154, 198), client.drowningProgress)
+		self:DrawBar(x + pad, y + pad, w - pad * 2, bh, Color(36, 154, 198), client.drowningProgress or 1)
 
 		-- draw lines around the element
 		self:DrawLines(x, y, w, h, self.basecolor.a)
