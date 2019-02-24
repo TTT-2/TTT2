@@ -121,6 +121,11 @@ function OnLoaded()
 
 		baseclass.Set(k, newTable)
 	end
+
+	-- Call PreInitialize on all hudelements
+	for _, v in pairs(HUDElementList) do
+		v:PreInitialize()
+	end
 end
 
 --[[---------------------------------------------------------

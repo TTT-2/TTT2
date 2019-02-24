@@ -27,6 +27,10 @@ HUDELEMENT.parent = nil
 HUDELEMENT.parent_is_type = nil
 HUDELEMENT.children = {}
 
+function HUDELEMENT:PreInitialize()
+	-- Use this to set child<->parent relations etc, this is called before Initialized and other objects can still be uninitialized!
+end
+
 function HUDELEMENT:Initialize()
 	-- Use this to set default values or set child relations.
 end

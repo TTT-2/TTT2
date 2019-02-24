@@ -16,8 +16,11 @@ if CLIENT then
 	local ply_ind_size = 0
 	local column_count = 0
 
-	function HUDELEMENT:Initialize()
+	function HUDELEMENT:PreInitialize()
 		hudelements.RegisterChildRelation(self.id, "pure_skin_roundinfo", false)
+	end
+
+	function HUDELEMENT:Initialize()
 		parentInstance = hudelements.GetStored(self.parent)
 	end
 
@@ -36,9 +39,6 @@ if CLIENT then
 
 		self:SetPos(parent_pos.x + parent_size.w, parent_pos.y)
 		self:SetSize(width, height)
-
-		self.defaults.size = self:GetSize()
-		self.defaults.basepos = self:GetBasePos()
 
 		BaseClass.PerformLayout(self)
 	end
