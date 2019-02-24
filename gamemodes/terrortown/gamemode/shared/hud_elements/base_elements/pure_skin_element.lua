@@ -8,13 +8,6 @@ if CLIENT then
 	local defaultColor = Color(49, 71, 94)
 	local shadowColor = Color(0, 0, 0, 220)
 
-	function HUDELEMENT:Initialize()
-		BaseClass.Initialize(self)
-
-		self.defaults.size = self:GetSize()
-		self.defaults.basepos = self:GetBasePos()
-	end
-
 	function HUDELEMENT:DrawBg(x, y, w, h, c)
 		DrawHUDElementBg(x, y, w, h, c)
 	end
