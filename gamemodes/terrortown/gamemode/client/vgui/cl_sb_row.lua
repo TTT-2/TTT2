@@ -277,7 +277,7 @@ function PANEL:ApplySchemeSettings()
 	self.sresult:SetImageColor(Color(170, 170, 170, 150))
 
 	self.vip:SetImage(ttt2_vip_indicator)
-	--self.vip:SetImageColor(COLOR_WHITE)
+	self.vip:SetImageColor(namecolor.vip)
 end
 
 function PANEL:LayoutColumns()
@@ -302,7 +302,7 @@ function PANEL:LayoutColumns()
 	local x = self.nick:GetPos()
 	local w = self.nick:GetSize()
 
-	self.vip:SetPos(x + w + 20, (SB_ROW_HEIGHT - 16) * 0.5)
+	self.vip:SetPos(x + w + 16, (SB_ROW_HEIGHT - 16) * 0.5)
 end
 
 function PANEL:PerformLayout()
