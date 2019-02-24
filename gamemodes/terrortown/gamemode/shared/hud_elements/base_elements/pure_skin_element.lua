@@ -9,7 +9,7 @@ if CLIENT then
 	local shadowColor = Color(0, 0, 0, 220)
 
 	function HUDELEMENT:Initialize()
-		local defs = self:GetDefaults()
+		local defs = self:GetStoredDefaults()
 
 		defs.size = self:GetSize()
 		defs.basepos = self:GetBasePos()

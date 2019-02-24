@@ -27,6 +27,10 @@ function HUDELEMENT:GetDefaults()
 	return table.Copy(defaults)
 end
 
+function HUDELEMENT:GetStoredDefaults()
+	return defaults
+end
+
 HUDELEMENT.parent = nil
 HUDELEMENT.parent_is_type = nil
 HUDELEMENT.children = {}
@@ -175,7 +179,7 @@ function HUDELEMENT:DrawSize()
 end
 
 function HUDELEMENT:SetDefaults()
-	local defs = self:GetDefaults()
+	local defs = self:GetStoredDefaults()
 
 	defs.basepos = table.Copy(self.basepos)
 	defs.size = table.Copy(self.size)
