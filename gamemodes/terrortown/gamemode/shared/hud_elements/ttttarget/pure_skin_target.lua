@@ -19,7 +19,7 @@ if CLIENT then -- CLIENT
 	function HUDELEMENT:Initialize()
 		local width, height = 365, 32
 
-	    self:SetBasePos(pad, ScrH() - height - 146 - pad)
+	    self:SetBasePos(10, ScrH() - height - 146 - pad - 10)
 		self:SetSize(width, height)
 
 		BaseClass.Initialize(self)
@@ -41,7 +41,7 @@ if CLIENT then -- CLIENT
 
 		surface.SetDrawColor(255, 255, 255, 255)
 		surface.SetMaterial(target_icon)
-		surface.DrawTexturedRect(x + 4, y - 4 - (nSize - height), nSize, nSize)
+		surface.DrawTexturedRect(x, y + 2 - (nSize - height), nSize, nSize)
 	end
 
 	function HUDELEMENT:Draw()
