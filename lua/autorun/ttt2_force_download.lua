@@ -43,6 +43,9 @@ if SERVER then
 	-- target icon
 	resource.AddFile("materials/vgui/ttt/target_icon.vmt")
 
+	-- watching icon
+	resource.AddFile("materials/vgui/ttt/watching_icon.vmt")
+
 	-- old ttt hud preview
 	resource.AddFile("materials/vgui/ttt/huds/old_ttt/preview.png")
 

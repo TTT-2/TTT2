@@ -64,7 +64,7 @@ if CLIENT then
 		end
 	end
 
-	local watching_icon = Material("vgui/ttt/dynamic/roles/icon_inno")
+	local watching_icon = Material("vgui/ttt/watching_icon")
 
 	function HUDELEMENT:Draw()
 		local client = LocalPlayer()
