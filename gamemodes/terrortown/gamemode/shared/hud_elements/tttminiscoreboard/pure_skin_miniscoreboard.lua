@@ -32,7 +32,7 @@ if CLIENT then
 		local height = parent_size.h
 		ply_ind_size = math.Round((height - element_margin - margin * 2 ) / 2)
 
-		local players = util.GetFilteredPlayers(function (ply) return ply:IsTerror() end)
+		local players = util.GetFilteredPlayers(function (ply) return ply:IsTerror() or ply:IsDeadTerror() end)
 		curPlayerCount = #players
 
 		column_count = math.Round(#players / 2)
@@ -58,7 +58,7 @@ if CLIENT then
 		local client = LocalPlayer()
 		local round_state = GAMEMODE.round_state
 
-		local players = util.GetFilteredPlayers(function (ply) return ply:IsTerror() end)
+		local players = util.GetFilteredPlayers(function (ply) return ply:IsTerror() or ply:IsDeadTerror() end)
 		if #players ~= curPlayerCount then
 			self:PerformLayout()
 		end
