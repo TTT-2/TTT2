@@ -75,6 +75,12 @@ if CLIENT then -- CLIENT
 		draw.SimpleText("Target", "TabLarge", x + self.margin * 2, y, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	end
 
+	local edit_colors = {
+		border = COLOR_WHITE,
+		background = Color(0, 0, 10, 200),
+		fill = Color(100, 100, 100, 255)
+	}
+
 	function HUDELEMENT:Draw()
 		local ply = LocalPlayer()
 
@@ -83,9 +89,15 @@ if CLIENT then -- CLIENT
 		local tgt = ply:GetTargetPlayer()
 
 		if HUDManager.IsEditing then
-			self:DrawComponent("TARGET", Color(100, 100, 100, 255), "- TARGET -")
+			self:DrawComponent("TARGET", edit_colors, "- TARGET -")
 		elseif IsValid(tgt) and ply:IsActive() then
-			self:DrawComponent("TARGET", tgt:GetRoleColor(), tgt:Nick())
+			local col_tbl = {
+				border = COLOR_WHITE,
+				background = tgt:GetRoleDkColor(),
+				fill = tgt:GetRoleColor()
+			}
+
+			self:DrawComponent("TARGET", col_tbl, tgt:Nick())
 		end
 	end
 end
