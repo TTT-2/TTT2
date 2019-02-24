@@ -5,13 +5,15 @@ HUDELEMENT.Base = base
 DEFINE_BASECLASS(base)
 
 if CLIENT then
-	local parentInstance = nil
 
 	local margin = 14
 	local element_margin = 6
+	local row_count = 2
+
+	-- values that will be overridden by code
+	local parentInstance = nil
 	local curPlayerCount = 0
 	local ply_ind_size = 0
-	local row_count = 2
 	local column_count = 0
 
 	function HUDELEMENT:Initialize()
@@ -24,7 +26,7 @@ if CLIENT then
 		local parent_size = parentInstance:GetSize()
 
 		local height = parent_size.h
-		ply_ind_size = math.Round((height - margin * 3) / 2)
+		ply_ind_size = math.Round((height - element_margin - margin * 2 ) / 2)
 
 		local players = util.GetFilteredPlayers(function (ply) return ply:IsTerror() end)
 		curPlayerCount = #players
