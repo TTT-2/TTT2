@@ -37,6 +37,9 @@ function HUDELEMENT:Initialize()
 		local elemtbl = hudelements.GetStored(elem)
 		if elemtbl then
 			elemtbl:Initialize()
+			elemtbl:SetDefaults()
+			elemtbl:LoadData()
+			elemtbl.initialized = true
 		end
 	end
 end
