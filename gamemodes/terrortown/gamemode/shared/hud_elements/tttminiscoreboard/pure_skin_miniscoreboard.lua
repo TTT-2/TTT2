@@ -49,7 +49,7 @@ if CLIENT then
 
 		if ply:GetNWBool("body_found", false) then
 			color = ply:GetRoleColor()
-			ret_color = Color(ret_color.r, ret_color.g, ret_color.b, 155) -- make color a bit transparent
+			ret_color = Color(color.r, color.g, color.b, 155) -- make color a bit transparent
 		end
 
 		return ret_color
