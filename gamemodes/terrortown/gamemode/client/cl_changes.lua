@@ -197,9 +197,15 @@ function CreateChanges()
 	- fixed DNA Scanner bug with the radar
 	- fixed loading issue in the items module
 	- fixed critical bug in the process of saving the items data
+	- fixed the Sidekick color in corpses
 
 	- improved the changelog (as you see :D)
 	- reworked sql and created a sql library
+	
+	- reworked the slot system
+	-> amount of carriable weapons are customizable 
+	-> weapons won't block slots anymore automatically 
+	-> slot positions are generated from weapon types
 	]])
 
 	hook.Run("TTT2AddChange")
