@@ -9,10 +9,6 @@ DEFINE_BASECLASS(base)
 
 HUDELEMENT.Base = base
 
-if SERVER then
-	resource.AddFile("materials/vgui/ttt/perks/old_ttt_bg.png")
-end
-
 if CLIENT then
 	local size = 64
 
