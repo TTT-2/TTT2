@@ -114,9 +114,12 @@ local namecolor = {
 
 function GM:TTTScoreboardColorForPlayer(ply)
 	if IsValid(ply) then
-		local steamid = tostring(ply:SteamID64())
+		local steamid = ply:SteamID64()
+		if steamid then
+			steamid = tostring(steamid)
+		end
 
-		if vip_tbl[steamid] then
+		if steamid and vip_tbl[steamid] then
 			return namecolor.vip
 		elseif ply:IsAdmin() and GetGlobalBool("ttt_highlight_admins", true) then
 			return namecolor.admin
@@ -226,7 +229,12 @@ function PANEL:UpdatePlayerData()
 	self.nick:SizeToContents()
 	self.nick:SetTextColor(ColorForPlayer(ply))
 
-	self.vip:SetVisible(vip_tbl[tostring(ply:SteamID64())] == true)
+	local steamid = ply:SteamID64()
+	if steamid then
+		steamid = tostring(steamid)
+	end
+
+	self.vip:SetVisible(steamid and vip_tbl[steamid] == true or false)
 
 	local ptag = ply.sb_tag
 
