@@ -43,7 +43,6 @@ function HUDELEMENT:Initialize()
 			Msg("Error: HUDElement " .. (self.id or "?") .. " has unkown child element named " .. elem .. " when calling Initialize \n")
 		end
 	end
-	self.initialized = true
 end
 
 function HUDELEMENT:Draw()

@@ -59,6 +59,16 @@ function HUD:Initialize()
 	end
 
 	self:PerformLayout()
+
+	-- Initialize elements default values
+	for _, v in ipairs(self:GetHUDElements()) do
+		local elem = hudelements.GetStored(v)
+		if elem then
+			elem.initialized = true
+		else
+			Msg("Error: HUD " .. (self.id or "?") .. " has unkown element named " .. v .. "\n")
+		end
+	end
 end
 
 function HUD:GetHUDElements()
