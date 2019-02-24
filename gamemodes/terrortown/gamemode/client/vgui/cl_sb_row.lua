@@ -99,19 +99,19 @@ function PANEL:Init()
 
 	self.vip = vgui.Create("DImage", self)
 	self.vip:SetSize(iconSizes, iconSizes)
-	self.vip:SetMouseInputEnabled(false)
+	self.vip:SetMouseInputEnabled(true)
 	self.vip:SetKeepAspect(true)
 	self.vip:SetTooltip("TTT2 VIP")
 
 	self.addondev = vgui.Create("DImage", self)
 	self.addondev:SetSize(iconSizes, iconSizes)
-	self.addondev:SetMouseInputEnabled(false)
+	self.addondev:SetMouseInputEnabled(true)
 	self.addondev:SetKeepAspect(true)
 	self.addondev:SetTooltip("TTT2 Addondev")
 
 	self.admin = vgui.Create("DImage", self)
 	self.admin:SetSize(iconSizes, iconSizes)
-	self.admin:SetMouseInputEnabled(false)
+	self.admin:SetMouseInputEnabled(true)
 	self.admin:SetKeepAspect(true)
 	self.admin:SetTooltip("Server Admin")
 
