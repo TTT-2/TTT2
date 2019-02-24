@@ -124,14 +124,14 @@ function PANEL:Init()
 	self.avatar:SetSize(SB_ROW_HEIGHT, SB_ROW_HEIGHT)
 	self.avatar:SetMouseInputEnabled(false)
 
-	self.nick = vgui.Create("DLabel", self)
-	self.nick:SetMouseInputEnabled(false)
-
 	self.nick2 = vgui.Create("DLabel", self)
 	self.nick2:SetMouseInputEnabled(false)
 
 	self.nick3 = vgui.Create("DLabel", self)
 	self.nick3:SetMouseInputEnabled(false)
+
+	self.nick = vgui.Create("DLabel", self)
+	self.nick:SetMouseInputEnabled(false)
 
 	self.voice = vgui.Create("DImageButton", self)
 	self.voice:SetSize(iconSizes, iconSizes)
@@ -280,17 +280,17 @@ function PANEL:UpdatePlayerData()
 		self.cols[i]:SetText(self.cols[i].GetPlayerText(ply, self.cols[i]))
 	end
 
-	self.nick:SetText(ply:Nick())
-	self.nick:SizeToContents()
-	self.nick:SetTextColor(ColorForPlayer(ply))
-
 	self.nick2:SetText(ply:Nick())
 	self.nick2:SizeToContents()
 	self.nick2:SetTextColor(COLOR_BLACK)
 
 	self.nick3:SetText(ply:Nick())
 	self.nick3:SizeToContents()
-	self.nick3:SetTextColor(CCOLOR_BLACK)
+	self.nick3:SetTextColor(COLOR_BLACK)
+
+	self.nick:SetText(ply:Nick())
+	self.nick:SizeToContents()
+	self.nick:SetTextColor(ColorForPlayer(ply))
 
 	local steamid = ply:SteamID64()
 	if steamid then
@@ -349,14 +349,14 @@ function PANEL:ApplySchemeSettings()
 		v:SetTextColor(COLOR_WHITE)
 	end
 
-	self.nick:SetFont("treb_small")
-	self.nick:SetTextColor(ColorForPlayer(self.Player))
-
 	self.nick2:SetFont("treb_small")
 	self.nick2:SetTextColor(COLOR_BLACK)
 
 	self.nick3:SetFont("treb_small")
 	self.nick3:SetTextColor(COLOR_BLACK)
+
+	self.nick:SetFont("treb_small")
+	self.nick:SetTextColor(ColorForPlayer(self.Player))
 
 	local ptag = self.Player and self.Player.sb_tag
 	self.tag:SetTextColor(ptag and ptag.color or COLOR_WHITE)
@@ -456,14 +456,16 @@ function PANEL:PerformLayout()
 		self:SetSize(self:GetWide(), SB_ROW_HEIGHT + self.info:GetTall())
 	end
 
-	self.nick:SizeToContents()
-	self.nick:SetPos(SB_ROW_HEIGHT + 10, (SB_ROW_HEIGHT - self.nick:GetTall()) * 0.5)
+	local ty = (SB_ROW_HEIGHT - self.nick:GetTall()) * 0.5
 
 	self.nick2:SizeToContents()
-	self.nick2:SetPos(SB_ROW_HEIGHT + 11, (SB_ROW_HEIGHT - self.nick:GetTall()) * 0.5 + 1)
+	self.nick2:SetPos(SB_ROW_HEIGHT + 12, ty + 2)
 
 	self.nick3:SizeToContents()
-	self.nick3:SetPos(SB_ROW_HEIGHT + 9, (SB_ROW_HEIGHT - self.nick:GetTall()) * 0.5 - 1)
+	self.nick3:SetPos(SB_ROW_HEIGHT + 8, ty - 2)
+
+	self.nick:SizeToContents()
+	self.nick:SetPos(SB_ROW_HEIGHT + 10, ty)
 
 	self:LayoutColumns()
 
