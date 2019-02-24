@@ -25,6 +25,9 @@ if CLIENT then
 
 		BaseClass.Initialize(self)
 	end
+	
+	function HUDELEMENT:RecalculateBasePos()
+	end
 
 	function HUDELEMENT:PerformLayout()
 		local parent_pos = parentInstance:GetPos()

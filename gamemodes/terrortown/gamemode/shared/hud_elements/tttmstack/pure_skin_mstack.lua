@@ -33,11 +33,9 @@ if CLIENT then
 	function HUDELEMENT:Initialize()
 		local width = MSTACK.msg_width + leftPad
 
-		top_y = MSTACK.margin
-		top_x = ScrW() - MSTACK.margin - width
 		text_height = draw.GetFontHeight(MSTACK.msgfont)
 
-		self:SetBasePos(top_x, top_y)
+		self:RecalculateBasePos()
 		self:SetSize(width, 80)
 
 		BaseClass.Initialize(self)
@@ -50,6 +48,14 @@ if CLIENT then
 			xalign = TEXT_ALIGN_LEFT,
 			yalign = TEXT_ALIGN_TOP
 		}
+	end
+	
+	function HUDELEMENT:RecalculateBasePos()
+		local width = MSTACK.msg_width + leftPad
+	
+		top_y = MSTACK.margin
+		top_x = ScrW() - MSTACK.margin - width
+		self:SetBasePos(top_x, top_y)
 	end
 
 	function HUDELEMENT:PerformLayout()

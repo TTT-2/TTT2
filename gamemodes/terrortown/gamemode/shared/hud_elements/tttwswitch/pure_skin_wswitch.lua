@@ -104,7 +104,7 @@ if CLIENT then
 	function HUDELEMENT:Initialize()
 		WSWITCH:UpdateWeaponCache()
 
-		self:SetBasePos(ScrW() - (width + self.margin * 2), ScrH() - self.margin)
+		self:RecalculateBasePos()
 		self:SetSize(width, -height)
 
 		BaseClass.Initialize(self)
@@ -113,6 +113,10 @@ if CLIENT then
 		self.defaults.minHeight = height
 	end
 
+	function HUDELEMENT:RecalculateBasePos()
+		self:SetBasePos(ScrW() - (width + self.margin * 2), ScrH() - self.margin)
+	end
+	
 	function HUDELEMENT:PerformLayout()
 		local basepos = self:GetBasePos()
 

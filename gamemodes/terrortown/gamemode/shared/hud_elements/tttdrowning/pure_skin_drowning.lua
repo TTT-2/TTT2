@@ -12,14 +12,18 @@ if CLIENT then
 	local h = 36 -- height
 	local bh = 8 -- bar height
 	local pad = 14 -- padding
-
+	
 	function HUDELEMENT:Initialize()
-		self:SetBasePos(math.Round(ScrW() * 0.5 - w * 0.5), ScrH() - pad - h)
+		self:RecalculateBasePos()
 		self:SetSize(w, h)
 
 		BaseClass.Initialize(self)
 
 		self.defaults.resizeableY = false
+	end
+
+	function HUDELEMENT:RecalculateBasePos()
+		self:SetBasePos(math.Round(ScrW() * 0.5 - w * 0.5), ScrH() - pad - h)
 	end
 
 	function HUDELEMENT:PerformLayout()
