@@ -23,6 +23,8 @@ if CLIENT then
 		self:SetSize(w, h)
 
 		BaseClass.Initialize(self)
+
+		self.defaults.resizeableY = false
 	end
 
 	function HUDELEMENT:PerformLayout()
@@ -216,16 +218,5 @@ if CLIENT then
 
 		-- draw lines around the element
 		self:DrawLines(x2, y2, w2, h2)
-	end
-
-	local defaults
-
-	function HUDELEMENT:GetDefaults()
-		if not defaults then
-			defaults = BaseClass.GetDefaults(self)
-			defaults.resizeableY = false
-		end
-
-		return table.Copy(defaults)
 	end
 end

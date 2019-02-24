@@ -13,10 +13,10 @@ if CLIENT then
 	local hudTeamicon = CreateClientConVar("ttt2_base_hud_teamicon", "1")
 
 	function HUDELEMENT:Initialize()
-		local defs = self:GetStoredDefaults()
+		BaseClass.Initialize(self)
 
-		defs.size = self:GetSize()
-		defs.basepos = self:GetBasePos()
+		self.defaults.size = self:GetSize()
+		self.defaults.basepos = self:GetBasePos()
 	end
 
 	-- Color presets

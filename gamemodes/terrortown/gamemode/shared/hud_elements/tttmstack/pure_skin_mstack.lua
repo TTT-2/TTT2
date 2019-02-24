@@ -40,6 +40,9 @@ if CLIENT then
 
 		BaseClass.Initialize(self)
 
+		self.defaults.resizeableX = false
+		self.defaults.resizeableY = false
+
 		base_spec = {
 			font = MSTACK.msgfont,
 			xalign = TEXT_ALIGN_LEFT,
@@ -130,17 +133,5 @@ if CLIENT then
 				running_y = y + height
 			end
 		end
-	end
-
-	local defaults
-
-	function HUDELEMENT:GetDefaults()
-		if not defaults then
-			defaults = BaseClass.GetDefaults(self)
-			defaults.resizeableX = false
-			defaults.resizeableY = false
-		end
-
-		return table.Copy(defaults)
 	end
 end

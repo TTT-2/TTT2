@@ -37,10 +37,8 @@ if CLIENT then
 		self:SetPos(parent_pos.x + parent_size.w, parent_pos.y)
 		self:SetSize(width, height)
 
-		local defs = self:GetStoredDefaults()
-
-		defs.size = self:GetSize()
-		defs.basepos = self:GetBasePos()
+		self.defaults.size = self:GetSize()
+		self.defaults.basepos = self:GetBasePos()
 
 		BaseClass.PerformLayout(self)
 	end

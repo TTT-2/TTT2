@@ -9,10 +9,10 @@ if CLIENT then
 	local shadowColor = Color(0, 0, 0, 220)
 
 	function HUDELEMENT:Initialize()
-		local defs = self:GetStoredDefaults()
+		BaseClass.Initialize(self)
 
-		defs.size = self:GetSize()
-		defs.basepos = self:GetBasePos()
+		self.defaults.size = self:GetSize()
+		self.defaults.basepos = self:GetBasePos()
 	end
 
 	function HUDELEMENT:DrawBg(x, y, w, h, c)

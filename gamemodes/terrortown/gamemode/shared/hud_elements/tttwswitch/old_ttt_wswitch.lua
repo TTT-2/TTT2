@@ -124,6 +124,9 @@ if CLIENT then
 		self:SetSize(width, -height)
 
 		BaseClass.Initialize(self)
+
+		self.defaults.resizeableY = false
+		self.defaults.minHeight = height
 	end
 
 	function HUDELEMENT:PerformLayout()
@@ -170,17 +173,5 @@ if CLIENT then
 
 			y_elem = y_elem + height + self.margin
 		end
-	end
-
-	local defaults
-
-	function HUDELEMENT:GetDefaults()
-		if not defaults then
-			defaults = BaseClass.GetDefaults(self)
-			defaults.resizeableY = false
-			defaults.minHeight = height
-		end
-
-		return table.Copy(defaults)
 	end
 end
