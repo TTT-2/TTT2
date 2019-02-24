@@ -34,10 +34,10 @@ local addondev_tbl = {
 	["76561198052323988"] = true -- LeBroomer
 }
 
-function AddTTT2AddonDev(steamid)
-	if not steamid then return end
+function AddTTT2AddonDev(steamid64)
+	if not steamid64 then return end
 
-	addondev_tbl[tostring(steamid)] = true
+	addondev_tbl[tostring(steamid64)] = true
 end
 
 local namecolor = {
@@ -164,17 +164,17 @@ end
 
 function GM:TTTScoreboardColorForPlayer(ply)
 	if IsValid(ply) then
-		local steamid = ply:SteamID64()
-		if steamid then
-			steamid = tostring(steamid)
+		local steamid64 = ply:SteamID64()
+		if steamid64 then
+			steamid64 = tostring(steamid64)
 		end
 
-		if steamid then
-			if dev_tbl[steamid] then
+		if steamid64 then
+			if dev_tbl[steamid64] then
 				return namecolor.dev
-			elseif vip_tbl[steamid] then
+			elseif vip_tbl[steamid64] then
 				return namecolor.vip
-			elseif addondev_tbl[steamid] then
+			elseif addondev_tbl[steamid64] then
 				return namecolor.addondev
 			end
 		end
@@ -295,18 +295,18 @@ function PANEL:UpdatePlayerData()
 	self.nick:SizeToContents()
 	self.nick:SetTextColor(ColorForPlayer(ply))
 
-	local steamid = ply:SteamID64()
-	if steamid then
-		steamid = tostring(steamid)
+	local steamid64 = ply:SteamID64()
+	if steamid64 then
+		steamid64 = tostring(steamid64)
 	end
 
-	local isdev = steamid and dev_tbl[steamid] == true
+	local isdev = steamid64 and dev_tbl[steamid64] == true
 
 	self.dev:SetVisible(isdev)
 
 	if not isdev then
-		self.vip:SetVisible(steamid and vip_tbl[steamid] == true or false)
-		self.addondev:SetVisible(steamid and addondev_tbl[steamid] == true or false)
+		self.vip:SetVisible(steamid64 and vip_tbl[steamid64] == true or false)
+		self.addondev:SetVisible(steamid64 and addondev_tbl[steamid64] == true or false)
 	else
 		self.vip:SetVisible(false)
 		self.addondev:SetVisible(false)
