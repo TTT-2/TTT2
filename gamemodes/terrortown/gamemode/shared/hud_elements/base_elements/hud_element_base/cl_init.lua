@@ -32,7 +32,13 @@ function HUDELEMENT:PreInitialize()
 end
 
 function HUDELEMENT:Initialize()
-	-- Use this to set default values or set child relations.
+	-- use this to set default values and dont forget to call BaseClass.Initialze(self)!!
+	for _, elem in ipairs(self.children) do
+		local elemtbl = hudelements.GetStored(elem)
+		if elemtbl then
+			elemtbl:Initialize()
+		end
+	end
 end
 
 function HUDELEMENT:Draw()
@@ -201,12 +207,23 @@ function HUDELEMENT:GetSavingKeys()
 	return table.Copy(savingKeys)
 end
 
-function HUDELEMENT:Save()
-
+function HUDELEMENT:SaveData()
+	SQL.Save("ttt2_hudelements", self, self.id, self:GetSavingKeys())
 end
 
-function HUDELEMENT:Load()
-	local basepos = self:GetBasePos()
+function HUDELEMENT:LoadData()
+	local skeys = self:GetSavingKeys()
 
+	-- load and initialize the elements data from database
+	if SQL.CreateSqlTable("ttt2_hudelements", skeys) then
+		local loaded = SQL.Load("ttt2_hudelements", self.id, self, skeys)
+
+		if not loaded then
+			SQL.Init("ttt2_hudelements", self.id, self, skeys)
+		end
+	end
+
+	-- set position to loaded position
+	local basepos = self:GetBasePos()
 	self:SetPos(basepos.x, basepos.y)
 end

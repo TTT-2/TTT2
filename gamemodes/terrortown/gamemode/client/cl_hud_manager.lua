@@ -187,9 +187,7 @@ function HUDManager.EditHUD(bool, hud)
 			for _, elem in ipairs(hud:GetHUDElements()) do
 				local el = hudelements.GetStored(elem)
 				if el then
-					SQL.Save("ttt2_hudelements", elem, el, el:GetSavingKeys())
-
-					el:Save()
+					el:SaveData()
 				end
 			end
 		end
