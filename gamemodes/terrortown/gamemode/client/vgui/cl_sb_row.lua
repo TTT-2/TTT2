@@ -92,7 +92,7 @@ function PANEL:Init()
 
 	self.dev = vgui.Create("DImage", self)
 	self.dev:SetSize(iconSizes, iconSizes)
-	self.dev:SetMouseInputEnabled(false)
+	self.dev:SetMouseInputEnabled(true)
 	self.dev:SetKeepAspect(true)
 	self.dev:SetTooltip("TTT2 Creator")
 
