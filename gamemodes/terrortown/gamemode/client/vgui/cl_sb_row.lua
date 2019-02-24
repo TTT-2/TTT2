@@ -298,10 +298,10 @@ function PANEL:LayoutColumns()
 
 	self.sresult:SetPos(cx - 8, (SB_ROW_HEIGHT - 16) * 0.5)
 
-	local pos = self.nick:GetPos()
-	local size = self.nick:GetSize()
+	local x = self.nick:GetPos()
+	local w = self.nick:GetSize()
 
-	self.vip:SetPos(pos.x + size.w + 20, (SB_ROW_HEIGHT - 16) * 0.5)
+	self.vip:SetPos(x + w + 20, (SB_ROW_HEIGHT - 16) * 0.5)
 end
 
 function PANEL:PerformLayout()
