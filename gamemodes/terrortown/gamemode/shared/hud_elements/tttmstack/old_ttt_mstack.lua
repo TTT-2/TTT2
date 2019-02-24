@@ -120,7 +120,7 @@ if CLIENT then
 					local ty = y + MSTACK.margin + (i - 1) * (text_height + MSTACK.margin)
 
 					if #item.title != 0 then
-						ty = ty + title_margin + MSTACK.margin + #item.title * (text_height + MSTACK.margin)
+						ty = ty + MSTACK.title_margin + MSTACK.margin + #item.title * (text_height + MSTACK.margin)
 					end
 
 					spec.pos = {tx, ty}
