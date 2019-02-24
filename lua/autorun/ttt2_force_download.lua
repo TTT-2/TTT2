@@ -39,8 +39,14 @@ if SERVER then
 
 	-- pureSkin Hud border and shadow
 	resource.AddFile("materials/vgui/ttt/dynamic/hud_components/shadow_border.vmt")
-	
+
+	-- old ttt hud preview
+	resource.AddFile("vgui/ttt/huds/old_ttt/preview.png")
+
+	-- pure skin hud preview
+	resource.AddFile("vgui/ttt/huds/pure_skin/preview.png")
+
 	-- ttt vip indicator
 	resource.AddFile("materials/vgui/ttt/ttt2_vip_indicator.vmt")
-	
+
 end
