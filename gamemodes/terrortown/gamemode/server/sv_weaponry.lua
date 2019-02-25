@@ -690,7 +690,7 @@ local function TransferCredits(ply, cmd, args)
 		if not IsValid(target)
 		or not target:IsActiveShopper()
 		or target == ply
-		or ply:GetSubRoleData().unknownTeam
+		or ply:GetSubRoleData().unknownTeam and not (ply:IsRole(ROLE_DETECTIVE) and target:IsRole(ROLE_DETECTIVE))
 		or not target:IsInTeam(ply)
 		then
 			LANG.Msg(ply, "xfer_no_recip")
