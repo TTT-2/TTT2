@@ -16,7 +16,7 @@ if CLIENT then
 	local column_count = 0
 
 	local x, y = 0, 0
-	local h = 72, 0
+	local h = 72
 	local pad = 14 -- padding
 
 	function HUDELEMENT:PreInitialize()

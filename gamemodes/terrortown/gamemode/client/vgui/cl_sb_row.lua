@@ -28,7 +28,9 @@ local vip_tbl = {
 	["76561198052323988"] = true, -- LeBroomer
 	["76561198020955880"] = true, -- V3kta
 	["76561198033468770"] = true, -- Dok441
-	["76561198208729341"] = true -- eBBIS
+	["76561198208729341"] = true, -- eBBIS
+	["76561198152558244"] = true, -- Lost TheSuspect
+	["76561198162764168"] = true -- DerJohn
 }
 
 local addondev_tbl = {

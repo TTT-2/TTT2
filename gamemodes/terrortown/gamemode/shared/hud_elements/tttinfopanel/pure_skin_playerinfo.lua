@@ -7,14 +7,11 @@ HUDELEMENT.Base = base
 if CLIENT then
 	local GetLang = LANG.GetUnsafeLanguageTable
 
-	local x = 0
-	local y = 0
-
-	local w = 365 -- width
-	local h = 146 -- height
+	local x, y = 0, 0
+	local w, h = 365, 146
 	local pad = 14 -- padding
 	local lpw = 44 -- left panel width
-	local sri_text_width_padding = 8 --secondary role information padding (needed for size calculations)
+	local sri_text_width_padding = 8 -- secondary role information padding (needed for size calculations)
 
 	local secondaryRoleInformationFunc = nil
 
