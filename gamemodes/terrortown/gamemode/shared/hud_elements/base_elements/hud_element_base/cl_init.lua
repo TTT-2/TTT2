@@ -21,7 +21,7 @@ HUDELEMENT.defaults = {
 	minWidth = 0,
 	resizeableX = true,
 	resizeableY = true,
-	
+
 	-- resize area parameters
 	click_area = 25,
 	click_padding = 3
@@ -189,38 +189,38 @@ end
 function HUDELEMENT:OnHovered(x, y)
 	local minX, minY = self.pos.x, self.pos.y
 	local maxX, maxY = minX + self.size.w, minY + self.size.h
-	
+
 	local c_pad, c_area = self.defaults.click_padding, self.defaults.click_area
-	
+
 	-- ROWS
 	local row = {
 		y > minY + c_pad and y < minY + c_pad + c_area, -- top row
 		y > minY + 2*c_pad + c_area and y < maxY - 2*c_pad - c_area, -- center column
 		y > maxY - c_pad - c_area and y < maxY - c_pad -- right column
 	}
-	
+
 	-- COLUMS
 	local col = {
 		x > minX + c_pad and x < minX + c_pad + c_area, -- left column
 		x > minX + 2*c_pad + c_area and x < maxX - 2*c_pad - c_area, -- center column
 		x > maxX - c_pad - c_area and x < maxX - c_pad -- right column
 	}
-	
+
 	return row, col
 end
 
-function HUDELEMENT:DrawHowered(x,y)
-	if not self:IsInPos(x,y) then
+function HUDELEMENT:DrawHowered(x, y)
+	if not self:IsInPos(x, y) then
 		return false
 	end
-	
+
 	local minX, minY = self.pos.x, self.pos.y
 	local maxX, maxY = minX + self.size.w, minY + self.size.h
 	local c_pad, c_area = self.defaults.click_padding, self.defaults.click_area
-	
-	local row, col = self:OnHovered(x,y)
-	local x1,x2,x3,x4 = 0,0,0,0
-	
+
+	local row, col = self:OnHovered(x, y)
+	local x1, x2, x3, x4 = 0, 0, 0, 0
+
 	if row[1] then
 		y1 = minY + c_pad
 		y2 = minY + c_pad + c_area
@@ -231,7 +231,7 @@ function HUDELEMENT:DrawHowered(x,y)
 		y1 = maxY - c_pad - c_area
 		y2 = maxY - c_pad
 	end
-	
+
 	if col[1] then
 		x1 = minX + c_pad
 		x2 = minX + c_pad + c_area
@@ -242,27 +242,27 @@ function HUDELEMENT:DrawHowered(x,y)
 		x1 = maxX - c_pad - c_area
 		x2 = maxX - c_pad
 	end
-	
+
 	surface.SetDrawColor(245, 30, 80, 155)
-	surface.DrawRect(x1, y1, x2-x1, y2-y1)
+	surface.DrawRect(x1, y1, x2 - x1, y2 - y1)
 end
 
-function HUDELEMENT:GetKlickedArea(x, y, shift_pressed, alt_pressed)
-	if not self:IsInPos(x,y) then
+function HUDELEMENT:GetClickedArea(x, y, shift_pressed, alt_pressed)
+	if not self:IsInPos(x, y) then
 		return false
 	end
-	
+
 	shift_pressed = shift_pressed or false
 	alt_pressed = alt_pressed or false
-	
-	local row, col = self:OnHovered(x,y)
-	
+
+	local row, col = self:OnHovered(x, y)
+
 	-- cache for shorter access
 	local x_p = row[3] and (col[1] or col[2] or col[3])
 	local x_m = row[1] and (col[1] or col[2] or col[3])
 	local y_p = col[3] and (row[1] or row[2] or row[3])
 	local y_m = col[1] and (row[1] or row[2] or row[3])
-	
+
 	local ret_transform_axis = {
 		"x_p" = x_p or (alt_pressed and x_m) or (shift_pressed and y_p) or false,
 		"x_m" = x_m or (alt_pressed and x_p) or (shift_pressed and y_m) or false,
