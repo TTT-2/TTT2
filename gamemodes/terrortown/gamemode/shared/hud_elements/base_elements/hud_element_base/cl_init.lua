@@ -206,7 +206,7 @@ function HUDELEMENT:OnHovered(x, y)
 	else
 		local row = {
 			false, -- top row
-			y > minY + c_pad and y < maxY - c_pad), -- center column
+			y > minY + c_pad and y < maxY - c_pad, -- center column
 			false -- right column
 		}
 	end
