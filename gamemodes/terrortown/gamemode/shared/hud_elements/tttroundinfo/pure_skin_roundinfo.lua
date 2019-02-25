@@ -7,17 +7,15 @@ HUDELEMENT.Base = base
 if CLIENT then
 	local GetLang = LANG.GetUnsafeLanguageTable
 
-	local x = 0
-	local y = 0
-
-	local w = 168 -- width
-	local h = 72 -- height
+	local x, y = 0, 0
+	local w, h = 96, 72
 	local pad = 14 -- padding
 
 	function HUDELEMENT:Initialize()
 		self:RecalculateBasePos()
+
 		self.disabledUnlessForced = true
-		
+
 		self:SetSize(w, h)
 
 		BaseClass.Initialize(self)
@@ -26,15 +24,13 @@ if CLIENT then
 	function HUDELEMENT:RecalculateBasePos()
 		self:SetBasePos(math.Round(ScrW() * 0.5 - w * 0.5), 4)
 	end
-	
+
 	function HUDELEMENT:PerformLayout()
 		local pos = self:GetPos()
 		local size = self:GetSize()
 
-		x = pos.x
-		y = pos.y
-		w = size.w
-		h = size.h
+		x, y = pos.x, pos.y
+		w, h = size.w, size.h
 
 		BaseClass.PerformLayout(self)
 	end
@@ -44,46 +40,8 @@ if CLIENT then
 		local L = GetLang()
 		local round_state = GAMEMODE.round_state
 
-		local x2, y2, w2, h2 = x, y, w, h -- caching
-
-		local iconSize = h2 - pad * 2
-		local mpw = w2 - h2 -- mid panel width
-		local c -- icon color
-		local icon -- team icon
-
-		-- draw team icon
-		local team = client:GetTeam()
-		local tm = TEAMS[team]
-
-		if round_state == ROUND_ACTIVE and team ~= TEAM_NONE and tm and not tm.alone then
-			icon = Material(tm.icon)
-			c = tm.color or Color(0, 0, 0, 255)
-		end
-
-		if not c then
-			x2 = x2 + h2
-			w2 = mpw
-		end
-
 		-- draw bg and shadow
-		self:DrawBg(x2, y2, w2, h2, self.basecolor)
-
-		if c then
-			surface.SetDrawColor(0, 0, 0, 90)
-			surface.DrawRect(x2, y2, h2, h2)
-
-			surface.SetDrawColor(clr(c))
-			surface.DrawRect(x2 + pad, y2 + pad, iconSize, iconSize)
-
-			if icon then
-				surface.SetDrawColor(255, 255, 255, 255)
-				surface.SetMaterial(icon)
-				surface.DrawTexturedRect(x2 + pad, y2 + pad, iconSize, iconSize)
-			end
-
-			-- draw lines around the element
-			self:DrawLines(x2 + pad, y2 + pad, iconSize, iconSize, 255)
-		end
+		self:DrawBg(x, y, w, h, self.basecolor)
 
 		-- draw haste / time
 		-- Draw round time
@@ -93,8 +51,8 @@ if CLIENT then
 		local font = "TimeLeft"
 		local color = COLOR_WHITE
 
-		local tmpx = (c and (x2 + h2) or x2) + mpw * 0.5
-		local tmpy = y2 + h2 * 0.5
+		local tmpx = (c and (x + h) or x) + mpw * 0.5
+		local tmpy = y + h * 0.5
 
 		local rx = tmpx
 		local ry = tmpy
@@ -136,10 +94,10 @@ if CLIENT then
 		self:ShadowedText(text, font, rx, ry, color, TEXT_ALIGN_CENTER)
 
 		if is_haste then
-			draw.SimpleText(L.hastemode, "TabLarge", tmpx, y2 + 14, COLOR_WHITE, TEXT_ALIGN_CENTER)
+			draw.SimpleText(L.hastemode, "TabLarge", tmpx, y + 14, COLOR_WHITE, TEXT_ALIGN_CENTER)
 		end
 
 		-- draw lines around the element
-		self:DrawLines(x2, y2, w2, h2, self.basecolor.a)
+		self:DrawLines(x, y, w, h, self.basecolor.a)
 	end
 end
