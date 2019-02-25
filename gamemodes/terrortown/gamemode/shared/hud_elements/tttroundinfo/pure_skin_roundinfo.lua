@@ -51,7 +51,7 @@ if CLIENT then
 		local font = "TimeLeft"
 		local color = COLOR_WHITE
 
-		local tmpx = (c and (x + h) or x) + mpw * 0.5
+		local tmpx = x + w * 0.5
 		local tmpy = y + h * 0.5
 
 		local rx = tmpx
