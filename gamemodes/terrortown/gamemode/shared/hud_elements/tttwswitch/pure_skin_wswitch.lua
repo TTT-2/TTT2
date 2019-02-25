@@ -75,10 +75,11 @@ if CLIENT then
 
 		if ammo then
 			local col = (wep:Clip1() == 0 and wep:Ammo1() == 0) and c.text_empty or c.text
+			local w = self:GetSize().w
 
 			-- Ammo
 			spec.text = ammo
-			spec.pos[1] = x + width - self.margin * 3
+			spec.pos[1] = x + w - self.margin * 3
 			spec.xalign = TEXT_ALIGN_RIGHT
 			spec.color = col
 
@@ -116,12 +117,15 @@ if CLIENT then
 	function HUDELEMENT:RecalculateBasePos()
 		self:SetBasePos(ScrW() - (width + self.margin * 2), ScrH() - self.margin)
 	end
-	
+
 	function HUDELEMENT:PerformLayout()
 		local basepos = self:GetBasePos()
 
 		self:SetPos(basepos.x, basepos.y)
-		self:SetSize(width, -height)
+
+		local w = self:GetSize().w
+
+		self:SetSize(w, -height)
 
 		BaseClass.PerformLayout(self)
 	end
@@ -135,9 +139,10 @@ if CLIENT then
 		local tmp = height + self.margin
 		local h = count * tmp
 		local basepos = self:GetBasePos()
+		local w = self:GetSize().w
 
 		self:SetPos(basepos.x, basepos.y)
-		self:SetSize(width, -h)
+		self:SetSize(w, -h)
 
 		local pos = self:GetPos()
 		local x_elem = pos.x
@@ -151,7 +156,7 @@ if CLIENT then
 				col = self.col_dark
 			end
 
-			self:DrawBarBg(x_elem, y_elem, width, height, col)
+			self:DrawBarBg(x_elem, y_elem, w, height, col)
 
 			if not self:DrawWeapon(x_elem, y_elem, col, wep) then
 				WSWITCH:UpdateWeaponCache()
