@@ -215,7 +215,7 @@ function HUDELEMENT:OnHovered(x, y)
 	if self.defaults.resizeableX then
 		local col = {
 			self.defaults.resizeableX and x > minX + c_pad and x < minX + c_pad + c_area, -- left column
-			x > minX + 2*c_pad + c_area and x < maxX - 2*c_pad - c_area -- center column
+			x > minX + 2*c_pad + c_area and x < maxX - 2*c_pad - c_area, -- center column
 			self.defaults.resizeableX and x > maxX - c_pad - c_area and x < maxX - c_pad -- right column
 		}
 	else
