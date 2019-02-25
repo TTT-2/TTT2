@@ -195,16 +195,18 @@ function HUDELEMENT:OnHovered(x, y)
 	local maxX, maxY = minX + self.size.w, minY + self.size.h
 
 	local c_pad, c_area = self.defaults.click_padding, self.defaults.click_area
+	
+	local row, col
 
 	-- ROWS
 	if self.defaults.resizeableY then
-		local row = {
+		row = {
 			self.defaults.resizeableY and y > minY + c_pad and y < minY + c_pad + c_area, -- top row
 			y > minY + 2*c_pad + c_area and y < maxY - 2*c_pad - c_area, -- center column
 			self.defaults.resizeableY and y > maxY - c_pad - c_area and y < maxY - c_pad -- right column
 		}
 	else
-		local row = {
+		row = {
 			false, -- top row
 			y > minY + c_pad and y < maxY - c_pad, -- center column
 			false -- right column
@@ -213,13 +215,13 @@ function HUDELEMENT:OnHovered(x, y)
 
 	-- COLUMS
 	if self.defaults.resizeableX then
-		local col = {
+		col = {
 			self.defaults.resizeableX and x > minX + c_pad and x < minX + c_pad + c_area, -- left column
 			x > minX + 2*c_pad + c_area and x < maxX - 2*c_pad - c_area, -- center column
 			self.defaults.resizeableX and x > maxX - c_pad - c_area and x < maxX - c_pad -- right column
 		}
 	else
-		local col = {
+		col = {
 			false, -- left column
 			x > minX + c_pad and x < maxX - c_pad, -- center column
 			false -- right column
