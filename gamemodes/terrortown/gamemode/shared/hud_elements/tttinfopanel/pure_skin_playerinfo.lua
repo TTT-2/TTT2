@@ -242,10 +242,10 @@ if CLIENT then
 
 			-- coin info
 			if cactive and client:IsShopper() and client:GetCredits() > 0 then
-				local coinSize = 32
+				local coinSize = 24
 				local x2_pad = math.Round((lpw - coinSize) * 0.5)
 
-				surface.SetDrawColor(255, 255, 255, 255)
+				surface.SetDrawColor(255, 255, 255, 200)
 				surface.SetMaterial(coin_icon)
 				surface.DrawTexturedRect(x2 + x2_pad, y2 + h - coinSize - x2_pad, coinSize, coinSize)
 			end
