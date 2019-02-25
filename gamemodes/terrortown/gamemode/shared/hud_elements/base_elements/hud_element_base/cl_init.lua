@@ -186,7 +186,7 @@ function HUDELEMENT:IsInPos(x, y)
 	return self:IsInRange(x,y,0)
 end
 
-function:OnHovered(x, y)
+function HUDELEMENT:OnHovered(x, y)
 	local minX, minY = self.pos.x, self.pos.y
 	local maxX, maxY = minX + self.size.w, minY + self.size.h
 	
