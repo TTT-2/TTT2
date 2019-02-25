@@ -8,7 +8,7 @@ if CLIENT then
 	local GetLang = LANG.GetUnsafeLanguageTable
 
 	local x, y = 0, 0
-	local w, h = 72, 72
+	local w, h = 96, 72
 	local pad = 14 -- padding
 
 	function HUDELEMENT:Initialize()
