@@ -264,10 +264,10 @@ function HUDELEMENT:GetClickedArea(x, y, shift_pressed, alt_pressed)
 	local y_m = col[1] and (row[1] or row[2] or row[3])
 
 	local ret_transform_axis = {
-		"x_p" = x_p or (alt_pressed and x_m) or (shift_pressed and y_p) or false,
-		"x_m" = x_m or (alt_pressed and x_p) or (shift_pressed and y_m) or false,
-		"y_p" = y_p or (alt_pressed and y_m) or (shift_pressed and x_p) or false,
-		"y_m" = y_m or (alt_pressed and y_p) or (shift_pressed and x_m) or false
+		x_p = x_p or (alt_pressed and x_m) or (shift_pressed and y_p) or false,
+		x_m = x_m or (alt_pressed and x_p) or (shift_pressed and y_m) or false,
+		y_p = y_p or (alt_pressed and y_m) or (shift_pressed and x_p) or false,
+		y_m = y_m or (alt_pressed and y_p) or (shift_pressed and x_m) or false
 	}
 
 	return ret_transform_axis
