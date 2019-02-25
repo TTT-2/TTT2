@@ -23,8 +23,8 @@ HUDELEMENT.defaults = {
 	resizeableY = true,
 
 	-- resize area parameters
-	click_area = 25,
-	click_padding = 3
+	click_area = 20,
+	click_padding = 0
 }
 
 HUDELEMENT.parent = nil
@@ -194,16 +194,16 @@ function HUDELEMENT:OnHovered(x, y)
 
 	-- ROWS
 	local row = {
-		y > minY + c_pad and y < minY + c_pad + c_area, -- top row
-		y > minY + 2*c_pad + c_area and y < maxY - 2*c_pad - c_area, -- center column
-		y > maxY - c_pad - c_area and y < maxY - c_pad -- right column
+		self.defaults.resizeableY and y > minY + c_pad and y < minY + c_pad + c_area, -- top row
+		self.defaults.resizeableY and y > minY + 2*c_pad + c_area and y < maxY - 2*c_pad - c_area, -- center column
+		self.defaults.resizeableY and y > maxY - c_pad - c_area and y < maxY - c_pad -- right column
 	}
 
 	-- COLUMS
 	local col = {
-		x > minX + c_pad and x < minX + c_pad + c_area, -- left column
-		x > minX + 2*c_pad + c_area and x < maxX - 2*c_pad - c_area, -- center column
-		x > maxX - c_pad - c_area and x < maxX - c_pad -- right column
+		self.defaults.resizeableX and x > minX + c_pad and x < minX + c_pad + c_area, -- left column
+		self.defaults.resizeableX and x > minX + 2*c_pad + c_area and x < maxX - 2*c_pad - c_area, -- center column
+		self.defaults.resizeableX and x > maxX - c_pad - c_area and x < maxX - c_pad -- right column
 	}
 
 	return row, col
@@ -219,12 +219,12 @@ function HUDELEMENT:DrawHowered(x, y)
 	local c_pad, c_area = self.defaults.click_padding, self.defaults.click_area
 
 	local row, col = self:OnHovered(x, y)
-	local x1, x2, x3, x4 = 0, 0, 0, 0
+	local x1, x2, y1, y2 = 0, 0, 0, 0
 
 	if row[1] then
 		y1 = minY + c_pad
 		y2 = minY + c_pad + c_area
-	elseif row[2] then
+	elseif row[2] and not col[2] then --ignore center area
 		y1 = minY + 2*c_pad + c_area
 		y2 = maxY - 2*c_pad - c_area
 	elseif row[3] then
@@ -235,7 +235,7 @@ function HUDELEMENT:DrawHowered(x, y)
 	if col[1] then
 		x1 = minX + c_pad
 		x2 = minX + c_pad + c_area
-	elseif col[2] then
+	elseif col[2] and not row[2] then --ignore center area
 		x1 = minX + 2*c_pad + c_area
 		x2 = maxX - 2*c_pad - c_area
 	elseif col[3] then
