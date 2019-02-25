@@ -191,6 +191,10 @@ function HUDELEMENT:OnHovered(x, y)
 	local maxX, maxY = minX + self.size.w, minY + self.size.h
 
 	local c_pad, c_area = self.defaults.click_padding, self.defaults.click_area
+	
+	if (self:IsChild) then -- children are not resizeable
+		return {false, false, false}, {false, false, false}
+	end
 
 	-- ROWS
 	local row = {
