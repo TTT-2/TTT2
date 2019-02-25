@@ -244,7 +244,7 @@ function HUDELEMENT:DrawHowered(x, y)
 	local row, col = self:OnHovered(x, y)
 	local x1, x2, y1, y2 = 0, 0, 0, 0
 
-	if row[1] -- resizeable in all directions
+	if row[1] then -- resizeable in all directions
 		y1 = minY + c_pad
 		y2 = minY + c_pad + c_area
 	elseif row[2] and not col[2] then -- resizeable in all directions / ignore center area
