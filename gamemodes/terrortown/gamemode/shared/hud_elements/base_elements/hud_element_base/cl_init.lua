@@ -199,7 +199,7 @@ function HUDELEMENT:OnHovered(x, y)
 	local row, col
 
 	-- ROWS
-	if self.defaults.resizeableX then
+	if self.defaults.resizeableY then
 		row = {
 			self.defaults.resizeableY and y > minY + c_pad and y < minY + c_pad + c_area, -- top row
 			y > minY + 2*c_pad + c_area and y < maxY - 2*c_pad - c_area, -- center column
@@ -214,7 +214,7 @@ function HUDELEMENT:OnHovered(x, y)
 	end
 
 	-- COLUMS
-	if self.defaults.resizeableY then
+	if self.defaults.resizeableX then
 		col = {
 			self.defaults.resizeableX and x > minX + c_pad and x < minX + c_pad + c_area, -- left column
 			x > minX + 2*c_pad + c_area and x < maxX - 2*c_pad - c_area, -- center column
@@ -244,25 +244,31 @@ function HUDELEMENT:DrawHowered(x, y)
 	local row, col = self:OnHovered(x, y)
 	local x1, x2, y1, y2 = 0, 0, 0, 0
 
-	if row[1] then
+	if row[1] -- resizeable in all directions
 		y1 = minY + c_pad
 		y2 = minY + c_pad + c_area
-	elseif row[2] and not col[2] then --ignore center area
+	elseif row[2] and not col[2] then -- resizeable in all directions / ignore center area
 		y1 = minY + 2*c_pad + c_area
 		y2 = maxY - 2*c_pad - c_area
-	elseif row[3] then
+	elseif row[3] then -- resizeable in all directions
 		y1 = maxY - c_pad - c_area
+		y2 = maxY - c_pad
+	elseif (col[1] or col[3]) and not row[1] and row[2] and not row[3] then -- only resizeable in Y
+		y1 = minY + c_pad
 		y2 = maxY - c_pad
 	end
 
-	if col[1] then
+	if col[1] then -- resizeable in all directions
 		x1 = minX + c_pad
 		x2 = minX + c_pad + c_area
-	elseif col[2] and not row[2] then --ignore center area
+	elseif col[2] and not row[2] then -- resizeable in all directions / ignore center area
 		x1 = minX + 2*c_pad + c_area
 		x2 = maxX - 2*c_pad - c_area
-	elseif col[3] then
+	elseif col[3] then -- resizeable in all directions
 		x1 = maxX - c_pad - c_area
+		x2 = maxX - c_pad
+	elseif (row[1] or row[3]) and not col[1] and col[2] and not col[3] then -- only resizeable in X
+		x1 = minX + c_pad
 		x2 = maxX - c_pad
 	end
 
