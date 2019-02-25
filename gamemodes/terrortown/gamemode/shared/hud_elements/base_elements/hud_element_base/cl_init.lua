@@ -235,10 +235,10 @@ function HUDELEMENT:DrawHowered(x, y)
 	if col[1] then
 		x1 = minX + c_pad
 		x2 = minX + c_pad + c_area
-	else if col[2] then
+	elseif col[2] then
 		x1 = minX + 2*c_pad + c_area
 		x2 = maxX - 2*c_pad - c_area
-	else if col[3] then
+	elseif col[3] then
 		x1 = maxX - c_pad - c_area
 		x2 = maxX - c_pad
 	end
