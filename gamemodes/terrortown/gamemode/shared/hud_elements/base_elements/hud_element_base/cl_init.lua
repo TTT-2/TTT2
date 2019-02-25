@@ -196,7 +196,7 @@ function HUDELEMENT:OnHovered(x, y)
 	local row = {
 		y > minY + c_pad and y < minY + c_pad + c_area, -- top row
 		y > minY + 2*c_pad + c_area and y < maxY - 2*c_pad - c_area, -- center column
-		y > maxY - c_pad - c_area and < < maxY - c_pad -- right column
+		y > maxY - c_pad - c_area and y < maxY - c_pad -- right column
 	}
 	
 	-- COLUMS
