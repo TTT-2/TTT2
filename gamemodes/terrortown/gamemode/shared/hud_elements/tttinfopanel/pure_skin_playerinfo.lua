@@ -17,7 +17,7 @@ if CLIENT then
 	local sri_text_width_padding = 8 --secondary role information padding (needed for size calculations)
 
 	local secondaryRoleInformationFunc = nil
-	
+
 	function HUDELEMENT:Initialize()
 		self:RecalculateBasePos()
 		self:SetSize(w, h)
@@ -30,11 +30,11 @@ if CLIENT then
 	function HUDELEMENT:RecalculateBasePos()
 		self:SetBasePos(10, ScrH() - (10 + h))
 	end
-	
+
 	function HUDELEMENT:PerformLayout()
 		local pos = self:GetPos()
 		local size = self:GetSize()
-	
+
 		x = pos.x
 		y = pos.y
 		w = size.w
@@ -69,6 +69,7 @@ if CLIENT then
 	end
 
 	local watching_icon = Material("vgui/ttt/watching_icon")
+	local coin_icon = Material("vgui/ttt/equip")
 
 	function HUDELEMENT:Draw()
 		local client = LocalPlayer()
@@ -237,6 +238,15 @@ if CLIENT then
 
 			if GetGlobalBool("ttt2_sprint_enabled", true) then
 				self:DrawBar(nx, ty, bw, sbh, Color(36, 154, 198), client.sprintProgress)
+			end
+
+			-- coin info
+			if cactive and client:IsShopper() and client:GetCredits() > 0 then
+				local coinSize = 48
+				
+				surface.SetDrawColor(255, 255, 255, 255)
+				surface.SetMaterial(coin_icon)
+				surface.DrawTexturedRect(x2 + 4, y2 + h - coinSize + 4, coinSize - 8, coinSize - 8)
 			end
 		end
 
