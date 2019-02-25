@@ -22,8 +22,10 @@ if CLIENT then -- CLIENT
 		self:SetSize(width, height)
 
 		BaseClass.Initialize(self)
+
+		self.defaults.resizeableY = false
 	end
-	
+
 	function HUDELEMENT:RecalculateBasePos()
 	    self:SetBasePos(10, ScrH() - height - 146 - pad - 10)
 	end
