@@ -69,7 +69,7 @@ if CLIENT then
 	end
 
 	local watching_icon = Material("vgui/ttt/watching_icon")
-	local coin_icon = Material("vgui/ttt/equip")
+	local coin_icon = Material("vgui/ttt/equip/coin.png")
 
 	function HUDELEMENT:Draw()
 		local client = LocalPlayer()
@@ -242,11 +242,12 @@ if CLIENT then
 
 			-- coin info
 			if cactive and client:IsShopper() and client:GetCredits() > 0 then
-				local coinSize = 48
-				
+				local coinSize = 32
+				local x2_pad = math.Round((lpw - coinSize) * 0.5)
+
 				surface.SetDrawColor(255, 255, 255, 255)
 				surface.SetMaterial(coin_icon)
-				surface.DrawTexturedRect(x2 + 4, y2 + h - coinSize + 4, coinSize - 8, coinSize - 8)
+				surface.DrawTexturedRect(x2 + x2_pad, y2 + h - coinSize - x2_pad, coinSize, coinSize)
 			end
 		end
 
