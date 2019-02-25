@@ -24,9 +24,9 @@ if CLIENT then
 
 		self.defaults.resizeableY = false
 	end
-	
+
 	function HUDELEMENT:RecalculateBasePos()
-		self:SetBasePos(ScrW() * 0.5 - width * 0.5, margin * 2 + 72)
+		self:SetBasePos(ScrW() * 0.5 - width * 0.5, margin + 72)
 	end
 
 	-- Paint punch-o-meter
