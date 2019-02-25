@@ -219,7 +219,7 @@ function HUDELEMENT:DrawHowered(x,y)
 	local c_pad, c_area = self.defaults.click_padding, self.defaults.click_area
 	
 	local row, col = self:OnHovered(x,y)
-	local x1=0, x2=0, y1=0, y2=0
+	local x1,x2,x3,x4 = 0,0,0,0
 	
 	if row[1] then
 		y1 = minY + c_pad
