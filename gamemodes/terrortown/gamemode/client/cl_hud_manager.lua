@@ -92,7 +92,7 @@ local function EditLocalHUD()
 		local difH = client.difH or 0
 
 		if elem and (client.oldMX and client.oldMX ~= x or client.oldMY and client.oldMY ~= y) then
-			-- set to true to get new click zone
+			-- set to true to get new click zone, because this sould only happen ONCE; this zone is now the active zone until the button is released
 			elem:SetMouseClicked(client.mouse_clicked, x, y)
 			client.mouse_clicked = false
 
@@ -180,6 +180,7 @@ function HUDManager.EditHUD(bool, hud)
 		HUDManager.ShowHUDSwitcher(false)
 
 		chat.AddText("[TTT2][INFO] Hover over the elements and kick and move the mouse to ", Color(20, 150, 245), "move", Color(151, 211, 255), " or ", Color(245, 30, 80), "resize", Color(151, 211, 255), " it.")
+		chat.AddText("[TTT2][INFO] Press and hold the ", Color(255, 255, 255), "alt-key", Color(151, 211, 255), " for symmetric resizing.")
 		chat.AddText("[TTT2][INFO] Press [RMB] (right mouse-button) -> 'close' to exit the HUD editor!")
 
 		hook.Add("Think", "TTT2EditHUD", EditLocalHUD)
