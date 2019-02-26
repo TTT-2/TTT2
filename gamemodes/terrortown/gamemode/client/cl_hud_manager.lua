@@ -130,15 +130,15 @@ local function EditLocalHUD()
 					local size = elem:GetSize() -- curent size
 					local pos = elem:GetPos() -- current pos
 
-					local multi_w = (trans_data.x_p and 1 or 0) + (trans_data.x_n and 1 or 0)
-					local multi_h = (trans_data.y_p and 1 or 0) + (trans_data.y_n and 1 or 0)
+					local multi_w = (trans_data.x_p and 1 or 0) + (trans_data.x_m and 1 or 0)
+					local multi_h = (trans_data.y_p and 1 or 0) + (trans_data.y_m and 1 or 0)
 					local new_w = size.w + (x - client.oldMX) * trans_data.direction_x * multi_w
 					local new_h = size.h + (y - client.oldMY) * trans_data.direction_y * multi_h
 					
 					chat.AddText("width multi: ", tostring(multi_w), ", new width: ", tostring(new_w))
 
 					elem:SetSize(new_w, new_h)
-					elem:SetBasePos(trans_data.x_n and pos.x + trans_data.direction_x * (x - client.oldMX) or pos.x, trans_data.y_n and pos.y + trans_data.direction_y * (y - client.oldMY) or pos.y)
+					elem:SetBasePos(trans_data.x_m and pos.x + trans_data.direction_x * (x - client.oldMX) or pos.x, trans_data.y_m and pos.y + trans_data.direction_y * (y - client.oldMY) or pos.y)
 				end
 
 				elem:PerformLayout()
