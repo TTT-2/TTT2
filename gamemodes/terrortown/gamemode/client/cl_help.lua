@@ -35,6 +35,8 @@ function HELPSCRN:Show()
 		client.settingsFrame:Close()
 	end
 
+	client.settingsFrameForceClose = nil
+
 	local margin = 15
 	local minWidth, minHeight = 630, 470
 	local w, h = math.max(minWidth, math.Round(ScrW() * 0.6)), math.max(minHeight, math.Round(ScrH() * 0.8))
