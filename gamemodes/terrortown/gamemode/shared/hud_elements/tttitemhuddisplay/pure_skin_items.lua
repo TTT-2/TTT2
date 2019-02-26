@@ -11,6 +11,7 @@ if CLIENT then
 	surface.CreateFont("ItemInfoFont", {font = "Trebuchet24", size = 14, weight = 700})
 
 	local size = 64
+	local w, h = 64
 
 	function HUDELEMENT:Initialize()
 		self:RecalculateBasePos()
@@ -18,10 +19,12 @@ if CLIENT then
 
 		BaseClass.Initialize(self)
 
-		self.defaults.minWidth = size
-		self.defaults.minHeight = size
-		self.defaults.resizeableX = false
-		self.defaults.resizeableY = false
+		self.defaults.minWidth = 32
+		self.defaults.minHeight = 32
+		
+		self:SetSize(size, -size)
+		--self.defaults.resizeableX = false
+		--self.defaults.resizeableY = false
 	end
 
 	function HUDELEMENT:RecalculateBasePos()
@@ -30,9 +33,13 @@ if CLIENT then
 	
 	function HUDELEMENT:PerformLayout()
 		local basepos = self:GetBasePos()
-
+		local currSize = self:GetSize()
+		w, h = currSize.w, currSize.h
+		
+		size = math.max(w, h)
+		
 		self:SetPos(basepos.x, basepos.y)
-		self:SetSize(size, -size)
+		self:SetSize(w, -h)
 
 		BaseClass.PerformLayout(self)
 	end
@@ -49,7 +56,7 @@ if CLIENT then
 		local itms = client:GetEquipmentItems()
 		local pos = self:GetPos()
 		local curY = pos.y
-
+		
 		-- at first, calculate old items because they don't take care of the new ones
 		for _, itemCls in ipairs(itms) do
 			local item = items.GetStored(itemCls)

@@ -18,8 +18,10 @@ if CLIENT then
 		self:SetSize(w, h)
 
 		BaseClass.Initialize(self)
-
-		self.defaults.resizeableY = false
+		
+		self.defaults.minHeight = bh + 2 * pad
+		self.defaults.minWidth = bh + 2 * pad
+		--self.defaults.resizeableY = false
 	end
 
 	function HUDELEMENT:RecalculateBasePos()
@@ -45,8 +47,8 @@ if CLIENT then
 
 		-- draw bg and shadow
 		self:DrawBg(x, y, w, h, self.basecolor)
-
-		self:DrawBar(x + pad, y + pad, w - pad * 2, bh, Color(36, 154, 198), HUDManager.IsEditing and 1 or (client.drowningProgress or 1))
+	
+		self:DrawBar(x + pad, y + pad, w - pad * 2, h - pad * 2, Color(36, 154, 198), HUDManager.IsEditing and 1 or (client.drowningProgress or 1), 1)
 
 		-- draw lines around the element
 		self:DrawLines(x, y, w, h, self.basecolor.a)

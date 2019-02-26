@@ -18,21 +18,25 @@ if CLIENT then
 		DrawHUDElementLines(x, y, w, h, a)
 	end
 
-	-- x, y, width, height, color, progress, text
-	function HUDELEMENT:DrawBar(x, y, w, h, c, p, t)
+	-- x, y, width, height, color, progress, scale, text
+	function HUDELEMENT:DrawBar(x, y, w, h, c, p, s, t)
+		s = s or 1
+	
 		surface.SetDrawColor(clr(c))
-		surface.DrawRect(x, y, w, h)
+		surface.DrawRect(x, y, w, h * s)
 
 		local w2 = math.Round(w * (p or 1))
 
 		surface.SetDrawColor(0, 0, 0, 165)
-		surface.DrawRect(x + w2, y, w - w2, h)
+		surface.DrawRect(x + w2, y, w - w2, h * s)
 
 		-- draw lines around this bar
-		self:DrawLines(x, y, w, h, c.a)
+		self:DrawLines(x, y, w, h * s, c.a)
 
 		-- draw text
-		self:AdvancedText(t or "", "PureSkinBar", x + 14, y + 1, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT, true, 1.0)
+		if t then
+			self:AdvancedText(t or "", "PureSkinBar", x + 14, y + 1, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT, true, s)
+		end
 	end
 
 	function HUDELEMENT:ShadowedText(text, font, x, y, color, xalign, yalign)

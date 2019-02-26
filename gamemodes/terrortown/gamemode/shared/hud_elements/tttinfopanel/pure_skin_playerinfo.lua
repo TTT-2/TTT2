@@ -21,7 +21,7 @@ if CLIENT then
 
 		BaseClass.Initialize(self)
 
-		self.defaults.resizeableY = false
+		--self.defaults.resizeableY = false
 	end
 
 	function HUDELEMENT:RecalculateBasePos()
@@ -75,7 +75,11 @@ if CLIENT then
 		local L = GetLang()
 
 		local x2, y2, w2, h2 = x, y, w, h
-
+		
+		local height_scale = (h / 146.0)
+		
+		lpw = 44 * height_scale
+		
 		if not calive then
 			y2 = y2 + h2 - lpw
 			h2 = lpw
@@ -150,7 +154,7 @@ if CLIENT then
 				end
 			end
 
-			role_scale_multiplier = math.Clamp(role_scale_multiplier, 0.55, 0.85)
+			role_scale_multiplier = math.Clamp(role_scale_multiplier, 0.55, 0.85) * height_scale
 
 			self:AdvancedText(string.upper(text), "PureSkinRole", nx, ry, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, true, Vector(role_scale_multiplier * 0.9, role_scale_multiplier, role_scale_multiplier))
 		end
@@ -198,10 +202,10 @@ if CLIENT then
 			-- health bar
 			local health = math.max(0, client:Health())
 
-			self:DrawBar(nx, ty, bw, bh, Color(234, 41, 41), health / client:GetMaxHealth(), "HEALTH: " .. health)
+			self:DrawBar(nx, ty, bw, bh, Color(234, 41, 41), health / client:GetMaxHealth(), height_scale, "HEALTH: " .. health)
 
 			-- ammo bar
-			ty = ty + bh + spc
+			ty = ty + bh * height_scale + spc
 
 			-- Draw ammo
 			if client:GetActiveWeapon().Primary then
@@ -210,15 +214,15 @@ if CLIENT then
 				if ammo_clip ~= -1 then
 					local text = string.format("%i + %02i", ammo_clip, ammo_inv)
 
-					self:DrawBar(nx, ty, bw, bh, Color(238, 151, 0), ammo_clip / ammo_max, text)
+					self:DrawBar(nx, ty, bw, bh, Color(238, 151, 0), ammo_clip / ammo_max, height_scale, text)
 				end
 			end
 
 			-- sprint bar
-			ty = ty + bh + spc
+			ty = ty + bh * height_scale + spc
 
 			if GetGlobalBool("ttt2_sprint_enabled", true) then
-				self:DrawBar(nx, ty, bw, sbh, Color(36, 154, 198), client.sprintProgress)
+				self:DrawBar(nx, ty, bw, sbh, Color(36, 154, 198), client.sprintProgress, height_scale, "")
 			end
 
 			-- coin info

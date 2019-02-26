@@ -92,6 +92,7 @@ if CLIENT then
 		end
 		
 		local scale = h / 72.0
+		
 		self:AdvancedText(text, font, rx, ry, color, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, true, scale)
 
 		if is_haste then
