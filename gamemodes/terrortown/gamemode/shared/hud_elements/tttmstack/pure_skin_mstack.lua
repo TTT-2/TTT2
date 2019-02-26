@@ -178,6 +178,10 @@ if CLIENT then
 				local tx = top_x + (item.subWidth or 0) + leftPad
 				local ty = y + pad
 
+				if #item.title > 0 then
+					ty = ty + top_margin
+				end
+
 				-- draw the title text
 				local title_spec = item.title_spec
 				title_spec.color = item.col
