@@ -67,19 +67,20 @@ function HELPSCRN:Show()
 	local padding = (dtabs:GetPadding()) * 2
 
 	-- TTT Settings
+	local pad = 10
 
-	local dsettings = vgui.Create("DPanelList", dtabs)
+	local dsettings = vgui.Create("DIconLayout", dtabs)
 	dsettings:StretchToParent(0, 0, padding, 0)
 	dsettings:EnableVerticalScrollbar(true)
 	dsettings:SetPadding(10)
 	dsettings:SetSpacing(10)
+	dsettings:SetSpaceX(pad)
+	dsettings:SetSpaceY(pad)
 
 	dtabs:AddSheet(GetTranslation("help_settings"), dsettings, "icon16/wrench.png", false, false, GetTranslation("help_settings_tip"))
 
 	local btnWidth = 120
 	local btnHeight = btnWidth * 0.75
-	local pad = 40
-	local cols = ((w - 50) / (btnWidth + pad))
 
 	local tbl = {
 		changes = {
@@ -115,24 +116,12 @@ function HELPSCRN:Show()
 		}
 	}
 
-	local row = 1
-	local i = 1
-
 	for name, tbl in pairs(tbl) do
 		local title = isfunction(tbl.getTitle) and tbl.getTitle() or string.upper(name)
 
 		local settingsButton = vgui.Create("DSettingsButton", dsettings)
 		settingsButton:SetSize(btnWidth, btnHeight)
 		settingsButton:SetText(title)
-		--[[
-		local pos_x, pos_y = dsettings:GetPos()
-		local pos = {
-			x = pos_x + i * (btnWidth + pad),
-			y = pos_y + row * (btnHeight + pad)
-		}
-
-		settingsButton:SetPos(pos)
-		]]--
 		settingsButton:Dock(LEFT)
 
 		settingsButton.DoClick = function(slf)
@@ -159,7 +148,8 @@ function HELPSCRN:Show()
 				end
 			end
 
-			local pnl = vgui.Create("DPanel", frame)
+			local pnl = vgui.Create("DScrollPanel", frame)
+			pnl:SetVerticalScrollbarEnabled(true)
 			pnl:Dock(FILL)
 
 			if isfunction(tbl.getContent) then
@@ -171,13 +161,6 @@ function HELPSCRN:Show()
 			frame:SetKeyboardInputEnabled(false)
 
 			client.settingsFrame = frame
-		end
-
-		if i % cols == 0 then
-			i = 1
-			row = row + 1
-		else
-			i = i + 1
 		end
 	end
 
