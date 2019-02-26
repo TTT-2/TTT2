@@ -97,6 +97,10 @@ local function EditLocalHUD()
 
 		if elem and (client.oldMX and client.oldMX ~= x or client.oldMY and client.oldMY ~= y) then
 			-- set to true to get new click zone
+			if mouse_clicked then
+				chat.AddText("[function prev] mouse clicked is: ", tostring(mouse_clicked))
+			end
+			
 			elem:SetMouseClicked(mouse_clicked, x, y)
 			
 			if mouse_clicked then
