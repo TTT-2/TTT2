@@ -30,7 +30,7 @@ if CLIENT then
 	local movespeed = 2
 
 	local margin = 6
-	local title_bottom_margin = 8
+	local title_bottom_margin = 15
 	local msg_width = 400
 	local text_width = msg_width - margin * 3
 	local pad = 7
@@ -49,7 +49,7 @@ if CLIENT then
 
 		BaseClass.Initialize(self)
 
-		self.defaults.minWidth = 200
+		self.defaults.minWidth = 250
 		self.defaults.resizeableX = true
 		self.defaults.resizeableY = false
 
@@ -74,6 +74,7 @@ if CLIENT then
 		top_y = self.pos.y
 
 		msg_width = self.size.w
+		text_width = msg_width - margin * 3
 
 		-- invalidate previous item size calculations
 		for k, v in pairs(MSTACK.msgs) do
@@ -92,8 +93,6 @@ if CLIENT then
 		item.text_spec.font_height = draw.GetFontHeight(item.text_spec.font)
 		item.text = MSTACK:WrapText(item.text, text_width - (item.subWidth or 0), item.text_spec.font)
 
-
-
 		item.title_spec = table.Copy(base_text_display_options)
 		item.title_spec.font = imagedmsgfont
 		item.title_spec.font_height = draw.GetFontHeight(item.title_spec.font)
@@ -107,10 +106,10 @@ if CLIENT then
 		-- Height depends on number of lines, which is equal to number of table
 		-- elements of the wrapped item.text
 
-		local item_height = #item.text * (item.text_spec.font_height + margin) + margin
+		local item_height = #item.text * (item.text_spec.font_height + margin) - margin + pad * 2
 
 		if #item.title > 0 then
-			item_height = item_height + title_bottom_margin + #item.title * (item.title_spec.font_height + margin)
+			item_height = item_height + title_bottom_margin + #item.title * (item.title_spec.font_height + margin) - margin
 		end
 
 		if item.image then
@@ -169,7 +168,7 @@ if CLIENT then
 				-- Text
 				item.col.a = math.Clamp(alpha, 0, item.col.a_max)
 				local tx = top_x + (item.subWidth or 0) + leftPad
-				local ty = y + margin
+				local ty = y + pad
 
 				-- draw the title text
 				local title_spec = item.title_spec
@@ -177,10 +176,11 @@ if CLIENT then
 
 				for i = 1, #item.title do
 					title_spec.text = item.title[i]
-					ty = ty + (i - 1) * (title_spec.font_height + margin)
 					title_spec.pos = {tx, ty}
 
 					draw.TextShadow(title_spec, 1, alpha)
+
+					ty = ty + title_spec.font_height + margin
 				end
 
 				-- draw the normal text
@@ -188,15 +188,16 @@ if CLIENT then
 				text_spec.color = item.col
 
 				if #item.title > 0 then
-					ty = ty + title_bottom_margin
+					ty = ty + title_bottom_margin - margin -- remove old margin used for new line set in for loop above
 				end
 
 				for i = 1, #item.text do
 					text_spec.text = item.text[i]
-					ty = ty + (i - 1) * (text_spec.font_height + margin)
 					text_spec.pos = {tx, ty}
 
 					draw.TextShadow(text_spec, 1, alpha)
+
+					ty = ty + text_spec.font_height + margin
 				end
 
 				-- image
