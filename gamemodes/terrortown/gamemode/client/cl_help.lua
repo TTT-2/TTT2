@@ -58,9 +58,11 @@ function HELPSCRN:Show()
 		dframe:Close()
 	end
 
+	local w2, h2 = w - margin * 2, h - margin * 3 - bh
+
 	local dtabs = vgui.Create("DPropertySheet", dframe)
 	dtabs:SetPos(margin, margin * 2)
-	dtabs:SetSize(w - margin * 2, h - margin * 3 - bh)
+	dtabs:SetSize(w2, h2)
 
 	-- now fill with content
 
@@ -69,14 +71,18 @@ function HELPSCRN:Show()
 	-- TTT Settings
 	local pad = 10
 
-	local dsettings = vgui.Create("DIconLayout", dtabs)
-	dsettings:StretchToParent(0, 0, padding, 0)
+	local scrollPanel = vgui.Create("DScrollPanel", dtabs)
+	scrollPanel:StretchToParent(0, 0, padding, 0)
+
+	dtabs:AddSheet(GetTranslation("help_settings"), scrollPanel, "icon16/wrench.png", false, false, GetTranslation("help_settings_tip"))
+
+	local dsettings = vgui.Create("DIconLayout", scrollPanel)
+	dsettings:Dock(FILL)
 	dsettings:SetSpaceX(pad)
 	dsettings:SetSpaceY(pad)
 
-	dtabs:AddSheet(GetTranslation("help_settings"), dsettings, "icon16/wrench.png", false, false, GetTranslation("help_settings_tip"))
-
-	local btnWidth = 260
+	local cols = 4
+	local btnWidth = math.Round(w2 / cols)
 	local btnHeight = btnWidth * 0.75
 
 	local tbl = {
