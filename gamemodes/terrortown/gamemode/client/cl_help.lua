@@ -146,7 +146,7 @@ function HELPSCRN:Show()
 			pnl:Dock(FILL)
 
 			if isfunction(tbl.getContent) then
-				tbl.getContent(self, pnl)
+				tbl.getContent(pnl)
 			end
 		end
 
