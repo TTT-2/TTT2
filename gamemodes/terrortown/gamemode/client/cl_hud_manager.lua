@@ -117,9 +117,9 @@ local function EditLocalHUD()
 					local pos = elem:GetPos() -- current pos
 
 					local multi_w = (trans_data.x_p and 1 or 0) + (trans_data.x_n and 1 or 0)
-					local multi_w = (trans_data.y_p and 1 or 0) + (trans_data.y_n and 1 or 0)
+					local multi_h = (trans_data.y_p and 1 or 0) + (trans_data.y_n and 1 or 0)
 					local new_w = size.w + (client.oldMX - x) * trans_data.direction_x * multi_w
-					local new_h = size.h + (client.oldMY - y) * trans_data.direction_y * multi_y
+					local new_h = size.h + (client.oldMY - y) * trans_data.direction_y * multi_h
 
 					elem:SetSize(new_w, new_h)
 					elem:SetBasePos(trans_data.x_n and pos.x + trans_data.direction_x * (client.oldMX - x) or pos.x, trans_data.y_n and pos.y + trans_data.direction_y * (client.oldMY - y) or pos.y)
