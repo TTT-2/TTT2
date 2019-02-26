@@ -99,6 +99,17 @@ local function EditLocalHUD()
 
 		if elem and (client.oldMX and client.oldMX ~= x or client.oldMY and client.oldMY ~= y) then
 			local size = elem:GetSize()
+			
+			local shift_pressed = input.IsKeyDown(KEY_LSHIFT) or input.IsKeyDown(KEY_RSHIFT)
+			local alt_pressed = input.IsKeyDown(KEY_LALT) or input.IsKeyDown(KEY_LALT)
+			trans_data = elem:GetClickedArea(x, y, shift_pressed, alt_pressed)
+			
+			if trans_data.move then
+				chat.AddText("move element")
+			else
+				chat.AddText(tostring(trans_data.x_p), tostring(trans_data.x_n), tostring(trans_data.y_p), tostring(trans_data.y_n))
+			end
+			
 
 			if mode == 0 then
 				local nx = x - difX

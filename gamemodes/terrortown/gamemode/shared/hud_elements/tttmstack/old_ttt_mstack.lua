@@ -35,6 +35,8 @@ if CLIENT then
 	local text_width = msg_width - margin * 3
 	local pad = 7
 	local msgfont = "DefaultBold"
+	local text_color = COLOR_WHITE
+	local bg_color = Color(0, 0, 0, 200)
 	local imageSize = 64
 	local imagePad = pad
 	local imageMinHeight = imageSize + 2 * pad
@@ -72,6 +74,12 @@ if CLIENT then
 		if item.image then
 			item.subWidth = imageSubWidth
 		end
+
+		item.bg = item.bg and table.Copy(item.bg) or table.Copy(bg_color)
+		item.bg.a_max = item.bg.a
+
+		item.col = item.col and table.Copy(item.col) or table.Copy(text_color)
+		item.col.a_max = item.col.a
 
 		item.text = MSTACK:WrapText(item.text, text_width - (item.subWidth or 0), msgfont)
 

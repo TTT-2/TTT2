@@ -307,7 +307,10 @@ function HUDELEMENT:GetClickedArea(x, y, shift_pressed, alt_pressed)
 		x_p = x_p or (alt_pressed and x_m) or (shift_pressed and y_p) or false,
 		x_m = x_m or (alt_pressed and x_p) or (shift_pressed and y_m) or false,
 		y_p = y_p or (alt_pressed and y_m) or (shift_pressed and x_p) or false,
-		y_m = y_m or (alt_pressed and y_p) or (shift_pressed and x_m) or false
+		y_m = y_m or (alt_pressed and y_p) or (shift_pressed and x_m) or false,
+		direction_x = x_p and 1 or -1,
+		direction_y = y_p and 1 or -1,
+		move = row[2] and col[2]
 	}
 
 	return ret_transform_axis
