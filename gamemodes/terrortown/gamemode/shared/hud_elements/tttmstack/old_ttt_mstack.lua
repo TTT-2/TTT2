@@ -84,12 +84,13 @@ if CLIENT then
 		-- Height depends on number of lines, which is equal to number of table
 		-- elements of the wrapped item.text
 		local item_height = #item.text * text_height + margin * (1 + #item.text)
-		if item.image then
-			item_height = math.max(item_height, imageMinHeight)
-		end
 
 		if #item.title > 0 then
 			item_height = item_height + title_margin + #item.title * text_height + margin * (1 + #item.title)
+		end
+
+		if item.image then
+			item_height = math.max(item_height, imageMinHeight)
 		end
 
 		item.move_y = -item_height

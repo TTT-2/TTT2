@@ -50,7 +50,7 @@ if CLIENT then
 
 		BaseClass.Initialize(self)
 
-		self.defaults.resizeableX = false
+		self.defaults.resizeableX = true
 		self.defaults.resizeableY = false
 
 		base_spec = {
@@ -65,6 +65,7 @@ if CLIENT then
 
 		top_y = margin
 		top_x = ScrW() - margin - width
+
 		self:SetBasePos(top_x, top_y)
 	end
 
@@ -72,7 +73,14 @@ if CLIENT then
 		top_x = self.pos.x
 		top_y = self.pos.y
 
+		msg_width = self.size.w
+
 		text_height = draw.GetFontHeight(msgfont)
+
+		-- invalidate previous item size calculations
+		for k, v in pairs(MSTACK.msgs) do
+			v.ready = false
+		end
 
 		BaseClass.PerformLayout(self)
 	end
@@ -92,13 +100,14 @@ if CLIENT then
 
 		-- Height depends on number of lines, which is equal to number of table
 		-- elements of the wrapped item.text
-		local item_height = #item.text * text_height + margin * (1 + #item.text)
-		if item.image then
-			item_height = math.max(item_height, imageMinHeight)
-		end
+		local item_height = #item.text * (text_height + margin) + margin
 
 		if #item.title > 0 then
-			item_height = item_height + title_margin + #item.title * text_height + margin * (1 + #item.title)
+			item_height = item_height + title_margin + #item.title * (text_height + margin)
+		end
+
+		if item.image then
+			item_height = math.max(item_height, imageMinHeight)
 		end
 
 		item.move_y = -item_height
@@ -145,12 +154,10 @@ if CLIENT then
 					alpha = math.Clamp(delta * (255 / fadeout), 0, 255)
 				end
 
-				local height = item.height
-
 				-- Background box
 				item.bg.a = math.Clamp(alpha, 0, item.bg.a_max)
 
-				self:DrawBg(top_x, y, msg_width + leftPad, height, item.bg)
+				self:DrawBg(top_x, y, msg_width + leftPad, item.height, item.bg)
 
 				-- Text
 				item.col.a = math.Clamp(alpha, 0, item.col.a_max)
@@ -191,13 +198,13 @@ if CLIENT then
 					surface.DrawTexturedRect(top_x + imagePad, y + imagePad, imageSize, imageSize)
 				end
 
-				self:DrawLines(top_x, y, msg_width + leftPad, height, item.bg.a)
+				self:DrawLines(top_x, y, msg_width + leftPad, item.height, item.bg.a)
 
 				if alpha == 0 then
 					MSTACK.msgs[k] = nil
 				end
 
-				running_y = y + height
+				running_y = y + item.height
 			end
 		end
 	end
