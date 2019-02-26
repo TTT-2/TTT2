@@ -347,7 +347,7 @@ function HUDELEMENT:DrawSize()
 
 	surface.SetDrawColor(255, 0, 0, 255)
 	surface.DrawLine(x, y, x + w, y) -- top
-	surface.DrawLine(x + 1, y + 1, x + w - 1, y - 1) -- top
+	surface.DrawLine(x + 1, y + 1, x + w - 1, y + 1) -- top
 
 	surface.DrawLine(x + w, y, x + w, y + h) -- right
 	surface.DrawLine(x + w - 1, y + 1, x + w - 1, y + h - 1) -- right
