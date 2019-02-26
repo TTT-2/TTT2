@@ -83,7 +83,7 @@ local function EditLocalHUD()
 
 		if elem and (client.oldMX and client.oldMX ~= x or client.oldMY and client.oldMY ~= y) then
 			-- set to true to get new click zone
-			elem:SetMouseClicked(input.WasMousePressed, x, y)
+			elem:SetMouseClicked(input.WasMousePressed(), x, y)
 		
 			local size = elem:GetSize()
 
