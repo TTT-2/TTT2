@@ -83,21 +83,21 @@ local function EditLocalHUD()
 
 		if elem and (client.oldMX and client.oldMX ~= x or client.oldMY and client.oldMY ~= y) then
 			local size = elem:GetSize()
-			
+
 			local shift_pressed = input.IsKeyDown(KEY_LSHIFT) or input.IsKeyDown(KEY_RSHIFT)
 			local alt_pressed = input.IsKeyDown(KEY_LALT) or input.IsKeyDown(KEY_LALT)
 			trans_data = elem:GetClickedArea(x, y, alt_pressed)
-			
+
 			if trans_data.move then
 				chat.AddText("move element")
 			else
 				chat.AddText(tostring(trans_data.x_p), ", ", tostring(trans_data.x_m), ", ", tostring(trans_data.y_p), ", ", tostring(trans_data.y_m), ", ", tostring(trans_data.direction_x), ", ", tostring(trans_data.direction_y))
 			end
-			
+
 			if trans_data.move then -- move mode
 				local nx = x - difX
 				local ny = y - difY
-			
+
 				if nx < 0 then
 					nx = 0
 				elseif nx + size.w > ScrW() then
@@ -114,16 +114,16 @@ local function EditLocalHUD()
 			else -- resize mode
 				local size = elem:GetSize() -- curent size
 				local pos = elem:GetPos() -- current pos
-				
+
 				local multi_w = (trans_data.x_p and 1 or 0) + (trans_data.x_n and 1 or 0)
 				local multi_w = (trans_data.y_p and 1 or 0) + (trans_data.y_n and 1 or 0)
 				local new_w = size.w + (client.oldMX - x) * trans_data.direction_x * multi_w
 				local new_h = size.h + (client.oldMY - y) * trans_data.direction_y * multi_y
-				
+
 				elem:SetSize(new_w, new_h)
 				elem:SetBasePos(trans_data.x_n and pos.x + trans_data.direction_x * (client.oldMX - x) or pos.x, trans_data.y_n and pos.y + trans_data.direction_y * (client.oldMY - y) or pos.y)
 			end
-			
+
 			elem:PerformLayout()
 		end
 	else
@@ -150,6 +150,8 @@ local function EditLocalHUD()
 end
 
 function HUDManager.EditHUD(bool, hud)
+	HUDManager.IsEditing = bool
+
 	local client = LocalPlayer()
 
 	hud = hud or huds.GetStored(HUDManager.GetHUD())
@@ -187,39 +189,26 @@ function HUDManager.EditHUD(bool, hud)
 
 		SQL.Save("ttt2_huds", hud.id, hud, hud:GetSavingKeys())
 	end
-
-	HUDManager.IsEditing = bool
 end
 
 function HUDManager.ShowHUDSwitcher(bool)
 	local client = LocalPlayer()
 
-	local inSettings = false
-
 	if IsValid(client.hudswitcher) then
 		client.hudswitcher.forceClosing = true
 
-		if client.settingsFrame and client.settingsFrame == client.hudswitcher then
-			inSettings = true
-		end
-
 		client.hudswitcher:Remove()
+	end
+
+	if not bool and not client.settingsFrameForceClose and not HUDManager.IsEditing then
+		HELPSCRN:Show()
 	end
 
 	if bool then
 		client.hudswitcher = vgui.Create("HUDSwitcher")
 
-		if inSettings then
-			local oldClose = client.hudswitcher.OnClose
-			client.hudswitcher.OnClose = function(slf)
-				if isfunction(oldClose) then
-					oldClose(slf)
-				end
-
-				if not client.settingsFrameForceClose then
-					HELPSCRN:Show()
-				end
-			end
+		if client.hudswitcherSettingsF1 then
+			client.settingsFrame = client.hudswitcher
 		end
 
 		client.hudswitcher:MakePopup()

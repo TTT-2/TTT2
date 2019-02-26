@@ -27,12 +27,15 @@ function HELPSCRN:Show()
 	end
 
 	local client = LocalPlayer()
+	client.hudswitcherSettingsF1 = nil
 
 	if client.settingsFrame and IsValid(client.settingsFrame) then
 		client.settingsFrameForceClose = true
 
 		client.settingsFrame:Close()
 	end
+
+	client.settingsFrameForceClose = nil
 
 	local margin = 15
 	local minWidth, minHeight = 630, 470
@@ -115,17 +118,7 @@ function HELPSCRN:Show()
 
 				if not hudswitcher then return end
 
-				local oldClose = hudswitcher.OnClose
-				hudswitcher.OnClose = function(slf)
-					if isfunction(oldClose) then
-						oldClose(slf)
-					end
-
-					if not client.settingsFrameForceClose then
-						self:Show()
-					end
-				end
-
+				client.hudswitcherSettingsF1 = true
 				client.settingsFrame = hudswitcher
 			end,
 			getTitle = function()
@@ -149,8 +142,10 @@ function HELPSCRN:Show()
 		}
 	}
 
+	hook.Run("TTT2ModifySettingsList", tbl)
+
 	for name, tbl in pairs(tbl) do
-		local title = isfunction(tbl.getTitle) and tbl.getTitle() or string.upper(name)
+		local title = string.upper(isfunction(tbl.getTitle) and tbl.getTitle() or name)
 
 		local settingsButton = dsettings:Add("DSettingsButton")
 		settingsButton:SetSize(btnWidth, btnHeight)

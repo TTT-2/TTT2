@@ -16,7 +16,7 @@ if CLIENT then
 		yalign = TEXT_ALIGN_TOP
 	}
 
-	local leftPad = 15
+	local leftPad = 14
 	local text_height = 0
 
 	local top_y = 0
@@ -29,13 +29,14 @@ if CLIENT then
 	local fadeout = 0.6
 	local movespeed = 2
 
-	local margin = 6
+	local line_margin = 6
+	local top_margin = 10
 	local title_bottom_margin = 10
 	local msg_width = 400
-	local text_width = msg_width - margin * 3
-	local pad = 7
+	local text_width = msg_width - line_margin * 3
+	local pad = 6
 	local msgfont = "PureSkinMSTACKMsg"
-	local imagedmsgfont = "PureSkinMSTACKTitle"
+	local imagedmsgfont = "PureSkinMSTACKMsg"
 	local text_color = COLOR_WHITE
 	local imageSize = 64
 	local imagePad = pad
@@ -64,8 +65,8 @@ if CLIENT then
 	function HUDELEMENT:RecalculateBasePos()
 		local width = msg_width + leftPad
 
-		top_y = margin
-		top_x = ScrW() - margin - width
+		top_y = line_margin
+		top_x = ScrW() - line_margin - width
 
 		self:SetBasePos(top_x, top_y)
 	end
@@ -75,7 +76,7 @@ if CLIENT then
 		top_y = self.pos.y
 
 		msg_width = self.size.w
-		text_width = msg_width - margin * 3 - leftPad
+		text_width = msg_width - line_margin * 3 - leftPad
 
 		-- invalidate previous item size calculations
 		for k, v in pairs(MSTACK.msgs) do
@@ -113,10 +114,10 @@ if CLIENT then
 		-- Height depends on number of lines, which is equal to number of table
 		-- elements of the wrapped item.text
 
-		local item_height = #item.text * (item.text_spec.font_height + margin) - margin + pad * 2
+		local item_height = #item.text * (item.text_spec.font_height + line_margin) - line_margin + pad * 2
 
 		if #item.title > 0 then
-			item_height = item_height + title_bottom_margin + #item.title * (item.title_spec.font_height + margin) - margin
+			item_height = item_height + top_margin + title_bottom_margin + #item.title * (item.title_spec.font_height + line_margin) - line_margin
 		end
 
 		if item.image then
@@ -146,7 +147,7 @@ if CLIENT then
 				end
 
 				-- Apply move effects to y
-				local y = running_y + margin + item.move_y
+				local y = running_y + line_margin + item.move_y
 
 				item.move_y = (item.move_y < 0) and item.move_y + movespeed or 0
 
@@ -187,7 +188,7 @@ if CLIENT then
 
 					draw.TextShadow(title_spec, 1, alpha)
 
-					ty = ty + title_spec.font_height + margin
+					ty = ty + title_spec.font_height + line_margin
 				end
 
 				-- draw the normal text
@@ -195,7 +196,7 @@ if CLIENT then
 				text_spec.color = item.col
 
 				if #item.title > 0 then
-					ty = ty + title_bottom_margin - margin -- remove old margin used for new line set in for loop above
+					ty = ty + title_bottom_margin - line_margin -- remove old margin used for new line set in for loop above
 				end
 
 				for i = 1, #item.text do
@@ -204,7 +205,7 @@ if CLIENT then
 
 					draw.TextShadow(text_spec, 1, alpha)
 
-					ty = ty + text_spec.font_height + margin
+					ty = ty + text_spec.font_height + line_margin
 				end
 
 				-- image
