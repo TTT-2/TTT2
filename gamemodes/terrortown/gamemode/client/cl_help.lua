@@ -27,6 +27,13 @@ function HELPSCRN:Show()
 	end
 
 	local client = LocalPlayer()
+
+	if client.settingsFrame and IsValid(client.settingsFrame) then
+		client.settingsFrameForceClose = true
+
+		client.settingsFrame:Close()
+	end
+
 	local margin = 15
 	local minWidth, minHeight = 630, 470
 	local w, h = math.max(minWidth, math.Round(ScrW() * 0.6)), math.max(minHeight, math.Round(ScrH() * 0.8))
@@ -112,9 +119,11 @@ function HELPSCRN:Show()
 	local i = 1
 
 	for name, tbl in pairs(tbl) do
+		local title = isfunction(tbl.getTitle) and tbl.getTitle() or string.upper(name)
+
 		local settingsButton = vgui.Create("DSettingsButton", dsettings)
 		settingsButton:SetSize(btnWidth, btnHeight)
-		settingsButton:SetText(isfunction(tbl.getTitle) and tbl.getTitle() or string.upper(name))
+		settingsButton:SetText(title)
 		--[[
 		local pos_x, pos_y = dsettings:GetPos()
 		local pos = {
@@ -137,9 +146,17 @@ function HELPSCRN:Show()
 
 			local frame = vgui.Create("DFrame")
 			frame:SetSize(minWidth, minHeight)
+			frame:Center()
+			frame:SetTitle(title)
+			frame:SetVisible(true)
+			frame:ShowCloseButton(true)
+			frame:SetMouseInputEnabled(true)
+			frame:SetDeleteOnClose(true)
 
 			frame.OnClose = function(frm)
-				self:Show()
+				if not client.settingsFrameForceClose then
+					self:Show()
+				end
 			end
 
 			local pnl = vgui.Create("DPanel", frame)
@@ -148,6 +165,12 @@ function HELPSCRN:Show()
 			if isfunction(tbl.getContent) then
 				tbl.getContent(self, pnl)
 			end
+
+			--
+			frame:MakePopup()
+			frame:SetKeyboardInputEnabled(false)
+
+			client.settingsFrame = frame
 		end
 
 		if i % cols == 0 then
@@ -226,6 +249,8 @@ function HELPSCRN:CreateInterfaceSettings(parent)
 	cb:SetTooltip(GetTranslation("set_wswitch_tip"))
 
 	cb = form:CheckBox(GetTranslation("set_cues"), "ttt_cl_soundcues")
+
+	form:Dock(FILL)
 end
 
 -- language
@@ -250,6 +275,8 @@ function HELPSCRN:CreateLanguageForm(parent)
 
 	form:Help(GetTranslation("set_lang"))
 	form:AddItem(dlang)
+
+	form:Dock(FILL)
 end
 
 function HELPSCRN:CreateCrosshairSettings(parent)
@@ -315,6 +342,8 @@ function HELPSCRN:CreateCrosshairSettings(parent)
 
 	cb = form:CheckBox(GetTranslation("set_lowsights"), "ttt_ironsights_lowered")
 	cb:SetTooltip(GetTranslation("set_lowsights_tip"))
+
+	form:Dock(FILL)
 end
 
 function HELPSCRN:CreateGameplaySettings(parent)
@@ -341,6 +370,8 @@ function HELPSCRN:CreateGameplaySettings(parent)
 	local mute = form:CheckBox(GetTranslation("set_mute"), "ttt_mute_team_check")
 	mute:SetValue(GetConVar("ttt_mute_team_check"):GetBool())
 	mute:SetTooltip(GetTranslation("set_mute_tip"))
+
+	form:Dock(FILL)
 end
 
 -- Bindings
@@ -373,6 +404,8 @@ function HELPSCRN:CreateBindings(parent)
 
 		form:AddItem(dPlabel, dPBinder)
 	end
+
+	form:Dock(FILL)
 end
 
 --- Tutorial
