@@ -73,10 +73,10 @@ if CLIENT then
 			item.subWidth = imageSubWidth
 		end
 
-		item.text = self:WrapText(item.text, text_width - (item.subWidth or 0), msgfont)
+		item.text = MSTACK:WrapText(item.text, text_width - (item.subWidth or 0), msgfont)
 
 		if item.title then
-			item.title = self:WrapText(item.title, text_width - (item.subWidth or 0), msgfont)
+			item.title = MSTACK:WrapText(item.title, text_width - (item.subWidth or 0), msgfont)
 		else
 			item.title = {}
 		end
