@@ -82,7 +82,7 @@ function HELPSCRN:Show()
 	dsettings:SetSpaceY(pad)
 
 	local cols = 4
-	local btnWidth = math.Round((w2 - pad * cols) / cols)
+	local btnWidth = math.Round((w2 - pad * (cols + 1)) / cols)
 	local btnHeight = btnWidth * 0.75
 
 	local tbl = {
