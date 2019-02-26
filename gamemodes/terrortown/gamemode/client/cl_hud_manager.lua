@@ -107,7 +107,7 @@ local function EditLocalHUD()
 			if trans_data.move then
 				chat.AddText("move element")
 			else
-				chat.AddText(tostring(trans_data.x_p), tostring(trans_data.x_n), tostring(trans_data.y_p), tostring(trans_data.y_n))
+				chat.AddText(tostring(trans_data.x_p), ", ", tostring(trans_data.x_m), ", ", tostring(trans_data.y_p), ", ", tostring(trans_data.y_m))
 			end
 			
 
