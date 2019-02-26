@@ -201,7 +201,7 @@ function HUDELEMENT:OnHovered(x, y)
 	local maxX, maxY = minX + self.size.w, minY + self.size.h
 
 	local c_pad, c_area = self.defaults.click_padding, self.defaults.click_area
-	
+
 	local row, col
 
 	-- ROWS
@@ -233,7 +233,7 @@ function HUDELEMENT:OnHovered(x, y)
 			false -- right column
 		}
 	end
-	
+
 
 	return row, col
 end
@@ -249,7 +249,7 @@ function HUDELEMENT:DrawHowered(x, y)
 
 	local row, col = self:OnHovered(x, y)
 	local x1, x2, y1, y2 = 0, 0, 0, 0
-	
+
 	-- set draw color for resizeable
 	surface.SetDrawColor(245, 30, 80, 155)
 
@@ -301,17 +301,17 @@ function HUDELEMENT:GetClickedArea(x, y, alt_pressed)
 		if not self:IsInPos(x, y) then
 			return false
 		end
-		
+
 		row, col = self:OnHovered(x, y)
 		self.edit_live_data.old_row = row
 		self.edit_live_data.old_col = col
-		
+
 		self.edit_live_data.calc_new_click_area = false
 	else
 		row = self.edit_live_data.old_row
 		col = self.edit_live_data.old_col
 	end
-	
+
 	if (row == nil or col == nil) then
 		return false
 	end
@@ -346,17 +346,17 @@ function HUDELEMENT:DrawSize()
 	local x, y, w, h = self.pos.x, self.pos.y, self.size.w, self.size.h
 
 	surface.SetDrawColor(255, 0, 0, 255)
-	surface.DrawLine(x - 1, y - 1, x + w + 1, y - 1) -- top
-	surface.DrawLine(x - 2, y - 2, x + w + 2, y - 2) -- top
+	surface.DrawLine(x, y, x + w, y) -- top
+	surface.DrawLine(x + 1, y + 1, x + w - 1, y - 1) -- top
 
-	surface.DrawLine(x + w + 1, y - 1, x + w + 1, y + h + 1) -- right
-	surface.DrawLine(x + w + 2, y - 2, x + w + 2, y + h + 2) -- right
+	surface.DrawLine(x + w, y, x + w, y + h) -- right
+	surface.DrawLine(x + w - 1, y + 1, x + w - 1, y + h - 1) -- right
 
-	surface.DrawLine(x - 1, y + h + 1, x + w + 1, y + h + 1) -- bottom
-	surface.DrawLine(x - 2, y + h + 2, x + w + 2, y + h + 2) -- bottom
+	surface.DrawLine(x, y + h, x + w, y + h) -- bottom
+	surface.DrawLine(x + 1, y + h - 1, x + w - 1, y + h - 1) -- bottom
 
-	surface.DrawLine(x - 1, y - 1, x - 1, y + h + 1) -- left
-	surface.DrawLine(x - 2, y - 2, x - 2, y + h + 2) -- left
+	surface.DrawLine(x, y, x, y + h) -- left
+	surface.DrawLine(x + 1, y + 1, x + 1, y + h - 1) -- left
 
 	draw.DrawText(self.id, "DermaDefault", x + w * 0.5, y + h * 0.5 - 7, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 end
