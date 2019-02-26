@@ -96,6 +96,8 @@ function HELPSCRN:Show()
 						self:Show()
 					end
 				end
+
+				client.settingsFrame = frm
 			end,
 			getTitle = function()
 				return "Changes"
@@ -117,6 +119,8 @@ function HELPSCRN:Show()
 						self:Show()
 					end
 				end
+
+				client.settingsFrame = hudswitcher
 			end,
 			getTitle = function()
 				return "HUD Switcher"
