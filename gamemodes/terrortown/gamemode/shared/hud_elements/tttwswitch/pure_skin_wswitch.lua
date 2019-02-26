@@ -138,14 +138,7 @@ if CLIENT then
 		local count = #weps
 		local tmp = height + self.margin
 		local basepos = self:GetBasePos()
-		local w = self:GetSize().w
-
-		-- hotfix TODO improve
-		if HUDManager.IsEditing and count < 1 then
-			count = 1
-		end
-
-		local h = count * tmp
+		local w, h = self:GetSize().w, math.max(count * tmp, self.defaults.minHeight)
 
 		self:SetPos(basepos.x, basepos.y)
 		self:SetSize(w, -h)
