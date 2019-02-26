@@ -101,6 +101,8 @@ if CLIENT then
 			item_height = item_height + title_margin + #item.title * text_height + margin * (1 + #item.title)
 		end
 
+		item.move_y = -item_height
+
 		item.ready = true
 	end
 
