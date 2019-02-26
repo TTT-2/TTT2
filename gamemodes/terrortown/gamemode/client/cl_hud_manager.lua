@@ -54,8 +54,10 @@ local function EditLocalHUD()
 	if (not client.mouse_clicked_prev and input.IsMouseDown(MOUSE_LEFT)) then
 		mouse_clicked = true
 		client.mouse_clicked_prev = true
+		chat.AddText("rising edge")
 	elseif (client.mouse_clicked_prev and not input.IsMouseDown(MOUSE_LEFT)) then
 		client.mouse_clicked_prev = false
+		chat.AddText("falling edge")
 	end
 
 	if input.IsMouseDown(MOUSE_LEFT) then
