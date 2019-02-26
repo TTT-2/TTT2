@@ -60,7 +60,8 @@ local function EditLocalHUD()
 		chat.AddText("falling edge")
 	end
 	
-	chat.AddText("mouse clicked is: ", tostring(mouse_clicked))
+	if mouse_clicked then
+		chat.AddText("[top] mouse clicked is: ", tostring(mouse_clicked))
 
 	if input.IsMouseDown(MOUSE_LEFT) then
 		if not elem then
@@ -96,6 +97,9 @@ local function EditLocalHUD()
 		if elem and (client.oldMX and client.oldMX ~= x or client.oldMY and client.oldMY ~= y) then
 			-- set to true to get new click zone
 			elem:SetMouseClicked(mouse_clicked, x, y)
+			
+			if mouse_clicked then
+				chat.AddText("[function] mouse clicked is: ", tostring(mouse_clicked))
 		
 			local size = elem:GetSize()
 
