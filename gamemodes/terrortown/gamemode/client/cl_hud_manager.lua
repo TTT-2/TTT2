@@ -212,6 +212,8 @@ function HUDManager.ShowHUDSwitcher(bool)
 		client.hudswitcher = vgui.Create("HUDSwitcher")
 		client.hudswitcher:MakePopup()
 	end
+
+	return client.hudswitcher
 end
 
 function HUDManager.GetHUD()

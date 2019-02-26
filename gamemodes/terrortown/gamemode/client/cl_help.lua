@@ -82,7 +82,20 @@ function HELPSCRN:Show()
 	local tbl = {
 		changes = {
 			onclick = function(slf)
-				ShowChanges()
+				local frm = ShowChanges()
+
+				if not frm then return end
+
+				local oldClose = frm.OnClose
+				frm.OnClose = function(slf)
+					if isfunction(oldClose) then
+						oldClose(slf)
+					end
+
+					if not client.settingsFrameForceClose then
+						self:Show()
+					end
+				end
 			end,
 			getTitle = function()
 				return "Changes"
@@ -90,7 +103,20 @@ function HELPSCRN:Show()
 		},
 		hudSwitcher = {
 			onclick = function(slf)
-				HUDManager.ShowHUDSwitcher(true)
+				local hudswitcher = HUDManager.ShowHUDSwitcher(true)
+
+				if not hudswitcher then return end
+
+				local oldClose = hudswitcher.OnClose
+				hudswitcher.OnClose = function(slf)
+					if isfunction(oldClose) then
+						oldClose(slf)
+					end
+
+					if not client.settingsFrameForceClose then
+						self:Show()
+					end
+				end
 			end,
 			getTitle = function()
 				return "HUD Switcher"

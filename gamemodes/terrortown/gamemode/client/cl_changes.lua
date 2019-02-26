@@ -323,6 +323,8 @@ function ShowChanges()
 	frame:SetKeyboardInputEnabled(false)
 
 	changesPanel = frame
+
+	return changesPanel
 end
 
 net.Receive("TTT2DevChanges", function(len)
