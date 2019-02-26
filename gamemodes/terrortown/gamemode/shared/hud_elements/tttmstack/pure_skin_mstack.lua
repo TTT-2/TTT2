@@ -85,12 +85,12 @@ if CLIENT then
 		BaseClass.PerformLayout(self)
 	end
 
-	local function PrepareItem(item)
+	local function PrepareItem(item, bg_color)
 		if item.image then
 			item.subWidth = imageSubWidth
 		end
 
-		item.bg = item.bg and table.Copy(item.bg) or table.Copy(self.basecolor)
+		item.bg = item.bg and table.Copy(item.bg) or table.Copy(bg_color)
 		item.bg.a_max = item.bg.a
 
 		item.col = item.col and table.Copy(item.col) or table.Copy(text_color)
@@ -136,7 +136,7 @@ if CLIENT then
 		for k, item in pairs(MSTACK.msgs) do
 			if item.time < CurTime() then
 				if not item.ready then
-					PrepareItem(item)
+					PrepareItem(item, self.basecolor)
 				end
 
 				if item.sounded == false then
