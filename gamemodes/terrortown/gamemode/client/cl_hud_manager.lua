@@ -49,9 +49,9 @@ local function EditLocalHUD()
 	local x, y = math.Round(gui.MouseX()), math.Round(gui.MouseY())
 	local elem = client.activeElement
 	local mode = client.hudEditMode or 0
-	
+
 	local mouse_down = input.IsMouseDown(MOUSE_LEFT)
-	
+
 	-- mouse rising/falling edge detection
 	if (not client.mouse_clicked_prev and mouse_down) then
 		client.mouse_clicked = true
@@ -59,7 +59,7 @@ local function EditLocalHUD()
 	elseif (client.mouse_clicked_prev and not mouse_down) then
 		client.mouse_clicked_prev = false
 	end
-	
+
 	if mouse_down then
 		if not elem then
 			local hud = huds.GetStored(HUDManager.GetHUD())
@@ -92,7 +92,7 @@ local function EditLocalHUD()
 		local difH = client.difH or 0
 
 		if elem and (client.oldMX and client.oldMX ~= x or client.oldMY and client.oldMY ~= y) then
-			-- set to true to get new click zone		
+			-- set to true to get new click zone
 			elem:SetMouseClicked(client.mouse_clicked, x, y)
 			client.mouse_clicked = false
 
@@ -382,9 +382,9 @@ function HUDManager.DrawHUD()
 		if elem.initialized and elem.type and hud:ShouldShow(elem.type) and hook.Call("HUDShouldDraw", GAMEMODE, elem.type) then
 			elem:Draw()
 
-			if HUDManager.IsEditing and not client.activeElement then
+			if HUDManager.IsEditing then
 				elem:DrawSize()
-				elem:DrawHowered( math.Round(gui.MouseX()), math.Round(gui.MouseY()) )
+				elem:DrawHowered(math.Round(gui.MouseX()), math.Round(gui.MouseY()))
 			end
 		end
 	end
