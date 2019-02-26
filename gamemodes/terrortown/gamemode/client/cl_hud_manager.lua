@@ -62,6 +62,7 @@ local function EditLocalHUD()
 	
 	if mouse_clicked then
 		chat.AddText("[top] mouse clicked is: ", tostring(mouse_clicked))
+	end
 
 	if input.IsMouseDown(MOUSE_LEFT) then
 		if not elem then
@@ -100,6 +101,7 @@ local function EditLocalHUD()
 			
 			if mouse_clicked then
 				chat.AddText("[function] mouse clicked is: ", tostring(mouse_clicked))
+			end
 		
 			local size = elem:GetSize()
 
