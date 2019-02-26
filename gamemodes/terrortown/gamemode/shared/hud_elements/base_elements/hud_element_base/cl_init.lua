@@ -243,6 +243,9 @@ function HUDELEMENT:DrawHowered(x, y)
 
 	local row, col = self:OnHovered(x, y)
 	local x1, x2, y1, y2 = 0, 0, 0, 0
+	
+	-- set draw color for resizeable
+	surface.SetDrawColor(245, 30, 80, 155)
 
 	if row[1] then -- resizeable in all directions
 		y1 = minY + c_pad
@@ -253,6 +256,7 @@ function HUDELEMENT:DrawHowered(x, y)
 	elseif row[2] and not self.defaults.resizeableY then -- only resizeable in X / show center area
 		y1 = minY + c_pad
 		y2 = maxY - c_pad
+		surface.SetDrawColor(20,150,245)
 	elseif row[2] then -- resizeable in all directions / show center area
 		y1 = minY + 2*c_pad + c_area
 		y2 = maxY - 2*c_pad - c_area
@@ -270,6 +274,7 @@ function HUDELEMENT:DrawHowered(x, y)
 	elseif col[2] and not self.defaults.resizeableX then -- only resizeable in Y / show center area
 		x1 = minX + c_pad
 		x2 = maxX - c_pad
+		surface.SetDrawColor(20,150,245)
 	elseif col[2] then -- resizeable in all directions / show center area
 		x1 = minX + 2*c_pad + c_area
 		x2 = maxX - 2*c_pad - c_area
@@ -278,7 +283,7 @@ function HUDELEMENT:DrawHowered(x, y)
 		x2 = maxX - c_pad
 	end
 
-	surface.SetDrawColor(245, 30, 80, 155)
+	
 	surface.DrawRect(x1, y1, x2 - x1, y2 - y1)
 end
 
