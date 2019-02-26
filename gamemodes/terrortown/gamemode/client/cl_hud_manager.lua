@@ -202,14 +202,34 @@ end
 function HUDManager.ShowHUDSwitcher(bool)
 	local client = LocalPlayer()
 
+	local inSettings = false
+
 	if IsValid(client.hudswitcher) then
 		client.hudswitcher.forceClosing = true
+
+		if client.settingsFrame and client.settingsFrame == client.hudswitcher then
+			inSettings = true
+		end
 
 		client.hudswitcher:Remove()
 	end
 
 	if bool then
 		client.hudswitcher = vgui.Create("HUDSwitcher")
+
+		if inSettings then
+			local oldClose = client.hudswitcher.OnClose
+			client.hudswitcher.OnClose = function(slf)
+				if isfunction(oldClose) then
+					oldClose(slf)
+				end
+
+				if not client.settingsFrameForceClose then
+					HELPSCRN:Show()
+				end
+			end
+		end
+
 		client.hudswitcher:MakePopup()
 	end
 
