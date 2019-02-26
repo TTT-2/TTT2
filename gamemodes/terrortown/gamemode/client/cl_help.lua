@@ -127,7 +127,7 @@ function HELPSCRN:Show()
 		settingsButton:Dock(LEFT)
 
 		settingsButton.DoClick = function(slf)
-			self:Close()
+			dframe:Close()
 
 			if isfunction(tbl.onclick) then
 				tbl.onclick(slf)
