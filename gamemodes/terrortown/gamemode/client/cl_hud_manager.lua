@@ -92,11 +92,11 @@ local function EditLocalHUD()
 			trans_data = elem:GetClickedArea(x, y, alt_pressed)
 
 			if trans_data then
-				if trans_data.move then
-					chat.AddText("move element")
-				else
-					chat.AddText(tostring(trans_data.x_p), ", ", tostring(trans_data.x_m), ", ", tostring(trans_data.y_p), ", ", tostring(trans_data.y_m), ", ", tostring(trans_data.direction_x), ", ", tostring(trans_data.direction_y))
-				end
+				--if trans_data.move then
+				--	chat.AddText("move element")
+				--else
+				--	chat.AddText(tostring(trans_data.x_p), ", ", tostring(trans_data.x_m), ", ", tostring(trans_data.y_p), ", ", tostring(trans_data.y_m), ", ", tostring(trans_data.direction_x), ", ", tostring(trans_data.direction_y))
+				--end
 
 				if trans_data.move then -- move mode
 					local nx = x - difX

@@ -340,7 +340,9 @@ end
 -- the active area should only be changed on mouse click
 function HUDELEMENT:SetMouseClicked(mouse_clicked, x, y)
 	if self:IsInPos(x, y) then
+	
 		self.edit_live_data.calc_new_click_area = mouse_clicked or self.edit_live_data.calc_new_click_area
+		chat.AddText("setMouseClicked to: ", tostring(mouse_clicked), " it's now: ", tostring(self.edit_live_data.calc_new_click_area))
 	end
 end
 
