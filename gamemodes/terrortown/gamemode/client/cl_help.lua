@@ -7,8 +7,11 @@ local ipairs = ipairs
 local IsValid = IsValid
 local ConVarExists = ConVarExists
 local CreateConVar = CreateConVar
+local surface = surface
 
 ttt_include("vgui__cl_settings_button")
+
+surface.CreateFont("SettingsButtonFont", {font = "Trebuchet24", size = 24, weight = 1000})
 
 CreateConVar("ttt_spectator_mode", "0", FCVAR_ARCHIVE)
 CreateConVar("ttt_mute_team_check", "0")
@@ -156,7 +159,7 @@ function HELPSCRN:Show()
 
 		local settingsButton = dsettings:Add("DSettingsButton")
 		settingsButton:SetSize(btnWidth, btnHeight)
-		--settingsButton:SetFont("Trebuchet24")
+		settingsButton:SetFont("SettingsButtonFont")
 		settingsButton:SetText(title)
 		settingsButton:SetTextColor(Color(0, 0, 0, 255))
 
