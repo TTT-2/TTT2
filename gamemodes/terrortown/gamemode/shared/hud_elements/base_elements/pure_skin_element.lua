@@ -32,13 +32,43 @@ if CLIENT then
 		self:DrawLines(x, y, w, h, c.a)
 
 		-- draw text
-		self:ShadowedText(t or "", "PureSkinBar", x + 14, y + 1, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT)
+		self:AdvancedText(t or "", "PureSkinBar", x + 14, y + 1, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT, true, 1.0)
 	end
 
 	function HUDELEMENT:ShadowedText(text, font, x, y, color, xalign, yalign)
 		draw.SimpleText(text, font, x + 2, y + 2, shadowColor, xalign, yalign)
 		draw.SimpleText(text, font, x + 1, y + 1, shadowColor, xalign, yalign)
 		draw.SimpleText(text, font, x, y, color, xalign, yalign)
+	end
+	
+	function HUDELEMENT:AdvancedText(text, font, x, y, color, xalign, yalign, shadow, scale)
+		local mat
+		if isvector(scale) or scale ~= 1.0 then
+			mat = Matrix()
+			mat:Translate(Vector(x, y))
+			
+			mat:Scale(isvector(scale) and scale or Vector(scale, scale, scale))
+			mat:Translate(-Vector(x, y))
+
+			render.PushFilterMag(TEXFILTER.ANISOTROPIC)
+			render.PushFilterMin(TEXFILTER.ANISOTROPIC)
+
+			cam.PushModelMatrix(mat)
+		end
+		
+		if shadow then
+			self:ShadowedText(text, font, x, y, color, xalign, yalign)
+		
+		else
+			draw.SimpleText(text, font, x, y, color, xalign, yalign)
+		end
+		
+		if isvector(scale) or scale ~= 1.0 then
+			cam.PopModelMatrix(mat)
+
+			render.PopFilterMag()
+			render.PopFilterMin()
+		end
 	end
 
 	HUDELEMENT.roundstate_string = {

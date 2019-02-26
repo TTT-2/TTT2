@@ -90,11 +90,12 @@ if CLIENT then
 			-- bog standard time when haste mode is off (or round not active)
 			text = util.SimpleTime(math.max(0, endtime), "%02i:%02i")
 		end
-
-		self:ShadowedText(text, font, rx, ry, color, TEXT_ALIGN_CENTER)
+		
+		local scale = h / 72.0
+		self:AdvancedText(text, font, rx, ry, color, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, true, scale)
 
 		if is_haste then
-			draw.SimpleText(L.hastemode, "TabLarge", tmpx, y + 14, COLOR_WHITE, TEXT_ALIGN_CENTER)
+			self:AdvancedText(L.hastemode, "TabLarge", tmpx, y + 14, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, false, scale)
 		end
 
 		-- draw lines around the element

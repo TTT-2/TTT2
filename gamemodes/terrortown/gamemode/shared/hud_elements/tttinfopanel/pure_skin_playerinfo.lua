@@ -153,22 +153,22 @@ if CLIENT then
 			role_scale_multiplier = math.Clamp(role_scale_multiplier, 0.55, 0.85)
 
 			--create scaling matrix for the text
-			local mat = Matrix()
-			mat:Translate(Vector(nx, ry))
-			mat:Scale(Vector(role_scale_multiplier * 0.9, role_scale_multiplier, role_scale_multiplier))
-			mat:Translate(-Vector(nx, ry))
+			-- local mat = Matrix()
+			-- mat:Translate(Vector(nx, ry))
+			-- mat:Scale(Vector(role_scale_multiplier * 0.9, role_scale_multiplier, role_scale_multiplier))
+			-- mat:Translate(-Vector(nx, ry))
 
-			render.PushFilterMag(TEXFILTER.ANISOTROPIC)
-			render.PushFilterMin(TEXFILTER.ANISOTROPIC)
+			-- render.PushFilterMag(TEXFILTER.ANISOTROPIC)
+			-- render.PushFilterMin(TEXFILTER.ANISOTROPIC)
 
-			cam.PushModelMatrix(mat)
+			-- cam.PushModelMatrix(mat)
 
-			self:ShadowedText(string.upper(text), "PureSkinRole", nx, ry, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			self:AdvancedText(string.upper(text), "PureSkinRole", nx, ry, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, true, Vector(role_scale_multiplier * 0.9, role_scale_multiplier, role_scale_multiplier))
 
-			cam.PopModelMatrix(mat)
+			-- cam.PopModelMatrix(mat)
 
-			render.PopFilterMag()
-			render.PopFilterMin()
+			-- render.PopFilterMag()
+			-- render.PopFilterMin()
 		end
 
 		-- player informations
@@ -194,7 +194,7 @@ if CLIENT then
 					surface.SetDrawColor(clr(secInfoTbl.color))
 					surface.DrawRect(nx2, ny, sri_width, nh)
 
-					self:ShadowedText(sri_text_caps, "PureSkinBar", nx2 + sri_width * 0.5, ry, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					self:AdvancedText(sri_text_caps, "PureSkinBar", nx2 + sri_width * 0.5, ry, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, true, 1.0)
 
 					-- draw lines around the element
 					self:DrawLines(nx2, ny, sri_width, nh, secInfoTbl.color.a)
