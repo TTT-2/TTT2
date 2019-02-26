@@ -307,6 +307,8 @@ function HUDELEMENT:GetClickedArea(x, y, alt_pressed)
 		row, col = self:OnHovered(x, y)
 		self.edit_live_data.old_row = row
 		self.edit_live_data.old_col = col
+		
+		self.edit_live_data.calc_new_click_area = false
 	else
 		row = self.edit_live_data.old_row
 		col = self.edit_live_data.old_col
