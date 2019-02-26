@@ -383,8 +383,8 @@ function HELPSCRN:CreateTutorial(parent)
 	tut:StretchToParent(0, 0, 0, 0)
 	tut:SetVerticalScrollbarEnabled(false)
 	tut:SetImage(Format(imgpath, 1))
-	tut:SetWide(1024)
-	tut:SetTall(512)
+	tut:SetWide(2048)
+	tut:SetTall(1024)
 
 	tut.current = 1
 
