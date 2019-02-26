@@ -142,8 +142,10 @@ function HELPSCRN:Show()
 		}
 	}
 
+	hook.Run("TTT2ModifySettingsList", tbl)
+
 	for name, tbl in pairs(tbl) do
-		local title = isfunction(tbl.getTitle) and tbl.getTitle() or string.upper(name)
+		local title = string.upper(isfunction(tbl.getTitle) and tbl.getTitle() or name)
 
 		local settingsButton = dsettings:Add("DSettingsButton")
 		settingsButton:SetSize(btnWidth, btnHeight)
