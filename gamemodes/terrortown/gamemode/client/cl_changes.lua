@@ -141,7 +141,7 @@ function CreateChanges()
 	<li>added new TTT2 Logo</li>
 	<li>added ShopEditor missing icons (by Mineotopia)</li>
 	<br />
-	<li><b>reworked weaponshop -> ShopEditor</b></li>
+	<li><b>reworked weaponshop → ShopEditor</b></li>
 	<li>changed file based shopsystem into sql</li>
 	</ul>]])
 
@@ -172,12 +172,12 @@ function CreateChanges()
 	AddChange("0.3.9b", [[<ul>
 	<li>reimplemented all these nice unaccepted PullRequest for TTT on GitHub:
 		<ul>
-			<li><b>Custom Crosshairs</b> (<code>F1 -> Settings</code>): 'https://github.com/Facepunch/garrysmod/pull/1376/' by nubpro</li>
+			<li><b>Custom Crosshairs</b> (<code>F1 → Settings</code>): 'https://github.com/Facepunch/garrysmod/pull/1376/' by nubpro</li>
 			<li>Performance improvements with the help of 'https://github.com/Facepunch/garrysmod/pull/1287' by markusmarkusz and Alf21</li>
 		</ul>
 	</li>
 	<br />
-	<li>added possibility to use <b>random shops!</b> (<code>ShopEditor -> Options</code>)</li>
+	<li>added possibility to use <b>random shops!</b> (<code>ShopEditor → Options</code>)</li>
 	<li>balanced karma system (Roles that are aware of their teammates can't earn karma anymore. This will lower teamkilling)</li>
 	</ul>]])
 
@@ -207,7 +207,7 @@ function CreateChanges()
 	</ul>]])
 
 	AddChange("0.5.0", [[<ul>
-	<li>added <b>HUDSwitcher</b> (<code>F1 -> TTT2 -> HUDSwitcher</code>)</li>
+	<li>added <b>HUDSwitcher</b> (<code>F1 → TTT2 → HUDSwitcher</code>)</li>
 		<ul>
 			<li>added old TTT HUD</li>
 			<li>added PureSkin HUD</li>
