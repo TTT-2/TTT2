@@ -115,7 +115,7 @@ function HELPSCRN:Show()
 		local settingsButton = vgui.Create("DSettingsButton", dsettings)
 		settingsButton:SetSize(btnWidth, btnHeight)
 		settingsButton:SetText(isfunction(tbl.getTitle) and tbl.getTitle() or string.upper(name))
-
+		--[[
 		local pos_x, pos_y = dsettings:GetPos()
 		local pos = {
 			x = pos_x + i * (btnWidth + pad),
@@ -123,6 +123,8 @@ function HELPSCRN:Show()
 		}
 
 		settingsButton:SetPos(pos)
+		]]--
+		settingsButton:Dock(LEFT)
 
 		settingsButton.DoClick = function(slf)
 			self:Close()
