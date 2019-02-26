@@ -29,10 +29,21 @@ if CLIENT then
 	local fadeout = 0.6
 	local movespeed = 2
 
-	function HUDELEMENT:Initialize()
-		local width = MSTACK.msg_width + leftPad
+	local margin = 6
+	local title_margin = 8
+	local msg_width = 400
+	local text_width = msg_width - margin * 3
+	local pad = 7
+	local msgfont = "DefaultBold"
+	local imageSize = 64
+	local imagePad = pad
+	local imageMinHeight = imageSize + 2 * pad
+	local imageSubWidth = imageSize + 2 * pad
 
-		text_height = draw.GetFontHeight(MSTACK.msgfont)
+	function HUDELEMENT:Initialize()
+		local width = msg_width + leftPad
+
+		text_height = draw.GetFontHeight(msgfont)
 
 		self:RecalculateBasePos()
 		self:SetSize(width, 80)
@@ -43,17 +54,17 @@ if CLIENT then
 		self.defaults.resizeableY = false
 
 		base_spec = {
-			font = MSTACK.msgfont,
+			font = msgfont,
 			xalign = TEXT_ALIGN_LEFT,
 			yalign = TEXT_ALIGN_TOP
 		}
 	end
-	
+
 	function HUDELEMENT:RecalculateBasePos()
-		local width = MSTACK.msg_width + leftPad
-	
-		top_y = MSTACK.margin
-		top_x = ScrW() - MSTACK.margin - width
+		local width = msg_width + leftPad
+
+		top_y = margin
+		top_x = ScrW() - margin - width
 		self:SetBasePos(top_x, top_y)
 	end
 
@@ -61,9 +72,36 @@ if CLIENT then
 		top_x = self.pos.x
 		top_y = self.pos.y
 
-		text_height = draw.GetFontHeight(MSTACK.msgfont)
+		text_height = draw.GetFontHeight(msgfont)
 
 		BaseClass.PerformLayout(self)
+	end
+
+	local function PrepareItem(item)
+		if item.image then
+			item.subWidth = imageSubWidth
+		end
+
+		item.text = self:WrapText(item.text, text_width - (item.subWidth or 0), msgfont)
+
+		if item.title then
+			item.title = self:WrapText(item.title, text_width - (item.subWidth or 0), msgfont)
+		else
+			item.title = {}
+		end
+
+		-- Height depends on number of lines, which is equal to number of table
+		-- elements of the wrapped item.text
+		local item_height = #item.text * text_height + margin * (1 + #item.text)
+		if item.image then
+			item_height = math.max(item_height, imageMinHeight)
+		end
+
+		if #item.title > 0 then
+			item_height = item_height + title_margin + #item.title * text_height + margin * (1 + #item.title)
+		end
+
+		item.ready = true
 	end
 
 	function HUDELEMENT:Draw()
@@ -72,6 +110,10 @@ if CLIENT then
 		local running_y = top_y
 		for k, item in pairs(MSTACK.msgs) do
 			if item.time < CurTime() then
+				if not item.ready then
+					PrepareItem(item)
+				end
+
 				if item.sounded == false then
 					LocalPlayer():EmitSound(msg_sound, 80, 250)
 
@@ -79,7 +121,7 @@ if CLIENT then
 				end
 
 				-- Apply move effects to y
-				local y = running_y + MSTACK.margin + item.move_y
+				local y = running_y + margin + item.move_y
 
 				item.move_y = (item.move_y < 0) and item.move_y + movespeed or 0
 
@@ -105,7 +147,7 @@ if CLIENT then
 				-- Background box
 				item.bg.a = math.Clamp(alpha, 0, item.bg.a_max)
 
-				self:DrawBg(top_x, y, MSTACK.msg_width + leftPad, height, item.bg)
+				self:DrawBg(top_x, y, msg_width + leftPad, height, item.bg)
 
 				-- Text
 				item.col.a = math.Clamp(alpha, 0, item.col.a_max)
@@ -117,7 +159,7 @@ if CLIENT then
 					spec.text = item.title[i]
 
 					local tx = top_x + (item.subWidth or 0) + leftPad
-					local ty = y + MSTACK.margin + (i - 1) * (text_height + MSTACK.margin)
+					local ty = y + margin + (i - 1) * (text_height + margin)
 
 					spec.pos = {tx, ty}
 
@@ -128,10 +170,10 @@ if CLIENT then
 					spec.text = item.text[i]
 
 					local tx = top_x + (item.subWidth or 0) + leftPad
-					local ty = y + MSTACK.margin + (i - 1) * (text_height + MSTACK.margin)
+					local ty = y + margin + (i - 1) * (text_height + margin)
 
 					if #item.title > 0 then
-						ty = ty + MSTACK.title_margin + MSTACK.margin + #item.title * (text_height + MSTACK.margin)
+						ty = ty + title_margin + margin + #item.title * (text_height + margin)
 					end
 
 					spec.pos = {tx, ty}
@@ -143,10 +185,10 @@ if CLIENT then
 				if item.image then
 					surface.SetMaterial(item.image)
 					surface.SetDrawColor(255, 255, 255, item.bg.a)
-					surface.DrawTexturedRect(top_x + item.imagePad, y + item.imagePad, item.imageSize, item.imageSize)
+					surface.DrawTexturedRect(top_x + imagePad, y + imagePad, imageSize, imageSize)
 				end
 
-				self:DrawLines(top_x, y, MSTACK.msg_width + leftPad, height, item.bg.a)
+				self:DrawLines(top_x, y, msg_width + leftPad, height, item.bg.a)
 
 				if alpha == 0 then
 					MSTACK.msgs[k] = nil

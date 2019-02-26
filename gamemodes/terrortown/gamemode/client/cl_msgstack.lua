@@ -14,20 +14,6 @@ local draw = draw
 local ipairs = ipairs
 local net = net
 
-MSTACK.margin = 6
-MSTACK.title_margin = 8
-MSTACK.msg_width = 400
-
-MSTACK.msgfont = "DefaultBold"
-
--- Total width we take up on screen, for other elements to read
-MSTACK.width = MSTACK.msg_width + MSTACK.margin
-
-local text_width = MSTACK.msg_width - MSTACK.margin * 3 -- three margins for a little more room
-local text_height = draw.GetFontHeight(MSTACK.msgfont)
-
-local pad = 7
-
 -- Text colors to render the messages in
 local msgcolors = {
 	traitor_text = COLOR_RED,
@@ -54,32 +40,24 @@ function MSTACK:AddColoredBgMessage(text, bg_clr)
 	self:AddMessageEx(item)
 end
 
-function MSTACK:AddImagedMessage(text, c, image, size2, title)
+function MSTACK:AddImagedMessage(text, c, image, title)
 	local item = {}
 	item.text = text
 	item.title = title
 	item.col = c
 	item.bg = msgcolors.generic_bg
 	item.image = image
-	item.imageSize = size2
-	item.imagePad = pad
-	item.minHeight = size2 + 2 * pad
-	item.subWidth = size2 + 2 * pad
 
 	self:AddMessageEx(item)
 end
 
-function MSTACK:AddColoredImagedMessage(text, bg_clr, image, size2, title)
+function MSTACK:AddColoredImagedMessage(text, bg_clr, image, title)
 	local item = {}
 	item.text = text
 	item.title = title
 	item.col = msgcolors.generic_text
 	item.bg = bg_clr
 	item.image = image
-	item.imageSize = size2
-	item.imagePad = pad
-	item.minHeight = size2 + 2 * pad
-	item.subWidth = size2 + 2 * pad
 
 	self:AddMessageEx(item)
 end
@@ -92,29 +70,8 @@ function MSTACK:AddMessageEx(item)
 	item.bg = table.Copy(item.bg or msgcolors.generic_bg)
 	item.bg.a_max = item.bg.a
 
-	item.text = self:WrapText(item.text, text_width - (item.subWidth or 0))
-
-	if item.title then
-		item.title = self:WrapText(item.title, text_width - (item.subWidth or 0))
-	else
-		item.title = {}
-	end
-
-	-- Height depends on number of lines, which is equal to number of table
-	-- elements of the wrapped item.text
-	item.height = #item.text * text_height + MSTACK.margin * (1 + #item.text)
-
-	if #item.title > 0 then
-		item.height = item.height + MSTACK.title_margin + #item.title * text_height + MSTACK.margin * (1 + #item.title)
-	end
-
-	if item.minHeight then
-		item.height = math.max(item.height, item.minHeight)
-	end
-
 	item.time = CurTime()
 	item.sounded = false
-	item.move_y = -item.height
 
 	-- Stagger the fading a bit
 	if self.last > item.time - 1 then
@@ -137,8 +94,8 @@ end
 
 -- Oh joy, I get to write my own wrapping function. Thanks Lua!
 -- Splits a string into a table of strings that are under the given width.
-function MSTACK:WrapText(text, width)
-	surface.SetFont(MSTACK.msgfont)
+function MSTACK:WrapText(text, width, font)
+	surface.SetFont(font or "DefaultBold")
 
 	-- Any wrapping required?
 	local w = surface.GetTextSize(text)
@@ -156,7 +113,7 @@ function MSTACK:WrapText(text, width)
 
 		w = surface.GetTextSize(added)
 
-		if w > text_width then
+		if w > width then
 			table.insert(lines, wrd) -- New line needed
 		else
 			lines[l] = added -- Safe to tack it on
