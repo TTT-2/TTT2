@@ -213,15 +213,11 @@ end
 function HUDManager.ShowHUDSwitcher(bool)
 	local client = LocalPlayer()
 
-	client:ChatPrint((not bool and not client.settingsFrameForceClose and not HUDManager.IsEditing) and "true" or "false")
-
 	if IsValid(client.hudswitcher) then
 		client.hudswitcher.forceClosing = true
 
 		client.hudswitcher:Remove()
 	end
-
-	client:ChatPrint((not bool and not client.settingsFrameForceClose and not HUDManager.IsEditing) and "true" or "false")
 
 	if not bool and not client.settingsFrameForceClose and not HUDManager.IsEditing then
 		HELPSCRN:Show()
