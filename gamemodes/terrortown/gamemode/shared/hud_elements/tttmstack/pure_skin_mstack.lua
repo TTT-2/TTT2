@@ -34,8 +34,8 @@ if CLIENT then
 	local msg_width = 400
 	local text_width = msg_width - margin * 3
 	local pad = 7
-	local msgfont = "DefaultBold"
-	local imagedmsgfont = "DefaultBold"
+	local msgfont = "PureSkinMSTACKMsg"
+	local imagedmsgfont = "PureSkinMSTACKTitle"
 	local imageSize = 64
 	local imagePad = pad
 	local imageMinHeight = imageSize + 2 * pad
