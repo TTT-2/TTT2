@@ -275,13 +275,13 @@ function ShowChanges()
 
 			frame:SetTitle("TTT2 Update - " .. change.version)
 
-			if not sheet.htmlSheet then
+			if not panel.htmlSheet then
 				local html = vgui.Create("DHTML", panel)
 				html:SetHTML(change.text)
 				html:Dock(FILL)
 				html:DockMargin(10, 10, 10, 10)
 
-				sheet.htmlSheet = html
+				panel.htmlSheet = html
 			end
 
 			currentVersion = change.version
@@ -293,8 +293,8 @@ function ShowChanges()
 			html:Dock(FILL)
 			html:DockMargin(10, 10, 10, 10)
 
-			sheet.htmlSheet = html
-			
+			panel.htmlSheet = html
+
 			sheet:SetActiveButton(leftBtn)
 		end
 	end
