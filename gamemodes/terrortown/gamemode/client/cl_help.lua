@@ -76,7 +76,7 @@ function HELPSCRN:Show()
 
 	dtabs:AddSheet(GetTranslation("help_settings"), dsettings, "icon16/wrench.png", false, false, GetTranslation("help_settings_tip"))
 
-	local btnWidth = 120
+	local btnWidth = 260
 	local btnHeight = btnWidth * 0.75
 
 	local tbl = {
