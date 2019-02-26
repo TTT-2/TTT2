@@ -386,6 +386,8 @@ function HUDManager.DrawHUD()
 
 			if HUDManager.IsEditing then
 				elem:DrawSize()
+			end
+			if HUDManager.IsEditing and not client.activeElement then
 				elem:DrawHowered(math.Round(gui.MouseX()), math.Round(gui.MouseY()))
 			end
 		end
