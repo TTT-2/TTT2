@@ -52,9 +52,8 @@ local function EditLocalHUD()
 	
 	local mouse_down = input.IsMouseDown(MOUSE_LEFT)
 	
-	local mouse_clicked = false
 	if (not client.mouse_clicked_prev and mouse_down) then
-		mouse_clicked = true
+		client.mouse_clicked = true
 		client.mouse_clicked_prev = true
 		chat.AddText("rising edge")
 	elseif (client.mouse_clicked_prev and not mouse_down) then
@@ -62,12 +61,12 @@ local function EditLocalHUD()
 		chat.AddText("falling edge")
 	end
 	
-	if mouse_clicked then
+	if client.mouse_clicked then
 		chat.AddText("[top] mouse clicked is: ", tostring(mouse_clicked))
 	end
 
 	if mouse_down then
-		if mouse_clicked then
+		if client.mouse_clicked then
 			chat.AddText("[first if] mouse clicked is: ", tostring(mouse_clicked))
 		end
 		if not elem then
@@ -94,7 +93,7 @@ local function EditLocalHUD()
 				end
 			end
 		end
-		if mouse_clicked then
+		if client.mouse_clicked then
 			chat.AddText("[after] mouse clicked is: ", tostring(mouse_clicked))
 		end
 
@@ -105,13 +104,14 @@ local function EditLocalHUD()
 
 		if elem and (client.oldMX and client.oldMX ~= x or client.oldMY and client.oldMY ~= y) then
 			-- set to true to get new click zone
-			if mouse_clicked then
+			if client.mouse_clicked then
 				chat.AddText("[function prev] mouse clicked is: ", tostring(mouse_clicked))
 			end
 			
-			elem:SetMouseClicked(mouse_clicked, x, y)
+			elem:SetMouseClicked(client.mouse_clicked, x, y)
+			client.mouse_clicked = false
 			
-			if mouse_clicked then
+			if client.mouse_clicked then
 				chat.AddText("[function] mouse clicked is: ", tostring(mouse_clicked))
 			end
 		
