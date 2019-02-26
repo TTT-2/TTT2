@@ -71,7 +71,6 @@ function HELPSCRN:Show()
 
 	local dsettings = vgui.Create("DIconLayout", dtabs)
 	dsettings:StretchToParent(0, 0, padding, 0)
-	dsettings:EnableVerticalScrollbar(true)
 	dsettings:SetPadding(10)
 	dsettings:SetSpacing(10)
 	dsettings:SetSpaceX(pad)
