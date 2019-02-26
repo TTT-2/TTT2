@@ -116,10 +116,9 @@ function HELPSCRN:Show()
 	for name, tbl in pairs(tbl) do
 		local title = isfunction(tbl.getTitle) and tbl.getTitle() or string.upper(name)
 
-		local settingsButton = vgui.Create("DSettingsButton", dsettings)
+		local settingsButton = dsettings:Add("DSettingsButton")
 		settingsButton:SetSize(btnWidth, btnHeight)
 		settingsButton:SetText(title)
-		settingsButton:Dock(LEFT)
 
 		settingsButton.DoClick = function(slf)
 			dframe:Close()
