@@ -247,7 +247,7 @@ function HUDELEMENT:DrawHowered(x, y)
 	if row[1] then -- resizeable in all directions
 		y1 = minY + c_pad
 		y2 = minY + c_pad + c_area
-	elseif row[2] and (col[1] or col[3]) and not self.defaults.resizeableX then -- only resizeable in Y
+	elseif row[2] and (col[1] or col[3]) and not self.defaults.resizeableY then -- only resizeable in X
 		y1 = minY + c_pad
 		y2 = maxY - c_pad
 	elseif row[2] and not col[2] then -- resizeable in all directions / ignore center area
@@ -261,7 +261,7 @@ function HUDELEMENT:DrawHowered(x, y)
 	if col[1] then -- resizeable in all directions
 		x1 = minX + c_pad
 		x2 = minX + c_pad + c_area
-	elseif col[2] and (row[1] or row[3]) and not self.defaults.resizeableY then -- only resizeable in X
+	elseif col[2] and (row[1] or row[3]) and not self.defaults.resizeableX then -- only resizeable in Y
 		y1 = minY + c_pad
 		y2 = maxY - c_pad
 	elseif col[2] and not row[2] then -- resizeable in all directions / ignore center area
