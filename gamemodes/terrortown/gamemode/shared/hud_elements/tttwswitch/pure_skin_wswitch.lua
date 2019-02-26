@@ -137,9 +137,15 @@ if CLIENT then
 		local weps = WSWITCH.WeaponCache
 		local count = #weps
 		local tmp = height + self.margin
-		local h = count * tmp
 		local basepos = self:GetBasePos()
 		local w = self:GetSize().w
+
+		-- hotfix TODO improve
+		if HUDManager.IsEditing and count < 1 then
+			count = 1
+		end
+
+		local h = count * tmp
 
 		self:SetPos(basepos.x, basepos.y)
 		self:SetSize(w, -h)
