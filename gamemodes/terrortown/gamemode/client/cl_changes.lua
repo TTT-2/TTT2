@@ -250,8 +250,8 @@ function ShowChanges()
 			draw.RoundedBox(4, 0, 0, w, h, Color(255, 255, 255))
 		end
 
-		local label = vgui.Create("DLabel", panel)
-		label:SetText(change.text)
+		local label = vgui.Create("DHTML", panel)
+		label:SetHTML(change.text)
 		label:SetTextColor(COLOR_BLACK)
 		label:Dock(TOP)
 		label:DockMargin(10, 10, 10, 10)
