@@ -265,11 +265,6 @@ function ShowChanges()
 			draw.RoundedBox(4, 0, 0, w, h, Color(255, 255, 255))
 		end
 
-		local html = vgui.Create("DHTML", panel)
-		html:SetHTML(change.text)
-		html:Dock(FILL)
-		html:DockMargin(10, 10, 10, 10)
-
 		local leftBtn = sheet:AddSheet("Update " .. change.version, panel).Button
 
 		local oldClick = leftBtn.DoClick
@@ -280,10 +275,26 @@ function ShowChanges()
 
 			frame:SetTitle("TTT2 Update - " .. change.version)
 
+			if not sheet.htmlSheet then
+				local html = vgui.Create("DHTML", panel)
+				html:SetHTML(change.text)
+				html:Dock(FILL)
+				html:DockMargin(10, 10, 10, 10)
+
+				sheet.htmlSheet = html
+			end
+
 			currentVersion = change.version
 		end
 
 		if change.version == currentVersion then
+			local html = vgui.Create("DHTML", panel)
+			html:SetHTML(change.text)
+			html:Dock(FILL)
+			html:DockMargin(10, 10, 10, 10)
+
+			sheet.htmlSheet = html
+			
 			sheet:SetActiveButton(leftBtn)
 		end
 	end
