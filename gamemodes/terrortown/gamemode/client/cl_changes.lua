@@ -250,12 +250,10 @@ function ShowChanges()
 			draw.RoundedBox(4, 0, 0, w, h, Color(255, 255, 255))
 		end
 
-		local label = vgui.Create("DHTML", panel)
-		label:SetHTML(change.text)
-		label:SetTextColor(COLOR_BLACK)
-		label:Dock(TOP)
-		label:DockMargin(10, 10, 10, 10)
-		label:SizeToContents()
+		local html = vgui.Create("DHTML", panel)
+		html:SetHTML(change.text)
+		html:Dock(TOP)
+		html:DockMargin(10, 10, 10, 10)
 
 		local leftBtn = sheet:AddSheet("Update " .. change.version, panel).Button
 
