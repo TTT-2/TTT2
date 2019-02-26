@@ -50,12 +50,14 @@ local function EditLocalHUD()
 	local elem = client.activeElement
 	local mode = client.hudEditMode or 0
 	
+	local mouse_down = input.IsMouseDown(MOUSE_LEFT)
+	
 	local mouse_clicked = false
-	if (not client.mouse_clicked_prev and input.IsMouseDown(MOUSE_LEFT)) then
+	if (not client.mouse_clicked_prev and mouse_down) then
 		mouse_clicked = true
 		client.mouse_clicked_prev = true
 		chat.AddText("rising edge")
-	elseif (client.mouse_clicked_prev and not input.IsMouseDown(MOUSE_LEFT)) then
+	elseif (client.mouse_clicked_prev and not mouse_down) then
 		client.mouse_clicked_prev = false
 		chat.AddText("falling edge")
 	end
@@ -64,7 +66,7 @@ local function EditLocalHUD()
 		chat.AddText("[top] mouse clicked is: ", tostring(mouse_clicked))
 	end
 
-	if input.IsMouseDown(MOUSE_LEFT) then
+	if mouse_down then
 		if not elem then
 			local hud = huds.GetStored(HUDManager.GetHUD())
 			if hud then
