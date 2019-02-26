@@ -99,7 +99,7 @@ local function EditLocalHUD()
 
 		if elem and (client.oldMX and client.oldMX ~= x or client.oldMY and client.oldMY ~= y) then
 			local size = elem:GetSize()
-			
+
 			local shift_pressed = input.IsKeyDown(KEY_LSHIFT) or input.IsKeyDown(KEY_RSHIFT)
 			local alt_pressed = input.IsKeyDown(KEY_LALT) or input.IsKeyDown(KEY_LALT)
 			trans_data = elem:GetClickedArea(x, y, alt_pressed)
@@ -109,7 +109,7 @@ local function EditLocalHUD()
 			else
 				chat.AddText(tostring(trans_data.x_p), ", ", tostring(trans_data.x_m), ", ", tostring(trans_data.y_p), ", ", tostring(trans_data.y_m), ", ", tostring(trans_data.direction_x), ", ", tostring(trans_data.direction_y))
 			end
-			
+
 
 			if mode == 0 then
 				local nx = x - difX
@@ -213,32 +213,21 @@ end
 function HUDManager.ShowHUDSwitcher(bool)
 	local client = LocalPlayer()
 
-	local inSettings = false
-
 	if IsValid(client.hudswitcher) then
 		client.hudswitcher.forceClosing = true
 
-		if client.settingsFrame and client.settingsFrame == client.hudswitcher then
-			inSettings = true
-		end
-
 		client.hudswitcher:Remove()
+	end
+
+	if not bool and not client.settingsFrameForceClose then
+		HELPSCRN:Show()
 	end
 
 	if bool then
 		client.hudswitcher = vgui.Create("HUDSwitcher")
 
-		if inSettings then
-			local oldClose = client.hudswitcher.OnClose
-			client.hudswitcher.OnClose = function(slf)
-				if isfunction(oldClose) then
-					oldClose(slf)
-				end
-
-				if not client.settingsFrameForceClose then
-					HELPSCRN:Show()
-				end
-			end
+		if client.hudswitcherSettingsF1 then
+			client.settingsFrame = client.hudswitcher
 		end
 
 		client.hudswitcher:MakePopup()

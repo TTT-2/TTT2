@@ -27,6 +27,7 @@ function HELPSCRN:Show()
 	end
 
 	local client = LocalPlayer()
+	client.hudswitcherSettingsF1 = nil
 
 	if client.settingsFrame and IsValid(client.settingsFrame) then
 		client.settingsFrameForceClose = true
@@ -115,17 +116,7 @@ function HELPSCRN:Show()
 
 				if not hudswitcher then return end
 
-				local oldClose = hudswitcher.OnClose
-				hudswitcher.OnClose = function(slf)
-					if isfunction(oldClose) then
-						oldClose(slf)
-					end
-
-					if not client.settingsFrameForceClose then
-						self:Show()
-					end
-				end
-
+				client.hudswitcherSettingsF1 = true
 				client.settingsFrame = hudswitcher
 			end,
 			getTitle = function()
