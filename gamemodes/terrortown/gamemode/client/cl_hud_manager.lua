@@ -103,7 +103,7 @@ local function EditLocalHUD()
 			local shift_pressed = input.IsKeyDown(KEY_LSHIFT) or input.IsKeyDown(KEY_RSHIFT)
 			local alt_pressed = input.IsKeyDown(KEY_LALT) or input.IsKeyDown(KEY_LALT)
 			trans_data = elem:GetClickedArea(x, y, alt_pressed)
-			
+
 			if trans_data.move then
 				chat.AddText("move element")
 			else
@@ -169,6 +169,8 @@ local function EditLocalHUD()
 end
 
 function HUDManager.EditHUD(bool, hud)
+	HUDManager.IsEditing = bool
+
 	local client = LocalPlayer()
 
 	hud = hud or huds.GetStored(HUDManager.GetHUD())
@@ -206,8 +208,6 @@ function HUDManager.EditHUD(bool, hud)
 
 		SQL.Save("ttt2_huds", hud.id, hud, hud:GetSavingKeys())
 	end
-
-	HUDManager.IsEditing = bool
 end
 
 function HUDManager.ShowHUDSwitcher(bool)
@@ -219,7 +219,7 @@ function HUDManager.ShowHUDSwitcher(bool)
 		client.hudswitcher:Remove()
 	end
 
-	if not bool and not client.settingsFrameForceClose then
+	if not bool and not client.settingsFrameForceClose and not HUDManager.IsEditing then
 		HELPSCRN:Show()
 	end
 
