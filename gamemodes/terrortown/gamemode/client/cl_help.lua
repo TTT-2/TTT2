@@ -138,7 +138,7 @@ function HELPSCRN:Show()
 			local frame = vgui.Create("DFrame")
 			frame:SetSize(minWidth, minHeight)
 
-			frame.OnClose = function(slf)
+			frame.OnClose = function(frm)
 				self:Show()
 			end
 
@@ -146,7 +146,7 @@ function HELPSCRN:Show()
 			pnl:Dock(FILL)
 
 			if isfunction(tbl.getContent) then
-				tbl.getContent(pnl)
+				tbl.getContent(self, pnl)
 			end
 		end
 
@@ -203,35 +203,37 @@ end
 cvars.AddChangeCallback("ttt_mute_team_check", MuteTeamCallback)
 
 function HELPSCRN:CreateInterfaceSettings(parent)
-	parent:SetName(GetTranslation("set_title_gui"))
-	parent:CheckBox(GetTranslation("set_tips"), "ttt_tips_enable")
+	local form = vgui.Create("DForm", parent)
+	form:SetName(GetTranslation("set_title_gui"))
+	form:CheckBox(GetTranslation("set_tips"), "ttt_tips_enable")
 
-	local cb = parent:NumSlider(GetTranslation("set_startpopup"), "ttt_startpopup_duration", 0, 60, 0)
+	local cb = form:NumSlider(GetTranslation("set_startpopup"), "ttt_startpopup_duration", 0, 60, 0)
 	if cb.Label then
 		cb.Label:SetWrap(true)
 	end
 
 	cb:SetTooltip(GetTranslation("set_startpopup_tip"))
 
-	parent:CheckBox(GetTranslation("set_healthlabel"), "ttt_health_label")
+	form:CheckBox(GetTranslation("set_healthlabel"), "ttt_health_label")
 
-	cb = parent:CheckBox(GetTranslation("set_fastsw"), "ttt_weaponswitcher_fast")
+	cb = form:CheckBox(GetTranslation("set_fastsw"), "ttt_weaponswitcher_fast")
 	cb:SetTooltip(GetTranslation("set_fastsw_tip"))
 
-	cb = parent:CheckBox(GetTranslation("set_fastsw_menu"), "ttt_weaponswitcher_displayfast")
+	cb = form:CheckBox(GetTranslation("set_fastsw_menu"), "ttt_weaponswitcher_displayfast")
 	cb:SetTooltip(GetTranslation("set_fastswmenu_tip"))
 
-	cb = parent:CheckBox(GetTranslation("set_wswitch"), "ttt_weaponswitcher_stay")
+	cb = form:CheckBox(GetTranslation("set_wswitch"), "ttt_weaponswitcher_stay")
 	cb:SetTooltip(GetTranslation("set_wswitch_tip"))
 
-	cb = parent:CheckBox(GetTranslation("set_cues"), "ttt_cl_soundcues")
+	cb = form:CheckBox(GetTranslation("set_cues"), "ttt_cl_soundcues")
 end
 
 -- language
 function HELPSCRN:CreateLanguageForm(parent)
-	parent:SetName(GetTranslation("set_title_lang"))
+	local form = vgui.Create("DForm", parent)
+	form:SetName(GetTranslation("set_title_lang"))
 
-	local dlang = vgui.Create("DComboBox", parent)
+	local dlang = vgui.Create("DComboBox", form)
 	dlang:SetConVar("ttt_language")
 	dlang:AddChoice("Server default", "auto")
 
@@ -246,14 +248,15 @@ function HELPSCRN:CreateLanguageForm(parent)
 
 	dlang.Think = dlang.ConVarStringThink
 
-	parent:Help(GetTranslation("set_lang"))
-	parent:AddItem(dlang)
+	form:Help(GetTranslation("set_lang"))
+	form:AddItem(dlang)
 end
 
 function HELPSCRN:CreateCrosshairSettings(parent)
-	parent:SetName(GetTranslation("set_title_cross"))
+	local form = vgui.Create("DForm", parent)
+	form:SetName(GetTranslation("set_title_cross"))
 
-	parent:CheckBox(GetTranslation("set_cross_color_enable"), "ttt_crosshair_color_enable")
+	form:CheckBox(GetTranslation("set_cross_color_enable"), "ttt_crosshair_color_enable")
 
 	local cm = vgui.Create("DColorMixer")
 	cm:SetLabel(GetTranslation("set_cross_color"))
@@ -265,57 +268,58 @@ function HELPSCRN:CreateCrosshairSettings(parent)
 	cm:SetConVarG("ttt_crosshair_color_g")
 	cm:SetConVarB("ttt_crosshair_color_b")
 
-	parent:AddItem(cm)
+	form:AddItem(cm)
 
-	parent:CheckBox(GetTranslation("set_cross_gap_enable"), "ttt_crosshair_gap_enable")
+	form:CheckBox(GetTranslation("set_cross_gap_enable"), "ttt_crosshair_gap_enable")
 
-	local cb = parent:NumSlider(GetTranslation("set_cross_gap"), "ttt_crosshair_gap", 0, 30, 0)
+	local cb = form:NumSlider(GetTranslation("set_cross_gap"), "ttt_crosshair_gap", 0, 30, 0)
 	if cb.Label then
 		cb.Label:SetWrap(true)
 	end
 
-	cb = parent:NumSlider(GetTranslation("set_cross_opacity"), "ttt_crosshair_opacity", 0, 1, 1)
+	cb = form:NumSlider(GetTranslation("set_cross_opacity"), "ttt_crosshair_opacity", 0, 1, 1)
 	if cb.Label then
 		cb.Label:SetWrap(true)
 	end
 
-	cb = parent:NumSlider(GetTranslation("set_ironsight_cross_opacity"), "ttt_ironsights_crosshair_opacity", 0, 1, 1)
+	cb = form:NumSlider(GetTranslation("set_ironsight_cross_opacity"), "ttt_ironsights_crosshair_opacity", 0, 1, 1)
 	if cb.Label then
 		cb.Label:SetWrap(true)
 	end
 
-	cb = parent:NumSlider(GetTranslation("set_cross_brightness"), "ttt_crosshair_brightness", 0, 1, 1)
+	cb = form:NumSlider(GetTranslation("set_cross_brightness"), "ttt_crosshair_brightness", 0, 1, 1)
 	if cb.Label then
 		cb.Label:SetWrap(true)
 	end
 
-	cb = parent:NumSlider(GetTranslation("set_cross_size"), "ttt_crosshair_size", 0.1, 3, 1)
+	cb = form:NumSlider(GetTranslation("set_cross_size"), "ttt_crosshair_size", 0.1, 3, 1)
 	if cb.Label then
 		cb.Label:SetWrap(true)
 	end
 
-	cb = parent:NumSlider(GetTranslation("set_cross_thickness"), "ttt_crosshair_thickness", 1, 10, 0)
+	cb = form:NumSlider(GetTranslation("set_cross_thickness"), "ttt_crosshair_thickness", 1, 10, 0)
 	if cb.Label then
 		cb.Label:SetWrap(true)
 	end
 
-	cb = parent:NumSlider(GetTranslation("set_cross_outlinethickness"), "ttt_crosshair_outlinethickness", 0, 5, 0)
+	cb = form:NumSlider(GetTranslation("set_cross_outlinethickness"), "ttt_crosshair_outlinethickness", 0, 5, 0)
 	if cb.Label then
 		cb.Label:SetWrap(true)
 	end
 
-	parent:CheckBox(GetTranslation("set_cross_disable"), "ttt_disable_crosshair")
-	parent:CheckBox(GetTranslation("set_minimal_id"), "ttt_minimal_targetid")
-	parent:CheckBox(GetTranslation("set_cross_static_enable"), "ttt_crosshair_static")
-	parent:CheckBox(GetTranslation("set_cross_dot_enable"), "ttt_crosshair_dot")
-	parent:CheckBox(GetTranslation("set_cross_weaponscale_enable"), "ttt_crosshair_weaponscale")
+	form:CheckBox(GetTranslation("set_cross_disable"), "ttt_disable_crosshair")
+	form:CheckBox(GetTranslation("set_minimal_id"), "ttt_minimal_targetid")
+	form:CheckBox(GetTranslation("set_cross_static_enable"), "ttt_crosshair_static")
+	form:CheckBox(GetTranslation("set_cross_dot_enable"), "ttt_crosshair_dot")
+	form:CheckBox(GetTranslation("set_cross_weaponscale_enable"), "ttt_crosshair_weaponscale")
 
-	cb = parent:CheckBox(GetTranslation("set_lowsights"), "ttt_ironsights_lowered")
+	cb = form:CheckBox(GetTranslation("set_lowsights"), "ttt_ironsights_lowered")
 	cb:SetTooltip(GetTranslation("set_lowsights_tip"))
 end
 
 function HELPSCRN:CreateGameplaySettings(parent)
-	parent:SetName(GetTranslation("set_title_play"))
+	local form = vgui.Create("DForm", parent)
+	form:SetName(GetTranslation("set_title_play"))
 
 	local cb
 
@@ -323,25 +327,26 @@ function HELPSCRN:CreateGameplaySettings(parent)
 		if ConVarExists("ttt_avoid_" .. v.name) then
 			local rolename = GetTranslation(v.name)
 
-			cb = parent:CheckBox(GetPTranslation("set_avoid", rolename), "ttt_avoid_" .. v.name)
+			cb = form:CheckBox(GetPTranslation("set_avoid", rolename), "ttt_avoid_" .. v.name)
 			cb:SetTooltip(GetPTranslation("set_avoid_tip", rolename))
 		end
 	end
 
-	cb = parent:CheckBox(GetTranslation("set_specmode"), "ttt_spectator_mode")
+	cb = form:CheckBox(GetTranslation("set_specmode"), "ttt_spectator_mode")
 	cb:SetTooltip(GetTranslation("set_specmode_tip"))
 
 	-- TODO what is the following reason?
 	-- For some reason this one defaulted to on, unlike other checkboxes, so
 	-- force it to the actual value of the cvar (which defaults to off)
-	local mute = parent:CheckBox(GetTranslation("set_mute"), "ttt_mute_team_check")
+	local mute = form:CheckBox(GetTranslation("set_mute"), "ttt_mute_team_check")
 	mute:SetValue(GetConVar("ttt_mute_team_check"):GetBool())
 	mute:SetTooltip(GetTranslation("set_mute_tip"))
 end
 
 -- Bindings
 function HELPSCRN:CreateBindings(parent)
-	parent:SetName("TTT2 Bindings")
+	local form = vgui.Create("DForm", parent)
+	form:SetName("TTT2 Bindings")
 
 	for _, binding in ipairs(bind.GetSettingsBindings()) do
 		local dPlabel = vgui.Create("DLabel")
@@ -366,7 +371,7 @@ function HELPSCRN:CreateBindings(parent)
 			curBinding = num
 		end
 
-		parent:AddItem(dPlabel, dPBinder)
+		form:AddItem(dPlabel, dPBinder)
 	end
 end
 
