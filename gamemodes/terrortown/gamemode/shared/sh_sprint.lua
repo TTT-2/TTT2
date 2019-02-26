@@ -2,11 +2,11 @@ if SERVER then
 	util.AddNetworkString("TTT2SprintToggle")
 
 	-- Set ConVars
-	local sprintEnabled = CreateConVar("ttt2_sprint_enabled", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "Toggle Sprint (Def: 0.5)")
+	local sprintEnabled = CreateConVar("ttt2_sprint_enabled", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "Toggle Sprint (Def: 1)")
 	local maxSprintMul = CreateConVar("ttt2_sprint_max", "0.5", {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "The maximum speed modifier the player will receive (Def: 0.5)")
 	local consumption = CreateConVar("ttt2_sprint_stamina_consumption", "0.6", {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "The speed of the stamina consumption (per second; Def: 0.6)")
 	local stamreg = CreateConVar("ttt2_sprint_stamina_regeneration", "0.3", {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "The regeneration time of the stamina (per second; Def: 0.3)")
-	local showCrosshair = CreateConVar("ttt2_sprint_crosshair", "0", {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "Should the Crosshair be visible while sprinting? (Def: 1)")
+	local showCrosshair = CreateConVar("ttt2_sprint_crosshair", "0", {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "Should the Crosshair be visible while sprinting? (Def: 0)")
 
 	hook.Add("TTT2SyncGlobals", "AddSprintGlobals", function()
 		SetGlobalBool(sprintEnabled:GetName(), sprintEnabled:GetBool())
@@ -60,16 +60,6 @@ else
 		net.Start("TTT2SprintToggle")
 		net.WriteBool(bool)
 		net.SendToServer()
-
-		if bool then
-			if not GetGlobalBool("ttt2_sprint_crosshair", true) then
-				client.oldCrosshair = GetConVar("ttt_disable_crosshair"):GetBool() and 1 or 0
-
-				RunConsoleCommand("ttt_disable_crosshair", 1)
-			end
-		else
-			RunConsoleCommand("ttt_disable_crosshair", client.oldCrosshair or 0)
-		end
 	end
 
 	bind.Register("ttt2_sprint", function()

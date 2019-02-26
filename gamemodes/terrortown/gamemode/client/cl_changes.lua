@@ -201,6 +201,7 @@ function CreateChanges()
 	- fixed the Sidekick color in corpses
 	- fixed bug that detective were not able to transfer credits
 	- fixed kill-list confirm role syncing bug
+	- fixed crosshair reset bug
 	- other small bugfixes
 
 	- changed convar "ttt2_confirm_killlist" to default "1"
