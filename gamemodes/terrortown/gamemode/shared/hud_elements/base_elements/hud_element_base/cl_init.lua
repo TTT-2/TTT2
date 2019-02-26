@@ -27,6 +27,12 @@ HUDELEMENT.defaults = {
 	click_padding = 0
 }
 
+HUDELEMENT.edit_live_data = {
+	calc_new_click_area = false,
+	old_row = nil,
+	old_col = nil
+}
+
 HUDELEMENT.parent = nil
 HUDELEMENT.parent_is_type = nil
 HUDELEMENT.children = {}
@@ -295,7 +301,20 @@ function HUDELEMENT:GetClickedArea(x, y, alt_pressed)
 	shift_pressed = shift_pressed or false
 	alt_pressed = alt_pressed or false
 
-	local row, col = self:OnHovered(x, y)
+	
+	local row, col
+	if self:edit_live_data.calc_new_click_area then
+		row, col = self:OnHovered(x, y)
+		self:edit_live_data.old_row = row
+		self:edit_live_data.old_col = col
+	else
+		row = self:edit_live_data.old_row
+		col = self:edit_live_data.old_col
+	end
+	
+	if (row == nil or col == nil) then
+		return false
+	end
 
 	-- cache for shorter access
 	local x_p = col[3] and (row[1] or row[2] or row[3])
@@ -314,6 +333,13 @@ function HUDELEMENT:GetClickedArea(x, y, alt_pressed)
 	}
 
 	return ret_transform_axis
+end
+
+-- the active area should only be changed on mouse click
+function HUDELEMENT:SetMouseClicked(mouse_clicked, x, y)
+	if self:IsInPos(x, y) then
+		self:edit_live_data.calc_new_click_area = mouse_clicked or self:edit_live_data.calc_new_click_area
+	end
 end
 
 function HUDELEMENT:DrawSize()

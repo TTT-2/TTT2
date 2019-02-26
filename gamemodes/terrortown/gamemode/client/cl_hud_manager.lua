@@ -49,6 +49,9 @@ local function EditLocalHUD()
 	local x, y = math.Round(gui.MouseX()), math.Round(gui.MouseY())
 	local elem = client.activeElement
 	local mode = client.hudEditMode or 0
+	
+	-- set to true to get new click zone
+	elem:SetMouseClicked(input.WasMousePressed, x, y)
 
 	if input.IsMouseDown(MOUSE_LEFT) then
 		if not elem then
