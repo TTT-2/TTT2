@@ -10,7 +10,7 @@ if CLIENT then
 
 	-- Constants for configuration
 	local msg_sound = Sound("Hud.Hint")
-	local base_spec = {
+	local base_text_display_options = {
 		font = "DefaultBold",
 		xalign = TEXT_ALIGN_LEFT,
 		yalign = TEXT_ALIGN_TOP
@@ -30,11 +30,12 @@ if CLIENT then
 	local movespeed = 2
 
 	local margin = 6
-	local title_margin = 8
+	local title_bottom_margin = 8
 	local msg_width = 400
 	local text_width = msg_width - margin * 3
 	local pad = 7
 	local msgfont = "DefaultBold"
+	local imagedmsgfont = "DefaultBold"
 	local imageSize = 64
 	local imagePad = pad
 	local imageMinHeight = imageSize + 2 * pad
@@ -43,17 +44,16 @@ if CLIENT then
 	function HUDELEMENT:Initialize()
 		local width = msg_width + leftPad
 
-		text_height = draw.GetFontHeight(msgfont)
-
 		self:RecalculateBasePos()
 		self:SetSize(width, 80)
 
 		BaseClass.Initialize(self)
 
+		self.defaults.minWidth = 200
 		self.defaults.resizeableX = true
 		self.defaults.resizeableY = false
 
-		base_spec = {
+		base_text_display_options = {
 			font = msgfont,
 			xalign = TEXT_ALIGN_LEFT,
 			yalign = TEXT_ALIGN_TOP
@@ -75,8 +75,6 @@ if CLIENT then
 
 		msg_width = self.size.w
 
-		text_height = draw.GetFontHeight(msgfont)
-
 		-- invalidate previous item size calculations
 		for k, v in pairs(MSTACK.msgs) do
 			v.ready = false
@@ -90,20 +88,29 @@ if CLIENT then
 			item.subWidth = imageSubWidth
 		end
 
-		item.text = MSTACK:WrapText(item.text, text_width - (item.subWidth or 0), msgfont)
+		item.text_spec = table.Copy(base_text_display_options)
+		item.text_spec.font_height = draw.GetFontHeight(item.text_spec.font)
+		item.text = MSTACK:WrapText(item.text, text_width - (item.subWidth or 0), item.text_spec.font)
+
+
+
+		item.title_spec = table.Copy(base_text_display_options)
+		item.title_spec.font = imagedmsgfont
+		item.title_spec.font_height = draw.GetFontHeight(item.title_spec.font)
 
 		if item.title then
-			item.title = MSTACK:WrapText(item.title, text_width - (item.subWidth or 0), msgfont)
+			item.title = MSTACK:WrapText(item.title, text_width - (item.subWidth or 0), item.title_spec.font)
 		else
 			item.title = {}
 		end
 
 		-- Height depends on number of lines, which is equal to number of table
 		-- elements of the wrapped item.text
-		local item_height = #item.text * (text_height + margin) + margin
+
+		local item_height = #item.text * (item.text_spec.font_height + margin) + margin
 
 		if #item.title > 0 then
-			item_height = item_height + title_margin + #item.title * (text_height + margin)
+			item_height = item_height + title_bottom_margin + #item.title * (item.title_spec.font_height + margin)
 		end
 
 		if item.image then
@@ -161,34 +168,35 @@ if CLIENT then
 
 				-- Text
 				item.col.a = math.Clamp(alpha, 0, item.col.a_max)
+				local tx = top_x + (item.subWidth or 0) + leftPad
+				local ty = y + margin
 
-				local spec = base_spec
-				spec.color = item.col
+				-- draw the title text
+				local title_spec = item.title_spec
+				title_spec.color = item.col
 
 				for i = 1, #item.title do
-					spec.text = item.title[i]
+					title_spec.text = item.title[i]
+					ty = ty + (i - 1) * (title_spec.font_height + margin)
+					title_spec.pos = {tx, ty}
 
-					local tx = top_x + (item.subWidth or 0) + leftPad
-					local ty = y + margin + (i - 1) * (text_height + margin)
+					draw.TextShadow(title_spec, 1, alpha)
+				end
 
-					spec.pos = {tx, ty}
+				-- draw the normal text
+				local text_spec = item.text_spec
+				text_spec.color = item.col
 
-					draw.TextShadow(spec, 1, alpha)
+				if #item.title > 0 then
+					ty = ty + title_bottom_margin
 				end
 
 				for i = 1, #item.text do
-					spec.text = item.text[i]
+					text_spec.text = item.text[i]
+					ty = ty + (i - 1) * (text_spec.font_height + margin)
+					text_spec.pos = {tx, ty}
 
-					local tx = top_x + (item.subWidth or 0) + leftPad
-					local ty = y + margin + (i - 1) * (text_height + margin)
-
-					if #item.title > 0 then
-						ty = ty + title_margin + margin + #item.title * (text_height + margin)
-					end
-
-					spec.pos = {tx, ty}
-
-					draw.TextShadow(spec, 1, alpha)
+					draw.TextShadow(text_spec, 1, alpha)
 				end
 
 				-- image
