@@ -150,6 +150,7 @@ function HELPSCRN:Show()
 		local settingsButton = dsettings:Add("DSettingsButton")
 		settingsButton:SetSize(btnWidth, btnHeight)
 		settingsButton:SetText(title)
+		settingsButton:SetColor(COLOR_BLACK)
 
 		settingsButton.DoClick = function(slf)
 			dframe:Close()
