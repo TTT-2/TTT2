@@ -19,6 +19,7 @@ function PANEL:Init()
 
 	self:SetCursor("hand")
 	self:SetFont("Trebuchet24")
+	self:SetTextColor(COLOR_BLACK)
 end
 
 function PANEL:IsDown()
