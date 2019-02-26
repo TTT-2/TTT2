@@ -152,23 +152,7 @@ if CLIENT then
 
 			role_scale_multiplier = math.Clamp(role_scale_multiplier, 0.55, 0.85)
 
-			--create scaling matrix for the text
-			-- local mat = Matrix()
-			-- mat:Translate(Vector(nx, ry))
-			-- mat:Scale(Vector(role_scale_multiplier * 0.9, role_scale_multiplier, role_scale_multiplier))
-			-- mat:Translate(-Vector(nx, ry))
-
-			-- render.PushFilterMag(TEXFILTER.ANISOTROPIC)
-			-- render.PushFilterMin(TEXFILTER.ANISOTROPIC)
-
-			-- cam.PushModelMatrix(mat)
-
 			self:AdvancedText(string.upper(text), "PureSkinRole", nx, ry, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, true, Vector(role_scale_multiplier * 0.9, role_scale_multiplier, role_scale_multiplier))
-
-			-- cam.PopModelMatrix(mat)
-
-			-- render.PopFilterMag()
-			-- render.PopFilterMin()
 		end
 
 		-- player informations
