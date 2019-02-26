@@ -200,8 +200,10 @@ function CreateChanges()
 	- fixed critical bug in the process of saving the items data
 	- fixed the Sidekick color in corpses
 	- fixed bug that detective were not able to transfer credits
+	- fixed kill-list confirm role syncing bug
 	- other small bugfixes
 
+	- changed convar "ttt2_confirm_killlist" to default "1"
 	- improved player-target add-on
 	- improved the changelog (as you see :D)
 	- reworked sql and created a sql library
