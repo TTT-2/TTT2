@@ -89,7 +89,8 @@ function HELPSCRN:Show()
 	local btnHeight = btnWidth * 0.75
 
 	local tbl = {
-		changes = {
+		[1] = {
+			id = "changes",
 			onclick = function(slf)
 				local frm = ShowChanges()
 
@@ -112,7 +113,8 @@ function HELPSCRN:Show()
 				return "Changes"
 			end
 		},
-		hudSwitcher = {
+		[2] = {
+			id = "hudSwitcher",
 			onclick = function(slf)
 				local hudswitcher = HUDManager.ShowHUDSwitcher(true)
 
@@ -125,27 +127,32 @@ function HELPSCRN:Show()
 				return "HUD Switcher"
 			end
 		},
-		bindings = {
+		[3] = {
+			id = "bindings",
 			getContent = self.CreateBindings
 		},
-		interface = {
+		[4] = {
+			id = "interface",
 			getContent = self.CreateInterfaceSettings
 		},
-		gameplay = {
+		[5] = {
+			id = "gameplay",
 			getContent = self.CreateGameplaySettings
 		},
-		crosshair = {
+		[6] = {
+			id = "crosshair",
 			getContent = self.CreateCrosshairSettings
 		},
-		language = {
+		[7] = {
+			id = "language",
 			getContent = self.CreateLanguageForm
 		}
 	}
 
 	hook.Run("TTT2ModifySettingsList", tbl)
 
-	for name, tbl in pairs(tbl) do
-		local title = string.upper(isfunction(tbl.getTitle) and tbl.getTitle() or name)
+	for _, data in ipairs(tbl) do
+		local title = string.upper(isfunction(data.getTitle) and data.getTitle() or data.id)
 
 		local settingsButton = dsettings:Add("DSettingsButton")
 		settingsButton:SetSize(btnWidth, btnHeight)
@@ -156,8 +163,8 @@ function HELPSCRN:Show()
 		settingsButton.DoClick = function(slf)
 			dframe:Close()
 
-			if isfunction(tbl.onclick) then
-				tbl.onclick(slf)
+			if isfunction(data.onclick) then
+				data.onclick(slf)
 
 				return
 			end
@@ -181,8 +188,8 @@ function HELPSCRN:Show()
 			pnl:SetVerticalScrollbarEnabled(true)
 			pnl:Dock(FILL)
 
-			if isfunction(tbl.getContent) then
-				tbl.getContent(self, pnl)
+			if isfunction(data.getContent) then
+				data.getContent(self, pnl)
 			end
 
 			--
