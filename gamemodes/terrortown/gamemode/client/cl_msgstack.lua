@@ -10,23 +10,14 @@ MSTACK.last = 0
 -- Localise some libs
 local table = table
 local surface = surface
-local draw = draw
-local ipairs = ipairs
 local net = net
 
--- Text colors to render the messages in
-local msgcolors = {
-	traitor_text = COLOR_RED,
-	generic_text = COLOR_WHITE,
-
-	generic_bg = Color(0, 0, 0, 200)
-}
+local traitor_msg_bg = Color(255, 0, 0, 255)
 
 function MSTACK:AddColoredMessage(text, c)
 	local item = {}
 	item.text = text
 	item.col = c
-	item.bg = msgcolors.generic_bg
 
 	self:AddMessageEx(item)
 end
@@ -34,18 +25,15 @@ end
 function MSTACK:AddColoredBgMessage(text, bg_clr)
 	local item = {}
 	item.text = text
-	item.col = msgcolors.generic_text
 	item.bg = bg_clr
 
 	self:AddMessageEx(item)
 end
 
-function MSTACK:AddImagedMessage(text, c, image, title)
+function MSTACK:AddImagedMessage(text, image, title)
 	local item = {}
 	item.text = text
 	item.title = title
-	item.col = c
-	item.bg = msgcolors.generic_bg
 	item.image = image
 
 	self:AddMessageEx(item)
@@ -55,7 +43,6 @@ function MSTACK:AddColoredImagedMessage(text, bg_clr, image, title)
 	local item = {}
 	item.text = text
 	item.title = title
-	item.col = msgcolors.generic_text
 	item.bg = bg_clr
 	item.image = image
 
@@ -64,12 +51,6 @@ end
 
 -- Internal
 function MSTACK:AddMessageEx(item)
-	item.col = table.Copy(item.col or msgcolors.generic_text)
-	item.col.a_max = item.col.a
-
-	item.bg = table.Copy(item.bg or msgcolors.generic_bg)
-	item.bg.a_max = item.bg.a
-
 	item.time = CurTime()
 	item.sounded = false
 
@@ -88,8 +69,11 @@ end
 -- is a special traitor-only message that traitors should pay attention to.
 -- Use the newer AddColoredMessage if you want special colours.
 function MSTACK:AddMessage(text, traitor_only)
-	-- TODO msgcolors.traitor_bg never defined!
-	self:AddColoredBgMessage(text, traitor_only and msgcolors.traitor_bg or msgcolors.generic_bg)
+	if traitor_only then
+		self:AddColoredBgMessage(text, traitor_msg_bg)
+	else
+		self:AddColoredMessage(text)
+	end
 end
 
 -- Oh joy, I get to write my own wrapping function. Thanks Lua!

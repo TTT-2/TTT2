@@ -30,12 +30,13 @@ if CLIENT then
 	local movespeed = 2
 
 	local margin = 6
-	local title_bottom_margin = 15
+	local title_bottom_margin = 10
 	local msg_width = 400
 	local text_width = msg_width - margin * 3
 	local pad = 7
 	local msgfont = "PureSkinMSTACKMsg"
 	local imagedmsgfont = "PureSkinMSTACKTitle"
+	local text_color = COLOR_WHITE
 	local imageSize = 64
 	local imagePad = pad
 	local imageMinHeight = imageSize + 2 * pad
@@ -74,7 +75,7 @@ if CLIENT then
 		top_y = self.pos.y
 
 		msg_width = self.size.w
-		text_width = msg_width - margin * 3
+		text_width = msg_width - margin * 3 - leftPad
 
 		-- invalidate previous item size calculations
 		for k, v in pairs(MSTACK.msgs) do
@@ -88,6 +89,12 @@ if CLIENT then
 		if item.image then
 			item.subWidth = imageSubWidth
 		end
+
+		item.bg = item.bg and table.Copy(item.bg) or table.Copy(self.basecolor)
+		item.bg.a_max = item.bg.a
+
+		item.col = item.col and table.Copy(item.col) or table.Copy(text_color)
+		item.col.a_max = item.col.a
 
 		item.text_spec = table.Copy(base_text_display_options)
 		item.text_spec.font_height = draw.GetFontHeight(item.text_spec.font)
@@ -163,7 +170,7 @@ if CLIENT then
 				-- Background box
 				item.bg.a = math.Clamp(alpha, 0, item.bg.a_max)
 
-				self:DrawBg(top_x, y, msg_width + leftPad, item.height, item.bg)
+				self:DrawBg(top_x, y, msg_width, item.height, item.bg)
 
 				-- Text
 				item.col.a = math.Clamp(alpha, 0, item.col.a_max)
