@@ -67,6 +67,9 @@ local function EditLocalHUD()
 	end
 
 	if mouse_down then
+		if mouse_clicked then
+			chat.AddText("[first if] mouse clicked is: ", tostring(mouse_clicked))
+		end
 		if not elem then
 			local hud = huds.GetStored(HUDManager.GetHUD())
 			if hud then
@@ -90,6 +93,9 @@ local function EditLocalHUD()
 					end
 				end
 			end
+		end
+		if mouse_clicked then
+			chat.AddText("[after] mouse clicked is: ", tostring(mouse_clicked))
 		end
 
 		local difX = client.difX or 0
