@@ -14,22 +14,6 @@ local function CreateEditOptions(x, y)
 
 	local menu = DermaMenu()
 
-	local editPos = menu:AddOption("Position")
-	editPos.OnMousePressed = function(slf, keyCode)
-		LocalPlayer().hudEditMode = 0
-
-		menu:Remove()
-	end
-
-	local editSize = menu:AddOption("Size")
-	editSize.OnMousePressed = function(slf, keyCode)
-		LocalPlayer().hudEditMode = 1
-
-		menu:Remove()
-	end
-
-	menu:AddSpacer()
-
 	local editReset = menu:AddOption("Reset")
 	editReset.OnMousePressed = function(slf, keyCode)
 		local hud = huds.GetStored(HUDManager.GetHUD())
@@ -110,11 +94,10 @@ local function EditLocalHUD()
 				chat.AddText(tostring(trans_data.x_p), ", ", tostring(trans_data.x_m), ", ", tostring(trans_data.y_p), ", ", tostring(trans_data.y_m), ", ", tostring(trans_data.direction_x), ", ", tostring(trans_data.direction_y))
 			end
 			
-
-			if mode == 0 then
+			if trans_data.move then -- move mode
 				local nx = x - difX
 				local ny = y - difY
-
+			
 				if nx < 0 then
 					nx = 0
 				elseif nx + size.w > ScrW() then
@@ -128,21 +111,19 @@ local function EditLocalHUD()
 				end
 
 				elem:SetBasePos(nx + client.difBaseX, ny + client.difBaseY)
-			elseif mode == 1 then
-				local nw = x - difW
-				local nh = y - difH
-
-				if nw < 1 then
-					nw = 1
-				end
-
-				if nh < 1 then
-					nh = 1
-				end
-
-				elem:SetSize(elem.defaults.resizeableX and nw or size.w, elem.defaults.resizeableY and nh or size.h)
+			else -- resize mode
+				local size = elem:GetSize() -- curent size
+				local pos = elem:GetPos() -- current pos
+				
+				local multi_w = (trans_data.x_p and 1 or 0) + (trans_data.x_n and 1 or 0)
+				local multi_w = (trans_data.y_p and 1 or 0) + (trans_data.y_n and 1 or 0)
+				local new_w = size.w + (client.oldMX - x) * trans_data.direction_x * multi_w
+				local new_h = size.h + (client.oldMY - y) * trans_data.direction_y * multi_y
+				
+				elem:SetSize(new_w, new_h)
+				elem:SetBasePos(trans_data.x_n and pos.x + trans_data.direction_x * (client.oldMX - x) or pos.x, trans_data.y_n and pos.y + trans_data.direction_y * (client.oldMY - y) or pos.y)
 			end
-
+			
 			elem:PerformLayout()
 		end
 	else
