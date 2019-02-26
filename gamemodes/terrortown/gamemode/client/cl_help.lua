@@ -66,6 +66,33 @@ function HELPSCRN:Show()
 
 	dtabs:AddSheet(GetTranslation("help_settings"), dsettings, "icon16/wrench.png", false, false, GetTranslation("help_settings_tip"))
 
+	-- changes
+	local changesButton = vgui.Create("DButton")
+	changesButton:SetText("Changes")
+
+	dsettings:AddItem(changesButton)
+
+	changesButton.DoClick = function(btn)
+		ShowChanges()
+	end
+
+	-- HUD switcher button
+	local hudSwitchButton = vgui.Create("DButton")
+	hudSwitchButton:SetText("HUD Switcher")
+
+	dsettings:AddItem(hudSwitchButton)
+
+	hudSwitchButton.DoClick = function(btn)
+		HUDManager.ShowHUDSwitcher(true)
+	end
+
+	--- binding area
+	local dbindings = vgui.Create("DForm", dsettings)
+
+	self:CreateBindings(dbindings)
+
+	dsettings:AddItem(dbindings)
+
 	--- interface settings
 	local dgui = vgui.Create("DForm", dsettings)
 
@@ -94,16 +121,7 @@ function HELPSCRN:Show()
 
 	dsettings:AddItem(dlanguage)
 
-	-- TTT2 Settings
-
-	local ttt2_panel = vgui.Create("DPanelList", dtabs)
-	ttt2_panel:StretchToParent(0, 0, dtabs:GetPadding() * 2, 0)
-	ttt2_panel:EnableVerticalScrollbar(true)
-	ttt2_panel:SetPadding(10)
-	ttt2_panel:SetSpacing(10)
-
-	dtabs:AddSheet("TTT2", ttt2_panel, "icon16/information.png", false, false, "The TTT2 settings")
-
+	--[[
 	-- role description
 	local roledesc_tab = vgui.Create("DForm")
 	roledesc_tab:SetSpacing(10)
@@ -116,8 +134,8 @@ function HELPSCRN:Show()
 		roledesc_tab:SetName("Current Role Description")
 	end
 
-	roledesc_tab:SetWide(ttt2_panel:GetWide() - 30)
-	ttt2_panel:AddItem(roledesc_tab)
+	roledesc_tab:SetWide(dsettings:GetWide() - 30)
+	dsettings:AddItem(roledesc_tab)
 
 	if subrole ~= ROLE_NONE then
 		roledesc_tab:Help(GetTranslation("ttt2_desc_" .. client:GetSubRoleData().name))
@@ -126,33 +144,7 @@ function HELPSCRN:Show()
 	end
 
 	roledesc_tab:SizeToContents()
-
-	-- changes
-	local changesButton = vgui.Create("DButton")
-	changesButton:SetText("Changes")
-
-	ttt2_panel:AddItem(changesButton)
-
-	changesButton.DoClick = function(btn)
-		ShowChanges()
-	end
-
-	-- HUD switcher button
-	local hudSwitchButton = vgui.Create("DButton")
-	hudSwitchButton:SetText("HUD Switcher")
-
-	ttt2_panel:AddItem(hudSwitchButton)
-
-	hudSwitchButton.DoClick = function(btn)
-		HUDManager.ShowHUDSwitcher(true)
-	end
-
-	--- binding area
-	local dbindings = vgui.Create("DForm", ttt2_panel)
-
-	self:CreateBindings(dbindings)
-
-	ttt2_panel:AddItem(dbindings)
+	]]--
 
 	-- Tutorial
 	local tutparent = vgui.Create("DPanel", dtabs)

@@ -239,6 +239,7 @@ function CreateChanges()
 	<li>improved player-target add-on</li>
 	<li>improved the changelog (as you see :D)</li>
 	<li>reworked sql and created a sql library</li>
+	<li>reworked <b>F1 menu</b></li>
 	<br />
 	<li>reworked the <b>slot system</b> (by LeBroomer)</li>
 		<ul>
