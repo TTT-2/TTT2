@@ -26,7 +26,8 @@ function HELPSCRN:Show()
 
 	local client = LocalPlayer()
 	local margin = 15
-	local w, h = math.max(630, math.Round(ScrW() * 0.6)), math.max(470, math.Round(ScrH() * 0.8))
+	local minWidth, minHeight = 630, 470
+	local w, h = math.max(minWidth, math.Round(ScrW() * 0.6)), math.max(minHeight, math.Round(ScrH() * 0.8))
 
 	local dframe = vgui.Create("DFrame")
 	dframe:SetSize(w, h)
@@ -66,91 +67,90 @@ function HELPSCRN:Show()
 
 	dtabs:AddSheet(GetTranslation("help_settings"), dsettings, "icon16/wrench.png", false, false, GetTranslation("help_settings_tip"))
 
-	-- changes
-	local changesButton = vgui.Create("DButton")
-	changesButton:SetText("Changes")
+	local btnWidth = 120
+	local btnHeight = btnWidth * 0.75
+	local pad = 40
+	local cols = ((w - 50) / (btnWidth + pad))
 
-	dsettings:AddItem(changesButton)
+	local tbl = {
+		changes = {
+			onclick = function(slf)
+				ShowChanges()
+			end,
+			getTitle = function()
+				return "Changes"
+			end
+		},
+		hudSwitcher = {
+			onclick = function(slf)
+				HUDManager.ShowHUDSwitcher(true)
+			end,
+			getTitle = function()
+				return "HUD Switcher"
+			end
+		},
+		bindings = {
+			getContent = self.CreateBindings
+		},
+		interface = {
+			getContent = self.CreateInterfaceSettings
+		},
+		gameplay = {
+			getContent = self.CreateGameplaySettings
+		},
+		crosshair = {
+			getContent = self.CreateCrosshairSettings
+		},
+		language = {
+			getContent = self.CreateLanguageForm
+		}
+	}
 
-	changesButton.DoClick = function(btn)
-		ShowChanges()
+	local row = 1
+	local i = 1
+
+	for name, tbl in pairs(tbl) do
+		local settingsButton = vgui.Create("DSettingsButton", dsettings)
+		settingsButton:SetSize(btnWidth, btnHeight)
+		settingsButton:SetText(isfunction(tbl.getTitle) and tbl.getTitle() or string.upper(name))
+
+		local pos = table.Copy(dsettings:GetPos())
+		pos.x = pos.x + i * (btnWidth + pad)
+		pos.y = pos.y + row * (btnHeight + pad)
+
+		settingsButton:SetPos(pos)
+
+		settingsButton.DoClick = function(slf)
+			self:Close()
+
+			if isfunction(tbl.onclick) then
+				tbl.onclick(slf)
+
+				return
+			end
+
+			local frame = vgui.Create("DFrame")
+			frame:SetSize(minWidth, minHeight)
+
+			frame.OnClose = function(slf)
+				self:Show()
+			end
+
+			local pnl = vgui.Create("DPanel", frame)
+			pnl:Dock(FILL)
+
+			if isfunction(tbl.getContent) then
+				tbl.getContent(self, pnl)
+			end
+		end
+
+		if i % cols == 0 then
+			i = 1
+			row = row + 1
+		else
+			i = i + 1
+		end
 	end
-
-	-- HUD switcher button
-	local hudSwitchButton = vgui.Create("DButton")
-	hudSwitchButton:SetText("HUD Switcher")
-
-	dsettings:AddItem(hudSwitchButton)
-
-	hudSwitchButton.DoClick = function(btn)
-		HUDManager.ShowHUDSwitcher(true)
-	end
-
-	--- binding area
-	local dbindings = vgui.Create("DForm", dsettings)
-	dbindings:SetExpanded(false)
-
-	self:CreateBindings(dbindings)
-
-	dsettings:AddItem(dbindings)
-
-	--- interface settings
-	local dgui = vgui.Create("DForm", dsettings)
-	dgui:SetExpanded(false)
-
-	self:CreateInterfaceSettings(dgui)
-
-	dsettings:AddItem(dgui)
-
-	--- gameplay settings
-	local dplay = vgui.Create("DForm", dsettings)
-	dplay:SetExpanded(false)
-
-	self:CreateGameplaySettings(dplay)
-
-	dsettings:AddItem(dplay)
-
-	-- crosshair settings
-	local dcrosshair = vgui.Create("DForm", dsettings)
-	dcrosshair:SetExpanded(false)
-
-	self:CreateCrosshairSettings(dcrosshair)
-
-	dsettings:AddItem(dcrosshair)
-
-	--- Language area
-	local dlanguage = vgui.Create("DForm", dsettings)
-	dlanguage:SetExpanded(false)
-
-	self:CreateLanguageForm(dlanguage)
-
-	dsettings:AddItem(dlanguage)
-
-	--[[
-	-- role description
-	local roledesc_tab = vgui.Create("DForm")
-	roledesc_tab:SetExpanded(false)
-	roledesc_tab:SetSpacing(10)
-
-	local subrole = client:GetSubRole()
-
-	if subrole ~= ROLE_NONE then
-		roledesc_tab:SetName("Current Role Description of " .. GetTranslation(client:GetSubRoleData().name))
-	else
-		roledesc_tab:SetName("Current Role Description")
-	end
-
-	roledesc_tab:SetWide(dsettings:GetWide() - 30)
-	dsettings:AddItem(roledesc_tab)
-
-	if subrole ~= ROLE_NONE then
-		roledesc_tab:Help(GetTranslation("ttt2_desc_" .. client:GetSubRoleData().name))
-	else
-		roledesc_tab:Help(GetTranslation("ttt2_desc_none"))
-	end
-
-	roledesc_tab:SizeToContents()
-	]]--
 
 	-- Tutorial
 	local tutparent = vgui.Create("DPanel", dtabs)
@@ -383,8 +383,8 @@ function HELPSCRN:CreateTutorial(parent)
 	tut:StretchToParent(0, 0, 0, 0)
 	tut:SetVerticalScrollbarEnabled(false)
 	tut:SetImage(Format(imgpath, 1))
-	tut:SetWide(2048)
-	tut:SetTall(1024)
+	tut:SetWide(1024)
+	tut:SetTall(512)
 
 	tut.current = 1
 
