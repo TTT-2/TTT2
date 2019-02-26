@@ -102,12 +102,12 @@ local function EditLocalHUD()
 			
 			local shift_pressed = input.IsKeyDown(KEY_LSHIFT) or input.IsKeyDown(KEY_RSHIFT)
 			local alt_pressed = input.IsKeyDown(KEY_LALT) or input.IsKeyDown(KEY_LALT)
-			trans_data = elem:GetClickedArea(x, y, shift_pressed, alt_pressed)
+			trans_data = elem:GetClickedArea(x, y, alt_pressed)
 			
 			if trans_data.move then
 				chat.AddText("move element")
 			else
-				chat.AddText(tostring(trans_data.x_p), ", ", tostring(trans_data.x_m), ", ", tostring(trans_data.y_p), ", ", tostring(trans_data.y_m))
+				chat.AddText(tostring(trans_data.x_p), ", ", tostring(trans_data.x_m), ", ", tostring(trans_data.y_p), ", ", tostring(trans_data.y_m), ", ", tostring(trans_data.direction_x), ", ", tostring(trans_data.direction_y))
 			end
 			
 

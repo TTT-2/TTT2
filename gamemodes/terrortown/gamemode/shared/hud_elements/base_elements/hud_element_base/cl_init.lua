@@ -287,7 +287,7 @@ function HUDELEMENT:DrawHowered(x, y)
 	surface.DrawRect(x1, y1, x2 - x1, y2 - y1)
 end
 
-function HUDELEMENT:GetClickedArea(x, y, shift_pressed, alt_pressed)
+function HUDELEMENT:GetClickedArea(x, y, alt_pressed)
 	if not self:IsInPos(x, y) then
 		return false
 	end
@@ -298,16 +298,16 @@ function HUDELEMENT:GetClickedArea(x, y, shift_pressed, alt_pressed)
 	local row, col = self:OnHovered(x, y)
 
 	-- cache for shorter access
-	local x_p = row[3] and (col[1] or col[2] or col[3])
-	local x_m = row[1] and (col[1] or col[2] or col[3])
-	local y_p = col[3] and (row[1] or row[2] or row[3])
-	local y_m = col[1] and (row[1] or row[2] or row[3])
+	local x_p = col[3] and (row[1] or row[2] or row[3])
+	local x_m = col[1] and (row[1] or row[2] or row[3])
+	local y_p = row[3] and (col[1] or col[2] or col[3])
+	local y_m = row[1] and (col[1] or col[2] or col[3])
 
 	local ret_transform_axis = {
-		x_p = x_p or (alt_pressed and x_m) or (shift_pressed and y_p) or false,
-		x_m = x_m or (alt_pressed and x_p) or (shift_pressed and y_m) or false,
-		y_p = y_p or (alt_pressed and y_m) or (shift_pressed and x_p) or false,
-		y_m = y_m or (alt_pressed and y_p) or (shift_pressed and x_m) or false,
+		x_p = x_p or (alt_pressed and x_m) or false,
+		x_m = x_m or (alt_pressed and x_p) or false,
+		y_p = y_p or (alt_pressed and y_m) or false,
+		y_m = y_m or (alt_pressed and y_p) or false,
 		direction_x = x_p and 1 or -1,
 		direction_y = y_p and 1 or -1,
 		move = row[2] and col[2]
