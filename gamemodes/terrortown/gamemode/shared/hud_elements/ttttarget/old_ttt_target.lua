@@ -11,9 +11,6 @@ DEFINE_BASECLASS(base)
 HUDELEMENT.Base = base
 
 if CLIENT then -- CLIENT
-	-- Creating Font
-	surface.CreateFont("HUDFont", {font = "Trebuchet24", size = 24, weight = 750})
-
 	function HUDELEMENT:Initialize()
 		local width, height = self.maxwidth, 45
 
