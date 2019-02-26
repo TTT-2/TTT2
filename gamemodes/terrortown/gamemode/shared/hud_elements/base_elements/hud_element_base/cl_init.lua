@@ -294,12 +294,8 @@ function HUDELEMENT:DrawHowered(x, y)
 end
 
 function HUDELEMENT:GetClickedArea(x, y, alt_pressed)
-	
-
-	shift_pressed = shift_pressed or false
 	alt_pressed = alt_pressed or false
 
-	
 	local row, col
 	if self.edit_live_data.calc_new_click_area then
 		if not self:IsInPos(x, y) then
@@ -343,7 +339,6 @@ end
 function HUDELEMENT:SetMouseClicked(mouse_clicked, x, y)
 	if self:IsInPos(x, y) then
 		self.edit_live_data.calc_new_click_area = mouse_clicked or self.edit_live_data.calc_new_click_area
-		chat.AddText("setMouseClicked to: ", tostring(mouse_clicked), " it's now: ", tostring(self.edit_live_data.calc_new_click_area))
 	end
 end
 

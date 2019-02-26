@@ -52,23 +52,15 @@ local function EditLocalHUD()
 	
 	local mouse_down = input.IsMouseDown(MOUSE_LEFT)
 	
+	-- mouse rising/falling edge detection
 	if (not client.mouse_clicked_prev and mouse_down) then
 		client.mouse_clicked = true
 		client.mouse_clicked_prev = true
-		chat.AddText("rising edge")
 	elseif (client.mouse_clicked_prev and not mouse_down) then
 		client.mouse_clicked_prev = false
-		chat.AddText("falling edge")
 	end
 	
-	if client.mouse_clicked then
-		chat.AddText("[top] mouse clicked is: ", tostring(mouse_clicked))
-	end
-
 	if mouse_down then
-		if client.mouse_clicked then
-			chat.AddText("[first if] mouse clicked is: ", tostring(mouse_clicked))
-		end
 		if not elem then
 			local hud = huds.GetStored(HUDManager.GetHUD())
 			if hud then
@@ -93,9 +85,6 @@ local function EditLocalHUD()
 				end
 			end
 		end
-		if client.mouse_clicked then
-			chat.AddText("[after] mouse clicked is: ", tostring(mouse_clicked))
-		end
 
 		local difX = client.difX or 0
 		local difY = client.difY or 0
@@ -103,18 +92,10 @@ local function EditLocalHUD()
 		local difH = client.difH or 0
 
 		if elem and (client.oldMX and client.oldMX ~= x or client.oldMY and client.oldMY ~= y) then
-			-- set to true to get new click zone
-			if client.mouse_clicked then
-				chat.AddText("[function prev] mouse clicked is: ", tostring(mouse_clicked))
-			end
-			
+			-- set to true to get new click zone		
 			elem:SetMouseClicked(client.mouse_clicked, x, y)
 			client.mouse_clicked = false
-			
-			if client.mouse_clicked then
-				chat.AddText("[function] mouse clicked is: ", tostring(mouse_clicked))
-			end
-		
+
 			local size = elem:GetSize()
 
 			local shift_pressed = input.IsKeyDown(KEY_LSHIFT) or input.IsKeyDown(KEY_RSHIFT)
