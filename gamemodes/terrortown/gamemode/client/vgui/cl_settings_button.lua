@@ -18,7 +18,6 @@ function PANEL:Init()
 	self:SetKeyboardInputEnabled(true)
 
 	self:SetCursor("hand")
-	self:SetFont("Trebuchet24")
 end
 
 function PANEL:IsDown()

@@ -149,8 +149,9 @@ function HELPSCRN:Show()
 
 		local settingsButton = dsettings:Add("DSettingsButton")
 		settingsButton:SetSize(btnWidth, btnHeight)
+		settingsButton:SetFont("Trebuchet24")
 		settingsButton:SetText(title)
-		settingsButton:SetColor(COLOR_BLACK)
+		settingsButton:SetTextColor(Color(0, 0, 0, 255))
 
 		settingsButton.DoClick = function(slf)
 			dframe:Close()
