@@ -138,7 +138,7 @@ local function EditLocalHUD()
 					chat.AddText("width multi: ", tostring(multi_w), ", new width: ", tostring(new_w))
 
 					elem:SetSize(new_w, new_h)
-					elem:SetBasePos(trans_data.x_m and pos.x + trans_data.direction_x * (x - client.oldMX) or pos.x, trans_data.y_m and pos.y + trans_data.direction_y * (y - client.oldMY) or pos.y)
+					elem:SetBasePos(trans_data.x_m and pos.x + trans_data.direction_x * (client.oldMX - x) or pos.x, trans_data.y_m and pos.y + trans_data.direction_y * (client.oldMY - y) or pos.y)
 				end
 
 				elem:PerformLayout()
