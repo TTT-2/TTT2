@@ -294,9 +294,7 @@ function HUDELEMENT:DrawHowered(x, y)
 end
 
 function HUDELEMENT:GetClickedArea(x, y, alt_pressed)
-	if not self:IsInPos(x, y) then
-		return false
-	end
+	
 
 	shift_pressed = shift_pressed or false
 	alt_pressed = alt_pressed or false
@@ -304,6 +302,10 @@ function HUDELEMENT:GetClickedArea(x, y, alt_pressed)
 	
 	local row, col
 	if self.edit_live_data.calc_new_click_area then
+		if not self:IsInPos(x, y) then
+			return false
+		end
+		
 		row, col = self:OnHovered(x, y)
 		self.edit_live_data.old_row = row
 		self.edit_live_data.old_col = col
