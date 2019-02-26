@@ -171,7 +171,7 @@ function HUDManager.EditHUD(bool, hud)
 
 		HUDManager.ShowHUDSwitcher(false)
 
-		chat.AddText("[TTT2][INFO] Hover over the elements and kick and move the mouse to ", Color(20, 150, 245), "move", " or ", Color(245, 30, 80), "resize", " it.")
+		chat.AddText("[TTT2][INFO] Hover over the elements and kick and move the mouse to ", Color(20, 150, 245), "move", Color(151, 211, 255), " or ", Color(245, 30, 80), "resize", Color(151, 211, 255), " it.")
 		chat.AddText("[TTT2][INFO] Press [RMB] (right mouse-button) -> 'close' to exit the HUD editor!")
 
 		hook.Add("Think", "TTT2EditHUD", EditLocalHUD)
