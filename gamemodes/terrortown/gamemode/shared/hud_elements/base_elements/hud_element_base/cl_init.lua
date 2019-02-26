@@ -129,7 +129,7 @@ function HUDELEMENT:SetSize(w, h)
 	w = math.max(self.defaults.minWidth, w)
 	h = math.max(self.defaults.minHeight, h)
 
-	if nw or nh then
+	if not HUDManager.IsEditing and (nw or nh) then
 		local basepos = self:GetBasePos()
 		local pos = self:GetPos()
 

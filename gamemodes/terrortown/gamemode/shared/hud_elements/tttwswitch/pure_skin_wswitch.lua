@@ -123,9 +123,13 @@ if CLIENT then
 
 		self:SetPos(basepos.x, basepos.y)
 
-		local w = self:GetSize().w
+		local weps = WSWITCH.WeaponCache
+		local count = #weps
+		local tmp = height + self.margin
 
-		self:SetSize(w, -height)
+		local w, h = self:GetSize().w, math.max(count * tmp, self.defaults.minHeight)
+
+		self:SetSize(w, -h)
 
 		BaseClass.PerformLayout(self)
 	end
