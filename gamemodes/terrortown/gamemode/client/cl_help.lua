@@ -76,7 +76,7 @@ function HELPSCRN:Show()
 	--- gameplay settings
 	local dplay = vgui.Create("DForm", dsettings)
 
-	self:CreateGameplaySettings(dsettings)
+	self:CreateGameplaySettings(dplay)
 
 	dsettings:AddItem(dplay)
 
