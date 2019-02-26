@@ -36,7 +36,7 @@ if CLIENT then
 	local text_width = msg_width - line_margin * 3
 	local pad = 6
 	local msgfont = "PureSkinMSTACKMsg"
-	local imagedmsgfont = "PureSkinMSTACKMsg"
+	local imagedmsgfont = "PureSkinMSTACKImageMsg"
 	local text_color = COLOR_WHITE
 	local imageSize = 64
 	local imagePad = pad
@@ -98,6 +98,9 @@ if CLIENT then
 		item.col.a_max = item.col.a
 
 		item.text_spec = table.Copy(base_text_display_options)
+		if item.title then
+			item.text_spec.font = imagedmsgfont
+		end
 		item.text_spec.font_height = draw.GetFontHeight(item.text_spec.font)
 		item.text = MSTACK:WrapText(item.text, text_width - (item.subWidth or 0), item.text_spec.font)
 
@@ -219,7 +222,7 @@ if CLIENT then
 					surface.DrawTexturedRect(top_x + imagePad, y + imagePad, imageSize, imageSize)
 				end
 
-				self:DrawLines(top_x, y, msg_width + leftPad, item.height, item.bg.a)
+				self:DrawLines(top_x, y, msg_width, item.height, item.bg.a)
 
 				if alpha == 0 then
 					MSTACK.msgs[k] = nil

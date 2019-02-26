@@ -1,7 +1,7 @@
 local surface = surface
 
 -- Fonts
-surface.CreateFont("PureSkinMSTACKTitle", {font = "Trebuchet18", size = 18, weight = 900})
+surface.CreateFont("PureSkinMSTACKImageMsg", {font = "Trebuchet24", size = 21, weight = 1000})
 surface.CreateFont("PureSkinMSTACKMsg", {font = "Trebuchet18", size = 15, weight = 900})
 surface.CreateFont("PureSkinRole", {font = "Trebuchet24", size = 30, weight = 700})
 surface.CreateFont("PureSkinBar", {font = "Trebuchet24", size = 21, weight = 1000})
