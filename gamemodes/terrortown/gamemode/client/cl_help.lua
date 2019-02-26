@@ -8,6 +8,8 @@ local IsValid = IsValid
 local ConVarExists = ConVarExists
 local CreateConVar = CreateConVar
 
+ttt_include("vgui__cl_settings_button")
+
 CreateConVar("ttt_spectator_mode", "0", FCVAR_ARCHIVE)
 CreateConVar("ttt_mute_team_check", "0")
 
