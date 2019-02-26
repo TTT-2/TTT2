@@ -103,12 +103,6 @@ local function EditLocalHUD()
 			trans_data = elem:GetClickedArea(x, y, alt_pressed)
 
 			if trans_data then
-				if trans_data.move then
-					chat.AddText("move element")
-				else
-					chat.AddText(tostring(trans_data.x_p), ", ", tostring(trans_data.x_m), ", ", tostring(trans_data.y_p), ", ", tostring(trans_data.y_m), ", ", tostring(trans_data.direction_x), ", ", tostring(trans_data.direction_y))
-				end
-
 				if trans_data.move then -- move mode
 					local nx = x - difX
 					local ny = y - difY
@@ -134,8 +128,6 @@ local function EditLocalHUD()
 					local multi_h = (trans_data.y_p and 1 or 0) + (trans_data.y_m and 1 or 0)
 					local new_w = size.w + (x - client.oldMX) * trans_data.direction_x * multi_w
 					local new_h = size.h + (y - client.oldMY) * trans_data.direction_y * multi_h
-					
-					chat.AddText("width multi: ", tostring(multi_w), ", new width: ", tostring(new_w))
 
 					elem:SetSize(new_w, new_h)
 					elem:SetBasePos(trans_data.x_m and pos.x + trans_data.direction_x * (client.oldMX - x) or pos.x, trans_data.y_m and pos.y + trans_data.direction_y * (client.oldMY - y) or pos.y)
