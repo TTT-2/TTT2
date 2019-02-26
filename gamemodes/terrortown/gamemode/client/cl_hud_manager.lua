@@ -171,8 +171,8 @@ function HUDManager.EditHUD(bool, hud)
 
 		HUDManager.ShowHUDSwitcher(false)
 
-		client:ChatPrint("[TTT2][INFO] Hover over the elements and kick and move the mouse to ", Color(20, 150, 245), "move", " or ", Color(245, 30, 80), "resize", " it.")
-		client:ChatPrint("[TTT2][INFO] Press [RMB] (right mouse-button) -> 'close' to exit the HUD editor!")
+		chat.AddText("[TTT2][INFO] Hover over the elements and kick and move the mouse to ", Color(20, 150, 245), "move", " or ", Color(245, 30, 80), "resize", " it.")
+		chat.AddText("[TTT2][INFO] Press [RMB] (right mouse-button) -> 'close' to exit the HUD editor!")
 
 		hook.Add("Think", "TTT2EditHUD", EditLocalHUD)
 	else
