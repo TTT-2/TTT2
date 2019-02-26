@@ -50,7 +50,13 @@ local function EditLocalHUD()
 	local elem = client.activeElement
 	local mode = client.hudEditMode or 0
 	
-	local mouse_clicked = input.WasMousePressed(MOUSE_LEFT)
+	local mouse_clicked = false
+	if (not client.mouse_clicked_prev and input.IsMouseDown(MOUSE_LEFT)) then
+		mouse_clicked = true
+		client.mouse_clicked_prev = true
+	elseif (client.mouse_clicked_prev and not input.IsMouseDown(MOUSE_LEFT)) then
+		client.mouse_clicked_prev = false
+	end
 
 	if input.IsMouseDown(MOUSE_LEFT) then
 		if not elem then
