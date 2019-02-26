@@ -26,7 +26,7 @@ function HELPSCRN:Show()
 
 	local client = LocalPlayer()
 	local margin = 15
-	local w, h = 630, 470
+	local w, h = math.max(630, math.Round(ScrW() * 0.6)), math.max(470, math.Round(ScrH() * 0.8))
 
 	local dframe = vgui.Create("DFrame")
 	dframe:SetSize(w, h)
