@@ -190,6 +190,7 @@ function CreateChanges()
 	- added possibility to modify the time a player can dive
 	- added parameter to the bindings to detect if a player released a key
 	- added possibility to switch between team-synced and individual random shops
+	- added some nice badges to the scoreboard
 
 	- fixed TTT2 binding system
 	- fixed Ammo pickup
@@ -198,13 +199,16 @@ function CreateChanges()
 	- fixed loading issue in the items module
 	- fixed critical bug in the process of saving the items data
 	- fixed the Sidekick color in corpses
+	- fixed bug that detective were not able to transfer credits
+	- other small bugfixes
 
+	- improved player-target add-on
 	- improved the changelog (as you see :D)
 	- reworked sql and created a sql library
-	
+
 	- reworked the slot system
-	-> amount of carriable weapons are customizable 
-	-> weapons won't block slots anymore automatically 
+	-> amount of carriable weapons are customizable
+	-> weapons won't block slots anymore automatically
 	-> slot positions are generated from weapon types
 	]])
 
