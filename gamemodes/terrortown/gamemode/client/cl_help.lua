@@ -116,9 +116,11 @@ function HELPSCRN:Show()
 		settingsButton:SetSize(btnWidth, btnHeight)
 		settingsButton:SetText(isfunction(tbl.getTitle) and tbl.getTitle() or string.upper(name))
 
-		local pos = table.Copy(dsettings:GetPos())
-		pos.x = pos.x + i * (btnWidth + pad)
-		pos.y = pos.y + row * (btnHeight + pad)
+		local pos_x, pos_y = dsettings:GetPos()
+		local pos = {
+			x = pos_x + i * (btnWidth + pad),
+			y = pos_y + row * (btnHeight + pad)
+		}
 
 		settingsButton:SetPos(pos)
 
