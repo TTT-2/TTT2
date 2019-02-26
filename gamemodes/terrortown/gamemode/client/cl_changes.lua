@@ -12,6 +12,25 @@ function AddChange(version, text)
 	currentVersion = version
 end
 
+local htmlStart = [[
+	<head>
+		<style>
+			body {
+				color: black;
+				background-color: white;
+			}
+			body * {
+				font-size: 14pt;
+			}
+		</style>
+	</head>
+	<body>
+]]
+
+local htmlEnd = [[
+	</body>
+]]
+
 function CreateChanges()
 	if changes then return end
 
@@ -277,7 +296,7 @@ function ShowChanges()
 
 			if not panel.htmlSheet then
 				local html = vgui.Create("DHTML", panel)
-				html:SetHTML(change.text)
+				html:SetHTML(htmlStart .. change.text .. htmlEnd)
 				html:Dock(FILL)
 				html:DockMargin(10, 10, 10, 10)
 
@@ -289,7 +308,7 @@ function ShowChanges()
 
 		if change.version == currentVersion then
 			local html = vgui.Create("DHTML", panel)
-			html:SetHTML(change.text)
+			html:SetHTML(htmlStart .. change.text .. htmlEnd)
 			html:Dock(FILL)
 			html:DockMargin(10, 10, 10, 10)
 
