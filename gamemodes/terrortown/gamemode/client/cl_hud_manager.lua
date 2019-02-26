@@ -49,6 +49,8 @@ local function EditLocalHUD()
 	local x, y = math.Round(gui.MouseX()), math.Round(gui.MouseY())
 	local elem = client.activeElement
 	local mode = client.hudEditMode or 0
+	
+	local mouse_clicked = input.WasMousePressed(MOUSE_LEFT)
 
 	if input.IsMouseDown(MOUSE_LEFT) then
 		if not elem then
@@ -83,7 +85,7 @@ local function EditLocalHUD()
 
 		if elem and (client.oldMX and client.oldMX ~= x or client.oldMY and client.oldMY ~= y) then
 			-- set to true to get new click zone
-			elem:SetMouseClicked(input.WasMousePressed(MOUSE_LEFT), x, y)
+			elem:SetMouseClicked(mouse_clicked, x, y)
 		
 			local size = elem:GetSize()
 
