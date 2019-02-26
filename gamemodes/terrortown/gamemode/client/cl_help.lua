@@ -88,6 +88,7 @@ function HELPSCRN:Show()
 
 	--- binding area
 	local dbindings = vgui.Create("DForm", dsettings)
+	dbindings:SetExpanded(false)
 
 	self:CreateBindings(dbindings)
 
@@ -95,6 +96,7 @@ function HELPSCRN:Show()
 
 	--- interface settings
 	local dgui = vgui.Create("DForm", dsettings)
+	dgui:SetExpanded(false)
 
 	self:CreateInterfaceSettings(dgui)
 
@@ -102,6 +104,7 @@ function HELPSCRN:Show()
 
 	--- gameplay settings
 	local dplay = vgui.Create("DForm", dsettings)
+	dplay:SetExpanded(false)
 
 	self:CreateGameplaySettings(dplay)
 
@@ -109,6 +112,7 @@ function HELPSCRN:Show()
 
 	-- crosshair settings
 	local dcrosshair = vgui.Create("DForm", dsettings)
+	dcrosshair:SetExpanded(false)
 
 	self:CreateCrosshairSettings(dcrosshair)
 
@@ -116,6 +120,7 @@ function HELPSCRN:Show()
 
 	--- Language area
 	local dlanguage = vgui.Create("DForm", dsettings)
+	dlanguage:SetExpanded(false)
 
 	self:CreateLanguageForm(dlanguage)
 
@@ -124,6 +129,7 @@ function HELPSCRN:Show()
 	--[[
 	-- role description
 	local roledesc_tab = vgui.Create("DForm")
+	roledesc_tab:SetExpanded(false)
 	roledesc_tab:SetSpacing(10)
 
 	local subrole = client:GetSubRole()

@@ -207,7 +207,7 @@ function CreateChanges()
 	</ul>]])
 
 	AddChange("0.5.0", [[<ul>
-	<li>added <b>HUDSwitcher</b> (<code>F1 → TTT2 → HUDSwitcher</code>)</li>
+	<li>added <b>HUDSwitcher</b> (<code>F1 → Settings → HUDSwitcher</code>)</li>
 		<ul>
 			<li>added old TTT HUD</li>
 			<li>added PureSkin HUD</li>
