@@ -94,6 +94,8 @@ if CLIENT then
 
 		item.move_y = -item_height
 
+		item.height = item_height
+
 		item.ready = true
 	end
 
@@ -138,7 +140,7 @@ if CLIENT then
 
 				-- Background box
 				item.bg.a = math.Clamp(alpha, 0, item.bg.a_max)
-				draw.RoundedBox(8, top_x, y, msg_width, item_height, item.bg)
+				draw.RoundedBox(8, top_x, y, msg_width, item.height, item.bg)
 
 				-- Text
 				item.col.a = math.Clamp(alpha, 0, item.col.a_max)
@@ -183,7 +185,7 @@ if CLIENT then
 					MSTACK.msgs[k] = nil
 				end
 
-				running_y = y + item_height
+				running_y = y + item.height
 			end
 		end
 	end

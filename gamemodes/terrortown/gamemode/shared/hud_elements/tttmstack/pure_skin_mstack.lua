@@ -102,6 +102,7 @@ if CLIENT then
 		end
 
 		item.move_y = -item_height
+		item.height = item_height
 
 		item.ready = true
 	end
