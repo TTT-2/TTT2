@@ -103,7 +103,7 @@ function HUDELEMENT:SetBasePos(x, y)
 end
 
 function HUDELEMENT:GetPos()
-	return self.pos
+	return table.Copy(self.pos)
 end
 
 function HUDELEMENT:SetPos(x, y)
@@ -112,7 +112,7 @@ function HUDELEMENT:SetPos(x, y)
 end
 
 function HUDELEMENT:GetSize()
-	return self.size
+	return table.Copy(self.size)
 end
 
 function HUDELEMENT:SetSize(w, h)
