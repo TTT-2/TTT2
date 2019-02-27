@@ -133,7 +133,7 @@ local function EditLocalHUD()
 
 					elem:SetBasePos(nx + client.difBaseX, ny + client.difBaseY)
 				else -- resize mode
-					
+					chat.AddText(tostring(client.size.w))
 
 					local multi_w = (trans_data.x_p and 1 or 0) + (trans_data.x_m and 1 or 0)
 					local multi_h = (trans_data.y_p and 1 or 0) + (trans_data.y_m and 1 or 0)
