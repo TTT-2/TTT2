@@ -551,7 +551,11 @@ net.Receive("TTT2PlayerAuthedShared", function(len)
 end)
 
 hook.Add("TTT2PlayerAuthed", "TTT2CacheAvatar", function(steamid64, name)
-	draw.CacheAvatar(steamid64, "medium") -- caching
+	local ply = player.GetBySteamID64(steamid64)
+	
+	if IsValid(ply) and ply:IsBot() then
+		steamid64 = nil
+	end
 
-	hook.Run("TTT2PlayerAuthedCacheReady", steamid64, name)
+	draw.CacheAvatar(steamid64, "medium") -- caching
 end)
