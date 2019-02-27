@@ -105,7 +105,12 @@ local function EditLocalHUD()
 			chat.AddText(tostring(key_changed_alt))
 		end
 
+		if (elem) then
+			chat.AddText("elem does exist")
+		end
+
 		if (elem and (mouse_changed or key_changed_shift or key_changed_alt)) then
+		chat.AddText("inside if")
 			-- set to true to get new click zone, because this sould only happen ONCE; this zone is now the active zone until the button is released
 			if client.mouse_clicked then
 				elem:SetMouseClicked(client.mouse_clicked, x, y)
