@@ -115,7 +115,6 @@ local function EditLocalHUD()
 			trans_data = elem:GetClickedArea(x, y, alt_pressed)
 			
 			if trans_data then
-				chat.AddText("transdata exists")
 				if trans_data.move then -- move mode
 					local size = elem:GetSize()
 					local nx = x - difX
@@ -135,7 +134,6 @@ local function EditLocalHUD()
 
 					elem:SetBasePos(nx + client.difBaseX, ny + client.difBaseY)
 				else -- resize mode
-					chat.AddText("resizing")
 					local multi_w = (trans_data.x_p and 1 or 0) + (trans_data.x_m and 1 or 0)
 					local multi_h = (trans_data.y_p and 1 or 0) + (trans_data.y_m and 1 or 0)
 					local new_w = client.size.w + (x - client.mouse_start_X) * trans_data.direction_x * multi_w
