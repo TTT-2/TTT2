@@ -14,7 +14,7 @@ if CLIENT then
 
 	function HUDELEMENT:Initialize()
 		self:RecalculateBasePos()
-		self:SetSize(size, -size)
+		self:SetSize(size, size)
 
 		BaseClass.Initialize(self)
 
@@ -27,12 +27,12 @@ if CLIENT then
 	function HUDELEMENT:RecalculateBasePos()
 		self:SetBasePos(20, ScrH() * 0.5)
 	end
-	
+
 	function HUDELEMENT:PerformLayout()
 		local basepos = self:GetBasePos()
 
 		self:SetPos(basepos.x, basepos.y)
-		self:SetSize(size, -size)
+		self:SetSize(size, size)
 
 		BaseClass.PerformLayout(self)
 	end
