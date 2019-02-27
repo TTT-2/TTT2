@@ -91,7 +91,17 @@ local function EditLocalHUD()
 		local difW = client.difW or 0
 		local difH = client.difH or 0
 
-		if elem and (client.oldMX and client.oldMX ~= x or client.oldMY and client.oldMY ~= y) then
+		local shift_pressed = input.IsKeyDown(KEY_LSHIFT) or input.IsKeyDown(KEY_RSHIFT)
+		local alt_pressed = input.IsKeyDown(KEY_LALT) or input.IsKeyDown(KEY_LALT)
+		
+		local mouse_changed = client.oldMX and client.oldMX ~= x or client.oldMY and client.oldMY ~= y
+		local key_changed_shift = client.old_shift_pressed and client.old_shift_pressed ~= shift_pressed
+		local key_changed_alt = client.old_alt_pressed and client.old_alt_pressed ~= alt_pressed
+
+		client.old_shift_pressed = shift_pressed
+		client.old_alt_pressed = alt_pressed
+
+		if (elem and (mouse_changed or key_changed_shift or key_changed_alt)) then
 			-- set to true to get new click zone, because this sould only happen ONCE; this zone is now the active zone until the button is released
 			if client.mouse_clicked then
 				elem:SetMouseClicked(client.mouse_clicked, x, y)
@@ -108,14 +118,12 @@ local function EditLocalHUD()
 				client.mouse_clicked = false
 			end
 
-			local size = elem:GetSize()
-
-			local shift_pressed = input.IsKeyDown(KEY_LSHIFT) or input.IsKeyDown(KEY_RSHIFT)
-			local alt_pressed = input.IsKeyDown(KEY_LALT) or input.IsKeyDown(KEY_LALT)
+			
 			trans_data = elem:GetClickedArea(x, y, alt_pressed)
-
+			
 			if trans_data then
 				if trans_data.move then -- move mode
+					local size = elem:GetSize()
 					local nx = x - difX
 					local ny = y - difY
 
@@ -133,8 +141,6 @@ local function EditLocalHUD()
 
 					elem:SetBasePos(nx + client.difBaseX, ny + client.difBaseY)
 				else -- resize mode
-					chat.AddText(tostring(client.size.w))
-
 					local multi_w = (trans_data.x_p and 1 or 0) + (trans_data.x_m and 1 or 0)
 					local multi_h = (trans_data.y_p and 1 or 0) + (trans_data.y_m and 1 or 0)
 					local new_w = client.size.w + (x - client.mouse_start_X) * trans_data.direction_x * multi_w
