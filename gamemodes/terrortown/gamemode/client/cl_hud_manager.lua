@@ -95,8 +95,8 @@ local function EditLocalHUD()
 		local alt_pressed = input.IsKeyDown(KEY_LALT) or input.IsKeyDown(KEY_LALT)
 		
 		local mouse_changed = client.oldMX and client.oldMX ~= x or client.oldMY and client.oldMY ~= y
-		local key_changed_shift = client.old_shift_pressed and client.old_shift_pressed ~= shift_pressed
-		local key_changed_alt = client.old_alt_pressed and client.old_alt_pressed ~= alt_pressed
+		local key_changed_shift = client.old_shift_pressed and client.old_shift_pressed ~= shift_pressed or false
+		local key_changed_alt = client.old_alt_pressed and client.old_alt_pressed ~= alt_pressed or false
 
 		client.old_shift_pressed = shift_pressed
 		client.old_alt_pressed = alt_pressed
