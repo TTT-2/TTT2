@@ -33,8 +33,8 @@ if CLIENT then
 	local top_margin = 10
 	local title_bottom_margin = 10
 	local msg_width = 400
-	local text_width = msg_width - pad * 4
 	local pad = 6
+	local text_width = msg_width - pad * 4
 	local msgfont = "PureSkinMSTACKMsg"
 	local imagedmsgfont = "PureSkinMSTACKImageMsg"
 	local text_color = COLOR_WHITE
