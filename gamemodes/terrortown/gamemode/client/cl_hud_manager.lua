@@ -98,10 +98,6 @@ local function EditLocalHUD()
 		local key_changed_shift = client.old_shift_pressed and client.old_shift_pressed ~= shift_pressed or false
 		local key_changed_alt = client.old_alt_pressed and client.old_alt_pressed ~= alt_pressed or false
 
-		if alt_pressed then
-			chat.AddText("alt pressed prior: ", tostring(alt_pressed))
-		end
-
 		if (elem and (mouse_changed or key_changed_shift or key_changed_alt)) then
 			-- set to true to get new click zone, because this sould only happen ONCE; this zone is now the active zone until the button is released
 			if client.mouse_clicked then
@@ -117,6 +113,11 @@ local function EditLocalHUD()
 
 				-- reset clicked because it sould be only executed once
 				client.mouse_clicked = false
+			end
+
+			
+			if alt_pressed then
+				chat.AddText("alt pressed prior: ", tostring(alt_pressed))
 			end
 
 			-- get data about the element, it returns the transformation direction
