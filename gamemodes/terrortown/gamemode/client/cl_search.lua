@@ -636,7 +636,7 @@ local function TTT2_ConfirmMsg()
 	local img = Material("vgui/ttt/icon_corpse")
 
 	if sid64 ~= "" then
-		img = draw.GetAvatarMaterial(sid64, "large", img)
+		img = draw.GetAvatarMaterial(sid64, "medium", img)
 	end
 
 	MSTACK:AddColoredImagedMessage(LANG.GetParamTranslation(msgName, tbl), clr, img)
