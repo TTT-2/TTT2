@@ -98,9 +98,6 @@ local function EditLocalHUD()
 		local key_changed_shift = client.old_shift_pressed and client.old_shift_pressed ~= shift_pressed or false
 		local key_changed_alt = client.old_alt_pressed and client.old_alt_pressed ~= alt_pressed or false
 
-		client.old_shift_pressed = shift_pressed
-		client.old_alt_pressed = alt_pressed
-
 		if alt_pressed then
 			chat.AddText("alt pressed prior: ", tostring(alt_pressed))
 		end
@@ -162,6 +159,9 @@ local function EditLocalHUD()
 				elem:PerformLayout()
 			end
 
+			-- set old values only if a change was used
+			client.old_shift_pressed = shift_pressed
+			client.old_alt_pressed = alt_pressed
 		end
 	else
 		elem = nil
