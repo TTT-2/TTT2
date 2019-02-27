@@ -546,7 +546,7 @@ net.Receive("TTT2PlayerAuthedShared", function(len)
 end)
 
 hook.Add("TTT2PlayerAuthed", "TTT2CacheAvatar", function(steamid, name)
-	fetch_asset(fetchAvatarAsset(steamid, "medium")) -- caching
+	draw.CacheAvatar(steamid, "medium") -- caching
 
 	hook.Run("TTT2PlayerAuthedCacheReady", steamid, name)
 end)

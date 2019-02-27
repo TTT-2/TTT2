@@ -70,6 +70,10 @@ local function fetchAvatarAsset(id64, size)
 	end)
 end
 
+function draw.CacheAvatar(id64, size)
+	return fetch_asset(fetchAvatarAsset(id64, size))
+end
+
 function draw.WebImage(url, x, y, width, height, color, angle, cornerorigin)
 	color = color or white
 
