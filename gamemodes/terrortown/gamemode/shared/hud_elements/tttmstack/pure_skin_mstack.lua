@@ -34,6 +34,7 @@ if CLIENT then
 	local title_bottom_margin = 10
 	local msg_width = 400
 	local pad = 6
+	local leftImagePad = 8
 	local text_width = msg_width - pad * 4
 	local msgfont = "PureSkinMSTACKMsg"
 	local imagedmsgfont = "PureSkinMSTACKImageMsg"
@@ -155,7 +156,7 @@ if CLIENT then
 		self:DrawBg(top_x, pos_y, msg_width, item.height, item.bg)
 
 		-- Text
-		local tx = top_x + imageSize + pad * 2 + leftImagePad
+		local tx = top_x + imageSize + pad + leftImagePad
 		local ty = pos_y + pad + top_margin
 
 		-- draw the title text
