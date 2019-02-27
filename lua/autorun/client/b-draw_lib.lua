@@ -22,7 +22,7 @@ local math = math
 local mats = {}
 local fetchedavatars = {}
 
-local function fetch_asset(url)
+local function fetch_asset(url, fallback)
 	if not url then
 		return _error
 	end
@@ -39,7 +39,7 @@ local function fetch_asset(url)
 		return mats[url]
 	end
 
-	mats[url] = _error
+	mats[url] = fallback or _error
 
 	fetch(url, function(data)
 		write("downloaded_assets/" .. crc .. ".png", data)
@@ -62,7 +62,7 @@ local function fetchAvatarAsset(id64, size)
 
 	if id64 == "BOT" then return end
 
-	fetch("http://steamcommunity.com/profiles/" .. id64 .. "/?xml=1",function( body )
+	fetch("http://steamcommunity.com/profiles/" .. id64 .. "/?xml=1", function(body)
 		local link = body:match("https://steamcdn%-a%.akamaihd%.net/steamcommunity/public/images/avatars/.-%.jpg") -- fix this with new https and gmod regex
 		if not link then return end
 
@@ -107,6 +107,6 @@ function draw.SteamAvatar(id64, size, x, y, width, height, color, ang, corner)
 	draw.WebImage(fetchAvatarAsset(id64, size), x, y, width, height, color, ang, corner)
 end
 
-function draw.GetAvatarMaterial(id64, size)
-	return fetch_asset(fetchAvatarAsset(id64, size))
+function draw.GetAvatarMaterial(id64, size, fallback)
+	return fetch_asset(fetchAvatarAsset(id64, size), fallback)
 end
