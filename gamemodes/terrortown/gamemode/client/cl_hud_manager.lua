@@ -98,7 +98,8 @@ local function EditLocalHUD()
 		local key_changed_shift = client.old_shift_pressed and client.old_shift_pressed ~= shift_pressed or false
 		local key_changed_alt = client.old_alt_pressed and client.old_alt_pressed ~= alt_pressed or false
 
-		if (elem and (mouse_changed or key_changed_shift or key_changed_alt)) then
+		--if (elem and (mouse_changed or key_changed_shift or key_changed_alt)) then
+		if elem then
 			-- set to true to get new click zone, because this sould only happen ONCE; this zone is now the active zone until the button is released
 			if client.mouse_clicked then
 				elem:SetMouseClicked(client.mouse_clicked, x, y)
