@@ -30,11 +30,11 @@ if CLIENT then
 	local movespeed = 2
 
 	local line_margin = 6
-	local top_margin = 10
-	local title_bottom_margin = 10
+	local top_margin = 8
+	local title_bottom_margin = 8
 	local msg_width = 400
 	local pad = 6
-	local leftImagePad = 8
+	local leftImagePad = 10
 	local text_width = msg_width - pad * 4
 	local msgfont = "PureSkinMSTACKMsg"
 	local imagedmsgfont = "PureSkinMSTACKImageMsg"
@@ -104,18 +104,18 @@ if CLIENT then
 			item.title_spec.font = imagedmsgfont
 			item.title_spec.font_height = draw.GetFontHeight(item.title_spec.font)
 
-			item.title = item.title and MSTACK:WrapText(item.title, max_text_width, item.title_spec.font) or {}
+			item.title_wrapped = item.title and MSTACK:WrapText(item.title, max_text_width, item.title_spec.font) or {}
 			-- calculate the new height
-			item_height = item_height + top_margin + title_bottom_margin + #item.title * (item.title_spec.font_height + line_margin) - line_margin
+			item_height = item_height + top_margin + title_bottom_margin + #item.title_wrapped * (item.title_spec.font_height + line_margin) - line_margin
 		end
 
 		item.text_spec.font_height = draw.GetFontHeight(item.text_spec.font)
 
-		item.text = MSTACK:WrapText(item.text, max_text_width, item.text_spec.font)
+		item.text_wrapped = MSTACK:WrapText(item.text, max_text_width, item.text_spec.font)
 
 		-- Height depends on number of lines, which is equal to number of table
 		-- elements of the wrapped item.text
-		item_height = item_height + #item.text * (item.text_spec.font_height + line_margin) - line_margin
+		item_height = item_height + #item.text_wrapped * (item.text_spec.font_height + line_margin) - line_margin
 
 		if item.image then
 			item_height = math.max(item_height, imageMinHeight)
@@ -139,8 +139,8 @@ if CLIENT then
 		local text_spec = item.text_spec
 		text_spec.color = item.col
 
-		for i = 1, #item.text do
-			text_spec.text = item.text[i]
+		for i = 1, #item.text_wrapped do
+			text_spec.text = item.text_wrapped[i]
 			text_spec.pos = {tx, ty}
 
 			draw.TextShadow(text_spec, 1, alpha)
@@ -163,8 +163,8 @@ if CLIENT then
 		local title_spec = item.title_spec
 		title_spec.color = item.col
 
-		for i = 1, #item.title do
-			title_spec.text = item.title[i]
+		for i = 1, #item.title_wrapped do
+			title_spec.text = item.title_wrapped[i]
 			title_spec.pos = {tx, ty}
 
 			draw.TextShadow(title_spec, 1, alpha)
@@ -178,8 +178,8 @@ if CLIENT then
 		local text_spec = item.text_spec
 		text_spec.color = item.col
 
-		for i = 1, #item.text do
-			text_spec.text = item.text[i]
+		for i = 1, #item.text_wrapped do
+			text_spec.text = item.text_wrapped[i]
 			text_spec.pos = {tx, ty}
 
 			draw.TextShadow(text_spec, 1, alpha)
