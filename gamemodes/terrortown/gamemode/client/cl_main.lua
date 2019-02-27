@@ -155,6 +155,11 @@ function GM:InitPostEntity()
 		GAMEMODE:ClearClientState()
 	end
 
+	-- cache players avatar
+	for _, v in ipairs(player.GetAll()) do
+		draw.CacheAvatar(v:SteamID64(), "medium") -- caching
+	end
+
 	timer.Create("cache_ents", 1, 0, GAMEMODE.DoCacheEnts)
 
 	RunConsoleCommand("_ttt_request_serverlang")
@@ -539,14 +544,14 @@ function GM:OnEntityCreated(ent)
 end
 
 net.Receive("TTT2PlayerAuthedShared", function(len)
-	local steamid = net.ReadString()
+	local steamid64 = net.ReadString()
 	local name = net.ReadString()
 
-	hook.Run("TTT2PlayerAuthed", steamid, name)
+	hook.Run("TTT2PlayerAuthed", steamid64, name)
 end)
 
-hook.Add("TTT2PlayerAuthed", "TTT2CacheAvatar", function(steamid, name)
-	draw.CacheAvatar(steamid, "medium") -- caching
+hook.Add("TTT2PlayerAuthed", "TTT2CacheAvatar", function(steamid64, name)
+	draw.CacheAvatar(steamid64, "medium") -- caching
 
-	hook.Run("TTT2PlayerAuthedCacheReady", steamid, name)
+	hook.Run("TTT2PlayerAuthedCacheReady", steamid64, name)
 end)
