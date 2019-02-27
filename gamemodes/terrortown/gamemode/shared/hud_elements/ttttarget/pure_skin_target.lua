@@ -20,7 +20,7 @@ if CLIENT then -- CLIENT
 
 		BaseClass.Initialize(self)
 		
-		--self.defaults.resizeableY = false
+		self.defaults.resizeableY = false
 	end
 
 	function HUDELEMENT:RecalculateBasePos()

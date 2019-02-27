@@ -110,7 +110,7 @@ if CLIENT then
 
 		BaseClass.Initialize(self)
 
-		--self.defaults.resizeableY = false
+		self.defaults.resizeableY = false
 		self.defaults.minHeight = height
 	end
 

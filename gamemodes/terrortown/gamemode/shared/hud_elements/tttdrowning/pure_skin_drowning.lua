@@ -19,9 +19,8 @@ if CLIENT then
 
 		BaseClass.Initialize(self)
 		
-		self.defaults.minHeight = bh + 2 * pad
 		self.defaults.minWidth = bh + 2 * pad
-		--self.defaults.resizeableY = false
+		self.defaults.resizeableY = false
 	end
 
 	function HUDELEMENT:RecalculateBasePos()

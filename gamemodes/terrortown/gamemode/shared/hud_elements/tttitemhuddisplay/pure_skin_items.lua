@@ -11,7 +11,6 @@ if CLIENT then
 	surface.CreateFont("ItemInfoFont", {font = "Trebuchet24", size = 14, weight = 700})
 
 	local size = 64
-	local w, h = 64
 
 	function HUDELEMENT:Initialize()
 		self:RecalculateBasePos()
@@ -23,8 +22,8 @@ if CLIENT then
 		self.defaults.minHeight = 32
 		
 		self:SetSize(size, -size)
-		--self.defaults.resizeableX = false
-		--self.defaults.resizeableY = false
+		self.defaults.resizeableX = false
+		self.defaults.resizeableY = false
 	end
 
 	function HUDELEMENT:RecalculateBasePos()
@@ -34,12 +33,9 @@ if CLIENT then
 	function HUDELEMENT:PerformLayout()
 		local basepos = self:GetBasePos()
 		local currSize = self:GetSize()
-		w, h = currSize.w, currSize.h
-		
-		size = math.max(w, h)
 		
 		self:SetPos(basepos.x, basepos.y)
-		self:SetSize(w, -h)
+		self:SetSize(size, -size)
 
 		BaseClass.PerformLayout(self)
 	end
