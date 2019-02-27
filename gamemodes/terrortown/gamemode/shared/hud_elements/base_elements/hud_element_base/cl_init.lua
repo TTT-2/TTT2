@@ -92,7 +92,7 @@ function HUDELEMENT:RecalculateBasePos()
 end
 
 function HUDELEMENT:GetBasePos()
-	return self.basepos
+	return table.Copy(self.basepos)
 end
 
 function HUDELEMENT:SetBasePos(x, y)
@@ -176,7 +176,7 @@ function HUDELEMENT:IsParent()
 end
 
 function HUDELEMENT:GetChildren()
-	return self.children
+	return table.Copy(self.children)
 end
 
 function HUDELEMENT:IsInRange(x, y, range)
