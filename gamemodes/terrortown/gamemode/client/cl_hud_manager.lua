@@ -142,8 +142,10 @@ local function EditLocalHUD()
 					new_w = math.max(elem.defaults.minWidth, math.Round(new_w))
 					new_h = math.max(elem.defaults.minHeight, math.Round(new_h))
 
-					elem:SetSize(new_w, new_h)
-					elem:SetBasePos(math.Round(trans_data.x_m and client.pos.x + trans_data.direction_x * (client.mouse_start_X - x) or client.pos.x), math.Round(trans_data.y_m and client.pos.y + trans_data.direction_y * (client.mouse_start_Y - y) or client.pos.y))
+					if (new_w ~= 0 and new_h ~= 0) then
+						elem:SetSize(new_w, new_h)
+						elem:SetBasePos(math.Round(trans_data.x_m and client.pos.x + trans_data.direction_x * (client.mouse_start_X - x) or client.pos.x), math.Round(trans_data.y_m and client.pos.y + trans_data.direction_y * (client.mouse_start_Y - y) or client.pos.y))
+					end
 				end
 
 				elem:PerformLayout()
