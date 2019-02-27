@@ -107,7 +107,7 @@ function GM:Move(ply, mv)
 		mul = basemul * mul * noLag[1]
 
 		if ply.sprintMultiplier and (ply.sprintProgress or 0) > 0 then
-			mul = mul * ply.sprintMultiplier
+			mul = mul * ply.sprintMultiplier * (ply.sprintMultiplierModifier or 1)
 		end
 
 		mv:SetMaxClientSpeed(mv:GetMaxClientSpeed() * mul)

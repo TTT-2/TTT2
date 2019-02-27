@@ -91,19 +91,32 @@ local function EditLocalHUD()
 		local difW = client.difW or 0
 		local difH = client.difH or 0
 
-		if elem and (client.oldMX and client.oldMX ~= x or client.oldMY and client.oldMY ~= y) then
-			-- set to true to get new click zone
-			elem:SetMouseClicked(client.mouse_clicked, x, y)
-			client.mouse_clicked = false
+		local shift_pressed = input.IsKeyDown(KEY_LSHIFT) or input.IsKeyDown(KEY_RSHIFT)
+		local alt_pressed = input.IsKeyDown(KEY_LALT) or input.IsKeyDown(KEY_LALT)
+		
+		if elem then
+			-- set to true to get new click zone, because this sould only happen ONCE; this zone is now the active zone until the button is released
+			if client.mouse_clicked then
+				elem:SetMouseClicked(client.mouse_clicked, x, y)
+				
+				-- save initial mouse position
+				client.mouse_start_X = x
+				client.mouse_start_Y = y
 
-			local size = elem:GetSize()
+				-- save initial element data
+				client.size = elem:GetSize() -- initial size
+				client.pos = elem:GetPos() -- initial pos
 
-			local shift_pressed = input.IsKeyDown(KEY_LSHIFT) or input.IsKeyDown(KEY_RSHIFT)
-			local alt_pressed = input.IsKeyDown(KEY_LALT) or input.IsKeyDown(KEY_LALT)
+				-- reset clicked because it sould be only executed once
+				client.mouse_clicked = false
+			end
+
+			-- get data about the element, it returns the transformation direction
 			trans_data = elem:GetClickedArea(x, y, alt_pressed)
-
+			
 			if trans_data then
 				if trans_data.move then -- move mode
+					local size = elem:GetSize()
 					local nx = x - difX
 					local ny = y - difY
 
@@ -121,24 +134,22 @@ local function EditLocalHUD()
 
 					elem:SetBasePos(nx + client.difBaseX, ny + client.difBaseY)
 				else -- resize mode
-					local size = elem:GetSize() -- curent size
-					local pos = elem:GetPos() -- current pos
-
 					local multi_w = (trans_data.x_p and 1 or 0) + (trans_data.x_m and 1 or 0)
 					local multi_h = (trans_data.y_p and 1 or 0) + (trans_data.y_m and 1 or 0)
-					local new_w = size.w + (x - client.oldMX) * trans_data.direction_x * multi_w
-					local new_h = size.h + (y - client.oldMY) * trans_data.direction_y * multi_h
+					local new_w = client.size.w + (x - client.mouse_start_X) * trans_data.direction_x * multi_w
+					local new_h = client.size.h + (y - client.mouse_start_Y) * trans_data.direction_y * multi_h
 
 					new_w = math.max(elem.defaults.minWidth, math.Round(new_w))
 					new_h = math.max(elem.defaults.minHeight, math.Round(new_h))
 
 					elem:SetSize(new_w, new_h)
-					elem:SetBasePos(math.Round(trans_data.x_m and pos.x + trans_data.direction_x * (client.oldMX - x) or pos.x), math.Round(trans_data.y_m and pos.y + trans_data.direction_y * (client.oldMY - y) or pos.y))
+					if (new_w ~= 0 and new_h ~= 0) then
+						elem:SetBasePos(math.Round(trans_data.x_m and client.pos.x + trans_data.direction_x * (client.mouse_start_X - x) or client.pos.x), math.Round(trans_data.y_m and client.pos.y + trans_data.direction_y * (client.mouse_start_Y - y) or client.pos.y))
+					end
 				end
 
 				elem:PerformLayout()
 			end
-
 		end
 	else
 		elem = nil
@@ -180,6 +191,7 @@ function HUDManager.EditHUD(bool, hud)
 		HUDManager.ShowHUDSwitcher(false)
 
 		chat.AddText("[TTT2][INFO] Hover over the elements and kick and move the mouse to ", Color(20, 150, 245), "move", Color(151, 211, 255), " or ", Color(245, 30, 80), "resize", Color(151, 211, 255), " it.")
+		chat.AddText("[TTT2][INFO] Press and hold the ", Color(255, 255, 255), "alt-key", Color(151, 211, 255), " for symmetric resizing.")
 		chat.AddText("[TTT2][INFO] Press [RMB] (right mouse-button) -> 'close' to exit the HUD editor!")
 
 		hook.Add("Think", "TTT2EditHUD", EditLocalHUD)
