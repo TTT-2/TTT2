@@ -537,3 +537,16 @@ function GM:OnEntityCreated(ent)
 
 	return self.BaseClass.OnEntityCreated(self, ent)
 end
+
+net.Receive("TTT2PlayerAuthedShared", function(len)
+	local steamid = net.ReadString()
+	local name = net.ReadString()
+
+	hook.Run("TTT2PlayerAuthed", steamid, name)
+end)
+
+hook.Add("TTT2PlayerAuthed", "TTT2CacheAvatar", function(steamid, name)
+	fetch_asset(fetchAvatarAsset(steamid, "medium")) -- caching
+
+	hook.Run("TTT2PlayerAuthedCacheReady", steamid, name)
+end)

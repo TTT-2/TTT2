@@ -170,6 +170,7 @@ util.AddNetworkString("TTT2SyncDBItems")
 util.AddNetworkString("TTT2ReceiveTBEq")
 util.AddNetworkString("TTT2ReceiveGBEq")
 util.AddNetworkString("TTT2ResetTBEq")
+util.AddNetworkString("TTT2PlayerAuthedShared")
 
 local buggyAddons = {
 	["656662924"] = "1367128301", -- Killer Notifier by nerzlakai96
@@ -1599,6 +1600,13 @@ function SelectRoles(plys, max_plys)
 
 	SendFullStateUpdate()
 end
+
+hook.Add("PlayerAuthed", "TTT2PlayerAuthedSharedHook", function(ply, steamid, uniqueid)
+	net.Start("TTT2PlayerAuthedShared")
+	net.WriteString(steamid)
+	net.WriteString((ply and ply:Nick()) or "UNKNOWN")
+	net.Broadcast()
+end)
 
 local function ttt_roundrestart(ply, command, args)
 	-- ply is nil on dedicated server console

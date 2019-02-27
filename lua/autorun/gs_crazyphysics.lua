@@ -183,7 +183,7 @@ local function IdentifyCorpse(pCorpse)
 	end
 
 	if ttt_announce_body_found:GetBool() then
-		if GetGlobalBool("ttt2_confirm_team") then
+		if GetGlobalBool("ttt2_confirm_team") then -- TODO adjust the new messages
 			LANG.Msg("body_found", {
 					finder = "The Server",
 					victim = CORPSE.GetPlayerNick(pCorpse, nil) or pPlayer:GetName(),
