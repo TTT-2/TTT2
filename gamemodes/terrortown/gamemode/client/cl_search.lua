@@ -620,11 +620,11 @@ net.Receive("TTT_RagdollSearch", TTT_RagdollSearch)
 
 local function TTT2_ConfirmMsg()
 	local msgName = net.ReadString()
-	local table = {}
 	local sid64 = net.ReadString()
 	local clr = Color(net.ReadUInt(8), net.ReadUInt(8), net.ReadUInt(8), net.ReadUInt(8))
 	local bool = net.ReadBool()
 
+	local tbl = {}
 	tbl.finder = net.ReadString()
 	tbl.victim = net.ReadString()
 	tbl.role = LANG.GetTranslation(net.ReadString())
