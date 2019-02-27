@@ -5,6 +5,8 @@
     You can use this anywhere for any purpose as long as you acredit the work to the original author with this notice.
     Optionally, if you choose to use this within your own software, it would be much appreciated if you could inform me of it.
     I love to see what people have done with my code! :)
+
+	-- This code got fixed and modified by the TTT2 dev group, ty for the lib @Bull !
 ]]--
 
 file.CreateDir("downloaded_assets")
@@ -99,4 +101,8 @@ end
 
 function draw.SteamAvatar(id64, size, x, y, width, height, color, ang, corner)
 	draw.WebImage(fetchAvatarAsset(id64, size), x, y, width, height, color, ang, corner)
+end
+
+function draw.GetAvatarMaterial(id64, size)
+	return fetch_asset(fetchAvatarAsset(id64, size))
 end
