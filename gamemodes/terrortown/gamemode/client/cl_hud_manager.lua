@@ -96,9 +96,13 @@ local function EditLocalHUD()
 			if client.mouse_clicked then
 				elem:SetMouseClicked(client.mouse_clicked, x, y)
 				
-				-- save initial position
+				-- save initial mouse position
 				client.mouse_start_X = x
 				client.mouse_start_Y = y
+
+				-- save initial element data
+				client.size = elem:GetSize() -- initial size
+				client.pos = elem:GetPos() -- initial pos
 
 				-- reset clicked because it sould be only executed once
 				client.mouse_clicked = false
@@ -129,19 +133,18 @@ local function EditLocalHUD()
 
 					elem:SetBasePos(nx + client.difBaseX, ny + client.difBaseY)
 				else -- resize mode
-					local size = elem:GetSize() -- curent size
-					local pos = elem:GetPos() -- current pos
+					
 
 					local multi_w = (trans_data.x_p and 1 or 0) + (trans_data.x_m and 1 or 0)
 					local multi_h = (trans_data.y_p and 1 or 0) + (trans_data.y_m and 1 or 0)
-					local new_w = size.w + (x - client.mouse_start_X) * trans_data.direction_x * multi_w
-					local new_h = size.h + (y - client.mouse_start_Y) * trans_data.direction_y * multi_h
+					local new_w = client.size.w + (x - client.mouse_start_X) * trans_data.direction_x * multi_w
+					local new_h = client.size.h + (y - client.mouse_start_Y) * trans_data.direction_y * multi_h
 
 					new_w = math.max(elem.defaults.minWidth, math.Round(new_w))
 					new_h = math.max(elem.defaults.minHeight, math.Round(new_h))
 
 					elem:SetSize(new_w, new_h)
-					elem:SetBasePos(math.Round(trans_data.x_m and pos.x + trans_data.direction_x * (client.mouse_start_X - x) or pos.x), math.Round(trans_data.y_m and pos.y + trans_data.direction_y * (client.mouse_start_Y - y) or pos.y))
+					elem:SetBasePos(math.Round(trans_data.x_m and client.pos.x + trans_data.direction_x * (client.mouse_start_X - x) or client.pos.x), math.Round(trans_data.y_m and client.pos.y + trans_data.direction_y * (client.mouse_start_Y - y) or client.pos.y))
 				end
 
 				elem:PerformLayout()
