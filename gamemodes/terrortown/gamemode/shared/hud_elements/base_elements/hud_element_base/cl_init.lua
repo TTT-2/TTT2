@@ -296,6 +296,8 @@ end
 function HUDELEMENT:GetClickedArea(x, y, alt_pressed)
 	alt_pressed = alt_pressed or false
 
+	chat.AddText("alt pressed: ", tostring(alt_pressed))
+
 	local row, col
 	if self.edit_live_data.calc_new_click_area then
 		if not self:IsInPos(x, y) then
@@ -321,6 +323,9 @@ function HUDELEMENT:GetClickedArea(x, y, alt_pressed)
 	local x_m = col[1] and (row[1] or row[2] or row[3])
 	local y_p = row[3] and (col[1] or col[2] or col[3])
 	local y_m = row[1] and (col[1] or col[2] or col[3])
+
+	chat.AddText("x_p: ", tostring(x_p))
+	chat.AddText("x_m: ", tostring(x_m))
 
 	local ret_transform_axis = {
 		x_p = x_p or (alt_pressed and x_m) or false,
