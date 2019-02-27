@@ -126,7 +126,7 @@ if CLIENT then
 		item.ready = true
 	end
 
-	local function DrawSmallMessage(item, pos_y, alpha)
+	function HUDELEMENT:DrawSmallMessage(item, pos_y, alpha)
 		-- Background box
 		self:DrawBg(top_x, pos_y, msg_width, item.height, item.bg)
 
@@ -150,7 +150,7 @@ if CLIENT then
 		self:DrawLines(top_x, pos_y, msg_width, item.height, item.bg.a)
 	end
 
-	local function DrawMessageWithImage(item, pos_y, alpha)
+	function HUDELEMENT:DrawMessageWithImage(item, pos_y, alpha)
 		-- Background box
 		self:DrawBg(top_x, pos_y, msg_width, item.height, item.bg)
 
@@ -239,6 +239,7 @@ if CLIENT then
 				else
 					DrawSmallMessage(item, y, alpha)
 				end
+				self:DrawLines(top_x, pos_y, msg_width, item.height, item.bg.a)
 
 				if alpha == 0 then
 					MSTACK.msgs[k] = nil
