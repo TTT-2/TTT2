@@ -633,12 +633,12 @@ local function TTT2_ConfirmMsg()
 		tbl.team = LANG.GetTranslation(net.ReadString())
 	end
 
-	local img = Material("_error")
+	local img = Material("vgui/ttt/icon_corpse")
 
 	if sid64 ~= "" then
 		img = draw.GetAvatarMaterial(sid64, "large")
 	end
 
-	MSTACK:AddColoredImagedMessage(LANG.GetParamTranslation(msgName, tbl), clr, img, "")
+	MSTACK:AddColoredImagedMessage(LANG.GetParamTranslation(msgName, tbl), clr, img)
 end
 net.Receive("TTT2SendConfirmMsg", TTT2_ConfirmMsg)
