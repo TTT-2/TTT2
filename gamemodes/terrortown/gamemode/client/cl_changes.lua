@@ -16,8 +16,9 @@ local htmlStart = [[
 	<head>
 		<style>
 			body {
-				color: black;
-				background-color: white;
+				font-family: Verdana, Trebuchet;
+				background-color: #162a39;
+				color: white;
 			}
 			body * {
 				font-size: 14pt;
