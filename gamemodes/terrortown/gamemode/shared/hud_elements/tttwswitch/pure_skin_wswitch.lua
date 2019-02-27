@@ -130,7 +130,6 @@ if CLIENT then
 		local w, h = self:GetSize().w, math.max(count * tmp, self.defaults.minHeight)
 
 		self:SetSize(w, -h)
-		print("set size", w, -h)
 
 		BaseClass.PerformLayout(self)
 	end
@@ -147,7 +146,6 @@ if CLIENT then
 
 		self:SetPos(basepos.x, basepos.y)
 		self:SetSize(w, -h)
-		print("set size", w, -h)
 
 		local pos = self:GetPos()
 		local x_elem = pos.x
