@@ -235,11 +235,10 @@ if CLIENT then
 				item.col.a = math.Clamp(alpha, 0, item.col.a_max)
 
 				if item.image then
-					DrawMessageWithImage(item, y, alpha)
+					self:DrawMessageWithImage(item, y, alpha)
 				else
-					DrawSmallMessage(item, y, alpha)
+					self:DrawSmallMessage(item, y, alpha)
 				end
-				self:DrawLines(top_x, pos_y, msg_width, item.height, item.bg.a)
 
 				if alpha == 0 then
 					MSTACK.msgs[k] = nil
