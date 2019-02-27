@@ -50,7 +50,7 @@ local function fetch_asset(url, fallback)
 	return mats[url]
 end
 
-local function fetchAvatarAsset(id64, size)
+local function fetchAvatarAsset(id64, size, onFetched)
 	id64 = id64 or "BOT"
 	size = size == "medium" and "medium" or size == "small" and "" or size == "large" and "full" or ""
 
@@ -58,26 +58,26 @@ local function fetchAvatarAsset(id64, size)
 		return fetchedavatars[id64 .. " " .. size]
 	end
 
-	print(id64)
-
 	fetchedavatars[id64 .. " " .. size] = id64 == "BOT" and "http://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/09/09962d76e5bd5b91a94ee76b07518ac6e240057a_full.jpg" or "http://i.imgur.com/uaYpdq7.png"
 
 	if id64 == "BOT" then return end
 
 	fetch("http://steamcommunity.com/profiles/" .. id64 .. "/?xml=1", function(body)
-		print(body)
-
 		local link = body:match("https://steamcdn%-a%.akamaihd%.net/steamcommunity/public/images/avatars/.-%.jpg") -- fix this with new https and gmod regex
 		if not link then return end
 
-		print("FETCHED!")
-
 		fetchedavatars[id64 .. " " .. size] = link:Replace(".jpg", (size ~= "" and "_" .. size or "") .. ".jpg")
+
+		if isfunction(onFetched) then
+			onFetched(fetchedavatars[id64 .. " " .. size])
+		end
 	end)
 end
 
 function draw.CacheAvatar(id64, size)
-	return fetch_asset(fetchAvatarAsset(id64, size))
+	fetch_asset(fetchAvatarAsset(id64, size, function(url)
+		fetch_asset(url)
+	end))
 end
 
 function draw.WebImage(url, x, y, width, height, color, angle, cornerorigin)
