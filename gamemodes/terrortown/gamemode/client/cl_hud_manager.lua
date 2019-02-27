@@ -101,7 +101,7 @@ local function EditLocalHUD()
 		client.old_shift_pressed = shift_pressed
 		client.old_alt_pressed = alt_pressed
 
-		chat.AddText(key_changed_shift)
+		chat.AddText(tostring(key_changed_shift))
 
 		if (elem and (mouse_changed or key_changed_shift or key_changed_alt)) then
 			-- set to true to get new click zone, because this sould only happen ONCE; this zone is now the active zone until the button is released
