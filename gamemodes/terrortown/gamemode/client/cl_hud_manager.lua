@@ -164,7 +164,7 @@ local function EditLocalHUD()
 						new_y = client.pos.y + math.Round((client.size.h - min_height) / 2)
 					else
 						new_h = client.size.h + new_h_p + new_h_m
-						new_y = client.pos.h - new_h_m
+						new_y = client.pos.y - new_h_m
 					end
 
 					elem:SetSize(new_w, new_h)
