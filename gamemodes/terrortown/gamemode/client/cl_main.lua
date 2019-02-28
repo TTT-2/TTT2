@@ -558,4 +558,6 @@ hook.Add("TTT2PlayerAuthed", "TTT2CacheAvatar", function(steamid64, name)
 	end
 
 	draw.CacheAvatar(steamid64, "medium") -- caching
+
+	hook.Run("TTT2PlayerAuthedCacheReady", steamid64, name)
 end)
