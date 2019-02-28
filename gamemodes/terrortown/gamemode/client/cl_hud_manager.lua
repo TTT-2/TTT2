@@ -120,17 +120,9 @@ local function EditLocalHUD()
 					local new_x = (x - client.mouse_start_X) + client.pos.x
 					local new_y = (y - client.mouse_start_Y) + client.pos.y
 
-					if new_x < 0 then
-						new_x = 0
-					elseif new_x + client.size.w > ScrW() then
-						new_x = ScrW() - client.size.w
-					end
-
-					if new_y < 0 then
-						new_y = 0
-					elseif new_y + client.size.h > ScrH() then
-						new_y = ScrH() - client.size.h
-					end
+					-- clamp values between min and max
+					new_x = math.Clamp(new_x, 0, ScrW() - client.size.w)
+					new_y = math.Clamp(new_y, 0, ScrH() - client.size.h)
 
 					elem:SetBasePos(new_x, new_y)
 				else -- resize mode
