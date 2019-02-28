@@ -18,8 +18,8 @@ if CLIENT then
 
 		BaseClass.Initialize(self)
 
-		self.defaults.minWidth = 32
-		self.defaults.minHeight = 32
+		self.defaults.minWidth = 64
+		self.defaults.minHeight = 64
 		
 		self:SetSize(size, -size)
 		self.defaults.resizeableX = false

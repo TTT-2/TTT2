@@ -1,6 +1,7 @@
 ttt_include("vgui__cl_hudswitcher")
 
 local current_hud = CreateClientConVar("ttt2_current_hud", HUDManager.defaultHUD or "pure_skin", true, true)
+local hud_scale = CreateClientConVar("ttt2_hud_scale", 1.0, true, true)
 
 local currentHUD
 
@@ -268,6 +269,7 @@ function HUDManager.AddHUDSettings(panel, hudEl)
 	if not IsValid(panel) or not hudEl then return end
 
 	local tmp = table.Copy(hudEl:GetSavingKeys()) or {}
+	tmp.scale = {typ = "scale", desc = "Set HUD Scale"}
 	tmp.el_pos = {typ = "el_pos", desc = "Change element's\nposition and size"}
 	tmp.reset = {typ = "reset", desc = "Reset HUD's data"}
 
@@ -323,6 +325,22 @@ function HUDManager.AddHUDSettings(panel, hudEl)
 				if isfunction(data.OnChange) then
 					data.OnChange(hudEl, col)
 				end
+			end
+		elseif data.typ == "scale" then
+			el = vgui.Create("DNumSlider")
+			el:SetPos(100, 0)
+			el:SetSize(600, 100)
+			el:SetMin( 0.1 )
+			el:SetMax( 5.0 )
+			el:SetDefaultValue( 1.0 )
+			el:SetDark(true)
+			el:SetDecimals( 1 )
+			el:SetConVar( "ttt2_hud_scale" )
+			el:PerformLayout()
+			el.Scratch:SetDisabled(true)
+			
+			function el:ValueChanged(scale)
+				print(scale)
 			end
 		end
 
