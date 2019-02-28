@@ -241,11 +241,11 @@ if CLIENT then
 			end
 
 			-- coin info
-			if cactive then
+			if cactive and client:IsShopper() then
 				local coinSize = 24
 				local x2_pad = math.Round((lpw - coinSize) * 0.5)
 
-				if client:IsShopper() and client:GetCredits() > 0 then
+				if client:GetCredits() > 0 then
 					surface.SetDrawColor(255, 255, 255, 200)
 					surface.SetMaterial(credits_default)
 				else
