@@ -68,28 +68,11 @@ local function EditLocalHUD()
 					local elObj = hudelements.GetStored(el)
 					if elObj and elObj:IsInPos(x, y) then
 						elem = elObj
-
-						local difPos = elem:GetPos()
-						local difBasePos = elem:GetBasePos()
-						local difSize = elem:GetSize()
-
-						client.difX = x - difPos.x
-						client.difY = y - difPos.y
-						client.difW = x - difSize.w
-						client.difH = y - difSize.h
-						client.difBaseX = difBasePos.x - difPos.x
-						client.difBaseY = difBasePos.y - difPos.y
-
 						break
 					end
 				end
 			end
 		end
-
-		local difX = client.difX or 0
-		local difY = client.difY or 0
-		local difW = client.difW or 0
-		local difH = client.difH or 0
 
 		local shift_pressed = input.IsKeyDown(KEY_LSHIFT) or input.IsKeyDown(KEY_RSHIFT)
 		local alt_pressed = input.IsKeyDown(KEY_LALT) or input.IsKeyDown(KEY_LALT)
@@ -130,7 +113,7 @@ local function EditLocalHUD()
 							new_x = client.pos.x
 							new_y = dif_y + client.pos.y
 						end
-					else
+					else -- default movement
 						new_x = dif_x + client.pos.x
 						new_y = dif_y + client.pos.y
 					end
@@ -160,9 +143,8 @@ local function EditLocalHUD()
 			end
 		end
 	else
+		-- element lost
 		elem = nil
-		client.difX = nil
-		client.difY = nil
 	end
 
 	if input.IsMouseDown(MOUSE_RIGHT) and (client.editOptionsX ~= x or client.editOptionsY ~= y) then
