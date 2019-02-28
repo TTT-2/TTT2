@@ -133,7 +133,7 @@ local function EditLocalHUD()
 					local additional_h = dif_y * trans_data.direction_y
 
 					-- calc and clamp new data
-					local new_w_p, new_w_m, new_h_p, new_h_m
+					local new_w_p, new_w_m, new_h_p, new_h_m = 0,0,0,0
 					if trans_data.x_p then
 						new_w_p = math.Clamp(additional_w, (-1) * client.size.w, ScrW() - (client.size.w + client.pos.x))
 					end
