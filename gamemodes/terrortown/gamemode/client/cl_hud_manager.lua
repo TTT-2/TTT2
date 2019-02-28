@@ -129,7 +129,7 @@ local function EditLocalHUD()
 					elem:SetBasePos(new_x, new_y)
 				else -- resize mode
 					-- calc base data wihile checking for the shift key
-					local additional_w,a additional_h
+					local additional_w, additional_h
 					if shift_pressed then
 						if dif_x > dif_y then
 							dif_x = math.round(dif_y * client.aspect)
