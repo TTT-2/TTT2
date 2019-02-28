@@ -148,11 +148,24 @@ local function EditLocalHUD()
 					end
 
 					-- combine new size data
-					local new_w = math.max(client.size.w + new_w_p + new_w_m, 0)
-					local new_h = math.max(client.size.h + new_h_p + new_h_m, 0)
+					local new_w, new_h, new_x, new_y
+					-- TODO
+					local min_width, min_height = 0,0
+					if (client.size.w + new_w_p + new_w_m < min_width) then
+						new_w = min_width
+						new_x = client.pos.x + math.Round((client.size.w - min_width) / 2)
+					else
+						new_w = client.size.w + new_w_p + new_w_m
+						new_x = client.pos.x - new_w_m
+					end
 
-					local new_x = client.pos.x - new_w_m
-					local new_y = client.pos.y - new_h_m
+					if (client.size.h + new_h_p + new_h_m < min_height) then
+						new_h = min_height
+						new_y = client.pos.y + math.Round((client.size.h - min_height) / 2)
+					else
+						new_h = client.size.h + new_h_p + new_h_m
+						new_y = client.pos.h - new_h_m
+					end
 
 					elem:SetSize(new_w, new_h)
 					elem:SetBasePos(new_x, new_y)
