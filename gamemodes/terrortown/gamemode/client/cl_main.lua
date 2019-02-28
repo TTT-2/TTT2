@@ -552,8 +552,8 @@ end)
 
 hook.Add("TTT2PlayerAuthed", "TTT2CacheAvatar", function(steamid64, name)
 	local ply = player.GetBySteamID64(steamid64)
-	
-	if IsValid(ply) and ply:IsBot() then
+
+	if not IsValid(ply) or ply:IsBot() then
 		steamid64 = nil
 	end
 
