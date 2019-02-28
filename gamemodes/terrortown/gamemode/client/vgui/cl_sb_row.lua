@@ -14,6 +14,7 @@ local ttt2_indicator_dev = "vgui/ttt/ttt2_indicator_dev"
 local ttt2_indicator_vip = "vgui/ttt/ttt2_indicator_vip"
 local ttt2_indicator_addondev = "vgui/ttt/ttt2_indicator_addondev"
 local ttt2_indicator_admin = "vgui/ttt/ttt2_indicator_admin"
+local ttt2_indicator_streamer = "vgui/ttt/ttt2_indicator_streamer"
 
 local dev_tbl = {
 	["76561197964193008"] = true,
@@ -39,6 +40,13 @@ local addondev_tbl = {
 	["76561198052323988"] = true -- LeBroomer
 }
 
+local streamer_tbl = {
+	["76561198049831089"] = true,
+	["76561198058039701"] = true,
+	["76561198047819379"] = true,
+	["76561198052323988"] = true
+}
+
 function AddTTT2AddonDev(steamid64)
 	if not steamid64 then return end
 
@@ -50,7 +58,8 @@ local namecolor = {
 	dev = Color(100, 240, 105, 255),
 	vip = Color(220, 55, 55, 255),
 	addondev = Color(30, 105, 300, 255),
-	admin = Color(255, 210, 35, 255)
+	admin = Color(255, 210, 35, 255),
+	streamer = Color(74, 54, 126, 255)
 }
 
 SB_ROW_HEIGHT = 24 --16
@@ -127,6 +136,12 @@ function PANEL:Init()
 	self.admin:SetMouseInputEnabled(true)
 	self.admin:SetKeepAspect(true)
 	self.admin:SetTooltip("Server Admin")
+
+	self.streamer = vgui.Create("DImage", self)
+	self.streamer:SetSize(iconSizes, iconSizes)
+	self.streamer:SetMouseInputEnabled(true)
+	self.streamer:SetKeepAspect(true)
+	self.streamer:SetTooltip("Streamer")
 
 	self.avatar = vgui.Create("AvatarImage", self)
 	self.avatar:SetSize(SB_ROW_HEIGHT, SB_ROW_HEIGHT)
@@ -318,6 +333,7 @@ function PANEL:UpdatePlayerData()
 	end
 
 	self.admin:SetVisible(ply:IsAdmin())
+	self.streamer:SetVisible(steamid64 and streamer_tbl[steamid64] == true or false)
 
 	local ptag = ply.sb_tag
 
@@ -384,6 +400,9 @@ function PANEL:ApplySchemeSettings()
 
 	self.admin:SetImage(ttt2_indicator_admin)
 	self.admin:SetImageColor(namecolor.admin)
+
+	self.streamer:SetImage(ttt2_indicator_streamer)
+	self.streamer:SetImageColor(namecolor.streamer)
 end
 
 function PANEL:LayoutColumns()
@@ -434,6 +453,12 @@ function PANEL:LayoutColumns()
 
 	if self.admin:IsVisible() then
 		self.admin:SetPos(tx + (iconSizes + mgn) * i, ty)
+
+		i = i + 1
+	end
+
+	if self.streamer:IsVisible() then
+		self.streamer:SetPos(tx + (iconSizes + mgn) * i, ty)
 
 		i = i + 1
 	end

@@ -61,4 +61,5 @@ if SERVER then
 	resource.AddFile("materials/vgui/ttt/ttt2_indicator_vip.vmt") -- vip
 	resource.AddFile("materials/vgui/ttt/ttt2_indicator_addondev.vmt") -- ttt2 addon dev
 	resource.AddFile("materials/vgui/ttt/ttt2_indicator_admin.vmt") -- server admin
+	resource.AddFile("materials/vgui/ttt/ttt2_indicator_streamer.vmt") -- streamer
 end
