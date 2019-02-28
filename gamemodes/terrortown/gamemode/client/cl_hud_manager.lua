@@ -135,13 +135,13 @@ local function EditLocalHUD()
 					-- calc and clamp new data
 					local new_w_p, new_w_m, new_h_p, new_h_m
 					if trans_data.x_p then
-						new_w_p = math.Clamp(additional_w, (-1) * client.size.w, ScrW() - (client.size.w, client.pos.x))
+						new_w_p = math.Clamp(additional_w, (-1) * client.size.w, ScrW() - (client.size.w + client.pos.x))
 					end
 					if trans_data.x_m then
 						new_w_m = math.Clamp(additional_w, (-1) * client.size.w, client.pos.x)
 					end
 					if trans_data.y_p then
-						new_h_p = math.Clamp(additional_h, (-1) * client.size.h, ScrH() - (client.size.h, client.pos.y))
+						new_h_p = math.Clamp(additional_h, (-1) * client.size.h, ScrH() - (client.size.h + client.pos.y))
 					end
 					if trans_data.y_m then
 						new_h_m = math.Clamp(additional_h, (-1) * client.size.h, client.pos.y)
