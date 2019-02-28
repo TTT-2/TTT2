@@ -93,7 +93,6 @@ local function EditLocalHUD()
 
 				-- store aspect ratio for shift-rescaling
 				client.aspect = client.size.w / client.size.h
-				chat.AddText(tostring(client.aspect))
 
 				-- reset clicked because it sould be only executed once
 				client.mouse_clicked = false
