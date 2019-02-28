@@ -15,8 +15,7 @@ if CLIENT then
 	function HUDELEMENT:Initialize()
 		self:RecalculateBasePos()
 		self:SetSize(size, -size)
-		self.SetMinSize(size, size)
-
+		
 		BaseClass.Initialize(self)
 
 		self.defaults.minWidth = size
