@@ -324,13 +324,13 @@ function PANEL:UpdatePlayerData()
 
 	self.dev:SetVisible(isdev)
 
-	if not isdev then
+	--if not isdev then
 		self.vip:SetVisible(steamid64 and vip_tbl[steamid64] == true or false)
 		self.addondev:SetVisible(steamid64 and addondev_tbl[steamid64] == true or false)
-	else
-		self.vip:SetVisible(false)
-		self.addondev:SetVisible(false)
-	end
+	--else
+	--	self.vip:SetVisible(false)
+	--	self.addondev:SetVisible(false)
+	--end
 
 	self.admin:SetVisible(ply:IsAdmin())
 	self.streamer:SetVisible(steamid64 and streamer_tbl[steamid64] == true or false)
