@@ -370,6 +370,11 @@ function GM:InitPostEntity()
 			local ret = CreateConVar(nm, "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 			SetGlobalBool(nm, ret:GetBool())
+
+			cvars.AddChangeCallback(nm, function(cvarName, old, new)
+				SetGlobalBool(cvarName, new)
+			end,
+			"CVAR_" .. nm)
 		end
 	end
 
