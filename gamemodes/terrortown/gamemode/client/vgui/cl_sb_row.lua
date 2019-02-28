@@ -129,7 +129,7 @@ function PANEL:Init()
 	self.addondev:SetSize(iconSizes, iconSizes)
 	self.addondev:SetMouseInputEnabled(true)
 	self.addondev:SetKeepAspect(true)
-	self.addondev:SetTooltip("TTT2 Addondev")
+	self.addondev:SetTooltip("TTT2 Addon Developer")
 
 	self.admin = vgui.Create("DImage", self)
 	self.admin:SetSize(iconSizes, iconSizes)
