@@ -12,6 +12,7 @@ DEFINE_BASECLASS(base)
 
 if CLIENT then
 	local width, height = 200, 40
+	local min_w, min_h = 100, 40
 	local draw_col = Color(205, 155, 0, 255)
 	local pad = 7
 	local margin = 14
@@ -19,6 +20,7 @@ if CLIENT then
 	function HUDELEMENT:Initialize()
 		self:RecalculateBasePos()
 		self:SetSize(width, height)
+		self:SetMinSize(min_w, min_h)
 
 		BaseClass.Initialize(self)
 

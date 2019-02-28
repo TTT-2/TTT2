@@ -12,9 +12,23 @@ HUDELEMENT.Base = base
 if CLIENT then
 	local width = 365
 	local height = 28
+	local min_w, min_h = 240, 28
 
 	HUDELEMENT.margin = 5
 	HUDELEMENT.lpw = 22 -- left panel width
+
+	function HUDELEMENT:Initialize()
+		WSWITCH:UpdateWeaponCache()
+
+		self:RecalculateBasePos()
+		self:SetSize(width, -height)
+		self:SetMinSize(min_w, min_h)
+
+		BaseClass.Initialize(self)
+
+		self.defaults.resizeableY = false
+		self.defaults.minHeight = height
+	end
 
 	function HUDELEMENT:DrawBarBg(x, y, w, h, col)
 		local ply = LocalPlayer()
@@ -101,18 +115,6 @@ if CLIENT then
 		text = Color(255, 255, 255, 100),
 		shadow = 100
 	}
-
-	function HUDELEMENT:Initialize()
-		WSWITCH:UpdateWeaponCache()
-
-		self:RecalculateBasePos()
-		self:SetSize(width, -height)
-
-		BaseClass.Initialize(self)
-
-		self.defaults.resizeableY = false
-		self.defaults.minHeight = height
-	end
 
 	function HUDELEMENT:RecalculateBasePos()
 		self:SetBasePos(ScrW() - (width + self.margin * 2), ScrH() - self.margin)

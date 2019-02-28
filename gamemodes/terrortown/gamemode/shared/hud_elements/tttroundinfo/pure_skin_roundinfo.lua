@@ -17,6 +17,7 @@ if CLIENT then
 		self.disabledUnlessForced = true
 
 		self:SetSize(w, h)
+		self:SetMinSize(w, h)
 
 		BaseClass.Initialize(self)
 	end
