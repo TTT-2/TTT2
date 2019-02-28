@@ -123,7 +123,7 @@ local function EditLocalHUD()
 					-- move on axis when shift is pressed
 					local new_x, new_y
 					if shift_pressed then
-						if dif_x > dif_y then
+						if math.abs(dif_x) > math.abs(dif_y) then
 							new_x = dif_x + client.pos.x
 							new_y = client.pos.y
 						else
