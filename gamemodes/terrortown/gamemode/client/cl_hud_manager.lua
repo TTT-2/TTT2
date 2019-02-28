@@ -147,21 +147,22 @@ local function EditLocalHUD()
 						new_h_m = math.Clamp(additional_h, (-1) * client.size.h, client.pos.y)
 					end
 
+					-- get min data for this element
+					local min = elem:GetMinSize()
+
 					-- combine new size data
 					local new_w, new_h, new_x, new_y
-					-- TODO
-					local min_width, min_height = 0,0
-					if (client.size.w + new_w_p + new_w_m < min_width) then
-						new_w = min_width
-						new_x = client.pos.x + math.Round((client.size.w - min_width) / 2)
+					if (client.size.w + new_w_p + new_w_m < min.w) then
+						new_w = min.w
+						new_x = client.pos.x + math.Round((client.size.w - min.w) / 2)
 					else
 						new_w = client.size.w + new_w_p + new_w_m
 						new_x = client.pos.x - new_w_m
 					end
 
-					if (client.size.h + new_h_p + new_h_m < min_height) then
-						new_h = min_height
-						new_y = client.pos.y + math.Round((client.size.h - min_height) / 2)
+					if (client.size.h + new_h_p + new_h_m < min.h) then
+						new_h = min.h
+						new_y = client.pos.y + math.Round((client.size.h - min.h) / 2)
 					else
 						new_h = client.size.h + new_h_p + new_h_m
 						new_y = client.pos.y - new_h_m

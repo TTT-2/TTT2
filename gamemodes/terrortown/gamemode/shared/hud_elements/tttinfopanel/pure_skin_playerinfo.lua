@@ -9,6 +9,7 @@ if CLIENT then
 
 	local x, y = 0, 0
 	local w, h = 365, 146
+	local min_w, min_h = 225, 146
 	local pad = 14 -- padding
 	local lpw = 44 -- left panel width
 	local sri_text_width_padding = 8 -- secondary role information padding (needed for size calculations)
@@ -18,6 +19,7 @@ if CLIENT then
 	function HUDELEMENT:Initialize()
 		self:RecalculateBasePos()
 		self:SetSize(w, h)
+		self:SetMinSize(min_w, min_h)
 
 		BaseClass.Initialize(self)
 

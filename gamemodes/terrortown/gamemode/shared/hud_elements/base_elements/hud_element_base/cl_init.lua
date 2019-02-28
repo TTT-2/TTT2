@@ -10,9 +10,15 @@ local zero_tbl_size = {
 	h = 0
 }
 
+local min_size_tbl = {
+	w = 0,
+	h = 0
+}
+
 HUDELEMENT.basepos = table.Copy(zero_tbl_pos)
 HUDELEMENT.pos = table.Copy(zero_tbl_pos)
 HUDELEMENT.size = table.Copy(zero_tbl_size)
+HUDELEMENT.minsize = table.Copy(min_size_tbl)
 
 HUDELEMENT.defaults = {
 	basepos = table.Copy(HUDELEMENT.basepos),
@@ -109,6 +115,15 @@ end
 function HUDELEMENT:SetPos(x, y)
 	self.pos.x = x
 	self.pos.y = y
+end
+
+function HUDELEMENT:SetMinSize(w, h)
+	self.minsize.w = w
+	self.minsize.h = h
+end
+
+function HUDELEMENT:GetMinSize()
+	return tabel.Copy(self.minsize)
 end
 
 function HUDELEMENT:GetSize()
