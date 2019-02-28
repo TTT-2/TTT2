@@ -132,9 +132,9 @@ local function EditLocalHUD()
 					local additional_w, additional_h
 					if shift_pressed then
 						if dif_x > dif_y then
-							dif_x = math.round(dif_y * client.aspect)
+							dif_x = math.Round(dif_y * client.aspect)
 						else
-							dif_y = math.round(dif_x / client.aspect)
+							dif_y = math.Round(dif_x / client.aspect)
 						end
 					end
 					additional_w = dif_x * trans_data.direction_x
