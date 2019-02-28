@@ -111,20 +111,20 @@ local function EditLocalHUD()
 					local new_x, new_y
 					if shift_pressed then
 						if math.abs(dif_x) > math.abs(dif_y) then
-							new_x = dif_x + client.pos.x
-							new_y = client.pos.y
+							new_x = dif_x + client.base.x
+							new_y = client.base.y
 						else
-							new_x = client.pos.x
-							new_y = dif_y + client.pos.y
+							new_x = client.base.x
+							new_y = dif_y + client.base.y
 						end
 					else -- default movement
-						new_x = dif_x + client.pos.x
-						new_y = dif_y + client.pos.y
+						new_x = dif_x + client.base.x
+						new_y = dif_y + client.base.y
 					end
 
 					-- clamp values between min and max
-					new_x = math.Clamp(new_x, 0, ScrW() - client.size.w)
-					new_y = math.Clamp(new_y, 0, ScrH() - client.size.h)
+					new_x = math.Clamp(new_x, 0, ScrW() - client.size.w - (client.pos.x - client.base.x))
+					new_y = math.Clamp(new_y, 0, ScrH() - client.size.h - (client.pos.y - client.base.y))
 
 					elem:SetBasePos(new_x, new_y)
 				else -- resize mode
@@ -135,16 +135,16 @@ local function EditLocalHUD()
 					-- calc and clamp new data
 					local new_w_p, new_w_m, new_h_p, new_h_m = 0,0,0,0
 					if trans_data.x_p then
-						new_w_p = math.Clamp(additional_w, (-1) * client.size.w, ScrW() - (client.size.w + client.pos.x))
+						new_w_p = math.Clamp(additional_w, (-1) * client.size.w, ScrW() - (client.size.w + client.base.x))
 					end
 					if trans_data.x_m then
-						new_w_m = math.Clamp(additional_w, (-1) * client.size.w, client.pos.x)
+						new_w_m = math.Clamp(additional_w, (-1) * client.size.w, client.base.x)
 					end
 					if trans_data.y_p then
-						new_h_p = math.Clamp(additional_h, (-1) * client.size.h, ScrH() - (client.size.h + client.pos.y))
+						new_h_p = math.Clamp(additional_h, (-1) * client.size.h, ScrH() - (client.size.h + client.base.y))
 					end
 					if trans_data.y_m then
-						new_h_m = math.Clamp(additional_h, (-1) * client.size.h, client.pos.y)
+						new_h_m = math.Clamp(additional_h, (-1) * client.size.h, client.base.y)
 					end
 
 					-- get min data for this element
@@ -154,30 +154,30 @@ local function EditLocalHUD()
 					local new_w, new_h, new_x, new_y
 					if (client.size.w + new_w_p < min.w) then
 						new_w = min.w
-						new_x = client.pos.x
+						new_x = client.base.x
 					elseif (client.size.w + new_w_m < min.w) then
 						new_w = min.w
-						new_x = client.pos.x + dif_x
+						new_x = client.base.x + dif_x
 					elseif (client.size.w + new_w_p + new_w_m < min.w) then
 						new_w = min.w
-						new_x = client.pos.x + math.Round((client.size.w - min.w) / 2)
+						new_x = client.base.x + math.Round((client.size.w - min.w) / 2)
 					else
 						new_w = client.size.w + new_w_p + new_w_m
-						new_x = client.pos.x - new_w_m
+						new_x = client.base.x - new_w_m
 					end
 
 					if (client.size.h + new_h_p < min.h) then
 						new_h = min.h
-						new_y = client.pos.y
+						new_y = client.base.y
 					elseif (client.size.h + new_h_m < min.h) then
 						new_h = min.h
-						new_y = client.pos.y + dif_y
+						new_y = client.base.y + dif_y
 					elseif (client.size.h + new_h_p + new_h_m < min.h) then
 						new_h = min.h
-						new_y = client.pos.y + math.Round((client.size.h - min.h) / 2)
+						new_y = client.base.y + math.Round((client.size.h - min.h) / 2)
 					else
 						new_h = client.size.h + new_h_p + new_h_m
-						new_y = client.pos.y - new_h_m
+						new_y = client.base.y - new_h_m
 					end
 
 					elem:SetSize(new_w, new_h)
