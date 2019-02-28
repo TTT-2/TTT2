@@ -372,7 +372,7 @@ function GM:InitPostEntity()
 			SetGlobalBool(nm, ret:GetBool())
 
 			cvars.AddChangeCallback(nm, function(cvarName, old, new)
-				SetGlobalBool(cvarName, new)
+				SetGlobalBool(cvarName, tobool(new))
 			end,
 			"CVAR_" .. nm)
 		end
