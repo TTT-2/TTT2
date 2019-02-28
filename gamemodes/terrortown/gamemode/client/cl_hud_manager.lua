@@ -117,8 +117,24 @@ local function EditLocalHUD()
 			
 			if trans_data then
 				if trans_data.move then -- move mode
-					local new_x = (x - client.mouse_start_X) + client.pos.x
-					local new_y = (y - client.mouse_start_Y) + client.pos.y
+					local dif_x = x - client.mouse_start_X
+					local dif_y = y - client.mouse_start_Y
+
+					-- move on axis when shift is pressed
+					local new_x, new_y
+					if shift_pressed then
+						if dif_x > dif_y then
+							new_x = dif_x + client.pos.x
+							new_y = client.pos.y
+						else
+							new_x = client.pos.x
+							new_y = dif_y + client.pos.y
+						end
+					else
+						new_x = dif_x + client.pos.x
+						new_y = dif_y + client.pos.y
+					end
+
 
 					-- clamp values between min and max
 					new_x = math.Clamp(new_x, 0, ScrW() - client.size.w)
@@ -184,6 +200,7 @@ function HUDManager.EditHUD(bool, hud)
 
 		chat.AddText("[TTT2][INFO] Hover over the elements and kick and move the mouse to ", Color(20, 150, 245), "move", Color(151, 211, 255), " or ", Color(245, 30, 80), "resize", Color(151, 211, 255), " it.")
 		chat.AddText("[TTT2][INFO] Press and hold the ", Color(255, 255, 255), "alt-key", Color(151, 211, 255), " for symmetric resizing.")
+		chat.AddText("[TTT2][INFO] Press and hold the ", Color(255, 255, 255), "shift-key", Color(151, 211, 255), " to move on axis and to keep the aspect ratio.")
 		chat.AddText("[TTT2][INFO] Press [RMB] (right mouse-button) -> 'close' to exit the HUD editor!")
 
 		hook.Add("Think", "TTT2EditHUD", EditLocalHUD)
