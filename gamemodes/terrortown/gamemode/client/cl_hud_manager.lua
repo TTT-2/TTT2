@@ -157,7 +157,7 @@ local function EditLocalHUD()
 						new_x = client.pos.x
 					elseif (client.size.w + new_w_m < min.w and new_w_p == 0) then
 						new_w = min.w
-						new_x = client.pos.x + dif_x
+						new_x = client.pos.x + client.size.w - min.w
 					elseif (client.size.w + new_w_p + new_w_m < min.w) then
 						new_w = min.w
 						new_x = client.pos.x + math.Round((client.size.w - min.w) / 2)
@@ -171,7 +171,7 @@ local function EditLocalHUD()
 						new_y = client.pos.y
 					elseif (client.size.h + new_h_m < min.h and new_h_p == 0) then
 						new_h = min.h
-						new_y = client.pos.y + dif_y
+						new_y = client.pos.y + client.size.h - min.h
 					elseif (client.size.h + new_h_p + new_h_m < min.h) then
 						new_h = min.h
 						new_y = client.pos.y + math.Round((client.size.h - min.h) / 2)
