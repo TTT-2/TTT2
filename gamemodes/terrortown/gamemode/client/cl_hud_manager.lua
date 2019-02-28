@@ -152,10 +152,10 @@ local function EditLocalHUD()
 
 					-- combine new size data
 					local new_w, new_h, new_x, new_y
-					if (client.size.w + new_w_p < min.w) then
+					if (client.size.w + new_w_p < min.w and new_w_m == 0) then
 						new_w = min.w
 						new_x = client.pos.x
-					elseif (client.size.w + new_w_m < min.w) then
+					elseif (client.size.w + new_w_m < min.w and new_w_p == 0) then
 						new_w = min.w
 						new_x = client.pos.x + dif_x
 					elseif (client.size.w + new_w_p + new_w_m < min.w) then
@@ -166,10 +166,10 @@ local function EditLocalHUD()
 						new_x = client.pos.x - new_w_m
 					end
 
-					if (client.size.h + new_h_p < min.h) then
+					if (client.size.h + new_h_p < min.h and new_h_m == 0) then
 						new_h = min.h
 						new_y = client.pos.y
-					elseif (client.size.h + new_h_m < min.h) then
+					elseif (client.size.h + new_h_m < min.h and new_h_p == 0) then
 						new_h = min.h
 						new_y = client.pos.y + dif_y
 					elseif (client.size.h + new_h_p + new_h_m < min.h) then
