@@ -91,6 +91,9 @@ local function EditLocalHUD()
 				client.pos = elem:GetPos() -- initial pos
 				client.base = elem:GetBasePos() -- initial base pos
 
+				-- store aspect ratio for shift-rescaling
+				client.aspect = client.size.w / client.size.h
+
 				-- reset clicked because it sould be only executed once
 				client.mouse_clicked = false
 			end
@@ -99,10 +102,11 @@ local function EditLocalHUD()
 			trans_data = elem:GetClickedArea(x, y, alt_pressed)
 			
 			if trans_data then
+				-- track mouse movement
+				local dif_x = x - client.mouse_start_X
+				local dif_y = y - client.mouse_start_Y
+				
 				if trans_data.move then -- move mode
-					local dif_x = x - client.mouse_start_X
-					local dif_y = y - client.mouse_start_Y
-
 					-- move on axis when shift is pressed
 					local new_x, new_y
 					if shift_pressed then
@@ -118,25 +122,40 @@ local function EditLocalHUD()
 						new_y = dif_y + client.pos.y
 					end
 
-
 					-- clamp values between min and max
 					new_x = math.Clamp(new_x, 0, ScrW() - client.size.w)
 					new_y = math.Clamp(new_y, 0, ScrH() - client.size.h)
 
 					elem:SetBasePos(new_x, new_y)
 				else -- resize mode
-					local multi_w = (trans_data.x_p and 1 or 0) + (trans_data.x_m and 1 or 0)
-					local multi_h = (trans_data.y_p and 1 or 0) + (trans_data.y_m and 1 or 0)
-					local new_w = client.size.w + (x - client.mouse_start_X) * trans_data.direction_x * multi_w
-					local new_h = client.size.h + (y - client.mouse_start_Y) * trans_data.direction_y * multi_h
+					-- calc base data
+					local additional_w = dif_x * trans_data.direction_x
+					local additional_h = dif_y * trans_data.direction_y
 
-					new_w = math.max(elem.defaults.minWidth, math.Round(new_w))
-					new_h = math.max(elem.defaults.minHeight, math.Round(new_h))
+					-- calc and clamp new data
+					local new_w_p, new_w_m, new_h_p, new_h_m
+					if trans_data.x_p then
+						new_w_p = math.Clamp(additional_w, (-1) * client.size.w, ScrW() - (client.size.w, client.pos.x))
+					end
+					if trans_data.x_m then
+						new_w_m = math.Clamp(additional_w, (-1) * client.size.w, client.pos.x)
+					end
+					if trans_data.y_p then
+						new_h_p = math.Clamp(additional_h, (-1) * client.size.h, ScrH() - (client.size.h, client.pos.y))
+					end
+					if trans_data.y_m then
+						new_h_m = math.Clamp(additional_h, (-1) * client.size.h, client.pos.y)
+					end
+
+					-- combine new size data
+					local new_w = math.max(client.size.w + new_w_p + new_w_m, 0)
+					local new_h = math.max(client.size.h + new_h_p + new_h_m, 0)
+
+					local new_x = client.pos.x - new_w_m
+					local new_y = client.pos.y - new_h_m
 
 					elem:SetSize(new_w, new_h)
-					if (new_w ~= 0 and new_h ~= 0) then
-						elem:SetBasePos(math.Round(trans_data.x_m and client.pos.x + trans_data.direction_x * (client.mouse_start_X - x) or client.pos.x), math.Round(trans_data.y_m and client.pos.y + trans_data.direction_y * (client.mouse_start_Y - y) or client.pos.y))
-					end
+					elem:SetBasePos(new_x, new_y)
 				end
 
 				elem:PerformLayout()
