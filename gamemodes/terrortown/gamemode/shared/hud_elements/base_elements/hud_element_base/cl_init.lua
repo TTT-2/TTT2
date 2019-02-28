@@ -123,7 +123,7 @@ function HUDELEMENT:SetMinSize(w, h)
 end
 
 function HUDELEMENT:GetMinSize()
-	return tabel.Copy(self.minsize)
+	return table.Copy(self.minsize)
 end
 
 function HUDELEMENT:GetSize()
