@@ -76,12 +76,12 @@ local function EditLocalHUD()
 
 		local shift_pressed = input.IsKeyDown(KEY_LSHIFT) or input.IsKeyDown(KEY_RSHIFT)
 		local alt_pressed = input.IsKeyDown(KEY_LALT) or input.IsKeyDown(KEY_LALT)
-		
+
 		if elem then
 			-- set to true to get new click zone, because this sould only happen ONCE; this zone is now the active zone until the button is released
 			if client.mouse_clicked then
 				elem:SetMouseClicked(client.mouse_clicked, x, y)
-				
+
 				-- save initial mouse position
 				client.mouse_start_X = x
 				client.mouse_start_Y = y
@@ -100,12 +100,12 @@ local function EditLocalHUD()
 
 			-- get data about the element, it returns the transformation direction
 			trans_data = elem:GetClickedArea(x, y, alt_pressed)
-			
+
 			if trans_data then
 				-- track mouse movement
 				local dif_x = x - client.mouse_start_X
 				local dif_y = y - client.mouse_start_Y
-				
+
 				if trans_data.move then -- move mode
 					-- move on axis when shift is pressed
 					local new_x, new_y
@@ -432,12 +432,13 @@ function HUDManager.DrawHUD()
 			return
 		end
 
-		if elem.initialized and elem.type and hud:ShouldShow(elem.type) and hook.Call("HUDShouldDraw", GAMEMODE, elem.type) then
+		if elem.initialized and (not elem.togglable or GetGlobalBool("ttt2_elem_toggled_" .. elem.id, true)) and elem.type and hud:ShouldShow(elem.type) and hook.Call("HUDShouldDraw", GAMEMODE, elem.type) then
 			elem:Draw()
 
 			if HUDManager.IsEditing then
 				elem:DrawSize()
 			end
+
 			if HUDManager.IsEditing and not client.activeElement then
 				elem:DrawHowered(math.Round(gui.MouseX()), math.Round(gui.MouseY()))
 			end

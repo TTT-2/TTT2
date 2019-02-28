@@ -363,6 +363,16 @@ function GM:InitPostEntity()
 
 	MsgN("[TTT2][INFO] Shops initialized...")
 
+	-- init hudelements fns
+	for _, hudelem in ipairs(hudelements.GetList()) do
+		if hudelem.togglable then
+			local nm = "ttt2_elem_toggled_" .. hudelem.id
+			local ret = CreateConVar(nm, "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+			SetGlobalBool(nm, ret:GetBool())
+		end
+	end
+
 	WEPS.ForcePrecache()
 
 	timer.Simple(0, function()

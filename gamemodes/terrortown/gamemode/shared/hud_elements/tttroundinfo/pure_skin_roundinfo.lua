@@ -4,6 +4,8 @@ DEFINE_BASECLASS(base)
 
 HUDELEMENT.Base = base
 
+HUDELEMENT.togglable = true
+
 if CLIENT then
 	local GetLang = LANG.GetUnsafeLanguageTable
 
