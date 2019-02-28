@@ -31,7 +31,8 @@ local vip_tbl = {
 	["76561198208729341"] = true, -- eBBIS
 	["76561198152558244"] = true, -- Lost TheSuspect
 	["76561198162764168"] = true, -- DerJohn
-	["76561198132229662"] = true -- Satton RU
+	["76561198132229662"] = true, -- Satton RU
+	["76561198007725535"] = true -- Skatcat
 }
 
 local addondev_tbl = {
