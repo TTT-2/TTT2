@@ -106,6 +106,7 @@ local function EditLocalHUD()
 				-- save initial element data
 				client.size = elem:GetSize() -- initial size
 				client.pos = elem:GetPos() -- initial pos
+				client.base = elem:GetBasePos() -- initial base pos
 
 				-- reset clicked because it sould be only executed once
 				client.mouse_clicked = false
@@ -131,7 +132,7 @@ local function EditLocalHUD()
 						new_y = ScrH() - client.size.h
 					end
 
-					elem:SetBasePos(new_x, new_y)
+					elem:SetBasePos(new_x + client.base.x, new_y + client.base.y)
 				else -- resize mode
 					local multi_w = (trans_data.x_p and 1 or 0) + (trans_data.x_m and 1 or 0)
 					local multi_h = (trans_data.y_p and 1 or 0) + (trans_data.y_m and 1 or 0)
