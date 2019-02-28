@@ -116,23 +116,22 @@ local function EditLocalHUD()
 			
 			if trans_data then
 				if trans_data.move then -- move mode
-					local size = elem:GetSize()
-					local nx = x - difX
-					local ny = y - difY
+					local new_x = (client.mouse_start_X + x) + client.pos.x
+					local new_y = (client.mouse_start_Y + y) + client.pos.y
 
-					if nx < 0 then
-						nx = 0
-					elseif nx + size.w > ScrW() then
-						nx = ScrW() - size.w
+					if new_x < 0 then
+						new_x = 0
+					elseif new_x + client.size.w > ScrW() then
+						new_x = ScrW() - client.size.w
 					end
 
-					if ny < 0 then
-						ny = 0
-					elseif ny + size.h > ScrH() then
-						ny = ScrH() - size.h
+					if new_y < 0 then
+						new_y = 0
+					elseif new_y + client.size.h > ScrH() then
+						new_y = ScrH() - client.size.h
 					end
 
-					elem:SetBasePos(nx + client.difBaseX, ny + client.difBaseY)
+					elem:SetBasePos(new_x, new_y)
 				else -- resize mode
 					local multi_w = (trans_data.x_p and 1 or 0) + (trans_data.x_m and 1 or 0)
 					local multi_h = (trans_data.y_p and 1 or 0) + (trans_data.y_m and 1 or 0)
