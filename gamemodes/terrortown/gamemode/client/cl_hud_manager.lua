@@ -152,7 +152,7 @@ local function EditLocalHUD()
 
 					-- combine new size data
 					local new_w, new_h, new_x, new_y
-					if (client.size.w + new_w_p + new_w_m < min.w) then
+					if (new_w_m ~= 0 and client.size.w + new_w_p + new_w_m < min.w) then
 						new_w = min.w
 						new_x = client.pos.x + math.Round((client.size.w - min.w) / 2)
 					else
@@ -160,7 +160,7 @@ local function EditLocalHUD()
 						new_x = client.pos.x - new_w_m
 					end
 
-					if (client.size.h + new_h_p + new_h_m < min.h) then
+					if (new_h_m ~= 0 and client.size.h + new_h_p + new_h_m < min.h) then
 						new_h = min.h
 						new_y = client.pos.y + math.Round((client.size.h - min.h) / 2)
 					else
