@@ -128,9 +128,17 @@ local function EditLocalHUD()
 
 					elem:SetBasePos(new_x, new_y)
 				else -- resize mode
-					-- calc base data
-					local additional_w = dif_x * trans_data.direction_x
-					local additional_h = dif_y * trans_data.direction_y
+					-- calc base data wihile checking for the shift key
+					local additional_w, additional_h
+					if shift_pressed then
+						if dif_x * client.size.h > dif_y * client.size.w then
+							dif_x = math.Round(dif_y * client.aspect)
+						else
+							dif_y = math.Round(dif_x / client.aspect)
+						end
+					end
+					additional_w = dif_x * trans_data.direction_x
+					additional_h = dif_y * trans_data.direction_y
 
 					-- calc and clamp new data
 					local new_w_p, new_w_m, new_h_p, new_h_m = 0,0,0,0
@@ -152,13 +160,13 @@ local function EditLocalHUD()
 
 					-- combine new size data
 					local new_w, new_h, new_x, new_y
-					if (client.size.w + new_w_p < min.w) then
+					if (client.size.w + new_w_p < min.w and new_w_m == 0) then -- limit scale of only the right side of the element
 						new_w = min.w
 						new_x = client.base.x
-					elseif (client.size.w + new_w_m < min.w) then
+					elseif (client.size.w + new_w_m < min.w and new_w_p == 0) then -- limit scale of only the left side of the element
 						new_w = min.w
-						new_x = client.base.x + dif_x
-					elseif (client.size.w + new_w_p + new_w_m < min.w) then
+						new_x = client.base.x + client.size.w - min.w
+					elseif (client.size.w + new_w_p + new_w_m < min.w) then -- limit scale of both sides of the element
 						new_w = min.w
 						new_x = client.base.x + math.Round((client.size.w - min.w) / 2)
 					else
@@ -166,13 +174,13 @@ local function EditLocalHUD()
 						new_x = client.base.x - new_w_m
 					end
 
-					if (client.size.h + new_h_p < min.h) then
+					if (client.size.h + new_h_p < min.h and new_h_m == 0) then -- limit scale of only the bottom side of the element
 						new_h = min.h
 						new_y = client.base.y
-					elseif (client.size.h + new_h_m < min.h) then
+					elseif (client.size.h + new_h_m < min.h and new_h_p == 0) then -- limit scale of only the top side of the element
 						new_h = min.h
-						new_y = client.base.y + dif_y
-					elseif (client.size.h + new_h_p + new_h_m < min.h) then
+						new_y = client.base.y + client.size.h - min.h
+					elseif (client.size.h + new_h_p + new_h_m < min.h) then -- limit scale of both sides of the element
 						new_h = min.h
 						new_y = client.base.y + math.Round((client.size.h - min.h) / 2)
 					else

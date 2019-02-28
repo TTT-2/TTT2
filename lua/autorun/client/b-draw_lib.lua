@@ -60,7 +60,13 @@ local function fetchAvatarAsset(id64, size, onFetched)
 
 	fetchedavatars[id64 .. " " .. size] = id64 == "BOT" and "http://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/09/09962d76e5bd5b91a94ee76b07518ac6e240057a_full.jpg" or "http://i.imgur.com/uaYpdq7.png"
 
-	if id64 == "BOT" then return end
+	if id64 == "BOT" then
+		if isfunction(onFetched) then
+			onFetched(fetchedavatars[id64 .. " " .. size])
+		end
+
+		return
+	end
 
 	fetch("http://steamcommunity.com/profiles/" .. id64 .. "/?xml=1", function(body)
 		local link = body:match("https://steamcdn%-a%.akamaihd%.net/steamcommunity/public/images/avatars/.-%.jpg") -- fix this with new https and gmod regex

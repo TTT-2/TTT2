@@ -1,0 +1,7 @@
+"UnlitGeneric"
+{
+	"$basetexture" "vgui/ttt/equip/credits_zero"
+	"$translucent" 1
+	"$vertexalpha" 1
+	"$vertexcolor" 1
+}

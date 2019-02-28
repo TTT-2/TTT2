@@ -10,6 +10,7 @@ HUDELEMENT.Base = base
 
 if CLIENT then -- CLIENT
 	local width, height = 365, 32
+	local min_w, min_h = 225, 32
 	local pad = 14 -- padding
 	local iconSize = 64
 	local target_icon = Material("vgui/ttt/target_icon")
@@ -17,6 +18,7 @@ if CLIENT then -- CLIENT
 	function HUDELEMENT:Initialize()
 	    self:RecalculateBasePos()
 		self:SetSize(width, height)
+		self:SetMinSize(min_w, min_h)
 
 		BaseClass.Initialize(self)
 
