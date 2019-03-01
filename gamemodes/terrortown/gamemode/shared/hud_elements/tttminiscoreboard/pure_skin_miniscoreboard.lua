@@ -4,6 +4,8 @@ HUDELEMENT.Base = base
 
 DEFINE_BASECLASS(base)
 
+HUDELEMENT.togglable = true
+
 if CLIENT then
 	local margin = 14
 	local element_margin = 6

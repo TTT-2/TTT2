@@ -8,14 +8,15 @@ if CLIENT then
 	local x = 0
 	local y = 0
 
-	local w = 321 -- width
-	local h = 36 -- height
+	local w, h = 321, 36
+	local min_w, min_h = 75, 36
 	local bh = 8 -- bar height
 	local pad = 14 -- padding
 	
 	function HUDELEMENT:Initialize()
 		self:RecalculateBasePos()
 		self:SetSize(w, h)
+		self:SetMinSize(min_w, min_h)
 
 		BaseClass.Initialize(self)
 		

@@ -4,6 +4,8 @@ DEFINE_BASECLASS(base)
 
 HUDELEMENT.Base = base
 
+HUDELEMENT.togglable = true
+
 if CLIENT then
 	local GetLang = LANG.GetUnsafeLanguageTable
 
@@ -17,6 +19,7 @@ if CLIENT then
 		self.disabledUnlessForced = true
 
 		self:SetSize(w, h)
+		self:SetMinSize(w, h)
 
 		BaseClass.Initialize(self)
 	end

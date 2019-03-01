@@ -15,7 +15,7 @@ if CLIENT then
 	function HUDELEMENT:Initialize()
 		self:RecalculateBasePos()
 		self:SetSize(size, -size)
-
+		
 		BaseClass.Initialize(self)
 
 		self.defaults.minWidth = 64
@@ -29,7 +29,7 @@ if CLIENT then
 	function HUDELEMENT:RecalculateBasePos()
 		self:SetBasePos(20, ScrH() * 0.5)
 	end
-	
+
 	function HUDELEMENT:PerformLayout()
 		local basepos = self:GetBasePos()
 		local currSize = self:GetSize()
@@ -46,13 +46,10 @@ if CLIENT then
 		if not client:Alive() or client:Team() ~= TEAM_TERROR then return end
 
 		local basepos = self:GetBasePos()
-
-		self:SetPos(basepos.x, basepos.y)
-
 		local itms = client:GetEquipmentItems()
 		local pos = self:GetPos()
-		local curY = pos.y
-		
+		local curY = basepos.y
+
 		-- at first, calculate old items because they don't take care of the new ones
 		for _, itemCls in ipairs(itms) do
 			local item = items.GetStored(itemCls)
@@ -65,6 +62,8 @@ if CLIENT then
 		for _, itemCls in ipairs(itms) do
 			local item = items.GetStored(itemCls)
 			if item and item.hud then
+				curY = curY - (size + size * 0.25)
+
 				surface.SetDrawColor(36, 115, 51, 255)
 				surface.DrawRect(pos.x, curY, size, size)
 
@@ -97,11 +96,9 @@ if CLIENT then
 						self:DrawLines(bx, by, bw, infoH, 255)
 					end
 				end
-
-				curY = curY - (size + size * 0.25)
 			end
 		end
 
-		self:SetSize(size, curY - basepos.y)
+		self:SetSize(size, - ( basepos.y - curY ) ) -- adjust the size
 	end
 end

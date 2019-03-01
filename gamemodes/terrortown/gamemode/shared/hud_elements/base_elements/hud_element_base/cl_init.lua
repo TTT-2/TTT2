@@ -10,15 +10,19 @@ local zero_tbl_size = {
 	h = 0
 }
 
+local min_size_tbl = {
+	w = 0,
+	h = 0
+}
+
 HUDELEMENT.basepos = table.Copy(zero_tbl_pos)
 HUDELEMENT.pos = table.Copy(zero_tbl_pos)
 HUDELEMENT.size = table.Copy(zero_tbl_size)
+HUDELEMENT.minsize = table.Copy(min_size_tbl)
 
 HUDELEMENT.defaults = {
 	basepos = table.Copy(HUDELEMENT.basepos),
 	size = table.Copy(HUDELEMENT.size),
-	minHeight = 0,
-	minWidth = 0,
 	resizeableX = true,
 	resizeableY = true,
 
@@ -45,6 +49,7 @@ function HUDELEMENT:Initialize()
 	-- use this to set default values and dont forget to call BaseClass.Initialze(self)!!
 	self:SetDefaults()
 	self:LoadData()
+
 	for _, elem in ipairs(self.children) do
 		local elemtbl = hudelements.GetStored(elem)
 		if elemtbl then
@@ -92,7 +97,7 @@ function HUDELEMENT:RecalculateBasePos()
 end
 
 function HUDELEMENT:GetBasePos()
-	return self.basepos
+	return table.Copy(self.basepos)
 end
 
 function HUDELEMENT:SetBasePos(x, y)
@@ -111,6 +116,15 @@ function HUDELEMENT:SetPos(x, y)
 	self.pos.y = y
 end
 
+function HUDELEMENT:SetMinSize(w, h)
+	self.minsize.w = w
+	self.minsize.h = h
+end
+
+function HUDELEMENT:GetMinSize()
+	return table.Copy(self.minsize)
+end
+
 function HUDELEMENT:GetSize()
 	return table.Copy(self.size)
 end
@@ -125,9 +139,6 @@ function HUDELEMENT:SetSize(w, h)
 	if nh then
 		h = -h
 	end
-
-	w = math.max(self.defaults.minWidth, w)
-	h = math.max(self.defaults.minHeight, h)
 
 	if nw or nh then
 		local basepos = self:GetBasePos()
@@ -176,7 +187,7 @@ function HUDELEMENT:IsParent()
 end
 
 function HUDELEMENT:GetChildren()
-	return self.children
+	return table.Copy(self.children)
 end
 
 function HUDELEMENT:IsInRange(x, y, range)

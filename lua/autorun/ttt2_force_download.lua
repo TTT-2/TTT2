@@ -46,6 +46,10 @@ if SERVER then
 	-- watching icon
 	resource.AddFile("materials/vgui/ttt/watching_icon.vmt")
 
+	-- credit icons
+	resource.AddFile("materials/vgui/ttt/equip/credits_default.vmt")
+	resource.AddFile("materials/vgui/ttt/equip/credits_zero.vmt")
+
 	-- old ttt hud preview
 	resource.AddFile("materials/vgui/ttt/huds/old_ttt/preview.png")
 
@@ -57,4 +61,5 @@ if SERVER then
 	resource.AddFile("materials/vgui/ttt/ttt2_indicator_vip.vmt") -- vip
 	resource.AddFile("materials/vgui/ttt/ttt2_indicator_addondev.vmt") -- ttt2 addon dev
 	resource.AddFile("materials/vgui/ttt/ttt2_indicator_admin.vmt") -- server admin
+	resource.AddFile("materials/vgui/ttt/ttt2_indicator_streamer.vmt") -- streamer
 end

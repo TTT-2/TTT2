@@ -170,6 +170,7 @@ util.AddNetworkString("TTT2SyncDBItems")
 util.AddNetworkString("TTT2ReceiveTBEq")
 util.AddNetworkString("TTT2ReceiveGBEq")
 util.AddNetworkString("TTT2ResetTBEq")
+util.AddNetworkString("TTT2PlayerAuthedShared")
 
 local buggyAddons = {
 	["656662924"] = "1367128301", -- Killer Notifier by nerzlakai96
@@ -361,6 +362,21 @@ function GM:InitPostEntity()
 	LoadShopsEquipment()
 
 	MsgN("[TTT2][INFO] Shops initialized...")
+
+	-- init hudelements fns
+	for _, hudelem in ipairs(hudelements.GetList()) do
+		if hudelem.togglable then
+			local nm = "ttt2_elem_toggled_" .. hudelem.id
+			local ret = CreateConVar(nm, "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+			SetGlobalBool(nm, ret:GetBool())
+
+			cvars.AddChangeCallback(nm, function(cvarName, old, new)
+				SetGlobalBool(cvarName, tobool(new))
+			end,
+			"CVAR_" .. nm)
+		end
+	end
 
 	WEPS.ForcePrecache()
 
@@ -1599,6 +1615,13 @@ function SelectRoles(plys, max_plys)
 
 	SendFullStateUpdate()
 end
+
+hook.Add("PlayerAuthed", "TTT2PlayerAuthedSharedHook", function(ply, steamid, uniqueid)
+	net.Start("TTT2PlayerAuthedShared")
+	net.WriteString(util.SteamIDTo64(steamid))
+	net.WriteString((ply and ply:Nick()) or "UNKNOWN")
+	net.Broadcast()
+end)
 
 local function ttt_roundrestart(ply, command, args)
 	-- ply is nil on dedicated server console

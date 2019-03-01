@@ -38,6 +38,7 @@ function HUD:ShouldShow(elementType)
 	-- hide element if its parent element is hidden
 	local element = hudelems[elementType]
 	local elementTbl = nil
+
 	if not element then
 		elementTbl = hudelements.GetTypeElement(elementType)
 	else
@@ -50,10 +51,13 @@ function HUD:ShouldShow(elementType)
 		end
 
 		local parent = elementTbl:GetParent()
+
 		if elementTbl:IsChild() and parent then
 			local parentTbl = hudelements.GetStored(parent)
+
 			return self:ShouldShow(parentTbl.type)
 		end
+
 		return true
 	else
 		return false
@@ -94,10 +98,12 @@ function HUD:Initialize()
 	-- Initialize elements default values
 	for _, v in ipairs(self:GetHUDElements()) do
 		local elem = hudelements.GetStored(v)
-		if elem and not elem:IsChild() then
-			elem:Initialize()
+		if elem then
+			if not elem:IsChild() then
+				elem:Initialize()
+			end
 		else
-			Msg("Error: HUD " .. (self.id or "?") .. " has unkown element named " .. v .. "\n")
+			Msg("Error: HUD " .. (self.id or "?") .. " has unknown element named " .. v .. "\n")
 		end
 	end
 
@@ -109,7 +115,7 @@ function HUD:Initialize()
 		if elem then
 			elem.initialized = true
 		else
-			Msg("Error: HUD " .. (self.id or "?") .. " has unkown element named " .. v .. "\n")
+			Msg("Error: HUD " .. (self.id or "?") .. " has unknown element named " .. v .. "\n")
 		end
 	end
 end

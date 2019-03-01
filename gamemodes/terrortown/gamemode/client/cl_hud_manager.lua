@@ -3,6 +3,10 @@ ttt_include("vgui__cl_hudswitcher")
 local current_hud = CreateClientConVar("ttt2_current_hud", HUDManager.defaultHUD or "pure_skin", true, true)
 local hud_scale = CreateClientConVar("ttt2_hud_scale", 1.0, true, true)
 
+cvars.AddChangeCallback(hud_scale:GetName(), function(name, old, new)
+	SetGlobalFloat(name, new)
+end, "TTT2HUDScaleChanged")
+
 local currentHUD
 
 HUDManager.IsEditing = false
@@ -69,37 +73,20 @@ local function EditLocalHUD()
 					local elObj = hudelements.GetStored(el)
 					if elObj and elObj:IsInPos(x, y) then
 						elem = elObj
-
-						local difPos = elem:GetPos()
-						local difBasePos = elem:GetBasePos()
-						local difSize = elem:GetSize()
-
-						client.difX = x - difPos.x
-						client.difY = y - difPos.y
-						client.difW = x - difSize.w
-						client.difH = y - difSize.h
-						client.difBaseX = difBasePos.x - difPos.x
-						client.difBaseY = difBasePos.y - difPos.y
-
 						break
 					end
 				end
 			end
 		end
 
-		local difX = client.difX or 0
-		local difY = client.difY or 0
-		local difW = client.difW or 0
-		local difH = client.difH or 0
-
 		local shift_pressed = input.IsKeyDown(KEY_LSHIFT) or input.IsKeyDown(KEY_RSHIFT)
 		local alt_pressed = input.IsKeyDown(KEY_LALT) or input.IsKeyDown(KEY_LALT)
-		
+
 		if elem then
 			-- set to true to get new click zone, because this sould only happen ONCE; this zone is now the active zone until the button is released
 			if client.mouse_clicked then
 				elem:SetMouseClicked(client.mouse_clicked, x, y)
-				
+
 				-- save initial mouse position
 				client.mouse_start_X = x
 				client.mouse_start_Y = y
@@ -107,6 +94,10 @@ local function EditLocalHUD()
 				-- save initial element data
 				client.size = elem:GetSize() -- initial size
 				client.pos = elem:GetPos() -- initial pos
+				client.base = elem:GetBasePos() -- initial base pos
+
+				-- store aspect ratio for shift-rescaling
+				client.aspect = client.size.w / client.size.h
 
 				-- reset clicked because it sould be only executed once
 				client.mouse_clicked = false
@@ -114,48 +105,104 @@ local function EditLocalHUD()
 
 			-- get data about the element, it returns the transformation direction
 			trans_data = elem:GetClickedArea(x, y, alt_pressed)
-			
+
 			if trans_data then
+				-- track mouse movement
+				local dif_x = x - client.mouse_start_X
+				local dif_y = y - client.mouse_start_Y
+
 				if trans_data.move then -- move mode
-					local size = elem:GetSize()
-					local nx = x - difX
-					local ny = y - difY
-
-					if nx < 0 then
-						nx = 0
-					elseif nx + size.w > ScrW() then
-						nx = ScrW() - size.w
+					-- move on axis when shift is pressed
+					local new_x, new_y
+					if shift_pressed then
+						if math.abs(dif_x) > math.abs(dif_y) then
+							new_x = dif_x + client.base.x
+							new_y = client.base.y
+						else
+							new_x = client.base.x
+							new_y = dif_y + client.base.y
+						end
+					else -- default movement
+						new_x = dif_x + client.base.x
+						new_y = dif_y + client.base.y
 					end
 
-					if ny < 0 then
-						ny = 0
-					elseif ny + size.h > ScrH() then
-						ny = ScrH() - size.h
-					end
+					-- clamp values between min and max
+					new_x = math.Clamp(new_x, 0, ScrW() - client.size.w - (client.pos.x - client.base.x))
+					new_y = math.Clamp(new_y, 0, ScrH() - client.size.h - (client.pos.y - client.base.y))
 
-					elem:SetBasePos(nx + client.difBaseX, ny + client.difBaseY)
+					elem:SetBasePos(new_x, new_y)
 				else -- resize mode
-					local multi_w = (trans_data.x_p and 1 or 0) + (trans_data.x_m and 1 or 0)
-					local multi_h = (trans_data.y_p and 1 or 0) + (trans_data.y_m and 1 or 0)
-					local new_w = client.size.w + (x - client.mouse_start_X) * trans_data.direction_x * multi_w
-					local new_h = client.size.h + (y - client.mouse_start_Y) * trans_data.direction_y * multi_h
+					-- calc base data wihile checking for the shift key
+					local additional_w, additional_h
+					if shift_pressed then
+						if dif_x * client.size.h > dif_y * client.size.w then
+							dif_x = math.Round(dif_y * client.aspect)
+						else
+							dif_y = math.Round(dif_x / client.aspect)
+						end
+					end
+					additional_w = dif_x * trans_data.direction_x
+					additional_h = dif_y * trans_data.direction_y
 
-					new_w = math.max(elem.defaults.minWidth, math.Round(new_w))
-					new_h = math.max(elem.defaults.minHeight, math.Round(new_h))
+					-- calc and clamp new data
+					local new_w_p, new_w_m, new_h_p, new_h_m = 0,0,0,0
+					if trans_data.x_p then
+						new_w_p = math.Clamp(additional_w, (-1) * client.size.w, ScrW() - (client.size.w + client.base.x))
+					end
+					if trans_data.x_m then
+						new_w_m = math.Clamp(additional_w, (-1) * client.size.w, client.base.x)
+					end
+					if trans_data.y_p then
+						new_h_p = math.Clamp(additional_h, (-1) * client.size.h, ScrH() - (client.size.h + client.base.y))
+					end
+					if trans_data.y_m then
+						new_h_m = math.Clamp(additional_h, (-1) * client.size.h, client.base.y)
+					end
+
+					-- get min data for this element
+					local min = elem:GetMinSize()
+
+					-- combine new size data
+					local new_w, new_h, new_x, new_y
+					if (client.size.w + new_w_p < min.w and new_w_m == 0) then -- limit scale of only the right side of the element
+						new_w = min.w
+						new_x = client.base.x
+					elseif (client.size.w + new_w_m < min.w and new_w_p == 0) then -- limit scale of only the left side of the element
+						new_w = min.w
+						new_x = client.base.x + client.size.w - min.w
+					elseif (client.size.w + new_w_p + new_w_m < min.w) then -- limit scale of both sides of the element
+						new_w = min.w
+						new_x = client.base.x + math.Round((client.size.w - min.w) / 2)
+					else
+						new_w = client.size.w + new_w_p + new_w_m
+						new_x = client.base.x - new_w_m
+					end
+
+					if (client.size.h + new_h_p < min.h and new_h_m == 0) then -- limit scale of only the bottom side of the element
+						new_h = min.h
+						new_y = client.base.y
+					elseif (client.size.h + new_h_m < min.h and new_h_p == 0) then -- limit scale of only the top side of the element
+						new_h = min.h
+						new_y = client.base.y + client.size.h - min.h
+					elseif (client.size.h + new_h_p + new_h_m < min.h) then -- limit scale of both sides of the element
+						new_h = min.h
+						new_y = client.base.y + math.Round((client.size.h - min.h) / 2)
+					else
+						new_h = client.size.h + new_h_p + new_h_m
+						new_y = client.base.y - new_h_m
+					end
 
 					elem:SetSize(new_w, new_h)
-					if (new_w ~= 0 and new_h ~= 0) then
-						elem:SetBasePos(math.Round(trans_data.x_m and client.pos.x + trans_data.direction_x * (client.mouse_start_X - x) or client.pos.x), math.Round(trans_data.y_m and client.pos.y + trans_data.direction_y * (client.mouse_start_Y - y) or client.pos.y))
-					end
+					elem:SetBasePos(new_x, new_y)
 				end
 
 				elem:PerformLayout()
 			end
 		end
 	else
+		-- element lost
 		elem = nil
-		client.difX = nil
-		client.difY = nil
 	end
 
 	if input.IsMouseDown(MOUSE_RIGHT) and (client.editOptionsX ~= x or client.editOptionsY ~= y) then
@@ -193,6 +240,7 @@ function HUDManager.EditHUD(bool, hud)
 
 		chat.AddText("[TTT2][INFO] Hover over the elements and kick and move the mouse to ", Color(20, 150, 245), "move", Color(151, 211, 255), " or ", Color(245, 30, 80), "resize", Color(151, 211, 255), " it.")
 		chat.AddText("[TTT2][INFO] Press and hold the ", Color(255, 255, 255), "alt-key", Color(151, 211, 255), " for symmetric resizing.")
+		chat.AddText("[TTT2][INFO] Press and hold the ", Color(255, 255, 255), "shift-key", Color(151, 211, 255), " to move on axis and to keep the aspect ratio.")
 		chat.AddText("[TTT2][INFO] Press [RMB] (right mouse-button) -> 'close' to exit the HUD editor!")
 
 		hook.Add("Think", "TTT2EditHUD", EditLocalHUD)
@@ -244,32 +292,10 @@ function HUDManager.ShowHUDSwitcher(bool)
 	return client.hudswitcher
 end
 
-function HUDManager.GetHUD()
-	if not currentHUD then
-		currentHUD = current_hud:GetString()
-	end
-
-	if not huds.GetStored(currentHUD) then
-		currentHUD = "pure_skin"
-	end
-
-	return currentHUD
-end
-
-function HUDManager.SetHUD(name)
-	local curHUD = HUDManager.GetHUD()
-
-	net.Start("TTT2RequestHUD")
-	net.WriteString(name or curHUD)
-	net.WriteString(curHUD)
-	net.SendToServer()
-end
-
 function HUDManager.AddHUDSettings(panel, hudEl)
 	if not IsValid(panel) or not hudEl then return end
 
 	local tmp = table.Copy(hudEl:GetSavingKeys()) or {}
-	tmp.scale = {typ = "scale", desc = "Set HUD Scale"}
 	tmp.el_pos = {typ = "el_pos", desc = "Change element's\nposition and size"}
 	tmp.reset = {typ = "reset", desc = "Reset HUD's data"}
 
@@ -314,7 +340,7 @@ function HUDManager.AddHUDSettings(panel, hudEl)
 		elseif data.typ == "color" then
 			el = vgui.Create("DColorMixer")
 			el:SetSize(267, 186)
-
+			
 			if hudEl[key] then
 				el:SetColor(hudEl[key])
 			end
@@ -328,19 +354,23 @@ function HUDManager.AddHUDSettings(panel, hudEl)
 			end
 		elseif data.typ == "scale" then
 			el = vgui.Create("DNumSlider")
-			el:SetPos(100, 0)
 			el:SetSize(600, 100)
 			el:SetMin( 0.1 )
-			el:SetMax( 5.0 )
-			el:SetDefaultValue( 1.0 )
-			el:SetDark(true)
+			el:SetMax( 4.0 )
+			if hudEl[key] then
+				el:SetDefaultValue( hudEl[key] )
+				el:SetValue( hudEl[key] )
+				hud_scale:SetFloat( hudEl[key] )
+			end
 			el:SetDecimals( 1 )
 			el:SetConVar( "ttt2_hud_scale" )
-			el:PerformLayout()
-			el.Scratch:SetDisabled(true)
 			
-			function el:ValueChanged(scale)
-				print(scale)
+			function el:ValueChanged(val)
+				if isfunction(data.OnChange) then
+					data.OnChange(hudEl, val)
+				end
+
+				hudEl[key] = val
 			end
 		end
 
@@ -406,12 +436,13 @@ function HUDManager.DrawHUD()
 			return
 		end
 
-		if elem.initialized and elem.type and hud:ShouldShow(elem.type) and hook.Call("HUDShouldDraw", GAMEMODE, elem.type) then
+		if elem.initialized and (not elem.togglable or GetGlobalBool("ttt2_elem_toggled_" .. elem.id, true)) and elem.type and hud:ShouldShow(elem.type) and hook.Call("HUDShouldDraw", GAMEMODE, elem.type) then
 			elem:Draw()
 
 			if HUDManager.IsEditing then
 				elem:DrawSize()
 			end
+
 			if HUDManager.IsEditing and not client.activeElement then
 				elem:DrawHowered(math.Round(gui.MouseX()), math.Round(gui.MouseY()))
 			end
@@ -484,9 +515,7 @@ function GM:HUDShouldDraw(name)
 	return self.BaseClass.HUDShouldDraw(self, name)
 end
 
--- if forced or requested, modified by server restrictions
-net.Receive("TTT2ReceiveHUD", function()
-	local name = net.ReadString()
+local function UpdateHUD(name)
 	local hudEl = huds.GetStored(name)
 
 	if not hudEl then
@@ -514,4 +543,30 @@ net.Receive("TTT2ReceiveHUD", function()
 	end
 
 	hudEl:Loaded()
+end
+
+function HUDManager.GetHUD()
+	if not currentHUD then
+		return current_hud:GetString()
+	end
+
+	if not huds.GetStored(currentHUD) then
+		return "pure_skin"
+	end
+
+	return currentHUD
+end
+
+function HUDManager.SetHUD(name)
+	local curHUD = HUDManager.GetHUD()
+
+	net.Start("TTT2RequestHUD")
+	net.WriteString(name or curHUD)
+	net.WriteString(curHUD)
+	net.SendToServer()
+end
+
+-- if forced or requested, modified by server restrictions
+net.Receive("TTT2ReceiveHUD", function()
+	UpdateHUD(net.ReadString())
 end)

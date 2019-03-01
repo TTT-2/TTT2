@@ -6,11 +6,11 @@ local team = team
 function GM:TTT2Initialize()
 	hook.Run("TTT2BaseRoleInit")
 
-	-- load all HUD elements
-	hudelements.OnLoaded()
-
 	-- load all HUDs
 	huds.OnLoaded()
+
+	-- load all HUD elements
+	hudelements.OnLoaded()
 
 	DefaultEquipment = GetDefaultEquipment()
 end

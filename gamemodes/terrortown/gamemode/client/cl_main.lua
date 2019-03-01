@@ -78,10 +78,6 @@ function GM:InitPostEntity()
 
 	hook.Run("TTTInitPostEntity")
 
-	for _, hudelem in ipairs(hudelements.GetList()) do
-		hudelem:Initialize()
-	end
-
 	HUDManager.SetHUD()
 
 	InitDefaultEquipment()
@@ -153,6 +149,11 @@ function GM:InitPostEntity()
 	-- initialization on them
 	if IsValid(client) and client.GetTraitor then
 		GAMEMODE:ClearClientState()
+	end
+
+	-- cache players avatar
+	for _, v in ipairs(player.GetAll()) do
+		draw.CacheAvatar(v:SteamID64(), "medium") -- caching
 	end
 
 	timer.Create("cache_ents", 1, 0, GAMEMODE.DoCacheEnts)
@@ -537,3 +538,22 @@ function GM:OnEntityCreated(ent)
 
 	return self.BaseClass.OnEntityCreated(self, ent)
 end
+
+net.Receive("TTT2PlayerAuthedShared", function(len)
+	local steamid64 = net.ReadString()
+	local name = net.ReadString()
+
+	hook.Run("TTT2PlayerAuthed", steamid64, name)
+end)
+
+hook.Add("TTT2PlayerAuthed", "TTT2CacheAvatar", function(steamid64, name)
+	local ply = player.GetBySteamID64(steamid64)
+
+	if not IsValid(ply) or ply:IsBot() then
+		steamid64 = nil
+	end
+
+	draw.CacheAvatar(steamid64, "medium") -- caching
+
+	hook.Run("TTT2PlayerAuthedCacheReady", steamid64, name)
+end)

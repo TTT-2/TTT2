@@ -18,6 +18,7 @@ DEFINE_BASECLASS(base)
 HUD.Base = base
 
 local defaultColor = Color(49, 71, 94)
+local defaultScale = 1.0
 
 HUD.previewImage = Material("vgui/ttt/huds/pure_skin/preview.png")
 
@@ -38,12 +39,30 @@ function HUD:GetSavingKeys()
 				end
 			end
 		}
+		savingKeys.scale = {
+			typ = "scale",
+			desc = "Reset Positions and set HUD Scale",
+			OnChange = function(slf, val)
+				local scaleMultiplier = val / self.scale
+				for _, elem in ipairs(slf:GetHUDElements()) do
+					local el = hudelements.GetStored(elem)
+					if el then
+						local size = el:GetSize()
+						el:SetSize(size.w * scaleMultiplier, size.h * scaleMultiplier)
+						el:RecalculateBasePos()
+						el:PerformLayout()
+						el:SaveData()
+					end
+				end
+			end
+		}
 	end
 
 	return table.Copy(savingKeys)
 end
 
 HUD.basecolor = defaultColor
+HUD.scale = defaultScale
 
 function HUD:Initialize()
 	self:ForceHUDElement("pure_skin_playerinfo")
@@ -70,6 +89,7 @@ end
 
 function HUD:Reset()
 	self.basecolor = defaultColor
+	self.scale = defaultScale
 end
 
 -- Voice overriding

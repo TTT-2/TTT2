@@ -17,6 +17,8 @@ local hook = hook
 
 ttt_include("sh_corpse")
 
+util.AddNetworkString("TTT2SendConfirmMsg")
+
 --- networked data abstraction layer
 local dti = CORPSE.dti
 
@@ -76,12 +78,37 @@ local function IdentifyBody(ply, rag)
 		local team = rag.was_team
 		local rd = GetRoleByIndex(subrole)
 		local roletext = "body_found_" .. rd.abbr
+		local clr = rd.color
 
-		if GetGlobalBool("ttt2_confirm_team") then
-			LANG.Msg("body_found_team", {finder = finder, victim = nick, role = LANG.Param(roletext), team = LANG.Param(team)})
+		net.Start("TTT2SendConfirmMsg")
+
+		if bool then
+			net.WriteString("body_found_team")
 		else
-			LANG.Msg("body_found", {finder = finder, victim = nick, role = LANG.Param(roletext)})
+			net.WriteString("body_found")
 		end
+
+		net.WriteString(rag.sid64 or "")
+
+		-- color
+		net.WriteUInt(clr.r, 8)
+		net.WriteUInt(clr.g, 8)
+		net.WriteUInt(clr.b, 8)
+		net.WriteUInt(clr.a, 8)
+
+		local bool = GetGlobalBool("ttt2_confirm_team")
+
+		net.WriteBool(bool)
+
+		net.WriteString(finder)
+		net.WriteString(nick)
+		net.WriteString(roletext)
+
+		if bool then
+			net.WriteString(team)
+		end
+
+		net.Broadcast()
 	end
 
 	-- Register find
