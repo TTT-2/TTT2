@@ -35,7 +35,7 @@ if CLIENT then
 
 		-- draw text
 		if t then
-			self:AdvancedText(t or "", "PureSkinBar", x + 14, y + 1, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT, true, s)
+			self:AdvancedText(t, "PureSkinBar", x + 14, y + 1, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT, true, s)
 		end
 	end
 
