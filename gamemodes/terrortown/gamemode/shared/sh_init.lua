@@ -136,9 +136,10 @@ ROLES.TRAITOR = {
 	buildin = true,
 	surviveBonus = 0.5,
 	scoreKillsMultiplier = 5,
-	scoreTeamKillsMultiplier = -16,
-	fallbackTable = {}
+	scoreTeamKillsMultiplier = -16
 }
+ROLES.TRAITOR.fallbackTable = ROLES.TRAITOR.fallbackTable or {}
+
 TRAITOR = ROLES.TRAITOR
 
 ROLES.DETECTIVE = {
@@ -153,9 +154,10 @@ ROLES.DETECTIVE = {
 	buildin = true,
 	scoreKillsMultiplier = INNOCENT.scoreKillsMultiplier,
 	scoreTeamKillsMultiplier = INNOCENT.scoreTeamKillsMultiplier,
-	fallbackTable = {},
 	unknownTeam = true
 }
+ROLES.DETECTIVE.fallbackTable = ROLES.DETECTIVE.fallbackTable or {}
+
 DETECTIVE = ROLES.DETECTIVE
 
 ACTIVEROLES = ACTIVEROLES or {}
