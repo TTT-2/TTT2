@@ -111,14 +111,22 @@ if CLIENT then
 			if cactive then
 				local icon = Material("vgui/ttt/dynamic/roles/icon_" .. rd.abbr)
 				if icon then
-					surface.SetDrawColor(255, 255, 255, 255)
-					surface.SetMaterial(icon)
-					surface.DrawTexturedRect(x2 + 4, y2 + 4, lpw - 8, lpw - 8)
+					render.PushFilterMag( TEXFILTER.LINEAR )
+					render.PushFilterMin( TEXFILTER.LINEAR )
+						surface.SetDrawColor(255, 255, 255, 255)
+						surface.SetMaterial(icon)
+						surface.DrawTexturedRect(x2 + 4, y2 + 4, lpw - 8, lpw - 8)
+					render.PopFilterMag()
+					render.PopFilterMin()
 				end
 			elseif IsValid(tgt) and tgt:IsPlayer() then
-				surface.SetDrawColor(255, 255, 255, 255)
-				surface.SetMaterial(watching_icon)
-				surface.DrawTexturedRect(x2 + 4, y2 + 4, lpw - 8, lpw - 8)
+				render.PushFilterMag( TEXFILTER.LINEAR )
+				render.PushFilterMin( TEXFILTER.LINEAR )
+					surface.SetDrawColor(255, 255, 255, 255)
+					surface.SetMaterial(watching_icon)
+					surface.DrawTexturedRect(x2 + 4, y2 + 4, lpw - 8, lpw - 8)
+				render.PopFilterMag()
+				render.PopFilterMin()
 			end
 
 			-- draw role string name
