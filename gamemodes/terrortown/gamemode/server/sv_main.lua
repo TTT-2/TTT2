@@ -349,20 +349,6 @@ function GM:InitPostEntity()
 		wep.CanBuy = {}
 	end
 
-	-- initialize fallback shops
-	InitFallbackShops()
-
-	hook.Run("PostInitPostEntity")
-
-	hook.Run("InitFallbackShops")
-
-	hook.Run("LoadedFallbackShops")
-
-	-- initialize the equipment
-	LoadShopsEquipment()
-
-	MsgN("[TTT2][INFO] Shops initialized...")
-
 	-- init hudelements fns
 	for _, hudelem in ipairs(hudelements.GetList()) do
 		if hudelem.togglable then
@@ -377,6 +363,20 @@ function GM:InitPostEntity()
 			"CVAR_" .. nm)
 		end
 	end
+
+	-- initialize fallback shops
+	InitFallbackShops()
+
+	hook.Run("PostInitPostEntity")
+
+	hook.Run("InitFallbackShops")
+
+	hook.Run("LoadedFallbackShops")
+
+	-- initialize the equipment
+	LoadShopsEquipment()
+
+	MsgN("[TTT2][INFO] Shops initialized...")
 
 	WEPS.ForcePrecache()
 
