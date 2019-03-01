@@ -287,27 +287,6 @@ function HUDManager.ShowHUDSwitcher(bool)
 	return client.hudswitcher
 end
 
-function HUDManager.GetHUD()
-	if not currentHUD then
-		currentHUD = current_hud:GetString()
-	end
-
-	if not huds.GetStored(currentHUD) then
-		currentHUD = "pure_skin"
-	end
-
-	return currentHUD
-end
-
-function HUDManager.SetHUD(name)
-	local curHUD = HUDManager.GetHUD()
-
-	net.Start("TTT2RequestHUD")
-	net.WriteString(name or curHUD)
-	net.WriteString(curHUD)
-	net.SendToServer()
-end
-
 function HUDManager.AddHUDSettings(panel, hudEl)
 	if not IsValid(panel) or not hudEl then return end
 
@@ -511,9 +490,7 @@ function GM:HUDShouldDraw(name)
 	return self.BaseClass.HUDShouldDraw(self, name)
 end
 
--- if forced or requested, modified by server restrictions
-net.Receive("TTT2ReceiveHUD", function()
-	local name = net.ReadString()
+local function UpdateHUD(name)
 	local hudEl = huds.GetStored(name)
 
 	if not hudEl then
@@ -541,4 +518,30 @@ net.Receive("TTT2ReceiveHUD", function()
 	end
 
 	hudEl:Loaded()
+end
+
+function HUDManager.GetHUD()
+	if not currentHUD then
+		return current_hud:GetString()
+	end
+
+	if not huds.GetStored(currentHUD) then
+		return "pure_skin"
+	end
+
+	return currentHUD
+end
+
+function HUDManager.SetHUD(name)
+	local curHUD = HUDManager.GetHUD()
+
+	net.Start("TTT2RequestHUD")
+	net.WriteString(name or curHUD)
+	net.WriteString(curHUD)
+	net.SendToServer()
+end
+
+-- if forced or requested, modified by server restrictions
+net.Receive("TTT2ReceiveHUD", function()
+	UpdateHUD(net.ReadString())
 end)
