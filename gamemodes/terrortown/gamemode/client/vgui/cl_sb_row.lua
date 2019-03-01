@@ -24,7 +24,7 @@ local dev_tbl = {
 }
 
 local vip_tbl = {
-	["76561198378608300"] = true, -- SirKadeeka
+	["76561198378608300"] = true, -- SirKadeeka / L$...
 	["76561198102780049"] = true, -- Nick
 	["76561198052323988"] = true, -- LeBroomer
 	["76561198020955880"] = true, -- V3kta
@@ -33,7 +33,8 @@ local vip_tbl = {
 	["76561198152558244"] = true, -- Lost TheSuspect
 	["76561198162764168"] = true, -- DerJohn
 	["76561198132229662"] = true, -- Satton RU
-	["76561198007725535"] = true -- Skatcat
+	["76561198007725535"] = true, -- Skatcat
+	["76561197989909602"] = true -- Tobiti
 }
 
 local addondev_tbl = {
