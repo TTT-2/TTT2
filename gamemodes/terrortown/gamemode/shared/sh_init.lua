@@ -103,7 +103,7 @@ TEAMS = TEAMS or {
 -- just the following roles should be 'buildin' = true
 ROLES = ROLES or {}
 
-ROLES.INNOCENT = {
+ROLES.INNOCENT = ROLES.INNOCENT or {
 	index = ROLE_INNOCENT,
 	color = Color(80, 173, 59, 255),
 	dkcolor = Color(28, 116, 10, 255),
@@ -123,7 +123,7 @@ ROLES.INNOCENT = {
 }
 INNOCENT = ROLES.INNOCENT
 
-ROLES.TRAITOR = {
+ROLES.TRAITOR = ROLES.TRAITOR or {
 	index = ROLE_TRAITOR,
 	color = Color(209, 43, 39, 255),
 	dkcolor = Color(127, 3, 0, 255),
@@ -136,13 +136,12 @@ ROLES.TRAITOR = {
 	buildin = true,
 	surviveBonus = 0.5,
 	scoreKillsMultiplier = 5,
-	scoreTeamKillsMultiplier = -16
+	scoreTeamKillsMultiplier = -16,
+	fallbackTable = {}
 }
-ROLES.TRAITOR.fallbackTable = ROLES.TRAITOR.fallbackTable or {}
-
 TRAITOR = ROLES.TRAITOR
 
-ROLES.DETECTIVE = {
+ROLES.DETECTIVE = ROLES.DETECTIVE or {
 	index = ROLE_DETECTIVE,
 	color = Color(31, 77, 191, 255),
 	dkcolor = Color(10, 42, 123, 255),
@@ -154,10 +153,9 @@ ROLES.DETECTIVE = {
 	buildin = true,
 	scoreKillsMultiplier = INNOCENT.scoreKillsMultiplier,
 	scoreTeamKillsMultiplier = INNOCENT.scoreTeamKillsMultiplier,
+	fallbackTable = {},
 	unknownTeam = true
 }
-ROLES.DETECTIVE.fallbackTable = ROLES.DETECTIVE.fallbackTable or {}
-
 DETECTIVE = ROLES.DETECTIVE
 
 ACTIVEROLES = ACTIVEROLES or {}
