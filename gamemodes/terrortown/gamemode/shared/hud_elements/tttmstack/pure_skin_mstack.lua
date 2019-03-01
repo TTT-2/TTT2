@@ -29,6 +29,7 @@ if CLIENT then
 	local fadeout = 0.6
 	local movespeed = 2
 
+	local margin = 5
 	local line_margin = 6
 	local top_margin = 8
 	local title_bottom_margin = 8
@@ -50,8 +51,6 @@ if CLIENT then
 		self:SetSize(width, 80)
 		self:SetMinSize(min_w, min_h)
 
-		BaseClass.Initialize(self)
-
 		self.defaults.resizeableX = true
 		self.defaults.resizeableY = false
 
@@ -60,13 +59,15 @@ if CLIENT then
 			xalign = TEXT_ALIGN_LEFT,
 			yalign = TEXT_ALIGN_TOP
 		}
+
+		BaseClass.Initialize(self)
 	end
 
 	function HUDELEMENT:RecalculateBasePos()
 		local width = msg_width + leftPad
 
-		top_y = line_margin
-		top_x = ScrW() - line_margin - width
+		top_y = margin
+		top_x = ScrW() - margin - width
 
 		self:SetBasePos(top_x, top_y)
 	end
