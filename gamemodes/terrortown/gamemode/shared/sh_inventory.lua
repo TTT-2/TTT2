@@ -45,7 +45,9 @@ function CleanupInventory(ply)
 	
 	--add weapons which are already in inventory
 	for k, v in pairs( ply:GetWeapons() ) do
-		AddWeaponToInventory(ply, v)
+		if v.Kind then
+			AddWeaponToInventory(ply, v)
+		end
 	end
 end
 
