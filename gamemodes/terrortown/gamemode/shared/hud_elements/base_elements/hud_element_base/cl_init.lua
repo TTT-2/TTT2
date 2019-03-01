@@ -23,8 +23,6 @@ HUDELEMENT.minsize = table.Copy(min_size_tbl)
 HUDELEMENT.defaults = {
 	basepos = table.Copy(HUDELEMENT.basepos),
 	size = table.Copy(HUDELEMENT.size),
-	minHeight = 0,
-	minWidth = 0,
 	resizeableX = true,
 	resizeableY = true,
 
@@ -141,9 +139,6 @@ function HUDELEMENT:SetSize(w, h)
 	if nh then
 		h = -h
 	end
-
-	w = math.max(self.defaults.minWidth, w)
-	h = math.max(self.defaults.minHeight, h)
 
 	if nw or nh then
 		local basepos = self:GetBasePos()

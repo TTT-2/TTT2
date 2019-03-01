@@ -41,16 +41,17 @@ if CLIENT then
 	local text_color = COLOR_WHITE
 	local imageSize = 64
 	local imageMinHeight = imageSize + 2 * pad
+	local min_w, min_h = 80, 250
 
 	function HUDELEMENT:Initialize()
 		local width = msg_width + leftPad
 
 		self:RecalculateBasePos()
 		self:SetSize(width, 80)
+		self:SetMinSize(min_w, min_h)
 
 		BaseClass.Initialize(self)
 
-		self.defaults.minWidth = 250
 		self.defaults.resizeableX = true
 		self.defaults.resizeableY = false
 
