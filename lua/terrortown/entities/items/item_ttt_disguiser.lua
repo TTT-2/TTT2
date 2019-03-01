@@ -1,7 +1,5 @@
 if SERVER then
 	AddCSLuaFile()
-
-	resource.AddFile("materials/vgui/ttt/perks/hud_disguiser.png")
 end
 
 ITEM.hud = Material("vgui/ttt/perks/hud_disguiser.png")

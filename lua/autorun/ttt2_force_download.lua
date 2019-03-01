@@ -62,4 +62,10 @@ if SERVER then
 	resource.AddFile("materials/vgui/ttt/ttt2_indicator_addondev.vmt") -- ttt2 addon dev
 	resource.AddFile("materials/vgui/ttt/ttt2_indicator_admin.vmt") -- server admin
 	resource.AddFile("materials/vgui/ttt/ttt2_indicator_streamer.vmt") -- streamer
+
+	-- ITEMs
+	resource.AddFile("materials/vgui/ttt/icon_armor.vmt") -- armor
+	resource.AddFile("materials/vgui/ttt/perks/hud_armor.png") -- armor HUD
+	resource.AddFile("materials/vgui/ttt/perks/hud_disguiser.png") -- disguiser
+	resource.AddFile("materials/vgui/ttt/perks/hud_radar.png") -- radar
 end
