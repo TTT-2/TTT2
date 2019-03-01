@@ -2,6 +2,8 @@ local base = "pure_skin_element"
 
 HUDELEMENT.Base = base
 
+HUDELEMENT.togglable = true
+
 DEFINE_BASECLASS(base)
 
 if CLIENT then

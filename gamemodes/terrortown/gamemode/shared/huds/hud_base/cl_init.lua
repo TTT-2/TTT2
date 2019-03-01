@@ -46,6 +46,10 @@ function HUD:ShouldShow(elementType)
 	end
 
 	if elementTbl then
+		if elementTbl.togglable and not GetGlobalBool("ttt2_elem_toggled_" .. elementTbl.id, true) then
+			return false
+		end
+
 		if elementTbl.disabledUnlessForced then
 			return table.HasValue(hudelems, elementTbl.id)
 		end

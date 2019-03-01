@@ -411,7 +411,7 @@ function HUDManager.DrawHUD()
 			return
 		end
 
-		if elem.initialized and (not elem.togglable or GetGlobalBool("ttt2_elem_toggled_" .. elem.id, true)) and elem.type and hud:ShouldShow(elem.type) and hook.Call("HUDShouldDraw", GAMEMODE, elem.type) then
+		if elem.initialized and elem.type and hud:ShouldShow(elem.type) and hook.Call("HUDShouldDraw", GAMEMODE, elem.type) then
 			elem:Draw()
 
 			if HUDManager.IsEditing then
