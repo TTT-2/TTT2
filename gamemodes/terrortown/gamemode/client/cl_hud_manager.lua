@@ -3,10 +3,6 @@ ttt_include("vgui__cl_hudswitcher")
 local current_hud = CreateClientConVar("ttt2_current_hud", HUDManager.defaultHUD or "pure_skin", true, true)
 local hud_scale = CreateClientConVar("ttt2_hud_scale", 1.0, true, true)
 
-cvars.AddChangeCallback(hud_scale:GetName(), function(name, old, new)
-	SetGlobalFloat(name, new)
-end, "TTT2HUDScaleChanged")
-
 local currentHUD
 
 HUDManager.IsEditing = false
