@@ -78,10 +78,6 @@ function GM:InitPostEntity()
 
 	hook.Run("TTTInitPostEntity")
 
-	for _, hudelem in ipairs(hudelements.GetList()) do
-		hudelem:Initialize()
-	end
-
 	HUDManager.SetHUD()
 
 	InitDefaultEquipment()
