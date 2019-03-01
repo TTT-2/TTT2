@@ -113,20 +113,12 @@ if CLIENT then
 				if icon then
 					surface.SetDrawColor(255, 255, 255, 255)
 					surface.SetMaterial(icon)
-					render.PushFilterMag( TEXFILTER.LINEAR )
-					render.PushFilterMin( TEXFILTER.LINEAR )
-						surface.DrawTexturedRect(x2 + 4, y2 + 4, lpw - 8, lpw - 8)
-					render.PopFilterMag()
-					render.PopFilterMin()
+					surface.DrawTexturedRect(x2 + 4, y2 + 4, lpw - 8, lpw - 8)
 				end
 			elseif IsValid(tgt) and tgt:IsPlayer() then
 				surface.SetDrawColor(255, 255, 255, 255)
 				surface.SetMaterial(watching_icon)
-				render.PushFilterMag( TEXFILTER.LINEAR )
-				render.PushFilterMin( TEXFILTER.LINEAR )
-					surface.DrawTexturedRect(x2 + 4, y2 + 4, lpw - 8, lpw - 8)
-				render.PopFilterMag()
-				render.PopFilterMin()
+				surface.DrawTexturedRect(x2 + 4, y2 + 4, lpw - 8, lpw - 8)
 			end
 
 			-- draw role string name
