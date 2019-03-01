@@ -83,8 +83,6 @@ end
 function draw.CacheAvatar(id64, size)
 	fetch_asset(fetchAvatarAsset(id64, size, function(url)
 		fetch_asset(url)
-
-		print("Got URL and transfered into img", url)
 	end))
 end
 
