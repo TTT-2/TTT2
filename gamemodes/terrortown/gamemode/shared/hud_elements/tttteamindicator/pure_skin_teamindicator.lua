@@ -76,7 +76,11 @@ if CLIENT then
 		if icon then
 			surface.SetDrawColor(255, 255, 255, 255)
 			surface.SetMaterial(icon)
+			render.PushFilterMag( TEXFILTER.LINEAR )
+			render.PushFilterMin( TEXFILTER.LINEAR )
 			surface.DrawTexturedRect(x + pad, y + pad, iconSize, iconSize)
+			render.PopFilterMag()
+			render.PopFilterMin()
 		end
 
 		-- draw lines around the element
