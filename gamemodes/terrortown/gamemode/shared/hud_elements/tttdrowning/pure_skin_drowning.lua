@@ -45,6 +45,8 @@ if CLIENT then
 
 		if not HUDManager.IsEditing and (not client.drowningProgress or not client:Alive() or client.drowningProgress == -1) then return end
 
+		pad = 14 * self.scale
+
 		-- draw bg and shadow
 		self:DrawBg(x, y, w, h, self.basecolor)
 	

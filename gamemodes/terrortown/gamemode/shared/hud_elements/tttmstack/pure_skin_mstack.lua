@@ -87,7 +87,7 @@ if CLIENT then
 	end
 
 	local function PrepareItem(item, bg_color)
-		local max_text_width = text_width - leftPad
+		local max_text_width = (text_width - leftPad) / item.scale
 		local item_height = pad * 2
 
 		item.text_spec = table.Copy(base_text_display_options)
@@ -103,14 +103,14 @@ if CLIENT then
 			item.text_spec.font = imagedmsgfont
 			item.title_spec = table.Copy(base_text_display_options)
 			item.title_spec.font = imagedmsgfont
-			item.title_spec.font_height = draw.GetFontHeight(item.title_spec.font)
+			item.title_spec.font_height = draw.GetFontHeight(item.title_spec.font) * item.scale
 
 			item.title_wrapped = item.title and MSTACK:WrapText(item.title, max_text_width, item.title_spec.font) or {}
 			-- calculate the new height
 			item_height = item_height + top_margin + title_bottom_margin + #item.title_wrapped * (item.title_spec.font_height + line_margin) - line_margin
 		end
 
-		item.text_spec.font_height = draw.GetFontHeight(item.text_spec.font)
+		item.text_spec.font_height = draw.GetFontHeight(item.text_spec.font) * item.scale
 
 		item.text_wrapped = MSTACK:WrapText(item.text, max_text_width, item.text_spec.font)
 
@@ -144,7 +144,8 @@ if CLIENT then
 			text_spec.text = item.text_wrapped[i]
 			text_spec.pos = {tx, ty}
 
-			draw.TextShadow(text_spec, 1, alpha)
+			--draw.TextShadow(text_spec, 1, alpha)
+			self:AdvancedText(text_spec.text, text_spec.font, text_spec.pos[1], text_spec.pos[2], text_spec.color, text_spec.xalign, text_spec.yalign, true, self.scale)
 
 			ty = ty + text_spec.font_height + line_margin
 		end
@@ -168,7 +169,8 @@ if CLIENT then
 			title_spec.text = item.title_wrapped[i]
 			title_spec.pos = {tx, ty}
 
-			draw.TextShadow(title_spec, 1, alpha)
+			--draw.TextShadow(title_spec, 1, alpha)
+			self:AdvancedText(title_spec.text, title_spec.font, title_spec.pos[1], title_spec.pos[2], title_spec.color, title_spec.xalign, title_spec.yalign, true, self.scale)
 
 			ty = ty + title_spec.font_height + line_margin
 		end
@@ -183,7 +185,8 @@ if CLIENT then
 			text_spec.text = item.text_wrapped[i]
 			text_spec.pos = {tx, ty}
 
-			draw.TextShadow(text_spec, 1, alpha)
+			--draw.TextShadow(text_spec, 1, alpha)
+			self:AdvancedText(text_spec.text, text_spec.font, text_spec.pos[1], text_spec.pos[2], text_spec.color, text_spec.xalign, text_spec.yalign, true, self.scale)
 
 			ty = ty + text_spec.font_height + line_margin
 		end
@@ -199,10 +202,22 @@ if CLIENT then
 	function HUDELEMENT:Draw()
 		if next(MSTACK.msgs) == nil then return end -- fast empty check
 
+		line_margin = 6 * self.scale
+		top_margin = 8 * self.scale
+		title_bottom_margin = 8* self.scale
+		msg_width = 400 * self.scale
+		pad = 6 * self.scale
+		leftImagePad = 10 * self.scale
+		text_width = msg_width - pad * 4
+		pad = 6 * self.scale
+		imageSize = 64 * self.scale
+		imageMinHeight = imageSize + 2 * pad
+
 		local running_y = top_y
 		for k, item in pairs(MSTACK.msgs) do
 			if item.time < CurTime() then
 				if not item.ready then
+					item.scale = self.scale
 					PrepareItem(item, self.basecolor)
 				end
 

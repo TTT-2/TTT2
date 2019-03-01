@@ -23,15 +23,15 @@ if CLIENT then
 		s = s or 1
 	
 		surface.SetDrawColor(clr(c))
-		surface.DrawRect(x, y, w, h * s)
+		surface.DrawRect(x, y, w, h)
 
 		local w2 = math.Round(w * (p or 1))
 
 		surface.SetDrawColor(0, 0, 0, 165)
-		surface.DrawRect(x + w2, y, w - w2, h * s)
+		surface.DrawRect(x + w2, y, w - w2, h)
 
 		-- draw lines around this bar
-		self:DrawLines(x, y, w, h * s, c.a)
+		self:DrawLines(x, y, w, h, c.a)
 
 		-- draw text
 		if t then

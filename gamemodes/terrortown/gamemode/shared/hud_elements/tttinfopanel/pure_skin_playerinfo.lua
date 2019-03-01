@@ -27,7 +27,7 @@ if CLIENT then
 	end
 
 	function HUDELEMENT:RecalculateBasePos()
-		self:SetBasePos(10, ScrH() - (10 + h))
+		self:SetBasePos(10 * self.scale, ScrH() - ((10 * self.scale) + h))
 	end
 
 	function HUDELEMENT:PerformLayout()
@@ -82,6 +82,7 @@ if CLIENT then
 		local height_scale = (h / 146.0)
 		
 		lpw = 44 * height_scale
+		pad = 14 * height_scale
 		
 		if not calive then
 			y2 = y2 + h2 - lpw
@@ -198,9 +199,9 @@ if CLIENT then
 
 			-- draw bars
 			local bw = w2 - lpw - pad * 2 -- bar width
-			local bh = 26 --  bar height
-			local sbh = 8 -- spring bar height
-			local spc = 7 -- space between bars
+			local bh = 26 * height_scale --  bar height
+			local sbh = 8 * height_scale -- spring bar height
+			local spc = 7 * height_scale -- space between bars
 
 			-- health bar
 			local health = math.max(0, client:Health())
@@ -208,7 +209,7 @@ if CLIENT then
 			self:DrawBar(nx, ty, bw, bh, Color(234, 41, 41), health / client:GetMaxHealth(), height_scale, "HEALTH: " .. health)
 
 			-- ammo bar
-			ty = ty + bh * height_scale + spc
+			ty = ty + bh + spc
 
 			-- Draw ammo
 			if client:GetActiveWeapon().Primary then
@@ -222,7 +223,7 @@ if CLIENT then
 			end
 
 			-- sprint bar
-			ty = ty + bh * height_scale + spc
+			ty = ty + bh + spc
 
 			if GetGlobalBool("ttt2_sprint_enabled", true) then
 				self:DrawBar(nx, ty, bw, sbh, Color(36, 154, 198), client.sprintProgress, height_scale, "")
@@ -230,7 +231,7 @@ if CLIENT then
 
 			-- coin info
 			if cactive and client:IsShopper() then
-				local coinSize = 24
+				local coinSize = 24 * height_scale
 				local x2_pad = math.Round((lpw - coinSize) * 0.5)
 
 				if client:GetCredits() > 0 then

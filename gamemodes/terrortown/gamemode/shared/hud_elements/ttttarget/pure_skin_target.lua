@@ -36,12 +36,10 @@ if CLIENT then -- CLIENT
 		local size = self:GetSize()
 		local x, y = pos.x, pos.y
 		local width, height = size.w, size.h
-		
-		local scale = height / 22.0
-		iconSize = 64 * scale
+		iconSize = 64 * self.scale
 
 		self:DrawBg(x, y, width, height, self.basecolor)
-		self:AdvancedText(name, "PureSkinBar", x + iconSize + pad, y + height * 0.5, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, true, scale)
+		self:AdvancedText(name, "PureSkinBar", x + iconSize + pad, y + height * 0.5, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, true, self.scale)
 		self:DrawLines(x, y, width, height, self.basecolor.a)
 
 		local nSize = iconSize - 8

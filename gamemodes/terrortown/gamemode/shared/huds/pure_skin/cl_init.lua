@@ -49,6 +49,7 @@ function HUD:GetSavingKeys()
 					if el then
 						local size = el:GetSize()
 						el:SetSize(size.w * scaleMultiplier, size.h * scaleMultiplier)
+						el.scale = val
 						el:RecalculateBasePos()
 						el:PerformLayout()
 						el:SaveData()
@@ -83,6 +84,7 @@ function HUD:Loaded()
 		local el = hudelements.GetStored(elem)
 		if el then
 			el.basecolor = self.basecolor
+			el.scale = self.scale
 		end
 	end
 end
