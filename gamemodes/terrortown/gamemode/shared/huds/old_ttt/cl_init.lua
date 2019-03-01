@@ -33,12 +33,12 @@ end
 HUD.disableHUDEditor = true
 
 function HUD:Initialize()
-	self:ForceHUDElement("old_ttt_info")
-	self:ForceHUDElement("old_ttt_punchometer")
-	self:ForceHUDElement("old_ttt_items")
-	self:ForceHUDElement("old_ttt_mstack")
-	self:ForceHUDElement("old_ttt_wswitch")
-	self:ForceHUDElement("old_ttt_target")
+	self:ForceElement("old_ttt_info")
+	self:ForceElement("old_ttt_punchometer")
+	self:ForceElement("old_ttt_items")
+	self:ForceElement("old_ttt_mstack")
+	self:ForceElement("old_ttt_wswitch")
+	self:ForceElement("old_ttt_target")
 
 	BaseClass.Initialize(self)
 end

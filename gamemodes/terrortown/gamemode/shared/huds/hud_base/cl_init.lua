@@ -2,7 +2,7 @@
 -- HUD Base class
 ----------------------------------------------
 HUD.elements = {}
-HUD.hiddenElements = {}
+HUD.disabledTypes = {}
 
 HUD.previewImage = Material("vgui/ttt/score_logo_2")
 
@@ -12,7 +12,7 @@ function HUD:GetSavingKeys()
 	return savingKeys
 end
 
-function HUD:ForceHUDElement(elementID)
+function HUD:ForceElement(elementID)
 	local elem = hudelements.GetStored(elementID)
 
 	if elem and elem.type and not self.elements[elem.type] then
@@ -20,43 +20,24 @@ function HUD:ForceHUDElement(elementID)
 	end
 end
 
-function HUD:GetForcedHUDElements()
+function HUD:GetForcedElements()
 	return self.elements
 end
 
-function HUD:HideHUDType(elementType)
-	table.insert(self.hiddenElements, elementType)
+function HUD:HideType(elementType)
+	table.insert(self.disabledTypes, elementType)
 end
 
 function HUD:ShouldShow(elementType)
-	if table.HasValue(self.hiddenElements, elementType) then
-		return false
-	end
-
-	local hudelems = self:GetForcedHUDElements()
-
-	-- hide element if its parent element is hidden
-	local element = hudelems[elementType]
-	local elementTbl = nil
-
-	if not element then
-		elementTbl = hudelements.GetTypeElement(elementType)
-	else
-		elementTbl = hudelements.GetStored(element)
-	end
-
-	if elementTbl then
-		if elementTbl.togglable and not GetGlobalBool("ttt2_elem_toggled_" .. elementTbl.id, true) then
+	local el = self:GetElementByType(elementType)
+	if el then
+		if el.togglable and not GetGlobalBool("ttt2_elem_toggled_" .. el.id, true) then
 			return false
 		end
 
-		if elementTbl.disabledUnlessForced then
-			return table.HasValue(hudelems, elementTbl.id)
-		end
+		local parent = el:GetParent()
 
-		local parent = elementTbl:GetParent()
-
-		if elementTbl:IsChild() and parent then
+		if el:IsChild() and parent then
 			local parentTbl = hudelements.GetStored(parent)
 
 			return self:ShouldShow(parentTbl.type)
@@ -69,7 +50,7 @@ function HUD:ShouldShow(elementType)
 end
 
 function HUD:PerformLayout()
-	for _, elemName in ipairs(self:GetHUDElements()) do
+	for _, elemName in ipairs(self:GetElements()) do
 		local elem = hudelements.GetStored(elemName)
 		if elem then
 			if not elem:IsChild() then
@@ -84,7 +65,7 @@ function HUD:PerformLayout()
 end
 
 function HUD:ResolutionChanged()
-	for _, elemName in ipairs(self:GetHUDElements()) do
+	for _, elemName in ipairs(self:GetElements()) do
 		local elem = hudelements.GetStored(elemName)
 		if elem then
 			if not elem:IsChild() then
@@ -100,7 +81,7 @@ end
 
 function HUD:Initialize()
 	-- Initialize elements default values
-	for _, v in ipairs(self:GetHUDElements()) do
+	for _, v in ipairs(self:GetElements()) do
 		local elem = hudelements.GetStored(v)
 		if elem then
 			if not elem:IsChild() then
@@ -114,7 +95,7 @@ function HUD:Initialize()
 	self:PerformLayout()
 
 	-- Initialize elements default values
-	for _, v in ipairs(self:GetHUDElements()) do
+	for _, v in ipairs(self:GetElements()) do
 		local elem = hudelements.GetStored(v)
 		if elem then
 			elem.initialized = true
@@ -124,35 +105,59 @@ function HUD:Initialize()
 	end
 end
 
-function HUD:GetHUDElements()
+function HUD:GetElementByType(elementType)
+	if table.HasValue(self.disabledTypes, elementType) then
+		return false
+	end
+
+	local hudelems = self:GetForcedElements()
+
+	-- hide element if its parent element is hidden
+	local element = hudelems[elementType]
+	local elementTbl = nil
+
+	if not element then
+		elementTbl = hudelements.GetTypeElement(elementType)
+	else
+		elementTbl = hudelements.GetStored(element)
+	end
+
+	if elementTbl then
+		if elementTbl.disabledUnlessForced then
+			return table.HasValue(hudelems, elementTbl.id)
+		end
+
+		local parent = elementTbl:GetParent()
+
+		if elementTbl:IsChild() and parent then
+			local parentTbl = hudelements.GetStored(parent)
+
+			return self:HasElementType(parentTbl.type)
+		end
+
+		return true
+	else
+		return false
+	end
+end
+
+function HUD:HasElementType(elementType)
+	return self:GetElementByType(elementType) ~= false
+end
+
+function HUD:GetElements()
 	local tbl = {}
-	local hudelems = self:GetForcedHUDElements()
+	local hudelems = self:GetForcedElements()
 
 	-- loop through all types and if the hud does not provide an element take the first found instance for the type
 	for _, typ in ipairs(hudelements.GetElementTypes()) do
-		if self:ShouldShow(typ) then
-			tbl[#tbl + 1] = hudelems[typ] or hudelements.GetTypeElement(typ).id
+		local el = self:GetElementByType(typ)
+		if el then
+			tbl[#tbl + 1] = el.id
 		end
 	end
 
 	return tbl
-end
-
-function HUD:GetHUDElementByType(typ)
-	if not typ then return end
-
-	local hudelem = self:GetForcedHUDElements()[typ]
-	if hudelem then
-		hudelem = hudelements.GetStored(hudelem)
-		if hudelem then
-			return hudelem
-		end
-	end
-
-	local allelems = hudelements.GetTypeElement(typ)
-	if allelems then
-		return allelems
-	end
 end
 
 function HUD:Loaded()

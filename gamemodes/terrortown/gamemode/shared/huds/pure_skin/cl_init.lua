@@ -30,7 +30,7 @@ function HUD:GetSavingKeys()
 			typ = "color",
 			desc = "BaseColor",
 			OnChange = function(slf, col)
-				for _, elem in ipairs(slf:GetHUDElements()) do
+				for _, elem in ipairs(slf:GetElements()) do
 					local el = hudelements.GetStored(elem)
 					if el then
 						el.basecolor = col
@@ -46,21 +46,21 @@ end
 HUD.basecolor = defaultColor
 
 function HUD:Initialize()
-	self:ForceHUDElement("pure_skin_playerinfo")
-	self:ForceHUDElement("pure_skin_roundinfo")
-	self:ForceHUDElement("pure_skin_wswitch")
-	self:ForceHUDElement("pure_skin_drowning")
-	self:ForceHUDElement("pure_skin_mstack")
-	self:ForceHUDElement("pure_skin_items")
-	self:ForceHUDElement("pure_skin_miniscoreboard")
-	self:ForceHUDElement("pure_skin_punchometer")
-	self:ForceHUDElement("pure_skin_target")
+	self:ForceElement("pure_skin_playerinfo")
+	self:ForceElement("pure_skin_roundinfo")
+	self:ForceElement("pure_skin_wswitch")
+	self:ForceElement("pure_skin_drowning")
+	self:ForceElement("pure_skin_mstack")
+	self:ForceElement("pure_skin_items")
+	self:ForceElement("pure_skin_miniscoreboard")
+	self:ForceElement("pure_skin_punchometer")
+	self:ForceElement("pure_skin_target")
 
 	BaseClass.Initialize(self)
 end
 
 function HUD:Loaded()
-	for _, elem in ipairs(self:GetHUDElements()) do
+	for _, elem in ipairs(self:GetElements()) do
 		local el = hudelements.GetStored(elem)
 		if el then
 			el.basecolor = self.basecolor

@@ -18,7 +18,7 @@ local function CreateEditOptions(x, y)
 	editReset.OnMousePressed = function(slf, keyCode)
 		local hud = huds.GetStored(HUDManager.GetHUD())
 		if hud then
-			for _, elem in ipairs(hud:GetHUDElements()) do
+			for _, elem in ipairs(hud:GetElements()) do
 				local el = hudelements.GetStored(elem)
 				if el then
 					el:Reset()
@@ -64,7 +64,7 @@ local function EditLocalHUD()
 		if not elem then
 			local hud = huds.GetStored(HUDManager.GetHUD())
 			if hud then
-				for _, el in ipairs(hud:GetHUDElements()) do
+				for _, el in ipairs(hud:GetElements()) do
 					local elObj = hudelements.GetStored(el)
 					if elObj and elObj:IsInPos(x, y) then
 						elem = elObj
@@ -249,7 +249,7 @@ function HUDManager.EditHUD(bool, hud)
 		hook.Remove("Think", "TTT2EditHUD")
 
 		if hud then
-			for _, elem in ipairs(hud:GetHUDElements()) do
+			for _, elem in ipairs(hud:GetElements()) do
 				local el = hudelements.GetStored(elem)
 				if el then
 					el:SaveData()
@@ -314,7 +314,7 @@ function HUDManager.AddHUDSettings(panel, hudEl)
 
 			el.DoClick = function(btn)
 				if hudEl then
-					for _, elem in ipairs(hudEl:GetHUDElements()) do
+					for _, elem in ipairs(hudEl:GetElements()) do
 						local tel = hudelements.GetStored(elem)
 						if tel then
 							tel:Reset()
@@ -403,7 +403,7 @@ function HUDManager.DrawHUD()
 
 	local client = LocalPlayer()
 
-	for _, elemName in ipairs(hud:GetHUDElements()) do
+	for _, elemName in ipairs(hud:GetElements()) do
 		local elem = hudelements.GetStored(elemName)
 		if not elem then
 			Msg("Error: Hudelement with name " .. elemName .. " not found!")
