@@ -113,8 +113,8 @@ if CLIENT then
 				if icon then
 					surface.SetDrawColor(255, 255, 255, 255)
 					surface.SetMaterial(icon)
-					render.PushFilterMag( TEXFILTER.LINEAR )
-					render.PushFilterMin( TEXFILTER.LINEAR )
+					render.PushFilterMag( TEXFILTER.ANISOTROPIC )
+					render.PushFilterMin( TEXFILTER.ANISOTROPIC )
 						surface.DrawTexturedRect(x2 + 4, y2 + 4, lpw - 8, lpw - 8)
 					render.PopFilterMag()
 					render.PopFilterMin()
@@ -122,8 +122,8 @@ if CLIENT then
 			elseif IsValid(tgt) and tgt:IsPlayer() then
 				surface.SetDrawColor(255, 255, 255, 255)
 				surface.SetMaterial(watching_icon)
-				render.PushFilterMag( TEXFILTER.LINEAR )
-				render.PushFilterMin( TEXFILTER.LINEAR )
+				render.PushFilterMag( TEXFILTER.ANISOTROPIC )
+				render.PushFilterMin( TEXFILTER.ANISOTROPIC )
 					surface.DrawTexturedRect(x2 + 4, y2 + 4, lpw - 8, lpw - 8)
 				render.PopFilterMag()
 				render.PopFilterMin()
