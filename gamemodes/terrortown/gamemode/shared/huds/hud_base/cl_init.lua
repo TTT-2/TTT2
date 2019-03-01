@@ -124,7 +124,7 @@ function HUD:GetElementByType(elementType)
 
 	if elementTbl then
 		if elementTbl.disabledUnlessForced then
-			return table.HasValue(hudelems, elementTbl.id)
+			return table.HasValue(hudelems, elementTbl.id) and elementTbl or false
 		end
 
 		local parent = elementTbl:GetParent()
@@ -132,10 +132,10 @@ function HUD:GetElementByType(elementType)
 		if elementTbl:IsChild() and parent then
 			local parentTbl = hudelements.GetStored(parent)
 
-			return self:HasElementType(parentTbl.type)
+			return self:HasElementType(parentTbl.type) and elementTbl or false
 		end
 
-		return true
+		return elementTbl
 	else
 		return false
 	end
