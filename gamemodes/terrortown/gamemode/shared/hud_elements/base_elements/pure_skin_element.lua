@@ -18,27 +18,61 @@ if CLIENT then
 		DrawHUDElementLines(x, y, w, h, a)
 	end
 
-	-- x, y, width, height, color, progress, text
-	function HUDELEMENT:DrawBar(x, y, w, h, c, p, t)
+	-- x, y, width, height, color, progress, scale, text
+	function HUDELEMENT:DrawBar(x, y, w, h, c, p, s, t)
+		s = s or 1
+	
 		surface.SetDrawColor(clr(c))
-		surface.DrawRect(x, y, w, h)
+		surface.DrawRect(x, y, w, h * s)
 
 		local w2 = math.Round(w * (p or 1))
 
 		surface.SetDrawColor(0, 0, 0, 165)
-		surface.DrawRect(x + w2, y, w - w2, h)
+		surface.DrawRect(x + w2, y, w - w2, h * s)
 
 		-- draw lines around this bar
-		self:DrawLines(x, y, w, h, c.a)
+		self:DrawLines(x, y, w, h * s, c.a)
 
 		-- draw text
-		self:ShadowedText(t or "", "PureSkinBar", x + 14, y + 1, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT)
+		if t then
+			self:AdvancedText(t or "", "PureSkinBar", x + 14, y + 1, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT, true, s)
+		end
 	end
 
 	function HUDELEMENT:ShadowedText(text, font, x, y, color, xalign, yalign)
 		draw.SimpleText(text, font, x + 2, y + 2, shadowColor, xalign, yalign)
 		draw.SimpleText(text, font, x + 1, y + 1, shadowColor, xalign, yalign)
 		draw.SimpleText(text, font, x, y, color, xalign, yalign)
+	end
+	
+	function HUDELEMENT:AdvancedText(text, font, x, y, color, xalign, yalign, shadow, scale)
+		local mat
+		if isvector(scale) or scale ~= 1.0 then
+			mat = Matrix()
+			mat:Translate(Vector(x, y))
+			
+			mat:Scale(isvector(scale) and scale or Vector(scale, scale, scale))
+			mat:Translate(-Vector(x, y))
+
+			render.PushFilterMag(TEXFILTER.ANISOTROPIC)
+			render.PushFilterMin(TEXFILTER.ANISOTROPIC)
+
+			cam.PushModelMatrix(mat)
+		end
+		
+		if shadow then
+			self:ShadowedText(text, font, x, y, color, xalign, yalign)
+		
+		else
+			draw.SimpleText(text, font, x, y, color, xalign, yalign)
+		end
+		
+		if isvector(scale) or scale ~= 1.0 then
+			cam.PopModelMatrix(mat)
+
+			render.PopFilterMag()
+			render.PopFilterMin()
+		end
 	end
 
 	HUDELEMENT.roundstate_string = {

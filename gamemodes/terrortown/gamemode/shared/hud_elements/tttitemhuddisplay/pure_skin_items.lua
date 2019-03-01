@@ -18,8 +18,10 @@ if CLIENT then
 		
 		BaseClass.Initialize(self)
 
-		self.defaults.minWidth = size
-		self.defaults.minHeight = size
+		self.defaults.minWidth = 64
+		self.defaults.minHeight = 64
+		
+		self:SetSize(size, -size)
 		self.defaults.resizeableX = false
 		self.defaults.resizeableY = false
 	end
@@ -30,7 +32,8 @@ if CLIENT then
 
 	function HUDELEMENT:PerformLayout()
 		local basepos = self:GetBasePos()
-
+		local currSize = self:GetSize()
+		
 		self:SetPos(basepos.x, basepos.y)
 		self:SetSize(size, -size)
 
