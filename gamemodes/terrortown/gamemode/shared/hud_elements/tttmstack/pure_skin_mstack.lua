@@ -41,7 +41,7 @@ if CLIENT then
 	local text_color = COLOR_WHITE
 	local imageSize = 64
 	local imageMinHeight = imageSize + 2 * pad
-	local min_w, min_h = 80, 250
+	local min_w, min_h = 250, 80
 
 	function HUDELEMENT:Initialize()
 		local width = msg_width + leftPad
