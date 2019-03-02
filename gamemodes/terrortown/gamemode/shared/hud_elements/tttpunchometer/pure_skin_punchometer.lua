@@ -90,7 +90,7 @@ if CLIENT then
 		if IsValid(tgt) and not tgt:IsPlayer() and tgt:GetNWEntity("spec_owner", nil) == client then
 			self:PunchPaint() -- punch bar if you are spectator and inside of an entity
 		else
-			self:AdvancedText(interp(L.spec_help, key_params), "TabLarge", x + size.w * 0.5, y - 5, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, true, self.scale)
+			self:AdvancedText(interp(L.spec_help, key_params), "TabLarge", x + size.w * 0.5, y, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, true, self.scale)
 		end
 	end
 end
