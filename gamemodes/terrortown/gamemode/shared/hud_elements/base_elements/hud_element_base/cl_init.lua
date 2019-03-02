@@ -399,12 +399,12 @@ function HUDELEMENT:Reset()
 		self:SetBasePos(defaultPos.x, defaultPos.y)
 	end
 
-	if defaultSize then
-		self:SetSize(defaultSize.w, defaultSize.h)
-	end
-
 	if defaultMinSize then
 		self:SetMinSize(defaultMinSize.w, defaultMinSize.h)
+	end
+
+	if defaultSize then
+		self:SetSize(defaultSize.w, defaultSize.h)
 	end
 
 	self.scale = 1.0

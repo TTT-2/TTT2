@@ -29,7 +29,7 @@ if CLIENT then -- CLIENT
 	end
 
 	function HUDELEMENT:RecalculateBasePos()
-	    self:SetBasePos(10, ScrH() - height - 146 * self.scale - pad - 10 * self.scale)
+	    self:SetBasePos(10 * self.scale, ScrH() - height - 146 * self.scale - pad - 10 * self.scale)
 	end
 
 	function HUDELEMENT:PerformLayout()
