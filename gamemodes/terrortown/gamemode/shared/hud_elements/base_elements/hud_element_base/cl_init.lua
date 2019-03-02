@@ -19,6 +19,7 @@ HUDELEMENT.basepos = table.Copy(zero_tbl_pos)
 HUDELEMENT.pos = table.Copy(zero_tbl_pos)
 HUDELEMENT.size = table.Copy(zero_tbl_size)
 HUDELEMENT.minsize = table.Copy(min_size_tbl)
+HUDELEMENT.scale = 1.0
 
 HUDELEMENT.defaults = {
 	basepos = table.Copy(HUDELEMENT.basepos),
@@ -130,6 +131,8 @@ function HUDELEMENT:GetSize()
 end
 
 function HUDELEMENT:SetSize(w, h)
+	w = math.Round(w)
+	h = math.Round(h)
 	local nw, nh = w < 0, h < 0
 
 	if nw then
@@ -390,6 +393,7 @@ function HUDELEMENT:Reset()
 	if defaultSize then
 		self:SetSize(defaultSize.w, defaultSize.h)
 	end
+	self.scale = 1.0
 
 	self:PerformLayout()
 end

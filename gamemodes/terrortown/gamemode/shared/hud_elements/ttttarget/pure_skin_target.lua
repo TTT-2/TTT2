@@ -21,7 +21,7 @@ if CLIENT then -- CLIENT
 		self:SetMinSize(min_w, min_h)
 
 		BaseClass.Initialize(self)
-
+		
 		self.defaults.resizeableY = false
 	end
 
@@ -36,9 +36,10 @@ if CLIENT then -- CLIENT
 		local size = self:GetSize()
 		local x, y = pos.x, pos.y
 		local width, height = size.w, size.h
+		iconSize = 64 * self.scale
 
 		self:DrawBg(x, y, width, height, self.basecolor)
-		self:ShadowedText(name, "PureSkinBar", x + iconSize + pad, y + height * 0.5, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		self:AdvancedText(name, "PureSkinBar", x + iconSize + pad, y + height * 0.5, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, true, self.scale)
 		self:DrawLines(x, y, width, height, self.basecolor.a)
 
 		local nSize = iconSize - 8
