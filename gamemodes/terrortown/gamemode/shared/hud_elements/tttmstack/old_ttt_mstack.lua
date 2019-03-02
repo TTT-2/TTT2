@@ -67,7 +67,7 @@ if CLIENT then
 		top_y = self.pos.y
 
 		msg_width = self.size.w
-		text_width = msg_width - line_margin * 3
+		text_width = msg_width - pad * 2
 
 		-- invalidate previous item size calculations
 		for k, v in pairs(MSTACK.msgs) do
@@ -90,7 +90,7 @@ if CLIENT then
 		item.col.a_max = item.col.a
 
 		if item.image then
-			max_text_width = max_text_width - imageSize + pad * 2
+			max_text_width = max_text_width - imageSize - leftImagePad
 			item.text_spec.font = imagedmsgfont
 			item.title_spec = table.Copy(base_text_display_options)
 			item.title_spec.font = imagedmsgfont
@@ -146,7 +146,7 @@ if CLIENT then
 		draw.RoundedBox(8, top_x, pos_y, msg_width, item.height, item.bg)
 
 		-- Text
-		local tx = top_x + msg_width * 0.5 + leftImagePad
+		local tx = top_x + (msg_width + leftImagePad + pad + imageSize) * 0.5
 		local ty = pos_y + pad + top_margin
 
 		-- draw the title text

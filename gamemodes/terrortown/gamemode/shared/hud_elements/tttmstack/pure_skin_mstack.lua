@@ -31,12 +31,12 @@ if CLIENT then
 
 	local margin = 5
 	local line_margin = 6
-	local top_margin = 8
+	local top_margin = 4
 	local title_bottom_margin = 8
 	local msg_width = 400
 	local pad = 6
-	local leftImagePad = 10
-	local text_width = msg_width - pad * 4
+	local leftImagePad = 8
+	local text_width = msg_width - pad * 2 - leftPad
 	local msgfont = "PureSkinMSTACKMsg"
 	local imagedmsgfont = "PureSkinMSTACKImageMsg"
 	local text_color = COLOR_WHITE
@@ -45,7 +45,7 @@ if CLIENT then
 	local min_w, min_h = 250, 80
 
 	function HUDELEMENT:Initialize()
-		local width = msg_width + leftPad
+		local width = msg_width
 
 		self:RecalculateBasePos()
 		self:SetSize(width, 80)
@@ -64,10 +64,8 @@ if CLIENT then
 	end
 
 	function HUDELEMENT:RecalculateBasePos()
-		local width = msg_width + leftPad
-
 		top_y = margin
-		top_x = ScrW() - margin - width
+		top_x = ScrW() - margin - self.size.w
 
 		self:SetBasePos(top_x, top_y)
 	end
@@ -77,7 +75,7 @@ if CLIENT then
 		top_y = self.pos.y
 
 		msg_width = self.size.w
-		text_width = msg_width - line_margin * 3 - leftPad
+		text_width = msg_width - pad * 2 - leftPad
 
 		-- invalidate previous item size calculations
 		for k, v in pairs(MSTACK.msgs) do
@@ -88,7 +86,7 @@ if CLIENT then
 	end
 
 	local function PrepareItem(item, bg_color)
-		local max_text_width = (text_width - leftPad) / item.scale
+		local max_text_width = (msg_width - pad * 2 - leftPad) / item.scale
 		local item_height = pad * 2
 
 		item.text_spec = table.Copy(base_text_display_options)
@@ -100,7 +98,7 @@ if CLIENT then
 		item.col.a_max = item.col.a
 
 		if item.image then
-			max_text_width = max_text_width - imageSize + pad * 2
+			max_text_width = (text_width - leftImagePad - imageSize) / item.scale
 			item.text_spec.font = imagedmsgfont
 			item.title_spec = table.Copy(base_text_display_options)
 			item.title_spec.font = imagedmsgfont
@@ -134,7 +132,7 @@ if CLIENT then
 		self:DrawBg(top_x, pos_y, msg_width, item.height, item.bg)
 
 		-- Text
-		local tx = top_x + leftPad
+		local tx = top_x + pad + leftPad
 		local ty = pos_y + pad
 
 		-- draw the normal text
@@ -209,7 +207,6 @@ if CLIENT then
 		msg_width = 400 * self.scale
 		pad = 6 * self.scale
 		leftImagePad = 10 * self.scale
-		text_width = msg_width - pad * 4
 		pad = 6 * self.scale
 		imageSize = 64 * self.scale
 		imageMinHeight = imageSize + 2 * pad
