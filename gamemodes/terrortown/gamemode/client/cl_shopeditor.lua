@@ -122,7 +122,7 @@ function ShopEditor.CreateItemList(frame, w, h, itms, onClick, updateListItems)
 				end
 			end
 
-			local tip = GetEquipmentTranslation(item.name, item.PrintName) .. " (" .. SafeTranslate(item.type) .. ")"
+			local tip = (GetEquipmentTranslation(item.name, item.PrintName) or "UNDEFINED") .. " (" .. (SafeTranslate(item.type) or "UNDEFINED") .. ")"
 
 			ic:SetTooltip(tip)
 
