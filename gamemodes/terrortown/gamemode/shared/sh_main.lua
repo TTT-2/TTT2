@@ -4,10 +4,11 @@ local hook = hook
 local team = team
 
 function GM:TTT2Initialize()
-	hook.Run("TTT2BaseRoleInit")
-
 	-- load all roles
 	roles.OnLoaded()
+
+	hook.Run("TTT2RolesLoaded")
+	hook.Run("TTT2BaseRoleInit")
 
 	-- load all HUDs
 	huds.OnLoaded()
