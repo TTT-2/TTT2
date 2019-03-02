@@ -1,7 +1,7 @@
 ttt_include("vgui__cl_hudswitcher")
 
 local current_hud = CreateClientConVar("ttt2_current_hud", HUDManager.defaultHUD or "pure_skin", true, true)
-local hud_scale = CreateClientConVar("ttt2_hud_scale", 1.0, true, true)
+local hud_scale = CreateClientConVar("ttt2_hud_scale", 1.0, true, false)
 
 local currentHUD
 
@@ -362,6 +362,7 @@ function HUDManager.AddHUDSettings(panel, hudEl)
 			el:SetConVar( "ttt2_hud_scale" )
 			
 			function el:ValueChanged(val)
+				val = math.Round(val, 1)
 				if isfunction(data.OnChange) then
 					data.OnChange(hudEl, val)
 				end

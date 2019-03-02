@@ -20,17 +20,14 @@ if CLIENT then
 	function HUDELEMENT:Initialize()
 		WSWITCH:UpdateWeaponCache()
 
-		self:SetSize(width, -height)
 		self:RecalculateBasePos()
-
+		self:SetSize(width, -height)
 		self:SetMinSize(min_w, min_h)
 
 		BaseClass.Initialize(self)
 
 		self.defaults.resizeableY = false
 		self.defaults.minHeight = height
-
-		--self:PerformLayout()
 	end
 
 	function HUDELEMENT:DrawBarBg(x, y, w, h, col)
@@ -76,10 +73,9 @@ if CLIENT then
 
 		if ammo then
 			local col = (wep:Clip1() == 0 and wep:Ammo1() == 0) and c.text_empty or c.text
-			local w = self:GetSize().w
 
 			-- Ammo
-			self:AdvancedText(tostring(ammo), "PureSkinWep", x + w - self.margin * 3, y + height * 0.5, col, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, false, self.scale)
+			self:AdvancedText(tostring(ammo), "PureSkinWep", x + width - self.margin * 3, y + height * 0.5, col, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, false, self.scale)
 		end
 
 		return true
@@ -99,9 +95,9 @@ if CLIENT then
 	}
 
 	function HUDELEMENT:RecalculateBasePos()
-		local w = self:GetSize().w
 		self.margin = 5 * self.scale
-		self:SetBasePos(ScrW() - (w + self.margin * 2), ScrH() - self.margin)
+
+		self:SetBasePos(ScrW() - (width + self.margin * 2), ScrH() - self.margin)
 	end
 
 	function HUDELEMENT:PerformLayout()
@@ -113,9 +109,10 @@ if CLIENT then
 		local count = #weps
 		local tmp = height + self.margin
 
-		local w, h = self:GetSize().w, math.max(count * tmp, self.defaults.minHeight)
+		local h = math.max(count * tmp, self.defaults.minHeight)
+		width = self:GetSize().w
 
-		self:SetSize(w, -h)
+		self:SetSize(width, -h)
 
 		BaseClass.PerformLayout(self)
 	end
@@ -131,10 +128,10 @@ if CLIENT then
 		local count = #weps
 		local tmp = height + self.margin
 		local basepos = self:GetBasePos()
-		local w, h = self:GetSize().w, math.max(count * tmp, self.defaults.minHeight)
+		local h = math.max(count * tmp, self.defaults.minHeight)
 
 		self:SetPos(basepos.x, basepos.y)
-		self:SetSize(w, -h)
+		self:SetSize(width, -h)
 
 		local pos = self:GetPos()
 		local x_elem = pos.x
@@ -148,7 +145,7 @@ if CLIENT then
 				col = self.col_dark
 			end
 
-			self:DrawBarBg(x_elem, y_elem, w, height, col)
+			self:DrawBarBg(x_elem, y_elem, width, height, col)
 
 			if not self:DrawWeapon(x_elem, y_elem, col, wep) then
 				WSWITCH:UpdateWeaponCache()

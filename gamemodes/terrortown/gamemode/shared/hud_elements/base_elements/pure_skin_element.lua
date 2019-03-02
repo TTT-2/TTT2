@@ -49,8 +49,7 @@ if CLIENT then
 		local mat
 		if isvector(scale) or scale ~= 1.0 then
 			mat = Matrix()
-			mat:Translate(Vector(x, y))
-			
+			mat:Translate(Vector(x, y))	
 			mat:Scale(isvector(scale) and scale or Vector(scale, scale, scale))
 			mat:Translate(-Vector(x, y))
 
@@ -62,7 +61,6 @@ if CLIENT then
 		
 		if shadow then
 			self:ShadowedText(text, font, x, y, color, xalign, yalign)
-		
 		else
 			draw.SimpleText(text, font, x, y, color, xalign, yalign)
 		end

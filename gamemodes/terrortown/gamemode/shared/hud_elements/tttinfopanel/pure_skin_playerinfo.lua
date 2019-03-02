@@ -27,7 +27,7 @@ if CLIENT then
 	end
 
 	function HUDELEMENT:RecalculateBasePos()
-		self:SetBasePos(10 * self.scale, ScrH() - ((10 * self.scale) + h))
+		self:SetBasePos(10 * self.scale, ScrH() - (10 * self.scale + h))
 	end
 
 	function HUDELEMENT:PerformLayout()
@@ -79,7 +79,7 @@ if CLIENT then
 
 		local x2, y2, w2, h2 = x, y, w, h
 		
-		local height_scale = (h / 146.0)
+		local height_scale = h / 146.0
 		
 		lpw = 44 * height_scale
 		pad = 14 * height_scale
