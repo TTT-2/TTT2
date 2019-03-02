@@ -22,6 +22,38 @@ HELPSCRN = {}
 
 local helpframe
 
+local function AddBindingCategory(category, parent)
+	local form = vgui.Create("DForm", parent)
+	form:SetName(category)
+	for _, binding in ipairs(bind.GetSettingsBindings()) do
+		if binding.category == category then
+			local dPlabel = vgui.Create("DLabel")
+			dPlabel:SetText(binding.label)
+
+			local dPBinder = vgui.Create("DBinder")
+			dPBinder:SetSize(170, 30)
+
+			local curBinding = bind.Find(binding.name)
+			dPBinder:SetValue(curBinding)
+
+			function dPBinder:OnChange(num)
+				if num == 0 then
+					bind.Remove(curBinding, binding.name)
+				else
+					bind.Remove(curBinding, binding.name)
+					bind.Add(num, binding.name, true)
+
+					LocalPlayer():ChatPrint("New bound key for '" .. binding.name .. "': " .. input.GetKeyName(num))
+				end
+
+				curBinding = num
+			end
+			form:AddItem(dPlabel, dPBinder)
+		end
+	end
+	form:Dock(TOP)
+end
+
 function HELPSCRN:Show()
 	if helpframe and IsValid(helpframe) then
 		helpframe:Close()
@@ -398,39 +430,13 @@ end
 
 -- Bindings
 function HELPSCRN:CreateBindings(parent)
-	for _, category in ipairs(bind.GetSettingsBindingsCategories()) do
-		local form = vgui.Create("DForm", parent)
-		form:SetName(category)
-
-		for _, binding in ipairs(bind.GetSettingsBindings()) do
-			if binding.category == category then
-				local dPlabel = vgui.Create("DLabel")
-				dPlabel:SetText(binding.label)
-
-				local dPBinder = vgui.Create("DBinder")
-				dPBinder:SetSize(170, 30)
-
-				local curBinding = bind.Find(binding.name)
-				dPBinder:SetValue(curBinding)
-
-				function dPBinder:OnChange(num)
-					if num == 0 then
-						bind.Remove(curBinding, binding.name)
-					else
-						bind.Remove(curBinding, binding.name)
-						bind.Add(num, binding.name, true)
-
-						LocalPlayer():ChatPrint("New bound key for '" .. binding.name .. "': " .. input.GetKeyName(num))
-					end
-
-					curBinding = num
-				end
-				form:AddItem(dPlabel, dPBinder)
-			end
+	AddBindingCategory("TTT2 Bindings", parent)
+	for k, category in ipairs(bind.GetSettingsBindingsCategories()) do
+		if k > 2 then
+			AddBindingCategory(category, parent)
 		end
-
-		form:Dock(TOP)
 	end
+	AddBindingCategory("Other Bindings", parent)
 end
 
 --- Tutorial
