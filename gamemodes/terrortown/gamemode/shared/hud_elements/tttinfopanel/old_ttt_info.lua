@@ -18,17 +18,21 @@ if CLIENT then
 	local y = 0
 
 	function HUDELEMENT:Initialize()
-		self:SetBasePos(self.margin, self.margin + self.maxheight)
+		self:RecalculateBasePos()
 		self:SetSize(self.maxwidth, self.maxheight)
 
 		BaseClass.Initialize(self)
 	end
 
-	function HUDELEMENT:PerformLayout()
-		local basepos = self:GetBasePos()
+	function HUDELEMENT:RecalculateBasePos()
+		self:SetBasePos(self.margin, ScrH() - (self.margin + self.maxheight))
+	end
 
-		x = basepos.x
-		y = ScrH() - basepos.y
+	function HUDELEMENT:PerformLayout()
+		local pos = self:GetPos()
+
+		x = pos.x
+		y = pos.y
 
 		BaseClass.PerformLayout(self)
 	end
@@ -174,9 +178,8 @@ if CLIENT then
 			local smargin = self.smargin
 			local hastewidth = self.hastewidth
 			local bg_colors = self.bg_colors
-			local round_y = ScrH() - height - margin
-
-			y = y - (height - self.bgheight)
+			local round_y = y + height - self.bgheight
+			
 			height = self.bgheight
 
 			-- move up a little on low resolutions to allow space for spectator hints
