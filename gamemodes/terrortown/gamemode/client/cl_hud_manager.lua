@@ -352,6 +352,10 @@ function HUDManager.AddHUDSettings(panel, hudEl)
 
 			function el:ValueChanged(val)
 				val = math.Round(val, 1)
+				if val == hudEl[key] then
+					return
+				end
+
 				if isfunction(data.OnChange) then
 					data.OnChange(hudEl, val)
 				end

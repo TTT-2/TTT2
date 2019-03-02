@@ -50,6 +50,7 @@ function HUD:GetSavingKeys()
 						local size = el:GetSize()
 						el:SetSize(size.w * scaleMultiplier, size.h * scaleMultiplier)
 						el.scale = val
+						el:PerformLayout()
 						el:RecalculateBasePos()
 						el:PerformLayout()
 						el:SaveData()
@@ -92,6 +93,8 @@ end
 function HUD:Reset()
 	self.basecolor = defaultColor
 	self.scale = defaultScale
+
+	BaseClass.Reset(self)
 end
 
 -- Voice overriding

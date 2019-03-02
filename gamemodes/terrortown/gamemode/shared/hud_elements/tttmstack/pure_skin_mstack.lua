@@ -16,7 +16,19 @@ if CLIENT then
 		yalign = TEXT_ALIGN_TOP
 	}
 
-	local leftPad = 14
+	local leftPad_default = 14
+
+	local margin_default = 5
+	local line_margin_default = 6
+	local top_margin_default = 4
+	local title_bottom_margin_default = 8
+
+	local pad_default = 6
+	local leftImagePad_default = 10
+
+	local imageSize_default = 64
+
+	local leftPad = leftPad_default
 	local text_height = 0
 
 	local top_y = 0
@@ -29,18 +41,18 @@ if CLIENT then
 	local fadeout = 0.6
 	local movespeed = 2
 
-	local margin = 5
-	local line_margin = 6
-	local top_margin = 4
-	local title_bottom_margin = 8
+	local margin = margin_default
+	local line_margin = line_margin_default
+	local top_margin = top_margin_default
+	local title_bottom_margin = title_bottom_margin_default
 	local msg_width = 400
-	local pad = 6
-	local leftImagePad = 8
+	local pad = pad_default
+	local leftImagePad = leftImagePad_default
 	local text_width = msg_width - pad * 2 - leftPad
 	local msgfont = "PureSkinMSTACKMsg"
 	local imagedmsgfont = "PureSkinMSTACKImageMsg"
 	local text_color = COLOR_WHITE
-	local imageSize = 64
+	local imageSize = imageSize_default
 	local imageMinHeight = imageSize + 2 * pad
 	local min_w, min_h = 250, 80
 
@@ -65,7 +77,7 @@ if CLIENT then
 
 	function HUDELEMENT:RecalculateBasePos()
 		top_y = margin
-		top_x = ScrW() - margin - self.size.w
+		top_x = ScrW() - margin - msg_width
 
 		self:SetBasePos(top_x, top_y)
 	end
@@ -73,6 +85,16 @@ if CLIENT then
 	function HUDELEMENT:PerformLayout()
 		top_x = self.pos.x
 		top_y = self.pos.y
+
+		leftPad = leftPad_default * self.scale
+		margin = margin_default * self.scale
+		line_margin = line_margin_default * self.scale
+		top_margin = top_margin_default * self.scale
+		title_bottom_margin = title_bottom_margin_default * self.scale
+		pad = pad_default * self.scale
+		leftImagePad = leftImagePad_default * self.scale
+		imageSize = imageSize_default * self.scale
+		imageMinHeight = imageSize + 2 * pad
 
 		msg_width = self.size.w
 		text_width = msg_width - pad * 2 - leftPad
@@ -200,16 +222,6 @@ if CLIENT then
 
 	function HUDELEMENT:Draw()
 		if next(MSTACK.msgs) == nil then return end -- fast empty check
-
-		line_margin = 6 * self.scale
-		top_margin = 8 * self.scale
-		title_bottom_margin = 8* self.scale
-		msg_width = 400 * self.scale
-		pad = 6 * self.scale
-		leftImagePad = 10 * self.scale
-		pad = 6 * self.scale
-		imageSize = 64 * self.scale
-		imageMinHeight = imageSize + 2 * pad
 
 		local running_y = top_y
 		for k, item in pairs(MSTACK.msgs) do
