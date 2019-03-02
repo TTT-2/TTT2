@@ -1,6 +1,5 @@
 local baseclass = baseclass
 local list = list
-local duplicator = duplicator
 local pairs = pairs
 
 module("items", package.seeall)
