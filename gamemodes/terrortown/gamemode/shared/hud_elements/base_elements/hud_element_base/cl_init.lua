@@ -131,6 +131,8 @@ function HUDELEMENT:GetSize()
 end
 
 function HUDELEMENT:SetSize(w, h)
+	w = math.Round(w)
+	h = math.Round(h)
 	local nw, nh = w < 0, h < 0
 
 	if nw then
