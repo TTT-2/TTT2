@@ -68,7 +68,7 @@ if CLIENT then
 		-- Slot
 		local _tmp = {x + self.lpw * 0.5, y + height * 0.5}
 		local spec = {
-			text = wep.Slot + 1,
+			text = MakeKindValid(wep.Kind),
 			font = "PureSkinWepNum",
 			pos = _tmp,
 			xalign = TEXT_ALIGN_CENTER,

@@ -86,7 +86,7 @@ if CLIENT then
 		-- Slot
 		local _tmp = {x + 4, y}
 		local spec = {
-			text = wep.Slot + 1,
+			text = MakeKindValid(wep.Kind),
 			font = "Trebuchet22",
 			pos = _tmp,
 			yalign = TEXT_ALIGN_CENTER,
