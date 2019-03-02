@@ -11,11 +11,14 @@ HUDELEMENT.Base = base
 DEFINE_BASECLASS(base)
 
 if CLIENT then
+	local pad_default = 7
+	local margin_default = 14
+
 	local width, height = 200, 40
 	local min_w, min_h = 100, 40
 	local draw_col = Color(205, 155, 0, 255)
-	local pad = 7
-	local margin = 14
+	local pad = pad_default
+	local margin = margin_default
 
 	function HUDELEMENT:Initialize()
 		self:RecalculateBasePos()
@@ -64,6 +67,8 @@ if CLIENT then
 	function HUDELEMENT:PerformLayout()
 		local size = self:GetSize()
 
+		pad = pad_default * self.scale
+		margin = margin_default * self.scale
 		width, height = size.w, size.h
 
 		BaseClass.PerformLayout(self)
@@ -84,8 +89,6 @@ if CLIENT then
 		local pos = self:GetPos()
 		local size = self:GetSize()
 		local x, y = pos.x, pos.y
-		pad = 7 * self.scale
-		margin = 14 * self.scale
 
 		if IsValid(tgt) and not tgt:IsPlayer() and tgt:GetNWEntity("spec_owner", nil) == client then
 			self:PunchPaint() -- punch bar if you are spectator and inside of an entity

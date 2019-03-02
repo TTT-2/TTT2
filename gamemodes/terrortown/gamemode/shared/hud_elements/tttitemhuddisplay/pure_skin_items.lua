@@ -10,16 +10,16 @@ HUDELEMENT.Base = base
 if CLIENT then
 	surface.CreateFont("ItemInfoFont", {font = "Trebuchet24", size = 14, weight = 700})
 
-	local size = 64
+	local size_default = 64
+	local size = size_default
 
 	function HUDELEMENT:Initialize()
 		self:RecalculateBasePos()
+		self:SetMinSize(size, size)
 		self:SetSize(size, -size)
-		
+
 		BaseClass.Initialize(self)
 
-		self.defaults.minWidth = 64
-		self.defaults.minHeight = 64
 		self.defaults.resizeableX = false
 		self.defaults.resizeableY = false
 	end
@@ -30,6 +30,8 @@ if CLIENT then
 
 	function HUDELEMENT:PerformLayout()
 		local basepos = self:GetBasePos()
+
+		size = size_default * self.scale
 
 		self:SetPos(basepos.x, basepos.y)
 		self:SetSize(size, -size)
@@ -46,7 +48,6 @@ if CLIENT then
 		local itms = client:GetEquipmentItems()
 		local pos = self:GetPos()
 		local curY = basepos.y
-		size = 64 * self.scale
 		
 		-- at first, calculate old items because they don't take care of the new ones
 		for _, itemCls in ipairs(itms) do
@@ -77,11 +78,13 @@ if CLIENT then
 						-- right bottom corner
 						local tx = pos.x + size
 						local ty = curY + size
-						local pad = 5
+						local pad = 5 * self.scale
 
 						surface.SetFont("ItemInfoFont")
 
 						local infoW, infoH = surface.GetTextSize(info)
+						infoW = infoW * self.scale
+						infoH = infoH * self.scale
 
 						local bx = tx - infoW * 0.5 - pad
 						local by = ty - infoH * 0.5
@@ -89,7 +92,7 @@ if CLIENT then
 
 						self:DrawBg(bx, by, bw, infoH, COLOR_DARKGREY)
 
-						draw.DrawText(info, "ItemInfoFont", tx, ty - infoH * 0.5, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+						self:AdvancedText(info, "ItemInfoFont", tx, ty, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, false, self.scale)
 
 						self:DrawLines(bx, by, bw, infoH, 255)
 					end

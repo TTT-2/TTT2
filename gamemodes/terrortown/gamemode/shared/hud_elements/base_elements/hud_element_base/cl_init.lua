@@ -24,6 +24,7 @@ HUDELEMENT.scale = 1.0
 HUDELEMENT.defaults = {
 	basepos = table.Copy(HUDELEMENT.basepos),
 	size = table.Copy(HUDELEMENT.size),
+	minsize = table.Copy(HUDELEMENT.minsize),
 	resizeableX = true,
 	resizeableY = true,
 
@@ -133,6 +134,7 @@ end
 function HUDELEMENT:SetSize(w, h)
 	w = math.Round(w)
 	h = math.Round(h)
+
 	local nw, nh = w < 0, h < 0
 
 	if nw then
@@ -141,6 +143,11 @@ function HUDELEMENT:SetSize(w, h)
 
 	if nh then
 		h = -h
+	end
+
+	if self.minsize then
+		w = math.max(self.minsize.w, w)
+		h = math.max(self.minsize.h, h)
 	end
 
 	if nw or nh then
@@ -380,11 +387,13 @@ end
 function HUDELEMENT:SetDefaults()
 	self.defaults.basepos = table.Copy(self.basepos)
 	self.defaults.size = table.Copy(self.size)
+	self.defaults.minsize = table.Copy(self.minsize)
 end
 
 function HUDELEMENT:Reset()
 	local defaultPos = self.defaults.basepos
 	local defaultSize = self.defaults.size
+	local defaultMinSize = self.defaults.minsize
 
 	if defaultPos then
 		self:SetBasePos(defaultPos.x, defaultPos.y)
@@ -393,6 +402,11 @@ function HUDELEMENT:Reset()
 	if defaultSize then
 		self:SetSize(defaultSize.w, defaultSize.h)
 	end
+
+	if defaultMinSize then
+		self:SetMinSize(defaultMinSize.w, defaultMinSize.h)
+	end
+
 	self.scale = 1.0
 
 	for _, elem in ipairs(self.children) do

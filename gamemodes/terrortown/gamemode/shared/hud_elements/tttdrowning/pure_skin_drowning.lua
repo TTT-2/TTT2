@@ -8,10 +8,12 @@ if CLIENT then
 	local x = 0
 	local y = 0
 
+	local pad_default = 14
+	local bh_default = 8 -- bar height
+
 	local w, h = 321, 36
 	local min_w, min_h = 75, 36
-	local bh = 8 -- bar height
-	local pad = 14 -- padding
+	local pad = pad_default -- padding
 	
 	function HUDELEMENT:Initialize()
 		self:RecalculateBasePos()
@@ -20,7 +22,7 @@ if CLIENT then
 
 		BaseClass.Initialize(self)
 		
-		self.defaults.minWidth = bh + 2 * pad
+		self.defaults.minWidth = pad_default + 2 * pad
 		self.defaults.resizeableY = false
 	end
 
@@ -32,6 +34,7 @@ if CLIENT then
 		local pos = self:GetPos()
 		local size = self:GetSize()
 
+		pad = pad_default * self.scale
 		x = pos.x
 		y = pos.y
 		w = size.w
@@ -44,8 +47,6 @@ if CLIENT then
 		local client = LocalPlayer()
 
 		if not HUDManager.IsEditing and (not client.drowningProgress or not client:Alive() or client.drowningProgress == -1) then return end
-
-		pad = 14 * self.scale
 
 		-- draw bg and shadow
 		self:DrawBg(x, y, w, h, self.basecolor)

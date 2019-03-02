@@ -94,12 +94,10 @@ if CLIENT then
 			text = util.SimpleTime(math.max(0, endtime), "%02i:%02i")
 		end
 		
-		local scale = h / 72.0
-		
-		self:AdvancedText(text, font, rx, ry, color, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, true, scale)
+		self:AdvancedText(text, font, rx, ry, color, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, true, self.scale)
 
 		if is_haste then
-			self:AdvancedText(L.hastemode, "TabLarge", tmpx, y + 14, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, false, scale)
+			self:AdvancedText(L.hastemode, "TabLarge", tmpx, y + 14, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, false, self.scale)
 		end
 
 		-- draw lines around the element

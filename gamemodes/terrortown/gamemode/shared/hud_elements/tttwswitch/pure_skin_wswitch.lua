@@ -10,12 +10,16 @@ DEFINE_BASECLASS(base)
 HUDELEMENT.Base = base
 
 if CLIENT then
+	local height_default = 28
+	local margin_default = 5
+	local lpw_default = 22
+
 	local width = 365
-	local height = 28
+	local height = height_default
 	local min_w, min_h = 240, 28
 
-	HUDELEMENT.margin = 5
-	HUDELEMENT.lpw = 22 -- left panel width
+	HUDELEMENT.margin = margin_default
+	HUDELEMENT.lpw = lpw_default -- left panel width
 
 	function HUDELEMENT:Initialize()
 		WSWITCH:UpdateWeaponCache()
@@ -105,6 +109,10 @@ if CLIENT then
 
 		self:SetPos(basepos.x, basepos.y)
 
+		height = height_default * self.scale
+		self.margin = margin_default * self.scale
+		self.lpw = lpw_default * self.scale
+
 		local weps = WSWITCH.WeaponCache
 		local count = #weps
 		local tmp = height + self.margin
@@ -120,9 +128,6 @@ if CLIENT then
 	function HUDELEMENT:Draw()
 		if not WSWITCH.Show and not HUDManager.IsEditing then return end
 
-		height = 28 * self.scale
-		self.margin = 5 * self.scale
-		self.lpw = 22 * self.scale
 		local client = LocalPlayer()
 		local weps = WSWITCH.WeaponCache
 		local count = #weps

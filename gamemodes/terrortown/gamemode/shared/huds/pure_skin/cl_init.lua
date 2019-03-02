@@ -48,7 +48,9 @@ function HUD:GetSavingKeys()
 					local el = hudelements.GetStored(elem)
 					if el then
 						local size = el:GetSize()
+						local min_size = el:GetMinSize()
 						el:SetSize(size.w * scaleMultiplier, size.h * scaleMultiplier)
+						el:SetMinSize(min_size.w * scaleMultiplier, min_size.h * scaleMultiplier)
 						el.scale = val
 						el:PerformLayout()
 						el:RecalculateBasePos()

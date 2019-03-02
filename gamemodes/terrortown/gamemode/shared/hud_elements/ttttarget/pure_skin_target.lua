@@ -9,10 +9,13 @@ DEFINE_BASECLASS(base)
 HUDELEMENT.Base = base
 
 if CLIENT then -- CLIENT
+	local iconSize_default = 64
+	local pad_default = 14
+
 	local width, height = 365, 32
 	local min_w, min_h = 225, 32
-	local pad = 14 -- padding
-	local iconSize = 64
+	local pad = pad_default -- padding
+	local iconSize = iconSize_default
 	local target_icon = Material("vgui/ttt/target_icon")
 
 	function HUDELEMENT:Initialize()
@@ -26,17 +29,23 @@ if CLIENT then -- CLIENT
 	end
 
 	function HUDELEMENT:RecalculateBasePos()
-	    self:SetBasePos(10, ScrH() - height - 146 - pad - 10)
+	    self:SetBasePos(10, ScrH() - height - 146 * self.scale - pad - 10 * self.scale)
+	end
+
+	function HUDELEMENT:PerformLayout()
+		local size = self:GetSize()
+
+		iconSize = iconSize_default * self.scale
+		pad = pad_default * self.scale
+
+		width, height = size.w, size.h
 	end
 
 	function HUDELEMENT:DrawComponent(name)
 		local client = LocalPlayer()
 
 		local pos = self:GetPos()
-		local size = self:GetSize()
 		local x, y = pos.x, pos.y
-		local width, height = size.w, size.h
-		iconSize = 64 * self.scale
 
 		self:DrawBg(x, y, width, height, self.basecolor)
 		self:AdvancedText(name, "PureSkinBar", x + iconSize + pad, y + height * 0.5, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, true, self.scale)
