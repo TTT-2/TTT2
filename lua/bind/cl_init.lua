@@ -7,6 +7,7 @@ local Registry = {}
 local FirstPressed = {}
 local WasPressed = {}
 local SettingsBindings = {}
+local SettingsBindingsCategories = {"TTT2 Bindings", "Other Bindings"}
 
 --[[----------------------------
 
@@ -182,17 +183,25 @@ end
     AddSettingsBinding( string name, string label )
     Adds an entry to the SettingsBindings table, to easily present them eg. in a GUI.
 -----------------------------------------------------------]]
-function bind.AddSettingsBinding(name, label)
+function bind.AddSettingsBinding(name, label, category)
+	if not category then
+		category = "Other Bindings"
+	end
+
+	if not table.HasValue(SettingsBindingsCategories, category) then
+		SettingsBindingsCategories[#SettingsBindingsCategories + 1] = category
+	end
+
 	-- check if it already exists
 	for _, tbl in ipairs(SettingsBindings) do
 		if tbl.name == name then
 			tbl.label = label -- update
-
+			tbl.category = category
 			return -- don't insert again
 		end
 	end
 
-	SettingsBindings[#SettingsBindings + 1] = {name = name, label = label}
+	SettingsBindings[#SettingsBindings + 1] = {name = name, label = label, category = category}
 end
 
 --[[---------------------------------------------------------
@@ -201,4 +210,8 @@ end
 -----------------------------------------------------------]]
 function bind.GetSettingsBindings()
 	return SettingsBindings
+end
+
+function bind.GetSettingsBindingsCategories()
+	return SettingsBindingsCategories
 end
