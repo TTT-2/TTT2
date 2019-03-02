@@ -71,7 +71,7 @@ else
 		PlayerSprint(false)
 	end)
 
-	bind.AddSettingsBinding("ttt2_sprint", "TTT2 Sprint")
+	bind.AddSettingsBinding("ttt2_sprint", "TTT2 Sprint", "TTT2 Bindings")
 end
 
 hook.Add("Think", "TTT2PlayerSprinting", function()

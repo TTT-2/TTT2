@@ -398,36 +398,39 @@ end
 
 -- Bindings
 function HELPSCRN:CreateBindings(parent)
-	local form = vgui.Create("DForm", parent)
-	form:SetName("TTT2 Bindings")
+	for _, category in ipairs(bind.GetSettingsBindingsCategories()) do
+		local form = vgui.Create("DForm", parent)
+		form:SetName(category)
 
-	for _, binding in ipairs(bind.GetSettingsBindings()) do
-		local dPlabel = vgui.Create("DLabel")
-		dPlabel:SetText(binding.label)
+		for _, binding in ipairs(bind.GetSettingsBindings()) do
+			if binding.category == category then
+				local dPlabel = vgui.Create("DLabel")
+				dPlabel:SetText(binding.label)
 
-		local dPBinder = vgui.Create("DBinder")
-		dPBinder:SetSize(170, 30)
+				local dPBinder = vgui.Create("DBinder")
+				dPBinder:SetSize(170, 30)
 
-		local curBinding = bind.Find(binding.name)
-		dPBinder:SetValue(curBinding)
+				local curBinding = bind.Find(binding.name)
+				dPBinder:SetValue(curBinding)
 
-		function dPBinder:OnChange(num)
-			if num == 0 then
-				bind.Remove(curBinding, binding.name)
-			else
-				bind.Remove(curBinding, binding.name)
-				bind.Add(num, binding.name, true)
+				function dPBinder:OnChange(num)
+					if num == 0 then
+						bind.Remove(curBinding, binding.name)
+					else
+						bind.Remove(curBinding, binding.name)
+						bind.Add(num, binding.name, true)
 
-				LocalPlayer():ChatPrint("New bound key for '" .. binding.name .. "': " .. input.GetKeyName(num))
+						LocalPlayer():ChatPrint("New bound key for '" .. binding.name .. "': " .. input.GetKeyName(num))
+					end
+
+					curBinding = num
+				end
+				form:AddItem(dPlabel, dPBinder)
 			end
-
-			curBinding = num
 		end
 
-		form:AddItem(dPlabel, dPBinder)
+		form:Dock(TOP)
 	end
-
-	form:Dock(FILL)
 end
 
 --- Tutorial
