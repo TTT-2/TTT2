@@ -318,9 +318,6 @@ function HUDManager.AddHUDSettings(panel, hudEl)
 						local tel = hudelements.GetStored(elem)
 						if tel then
 							tel:Reset()
-
-							SQL.Save("ttt2_hudelements", elem, tel, tel:GetSavingKeys())
-
 							tel:SaveData()
 						end
 					end
