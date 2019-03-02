@@ -122,7 +122,11 @@ end
 function GetShopFallback(subrole, tbl)
 	local rd = roles.GetByIndex(subrole)
 	local shopFallback = GetGlobalString("ttt_" .. rd.abbr .. "_shop_fallback")
-	local fb = roles.GetStored(shopFallback).index
+	local fb = roles.GetStored(shopFallback)
+
+	if fb then
+		fb = fb.index
+	end
 
 	if not fb or shopFallback == SHOP_UNSET or shopFallback == SHOP_DISABLED then
 		return subrole, fb
