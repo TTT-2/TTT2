@@ -9,9 +9,11 @@ local _, rolesFolders = file.Find(rolesPre .. "*", "LUA")
 for _, fl in ipairs(rolesFiles) do
 	ROLE = {}
 
-	include(rolesPre .. fl)
-
 	local cls = string.sub(fl, 0, #fl - 4)
+
+	ROLE.name = cls
+
+	include(rolesPre .. fl)
 
 	roles.Register(ROLE, cls)
 
@@ -20,6 +22,7 @@ end
 
 for _, folder in ipairs(rolesFolders) do
 	ROLE = {}
+	ROLE.name = folder
 
 	local subFiles = file.Find(rolesPre .. folder .. "/*.lua", "LUA")
 
