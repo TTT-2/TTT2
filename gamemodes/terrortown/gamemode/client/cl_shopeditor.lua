@@ -661,7 +661,7 @@ function ShopEditor.shopFallbackReset(len)
 		v.CanBuy = {}
 	end
 
-	for _, rd in pairs(roles.GetList()) do
+	for _, rd in ipairs(roles.GetList()) do
 		local subrole = rd.index
 		local fb = GetGlobalString("ttt_" .. rd.abbr .. "_shop_fallback")
 

@@ -120,7 +120,7 @@ function GM:InitPostEntity()
 	end
 
 	-- reset normal equipment tables
-	for _, role in pairs(roles.GetList()) do
+	for _, role in ipairs(roles.GetList()) do
 		if Equipment then
 			Equipment[role.index] = {}
 		end

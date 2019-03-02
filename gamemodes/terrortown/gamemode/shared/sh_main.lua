@@ -69,6 +69,7 @@ hook.Add("TTTInitPostEntity", "InitTTT2OldItems", function()
 			end
 		end
 	end
+	
 	items.OnLoaded() -- init baseclasses
 end)
 

@@ -413,7 +413,7 @@ function GM:SyncGlobals()
 	SetGlobalFloat("ttt_voice_drain_admin", voice_drain_admin:GetFloat())
 	SetGlobalFloat("ttt_voice_drain_recharge", voice_drain_recharge:GetFloat())
 
-	for _, v in pairs(roles.GetList()) do
+	for _, v in ipairs(roles.GetList()) do
 		SetGlobalString("ttt_" .. v.abbr .. "_shop_fallback", GetConVar("ttt_" .. v.abbr .. "_shop_fallback"):GetString())
 	end
 
@@ -424,7 +424,7 @@ end
 
 function LoadShopsEquipment()
 	-- initialize shop equipment
-	for _, roleData in pairs(roles.GetList()) do
+	for _, roleData in ipairs(roles.GetList()) do
 		local shopFallback = GetConVar("ttt_" .. roleData.abbr .. "_shop_fallback"):GetString()
 		if shopFallback == roleData.name then
 			LoadSingleShopEquipment(roleData)
@@ -1020,7 +1020,7 @@ function EndRound(result)
 	StopWinChecks()
 
 	-- send each client the role setup, reveal every player
-	for _, v in pairs(roles.GetList()) do
+	for _, v in ipairs(roles.GetList()) do
 		SendSubRoleList(v.index)
 	end
 
@@ -1201,7 +1201,7 @@ function GetSelectableRoles(plys, max_plys)
 	local iTmpTbl = {}
 	local checked = {}
 
-	for _, v in pairs(roles.GetList()) do
+	for _, v in ipairs(roles.GetList()) do
 		if checked[v.index] then continue end
 
 		checked[v.index] = true
@@ -1528,7 +1528,7 @@ function SelectRoles(plys, max_plys)
 
 	hook.Run("TTT2ModifySelectableRoles", selectableRoles)
 
-	for _, v in pairs(roles.GetList()) do
+	for _, v in ipairs(roles.GetList()) do
 		roleCount[v.index] = selectableRoles[v] or 0
 	end
 
@@ -1542,7 +1542,7 @@ function SelectRoles(plys, max_plys)
 	local tmpTbl = {}
 
 	-- get selectable baseroles (except traitor and innocent)
-	for _, v in pairs(roles.GetList()) do
+	for _, v in ipairs(roles.GetList()) do
 		if v ~= TRAITOR and v ~= INNOCENT and not table.HasValue(tmpTbl, v) and selectableRoles[v] and not v.baserole then
 			tmpTbl[#tmpTbl + 1] = v
 		end

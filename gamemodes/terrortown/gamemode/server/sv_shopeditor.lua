@@ -33,7 +33,7 @@ function ShopEditor.CreateShopDB(name)
 end
 
 function ShopEditor.CreateShopDBs()
-	for _, v in pairs(roles.GetList()) do
+	for _, v in ipairs(roles.GetList()) do
 		if v ~= INNOCENT then
 			ShopEditor.CreateShopDB(v.name)
 		end
@@ -202,7 +202,7 @@ function ShopEditor.OnChangeWSCVar(subrole, fallback, ply_or_rf)
 end
 
 function ShopEditor.SetupShopEditorCVars()
-	for _, v in pairs(roles.GetList()) do
+	for _, v in ipairs(roles.GetList()) do
 		local _func = function(convar_name, value_old, value_new)
 			if value_old ~= value_new then
 				print(convar_name .. ": Changing fallback from " .. value_old .. " to " .. value_new)

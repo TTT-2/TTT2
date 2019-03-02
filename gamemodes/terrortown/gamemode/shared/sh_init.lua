@@ -125,7 +125,7 @@ function GetRoleByIndex(index)
 end
 
 function GetRoleByName(name)
-	return roles.GetStored(name)
+	return roles.GetByName(name)
 end
 
 function GetRoleByAbbr(abbr)
@@ -306,7 +306,6 @@ WEAPON_ROLE = WEAPON_EXTRA
 WEAPON_NONE = WEAPON_EXTRA
 WEAPON_EQUIP = WEAPON_SPECIAL
 
-
 -- Kill types discerned by last words
 KILL_NORMAL = 0
 KILL_SUICIDE = 1
@@ -391,7 +390,7 @@ end
 function GetDefaultEquipment()
 	local defaultEquipment = {}
 
-	for _, v in pairs(roles.GetList()) do
+	for _, v in ipairs(roles.GetList()) do
 		if v.defaultEquipment then
 			defaultEquipment[v.index] = v.defaultEquipment
 		end

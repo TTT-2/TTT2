@@ -43,7 +43,7 @@ local curSearch = curSearch
 -- ----------------------------------
 
 local function RolenameToRole(val)
-	for _, v in pairs(roles.GetList()) do
+	for _, v in ipairs(roles.GetList()) do
 		if SafeTranslate(v.name) == val then
 			return v.index
 		end
@@ -581,7 +581,7 @@ function TraitorMenuPopup()
 		drolesel:SetPos(m, dsph + m * 2)
 		drolesel:MoveBelow(dsearch, m)
 
-		for _, v in pairs(roles.GetList()) do
+		for _, v in ipairs(roles.GetList()) do
 			if v:IsShoppingRole() then
 				drolesel:AddChoice(SafeTranslate(v.name))
 			end

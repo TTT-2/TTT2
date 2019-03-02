@@ -126,6 +126,8 @@ function GetShopFallback(subrole, tbl)
 
 	if fb then
 		fb = fb.index
+	else
+		fb = ROLE_INNOCENT
 	end
 
 	if not fb or shopFallback == SHOP_UNSET or shopFallback == SHOP_DISABLED then

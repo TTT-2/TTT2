@@ -306,7 +306,7 @@ end
 function GM:PlayerLoadout(ply)
 	if IsValid(ply) and not ply:IsSpec() then
 		CleanupInventoryAndNotifyClient(ply)
-	
+
 		ResetLoadoutItems(ply)
 
 		-- give default items
@@ -691,7 +691,7 @@ function GM:WeaponEquip(wep, ply)
 
 		ErrorNoHalt("Equipped weapon " .. wep:GetClass() .. " is not compatible with TTT\n")
 	end
-	
+
 	if IsValid(ply) and wep.Kind then
 		AddWeaponToInventoryAndNotifyClient(ply, wep)
 	end

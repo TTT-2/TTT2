@@ -372,7 +372,7 @@ function HELPSCRN:CreateGameplaySettings(parent)
 
 	local cb
 
-	for _, v in pairs(roles.GetList()) do
+	for _, v in ipairs(roles.GetList()) do
 		if ConVarExists("ttt_avoid_" .. v.name) then
 			local rolename = GetTranslation(v.name)
 

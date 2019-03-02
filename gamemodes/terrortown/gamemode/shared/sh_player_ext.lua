@@ -184,7 +184,7 @@ function plymeta:GetDetective()
 end
 
 function plymeta:GetSubRoleData()
-	for _, v in pairs(roles.GetList()) do
+	for _, v in ipairs(roles.GetList()) do
 		if v.index == self:GetSubRole() then
 			return v
 		end
@@ -194,7 +194,7 @@ function plymeta:GetSubRoleData()
 end
 
 function plymeta:GetBaseRoleData()
-	for _, v in pairs(roles.GetList()) do
+	for _, v in ipairs(roles.GetList()) do
 		if v.index == self:GetBaseRole() then
 			return v
 		end

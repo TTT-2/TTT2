@@ -51,6 +51,25 @@ function IsBasedOn(name, base)
 	return IsBasedOn(t.Base, base)
 end
 
+local function SetupGlobals(roleData)
+	local upStr = string.upper(roleData.name)
+
+	_G["ROLE_" .. upStr] = roleData.index
+	_G[upStr] = roleData
+	_G["SHOP_FALLBACK_" .. upStr] = roleData.name
+
+	local plymeta = FindMetaTable("Player")
+	if plymeta then
+		-- e.g. IsJackal() will match each subrole of the jackal as well as the jackal as the baserole
+		plymeta["Is" .. roleData.name:gsub("^%l", string.upper)] = function(slf)
+			local br = slf:GetBaseRole()
+			local sr = slf:GetSubRole()
+
+			return roleData.baserole and sr == roleData.index or not roleData.baserole and br == roleData.index
+		end
+	end
+end
+
 local function SetupData(roleData)
 	print("[TTT2][ROLE] Adding '" .. roleData.name .. "' role...")
 
@@ -96,7 +115,7 @@ local function SetupData(roleData)
 	end
 
 	-- set id
-	roleData.index = (roleData.buildin and roleData.index) or GenerateNewRoleID()
+	roleData.index = roleData.index or GenerateNewRoleID()
 
 	-- fix defaultTeam
 	roleData.defaultTeam = roleData.defaultTeam or TEAM_NONE
@@ -119,6 +138,7 @@ function Register(t, name)
 
 	if name ~= BASE_ROLE_CLASS then
 		SetupData(t)
+		SetupGlobals(t)
 
 		t.id = t.index
 	end
@@ -142,11 +162,10 @@ function OnLoaded()
 	-- - we have to wait until they're all setup because load order
 	-- could cause some entities to load before their bases!
 	--
-	for k in pairs(RoleList) do
-		local newTable = Get(k)
-		RoleList[k] = newTable
+	for k, v in pairs(RoleList) do
+		Get(k, v)
 
-		baseclass.Set(k, newTable)
+		baseclass.Set(k, v)
 	end
 
 	-- Call PreInitialize on all roles
@@ -166,11 +185,13 @@ function Get(name, retTbl)
 	-- Create/copy a new table
 	local retval = retTbl or {}
 
-	for k, v in pairs(Stored) do
-		if istable(v) then
-			retval[k] = table.Copy(v)
-		else
-			retval[k] = v
+	if retval ~= Stored then
+		for k, v in pairs(Stored) do
+			if istable(v) then
+				retval[k] = table.Copy(v)
+			else
+				retval[k] = v
+			end
 		end
 	end
 
@@ -218,17 +239,11 @@ end
 function GenerateNewRoleID()
 	-- start with "1" to prevent incompatibilities with ROLE_ANY => new roles will start @ id: i(1)+3=4
 	-- edit: add 3 more nop (1+3=4) to use it later -> new roles will start @ id: i(4)+3=7
-	local i = 4
-
-	for k in pairs(GetList()) do
-		i = i + 1
-	end
-
-	return i
+	return 4 + #GetList()
 end
 
 function GetByIndex(index)
-	for _, v in pairs(GetList()) do
+	for _, v in ipairs(GetList()) do
 		if v.index == index then
 			return v
 		end
@@ -237,8 +252,12 @@ function GetByIndex(index)
 	return INNOCENT
 end
 
+function GetByName(name)
+	return GetStored(name) or INNOCENT
+end
+
 function GetByAbbr(abbr)
-	for _, v in pairs(GetList()) do
+	for _, v in ipairs(GetList()) do
 		if v.abbr == abbr then
 			return v
 		end
@@ -268,7 +287,7 @@ function GetShopRoles()
 
 	local i = 0
 
-	for _, v in pairs(GetList()) do
+	for _, v in ipairs(GetList()) do
 		if v ~= INNOCENT then
 			local shopFallback = GetGlobalString("ttt_" .. v.abbr .. "_shop_fallback")
 			if shopFallback ~= SHOP_DISABLED then
@@ -286,7 +305,7 @@ end
 function GetDefaultTeamRole(team)
 	if team == TEAM_NONE then return end
 
-	for _, v in pairs(GetList()) do
+	for _, v in ipairs(GetList()) do
 		if not v.baserole and v.defaultTeam ~= TEAM_NONE and v.defaultTeam == team then
 			return v
 		end
@@ -318,7 +337,7 @@ end
 function GetWinTeams()
 	local winTeams = {}
 
-	for _, v in pairs(GetList()) do
+	for _, v in ipairs(GetList()) do
 		if v.defaultTeam ~= TEAM_NONE and not table.HasValue(winTeams, v.defaultTeam) and not v.preventWin then
 			table.insert(winTeams, v.defaultTeam)
 		end
@@ -330,7 +349,7 @@ end
 function GetAvailableTeams()
 	local availableTeams = {}
 
-	for _, v in pairs(GetList()) do
+	for _, v in ipairs(GetList()) do
 		if v.defaultTeam ~= TEAM_NONE and not table.HasValue(availableTeams, v.defaultTeam) then
 			availableTeams[#availableTeams + 1] = v.defaultTeam
 		end
@@ -344,7 +363,7 @@ function GetSortedRoles()
 
 	local i = 0
 
-	for _, v in pairs(GetList()) do
+	for _, v in ipairs(GetList()) do
 		i = i + 1
 		rls[i] = v
 	end
