@@ -26,6 +26,7 @@ ttt_include("sh_scoring")
 ttt_include("sh_corpse")
 ttt_include("sh_player_ext")
 ttt_include("sh_weaponry")
+ttt_include("sh_inventory")
 
 ttt_include("vgui__cl_coloredbox")
 ttt_include("vgui__cl_droleimage")
@@ -54,6 +55,7 @@ ttt_include("cl_shopeditor")
 ttt_include("cl_chat")
 ttt_include("cl_voice")
 ttt_include("cl_changes")
+ttt_include("cl_inventory")
 
 ttt_include("sh_sprint")
 

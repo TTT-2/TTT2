@@ -114,7 +114,7 @@ local function IdentifyBody(ply, rag)
 	-- Register find
 	if not CORPSE.GetFound(rag, false) then -- will return either false or a valid ply
 		local deadply = player.GetBySteamID64(rag.sid64)
-		if deadply then
+		if deadply and not deadply:Alive() then
 			deadply:SetNWBool("body_found", true)
 
 			SendPlayerToEveryone(deadply) -- confirm player for everyone
@@ -236,6 +236,7 @@ function CORPSE.ShowSearch(ply, rag, covert, long_range)
 	-- init a heap of data we'll be sending
 	local nick = CORPSE.GetPlayerNick(rag)
 	local subrole = rag.was_role
+	local role_color = rag.role_color
 	local team = rag.was_team
 	local eq = rag.equipment or {}
 	local c4 = rag.bomb_wire or - 1
@@ -307,6 +308,7 @@ function CORPSE.ShowSearch(ply, rag, covert, long_range)
 	net.WriteUInt(rag:EntIndex(), 16) -- 16 bits
 	net.WriteUInt(owner, 8) -- 128 max players. (8 bits)
 	net.WriteString(nick)
+	net.WriteColor(role_color)
 
 	net.WriteUInt(#eq, 16) -- Equipment (16 = max.)
 
@@ -476,6 +478,8 @@ function CORPSE.Create(ply, attacker, dmginfo)
 	-- death circumstances
 	rag.equipment = ply:GetEquipmentItems()
 	rag.was_role = ply:GetSubRole()
+	rag.role_color = ply:GetRoleColor()
+
 	rag.was_team = ply:GetTeam()
 	rag.bomb_wire = ply.bomb_wire
 	rag.dmgtype = dmginfo:GetDamageType()
