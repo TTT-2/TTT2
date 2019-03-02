@@ -157,7 +157,7 @@ function CLSCORE:BuildScorePanel(dpanel)
 	-- the type of win condition triggered is relevant for team bonus
 	local wintype = WIN_NONE
 	local events = self.Events
-	local roles = {}
+	local rls = {}
 	local teams = {}
 	local role = {}
 	local team = {}
@@ -173,12 +173,12 @@ function CLSCORE:BuildScorePanel(dpanel)
 
 			for sr, ids in pairs(subroles) do
 				for _, id in ipairs(ids) do
-					roles[id] = roles[id] or {}
+					rls[id] = rls[id] or {}
 					teams[id] = teams[id] or {}
 					role[id] = role[id] or ""
 					team[id] = team[id] or ""
 
-					if not roles[id][sr] then
+					if not rls[id][sr] then
 						local roleData = roles.GetByIndex(sr)
 
 						if role[id] ~= "" then
@@ -186,14 +186,14 @@ function CLSCORE:BuildScorePanel(dpanel)
 						end
 
 						role[id] = role[id] .. T(roleData.name)
-						roles[id][sr] = true
+						rls[id][sr] = true
 					end
 				end
 			end
 
 			for tm, ids in pairs(tms) do
 				for _, id in ipairs(ids) do
-					roles[id] = roles[id] or {}
+					rls[id] = rls[id] or {}
 					teams[id] = teams[id] or {}
 					role[id] = role[id] or ""
 					team[id] = team[id] or ""
@@ -220,7 +220,7 @@ function CLSCORE:BuildScorePanel(dpanel)
 			local kills = 0
 			local teamkills = 0
 
-			roles[id] = roles[id] or {}
+			rls[id] = rls[id] or {}
 			teams[id] = teams[id] or {}
 			role[id] = role[id] or ""
 			team[id] = team[id] or ""
@@ -233,7 +233,7 @@ function CLSCORE:BuildScorePanel(dpanel)
 						teamkills = teamkills + 1
 					end
 
-					if not roles[id][ev.r] then
+					if not rls[id][ev.r] then
 						local roleData = roles.GetByIndex(ev.r)
 
 						if role[id] ~= "" then
@@ -241,7 +241,7 @@ function CLSCORE:BuildScorePanel(dpanel)
 						end
 
 						role[id] = role[id] .. T(roleData.name)
-						roles[id][ev.r] = true
+						rls[id][ev.r] = true
 					end
 
 					if ev.t ~= TEAM_NONE and not teams[id][ev.t] then

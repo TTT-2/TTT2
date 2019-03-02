@@ -353,16 +353,16 @@ function GetAvailableTeams()
 end
 
 function GetSortedRoles()
-	local roles = {}
+	local rls = {}
 
 	local i = 0
 
 	for _, v in pairs(RoleList) do
 		i = i + 1
-		roles[i] = v
+		rls[i] = v
 	end
 
-	SortTable(roles)
+	SortTable(rls)
 
-	return roles
+	return rls
 end
