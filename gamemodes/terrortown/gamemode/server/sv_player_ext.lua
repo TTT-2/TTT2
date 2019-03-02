@@ -291,6 +291,48 @@ function plymeta:ResetRoundFlags()
 	self:Freeze(false)
 end
 
+-- Give a weapon to a player. If the initial attempt fails due to heisenbugs in
+-- the map, keep trying until the player has moved to a better spot where it
+-- does work.
+function plymeta:GiveEquipmentWeapon(cls)
+	-- Referring to players by SteamID64 because a player may disconnect while his
+	-- unique timer still runs, in which case we want to be able to stop it. For
+	-- that we need its name, and hence his SteamID64.
+	local tmr = "give_equipment" .. self:UniqueID()
+
+	if not IsValid(self) or not self:IsActive() then
+		timer.Remove(tmr)
+
+		return
+	end
+
+	-- giving attempt, will fail if we're in a crazy spot in the map or perhaps
+	-- other glitchy cases
+	local w = self:Give(cls)
+
+	if not IsValid(w) or not self:HasWeapon(cls) then
+		if not timer.Exists(tmr) then
+			local slf = self
+
+			timer.Create(tmr, 1, 0, function()
+				if IsValid(slf) then
+					slf:GiveEquipmentWeapon(cls)
+				end
+			end)
+		end
+
+		-- we will be retrying
+	else
+		-- can stop retrying, if we were
+		timer.Remove(tmr)
+
+		if w.WasBought then
+			-- some weapons give extra ammo after being bought, etc
+			w:WasBought(self)
+		end
+	end
+end
+
 function plymeta:GiveEquipmentItem(id)
 	if self:HasEquipmentItem(id) then
 		return false
