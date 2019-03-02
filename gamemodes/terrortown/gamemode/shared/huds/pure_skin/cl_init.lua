@@ -44,7 +44,7 @@ function HUD:GetSavingKeys()
 			desc = "Reset Positions and set HUD Scale",
 			OnChange = function(slf, val)
 				local scaleMultiplier = val / self.scale
-				for _, elem in ipairs(slf:GetHUDElements()) do
+				for _, elem in ipairs(slf:GetElements()) do
 					local el = hudelements.GetStored(elem)
 					if el then
 						local size = el:GetSize()
