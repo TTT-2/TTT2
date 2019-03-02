@@ -421,6 +421,8 @@ local function ShowSearchScreen(search_raw)
 		RunConsoleCommand("ttt_confirm_death", search_raw.eidx, id, search_raw.lrng)
 	end
 
+	dconfirm:SetDisabled(client:IsSpec() or search_raw.owner and IsVaild(search_raw.owner) and search_raw.owner:GetNWBool("body_found", false))
+
 	local dcall = vgui.Create("DButton", dcont)
 	dcall:SetPos(m * 2 + bw_large, by)
 	dcall:SetSize(bw_large, bh)
@@ -555,7 +557,7 @@ local function TTT_RagdollSearch()
 	search.nick = net.ReadString()
 
 	search.role_color = net.ReadColor()
-	
+
 	-- Equipment
 	local eq = {}
 
