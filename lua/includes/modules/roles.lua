@@ -134,9 +134,11 @@ function Register(t, name)
 	t.ClassName = name
 	t.name = name
 
-	SetupData(t)
+	if name ~= BASE_ROLE_CLASS then
+		SetupData(t)
 
-	t.id = t.index
+		t.id = t.index
+	end
 
 	RoleList[name] = t
 
