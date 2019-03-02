@@ -226,7 +226,7 @@ function GetList()
 	local result = {}
 
 	for _, v in pairs(RoleList) do
-		if v ~= BASE_ROLE_CLASS then
+		if v.name ~= BASE_ROLE_CLASS then
 			result[#result + 1] = v
 		end
 	end
