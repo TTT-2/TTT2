@@ -8,8 +8,8 @@ ROLE.name = "detective"
 ROLE.abbr = "det"
 ROLE.defaultTeam = TEAM_INNOCENT
 ROLE.defaultEquipment = SPECIAL_EQUIPMENT
-ROLE.scoreKillsMultiplier = INNOCENT.scoreKillsMultiplier
-ROLE.scoreTeamKillsMultiplier = INNOCENT.scoreTeamKillsMultiplier
+ROLE.scoreKillsMultiplier = 1
+ROLE.scoreTeamKillsMultiplier = -8
 ROLE.fallbackTable = {}
 ROLE.unknownTeam = true
 

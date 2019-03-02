@@ -116,7 +116,7 @@ local function SetupData(roleData)
 		end
 	end
 
-	print("[TTT2][ROLE] Added '" .. name .. "' role (index: " .. roleData.index .. ")")
+	print("[TTT2][ROLE] Added '" .. roleData.name .. "' role (index: " .. roleData.index .. ")")
 end
 
 --[[---------------------------------------------------------

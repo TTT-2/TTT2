@@ -400,7 +400,7 @@ function GetDefaultEquipment()
 	return defaultEquipment
 end
 
-DefaultEquipment = GetDefaultEquipment()
+DefaultEquipment = {}
 
 BUYTABLE = BUYTABLE or {}
 TEAMBUYTABLE = TEAMBUYTABLE or {}
