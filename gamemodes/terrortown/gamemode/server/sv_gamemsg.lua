@@ -103,7 +103,7 @@ function GetRoleFilter(subrole, alive_only)
 end
 
 function GetRoleChatFilter(subrole, alive_only)
-	if GetRoleByIndex(subrole).disabledTeamChat then
+	if roles.GetByIndex(subrole).disabledTeamChat then
 		return {}
 	end
 

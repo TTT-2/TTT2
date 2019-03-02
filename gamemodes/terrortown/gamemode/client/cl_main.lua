@@ -18,6 +18,7 @@ surface.CreateFont("Trebuchet22", {font = "Trebuchet MS", size = 22, weight = 90
 
 ttt_include("sh_init")
 
+include("terrortown/gamemode/shared/sh_role_module.lua")
 include("terrortown/gamemode/shared/sh_item_module.lua")
 
 ttt_include("sh_main")
@@ -119,7 +120,7 @@ function GM:InitPostEntity()
 	end
 
 	-- reset normal equipment tables
-	for _, role in pairs(GetRoles()) do
+	for _, role in pairs(roles.GetList()) do
 		if Equipment then
 			Equipment[role.index] = {}
 		end
@@ -230,7 +231,7 @@ local function RoundStateChange(o, n)
 
 	-- whatever round state we get, clear out the voice flags
 	for _, v in ipairs(player.GetAll()) do
-		for _, team in ipairs(GetWinTeams()) do
+		for _, team in ipairs(roles.GetWinTeams()) do
 			v[team .. "_gvoice"] = false
 		end
 	end
@@ -272,7 +273,7 @@ local function ReceiveRole()
 	client:SetRole(subrole, team)
 
 	Msg("You are: ")
-	MsgN(string.upper(GetRoleByIndex(subrole).name))
+	MsgN(string.upper(roles.GetByIndex(subrole).name))
 end
 net.Receive("TTT_Role", ReceiveRole)
 

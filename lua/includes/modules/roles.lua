@@ -51,6 +51,74 @@ function IsBasedOn(name, base)
 	return IsBasedOn(t.Base, base)
 end
 
+local function SetupData(roleData)
+	local conVarData = roleData.conVarData or {}
+
+	-- shared
+	if not roleData.notSelectable then
+		if conVarData.togglable then
+			CreateClientConVar("ttt_avoid_" .. roleData.name, "0", true, true)
+		end
+
+		CreateConVar("ttt_" .. roleData.name .. "_pct", tostring(conVarData.pct or 1), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+		CreateConVar("ttt_" .. roleData.name .. "_max", tostring(conVarData.maximum or 1), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+		CreateConVar("ttt_" .. roleData.name .. "_min_players", tostring(conVarData.minPlayers or 1), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+		if conVarData.minKarma then
+			CreateConVar("ttt_" .. roleData.name .. "_karma_min", tostring(conVarData.minKarma), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+		end
+
+		if not roleData.buildin then
+			CreateConVar("ttt_" .. roleData.name .. "_random", tostring(conVarData.random or 100), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+			CreateConVar("ttt_" .. roleData.name .. "_enabled", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+		end
+	end
+
+	CreateConVar("ttt_" .. roleData.abbr .. "_credits_starting", tostring(conVarData.credits or 0), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+	CreateConVar("ttt_" .. roleData.abbr .. "_credits_traitorkill", tostring(conVarData.creditsTraitorKill or 0), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+	CreateConVar("ttt_" .. roleData.abbr .. "_credits_traitordead", tostring(conVarData.creditsTraitorDead or 0), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+	local shopFallbackValue
+
+	if not conVarData.shopFallback and roleData.fallbackTable then
+		shopFallbackValue = SHOP_UNSET
+	else
+		shopFallbackValue = conVarData.shopFallback and tostring(conVarData.shopFallback) or SHOP_DISABLED
+	end
+
+	SetGlobalString("ttt_" .. roleData.abbr .. "_shop_fallback", CreateConVar("ttt_" .. roleData.abbr .. "_shop_fallback", shopFallbackValue, {FCVAR_NOTIFY, FCVAR_ARCHIVE}):GetString())
+
+	if conVarData.traitorKill then
+		CreateConVar("ttt_credits_" .. roleData.name .. "kill", tostring(conVarData.traitorKill), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+	end
+
+	-- set id
+	roleData.index = (roleData.buildin and roleData.index) or GenerateNewRoleID()
+
+	-- fix defaultTeam
+	roleData.defaultTeam = roleData.defaultTeam or TEAM_NONE
+
+	local upStr = string.upper(roleData.name)
+
+	_G["ROLE_" .. upStr] = roleData.index
+	_G[upStr] = roleData
+	_G["SHOP_FALLBACK_" .. upStr] = roleData.name
+
+	local plymeta = FindMetaTable("Player")
+	if plymeta then
+		-- e.g. IsJackal() will match each subrole of the jackal as well as the jackal as the baserole
+		plymeta["Is" .. roleData.name:gsub("^%l", string.upper)] = function(self)
+			local br = self:GetBaseRole()
+			local sr = self:GetSubRole()
+
+			return roleData.baserole and sr == roleData.index or not roleData.baserole and br == roleData.index
+		end
+	end
+
+	print("[TTT2][ROLE] Added '" .. name .. "' role (index: " .. roleData.index .. ")")
+end
+
 --[[---------------------------------------------------------
 	Name: Register( table, string )
 	Desc: Used to register your role with the engine
@@ -59,52 +127,22 @@ function Register(t, name)
 	name = string.lower(name)
 
 	local old = RoleList[name]
+	if old then return end
 
 	t.ClassName = name
-	t.id = name
+	t.name = name
+
+	SetupData(t)
+
+	t.id = t.index
 
 	RoleList[name] = t
 
 	list.Set("Roles", name, {
 			ClassName = name,
-			id = name
+			name = name,
+			id = t.index
 	})
-
-	--
-	-- If we're reloading this entity class
-	-- then refresh all the existing entities.
-	--
-	if old ~= nil then
-
-		--
-		-- For each entity using this class
-		--
-		for _, entity in ipairs(ents.FindByClass(name)) do
-
-			--
-			-- Replace the contents with this entity table
-			--
-			table.Merge(entity, t)
-
-			--
-			-- Call OnReloaded hook (if it has one)
-			--
-			if isfunction(entity.OnReloaded) then
-				entity:OnReloaded()
-			end
-		end
-
-		-- Update roles table of entities that are based on this role
-		for _, e in ipairs(ents.GetAll()) do
-			if IsBasedOn(e:GetClass(), name) then
-				table.Merge(e, Get(e:GetClass()))
-
-				if isfunction(e.OnReloaded) then
-					e:OnReloaded()
-				end
-			end
-		end
-	end
 end
 
 --
@@ -190,7 +228,19 @@ function GetList()
 	return result
 end
 
-function GetRoleByIndex(index)
+function GenerateNewRoleID()
+	-- start with "1" to prevent incompatibilities with ROLE_ANY => new roles will start @ id: i(1)+3=4
+	-- edit: add 3 more nop (1+3=4) to use it later -> new roles will start @ id: i(4)+3=7
+	local i = 4
+
+	for k in pairs(RoleList) do
+		i = i + 1
+	end
+
+	return i
+end
+
+function GetByIndex(index)
 	for _, v in pairs(RoleList) do
 		if v.index == index then
 			return v
@@ -200,17 +250,7 @@ function GetRoleByIndex(index)
 	return INNOCENT
 end
 
-function GetRoleByName(name)
-	for _, v in pairs(RoleList) do
-		if v.name == name then
-			return v
-		end
-	end
-
-	return INNOCENT
-end
-
-function GetRoleByAbbr(abbr)
+function GetByAbbr(abbr)
 	for _, v in pairs(RoleList) do
 		if v.abbr == abbr then
 			return v
@@ -218,4 +258,111 @@ function GetRoleByAbbr(abbr)
 	end
 
 	return INNOCENT
+end
+
+function InitCustomTeam(name, data) -- creates global var "TEAM_[name]" and other required things
+	local teamname = string.Trim(string.lower(name)) .. "s"
+
+	_G["TEAM_" .. name] = teamname
+
+	TEAMS[teamname] = data
+end
+
+function SortTable(tbl)
+	local _func = function(a, b)
+		return a.index < b.index
+	end
+
+	table.sort(tbl, _func)
+end
+
+function GetShopRoles()
+	local shopRoles = {}
+
+	local i = 0
+
+	for _, v in pairs(RoleList) do
+		if v ~= INNOCENT then
+			local shopFallback = GetGlobalString("ttt_" .. v.abbr .. "_shop_fallback")
+			if shopFallback ~= SHOP_DISABLED then
+				i = i + 1
+				shopRoles[i] = v
+			end
+		end
+	end
+
+	SortTable(shopRoles)
+
+	return shopRoles
+end
+
+function GetDefaultTeamRole(team)
+	if team == TEAM_NONE then return end
+
+	for _, v in pairs(RoleList) do
+		if not v.baserole and v.defaultTeam ~= TEAM_NONE and v.defaultTeam == team then
+			return v
+		end
+	end
+
+	return INNOCENT
+end
+
+function GetDefaultTeamRoles(team)
+	if team == TEAM_NONE then return end
+
+	return GetDefaultTeamRole(team):GetSubRoles()
+end
+
+function GetTeamMembers(team)
+	if team == TEAM_NONE or TEAMS[team].alone then return end
+
+	local tmp = {}
+
+	for _, v in ipairs(player.GetAll()) do
+		if v:HasTeam(team) then
+			table.insert(tmp, v)
+		end
+	end
+
+	return tmp
+end
+
+function GetWinTeams()
+	local winTeams = {}
+
+	for _, v in pairs(RoleList) do
+		if v.defaultTeam ~= TEAM_NONE and not table.HasValue(winTeams, v.defaultTeam) and not v.preventWin then
+			table.insert(winTeams, v.defaultTeam)
+		end
+	end
+
+	return winTeams
+end
+
+function GetAvailableTeams()
+	local availableTeams = {}
+
+	for _, v in pairs(RoleList) do
+		if v.defaultTeam ~= TEAM_NONE and not table.HasValue(availableTeams, v.defaultTeam) then
+			availableTeams[#availableTeams + 1] = v.defaultTeam
+		end
+	end
+
+	return availableTeams
+end
+
+function GetSortedRoles()
+	local roles = {}
+
+	local i = 0
+
+	for _, v in pairs(RoleList) do
+		i = i + 1
+		roles[i] = v
+	end
+
+	SortTable(roles)
+
+	return roles
 end

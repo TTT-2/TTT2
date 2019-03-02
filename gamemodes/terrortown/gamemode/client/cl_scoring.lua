@@ -179,7 +179,7 @@ function CLSCORE:BuildScorePanel(dpanel)
 					team[id] = team[id] or ""
 
 					if not roles[id][sr] then
-						local roleData = GetRoleByIndex(sr)
+						local roleData = roles.GetByIndex(sr)
 
 						if role[id] ~= "" then
 							role[id] = role[id] .. "/"
@@ -234,7 +234,7 @@ function CLSCORE:BuildScorePanel(dpanel)
 					end
 
 					if not roles[id][ev.r] then
-						local roleData = GetRoleByIndex(ev.r)
+						local roleData = roles.GetByIndex(ev.r)
 
 						if role[id] ~= "" then
 							role[id] = role[id] .. "/"

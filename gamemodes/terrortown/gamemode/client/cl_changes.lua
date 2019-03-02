@@ -249,6 +249,7 @@ function CreateChanges()
 			<li>slot positions are generated from weapon types</li>
 		</ul>
 	</li>
+	<li>reworked the ROLES system</li>
 	</ul>]])
 
 	hook.Run("TTT2AddChange")

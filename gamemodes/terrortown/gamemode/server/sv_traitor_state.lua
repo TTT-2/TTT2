@@ -326,7 +326,7 @@ local function ttt_force_role(ply, cmd, args, argStr)
 
 	local rd
 
-	for _, v in pairs(GetRoles()) do
+	for _, v in pairs(roles.GetList()) do
 		if v.index == role then
 			rd = v
 
@@ -353,7 +353,7 @@ concommand.Add("get_role", get_role)
 local function ttt_toggle_role(ply, cmd, args, argStr)
 	if ply:IsAdmin() then
 		local role = tonumber(args[1])
-		local roleData = GetRoleByIndex(role)
+		local roleData = roles.GetByIndex(role)
 		local currentState = not GetConVar("ttt_" .. roleData.name .. "_enabled"):GetBool()
 
 		local word = currentState and "disabled" or "enabled"
@@ -397,7 +397,7 @@ local function ttt_roles_index(ply)
 		ply:ChatPrint("----------------")
 		ply:ChatPrint("[Role] | [Index]")
 
-		for _, v in pairs(GetSortedRoles()) do
+		for _, v in ipairs(roles.GetSortedRoles()) do
 			ply:ChatPrint(v.name .. " | " .. v.index)
 		end
 

@@ -514,7 +514,7 @@ local function OrderEquipment(ply, cmd, args)
 
 	if not ply:IsActive() then return end
 
-	local rd = GetRoleByIndex(subrole)
+	local rd = roles.GetByIndex(subrole)
 
 	local shopFallback = GetGlobalString("ttt_" .. rd.abbr .. "_shop_fallback")
 	if shopFallback == SHOP_DISABLED then return end

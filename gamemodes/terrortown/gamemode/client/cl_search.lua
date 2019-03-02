@@ -97,7 +97,7 @@ local function IconForInfoType(t, data)
 	if type(mat) == "table" then
 		if t == "role" then
 			if not mat[data] then
-				TypeToMat.role[data] = GetRoleByIndex(data).abbr
+				TypeToMat.role[data] = roles.GetByIndex(data).abbr
 			end
 
 			base = "vgui/ttt/dynamic/roles/icon_"
@@ -137,7 +137,7 @@ function PreprocSearch(raw)
 			search[t].p = 1
 			search[t].nick = d
 		elseif t == "role" then
-			local rd = GetRoleByIndex(d)
+			local rd = roles.GetByIndex(d)
 
 			search[t].text = T("search_role_" .. rd.abbr)
 			search[t].color = raw["role_color"] or rd.color

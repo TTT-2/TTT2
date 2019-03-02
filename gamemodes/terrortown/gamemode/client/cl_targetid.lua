@@ -262,7 +262,7 @@ function GM:HUDDrawTargetID()
 	if target_role then
 		surface.SetTexture(ring_tex)
 
-		local c = GetRoleByIndex(target_role).color
+		local c = roles.GetByIndex(target_role).color
 
 		surface.SetDrawColor(c.r, c.g, c.b, 200)
 		surface.DrawTexturedRect(x - 32, y - 32, 64, 64)
@@ -359,7 +359,7 @@ function GM:HUDDrawTargetID()
 	text = nil
 
 	if target_role then
-		local rd = GetRoleByIndex(target_role)
+		local rd = roles.GetByIndex(target_role)
 
 		text = L["target_" .. rd.name]
 		c = IsValid(ent) and ent:GetRoleColor() or rd.color

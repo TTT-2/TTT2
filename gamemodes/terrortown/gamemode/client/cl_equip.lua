@@ -43,7 +43,7 @@ local curSearch = curSearch
 -- ----------------------------------
 
 local function RolenameToRole(val)
-	for _, v in pairs(GetRoles()) do
+	for _, v in pairs(roles.GetList()) do
 		if SafeTranslate(v.name) == val then
 			return v.index
 		end
@@ -415,7 +415,7 @@ function TraitorMenuPopup()
 
 	local subrole = ply:GetSubRole()
 	local fallbackRole = GetShopFallback(subrole)
-	local rd = GetRoleByIndex(fallbackRole)
+	local rd = roles.GetByIndex(fallbackRole)
 	local notalive = false
 
 	local fallback = GetGlobalString("ttt_" .. rd.abbr .. "_shop_fallback")
@@ -581,8 +581,8 @@ function TraitorMenuPopup()
 		drolesel:SetPos(m, dsph + m * 2)
 		drolesel:MoveBelow(dsearch, m)
 
-		for _, v in pairs(GetRoles()) do
-			if IsShoppingRole(v.index) then
+		for _, v in pairs(roles.GetList()) do
+			if v:IsShoppingRole() then
 				drolesel:AddChoice(SafeTranslate(v.name))
 			end
 		end
