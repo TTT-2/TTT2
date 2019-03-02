@@ -226,7 +226,9 @@ function GetList()
 	local result = {}
 
 	for _, v in pairs(RoleList) do
-		result[#result + 1] = v
+		if v ~= BASE_ROLE_CLASS then
+			result[#result + 1] = v
+		end
 	end
 
 	return result
