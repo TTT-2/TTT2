@@ -187,14 +187,14 @@ local function IdentifyCorpse(pCorpse)
 			LANG.Msg("body_found", {
 					finder = "The Server",
 					victim = CORPSE.GetPlayerNick(pCorpse, nil) or pPlayer:GetName(),
-					role = LANG.Param("body_found_" .. GetRoleByIndex(nRole).abbr),
+					role = LANG.Param("body_found_" .. roles.GetByIndex(nRole).abbr),
 					team = LANG.Param(nTeam)
 			})
 		else
 			LANG.Msg("body_found", {
 					finder = "The Server",
 					victim = CORPSE.GetPlayerNick(pCorpse, nil) or pPlayer:GetName(),
-					role = LANG.Param("body_found_" .. GetRoleByIndex(nRole).abbr)
+					role = LANG.Param("body_found_" .. roles.GetByIndex(nRole).abbr)
 			})
 		end
 	end

@@ -45,7 +45,7 @@ function plymeta:SetRole(subrole, team, forceHooks)
 	local oldRole = self:GetBaseRole()
 	local oldSubrole = self:GetSubRole()
 	local oldTeam = self:GetTeam()
-	local rd = GetRoleByIndex(subrole)
+	local rd = roles.GetByIndex(subrole)
 
 	self.role = rd.baserole or subrole
 	self.subrole = subrole
@@ -57,7 +57,7 @@ function plymeta:SetRole(subrole, team, forceHooks)
 	local newTeam = self:GetTeam()
 
 	if oldSubrole ~= newSubrole then
-		local ord = GetRoleByIndex(oldSubrole)
+		local ord = roles.GetByIndex(oldSubrole)
 		local ar = GetActiveRolesCount(rd) + 1
 		local oar = GetActiveRolesCount(ord) - 1
 
@@ -184,7 +184,7 @@ function plymeta:GetDetective()
 end
 
 function plymeta:GetSubRoleData()
-	for _, v in pairs(GetRoles()) do
+	for _, v in ipairs(roles.GetList()) do
 		if v.index == self:GetSubRole() then
 			return v
 		end
@@ -194,7 +194,7 @@ function plymeta:GetSubRoleData()
 end
 
 function plymeta:GetBaseRoleData()
-	for _, v in pairs(GetRoles()) do
+	for _, v in ipairs(roles.GetList()) do
 		if v.index == self:GetBaseRole() then
 			return v
 		end
@@ -248,7 +248,7 @@ function plymeta:IsActiveSpecial()
 end
 
 function plymeta:IsShopper()
-	return IsShoppingRole(self:GetSubRole())
+	return self:GetSubRoleData():IsShoppingRole()
 end
 
 function plymeta:IsActiveShopper()
@@ -287,14 +287,14 @@ function plymeta:CanCarryWeapon(wep)
 	if not wep or not wep.Kind then
 		return false
 	end
-	
+
 	--appeareantly TTT can't handle two times the same weapon
 	for k, v in pairs(self:GetWeapons()) do
 		if WEPS.GetClass(wep) == v:GetClass() then
 			return false
 		end
 	end
-	
+
 	return self:CanCarryType(wep.Kind)
 end
 
@@ -302,13 +302,13 @@ function plymeta:CanCarryType(t)
 	if not t then
 		return false
 	end
-	
+
 	return InventorySlotFree(self, t)
 end
 
 function plymeta:GetInventory()
 	CleanupInventoryIfDirty(self)
-	
+
 	return self.inventory
 end
 
@@ -316,7 +316,7 @@ function plymeta:GetWeaponsOnSlot(slot)
 	if slot > WEAPON_EXTRA then
 		return
 	end
-	
+
 	return self:GetInventory()[slot]
 end
 

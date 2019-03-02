@@ -33,7 +33,7 @@ function ShopEditor.CreateShopDB(name)
 end
 
 function ShopEditor.CreateShopDBs()
-	for _, v in pairs(GetRoles()) do
+	for _, v in ipairs(roles.GetList()) do
 		if v ~= INNOCENT then
 			ShopEditor.CreateShopDB(v.name)
 		end
@@ -87,7 +87,7 @@ local function shop(len, ply)
 	local eq = net.ReadString()
 
 	local equip = GetEquipmentFileName(eq)
-	local rd = GetRoleByIndex(subrole)
+	local rd = roles.GetByIndex(subrole)
 
 	if add then
 		ShopEditor.AddToShopEditor(ply, rd, equip)
@@ -116,14 +116,14 @@ local function shopFallback(len, ply)
 	local subrole = net.ReadUInt(ROLE_BITS)
 	local fallback = net.ReadString()
 
-	local rd = GetRoleByIndex(subrole)
+	local rd = roles.GetByIndex(subrole)
 
 	RunConsoleCommand("ttt_" .. rd.abbr .. "_shop_fallback", fallback)
 end
 net.Receive("shopFallback", shopFallback)
 
 function ShopEditor.OnChangeWSCVar(subrole, fallback, ply_or_rf)
-	local rd = GetRoleByIndex(subrole)
+	local rd = roles.GetByIndex(subrole)
 
 	SYNC_EQUIP[subrole] = {}
 
@@ -202,7 +202,7 @@ function ShopEditor.OnChangeWSCVar(subrole, fallback, ply_or_rf)
 end
 
 function ShopEditor.SetupShopEditorCVars()
-	for _, v in pairs(GetRoles()) do
+	for _, v in ipairs(roles.GetList()) do
 		local _func = function(convar_name, value_old, value_new)
 			if value_old ~= value_new then
 				print(convar_name .. ": Changing fallback from " .. value_old .. " to " .. value_new)

@@ -16,8 +16,6 @@ surface.CreateFont("SettingsButtonFont", {font = "Trebuchet24", size = 24, weigh
 CreateConVar("ttt_spectator_mode", "0", FCVAR_ARCHIVE)
 CreateConVar("ttt_mute_team_check", "0")
 
-CreateClientConVar("ttt_avoid_detective", "0", true, true)
-
 HELPSCRN = {}
 
 local helpframe
@@ -406,7 +404,7 @@ function HELPSCRN:CreateGameplaySettings(parent)
 
 	local cb
 
-	for _, v in pairs(GetRoles()) do
+	for _, v in ipairs(roles.GetList()) do
 		if ConVarExists("ttt_avoid_" .. v.name) then
 			local rolename = GetTranslation(v.name)
 

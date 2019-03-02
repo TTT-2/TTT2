@@ -1,6 +1,9 @@
 ---- Trouble in Terrorist Town 2
 ttt_include("sh_init")
 
+AddCSLuaFile("terrortown/gamemode/shared/sh_role_module.lua")
+include("terrortown/gamemode/shared/sh_role_module.lua")
+
 AddCSLuaFile("terrortown/gamemode/shared/sh_item_module.lua")
 include("terrortown/gamemode/shared/sh_item_module.lua")
 
@@ -58,15 +61,6 @@ CreateConVar("ttt_haste_minutes_per_death", "0.5", {FCVAR_NOTIFY, FCVAR_ARCHIVE}
 
 local spawnwaveint = CreateConVar("ttt_spawn_wave_interval", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
-CreateConVar("ttt_traitor_pct", "0.4", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-CreateConVar("ttt_traitor_max", "32", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-CreateConVar("ttt_traitor_min_players", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
-CreateConVar("ttt_detective_pct", "0.13", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-CreateConVar("ttt_detective_max", "32", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-CreateConVar("ttt_detective_min_players", "8", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-CreateConVar("ttt_detective_karma_min", "600", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
 -- Traitor credits
 CreateConVar("ttt_credits_starting", "2", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 CreateConVar("ttt_credits_award_pct", "0.35", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
@@ -75,11 +69,6 @@ CreateConVar("ttt_credits_award_repeat", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 CreateConVar("ttt_credits_detectivekill", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 CreateConVar("ttt_credits_alonebonus", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
--- Detective credits
-CreateConVar("ttt_det_credits_starting", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-CreateConVar("ttt_det_credits_traitorkill", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-CreateConVar("ttt_det_credits_traitordead", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 CreateConVar("ttt_use_weapon_spawn_scripts", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 CreateConVar("ttt_weapon_spawn_count", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
@@ -119,8 +108,6 @@ CreateConVar("ttt_max_roles", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amoun
 CreateConVar("ttt_max_roles_pct", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different roles based on player amount. ttt_max_roles needs to be 0")
 CreateConVar("ttt_max_baseroles", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different baseroles")
 CreateConVar("ttt_max_baseroles_pct", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different baseroles based on player amount. ttt_max_baseroles needs to be 0")
-
-CreateConVar("ttt_detective_random", "100", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 -- debuggery
 local ttt_dbgwin = CreateConVar("ttt_debug_preventwin", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
@@ -426,7 +413,7 @@ function GM:SyncGlobals()
 	SetGlobalFloat("ttt_voice_drain_admin", voice_drain_admin:GetFloat())
 	SetGlobalFloat("ttt_voice_drain_recharge", voice_drain_recharge:GetFloat())
 
-	for _, v in pairs(GetRoles()) do
+	for _, v in ipairs(roles.GetList()) do
 		SetGlobalString("ttt_" .. v.abbr .. "_shop_fallback", GetConVar("ttt_" .. v.abbr .. "_shop_fallback"):GetString())
 	end
 
@@ -437,7 +424,7 @@ end
 
 function LoadShopsEquipment()
 	-- initialize shop equipment
-	for _, roleData in pairs(GetRoles()) do
+	for _, roleData in ipairs(roles.GetList()) do
 		local shopFallback = GetConVar("ttt_" .. roleData.abbr .. "_shop_fallback"):GetString()
 		if shopFallback == roleData.name then
 			LoadSingleShopEquipment(roleData)
@@ -1033,7 +1020,7 @@ function EndRound(result)
 	StopWinChecks()
 
 	-- send each client the role setup, reveal every player
-	for _, v in pairs(GetRoles()) do
+	for _, v in ipairs(roles.GetList()) do
 		SendSubRoleList(v.index)
 	end
 
@@ -1214,14 +1201,14 @@ function GetSelectableRoles(plys, max_plys)
 	local iTmpTbl = {}
 	local checked = {}
 
-	for _, v in pairs(GetRoles()) do
+	for _, v in ipairs(roles.GetList()) do
 		if checked[v.index] then continue end
 
 		checked[v.index] = true
 
-		if v ~= INNOCENT and v ~= TRAITOR and (newRolesEnabled or v == DETECTIVE) and IsRoleSelectable(v) then
+		if v ~= INNOCENT and v ~= TRAITOR and (newRolesEnabled or v == DETECTIVE) and v:IsSelectable() then
 			if v.baserole and v.baserole ~= ROLE_INNOCENT and v.baserole ~= ROLE_TRAITOR then
-				local rd = GetRoleByIndex(v.baserole)
+				local rd = roles.GetByIndex(v.baserole)
 
 				if not checked[v.baserole] then
 					local forced = forcedRolesTbl[v.baserole] -- add forced role definitely, randomness doesn't matter
@@ -1323,7 +1310,7 @@ function GetSelectableRoles(plys, max_plys)
 		table.remove(iTmpTbl, rnd)
 
 		if v.baserole then
-			local br = GetRoleByIndex(v.baserole)
+			local br = roles.GetByIndex(v.baserole)
 
 			if not selectableRoles[br] then
 				if max_baseroles and baseroles_count >= max_baseroles then continue end
@@ -1414,7 +1401,7 @@ local function SelectForcedRoles(max_plys, roleCount, allSelectableRoles, choice
 	end
 
 	for subrole, ps in pairs(transformed) do
-		local rd = GetRoleByIndex(subrole)
+		local rd = roles.GetByIndex(subrole)
 
 		if table.HasValue(allSelectableRoles, rd) then
 			local role_count = roleCount[subrole]
@@ -1448,7 +1435,7 @@ local function SelectForcedRoles(max_plys, roleCount, allSelectableRoles, choice
 
 	for id, subrole in pairs(PLYFORCEDROLES) do
 		local ply = player.GetByUniqueID(id)
-		local rd = GetRoleByIndex(subrole)
+		local rd = roles.GetByIndex(subrole)
 
 		hook.Run("TTT2ReceivedForcedRole", ply, rd, false)
 	end
@@ -1541,7 +1528,7 @@ function SelectRoles(plys, max_plys)
 
 	hook.Run("TTT2ModifySelectableRoles", selectableRoles)
 
-	for _, v in pairs(GetRoles()) do
+	for _, v in ipairs(roles.GetList()) do
 		roleCount[v.index] = selectableRoles[v] or 0
 	end
 
@@ -1555,7 +1542,7 @@ function SelectRoles(plys, max_plys)
 	local tmpTbl = {}
 
 	-- get selectable baseroles (except traitor and innocent)
-	for _, v in pairs(GetRoles()) do
+	for _, v in ipairs(roles.GetList()) do
 		if v ~= TRAITOR and v ~= INNOCENT and not table.HasValue(tmpTbl, v) and selectableRoles[v] and not v.baserole then
 			tmpTbl[#tmpTbl + 1] = v
 		end

@@ -469,34 +469,34 @@ function ShopEditor.CreateLinkWithRole(roleData)
 		ply.shopeditor = nil
 	end
 
-	local roles = GetSortedRoles()
+	local rls = roles.GetSortedRoles()
 
-	table.insert(roles, 1, {name = SHOP_UNSET, abbr = "shop_default", color = roleData.color})
-	table.insert(roles, 1, {name = SHOP_DISABLED, abbr = "disable", color = roleData.color})
+	table.insert(rls, 1, {name = SHOP_UNSET, abbr = "shop_default", color = roleData.color})
+	table.insert(rls, 1, {name = SHOP_DISABLED, abbr = "disable", color = roleData.color})
 
 	-- remove innocents
 	local key
 
-	for k, v in ipairs(roles) do
+	for k, v in ipairs(rls) do
 		if v == INNOCENT then
 			key = k
 		end
 	end
 
-	table.remove(roles, key)
+	table.remove(rls, key)
 
 	-- change position of own shop
-	for k, v in ipairs(roles) do
+	for k, v in ipairs(rls) do
 		if v == roleData then
 			key = k
 		end
 	end
 
-	table.remove(roles, key)
+	table.remove(rls, key)
 
-	table.insert(roles, 1, roleData)
+	table.insert(rls, 1, roleData)
 
-	local dlist = ShopEditor.CreateRolesList(frame, w, h, roles, function(s)
+	local dlist = ShopEditor.CreateRolesList(frame, w, h, rls, function(s)
 		local oldFallback = GetGlobalString("ttt_" .. roleData.abbr .. "_shop_fallback")
 
 		if s.roleData.name == SHOP_DISABLED or s.roleData.name == SHOP_UNSET or s.roleData.name ~= roleData.name then
@@ -576,19 +576,19 @@ function ShopEditor.CreateShopLinker()
 		ply.shopeditor_frame = nil
 	end
 
-	local roles = GetSortedRoles()
+	local rls = roles.GetSortedRoles()
 
 	local key
 
-	for k, v in ipairs(roles) do
+	for k, v in ipairs(rls) do
 		if v == INNOCENT then
 			key = k
 		end
 	end
 
-	table.remove(roles, key)
+	table.remove(rls, key)
 
-	ShopEditor.CreateRolesList(frame, w, h, roles, function(s)
+	ShopEditor.CreateRolesList(frame, w, h, rls, function(s)
 		if IsValid(ply.shopeditor_frame) then
 			ply.shopeditor_frame:Close()
 		end
@@ -634,7 +634,7 @@ function ShopEditor.shopFallbackAnsw(len)
 	end
 
 	if fb == SHOP_UNSET then
-		local roleData = GetRoleByIndex(subrole)
+		local roleData = roles.GetByIndex(subrole)
 		if roleData.fallbackTable then
 			-- set everything
 			for _, eq in ipairs(roleData.fallbackTable) do
@@ -661,7 +661,7 @@ function ShopEditor.shopFallbackReset(len)
 		v.CanBuy = {}
 	end
 
-	for _, rd in pairs(GetRoles()) do
+	for _, rd in ipairs(roles.GetList()) do
 		local subrole = rd.index
 		local fb = GetGlobalString("ttt_" .. rd.abbr .. "_shop_fallback")
 
@@ -669,7 +669,7 @@ function ShopEditor.shopFallbackReset(len)
 		Equipment[subrole] = {}
 
 		if fb == SHOP_UNSET then
-			local roleData = GetRoleByIndex(subrole)
+			local roleData = roles.GetByIndex(subrole)
 			if roleData.fallbackTable then
 				-- set everything
 				for _, eq in ipairs(roleData.fallbackTable) do

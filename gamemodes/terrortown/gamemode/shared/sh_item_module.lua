@@ -1,3 +1,5 @@
+local oldITEM = ITEM
+
 -- include modules
 require("items")
 
@@ -47,3 +49,5 @@ for _, folder in ipairs(itemsFolders) do
 
 	ITEM = nil
 end
+
+ITEM = oldITEM

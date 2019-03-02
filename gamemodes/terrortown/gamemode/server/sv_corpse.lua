@@ -76,7 +76,7 @@ local function IdentifyBody(ply, rag)
 	if bodyfound:GetBool() and not CORPSE.GetFound(rag, false) then
 		local subrole = rag.was_role
 		local team = rag.was_team
-		local rd = GetRoleByIndex(subrole)
+		local rd = roles.GetByIndex(subrole)
 		local roletext = "body_found_" .. rd.abbr
 		local clr = rd.color
 

@@ -144,6 +144,8 @@ function PANEL:NextTip(auto)
 end
 
 function PANEL:PrevTip(auto)
+	if not self.TipIndex then return end
+	
 	local idx = self.TipIndex - 1
 
 	if idx < 1 then

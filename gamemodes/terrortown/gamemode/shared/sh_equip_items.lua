@@ -120,9 +120,15 @@ function AddWeaponIntoFallbackTable(wepClass, roleData)
 end
 
 function GetShopFallback(subrole, tbl)
-	local rd = GetRoleByIndex(subrole)
+	local rd = roles.GetByIndex(subrole)
 	local shopFallback = GetGlobalString("ttt_" .. rd.abbr .. "_shop_fallback")
-	local fb = GetRoleByName(shopFallback).index
+	local fb = roles.GetStored(shopFallback)
+
+	if fb then
+		fb = fb.index
+	else
+		fb = ROLE_INNOCENT
+	end
 
 	if not fb or shopFallback == SHOP_UNSET or shopFallback == SHOP_DISABLED then
 		return subrole, fb
@@ -149,7 +155,7 @@ function GetShopFallback(subrole, tbl)
 end
 
 function GetShopFallbackTable(subrole)
-	local rd = GetRoleByIndex(subrole)
+	local rd = roles.GetByIndex(subrole)
 
 	local shopFallback = GetGlobalString("ttt_" .. rd.abbr .. "_shop_fallback")
 	if shopFallback == SHOP_DISABLED then return end
@@ -159,7 +165,7 @@ function GetShopFallbackTable(subrole)
 	subrole, fallback = GetShopFallback(subrole)
 
 	if fallback == ROLE_INNOCENT then -- fallback is SHOP_UNSET
-		rd = GetRoleByIndex(subrole)
+		rd = roles.GetByIndex(subrole)
 
 		if rd.fallbackTable then
 			return rd.fallbackTable
@@ -301,7 +307,7 @@ if SERVER then
 			RANDOMSAVEDSHOPS = {} -- reset saved shops
 		end
 
-		local tbl = GetShopRoles()
+		local tbl = roles.GetShopRoles()
 
 		-- at first, get all available equipment per team
 		for _, rd in pairs(tbl) do
@@ -368,19 +374,19 @@ if SERVER then
 		-- now set the individual random shop
 		if team then -- the shop is synced with the team
 			for _, ply in ipairs(plys and plys or player.GetAll()) do
-				local sr = ply:GetSubRole()
+				local srd = ply:GetSubRoleData()
 
-				if not IsShoppingRole(sr) then continue end
+				if not srd:IsShoppingRole() then continue end
 
-				RANDOMSHOP[ply] = RANDOMTEAMSHOPS[GetShopFallback(sr)]
+				RANDOMSHOP[ply] = RANDOMTEAMSHOPS[GetShopFallback(srd.index)]
 			end
 		else -- every player has his own shop
 			for _, ply in ipairs(plys and plys or player.GetAll()) do
-				local sr = ply:GetSubRole()
+				local srd = ply:GetSubRoleData()
 
-				if not IsShoppingRole(sr) then continue end
+				if not srd:IsShoppingRole() then continue end
 
-				local fallbackTable = RANDOMSAVEDSHOPS[GetShopFallback(sr)]
+				local fallbackTable = RANDOMSAVEDSHOPS[GetShopFallback(srd.index)]
 				local length = #fallbackTable
 				local amount = val
 				local tmp2 = {}

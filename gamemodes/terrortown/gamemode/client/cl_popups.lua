@@ -20,7 +20,7 @@ local function GetTextForPlayer(ply)
 			return GetPTranslation("info_popup_" .. roleData.name, {menukey = menukey})
 		end
 	else
-		local traitors = GetTeamMembers(TEAM_TRAITOR)
+		local traitors = roles.GetTeamMembers(TEAM_TRAITOR)
 		if #traitors > 1 then
 			local traitorlist = ""
 

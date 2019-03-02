@@ -187,7 +187,7 @@ function RADAR:Draw(client)
 
 			subrole = tgt.subrole or ROLE_INNOCENT
 
-			local roleData = GetRoleByIndex(subrole)
+			local roleData = roles.GetByIndex(subrole)
 			local c = roleData.radarColor
 
 			if c then
