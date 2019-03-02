@@ -88,6 +88,7 @@ function HUD:Loaded()
 		if el then
 			el.basecolor = self.basecolor
 			el.scale = self.scale
+			el:PerformLayout()
 		end
 	end
 end
