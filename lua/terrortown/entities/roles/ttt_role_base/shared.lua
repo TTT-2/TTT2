@@ -1,4 +1,4 @@
-function ROLE:Initialize()
+function ROLE:PreInitialize()
 
 end
 
