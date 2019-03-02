@@ -19,7 +19,8 @@ if CLIENT then
 		self:SetMinSize(min_w, min_h)
 
 		BaseClass.Initialize(self)
-
+		
+		self.defaults.minWidth = bh + 2 * pad
 		self.defaults.resizeableY = false
 	end
 
@@ -44,10 +45,12 @@ if CLIENT then
 
 		if not HUDManager.IsEditing and (not client.drowningProgress or not client:Alive() or client.drowningProgress == -1) then return end
 
+		pad = 14 * self.scale
+
 		-- draw bg and shadow
 		self:DrawBg(x, y, w, h, self.basecolor)
-
-		self:DrawBar(x + pad, y + pad, w - pad * 2, bh, Color(36, 154, 198), HUDManager.IsEditing and 1 or (client.drowningProgress or 1))
+	
+		self:DrawBar(x + pad, y + pad, w - pad * 2, h - pad * 2, Color(36, 154, 198), HUDManager.IsEditing and 1 or (client.drowningProgress or 1), 1)
 
 		-- draw lines around the element
 		self:DrawLines(x, y, w, h, self.basecolor.a)

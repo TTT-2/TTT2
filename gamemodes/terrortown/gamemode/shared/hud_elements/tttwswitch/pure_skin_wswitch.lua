@@ -66,38 +66,16 @@ if CLIENT then
 		end
 
 		-- Slot
-		local _tmp = {x + self.lpw * 0.5, y + height * 0.5}
-		local spec = {
-			text = MakeKindValid(wep.Kind),
-			font = "PureSkinWepNum",
-			pos = _tmp,
-			xalign = TEXT_ALIGN_CENTER,
-			yalign = TEXT_ALIGN_CENTER,
-			color = c.text
-		}
-
-		draw.TextShadow(spec, 2, c.shadow)
+		self:AdvancedText(tostring(wep.Slot + 1), "PureSkinWepNum", x + self.lpw * 0.5, y + height * 0.5, c.text, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, true, self.scale)
 
 		-- Name
-		spec.text = string.upper(name)
-		spec.font = "PureSkinWep"
-		spec.pos[1] = x + 10 + height
-		spec.xalign = nil
-
-		--draw.Text(spec)
-		draw.TextShadow(spec, 2, c.shadow)
+		self:AdvancedText(string.upper(name), "PureSkinWep", x + 10 + height, y + height * 0.5, c.text, nil, TEXT_ALIGN_CENTER, true, self.scale)
 
 		if ammo then
 			local col = (wep:Clip1() == 0 and wep:Ammo1() == 0) and c.text_empty or c.text
-			local w = self:GetSize().w
 
 			-- Ammo
-			spec.text = ammo
-			spec.pos[1] = x + w - self.margin * 3
-			spec.xalign = TEXT_ALIGN_RIGHT
-			spec.color = col
-
-			draw.Text(spec)
+			self:AdvancedText(tostring(ammo), "PureSkinWep", x + width - self.margin * 3, y + height * 0.5, col, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, false, self.scale)
 		end
 
 		return true
@@ -117,6 +95,8 @@ if CLIENT then
 	}
 
 	function HUDELEMENT:RecalculateBasePos()
+		self.margin = 5 * self.scale
+
 		self:SetBasePos(ScrW() - (width + self.margin * 2), ScrH() - self.margin)
 	end
 
@@ -129,9 +109,10 @@ if CLIENT then
 		local count = #weps
 		local tmp = height + self.margin
 
-		local w, h = self:GetSize().w, math.max(count * tmp, self.defaults.minHeight)
+		local h = math.max(count * tmp, self.defaults.minHeight)
+		width = self:GetSize().w
 
-		self:SetSize(w, -h)
+		self:SetSize(width, -h)
 
 		BaseClass.PerformLayout(self)
 	end
@@ -139,15 +120,18 @@ if CLIENT then
 	function HUDELEMENT:Draw()
 		if not WSWITCH.Show and not HUDManager.IsEditing then return end
 
+		height = 28 * self.scale
+		self.margin = 5 * self.scale
+		self.lpw = 22 * self.scale
 		local client = LocalPlayer()
 		local weps = WSWITCH.WeaponCache
 		local count = #weps
 		local tmp = height + self.margin
 		local basepos = self:GetBasePos()
-		local w, h = self:GetSize().w, math.max(count * tmp, self.defaults.minHeight)
+		local h = math.max(count * tmp, self.defaults.minHeight)
 
 		self:SetPos(basepos.x, basepos.y)
-		self:SetSize(w, -h)
+		self:SetSize(width, -h)
 
 		local pos = self:GetPos()
 		local x_elem = pos.x
@@ -161,7 +145,7 @@ if CLIENT then
 				col = self.col_dark
 			end
 
-			self:DrawBarBg(x_elem, y_elem, w, height, col)
+			self:DrawBarBg(x_elem, y_elem, width, height, col)
 
 			if not self:DrawWeapon(x_elem, y_elem, col, wep) then
 				WSWITCH:UpdateWeaponCache()

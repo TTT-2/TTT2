@@ -23,11 +23,11 @@ if CLIENT then
 
 		BaseClass.Initialize(self)
 
-		self.defaults.resizeableY = false
+		--self.defaults.resizeableY = false
 	end
 
 	function HUDELEMENT:RecalculateBasePos()
-		self:SetBasePos(10, ScrH() - (10 + h))
+		self:SetBasePos(10 * self.scale, ScrH() - (10 * self.scale + h))
 	end
 
 	function HUDELEMENT:PerformLayout()
@@ -78,7 +78,12 @@ if CLIENT then
 		local L = GetLang()
 
 		local x2, y2, w2, h2 = x, y, w, h
-
+		
+		local height_scale = h / 146.0
+		
+		lpw = 44 * height_scale
+		pad = 14 * height_scale
+		
 		if not calive then
 			y2 = y2 + h2 - lpw
 			h2 = lpw
@@ -153,25 +158,9 @@ if CLIENT then
 				end
 			end
 
-			role_scale_multiplier = math.Clamp(role_scale_multiplier, 0.55, 0.85)
+			role_scale_multiplier = math.Clamp(role_scale_multiplier, 0.55, 0.85) * height_scale
 
-			--create scaling matrix for the text
-			local mat = Matrix()
-			mat:Translate(Vector(nx, ry))
-			mat:Scale(Vector(role_scale_multiplier * 0.9, role_scale_multiplier, role_scale_multiplier))
-			mat:Translate(-Vector(nx, ry))
-
-			render.PushFilterMag(TEXFILTER.ANISOTROPIC)
-			render.PushFilterMin(TEXFILTER.ANISOTROPIC)
-
-			cam.PushModelMatrix(mat)
-
-			self:ShadowedText(string.upper(text), "PureSkinRole", nx, ry, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-
-			cam.PopModelMatrix(mat)
-
-			render.PopFilterMag()
-			render.PopFilterMin()
+			self:AdvancedText(string.upper(text), "PureSkinRole", nx, ry, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, true, Vector(role_scale_multiplier * 0.9, role_scale_multiplier, role_scale_multiplier))
 		end
 
 		-- player informations
@@ -197,7 +186,7 @@ if CLIENT then
 					surface.SetDrawColor(clr(secInfoTbl.color))
 					surface.DrawRect(nx2, ny, sri_width, nh)
 
-					self:ShadowedText(sri_text_caps, "PureSkinBar", nx2 + sri_width * 0.5, ry, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					self:AdvancedText(sri_text_caps, "PureSkinBar", nx2 + sri_width * 0.5, ry, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, true, 1.0)
 
 					-- draw lines around the element
 					self:DrawLines(nx2, ny, sri_width, nh, secInfoTbl.color.a)
@@ -210,14 +199,14 @@ if CLIENT then
 
 			-- draw bars
 			local bw = w2 - lpw - pad * 2 -- bar width
-			local bh = 26 --  bar height
-			local sbh = 8 -- spring bar height
-			local spc = 7 -- space between bars
+			local bh = 26 * height_scale --  bar height
+			local sbh = 8 * height_scale -- spring bar height
+			local spc = 7 * height_scale -- space between bars
 
 			-- health bar
 			local health = math.max(0, client:Health())
 
-			self:DrawBar(nx, ty, bw, bh, Color(234, 41, 41), health / client:GetMaxHealth(), "HEALTH: " .. health)
+			self:DrawBar(nx, ty, bw, bh, Color(234, 41, 41), health / client:GetMaxHealth(), height_scale, "HEALTH: " .. health)
 
 			-- ammo bar
 			ty = ty + bh + spc
@@ -229,7 +218,7 @@ if CLIENT then
 				if ammo_clip ~= -1 then
 					local text = string.format("%i + %02i", ammo_clip, ammo_inv)
 
-					self:DrawBar(nx, ty, bw, bh, Color(238, 151, 0), ammo_clip / ammo_max, text)
+					self:DrawBar(nx, ty, bw, bh, Color(238, 151, 0), ammo_clip / ammo_max, height_scale, text)
 				end
 			end
 
@@ -237,12 +226,12 @@ if CLIENT then
 			ty = ty + bh + spc
 
 			if GetGlobalBool("ttt2_sprint_enabled", true) then
-				self:DrawBar(nx, ty, bw, sbh, Color(36, 154, 198), client.sprintProgress)
+				self:DrawBar(nx, ty, bw, sbh, Color(36, 154, 198), client.sprintProgress, height_scale, "")
 			end
 
 			-- coin info
 			if cactive and client:IsShopper() then
-				local coinSize = 24
+				local coinSize = 24 * height_scale
 				local x2_pad = math.Round((lpw - coinSize) * 0.5)
 
 				if client:GetCredits() > 0 then

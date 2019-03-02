@@ -18,14 +18,14 @@ if CLIENT then
 		
 		BaseClass.Initialize(self)
 
-		self.defaults.minWidth = size
-		self.defaults.minHeight = size
+		self.defaults.minWidth = 64
+		self.defaults.minHeight = 64
 		self.defaults.resizeableX = false
 		self.defaults.resizeableY = false
 	end
 
 	function HUDELEMENT:RecalculateBasePos()
-		self:SetBasePos(20, ScrH() * 0.5)
+		self:SetBasePos(20 * self.scale, ScrH() * 0.5)
 	end
 
 	function HUDELEMENT:PerformLayout()
@@ -46,7 +46,8 @@ if CLIENT then
 		local itms = client:GetEquipmentItems()
 		local pos = self:GetPos()
 		local curY = basepos.y
-
+		size = 64 * self.scale
+		
 		-- at first, calculate old items because they don't take care of the new ones
 		for _, itemCls in ipairs(itms) do
 			local item = items.GetStored(itemCls)

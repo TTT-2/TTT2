@@ -28,7 +28,7 @@ if CLIENT then
 	end
 
 	function HUDELEMENT:RecalculateBasePos()
-		self:SetBasePos(ScrW() * 0.5 - width * 0.5, margin + 72)
+		self:SetBasePos(ScrW() * 0.5 - width * 0.5, (margin + 72) * self.scale)
 	end
 
 	-- Paint punch-o-meter
@@ -42,10 +42,10 @@ if CLIENT then
 		local x, y = pos.x, pos.y
 
 		self:DrawBg(x, y, width, height, self.basecolor)
-		self:DrawBar(x + pad, y + pad, width - pad * 2, height - pad * 2, draw_col, punch, L.punch_title)
+		self:DrawBar(x + pad, y + pad, width - pad * 2, height - pad * 2, draw_col, punch, self.scale, L.punch_title)
 		self:DrawLines(x, y, width, height, self.basecolor.a)
 
-		draw.SimpleText(L.punch_help, "TabLarge", x + width * 0.5, y, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		self:AdvancedText(L.punch_help, "TabLarge", x + width * 0.5, y, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, true, self.scale)
 
 		local bonus = client:GetNWInt("bonuspunches", 0)
 		if bonus ~= 0 then
@@ -57,8 +57,16 @@ if CLIENT then
 				text = interp(L.punch_malus, {num = bonus})
 			end
 
-			draw.SimpleText(text, "TabLarge", x, y + margin * 2 + 20, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			self:AdvancedText(text, "TabLarge", x, y + margin * 2 + 20, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, true, self.scale)
 		end
+	end
+
+	function HUDELEMENT:PerformLayout()
+		local size = self:GetSize()
+
+		width, height = size.w, size.h
+
+		BaseClass.PerformLayout(self)
 	end
 
 	local key_params = {usekey = Key("+use", "USE")}
@@ -76,11 +84,13 @@ if CLIENT then
 		local pos = self:GetPos()
 		local size = self:GetSize()
 		local x, y = pos.x, pos.y
+		pad = 7 * self.scale
+		margin = 14 * self.scale
 
 		if IsValid(tgt) and not tgt:IsPlayer() and tgt:GetNWEntity("spec_owner", nil) == client then
 			self:PunchPaint() -- punch bar if you are spectator and inside of an entity
 		else
-			self:ShadowedText(interp(L.spec_help, key_params), "TabLarge", x + size.w  * 0.5, y, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			self:AdvancedText(interp(L.spec_help, key_params), "TabLarge", x + size.w  * 0.5, y, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, true, self.scale)
 		end
 	end
 end
