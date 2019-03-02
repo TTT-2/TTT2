@@ -170,7 +170,9 @@ function OnLoaded()
 
 	-- Call PreInitialize on all roles
 	for _, v in pairs(RoleList) do
-		v:PreInitialize()
+		if v.name ~= BASE_ROLE_CLASS then
+			v:PreInitialize()
+		end
 	end
 end
 
@@ -244,7 +246,7 @@ end
 
 function GetByIndex(index)
 	for _, v in pairs(RoleList) do
-		if v.index == index then
+		if v.name ~= BASE_ROLE_CLASS and v.index == index then
 			return v
 		end
 	end
@@ -258,7 +260,7 @@ end
 
 function GetByAbbr(abbr)
 	for _, v in pairs(RoleList) do
-		if v.abbr == abbr then
+		if v.name ~= BASE_ROLE_CLASS and v.abbr == abbr then
 			return v
 		end
 	end
@@ -288,7 +290,7 @@ function GetShopRoles()
 	local i = 0
 
 	for _, v in pairs(RoleList) do
-		if v ~= INNOCENT then
+		if v.name ~= BASE_ROLE_CLASS and v ~= INNOCENT then
 			local shopFallback = GetGlobalString("ttt_" .. v.abbr .. "_shop_fallback")
 			if shopFallback ~= SHOP_DISABLED then
 				i = i + 1
@@ -306,7 +308,7 @@ function GetDefaultTeamRole(team)
 	if team == TEAM_NONE then return end
 
 	for _, v in pairs(RoleList) do
-		if not v.baserole and v.defaultTeam ~= TEAM_NONE and v.defaultTeam == team then
+		if v.name ~= BASE_ROLE_CLASS and not v.baserole and v.defaultTeam ~= TEAM_NONE and v.defaultTeam == team then
 			return v
 		end
 	end
@@ -338,7 +340,7 @@ function GetWinTeams()
 	local winTeams = {}
 
 	for _, v in pairs(RoleList) do
-		if v.defaultTeam ~= TEAM_NONE and not table.HasValue(winTeams, v.defaultTeam) and not v.preventWin then
+		if v.name ~= BASE_ROLE_CLASS and v.defaultTeam ~= TEAM_NONE and not table.HasValue(winTeams, v.defaultTeam) and not v.preventWin then
 			table.insert(winTeams, v.defaultTeam)
 		end
 	end
@@ -350,7 +352,7 @@ function GetAvailableTeams()
 	local availableTeams = {}
 
 	for _, v in pairs(RoleList) do
-		if v.defaultTeam ~= TEAM_NONE and not table.HasValue(availableTeams, v.defaultTeam) then
+		if v.name ~= BASE_ROLE_CLASS and v.defaultTeam ~= TEAM_NONE and not table.HasValue(availableTeams, v.defaultTeam) then
 			availableTeams[#availableTeams + 1] = v.defaultTeam
 		end
 	end
@@ -364,8 +366,10 @@ function GetSortedRoles()
 	local i = 0
 
 	for _, v in pairs(RoleList) do
-		i = i + 1
-		rls[i] = v
+		if v.name ~= BASE_ROLE_CLASS then
+			i = i + 1
+			rls[i] = v
+		end
 	end
 
 	SortTable(rls)
