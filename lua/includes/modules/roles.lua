@@ -52,6 +52,8 @@ function IsBasedOn(name, base)
 end
 
 local function SetupData(roleData)
+	print("[TTT2][ROLE] Adding '" .. roleData.name .. "' role...")
+
 	local conVarData = roleData.conVarData or {}
 
 	-- shared

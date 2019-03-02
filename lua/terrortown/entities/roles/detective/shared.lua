@@ -4,7 +4,6 @@ ROLE.index = ROLE_DETECTIVE
 ROLE.color = Color(31, 77, 191, 255)
 ROLE.dkcolor = Color(10, 42, 123, 255)
 ROLE.bgcolor = Color(255, 177, 16, 255)
-ROLE.name = "detective"
 ROLE.abbr = "det"
 ROLE.defaultTeam = TEAM_INNOCENT
 ROLE.defaultEquipment = SPECIAL_EQUIPMENT

@@ -4,7 +4,6 @@ ROLE.index = ROLE_TRAITOR
 ROLE.color = Color(209, 43, 39, 255)
 ROLE.dkcolor = Color(127, 3, 0, 255)
 ROLE.bgcolor = Color(31, 164, 40, 255)
-ROLE.name = "traitor"
 ROLE.abbr = "traitor"
 ROLE.defaultTeam = TEAM_TRAITOR
 ROLE.defaultEquipment = TRAITOR_EQUIPMENT
