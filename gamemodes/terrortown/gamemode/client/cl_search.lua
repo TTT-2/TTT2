@@ -619,3 +619,28 @@ local function TTT_RagdollSearch()
 	search = nil
 end
 net.Receive("TTT_RagdollSearch", TTT_RagdollSearch)
+
+local function TTT2_ConfirmMsg()
+	local msgName = net.ReadString()
+	local sid64 = net.ReadString()
+	local clr = Color(net.ReadUInt(8), net.ReadUInt(8), net.ReadUInt(8), net.ReadUInt(8))
+	local bool = net.ReadBool()
+
+	local tbl = {}
+	tbl.finder = net.ReadString()
+	tbl.victim = net.ReadString()
+	tbl.role = LANG.GetTranslation(net.ReadString())
+
+	if bool then
+		tbl.team = LANG.GetTranslation(net.ReadString())
+	end
+
+	local img = Material("vgui/ttt/icon_corpse")
+
+	if sid64 ~= "" then
+		img = draw.GetAvatarMaterial(sid64, "medium", img)
+	end
+
+	MSTACK:AddColoredImagedMessage(LANG.GetParamTranslation(msgName, tbl), clr, img)
+end
+net.Receive("TTT2SendConfirmMsg", TTT2_ConfirmMsg)

@@ -4,7 +4,7 @@ GM.Name = "TTT2 (Advanced Update)"
 GM.Author = "Bad King Urgrain && Alf21"
 GM.Email = "4lf-mueller@gmx.de"
 GM.Website = "ttt.badking.net, ttt2.informaskill.de"
-GM.Version = "0.4.1b"
+GM.Version = "0.5.0b"
 GM.Customized = true
 
 TTT2 = true -- identifier for TTT2. Just use "if TTT2 then ... end"
@@ -103,7 +103,7 @@ TEAMS = TEAMS or {
 -- just the following roles should be 'buildin' = true
 ROLES = ROLES or {}
 
-ROLES.INNOCENT = {
+ROLES.INNOCENT = ROLES.INNOCENT or {
 	index = ROLE_INNOCENT,
 	color = Color(80, 173, 59, 255),
 	dkcolor = Color(28, 116, 10, 255),
@@ -123,7 +123,7 @@ ROLES.INNOCENT = {
 }
 INNOCENT = ROLES.INNOCENT
 
-ROLES.TRAITOR = {
+ROLES.TRAITOR = ROLES.TRAITOR or {
 	index = ROLE_TRAITOR,
 	color = Color(209, 43, 39, 255),
 	dkcolor = Color(127, 3, 0, 255),
@@ -141,7 +141,7 @@ ROLES.TRAITOR = {
 }
 TRAITOR = ROLES.TRAITOR
 
-ROLES.DETECTIVE = {
+ROLES.DETECTIVE = ROLES.DETECTIVE or {
 	index = ROLE_DETECTIVE,
 	color = Color(31, 77, 191, 255),
 	dkcolor = Color(10, 42, 123, 255),
@@ -172,7 +172,6 @@ SHOP_UNSET = "UNSET"
 SetGlobalString("ttt_" .. INNOCENT.abbr .. "_shop_fallback", CreateConVar("ttt_" .. INNOCENT.abbr .. "_shop_fallback", SHOP_DISABLED, {FCVAR_NOTIFY, FCVAR_ARCHIVE}):GetString())
 SetGlobalString("ttt_" .. TRAITOR.abbr .. "_shop_fallback", CreateConVar("ttt_" .. TRAITOR.abbr .. "_shop_fallback", SHOP_UNSET, {FCVAR_NOTIFY, FCVAR_ARCHIVE}):GetString())
 SetGlobalString("ttt_" .. DETECTIVE.abbr .. "_shop_fallback", CreateConVar("ttt_" .. DETECTIVE.abbr .. "_shop_fallback", SHOP_UNSET, {FCVAR_NOTIFY, FCVAR_ARCHIVE}):GetString())
-
 
 function InitCustomTeam(name, data) -- creates global var "TEAM_[name]" and other required things
 	local teamname = string.Trim(string.lower(name)) .. "s"
@@ -622,6 +621,8 @@ COLOR_OLIVE = Color(100, 100, 0, 255)
 
 ttt_include("sh_util")
 ttt_include("sh_lang")
+ttt_include("sh_sql")
+ttt_include("sh_hud_manager")
 ttt_include("sh_equip_items")
 
 function GetEquipmentFileName(name)

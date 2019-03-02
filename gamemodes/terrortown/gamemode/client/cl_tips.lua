@@ -220,8 +220,19 @@ function PANEL:ApplySchemeSettings()
 	self.tiptext:SetWrap(true)
 end
 
-function PANEL:Paint()
-	draw.RoundedBox(8, 0, 0, self:GetWide(), self:GetTall(), self.BgColor)
+function PANEL:Paint(w, h)
+	self.paintColor = self.BgColor
+
+	if huds and HUDManager then
+		local hud = huds.GetStored(HUDManager.GetHUD())
+		if hud and isfunction(hud.popupPaint) then
+			hud.popupPaint(self, w, h)
+
+			return
+		end
+	end
+
+	draw.RoundedBox(8, 0, 0, w, h, self.BgColor)
 end
 
 function PANEL:Think()

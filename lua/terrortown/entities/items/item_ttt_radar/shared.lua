@@ -2,7 +2,7 @@ if SERVER then
 	AddCSLuaFile()
 end
 
-ITEM.hud = Material("vgui/ttt/icon_radar")
+ITEM.hud = Material("vgui/ttt/perks/hud_radar.png")
 ITEM.EquipMenuData = {
 	type = "item_active",
 	name = "item_radar",

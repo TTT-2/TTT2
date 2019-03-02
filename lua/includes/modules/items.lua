@@ -76,11 +76,6 @@ function Register(t, name)
 			ScriptedEntityType = t.ScriptedEntityType
 	})
 
-	-- Allow all ITEMS to be duplicated, unless specified
-	if not t.DisableDuplicator then
-		duplicator.Allow(name)
-	end
-
 	--
 	-- If we're reloading this entity class
 	-- then refresh all the existing entities.

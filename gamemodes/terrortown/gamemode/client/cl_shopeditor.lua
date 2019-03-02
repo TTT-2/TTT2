@@ -745,7 +745,8 @@ function ShopEditor.ShowOptions()
 
 	local tmp = {}
 	local tbl = {
-		ttt2_random_shops = {typ = "number"}
+		ttt2_random_shops = {typ = "number", bits = 8},
+		ttt2_random_team_shops = {typ = "bool"}
 	}
 
 	for key, data in pairs(tbl) do
@@ -795,7 +796,7 @@ function ShopEditor.ShowOptions()
 				if data.typ == "number" then
 					net.WriteString(tostring(math.Round(tmp[key]:GetValue())))
 				elseif data.typ == "bool" then
-					net.WriteString(tostring(tonumber(tmp[key]:GetChecked())))
+					net.WriteString(tmp[key]:GetChecked() and "1" or "0")
 				else
 					net.WriteString(tmp[key]:GetValue())
 				end

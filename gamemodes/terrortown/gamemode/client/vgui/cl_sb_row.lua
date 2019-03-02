@@ -10,7 +10,62 @@ local IsValid = IsValid
 local surface = surface
 local vgui = vgui
 
+local ttt2_indicator_dev = "vgui/ttt/ttt2_indicator_dev"
+local ttt2_indicator_vip = "vgui/ttt/ttt2_indicator_vip"
+local ttt2_indicator_addondev = "vgui/ttt/ttt2_indicator_addondev"
+local ttt2_indicator_admin = "vgui/ttt/ttt2_indicator_admin"
+local ttt2_indicator_streamer = "vgui/ttt/ttt2_indicator_streamer"
+
+local dev_tbl = {
+	["76561197964193008"] = true,
+	["76561198049831089"] = true,
+	["76561198058039701"] = true,
+	["76561198047819379"] = true,
+	["76561198052323988"] = true
+}
+
+local vip_tbl = {
+	["76561198378608300"] = true, -- SirKadeeka / L$...
+	["76561198102780049"] = true, -- Nick
+	["76561198020955880"] = true, -- V3kta
+	["76561198033468770"] = true, -- Dok441
+	["76561198208729341"] = true, -- eBBIS
+	["76561198152558244"] = true, -- Lost TheSuspect
+	["76561198162764168"] = true, -- DerJohn
+	["76561198132229662"] = true, -- Satton RU
+	["76561198007725535"] = true, -- Skatcat
+	["76561197989909602"] = true -- Tobiti
+}
+
+local addondev_tbl = {
+	["76561198052323988"] = true -- LeBroomer
+}
+
+local streamer_tbl = {
+	["76561198049831089"] = true,
+	["76561198058039701"] = true,
+	["76561198047819379"] = true,
+	["76561198052323988"] = true
+}
+
+function AddTTT2AddonDev(steamid64)
+	if not steamid64 then return end
+
+	addondev_tbl[tostring(steamid64)] = true
+end
+
+local namecolor = {
+	default = COLOR_WHITE,
+	dev = Color(100, 240, 105, 255),
+	vip = Color(220, 55, 55, 255),
+	addondev = Color(30, 105, 300, 255),
+	admin = Color(255, 210, 35, 255),
+	streamer = Color(74, 54, 126, 255)
+}
+
 SB_ROW_HEIGHT = 24 --16
+
+local iconSizes = 16
 
 local PANEL = {}
 
@@ -56,18 +111,54 @@ function PANEL:Init()
 	self.tag:SetMouseInputEnabled(false)
 
 	self.sresult = vgui.Create("DImage", self)
-	self.sresult:SetSize(16, 16)
+	self.sresult:SetSize(iconSizes, iconSizes)
 	self.sresult:SetMouseInputEnabled(false)
+
+	self.dev = vgui.Create("DImage", self)
+	self.dev:SetSize(iconSizes, iconSizes)
+	self.dev:SetMouseInputEnabled(true)
+	self.dev:SetKeepAspect(true)
+	self.dev:SetTooltip("TTT2 Creator")
+
+	self.vip = vgui.Create("DImage", self)
+	self.vip:SetSize(iconSizes, iconSizes)
+	self.vip:SetMouseInputEnabled(true)
+	self.vip:SetKeepAspect(true)
+	self.vip:SetTooltip("TTT2 VIP")
+
+	self.addondev = vgui.Create("DImage", self)
+	self.addondev:SetSize(iconSizes, iconSizes)
+	self.addondev:SetMouseInputEnabled(true)
+	self.addondev:SetKeepAspect(true)
+	self.addondev:SetTooltip("TTT2 Addon Developer")
+
+	self.admin = vgui.Create("DImage", self)
+	self.admin:SetSize(iconSizes, iconSizes)
+	self.admin:SetMouseInputEnabled(true)
+	self.admin:SetKeepAspect(true)
+	self.admin:SetTooltip("Server Admin")
+
+	self.streamer = vgui.Create("DImage", self)
+	self.streamer:SetSize(iconSizes, iconSizes)
+	self.streamer:SetMouseInputEnabled(true)
+	self.streamer:SetKeepAspect(true)
+	self.streamer:SetTooltip("Streamer")
 
 	self.avatar = vgui.Create("AvatarImage", self)
 	self.avatar:SetSize(SB_ROW_HEIGHT, SB_ROW_HEIGHT)
 	self.avatar:SetMouseInputEnabled(false)
 
+	self.nick2 = vgui.Create("DLabel", self)
+	self.nick2:SetMouseInputEnabled(false)
+
+	self.nick3 = vgui.Create("DLabel", self)
+	self.nick3:SetMouseInputEnabled(false)
+
 	self.nick = vgui.Create("DLabel", self)
 	self.nick:SetMouseInputEnabled(false)
 
 	self.voice = vgui.Create("DImageButton", self)
-	self.voice:SetSize(16, 16)
+	self.voice:SetSize(iconSizes, iconSizes)
 
 	self:SetCursor("hand")
 end
@@ -92,17 +183,24 @@ function PANEL:AddFakeColumn()
 
 end
 
-local namecolor = {
-	default = COLOR_WHITE,
-	admin = Color(220, 180, 0, 255),
-	dev = Color(100, 240, 105, 255)
-}
-
 function GM:TTTScoreboardColorForPlayer(ply)
 	if IsValid(ply) then
-		if ply:SteamID64() == "STEAM_0:0:1963640" or ply:SteamID64() == "STEAM_1:1:44782680" then
-			return namecolor.dev
-		elseif ply:IsAdmin() and GetGlobalBool("ttt_highlight_admins", true) then
+		local steamid64 = ply:SteamID64()
+		if steamid64 then
+			steamid64 = tostring(steamid64)
+		end
+
+		if steamid64 then
+			if dev_tbl[steamid64] then
+				return namecolor.dev
+			elseif vip_tbl[steamid64] then
+				return namecolor.vip
+			elseif addondev_tbl[steamid64] then
+				return namecolor.addondev
+			end
+		end
+
+		if ply:IsAdmin() and GetGlobalBool("ttt_highlight_admins", true) then
 			return namecolor.admin
 		end
 	end
@@ -206,9 +304,37 @@ function PANEL:UpdatePlayerData()
 		self.cols[i]:SetText(self.cols[i].GetPlayerText(ply, self.cols[i]))
 	end
 
+	self.nick2:SetText(ply:Nick())
+	self.nick2:SizeToContents()
+	self.nick2:SetTextColor(COLOR_BLACK)
+
+	self.nick3:SetText(ply:Nick())
+	self.nick3:SizeToContents()
+	self.nick3:SetTextColor(COLOR_BLACK)
+
 	self.nick:SetText(ply:Nick())
 	self.nick:SizeToContents()
 	self.nick:SetTextColor(ColorForPlayer(ply))
+
+	local steamid64 = ply:SteamID64()
+	if steamid64 then
+		steamid64 = tostring(steamid64)
+	end
+
+	local isdev = steamid64 and dev_tbl[steamid64] == true
+
+	self.dev:SetVisible(isdev)
+
+	if not isdev then
+		self.vip:SetVisible(steamid64 and vip_tbl[steamid64] == true or false)
+		self.addondev:SetVisible(steamid64 and addondev_tbl[steamid64] == true or false)
+	else
+		self.vip:SetVisible(false)
+		self.addondev:SetVisible(false)
+	end
+
+	self.admin:SetVisible(ply:IsAdmin())
+	self.streamer:SetVisible(steamid64 and streamer_tbl[steamid64] == true or false)
 
 	local ptag = ply.sb_tag
 
@@ -248,6 +374,12 @@ function PANEL:ApplySchemeSettings()
 		v:SetTextColor(COLOR_WHITE)
 	end
 
+	self.nick2:SetFont("treb_small")
+	self.nick2:SetTextColor(COLOR_BLACK)
+
+	self.nick3:SetFont("treb_small")
+	self.nick3:SetTextColor(COLOR_BLACK)
+
 	self.nick:SetFont("treb_small")
 	self.nick:SetTextColor(ColorForPlayer(self.Player))
 
@@ -257,6 +389,21 @@ function PANEL:ApplySchemeSettings()
 
 	self.sresult:SetImage("icon16/magnifier.png")
 	self.sresult:SetImageColor(Color(170, 170, 170, 150))
+
+	self.dev:SetImage(ttt2_indicator_dev)
+	self.dev:SetImageColor(namecolor.dev)
+
+	self.vip:SetImage(ttt2_indicator_vip)
+	self.vip:SetImageColor(namecolor.vip)
+
+	self.addondev:SetImage(ttt2_indicator_addondev)
+	self.addondev:SetImageColor(namecolor.addondev)
+
+	self.admin:SetImage(ttt2_indicator_admin)
+	self.admin:SetImageColor(namecolor.admin)
+
+	self.streamer:SetImage(ttt2_indicator_streamer)
+	self.streamer:SetImageColor(namecolor.streamer)
 end
 
 function PANEL:LayoutColumns()
@@ -275,7 +422,47 @@ function PANEL:LayoutColumns()
 	cx = cx - 90
 
 	self.tag:SetPos(cx - self.tag:GetWide() * 0.5, (SB_ROW_HEIGHT - self.tag:GetTall()) * 0.5)
-	self.sresult:SetPos(cx - 8, (SB_ROW_HEIGHT - 16) * 0.5)
+
+	self.sresult:SetPos(cx - 8, (SB_ROW_HEIGHT - iconSizes) * 0.5)
+
+	local x = self.nick:GetPos()
+	local w = self.nick:GetSize()
+
+	local i = 0
+	local mgn = 10
+
+	local tx = x + w + mgn
+	local ty = (SB_ROW_HEIGHT - iconSizes) * 0.5
+
+	if self.dev:IsVisible() then
+		self.dev:SetPos(tx + (iconSizes + mgn) * i, ty)
+
+		i = i + 1
+	end
+
+	if self.vip:IsVisible() then
+		self.vip:SetPos(tx + (iconSizes + mgn) * i, ty)
+
+		i = i + 1
+	end
+
+	if self.addondev:IsVisible() then
+		self.addondev:SetPos(tx + (iconSizes + mgn) * i, ty)
+
+		i = i + 1
+	end
+
+	if self.admin:IsVisible() then
+		self.admin:SetPos(tx + (iconSizes + mgn) * i, ty)
+
+		i = i + 1
+	end
+
+	if self.streamer:IsVisible() then
+		self.streamer:SetPos(tx + (iconSizes + mgn) * i, ty)
+
+		i = i + 1
+	end
 end
 
 function PANEL:PerformLayout()
@@ -284,7 +471,7 @@ function PANEL:PerformLayout()
 
 	local fw = sboard_panel.ply_frame:GetWide()
 
-	self:SetWide(sboard_panel.ply_frame.scroll.Enabled and (fw - 16) or fw)
+	self:SetWide(sboard_panel.ply_frame.scroll.Enabled and (fw - iconSizes) or fw)
 
 	if not self.open then
 		self:SetSize(self:GetWide(), SB_ROW_HEIGHT)
@@ -303,13 +490,21 @@ function PANEL:PerformLayout()
 		self:SetSize(self:GetWide(), SB_ROW_HEIGHT + self.info:GetTall())
 	end
 
+	local ty = (SB_ROW_HEIGHT - self.nick:GetTall()) * 0.5
+
+	self.nick2:SizeToContents()
+	self.nick2:SetPos(SB_ROW_HEIGHT + 11, ty + 1)
+
+	self.nick3:SizeToContents()
+	self.nick3:SetPos(SB_ROW_HEIGHT + 10, ty)
+
 	self.nick:SizeToContents()
-	self.nick:SetPos(SB_ROW_HEIGHT + 10, (SB_ROW_HEIGHT - self.nick:GetTall()) * 0.5)
+	self.nick:SetPos(SB_ROW_HEIGHT + 10, ty)
 
 	self:LayoutColumns()
 
 	self.voice:SetVisible(not self.open)
-	self.voice:SetSize(16, 16)
+	self.voice:SetSize(iconSizes, iconSizes)
 	self.voice:DockMargin(4, 4, 4, 4)
 	self.voice:Dock(RIGHT)
 end

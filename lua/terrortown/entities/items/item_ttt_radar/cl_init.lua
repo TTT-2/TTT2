@@ -78,6 +78,10 @@ function ITEM:Equip(ply)
 	RunConsoleCommand("ttt_radar_scan")
 end
 
+function ITEM:DrawInfo()
+	return tostring(math.Round(math.max(0, RADAR.endtime - CurTime())))
+end
+
 local function DrawTarget(tgt, size, offset, no_shrink)
 	local scrpos = tgt.pos:ToScreen() -- sweet
 	local sz = (IsOffScreen(scrpos) and not no_shrink) and (size * 0.5) or size
@@ -117,7 +121,7 @@ local function DrawTarget(tgt, size, offset, no_shrink)
 end
 
 function RADAR:Draw(client)
-	if not client or not client:HasEquipmentItem("item_ttt_radar") then return end
+	if not IsValid(client) then return end
 
 	GetPTranslation = GetPTranslation or LANG.GetParamTranslation
 
@@ -135,11 +139,7 @@ function RADAR:Draw(client)
 	end
 
 	-- Corpse calls
-	local size = 0
-
-	for k in pairs(self.called_corpses) do
-		size = size + 1
-	end
+	local size = table.Count(self.called_corpses)
 
 	if client:IsActiveRole(ROLE_DETECTIVE) and size > 0 then
 		surface.SetTexture(det_beacon)
@@ -210,16 +210,6 @@ function RADAR:Draw(client)
 			DrawTarget(tgt, 24, 0)
 		end
 	end
-
-	-- Time until next scan
-	surface.SetFont("TabLarge")
-	surface.SetTextColor(255, 0, 0, 230)
-
-	local text = GetPTranslation("radar_hud", {time = FormatTime(remaining, "%02i:%02i")})
-	local _, h = surface.GetTextSize(text)
-
-	surface.SetTextPos(36, ScrH() - 140 - h)
-	surface.DrawText(text)
 end
 
 local function ReceiveC4Warn()

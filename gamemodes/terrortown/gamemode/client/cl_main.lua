@@ -43,7 +43,6 @@ ttt_include("cl_tbuttons")
 ttt_include("cl_scoreboard")
 ttt_include("cl_tips")
 ttt_include("cl_help")
-ttt_include("cl_hud")
 ttt_include("cl_msgstack")
 ttt_include("cl_hudpickup")
 ttt_include("cl_keys")
@@ -56,8 +55,9 @@ ttt_include("cl_shopeditor")
 ttt_include("cl_chat")
 ttt_include("cl_voice")
 ttt_include("cl_changes")
-ttt_include("cl_credits")
 ttt_include("cl_inventory")
+
+ttt_include("sh_sprint")
 
 function GM:Initialize()
 	MsgN("TTT2 Client initializing...")
@@ -79,6 +79,8 @@ function GM:InitPostEntity()
 	MsgN("TTT Client post-init...")
 
 	hook.Run("TTTInitPostEntity")
+
+	HUDManager.SetHUD()
 
 	InitDefaultEquipment()
 
@@ -149,6 +151,11 @@ function GM:InitPostEntity()
 	-- initialization on them
 	if IsValid(client) and client.GetTraitor then
 		GAMEMODE:ClearClientState()
+	end
+
+	-- cache players avatar
+	for _, v in ipairs(player.GetAll()) do
+		draw.CacheAvatar(v:SteamID64(), "medium") -- caching
 	end
 
 	timer.Create("cache_ents", 1, 0, GAMEMODE.DoCacheEnts)
@@ -335,6 +342,7 @@ function GM:ClearClientState()
 	client.last_id = nil
 	client.radio = nil
 	client.called_corpses = {}
+	client.sprintProgress = 1
 
 	VOICE.InitBattery()
 
@@ -450,23 +458,12 @@ function GM:DrawDeathNotice()
 
 end
 
-function GM:Tick()
-	local client = LocalPlayer()
-
-	if IsValid(client) then
-		if client:Alive() and client:Team() ~= TEAM_SPEC then
-			WSWITCH:Think()
-			RADIO:StoreTarget()
-		end
-
-		VOICE.Tick()
-	end
-end
-
 -- Simple client-based idle checking
 local idle = {ang = nil, pos = nil, mx = 0, my = 0, t = 0}
 
 function CheckIdle()
+	if not GetGlobalBool("ttt_idle", false) then return end
+
 	local client = LocalPlayer()
 
 	if not IsValid(client) then return end
@@ -543,3 +540,22 @@ function GM:OnEntityCreated(ent)
 
 	return self.BaseClass.OnEntityCreated(self, ent)
 end
+
+net.Receive("TTT2PlayerAuthedShared", function(len)
+	local steamid64 = net.ReadString()
+	local name = net.ReadString()
+
+	hook.Run("TTT2PlayerAuthed", steamid64, name)
+end)
+
+hook.Add("TTT2PlayerAuthed", "TTT2CacheAvatar", function(steamid64, name)
+	local ply = player.GetBySteamID64(steamid64)
+
+	if not IsValid(ply) or ply:IsBot() then
+		steamid64 = nil
+	end
+
+	draw.CacheAvatar(steamid64, "medium") -- caching
+
+	hook.Run("TTT2PlayerAuthedCacheReady", steamid64, name)
+end)

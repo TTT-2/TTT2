@@ -7,7 +7,6 @@ include("terrortown/gamemode/shared/sh_item_module.lua")
 ttt_include("sh_main")
 ttt_include("sh_shopeditor")
 
-ttt_include("sv_shopeditor_sql")
 ttt_include("sv_shopeditor")
 ttt_include("sv_karma")
 ttt_include("sv_entity")
@@ -29,6 +28,8 @@ ttt_include("sh_player_ext")
 
 ttt_include("sv_player_ext")
 ttt_include("sv_player")
+
+ttt_include("sh_sprint")
 
 -- Localize stuff we use often. It's like Lua go-faster stripes.
 local math = math
@@ -86,6 +87,7 @@ CreateConVar("ttt_weapon_spawn_count", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 local round_limit = CreateConVar("ttt_round_limit", "6", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
 local time_limit = CreateConVar("ttt_time_limit_minutes", "75", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
 
+local idle_enabled = CreateConVar("ttt_idle", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 local idle_time = CreateConVar("ttt_idle_limit", "180", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 local voice_drain = CreateConVar("ttt_voice_drain", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
@@ -109,7 +111,7 @@ CreateConVar("ttt_identify_body_woconfirm", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, 
 local confirm_team = CreateConVar("ttt2_confirm_team", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 -- confirm players in kill list
-CreateConVar("ttt2_confirm_killlist", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+CreateConVar("ttt2_confirm_killlist", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 -- innos min pct
 CreateConVar("ttt_min_inno_pct", "0.47", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Minimum multiplicator for each player to calculate the minimum amount of innocents")
@@ -169,6 +171,7 @@ util.AddNetworkString("TTT2SyncDBItems")
 util.AddNetworkString("TTT2ReceiveTBEq")
 util.AddNetworkString("TTT2ReceiveGBEq")
 util.AddNetworkString("TTT2ResetTBEq")
+util.AddNetworkString("TTT2PlayerAuthedShared")
 
 local buggyAddons = {
 	["656662924"] = "1367128301", -- Killer Notifier by nerzlakai96
@@ -298,16 +301,16 @@ function GM:InitPostEntity()
 	local itms = items.GetList()
 	local sweps = weapons.GetList()
 
-	-- load and initialize all SWEPS and all items from database
-	if ShopEditor.CreateSqlTable() then
+	-- load and initialize all SWEPs and all ITEMs from database
+	if SQL.CreateSqlTable("ttt2_items", ShopEditor.savingKeys) then
 		for _, eq in ipairs(itms) do
 			ShopEditor.InitDefaultData(eq)
 
 			local name = GetEquipmentFileName(WEPS.GetClass(eq))
-			local loaded, changed = ShopEditor.LoadItem(name, eq)
+			local loaded, changed = SQL.Load("ttt2_items", name, eq, ShopEditor.savingKeys)
 
 			if not loaded then
-				ShopEditor.InitItem(name, eq)
+				SQL.Init("ttt2_items", name, eq, ShopEditor.savingKeys)
 			elseif changed then
 				CHANGED_EQUIPMENT[#CHANGED_EQUIPMENT + 1] = {name, eq}
 			end
@@ -317,10 +320,10 @@ function GM:InitPostEntity()
 			ShopEditor.InitDefaultData(wep)
 
 			local name = GetEquipmentFileName(WEPS.GetClass(wep))
-			local loaded, changed = ShopEditor.LoadItem(name, wep)
+			local loaded, changed = SQL.Load("ttt2_items", name, wep, ShopEditor.savingKeys)
 
 			if not loaded then
-				ShopEditor.InitItem(name, wep)
+				SQL.Init("ttt2_items", name, wep, ShopEditor.savingKeys)
 			elseif changed then
 				CHANGED_EQUIPMENT[#CHANGED_EQUIPMENT + 1] = {name, wep}
 			end
@@ -345,6 +348,21 @@ function GM:InitPostEntity()
 	-- reset normal weapons equipment
 	for _, wep in ipairs(sweps) do
 		wep.CanBuy = {}
+	end
+
+	-- init hudelements fns
+	for _, hudelem in ipairs(hudelements.GetList()) do
+		if hudelem.togglable then
+			local nm = "ttt2_elem_toggled_" .. hudelem.id
+			local ret = CreateConVar(nm, "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+			SetGlobalBool(nm, ret:GetBool())
+
+			cvars.AddChangeCallback(nm, function(cvarName, old, new)
+				SetGlobalBool(cvarName, tobool(new))
+			end,
+			"CVAR_" .. nm)
+		end
 	end
 
 	-- initialize fallback shops
@@ -401,6 +419,7 @@ function GM:SyncGlobals()
 	SetGlobalBool("ttt_highlight_admins", GetConVar("ttt_highlight_admins"):GetBool())
 	SetGlobalBool("ttt_locational_voice", GetConVar("ttt_locational_voice"):GetBool())
 	SetGlobalInt("ttt_idle_limit", idle_time:GetInt())
+	SetGlobalBool("ttt_idle", idle_enabled:GetBool())
 
 	SetGlobalBool("ttt_voice_drain", voice_drain:GetBool())
 	SetGlobalFloat("ttt_voice_drain_normal", voice_drain_normal:GetFloat())
@@ -412,6 +431,8 @@ function GM:SyncGlobals()
 	end
 
 	SetGlobalBool("ttt2_confirm_team", confirm_team:GetBool())
+
+	hook.Run("TTT2SyncGlobals")
 end
 
 function LoadShopsEquipment()
@@ -1595,6 +1616,13 @@ function SelectRoles(plys, max_plys)
 
 	SendFullStateUpdate()
 end
+
+hook.Add("PlayerAuthed", "TTT2PlayerAuthedSharedHook", function(ply, steamid, uniqueid)
+	net.Start("TTT2PlayerAuthedShared")
+	net.WriteString(util.SteamIDTo64(steamid))
+	net.WriteString((ply and ply:Nick()) or "UNKNOWN")
+	net.Broadcast()
+end)
 
 local function ttt_roundrestart(ply, command, args)
 	-- ply is nil on dedicated server console

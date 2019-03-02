@@ -56,16 +56,28 @@ function util.WeaponForClass(cls)
 	return wep
 end
 
-function util.GetAlivePlayers()
-	local alive = {}
+function util.GetFilteredPlayers(filterFn)
+	local plys = player.GetAll()
 
-	for _, p in ipairs(player.GetAll()) do
-		if p:Alive() and p:IsTerror() then
-			table.insert(alive, p)
+	if not isfunction(filterFn) then
+		return plys
+	end
+
+	local tmp = {}
+
+	for _, ply in ipairs(plys) do
+		if filterFn(ply) then
+			table.insert(tmp, ply)
 		end
 	end
 
-	return alive
+	return tmp
+end
+
+function util.GetAlivePlayers()
+	return util.GetFilteredPlayers(function(ply)
+		return ply:Alive() and ply:IsTerror()
+	end)
 end
 
 function util.GetNextAlivePlayer(ply)

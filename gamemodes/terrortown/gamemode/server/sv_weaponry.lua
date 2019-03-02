@@ -227,9 +227,7 @@ local function GiveLoadoutItems(ply)
 end
 
 local function ResetLoadoutItems(ply)
-	local sr = ply:GetSubRole()
-	local itms = GetModifiedEquipment(sr, items.GetRoleItems(sr))
-
+	local itms = GetModifiedEquipment(ply, items.GetRoleItems(ply:GetSubRole()))
 	if itms then
 		for _, item in ipairs(itms) do
 			if item.loadout then
@@ -499,46 +497,6 @@ local function DropActiveAmmo(ply)
 end
 concommand.Add("ttt_dropammo", DropActiveAmmo)
 
--- Give a weapon to a player. If the initial attempt fails due to heisenbugs in
--- the map, keep trying until the player has moved to a better spot where it
--- does work.
-local function GiveEquipmentWeapon(ply, cls)
-	-- Referring to players by SteamID64 because a player may disconnect while his
-	-- unique timer still runs, in which case we want to be able to stop it. For
-	-- that we need its name, and hence his SteamID64.
-	local tmr = "give_equipment" .. ply:UniqueID()
-
-	if not IsValid(ply) or not ply:IsActive() then
-		timer.Remove(tmr)
-
-		return
-	end
-
-	-- giving attempt, will fail if we're in a crazy spot in the map or perhaps
-	-- other glitchy cases
-	local w = ply:Give(cls)
-
-	if not IsValid(w) or not ply:HasWeapon(cls) then
-		if not timer.Exists(tmr) then
-			timer.Create(tmr, 1, 0, function()
-				if IsValid(ply) then
-					GiveEquipmentWeapon(ply, cls)
-				end
-			end)
-		end
-
-		-- we will be retrying
-	else
-		-- can stop retrying, if we were
-		timer.Remove(tmr)
-
-		if w.WasBought then
-			-- some weapons give extra ammo after being bought, etc
-			w:WasBought(ply)
-		end
-	end
-end
-
 local function HasPendingOrder(ply)
 	return timer.Exists("give_equipment" .. ply:UniqueID())
 end
@@ -609,10 +567,10 @@ local function OrderEquipment(ply, cmd, args)
 			return
 		end
 
-		if GetGlobalInt("ttt2_random_shops") > 0 and RANDOMSHOP[subrole] and #RANDOMSHOP[subrole] > 0 then
+		if GetGlobalInt("ttt2_random_shops") > 0 and RANDOMSHOP[ply] and #RANDOMSHOP[ply] > 0 then
 			local key = false
 
-			for _, equip in ipairs(RANDOMSHOP[subrole]) do
+			for _, equip in ipairs(RANDOMSHOP[ply]) do
 				if equip.id == id then
 					key = true
 
@@ -631,7 +589,7 @@ local function OrderEquipment(ply, cmd, args)
 		-- is whitelisted and carryable
 		if not is_item then
 			if ply:CanCarryWeapon(equip_table) then
-				GiveEquipmentWeapon(ply, id)
+				ply:GiveEquipmentWeapon(id)
 			else
 				return
 			end
@@ -698,7 +656,7 @@ local function TransferCredits(ply, cmd, args)
 		if not IsValid(target)
 		or not target:IsActiveShopper()
 		or target == ply
-		or ply:GetSubRoleData().unknownTeam
+		or ply:GetSubRoleData().unknownTeam and not (ply:IsRole(ROLE_DETECTIVE) and target:IsRole(ROLE_DETECTIVE))
 		or not target:IsInTeam(ply)
 		then
 			LANG.Msg(ply, "xfer_no_recip")

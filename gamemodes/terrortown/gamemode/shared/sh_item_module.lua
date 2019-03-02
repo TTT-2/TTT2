@@ -1,18 +1,5 @@
-ITEM = {}
-
 -- include modules
 require("items")
-
--- include base item files
-if SERVER then
-	AddCSLuaFile("terrortown/entities/items/item_base/shared.lua")
-end
-
-include("terrortown/entities/items/item_base/shared.lua")
-
-items.Register(ITEM, "item_base")
-
-ITEM = nil
 
 -- load items
 local itemsPre = "terrortown/entities/items/"
@@ -32,33 +19,31 @@ for _, fl in ipairs(itemsFiles) do
 end
 
 for _, folder in ipairs(itemsFolders) do
-	if folder ~= "item_base" then
-		ITEM = {}
+	ITEM = {}
 
-		local subFiles = file.Find(itemsPre .. folder .. "/*.lua", "LUA")
+	local subFiles = file.Find(itemsPre .. folder .. "/*.lua", "LUA")
 
-		for _, fl in ipairs(subFiles) do
-			if fl == "init.lua" then
-				if SERVER then
-					include(itemsPre .. folder .. "/" .. fl)
-				end
-			elseif fl == "cl_init.lua" then
-				if SERVER then
-					AddCSLuaFile(itemsPre .. folder .. "/" .. fl)
-				else
-					include(itemsPre .. folder .. "/" .. fl)
-				end
-			else
-				if SERVER and fl == "shared.lua" then
-					AddCSLuaFile(itemsPre .. folder .. "/" .. fl)
-				end
-
+	for _, fl in ipairs(subFiles) do
+		if fl == "init.lua" then
+			if SERVER then
 				include(itemsPre .. folder .. "/" .. fl)
 			end
+		elseif fl == "cl_init.lua" then
+			if SERVER then
+				AddCSLuaFile(itemsPre .. folder .. "/" .. fl)
+			else
+				include(itemsPre .. folder .. "/" .. fl)
+			end
+		else
+			if SERVER and fl == "shared.lua" then
+				AddCSLuaFile(itemsPre .. folder .. "/" .. fl)
+			end
+
+			include(itemsPre .. folder .. "/" .. fl)
 		end
-
-		items.Register(ITEM, folder)
-
-		ITEM = nil
 	end
+
+	items.Register(ITEM, folder)
+
+	ITEM = nil
 end

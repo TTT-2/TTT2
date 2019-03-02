@@ -57,16 +57,25 @@ local function RoundStartPopup()
 
 	if not client then return end
 
-	local color = Color(0, 0, 0, 200)
-
 	local dframe = vgui.Create("Panel")
 	dframe:SetDrawOnTop(true)
 	dframe:SetMouseInputEnabled(false)
 	dframe:SetKeyboardInputEnabled(false)
 
-	dframe.Paint = function(s)
-		draw.RoundedBox(8, 0, 0, s:GetWide(), s:GetTall(), color)
+	dframe.paintColor = Color(0, 0, 0, 200)
+
+	local paintFn = function(s, w, h)
+		draw.RoundedBox(8, 0, 0, w, h, s.paintColor)
 	end
+
+	if huds and HUDManager then
+		local hud = huds.GetStored(HUDManager.GetHUD())
+		if hud then
+			paintFn = hud.popupPaint or paintFn
+		end
+	end
+
+	dframe.Paint = paintFn
 
 	local text = GetTextForPlayer(client)
 
