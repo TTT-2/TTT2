@@ -166,5 +166,16 @@ function HUD:Loaded()
 end
 
 function HUD:Reset()
+	for _, elemName in ipairs(self:GetElements()) do
+		local elem = hudelements.GetStored(elemName)
+		if elem then
+			if not elem:IsChild() then
+				elem:Reset()
+			end
+		else
+			Msg("Error: Hudelement not found during Reset: " .. elemName)
 
+			return
+		end
+	end
 end

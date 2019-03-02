@@ -19,13 +19,6 @@ local function CreateEditOptions(x, y)
 	editReset.OnMousePressed = function(slf, keyCode)
 		local hud = huds.GetStored(HUDManager.GetHUD())
 		if hud then
-			for _, elem in ipairs(hud:GetElements()) do
-				local el = hudelements.GetStored(elem)
-				if el then
-					el:Reset()
-				end
-			end
-
 			hud:Reset()
 		end
 
@@ -315,15 +308,14 @@ function HUDManager.AddHUDSettings(panel, hudEl)
 
 			el.DoClick = function(btn)
 				if hudEl then
+					hudEl:Reset()
+
 					for _, elem in ipairs(hudEl:GetElements()) do
 						local tel = hudelements.GetStored(elem)
 						if tel then
-							tel:Reset()
 							tel:SaveData()
 						end
 					end
-
-					hudEl:Reset()
 
 					SQL.Save("ttt2_huds", hudEl.id, hudEl, hudEl:GetSavingKeys())
 				end
@@ -333,7 +325,7 @@ function HUDManager.AddHUDSettings(panel, hudEl)
 		elseif data.typ == "color" then
 			el = vgui.Create("DColorMixer")
 			el:SetSize(267, 186)
-			
+
 			if hudEl[key] then
 				el:SetColor(hudEl[key])
 			end
@@ -357,7 +349,7 @@ function HUDManager.AddHUDSettings(panel, hudEl)
 			end
 			el:SetDecimals( 1 )
 			el:SetConVar( "ttt2_hud_scale" )
-			
+
 			function el:ValueChanged(val)
 				val = math.Round(val, 1)
 				if isfunction(data.OnChange) then

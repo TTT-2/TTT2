@@ -395,6 +395,15 @@ function HUDELEMENT:Reset()
 	end
 	self.scale = 1.0
 
+	for _, elem in ipairs(self.children) do
+		local elemtbl = hudelements.GetStored(elem)
+		if elemtbl then
+			elemtbl:Reset()
+		else
+			Msg("Error: HUDElement " .. (self.id or "?") .. " has unkown child element named " .. elem .. " when calling Reset \n")
+		end
+	end
+
 	self:PerformLayout()
 end
 
