@@ -101,23 +101,6 @@ local function SetupData(roleData)
 	-- fix defaultTeam
 	roleData.defaultTeam = roleData.defaultTeam or TEAM_NONE
 
-	local upStr = string.upper(roleData.name)
-
-	_G["ROLE_" .. upStr] = roleData.index
-	_G[upStr] = roleData
-	_G["SHOP_FALLBACK_" .. upStr] = roleData.name
-
-	local plymeta = FindMetaTable("Player")
-	if plymeta then
-		-- e.g. IsJackal() will match each subrole of the jackal as well as the jackal as the baserole
-		plymeta["Is" .. roleData.name:gsub("^%l", string.upper)] = function(self)
-			local br = self:GetBaseRole()
-			local sr = self:GetSubRole()
-
-			return roleData.baserole and sr == roleData.index or not roleData.baserole and br == roleData.index
-		end
-	end
-
 	print("[TTT2][ROLE] Added '" .. roleData.name .. "' role (index: " .. roleData.index .. ")")
 end
 
@@ -166,11 +149,9 @@ function OnLoaded()
 		baseclass.Set(k, newTable)
 	end
 
-	if CLIENT then
-		-- Call PreInitialize on all roles
-		for _, v in pairs(RoleList) do
-			v:PreInitialize()
-		end
+	-- Call PreInitialize on all roles
+	for _, v in pairs(RoleList) do
+		v:PreInitialize()
 	end
 end
 
