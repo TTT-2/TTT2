@@ -435,7 +435,6 @@ function GM:HUDPaint()
 		local hud = huds.GetStored(HUDManager.GetHUD())
 		if hud then
 			hud:ResolutionChanged()
-			hud:PerformLayout()
 		end
 
 		changed = true

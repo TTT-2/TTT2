@@ -77,6 +77,7 @@ function HUD:ResolutionChanged()
 			return
 		end
 	end
+	self:PerformLayout()
 end
 
 function HUD:Initialize()
