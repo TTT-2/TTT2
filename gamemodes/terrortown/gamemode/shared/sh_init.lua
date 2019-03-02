@@ -301,36 +301,6 @@ function SortRolesTable(tbl)
 	table.sort(tbl, _func)
 end
 
-function GetRoleByIndex(index)
-	for _, v in pairs(GetRoles()) do
-		if v.index == index then
-			return v
-		end
-	end
-
-	return INNOCENT
-end
-
-function GetRoleByName(name)
-	for _, v in pairs(GetRoles()) do
-		if v.name == name then
-			return v
-		end
-	end
-
-	return INNOCENT
-end
-
-function GetRoleByAbbr(abbr)
-	for _, v in pairs(GetRoles()) do
-		if v.abbr == abbr then
-			return v
-		end
-	end
-
-	return INNOCENT
-end
-
 function GetStartingCredits(abbr)
 	if abbr == TRAITOR.abbr then
 		return GetConVar("ttt_credits_starting"):GetInt()

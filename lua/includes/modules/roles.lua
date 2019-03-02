@@ -1,14 +1,17 @@
 local baseclass = baseclass
 local list = list
 local pairs = pairs
+local ipairs = ipairs
 
-module("huds", package.seeall)
+module("roles", package.seeall)
 
 if SERVER then
 	AddCSLuaFile()
 end
 
-local HUDList = HUDList or {}
+local BASE_ROLE_CLASS = "ttt_role_base"
+
+local RoleList = RoleList or {}
 
 --[[---------------------------------------------------------
 	Name: TableInherit( t, base )
@@ -50,19 +53,19 @@ end
 
 --[[---------------------------------------------------------
 	Name: Register( table, string )
-	Desc: Used to register your HUD Element with the engine
+	Desc: Used to register your role with the engine
 -----------------------------------------------------------]]
 function Register(t, name)
 	name = string.lower(name)
 
-	local old = HUDList[name]
+	local old = RoleList[name]
 
 	t.ClassName = name
 	t.id = name
 
-	HUDList[name] = t
+	RoleList[name] = t
 
-	list.Set("HUD", name, {
+	list.Set("Roles", name, {
 			ClassName = name,
 			id = name
 	})
@@ -91,7 +94,7 @@ function Register(t, name)
 			end
 		end
 
-		-- Update HUD table of entities that are based on this HUD
+		-- Update roles table of entities that are based on this role
 		for _, e in ipairs(ents.GetAll()) do
 			if IsBasedOn(e:GetClass(), name) then
 				table.Merge(e, Get(e:GetClass()))
@@ -114,17 +117,24 @@ function OnLoaded()
 	-- - we have to wait until they're all setup because load order
 	-- could cause some entities to load before their bases!
 	--
-	for k in pairs(HUDList) do
+	for k in pairs(RoleList) do
 		local newTable = Get(k)
-		HUDList[k] = newTable
+		RoleList[k] = newTable
 
 		baseclass.Set(k, newTable)
+	end
+
+	if CLIENT then
+		-- Call PreInitialize on all roles
+		for _, v in pairs(RoleList) do
+			v:PreInitialize()
+		end
 	end
 end
 
 --[[---------------------------------------------------------
 	Name: Get( string, retTbl )
-	Desc: Get a HUD element by name.
+	Desc: Get a role by name.
 -----------------------------------------------------------]]
 function Get(name, retTbl)
 	local Stored = GetStored(name)
@@ -141,15 +151,15 @@ function Get(name, retTbl)
 		end
 	end
 
-	retval.Base = retval.Base or "hud_base"
+	retval.Base = retval.Base or BASE_ROLE_CLASS
 
-	-- If we're not derived from ourselves (a base HUD element)
-	-- then derive from our 'Base' HUD element.
+	-- If we're not derived from ourselves (a base role)
+	-- then derive from our 'Base' role.
 	if retval.Base ~= name then
 		local base = Get(retval.Base)
 
 		if not base then
-			Msg("ERROR: Trying to derive HUD " .. tostring(name) .. " from non existant HUD " .. tostring(retval.Base) .. "!\n")
+			Msg("ERROR: Trying to derive role " .. tostring(name) .. " from non existant role " .. tostring(retval.Base) .. "!\n")
 		else
 			retval = TableInherit(retval, base)
 		end
@@ -163,19 +173,49 @@ end
 	Desc: Gets the REAL HUD elements table, not a copy
 -----------------------------------------------------------]]
 function GetStored(name)
-	return HUDList[name]
+	return RoleList[name]
 end
 
 --[[---------------------------------------------------------
 	Name: GetList( string )
-	Desc: Get a list (copy) of all the registered HUD elements
+	Desc: Get a list (copy) of all the registered roles
 -----------------------------------------------------------]]
 function GetList()
 	local result = {}
 
-	for _, v in pairs(HUDList) do
+	for _, v in pairs(RoleList) do
 		result[#result + 1] = v
 	end
 
 	return result
+end
+
+function GetRoleByIndex(index)
+	for _, v in pairs(RoleList) do
+		if v.index == index then
+			return v
+		end
+	end
+
+	return INNOCENT
+end
+
+function GetRoleByName(name)
+	for _, v in pairs(RoleList) do
+		if v.name == name then
+			return v
+		end
+	end
+
+	return INNOCENT
+end
+
+function GetRoleByAbbr(abbr)
+	for _, v in pairs(RoleList) do
+		if v.abbr == abbr then
+			return v
+		end
+	end
+
+	return INNOCENT
 end
