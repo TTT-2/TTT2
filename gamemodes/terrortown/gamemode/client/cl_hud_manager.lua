@@ -243,15 +243,8 @@ function HUDManager.EditHUD(bool, hud)
 		hook.Remove("Think", "TTT2EditHUD")
 
 		if hud then
-			for _, elem in ipairs(hud:GetElements()) do
-				local el = hudelements.GetStored(elem)
-				if el then
-					el:SaveData()
-				end
-			end
+			hud:SaveData()
 		end
-
-		SQL.Save("ttt2_huds", hud.id, hud, hud:GetSavingKeys())
 	end
 end
 
@@ -309,15 +302,7 @@ function HUDManager.AddHUDSettings(panel, hudEl)
 			el.DoClick = function(btn)
 				if hudEl then
 					hudEl:Reset()
-
-					for _, elem in ipairs(hudEl:GetElements()) do
-						local tel = hudelements.GetStored(elem)
-						if tel then
-							tel:SaveData()
-						end
-					end
-
-					SQL.Save("ttt2_huds", hudEl.id, hudEl, hudEl:GetSavingKeys())
+					hudEl:SaveData()
 				end
 
 				HUDManager.ShowHUDSwitcher(true)
@@ -520,16 +505,7 @@ local function UpdateHUD(name)
 	-- Initialize elements
 	hudEl:Initialize()
 
-	local skeys = hudEl:GetSavingKeys()
-
-	-- load and initialize all HUD data from database
-	if SQL.CreateSqlTable("ttt2_huds", skeys) then
-		local loaded = SQL.Load("ttt2_huds", hudEl.id, hudEl, skeys)
-
-		if not loaded then
-			SQL.Init("ttt2_huds", hudEl.id, hudEl, skeys)
-		end
-	end
+	hudEl:LoadData()
 
 	hudEl:Loaded()
 end
