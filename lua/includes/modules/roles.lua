@@ -243,7 +243,7 @@ function GenerateNewRoleID()
 end
 
 function GetByIndex(index)
-	for _, v in ipairs(GetList()) do
+	for _, v in pairs(RoleList) do
 		if v.index == index then
 			return v
 		end
@@ -257,7 +257,7 @@ function GetByName(name)
 end
 
 function GetByAbbr(abbr)
-	for _, v in ipairs(GetList()) do
+	for _, v in pairs(RoleList) do
 		if v.abbr == abbr then
 			return v
 		end
@@ -287,7 +287,7 @@ function GetShopRoles()
 
 	local i = 0
 
-	for _, v in ipairs(GetList()) do
+	for _, v in pairs(RoleList) do
 		if v ~= INNOCENT then
 			local shopFallback = GetGlobalString("ttt_" .. v.abbr .. "_shop_fallback")
 			if shopFallback ~= SHOP_DISABLED then
@@ -305,7 +305,7 @@ end
 function GetDefaultTeamRole(team)
 	if team == TEAM_NONE then return end
 
-	for _, v in ipairs(GetList()) do
+	for _, v in pairs(RoleList) do
 		if not v.baserole and v.defaultTeam ~= TEAM_NONE and v.defaultTeam == team then
 			return v
 		end
@@ -337,7 +337,7 @@ end
 function GetWinTeams()
 	local winTeams = {}
 
-	for _, v in ipairs(GetList()) do
+	for _, v in pairs(RoleList) do
 		if v.defaultTeam ~= TEAM_NONE and not table.HasValue(winTeams, v.defaultTeam) and not v.preventWin then
 			table.insert(winTeams, v.defaultTeam)
 		end
@@ -349,7 +349,7 @@ end
 function GetAvailableTeams()
 	local availableTeams = {}
 
-	for _, v in ipairs(GetList()) do
+	for _, v in pairs(RoleList) do
 		if v.defaultTeam ~= TEAM_NONE and not table.HasValue(availableTeams, v.defaultTeam) then
 			availableTeams[#availableTeams + 1] = v.defaultTeam
 		end
@@ -363,7 +363,7 @@ function GetSortedRoles()
 
 	local i = 0
 
-	for _, v in ipairs(GetList()) do
+	for _, v in pairs(RoleList) do
 		i = i + 1
 		rls[i] = v
 	end
