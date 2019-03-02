@@ -290,7 +290,7 @@ function ShopEditor.CreateItemEditor()
 end
 
 -- SHOP LINKER
-function ShopEditor.CreateRolesList(frame, w, h, roles, onClick, defaultRoleData)
+function ShopEditor.CreateRolesList(frame, w, h, rls, onClick, defaultRoleData)
 	-- Construct icon listing
 	local dlist = vgui.Create("EquipSelect", frame)
 	dlist:SetPos(0, 25)
@@ -299,7 +299,7 @@ function ShopEditor.CreateRolesList(frame, w, h, roles, onClick, defaultRoleData
 	dlist:EnableHorizontal(true)
 	dlist:SetPadding(4)
 
-	for _, roleData in pairs(roles) do
+	for _, roleData in pairs(rls) do
 		local ic = vgui.Create("SimpleRoleIcon", dlist)
 
 		ic:SetIcon("vgui/ttt/dynamic/icon_base")
