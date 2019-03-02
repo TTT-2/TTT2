@@ -250,7 +250,7 @@ end
 function InitCustomTeam(name, data) -- creates global var "TEAM_[name]" and other required things
 	local teamname = string.Trim(string.lower(name)) .. "s"
 
-	_G["TEAM_" .. name] = teamname
+	_G["TEAM_" .. string.upper(name)] = teamname
 
 	TEAMS[teamname] = data
 end
