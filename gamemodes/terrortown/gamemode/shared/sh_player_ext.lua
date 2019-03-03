@@ -93,11 +93,8 @@ function plymeta:SetRole(subrole, team, forceHooks)
 
 		if SERVER then
 			hook.Call("PlayerLoadout", GAMEMODE, self)
-
-			if self:GetSubRoleModel() or self.nonsubroleModel then
-				hook.Call("PlayerSetModel", GAMEMODE, self, true)
-				hook.Run("TTTPlayerSetColor", self)
-			end
+			hook.Call("PlayerSetModel", GAMEMODE, self)
+			hook.Run("TTTPlayerSetColor", self)
 		end
 	end
 end

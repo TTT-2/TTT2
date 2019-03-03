@@ -153,7 +153,7 @@ local function PreqLabels(parent, x, y)
 
 	for _, pnl in pairs(tbl) do
 		pnl:SetFont("DermaLarge")
-		pnl:SetText("-")
+		pnl:SetText(" - ")
 	end
 
 	return function(selected)
@@ -220,7 +220,6 @@ local function CreateEquipmentList(t)
 	local ply = LocalPlayer()
 	local currole = ply:GetSubRole()
 	local credits = ply:GetCredits()
-	local can_order = credits > 0
 
 	local itemSize = 64
 
@@ -246,7 +245,7 @@ local function CreateEquipmentList(t)
 	local owned_ids = {}
 
 	for _, wep in pairs(ply:GetWeapons()) do
-		if IsValid(wep) and wep:IsEquipment() then
+		if IsValid(wep) and wep.IsEquipment and wep:IsEquipment() then
 			table.insert(owned_ids, wep:GetClass())
 		end
 	end
@@ -358,9 +357,9 @@ local function CreateEquipmentList(t)
 				ic:SetTooltip(tip)
 
 				-- If we cannot order this item, darken it
-				if not t.role and ((not can_order
+				if not t.role and ((
 						-- already owned
-						or table.HasValue(owned_ids, item.id)
+						table.HasValue(owned_ids, item.id)
 						or items.IsItem(item.id) and ply:HasEquipmentItem(item.id)
 						-- already carrying a weapon for this slot
 						or ItemIsWeapon(item) and not CanCarryWeapon(item)
@@ -619,8 +618,9 @@ function TraitorMenuPopup()
 	end
 
 	-- item info pane
-	local dinfo = vgui.Create("ColoredBox", dinfobg)
-	dinfo:SetColor(Color(90, 90, 95, 255))
+	local dinfo = vgui.Create("DScrollPanel", dinfobg)
+	dinfo:SetBackgroundColor(Color(90, 90, 95, 255))
+	dinfo:SetPaintBackground(true)
 	dinfo:SetPos(0, 0)
 	dinfo:StretchToParent(0, 0, m * 2, m * 2)
 

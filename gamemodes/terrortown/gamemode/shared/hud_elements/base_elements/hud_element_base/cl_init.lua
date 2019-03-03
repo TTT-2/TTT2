@@ -50,7 +50,6 @@ end
 function HUDELEMENT:Initialize()
 	-- use this to set default values and dont forget to call BaseClass.Initialze(self)!!
 	self:SetDefaults()
-	self:LoadData()
 
 	for _, elem in ipairs(self.children) do
 		local elemtbl = hudelements.GetStored(elem)
@@ -350,6 +349,7 @@ function HUDELEMENT:GetClickedArea(x, y, alt_pressed)
 		x_m = x_m or (alt_pressed and x_p) or false,
 		y_p = y_p or (alt_pressed and y_m) or false,
 		y_m = y_m or (alt_pressed and y_p) or false,
+		edge = (col[1] or col[3]) and (row[1] or row[3]),
 		direction_x = x_p and 1 or -1,
 		direction_y = y_p and 1 or -1,
 		move = row[2] and col[2]

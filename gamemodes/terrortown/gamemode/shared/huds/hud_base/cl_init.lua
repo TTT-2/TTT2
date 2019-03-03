@@ -181,6 +181,8 @@ function HUD:Reset()
 end
 
 function HUD:SaveData()
+
+	-- save data of all elements of this hud
 	for _, elem in ipairs(self:GetElements()) do
 		local el = hudelements.GetStored(elem)
 		if el then
@@ -193,6 +195,14 @@ end
 
 function HUD:LoadData()
 	local skeys = self:GetSavingKeys()
+
+	-- load data of all elements in this hud
+	for _, elem in ipairs(self:GetElements()) do
+		local el = hudelements.GetStored(elem)
+		if el then
+			el:LoadData()
+		end
+	end
 
 	-- load and initialize all HUD data from database
 	if SQL.CreateSqlTable("ttt2_huds", skeys) then

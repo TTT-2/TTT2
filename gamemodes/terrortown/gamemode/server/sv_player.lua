@@ -276,29 +276,29 @@ end
 
 util.AddNetworkString("TTT2SyncModel")
 
-function GM:PlayerSetModel(ply, forced)
+function GM:PlayerSetModel(ply)
 	if not IsValid(ply) then return end
 
 	local mdl
 
-	local srm = ply:GetSubRoleModel()
-	if srm then
-		mdl = srm
+	local curMdl = ply:GetModel()
+	if not curMdl or curMdl == "models/player.mdl" then
+		curMdl = GAMEMODE.playermodel or "models/player/phoenix.mdl"
 	end
 
-	if ply.nonsubroleModel and (not srm or srm == "models/player.mdl") then
-		mdl = ply.nonsubroleModel
+	local srMdl = ply:GetSubRoleModel()
+	if srMdl then
+		mdl = srMdl
 
-		ply.nonsubroleModel = nil
-	end
-
-	if not mdl or mdl == "models/player.mdl" then
-		if forced then return end
-
-		if ply:GetModel() and ply:GetModel() ~= "models/player.mdl" then
-			mdl = ply:GetModel()
+		if curMdl ~= srMdl then
+			ply.oldModel = curMdl
+		end
+	else
+		if ply.oldModel then
+			mdl = ply.oldModel
+			ply.oldModel = nil
 		else
-			mdl = GAMEMODE.playermodel or "models/player/phoenix.mdl"
+			mdl = curMdl
 		end
 	end
 

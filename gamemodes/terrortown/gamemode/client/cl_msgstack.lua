@@ -92,6 +92,13 @@ function MSTACK:WrapText(text, width, font)
 	local lines = {""}
 
 	for i, wrd in ipairs(words) do
+		if i == 1 then
+			-- add the first word wether or not it matches the size to prevent
+			-- weird empty first lines and ' ' in front of the first line
+			lines[1] = wrd
+			continue
+		end
+
 		local l = #lines
 		local added = lines[l] .. " " .. wrd
 
