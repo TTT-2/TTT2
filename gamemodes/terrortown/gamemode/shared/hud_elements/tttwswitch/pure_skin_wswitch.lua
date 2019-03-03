@@ -70,7 +70,7 @@ if CLIENT then
 		end
 
 		-- Slot
-		self:AdvancedText(tostring(wep.Slot + 1), "PureSkinWepNum", x + self.lpw * 0.5, y + height * 0.5, c.text, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, true, self.scale)
+		self:AdvancedText(MakeKindValid(wep.Kind), "PureSkinWepNum", x + self.lpw * 0.5, y + height * 0.5, c.text, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, true, self.scale)
 
 		-- Name
 		self:AdvancedText(string.upper(name), "PureSkinWep", x + 10 + height, y + height * 0.5, c.text, nil, TEXT_ALIGN_CENTER, true, self.scale)
