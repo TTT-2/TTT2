@@ -17,7 +17,7 @@ local htmlStart = [[
 		<style>
 			body {
 				font-family: Verdana, Trebuchet;
-				background-color: #162a39;
+				background-color: rgb(22, 42, 57);
 				color: white;
 			}
 			body * {
