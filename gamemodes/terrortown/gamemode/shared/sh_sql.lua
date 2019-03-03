@@ -233,9 +233,7 @@ function SQL.Load(tableName, name, tbl, keys)
 
 		local nres = SQL.GetParsedData(key, data, res)
 		if nres and (tbl[key] == nil or tbl[key] ~= nres) then
-			if nres == "NULL" then
-				tbl[key] = tbl[key] or nres -- keep old or init new
-			else
+			if nres ~= "NULL" then
 				tbl[key] = nres -- override with saved one
 			end
 
