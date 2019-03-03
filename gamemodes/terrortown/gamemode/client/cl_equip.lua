@@ -153,7 +153,7 @@ local function PreqLabels(parent, x, y)
 
 	for _, pnl in pairs(tbl) do
 		pnl:SetFont("DermaLarge")
-		pnl:SetText("-")
+		pnl:SetText(" - ")
 	end
 
 	return function(selected)
@@ -618,8 +618,9 @@ function TraitorMenuPopup()
 	end
 
 	-- item info pane
-	local dinfo = vgui.Create("ColoredBox", dinfobg)
-	dinfo:SetColor(Color(90, 90, 95, 255))
+	local dinfo = vgui.Create("DScrollPanel", dinfobg)
+	dinfo:SetBackgroundColor(Color(90, 90, 95, 255))
+	dinfo:SetPaintBackground(true)
 	dinfo:SetPos(0, 0)
 	dinfo:StretchToParent(0, 0, m * 2, m * 2)
 
