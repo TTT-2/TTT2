@@ -42,3 +42,11 @@ function HUD:Initialize()
 
 	BaseClass.Initialize(self)
 end
+
+function HUD:StoreData()
+	-- nothing, to prevent the hud from saving data to the database
+end
+
+function HUD:LoadData()
+	-- nothing, to prevent the hud from loading data from the database
+end
