@@ -300,7 +300,7 @@ function plymeta:GiveEquipmentWeapon(cls)
 	-- that we need its name, and hence his SteamID64.
 	local tmr = "give_equipment" .. self:UniqueID()
 
-	if not IsValid(self) or not self:IsActive() then
+	if not IsValid(self) or not self:Alive() then
 		timer.Remove(tmr)
 
 		return
