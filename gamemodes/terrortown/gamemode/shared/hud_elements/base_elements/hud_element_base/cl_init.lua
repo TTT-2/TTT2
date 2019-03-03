@@ -50,7 +50,6 @@ end
 function HUDELEMENT:Initialize()
 	-- use this to set default values and dont forget to call BaseClass.Initialze(self)!!
 	self:SetDefaults()
-	self:LoadData()
 
 	for _, elem in ipairs(self.children) do
 		local elemtbl = hudelements.GetStored(elem)

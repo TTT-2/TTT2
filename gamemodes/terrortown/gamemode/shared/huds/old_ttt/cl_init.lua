@@ -10,7 +10,7 @@ local base = "hud_base"
 DEFINE_BASECLASS(base)
 
 HUD.Base = base
-
+HUD.disableHUDEditor = true
 HUD.previewImage = Material("vgui/ttt/huds/old_ttt/preview.png")
 
 function DrawOldRoleIcon(x, y, w, h, icon, color)
@@ -30,8 +30,6 @@ function DrawOldRoleIcon(x, y, w, h, icon, color)
 	surface.DrawTexturedRect(x, y, w, h)
 end
 
-HUD.disableHUDEditor = true
-
 function HUD:Initialize()
 	self:ForceElement("old_ttt_info")
 	self:ForceElement("old_ttt_punchometer")
@@ -43,7 +41,7 @@ function HUD:Initialize()
 	BaseClass.Initialize(self)
 end
 
-function HUD:StoreData()
+function HUD:SaveData()
 	-- nothing, to prevent the hud from saving data to the database
 end
 

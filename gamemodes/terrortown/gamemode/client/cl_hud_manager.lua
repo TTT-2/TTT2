@@ -406,7 +406,7 @@ function HUDManager.DrawHUD()
 	for _, elemName in ipairs(hud:GetElements()) do
 		local elem = hudelements.GetStored(elemName)
 		if not elem then
-			Msg("Error: Hudelement with name " .. elemName .. " not found!")
+			MsgN("Error: Hudelement with name " .. elemName .. " not found!")
 
 			return
 		end
@@ -493,8 +493,7 @@ local function UpdateHUD(name)
 	local hudEl = huds.GetStored(name)
 
 	if not hudEl then
-		Msg("Error: HUD with name " .. name .. " was not found!\n")
-
+		MsgN("Error: HUD with name " .. name .. " was not found!")
 		return
 	end
 
