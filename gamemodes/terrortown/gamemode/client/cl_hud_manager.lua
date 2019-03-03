@@ -86,7 +86,7 @@ local function EditLocalHUD()
 				client.base = elem:GetBasePos() -- initial base pos
 
 				-- store aspect ratio for shift-rescaling
-				client.aspect = client.size.w / client.size.h
+				client.aspect = math.abs(client.size.w / client.size.h)
 
 				-- reset clicked because it sould be only executed once
 				client.mouse_clicked = false
@@ -124,11 +124,11 @@ local function EditLocalHUD()
 				else -- resize mode
 					-- calc base data wihile checking for the shift key
 					local additional_w, additional_h
-					if shift_pressed then
-						if dif_x * client.size.h > dif_y * client.size.w then
-							dif_x = math.Round(dif_y * client.aspect)
+					if shift_pressed and trans_data.edge then
+						if dif_x * trans_data.direction_x * client.size.h > dif_y * trans_data.direction_y * client.size.w then
+							dif_x = math.Round(dif_y * trans_data.direction_y * client.aspect) * trans_data.direction_x
 						else
-							dif_y = math.Round(dif_x / client.aspect)
+							dif_y = math.Round(dif_x * trans_data.direction_x / client.aspect) * trans_data.direction_y
 						end
 					end
 					additional_w = dif_x * trans_data.direction_x
