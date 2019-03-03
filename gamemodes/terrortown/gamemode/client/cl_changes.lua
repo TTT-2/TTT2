@@ -207,50 +207,79 @@ function CreateChanges()
 	<li>huge amount of fixes</li>
 	</ul>]])
 
-	AddChange("0.5.0", [[<ul>
-	<li>added <b>HUDSwitcher</b> (<code>F1 → Settings → HUDSwitcher</code>)</li>
-		<ul>
-			<li>added old TTT HUD</li>
-			<li>added PureSkin HUD</li>
+	AddChange("0.5.0", [[
+	<h2><b>NEW:</b></h2>
+	<ul>
+		<li>Added new <b>HUD system</b></li>
+			<ul>
+				<li>Added <b>HUDSwitcher</b> (<code>F1 → Settings → HUDSwitcher</code>)</li>
+				<li>Added <b>HUDEditor</b> (<code>F1 → Settings → HUDSwitcher</code>)</li>
+				<li>Added old TTT HUD</li>
+				<li>Added <b>new</b> PureSkin HUD, an improved and fully integrated new HUD</li>
+					<ul>
+						<li>Added a Miniscoreboard / Confirm view at the top</li>
+						<li>Added support for SubRole informations in the player info (eg. used by TTT Heroes)</li>
+						<li>Added a team icon to the top</li>
+						<li>Redesign of all other HUD elements...</li>
+					</ul>
+				</li>
+			</ul>
+		</li>
+		<li>Added possibility to give every player his <b>own random shop</b></li>
+		<li>Added <b>sprint</b> to TTT2</li>
+		<li>Added a <b>drowning indicator</b> into TTT2</li>
+		<li>Added possibility to toggle auto afk</li>
+		<li>Added possibility to modify the time a player can dive</li>
+		<li>Added parameter to the bindings to detect if a player released a key</li>
+		<li>Added possibility to switch between team-synced and individual random shops</li>
+		<li>Added some nice <b>badges</b> to the scoreboard</li>
+		<li>Added a sql library for saving and loading specific elements (used by the HUD system)</li>
+		<li>Added and fixed Bulls draw lib</li>
+		<li>Added an improved player-target add-on</li>
+	</ul>
+	<br />
+	<h2><b>Changed:</b></h2>
+	<ul>
+		<li>Changed convar <code>ttt2_confirm_killlist</code> to default <code>1</code></li>
+		<li>Improved the changelog (as you can see :D)</li>
+		<li>Improved Workshop page :)</li>
+		<li>Reworked <b>F1 menu</b></li>
+		<li>Reworked the <b>slot system</b> (by LeBroomer)</li>
+			<ul>
+				<li>Amount of carriable weapons are customizable</li>
+				<li>Weapons won't block slots anymore automatically</li>
+				<li>Slot positions are generated from weapon types</li>
+			</ul>
+		</li>
+		<li>Reworked the <b>ROLES</b> system</li>
+			<ul>
+				<li>Roles can now be created like weapons utilizing the new roles lua module</li>
+				<li>They can also inherit from other roles</li>
+			</ul>
 		</ul>
-	</li>
+		<li>Improved the MSTACK to also support messages with images</li>
+		<li>Confirming a player will now display an imaged message in the message stack</li>
+	</ul>
 	<br />
-	<li>added possibility to give every player his <b>own random shop</b></li>
-	<li>added <b>sprint</b> to TTT2</li>
-	<li>added a <b>drowning indicator</b> into TTT2</li>
-	<li>added possibility to toggle auto afk</li>
-	<li>added possibility to modify the time a player can dive</li>
-	<li>added parameter to the bindings to detect if a player released a key</li>
-	<li>added possibility to switch between team-synced and individual random shops</li>
-	<li>added some nice <b>badges</b> to the scoreboard</li>
-	<br />
-	<li>fixed TTT2 binding system</li>
-	<li>fixed Ammo pickup</li>
-	<li>fixed karma issue with detective</li>
-	<li>fixed DNA Scanner bug with the radar</li>
-	<li>fixed loading issue in the items module</li>
-	<li>fixed critical bug in the process of saving the items data</li>
-	<li>fixed the Sidekick color in corpses</li>
-	<li>fixed bug that detective were not able to transfer credits</li>
-	<li>fixed kill-list confirm role syncing bug</li>
-	<li>fixed crosshair reset bug</li>
-	<li>other small bugfixes</li>
-	<br />
-	<li>changed convar <code>ttt2_confirm_killlist</code> to default <code>1</code></li>
-	<li>improved player-target add-on</li>
-	<li>improved the changelog (as you see :D)</li>
-	<li>reworked sql and created a sql library</li>
-	<li>reworked <b>F1 menu</b></li>
-	<br />
-	<li>reworked the <b>slot system</b> (by LeBroomer)</li>
-		<ul>
-			<li>amount of carriable weapons are customizable</li>
-			<li>weapons won't block slots anymore automatically</li>
-			<li>slot positions are generated from weapon types</li>
-		</ul>
-	</li>
-	<li>reworked the ROLES system</li>
-	</ul>]])
+	<h2><b>Fixed:</b></h2>
+	<ul>
+		<li>Fixed TTT2 binding system</li>
+		<li>Fixed Ammo pickup</li>
+		<li>Fixed karma issue with detective</li>
+		<li>Fixed DNA Scanner bug with the radar</li>
+		<li>Fixed loading issue in the items module</li>
+		<li>Fixed critical bug in the process of saving the items data</li>
+		<li>Fixed the Sidekick color in corpses</li>
+		<li>Fixed bug that detective were not able to transfer credits</li>
+		<li>Fixed kill-list confirm role syncing bug</li>
+		<li>Fixed crosshair reset bug</li>
+		<li>Fixed confirm button on corpse search still showing after the corpse was confirmed or when a player was spectating</li>
+		<li>Fixed MSTACK:WrapText containing a ' ' in its first row</li>
+		<li>Fixed shop item information not readable when the panel is too small -> added a scrollbar</li>
+		<li>Fixed shop item being displayed as unbuyable when the items price is set to 0 credits</li>
+		<li>Other small bugfixes</li>
+	</ul>
+	<br />]])
 
 	hook.Run("TTT2AddChange")
 end
