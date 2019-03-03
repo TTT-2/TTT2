@@ -220,7 +220,6 @@ local function CreateEquipmentList(t)
 	local ply = LocalPlayer()
 	local currole = ply:GetSubRole()
 	local credits = ply:GetCredits()
-	local can_order = credits > 0
 
 	local itemSize = 64
 
@@ -358,9 +357,9 @@ local function CreateEquipmentList(t)
 				ic:SetTooltip(tip)
 
 				-- If we cannot order this item, darken it
-				if not t.role and ((not can_order
+				if not t.role and ((
 						-- already owned
-						or table.HasValue(owned_ids, item.id)
+						table.HasValue(owned_ids, item.id)
 						or items.IsItem(item.id) and ply:HasEquipmentItem(item.id)
 						-- already carrying a weapon for this slot
 						or ItemIsWeapon(item) and not CanCarryWeapon(item)
