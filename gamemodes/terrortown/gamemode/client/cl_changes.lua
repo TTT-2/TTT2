@@ -284,7 +284,7 @@ function ShowChanges()
 		panel:Dock(FILL)
 
 		panel.Paint = function(slf, w, h)
-			draw.RoundedBox(4, 0, 0, w, h, Color(255, 255, 255))
+			draw.RoundedBox(4, 0, 0, w, h, Color(22, 42, 57))
 		end
 
 		local leftBtn = sheet:AddSheet("Update " .. change.version, panel).Button
