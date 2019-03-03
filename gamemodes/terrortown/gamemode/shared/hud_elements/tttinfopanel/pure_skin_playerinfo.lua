@@ -10,9 +10,11 @@ if CLIENT then
 	local pad_default = 14
 	local lpw_default = 44
 	local sri_text_width_padding_default = 8
+	local w_default, h_default = 365, 146
 
 	local x, y = 0, 0
-	local w, h = 365, 146
+	local w, h = w_default, h_default
+	local scale = 1.0
 	local min_w, min_h = 225, 146
 	local pad = pad_default -- padding
 	local lpw = lpw_default -- left panel width
@@ -31,20 +33,23 @@ if CLIENT then
 	end
 
 	function HUDELEMENT:RecalculateBasePos()
-		self:SetBasePos(10 * self.scale, ScrH() - (10 * self.scale + h))
+		self:SetBasePos(10 * scale, ScrH() - (10 * scale + h))
 	end
 
 	function HUDELEMENT:PerformLayout()
 		local pos = self:GetPos()
 		local size = self:GetSize()
 
-		lpw = lpw_default * self.scale
-		pad = pad_default * self.scale
-		sri_text_width_padding = sri_text_width_padding_default * self.scale
 		x = pos.x
 		y = pos.y
 		w = size.w
 		h = size.h
+
+		scale = math.min(w / w_default, h / h_default)
+
+		lpw = lpw_default * scale
+		pad = pad_default * scale
+		sri_text_width_padding = sri_text_width_padding_default * scale
 
 		BaseClass.PerformLayout(self)
 	end
@@ -145,7 +150,7 @@ if CLIENT then
 			--calculate the scale multplier for role text
 			surface.SetFont("PureSkinRole")
 
-			local role_text_width = surface.GetTextSize(string.upper(text)) * self.scale
+			local role_text_width = surface.GetTextSize(string.upper(text)) * scale
 			local role_scale_multiplier = (w - lpw - 2 * pad) / role_text_width
 
 			if calive and cactive and isfunction(secondaryRoleInformationFunc) then
@@ -154,13 +159,13 @@ if CLIENT then
 				if secInfoTbl and secInfoTbl.text then
 					surface.SetFont("PureSkinBar")
 
-					local sri_text_width = surface.GetTextSize(string.upper(secInfoTbl.text)) * self.scale
+					local sri_text_width = surface.GetTextSize(string.upper(secInfoTbl.text)) * scale
 
 					role_scale_multiplier = (w - sri_text_width - lpw - 2 * pad - 3 * sri_text_width_padding) / role_text_width
 				end
 			end
 
-			role_scale_multiplier = math.Clamp(role_scale_multiplier, 0.55, 0.85) * self.scale
+			role_scale_multiplier = math.Clamp(role_scale_multiplier, 0.55, 0.85) * scale
 
 			self:AdvancedText(string.upper(text), "PureSkinRole", nx, ry, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, true, Vector(role_scale_multiplier * 0.9, role_scale_multiplier, role_scale_multiplier))
 		end
@@ -176,8 +181,8 @@ if CLIENT then
 					surface.SetFont("PureSkinBar")
 
 					local sri_text_caps = string.upper(secInfoTbl.text)
-					local sri_text_width = surface.GetTextSize(sri_text_caps) * self.scale
-					local sri_margin_top_bottom = 8 * self.scale
+					local sri_text_width = surface.GetTextSize(sri_text_caps) * scale
+					local sri_margin_top_bottom = 8 * scale
 					local sri_width = sri_text_width + sri_text_width_padding * 2
 					local sri_xoffset = w2 - sri_width - pad
 
@@ -188,7 +193,7 @@ if CLIENT then
 					surface.SetDrawColor(clr(secInfoTbl.color))
 					surface.DrawRect(nx2, ny, sri_width, nh)
 
-					self:AdvancedText(sri_text_caps, "PureSkinBar", nx2 + sri_width * 0.5, ry, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, true, self.scale)
+					self:AdvancedText(sri_text_caps, "PureSkinBar", nx2 + sri_width * 0.5, ry, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, true, scale)
 
 					-- draw lines around the element
 					self:DrawLines(nx2, ny, sri_width, nh, secInfoTbl.color.a)
@@ -201,14 +206,14 @@ if CLIENT then
 
 			-- draw bars
 			local bw = w2 - lpw - pad * 2 -- bar width
-			local bh = 26 * self.scale --  bar height
-			local sbh = 8 * self.scale -- spring bar height
-			local spc = 7 * self.scale -- space between bars
+			local bh = 26 * scale --  bar height
+			local sbh = 8 * scale -- spring bar height
+			local spc = 7 * scale -- space between bars
 
 			-- health bar
 			local health = math.max(0, client:Health())
 
-			self:DrawBar(nx, ty, bw, bh, Color(234, 41, 41), health / client:GetMaxHealth(), self.scale, "HEALTH: " .. health)
+			self:DrawBar(nx, ty, bw, bh, Color(234, 41, 41), health / client:GetMaxHealth(), scale, "HEALTH: " .. health)
 
 			-- ammo bar
 			ty = ty + bh + spc
@@ -220,7 +225,7 @@ if CLIENT then
 				if ammo_clip ~= -1 then
 					local text = string.format("%i + %02i", ammo_clip, ammo_inv)
 
-					self:DrawBar(nx, ty, bw, bh, Color(238, 151, 0), ammo_clip / ammo_max, self.scale, text)
+					self:DrawBar(nx, ty, bw, bh, Color(238, 151, 0), ammo_clip / ammo_max, scale, text)
 				end
 			end
 
@@ -228,12 +233,12 @@ if CLIENT then
 			ty = ty + bh + spc
 
 			if GetGlobalBool("ttt2_sprint_enabled", true) then
-				self:DrawBar(nx, ty, bw, sbh, Color(36, 154, 198), client.sprintProgress, self.scale, "")
+				self:DrawBar(nx, ty, bw, sbh, Color(36, 154, 198), client.sprintProgress, scale, "")
 			end
 
 			-- coin info
 			if cactive and client:IsShopper() then
-				local coinSize = 24 * self.scale
+				local coinSize = 24 * scale
 				local x2_pad = math.Round((lpw - coinSize) * 0.5)
 
 				if client:GetCredits() > 0 then

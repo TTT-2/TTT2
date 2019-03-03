@@ -9,8 +9,11 @@ HUDELEMENT.togglable = true
 if CLIENT then
 	local GetLang = LANG.GetUnsafeLanguageTable
 
+	local w_default, h_default = 96, 72
+
 	local x, y = 0, 0
-	local w, h = 96, 72
+	local w, h = w_default, h_default
+	local scale = 1.0
 	local pad = 14 -- padding
 
 	function HUDELEMENT:Initialize()
@@ -25,7 +28,7 @@ if CLIENT then
 	end
 
 	function HUDELEMENT:RecalculateBasePos()
-		self:SetBasePos(math.Round(ScrW() * 0.5 - w * 0.5), 4 * self.scale)
+		self:SetBasePos(math.Round(ScrW() * 0.5 - w * 0.5), 4 * scale)
 	end
 
 	function HUDELEMENT:PerformLayout()
@@ -34,6 +37,8 @@ if CLIENT then
 
 		x, y = pos.x, pos.y
 		w, h = size.w, size.h
+
+		scale = math.min(w / w_default, h / h_default)
 
 		BaseClass.PerformLayout(self)
 	end
@@ -94,10 +99,10 @@ if CLIENT then
 			text = util.SimpleTime(math.max(0, endtime), "%02i:%02i")
 		end
 		
-		self:AdvancedText(text, font, rx, ry, color, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, true, self.scale)
+		self:AdvancedText(text, font, rx, ry, color, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, true, scale)
 
 		if is_haste then
-			self:AdvancedText(L.hastemode, "TabLarge", tmpx, y + 14, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, false, self.scale)
+			self:AdvancedText(L.hastemode, "TabLarge", tmpx, y + 14, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, false, scale)
 		end
 
 		-- draw lines around the element
