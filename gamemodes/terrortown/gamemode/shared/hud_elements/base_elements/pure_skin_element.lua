@@ -51,12 +51,15 @@ if CLIENT then
 			mat = Matrix()
 			mat:Translate(Vector(x, y))	
 			mat:Scale(isvector(scale) and scale or Vector(scale, scale, scale))
-			mat:Translate(-Vector(x, y))
+			mat:Translate(-Vector(ScrW() / 2, ScrH() / 2))
 
 			render.PushFilterMag(TEXFILTER.ANISOTROPIC)
 			render.PushFilterMin(TEXFILTER.ANISOTROPIC)
 
 			cam.PushModelMatrix(mat)
+
+			x = ScrW() / 2
+			y = ScrH() / 2
 		end
 		
 		if shadow then
