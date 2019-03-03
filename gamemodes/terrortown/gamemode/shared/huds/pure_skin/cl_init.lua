@@ -39,6 +39,7 @@ function HUD:GetSavingKeys()
 				end
 			end
 		}
+		--[[
 		savingKeys.scale = {
 			typ = "scale",
 			desc = "Reset Positions and set HUD Scale",
@@ -60,6 +61,7 @@ function HUD:GetSavingKeys()
 				end
 			end
 		}
+		]]
 	end
 
 	return table.Copy(savingKeys)
