@@ -245,7 +245,7 @@ local function CreateEquipmentList(t)
 	local owned_ids = {}
 
 	for _, wep in pairs(ply:GetWeapons()) do
-		if IsValid(wep) and wep:IsEquipment() then
+		if IsValid(wep) and wep.IsEquipment and wep:IsEquipment() then
 			table.insert(owned_ids, wep:GetClass())
 		end
 	end
