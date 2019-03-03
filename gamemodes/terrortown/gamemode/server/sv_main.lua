@@ -756,6 +756,10 @@ function PrepareRound()
 	-- In case client's cleanup fails, make client set all players to innocent role
 	timer.Simple(1, SendRoleReset)
 
+	for _, v in ipairs(player.GetAll()) do
+		v:SetTargetPlayer(nil)
+	end
+
 	-- Tell hooks and map we started prep
 	hook.Call("TTTPrepareRound", GAMEMODE)
 

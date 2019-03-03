@@ -345,6 +345,8 @@ function GM:ClearClientState()
 	client.called_corpses = {}
 	client.sprintProgress = 1
 
+	client:SetTargetPlayer(nil)
+
 	VOICE.InitBattery()
 
 	for _, p in ipairs(player.GetAll()) do
