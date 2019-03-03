@@ -86,8 +86,10 @@ function HUD:Loaded()
 	for _, elem in ipairs(self:GetElements()) do
 		local el = hudelements.GetStored(elem)
 		if el then
+			local min_size = el:GetMinSize()
 			el.basecolor = self.basecolor
 			el.scale = self.scale
+			el:SetMinSize(min_size.w * self.scale, min_size.h * self.scale)
 			el:PerformLayout()
 		end
 	end
