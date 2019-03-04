@@ -135,8 +135,12 @@ else
 		local mdl = net.ReadString()
 		local ply = net.ReadEntity()
 
+		print("Received RoleModelMOD")
+
 		if IsValid(ply) then
 			util.PrecacheModel(mdl)
+
+			print("set", ply:Nick(), mdl)
 
 			ply:SetModel(mdl)
 		end
@@ -672,6 +676,8 @@ function plymeta:SetModel(mdlName)
 		oldSetModel(self, mdl)
 
 		if SERVER then
+			print("Send to clients -> !")
+
 			net.Start("TTT2SyncModel")
 			net.WriteString(mdl)
 			net.WriteEntity(self)
