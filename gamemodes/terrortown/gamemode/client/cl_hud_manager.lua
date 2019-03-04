@@ -182,6 +182,12 @@ local function EditLocalHUD()
 						new_y = client.base.y - new_h_m
 					end
 
+					-- make sure the element does not leave the screen when the aspect ratio is fixed
+					if elem:GetLockAspectRatio() then
+						new_w = (new_w < new_h) and new_w or new_h
+						new_h = new_w
+					end
+
 					elem:SetSize(new_w, new_h)
 					elem:SetBasePos(new_x, new_y)
 				end
