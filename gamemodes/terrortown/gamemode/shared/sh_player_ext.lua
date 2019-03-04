@@ -621,14 +621,26 @@ function plymeta:SetSubRoleModel(mdl)
 	end
 end
 
+local function checkModel(mdl)
+	return mdl and mdl ~= "" and mdl ~= "models/player.mdl"
+end
+
 -- override to fix PS/ModelSelector/... issues
 local oldSetModel = plymeta.SetModel
 function plymeta:SetModel(mdlName)
 	local mdl
 
 	local curMdl = mdlName or self:GetModel()
-	if not curMdl or curMdl == "" or curMdl == "models/player.mdl" then
-		curMdl = GAMEMODE.playermodel or "models/player/phoenix.mdl"
+	if not checkModel(curMdl) then
+		if not checkModel(GAMEMODE.playermodel) then
+			GAMEMODE.playermodel = GAMEMODE.force_plymodel == "" and GetRandomPlayerModel() or GAMEMODE.force_plymodel
+
+			if not checkModel(GAMEMODE.playermodel) then
+				GAMEMODE.playermodel = "models/player/phoenix.mdl"
+			end
+		end
+
+		curMdl = GAMEMODE.playermodel
 	end
 
 	local srMdl = self:GetSubRoleModel()
@@ -648,7 +660,7 @@ function plymeta:SetModel(mdlName)
 	end
 
 	-- last but not least, we fix this grey model "bug"
-	if not mdl or mdl == "" or mdl == "models/player.mdl" then
+	if not checkModel(mdl) then
 		mdl = "models/player/phoenix.mdl"
 	end
 
