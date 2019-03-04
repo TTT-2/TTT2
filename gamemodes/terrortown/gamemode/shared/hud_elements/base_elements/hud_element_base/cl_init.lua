@@ -26,6 +26,7 @@ HUDELEMENT.size = table.Copy(zero_tbl_size)
 HUDELEMENT.minsize = table.Copy(min_size_tbl)
 HUDELEMENT.resizeable = table.Copy(resizeable_tbl)
 HUDELEMENT.scale = 1.0
+HUDELEMENT.lockAspectRatio = false
 
 HUDELEMENT.defaults = {
 	basepos = table.Copy(HUDELEMENT.basepos),
@@ -124,6 +125,14 @@ end
 function HUDELEMENT:SetResizable(x, y)
 	self.resizeable.x = x
 	self.resizeable.y = y
+end
+
+function HUDELEMENT:SetLockAspectRatio(locked)
+	self.lockAspectRatio = locked or true
+end
+
+function HUDELEMENT:GetLockAspectRatio()
+	return self.lockAspectRatio
 end
 
 function HUDELEMENT:SetMinSize(w, h)
@@ -236,9 +245,9 @@ function HUDELEMENT:OnHovered(x, y)
 	-- ROWS
 	if self.resizeable.y then
 		row = {
-			self.resizeable.y and y > minY + c_pad and y < minY + c_pad + c_area, -- top row
+			y > minY + c_pad and y < minY + c_pad + c_area, -- top row
 			y > minY + 2*c_pad + c_area and y < maxY - 2*c_pad - c_area, -- center column
-			self.resizeable.y and y > maxY - c_pad - c_area and y < maxY - c_pad -- right column
+			y > maxY - c_pad - c_area and y < maxY - c_pad -- right column
 		}
 	else
 		row = {
@@ -251,9 +260,9 @@ function HUDELEMENT:OnHovered(x, y)
 	-- COLUMS
 	if self.resizeable.x then
 		col = {
-			self.resizeable.x and x > minX + c_pad and x < minX + c_pad + c_area, -- left column
+			x > minX + c_pad and x < minX + c_pad + c_area, -- left column
 			x > minX + 2*c_pad + c_area and x < maxX - 2*c_pad - c_area, -- center column
-			self.resizeable.x and x > maxX - c_pad - c_area and x < maxX - c_pad -- right column
+			x > maxX - c_pad - c_area and x < maxX - c_pad -- right column
 		}
 	else
 		col = {
@@ -261,6 +270,15 @@ function HUDELEMENT:OnHovered(x, y)
 			x > minX + c_pad and x < maxX - c_pad, -- center column
 			false -- right column
 		}
+	end
+
+	-- locked aspect ratio has to be a special case to not break movement
+	if self.lockAspectRatio then
+		-- ignore if mouse is on center
+		if (not (row[2] and col[2])) then
+			row[2] = false
+			col[2] = false
+		end
 	end
 
 

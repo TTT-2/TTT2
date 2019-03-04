@@ -122,9 +122,9 @@ local function EditLocalHUD()
 
 					elem:SetBasePos(new_x, new_y)
 				else -- resize mode
-					-- calc base data wihile checking for the shift key
+					-- calc base data while checking for the shift key
 					local additional_w, additional_h
-					if shift_pressed and trans_data.edge then
+					if (shift_pressed and trans_data.edge) or elem:GetLockAspectRatio() then
 						if dif_x * trans_data.direction_x * client.size.h > dif_y * trans_data.direction_y * client.size.w then
 							dif_x = math.Round(dif_y * trans_data.direction_y * client.aspect) * trans_data.direction_x
 						else

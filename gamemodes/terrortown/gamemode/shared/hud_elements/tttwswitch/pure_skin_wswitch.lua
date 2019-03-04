@@ -27,11 +27,9 @@ if CLIENT then
 		self:RecalculateBasePos()
 		self:SetSize(width, -height)
 		self:SetMinSize(min_w, min_h)
+		self:SetResizable(true, false)
 
 		BaseClass.Initialize(self)
-
-		self.defaults.resizeableY = false
-		self.defaults.minHeight = height
 	end
 
 	function HUDELEMENT:DrawBarBg(x, y, w, h, col)
@@ -117,7 +115,7 @@ if CLIENT then
 		local count = #weps
 		local tmp = height + self.margin
 
-		local h = math.max(count * tmp, self.defaults.minHeight)
+		local h = math.max(count * tmp, self.minsize.h)
 		width = self:GetSize().w
 
 		self:SetSize(width, -h)
@@ -133,7 +131,7 @@ if CLIENT then
 		local count = #weps
 		local tmp = height + self.margin
 		local basepos = self:GetBasePos()
-		local h = math.max(count * tmp, self.defaults.minHeight)
+		local h = math.max(count * tmp, self.minsize.h)
 
 		self:SetPos(basepos.x, basepos.y)
 		self:SetSize(width, -h)
