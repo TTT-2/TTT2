@@ -626,8 +626,9 @@ local function checkModel(mdl)
 end
 
 -- override to fix PS/ModelSelector/... issues
-hook.Add("Initialize", "TTT2OverrideSetModel", function()
-	local oldSetModel = plymeta.SetModel
+local oldSetModel = plymeta.SetModel
+
+if isfunction(oldSetModel) then
 	function plymeta:SetModel(mdlName)
 		local mdl
 
@@ -669,18 +670,16 @@ hook.Add("Initialize", "TTT2OverrideSetModel", function()
 			mdl = "models/player/phoenix.mdl"
 		end
 
-		if isfunction(oldSetModel) then
-			oldSetModel(self, mdl)
+		oldSetModel(self, mdl)
 
-			if SERVER then
-				net.Start("TTT2SyncModel")
-				net.WriteString(mdl)
-				net.WriteEntity(self)
-				net.Broadcast()
-			end
+		if SERVER then
+			net.Start("TTT2SyncModel")
+			net.WriteString(mdl)
+			net.WriteEntity(self)
+			net.Broadcast()
 		end
 	end
-end)
+end
 
 hook.Add("TTTEndRound", "TTTEndRound4TTT2TargetPlayer", function()
 	for _, pl in ipairs(player.GetAll()) do
