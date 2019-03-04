@@ -679,6 +679,8 @@ if isfunction(oldSetModel) then
 			net.Broadcast()
 		end
 	end
+else
+	print("SetModel modification couldn't applied...")
 end
 
 hook.Add("TTTEndRound", "TTTEndRound4TTT2TargetPlayer", function()
