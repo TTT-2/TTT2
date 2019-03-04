@@ -683,7 +683,11 @@ if CLIENT then
 
 		local target = net.ReadEntity()
 
-		if target == nil or IsValid(target) and target:IsPlayer() and target:IsActive() then
+		if not IsValid(target) or not target:IsPlayer() or target:IsWorld() then
+			target = nil
+		end
+
+		if target == nil or IsValid(target) and target:IsActive() and target:Alive() then
 			client:SetTargetPlayer(target)
 		end
 	end)
