@@ -127,7 +127,10 @@ function plymeta:SetRoleBgColor(col)
 	self.roleBgColor = hook.Run("TTT2ModifyRoleBgColor", self, col) or col
 end
 
-if CLIENT then
+if SERVER then
+	util.AddNetworkString("TTT2SyncModel")
+	util.AddNetworkString("TTT2SyncSubroleModel")
+else
 	net.Receive("TTT2SyncModel", function()
 		local mdl = net.ReadString()
 		local ply = net.ReadEntity()
@@ -136,6 +139,17 @@ if CLIENT then
 			util.PrecacheModel(mdl)
 
 			ply:SetModel(mdl)
+		end
+	end)
+
+	net.Receive("TTT2SyncSubroleModel", function()
+		local mdl = net.ReadString()
+		local ply = net.ReadEntity()
+
+		if IsValid(ply) then
+			util.PrecacheModel(mdl)
+
+			ply:SetSubRoleModel(mdl)
 		end
 	end)
 end
@@ -589,6 +603,59 @@ function plymeta:SetTargetPlayer(ply)
 		net.Start("TTT2TargetPlayer")
 		net.WriteEntity(ply)
 		net.Send(self)
+	end
+end
+
+function plymeta:GetSubRoleModel()
+	return self.subroleModel
+end
+
+function plymeta:SetSubRoleModel(mdl)
+	self.subroleModel = mdl
+
+	if SERVER then
+		net.Start("TTT2SyncSubroleModel")
+		net.WriteString(mdl)
+		net.WriteEntity(self)
+		net.Broadcast()
+	end
+end
+
+-- override to fix PS/ModelSelector/... issues
+local oldSetModel = plymeta.SetModel
+function plymeta:SetModel(mdlName)
+	local mdl
+
+	local curMdl = mdlName or self:GetModel()
+	if not curMdl or curMdl == "models/player.mdl" then
+		curMdl = GAMEMODE.playermodel or "models/player/phoenix.mdl"
+	end
+
+	local srMdl = self:GetSubRoleModel()
+	if srMdl then
+		mdl = srMdl
+
+		if curMdl ~= srMdl then
+			self.oldModel = curMdl
+		end
+	else
+		if self.oldModel then
+			mdl = self.oldModel
+			self.oldModel = nil
+		else
+			mdl = curMdl
+		end
+	end
+
+	if isfunction(oldSetModel) then
+		oldSetModel(self, mdl)
+
+		if SERVER then
+			net.Start("TTT2SyncModel")
+			net.WriteString(mdl)
+			net.WriteEntity(self)
+			net.Broadcast()
+		end
 	end
 end
 

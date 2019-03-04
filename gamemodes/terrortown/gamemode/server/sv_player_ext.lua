@@ -583,18 +583,6 @@ local function FindCorpsePosition(corpse)
 	return false
 end
 
-function plymeta:GetSubRoleModel()
-	return self.subroleModel
-end
-
-function plymeta:SetSubRoleModel(mdl)
-	if mdl then
-		self.nonsubroleModel = self.nonsubroleModel or self:GetModel()
-	end
-
-	self.subroleModel = mdl
-end
-
 function plymeta:Revive(delay, fn, check, needcorpse, force, onFail)
 	local ply = self
 	local name = "TTT2RevivePlayer" .. ply:EntIndex()

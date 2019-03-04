@@ -58,7 +58,7 @@ if CLIENT then
 	end
 
 	function HUDELEMENT:DrawWeapon(x, y, c, wep)
-		if not IsValid(wep) then
+		if not IsValid(wep) or not IsValid(wep.Owner) or not isfunction(wep.Owner.GetAmmoCount) then
 			return false
 		end
 
