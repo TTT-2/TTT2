@@ -10,10 +10,9 @@ if CLIENT then
 	local pad_default = 14
 	local lpw_default = 44
 	local sri_text_width_padding_default = 8
-	local w_default, h_default = 365, 146
 
 	local x, y = 0, 0
-	local w, h = w_default, h_default
+	local w, h = 365, 146
 	local scale = 1.0
 	local min_w, min_h = 225, 146
 	local pad = pad_default -- padding
@@ -50,7 +49,7 @@ if CLIENT then
 		w = size.w
 		h = size.h
 
-		scale = math.min(w / w_default, h / h_default)
+		scale = math.min(w / min_w, h / min_h)
 
 		lpw = lpw_default * scale
 		pad = pad_default * scale
