@@ -31,6 +31,16 @@ if CLIENT then
 		BaseClass.Initialize(self)
 	end
 
+	-- parameter overwrites
+	function HUDELEMENT:ShouldShow()
+		return GAMEMODE.round_state == ROUND_ACTIVE
+	end
+
+	function HUDELEMENT:InheritParentBorder()
+		return true
+	end
+	-- parameter overwrites end
+
 	function HUDELEMENT:RecalculateBasePos()
 
 	end
@@ -52,8 +62,6 @@ if CLIENT then
 	function HUDELEMENT:Draw()
 		local client = LocalPlayer()
 		local round_state = GAMEMODE.round_state
-
-		if round_state ~= ROUND_ACTIVE then return end
 
 		-- draw team icon
 		local team = client:GetTeam()
@@ -85,6 +93,8 @@ if CLIENT then
 		self:DrawLines(x + pad, y + pad, iconSize, iconSize, 255)
 
 		-- draw lines around the element
-		self:DrawLines(x, y, h, h, self.basecolor.a)
+		if not self:InheritParentBorder() then
+			self:DrawLines(x, y, h, h, self.basecolor.a)
+		end
 	end
 end

@@ -27,6 +27,16 @@ if CLIENT then
 		BaseClass.Initialize(self)
 	end
 
+	-- parameter overwrites
+	function HUDELEMENT:ShouldShow()
+		return GAMEMODE.round_state == ROUND_ACTIVE
+	end
+
+	function HUDELEMENT:InheritParentBorder()
+		return true
+	end
+	-- parameter overwrites end
+
 	function HUDELEMENT:RecalculateBasePos()
 
 	end
@@ -68,9 +78,6 @@ if CLIENT then
 
 	function HUDELEMENT:Draw()
 		local client = LocalPlayer()
-		local round_state = GAMEMODE.round_state
-
-		if round_state ~= ROUND_ACTIVE then return end
 
 		local players = util.GetFilteredPlayers(function (ply)
 			return ply:IsTerror() or ply:IsDeadTerror()
@@ -109,6 +116,8 @@ if CLIENT then
 		end
 
 		-- draw lines around the element
-		self:DrawLines(self.pos.x, self.pos.y, self.size.w, self.size.h, self.basecolor.a)
+		if not self:InheritParentBorder() then
+			self:DrawLines(self.pos.x, self.pos.y, self.size.w, self.size.h, self.basecolor.a)
+		end
 	end
 end

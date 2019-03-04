@@ -15,18 +15,11 @@ local min_size_tbl = {
 	h = 0
 }
 
-local resizeable_tbl = {
-	x = false,
-	y = false
-}
-
 HUDELEMENT.basepos = table.Copy(zero_tbl_pos)
 HUDELEMENT.pos = table.Copy(zero_tbl_pos)
 HUDELEMENT.size = table.Copy(zero_tbl_size)
 HUDELEMENT.minsize = table.Copy(min_size_tbl)
-HUDELEMENT.resizeable = table.Copy(resizeable_tbl)
 HUDELEMENT.scale = 1.0
-HUDELEMENT.lockAspectRatio = false
 
 HUDELEMENT.defaults = {
 	basepos = table.Copy(HUDELEMENT.basepos),
@@ -69,6 +62,24 @@ end
 function HUDELEMENT:Draw()
 	-- Override this function to draw your element
 end
+
+-- parameter overwrites
+function HUDELEMENT:ShouldShow()
+	return true
+end
+
+function HUDELEMENT:IsResizable()
+	return true, true
+end
+
+function HUDELEMENT:AspectRatioIsLocked()
+	return false
+end
+
+function HUDELEMENT:InheritParentBorder()
+	return false
+end
+-- parameter overwrites end
 
 --[[------------------------------
 	PerformLayout()
@@ -122,17 +133,35 @@ function HUDELEMENT:SetPos(x, y)
 	self.pos.y = y
 end
 
-function HUDELEMENT:SetResizable(x, y)
-	self.resizeable.x = x
-	self.resizeable.y = y
-end
+function HUDELEMENT:GetBorderParams()
+	if self:IsParent() then
+		local pos = self:GetPos()
+		local size = self:GetSize()
+		local children = self:GetChildren()
 
-function HUDELEMENT:SetLockAspectRatio(locked)
-	self.lockAspectRatio = locked or true
-end
+		local x_min, y_min, x_max, y_max = pos.x, pos.y, pos.x + size.w, pos.y + size.h
 
-function HUDELEMENT:GetLockAspectRatio()
-	return self.lockAspectRatio
+		-- iterate over children
+		for _, elem_str in ipairs(self.children) do
+			local elem = hudelements.GetStored(elem_str)
+
+			local hud = huds.GetStored(HUDManager.GetHUD())
+
+			if elem and elem:InheritParentBorder() and hud:ShouldShow(elem.type) and elem:ShouldShow() then
+				local c_pos = elem:GetPos()
+				local c_size = elem:GetSize()
+
+				x_min = math.min(x_min, c_pos.x)
+				y_min = math.min(y_min, c_pos.y)
+				x_max = math.max(x_max, c_pos.x + c_size.w)
+				y_max = math.max(y_max, c_pos.y + c_size.h)
+			end
+		end
+
+		return {x = x_min, y = y_min}, {w = x_max-x_min, h = y_max-y_min}
+	else
+		return self:GetPos(), self:GetSize()
+	end
 end
 
 function HUDELEMENT:SetMinSize(w, h)
@@ -239,11 +268,12 @@ function HUDELEMENT:OnHovered(x, y)
 	local maxX, maxY = minX + self.size.w, minY + self.size.h
 
 	local c_pad, c_area = self.defaults.click_padding, self.defaults.click_area
+	local res_x, res_y = self:IsResizable()
 
 	local row, col
 
 	-- ROWS
-	if self.resizeable.y then
+	if res_y then
 		row = {
 			y > minY + c_pad and y < minY + c_pad + c_area, -- top row
 			y > minY + 2*c_pad + c_area and y < maxY - 2*c_pad - c_area, -- center column
@@ -258,7 +288,7 @@ function HUDELEMENT:OnHovered(x, y)
 	end
 
 	-- COLUMS
-	if self.resizeable.x then
+	if res_x then
 		col = {
 			x > minX + c_pad and x < minX + c_pad + c_area, -- left column
 			x > minX + 2*c_pad + c_area and x < maxX - 2*c_pad - c_area, -- center column
@@ -273,7 +303,7 @@ function HUDELEMENT:OnHovered(x, y)
 	end
 
 	-- locked aspect ratio has to be a special case to not break movement
-	if self.lockAspectRatio then
+	if self:AspectRatioIsLocked() then
 		-- ignore if mouse is on center
 		if (not (row[2] and col[2])) then
 			row[2] = false
@@ -293,6 +323,7 @@ function HUDELEMENT:DrawHowered(x, y)
 	local minX, minY = self.pos.x, self.pos.y
 	local maxX, maxY = minX + self.size.w, minY + self.size.h
 	local c_pad, c_area = self.defaults.click_padding, self.defaults.click_area
+	local res_x, res_y = self:IsResizable()
 
 	local row, col = self:OnHovered(x, y)
 	local x1, x2, y1, y2 = 0, 0, 0, 0
@@ -300,10 +331,10 @@ function HUDELEMENT:DrawHowered(x, y)
 	if row[1] then -- resizeable in all directions
 		y1 = minY + c_pad
 		y2 = minY + c_pad + c_area
-	elseif row[2] and (col[1] or col[3]) and not self.resizeable.y then -- only resizeable in X
+	elseif row[2] and (col[1] or col[3]) and not res_y then -- only resizeable in X
 		y1 = minY + c_pad
 		y2 = maxY - c_pad
-	elseif row[2] and not self.resizeable.y then -- only resizeable in X / show center area
+	elseif row[2] and not res_y then -- only resizeable in X / show center area
 		y1 = minY + c_pad
 		y2 = maxY - c_pad
 	elseif row[2] then -- resizeable in all directions / show center area
@@ -317,10 +348,10 @@ function HUDELEMENT:DrawHowered(x, y)
 	if col[1] then -- resizeable in all directions
 		x1 = minX + c_pad
 		x2 = minX + c_pad + c_area
-	elseif col[2] and (row[1] or row[3]) and not self.resizeable.x then -- only resizeable in Y
+	elseif col[2] and (row[1] or row[3]) and not res_x then -- only resizeable in Y
 		x1 = minX + c_pad
 		x2 = maxX - c_pad
-	elseif col[2] and not self.resizeable.x then -- only resizeable in Y / show center area
+	elseif col[2] and not res_x then -- only resizeable in Y / show center area
 		x1 = minX + c_pad
 		x2 = maxX - c_pad
 	elseif col[2] then -- resizeable in all directions / show center area

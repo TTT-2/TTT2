@@ -23,10 +23,15 @@ if CLIENT then
 
 		self:SetSize(w, h)
 		self:SetMinSize(w, h)
-		self:SetResizable(true, true)
 
 		BaseClass.Initialize(self)
 	end
+
+	-- parameter overwrites
+	function HUDELEMENT:IsResizable()
+		return true, true
+	end
+	-- parameter overwrites end
 
 	function HUDELEMENT:RecalculateBasePos()
 		self:SetBasePos(math.Round(ScrW() * 0.5 - w * 0.5), 4 * scale)
@@ -107,6 +112,7 @@ if CLIENT then
 		end
 
 		-- draw lines around the element
-		self:DrawLines(x, y, w, h, self.basecolor.a)
+		local border_pos, border_size = self:GetBorderParams()
+		self:DrawLines(border_pos.x, border_pos.y, border_size.w, border_size.h, self.basecolor.a)
 	end
 end

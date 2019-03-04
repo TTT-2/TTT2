@@ -23,10 +23,15 @@ if CLIENT then -- CLIENT
 		
 		self:SetSize(width, height)
 		self:SetMinSize(min_w, min_h)
-		self:SetResizable(true, false)
 
 		BaseClass.Initialize(self)
 	end
+
+	-- parameter overwrites
+	function HUDELEMENT:IsResizable()
+		return true, false
+	end
+	-- parameter overwrites end
 
 	function HUDELEMENT:RecalculateBasePos()
 	    self:SetBasePos(10 * self.scale, ScrH() - height - 146 * self.scale - pad - 10 * self.scale)

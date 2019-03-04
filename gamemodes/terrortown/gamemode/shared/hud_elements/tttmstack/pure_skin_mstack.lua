@@ -63,7 +63,6 @@ if CLIENT then
 
 		self:SetSize(width, 80)
 		self:SetMinSize(min_w, min_h)
-		self:SetResizable(true, false)
 
 		base_text_display_options = {
 			font = msgfont,
@@ -73,6 +72,12 @@ if CLIENT then
 
 		BaseClass.Initialize(self)
 	end
+
+	-- parameter overwrites
+	function HUDELEMENT:IsResizable()
+		return true, false
+	end
+	-- parameter overwrites end
 
 	function HUDELEMENT:RecalculateBasePos()
 		top_y = margin

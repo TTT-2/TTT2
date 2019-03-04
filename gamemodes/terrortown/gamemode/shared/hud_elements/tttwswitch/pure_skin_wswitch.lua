@@ -27,10 +27,15 @@ if CLIENT then
 		self:RecalculateBasePos()
 		self:SetSize(width, -height)
 		self:SetMinSize(min_w, min_h)
-		self:SetResizable(true, false)
 
 		BaseClass.Initialize(self)
 	end
+
+	-- parameter overwrites
+	function HUDELEMENT:IsResizable()
+		return true, false
+	end
+	-- parameter overwrites end
 
 	function HUDELEMENT:DrawBarBg(x, y, w, h, col)
 		local ply = LocalPlayer()

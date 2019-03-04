@@ -90,6 +90,8 @@ local function EditLocalHUD()
 
 				-- reset clicked because it sould be only executed once
 				client.mouse_clicked = false
+
+				elem:GetBorderParams()
 			end
 
 			-- get data about the element, it returns the transformation direction
@@ -124,7 +126,7 @@ local function EditLocalHUD()
 				else -- resize mode
 					-- calc base data while checking for the shift key
 					local additional_w, additional_h
-					if (shift_pressed and trans_data.edge) or elem:GetLockAspectRatio() then
+					if (shift_pressed and trans_data.edge) or elem:AspectRatioIsLocked() then
 						if dif_x * trans_data.direction_x * client.size.h > dif_y * trans_data.direction_y * client.size.w then
 							dif_x = math.Round(dif_y * trans_data.direction_y * client.aspect) * trans_data.direction_x
 						else
@@ -183,7 +185,7 @@ local function EditLocalHUD()
 					end
 
 					-- make sure the element does not leave the screen when the aspect ratio is fixed
-					if elem:GetLockAspectRatio() then
+					if elem:AspectRatioIsLocked() then
 						new_w = (new_w < new_h) and new_w or new_h
 						new_h = new_w
 					end
@@ -416,7 +418,9 @@ function HUDManager.DrawHUD()
 		end
 
 		if elem.initialized and elem.type and hud:ShouldShow(elem.type) and hook.Call("HUDShouldDraw", GAMEMODE, elem.type) then
-			elem:Draw()
+			if elem:ShouldShow() then
+				elem:Draw()
+			end
 
 			if HUDManager.IsEditing then
 				elem:DrawSize()
