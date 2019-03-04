@@ -60,11 +60,12 @@ if CLIENT then
 	function HUDELEMENT:Initialize()
 		msg_width = msg_width_default
 		margin = margin_default
+		self.scale = 1.0
 
 		self:RecalculateBasePos()
 
-		self:SetSize(msg_width, 80)
 		self:SetMinSize(min_w, min_h)
+		self:SetSize(msg_width, 80)
 
 		base_text_display_options = {
 			font = msgfont,

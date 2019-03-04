@@ -22,12 +22,14 @@ if CLIENT then
 
 	function HUDELEMENT:Initialize()
 		width, height = width_default, height_default
+		self.scale = 1.0
 
 		WSWITCH:UpdateWeaponCache()
 
 		self:RecalculateBasePos()
-		self:SetSize(width, -height)
+
 		self:SetMinSize(min_w, min_h)
+		self:SetSize(width, -height)
 
 		BaseClass.Initialize(self)
 	end

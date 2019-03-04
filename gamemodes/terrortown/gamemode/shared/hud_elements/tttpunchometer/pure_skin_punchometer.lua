@@ -24,11 +24,12 @@ if CLIENT then
 	function HUDELEMENT:Initialize()
 		w, h = w_default, h_default
 		margin = margin_default
+		self.scale = 1.0
 
 		self:RecalculateBasePos()
 
-		self:SetSize(w, h)
 		self:SetMinSize(min_w, min_h)
+		self:SetSize(w, h)
 
 		BaseClass.Initialize(self)
 	end

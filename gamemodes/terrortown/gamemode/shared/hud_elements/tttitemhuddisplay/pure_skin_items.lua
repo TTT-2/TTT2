@@ -15,6 +15,7 @@ if CLIENT then
 
 	function HUDELEMENT:Initialize()
 		size = size_default
+		self.scale = 1.0
 
 		self:RecalculateBasePos()
 

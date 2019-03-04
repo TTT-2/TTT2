@@ -19,13 +19,14 @@ if CLIENT then
 	function HUDELEMENT:Initialize()
 		w, h = w_default, h_default
 		scale = 1.0
+		self.scale = 1.0
 
 		self:RecalculateBasePos()
 
 		self.disabledUnlessForced = true
 
-		self:SetSize(w, h)
 		self:SetMinSize(w, h)
+		self:SetSize(w, h)
 
 		BaseClass.Initialize(self)
 	end
