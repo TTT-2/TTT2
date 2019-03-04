@@ -409,19 +409,7 @@ function HUDManager.DrawHUD()
 
 	local client = LocalPlayer()
 
-	local children, parents = {}, {}
 	for _, elemName in ipairs(hud:GetElements()) do
-		if hudelements.GetStored(elemName):IsChild() then
-			children[#children + 1] = elemName
-		else
-			parents[#parents + 1] = elemName
-		end
-	end
-
-	-- merge into children because they should be drawn first
-	table.Add(children, parents)
-
-	for _, elemName in ipairs(children) do
 		local elem = hudelements.GetStored(elemName)
 		if not elem then
 			MsgN("Error: Hudelement with name " .. elemName .. " not found!")

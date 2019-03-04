@@ -135,12 +135,8 @@ else
 		local mdl = net.ReadString()
 		local ply = net.ReadEntity()
 
-		print("Received RoleModelMOD")
-
 		if IsValid(ply) then
 			util.PrecacheModel(mdl)
-
-			print("set", ply:Nick(), mdl)
 
 			ply:SetModel(mdl)
 		end
@@ -636,15 +632,19 @@ function plymeta:SetModel(mdlName)
 
 	local curMdl = mdlName or self:GetModel()
 	if not checkModel(curMdl) then
-		if not checkModel(GAMEMODE.playermodel) then
-			GAMEMODE.playermodel = GAMEMODE.force_plymodel == "" and GetRandomPlayerModel() or GAMEMODE.force_plymodel
+		curMdl = self.defaultModel
 
+		if not checkModel(curMdl) then
 			if not checkModel(GAMEMODE.playermodel) then
-				GAMEMODE.playermodel = "models/player/phoenix.mdl"
-			end
-		end
+				GAMEMODE.playermodel = GAMEMODE.force_plymodel == "" and GetRandomPlayerModel() or GAMEMODE.force_plymodel
 
-		curMdl = GAMEMODE.playermodel
+				if not checkModel(GAMEMODE.playermodel) then
+					GAMEMODE.playermodel = "models/player/phoenix.mdl"
+				end
+			end
+
+			curMdl = GAMEMODE.playermodel
+		end
 	end
 
 	local srMdl = self:GetSubRoleModel()
@@ -668,24 +668,16 @@ function plymeta:SetModel(mdlName)
 		mdl = "models/player/phoenix.mdl"
 	end
 
-	print("Set Model 1")
-
 	if isfunction(oldSetModel) then
-		print("Set Model 2")
-
 		oldSetModel(self, mdl)
 
 		if SERVER then
-			print("Send to clients -> !")
-
 			net.Start("TTT2SyncModel")
 			net.WriteString(mdl)
 			net.WriteEntity(self)
 			net.Broadcast()
 		end
 	end
-
-	print("Set Model 3", mdl)
 end
 
 hook.Add("TTTEndRound", "TTTEndRound4TTT2TargetPlayer", function()

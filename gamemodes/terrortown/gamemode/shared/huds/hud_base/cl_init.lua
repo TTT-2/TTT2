@@ -151,14 +151,22 @@ function HUD:GetElements()
 	local hudelems = self:GetForcedElements()
 
 	-- loop through all types and if the hud does not provide an element take the first found instance for the type
+	local children, parents = {}, {}
 	for _, typ in ipairs(hudelements.GetElementTypes()) do
 		local el = self:GetElementByType(typ)
 		if el then
-			tbl[#tbl + 1] = el.id
+			if el:IsChild() then
+				children[#children + 1] = el.id
+			else
+				parents[#parents + 1] = el.id
+			end
 		end
 	end
 
-	return tbl
+	-- merge into children because they should be drawn first
+	table.Add(children, parents)
+
+	return children
 end
 
 function HUD:Loaded()

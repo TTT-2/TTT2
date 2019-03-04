@@ -277,11 +277,11 @@ end
 function GM:PlayerSetModel(ply)
 	if not IsValid(ply) then return end
 
-	local mdl = GAMEMODE.playermodel or "models/player/phoenix.mdl"
+	local mdl = ply.defaultModel or GAMEMODE.playermodel or "models/player/phoenix.mdl"
 
 	util.PrecacheModel(mdl)
 
-	ply:SetModel(mdl)
+	ply:SetModel(mdl) -- this will call the overwritten internal function to modify the model
 
 	-- Always clear color state, may later be changed in TTTPlayerSetColor
 	ply:SetColor(COLOR_WHITE)
