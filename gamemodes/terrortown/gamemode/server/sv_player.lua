@@ -274,42 +274,14 @@ function GM:PlayerSelectSpawn(ply)
 	return picked
 end
 
-util.AddNetworkString("TTT2SyncModel")
-
 function GM:PlayerSetModel(ply)
 	if not IsValid(ply) then return end
 
-	local mdl
-
-	local curMdl = ply:GetModel()
-	if not curMdl or curMdl == "models/player.mdl" then
-		curMdl = GAMEMODE.playermodel or "models/player/phoenix.mdl"
-	end
-
-	local srMdl = ply:GetSubRoleModel()
-	if srMdl then
-		mdl = srMdl
-
-		if curMdl ~= srMdl then
-			ply.oldModel = curMdl
-		end
-	else
-		if ply.oldModel then
-			mdl = ply.oldModel
-			ply.oldModel = nil
-		else
-			mdl = curMdl
-		end
-	end
+	local mdl = GAMEMODE.playermodel or "models/player/phoenix.mdl"
 
 	util.PrecacheModel(mdl)
 
 	ply:SetModel(mdl)
-
-	net.Start("TTT2SyncModel")
-	net.WriteString(mdl)
-	net.WriteEntity(ply)
-	net.Broadcast()
 
 	-- Always clear color state, may later be changed in TTTPlayerSetColor
 	ply:SetColor(COLOR_WHITE)
