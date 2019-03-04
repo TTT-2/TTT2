@@ -53,7 +53,7 @@ if CLIENT then
 		w = size.w
 		h = size.h
 
-		scale = math.min(w / w_default, h / h_default)
+		scale = math.min(w / min_w, h / min_h)
 
 		lpw = lpw_default * scale
 		pad = pad_default * scale
