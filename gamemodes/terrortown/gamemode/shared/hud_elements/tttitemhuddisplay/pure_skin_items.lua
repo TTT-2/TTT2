@@ -14,6 +14,8 @@ if CLIENT then
 	local size = size_default
 
 	function HUDELEMENT:Initialize()
+		size = size_default
+
 		self:RecalculateBasePos()
 
 		self:SetMinSize(size, size)

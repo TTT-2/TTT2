@@ -17,6 +17,9 @@ if CLIENT then
 	local pad = 14 -- padding
 
 	function HUDELEMENT:Initialize()
+		w, h = w_default, h_default
+		scale = 1.0
+
 		self:RecalculateBasePos()
 
 		self.disabledUnlessForced = true

@@ -10,12 +10,16 @@ if CLIENT then
 
 	local pad_default = 14
 	local bh_default = 8 -- bar height
+	local w_default, h_default = 321, 36
 
-	local w, h = 321, 36
+	local w, h = w_default, h_default
 	local min_w, min_h = 75, 36
 	local pad = pad_default -- padding
 	
 	function HUDELEMENT:Initialize()
+		w, h = w_default, h_default
+		pad = pad_default
+		
 		self:RecalculateBasePos()
 		
 		self:SetSize(w, h)

@@ -11,17 +11,21 @@ HUDELEMENT.Base = base
 if CLIENT then -- CLIENT
 	local iconSize_default = 64
 	local pad_default = 14
+	local w_default, h_default = 365, 32
 
-	local width, height = 365, 32
+	local w, h = w_default, h_default
 	local min_w, min_h = 225, 32
 	local pad = pad_default -- padding
 	local iconSize = iconSize_default
 	local target_icon = Material("vgui/ttt/target_icon")
 
 	function HUDELEMENT:Initialize()
+		w, h = w_default, h_default
+		pad = pad_default
+
 		self:RecalculateBasePos()
 		
-		self:SetSize(width, height)
+		self:SetSize(w, h)
 		self:SetMinSize(min_w, min_h)
 
 		BaseClass.Initialize(self)
@@ -34,7 +38,7 @@ if CLIENT then -- CLIENT
 	-- parameter overwrites end
 
 	function HUDELEMENT:RecalculateBasePos()
-	    self:SetBasePos(10 * self.scale, ScrH() - height - 146 * self.scale - pad - 10 * self.scale)
+	    self:SetBasePos(10 * self.scale, ScrH() - h - 146 * self.scale - pad - 10 * self.scale)
 	end
 
 	function HUDELEMENT:PerformLayout()
@@ -43,7 +47,7 @@ if CLIENT then -- CLIENT
 		iconSize = iconSize_default * self.scale
 		pad = pad_default * self.scale
 
-		width, height = size.w, size.h
+		w, h = size.w, size.h
 	end
 
 	function HUDELEMENT:DrawComponent(name)
@@ -52,15 +56,15 @@ if CLIENT then -- CLIENT
 		local pos = self:GetPos()
 		local x, y = pos.x, pos.y
 
-		self:DrawBg(x, y, width, height, self.basecolor)
-		self:AdvancedText(name, "PureSkinBar", x + iconSize + pad, y + height * 0.5, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, true, self.scale)
-		self:DrawLines(x, y, width, height, self.basecolor.a)
+		self:DrawBg(x, y, w, h, self.basecolor)
+		self:AdvancedText(name, "PureSkinBar", x + iconSize + pad, y + h * 0.5, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, true, self.scale)
+		self:DrawLines(x, y, w, h, self.basecolor.a)
 
 		local nSize = iconSize - 8
 
 		surface.SetDrawColor(255, 255, 255, 255)
 		surface.SetMaterial(target_icon)
-		surface.DrawTexturedRect(x, y + 2 - (nSize - height), nSize, nSize)
+		surface.DrawTexturedRect(x, y + 2 - (nSize - h), nSize, nSize)
 	end
 
 	function HUDELEMENT:Draw()

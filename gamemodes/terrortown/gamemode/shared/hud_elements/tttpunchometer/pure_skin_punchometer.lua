@@ -13,17 +13,21 @@ DEFINE_BASECLASS(base)
 if CLIENT then
 	local pad_default = 7
 	local margin_default = 14
+	local w_default, h_default = 200, 40
 
-	local width, height = 200, 40
+	local w, h = w_default, h_default
 	local min_w, min_h = 100, 40
 	local draw_col = Color(205, 155, 0, 255)
 	local pad = pad_default
 	local margin = margin_default
 
 	function HUDELEMENT:Initialize()
+		w, h = w_default, h_default
+		margin = margin_default
+
 		self:RecalculateBasePos()
 
-		self:SetSize(width, height)
+		self:SetSize(w, h)
 		self:SetMinSize(min_w, min_h)
 
 		BaseClass.Initialize(self)
@@ -36,7 +40,7 @@ if CLIENT then
 	-- parameter overwrites end
 
 	function HUDELEMENT:RecalculateBasePos()
-		self:SetBasePos(ScrW() * 0.5 - width * 0.5, (margin + 72) * self.scale)
+		self:SetBasePos(ScrW() * 0.5 - w * 0.5, (margin + 72) * self.scale)
 	end
 
 	-- Paint punch-o-meter
@@ -44,16 +48,14 @@ if CLIENT then
 		local client = LocalPlayer()
 		local L = GetLang()
 		local punch = client:GetNWFloat("specpunches", 0)
-		local size = self:GetSize()
 		local pos = self:GetPos()
-		local width, height = size.w, size.h
 		local x, y = pos.x, pos.y
 
-		self:DrawBg(x, y, width, height, self.basecolor)
-		self:DrawBar(x + pad, y + pad, width - pad * 2, height - pad * 2, draw_col, punch, self.scale, L.punch_title)
-		self:DrawLines(x, y, width, height, self.basecolor.a)
+		self:DrawBg(x, y, w, h, self.basecolor)
+		self:DrawBar(x + pad, y + pad, w - pad * 2, h - pad * 2, draw_col, punch, self.scale, L.punch_title)
+		self:DrawLines(x, y, w, h, self.basecolor.a)
 
-		self:AdvancedText(L.punch_help, "TabLarge", x + width * 0.5, y, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, true, self.scale)
+		self:AdvancedText(L.punch_help, "TabLarge", x + w * 0.5, y, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, true, self.scale)
 
 		local bonus = client:GetNWInt("bonuspunches", 0)
 		if bonus ~= 0 then
@@ -65,7 +67,7 @@ if CLIENT then
 				text = interp(L.punch_malus, {num = bonus})
 			end
 
-			self:AdvancedText(text, "TabLarge", x + width * 0.5, y + margin * 2 + 20, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, true, self.scale)
+			self:AdvancedText(text, "TabLarge", x + w * 0.5, y + margin * 2 + 20, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, true, self.scale)
 		end
 	end
 
@@ -74,7 +76,7 @@ if CLIENT then
 
 		pad = pad_default * self.scale
 		margin = margin_default * self.scale
-		width, height = size.w, size.h
+		w, h = size.w, size.h
 
 		BaseClass.PerformLayout(self)
 	end

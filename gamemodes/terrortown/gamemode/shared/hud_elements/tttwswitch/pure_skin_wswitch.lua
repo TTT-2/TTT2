@@ -10,18 +10,19 @@ DEFINE_BASECLASS(base)
 HUDELEMENT.Base = base
 
 if CLIENT then
-	local height_default = 28
+	local width_default, height_default = 365, 28
 	local margin_default = 5
 	local lpw_default = 22
 
-	local width = 365
-	local height = height_default
+	local width, height = width_default, height_default
 	local min_w, min_h = 240, 28
 
 	HUDELEMENT.margin = margin_default
 	HUDELEMENT.lpw = lpw_default -- left panel width
 
 	function HUDELEMENT:Initialize()
+		width, height = width_default, height_default
+
 		WSWITCH:UpdateWeaponCache()
 
 		self:RecalculateBasePos()
@@ -102,7 +103,7 @@ if CLIENT then
 	}
 
 	function HUDELEMENT:RecalculateBasePos()
-		self.margin = 5 * self.scale
+		self.margin = margin_default * self.scale
 
 		self:SetBasePos(ScrW() - (width + self.margin * 2), ScrH() - self.margin)
 	end

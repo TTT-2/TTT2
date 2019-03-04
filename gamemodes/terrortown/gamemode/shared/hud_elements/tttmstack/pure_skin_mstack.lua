@@ -22,6 +22,7 @@ if CLIENT then
 	local line_margin_default = 6
 	local top_margin_default = 4
 	local title_bottom_margin_default = 8
+	local msg_width_default = 400
 
 	local pad_default = 6
 	local leftImagePad_default = 10
@@ -45,7 +46,7 @@ if CLIENT then
 	local line_margin = line_margin_default
 	local top_margin = top_margin_default
 	local title_bottom_margin = title_bottom_margin_default
-	local msg_width = 400
+	local msg_width = msg_width_default
 	local pad = pad_default
 	local leftImagePad = leftImagePad_default
 	local text_width = msg_width - pad * 2 - leftPad
@@ -57,11 +58,12 @@ if CLIENT then
 	local min_w, min_h = 250, 80
 
 	function HUDELEMENT:Initialize()
-		local width = msg_width
+		msg_width = msg_width_default
+		margin = margin_default
 
 		self:RecalculateBasePos()
 
-		self:SetSize(width, 80)
+		self:SetSize(msg_width, 80)
 		self:SetMinSize(min_w, min_h)
 
 		base_text_display_options = {
