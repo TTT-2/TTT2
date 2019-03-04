@@ -664,7 +664,11 @@ function plymeta:SetModel(mdlName)
 		mdl = "models/player/phoenix.mdl"
 	end
 
+	print("Set Model 1")
+
 	if isfunction(oldSetModel) then
+		print("Set Model 2")
+
 		oldSetModel(self, mdl)
 
 		if SERVER then
@@ -674,6 +678,8 @@ function plymeta:SetModel(mdlName)
 			net.Broadcast()
 		end
 	end
+
+	print("Set Model 3", mdl)
 end
 
 hook.Add("TTTEndRound", "TTTEndRound4TTT2TargetPlayer", function()
