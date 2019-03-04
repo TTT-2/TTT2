@@ -23,6 +23,7 @@ if CLIENT then
 
 		self:SetSize(w, h)
 		self:SetMinSize(w, h)
+		self:SetResizable(true, true)
 
 		BaseClass.Initialize(self)
 	end

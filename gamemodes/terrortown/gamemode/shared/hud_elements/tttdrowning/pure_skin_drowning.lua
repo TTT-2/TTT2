@@ -17,13 +17,12 @@ if CLIENT then
 	
 	function HUDELEMENT:Initialize()
 		self:RecalculateBasePos()
+		
 		self:SetSize(w, h)
 		self:SetMinSize(min_w, min_h)
+		self:SetResizable(true, false)
 
 		BaseClass.Initialize(self)
-		
-		self.defaults.minWidth = pad_default + 2 * pad
-		self.defaults.resizeableY = false
 	end
 
 	function HUDELEMENT:RecalculateBasePos()

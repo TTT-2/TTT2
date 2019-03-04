@@ -19,13 +19,13 @@ if CLIENT then -- CLIENT
 	local target_icon = Material("vgui/ttt/target_icon")
 
 	function HUDELEMENT:Initialize()
-	    self:RecalculateBasePos()
+		self:RecalculateBasePos()
+		
 		self:SetSize(width, height)
 		self:SetMinSize(min_w, min_h)
+		self:SetResizable(true, false)
 
 		BaseClass.Initialize(self)
-		
-		self.defaults.resizeableY = false
 	end
 
 	function HUDELEMENT:RecalculateBasePos()

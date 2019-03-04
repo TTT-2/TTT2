@@ -60,11 +60,10 @@ if CLIENT then
 		local width = msg_width
 
 		self:RecalculateBasePos()
+
 		self:SetSize(width, 80)
 		self:SetMinSize(min_w, min_h)
-
-		self.defaults.resizeableX = true
-		self.defaults.resizeableY = false
+		self:SetResizable(true, false)
 
 		base_text_display_options = {
 			font = msgfont,
