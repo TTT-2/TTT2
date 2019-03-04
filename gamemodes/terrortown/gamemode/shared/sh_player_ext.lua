@@ -627,7 +627,7 @@ function plymeta:SetModel(mdlName)
 	local mdl
 
 	local curMdl = mdlName or self:GetModel()
-	if not curMdl or curMdl == "models/player.mdl" then
+	if not curMdl or curMdl == "" or curMdl == "models/player.mdl" then
 		curMdl = GAMEMODE.playermodel or "models/player/phoenix.mdl"
 	end
 
@@ -645,6 +645,11 @@ function plymeta:SetModel(mdlName)
 		else
 			mdl = curMdl
 		end
+	end
+
+	-- last but not least, we fix this grey model "bug"
+	if not mdl or mdl == "" or mdl == "models/player.mdl" then
+		mdl = "models/player/phoenix.mdl"
 	end
 
 	if isfunction(oldSetModel) then
