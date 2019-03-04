@@ -27,6 +27,8 @@ local function AddBindingCategory(category, parent)
 		if binding.category == category then
 			local dPlabel = vgui.Create("DLabel")
 			dPlabel:SetText(binding.label)
+			dPlabel:SetTextColor(COLOR_BLACK)
+			dPlabel:SetContentAlignment(5) -- center
 
 			local dPBinder = vgui.Create("DBinder")
 			dPBinder:SetSize(170, 30)
@@ -120,6 +122,7 @@ function HELPSCRN:Show()
 	local cols = 4
 	local btnWidth = math.Round((w2 - pad * (cols + 1)) / cols)
 	local btnHeight = btnWidth * 0.75
+	local settings_panel_default_bgcol = Color( 160, 160, 160, 255 )
 
 	local tbl = {
 		[1] = {
@@ -191,7 +194,7 @@ function HELPSCRN:Show()
 		settingsButton:SetSize(btnWidth, btnHeight)
 		settingsButton:SetFont("SettingsButtonFont")
 		settingsButton:SetText(title)
-		settingsButton:SetTextColor(Color(0, 0, 0, 255))
+		settingsButton:SetTextColor(COLOR_BLACK)
 
 		settingsButton.DoClick = function(slf)
 			dframe:Close()
@@ -220,6 +223,8 @@ function HELPSCRN:Show()
 			local pnl = vgui.Create("DScrollPanel", frame)
 			pnl:SetVerticalScrollbarEnabled(true)
 			pnl:Dock(FILL)
+			pnl:SetPaintBackground(true)
+			pnl:SetBackgroundColor(settings_panel_default_bgcol)
 
 			if isfunction(data.getContent) then
 				data.getContent(self, pnl)
