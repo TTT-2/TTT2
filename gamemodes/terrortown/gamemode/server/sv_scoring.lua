@@ -125,6 +125,11 @@ function SCORE:HandleSelection()
 		team = ply:GetTeam()
 		tmp[subrole] = tmp[subrole] or {}
 
+		if ply:SteamID64() == nil then
+			print("[TTT2] ERROR: Player has no steamID64")
+			break
+		end
+
 		table.insert(tmp[subrole], ply:SteamID64())
 
 		if team ~= TEAM_NONE then
