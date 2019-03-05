@@ -670,7 +670,7 @@ hook.Add("PostEntityInit", "TTT2OverrideSetModel", function()
 			mdl = "models/player/phoenix.mdl"
 		end
 
-		oldSetModel(self, mdl)
+		oldSetModel(self, Model(mdl))
 
 		if SERVER then
 			net.Start("TTT2SyncModel")
