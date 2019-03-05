@@ -621,32 +621,16 @@ function plymeta:SetSubRoleModel(mdl)
 	end
 end
 
-local function checkModel(mdl)
-	return mdl and mdl ~= "" and mdl ~= "models/player.mdl"
-end
-
 -- override to fix PS/ModelSelector/... issues
-local oldSetModel = plymeta.SetModel
-
-if isfunction(oldSetModel) then
+hook.Add("PostEntityInit", "TTT2OverrideSetModel", function()
+	-- override to fix PS/ModelSelector/... issues
+	local oldSetModel = plymeta.SetModel
 	function plymeta:SetModel(mdlName)
 		local mdl
 
 		local curMdl = mdlName or self:GetModel()
-		if not checkModel(curMdl) then
-			curMdl = self.defaultModel
-
-			if not checkModel(curMdl) then
-				if not checkModel(GAMEMODE.playermodel) then
-					GAMEMODE.playermodel = GAMEMODE.force_plymodel == "" and GetRandomPlayerModel() or GAMEMODE.force_plymodel
-
-					if not checkModel(GAMEMODE.playermodel) then
-						GAMEMODE.playermodel = "models/player/phoenix.mdl"
-					end
-				end
-
-				curMdl = GAMEMODE.playermodel
-			end
+		if not curMdl or curMdl == "models/player.mdl" then
+			curMdl = GAMEMODE.playermodel or "models/player/phoenix.mdl"
 		end
 
 		local srMdl = self:GetSubRoleModel()
@@ -665,23 +649,18 @@ if isfunction(oldSetModel) then
 			end
 		end
 
-		-- last but not least, we fix this grey model "bug"
-		if not checkModel(mdl) then
-			mdl = "models/player/phoenix.mdl"
-		end
+		if isfunction(oldSetModel) then
+			oldSetModel(self, mdl)
 
-		oldSetModel(self, mdl)
-
-		if SERVER then
-			net.Start("TTT2SyncModel")
-			net.WriteString(mdl)
-			net.WriteEntity(self)
-			net.Broadcast()
+			if SERVER then
+				net.Start("TTT2SyncModel")
+				net.WriteString(mdl)
+				net.WriteEntity(self)
+				net.Broadcast()
+			end
 		end
 	end
-else
-	print("SetModel modification couldn't applied...")
-end
+end)
 
 hook.Add("TTTEndRound", "TTTEndRound4TTT2TargetPlayer", function()
 	for _, pl in ipairs(player.GetAll()) do
