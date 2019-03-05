@@ -281,6 +281,24 @@ function CreateChanges()
 	</ul>
 	<br />]])
 
+	AddChange("0.5.1b", [[<ul>
+	<li>Improved the binding library and extended the functions</li>
+	<hr />
+	<li>Fixes:
+		<ul>
+			<li>Fixed target reset bug</li>
+			<li>Fixed / Adjusted hud element resize handling</li>
+			<li>Fixed strange weapon switch error</li>
+			<li>Fixed critical model reset bug</li>
+			<li>Fixed hudelements borders, childs will now extend the border of their parents</li>
+			<li>Fixed mstack shadowed text alpha fadeout</li>
+			<li>Fixed / Adjusted scaling calculations</li>
+			<li>Fixed render order</li>
+			<li>Fixed "player has no SteamID64" bug</li>
+		</ul>
+	</li>
+	</ul>]])
+
 	hook.Run("TTT2AddChange")
 end
 
