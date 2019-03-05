@@ -671,6 +671,13 @@ hook.Add("PostEntityInit", "TTT2OverrideSetModel", function()
 		end
 
 		oldSetModel(self, mdl)
+
+		if SERVER then
+			net.Start("TTT2SyncModel")
+			net.WriteString(mdl)
+			net.WriteEntity(self)
+			net.Broadcast()
+		end
 	end
 end)
 
