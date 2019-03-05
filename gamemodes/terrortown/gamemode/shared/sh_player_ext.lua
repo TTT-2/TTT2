@@ -611,6 +611,7 @@ function plymeta:GetSubRoleModel()
 end
 
 function plymeta:SetSubRoleModel(mdl)
+	if not mdl or mdl == "" then return end
 	self.subroleModel = mdl
 
 	if SERVER then
