@@ -627,7 +627,7 @@ function plymeta:SetSubRoleModel(mdl)
 end
 
 -- override to fix PS/ModelSelector/... issues
-hook.Add("PostEntityInit", "TTT2OverrideSetModel", function()
+hook.Add("InitPostEntity", "TTT2OverrideSetModel", function()
 	local oldSetModel = plymeta.SetModel
 	function plymeta:SetModel(mdlName)
 		local mdl
