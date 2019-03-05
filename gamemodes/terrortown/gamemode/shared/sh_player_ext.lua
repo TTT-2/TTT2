@@ -629,7 +629,6 @@ end
 -- override to fix PS/ModelSelector/... issues
 hook.Add("Initialize", "TTT2OverrideSetModel", function()
 	local oldSetModel = plymeta.SetModel or plymeta.MetaBaseClass.SetModel
-	print(oldSetModel)
 	function plymeta:SetModel(mdlName)
 		local mdl
 
