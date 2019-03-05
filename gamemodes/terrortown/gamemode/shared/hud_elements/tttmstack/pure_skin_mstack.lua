@@ -107,7 +107,7 @@ if CLIENT then
 		text_width = msg_width - pad * 2 - leftPad
 
 		-- invalidate previous item size calculations
-		for k, v in pairs(MSTACK.msgs) do
+		for _, v in pairs(MSTACK.msgs) do
 			v.ready = false
 		end
 
@@ -235,11 +235,13 @@ if CLIENT then
 			if item.time < CurTime() then
 				if not item.ready then
 					item.scale = self.scale
+
 					PrepareItem(item, self.basecolor)
 				end
 
 				if item.sounded == false then
 					LocalPlayer():EmitSound(msg_sound, 80, 250)
+
 					item.sounded = true
 				end
 

@@ -21,7 +21,7 @@ if CLIENT then
 	-- x, y, width, height, color, progress, scale, text
 	function HUDELEMENT:DrawBar(x, y, w, h, c, p, s, t)
 		s = s or 1
-	
+
 		surface.SetDrawColor(clr(c))
 		surface.DrawRect(x, y, w, h)
 
@@ -40,16 +40,18 @@ if CLIENT then
 	end
 
 	function HUDELEMENT:ShadowedText(text, font, x, y, color, xalign, yalign)
-		draw.SimpleText(text, font, x + 2, y + 2, shadowColor, xalign, yalign)
-		draw.SimpleText(text, font, x + 1, y + 1, shadowColor, xalign, yalign)
+		local tmpCol = Color(shadowColor.r, shadowColor.g, shadowColor.b, color.a)
+
+		draw.SimpleText(text, font, x + 2, y + 2, tmpCol, xalign, yalign)
+		draw.SimpleText(text, font, x + 1, y + 1, tmpCol, xalign, yalign)
 		draw.SimpleText(text, font, x, y, color, xalign, yalign)
 	end
-	
+
 	function HUDELEMENT:AdvancedText(text, font, x, y, color, xalign, yalign, shadow, scale)
 		local mat
 		if isvector(scale) or scale ~= 1.0 then
 			mat = Matrix()
-			mat:Translate(Vector(x, y))	
+			mat:Translate(Vector(x, y))
 			mat:Scale(isvector(scale) and scale or Vector(scale, scale, scale))
 			mat:Translate(-Vector(ScrW() / 2, ScrH() / 2))
 
@@ -61,13 +63,13 @@ if CLIENT then
 			x = ScrW() / 2
 			y = ScrH() / 2
 		end
-		
+
 		if shadow then
 			self:ShadowedText(text, font, x, y, color, xalign, yalign)
 		else
 			draw.SimpleText(text, font, x, y, color, xalign, yalign)
 		end
-		
+
 		if isvector(scale) or scale ~= 1.0 then
 			cam.PopModelMatrix(mat)
 
