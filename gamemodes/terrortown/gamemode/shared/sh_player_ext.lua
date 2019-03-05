@@ -136,8 +136,6 @@ else
 		local ply = net.ReadEntity()
 
 		if IsValid(ply) then
-			util.PrecacheModel(mdl)
-
 			ply:SetModel(mdl)
 		end
 	end)
@@ -146,9 +144,11 @@ else
 		local mdl = net.ReadString()
 		local ply = net.ReadEntity()
 
-		if IsValid(ply) then
-			util.PrecacheModel(mdl)
+		if mdl == "" then
+			mdl = nil
+		end
 
+		if IsValid(ply) then
 			ply:SetSubRoleModel(mdl)
 		end
 	end)
@@ -606,21 +606,24 @@ function plymeta:SetTargetPlayer(ply)
 	end
 end
 
-function plymeta:GetSubRoleModel()
-	return self.subroleModel
-end
-
 local function checkModel(mdl)
 	return mdl and mdl ~= "" and mdl ~= "models/player.mdl"
 end
 
+function plymeta:GetSubRoleModel()
+	return self.subroleModel
+end
+
 function plymeta:SetSubRoleModel(mdl)
-	 if not checkModel(mdl) then return end
+	if not checkModel(mdl) then
+		mdl = nil
+	end
+
 	self.subroleModel = mdl
 
 	if SERVER then
 		net.Start("TTT2SyncSubroleModel")
-		net.WriteString(mdl)
+		net.WriteString(mdl or "")
 		net.WriteEntity(self)
 		net.Broadcast()
 	end
