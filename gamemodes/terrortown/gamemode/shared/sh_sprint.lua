@@ -17,7 +17,7 @@ if SERVER then
 	end)
 
 	cvars.AddChangeCallback(sprintEnabled:GetName(), function(name, old, new)
-		SetGlobalFloat(name, new)
+		SetGlobalBool(name, tobool(new))
 	end, "TTT2SprintENChange")
 
 	cvars.AddChangeCallback(maxSprintMul:GetName(), function(name, old, new)
@@ -33,7 +33,7 @@ if SERVER then
 	end, "TTT2SprintSRChange")
 
 	cvars.AddChangeCallback(showCrosshair:GetName(), function(name, old, new)
-		SetGlobalBool(name, new)
+		SetGlobalBool(name, tobool(new))
 	end, "TTT2SprintCHChange")
 
 	net.Receive("TTT2SprintToggle", function(_, ply)
@@ -69,9 +69,7 @@ else
 	end,
 	function()
 		PlayerSprint(false)
-	end)
-
-	bind.AddSettingsBinding("ttt2_sprint", "TTT2 Sprint", "TTT2 Bindings")
+	end, "TTT2 Bindings", "TTT2 Sprint")
 end
 
 hook.Add("Think", "TTT2PlayerSprinting", function()
