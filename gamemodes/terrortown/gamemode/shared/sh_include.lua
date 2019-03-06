@@ -7,6 +7,7 @@ TTTFiles = {
 	cl_chat = {file = "cl_chat.lua", on = "client"},
 	cl_equip = {file = "cl_equip.lua", on = "client"},
 	cl_help = {file = "cl_help.lua", on = "client"},
+	cl_hud_editor = {file = "cl_hud_editor.lua", on = "client"},
 	cl_hud_manager = {file = "cl_hud_manager.lua", on = "client"},
 	cl_hudpickup = {file = "cl_hudpickup.lua", on = "client"},
 	cl_inventory = {file = "cl_inventory.lua", on = "client"},

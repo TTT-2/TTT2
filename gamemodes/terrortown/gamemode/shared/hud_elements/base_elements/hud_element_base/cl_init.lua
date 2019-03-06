@@ -315,7 +315,7 @@ function HUDELEMENT:OnHovered(x, y)
 	return row, col
 end
 
-function HUDELEMENT:DrawHowered(x, y)
+function HUDELEMENT:DrawHovered(x, y)
 	if not self:IsInPos(x, y) then
 		return false
 	end

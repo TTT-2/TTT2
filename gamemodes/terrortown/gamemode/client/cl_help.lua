@@ -152,12 +152,8 @@ function HELPSCRN:Show()
 		[2] = {
 			id = "hudSwitcher",
 			onclick = function(slf)
-				local hudswitcher = HUDManager.ShowHUDSwitcher(true)
-
-				if not hudswitcher then return end
-
 				client.hudswitcherSettingsF1 = true
-				client.settingsFrame = hudswitcher
+				HUDManager.ShowHUDSwitcher()
 			end,
 			getTitle = function()
 				return "HUD Switcher"
