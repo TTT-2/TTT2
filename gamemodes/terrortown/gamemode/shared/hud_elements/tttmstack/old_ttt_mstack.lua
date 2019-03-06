@@ -17,8 +17,6 @@ if CLIENT then
 		yalign = TEXT_ALIGN_TOP
 	}
 
-	local text_height = 0
-
 	local top_y = 0
 	local top_x = 0
 
@@ -77,13 +75,13 @@ if CLIENT then
 		BaseClass.PerformLayout(self)
 	end
 
-	local function PrepareItem(item, bg_color)
+	local function PrepareItem(item, bg_col)
 		local max_text_width = text_width
 		local item_height = pad * 2
 
 		item.text_spec = table.Copy(base_text_display_options)
 
-		item.bg = item.bg and table.Copy(item.bg) or table.Copy(bg_color)
+		item.bg = item.bg and table.Copy(item.bg) or table.Copy(bg_col)
 		item.bg.a_max = item.bg.a
 
 		item.col = item.col and table.Copy(item.col) or table.Copy(text_color)

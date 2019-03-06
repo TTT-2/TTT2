@@ -30,7 +30,6 @@ if CLIENT then
 	local imageSize_default = 64
 
 	local leftPad = leftPad_default
-	local text_height = 0
 
 	local top_y = 0
 	local top_x = 0

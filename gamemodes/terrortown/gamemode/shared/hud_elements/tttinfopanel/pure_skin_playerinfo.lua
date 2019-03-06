@@ -99,7 +99,7 @@ if CLIENT then
 		local L = GetLang()
 
 		local x2, y2, w2, h2 = x, y, w, h
-		
+
 		if not calive then
 			y2 = y2 + h2 - lpw
 			h2 = lpw
