@@ -277,7 +277,7 @@ end
 function GM:PlayerSetModel(ply)
 	if not IsValid(ply) then return end
 
-	ply:SetModel(nil) -- this will call the overwritten internal function to modify the model
+	ply:SetModel(ply:GetModel()) -- this will call the overwritten internal function to modify the model
 
 	-- Always clear color state, may later be changed in TTTPlayerSetColor
 	ply:SetColor(COLOR_WHITE)

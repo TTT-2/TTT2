@@ -630,59 +630,57 @@ function plymeta:SetSubRoleModel(mdl)
 end
 
 -- override to fix PS/ModelSelector/... issues
-hook.Add("Initialize", "TTT2OverrideSetModel", function()
-	local oldSetModel = plymeta.SetModel or plymeta.MetaBaseClass.SetModel
-	function plymeta:SetModel(mdlName)
-		local mdl
+local oldSetModel = plymeta.SetModel or plymeta.MetaBaseClass.SetModel
+function plymeta:SetModel(mdlName)
+	local mdl
 
-		local curMdl = mdlName or self:GetModel()
+	local curMdl = mdlName or self:GetModel()
+	if not checkModel(curMdl) then
+		curMdl = self.defaultModel
+
 		if not checkModel(curMdl) then
-			curMdl = self.defaultModel
+			if not checkModel(GAMEMODE.playermodel) then
+				GAMEMODE.playermodel = GAMEMODE.force_plymodel == "" and GetRandomPlayerModel() or GAMEMODE.force_plymodel
 
-			if not checkModel(curMdl) then
 				if not checkModel(GAMEMODE.playermodel) then
-					GAMEMODE.playermodel = GAMEMODE.force_plymodel == "" and GetRandomPlayerModel() or GAMEMODE.force_plymodel
-
-					if not checkModel(GAMEMODE.playermodel) then
-						GAMEMODE.playermodel = "models/player/phoenix.mdl"
-					end
+					GAMEMODE.playermodel = "models/player/phoenix.mdl"
 				end
-
-				curMdl = GAMEMODE.playermodel
 			end
-		end
 
-		local srMdl = self:GetSubRoleModel()
-		if srMdl then
-			mdl = srMdl
-
-			if curMdl ~= srMdl then
-				self.oldModel = curMdl
-			end
-		else
-			if self.oldModel then
-				mdl = self.oldModel
-				self.oldModel = nil
-			else
-				mdl = curMdl
-			end
-		end
-
-		-- last but not least, we fix this grey model "bug"
-		if not checkModel(mdl) then
-			mdl = "models/player/phoenix.mdl"
-		end
-
-		oldSetModel(self, Model(mdl))
-
-		if SERVER then
-			net.Start("TTT2SyncModel")
-			net.WriteString(mdl)
-			net.WriteEntity(self)
-			net.Broadcast()
+			curMdl = GAMEMODE.playermodel
 		end
 	end
-end)
+
+	local srMdl = self:GetSubRoleModel()
+	if srMdl then
+		mdl = srMdl
+
+		if curMdl ~= srMdl then
+			self.oldModel = curMdl
+		end
+	else
+		if self.oldModel then
+			mdl = self.oldModel
+			self.oldModel = nil
+		else
+			mdl = curMdl
+		end
+	end
+
+	-- last but not least, we fix this grey model "bug"
+	if not checkModel(mdl) then
+		mdl = "models/player/phoenix.mdl"
+	end
+
+	oldSetModel(self, Model(mdl))
+
+	if SERVER then
+		net.Start("TTT2SyncModel")
+		net.WriteString(mdl)
+		net.WriteEntity(self)
+		net.Broadcast()
+	end
+end
 
 hook.Add("TTTEndRound", "TTTEndRound4TTT2TargetPlayer", function()
 	for _, pl in ipairs(player.GetAll()) do
