@@ -7,6 +7,49 @@ local maxUnarmedSlots = CreateConVar("ttt2_max_unarmed_slots", "1", {FCVAR_NOTIF
 local maxSpecialSlots = CreateConVar("ttt2_max_special_slots", "2", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of special weapons, a player can carry (-1 = infinite)")
 local maxExtraSlots = CreateConVar("ttt2_max_extra_slots", "-1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of extra weapons, a player can carry (-1 = infinite)")
 
+hook.Add("TTT2SyncGlobals", "AddInventoryGlobals", function()
+	SetGlobalInt(maxMeleeSlots:GetName(), maxMeleeSlots:GetInt())
+	SetGlobalInt(maxSecondarySlots:GetName(), maxSecondarySlots:GetInt())
+	SetGlobalInt(maxPrimarySlots:GetName(), maxPrimarySlots:GetInt())
+	SetGlobalInt(maxNadeSlots:GetName(), maxNadeSlots:GetInt())
+	SetGlobalInt(maxCarrySlots:GetName(), maxCarrySlots:GetInt())
+	SetGlobalInt(maxUnarmedSlots:GetName(), maxUnarmedSlots:GetInt())
+	SetGlobalInt(maxSpecialSlots:GetName(), maxSpecialSlots:GetInt())
+	SetGlobalInt(maxExtraSlots:GetName(), maxExtraSlots:GetInt())
+end)
+
+cvars.AddChangeCallback(maxMeleeSlots:GetName(), function(name, old, new)
+	SetGlobalInt(name, new)
+end, "TTT2MaxMeleeSlotsChange")
+
+cvars.AddChangeCallback(maxSecondarySlots:GetName(), function(name, old, new)
+	SetGlobalInt(name, new)
+end, "TTT2MaxSecondarySlotsChange")
+
+cvars.AddChangeCallback(maxPrimarySlots:GetName(), function(name, old, new)
+	SetGlobalInt(name, new)
+end, "TTT2MaxPrimarySlotsChange")
+
+cvars.AddChangeCallback(maxNadeSlots:GetName(), function(name, old, new)
+	SetGlobalInt(name, new)
+end, "TTT2MaxNadeSlotsChange")
+
+cvars.AddChangeCallback(maxCarrySlots:GetName(), function(name, old, new)
+	SetGlobalInt(name, new)
+end, "TTT2MaxCarrySlotsChange")
+
+cvars.AddChangeCallback(maxUnarmedSlots:GetName(), function(name, old, new)
+	SetGlobalInt(name, new)
+end, "TTT2MaxUnarmedSlotsChange")
+
+cvars.AddChangeCallback(maxSpecialSlots:GetName(), function(name, old, new)
+	SetGlobalInt(name, new)
+end, "TTT2MaxSpecialSlotsChange")
+
+cvars.AddChangeCallback(maxExtraSlots:GetName(), function(name, old, new)
+	SetGlobalInt(name, new)
+end, "TTT2MaxExtraSlotsChange")
+
 ORDERED_SLOT_TABLE = {
 	[WEAPON_MELEE] = "ttt2_max_melee_slots",
 	[WEAPON_PISTOL] = "ttt2_max_secondary_slots",
@@ -58,7 +101,7 @@ function InventorySlotFree(ply, kind)
 
 	local invSlot = MakeKindValid(kind)
 	
-	local slotCount = GetConVar(ORDERED_SLOT_TABLE[invSlot]):GetInt()
+	local slotCount = GetGlobalInt(ORDERED_SLOT_TABLE[invSlot])
 
 	return slotCount < 0 or #ply.inventory[invSlot] < slotCount
 end
