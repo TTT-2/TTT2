@@ -117,13 +117,6 @@ function clr(color)
 	return color.r, color.g, color.b, color.a
 end
 
-if CLIENT then
-	-- Is screenpos on screen?
-	function IsOffScreen(scrpos)
-		return not scrpos.visible or scrpos.x < 0 or scrpos.y < 0 or scrpos.x > ScrW() or scrpos.y > ScrH()
-	end
-end
-
 function AccessorFuncDT(tbl, varname, name)
 	tbl["Get" .. name] = function(s)
 		return s.dt and s.dt[varname]
@@ -356,6 +349,11 @@ if CLIENT then
 		death = Color(255, 0, 0, 255)
 	}
 
+	-- Is screenpos on screen?
+	function IsOffScreen(scrpos)
+		return not scrpos.visible or scrpos.x < 0 or scrpos.y < 0 or scrpos.x > ScrW() or scrpos.y > ScrH()
+	end
+
 	function util.HealthToString(health, maxhealth)
 		maxhealth = maxhealth or 100
 
@@ -398,6 +396,19 @@ if CLIENT then
 
 	function util.IncludeClientFile(file)
 		include(file)
+	end
+
+	function util.DrawFilteredTexturedRect(x, y, w, h, material, alpha, rgb)
+		alpha = alpha or 255
+		rgb = rgb or {r=255,g=255,b=255}
+
+		surface.SetDrawColor(rgb.r, rgb.g, rgb.b, alpha)
+		surface.SetMaterial(material)
+		render.PushFilterMag( TEXFILTER.LINEAR )
+		render.PushFilterMin( TEXFILTER.LINEAR )
+		surface.DrawTexturedRect(x, y, w, h)
+		render.PopFilterMag()
+		render.PopFilterMin()
 	end
 else
 	function util.IncludeClientFile(file)

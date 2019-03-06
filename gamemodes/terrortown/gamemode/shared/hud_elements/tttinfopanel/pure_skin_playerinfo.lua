@@ -132,14 +132,10 @@ if CLIENT then
 			if cactive then
 				local icon = Material("vgui/ttt/dynamic/roles/icon_" .. rd.abbr)
 				if icon then
-					surface.SetDrawColor(255, 255, 255, 255)
-					surface.SetMaterial(icon)
-					surface.DrawTexturedRect(x2 + 4, y2 + 4, lpw - 8, lpw - 8)
+					util.DrawFilteredTexturedRect(x2 + 4, y2 + 4, lpw - 8, lpw - 8, icon)
 				end
 			elseif IsValid(tgt) and tgt:IsPlayer() then
-				surface.SetDrawColor(255, 255, 255, 255)
-				surface.SetMaterial(watching_icon)
-				surface.DrawTexturedRect(x2 + 4, y2 + 4, lpw - 8, lpw - 8)
+				util.DrawFilteredTexturedRect(x2 + 4, y2 + 4, lpw - 8, lpw - 8, watching_icon)
 			end
 
 			-- draw role string name
@@ -251,14 +247,10 @@ if CLIENT then
 				local x2_pad = math.Round((lpw - coinSize) * 0.5)
 
 				if client:GetCredits() > 0 then
-					surface.SetDrawColor(255, 255, 255, 200)
-					surface.SetMaterial(credits_default)
+					util.DrawFilteredTexturedRect(x2 + x2_pad, y2 + h - coinSize - x2_pad, coinSize, coinSize, credits_default, 200)
 				else
-					surface.SetDrawColor(255, 255, 255, 100)
-					surface.SetMaterial(credits_zero)
+					util.DrawFilteredTexturedRect(x2 + x2_pad, y2 + h - coinSize - x2_pad, coinSize, coinSize, credits_zero, 100)
 				end
-
-				surface.DrawTexturedRect(x2 + x2_pad, y2 + h - coinSize - x2_pad, coinSize, coinSize)
 			end
 		end
 
