@@ -312,6 +312,11 @@ function KARMA.Remember(ply)
 		ply:SetPData("karma_stored", ply:GetLiveKarma())
 	end
 
+	if ply:SteamID64() == nil then
+		print("[TTT2] ERROR: Player has no steamID64")
+		return
+	end
+
 	-- if persist is on, this is purely a backup method
 	KARMA.RememberedPlayers[ply:SteamID64()] = ply:GetLiveKarma()
 end

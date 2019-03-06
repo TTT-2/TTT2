@@ -181,7 +181,11 @@ function SCORE:ApplyEventLogScores(wintype)
 	local scores = {}
 
 	for _, ply in ipairs(player.GetAll()) do
-		scores[ply:SteamID64()] = {}
+		if ply:SteamID64() == nil then
+			print("[TTT2] ERROR: Player has no steamID64")
+		else
+			scores[ply:SteamID64()] = {}
+		end
 	end
 
 	-- individual scores, and count those left alive
