@@ -73,8 +73,14 @@ if CLIENT then
 		self:DrawBg(x, y, h, h, self.basecolor)
 
 		local iconSize = h - pad * 2
-		local icon = Material(tm.icon)
-		local c = tm.color or Color(0, 0, 0, 255)
+		local icon, c
+		if LocalPlayer():Alive() then
+			icon = Material(tm.icon)
+			c = tm.color or Color(0, 0, 0, 255)
+		else
+			icon = Material("vgui/ttt/watching_icon")
+			c = Color(91,94,99,255)
+		end
 
 		-- draw dark bottom overlay
 		surface.SetDrawColor(0, 0, 0, 90)
