@@ -15,13 +15,14 @@ local ttt2_indicator_vip = "vgui/ttt/ttt2_indicator_vip"
 local ttt2_indicator_addondev = "vgui/ttt/ttt2_indicator_addondev"
 local ttt2_indicator_admin = "vgui/ttt/ttt2_indicator_admin"
 local ttt2_indicator_streamer = "vgui/ttt/ttt2_indicator_streamer"
+local ttt2_indicator_heroes = "vgui/ttt/ttt2_indicator_heroes"
 
 local dev_tbl = {
 	["76561197964193008"] = true,
 	["76561198049831089"] = true,
 	["76561198058039701"] = true,
-	["76561198047819379"] = true,
-	["76561198052323988"] = true
+	["76561198047819379"] = true, -- Mineotopia
+	["76561198052323988"] = true --LeBroomer
 }
 
 local vip_tbl = {
@@ -44,8 +45,13 @@ local addondev_tbl = {
 local streamer_tbl = {
 	["76561198049831089"] = true,
 	["76561198058039701"] = true,
-	["76561198047819379"] = true,
+	["76561198047819379"] = true, -- Mineotopia
 	["76561198052323988"] = true
+}
+
+local heroes_tbl = {
+	["76561198047819379"] = true, -- Mineotopia
+	["76561198000950884"] = true -- Dhalucard
 }
 
 function AddTTT2AddonDev(steamid64)
@@ -60,7 +66,8 @@ local namecolor = {
 	vip = Color(220, 55, 55, 255),
 	addondev = Color(30, 105, 300, 255),
 	admin = Color(255, 210, 35, 255),
-	streamer = Color(74, 54, 126, 255)
+	streamer = Color(100, 70, 140, 255),
+	heroes = Color(70, 125, 110, 255)
 }
 
 SB_ROW_HEIGHT = 24 --16
@@ -144,6 +151,12 @@ function PANEL:Init()
 	self.streamer:SetKeepAspect(true)
 	self.streamer:SetTooltip("Streamer")
 
+	self.heroes = vgui.Create("DImage", self)
+	self.heroes:SetSize(iconSizes, iconSizes)
+	self.heroes:SetMouseInputEnabled(true)
+	self.heroes:SetKeepAspect(true)
+	self.heroes:SetTooltip("TTT2 Heroes")
+
 	self.avatar = vgui.Create("AvatarImage", self)
 	self.avatar:SetSize(SB_ROW_HEIGHT, SB_ROW_HEIGHT)
 	self.avatar:SetMouseInputEnabled(false)
@@ -197,6 +210,8 @@ function GM:TTTScoreboardColorForPlayer(ply)
 				return namecolor.vip
 			elseif addondev_tbl[steamid64] then
 				return namecolor.addondev
+			elseif heroes_tbl[steamid64] then
+				return namecolor.heroes
 			end
 		end
 
@@ -335,6 +350,7 @@ function PANEL:UpdatePlayerData()
 
 	self.admin:SetVisible(ply:IsAdmin())
 	self.streamer:SetVisible(steamid64 and streamer_tbl[steamid64] == true or false)
+	self.heroes:SetVisible(steamid64 and heroes_tbl[steamid64] == true or false)
 
 	local ptag = ply.sb_tag
 
@@ -404,6 +420,9 @@ function PANEL:ApplySchemeSettings()
 
 	self.streamer:SetImage(ttt2_indicator_streamer)
 	self.streamer:SetImageColor(namecolor.streamer)
+
+	self.heroes:SetImage(ttt2_indicator_heroes)
+	self.heroes:SetImageColor(namecolor.heroes)
 end
 
 function PANEL:LayoutColumns()
@@ -460,6 +479,12 @@ function PANEL:LayoutColumns()
 
 	if self.streamer:IsVisible() then
 		self.streamer:SetPos(tx + (iconSizes + mgn) * i, ty)
+
+		i = i + 1
+	end
+
+	if self.heroes:IsVisible() then
+		self.heroes:SetPos(tx + (iconSizes + mgn) * i, ty)
 
 		i = i + 1
 	end
