@@ -10,15 +10,17 @@ if CLIENT then
 	local GetLang = LANG.GetUnsafeLanguageTable
 
 	local w_default, h_default = 96, 72
+	local pad_default = 14
 
 	local x, y = 0, 0
 	local w, h = w_default, h_default
 	local scale = 1.0
-	local pad = 14 -- padding
+	local pad = pad_default -- padding
 
 	function HUDELEMENT:Initialize()
 		w, h = w_default, h_default
 		scale = 1.0
+		pad = pad_default
 		self.scale = 1.0
 
 		self:RecalculateBasePos()
@@ -45,10 +47,10 @@ if CLIENT then
 		local pos = self:GetPos()
 		local size = self:GetSize()
 
+		scale = math.min(w / w_default, h / h_default)
+		pad = pad_default * scale
 		x, y = pos.x, pos.y
 		w, h = size.w, size.h
-
-		scale = math.min(w / w_default, h / h_default)
 
 		BaseClass.PerformLayout(self)
 	end
@@ -75,6 +77,8 @@ if CLIENT then
 		local rx = tmpx
 		local ry = tmpy
 
+		local vert_align_clock = TEXT_ALIGN_TOP
+
 		-- Time displays differently depending on whether haste mode is on,
 		-- whether the player is traitor or not, and whether it is overtime.
 		if is_haste then
@@ -83,7 +87,7 @@ if CLIENT then
 				if not is_traitor or math.ceil(CurTime()) % 7 <= 2 then
 					-- innocent or blinking "overtime"
 					text = L.overtime
-					font = "Trebuchet18"
+					font = "PureSkinMSTACKMsg"
 
 					-- need to hack the position a little because of the font switch
 					ry = ry + 5
@@ -105,14 +109,16 @@ if CLIENT then
 				text = util.SimpleTime(math.max(0, t), "%02i:%02i")
 			end
 		else
+			vert_align_clock = TEXT_ALIGN_CENTER
+			
 			-- bog standard time when haste mode is off (or round not active)
 			text = util.SimpleTime(math.max(0, endtime), "%02i:%02i")
 		end
 		
-		self:AdvancedText(text, font, rx, ry, color, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, true, scale)
+		self:AdvancedText(text, font, rx, ry, color, TEXT_ALIGN_CENTER, vert_align_clock, true, scale)
 
 		if is_haste then
-			self:AdvancedText(L.hastemode, "TabLarge", tmpx, y + 14, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, false, scale)
+			self:AdvancedText(L.hastemode, "PureSkinMSTACKMsg", tmpx, y + pad, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, true, scale)
 		end
 
 		-- draw lines around the element

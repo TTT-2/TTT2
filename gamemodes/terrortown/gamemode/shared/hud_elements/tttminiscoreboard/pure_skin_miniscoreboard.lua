@@ -7,9 +7,17 @@ DEFINE_BASECLASS(base)
 HUDELEMENT.togglable = true
 
 if CLIENT then
-	local margin = 14
-	local element_margin = 6
+	local margin_default = 14
+	local element_margin_default = 6
+	local h_default = 72
+
+	local margin = margin_default
+	local element_margin = element_margin_default
 	local row_count = 2
+
+	local x, y = 0, 0
+	local w, h = h_default, h_default
+	local scale = 1.0
 
 	-- values that will be overridden by code
 	local parentInstance = nil
@@ -22,6 +30,11 @@ if CLIENT then
 	end
 
 	function HUDELEMENT:Initialize()
+		w, h = h_default, h_default
+		scale = 1.0
+		margin = margin_default
+		element_margin = element_margin_default
+
 		parentInstance = hudelements.GetStored(self.parent)
 
 		BaseClass.Initialize(self)
@@ -45,9 +58,13 @@ if CLIENT then
 		local parent_pos = parentInstance:GetPos()
 		local parent_size = parentInstance:GetSize()
 
-		local height = parent_size.h
+		x, y = parent_pos.x + parent_size.w, parent_pos.y
+		h = parent_size.h
+		scale = h / h_default
+		margin = margin_default * scale
+		element_margin = element_margin_default * scale
 
-		ply_ind_size = math.Round((height - element_margin - margin * 2) * 0.5)
+		ply_ind_size = math.Round((h - element_margin - margin * 2) * 0.5)
 
 		local players = util.GetFilteredPlayers(function (ply)
 			return ply:IsTerror() or ply:IsDeadTerror()
@@ -57,10 +74,10 @@ if CLIENT then
 
 		column_count = math.Round(#players * 0.5)
 
-		local width = element_margin * (column_count - 1) + ply_ind_size * column_count + 2 * margin
+		w = element_margin * (column_count - 1) + ply_ind_size * column_count + 2 * margin
 
-		self:SetPos(parent_pos.x + parent_size.w, parent_pos.y)
-		self:SetSize(width, height)
+		self:SetPos(x, y)
+		self:SetSize(w, h)
 
 		BaseClass.PerformLayout(self)
 	end
@@ -93,11 +110,11 @@ if CLIENT then
 		end)
 
 		-- draw bg and shadow
-		self:DrawBg(self.pos.x, self.pos.y, self.size.w, self.size.h, self.basecolor)
+		self:DrawBg(x, y, w, h, self.basecolor)
 
 		-- draw dark bottom overlay
 		surface.SetDrawColor(0, 0, 0, 90)
-		surface.DrawRect(self.pos.x, self.pos.y, self.size.w, self.size.h)
+		surface.DrawRect(x, y, w, h)
 
 		-- draw squares
 		local tmp_x, tmp_y = self.pos.x, self.pos.y
@@ -117,7 +134,7 @@ if CLIENT then
 
 		-- draw lines around the element
 		if not self:InheritParentBorder() then
-			self:DrawLines(self.pos.x, self.pos.y, self.size.w, self.size.h, self.basecolor.a)
+			self:DrawLines(x, y, w, h, self.basecolor.a)
 		end
 	end
 end

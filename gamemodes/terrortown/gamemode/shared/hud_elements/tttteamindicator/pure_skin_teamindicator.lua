@@ -7,8 +7,13 @@ HUDELEMENT.togglable = true
 DEFINE_BASECLASS(base)
 
 if CLIENT then
-	local margin = 14
-	local element_margin = 6
+	local margin_default = 14
+	local element_margin_default = 6
+	local pad_default = 14
+	local h_default = 72
+
+	local margin = margin_default
+	local element_margin = element_margin_default
 	local row_count = 2
 
 	-- values that will be overridden by code
@@ -18,8 +23,9 @@ if CLIENT then
 	local column_count = 0
 
 	local x, y = 0, 0
-	local h = 72
-	local pad = 14 -- padding
+	local h = h_default
+	local scale = 1.0
+	local pad = pad_default -- padding
 
 	function HUDELEMENT:PreInitialize()
 		hudelements.RegisterChildRelation(self.id, "pure_skin_roundinfo", false)
@@ -27,6 +33,10 @@ if CLIENT then
 
 	function HUDELEMENT:Initialize()
 		parentInstance = hudelements.GetStored(self.parent)
+		scale = 1.0
+		margin = margin_default
+		element_margin = element_margin_default
+		pad = pad_default
 
 		BaseClass.Initialize(self)
 	end
@@ -52,6 +62,10 @@ if CLIENT then
 		-- caching
 		h = parent_size.h
 		x, y = parent_pos.x - h, parent_pos.y
+		scale = h / h_default
+		margin = margin_default * scale
+		element_margin = element_margin_default * scale
+		pad = pad_default * scale
 
 		self:SetPos(x, y)
 		self:SetSize(h, h)
