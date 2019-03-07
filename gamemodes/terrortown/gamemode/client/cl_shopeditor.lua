@@ -41,7 +41,12 @@ function ShopEditor.GetEquipmentForRoleAll()
 			and not string.match(name, "base")
 			and not table.HasValue(eject, name)
 			then
-				table.insert(tbl, v)
+				if v.id then
+					table.insert(tbl, v)
+				else
+					ErrorNoHalt("[TTT2][SHOPEDITOR][ERROR] Item without id:")
+					PrintTable(v)
+				end
 			end
 		end
 
@@ -55,7 +60,12 @@ function ShopEditor.GetEquipmentForRoleAll()
 			and not string.match(name, "event")
 			and not table.HasValue(eject, name)
 			then
-				table.insert(tbl, v)
+				if v.id then
+					table.insert(tbl, v)
+				else
+					ErrorNoHalt("[TTT2][SHOPEDITOR][ERROR] Weapon without id:")
+					PrintTable(v)
+				end
 			end
 		end
 
