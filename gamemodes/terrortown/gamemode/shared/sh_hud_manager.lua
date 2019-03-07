@@ -130,5 +130,6 @@ end
 if SERVER then
 	ttt_include("sv_hud_manager")
 else
+	ttt_include("cl_hud_editor")
 	ttt_include("cl_hud_manager")
 end

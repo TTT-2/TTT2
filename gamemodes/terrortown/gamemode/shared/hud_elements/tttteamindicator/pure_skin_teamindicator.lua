@@ -104,9 +104,7 @@ if CLIENT then
 		surface.DrawRect(x + pad, y + pad, iconSize, iconSize)
 
 		if icon then
-			surface.SetDrawColor(255, 255, 255, 255)
-			surface.SetMaterial(icon)
-			surface.DrawTexturedRect(x + pad, y + pad, iconSize, iconSize)
+			util.DrawFilteredTexturedRect(x + pad, y + pad, iconSize, iconSize, icon)
 		end
 
 		-- draw lines around the element

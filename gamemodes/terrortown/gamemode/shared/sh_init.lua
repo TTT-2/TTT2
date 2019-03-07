@@ -255,6 +255,8 @@ if CLIENT then
 	end
 
 	function SortEquipmentTable(tbl)
+		if not tbl or #tbl < 2 then return end
+		
 		local _func = function(adata, bdata)
 			a = adata.id
 			b = bdata.id

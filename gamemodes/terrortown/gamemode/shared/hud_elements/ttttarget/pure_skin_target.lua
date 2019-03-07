@@ -63,9 +63,7 @@ if CLIENT then -- CLIENT
 
 		local nSize = iconSize - 8
 
-		surface.SetDrawColor(255, 255, 255, 255)
-		surface.SetMaterial(target_icon)
-		surface.DrawTexturedRect(x, y + 2 - (nSize - h), nSize, nSize)
+		util.DrawFilteredTexturedRect(x, y + 2 - (nSize - h), nSize, nSize, target_icon)
 	end
 
 	function HUDELEMENT:Draw()
