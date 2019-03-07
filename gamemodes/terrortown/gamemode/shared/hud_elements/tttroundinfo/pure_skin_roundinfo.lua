@@ -47,10 +47,10 @@ if CLIENT then
 		local pos = self:GetPos()
 		local size = self:GetSize()
 
-		scale = math.min(w / w_default, h / h_default)
-		pad = pad_default * scale
 		x, y = pos.x, pos.y
 		w, h = size.w, size.h
+		scale = math.min(w / w_default, h / h_default)
+		pad = pad_default * scale
 
 		BaseClass.PerformLayout(self)
 	end
