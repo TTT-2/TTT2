@@ -1,9 +1,3 @@
-if SERVER then
-	AddCSLuaFile()
-
-	util.AddNetworkString("TTTHTargetHit")
-end
-
 local base = "old_ttt_element"
 
 DEFINE_BASECLASS(base)

@@ -1,7 +1,3 @@
-if SERVER then
-	AddCSLuaFile()
-end
-
 local base = "pure_skin_element"
 
 DEFINE_BASECLASS(base)
@@ -17,7 +13,7 @@ if CLIENT then -- CLIENT
 	local min_w, min_h = 225, 32
 	local pad = pad_default -- padding
 	local iconSize = iconSize_default
-	local target_icon = Material("vgui/ttt/target_icon")
+	HUDELEMENT.icon = Material("vgui/ttt/target_icon")
 
 	function HUDELEMENT:Initialize()
 		w, h = w_default, h_default
@@ -25,7 +21,7 @@ if CLIENT then -- CLIENT
 		self.scale = 1.0
 
 		self:RecalculateBasePos()
-		
+
 		self:SetMinSize(min_w, min_h)
 		self:SetSize(w, h)
 
@@ -52,8 +48,6 @@ if CLIENT then -- CLIENT
 	end
 
 	function HUDELEMENT:DrawComponent(name)
-		local client = LocalPlayer()
-
 		local pos = self:GetPos()
 		local x, y = pos.x, pos.y
 
@@ -63,7 +57,7 @@ if CLIENT then -- CLIENT
 
 		local nSize = iconSize - 8
 
-		util.DrawFilteredTexturedRect(x, y + 2 - (nSize - h), nSize, nSize, target_icon)
+		util.DrawFilteredTexturedRect(x, y + 2 - (nSize - h), nSize, nSize, self.icon)
 	end
 
 	function HUDELEMENT:Draw()
@@ -73,7 +67,7 @@ if CLIENT then -- CLIENT
 
 		local tgt = ply:GetTargetPlayer()
 
-		if HUDManager.IsEditing then
+		if HUDEditor.IsEditing then
 			self:DrawComponent("- TARGET -")
 		elseif IsValid(tgt) and ply:IsActive() then
 			self:DrawComponent(tgt:Nick())
