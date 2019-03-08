@@ -19,35 +19,35 @@ hook.Add("TTT2SyncGlobals", "AddInventoryGlobals", function()
 end)
 
 cvars.AddChangeCallback(maxMeleeSlots:GetName(), function(name, old, new)
-	SetGlobalInt(name, new)
+	SetGlobalInt(name, tonumber(new))
 end, "TTT2MaxMeleeSlotsChange")
 
 cvars.AddChangeCallback(maxSecondarySlots:GetName(), function(name, old, new)
-	SetGlobalInt(name, new)
+	SetGlobalInt(name, tonumber(new))
 end, "TTT2MaxSecondarySlotsChange")
 
 cvars.AddChangeCallback(maxPrimarySlots:GetName(), function(name, old, new)
-	SetGlobalInt(name, new)
+	SetGlobalInt(name, tonumber(new))
 end, "TTT2MaxPrimarySlotsChange")
 
 cvars.AddChangeCallback(maxNadeSlots:GetName(), function(name, old, new)
-	SetGlobalInt(name, new)
+	SetGlobalInt(name, tonumber(new))
 end, "TTT2MaxNadeSlotsChange")
 
 cvars.AddChangeCallback(maxCarrySlots:GetName(), function(name, old, new)
-	SetGlobalInt(name, new)
+	SetGlobalInt(name, tonumber(new))
 end, "TTT2MaxCarrySlotsChange")
 
 cvars.AddChangeCallback(maxUnarmedSlots:GetName(), function(name, old, new)
-	SetGlobalInt(name, new)
+	SetGlobalInt(name, tonumber(new))
 end, "TTT2MaxUnarmedSlotsChange")
 
 cvars.AddChangeCallback(maxSpecialSlots:GetName(), function(name, old, new)
-	SetGlobalInt(name, new)
+	SetGlobalInt(name, tonumber(new))
 end, "TTT2MaxSpecialSlotsChange")
 
 cvars.AddChangeCallback(maxExtraSlots:GetName(), function(name, old, new)
-	SetGlobalInt(name, new)
+	SetGlobalInt(name, tonumber(new))
 end, "TTT2MaxExtraSlotsChange")
 
 ORDERED_SLOT_TABLE = {
