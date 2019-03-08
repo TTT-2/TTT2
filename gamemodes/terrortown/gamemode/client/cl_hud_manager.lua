@@ -1,6 +1,6 @@
 ttt_include("vgui__cl_hudswitcher")
 
-local current_hud = CreateClientConVar("ttt2_current_hud", HUDManager.defaultHUD or "pure_skin", true, true)
+local current_hud_cvar = CreateClientConVar("ttt2_current_hud", HUDManager.defaultHUD or "pure_skin", true, true)
 
 local currentHUD
 
@@ -136,7 +136,7 @@ local function UpdateHUD(name)
 
 	HUDEditor.StopEditHUD()
 
-	RunConsoleCommand(current_hud:GetName(), name)
+	RunConsoleCommand(current_hud_cvar:GetName(), name)
 
 	currentHUD = name
 
@@ -150,7 +150,7 @@ end
 
 function HUDManager.GetHUD()
 	if not currentHUD then
-		return current_hud:GetString()
+		return current_hud_cvar:GetString()
 	end
 
 	if not huds.GetStored(currentHUD) then

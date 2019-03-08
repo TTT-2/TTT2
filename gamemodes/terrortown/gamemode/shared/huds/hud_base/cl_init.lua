@@ -108,7 +108,7 @@ end
 
 function HUD:GetElementByType(elementType)
 	if table.HasValue(self.disabledTypes, elementType) then
-		return false
+		return nil
 	end
 
 	local hudelems = self:GetForcedElements()
@@ -125,7 +125,7 @@ function HUD:GetElementByType(elementType)
 
 	if elementTbl then
 		if elementTbl.disabledUnlessForced then
-			return table.HasValue(hudelems, elementTbl.id) and elementTbl or false
+			return table.HasValue(hudelems, elementTbl.id) and elementTbl or nil
 		end
 
 		local parent = elementTbl:GetParent()
@@ -133,23 +133,20 @@ function HUD:GetElementByType(elementType)
 		if elementTbl:IsChild() and parent then
 			local parentTbl = hudelements.GetStored(parent)
 
-			return self:HasElementType(parentTbl.type) and elementTbl or false
+			return self:HasElementType(parentTbl.type) and elementTbl or nil
 		end
 
 		return elementTbl
 	else
-		return false
+		return nil
 	end
 end
 
 function HUD:HasElementType(elementType)
-	return self:GetElementByType(elementType) ~= false
+	return self:GetElementByType(elementType) ~= nil
 end
 
 function HUD:GetElements()
-	local tbl = {}
-	local hudelems = self:GetForcedElements()
-
 	-- loop through all types and if the hud does not provide an element take the first found instance for the type
 	local children, parents = {}, {}
 	for _, typ in ipairs(hudelements.GetElementTypes()) do

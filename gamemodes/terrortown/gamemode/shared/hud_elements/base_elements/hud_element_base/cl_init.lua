@@ -142,7 +142,7 @@ function HUDELEMENT:GetBorderParams()
 		local x_min, y_min, x_max, y_max = pos.x, pos.y, pos.x + size.w, pos.y + size.h
 
 		-- iterate over children
-		for _, elem_str in ipairs(self.children) do
+		for _, elem_str in ipairs(children) do
 			local elem = hudelements.GetStored(elem_str)
 
 			local hud = huds.GetStored(HUDManager.GetHUD())
