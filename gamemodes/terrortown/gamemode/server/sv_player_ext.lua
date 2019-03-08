@@ -708,7 +708,7 @@ function plymeta:RemoveItem(id)
 end
 
 hook.Add("TTTBeginRound", "TTT2GivePendingItems", function()
-	for ply, tbl in pairs(pendingItems) do
+	for ply, tbl in ipairs(pendingItems) do
 		if IsValid(ply) then
 			for _, item in ipairs(tbl) do
 				ply:GiveItem(item)
