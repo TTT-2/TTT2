@@ -655,16 +655,18 @@ function plymeta:SelectRandomRole(avoidRoles)
 	for _, ply in ipairs(player.GetAll()) do
 		local rd = ply:GetSubRoleData()
 
-		roleCount[rd] = roleCount[rd] and (roleCount[rd] + 1) or 1
+		roleCount[rd] = (roleCount[rd] or 0) + 1
 	end
 
 	for v, c in pairs(selectableRoles) do
 		if (not avoidRoles or not avoidRoles[v]) and (not roleCount[v] or roleCount[v] > c) then
-			availableRoles[#availableRoles + 1] = v
+			availableRoles[#availableRoles + 1] = v.index
 		end
 	end
 
-	self:SetRole(availableRoles[math.random(1, #availableRoles)].index)
+	if #availableRoles < 1 then return end
+
+	self:SetRole(availableRoles[math.random(1, #availableRoles)])
 
 	SendFullStateUpdate()
 end
