@@ -88,8 +88,6 @@ local function Think_EditLocalHUD()
 
 				-- reset clicked because it sould be only executed once
 				client.mouse_clicked = false
-
-				elem:GetBorderParams()
 			end
 
 			-- get data about the element, it returns the transformation direction

@@ -197,15 +197,12 @@ function HUDELEMENT:SetSize(w, h)
 	end
 
 	if nw or nh then
-		local basepos = self:GetBasePos()
-		local pos = self:GetPos()
-
 		if nw then
-			self:SetPos(basepos.x - w, pos.y)
+			self:SetPos(self:GetBasePos().x - w, self:GetPos().y)
 		end
 
 		if nh then
-			self:SetPos(pos.x, basepos.y - h)
+			self:SetPos(self:GetPos().x, self:GetBasePos().y - h)
 		end
 	end
 
