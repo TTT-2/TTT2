@@ -256,7 +256,7 @@ if CLIENT then
 
 	function SortEquipmentTable(tbl)
 		if not tbl or #tbl < 2 then return end
-		
+
 		local _func = function(adata, bdata)
 			a = adata.id
 			b = bdata.id
@@ -423,6 +423,13 @@ function EquipmentIsBuyable(tbl, team)
 		return false, "X", "error"
 	end
 
+	if not tbl.id then
+		ErrorNoHalt("[TTT2][ERROR] Missing id in table:", tbl)
+		PrintTable(tbl)
+
+		return false, "X", "ID error"
+	end
+
 	if tbl.minPlayers and tbl.minPlayers > 1 then
 		local choices = {}
 
@@ -438,7 +445,7 @@ function EquipmentIsBuyable(tbl, team)
 		end
 	end
 
-	if tbl.globalLimited and BUYTABLE[tbl.id] or team and tbl.teamLimited and not TEAMS[team].alone and TEAMBUYTABLE[team] and TEAMBUYTABLE[team][tbl.id] then
+	if tbl.globalLimited and BUYTABLE[tbl.id] or team and tbl.teamLimited and TEAMS[team] and not TEAMS[team].alone and TEAMBUYTABLE[team] and TEAMBUYTABLE[team][tbl.id] then
 		return false, "X", "This equipment is limited and is already bought."
 	end
 
