@@ -107,6 +107,6 @@ if CLIENT then
 			end
 		end
 
-		self:SetSize(size, - ( basepos.y - curY ) ) -- adjust the size
+		self:SetSize(size, - math.max(basepos.y - curY, self.minsize.h)  ) -- adjust the size
 	end
 end

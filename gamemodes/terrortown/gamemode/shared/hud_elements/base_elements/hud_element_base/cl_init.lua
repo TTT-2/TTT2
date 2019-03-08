@@ -191,11 +191,6 @@ function HUDELEMENT:SetSize(w, h)
 		h = -h
 	end
 
-	if self.minsize then
-		w = math.max(self.minsize.w, w)
-		h = math.max(self.minsize.h, h)
-	end
-
 	if nw or nh then
 		if nw then
 			self:SetPos(self:GetBasePos().x - w, self:GetPos().y)
