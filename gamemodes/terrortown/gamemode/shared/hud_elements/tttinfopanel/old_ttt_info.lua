@@ -179,7 +179,7 @@ if CLIENT then
 			local hastewidth = self.hastewidth
 			local bg_colors = self.bg_colors
 			local round_y = y + height - self.bgheight
-			
+
 			height = self.bgheight
 
 			-- move up a little on low resolutions to allow space for spectator hints

@@ -5,18 +5,28 @@ DEFINE_BASECLASS(base)
 HUDELEMENT.Base = base
 
 if CLIENT then -- CLIENT
+	function HUDELEMENT:PreInitialize()
+		BaseClass.PreInitialize(self)
+
+		hudelements.RegisterChildRelation(self.id, "old_ttt_info", false)
+	end
+
 	function HUDELEMENT:Initialize()
 		local width, height = self.maxwidth, 45
-
-	    self:SetBasePos(15, ScrH() - height - self.maxheight - self.margin)
+		local parent = self:GetParent()
+		local parentEl = hudelements.GetStored(parent)
+		local x, y = 15, ScrH() - height - self.maxheight - self.margin
+		if parentEl then
+			x = parentEl.pos.x
+			y = parentEl.pos.y - self.margin - height - 30
+		end
+	    self:SetBasePos(x, y)
 		self:SetSize(width, height)
 
 		BaseClass.Initialize(self)
 	end
 
 	function HUDELEMENT:DrawComponent(name, col, val)
-		local client = LocalPlayer()
-
 		local pos = self:GetPos()
 		local size = self:GetSize()
 		local x, y = pos.x, pos.y
@@ -31,9 +41,9 @@ if CLIENT then -- CLIENT
 		local ty = y + self.margin
 
 		self:PaintBar(tx, ty, bar_width, bar_height, col)
-		self:ShadowedText(name, "HealthAmmo", tx + bar_width * 0.5, ty + bar_height * 0.5, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		self:ShadowedText(val, "HealthAmmo", tx + bar_width * 0.5, ty + bar_height * 0.5, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
-		draw.SimpleText("Target", "TabLarge", x + self.margin * 2, y, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		draw.SimpleText(name, "TabLarge", x + self.margin * 2, y, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	end
 
 	local edit_colors = {
@@ -49,7 +59,7 @@ if CLIENT then -- CLIENT
 
 		local tgt = ply:GetTargetPlayer()
 
-		if HUDManager.IsEditing then
+		if HUDEditor.IsEditing then
 			self:DrawComponent("TARGET", edit_colors, "- TARGET -")
 		elseif IsValid(tgt) and ply:IsActive() then
 			local col_tbl = {
