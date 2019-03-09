@@ -1,4 +1,6 @@
 local HUDELEMENTS_SHARED_FUNCTIONS_FOLDER = "shared_base"
+local HUDELEMENTS_ABSTRACT_FOLDER = "base_elements"
+local HUDS_ABSTRACT_FOLDER = "base_huds"
 
 if not HUDManager then
 	require("hudelements")
@@ -49,7 +51,7 @@ if not HUDManager then
 
 			local cls = string.sub(fl, 0, #fl - 4)
 
-			if typ ~= "base_elements" then
+			if typ ~= HUDELEMENTS_ABSTRACT_FOLDER then
 				HUDELEMENT.type = typ
 			end
 
@@ -78,7 +80,7 @@ if not HUDManager then
 
 				includeFoldersFiles(shortPath, folder, subFiles)
 
-				if typ ~= "base_elements" then
+				if typ ~= HUDELEMENTS_ABSTRACT_FOLDER then
 					HUDELEMENT.type = typ
 				end
 
@@ -87,6 +89,52 @@ if not HUDManager then
 				HUDELEMENT = nil
 			end
 		end
+	end
+
+	--------------------------
+	-- Load abstract HUDs
+	--------------------------
+
+	pathBase = "terrortown/gamemode/shared/huds/" .. HUDS_ABSTRACT_FOLDER .. "/"
+
+	local pathFiles = file.Find(pathBase .. "*.lua", "LUA")
+
+	-- include HUD Elements files
+	for _, fl in ipairs(pathFiles) do
+		HUD = {}
+
+		if SERVER then
+			AddCSLuaFile(pathBase .. fl)
+		end
+
+		include(pathBase .. fl)
+
+		local cls = string.sub(fl, 0, #fl - 4)
+
+		HUD.isAbstract = true
+
+		huds.Register(HUD, cls)
+
+		HUD = nil
+	end
+
+	-- include HUD Elements folders
+	local _, subFolders = file.Find(pathBase .. "*", "LUA")
+
+	for _, folder in ipairs(subFolders) do
+
+		local subSubFiles = file.Find(pathBase .. folder .. "/*.lua", "LUA")
+
+		-- all huds will be loaded here
+		HUD = {}
+
+		includeFoldersFiles(pathBase, folder, subSubFiles)
+
+		HUD.isAbstract = true
+
+		huds.Register(HUD, folder)
+
+		HUD = nil
 	end
 
 	-----------------------------------------
@@ -118,6 +166,7 @@ if not HUDManager then
 	local _, subFolders = file.Find(pathBase .. "*", "LUA")
 
 	for _, folder in ipairs(subFolders) do
+		if folder == HUDS_ABSTRACT_FOLDER then continue end
 
 		local subSubFiles = file.Find(pathBase .. folder .. "/*.lua", "LUA")
 

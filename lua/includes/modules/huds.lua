@@ -59,6 +59,7 @@ function Register(t, name)
 
 	t.ClassName = name
 	t.id = name
+	t.isAbstract = t.isAbstract or false
 
 	HUDList[name] = t
 
@@ -123,7 +124,7 @@ function OnLoaded()
 end
 
 --[[---------------------------------------------------------
-	Name: Get( string, retTbl )
+	Name: Get( string name, retTbl )
 	Desc: Get a HUD by name.
 -----------------------------------------------------------]]
 function Get(name, retTbl)
@@ -159,7 +160,7 @@ function Get(name, retTbl)
 end
 
 --[[---------------------------------------------------------
-	Name: GetStored( string )
+	Name: GetStored( string name )
 	Desc: Gets the REAL HUD table, not a copy
 -----------------------------------------------------------]]
 function GetStored(name)
@@ -167,14 +168,34 @@ function GetStored(name)
 end
 
 --[[---------------------------------------------------------
-	Name: GetList( string )
-	Desc: Get a list (copy) of all the registered HUDs
+	Name: GetList()
+	Desc: Get a list (copy) of all the registered HUDs, that
+		  can be displayed (no abstract HUDs).
 -----------------------------------------------------------]]
 function GetList()
 	local result = {}
 
 	for _, v in pairs(HUDList) do
-		result[#result + 1] = v
+		if not v.isAbstract then
+			result[#result + 1] = v
+		end
+	end
+
+	return result
+end
+
+--[[---------------------------------------------------------
+	Name: GetRealList()
+	Desc: Get a list (copy) of all the registered HUDs
+		  including abstract HUDs.
+-----------------------------------------------------------]]
+function GetList()
+	local result = {}
+
+	for _, v in pairs(HUDList) do
+		if not v.isAbstract then
+			result[#result + 1] = v
+		end
 	end
 
 	return result

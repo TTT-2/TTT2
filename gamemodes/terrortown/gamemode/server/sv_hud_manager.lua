@@ -3,6 +3,8 @@ util.AddNetworkString("TTT2ReceiveHUD")
 
 HUDManager.restrictedHUDs = HUDManager.restrictedHUDs or {}
 
+-- TODO add permissions / force and improve readability
+
 net.Receive("TTT2RequestHUD", function(len, ply)
 	local hudname = net.ReadString() -- new requested HUD
 	local oldHUD = net.ReadString() -- current HUD as fallback
@@ -47,7 +49,13 @@ net.Receive("TTT2RequestHUD", function(len, ply)
 		end
 	end
 
+	local hudToSend = HUDManager.forcedHUD or hudname
+	local hudToSendTbl = huds.GetStored(hudToSend)
+	if not hudToSendTbl or hudToSendTbl.isAbstract then
+		hudToSend = HUDManager.defaultHUD
+	end
+
 	net.Start("TTT2ReceiveHUD")
-	net.WriteString(HUDManager.forcedHUD or hudname)
+	net.WriteString(hudToSend)
 	net.Send(ply)
 end)

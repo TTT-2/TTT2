@@ -151,8 +151,6 @@ function PANEL:Init()
 	end
 
 	for _, hud in ipairs(huds.GetList()) do
-		if hud.id == "hud_base" then continue end
-
 		local panel = vgui.Create("DPanel", sheet)
 		panel:Dock(FILL)
 
