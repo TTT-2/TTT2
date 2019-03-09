@@ -5,6 +5,24 @@ if not HUDManager then
 	HUDManager = {}
 	HUDManager.defaultHUD = "pure_skin"
 
+	local function includeFoldersFiles(pathBase, folder, filestbl)
+		for _, fl in ipairs(filestbl) do
+			local filename = pathBase .. folder .. "/" .. fl
+
+			if SERVER then
+				AddCSLuaFile(filename)
+			end
+
+			if CLIENT and fl == "cl_init.lua" then
+				include(filename)
+			elseif SERVER and fl == "init.lua" then
+				include(filename)
+			elseif fl == "shared.lua" then
+				include(filename)
+			end
+		end
+	end
+
 	-----------------------------------------
 	-- load HUD Elements
 	-----------------------------------------
@@ -46,21 +64,7 @@ if not HUDManager then
 
 			local subFiles = file.Find(shortPath .. folder .. "/*.lua", "LUA")
 
-			for _, fl in ipairs(subFiles) do
-				local filename = shortPath .. folder .. "/" .. fl
-
-				if SERVER then
-					AddCSLuaFile(filename)
-				end
-
-				if CLIENT and fl == "cl_init.lua" then
-					include(filename)
-				elseif SERVER and fl == "init.lua" then
-					include(filename)
-				elseif fl == "shared.lua" then
-					include(filename)
-				end
-			end
+			includeFoldersFiles(shortPath, folder, subFiles)
 
 			if typ ~= "base_elements" then
 				HUDELEMENT.type = typ
@@ -101,25 +105,13 @@ if not HUDManager then
 	local _, subFolders = file.Find(pathBase .. "*", "LUA")
 
 	for _, folder in ipairs(subFolders) do
+
+		local subSubFiles = file.Find(pathBase .. folder .. "/*.lua", "LUA")
+
+		-- all huds will be loaded here
 		HUD = {}
 
-		local subFiles = file.Find(pathBase .. folder .. "/*.lua", "LUA")
-
-		for _, fl in ipairs(subFiles) do
-			local filename = pathBase .. folder .. "/" .. fl
-
-			if SERVER then
-				AddCSLuaFile(filename)
-			end
-
-			if CLIENT and fl == "cl_init.lua" then
-				include(filename)
-			elseif SERVER and fl == "init.lua" then
-				include(filename)
-			elseif fl == "shared.lua" then
-				include(filename)
-			end
-		end
+		includeFoldersFiles(pathBase, folder, subSubFiles)
 
 		huds.Register(HUD, folder)
 

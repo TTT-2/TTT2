@@ -50,7 +50,7 @@ end
 
 --[[---------------------------------------------------------
 	Name: Register( table, string )
-	Desc: Used to register your HUD Element with the engine
+	Desc: Used to register your HUD with the engine
 -----------------------------------------------------------]]
 function Register(t, name)
 	name = string.lower(name)
@@ -124,7 +124,7 @@ end
 
 --[[---------------------------------------------------------
 	Name: Get( string, retTbl )
-	Desc: Get a HUD element by name.
+	Desc: Get a HUD by name.
 -----------------------------------------------------------]]
 function Get(name, retTbl)
 	local Stored = GetStored(name)
@@ -160,7 +160,7 @@ end
 
 --[[---------------------------------------------------------
 	Name: GetStored( string )
-	Desc: Gets the REAL HUD elements table, not a copy
+	Desc: Gets the REAL HUD table, not a copy
 -----------------------------------------------------------]]
 function GetStored(name)
 	return HUDList[name]
@@ -168,7 +168,7 @@ end
 
 --[[---------------------------------------------------------
 	Name: GetList( string )
-	Desc: Get a list (copy) of all the registered HUD elements
+	Desc: Get a list (copy) of all the registered HUDs
 -----------------------------------------------------------]]
 function GetList()
 	local result = {}

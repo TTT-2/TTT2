@@ -243,12 +243,12 @@ function HUDELEMENT:GetParent()
 	return self.parent, self.parent_is_type
 end
 
---[[------------------------------
-	SetParent()
-	Desc: This function is used internally and only has the full effect if called by the
-		  hudelements.RegisterChildRelation() function.
-		  INTERNAL FUNCTION!!!
---]]-------------------------------
+--[[----------------------------------------------------------------------------
+	Name: SetParent(string parent, bool is_type)
+	Desc: This function is used internally and only has the full effect if
+		  called by the hudelements.RegisterChildRelation() function.
+		  !!! INTERNAL FUNCTION !!!
+--]]----------------------------------------------------------------------------
 function HUDELEMENT:SetParent(parent, is_type)
 	self.parent = parent
 	self.parent_is_type = is_type

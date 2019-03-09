@@ -3,7 +3,6 @@
 ----------------------------------------------
 HUD.elements = {}
 HUD.disabledTypes = {}
-
 HUD.previewImage = Material("vgui/ttt/score_logo_2")
 
 local savingKeys = {}
