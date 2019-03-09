@@ -64,16 +64,20 @@ if CLIENT then -- CLIENT
 		util.DrawFilteredTexturedRect(x, y + 2 - (nSize - h), nSize, nSize, self.icon)
 	end
 
+	function HUDELEMENT:ShouldDraw()
+		local client = LocalPlayer()
+
+		return IsValid(client)
+	end
+
 	function HUDELEMENT:Draw()
-		local ply = LocalPlayer()
+		local client = LocalPlayer()
 
-		if not IsValid(ply) then return end
-
-		local tgt = ply:GetTargetPlayer()
+		local tgt = client:GetTargetPlayer()
 
 		if HUDEditor.IsEditing then
 			self:DrawComponent("- TARGET -")
-		elseif IsValid(tgt) and ply:IsActive() then
+		elseif IsValid(tgt) and client:IsActive() then
 			self:DrawComponent(tgt:Nick())
 		end
 	end

@@ -230,9 +230,11 @@ if CLIENT then
 		self:DrawLines(top_x, pos_y, msg_width, item.height, item.bg.a)
 	end
 
-	function HUDELEMENT:Draw()
-		if next(MSTACK.msgs) == nil then return end -- fast empty check
+	function HUDELEMENT:ShouldDraw()
+		return next(MSTACK.msgs) ~= nil
+	end
 
+	function HUDELEMENT:Draw()
 		local running_y = top_y
 		for k, item in pairs(MSTACK.msgs) do
 			if item.time < CurTime() then

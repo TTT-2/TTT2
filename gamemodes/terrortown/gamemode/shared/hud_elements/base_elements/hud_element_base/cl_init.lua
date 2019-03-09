@@ -111,8 +111,12 @@ function HUDELEMENT:Draw()
 	self:ApplyToChildren("Draw")
 end
 
--- parameter overwrites
-function HUDELEMENT:ShouldShow()
+--[[----------------------------------------------------------------------------
+	Name: ShouldDraw()
+	Desc: This function is called to decide whether or not an element should be drawn.
+	Override it to let your element be drawn only in specific situations.
+--]]----------------------------------------------------------------------------
+function HUDELEMENT:ShouldDraw()
 	return true
 end
 
@@ -181,7 +185,7 @@ function HUDELEMENT:GetBorderParams()
 
 			local hud = huds.GetStored(HUDManager.GetHUD())
 
-			if elem and elem:InheritParentBorder() and hud:ShouldShow(elem.type) and elem:ShouldShow() then
+			if elem and elem:InheritParentBorder() and hud:ShouldShow(elem.type) and elem:ShouldDraw() then
 				local c_pos = elem:GetPos()
 				local c_size = elem:GetSize()
 

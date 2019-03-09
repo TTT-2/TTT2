@@ -88,10 +88,14 @@ if CLIENT then
 
 	local key_params = {usekey = Key("+use", "USE")}
 
-	function HUDELEMENT:Draw()
+	function HUDELEMENT:ShouldDraw()
 		local client = LocalPlayer()
 
-		if client:Alive() and client:Team() ~= TEAM_SPEC then return end
+		return not client:Alive() or client:Team() == TEAM_SPEC
+	end
+
+	function HUDELEMENT:Draw()
+		local client = LocalPlayer()
 
 		local L = GetLang() -- for fast direct table lookups
 

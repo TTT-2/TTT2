@@ -47,10 +47,14 @@ if CLIENT then
 		BaseClass.PerformLayout(self)
 	end
 
-	function HUDELEMENT:Draw()
+	function HUDELEMENT:ShouldDraw()
 		local client = LocalPlayer()
 
-		if not client:Alive() or client:Team() ~= TEAM_TERROR then return end
+		return client:Alive() or client:Team() == TEAM_TERROR 
+	end
+
+	function HUDELEMENT:Draw()
+		local client = LocalPlayer()
 
 		local basepos = self:GetBasePos()
 		local itms = client:GetEquipmentItems()

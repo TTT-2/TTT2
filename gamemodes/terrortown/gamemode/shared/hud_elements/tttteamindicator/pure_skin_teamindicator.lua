@@ -43,7 +43,7 @@ if CLIENT then
 	end
 
 	-- parameter overwrites
-	function HUDELEMENT:ShouldShow()
+	function HUDELEMENT:ShouldDraw()
 		return GAMEMODE.round_state == ROUND_ACTIVE
 	end
 

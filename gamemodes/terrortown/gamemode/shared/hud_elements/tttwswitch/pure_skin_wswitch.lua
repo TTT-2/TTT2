@@ -135,9 +135,11 @@ if CLIENT then
 		BaseClass.PerformLayout(self)
 	end
 
-	function HUDELEMENT:Draw()
-		if not WSWITCH.Show and not HUDManager.IsEditing then return end
+	function HUDELEMENT:ShouldDraw()
+		return HUDManager.IsEditing or WSWITCH.Show
+	end
 
+	function HUDELEMENT:Draw()
 		local client = LocalPlayer()
 		local weps = WSWITCH.WeaponCache
 		local count = #weps

@@ -39,6 +39,12 @@ if CLIENT then
 		self:SetBasePos(math.Round(ScrW() * 0.5 - w * 0.5), ScrH() - pad - h)
 	end
 
+	function HUDELEMENT:ShouldDraw()
+		local client = LocalPlayer()
+
+		return HUDManager.IsEditing or client.drowningProgress and client:Alive() and client.drowningProgress ~= -1
+	end
+
 	function HUDELEMENT:PerformLayout()
 		local pos = self:GetPos()
 		local size = self:GetSize()
@@ -57,8 +63,6 @@ if CLIENT then
 
 	function HUDELEMENT:Draw()
 		local client = LocalPlayer()
-
-		if not HUDManager.IsEditing and (not client.drowningProgress or not client:Alive() or client.drowningProgress == -1) then return end
 
 		-- draw bg and shadow
 		self:DrawBg(x, y, w, h, self.basecolor)
