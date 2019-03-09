@@ -136,7 +136,7 @@ if CLIENT then
 	end
 
 	function HUDELEMENT:ShouldDraw()
-		return HUDManager.IsEditing or WSWITCH.Show
+		return HUDEditor.IsEditing or WSWITCH.Show
 	end
 
 	function HUDELEMENT:Draw()
