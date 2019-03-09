@@ -1,15 +1,14 @@
-local surface = surface
-
 local base = "hud_base"
-
-DEFINE_BASECLASS(base)
-
-HUD.Base = base
-
 local defaultColor = Color(49, 71, 94)
 local defaultScale = 1.0
 
 local savingKeys
+
+DEFINE_BASECLASS(base)
+
+HUD.Base = base
+HUD.basecolor = defaultColor
+HUD.scale = defaultScale
 
 function HUD:GetSavingKeys()
 	if not savingKeys then
@@ -17,7 +16,7 @@ function HUD:GetSavingKeys()
 		savingKeys.basecolor = {
 			typ = "color",
 			desc = "BaseColor",
-			OnChange = function(slf, col) 
+			OnChange = function(slf, col)
 				self:PerformLayout()
 			end
 		}
@@ -28,17 +27,16 @@ function HUD:GetSavingKeys()
 				local scaleMultiplier = val / self.scale
 				self:ApplyScale(scaleMultiplier)
 				self:SaveData()
-			end	
+			end
 		}
 	end
 
 	return table.Copy(savingKeys)
 end
 
-HUD.basecolor = defaultColor
-HUD.scale = defaultScale
+function HUD:LoadData()
+	BaseClass.LoadData(self)
 
-function HUD:Loaded()
 	for _, elem in ipairs(self:GetElements()) do
 		local el = hudelements.GetStored(elem)
 		if el then

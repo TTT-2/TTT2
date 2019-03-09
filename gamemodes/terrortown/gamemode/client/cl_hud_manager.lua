@@ -128,8 +128,6 @@ local function UpdateHUD(name)
 	hudEl:Initialize()
 
 	hudEl:LoadData()
-
-	hudEl:Loaded()
 end
 
 function HUDManager.GetHUD()
