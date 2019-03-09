@@ -39,7 +39,7 @@ function HUD:GetSavingKeys()
 			desc = "Reset Positions and set HUD Scale",
 			OnChange = function(slf, val)
 				local scaleMultiplier = val / self.scale
-				self:SetScale(scaleMultiplier)
+				self:ApplyScale(scaleMultiplier)
 				self:SaveData()
 			end	
 		}
@@ -76,7 +76,7 @@ function HUD:Loaded()
 	end
 end
 
-function HUD:SetScale(scale)
+function HUD:ApplyScale(scale)
 	for _, elem in ipairs(self:GetElements()) do
 		local el = hudelements.GetStored(elem)
 		if el then
@@ -93,9 +93,9 @@ end
 
 function HUD:Reset()
 	self.basecolor = defaultColor
-	self.scale = defaultScale
-
 	BaseClass.Reset(self)
+
+	self:ApplyScale(self.scale)
 end
 
 -- Voice overriding

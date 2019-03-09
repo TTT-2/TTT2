@@ -58,7 +58,7 @@ function HUDELEMENT:ApplyToChildren(funcName, ...)
 		local elemtbl = hudelements.GetStored(elem)
 		if elemtbl then
 			if isfunction(elemtbl[funcName]) then
-				elemtbl[funcName](...)
+				elemtbl[funcName](elemtbl, ...)
 			else
 				MsgN("ERROR: HUDElement " .. (self.id or "?") .. " has child named " .. elem .. " with unknown function " .. funcName .. " \n")
 			end
@@ -97,7 +97,7 @@ function HUDELEMENT:Initialize()
 	-- use this to set default values and dont forget to call BaseClass.Initialze(self)!!
 	self:SetDefaults()
 
-	self:ApplyToChildren("Initialize", self)
+	self:ApplyToChildren("Initialize")
 end
 
 --[[----------------------------------------------------------------------------
@@ -108,7 +108,7 @@ end
 --]]----------------------------------------------------------------------------
 function HUDELEMENT:Draw()
 	-- call Draw() on all children
-	self:ApplyToChildren("Draw", self)
+	self:ApplyToChildren("Draw")
 end
 
 -- parameter overwrites
@@ -134,13 +134,13 @@ end
 	Desc: This function is called after all Initialize() functions.
 --]]-------------------------------
 function HUDELEMENT:PerformLayout()
-	self:ApplyToChildren("PerformLayout", self)
+	self:ApplyToChildren("PerformLayout")
 end
 
 function HUDELEMENT:ResolutionChanged()
 	self:RecalculateBasePos()
 	self:SetDefaults()
-	self:ApplyToChildren("ResolutionChanged", self)
+	self:ApplyToChildren("ResolutionChanged")
 end
 
 function HUDELEMENT:RecalculateBasePos()
@@ -491,7 +491,7 @@ function HUDELEMENT:Reset()
 		self:SetSize(defaultSize.w, defaultSize.h)
 	end
 
-	self:ApplyToChildren("Reset", self)
+	self:ApplyToChildren("Reset")
 
 	self:PerformLayout()
 end
