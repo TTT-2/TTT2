@@ -114,7 +114,7 @@ end
 --[[----------------------------------------------------------------------------
 	Name: ShouldDraw()
 	Desc: This function is called to decide whether or not an element should be drawn.
-	Override it to let your element be drawn only in specific situations.
+		  Override it to let your element be drawn only in specific situations.
 --]]----------------------------------------------------------------------------
 function HUDELEMENT:ShouldDraw()
 	return true
@@ -470,6 +470,16 @@ function HUDELEMENT:DrawSize()
 	surface.DrawLine(x + 1, y + 1, x + 1, y + h - 1) -- left
 
 	draw.DrawText(self.id, "DermaDefault", x + w * 0.5, y + h * 0.5 - 7, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+end
+
+--[[----------------------------------------------------------------------------
+	Name: 		GetDefaults()
+	Desc: 		This function is called when an element wants to now its original position.
+		  		This is the case at Resets and Initializations.
+	Returns: 	Reference to a table with basepos, size and minsize
+--]]----------------------------------------------------------------------------
+function HUDELEMENT:GetDefaults()
+
 end
 
 function HUDELEMENT:SetDefaults()

@@ -21,14 +21,22 @@ if CLIENT then
 
 	local secondaryRoleInformationFunc = nil
 
+	local const_defaults = {
+							basepos = {x = 0, y = 0},
+							size = {w = w_default, h = h_default},
+							minsize = {w = min_w, h = min_h}
+		}
+
 	function HUDELEMENT:Initialize()
-		w, h = w_default, h_default
 		self.scale = 1.0
+		local defaults = self:GetDefaults()
+		w, h = defaults.size.w, defaults.size.h
+
 		self.basecolor = self:GetHUDBasecolor()
 
-		self:RecalculateBasePos()
+		--self:RecalculateBasePos()
 
-		self:SetMinSize(min_w, min_h)
+		self:SetMinSize(defaults.minsize.w, defaults.minsize.h)
 		self:SetSize(w, h)
 
 		BaseClass.Initialize(self)
@@ -43,6 +51,11 @@ if CLIENT then
 	function HUDELEMENT:RecalculateBasePos()
 		self:SetBasePos(10 * self.scale, ScrH() - (10 * self.scale + h))
 	end
+
+	function HUDELEMENT:GetDefaults()
+		const_defaults["basepos"] = { x = 10 * self.scale, y = ScrH() - (10 * self.scale + h)}
+		return const_defaults
+ 	end
 
 	function HUDELEMENT:PerformLayout()
 		local pos = self:GetPos()
