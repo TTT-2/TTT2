@@ -1,3 +1,5 @@
+local HUDELEMENTS_SHARED_FUNCTIONS_FOLDER = "shared_base"
+
 if not HUDManager then
 	require("hudelements")
 	require("huds")
@@ -60,19 +62,30 @@ if not HUDManager then
 		local _, subFolders = file.Find(shortPath .. "*", "LUA")
 
 		for _, folder in ipairs(subFolders) do
-			HUDELEMENT = {}
-
 			local subFiles = file.Find(shortPath .. folder .. "/*.lua", "LUA")
 
-			includeFoldersFiles(shortPath, folder, subFiles)
+			-- add special folder to clients, this is for shared functions between
+			-- different implementations of element types
+			if folder == HUDELEMENTS_SHARED_FUNCTIONS_FOLDER then
+				for _, fl in ipairs(subFiles) do
+					local filename = pathBase .. folder .. "/" .. fl
+					if SERVER then
+						AddCSLuaFile(filename)
+					end
+				end
+			else
+				HUDELEMENT = {}
 
-			if typ ~= "base_elements" then
-				HUDELEMENT.type = typ
+				includeFoldersFiles(shortPath, folder, subFiles)
+
+				if typ ~= "base_elements" then
+					HUDELEMENT.type = typ
+				end
+
+				hudelements.Register(HUDELEMENT, folder)
+
+				HUDELEMENT = nil
 			end
-
-			hudelements.Register(HUDELEMENT, folder)
-
-			HUDELEMENT = nil
 		end
 	end
 
