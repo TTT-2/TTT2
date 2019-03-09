@@ -10,15 +10,24 @@ local zero_tbl_size = {
 	h = 0
 }
 
-local min_size_tbl = {
+local zero_tbl_min_size = {
 	w = 0,
 	h = 0
 }
 
+-- Basic position / dimension variables
 HUDELEMENT.basepos = table.Copy(zero_tbl_pos)
 HUDELEMENT.pos = table.Copy(zero_tbl_pos)
 HUDELEMENT.size = table.Copy(zero_tbl_size)
-HUDELEMENT.minsize = table.Copy(min_size_tbl)
+HUDELEMENT.minsize = table.Copy(zero_tbl_min_size)
+
+-- Parent / Child variables ----------------------------------------------------
+-- These usually should not be set manually! Use the Getter / Setters, and for
+-- adding a child use the hudelements.RegisterChildRelation(childid, parentid, parent_is_type)
+-- which will also take care of adding a child to an element type instead of a specific element
+HUDELEMENT.parent = nil
+HUDELEMENT.parent_is_type = nil
+HUDELEMENT.children = {}
 
 HUDELEMENT.defaults = {
 	basepos = table.Copy(HUDELEMENT.basepos),
@@ -36,30 +45,70 @@ HUDELEMENT.edit_live_data = {
 	old_col = nil
 }
 
-HUDELEMENT.parent = nil
-HUDELEMENT.parent_is_type = nil
-HUDELEMENT.children = {}
+--[[----------------------------------------------------------------------------
+	Name: ApplyToChildren(string funcName, ...)
+	Desc: This function will try to call the function given with funcName on
+		  all children of this hud element, while also passing extra parameters
+		  to this the function.
+--]]----------------------------------------------------------------------------
+function HUDELEMENT:ApplyToChildren(funcName, ...)
+	if not funcName then return end
 
-function HUDELEMENT:PreInitialize()
-	-- Use this to set child<->parent relations etc, this is called before Initialized and other objects can still be uninitialized!
-end
-
-function HUDELEMENT:Initialize()
-	-- use this to set default values and dont forget to call BaseClass.Initialze(self)!!
-	self:SetDefaults()
-
-	for _, elem in ipairs(self.children) do
+	for _, elem in ipairs(self:GetChildren()) do
 		local elemtbl = hudelements.GetStored(elem)
 		if elemtbl then
-			elemtbl:Initialize()
+			if isfunction(elemtbl[funcName]) then
+				elemtbl[funcName](...)
+			else
+				MsgN("ERROR: HUDElement " .. (self.id or "?") .. " has child named " .. elem .. " with unknown function " .. funcName .. " \n")
+			end
 		else
-			Msg("Error: HUDElement " .. (self.id or "?") .. " has unkown child element named " .. elem .. " when calling Initialize \n")
+			Msg("ERROR: HUDElement " .. (self.id or "?") .. " has unknown child element named " .. elem .. " when applying a function to all children: " .. funcName .. " \n")
 		end
 	end
 end
 
+--[[----------------------------------------------------------------------------
+	Name: PreInitialize()
+	Desc: This function will be called after all hud elements have been loaded
+	 	  and are registered. But be aware that the elements are still "raw", so
+		  they did not execute any code or set any of their properties correct.
+		  Use this function for example to register your child -> parent
+		  relation, by calling
+		  hudelements.RegisterChildRelation(childid, parentid, parent_is_type)
+--]]----------------------------------------------------------------------------
+function HUDELEMENT:PreInitialize()
+	-- Use this to set child<->parent relations etc, this is called before Initialized and other objects can still be uninitialized!
+end
+
+--[[----------------------------------------------------------------------------
+	Name: Initialize()
+	Desc: This function will be called each time the HUD is loaded eg. when
+		  switching to this HUD in the HUDManager, so expect this function to
+		  be called multiple times and respect that within your code. Due to
+		  this, the function should be used to reset your member variables and
+		  temporary variables. Then you can set them to an useful inital value.
+
+		  Remember that previously loaded values will be applied later and
+		  dont forget to call BaseClass.Initialize(self), which will then call
+		  Initialize() on all children.
+--]]----------------------------------------------------------------------------
+function HUDELEMENT:Initialize()
+	-- use this to set default values and dont forget to call BaseClass.Initialze(self)!!
+	self:SetDefaults()
+
+	self:ApplyToChildren("Initialize", self)
+end
+
+--[[----------------------------------------------------------------------------
+	Name: Draw()
+	Desc: This function is called when an element should draw its content.
+		  Please use this function only to draw your element and after that remember to call
+		  the BaseClass.Draw(self), this will ensure that child elements will be drawn too!
+--]]----------------------------------------------------------------------------
 function HUDELEMENT:Draw()
-	-- Override this function to draw your element
+	-- call Draw() on all children
+	self:ApplyToChildren("Draw", self)
 end
 
 -- parameter overwrites
@@ -81,31 +130,17 @@ end
 -- parameter overwrites end
 
 --[[------------------------------
-	PerformLayout()
+	Name: PerformLayout()
 	Desc: This function is called after all Initialize() functions.
 --]]-------------------------------
 function HUDELEMENT:PerformLayout()
-	for _, elem in ipairs(self.children) do
-		local elemtbl = hudelements.GetStored(elem)
-		if elemtbl then
-			elemtbl:PerformLayout()
-		else
-			Msg("Error: HUDElement " .. (self.id or "?") .. " has unkown child element named " .. elem .. " when calling PerformLayout \n")
-		end
-	end
+	self:ApplyToChildren("PerformLayout", self)
 end
 
 function HUDELEMENT:ResolutionChanged()
 	self:RecalculateBasePos()
 	self:SetDefaults()
-	for _, elem in ipairs(self.children) do
-		local elemtbl = hudelements.GetStored(elem)
-		if elemtbl then
-			elemtbl:ResolutionChanged()
-		else
-			Msg("Error: HUDElement " .. (self.id or "?") .. " has unkown child element named " .. elem .. " when calling ResolutionChanged \n")
-		end
-	end
+	self:ApplyToChildren("ResolutionChanged", self)
 end
 
 function HUDELEMENT:RecalculateBasePos()
@@ -456,14 +491,7 @@ function HUDELEMENT:Reset()
 		self:SetSize(defaultSize.w, defaultSize.h)
 	end
 
-	for _, elem in ipairs(self.children) do
-		local elemtbl = hudelements.GetStored(elem)
-		if elemtbl then
-			elemtbl:Reset()
-		else
-			Msg("Error: HUDElement " .. (self.id or "?") .. " has unkown child element named " .. elem .. " when calling Reset \n")
-		end
-	end
+	self:ApplyToChildren("Reset", self)
 
 	self:PerformLayout()
 end
