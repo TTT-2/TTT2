@@ -16,18 +16,25 @@ if CLIENT then
 	local w, h = w_default, h_default
 	local pad = pad_default -- padding
 
+	local const_defaults = {
+						basepos = {x = 0, y = 0},
+						size = {w = 96, h = 72},
+						minsize = {w = 96, h = 72}
+	}
+
 	function HUDELEMENT:Initialize()
 		w, h = w_default, h_default
 		pad = pad_default
 		self.scale = 1.0
 		self.basecolor = self:GetHUDBasecolor()
 
-		self:RecalculateBasePos()
+		local defaults = self:GetDefaults()
 
 		self.disabledUnlessForced = true
-
-		self:SetMinSize(w, h)
-		self:SetSize(w, h)
+		
+		self:SetBasePos(defaults.basepos.x, defaults.basepos.y)
+		self:SetMinSize(defaults.size.w, defaults.size.h)
+		self:SetSize(defaults.minsize.w, defaults.minsize.h)
 
 		BaseClass.Initialize(self)
 	end
@@ -38,9 +45,10 @@ if CLIENT then
 	end
 	-- parameter overwrites end
 
-	function HUDELEMENT:RecalculateBasePos()
-		self:SetBasePos(math.Round(ScrW() * 0.5 - w * 0.5), 4 * self.scale)
-	end
+	function HUDELEMENT:GetDefaults()
+		const_defaults["basepos"] = { x = math.Round(ScrW() * 0.5 - self.size.w * 0.5), y = 4 * self.scale}
+		return const_defaults
+ 	end
 
 	function HUDELEMENT:PerformLayout()
 		local pos = self:GetPos()

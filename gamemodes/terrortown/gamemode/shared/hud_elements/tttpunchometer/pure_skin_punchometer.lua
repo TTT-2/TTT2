@@ -21,16 +21,23 @@ if CLIENT then
 	local pad = pad_default
 	local margin = margin_default
 
+	local const_defaults = {
+						basepos = {x = 0, y = 0},
+						size = {w = 200, h = 40},
+						minsize = {w = 100, h = 40}
+	}
+
 	function HUDELEMENT:Initialize()
 		w, h = w_default, h_default
 		margin = margin_default
 		self.scale = 1.0
 		self.basecolor = self:GetHUDBasecolor()
 
-		self:RecalculateBasePos()
+		local defaults = self:GetDefaults()
 
-		self:SetMinSize(min_w, min_h)
-		self:SetSize(w, h)
+		self:SetBasePos(defaults.basepos.x, defaults.basepos.y)
+		self:SetMinSize(defaults.size.w, defaults.size.h)
+		self:SetSize(defaults.minsize.w, defaults.minsize.h)
 
 		BaseClass.Initialize(self)
 	end
@@ -41,9 +48,10 @@ if CLIENT then
 	end
 	-- parameter overwrites end
 
-	function HUDELEMENT:RecalculateBasePos()
-		self:SetBasePos(ScrW() * 0.5 - w * 0.5, (margin + 72) * self.scale)
-	end
+	function HUDELEMENT:GetDefaults()
+		const_defaults["basepos"] = { x = ScrW() * 0.5 - w * 0.5, y = margin + 72 * self.scale}
+		return const_defaults
+ 	end
 
 	-- Paint punch-o-meter
 	function HUDELEMENT:PunchPaint()
@@ -52,9 +60,6 @@ if CLIENT then
 		local punch = client:GetNWFloat("specpunches", 0)
 		local pos = self:GetPos()
 		local x, y = pos.x, pos.y
-
-		self.scale = self:GetHUDScale()
-		self.basecolor = self:GetHUDBasecolor()
 
 		self:DrawBg(x, y, w, h, self.basecolor)
 		self:DrawBar(x + pad, y + pad, w - pad * 2, h - pad * 2, draw_col, punch, self.scale, L.punch_title)
@@ -78,6 +83,9 @@ if CLIENT then
 
 	function HUDELEMENT:PerformLayout()
 		local size = self:GetSize()
+
+		self.scale = self:GetHUDScale()
+		self.basecolor = self:GetHUDBasecolor()
 
 		pad = pad_default * self.scale
 		margin = margin_default * self.scale

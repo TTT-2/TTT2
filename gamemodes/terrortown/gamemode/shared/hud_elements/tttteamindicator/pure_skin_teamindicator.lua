@@ -26,6 +26,12 @@ if CLIENT then
 	local h = h_default
 	local pad = pad_default -- padding
 
+	local const_defaults = {
+						basepos = {x = 0, y = 0},
+						size = {w = 500, h = 500},
+						minsize = {w = 500, h = 500}
+	}
+
 	function HUDELEMENT:PreInitialize()
 		hudelements.RegisterChildRelation(self.id, "pure_skin_roundinfo", false)
 	end
@@ -52,9 +58,9 @@ if CLIENT then
 	end
 	-- parameter overwrites end
 
-	function HUDELEMENT:RecalculateBasePos()
-
-	end
+	function HUDELEMENT:GetDefaults()
+		return const_defaults
+ 	end
 
 	function HUDELEMENT:PerformLayout()
 		local parent_pos = parentInstance:GetPos()

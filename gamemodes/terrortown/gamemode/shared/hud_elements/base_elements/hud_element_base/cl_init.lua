@@ -30,10 +30,6 @@ HUDELEMENT.parent_is_type = nil
 HUDELEMENT.children = {}
 
 HUDELEMENT.defaults = {
-	basepos = table.Copy(HUDELEMENT.basepos),
-	size = table.Copy(HUDELEMENT.size),
-	minsize = table.Copy(HUDELEMENT.minsize),
-
 	-- resize area parameters
 	click_area = 20,
 	click_padding = 0
@@ -95,8 +91,6 @@ end
 --]]----------------------------------------------------------------------------
 function HUDELEMENT:Initialize()
 	-- use this to set default values and dont forget to call BaseClass.Initialze(self)!!
-	self:SetDefaults()
-
 	self:ApplyToChildren("Initialize")
 end
 
@@ -139,16 +133,6 @@ end
 --]]-------------------------------
 function HUDELEMENT:PerformLayout()
 	self:ApplyToChildren("PerformLayout")
-end
-
-function HUDELEMENT:ResolutionChanged()
-	self:RecalculateBasePos()
-	self:SetDefaults()
-	self:ApplyToChildren("ResolutionChanged")
-end
-
-function HUDELEMENT:RecalculateBasePos()
-	-- Use this to intialize/reinitialize your basePos (take ScrH()/ScrW() as reference to support different resolutions)
 end
 
 function HUDELEMENT:GetBasePos()
@@ -482,16 +466,11 @@ function HUDELEMENT:GetDefaults()
 
 end
 
-function HUDELEMENT:SetDefaults()
-	self.defaults.basepos = table.Copy(self.basepos)
-	self.defaults.size = table.Copy(self.size)
-	self.defaults.minsize = table.Copy(self.minsize)
-end
-
 function HUDELEMENT:Reset()
-	local defaultPos = self.defaults.basepos
-	local defaultSize = self.defaults.size
-	local defaultMinSize = self.defaults.minsize
+	local defaults = self:GetDefaults()
+	local defaultPos = defaults.basepos
+	local defaultSize = defaults.size
+	local defaultMinSize = defaults.minsize
 
 	if defaultPos then
 		self:SetBasePos(defaultPos.x, defaultPos.y)

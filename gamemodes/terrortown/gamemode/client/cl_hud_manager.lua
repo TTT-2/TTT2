@@ -41,7 +41,26 @@ function HUDManager.DrawHUD()
 
 	if not hud then return end
 
-	hud:Draw()
+
+	----TODO: Fix the bug, that HUD:Draw is nil the second time a map is loaded
+	--hud:Draw()
+	for _, elemName in ipairs(hud:GetElements()) do
+		local elem = hudelements.GetStored(elemName)
+		if not elem then
+			MsgN("Error: Hudelement with name " .. elemName .. " not found!")
+			return
+		end
+
+		if elem.initialized and elem.type and hud:ShouldShow(elem.type) and hook.Call("HUDShouldDraw", GAMEMODE, elem.type) then
+			if elem:ShouldDraw() then
+				elem:Draw()
+			end
+
+			if HUDEditor then
+				HUDEditor.DrawElem(elem)
+			end
+		end
+	end
 end
 
 -- Paints player status HUD element in the bottom left
@@ -56,7 +75,7 @@ function GM:HUDPaint()
 	if client.oldScrW and client.oldScrW ~= scrW and client.oldScrH and client.oldScrH ~= scrH then
 		local hud = huds.GetStored(HUDManager.GetHUD())
 		if hud then
-			hud:ResolutionChanged()
+			hud:Reset()
 		end
 
 		changed = true

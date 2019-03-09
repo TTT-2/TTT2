@@ -13,14 +13,20 @@ if CLIENT then
 	local size_default = 64
 	local size = size_default
 
+	local const_defaults = {
+						basepos = {x = 0, y = 0},
+						size = {w = 64, h = 64},
+						minsize = {w = 64, h = 64}
+	}
+
 	function HUDELEMENT:Initialize()
 		size = size_default
 		self.scale = 1.0
+		local defaults = self:GetDefaults()
 
-		self:RecalculateBasePos()
-
-		self:SetMinSize(size, size)
-		self:SetSize(size, -size)
+		self:SetBasePos(defaults.basepos.x, defaults.basepos.y)
+		self:SetMinSize(defaults.size.w, defaults.size.h)
+		self:SetSize(defaults.minsize.w, defaults.minsize.h)
 
 		BaseClass.Initialize(self)
 	end
@@ -31,9 +37,10 @@ if CLIENT then
 	end
 	-- parameter overwrites end
 
-	function HUDELEMENT:RecalculateBasePos()
-		self:SetBasePos(20 * self.scale, ScrH() * 0.5)
-	end
+	function HUDELEMENT:GetDefaults()
+		const_defaults["basepos"] = { x = 20 * self.scale, y = ScrH() * 0.5}
+		return const_defaults
+ 	end
 
 	function HUDELEMENT:PerformLayout()
 		local basepos = self:GetBasePos()

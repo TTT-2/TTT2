@@ -24,6 +24,12 @@ if CLIENT then
 	local ply_ind_size = 0
 	local column_count = 0
 
+	local const_defaults = {
+						basepos = {x = 0, y = 0},
+						size = {w = 72, h = 72},
+						minsize = {w = 0, h = 0}
+	}
+
 	function HUDELEMENT:PreInitialize()
 		hudelements.RegisterChildRelation(self.id, "pure_skin_roundinfo", false)
 	end
@@ -50,9 +56,9 @@ if CLIENT then
 	end
 	-- parameter overwrites end
 
-	function HUDELEMENT:RecalculateBasePos()
-
-	end
+	function HUDELEMENT:GetDefaults()
+		return const_defaults
+ 	end
 
 	function HUDELEMENT:PerformLayout()
 		local parent_pos = parentInstance:GetPos()

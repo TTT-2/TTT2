@@ -56,16 +56,23 @@ if CLIENT then
 	local imageMinHeight = imageSize + 2 * pad
 	local min_w, min_h = 250, 80
 
+	local const_defaults = {
+						basepos = {x = 0, y = 0},
+						size = {w = 400, h = 80},
+						minsize = {w = 250, h = 80}
+	}
+
 	function HUDELEMENT:Initialize()
 		msg_width = msg_width_default
 		margin = margin_default
 		self.scale = 1.0
 		self.basecolor = self:GetHUDBasecolor()
 
-		self:RecalculateBasePos()
+		local defaults = self:GetDefaults()
 
-		self:SetMinSize(min_w, min_h)
-		self:SetSize(msg_width, 80)
+		self:SetBasePos(defaults.basepos.x, defaults.basepos.y)
+		self:SetMinSize(defaults.size.w, defaults.size.h)
+		self:SetSize(defaults.minsize.w, defaults.minsize.h)
 
 		base_text_display_options = {
 			font = msgfont,
@@ -82,12 +89,10 @@ if CLIENT then
 	end
 	-- parameter overwrites end
 
-	function HUDELEMENT:RecalculateBasePos()
-		top_y = margin
-		top_x = ScrW() - margin - msg_width
-
-		self:SetBasePos(top_x, top_y)
-	end
+	function HUDELEMENT:GetDefaults()
+		const_defaults["basepos"] = { x = ScrW() - margin - msg_width, y = margin}
+		return const_defaults
+ 	end
 
 	function HUDELEMENT:PerformLayout()
 		top_x = self.pos.x

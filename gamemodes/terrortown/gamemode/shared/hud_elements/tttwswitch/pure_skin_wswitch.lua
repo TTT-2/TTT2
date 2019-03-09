@@ -20,17 +20,24 @@ if CLIENT then
 	HUDELEMENT.margin = margin_default
 	HUDELEMENT.lpw = lpw_default -- left panel width
 
+	local const_defaults = {
+						basepos = {x = 0, y = 0},
+						size = {w = 365, h = 28},
+						minsize = {w = 240, h = 28}
+	}
+
 	function HUDELEMENT:Initialize()
 		width, height = width_default, height_default
 		self.scale = 1.0
 		self.basecolor = self:GetHUDBasecolor()
 
 		WSWITCH:UpdateWeaponCache()
-
-		self:RecalculateBasePos()
-
-		self:SetMinSize(min_w, min_h)
-		self:SetSize(width, -height)
+		
+		local defaults = self:GetDefaults()
+		
+		self:SetBasePos(defaults.basepos.x, defaults.basepos.y)
+		self:SetMinSize(defaults.size.w, defaults.size.h)
+		self:SetSize(defaults.minsize.w, defaults.minsize.h)
 
 		BaseClass.Initialize(self)
 	end
@@ -105,11 +112,10 @@ if CLIENT then
 		shadow = 100
 	}
 
-	function HUDELEMENT:RecalculateBasePos()
-		self.margin = margin_default * self.scale
-
-		self:SetBasePos(ScrW() - (width + self.margin * 2), ScrH() - self.margin)
-	end
+	function HUDELEMENT:GetDefaults()
+		const_defaults["basepos"] = { x = ScrW() - (width + self.margin * 2), y = ScrH() - self.margin}
+		return const_defaults
+ 	end
 
 	function HUDELEMENT:PerformLayout()
 		local basepos = self:GetBasePos()

@@ -10,21 +10,28 @@ if CLIENT then
 
 	local pad_default = 14
 	local bh_default = 8 -- bar height
-	local w_default, h_default = 321, 36
 
 	local w, h = w_default, h_default
 	local min_w, min_h = 75, 36
 	local pad = pad_default -- padding
 	
+	local const_defaults = {
+							basepos = {x = 0, y = 0},
+							size = {w = 321, h = 36},
+							minsize = {w = 75, h = 36}
+		}
+
 	function HUDELEMENT:Initialize()
-		w, h = w_default, h_default
 		pad = pad_default
+
+		local defaults = self:GetDefaults()
+
+		w, h = defaults.size.w, defaults.size.h
 		self.basecolor = self:GetHUDBasecolor()
 
-		self:RecalculateBasePos()
-		
-		self:SetMinSize(min_w, min_h)
-		self:SetSize(w, h)
+		self:SetBasePos(defaults.basepos.x, defaults.basepos.y)
+		self:SetMinSize(defaults.minsize.w, defaults.minsize.h)
+		self:SetSize(defaults.size.w, defaults.size.h)
 
 		BaseClass.Initialize(self)
 	end
@@ -35,9 +42,10 @@ if CLIENT then
 	end
 	-- parameter overwrites end
 
-	function HUDELEMENT:RecalculateBasePos()
-		self:SetBasePos(math.Round(ScrW() * 0.5 - w * 0.5), ScrH() - pad - h)
-	end
+	function HUDELEMENT:GetDefaults()
+		const_defaults["basepos"] = { x = math.Round(ScrW() * 0.5 - self.size.w * 0.5), y = ScrH() - pad - self.size.h}
+		return const_defaults
+ 	end
 
 	function HUDELEMENT:ShouldDraw()
 		local client = LocalPlayer()

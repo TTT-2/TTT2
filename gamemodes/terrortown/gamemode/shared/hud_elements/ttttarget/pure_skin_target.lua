@@ -15,16 +15,23 @@ if CLIENT then -- CLIENT
 	local iconSize = iconSize_default
 	HUDELEMENT.icon = Material("vgui/ttt/target_icon")
 
+	local const_defaults = {
+						basepos = {x = 0, y = 0},
+						size = {w = 365, h = 32},
+						minsize = {w = 225, h = 32}
+	}
+
 	function HUDELEMENT:Initialize()
 		w, h = w_default, h_default
 		pad = pad_default
 		self.scale = 1.0
 		self.basecolor = self:GetHUDBasecolor()
 
-		self:RecalculateBasePos()
+		local defaults = self:GetDefaults()
 
-		self:SetMinSize(min_w, min_h)
-		self:SetSize(w, h)
+		self:SetBasePos(defaults.basepos.x, defaults.basepos.y)
+		self:SetMinSize(defaults.size.w, defaults.size.h)
+		self:SetSize(defaults.minsize.w, defaults.minsize.h)
 
 		BaseClass.Initialize(self)
 	end
@@ -35,9 +42,10 @@ if CLIENT then -- CLIENT
 	end
 	-- parameter overwrites end
 
-	function HUDELEMENT:RecalculateBasePos()
-	    self:SetBasePos(10 * self.scale, ScrH() - h - 146 * self.scale - pad - 10 * self.scale)
-	end
+	function HUDELEMENT:GetDefaults()
+		const_defaults["basepos"] = { x = 10 * self.scale, y = ScrH() - h - 146 * self.scale - pad - 10 * self.scale}
+		return const_defaults
+ 	end
 
 	function HUDELEMENT:PerformLayout()
 		local size = self:GetSize()

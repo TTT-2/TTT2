@@ -23,8 +23,8 @@ if CLIENT then
 
 	local const_defaults = {
 							basepos = {x = 0, y = 0},
-							size = {w = w_default, h = h_default},
-							minsize = {w = min_w, h = min_h}
+							size = {w = 365, h = 146},
+							minsize = {w = 225, h = 146}
 		}
 
 	function HUDELEMENT:Initialize()
@@ -34,8 +34,7 @@ if CLIENT then
 
 		self.basecolor = self:GetHUDBasecolor()
 
-		--self:RecalculateBasePos()
-
+		self:SetBasePos(defaults.basepos.x, defaults.basepos.y)
 		self:SetMinSize(defaults.minsize.w, defaults.minsize.h)
 		self:SetSize(w, h)
 
@@ -47,10 +46,6 @@ if CLIENT then
 		return true, true
 	end
 	-- parameter overwrites end
-
-	function HUDELEMENT:RecalculateBasePos()
-		self:SetBasePos(10 * self.scale, ScrH() - (10 * self.scale + h))
-	end
 
 	function HUDELEMENT:GetDefaults()
 		const_defaults["basepos"] = { x = 10 * self.scale, y = ScrH() - (10 * self.scale + h)}

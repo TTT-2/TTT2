@@ -18,14 +18,10 @@ if CLIENT then
 	local y = 0
 
 	function HUDELEMENT:Initialize()
-		self:RecalculateBasePos()
+		self:SetBasePos(self.margin, ScrH() - (self.margin + self.maxheight))
 		self:SetSize(self.maxwidth, self.maxheight)
 
 		BaseClass.Initialize(self)
-	end
-
-	function HUDELEMENT:RecalculateBasePos()
-		self:SetBasePos(self.margin, ScrH() - (self.margin + self.maxheight))
 	end
 
 	function HUDELEMENT:PerformLayout()
