@@ -2,8 +2,6 @@ ttt_include("vgui__cl_hudswitcher")
 
 local current_hud_cvar = CreateClientConVar("ttt2_current_hud", HUDManager.defaultHUD or "pure_skin", true, true)
 
-local currentHUD
-
 function HUDManager.ShowHUDSwitcher()
 	local client = LocalPlayer()
 
@@ -43,23 +41,7 @@ function HUDManager.DrawHUD()
 
 	if not hud then return end
 
-	for _, elemName in ipairs(hud:GetElements()) do
-		local elem = hudelements.GetStored(elemName)
-		if not elem then
-			MsgN("Error: Hudelement with name " .. elemName .. " not found!")
-			return
-		end
-
-		if elem.initialized and elem.type and hud:ShouldShow(elem.type) and hook.Call("HUDShouldDraw", GAMEMODE, elem.type) then
-			if elem:ShouldDraw() then
-				elem:Draw()
-			end
-
-			if HUDEditor then
-				HUDEditor.DrawElem(elem)
-			end
-		end
-	end
+	hud:Draw()
 end
 
 -- Paints player status HUD element in the bottom left
@@ -136,24 +118,19 @@ local function UpdateHUD(name)
 
 	HUDEditor.StopEditHUD()
 
-	RunConsoleCommand(current_hud_cvar:GetName(), name)
-
-	currentHUD = name
+	current_hud_cvar:SetString(name)
 
 	-- Initialize elements
 	hudEl:Initialize()
 
 	hudEl:LoadData()
-
-	hudEl:Loaded()
 end
 
 function HUDManager.GetHUD()
-	if not currentHUD then
-		return current_hud_cvar:GetString()
-	end
+	local currentHUD = current_hud_cvar:GetString()
+	local currentHUDTbl = huds.GetStored(currentHUD)
 
-	if not huds.GetStored(currentHUD) then
+	if not currentHUDTbl then
 		return HUDManager.defaultHUD
 	end
 
@@ -161,11 +138,11 @@ function HUDManager.GetHUD()
 end
 
 function HUDManager.SetHUD(name)
-	local curHUD = HUDManager.GetHUD()
+	local currentHUD = HUDManager.GetHUD()
 
 	net.Start("TTT2RequestHUD")
-	net.WriteString(name or curHUD)
-	net.WriteString(curHUD)
+	net.WriteString(name or currentHUD)
+	net.WriteString(currentHUD)
 	net.SendToServer()
 end
 
