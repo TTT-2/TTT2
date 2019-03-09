@@ -147,26 +147,35 @@ end
 
 function HUD:GetElements()
 	-- loop through all types and if the hud does not provide an element take the first found instance for the type
-	local children, parents = {}, {}
+	local elems = {}
 	for _, typ in ipairs(hudelements.GetElementTypes()) do
 		local el = self:GetElementByType(typ)
 		if el then
-			if el:IsChild() then
-				children[#children + 1] = el.id
-			else
-				parents[#parents + 1] = el.id
-			end
+			elems[#elems + 1] = el.id
 		end
 	end
 
-	-- merge into children because they should be drawn first
-	table.Add(children, parents)
-
-	return children
+	return elems
 end
 
-function HUD:Loaded()
+function HUD:Draw()
+	for _, elemName in ipairs(self:GetElements()) do
+		local elem = hudelements.GetStored(elemName)
+		if not elem then
+			MsgN("Error: Hudelement with name " .. elemName .. " not found!")
+			return
+		end
 
+		if elem.initialized and elem.type and self:ShouldShow(elem.type) and hook.Call("HUDShouldDraw", GAMEMODE, elem.type) then
+			if elem:ShouldDraw() and not elem:IsChild() then
+				elem:Draw()
+			end
+
+			if HUDEditor then
+				HUDEditor.DrawElem(elem)
+			end
+		end
+	end
 end
 
 function HUD:Reset()
