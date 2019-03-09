@@ -60,6 +60,7 @@ if CLIENT then
 		msg_width = msg_width_default
 		margin = margin_default
 		self.scale = 1.0
+		self.basecolor = self:GetHUDBasecolor()
 
 		self:RecalculateBasePos()
 
@@ -91,6 +92,9 @@ if CLIENT then
 	function HUDELEMENT:PerformLayout()
 		top_x = self.pos.x
 		top_y = self.pos.y
+
+		self.scale = self:GetHUDScale()
+		self.basecolor = self:GetHUDBasecolor()
 
 		leftPad = leftPad_default * self.scale
 		margin = margin_default * self.scale

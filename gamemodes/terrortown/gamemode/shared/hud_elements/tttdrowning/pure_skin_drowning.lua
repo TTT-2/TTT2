@@ -19,8 +19,8 @@ if CLIENT then
 	function HUDELEMENT:Initialize()
 		w, h = w_default, h_default
 		pad = pad_default
-		self.scale = 1.0
-		
+		self.basecolor = self:GetHUDBasecolor()
+
 		self:RecalculateBasePos()
 		
 		self:SetMinSize(min_w, min_h)
@@ -42,8 +42,11 @@ if CLIENT then
 	function HUDELEMENT:PerformLayout()
 		local pos = self:GetPos()
 		local size = self:GetSize()
+		local scale = self:GetHUDScale()
 
-		pad = pad_default * self.scale
+		self.basecolor = self:GetHUDBasecolor()
+
+		pad = pad_default * scale
 		x = pos.x
 		y = pos.y
 		w = size.w

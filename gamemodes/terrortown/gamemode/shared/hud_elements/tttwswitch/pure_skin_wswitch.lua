@@ -23,6 +23,7 @@ if CLIENT then
 	function HUDELEMENT:Initialize()
 		width, height = width_default, height_default
 		self.scale = 1.0
+		self.basecolor = self:GetHUDBasecolor()
 
 		WSWITCH:UpdateWeaponCache()
 
@@ -114,6 +115,9 @@ if CLIENT then
 		local basepos = self:GetBasePos()
 
 		self:SetPos(basepos.x, basepos.y)
+
+		self.scale = self:GetHUDScale()
+		self.basecolor = self:GetHUDBasecolor()
 
 		height = height_default * self.scale
 		self.margin = margin_default * self.scale

@@ -25,6 +25,7 @@ if CLIENT then
 		w, h = w_default, h_default
 		margin = margin_default
 		self.scale = 1.0
+		self.basecolor = self:GetHUDBasecolor()
 
 		self:RecalculateBasePos()
 
@@ -51,6 +52,9 @@ if CLIENT then
 		local punch = client:GetNWFloat("specpunches", 0)
 		local pos = self:GetPos()
 		local x, y = pos.x, pos.y
+
+		self.scale = self:GetHUDScale()
+		self.basecolor = self:GetHUDBasecolor()
 
 		self:DrawBg(x, y, w, h, self.basecolor)
 		self:DrawBar(x + pad, y + pad, w - pad * 2, h - pad * 2, draw_col, punch, self.scale, L.punch_title)

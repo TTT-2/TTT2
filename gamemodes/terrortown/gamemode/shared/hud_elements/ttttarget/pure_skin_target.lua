@@ -19,6 +19,7 @@ if CLIENT then -- CLIENT
 		w, h = w_default, h_default
 		pad = pad_default
 		self.scale = 1.0
+		self.basecolor = self:GetHUDBasecolor()
 
 		self:RecalculateBasePos()
 
@@ -41,6 +42,9 @@ if CLIENT then -- CLIENT
 	function HUDELEMENT:PerformLayout()
 		local size = self:GetSize()
 
+		self.scale = self:GetHUDScale()
+		self.basecolor = self:GetHUDBasecolor()
+		
 		iconSize = iconSize_default * self.scale
 		pad = pad_default * self.scale
 

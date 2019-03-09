@@ -24,7 +24,6 @@ if CLIENT then
 
 	local x, y = 0, 0
 	local h = h_default
-	local scale = 1.0
 	local pad = pad_default -- padding
 
 	function HUDELEMENT:PreInitialize()
@@ -33,10 +32,12 @@ if CLIENT then
 
 	function HUDELEMENT:Initialize()
 		parentInstance = hudelements.GetStored(self.parent)
-		scale = 1.0
 		margin = margin_default
 		element_margin = element_margin_default
 		pad = pad_default
+
+		self.scale = 1.0
+		self.basecolor = self:GetHUDBasecolor()
 
 		BaseClass.Initialize(self)
 	end
@@ -60,12 +61,13 @@ if CLIENT then
 		local parent_size = parentInstance:GetSize()
 
 		-- caching
+		self.basecolor = self:GetHUDBasecolor()
 		h = parent_size.h
 		x, y = parent_pos.x - h, parent_pos.y
-		scale = h / h_default
-		margin = margin_default * scale
-		element_margin = element_margin_default * scale
-		pad = pad_default * scale
+		self.scale = h / h_default
+		margin = margin_default * self.scale
+		element_margin = element_margin_default * self.scale
+		pad = pad_default * self.scale
 
 		self:SetPos(x, y)
 		self:SetSize(h, h)

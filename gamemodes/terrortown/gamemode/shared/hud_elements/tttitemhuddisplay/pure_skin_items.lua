@@ -38,6 +38,7 @@ if CLIENT then
 	function HUDELEMENT:PerformLayout()
 		local basepos = self:GetBasePos()
 
+		self.scale = self:GetHUDScale()
 		size = size_default * self.scale
 
 		self:SetPos(basepos.x, basepos.y)

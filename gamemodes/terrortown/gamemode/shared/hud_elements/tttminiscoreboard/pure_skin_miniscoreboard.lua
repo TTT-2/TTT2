@@ -17,7 +17,6 @@ if CLIENT then
 
 	local x, y = 0, 0
 	local w, h = h_default, h_default
-	local scale = 1.0
 
 	-- values that will be overridden by code
 	local parentInstance = nil
@@ -31,9 +30,10 @@ if CLIENT then
 
 	function HUDELEMENT:Initialize()
 		w, h = h_default, h_default
-		scale = 1.0
 		margin = margin_default
 		element_margin = element_margin_default
+		self.scale = 1.0
+		self.basecolor = self:GetHUDBasecolor()
 
 		parentInstance = hudelements.GetStored(self.parent)
 
@@ -58,11 +58,13 @@ if CLIENT then
 		local parent_pos = parentInstance:GetPos()
 		local parent_size = parentInstance:GetSize()
 
+		self.basecolor = self:GetHUDBasecolor()
+
 		x, y = parent_pos.x + parent_size.w, parent_pos.y
 		h = parent_size.h
-		scale = h / h_default
-		margin = margin_default * scale
-		element_margin = element_margin_default * scale
+		self.scale = h / h_default
+		margin = margin_default * self.scale
+		element_margin = element_margin_default * self.scale
 
 		ply_ind_size = math.Round((h - element_margin - margin * 2) * 0.5)
 

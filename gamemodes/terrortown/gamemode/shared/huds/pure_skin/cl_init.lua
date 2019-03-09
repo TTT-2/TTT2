@@ -30,13 +30,8 @@ function HUD:GetSavingKeys()
 		savingKeys.basecolor = {
 			typ = "color",
 			desc = "BaseColor",
-			OnChange = function(slf, col)
-				for _, elem in ipairs(slf:GetElements()) do
-					local el = hudelements.GetStored(elem)
-					if el then
-						el.basecolor = col
-					end
-				end
+			OnChange = function(slf, col) 
+				self:PerformLayout()
 			end
 		}
 		savingKeys.scale = {
@@ -44,21 +39,9 @@ function HUD:GetSavingKeys()
 			desc = "Reset Positions and set HUD Scale",
 			OnChange = function(slf, val)
 				local scaleMultiplier = val / self.scale
-				for _, elem in ipairs(slf:GetElements()) do
-					local el = hudelements.GetStored(elem)
-					if el then
-						local size = el:GetSize()
-						local min_size = el:GetMinSize()
-						el:SetMinSize(min_size.w * scaleMultiplier, min_size.h * scaleMultiplier)
-						el:SetSize(size.w * scaleMultiplier, size.h * scaleMultiplier)
-						el.scale = val
-						el:PerformLayout()
-						el:RecalculateBasePos()
-						el:PerformLayout()
-						el:SaveData()
-					end
-				end
-			end
+				self:SetScale(scaleMultiplier)
+				self:SaveData()
+			end	
 		}
 	end
 
@@ -87,9 +70,22 @@ function HUD:Loaded()
 		local el = hudelements.GetStored(elem)
 		if el then
 			local min_size = el.defaults.minsize
-			el.basecolor = self.basecolor
-			el.scale = self.scale
 			el:SetMinSize(min_size.w * self.scale, min_size.h * self.scale)
+			el:PerformLayout()
+		end
+	end
+end
+
+function HUD:SetScale(scale)
+	for _, elem in ipairs(self:GetElements()) do
+		local el = hudelements.GetStored(elem)
+		if el then
+			local size = el:GetSize()
+			local min_size = el:GetMinSize()
+			el:SetMinSize(min_size.w * scale, min_size.h * scale)
+			el:SetSize(size.w * scale, size.h * scale)
+			el:PerformLayout()      --code from here will be replaced by a Reset call
+			el:RecalculateBasePos()
 			el:PerformLayout()
 		end
 	end

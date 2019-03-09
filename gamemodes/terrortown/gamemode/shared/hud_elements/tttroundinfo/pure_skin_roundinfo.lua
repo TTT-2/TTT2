@@ -14,14 +14,13 @@ if CLIENT then
 
 	local x, y = 0, 0
 	local w, h = w_default, h_default
-	local scale = 1.0
 	local pad = pad_default -- padding
 
 	function HUDELEMENT:Initialize()
 		w, h = w_default, h_default
-		scale = 1.0
 		pad = pad_default
 		self.scale = 1.0
+		self.basecolor = self:GetHUDBasecolor()
 
 		self:RecalculateBasePos()
 
@@ -40,17 +39,18 @@ if CLIENT then
 	-- parameter overwrites end
 
 	function HUDELEMENT:RecalculateBasePos()
-		self:SetBasePos(math.Round(ScrW() * 0.5 - w * 0.5), 4 * scale)
+		self:SetBasePos(math.Round(ScrW() * 0.5 - w * 0.5), 4 * self.scale)
 	end
 
 	function HUDELEMENT:PerformLayout()
 		local pos = self:GetPos()
 		local size = self:GetSize()
+		self.scale = math.min(size.w / w_default, size.h / h_default)
+		self.basecolor = self:GetHUDBasecolor()
 
 		x, y = pos.x, pos.y
 		w, h = size.w, size.h
-		scale = math.min(w / w_default, h / h_default)
-		pad = pad_default * scale
+		pad = pad_default * self.scale
 
 		BaseClass.PerformLayout(self)
 	end
@@ -115,10 +115,10 @@ if CLIENT then
 			text = util.SimpleTime(math.max(0, endtime), "%02i:%02i")
 		end
 		
-		self:AdvancedText(text, font, rx, ry, color, TEXT_ALIGN_CENTER, vert_align_clock, true, scale)
+		self:AdvancedText(text, font, rx, ry, color, TEXT_ALIGN_CENTER, vert_align_clock, true, self.scale)
 
 		if is_haste then
-			self:AdvancedText(L.hastemode, "PureSkinMSTACKMsg", tmpx, y + pad, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, true, scale)
+			self:AdvancedText(L.hastemode, "PureSkinMSTACKMsg", tmpx, y + pad, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, true, self.scale)
 		end
 
 		-- draw lines around the element
