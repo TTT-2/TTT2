@@ -2,8 +2,6 @@ ttt_include("vgui__cl_hudswitcher")
 
 local current_hud_cvar = CreateClientConVar("ttt2_current_hud", HUDManager.defaultHUD or "pure_skin", true, true)
 
-local currentHUD
-
 function HUDManager.ShowHUDSwitcher()
 	local client = LocalPlayer()
 
@@ -120,9 +118,7 @@ local function UpdateHUD(name)
 
 	HUDEditor.StopEditHUD()
 
-	RunConsoleCommand(current_hud_cvar:GetName(), name)
-
-	currentHUD = name
+	current_hud_cvar:SetString(name)
 
 	-- Initialize elements
 	hudEl:Initialize()
@@ -131,11 +127,10 @@ local function UpdateHUD(name)
 end
 
 function HUDManager.GetHUD()
-	if not currentHUD then
-		return current_hud_cvar:GetString()
-	end
+	local currentHUD = current_hud_cvar:GetString()
+	local currentHUDTbl = huds.GetStored(currentHUD)
 
-	if not huds.GetStored(currentHUD) then
+	if not currentHUDTbl then
 		return HUDManager.defaultHUD
 	end
 
@@ -143,11 +138,11 @@ function HUDManager.GetHUD()
 end
 
 function HUDManager.SetHUD(name)
-	local curHUD = HUDManager.GetHUD()
+	local currentHUD = HUDManager.GetHUD()
 
 	net.Start("TTT2RequestHUD")
-	net.WriteString(name or curHUD)
-	net.WriteString(curHUD)
+	net.WriteString(name or currentHUD)
+	net.WriteString(currentHUD)
 	net.SendToServer()
 end
 
