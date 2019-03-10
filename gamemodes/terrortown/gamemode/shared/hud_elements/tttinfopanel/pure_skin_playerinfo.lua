@@ -44,7 +44,6 @@ if CLIENT then
 
 		self.basecolor = self:GetHUDBasecolor()
 		self.scale = math.min(self.size.w / defaults.minsize.w, self.size.h / defaults.minsize.h)
-
 		self.lpw = lpw * self.scale
 		self.pad = pad * self.scale
 		self.sri_text_width_padding = sri_text_width_padding * self.scale
@@ -145,7 +144,7 @@ if CLIENT then
 			surface.SetFont("PureSkinRole")
 
 			local role_text_width = surface.GetTextSize(string.upper(text)) * self.scale
-			local role_scale_multiplier = (w - self.lpw - 2 * self.pad) / role_text_width
+			local role_scale_multiplier = (self.size.w - self.lpw - 2 * self.pad) / role_text_width
 
 			if calive and cactive and isfunction(self.secondaryRoleInformationFunc) then
 				local secInfoTbl = self.secondaryRoleInformationFunc()
@@ -155,7 +154,7 @@ if CLIENT then
 
 					local sri_text_width = surface.GetTextSize(string.upper(secInfoTbl.text)) * self.scale
 
-					role_scale_multiplier = (w - sri_text_width - self.lpw - 2 * self.pad - 3 * self.sri_text_width_padding) / role_text_width
+					role_scale_multiplier = (self.size.w - sri_text_width - self.lpw - 2 * self.pad - 3 * self.sri_text_width_padding) / role_text_width
 				end
 			end
 
@@ -236,9 +235,9 @@ if CLIENT then
 				local x2_pad = math.Round((self.lpw - coinSize) * 0.5)
 
 				if client:GetCredits() > 0 then
-					util.DrawFilteredTexturedRect(x2 + x2_pad, y2 + h - coinSize - x2_pad, coinSize, coinSize, credits_default, 200)
+					util.DrawFilteredTexturedRect(x2 + x2_pad, y2 + self.size.h - coinSize - x2_pad, coinSize, coinSize, credits_default, 200)
 				else
-					util.DrawFilteredTexturedRect(x2 + x2_pad, y2 + h - coinSize - x2_pad, coinSize, coinSize, credits_zero, 100)
+					util.DrawFilteredTexturedRect(x2 + x2_pad, y2 + self.size.h - coinSize - x2_pad, coinSize, coinSize, credits_zero, 100)
 				end
 			end
 		end

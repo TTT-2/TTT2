@@ -10,9 +10,6 @@ HUDELEMENT.Base = base
 if CLIENT then
 	surface.CreateFont("ItemInfoFont", {font = "Trebuchet24", size = 14, weight = 700})
 
-	local size_default = 64
-	local size = size_default
-
 	local const_defaults = {
 						basepos = {x = 0, y = 0},
 						size = {w = 64, h = 64},
@@ -20,7 +17,6 @@ if CLIENT then
 	}
 
 	function HUDELEMENT:Initialize()
-		size = size_default
 		self.scale = 1.0
 
 		BaseClass.Initialize(self)
@@ -41,10 +37,9 @@ if CLIENT then
 		local basepos = self:GetBasePos()
 
 		self.scale = self:GetHUDScale()
-		size = size_default * self.scale
 
 		self:SetPos(basepos.x, basepos.y)
-		self:SetSize(size, -size)
+		self:SetSize(self.size.w, -self.size.w)
 
 		BaseClass.PerformLayout(self)
 	end
@@ -75,23 +70,23 @@ if CLIENT then
 		for _, itemCls in ipairs(itms) do
 			local item = items.GetStored(itemCls)
 			if item and item.hud then
-				curY = curY - (size + size * 0.25)
+				curY = curY - (self.size.w + self.size.w* 0.25)
 
 				surface.SetDrawColor(36, 115, 51, 255)
-				surface.DrawRect(pos.x, curY, size, size)
+				surface.DrawRect(pos.x, curY, self.size.w, self.size.w)
 
 				surface.SetMaterial(item.hud)
 				surface.SetDrawColor(255, 255, 255, 255)
-				surface.DrawTexturedRect(pos.x, curY, size, size)
+				surface.DrawTexturedRect(pos.x, curY, self.size.w, self.size.w)
 
-				self:DrawLines(pos.x, curY, size, size, 255)
+				self:DrawLines(pos.x, curY, self.size.w, self.size.w, 255)
 
 				if isfunction(item.DrawInfo) then
 					local info = item:DrawInfo()
 					if info then
 						-- right bottom corner
-						local tx = pos.x + size
-						local ty = curY + size
+						local tx = pos.x + self.size.w
+						local ty = curY + self.size.w
 						local pad = 5 * self.scale
 
 						surface.SetFont("ItemInfoFont")
@@ -114,6 +109,6 @@ if CLIENT then
 			end
 		end
 
-		self:SetSize(size, - math.max(basepos.y - curY, self.minsize.h)  ) -- adjust the size
+		self:SetSize(self.size.w, - math.max(basepos.y - curY, self.minsize.h)  ) -- adjust the size
 	end
 end

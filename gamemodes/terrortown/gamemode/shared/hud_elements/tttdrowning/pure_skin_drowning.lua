@@ -17,10 +17,6 @@ if CLIENT then
 
 	function HUDELEMENT:Initialize()
 		self.pad = pad
-
-		local defaults = self:GetDefaults()
-
-		w, h = defaults.size.w, defaults.size.h
 		self.basecolor = self:GetHUDBasecolor()
 
 		BaseClass.Initialize(self)
@@ -47,7 +43,6 @@ if CLIENT then
 		local scale = self:GetHUDScale()
 
 		self.basecolor = self:GetHUDBasecolor()
-
 		self.pad = pad * scale
 
 		BaseClass.PerformLayout(self)
