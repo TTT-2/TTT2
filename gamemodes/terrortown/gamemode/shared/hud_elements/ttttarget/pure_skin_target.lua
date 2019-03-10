@@ -27,12 +27,6 @@ if CLIENT then -- CLIENT
 		self.scale = 1.0
 		self.basecolor = self:GetHUDBasecolor()
 
-		local defaults = self:GetDefaults()
-
-		self:SetBasePos(defaults.basepos.x, defaults.basepos.y)
-		self:SetMinSize(defaults.size.w, defaults.size.h)
-		self:SetSize(defaults.minsize.w, defaults.minsize.h)
-
 		BaseClass.Initialize(self)
 	end
 
@@ -43,7 +37,7 @@ if CLIENT then -- CLIENT
 	-- parameter overwrites end
 
 	function HUDELEMENT:GetDefaults()
-		const_defaults["basepos"] = { x = 10 * self.scale, y = ScrH() - h - 146 * self.scale - pad - 10 * self.scale}
+		const_defaults["basepos"] = { x = 10 * self.scale, y = ScrH() - self.size.h - 146 * self.scale - pad - 10 * self.scale}
 		return const_defaults
  	end
 

@@ -68,12 +68,6 @@ if CLIENT then
 		self.scale = 1.0
 		self.basecolor = self:GetHUDBasecolor()
 
-		local defaults = self:GetDefaults()
-
-		self:SetBasePos(defaults.basepos.x, defaults.basepos.y)
-		self:SetMinSize(defaults.size.w, defaults.size.h)
-		self:SetSize(defaults.minsize.w, defaults.minsize.h)
-
 		base_text_display_options = {
 			font = msgfont,
 			xalign = TEXT_ALIGN_LEFT,

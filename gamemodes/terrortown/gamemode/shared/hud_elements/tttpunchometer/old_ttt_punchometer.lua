@@ -12,6 +12,16 @@ DEFINE_BASECLASS(base)
 
 if CLIENT then
 
+	local const_defaults = {
+						basepos = {x = 0, y = 0},
+						size = {w = 0, h = 0},
+						minsize = {w = 0, h = 0}
+	}
+
+	function HUDELEMENT:GetDefaults()
+		return const_defaults
+	end
+
 	-- Paint punch-o-meter
 	local function PunchPaint(el, client)
 		local L = GetLang()

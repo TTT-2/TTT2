@@ -90,6 +90,14 @@ end
 		  Initialize() on all children.
 --]]----------------------------------------------------------------------------
 function HUDELEMENT:Initialize()
+
+	local defaults = self:GetDefaults()
+	self:SetSize(defaults.size.w, defaults.size.h)
+	self:SetMinSize(defaults.minsize.w, defaults.minsize.h)
+
+	defaults = self:GetDefaults()
+	self:SetBasePos(defaults.basepos.x, defaults.basepos.y)
+
 	-- use this to set default values and dont forget to call BaseClass.Initialze(self)!!
 	self:ApplyToChildren("Initialize")
 end

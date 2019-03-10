@@ -5,6 +5,13 @@ DEFINE_BASECLASS(base)
 HUDELEMENT.Base = base
 
 if CLIENT then -- CLIENT
+
+	local const_defaults = {
+						basepos = {x = 0, y = 0},
+						size = {w = 0, h = 45},
+						minsize = {w = 0, h = 45}
+	}
+
 	function HUDELEMENT:PreInitialize()
 		BaseClass.PreInitialize(self)
 
@@ -12,6 +19,10 @@ if CLIENT then -- CLIENT
 	end
 
 	function HUDELEMENT:Initialize()
+		BaseClass.Initialize(self)
+	end
+
+	function HUDELEMENT:GetDefaults()
 		local width, height = self.maxwidth, 45
 		local parent = self:GetParent()
 		local parentEl = hudelements.GetStored(parent)
@@ -20,10 +31,12 @@ if CLIENT then -- CLIENT
 			x = parentEl.pos.x
 			y = parentEl.pos.y - self.margin - height - 30
 		end
-	    self:SetBasePos(x, y)
-		self:SetSize(width, height)
 
-		BaseClass.Initialize(self)
+		const_defaults["basepos"] = {x = x, y = y}
+		const_defaults["size"] = {w = self.maxwidth, h = 45}
+		const_defaults["minsize"] = {w = self.maxwidth, h = 45}
+
+		return const_defaults
 	end
 
 	function HUDELEMENT:DrawComponent(name, col, val)

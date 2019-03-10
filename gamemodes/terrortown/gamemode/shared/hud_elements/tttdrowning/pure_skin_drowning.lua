@@ -29,10 +29,6 @@ if CLIENT then
 		w, h = defaults.size.w, defaults.size.h
 		self.basecolor = self:GetHUDBasecolor()
 
-		self:SetBasePos(defaults.basepos.x, defaults.basepos.y)
-		self:SetMinSize(defaults.minsize.w, defaults.minsize.h)
-		self:SetSize(defaults.size.w, defaults.size.h)
-
 		BaseClass.Initialize(self)
 	end
 	

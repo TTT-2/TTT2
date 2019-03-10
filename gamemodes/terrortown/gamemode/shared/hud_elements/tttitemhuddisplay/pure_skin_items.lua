@@ -22,11 +22,6 @@ if CLIENT then
 	function HUDELEMENT:Initialize()
 		size = size_default
 		self.scale = 1.0
-		local defaults = self:GetDefaults()
-
-		self:SetBasePos(defaults.basepos.x, defaults.basepos.y)
-		self:SetMinSize(defaults.size.w, defaults.size.h)
-		self:SetSize(defaults.minsize.w, defaults.minsize.h)
 
 		BaseClass.Initialize(self)
 	end

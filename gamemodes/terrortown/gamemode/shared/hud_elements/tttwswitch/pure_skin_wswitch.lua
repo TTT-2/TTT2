@@ -32,15 +32,14 @@ if CLIENT then
 		self.basecolor = self:GetHUDBasecolor()
 
 		WSWITCH:UpdateWeaponCache()
-		
-		local defaults = self:GetDefaults()
-		
-		self:SetBasePos(defaults.basepos.x, defaults.basepos.y)
-		self:SetMinSize(defaults.size.w, defaults.size.h)
-		self:SetSize(defaults.minsize.w, defaults.minsize.h)
 
 		BaseClass.Initialize(self)
 	end
+
+	function HUDELEMENT:GetDefaults()
+		const_defaults["basepos"] = { x = ScrW() - (self.size.w + self.margin * 2), y = ScrH() - self.margin}
+		return const_defaults
+ 	end
 
 	-- parameter overwrites
 	function HUDELEMENT:IsResizable()
@@ -111,11 +110,6 @@ if CLIENT then
 		text = Color(255, 255, 255, 100),
 		shadow = 100
 	}
-
-	function HUDELEMENT:GetDefaults()
-		const_defaults["basepos"] = { x = ScrW() - (width + self.margin * 2), y = ScrH() - self.margin}
-		return const_defaults
- 	end
 
 	function HUDELEMENT:PerformLayout()
 		local basepos = self:GetBasePos()

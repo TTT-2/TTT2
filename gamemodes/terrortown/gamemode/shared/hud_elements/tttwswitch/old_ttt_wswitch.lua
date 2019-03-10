@@ -35,6 +35,12 @@ if CLIENT then
 		shadow = 100
 	}
 
+	local const_defaults = {
+						basepos = {x = 0, y = 0},
+						size = {w = width, h = -height},
+						minsize = {w = width, h = height}
+	}
+
 	function HUDELEMENT:DrawBarBg(x, y, w, h, col)
 		local rx = round(x - 4)
 		local ry = round(y - h * 0.5 - 4)
@@ -120,13 +126,16 @@ if CLIENT then
 	function HUDELEMENT:Initialize()
 		WSWITCH:UpdateWeaponCache()
 
-		self:SetBasePos(ScrW() - (width + self.margin * 2), ScrH() - self.margin)
-		self:SetSize(width, -height)
-
 		BaseClass.Initialize(self)
 
 		self.defaults.resizeableY = false
 		self.defaults.minHeight = height
+	end
+
+	function HUDELEMENT:GetDefaults()
+		const_defaults["basepos"] = {x = ScrW() - (width + self.margin * 2), y = ScrH() - self.margin}
+		
+		return const_defaults
 	end
 
 	function HUDELEMENT:PerformLayout()
