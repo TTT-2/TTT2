@@ -101,6 +101,7 @@ end
 		  the BaseClass.Draw(self), this will ensure that child elements will be drawn too!
 --]]----------------------------------------------------------------------------
 function HUDELEMENT:Draw()
+	if not self:ShouldDraw() then return end
 	-- call Draw() on all children
 	self:ApplyToChildren("Draw")
 end

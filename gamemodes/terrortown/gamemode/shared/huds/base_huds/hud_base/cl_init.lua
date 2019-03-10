@@ -149,7 +149,7 @@ function HUD:Draw()
 		end
 
 		if elem.initialized and elem.type and self:ShouldShow(elem.type) and hook.Call("HUDShouldDraw", GAMEMODE, elem.type) then
-			if elem:ShouldDraw() and not elem:IsChild() then
+			if not elem:IsChild() then
 				elem:Draw()
 			end
 
