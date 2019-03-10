@@ -29,6 +29,8 @@ if CLIENT then
 		hudelements.RegisterChildRelation(self.id, "pure_skin_roundinfo", false)
 	end
 
+	HUDELEMENT.icon_in_conf = Material("vgui/ttt/indirect_confirmed")
+
 	function HUDELEMENT:Initialize()
 		w, h = h_default, h_default
 		scale = 1.0
@@ -110,7 +112,18 @@ if CLIENT then
 
 		-- sort playerlist: confirmed players should be in the first position
 		table.sort(players, function(a, b)
-			return a:GetNWBool("body_found", false) and not b:GetNWBool("body_found", false)
+			if not a:GetNWBool("body_found", false) then
+				return false
+			end
+
+			local time_a = (math.Round(a:GetNWFloat("t_body_found", -1)) ~= -1) and math.Round(a:GetNWFloat("t_body_found", -1)) or math.Round(a:GetNWFloat("t_role_found", -1))
+			local time_b = (math.Round(b:GetNWFloat("t_body_found", -1)) ~= -1) and math.Round(b:GetNWFloat("t_body_found", -1)) or math.Round(b:GetNWFloat("t_role_found", -1))
+
+			if b:GetNWBool("body_found", false) and (time_a >= time_b) then -- bodies were confirmed and body a was confirmed prior to body b
+				return false
+			end
+
+			return true
 		end)
 
 		-- draw bg and shadow
@@ -131,6 +144,11 @@ if CLIENT then
 
 			surface.SetDrawColor(clr(ply_color))
 			surface.DrawRect(tmp_x, tmp_y, ply_ind_size, ply_ind_size)
+
+			-- draw marker on indirect confirmed bodies
+			if (p:GetNWBool("body_found", false) and not p:GetNWBool("role_found", false)) then
+				util.DrawFilteredTexturedRect(tmp_x +3, tmp_y +3, ply_ind_size -6, ply_ind_size -6, self.icon_in_conf, 100)
+			end
 
 			-- draw lines around the element
 			self:DrawLines(tmp_x, tmp_y, ply_ind_size, ply_ind_size, ply_color.a)

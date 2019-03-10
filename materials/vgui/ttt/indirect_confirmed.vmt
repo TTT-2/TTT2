@@ -1,0 +1,7 @@
+"UnlitGeneric"
+{
+	"$basetexture" "vgui/ttt/indirect_confirmed"
+	"$translucent" 1
+	"$vertexalpha" 1
+	"$vertexcolor" 1
+}

@@ -270,9 +270,11 @@ function plymeta:ResetRoundFlags()
 	self.radar_charge = 0
 	self.decoy = nil
 
-	-- corpse
+	-- corpse, role_dounf/body_found defines wether or not a body was confirmed directly or indirectly
 	self:SetNWBool("body_found", false)
-	self:SetNWBool("role_found", false) -- defines wether or not a body was confirmed directly or indirectly
+	self:SetNWBool("role_found", false) 
+	self:SetNWFloat("t_body_found", -1)
+	self:SetNWFloat("t_role_found", -1)
 
 	self.kills = {}
 	self.dying_wep = nil
