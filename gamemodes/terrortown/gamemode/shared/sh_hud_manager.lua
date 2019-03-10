@@ -143,7 +143,7 @@ if not HUDManager then
 
 	pathBase = "terrortown/gamemode/shared/huds/"
 
-	local pathFiles = file.Find(pathBase .. "*.lua", "LUA")
+	pathFiles = file.Find(pathBase .. "*.lua", "LUA")
 
 	-- include HUD Elements files
 	for _, fl in ipairs(pathFiles) do
@@ -163,13 +163,16 @@ if not HUDManager then
 	end
 
 	-- include HUD Elements folders
-	local _, subFolders = file.Find(pathBase .. "*", "LUA")
+	_, subFolders = file.Find(pathBase .. "*", "LUA")
 
 	for _, folder in ipairs(subFolders) do
 		if folder == HUDS_ABSTRACT_FOLDER then continue end
-		
+
 		--appearently we need this check, because file.Find returns old weirdly cached directories
-		if not file.IsDir(pathBase .. folder, "LUA") then continue end
+		if not file.IsDir(pathBase .. folder, "LUA") then
+			MsgN("Skipped a file that was reported as folder! " .. folder)
+			continue
+		end
 
 		local subSubFiles = file.Find(pathBase .. folder .. "/*.lua", "LUA")
 
