@@ -198,7 +198,7 @@ function HUD:Draw()
 
 		if elem.initialized and elem.type and self:ShouldShow(elem.type) and hook.Call("HUDShouldDraw", GAMEMODE, elem.type) then
 			if not elem:IsChild() then
-				elem:Draw()
+				elem:OnDraw()
 			end
 
 			if HUDEditor then

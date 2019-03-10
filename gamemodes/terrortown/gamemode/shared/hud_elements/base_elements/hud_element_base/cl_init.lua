@@ -100,10 +100,12 @@ end
 		  Please use this function only to draw your element and after that remember to call
 		  the BaseClass.Draw(self), this will ensure that child elements will be drawn too!
 --]]----------------------------------------------------------------------------
-function HUDELEMENT:Draw()
+function HUDELEMENT:OnDraw()
 	if not self:ShouldDraw() then return end
 	-- call Draw() on all children
-	self:ApplyToChildren("Draw")
+	self:ApplyToChildren("OnDraw")
+
+	self:Draw()
 end
 
 --[[----------------------------------------------------------------------------
