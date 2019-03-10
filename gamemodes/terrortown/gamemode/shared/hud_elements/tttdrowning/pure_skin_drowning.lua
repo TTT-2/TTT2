@@ -5,16 +5,10 @@ DEFINE_BASECLASS(base)
 HUDELEMENT.Base = base
 
 if CLIENT then
-	local x = 0
-	local y = 0
-
-	local pad_default = 14
-	local bh_default = 8 -- bar height
-
-	local w, h = w_default, h_default
-	local min_w, min_h = 75, 36
-	local pad = pad_default -- padding
+	local pad = 14
 	
+	local drowning_color = Color(36, 154, 198)
+
 	local const_defaults = {
 							basepos = {x = 0, y = 0},
 							size = {w = 321, h = 36},
@@ -22,7 +16,7 @@ if CLIENT then
 		}
 
 	function HUDELEMENT:Initialize()
-		pad = pad_default
+		self.pad = pad
 
 		local defaults = self:GetDefaults()
 
@@ -39,7 +33,7 @@ if CLIENT then
 	-- parameter overwrites end
 
 	function HUDELEMENT:GetDefaults()
-		const_defaults["basepos"] = { x = math.Round(ScrW() * 0.5 - self.size.w * 0.5), y = ScrH() - pad - self.size.h}
+		const_defaults["basepos"] = { x = math.Round(ScrW() * 0.5 - self.size.w * 0.5), y = ScrH() - self.pad - self.size.h}
 		return const_defaults
  	end
 
@@ -50,28 +44,26 @@ if CLIENT then
 	end
 
 	function HUDELEMENT:PerformLayout()
-		local pos = self:GetPos()
-		local size = self:GetSize()
 		local scale = self:GetHUDScale()
 
 		self.basecolor = self:GetHUDBasecolor()
 
-		pad = pad_default * scale
-		x = pos.x
-		y = pos.y
-		w = size.w
-		h = size.h
+		self.pad = pad * scale
 
 		BaseClass.PerformLayout(self)
 	end
 
 	function HUDELEMENT:Draw()
 		local client = LocalPlayer()
-
+		local pos = self:GetPos()
+		local size = self:GetSize()
+		local x, y = pos.x, pos.y
+		local w, h = size.w, size.h
+		
 		-- draw bg and shadow
 		self:DrawBg(x, y, w, h, self.basecolor)
 	
-		self:DrawBar(x + pad, y + pad, w - pad * 2, h - pad * 2, Color(36, 154, 198), HUDEditor.IsEditing and 1 or (client.drowningProgress or 1), 1)
+		self:DrawBar(x + self.pad, y + self.pad, w - self.pad * 2, h - self.pad * 2, drowning_color, HUDEditor.IsEditing and 1 or (client.drowningProgress or 1), 1)
 
 		-- draw lines around the element
 		self:DrawLines(x, y, w, h, self.basecolor.a)

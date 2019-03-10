@@ -7,19 +7,9 @@ HUDELEMENT.Base = base
 if CLIENT then
 	local GetLang = LANG.GetUnsafeLanguageTable
 
-	local pad_default = 14
-	local lpw_default = 44
-	local sri_text_width_padding_default = 8
-	local w_default, h_default = 365, 146
-
-	local x, y = 0, 0
-	local w, h = w_default, h_default
-	local min_w, min_h = 225, 146
-	local pad = pad_default -- padding
-	local lpw = lpw_default -- left panel width
-	local sri_text_width_padding = sri_text_width_padding_default -- secondary role information padding (needed for size calculations)
-
-	local secondaryRoleInformationFunc = nil
+	local pad = 14 -- padding
+	local lpw = 44 -- left panel width
+	local sri_text_width_padding = 8 -- secondary role information padding (needed for size calculations)
 
 	local const_defaults = {
 							basepos = {x = 0, y = 0},
@@ -29,10 +19,11 @@ if CLIENT then
 
 	function HUDELEMENT:Initialize()
 		self.scale = 1.0
-		local defaults = self:GetDefaults()
-		w, h = defaults.size.w, defaults.size.h
-
 		self.basecolor = self:GetHUDBasecolor()
+		self.pad = pad
+		self.lpw = lpw
+		self.sri_text_width_padding = sri_text_width_padding
+		self.secondaryRoleInformationFunc = nil
 
 		BaseClass.Initialize(self)
 	end
@@ -49,20 +40,14 @@ if CLIENT then
 	end
 
 	function HUDELEMENT:PerformLayout()
-		local pos = self:GetPos()
-		local size = self:GetSize()
-
-		x = pos.x
-		y = pos.y
-		w = size.w
-		h = size.h
+		local defaults = self:GetDefaults()
 
 		self.basecolor = self:GetHUDBasecolor()
-		self.scale = math.min(w / min_w, h / min_h)
+		self.scale = math.min(self.size.w / defaults.minsize.w, self.size.h / defaults.minsize.h)
 
-		lpw = lpw_default * self.scale
-		pad = pad_default * self.scale
-		sri_text_width_padding = sri_text_width_padding_default * self.scale
+		self.lpw = lpw * self.scale
+		self.pad = pad * self.scale
+		self.sri_text_width_padding = sri_text_width_padding * self.scale
 
 		BaseClass.PerformLayout(self)
 	end
@@ -88,7 +73,7 @@ if CLIENT then
 	]]--
 	function HUDELEMENT:SetSecondaryRoleInfoFunction(func)
 		if func and isfunction(func) then
-			secondaryRoleInformationFunc = func
+			self.secondaryRoleInformationFunc = func
 		end
 	end
 
@@ -102,11 +87,11 @@ if CLIENT then
 		local cactive = client:IsActive()
 		local L = GetLang()
 
-		local x2, y2, w2, h2 = x, y, w, h
+		local x2, y2, w2, h2 = self.pos.x, self.pos.y, self.size.w, self.size.h
 
 		if not calive then
-			y2 = y2 + h2 - lpw
-			h2 = lpw
+			y2 = y2 + h2 - self.lpw
+			h2 = self.lpw
 		end
 
 		-- draw bg and shadow
@@ -122,11 +107,11 @@ if CLIENT then
 		end
 
 		surface.SetDrawColor(clr(c))
-		surface.DrawRect(x2, y2, lpw, h2)
+		surface.DrawRect(x2, y2, self.lpw, h2)
 
-		local ry = y2 + lpw * 0.5
-		local ty = y2 + lpw + pad -- new y
-		local nx = x2 + lpw + pad -- new x
+		local ry = y2 + self.lpw * 0.5
+		local ty = y2 + self.lpw + self.pad -- new y
+		local nx = x2 + self.lpw + self.pad -- new x
 
 		-- draw role icon
 		local rd = client:GetSubRoleData()
@@ -136,10 +121,10 @@ if CLIENT then
 			if cactive then
 				local icon = Material("vgui/ttt/dynamic/roles/icon_" .. rd.abbr)
 				if icon then
-					util.DrawFilteredTexturedRect(x2 + 4, y2 + 4, lpw - 8, lpw - 8, icon)
+					util.DrawFilteredTexturedRect(x2 + 4, y2 + 4, self.lpw - 8, self.lpw - 8, icon)
 				end
 			elseif IsValid(tgt) and tgt:IsPlayer() then
-				util.DrawFilteredTexturedRect(x2 + 4, y2 + 4, lpw - 8, lpw - 8, watching_icon)
+				util.DrawFilteredTexturedRect(x2 + 4, y2 + 4, self.lpw - 8, self.lpw - 8, watching_icon)
 			end
 
 			-- draw role string name
@@ -160,17 +145,17 @@ if CLIENT then
 			surface.SetFont("PureSkinRole")
 
 			local role_text_width = surface.GetTextSize(string.upper(text)) * self.scale
-			local role_scale_multiplier = (w - lpw - 2 * pad) / role_text_width
+			local role_scale_multiplier = (w - self.lpw - 2 * self.pad) / role_text_width
 
-			if calive and cactive and isfunction(secondaryRoleInformationFunc) then
-				local secInfoTbl = secondaryRoleInformationFunc()
+			if calive and cactive and isfunction(self.secondaryRoleInformationFunc) then
+				local secInfoTbl = self.secondaryRoleInformationFunc()
 
 				if secInfoTbl and secInfoTbl.text then
 					surface.SetFont("PureSkinBar")
 
 					local sri_text_width = surface.GetTextSize(string.upper(secInfoTbl.text)) * self.scale
 
-					role_scale_multiplier = (w - sri_text_width - lpw - 2 * pad - 3 * sri_text_width_padding) / role_text_width
+					role_scale_multiplier = (w - sri_text_width - self.lpw - 2 * self.pad - 3 * self.sri_text_width_padding) / role_text_width
 				end
 			end
 
@@ -183,8 +168,8 @@ if CLIENT then
 		if calive then
 
 			-- draw secondary role information
-			if cactive and isfunction(secondaryRoleInformationFunc) then
-				local secInfoTbl = secondaryRoleInformationFunc()
+			if cactive and isfunction(self.secondaryRoleInformationFunc) then
+				local secInfoTbl = self.secondaryRoleInformationFunc()
 
 				if secInfoTbl and secInfoTbl.color and secInfoTbl.text then
 					surface.SetFont("PureSkinBar")
@@ -192,12 +177,12 @@ if CLIENT then
 					local sri_text_caps = string.upper(secInfoTbl.text)
 					local sri_text_width = surface.GetTextSize(sri_text_caps) * self.scale
 					local sri_margin_top_bottom = 8 * self.scale
-					local sri_width = sri_text_width + sri_text_width_padding * 2
-					local sri_xoffset = w2 - sri_width - pad
+					local sri_width = sri_text_width + self.sri_text_width_padding * 2
+					local sri_xoffset = w2 - sri_width - self.pad
 
 					local nx2 = x2 + sri_xoffset
 					local ny = y2 + sri_margin_top_bottom
-					local nh = lpw - sri_margin_top_bottom * 2
+					local nh = self.lpw - sri_margin_top_bottom * 2
 
 					surface.SetDrawColor(clr(secInfoTbl.color))
 					surface.DrawRect(nx2, ny, sri_width, nh)
@@ -211,10 +196,10 @@ if CLIENT then
 
 			-- draw dark bottom overlay
 			surface.SetDrawColor(0, 0, 0, 90)
-			surface.DrawRect(x2, y2 + lpw, w2, h2 - lpw)
+			surface.DrawRect(x2, y2 + self.lpw, w2, h2 - self.lpw)
 
 			-- draw bars
-			local bw = w2 - lpw - pad * 2 -- bar width
+			local bw = w2 - self.lpw - self.pad * 2 -- bar width
 			local bh = 26 * self.scale --  bar height
 			local sbh = 8 * self.scale -- spring bar height
 			local spc = 7 * self.scale -- space between bars
@@ -248,7 +233,7 @@ if CLIENT then
 			-- coin info
 			if cactive and client:IsShopper() then
 				local coinSize = 24 * self.scale
-				local x2_pad = math.Round((lpw - coinSize) * 0.5)
+				local x2_pad = math.Round((self.lpw - coinSize) * 0.5)
 
 				if client:GetCredits() > 0 then
 					util.DrawFilteredTexturedRect(x2 + x2_pad, y2 + h - coinSize - x2_pad, coinSize, coinSize, credits_default, 200)
