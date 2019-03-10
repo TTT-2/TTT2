@@ -92,7 +92,7 @@ if CLIENT then
 				color = ply:GetRoleColor()
 				ret_color = Color(color.r, color.g, color.b, 155) -- make color a bit transparent
 			else
-				ret_color = Color(255, 255, 255, 155) -- make color a bit transparent
+				ret_color = Color(215, 215, 215, 155) -- make color a bit transparent
 			end
 		end
 
@@ -147,7 +147,7 @@ if CLIENT then
 
 			-- draw marker on indirect confirmed bodies
 			if (p:GetNWBool("body_found", false) and not p:GetNWBool("role_found", false)) then
-				util.DrawFilteredTexturedRect(tmp_x +3, tmp_y +3, ply_ind_size -6, ply_ind_size -6, self.icon_in_conf, 100)
+				util.DrawFilteredTexturedRect(tmp_x +3, tmp_y +3, ply_ind_size -6, ply_ind_size -6, self.icon_in_conf, 120)
 			end
 
 			-- draw lines around the element
