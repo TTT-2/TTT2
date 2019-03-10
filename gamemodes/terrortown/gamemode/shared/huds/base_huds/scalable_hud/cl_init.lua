@@ -56,8 +56,8 @@ function HUD:ApplyScale(scale)
 			local min_size = el:GetMinSize()
 			el:SetMinSize(min_size.w * scale, min_size.h * scale)
 			el:SetSize(size.w * scale, size.h * scale)
-			el:PerformLayout()  
-			
+			el:PerformLayout()
+
 			--reset position to new calculated default position
 			local defaultPos = el:GetDefaults().basepos
 			el:SetBasePos(defaultPos.x, defaultPos.y)

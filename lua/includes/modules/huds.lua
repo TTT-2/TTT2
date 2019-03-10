@@ -189,13 +189,11 @@ end
 	Desc: Get a list (copy) of all the registered HUDs
 		  including abstract HUDs.
 -----------------------------------------------------------]]
-function GetList()
+function GetRealList()
 	local result = {}
 
 	for _, v in pairs(HUDList) do
-		if not v.isAbstract then
-			result[#result + 1] = v
-		end
+		result[#result + 1] = v
 	end
 
 	return result

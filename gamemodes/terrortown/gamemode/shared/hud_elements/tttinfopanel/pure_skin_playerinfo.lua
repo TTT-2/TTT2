@@ -50,7 +50,7 @@ if CLIENT then
 	function HUDELEMENT:GetDefaults()
 		const_defaults["basepos"] = { x = 10 * self.scale, y = ScrH() - (10 * self.scale + h)}
 		return const_defaults
- 	end
+	end
 
 	function HUDELEMENT:PerformLayout()
 		local pos = self:GetPos()
