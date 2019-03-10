@@ -20,7 +20,7 @@ function HUD:ForceElement(elementID)
 end
 
 function HUD:GetForcedElements()
-	return self.elements
+	return table.Copy(self.forcedElements)
 end
 
 function HUD:HideType(elementType)
@@ -30,16 +30,14 @@ end
 function HUD:ShouldShow(elementType)
 	local el = self:GetElementByType(elementType)
 	if el then
-		if el.togglable and not GetGlobalBool("ttt2_elem_toggled_" .. el.id, true) then
+		if el.togglable and not GetGlobalBool("ttt2_elem_toggled_" .. el.id, false) then
 			return false
 		end
 
 		local parent = el:GetParent()
-
 		if el:IsChild() and parent then
 			local parentTbl = hudelements.GetStored(parent)
-
-			return self:ShouldShow(parentTbl.type)
+			return parentTbl and self:ShouldShow(parentTbl.type)
 		end
 
 		return true
@@ -116,7 +114,7 @@ function HUD:GetElementByType(elementType)
 		if elementTbl:IsChild() and parent then
 			local parentTbl = hudelements.GetStored(parent)
 
-			return self:HasElementType(parentTbl.type) and elementTbl or nil
+			return parentTbl and self:HasElementType(parentTbl.type) and elementTbl or nil
 		end
 
 		return elementTbl
@@ -178,28 +176,20 @@ function HUD:Reset()
 end
 
 function HUD:SaveData()
+	-- save data for the HUD
+	SQL.Save("ttt2_huds", self.id, self, self:GetSavingKeys())
 
-	-- save data of all elements of this hud
+	-- save data of all elements of this HUD
 	for _, elem in ipairs(self:GetElements()) do
 		local el = hudelements.GetStored(elem)
 		if el then
 			el:SaveData()
 		end
 	end
-
-	SQL.Save("ttt2_huds", self.id, self, self:GetSavingKeys())
 end
 
 function HUD:LoadData()
 	local skeys = self:GetSavingKeys()
-
-	-- load data of all elements in this hud
-	for _, elem in ipairs(self:GetElements()) do
-		local el = hudelements.GetStored(elem)
-		if el then
-			el:LoadData()
-		end
-	end
 
 	-- load and initialize all HUD data from database
 	if SQL.CreateSqlTable("ttt2_huds", skeys) then
@@ -209,4 +199,14 @@ function HUD:LoadData()
 			SQL.Init("ttt2_huds", self.id, self, skeys)
 		end
 	end
+
+	-- load data of all elements in this HUD
+	for _, elem in ipairs(self:GetElements()) do
+		local el = hudelements.GetStored(elem)
+		if el then
+			el:LoadData()
+		end
+	end
+
+	self:PerformLayout()
 end
