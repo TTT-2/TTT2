@@ -167,6 +167,9 @@ if not HUDManager then
 
 	for _, folder in ipairs(subFolders) do
 		if folder == HUDS_ABSTRACT_FOLDER then continue end
+		
+		--appearently we need this check, because file.Find returns old weirdly cached directories
+		if not file.IsDir(pathBase .. folder, "LUA") then continue end
 
 		local subSubFiles = file.Find(pathBase .. folder .. "/*.lua", "LUA")
 
