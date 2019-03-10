@@ -272,6 +272,7 @@ function plymeta:ResetRoundFlags()
 
 	-- corpse
 	self:SetNWBool("body_found", false)
+	self:SetNWBool("role_found", false) -- defines wether or not a body was confirmed directly or indirectly
 
 	self.kills = {}
 	self.dying_wep = nil

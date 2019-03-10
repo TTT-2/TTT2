@@ -116,6 +116,7 @@ local function IdentifyBody(ply, rag)
 		local deadply = player.GetBySteamID64(rag.sid64)
 		if deadply and not deadply:Alive() then
 			deadply:SetNWBool("body_found", true)
+			deadply:SetNWBool("role_found", true)
 
 			SendPlayerToEveryone(deadply) -- confirm player for everyone
 
@@ -138,6 +139,7 @@ local function IdentifyBody(ply, rag)
 				LANG.Msg("body_confirm", {finder = finder, victim = vic:Nick()})
 
 				vic:SetNWBool("body_found", true) -- update scoreboard status
+				-- do not set 'role_found' to true when the dead player was only confirmed through the killlist
 
 				-- however, do not mark body as found. This lets players find the
 				-- body later and get the benefits of that
