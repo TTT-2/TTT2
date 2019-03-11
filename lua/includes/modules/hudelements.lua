@@ -265,5 +265,5 @@ function RegisterChildRelation(childid, parentid, parent_is_type)
 		end
 	end
 
-	child:SetParent(parentid, parent_is_type)
+	child:SetParentRelation(parentid, parent_is_type)
 end

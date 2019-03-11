@@ -238,7 +238,7 @@ function HUDELEMENT:SetSize(w, h)
 	self.size.h = h
 end
 
-function HUDELEMENT:GetParent()
+function HUDELEMENT:GetParentRelation()
 	return self.parent, self.parent_is_type
 end
 
@@ -248,7 +248,7 @@ end
 		  called by the hudelements.RegisterChildRelation() function.
 		  !!! INTERNAL FUNCTION !!!
 --]]----------------------------------------------------------------------------
-function HUDELEMENT:SetParent(parent, is_type)
+function HUDELEMENT:SetParentRelation(parent, is_type)
 	self.parent = parent
 	self.parent_is_type = is_type
 end

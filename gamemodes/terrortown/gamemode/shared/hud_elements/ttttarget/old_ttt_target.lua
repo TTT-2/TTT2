@@ -23,8 +23,8 @@ if CLIENT then -- CLIENT
 	end
 
 	function HUDELEMENT:GetDefaults()
-		local width, height = self.maxwidth, 45
-		local parent = self:GetParent()
+		local _, height = self.maxwidth, 45
+		local parent = self:GetParentRelation()
 		local parentEl = hudelements.GetStored(parent)
 		local x, y = 15, ScrH() - height - self.maxheight - self.margin
 		if parentEl then

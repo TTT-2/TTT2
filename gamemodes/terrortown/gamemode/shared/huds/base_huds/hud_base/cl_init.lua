@@ -56,10 +56,10 @@ function HUD:ShouldShow(elementType)
 			return false
 		end
 
-		local parent = el:GetParent()
-		if el:IsChild() and parent then
-			local parentTbl = hudelements.GetStored(parent)
-			return parentTbl and self:ShouldShow(parentTbl.type)
+		local parent, parentIsType = el:GetParentRelation()
+		if el:IsChild() and parent and parentIsType ~= nil then
+			local parentTbl = not parentIsType and hudelements.GetStored(parent) or nil
+			return parentIsType and self:ShouldShow(parent) or parentTbl and self:ShouldShow(parentTbl.type)
 		end
 
 		return true
@@ -131,39 +131,28 @@ end
 -- @tparam string
 -- @treturn tab
 function HUD:GetElementByType(elementType)
-	if table.HasValue(self.disabledTypes, elementType) then
-		return nil
+	-- element is hidden in this HUD so return nil
+	if table.HasValue(self.disabledTypes, elementType) then return nil end
+
+	local element = self.forcedElements[elementType]
+	local elementTbl = not element and hudelements.GetTypeElement(elementType) or hudelements.GetStored(element)
+
+	-- return nil if the elements table is not found
+	if not elementTbl then return nil end
+
+	-- return nil if the element is disabled unless it is forced and it is not forced in this HUD
+	if elementTbl.disabledUnlessForced and not table.HasValue(self.forcedElements, elementTbl.id) then return nil end
+
+	-- check if the element is a child and if its parent element is a part of this HUD
+	if elementTbl:IsChild() then
+		local parent, parentIsType = elementTbl:GetParentRelation()
+		if not parent or parentIsType == nil then return nil end
+		-- find the parent element, if the element is bound to a type call this method again and if not get the specific element
+		local parentTbl = ( parentIsType and self:GetElementByType(parent) ) or ( not parentIsType and hudelements.GetStored(parent) )
+		if not parentTbl then return nil end
 	end
 
-	local hudelems = self:GetForcedElements()
-
-	-- hide element if its parent element is hidden
-	local element = hudelems[elementType]
-	local elementTbl = nil
-
-	if not element then
-		elementTbl = hudelements.GetTypeElement(elementType)
-	else
-		elementTbl = hudelements.GetStored(element)
-	end
-
-	if elementTbl then
-		if elementTbl.disabledUnlessForced then
-			return table.HasValue(hudelems, elementTbl.id) and elementTbl or nil
-		end
-
-		local parent = elementTbl:GetParent()
-
-		if elementTbl:IsChild() and parent then
-			local parentTbl = hudelements.GetStored(parent)
-
-			return parentTbl and self:HasElementType(parentTbl.type) and elementTbl or nil
-		end
-
-		return elementTbl
-	else
-		return nil
-	end
+	return elementTbl
 end
 
 --- This returns a table with all the specific elements the HUD has. One element
