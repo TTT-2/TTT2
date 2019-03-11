@@ -272,7 +272,7 @@ function plymeta:ResetRoundFlags()
 
 	-- corpse, role_dounf/body_found defines wether or not a body was confirmed directly or indirectly
 	self:SetNWBool("body_found", false)
-	self:SetNWBool("role_found", false) 
+	self:SetNWBool("role_found", false)
 	self:SetNWFloat("t_body_found", -1)
 	self:SetNWFloat("t_role_found", -1)
 
@@ -400,7 +400,9 @@ function plymeta:SendLastWords(dmginfo)
 	local ply = self
 
 	timer.Simple(2, function()
-		ply:ResetLastWords()
+		if IsValid(ply) then
+			ply:ResetLastWords()
+		end
 	end)
 end
 

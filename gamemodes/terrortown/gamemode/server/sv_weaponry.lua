@@ -360,8 +360,10 @@ function GM:PlayerLoadout(ply)
 		if not HasLoadoutWeapons(ply) then
 			MsgN("Could not spawn all loadout weapons for " .. ply:Nick() .. ", will retry.")
 
-			timer.Create("lateloadout" .. ply:EntIndex(), 1, 0, function()
-				LateLoadout(ply:EntIndex())
+			local timerId = ply:EntIndex()
+
+			timer.Create("lateloadout" .. timerId, 1, 0, function()
+				LateLoadout(timerId)
 			end)
 		end
 	end
