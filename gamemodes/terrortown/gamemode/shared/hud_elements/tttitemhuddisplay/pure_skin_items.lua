@@ -31,7 +31,7 @@ if CLIENT then
 	function HUDELEMENT:GetDefaults()
 		const_defaults["basepos"] = { x = 20 * self.scale, y = ScrH() * 0.5}
 		return const_defaults
- 	end
+	end
 
 	function HUDELEMENT:PerformLayout()
 		local basepos = self:GetBasePos()
@@ -47,7 +47,7 @@ if CLIENT then
 	function HUDELEMENT:ShouldDraw()
 		local client = LocalPlayer()
 
-		return client:Alive() or client:Team() == TEAM_TERROR 
+		return client:Alive() or client:Team() == TEAM_TERROR
 	end
 
 	function HUDELEMENT:Draw()
@@ -57,7 +57,7 @@ if CLIENT then
 		local itms = client:GetEquipmentItems()
 		local pos = self:GetPos()
 		local curY = basepos.y
-		
+
 		-- at first, calculate old items because they don't take care of the new ones
 		for _, itemCls in ipairs(itms) do
 			local item = items.GetStored(itemCls)

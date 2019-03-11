@@ -6,7 +6,7 @@ HUDELEMENT.Base = base
 
 if CLIENT then
 	local pad = 14
-	
+
 	local drowning_color = Color(36, 154, 198)
 
 	local const_defaults = {
@@ -21,7 +21,7 @@ if CLIENT then
 
 		BaseClass.Initialize(self)
 	end
-	
+
 	-- parameter overwrites
 	function HUDELEMENT:IsResizable()
 		return true, false
@@ -31,7 +31,7 @@ if CLIENT then
 	function HUDELEMENT:GetDefaults()
 		const_defaults["basepos"] = { x = math.Round(ScrW() * 0.5 - self.size.w * 0.5), y = ScrH() - self.pad - self.size.h}
 		return const_defaults
- 	end
+	end
 
 	function HUDELEMENT:ShouldDraw()
 		local client = LocalPlayer()
@@ -54,10 +54,10 @@ if CLIENT then
 		local size = self:GetSize()
 		local x, y = pos.x, pos.y
 		local w, h = size.w, size.h
-		
+
 		-- draw bg and shadow
 		self:DrawBg(x, y, w, h, self.basecolor)
-	
+
 		self:DrawBar(x + self.pad, y + self.pad, w - self.pad * 2, h - self.pad * 2, drowning_color, HUDEditor.IsEditing and 1 or (client.drowningProgress or 1), 1)
 
 		-- draw lines around the element

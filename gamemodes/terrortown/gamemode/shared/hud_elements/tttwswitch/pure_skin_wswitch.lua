@@ -1,4 +1,3 @@
-local draw = draw
 local surface = surface
 local IsValid = IsValid
 local TryTranslation = LANG.TryTranslation
@@ -15,7 +14,6 @@ if CLIENT then
 	local lpw_default = 22
 
 	local width, height = width_default, height_default
-	local min_w, min_h = 240, 28
 
 	HUDELEMENT.margin = margin_default
 	HUDELEMENT.lpw = lpw_default -- left panel width
@@ -39,7 +37,7 @@ if CLIENT then
 	function HUDELEMENT:GetDefaults()
 		const_defaults["basepos"] = { x = ScrW() - (self.size.w + self.margin * 2), y = ScrH() - self.margin}
 		return const_defaults
- 	end
+	end
 
 	-- parameter overwrites
 	function HUDELEMENT:IsResizable()
@@ -140,7 +138,6 @@ if CLIENT then
 	end
 
 	function HUDELEMENT:Draw()
-		local client = LocalPlayer()
 		local weps = WSWITCH.WeaponCache
 		local count = #weps
 		local tmp = height + self.margin

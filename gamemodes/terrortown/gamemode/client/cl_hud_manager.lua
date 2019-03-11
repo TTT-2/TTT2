@@ -1,6 +1,7 @@
 ttt_include("vgui__cl_hudswitcher")
 
 local current_hud_cvar = CreateClientConVar("ttt2_current_hud", HUDManager.defaultHUD or "pure_skin", true, true)
+local current_hud_table = nil
 
 function HUDManager.ShowHUDSwitcher()
 	local client = LocalPlayer()
@@ -37,11 +38,8 @@ function HUDManager.HideHUDSwitcher()
 end
 
 function HUDManager.DrawHUD()
-	local hud = huds.GetStored(HUDManager.GetHUD())
-
-	if not hud then return end
-
-	hud:Draw()
+	if not current_hud_table then return end
+	current_hud_table:Draw()
 end
 
 -- Paints player status HUD element in the bottom left
@@ -119,6 +117,7 @@ local function UpdateHUD(name)
 	HUDEditor.StopEditHUD()
 
 	current_hud_cvar:SetString(name)
+	current_hud_table = hudEl
 
 	-- Initialize elements
 	hudEl:Initialize()
@@ -127,14 +126,7 @@ local function UpdateHUD(name)
 end
 
 function HUDManager.GetHUD()
-	local currentHUD = current_hud_cvar:GetString()
-	local currentHUDTbl = huds.GetStored(currentHUD)
-
-	if not currentHUDTbl then
-		return HUDManager.defaultHUD
-	end
-
-	return currentHUD
+	return current_hud_cvar:GetString()
 end
 
 function HUDManager.SetHUD(name)
