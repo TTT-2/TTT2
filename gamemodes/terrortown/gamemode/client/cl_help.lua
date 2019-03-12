@@ -9,7 +9,7 @@ local ConVarExists = ConVarExists
 local CreateConVar = CreateConVar
 local surface = surface
 
-ttt_include("vgui__cl_settings_button")
+ttt_include("vgui__cl_f1settings_button")
 
 surface.CreateFont("SettingsButtonFont", {font = "Trebuchet24", size = 24, weight = 1000})
 
@@ -186,7 +186,7 @@ function HELPSCRN:Show()
 	for _, data in ipairs(tbl) do
 		local title = string.upper(isfunction(data.getTitle) and data.getTitle() or data.id)
 
-		local settingsButton = dsettings:Add("DSettingsButton")
+		local settingsButton = dsettings:Add("DF1SettingsButton")
 		settingsButton:SetSize(btnWidth, btnHeight)
 		settingsButton:SetFont("SettingsButtonFont")
 		settingsButton:SetText(title)

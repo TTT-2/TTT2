@@ -80,4 +80,4 @@ function PANEL:SizeToContents()
 	self:SetSize(w + 40, h + 30)
 end
 
-local PANEL = derma.DefineControl("DSettingsButton", "A settings Button", PANEL, "DButton")
+local PANEL = derma.DefineControl("DF1SettingsButton", "A settings Button", PANEL, "DButton")
