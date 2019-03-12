@@ -62,6 +62,11 @@ if SERVER then
 	resource.AddFile("materials/vgui/ttt/ttt2_indicator_addondev.vmt") -- ttt2 addon dev
 	resource.AddFile("materials/vgui/ttt/ttt2_indicator_admin.vmt") -- server admin
 	resource.AddFile("materials/vgui/ttt/ttt2_indicator_streamer.vmt") -- streamer
+	resource.AddFile("materials/vgui/ttt/ttt2_indicator_heroes.vmt") -- ttt2 heroes
+
+	-- miniscoreboard indicator
+	resource.AddFile("materials/vgui/ttt/indirect_confirmed.vmt")
+	resource.AddFile("materials/vgui/ttt/revived.vmt")
 
 	-- ITEMs
 	resource.AddFile("materials/vgui/ttt/icon_armor.vmt") -- armor
