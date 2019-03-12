@@ -252,7 +252,9 @@ function RADIO:ShowRadioCommands(state)
 		self.Show = true
 
 		timer.Create("radiocmdshow", 3, 1, function()
-			RADIO:ShowRadioCommands(false)
+			if RADIO then
+				RADIO:ShowRadioCommands(false)
+			end
 		end)
 	end
 end

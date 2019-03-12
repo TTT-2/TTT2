@@ -397,7 +397,9 @@ function plymeta:SendLastWords(dmginfo)
 	local ply = self
 
 	timer.Simple(2, function()
-		ply:ResetLastWords()
+		if IsValid(ply) then
+			ply:ResetLastWords()
+		end
 	end)
 end
 
@@ -721,7 +723,7 @@ function plymeta:ConfirmPlayer(announceRole)
 		self:SetNWBool("role_found", true)
 	else
 		self:SetNWBool("body_found", true)
-	end 
+	end
 end
 
 function plymeta:ResetConfirmPlayer()

@@ -56,7 +56,9 @@ hook.Add("TTTInitPostEntity", "InitTTT2OldItems", function()
 						items.Register(ITEMDATA, GetEquipmentFileName(name))
 
 						timer.Simple(0, function()
-							print("[TTT2][INFO] Automatically converted not adjusted ITEM", name, ITEMDATA.oldId)
+							if ITEMDATA then
+								print("[TTT2][INFO] Automatically converted not adjusted ITEM", name, ITEMDATA.oldId)
+							end
 						end)
 					else
 						item.CanBuy = item.CanBuy or {}
@@ -69,7 +71,7 @@ hook.Add("TTTInitPostEntity", "InitTTT2OldItems", function()
 			end
 		end
 	end
-	
+
 	items.OnLoaded() -- init baseclasses
 end)
 

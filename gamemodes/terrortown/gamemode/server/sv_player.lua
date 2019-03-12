@@ -716,30 +716,32 @@ function GM:PlayerDeath(victim, infl, attacker)
 	self:PlayerSilentDeath(victim)
 
 	timer.Simple(0, function()
-		victim:SetTeam(TEAM_SPEC)
-		victim:Freeze(false)
-		victim:SetRagdollSpec(true)
-		victim:Spectate(OBS_MODE_IN_EYE)
+		if IsValid(victim) then
+			victim:SetTeam(TEAM_SPEC)
+			victim:Freeze(false)
+			victim:SetRagdollSpec(true)
+			victim:Spectate(OBS_MODE_IN_EYE)
 
-		local rag_ent = victim.server_ragdoll or victim:GetRagdollEntity()
+			local rag_ent = victim.server_ragdoll or victim:GetRagdollEntity()
 
-		victim:SpectateEntity(rag_ent)
-		victim:Flashlight(false)
-		victim:Extinguish()
+			victim:SpectateEntity(rag_ent)
+			victim:Flashlight(false)
+			victim:Extinguish()
 
-		net.Start("TTT_PlayerDied")
-		net.Send(victim)
+			net.Start("TTT_PlayerDied")
+			net.Send(victim)
 
-		if HasteMode() and GetRoundState() == ROUND_ACTIVE and not hook.Run("TTT2ShouldSkipHaste", victim, attacker) then
-			IncRoundEnd(GetConVar("ttt_haste_minutes_per_death"):GetFloat() * 60)
-		end
+			if HasteMode() and GetRoundState() == ROUND_ACTIVE and not hook.Run("TTT2ShouldSkipHaste", victim, attacker) then
+				IncRoundEnd(GetConVar("ttt_haste_minutes_per_death"):GetFloat() * 60)
+			end
 
-		if IsValid(attacker) and attacker:IsPlayer() and attacker ~= victim and attacker:IsActive() then
-			victim.killerSpec = attacker
+			if IsValid(attacker) and attacker:IsPlayer() and attacker ~= victim and attacker:IsActive() then
+				victim.killerSpec = attacker
+			end
+
+			hook.Run("TTT2PostPlayerDeath", victim, infl, attacker)
 		end
 	end)
-
-	hook.Run("TTT2PostPlayerDeath", victim, infl, attacker)
 end
 
 -- kill hl2 beep
@@ -750,9 +752,11 @@ end
 function GM:PostPlayerDeath(ply)
 	if GetRoundState() == ROUND_PREP and GetConVar("ttt2_prep_respawn"):GetBool() then -- endless respawn player if he dies in preparing time
 		timer.Simple(1, function()
-			ply:SpawnForRound(true)
+			if IsValid(ply) then
+				ply:SpawnForRound(true)
 
-			hook.Call("PlayerLoadout", GAMEMODE, ply)
+				hook.Call("PlayerLoadout", GAMEMODE, ply)
+			end
 		end)
 	end
 end
