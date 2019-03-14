@@ -5,6 +5,8 @@ DEFINE_BASECLASS(base)
 HUDELEMENT.Base = base
 
 if CLIENT then -- CLIENT
+	local defaultColor = Color(49, 71, 94)
+
 	local iconSize_default = 64
 	local pad_default = 14
 	local w_default, h_default = 365, 32
@@ -25,7 +27,7 @@ if CLIENT then -- CLIENT
 		w, h = w_default, h_default
 		pad = pad_default
 		self.scale = 1.0
-		self.basecolor = self:GetHUDBasecolor()
+		self.basecolor = self:GetHUDBasecolor() or defaultColor
 
 		BaseClass.Initialize(self)
 	end
@@ -44,8 +46,8 @@ if CLIENT then -- CLIENT
 	function HUDELEMENT:PerformLayout()
 		local size = self:GetSize()
 
-		self.scale = self:GetHUDScale()
-		self.basecolor = self:GetHUDBasecolor()
+		self.scale = self:GetHUDScale() or 1.0
+		self.basecolor = self:GetHUDBasecolor() or defaultColor
 		
 		iconSize = iconSize_default * self.scale
 		pad = pad_default * self.scale

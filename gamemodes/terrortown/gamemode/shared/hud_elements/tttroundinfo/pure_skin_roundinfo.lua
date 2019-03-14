@@ -7,6 +7,8 @@ HUDELEMENT.Base = base
 HUDELEMENT.togglable = true
 
 if CLIENT then
+	local defaultColor = Color(49, 71, 94)
+
 	local GetLang = LANG.GetUnsafeLanguageTable
 
 	local w_default, h_default = 96, 72
@@ -26,7 +28,7 @@ if CLIENT then
 		w, h = w_default, h_default
 		pad = pad_default
 		self.scale = 1.0
-		self.basecolor = self:GetHUDBasecolor()
+		self.basecolor = self:GetHUDBasecolor() or defaultColor
 
 		self.disabledUnlessForced = true
 
@@ -48,7 +50,7 @@ if CLIENT then
 		local pos = self:GetPos()
 		local size = self:GetSize()
 		self.scale = math.min(size.w / w_default, size.h / h_default)
-		self.basecolor = self:GetHUDBasecolor()
+		self.basecolor = self:GetHUDBasecolor() or defaultColor
 
 		x, y = pos.x, pos.y
 		w, h = size.w, size.h

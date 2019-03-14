@@ -7,6 +7,8 @@ HUDELEMENT.togglable = true
 DEFINE_BASECLASS(base)
 
 if CLIENT then
+	local defaultColor = Color(49, 71, 94)
+
 	local margin_default = 14
 	local element_margin_default = 6
 	local pad_default = 14
@@ -43,7 +45,7 @@ if CLIENT then
 		pad = pad_default
 
 		self.scale = 1.0
-		self.basecolor = self:GetHUDBasecolor()
+		self.basecolor = self:GetHUDBasecolor() or defaultColor
 
 		BaseClass.Initialize(self)
 	end
@@ -67,7 +69,7 @@ if CLIENT then
 		local parent_size = parentInstance:GetSize()
 
 		-- caching
-		self.basecolor = self:GetHUDBasecolor()
+		self.basecolor = self:GetHUDBasecolor() or defaultColor
 		h = parent_size.h
 		x, y = parent_pos.x - h, parent_pos.y
 		self.scale = h / h_default

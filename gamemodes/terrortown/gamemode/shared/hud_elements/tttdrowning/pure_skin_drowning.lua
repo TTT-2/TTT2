@@ -8,6 +8,7 @@ if CLIENT then
 	local pad = 14
 
 	local drowning_color = Color(36, 154, 198)
+	local defaultColor = Color(49, 71, 94)
 
 	local const_defaults = {
 							basepos = {x = 0, y = 0},
@@ -17,7 +18,7 @@ if CLIENT then
 
 	function HUDELEMENT:Initialize()
 		self.pad = pad
-		self.basecolor = self:GetHUDBasecolor()
+		self.basecolor = self:GetHUDBasecolor() or defaultColor
 
 		BaseClass.Initialize(self)
 	end
@@ -40,9 +41,9 @@ if CLIENT then
 	end
 
 	function HUDELEMENT:PerformLayout()
-		local scale = self:GetHUDScale()
+		local scale = self:GetHUDScale() or 1.0
 
-		self.basecolor = self:GetHUDBasecolor()
+		self.basecolor = self:GetHUDBasecolor() or defaultColor
 		self.pad = pad * scale
 
 		BaseClass.PerformLayout(self)

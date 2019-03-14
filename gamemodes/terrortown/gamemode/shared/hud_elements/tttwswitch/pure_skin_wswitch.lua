@@ -9,6 +9,8 @@ DEFINE_BASECLASS(base)
 HUDELEMENT.Base = base
 
 if CLIENT then
+	local defaultColor = Color(49, 71, 94)
+
 	local width_default, height_default = 365, 28
 	local margin_default = 5
 	local lpw_default = 22
@@ -27,7 +29,7 @@ if CLIENT then
 	function HUDELEMENT:Initialize()
 		width, height = width_default, height_default
 		self.scale = 1.0
-		self.basecolor = self:GetHUDBasecolor()
+		self.basecolor = self:GetHUDBasecolor() or defaultColor
 
 		WSWITCH:UpdateWeaponCache()
 
@@ -114,8 +116,8 @@ if CLIENT then
 
 		self:SetPos(basepos.x, basepos.y)
 
-		self.scale = self:GetHUDScale()
-		self.basecolor = self:GetHUDBasecolor()
+		self.scale = self:GetHUDScale() or 1.0
+		self.basecolor = self:GetHUDBasecolor() or defaultColor
 
 		height = height_default * self.scale
 		self.margin = margin_default * self.scale

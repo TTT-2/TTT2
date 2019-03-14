@@ -5,6 +5,8 @@ DEFINE_BASECLASS(base)
 HUDELEMENT.Base = base
 
 if CLIENT then
+	local defaultColor = Color(49, 71, 94)
+	
 	local draw = draw
 	local math = math
 
@@ -66,7 +68,7 @@ if CLIENT then
 		msg_width = msg_width_default
 		margin = margin_default
 		self.scale = 1.0
-		self.basecolor = self:GetHUDBasecolor()
+		self.basecolor = self:GetHUDBasecolor() or defaultColor
 
 		base_text_display_options = {
 			font = msgfont,
@@ -92,8 +94,8 @@ if CLIENT then
 		top_x = self.pos.x
 		top_y = self.pos.y
 
-		self.scale = self:GetHUDScale()
-		self.basecolor = self:GetHUDBasecolor()
+		self.scale = self:GetHUDScale() or 1.0
+		self.basecolor = self:GetHUDBasecolor() or defaultColor
 
 		leftPad = leftPad_default * self.scale
 		margin = margin_default * self.scale
