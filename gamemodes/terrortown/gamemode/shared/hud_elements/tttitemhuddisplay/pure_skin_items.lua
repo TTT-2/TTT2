@@ -34,12 +34,7 @@ if CLIENT then
 	end
 
 	function HUDELEMENT:PerformLayout()
-		local basepos = self:GetBasePos()
-
 		self.scale = self:GetHUDScale()
-
-		self:SetPos(basepos.x, basepos.y)
-		self:SetSize(self.size.w, -self.size.w)
 
 		BaseClass.PerformLayout(self)
 	end

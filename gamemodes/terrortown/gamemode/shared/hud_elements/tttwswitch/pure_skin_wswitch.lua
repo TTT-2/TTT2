@@ -64,13 +64,6 @@ if CLIENT then
 		self.margin = margin * self.scale
 		self.lpw = lpw * self.scale
 
-		local weps = WSWITCH.WeaponCache
-		local count = #weps
-		local tmp = self.element_height + self.margin
-		local h = math.max(count * tmp, self.minsize.h)
-
-		self:SetSize(self.size.w, -h)
-
 		BaseClass.PerformLayout(self)
 	end
 

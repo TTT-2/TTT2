@@ -156,10 +156,13 @@ function HUDELEMENT:GetBasePos()
 end
 
 function HUDELEMENT:SetBasePos(x, y)
+	local pos_difference_x = self.pos.x - self.basepos.x
+	local pos_difference_y = self.pos.y - self.basepos.y
+
 	self.basepos.x = x
 	self.basepos.y = y
 
-	self:SetPos(x, y)
+	self:SetPos(x + pos_difference_x, y + pos_difference_y)
 end
 
 function HUDELEMENT:GetPos()

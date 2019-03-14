@@ -79,7 +79,6 @@ if CLIENT then
 
 		self.scale = self:GetHUDScale() or 1.0
 		self.basecolor = self:GetHUDBasecolor() or defaultColor
-
 		self.pad = pad * self.scale
 		self.margin = margin * self.scale
 
