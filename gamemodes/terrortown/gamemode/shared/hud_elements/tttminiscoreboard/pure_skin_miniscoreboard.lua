@@ -54,11 +54,11 @@ if CLIENT then
 	function HUDELEMENT:PerformLayout()
 		local parent_pos = self.parentInstance:GetPos()
 		local parent_size = self.parentInstance:GetSize()
+		local parent_defaults = self.parentInstance:GetDefaults()
 		local h = parent_size.h
-		local defaults = self:GetDefaults()
 
 		self.basecolor = self:GetHUDBasecolor() or defaultColor
-		self.scale = h / defaults.size.h
+		self.scale = h / parent_defaults.size.h
 		self.margin = margin * self.scale
 		self.element_margin = element_margin * self.scale
 		self.ply_ind_size = math.Round((h - self.element_margin - self.margin * 2) * 0.5)
