@@ -43,6 +43,8 @@ if CLIENT then -- CLIENT
 		self.basecolor = self:GetHUDBasecolor() or defaultColor
 		self.iconSize = iconSize * self.scale
 		self.pad = pad * self.scale
+
+		BaseClass.PerformLayout(self)
 	end
 
 	function HUDELEMENT:DrawComponent(name)
