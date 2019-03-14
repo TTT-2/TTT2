@@ -635,6 +635,28 @@ function plymeta:SetSubRoleModel(mdl)
 	end
 end
 
+-- get player corpse state
+function plymeta:OnceFound()
+	return (self:GetNWFloat("t_first_found", -1) >= 0)
+end
+
+function plymeta:RoleKnown()
+	return self:GetNWBool("role_found", false)
+end
+
+function plymeta:Revived()
+	return not self:GetNWBool("body_found", false) and self:OnceFound()
+end
+
+function plymeta:GetFirstFound()
+	return math.Round(self:GetNWFloat("t_first_found", -1))
+end
+
+function plymeta:GetLastFound()
+	return math.Round(self:GetNWFloat("t_last_found", -1))
+end
+
+
 -- override to fix PS/ModelSelector/... issues
 local oldSetModel = plymeta.SetModel or plymeta.MetaBaseClass.SetModel
 function plymeta:SetModel(mdlName)

@@ -397,7 +397,9 @@ function plymeta:SendLastWords(dmginfo)
 	local ply = self
 
 	timer.Simple(2, function()
-		ply:ResetLastWords()
+		if IsValid(ply) then
+			ply:ResetLastWords()
+		end
 	end)
 end
 
@@ -707,6 +709,33 @@ function plymeta:RemoveItem(id)
 	self:RemoveBought(id)
 end
 
+-- update player corpse state
+function plymeta:ConfirmPlayer(announceRole)
+	announceRole = announceRole or false
+
+	if self:GetNWFloat("t_first_found", -1) < 0 then
+		self:SetNWFloat("t_first_found", CurTime())
+	end
+	self:SetNWFloat("t_last_found", CurTime())
+
+	if announceRole then
+		self:SetNWBool("body_found", true)
+		self:SetNWBool("role_found", true)
+	else
+		self:SetNWBool("body_found", true)
+	end
+end
+
+function plymeta:ResetConfirmPlayer()
+	-- body_found is reset on the player reset
+	self:SetNWBool("role_found", false)
+
+	self:SetNWFloat("t_first_found", -1)
+	self:SetNWFloat("t_last_found", -1)
+end
+
+
+
 hook.Add("TTTBeginRound", "TTT2GivePendingItems", function()
 	for ply, tbl in pairs(pendingItems) do
 		if IsValid(ply) then
@@ -717,4 +746,11 @@ hook.Add("TTTBeginRound", "TTT2GivePendingItems", function()
 	end
 
 	pendingItems = {}
+end)
+
+-- reset confirm state only on round begin, not on revive
+hook.Add("TTTBeginRound", "TTT2ResetRoleState", function()
+	for _,p in ipairs(player.GetAll()) do
+		p:ResetConfirmPlayer()
+	end
 end)

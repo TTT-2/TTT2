@@ -24,6 +24,9 @@ if CLIENT then
 		hudelements.RegisterChildRelation(self.id, "pure_skin_roundinfo", false)
 	end
 
+	HUDELEMENT.icon_in_conf = Material("vgui/ttt/indirect_confirmed")
+	HUDELEMENT.icon_revived = Material("vgui/ttt/revived")
+
 	function HUDELEMENT:Initialize()
 		self.margin = margin
 		self.element_margin = element_margin
@@ -79,14 +82,16 @@ if CLIENT then
 	end
 
 	local function GetMSBColorForPlayer(ply)
-		local ret_color = Color(0, 0, 0, 130)
-
-		if ply:GetNWBool("body_found", false) then
-			color = ply:GetRoleColor()
-			ret_color = Color(color.r, color.g, color.b, 155) -- make color a bit transparent
+		if ply:OnceFound() then
+			if ply:RoleKnown() then
+				color = ply:GetRoleColor()
+				return Color(color.r, color.g, color.b, 155) -- role known
+			else
+				return Color(215, 215, 215, 155) -- indirect confirmed
+			end
 		end
 
-		return ret_color
+		return Color(0, 0, 0, 130) -- not yet confirmed
 	end
 
 	function HUDELEMENT:Draw()
@@ -100,7 +105,15 @@ if CLIENT then
 
 		-- sort playerlist: confirmed players should be in the first position
 		table.sort(players, function(a, b)
-			return a:GetNWBool("body_found", false) and not b:GetNWBool("body_found", false)
+			if not a:OnceFound() then
+				return false
+			end
+
+			if b:OnceFound() and (a:GetFirstFound() >= b:GetFirstFound()) then -- bodies were confirmed and body a was confirmed prior to body b
+				return false
+			end
+
+			return true
 		end)
 
 		-- draw bg and shadow
@@ -122,6 +135,12 @@ if CLIENT then
 			surface.SetDrawColor(clr(ply_color))
 			surface.DrawRect(tmp_x, tmp_y, self.ply_ind_size, self.ply_ind_size)
 
+			if p:Revived() then
+				util.DrawFilteredTexturedRect(tmp_x +3, tmp_y +3, ply_ind_size -6, ply_ind_size -6, self.icon_revived, 180, {r=0,g=0,b=0})
+			elseif p:OnceFound() and not p:RoleKnown() then -- draw marker on indirect confirmed bodies
+				util.DrawFilteredTexturedRect(tmp_x +3, tmp_y +3, ply_ind_size -6, ply_ind_size -6, self.icon_in_conf, 120, {r=0,g=0,b=0})
+			end
+		
 			-- draw lines around the element
 			self:DrawLines(tmp_x, tmp_y, self.ply_ind_size, self.ply_ind_size, ply_color.a)
 		end

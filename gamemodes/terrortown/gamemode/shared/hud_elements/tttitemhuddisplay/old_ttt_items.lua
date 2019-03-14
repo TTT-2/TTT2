@@ -71,11 +71,9 @@ if CLIENT then
 			if item and item.hud then
 				surface.SetMaterial(old_ttt_bg)
 				surface.SetDrawColor(255, 255, 255, 255)
-				surface.DrawTexturedRect(pos.x, curY, size, size)
+				surface.DrawTexturedRect(pos.x-1, curY, size, size)
 
-				surface.SetMaterial(item.hud)
-				surface.SetDrawColor(255, 255, 255, 255)
-				surface.DrawTexturedRect(pos.x, curY, size, size)
+				util.DrawFilteredTexturedRect(pos.x + 0.1*size, curY + 0.1*size, size -0.2*size, size - 0.2*size, item.hud, 175)
 
 				if isfunction(item.DrawInfo) then
 					local info = item:DrawInfo()

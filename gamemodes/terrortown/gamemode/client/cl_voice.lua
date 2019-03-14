@@ -171,9 +171,11 @@ end
 net.Receive("TTT_RoleVoiceState", ReceiveVoiceState)
 
 local function VoiceClean()
-	for ply, pnl in pairs(PlayerVoicePanels) do
-		if not IsValid(pnl) or not IsValid(ply) then
-			GAMEMODE:PlayerEndVoice(ply)
+	if PlayerVoicePanels then
+		for ply, pnl in pairs(PlayerVoicePanels) do
+			if not IsValid(pnl) or not IsValid(ply) then
+				GAMEMODE:PlayerEndVoice(ply)
+			end
 		end
 	end
 end

@@ -548,7 +548,9 @@ function CLSCORE:ClearPanel()
 		local pnl = self.Panel
 
 		timer.Simple(0, function()
-			pnl:Remove()
+			if IsValid(pnl) then
+				pnl:Remove()
+			end
 		end)
 	end
 end

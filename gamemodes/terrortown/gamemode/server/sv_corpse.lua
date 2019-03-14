@@ -115,8 +115,7 @@ local function IdentifyBody(ply, rag)
 	if not CORPSE.GetFound(rag, false) then -- will return either false or a valid ply
 		local deadply = player.GetBySteamID64(rag.sid64)
 		if deadply and not deadply:Alive() then
-			deadply:SetNWBool("body_found", true)
-
+			deadply:ConfirmPlayer(true)
 			SendPlayerToEveryone(deadply) -- confirm player for everyone
 
 			SCORE:HandleBodyFound(ply, deadply)
@@ -137,7 +136,7 @@ local function IdentifyBody(ply, rag)
 			if IsValid(vic) and not vic:GetNWBool("body_found", false) then
 				LANG.Msg("body_confirm", {finder = finder, victim = vic:Nick()})
 
-				vic:SetNWBool("body_found", true) -- update scoreboard status
+				vic:ConfirmPlayer(false)
 
 				-- however, do not mark body as found. This lets players find the
 				-- body later and get the benefits of that

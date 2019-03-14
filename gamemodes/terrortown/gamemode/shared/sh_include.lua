@@ -49,7 +49,7 @@ TTTFiles = {
 	vgui__cl_droleimage = {file = "vgui/cl_droleimage.lua", on = "client"},
 	vgui__cl_hudswitcher = {file = "vgui/cl_hudswitcher.lua", on = "client"},
 	vgui__cl_simpleicon = {file = "vgui/cl_simpleicon.lua", on = "client"},
-	vgui__cl_settings_button = {file = "vgui/cl_settings_button.lua", on = "client"},
+	vgui__cl_f1settings_button = {file = "vgui/cl_f1settings_button.lua", on = "client"},
 	vgui__cl_shopeditor_buttons = {file = "vgui/cl_shopeditor_buttons.lua", on = "client"},
 	vgui__cl_shopeditor_slider = {file = "vgui/cl_shopeditor_slider.lua", on = "client"},
 	vgui__cl_simpleclickicon = {file = "vgui/cl_simpleclickicon.lua", on = "client"},
