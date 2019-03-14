@@ -47,7 +47,7 @@ if CLIENT then
 
 	function HUDELEMENT:GetDefaults()
 		return const_defaults
- 	end
+	end
 
 	function HUDELEMENT:PerformLayout()
 		local parent_pos = self.parentInstance:GetPos()
@@ -88,8 +88,6 @@ if CLIENT then
 	end
 
 	function HUDELEMENT:Draw()
-		local client = LocalPlayer()
-
 		local players = util.GetFilteredPlayers(function (ply)
 			return ply:IsTerror() or ply:IsDeadTerror()
 		end)

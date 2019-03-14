@@ -23,7 +23,7 @@ if CLIENT then
 		self.pad = pad
 		self.lpw = lpw
 		self.sri_text_width_padding = sri_text_width_padding
-		self.secondaryRoleInformationFunc = nil
+		--self.secondaryRoleInformationFunc = nil
 
 		BaseClass.Initialize(self)
 	end

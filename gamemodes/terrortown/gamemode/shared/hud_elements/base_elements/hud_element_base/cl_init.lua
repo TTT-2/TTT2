@@ -110,6 +110,11 @@ end
 --]]----------------------------------------------------------------------------
 function HUDELEMENT:OnDraw()
 	if not self:ShouldDraw() then return end
+	-- TODO optimize / refactor
+	local hud = huds.GetStored(HUDManager.GetHUD())
+
+	if not hud or not hud:ShouldShow(self.type) then return end
+
 	-- call Draw() on all children
 	self:ApplyToChildren("OnDraw")
 
