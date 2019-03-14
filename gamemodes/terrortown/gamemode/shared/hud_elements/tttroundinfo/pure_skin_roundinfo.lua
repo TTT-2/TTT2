@@ -11,12 +11,7 @@ if CLIENT then
 
 	local GetLang = LANG.GetUnsafeLanguageTable
 
-	local w_default, h_default = 96, 72
-	local pad_default = 14
-
-	local x, y = 0, 0
-	local w, h = w_default, h_default
-	local pad = pad_default -- padding
+	local pad = 14
 
 	local const_defaults = {
 						basepos = {x = 0, y = 0},
@@ -25,10 +20,9 @@ if CLIENT then
 	}
 
 	function HUDELEMENT:Initialize()
-		w, h = w_default, h_default
-		pad = pad_default
 		self.scale = 1.0
 		self.basecolor = self:GetHUDBasecolor() or defaultColor
+		self.pad = pad
 
 		self.disabledUnlessForced = true
 
@@ -47,14 +41,11 @@ if CLIENT then
  	end
 
 	function HUDELEMENT:PerformLayout()
-		local pos = self:GetPos()
-		local size = self:GetSize()
-		self.scale = math.min(size.w / w_default, size.h / h_default)
-		self.basecolor = self:GetHUDBasecolor() or defaultColor
+		local defaults = self:GetDefaults()
 
-		x, y = pos.x, pos.y
-		w, h = size.w, size.h
-		pad = pad_default * self.scale
+		self.scale = math.min(self.size.w / defaults.minsize.w, self.size.h / defaults.minsize.h)
+		self.basecolor = self:GetHUDBasecolor() or defaultColor
+		self.pad = pad * self.scale
 
 		BaseClass.PerformLayout(self)
 	end
@@ -65,7 +56,7 @@ if CLIENT then
 		local round_state = GAMEMODE.round_state
 
 		-- draw bg and shadow
-		self:DrawBg(x, y, w, h, self.basecolor)
+		self:DrawBg(self.pos.x, self.pos.y, self.size.w, self.size.h, self.basecolor)
 
 		-- draw haste / time
 		-- Draw round time
@@ -75,8 +66,8 @@ if CLIENT then
 		local font = "TimeLeft"
 		local color = COLOR_WHITE
 
-		local tmpx = x + w * 0.5
-		local tmpy = y + h * 0.5
+		local tmpx = self.pos.x + self.size.w * 0.5
+		local tmpy = self.pos.y + self.size.h * 0.5
 
 		local rx = tmpx
 		local ry = tmpy
@@ -122,7 +113,7 @@ if CLIENT then
 		self:AdvancedText(text, font, rx, ry, color, TEXT_ALIGN_CENTER, vert_align_clock, true, self.scale)
 
 		if is_haste then
-			self:AdvancedText(L.hastemode, "PureSkinMSTACKMsg", tmpx, y + pad, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, true, self.scale)
+			self:AdvancedText(L.hastemode, "PureSkinMSTACKMsg", tmpx, self.pos.y + self.pad, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, true, self.scale)
 		end
 
 		-- draw lines around the element
