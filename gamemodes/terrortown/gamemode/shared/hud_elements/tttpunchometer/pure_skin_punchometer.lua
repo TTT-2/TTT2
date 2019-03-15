@@ -11,7 +11,6 @@ HUDELEMENT.Base = base
 DEFINE_BASECLASS(base)
 
 if CLIENT then
-	local defaultColor = Color(49, 71, 94)
 	local draw_col = Color(205, 155, 0, 255)
 
 	local pad = 7
@@ -25,7 +24,7 @@ if CLIENT then
 
 	function HUDELEMENT:Initialize()
 		self.scale = 1.0
-		self.basecolor = self:GetHUDBasecolor() or defaultColor
+		self.basecolor = self:GetHUDBasecolor()
 
 		self.pad = pad
 		self.margin = margin
@@ -77,8 +76,8 @@ if CLIENT then
 	function HUDELEMENT:PerformLayout()
 		local size = self:GetSize()
 
-		self.scale = self:GetHUDScale() or 1.0
-		self.basecolor = self:GetHUDBasecolor() or defaultColor
+		self.scale = self:GetHUDScale()
+		self.basecolor = self:GetHUDBasecolor()
 		self.pad = pad * self.scale
 		self.margin = margin * self.scale
 

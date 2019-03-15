@@ -10,8 +10,6 @@ HUDELEMENT.Base = base
 
 if CLIENT then
 	-- color defines
-	local defaultColor = Color(49, 71, 94)
-
 	local col_active = {
 		text_empty = Color(200, 20, 20, 255),
 		text = Color(255, 255, 255, 255),
@@ -40,7 +38,7 @@ if CLIENT then
 
 	function HUDELEMENT:Initialize()
 		self.scale = 1.0
-		self.basecolor = self:GetHUDBasecolor() or defaultColor
+		self.basecolor = self:GetHUDBasecolor()
 		self.element_height = element_height
 		self.margin = margin
 		self.lpw = lpw
@@ -62,8 +60,8 @@ if CLIENT then
 	-- parameter overwrites end
 
 	function HUDELEMENT:PerformLayout()
-		self.scale = self:GetHUDScale() or 1.0
-		self.basecolor = self:GetHUDBasecolor() or defaultColor
+		self.scale = self:GetHUDScale()
+		self.basecolor = self:GetHUDBasecolor()
 		self.element_height = element_height * self.scale
 		self.margin = margin * self.scale
 		self.lpw = lpw * self.scale

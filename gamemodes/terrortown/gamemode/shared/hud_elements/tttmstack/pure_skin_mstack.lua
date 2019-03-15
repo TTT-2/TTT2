@@ -5,8 +5,6 @@ DEFINE_BASECLASS(base)
 HUDELEMENT.Base = base
 
 if CLIENT then
-	local defaultColor = Color(49, 71, 94)
-	
 	local draw = draw
 	local math = math
 
@@ -49,7 +47,7 @@ if CLIENT then
 		local defaults = self:GetDefaults()
 		
 		self.scale = 1.0
-		self.basecolor = self:GetHUDBasecolor() or defaultColor
+		self.basecolor = self:GetHUDBasecolor()
 
 		self.leftPad = leftPad
 		self.line_margin = line_margin
@@ -82,8 +80,8 @@ if CLIENT then
  	end
 
 	function HUDELEMENT:PerformLayout()
-		self.scale = self:GetHUDScale() or 1.0
-		self.basecolor = self:GetHUDBasecolor() or defaultColor
+		self.scale = self:GetHUDScale()
+		self.basecolor = self:GetHUDBasecolor()
 
 		self.leftPad = leftPad * self.scale
 		self.margin = margin * self.scale

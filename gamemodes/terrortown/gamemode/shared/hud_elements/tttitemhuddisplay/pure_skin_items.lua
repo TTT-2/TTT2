@@ -8,8 +8,6 @@ DEFINE_BASECLASS(base)
 HUDELEMENT.Base = base
 
 if CLIENT then
-	local defaultColor = Color(49, 71, 94)
-
 	surface.CreateFont("ItemInfoFont", {font = "Trebuchet24", size = 14, weight = 700})
 
 	local padding = 10
@@ -22,7 +20,7 @@ if CLIENT then
 
 	function HUDELEMENT:Initialize()
 		self.scale = 1.0
-		self.basecolor = self:GetHUDBasecolor() or defaultColor
+		self.basecolor = self:GetHUDBasecolor()
 		self.padding = padding
 
 		BaseClass.Initialize(self)
@@ -40,8 +38,8 @@ if CLIENT then
 	end
 
 	function HUDELEMENT:PerformLayout()
-		self.scale = self:GetHUDScale() or 1.0
-		self.basecolor = self:GetHUDBasecolor() or defaultColor
+		self.scale = self:GetHUDScale()
+		self.basecolor = self:GetHUDBasecolor()
 		self.padding = padding * self.scale
 
 		BaseClass.PerformLayout(self)

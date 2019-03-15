@@ -5,8 +5,6 @@ DEFINE_BASECLASS(base)
 HUDELEMENT.Base = base
 
 if CLIENT then
-	local defaultColor = Color(49, 71, 94)
-
 	local GetLang = LANG.GetUnsafeLanguageTable
 
 	local pad = 14 -- padding
@@ -21,7 +19,7 @@ if CLIENT then
 
 	function HUDELEMENT:Initialize()
 		self.scale = 1.0
-		self.basecolor = self:GetHUDBasecolor() or defaultColor
+		self.basecolor = self:GetHUDBasecolor()
 		self.pad = pad
 		self.lpw = lpw
 		self.sri_text_width_padding = sri_text_width_padding
@@ -44,7 +42,7 @@ if CLIENT then
 	function HUDELEMENT:PerformLayout()
 		local defaults = self:GetDefaults()
 
-		self.basecolor = self:GetHUDBasecolor() or defaultColor
+		self.basecolor = self:GetHUDBasecolor()
 		self.scale = math.min(self.size.w / defaults.minsize.w, self.size.h / defaults.minsize.h)
 		self.lpw = lpw * self.scale
 		self.pad = pad * self.scale
