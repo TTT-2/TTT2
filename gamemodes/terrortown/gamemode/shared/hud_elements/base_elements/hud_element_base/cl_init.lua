@@ -41,12 +41,11 @@ HUDELEMENT.edit_live_data = {
 	old_col = nil
 }
 
---[[----------------------------------------------------------------------------
-	Name: ApplyToChildren(string funcName, ...)
-	Desc: This function will try to call the function given with funcName on
-		  all children of this hud element, while also passing extra parameters
-		  to this the function.
---]]----------------------------------------------------------------------------
+--- This function will try to call the function given with funcName on
+-- all children of this hud element, while also passing extra parameters
+-- to this the function.
+-- @tparam string
+-- @param[opt] parameter for the function to call
 function HUDELEMENT:ApplyToChildren(funcName, ...)
 	if not funcName then return end
 
@@ -64,31 +63,26 @@ function HUDELEMENT:ApplyToChildren(funcName, ...)
 	end
 end
 
---[[----------------------------------------------------------------------------
-	Name: PreInitialize()
-	Desc: This function will be called after all hud elements have been loaded
-	 	  and are registered. But be aware that the elements are still "raw", so
-		  they did not execute any code or set any of their properties correct.
-		  Use this function for example to register your child -> parent
-		  relation, by calling
-		  hudelements.RegisterChildRelation(childid, parentid, parent_is_type)
---]]----------------------------------------------------------------------------
+--- This function will be called after all hud elements have been loaded
+-- and are registered. But be aware that the elements are still "raw", so
+-- they did not execute any code or set any of their properties correct.
+-- Use this function for example to register your child -> parent
+-- relation, by calling
+-- @{hudelements.RegisterChildRelation(childid, parentid, parent_is_type)}
 function HUDELEMENT:PreInitialize()
 	-- Use this to set child<->parent relations etc, this is called before Initialized and other objects can still be uninitialized!
 end
 
---[[----------------------------------------------------------------------------
-	Name: Initialize()
-	Desc: This function will be called each time the HUD is loaded eg. when
-		  switching to this HUD in the HUDManager, so expect this function to
-		  be called multiple times and respect that within your code. Due to
-		  this, the function should be used to reset your member variables and
-		  temporary variables. Then you can set them to an useful inital value.
 
-		  Remember that previously loaded values will be applied later and
-		  dont forget to call BaseClass.Initialize(self), which will then call
-		  Initialize() on all children.
---]]----------------------------------------------------------------------------
+--- This function will be called each time the HUD is loaded eg. when
+-- switching to this HUD in the HUDManager, so expect this function to
+-- be called multiple times and respect that within your code. Due to
+-- this, the function should be used to reset your member variables and
+-- temporary variables. Then you can set them to an useful inital value.
+
+-- Remember that previously loaded values will be applied later and
+-- dont forget to call @{BaseClass.Initialize(self)}, which will then call
+-- @{HUDELEMENT:Initialize()} on all children.
 function HUDELEMENT:Initialize()
 
 	local defaults = self:GetDefaults()
@@ -102,21 +96,17 @@ function HUDELEMENT:Initialize()
 	self:ApplyToChildren("Initialize")
 end
 
---[[----------------------------------------------------------------------------
-	Name: Draw()
-	Desc: This function is called when an element should draw its content.
-		  Please use this function only to draw your element and dont calculate
-		  any values if not explicitly needed.
---]]----------------------------------------------------------------------------
+
+--- This function is called when an element should draw its content.
+-- Please use this function only to draw your element and dont calculate
+-- any values if not explicitly needed.
 function HUDELEMENT:Draw()
 	-- override this
 end
 
---[[----------------------------------------------------------------------------
-	Name: ShouldDraw()
-	Desc: This function is called to decide whether or not an element should be drawn.
-		  Override it to let your element be drawn only in specific situations.
---]]----------------------------------------------------------------------------
+--- This function is called to decide whether or not an element should be drawn.
+-- Override it to let your element be drawn only in specific situations.
+-- @treturn bool
 function HUDELEMENT:ShouldDraw()
 	return true
 end
@@ -134,10 +124,8 @@ function HUDELEMENT:InheritParentBorder()
 end
 -- parameter overwrites end
 
---[[------------------------------
-	Name: PerformLayout()
-	Desc: This function is called after all Initialize() functions.
---]]-------------------------------
+--- This function is called after all @{HUDELEMENT:Initialize()} functions and
+-- whenever the layout was changed, i.e., size, position.
 function HUDELEMENT:PerformLayout()
 	self:ApplyToChildren("PerformLayout")
 end
@@ -241,12 +229,11 @@ function HUDELEMENT:GetParentRelation()
 	return self.parent, self.parent_is_type
 end
 
---[[----------------------------------------------------------------------------
-	Name: SetParent(string parent, bool is_type)
-	Desc: This function is used internally and only has the full effect if
-		  called by the hudelements.RegisterChildRelation() function.
-		  !!! INTERNAL FUNCTION !!!
---]]----------------------------------------------------------------------------
+--- This function is used internally and only has the full effect if
+-- called by the hudelements.RegisterChildRelation() function.
+-- !!! INTERNAL FUNCTION !!!
+-- @tparam string
+-- @tparam bool
 function HUDELEMENT:SetParentRelation(parent, is_type)
 	self.parent = parent
 	self.parent_is_type = is_type
@@ -466,12 +453,9 @@ function HUDELEMENT:DrawSize()
 	draw.DrawText(self.id, "DermaDefault", x + w * 0.5, y + h * 0.5 - 7, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 end
 
---[[----------------------------------------------------------------------------
-	Name: 		GetDefaults()
-	Desc: 		This function is called when an element wants to now its original position.
-		  		This is the case at Resets and Initializations.
-	Returns: 	Reference to a table with basepos, size and minsize
---]]----------------------------------------------------------------------------
+--- This function is called when an element wants to now its original position.
+-- This is the case at @{HUDELEMENT:Reset} and @{HUDELEMENT:Initialize}.
+-- @treturn tab with basepos, size and minsize fields
 function HUDELEMENT:GetDefaults()
 
 end
