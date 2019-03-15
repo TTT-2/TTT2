@@ -100,6 +100,8 @@ function HUDManager.StoreData()
 		sql.Query("INSERT OR REPLACE INTO " .. HUD_MANAGER_SQL_TABLE .. " VALUES('defaultHUD', " .. sql.SQLStr(HUDManager.GetModelValue("defaultHUD")) .. ")")
 	end
 
+	-- delete the table to recreate it again, to remove all values that might have been removed from the table
+	sql.Query("DROP TABLE " .. HUD_MANAGER_SQL_RESTRICTEDHUDS_TABLE)
 	if DB_EnsureTableExists(HUD_MANAGER_SQL_RESTRICTEDHUDS_TABLE, "name TEXT PRIMARY KEY") then
 		for _, v in ipairs(HUDManager.GetModelValue("restrictedHUDs")) do
 			sql.Query("INSERT INTO " .. HUD_MANAGER_SQL_RESTRICTEDHUDS_TABLE .. " VALUES(" .. sql.SQLStr(v) .. ")")

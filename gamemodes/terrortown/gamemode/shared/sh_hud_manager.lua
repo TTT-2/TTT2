@@ -37,7 +37,7 @@ end
 function HUDManager.OnUpdateAnyAttribute(func)
 	if not isfunction(func) then return end
 
-	if not table.HasValue(func) then
+	if not table.HasValue(updateAnyListeners, func) then
 		table.insert(updateAnyListeners, func)
 	end
 end
@@ -46,7 +46,9 @@ function HUDManager.OnUpdateAttribute(key, func)
 	if not key or not isfunction(func) then return end
 
 	updateListeners[key] = updateListeners[key] or {}
-	table.insert(updateListeners[key], func)
+	if not table.HasValue(updateListeners[key], func) then
+		table.insert(updateListeners[key], func)
+	end
 end
 
 if SERVER then
