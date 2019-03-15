@@ -460,6 +460,8 @@ function HUDELEMENT:GetDefaults()
 
 end
 
+--- This function uses @{HUDELEMENT:GetDefaults} to reset an element to its
+--  original position.
 function HUDELEMENT:Reset()
 	local defaults = self:GetDefaults()
 	local defaultPos = defaults.basepos
@@ -488,14 +490,18 @@ local savingKeys = {
 	size = {typ = "size"}
 }
 
+--- Getter for saving keys
+-- @treturn tab with savable keys
 function HUDELEMENT:GetSavingKeys()
 	return table.Copy(savingKeys)
 end
 
+--- Saves the current savingkey values (position, size)
 function HUDELEMENT:SaveData()
 	SQL.Save("ttt2_hudelements", self.id, self, self:GetSavingKeys())
 end
 
+--- Loads the saved keys and applies them to the element
 function HUDELEMENT:LoadData()
 	local skeys = self:GetSavingKeys()
 
