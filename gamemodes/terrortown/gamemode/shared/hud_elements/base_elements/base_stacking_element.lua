@@ -4,14 +4,15 @@ DEFINE_BASECLASS(base)
 
 HUDELEMENT.Base = base
 
-HUDELEMENT.ElementList = {}
+HUDELEMENT.elements = {}
+HUDELEMENT.element_margin = 0
 
 function HUDELEMENT:Draw()
     local running_y = self.pos.y
 
-    for k, el in ipairs(self.ElementList) do
+    for k, el in ipairs(self.elements) do
         self:DrawElement(k, self.pos.x, running_y, self.size.w, el.h)
-        running_y = running_y + el.h + self.margin
+        running_y = running_y + el.h + self.element_margin
     end
 
     local totalHeight = running_y - self.pos.y
@@ -25,4 +26,21 @@ end
 --]]-----------------------------------------------------------------------------
 function HUDELEMENT:DrawElement(i, x, y, w, h)
 
+end
+
+--[[----------------------------------------------------------------------------
+	Name: SetElements(table elements)
+	Desc: Pass a list of elements, which should be drawn. Each element needs
+          a height h.
+--]]-----------------------------------------------------------------------------
+function HUDELEMENT:SetElements(elements)
+    self.elements = elements
+end
+
+--[[----------------------------------------------------------------------------
+	Name: SetElementMargin(number margin)
+	Desc: Sets the margin between the elements
+--]]-----------------------------------------------------------------------------
+function HUDELEMENT:SetElementMargin(margin)
+    self.element_margin = margin
 end

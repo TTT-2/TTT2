@@ -127,11 +127,13 @@ if CLIENT then
 	end
 
 	function HUDELEMENT:Draw()
-		self.ElementList = {}
+		local weaponList = {}
 		local weps = WSWITCH.WeaponCache
 		for k, wep in ipairs(weps) do
-			table.insert(self.ElementList, {h = self.element_height})
+			table.insert(weaponList, {h = self.element_height})
 		end
+		self:SetElements(weaponList)
+		self:SetElementMargin(self.margin)
 
 		BaseClass.Draw(self)
 	end
