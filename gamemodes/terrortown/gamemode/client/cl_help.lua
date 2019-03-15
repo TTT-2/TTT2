@@ -448,6 +448,8 @@ function HELPSCRN:CreateBindings(parent)
 end
 
 -- Administration
+-- save the restricted huds list view here to adjust its content in the update listener
+local admin_dlv_rhuds = nil
 function HELPSCRN:CreateAdministrationForm(parent)
 	local defaultHUDlabel = vgui.Create("DLabel", parent)
 	defaultHUDlabel:SetText("Default HUD:")
@@ -486,37 +488,37 @@ function HELPSCRN:CreateAdministrationForm(parent)
 	restrictHUDlabel:SetText("Restrict HUDs:")
 	restrictHUDlabel:Dock(TOP)
 
-	local dsp = vgui.Create("DListView", parent)
-	dsp:SetHeight(100)
-	dsp:SetMultiSelect( false )
-	dsp:AddColumn( "HUD" )
-	dsp:AddColumn( "Restricted" )
+	admin_dlv_rhuds = vgui.Create("DListView", parent)
+	admin_dlv_rhuds:SetHeight(100)
+	admin_dlv_rhuds:SetMultiSelect( false )
+	admin_dlv_rhuds:AddColumn( "HUD" )
+	admin_dlv_rhuds:AddColumn( "Restricted" )
 
 	local restrictedHUDs = HUDManager.GetModelValue("restrictedHUDs")
 	local allHUDs = huds.GetList()
 	for _, v in ipairs(allHUDs) do
-		dsp:AddLine(v.id, table.HasValue(restrictedHUDs, v.id) and "true" or "false")
+		admin_dlv_rhuds:AddLine(v.id, table.HasValue(restrictedHUDs, v.id) and "true" or "false")
 	end
-	dsp:Dock(TOP)
+	admin_dlv_rhuds:Dock(TOP)
 
-	function dsp:DoDoubleClick( lineID, line )
-		MsgN("Request hud restriction for " .. line:GetColumnText( 1 ) .. " and state change from " .. line:GetColumnText( 2 ))
+	function admin_dlv_rhuds:DoDoubleClick( lineID, line )
 		net.Start("TTT2RestrictHUDRequest")
 		net.WriteString(line:GetColumnText( 1 ))
 		net.WriteBool(not tobool(line:GetColumnText( 2 )))
 		net.SendToServer()
 	end
 
-	HUDManager.OnUpdateAttribute("restrictedHUDs", function()
-		dsp:Clear()
-		local r = HUDManager.GetModelValue("restrictedHUDs")
-		local a = huds.GetList()
-		for _, v in ipairs(a) do
-			dsp:AddLine(v.id, table.HasValue(r, v.id) and "true" or "false")
-		end
-	end)
-
 end
+
+HUDManager.OnUpdateAttribute("restrictedHUDs", function()
+	if not admin_dlv_rhuds or not IsValid(admin_dlv_rhuds) then return end
+	admin_dlv_rhuds:Clear()
+	local r = HUDManager.GetModelValue("restrictedHUDs")
+	local a = huds.GetList()
+	for _, v in ipairs(a) do
+		admin_dlv_rhuds:AddLine(v.id, table.HasValue(r, v.id) and "true" or "false")
+	end
+end)
 
 net.Receive("TTT2RestrictHUDResponse", function()
 	local accepted = net.ReadBool()
