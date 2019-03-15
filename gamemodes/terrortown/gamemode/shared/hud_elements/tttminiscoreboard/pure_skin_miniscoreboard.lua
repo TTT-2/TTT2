@@ -86,16 +86,17 @@ if CLIENT then
 	end
 
 	local function GetMSBColorForPlayer(ply)
+		local color = Color(0, 0, 0, 130)
 		if ply:OnceFound() then
 			if ply:RoleKnown() then
-				color = ply:GetRoleColor()
-				return Color(color.r, color.g, color.b, 155) -- role known
+				local roleColor = ply:GetRoleColor()
+				color = Color(roleColor.r, roleColor.g, roleColor.b, 155) -- role known
 			else
-				return Color(215, 215, 215, 155) -- indirect confirmed
+				color = Color(215, 215, 215, 155) -- indirect confirmed
 			end
 		end
 
-		return Color(0, 0, 0, 130) -- not yet confirmed
+		return hook.Run("TTT2ModifyMiniscoreboardColor", ply, color) or color -- not yet confirmed
 	end
 
 	function HUDELEMENT:Draw()
