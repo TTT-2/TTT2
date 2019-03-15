@@ -2,7 +2,7 @@ local surface = surface
 local IsValid = IsValid
 local TryTranslation = LANG.TryTranslation
 
-local base = "base_wswitch"
+local base = "base_stacking_element"
 
 DEFINE_BASECLASS(base)
 
@@ -127,32 +127,26 @@ if CLIENT then
 	end
 
 	function HUDELEMENT:Draw()
+		self.ElementList = {}
 		local weps = WSWITCH.WeaponCache
-		local count = #weps
-		local tmp = self.element_height + self.margin
-		local h = math.max(count * tmp, self.minsize.h)
-		local col = col_dark
-
-		local running_y = self.pos.y
-
 		for k, wep in ipairs(weps) do
-			if WSWITCH.Selected == k then
-				col = col_active
-			else
-				col = col_dark
-			end
-
-			self:DrawBarBg(self.pos.x, running_y, self.size.w, self.element_height, col)
-
-			if not self:DrawWeapon(self.pos.x, running_y, col, wep) then
-				WSWITCH:UpdateWeaponCache()
-
-				return
-			end
-
-			running_y = running_y + self.element_height + self.margin
+			table.insert(self.ElementList, {h = self.element_height})
 		end
 
-		self:SetSize(self.size.w, -h)
+		BaseClass.Draw(self)
+	end
+
+	function HUDELEMENT:DrawElement(i, x, y, w, h)
+		local col = col_dark
+		if WSWITCH.Selected == i then
+			col = col_active
+		end
+		self:DrawBarBg(x, y, w, h, col)
+
+		if not self:DrawWeapon(x, y, col, WSWITCH.WeaponCache[i]) then
+			WSWITCH:UpdateWeaponCache()
+			return
+		end
+
 	end
 end

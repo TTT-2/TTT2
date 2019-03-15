@@ -4,7 +4,7 @@ local math = math
 local IsValid = IsValid
 local TryTranslation = LANG.TryTranslation
 
-local base = "base_wswitch"
+local base = "base_stacking_element"
 
 DEFINE_BASECLASS(base)
 
