@@ -499,16 +499,32 @@ end
 function HUDELEMENT:LoadData()
 	local skeys = self:GetSavingKeys()
 
+	local loadedData = {}
 	-- load and initialize the elements data from database
 	if SQL.CreateSqlTable("ttt2_hudelements", skeys) then
-		local loaded = SQL.Load("ttt2_hudelements", self.id, self, skeys)
+		local loaded = SQL.Load("ttt2_hudelements", self.id, loadedData, skeys)
 
 		if not loaded then
 			SQL.Init("ttt2_hudelements", self.id, self, skeys)
 		end
 	end
 
-	-- set position to loaded position
-	local basepos = self:GetBasePos()
-	self:SetPos(basepos.x, basepos.y)
+	if loadedData.pos then
+		self:SetPos(loadedData.pos.x, loadedData.pos.y)
+		loadedData.pos = nil
+	end
+
+	if loadedData.basepos then
+		self:SetBasePos(loadedData.basepos.x, loadedData.basepos.y)
+		loadedData.basepos = nil
+	end
+
+	if loadedData.size then
+		self:SetSize(loadedData.size.w, loadedData.size.h)
+		loadedData.size = nil
+	end
+
+	for k, v in pairs(loadedData) do
+		self[k] = v or self[k]
+	end
 end
