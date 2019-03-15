@@ -2,7 +2,7 @@ local surface = surface
 local IsValid = IsValid
 local TryTranslation = LANG.TryTranslation
 
-local base = "pure_skin_element"
+local base = "base_wswitch"
 
 DEFINE_BASECLASS(base)
 
@@ -33,6 +33,10 @@ if CLIENT then
 						size = {w = 365, h = 28},
 						minsize = {w = 240, h = 28}
 	}
+
+	function HUDELEMENT:PreInitialize()
+		self.drawer =  hudelements.GetStored("pure_skin_element")
+	end
 
 	function HUDELEMENT:Initialize()
 		self.scale = 1.0
@@ -72,7 +76,7 @@ if CLIENT then
 		local c = (col == col_active and ply:GetRoleColor() or ply:GetRoleDkColor()) or Color(100, 100, 100)
 
 		-- draw bg and shadow
-		self:DrawBg(x, y, w, h, self.basecolor)
+		self.drawer:DrawBg(x, y, w, h, self.basecolor)
 
 		if col == col_active then
 			surface.SetDrawColor(0, 0, 0, 90)
@@ -84,7 +88,7 @@ if CLIENT then
 		surface.DrawRect(x, y, self.lpw, h)
 
 		-- draw lines around the element
-		self:DrawLines(x, y, w, h, self.basecolor.a)
+		self.drawer:DrawLines(x, y, w, h, self.basecolor.a)
 	end
 
 	function HUDELEMENT:DrawWeapon(x, y, c, wep)
@@ -103,16 +107,16 @@ if CLIENT then
 		end
 
 		-- Slot
-		self:AdvancedText(MakeKindValid(wep.Kind), "PureSkinWepNum", x + self.lpw * 0.5, y + self.element_height * 0.5, c.text, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, true, self.scale)
+		self.drawer:AdvancedText(MakeKindValid(wep.Kind), "PureSkinWepNum", x + self.lpw * 0.5, y + self.element_height * 0.5, c.text, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, true, self.scale)
 
 		-- Name
-		self:AdvancedText(string.upper(name), "PureSkinWep", x + 10 + self.element_height, y + self.element_height * 0.5, c.text, nil, TEXT_ALIGN_CENTER, true, self.scale)
+		self.drawer:AdvancedText(string.upper(name), "PureSkinWep", x + 10 + self.element_height, y + self.element_height * 0.5, c.text, nil, TEXT_ALIGN_CENTER, true, self.scale)
 
 		if ammo then
 			local col = (wep:Clip1() == 0 and wep:Ammo1() == 0) and c.text_empty or c.text
 
 			-- Ammo
-			self:AdvancedText(tostring(ammo), "PureSkinWep", x + self.size.w - self.margin * 3, y + self.element_height * 0.5, col, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, false, self.scale)
+			self.drawer:AdvancedText(tostring(ammo), "PureSkinWep", x + self.size.w - self.margin * 3, y + self.element_height * 0.5, col, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, false, self.scale)
 		end
 
 		return true

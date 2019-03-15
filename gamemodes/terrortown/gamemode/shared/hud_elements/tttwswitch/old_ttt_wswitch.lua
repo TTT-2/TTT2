@@ -4,7 +4,7 @@ local math = math
 local IsValid = IsValid
 local TryTranslation = LANG.TryTranslation
 
-local base = "old_ttt_element"
+local base = "base_wswitch"
 
 DEFINE_BASECLASS(base)
 
@@ -40,6 +40,31 @@ if CLIENT then
 						size = {w = width, h = -height},
 						minsize = {w = width, h = height}
 	}
+
+	function HUDELEMENT:Initialize()
+			WSWITCH:UpdateWeaponCache()
+
+			BaseClass.Initialize(self)
+
+			self.defaults.resizeableY = false
+			self.defaults.minHeight = height
+	end
+
+	function HUDELEMENT:GetDefaults()
+		const_defaults["basepos"] = {x = ScrW() - (width + self.margin * 2), y = ScrH() - self.margin}
+		
+		return const_defaults
+	end
+
+	function HUDELEMENT:PerformLayout()
+		local basepos = self:GetBasePos()
+
+		self:SetPos(basepos.x, basepos.y)
+		self:SetSize(width, -height)
+
+		BaseClass.PerformLayout(self)
+	end
+
 
 	function HUDELEMENT:DrawBarBg(x, y, w, h, col)
 		local rx = round(x - 4)
@@ -121,30 +146,6 @@ if CLIENT then
 		end
 
 		return true
-	end
-
-	function HUDELEMENT:Initialize()
-		WSWITCH:UpdateWeaponCache()
-
-		BaseClass.Initialize(self)
-
-		self.defaults.resizeableY = false
-		self.defaults.minHeight = height
-	end
-
-	function HUDELEMENT:GetDefaults()
-		const_defaults["basepos"] = {x = ScrW() - (width + self.margin * 2), y = ScrH() - self.margin}
-		
-		return const_defaults
-	end
-
-	function HUDELEMENT:PerformLayout()
-		local basepos = self:GetBasePos()
-
-		self:SetPos(basepos.x, basepos.y)
-		self:SetSize(width, -height)
-
-		BaseClass.PerformLayout(self)
 	end
 
 	function HUDELEMENT:Draw()
