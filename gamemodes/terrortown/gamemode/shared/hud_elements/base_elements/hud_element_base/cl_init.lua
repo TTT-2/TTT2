@@ -105,20 +105,11 @@ end
 --[[----------------------------------------------------------------------------
 	Name: Draw()
 	Desc: This function is called when an element should draw its content.
-		  Please use this function only to draw your element and after that remember to call
-		  the BaseClass.Draw(self), this will ensure that child elements will be drawn too!
+		  Please use this function only to draw your element and dont calculate
+		  any values if not explicitly needed.
 --]]----------------------------------------------------------------------------
-function HUDELEMENT:OnDraw()
-	if not self:ShouldDraw() then return end
-	-- TODO optimize / refactor
-	local hud = huds.GetStored(HUDManager.GetHUD())
-
-	if not hud or not hud:ShouldShow(self.type) then return end
-
-	-- call Draw() on all children
-	self:ApplyToChildren("OnDraw")
-
-	self:Draw()
+function HUDELEMENT:Draw()
+	-- override this
 end
 
 --[[----------------------------------------------------------------------------

@@ -44,9 +44,10 @@ function HUD:HideType(elementType)
 	table.insert(self.disabledTypes, elementType)
 end
 
---- This will determine if an element type is supposed to be displayed and it
--- will respect the parent->child relation, so if a parent is hidden, the child
--- won't show either.
+--- This will determine if an element type is supposed to be displayed, by
+-- checking if @{HUD:GetElementByType} will return an element table, so the
+-- HUD actually "has" the element, and checking if the element is toggled on/off
+-- with its clientside ConVar.
 -- @tparam string
 -- @treturn bool
 function HUD:ShouldShow(elementType)
@@ -55,13 +56,6 @@ function HUD:ShouldShow(elementType)
 		if el.togglable and not GetGlobalBool("ttt2_elem_toggled_" .. el.id, false) then
 			return false
 		end
-
-		local parent, parentIsType = el:GetParentRelation()
-		if el:IsChild() and parent and parentIsType ~= nil then
-			local parentTbl = not parentIsType and hudelements.GetStored(parent) or nil
-			return parentIsType and self:ShouldShow(parent) or parentTbl and self:ShouldShow(parentTbl.type)
-		end
-
 		return true
 	else
 		return false
@@ -172,11 +166,35 @@ function HUD:GetElements()
 	return elems
 end
 
---- Called to draw all elements, by calling the @{HUDELEMENT:Draw} function on
--- them. This will also respect the @{HUDELEMENT.initialized} attribute, the
--- @{HUD:ShouldShow} result and the result of the hook "HUDShouldDraw".
--- This will also respect the parent -> child relations and will only call
--- @{HUDELEMENT:Draw} on non-child elements.
+--- Called to draw an element and all its children, by calling the
+-- @{HUDELEMENT:DrawElemAndChildren} function on them (recursive).
+-- This will also respect the @{HUDELEMENT.initialized} attribute, the
+-- @{HUD:ShouldShow} result, the @{HUDELEMENT:ShouldDraw} result and the result
+-- of the hook "HUDShouldDraw". Additionally this function will call
+-- @{HUDEditor.DrawElem} after the elements draw, to correctly display
+-- the HUDEditors elements on top.
+function HUD:DrawElemAndChildren(elem)
+	if not elem.initialized or not elem.type or not hook.Call("HUDShouldDraw", GAMEMODE, elem.type) or not self:ShouldShow(elem.type) or not elem:ShouldDraw() then return end
+	local children = elem:GetChildren()
+	for _, v in ipairs(children) do
+		local child = hudelements.GetStored(v)
+		if not child then
+			MsgN("Error: Hudelement with name " .. v .. " not found!")
+		else
+			self:DrawElemAndChildren(child)
+		end
+	end
+
+	elem:Draw()
+
+	if HUDEditor then
+		HUDEditor.DrawElem(elem)
+	end
+end
+
+--- Called to draw all elements, by calling the
+-- @{HUDELEMENT:DrawElemAndChildren} function on all elements which aren't
+-- a child and have a @{HUDELEMENT.type} (these are all non-base elements).
 function HUD:Draw()
 	for _, elemName in ipairs(self:GetElements()) do
 		local elem = hudelements.GetStored(elemName)
@@ -185,14 +203,8 @@ function HUD:Draw()
 			return
 		end
 
-		if elem.initialized and elem.type and hook.Call("HUDShouldDraw", GAMEMODE, elem.type) then
-			if not elem:IsChild() then
-				elem:OnDraw()
-			end
-
-			if HUDEditor then
-				HUDEditor.DrawElem(elem)
-			end
+		if elem.type and not elem:IsChild() then
+			self:DrawElemAndChildren(elem)
 		end
 	end
 end
