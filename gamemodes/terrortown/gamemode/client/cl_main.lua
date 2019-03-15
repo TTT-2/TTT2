@@ -3,7 +3,6 @@
 local math = math
 local net = net
 local player = player
-local pairs = pairs
 local ipairs = ipairs
 local timer = timer
 local util = util
@@ -17,9 +16,6 @@ surface.CreateFont("TabLarge", {font = "Tahoma", size = 13, weight = 700, shadow
 surface.CreateFont("Trebuchet22", {font = "Trebuchet MS", size = 22, weight = 900})
 
 ttt_include("sh_init")
-
-include("terrortown/gamemode/shared/sh_role_module.lua")
-include("terrortown/gamemode/shared/sh_item_module.lua")
 
 ttt_include("sh_main")
 ttt_include("sh_shopeditor")

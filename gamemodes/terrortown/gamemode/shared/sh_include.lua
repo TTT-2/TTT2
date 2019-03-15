@@ -29,6 +29,10 @@ TTTFiles = {
 	cl_wepswitch = {file = "cl_wepswitch.lua", on = "client"},
 
 	-- shared files
+	sh_item_module = {file = "sh_item_module.lua", on = "shared"},
+	sh_role_module = {file = "sh_role_module.lua", on = "shared"},
+	sh_hud_module = {file = "sh_hud_module.lua", on = "shared"},
+	sh_hudelement_module = {file = "sh_hudelement_module.lua", on = "shared"},
 	sh_corpse = {file = "sh_corpse.lua", on = "shared"},
 	sh_equip_items = {file = "sh_equip_items.lua", on = "shared"},
 	sh_hud_manager = {file = "sh_hud_manager.lua", on = "shared"},

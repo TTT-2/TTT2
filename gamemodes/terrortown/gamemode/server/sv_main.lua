@@ -1,12 +1,6 @@
 ---- Trouble in Terrorist Town 2
 ttt_include("sh_init")
 
-AddCSLuaFile("terrortown/gamemode/shared/sh_role_module.lua")
-include("terrortown/gamemode/shared/sh_role_module.lua")
-
-AddCSLuaFile("terrortown/gamemode/shared/sh_item_module.lua")
-include("terrortown/gamemode/shared/sh_item_module.lua")
-
 ttt_include("sh_main")
 ttt_include("sh_shopeditor")
 

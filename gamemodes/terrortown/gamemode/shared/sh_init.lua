@@ -343,8 +343,12 @@ COLOR_OLIVE = Color(100, 100, 0, 255)
 ttt_include("sh_util")
 ttt_include("sh_lang")
 ttt_include("sh_sql")
+ttt_include("sh_hudelement_module")
+ttt_include("sh_hud_module")
 ttt_include("sh_hud_manager")
 ttt_include("sh_equip_items")
+ttt_include("sh_role_module")
+ttt_include("sh_item_module")
 
 function GetEquipmentFileName(name)
 	return string.gsub(string.lower(name), "[%W%s]", "_") -- clean string

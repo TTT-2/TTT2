@@ -178,12 +178,21 @@ function HELPSCRN:Show()
 		[7] = {
 			id = "language",
 			getContent = self.CreateLanguageForm
+		},
+		[8] = {
+			id = "administration",
+			getContent = self.CreateAdministrationForm,
+			shouldShow = function()
+				return LocalPlayer():IsAdmin()
+			end
 		}
 	}
 
 	hook.Run("TTT2ModifySettingsList", tbl)
 
 	for _, data in ipairs(tbl) do
+		if isfunction(data.shouldShow) and not data.shouldShow() then continue end
+
 		local title = string.upper(isfunction(data.getTitle) and data.getTitle() or data.id)
 
 		local settingsButton = dsettings:Add("DF1SettingsButton")
@@ -437,6 +446,111 @@ function HELPSCRN:CreateBindings(parent)
 	end
 	AddBindingCategory("Other Bindings", parent)
 end
+
+-- Administration
+function HELPSCRN:CreateAdministrationForm(parent)
+	local defaultHUDlabel = vgui.Create("DLabel", parent)
+	defaultHUDlabel:SetText("Default HUD:")
+	defaultHUDlabel:Dock(TOP)
+	local defaultHUDCb = vgui.Create("DComboBox", parent)
+	defaultHUDCb:SetValue(HUDManager.GetModelValue("defaultHUD") or "None")
+	defaultHUDCb.OnSelect = function (self, index, value)
+		net.Start("TTT2DefaultHUDRequest")
+		net.WriteString(value == "None" and "" or value)
+		net.SendToServer()
+	end
+	for _, v in ipairs(huds.GetList()) do
+		defaultHUDCb:AddChoice(v.id)
+	end
+
+	defaultHUDCb:Dock(TOP)
+
+	local forceHUDlabel = vgui.Create("DLabel", parent)
+	forceHUDlabel:SetText("Force HUD:")
+	forceHUDlabel:Dock(TOP)
+	local forceHUDCb = vgui.Create("DComboBox", parent)
+	forceHUDCb:SetValue(HUDManager.GetModelValue("forcedHUD") or "None")
+	forceHUDCb.OnSelect = function (self, index, value)
+		net.Start("TTT2ForceHUDRequest")
+		net.WriteString(value == "None" and "" or value)
+		net.SendToServer()
+	end
+	forceHUDCb:AddChoice("None")
+	for _, v in ipairs(huds.GetList()) do
+		forceHUDCb:AddChoice(v.id)
+	end
+
+	forceHUDCb:Dock(TOP)
+
+	local restrictHUDlabel = vgui.Create("DLabel", parent)
+	restrictHUDlabel:SetText("Restrict HUDs:")
+	restrictHUDlabel:Dock(TOP)
+
+	local dsp = vgui.Create("DListView", parent)
+	dsp:SetHeight(100)
+	dsp:SetMultiSelect( false )
+	dsp:AddColumn( "HUD" )
+	dsp:AddColumn( "Restricted" )
+
+	local restrictedHUDs = HUDManager.GetModelValue("restrictedHUDs")
+	local allHUDs = huds.GetList()
+	for _, v in ipairs(allHUDs) do
+		dsp:AddLine(v.id, table.HasValue(restrictedHUDs, v.id) and "true" or "false")
+	end
+	dsp:Dock(TOP)
+
+	function dsp:DoDoubleClick( lineID, line )
+		MsgN("Request hud restriction for " .. line:GetColumnText( 1 ) .. " and state change from " .. line:GetColumnText( 2 ))
+		net.Start("TTT2RestrictHUDRequest")
+		net.WriteString(line:GetColumnText( 1 ))
+		net.WriteBool(not tobool(line:GetColumnText( 2 )))
+		net.SendToServer()
+	end
+
+	HUDManager.OnUpdateAttribute("restrictedHUDs", function()
+		dsp:Clear()
+		local r = HUDManager.GetModelValue("restrictedHUDs")
+		local a = huds.GetList()
+		for _, v in ipairs(a) do
+			dsp:AddLine(v.id, table.HasValue(r, v.id) and "true" or "false")
+		end
+	end)
+
+end
+
+net.Receive("TTT2RestrictHUDResponse", function()
+	local accepted = net.ReadBool()
+	local hudname = net.ReadString()
+	local ply = LocalPlayer()
+
+	if not accepted then
+		ply:ChatPrint("[TTT2][HUDManager] Failed to restrict the HUD " .. hudname .. ". Are you an admin?")
+		return
+	end
+end)
+
+net.Receive("TTT2ForceHUDResponse", function()
+	local accepted = net.ReadBool()
+	local hudname = net.ReadString()
+	local ply = LocalPlayer()
+
+	if not accepted then
+		ply:ChatPrint("[TTT2][HUDManager] Failed to force the HUD " .. hudname .. ". Are you an admin and does this HUD even exist?")
+		return
+	end
+end)
+
+net.Receive("TTT2DefaultHUDResponse", function()
+	local accepted = net.ReadBool()
+	local hudname = net.ReadString()
+	local ply = LocalPlayer()
+
+	if not accepted then
+		ply:ChatPrint("[TTT2][HUDManager] Failed to set the HUD " .. hudname .. " as new default. Are you an admin and does this HUD even exist?")
+		return
+	end
+end)
+
 
 --- Tutorial
 

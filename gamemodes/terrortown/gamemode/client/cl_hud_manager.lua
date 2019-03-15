@@ -1,7 +1,32 @@
 ttt_include("vgui__cl_hudswitcher")
 
-local current_hud_cvar = CreateClientConVar("ttt2_current_hud", HUDManager.defaultHUD or "pure_skin", true, true)
+local current_hud_cvar = CreateClientConVar("ttt2_current_hud", HUDManager.GetModelValue("defaultHUD") or "pure_skin", true, true)
 local current_hud_table = nil
+
+net.Receive("TTT2UpdateHUDManagerStringAttribute", function()
+	MsgN("Received HUDManager updated string attribute!")
+	local key = net.ReadString()
+	local value = net.ReadString()
+	if value == "NULL" then
+		value = nil
+	end
+	HUDManager.SetModelValue(key, value)
+end)
+
+net.Receive("TTT2UpdateHUDManagerRestrictedHUDsAttribute", function()
+	MsgN("Received HUDManager updated restricted Huds attribute!")
+	local len = net.ReadUInt(16)
+	if len == 0 then
+		HUDManager.SetModelValue("restrictedHUDs", {})
+	else
+		local tab = {}
+		for i = 1, len do
+			table.insert(tab, net.ReadString())
+		end
+
+		HUDManager.SetModelValue("restrictedHUDs", tab)
+	end
+end)
 
 function HUDManager.ShowHUDSwitcher()
 	local client = LocalPlayer()
@@ -138,7 +163,15 @@ function HUDManager.SetHUD(name)
 	net.SendToServer()
 end
 
+function HUDManager.RequestFullStateUpdate()
+	MsgN("[TTT2][HUDManager] Requesting a full state update...")
+	net.Start("TTT2RequestHUDManagerFullStateUpdate")
+	net.SendToServer()
+end
+
 -- if forced or requested, modified by server restrictions
 net.Receive("TTT2ReceiveHUD", function()
 	UpdateHUD(net.ReadString())
 end)
+
+hook.Add("TTTInitPostEntity", "RequestHUDManagerStateUpdate", HUDManager.RequestFullStateUpdate)
