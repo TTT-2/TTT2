@@ -141,18 +141,22 @@ function PANEL:Init()
 		end
 	end
 
-	local sheet = vgui.Create("DColumnSheet", self)
-	sheet:Dock(FILL)
+	local dcsheet = vgui.Create("DColumnSheet", self)
+	dcsheet:Dock(FILL)
 
-	sheet.Navigation:SetWidth(256)
+	dcsheet.Navigation:SetWidth(256)
 
-	sheet.OnActiveTabChanged = function(old, new)
+	dcsheet.OnActiveTabChanged = function(old, new)
 
 	end
 
+	local items = {}
+
 	for _, hud in ipairs(huds.GetList()) do
-		local panel = vgui.Create("DPanel", sheet)
+		local panel = vgui.Create("DPanel", dcsheet)
 		panel:Dock(FILL)
+
+		panel.hudid = hud.id
 
 		panel.Paint = function(slf, w, h)
 			draw.RoundedBox(4, 0, 0, w, h, hud.disableHUDEditor and Color(255, 0, 0) or Color(155, 155, 155, 255))
@@ -171,8 +175,9 @@ function PANEL:Init()
 				end
 			end
 		end
-
-		local leftBtn = sheet:AddSheet("", panel).Button
+		local sheet = dcsheet:AddSheet("", panel)
+		table.insert(items, sheet)
+		local leftBtn = sheet.Button
 		leftBtn:SetSize(256, 256)
 
 		leftBtn.Paint = function(slf, w, h)
@@ -187,29 +192,28 @@ function PANEL:Init()
 			surface.DrawTexturedRect(0, 0, w, h)
 		end
 
-		local mainPanel = self
-
-		local oldClick = leftBtn.DoClick
 		leftBtn.DoClick = function(slf)
 			local oldHUD = HUDManager.GetHUD()
 
 			if hud.id == oldHUD then return end
 
-			local oldHUDEl = huds.GetStored(oldHUD)
-			if oldHUDEl then
-				oldHUDEl:SaveData()
-			end
-
-			oldClick(slf)
-
-			mainPanel:SetTitle("HUD Switcher - " .. hud.id)
 			HUDManager.SetHUD(hud.id)
 		end
 
 		if hud.id == currentHUD then
-			sheet:SetActiveButton(leftBtn)
+			dcsheet:SetActiveButton(leftBtn)
 		end
 	end
+
+	hook.Add("TTT2HUDUpdated", "TTT2HUDUpdateHUDSwitcher", function (name)
+		for _, v in ipairs(items or {}) do
+			if name == v.Panel.hudid then
+				dcsheet:SetActiveButton(v.Button)
+				self:SetTitle("HUD Switcher - " .. name)
+				break
+			end
+		end
+	end)
 end
 
 derma.DefineControl("HUDSwitcher", "", PANEL, "DFrame")

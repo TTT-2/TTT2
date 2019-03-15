@@ -4,7 +4,6 @@ local current_hud_cvar = CreateClientConVar("ttt2_current_hud", HUDManager.GetMo
 local current_hud_table = nil
 
 net.Receive("TTT2UpdateHUDManagerStringAttribute", function()
-	MsgN("Received HUDManager updated string attribute!")
 	local key = net.ReadString()
 	local value = net.ReadString()
 	if value == "NULL" then
@@ -14,7 +13,6 @@ net.Receive("TTT2UpdateHUDManagerStringAttribute", function()
 end)
 
 net.Receive("TTT2UpdateHUDManagerRestrictedHUDsAttribute", function()
-	MsgN("Received HUDManager updated restricted Huds attribute!")
 	local len = net.ReadUInt(16)
 	if len == 0 then
 		HUDManager.SetModelValue("restrictedHUDs", {})
@@ -141,6 +139,9 @@ local function UpdateHUD(name)
 
 	HUDEditor.StopEditHUD()
 
+	-- save the old HUDs values
+	if current_hud_table then current_hud_table:SaveData() end
+
 	current_hud_cvar:SetString(name)
 	current_hud_table = hudEl
 
@@ -148,6 +149,9 @@ local function UpdateHUD(name)
 	hudEl:Initialize()
 
 	hudEl:LoadData()
+
+	-- call all listeners
+	hook.Run("TTT2HUDUpdated", name)
 end
 
 function HUDManager.GetHUD()
