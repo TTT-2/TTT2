@@ -130,10 +130,18 @@ function HUDELEMENT:PerformLayout()
 	self:ApplyToChildren("PerformLayout")
 end
 
+--- This function returns your basepos, the value which is used
+-- to move the element.
+-- @treturn tab with x and y value
 function HUDELEMENT:GetBasePos()
 	return table.Copy(self.basepos)
 end
 
+--- This function sets your basepos, the value which is used
+-- to move the element. It automatically updates the position as 
+-- well with @{HUDLEMENT:SetPos}
+-- @tparam number
+-- @tparam number
 function HUDELEMENT:SetBasePos(x, y)
 	local pos_difference_x = self.pos.x - self.basepos.x
 	local pos_difference_y = self.pos.y - self.basepos.y
@@ -144,13 +152,124 @@ function HUDELEMENT:SetBasePos(x, y)
 	self:SetPos(x + pos_difference_x, y + pos_difference_y)
 end
 
+--- This function returns your pos, the value which is used
+-- internally to define the upper left corner of the element
+-- @treturn tab with x and y value
 function HUDELEMENT:GetPos()
 	return table.Copy(self.pos)
 end
 
+--- This function sets your pos, the value which is used
+-- internally to define the upper left corner of the element
+-- @tparam number
+-- @tparam number
 function HUDELEMENT:SetPos(x, y)
 	self.pos.x = x
 	self.pos.y = y
+end
+
+--- This function returns your minsize, the value which is used
+-- as a minimum when resizing the element.
+-- Note: Setting the size with @{HUDLEMENT:SetSize} allows smaller values.
+-- @treturn tab with width and height value
+function HUDELEMENT:GetMinSize()
+	return table.Copy(self.minsize)
+end
+
+--- This function sets your minsize, the value which is used
+-- as a minimum when resizing the element.
+-- Note: Setting the size with @{HUDLEMENT:SetSize} allows smaller values.
+-- @tparam number width
+-- @tparam number height
+function HUDELEMENT:SetMinSize(w, h)
+	self.minsize.w = w
+	self.minsize.h = h
+end
+
+--- This function returns your size.
+-- @treturn tab with width and height value
+function HUDELEMENT:GetSize()
+	return table.Copy(self.size)
+end
+
+--- This function sets your size.
+-- Note: When passing negative values it will call @{HUDELEMENT:SetPos} to 
+-- shift your element by the value. This results in i.e. in a top growing element
+-- instead of the default bottom growing when setting -h instead of h.
+-- @tparam number width
+-- @tparam number height
+function HUDELEMENT:SetSize(w, h)
+	w = math.Round(w)
+	h = math.Round(h)
+
+	local nw, nh = w < 0, h < 0
+
+	if nw then
+		w = -w
+	end
+
+	if nh then
+		h = -h
+	end
+
+	if nw or nh then
+		if nw then
+			self:SetPos(self:GetBasePos().x - w, self:GetPos().y)
+		end
+
+		if nh then
+			self:SetPos(self:GetPos().x, self:GetBasePos().y - h)
+		end
+	end
+
+	self.size.w = w
+	self.size.h = h
+end
+
+--- This function returns the current parent together with its type
+-- !!! INTERNAL FUNCTION !!!
+-- @treturn string
+-- @treturn bool
+function HUDELEMENT:GetParentRelation()
+	return self.parent, self.parent_is_type
+end
+
+--- This function is used internally and only has the full effect if
+-- called by the hudelements.RegisterChildRelation() function.
+-- !!! INTERNAL FUNCTION !!!
+-- @tparam string
+-- @tparam bool
+function HUDELEMENT:SetParentRelation(parent, is_type)
+	self.parent = parent
+	self.parent_is_type = is_type
+end
+
+--- This function adds a child to your list of children.
+-- Children functions will be called whenever a parent function is called
+-- , e.g., in @{HUDELEMENT:PerformLayout}
+-- @tparam number
+function HUDELEMENT:AddChild(elementid)
+	if not table.HasValue(self.children, elementid) then
+		table.insert(self.children, elementid)
+	end
+end
+
+--- This function gives you information about whether it has a parent or not
+-- @treturn bool
+function HUDELEMENT:IsChild()
+	return self.parent ~= nil
+end
+
+--- This function gives you information about whether it has child elements or not
+-- @treturn bool
+function HUDELEMENT:IsParent()
+	return #self.children > 0
+end
+
+--- This function gives you a copy of all your children
+-- @treturn tab a copy of all your child elements
+function HUDELEMENT:GetChildren()
+	return table.Copy(self.children)
 end
 
 function HUDELEMENT:GetBorderParams()
@@ -182,79 +301,6 @@ function HUDELEMENT:GetBorderParams()
 	else
 		return self:GetPos(), self:GetSize()
 	end
-end
-
-function HUDELEMENT:SetMinSize(w, h)
-	self.minsize.w = w
-	self.minsize.h = h
-end
-
-function HUDELEMENT:GetMinSize()
-	return table.Copy(self.minsize)
-end
-
-function HUDELEMENT:GetSize()
-	return table.Copy(self.size)
-end
-
-function HUDELEMENT:SetSize(w, h)
-	w = math.Round(w)
-	h = math.Round(h)
-
-	local nw, nh = w < 0, h < 0
-
-	if nw then
-		w = -w
-	end
-
-	if nh then
-		h = -h
-	end
-
-	if nw or nh then
-		if nw then
-			self:SetPos(self:GetBasePos().x - w, self:GetPos().y)
-		end
-
-		if nh then
-			self:SetPos(self:GetPos().x, self:GetBasePos().y - h)
-		end
-	end
-
-	self.size.w = w
-	self.size.h = h
-end
-
-function HUDELEMENT:GetParentRelation()
-	return self.parent, self.parent_is_type
-end
-
---- This function is used internally and only has the full effect if
--- called by the hudelements.RegisterChildRelation() function.
--- !!! INTERNAL FUNCTION !!!
--- @tparam string
--- @tparam bool
-function HUDELEMENT:SetParentRelation(parent, is_type)
-	self.parent = parent
-	self.parent_is_type = is_type
-end
-
-function HUDELEMENT:AddChild(elementid)
-	if not table.HasValue(self.children, elementid) then
-		table.insert(self.children, elementid)
-	end
-end
-
-function HUDELEMENT:IsChild()
-	return self.parent ~= nil
-end
-
-function HUDELEMENT:IsParent()
-	return #self.children > 0
-end
-
-function HUDELEMENT:GetChildren()
-	return table.Copy(self.children)
 end
 
 function HUDELEMENT:IsInRange(x, y, range)
