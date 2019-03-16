@@ -7,42 +7,31 @@ HUDELEMENT.togglable = true
 DEFINE_BASECLASS(base)
 
 if CLIENT then
-	local margin_default = 14
-	local element_margin_default = 6
-	local pad_default = 14
-	local h_default = 72
+	local pad = 14
+	local element_margin = 6
 
-	local margin = margin_default
-	local element_margin = element_margin_default
-	local row_count = 2
-
-	-- values that will be overridden by code
-	local parentInstance = nil
-	local curPlayerCount = 0
-	local ply_ind_size = 0
-	local column_count = 0
-
-	local x, y = 0, 0
-	local h = h_default
-	local scale = 1.0
-	local pad = pad_default -- padding
+	local const_defaults = {
+				basepos = {x = 0, y = 0},
+				size = {w = 72, h = 72},
+				minsize = {w = 0, h = 0}
+				}
 
 	function HUDELEMENT:PreInitialize()
 		hudelements.RegisterChildRelation(self.id, "pure_skin_roundinfo", false)
 	end
 
 	function HUDELEMENT:Initialize()
-		parentInstance = hudelements.GetStored(self.parent)
-		scale = 1.0
-		margin = margin_default
-		element_margin = element_margin_default
-		pad = pad_default
+		self.parentInstance = hudelements.GetStored(self.parent)
+		self.pad = pad
+		self.element_margin = element_margin
+		self.scale = 1.0
+		self.basecolor = self:GetHUDBasecolor()
 
 		BaseClass.Initialize(self)
 	end
 
 	-- parameter overwrites
-	function HUDELEMENT:ShouldShow()
+	function HUDELEMENT:ShouldDraw()
 		return GAMEMODE.round_state == ROUND_ACTIVE
 	end
 
@@ -51,31 +40,33 @@ if CLIENT then
 	end
 	-- parameter overwrites end
 
-	function HUDELEMENT:RecalculateBasePos()
-
-	end
+	function HUDELEMENT:GetDefaults()
+		return const_defaults
+ 	end
 
 	function HUDELEMENT:PerformLayout()
-		local parent_pos = parentInstance:GetPos()
-		local parent_size = parentInstance:GetSize()
+		local parent_pos = self.parentInstance:GetPos()
+		local parent_size = self.parentInstance:GetSize()
+		local parent_defaults = self.parentInstance:GetDefaults()
+		local size = parent_size.h
 
-		-- caching
-		h = parent_size.h
-		x, y = parent_pos.x - h, parent_pos.y
-		scale = h / h_default
-		margin = margin_default * scale
-		element_margin = element_margin_default * scale
-		pad = pad_default * scale
+		self.basecolor = self:GetHUDBasecolor()
+		self.scale = size / parent_defaults.size.h
+		self.pad = pad * self.scale
+		self.element_margin = element_margin * self.scale
 
-		self:SetPos(x, y)
-		self:SetSize(h, h)
+		self:SetPos(parent_pos.x - size, parent_pos.y)
+		self:SetSize(size, size)
 
 		BaseClass.PerformLayout(self)
 	end
 
 	function HUDELEMENT:Draw()
 		local client = LocalPlayer()
-		local round_state = GAMEMODE.round_state
+		local pos = self:GetPos()
+		local size = self:GetSize()
+		local x, y = pos.x, pos.y
+		local w, h = size.w, size.h
 
 		-- draw team icon
 		local team = client:GetTeam()
@@ -84,9 +75,9 @@ if CLIENT then
 		if team == TEAM_NONE or not tm or tm.alone then return end
 
 		-- draw bg and shadow
-		self:DrawBg(x, y, h, h, self.basecolor)
+		self:DrawBg(x, y, w, h, self.basecolor)
 
-		local iconSize = h - pad * 2
+		local iconSize = h - self.pad * 2
 		local icon, c
 		if LocalPlayer():Alive() then
 			icon = Material(tm.icon)
@@ -101,18 +92,18 @@ if CLIENT then
 		surface.DrawRect(x, y, h, h)
 
 		surface.SetDrawColor(clr(c))
-		surface.DrawRect(x + pad, y + pad, iconSize, iconSize)
+		surface.DrawRect(x + self.pad, y + self.pad, iconSize, iconSize)
 
 		if icon then
-			util.DrawFilteredTexturedRect(x + pad, y + pad, iconSize, iconSize, icon)
+			util.DrawFilteredTexturedRect(x + self.pad, y + self.pad, iconSize, iconSize, icon)
 		end
 
 		-- draw lines around the element
-		self:DrawLines(x + pad, y + pad, iconSize, iconSize, 255)
+		self:DrawLines(x + self.pad, y + self.pad, iconSize, iconSize, 255)
 
 		-- draw lines around the element
 		if not self:InheritParentBorder() then
-			self:DrawLines(x, y, h, h, self.basecolor.a)
+			self:DrawLines(x, y, w, h, self.basecolor.a)
 		end
 	end
 end

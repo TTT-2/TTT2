@@ -10,18 +10,18 @@ HUDELEMENT.Base = base
 if CLIENT then
 	surface.CreateFont("ItemInfoFont", {font = "Trebuchet24", size = 14, weight = 700})
 
-	local size_default = 48
-	local size = size_default
+	local padding = 10
+
+	local const_defaults = {
+				basepos = {x = 0, y = 0},
+				size = {w = 48, h = 48},
+				minsize = {w = 48, h = 48}
+				}
 
 	function HUDELEMENT:Initialize()
-		size = size_default
 		self.scale = 1.0
-		self.padding = 10
-		
-		self:RecalculateBasePos()
-
-		self:SetMinSize(size, size)
-		self:SetSize(size, -size)
+		self.basecolor = self:GetHUDBasecolor()
+		self.padding = padding
 
 		BaseClass.Initialize(self)
 	end
@@ -32,29 +32,32 @@ if CLIENT then
 	end
 	-- parameter overwrites end
 
-	function HUDELEMENT:RecalculateBasePos()
-		self:SetBasePos(self.padding * self.scale, ScrH() * 0.5)
+	function HUDELEMENT:GetDefaults()
+		const_defaults["basepos"] = { x = self.padding, y = ScrH() * 0.5}
+		return const_defaults
 	end
 
 	function HUDELEMENT:PerformLayout()
-		local basepos = self:GetBasePos()
-
-		size = size_default * self.scale
-
-		self:SetPos(basepos.x, basepos.y)
-		self:SetSize(size, -size)
+		self.scale = self:GetHUDScale()
+		self.basecolor = self:GetHUDBasecolor()
+		self.padding = padding * self.scale
 
 		BaseClass.PerformLayout(self)
+	end
+
+	function HUDELEMENT:ShouldDraw()
+		local client = LocalPlayer()
+
+		return client:Alive() or client:Team() == TEAM_TERROR
 	end
 
 	function HUDELEMENT:Draw()
 		local client = LocalPlayer()
 
-		if not client:Alive() or client:Team() ~= TEAM_TERROR then return end
-
 		local basepos = self:GetBasePos()
 		local itms = client:GetEquipmentItems()
 		local pos = self:GetPos()
+		local size = self.size.w
 
 		-- get number of new icons
 		local num_icons = 0
@@ -65,7 +68,7 @@ if CLIENT then
 			end
 		end
 
-		local curY = basepos.y + 0.5 * (num_icons -1) * (size + self.padding)
+		local curY = basepos.y + 0.5 * (num_icons -1) * (self.size.w + self.padding)
 		
 		-- at first, calculate old items because they don't take care of the new ones
 		for _, itemCls in ipairs(itms) do
@@ -92,8 +95,8 @@ if CLIENT then
 					local info = item:DrawInfo()
 					if info then
 						-- right bottom corner
-						local tx = pos.x + size -5
-						local ty = curY + size -2
+						local tx = pos.x + size - 5
+						local ty = curY +  size - 2
 						local pad = 5 * self.scale
 
 						surface.SetFont("ItemInfoFont")
@@ -108,7 +111,7 @@ if CLIENT then
 
 						self:DrawBg(bx, by, bw, infoH, self.basecolor)
 
-						self:AdvancedText(info, "ItemInfoFont", tx+2, ty+2, COLOR_BLACK, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, false, self.scale)
+						self:AdvancedText(info, "ItemInfoFont", tx + 2, ty + 2, COLOR_BLACK, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, false, self.scale)
 						self:AdvancedText(info, "ItemInfoFont", tx, ty, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, false, self.scale)
 
 						self:DrawLines(bx, by, bw, infoH, self.basecolor.a)
@@ -117,6 +120,6 @@ if CLIENT then
 			end
 		end
 
-		self:SetSize(size, - ( basepos.y - curY ) ) -- adjust the size
+		self:SetSize(size, - math.max(basepos.y - curY, self.minsize.h)  ) -- adjust the size
 	end
 end

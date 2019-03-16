@@ -4,7 +4,7 @@ local math = math
 local IsValid = IsValid
 local TryTranslation = LANG.TryTranslation
 
-local base = "old_ttt_element"
+local base = "base_stacking_element"
 
 DEFINE_BASECLASS(base)
 
@@ -21,19 +21,50 @@ if CLIENT then
 	local round = math.Round
 
 	-- color defines
-	HUDELEMENT.col_active = {
+	col_active = {
 		bg = Color(20, 20, 20, 250),
 		text_empty = Color(200, 20, 20, 255),
 		text = Color(255, 255, 255, 255),
 		shadow = 255
 	}
 
-	HUDELEMENT.col_dark = {
+	col_dark = {
 		bg = Color(20, 20, 20, 200),
 		text_empty = Color(200, 20, 20, 100),
 		text = Color(255, 255, 255, 100),
 		shadow = 100
 	}
+
+	local const_defaults = {
+				basepos = {x = 0, y = 0},
+				size = {w = width, h = -height},
+				minsize = {w = width, h = height}
+				}
+
+	function HUDELEMENT:Initialize()
+		WSWITCH:UpdateWeaponCache()
+
+		BaseClass.Initialize(self)
+
+		self.defaults.resizeableY = false
+		self.defaults.minHeight = height
+	end
+
+	function HUDELEMENT:GetDefaults()
+		const_defaults["basepos"] = {x = ScrW() - (width + self.margin * 2), y = ScrH() - self.margin}
+		
+		return const_defaults
+	end
+
+	function HUDELEMENT:PerformLayout()
+		local basepos = self:GetBasePos()
+
+		self:SetPos(basepos.x, basepos.y)
+		self:SetSize(width, -height)
+
+		BaseClass.PerformLayout(self)
+	end
+
 
 	function HUDELEMENT:DrawBarBg(x, y, w, h, col)
 		local rx = round(x - 4)
@@ -45,7 +76,7 @@ if CLIENT then
 		local bh = b * 0.5
 
 		local ply = LocalPlayer()
-		local c = (col == self.col_active and ply:GetRoleColor() or ply:GetRoleDkColor()) or (col == self.col_active and INNOCENT.color or INNOCENT.dkcolor)
+		local c = (col == col_active and ply:GetRoleColor() or ply:GetRoleDkColor()) or (col == col_active and INNOCENT.color or INNOCENT.dkcolor)
 
 		-- Draw the colour tip
 		surface.SetTexture(self.barcorner)
@@ -117,61 +148,33 @@ if CLIENT then
 		return true
 	end
 
-	function HUDELEMENT:Initialize()
-		WSWITCH:UpdateWeaponCache()
-
-		self:SetBasePos(ScrW() - (width + self.margin * 2), ScrH() - self.margin)
-		self:SetSize(width, -height)
-
-		BaseClass.Initialize(self)
-
-		self.defaults.resizeableY = false
-		self.defaults.minHeight = height
-	end
-
-	function HUDELEMENT:PerformLayout()
-		local basepos = self:GetBasePos()
-
-		self:SetPos(basepos.x, basepos.y)
-		self:SetSize(width, -height)
-
-		BaseClass.PerformLayout(self)
+	function HUDELEMENT:ShouldDraw()
+		return HUDEditor.IsEditing or WSWITCH.Show
 	end
 
 	function HUDELEMENT:Draw()
-		if not WSWITCH.Show and not HUDManager.IsEditing then return end
-
-		local client = LocalPlayer()
+		local weaponList = {}
 		local weps = WSWITCH.WeaponCache
-		local count = #weps
-		local tmp = height + self.margin
-		local h = count * tmp
-		local basepos = self:GetBasePos()
-
-		self:SetPos(basepos.x, basepos.y)
-		self:SetSize(width, -h)
-
-		local pos = self:GetPos()
-		local x_elem = pos.x
-		local y_elem = pos.y
-		local col = self.col_dark
-
-		for k, wep in ipairs(weps) do
-			if WSWITCH.Selected == k then
-				col = self.col_active
-			else
-				col = self.col_dark
-			end
-
-			self:DrawBarBg(x_elem, y_elem, width, height, col)
-
-			if not self:DrawWeapon(x_elem, y_elem, col, wep) then
-				WSWITCH:UpdateWeaponCache()
-
-				return
-			end
-
-			y_elem = y_elem + height + self.margin
+		for i=1,table.Count(weps) do
+			table.insert(weaponList, {h = height})
 		end
+		self:SetElements(weaponList)
+		self:SetElementMargin(self.margin)
+
+		BaseClass.Draw(self)
+	end
+
+	function HUDELEMENT:DrawElement(i, x, y, w, h)
+		local col = col_dark
+		if WSWITCH.Selected == i then
+			col = col_active
+		end
+		self:DrawBarBg(x, y, w, h, col)
+
+		if not self:DrawWeapon(x, y, col, WSWITCH.WeaponCache[i]) then
+			WSWITCH:UpdateWeaponCache()
+			return
+		end
+
 	end
 end

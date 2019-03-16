@@ -10,22 +10,26 @@ local zero_tbl_size = {
 	h = 0
 }
 
-local min_size_tbl = {
+local zero_tbl_min_size = {
 	w = 0,
 	h = 0
 }
 
+-- Basic position / dimension variables
 HUDELEMENT.basepos = table.Copy(zero_tbl_pos)
 HUDELEMENT.pos = table.Copy(zero_tbl_pos)
 HUDELEMENT.size = table.Copy(zero_tbl_size)
-HUDELEMENT.minsize = table.Copy(min_size_tbl)
-HUDELEMENT.scale = 1.0
+HUDELEMENT.minsize = table.Copy(zero_tbl_min_size)
+
+-- Parent / Child variables ----------------------------------------------------
+-- These usually should not be set manually! Use the Getter / Setters, and for
+-- adding a child use the hudelements.RegisterChildRelation(childid, parentid, parent_is_type)
+-- which will also take care of adding a child to an element type instead of a specific element
+HUDELEMENT.parent = nil
+HUDELEMENT.parent_is_type = nil
+HUDELEMENT.children = {}
 
 HUDELEMENT.defaults = {
-	basepos = table.Copy(HUDELEMENT.basepos),
-	size = table.Copy(HUDELEMENT.size),
-	minsize = table.Copy(HUDELEMENT.minsize),
-
 	-- resize area parameters
 	click_area = 20,
 	click_padding = 0
@@ -37,34 +41,73 @@ HUDELEMENT.edit_live_data = {
 	old_col = nil
 }
 
-HUDELEMENT.parent = nil
-HUDELEMENT.parent_is_type = nil
-HUDELEMENT.children = {}
+--- This function will try to call the function given with funcName on
+-- all children of this hud element, while also passing extra parameters
+-- to this the function.
+-- @tparam string
+-- @param[opt] parameter for the function to call
+function HUDELEMENT:ApplyToChildren(funcName, ...)
+	if not funcName then return end
 
-function HUDELEMENT:PreInitialize()
-	-- Use this to set child<->parent relations etc, this is called before Initialized and other objects can still be uninitialized!
-end
-
-function HUDELEMENT:Initialize()
-	-- use this to set default values and dont forget to call BaseClass.Initialze(self)!!
-	self:SetDefaults()
-
-	for _, elem in ipairs(self.children) do
+	for _, elem in ipairs(self:GetChildren()) do
 		local elemtbl = hudelements.GetStored(elem)
 		if elemtbl then
-			elemtbl:Initialize()
+			if isfunction(elemtbl[funcName]) then
+				elemtbl[funcName](elemtbl, ...)
+			else
+				MsgN("ERROR: HUDElement " .. (self.id or "?") .. " has child named " .. elem .. " with unknown function " .. funcName .. " \n")
+			end
 		else
-			Msg("Error: HUDElement " .. (self.id or "?") .. " has unkown child element named " .. elem .. " when calling Initialize \n")
+			Msg("ERROR: HUDElement " .. (self.id or "?") .. " has unknown child element named " .. elem .. " when applying a function to all children: " .. funcName .. " \n")
 		end
 	end
 end
 
-function HUDELEMENT:Draw()
-	-- Override this function to draw your element
+--- This function will be called after all hud elements have been loaded
+-- and are registered. But be aware that the elements are still "raw", so
+-- they did not execute any code or set any of their properties correct.
+-- Use this function for example to register your child -> parent
+-- relation, by calling
+-- @{hudelements.RegisterChildRelation(childid, parentid, parent_is_type)}
+function HUDELEMENT:PreInitialize()
+	-- Use this to set child<->parent relations etc, this is called before Initialized and other objects can still be uninitialized!
 end
 
--- parameter overwrites
-function HUDELEMENT:ShouldShow()
+
+--- This function will be called each time the HUD is loaded eg. when
+-- switching to this HUD in the HUDManager, so expect this function to
+-- be called multiple times and respect that within your code. Due to
+-- this, the function should be used to reset your member variables and
+-- temporary variables. Then you can set them to an useful inital value.
+
+-- Remember that previously loaded values will be applied later and
+-- dont forget to call @{BaseClass.Initialize(self)}, which will then call
+-- @{HUDELEMENT:Initialize()} on all children.
+function HUDELEMENT:Initialize()
+
+	local defaults = self:GetDefaults()
+	self:SetSize(defaults.size.w, defaults.size.h)
+	self:SetMinSize(defaults.minsize.w, defaults.minsize.h)
+
+	defaults = self:GetDefaults()
+	self:SetBasePos(defaults.basepos.x, defaults.basepos.y)
+
+	-- use this to set default values and dont forget to call BaseClass.Initialze(self)!!
+	self:ApplyToChildren("Initialize")
+end
+
+
+--- This function is called when an element should draw its content.
+-- Please use this function only to draw your element and dont calculate
+-- any values if not explicitly needed.
+function HUDELEMENT:Draw()
+	-- override this
+end
+
+--- This function is called to decide whether or not an element should be drawn.
+-- Override it to let your element be drawn only in specific situations.
+-- @treturn bool
+function HUDELEMENT:ShouldDraw()
 	return true
 end
 
@@ -81,102 +124,80 @@ function HUDELEMENT:InheritParentBorder()
 end
 -- parameter overwrites end
 
---[[------------------------------
-	PerformLayout()
-	Desc: This function is called after all Initialize() functions.
---]]-------------------------------
+--- This function is called after all @{HUDELEMENT:Initialize()} functions and
+-- whenever the layout was changed, i.e., size, position.
 function HUDELEMENT:PerformLayout()
-	for _, elem in ipairs(self.children) do
-		local elemtbl = hudelements.GetStored(elem)
-		if elemtbl then
-			elemtbl:PerformLayout()
-		else
-			Msg("Error: HUDElement " .. (self.id or "?") .. " has unkown child element named " .. elem .. " when calling PerformLayout \n")
-		end
-	end
+	self:ApplyToChildren("PerformLayout")
 end
 
-function HUDELEMENT:ResolutionChanged()
-	self:RecalculateBasePos()
-	self:SetDefaults()
-	for _, elem in ipairs(self.children) do
-		local elemtbl = hudelements.GetStored(elem)
-		if elemtbl then
-			elemtbl:ResolutionChanged()
-		else
-			Msg("Error: HUDElement " .. (self.id or "?") .. " has unkown child element named " .. elem .. " when calling ResolutionChanged \n")
-		end
-	end
-end
-
-function HUDELEMENT:RecalculateBasePos()
-	-- Use this to intialize/reinitialize your basePos (take ScrH()/ScrW() as reference to support different resolutions)
-end
-
+--- This function returns your basepos, the value which is used
+-- to move the element.
+-- @treturn tab with x and y value
 function HUDELEMENT:GetBasePos()
 	return table.Copy(self.basepos)
 end
 
+--- This function sets your basepos, the value which is used
+-- to move the element. It automatically updates the position as 
+-- well with @{HUDLEMENT:SetPos}
+-- @tparam number
+-- @tparam number
 function HUDELEMENT:SetBasePos(x, y)
+	local pos_difference_x = self.pos.x - self.basepos.x
+	local pos_difference_y = self.pos.y - self.basepos.y
+
 	self.basepos.x = x
 	self.basepos.y = y
 
-	self:SetPos(x, y)
+	self:SetPos(x + pos_difference_x, y + pos_difference_y)
 end
 
+--- This function returns your pos, the value which is used
+-- internally to define the upper left corner of the element
+-- @treturn tab with x and y value
 function HUDELEMENT:GetPos()
 	return table.Copy(self.pos)
 end
 
+--- This function sets your pos, the value which is used
+-- internally to define the upper left corner of the element
+-- @tparam number
+-- @tparam number
 function HUDELEMENT:SetPos(x, y)
 	self.pos.x = x
 	self.pos.y = y
 end
 
-function HUDELEMENT:GetBorderParams()
-	if self:IsParent() then
-		local pos = self:GetPos()
-		local size = self:GetSize()
-		local children = self:GetChildren()
-
-		local x_min, y_min, x_max, y_max = pos.x, pos.y, pos.x + size.w, pos.y + size.h
-
-		-- iterate over children
-		for _, elem_str in ipairs(children) do
-			local elem = hudelements.GetStored(elem_str)
-
-			local hud = huds.GetStored(HUDManager.GetHUD())
-
-			if elem and elem:InheritParentBorder() and hud:ShouldShow(elem.type) and elem:ShouldShow() then
-				local c_pos = elem:GetPos()
-				local c_size = elem:GetSize()
-
-				x_min = math.min(x_min, c_pos.x)
-				y_min = math.min(y_min, c_pos.y)
-				x_max = math.max(x_max, c_pos.x + c_size.w)
-				y_max = math.max(y_max, c_pos.y + c_size.h)
-			end
-		end
-
-		return {x = x_min, y = y_min}, {w = x_max-x_min, h = y_max-y_min}
-	else
-		return self:GetPos(), self:GetSize()
-	end
+--- This function returns your minsize, the value which is used
+-- as a minimum when resizing the element.
+-- Note: Setting the size with @{HUDLEMENT:SetSize} allows smaller values.
+-- @treturn tab with width and height value
+function HUDELEMENT:GetMinSize()
+	return table.Copy(self.minsize)
 end
 
+--- This function sets your minsize, the value which is used
+-- as a minimum when resizing the element.
+-- Note: Setting the size with @{HUDLEMENT:SetSize} allows smaller values.
+-- @tparam number width
+-- @tparam number height
 function HUDELEMENT:SetMinSize(w, h)
 	self.minsize.w = w
 	self.minsize.h = h
 end
 
-function HUDELEMENT:GetMinSize()
-	return table.Copy(self.minsize)
-end
-
+--- This function returns your size.
+-- @treturn tab with width and height value
 function HUDELEMENT:GetSize()
 	return table.Copy(self.size)
 end
 
+--- This function sets your size.
+-- Note: When passing negative values it will call @{HUDELEMENT:SetPos} to 
+-- shift your element by the value. This results in i.e. in a top growing element
+-- instead of the default bottom growing when setting -h instead of h.
+-- @tparam number width
+-- @tparam number height
 function HUDELEMENT:SetSize(w, h)
 	w = math.Round(w)
 	h = math.Round(h)
@@ -189,11 +210,6 @@ function HUDELEMENT:SetSize(w, h)
 
 	if nh then
 		h = -h
-	end
-
-	if self.minsize then
-		w = math.max(self.minsize.w, w)
-		h = math.max(self.minsize.h, h)
 	end
 
 	if nw or nh then
@@ -210,37 +226,81 @@ function HUDELEMENT:SetSize(w, h)
 	self.size.h = h
 end
 
-function HUDELEMENT:GetParent()
+--- This function returns the current parent together with its type
+-- !!! INTERNAL FUNCTION !!!
+-- @treturn string
+-- @treturn bool
+function HUDELEMENT:GetParentRelation()
 	return self.parent, self.parent_is_type
 end
 
---[[------------------------------
-	SetParent()
-	Desc: This function is used internally and only has the full effect if called by the
-		  hudelements.RegisterChildRelation() function.
-		  INTERNAL FUNCTION!!!
---]]-------------------------------
-function HUDELEMENT:SetParent(parent, is_type)
+--- This function is used internally and only has the full effect if
+-- called by the hudelements.RegisterChildRelation() function.
+-- !!! INTERNAL FUNCTION !!!
+-- @tparam string
+-- @tparam bool
+function HUDELEMENT:SetParentRelation(parent, is_type)
 	self.parent = parent
 	self.parent_is_type = is_type
 end
 
+--- This function adds a child to your list of children.
+-- Children functions will be called whenever a parent function is called
+-- , e.g., in @{HUDELEMENT:PerformLayout}
+-- @tparam number
 function HUDELEMENT:AddChild(elementid)
 	if not table.HasValue(self.children, elementid) then
 		table.insert(self.children, elementid)
 	end
 end
 
+--- This function gives you information about whether it has a parent or not
+-- @treturn bool
 function HUDELEMENT:IsChild()
 	return self.parent ~= nil
 end
 
+--- This function gives you information about whether it has child elements or not
+-- @treturn bool
 function HUDELEMENT:IsParent()
 	return #self.children > 0
 end
 
+--- This function gives you a copy of all your children
+-- @treturn tab a copy of all your child elements
 function HUDELEMENT:GetChildren()
 	return table.Copy(self.children)
+end
+
+function HUDELEMENT:GetBorderParams()
+	if self:IsParent() then
+		local pos = self:GetPos()
+		local size = self:GetSize()
+		local children = self:GetChildren()
+
+		local x_min, y_min, x_max, y_max = pos.x, pos.y, pos.x + size.w, pos.y + size.h
+
+		-- iterate over children
+		for _, elem_str in ipairs(children) do
+			local elem = hudelements.GetStored(elem_str)
+
+			local hud = huds.GetStored(HUDManager.GetHUD())
+
+			if elem and elem:InheritParentBorder() and hud:ShouldShow(elem.type) and elem:ShouldDraw() then
+				local c_pos = elem:GetPos()
+				local c_size = elem:GetSize()
+
+				x_min = math.min(x_min, c_pos.x)
+				y_min = math.min(y_min, c_pos.y)
+				x_max = math.max(x_max, c_pos.x + c_size.w)
+				y_max = math.max(y_max, c_pos.y + c_size.h)
+			end
+		end
+
+		return {x = x_min, y = y_min}, {w = x_max-x_min, h = y_max-y_min}
+	else
+		return self:GetPos(), self:GetSize()
+	end
 end
 
 function HUDELEMENT:IsInRange(x, y, range)
@@ -439,16 +499,20 @@ function HUDELEMENT:DrawSize()
 	draw.DrawText(self.id, "DermaDefault", x + w * 0.5, y + h * 0.5 - 7, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 end
 
-function HUDELEMENT:SetDefaults()
-	self.defaults.basepos = table.Copy(self.basepos)
-	self.defaults.size = table.Copy(self.size)
-	self.defaults.minsize = table.Copy(self.minsize)
+--- This function is called when an element wants to now its original position.
+-- This is the case at @{HUDELEMENT:Reset} and @{HUDELEMENT:Initialize}.
+-- @treturn tab with basepos, size and minsize fields
+function HUDELEMENT:GetDefaults()
+
 end
 
+--- This function uses @{HUDELEMENT:GetDefaults} to reset an element to its
+--  original position.
 function HUDELEMENT:Reset()
-	local defaultPos = self.defaults.basepos
-	local defaultSize = self.defaults.size
-	local defaultMinSize = self.defaults.minsize
+	local defaults = self:GetDefaults()
+	local defaultPos = defaults.basepos
+	local defaultSize = defaults.size
+	local defaultMinSize = defaults.minsize
 
 	if defaultPos then
 		self:SetBasePos(defaultPos.x, defaultPos.y)
@@ -462,16 +526,7 @@ function HUDELEMENT:Reset()
 		self:SetSize(defaultSize.w, defaultSize.h)
 	end
 
-	self.scale = 1.0
-
-	for _, elem in ipairs(self.children) do
-		local elemtbl = hudelements.GetStored(elem)
-		if elemtbl then
-			elemtbl:Reset()
-		else
-			Msg("Error: HUDElement " .. (self.id or "?") .. " has unkown child element named " .. elem .. " when calling Reset \n")
-		end
-	end
+	self:ApplyToChildren("Reset")
 
 	self:PerformLayout()
 end
@@ -481,27 +536,47 @@ local savingKeys = {
 	size = {typ = "size"}
 }
 
+--- Getter for saving keys
+-- @treturn tab with savable keys
 function HUDELEMENT:GetSavingKeys()
 	return table.Copy(savingKeys)
 end
 
+--- Saves the current savingkey values (position, size)
 function HUDELEMENT:SaveData()
 	SQL.Save("ttt2_hudelements", self.id, self, self:GetSavingKeys())
 end
 
+--- Loads the saved keys and applies them to the element
 function HUDELEMENT:LoadData()
 	local skeys = self:GetSavingKeys()
 
+	local loadedData = {}
 	-- load and initialize the elements data from database
 	if SQL.CreateSqlTable("ttt2_hudelements", skeys) then
-		local loaded = SQL.Load("ttt2_hudelements", self.id, self, skeys)
+		local loaded = SQL.Load("ttt2_hudelements", self.id, loadedData, skeys)
 
 		if not loaded then
 			SQL.Init("ttt2_hudelements", self.id, self, skeys)
 		end
 	end
 
-	-- set position to loaded position
-	local basepos = self:GetBasePos()
-	self:SetPos(basepos.x, basepos.y)
+	if loadedData.pos then
+		self:SetPos(loadedData.pos.x, loadedData.pos.y)
+		loadedData.pos = nil
+	end
+
+	if loadedData.basepos then
+		self:SetBasePos(loadedData.basepos.x, loadedData.basepos.y)
+		loadedData.basepos = nil
+	end
+
+	if loadedData.size then
+		self:SetSize(loadedData.size.w, loadedData.size.h)
+		loadedData.size = nil
+	end
+
+	for k, v in pairs(loadedData) do
+		self[k] = v or self[k]
+	end
 end

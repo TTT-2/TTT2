@@ -50,7 +50,7 @@ end
 
 --[[---------------------------------------------------------
 	Name: Register( table, string )
-	Desc: Used to register your HUD Element with the engine
+	Desc: Used to register your HUD with the engine
 -----------------------------------------------------------]]
 function Register(t, name)
 	name = string.lower(name)
@@ -59,6 +59,7 @@ function Register(t, name)
 
 	t.ClassName = name
 	t.id = name
+	t.isAbstract = t.isAbstract or false
 
 	HUDList[name] = t
 
@@ -123,8 +124,8 @@ function OnLoaded()
 end
 
 --[[---------------------------------------------------------
-	Name: Get( string, retTbl )
-	Desc: Get a HUD element by name.
+	Name: Get( string name, retTbl )
+	Desc: Get a HUD by name.
 -----------------------------------------------------------]]
 function Get(name, retTbl)
 	local Stored = GetStored(name)
@@ -159,18 +160,36 @@ function Get(name, retTbl)
 end
 
 --[[---------------------------------------------------------
-	Name: GetStored( string )
-	Desc: Gets the REAL HUD elements table, not a copy
+	Name: GetStored( string name )
+	Desc: Gets the REAL HUD table, not a copy
 -----------------------------------------------------------]]
 function GetStored(name)
 	return HUDList[name]
 end
 
 --[[---------------------------------------------------------
-	Name: GetList( string )
-	Desc: Get a list (copy) of all the registered HUD elements
+	Name: GetList()
+	Desc: Get a list (copy) of all the registered HUDs, that
+		  can be displayed (no abstract HUDs).
 -----------------------------------------------------------]]
 function GetList()
+	local result = {}
+
+	for _, v in pairs(HUDList) do
+		if not v.isAbstract then
+			result[#result + 1] = v
+		end
+	end
+
+	return result
+end
+
+--[[---------------------------------------------------------
+	Name: GetRealList()
+	Desc: Get a list (copy) of all the registered HUDs
+		  including abstract HUDs.
+-----------------------------------------------------------]]
+function GetRealList()
 	local result = {}
 
 	for _, v in pairs(HUDList) do

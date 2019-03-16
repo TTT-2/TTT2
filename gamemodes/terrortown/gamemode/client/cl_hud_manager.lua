@@ -1,8 +1,30 @@
 ttt_include("vgui__cl_hudswitcher")
 
-local current_hud_cvar = CreateClientConVar("ttt2_current_hud", HUDManager.defaultHUD or "pure_skin", true, true)
+local current_hud_cvar = CreateClientConVar("ttt2_current_hud", HUDManager.GetModelValue("defaultHUD") or "pure_skin", true, true)
+local current_hud_table = nil
 
-local currentHUD
+net.Receive("TTT2UpdateHUDManagerStringAttribute", function()
+	local key = net.ReadString()
+	local value = net.ReadString()
+	if value == "NULL" then
+		value = nil
+	end
+	HUDManager.SetModelValue(key, value)
+end)
+
+net.Receive("TTT2UpdateHUDManagerRestrictedHUDsAttribute", function()
+	local len = net.ReadUInt(16)
+	if len == 0 then
+		HUDManager.SetModelValue("restrictedHUDs", {})
+	else
+		local tab = {}
+		for i = 1, len do
+			table.insert(tab, net.ReadString())
+		end
+
+		HUDManager.SetModelValue("restrictedHUDs", tab)
+	end
+end)
 
 function HUDManager.ShowHUDSwitcher()
 	local client = LocalPlayer()
@@ -39,27 +61,8 @@ function HUDManager.HideHUDSwitcher()
 end
 
 function HUDManager.DrawHUD()
-	local hud = huds.GetStored(HUDManager.GetHUD())
-
-	if not hud then return end
-
-	for _, elemName in ipairs(hud:GetElements()) do
-		local elem = hudelements.GetStored(elemName)
-		if not elem then
-			MsgN("Error: Hudelement with name " .. elemName .. " not found!")
-			return
-		end
-
-		if elem.initialized and elem.type and hud:ShouldShow(elem.type) and hook.Call("HUDShouldDraw", GAMEMODE, elem.type) then
-			if elem:ShouldShow() then
-				elem:Draw()
-			end
-
-			if HUDEditor then
-				HUDEditor.DrawElem(elem)
-			end
-		end
-	end
+	if not current_hud_table then return end
+	current_hud_table:Draw()
 end
 
 -- Paints player status HUD element in the bottom left
@@ -74,7 +77,7 @@ function GM:HUDPaint()
 	if client.oldScrW and client.oldScrW ~= scrW and client.oldScrH and client.oldScrH ~= scrH then
 		local hud = huds.GetStored(HUDManager.GetHUD())
 		if hud then
-			hud:ResolutionChanged()
+			hud:Reset()
 		end
 
 		changed = true
@@ -136,36 +139,37 @@ local function UpdateHUD(name)
 
 	HUDEditor.StopEditHUD()
 
-	RunConsoleCommand(current_hud_cvar:GetName(), name)
+	-- save the old HUDs values
+	if current_hud_table then current_hud_table:SaveData() end
 
-	currentHUD = name
+	current_hud_cvar:SetString(name)
+	current_hud_table = hudEl
 
 	-- Initialize elements
 	hudEl:Initialize()
 
 	hudEl:LoadData()
 
-	hudEl:Loaded()
+	-- call all listeners
+	hook.Run("TTT2HUDUpdated", name)
 end
 
 function HUDManager.GetHUD()
-	if not currentHUD then
-		return current_hud_cvar:GetString()
-	end
-
-	if not huds.GetStored(currentHUD) then
-		return HUDManager.defaultHUD
-	end
-
-	return currentHUD
+	return current_hud_cvar:GetString()
 end
 
 function HUDManager.SetHUD(name)
-	local curHUD = HUDManager.GetHUD()
+	local currentHUD = HUDManager.GetHUD()
 
 	net.Start("TTT2RequestHUD")
-	net.WriteString(name or curHUD)
-	net.WriteString(curHUD)
+	net.WriteString(name or currentHUD)
+	net.WriteString(currentHUD)
+	net.SendToServer()
+end
+
+function HUDManager.RequestFullStateUpdate()
+	MsgN("[TTT2][HUDManager] Requesting a full state update...")
+	net.Start("TTT2RequestHUDManagerFullStateUpdate")
 	net.SendToServer()
 end
 
@@ -173,3 +177,5 @@ end
 net.Receive("TTT2ReceiveHUD", function()
 	UpdateHUD(net.ReadString())
 end)
+
+hook.Add("TTTInitPostEntity", "RequestHUDManagerStateUpdate", HUDManager.RequestFullStateUpdate)

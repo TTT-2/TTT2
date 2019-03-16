@@ -1,129 +1,53 @@
-if not HUDManager then
-	require("hudelements")
-	require("huds")
+HUDManager = {}
 
-	HUDManager = {}
-	HUDManager.defaultHUD = "pure_skin"
+local updateListeners = {}
+local updateAnyListeners = {}
 
-	-----------------------------------------
-	-- load HUD Elements
-	-----------------------------------------
+local model = {
+	restrictedHUDs = {},
+	forcedHUD = nil,
+	defaultHUD = "pure_skin"
+}
 
-	local pathBase = "terrortown/gamemode/shared/hud_elements/"
+function HUDManager.GetModelValue(key)
+	if not key then return end
+	local val = model[key]
+	if istable(model[key]) then
+		val = table.Copy(model[key])
+	end
+	return val
+end
 
-	local _, pathFolders = file.Find(pathBase .. "*", "LUA")
+function HUDManager.SetModelValue(key, value)
+	if not key then return end
+	local oldvalue = model[key]
+	model[key] = value
 
-	for _, typ in ipairs(pathFolders) do
-		local shortPath = pathBase .. typ .. "/"
-		local pathFiles = file.Find(shortPath .. "*.lua", "LUA")
-
-		-- include HUD Elements files
-		for _, fl in ipairs(pathFiles) do
-			HUDELEMENT = {}
-
-			if SERVER then
-				AddCSLuaFile(shortPath .. fl)
-			end
-
-			include(shortPath .. fl)
-
-			local cls = string.sub(fl, 0, #fl - 4)
-
-			if typ ~= "base_elements" then
-				HUDELEMENT.type = typ
-			end
-
-			hudelements.Register(HUDELEMENT, cls)
-
-			HUDELEMENT = nil
+	if oldvalue ~= value and updateListeners[key] then -- equal check does not work as expected for tables (always true)!
+		-- call all listeners, that the value has changed
+		for _, func in ipairs(updateAnyListeners) do
+			func()
 		end
-
-		-- include HUD Elements folders
-		local _, subFolders = file.Find(shortPath .. "*", "LUA")
-
-		for _, folder in ipairs(subFolders) do
-			HUDELEMENT = {}
-
-			local subFiles = file.Find(shortPath .. folder .. "/*.lua", "LUA")
-
-			for _, fl in ipairs(subFiles) do
-				local filename = shortPath .. folder .. "/" .. fl
-
-				if SERVER then
-					AddCSLuaFile(filename)
-				end
-
-				if CLIENT and fl == "cl_init.lua" then
-					include(filename)
-				elseif SERVER and fl == "init.lua" then
-					include(filename)
-				elseif fl == "shared.lua" then
-					include(filename)
-				end
-			end
-
-			if typ ~= "base_elements" then
-				HUDELEMENT.type = typ
-			end
-
-			hudelements.Register(HUDELEMENT, folder)
-
-			HUDELEMENT = nil
+		for _, func in ipairs(updateListeners[key]) do
+			func(value, oldvalue)
 		end
 	end
+end
 
-	-----------------------------------------
-	-- load HUDs
-	-----------------------------------------
+function HUDManager.OnUpdateAnyAttribute(func)
+	if not isfunction(func) then return end
 
-	pathBase = "terrortown/gamemode/shared/huds/"
-
-	local pathFiles = file.Find(pathBase .. "*.lua", "LUA")
-
-	-- include HUD Elements files
-	for _, fl in ipairs(pathFiles) do
-		HUD = {}
-
-		if SERVER then
-			AddCSLuaFile(pathBase .. fl)
-		end
-
-		include(pathBase .. fl)
-
-		local cls = string.sub(fl, 0, #fl - 4)
-
-		huds.Register(HUD, cls)
-
-		HUD = nil
+	if not table.HasValue(updateAnyListeners, func) then
+		table.insert(updateAnyListeners, func)
 	end
+end
 
-	-- include HUD Elements folders
-	local _, subFolders = file.Find(pathBase .. "*", "LUA")
+function HUDManager.OnUpdateAttribute(key, func)
+	if not key or not isfunction(func) then return end
 
-	for _, folder in ipairs(subFolders) do
-		HUD = {}
-
-		local subFiles = file.Find(pathBase .. folder .. "/*.lua", "LUA")
-
-		for _, fl in ipairs(subFiles) do
-			local filename = pathBase .. folder .. "/" .. fl
-
-			if SERVER then
-				AddCSLuaFile(filename)
-			end
-
-			if CLIENT and fl == "cl_init.lua" then
-				include(filename)
-			elseif SERVER and fl == "init.lua" then
-				include(filename)
-			elseif fl == "shared.lua" then
-				include(filename)
-			end
-		end
-
-		huds.Register(HUD, folder)
-
-		HUD = nil
+	updateListeners[key] = updateListeners[key] or {}
+	if not table.HasValue(updateListeners[key], func) then
+		table.insert(updateListeners[key], func)
 	end
 end
 

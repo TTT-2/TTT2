@@ -17,15 +17,22 @@ if CLIENT then
 	local x = 0
 	local y = 0
 
-	function HUDELEMENT:Initialize()
-		self:RecalculateBasePos()
-		self:SetSize(self.maxwidth, self.maxheight)
+	local const_defaults = {
+				basepos = {x = 0, y = 0},
+				size = {w = HUDELEMENT.maxwidth, h = HUDELEMENT.maxheight},
+				minsize = {w = HUDELEMENT.maxwidth, h = HUDELEMENT.maxheight}
+				}
 
+	function HUDELEMENT:Initialize()
 		BaseClass.Initialize(self)
 	end
 
-	function HUDELEMENT:RecalculateBasePos()
-		self:SetBasePos(self.margin, ScrH() - (self.margin + self.maxheight))
+	function HUDELEMENT:GetDefaults()
+		const_defaults["size"] = {w = self.maxwidth, h = self.maxheight}
+		const_defaults["minsize"] = {w = self.maxwidth, h = self.maxheight}
+		const_defaults["basepos"] = {x = self.margin, y = ScrH() - (self.margin + self.maxheight)}
+
+		return const_defaults
 	end
 
 	function HUDELEMENT:PerformLayout()

@@ -27,7 +27,7 @@ end
 
 local function SaveBinding(name, button)
 	if DBCreateTable() then
-		local result = sql.Query("INSERT INTO " .. tablename .. " VALUES('" .. LocalPlayer():SteamID64() .. "', '" .. name .. "', '" .. button .. "')")
+		local result = sql.Query("INSERT INTO " .. tablename .. " VALUES('" .. LocalPlayer():SteamID64() .. "', " .. sql.SQLStr(name) .. ", " .. sql.SQLStr(button) .. ")")
 		if result ~= false then
 			print("[TTT2][BIND] Saved binding...")
 		else
@@ -40,7 +40,7 @@ local function DBRemoveBinding(name, button)
 	print("[TTT2][BIND] Deleting key from DB")
 
 	if DBCreateTable() then
-		local result = sql.Query("DELETE FROM " .. tablename .. " WHERE guid = '" .. LocalPlayer():SteamID64() .. "' AND name = '" .. name .. "' AND button = '" .. button .. "'")
+		local result = sql.Query("DELETE FROM " .. tablename .. " WHERE guid = '" .. LocalPlayer():SteamID64() .. "' AND name = " .. sql.SQLStr(name) .. " AND button = " .. sql.SQLStr(button) )
 		if result ~= false then
 			print("[TTT2][BIND] Removed binding...")
 		else

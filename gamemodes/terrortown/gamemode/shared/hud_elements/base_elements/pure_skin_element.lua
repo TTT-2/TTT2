@@ -1,11 +1,10 @@
-local base = "hud_element_base"
+local base = "dynamic_hud_element"
 
 DEFINE_BASECLASS(base)
 
 HUDELEMENT.Base = base
 
 if CLIENT then
-	local defaultColor = Color(49, 71, 94)
 	local shadowColor = Color(0, 0, 0, 200)
 
 	function HUDELEMENT:DrawBg(x, y, w, h, c)
@@ -84,12 +83,4 @@ if CLIENT then
 		[ROUND_ACTIVE] = "round_active",
 		[ROUND_POST] = "round_post"
 	}
-
-	HUDELEMENT.basecolor = defaultColor
-
-	function HUDELEMENT:Reset()
-		self.basecolor = defaultColor
-
-		BaseClass.Reset(self)
-	end
 end

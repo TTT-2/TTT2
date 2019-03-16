@@ -1,37 +1,56 @@
-local draw = draw
 local surface = surface
 local IsValid = IsValid
 local TryTranslation = LANG.TryTranslation
 
-local base = "pure_skin_element"
+local base = "base_stacking_element"
 
 DEFINE_BASECLASS(base)
 
 HUDELEMENT.Base = base
 
 if CLIENT then
-	local width_default, height_default = 365, 28
-	local margin_default = 5
-	local lpw_default = 22
+	-- color defines
+	local col_active = {
+		text_empty = Color(200, 20, 20, 255),
+		text = Color(255, 255, 255, 255),
+		shadow = 255
+	}
 
-	local width, height = width_default, height_default
-	local min_w, min_h = 240, 28
+	local col_dark = {
+		text_empty = Color(200, 20, 20, 100),
+		text = Color(255, 255, 255, 100),
+		shadow = 100
+	}
 
-	HUDELEMENT.margin = margin_default
-	HUDELEMENT.lpw = lpw_default -- left panel width
+	local element_height = 28
+	local margin = 5
+	local lpw = 22 -- left panel width
+
+	local const_defaults = {
+				basepos = {x = 0, y = 0},
+				size = {w = 365, h = 28},
+				minsize = {w = 240, h = 28}
+				}
+
+	function HUDELEMENT:PreInitialize()
+		self.drawer = hudelements.GetStored("pure_skin_element")
+	end
 
 	function HUDELEMENT:Initialize()
-		width, height = width_default, height_default
 		self.scale = 1.0
+		self.basecolor = self:GetHUDBasecolor()
+		self.element_height = element_height
+		self.margin = margin
+		self.lpw = lpw
 
 		WSWITCH:UpdateWeaponCache()
 
-		self:RecalculateBasePos()
-
-		self:SetMinSize(min_w, min_h)
-		self:SetSize(width, -height)
-
 		BaseClass.Initialize(self)
+	end
+
+	function HUDELEMENT:GetDefaults()
+		const_defaults["basepos"] = { x = ScrW() - (self.size.w + self.margin * 2), y = ScrH() - self.margin}
+		return const_defaults
 	end
 
 	-- parameter overwrites
@@ -40,14 +59,24 @@ if CLIENT then
 	end
 	-- parameter overwrites end
 
+	function HUDELEMENT:PerformLayout()
+		self.scale = self:GetHUDScale()
+		self.basecolor = self:GetHUDBasecolor()
+		self.element_height = element_height * self.scale
+		self.margin = margin * self.scale
+		self.lpw = lpw * self.scale
+
+		BaseClass.PerformLayout(self)
+	end
+
 	function HUDELEMENT:DrawBarBg(x, y, w, h, col)
 		local ply = LocalPlayer()
-		local c = (col == self.col_active and ply:GetRoleColor() or ply:GetRoleDkColor()) or Color(100, 100, 100)
+		local c = (col == col_active and ply:GetRoleColor() or ply:GetRoleDkColor()) or Color(100, 100, 100)
 
 		-- draw bg and shadow
-		self:DrawBg(x, y, w, h, self.basecolor)
+		self.drawer:DrawBg(x, y, w, h, self.basecolor)
 
-		if col == self.col_active then
+		if col == col_active then
 			surface.SetDrawColor(0, 0, 0, 90)
 			surface.DrawRect(x, y, w, h)
 		end
@@ -57,7 +86,7 @@ if CLIENT then
 		surface.DrawRect(x, y, self.lpw, h)
 
 		-- draw lines around the element
-		self:DrawLines(x, y, w, h, self.basecolor.a)
+		self.drawer:DrawLines(x, y, w, h, self.basecolor.a)
 	end
 
 	function HUDELEMENT:DrawWeapon(x, y, c, wep)
@@ -76,95 +105,48 @@ if CLIENT then
 		end
 
 		-- Slot
-		self:AdvancedText(MakeKindValid(wep.Kind), "PureSkinWepNum", x + self.lpw * 0.5, y + height * 0.5, c.text, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, true, self.scale)
+		self.drawer:AdvancedText(MakeKindValid(wep.Kind), "PureSkinWepNum", x + self.lpw * 0.5, y + self.element_height * 0.5, c.text, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, true, self.scale)
 
 		-- Name
-		self:AdvancedText(string.upper(name), "PureSkinWep", x + 10 + height, y + height * 0.5, c.text, nil, TEXT_ALIGN_CENTER, true, self.scale)
+		self.drawer:AdvancedText(string.upper(name), "PureSkinWep", x + 10 + self.element_height, y + self.element_height * 0.5, c.text, nil, TEXT_ALIGN_CENTER, true, self.scale)
 
 		if ammo then
 			local col = (wep:Clip1() == 0 and wep:Ammo1() == 0) and c.text_empty or c.text
 
 			-- Ammo
-			self:AdvancedText(tostring(ammo), "PureSkinWep", x + width - self.margin * 3, y + height * 0.5, col, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, false, self.scale)
+			self.drawer:AdvancedText(tostring(ammo), "PureSkinWep", x + self.size.w - self.margin * 3, y + self.element_height * 0.5, col, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, false, self.scale)
 		end
 
 		return true
 	end
 
-	-- color defines
-	HUDELEMENT.col_active = {
-		text_empty = Color(200, 20, 20, 255),
-		text = Color(255, 255, 255, 255),
-		shadow = 255
-	}
-
-	HUDELEMENT.col_dark = {
-		text_empty = Color(200, 20, 20, 100),
-		text = Color(255, 255, 255, 100),
-		shadow = 100
-	}
-
-	function HUDELEMENT:RecalculateBasePos()
-		self.margin = margin_default * self.scale
-
-		self:SetBasePos(ScrW() - (width + self.margin * 2), ScrH() - self.margin)
-	end
-
-	function HUDELEMENT:PerformLayout()
-		local basepos = self:GetBasePos()
-
-		self:SetPos(basepos.x, basepos.y)
-
-		height = height_default * self.scale
-		self.margin = margin_default * self.scale
-		self.lpw = lpw_default * self.scale
-
-		local weps = WSWITCH.WeaponCache
-		local count = #weps
-		local tmp = height + self.margin
-
-		local h = math.max(count * tmp, self.minsize.h)
-		width = self:GetSize().w
-
-		self:SetSize(width, -h)
-
-		BaseClass.PerformLayout(self)
+	function HUDELEMENT:ShouldDraw()
+		return HUDEditor.IsEditing or WSWITCH.Show
 	end
 
 	function HUDELEMENT:Draw()
-		if not WSWITCH.Show and not HUDManager.IsEditing then return end
-
-		local client = LocalPlayer()
+		local weaponList = {}
 		local weps = WSWITCH.WeaponCache
-		local count = #weps
-		local tmp = height + self.margin
-		local basepos = self:GetBasePos()
-		local h = math.max(count * tmp, self.minsize.h)
-
-		self:SetPos(basepos.x, basepos.y)
-		self:SetSize(width, -h)
-
-		local pos = self:GetPos()
-		local x_elem = pos.x
-		local y_elem = pos.y
-		local col = self.col_dark
-
-		for k, wep in ipairs(weps) do
-			if WSWITCH.Selected == k then
-				col = self.col_active
-			else
-				col = self.col_dark
-			end
-
-			self:DrawBarBg(x_elem, y_elem, width, height, col)
-
-			if not self:DrawWeapon(x_elem, y_elem, col, wep) then
-				WSWITCH:UpdateWeaponCache()
-
-				return
-			end
-
-			y_elem = y_elem + height + self.margin
+		for i=1,table.Count(weps) do
+			table.insert(weaponList, {h = self.element_height})
 		end
+		self:SetElements(weaponList)
+		self:SetElementMargin(self.margin)
+
+		BaseClass.Draw(self)
+	end
+
+	function HUDELEMENT:DrawElement(i, x, y, w, h)
+		local col = col_dark
+		if WSWITCH.Selected == i then
+			col = col_active
+		end
+		self:DrawBarBg(x, y, w, h, col)
+
+		if not self:DrawWeapon(x, y, col, WSWITCH.WeaponCache[i]) then
+			WSWITCH:UpdateWeaponCache()
+			return
+		end
+
 	end
 end

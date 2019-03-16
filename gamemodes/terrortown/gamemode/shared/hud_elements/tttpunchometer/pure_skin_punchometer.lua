@@ -11,25 +11,23 @@ HUDELEMENT.Base = base
 DEFINE_BASECLASS(base)
 
 if CLIENT then
-	local pad_default = 7
-	local margin_default = 14
-	local w_default, h_default = 200, 40
-
-	local w, h = w_default, h_default
-	local min_w, min_h = 100, 40
 	local draw_col = Color(205, 155, 0, 255)
-	local pad = pad_default
-	local margin = margin_default
+
+	local pad = 7
+	local margin= 14
+
+	local const_defaults = {
+				basepos = {x = 0, y = 0},
+				size = {w = 200, h = 40},
+				minsize = {w = 100, h = 40}
+				}
 
 	function HUDELEMENT:Initialize()
-		w, h = w_default, h_default
-		margin = margin_default
 		self.scale = 1.0
+		self.basecolor = self:GetHUDBasecolor()
 
-		self:RecalculateBasePos()
-
-		self:SetMinSize(min_w, min_h)
-		self:SetSize(w, h)
+		self.pad = pad
+		self.margin = margin
 
 		BaseClass.Initialize(self)
 	end
@@ -40,9 +38,10 @@ if CLIENT then
 	end
 	-- parameter overwrites end
 
-	function HUDELEMENT:RecalculateBasePos()
-		self:SetBasePos(ScrW() * 0.5 - w * 0.5, (margin + 72) * self.scale)
-	end
+	function HUDELEMENT:GetDefaults()
+		const_defaults["basepos"] = { x = ScrW() * 0.5 - self.size.w * 0.5, y = self.margin + 72 * self.scale}
+		return const_defaults
+ 	end
 
 	-- Paint punch-o-meter
 	function HUDELEMENT:PunchPaint()
@@ -50,10 +49,12 @@ if CLIENT then
 		local L = GetLang()
 		local punch = client:GetNWFloat("specpunches", 0)
 		local pos = self:GetPos()
+		local size = self:GetSize()
 		local x, y = pos.x, pos.y
+		local w, h = size.w, size.h
 
 		self:DrawBg(x, y, w, h, self.basecolor)
-		self:DrawBar(x + pad, y + pad, w - pad * 2, h - pad * 2, draw_col, punch, self.scale, L.punch_title)
+		self:DrawBar(x + self.pad, y + self.pad, w - self.pad * 2, h - self.pad * 2, draw_col, punch, self.scale, L.punch_title)
 		self:DrawLines(x, y, w, h, self.basecolor.a)
 
 		self:AdvancedText(L.punch_help, "TabLarge", x + w * 0.5, y, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, true, self.scale)
@@ -68,26 +69,31 @@ if CLIENT then
 				text = interp(L.punch_malus, {num = bonus})
 			end
 
-			self:AdvancedText(text, "TabLarge", x + w * 0.5, y + margin * 2 + 20, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, true, self.scale)
+			self:AdvancedText(text, "TabLarge", x + w * 0.5, y + self.margin * 2 + 20, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, true, self.scale)
 		end
 	end
 
 	function HUDELEMENT:PerformLayout()
 		local size = self:GetSize()
 
-		pad = pad_default * self.scale
-		margin = margin_default * self.scale
-		w, h = size.w, size.h
+		self.scale = self:GetHUDScale()
+		self.basecolor = self:GetHUDBasecolor()
+		self.pad = pad * self.scale
+		self.margin = margin * self.scale
 
 		BaseClass.PerformLayout(self)
 	end
 
 	local key_params = {usekey = Key("+use", "USE")}
 
-	function HUDELEMENT:Draw()
+	function HUDELEMENT:ShouldDraw()
 		local client = LocalPlayer()
 
-		if client:Alive() and client:Team() ~= TEAM_SPEC then return end
+		return not client:Alive() or client:Team() == TEAM_SPEC
+	end
+
+	function HUDELEMENT:Draw()
+		local client = LocalPlayer()
 
 		local L = GetLang() -- for fast direct table lookups
 
@@ -95,13 +101,12 @@ if CLIENT then
 		local tgt = client:GetObserverTarget()
 
 		local pos = self:GetPos()
-		local size = self:GetSize()
 		local x, y = pos.x, pos.y
 
 		if IsValid(tgt) and not tgt:IsPlayer() and tgt:GetNWEntity("spec_owner", nil) == client then
 			self:PunchPaint() -- punch bar if you are spectator and inside of an entity
 		else
-			self:AdvancedText(interp(L.spec_help, key_params), "TabLarge", x + size.w * 0.5, y, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, true, self.scale)
+			self:AdvancedText(interp(L.spec_help, key_params), "TabLarge", x + self.size.w * 0.5, y, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, true, self.scale)
 		end
 	end
 end

@@ -42,15 +42,13 @@ if CLIENT then
 	local imageSize = 64
 	local imageMinHeight = imageSize + 2 * pad
 
+	local const_defaults = {
+				basepos = {x = 0, y = 0},
+				size = {w = msg_width, h = 80},
+				minsize = {w = msg_width, h = 80}
+				}
+
 	function HUDELEMENT:Initialize()
-		local width = msg_width
-
-		top_y = margin
-		top_x = ScrW() - margin - width
-
-		self:SetBasePos(top_x, top_y)
-		self:SetSize(width, 80)
-
 		base_text_display_options = {
 			font = msgfont,
 			xalign = TEXT_ALIGN_CENTER,
@@ -58,6 +56,15 @@ if CLIENT then
 		}
 
 		BaseClass.Initialize(self)
+	end
+
+	function HUDELEMENT:GetDefaults()
+		top_y = margin
+		top_x = ScrW() - margin - msg_width
+
+		const_defaults["basepos"] = {x = top_x, y = top_y}
+
+		return const_defaults
 	end
 
 	function HUDELEMENT:PerformLayout()

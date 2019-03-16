@@ -62,7 +62,7 @@ if CLIENT then
 
 	function HUDELEMENT:PaintBar(x, y, w, h, colors, value)
 		value = value or 1
-		
+
 		-- Background
 		-- slightly enlarged to make a subtle border
 		draw.RoundedBox(8, x - 1, y - 1, w + 2, h + 2, colors.background)

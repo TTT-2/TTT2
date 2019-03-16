@@ -16,23 +16,14 @@ if CLIENT then
 		yalign = TEXT_ALIGN_TOP
 	}
 
-	local leftPad_default = 14
-
-	local margin_default = 5
-	local line_margin_default = 6
-	local top_margin_default = 4
-	local title_bottom_margin_default = 8
-	local msg_width_default = 400
-
-	local pad_default = 6
-	local leftImagePad_default = 10
-
-	local imageSize_default = 64
-
-	local leftPad = leftPad_default
-
-	local top_y = 0
-	local top_x = 0
+	local leftPad = 14
+	local margin = 5
+	local line_margin = 6
+	local top_margin = 4
+	local title_bottom_margin = 8
+	local pad = 6
+	local leftImagePad = 10
+	local image_size = 64
 
 	local staytime = 12
 	local max_items = 8
@@ -41,30 +32,32 @@ if CLIENT then
 	local fadeout = 0.6
 	local movespeed = 2
 
-	local margin = margin_default
-	local line_margin = line_margin_default
-	local top_margin = top_margin_default
-	local title_bottom_margin = title_bottom_margin_default
-	local msg_width = msg_width_default
-	local pad = pad_default
-	local leftImagePad = leftImagePad_default
-	local text_width = msg_width - pad * 2 - leftPad
 	local msgfont = "PureSkinMSTACKMsg"
 	local imagedmsgfont = "PureSkinMSTACKImageMsg"
 	local text_color = COLOR_WHITE
-	local imageSize = imageSize_default
-	local imageMinHeight = imageSize + 2 * pad
-	local min_w, min_h = 250, 80
+
+	local const_defaults = {
+				basepos = {x = 0, y = 0},
+				size = {w = 400, h = 80},
+				minsize = {w = 250, h = 80}
+				}
 
 	function HUDELEMENT:Initialize()
-		msg_width = msg_width_default
-		margin = margin_default
+		self.margin = margin
+		local defaults = self:GetDefaults()
+		
 		self.scale = 1.0
+		self.basecolor = self:GetHUDBasecolor()
 
-		self:RecalculateBasePos()
-
-		self:SetMinSize(min_w, min_h)
-		self:SetSize(msg_width, 80)
+		self.leftPad = leftPad
+		self.line_margin = line_margin
+		self.top_margin = top_margin
+		self.title_bottom_margin = title_bottom_margin
+		self.pad = pad
+		self.leftImagePad = leftImagePad
+		self.text_width = defaults.size.w - self.pad * 2 - self.leftPad
+		self.image_size = image_size
+		self.imageMinHeight = self.image_size + 2 * self.pad
 
 		base_text_display_options = {
 			font = msgfont,
@@ -81,29 +74,25 @@ if CLIENT then
 	end
 	-- parameter overwrites end
 
-	function HUDELEMENT:RecalculateBasePos()
-		top_y = margin
-		top_x = ScrW() - margin - msg_width
-
-		self:SetBasePos(top_x, top_y)
-	end
+	function HUDELEMENT:GetDefaults()
+		const_defaults["basepos"] = { x = ScrW() - self.margin - self.size.w, y = self.margin}
+		return const_defaults
+ 	end
 
 	function HUDELEMENT:PerformLayout()
-		top_x = self.pos.x
-		top_y = self.pos.y
+		self.scale = self:GetHUDScale()
+		self.basecolor = self:GetHUDBasecolor()
 
-		leftPad = leftPad_default * self.scale
-		margin = margin_default * self.scale
-		line_margin = line_margin_default * self.scale
-		top_margin = top_margin_default * self.scale
-		title_bottom_margin = title_bottom_margin_default * self.scale
-		pad = pad_default * self.scale
-		leftImagePad = leftImagePad_default * self.scale
-		imageSize = imageSize_default * self.scale
-		imageMinHeight = imageSize + 2 * pad
-
-		msg_width = self.size.w
-		text_width = msg_width - pad * 2 - leftPad
+		self.leftPad = leftPad * self.scale
+		self.margin = margin * self.scale
+		self.line_margin = line_margin * self.scale
+		self.top_margin = top_margin * self.scale
+		self.title_bottom_margin = title_bottom_margin * self.scale
+		self.pad = pad * self.scale
+		self.leftImagePad = leftImagePad * self.scale
+		self.image_size = image_size * self.scale
+		self.imageMinHeight = self.image_size + 2 * self.pad
+		self.text_width = self.size.w - self.pad * 2 - self.leftPad
 
 		-- invalidate previous item size calculations
 		for _, v in pairs(MSTACK.msgs) do
@@ -113,9 +102,9 @@ if CLIENT then
 		BaseClass.PerformLayout(self)
 	end
 
-	local function PrepareItem(item, bg_color)
-		local max_text_width = (msg_width - pad * 2 - leftPad) / item.scale
-		local item_height = pad * 2
+	function HUDELEMENT:PrepareItem(item, bg_color)
+		local max_text_width = math.Round((self.size.w - self.pad * 2 - self.leftPad) / self.scale)
+		local item_height = self.pad * 2
 
 		item.text_spec = table.Copy(base_text_display_options)
 
@@ -126,27 +115,27 @@ if CLIENT then
 		item.col.a_max = item.col.a
 
 		if item.image then
-			max_text_width = (text_width - leftImagePad - imageSize) / item.scale
+			max_text_width = math.Round((self.text_width - self.leftImagePad - self.image_size) / self.scale)
 			item.text_spec.font = imagedmsgfont
 			item.title_spec = table.Copy(base_text_display_options)
 			item.title_spec.font = imagedmsgfont
-			item.title_spec.font_height = draw.GetFontHeight(item.title_spec.font) * item.scale
+			item.title_spec.font_height = draw.GetFontHeight(item.title_spec.font) * self.scale
 
 			item.title_wrapped = item.title and MSTACK:WrapText(item.title, max_text_width, item.title_spec.font) or {}
 			-- calculate the new height
-			item_height = item_height + top_margin + title_bottom_margin + #item.title_wrapped * (item.title_spec.font_height + line_margin) - line_margin
+			item_height = item_height + self.top_margin + self.title_bottom_margin + #item.title_wrapped * (item.title_spec.font_height + self.line_margin) - self.line_margin
 		end
 
-		item.text_spec.font_height = draw.GetFontHeight(item.text_spec.font) * item.scale
+		item.text_spec.font_height = draw.GetFontHeight(item.text_spec.font) * self.scale
 
 		item.text_wrapped = MSTACK:WrapText(item.text, max_text_width, item.text_spec.font)
 
 		-- Height depends on number of lines, which is equal to number of table
 		-- elements of the wrapped item.text
-		item_height = item_height + #item.text_wrapped * (item.text_spec.font_height + line_margin) - line_margin
+		item_height = item_height + #item.text_wrapped * (item.text_spec.font_height + self.line_margin) - self.line_margin
 
 		if item.image then
-			item_height = math.max(item_height, imageMinHeight)
+			item_height = math.max(item_height, self.imageMinHeight)
 		end
 
 		item.move_y = -item_height
@@ -157,11 +146,11 @@ if CLIENT then
 
 	function HUDELEMENT:DrawSmallMessage(item, pos_y, alpha)
 		-- Background box
-		self:DrawBg(top_x, pos_y, msg_width, item.height, item.bg)
+		self:DrawBg(self.pos.x, pos_y, self.size.w, item.height, item.bg)
 
 		-- Text
-		local tx = top_x + pad + leftPad
-		local ty = pos_y + pad
+		local tx = self.pos.x + self.pad + self.leftPad
+		local ty = pos_y + self.pad
 
 		-- draw the normal text
 		local text_spec = item.text_spec
@@ -174,19 +163,19 @@ if CLIENT then
 			--draw.TextShadow(text_spec, 1, alpha)
 			self:AdvancedText(text_spec.text, text_spec.font, text_spec.pos[1], text_spec.pos[2], text_spec.color, text_spec.xalign, text_spec.yalign, true, self.scale)
 
-			ty = ty + text_spec.font_height + line_margin
+			ty = ty + text_spec.font_height + self.line_margin
 		end
 
-		self:DrawLines(top_x, pos_y, msg_width, item.height, item.bg.a)
+		self:DrawLines(self.pos.x, pos_y, self.size.w, item.height, item.bg.a)
 	end
 
 	function HUDELEMENT:DrawMessageWithImage(item, pos_y, alpha)
 		-- Background box
-		self:DrawBg(top_x, pos_y, msg_width, item.height, item.bg)
+		self:DrawBg(self.pos.x, pos_y, self.size.w, item.height, item.bg)
 
 		-- Text
-		local tx = top_x + imageSize + pad + leftImagePad
-		local ty = pos_y + pad + top_margin
+		local tx = self.pos.x + self.image_size + self.pad + self.leftImagePad
+		local ty = pos_y + self.pad + self.top_margin
 
 		-- draw the title text
 		local title_spec = item.title_spec
@@ -199,10 +188,10 @@ if CLIENT then
 			--draw.TextShadow(title_spec, 1, alpha)
 			self:AdvancedText(title_spec.text, title_spec.font, title_spec.pos[1], title_spec.pos[2], title_spec.color, title_spec.xalign, title_spec.yalign, true, self.scale)
 
-			ty = ty + title_spec.font_height + line_margin
+			ty = ty + title_spec.font_height + self.line_margin
 		end
 
-		ty = ty + title_bottom_margin - line_margin -- remove old margin used for new line set in for loop above
+		ty = ty + self.title_bottom_margin - self.line_margin -- remove old margin used for new line set in for loop above
 
 		-- draw the normal text
 		local text_spec = item.text_spec
@@ -215,27 +204,27 @@ if CLIENT then
 			--draw.TextShadow(text_spec, 1, alpha)
 			self:AdvancedText(text_spec.text, text_spec.font, text_spec.pos[1], text_spec.pos[2], text_spec.color, text_spec.xalign, text_spec.yalign, true, self.scale)
 
-			ty = ty + text_spec.font_height + line_margin
+			ty = ty + text_spec.font_height + self.line_margin
 		end
 
 		-- image
 		surface.SetMaterial(item.image)
 		surface.SetDrawColor(255, 255, 255, item.bg.a)
-		surface.DrawTexturedRect(top_x + pad, pos_y + pad, imageSize, imageSize)
+		surface.DrawTexturedRect(self.pos.x + self.pad, pos_y + self.pad, self.image_size, self.image_size)
 
-		self:DrawLines(top_x, pos_y, msg_width, item.height, item.bg.a)
+		self:DrawLines(self.pos.x, pos_y, self.size.w, item.height, item.bg.a)
+	end
+
+	function HUDELEMENT:ShouldDraw()
+		return next(MSTACK.msgs) ~= nil
 	end
 
 	function HUDELEMENT:Draw()
-		if next(MSTACK.msgs) == nil then return end -- fast empty check
-
-		local running_y = top_y
+		local running_y = self.pos.y
 		for k, item in pairs(MSTACK.msgs) do
 			if item.time < CurTime() then
 				if not item.ready then
-					item.scale = self.scale
-
-					PrepareItem(item, self.basecolor)
+					self:PrepareItem(item, self.basecolor)
 				end
 
 				if item.sounded == false then
@@ -245,7 +234,7 @@ if CLIENT then
 				end
 
 				-- Apply move effects to y
-				local y = running_y + line_margin + item.move_y
+				local y = running_y + self.line_margin + item.move_y
 
 				item.move_y = (item.move_y < 0) and item.move_y + movespeed or 0
 
