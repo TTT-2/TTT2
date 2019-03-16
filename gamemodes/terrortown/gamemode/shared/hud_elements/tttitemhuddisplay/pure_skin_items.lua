@@ -13,10 +13,10 @@ if CLIENT then
 	local padding = 10
 
 	local const_defaults = {
-						basepos = {x = 0, y = 0},
-						size = {w = 48, h = 48},
-						minsize = {w = 48, h = 48}
-	}
+				basepos = {x = 0, y = 0},
+				size = {w = 48, h = 48},
+				minsize = {w = 48, h = 48}
+				}
 
 	function HUDELEMENT:Initialize()
 		self.scale = 1.0
@@ -57,6 +57,7 @@ if CLIENT then
 		local basepos = self:GetBasePos()
 		local itms = client:GetEquipmentItems()
 		local pos = self:GetPos()
+		local size = self.size.w
 
 		-- get number of new icons
 		local num_icons = 0
@@ -81,21 +82,21 @@ if CLIENT then
 		for _, itemCls in ipairs(itms) do
 			local item = items.GetStored(itemCls)
 			if item and item.hud then
-				curY = curY - (self.size.w + self.padding)
+				curY = curY - (size + self.padding)
 
 				surface.SetDrawColor(36, 115, 51, 255)
-				surface.DrawRect(pos.x, curY, self.size.w, self.size.w)
+				surface.DrawRect(pos.x, curY, size, size)
 
-				util.DrawFilteredTexturedRect(pos.x, curY, self.size.w, self.size.w, item.hud, 175)
+				util.DrawFilteredTexturedRect(pos.x, curY, size, size, item.hud, 175)
 
-				self:DrawLines(pos.x, curY, self.size.w, self.size.w, self.basecolor.a)
+				self:DrawLines(pos.x, curY, size, size, self.basecolor.a)
 
 				if isfunction(item.DrawInfo) then
 					local info = item:DrawInfo()
 					if info then
 						-- right bottom corner
-						local tx = pos.x + self.size.w - 5
-						local ty = curY +  self.size.w - 2
+						local tx = pos.x + size - 5
+						local ty = curY +  size - 2
 						local pad = 5 * self.scale
 
 						surface.SetFont("ItemInfoFont")
@@ -119,6 +120,6 @@ if CLIENT then
 			end
 		end
 
-		self:SetSize(self.size.w, - math.max(basepos.y - curY, self.minsize.h)  ) -- adjust the size
+		self:SetSize(size, - math.max(basepos.y - curY, self.minsize.h)  ) -- adjust the size
 	end
 end

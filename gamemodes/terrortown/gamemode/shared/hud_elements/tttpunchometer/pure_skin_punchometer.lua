@@ -17,10 +17,10 @@ if CLIENT then
 	local margin= 14
 
 	local const_defaults = {
-						basepos = {x = 0, y = 0},
-						size = {w = 200, h = 40},
-						minsize = {w = 100, h = 40}
-	}
+				basepos = {x = 0, y = 0},
+				size = {w = 200, h = 40},
+				minsize = {w = 100, h = 40}
+				}
 
 	function HUDELEMENT:Initialize()
 		self.scale = 1.0

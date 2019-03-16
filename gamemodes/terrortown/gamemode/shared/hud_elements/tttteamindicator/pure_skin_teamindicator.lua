@@ -11,10 +11,10 @@ if CLIENT then
 	local element_margin = 6
 
 	local const_defaults = {
-						basepos = {x = 0, y = 0},
-						size = {w = 72, h = 72},
-						minsize = {w = 0, h = 0}
-	}
+				basepos = {x = 0, y = 0},
+				size = {w = 72, h = 72},
+				minsize = {w = 0, h = 0}
+				}
 
 	function HUDELEMENT:PreInitialize()
 		hudelements.RegisterChildRelation(self.id, "pure_skin_roundinfo", false)
@@ -63,6 +63,10 @@ if CLIENT then
 
 	function HUDELEMENT:Draw()
 		local client = LocalPlayer()
+		local pos = self:GetPos()
+		local size = self:GetSize()
+		local x, y = pos.x, pos.y
+		local w, h = size.w, size.h
 
 		-- draw team icon
 		local team = client:GetTeam()
@@ -71,9 +75,9 @@ if CLIENT then
 		if team == TEAM_NONE or not tm or tm.alone then return end
 
 		-- draw bg and shadow
-		self:DrawBg(self.pos.x, self.pos.y, self.size.w, self.size.h, self.basecolor)
+		self:DrawBg(x, y, w, h, self.basecolor)
 
-		local iconSize = self.size.h - self.pad * 2
+		local iconSize = h - self.pad * 2
 		local icon, c
 		if LocalPlayer():Alive() then
 			icon = Material(tm.icon)
@@ -85,21 +89,21 @@ if CLIENT then
 
 		-- draw dark bottom overlay
 		surface.SetDrawColor(0, 0, 0, 90)
-		surface.DrawRect(self.pos.x, self.pos.y, self.size.h, self.size.h)
+		surface.DrawRect(x, y, h, h)
 
 		surface.SetDrawColor(clr(c))
-		surface.DrawRect(self.pos.x + self.pad, self.pos.y + self.pad, iconSize, iconSize)
+		surface.DrawRect(x + self.pad, y + self.pad, iconSize, iconSize)
 
 		if icon then
-			util.DrawFilteredTexturedRect(self.pos.x + self.pad, self.pos.y + self.pad, iconSize, iconSize, icon)
+			util.DrawFilteredTexturedRect(x + self.pad, y + self.pad, iconSize, iconSize, icon)
 		end
 
 		-- draw lines around the element
-		self:DrawLines(self.pos.x + self.pad, self.pos.y + self.pad, iconSize, iconSize, 255)
+		self:DrawLines(x + self.pad, y + self.pad, iconSize, iconSize, 255)
 
 		-- draw lines around the element
 		if not self:InheritParentBorder() then
-			self:DrawLines(self.pos.x, self.pos.y, self.size.w, self.size.h, self.basecolor.a)
+			self:DrawLines(x, y, w, h, self.basecolor.a)
 		end
 	end
 end

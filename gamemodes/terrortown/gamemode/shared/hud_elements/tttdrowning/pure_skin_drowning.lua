@@ -10,10 +10,10 @@ if CLIENT then
 	local drowning_color = Color(36, 154, 198)
 
 	local const_defaults = {
-							basepos = {x = 0, y = 0},
-							size = {w = 321, h = 36},
-							minsize = {w = 75, h = 36}
-		}
+				basepos = {x = 0, y = 0},
+				size = {w = 321, h = 36},
+				minsize = {w = 75, h = 36}
+		                }
 
 	function HUDELEMENT:Initialize()
 		self.pad = pad

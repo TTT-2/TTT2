@@ -43,10 +43,10 @@ if CLIENT then
 	local imageMinHeight = imageSize + 2 * pad
 
 	local const_defaults = {
-						basepos = {x = 0, y = 0},
-						size = {w = msg_width, h = 80},
-						minsize = {w = msg_width, h = 80}
-	}
+				basepos = {x = 0, y = 0},
+				size = {w = msg_width, h = 80},
+				minsize = {w = msg_width, h = 80}
+				}
 
 	function HUDELEMENT:Initialize()
 		base_text_display_options = {
@@ -59,7 +59,6 @@ if CLIENT then
 	end
 
 	function HUDELEMENT:GetDefaults()
-
 		top_y = margin
 		top_x = ScrW() - margin - msg_width
 

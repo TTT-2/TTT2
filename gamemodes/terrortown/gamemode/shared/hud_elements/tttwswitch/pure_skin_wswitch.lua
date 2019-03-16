@@ -27,13 +27,13 @@ if CLIENT then
 	local lpw = 22 -- left panel width
 
 	local const_defaults = {
-						basepos = {x = 0, y = 0},
-						size = {w = 365, h = 28},
-						minsize = {w = 240, h = 28}
-	}
+				basepos = {x = 0, y = 0},
+				size = {w = 365, h = 28},
+				minsize = {w = 240, h = 28}
+				}
 
 	function HUDELEMENT:PreInitialize()
-		self.drawer =  hudelements.GetStored("pure_skin_element")
+		self.drawer = hudelements.GetStored("pure_skin_element")
 	end
 
 	function HUDELEMENT:Initialize()
@@ -127,7 +127,7 @@ if CLIENT then
 	function HUDELEMENT:Draw()
 		local weaponList = {}
 		local weps = WSWITCH.WeaponCache
-		for k, wep in ipairs(weps) do
+		for i=1,table.Count(weps) do
 			table.insert(weaponList, {h = self.element_height})
 		end
 		self:SetElements(weaponList)

@@ -18,10 +18,10 @@ if CLIENT then
 	local y = 0
 
 	local const_defaults = {
-						basepos = {x = 0, y = 0},
-						size = {w = HUDELEMENT.maxwidth, h = HUDELEMENT.maxheight},
-						minsize = {w = HUDELEMENT.maxwidth, h = HUDELEMENT.maxheight}
-	}
+				basepos = {x = 0, y = 0},
+				size = {w = HUDELEMENT.maxwidth, h = HUDELEMENT.maxheight},
+				minsize = {w = HUDELEMENT.maxwidth, h = HUDELEMENT.maxheight}
+				}
 
 	function HUDELEMENT:Initialize()
 		BaseClass.Initialize(self)

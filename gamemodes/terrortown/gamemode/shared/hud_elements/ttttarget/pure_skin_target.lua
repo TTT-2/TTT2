@@ -11,10 +11,10 @@ if CLIENT then -- CLIENT
 	HUDELEMENT.icon = Material("vgui/ttt/target_icon")
 
 	local const_defaults = {
-						basepos = {x = 0, y = 0},
-						size = {w = 365, h = 32},
-						minsize = {w = 225, h = 32}
-	}
+				basepos = {x = 0, y = 0},
+				size = {w = 365, h = 32},
+				minsize = {w = 225, h = 32}
+				}
 
 	function HUDELEMENT:Initialize()
 		self.scale = 1.0

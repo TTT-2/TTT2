@@ -37,10 +37,10 @@ if CLIENT then
 	local text_color = COLOR_WHITE
 
 	local const_defaults = {
-						basepos = {x = 0, y = 0},
-						size = {w = 400, h = 80},
-						minsize = {w = 250, h = 80}
-	}
+				basepos = {x = 0, y = 0},
+				size = {w = 400, h = 80},
+				minsize = {w = 250, h = 80}
+				}
 
 	function HUDELEMENT:Initialize()
 		self.margin = margin
@@ -103,7 +103,7 @@ if CLIENT then
 	end
 
 	function HUDELEMENT:PrepareItem(item, bg_color)
-		local max_text_width = (self.size.w - self.pad * 2 - self.leftPad) / self.scale
+		local max_text_width = math.Round((self.size.w - self.pad * 2 - self.leftPad) / self.scale)
 		local item_height = self.pad * 2
 
 		item.text_spec = table.Copy(base_text_display_options)
@@ -115,7 +115,7 @@ if CLIENT then
 		item.col.a_max = item.col.a
 
 		if item.image then
-			max_text_width = (self.text_width - self.leftImagePad - self.image_size) / self.scale
+			max_text_width = math.Round((self.text_width - self.leftImagePad - self.image_size) / self.scale)
 			item.text_spec.font = imagedmsgfont
 			item.title_spec = table.Copy(base_text_display_options)
 			item.title_spec.font = imagedmsgfont

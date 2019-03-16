@@ -7,10 +7,10 @@ HUDELEMENT.Base = base
 if CLIENT then -- CLIENT
 
 	local const_defaults = {
-						basepos = {x = 0, y = 0},
-						size = {w = 0, h = 45},
-						minsize = {w = 0, h = 45}
-	}
+				basepos = {x = 0, y = 0},
+				size = {w = 0, h = 45},
+				minsize = {w = 0, h = 45}
+				}
 
 	function HUDELEMENT:PreInitialize()
 		BaseClass.PreInitialize(self)

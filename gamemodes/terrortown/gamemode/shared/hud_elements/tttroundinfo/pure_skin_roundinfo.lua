@@ -12,10 +12,10 @@ if CLIENT then
 	local pad = 14
 
 	local const_defaults = {
-						basepos = {x = 0, y = 0},
-						size = {w = 96, h = 72},
-						minsize = {w = 96, h = 72}
-	}
+				basepos = {x = 0, y = 0},
+				size = {w = 96, h = 72},
+				minsize = {w = 96, h = 72}
+				}
 
 	function HUDELEMENT:Initialize()
 		self.scale = 1.0

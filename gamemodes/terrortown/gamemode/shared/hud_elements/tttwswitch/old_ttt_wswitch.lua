@@ -36,18 +36,18 @@ if CLIENT then
 	}
 
 	local const_defaults = {
-						basepos = {x = 0, y = 0},
-						size = {w = width, h = -height},
-						minsize = {w = width, h = height}
-	}
+				basepos = {x = 0, y = 0},
+				size = {w = width, h = -height},
+				minsize = {w = width, h = height}
+				}
 
 	function HUDELEMENT:Initialize()
-			WSWITCH:UpdateWeaponCache()
+		WSWITCH:UpdateWeaponCache()
 
-			BaseClass.Initialize(self)
+		BaseClass.Initialize(self)
 
-			self.defaults.resizeableY = false
-			self.defaults.minHeight = height
+		self.defaults.resizeableY = false
+		self.defaults.minHeight = height
 	end
 
 	function HUDELEMENT:GetDefaults()
@@ -155,7 +155,7 @@ if CLIENT then
 	function HUDELEMENT:Draw()
 		local weaponList = {}
 		local weps = WSWITCH.WeaponCache
-		for k, wep in ipairs(weps) do
+		for i=1,table.Count(weps) do
 			table.insert(weaponList, {h = height})
 		end
 		self:SetElements(weaponList)
