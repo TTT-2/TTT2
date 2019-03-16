@@ -1,4 +1,4 @@
-local base = "scalable_hud_element"
+local base = "dynamic_hud_element"
 
 DEFINE_BASECLASS(base)
 
