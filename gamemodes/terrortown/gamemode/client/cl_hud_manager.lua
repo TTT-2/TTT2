@@ -155,7 +155,14 @@ local function UpdateHUD(name)
 end
 
 function HUDManager.GetHUD()
-	return current_hud_cvar:GetString()
+	-- TODO refactor and update the hud correctly! This is just an hotfix
+	local hud = current_hud_cvar:GetString()
+
+	if not huds.GetStored(hud) then
+		hud = HUDManager.GetModelValue("defaultHUD") or "pure_skin"
+	end
+
+	return hud
 end
 
 function HUDManager.SetHUD(name)
