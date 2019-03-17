@@ -111,9 +111,13 @@ end
 
 function HUDManager.LoadData()
 	MsgN("[TTT2][HUDManager] Loading data from database...")
-	HUDManager.SetModelValue("forcedHUD", DB_GetStringValue("forcedHUD"))
-	HUDManager.SetModelValue("defaultHUD", DB_GetStringValue("defaultHUD"))
-	HUDManager.SetModelValue("restrictedHUDs", DB_GetStringTable(HUD_MANAGER_SQL_RESTRICTEDHUDS_TABLE) or {})
+	if sql.TableExists(HUD_MANAGER_SQL_TABLE) then
+		HUDManager.SetModelValue("forcedHUD", DB_GetStringValue("forcedHUD"))
+		HUDManager.SetModelValue("defaultHUD", DB_GetStringValue("defaultHUD"))
+	end
+	if sql.TableExists(HUD_MANAGER_SQL_RESTRICTEDHUDS_TABLE) then
+		HUDManager.SetModelValue("restrictedHUDs", DB_GetStringTable(HUD_MANAGER_SQL_RESTRICTEDHUDS_TABLE) or {})
+	end
 end
 
 -- load values from the database when this file is executed
@@ -175,7 +179,7 @@ net.Receive("TTT2RequestHUD", function(len, ply)
 	local hudToSend = forced or hudname
 	local hudToSendTbl = huds.GetStored(hudToSend)
 	if not hudToSendTbl or hudToSendTbl.isAbstract then
-		hudToSend = HUDManager.GetModelValue("defaultHUD")
+		hudToSend = HUDManager.GetModelValue("defaultHUD") or "pure_skin"
 	end
 
 	net.Start("TTT2ReceiveHUD")
