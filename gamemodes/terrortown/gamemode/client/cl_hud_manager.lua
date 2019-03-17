@@ -137,6 +137,8 @@ local function UpdateHUD(name)
 		return
 	end
 
+	MsgN("[TTT2][DEBUG] Received HUD Update with HUD: " .. tostring(name))
+
 	HUDEditor.StopEditHUD()
 
 	-- save the old HUDs values
@@ -155,14 +157,13 @@ local function UpdateHUD(name)
 end
 
 function HUDManager.GetHUD()
-	-- TODO refactor and update the hud correctly! This is just an hotfix
-	local hud = current_hud_cvar:GetString()
+	local hudvar = current_hud_cvar:GetString()
 
-	if not huds.GetStored(hud) then
-		hud = HUDManager.GetModelValue("defaultHUD") or "pure_skin"
+	if not huds.GetStored(hudvar) then
+		hudvar = HUDManager.GetModelValue("defaultHUD") or "pure_skin"
 	end
 
-	return hud
+	return hudvar
 end
 
 function HUDManager.SetHUD(name)

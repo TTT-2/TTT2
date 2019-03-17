@@ -20,16 +20,21 @@ end
 
 function HUDManager.SetModelValue(key, value)
 	if not key then return end
+
+	MsgN("[TTT2][DEBUG] SetModelValue called for key: " .. key .. " value: " .. tostring(value))
+
 	local oldvalue = model[key]
 	model[key] = value
 
-	if oldvalue ~= value and updateListeners[key] then -- equal check does not work as expected for tables (always true)!
+	if oldvalue ~= value then -- equal check does not work as expected for tables (always true)!
 		-- call all listeners, that the value has changed
 		for _, func in ipairs(updateAnyListeners) do
 			func()
 		end
-		for _, func in ipairs(updateListeners[key]) do
-			func(value, oldvalue)
+		if updateListeners[key] then
+			for _, func in ipairs(updateListeners[key]) do
+				func(value, oldvalue)
+			end
 		end
 	end
 end

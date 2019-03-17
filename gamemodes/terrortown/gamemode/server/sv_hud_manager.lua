@@ -19,7 +19,7 @@ local HUD_MANAGER_SQL_RESTRICTEDHUDS_TABLE = "ttt2_hudmanager_model_data_restric
 
 local function DB_EnsureTableExists(tablename, tablecolumns)
 	if not tablename or not tablecolumns then return false end
-
+	MsgN("[TTT2][DEBUG] DB_EnsureTableExists was called on table " .. tablename)
 	if not sql.TableExists(tablename) then
 		local result = sql.Query("CREATE TABLE " .. sql.SQLStr(tablename, false) .. " (" .. tablecolumns .. ")")
 		if result == false then
@@ -112,10 +112,12 @@ end
 function HUDManager.LoadData()
 	MsgN("[TTT2][HUDManager] Loading data from database...")
 	if sql.TableExists(HUD_MANAGER_SQL_TABLE) then
+		MsgN("[TTT2][DEBUG] Table exists for model_data ! Loading ...")
 		HUDManager.SetModelValue("forcedHUD", DB_GetStringValue("forcedHUD"))
 		HUDManager.SetModelValue("defaultHUD", DB_GetStringValue("defaultHUD"))
 	end
 	if sql.TableExists(HUD_MANAGER_SQL_RESTRICTEDHUDS_TABLE) then
+		MsgN("[TTT2][DEBUG] Table exists for model_data_restrictedhuds ! Loading ...")
 		HUDManager.SetModelValue("restrictedHUDs", DB_GetStringTable(HUD_MANAGER_SQL_RESTRICTEDHUDS_TABLE) or {})
 	end
 end
@@ -145,6 +147,8 @@ net.Receive("TTT2RequestHUD", function(len, ply)
 	local hudname = net.ReadString() -- new requested HUD
 	local oldHUD = net.ReadString() -- current HUD as fallback
 	local forced = HUDManager.GetModelValue("forcedHUD")
+
+	MsgN("[TTT2][DEBUG] User " .. ply:Nick() .. " requested to change the HUD to " .. tostring(hudname) .. ", alternative: " .. tostring(oldHUD))
 
 	if not forced then
 		local restrictions = HUDManager.GetModelValue("restrictedHUDs") or {}
@@ -181,6 +185,8 @@ net.Receive("TTT2RequestHUD", function(len, ply)
 	if not hudToSendTbl or hudToSendTbl.isAbstract then
 		hudToSend = HUDManager.GetModelValue("defaultHUD") or "pure_skin"
 	end
+
+	MsgN("[TTT2][DEBUG] The user will receive the HUD: " .. hudToSend)
 
 	net.Start("TTT2ReceiveHUD")
 	net.WriteString(hudToSend)
