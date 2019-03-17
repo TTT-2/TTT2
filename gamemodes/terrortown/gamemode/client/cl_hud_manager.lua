@@ -61,7 +61,7 @@ function HUDManager.HideHUDSwitcher()
 end
 
 function HUDManager.DrawHUD()
-	if not current_hud_table then return end
+	if not current_hud_table or not current_hud_table.Draw then return end
 	current_hud_table:Draw()
 end
 

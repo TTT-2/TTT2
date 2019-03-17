@@ -52,6 +52,7 @@ function IsBasedOn(name, base)
 end
 
 local function SetupGlobals(roleData)
+	print("[TTT2][ROLE] Setting up '" .. roleData.name .. "' role...")
 	local upStr = string.upper(roleData.name)
 
 	_G["ROLE_" .. upStr] = roleData.index
@@ -114,9 +115,6 @@ local function SetupData(roleData)
 		CreateConVar("ttt_credits_" .. roleData.name .. "kill", tostring(conVarData.traitorKill), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 	end
 
-	-- set id
-	roleData.index = roleData.index or GenerateNewRoleID()
-
 	-- fix defaultTeam
 	roleData.defaultTeam = roleData.defaultTeam or TEAM_NONE
 
@@ -137,7 +135,9 @@ function Register(t, name)
 	t.name = name
 
 	if name ~= BASE_ROLE_CLASS then
-		SetupData(t)
+		-- set id
+		t.index = t.index or GenerateNewRoleID()
+
 		SetupGlobals(t)
 
 		t.id = t.index
@@ -166,6 +166,10 @@ function OnLoaded()
 		Get(k, v)
 
 		baseclass.Set(k, v)
+
+		if k ~= BASE_ROLE_CLASS then
+			SetupData(v)
+		end
 	end
 
 	-- Call PreInitialize on all roles
