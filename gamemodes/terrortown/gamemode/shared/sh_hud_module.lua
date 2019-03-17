@@ -104,8 +104,9 @@ for _, folder in ipairs(subFolders) do
 	if folder == HUDS_ABSTRACT_FOLDER then continue end
 
 	--appearently we need this check, because file.Find returns old weirdly cached directories
-	if SERVER and not file.IsDir(pathBase .. folder, "LUA") then
-		MsgN("Skipped a file that was reported as folder! " .. folder)
+	if SERVER and not file.Exists(pathBase .. folder, "LUA") then
+		MsgN("Skipped a folder that doesn't exists! " .. folder)
+
 		continue
 	end
 
