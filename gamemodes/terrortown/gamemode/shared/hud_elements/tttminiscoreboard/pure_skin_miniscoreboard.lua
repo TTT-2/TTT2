@@ -9,14 +9,13 @@ HUDELEMENT.togglable = true
 if CLIENT then
 	local margin = 14
 	local element_margin = 6
-
 	local row_count = 2
 
 	local const_defaults = {
-				basepos = {x = 0, y = 0},
-				size = {w = 72, h = 72},
-				minsize = {w = 0, h = 0}
-				}
+		basepos = {x = 0, y = 0},
+		size = {w = 72, h = 72},
+		minsize = {w = 0, h = 0}
+	}
 
 	function HUDELEMENT:PreInitialize()
 		hudelements.RegisterChildRelation(self.id, "pure_skin_roundinfo", false)
@@ -139,7 +138,7 @@ if CLIENT then
 			elseif p:OnceFound() and not p:RoleKnown() then -- draw marker on indirect confirmed bodies
 				util.DrawFilteredTexturedRect(tmp_x +3, tmp_y +3, self.ply_ind_size -6, self.ply_ind_size -6, self.icon_in_conf, 120, {r=0,g=0,b=0})
 			end
-		
+
 			-- draw lines around the element
 			self:DrawLines(tmp_x, tmp_y, self.ply_ind_size, self.ply_ind_size, ply_color.a)
 		end

@@ -56,17 +56,18 @@ local function AddHUDSettings(panel, hudEl)
 		elseif data.typ == "scale" then
 			el = vgui.Create("DNumSliderWang")
 			el:SetSize(600, 20)
-			el:SetMin( 0.1 )
-			el:SetMax( 4.0 )
-			el:SetDecimals( 1 )
-			if hudEl[key] then
-				el:SetDefaultValue( hudEl[key] )
-				el:SetValue( math.Round(hudEl[key], 1) )
-			end
+			el:SetMin(0.1)
+			el:SetMax(4.0)
+			el:SetDecimals(1)
 
+			if hudEl[key] then
+				el:SetDefaultValue(hudEl[key])
+				el:SetValue(math.Round(hudEl[key], 1))
+			end
 
 			function el:OnValueChanged(val)
 				val = math.Round(val, 1)
+
 				if val ~= math.Round(hudEl[key], 1) then
 					if isfunction(data.OnChange) then
 						data.OnChange(hudEl, val)
@@ -150,7 +151,7 @@ function PANEL:Init()
 
 	end
 
-	local items = {}
+	local sheets = {}
 
 	for _, hud in ipairs(huds.GetList()) do
 		local panel = vgui.Create("DPanel", dcsheet)
@@ -175,8 +176,11 @@ function PANEL:Init()
 				end
 			end
 		end
+
 		local sheet = dcsheet:AddSheet("", panel)
-		table.insert(items, sheet)
+
+		sheets[#sheets + 1] = sheet
+
 		local leftBtn = sheet.Button
 		leftBtn:SetSize(256, 256)
 
@@ -205,11 +209,15 @@ function PANEL:Init()
 		end
 	end
 
-	hook.Add("TTT2HUDUpdated", "TTT2HUDUpdateHUDSwitcher", function (name)
-		for _, v in ipairs(items or {}) do
+	hook.Add("TTT2HUDUpdated", "TTT2HUDUpdateHUDSwitcher", function(name)
+		if not sheets then return end
+
+		for _, v in ipairs(sheets) do
 			if name == v.Panel.hudid then
 				dcsheet:SetActiveButton(v.Button)
+
 				self:SetTitle("HUD Switcher - " .. name)
+
 				break
 			end
 		end

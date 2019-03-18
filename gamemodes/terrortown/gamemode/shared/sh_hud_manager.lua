@@ -11,10 +11,13 @@ local model = {
 
 function HUDManager.GetModelValue(key)
 	if not key then return end
+
 	local val = model[key]
+
 	if istable(model[key]) then
 		val = table.Copy(model[key])
 	end
+
 	return val
 end
 
@@ -31,6 +34,7 @@ function HUDManager.SetModelValue(key, value)
 		for _, func in ipairs(updateAnyListeners) do
 			func()
 		end
+
 		if updateListeners[key] then
 			for _, func in ipairs(updateListeners[key]) do
 				func(value, oldvalue)
@@ -51,6 +55,7 @@ function HUDManager.OnUpdateAttribute(key, func)
 	if not key or not isfunction(func) then return end
 
 	updateListeners[key] = updateListeners[key] or {}
+
 	if not table.HasValue(updateListeners[key], func) then
 		table.insert(updateListeners[key], func)
 	end

@@ -43,10 +43,10 @@ if CLIENT then
 	local imageMinHeight = imageSize + 2 * pad
 
 	local const_defaults = {
-				basepos = {x = 0, y = 0},
-				size = {w = msg_width, h = 80},
-				minsize = {w = msg_width, h = 80}
-				}
+		basepos = {x = 0, y = 0},
+		size = {w = msg_width, h = 80},
+		minsize = {w = msg_width, h = 80}
+	}
 
 	function HUDELEMENT:Initialize()
 		base_text_display_options = {
@@ -75,7 +75,7 @@ if CLIENT then
 		text_width = msg_width - pad * 2
 
 		-- invalidate previous item size calculations
-		for k, v in pairs(MSTACK.msgs) do
+		for _, v in pairs(MSTACK.msgs) do
 			v.ready = false
 		end
 

@@ -37,15 +37,16 @@ if CLIENT then
 	local text_color = COLOR_WHITE
 
 	local const_defaults = {
-				basepos = {x = 0, y = 0},
-				size = {w = 400, h = 80},
-				minsize = {w = 250, h = 80}
-				}
+		basepos = {x = 0, y = 0},
+		size = {w = 400, h = 80},
+		minsize = {w = 250, h = 80}
+	}
 
 	function HUDELEMENT:Initialize()
 		self.margin = margin
+
 		local defaults = self:GetDefaults()
-		
+
 		self.scale = 1.0
 		self.basecolor = self:GetHUDBasecolor()
 
@@ -75,7 +76,8 @@ if CLIENT then
 	-- parameter overwrites end
 
 	function HUDELEMENT:GetDefaults()
-		const_defaults["basepos"] = { x = ScrW() - self.margin - self.size.w, y = self.margin}
+		const_defaults["basepos"] = {x = ScrW() - self.margin - self.size.w, y = self.margin}
+
 		return const_defaults
  	end
 
@@ -221,6 +223,7 @@ if CLIENT then
 
 	function HUDELEMENT:Draw()
 		local running_y = self.pos.y
+		
 		for k, item in pairs(MSTACK.msgs) do
 			if item.time < CurTime() then
 				if not item.ready then

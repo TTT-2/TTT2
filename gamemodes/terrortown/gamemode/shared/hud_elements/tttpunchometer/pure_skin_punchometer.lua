@@ -17,10 +17,10 @@ if CLIENT then
 	local margin= 14
 
 	local const_defaults = {
-				basepos = {x = 0, y = 0},
-				size = {w = 200, h = 40},
-				minsize = {w = 100, h = 40}
-				}
+		basepos = {x = 0, y = 0},
+		size = {w = 200, h = 40},
+		minsize = {w = 100, h = 40}
+	}
 
 	function HUDELEMENT:Initialize()
 		self.scale = 1.0
@@ -39,7 +39,8 @@ if CLIENT then
 	-- parameter overwrites end
 
 	function HUDELEMENT:GetDefaults()
-		const_defaults["basepos"] = { x = ScrW() * 0.5 - self.size.w * 0.5, y = self.margin + 72 * self.scale}
+		const_defaults["basepos"] = {x = ScrW() * 0.5 - self.size.w * 0.5, y = self.margin + 72 * self.scale}
+		
 		return const_defaults
  	end
 

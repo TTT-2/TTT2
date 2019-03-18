@@ -9,11 +9,13 @@ if CLIENT then
 
 	function HUDELEMENT:GetHUDScale()
 		local hud = huds.GetStored(HUDManager.GetHUD())
-		return hud.scale or 1.0
+
+		return (hud and hud.scale) or 1.0
 	end
 
 	function HUDELEMENT:GetHUDBasecolor()
 		local hud = huds.GetStored(HUDManager.GetHUD())
-		return hud.basecolor or defaultColor
+
+		return (hud and hud.basecolor) or defaultColor
 	end
 end

@@ -13,10 +13,10 @@ if CLIENT then
 	local size = 64
 
 	local const_defaults = {
-				basepos = {x = 0, y = 0},
-				size = {w = size, h = -size},
-				minsize = {w = size, h = size}
-				}
+		basepos = {x = 0, y = 0},
+		size = {w = size, h = -size},
+		minsize = {w = size, h = size}
+	}
 
 	function HUDELEMENT:Initialize()
 		BaseClass.Initialize(self)
@@ -29,7 +29,7 @@ if CLIENT then
 
 	function HUDELEMENT:GetDefaults()
 		const_defaults["basepos"] = {x = 20, y = ScrH() * 0.5}
-		
+
 		return const_defaults
 	end
 

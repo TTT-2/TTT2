@@ -13,10 +13,10 @@ if CLIENT then
 	local padding = 10
 
 	local const_defaults = {
-				basepos = {x = 0, y = 0},
-				size = {w = 48, h = 48},
-				minsize = {w = 48, h = 48}
-				}
+		basepos = {x = 0, y = 0},
+		size = {w = 48, h = 48},
+		minsize = {w = 48, h = 48}
+	}
 
 	function HUDELEMENT:Initialize()
 		self.scale = 1.0
@@ -33,7 +33,8 @@ if CLIENT then
 	-- parameter overwrites end
 
 	function HUDELEMENT:GetDefaults()
-		const_defaults["basepos"] = { x = self.padding, y = ScrH() * 0.5}
+		const_defaults["basepos"] = {x = self.padding, y = ScrH() * 0.5}
+
 		return const_defaults
 	end
 
@@ -61,18 +62,21 @@ if CLIENT then
 
 		-- get number of new icons
 		local num_icons = 0
+
 		for _, itemCls in ipairs(itms) do
 			local item = items.GetStored(itemCls)
+
 			if item and item.hud then
 				num_icons = num_icons + 1
 			end
 		end
 
 		local curY = basepos.y + 0.5 * (num_icons -1) * (self.size.w + self.padding)
-		
+
 		-- at first, calculate old items because they don't take care of the new ones
 		for _, itemCls in ipairs(itms) do
 			local item = items.GetStored(itemCls)
+
 			if item and item.oldHud then
 				curY = curY - 80
 			end
@@ -81,6 +85,7 @@ if CLIENT then
 		-- now draw our new items automatically
 		for _, itemCls in ipairs(itms) do
 			local item = items.GetStored(itemCls)
+
 			if item and item.hud then
 				curY = curY - (size + self.padding)
 
@@ -120,6 +125,6 @@ if CLIENT then
 			end
 		end
 
-		self:SetSize(size, - math.max(basepos.y - curY, self.minsize.h)  ) -- adjust the size
+		self:SetSize(size, - math.max(basepos.y - curY, self.minsize.h)) -- adjust the size
 	end
 end

@@ -6,18 +6,22 @@ local current_hud_table = nil
 net.Receive("TTT2UpdateHUDManagerStringAttribute", function()
 	local key = net.ReadString()
 	local value = net.ReadString()
+
 	if value == "NULL" then
 		value = nil
 	end
+
 	HUDManager.SetModelValue(key, value)
 end)
 
 net.Receive("TTT2UpdateHUDManagerRestrictedHUDsAttribute", function()
 	local len = net.ReadUInt(16)
+
 	if len == 0 then
 		HUDManager.SetModelValue("restrictedHUDs", {})
 	else
 		local tab = {}
+
 		for i = 1, len do
 			table.insert(tab, net.ReadString())
 		end
@@ -62,6 +66,7 @@ end
 
 function HUDManager.DrawHUD()
 	if not current_hud_table or not current_hud_table.Draw then return end
+
 	current_hud_table:Draw()
 end
 
@@ -134,6 +139,7 @@ local function UpdateHUD(name)
 
 	if not hudEl then
 		MsgN("Error: HUD with name " .. name .. " was not found!")
+
 		return
 	end
 
@@ -144,7 +150,8 @@ local function UpdateHUD(name)
 	-- save the old HUDs values
 	if current_hud_table then current_hud_table:SaveData() end
 
-	current_hud_cvar:SetString(name)
+	RunConsoleCommand(current_hud_cvar:GetName(), name)
+
 	current_hud_table = hudEl
 
 	-- Initialize elements

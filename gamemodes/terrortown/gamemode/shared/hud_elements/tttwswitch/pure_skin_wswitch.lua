@@ -27,10 +27,10 @@ if CLIENT then
 	local lpw = 22 -- left panel width
 
 	local const_defaults = {
-				basepos = {x = 0, y = 0},
-				size = {w = 365, h = 28},
-				minsize = {w = 240, h = 28}
-				}
+		basepos = {x = 0, y = 0},
+		size = {w = 365, h = 28},
+		minsize = {w = 240, h = 28}
+	}
 
 	function HUDELEMENT:PreInitialize()
 		self.drawer = hudelements.GetStored("pure_skin_element")
@@ -49,7 +49,8 @@ if CLIENT then
 	end
 
 	function HUDELEMENT:GetDefaults()
-		const_defaults["basepos"] = { x = ScrW() - (self.size.w + self.margin * 2), y = ScrH() - self.margin}
+		const_defaults["basepos"] = {x = ScrW() - (self.size.w + self.margin * 2), y = ScrH() - self.margin}
+
 		return const_defaults
 	end
 
@@ -127,9 +128,12 @@ if CLIENT then
 	function HUDELEMENT:Draw()
 		local weaponList = {}
 		local weps = WSWITCH.WeaponCache
-		for i=1,table.Count(weps) do
+		local count = table.Count(weps)
+
+		for i = 1, count do
 			table.insert(weaponList, {h = self.element_height})
 		end
+
 		self:SetElements(weaponList)
 		self:SetElementMargin(self.margin)
 
@@ -138,15 +142,17 @@ if CLIENT then
 
 	function HUDELEMENT:DrawElement(i, x, y, w, h)
 		local col = col_dark
+
 		if WSWITCH.Selected == i then
 			col = col_active
 		end
+
 		self:DrawBarBg(x, y, w, h, col)
 
 		if not self:DrawWeapon(x, y, col, WSWITCH.WeaponCache[i]) then
 			WSWITCH:UpdateWeaponCache()
+
 			return
 		end
-
 	end
 end

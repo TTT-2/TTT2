@@ -11,10 +11,10 @@ if CLIENT then
 	local element_margin = 6
 
 	local const_defaults = {
-				basepos = {x = 0, y = 0},
-				size = {w = 72, h = 72},
-				minsize = {w = 0, h = 0}
-				}
+		basepos = {x = 0, y = 0},
+		size = {w = 72, h = 72},
+		minsize = {w = 0, h = 0}
+	}
 
 	function HUDELEMENT:PreInitialize()
 		hudelements.RegisterChildRelation(self.id, "pure_skin_roundinfo", false)

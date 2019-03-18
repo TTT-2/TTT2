@@ -2,9 +2,9 @@ require("huds")
 
 local HUDS_ABSTRACT_FOLDER = "base_huds"
 
-local function includeFoldersFiles(pathBase, folder, filestbl)
-	for _, fl in ipairs(filestbl) do
-		local filename = pathBase .. folder .. "/" .. fl
+local function includeFoldersFiles(base, fld, fls)
+	for _, fl in ipairs(fls) do
+		local filename = base .. fld .. "/" .. fl
 
 		if SERVER then
 			AddCSLuaFile(filename)
@@ -25,7 +25,6 @@ end
 --------------------------
 
 local pathBase = "terrortown/gamemode/shared/huds/" .. HUDS_ABSTRACT_FOLDER .. "/"
-
 local pathFiles = file.Find(pathBase .. "*.lua", "LUA")
 
 -- include HUD Elements files
@@ -53,13 +52,12 @@ end
 local _, subFolders = file.Find(pathBase .. "*", "LUA")
 
 for _, folder in ipairs(subFolders) do
-
-	local subSubFiles = file.Find(pathBase .. folder .. "/*.lua", "LUA")
+	local subFiles = file.Find(pathBase .. folder .. "/*.lua", "LUA")
 
 	-- all huds will be loaded here
 	HUD = {}
 
-	includeFoldersFiles(pathBase, folder, subSubFiles)
+	includeFoldersFiles(pathBase, folder, subFiles)
 
 	HUD.isAbstract = true
 
@@ -76,10 +74,10 @@ end
 
 pathBase = "terrortown/gamemode/shared/huds/"
 
-pathFiles = file.Find(pathBase .. "*.lua", "LUA")
+local pathFiles2 = file.Find(pathBase .. "*.lua", "LUA")
 
 -- include HUD Elements files
-for _, fl in ipairs(pathFiles) do
+for _, fl in ipairs(pathFiles2) do
 	HUD = {}
 
 	if SERVER then
@@ -98,24 +96,17 @@ for _, fl in ipairs(pathFiles) do
 end
 
 -- include HUD Elements folders
-_, subFolders = file.Find(pathBase .. "*", "LUA")
+local _, subFolders2 = file.Find(pathBase .. "*", "LUA")
 
-for _, folder in ipairs(subFolders) do
+for _, folder in ipairs(subFolders2) do
 	if folder == HUDS_ABSTRACT_FOLDER then continue end
 
-	--appearently we need this check, because file.Find returns old weirdly cached directories
-	if SERVER and not file.Exists(pathBase .. folder, "LUA") then
-		MsgN("Skipped a folder that doesn't exists! " .. folder)
-
-		continue
-	end
-
-	local subSubFiles = file.Find(pathBase .. folder .. "/*.lua", "LUA")
+	local subFiles = file.Find(pathBase .. folder .. "/*.lua", "LUA")
 
 	-- all huds will be loaded here
 	HUD = {}
 
-	includeFoldersFiles(pathBase, folder, subSubFiles)
+	includeFoldersFiles(pathBase, folder, subFiles)
 
 	huds.Register(HUD, folder)
 

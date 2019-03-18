@@ -56,6 +56,7 @@ function HUD:ShouldShow(elementType)
 		if el.togglable and not GetGlobalBool("ttt2_elem_toggled_" .. el.id, false) then
 			return false
 		end
+
 		return true
 	else
 		return false
@@ -140,9 +141,12 @@ function HUD:GetElementByType(elementType)
 	-- check if the element is a child and if its parent element is a part of this HUD
 	if elementTbl:IsChild() then
 		local parent, parentIsType = elementTbl:GetParentRelation()
+
 		if not parent or parentIsType == nil then return nil end
+
 		-- find the parent element, if the element is bound to a type call this method again and if not get the specific element
-		local parentTbl = ( parentIsType and self:GetElementByType(parent) ) or ( not parentIsType and hudelements.GetStored(parent) )
+		local parentTbl = (parentIsType and self:GetElementByType(parent)) or (not parentIsType and hudelements.GetStored(parent))
+
 		if not parentTbl then return nil end
 	end
 
@@ -156,6 +160,7 @@ end
 function HUD:GetElements()
 	-- loop through all types and if the hud does not provide an element take the first found instance for the type
 	local elems = {}
+
 	for _, typ in ipairs(hudelements.GetElementTypes()) do
 		local el = self:GetElementByType(typ)
 		if el then
@@ -175,7 +180,9 @@ end
 -- the HUDEditors elements on top.
 function HUD:DrawElemAndChildren(elem)
 	if not elem.initialized or not elem.type or not hook.Call("HUDShouldDraw", GAMEMODE, elem.type) or not self:ShouldShow(elem.type) or not elem:ShouldDraw() then return end
+
 	local children = elem:GetChildren()
+
 	for _, v in ipairs(children) do
 		local child = hudelements.GetStored(v)
 		if not child then
@@ -200,6 +207,7 @@ function HUD:Draw()
 		local elem = hudelements.GetStored(elemName)
 		if not elem then
 			MsgN("Error: Hudelement with name " .. elemName .. " not found!")
+			
 			return
 		end
 

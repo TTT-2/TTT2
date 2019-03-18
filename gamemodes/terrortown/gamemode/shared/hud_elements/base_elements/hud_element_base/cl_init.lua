@@ -84,12 +84,13 @@ end
 -- dont forget to call @{BaseClass.Initialize(self)}, which will then call
 -- @{HUDELEMENT:Initialize()} on all children.
 function HUDELEMENT:Initialize()
-
 	local defaults = self:GetDefaults()
+
 	self:SetSize(defaults.size.w, defaults.size.h)
 	self:SetMinSize(defaults.minsize.w, defaults.minsize.h)
 
 	defaults = self:GetDefaults()
+
 	self:SetBasePos(defaults.basepos.x, defaults.basepos.y)
 
 	-- use this to set default values and dont forget to call BaseClass.Initialze(self)!!
@@ -138,7 +139,7 @@ function HUDELEMENT:GetBasePos()
 end
 
 --- This function sets your basepos, the value which is used
--- to move the element. It automatically updates the position as 
+-- to move the element. It automatically updates the position as
 -- well with @{HUDLEMENT:SetPos}
 -- @tparam number
 -- @tparam number
@@ -193,7 +194,7 @@ function HUDELEMENT:GetSize()
 end
 
 --- This function sets your size.
--- Note: When passing negative values it will call @{HUDELEMENT:SetPos} to 
+-- Note: When passing negative values it will call @{HUDELEMENT:SetPos} to
 -- shift your element by the value. This results in i.e. in a top growing element
 -- instead of the default bottom growing when setting -h instead of h.
 -- @tparam number width
@@ -362,7 +363,7 @@ function HUDELEMENT:OnHovered(x, y)
 	-- locked aspect ratio has to be a special case to not break movement
 	if self:AspectRatioIsLocked() then
 		-- ignore if mouse is on center
-		if (not (row[2] and col[2])) then
+		if not (row[2] and col[2]) then
 			row[2] = false
 			col[2] = false
 		end
@@ -420,7 +421,7 @@ function HUDELEMENT:DrawHovered(x, y)
 	end
 
 	-- set color
-	if (row[2] and col[2]) then
+	if row[2] and col[2] then
 		surface.SetDrawColor(20, 150, 245, 155)
 	else
 		surface.SetDrawColor(245, 30, 80, 155)
@@ -434,6 +435,7 @@ function HUDELEMENT:GetClickedArea(x, y, alt_pressed)
 	alt_pressed = alt_pressed or false
 
 	local row, col
+
 	if self.edit_live_data.calc_new_click_area then
 		if not self:IsInPos(x, y) then
 			return false
@@ -449,7 +451,7 @@ function HUDELEMENT:GetClickedArea(x, y, alt_pressed)
 		col = self.edit_live_data.old_col
 	end
 
-	if (row == nil or col == nil) then
+	if row == nil or col == nil then
 		return false
 	end
 
@@ -550,8 +552,8 @@ end
 --- Loads the saved keys and applies them to the element
 function HUDELEMENT:LoadData()
 	local skeys = self:GetSavingKeys()
-
 	local loadedData = {}
+
 	-- load and initialize the elements data from database
 	if SQL.CreateSqlTable("ttt2_hudelements", skeys) then
 		local loaded = SQL.Load("ttt2_hudelements", self.id, loadedData, skeys)
@@ -563,16 +565,19 @@ function HUDELEMENT:LoadData()
 
 	if loadedData.pos then
 		self:SetPos(loadedData.pos.x, loadedData.pos.y)
+
 		loadedData.pos = nil
 	end
 
 	if loadedData.basepos then
 		self:SetBasePos(loadedData.basepos.x, loadedData.basepos.y)
+
 		loadedData.basepos = nil
 	end
 
 	if loadedData.size then
 		self:SetSize(loadedData.size.w, loadedData.size.h)
+
 		loadedData.size = nil
 	end
 

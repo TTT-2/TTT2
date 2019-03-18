@@ -36,10 +36,10 @@ if CLIENT then
 	}
 
 	local const_defaults = {
-				basepos = {x = 0, y = 0},
-				size = {w = width, h = -height},
-				minsize = {w = width, h = height}
-				}
+		basepos = {x = 0, y = 0},
+		size = {w = width, h = -height},
+		minsize = {w = width, h = height}
+	}
 
 	function HUDELEMENT:Initialize()
 		WSWITCH:UpdateWeaponCache()
@@ -52,7 +52,7 @@ if CLIENT then
 
 	function HUDELEMENT:GetDefaults()
 		const_defaults["basepos"] = {x = ScrW() - (width + self.margin * 2), y = ScrH() - self.margin}
-		
+
 		return const_defaults
 	end
 
@@ -166,15 +166,17 @@ if CLIENT then
 
 	function HUDELEMENT:DrawElement(i, x, y, w, h)
 		local col = col_dark
+
 		if WSWITCH.Selected == i then
 			col = col_active
 		end
+
 		self:DrawBarBg(x, y, w, h, col)
 
 		if not self:DrawWeapon(x, y, col, WSWITCH.WeaponCache[i]) then
 			WSWITCH:UpdateWeaponCache()
+
 			return
 		end
-
 	end
 end

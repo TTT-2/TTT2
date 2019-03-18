@@ -12,10 +12,10 @@ if CLIENT then
 	local sri_text_width_padding = 8 -- secondary role information padding (needed for size calculations)
 
 	local const_defaults = {
-				basepos = {x = 0, y = 0},
-				size = {w = 365, h = 146},
-				minsize = {w = 225, h = 146}
-				}
+		basepos = {x = 0, y = 0},
+		size = {w = 365, h = 146},
+		minsize = {w = 225, h = 146}
+	}
 
 	function HUDELEMENT:Initialize()
 		self.scale = 1.0
@@ -35,7 +35,8 @@ if CLIENT then
 	-- parameter overwrites end
 
 	function HUDELEMENT:GetDefaults()
-		const_defaults["basepos"] = { x = 10 * self.scale, y = ScrH() - (10 * self.scale + self.size.h)}
+		const_defaults["basepos"] = {x = 10 * self.scale, y = ScrH() - (10 * self.scale + self.size.h)}
+
 		return const_defaults
 	end
 

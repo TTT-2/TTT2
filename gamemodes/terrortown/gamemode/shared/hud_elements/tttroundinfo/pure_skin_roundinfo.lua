@@ -12,10 +12,10 @@ if CLIENT then
 	local pad = 14
 
 	local const_defaults = {
-				basepos = {x = 0, y = 0},
-				size = {w = 96, h = 72},
-				minsize = {w = 96, h = 72}
-				}
+		basepos = {x = 0, y = 0},
+		size = {w = 96, h = 72},
+		minsize = {w = 96, h = 72}
+	}
 
 	function HUDELEMENT:Initialize()
 		self.scale = 1.0
@@ -34,7 +34,8 @@ if CLIENT then
 	-- parameter overwrites end
 
 	function HUDELEMENT:GetDefaults()
-		const_defaults["basepos"] = { x = math.Round(ScrW() * 0.5 - self.size.w * 0.5), y = 4 * self.scale}
+		const_defaults["basepos"] = {x = math.Round(ScrW() * 0.5 - self.size.w * 0.5), y = 4 * self.scale}
+		
 		return const_defaults
  	end
 
@@ -58,7 +59,7 @@ if CLIENT then
 
 		-- draw haste / time
 		-- Draw round time
-		
+
 		local is_haste = HasteMode() and round_state == ROUND_ACTIVE
 		local is_traitor = not client:IsActive() or client:HasTeam(TEAM_TRAITOR)
 		local endtime = GetGlobalFloat("ttt_round_end", 0) - CurTime()
@@ -104,11 +105,11 @@ if CLIENT then
 			end
 		else
 			vert_align_clock = TEXT_ALIGN_CENTER
-			
+
 			-- bog standard time when haste mode is off (or round not active)
 			text = util.SimpleTime(math.max(0, endtime), "%02i:%02i")
 		end
-		
+
 		self:AdvancedText(text, font, rx, ry, color, TEXT_ALIGN_CENTER, vert_align_clock, true, self.scale)
 
 		if is_haste then

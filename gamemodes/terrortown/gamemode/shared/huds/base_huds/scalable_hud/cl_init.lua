@@ -26,6 +26,7 @@ function HUD:GetSavingKeys()
 			OnChange = function(slf, val)
 				--local scaleMultiplier = val / self.scale
 				self.scale = val
+
 				self:Reset()
 				self:SaveData()
 			end
@@ -42,6 +43,7 @@ function HUD:LoadData()
 		local el = hudelements.GetStored(elem)
 		if el then
 			local min_size = el:GetDefaults().minsize
+
 			el:SetMinSize(min_size.w * self.scale, min_size.h * self.scale)
 			el:PerformLayout()
 		end
@@ -54,12 +56,14 @@ function HUD:ApplyScale(scale)
 		if el then
 			local size = el:GetSize()
 			local min_size = el:GetMinSize()
+
 			el:SetMinSize(min_size.w * scale, min_size.h * scale)
 			el:SetSize(size.w * scale, size.h * scale)
 			el:PerformLayout()
 
 			--reset position to new calculated default position
 			local defaultPos = el:GetDefaults().basepos
+
 			el:SetBasePos(defaultPos.x, defaultPos.y)
 			el:PerformLayout()
 		end
@@ -68,6 +72,7 @@ end
 
 function HUD:Reset()
 	self.basecolor = defaultColor
+	
 	BaseClass.Reset(self)
 
 	self:ApplyScale(self.scale)

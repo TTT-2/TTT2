@@ -12,10 +12,12 @@ function HUDELEMENT:Draw()
 
     for k, el in ipairs(self.elements) do
         self:DrawElement(k, self.pos.x, running_y, self.size.w, el.h)
+
         running_y = running_y + el.h + self.element_margin
     end
 
     local totalHeight = running_y - self.pos.y
+	
     self:SetSize(self.size.w, -totalHeight)
 end
 
