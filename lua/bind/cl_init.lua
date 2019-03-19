@@ -57,6 +57,8 @@ local function TTT2LoadBindings()
 		if istable(result) then
 			for _, tbl in ipairs(result) do
 				local tmp = tbl.button
+				
+				bind.RemoveAll(tbl.name)
 
 				Bindings[tmp] = Bindings[tmp] or {}
 
@@ -210,13 +212,14 @@ function bind.AddSettingsBinding(name, label, category)
 end
 
 --[[---------------------------------------------------------
-    Register( any identifier, function func, function onPressed, function onReleased, [OPTIONAL] dontShowOrCategory, [OPTIONAL] settingsLabel )
+    Register( any identifier, function func, function onPressed, function onReleased, [OPTIONAL] dontShowOrCategory, [OPTIONAL] settingsLabel, [OPTIONAL] defaultKey )
     Register a function to run when the button for a specific binding is pressed. This will also add the binding to the
 	BindingsCategories with the default category, otherwise set dontShowOrCategory to true.
 	If you wish to set a custom category name then set dontShowOrCategory to the category name and optionally also set the
 	label you wish to be displayed.
+	You can set a default key as well, so players don't need to bind manually if they don't want to.
 -----------------------------------------------------------]]
-function bind.Register(name, onPressedFunc, onReleasedFunc, dontShowOrCategory, settingsLabel)
+function bind.Register(name, onPressedFunc, onReleasedFunc, dontShowOrCategory, settingsLabel, defaultKey)
 	if not isfunction(onPressedFunc) and not isfunction(onReleasedFunc) then
 		return
 	end
@@ -228,6 +231,12 @@ function bind.Register(name, onPressedFunc, onReleasedFunc, dontShowOrCategory, 
 
 	if dontShowOrCategory ~= true then
 		bind.AddSettingsBinding(name, settingsLabel or name, dontShowOrCategory)
+	end
+
+	if defaultKey then
+		if bind.Find(name) == KEY_NONE then
+			bind.Set(defaultKey, name, false)
+		end
 	end
 end
 
