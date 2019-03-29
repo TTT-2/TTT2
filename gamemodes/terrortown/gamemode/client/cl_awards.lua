@@ -84,7 +84,7 @@ function ExplosiveGrant(events, scores, players, traitors)
 
 	local award = {title = T("aw_exp1_title")}
 
-	if table.Count(bombers) > 0 then
+	if not table.IsEmpty(bombers) then
 		for sid64, num in pairs(bombers) do
 			-- award goes to whoever reaches this first I guess
 			if num > 2 then
@@ -223,7 +223,7 @@ function Headshots(events, scores, players, traitors)
 		end
 	end
 
-	if table.Count(hs) == 0 then return end
+	if table.IsEmpty(hs) then return end
 
 	-- find the one with the most shots
 	local m_id, m_num = FindHighest(hs)
@@ -262,7 +262,7 @@ function UsedAmmoMost(events, ammotype)
 		end
 	end
 
-	if table.Count(user) == 0 then return end
+	if table.IsEmpty(user) then return end
 
 	local m_id, m_num = FindHighest(user)
 
@@ -657,7 +657,7 @@ function Burner(events, scores, players, traitors)
 		end
 	end
 
-	if table.Count(brn) == 0 then return end
+	if table.IsEmpty(brn) then return end
 
 	-- find the one with the most burnings
 	local m_id, m_num = FindHighest(brn)
@@ -697,7 +697,7 @@ function Coroner(events, scores, players, traitors)
 		end
 	end
 
-	if table.Count(finders) == 0 then return end
+	if table.IsEmpty(finders) then return end
 
 	local m_id, m_num = FindHighest(finders)
 
@@ -736,7 +736,7 @@ function CreditFound(events, scores, players, traitors)
 		end
 	end
 
-	if table.Count(finders) == 0 then return end
+	if table.IsEmpty(finders) then return end
 
 	local m_id, m_num = FindHighest(finders)
 

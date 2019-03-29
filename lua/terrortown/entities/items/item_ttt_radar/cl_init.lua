@@ -139,9 +139,7 @@ function RADAR:Draw(client)
 	end
 
 	-- Corpse calls
-	local size = table.Count(self.called_corpses)
-
-	if client:IsActiveRole(ROLE_DETECTIVE) and size > 0 then
+	if client:IsActiveRole(ROLE_DETECTIVE) and not table.IsEmpty(self.called_corpses) then
 		surface.SetTexture(det_beacon)
 		surface.SetTextColor(255, 255, 255, 240)
 		surface.SetDrawColor(255, 255, 255, 230)

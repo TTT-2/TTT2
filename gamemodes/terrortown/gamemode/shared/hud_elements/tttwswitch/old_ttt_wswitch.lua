@@ -155,9 +155,12 @@ if CLIENT then
 	function HUDELEMENT:Draw()
 		local weaponList = {}
 		local weps = WSWITCH.WeaponCache
-		for i=1,table.Count(weps) do
+		local count = table.Count(weps)
+
+		for i = 1, count do
 			table.insert(weaponList, {h = height})
 		end
+
 		self:SetElements(weaponList)
 		self:SetElementMargin(self.margin)
 

@@ -197,7 +197,7 @@ function SQL.CreateSqlTable(tableName, keys)
 end
 
 function SQL.Init(tableName, name, tbl, keys)
-	if not keys or table.Count(keys) == 0 then return end
+	if not keys or table.IsEmpty(keys) then return end
 
 	local query = SQL.BuildInsertString(tableName, name, tbl, keys)
 
@@ -207,7 +207,7 @@ function SQL.Init(tableName, name, tbl, keys)
 end
 
 function SQL.Save(tableName, name, tbl, keys)
-	if not keys or table.Count(keys) == 0 then return end
+	if not keys or table.IsEmpty(keys) then return end
 
 	local query = SQL.BuildUpdateString(tableName, name, tbl, keys)
 
@@ -217,7 +217,7 @@ function SQL.Save(tableName, name, tbl, keys)
 end
 
 function SQL.Load(tableName, name, tbl, keys)
-	if not keys or table.Count(keys) == 0 then return end
+	if not keys or table.IsEmpty(keys) then return end
 
 	local result = sql.Query("SELECT * FROM " .. tableName .. " WHERE name = '" .. name .. "'")
 
