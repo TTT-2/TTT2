@@ -55,13 +55,14 @@ end
 local function RoleChatMsg(sender, msg)
 	local tm = sender:GetTeam()
 	if tm ~= TEAM_NONE and not sender:GetSubRoleData().disabledTeamChat and not TEAMS[tm].alone then
+		if hook.Run("TTT2AvoidTeamChat", sender, tm, msg) == false then return end
+
 		net.Start("TTT_RoleChat")
 		net.WriteEntity(sender)
 		net.WriteString(msg)
 		net.Send(GetTeamChatFilter(tm))
 	end
 end
-
 
 -- Round start info popup
 function ShowRoundStartPopup()
@@ -163,7 +164,8 @@ function GM:PlayerCanSeePlayersChat(text, team_only, listener, speaker)
 		speaker:IsInTeam(listener)
 		and not speaker:GetSubRoleData().unknownTeam
 		and not speaker:GetSubRoleData().disabledTeamChat
-		and not listener:GetSubRoleData().disabledTeamChatRecv -- if the speaker and listener are in same team
+		and not listener:GetSubRoleData().disabledTeamChatRecv
+		and hook.Run("TTT2AvoidTeamVoiceChat", speaker, listener) ~= false -- if the speaker and listener are in same team
 	) or sTeam and lTeam then -- If the speaker and listener are spectators
 		return true
 	end
