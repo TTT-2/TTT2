@@ -754,3 +754,10 @@ hook.Add("TTTBeginRound", "TTT2ResetRoleState", function()
 		p:ResetConfirmPlayer()
 	end
 end)
+
+-- additionally reset confirm state on round end to prevent short blinking of confirmed roles on round start
+hook.Add("TTTEndRound", "TTT2ResetRoleState", function()
+	for _,p in ipairs(player.GetAll()) do
+		p:ResetConfirmPlayer()
+	end
+end)
