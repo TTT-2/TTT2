@@ -834,13 +834,13 @@ end
 function TellTraitorsAboutTraitors()
 	local traitornicks = {}
 
-	hook.Run("TTT2TellTraitors")
-
 	for _, v in ipairs(player.GetAll()) do
 		if v:HasTeam(TEAM_TRAITOR) then
-			table.insert(traitornicks, v:Nick())
+			traitornicks[#traitornicks + 1] = v:Nick()
 		end
 	end
+
+	hook.Run("TTT2TellTraitors", traitornicks)
 
 	-- This is ugly as hell, but it's kinda nice to filter out the names of the
 	-- traitors themselves in the messages to them
@@ -861,7 +861,7 @@ function TellTraitorsAboutTraitors()
 					end
 				end
 
-				names = string.sub(names, 1, - 3)
+				names = string.sub(names, 1, -3)
 
 				LANG.Msg(v, "round_traitors_more", {names = names})
 			end
