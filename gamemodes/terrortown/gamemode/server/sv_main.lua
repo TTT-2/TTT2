@@ -846,6 +846,12 @@ function TellTraitorsAboutTraitors()
 	-- traitors themselves in the messages to them
 	local traitornicks_min = #traitornicks < 2
 
+	if not traitornicks_min then
+		table.sort(traitornicks, function(a, b)
+			return a and b and a:upper() < b:upper()
+		end)
+	end
+
 	for _, v in ipairs(player.GetAll()) do
 		if v:HasTeam(TEAM_TRAITOR) then
 			if traitornicks_min then
