@@ -278,6 +278,14 @@ function table.CopyKeys(tbl, keys)
 	return out
 end
 
+-- this fn is just available in the next update
+if not table.IsEmpty then
+	-- checks whether a table is empty
+	function table.IsEmpty(tbl)
+		return next(tbl) == nil
+	end
+end
+
 local gsub = string.gsub
 
 -- Simple string interpolation:
