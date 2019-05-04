@@ -749,7 +749,14 @@ hook.Add("TTTBeginRound", "TTT2GivePendingItems", function()
 end)
 
 -- reset confirm state only on round begin, not on revive
-hook.Add("TTTBeginRound", "TTT2ResetRoleState", function()
+hook.Add("TTTBeginRound", "TTT2ResetRoleState_Begin", function()
+	for _,p in ipairs(player.GetAll()) do
+		p:ResetConfirmPlayer()
+	end
+end)
+
+-- additionally reset confirm state on round end to prevent short blinking of confirmed roles on round start
+hook.Add("TTTEndRound", "TTT2ResetRoleState_End", function()
 	for _,p in ipairs(player.GetAll()) do
 		p:ResetConfirmPlayer()
 	end
