@@ -114,7 +114,7 @@ local function IdentifyBody(ply, rag)
 	-- Register find
 	if not CORPSE.GetFound(rag, false) then -- will return either false or a valid ply
 		local deadply = player.GetBySteamID64(rag.sid64)
-		if deadply and not deadply:Alive() then
+		if deadply and not deadply:Alive() and hook.Run("TTT2ConfirmPlayer", deadply, ply, rag) ~= false then
 			deadply:ConfirmPlayer(true)
 			SendPlayerToEveryone(deadply) -- confirm player for everyone
 
@@ -123,7 +123,9 @@ local function IdentifyBody(ply, rag)
 
 		hook.Call("TTTBodyFound", GAMEMODE, ply, deadply, rag)
 
-		CORPSE.SetFound(rag, true)
+		if hook.Run("TTT2SetCorpseFound", deadply, ply, rag) ~= false then
+			CORPSE.SetFound(rag, true)
+		end
 	end
 
 	if GetConVar("ttt2_confirm_killlist"):GetBool() then
