@@ -133,11 +133,11 @@ L.xfer_success = "Credit-Transfer an {player} abgeschlossen."
 L.xfer_received = "{player} gab dir {num} Credit(s)."
 
 -- Reroll tab in equipment menu
-L.rroll_name = "Reroll"
-L.rroll_menutitle = "Items neu ausrollen"
-L.rroll_no_credits = "Du brauchst {amount} Credits zum neu ausrollen!"
-L.rroll_button = "Reroll"
-L.rroll_help = "Bekomme neu zufällige Items für {amount} Credits!"
+L.reroll_name = "Reroll"
+L.reroll_menutitle = "Items neu ausrollen"
+L.reroll_no_credits = "Du brauchst {amount} Credits zum neu ausrollen!"
+L.reroll_button = "Reroll"
+L.reroll_help = "Bekomme neu zufällige Items für {amount} Credits!"
 
 -- Radio tab in equipment menu
 L.radio_name = "Radio"

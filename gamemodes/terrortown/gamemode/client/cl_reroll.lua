@@ -8,14 +8,14 @@ function CreateRerollMenu(parent)
 	local client = LocalPlayer()
 
 	local dform = vgui.Create("DForm", parent)
-	dform:SetName(GetTranslation("rroll_menutitle"))
+	dform:SetName(GetTranslation("reroll_menutitle"))
 	dform:StretchToParent(0, 0, 0, 0)
 	dform:SetAutoSize(false)
 
 	local cost = GetGlobalInt("ttt2_random_shop_reroll_cost")
 
 	if client:GetCredits() <= 0 then
-		dform:Help(LANG.GetParamTranslation("rroll_no_credits", {amount = cost}))
+		dform:Help(LANG.GetParamTranslation("reroll_no_credits", {amount = cost}))
 
 		return dform
 	end
@@ -25,7 +25,7 @@ function CreateRerollMenu(parent)
 	local dsubmit = vgui.Create("DButton", dform)
 	dsubmit:SetSize(bw, bh)
 	dsubmit:SetDisabled(false)
-	dsubmit:SetText(GetTranslation("rroll_button"))
+	dsubmit:SetText(GetTranslation("reroll_button"))
 
 	dsubmit.DoClick = function(s)
 		RunConsoleCommand("ttt2_reroll_shop")
@@ -43,7 +43,7 @@ function CreateRerollMenu(parent)
 
 	dform:AddItem(dsubmit)
 
-	dform:Help(LANG.GetParamTranslation("rroll_help", {amount = cost}))
+	dform:Help(LANG.GetParamTranslation("reroll_help", {amount = cost}))
 
 	return dform
 end
