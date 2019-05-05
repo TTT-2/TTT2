@@ -16,6 +16,7 @@ hook.Add("TTT2SyncGlobals", "AddInventoryGlobals", function()
 	SetGlobalInt(maxUnarmedSlots:GetName(), maxUnarmedSlots:GetInt())
 	SetGlobalInt(maxSpecialSlots:GetName(), maxSpecialSlots:GetInt())
 	SetGlobalInt(maxExtraSlots:GetName(), maxExtraSlots:GetInt())
+	SetGlobalInt("ttt2_max_class_slots", -1)
 end)
 
 cvars.AddChangeCallback(maxMeleeSlots:GetName(), function(name, old, new)
@@ -58,11 +59,12 @@ ORDERED_SLOT_TABLE = {
 	[WEAPON_CARRY] = "ttt2_max_carry_slots",
 	[WEAPON_UNARMED] = "ttt2_max_unarmed_slots",
 	[WEAPON_SPECIAL] = "ttt2_max_special_slots",
-	[WEAPON_EXTRA] = "ttt2_max_extra_slots"
+	[WEAPON_EXTRA] = "ttt2_max_extra_slots",
+	[WEAPON_CLASS] = "ttt2_max_class_slots"
 }
 
 function MakeKindValid(kind)
-	if kind > WEAPON_EXTRA or kind < WEAPON_MELEE then
+	if kind > WEAPON_CLASS or kind < WEAPON_MELEE then
 		return WEAPON_EXTRA
 	else
 		return kind

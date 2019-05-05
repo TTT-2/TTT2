@@ -330,7 +330,7 @@ function plymeta:GetInventory()
 end
 
 function plymeta:GetWeaponsOnSlot(slot)
-	if slot > WEAPON_EXTRA then
+	if slot > WEAPON_CLASS then
 		return
 	end
 
@@ -363,6 +363,10 @@ end
 
 function plymeta:GetExtraWeapons()
 	return self:GetWeaponsOnSlot(WEAPON_EXTRA)
+end
+
+function plymeta:GetClassWeapons()
+	return self:GetWeaponsOnSlot(WEAPON_CLASS)
 end
 
 function plymeta:IsDeadTerror()
