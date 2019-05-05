@@ -756,7 +756,9 @@ function ShopEditor.ShowOptions()
 	local tmp = {}
 	local tbl = {
 		ttt2_random_shops = {typ = "number", bits = 8},
-		ttt2_random_team_shops = {typ = "bool"}
+		ttt2_random_team_shops = {typ = "bool"},
+		ttt2_random_shop_reroll = {typ = "bool"},
+		ttt2_random_shop_reroll_cost = {typ = "number", bits = 8}
 	}
 
 	for key, data in pairs(tbl) do
