@@ -251,6 +251,8 @@ end
 if SERVER then
 	local random_shops = CreateConVar("ttt2_random_shops", "0", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_SERVER_CAN_EXECUTE}, "Set to 0 to disable")
 	local random_team_shops = CreateConVar("ttt2_random_team_shops", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_SERVER_CAN_EXECUTE}, "Set to 0 to disable")
+	local random_shop_reroll = CreateConVar("ttt2_random_shop_reroll", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_SERVER_CAN_EXECUTE}, "Set to 0 to disable")
+	local random_shop_reroll_cost = CreateConVar("ttt2_random_shop_reroll_cost", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_SERVER_CAN_EXECUTE}, "Credit cost per reroll")
 
 	util.AddNetworkString("TTT2SyncRandomShops")
 
@@ -441,6 +443,15 @@ if SERVER then
 		end
 	end, "ttt2changeteamshops")
 
+	cvars.AddChangeCallback("ttt2_random_shop_reroll", function(name, old, new)
+		SetGlobalBool("ttt2_random_shop_reroll", tobool(new))
+	end, "ttt2updatererollglobal")
+
+	
+	cvars.AddChangeCallback("ttt2_random_shop_reroll_cost", function(name, old, new)
+		SetGlobalInt("ttt2_random_shop_reroll_cost", tonumber(new))
+	end, "ttt2updatererollcostglobal")
+
 	hook.Add("TTTPrepareRound", "TTT2InitRandomShops", function()
 		local amount = GetGlobalInt("ttt2_random_shops")
 		if amount > 0 then
@@ -460,6 +471,8 @@ if SERVER then
 
 		SetGlobalInt("ttt2_random_shops", amount)
 		SetGlobalBool("ttt2_random_team_shops", random_team_shops:GetBool())
+		SetGlobalBool("ttt2_random_shop_reroll", random_shop_reroll:GetBool())
+		SetGlobalInt("ttt2_random_shop_reroll_cost", random_shop_reroll_cost:GetInt())
 
 		if amount > 0 then
 			SyncRandomShops({ply})

@@ -677,6 +677,13 @@ function TraitorMenuPopup()
 		dsheet:AddSheet(GetTranslation("xfer_name"), dtransfer, "icon16/group_gear.png", false, false, GetTranslation("equip_tooltip_xfer"))
 	end
 
+	-- Random Shop Rerolling
+	if credits > 0 and GetGlobalInt("ttt2_random_shops") > 0 and not GetGlobalBool("ttt2_random_team_shops") and GetGlobalBool("ttt2_random_shop_reroll") then
+		local dtransfer = CreateRerollMenu(dsheet)
+
+		dsheet:AddSheet(GetTranslation("rroll_name"), dtransfer, "icon16/group_gear.png", false, false, GetTranslation("equip_tooltip_rroll"))
+	end
+
 	hook.Run("TTTEquipmentTabs", dsheet)
 
 	-- couple panelselect with info

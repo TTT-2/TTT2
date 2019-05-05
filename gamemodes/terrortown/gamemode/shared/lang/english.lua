@@ -132,6 +132,13 @@ L.xfer_no_credits = "Insufficient credits for transfer."
 L.xfer_success = "Credit transfer to {player} completed."
 L.xfer_received = "{player} has given you {num} credit."
 
+-- Reroll tab in equipment menu
+L.rroll_name = "Reroll"
+L.rroll_menutitle = "Reroll Items"
+L.rroll_no_credits = "You need no credits to reroll!"
+L.rroll_button = "Reroll"
+L.rroll_help = "Use {amount} credits to get new items in your shop!"
+
 -- Radio tab in equipment menu
 L.radio_name = "Radio"
 L.radio_help = "Click a button to make your Radio play that sound."
@@ -1083,6 +1090,7 @@ L.equip_tooltip_radar = "Radar control"
 L.equip_tooltip_disguise = "Disguise control"
 L.equip_tooltip_radio = "Radio control"
 L.equip_tooltip_xfer = "Transfer credits"
+L.equip_tooltip_rroll = "Reroll Items"
 
 L.confgrenade_name = "Discombobulator"
 L.polter_name = "Poltergeist"
