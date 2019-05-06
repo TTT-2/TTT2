@@ -770,7 +770,6 @@ function ShopEditor.ShowOptions()
 	}
 
 	for key, data in ipairs(tbl) do
-		print(data.name)
 		local el
 
 		if data.typ == "number" then

@@ -423,6 +423,22 @@ if SERVER then
 		SyncRandomShops(plys)
 	end
 
+	function ResetRandomShopsForRole(role, amount, team)
+		local fallback = GetShopFallback(role)
+
+		RANDOMTEAMSHOPS[fallback] = nil
+		RANDOMSAVEDSHOPS[fallback] = nil
+
+		local plys_with_fb = {}
+		for _, ply in ipairs(player.GetAll()) do
+			if GetShopFallback(ply:GetSubRole()) == fallback then
+				table.insert(plys_with_fb, ply)
+			end
+		end
+
+		UpdateRandomShops(plys_with_fb, amount, team)
+	end
+
 	cvars.AddChangeCallback("ttt2_random_shops", function(name, old, new)
 		local tmp = tonumber(new)
 

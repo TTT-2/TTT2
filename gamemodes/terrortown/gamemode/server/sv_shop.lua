@@ -1,5 +1,13 @@
 
 
+local function RerollShop(ply)
+	if GetGlobalBool("ttt2_random_team_shops") then
+		ResetRandomShopsForRole(ply:GetSubRole(), GetGlobalInt("ttt2_random_shops"), true)
+	else
+		UpdateRandomShops({ply}, GetGlobalInt("ttt2_random_shops"), false)
+	end
+end
+
 local function HasPendingOrder(ply)
 	return timer.Exists("give_equipment" .. ply:UniqueID())
 end
@@ -129,7 +137,7 @@ local function OrderEquipment(ply, cmd, args)
 	hook.Call("TTTOrderedEquipment", GAMEMODE, ply, id2, is_item and id2 or false)
 
 	if GetGlobalBool("ttt2_random_shop_reroll_per_buy") then
-		UpdateRandomShops({ply}, GetGlobalInt("ttt2_random_shops"), false)
+		RerollShop()
 	end
 end
 concommand.Add("ttt_order_equipment", OrderEquipment)
@@ -187,10 +195,10 @@ local function TransferCredits(ply, cmd, args)
 end
 concommand.Add("ttt_transfer_credits", TransferCredits)
 
-local function RerollShop(ply, cmd, args)
+local function RerollShopForCredit(ply, cmd, args)
 	if not IsValid(ply) or not ply:IsActiveShopper() then return end
 
         ply:SubtractCredits(GetGlobalInt("ttt2_random_shop_reroll_cost"))
-        UpdateRandomShops({ply}, GetGlobalInt("ttt2_random_shops"), false)
+	RerollShop(ply)
 end
-concommand.Add("ttt2_reroll_shop", RerollShop)
+concommand.Add("ttt2_reroll_shop", RerollShopForCredit)
