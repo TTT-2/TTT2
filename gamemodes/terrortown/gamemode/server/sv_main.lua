@@ -670,7 +670,9 @@ function GM:PostCleanupMap()
 end
 
 local function CleanUp()
-	game.CleanUpMap()
+	-- This cleans up decals since GMod v100
+	-- added a timer to prevent random crashes...
+	timer.Simple(0, game.CleanUpMap)
 
 	-- Strip players now, so that their weapons are not seen by ReplaceEntities
 	for _, v in ipairs(player.GetAll()) do
@@ -679,7 +681,7 @@ local function CleanUp()
 	end
 
 	-- a different kind of cleanup
-	util.SafeRemoveHook("PlayerSay", "ULXMeCheck")
+	hook.Remove("PlayerSay", "ULXMeCheck")
 end
 
 local function SpawnEntities()

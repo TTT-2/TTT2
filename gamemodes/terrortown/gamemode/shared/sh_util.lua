@@ -182,6 +182,7 @@ function util.BasicKeyHandler(pnl, kc)
 	end
 end
 
+-- just for compatibility. All in all, a useless functions (hook.Remove already ignores not existing hooks automatically)
 function util.SafeRemoveHook(event, name)
 	local h = hook.GetTable()
 	if h and h[event] and h[event][name] then
