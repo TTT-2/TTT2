@@ -102,6 +102,8 @@ L.equip_spec_desc = "Description"
 
 L.equip_confirm = "Buy equipment"
 
+L.equip_not_alive = "You can view all available items by selecting a role on the right. Dont forget to mark your favorites!"
+
 -- Disguiser tab in equipment menu
 L.disg_name = "Disguiser"
 L.disg_menutitle = "Disguise control"

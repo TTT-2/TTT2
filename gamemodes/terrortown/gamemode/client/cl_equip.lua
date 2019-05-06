@@ -573,6 +573,13 @@ function TraitorMenuPopup()
 	local drolesel = nil
 
 	if notalive then
+		dnotaliveHelp = vgui.Create("DLabel", dequip)
+		dnotaliveHelp:SetText(GetTranslation("equip_not_alive"))
+		dnotaliveHelp:SetFont("DermaLarge")
+		dnotaliveHelp:SetWrap(true)
+		dnotaliveHelp:DockMargin(10, 0, depanel:GetWide() + 10, 0)
+		dnotaliveHelp:Dock(FILL)
+
 		depanel:SetSize(depanel:GetWide(), depanel:GetTall() + drsh + m)
 
 		drolesel = vgui.Create("DComboBox", depanel)
@@ -590,7 +597,7 @@ function TraitorMenuPopup()
 
 		drolesel.OnSelect = function(panel, index, value)
 			print(value .."'s shop was selected!")
-
+			dnotaliveHelp:SetText("")
 			CreateEquipmentList({role = RolenameToRole(value), search = dsearch:GetValue(), notalive = notalive})
 		end
 

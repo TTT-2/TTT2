@@ -102,6 +102,8 @@ L.equip_spec_desc = "Beschreibung"
 
 L.equip_confirm = "Ausrüstung kaufen"
 
+L.equip_not_alive = "Du kannst alle verfügbaren Items sehen, wenn du eine Rolle auf der rechten Seite auswählst. Denk dran, du kannst zu jeder Zeit Favoriten hinzufügen!"
+
 -- Disguiser tab in equipment menu
 L.disg_name = "Tarnung"
 L.disg_menutitle = "Tarnung-Einstellungen"
