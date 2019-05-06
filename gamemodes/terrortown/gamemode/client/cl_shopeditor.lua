@@ -758,7 +758,8 @@ function ShopEditor.ShowOptions()
 		ttt2_random_shops = {typ = "number", bits = 8},
 		ttt2_random_team_shops = {typ = "bool"},
 		ttt2_random_shop_reroll = {typ = "bool"},
-		ttt2_random_shop_reroll_cost = {typ = "number", bits = 8}
+		ttt2_random_shop_reroll_cost = {typ = "number", bits = 8},
+		ttt2_random_shop_reroll_per_buy = {typ = "bool"}
 	}
 
 	for key, data in pairs(tbl) do

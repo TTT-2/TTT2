@@ -127,6 +127,10 @@ local function OrderEquipment(ply, cmd, args)
 	local id2 = (is_item and equip_table.oldId or nil) or id
 
 	hook.Call("TTTOrderedEquipment", GAMEMODE, ply, id2, is_item and id2 or false)
+
+	if GetGlobalBool("ttt2_random_shop_reroll_per_buy") then
+		UpdateRandomShops({ply}, GetGlobalInt("ttt2_random_shops"), false)
+	end
 end
 concommand.Add("ttt_order_equipment", OrderEquipment)
 
