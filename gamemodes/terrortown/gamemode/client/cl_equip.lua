@@ -573,6 +573,13 @@ function TraitorMenuPopup()
 	local drolesel = nil
 
 	if notalive then
+		dnotaliveHelp = vgui.Create("DLabel", dequip)
+		dnotaliveHelp:SetText(GetTranslation("equip_not_alive"))
+		dnotaliveHelp:SetFont("DermaLarge")
+		dnotaliveHelp:SetWrap(true)
+		dnotaliveHelp:DockMargin(10, 0, depanel:GetWide() + 10, 0)
+		dnotaliveHelp:Dock(FILL)
+
 		depanel:SetSize(depanel:GetWide(), depanel:GetTall() + drsh + m)
 
 		drolesel = vgui.Create("DComboBox", depanel)
@@ -590,7 +597,7 @@ function TraitorMenuPopup()
 
 		drolesel.OnSelect = function(panel, index, value)
 			print(value .."'s shop was selected!")
-
+			dnotaliveHelp:SetText("")
 			CreateEquipmentList({role = RolenameToRole(value), search = dsearch:GetValue(), notalive = notalive})
 		end
 
@@ -675,6 +682,13 @@ function TraitorMenuPopup()
 		local dtransfer = CreateTransferMenu(dsheet)
 
 		dsheet:AddSheet(GetTranslation("xfer_name"), dtransfer, "icon16/group_gear.png", false, false, GetTranslation("equip_tooltip_xfer"))
+	end
+
+	-- Random Shop Rerolling
+	if credits > 0 and GetGlobalInt("ttt2_random_shops") > 0 and GetGlobalBool("ttt2_random_shop_reroll") then
+		local dtransfer = CreateRerollMenu(dsheet)
+
+		dsheet:AddSheet(GetTranslation("reroll_name"), dtransfer, "vgui/ttt/equip/reroll.png", false, false, GetTranslation("equip_tooltip_reroll"))
 	end
 
 	hook.Run("TTTEquipmentTabs", dsheet)

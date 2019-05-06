@@ -34,6 +34,7 @@ ttt_include("vgui__cl_scrolllabel")
 
 ttt_include("cl_radio")
 ttt_include("cl_transfer")
+ttt_include("cl_reroll")
 ttt_include("cl_targetid")
 ttt_include("cl_search")
 ttt_include("cl_tbuttons")

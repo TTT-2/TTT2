@@ -753,20 +753,30 @@ function ShopEditor.ShowOptions()
 		ply.shopeditor_frame = nil
 	end
 
+	local help = vgui.Create("DLabel", frame)
+	help:SetText("Change the values to adapt Random Shop ConVars. Don't forget to save afterwards!")
+	help:DockMargin(20, 0, 0, 0)
+	help:SetFont("DermaDefaultBold")
+	help:SetSize(w, 50)
+	help:Dock(TOP)
+
 	local tmp = {}
 	local tbl = {
-		ttt2_random_shops = {typ = "number", bits = 8},
-		ttt2_random_team_shops = {typ = "bool"}
+		[1] = {name = "ttt2_random_shops", typ = "number", bits = 8},
+		[2] = {name = "ttt2_random_team_shops",  typ = "bool"},
+		[3] = {name = "ttt2_random_shop_reroll", typ = "bool"},
+		[4] = {name = "ttt2_random_shop_reroll_cost", typ = "number", bits = 8},
+		[5] = {name = "ttt2_random_shop_reroll_per_buy", typ = "bool"}
 	}
 
-	for key, data in pairs(tbl) do
+	for key, data in ipairs(tbl) do
 		local el
 
 		if data.typ == "number" then
 			local max = data.bits and (2 ^ data.bits - 1) or 65535
 
 			local slider = vgui.Create("DNumSliderWang", frame)
-			slider:SetSize(w, 20)
+			slider:SetSize(100, 20)
 			slider:SetMin(0)
 			slider:SetMax(max)
 			slider:SetDecimals(0)
@@ -779,8 +789,8 @@ function ShopEditor.ShowOptions()
 			el = checkbox
 		end
 
-		el:SetText("ConVar: " .. key)
-		el:SetValue(GetGlobalInt(key))
+		el:SetText(data.name)
+		el:SetValue(GetGlobalInt(data.name))
 		el:Dock(TOP)
 		el:DockMargin(4, 0, 0, 0)
 
@@ -789,6 +799,11 @@ function ShopEditor.ShowOptions()
 		end
 
 		tmp[key] = el
+
+		local space = vgui.Create("DLabel", frame)
+		space:SetText("")
+		space:Dock(TOP)
+		space:SetSize(20, 10)
 	end
 
 	-- save button
@@ -800,7 +815,7 @@ function ShopEditor.ShowOptions()
 	saveButton.DoClick = function()
 		for key, data in pairs(tbl) do
 			net.Start("TTT2UpdateCVar")
-			net.WriteString(key)
+			net.WriteString(data.name)
 
 			if IsValid(tmp[key]) then
 				if data.typ == "number" then

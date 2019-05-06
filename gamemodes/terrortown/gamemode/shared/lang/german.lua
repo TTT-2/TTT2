@@ -102,6 +102,8 @@ L.equip_spec_desc = "Beschreibung"
 
 L.equip_confirm = "Ausrüstung kaufen"
 
+L.equip_not_alive = "Du kannst alle verfügbaren Items sehen, wenn du eine Rolle auf der rechten Seite auswählst. Denk dran, du kannst zu jeder Zeit Favoriten hinzufügen!"
+
 -- Disguiser tab in equipment menu
 L.disg_name = "Tarnung"
 L.disg_menutitle = "Tarnung-Einstellungen"
@@ -131,6 +133,13 @@ L.xfer_no_recip = "Der Empfänger ist ungültig, Credit-Transfer abgebrochen."
 L.xfer_no_credits = "Ungenügend Credits für einen Transfer."
 L.xfer_success = "Credit-Transfer an {player} abgeschlossen."
 L.xfer_received = "{player} gab dir {num} Credit(s)."
+
+-- Reroll tab in equipment menu
+L.reroll_name = "Reroll"
+L.reroll_menutitle = "Items neu ausrollen"
+L.reroll_no_credits = "Du brauchst {amount} Credits zum neu ausrollen!"
+L.reroll_button = "Reroll"
+L.reroll_help = "Bekomme neu zufällige Items für {amount} Credits!"
 
 -- Radio tab in equipment menu
 L.radio_name = "Radio"

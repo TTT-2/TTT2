@@ -251,6 +251,9 @@ end
 if SERVER then
 	local random_shops = CreateConVar("ttt2_random_shops", "0", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_SERVER_CAN_EXECUTE}, "Set to 0 to disable")
 	local random_team_shops = CreateConVar("ttt2_random_team_shops", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_SERVER_CAN_EXECUTE}, "Set to 0 to disable")
+	local random_shop_reroll = CreateConVar("ttt2_random_shop_reroll", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_SERVER_CAN_EXECUTE}, "Set to 0 to disable")
+	local random_shop_reroll_cost = CreateConVar("ttt2_random_shop_reroll_cost", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_SERVER_CAN_EXECUTE}, "Credit cost per reroll")
+	local random_shop_reroll_per_buy = CreateConVar("ttt2_random_shop_reroll_per_buy", "0", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_SERVER_CAN_EXECUTE}, "Should the random shop reroll after every purchase")
 
 	util.AddNetworkString("TTT2SyncRandomShops")
 
@@ -420,6 +423,22 @@ if SERVER then
 		SyncRandomShops(plys)
 	end
 
+	function ResetRandomShopsForRole(role, amount, team)
+		local fallback = GetShopFallback(role)
+
+		RANDOMTEAMSHOPS[fallback] = nil
+		RANDOMSAVEDSHOPS[fallback] = nil
+
+		local plys_with_fb = {}
+		for _, ply in ipairs(player.GetAll()) do
+			if GetShopFallback(ply:GetSubRole()) == fallback then
+				table.insert(plys_with_fb, ply)
+			end
+		end
+
+		UpdateRandomShops(plys_with_fb, amount, team)
+	end
+
 	cvars.AddChangeCallback("ttt2_random_shops", function(name, old, new)
 		local tmp = tonumber(new)
 
@@ -441,6 +460,19 @@ if SERVER then
 		end
 	end, "ttt2changeteamshops")
 
+	cvars.AddChangeCallback("ttt2_random_shop_reroll", function(name, old, new)
+		SetGlobalBool("ttt2_random_shop_reroll", tobool(new))
+	end, "ttt2updatererollglobal")
+
+	
+	cvars.AddChangeCallback("ttt2_random_shop_reroll_cost", function(name, old, new)
+		SetGlobalInt("ttt2_random_shop_reroll_cost", tonumber(new))
+	end, "ttt2updatererollcostglobal")
+
+	cvars.AddChangeCallback("ttt2_random_shop_reroll_per_buy", function(name, old, new)
+		SetGlobalBool("ttt2_random_shop_reroll_per_buy", tobool(new))
+	end, "ttt2updatererollperbuyglobal")
+
 	hook.Add("TTTPrepareRound", "TTT2InitRandomShops", function()
 		local amount = GetGlobalInt("ttt2_random_shops")
 		if amount > 0 then
@@ -460,6 +492,9 @@ if SERVER then
 
 		SetGlobalInt("ttt2_random_shops", amount)
 		SetGlobalBool("ttt2_random_team_shops", random_team_shops:GetBool())
+		SetGlobalBool("ttt2_random_shop_reroll", random_shop_reroll:GetBool())
+		SetGlobalInt("ttt2_random_shop_reroll_cost", random_shop_reroll_cost:GetInt())
+		SetGlobalBool("ttt2_random_shop_reroll_per_buy", random_shop_reroll_per_buy:GetBool())
 
 		if amount > 0 then
 			SyncRandomShops({ply})
