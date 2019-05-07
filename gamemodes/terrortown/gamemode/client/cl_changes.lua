@@ -342,7 +342,30 @@ function CreateChanges()
 	</ul>]])
 
 	AddChange("0.5.3b", [[<ul>
-	<li>@LeBroomer</li>
+	<li><b>NEW:</b>
+		<ul>
+			<li>Added a <b>Reroll System</b> for the <b>Random Shop</b></li>
+			<ul>
+				<li>Rerolls can be done in the Traitor Shop similar to the credit transferring</li>
+				<li>Various parameters in the <b>ShopEditor</b> are possible (reroll, cost, reroll per buy)</li>
+				<li>Added the reroll possibility for the <b>Team Random Shop</b> (very funny)</li>
+			</ul>
+		</ul>
+	</li>
+	<hr />
+	<li>Improved:
+		<ul>
+			<li>Added a separate slot for class items</li>
+			<li>Added help text to the <b>"Not Alive" Shop</b></li>
+			<li>Minor design tweaks</li>
+		</ul>
+	</li>
+	<hr />
+	<li>Fixes:
+		<ul>
+			<li>Fixed critical crash issue (ty to @nick)</li>
+		</ul>
+	</li>
 	</ul>]])
 
 	hook.Run("TTT2AddChange", changes, currentVersion)
