@@ -58,7 +58,7 @@ if CLIENT then
 		self:DrawBar(x + self.pad, y + self.pad, w - self.pad * 2, h - self.pad * 2, draw_col, punch, self.scale, L.punch_title)
 		self:DrawLines(x, y, w, h, self.basecolor.a)
 
-		self:AdvancedText(L.punch_help, "TabLarge", x + w * 0.5, y, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, true, self.scale)
+		self:AdvancedText(L.punch_help, "TabLarge", x + w * 0.5, y, self:GetDefaultFontColor(self.basecolor), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, true, self.scale)
 
 		local bonus = client:GetNWInt("bonuspunches", 0)
 		if bonus ~= 0 then
@@ -70,7 +70,7 @@ if CLIENT then
 				text = interp(L.punch_malus, {num = bonus})
 			end
 
-			self:AdvancedText(text, "TabLarge", x + w * 0.5, y + self.margin * 2 + 20, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, true, self.scale)
+			self:AdvancedText(text, "TabLarge", x + w * 0.5, y + self.margin * 2 + 20, self:GetDefaultFontColor(self.basecolor), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, true, self.scale)
 		end
 	end
 
@@ -107,7 +107,7 @@ if CLIENT then
 		if IsValid(tgt) and not tgt:IsPlayer() and tgt:GetNWEntity("spec_owner", nil) == client then
 			self:PunchPaint() -- punch bar if you are spectator and inside of an entity
 		else
-			self:AdvancedText(interp(L.spec_help, key_params), "TabLarge", x + self.size.w * 0.5, y, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, true, self.scale)
+			self:AdvancedText(interp(L.spec_help, key_params), "TabLarge", x + self.size.w * 0.5, y, self:GetDefaultFontColor(self.basecolor), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, true, self.scale)
 		end
 	end
 end

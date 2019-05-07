@@ -34,7 +34,6 @@ if CLIENT then
 
 	local msgfont = "PureSkinMSTACKMsg"
 	local imagedmsgfont = "PureSkinMSTACKImageMsg"
-	local text_color = COLOR_WHITE
 
 	local const_defaults = {
 		basepos = {x = 0, y = 0},
@@ -113,7 +112,7 @@ if CLIENT then
 		item.bg = item.bg and table.Copy(item.bg) or table.Copy(bg_color)
 		item.bg.a_max = item.bg.a
 
-		item.col = item.col and table.Copy(item.col) or table.Copy(text_color)
+		item.col = item.col and table.Copy(item.col) or table.Copy(self:GetDefaultFontColor(self.basecolor))
 		item.col.a_max = item.col.a
 
 		if item.image then
