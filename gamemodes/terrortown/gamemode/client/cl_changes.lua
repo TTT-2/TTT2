@@ -299,7 +299,53 @@ function CreateChanges()
 	</li>
 	</ul>]])
 
-	hook.Run("TTT2AddChange")
+	AddChange("0.5.2b", [[<ul>
+	<li>Improved:
+		<ul>
+			<li>Improved the project structure / <b>Code refactoring</b></li>
+			<li>Improved HUD sidebar of items / perks</li>
+			<li>Improved HUD loading</li>
+			<li>Improved the sql library</li>
+			<li>Improved item handling and item converting</li>
+			<li><b>Improved performance / performance optimization</b></li>
+		</ul>
+	</li>
+	<hr />
+	<li>Added:
+		<ul>
+			<li>Added spectator indicator in the Miniscoreboard</li>
+			<li>Added icons with higher resolution (native 512x512)</li>
+			<li>Added Heroes badge</li>
+			<li>Added HUD documentation</li>
+			<li>Added some more hooks to modify TTT2 externally</li>
+		</ul>
+	</li>
+	<hr />
+	<li>Fixes:
+		<ul>
+			<li>Fixed SetModel bugs</li>
+			<li>Fixed some model-selector bugs</li>
+			<li>Fixed a sprint bug</li>
+			<li>Fixed some ConVars async bugs</li>
+			<li>Fixed some shopeditor bugs</li>
+			<li>Fixed an HUD scaling bug</li>
+			<li>Fixed old_ttt HUD</li>
+			<li>Fixed border's alpha value</li>
+			<li>Fixed confirmed player ordering in the Miniscoreboard</li>
+			<li><b>Fixed <u>critical</u> TTT2 bug</b></li>
+			<li><b>Fixed a crash that randomly happens in the <u>normal TTT</u></b></li>
+			<li>Fixed PS2 incompatibility</li>
+			<li>Fixed spectator bug with Roundtime and Haste Mode</li>
+			<li>Fixed many small HUD bugs</li>
+		</ul>
+	</li>
+	</ul>]])
+
+	AddChange("0.5.3b", [[<ul>
+	<li>@LeBroomer</li>
+	</ul>]])
+
+	hook.Run("TTT2AddChange", changes, currentVersion)
 end
 
 function ShowChanges()
