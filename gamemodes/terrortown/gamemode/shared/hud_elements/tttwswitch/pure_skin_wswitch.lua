@@ -9,18 +9,10 @@ DEFINE_BASECLASS(base)
 HUDELEMENT.Base = base
 
 if CLIENT then
-	-- color defines
-	local col_active = {
-		text_empty = Color(200, 20, 20, 255),
-		text = Color(255, 255, 255, 255),
-		shadow = 255
-	}
 
-	local col_dark = {
-		text_empty = Color(200, 20, 20, 100),
-		text = Color(255, 255, 255, 100),
-		shadow = 100
-	}
+	-- color defines
+	local color_empty = Color(200, 20, 20, 255)
+	local color_empty_dark = Color(200, 20, 20, 100)
 
 	local element_height = 28
 	local margin = 5
@@ -70,14 +62,14 @@ if CLIENT then
 		BaseClass.PerformLayout(self)
 	end
 
-	function HUDELEMENT:DrawBarBg(x, y, w, h, col)
+	function HUDELEMENT:DrawBarBg(x, y, w, h, active)
 		local ply = LocalPlayer()
-		local c = (col == col_active and ply:GetRoleColor() or ply:GetRoleDkColor()) or Color(100, 100, 100)
+		local c = (active and ply:GetRoleColor() or ply:GetRoleDkColor()) or Color(100, 100, 100)
 
 		-- draw bg and shadow
 		self.drawer:DrawBg(x, y, w, h, self.basecolor)
 
-		if col == col_active then
+		if active then
 			surface.SetDrawColor(0, 0, 0, 90)
 			surface.DrawRect(x, y, w, h)
 		end
@@ -88,12 +80,23 @@ if CLIENT then
 
 		-- draw lines around the element
 		self.drawer:DrawLines(x, y, w, h, self.basecolor.a)
+
+		return c
 	end
 
-	function HUDELEMENT:DrawWeapon(x, y, c, wep)
+	function HUDELEMENT:DrawWeapon(x, y, active, wep, tip_color)
 		if not IsValid(wep) or not IsValid(wep.Owner) or not isfunction(wep.Owner.GetAmmoCount) then
 			return false
 		end
+
+		--define colors
+		local text_color = self.drawer:GetDefaultFontColor(self.basecolor)
+		text_color = active and text_color or Color(text_color.r, text_color.g, text_color.b, text_color.r > 128 and 100 or 180)
+
+		local number_color = self.drawer:GetDefaultFontColor(tip_color)
+		number_color = active and number_color or Color(number_color.r, number_color.g, number_color.b, number_color.r > 128 and 100 or 180)
+
+		local empty_color = active and color_empty or color_empty_dark
 
 		local name = TryTranslation(wep:GetPrintName() or wep.PrintName or "...")
 		local cl1, am1 = wep:Clip1(), (wep.Ammo1 and wep:Ammo1() or false)
@@ -106,13 +109,13 @@ if CLIENT then
 		end
 
 		-- Slot
-		self.drawer:AdvancedText(MakeKindValid(wep.Kind), "PureSkinWepNum", x + self.lpw * 0.5, y + self.element_height * 0.5, c.text, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, true, self.scale)
+		self.drawer:AdvancedText(MakeKindValid(wep.Kind), "PureSkinWepNum", x + self.lpw * 0.5, y + self.element_height * 0.5, number_color, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, true, self.scale)
 
 		-- Name
-		self.drawer:AdvancedText(string.upper(name), "PureSkinWep", x + 10 + self.element_height, y + self.element_height * 0.5, c.text, nil, TEXT_ALIGN_CENTER, true, self.scale)
+		self.drawer:AdvancedText(string.upper(name), "PureSkinWep", x + 10 + self.element_height, y + self.element_height * 0.5, text_color, nil, TEXT_ALIGN_CENTER, true, self.scale)
 
 		if ammo then
-			local col = (wep:Clip1() == 0 and wep:Ammo1() == 0) and c.text_empty or c.text
+			local col = (wep:Clip1() == 0 and wep:Ammo1() == 0) and empty_color or text_color
 
 			-- Ammo
 			self.drawer:AdvancedText(tostring(ammo), "PureSkinWep", x + self.size.w - self.margin * 3, y + self.element_height * 0.5, col, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, false, self.scale)
@@ -141,15 +144,11 @@ if CLIENT then
 	end
 
 	function HUDELEMENT:DrawElement(i, x, y, w, h)
-		local col = col_dark
+		local active = WSWITCH.Selected == i 
 
-		if WSWITCH.Selected == i then
-			col = col_active
-		end
+		local tipCol = self:DrawBarBg(x, y, w, h, active)
 
-		self:DrawBarBg(x, y, w, h, col)
-
-		if not self:DrawWeapon(x, y, col, WSWITCH.WeaponCache[i]) then
+		if not self:DrawWeapon(x, y, active, WSWITCH.WeaponCache[i], tipCol) then
 			WSWITCH:UpdateWeaponCache()
 
 			return
