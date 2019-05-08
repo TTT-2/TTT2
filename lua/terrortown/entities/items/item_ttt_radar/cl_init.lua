@@ -67,7 +67,7 @@ function RADAR.CacheEnts()
 	-- Update bomb positions for those we know about
 	for idx, b in pairs(RADAR.bombs) do
 		local ent = Entity(idx)
-
+		
 		if IsValid(ent) then
 			b.pos = ent:GetPos()
 		end
@@ -128,13 +128,15 @@ function RADAR:Draw(client)
 	surface.SetFont("HudSelectionText")
 
 	-- C4 warnings
-	if self.bombs_count ~= 0 and client:IsActive() and client:HasTeam(TEAM_TRAITOR) then
+	if self.bombs_count ~= 0 and client:IsActive() and not client:GetSubRoleData().unknownTeam then
 		surface.SetTexture(c4warn)
-		surface.SetTextColor(200, 55, 55, 220)
+		surface.SetTextColor(client:GetRoleColor())
 		surface.SetDrawColor(255, 255, 255, 200)
 
 		for _, bomb in pairs(self.bombs) do
-			DrawTarget(bomb, 24, 0, true)
+			if bomb.team == client:GetTeam() then
+				DrawTarget(bomb, 24, 0, true)
+			end
 		end
 	end
 
@@ -217,8 +219,9 @@ local function ReceiveC4Warn()
 	if armed then
 		local pos = net.ReadVector()
 		local etime = net.ReadFloat()
+		local team = net.ReadString()
 
-		RADAR.bombs[idx] = {pos = pos, t = etime}
+		RADAR.bombs[idx] = {pos = pos, t = etime, team = team}
 	else
 		RADAR.bombs[idx] = nil
 	end
