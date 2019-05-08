@@ -116,8 +116,7 @@ if CLIENT then
 
 						self:DrawBg(bx, by, bw, infoH, self.basecolor)
 
-						self:AdvancedText(info, "ItemInfoFont", tx + 2, ty + 2, COLOR_BLACK, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, false, self.scale)
-						self:AdvancedText(info, "ItemInfoFont", tx, ty, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, false, self.scale)
+						self:AdvancedText(info, "ItemInfoFont", tx, ty, self:GetDefaultFontColor(self.basecolor), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, false, self.scale)
 
 						self:DrawLines(bx, by, bw, infoH, self.basecolor.a)
 					end

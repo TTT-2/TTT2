@@ -5,7 +5,8 @@ DEFINE_BASECLASS(base)
 HUDELEMENT.Base = base
 
 if CLIENT then
-	local shadowColor = Color(0, 0, 0, 200)
+	local shadowColorDark = Color(0, 0, 0, 200)
+	local shadowColorWhite = Color(200, 200, 200, 200)
 
 	function HUDELEMENT:DrawBg(x, y, w, h, c)
 		DrawHUDElementBg(x, y, w, h, c)
@@ -34,12 +35,21 @@ if CLIENT then
 
 		-- draw text
 		if t then
-			self:AdvancedText(t, "PureSkinBar", x + 14, y + 1, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT, true, s)
+			self:AdvancedText(t, "PureSkinBar", x + 14, y + 1, self:GetDefaultFontColor(c), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT, true, s)
 		end
 	end
 
-	function HUDELEMENT:ShadowedText(text, font, x, y, color, xalign, yalign)
-		local tmpCol = Color(shadowColor.r, shadowColor.g, shadowColor.b, color.a)
+	function HUDELEMENT:GetDefaultFontColor(bgcolor)
+		local color = 0
+		if bgcolor.r + bgcolor.g + bgcolor.b < 500 then
+			return COLOR_WHITE
+		else
+			return COLOR_BLACK
+		end
+	end
+
+	function HUDELEMENT:ShadowedText(text, font, x, y, color, xalign, yalign, dark)
+		local tmpCol = color.r + color.g + color.b > 200 and Color(shadowColorDark.r, shadowColorDark.g, shadowColorDark.b, color.a) or Color(shadowColorWhite.r, shadowColorWhite.g, shadowColorWhite.b, color.a)
 
 		draw.SimpleText(text, font, x + 2, y + 2, tmpCol, xalign, yalign)
 		draw.SimpleText(text, font, x + 1, y + 1, tmpCol, xalign, yalign)
