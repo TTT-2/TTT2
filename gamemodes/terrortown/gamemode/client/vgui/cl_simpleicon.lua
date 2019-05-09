@@ -125,7 +125,7 @@ function PANEL:AddLayer(pnl)
 	pnl:SetMouseInputEnabled(false)
 	pnl:SetKeyboardInputEnabled(false)
 
-	table.insert(self.Layers, pnl)
+	self.Layers[#self.Layers + 1] = pnl
 end
 
 function PANEL:PerformLayout()
@@ -142,7 +142,7 @@ function PANEL:PerformLayout()
 end
 
 function PANEL:EnableMousePassthrough(pnl)
-	for _, p in pairs(self.Layers) do
+	for _, p in ipairs(self.Layers) do
 		if p == pnl then
 			p.OnMousePressed = function(s, mc)
 				s:GetParent():OnMousePressed(mc)

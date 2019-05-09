@@ -127,7 +127,7 @@ function PANEL:AddLayer(pnl)
 	pnl:SetMouseInputEnabled(false)
 	pnl:SetKeyboardInputEnabled(false)
 
-	table.insert(self.Layers, pnl)
+	self.Layers[#self.Layers + 1] = pnl
 end
 
 function PANEL:PerformLayout()
