@@ -6,6 +6,7 @@ Find [TTT2 on Steam](https://steamcommunity.com/sharedfiles/filedetails/?id=1357
 * Discord: [https://discord.gg/9njYXGY](https://discord.gg/9njYXGY)  
 * Source: [https://github.com/Alf21/TTT2](https://github.com/Alf21/TTT2)  
 * Wiki: [https://github.com/Alf21/TTT2/wiki](https://github.com/Alf21/TTT2/wiki)
+* Designguidelines: [https://github.com/Alf21/TTT2/blob/master/DESIGNGUIDELINES.md](https://github.com/Alf21/TTT2/blob/master/DESIGNGUIDELINES.md)
 * GLua Beautifier: [https://gist.github.com/Alf21/e86601521f67fcbb88ddc34bfa778727](https://gist.github.com/Alf21/e86601521f67fcbb88ddc34bfa778727)
   
 <br />
