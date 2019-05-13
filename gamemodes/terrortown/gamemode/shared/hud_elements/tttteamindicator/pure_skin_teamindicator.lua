@@ -32,7 +32,10 @@ if CLIENT then
 
 	-- parameter overwrites
 	function HUDELEMENT:ShouldDraw()
-		return GAMEMODE.round_state == ROUND_ACTIVE
+		local team = LocalPlayer():GetTeam()
+		local tm = TEAMS[team]
+
+		return GAMEMODE.round_state == ROUND_ACTIVE and team ~= TEAM_NONE and tm ~= nil and not tm.alone
 	end
 
 	function HUDELEMENT:InheritParentBorder()
@@ -71,8 +74,6 @@ if CLIENT then
 		-- draw team icon
 		local team = client:GetTeam()
 		local tm = TEAMS[team]
-
-		if team == TEAM_NONE or not tm or tm.alone then return end
 
 		-- draw bg and shadow
 		self:DrawBg(x, y, w, h, self.basecolor)
