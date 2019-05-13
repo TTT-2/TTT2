@@ -78,7 +78,7 @@ local function IdentifyBody(ply, rag)
 		local team = rag.was_team
 		local rd = roles.GetByIndex(subrole)
 		local roletext = "body_found_" .. rd.abbr
-		local clr = rd.color
+		local clr = rag.role_color
 
 		net.Start("TTT2SendConfirmMsg")
 
