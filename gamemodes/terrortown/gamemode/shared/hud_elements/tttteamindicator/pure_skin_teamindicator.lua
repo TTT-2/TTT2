@@ -32,10 +32,7 @@ if CLIENT then
 
 	-- parameter overwrites
 	function HUDELEMENT:ShouldDraw()
-		local team = LocalPlayer():GetTeam()
-		local tm = TEAMS[team]
-
-		return GAMEMODE.round_state == ROUND_ACTIVE and team ~= TEAM_NONE and tm ~= nil and not tm.alone
+		return GAMEMODE.round_state == ROUND_ACTIVE
 	end
 
 	function HUDELEMENT:InheritParentBorder()
@@ -81,9 +78,14 @@ if CLIENT then
 		local iconSize = h - self.pad * 2
 		local icon, c
 		if LocalPlayer():Alive() then
-			icon = Material(tm.icon)
-			c = tm.color or Color(0, 0, 0, 255)
-		else
+			if (team == TEAM_NONE or not tm or tm.alone) then -- support roles without a team
+				icon = Material("vgui/ttt/dynamic/roles/icon_no_team")
+				c = Color(91,94,99,255)
+			else -- normal role
+				icon = Material(tm.icon)
+				c = tm.color or Color(0, 0, 0, 255)
+			end
+		else -- player is dead and spectator
 			icon = Material("vgui/ttt/watching_icon")
 			c = Color(91,94,99,255)
 		end
