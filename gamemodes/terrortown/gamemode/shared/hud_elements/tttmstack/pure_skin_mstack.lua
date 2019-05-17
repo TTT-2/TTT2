@@ -217,7 +217,7 @@ if CLIENT then
 	end
 
 	function HUDELEMENT:ShouldDraw()
-		return next(MSTACK.msgs) ~= nil
+		return next(MSTACK.msgs) ~= nil or HUDEditor.IsEditing
 	end
 
 	function HUDELEMENT:Draw()
