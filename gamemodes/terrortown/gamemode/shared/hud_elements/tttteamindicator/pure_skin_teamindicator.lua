@@ -77,7 +77,7 @@ if CLIENT then
 
 		local iconSize = h - self.pad * 2
 		local icon, c
-		if LocalPlayer():Alive() then
+		if LocalPlayer():Alive() and LocalPlayer():IsActive() then
 			if (team == TEAM_NONE or not tm or tm.alone) then -- support roles without a team
 				icon = Material("vgui/ttt/dynamic/roles/icon_no_team")
 				c = Color(91,94,99,255)
