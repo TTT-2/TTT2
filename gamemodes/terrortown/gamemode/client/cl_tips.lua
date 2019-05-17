@@ -132,6 +132,8 @@ function PANEL:SetTip(idx)
 end
 
 function PANEL:NextTip(auto)
+	if not self.TipIndex then return end
+	
 	local idx = self.TipIndex + 1
 
 	if idx > #tip_ids then

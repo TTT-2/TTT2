@@ -20,7 +20,8 @@ LANG.ActiveLanguage = LANG.DefaultLanguage
 
 LANG.ServerLanguage = "english"
 
-local cached_default, cached_active
+local cached_default = {}
+local cached_active = {}
 
 function LANG.CreateLanguage(lang_name)
 	if not lang_name then return end
