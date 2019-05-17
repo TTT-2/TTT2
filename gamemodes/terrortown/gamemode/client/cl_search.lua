@@ -52,7 +52,8 @@ local dtm = {
 	rock = DMG_CRUSH,
 	splode = DMG_BLAST,
 	fall = DMG_FALL,
-	fire = DMG_BURN
+	fire = DMG_BURN,
+	drown = DMG_DROWN
 }
 
 local function DmgToMat(d)
