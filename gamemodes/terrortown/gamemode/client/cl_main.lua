@@ -381,9 +381,7 @@ function GM:CleanUpMap()
 		end
 	end
 
-	-- This cleans up decals since GMod v100
-	-- added a timer to prevent random crashes...
-	timer.Simple(0, game.CleanUpMap)
+	game.CleanUpMap()
 end
 
 net.Receive("TTT2SyncDBItems", function()

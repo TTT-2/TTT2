@@ -630,7 +630,9 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
 	for _, wep in pairs(ply:GetWeapons()) do
 		WEPS.DropNotifiedWeapon(ply, wep, true) -- with ammo in them
 
-		wep:DampenDrop()
+		if isfunction(wep.DampenDrop) then
+			wep:DampenDrop()
+		end
 	end
 
 	if IsValid(ply.hat) then
