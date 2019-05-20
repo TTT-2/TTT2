@@ -538,3 +538,24 @@ function WEPS.ForcePrecache()
 		end
 	end
 end
+
+--manipulate shove attack for all crowbar alikes
+local crowbar_delay = CreateConVar("ttt2_crowbar_shove_delay", "1.0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+local function ChangeShoveDelay()
+	for _, wep in ipairs(weapons.GetList()) do
+		--all weapons on the WEAPON_MELEE slot should be Crowbars or Crowbar alikes
+		if wep.Kind and wep.Kind == WEAPON_MELEE then
+			wep.Secondary.Delay = crowbar_delay:GetFloat()
+		end
+	end
+end
+
+cvars.AddChangeCallback(crowbar_delay:GetName(), function(name, old, new)
+	ChangeShoveDelay()
+end, "TTT2CrowbarShoveDelay")
+
+
+hook.Add("TTT2Initialize", "TTT2ChangeMeleesSecondaryDelay", function()
+	ChangeShoveDelay()
+end)
