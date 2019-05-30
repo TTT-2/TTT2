@@ -477,7 +477,7 @@ function CORPSE.Create(ply, attacker, dmginfo)
 
 	-- if someone searches this body they can find info on the victim and the
 	-- death circumstances
-	rag.equipment = ply:GetEquipmentItems()
+	rag.equipment = table.Copy(ply:GetEquipmentItems())
 	rag.was_role = ply:GetSubRole()
 	rag.role_color = ply:GetRoleColor()
 
