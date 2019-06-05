@@ -52,13 +52,53 @@ if CLIENT then
 		return client:Alive() or client:Team() == TEAM_TERROR
 	end
 
+	function HUDELEMENT:DrawItem(curY, item, color)
+		local pos = self:GetPos()
+		local size = self:GetSize()
+
+		curY = curY - (size.w + self.padding)
+
+		surface.SetDrawColor(color)
+		surface.DrawRect(pos.x, curY, size.w, size.w)
+
+		util.DrawFilteredTexturedRect(pos.x, curY, size.w, size.w, item.hud, 175)
+
+		self:DrawLines(pos.x, curY, size.w, size.w, self.basecolor.a)
+
+		if isfunction(item.DrawInfo) then
+			local info = item:DrawInfo()
+			if info then
+				-- right bottom corner
+				local tx = pos.x + size.w - 5
+				local ty = curY +  size.w - 2
+				local pad = 5 * self.scale
+
+				surface.SetFont("ItemInfoFont")
+
+				local infoW, infoH = surface.GetTextSize(info)
+				infoW = infoW * self.scale
+				infoH = (infoH + 2) * self.scale
+
+				local bx = tx - infoW * 0.5 - pad
+				local by = ty - infoH * 0.5
+				local bw = infoW + pad * 2
+
+				self:DrawBg(bx, by, bw, infoH, self.basecolor)
+
+				self:AdvancedText(info, "ItemInfoFont", tx, ty, self:GetDefaultFontColor(self.basecolor), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, false, self.scale)
+
+				self:DrawLines(bx, by, bw, infoH, self.basecolor.a)
+			end
+		end
+
+		return curY
+	end
+
 	function HUDELEMENT:Draw()
 		local client = LocalPlayer()
 
 		local basepos = self:GetBasePos()
 		local itms = client:GetEquipmentItems()
-		local pos = self:GetPos()
-		local size = self.size.w
 
 		-- get number of new icons
 		local num_icons = 0
@@ -87,43 +127,10 @@ if CLIENT then
 			local item = items.GetStored(itemCls)
 
 			if item and item.hud then
-				curY = curY - (size + self.padding)
-
-				surface.SetDrawColor(36, 115, 51, 255)
-				surface.DrawRect(pos.x, curY, size, size)
-
-				util.DrawFilteredTexturedRect(pos.x, curY, size, size, item.hud, 175)
-
-				self:DrawLines(pos.x, curY, size, size, self.basecolor.a)
-
-				if isfunction(item.DrawInfo) then
-					local info = item:DrawInfo()
-					if info then
-						-- right bottom corner
-						local tx = pos.x + size - 5
-						local ty = curY +  size - 2
-						local pad = 5 * self.scale
-
-						surface.SetFont("ItemInfoFont")
-
-						local infoW, infoH = surface.GetTextSize(info)
-						infoW = infoW * self.scale
-						infoH = (infoH + 2) * self.scale
-
-						local bx = tx - infoW * 0.5 - pad
-						local by = ty - infoH * 0.5
-						local bw = infoW + pad * 2
-
-						self:DrawBg(bx, by, bw, infoH, self.basecolor)
-
-						self:AdvancedText(info, "ItemInfoFont", tx, ty, self:GetDefaultFontColor(self.basecolor), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, false, self.scale)
-
-						self:DrawLines(bx, by, bw, infoH, self.basecolor.a)
-					end
-				end
+				curY = self:DrawItem(curY, item, self.basecolor)
 			end
 		end
 
-		self:SetSize(size, - math.max(basepos.y - curY, self.minsize.h)) -- adjust the size
+		self:SetSize(self.size.w, - math.max(basepos.y - curY, self.minsize.h)) -- adjust the size
 	end
 end
