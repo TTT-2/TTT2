@@ -138,6 +138,12 @@ if CLIENT then
 			if status.type == 'bad' then
 				status.hud_color = Color(183, 54, 47)
 			end
+			if status.type == 'good' then
+				status.hud_color = Color(36, 115, 51)
+			end
+			if status.type == 'default' then
+				status.hud_color = Color(self.basecolor.r, self.basecolor.g, self.basecolor.b)
+			end
 			curY = self:DrawItem(curY, status)
 		end
 
@@ -155,7 +161,7 @@ if CLIENT then
 			local item = items.GetStored(itemCls)
 
 			if item and item.hud then
-				item.hud_color = self.basecolor
+				item.hud_color = Color(self.basecolor.r, self.basecolor.g, self.basecolor.b)
 				curY = self:DrawItem(curY, item)
 			end
 		end
