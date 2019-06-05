@@ -60,12 +60,22 @@ if CLIENT then
 
 		curY = curY - (size.w + self.padding)
 
-		surface.SetDrawColor(item.hud_color)
+		local factor = 1
+		if item.displaytime then -- start blinking in last 5 seconds
+			local time_left = item.displaytime - CurTime()
+
+			if time_left < 5 then
+				local num = 0.5 * math.pi + (-1.4 * time_left + 7) * math.pi
+				factor = 0.5 * (math.sin(num) + 1)
+			end
+		end
+
+		surface.SetDrawColor(item.hud_color.r, item.hud_color.g, item.hud_color.b, math.Round(factor * 255))
 		surface.DrawRect(pos.x, curY, size.w, size.w)
 
 		util.DrawFilteredTexturedRect(pos.x, curY, size.w, size.w, item.hud, 175)
 
-		self:DrawLines(pos.x, curY, size.w, size.w, item.hud_color.a)
+		self:DrawLines(pos.x, curY, size.w, size.w, item.hud_color.a * factor)
 
 		if isfunction(item.DrawInfo) then
 			local info = item:DrawInfo()
@@ -116,7 +126,7 @@ if CLIENT then
 		num_icons = num_icons + num_items
 
 		local num_status = 0
-		for _, status in ipairs(STATUS.active) do
+		for _, status in pairs(STATUS.active) do
 			num_status = num_status + 1
 		end
 		num_icons = num_icons + num_status
@@ -124,7 +134,7 @@ if CLIENT then
 		local curY = basepos.y + 0.5 * ( (num_icons -1) * (self.size.w + self.padding) + ((num_status > 0) and 25 or 0))
 
 		-- draw status
-		for _, status in ipairs(STATUS.active) do
+		for _, status in pairs(STATUS.active) do
 			if status.type == 'bad' then
 				status.hud_color = Color(183, 54, 47)
 			end
@@ -132,8 +142,12 @@ if CLIENT then
 		end
 
 		-- draw spacer
-		if num_status > 0 then
-			curY = curY + 25
+		if num_status > 0 and num_items > 0 then
+			curY = curY - 16
+			local pos = self:GetPos()
+			local size = self:GetSize()
+			surface.SetDrawColor(self.basecolor)
+			surface.DrawRect(pos.x, curY - self.padding * 0.5 + 8, size.w, 2)
 		end
 		
 		-- draw items

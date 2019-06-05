@@ -28,6 +28,7 @@ TTTFiles = {
 	cl_transfer = {file = "cl_transfer.lua", on = "client"},
 	cl_voice = {file = "cl_voice.lua", on = "client"},
 	cl_wepswitch = {file = "cl_wepswitch.lua", on = "client"},
+	cl_status = {file = "cl_status.lua", on = "client"},
 
 	-- shared files
 	sh_corpse = {file = "sh_corpse.lua", on = "shared"},
@@ -48,7 +49,6 @@ TTTFiles = {
 	sh_sprint = {file = "sh_sprint.lua", on = "shared"},
 	sh_util = {file = "sh_util.lua", on = "shared"},
 	sh_weaponry = {file = "sh_weaponry.lua", on = "shared"},
-	sh_status = {file = "sh_status.lua", on = "shared"},
 
 	-- vgui client files
 	vgui__cl_coloredbox = {file = "vgui/cl_coloredbox.lua", on = "client"},
@@ -87,6 +87,7 @@ if SERVER then
 		sv_traitor_state = {file = "sv_traitor_state.lua", on = "server"},
 		sv_voice = {file = "sv_voice.lua", on = "server"},
 		sv_weaponry = {file = "sv_weaponry.lua", on = "server"},
+		sv_status = {file = "sv_status.lua", on = "server"},
 	}
 
 	table.Merge(TTTFiles, tmp)

@@ -21,6 +21,7 @@ ttt_include("sv_voice")
 ttt_include("sv_ent_replace")
 ttt_include("sv_scoring")
 ttt_include("sv_corpse")
+ttt_include("sv_status")
 
 ttt_include("sh_player_ext")
 
