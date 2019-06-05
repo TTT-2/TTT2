@@ -33,7 +33,10 @@ if CLIENT then
 	-- parameter overwrites end
 
 	function HUDELEMENT:GetDefaults()
-		const_defaults["basepos"] = {x = self.padding, y = ScrH() * 0.5}
+		const_defaults["basepos"] = {
+			x = self.padding,
+			y = ScrH() * 0.5
+		}
 
 		return const_defaults
 	end
@@ -56,16 +59,20 @@ if CLIENT then
 		local pos = self:GetPos()
 		local size = self:GetSize()
 
-		if item.hud_color == nil then item.hud_color = self.basecolor end
+		if not item.hud_color then
+			item.hud_color = self.basecolor
+		end
 
 		curY = curY - (size.w + self.padding)
 
 		local factor = 1
+
 		if item.displaytime then -- start blinking in last 5 seconds
 			local time_left = item.displaytime - CurTime()
 
 			if time_left < 5 then
 				local num = 0.5 * math.pi + (-1.4 * time_left + 7) * math.pi
+
 				factor = 0.5 * (math.sin(num) + 1)
 			end
 		end
@@ -114,8 +121,8 @@ if CLIENT then
 
 		-- get number of new icons
 		local num_icons = 0
-
 		local num_items = 0
+
 		for _, itemCls in ipairs(itms) do
 			local item = items.GetStored(itemCls)
 
@@ -123,39 +130,47 @@ if CLIENT then
 				num_items = num_items + 1
 			end
 		end
+
 		num_icons = num_icons + num_items
 
 		local num_status = 0
+
 		for _, status in pairs(STATUS.active) do
 			num_status = num_status + 1
 		end
+
 		num_icons = num_icons + num_status
 
-		local curY = basepos.y + 0.5 * ( (num_icons -1) * (self.size.w + self.padding) + ((num_status > 0) and 25 or 0))
+		local curY = basepos.y + 0.5 * ((num_icons -1) * (self.size.w + self.padding) + ((num_status > 0) and 25 or 0))
 
 		-- draw status
 		for _, status in pairs(STATUS.active) do
 			if status.type == 'bad' then
 				status.hud_color = Color(183, 54, 47)
 			end
+
 			if status.type == 'good' then
 				status.hud_color = Color(36, 115, 51)
 			end
+
 			if status.type == 'default' then
 				status.hud_color = Color(self.basecolor.r, self.basecolor.g, self.basecolor.b)
 			end
+
 			curY = self:DrawItem(curY, status)
 		end
 
 		-- draw spacer
 		if num_status > 0 and num_items > 0 then
 			curY = curY - 16
+
 			local pos = self:GetPos()
 			local size = self:GetSize()
+
 			surface.SetDrawColor(self.basecolor)
 			surface.DrawRect(pos.x, curY - self.padding * 0.5 + 8, size.w, 2)
 		end
-		
+
 		-- draw items
 		for _, itemCls in ipairs(itms) do
 			local item = items.GetStored(itemCls)
