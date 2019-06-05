@@ -24,6 +24,7 @@ ttt_include("sh_corpse")
 ttt_include("sh_player_ext")
 ttt_include("sh_weaponry")
 ttt_include("sh_inventory")
+--ttt_include("sh_status")
 
 ttt_include("vgui__cl_coloredbox")
 ttt_include("vgui__cl_droleimage")

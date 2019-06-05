@@ -1,3 +1,5 @@
+--ttt_include("sh_status")
+
 if CLIENT then
 
     STATUS = {}
@@ -50,6 +52,8 @@ if CLIENT then
         local id = net.ReadString()
         STATUS:RemoveStatus(id)
     end)
+
+end
 
 
 if SERVER then

@@ -52,18 +52,20 @@ if CLIENT then
 		return client:Alive() or client:Team() == TEAM_TERROR
 	end
 
-	function HUDELEMENT:DrawItem(curY, item, color)
+	function HUDELEMENT:DrawItem(curY, item)
 		local pos = self:GetPos()
 		local size = self:GetSize()
 
+		if item.hud_color == nil then item.hud_color = self.basecolor end
+
 		curY = curY - (size.w + self.padding)
 
-		surface.SetDrawColor(color)
+		surface.SetDrawColor(item.hud_color)
 		surface.DrawRect(pos.x, curY, size.w, size.w)
 
 		util.DrawFilteredTexturedRect(pos.x, curY, size.w, size.w, item.hud, 175)
 
-		self:DrawLines(pos.x, curY, size.w, size.w, self.basecolor.a)
+		self:DrawLines(pos.x, curY, size.w, size.w, item.hud_color.a)
 
 		if isfunction(item.DrawInfo) then
 			local info = item:DrawInfo()
@@ -83,11 +85,11 @@ if CLIENT then
 				local by = ty - infoH * 0.5
 				local bw = infoW + pad * 2
 
-				self:DrawBg(bx, by, bw, infoH, self.basecolor)
+				self:DrawBg(bx, by, bw, infoH, item.hud_color)
 
-				self:AdvancedText(info, "ItemInfoFont", tx, ty, self:GetDefaultFontColor(self.basecolor), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, false, self.scale)
+				self:AdvancedText(info, "ItemInfoFont", tx, ty, self:GetDefaultFontColor(item.hud_color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, false, self.scale)
 
-				self:DrawLines(bx, by, bw, infoH, self.basecolor.a)
+				self:DrawLines(bx, by, bw, infoH, item.hud_color.a)
 			end
 		end
 
@@ -103,31 +105,44 @@ if CLIENT then
 		-- get number of new icons
 		local num_icons = 0
 
+		local num_items = 0
 		for _, itemCls in ipairs(itms) do
 			local item = items.GetStored(itemCls)
 
 			if item and item.hud then
-				num_icons = num_icons + 1
+				num_items = num_items + 1
 			end
 		end
+		num_icons = num_icons + num_items
 
-		local curY = basepos.y + 0.5 * (num_icons -1) * (self.size.w + self.padding)
+		local num_status = 0
+		for _, status in ipairs(STATUS.active) do
+			num_status = num_status + 1
+		end
+		num_icons = num_icons + num_status
 
-		-- at first, calculate old items because they don't take care of the new ones
-		for _, itemCls in ipairs(itms) do
-			local item = items.GetStored(itemCls)
+		local curY = basepos.y + 0.5 * ( (num_icons -1) * (self.size.w + self.padding) + ((num_status > 0) and 25 or 0))
 
-			if item and item.oldHud then
-				curY = curY - 80
+		-- draw status
+		for _, status in ipairs(STATUS.active) do
+			if status.type == 'bad' then
+				status.hud_color = Color(183, 54, 47)
 			end
+			curY = self:DrawItem(curY, status)
 		end
 
-		-- now draw our new items automatically
+		-- draw spacer
+		if num_status > 0 then
+			curY = curY + 25
+		end
+		
+		-- draw items
 		for _, itemCls in ipairs(itms) do
 			local item = items.GetStored(itemCls)
 
 			if item and item.hud then
-				curY = self:DrawItem(curY, item, self.basecolor)
+				item.hud_color = self.basecolor
+				curY = self:DrawItem(curY, item)
 			end
 		end
 

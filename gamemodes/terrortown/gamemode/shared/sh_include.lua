@@ -48,6 +48,7 @@ TTTFiles = {
 	sh_sprint = {file = "sh_sprint.lua", on = "shared"},
 	sh_util = {file = "sh_util.lua", on = "shared"},
 	sh_weaponry = {file = "sh_weaponry.lua", on = "shared"},
+	sh_status = {file = "sh_status.lua", on = "shared"},
 
 	-- vgui client files
 	vgui__cl_coloredbox = {file = "vgui/cl_coloredbox.lua", on = "client"},
