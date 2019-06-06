@@ -157,6 +157,11 @@ if CLIENT then
 				status.hud_color = Color(self.basecolor.r, self.basecolor.g, self.basecolor.b)
 			end
 
+			-- fallback
+			if status.type == nil and status.hud_color == nil then
+				status.hud_color = Color(self.basecolor.r, self.basecolor.g, self.basecolor.b)
+			end
+
 			curY = self:DrawItem(curY, status)
 		end
 
