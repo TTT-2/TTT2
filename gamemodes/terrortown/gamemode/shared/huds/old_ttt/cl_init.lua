@@ -33,7 +33,7 @@ end
 function HUD:Initialize()
 	self:ForceElement("old_ttt_info")
 	self:ForceElement("old_ttt_punchometer")
-	self:ForceElement("old_ttt_items")
+	self:ForceElement("old_ttt_sidebar")
 	self:ForceElement("old_ttt_mstack")
 	self:ForceElement("old_ttt_wswitch")
 	self:ForceElement("old_ttt_target")
