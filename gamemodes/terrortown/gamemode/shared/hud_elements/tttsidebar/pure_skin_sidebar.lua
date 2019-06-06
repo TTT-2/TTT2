@@ -55,7 +55,7 @@ if CLIENT then
 		return client:Alive() or client:Team() == TEAM_TERROR
 	end
 
-	function HUDELEMENT:DrawItem(curY, item)
+	function HUDELEMENT:DrawIcon(curY, item)
 		local pos = self:GetPos()
 		local size = self:GetSize()
 
@@ -162,7 +162,7 @@ if CLIENT then
 				status.hud_color = Color(self.basecolor.r, self.basecolor.g, self.basecolor.b)
 			end
 
-			curY = self:DrawItem(curY, status)
+			curY = self:DrawIcon(curY, status)
 		end
 
 		-- draw spacer
@@ -182,7 +182,7 @@ if CLIENT then
 
 			if item and item.hud then
 				item.hud_color = Color(self.basecolor.r, self.basecolor.g, self.basecolor.b)
-				curY = self:DrawItem(curY, item)
+				curY = self:DrawIcon(curY, item)
 			end
 		end
 
