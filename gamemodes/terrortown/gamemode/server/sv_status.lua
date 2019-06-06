@@ -3,8 +3,8 @@ STATUS = {}
 -- register networkt messages
 util.AddNetworkString("ttt2_status_effect_add")
 util.AddNetworkString("ttt2_status_effect_add_timed")
-util.AddNetworkString("ttt2_status_effect_removed")
-util.AddNetworkString("ttt2_status_effect_removed_all")
+util.AddNetworkString("ttt2_status_effect_remove")
+util.AddNetworkString("ttt2_status_effect_remove_all")
 
 function STATUS:AddStatus(ply, id)
     net.Start("ttt2_status_effect_add")
@@ -20,13 +20,13 @@ function STATUS:AddTimedStatus(ply, id, duration)
 end
 
 function STATUS:RemoveStatus(ply, id)
-    net.Start("ttt2_status_effect_removed")
+    net.Start("ttt2_status_effect_remove")
     net.WriteString(id)
     net.Send(ply)
 end
 
 function STATUS:RemoveAll(ply)
-    net.Start("ttt2_status_effect_removed_all")
+    net.Start("ttt2_status_effect_remove_all")
     net.Send(ply)
 end
 

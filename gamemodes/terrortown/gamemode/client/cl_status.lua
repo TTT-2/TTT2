@@ -40,6 +40,12 @@ function STATUS:RemoveStatus(id)
     end
 end
 
+function STATUS:RemoveAll()
+    for i in pairs(STATUS.active) do
+        STATUS:RemoveStatus(i)
+    end
+end
+
 net.Receive("ttt2_status_effect_add", function()
     STATUS:AddStatus(net.ReadString())
 end)
@@ -48,12 +54,10 @@ net.Receive("ttt2_status_effect_add_timed", function()
     STATUS:AddTimedStatus(net.ReadString(), net.ReadUInt(32))
 end)
 
-net.Receive("ttt2_status_effect_removed", function()
+net.Receive("ttt2_status_effect_remove", function()
     STATUS:RemoveStatus(net.ReadString())
 end)
 
-net.Receive("ttt2_status_effect_removed_all", function()
-    for i in pairs(STATUS.active) do
-        STATUS:RemoveStatus(i)
-    end
+net.Receive("ttt2_status_effect_remove_all", function()
+    STATUS:RemoveAll()
 end)
