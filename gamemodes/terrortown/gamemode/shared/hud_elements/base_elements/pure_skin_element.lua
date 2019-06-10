@@ -42,9 +42,9 @@ if CLIENT then
 	function HUDELEMENT:GetDefaultFontColor(bgcolor)
 		local color = 0
 		if bgcolor.r + bgcolor.g + bgcolor.b < 500 then
-			return table.Copy(COLOR_WHITE)
+			return COLOR_WHITE
 		else
-			return table.Copy(COLOR_BLACK)
+			return COLOR_BLACK
 		end
 	end
 
