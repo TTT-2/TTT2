@@ -4,7 +4,6 @@
 	"title"		"Trouble in Terrorist Town 2"
 	"maps"		"^ttt_"
 	"menusystem"	"1"
-	"workshopid"	"1357204556"
 
 	"settings"
 	{
