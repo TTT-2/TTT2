@@ -155,7 +155,7 @@ end
 concommand.Add("ttt_cheat_credits", CheatCredits, nil, nil, FCVAR_CHEAT)
 
 local function TransferCredits(ply, cmd, args)
-	if not IsValid(ply) or not ply:IsActiveShopper() then return end
+	if not IsValid(ply) then return end
 
 	if #args ~= 2 then return end
 
@@ -166,10 +166,7 @@ local function TransferCredits(ply, cmd, args)
 		local target = player.GetBySteamID64(sid64)
 
 		if not IsValid(target)
-		or not target:IsActiveShopper()
 		or target == ply
-		or ply:GetSubRoleData().unknownTeam and not (ply:IsRole(ROLE_DETECTIVE) and target:IsRole(ROLE_DETECTIVE))
-		or not target:IsInTeam(ply)
 		then
 			LANG.Msg(ply, "xfer_no_recip")
 
