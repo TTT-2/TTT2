@@ -368,6 +368,31 @@ function CreateChanges()
 	</li>
 	</ul>]])
 
+	AddChange("0.5.4b", [[<ul>
+	<li><b>NEW:</b>
+		<ul>
+			<li>Added a noTeam indicator to the HUD</li>
+			<li>intriduced a new drowned death symbol</li>
+			<li><i>ttt2_crowbar_shove_delay<i> is now used to set the crowbar attack delay</li>
+			<li>introduced a status system alongside the perk system</li>
+		</ul>
+	</li>
+	<hr />
+	<li>Improved:
+		<ul>
+			<li>Included LeBroomer in the TTT2 logo</li>
+		</ul>
+	</li>
+	<hr />
+	<li>Fixes:
+		<ul>
+			<li>Fixed a problem with colors (seen with sidekick death confirms)</li>
+			<li>Fixed the team indicator when in spectator mode</li>
+			<li>Credits now can be transfered to everyone, this fixes a bug with the spy</li>
+		</ul>
+	</li>
+	</ul>]])
+
 	hook.Run("TTT2AddChange", changes, currentVersion)
 end
 
