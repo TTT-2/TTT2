@@ -137,7 +137,7 @@ local function OrderEquipment(ply, cmd, args)
 	hook.Call("TTTOrderedEquipment", GAMEMODE, ply, id2, is_item and id2 or false)
 
 	if GetGlobalBool("ttt2_random_shop_reroll_per_buy") then
-		RerollShop()
+		RerollShop(ply)
 	end
 end
 concommand.Add("ttt_order_equipment", OrderEquipment)
