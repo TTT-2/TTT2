@@ -64,7 +64,7 @@ ORDERED_SLOT_TABLE = {
 }
 
 function MakeKindValid(kind)
-	if kind > WEAPON_CLASS or kind < WEAPON_MELEE then
+	if not kind or kind > WEAPON_CLASS or kind < WEAPON_MELEE then
 		return WEAPON_EXTRA
 	else
 		return kind
