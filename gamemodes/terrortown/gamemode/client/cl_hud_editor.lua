@@ -14,7 +14,7 @@ local function CreateEditOptions(x, y)
 
 	local menu = DermaMenu()
 
-	local editReset = menu:AddOption("Reset")
+	local editReset = menu:AddOption(LANG.GetTranslation("f1_settings_hudswitcher_button_reset"))
 	editReset.OnMousePressed = function(slf, keyCode)
 		local hud = huds.GetStored(HUDManager.GetHUD())
 		if hud then
@@ -24,7 +24,7 @@ local function CreateEditOptions(x, y)
 		menu:Remove()
 	end
 
-	local editClose = menu:AddOption("Close")
+	local editClose = menu:AddOption(LANG.GetTranslation("f1_settings_hudswitcher_button_close"))
 	editClose.OnMousePressed = function(slf, keyCode)
 		HUDEditor.StopEditHUD()
 		HUDManager.ShowHUDSwitcher()
@@ -228,10 +228,10 @@ function HUDEditor.EditHUD()
 
 	gui.EnableScreenClicker(true)
 
-	chat.AddText("[TTT2][INFO] Hover over the elements and kick and move the mouse to ", Color(20, 150, 245), "move", Color(151, 211, 255), " or ", Color(245, 30, 80), "resize", Color(151, 211, 255), " it.")
+	chat.AddText("[TTT2][INFO] Hover over the elements and press [LMB] and move the mouse to ", Color(20, 150, 245), "move", Color(151, 211, 255), " or ", Color(245, 30, 80), "resize", Color(151, 211, 255), " it.")
 	chat.AddText("[TTT2][INFO] Press and hold the ", Color(255, 255, 255), "alt-key", Color(151, 211, 255), " for symmetric resizing.")
 	chat.AddText("[TTT2][INFO] Press and hold the ", Color(255, 255, 255), "shift-key", Color(151, 211, 255), " to move on axis and to keep the aspect ratio.")
-	chat.AddText("[TTT2][INFO] Press [RMB] (right mouse-button) -> 'close' to exit the HUD editor!")
+	chat.AddText("[TTT2][INFO] Press [RMB] -> 'close' to exit the HUD editor!")
 
 	hook.Add("Think", "TTT2EditHUD", Think_EditLocalHUD)
 end

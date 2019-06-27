@@ -19,34 +19,37 @@ if CLIENT then
 			local dgeneral = vgui.Create("DForm", parent)
 			dgeneral:SetName("General")
 
-			dgeneral:CheckBox("Should the shop be opened/closed instead of the score menu during preparing / at the end of a round?", "ttt_bem_always_show_shop")
+			dgeneral:CheckBox(LANG.GetTranslation("f1_settings_shop_desc_shopopen"), "ttt_bem_always_show_shop")
 
 			dgeneral:Dock(TOP)
 
 			-- layout section
 			local dlayout = vgui.Create("DForm", parent)
-			dlayout:SetName("Item List Layout")
+			dlayout:SetName(LANG.GetTranslation("f1_settings_shop_title_layout"))
 
 			if allowChange:GetBool() then
 				--dlayout:Help("All changes made here are clientside and will only apply to your own menu.")
-				dlayout:NumSlider("Number of columns (def. 4)", "ttt_bem_cols", 1, 20, 0)
-				dlayout:NumSlider("Number of rows (def. 5)", "ttt_bem_rows", 1, 20, 0)
-				dlayout:NumSlider("Icon size (def. 64)", "ttt_bem_size", 32, 128, 0)
+				dlayout:NumSlider(LANG.GetTranslation("f1_settings_shop_desc_num_columns") .. " (def. 4)", "ttt_bem_cols", 1, 20, 0)
+				dlayout:NumSlider(LANG.GetTranslation("f1_settings_shop_desc_num_rows") .. " (def. 5)", "ttt_bem_rows", 1, 20, 0)
+				dlayout:NumSlider(LANG.GetTranslation("f1_settings_shop_desc_item_size") .. " (def. 64)", "ttt_bem_size", 32, 128, 0)
 			else
-				dlayout:Help("Individual changes to the Traitor/Detective menus layout are not allowed on this server. Please contact a server admin for details.")
+				dlayout:Help(LANG.GetTranslation("f1_shop_restricted"))
 			end
 
 			dlayout:Dock(TOP)
 
 			-- marker section
 			local dmarker = vgui.Create("DForm", parent)
-			dmarker:SetName("Item Marker Settings")
+			dmarker:SetName(LANG.GetTranslation("f1_settings_shop_title_marker"))
 
-			dmarker:CheckBox("Show slot marker", "ttt_bem_marker_slot")
-			dmarker:CheckBox("Show custom item marker", "ttt_bem_marker_custom")
-			dmarker:CheckBox("Show favourite item marker", "ttt_bem_marker_fav")
+			dmarker:CheckBox(LANG.GetTranslation("f1_settings_shop_desc_show_slot"), "ttt_bem_marker_slot")
+			dmarker:CheckBox(LANG.GetTranslation("f1_settings_shop_desc_show_custom"), "ttt_bem_marker_custom")
+			dmarker:CheckBox(LANG.GetTranslation("f1_settings_shop_desc_show_favourite"), "ttt_bem_marker_fav")
 
 			dmarker:Dock(TOP)
+		end
+		bemTbl.getTitle = function()
+			return LANG.GetTranslation("f1_settings_shop_title")
 		end
 
 		tbl[#tbl + 1] = bemTbl

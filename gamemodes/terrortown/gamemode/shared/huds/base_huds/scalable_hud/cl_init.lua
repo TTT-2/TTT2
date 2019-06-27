@@ -15,14 +15,14 @@ function HUD:GetSavingKeys()
 		savingKeys = BaseClass.GetSavingKeys(self)
 		savingKeys.basecolor = {
 			typ = "color",
-			desc = "BaseColor",
+			desc = LANG.GetTranslation("f1_settings_hudswitcher_desc_basecolor"),
 			OnChange = function(slf, col)
 				self:PerformLayout()
 			end
 		}
 		savingKeys.scale = {
 			typ = "scale",
-			desc = "Reset Positions and set HUD Scale",
+			desc = LANG.GetTranslation("f1_settings_hudswitcher_desc_hud_scale"),
 			OnChange = function(slf, val)
 				--local scaleMultiplier = val / self.scale
 				self.scale = val
