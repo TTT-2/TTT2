@@ -204,14 +204,12 @@ function GM:TTTScoreboardColorForPlayer(ply)
 		end
 
 		if steamid64 then
-			if dev_tbl[steamid64] then
+			if dev_tbl[steamid64] and GetGlobalBool("ttt_highlight_dev", true) then
 				return namecolor.dev
-			elseif vip_tbl[steamid64] then
+			elseif vip_tbl[steamid64] and GetGlobalBool("ttt_highlight_vip", true) then
 				return namecolor.vip
-			elseif addondev_tbl[steamid64] then
+			elseif addondev_tbl[steamid64] and GetGlobalBool("ttt_highlight_addondev", true) then
 				return namecolor.addondev
-			elseif heroes_tbl[steamid64] then
-				return namecolor.heroes
 			end
 		end
 
@@ -338,19 +336,19 @@ function PANEL:UpdatePlayerData()
 
 	local isdev = steamid64 and dev_tbl[steamid64] == true
 
-	self.dev:SetVisible(isdev)
+	self.dev:SetVisible(isdev and GetGlobalBool("ttt_highlight_dev", true))
 
-	if not isdev then
-		self.vip:SetVisible(steamid64 and vip_tbl[steamid64] == true or false)
-		self.addondev:SetVisible(steamid64 and addondev_tbl[steamid64] == true or false)
+	if not isdev or not GetGlobalBool("ttt_highlight_dev", true) then
+		self.vip:SetVisible(steamid64 and vip_tbl[steamid64] and GetGlobalBool("ttt_highlight_vip", true))
+		self.addondev:SetVisible(steamid64 and addondev_tbl[steamid64] and GetGlobalBool("ttt_highlight_addondev", true))
 	else
 		self.vip:SetVisible(false)
 		self.addondev:SetVisible(false)
 	end
 
-	self.admin:SetVisible(ply:IsAdmin())
-	self.streamer:SetVisible(steamid64 and streamer_tbl[steamid64] == true or false)
-	self.heroes:SetVisible(steamid64 and heroes_tbl[steamid64] == true or false)
+	self.admin:SetVisible(ply:IsAdmin() and GetGlobalBool("ttt_highlight_admins", true))
+	self.streamer:SetVisible(steamid64 and streamer_tbl[steamid64] and GetGlobalBool("ttt_highlight_supporter", true))
+	self.heroes:SetVisible(steamid64 and heroes_tbl[steamid64] and GetGlobalBool("ttt_highlight_supporter", true))
 
 	local ptag = ply.sb_tag
 
