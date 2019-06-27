@@ -1164,3 +1164,7 @@ L.hud_restricted = "Beschränkte HUDs"
 L.hud_default_failed = "Es ist fehlgeschlagen {hudname} als Standard HUD zu setzen. Bist du Admin und existiert dieses HUD überhaupt?"
 L.hud_forced_failed = "Es ist fehlgeschlagen {hudname} zu erzwingen. Bist du Admin und existiert dieses HUD überhaupt?"
 L.hud_restricted_failed = "Es ist fehlgeschlagen {hudname} zu beschränken. Bist du Admin?"
+
+L.shop_role_select = "Wähle eine Rolle"
+L.shop_role_selected = "Der {roles} Shop wurde gewählt!"
+L.shop_search = "Suche"

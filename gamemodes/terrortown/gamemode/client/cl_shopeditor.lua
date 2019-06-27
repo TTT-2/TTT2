@@ -210,7 +210,7 @@ function ShopEditor.EditItem(item)
 	-- save button
 	local saveButton = vgui.Create("DButton", frame)
 	saveButton:SetFont("Trebuchet22")
-	saveButton:SetText("Save")
+	saveButton:SetText(LANG.GetTranslation("button_save"))
 	saveButton:Dock(BOTTOM)
 
 	saveButton.DoClick = function()
@@ -809,7 +809,7 @@ function ShopEditor.ShowOptions()
 	-- save button
 	local saveButton = vgui.Create("DButton", frame)
 	saveButton:SetFont("Trebuchet22")
-	saveButton:SetText("Save")
+	saveButton:SetText(LANG.GetTranslation("button_save"))
 	saveButton:Dock(BOTTOM)
 
 	saveButton.DoClick = function()

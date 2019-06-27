@@ -1179,3 +1179,8 @@ L.hud_default_failed = "Failed to set the HUD {hudname} as new default. Are you 
 L.hud_forced_failed = "Failed to force the HUD {hudname}. Are you an admin and does this HUD even exist?"
 L.hud_restricted_failed = "Failed to restrict the HUD {hudname}. Are you an admin?"
 
+L.shop_role_select = "Select a role"
+L.shop_role_selected = "{roles}'s shop was selected!"
+L.shop_search = "Search"
+
+L.button_save = "Save"
