@@ -69,6 +69,7 @@ if CLIENT then
 			PunchPaint(self, client) -- punch bar if you are spectator and inside of an entity
 		else
 			self:ShadowedText(interp(L.spec_help, key_params), "TabLarge", ScrW() * 0.5, margin, COLOR_WHITE, TEXT_ALIGN_CENTER)
+			self:ShadowedText(interp(L.spec_help2, key_params), "TabLarge",ScrW() * 0.5, margin +20, COLOR_WHITE, TEXT_ALIGN_CENTER)
 		end
 	end
 end

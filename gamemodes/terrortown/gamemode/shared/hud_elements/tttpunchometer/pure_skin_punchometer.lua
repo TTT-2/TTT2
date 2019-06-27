@@ -85,7 +85,7 @@ if CLIENT then
 		BaseClass.PerformLayout(self)
 	end
 
-	local key_params = {usekey = Key("+use", "USE")}
+	local key_params = {usekey = Key("+use", "USE"), helpkey = Key("+help", "HELP")}
 
 	function HUDELEMENT:ShouldDraw()
 		local client = LocalPlayer()
@@ -108,6 +108,7 @@ if CLIENT then
 			self:PunchPaint() -- punch bar if you are spectator and inside of an entity
 		else
 			self:AdvancedText(interp(L.spec_help, key_params), "TabLarge", x + self.size.w * 0.5, y, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, true, self.scale)
+			self:AdvancedText(interp(L.spec_help2, key_params), "TabLarge", x + self.size.w * 0.5, y +20, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, true, self.scale)
 		end
 	end
 end
