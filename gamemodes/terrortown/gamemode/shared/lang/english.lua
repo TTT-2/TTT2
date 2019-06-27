@@ -636,7 +636,7 @@ L.punch_bonus = "Your bad score lowered your punch-o-meter limit by {num}"
 L.punch_malus = "Your good score increased your punch-o-meter limit by {num}!"
 
 L.spec_help = "Click to spectate players, or press {usekey} on a physics object to possess it."
-L.spec_help2 = "To leave the spectator mode you have to open the help menu, goto 'gameplay' and toggle the specator mode."
+L.spec_help2 = "To leave the spectator mode you have to open menu by pressing {helpkey}, goto 'gameplay' and toggle the specator mode."
 
 --- Info popups shown when the round starts
 

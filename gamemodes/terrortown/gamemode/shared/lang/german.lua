@@ -626,7 +626,7 @@ L.punch_bonus = "Deine schlechte Punktzahl hat dein Punch-O-Meter Limit um {num}
 L.punch_malus = "Deine gute Punktzahl hat dein Punch-O-Meter Limit um {num} erhöht!"
 
 L.spec_help = "Klicke, um Spielern zu zuschauen, oder drücke {usekey} auf ein physikalisches Objekt um die Kontrolle zu erhalten."
-L.spec_help2 = "Zum Verlassen des Zuschauer-Modus öffne das Hilfemenü, navigiere in 'Gameplay' und schalte den Zuschauermodus um"
+L.spec_help2 = "Zum Verlassen des Zuschauer-Modus öffne das Menü mit {helpkey}, navigiere in 'Gameplay' und schalte den Zuschauermodus um."
 
 --- Info popups shown when the round starts
 
