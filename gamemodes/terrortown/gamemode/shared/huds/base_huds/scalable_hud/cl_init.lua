@@ -17,7 +17,7 @@ function HUD:GetSavingKeys()
 			typ = "color",
 			desc = "BaseColor",
 			OnChange = function(slf, col)
-				self:PerformLayout()
+				slf:PerformLayout()
 			end
 		}
 		savingKeys.scale = {
@@ -25,10 +25,10 @@ function HUD:GetSavingKeys()
 			desc = "Reset Positions and set HUD Scale",
 			OnChange = function(slf, val)
 				--local scaleMultiplier = val / self.scale
-				self.scale = val
+				slf.scale = val
 
-				self:Reset()
-				self:SaveData()
+				slf:Reset()
+				slf:SaveData()
 			end
 		}
 	end

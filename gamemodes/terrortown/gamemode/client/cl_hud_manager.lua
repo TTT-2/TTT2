@@ -150,7 +150,7 @@ local function UpdateHUD(name)
 	-- save the old HUDs values
 	if current_hud_table then current_hud_table:SaveData() end
 
-	RunConsoleCommand(current_hud_cvar:GetName(), name)
+	current_hud_cvar:SetString(name)
 
 	current_hud_table = hudEl
 
