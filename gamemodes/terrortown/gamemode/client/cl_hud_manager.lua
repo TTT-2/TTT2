@@ -182,6 +182,13 @@ function HUDManager.SetHUD(name)
 	net.SendToServer()
 end
 
+function HUDManager.LoadAllHUDS()
+	for _, hud in ipairs(huds.GetList()) do
+		hud:Initialize()
+		hud:LoadData()
+	end
+end
+
 function HUDManager.RequestFullStateUpdate()
 	MsgN("[TTT2][HUDManager] Requesting a full state update...")
 	net.Start("TTT2RequestHUDManagerFullStateUpdate")
