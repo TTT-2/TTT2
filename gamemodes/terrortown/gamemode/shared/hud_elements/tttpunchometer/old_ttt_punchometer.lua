@@ -50,7 +50,7 @@ if CLIENT then
 		end
 	end
 
-	local key_params = {usekey = Key("+use", "USE")}
+	local key_params = {usekey = Key("+use", "USE"), helpkey = Key("gm_showhelp", "F1")}
 
 	function HUDELEMENT:Draw()
 		local client = LocalPlayer()
@@ -69,6 +69,9 @@ if CLIENT then
 			PunchPaint(self, client) -- punch bar if you are spectator and inside of an entity
 		else
 			self:ShadowedText(interp(L.spec_help, key_params), "TabLarge", ScrW() * 0.5, margin, COLOR_WHITE, TEXT_ALIGN_CENTER)
+			if GetConVar("ttt_spectator_mode"):GetBool() then
+				self:ShadowedText(interp(L.spec_help2, key_params), "TabLarge",ScrW() * 0.5, margin +20, COLOR_WHITE, TEXT_ALIGN_CENTER)
+			end
 		end
 	end
 end

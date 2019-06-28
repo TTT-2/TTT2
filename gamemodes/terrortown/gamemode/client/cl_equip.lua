@@ -213,7 +213,7 @@ local function CreateEquipmentList(t)
 
 	setmetatable(t, {__index = {search = nil, role = nil, notalive = false}})
 
-	if t.search == "Search..." or t.search == "" then
+	if t.search == LANG.GetTranslation("shop_search") .. "..." or t.search == "" then
 		t.search = nil
 	end
 
@@ -530,7 +530,7 @@ function TraitorMenuPopup()
 	dsearch:SetPos(5, 5)
 	dsearch:SetUpdateOnType(true)
 	dsearch:SetEditable(true)
-	dsearch:SetText("Search...")
+	dsearch:SetText(LANG.GetTranslation("shop_search") .. "...")
 
 	dsearch.selectAll = true
 
@@ -593,10 +593,10 @@ function TraitorMenuPopup()
 			end
 		end
 
-		drolesel:SetValue("Select a role...")
+		drolesel:SetValue(LANG.GetTranslation("shop_role_select") .. " ...")
 
 		drolesel.OnSelect = function(panel, index, value)
-			print(value .."'s shop was selected!")
+			print(LANG.GetParamTranslation("shop_role_selected", {role = value}))
 			dnotaliveHelp:SetText("")
 			CreateEquipmentList({role = RolenameToRole(value), search = dsearch:GetValue(), notalive = notalive})
 		end

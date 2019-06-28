@@ -22,6 +22,7 @@ local helpframe
 
 local function AddBindingCategory(category, parent)
 	local form = vgui.Create("DForm", parent)
+
 	form:SetName(category)
 	for _, binding in ipairs(bind.GetSettingsBindings()) do
 		if binding.category == category then
@@ -43,7 +44,7 @@ local function AddBindingCategory(category, parent)
 					bind.Remove(curBinding, binding.name)
 					bind.Add(num, binding.name, true)
 
-					LocalPlayer():ChatPrint("New bound key for '" .. binding.name .. "': " .. input.GetKeyName(num))
+					LocalPlayer():ChatPrint(GetParamTranslation("ttt2_bindings_new", {name = binding.name, key = input.GetKeyName(num)}))
 				end
 
 				curBinding = num
@@ -146,7 +147,7 @@ function HELPSCRN:Show()
 				client.settingsFrame = frm
 			end,
 			getTitle = function()
-				return "Changes"
+				return GetTranslation("f1_settings_changes_title")
 			end
 		},
 		[2] = {
@@ -156,34 +157,52 @@ function HELPSCRN:Show()
 				HUDManager.ShowHUDSwitcher()
 			end,
 			getTitle = function()
-				return "HUD Switcher"
+				return GetTranslation("f1_settings_hudswitcher_title")
 			end
 		},
 		[3] = {
 			id = "bindings",
-			getContent = self.CreateBindings
+			getContent = self.CreateBindings,
+			getTitle = function()
+				return GetTranslation("f1_settings_bindings_title")
+			end
 		},
 		[4] = {
 			id = "interface",
-			getContent = self.CreateInterfaceSettings
+			getContent = self.CreateInterfaceSettings,
+			getTitle = function()
+				return GetTranslation("f1_settings_interface_title")
+			end
 		},
 		[5] = {
 			id = "gameplay",
-			getContent = self.CreateGameplaySettings
+			getContent = self.CreateGameplaySettings,
+			getTitle = function()
+				return GetTranslation("f1_settings_gameplay_title")
+			end
 		},
 		[6] = {
 			id = "crosshair",
-			getContent = self.CreateCrosshairSettings
+			getContent = self.CreateCrosshairSettings,
+			getTitle = function()
+				return GetTranslation("f1_settings_crosshair_title")
+			end
 		},
 		[7] = {
 			id = "language",
-			getContent = self.CreateLanguageForm
+			getContent = self.CreateLanguageForm,
+			getTitle = function()
+				return GetTranslation("f1_settings_language_title")
+			end
 		},
 		[8] = {
 			id = "administration",
 			getContent = self.CreateAdministrationForm,
 			shouldShow = function()
 				return LocalPlayer():IsAdmin()
+			end,
+			getTitle = function()
+				return GetTranslation("f1_settings_administration_title")
 			end
 		}
 	}
@@ -452,7 +471,7 @@ end
 local admin_dlv_rhuds = nil
 function HELPSCRN:CreateAdministrationForm(parent)
 	local defaultHUDlabel = vgui.Create("DLabel", parent)
-	defaultHUDlabel:SetText("Default HUD:")
+	defaultHUDlabel:SetText(GetTranslation("hud_default") .. ":")
 	defaultHUDlabel:Dock(TOP)
 	local defaultHUDCb = vgui.Create("DComboBox", parent)
 	defaultHUDCb:SetValue(HUDManager.GetModelValue("defaultHUD") or "None")
@@ -468,7 +487,7 @@ function HELPSCRN:CreateAdministrationForm(parent)
 	defaultHUDCb:Dock(TOP)
 
 	local forceHUDlabel = vgui.Create("DLabel", parent)
-	forceHUDlabel:SetText("Force HUD:")
+	forceHUDlabel:SetText(GetTranslation("hud_force") .. ":")
 	forceHUDlabel:Dock(TOP)
 	local forceHUDCb = vgui.Create("DComboBox", parent)
 	forceHUDCb:SetValue(HUDManager.GetModelValue("forcedHUD") or "None")
@@ -485,7 +504,7 @@ function HELPSCRN:CreateAdministrationForm(parent)
 	forceHUDCb:Dock(TOP)
 
 	local restrictHUDlabel = vgui.Create("DLabel", parent)
-	restrictHUDlabel:SetText("Restrict HUDs:")
+	restrictHUDlabel:SetText(GetTranslation("hud_restricted") .. ":")
 	restrictHUDlabel:Dock(TOP)
 
 	admin_dlv_rhuds = vgui.Create("DListView", parent)
@@ -526,7 +545,7 @@ net.Receive("TTT2RestrictHUDResponse", function()
 	local ply = LocalPlayer()
 
 	if not accepted then
-		ply:ChatPrint("[TTT2][HUDManager] Failed to restrict the HUD " .. hudname .. ". Are you an admin?")
+		ply:ChatPrint("[TTT2][HUDManager] " .. GetParamTranslation("hud_restricted_failed", {hudname = hudname}))
 		return
 	end
 end)
@@ -537,7 +556,7 @@ net.Receive("TTT2ForceHUDResponse", function()
 	local ply = LocalPlayer()
 
 	if not accepted then
-		ply:ChatPrint("[TTT2][HUDManager] Failed to force the HUD " .. hudname .. ". Are you an admin and does this HUD even exist?")
+		ply:ChatPrint("[TTT2][HUDManager] " .. GetParamTranslation("hud_forced_failed", {hudname = hudname}))
 		return
 	end
 end)
@@ -548,7 +567,7 @@ net.Receive("TTT2DefaultHUDResponse", function()
 	local ply = LocalPlayer()
 
 	if not accepted then
-		ply:ChatPrint("[TTT2][HUDManager] Failed to set the HUD " .. hudname .. " as new default. Are you an admin and does this HUD even exist?")
+		ply:ChatPrint("[TTT2][HUDManager] " .. GetParamTranslation("hud_default_failed", {hudname = hudname}))
 		return
 	end
 end)

@@ -8,8 +8,8 @@ local function AddHUDSettings(panel, hudEl)
 	if not IsValid(panel) or not hudEl then return end
 
 	local tmp = table.Copy(hudEl:GetSavingKeys()) or {}
-	tmp.el_pos = {typ = "el_pos", desc = "Change element's\nposition and size"}
-	tmp.reset = {typ = "reset", desc = "Reset HUD's data"}
+	tmp.el_pos = {typ = "el_pos", desc = LANG.GetTranslation("f1_settings_hudswitcher_desc_layout_editor")}
+	tmp.reset = {typ = "reset", desc = LANG.GetTranslation("f1_settings_hudswitcher_desc_reset")}
 
 	for key, data in pairs(tmp) do
 		local el
@@ -17,7 +17,7 @@ local function AddHUDSettings(panel, hudEl)
 
 		if data.typ == "el_pos" then -- HUD edit button
 			el = vgui.Create("DButton")
-			el:SetText("Layout Editor")
+			el:SetText(LANG.GetTranslation("f1_settings_hudswitcher_button_layout_editor"))
 			el:SizeToContents()
 
 			el.DoClick = function(btn)
@@ -27,7 +27,7 @@ local function AddHUDSettings(panel, hudEl)
 		elseif data.typ == "reset" then
 			el = vgui.Create("DButton")
 			el:SetTextColor(Color(255, 0, 0))
-			el:SetText("- Reset -")
+			el:SetText("- " .. LANG.GetTranslation("f1_settings_hudswitcher_button_reset") .. " -")
 			el:SizeToContents()
 
 			el.DoClick = function(btn)
@@ -130,7 +130,7 @@ function PANEL:Init()
 
 	self:SetSize(ScrW() * 0.8, ScrH() * 0.8)
 	self:Center()
-	self:SetTitle("HUDSwitcher - " .. currentHUD)
+	self:SetTitle(LANG.GetTranslation("f1_settings_hudswitcher_title") .. " - " .. currentHUD)
 	self:SetVisible(true)
 	self:ShowCloseButton(true)
 	self:SetMouseInputEnabled(true)
@@ -163,7 +163,7 @@ function PANEL:Init()
 			draw.RoundedBox(4, 0, 0, w, h, hud.disableHUDEditor and Color(255, 0, 0) or Color(155, 155, 155, 255))
 
 			if hud.disableHUDEditor then
-				draw.DrawText("! THIS HUD DOESN'T SUPPORT THE HUD EDITOR !", "DermaDefault", w * 0.5, 10, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.DrawText(LANG.GetTranslation("f1_settings_hudswitcher_desc_hud_not_supported"), "DermaDefault", w * 0.5, 10, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
 		end
 
@@ -216,7 +216,7 @@ function PANEL:Init()
 			if name == v.Panel.hudid then
 				dcsheet:SetActiveButton(v.Button)
 
-				self:SetTitle("HUD Switcher - " .. name)
+				self:SetTitle(LANG.GetTranslation("f1_settings_hudswitcher_title") .. " - " .. name)
 
 				break
 			end
