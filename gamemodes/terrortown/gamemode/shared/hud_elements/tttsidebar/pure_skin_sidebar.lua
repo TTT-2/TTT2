@@ -142,7 +142,7 @@ if CLIENT then
 		num_icons = num_icons + num_status
 
 		local height = math.max(num_icons, 1) * self.size.w + math.max(num_icons -1, 0) * ((num_icons > 1) and self.padding or 0) + ((num_status > 0) and 25 or 0)
-        local startY = basepos.y + 0.5 * self.size.w + 0.5 * height
+        	local startY = basepos.y + 0.5 * self.size.w + 0.5 * height
 		local curY = startY
 
 		-- draw status
@@ -189,6 +189,6 @@ if CLIENT then
 		end
 
 		self:SetSize(self.size.w, - math.max(height, self.minsize.h)) -- adjust the size
-        self:SetPos(basepos.x, startY - height)
+        	self:SetPos(basepos.x, startY - height)
 	end
 end
