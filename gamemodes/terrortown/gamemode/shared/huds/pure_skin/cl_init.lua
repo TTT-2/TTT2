@@ -7,6 +7,7 @@ surface.CreateFont("PureSkinRole", {font = "Trebuchet24", size = 30, weight = 70
 surface.CreateFont("PureSkinBar", {font = "Trebuchet24", size = 21, weight = 1000})
 surface.CreateFont("PureSkinWep", {font = "Trebuchet24", size = 21, weight = 1000})
 surface.CreateFont("PureSkinWepNum", {font = "Trebuchet24", size = 21, weight = 700})
+surface.CreateFont("PureSkinItemInfo", {font = "Trebuchet24", size = 14, weight = 700})
 
 -- base drawing functions
 include("cl_drawing_functions.lua")
