@@ -63,7 +63,7 @@ if CLIENT then
 			item.hud_color = self.basecolor
 		end
 
-		curY = curY - (size.w + self.padding)
+		curY = curY - size.w
 
 		local factor = 1
 
@@ -110,7 +110,7 @@ if CLIENT then
 			end
 		end
 
-		return curY
+		return curY - self.padding
 	end
 
 	function HUDELEMENT:Draw()
@@ -141,7 +141,9 @@ if CLIENT then
 
 		num_icons = num_icons + num_status
 
-		local curY = basepos.y + 0.5 * ((num_icons -1) * (self.size.w + self.padding) + ((num_status > 0) and 25 or 0))
+		local height = math.max(num_icons, 1) * self.size.w + math.max(num_icons -1, 0) * ((num_icons > 1) and self.padding or 0) + ((num_status > 0) and 25 or 0)
+        local startY = basepos.y + 0.5 * self.size.w + 0.5 * height
+		local curY = startY
 
 		-- draw status
 		for _, status in pairs(STATUS.active) do
@@ -173,7 +175,7 @@ if CLIENT then
 			local size = self:GetSize()
 
 			surface.SetDrawColor(self.basecolor)
-			surface.DrawRect(pos.x, curY - self.padding * 0.5 + 8, size.w, 2)
+			surface.DrawRect(pos.x, curY + self.padding * 0.5 + 8, size.w, 2)
 		end
 
 		-- draw items
@@ -186,6 +188,7 @@ if CLIENT then
 			end
 		end
 
-		self:SetSize(self.size.w, - math.max(basepos.y - curY, self.minsize.h)) -- adjust the size
+		self:SetSize(self.size.w, - math.max(height, self.minsize.h)) -- adjust the size
+        self:SetPos(basepos.x, startY - height)
 	end
 end
