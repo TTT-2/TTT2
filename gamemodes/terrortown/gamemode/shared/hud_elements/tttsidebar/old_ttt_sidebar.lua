@@ -8,8 +8,6 @@ DEFINE_BASECLASS(base)
 HUDELEMENT.Base = base
 
 if CLIENT then
-	surface.CreateFont("ItemInfoFont", {font = "Trebuchet24", size = 14, weight = 700})
-
 	local size = 64
 
 	local const_defaults = {
@@ -83,12 +81,12 @@ if CLIENT then
 						local ty = curY + size
 						local pad = 5
 
-						surface.SetFont("ItemInfoFont")
+						surface.SetFont("ItemInfo")
 
 						local infoW, infoH = surface.GetTextSize(info)
 
 						draw.RoundedBox(4, tx - infoW * 0.5 - pad, ty - infoH * 0.5, infoW + pad * 2, infoH, COLOR_DARKGREY)
-						draw.DrawText(info, "ItemInfoFont", tx, ty - infoH * 0.5, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+						draw.DrawText(info, "ItemInfo", tx, ty - infoH * 0.5, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 					end
 				end
 
