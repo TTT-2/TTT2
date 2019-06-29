@@ -1,14 +1,14 @@
 local base = "hud_base"
-local defaultColor = Color(49, 71, 94)
-local defaultScale = 1.0
 
 local savingKeys
 
 DEFINE_BASECLASS(base)
 
 HUD.Base = base
-HUD.basecolor = defaultColor
-HUD.scale = defaultScale
+HUD.defaultcolor = Color(49, 71, 94)
+HUD.basecolor = HUD.defaultcolor
+HUD.defaultscale = 1.0
+HUD.scale = HUD.defaultscale
 
 function HUD:GetSavingKeys()
 	if not savingKeys then
@@ -24,7 +24,6 @@ function HUD:GetSavingKeys()
 			typ = "scale",
 			desc = LANG.GetTranslation("f1_settings_hudswitcher_desc_hud_scale"),
 			OnChange = function(slf, val)
-				--local scaleMultiplier = val / self.scale
 				slf.scale = val
 
 				slf:Reset()
@@ -71,7 +70,7 @@ function HUD:ApplyScale(scale)
 end
 
 function HUD:Reset()
-	self.basecolor = defaultColor
+	self.basecolor = self.defaultcolor
 	
 	BaseClass.Reset(self)
 
