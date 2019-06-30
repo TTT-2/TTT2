@@ -30,6 +30,7 @@ function HUD:Initialize()
 	self:ForceElement("pure_skin_miniscoreboard")
 	self:ForceElement("pure_skin_punchometer")
 	self:ForceElement("pure_skin_target")
+	self:ForceElement("pure_skin_pickup")
 
 	BaseClass.Initialize(self)
 end

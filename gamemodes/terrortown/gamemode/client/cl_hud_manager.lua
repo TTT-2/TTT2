@@ -112,10 +112,6 @@ function GM:HUDPaint()
 	if hook.Call("HUDShouldDraw", GAMEMODE, "TTTVoice") then
 		VOICE.Draw(client)
 	end
-
-	if hook.Call("HUDShouldDraw", GAMEMODE, "TTTPickupHistory") then
-		hook.Call("HUDDrawPickupHistory", GAMEMODE)
-	end
 end
 
 -- Hide the standard HUD stuff

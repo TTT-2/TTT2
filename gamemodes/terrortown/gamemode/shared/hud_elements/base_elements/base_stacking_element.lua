@@ -6,8 +6,20 @@ HUDELEMENT.Base = base
 
 HUDELEMENT.elements = {}
 HUDELEMENT.element_margin = 0
+HUDELEMENT.lastCount = 0
 
 function HUDELEMENT:Draw()
+    --set size beforehand if #elements was reduced to remove flickering
+    if #self.elements < self.lastCount then
+        local height = 0
+        for k, el in ipairs(self.elements) do
+            height = height + el.h + self.element_margin
+        end
+
+        self:SetSize(self.size.w, -height)
+    end
+
+    --draw all elements
     local running_y = self.pos.y
 
     for k, el in ipairs(self.elements) do
@@ -17,8 +29,9 @@ function HUDELEMENT:Draw()
     end
 
     local totalHeight = running_y - self.pos.y
-	
-    self:SetSize(self.size.w, -totalHeight)
+
+    self.lastCount = #self.elements
+    self:SetSize(self.size.w, - math.max(totalHeight, self.minsize.h))
 end
 
 --[[----------------------------------------------------------------------------

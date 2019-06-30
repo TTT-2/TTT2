@@ -38,6 +38,7 @@ function HUD:Initialize()
 	self:ForceElement("old_ttt_mstack")
 	self:ForceElement("old_ttt_wswitch")
 	self:ForceElement("old_ttt_target")
+	self:ForceElement("old_ttt_pickup")
 
 	BaseClass.Initialize(self)
 end
