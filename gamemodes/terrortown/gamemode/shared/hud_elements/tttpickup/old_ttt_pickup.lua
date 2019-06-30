@@ -102,7 +102,7 @@ if CLIENT then
 		end
 
 		local shiftX = x + w - self.size.w * (alpha / 255)
-		local tipSize = h - 4
+		local tipSize = h - 10
 
 		self:DrawBar(shiftX, y, w, h, tipSize, alpha, item)
 
