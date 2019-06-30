@@ -13,7 +13,7 @@ if CLIENT then
 		basepos = {x = 0, y = 0},
 		size = {w = 321, h = 36},
 		minsize = {w = 75, h = 36}
-    }
+	}
 
 	function HUDELEMENT:Initialize()
 		self.pad = pad
