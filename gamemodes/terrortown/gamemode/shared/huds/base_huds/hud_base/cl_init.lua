@@ -130,7 +130,8 @@ function HUD:GetElementByType(elementType)
 	if table.HasValue(self.disabledTypes, elementType) then return nil end
 
 	local element = self.forcedElements[elementType]
-	local elementTbl = not element and hudelements.GetTypeElement(elementType) or hudelements.GetStored(element)
+
+	local elementTbl = not element and self:GetEnabledTypeElement(elementType) or hudelements.GetStored(element)
 
 	-- return nil if the elements table is not found
 	if not elementTbl then return nil end
@@ -151,6 +152,14 @@ function HUD:GetElementByType(elementType)
 	end
 
 	return elementTbl
+end
+
+function HUD:GetEnabledTypeElement(elementType)
+	for _, v in pairs(hudelements.GetAllTypeElements(elementType)) do
+		if not v.disabledUnlessForced then
+			return v
+		end
+	end
 end
 
 --- This returns a table with all the specific elements the HUD has. One element
