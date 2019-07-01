@@ -118,36 +118,67 @@ function HUD:HasElementType(elementType)
 	return self:GetElementByType(elementType) ~= nil
 end
 
---- Returns an element the HUD wants to be used for a given type.
--- It will only return the element if the HUD 'has' the element,
--- here 'has' means the element is not hidden by @{HUD:HideType} or for example
--- doesn't have the HUDELEMENT.disabledUnlessForced attribute set and is not
--- explicitly forced by @{HUD:ForceElement}.
--- @tparam string 'elementType'
--- @treturn tab
-function HUD:GetElementByType(elementType)
-	-- element is hidden in this HUD so return nil
-	if table.HasValue(self.disabledTypes, elementType) then return nil end
+--- Determines if the given element instance is available/usable for this HUD.
+-- This will respect the @{HUDELEMENT}.disabledUnlessForced property and check
+-- if the parent element (if exists) is also available, otherwise this will
+-- return false.
+-- @tparam tab 'elementTbl'
+-- @treturn bool
+function HUD:CanUseElement(elementTbl)
+	-- return false if the table is empty.
+	if not elementTbl then return false end
 
-	local element = self.forcedElements[elementType]
-	local elementTbl = not element and hudelements.GetTypeElement(elementType) or hudelements.GetStored(element)
+	-- return false if the element is disabled unless it is forced and it is not forced in this HUD.
+	if elementTbl.disabledUnlessForced and not table.HasValue(self.forcedElements, elementTbl.id) then return false end
 
-	-- return nil if the elements table is not found
-	if not elementTbl then return nil end
-
-	-- return nil if the element is disabled unless it is forced and it is not forced in this HUD
-	if elementTbl.disabledUnlessForced and not table.HasValue(self.forcedElements, elementTbl.id) then return nil end
-
-	-- check if the element is a child and if its parent element is a part of this HUD
+	-- check if the element is a child and if it is parent element is a part of this HUD.
 	if elementTbl:IsChild() then
 		local parent, parentIsType = elementTbl:GetParentRelation()
 
-		if not parent or parentIsType == nil then return nil end
+		if not parent or parentIsType == nil then return false end
 
-		-- find the parent element, if the element is bound to a type call this method again and if not get the specific element
-		local parentTbl = (parentIsType and self:GetElementByType(parent)) or (not parentIsType and hudelements.GetStored(parent))
+		-- find the parent element, if the element is bound to a type call this method again implicitly (check if element is used by the HUD) and if not,
+		-- get the specific element and call this method on it.
+		return (parentIsType and self:HasElementType(parent)) or (not parentIsType and self:CanUseElement(hudelements.GetStored(parent)))
+	end
 
-		if not parentTbl then return nil end
+	return true
+end
+
+--- Returns an element the HUD wants to use for a given type.
+-- It will only return an element, if the HUD 'has' the element.
+-- This will first evaluate, if there is a forcedElement for the given type,
+-- otherwise it will search all elements that match the type and find the first
+-- instance that 'can' be used, please take a look at @{HUD:CanUseElement} for
+-- the criteria / restrictions for the evaluation as if an element can be used.
+-- @tparam string 'elementType'
+-- @treturn tab
+function HUD:GetElementByType(elementType)
+	-- element type is hidden in this HUD so return nil
+	if table.HasValue(self.disabledTypes, elementType) then return nil end
+
+	local forcedElement = self.forcedElements[elementType]
+	local elementTbl = nil
+
+	-- Check if an element is forced by the HUD for the given type
+	if forcedElement ~= nil then
+		elementTbl = hudelements.GetStored(forcedElement)
+	end
+
+	-- Evaluate the forcedElement or try to find a usable element.
+	if self:CanUseElement(elementTbl) then
+		return elementTbl
+	else
+		-- fallback and search for the first usable element for this type
+		local availableElements = hudelements.GetAllTypeElements(elementType)
+
+		-- find first valid element
+		for _, el in ipairs(availableElements) do
+			if self:CanUseElement(el) then
+				elementTbl = el
+				break
+			end
+		end
 	end
 
 	return elementTbl
@@ -156,6 +187,7 @@ end
 --- This returns a table with all the specific elements the HUD has. One element
 -- per type, respecting the forcedElements and otherwise taking the first found
 -- implementation.
+-- @todo TODO optimize / cache maybe?!
 -- @treturn tab
 function HUD:GetElements()
 	-- loop through all types and if the hud does not provide an element take the first found instance for the type
