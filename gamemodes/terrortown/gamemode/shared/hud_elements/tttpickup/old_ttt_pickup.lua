@@ -52,7 +52,14 @@ if CLIENT then
 
 		surface.SetTexture(self.barcorner)
 
-		surface.SetDrawColor(item.color.r, item.color.g, item.color.b, alpha)
+		local tipColor = LocalPlayer():GetRoleDkColor()
+		if item.type == PICKUP_ITEM then
+			tipColor = Color(255, 255, 255, 255)
+		elseif item.type == PICKUP_AMMO then
+			tipColor = Color(205, 155, 0, 255)
+		end
+
+		surface.SetDrawColor(tipColor.r, tipColor.g, tipColor.b, alpha)
 		surface.DrawTexturedRectRotated(x + bordersize * 0.5, y + bordersize * 0.5, bordersize, bordersize, 0)
 		surface.DrawTexturedRectRotated(x + bordersize * 0.5, y + h - bordersize * 0.5, bordersize, bordersize, 90)
 		surface.DrawRect(x, y + bordersize, bordersize, h - bordersize * 2)
