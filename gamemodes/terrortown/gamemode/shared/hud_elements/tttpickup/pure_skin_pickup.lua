@@ -12,11 +12,10 @@ HUDELEMENT.Base = base
 
 if CLIENT then
 	local width = 200
-	local elemheight = 20
-	local font = "DefaultBold"
-	local bordersize = 8
-	local tipsize = elemheight - 4
-	local margin = 10
+	local element_height = 27
+	local font = "PureSkinMSTACKMsg"
+	local tipsize = element_height
+	local margin = 5
 	local pad = 8
 
 	HUDELEMENT.barcorner = surface.GetTextureID("gui/corner8")
@@ -24,8 +23,8 @@ if CLIENT then
 
 	local const_defaults = {
 		basepos = {x = 0, y = 0},
-		size = {w = width, h = -elemheight},
-		minsize = {w = width, h = elemheight}
+		size = {w = width, h = -element_height},
+		minsize = {w = width, h = element_height}
 	}
 
 	function HUDELEMENT:PreInitialize()
@@ -35,10 +34,9 @@ if CLIENT then
 	function HUDELEMENT:Initialize()
 		self.scale = 1.0
 		self.basecolor = self:GetHUDBasecolor()
-		self.elemheight = elemheight * self.scale
+		self.element_height = element_height * self.scale
 		self.margin = margin * self.scale
 		self.pad = pad * self.scale
-		self.bordersize = bordersize * self.scale
 		self.tipsize = tipsize * self.scale
 
 		BaseClass.Initialize(self)
@@ -57,10 +55,9 @@ if CLIENT then
 	function HUDELEMENT:PerformLayout()
 		self.scale = self:GetHUDScale()
 		self.basecolor = self:GetHUDBasecolor()
-		self.elemheight = elemheight * self.scale
+		self.element_height = element_height * self.scale
 		self.margin = margin * self.scale
 		self.pad = pad * self.scale
-		self.bordersize = bordersize * self.scale
 		self.tipsize = tipsize * self.scale
 
 		BaseClass.PerformLayout(self)
@@ -69,11 +66,11 @@ if CLIENT then
 
 	function HUDELEMENT:DrawBar(x, y, w, h, alpha, item)
 
+		-- draw bg and shadow
 		local barColor = Color(self.basecolor.r, self.basecolor.g, self.basecolor.b, alpha)
-		draw.RoundedBox(self.bordersize, x, y, w, h, barColor)
+		self.drawer:DrawBg(x, y, w, h, barColor)
 
-		surface.SetTexture(self.barcorner)
-
+		--draw tip
 		local tipColor = LocalPlayer():GetRoleColor()
 		if item.type == PICKUP_ITEM then
 			tipColor = Color(255, 255, 255, 255)
@@ -81,18 +78,19 @@ if CLIENT then
 			tipColor = Color(205, 155, 0, 255)
 		end
 
+		-- Draw the colour tip
 		surface.SetDrawColor(tipColor.r, tipColor.g, tipColor.b, alpha)
-		surface.DrawTexturedRectRotated(x + self.bordersize * 0.5, y + self.bordersize * 0.5, self.bordersize, self.bordersize, 0)
-		surface.DrawTexturedRectRotated(x + self.bordersize * 0.5, y + h - self.bordersize * 0.5, self.bordersize, self.bordersize, 90)
-		surface.DrawRect(x, y + self.bordersize, self.bordersize, h - self.bordersize * 2)
-		surface.DrawRect(x + self.bordersize, y, self.tipsize, h)
+		surface.DrawRect(x, y, self.tipsize, h)
 
-		draw.SimpleText(item.name, font, x + self.tipsize + self.bordersize + self.pad + 2, y + h * 0.5 + 2, Color(0, 0, 0, alpha * 0.75), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-		draw.SimpleText(item.name, font, x + self.tipsize + self.bordersize + self.pad, y + h * 0.5, Color(255, 255, 255, alpha), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		-- draw lines around the element
+		self.drawer:DrawLines(x, y, w, h, self.basecolor.a)
 
+		--draw name text
+		self.drawer:AdvancedText(item.name, font, x + self.tipsize + self.pad, y + h * 0.5, self.drawer:GetDefaultFontColor(self.basecolor), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, true, self.scale)
+
+		--draw amount text
 		if item.amount then
-			draw.SimpleText(item.amount, font, x + w - self.pad, y + h * 0.5 + 2, Color(0, 0, 0, alpha * 0.75), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
-			draw.SimpleText(item.amount, font, x + w - self.pad, y + h * 0.5, Color(255, 255, 255, alpha), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+			self.drawer:AdvancedText(item.amount, font, x + w - self.pad, y + h * 0.5, self.drawer:GetDefaultFontColor(self.basecolor), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, true, self.scale)
 		end
 	end
 
@@ -105,7 +103,7 @@ if CLIENT then
 
 		for k, v in pairs(PICKUP.items) do
 			if v.time < CurTime() then
-				table.insert(pickupList, {h = self.elemheight})
+				table.insert(pickupList, {h = self.element_height})
 			end
 		end
 
