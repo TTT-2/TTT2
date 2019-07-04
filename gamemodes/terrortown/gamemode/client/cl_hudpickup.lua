@@ -22,7 +22,7 @@ local function InsertNewPickupItem()
 		pickup.time = PICKUP.last + 0.05
 	end
 
-	local index = table.insert(PICKUP.items, pickup)
+	table.insert(PICKUP.items, pickup)
 
 	PICKUP.last = pickup.time
 
