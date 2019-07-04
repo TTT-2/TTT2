@@ -18,14 +18,38 @@ if CLIENT then
 	local margin = 5
 	local pad = 8
 
-	HUDELEMENT.barcorner = surface.GetTextureID("gui/corner8")
-	HUDELEMENT.PickupHistoryTop = ScrH() / 2
+	HUDELEMENT.icon_item = Material("vgui/ttt/hud_icon_marked.png")
+	HUDELEMENT.icon_ammo = Material("vgui/ttt/hud_icon_pirate.png")
+	HUDELEMENT.icon_primary = Material("vgui/ttt/hud_icon_marked.png")
+	HUDELEMENT.icon_secondary = Material("vgui/ttt/hud_icon_deagle.png")
+	HUDELEMENT.icon_grenade = Material("vgui/ttt/hud_icon_marked.png")
+	HUDELEMENT.icon_special = Material("vgui/ttt/hud_icon_marked.png")
+	HUDELEMENT.icon_extra = Material("vgui/ttt/hud_icon_marked.png")
+	HUDELEMENT.icon_class = Material("vgui/ttt/hud_icon_marked.png")
 
 	local const_defaults = {
 		basepos = {x = 0, y = 0},
 		size = {w = width, h = -element_height},
 		minsize = {w = width, h = element_height}
 	}
+
+	function HUDELEMENT:KindToIcon(kind)
+		if kind == WEAPON_HEAVY then
+			return self.icon_primary
+		elseif kind == WEAPON_PISTOL then
+			return self.icon_secondary
+		elseif kind == WEAPON_NADE then
+			return self.icon_grenade
+		elseif kind == WEAPON_SPECIAL then
+			return self.icon_special
+		elseif kind == WEAPON_EXTRA then
+			return self.icon_extra
+		elseif kind == WEAPON_CLASS then
+			return self.icon_class
+		else 
+			return self.icon_extra
+		end
+	end
 
 	function HUDELEMENT:PreInitialize()
 		self.drawer = hudelements.GetStored("pure_skin_element")
@@ -71,26 +95,35 @@ if CLIENT then
 		self.drawer:DrawBg(x, y, w, h, barColor)
 
 		--draw tip
-		local tipColor = LocalPlayer():GetRoleColor()
-		if item.type == PICKUP_ITEM then
-			tipColor = Color(255, 255, 255, 255)
+		local tipColor = Color(255, 255, 255, 255)
+		local icon = self.icon_item
+
+		if item.type == PICKUP_WEAPON then
+			tipColor = LocalPlayer():GetRoleColor()
+			icon = self:KindToIcon(item.kind)
 		elseif item.type == PICKUP_AMMO then
 			tipColor = Color(205, 155, 0, 255)
+			icon = self.icon_ammo
 		end
 
 		-- Draw the colour tip
 		surface.SetDrawColor(tipColor.r, tipColor.g, tipColor.b, alpha)
 		surface.DrawRect(x, y, self.tipsize, h)
 
+		--draw icon
+		util.DrawFilteredTexturedRect(x, y, h, h, icon, alpha)
+
 		-- draw lines around the element
-		self.drawer:DrawLines(x, y, w, h, self.basecolor.a)
+		self.drawer:DrawLines(x, y, w, h, alpha)
 
 		--draw name text
-		self.drawer:AdvancedText(item.name, font, x + self.tipsize + self.pad, y + h * 0.5, self.drawer:GetDefaultFontColor(self.basecolor), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, true, self.scale)
+		local fontColor = self.drawer:GetDefaultFontColor(self.basecolor)
+		fontColor = Color(fontColor.r, fontColor.g, fontColor.b, alpha)
+		self.drawer:AdvancedText(item.name, font, x + self.tipsize + self.pad, y + h * 0.5, fontColor, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, true, self.scale)
 
 		--draw amount text
 		if item.amount then
-			self.drawer:AdvancedText(item.amount, font, x + w - self.pad, y + h * 0.5, self.drawer:GetDefaultFontColor(self.basecolor), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, true, self.scale)
+			self.drawer:AdvancedText(item.amount, font, x + w - self.pad, y + h * 0.5, fontColor, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, true, self.scale)
 		end
 	end
 
