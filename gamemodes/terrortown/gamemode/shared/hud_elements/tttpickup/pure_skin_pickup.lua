@@ -18,38 +18,22 @@ if CLIENT then
 	local margin = 5
 	local pad = 8
 
+	HUDELEMENT.SlotIcons = {[WEAPON_HEAVY] = Material("vgui/ttt/hud_icon_marked.png"),
+				[WEAPON_PISTOL] = Material("vgui/ttt/hud_icon_deagle.png"),
+				[WEAPON_NADE] = Material("vgui/ttt/hud_icon_marked.png"),
+				[WEAPON_SPECIAL] = Material("vgui/ttt/hud_icon_marked.png"),
+				[WEAPON_EXTRA] = Material("vgui/ttt/hud_icon_marked.png"),
+				[WEAPON_CLASS] = Material("vgui/ttt/hud_icon_marked.png")
+	}
+
 	HUDELEMENT.icon_item = Material("vgui/ttt/hud_icon_marked.png")
 	HUDELEMENT.icon_ammo = Material("vgui/ttt/hud_icon_pirate.png")
-	HUDELEMENT.icon_primary = Material("vgui/ttt/hud_icon_marked.png")
-	HUDELEMENT.icon_secondary = Material("vgui/ttt/hud_icon_deagle.png")
-	HUDELEMENT.icon_grenade = Material("vgui/ttt/hud_icon_marked.png")
-	HUDELEMENT.icon_special = Material("vgui/ttt/hud_icon_marked.png")
-	HUDELEMENT.icon_extra = Material("vgui/ttt/hud_icon_marked.png")
-	HUDELEMENT.icon_class = Material("vgui/ttt/hud_icon_marked.png")
 
 	local const_defaults = {
 		basepos = {x = 0, y = 0},
 		size = {w = width, h = -element_height},
 		minsize = {w = width, h = element_height}
 	}
-
-	function HUDELEMENT:KindToIcon(kind)
-		if kind == WEAPON_HEAVY then
-			return self.icon_primary
-		elseif kind == WEAPON_PISTOL then
-			return self.icon_secondary
-		elseif kind == WEAPON_NADE then
-			return self.icon_grenade
-		elseif kind == WEAPON_SPECIAL then
-			return self.icon_special
-		elseif kind == WEAPON_EXTRA then
-			return self.icon_extra
-		elseif kind == WEAPON_CLASS then
-			return self.icon_class
-		else 
-			return self.icon_extra
-		end
-	end
 
 	function HUDELEMENT:PreInitialize()
 		self.drawer = hudelements.GetStored("pure_skin_element")
@@ -100,7 +84,7 @@ if CLIENT then
 
 		if item.type == PICKUP_WEAPON then
 			tipColor = LocalPlayer():GetRoleColor()
-			icon = self:KindToIcon(item.kind)
+			icon = self.SlotIcons[item.kind] or self.icon_item
 		elseif item.type == PICKUP_AMMO then
 			tipColor = Color(205, 155, 0, 255)
 			icon = self.icon_ammo
