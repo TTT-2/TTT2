@@ -102,7 +102,7 @@ if CLIENT then
 
 				self:DrawBg(bx, by, bw, infoH, item.hud_color)
 
-				self:AdvancedText(info, "PureSkinItemInfo", tx, ty, self:GetDefaultFontColor(item.hud_color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, false, self.scale)
+				util.DrawAdvancedText(info, "PureSkinItemInfo", tx, ty, self:GetDefaultFontColor(item.hud_color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, false, self.scale)
 
 				self:DrawLines(bx, by, bw, infoH, item.hud_color.a)
 			end

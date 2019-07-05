@@ -110,10 +110,10 @@ if CLIENT then
 			text = util.SimpleTime(math.max(0, endtime), "%02i:%02i")
 		end
 
-		self:AdvancedText(text, font, rx, ry, color, TEXT_ALIGN_CENTER, vert_align_clock, true, self.scale)
+		util.DrawAdvancedText(text, font, rx, ry, color, TEXT_ALIGN_CENTER, vert_align_clock, true, self.scale)
 
 		if is_haste then
-			self:AdvancedText(L.hastemode, "PureSkinMSTACKMsg", tmpx, self.pos.y + self.pad, self:GetDefaultFontColor(self.basecolor), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, true, self.scale)
+			util.DrawAdvancedText(L.hastemode, "PureSkinMSTACKMsg", tmpx, self.pos.y + self.pad, self:GetDefaultFontColor(self.basecolor), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, true, self.scale)
 		end
 
 		-- draw lines around the element
