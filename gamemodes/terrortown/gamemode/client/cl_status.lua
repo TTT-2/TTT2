@@ -55,7 +55,7 @@ net.Receive("ttt2_status_effect_add", function()
 end)
 
 net.Receive("ttt2_status_effect_add_timed", function()
-    STATUS:AddTimedStatus(net.ReadString(), net.ReadUInt(32))
+    STATUS:AddTimedStatus(net.ReadString(), net.ReadUInt(32), net.ReadBool())
 end)
 
 net.Receive("ttt2_status_effect_remove", function()
