@@ -1,3 +1,5 @@
+**Please make sure to read the [FAQ](https://github.com/Alf21/TTT2/wiki/faq) first!**
+
 ---
 name: Bug report
 about: Create a report to help us improve
