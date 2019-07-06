@@ -32,7 +32,7 @@ if CLIENT then
 
 		-- draw text
 		if t then
-			util.DrawAdvancedText(t, "PureSkinBar", x + 14, y + 1, self:GetDefaultFontColor(c), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT, true, s)
+			draw.AdvancedText(t, "PureSkinBar", x + 14, y + 1, self:GetDefaultFontColor(c), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT, true, s)
 		end
 	end
 
