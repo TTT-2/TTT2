@@ -59,9 +59,6 @@ if CLIENT then
 	function HUDELEMENT:PerformLayout()
 		local basepos = self:GetBasePos()
 
-		self:SetPos(basepos.x, basepos.y)
-		self:SetSize(width, -height)
-
 		BaseClass.PerformLayout(self)
 	end
 
