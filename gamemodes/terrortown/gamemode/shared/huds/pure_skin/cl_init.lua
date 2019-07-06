@@ -1,13 +1,14 @@
 local surface = surface
 
 -- Fonts
-surface.CreateFont("PureSkinMSTACKImageMsg", {font = "Trebuchet24", size = 21, weight = 1000})
-surface.CreateFont("PureSkinMSTACKMsg", {font = "Trebuchet18", size = 15, weight = 900})
-surface.CreateFont("PureSkinRole", {font = "Trebuchet24", size = 30, weight = 700})
-surface.CreateFont("PureSkinBar", {font = "Trebuchet24", size = 21, weight = 1000})
-surface.CreateFont("PureSkinWep", {font = "Trebuchet24", size = 21, weight = 1000})
-surface.CreateFont("PureSkinWepNum", {font = "Trebuchet24", size = 21, weight = 700})
-surface.CreateFont("PureSkinItemInfo", {font = "Trebuchet24", size = 14, weight = 700})
+surface.CreateAdvancedFont("PureSkinMSTACKImageMsg", {font = "Trebuchet24", size = 21, weight = 1000})
+surface.CreateAdvancedFont("PureSkinMSTACKMsg", {font = "Trebuchet18", size = 15, weight = 900})
+surface.CreateAdvancedFont("PureSkinRole", {font = "Trebuchet24", size = 30, weight = 700})
+surface.CreateAdvancedFont("PureSkinBar", {font = "Trebuchet24", size = 21, weight = 1000})
+surface.CreateAdvancedFont("PureSkinWep", {font = "Trebuchet24", size = 21, weight = 1000})
+surface.CreateAdvancedFont("PureSkinWepNum", {font = "Trebuchet24", size = 21, weight = 700})
+surface.CreateAdvancedFont("PureSkinItemInfo", {font = "Trebuchet24", size = 14, weight = 700})
+surface.CreateAdvancedFont("PureSkinTimeLeft", {font = "Trebuchet24", size = 24, weight = 800})
 
 -- base drawing functions
 include("cl_drawing_functions.lua")
