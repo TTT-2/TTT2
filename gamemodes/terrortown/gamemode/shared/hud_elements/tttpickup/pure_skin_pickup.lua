@@ -103,11 +103,11 @@ if CLIENT then
 		--draw name text
 		local fontColor = self.drawer:GetDefaultFontColor(self.basecolor)
 		fontColor = Color(fontColor.r, fontColor.g, fontColor.b, alpha)
-		self.drawer:AdvancedText(item.name, font, x + self.tipsize + self.pad, y + h * 0.5, fontColor, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, true, self.scale)
+		draw.AdvancedText(item.name, font, x + self.tipsize + self.pad, y + h * 0.5, fontColor, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, true, self.scale)
 
 		--draw amount text
 		if item.amount then
-			self.drawer:AdvancedText(item.amount, font, x + w - self.pad, y + h * 0.5, fontColor, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, true, self.scale)
+			draw.AdvancedText(item.amount, font, x + w - self.pad, y + h * 0.5, fontColor, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, true, self.scale)
 		end
 	end
 
