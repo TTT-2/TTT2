@@ -26,7 +26,7 @@ if CLIENT then
 				[WEAPON_CLASS] = Material("vgui/ttt/pickup/icon_class.png")
 	}
 
-	HUDELEMENT.icon_item = Material("vgui/ttt/hud_icon_special.png")
+	HUDELEMENT.icon_item = Material("vgui/ttt/pickup/icon_special.png")
 	HUDELEMENT.icon_ammo = Material("vgui/ttt/pickup/icon_ammo.png")
 
 	local const_defaults = {
