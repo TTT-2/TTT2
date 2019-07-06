@@ -18,16 +18,16 @@ if CLIENT then
 	local margin = 5
 	local pad = 8
 
-	HUDELEMENT.SlotIcons = {[WEAPON_HEAVY] = Material("vgui/ttt/hud_icon_marked.png"),
-				[WEAPON_PISTOL] = Material("vgui/ttt/hud_icon_deagle.png"),
-				[WEAPON_NADE] = Material("vgui/ttt/hud_icon_marked.png"),
-				[WEAPON_SPECIAL] = Material("vgui/ttt/hud_icon_marked.png"),
-				[WEAPON_EXTRA] = Material("vgui/ttt/hud_icon_marked.png"),
-				[WEAPON_CLASS] = Material("vgui/ttt/hud_icon_marked.png")
+	HUDELEMENT.SlotIcons = {[WEAPON_HEAVY] = Material("vgui/ttt/pickup/icon_heavy.png"),
+				[WEAPON_PISTOL] = Material("vgui/ttt/pickup/icon_pistol.png"),
+				[WEAPON_NADE] = Material("vgui/ttt/pickup/icon_nades.png"),
+				[WEAPON_SPECIAL] = Material("vgui/ttt/pickup/icon_special.png"),
+				[WEAPON_EXTRA] = Material("vgui/ttt/pickup/icon_extra.png"),
+				[WEAPON_CLASS] = Material("vgui/ttt/pickup/icon_class.png")
 	}
 
-	HUDELEMENT.icon_item = Material("vgui/ttt/hud_icon_marked.png")
-	HUDELEMENT.icon_ammo = Material("vgui/ttt/hud_icon_pirate.png")
+	HUDELEMENT.icon_item = Material("vgui/ttt/hud_icon_special.png")
+	HUDELEMENT.icon_ammo = Material("vgui/ttt/pickup/icon_ammo.png")
 
 	local const_defaults = {
 		basepos = {x = 0, y = 0},
@@ -95,7 +95,7 @@ if CLIENT then
 		surface.DrawRect(x, y, self.tipsize, h)
 
 		--draw icon
-		util.DrawFilteredTexturedRect(x, y, h, h, icon, alpha)
+		util.DrawFilteredTexturedRect(x, y, h, h, icon, math.Round(alpha * 0.75))
 
 		-- draw lines around the element
 		self.drawer:DrawLines(x, y, w, h, alpha)
