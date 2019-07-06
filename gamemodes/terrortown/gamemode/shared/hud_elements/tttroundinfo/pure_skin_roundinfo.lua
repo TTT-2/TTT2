@@ -63,7 +63,7 @@ if CLIENT then
 		local is_haste = HasteMode() and round_state == ROUND_ACTIVE
 		local is_traitor = not client:IsActive() or client:HasTeam(TEAM_TRAITOR)
 		local endtime = GetGlobalFloat("ttt_round_end", 0) - CurTime()
-		local font = "TimeLeft"
+		local font = "PureSkinTimeLeft"
 		local color = self:GetDefaultFontColor(self.basecolor)
 
 		local tmpx = self.pos.x + self.size.w * 0.5
@@ -110,10 +110,10 @@ if CLIENT then
 			text = util.SimpleTime(math.max(0, endtime), "%02i:%02i")
 		end
 
-		self:AdvancedText(text, font, rx, ry, color, TEXT_ALIGN_CENTER, vert_align_clock, true, self.scale)
+		draw.AdvancedText(text, font, rx, ry, color, TEXT_ALIGN_CENTER, vert_align_clock, true, self.scale)
 
 		if is_haste then
-			self:AdvancedText(L.hastemode, "PureSkinMSTACKMsg", tmpx, self.pos.y + self.pad, self:GetDefaultFontColor(self.basecolor), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, true, self.scale)
+			draw.AdvancedText(L.hastemode, "PureSkinMSTACKMsg", tmpx, self.pos.y + self.pad, self:GetDefaultFontColor(self.basecolor), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, true, self.scale)
 		end
 
 		-- draw lines around the element

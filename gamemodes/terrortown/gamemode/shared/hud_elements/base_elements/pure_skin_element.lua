@@ -5,9 +5,6 @@ DEFINE_BASECLASS(base)
 HUDELEMENT.Base = base
 
 if CLIENT then
-	local shadowColorDark = Color(0, 0, 0, 200)
-	local shadowColorWhite = Color(200, 200, 200, 200)
-
 	function HUDELEMENT:DrawBg(x, y, w, h, c)
 		DrawHUDElementBg(x, y, w, h, c)
 	end
@@ -35,7 +32,7 @@ if CLIENT then
 
 		-- draw text
 		if t then
-			self:AdvancedText(t, "PureSkinBar", x + 14, y + 1, self:GetDefaultFontColor(c), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT, true, s)
+			draw.AdvancedText(t, "PureSkinBar", x + 14, y + 1, self:GetDefaultFontColor(c), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT, true, s)
 		end
 	end
 
@@ -45,45 +42,6 @@ if CLIENT then
 			return COLOR_WHITE
 		else
 			return COLOR_BLACK
-		end
-	end
-
-	function HUDELEMENT:ShadowedText(text, font, x, y, color, xalign, yalign, dark)
-		local tmpCol = color.r + color.g + color.b > 200 and Color(shadowColorDark.r, shadowColorDark.g, shadowColorDark.b, color.a) or Color(shadowColorWhite.r, shadowColorWhite.g, shadowColorWhite.b, color.a)
-
-		draw.SimpleText(text, font, x + 2, y + 2, tmpCol, xalign, yalign)
-		draw.SimpleText(text, font, x + 1, y + 1, tmpCol, xalign, yalign)
-		draw.SimpleText(text, font, x, y, color, xalign, yalign)
-	end
-
-	function HUDELEMENT:AdvancedText(text, font, x, y, color, xalign, yalign, shadow, scale)
-		local mat
-		if isvector(scale) or scale ~= 1.0 then
-			mat = Matrix()
-			mat:Translate(Vector(x, y))
-			mat:Scale(isvector(scale) and scale or Vector(scale, scale, scale))
-			mat:Translate(-Vector(ScrW() * 0.5, ScrH() * 0.5))
-
-			render.PushFilterMag(TEXFILTER.ANISOTROPIC)
-			render.PushFilterMin(TEXFILTER.ANISOTROPIC)
-
-			cam.PushModelMatrix(mat)
-
-			x = ScrW() * 0.5
-			y = ScrH() * 0.5
-		end
-
-		if shadow then
-			self:ShadowedText(text, font, x, y, color, xalign, yalign)
-		else
-			draw.SimpleText(text, font, x, y, color, xalign, yalign)
-		end
-
-		if isvector(scale) or scale ~= 1.0 then
-			cam.PopModelMatrix(mat)
-
-			render.PopFilterMag()
-			render.PopFilterMin()
 		end
 	end
 

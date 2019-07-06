@@ -1,5 +1,5 @@
 ------------
--- HUD Base class.
+-- HUD base class.
 -- @module HUD
 
 HUD.forcedElements = {}
@@ -22,7 +22,7 @@ end
 -- this will define the implementation used for a type. Use this on knonw
 -- elements you want to be shown in your HUD, so the HUD doesn't select the
 -- first implementation it finds.
--- @tparam string
+-- @tparam string 'elementID'
 function HUD:ForceElement(elementID)
 	local elem = hudelements.GetStored(elementID)
 
@@ -39,7 +39,7 @@ end
 
 --- This will set a type to be hidden.
 -- The element implementation for this type then will not be drawn anymore.
--- @tparam string
+-- @tparam string 'elementType'
 function HUD:HideType(elementType)
 	table.insert(self.disabledTypes, elementType)
 end
@@ -48,7 +48,7 @@ end
 -- checking if @{HUD:GetElementByType} will return an element table, so the
 -- HUD actually "has" the element, and checking if the element is toggled on/off
 -- with its clientside ConVar.
--- @tparam string
+-- @tparam string 'elementType'
 -- @treturn bool
 function HUD:ShouldShow(elementType)
 	local el = self:GetElementByType(elementType)
@@ -81,9 +81,9 @@ function HUD:PerformLayout()
 	end
 end
 
---- This will initialize the HUD, by calling @{HUDELEMENT:Initialze} on its
+--- This will initialize the HUD, by calling @{HUDELEMENT:Initialize} on its
 -- elements, respecting the parent -> child relations. It will also call
--- @{HUD:PerformLayout} before setting the @{HUDELEMENT.initialized} parameter.
+-- @{HUD:PerformLayout} before setting the HUDELEMENT.initialized parameter.
 function HUD:Initialize()
 	-- Initialize elements default values
 	for _, v in ipairs(self:GetElements()) do
@@ -112,42 +112,73 @@ end
 
 --- Returns wether or not the HUD has an element for the given type.
 -- See @{HUD:GetElementByType} for an explaination when a HUD 'has' an element.
--- @tparam string
+-- @tparam string 'elementType'
 -- @treturn bool
 function HUD:HasElementType(elementType)
 	return self:GetElementByType(elementType) ~= nil
 end
 
---- Returns an element the HUD wants to be used for a given type.
--- It will only return the element if the HUD 'has' the element,
--- here 'has' means the element is not hidden by @{HUD:HideType} or for example
--- doesn't have the @{HUDELEMENT.disabledUnlessForced} attribute set and is not
--- explicitly forced by @{HUD:ForceElement}.
--- @tparam string
--- @treturn tab
-function HUD:GetElementByType(elementType)
-	-- element is hidden in this HUD so return nil
-	if table.HasValue(self.disabledTypes, elementType) then return nil end
+--- Determines if the given element instance is available/usable for this HUD.
+-- This will respect the @{HUDELEMENT}.disabledUnlessForced property and check
+-- if the parent element (if exists) is also available, otherwise this will
+-- return false.
+-- @tparam tab 'elementTbl'
+-- @treturn bool
+function HUD:CanUseElement(elementTbl)
+	-- return false if the table is empty.
+	if not elementTbl then return false end
 
-	local element = self.forcedElements[elementType]
-	local elementTbl = not element and hudelements.GetTypeElement(elementType) or hudelements.GetStored(element)
+	-- return false if the element is disabled unless it is forced and it is not forced in this HUD.
+	if elementTbl.disabledUnlessForced and not table.HasValue(self.forcedElements, elementTbl.id) then return false end
 
-	-- return nil if the elements table is not found
-	if not elementTbl then return nil end
-
-	-- return nil if the element is disabled unless it is forced and it is not forced in this HUD
-	if elementTbl.disabledUnlessForced and not table.HasValue(self.forcedElements, elementTbl.id) then return nil end
-
-	-- check if the element is a child and if its parent element is a part of this HUD
+	-- check if the element is a child and if it is parent element is a part of this HUD.
 	if elementTbl:IsChild() then
 		local parent, parentIsType = elementTbl:GetParentRelation()
 
-		if not parent or parentIsType == nil then return nil end
+		if not parent or parentIsType == nil then return false end
 
-		-- find the parent element, if the element is bound to a type call this method again and if not get the specific element
-		local parentTbl = (parentIsType and self:GetElementByType(parent)) or (not parentIsType and hudelements.GetStored(parent))
+		-- find the parent element, if the element is bound to a type call this method again implicitly (check if element is used by the HUD) and if not,
+		-- get the specific element and call this method on it.
+		return (parentIsType and self:HasElementType(parent)) or (not parentIsType and self:CanUseElement(hudelements.GetStored(parent)))
+	end
 
-		if not parentTbl then return nil end
+	return true
+end
+
+--- Returns an element the HUD wants to use for a given type.
+-- It will only return an element, if the HUD 'has' the element.
+-- This will first evaluate, if there is a forcedElement for the given type,
+-- otherwise it will search all elements that match the type and find the first
+-- instance that 'can' be used, please take a look at @{HUD:CanUseElement} for
+-- the criteria / restrictions for the evaluation as if an element can be used.
+-- @tparam string 'elementType'
+-- @treturn tab
+function HUD:GetElementByType(elementType)
+	-- element type is hidden in this HUD so return nil
+	if table.HasValue(self.disabledTypes, elementType) then return nil end
+
+	local forcedElement = self.forcedElements[elementType]
+	local elementTbl = nil
+
+	-- Check if an element is forced by the HUD for the given type
+	if forcedElement ~= nil then
+		elementTbl = hudelements.GetStored(forcedElement)
+	end
+
+	-- Evaluate the forcedElement or try to find a usable element.
+	if self:CanUseElement(elementTbl) then
+		return elementTbl
+	else
+		-- fallback and search for the first usable element for this type
+		local availableElements = hudelements.GetAllTypeElements(elementType)
+
+		-- find first valid element
+		for _, el in ipairs(availableElements) do
+			if self:CanUseElement(el) then
+				elementTbl = el
+				break
+			end
+		end
 	end
 
 	return elementTbl
@@ -156,6 +187,7 @@ end
 --- This returns a table with all the specific elements the HUD has. One element
 -- per type, respecting the forcedElements and otherwise taking the first found
 -- implementation.
+-- @todo TODO optimize / cache maybe?!
 -- @treturn tab
 function HUD:GetElements()
 	-- loop through all types and if the hud does not provide an element take the first found instance for the type
@@ -172,12 +204,13 @@ function HUD:GetElements()
 end
 
 --- Called to draw an element and all its children, by calling the
--- @{HUDELEMENT:DrawElemAndChildren} function on them (recursive).
--- This will also respect the @{HUDELEMENT.initialized} attribute, the
+-- @{HUD:DrawElemAndChildren} function on them (recursive).
+-- This will also respect the HUDELEMENT.initialized attribute, the
 -- @{HUD:ShouldShow} result, the @{HUDELEMENT:ShouldDraw} result and the result
 -- of the hook "HUDShouldDraw". Additionally this function will call
--- @{HUDEditor.DrawElem} after the elements draw, to correctly display
+-- HUDEditor.DrawElem after the elements draw, to correctly display
 -- the HUDEditors elements on top.
+-- @tparam tab 'elem'
 function HUD:DrawElemAndChildren(elem)
 	if not elem.initialized or not elem.type or not hook.Call("HUDShouldDraw", GAMEMODE, elem.type) or not self:ShouldShow(elem.type) or not elem:ShouldDraw() then return end
 
@@ -200,14 +233,13 @@ function HUD:DrawElemAndChildren(elem)
 end
 
 --- Called to draw all elements, by calling the
--- @{HUDELEMENT:DrawElemAndChildren} function on all elements which aren't
--- a child and have a @{HUDELEMENT.type} (these are all non-base elements).
+-- @{HUD:DrawElemAndChildren} function on all elements which aren't
+-- a child and have a HUDELEMENT.type (these are all non-base elements).
 function HUD:Draw()
 	for _, elemName in ipairs(self:GetElements()) do
 		local elem = hudelements.GetStored(elemName)
 		if not elem then
 			MsgN("Error: Hudelement with name " .. elemName .. " not found!")
-			
 			return
 		end
 
@@ -236,7 +268,7 @@ function HUD:Reset()
 end
 
 --- This will save all data of the HUD and its elements, by calling
--- {@HUDELEMENT:SaveData} on them. This is usually called when changing the
+-- @{HUDELEMENT:SaveData} on them. This is usually called when changing the
 -- current HUD or editing a HUD in the HUDEditor.
 function HUD:SaveData()
 	-- save data for the HUD

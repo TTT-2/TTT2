@@ -102,7 +102,7 @@ if CLIENT then
 
 				self:DrawBg(bx, by, bw, infoH, item.hud_color)
 
-				self:AdvancedText(info, "PureSkinItemInfo", tx, ty, self:GetDefaultFontColor(item.hud_color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, false, self.scale)
+				draw.AdvancedText(info, "PureSkinItemInfo", tx, ty, self:GetDefaultFontColor(item.hud_color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, false, self.scale)
 
 				self:DrawLines(bx, by, bw, infoH, item.hud_color.a)
 			end
@@ -139,8 +139,9 @@ if CLIENT then
 
 		num_icons = num_icons + num_status
 
-		local height = math.max(num_icons, 1) * self.size.w + math.max(num_icons -1, 0) * ((num_icons > 1) and self.padding or 0) + ((num_status > 0) and 25 or 0)
-        	local startY = basepos.y + 0.5 * self.size.w + 0.5 * height
+		local linespace = ((num_status > 0) and (num_items > 0)) and 25 or 0
+		local height = math.max(num_icons, 1) * self.size.w + math.max(num_icons -1, 0) * ((num_icons > 1) and self.padding or 0) + linespace
+		local startY = basepos.y + 0.5 * self.size.w + 0.5 * height
 		local curY = startY
 
 		-- draw status

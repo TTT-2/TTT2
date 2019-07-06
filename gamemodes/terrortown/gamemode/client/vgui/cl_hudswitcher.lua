@@ -53,7 +53,7 @@ local function AddHUDSettings(panel, hudEl)
 					data.OnChange(hudEl, col)
 				end
 			end
-		elseif data.typ == "scale" then
+		elseif data.typ == "number" then
 			el = vgui.Create("DNumSliderWang")
 			el:SetSize(600, 20)
 			el:SetMin(0.1)

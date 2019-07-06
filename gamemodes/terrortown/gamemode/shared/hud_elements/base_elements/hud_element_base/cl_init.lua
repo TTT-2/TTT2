@@ -1,3 +1,7 @@
+------------
+-- HUDELEMENT base class.
+-- @module HUDELEMENT
+
 local surface = surface
 
 local zero_tbl_pos = {
@@ -44,8 +48,8 @@ HUDELEMENT.edit_live_data = {
 --- This function will try to call the function given with funcName on
 -- all children of this hud element, while also passing extra parameters
 -- to this the function.
--- @tparam string
--- @param[opt] parameter for the function to call
+-- @tparam string 'funcName'
+-- @param[opt] ... parameters to call the given function with
 function HUDELEMENT:ApplyToChildren(funcName, ...)
 	if not funcName then return end
 
@@ -68,9 +72,10 @@ end
 -- they did not execute any code or set any of their properties correct.
 -- Use this function for example to register your child -> parent
 -- relation, by calling
--- @{hudelements.RegisterChildRelation(childid, parentid, parent_is_type)}
+-- @{hudelements.RegisterChildRelation}(childid, parentid, parent_is_type)
+-- and also to force your element to a specific HUD if needed etc...
 function HUDELEMENT:PreInitialize()
-	-- Use this to set child<->parent relations etc, this is called before Initialized and other objects can still be uninitialized!
+	-- Use this to set child<->parent relations and also to force your element to a specific HUD if needed etc, this is called before Initialized and other objects can still be uninitialized!
 end
 
 
@@ -79,10 +84,10 @@ end
 -- be called multiple times and respect that within your code. Due to
 -- this, the function should be used to reset your member variables and
 -- temporary variables. Then you can set them to an useful inital value.
-
+--
 -- Remember that previously loaded values will be applied later and
--- dont forget to call @{BaseClass.Initialize(self)}, which will then call
--- @{HUDELEMENT:Initialize()} on all children.
+-- dont forget to call BaseClass.@{Initialize}(self), which will then call
+-- @{Initialize} on all children.
 function HUDELEMENT:Initialize()
 	local defaults = self:GetDefaults()
 
@@ -125,7 +130,7 @@ function HUDELEMENT:InheritParentBorder()
 end
 -- parameter overwrites end
 
---- This function is called after all @{HUDELEMENT:Initialize()} functions and
+--- This function is called after all @{Initialize} functions and
 -- whenever the layout was changed, i.e., size, position.
 function HUDELEMENT:PerformLayout()
 	self:ApplyToChildren("PerformLayout")
@@ -140,9 +145,9 @@ end
 
 --- This function sets your basepos, the value which is used
 -- to move the element. It automatically updates the position as
--- well with @{HUDLEMENT:SetPos}
--- @tparam number
--- @tparam number
+-- well with @{SetPos}
+-- @tparam number 'x'
+-- @tparam number 'y'
 function HUDELEMENT:SetBasePos(x, y)
 	local pos_difference_x = self.pos.x - self.basepos.x
 	local pos_difference_y = self.pos.y - self.basepos.y
@@ -162,8 +167,8 @@ end
 
 --- This function sets your pos, the value which is used
 -- internally to define the upper left corner of the element
--- @tparam number
--- @tparam number
+-- @tparam number 'x'
+-- @tparam number 'y'
 function HUDELEMENT:SetPos(x, y)
 	self.pos.x = x
 	self.pos.y = y
@@ -171,7 +176,7 @@ end
 
 --- This function returns your minsize, the value which is used
 -- as a minimum when resizing the element.
--- Note: Setting the size with @{HUDLEMENT:SetSize} allows smaller values.
+-- Note: Setting the size with @{SetSize} allows smaller values.
 -- @treturn tab with width and height value
 function HUDELEMENT:GetMinSize()
 	return table.Copy(self.minsize)
@@ -179,9 +184,9 @@ end
 
 --- This function sets your minsize, the value which is used
 -- as a minimum when resizing the element.
--- Note: Setting the size with @{HUDLEMENT:SetSize} allows smaller values.
--- @tparam number width
--- @tparam number height
+-- Note: Setting the size with @{SetSize} allows smaller values.
+-- @tparam number 'w'
+-- @tparam number 'h'
 function HUDELEMENT:SetMinSize(w, h)
 	self.minsize.w = w
 	self.minsize.h = h
@@ -194,11 +199,11 @@ function HUDELEMENT:GetSize()
 end
 
 --- This function sets your size.
--- Note: When passing negative values it will call @{HUDELEMENT:SetPos} to
+-- Note: When passing negative values it will call @{SetPos} to
 -- shift your element by the value. This results in i.e. in a top growing element
 -- instead of the default bottom growing when setting -h instead of h.
--- @tparam number width
--- @tparam number height
+-- @tparam number 'w'
+-- @tparam number 'h'
 function HUDELEMENT:SetSize(w, h)
 	w = math.Round(w)
 	h = math.Round(h)
@@ -238,8 +243,8 @@ end
 --- This function is used internally and only has the full effect if
 -- called by the hudelements.RegisterChildRelation() function.
 -- !!! INTERNAL FUNCTION !!!
--- @tparam string
--- @tparam bool
+-- @tparam string 'parent'
+-- @tparam bool 'is_type'
 function HUDELEMENT:SetParentRelation(parent, is_type)
 	self.parent = parent
 	self.parent_is_type = is_type
@@ -247,8 +252,8 @@ end
 
 --- This function adds a child to your list of children.
 -- Children functions will be called whenever a parent function is called
--- , e.g., in @{HUDELEMENT:PerformLayout}
--- @tparam number
+-- , e.g., in @{PerformLayout}
+-- @tparam number 'elementid'
 function HUDELEMENT:AddChild(elementid)
 	if not table.HasValue(self.children, elementid) then
 		table.insert(self.children, elementid)
@@ -298,7 +303,7 @@ function HUDELEMENT:GetBorderParams()
 			end
 		end
 
-		return {x = x_min, y = y_min}, {w = x_max-x_min, h = y_max-y_min}
+		return {x = x_min, y = y_min}, {w = x_max - x_min, h = y_max - y_min}
 	else
 		return self:GetPos(), self:GetSize()
 	end
@@ -314,7 +319,7 @@ function HUDELEMENT:IsInRange(x, y, range)
 end
 
 function HUDELEMENT:IsInPos(x, y)
-	return self:IsInRange(x,y,0)
+	return self:IsInRange(x, y, 0)
 end
 
 function HUDELEMENT:OnHovered(x, y)
@@ -334,7 +339,7 @@ function HUDELEMENT:OnHovered(x, y)
 	if res_y then
 		row = {
 			y > minY + c_pad and y < minY + c_pad + c_area, -- top row
-			y > minY + 2*c_pad + c_area and y < maxY - 2*c_pad - c_area, -- center column
+			y > minY + 2 * c_pad + c_area and y < maxY - 2 * c_pad - c_area, -- center column
 			y > maxY - c_pad - c_area and y < maxY - c_pad -- right column
 		}
 	else
@@ -349,7 +354,7 @@ function HUDELEMENT:OnHovered(x, y)
 	if res_x then
 		col = {
 			x > minX + c_pad and x < minX + c_pad + c_area, -- left column
-			x > minX + 2*c_pad + c_area and x < maxX - 2*c_pad - c_area, -- center column
+			x > minX + 2 * c_pad + c_area and x < maxX - 2 * c_pad - c_area, -- center column
 			x > maxX - c_pad - c_area and x < maxX - c_pad -- right column
 		}
 	else
@@ -396,8 +401,8 @@ function HUDELEMENT:DrawHovered(x, y)
 		y1 = minY + c_pad
 		y2 = maxY - c_pad
 	elseif row[2] then -- resizeable in all directions / show center area
-		y1 = minY + 2*c_pad + c_area
-		y2 = maxY - 2*c_pad - c_area
+		y1 = minY + 2 * c_pad + c_area
+		y2 = maxY - 2 * c_pad - c_area
 	elseif row[3] then -- resizeable in all directions
 		y1 = maxY - c_pad - c_area
 		y2 = maxY - c_pad
@@ -413,8 +418,8 @@ function HUDELEMENT:DrawHovered(x, y)
 		x1 = minX + c_pad
 		x2 = maxX - c_pad
 	elseif col[2] then -- resizeable in all directions / show center area
-		x1 = minX + 2*c_pad + c_area
-		x2 = maxX - 2*c_pad - c_area
+		x1 = minX + 2 * c_pad + c_area
+		x2 = maxX - 2 * c_pad - c_area
 	elseif col[3] then -- resizeable in all directions
 		x1 = maxX - c_pad - c_area
 		x2 = maxX - c_pad
@@ -467,8 +472,8 @@ function HUDELEMENT:GetClickedArea(x, y, alt_pressed)
 		y_p = y_p or (alt_pressed and y_m) or false,
 		y_m = y_m or (alt_pressed and y_p) or false,
 		edge = (col[1] or col[3]) and (row[1] or row[3]),
-		direction_x = x_p and 1 or -1,
-		direction_y = y_p and 1 or -1,
+		direction_x = x_p and 1 or - 1,
+		direction_y = y_p and 1 or - 1,
 		move = row[2] and col[2]
 	}
 
@@ -502,13 +507,18 @@ function HUDELEMENT:DrawSize()
 end
 
 --- This function is called when an element wants to now its original position.
--- This is the case at @{HUDELEMENT:Reset} and @{HUDELEMENT:Initialize}.
+-- This is the case at @{Reset} and @{Initialize}.
+-- You should overwrite this with your own calculated values!
 -- @treturn tab with basepos, size and minsize fields
 function HUDELEMENT:GetDefaults()
-
+	return {
+		basepos = table.Copy(self.basepos),
+		size = table.Copy(self.size),
+		minsize = table.Copy(self.minsize)
+	}
 end
 
---- This function uses @{HUDELEMENT:GetDefaults} to reset an element to its
+--- This function uses @{GetDefaults} to reset an element to its
 --  original position.
 function HUDELEMENT:Reset()
 	local defaults = self:GetDefaults()

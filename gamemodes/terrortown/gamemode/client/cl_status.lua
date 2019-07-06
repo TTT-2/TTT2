@@ -18,7 +18,7 @@ function STATUS:AddStatus(id)
     STATUS.active[id] = table.Copy(STATUS.registered[id])
 end
 
-function STATUS:AddTimedStatus(id, duration)
+function STATUS:AddTimedStatus(id, duration, showDuration)
     if STATUS.registered[id] == nil then return end
 
     self:AddStatus(id)
@@ -27,7 +27,11 @@ function STATUS:AddTimedStatus(id, duration)
 
     timer.Create(id, duration, 1, function()
 		self:RemoveStatus(id)
-	end)
+    end)
+    
+    if showDuration then
+        STATUS.active[id].DrawInfo = function(self) return tostring(math.Round(math.max(0, self.displaytime - CurTime()))) end
+    end
 end
 
 function STATUS:RemoveStatus(id)
@@ -51,7 +55,7 @@ net.Receive("ttt2_status_effect_add", function()
 end)
 
 net.Receive("ttt2_status_effect_add_timed", function()
-    STATUS:AddTimedStatus(net.ReadString(), net.ReadUInt(32))
+    STATUS:AddTimedStatus(net.ReadString(), net.ReadUInt(32), net.ReadBool())
 end)
 
 net.Receive("ttt2_status_effect_remove", function()

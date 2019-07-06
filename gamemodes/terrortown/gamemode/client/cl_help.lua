@@ -44,7 +44,7 @@ local function AddBindingCategory(category, parent)
 					bind.Remove(curBinding, binding.name)
 					bind.Add(num, binding.name, true)
 
-					LocalPlayer():ChatPrint(GetParamTranslation("ttt2_bindings_new", {name = binding.name, key = input.GetKeyName(num)}))
+					LocalPlayer():ChatPrint(GetPTranslation("ttt2_bindings_new", {name = binding.name, key = input.GetKeyName(num)}))
 				end
 
 				curBinding = num

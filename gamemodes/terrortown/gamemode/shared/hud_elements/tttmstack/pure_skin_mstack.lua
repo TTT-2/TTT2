@@ -162,7 +162,7 @@ if CLIENT then
 			text_spec.pos = {tx, ty}
 
 			--draw.TextShadow(text_spec, 1, alpha)
-			self:AdvancedText(text_spec.text, text_spec.font, text_spec.pos[1], text_spec.pos[2], text_spec.color, text_spec.xalign, text_spec.yalign, true, self.scale)
+			draw.AdvancedText(text_spec.text, text_spec.font, text_spec.pos[1], text_spec.pos[2], text_spec.color, text_spec.xalign, text_spec.yalign, true, self.scale)
 
 			ty = ty + text_spec.font_height + self.line_margin
 		end
@@ -187,7 +187,7 @@ if CLIENT then
 			title_spec.pos = {tx, ty}
 
 			--draw.TextShadow(title_spec, 1, alpha)
-			self:AdvancedText(title_spec.text, title_spec.font, title_spec.pos[1], title_spec.pos[2], title_spec.color, title_spec.xalign, title_spec.yalign, true, self.scale)
+			draw.AdvancedText(title_spec.text, title_spec.font, title_spec.pos[1], title_spec.pos[2], title_spec.color, title_spec.xalign, title_spec.yalign, true, self.scale)
 
 			ty = ty + title_spec.font_height + self.line_margin
 		end
@@ -203,7 +203,7 @@ if CLIENT then
 			text_spec.pos = {tx, ty}
 
 			--draw.TextShadow(text_spec, 1, alpha)
-			self:AdvancedText(text_spec.text, text_spec.font, text_spec.pos[1], text_spec.pos[2], text_spec.color, text_spec.xalign, text_spec.yalign, true, self.scale)
+			draw.AdvancedText(text_spec.text, text_spec.font, text_spec.pos[1], text_spec.pos[2], text_spec.color, text_spec.xalign, text_spec.yalign, true, self.scale)
 
 			ty = ty + text_spec.font_height + self.line_margin
 		end

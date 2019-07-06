@@ -4,6 +4,8 @@ about: Create a report to help us improve
 
 ---
 
+**Please make sure to read the [FAQ](https://github.com/Alf21/TTT2/wiki/faq) first!**
+
 **Video**
 If it's a very strange problem, it's better to add a video to see what happens. This step can replace the following steps: "Screenshots", "To Reproduce" and "Describe the bug"
 

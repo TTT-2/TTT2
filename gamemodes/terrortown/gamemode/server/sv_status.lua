@@ -12,10 +12,11 @@ function STATUS:AddStatus(ply, id)
     net.Send(ply)
 end
 
-function STATUS:AddTimedStatus(ply, id, duration)
+function STATUS:AddTimedStatus(ply, id, duration, showDuration)
     net.Start("ttt2_status_effect_add_timed")
     net.WriteString(id)
     net.WriteUInt(duration, 32)
+    net.WriteBool(showDuration or false)
     net.Send(ply)
 end
 
