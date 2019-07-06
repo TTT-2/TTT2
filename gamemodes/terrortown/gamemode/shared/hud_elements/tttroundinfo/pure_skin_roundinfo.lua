@@ -63,7 +63,7 @@ if CLIENT then
 		local is_haste = HasteMode() and round_state == ROUND_ACTIVE
 		local is_traitor = not client:IsActive() or client:HasTeam(TEAM_TRAITOR)
 		local endtime = GetGlobalFloat("ttt_round_end", 0) - CurTime()
-		local font = "TimeLeft"
+		local font = "PureSkinTimeLeft"
 		local color = self:GetDefaultFontColor(self.basecolor)
 
 		local tmpx = self.pos.x + self.size.w * 0.5

@@ -19,8 +19,8 @@ local function getScaleModifier(scale)
     return FONTS.Scales[#FONTS.Scales]
 end
 
-function draw.CreateAdvancedFont(fontName, fontData)
-    local originalSize = fontData.size
+function surface.CreateAdvancedFont(fontName, fontData)
+    local originalSize = fontData.size or 13
     
     FONTS.fonts[fontName] = {}
 
