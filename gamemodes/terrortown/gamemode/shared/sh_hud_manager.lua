@@ -24,8 +24,6 @@ end
 function HUDManager.SetModelValue(key, value)
 	if not key then return end
 
-	MsgN("[TTT2][DEBUG] SetModelValue called for key: " .. key .. " value: " .. tostring(value))
-
 	local oldvalue = model[key]
 	model[key] = value
 

@@ -115,7 +115,7 @@ function GM:HUDPaint()
 end
 
 -- Hide the standard HUD stuff
-local hud = {
+local gmodhud = {
 	["CHudHealth"] = true,
 	["CHudBattery"] = true,
 	["CHudAmmo"] = true,
@@ -123,7 +123,7 @@ local hud = {
 }
 
 function GM:HUDShouldDraw(name)
-	if hud[name] then
+	if gmodhud[name] then
 		return false
 	end
 

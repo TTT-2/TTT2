@@ -22,8 +22,6 @@ local function DB_EnsureTableExists(tablename, tablecolumns)
 		return false
 	end
 
-	MsgN("[TTT2][DEBUG] DB_EnsureTableExists was called on table " .. tablename)
-
 	if not sql.TableExists(tablename) then
 		local result = sql.Query("CREATE TABLE " .. sql.SQLStr(tablename, false) .. " (" .. tablecolumns .. ")")
 		if result == false then
@@ -128,15 +126,11 @@ function HUDManager.LoadData()
 	MsgN("[TTT2][HUDManager] Loading data from database...")
 
 	if sql.TableExists(HUD_MANAGER_SQL_TABLE) then
-		MsgN("[TTT2][DEBUG] Table exists for model_data ! Loading ...")
-
 		HUDManager.SetModelValue("forcedHUD", DB_GetStringValue("forcedHUD"))
 		HUDManager.SetModelValue("defaultHUD", DB_GetStringValue("defaultHUD"))
 	end
 
 	if sql.TableExists(HUD_MANAGER_SQL_RESTRICTEDHUDS_TABLE) then
-		MsgN("[TTT2][DEBUG] Table exists for model_data_restrictedhuds ! Loading ...")
-
 		HUDManager.SetModelValue("restrictedHUDs", DB_GetStringTable(HUD_MANAGER_SQL_RESTRICTEDHUDS_TABLE) or {})
 	end
 end
@@ -198,7 +192,7 @@ net.Receive("TTT2RequestHUD", function(_, ply)
 			for _, v in ipairs(restrictions) do
 				if v == hudname then
 					restricted = true
-					
+
 					break
 				end
 			end
