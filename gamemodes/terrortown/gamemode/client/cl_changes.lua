@@ -393,6 +393,33 @@ function CreateChanges()
 	</li>
 	</ul>]])
 
+	AddChange("0.5.5b", [[<ul>
+	<li><b>NEW:</b>
+		<ul>
+			<li>Added convars to hide scoreboard badges</li>
+			<li>A small text that explains the spectator mode</li>
+			<li>Weapon pickup notifications are now moved to the new HUD system</li>
+			<li>Weapon pickup notifications support now pure_skin</li>
+			<li>New shadowed text rendering with font mipmapping</li>
+		</ul>
+	</li>
+	<hr />
+	<li>Improved:
+		<ul>
+			<li>Refactored the code to move all language strings into the language files</li>
+		</ul>
+	</li>
+	<hr />
+	<li>Fixes:
+		<ul>
+			<li>Fixed the reroll per buy bug</li>
+			<li>Fixed HUD switcher bug, now infinite amounts of HUDs are supported</li>
+			<li>Fixed the outline border of the sidebar beeing wrong</li>
+			<li>Fixed problem with the element restriction</li>
+		</ul>
+	</li>
+	</ul>]])
+
 	hook.Run("TTT2AddChange", changes, currentVersion)
 end
 
