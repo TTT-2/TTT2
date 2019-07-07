@@ -37,6 +37,7 @@ function surface.CreateAdvancedFont(fontName, fontData)
 end
 
 function draw.ShadowedText(text, font, x, y, color, xalign, yalign, scaleModifier)
+    scaleModifier = scaleModifier or 1.0   
     local tmpCol = color.r + color.g + color.b > 200 and Color(shadowColorDark.r, shadowColorDark.g, shadowColorDark.b, color.a) or Color(shadowColorWhite.r, shadowColorWhite.g, shadowColorWhite.b, color.a)
 
     draw.SimpleText(text, font, x + 2 * scaleModifier, y + 2 * scaleModifier, tmpCol, xalign, yalign)

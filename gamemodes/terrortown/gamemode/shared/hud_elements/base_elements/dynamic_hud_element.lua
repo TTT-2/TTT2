@@ -18,4 +18,14 @@ if CLIENT then
 
 		return (hud and hud.basecolor) or defaultColor
 	end
+
+	--DEPRECATED
+	function HUDELEMENT:ShadowedText(text, font, x, y, color, xalign, yalign, dark)
+		draw.ShadowedText(text, font, x, y, color, xalign, yalign, dark)
+	end
+
+	--DEPRECATED
+	function HUDELEMENT:AdvancedText(text, font, x, y, color, xalign, yalign, shadow, scale)
+		draw.AdvancedText(text, font, x, y, color, xalign, yalign, shadow, scale)
+	end
 end
