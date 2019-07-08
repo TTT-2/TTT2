@@ -99,26 +99,28 @@ local function Think_EditLocalHUD()
 				local dif_y = y - client.mouse_start_Y
 
 				if trans_data.move then -- move mode
-					-- move on axis when shift is pressed
-					local new_x, new_y
-					if shift_pressed then
-						if math.abs(dif_x) > math.abs(dif_y) then
+					if elem:ShouldDraw() then -- restrict movement when element is hidden
+						-- move on axis when shift is pressed
+						local new_x, new_y
+						if shift_pressed then
+							if math.abs(dif_x) > math.abs(dif_y) then
+								new_x = dif_x + client.base.x
+								new_y = client.base.y
+							else
+								new_x = client.base.x
+								new_y = dif_y + client.base.y
+							end
+						else -- default movement
 							new_x = dif_x + client.base.x
-							new_y = client.base.y
-						else
-							new_x = client.base.x
 							new_y = dif_y + client.base.y
 						end
-					else -- default movement
-						new_x = dif_x + client.base.x
-						new_y = dif_y + client.base.y
+
+						-- clamp values between min and max
+						new_x = math.Clamp(new_x, 0, ScrW() - client.size.w - (client.pos.x - client.base.x))
+						new_y = math.Clamp(new_y, 0, ScrH() - client.size.h - (client.pos.y - client.base.y))
+
+						elem:SetBasePos(new_x, new_y)
 					end
-
-					-- clamp values between min and max
-					new_x = math.Clamp(new_x, 0, ScrW() - client.size.w - (client.pos.x - client.base.x))
-					new_y = math.Clamp(new_y, 0, ScrH() - client.size.h - (client.pos.y - client.base.y))
-
-					elem:SetBasePos(new_x, new_y)
 				else -- resize mode
 					-- calc base data while checking for the shift key
 					local additional_w, additional_h
