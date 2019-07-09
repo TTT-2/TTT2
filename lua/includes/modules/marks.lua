@@ -17,11 +17,28 @@ else
 		-- check for valid data
 		local tmp = {}
 		local index = 1
+		local remTable = nil
 
 		for _, ent in ipairs(ents) do
-			if not ent:IsPlayer() or ent:Alive() and ent:IsTerror() then
+			if not IsValid(ent) then -- search for invalid data
+				remTable = remTable or {}
+				remTable[#remTable + 1] = ent
+			elseif not ent:IsPlayer() or ent:Alive() and ent:IsTerror() then
 				tmp[index] = ent
 				index = index + 1
+			end
+		end
+
+		-- clear invalid data. Should just happen if a player disconnects or an entity is deleted
+		if remTable then
+			for _, ent in ipairs(remTable) do
+				for k, v in ipairs(ents) do
+					if v == ent then
+						table.remove(ents, k)
+
+						break
+					end
+				end
 			end
 		end
 
