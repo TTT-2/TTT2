@@ -287,6 +287,21 @@ if not table.IsEmpty then
 	end
 end
 
+-- this function adds missing values into a table
+function table.AddMissing(target, source, iterable)
+	if #source == 0 then return end
+
+	local fn = not iterable and pairs or ipairs
+	local index = #target + 1
+
+	for _, v in fn(source) do
+		if not table.HasValue(target, v) then
+			target[index] = v
+			index = index + 1
+		end
+	end
+end
+
 local gsub = string.gsub
 
 -- Simple string interpolation:

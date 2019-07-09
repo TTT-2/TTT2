@@ -2,7 +2,7 @@
 
 GM.Name = "TTT2 (Advanced Update)"
 GM.Author = "Bad King Urgrain, Alf21, tkindanight, Mineotopia, LeBroomer"
-GM.Email = "4lf-mueller@gmx.de"
+GM.Email = ""
 GM.Website = "ttt.badking.net, ttt2.informaskill.de"
 GM.Version = "0.5.5b"
 GM.Customized = true
@@ -341,6 +341,7 @@ COLOR_PINK = Color(255, 0, 255, 255)
 COLOR_ORANGE = Color(250, 100, 0, 255)
 COLOR_OLIVE = Color(100, 100, 0, 255)
 
+-- include ttt required files
 ttt_include("sh_util")
 ttt_include("sh_lang")
 ttt_include("sh_sql")
@@ -350,6 +351,9 @@ ttt_include("sh_hud_manager")
 ttt_include("sh_equip_items")
 ttt_include("sh_role_module")
 ttt_include("sh_item_module")
+
+-- load non-wrapped modules directly
+require("marks")
 
 function GetEquipmentFileName(name)
 	return string.gsub(string.lower(name), "[%W%s]", "_") -- clean string
