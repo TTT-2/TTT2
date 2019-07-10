@@ -1,4 +1,6 @@
--- this is a massively performance improved version of entity rendering (highlighting) with caching
+--- This is the <code>marks</code> module. It massively improves the performance while rendering an entity (highlighting it) with caching
+-- @author Alf21
+module("marks", package.seeall)
 
 local baseclass = baseclass
 local list = list
@@ -7,12 +9,15 @@ local pairs = pairs
 local marksList = {}
 local marksHookInstalled = false
 
-module("marks", package.seeall)
-
 if SERVER then
 	AddCSLuaFile()
 else
-	-- this was made by Bletotum and improved by Alf21
+	---
+	-- Renders the entity based on the color
+	-- @tab ents list of entities
+	-- @col col color of rendering
+	-- @pos pos position of client's view the rendering starts from
+	-- @ang ang angle of client's view the rendering starts from
 	local function Render(ents, col, pos, ang)
 		-- check for valid data
 		local tmp = {}
@@ -63,7 +68,7 @@ else
 		render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_EQUAL)
 
 		-- stencil work is done in postdrawopaquerenderables, where surface doesn't work correctly
-		-- workaround via 3D2D
+		-- workaround via 3D2D by Bletotum
 
 		cam.Start3D2D(pos, ang, 1)
 
@@ -79,6 +84,8 @@ else
 		render.SetStencilEnable(false)
 	end
 
+	---
+	-- Hook that renders the entities with the highlighting
 	local function RenderHook()
 		local client = LocalPlayer()
 		local ang = client:EyeAngles()
@@ -91,18 +98,24 @@ else
 		end
 	end
 
+	---
+	-- Hook adding
 	local function AddMarksHook()
 		if marksHookInstalled then return end
 
 		hook.Add("PostDrawOpaqueRenderables", "RenderMarks", RenderHook)
 	end
 
+	---
+	-- Hook removing
 	local function RemoveMarksHook()
 		hook.Remove("PostDrawOpaqueRenderables", "RenderMarks")
 
 		marksHookInstalled = false
 	end
 
+	---
+	-- Initialization of the markers list
 	local function SetupMarkList(col)
 		if not col then return end
 
@@ -113,12 +126,17 @@ else
 		marksList[str].col = col
 	end
 
+	---
+	-- Clearing the cached entity list
 	function Clear()
 		marksList = {}
 
 		RemoveMarksHook()
 	end
 
+	---
+	-- Removes entities from the entities list
+	-- @tab ents list of entities that should get removed
 	function Remove(ents)
 		if #ents == 0 or table.Count(marksList) == 0 then return end
 
@@ -145,6 +163,10 @@ else
 		end
 	end
 
+	---
+	-- Adds entities into the entities list that should be rendered with a specific color
+	-- @tab ents list of entities that should be added
+	-- @col col the color the added entities should get rendered
 	function Add(ents, col)
 		if #ents == 0 or not col then return end
 
@@ -161,6 +183,12 @@ else
 		AddMarksHook()
 	end
 
+	---
+	-- Sets entities of the entities list that based on a specific color.
+	-- All the other previously inserted entities with the same color will get removed
+	-- @tab ents list of entities that should be set
+	-- @col col the color the added entities should get rendered
+	-- @usage marks.Set({}, COLOR_WHITE) -- this will clear all entities rendered in white
 	function Set(ents, col)
 		if not col or not istable(ents) then return end
 
