@@ -55,7 +55,8 @@ function IsBasedOn(name, base)
 end
 
 ---
--- Used to register your hud element with the engine
+-- Used to register your hud element with the engine.<br />
+-- <b>This is done automatically for all the files in the <code>gamemodes/terrortown/gamemode/shared/hudelements</code> folder</b>
 -- @tab t hud element table
 -- @str name hud element name
 function Register(t, name)

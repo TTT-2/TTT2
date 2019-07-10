@@ -57,7 +57,8 @@ function IsBasedOn(name, base)
 end
 
 ---
--- Used to register your item with the engine
+-- Used to register your item with the engine.<br />
+-- <b>This is done automatically for all the files in the <code>lua/terrortown/entities/items</code> folder</b>
 -- @tab t item table
 -- @str name item name
 function Register(t, name)
@@ -220,9 +221,12 @@ function IsItem(val)
 end
 
 ---
--- Checks whether the input table has a specific item
+-- Checks whether the input table has a specific item.<br />
+-- This is calling <a href="https://wiki.garrysmod.com/page/table/HasValue">table.HasValue</a> internally,
+-- but you don't have to tackle with the input value (<code>val</code>) type
 -- @tab tbl target table
 -- @stn val item name / table / id
+-- @treturn boolean whether the input table has a specific item
 function TableHasItem(tbl, val)
 	if not tbl or not val then
 		return false

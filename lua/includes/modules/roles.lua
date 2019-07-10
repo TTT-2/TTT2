@@ -136,7 +136,8 @@ local function SetupData(roleData)
 end
 
 ---
--- Used to register your role with the engine
+-- Used to register your role with the engine.<br />
+-- <b>This is done automatically for all the files in the <code>lua/terrortown/entities/roles</code> folder</b>
 -- @tab t role table
 -- @str name role name
 function Register(t, name)
