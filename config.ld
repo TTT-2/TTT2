@@ -2,6 +2,7 @@ title = "TTT2 Reference"
 project = "TTT2"
 convert_opt = true
 sort = true
+dir = "docs"
 
 file = {
 	"lua/bind",

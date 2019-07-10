@@ -1,4 +1,6 @@
---- This is the <code>marks</code> module. It massively improves the performance while rendering an entity (highlighting it) with caching
+---
+-- This is the <code>marks</code> module.
+-- It massively improves the performance while rendering an entity (highlighting it) with caching
 -- @author Alf21
 module("marks", package.seeall)
 

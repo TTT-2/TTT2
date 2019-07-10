@@ -1,9 +1,13 @@
+---
+-- This is the <code>roles</code> module.
+-- @author Alf21
+-- @author saibotk
+module("roles", package.seeall)
+
 local baseclass = baseclass
 local list = list
 local pairs = pairs
 local ipairs = ipairs
-
-module("roles", package.seeall)
 
 if SERVER then
 	AddCSLuaFile()
@@ -13,10 +17,11 @@ local BASE_ROLE_CLASS = "ttt_role_base"
 
 local RoleList = RoleList or {}
 
---[[---------------------------------------------------------
-	Name: TableInherit( t, base )
-	Desc: Copies any missing data from base to t
------------------------------------------------------------]]
+---
+-- Copies any missing data from base table to the target table
+-- @tab t target table
+-- @tab base base (fallback) table
+-- @treturn table t target table
 local function TableInherit(t, base)
 	for k, v in pairs(base) do
 		if t[k] == nil then
@@ -29,10 +34,11 @@ local function TableInherit(t, base)
 	return t
 end
 
---[[---------------------------------------------------------
-	Name: IsBasedOn( name, base )
-	Desc: Checks if name is based on base
------------------------------------------------------------]]
+---
+-- Checks if name is based on base
+-- @tab name table to check
+-- @tab base base (fallback) table
+-- @treturn boolean returns whether name is based on base
 function IsBasedOn(name, base)
 	local t = GetStored(name)
 
@@ -51,6 +57,9 @@ function IsBasedOn(name, base)
 	return IsBasedOn(t.Base, base)
 end
 
+---
+-- Automatically generates global vars based on the role data
+-- @tab roleData role table
 local function SetupGlobals(roleData)
 	print("[TTT2][ROLE] Setting up '" .. roleData.name .. "' role...")
 	local upStr = string.upper(roleData.name)
@@ -71,6 +80,9 @@ local function SetupGlobals(roleData)
 	end
 end
 
+---
+-- Automatically generates ConVars based on the role data
+-- @tab roleData role table
 local function SetupData(roleData)
 	print("[TTT2][ROLE] Adding '" .. roleData.name .. "' role...")
 
@@ -121,10 +133,10 @@ local function SetupData(roleData)
 	print("[TTT2][ROLE] Added '" .. roleData.name .. "' role (index: " .. roleData.index .. ")")
 end
 
---[[---------------------------------------------------------
-	Name: Register( table, string )
-	Desc: Used to register your role with the engine
------------------------------------------------------------]]
+---
+-- Used to register your role with the engine
+-- @tab t role table
+-- @str name role name
 function Register(t, name)
 	name = string.lower(name)
 
@@ -152,9 +164,9 @@ function Register(t, name)
 	})
 end
 
---
+---
 -- All scripts have been loaded...
---
+-- @local
 function OnLoaded()
 
 	--
@@ -180,10 +192,11 @@ function OnLoaded()
 	end
 end
 
---[[---------------------------------------------------------
-	Name: Get( string, retTbl )
-	Desc: Get a role by name.
------------------------------------------------------------]]
+---
+-- Get an role by name (a copy)
+-- @str name role name
+-- @tparam[opt] ?table retTbl this table will be modified and returned. If nil, a new table will be created.
+-- @treturn table returns the modified retTbl or the new role table
 function Get(name, retTbl)
 	local Stored = GetStored(name)
 	if not Stored then return end
@@ -218,18 +231,17 @@ function Get(name, retTbl)
 	return retval
 end
 
---[[---------------------------------------------------------
-	Name: GetStored( string )
-	Desc: Gets the REAL HUD elements table, not a copy
------------------------------------------------------------]]
+---
+-- Gets the real role table (not a copy)
+-- @str name role name
+-- @treturn table returns the real role table
 function GetStored(name)
 	return RoleList[name]
 end
 
---[[---------------------------------------------------------
-	Name: GetList( string )
-	Desc: Get a list (copy) of all the registered roles
------------------------------------------------------------]]
+---
+-- Get a list of all the registered roles
+-- @treturn table all registered roles
 function GetList()
 	local result = {}
 
@@ -242,12 +254,25 @@ function GetList()
 	return result
 end
 
+---
+-- Generates a new subrole id.
+-- starts with <code>1</code> to prevent incompatibilities with <code>ROLE_ANY</code> => new roles will start at the id: <code>7</code>
+-- <ul>
+-- <li><code>0</code> = <code>ROLE_INNOCENT</code></li>
+-- <li><code>1</code> = <code>ROLE_TRAITOR</code></li>
+-- <li><code>2</code> = <code>ROLE_DETECTIVE</code></li>
+-- <li><code>3</code> = <code>ROLE_ANY</code></li>
+-- <li><code>4</code>, <code>5</code>, <code>6</code> = <code>nop</code></li>
+-- </ul>
+-- @treturn number new generated subrole id
 function GenerateNewRoleID()
-	-- start with "1" to prevent incompatibilities with ROLE_ANY => new roles will start @ id: i(1)+3=4
-	-- edit: add 3 more nop (1+3=4) to use it later -> new roles will start @ id: i(4)+3=7
 	return 4 + #GetList()
 end
 
+---
+-- Get the role table by the role id
+-- @int index subrole id
+-- @treturn table returns the role table. This will return the <code>INNOCENT</code> role table as fallback.
 function GetByIndex(index)
 	for _, v in pairs(RoleList) do
 		if v.name ~= BASE_ROLE_CLASS and v.index == index then
@@ -258,10 +283,18 @@ function GetByIndex(index)
 	return INNOCENT
 end
 
+---
+-- Get the role table by the role name
+-- @str name role name
+-- @treturn table returns the role table. This will return the <code>INNOCENT</code> role table as fallback.
 function GetByName(name)
 	return GetStored(name) or INNOCENT
 end
 
+---
+-- Get the role table by the role abbreviation
+-- @str abbr role abbreviation
+-- @treturn table returns the role table. This will return the <code>INNOCENT</code> role table as fallback.
 function GetByAbbr(abbr)
 	for _, v in pairs(RoleList) do
 		if v.name ~= BASE_ROLE_CLASS and v.abbr == abbr then
@@ -272,6 +305,11 @@ function GetByAbbr(abbr)
 	return INNOCENT
 end
 
+---
+-- Automatically initializes a new role team. This will generate the global var <code>TEAM_[NAME]</code>
+-- @str name role team name
+-- @tab data role team data
+-- @todo data table structure
 function InitCustomTeam(name, data) -- creates global var "TEAM_[name]" and other required things
 	local teamname = string.Trim(string.lower(name)) .. "s"
 
@@ -280,6 +318,9 @@ function InitCustomTeam(name, data) -- creates global var "TEAM_[name]" and othe
 	TEAMS[teamname] = data
 end
 
+---
+-- Sorts a role table
+-- @tab tbl table to sort
 function SortTable(tbl)
 	local _func = function(a, b)
 		return a.index < b.index
@@ -288,6 +329,9 @@ function SortTable(tbl)
 	table.sort(tbl, _func)
 end
 
+---
+-- Get a sorted list of roles that have access to a shop
+-- @treturn table list of roles that have access to a shop
 function GetShopRoles()
 	local shopRoles = {}
 
@@ -308,6 +352,10 @@ function GetShopRoles()
 	return shopRoles
 end
 
+---
+-- Get the default role table of a specific role team
+-- @str team role team name
+-- @treturn table returns the role table. This will return the <code>INNOCENT</code> role table as fallback.
 function GetDefaultTeamRole(team)
 	if team == TEAM_NONE then return end
 
@@ -320,12 +368,20 @@ function GetDefaultTeamRole(team)
 	return INNOCENT
 end
 
+---
+-- Get the default role tables of a specific role team
+-- @str team role team name
+-- @treturn table returns the role tables. This will return the <code>INNOCENT</code> role table as well as its subrole tables as fallback.
 function GetDefaultTeamRoles(team)
 	if team == TEAM_NONE then return end
 
 	return GetDefaultTeamRole(team):GetSubRoles()
 end
 
+---
+-- Get a list of team members
+-- @str team role team name
+-- @treturn table returns the member table of a role team.
 function GetTeamMembers(team)
 	if team == TEAM_NONE or TEAMS[team].alone then return end
 
@@ -340,6 +396,9 @@ function GetTeamMembers(team)
 	return tmp
 end
 
+---
+-- Get a list of all teams that are able to win
+-- @treturn table returns a list of all teams that are able to win
 function GetWinTeams()
 	local winTeams = {}
 
@@ -352,6 +411,9 @@ function GetWinTeams()
 	return winTeams
 end
 
+---
+-- Get a list of all available teams
+-- @treturn table returns a list of all available teams
 function GetAvailableTeams()
 	local availableTeams = {}
 
@@ -364,6 +426,9 @@ function GetAvailableTeams()
 	return availableTeams
 end
 
+---
+-- Get a sorted list of all roles
+-- @treturn table returns a list of all roles
 function GetSortedRoles()
 	local rls = {}
 

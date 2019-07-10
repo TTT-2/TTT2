@@ -1,6 +1,8 @@
 ------------
 -- HUD base class.
 -- @module HUD
+-- @author saibotk
+-- @author LeBroomer
 
 HUD.forcedElements = {}
 HUD.disabledTypes = {}

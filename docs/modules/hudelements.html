@@ -41,18 +41,18 @@
   <li><a href="../modules/HUD.html">HUD</a></li>
   <li><a href="../modules/HUDELEMENT.html">HUDELEMENT</a></li>
   <li><a href="../modules/bind.html">bind</a></li>
-  <li><a href="../modules/hudelements.html">hudelements</a></li>
+  <li><strong>hudelements</strong></li>
   <li><a href="../modules/huds.html">huds</a></li>
   <li><a href="../modules/items.html">items</a></li>
   <li><a href="../modules/marks.html">marks</a></li>
-  <li><strong>roles</strong></li>
+  <li><a href="../modules/roles.html">roles</a></li>
 </ul>
 
 </div>
 
 <div id="content">
 
-<h1>Module <code>roles</code></h1>
+<h1>Module <code>hudelements</code></h1>
 <p>(no description)</p>
 <p></p>
 
@@ -62,17 +62,32 @@
 	<tr>
 	<td class="name" nowrap><a href="#Get">Get (name, retTbl)</a></td>
 	<td class="summary">Name: Get( string, retTbl )
-	Desc: Get a role by name.</td>
+	Desc: Get a HUD element by name.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#GetAllTypeElements">GetAllTypeElements (type)</a></td>
+	<td class="summary">Name: GetAllTypeElements( type )
+	Desc: Gets all elements matching the type of all the registered HUD elements</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#GetElementTypes">GetElementTypes ()</a></td>
+	<td class="summary">Name: GetElementTypes()
+	Desc: Get a list of all the registered HUD element types</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#GetList">GetList ()</a></td>
 	<td class="summary">Name: GetList( string )
-	Desc: Get a list (copy) of all the registered roles</td>
+	Desc: Get a list (copy) of all the registered HUD elements</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#GetStored">GetStored (name)</a></td>
 	<td class="summary">Name: GetStored( string )
 	Desc: Gets the REAL HUD elements table, not a copy</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#GetTypeElement">GetTypeElement (type)</a></td>
+	<td class="summary">Name: GetTypeElement( type )
+	Desc: Gets the first element matching the type of all the registered HUD elements</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#IsBasedOn">IsBasedOn (name, base)</a></td>
@@ -82,7 +97,12 @@
 	<tr>
 	<td class="name" nowrap><a href="#Register">Register (t, name)</a></td>
 	<td class="summary">Name: Register( table, string )
-	Desc: Used to register your role with the engine</td>
+	Desc: Used to register your HUD Element with the engine</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#RegisterChildRelation">RegisterChildRelation (childid, parentid, parent_is_type)</a></td>
+	<td class="summary">Name: RegisterChildRelation( childid, parentid, parent_is_type )
+	Desc: Sets the child relation on all objects that have to be informed / are involved.</td>
 	</tr>
 </table>
 
@@ -99,7 +119,7 @@
     </dt>
     <dd>
     Name: Get( string, retTbl )
-	Desc: Get a role by name.
+	Desc: Get a HUD element by name.
 
 
     <h3>Parameters:</h3>
@@ -118,12 +138,48 @@
 
 </dd>
     <dt>
+    <a name = "GetAllTypeElements"></a>
+    <strong>GetAllTypeElements (type)</strong>
+    </dt>
+    <dd>
+    Name: GetAllTypeElements( type )
+	Desc: Gets all elements matching the type of all the registered HUD elements
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">type</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "GetElementTypes"></a>
+    <strong>GetElementTypes ()</strong>
+    </dt>
+    <dd>
+    Name: GetElementTypes()
+	Desc: Get a list of all the registered HUD element types
+
+
+
+
+
+
+
+</dd>
+    <dt>
     <a name = "GetList"></a>
     <strong>GetList ()</strong>
     </dt>
     <dd>
     Name: GetList( string )
-	Desc: Get a list (copy) of all the registered roles
+	Desc: Get a list (copy) of all the registered HUD elements
 
 
 
@@ -144,6 +200,27 @@
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">name</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "GetTypeElement"></a>
+    <strong>GetTypeElement (type)</strong>
+    </dt>
+    <dd>
+    Name: GetTypeElement( type )
+	Desc: Gets the first element matching the type of all the registered HUD elements
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">type</span>
 
         </li>
     </ul>
@@ -183,7 +260,7 @@
     </dt>
     <dd>
     Name: Register( table, string )
-	Desc: Used to register your role with the engine
+	Desc: Used to register your HUD Element with the engine
 
 
     <h3>Parameters:</h3>
@@ -201,6 +278,36 @@
 
 
 </dd>
+    <dt>
+    <a name = "RegisterChildRelation"></a>
+    <strong>RegisterChildRelation (childid, parentid, parent_is_type)</strong>
+    </dt>
+    <dd>
+    Name: RegisterChildRelation( childid, parentid, parent_is_type )
+	Desc: Sets the child relation on all objects that have to be informed / are involved.  This can either be a single parent <-> child relation or
+		  a parents <-> child relation, if the parent is a type. This function then will register the childid as a child to all elements with that type.
+		  A parent element is responsible for calling PerformLayout on its child elements!
+		  !! This should be called in the PreInitialize method !!
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">childid</span>
+
+        </li>
+        <li><span class="parameter">parentid</span>
+
+        </li>
+        <li><span class="parameter">parent_is_type</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
 </dl>
 
 
@@ -208,7 +315,7 @@
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
-<i style="float:right;">Last updated 2019-07-10 22:42:48 </i>
+<i style="float:right;">Last updated 2019-07-10 23:43:13 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

@@ -1,6 +1,8 @@
 ------------
 -- HUDELEMENT base class.
 -- @module HUDELEMENT
+-- @author saibotk
+-- @author LeBroomer
 
 local surface = surface
 

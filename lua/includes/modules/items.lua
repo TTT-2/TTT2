@@ -1,4 +1,5 @@
---- This is the <code>items</code> module
+---
+-- This is the <code>items</code> module
 -- @author Alf21
 -- @author saibotk
 module("items", package.seeall)
@@ -58,7 +59,7 @@ end
 ---
 -- Used to register your item with the engine
 -- @tab t item table
--- @str name the item name
+-- @str name item name
 function Register(t, name)
 	name = string.lower(name)
 
@@ -119,6 +120,7 @@ end
 
 ---
 -- All scripts have been loaded...
+-- @local
 function OnLoaded()
 
 	--
