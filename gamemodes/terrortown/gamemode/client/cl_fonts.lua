@@ -2,8 +2,8 @@ FONTS = {}
 FONTS.fonts = {}
 FONTS.Scales = {1, 1.5, 2, 2.5}
 
-local shadowColorDark = Color(0, 0, 0, 200)
-local shadowColorWhite = Color(200, 200, 200, 200)
+local shadowColorDark = Color(0, 0, 0, 220)
+local shadowColorWhite = Color(0, 0, 0, 75)
 
 local function getScaleModifier(scale)      
     local scaleFactor = isvector(scale) and math.max(scale.x, math.max(scale.y, scale.z)) or scale
@@ -38,7 +38,8 @@ end
 
 function draw.ShadowedText(text, font, x, y, color, xalign, yalign, scaleModifier)
     scaleModifier = scaleModifier or 1.0   
-    local tmpCol = color.r + color.g + color.b > 200 and Color(shadowColorDark.r, shadowColorDark.g, shadowColorDark.b, color.a) or Color(shadowColorWhite.r, shadowColorWhite.g, shadowColorWhite.b, color.a)
+    local tmpCol = color.r + color.g + color.b > 200 and table.Copy(shadowColorDark) or table.Copy(shadowColorWhite)
+    tmpCol.a = tmpCol.a * (color.a / 255.0)
 
     draw.SimpleText(text, font, x + 2 * scaleModifier, y + 2 * scaleModifier, tmpCol, xalign, yalign)
     draw.SimpleText(text, font, x + 1 * scaleModifier, y + 1 * scaleModifier, tmpCol, xalign, yalign)
