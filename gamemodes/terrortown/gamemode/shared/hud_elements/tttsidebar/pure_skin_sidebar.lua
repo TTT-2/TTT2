@@ -56,12 +56,13 @@ if CLIENT then
 	function HUDELEMENT:DrawIcon(curY, item)
 		local pos = self:GetPos()
 		local size = self:GetSize()
-		local fontColor = self:GetDefaultFontColor(item.hud_color)
-		local iconAlpha = fontColor.r > 60 and 175 or 250 
 
 		if not item.hud_color then
 			item.hud_color = self.basecolor
 		end
+
+		local fontColor = self:GetDefaultFontColor(item.hud_color)
+		local iconAlpha = fontColor.r > 60 and 175 or 250 
 
 		curY = curY - size.w
 
