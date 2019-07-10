@@ -56,6 +56,8 @@ if CLIENT then
 	function HUDELEMENT:DrawIcon(curY, item)
 		local pos = self:GetPos()
 		local size = self:GetSize()
+		local fontColor = self:GetDefaultFontColor(item.hud_color)
+		local iconAlpha = fontColor.r > 60 and 175 or 250 
 
 		if not item.hud_color then
 			item.hud_color = self.basecolor
@@ -78,7 +80,7 @@ if CLIENT then
 		surface.SetDrawColor(item.hud_color.r, item.hud_color.g, item.hud_color.b, math.Round(factor * 255))
 		surface.DrawRect(pos.x, curY, size.w, size.w)
 
-		util.DrawFilteredTexturedRect(pos.x, curY, size.w, size.w, item.hud, 175)
+		util.DrawFilteredTexturedRect(pos.x, curY, size.w, size.w, item.hud, iconAlpha, fontColor)
 
 		self:DrawLines(pos.x, curY, size.w, size.w, item.hud_color.a * factor)
 
@@ -102,7 +104,7 @@ if CLIENT then
 
 				self:DrawBg(bx, by, bw, infoH, item.hud_color)
 
-				draw.AdvancedText(info, "PureSkinItemInfo", tx, ty, self:GetDefaultFontColor(item.hud_color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, false, self.scale)
+				draw.AdvancedText(info, "PureSkinItemInfo", tx, ty, fontColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, false, self.scale)
 
 				self:DrawLines(bx, by, bw, infoH, item.hud_color.a)
 			end
