@@ -1,8 +1,12 @@
+---
+-- This is the <code>huds</code> module
+-- @author Alf21
+-- @author saibotk
+module("huds", package.seeall)
+
 local baseclass = baseclass
 local list = list
 local pairs = pairs
-
-module("huds", package.seeall)
 
 if SERVER then
 	AddCSLuaFile()
@@ -10,10 +14,11 @@ end
 
 local HUDList = HUDList or {}
 
---[[---------------------------------------------------------
-	Name: TableInherit( t, base )
-	Desc: Copies any missing data from base to t
------------------------------------------------------------]]
+---
+-- Copies any missing data from base table to the target table
+-- @tab t target table
+-- @tab base base (fallback) table
+-- @treturn table t target table
 local function TableInherit(t, base)
 	for k, v in pairs(base) do
 		if t[k] == nil then
@@ -26,10 +31,11 @@ local function TableInherit(t, base)
 	return t
 end
 
---[[---------------------------------------------------------
-	Name: IsBasedOn( name, base )
-	Desc: Checks if name is based on base
------------------------------------------------------------]]
+---
+-- Checks if name is based on base
+-- @tab name table to check
+-- @tab base base (fallback) table
+-- @treturn boolean returns whether name is based on base
 function IsBasedOn(name, base)
 	local t = GetStored(name)
 
@@ -48,10 +54,10 @@ function IsBasedOn(name, base)
 	return IsBasedOn(t.Base, base)
 end
 
---[[---------------------------------------------------------
-	Name: Register( table, string )
-	Desc: Used to register your HUD with the engine
------------------------------------------------------------]]
+---
+-- Used to register your hud with the engine
+-- @tab t hud table
+-- @str name hud name
 function Register(t, name)
 	name = string.lower(name)
 
@@ -105,9 +111,9 @@ function Register(t, name)
 	end
 end
 
---
+---
 -- All scripts have been loaded...
---
+-- @local
 function OnLoaded()
 
 	--
@@ -123,10 +129,11 @@ function OnLoaded()
 	end
 end
 
---[[---------------------------------------------------------
-	Name: Get( string name, retTbl )
-	Desc: Get a HUD by name.
------------------------------------------------------------]]
+---
+-- Get an hud by name (a copy)
+-- @str name hud name
+-- @tparam[opt] ?table retTbl this table will be modified and returned. If nil, a new table will be created.
+-- @treturn table returns the modified retTbl or the new hud table
 function Get(name, retTbl)
 	local Stored = GetStored(name)
 	if not Stored then return end
@@ -159,19 +166,17 @@ function Get(name, retTbl)
 	return retval
 end
 
---[[---------------------------------------------------------
-	Name: GetStored( string name )
-	Desc: Gets the REAL HUD table, not a copy
------------------------------------------------------------]]
+---
+-- Gets the real hud table (not a copy)
+-- @str name hud name
+-- @treturn table returns the real hud table
 function GetStored(name)
 	return HUDList[name]
 end
 
---[[---------------------------------------------------------
-	Name: GetList()
-	Desc: Get a list (copy) of all the registered HUDs, that
-		  can be displayed (no abstract HUDs).
------------------------------------------------------------]]
+---
+-- Get a list (copy) of all registered huds, that can be displayed (no abstract HUDs).
+-- @treturn table available huds
 function GetList()
 	local result = {}
 
@@ -184,11 +189,9 @@ function GetList()
 	return result
 end
 
---[[---------------------------------------------------------
-	Name: GetRealList()
-	Desc: Get a list (copy) of all the registered HUDs
-		  including abstract HUDs.
------------------------------------------------------------]]
+---
+-- Get a list (copy) of all the registered HUDs including abstract HUDs.
+-- @treturn table all registered huds
 function GetRealList()
 	local result = {}
 

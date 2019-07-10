@@ -60,6 +60,7 @@ end
 ---
 -- Automatically generates global vars based on the role data
 -- @tab roleData role table
+-- @todo global vars list
 local function SetupGlobals(roleData)
 	print("[TTT2][ROLE] Setting up '" .. roleData.name .. "' role...")
 	local upStr = string.upper(roleData.name)
@@ -83,6 +84,7 @@ end
 ---
 -- Automatically generates ConVars based on the role data
 -- @tab roleData role table
+-- @todo ConVar list
 local function SetupData(roleData)
 	print("[TTT2][ROLE] Adding '" .. roleData.name .. "' role...")
 
@@ -193,7 +195,7 @@ function OnLoaded()
 end
 
 ---
--- Get an role by name (a copy)
+-- Get a role by name (a copy)
 -- @str name role name
 -- @tparam[opt] ?table retTbl this table will be modified and returned. If nil, a new table will be created.
 -- @treturn table returns the modified retTbl or the new role table

@@ -53,43 +53,39 @@
 <div id="content">
 
 <h1>Module <code>huds</code></h1>
-<p>(no description)</p>
+<p>This is the <code>huds</code> module</p>
 <p></p>
+    <h3>Info:</h3>
+    <ul>
+        <li><strong>Author</strong>: Alf21,saibotk</li>
+    </ul>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#Get">Get (name, retTbl)</a></td>
-	<td class="summary">Name: Get( string name, retTbl )
-	Desc: Get a HUD by name.</td>
+	<td class="name" nowrap><a href="#Get">Get (name[, retTbl])</a></td>
+	<td class="summary">Get an hud by name (a copy)</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#GetList">GetList ()</a></td>
-	<td class="summary">Name: GetList()
-	Desc: Get a list (copy) of all the registered HUDs, that
-		  can be displayed (no abstract HUDs).</td>
+	<td class="summary">Get a list (copy) of all registered huds, that can be displayed (no abstract HUDs).</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#GetRealList">GetRealList ()</a></td>
-	<td class="summary">Name: GetRealList()
-	Desc: Get a list (copy) of all the registered HUDs
-		  including abstract HUDs.</td>
+	<td class="summary">Get a list (copy) of all the registered HUDs including abstract HUDs.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#GetStored">GetStored (name)</a></td>
-	<td class="summary">Name: GetStored( string name )
-	Desc: Gets the REAL HUD table, not a copy</td>
+	<td class="summary">Gets the real hud table (not a copy)</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#IsBasedOn">IsBasedOn (name, base)</a></td>
-	<td class="summary">Name: IsBasedOn( name, base )
-	Desc: Checks if name is based on base</td>
+	<td class="summary">Checks if name is based on base</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#Register">Register (t, name)</a></td>
-	<td class="summary">Name: Register( table, string )
-	Desc: Used to register your HUD with the engine</td>
+	<td class="summary">Used to register your hud with the engine</td>
 	</tr>
 </table>
 
@@ -102,23 +98,31 @@
     <dl class="function">
     <dt>
     <a name = "Get"></a>
-    <strong>Get (name, retTbl)</strong>
+    <strong>Get (name[, retTbl])</strong>
     </dt>
     <dd>
-    Name: Get( string name, retTbl )
-	Desc: Get a HUD by name.
+    Get an hud by name (a copy)
 
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">name</span>
-
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         hud name
         </li>
         <li><span class="parameter">retTbl</span>
-
+            <span class="types">optional <a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+         this table will be modified and returned. If nil, a new table will be created.
+         (<em>optional</em>)
         </li>
     </ul>
 
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+        returns the modified retTbl or the new hud table
+    </ol>
 
 
 
@@ -129,12 +133,16 @@
     <strong>GetList ()</strong>
     </dt>
     <dd>
-    Name: GetList()
-	Desc: Get a list (copy) of all the registered HUDs, that
-		  can be displayed (no abstract HUDs).
+    Get a list (copy) of all registered huds, that can be displayed (no abstract HUDs).
 
 
 
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+        available huds
+    </ol>
 
 
 
@@ -145,12 +153,16 @@
     <strong>GetRealList ()</strong>
     </dt>
     <dd>
-    Name: GetRealList()
-	Desc: Get a list (copy) of all the registered HUDs
-		  including abstract HUDs.
+    Get a list (copy) of all the registered HUDs including abstract HUDs.
 
 
 
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+        all registered huds
+    </ol>
 
 
 
@@ -161,17 +173,23 @@
     <strong>GetStored (name)</strong>
     </dt>
     <dd>
-    Name: GetStored( string name )
-	Desc: Gets the REAL HUD table, not a copy
+    Gets the real hud table (not a copy)
 
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">name</span>
-
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         hud name
         </li>
     </ul>
 
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+        returns the real hud table
+    </ol>
 
 
 
@@ -182,20 +200,27 @@
     <strong>IsBasedOn (name, base)</strong>
     </dt>
     <dd>
-    Name: IsBasedOn( name, base )
-	Desc: Checks if name is based on base
+    Checks if name is based on base
 
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">name</span>
-
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+         table to check
         </li>
         <li><span class="parameter">base</span>
-
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+         base (fallback) table
         </li>
     </ul>
 
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        returns whether name is based on base
+    </ol>
 
 
 
@@ -206,17 +231,18 @@
     <strong>Register (t, name)</strong>
     </dt>
     <dd>
-    Name: Register( table, string )
-	Desc: Used to register your HUD with the engine
+    Used to register your hud with the engine
 
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">t</span>
-
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+         hud table
         </li>
         <li><span class="parameter">name</span>
-
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         hud name
         </li>
     </ul>
 
@@ -232,7 +258,7 @@
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
-<i style="float:right;">Last updated 2019-07-10 23:43:13 </i>
+<i style="float:right;">Last updated 2019-07-11 00:09:22 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

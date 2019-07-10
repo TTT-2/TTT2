@@ -53,56 +53,53 @@
 <div id="content">
 
 <h1>Module <code>hudelements</code></h1>
-<p>(no description)</p>
+<p>This is the <code>hudelements</code> module</p>
 <p></p>
+    <h3>Info:</h3>
+    <ul>
+        <li><strong>Author</strong>: Alf21,saibotk</li>
+    </ul>
 
 
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#Get">Get (name, retTbl)</a></td>
-	<td class="summary">Name: Get( string, retTbl )
-	Desc: Get a HUD element by name.</td>
+	<td class="name" nowrap><a href="#Get">Get (name[, retTbl])</a></td>
+	<td class="summary">Get an hud element by name (a copy)</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#GetAllTypeElements">GetAllTypeElements (type)</a></td>
-	<td class="summary">Name: GetAllTypeElements( type )
-	Desc: Gets all elements matching the type of all the registered HUD elements</td>
+	<td class="summary">Gets all hud elements matching the type of all the registered hud elements</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#GetElementTypes">GetElementTypes ()</a></td>
-	<td class="summary">Name: GetElementTypes()
-	Desc: Get a list of all the registered HUD element types</td>
+	<td class="summary">Get a list of all the registered hud element types</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#GetList">GetList ()</a></td>
-	<td class="summary">Name: GetList( string )
-	Desc: Get a list (copy) of all the registered HUD elements</td>
+	<td class="summary">Get a list (copy) of all registered hud elements</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#GetStored">GetStored (name)</a></td>
-	<td class="summary">Name: GetStored( string )
-	Desc: Gets the REAL HUD elements table, not a copy</td>
+	<td class="summary">Gets the real hud element table (not a copy)</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#GetTypeElement">GetTypeElement (type)</a></td>
-	<td class="summary">Name: GetTypeElement( type )
-	Desc: Gets the first element matching the type of all the registered HUD elements</td>
+	<td class="summary">Gets the first element matching the type of all the registered hud elements</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#IsBasedOn">IsBasedOn (name, base)</a></td>
-	<td class="summary">Name: IsBasedOn( name, base )
-	Desc: Checks if name is based on base</td>
+	<td class="summary">Checks if name is based on base</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#Register">Register (t, name)</a></td>
-	<td class="summary">Name: Register( table, string )
-	Desc: Used to register your HUD Element with the engine</td>
+	<td class="summary">Used to register your hud element with the engine</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#RegisterChildRelation">RegisterChildRelation (childid, parentid, parent_is_type)</a></td>
-	<td class="summary">Name: RegisterChildRelation( childid, parentid, parent_is_type )
-	Desc: Sets the child relation on all objects that have to be informed / are involved.</td>
+	<td class="summary"><p>Sets the child relation on all objects that have to be informed / are involved.</p>
+ <p>This can either be a single parent <-> child relation or a parents <-> child relation,
+ if the parent is a type.</td>
 	</tr>
 </table>
 
@@ -115,23 +112,31 @@
     <dl class="function">
     <dt>
     <a name = "Get"></a>
-    <strong>Get (name, retTbl)</strong>
+    <strong>Get (name[, retTbl])</strong>
     </dt>
     <dd>
-    Name: Get( string, retTbl )
-	Desc: Get a HUD element by name.
+    Get an hud element by name (a copy)
 
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">name</span>
-
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         hud element name
         </li>
         <li><span class="parameter">retTbl</span>
-
+            <span class="types">optional <a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+         this table will be modified and returned. If nil, a new table will be created.
+         (<em>optional</em>)
         </li>
     </ul>
 
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+        returns the modified retTbl or the new hud element table
+    </ol>
 
 
 
@@ -142,17 +147,23 @@
     <strong>GetAllTypeElements (type)</strong>
     </dt>
     <dd>
-    Name: GetAllTypeElements( type )
-	Desc: Gets all elements matching the type of all the registered HUD elements
+    Gets all hud elements matching the type of all the registered hud elements
 
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">type</span>
-
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         the hud element's type name
         </li>
     </ul>
 
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+        returns all hud elements matching the type of all the registered hud elements
+    </ol>
 
 
 
@@ -163,11 +174,16 @@
     <strong>GetElementTypes ()</strong>
     </dt>
     <dd>
-    Name: GetElementTypes()
-	Desc: Get a list of all the registered HUD element types
+    Get a list of all the registered hud element types
 
 
 
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+        returns a list of all the registered hud element types
+    </ol>
 
 
 
@@ -178,11 +194,16 @@
     <strong>GetList ()</strong>
     </dt>
     <dd>
-    Name: GetList( string )
-	Desc: Get a list (copy) of all the registered HUD elements
+    Get a list (copy) of all registered hud elements
 
 
 
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+        registered hud elements
+    </ol>
 
 
 
@@ -193,17 +214,23 @@
     <strong>GetStored (name)</strong>
     </dt>
     <dd>
-    Name: GetStored( string )
-	Desc: Gets the REAL HUD elements table, not a copy
+    Gets the real hud element table (not a copy)
 
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">name</span>
-
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         hud element name
         </li>
     </ul>
 
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+        returns the real hud element table
+    </ol>
 
 
 
@@ -214,17 +241,24 @@
     <strong>GetTypeElement (type)</strong>
     </dt>
     <dd>
-    Name: GetTypeElement( type )
-	Desc: Gets the first element matching the type of all the registered HUD elements
+    Gets the first element matching the type of all the registered hud elements
 
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">type</span>
-
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         the hud element's type name
         </li>
     </ul>
 
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">nil</span> or <a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+        returns the first element matching the type of all the registered hud elements
+]]
+    </ol>
 
 
 
@@ -235,20 +269,27 @@
     <strong>IsBasedOn (name, base)</strong>
     </dt>
     <dd>
-    Name: IsBasedOn( name, base )
-	Desc: Checks if name is based on base
+    Checks if name is based on base
 
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">name</span>
-
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+         table to check
         </li>
         <li><span class="parameter">base</span>
-
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+         base (fallback) table
         </li>
     </ul>
 
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        returns whether name is based on base
+    </ol>
 
 
 
@@ -259,17 +300,18 @@
     <strong>Register (t, name)</strong>
     </dt>
     <dd>
-    Name: Register( table, string )
-	Desc: Used to register your HUD Element with the engine
+    Used to register your hud element with the engine
 
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">t</span>
-
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+         hud element table
         </li>
         <li><span class="parameter">name</span>
-
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         hud element name
         </li>
     </ul>
 
@@ -283,23 +325,27 @@
     <strong>RegisterChildRelation (childid, parentid, parent_is_type)</strong>
     </dt>
     <dd>
-    Name: RegisterChildRelation( childid, parentid, parent_is_type )
-	Desc: Sets the child relation on all objects that have to be informed / are involved.  This can either be a single parent <-> child relation or
-		  a parents <-> child relation, if the parent is a type. This function then will register the childid as a child to all elements with that type.
-		  A parent element is responsible for calling PerformLayout on its child elements!
-		  !! This should be called in the PreInitialize method !!
+    <p>Sets the child relation on all objects that have to be informed / are involved.</p>
+ <p>This can either be a single parent <-> child relation or a parents <-> child relation,
+ if the parent is a type.  This function then will register the childid as a child to all elements with that type.</p>
+ <p>A parent element is responsible for calling PerformLayout on its child elements!</p>
+ <p><b>!! This should be called in the <code>PreInitialize</code> method !!</b></p>
+
 
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">childid</span>
-
+            <span class="types"><span class="type">number</span></span>
+         child hud element name
         </li>
         <li><span class="parameter">parentid</span>
-
+            <span class="types"><span class="type">number</span></span>
+         parent hud element name
         </li>
         <li><span class="parameter">parent_is_type</span>
-
+            <span class="types"><span class="type">boolean</span></span>
+         whether the parent is a type
         </li>
     </ul>
 
@@ -315,7 +361,7 @@
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
-<i style="float:right;">Last updated 2019-07-10 23:43:13 </i>
+<i style="float:right;">Last updated 2019-07-11 00:09:22 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>
