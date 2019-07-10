@@ -1,8 +1,12 @@
+---
+-- This is the <code>hudelements</code> module
+-- @author Alf21
+-- @author saibotk
+module("hudelements", package.seeall)
+
 local baseclass = baseclass
 local list = list
 local pairs = pairs
-
-module("hudelements", package.seeall)
 
 if SERVER then
 	AddCSLuaFile()
@@ -10,10 +14,11 @@ end
 
 local HUDElementList = HUDElementList or {}
 
---[[---------------------------------------------------------
-	Name: TableInherit( t, base )
-	Desc: Copies any missing data from base to t
------------------------------------------------------------]]
+---
+-- Copies any missing data from base table to the target table
+-- @tab t target table
+-- @tab base base (fallback) table
+-- @treturn table t target table
 local function TableInherit(t, base)
 	for k, v in pairs(base) do
 		if t[k] == nil then
@@ -26,10 +31,11 @@ local function TableInherit(t, base)
 	return t
 end
 
---[[---------------------------------------------------------
-	Name: IsBasedOn( name, base )
-	Desc: Checks if name is based on base
------------------------------------------------------------]]
+---
+-- Checks if name is based on base
+-- @tab name table to check
+-- @tab base base (fallback) table
+-- @treturn boolean returns whether name is based on base
 function IsBasedOn(name, base)
 	local t = GetStored(name)
 
@@ -48,10 +54,11 @@ function IsBasedOn(name, base)
 	return IsBasedOn(t.Base, base)
 end
 
---[[---------------------------------------------------------
-	Name: Register( table, string )
-	Desc: Used to register your HUD Element with the engine
------------------------------------------------------------]]
+---
+-- Used to register your hud element with the engine.<br />
+-- <b>This is done automatically for all the files in the <code>gamemodes/terrortown/gamemode/shared/hudelements</code> folder</b>
+-- @tab t hud element table
+-- @str name hud element name
 function Register(t, name)
 	name = string.lower(name)
 
@@ -104,9 +111,9 @@ function Register(t, name)
 	end
 end
 
---
+---
 -- All scripts have been loaded...
---
+-- @local
 function OnLoaded()
 
 	--
@@ -129,10 +136,11 @@ function OnLoaded()
 	end
 end
 
---[[---------------------------------------------------------
-	Name: Get( string, retTbl )
-	Desc: Get a HUD element by name.
------------------------------------------------------------]]
+---
+-- Get an hud element by name (a copy)
+-- @str name hud element name
+-- @tparam[opt] ?table retTbl this table will be modified and returned. If nil, a new table will be created.
+-- @treturn table returns the modified retTbl or the new hud element table
 function Get(name, retTbl)
 	local Stored = GetStored(name)
 	if not Stored then return end
@@ -165,18 +173,17 @@ function Get(name, retTbl)
 	return retval
 end
 
---[[---------------------------------------------------------
-	Name: GetStored( string )
-	Desc: Gets the REAL HUD elements table, not a copy
------------------------------------------------------------]]
+---
+-- Gets the real hud element table (not a copy)
+-- @str name hud element name
+-- @treturn table returns the real hud element table
 function GetStored(name)
 	return HUDElementList[name]
 end
 
---[[---------------------------------------------------------
-	Name: GetList( string )
-	Desc: Get a list (copy) of all the registered HUD elements
------------------------------------------------------------]]
+---
+-- Get a list (copy) of all registered hud elements
+-- @treturn table registered hud elements
 function GetList()
 	local result = {}
 
@@ -187,10 +194,9 @@ function GetList()
 	return result
 end
 
---[[---------------------------------------------------------
-	Name: GetElementTypes()
-	Desc: Get a list of all the registered HUD element types
------------------------------------------------------------]]
+---
+-- Get a list of all the registered hud element types
+-- @treturn table returns a list of all the registered hud element types
 function GetElementTypes()
 	local typetbl = {}
 
@@ -203,9 +209,10 @@ function GetElementTypes()
 	return typetbl
 end
 
---[[---------------------------------------------------------
-	Name: GetTypeElement( type )
-	Desc: Gets the first element matching the type of all the registered HUD elements
+---
+-- Gets the first element matching the type of all the registered hud elements
+-- @str type the hud element's type name
+-- @treturn nil|table returns the first element matching the type of all the registered hud elements
 -----------------------------------------------------------]]
 function GetTypeElement(type)
 	for _, v in pairs(HUDElementList) do
@@ -213,14 +220,12 @@ function GetTypeElement(type)
 			return v
 		end
 	end
-
-	return
 end
 
---[[---------------------------------------------------------
-	Name: GetAllTypeElements( type )
-	Desc: Gets all elements matching the type of all the registered HUD elements
------------------------------------------------------------]]
+---
+-- Gets all hud elements matching the type of all the registered hud elements
+-- @str type the hud element's type name
+-- @treturn table returns all hud elements matching the type of all the registered hud elements
 function GetAllTypeElements(type)
 	local retTbl = {}
 
@@ -233,13 +238,17 @@ function GetAllTypeElements(type)
 	return retTbl
 end
 
---[[---------------------------------------------------------
-	Name: RegisterChildRelation( childid, parentid, parent_is_type )
-	Desc: Sets the child relation on all objects that have to be informed / are involved. This can either be a single parent <-> child relation or
-		  a parents <-> child relation, if the parent is a type. This function then will register the childid as a child to all elements with that type.
-		  A parent element is responsible for calling PerformLayout on its child elements!
-		  !! This should be called in the PreInitialize method !!
------------------------------------------------------------]]
+---
+-- <p>Sets the child relation on all objects that have to be informed / are involved.</p>
+-- <p>This can either be a single parent <-> child relation or a parents <-> child relation,
+-- if the parent is a type. This function then will register the childid as a child to all elements with that type.</p>
+-- <p>A parent element is responsible for calling PerformLayout on its child elements!</p>
+-- <p><b>!! This should be called in the <code>PreInitialize</code> method !!</b></p>
+--
+-- @int childid child hud element name
+-- @int parentid parent hud element name
+-- @bool parent_is_type whether the parent is a type
+-- @todo example / usage
 function RegisterChildRelation(childid, parentid, parent_is_type)
 	local child = GetStored(childid)
 	if not child then

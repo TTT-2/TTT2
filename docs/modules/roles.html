@@ -1,0 +1,611 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>TTT2 Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>TTT2</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../modules/HUD.html">HUD</a></li>
+  <li><a href="../modules/HUDELEMENT.html">HUDELEMENT</a></li>
+  <li><a href="../modules/bind.html">bind</a></li>
+  <li><a href="../modules/hudelements.html">hudelements</a></li>
+  <li><a href="../modules/huds.html">huds</a></li>
+  <li><a href="../modules/items.html">items</a></li>
+  <li><a href="../modules/marks.html">marks</a></li>
+  <li><strong>roles</strong></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>roles</code></h1>
+<p>This is the <code>roles</code> module.</p>
+<p></p>
+    <h3>Info:</h3>
+    <ul>
+        <li><strong>Author</strong>: Alf21,saibotk</li>
+    </ul>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#GenerateNewRoleID">GenerateNewRoleID ()</a></td>
+	<td class="summary">Generates a new subrole id.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Get">Get (name[, retTbl])</a></td>
+	<td class="summary">Get a role by name (a copy)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#GetAvailableTeams">GetAvailableTeams ()</a></td>
+	<td class="summary">Get a list of all available teams</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#GetByAbbr">GetByAbbr (abbr)</a></td>
+	<td class="summary">Get the role table by the role abbreviation</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#GetByIndex">GetByIndex (index)</a></td>
+	<td class="summary">Get the role table by the role id</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#GetByName">GetByName (name)</a></td>
+	<td class="summary">Get the role table by the role name</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#GetDefaultTeamRole">GetDefaultTeamRole (team)</a></td>
+	<td class="summary">Get the default role table of a specific role team</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#GetDefaultTeamRoles">GetDefaultTeamRoles (team)</a></td>
+	<td class="summary">Get the default role tables of a specific role team</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#GetList">GetList ()</a></td>
+	<td class="summary">Get a list of all the registered roles</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#GetShopRoles">GetShopRoles ()</a></td>
+	<td class="summary">Get a sorted list of roles that have access to a shop</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#GetSortedRoles">GetSortedRoles ()</a></td>
+	<td class="summary">Get a sorted list of all roles</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#GetStored">GetStored (name)</a></td>
+	<td class="summary">Gets the real role table (not a copy)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#GetTeamMembers">GetTeamMembers (team)</a></td>
+	<td class="summary">Get a list of team members</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#GetWinTeams">GetWinTeams ()</a></td>
+	<td class="summary">Get a list of all teams that are able to win</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#InitCustomTeam">InitCustomTeam (name, data)</a></td>
+	<td class="summary">Automatically initializes a new role team.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#IsBasedOn">IsBasedOn (name, base)</a></td>
+	<td class="summary">Checks if name is based on base</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Register">Register (t, name)</a></td>
+	<td class="summary">Used to register your role with the engine.<br />
+ <b>This is done automatically for all the files in the <code>lua/terrortown/entities/roles</code> folder</b></td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#SortTable">SortTable (tbl)</a></td>
+	<td class="summary">Sorts a role table</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "GenerateNewRoleID"></a>
+    <strong>GenerateNewRoleID ()</strong>
+    </dt>
+    <dd>
+    Generates a new subrole id.
+ starts with <code>1</code> to prevent incompatibilities with <code>ROLE_ANY</code> => new roles will start at the id: <code>7</code>
+ <ul>
+ <li><code>0</code> = <code>ROLE_INNOCENT</code></li>
+ <li><code>1</code> = <code>ROLE_TRAITOR</code></li>
+ <li><code>2</code> = <code>ROLE_DETECTIVE</code></li>
+ <li><code>3</code> = <code>ROLE_ANY</code></li>
+ <li><code>4</code>, <code>5</code>, <code>6</code> = <code>nop</code></li>
+ </ul>
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">number</span></span>
+        new generated subrole id
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Get"></a>
+    <strong>Get (name[, retTbl])</strong>
+    </dt>
+    <dd>
+    Get a role by name (a copy)
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">name</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         role name
+        </li>
+        <li><span class="parameter">retTbl</span>
+            <span class="types">optional <a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+         this table will be modified and returned. If nil, a new table will be created.
+         (<em>optional</em>)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+        returns the modified retTbl or the new role table
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "GetAvailableTeams"></a>
+    <strong>GetAvailableTeams ()</strong>
+    </dt>
+    <dd>
+    Get a list of all available teams
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+        returns a list of all available teams
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "GetByAbbr"></a>
+    <strong>GetByAbbr (abbr)</strong>
+    </dt>
+    <dd>
+    Get the role table by the role abbreviation
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">abbr</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         role abbreviation
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+        returns the role table. This will return the <code>INNOCENT</code> role table as fallback.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "GetByIndex"></a>
+    <strong>GetByIndex (index)</strong>
+    </dt>
+    <dd>
+    Get the role table by the role id
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">index</span>
+            <span class="types"><span class="type">number</span></span>
+         subrole id
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+        returns the role table. This will return the <code>INNOCENT</code> role table as fallback.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "GetByName"></a>
+    <strong>GetByName (name)</strong>
+    </dt>
+    <dd>
+    Get the role table by the role name
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">name</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         role name
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+        returns the role table. This will return the <code>INNOCENT</code> role table as fallback.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "GetDefaultTeamRole"></a>
+    <strong>GetDefaultTeamRole (team)</strong>
+    </dt>
+    <dd>
+    Get the default role table of a specific role team
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">team</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         role team name
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+        returns the role table. This will return the <code>INNOCENT</code> role table as fallback.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "GetDefaultTeamRoles"></a>
+    <strong>GetDefaultTeamRoles (team)</strong>
+    </dt>
+    <dd>
+    Get the default role tables of a specific role team
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">team</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         role team name
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+        returns the role tables. This will return the <code>INNOCENT</code> role table as well as its subrole tables as fallback.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "GetList"></a>
+    <strong>GetList ()</strong>
+    </dt>
+    <dd>
+    Get a list of all the registered roles
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+        all registered roles
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "GetShopRoles"></a>
+    <strong>GetShopRoles ()</strong>
+    </dt>
+    <dd>
+    Get a sorted list of roles that have access to a shop
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+        list of roles that have access to a shop
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "GetSortedRoles"></a>
+    <strong>GetSortedRoles ()</strong>
+    </dt>
+    <dd>
+    Get a sorted list of all roles
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+        returns a list of all roles
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "GetStored"></a>
+    <strong>GetStored (name)</strong>
+    </dt>
+    <dd>
+    Gets the real role table (not a copy)
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">name</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         role name
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+        returns the real role table
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "GetTeamMembers"></a>
+    <strong>GetTeamMembers (team)</strong>
+    </dt>
+    <dd>
+    Get a list of team members
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">team</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         role team name
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+        returns the member table of a role team.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "GetWinTeams"></a>
+    <strong>GetWinTeams ()</strong>
+    </dt>
+    <dd>
+    Get a list of all teams that are able to win
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+        returns a list of all teams that are able to win
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "InitCustomTeam"></a>
+    <strong>InitCustomTeam (name, data)</strong>
+    </dt>
+    <dd>
+    Automatically initializes a new role team.  This will generate the global var <code>TEAM_[NAME]</code>
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">name</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         role team name
+        </li>
+        <li><span class="parameter">data</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+         role team data
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "IsBasedOn"></a>
+    <strong>IsBasedOn (name, base)</strong>
+    </dt>
+    <dd>
+    Checks if name is based on base
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">name</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+         table to check
+        </li>
+        <li><span class="parameter">base</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+         base (fallback) table
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        returns whether name is based on base
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Register"></a>
+    <strong>Register (t, name)</strong>
+    </dt>
+    <dd>
+    Used to register your role with the engine.<br />
+ <b>This is done automatically for all the files in the <code>lua/terrortown/entities/roles</code> folder</b>
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">t</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+         role table
+        </li>
+        <li><span class="parameter">name</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         role name
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "SortTable"></a>
+    <strong>SortTable (tbl)</strong>
+    </dt>
+    <dd>
+    Sorts a role table
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">tbl</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+         table to sort
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2019-07-11 00:29:42 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>
