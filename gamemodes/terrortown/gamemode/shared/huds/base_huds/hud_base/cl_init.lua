@@ -15,7 +15,7 @@ local savingKeys = {}
 
 --- This function will return a table containing all keys that will be stored by
 -- the @{HUD:SaveData} function.
--- @treturn tab
+-- @treturn table
 function HUD:GetSavingKeys()
 	return savingKeys
 end
@@ -34,7 +34,7 @@ function HUD:ForceElement(elementID)
 end
 
 --- This will give you a copy of the forced elements table.
--- @treturn tab
+-- @treturn table
 function HUD:GetForcedElements()
 	return table.Copy(self.forcedElements)
 end
@@ -124,7 +124,7 @@ end
 -- This will respect the @{HUDELEMENT}.disabledUnlessForced property and check
 -- if the parent element (if exists) is also available, otherwise this will
 -- return false.
--- @tparam tab 'elementTbl'
+-- @tparam table 'elementTbl'
 -- @treturn bool
 function HUD:CanUseElement(elementTbl)
 	-- return false if the table is empty.
@@ -154,7 +154,7 @@ end
 -- instance that 'can' be used, please take a look at @{HUD:CanUseElement} for
 -- the criteria / restrictions for the evaluation as if an element can be used.
 -- @tparam string 'elementType'
--- @treturn tab
+-- @treturn table
 function HUD:GetElementByType(elementType)
 	-- element type is hidden in this HUD so return nil
 	if table.HasValue(self.disabledTypes, elementType) then return nil end
@@ -190,7 +190,7 @@ end
 -- per type, respecting the forcedElements and otherwise taking the first found
 -- implementation.
 -- @todo TODO optimize / cache maybe?!
--- @treturn tab
+-- @treturn table
 function HUD:GetElements()
 	-- loop through all types and if the hud does not provide an element take the first found instance for the type
 	local elems = {}
@@ -212,7 +212,7 @@ end
 -- of the hook "HUDShouldDraw". Additionally this function will call
 -- HUDEditor.DrawElem after the elements draw, to correctly display
 -- the HUDEditors elements on top.
--- @tparam tab 'elem'
+-- @tparam table 'elem'
 function HUD:DrawElemAndChildren(elem)
 	if not elem.initialized or not elem.type or not hook.Call("HUDShouldDraw", GAMEMODE, elem.type) or not self:ShouldShow(elem.type) or not elem:ShouldDraw() then return end
 

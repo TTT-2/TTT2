@@ -140,7 +140,7 @@ end
 
 --- This function returns your basepos, the value which is used
 -- to move the element.
--- @treturn tab with x and y value
+-- @treturn table with x and y value
 function HUDELEMENT:GetBasePos()
 	return table.Copy(self.basepos)
 end
@@ -162,7 +162,7 @@ end
 
 --- This function returns your pos, the value which is used
 -- internally to define the upper left corner of the element
--- @treturn tab with x and y value
+-- @treturn table with x and y value
 function HUDELEMENT:GetPos()
 	return table.Copy(self.pos)
 end
@@ -179,7 +179,7 @@ end
 --- This function returns your minsize, the value which is used
 -- as a minimum when resizing the element.
 -- Note: Setting the size with @{SetSize} allows smaller values.
--- @treturn tab with width and height value
+-- @treturn table with width and height value
 function HUDELEMENT:GetMinSize()
 	return table.Copy(self.minsize)
 end
@@ -195,7 +195,7 @@ function HUDELEMENT:SetMinSize(w, h)
 end
 
 --- This function returns your size.
--- @treturn tab with width and height value
+-- @treturn table with width and height value
 function HUDELEMENT:GetSize()
 	return table.Copy(self.size)
 end
@@ -275,7 +275,7 @@ function HUDELEMENT:IsParent()
 end
 
 --- This function gives you a copy of all your children
--- @treturn tab a copy of all your child elements
+-- @treturn table a copy of all your child elements
 function HUDELEMENT:GetChildren()
 	return table.Copy(self.children)
 end
@@ -511,7 +511,7 @@ end
 --- This function is called when an element wants to now its original position.
 -- This is the case at @{Reset} and @{Initialize}.
 -- You should overwrite this with your own calculated values!
--- @treturn tab with basepos, size and minsize fields
+-- @treturn table with basepos, size and minsize fields
 function HUDELEMENT:GetDefaults()
 	return {
 		basepos = table.Copy(self.basepos),
@@ -551,7 +551,7 @@ local savingKeys = {
 }
 
 --- Getter for saving keys
--- @treturn tab with savable keys
+-- @treturn table with savable keys
 function HUDELEMENT:GetSavingKeys()
 	return table.Copy(savingKeys)
 end
