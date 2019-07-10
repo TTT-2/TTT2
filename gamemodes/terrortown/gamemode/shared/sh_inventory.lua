@@ -89,10 +89,17 @@ function CleanupInventory(ply)
 	end
 	
 	--add weapons which are already in inventory
+	local weaponsInInventory = 0
 	for k, v in pairs( ply:GetWeapons() ) do
 		if v.Kind then
 			AddWeaponToInventory(ply, v)
+			weaponsInInventory = weaponsInInventory + 1
 		end
+	end
+
+	--no valid weapons found (try again)
+	if weaponsInInventory == 0 then
+		ply.refresh_inventory_cache = true
 	end
 end
 
