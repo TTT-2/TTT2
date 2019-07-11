@@ -243,7 +243,7 @@ local function ttt_print_playercount()
 end
 concommand.Add("ttt_print_playercount", ttt_print_playercount)
 
---- optional sound cues on round start and end
+-- optional sound cues on round start and end
 CreateConVar("ttt_cl_soundcues", "0", FCVAR_ARCHIVE)
 
 local cues = {
@@ -260,7 +260,7 @@ end
 GM.TTTBeginRound = PlaySoundCue
 GM.TTTEndRound = PlaySoundCue
 
---- usermessages
+-- usermessages
 
 local function ReceiveRole()
 	local client = LocalPlayer()
@@ -285,7 +285,7 @@ local function ReceiveRoleReset()
 end
 net.Receive("TTT_RoleReset", ReceiveRoleReset)
 
---- role test
+-- role test
 local function TTT2TestRole()
 	local client = LocalPlayer()
 

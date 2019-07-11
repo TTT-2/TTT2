@@ -1,4 +1,4 @@
----- Dummy ent that just spawns a random TTT weapon and kills itself
+-- Dummy ent that just spawns a random TTT weapon and kills itself
 
 local IsValid = IsValid
 local math = math

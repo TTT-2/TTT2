@@ -1,4 +1,4 @@
----- Replace old and boring ents with new and shiny SENTs
+-- Replace old and boring ents with new and shiny SENTs
 
 ents.TTT = {}
 
@@ -422,7 +422,7 @@ function ents.TTT.PlaceExtraWeapons()
 	end
 end
 
----- Weapon/ammo placement script importing
+-- Weapon/ammo placement script importing
 local function RemoveWeaponEntities()
 	-- This could be transformed into lots of FindByClass searches, one for every
 	-- key in the replace tables. Hopefully this is faster as more of the work is

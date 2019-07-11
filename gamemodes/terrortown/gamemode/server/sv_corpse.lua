@@ -1,4 +1,4 @@
----- Corpse functions
+-- Corpse functions
 
 -- namespaced because we have no ragdoll metatable
 CORPSE = {}
@@ -19,7 +19,7 @@ ttt_include("sh_corpse")
 
 util.AddNetworkString("TTT2SendConfirmMsg")
 
---- networked data abstraction layer
+-- networked data abstraction layer
 local dti = CORPSE.dti
 
 function CORPSE.SetFound(rag, state)
@@ -46,7 +46,7 @@ function CORPSE.SetCredits(rag, credits)
 	rag:SetDTInt(dti.INT_CREDITS, credits)
 end
 
---- ragdoll creation and search
+-- ragdoll creation and search
 
 -- If detective mode, announce when someone's body is found
 local bodyfound = CreateConVar("ttt_announce_body_found", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})

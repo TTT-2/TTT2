@@ -10,7 +10,7 @@ function MuteForRestart(state)
 	mute_all = state
 end
 
----- Communication control
+-- Communication control
 CreateConVar("ttt_limit_spectator_voice", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 local loc_voice = CreateConVar("ttt_locational_voice", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})

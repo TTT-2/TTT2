@@ -1,4 +1,4 @@
----- Communicating game state to players
+-- Communicating game state to players
 
 local net = net
 local string = string
@@ -137,7 +137,7 @@ function GetTeamMemberFilter(ply, alive_only)
 	end)
 end
 
----- Communication control
+-- Communication control
 CreateConVar("ttt_limit_spectator_chat", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY})
 
 function GM:PlayerCanSeePlayersChat(text, team_only, listener, speaker)
@@ -280,7 +280,7 @@ local function deathrec(ply, cmd, args)
 				rag = nil
 			end
 
-			--- last id'd person
+			-- last id'd person
 			local last_seen = tonumber(args[2])
 
 			if last_seen then
@@ -291,7 +291,7 @@ local function deathrec(ply, cmd, args)
 				end
 			end
 
-			--- last words
+			-- last words
 			local words = string.Trim(args[3])
 
 			-- nothing of interest

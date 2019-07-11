@@ -1,4 +1,4 @@
----- Shared corpsey stuff
+-- Shared corpsey stuff
 
 CORPSE = CORPSE or {}
 
@@ -13,7 +13,7 @@ CORPSE.dti = {
 
 local dti = CORPSE.dti
 
---- networked data abstraction
+-- networked data abstraction
 function CORPSE.GetFound(rag, default)
 	return rag and rag:GetDTBool(dti.BOOL_FOUND) or default
 end

@@ -16,10 +16,10 @@ if SERVER then
 else
 	---
 	-- Renders the entity based on the color
-	-- @tab ents list of entities
-	-- @col col color of rendering
-	-- @pos pos position of client's view the rendering starts from
-	-- @ang ang angle of client's view the rendering starts from
+	-- @tab ents list of <a href="https://wiki.garrysmod.com/page/Category:Entity">Entity</a>
+	-- @param col (<a href="https://wiki.garrysmod.com/page/Category:Color">Color</a>) color of rendering
+	-- @param pos (<a href="https://wiki.garrysmod.com/page/Category:Vector">Vector</a>) position of client's view the rendering starts from
+	-- @param ang (<a href="https://wiki.garrysmod.com/page/Category:Angle">Angle</a>) angle of client's view the rendering starts from
 	local function Render(ents, col, pos, ang)
 		-- check for valid data
 		local tmp = {}
@@ -129,7 +129,7 @@ else
 	end
 
 	---
-	-- Clearing the cached entity list
+	-- Clearing the cached <a href="https://wiki.garrysmod.com/page/Category:Entity">Entity</a> list
 	function Clear()
 		marksList = {}
 
@@ -137,7 +137,7 @@ else
 	end
 
 	---
-	-- Removes entities from the entities list
+	-- Removes entities from the <a href="https://wiki.garrysmod.com/page/Category:Entity">Entity</a> list
 	-- @tab ents list of entities that should get removed
 	function Remove(ents)
 		if #ents == 0 or table.Count(marksList) == 0 then return end
@@ -166,9 +166,9 @@ else
 	end
 
 	---
-	-- Adds entities into the entities list that should be rendered with a specific color
-	-- @tab ents list of entities that should be added
-	-- @col col the color the added entities should get rendered
+	-- Adds entities into the <a href="https://wiki.garrysmod.com/page/Category:Entity">Entity</a> list that should be rendered with a specific <a href="https://wiki.garrysmod.com/page/Category:Color">Color</a>
+	-- @tab ents list of <a href="https://wiki.garrysmod.com/page/Category:Entity">Entity</a> that should be added
+	-- @param col (<a href="https://wiki.garrysmod.com/page/Category:Color">Color</a>) the color the added entities should get rendered
 	function Add(ents, col)
 		if #ents == 0 or not col then return end
 
@@ -186,10 +186,10 @@ else
 	end
 
 	---
-	-- Sets entities of the entities list that based on a specific color.
+	-- Sets entities of the <a href="https://wiki.garrysmod.com/page/Category:Entity">Entity</a> list that based on a specific <a href="https://wiki.garrysmod.com/page/Category:Color">Color</a>.
 	-- All the other previously inserted entities with the same color will get removed
-	-- @tab ents list of entities that should be set
-	-- @col col the color the added entities should get rendered
+	-- @tab ents list of <a href="https://wiki.garrysmod.com/page/Category:Entity">Entity</a> that should be set
+	-- @param col (<a href="https://wiki.garrysmod.com/page/Category:Color">Color</a>) the color the added entities should get rendered
 	-- @usage marks.Set({}, COLOR_WHITE) -- this will clear all entities rendered in white
 	function Set(ents, col)
 		if not col or not istable(ents) then return end

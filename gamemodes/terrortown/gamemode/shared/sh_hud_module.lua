@@ -20,9 +20,9 @@ local function includeFoldersFiles(base, fld, fls)
 	end
 end
 
---------------------------
+--
 -- Load abstract HUDs
---------------------------
+--
 
 local pathBase = "terrortown/gamemode/shared/huds/" .. HUDS_ABSTRACT_FOLDER .. "/"
 local pathFiles = file.Find(pathBase .. "*.lua", "LUA")
@@ -68,9 +68,9 @@ for _, folder in ipairs(subFolders) do
 	HUD = nil
 end
 
------------------------------------------
+--
 -- load HUDs
------------------------------------------
+--
 
 pathBase = "terrortown/gamemode/shared/huds/"
 

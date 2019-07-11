@@ -1,4 +1,4 @@
----- Traitor equipment menu
+-- Traitor equipment menu
 local GetTranslation = LANG.GetTranslation
 local GetPTranslation = LANG.GetParamTranslation
 local SafeTranslate = LANG.TryTranslation
@@ -38,9 +38,9 @@ local eqframe = eqframe
 local dlist = dlist
 local curSearch = curSearch
 
--- ----------------------------------
+--
 --     GENERAL HELPER FUNCTIONS
--- ----------------------------------
+--
 
 local function RolenameToRole(val)
 	for _, v in ipairs(roles.GetList()) do
@@ -60,9 +60,9 @@ local function CanCarryWeapon(item)
 	return LocalPlayer():CanCarryWeapon(item)
 end
 
--- ----------------------------------
+--
 -- Creates tabel of labels showing the status of ordering prerequisites
--- ----------------------------------
+--
 
 local function PreqLabels(parent, x, y)
 	local tbl = {}
@@ -177,10 +177,10 @@ local function PreqLabels(parent, x, y)
 	end
 end
 
--- ----------------------------------
+--
 -- PANEL OVERRIDES
 -- quick, very basic override of DPanelSelect
--- ----------------------------------
+--
 
 local PANEL = {}
 
@@ -202,9 +202,9 @@ function PANEL:SelectPanel(pnl)
 end
 vgui.Register("EquipSelect", PANEL, "DPanelSelect")
 
--- ----------------------------------
---- Create Equipment GUI / refresh
--- ----------------------------------
+--
+-- Create Equipment GUI / refresh
+--
 
 local function CreateEquipmentList(t)
 	if not t then
@@ -232,7 +232,7 @@ local function CreateEquipmentList(t)
 		currole = t.role or ROLE_INNOCENT
 	end
 
-	--- icon size = 64 x 64
+	-- icon size = 64 x 64
 	if IsValid(dlist) then
 		dlist:Clear()
 	else
@@ -390,9 +390,9 @@ local function CreateEquipmentList(t)
 	end
 end
 
--- ----------------------------------
+--
 -- Create/Show Shop frame
--- ----------------------------------
+--
 --  dframe
 --   \-> dsheet
 --      \-> dequip
@@ -403,7 +403,7 @@ end
 --         \-> dinfobg
 --            \-> dhelp
 --
--- -----------------------------------
+--
 
 function TraitorMenuPopup()
 	local ply = LocalPlayer()
@@ -503,8 +503,8 @@ function TraitorMenuPopup()
 	dequip:SetPaintBackground(false)
 	dequip:StretchToParent(padding, padding, padding, padding)
 
-	--- Construct icon listing
-	--- icon size = 64 x 64
+	-- Construct icon listing
+	-- icon size = 64 x 64
 	dlist = vgui.Create("EquipSelect", dequip)
 	-- local dlistw = 288
 	dlist:SetPos(0, 0)
@@ -781,9 +781,9 @@ function TraitorMenuPopup()
 end
 concommand.Add("ttt_cl_traitorpopup", TraitorMenuPopup)
 
--- ----------------------------------
+--
 -- Force closes the menu
--- ----------------------------------
+--
 
 local function ForceCloseTraitorMenu(ply, cmd, args)
 	if IsValid(eqframe) then
@@ -792,9 +792,9 @@ local function ForceCloseTraitorMenu(ply, cmd, args)
 end
 concommand.Add("ttt_cl_traitorpopup_close", ForceCloseTraitorMenu)
 
--- ----------------------------------
+--
 -- NET RELATED STUFF:
--- ----------------------------------
+--
 
 local function ReceiveEquipment()
 	local ply = LocalPlayer()
@@ -902,9 +902,9 @@ local function ReceiveBoughtItem()
 end
 net.Receive("TTT_BoughtItem", ReceiveBoughtItem)
 
--- ----------------------------------
+--
 -- HOOKS / GAMEMODE RELATED STUFF:
--- ----------------------------------
+--
 
 function GM:OnContextMenuOpen()
 	local rs = GetRoundState()

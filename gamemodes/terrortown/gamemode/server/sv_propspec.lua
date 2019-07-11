@@ -1,4 +1,4 @@
----- Spectator prop meddling
+-- Spectator prop meddling
 
 local string = string
 local math = math

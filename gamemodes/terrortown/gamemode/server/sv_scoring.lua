@@ -1,4 +1,4 @@
----- Customized scoring
+-- Customized scoring
 
 local math = math
 local string = string

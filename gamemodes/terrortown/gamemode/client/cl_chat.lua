@@ -1,4 +1,4 @@
----- radio commands, text chat stuff
+-- radio commands, text chat stuff
 DEFINE_BASECLASS("gamemode_base")
 
 local GetTranslation = LANG.GetTranslation
@@ -109,7 +109,7 @@ function ChatInterrupt()
 end
 net.Receive("TTT_InterruptChat", ChatInterrupt)
 
---- Radio
+--  Radio
 -- modified with https://github.com/Exho1/TTT-ScoreboardTagging/blob/master/lua/client/ttt_scoreboardradiocmd.lua
 
 RADIO = {}

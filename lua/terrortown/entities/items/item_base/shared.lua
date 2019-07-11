@@ -1,23 +1,25 @@
--- Variables that are used on both client and server
+---
+-- @module ITEM
 
-ITEM.PrintName = "Scripted Item" -- 'Nice' Item name (Shown on HUD)
-ITEM.Author = ""
-ITEM.Contact = ""
-ITEM.Purpose = ""
-ITEM.Instructions = ""
+ITEM.PrintName = "Scripted Item" -- displayed @{ITEM} name (Shown on HUD), language supported
+
+ITEM.Author = "" -- author
+ITEM.Contact = "" -- contact to the author
+ITEM.Purpose = "" -- purpose of this @{ITEM}
+ITEM.Instructions = "" -- some Instructions for this @{ITEM}
 
 -- If CanBuy is a table that contains ROLE_TRAITOR and/or ROLE_DETECTIVE, those
 -- players are allowed to purchase it and it will appear in their Equipment Menu
--- for that purpose. If CanBuy is nil this item cannot be bought.
+-- for that purpose. If CanBuy is nil this @{ITEM} cannot be bought.
 --   Example: ITEM.CanBuy = { ROLE_TRAITOR }
 -- (just setting to nil here to document its existence, don't make this buyable)
-ITEM.CanBuy = nil
+ITEM.CanBuy = nil -- this @{table} contains a list of subrole ids (@int) which are able to access this @{ITEM} in the shop
 
-ITEM.Category = "TTT"
+ITEM.Category = "TTT" -- the @{ITEM} Category
 
 if CLIENT then
 
-	-- If this is a buyable item (ie. CanBuy is not nil) EquipMenuData must be
+	-- If this is a buyable @{ITEM} (ie. CanBuy is not nil) EquipMenuData must be
 	-- a table containing some information to show in the Equipment Menu. See
 	-- default equipment items for real-world examples.
 	ITEM.EquipMenuData = nil
@@ -25,18 +27,18 @@ if CLIENT then
 	-- Example data:
 	-- ITEM.EquipMenuData = {
 	--
-	---- Type tells players if it's a weapon or item
+	--   Type tells players if it's a weapon or @{ITEM}
 	--     type = "Weapon",
 	--
-	---- Desc is the description in the menu. Needs manual linebreaks (via \n).
+	--   Desc is the description in the menu. Needs manual linebreaks (via \n).
 	--     desc = "Text."
 	-- }
 
-	-- This sets the icon shown for the item in the DNA sampler, search window,
+	-- This sets the icon shown for the @{ITEM} in the DNA sampler, search window,
 	-- equipment menu (if buyable), etc.
 	ITEM.material = "vgui/ttt/icon_nades" -- most generic icon I guess
 
-	-- You can make your own item icon using the template in:
+	-- You can make your own @{ITEM} icon using the template in:
 	--   /garrysmod/gamemodes/terrortown/template/
 
 	-- Open one of TTT's icons with VTFEdit to see what kind of settings to use
@@ -47,40 +49,37 @@ if CLIENT then
 	-- create your own directory so that this does not happen,
 	-- eg. /materials/vgui/ttt/mycoolserver/mygun.vmt
 
-	--[[---------------------------------------------------------
-		Name: DrawInfo
-		Desc: Draw some information in a small box next to the icon
-	-----------------------------------------------------------]]
+	---
+	-- Draw some information in a small box next to the icon in the hud if a <a href="https://wiki.garrysmod.com/page/Category:Player">Player</a> is owning this @{ITEM}
 	function ITEM:DrawInfo()
 
 	end
 end
 
---[[---------------------------------------------------------
-	Name: Reset
-	Desc: Called just before entity is deleted
------------------------------------------------------------]]
+---
+-- Called just before entity is deleted. This is used to reset data you set before
+-- @param ply (<a href="https://wiki.garrysmod.com/page/Category:Player">Player</a>)
 function ITEM:Reset(ply)
 
 end
 
---[[---------------------------------------------------------
-	Name: Equip
-	Desc: A player or NPC has picked the item up
------------------------------------------------------------]]
+---
+-- A player or NPC has picked the @{ITEM} up
+-- @param ply (<a href="https://wiki.garrysmod.com/page/Category:Player">Player</a>)
 function ITEM:Equip(ply)
 
 end
 
---[[---------------------------------------------------------
-	Name: Bought
-	Desc: A player or NPC has bought the item
------------------------------------------------------------]]
+---
+-- A player or NPC has bought the @{ITEM}
+-- @param ply (<a href="https://wiki.garrysmod.com/page/Category:Player">Player</a>)
 function ITEM:Bought(ply)
 
 end
 
+---
 -- useable, but do not modify this!
+-- @treturn boolean whether this @{ITEM} is an equipment
 function ITEM:IsEquipment()
 	return WEPS.IsEquipment(self)
 end

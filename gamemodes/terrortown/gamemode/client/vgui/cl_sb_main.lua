@@ -1,5 +1,5 @@
----- VGUI panel version of the scoreboard, based on TEAM GARRY's sandbox mode
----- scoreboard.
+-- VGUI panel version of the scoreboard, based on TEAM GARRY's sandbox mode
+-- scoreboard.
 TTTScoreboard = TTTScoreboard or {}
 
 local surface = surface
@@ -139,7 +139,7 @@ sboard_sort = {
 	end
 }
 
------ PANEL START
+-- PANEL START
 function PANEL:Init()
 	self.hostdesc = vgui.Create("DLabel", self)
 	self.hostdesc:SetText(GetTranslation("sb_playing"))
@@ -474,8 +474,8 @@ end
 
 vgui.Register("TTTScoreboard", PANEL, "Panel")
 
----- PlayerFrame is defined in sandbox and is basically a little scrolling
----- hack. Just putting it here (slightly modified) because it's tiny.
+-- PlayerFrame is defined in sandbox and is basically a little scrolling
+-- hack. Just putting it here (slightly modified) because it's tiny.
 
 PANEL = {}
 

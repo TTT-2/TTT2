@@ -1,4 +1,4 @@
----- Help screen
+-- Help screen
 
 local GetTranslation = LANG.GetTranslation
 local GetPTranslation = LANG.GetParamTranslation
@@ -573,7 +573,7 @@ net.Receive("TTT2DefaultHUDResponse", function()
 end)
 
 
---- Tutorial
+-- Tutorial
 
 local imgpath = "vgui/ttt/help/tut0%d"
 local tutorial_pages = 6

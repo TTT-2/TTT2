@@ -1,4 +1,4 @@
---- Display of and interaction with ttt_traitor_button
+-- Display of and interaction with ttt_traitor_button
 local surface = surface
 local pairs = pairs
 local ipairs = ipairs

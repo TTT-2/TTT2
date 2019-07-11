@@ -1,4 +1,4 @@
----- Voicechat popup
+-- Voicechat popup
 
 DEFINE_BASECLASS("gamemode_base")
 
@@ -12,7 +12,7 @@ local timer = timer
 local IsValid = IsValid
 local hook = hook
 
---- voicechat stuff
+-- voicechat stuff
 VOICE = {}
 
 local VP_GREEN = Color(0, 200, 0)

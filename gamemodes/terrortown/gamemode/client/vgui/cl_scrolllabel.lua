@@ -1,4 +1,4 @@
---- why can't the default label scroll? welcome to gmod
+-- why can't the default label scroll? welcome to gmod
 
 PANEL = {}
 

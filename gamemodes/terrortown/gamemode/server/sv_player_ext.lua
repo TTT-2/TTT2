@@ -32,7 +32,7 @@ function plymeta:SetForceSpec(state)
 	self:SetNWBool("force_spec", state)
 end
 
---- Karma
+-- Karma
 
 -- The base/start karma is determined once per round and determines the player's
 -- damage penalty. It is networked and shown on clients.
@@ -57,7 +57,7 @@ function plymeta:InitKarma()
 	KARMA.InitPlayer(self)
 end
 
---- Equipment credits
+-- Equipment credits
 function plymeta:SetCredits(amt)
 	self.equipment_credits = amt
 
@@ -107,7 +107,7 @@ function plymeta:SendCredits()
 	net.Send(self)
 end
 
---- Equipment items
+-- Equipment items
 function plymeta:AddEquipmentItem(id)
 	if not self:HasEquipmentItem(id) then
 		self.equipmentItems = self.equipmentItems or {}
@@ -540,9 +540,9 @@ function plymeta:CanSelectRole(roleData, choice_count, role_count)
 	) and (choice_count <= role_count or not self:GetAvoidRole(roleData.index))
 end
 
--- ----------------------
+--
 -- Function taken from Trouble in Terrorist Town Commands (https://github.com/bender180/Trouble-in-Terrorist-Town-ULX-Commands)
--- ----------------------
+--
 local function FindCorpse(ply)
 	for _, ent in ipairs(ents.FindByClass("prop_ragdoll")) do
 		if ent.uqid == ply:UniqueID() and IsValid(ent) then

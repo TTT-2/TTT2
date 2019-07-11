@@ -21,9 +21,9 @@ local function includeFoldersFiles(pathBase, folder, filestbl)
 	end
 end
 
------------------------------------------
+--
 -- load HUD Elements
------------------------------------------
+--
 
 local pathBase = "terrortown/gamemode/shared/hud_elements/"
 

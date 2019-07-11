@@ -109,7 +109,7 @@ end
 
 vgui.Register("SimpleIcon", PANEL, "Panel")
 
----
+--
 
 PANEL = {}
 
@@ -190,7 +190,7 @@ end
 vgui.Register("SimpleIconAvatar", PANEL, "LayeredIcon")
 
 
---- Labelled icon
+-- Labelled icon
 
 PANEL = {}
 

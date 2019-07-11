@@ -1,8 +1,8 @@
----- English language strings
+-- English language strings
 
 local L = LANG.CreateLanguage("English")
 
---- General text used in various places
+-- General text used in various places
 L.traitor = "Traitor"
 L.detective = "Detective"
 L.innocent = "Innocent"
@@ -21,7 +21,7 @@ L.ttt2_desc_innocent = "Your goal is to survive the Traitors!"
 L.ttt2_desc_traitor = "Kill every other role with the help of the Traitorshop ([C])!"
 L.ttt2_desc_detective = "You are an Innocent! Help the Innocents to survive or to find the Traitors!"
 
---- Round status messages
+-- Round status messages
 L.round_minplayers = "Not enough players to start a new round..."
 L.round_voting = "Vote in progress, delaying new round by {num} seconds..."
 L.round_begintime = "A new round begins in {num} seconds. Prepare yourself."
@@ -42,16 +42,16 @@ L.limit_round = "Round limit reached. {mapname} will load soon."
 L.limit_time = "Time limit reached. {mapname} will load soon."
 L.limit_left = "{num} round(s) or {time} minutes remaining before the map changes to {mapname}."
 
---- Credit awards
+-- Credit awards
 L.credit_all = "Your team have been awarded {num} equipment credit(s) for your performance."
 
 L.credit_kill = "You have received {num} credit(s) for killing a {role}."
 
---- Karma
+-- Karma
 L.karma_dmg_full = "Your Karma is {amount}, so you deal full damage this round!"
 L.karma_dmg_other = "Your Karma is {amount}. As a result all damage you deal is reduced by {num}%"
 
---- Body identification messages
+-- Body identification messages
 L.body_found = "{finder} found the body of {victim}. {role}"
 L.body_found_team = "{finder} found the body of {victim}. {role} ({team})"
 
@@ -68,7 +68,7 @@ L.body_call_error = "You must confirm the death of this player before calling a 
 L.body_burning = "Ouch! This corpse is on fire!"
 L.body_credits = "You found {num} credit(s) on the body!"
 
---- Menus and windows
+-- Menus and windows
 L.close = "Close"
 L.cancel = "Cancel"
 
@@ -185,7 +185,7 @@ L.quick_corpse = "an unidentified body"
 L.quick_corpse_id = "{player}'s corpse"
 
 
---- Body search window
+-- Body search window
 L.search_title = "Body Search Results"
 L.search_info = "Information"
 L.search_confirm = "Confirm Death"
@@ -249,7 +249,7 @@ L.sb_tag_avoid = "AVOID"
 L.sb_tag_kill = "KILL"
 L.sb_tag_miss = "MISSING"
 
---- Help and settings menu (F1)
+-- Help and settings menu (F1)
 
 L.help_title = "Help and Settings"
 
@@ -298,7 +298,7 @@ L.set_title_lang = "Language settings"
 L.set_lang = "Select language:"
 
 
---- Weapons and equipment, HUD and messages
+-- Weapons and equipment, HUD and messages
 
 -- Equipment actions, like buying and dropping
 L.buy_no_stock = "This weapon is out of stock: you already bought it this round."
@@ -574,7 +574,7 @@ L.ammo_ar2altfire = "Flare ammo"
 L.ammo_gravity = "Poltergeist ammo"
 
 
---- HUD interface text
+-- HUD interface text
 
 -- Round status
 L.round_wait = "Waiting"
@@ -638,7 +638,7 @@ L.punch_malus = "Your good score increased your punch-o-meter limit by {num}!"
 L.spec_help = "Click to spectate players, or press {usekey} on a physics object to possess it."
 L.spec_help2 = "To leave the spectator mode you have to open the menu by pressing {helpkey}, goto 'gameplay' and toggle the specator mode."
 
---- Info popups shown when the round starts
+-- Info popups shown when the round starts
 
 -- These are spread over multiple lines, hence the square brackets instead of
 -- quotes. That's a Lua thing. Every line break (enter) will show up in-game.
@@ -667,7 +667,7 @@ These are your comrades:
 
 Press {menukey} to receive your special equipment!]]
 
---- Various other text
+-- Various other text
 L.name_kick = "A player was automatically kicked for changing their name during a round."
 
 L.idle_popup = [[You were idle for {num} seconds and were moved into Spectator-only mode as a result. While you are in this mode, you will not spawn when a new round starts.
@@ -682,7 +682,7 @@ L.idle_warning = "Warning: you appear to be idle/AFK, and will be made to specta
 L.spec_mode_warning = "You are in Spectator Mode and will not spawn when a round starts. To disable this mode, press F1, go to Settings and uncheck 'Spectate-only mode'."
 
 
---- Tips, shown at bottom of screen to spectators
+-- Tips, shown at bottom of screen to spectators
 
 -- Tips panel
 L.tips_panel_title = "Tips"
@@ -771,7 +771,7 @@ L.tip39 = "C4 that explodes due to a mistake in disarming it has a smaller explo
 L.tip40 = "If it says 'HASTE MODE' above the round timer, the round will at first be only a few minutes long, but with every death the available time increases (like capturing a point in TF2). This mode puts the pressure on the traitors to keep things moving."
 
 
---- Round report
+-- Round report
 
 L.report_title = "Round report"
 
@@ -868,7 +868,7 @@ L.ev_win_traitors = "The dastardly traitors won the round!"
 L.ev_win_innocents = "The lovable innocent terrorists won the round!"
 L.ev_win_time = "The traitors ran out of time and lost!"
 
---- Awards/highlights
+-- Awards/highlights
 
 L.aw_sui1_title = "Suicide Cult Leader"
 L.aw_sui1_text = "showed the other suiciders how to do it by being the first to go."
@@ -1066,28 +1066,28 @@ L.aw_tod2_title = "I Hate This Game"
 L.aw_tod2_text = "died right after the start of the round."
 
 
---- New and modified pieces of text are placed below this point, marked with the
---- version in which they were added, to make updating translations easier.
+-- New and modified pieces of text are placed below this point, marked with the
+-- version in which they were added, to make updating translations easier.
 
 
---- v23
+-- v23
 L.set_avoid = "Avoid being selected as {role}."
 L.set_avoid_tip = "Enable this to ask the server not to select you as {role} if possible."
 
---- v24
+-- v24
 L.drop_no_ammo = "Insufficient ammo in your weapon's clip to drop as an ammo box."
 
---- v31
+-- v31
 L.set_cross_brightness = "Crosshair brightness"
 L.set_cross_size = "Crosshair size"
 
---- 5-25-15
+-- 5-25-15
 L.hat_retrieve = "You picked up a Detective's hat."
 
---- 3-9-2017
+-- 3-9-2017
 L.sb_sortby = "Sort By:"
 
---- 2018-07-24
+-- 2018-07-24
 L.equip_tooltip_main = "Equipment menu"
 L.equip_tooltip_radar = "Radar control"
 L.equip_tooltip_disguise = "Disguise control"

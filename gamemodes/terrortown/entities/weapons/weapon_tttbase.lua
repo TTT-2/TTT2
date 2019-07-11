@@ -1,4 +1,8 @@
--- Custom weapon base, used to derive from CS one, still very similar
+---
+-- Custom weapon base, used to derive from CS one, still very similar.
+-- See <a href="https://wiki.garrysmod.com/page/Category:Weapon">Weapon</a>
+-- @module WEAPON
+
 local math = math
 local table = table
 local pairs = pairs
@@ -12,7 +16,7 @@ if SERVER then
 	AddCSLuaFile()
 end
 
----- TTT SPECIAL EQUIPMENT FIELDS
+--   TTT SPECIAL EQUIPMENT FIELDS
 
 -- This must be set to one of the WEAPON_ types in TTT weapons for weapon
 -- carrying limits to work properly. See /gamemode/shared.lua for all possible
@@ -35,10 +39,10 @@ if CLIENT then
 	-- Example data:
 	-- SWEP.EquipMenuData = {
 	--
-	---- Type tells players if it's a weapon or item
+	--   Type tells players if it's a weapon or item
 	--	 type = "Weapon",
 	--
-	---- Desc is the description in the menu. Needs manual linebreaks (via \n).
+	--   Desc is the description in the menu. Needs manual linebreaks (via \n).
 	--	 desc = "Text."
 	-- }
 
@@ -58,7 +62,7 @@ if CLIENT then
 	-- eg. /materials/vgui/ttt/mycoolserver/mygun.vmt
 end
 
----- MISC TTT-SPECIFIC BEHAVIOUR CONFIGURATION
+--   MISC TTT-SPECIFIC BEHAVIOUR CONFIGURATION
 
 -- ALL weapons in TTT must have weapon_tttbase as their SWEP.Base. It provides
 -- some functions that TTT expects, and you will get errors without them.
@@ -84,7 +88,7 @@ SWEP.IsSilent = false
 -- SWEPs do not need it for anything.
 --	SWEP.WeaponID = nil
 
----- YE OLDE SWEP STUFF
+--   YE OLDE SWEP STUFF
 
 if CLIENT then
 	SWEP.DrawCrosshair = false
@@ -513,8 +517,8 @@ function SWEP:GetIronsights()
 	return self:GetIronsightsPredicted()
 end
 
---- Dummy functions that will be replaced when SetupDataTables runs. These are
---- here for when that does not happen (due to e.g. stacking base classes)
+-- Dummy functions that will be replaced when SetupDataTables runs. These are
+-- here for when that does not happen (due to e.g. stacking base classes)
 function SWEP:GetIronsightsTime()
 	return - 1
 end

@@ -163,7 +163,7 @@ function KillsToPoints(score)
 	return sc
 end
 
----- Weapon AMMO_ enum stuff, used only in score.lua/cl_score.lua these days
+-- Weapon AMMO_ enum stuff, used only in score.lua/cl_score.lua these days
 
 -- Not actually ammo identifiers anymore, but still weapon identifiers. Used
 -- only in round report (score.lua) to save bandwidth because we can't use

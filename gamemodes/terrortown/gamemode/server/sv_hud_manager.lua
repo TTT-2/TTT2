@@ -13,9 +13,9 @@ util.AddNetworkString("TTT2UpdateHUDManagerRestrictedHUDsAttribute")
 local HUD_MANAGER_SQL_TABLE = "ttt2_hudmanager_model_data"
 local HUD_MANAGER_SQL_RESTRICTEDHUDS_TABLE = "ttt2_hudmanager_model_data_restrictedhuds"
 
---[[----------------------------------------------------------------------------
-	DB HELPER FUNCTIONS
---]]----------------------------------------------------------------------------
+--
+-- DB HELPER FUNCTIONS
+--
 
 local function DB_EnsureTableExists(tablename, tablecolumns)
 	if not tablename or not tablecolumns then
@@ -62,9 +62,9 @@ local function DB_GetStringTable(db_table)
 	return nil
 end
 
---[[----------------------------------------------------------------------------
-	SYNCING HELPER FUNCTIONS
---]]----------------------------------------------------------------------------
+--
+-- SYNCING HELPER FUNCTIONS
+--
 
 local function syncModelStringAttribute(key, ply)
 	net.Start("TTT2UpdateHUDManagerStringAttribute")
@@ -100,9 +100,9 @@ local function syncModelRestrictedHUDsAttribute(ply)
 	end
 end
 
---[[----------------------------------------------------------------------------
-	STORE/LOAD FUNCTIONS
---]]----------------------------------------------------------------------------
+--
+-- STORE/LOAD FUNCTIONS
+--
 
 function HUDManager.StoreData()
 	MsgN("[TTT2][HUDManager] Storing data in database...")
@@ -153,9 +153,9 @@ HUDManager.OnUpdateAttribute("restrictedHUDs", function(newval, oldval)
 	syncModelRestrictedHUDsAttribute()
 end)
 
---[[----------------------------------------------------------------------------
-	HUDManager commands / requests from clients
---]]----------------------------------------------------------------------------
+--
+-- HUDManager commands / requests from clients
+--
 
 net.Receive("TTT2RequestHUDManagerFullStateUpdate", function(_, ply)
 	MsgN("[TTT2][HUDManager] Player " .. ply:Nick() .. " requested full state update...")

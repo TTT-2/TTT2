@@ -1,4 +1,4 @@
----- Dummy ent that just spawns a random TTT ammo item and kills itself
+-- Dummy ent that just spawns a random TTT ammo item and kills itself
 
 local math = math
 local ents = ents

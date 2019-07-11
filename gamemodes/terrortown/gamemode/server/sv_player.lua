@@ -1,5 +1,5 @@
 -- TODO rework
----- Player spawning/dying
+-- Player spawning/dying
 
 local math = math
 local table = table
@@ -485,7 +485,7 @@ function GM:PlayerDisconnected(ply)
 	end
 end
 
----- Death affairs
+-- Death affairs
 local function CreateDeathEffect(ent, marked)
 	local pos = ent:GetPos() + Vector(0, 0, 20)
 	local jit = 35.0
@@ -677,7 +677,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
 		PlayDeathSound(ply)
 	end
 
-	--- Credits
+	-- Credits
 	CheckCreditAward(ply, attacker)
 
 	-- Check for TEAM killing ANOTHER TEAM to send credit rewards

@@ -1,4 +1,4 @@
----- Scoreboard player score row, based on sandbox version
+-- Scoreboard player score row, based on sandbox version
 
 ttt_include("vgui__cl_sb_info")
 

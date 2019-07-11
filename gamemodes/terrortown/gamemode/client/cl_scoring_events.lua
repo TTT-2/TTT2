@@ -1,6 +1,6 @@
----- Event display information for Event Log in the Round Report
+-- Event display information for Event Log in the Round Report
 
----- Usage:
+-- Usage:
 -- Declare a *unique* event identifier in a shared file, eg.
 -- EVENT_PANTS = 800
 --

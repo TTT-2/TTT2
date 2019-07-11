@@ -1,4 +1,4 @@
----- Trouble in Terrorist Town 2
+-- Trouble in Terrorist Town 2
 ttt_include("sh_init")
 
 ttt_include("sh_main")
@@ -248,7 +248,7 @@ local outdatedAddons = { -- addons that have newer versions in the WS
 
 CHANGED_EQUIPMENT = {}
 
----- Round mechanics
+-- Round mechanics
 function GM:Initialize()
 	MsgN("Trouble In Terrorist Town 2 gamemode initializing...")
 	ShowVersion()

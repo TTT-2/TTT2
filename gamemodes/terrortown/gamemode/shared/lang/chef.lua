@@ -1,4 +1,4 @@
----- Test/gimmick lang
+-- Test/gimmick lang
 -- Not an example of how you should translate something. See english.lua for that.
 
 local L = LANG.CreateLanguage("Swedish chef")

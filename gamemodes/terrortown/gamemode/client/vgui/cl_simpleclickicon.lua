@@ -109,7 +109,7 @@ end
 
 vgui.Register("SimpleClickIcon", PANEL, "Panel")
 
----
+--
 
 -- reset
 PANEL = {}
@@ -211,7 +211,7 @@ end
 
 vgui.Register("SimpleClickIconAvatar", PANEL, "LayeredClickIcon")
 
---- Labelled icon
+-- Labelled icon
 PANEL = {}
 
 AccessorFunc(PANEL, "IconText", "IconText")

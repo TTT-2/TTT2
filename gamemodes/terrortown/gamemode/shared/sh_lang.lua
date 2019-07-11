@@ -1,4 +1,4 @@
----- Shared language stuff
+-- Shared language stuff
 
 -- tbl is first created here on both server and client
 -- could make it a module but meh

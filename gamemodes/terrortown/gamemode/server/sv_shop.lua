@@ -13,7 +13,7 @@ local function HasPendingOrder(ply)
 end
 
 function GM:TTTCanOrderEquipment(ply, id)
-	--- return true to allow buying of an equipment item, false to disallow
+	-- return true to allow buying of an equipment item, false to disallow
 	return true
 end
 

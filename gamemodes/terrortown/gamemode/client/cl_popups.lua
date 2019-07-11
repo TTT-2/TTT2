@@ -6,7 +6,7 @@ local ipairs = ipairs
 local timer = timer
 local CreateConVar = CreateConVar
 
----- Round start
+-- Round start
 
 local function GetTextForPlayer(ply)
 	local menukey = Key("+menu_context", "C")
@@ -104,7 +104,7 @@ local function RoundStartPopup()
 end
 concommand.Add("ttt_cl_startpopup", RoundStartPopup)
 
---- Idle message
+-- Idle message
 local function IdlePopup()
 	local w, h = 300, 180
 

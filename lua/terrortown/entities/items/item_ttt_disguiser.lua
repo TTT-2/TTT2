@@ -1,3 +1,9 @@
+---
+-- disguiser @{ITEM}
+-- @module DISGUISE
+-- @see ITEM
+DISGUISE = CLIENT and {}
+
 if SERVER then
 	AddCSLuaFile()
 end
@@ -13,10 +19,12 @@ ITEM.CanBuy = {ROLE_TRAITOR}
 ITEM.oldId = EQUIP_DISGUISE or 4
 
 if CLIENT then
-	DISGUISE = {}
-
 	local trans
 
+	---
+	-- Creates the Disguiser menu on the parent panel
+	-- @param parent (<a href="https://wiki.garrysmod.com/page/Category:Panel">Panel</a>) parent panel
+	-- @return (<a href="https://wiki.garrysmod.com/page/Category:Panel">Panel</a>) created disguiser menu panel
 	function DISGUISE.CreateMenu(parent)
 		trans = trans or LANG.GetTranslation
 
@@ -50,6 +58,9 @@ if CLIENT then
 		return dform
 	end
 
+	---
+	-- Draws the disguise info on screen for the disguised <a href="https://wiki.garrysmod.com/page/Category:Player">Player</a>
+	-- @param client (<a href="https://wiki.garrysmod.com/page/Category:Player">Player</a>) the client
 	function DISGUISE.Draw(client)
 		if not client or not client:IsActive() or not client:GetNWBool("disguised", false) then return end
 

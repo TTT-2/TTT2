@@ -1,6 +1,6 @@
---[[------------
-	HUD EDITOR
---]]------------
+--
+-- HUD EDITOR
+--
 if not HUDEditor then
 	HUDEditor = {}
 	HUDEditor.IsEditing = false

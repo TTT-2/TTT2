@@ -1,4 +1,4 @@
---- Traitor radio controls
+-- Traitor radio controls
 
 TRADIO = {}
 

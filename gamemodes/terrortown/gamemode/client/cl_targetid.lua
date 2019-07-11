@@ -39,7 +39,7 @@ function GM:AddClassHint(cls, hint)
 	ClassHint[cls] = table.Copy(hint)
 end
 
----- "T" indicator above traitors
+-- "T" indicator above traitors
 indicator_col = Color(255, 255, 255, 130)
 
 local propspec_outline = Material("models/props_combine/portalball001_sheet")
@@ -112,7 +112,7 @@ function GM:PostDrawTranslucentRenderables()
 	end
 end
 
----- Spectator labels
+-- Spectator labels
 local function DrawPropSpecLabels(client)
 	if not client:IsSpec() and GetRoundState() ~= ROUND_POST then return end
 
@@ -152,7 +152,7 @@ local function DrawPropSpecLabels(client)
 	end
 end
 
----- Crosshair affairs
+-- Crosshair affairs
 
 surface.CreateFont("TargetIDSmall2", {font = "TargetID", size = 16, weight = 1000})
 

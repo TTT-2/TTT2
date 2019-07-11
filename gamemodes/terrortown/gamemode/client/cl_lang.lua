@@ -1,4 +1,4 @@
----- Clientside language stuff
+-- Clientside language stuff
 
 -- Need to build custom tables of strings. Can't use language.Add as there is no
 -- way to access the translated string in Lua. Identifiers only get translated
@@ -291,7 +291,7 @@ end
 
 
 
---- Message style declarations
+-- Message style declarations
 
 -- Rather than having a big list of LANG.SetStyle calls, we specify it the other
 -- way around here and churn through it in code. This is convenient because

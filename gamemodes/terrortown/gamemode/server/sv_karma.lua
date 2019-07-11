@@ -1,4 +1,4 @@
----- Karma system stuff
+-- Karma system stuff
 
 KARMA = {}
 

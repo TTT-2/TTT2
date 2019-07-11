@@ -432,7 +432,7 @@ end
 
 derma.DefineControl("DRoleImage", "A simple role image", PANEL, "DPanel")
 
-----------
+--
 local matHover = Material("vgui/spawnmenu/hover")
 
 PANEL = {}

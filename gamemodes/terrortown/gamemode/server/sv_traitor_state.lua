@@ -1,4 +1,4 @@
----- Role state communication
+-- Role state communication
 TTT2NETTABLE = {}
 
 local net = net
@@ -229,7 +229,7 @@ function SendRoleReset(ply_or_rf)
 	end
 end
 
----- Console commands
+-- Console commands
 local function ttt_request_rolelist(ply)
 	-- Client requested a state update. Note that the client can only use this
 	-- information after entities have been initialized (e.g. in InitPostEntity).

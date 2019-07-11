@@ -4,7 +4,7 @@ util.AddNetworkString("TTT2CleanupInventory")
 util.AddNetworkString("TTT2AddWeaponToInventory")
 util.AddNetworkString("TTT2RemoveWeaponFromInventory")
 
----- Weapon system, pickup limits, etc
+-- Weapon system, pickup limits, etc
 local ipairs = ipairs
 local IsValid = IsValid
 local table = table
@@ -375,7 +375,7 @@ function GM:UpdatePlayerLoadouts()
 	end
 end
 
----- Weapon switching
+-- Weapon switching
 local function ForceWeaponSwitch(ply, cmd, args)
 	if not ply:IsPlayer() then return end
 
@@ -398,7 +398,7 @@ local function ForceWeaponSwitch(ply, cmd, args)
 end
 concommand.Add("wepswitch", ForceWeaponSwitch)
 
----- Weapon dropping
+-- Weapon dropping
 
 function WEPS.DropNotifiedWeapon(ply, wep, death_drop)
 	if IsValid(ply) and IsValid(wep) then

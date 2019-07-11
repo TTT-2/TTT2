@@ -1,4 +1,4 @@
----- Tips panel shown to specs
+-- Tips panel shown to specs
 local math = math
 local table = table
 local pairs = pairs
@@ -14,7 +14,7 @@ local GetPTranslation = LANG.GetParamTranslation
 
 TIPS = {}
 
---- Tip cycling button
+-- Tip cycling button
 PANEL = {}
 PANEL.Colors = {
 	default = COLOR_LGRAY,
@@ -42,7 +42,7 @@ end
 derma.DefineControl("TipsButton", "Tip cycling button", PANEL, "DButton")
 
 
---- Main tip panel
+-- Main tip panel
 local tips_bg = Color(0, 0, 0, 200)
 local tip_ids = {}
 
@@ -133,7 +133,7 @@ end
 
 function PANEL:NextTip(auto)
 	if not self.TipIndex then return end
-	
+
 	local idx = self.TipIndex + 1
 
 	if idx > #tip_ids then
@@ -147,7 +147,7 @@ end
 
 function PANEL:PrevTip(auto)
 	if not self.TipIndex then return end
-	
+
 	local idx = self.TipIndex - 1
 
 	if idx < 1 then
@@ -247,7 +247,7 @@ end
 
 vgui.Register("TTTTips", PANEL, "Panel")
 
---- Creation
+-- Creation
 
 local tips_panel
 

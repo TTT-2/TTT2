@@ -1,8 +1,8 @@
----- German language strings
+-- German language strings
 
 local L = LANG.CreateLanguage("Deutsch")
 
---- General text used in various places
+-- General text used in various places
 L.traitor = "Verräter"
 L.detective = "Detektiv"
 L.innocent = "Unschuldiger"
@@ -21,7 +21,7 @@ L.ttt2_desc_innocent = "Dein Ziel ist es zu überleben bzw. alle Verräter zu t�
 L.ttt2_desc_traitor = "Töte jede andere Rolle mithilfe des Traitorshops ([C])!"
 L.ttt2_desc_detective = "Du bist ein Unschuldiger! Helfe den anderen Unschuldigen zu überleben oder die Verräter zu finden!"
 
---- Round status messages
+-- Round status messages
 L.round_minplayers = "Zu wenig Spieler, um eine neue Runde zu beginnen..."
 L.round_voting = "Es läuft eine Umfrage, verzögere neue Runde um {num} Sekunde(n)..."
 L.round_begintime = "Eine neue Runde beginnt in {num} Sekunde(n). Bereite dich vor."
@@ -42,16 +42,16 @@ L.limit_round = "Rundenlimit erreicht. {mapname} wird bald geladen."
 L.limit_time = "Zeitlimit erreicht. {mapname} wird bald geladen."
 L.limit_left = "{num} Runde(n) oder {time} Minute(n) verbleibend bis die Map zu {mapname} gewechselt wird."
 
---- Credit awards
+-- Credit awards
 L.credit_all = "Deinem Team wurde(n) {num} Ausrüstungs-Credit(s) für eure Leistung gegeben."
 
 L.credit_kill = "Dir wurde(n) {num} Credit(s) gegeben, da du einen {role} getötet hast."
 
---- Karma
+-- Karma
 L.karma_dmg_full = "Dein Karma ist {amount}, also verteilst du diese Runde vollen Schaden!"
 L.karma_dmg_other = "Dein Karma ist {amount}. Daher ist dein Schaden um {num}% reduziert!"
 
---- Body identification messages
+-- Body identification messages
 L.body_found = "{finder} fand den Körper von {victim}. {role}"
 L.body_found_team = "{finder} fand den Körper von {victim}. {role} ({team})"
 
@@ -69,7 +69,7 @@ L.body_call_error = "Du musst erst den Tod dieses Spielers bestätigen, bevor du
 L.body_burning = "Autsch! Diese Leiche brennt lichterloh!"
 L.body_credits = "Du hast {num} Credit(s) an diesem Körper gefunden!"
 
---- Menus and windows
+-- Menus and windows
 L.close = "Schließen"
 L.cancel = "Abbrechen"
 
@@ -185,7 +185,7 @@ L.quick_corpse = "ein(en) unidentifizierten/r Körper"
 L.quick_corpse_id = "{player}'s Leiche"
 
 
---- Body search window
+-- Body search window
 L.search_title = "Ergebnisse der Leichenuntersuchung"
 L.search_info = "Information"
 L.search_confirm = "Tod bestätigen"
@@ -247,7 +247,7 @@ L.sb_tag_avoid = "VERMEIDEN"
 L.sb_tag_kill = "TÖTEN"
 L.sb_tag_miss = "VERMISST"
 
---- Help and settings menu (F1)
+-- Help and settings menu (F1)
 
 L.help_title = "Hilfe und Einstellungen"
 
@@ -296,7 +296,7 @@ L.set_title_lang = "Spracheinstellungen"
 L.set_lang = "Select language:"
 
 
---- Weapons and equipment, HUD and messages
+-- Weapons and equipment, HUD and messages
 
 -- Equipment actions, like buying and dropping
 L.buy_no_stock = "Diese Waffe ist nicht mehr vorrätig: Du hast sie bereits gekauft."
@@ -564,7 +564,7 @@ L.ammo_ar2altfire = "Leucht Munition"
 L.ammo_gravity = "Poltergeist Munition"
 
 
---- HUD interface text
+-- HUD interface text
 
 -- Round status
 L.round_wait = "Warte..."
@@ -628,7 +628,7 @@ L.punch_malus = "Deine gute Punktzahl hat dein Punch-O-Meter Limit um {num} erh�
 L.spec_help = "Klicke, um Spielern zu zuschauen, oder drücke {usekey} auf ein physikalisches Objekt um die Kontrolle zu erhalten."
 L.spec_help2 = "Zum Verlassen des Zuschauer-Modus öffne das Menü mit {helpkey}, navigiere in 'Gameplay' und schalte den Zuschauermodus um."
 
---- Info popups shown when the round starts
+-- Info popups shown when the round starts
 
 -- These are spread over multiple lines, hence the square brackets instead of
 -- quotes. That's a Lua thing. Every line break (enter) will show up in-game.
@@ -654,7 +654,7 @@ Das sind deine Kollegen:
 
 Drücke {menukey} um den Verräter Shop zu öffnen!]]
 
---- Various other text
+-- Various other text
 L.name_kick = "Ein Spieler wurde automatisch gekickt, weil er seinen Namen während einer laufenden Runde geändert hat."
 
 L.idle_popup = [[Du warst untätig für {num} Sekunden und wurdest deshalb in den Zuschauer-Modus gesetzt. Während du in diesem Modus bist, kannst du nicht an einer neuen Runde teilnehmen.
@@ -669,7 +669,7 @@ L.idle_warning = "Warnung: Du scheinst AFK zu sein und wirst zum Zuschauer, auß
 L.spec_mode_warning = "Du bist im Zuschauermodus und wirst nicht spielen, wenn eine Runde beginnt. Um diesen Modus zu verlassen, drücke F1, gehe in die Einstellungen und nimm den Haken bei ‘Nur-Zuschauer-Modus’ raus."
 
 
---- Tips, shown at bottom of screen to spectators
+-- Tips, shown at bottom of screen to spectators
 
 -- Tips panel
 L.tips_panel_title = "Tipps"
@@ -758,7 +758,7 @@ L.tip39 = "C4, das beim Entschärfen ungewollt gezündet wird, hat eine geringer
 L.tip40 = "Wenn 'HAST MODUS' über der Rundenzeit zu lesen ist, dauert die Runde zunächst nur wenige Minuten länger, wird jedoch mit jedem Tod weiter und weiter verlängert. Dieser Modus übt Druck auf die Verräter aus und sorgt dafür, dass sie sich nicht alle Zeit der Welt nehmen können."
 
 
---- Round report
+-- Round report
 
 L.report_title = "Rundenbericht"
 
@@ -855,7 +855,7 @@ L.ev_win_traitors = "Die heimtückischen Verräter haben die Runde gewonnen!"
 L.ev_win_innocents = "Die liebenswerten unschuldigen Terroristen haben die Runde gewonnen!"
 L.ev_win_time = "Den Verrätern ist die Zeit ausgegangen und sie verloren!"
 
---- Awards/highlights
+-- Awards/highlights
 
 L.aw_sui1_title = "Leiter des Selbstmord-Kultes"
 L.aw_sui1_text = "zeigte den anderen Selbstmördern, wie sie es zu tun haben, indem er der erste war."
@@ -1053,28 +1053,28 @@ L.aw_tod2_title = "Ich hasse dieses Spiel"
 L.aw_tod2_text = "starb direkt am Anfang der Runde."
 
 
---- New and modified pieces of text are placed below this point, marked with the
---- version in which they were added, to make updating translations easier.
+-- New and modified pieces of text are placed below this point, marked with the
+-- version in which they were added, to make updating translations easier.
 
 
---- v23
+-- v23
 L.set_avoid = "Nicht als {role} ausgewählt werden."
 L.set_avoid_tip = "Aktiviere diese Funktion, damit du nicht als {role} ausgewählt wirst, soweit dies möglich ist."
 
---- v24
+-- v24
 L.drop_no_ammo = "Du hast zu wenig Munition im Magazin, um eine Munitionskiste fallenzulassen."
 
---- v31
+-- v31
 L.set_cross_brightness = "Fadenkreuz Helligkeit"
 L.set_cross_size = "Fadenkreuz Größe"
 
 -- 5-25-15
 L.hat_retrieve = "Du hast den Hut eines Detektivs aufgehoben."
 
---- 3-9-2017
+-- 3-9-2017
 L.sb_sortby = "Sortiere nach:"
 
---- 2018-07-24
+-- 2018-07-24
 L.equip_tooltip_main = "Equipment menu"
 L.equip_tooltip_radar = "Radar control"
 L.equip_tooltip_disguise = "Disguise control"

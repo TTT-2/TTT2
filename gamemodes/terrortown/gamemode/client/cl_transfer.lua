@@ -1,4 +1,4 @@
---- Credit transfer tab for equipment menu
+-- Credit transfer tab for equipment menu
 local GetTranslation = LANG.GetTranslation
 local player = player
 local ipairs = ipairs

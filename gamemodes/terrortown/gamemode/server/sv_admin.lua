@@ -1,4 +1,4 @@
---- Admin commands
+-- Admin commands
 
 local math = math
 local table = table
