@@ -60,6 +60,10 @@
 <h1>Module <code>bind</code></h1>
 <p>Bind module.</p>
 <p></p>
+    <h3>Info:</h3>
+    <ul>
+        <li><strong>Author</strong>: saibotk</li>
+    </ul>
 
 
 <h2><a href="#Functions">Functions</a></h2>
@@ -95,7 +99,7 @@
 	<td class="summary">Returns a table of all the bindings</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#Register">Register (name, onPressedFunc, onReleasedFunc[, dontShowOrCategory][, settingsLabel][, defaultKey])</a></td>
+	<td class="name" nowrap><a href="#Register">Register (name, onPressedFunc, onReleasedFunc[, dontShowOrCategory[, settingsLabel[, defaultKey]]])</a></td>
 	<td class="summary">Register a function to run when the button for a specific binding is pressed.</td>
 	</tr>
 	<tr>
@@ -132,15 +136,15 @@
     <ul>
         <li><span class="parameter">btn</span>
             <span class="types"><span class="type">number</span></span>
-        '
+
         </li>
         <li><span class="parameter">name</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
-        '
+
         </li>
         <li><span class="parameter">persistent</span>
-            <span class="types"><span class="type">bool</span></span>
-        '
+            <span class="types"><span class="type">boolean</span></span>
+
         </li>
     </ul>
 
@@ -161,11 +165,11 @@
     <ul>
         <li><span class="parameter">name</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
-        '
+
         </li>
         <li><span class="parameter">label</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
-        '
+
         </li>
         <li><span class="parameter">category</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
@@ -192,7 +196,7 @@
     <ul>
         <li><span class="parameter">name</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
-        '
+
         </li>
     </ul>
 
@@ -220,14 +224,14 @@
     <ul>
         <li><span class="parameter">name</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
-        '
+
         </li>
     </ul>
 
     <h3>Returns:</h3>
     <ol>
 
-           <span class="types"><span class="type">tab</span></span>
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
 
     </ol>
 
@@ -247,7 +251,7 @@
     <h3>Returns:</h3>
     <ol>
 
-           <span class="types"><span class="type">tab</span></span>
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
 
     </ol>
 
@@ -267,7 +271,7 @@
     <h3>Returns:</h3>
     <ol>
 
-           <span class="types"><span class="type">tab</span></span>
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
 
     </ol>
 
@@ -287,7 +291,7 @@
     <h3>Returns:</h3>
     <ol>
 
-           <span class="types"><span class="type">tab</span></span>
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
 
     </ol>
 
@@ -297,7 +301,7 @@
 </dd>
     <dt>
     <a name = "Register"></a>
-    <strong>Register (name, onPressedFunc, onReleasedFunc[, dontShowOrCategory][, settingsLabel][, defaultKey])</strong>
+    <strong>Register (name, onPressedFunc, onReleasedFunc[, dontShowOrCategory[, settingsLabel[, defaultKey]]])</strong>
     </dt>
     <dd>
     Register a function to run when the button for a specific binding is pressed.  This will also add the binding to the
@@ -311,29 +315,29 @@
     <ul>
         <li><span class="parameter">name</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
-        '
+
         </li>
         <li><span class="parameter">onPressedFunc</span>
-            <span class="types"><span class="type">func</span></span>
-        '
+            <span class="types"><span class="type">function</span></span>
+
         </li>
         <li><span class="parameter">onReleasedFunc</span>
-            <span class="types"><span class="type">func</span></span>
-        '
+            <span class="types"><span class="type">function</span></span>
+
         </li>
         <li><span class="parameter">dontShowOrCategory</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a> or <span class="type">bool</span></span>
-        '
+            <span class="types"><span class="type">nil</span>, <a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a> or <span class="type">boolean</span></span>
+
          (<em>optional</em>)
         </li>
         <li><span class="parameter">settingsLabel</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
-        '
+
          (<em>optional</em>)
         </li>
         <li><span class="parameter">defaultKey</span>
             <span class="types"><span class="type">number</span></span>
-        '
+
          (<em>optional</em>)
         </li>
     </ul>
@@ -355,11 +359,11 @@
     <ul>
         <li><span class="parameter">btn</span>
             <span class="types"><span class="type">number</span></span>
-        '
+
         </li>
         <li><span class="parameter">name</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
-        '
+
         </li>
     </ul>
 
@@ -380,7 +384,7 @@
     <ul>
         <li><span class="parameter">name</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
-        '
+
         </li>
     </ul>
 
@@ -402,15 +406,15 @@
     <ul>
         <li><span class="parameter">btn</span>
             <span class="types"><span class="type">number</span></span>
-        '
+
         </li>
         <li><span class="parameter">name</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
-        '
+
         </li>
         <li><span class="parameter">persistent</span>
-            <span class="types"><span class="type">bool</span></span>
-        '
+            <span class="types"><span class="type">boolean</span></span>
+
         </li>
     </ul>
 
@@ -426,7 +430,7 @@
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
-<i style="float:right;">Last updated 2019-07-11 14:00:13 </i>
+<i style="float:right;">Last updated 2019-07-11 14:45:25 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

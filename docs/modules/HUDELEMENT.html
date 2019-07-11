@@ -79,6 +79,10 @@
  to this the function.</td>
 	</tr>
 	<tr>
+	<td class="name" nowrap><a href="#AspectRatioIsLocked">AspectRatioIsLocked ()</a></td>
+	<td class="summary">Checks whether an hud element's aspect ratio is locked.</td>
+	</tr>
+	<tr>
 	<td class="name" nowrap><a href="#Draw">Draw ()</a></td>
 	<td class="summary">This function is called when an element should draw its content.</td>
 	</tr>
@@ -86,6 +90,10 @@
 	<td class="name" nowrap><a href="#GetBasePos">GetBasePos ()</a></td>
 	<td class="summary">This function returns your basepos, the value which is used
  to move the element.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#GetBorderParams">GetBorderParams ()</a></td>
+	<td class="summary">Get the position and the size of an hud element</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#GetChildren">GetChildren ()</a></td>
@@ -102,8 +110,7 @@
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#GetParentRelation">GetParentRelation ()</a></td>
-	<td class="summary">This function returns the current parent together with its type
- !!! INTERNAL FUNCTION !!!</td>
+	<td class="summary">This function returns the current parent together with its type.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#GetPos">GetPos ()</a></td>
@@ -119,6 +126,10 @@
 	<td class="summary">This function returns your size.</td>
 	</tr>
 	<tr>
+	<td class="name" nowrap><a href="#InheritParentBorder">InheritParentBorder ()</a></td>
+	<td class="summary">Checks whether an hud element's borders are inherited by it's parent.</td>
+	</tr>
+	<tr>
 	<td class="name" nowrap><a href="#Initialize">Initialize ()</a></td>
 	<td class="summary">This function will be called each time the HUD is loaded eg.</td>
 	</tr>
@@ -127,8 +138,20 @@
 	<td class="summary">This function gives you information about whether it has a parent or not</td>
 	</tr>
 	<tr>
+	<td class="name" nowrap><a href="#IsInPos">IsInPos (x, y)</a></td>
+	<td class="summary">Checks whether an hud element is in position (same as <a href="../modules/HUDELEMENT.html#IsInRange">IsInRange</a>, but without any padding)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#IsInRange">IsInRange (x, y, range)</a></td>
+	<td class="summary">Checks whether an hud element is in range</td>
+	</tr>
+	<tr>
 	<td class="name" nowrap><a href="#IsParent">IsParent ()</a></td>
 	<td class="summary">This function gives you information about whether it has child elements or not</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#IsResizable">IsResizable ()</a></td>
+	<td class="summary">Checks whether an hud element is resizeable.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#LoadData">LoadData ()</a></td>
@@ -147,7 +170,7 @@
 	<tr>
 	<td class="name" nowrap><a href="#Reset">Reset ()</a></td>
 	<td class="summary">This function uses <a href="../modules/HUDELEMENT.html#GetDefaults">GetDefaults</a> to reset an element to its
-  original position.</td>
+ original position.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#SaveData">SaveData ()</a></td>
@@ -204,7 +227,7 @@
     <ul>
         <li><span class="parameter">elementid</span>
             <span class="types"><span class="type">number</span></span>
-        '
+
         </li>
     </ul>
 
@@ -227,7 +250,7 @@
     <ul>
         <li><span class="parameter">funcName</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
-        '
+
         </li>
         <li><span class="parameter">...</span>
          parameters to call the given function with
@@ -235,6 +258,27 @@
         </li>
     </ul>
 
+
+
+
+
+</dd>
+    <dt>
+    <a name = "AspectRatioIsLocked"></a>
+    <strong>AspectRatioIsLocked ()</strong>
+    </dt>
+    <dd>
+    Checks whether an hud element's aspect ratio is locked.
+ Override it to change the behaviour.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+
+    </ol>
 
 
 
@@ -271,6 +315,29 @@
 
            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
         with x and y value
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "GetBorderParams"></a>
+    <strong>GetBorderParams ()</strong>
+    </dt>
+    <dd>
+    Get the position and the size of an hud element
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+        position (<code>{x (<span class="type">number</span>), y (<span class="type">number</span>)}</code>)</li>
+        <li>
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+        size (<code>{w (<span class="type">number</span>), h (<span class="type">number</span>)}</code>)</li>
     </ol>
 
 
@@ -346,8 +413,8 @@
     <strong>GetParentRelation ()</strong>
     </dt>
     <dd>
-    This function returns the current parent together with its type
- !!! INTERNAL FUNCTION !!!
+    This function returns the current parent together with its type.
+ <p><strong>!!! INTERNAL FUNCTION !!!</strong></p>
 
 
 
@@ -357,7 +424,7 @@
            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
         </li>
         <li>
-           <span class="types"><span class="type">bool</span></span>
+           <span class="types"><span class="type">boolean</span></span>
         </li>
     </ol>
 
@@ -427,6 +494,27 @@
 
 </dd>
     <dt>
+    <a name = "InheritParentBorder"></a>
+    <strong>InheritParentBorder ()</strong>
+    </dt>
+    <dd>
+    Checks whether an hud element's borders are inherited by it's parent.
+ Override it to change the resizing behaviour.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
     <a name = "Initialize"></a>
     <strong>Initialize ()</strong>
     </dt>
@@ -459,7 +547,73 @@
     <h3>Returns:</h3>
     <ol>
 
-           <span class="types"><span class="type">bool</span></span>
+           <span class="types"><span class="type">boolean</span></span>
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "IsInPos"></a>
+    <strong>IsInPos (x, y)</strong>
+    </dt>
+    <dd>
+    Checks whether an hud element is in position (same as <a href="../modules/HUDELEMENT.html#IsInRange">IsInRange</a>, but without any padding)
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">x</span>
+            <span class="types"><span class="type">number</span></span>
+
+        </li>
+        <li><span class="parameter">y</span>
+            <span class="types"><span class="type">number</span></span>
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "IsInRange"></a>
+    <strong>IsInRange (x, y, range)</strong>
+    </dt>
+    <dd>
+    Checks whether an hud element is in range
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">x</span>
+            <span class="types"><span class="type">number</span></span>
+
+        </li>
+        <li><span class="parameter">y</span>
+            <span class="types"><span class="type">number</span></span>
+
+        </li>
+        <li><span class="parameter">range</span>
+            <span class="types"><span class="type">number</span></span>
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
 
     </ol>
 
@@ -479,7 +633,28 @@
     <h3>Returns:</h3>
     <ol>
 
-           <span class="types"><span class="type">bool</span></span>
+           <span class="types"><span class="type">boolean</span></span>
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "IsResizable"></a>
+    <strong>IsResizable ()</strong>
+    </dt>
+    <dd>
+    Checks whether an hud element is resizeable.
+ Override it to change the resizing behaviour.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
 
     </ol>
 
@@ -542,7 +717,7 @@
     </dt>
     <dd>
     This function uses <a href="../modules/HUDELEMENT.html#GetDefaults">GetDefaults</a> to reset an element to its
-  original position.
+ original position.
 
 
 
@@ -579,11 +754,11 @@
     <ul>
         <li><span class="parameter">x</span>
             <span class="types"><span class="type">number</span></span>
-        '
+
         </li>
         <li><span class="parameter">y</span>
             <span class="types"><span class="type">number</span></span>
-        '
+
         </li>
     </ul>
 
@@ -606,11 +781,11 @@
     <ul>
         <li><span class="parameter">w</span>
             <span class="types"><span class="type">number</span></span>
-        '
+
         </li>
         <li><span class="parameter">h</span>
             <span class="types"><span class="type">number</span></span>
-        '
+
         </li>
     </ul>
 
@@ -626,18 +801,18 @@
     <dd>
     This function is used internally and only has the full effect if
  called by the hudelements.RegisterChildRelation() function.
- !!! INTERNAL FUNCTION !!!
+ <p><strong>!!! INTERNAL FUNCTION !!!</strong></p>
 
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">parent</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
-        '
+
         </li>
         <li><span class="parameter">is_type</span>
-            <span class="types"><span class="type">bool</span></span>
-        '
+            <span class="types"><span class="type">boolean</span></span>
+
         </li>
     </ul>
 
@@ -659,11 +834,11 @@
     <ul>
         <li><span class="parameter">x</span>
             <span class="types"><span class="type">number</span></span>
-        '
+
         </li>
         <li><span class="parameter">y</span>
             <span class="types"><span class="type">number</span></span>
-        '
+
         </li>
     </ul>
 
@@ -687,11 +862,11 @@
     <ul>
         <li><span class="parameter">w</span>
             <span class="types"><span class="type">number</span></span>
-        '
+
         </li>
         <li><span class="parameter">h</span>
             <span class="types"><span class="type">number</span></span>
-        '
+
         </li>
     </ul>
 
@@ -713,7 +888,7 @@
     <h3>Returns:</h3>
     <ol>
 
-           <span class="types"><span class="type">bool</span></span>
+           <span class="types"><span class="type">boolean</span></span>
 
     </ol>
 
@@ -728,7 +903,7 @@
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
-<i style="float:right;">Last updated 2019-07-11 14:00:13 </i>
+<i style="float:right;">Last updated 2019-07-11 14:45:25 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

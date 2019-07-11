@@ -50,7 +50,7 @@ HUDELEMENT.edit_live_data = {
 --- This function will try to call the function given with funcName on
 -- all children of this hud element, while also passing extra parameters
 -- to this the function.
--- @tparam string 'funcName'
+-- @str funcName
 -- @param[opt] ... parameters to call the given function with
 function HUDELEMENT:ApplyToChildren(funcName, ...)
 	if not funcName then return end
@@ -114,19 +114,28 @@ end
 
 --- This function is called to decide whether or not an element should be drawn.
 -- Override it to let your element be drawn only in specific situations.
--- @treturn bool
+-- @treturn boolean
 function HUDELEMENT:ShouldDraw()
 	return true
 end
 
+--- Checks whether an hud element is resizeable.
+-- Override it to change the resizing behaviour.
+-- @treturn boolean
 function HUDELEMENT:IsResizable()
 	return true, true
 end
 
+--- Checks whether an hud element's aspect ratio is locked.
+-- Override it to change the behaviour.
+-- @treturn boolean
 function HUDELEMENT:AspectRatioIsLocked()
 	return false
 end
 
+--- Checks whether an hud element's borders are inherited by it's parent.
+-- Override it to change the resizing behaviour.
+-- @treturn boolean
 function HUDELEMENT:InheritParentBorder()
 	return false
 end
@@ -148,8 +157,8 @@ end
 --- This function sets your basepos, the value which is used
 -- to move the element. It automatically updates the position as
 -- well with @{SetPos}
--- @tparam number 'x'
--- @tparam number 'y'
+-- @int x
+-- @int y
 function HUDELEMENT:SetBasePos(x, y)
 	local pos_difference_x = self.pos.x - self.basepos.x
 	local pos_difference_y = self.pos.y - self.basepos.y
@@ -169,8 +178,8 @@ end
 
 --- This function sets your pos, the value which is used
 -- internally to define the upper left corner of the element
--- @tparam number 'x'
--- @tparam number 'y'
+-- @int x
+-- @int y
 function HUDELEMENT:SetPos(x, y)
 	self.pos.x = x
 	self.pos.y = y
@@ -187,8 +196,8 @@ end
 --- This function sets your minsize, the value which is used
 -- as a minimum when resizing the element.
 -- Note: Setting the size with @{SetSize} allows smaller values.
--- @tparam number 'w'
--- @tparam number 'h'
+-- @int w
+-- @int h
 function HUDELEMENT:SetMinSize(w, h)
 	self.minsize.w = w
 	self.minsize.h = h
@@ -204,8 +213,8 @@ end
 -- Note: When passing negative values it will call @{SetPos} to
 -- shift your element by the value. This results in i.e. in a top growing element
 -- instead of the default bottom growing when setting -h instead of h.
--- @tparam number 'w'
--- @tparam number 'h'
+-- @int w
+-- @int h
 function HUDELEMENT:SetSize(w, h)
 	w = math.Round(w)
 	h = math.Round(h)
@@ -234,19 +243,19 @@ function HUDELEMENT:SetSize(w, h)
 	self.size.h = h
 end
 
---- This function returns the current parent together with its type
--- !!! INTERNAL FUNCTION !!!
+--- This function returns the current parent together with its type.
+-- <p><strong>!!! INTERNAL FUNCTION !!!</strong></p>
 -- @treturn string
--- @treturn bool
+-- @treturn boolean
 function HUDELEMENT:GetParentRelation()
 	return self.parent, self.parent_is_type
 end
 
 --- This function is used internally and only has the full effect if
 -- called by the hudelements.RegisterChildRelation() function.
--- !!! INTERNAL FUNCTION !!!
--- @tparam string 'parent'
--- @tparam bool 'is_type'
+-- <p><strong>!!! INTERNAL FUNCTION !!!</strong></p>
+-- @str parent
+-- @bool is_type
 function HUDELEMENT:SetParentRelation(parent, is_type)
 	self.parent = parent
 	self.parent_is_type = is_type
@@ -255,7 +264,7 @@ end
 --- This function adds a child to your list of children.
 -- Children functions will be called whenever a parent function is called
 -- , e.g., in @{PerformLayout}
--- @tparam number 'elementid'
+-- @int elementid
 function HUDELEMENT:AddChild(elementid)
 	if not table.HasValue(self.children, elementid) then
 		table.insert(self.children, elementid)
@@ -263,13 +272,13 @@ function HUDELEMENT:AddChild(elementid)
 end
 
 --- This function gives you information about whether it has a parent or not
--- @treturn bool
+-- @treturn boolean
 function HUDELEMENT:IsChild()
 	return self.parent ~= nil
 end
 
 --- This function gives you information about whether it has child elements or not
--- @treturn bool
+-- @treturn boolean
 function HUDELEMENT:IsParent()
 	return #self.children > 0
 end
@@ -280,6 +289,9 @@ function HUDELEMENT:GetChildren()
 	return table.Copy(self.children)
 end
 
+--- Get the position and the size of an hud element
+-- @treturn table position (<code>{x (<span class="type">number</span>), y (<span class="type">number</span>)}</code>)
+-- @treturn table size (<code>{w (<span class="type">number</span>), h (<span class="type">number</span>)}</code>)
 function HUDELEMENT:GetBorderParams()
 	if self:IsParent() then
 		local pos = self:GetPos()
@@ -311,6 +323,11 @@ function HUDELEMENT:GetBorderParams()
 	end
 end
 
+--- Checks whether an hud element is in range
+-- @int x
+-- @int y
+-- @int range
+-- @treturn boolean
 function HUDELEMENT:IsInRange(x, y, range)
 	range = range or 0
 
@@ -320,10 +337,20 @@ function HUDELEMENT:IsInRange(x, y, range)
 	return x - range <= maxX and x + range >= minX and y - range <= maxY and y + range >= minY
 end
 
+--- Checks whether an hud element is in position (same as @{IsInRange}, but without any padding)
+-- @int x
+-- @int y
+-- @treturn boolean
 function HUDELEMENT:IsInPos(x, y)
 	return self:IsInRange(x, y, 0)
 end
 
+--- Returns the hovered area of an hud element
+-- @int x
+-- @int y
+-- @treturn table ({<span>boolean</span>, <span class="type">boolean</span>, <span class="type">boolean</span>})
+-- @treturn table ({<span>boolean</span>, <span class="type">boolean</span>, <span class="type">boolean</span>})
+-- @local
 function HUDELEMENT:OnHovered(x, y)
 	if self:IsChild() then -- children are not resizeable
 		return {false, false, false}, {false, false, false}
@@ -376,10 +403,13 @@ function HUDELEMENT:OnHovered(x, y)
 		end
 	end
 
-
 	return row, col
 end
 
+--- Draws the hovered @{OnHovered} areas of the hud element in a specific color
+-- @int x
+-- @int y
+-- @local
 function HUDELEMENT:DrawHovered(x, y)
 	if not self:IsInPos(x, y) then
 		return false
@@ -438,6 +468,13 @@ function HUDELEMENT:DrawHovered(x, y)
 	surface.DrawRect(x1, y1, x2 - x1, y2 - y1)
 end
 
+--- Returns the clicked area of an hud element
+-- @int x
+-- @int y
+-- @bool alt_pressed
+-- @treturn boolean
+-- @see OnHovered
+-- @local
 function HUDELEMENT:GetClickedArea(x, y, alt_pressed)
 	alt_pressed = alt_pressed or false
 
@@ -483,12 +520,19 @@ function HUDELEMENT:GetClickedArea(x, y, alt_pressed)
 end
 
 -- the active area should only be changed on mouse click
+--- Sets the mouse clicked state
+-- @bool mouse_clicked
+-- @int x
+-- @int y
+-- @local
 function HUDELEMENT:SetMouseClicked(mouse_clicked, x, y)
 	if self:IsInPos(x, y) then
 		self.edit_live_data.calc_new_click_area = mouse_clicked or self.edit_live_data.calc_new_click_area
 	end
 end
 
+--- Draws the size of the hud element (borders in red)
+-- @local
 function HUDELEMENT:DrawSize()
 	local x, y, w, h = self.pos.x, self.pos.y, self.size.w, self.size.h
 
@@ -521,7 +565,7 @@ function HUDELEMENT:GetDefaults()
 end
 
 --- This function uses @{GetDefaults} to reset an element to its
---  original position.
+-- original position.
 function HUDELEMENT:Reset()
 	local defaults = self:GetDefaults()
 	local defaultPos = defaults.basepos

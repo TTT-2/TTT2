@@ -24,7 +24,7 @@ end
 -- this will define the implementation used for a type. Use this on knonw
 -- elements you want to be shown in your HUD, so the HUD doesn't select the
 -- first implementation it finds.
--- @tparam string 'elementID'
+-- @str elementID
 function HUD:ForceElement(elementID)
 	local elem = hudelements.GetStored(elementID)
 
@@ -41,7 +41,7 @@ end
 
 --- This will set a type to be hidden.
 -- The element implementation for this type then will not be drawn anymore.
--- @tparam string 'elementType'
+-- @str elementType
 function HUD:HideType(elementType)
 	table.insert(self.disabledTypes, elementType)
 end
@@ -50,8 +50,8 @@ end
 -- checking if @{HUD:GetElementByType} will return an element table, so the
 -- HUD actually "has" the element, and checking if the element is toggled on/off
 -- with its clientside ConVar.
--- @tparam string 'elementType'
--- @treturn bool
+-- @str elementType
+-- @treturn boolean
 function HUD:ShouldShow(elementType)
 	local el = self:GetElementByType(elementType)
 	if el then
@@ -114,8 +114,8 @@ end
 
 --- Returns wether or not the HUD has an element for the given type.
 -- See @{HUD:GetElementByType} for an explaination when a HUD 'has' an element.
--- @tparam string 'elementType'
--- @treturn bool
+-- @str elementType
+-- @treturn boolean
 function HUD:HasElementType(elementType)
 	return self:GetElementByType(elementType) ~= nil
 end
@@ -124,8 +124,8 @@ end
 -- This will respect the @{HUDELEMENT}.disabledUnlessForced property and check
 -- if the parent element (if exists) is also available, otherwise this will
 -- return false.
--- @tparam table 'elementTbl'
--- @treturn bool
+-- @tab elementTbl
+-- @treturn boolean
 function HUD:CanUseElement(elementTbl)
 	-- return false if the table is empty.
 	if not elementTbl then return false end
@@ -153,7 +153,7 @@ end
 -- otherwise it will search all elements that match the type and find the first
 -- instance that 'can' be used, please take a look at @{HUD:CanUseElement} for
 -- the criteria / restrictions for the evaluation as if an element can be used.
--- @tparam string 'elementType'
+-- @str elementType
 -- @treturn table
 function HUD:GetElementByType(elementType)
 	-- element type is hidden in this HUD so return nil
@@ -212,7 +212,7 @@ end
 -- of the hook "HUDShouldDraw". Additionally this function will call
 -- HUDEditor.DrawElem after the elements draw, to correctly display
 -- the HUDEditors elements on top.
--- @tparam table 'elem'
+-- @tab elem
 function HUD:DrawElemAndChildren(elem)
 	if not elem.initialized or not elem.type or not hook.Call("HUDShouldDraw", GAMEMODE, elem.type) or not self:ShouldShow(elem.type) or not elem:ShouldDraw() then return end
 
