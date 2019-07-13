@@ -64,7 +64,7 @@ local function TTT2LoadBindings()
 			for _, tbl in ipairs(result) do
 				local tmp = tbl.button
 
-				bind.RemoveAll(tbl.name)
+				bind.RemoveAll(tbl.name, false)
 
 				Bindings[tmp] = Bindings[tmp] or {}
 
@@ -161,10 +161,13 @@ end
 --- Removes the binding (button) with the given identifier.
 -- @int btn
 -- @str name
-function bind.Remove(btn, name)
+-- @bool persistent
+function bind.Remove(btn, name, persistent)
 	print("[TTT2][BIND] Attempt to remove binding " .. name .. " on button id " .. tonumber(btn))
 
-	DBRemoveBinding(name, btn) -- Still try to delete from DB
+	if persistent then
+		DBRemoveBinding(name, btn) -- Still try to delete from DB
+	end
 
 	if not Bindings[btn] then return end
 
@@ -179,10 +182,11 @@ end
 
 --- Removes all bindings (buttons) associated with the given identifier.
 -- @str name
-function bind.RemoveAll(name)
+-- @bool persistent
+function bind.RemoveAll(name, persistent)
 	-- clear all bindings
 	for _, v in ipairs(bind.FindAll(name)) do
-		bind.Remove(v, name)
+		bind.Remove(v, name, persistent)
 	end
 end
 
@@ -190,7 +194,8 @@ end
 -- @str name
 -- @str label
 -- @str[opt] category
-function bind.AddSettingsBinding(name, label, category)
+-- @int[optchain] defaultKey
+function bind.AddSettingsBinding(name, label, category, defaultKey)
 	if not category then
 		category = "Other Bindings"
 	end
@@ -199,16 +204,22 @@ function bind.AddSettingsBinding(name, label, category)
 		SettingsBindingsCategories[#SettingsBindingsCategories + 1] = category
 	end
 
+	--set DefaultKey if needed
+	if defaultKey then
+		bind.Set(defaultKey, name, false)
+	end
+
 	-- check if it already exists
 	for _, tbl in ipairs(SettingsBindings) do
 		if tbl.name == name then
 			tbl.label = label -- update
 			tbl.category = category
+			tbl.defaultKey = defaultKey
 			return -- don't insert again
 		end
 	end
 
-	SettingsBindings[#SettingsBindings + 1] = {name = name, label = label, category = category}
+	SettingsBindings[#SettingsBindings + 1] = {name = name, label = label, category = category, defaultKey = defaultKey}
 end
 
 
@@ -234,10 +245,10 @@ function bind.Register(name, onPressedFunc, onReleasedFunc, dontShowOrCategory, 
 	}
 
 	if dontShowOrCategory ~= true then
-		bind.AddSettingsBinding(name, settingsLabel or name, dontShowOrCategory)
+		bind.AddSettingsBinding(name, settingsLabel or name, dontShowOrCategory, defaultKey)
 	end
 
-	if defaultKey and bind.Find(name) == KEY_NONE then
+	if defaultKey then
 		bind.Set(defaultKey, name, false)
 	end
 end
