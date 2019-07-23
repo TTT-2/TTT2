@@ -840,38 +840,40 @@ function TellTraitorsAboutTraitors()
 			traitornicks[#traitornicks + 1] = v:Nick()
 		end
 	end
-
-	hook.Run("TTT2TellTraitors", traitornicks)
-
-	-- This is ugly as hell, but it's kinda nice to filter out the names of the
-	-- traitors themselves in the messages to them
-	local traitornicks_min = #traitornicks < 2
-
-	if not traitornicks_min then
-		table.sort(traitornicks, function(a, b)
-			return a and b and a:upper() < b:upper()
-		end)
-	end
-
+	
 	for _, v in ipairs(player.GetAll()) do
 		if v:HasTeam(TEAM_TRAITOR) then
-			if traitornicks_min then
+
+			local tmp, shouldShow = hook.Run("TTT2TellTraitors", v, table.Copy(traitornicks))
+
+			if shouldShow == nil then shouldShow = true end
+			if not shouldShow then continue end
+
+			if tmp == nil then tmp = table.Copy(traitornicks) end
+
+			table.RemoveByValue(tmp, v:Nick())
+
+			if #tmp == 0 then
 				LANG.Msg(v, "round_traitors_one")
-
 				return
-			else
-				local names = ""
-
-				for _, name in ipairs(traitornicks) do
-					if name ~= v:Nick() then
-						names = names .. name .. ", "
-					end
-				end
-
-				names = string.sub(names, 1, -3)
-
-				LANG.Msg(v, "round_traitors_more", {names = names})
 			end
+
+			if #tmp >= 2 then
+				table.sort(tmp, function(a, b)
+					return a and b and a:upper() < b:upper()
+				end)
+			end
+
+			local names = ""
+
+			for _, name in ipairs(tmp) do
+				names = names .. name .. ", "
+			end
+
+			names = string.sub(names, 1, -3)
+
+			LANG.Msg(v, "round_traitors_more", {names = names})
+
 		end
 	end
 end
