@@ -848,16 +848,14 @@ function TellTraitorsAboutTraitors()
 
 			local shouldShow = hook.Run("TTT2TellTraitors", tmp, v)
 
-			if shouldShow == false or tmp == nil then continue end
+			if shouldShow == false or tmp == nil or #tmp == 0 then continue end
 
-			table.RemoveByValue(tmp, v:Nick())
-
-			if #tmp == 0 then
+			if #tmp == 1 then
 				LANG.Msg(v, "round_traitors_one")
 				return
 			end
 
-			if #tmp >= 2 then
+			if #tmp >= 3 then
 				table.sort(tmp, function(a, b)
 					return a and b and a:upper() < b:upper()
 				end)
@@ -866,7 +864,9 @@ function TellTraitorsAboutTraitors()
 			local names = ""
 
 			for _, name in ipairs(tmp) do
-				names = names .. name .. ", "
+				if name ~= v:Nick() then
+					names = names .. name .. ", "
+				end
 			end
 
 			names = string.sub(names, 1, -3)
