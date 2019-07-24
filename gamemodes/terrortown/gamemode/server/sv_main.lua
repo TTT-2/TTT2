@@ -846,9 +846,7 @@ function TellTraitorsAboutTraitors()
 
 			local tmp = table.Copy(traitornicks)
 
-			local shouldShow
-
-			shouldShow = hook.Run("TTT2TellTraitors", tmp, v)
+			local shouldShow = hook.Run("TTT2TellTraitors", tmp, v)
 
 			if shouldShow == false or tmp == nil then continue end
 
