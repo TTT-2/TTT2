@@ -89,7 +89,7 @@ hook.Add("Think", "TTT2PlayerSprinting", function()
 		local timeElapsed = CurTime() - ply.sprintTS
 		local isSprinting = (ply.sprintMultiplier ~= nil)
 
-		local drainMult, regenMult = hook.Run("StaminaMult", ply, isSprinting, ply.sprintProgress)
+		local drainMult, regenMult = hook.Run("TTT2StaminaMult", ply, isSprinting, ply.sprintProgress)
 		drainMult = drainMult or 1
 		regenMult = regenMult or 1
 			
