@@ -844,13 +844,13 @@ function TellTraitorsAboutTraitors()
 	for _, v in ipairs(player.GetAll()) do
 		if v:HasTeam(TEAM_TRAITOR) then
 
-			local tmp, shouldShow = table.Copy(traitornicks)
+			local tmp = table.Copy(traitornicks)
+
+			local shouldShow
 
 			shouldShow = hook.Run("TTT2TellTraitors", tmp, v)
 
-			if shouldShow == false then continue end
-
-			if tmp == nil then tmp = table.Copy(traitornicks) end
+			if shouldShow == false or tmp == nil then continue end
 
 			table.RemoveByValue(tmp, v:Nick())
 
