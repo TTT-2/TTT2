@@ -90,7 +90,6 @@ hook.Add("Think", "TTT2PlayerSprinting", function()
 		local isSprinting = (ply.sprintMultiplier ~= nil)
 
 		local staminaMult = hook.Run("StaminaMult", ply, isSprinting, ply.sprintProgress)
-		if staminaMult == false then continue end -- Disable stamina completely if the hook so desires
 		staminaMult = staminaMult or 1
 			
 		if !isSprinting then
