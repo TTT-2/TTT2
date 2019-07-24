@@ -89,13 +89,14 @@ hook.Add("Think", "TTT2PlayerSprinting", function()
 		local timeElapsed = CurTime() - ply.sprintTS
 		local isSprinting = (ply.sprintMultiplier ~= nil)
 
-		local staminaMult = hook.Run("StaminaMult", ply, isSprinting, ply.sprintProgress)
-		staminaMult = staminaMult or 1
+		local drainMult, regenMult = hook.Run("StaminaMult", ply, isSprinting, ply.sprintProgress)
+		drainMult = drainMult or 1
+		regenMult = regenMult or 1
 			
 		if !isSprinting then
-			ply.sprintProgress = math.min((ply.oldSprintProgress or 0) + timeElapsed * staminaMult * GetGlobalFloat("ttt2_sprint_stamina_regeneration"), 1)
+			ply.sprintProgress = math.min((ply.oldSprintProgress or 0) + timeElapsed * regenMult * GetGlobalFloat("ttt2_sprint_stamina_regeneration"), 1)
 		else
-			ply.sprintProgress = math.max((ply.oldSprintProgress or 0) - timeElapsed * staminaMult * GetGlobalFloat("ttt2_sprint_stamina_consumption"), 0)
+			ply.sprintProgress = math.max((ply.oldSprintProgress or 0) - timeElapsed * drainMult * GetGlobalFloat("ttt2_sprint_stamina_consumption"), 0)
 		end
 
 		if ply.sprintProgress == 1 then
