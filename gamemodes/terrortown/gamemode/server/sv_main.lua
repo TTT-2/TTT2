@@ -840,14 +840,16 @@ function TellTraitorsAboutTraitors()
 			traitornicks[#traitornicks + 1] = v:Nick()
 		end
 	end
-	
+
 	for _, v in ipairs(player.GetAll()) do
 		if v:HasTeam(TEAM_TRAITOR) then
 
-			local tmp, shouldShow = hook.Run("TTT2TellTraitors", v, table.Copy(traitornicks))
+			local tmp, shouldShow = table.Copy(traitornicks), true
+
+			tmp, shouldShow = hook.Run("TTT2TellTraitors", tmp, v)
 
 			if shouldShow == nil then shouldShow = true end
-			if not shouldShow then continue end
+			if shouldShow == false then continue end
 
 			if tmp == nil then tmp = table.Copy(traitornicks) end
 
