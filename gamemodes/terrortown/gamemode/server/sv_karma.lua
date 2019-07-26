@@ -1,3 +1,5 @@
+---
+-- @module KARMA
 -- Karma system stuff
 
 KARMA = {}
@@ -44,42 +46,78 @@ local function ttt_karma_max(cvar, old, new)
 end
 cvars.AddChangeCallback("ttt_karma_max", ttt_karma_max)
 
+---
+-- Initializes the KARMA System
+-- @realm server
+-- @internal
 function KARMA.InitState()
 	SetGlobalBool("ttt_karma", config.enabled:GetBool())
 	SetGlobalInt("ttt_karma_max", config.max:GetFloat())
 end
 
+---
+-- Returns whether the KARMA System is Initialized
+-- @return boolean
+-- @realm server
 function KARMA.IsEnabled()
 	return GetGlobalBool("ttt_karma", false)
 end
 
+---
 -- Compute penalty for hurting someone a certain amount
+-- @param number victim_karma
+-- @param number dmg
+-- @return number the amount of KARMA penalty
+-- @realm server
 function KARMA.GetHurtPenalty(victim_karma, dmg)
 	return victim_karma * math.Clamp(dmg * config.ratio:GetFloat(), 0, 1)
 end
 
+---
 -- Compute penalty for killing someone
+-- @param number victim_karma
+-- @return number the amount of KARMA penalty
+-- @realm server
 function KARMA.GetKillPenalty(victim_karma)
 	-- the kill penalty handled like dealing a bit of damage
 	return KARMA.GetHurtPenalty(victim_karma, config.killpenalty:GetFloat())
 end
 
+---
 -- Compute reward for hurting a traitor (when innocent yourself)
+-- @param number dmg
+-- @return number the amount of KARMA reward
+-- @realm server
 function KARMA.GetHurtReward(dmg)
 	return config.max:GetFloat() * math.Clamp(dmg * config.tratio:GetFloat(), 0, 1)
 end
 
+---
 -- Compute reward for killing traitor
+-- @return number the amount of KARMA kill reward
+-- @realm server
 function KARMA.GetKillReward()
 	return KARMA.GetHurtReward(config.tbonus:GetFloat())
 end
 
+---
+-- Gives a @{Player} a KARMA penalty
+-- @param Player ply
+-- @param number penalty
+-- @param Player victim
+-- @realm server
 function KARMA.GivePenalty(ply, penalty, victim)
 	if not hook.Call("TTTKarmaGivePenalty", nil, ply, penalty, victim) then
 		ply:SetLiveKarma(math.max(ply:GetLiveKarma() - penalty, 0))
 	end
 end
 
+---
+-- Gives a @{Player} a KARMA reward
+-- @param Player ply
+-- @param number reward
+-- @return number reward modified / reward
+-- @realm server
 function KARMA.GiveReward(ply, reward)
 	reward = KARMA.DecayedMultiplier(ply) * reward
 
@@ -88,6 +126,10 @@ function KARMA.GiveReward(ply, reward)
 	return reward
 end
 
+---
+-- Calculates the damage factor (a @{Player} will do in the next round) based on the KARMA
+-- @param Player ply
+-- @realm server
 function KARMA.ApplyKarma(ply)
 	local df = 1
 
@@ -131,9 +173,14 @@ local function WasAvoidable(attacker, victim, dmginfo)
 	return 0
 end
 
+---
 -- Handle karma change due to one player damaging another. Damage must not have
 -- been applied to the victim yet, but must have been scaled according to the
 -- damage factor of the attacker.
+-- @param Player attacker
+-- @param Player victim
+-- @param DamageInfo dmginfo
+-- @realm server
 function KARMA.Hurt(attacker, victim, dmginfo)
 	if attacker == victim or not IsValid(attacker) or not IsValid(victim) or not attacker:IsPlayer() or not victim:IsPlayer() or dmginfo:GetDamage() <= 0 then return end
 
@@ -163,7 +210,12 @@ function KARMA.Hurt(attacker, victim, dmginfo)
 	end
 end
 
+---
 -- Handle karma change due to one player killing another.
+-- @param Player attacker
+-- @param Player victim
+-- @param DamageInfo dmginfo
+-- @realm server
 function KARMA.Killed(attacker, victim, dmginfo)
 	if attacker == victim or not IsValid(attacker) or not IsValid(victim) or not victim:IsPlayer() or not attacker:IsPlayer() then return end
 
@@ -191,6 +243,11 @@ end
 
 local expdecay = math.ExponentialDecay
 
+---
+-- Returns a multiplicator for the KARMA calculations
+-- @param Player ply
+-- @return number
+-- @realm server
 function KARMA.DecayedMultiplier(ply)
 	local max = config.max:GetFloat()
 	local start = config.starting:GetFloat()
@@ -213,7 +270,9 @@ function KARMA.DecayedMultiplier(ply)
 	return 1
 end
 
+---
 -- Handle karma regeneration upon the start of a new round
+-- @realm server
 function KARMA.RoundIncrement()
 	local healbonus = config.roundheal:GetFloat()
 	local cleanbonus = config.clean:GetFloat()
@@ -233,7 +292,9 @@ function KARMA.RoundIncrement()
 	-- player's CleanRound state will be reset by the ply class
 end
 
+---
 -- When a new round starts, Live karma becomes Base karma
+-- @realm server
 function KARMA.Rebase()
 	for _, ply in ipairs(player.GetAll()) do
 		if IsDebug() then
@@ -244,13 +305,19 @@ function KARMA.Rebase()
 	end
 end
 
+---
 -- Apply karma to damage factor for all players
+-- @realm server
 function KARMA.ApplyKarmaAll()
 	for _, ply in ipairs(player.GetAll()) do
 		KARMA.ApplyKarma(ply)
 	end
 end
 
+---
+-- Sends a message to a given @{Player} about the current damage factor
+-- @param Player ply
+-- @realm server
 function KARMA.NotifyPlayer(ply)
 	local df = ply:GetDamageFactor() or 1
 	local k = math.Round(ply:GetBaseKarma())
@@ -262,8 +329,10 @@ function KARMA.NotifyPlayer(ply)
 	end
 end
 
+---
 -- These generic fns will be called at round end and start, so that stuff can
 -- easily be moved to a different phase
+-- @realm server
 function KARMA.RoundEnd()
 	if KARMA.IsEnabled() then
 		KARMA.RoundIncrement()
@@ -281,6 +350,9 @@ function KARMA.RoundEnd()
 	end
 end
 
+---
+-- Update / Reset the KARMA System if the round begins
+-- @realm server
 function KARMA.RoundBegin()
 	KARMA.InitState()
 
@@ -292,6 +364,10 @@ function KARMA.RoundBegin()
 	end
 end
 
+---
+-- Initializes a @{Player} for the KARMA System
+-- @param Player ply
+-- @realm server
 function KARMA.InitPlayer(ply)
 	local k = math.Clamp(KARMA.Recall(ply) or config.starting:GetFloat(), 0, config.max:GetFloat())
 
@@ -304,6 +380,10 @@ function KARMA.InitPlayer(ply)
 	KARMA.ApplyKarma(ply)
 end
 
+---
+-- Restores the KARMA of a @{Player} if possible
+-- @param Player ply
+-- @realm server
 function KARMA.Remember(ply)
 	if ply.karma_kicked or not ply:IsFullyAuthenticated() then return end
 
@@ -321,6 +401,11 @@ function KARMA.Remember(ply)
 	KARMA.RememberedPlayers[ply:SteamID64()] = ply:GetLiveKarma()
 end
 
+---
+-- Returns the amount of stored KARMA of a given @{Player}
+-- @param Player ply
+-- @return number
+-- @realm server
 function KARMA.Recall(ply)
 	if config.persist:GetBool() then
 		ply.delay_karma_recall = not ply:IsFullyAuthenticated()
@@ -336,6 +421,10 @@ function KARMA.Recall(ply)
 	return KARMA.RememberedPlayers[ply:SteamID64()]
 end
 
+---
+-- Sets the amount of stored KARMA of a given @{Player}
+-- @param Player ply
+-- @realm server
 function KARMA.LateRecallAndSet(ply)
 	local k = tonumber(ply:GetPData("karma_stored", KARMA.RememberedPlayers[ply:SteamID64()]))
 	if k and k < ply:GetLiveKarma() then
@@ -344,6 +433,10 @@ function KARMA.LateRecallAndSet(ply)
 	end
 end
 
+---
+-- Calls @{KARMA.Remember} on every @{Player}
+-- @realm server
+-- @see KARMA.Remember
 function KARMA.RememberAll()
 	for _, ply in ipairs(player.GetAll()) do
 		KARMA.Remember(ply)
@@ -352,6 +445,10 @@ end
 
 local reason = "Karma too low"
 
+---
+-- Checks and (if enabled) performs an auto kick if the KARMA is too low
+-- @param Player ply
+-- @realm server
 function KARMA.CheckAutoKick(ply)
 	if ply:GetBaseKarma() <= config.kicklevel:GetInt() then
 		if hook.Call("TTTKarmaLow", GAMEMODE, ply) == false then return end
@@ -378,6 +475,10 @@ function KARMA.CheckAutoKick(ply)
 	end
 end
 
+---
+-- Debugs / Prints all the KARMA stats of each @{Player} of the last round
+-- @param function printfn
+-- @realm server
 function KARMA.PrintAll(printfn)
 	for _, ply in ipairs(player.GetAll()) do
 		printfn(Format("%s : Live = %f -- Base = %f -- Dmg = %f\n",

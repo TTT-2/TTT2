@@ -41,6 +41,10 @@ local function TraitorSort(a, b)
 	return false
 end
 
+---
+-- Prints a list of all available Traitors in this round
+-- @param Player ply
+-- @realm server
 function PrintTraitors(ply)
 	if not IsValid(ply) or ply:IsSuperAdmin() then
 		ServerLog(Format("%s used ttt_print_traitors\n", IsValid(ply) and ply:Nick() or "console"))
@@ -51,12 +55,16 @@ function PrintTraitors(ply)
 		table.sort(ps, TraitorSort)
 
 		for _, p in ipairs(ps) do
-			pr(string.upper(p:GetTeam()), ":", p:Nick())
+			pr(string.upper(p:GetTeam()), ": ", p:Nick())
 		end
 	end
 end
 concommand.Add("ttt_print_traitors", PrintTraitors)
 
+---
+-- Prints the @{Player}s connected with their UserGroup
+-- @param Player ply
+-- @realm server
 function PrintGroups(ply)
 	local pr = GetPrintFn(ply)
 
@@ -68,6 +76,10 @@ function PrintGroups(ply)
 end
 concommand.Add("ttt_print_usergroups", PrintGroups)
 
+---
+-- Prints a killer report / log
+-- @param Player ply
+-- @realm server
 function PrintReport(ply)
 	local pr = GetPrintFn(ply)
 
@@ -178,6 +190,10 @@ local function SaveDamageLog()
 end
 hook.Add("TTTEndRound", "ttt_damagelog_save_hook", SaveDamageLog)
 
+---
+-- Adds a text to the DamageLog list
+-- @param string txt
+-- @realm server
 function DamageLog(txt)
 	local t = math.max(0, CurTime() - GAMEMODE.RoundStartTime)
 
@@ -240,6 +256,12 @@ local function BanningFunction()
 	return ban_functions[bantype] or ban_functions["gmod"]
 end
 
+---
+-- Kicks and bans a @{Player} from the server
+-- @param Player ply the target @{Player}
+-- @param number length time of the ban
+-- @param string reason
+-- @realm server
 function PerformKickBan(ply, length, reason)
 	local banfn = BanningFunction()
 
