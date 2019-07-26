@@ -243,7 +243,9 @@ local outdatedAddons = { -- addons that have newer versions in the WS
 
 	["254779132"] = "810154456", -- Dead Ringer by Porter
 	["1315377462"] = "810154456", -- Dead Ringer by MuratYilderimTM
-	["240281783"] = "810154456" -- Dead Ringer by Niandra
+	["240281783"] = "810154456", -- Dead Ringer by Niandra
+
+	["863963592"] = "1815518231" -- Super Soda by ---
 }
 
 CHANGED_EQUIPMENT = {}
