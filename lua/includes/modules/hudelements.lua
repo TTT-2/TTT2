@@ -16,9 +16,10 @@ local HUDElementList = HUDElementList or {}
 
 ---
 -- Copies any missing data from base table to the target table
--- @tab t target table
--- @tab base base (fallback) table
--- @treturn table t target table
+-- @param table t target table
+-- @param table base base (fallback) table
+-- @return table t target table
+-- @realm shared
 local function TableInherit(t, base)
 	for k, v in pairs(base) do
 		if t[k] == nil then
@@ -33,9 +34,10 @@ end
 
 ---
 -- Checks if name is based on base
--- @tab name table to check
--- @tab base base (fallback) table
--- @treturn boolean returns whether name is based on base
+-- @param table name table to check
+-- @param table base base (fallback) table
+-- @return boolean returns whether name is based on base
+-- @realm shared
 function IsBasedOn(name, base)
 	local t = GetStored(name)
 
@@ -57,8 +59,9 @@ end
 ---
 -- Used to register your hud element with the engine.<br />
 -- <b>This is done automatically for all the files in the <code>gamemodes/terrortown/gamemode/shared/hudelements</code> folder</b>
--- @tab t hud element table
--- @str name hud element name
+-- @param table t hud element table
+-- @param string name hud element name
+-- @realm shared
 function Register(t, name)
 	name = string.lower(name)
 
@@ -114,6 +117,7 @@ end
 ---
 -- All scripts have been loaded...
 -- @local
+-- @realm shared
 function OnLoaded()
 
 	--
@@ -138,9 +142,10 @@ end
 
 ---
 -- Get an hud element by name (a copy)
--- @str name hud element name
--- @tparam[opt] ?table retTbl this table will be modified and returned. If nil, a new table will be created.
--- @treturn table returns the modified retTbl or the new hud element table
+-- @param string name hud element name
+-- @param[opt] ?table retTbl this table will be modified and returned. If nil, a new table will be created.
+-- @return table returns the modified retTbl or the new hud element table
+-- @realm shared
 function Get(name, retTbl)
 	local Stored = GetStored(name)
 	if not Stored then return end
@@ -175,15 +180,17 @@ end
 
 ---
 -- Gets the real hud element table (not a copy)
--- @str name hud element name
--- @treturn table returns the real hud element table
+-- @param string name hud element name
+-- @return table returns the real hud element table
+-- @realm shared
 function GetStored(name)
 	return HUDElementList[name]
 end
 
 ---
 -- Get a list (copy) of all registered hud elements
--- @treturn table registered hud elements
+-- @return table registered hud elements
+-- @realm shared
 function GetList()
 	local result = {}
 
@@ -196,7 +203,8 @@ end
 
 ---
 -- Get a list of all the registered hud element types
--- @treturn table returns a list of all the registered hud element types
+-- @return table returns a list of all the registered hud element types
+-- @realm shared
 function GetElementTypes()
 	local typetbl = {}
 
@@ -211,9 +219,9 @@ end
 
 ---
 -- Gets the first element matching the type of all the registered hud elements
--- @str type the hud element's type name
--- @treturn nil|table returns the first element matching the type of all the registered hud elements
------------------------------------------------------------]]
+-- @param string type the hud element's type name
+-- @return nil|table returns the first element matching the type of all the registered hud elements
+-- @realm shared
 function GetTypeElement(type)
 	for _, v in pairs(HUDElementList) do
 		if v.type and v.type == type then
@@ -224,8 +232,9 @@ end
 
 ---
 -- Gets all hud elements matching the type of all the registered hud elements
--- @str type the hud element's type name
--- @treturn table returns all hud elements matching the type of all the registered hud elements
+-- @param string type the hud element's type name
+-- @return table returns all hud elements matching the type of all the registered hud elements
+-- @realm shared
 function GetAllTypeElements(type)
 	local retTbl = {}
 
@@ -243,12 +252,14 @@ end
 -- <p>This can either be a single parent <-> child relation or a parents <-> child relation,
 -- if the parent is a type. This function then will register the childid as a child to all elements with that type.</p>
 -- <p>A parent element is responsible for calling PerformLayout on its child elements!</p>
--- <p><b>!! This should be called in the <code>PreInitialize</code> method !!</b></p>
+-- @note This should be called in the <code>PreInitialize</code> method!
+-- @todo link PreInitialize method
 --
--- @int childid child hud element name
--- @int parentid parent hud element name
--- @bool parent_is_type whether the parent is a type
+-- @param number childid child hud element name
+-- @param number parentid parent hud element name
+-- @param boolean parent_is_type whether the parent is a type
 -- @todo example / usage
+-- @realm shared
 function RegisterChildRelation(childid, parentid, parent_is_type)
 	local child = GetStored(childid)
 	if not child then

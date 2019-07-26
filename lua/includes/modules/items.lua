@@ -16,9 +16,10 @@ local ItemList = ItemList or {}
 
 ---
 -- Copies any missing data from base table to the target table
--- @tab t target table
--- @tab base base (fallback) table
--- @treturn table t target table
+-- @param table t target table
+-- @param table base base (fallback) table
+-- @return table t target table
+-- @realm shared
 local function TableInherit(t, base)
 	for k, v in pairs(base) do
 		if t[k] == nil then
@@ -35,9 +36,10 @@ end
 
 ---
 -- Checks if name is based on base
--- @tab name table to check
--- @tab base base (fallback) table
--- @treturn boolean returns whether name is based on base
+-- @param table name table to check
+-- @param table base base (fallback) table
+-- @return boolean returns whether name is based on base
+-- @realm shared
 function IsBasedOn(name, base)
 	local t = GetStored(name)
 
@@ -59,8 +61,9 @@ end
 ---
 -- Used to register your item with the engine.<br />
 -- <b>This is done automatically for all the files in the <code>lua/terrortown/entities/items</code> folder</b>
--- @tab t item table
--- @str name item name
+-- @param table t item table
+-- @param string name item name
+-- @realm shared
 function Register(t, name)
 	name = string.lower(name)
 
@@ -122,6 +125,7 @@ end
 ---
 -- All scripts have been loaded...
 -- @local
+-- @realm shared
 function OnLoaded()
 
 	--
@@ -139,9 +143,10 @@ end
 
 ---
 -- Get an item by name (a copy)
--- @str name item name
--- @tparam[opt] ?table retTbl this table will be modified and returned. If nil, a new table will be created.
--- @treturn table returns the modified retTbl or the new item table
+-- @param string name item name
+-- @param[opt] ?table retTbl this table will be modified and returned. If nil, a new table will be created.
+-- @return table returns the modified retTbl or the new item table
+-- @realm shared
 function Get(name, retTbl)
 	local Stored = GetStored(name)
 	if not Stored then return end
@@ -176,8 +181,9 @@ end
 
 ---
 -- Gets the real item table (not a copy)
--- @str name item name
--- @treturn table returns the real item table
+-- @param string name item name
+-- @return table returns the real item table
+-- @realm shared
 function GetStored(name)
 	return ItemList[name]
 end
@@ -185,7 +191,8 @@ end
 
 ---
 -- Get a list of all the registered items
--- @treturn table all registered items
+-- @return table all registered items
+-- @realm shared
 function GetList()
 	local result = {}
 
@@ -198,8 +205,9 @@ end
 
 ---
 -- Checks whether the input is an item
--- @stn val item name / table / id
--- @treturn boolean returns true if the inserted table is an item
+-- @param string|table|number val item name / table / id
+-- @return boolean returns true if the inserted table is an item
+-- @realm shared
 function IsItem(val)
 	if not val then
 		return false
@@ -222,11 +230,12 @@ end
 
 ---
 -- Checks whether the input table has a specific item.<br />
--- This is calling <a href="https://wiki.garrysmod.com/page/table/HasValue">table.HasValue</a> internally,
+-- This is calling @{table.HasValue} internally,
 -- but you don't have to tackle with the input value (<code>val</code>) type
--- @tab tbl target table
--- @stn val item name / table / id
--- @treturn boolean whether the input table has a specific item
+-- @param table tbl target table
+-- @param string|table|number val item name / table / id
+-- @return boolean whether the input table has a specific item
+-- @realm shared
 function TableHasItem(tbl, val)
 	if not tbl or not val then
 		return false
@@ -253,8 +262,9 @@ end
 
 ---
 -- Get all items for this role
--- @int subrole subrole id
--- @treturn table role items table
+-- @param number subrole subrole id
+-- @return table role items table
+-- @realm shared
 function GetRoleItems(subrole)
 	local itms = GetList()
 	local tbl = {}
@@ -270,8 +280,9 @@ end
 
 ---
 -- Get a role item if it's available for this role
--- @int subrole subrole id
--- @sn id item id / name
+-- @param number subrole subrole id
+-- @param string|number id item id / name
+-- @realm shared
 function GetRoleItem(subrole, id)
 	if tonumber(id) then
 		for _, item in pairs(ItemList) do

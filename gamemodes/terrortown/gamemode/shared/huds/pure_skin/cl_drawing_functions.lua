@@ -1,12 +1,29 @@
+---
+-- HUD base class.
+-- @module HUD
+-- @section pure_skin
+
 local shadow_border = surface.GetTextureID("vgui/ttt/dynamic/hud_components/shadow_border")
 
--- x, y, width, height, color
+---
+-- @param number x
+-- @param number y
+-- @param number w width
+-- @param number h height
+-- @param Color c color
+-- @realm client
 function DrawHUDElementBg(x, y, w, h, c)
 	surface.SetDrawColor(clr(c))
 	surface.DrawRect(x, y, w, h)
 end
 
--- x, y, width, height, alpha
+---
+-- @param number x
+-- @param number y
+-- @param number w width
+-- @param number h height
+-- @param number a alpha
+-- @realm client
 function DrawHUDElementLines(x, y, w, h, a)
 	local corner_size = 7
 	local shadow_size = 4

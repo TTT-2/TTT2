@@ -1,3 +1,6 @@
+---
+-- @module CORPSE
+
 -- Shared corpsey stuff
 
 CORPSE = CORPSE or {}
@@ -13,11 +16,23 @@ CORPSE.dti = {
 
 local dti = CORPSE.dti
 
--- networked data abstraction
+---
+-- Returns whether a @{CORPSE} was found already
+-- @param Entity rag
+-- @param boolean default
+-- @return boolean
+-- @note networked data abstraction
+-- @realm shared
 function CORPSE.GetFound(rag, default)
 	return rag and rag:GetDTBool(dti.BOOL_FOUND) or default
 end
 
+---
+-- Returns the @{Player}'s nickname of the CORPSE
+-- @param Entity rag
+-- @param string default
+-- @return string
+-- @realm shared
 function CORPSE.GetPlayerNick(rag, default)
 	if not IsValid(rag) then
 		return default
@@ -32,6 +47,12 @@ function CORPSE.GetPlayerNick(rag, default)
 	end
 end
 
+---
+-- Returns the amount of credits which are stored in the CORPSE
+-- @param Entity rag
+-- @param number default
+-- @return number
+-- @realm shared
 function CORPSE.GetCredits(rag, default)
 	if not IsValid(rag) then
 		return default
@@ -40,6 +61,11 @@ function CORPSE.GetCredits(rag, default)
 	return rag:GetDTInt(dti.INT_CREDITS)
 end
 
+---
+-- Returns the owner of a CORPSE
+-- @param Entity rag
+-- @return Player owner
+-- @realm shared
 function CORPSE.GetPlayer(rag)
 	if not IsValid(rag) then
 		return NULL

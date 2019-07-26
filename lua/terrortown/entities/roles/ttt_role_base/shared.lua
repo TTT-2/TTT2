@@ -1,7 +1,19 @@
+---
+-- @module ROLE
+-- @author Alf21
+
+---
+-- This function is called before initializing a @{ROLE}
+-- @hook
+-- @realm shared
 function ROLE:PreInitialize()
 
 end
 
+---
+-- Returns the starting credits of a @{ROLE} based on ConVar settings or default traitor settings
+-- @return[default=0] number
+-- @realm shared
 function ROLE:GetStartingCredits()
 	if self.abbr == TRAITOR.abbr then
 		return GetConVar("ttt_credits_starting"):GetInt()
@@ -10,6 +22,10 @@ function ROLE:GetStartingCredits()
 	return ConVarExists("ttt_" .. self.abbr .. "_credits_starting") and GetConVar("ttt_" .. self.abbr .. "_credits_starting"):GetInt() or 0
 end
 
+---
+-- Returns whether a @{ROLE} is able to access the shop based on ConVar settings
+-- @return[default=false] boolean
+-- @realm shared
 function ROLE:IsShoppingRole()
 	if self.subrole == ROLE_INNOCENT then
 		return false
@@ -20,11 +36,20 @@ function ROLE:IsShoppingRole()
 	return shopFallback ~= SHOP_DISABLED
 end
 
-function ROLE:IsBaseRole(roleData)
-	return not roleData.baserole
+---
+-- Returns whether a @{ROLE} is a BaseRole
+-- @return boolean
+-- @realm shared
+function ROLE:IsBaseRole()
+	return self.baserole
 end
 
--- usage: inside of e.g. this hook: hook.Add("TTT2BaseRoleInit", "TTT2ConnectBaseRole" .. baserole .. "With_" .. roleData.name, ...)
+---
+-- Connects a SubRole with its BaseRole
+-- @param ROLE baserole the BaseRole
+-- @usage -- inside of e.g. this hook:
+-- @usage hook.Add("TTT2BaseRoleInit", "TTT2ConnectBaseRole" .. baserole .. "With_" .. roleData.name, ...)
+-- @realm shared
 function ROLE:SetBaseRole(baserole)
 	if self.baserole then
 		error("[TTT2][ROLE-SYSTEM][ERROR] BaseRole of " .. self.name .. " already set (" .. self.baserole .. ")!")
@@ -44,6 +69,18 @@ function ROLE:SetBaseRole(baserole)
 	end
 end
 
+---
+-- Returns the baserole of a specific @{ROLE}
+-- @return number subrole id of the BaseRole (@{ROLE})
+-- @realm shared
+function ROLE:GetBaseRole()
+	return self.baserole or self.index
+end
+
+---
+-- Returns a list of subroles of this BaseRole (this subrole's BaseRole)
+-- @return table list of @{ROLE}
+-- @realm shared
 function ROLE:GetSubRoles()
 	local br = self:GetBaseRole()
 	local tmp = {}

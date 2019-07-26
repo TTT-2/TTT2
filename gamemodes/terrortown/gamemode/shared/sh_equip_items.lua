@@ -1,3 +1,6 @@
+---
+-- section Equipment
+
 -- This table is used by the client to show items in the equipment menu, and by
 -- the server to check if a certain role is allowed to buy a certain item.local math = math
 local table = table
@@ -53,6 +56,14 @@ EquipmentItems = EquipmentItems or setmetatable(
 	}
 )
 
+---
+-- Returns the equipment base table merged with the given data
+-- @param table data
+-- @param table eq
+-- @return table
+-- @todo improve description
+-- @internal
+-- @realm shared
 function GetEquipmentBase(data, eq)
 	if not eq or eq.inited then
 		return eq
@@ -93,12 +104,23 @@ function GetEquipmentBase(data, eq)
 	return eq
 end
 
+---
+-- Creates an equipment
+-- @param eq
+-- @return table equipment table
+-- @internal
+-- @realm shared
 function CreateEquipment(eq)
 	if not eq.Doublicated then
 		return GetEquipmentBase(eq.EquipMenuData or {}, eq)
 	end
 end
 
+---
+-- Adds a @{Weapon} into a shop / fallback table
+-- @param string wepClass
+-- @param ROLE roleData
+-- @realm shared
 function AddWeaponIntoFallbackTable(wepClass, roleData)
 	if not roleData.fallbackTable then return end
 
@@ -119,6 +141,15 @@ function AddWeaponIntoFallbackTable(wepClass, roleData)
 	end
 end
 
+---
+-- Returns a shop fallback / shop
+-- @param number subrole id of @{ROLE}
+-- @param[opt] table tbl this table will be modified
+-- @return number subrole id of the connected fallback
+-- @return number subrole id of role connected with the deepest fallback role (the value returned before)
+-- @internal
+-- @todo improve description
+-- @realm shared
 function GetShopFallback(subrole, tbl)
 	local rd = roles.GetByIndex(subrole)
 	local shopFallback = GetGlobalString("ttt_" .. rd.abbr .. "_shop_fallback")
@@ -154,6 +185,13 @@ function GetShopFallback(subrole, tbl)
 	return fb, subrole -- return deepest value and the value before the deepest value
 end
 
+---
+-- Returns a shop fallback / shop table
+-- @param number subrole id of @{ROLE}
+-- @return table fallback table
+-- @internal
+-- @todo improve description
+-- @realm shared
 function GetShopFallbackTable(subrole)
 	local rd = roles.GetByIndex(subrole)
 
@@ -174,6 +212,15 @@ function GetShopFallbackTable(subrole)
 end
 
 if CLIENT then
+
+	---
+	-- Returns a list of equipment that is available for a @{ROLE}
+	-- param Player ply
+	-- @param number subrole id of @{ROLE}
+	-- @param[opt] boolean noModification whether the modified equipment (e.g. randomshop) table should be returned or the original one
+	-- @internal
+	-- @todo improve description
+	-- @realm client
 	function GetEquipmentForRole(ply, subrole, noModification)
 		local fallbackTable = GetShopFallbackTable(subrole)
 
@@ -299,6 +346,13 @@ if SERVER then
 		end
 	end
 
+  ---
+	-- Update the random shops
+	-- @param table plys list of @{Player}
+	-- @param number val
+	-- @param string team @{ROLE} team
+	-- @internal
+	-- @realm server
 	function UpdateRandomShops(plys, val, team)
 		if plys then
 			for _, ply in ipairs(plys) do
@@ -423,6 +477,13 @@ if SERVER then
 		SyncRandomShops(plys)
 	end
 
+  ---
+	-- Reset the random shops for a @{ROLE}
+	-- @param number role subrole id of a @{ROLE}
+	-- @param number amount
+	-- @param string team @{ROLE} team
+	-- @internal
+	-- @realm server
 	function ResetRandomShopsForRole(role, amount, team)
 		local fallback = GetShopFallback(role)
 
@@ -464,7 +525,7 @@ if SERVER then
 		SetGlobalBool("ttt2_random_shop_reroll", tobool(new))
 	end, "ttt2updatererollglobal")
 
-	
+
 	cvars.AddChangeCallback("ttt2_random_shop_reroll_cost", function(name, old, new)
 		SetGlobalInt("ttt2_random_shop_reroll_cost", tonumber(new))
 	end, "ttt2updatererollcostglobal")
@@ -542,6 +603,13 @@ else
 	net.Receive("TTT2SyncRandomShops", TTT2SyncRandomShops)
 end
 
+---
+-- Returns the modified equipment table (e.g. randomshop table)
+-- @param Player ply
+-- @param table fallback
+-- @return table
+-- @internal
+-- @realm shared
 function GetModifiedEquipment(ply, fallback)
 	if ply and fallback and RANDOMSHOP[ply] and GetGlobalInt("ttt2_random_shops") > 0 then
 		local tmp = {}
@@ -562,7 +630,13 @@ function GetModifiedEquipment(ply, fallback)
 	return fallback
 end
 
--- Utility function to register a new Equipment ID
+---
+-- Utility function to register a new Equipment ID. The ID is generated exponentially.
+-- This functions shouldn't be called more than 13 times.
+-- @note You should definitely use the new ITEM System instead!
+-- @return number
+-- @deprecated
+-- @realm shared
 function GenerateNewEquipmentID()
 	EQUIP_MAX = EQUIP_MAX * 2
 
@@ -581,6 +655,12 @@ function GenerateNewEquipmentID()
 	return EQUIP_MAX
 end
 
+---
+-- Checks whether a equipment table has a specific equipment
+-- @param table tbl
+-- @param table equip
+-- @return[default=false] boolean
+-- @realm shared
 function EquipmentTableHasValue(tbl, equip)
 	if not tbl then
 		return false
@@ -595,6 +675,10 @@ function EquipmentTableHasValue(tbl, equip)
 	return false
 end
 
+---
+-- Initializes the fallback shops
+-- @internal
+-- @realm shared
 function InitFallbackShops()
 	for _, v in ipairs({TRAITOR, DETECTIVE}) do
 		local fallback = GetShopFallbackTable(v.index)
@@ -613,6 +697,13 @@ function InitFallbackShops()
 	end
 end
 
+---
+-- Initializes the fallback shop for a @{ROLE}
+-- @param Role roleData
+-- @param table fallbackTable
+-- @param[opt] boolean avoidSet
+-- @internal
+-- @realm shared
 function InitFallbackShop(roleData, fallbackTable, avoidSet)
 	if not avoidSet then
 		roleData.fallbackTable = fallbackTable
@@ -633,6 +724,13 @@ function InitFallbackShop(roleData, fallbackTable, avoidSet)
 	end
 end
 
+---
+-- Adds an equipment into a shop fallback table of a @{ROLE}
+-- @param table fallback
+-- @param number subrole subrole id of a @{ROLE}
+-- @param table eq equipment
+-- @internal
+-- @realm shared
 function AddToShopFallback(fallback, subrole, eq)
 	if not table.HasValue(fallback, eq) then
 		table.insert(fallback, eq)
@@ -692,6 +790,10 @@ local function InitDefaultEquipmentForRole(roleData)
 	roleData.fallbackTable = tbl
 end
 
+---
+-- Initializes the default equipment for traitors and detectives
+-- @internal
+-- @realm shared
 function InitDefaultEquipment()
 	InitDefaultEquipmentForRole(TRAITOR)
 	InitDefaultEquipmentForRole(DETECTIVE)
@@ -700,13 +802,19 @@ end
 if SERVER then
 	util.AddNetworkString("TTT2SyncEquipment")
 
+	---
+	-- Synces equipment with a @{Player}
+	-- @param Player ply
+	-- @param[opt=true] boolean add
+	-- @internal
+	-- @realm server
 	function SyncEquipment(ply, add)
-		add = add or true
-
 		--print("[TTT2][SHOP] Sending new SHOP list to " .. ply:Nick() .. "...")
 
 		local s = EncodeForStream(SYNC_EQUIP)
 		if not s then return end
+
+		add = add == nil and true or add
 
 		-- divide into happy lil bits.
 		-- this was necessary with user messages, now it's
@@ -733,9 +841,19 @@ if SERVER then
 		end
 	end
 
+	---
+	-- Synces single equipment with a @{Player}
+	-- @param Player ply
+	-- @param number role subrole id of a @{ROLE}
+	-- @param number equipId
+	-- @param[opt=true] boolean add
+	-- @internal
+	-- @realm server
 	function SyncSingleEquipment(ply, role, equipId, add)
 		local s = EncodeForStream({[role] = {equipId}})
 		if not s then return end
+
+		add = add == nil and true or add
 
 		-- divide into happy lil bits.
 		-- this was necessary with user messages, now it's
@@ -762,6 +880,11 @@ if SERVER then
 		end
 	end
 
+	---
+	-- Loads a single shop of a @{ROLE}
+	-- @param ROLE roleData
+	-- @internal
+	-- @realm server
 	function LoadSingleShopEquipment(roleData)
 		local fallback = GetGlobalString("ttt_" .. roleData.abbr .. "_shop_fallback")
 
@@ -794,6 +917,11 @@ if SERVER then
 		end
 	end
 
+	---
+	-- Adds an equipment into a @{ROLE}'s equipment table
+	-- @param number subrole subrole id
+	-- @param table equip_table
+	-- @realm server
 	function AddEquipmentToRole(subrole, equip_table)
 		equip_table.CanBuy = equip_table.CanBuy or {}
 
@@ -813,6 +941,11 @@ if SERVER then
 		end
 	end
 
+	---
+	-- Removes an equipment from a @{ROLE}'s equipment table
+	-- @param number subrole subrole id
+	-- @param table equip_table
+	-- @realm server
 	function RemoveEquipmentFromRole(subrole, equip_table)
 		if not equip_table.CanBuy then
 			equip_table.CanBuy = {}
@@ -889,6 +1022,11 @@ else -- CLIENT
 	end
 	net.Receive("TTT2ResetTBEq", ResetTeambuyEquipment)
 
+	---
+	-- Adds an equipment into a @{ROLE}'s equipment table
+	-- @param number subrole subrole id
+	-- @param table equip
+	-- @realm client
 	function AddEquipmentToRoleEquipment(subrole, equip)
 		-- start with all the non-weapon goodies
 		local toadd
@@ -921,6 +1059,11 @@ else -- CLIENT
 		end
 	end
 
+	---
+	-- Removes an equipment from a @{ROLE}'s equipment table
+	-- @param number subrole subrole id
+	-- @param table equip
+	-- @realm client
 	function RemoveEquipmentFromRoleEquipment(subrole, equip)
 		for k, v in ipairs(equip.CanBuy) do
 			if v == subrole then
@@ -996,7 +1139,13 @@ else -- CLIENT
 	net.Receive("TTT2SyncEquipment", TTT2SyncEquipment)
 end
 
--- support this old item system too
+---
+-- Returns an @{ITEM} if it's available for a specific @{ROLE}
+-- @param number role subrole id
+-- @param string|number id item id / name
+-- @see items.GetRoleItem
+-- @deprecated
+-- @realm shared
 function GetEquipmentItem(role, id)
 	return items.GetRoleItem(role, id)
 end

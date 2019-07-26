@@ -1,3 +1,5 @@
+---
+-- @module LANG
 -- Shared language stuff
 
 -- tbl is first created here on both server and client
@@ -30,10 +32,16 @@ end
 if SERVER then
 	local count = table.Count
 
-	-- Can be called as:
+	---
+	-- Sends a message to (a) specific target(s) in their selected language
+	-- @param[opt] number|table|Player arg1 the target(s) that should receive this message
+	-- @param string arg2 the translation key name
+	-- @param any arg3 params
+	-- @note Can be called as:
 	--   1) LANG.Msg(ply, name, params)  -- sent to ply
 	--   2) LANG.Msg(name, params)       -- sent to all
 	--   3) LANG.Msg(role, name, params) -- sent to plys with role
+	-- @realm server
 	function LANG.Msg(arg1, arg2, arg3)
 		if type(arg1) == "string" then
 			LANG.ProcessMsg(nil, arg1, arg2)
@@ -44,6 +52,13 @@ if SERVER then
 		end
 	end
 
+	---
+	-- Sends a message to (a) specific target(s) in their selected language
+	-- @param table|Player send_to the target(s) that should receive this message
+	-- @param string name the translation key name
+	-- @param any params params
+	-- @realm server
+	-- @internal
 	function LANG.ProcessMsg(send_to, name, params)
 		-- don't want to send to null ents, but can't just IsValid send_to because
 		-- it may be a recipientfilter, so type check first
@@ -72,6 +87,12 @@ if SERVER then
 		end
 	end
 
+	---
+	-- Sends a message to all players in their selected language
+	-- @param string name the translation key name
+	-- @param any params params
+	-- @realm server
+	-- @internal
 	function LANG.MsgAll(name, params)
 		LANG.Msg(nil, name, params)
 	end
@@ -126,16 +147,25 @@ else -- CLIENT
 	net.Receive("TTT_ServerLang", RecvServerLang)
 end
 
+---
 -- It can be useful to send string names as params, that the client can then
 -- localize before interpolating. However, we want to prevent user input like
 -- nicknames from being localized, so mark string names with something users
 -- can't input.
+-- @param string name
+-- @return string transformed name
+-- @realm shared
 function LANG.NameParam(name)
 	return "LID\t" .. name
 end
 
 LANG.Param = LANG.NameParam
 
+---
+-- Returns the matches based on the transformation of @{LANG.NameParam}
+-- @param string str
+-- @return table list of matched params
+-- @realm shared
 function LANG.GetNameParam(str)
 	return string.match(str, "^LID\t([%w_]+)$")
 end

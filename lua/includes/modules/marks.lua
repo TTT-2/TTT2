@@ -16,10 +16,11 @@ if SERVER then
 else
 	---
 	-- Renders the entity based on the color
-	-- @tab ents list of <a href="https://wiki.garrysmod.com/page/Category:Entity">Entity</a>
-	-- @param col (<a href="https://wiki.garrysmod.com/page/Category:Color">Color</a>) color of rendering
-	-- @param pos (<a href="https://wiki.garrysmod.com/page/Category:Vector">Vector</a>) position of client's view the rendering starts from
-	-- @param ang (<a href="https://wiki.garrysmod.com/page/Category:Angle">Angle</a>) angle of client's view the rendering starts from
+	-- @param table ents list of @{Entity}
+	-- @param Color col color of rendering
+	-- @param Vector pos position of client's view the rendering starts from
+	-- @param Angle ang angle of client's view the rendering starts from
+	-- @realm client
 	local function Render(ents, col, pos, ang)
 		-- check for valid data
 		local tmp = {}
@@ -88,6 +89,7 @@ else
 
 	---
 	-- Hook that renders the entities with the highlighting
+	-- @realm client
 	local function RenderHook()
 		local client = LocalPlayer()
 		local ang = client:EyeAngles()
@@ -102,6 +104,7 @@ else
 
 	---
 	-- Hook adding
+	-- @realm client
 	local function AddMarksHook()
 		if marksHookInstalled then return end
 
@@ -110,6 +113,7 @@ else
 
 	---
 	-- Hook removing
+	-- @realm client
 	local function RemoveMarksHook()
 		hook.Remove("PostDrawOpaqueRenderables", "RenderMarks")
 
@@ -118,6 +122,7 @@ else
 
 	---
 	-- Initialization of the markers list
+	-- @realm client
 	local function SetupMarkList(col)
 		if not col then return end
 
@@ -129,7 +134,8 @@ else
 	end
 
 	---
-	-- Clearing the cached <a href="https://wiki.garrysmod.com/page/Category:Entity">Entity</a> list
+	-- Clearing the cached @{Entity} list
+	-- @realm client
 	function Clear()
 		marksList = {}
 
@@ -137,8 +143,9 @@ else
 	end
 
 	---
-	-- Removes entities from the <a href="https://wiki.garrysmod.com/page/Category:Entity">Entity</a> list
-	-- @tab ents list of entities that should get removed
+	-- Removes entities from the @{Entity} list
+	-- @param table ents list of entities that should get removed
+	-- @realm client
 	function Remove(ents)
 		if #ents == 0 or table.Count(marksList) == 0 then return end
 
@@ -166,9 +173,10 @@ else
 	end
 
 	---
-	-- Adds entities into the <a href="https://wiki.garrysmod.com/page/Category:Entity">Entity</a> list that should be rendered with a specific <a href="https://wiki.garrysmod.com/page/Category:Color">Color</a>
-	-- @tab ents list of <a href="https://wiki.garrysmod.com/page/Category:Entity">Entity</a> that should be added
-	-- @param col (<a href="https://wiki.garrysmod.com/page/Category:Color">Color</a>) the color the added entities should get rendered
+	-- Adds entities into the @{Entity} list that should be rendered with a specific @{Color}
+	-- @param table ents list of @{Entity} that should be added
+	-- @param Color col the color the added entities should get rendered
+	-- @realm client
 	function Add(ents, col)
 		if #ents == 0 or not col then return end
 
@@ -186,11 +194,12 @@ else
 	end
 
 	---
-	-- Sets entities of the <a href="https://wiki.garrysmod.com/page/Category:Entity">Entity</a> list that based on a specific <a href="https://wiki.garrysmod.com/page/Category:Color">Color</a>.
+	-- Sets entities of the @{Entity} list that based on a specific @{Color}.
 	-- All the other previously inserted entities with the same color will get removed
-	-- @tab ents list of <a href="https://wiki.garrysmod.com/page/Category:Entity">Entity</a> that should be set
-	-- @param col (<a href="https://wiki.garrysmod.com/page/Category:Color">Color</a>) the color the added entities should get rendered
+	-- @param table ents list of @{Entity} that should be set
+	-- @param Color col the color the added entities should get rendered
 	-- @usage marks.Set({}, COLOR_WHITE) -- this will clear all entities rendered in white
+	-- @realm client
 	function Set(ents, col)
 		if not col or not istable(ents) then return end
 

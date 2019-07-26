@@ -1,3 +1,8 @@
+---
+-- @module SQL
+-- @author Alf21
+-- @author saibotk
+
 local pairs = pairs
 local sql = sql
 
@@ -8,6 +13,15 @@ SQL = {}
 --
 --
 
+---
+-- Transformes parsed data into usable data
+-- Opposite of @{SQL.ParseData}
+-- @param string key the data you wanna get
+-- @param table data data with data.typ
+-- @param table res resource / parsed data
+-- @return any usable data
+-- @realm shared
+-- @todo usage
 function SQL.GetParsedData(key, data, res)
 	if key == "BaseClass" then return end
 
@@ -56,6 +70,14 @@ function SQL.GetParsedData(key, data, res)
 	return val
 end
 
+---
+-- Transformes usable data into parsed data
+-- Opposite of @{SQL.GetParsedData}
+-- @param table tbl table with data
+-- @param table keys the data you wanna save
+-- @return any parsed data
+-- @realm shared
+-- @todo usage
 function SQL.ParseData(tbl, keys)
 	local tmp = {}
 
@@ -89,6 +111,13 @@ function SQL.ParseData(tbl, keys)
 	return tmp
 end
 
+---
+-- Transformes a string into a data string (to work with MySQL)
+-- @param string key
+-- @param table data data table with data.typ
+-- @return string data string
+-- @realm shared
+-- @todo usage
 function SQL.ParseDataString(key, data)
 	if key == "BaseClass" then return end
 
@@ -110,6 +139,15 @@ end
 --
 --
 
+---
+-- Builds a MySQL "Insert" @{string}
+-- @param string tableName name of the MySQL table
+-- @param string name ?
+-- @param table tbl data @{table}
+-- @param table keys keys for the data @{table}
+-- @return string MySQL "Insert" @{string}
+-- @realm shared
+-- @todo usage
 function SQL.BuildInsertString(tableName, name, tbl, keys)
 	if not keys then return end
 
@@ -132,6 +170,15 @@ function SQL.BuildInsertString(tableName, name, tbl, keys)
 	return str
 end
 
+---
+-- Builds a MySQL "Update" @{string}
+-- @param string tableName name of the MySQL table
+-- @param string name ?
+-- @param table tbl data @{table}
+-- @param table keys keys for the data @{table}
+-- @return string MySQL "Update" @{string}
+-- @realm shared
+-- @todo usage
 function SQL.BuildUpdateString(tableName, name, tbl, keys)
 	if not keys then return end
 
@@ -154,6 +201,13 @@ function SQL.BuildUpdateString(tableName, name, tbl, keys)
 	return str
 end
 
+---
+-- Creates the MySQL table
+-- @param string tableName the MySQL table name
+-- @param table keys the keys for the data @{table}
+-- @return boolean Whether the MySQL table was created successfully
+-- @realm shared
+-- @todo usage
 function SQL.CreateSqlTable(tableName, keys)
 	local result
 
@@ -196,6 +250,15 @@ function SQL.CreateSqlTable(tableName, keys)
 	return result ~= false
 end
 
+---
+-- Initializes a MySQL table and inserts all necessary data
+-- @param string tableName name of the MySQL table
+-- @param string name ?
+-- @param table tbl data @{table}
+-- @param table keys keys for the data @{table}
+-- @return table false is returned if there is an error, nil if the query returned no data.
+-- @realm shared
+-- @todo usage
 function SQL.Init(tableName, name, tbl, keys)
 	if not keys or table.IsEmpty(keys) then return end
 
@@ -206,6 +269,15 @@ function SQL.Init(tableName, name, tbl, keys)
 	return sql.Query(query)
 end
 
+---
+-- Saves a MySQL table and updates all necessary data
+-- @param string tableName name of the MySQL table
+-- @param string name ?
+-- @param table tbl data @{table}
+-- @param table keys keys for the data @{table}
+-- @return table false is returned if there is an error, nil if the query returned no data.
+-- @realm shared
+-- @todo usage
 function SQL.Save(tableName, name, tbl, keys)
 	if not keys or table.IsEmpty(keys) then return end
 
@@ -216,6 +288,15 @@ function SQL.Save(tableName, name, tbl, keys)
 	return sql.Query(query)
 end
 
+---
+-- Loads a MySQL table and set all necessary data of the data @{table}
+-- @param string tableName name of the MySQL table
+-- @param string name ?
+-- @param table tbl data @{table}
+-- @param table keys keys for the data @{table}
+-- @return table false is returned if there is an error, nil if the query returned no data.
+-- @realm shared
+-- @todo usage
 function SQL.Load(tableName, name, tbl, keys)
 	if not keys or table.IsEmpty(keys) then return end
 

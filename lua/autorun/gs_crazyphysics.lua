@@ -1,3 +1,4 @@
+---
 -- Entity Crash Catcher v2
 -- This script detects entities that are moving too fast, leading to a potential server crash
 -- Original by code_gs, Ambro, DarthTealc, TheEMP, and LuaTenshi; v2 by code_gs

@@ -16,9 +16,10 @@ local HUDList = HUDList or {}
 
 ---
 -- Copies any missing data from base table to the target table
--- @tab t target table
--- @tab base base (fallback) table
--- @treturn table t target table
+-- @param table t target table
+-- @param table base base (fallback) table
+-- @return table t target table
+-- @realm shared
 local function TableInherit(t, base)
 	for k, v in pairs(base) do
 		if t[k] == nil then
@@ -33,9 +34,10 @@ end
 
 ---
 -- Checks if name is based on base
--- @tab name table to check
--- @tab base base (fallback) table
--- @treturn boolean returns whether name is based on base
+-- @param table name table to check
+-- @param table base base (fallback) table
+-- @return boolean returns whether name is based on base
+-- @realm shared
 function IsBasedOn(name, base)
 	local t = GetStored(name)
 
@@ -57,8 +59,9 @@ end
 ---
 -- Used to register your hud with the engine.<br />
 -- <b>This is done automatically for all the files in the <code>gamemodes/terrortown/gamemode/shared/huds</code> folder</b>
--- @tab t hud table
--- @str name hud name
+-- @param table t hud table
+-- @param string name hud name
+-- @realm shared
 function Register(t, name)
 	name = string.lower(name)
 
@@ -115,6 +118,7 @@ end
 ---
 -- All scripts have been loaded...
 -- @local
+-- @realm shared
 function OnLoaded()
 
 	--
@@ -132,9 +136,10 @@ end
 
 ---
 -- Get an hud by name (a copy)
--- @str name hud name
--- @tparam[opt] ?table retTbl this table will be modified and returned. If nil, a new table will be created.
--- @treturn table returns the modified retTbl or the new hud table
+-- @param string name hud name
+-- @param[opt] ?table retTbl this table will be modified and returned. If nil, a new table will be created.
+-- @return table returns the modified retTbl or the new hud table
+-- @realm shared
 function Get(name, retTbl)
 	local Stored = GetStored(name)
 	if not Stored then return end
@@ -169,15 +174,17 @@ end
 
 ---
 -- Gets the real hud table (not a copy)
--- @str name hud name
--- @treturn table returns the real hud table
+-- @param string name hud name
+-- @return table returns the real hud table
+-- @realm shared
 function GetStored(name)
 	return HUDList[name]
 end
 
 ---
 -- Get a list (copy) of all registered huds, that can be displayed (no abstract HUDs).
--- @treturn table available huds
+-- @return table available huds
+-- @realm shared
 function GetList()
 	local result = {}
 
@@ -192,7 +199,8 @@ end
 
 ---
 -- Get a list (copy) of all the registered HUDs including abstract HUDs.
--- @treturn table all registered huds
+-- @return table all registered huds
+-- @realm shared
 function GetRealList()
 	local result = {}
 
