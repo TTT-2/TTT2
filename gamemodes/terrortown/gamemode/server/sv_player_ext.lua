@@ -1,3 +1,6 @@
+---
+-- @module Player
+
 -- serverside extensions to player table
 
 local net = net
@@ -14,6 +17,10 @@ if not plymeta then
 	return
 end
 
+---
+-- Sets whether a @{Player} is spectating the own ragdoll
+-- @param boolean s
+-- @realm server
 function plymeta:SetRagdollSpec(s)
 	if s then
 		self.spec_ragdoll_start = CurTime()
@@ -22,10 +29,18 @@ function plymeta:SetRagdollSpec(s)
 	self.spec_ragdoll = s
 end
 
+---
+-- Returns whether a @{Player} is spectating the own ragdoll
+-- @return boolean
+-- @realm server
 function plymeta:GetRagdollSpec()
 	return self.spec_ragdoll
 end
 
+---
+-- Sets a @{Player} to be a forced spectator (not just a dead terrorist)
+-- @param boolean state
+-- @realm server
 function plymeta:SetForceSpec(state)
 	self.force_spec = state -- compatibility with other addons
 
@@ -34,40 +49,96 @@ end
 
 -- Karma
 
--- The base/start karma is determined once per round and determines the player's
+---
+-- The base/start karma is determined once per round and determines the @{Player}'s
 -- damage penalty. It is networked and shown on clients.
+-- @param number k
+-- @realm server
 function plymeta:SetBaseKarma(k)
 	self:SetNWFloat("karma", k)
 end
 
--- The live karma starts equal to the base karma, but is updated "live" as the
+---
+-- @function plymeta:GetLiveKarma()
+-- @desc The live karma starts equal to the base karma, but is updated "live" as the
 -- player damages/kills others. When another player damages/kills this one, the
 -- live karma is used to determine his karma penalty.
+-- @return number
+-- @realm server
+-- @see plymeta:SetLiveKarma
+---
+-- @function plymeta:SetLiveKarma(live_karma)
+-- @desc The live karma starts equal to the base karma, but is updated "live" as the
+-- player damages/kills others. When another player damages/kills this one, the
+-- live karma is used to determine his karma penalty.
+-- @param number live_karma
+-- @realm server
+-- @see plymeta:GetLiveKarma
 AccessorFunc(plymeta, "live_karma", "LiveKarma", FORCE_NUMBER)
 
--- The damage factor scales how much damage the player deals, so if it is .9
+---
+-- @function plymeta:GetDamageFactor()
+-- @desc The damage factor scales how much damage the player deals, so if it is .9
 -- then the player only deals 90% of his original damage.
+-- @return number
+-- @realm server
+-- @see plymeta:SetDamageFactor
+---
+-- @function plymeta:SetDamageFactor(dmg_factor)
+-- @desc The damage factor scales how much damage the player deals, so if it is .9
+-- then the player only deals 90% of his original damage.
+-- @param number dmg_factor
+-- @realm server
+-- @see plymeta:GetDamageFactor
 AccessorFunc(plymeta, "dmg_factor", "DamageFactor", FORCE_NUMBER)
 
--- If a player does not damage team members in a round, he has a "clean" round
+---
+-- @function plymeta:GetCleanRound()
+-- @desc If a player does not damage team members in a round, he has a "clean" round
 -- and gets a bonus for it.
+-- @return boolean
+-- @realm server
+-- @see plymeta:SetCleanRound
+---
+-- @function plymeta:SetCleanRound(clean_round)
+-- @desc If a player does not damage team members in a round, he has a "clean" round
+-- and gets a bonus for it.
+-- @param boolean clean_round
+-- @realm server
+-- @see plymeta:GetCleanRound
 AccessorFunc(plymeta, "clean_round", "CleanRound", FORCE_BOOL)
 
+---
+-- Initializes the KARMA for the given @{Player}
+-- @realm server
 function plymeta:InitKarma()
 	KARMA.InitPlayer(self)
 end
 
 -- Equipment credits
+
+---
+-- Sets the amount of credits
+-- @param number amt
+-- @realm server
 function plymeta:SetCredits(amt)
 	self.equipment_credits = amt
 
 	self:SendCredits()
 end
 
+---
+-- Adds an amount of credits
+-- @param number amt
+-- @realm server
 function plymeta:AddCredits(amt)
 	self:SetCredits(self:GetCredits() + amt)
 end
 
+---
+-- Removes an amount of credits
+-- @param number amt
+-- @realm server
 function plymeta:SubtractCredits(amt)
 	local tmp = self:GetCredits() - amt
 	if tmp < 0 then
@@ -77,6 +148,9 @@ function plymeta:SubtractCredits(amt)
 	self:SetCredits(tmp)
 end
 
+---
+-- Sets the default amount of credits
+-- @realm server
 function plymeta:SetDefaultCredits()
 	if hook.Run("TTT2SetDefaultCredits", self) then return end
 
@@ -101,6 +175,9 @@ function plymeta:SetDefaultCredits()
 	end
 end
 
+---
+-- Synces the amount of credits with the @{Player}
+-- @realm server
 function plymeta:SendCredits()
 	net.Start("TTT_Credits")
 	net.WriteUInt(self:GetCredits(), 8)
@@ -108,6 +185,11 @@ function plymeta:SendCredits()
 end
 
 -- Equipment items
+
+---
+-- Gives a specific @{ITEM} (if possible)
+-- @param string id
+-- @realm server
 function plymeta:AddEquipmentItem(id)
 	if not self:HasEquipmentItem(id) then
 		self.equipmentItems = self.equipmentItems or {}
@@ -122,6 +204,10 @@ function plymeta:AddEquipmentItem(id)
 	end
 end
 
+---
+-- Removes a specific @{ITEM}
+-- @param string id
+-- @realm server
 function plymeta:RemoveEquipmentItem(id)
 	if self:HasEquipmentItem(id) then
 		local item = items.GetStored(id)
@@ -141,7 +227,10 @@ function plymeta:RemoveEquipmentItem(id)
 	end
 end
 
--- We do this instead of an NW var in order to limit the info to just this ply
+---
+-- Synces the server stored equipment with the @{Player}
+-- @note We do this instead of an NW var in order to limit the info to just this ply
+-- @realm server
 function plymeta:SendEquipment()
 	local arr = self:GetEquipmentItems()
 
@@ -155,6 +244,9 @@ function plymeta:SendEquipment()
 	net.Send(self)
 end
 
+---
+-- Resets the equipment of a @{Player}
+-- @realm server
 function plymeta:ResetEquipment()
 	for _, id in ipairs(self:GetEquipmentItems()) do
 		local item = items.GetStored(id)
@@ -168,6 +260,9 @@ function plymeta:ResetEquipment()
 	self:SendEquipment()
 end
 
+---
+-- Sends the list of bought @{ITEM}s and @{Weapon}s to the @{Player}
+-- @realm server
 function plymeta:SendBought()
 	-- Send all as string, even though equipment are numbers, for simplicity
 	net.Start("TTT_Bought")
@@ -187,12 +282,22 @@ local function ttt_resend_bought(ply)
 end
 concommand.Add("ttt_resend_bought", ttt_resend_bought)
 
+---
+-- Resets the bought list of a @{Player}
+-- @realm server
 function plymeta:ResetBought()
 	self.bought = {}
 
 	self:SendBought()
 end
 
+---
+-- Adds an @{ITEM} or a @{Weapon} into the bought list of a @{Player}
+-- @note This will disable another purchase of the same equipment
+-- if this equipment is limited
+-- @param string id
+-- @realm server
+-- @see plymeta:RemoveBought
 function plymeta:AddBought(id)
 	self.bought = self.bought or {}
 
@@ -220,6 +325,13 @@ function plymeta:AddBought(id)
 	self:SendBought()
 end
 
+---
+-- Removes an @{ITEM} or a @{Weapon} from the bought list of a @{Player}
+-- @note This will enable another purchase of the same equipment
+-- if this equipment is limited
+-- @param string id
+-- @realm server
+-- @see plymeta:AddBought
 function plymeta:RemoveBought(id)
 	local key
 
@@ -240,7 +352,9 @@ function plymeta:RemoveBought(id)
 	end
 end
 
+---
 -- Strips player of all equipment
+-- @realm server
 function plymeta:StripAll()
 	-- standard stuff
 	self:StripAmmo()
@@ -251,7 +365,9 @@ function plymeta:StripAll()
 	self:SetCredits(0)
 end
 
+---
 -- Sets all flags (force_spec, etc) to their default
+-- @realm server
 function plymeta:ResetStatus()
 	self:SetRole(ROLE_INNOCENT) -- this will update the team automatically
 	self:SetRagdollSpec(false)
@@ -259,7 +375,9 @@ function plymeta:ResetStatus()
 	self:ResetRoundFlags()
 end
 
+---
 -- Sets round-based misc flags to default position. Called at PlayerSpawn.
+-- @realm server
 function plymeta:ResetRoundFlags()
 	self:ResetEquipment()
 	self:SetCredits(0)
@@ -291,9 +409,13 @@ function plymeta:ResetRoundFlags()
 	self:Freeze(false)
 end
 
--- Give a weapon to a player. If the initial attempt fails due to heisenbugs in
--- the map, keep trying until the player has moved to a better spot where it
+---
+-- Give a @{Weapon} to a @{Player}.
+-- @note If the initial attempt fails due to heisenbugs in
+-- the map, keep trying until the @{Player} has moved to a better spot where it
 -- does work.
+-- @param string cls @{Weapon}'s class
+-- @realm server
 function plymeta:GiveEquipmentWeapon(cls)
 	-- Referring to players by SteamID64 because a player may disconnect while his
 	-- unique timer still runs, in which case we want to be able to stop it. For
@@ -333,6 +455,11 @@ function plymeta:GiveEquipmentWeapon(cls)
 	end
 end
 
+---
+-- Gives an @{ITEM} to a @{Player}
+-- @param string id
+-- @return boolean success?
+-- @realm server
 function plymeta:GiveEquipmentItem(id)
 	if self:HasEquipmentItem(id) then
 		return false
@@ -343,7 +470,10 @@ function plymeta:GiveEquipmentItem(id)
 	end
 end
 
+---
 -- Forced specs and latejoin specs should not get points
+-- @return boolean
+-- @realm server
 function plymeta:ShouldScore()
 	if self:GetForceSpec() then
 		return false
@@ -354,6 +484,10 @@ function plymeta:ShouldScore()
 	end
 end
 
+---
+-- Adds a kill into the kill list
+-- @param Player victim
+-- @realm server
 function plymeta:RecordKill(victim)
 	if not IsValid(victim) then return end
 
@@ -362,16 +496,28 @@ function plymeta:RecordKill(victim)
 	table.insert(self.kills, victim:SteamID64())
 end
 
+---
+-- This is doing nothing, it's just a function to avoid incompatibility
+-- @note Please remove this call and use the TTTPlayerSpeedModifier hook in both CLIENT and SERVER states
+-- @deprecated
+-- @realm server
 function plymeta:SetSpeed(slowed)
 	error "Player:SetSpeed(slowed) is deprecated - please remove this call and use the TTTPlayerSpeedModifier hook in both CLIENT and SERVER states"
 end
 
+---
+-- Resets the last words
+-- @realm server
 function plymeta:ResetLastWords()
-	if not IsValid(self) then return end -- timers are dangerous things
+	--if not IsValid(self) then return end -- timers are dangerous things
 
 	self.last_words_id = nil
 end
 
+---
+-- Sends the last words based on the DamageInfo
+-- @param DamageInfo dmginfo
+-- @realm server
 function plymeta:SendLastWords(dmginfo)
 	-- Use a pseudo unique id to prevent people from abusing the concmd
 	self.last_words_id = math.floor(CurTime() + math.random(500))
@@ -403,6 +549,9 @@ function plymeta:SendLastWords(dmginfo)
 	end)
 end
 
+---
+-- Resets the view
+-- @realm server
 function plymeta:ResetViewRoll()
 	local ang = self:EyeAngles()
 
@@ -413,6 +562,10 @@ function plymeta:ResetViewRoll()
 	end
 end
 
+---
+-- Checks whether a @{Player} is able to spawn
+-- @return boolean
+-- @realm server
 function plymeta:ShouldSpawn()
 	-- do not spawn players who have not been through initspawn
 	if not self:IsSpec() and not self:IsTerror() then
@@ -427,8 +580,12 @@ function plymeta:ShouldSpawn()
 	return true
 end
 
--- Preps a player for a new round, spawning them if they should. If dead_only is
+---
+-- Preps a player for a new round, spawning them if they should
+-- @param boolean dead_only If dead_only is
 -- true, only spawns if player is dead, else just makes sure he is healed.
+-- @return boolean
+-- realm shared
 function plymeta:SpawnForRound(dead_only)
 	hook.Call("PlayerSetModel", GAMEMODE, self)
 	hook.Run("TTTPlayerSetColor", self)
@@ -462,6 +619,9 @@ function plymeta:SpawnForRound(dead_only)
 	return true
 end
 
+---
+-- This is called on the first spawn to set the default vars
+-- @realm server
 function plymeta:InitialSpawn()
 	self.has_spawned = false
 
@@ -489,6 +649,11 @@ function plymeta:InitialSpawn()
 	self:StripAll()
 end
 
+---
+-- Kicks and bans a player
+-- @param number length time of the ban
+-- @param string reason
+-- @realm server
 function plymeta:KickBan(length, reason)
 	-- see admin.lua
 	PerformKickBan(self, length, reason)
@@ -496,6 +661,10 @@ end
 
 local oldSpectate = plymeta.Spectate
 
+---
+-- Forces a @{Player} to the spectation modus
+-- @param number type
+-- @realm server
 function plymeta:Spectate(type)
 	oldSpectate(self, type)
 
@@ -510,6 +679,10 @@ end
 
 local oldSpectateEntity = plymeta.SpectateEntity
 
+---
+-- Forces a @{Player} to spectate an @{Entity}
+-- @param Entity ent
+-- @realm server
 function plymeta:SpectateEntity(ent)
 	oldSpectateEntity(self, ent)
 
@@ -520,16 +693,31 @@ end
 
 local oldUnSpectate = plymeta.UnSpectate
 
+---
+-- Unspectates a @{Player}
+-- @realm server
 function plymeta:UnSpectate()
 	oldUnSpectate(self)
 
 	self:SetNoTarget(false)
 end
 
+---
+-- Returns whether a @{Player} has disabled the selection of a given @{ROLE}
+-- @param number role subrole id of a @{ROLE}
+-- @return boolean
+-- @realm server
 function plymeta:GetAvoidRole(role)
 	return self:GetInfoNum("ttt_avoid_" .. roles.GetByIndex(role).name, 0) > 0
 end
 
+---
+-- Returns whether a @{Player} is able to select a specific @{ROLE}
+-- @param ROLE roleData
+-- @param number choice_count
+-- @param number role_count
+-- @return boolean
+-- @realm server
 function plymeta:CanSelectRole(roleData, choice_count, role_count)
 	local min_karmas = ConVarExists("ttt_" .. roleData.name .. "_karma_min") and GetConVar("ttt_" .. roleData.name .. "_karma_min"):GetInt() or 0
 
@@ -585,6 +773,15 @@ local function FindCorpsePosition(corpse)
 	return false
 end
 
+---
+-- Revives a @{Player}
+-- @param number delay the delay of the revive
+-- @param function fn the @{function} that should be run if the @{Player} revives
+-- @param function check an additional checking @{function}
+-- @param boolean needcorpse whether the dead @{Player} CORPSE is needed
+-- @param boolean force if the @{Player} revive is already forced. Useful if you have multiple reviving equipments
+-- @param function onFail this @{function} is called if the revive fails
+-- @realm server
 function plymeta:Revive(delay, fn, check, needcorpse, force, onFail)
 	local ply = self
 	local name = "TTT2RevivePlayer" .. ply:EntIndex()
@@ -649,6 +846,10 @@ function plymeta:Revive(delay, fn, check, needcorpse, force, onFail)
 	end)
 end
 
+---
+-- Selects a random available @{ROLE} for a @{Player}
+-- @param table avoidRoles list of @{ROLE}s that should be avoided
+-- @realm server
 function plymeta:SelectRandomRole(avoidRoles)
 	local selectableRoles = GetSelectableRoles()
 	local availableRoles = {}
@@ -675,6 +876,10 @@ end
 
 local pendingItems = {}
 
+---
+-- Gives an @{ITEM} to a @{Player}
+-- @param string id
+-- @realm server
 function plymeta:GiveItem(id)
 	if GetRoundState() == ROUND_PREP then
 		pendingItems[self] = pendingItems[self] or {}
@@ -704,21 +909,26 @@ function plymeta:GiveItem(id)
 	hook.Run("TTTOrderedEquipment", self, id, items.IsItem(id) and id or false)
 end
 
+---
+-- Removes an @{ITEM} from a @{Player}
+-- @param string id
+-- @realm server
 function plymeta:RemoveItem(id)
 	self:RemoveEquipmentItem(id)
 	self:RemoveBought(id)
 end
 
--- update player corpse state
+---
+-- Update player corpse state
+-- @param[opt] boolean announceRole
+-- @realm server
 function plymeta:ConfirmPlayer(announceRole)
-	announceRole = announceRole or false
-
 	if self:GetNWFloat("t_first_found", -1) < 0 then
 		self:SetNWFloat("t_first_found", CurTime())
 	end
 	self:SetNWFloat("t_last_found", CurTime())
 
-	if announceRole then
+	if announceRole == true then
 		self:SetNWBool("body_found", true)
 		self:SetNWBool("role_found", true)
 	else
@@ -726,6 +936,9 @@ function plymeta:ConfirmPlayer(announceRole)
 	end
 end
 
+---
+-- Resets the confirmation of a @{Player}
+-- @realm server
 function plymeta:ResetConfirmPlayer()
 	-- body_found is reset on the player reset
 	self:SetNWBool("role_found", false)
@@ -734,7 +947,7 @@ function plymeta:ResetConfirmPlayer()
 	self:SetNWFloat("t_last_found", -1)
 end
 
-
+-- TODO REMOVE THIS
 
 hook.Add("TTTBeginRound", "TTT2GivePendingItems", function()
 	for ply, tbl in pairs(pendingItems) do
