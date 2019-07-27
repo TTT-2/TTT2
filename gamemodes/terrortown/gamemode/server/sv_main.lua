@@ -255,6 +255,7 @@ CHANGED_EQUIPMENT = {}
 -- @hook
 -- @realm server
 -- @ref https://wiki.garrysmod.com/page/GM/Initialize
+-- @local
 function GM:Initialize()
 	MsgN("Trouble In Terrorist Town 2 gamemode initializing...")
 	ShowVersion()
@@ -343,6 +344,7 @@ end
 -- @hook
 -- @realm server
 -- @ref https://wiki.garrysmod.com/page/GM/GetGameDescription
+-- @local
 function GM:GetGameDescription()
 	return self.Name
 end
@@ -357,6 +359,7 @@ end
 -- @hook
 -- @realm server
 -- @ref https://wiki.garrysmod.com/page/GM/InitPostEntity
+-- @local
 function GM:InitPostEntity()
 	MsgN("[TTT2][INFO] Client post-init...")
 
@@ -490,6 +493,7 @@ end
 -- @hook
 -- @realm server
 -- @ref https://wiki.garrysmod.com/page/GM/PostGamemodeLoaded
+-- @local
 function GM:PostGamemodeLoaded()
 
 end
@@ -763,6 +767,7 @@ end
 -- @hook
 -- @realm server
 -- @ref https://wiki.garrysmod.com/page/GM/PreCleanupMap
+-- @local
 function GM:PreCleanupMap()
 	ents.TTT.FixParentedPreCleanup()
 end
@@ -772,6 +777,7 @@ end
 -- @hook
 -- @realm server
 -- @ref https://wiki.garrysmod.com/page/GM/PostCleanupMap
+-- @local
 function GM:PostCleanupMap()
 	ents.TTT.FixParentedPostCleanup()
 end

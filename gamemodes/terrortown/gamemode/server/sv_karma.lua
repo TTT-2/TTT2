@@ -179,7 +179,7 @@ end
 -- damage factor of the attacker.
 -- @param Player attacker
 -- @param Player victim
--- @param DamageInfo dmginfo
+-- @param CTakeDamageInfo dmginfo
 -- @realm server
 function KARMA.Hurt(attacker, victim, dmginfo)
 	if attacker == victim or not IsValid(attacker) or not IsValid(victim) or not attacker:IsPlayer() or not victim:IsPlayer() or dmginfo:GetDamage() <= 0 then return end
@@ -214,7 +214,7 @@ end
 -- Handle karma change due to one player killing another.
 -- @param Player attacker
 -- @param Player victim
--- @param DamageInfo dmginfo
+-- @param CTakeDamageInfo dmginfo
 -- @realm server
 function KARMA.Killed(attacker, victim, dmginfo)
 	if attacker == victim or not IsValid(attacker) or not IsValid(victim) or not victim:IsPlayer() or not attacker:IsPlayer() then return end

@@ -15,7 +15,7 @@ local weapons = weapons
 ---
 -- Attempts to get the weapon used from a DamageInfo instance needed because the
 -- GetAmmoType value is useless and inflictor isn't properly set (yet)
--- @param DamageInfo dmg
+-- @param CTakeDamageInfo dmg
 -- @return Weapon
 -- @realm shared
 function util.WeaponFromDamage(dmg)
@@ -203,7 +203,7 @@ end
 ---
 -- Something hurt us, start bleeding for a bit depending on the amount
 -- @param Entity ent
--- @param DamageInfo dmg
+-- @param CTakeDamageInfo dmg
 -- @param number t times
 -- @realm shared
 -- @todo improve description

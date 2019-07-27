@@ -516,7 +516,7 @@ end
 
 ---
 -- Sends the last words based on the DamageInfo
--- @param DamageInfo dmginfo
+-- @param CTakeDamageInfo dmginfo
 -- @realm server
 function plymeta:SendLastWords(dmginfo)
 	-- Use a pseudo unique id to prevent people from abusing the concmd
@@ -926,14 +926,14 @@ function plymeta:ConfirmPlayer(announceRole)
 	if self:GetNWFloat("t_first_found", -1) < 0 then
 		self:SetNWFloat("t_first_found", CurTime())
 	end
+
 	self:SetNWFloat("t_last_found", CurTime())
 
-	if announceRole == true then
-		self:SetNWBool("body_found", true)
+	if announceRole then
 		self:SetNWBool("role_found", true)
-	else
-		self:SetNWBool("body_found", true)
 	end
+
+	self:SetNWBool("body_found", true)
 end
 
 ---
