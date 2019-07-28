@@ -1,3 +1,6 @@
+---
+-- @section weapon_manager
+
 ttt_include("sh_weaponry") -- inits WEPS tbl
 
 util.AddNetworkString("TTT2CleanupInventory")
@@ -14,7 +17,16 @@ local hook = hook
 
 local IsEquipment = WEPS.IsEquipment
 
--- Prevent players from picking up multiple weapons of the same type etc
+---
+-- Returns whether or not a @{Player} is allowed to pick up a @{Weapon}
+-- @note Prevent @{Player}s from picking up multiple @{Weapon}s of the same type etc
+-- @param Player ply The @{Player} attempting to pick up the @{Weapon}
+-- @param Weapon wep The @{Weapon} entity in question
+-- @return boolean Allowed pick up or not
+-- @hook
+-- @realm server
+-- @ref https://wiki.garrysmod.com/page/GM/PlayerCanPickupWeapon
+-- @local
 function GM:PlayerCanPickupWeapon(ply, wep)
 	if not IsValid(wep) or not IsValid(ply) then return end
 
@@ -256,6 +268,7 @@ local function CanWearHat(ply)
 end
 
 CreateConVar("ttt_detective_hats", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
 -- Just hats right now
 local function GiveLoadoutSpecial(ply)
 	if ply:IsActive() and ply:GetBaseRole() == ROLE_DETECTIVE and GetConVar("ttt_detective_hats"):GetBool() and CanWearHat(ply) then
@@ -279,6 +292,7 @@ local function GiveLoadoutSpecial(ply)
 	end
 end
 
+---
 -- Sometimes, in cramped map locations, giving players weapons fails. A timer
 -- calling this function is used to get them the weapons anyway as soon as
 -- possible.
@@ -302,7 +316,16 @@ local function LateLoadout(id)
 	end
 end
 
--- Note that this is called both when a player spawns and when a round starts
+---
+-- Called to give @{Player}s the default set of @{Weapon}s.
+-- @note This function may not work in your custom gamemode if you have overridden your
+-- @{GM:PlayerSpawn} and you do not use self.BaseClass.PlayerSpawn or @{hook.Call}.
+-- @param Player ply @{Player} to give @{Weapon}s to
+-- @note Note that this is called both when a @{Player} spawns and when a round starts
+-- @hook
+-- @realm server
+-- @ref https://wiki.garrysmod.com/page/GM/PlayerLoadout
+-- @local
 function GM:PlayerLoadout(ply)
 	if IsValid(ply) and not ply:IsSpec() then
 		CleanupInventoryAndNotifyClient(ply)
@@ -369,12 +392,19 @@ function GM:PlayerLoadout(ply)
 	end
 end
 
+---
+-- Called whenever all @{Player}s' loadout should update
+-- @note this internally calls @{GM:PlayerLoadout} for every @{Player}
+-- @hook
+-- @realm server
+-- @ref https://wiki.garrysmod.com/page/GM/PlayerLoadout
 function GM:UpdatePlayerLoadouts()
 	for _, ply in ipairs(player.GetAll()) do
 		hook.Call("PlayerLoadout", GAMEMODE, ply)
 	end
 end
 
+---
 -- Weapon switching
 local function ForceWeaponSwitch(ply, cmd, args)
 	if not ply:IsPlayer() then return end
@@ -398,8 +428,16 @@ local function ForceWeaponSwitch(ply, cmd, args)
 end
 concommand.Add("wepswitch", ForceWeaponSwitch)
 
+---
 -- Weapon dropping
 
+---
+-- Called whenever a @{Player} drops a @{Weapon}, e.g. on death
+-- @param Player ply
+-- @param Weapon wep
+-- @param boolean death_drop
+-- @realm server
+-- @module WEPS
 function WEPS.DropNotifiedWeapon(ply, wep, death_drop)
 	if IsValid(ply) and IsValid(wep) then
 		-- Hack to tell the weapon it's about to be dropped and should do what it
@@ -499,7 +537,20 @@ local function DropActiveAmmo(ply)
 end
 concommand.Add("ttt_dropammo", DropActiveAmmo)
 
--- Protect against non-TTT weapons that may break the HUD
+---
+-- Called as a @{Weapon} entity is picked up by a @{Player}.<br />
+-- See also @{GM:PlayerDroppedWeapon}
+-- @note At the time when this hook is called @{Entity:GetOwner} will return NULL.
+-- The owner is set on the next frame
+-- @note This will not be called when picking up a @{Weapon} you already have as
+-- the @{Weapon} will be removed and @{WEAPON:EquipAmmo} will be called instead
+-- @note Protect against non-TTT @{Weapon}s that may break the HUD
+-- @param Weapon wep The equipped @{Weapon}
+-- @param Player ply The @{Player} that is picking up the @{Weapon}
+-- @hook
+-- @realm server
+-- @ref https://wiki.garrysmod.com/page/GM/WeaponEquip
+-- @local
 function GM:WeaponEquip(wep, ply)
 	if IsValid(wep) and not wep.Kind then
 		-- only remove if they lack critical stuff
@@ -513,20 +564,42 @@ function GM:WeaponEquip(wep, ply)
 	end
 end
 
+---
+-- Called when a @{Weapon} is dropped by a @{Player} via @{Player:DropWeapon}.<br />
+-- See also @{GM:WeaponEquip} for a hook when a @{Player} picks up a @{Weapon}.<br />
+-- The @{Weapon}'s @{Entity:GetOwner} will be NULL at the time this hook is called.
+-- @{Weapon:OnDrop} will be called before this hook is.
+-- @param Player ply The @{Player} who owned this @{Weapon} before it was dropped
+-- @param Weapon wep The @{Weapon} that was dropped
+-- @hook
+-- @realm server
+-- @ref https://wiki.garrysmod.com/page/GM/PlayerDroppedWeapon
+-- @local
 function GM:PlayerDroppedWeapon(ply, wep)
 	if IsValid(wep) and IsValid(ply) and wep.Kind then
 		RemoveWeaponFromInventoryAndNotifyClient(ply, wep)
 	end
 end
 
+---
+-- Called right before the removal of an entity.
+-- @param Entity ent @{Entity} being removed
+-- @hook
+-- @realm server
+-- @ref https://wiki.garrysmod.com/page/GM/EntityRemoved
+-- @local
 function GM:EntityRemoved(ent)
 	if IsValid(ent) and IsValid(ent:GetOwner()) and ent:IsWeapon() and ent.Kind then
 		RemoveWeaponFromInventoryAndNotifyClient(ent:GetOwner(), ent)
 	end
 end
 
--- non-cheat developer commands can reveal precaching the first time equipment
+---
+-- Forces a @{Model} pre-cache for each @{Weapon}
+-- @note non-cheat developer commands can reveal precaching the first time equipment
 -- is bought, so trigger it at the start of a round instead
+-- @realm server
+-- @module WEPS
 function WEPS.ForcePrecache()
 	for _, w in ipairs(weapons.GetList()) do
 		if w.WorldModel then
@@ -555,7 +628,7 @@ cvars.AddChangeCallback(crowbar_delay:GetName(), function(name, old, new)
 	ChangeShoveDelay()
 end, "TTT2CrowbarShoveDelay")
 
-
+-- TODO remove this
 hook.Add("TTT2Initialize", "TTT2ChangeMeleesSecondaryDelay", function()
 	ChangeShoveDelay()
 end)

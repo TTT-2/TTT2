@@ -1,3 +1,6 @@
+---
+-- @section voice_manager
+
 -- Mute players when we are about to run map cleanup, because it might cause
 -- net buffer overflows on clients.
 local mute_all = false
@@ -6,6 +9,10 @@ local IsValid = IsValid
 local hook = hook
 local net = net
 
+---
+-- Updates the mute_all state
+-- @param number state
+-- @realm server
 function MuteForRestart(state)
 	mute_all = state
 end
@@ -15,7 +22,20 @@ CreateConVar("ttt_limit_spectator_voice", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 local loc_voice = CreateConVar("ttt_locational_voice", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
--- Of course voice has to be limited as well
+-- TODO
+---
+-- Decides whether a @{Player} can hear another @{Player} using voice chat.
+-- @note This hook is called several times a tick, so ensure your code is efficient.
+-- @note Of course voice has to be limited as well
+-- @param Player listener The listening @{Player}
+-- @param Player speaker The talking @{Player}
+-- @return boolean Return true if the listener should hear the talker, false if they shouldn't
+-- @return boolean 3D sound. If set to true, will fade out the sound the further away listener is from the talker, the voice will also be in stereo, and not mono
+-- @todo Improve the code
+-- @hook
+-- @realm server
+-- @ref https://wiki.garrysmod.com/page/GM/PlayerCanHearPlayersVoice
+-- @local
 function GM:PlayerCanHearPlayersVoice(listener, speaker)
 	-- Enforced silence
 	if mute_all then

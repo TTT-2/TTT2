@@ -86,7 +86,7 @@ if SERVER then
 		sv_shop = {file = "sv_shop.lua", on = "server"},
 		sv_shopeditor = {file = "sv_shopeditor.lua", on = "server"},
 		sv_status = {file = "sv_status.lua", on = "server"},
-		sv_traitor_state = {file = "sv_traitor_state.lua", on = "server"},
+		sv_networking = {file = "sv_networking.lua", on = "server"},
 		sv_voice = {file = "sv_voice.lua", on = "server"},
 		sv_weaponry = {file = "sv_weaponry.lua", on = "server"},
 	}

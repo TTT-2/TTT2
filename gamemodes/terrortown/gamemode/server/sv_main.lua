@@ -12,7 +12,7 @@ ttt_include("sv_inventory")
 ttt_include("sh_scoring")
 
 ttt_include("sv_admin")
-ttt_include("sv_traitor_state")
+ttt_include("sv_networking")
 ttt_include("sv_propspec")
 ttt_include("sv_shop")
 ttt_include("sv_weaponry")

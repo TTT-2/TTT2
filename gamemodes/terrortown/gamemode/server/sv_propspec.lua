@@ -1,3 +1,6 @@
+---
+-- @module PROPSPEC
+
 -- Spectator prop meddling
 
 local string = string
@@ -12,6 +15,11 @@ local propspec_base = CreateConVar("ttt_spec_prop_base", "8", {FCVAR_NOTIFY, FCV
 local propspec_min = CreateConVar("ttt_spec_prop_maxpenalty", "-6", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 local propspec_max = CreateConVar("ttt_spec_prop_maxbonus", "16", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
+---
+-- Forces a @{Player} to spectate an @{Entity}
+-- @param Player ply
+-- @param Entity ent
+-- @realm server
 function PROPSPEC.Start(ply, ent)
 	ply:Spectate(OBS_MODE_CHASE)
 	ply:SpectateEntity(ent, true)
@@ -34,6 +42,11 @@ local function IsWhitelistedClass(cls)
 	return string.match(cls, "prop_physics*") or string.match(cls, "func_physbox*")
 end
 
+---
+-- Attempts to force a @{Player} to spectate an @{Entity}
+-- @param Player ply
+-- @param Entity ent
+-- @realm server
 function PROPSPEC.Target(ply, ent)
 	if not propspec_toggle:GetBool() or not IsValid(ply) or not ply:IsSpec() or not IsValid(ent) or IsValid(ent:GetNWEntity("spec_owner", nil)) then return end
 
@@ -48,8 +61,11 @@ function PROPSPEC.Target(ply, ent)
 	PROPSPEC.Start(ply, ent)
 end
 
--- Clear any propspec state a player has. Safe even if player is not currently
+---
+-- Clear any propspec state a @{Player} has. Safe even if @{Player} is not currently
 -- spectating.
+-- @param Player ply
+-- @realm server
 function PROPSPEC.Clear(ply)
 	local ent = (ply.propspec and ply.propspec.ent) or ply:GetObserverTarget()
 
@@ -62,6 +78,10 @@ function PROPSPEC.Clear(ply)
 	ply:SpectateEntity(nil)
 end
 
+---
+-- Stops a @{Player} spectating an @{Entity}
+-- @param Player ply
+-- @realm server
 function PROPSPEC.End(ply)
 	PROPSPEC.Clear(ply)
 
@@ -77,11 +97,19 @@ end
 
 local propspec_force = CreateConVar("ttt_spec_prop_force", "110", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
+---
+-- Triggers an event based on the pressed key
+-- @param Player ply The @{Player} pressing the key. If running client-side, this will always be @{LocalPlayer}
+-- @param number key The key that the @{Player} pressed using <a href="https://wiki.garrysmod.com/page/Enums/IN">IN_Enums</a>.
+-- @return boolean
+-- @realm server
+-- @ref https://wiki.garrysmod.com/page/GM/KeyPress
 function PROPSPEC.Key(ply, key)
 	local ent = ply.propspec.ent
-	local phys = IsValid(ent) and ent:GetPhysicsObject()
+	local validEnt = IsValid(ent)
+	local phys = validEnt and ent:GetPhysicsObject()
 
-	if not IsValid(ent) or not IsValid(phys) then
+	if not validEnt or not IsValid(phys) then
 		PROPSPEC.End(ply)
 
 		return false
@@ -149,6 +177,11 @@ end
 
 local propspec_retime = CreateConVar("ttt_spec_prop_rechargetime", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
+---
+-- Recharges the amount of punches a @{Player} can do (if possible)
+-- @note This automatically calculates the recharge based on time
+-- @param Player ply
+-- @realm server
 function PROPSPEC.Recharge(ply)
 	local pr = ply.propspec
 
