@@ -42,7 +42,28 @@ local function TTT_RoleChat()
 end
 net.Receive("TTT_RoleChat", TTT_RoleChat)
 
--- special processing for certain special chat types
+---
+-- Called when a message is printed to the chat box. Note, that this isn't
+-- working with @{Player} messages even though there are arguments for it.<br />
+-- For @{Player} messages see @{GM:PlayerSay} and @{GM:OnPlayerChat}
+-- @note special processing for certain special chat types
+-- @param number idx The index of the @{Player}
+-- @param string name The name of the @{Player}
+-- @param string text The text that is being sent
+-- @param string type Chat filter type. Possible values are:
+-- <ul>
+-- <li>joinleave - @{Player} join and leave messages</li>
+-- <li>namechange - @{Player} name change messages</li>
+-- <li>servermsg - Server messages such as convar changes</li>
+-- <li>teamchange - Team changes?</li>
+-- <li>chat - (Obsolete?) @{Player} chat?</li>
+-- <li>none - A fallback value</li>
+-- </ul>
+-- @return boolean Return true to suppress the chat message
+-- @hook
+-- @realm client
+-- @ref https://wiki.garrysmod.com/page/GM/ChatText
+-- @local
 function GM:ChatText(idx, name, text, type)
 	if type == "joinleave" and string.find(text, "Changed name during a round") then
 		-- prevent nick from showing up
@@ -59,9 +80,22 @@ local function AddDetectiveText(ply, text)
 	chat.AddText(DETECTIVE.color, ply:Nick(), Color(255, 255, 255), ": " .. text)
 end
 
-function GM:OnPlayerChat(ply, text, teamchat, dead)
+---
+-- Called whenever a @{Player} sends a chat message. For the serverside equivalent, see @{GM:PlayerSay}.
+-- @note The text input of this hook depends on @{GM:PlayerSay}.
+-- If it is suppressed on the server, it will be suppressed on the client.
+-- @param Player ply The @{Player}
+-- @param string text The message's text
+-- @param boolean teamchat Is the @{Player} typing in team chat?
+-- @param boolean isDead Is the @{Player} dead?
+-- @return boolean Should the message be suppressed?
+-- @hook
+-- @realm client
+-- @ref https://wiki.garrysmod.com/page/GM/OnPlayerChat
+-- @local
+function GM:OnPlayerChat(ply, text, teamChat, isDead)
 	if not IsValid(ply) then
-		return BaseClass.OnPlayerChat(self, ply, text, teamchat, dead)
+		return BaseClass.OnPlayerChat(self, ply, text, teamChat, isDead)
 	end
 
 	if ply:IsActiveRole(ROLE_DETECTIVE) then
@@ -72,19 +106,26 @@ function GM:OnPlayerChat(ply, text, teamchat, dead)
 
 	local team = ply:Team() == TEAM_SPEC
 
-	if team and not dead then
-		dead = true
+	if team and not isDead then
+		isDead = true
 	end
 
-	if teamchat and (not team and not ply:IsSpecial() or team) then
-		teamchat = false
+	if teamChat and (not team and not ply:IsSpecial() or team) then
+		teamChat = false
 	end
 
-	return BaseClass.OnPlayerChat(self, ply, text, teamchat, dead)
+	return BaseClass.OnPlayerChat(self, ply, text, teamChat, isDead)
 end
 
 local last_chat = ""
 
+---
+-- Called whenever the content of the user's chat input box is changed.
+-- @param string text The new contents of the input box
+-- @hook
+-- @realm client
+-- @ref https://wiki.garrysmod.com/page/GM/ChatTextChanged
+-- @local
 function GM:ChatTextChanged(text)
 	last_chat = text
 end
@@ -109,7 +150,9 @@ function ChatInterrupt()
 end
 net.Receive("TTT_InterruptChat", ChatInterrupt)
 
---  Radio
+---
+-- @class RADIO
+
 -- modified with https://github.com/Exho1/TTT-ScoreboardTagging/blob/master/lua/client/ttt_scoreboardradiocmd.lua
 
 RADIO = {}

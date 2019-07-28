@@ -41,6 +41,12 @@ local function FindHighest(tbl)
 	return m_id, m_num
 end
 
+---
+-- @param table events
+-- @param table scores
+-- @param table players list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
+-- @param table traitors list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
+-- @realm client
 function AWARDS.FirstSuicide(events, scores, players, traitors)
 	local fs
 	local fnum = 0
@@ -76,6 +82,12 @@ function AWARDS.FirstSuicide(events, scores, players, traitors)
 end
 FirstSuicide = AWARDS.FirstSuicide -- just for compatibility
 
+---
+-- @param table events
+-- @param table scores
+-- @param table players list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
+-- @param table traitors list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
+-- @realm client
 function AWARDS.ExplosiveGrant(events, scores, players, traitors)
 	local bombers = {}
 
@@ -107,6 +119,12 @@ function AWARDS.ExplosiveGrant(events, scores, players, traitors)
 end
 ExplosiveGrant = AWARDS.ExplosiveGrant -- just for compatibility
 
+---
+-- @param table events
+-- @param table scores
+-- @param table players list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
+-- @param table traitors list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
+-- @realm client
 function AWARDS.ExplodedSelf(events, scores, players, traitors)
 	for _, e in pairs(events) do
 		if e.id == EVENT_KILL and is_dmg(e.dmg.t, DMG_BLAST) and e.att.sid64 == e.vic.sid64 then
@@ -116,6 +134,12 @@ function AWARDS.ExplodedSelf(events, scores, players, traitors)
 end
 ExplodedSelf = AWARDS.ExplodedSelf -- just for compatibility
 
+---
+-- @param table events
+-- @param table scores
+-- @param table players list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
+-- @param table traitors list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
+-- @realm client
 function AWARDS.FirstBlood(events, scores, players, traitors)
 	for _, e in pairs(events) do
 		if e.id == EVENT_KILL and e.att.sid64 ~= e.vic.sid64 and e.att.sid64 ~= -1 then
@@ -153,6 +177,12 @@ function AWARDS.FirstBlood(events, scores, players, traitors)
 end
 FirstBlood = AWARDS.FirstBlood -- just for compatibility
 
+---
+-- @param table events
+-- @param table scores
+-- @param table players list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
+-- @param table traitors list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
+-- @realm client
 function AWARDS.AllKills(events, scores, players, traitors)
 	-- see if there is one killer responsible for all kills of either team
 
@@ -195,6 +225,12 @@ function AWARDS.AllKills(events, scores, players, traitors)
 end
 AllKills = AWARDS.AllKills -- just for compatibility
 
+---
+-- @param table events
+-- @param table scores
+-- @param table players list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
+-- @param table traitors list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
+-- @realm client
 function AWARDS.FallDeath(events, scores, players, traitors)
 	for _, e in pairs(events) do
 		if e.id == EVENT_KILL and is_dmg(e.dmg.t, DMG_FALL) then
@@ -208,6 +244,12 @@ function AWARDS.FallDeath(events, scores, players, traitors)
 end
 FallDeath = AWARDS.FallDeath -- just for compatibility
 
+---
+-- @param table events
+-- @param table scores
+-- @param table players list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
+-- @param table traitors list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
+-- @realm client
 function AWARDS.FallKill(events, scores, players, traitors)
 	for _, e in pairs(events) do
 		if e.id == EVENT_KILL and is_dmg(e.dmg.t, DMG_CRUSH) and is_dmg(e.dmg.t, DMG_PHYSGUN) and e.att.ni ~= "" then
@@ -217,6 +259,12 @@ function AWARDS.FallKill(events, scores, players, traitors)
 end
 FallKill = AWARDS.FallKill -- just for compatibility
 
+---
+-- @param table events
+-- @param table scores
+-- @param table players list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
+-- @param table traitors list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
+-- @realm client
 function AWARDS.Headshots(events, scores, players, traitors)
 	local hs = {}
 
@@ -256,6 +304,12 @@ function AWARDS.Headshots(events, scores, players, traitors)
 end
 Headshots = AWARDS.Headshots -- just for compatibility
 
+---
+-- @param table events
+-- @param table scores
+-- @param table players list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
+-- @param table traitors list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
+-- @realm client
 function AWARDS.UsedAmmoMost(events, ammotype)
 	local user = {}
 
@@ -275,6 +329,12 @@ function AWARDS.UsedAmmoMost(events, ammotype)
 end
 UsedAmmoMost = AWARDS.UsedAmmoMost -- just for compatibility
 
+---
+-- @param table events
+-- @param table scores
+-- @param table players list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
+-- @param table traitors list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
+-- @realm client
 function AWARDS.CrowbarUser(events, scores, players, traitors)
 	local most = UsedAmmoMost(events, AMMO_CROWBAR)
 
@@ -302,6 +362,12 @@ function AWARDS.CrowbarUser(events, scores, players, traitors)
 end
 CrowbarUser = AWARDS.CrowbarUser -- just for compatibility
 
+---
+-- @param table events
+-- @param table scores
+-- @param table players list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
+-- @param table traitors list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
+-- @realm client
 function AWARDS.PistolUser(events, scores, players, traitors)
 	local most = UsedAmmoMost(events, AMMO_PISTOL)
 
@@ -329,6 +395,12 @@ function AWARDS.PistolUser(events, scores, players, traitors)
 end
 PistolUser = AWARDS.PistolUser -- just for compatibility
 
+---
+-- @param table events
+-- @param table scores
+-- @param table players list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
+-- @param table traitors list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
+-- @realm client
 function AWARDS.ShotgunUser(events, scores, players, traitors)
 	local most = UsedAmmoMost(events, AMMO_SHOTGUN)
 
@@ -356,6 +428,12 @@ function AWARDS.ShotgunUser(events, scores, players, traitors)
 end
 ShotgunUser = AWARDS.ShotgunUser -- just for compatibility
 
+---
+-- @param table events
+-- @param table scores
+-- @param table players list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
+-- @param table traitors list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
+-- @realm client
 function AWARDS.RifleUser(events, scores, players, traitors)
 	local most = UsedAmmoMost(events, AMMO_RIFLE)
 
@@ -383,6 +461,12 @@ function AWARDS.RifleUser(events, scores, players, traitors)
 end
 RifleUser = AWARDS.RifleUser -- just for compatibility
 
+---
+-- @param table events
+-- @param table scores
+-- @param table players list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
+-- @param table traitors list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
+-- @realm client
 function AWARDS.RDeagleUser(events, scores, players, traitors)
 	local most = UsedAmmoMost(events, AMMO_DEAGLE)
 
@@ -411,6 +495,12 @@ function AWARDS.RDeagleUser(events, scores, players, traitors)
 end
 DeagleUser = AWARDS.DeagleUser -- just for compatibility
 
+---
+-- @param table events
+-- @param table scores
+-- @param table players list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
+-- @param table traitors list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
+-- @realm client
 function AWARDS.MAC10User(events, scores, players, traitors)
 	local most = UsedAmmoMost(events, AMMO_MAC10)
 
@@ -438,6 +528,12 @@ function AWARDS.MAC10User(events, scores, players, traitors)
 end
 MAC10User = AWARDS.MAC10User -- just for compatibility
 
+---
+-- @param table events
+-- @param table scores
+-- @param table players list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
+-- @param table traitors list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
+-- @realm client
 function AWARDS.SilencedPistolUser(events, scores, players, traitors)
 	local most = UsedAmmoMost(events, AMMO_SIPISTOL)
 
@@ -464,6 +560,12 @@ function AWARDS.SilencedPistolUser(events, scores, players, traitors)
 end
 SilencedPistolUser = AWARDS.SilencedPistolUser -- just for compatibility
 
+---
+-- @param table events
+-- @param table scores
+-- @param table players list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
+-- @param table traitors list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
+-- @realm client
 function AWARDS.KnifeUser(events, scores, players, traitors)
 	local most = UsedAmmoMost(events, AMMO_KNIFE)
 
@@ -500,6 +602,12 @@ function AWARDS.KnifeUser(events, scores, players, traitors)
 end
 KnifeUser = AWARDS.KnifeUser -- just for compatibility
 
+---
+-- @param table events
+-- @param table scores
+-- @param table players list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
+-- @param table traitors list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
+-- @realm client
 function AWARDS.FlareUser(events, scores, players, traitors)
 	local most = UsedAmmoMost(events, AMMO_FLARE)
 
@@ -526,6 +634,12 @@ function AWARDS.FlareUser(events, scores, players, traitors)
 end
 FlareUser = AWARDS.FlareUser -- just for compatibility
 
+---
+-- @param table events
+-- @param table scores
+-- @param table players list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
+-- @param table traitors list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
+-- @realm client
 function AWARDS.M249User(events, scores, players, traitors)
 	local most = UsedAmmoMost(events, AMMO_M249)
 
@@ -552,6 +666,12 @@ function AWARDS.M249User(events, scores, players, traitors)
 end
 M249User = AWARDS.M249User -- just for compatibility
 
+---
+-- @param table events
+-- @param table scores
+-- @param table players list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
+-- @param table traitors list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
+-- @realm client
 function AWARDS.M16User(events, scores, players, traitors)
 	local most = UsedAmmoMost(events, AMMO_M16)
 
@@ -578,6 +698,12 @@ function AWARDS.M16User(events, scores, players, traitors)
 end
 M16User = AWARDS.M16User -- just for compatibility
 
+---
+-- @param table events
+-- @param table scores
+-- @param table players list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
+-- @param table traitors list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
+-- @realm client
 function AWARDS.TeamKiller(events, scores, players, traitors)
 	local tker
 	local tktbl = {}
@@ -651,6 +777,12 @@ function AWARDS.TeamKiller(events, scores, players, traitors)
 end
 TeamKiller = AWARDS.TeamKiller -- just for compatibility
 
+---
+-- @param table events
+-- @param table scores
+-- @param table players list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
+-- @param table traitors list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
+-- @realm client
 function AWARDS.Burner(events, scores, players, traitors)
 	local brn = {}
 
@@ -691,6 +823,12 @@ function AWARDS.Burner(events, scores, players, traitors)
 end
 Burner = AWARDS.Burner -- just for compatibility
 
+---
+-- @param table events
+-- @param table scores
+-- @param table players list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
+-- @param table traitors list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
+-- @realm client
 function AWARDS.Coroner(events, scores, players, traitors)
 	local finders = {}
 
@@ -730,6 +868,12 @@ function AWARDS.Coroner(events, scores, players, traitors)
 end
 Coroner = AWARDS.Coroner -- just for compatibility
 
+---
+-- @param table events
+-- @param table scores
+-- @param table players list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
+-- @param table traitors list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
+-- @realm client
 function AWARDS.CreditFound(events, scores, players, traitors)
 	local finders = {}
 
@@ -763,6 +907,12 @@ function AWARDS.CreditFound(events, scores, players, traitors)
 end
 CreditFound = AWARDS.CreditFound -- just for compatibility
 
+---
+-- @param table events
+-- @param table scores
+-- @param table players list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
+-- @param table traitors list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
+-- @realm client
 function AWARDS.TimeOfDeath(events, scores, players, traitors)
 	local near = 10
 	local time_near_start = CLSCORE.StartTime + near

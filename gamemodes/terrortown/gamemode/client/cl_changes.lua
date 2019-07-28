@@ -1,9 +1,17 @@
+---
+-- @section changes
+
 local changesVersion = CreateClientConVar("changes_version", "v0.0.0.0")
 
 local changesPanel
 local changes
 local currentVersion
 
+---
+-- Adds a change into the changes list
+-- @param string version
+-- @param string text
+-- @realm client
 function AddChange(version, text)
 	changes = changes or {}
 
@@ -32,6 +40,10 @@ local htmlEnd = [[
 	</body>
 ]]
 
+---
+-- Creates the changes list
+-- @realm client
+-- @internal
 function CreateChanges()
 	if changes then return end
 
@@ -423,6 +435,9 @@ function CreateChanges()
 	hook.Run("TTT2AddChange", changes, currentVersion)
 end
 
+---
+-- Displays the changes window
+-- @realm client
 function ShowChanges()
 	if IsValid(changesPanel) then
 		changesPanel:Remove()
