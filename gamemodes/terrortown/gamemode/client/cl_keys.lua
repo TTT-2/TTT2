@@ -1,3 +1,6 @@
+---
+-- @section key_manager
+
 -- Key overrides for TTT specific keyboard functions
 
 local timer = timer
@@ -11,10 +14,29 @@ local function SendWeaponDrop()
 	WSWITCH:Disable()
 end
 
+---
+-- Called when a @{Player} presses the "+menu" bind on their keyboard, which is bound to Q by default.
+-- @hook
+-- @realm client
+-- @ref https://wiki.garrysmod.com/page/GM/OnSpawnMenuOpen
+-- @local
 function GM:OnSpawnMenuOpen()
 	SendWeaponDrop()
 end
 
+---
+-- Runs when a bind has been pressed. Allows to block commands.
+-- @note By using the "alias" console command, this hook can be effectively circumvented
+-- @note To stop the user from using +attack, +left and any other movement commands
+-- of the sort, please look into using @{GM:StartCommand} instead
+-- @param Player ply The @{Player} who used the command; this will always be equal to LocalPlayer
+-- @param string bind The bind command
+-- @param boolean pressed If the bind was activated or deactivated
+-- @return boolean Return true to prevent the bind
+-- @hook
+-- @realm client
+-- @ref https://wiki.garrysmod.com/page/GM/PlayerBindPress
+-- @local
 function GM:PlayerBindPress(ply, bind, pressed)
 	if not IsValid(ply) then return end
 
@@ -120,8 +142,20 @@ function GM:PlayerBindPress(ply, bind, pressed)
 	end
 end
 
--- Note that for some reason KeyPress and KeyRelease are called multiple times
+---
+-- Called whenever a @{Player} pressed a key included within the IN keys.<br />
+-- For a more general purpose function that handles all kinds of input, see @{GM:PlayerButtonDown}.
+-- @warning Due to this being a predicted hook, <a href="https://wiki.garrysmod.com/page/Global/ParticleEffect">ParticleEffects</a>
+-- created only serverside from this hook will not be networked to the client, so make sure to do that on both realms
+-- @predicted
+-- @param Player ply The @{Player} pressing the key. If running client-side, this will always be LocalPlayer
+-- @param number key The key that the player pressed using <a href="https://wiki.garrysmod.com/page/Enums/IN">IN_Enums</a>.
+-- @note Note that for some reason KeyPress and KeyRelease are called multiple times
 -- for the same key event in multiplayer.
+-- @hook
+-- @realm client
+-- @ref https://wiki.garrysmod.com/page/GM/KeyPress
+-- @local
 function GM:KeyPress(ply, key)
 	if not IsFirstTimePredicted() or not IsValid(ply) or ply ~= LocalPlayer() then return end
 
@@ -137,6 +171,16 @@ function GM:KeyPress(ply, key)
 	end
 end
 
+---
+-- Runs when a IN key was released by a player.<br />
+-- For a more general purpose function that handles all kinds of input, see @{GM:PlayerButtonUp}.
+-- @param Player ply The @{Player} releasing the key. If running client-side, this will always be LocalPlayer
+-- @param number key The key that the player released using <a href="https://wiki.garrysmod.com/page/Enums/IN">IN_Enums</a>.
+-- @predicted
+-- @hook
+-- @realm client
+-- @ref https://wiki.garrysmod.com/page/GM/KeyRelease
+-- @local
 function GM:KeyRelease(ply, key)
 	if not IsFirstTimePredicted() or not IsValid(ply) or ply ~= LocalPlayer() then return end
 
@@ -152,6 +196,15 @@ function GM:KeyRelease(ply, key)
 	end
 end
 
+---
+-- Called when a player releases a button.
+-- @param Player ply @{Player} who released the button
+-- @param number btn The button, see
+-- <a href="https://wiki.garrysmod.com/page/Enums/BUTTON_CODE">BUTTON_CODE_Enums</a>
+-- @hook
+-- @realm client
+-- @ref https://wiki.garrysmod.com/page/GM/PlayerButtonUp
+-- @local
 function GM:PlayerButtonUp(ply, btn)
 	if not IsFirstTimePredicted() then return end
 

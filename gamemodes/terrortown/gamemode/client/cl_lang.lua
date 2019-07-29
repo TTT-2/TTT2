@@ -1,3 +1,6 @@
+---
+-- @module LANG
+
 -- Clientside language stuff
 
 -- Need to build custom tables of strings. Can't use language.Add as there is no
@@ -23,6 +26,11 @@ LANG.ServerLanguage = "english"
 local cached_default = {}
 local cached_active = {}
 
+---
+-- Creates a new language
+-- @param string lang_name the new language name
+-- @return table initialized language table that should be extended with translated @{string}s
+-- @realm client
 function LANG.CreateLanguage(lang_name)
 	if not lang_name then return end
 
@@ -50,13 +58,22 @@ function LANG.CreateLanguage(lang_name)
 	return LANG.Strings[lang_name]
 end
 
--- Add a string to a language. Should not be used in a language file, only for
+---
+-- Adds a string to a language.
+-- @note Should not be used in a language file, only for
 -- adding strings elsewhere, such as a SWEP script.
+-- @param string lang_name the new language name
+-- @param string string_name the string key identifier for the translated @{string}
+-- @param string string_text the translated @{string} text
+-- @return string the inserted string_name parameter
+-- @realm client
 function LANG.AddToLanguage(lang_name, string_name, string_text)
 	lang_name = lang_name and string.lower(lang_name)
 
 	if not LANG.IsLanguage(lang_name) then
 		ErrorNoHalt(Format("Failed to add '%s' to language '%s': language does not exist.\n", tostring(string_name), tostring(lang_name)))
+
+		return string_name
 	end
 
 	LANG.Strings[lang_name][string_name] = string_text
@@ -64,14 +81,24 @@ function LANG.AddToLanguage(lang_name, string_name, string_text)
 	return string_name
 end
 
--- Simple and fastest name->string lookup
+---
+-- Returns the translated @{string} text (if available)
+-- @note Simple and fastest name->string lookup
+-- @param string name string key identifier for the translated @{string}
+-- @return nil|string
+-- @realm client
 function LANG.GetTranslation(name)
 	return cached_active[name]
 end
 
+---
+-- Returns the translated @{string} text (if available) or an available fallback
 -- Lookup with no error upon failback, just nil. Slightly slower, but best way
 -- to handle lookup of strings that may legitimately fail to exist
 -- (eg. SWEP-defined).
+-- @param string name string key identifier for the translated @{string}
+-- @return nil|string
+-- @realm client
 function LANG.GetRawTranslation(name)
 	return rawget(cached_active, name) or rawget(cached_default, name)
 end
@@ -79,36 +106,80 @@ end
 -- A common idiom
 local GetRaw = LANG.GetRawTranslation
 
+---
+-- Returns the translated @{string} text (if available) or the name parameter if not available
+-- @param string name string key identifier for the translated @{string}
+-- @return nil|string raw translated @{string} or the name parameter if not available
+-- @realm client
 function LANG.TryTranslation(name)
 	return GetRaw(name) or name
 end
 
 local interp = string.Interp
 
+---
+-- Returns the translated @{string} text (if available).<br />String
+-- <a href="http://lua-users.org/wiki/StringInterpolation">interpolation</a> is allowed<br />
 -- Parameterised version, performs string interpolation. Slower than
--- GetTranslation.
+-- @{LANG.GetTranslation}.
+-- @param string name string key identifier for the translated @{string}
+-- @param table params
+-- @return nil|string
+-- @realm client
+-- @see LANG.GetPTranslation
 function LANG.GetParamTranslation(name, params)
 	return interp(cached_active[name], params)
 end
+
+---
+-- @function LANG.GetPTranslation(name, params)
+-- @desc Returns the translated @{string} text (if available).<br />String
+-- <a href="http://lua-users.org/wiki/StringInterpolation">interpolation</a> is allowed<br />
+-- Parameterised version, performs string interpolation. Slower than
+-- @{LANG.GetTranslation}.
+-- @param string name string key identifier for the translated @{string}
+-- @return nil|string
+-- @realm client
+-- @see LANG.GetParamTranslation
 LANG.GetPTranslation = LANG.GetParamTranslation
 
+---
+-- Returns the translated @{string} text of a given language (if available)
+-- @param string name string key identifier for the translated @{string}
+-- @param string lang_name the language name
+-- @return nil|string
+-- @realm client
 function LANG.GetTranslationFromLanguage(name, lang_name)
 	return rawget(LANG.Strings[lang_name], name)
 end
 
--- Ability to perform lookups in the current language table directly is of
+---
+-- Returns the currently cached language table
+-- @note Ability to perform lookups in the current language table directly is of
 -- interest to consumers in draw/think hooks. Grabbing a translation directly
 -- from the table is very fast, and much simpler than a local caching solution.
 -- Modifying it would typically be a bad idea.
+-- @return table
+-- @realm client
 function LANG.GetUnsafeLanguageTable()
 	return cached_active
 end
 
+---
+-- Returns a translated @{string} text (if possible) directly from the language table
+-- @param string name string key identifier for the translated @{string}
+-- @return nil|string
+-- @realm client
 function LANG.GetUnsafeNamed(name)
 	return LANG.Strings[name]
 end
 
--- Safe and slow access, not sure if it's ever useful.
+---
+-- Returns a copy of a selected language table
+-- @note Safe and slow access, not sure if it's ever useful.
+-- @param string lang_name the language name
+-- @return table
+-- @realm client
 function LANG.GetLanguageTable(lang_name)
 	lang_name = lang_name or LANG.ActiveLanguage
 
@@ -119,7 +190,10 @@ function LANG.GetLanguageTable(lang_name)
 	return cpy
 end
 
-
+---
+-- Initializes a fallback table for a given language table
+-- @param table tbl
+-- @realm client
 function SetFallback(tbl)
 	-- languages may deal with this themselves, or may already have the fallback
 	local m = getmetatable(tbl)
@@ -136,9 +210,12 @@ function SetFallback(tbl)
 			__index = cached_default
 		}
 	)
-
 end
 
+---
+-- Switches the active language
+-- @param string lang_name the new language name
+-- @realm client
 function LANG.SetActiveLanguage(lang_name)
 	lang_name = lang_name and string.lower(lang_name)
 
@@ -167,6 +244,10 @@ function LANG.SetActiveLanguage(lang_name)
 	end
 end
 
+---
+-- Initializes the language service
+-- @realm client
+-- @internal
 function LANG.Init()
 	local lang_name = (ConVarExists("ttt_language") and GetConVar("ttt_language"):GetString() or "")
 
@@ -179,16 +260,27 @@ function LANG.Init()
 	LANG.SetActiveLanguage(lang_name)
 end
 
+---
+-- Returns whether the given language name is the default server language
+-- @param string lang_name the language name
+-- @return boolean
+-- @realm client
 function LANG.IsServerDefault(lang_name)
 	lang_name = string.lower(lang_name)
 
 	return lang_name == "server default" or lang_name == "auto"
 end
 
+---
+-- Returns whether the given language is a valid language (already exists)
+-- @param string lang_name the language name
+-- @return table the language table, same as @{LANG.GetUnsafeNamed}, but without
+-- @{nil} check and without automatic string lowering
+-- @realm client
 function LANG.IsLanguage(lang_name)
-	lang_name = lang_name and string.lower(lang_name)
+	if not lang_name then return end
 
-	return LANG.Strings[lang_name]
+	return LANG.Strings[string.lower(lang_name)]
 end
 
 local function LanguageChanged(cv, old, new)
@@ -207,7 +299,10 @@ local function ForceReload()
 end
 concommand.Add("ttt_reloadlang", ForceReload)
 
+---
 -- Get a copy of all available languages (keys in the Strings tbl)
+-- @return table
+-- @realm client
 function LANG.GetLanguages()
 	local langs = {}
 
@@ -218,6 +313,7 @@ function LANG.GetLanguages()
 	return langs
 end
 
+---
 -- Table of styles that can take a string and display it in some position,
 -- colour, etc.
 LANG.Styles = {
@@ -240,17 +336,26 @@ LANG.Styles = {
 	chat_plain = chat.AddText
 }
 
+---
 -- Table mapping message name => message style name. If no message style is
 -- defined, the default style is used. This is the case for the vast majority of
 -- messages at the time of writing.
 LANG.MsgStyle = {}
 
+---
 -- Access of message styles
+-- @param string name style name
+-- @return function style table
+-- @realm client
 function LANG.GetStyle(name)
 	return LANG.MsgStyle[name] or LANG.Styles.default
 end
 
+---
 -- Set a style by name or directly as style-function
+-- @param string name style name
+-- @param string|function style style name or @{function}
+-- @realm client
 function LANG.SetStyle(name, style)
 	if type(style) == "string" then
 		style = LANG.Styles[style]
@@ -259,10 +364,20 @@ function LANG.SetStyle(name, style)
 	LANG.MsgStyle[name] = style
 end
 
+---
+-- Runs the style function for a given text
+-- @param string text
+-- @param function style
+-- @realm client
 function LANG.ShowStyledMsg(text, style)
 	style(text)
 end
 
+---
+-- Styles a previously translated message
+-- @param string name the requested translation identifier (key)
+-- @param table params
+-- @realm client
 function LANG.ProcessMsg(name, params)
 	local raw = LANG.GetTranslation(name)
 
@@ -288,8 +403,6 @@ function LANG.ProcessMsg(name, params)
 
 	LANG.ShowStyledMsg(text, LANG.GetStyle(name))
 end
-
-
 
 -- Message style declarations
 
