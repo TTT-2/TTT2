@@ -1,3 +1,6 @@
+---
+-- @section equipment_manager
+
 -- Traitor equipment menu
 local GetTranslation = LANG.GetTranslation
 local GetPTranslation = LANG.GetParamTranslation
@@ -189,6 +192,10 @@ local function DrawSelectedEquipment(pnl)
 	surface.DrawOutlinedRect(0, 0, pnl:GetWide(), pnl:GetTall())
 end
 
+---
+-- @param Panel pnl
+-- @realm client
+-- @local
 function PANEL:SelectPanel(pnl)
 	if not pnl then return end
 
@@ -405,38 +412,42 @@ end
 --
 --
 
+---
+-- Creates / opens the shop frame
+-- @realm client
 function TraitorMenuPopup()
 	local ply = LocalPlayer()
 
-	if not IsValid(ply) then
-		return
-	end
+	if not IsValid(ply) then return end
 
 	local subrole = ply:GetSubRole()
 	local fallbackRole = GetShopFallback(subrole)
 	local rd = roles.GetByIndex(fallbackRole)
 	local notalive = false
-
 	local fallback = GetGlobalString("ttt_" .. rd.abbr .. "_shop_fallback")
+
 	if ply:IsActive() and fallback == SHOP_DISABLED then return end
 
 	-- calculate dimensions
-	local numCols = serverColsVar:GetInt()
-	local numRows = serverRowsVar:GetInt()
-	local itemSize = serverSizeVar:GetInt()
+	local numCols, numRows, itemSize
 
 	if allowChangeVar:GetBool() then
 		numCols = numColsVar:GetInt()
 		numRows = numRowsVar:GetInt()
 		itemSize = itemSizeVar:GetInt()
+	else
+		numCols = serverColsVar:GetInt()
+		numRows = serverRowsVar:GetInt()
+		itemSize = serverSizeVar:GetInt()
 	end
 
 	-- margin
 	local m = 5
+	local itemSizePad = itemSize + 2
 
 	-- item list width
-	local dlistw = (itemSize + 2) * numCols - 2 + 15
-	local dlisth = (itemSize + 2) * numRows - 2 + 15
+	local dlistw = itemSizePad * numCols + 13
+	local dlisth = itemSizePad * numRows + 13
 
 	-- right column width
 	local diw = 270
@@ -850,6 +861,7 @@ end
 net.Receive("TTT_Credits", ReceiveCredits)
 
 local r = 0
+
 local function ReceiveBought()
 	local ply = LocalPlayer()
 
@@ -906,6 +918,13 @@ net.Receive("TTT_BoughtItem", ReceiveBoughtItem)
 -- HOOKS / GAMEMODE RELATED STUFF:
 --
 
+---
+-- Called when the context menu keybind (+menu_context) is pressed, which by default is C.<br />
+-- See also @{GM:OnContextMenuClose}.
+-- @hook
+-- @realm client
+-- @ref https://wiki.garrysmod.com/page/GM/OnContextMenuOpen
+-- @local
 function GM:OnContextMenuOpen()
 	local rs = GetRoundState()
 
