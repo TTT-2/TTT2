@@ -1,8 +1,12 @@
-local PANEL = {}
+---
+-- @class PANEL
+-- @section DNumSliderWang
 
 local math = math
 local table = table
 local vgui = vgui
+
+local PANEL = {}
 
 AccessorFunc(PANEL, "m_fDefaultValue", "DefaultValue")
 AccessorFunc(PANEL, "m_autoFocus", "AutoFocus")

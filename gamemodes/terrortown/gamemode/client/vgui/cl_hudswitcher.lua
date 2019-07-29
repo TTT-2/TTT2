@@ -1,4 +1,9 @@
--- Removed in GM13, still need it
+---
+-- @class PANEL
+-- @section HUDSwitcher
+
+local vgui = vgui
+
 local PANEL = {}
 
 AccessorFunc(PANEL, "m_bBorder", "Border")

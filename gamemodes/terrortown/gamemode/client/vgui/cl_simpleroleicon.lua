@@ -1,19 +1,18 @@
 ---
--- @class PANEL
--- @section ShopEditButton
--- Altered version of gmod's SpawnIcon
--- This panel does not deal with models and such
+-- @section SimpleRoleIcon
 
-local GetTranslation = LANG.GetTranslation
 local math = math
+local surface = surface
 local vgui = vgui
+
+local matHover = Material("vgui/spawnmenu/hover")
 
 local PANEL = {}
 
 AccessorFunc(PANEL, "m_iIconSize", "IconSize")
 
 function PANEL:Init()
-	self.Icon = vgui.Create("DImage", self)
+	self.Icon = vgui.Create("DRoleImage", self)
 	self.Icon:SetMouseInputEnabled(false)
 	self.Icon:SetKeyboardInputEnabled(false)
 
@@ -46,12 +45,38 @@ function PANEL:ApplySchemeSettings()
 
 end
 
-function PANEL:OnCursorEntered()
+local oldPaintOver = PANEL.PaintOver
+function PANEL:PaintOver(w, h)
+	if self.toggled then
+		surface.SetDrawColor(0, 200, 0, 255)
+		surface.SetMaterial(matHover)
 
+		self:DrawTexturedRect()
+	end
+
+	if isfunction(oldPaintOver) then
+		oldPaintOver(self, w, h)
+	end
+end
+
+function PANEL:OnCursorEntered()
+	self.PaintOverOld = self.PaintOver
+	self.PaintOver = self.PaintOverHovered
 end
 
 function PANEL:OnCursorExited()
+	if self.PaintOver == self.PaintOverHovered then
+		self.PaintOver = self.PaintOverOld
+	end
+end
 
+function PANEL:PaintOverHovered()
+	if self.animPress:Active() or self.toggled then return end
+
+	surface.SetDrawColor(255, 255, 255, 80)
+	surface.SetMaterial(matHover)
+
+	self:DrawTexturedRect()
 end
 
 function PANEL:PerformLayout()
@@ -92,31 +117,8 @@ function PANEL:PressedAnim(anim, delta, data)
 	self.Icon:StretchToParent(border, border, border, border)
 end
 
-vgui.Register("ShopEditButton", PANEL, "Panel")
-
----
--- @section ShopEditorChildFrame
----
-
-PANEL = {}
-
-AccessorFunc(PANEL, "m_fPrevFunc", "PrevFunc")
-
-function PANEL:Init()
-	local frame = self
-
-	local bprev = vgui.Create("DButton", self)
-	bprev:SetFont("Trebuchet22")
-	bprev:SetPos(0, 0)
-	bprev:SetText(GetTranslation("prev"))
-	bprev:AlignLeft()
-	bprev:SizeToContents()
-
-	bprev.DoClick = function()
-		if frame:GetPrevFunc() and isfunction(frame:GetPrevFunc()) then
-			frame:GetPrevFunc()()
-		end
-	end
+function PANEL:Toggle(b)
+	self.toggled = b
 end
 
-vgui.Register("ShopEditorChildFrame", PANEL, "DFrame")
+vgui.Register("SimpleRoleIcon", PANEL, "Panel")

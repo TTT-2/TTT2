@@ -1,3 +1,6 @@
+---
+-- @class PANEL
+-- @section TTTProgressBar
 -- Version of DProgressBar I can mess around with
 
 local PANEL = {}

@@ -1,3 +1,6 @@
+---
+-- @class PANEL
+-- @section ScrollLabel
 -- why can't the default label scroll? welcome to gmod
 
 PANEL = {}

@@ -31,6 +31,7 @@ ttt_include("sh_inventory")
 
 ttt_include("vgui__cl_coloredbox")
 ttt_include("vgui__cl_droleimage")
+ttt_include("vgui__cl_simpleroleicon")
 ttt_include("vgui__cl_simpleicon")
 ttt_include("vgui__cl_simpleclickicon")
 ttt_include("vgui__cl_progressbar")

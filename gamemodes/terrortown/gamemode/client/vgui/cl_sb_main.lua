@@ -1,5 +1,9 @@
+---
+-- @class PANEL
+-- @section TTTScoreboard
 -- VGUI panel version of the scoreboard, based on TEAM GARRY's sandbox mode
 -- scoreboard.
+
 TTTScoreboard = TTTScoreboard or {}
 
 local surface = surface
@@ -474,8 +478,11 @@ end
 
 vgui.Register("TTTScoreboard", PANEL, "Panel")
 
+---
+-- @section TTTPlayerFrame
 -- PlayerFrame is defined in sandbox and is basically a little scrolling
 -- hack. Just putting it here (slightly modified) because it's tiny.
+---
 
 PANEL = {}
 

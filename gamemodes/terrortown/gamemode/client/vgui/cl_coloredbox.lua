@@ -1,3 +1,7 @@
+---
+-- @class PANEL
+-- @section ColoredBox
+
 -- Removed in GM13, still need it
 local PANEL = {}
 

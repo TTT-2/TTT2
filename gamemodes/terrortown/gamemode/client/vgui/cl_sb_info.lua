@@ -1,4 +1,8 @@
+---
+-- @class PANEL
+-- @section TTTScorePlayerInfoSearch
 -- Player info panel, based on sandbox scoreboard's infocard
+
 TTTScoreboard = TTTScoreboard or {}
 
 local ipairs = ipairs
@@ -144,7 +148,10 @@ end
 
 vgui.Register("TTTScorePlayerInfoSearch", PANEL, "TTTScorePlayerInfoBase")
 
+---
+-- @section TTTScorePlayerInfoTags
 -- Living player, tags etc
+---
 
 TTTScoreboard.Tags = {
 	{txt = "sb_tag_friend", color = COLOR_GREEN},
@@ -205,7 +212,11 @@ end
 
 vgui.Register("TTTScorePlayerInfoTags", PANEL, "TTTScorePlayerInfoBase")
 
+---
+-- @section TagButton
 -- Tag button
+---
+
 PANEL = {}
 
 function PANEL:Init()

@@ -1,3 +1,6 @@
+---
+-- @class PANEL
+-- @section TTTScoreGroup
 -- Unlike sandbox, we have teams to deal with, so here's an extra panel in the
 -- hierarchy that handles a set of player rows belonging to its team.
 

@@ -1,3 +1,6 @@
+---
+-- @class PANEL
+-- @section SimpleIcon
 -- Altered version of gmod's SpawnIcon
 -- This panel does not deal with models and such
 
@@ -109,7 +112,9 @@ end
 
 vgui.Register("SimpleIcon", PANEL, "Panel")
 
---
+---
+-- @section LayeredIcon
+---
 
 PANEL = {}
 
@@ -163,7 +168,11 @@ end
 
 vgui.Register("LayeredIcon", PANEL, "SimpleIcon")
 
+---
+-- @section SimpleIconAvatar
 -- Avatar icon
+---
+
 PANEL = {}
 
 function PANEL:Init()
@@ -189,8 +198,10 @@ end
 
 vgui.Register("SimpleIconAvatar", PANEL, "LayeredIcon")
 
-
+---
+-- @section SimpleIconLabelled
 -- Labelled icon
+---
 
 PANEL = {}
 
