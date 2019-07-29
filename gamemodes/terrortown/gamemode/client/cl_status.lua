@@ -50,7 +50,7 @@ function STATUS:AddTimedStatus(id, duration, showDuration)
   end)
 
   if showDuration then
-    STATUS.active[id].DrawInfo = function(self)
+		STATUS.active[id].DrawInfo = function(self)
 			return tostring(math.Round(math.max(0, self.displaytime - CurTime())))
 		end
   end
@@ -66,7 +66,7 @@ function STATUS:RemoveStatus(id)
 	STATUS.active[id] = nil
 
 	if timer.Exists(id) then
-	  timer.Remove(id)
+		timer.Remove(id)
 	end
 end
 
@@ -76,22 +76,22 @@ end
 -- @realm client
 function STATUS:RemoveAll()
 	for i in pairs(STATUS.active) do
-	  STATUS:RemoveStatus(i)
+		STATUS:RemoveStatus(i)
 	end
 end
 
 net.Receive("ttt2_status_effect_add", function()
-  STATUS:AddStatus(net.ReadString())
+	STATUS:AddStatus(net.ReadString())
 end)
 
 net.Receive("ttt2_status_effect_add_timed", function()
-  STATUS:AddTimedStatus(net.ReadString(), net.ReadUInt(32), net.ReadBool())
+	STATUS:AddTimedStatus(net.ReadString(), net.ReadUInt(32), net.ReadBool())
 end)
 
 net.Receive("ttt2_status_effect_remove", function()
-  STATUS:RemoveStatus(net.ReadString())
+	STATUS:RemoveStatus(net.ReadString())
 end)
 
 net.Receive("ttt2_status_effect_remove_all", function()
-  STATUS:RemoveAll()
+	STATUS:RemoveAll()
 end)
