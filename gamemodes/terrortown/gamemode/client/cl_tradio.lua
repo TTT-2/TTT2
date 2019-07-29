@@ -1,3 +1,5 @@
+---
+-- @module TRADIO
 -- Traitor radio controls
 
 TRADIO = {}
@@ -76,6 +78,11 @@ local function CreateSoundBoard(parent)
 	return b
 end
 
+---
+-- Creates the traitor radio menu
+-- @param Panel parent
+-- @return Panel the created DPanel menu
+-- @realm client
 function TRADIO.CreateMenu(parent)
 	local w, h = parent:GetSize()
 	local client = LocalPlayer()

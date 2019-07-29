@@ -1,3 +1,6 @@
+---
+--
+
 local util = util
 local surface = surface
 local draw = draw
@@ -28,13 +31,26 @@ local ClassHint = {
 	}
 }
 
+---
+-- Returns the localized ClassHint table
 -- Access for servers to display hints using their own HUD/UI.
+-- @return table
+-- @hook
+-- @realm client
 function GM:GetClassHints()
 	return ClassHint
 end
 
--- Basic access for servers to add/modify hints. They override hints stored on
+---
+-- Sets an index of the localized ClassHint table
+-- @note Basic access for servers to add/modify hints. They override hints stored on
 -- the entities themselves.
+-- @param string cls
+-- @param table hint
+-- @hook
+-- @realm client
+-- @ref
+-- @local
 function GM:AddClassHint(cls, hint)
 	ClassHint[cls] = table.Copy(hint)
 end
@@ -44,9 +60,19 @@ indicator_col = Color(255, 255, 255, 130)
 
 local propspec_outline = Material("models/props_combine/portalball001_sheet")
 
--- using this hook instead of pre/postplayerdraw because playerdraw seems to
+---
+-- Called after all translucent entities are drawn.
+-- See also @{GM:PostDrawOpaqueRenderables} and @{GM:PreDrawTranslucentRenderables}.
+-- @3D
+-- @note using this hook instead of pre/postplayerdraw because playerdraw seems to
 -- happen before certain entities are drawn, which then clip over the sprite
-function GM:PostDrawTranslucentRenderables()
+-- @param boolean bDrawingDepth Whether the current call is writing depth
+-- @param boolean bDrawingSkybox Whether the current call is drawing skybox
+-- @hook
+-- @realm client
+-- @ref https://wiki.garrysmod.com/page/GM/PostDrawTranslucentRenderables
+-- @local
+function GM:PostDrawTranslucentRenderables(bDrawingDepth, bDrawingSkybox)
 	local client = LocalPlayer()
 	local plys = GetPlayers()
 
@@ -112,6 +138,7 @@ function GM:PostDrawTranslucentRenderables()
 	end
 end
 
+---
 -- Spectator labels
 local function DrawPropSpecLabels(client)
 	if not client:IsSpec() and GetRoundState() ~= ROUND_POST then return end
@@ -162,6 +189,12 @@ local ring_tex = surface.GetTextureID("effects/select_ring")
 local rag_color = Color(200, 200, 200, 255)
 local MAX_TRACE_LENGTH = math.sqrt(3) * 32768
 
+---
+-- Called from @{GM:HUDPaint} to draw @{Player} info when you hover over a @{Player} with your crosshair or mouse.
+-- @hook
+-- @realm client
+-- @ref https://wiki.garrysmod.com/page/GM/HUDDrawTargetID
+-- @local
 function GM:HUDDrawTargetID()
 	local client = LocalPlayer()
 	local L = GetLang()
