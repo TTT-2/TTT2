@@ -1,3 +1,6 @@
+---
+-- @class CLSCORE
+
 -- Game report
 
 ttt_include("cl_awards")
@@ -30,6 +33,13 @@ surface.CreateFont("WinHuge", {font = "Trebuchet24", size = 72, weight = 1000, s
 local T = LANG.GetTranslation
 local PT = LANG.GetParamTranslation
 
+---
+-- Returns the output of an event
+-- @param string key Index of the display @{function}
+-- @param table event
+-- @return any
+-- @realm client
+-- @internal
 function CLSCORE:GetDisplay(key, event)
 	local displayfns = self.EventDisplay[event.id]
 
@@ -42,14 +52,32 @@ function CLSCORE:GetDisplay(key, event)
 	return keyfn(event)
 end
 
+---
+-- Returns the text for a given event
+-- @param table e The event
+-- @return string The event text
+-- @realm client
+-- @internal
 function CLSCORE:TextForEvent(e)
 	return self:GetDisplay("text", e)
 end
 
+---
+-- Returns the icon data for a given event
+-- @param table e The event
+-- @return table Icon data table
+-- @realm client
+-- @internal
 function CLSCORE:IconForEvent(e)
 	return self:GetDisplay("icon", e)
 end
 
+---
+-- Returns the time for an event
+-- @param table e The event
+-- @return string Formatted time
+-- @realm client
+-- @internal
 function CLSCORE:TimeForEvent(e)
 	local t = e.t - self.StartTime
 
@@ -60,8 +88,12 @@ function CLSCORE:TimeForEvent(e)
 	end
 end
 
--- Tell CLSCORE how to display an event. See cl_scoring_events for examples.
--- Pass an empty table to keep an event from showing up.
+---
+-- Tell CLSCORE how to display an event. See @{file/cl_scoring_events.lua} for examples.
+-- @param number event_id
+-- @param table event_fns The event table @{function}s. Pass an empty table to keep an event from showing up.
+-- @realm client
+-- @module CLSCORE
 function CLSCORE.DeclareEventDisplay(event_id, event_fns)
 	-- basic input vetting, can't check returned value types because the
 	-- functions may be impure
@@ -84,6 +116,11 @@ function CLSCORE.DeclareEventDisplay(event_id, event_fns)
 	CLSCORE.EventDisplay[event_id] = event_fns
 end
 
+---
+-- Fills a given @{Panel} DList with the stored event data
+-- @param Panel dlst
+-- @realm client
+-- @internal
 function CLSCORE:FillDList(dlst)
 	for _, e in pairs(self.Events) do
 		local etxt = self:TextForEvent(e)
@@ -106,6 +143,11 @@ function CLSCORE:FillDList(dlst)
 	end
 end
 
+---
+-- Creates the event logs
+-- @param Panel dpanel
+-- @realm client
+-- @internal
 function CLSCORE:BuildEventLogPanel(dpanel)
 	local margin = 10
 	local w, h = dpanel:GetSize()
@@ -132,6 +174,12 @@ function CLSCORE:BuildEventLogPanel(dpanel)
 	self:FillDList(dlist)
 end
 
+---
+-- Creates the score @{Panel}
+-- @param Panel dpanel
+-- @realm client
+-- @internal
+-- @internal
 function CLSCORE:BuildScorePanel(dpanel)
 	--local margin = 10
 	local w, h = dpanel:GetSize()
@@ -293,6 +341,15 @@ function CLSCORE:BuildScorePanel(dpanel)
 	dlist:SortByColumn(6)
 end
 
+---
+-- Adds an award into the stored events and returns the new Y Coordinate
+-- @param number y the Y Coordinate
+-- @param number pw the @{Panel} width
+-- @param table award the award data
+-- @param Panel dpanel
+-- @return number The modified Y Coordinate
+-- @realm client
+-- @internal
 function CLSCORE:AddAward(y, pw, award, dpanel)
 	local nick = award.nick
 	local text = award.text
@@ -334,11 +391,17 @@ function CLSCORE:AddAward(y, pw, award, dpanel)
 	return y
 end
 
+---
 -- double check that we have no nils
 local function ValidAward(a)
 	return a and a.nick and a.text and a.title and a.priority
 end
 
+---
+-- Creates the highlights @{Panel}
+-- @param Panel dpanel
+-- @realm client
+-- @internal
 function CLSCORE:BuildHilitePanel(dpanel)
 	local w, h = dpanel:GetSize()
 	local title = {c = TEAMS[TEAM_INNOCENT].color or INNOCENT.color, txt = "hilite_win_" .. TEAM_INNOCENT}
@@ -460,6 +523,9 @@ function CLSCORE:BuildHilitePanel(dpanel)
 	end
 end
 
+---
+-- Displays the score @{Panel} for the local @{Player}
+-- @realm client
 function CLSCORE:ShowPanel()
 	local margin = 15
 	local dpanel = vgui.Create("DFrame")
@@ -536,6 +602,10 @@ function CLSCORE:ShowPanel()
 	dpanel:SetKeyboardInputEnabled(false)
 end
 
+---
+-- Clears the current score @{Panel} and removes it
+-- @realm client
+-- @internal
 function CLSCORE:ClearPanel()
 	if self.Panel then
 		-- move the mouse off any tooltips and then remove the panel next tick
@@ -555,6 +625,11 @@ function CLSCORE:ClearPanel()
 	end
 end
 
+---
+-- Saves the current score @{Panel}'s data into a log file
+-- @note The logfiles are stored in <code>ttt/logs</code>
+-- @realm client
+-- @internal
 function CLSCORE:SaveLog()
 	if self.Events and #self.Events <= 0 then
 		chat.AddText(COLOR_WHITE, T("report_save_error"))
@@ -588,6 +663,10 @@ function CLSCORE:SaveLog()
 	chat.AddText(COLOR_WHITE, T("report_save_result"), COLOR_GREEN, " /garrysmod/data/" .. logname)
 end
 
+---
+-- Resets the stored data of the current score @{Panel}
+-- @realm client
+-- @internal
 function CLSCORE:Reset()
 	self.Events = {}
 	self.Tms = {} -- team setup on round start
@@ -598,6 +677,11 @@ function CLSCORE:Reset()
 	self:ClearPanel()
 end
 
+---
+-- Initializes the score @{Panel}
+-- @param table events The list of events
+-- @realm client
+-- @internal
 function CLSCORE:Init(events)
 	-- Get start time and traitors
 	local starttime
@@ -633,6 +717,11 @@ function CLSCORE:Init(events)
 	self.Events = events
 end
 
+---
+-- Resets the old score @{Panel}, Initializes a new one
+-- and displays it to the local @{Player}
+-- @realm client
+-- @internal
 function CLSCORE:ReportEvents(events)
 	self:Reset()
 
@@ -640,6 +729,10 @@ function CLSCORE:ReportEvents(events)
 	self:ShowPanel()
 end
 
+---
+-- Toggles the visibility of the current score @{Panel}
+-- @realm client
+-- @internal
 function CLSCORE:Toggle()
 	if IsValid(self.Panel) then
 		self.Panel:ToggleVisible()

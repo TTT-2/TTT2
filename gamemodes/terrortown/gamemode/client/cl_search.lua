@@ -1,4 +1,8 @@
+---
+-- @section body_search_manager
+
 -- Body search popup
+
 local T = LANG.GetTranslation
 local PT = LANG.GetParamTranslation
 local RT = LANG.GetRawTranslation
@@ -122,7 +126,11 @@ local function IconForInfoType(t, data)
 	end
 end
 
--- create a table with icons, text,... out of search_raw table
+---
+-- Creates a table with icons, text,... out of search_raw table
+-- @param table raw
+-- @return table a converted search data table
+-- @realm client
 function PreprocSearch(raw)
 	local search = {}
 
@@ -289,6 +297,7 @@ function PreprocSearch(raw)
 	return search
 end
 
+---
 -- Returns a function meant to override OnActivePanelChanged, which modifies
 -- dactive and dtext based on the search information that is associated with the
 -- newly selected panel
