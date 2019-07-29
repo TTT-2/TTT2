@@ -1,5 +1,5 @@
 ---
---
+-- The main file. Some GAMEMODE hooks and internal @{function}s
 
 local math = math
 local net = net

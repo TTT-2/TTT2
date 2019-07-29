@@ -45,6 +45,11 @@ end
 
 local radioframe
 
+---
+-- Displays the radio commands for the local @{Player}
+-- @note This automatically disappears after 3 seconds
+-- @param boolean state
+-- @realm client
 function RADIO:ShowRadioCommands(state)
 	if not state then
 		if radioframe and radioframe:IsValid() then
@@ -150,6 +155,11 @@ function RADIO:ShowRadioCommands(state)
 	end
 end
 
+---
+-- Sends an command based on the given index of the <code>RADIO.Commands</code> table
+-- (if this command is available)
+-- @param number slotidx
+-- @realm client
 function RADIO:SendCommand(slotidx)
 	local c = self.Commands[slotidx]
 	if c then
@@ -161,6 +171,11 @@ function RADIO:SendCommand(slotidx)
 	end
 end
 
+---
+-- Returns the target type of the local @{Player}
+-- @return nil|string the cmd name
+-- @return nil|boolean whether a custom cmd matches this situation
+-- @realm client
 function RADIO:GetTargetType()
 	local client = LocalPlayer()
 
@@ -188,7 +203,11 @@ function RADIO:GetTargetType()
 end
 
 ---
+-- Makes a target printable
+-- @param string|Player|Entity target
+-- @return nil|string
 -- @module RADIO
+-- @realm client
 function RADIO.ToPrintable(target)
 	if type(target) == "string" then
 		return GetTranslation(target)
@@ -201,6 +220,12 @@ function RADIO.ToPrintable(target)
 	end
 end
 
+---
+-- Returns the current target or the last stored one
+-- @return nil|string the cmd name
+-- @return nil|boolean whether a custom cmd matches this situation
+-- @see RADIO:GetTargetType
+-- @realm client
 function RADIO:GetTarget()
 	local client = LocalPlayer()
 
@@ -221,6 +246,10 @@ function RADIO:GetTarget()
 	return "quick_nobody", true
 end
 
+---
+-- Stores the current target
+-- @see RADIO:GetTargetType
+-- @realm client
 function RADIO:StoreTarget()
 	local current, vague = self:GetTargetType()
 
@@ -231,6 +260,7 @@ function RADIO:StoreTarget()
 	end
 end
 
+---
 -- Radio commands are a console cmd instead of directly sent from RADIO, because
 -- this way players can bind keys to them
 local function RadioCommand(ply, cmd, arg)
@@ -338,9 +368,16 @@ local radio_gestures = {
 	quick_suspect = ACT_SIGNAL_HALT
 }
 
+---
+-- Performs an anim gesture based on the @{RADIO} cmd
+-- @note Called by recieving the "TTT_RadioMsg" network message
+-- @param Player ply
+-- @param string name name of the @{RADIO} cmd
+-- @param string target
+-- @hook
+-- @realm client
 function GM:PlayerSentRadioCommand(ply, name, target)
 	local act = radio_gestures[name]
-
 	if act then
 		ply:AnimPerformGesture(act)
 	end

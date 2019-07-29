@@ -1,3 +1,5 @@
+---
+-- @section chat_manager
 -- radio commands, text chat stuff
 DEFINE_BASECLASS("gamemode_base")
 
@@ -132,6 +134,10 @@ function GM:ChatTextChanged(text)
 	last_chat = text
 end
 
+---
+-- Interrupts the chat
+-- @realm client
+-- @internal
 function ChatInterrupt()
 	local client = LocalPlayer()
 	local id = net.ReadUInt(32)

@@ -1,3 +1,5 @@
+---
+-- @section scoreboard_manager
 -- a much requested darker scoreboard
 
 ttt_include("vgui__cl_sb_main")
@@ -13,12 +15,22 @@ local function ScoreboardRemove()
 end
 hook.Add("TTTLanguageChanged", "RebuildScoreboard", ScoreboardRemove)
 
+---
+-- Called before (re)creating the scoreboard
+-- @hook
+-- @realm client
 function GM:ScoreboardCreate()
 	ScoreboardRemove()
 
 	sboard_panel = vgui.Create("TTTScoreboard")
 end
 
+---
+-- Called when player presses the scoreboard button (TAB by default).
+-- @hook
+-- @realm client
+-- @ref https://wiki.garrysmod.com/page/GM/ScoreboardShow
+-- @local
 function GM:ScoreboardShow()
 	self.ShowScoreboard = true
 
@@ -33,6 +45,12 @@ function GM:ScoreboardShow()
 	sboard_panel:StartUpdateTimer()
 end
 
+---
+-- Called when player released the scoreboard button (TAB by default).
+-- @hook
+-- @realm client
+-- @ref https://wiki.garrysmod.com/page/GM/ScoreboardHide
+-- @local
 function GM:ScoreboardHide()
 	self.ShowScoreboard = false
 
@@ -43,10 +61,24 @@ function GM:ScoreboardHide()
 	end
 end
 
+---
+-- Returns the current stored scoreboard
+-- @return Panel
+-- @hook
+-- @realm client
 function GM:GetScoreboardPanel()
 	return sboard_panel
 end
 
+---
+-- Called every frame to render the scoreboard.<br />
+-- It is recommended to use Derma and VGUI for this job instead of this hook.
+-- Called right after @{GM:HUDPaint}.
+-- @2D
+-- @hook
+-- @realm client
+-- @ref Called every frame to render the scoreboard.
+-- @local
 function GM:HUDDrawScoreBoard()
 	-- replaced by panel version
 end
