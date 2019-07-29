@@ -12,6 +12,7 @@ TTTFiles = {
 	cl_hud_manager = {file = "cl_hud_manager.lua", on = "client"},
 	cl_hudpickup = {file = "cl_hudpickup.lua", on = "client"},
 	cl_inventory = {file = "cl_inventory.lua", on = "client"},
+	cl_karma = {file = "cl_karma.lua", on = "client"},
 	cl_keys = {file = "cl_keys.lua", on = "client"},
 	cl_main = {file = "cl_main.lua", on = "client"},
 	cl_msgstack = {file = "cl_msgstack.lua", on = "client"},

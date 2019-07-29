@@ -36,6 +36,7 @@ ttt_include("vgui__cl_simpleclickicon")
 ttt_include("vgui__cl_progressbar")
 ttt_include("vgui__cl_scrolllabel")
 
+ttt_include("cl_karma")
 ttt_include("cl_tradio")
 ttt_include("cl_transfer")
 ttt_include("cl_reroll")

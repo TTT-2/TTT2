@@ -13,13 +13,13 @@ STATUS.active = {}
 -- @return boolean whether the creation was successfully
 -- @realm client
 function STATUS:RegisterStatus(id, data)
-  if STATUS.registered[id] ~= nil then  -- name is not unique
+	if STATUS.registered[id] ~= nil then  -- name is not unique
 		return false
 	end
 
-  STATUS.registered[id] = data
+	STATUS.registered[id] = data
 
-  return true
+	return true
 end
 
 ---
@@ -27,9 +27,9 @@ end
 -- @param number id The id of the registered @{STATUS}
 -- @realm client
 function STATUS:AddStatus(id)
-  if STATUS.registered[id] == nil then return end
+	if STATUS.registered[id] == nil then return end
 
-  STATUS.active[id] = table.Copy(STATUS.registered[id])
+	STATUS.active[id] = table.Copy(STATUS.registered[id])
 end
 
 ---
@@ -39,21 +39,21 @@ end
 -- the @{STATUS} will be removed automatically
 -- @realm client
 function STATUS:AddTimedStatus(id, duration, showDuration)
-  if STATUS.registered[id] == nil or duration == 0 then return end
+	if STATUS.registered[id] == nil or duration == 0 then return end
 
-  self:AddStatus(id)
+	self:AddStatus(id)
 
-  STATUS.active[id].displaytime = CurTime() + duration
+	STATUS.active[id].displaytime = CurTime() + duration
 
-  timer.Create(id, duration, 1, function()
+	timer.Create(id, duration, 1, function()
 		self:RemoveStatus(id)
-  end)
+	end)
 
-  if showDuration then
+	if showDuration then
 		STATUS.active[id].DrawInfo = function(self)
 			return tostring(math.Round(math.max(0, self.displaytime - CurTime())))
 		end
-  end
+	end
 end
 
 ---
