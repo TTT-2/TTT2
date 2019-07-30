@@ -1,6 +1,7 @@
 ---
 -- @class PANEL
--- @section TTTScorePlayerInfoSearch
+-- @realm client
+-- @section TTTScorePlayerInfoBase
 -- Player info panel, based on sandbox scoreboard's infocard
 
 TTTScoreboard = TTTScoreboard or {}
@@ -20,6 +21,8 @@ function PANEL:Init()
 	--self:SetMouseInputEnabled(false)
 end
 
+---
+-- @param Player ply
 function PANEL:SetPlayer(ply)
 	self.Player = ply
 
@@ -30,13 +33,18 @@ function PANEL:UpdatePlayerData()
 	-- override me
 end
 
+---
+-- @return[default=true] boolean
 function PANEL:Paint()
 	return true
 end
 
 vgui.Register("TTTScorePlayerInfoBase", PANEL, "Panel")
 
+---
+-- @section TTTScorePlayerInfoSearch
 -- Dead player search results
+---
 
 PANEL = {}
 
@@ -174,6 +182,8 @@ function PANEL:Init()
 	--self:SetMouseInputEnabled(false)
 end
 
+---
+-- @param Player ply
 function PANEL:SetPlayer(ply)
 	self.Player = ply
 
@@ -238,10 +248,14 @@ function PANEL:Init()
 	self:SetTextColor(self.Tag and self.Tag.color or COLOR_WHITE)
 end
 
+---
+-- @param Player ply
 function PANEL:SetPlayer(ply)
 	self.Player = ply
 end
 
+---
+-- @param table tag
 function PANEL:SetupTag(tag)
 	self.Tag = tag
 

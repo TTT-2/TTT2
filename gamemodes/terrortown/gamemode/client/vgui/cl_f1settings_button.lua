@@ -1,5 +1,6 @@
 ---
 -- @class PANEL
+-- @realm client
 -- @section DF1SettingsButton
 
 local vgui = vgui
@@ -26,6 +27,8 @@ function PANEL:Init()
 	self:SetCursor("hand")
 end
 
+---
+-- @return boolean
 function PANEL:IsDown()
 	return self.Depressed
 end
@@ -50,6 +53,10 @@ function PANEL:SetImage(img)
 end
 PANEL.SetIcon = PANEL.SetImage
 
+---
+-- @param number w
+-- @param number h
+-- @return[default=false] boolean
 function PANEL:Paint(w, h)
 	derma.SkinHook("Paint", "Button", self, w, h)
 
@@ -74,6 +81,9 @@ function PANEL:PerformLayout()
 	DLabel.PerformLayout(self)
 end
 
+---
+-- @param string strName
+-- @param any strArgs
 function PANEL:SetConsoleCommand(strName, strArgs)
 	self.DoClick = function(self, val)
 		RunConsoleCommand(strName, strArgs)

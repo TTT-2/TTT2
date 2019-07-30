@@ -1,5 +1,6 @@
 ---
 -- @class PANEL
+-- @realm client
 -- @section SimpleIcon
 -- Altered version of gmod's SpawnIcon
 -- This panel does not deal with models and such
@@ -28,6 +29,8 @@ function PANEL:Init()
 	self:SetIconSize(64)
 end
 
+---
+-- @param number mcode mouse key / code
 function PANEL:OnMousePressed(mcode)
 	if mcode == MOUSE_LEFT then
 		self:DoClick()
@@ -80,10 +83,14 @@ function PANEL:PerformLayout()
 	self.Icon:StretchToParent(0, 0, 0, 0)
 end
 
+---
+-- @param Material icon
 function PANEL:SetIcon(icon)
 	self.Icon:SetImage(icon)
 end
 
+---
+-- @return Material
 function PANEL:GetIcon()
 	return self.Icon:GetImage()
 end
@@ -96,6 +103,10 @@ function PANEL:Think()
 	self.animPress:Run()
 end
 
+---
+-- @param table anim
+-- @param number delta
+-- @param table data
 function PANEL:PressedAnim(anim, delta, data)
 	if anim.Started then return end
 
@@ -122,7 +133,9 @@ function PANEL:Init()
 	self.Layers = {}
 end
 
+---
 -- Add a panel to this icon. Most recent addition will be the top layer.
+-- @param Panel pnl
 function PANEL:AddLayer(pnl)
 	if not IsValid(pnl) then return end
 
@@ -146,6 +159,8 @@ function PANEL:PerformLayout()
 	end
 end
 
+---
+-- @param Panel pnl
 function PANEL:EnableMousePassthrough(pnl)
 	for _, p in ipairs(self.Layers) do
 		if p == pnl then
@@ -188,10 +203,14 @@ function PANEL:Init()
 	--return self.BaseClass.Init(self)
 end
 
+---
+-- @param number s
 function PANEL:SetAvatarSize(s)
 	self.imgAvatar:SetSize(s, s)
 end
 
+---
+-- @param Player ply
 function PANEL:SetPlayer(ply)
 	self.imgAvatar:SetPlayer(ply)
 end
@@ -236,6 +255,11 @@ function PANEL:PerformLayout()
 	return self.BaseClass.PerformLayout(self)
 end
 
+---
+-- @param Color color
+-- @param string font
+-- @param table shadow
+-- @param table pos
 function PANEL:SetIconProperties(color, font, shadow, pos)
 	self:SetIconTextColor(color or self:GetIconTextColor())
 	self:SetIconFont(font or self:GetIconFont())
@@ -243,6 +267,11 @@ function PANEL:SetIconProperties(color, font, shadow, pos)
 	self:SetIconTextPos(pos or self:GetIconTextPos())
 end
 
+---
+-- @param string text
+-- @param Color color
+-- @param string font
+-- @param table pos
 function PANEL:SetLabelText(text, color, font, pos)
 	if self.FakeLabel then
 		local spec = {pos = pos, color = color, text = text, font = font, xalign = TEXT_ALIGN_CENTER, yalign = TEXT_ALIGN_CENTER}

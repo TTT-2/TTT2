@@ -1,5 +1,6 @@
 ---
 -- @class PANEL
+-- @realm client
 -- @section HUDSwitcher
 
 local vgui = vgui
@@ -9,6 +10,9 @@ local PANEL = {}
 AccessorFunc(PANEL, "m_bBorder", "Border")
 AccessorFunc(PANEL, "m_Color", "Color")
 
+---
+-- @param Panel panel
+-- @param HUDELEMENT hudEl
 local function AddHUDSettings(panel, hudEl)
 	if not IsValid(panel) or not hudEl then return end
 

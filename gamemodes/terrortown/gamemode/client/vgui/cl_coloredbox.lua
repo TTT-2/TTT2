@@ -1,5 +1,6 @@
 ---
 -- @class PANEL
+-- @realm client
 -- @section ColoredBox
 
 -- Removed in GM13, still need it

@@ -1,5 +1,6 @@
 ---
 -- @class PANEL
+-- @realm client
 -- @section ScrollLabel
 -- why can't the default label scroll? welcome to gmod
 
@@ -16,10 +17,14 @@ function PANEL:Init()
 	self.Scroll = vgui.Create("DVScrollBar", self)
 end
 
+---
+-- @return string
 function PANEL:GetLabel()
 	return self.Label
 end
 
+---
+-- @param number dlta
 function PANEL:OnMouseWheeled(dlta)
 	if not self.Scroll then return end
 

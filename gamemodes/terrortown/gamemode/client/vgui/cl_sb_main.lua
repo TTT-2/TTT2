@@ -1,5 +1,6 @@
 ---
 -- @class PANEL
+-- @realm client
 -- @section TTTScoreboard
 -- VGUI panel version of the scoreboard, based on TEAM GARRY's sandbox mode
 -- scoreboard.
@@ -72,7 +73,12 @@ GROUP_SPEC = 4
 
 GROUP_COUNT = 4
 
-function AddScoreGroup(name) -- Utility function to register a score group
+---
+-- Utility function to register a score group
+-- @param string name
+-- @section Scoreboard
+-- @noclass
+function AddScoreGroup(name)
 	if _G["GROUP_" .. name] then
 		error("Group of name '" .. name .. "' already exists!")
 
@@ -84,19 +90,25 @@ function AddScoreGroup(name) -- Utility function to register a score group
 	_G["GROUP_" .. name] = GROUP_COUNT
 end
 
-function ScoreGroup(p)
-	if not IsValid(p) then -- will not match any group panel
-		return - 1
+---
+-- Returns the score group of a @{Player}
+-- @param Player ply
+-- @return number|string
+-- @section Scoreboard
+-- @noclass
+function ScoreGroup(ply)
+	if not IsValid(ply) then -- will not match any group panel
+		return -1
 	end
 
-	local group = hook.Call("TTTScoreGroup", nil, p)
+	local group = hook.Call("TTTScoreGroup", nil, ply)
 
 	if group then -- If that hook gave us a group, use it
 		return group
 	end
 
-	if DetectiveMode() and p:IsSpec() and not p:Alive() then
-		if p:GetNWBool("body_found", false) then
+	if DetectiveMode() and ply:IsSpec() and not ply:Alive() then
+		if ply:GetNWBool("body_found", false) then
 			return GROUP_FOUND
 		else
 			local client = LocalPlayer()
@@ -113,10 +125,10 @@ function ScoreGroup(p)
 		end
 	end
 
-	return p:IsTerror() and GROUP_TERROR or GROUP_SPEC
+	return ply:IsTerror() and GROUP_TERROR or GROUP_SPEC
 end
 
-
+---
 -- Comparison functions used to sort scoreboard
 sboard_sort = {
 	name = function(plya, plyb)
@@ -274,12 +286,29 @@ local function column_label_work(self_, table_to_add, label, width, sort_identif
 	return lbl
 end
 
+---
+-- Adds column headers with player-specific data
+-- @param string label
+-- @param any _
+-- @param number width
+-- @param number sort_id
+-- @param function sort_func
+-- @return Panel DLabel
+-- @see PANEL:AddFakeColumn
 function PANEL:AddColumn(label, _, width, sort_id, sort_func)
 	return column_label_work(self, self.cols, label, width, sort_id, sort_func)
 end
 
+---
 -- Adds just column headers without player-specific data
 -- Identical to PANEL:AddColumn except it adds to the sort_headers table instead
+-- @param string label
+-- @param any _
+-- @param number width
+-- @param number sort_id
+-- @param function sort_func
+-- @return Panel DLabel
+-- @see PANEL:AddColumn
 function PANEL:AddFakeColumn(label, _, width, sort_id, sort_func)
 	return column_label_work(self, self.sort_headers, label, width, sort_id, sort_func)
 end
@@ -443,6 +472,8 @@ function PANEL:ApplySchemeSettings()
 	end
 end
 
+---
+-- @param boolean force
 function PANEL:UpdateScoreboard(force)
 	if not force and not self:IsVisible() then return end
 
@@ -493,10 +524,14 @@ function PANEL:Init()
 	self.scroll = vgui.Create("DVScrollBar", self)
 end
 
+---
+-- @return Panel
 function PANEL:GetCanvas()
 	return self.pnlCanvas
 end
 
+---
+-- @param number dlta
 function PANEL:OnMouseWheeled(dlta)
 	self.scroll:AddScroll(dlta * -2)
 

@@ -1,4 +1,5 @@
 ---
+-- @realm client
 -- @section SimpleRoleIcon
 
 local math = math
@@ -21,6 +22,8 @@ function PANEL:Init()
 	self:SetIconSize(64)
 end
 
+---
+-- @param number mcode mouse key / code
 function PANEL:OnMousePressed(mcode)
 	if mcode == MOUSE_LEFT then
 		self:DoClick()
@@ -46,6 +49,10 @@ function PANEL:ApplySchemeSettings()
 end
 
 local oldPaintOver = PANEL.PaintOver
+
+---
+-- @param number w width
+-- @param number h height
 function PANEL:PaintOver(w, h)
 	if self.toggled then
 		surface.SetDrawColor(0, 200, 0, 255)
@@ -87,10 +94,14 @@ function PANEL:PerformLayout()
 	self.Icon:StretchToParent(0, 0, 0, 0)
 end
 
+---
+-- @param Material icon
 function PANEL:SetIcon(icon)
 	self.Icon:SetImage(icon)
 end
 
+---
+-- @return Material
 function PANEL:GetIcon()
 	return self.Icon:GetImage()
 end
@@ -103,6 +114,10 @@ function PANEL:Think()
 	self.animPress:Run()
 end
 
+---
+-- @param table anim
+-- @param number delta
+-- @param table data
 function PANEL:PressedAnim(anim, delta, data)
 	if anim.Started then return end
 
@@ -117,6 +132,8 @@ function PANEL:PressedAnim(anim, delta, data)
 	self.Icon:StretchToParent(border, border, border, border)
 end
 
+---
+-- @param boolean b
 function PANEL:Toggle(b)
 	self.toggled = b
 end

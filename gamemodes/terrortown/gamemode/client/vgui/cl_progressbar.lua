@@ -1,5 +1,6 @@
 ---
 -- @class PANEL
+-- @realm client
 -- @section TTTProgressBar
 -- Version of DProgressBar I can mess around with
 
@@ -29,18 +30,24 @@ function PANEL:LabelAsPercentage()
 	self:UpdateText()
 end
 
+---
+-- @param number i
 function PANEL:SetMin(i)
 	self.m_iMin = i
 
 	self:UpdateText()
 end
 
+---
+-- @param number i
 function PANEL:SetMax(i)
 	self.m_iMax = i
 
 	self:UpdateText()
 end
 
+---
+-- @param number i
 function PANEL:SetValue(i)
 	self.m_iValue = i
 

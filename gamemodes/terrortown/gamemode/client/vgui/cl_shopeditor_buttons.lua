@@ -1,5 +1,6 @@
 ---
 -- @class PANEL
+-- @realm client
 -- @section ShopEditButton
 -- Altered version of gmod's SpawnIcon
 -- This panel does not deal with models and such
@@ -62,6 +63,8 @@ function PANEL:PerformLayout()
 	self.Icon:StretchToParent(0, 0, 0, 0)
 end
 
+---
+-- @param Material icon
 function PANEL:SetIcon(icon)
 	self.Icon:SetImage(icon)
 end
@@ -78,6 +81,10 @@ function PANEL:Think()
 	self.animPress:Run()
 end
 
+---
+-- @param table anim
+-- @param number delta
+-- @param table data
 function PANEL:PressedAnim(anim, delta, data)
 	if anim.Started then return end
 

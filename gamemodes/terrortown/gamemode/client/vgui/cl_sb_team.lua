@@ -1,5 +1,6 @@
 ---
 -- @class PANEL
+-- @realm client
 -- @section TTTScoreGroup
 -- Unlike sandbox, we have teams to deal with, so here's an extra panel in the
 -- hierarchy that handles a set of player rows belonging to its team.
@@ -26,6 +27,10 @@ function PANEL:Init()
 	self.group = "spec"
 end
 
+---
+-- @param string name
+-- @param Color color
+-- @param string group
 function PANEL:SetGroupInfo(name, color, group)
 	self.name = name
 	self.color = color
@@ -91,6 +96,8 @@ function PANEL:Paint()
 	end
 end
 
+---
+-- @param Player ply
 function PANEL:AddPlayerRow(ply)
 	if ScoreGroup(ply) == self.group and not self.rows[ply] then
 		hook.Run("TTT2ScoreboardAddPlayerRow", ply)
@@ -106,6 +113,8 @@ function PANEL:AddPlayerRow(ply)
 	end
 end
 
+---
+-- @param Player ply
 function PANEL:HasPlayerRow(ply)
 	return self.rows[ply] ~= nil
 end
