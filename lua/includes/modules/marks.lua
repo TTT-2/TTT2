@@ -1,12 +1,20 @@
 ---
 -- This is the <code>marks</code> module.
--- It massively improves the performance while rendering an entity (highlighting it) with caching
+-- It massively improves the performance while rendering an entity (highlighting it) with caching (compared with the default halo library)
 -- @author Alf21
 module("marks", package.seeall)
 
 local baseclass = baseclass
 local list = list
 local pairs = pairs
+local render = render
+local table = table
+local IsValid = IsValid
+local cam = cam
+local surface = surface
+local hook = hook
+local pairs = pairs
+local ipairs = ipairs
 
 local marksList = {}
 local marksHookInstalled = false
@@ -22,15 +30,26 @@ else
 	-- @param Angle ang angle of client's view the rendering starts from
 	-- @realm client
 	local function Render(ents, col, pos, ang)
+		-- micro-optimization (even not a great effect because it's not used in a big loop. But it's better than nothing)
+		local render = render
+		local cam = cam
+		local surface = surface
+
 		-- check for valid data
 		local tmp = {}
 		local index = 1
-		local remTable = nil
+		local remTable = {}
+		local remSize = 0
 
-		for _, ent in ipairs(ents) do
+		local entsSize = #ents
+		local IsValid = IsValid -- micro optimization
+
+		for i = 1, entsSize do
+			local ent = ents[i]
+
 			if not IsValid(ent) then -- search for invalid data
-				remTable = remTable or {}
-				remTable[#remTable + 1] = ent
+				remSize = remSize + 1
+				remTable[remSize] = ent
 			elseif not ent:IsPlayer() or ent:Alive() and ent:IsTerror() then
 				tmp[index] = ent
 				index = index + 1
@@ -38,11 +57,15 @@ else
 		end
 
 		-- clear invalid data. Should just happen if a player disconnects or an entity is deleted
-		if remTable then
-			for _, ent in ipairs(remTable) do
-				for k, v in ipairs(ents) do
-					if v == ent then
-						table.remove(ents, k)
+		if remSize ~= 0 then
+			local tableRemove = table.remove
+
+			for i = 1, remSize do
+				for x = 1, entsSize do
+					if ents[x] == remTable[i] then
+						tableRemove(ents, x)
+
+						entsSize = entsSize - 1
 
 						break
 					end
@@ -50,7 +73,8 @@ else
 			end
 		end
 
-		if #tmp == 0 then return end
+		local size = #tmp
+		if size == 0 then return end
 
 		render.ClearStencil()
 		render.SetStencilEnable(true)
@@ -63,8 +87,8 @@ else
 		render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_ALWAYS)
 		render.SetBlend(0)
 
-		for _, ent in ipairs(tmp) do
-			ent:DrawModel()
+		for i = 1, size do
+			tmp[i]:DrawModel()
 		end
 
 		render.SetBlend(1)
@@ -75,13 +99,16 @@ else
 
 		cam.Start3D2D(pos, ang, 1)
 
-		surface.SetDrawColor(clr(col))
-		surface.DrawRect(-ScrW(), -ScrH(), ScrW() * 2, ScrH() * 2)
+		local w = ScrW()
+		local h = ScrH()
+
+		surface.SetDrawColor(col.r, col.g, col.b, col.a)
+		surface.DrawRect(-w, -h, w * 2, h * 2)
 
 		cam.End3D2D()
 
-		for _, ent in ipairs(tmp) do
-			ent:DrawModel()
+		for i = 1, size do
+			tmp[i]:DrawModel()
 		end
 
 		render.SetStencilEnable(false)
@@ -147,15 +174,20 @@ else
 	-- @param table ents list of entities that should get removed
 	-- @realm client
 	function Remove(ents)
-		if #ents == 0 or table.Count(marksList) == 0 then return end
+		local entsSize = #ents
 
-		for _, ent in ipairs(ents) do
+		if entsSize == 0 or table.Count(marksList) == 0 then return end
+
+		for i = 1, entsSize do
+			local ent = ents[i]
+
 			for _, list in pairs(marksList) do
 				local ret = nil
+				local size = #list.ents
 
-				for k, mark in ipairs(list.ents) do
-					if ent == mark then
-						table.remove(list.ents, k)
+				for x = 1, size do
+					if ent == list.ents[x] then
+						table.remove(list.ents, x)
 
 						ret = true
 
