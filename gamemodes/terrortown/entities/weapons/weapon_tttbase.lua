@@ -1,7 +1,7 @@
 ---
 -- Custom weapon base, used to derive from CS one, still very similar.
 -- See <a href="https://wiki.garrysmod.com/page/Category:Weapon">Weapon</a>
--- @class WEAPON
+-- @class Weapon
 
 local math = math
 local table = table

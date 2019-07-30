@@ -1,5 +1,4 @@
 ---
--- @class PANEL
 -- @realm client
 -- @section Scoreboard
 -- @desc VGUI panel version of the scoreboard, based on TEAM GARRY's sandbox mode
@@ -38,7 +37,6 @@ GROUP_COUNT = 4
 ---
 -- Utility function to register a score group
 -- @param string name
--- @noclass
 function AddScoreGroup(name)
 	if _G["GROUP_" .. name] then
 		error("Group of name '" .. name .. "' already exists!")
@@ -55,7 +53,6 @@ end
 -- Returns the score group of a @{Player}
 -- @param Player ply
 -- @return number|string
--- @noclass
 function ScoreGroup(ply)
 	if not IsValid(ply) then -- will not match any group panel
 		return -1
@@ -87,6 +84,10 @@ function ScoreGroup(ply)
 
 	return ply:IsTerror() and GROUP_TERROR or GROUP_SPEC
 end
+
+---
+-- @class PANEL
+---
 
 ---
 -- @section TTTScoreboard

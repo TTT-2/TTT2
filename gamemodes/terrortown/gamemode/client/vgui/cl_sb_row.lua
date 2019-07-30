@@ -1,16 +1,18 @@
 ---
--- @class PANEL
 -- @realm client
 -- @section Scoreboard
 
 ---
 -- @param string steamid64
--- @noclass
 function AddTTT2AddonDev(steamid64)
 	if not steamid64 then return end
 
 	addondev_tbl[tostring(steamid64)] = true
 end
+
+---
+-- @class PANEL
+---
 
 ---
 -- @section TTTScorePlayerRow

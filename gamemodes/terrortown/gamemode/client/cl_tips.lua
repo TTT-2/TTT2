@@ -115,11 +115,14 @@ function PANEL:Init()
 end
 
 ---
+-- @class PANEL
+-- @section TIPS
+---
+
+---
 -- Sets the current tip index
 -- @param number idx
 -- @realm client
--- @class PANEL
--- @section TIPS
 -- @local
 function PANEL:SetTip(idx)
 	if not idx then
@@ -150,8 +153,6 @@ end
 -- @param boolean auto If this switched automatically, there will be another delay
 -- than doing it manually
 -- @realm client
--- @class PANEL
--- @section TIPS
 -- @local
 function PANEL:NextTip(auto)
 	if not self.TipIndex then return end
@@ -172,8 +173,6 @@ end
 -- @param boolean auto If this switched automatically, there will be another delay
 -- than doing it manually
 -- @realm client
--- @class PANEL
--- @section TIPS
 -- @local
 function PANEL:PrevTip(auto)
 	if not self.TipIndex then return end
@@ -284,6 +283,11 @@ function PANEL:Think()
 end
 
 vgui.Register("TTTTips", PANEL, "Panel")
+
+---
+-- @module TIPS
+-- @section
+---
 
 -- Creation
 
