@@ -1,3 +1,4 @@
+---
 -- Admin commands
 
 local math = math

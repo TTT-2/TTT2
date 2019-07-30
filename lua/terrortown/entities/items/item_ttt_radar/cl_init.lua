@@ -1,6 +1,6 @@
 ---
 -- @module RADAR
--- radar rendering
+-- @desc radar rendering
 
 local surface = surface
 local math = math

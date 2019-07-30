@@ -1,8 +1,8 @@
 ---
 -- @section voice_manager
-
--- Mute players when we are about to run map cleanup, because it might cause
+-- @desc Mute players when we are about to run map cleanup, because it might cause
 -- net buffer overflows on clients.
+
 local mute_all = false
 
 local IsValid = IsValid

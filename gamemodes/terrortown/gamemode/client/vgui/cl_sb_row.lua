@@ -1,8 +1,21 @@
 ---
 -- @class PANEL
 -- @realm client
+-- @section Scoreboard
+
+---
+-- @param string steamid64
+-- @noclass
+function AddTTT2AddonDev(steamid64)
+	if not steamid64 then return end
+
+	addondev_tbl[tostring(steamid64)] = true
+end
+
+---
 -- @section TTTScorePlayerRow
--- Scoreboard player score row, based on sandbox version
+-- @desc Scoreboard player score row, based on sandbox version
+---
 
 ttt_include("vgui__cl_sb_info")
 
@@ -52,16 +65,6 @@ local streamer_tbl = {
 	["76561198047819379"] = true, -- Mineotopia
 	["76561198052323988"] = true
 }
-
----
--- @param string steamid64
--- @section Scoreboard
--- @noclass
-function AddTTT2AddonDev(steamid64)
-	if not steamid64 then return end
-
-	addondev_tbl[tostring(steamid64)] = true
-end
 
 local namecolor = {
 	default = COLOR_WHITE,

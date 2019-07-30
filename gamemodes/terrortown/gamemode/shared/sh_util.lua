@@ -1,6 +1,6 @@
 ---
 -- @section Utils
--- Random stuff
+-- @desc Random stuff
 
 if not util then return end
 

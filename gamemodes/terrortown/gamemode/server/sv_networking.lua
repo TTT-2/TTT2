@@ -1,7 +1,7 @@
 ---
 -- @section networking
+-- @desc Role state communication
 
--- Role state communication
 TTT2NETTABLE = {}
 
 local net = net

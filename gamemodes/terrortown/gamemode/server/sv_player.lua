@@ -1,8 +1,7 @@
 ---
 -- @section player_manager
-
--- TODO rework
--- Player spawning/dying
+-- @todo rework
+-- @desc Player spawning/dying
 
 local math = math
 local table = table

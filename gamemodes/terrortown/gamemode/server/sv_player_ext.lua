@@ -1,7 +1,6 @@
 ---
 -- @module Player
-
--- serverside extensions to player table
+-- @desc serverside extensions to player table
 
 local net = net
 local table = table

@@ -1,4 +1,6 @@
+---
 -- This file contains all shared gamemode hooks needed when the gamemode initializes
+
 local IsValid = IsValid
 local hook = hook
 local team = team

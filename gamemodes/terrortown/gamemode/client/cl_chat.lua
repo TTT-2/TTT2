@@ -1,6 +1,6 @@
 ---
 -- @section chat_manager
--- radio commands, text chat stuff
+-- @desc radio commands, text chat stuff
 DEFINE_BASECLASS("gamemode_base")
 
 local GetTranslation = LANG.GetTranslation

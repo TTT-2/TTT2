@@ -1,6 +1,6 @@
 ---
 -- @module KARMA
--- Karma system stuff
+-- @desc Karma system stuff
 
 KARMA = {}
 

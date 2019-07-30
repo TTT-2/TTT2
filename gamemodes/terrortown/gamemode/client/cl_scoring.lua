@@ -1,7 +1,6 @@
 ---
 -- @class CLSCORE
-
--- Game report
+-- @desc Game report
 
 ttt_include("cl_awards")
 

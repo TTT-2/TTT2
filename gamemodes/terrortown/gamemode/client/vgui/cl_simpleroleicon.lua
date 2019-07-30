@@ -10,6 +10,14 @@ local matHover = Material("vgui/spawnmenu/hover")
 
 local PANEL = {}
 
+---
+-- @function GetIconSize()
+-- @return number
+--
+---
+-- @function SetIconSize(i)
+-- @param number i
+---
 AccessorFunc(PANEL, "m_iIconSize", "IconSize")
 
 function PANEL:Init()

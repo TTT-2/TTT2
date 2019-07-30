@@ -1,7 +1,6 @@
 ---
 -- @section key_manager
-
--- Key overrides for TTT specific keyboard functions
+-- @desc Key overrides for TTT specific keyboard functions
 
 local timer = timer
 local IsValid = IsValid

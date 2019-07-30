@@ -2,15 +2,50 @@
 -- @class PANEL
 -- @realm client
 -- @section TTTProgressBar
--- Version of DProgressBar I can mess around with
+-- @desc Version of DProgressBar I can mess around with
 
 local PANEL = {}
 local surface = surface
 local vgui = vgui
 
+---
+-- @function GetMin()
+-- @return number
+--
+---
+-- @function SetMin(i)
+-- @param number i
+---
 AccessorFunc(PANEL, "m_iMin", "Min")
+
+---
+-- @function GetMax()
+-- @return number
+--
+---
+-- @function SetMax(i)
+-- @param number i
+---
 AccessorFunc(PANEL, "m_iMax", "Max")
+
+---
+-- @function GetValue()
+-- @return number
+--
+---
+-- @function SetValue(i)
+-- @param number i
+---
 AccessorFunc(PANEL, "m_iValue", "Value")
+
+---
+-- @function GetColor()
+-- @return Color
+--
+---
+-- @function SetColor(color)
+-- @param Color color
+---
 AccessorFunc(PANEL, "m_Color", "Color")
 
 function PANEL:Init()

@@ -1,7 +1,6 @@
 ---
 -- @class HELPSCRN
-
--- Help screen
+-- @desc Help screen
 
 local GetTranslation = LANG.GetTranslation
 local GetPTranslation = LANG.GetParamTranslation

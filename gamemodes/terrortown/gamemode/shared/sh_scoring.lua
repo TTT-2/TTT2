@@ -1,7 +1,6 @@
 ---
 -- @section Scoring
-
--- Server and client both need this for scoring event logs
+-- @desc Server and client both need this for scoring event logs
 
 local pairs = pairs
 local ipairs = ipairs

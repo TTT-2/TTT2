@@ -2,7 +2,7 @@
 -- @class PANEL
 -- @realm client
 -- @section ScrollLabel
--- why can't the default label scroll? welcome to gmod
+-- @desc why can't the default label scroll? welcome to gmod
 
 PANEL = {}
 

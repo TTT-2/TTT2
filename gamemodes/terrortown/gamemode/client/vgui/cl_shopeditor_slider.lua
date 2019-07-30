@@ -9,7 +9,24 @@ local vgui = vgui
 
 local PANEL = {}
 
+---
+-- @function GetDefaultValue()
+-- @return number
+--
+---
+-- @function SetDefaultValue(i)
+-- @param number i
+---
 AccessorFunc(PANEL, "m_fDefaultValue", "DefaultValue")
+
+---
+-- @function GetAutoFocus()
+-- @return boolean
+--
+---
+-- @function SetAutoFocus(bool)
+-- @param boolean bool
+---
 AccessorFunc(PANEL, "m_autoFocus", "AutoFocus")
 
 function PANEL:Init()

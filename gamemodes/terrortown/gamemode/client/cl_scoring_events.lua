@@ -1,9 +1,7 @@
 ---
 -- @section scoring_manager
-
--- Event display information for Event Log in the Round Report
-
--- Usage:
+-- @desc Event display information for Event Log in the Round Report
+-- @usage
 -- Declare a *unique* event identifier in a shared file, eg.
 -- EVENT_PANTS = 800
 --
@@ -19,8 +17,7 @@
 --		return myiconmaterial, "MyTooltip"
 --	end
 -- })
-
--- Note that custom events don't have to be in this file, just any file that is
+-- @note Note that custom events don't have to be in this file, just any file that is
 -- loaded on the client.
 
 -- Translation helpers + Shorter name, using it lots

@@ -3,12 +3,28 @@
 -- @realm client
 -- @section ColoredBox
 
--- Removed in GM13, still need it
 local PANEL = {}
 
 local surface = surface
 
+---
+-- @function GetBorder()
+-- @return boolean
+--
+---
+-- @function SetBorder(border)
+-- @param boolean border
+---
 AccessorFunc(PANEL, "m_bBorder", "Border")
+
+---
+-- @function GetColor()
+-- @return Color
+--
+---
+-- @function SetColor(color)
+-- @param Color color
+---
 AccessorFunc(PANEL, "m_Color", "Color")
 
 function PANEL:Init()

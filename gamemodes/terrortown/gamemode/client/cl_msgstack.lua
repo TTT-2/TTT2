@@ -1,8 +1,7 @@
 ---
 -- @class MSTACK
 -- @author saibotk
-
--- HUD stuff similar to weapon/ammo pickups but for game status messages
+-- @desc HUD stuff similar to weapon/ammo pickups but for game status messages
 
 MSTACK = {}
 MSTACK.msgs = {}

@@ -9,15 +9,104 @@ local math = math
 local surface = surface
 local vgui = vgui
 
+---
+-- @function GetMaterial()
+-- @return Material
+--
+---
+-- @function SetMaterial(material)
+-- @param Material material
+---
 AccessorFunc(PANEL, "m_Material", "Material")
+
+---
+-- @function GetMaterial2()
+-- @return Material
+--
+---
+-- @function SetMaterial2(material)
+-- @param Material material
+---
 AccessorFunc(PANEL, "m_Material2", "Material2")
+
+---
+-- @function GetMaterialOverlay()
+-- @return Material
+--
+---
+-- @function SetMaterialOverlay(material)
+-- @param Material material
+---
 AccessorFunc(PANEL, "m_MaterialOverlay", "MaterialOverlay")
+
+---
+-- @function GetRoleIcon()
+-- @return Material
+--
+---
+-- @function SetRoleIcon(material)
+-- @param Material material
+---
 AccessorFunc(PANEL, "m_RoleIcon", "RoleIcon")
+
+---
+-- @function GetImageColor()
+-- @return Color
+--
+---
+-- @function SetImageColor(color)
+-- @param Color color
+---
 AccessorFunc(PANEL, "m_Color", "ImageColor")
+
+---
+-- @function GetKeepAspect()
+-- @return boolean
+--
+---
+-- @function SetKeepAspect(bool)
+-- @param boolean bool
+---
 AccessorFunc(PANEL, "m_bKeepAspect", "KeepAspect")
+
+---
+-- @function GetMatName()
+-- @return string
+--
+---
+-- @function SetMatName(str)
+-- @param string str
+---
 AccessorFunc(PANEL, "m_strMatName", "MatName")
+
+---
+-- @function GetMatName2()
+-- @return string
+--
+---
+-- @function SetMatName2(str)
+-- @param string str
+---
 AccessorFunc(PANEL, "m_strMatName2", "MatName2")
+
+---
+-- @function GetMatOverName()
+-- @return string
+--
+---
+-- @function SetMatOverName(str)
+-- @param string str
+---
 AccessorFunc(PANEL, "m_strMatOverName", "MatOverName")
+
+---
+-- @function GetRoleIconName()
+-- @return string
+--
+---
+-- @function SetRoleIconName(str)
+-- @param string str
+---
 AccessorFunc(PANEL, "m_strRoleIconName", "RoleIconName")
 
 function PANEL:Init()

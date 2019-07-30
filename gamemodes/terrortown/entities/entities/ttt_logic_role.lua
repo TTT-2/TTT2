@@ -1,3 +1,8 @@
+---
+-- @class ENT
+-- @realm shared
+-- @section LogicRole
+
 ENT.Type = "point"
 ENT.Base = "base_point"
 
@@ -7,6 +12,9 @@ local ROLE_ANY = 3
 
 ENT.Role = ROLE_ANY
 
+---
+-- @param string key
+-- @param string|number value
 function ENT:KeyValue(key, value)
 	if key == "OnPass" or key == "OnFail" then
 		-- this is our output, so handle it as such
@@ -26,6 +34,10 @@ function ENT:KeyValue(key, value)
 	end
 end
 
+---
+-- @param string name
+-- @param Entity|Player activator
+-- @return[default=true] boolean
 function ENT:AcceptInput(name, activator)
 	if name == "TestActivator" then
 		if IsValid(activator) and activator:IsPlayer() then

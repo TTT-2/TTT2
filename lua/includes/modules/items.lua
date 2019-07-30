@@ -2,6 +2,7 @@
 -- This is the <code>items</code> module
 -- @author Alf21
 -- @author saibotk
+
 module("items", package.seeall)
 
 local baseclass = baseclass

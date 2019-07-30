@@ -1,6 +1,6 @@
 ---
 -- @module CORPSE
--- Corpse functions
+-- @desc Corpse functions
 
 -- namespaced because we have no ragdoll metatable
 CORPSE = {}

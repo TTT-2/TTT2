@@ -1,9 +1,7 @@
 ---
 -- @module LANG
-
--- Clientside language stuff
-
--- Need to build custom tables of strings. Can't use language.Add as there is no
+-- @desc Clientside language stuff
+-- @note Need to build custom tables of strings. Can't use language.Add as there is no
 -- way to access the translated string in Lua. Identifiers only get translated
 -- when Source/gmod print them. By using our own table and our own lookup, we
 -- have far more control. Maybe it's slower, but maybe not, we aren't scanning

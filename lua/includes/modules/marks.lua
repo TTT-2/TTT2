@@ -2,6 +2,7 @@
 -- This is the <code>marks</code> module.
 -- It massively improves the performance while rendering an entity (highlighting it) with caching (compared with the default halo library)
 -- @author Alf21
+
 module("marks", package.seeall)
 
 local baseclass = baseclass

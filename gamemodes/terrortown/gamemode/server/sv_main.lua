@@ -1,4 +1,6 @@
+---
 -- Trouble in Terrorist Town 2
+
 ttt_include("sh_init")
 
 ttt_include("sh_main")

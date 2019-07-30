@@ -2,7 +2,7 @@
 -- @class PANEL
 -- @realm client
 -- @section ShopEditButton
--- Altered version of gmod's SpawnIcon
+-- @desc Altered version of gmod's SpawnIcon
 -- This panel does not deal with models and such
 
 local GetTranslation = LANG.GetTranslation
@@ -11,6 +11,14 @@ local vgui = vgui
 
 local PANEL = {}
 
+---
+-- @function GetIconSize()
+-- @return number
+--
+---
+-- @function SetIconSize(i)
+-- @param number i
+---
 AccessorFunc(PANEL, "m_iIconSize", "IconSize")
 
 function PANEL:Init()
@@ -107,6 +115,14 @@ vgui.Register("ShopEditButton", PANEL, "Panel")
 
 PANEL = {}
 
+---
+-- @function GetPrevFunc()
+-- @return function
+--
+---
+-- @function SetPrevFunc(func)
+-- @param function func
+---
 AccessorFunc(PANEL, "m_fPrevFunc", "PrevFunc")
 
 function PANEL:Init()

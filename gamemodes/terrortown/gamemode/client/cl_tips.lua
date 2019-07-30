@@ -1,7 +1,7 @@
 ---
 -- @module TIPS
+-- @desc Tips panel shown to specs
 
--- Tips panel shown to specs
 local math = math
 local table = table
 local pairs = pairs

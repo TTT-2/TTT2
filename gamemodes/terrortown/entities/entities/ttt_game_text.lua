@@ -1,3 +1,8 @@
+---
+-- @class ENT
+-- @realm shared
+-- @section GameText
+
 ENT.Type = "point"
 ENT.Base = "base_point"
 
@@ -13,6 +18,9 @@ local RECEIVE_CUSTOMROLE = 5
 
 ENT.Receiver = RECEIVE_ACTIVATOR
 
+---
+-- @param string key
+-- @param string|number value
 function ENT:KeyValue(key, value)
 	if key == "message" then
 		self.Message = tostring(value) or "ERROR: bad value"
@@ -38,6 +46,10 @@ function ENT:KeyValue(key, value)
 	end
 end
 
+---
+-- @param string name
+-- @param Entity|Player activator
+-- @return[default=true] boolean
 function ENT:AcceptInput(name, activator)
 	if name == "Display" then
 		local recv = activator

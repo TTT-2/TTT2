@@ -2,6 +2,7 @@
 -- disguiser @{ITEM}
 -- @module DISGUISE
 -- @see ITEM
+
 DISGUISE = CLIENT and {}
 
 if SERVER then

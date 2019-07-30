@@ -1,11 +1,9 @@
 ---
 -- @class PANEL
 -- @realm client
--- @section TTTScoreboard
--- VGUI panel version of the scoreboard, based on TEAM GARRY's sandbox mode
+-- @section Scoreboard
+-- @desc VGUI panel version of the scoreboard, based on TEAM GARRY's sandbox mode
 -- scoreboard.
-
-TTTScoreboard = TTTScoreboard or {}
 
 local surface = surface
 local draw = draw
@@ -28,6 +26,73 @@ ttt_include("vgui__cl_sb_team")
 -- TODO add Team!
 CreateClientConVar("ttt_scoreboard_sorting", "name", true, false, "name | role | karma | score | deaths | ping")
 CreateClientConVar("ttt_scoreboard_ascending", "1", true, false, "Should scoreboard ordering be in ascending order")
+
+
+GROUP_TERROR = 1
+GROUP_NOTFOUND = 2
+GROUP_FOUND = 3
+GROUP_SPEC = 4
+
+GROUP_COUNT = 4
+
+---
+-- Utility function to register a score group
+-- @param string name
+-- @noclass
+function AddScoreGroup(name)
+	if _G["GROUP_" .. name] then
+		error("Group of name '" .. name .. "' already exists!")
+
+		return
+	end
+
+	GROUP_COUNT = GROUP_COUNT + 1
+
+	_G["GROUP_" .. name] = GROUP_COUNT
+end
+
+---
+-- Returns the score group of a @{Player}
+-- @param Player ply
+-- @return number|string
+-- @noclass
+function ScoreGroup(ply)
+	if not IsValid(ply) then -- will not match any group panel
+		return -1
+	end
+
+	local group = hook.Call("TTTScoreGroup", nil, ply)
+
+	if group then -- If that hook gave us a group, use it
+		return group
+	end
+
+	if DetectiveMode() and ply:IsSpec() and not ply:Alive() then
+		if ply:GetNWBool("body_found", false) then
+			return GROUP_FOUND
+		else
+			local client = LocalPlayer()
+
+			-- To terrorists, missing players show as alive
+			if client:IsSpec()
+			or client:IsActive() and client:HasTeam(TEAM_TRAITOR)
+			or GetRoundState() ~= ROUND_ACTIVE and client:IsTerror()
+			then
+				return GROUP_NOTFOUND
+			else
+				return GROUP_TERROR
+			end
+		end
+	end
+
+	return ply:IsTerror() and GROUP_TERROR or GROUP_SPEC
+end
+
+---
+-- @section TTTScoreboard
+---
+
+TTTScoreboard = TTTScoreboard or {}
 
 local PANEL = {}
 TTTScoreboard.Logo = surface.GetTextureID("vgui/ttt/score_logo_2")
@@ -64,68 +129,6 @@ local function UntilMapChange()
 	local s = floor(time_left)
 
 	return rounds_left, string.format("%02i:%02i:%02i", h, m, s)
-end
-
-GROUP_TERROR = 1
-GROUP_NOTFOUND = 2
-GROUP_FOUND = 3
-GROUP_SPEC = 4
-
-GROUP_COUNT = 4
-
----
--- Utility function to register a score group
--- @param string name
--- @section Scoreboard
--- @noclass
-function AddScoreGroup(name)
-	if _G["GROUP_" .. name] then
-		error("Group of name '" .. name .. "' already exists!")
-
-		return
-	end
-
-	GROUP_COUNT = GROUP_COUNT + 1
-
-	_G["GROUP_" .. name] = GROUP_COUNT
-end
-
----
--- Returns the score group of a @{Player}
--- @param Player ply
--- @return number|string
--- @section Scoreboard
--- @noclass
-function ScoreGroup(ply)
-	if not IsValid(ply) then -- will not match any group panel
-		return -1
-	end
-
-	local group = hook.Call("TTTScoreGroup", nil, ply)
-
-	if group then -- If that hook gave us a group, use it
-		return group
-	end
-
-	if DetectiveMode() and ply:IsSpec() and not ply:Alive() then
-		if ply:GetNWBool("body_found", false) then
-			return GROUP_FOUND
-		else
-			local client = LocalPlayer()
-
-			-- To terrorists, missing players show as alive
-			if client:IsSpec()
-			or client:IsActive() and client:HasTeam(TEAM_TRAITOR)
-			or GetRoundState() ~= ROUND_ACTIVE and client:IsTerror()
-			then
-				return GROUP_NOTFOUND
-			else
-				return GROUP_TERROR
-			end
-		end
-	end
-
-	return ply:IsTerror() and GROUP_TERROR or GROUP_SPEC
 end
 
 ---
@@ -511,7 +514,7 @@ vgui.Register("TTTScoreboard", PANEL, "Panel")
 
 ---
 -- @section TTTPlayerFrame
--- PlayerFrame is defined in sandbox and is basically a little scrolling
+-- @desc PlayerFrame is defined in sandbox and is basically a little scrolling
 -- hack. Just putting it here (slightly modified) because it's tiny.
 ---
 

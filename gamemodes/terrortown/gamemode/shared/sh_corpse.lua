@@ -1,7 +1,6 @@
 ---
 -- @module CORPSE
-
--- Shared corpsey stuff
+-- @desc Shared corpsey stuff
 
 CORPSE = CORPSE or {}
 

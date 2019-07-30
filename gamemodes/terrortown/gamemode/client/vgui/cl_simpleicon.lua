@@ -2,7 +2,7 @@
 -- @class PANEL
 -- @realm client
 -- @section SimpleIcon
--- Altered version of gmod's SpawnIcon
+-- @desc Altered version of gmod's SpawnIcon
 -- This panel does not deal with models and such
 
 local matHover = Material("vgui/spawnmenu/hover")
@@ -17,6 +17,14 @@ local surface = surface
 local draw = draw
 local vgui = vgui
 
+---
+-- @function GetIconSize()
+-- @return number
+--
+---
+-- @function SetIconSize(i)
+-- @param number i
+---
 AccessorFunc(PANEL, "m_iIconSize", "IconSize")
 
 function PANEL:Init()
@@ -185,7 +193,7 @@ vgui.Register("LayeredIcon", PANEL, "SimpleIcon")
 
 ---
 -- @section SimpleIconAvatar
--- Avatar icon
+-- @desc Avatar icon
 ---
 
 PANEL = {}
@@ -219,15 +227,59 @@ vgui.Register("SimpleIconAvatar", PANEL, "LayeredIcon")
 
 ---
 -- @section SimpleIconLabelled
--- Labelled icon
+-- @desc Labelled icon
 ---
 
 PANEL = {}
 
+---
+-- @function GetIconText()
+-- @return string
+--
+---
+-- @function SetIconText(str)
+-- @param string str
+---
 AccessorFunc(PANEL, "IconText", "IconText")
+
+---
+-- @function GetIconTextColor()
+-- @return Color
+--
+---
+-- @function SetIconTextColor(color)
+-- @param Color color
+---
 AccessorFunc(PANEL, "IconTextColor", "IconTextColor")
+
+---
+-- @function GetIconFont()
+-- @return string
+--
+---
+-- @function SetIconFont(str)
+-- @param string str
+---
 AccessorFunc(PANEL, "IconFont", "IconFont")
+
+---
+-- @function GetIconTextShadow()
+-- @return table
+--
+---
+-- @function SetIconTextShadow(tab)
+-- @param table tab
+---
 AccessorFunc(PANEL, "IconTextShadow", "IconTextShadow")
+
+---
+-- @function GetIconTextPos()
+-- @return table
+--
+---
+-- @function SetIconTextPos(tab)
+-- @param table tab
+---
 AccessorFunc(PANEL, "IconTextPos", "IconTextPos")
 
 function PANEL:Init()

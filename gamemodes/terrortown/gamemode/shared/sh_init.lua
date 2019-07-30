@@ -1,3 +1,4 @@
+---
 -- This file contains all shared vars, tables and functions
 
 GM.Name = "TTT2 (Advanced Update)"

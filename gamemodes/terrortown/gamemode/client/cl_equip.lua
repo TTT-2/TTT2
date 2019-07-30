@@ -1,7 +1,7 @@
 ---
 -- @section stop_manager
+-- @desc Traitor equipment menu
 
--- Traitor equipment menu
 local GetTranslation = LANG.GetTranslation
 local GetPTranslation = LANG.GetParamTranslation
 local SafeTranslate = LANG.TryTranslation

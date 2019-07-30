@@ -1,5 +1,6 @@
 ---
 -- @module HUDEditor
+
 if not HUDEditor then
 	HUDEditor = {}
 	HUDEditor.IsEditing = false

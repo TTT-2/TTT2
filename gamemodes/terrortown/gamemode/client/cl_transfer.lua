@@ -1,6 +1,6 @@
 ---
 -- @section credit_transfer
--- Credit transfer tab for equipment menu
+-- @desc Credit transfer tab for equipment menu
 
 local GetTranslation = LANG.GetTranslation
 local player = player

@@ -1,7 +1,7 @@
 ---
 -- @module Player
 -- @ref https://wiki.garrysmod.com/page/Category:Player
--- shared extensions to player table
+-- @desc shared extensions to player table
 
 local net = net
 local table = table

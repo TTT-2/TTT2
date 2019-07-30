@@ -1,7 +1,6 @@
 ---
 -- @class RADIO
-
--- modified with https://github.com/Exho1/TTT-ScoreboardTagging/blob/master/lua/client/ttt_scoreboardradiocmd.lua
+-- @desc modified with https://github.com/Exho1/TTT-ScoreboardTagging/blob/master/lua/client/ttt_scoreboardradiocmd.lua
 
 local table = table
 local pairs = pairs

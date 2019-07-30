@@ -1,6 +1,6 @@
 ---
 -- @module LANG
--- Shared language stuff
+-- @desc Shared language stuff
 
 -- tbl is first created here on both server and client
 -- could make it a module but meh

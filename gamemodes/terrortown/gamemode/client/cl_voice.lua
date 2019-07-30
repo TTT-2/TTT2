@@ -1,6 +1,6 @@
 ---
 -- @module VOICE
--- Voicechat popup
+-- @desc Voicechat popup
 
 DEFINE_BASECLASS("gamemode_base")
 

@@ -1,7 +1,6 @@
 ---
 -- @module SCORE
-
--- Customized scoring
+-- @desc Customized scoring
 
 local math = math
 local string = string

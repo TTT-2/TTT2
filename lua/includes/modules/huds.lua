@@ -2,6 +2,7 @@
 -- This is the <code>huds</code> module
 -- @author Alf21
 -- @author saibotk
+
 module("huds", package.seeall)
 
 local baseclass = baseclass

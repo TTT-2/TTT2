@@ -2,7 +2,7 @@
 -- @class PANEL
 -- @realm client
 -- @section TTTScorePlayerInfoBase
--- Player info panel, based on sandbox scoreboard's infocard
+-- @desc Player info panel, based on sandbox scoreboard's infocard
 
 TTTScoreboard = TTTScoreboard or {}
 
@@ -43,7 +43,7 @@ vgui.Register("TTTScorePlayerInfoBase", PANEL, "Panel")
 
 ---
 -- @section TTTScorePlayerInfoSearch
--- Dead player search results
+-- @desc Dead player search results
 ---
 
 PANEL = {}
@@ -158,7 +158,7 @@ vgui.Register("TTTScorePlayerInfoSearch", PANEL, "TTTScorePlayerInfoBase")
 
 ---
 -- @section TTTScorePlayerInfoTags
--- Living player, tags etc
+-- @desc Living player, tags etc
 ---
 
 TTTScoreboard.Tags = {
@@ -224,7 +224,7 @@ vgui.Register("TTTScorePlayerInfoTags", PANEL, "TTTScorePlayerInfoBase")
 
 ---
 -- @section TagButton
--- Tag button
+-- @desc Tag button
 ---
 
 PANEL = {}

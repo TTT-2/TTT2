@@ -1,4 +1,8 @@
--- Dummy ent that just spawns a random TTT ammo item and kills itself
+---
+-- @class ENT
+-- @realm shared
+-- @section RandomAmmo
+-- @desc Dummy ent that just spawns a random TTT ammo item and kills itself
 
 local math = math
 local ents = ents
@@ -7,6 +11,8 @@ local IsValid = IsValid
 ENT.Type = "point"
 ENT.Base = "base_point"
 
+---
+--
 function ENT:Initialize()
 	local ammos = ents.TTT.GetSpawnableAmmo()
 

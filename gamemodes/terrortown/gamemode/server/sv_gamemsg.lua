@@ -1,6 +1,6 @@
 ---
 -- @section GameMessage
--- Communicating game state to players
+-- @desc Communicating game state to players
 
 local net = net
 local string = string

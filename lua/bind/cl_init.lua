@@ -2,8 +2,8 @@
 -- Bind module.
 -- @module bind
 -- @author saibotk
+-- @desc Source: https://github.com/MysteryPancake/GMod-Binding/
 
--- Source: https://github.com/MysteryPancake/GMod-Binding/
 bind = {}
 
 local tablename = "ttt2_bindings"

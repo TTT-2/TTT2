@@ -7,6 +7,14 @@ local vgui = vgui
 
 local PANEL = {}
 
+---
+-- @function GetBorder()
+-- @return boolean
+--
+---
+-- @function SetBorder(border)
+-- @param boolean border
+---
 AccessorFunc(PANEL, "m_bBorder", "DrawBorder", FORCE_BOOL)
 
 function PANEL:Init()

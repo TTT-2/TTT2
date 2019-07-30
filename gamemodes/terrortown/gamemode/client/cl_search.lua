@@ -1,7 +1,6 @@
 ---
 -- @section body_search_manager
-
--- Body search popup
+-- @desc Body search popup
 
 local T = LANG.GetTranslation
 local PT = LANG.GetParamTranslation

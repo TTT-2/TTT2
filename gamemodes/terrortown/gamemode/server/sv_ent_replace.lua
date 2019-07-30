@@ -1,6 +1,6 @@
 ---
 -- @module ents.TTT
--- Replace old and boring ents with new and shiny SENTs
+-- @desc Replace old and boring ents with new and shiny SENTs
 
 ents.TTT = {}
 

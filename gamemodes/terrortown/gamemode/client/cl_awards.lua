@@ -1,7 +1,6 @@
 ---
 -- @module AWARDS
-
--- Award/highlight generator functions take the events and the scores as
+-- @desc Award/highlight generator functions take the events and the scores as
 -- produced by SCORING/CLSCORING and return a table if successful, or nil if
 -- not and another one should be tried.
 

@@ -2,6 +2,7 @@
 -- This is the <code>roles</code> module.
 -- @author Alf21
 -- @author saibotk
+
 module("roles", package.seeall)
 
 local baseclass = baseclass
