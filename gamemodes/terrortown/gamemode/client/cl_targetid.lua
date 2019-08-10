@@ -67,22 +67,33 @@ function GM:PostDrawTranslucentRenderables()
 			and not ply:GetSubRoleData().avoidTeamIcons
 			then
 				local base = Material("vgui/ttt/dynamic/sprite_base")
-				local base_overlay = Material("vgui/ttt/dynamic/sprite_base_overlay")
+				local base_overlay = Material("vgui/ttt/dynamic/sprite_base_overlay.png")
 				local icon = Material("vgui/ttt/dynamic/roles/icon_" .. rd.abbr)
 				local incol = ply:GetRoleColor()
 
+				-- start linear filter
+				render.PushFilterMag( TEXFILTER.LINEAR )
+				render.PushFilterMin( TEXFILTER.LINEAR )
+
+				-- draw color
 				render.SetMaterial(base)
-				render.DrawQuadEasy(pos, dir, 8, 8, incol, 180)
+				render.DrawQuadEasy(pos, dir, 10, 10, incol, 180)
 
+				-- draw border overlay
 				render.SetMaterial(base_overlay)
-				render.DrawQuadEasy(pos, dir, 8, 8, incol, 180)
+				render.DrawQuadEasy(pos, dir, 10, 10, Color(255, 255, 255, 255), 180)
 
-				pos.x = pos.x
-				pos.y = pos.y
-				pos.z = pos.z + 0.5
-
+				-- draw shadow
 				render.SetMaterial(icon)
-				render.DrawQuadEasy(pos, dir, 7, 7, Color(255, 255, 255, 255), 180)
+				render.DrawQuadEasy(Vector(pos.x, pos.y, pos.z+ 0.2), dir, 8, 8, Color(0, 0, 0, 180), 180)
+
+				-- draw icon
+				render.SetMaterial(icon)
+				render.DrawQuadEasy(Vector(pos.x, pos.y, pos.z + 0.5), dir, 8, 8, Color(255, 255, 255, 255), 180)
+
+				-- stop linear filter
+				render.PopFilterMag()
+				render.PopFilterMin()
 			end
 		end
 	end
