@@ -31,7 +31,7 @@ if CLIENT then
 		if c2 and p2 > 0 then
 			local sub_h = math.Round(0.1 * h)
 
-			surface.SetDrawColor(0, 0, 0, 150)
+			surface.SetDrawColor(0, 0, 0, 130)
 			surface.DrawRect(x, y + h - sub_h -1, w, sub_h + 1)
 
 			p2 = math.min(p2, 1)
