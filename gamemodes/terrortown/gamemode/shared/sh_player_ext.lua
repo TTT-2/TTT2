@@ -40,6 +40,77 @@ function plymeta:GetRole()
 	return self.role or ROLE_INNOCENT
 end
 
+-- ARMOR SYSTEM
+
+function plymeta:Armor()
+	return self.armor or 0
+end
+
+function plymeta:GetMaxArmor()
+	return self.armor_max or 100
+end
+
+if SERVER then
+	util.AddNetworkString("ttt2_sync_armor")
+	util.AddNetworkString("ttt2_sync_armor_max")
+
+	function plymeta:SetArmor(armor)
+		self.armor = armor
+
+		net.Start("ttt2_sync_armor")
+		net.WriteUInt(armor, 16)
+		net.Send(self)
+	end
+	
+	function plymeta:SetMaxArmor(armor_max)
+		self.armor_max = armor_max
+
+		net.Start("ttt2_sync_armor_max")
+		net.WriteUInt(armor_max, 16)
+		net.Send(self)
+	end
+
+	-- split damage between armor and health
+	hook.Add("EntityTakeDamage", "ttt2_player_armor_damage_handling", function(ply, dmg)
+		if not ply or not IsValid(ply) or not ply:IsPlayer() then return end
+
+		-- only affects bullet damage
+		--if not dmg:IsBulletDamage() then return end
+
+		
+		-- calculate damage
+		local damage = dmg:GetDamage()
+		local armor = ply:Armor()
+
+		if damage == 0 then return end
+		
+		print("current HP     : " .. tostring(ply:Health()))
+		print("current Armor  : " .. tostring(armor))
+		print("damage to take : " .. tostring(damage))
+
+		-- normal damage handling when no armor is available
+		if armor == 0 then return end
+
+		armor = armor - math.Round(0.2 * damage)
+		print("armor internal : " .. tostring(armor))
+		ply:SetArmor(math.max(armor, 0))
+		print("new armor      : " .. tostring(ply:Armor()))
+		
+		local new_damage = math.Round(0.7 * damage - math.min(armor, 0))
+		print("calced dmg     : " .. tostring(new_damage))
+		dmg:SetDamage(new_damage)
+	end)
+else
+	net.Receive("ttt2_sync_armor", function()
+		LocalPlayer().armor = net.ReadUInt(16)
+	end)
+	net.Receive("ttt2_sync_armor_max", function()
+		LocalPlayer().armor_max = net.ReadUInt(16)
+	end)
+end
+
+-- end ARMOR SYSTEM
+
 -- ply:UpdateTeam(team) should never be used BEFORE this function
 function plymeta:SetRole(subrole, team, forceHooks)
 	local oldRole = self:GetBaseRole()
