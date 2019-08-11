@@ -147,7 +147,7 @@ function KARMA.Hurt(attacker, victim, dmginfo)
 
 			reward = KARMA.GiveReward(attacker, reward)
 
-			print(Format("%s (%f) killed %s (%f) and gets REWARDED %f", attacker:Nick(), attacker:GetLiveKarma(), victim:Nick(), victim:GetLiveKarma(), reward))
+			print(Format("%s (%f) hurt %s (%f) and gets REWARDED %f", attacker:Nick(), attacker:GetLiveKarma(), victim:Nick(), victim:GetLiveKarma(), reward))
 		end
 	else -- team kills own team
 		if not victim:GetCleanRound() then return end
@@ -159,7 +159,7 @@ function KARMA.Hurt(attacker, victim, dmginfo)
 
 		attacker:SetCleanRound(false)
 
-		print(Format("%s (%f) killed %s (%f) and gets penalised for %f", attacker:Nick(), attacker:GetLiveKarma(), victim:Nick(), victim:GetLiveKarma(), penalty))
+		print(Format("%s (%f) hurt %s (%f) and gets penalised for %f", attacker:Nick(), attacker:GetLiveKarma(), victim:Nick(), victim:GetLiveKarma(), penalty))
 	end
 end
 
