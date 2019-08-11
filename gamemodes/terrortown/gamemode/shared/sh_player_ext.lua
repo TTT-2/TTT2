@@ -108,6 +108,10 @@ if SERVER then
 		print("calced dmg     : " .. tostring(new_damage))
 		dmg:SetDamage(new_damage)
 	end)
+
+	hook.Add("PlayerSpawn", "ttt2_player_armor_spawn_reset", function(ply)
+		ply:SetArmor(0)
+	end)
 else
 	net.Receive("ttt2_sync_armor", function()
 		LocalPlayer().armor = net.ReadUInt(16)
