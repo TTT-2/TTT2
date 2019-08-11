@@ -9,7 +9,7 @@ ITEM.EquipMenuData = {
 	desc = "item_armor_desc"
 }
 ITEM.material = "vgui/ttt/icon_armor"
-ITEM.CanBuy = {ROLE_TRAITOR, ROLE_DETECTIVE}
+ITEM.CanBuy = nil
 ITEM.oldId = EQUIP_ARMOR or 1
 
 if SERVER then

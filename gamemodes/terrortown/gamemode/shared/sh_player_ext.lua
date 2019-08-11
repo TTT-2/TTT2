@@ -54,8 +54,13 @@ if SERVER then
 	util.AddNetworkString("ttt2_sync_armor")
 	util.AddNetworkString("ttt2_sync_armor_max")
 
+	CreateConVar('ttt_armor_damage_block_pct', 0.2, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+	CreateConVar('ttt_armor_damage_health_pct', 0.7, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
 	function plymeta:SetArmor(armor)
 		self.armor = armor
+
+		print("Setting armor to: " .. tostring(self.armor))
 
 		net.Start("ttt2_sync_armor")
 		net.WriteUInt(armor, 16)
@@ -70,14 +75,17 @@ if SERVER then
 		net.Send(self)
 	end
 
+	function plymeta:IncreaseArmor(increaseby)
+		self:SetArmor(self:Armor() + increaseby)
+	end
+
 	-- split damage between armor and health
 	hook.Add("EntityTakeDamage", "ttt2_player_armor_damage_handling", function(ply, dmg)
 		if not ply or not IsValid(ply) or not ply:IsPlayer() then return end
 
 		-- only affects bullet damage
-		--if not dmg:IsBulletDamage() then return end
+		if not dmg:IsBulletDamage() then return end
 
-		
 		-- calculate damage
 		local damage = dmg:GetDamage()
 		local armor = ply:Armor()
@@ -91,12 +99,12 @@ if SERVER then
 		-- normal damage handling when no armor is available
 		if armor == 0 then return end
 
-		armor = armor - math.Round(0.2 * damage)
+		armor = armor - math.Round(GetConVar("ttt_armor_damage_block_pct"):GetFloat() * damage)
 		print("armor internal : " .. tostring(armor))
 		ply:SetArmor(math.max(armor, 0))
 		print("new armor      : " .. tostring(ply:Armor()))
 		
-		local new_damage = math.Round(0.7 * damage - math.min(armor, 0))
+		local new_damage = math.Round(GetConVar("ttt_armor_damage_health_pct"):GetFloat() * damage - math.min(armor, 0))
 		print("calced dmg     : " .. tostring(new_damage))
 		dmg:SetDamage(new_damage)
 	end)

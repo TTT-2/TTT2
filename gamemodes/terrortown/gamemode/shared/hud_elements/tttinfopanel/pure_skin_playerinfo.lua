@@ -206,8 +206,12 @@ if CLIENT then
 
 			-- health bar
 			local health = math.max(0, client:Health())
+			local health_print = tostring(health)
+			if client:Armor() > 0 then
+				health_print = health_print .. " + " .. tostring(client:Armor())
+			end
 
-			self:DrawBar(nx, ty, bw, bh, Color(234, 41, 41), health / client:GetMaxHealth(), self.scale, "HEALTH: " .. health)
+			self:DrawBar(nx, ty, bw, bh, Color(234, 41, 41), health / client:GetMaxHealth(), self.scale, "HEALTH: " .. health_print)
 
 			-- ammo bar
 			ty = ty + bh + spc

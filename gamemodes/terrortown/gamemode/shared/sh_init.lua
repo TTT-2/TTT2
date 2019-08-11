@@ -46,6 +46,7 @@ SPECIAL_EQUIPMENT = {
 	"weapon_ttt_stungun",
 	"weapon_ttt_cse",
 	"weapon_ttt_teleport",
+	"weapon_ttt_armor",
 	"item_ttt_armor",
 	"item_ttt_radar"
 }
@@ -64,6 +65,7 @@ TRAITOR_EQUIPMENT = {
 	"weapon_ttt_teleport",
 	"weapon_ttt_decoy",
 	"item_ttt_armor",
+	"weapon_ttt_armor",
 	"item_ttt_radar",
 	"item_ttt_disguiser"
 }
