@@ -211,7 +211,7 @@ if CLIENT then
 				health_print = health_print .. " + " .. tostring(client:Armor())
 			end
 
-			self:DrawBar(nx, ty, bw, bh, Color(234, 41, 41), health / client:GetMaxHealth(), self.scale, "HEALTH: " .. health_print)
+			self:DrawBar(nx, ty, bw, bh, Color(234, 41, 41), health / client:GetMaxHealth(), self.scale, "HEALTH: " .. health_print, Color(250,110,220), client:Armor() / client:GetMaxArmor())
 
 			-- ammo bar
 			ty = ty + bh + spc
