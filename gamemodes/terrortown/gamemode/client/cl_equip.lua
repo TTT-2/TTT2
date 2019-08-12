@@ -282,7 +282,9 @@ local function CreateEquipmentList(t)
 	local col = ply:GetRoleColor()
 
 	for k, item in ipairs(itms) do
-		if t.search and string.find(string.lower(item.name), string.lower(t.search)) or not t.search then
+		local equipName = GetEquipmentTranslation(item.name, item.PrintName)
+		
+		if t.search and string.find(string.lower(equipName), string.lower(t.search)) or not t.search then
 			local ic = nil
 
 			-- Create icon panel
@@ -359,7 +361,7 @@ local function CreateEquipmentList(t)
 			if ic then
 				ic.item = item
 
-				local tip = GetEquipmentTranslation(item.name, item.PrintName) .. " (" .. SafeTranslate(item.type) .. ")"
+				local tip = equipName .. " (" .. SafeTranslate(item.type) .. ")"
 
 				ic:SetTooltip(tip)
 

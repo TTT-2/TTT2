@@ -304,6 +304,13 @@ function PANEL:AddColumn(label, _, width, sort_id, sort_func)
 end
 
 ---
+-- Returns the current columns
+-- @return table
+function PANEL:GetColumns()
+	return self.cols
+end
+
+---
 -- Adds just column headers without player-specific data
 -- Identical to PANEL:AddColumn except it adds to the sort_headers table instead
 -- @param string label
