@@ -1,7 +1,7 @@
 ---
 -- Custom weapon base, used to derive from CS one, still very similar.
 -- See <a href="https://wiki.garrysmod.com/page/Category:Weapon">Weapon</a>
--- @module WEAPON
+-- @class Weapon
 
 local math = math
 local table = table
@@ -162,6 +162,8 @@ if CLIENT then
 	local crosshair_outlinethickness = CreateConVar("ttt_crosshair_outlinethickness", "0", FCVAR_ARCHIVE)
 	local enable_dot_crosshair = CreateConVar("ttt_crosshair_dot", "0", FCVAR_ARCHIVE)
 
+	---
+	-- @realm client
 	function SWEP:DrawHUD()
 		if self.HUDHelp then
 			self:DrawHelp()
@@ -271,7 +273,9 @@ if CLIENT then
 	end
 end
 
+---
 -- Shooting functions largely copied from weapon_cs_base
+-- @param boolean worldsnd
 function SWEP:PrimaryAttack(worldsnd)
 	self:SetNextSecondaryFire(CurTime() + self.Primary.Delay)
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
@@ -294,6 +298,8 @@ function SWEP:PrimaryAttack(worldsnd)
 	owner:ViewPunch(Angle(util.SharedRandom(self:GetClass(), -0.2, -0.1, 0) * self.Primary.Recoil, util.SharedRandom(self:GetClass(), -0.1, 0.1, 1) * self.Primary.Recoil, 0))
 end
 
+---
+-- @param function setnext
 function SWEP:DryFire(setnext)
 	if CLIENT and LocalPlayer() == self:GetOwner() then
 		self:EmitSound("Weapon_Pistol.Empty")
@@ -304,6 +310,8 @@ function SWEP:DryFire(setnext)
 	self:Reload()
 end
 
+---
+-- @return boolean
 function SWEP:CanPrimaryAttack()
 	if not IsValid(self:GetOwner()) then return end
 
@@ -316,6 +324,8 @@ function SWEP:CanPrimaryAttack()
 	return true
 end
 
+---
+-- @return boolean
 function SWEP:CanSecondaryAttack()
 	if not IsValid(self:GetOwner()) then return end
 
@@ -338,6 +348,11 @@ local function Sparklies(attacker, tr, dmginfo)
 	end
 end
 
+---
+-- @param CTakeDamageInfo dmg
+-- @param number recoil
+-- @param number numbul
+-- @param number cone
 function SWEP:ShootBullet(dmg, recoil, numbul, cone)
 	self:SendWeaponAnim(self.PrimaryAnim)
 
@@ -380,6 +395,8 @@ function SWEP:ShootBullet(dmg, recoil, numbul, cone)
 	end
 end
 
+---
+-- @return number
 function SWEP:GetPrimaryCone()
 	local cone = self.Primary.Cone or 0.2
 
@@ -387,15 +404,23 @@ function SWEP:GetPrimaryCone()
 	return self:GetIronsights() and (cone * 0.85) or cone
 end
 
+---
+-- @param Player victim
+-- @param CTakeDamageInfo dmginfo
+-- @return number
 function SWEP:GetHeadshotMultiplier(victim, dmginfo)
 	return self.HeadshotMultiplier
 end
 
+---
+-- @return boolean
 function SWEP:IsEquipment()
 	return WEPS.IsEquipment(self)
 end
 
-function SWEP:DrawWeaponSelection() end
+function SWEP:DrawWeaponSelection()
+
+end
 
 function SWEP:SecondaryAttack()
 	if self.NoSights or not self.IronSightsPos then return end
@@ -404,6 +429,8 @@ function SWEP:SecondaryAttack()
 	self:SetNextSecondaryFire(CurTime() + 0.3)
 end
 
+---
+-- @return[default=true] boolean
 function SWEP:Deploy()
 	self:SetIronsights(false)
 
@@ -423,10 +450,13 @@ function SWEP:OnRestore()
 	self:SetIronsights(false)
 end
 
+---
+-- @return number|boolean
 function SWEP:Ammo1()
 	return IsValid(self:GetOwner()) and self:GetOwner():GetAmmoCount(self.Primary.Ammo) or false
 end
 
+---
 -- The OnDrop() hook is useless for this as it happens AFTER the drop. OwnerChange
 -- does not occur when a drop happens for some reason. Hence this thing.
 function SWEP:PreDrop()
@@ -463,7 +493,9 @@ end
 
 local SF_WEAPON_START_CONSTRAINED = 1
 
+---
 -- Picked up by player. Transfer of stored ammo and such.
+-- @param Player newowner
 function SWEP:Equip(newowner)
 	if SERVER then
 		if self:IsOnFire() then
@@ -496,12 +528,16 @@ function SWEP:Equip(newowner)
 	end
 end
 
+---
 -- We were bought as special equipment, some weapons will want to do something
 -- extra for their buyer
+-- @param Player buyer
 function SWEP:WasBought(buyer)
 
 end
 
+---
+-- @param boolean b
 function SWEP:SetIronsights(b)
 	if b ~= self:GetIronsights() then
 		self:SetIronsightsPredicted(b)
@@ -513,20 +549,26 @@ function SWEP:SetIronsights(b)
 	end
 end
 
+---
+-- @return boolean
 function SWEP:GetIronsights()
 	return self:GetIronsightsPredicted()
 end
 
+---
 -- Dummy functions that will be replaced when SetupDataTables runs. These are
 -- here for when that does not happen (due to e.g. stacking base classes)
+-- @return[default=-1] number
 function SWEP:GetIronsightsTime()
-	return - 1
+	return -1
 end
 
 function SWEP:SetIronsightsTime()
 
 end
 
+---
+-- @return boolean
 function SWEP:GetIronsightsPredicted()
 	return false
 end
@@ -535,6 +577,7 @@ function SWEP:SetIronsightsPredicted()
 
 end
 
+---
 -- Set up ironsights dt bool. Weapons using their own DT vars will have to make
 -- sure they call this.
 function SWEP:SetupDataTables()
@@ -574,6 +617,8 @@ function SWEP:Think()
 	self:CalcViewModel()
 end
 
+---
+-- @return boolean
 function SWEP:DyingShot()
 	local fired = false
 
@@ -613,6 +658,11 @@ local host_timescale = GetConVar("host_timescale")
 local LOWER_POS = Vector(0, 0, -2)
 local IRONSIGHT_TIME = 0.25
 
+---
+-- @param Vector pos
+-- @param Angle ang
+-- @return Vector
+-- @return Angle
 function SWEP:GetViewModelPosition(pos, ang)
 	if not self.IronSightsPos or self.bIron == nil then
 		return pos, ang

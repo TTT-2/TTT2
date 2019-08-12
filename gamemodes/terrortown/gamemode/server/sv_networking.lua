@@ -1,4 +1,7 @@
--- Role state communication
+---
+-- @section networking
+-- @desc Role state communication
+
 TTT2NETTABLE = {}
 
 local net = net
@@ -9,10 +12,16 @@ local IsValid = IsValid
 local player = player
 local hook = hook
 
--- TODO improve, e.g. if sending every role to everyone on RoundEnd()!
+---
+-- Sends a message to a list of @{Player}s
+-- @param number subrole subrole id of a @{ROLE}
+-- @param string team
+-- @param table sids a list of steamid64s
+-- @param nil|Player|table ply_or_rf
+-- @todo improve, e.g. if sending every role to everyone on RoundEnd()!
+-- @todo add role hacking
+-- @realm server
 function SendRoleListMessage(subrole, team, sids, ply_or_rf)
-	-- TODO add role hacking
-
 	local tmp = ply_or_rf or player.GetAll()
 
 	if not istable(tmp) then
@@ -75,6 +84,14 @@ function SendRoleListMessage(subrole, team, sids, ply_or_rf)
 	end
 end
 
+---
+-- Sends a message to a list of @{Player}s with the same SubRole based on a filter
+-- @note This is doing a <code>@{Player:GetSubRole} == subrole</code> check
+-- @param number subrole subrole id of a @{ROLE}
+-- @param nil|Player|table ply_or_rf
+-- @param function pred the filter @{function}
+-- @realm server
+-- @see SendRoleList
 function SendSubRoleList(subrole, ply_or_rf, pred)
 	local team_ids = {}
 
@@ -94,6 +111,14 @@ function SendSubRoleList(subrole, ply_or_rf, pred)
 	end
 end
 
+---
+-- Sends a message to a list of @{Player}s with the same role based on a filter
+-- @note This is doing a @{Player:IsRole} check
+-- @param number subrole subrole id of a @{ROLE}
+-- @param nil|Player|table ply_or_rf
+-- @param function pred the filter @{function}
+-- @realm server
+-- @see SendSubRoleList
 function SendRoleList(subrole, ply_or_rf, pred)
 	local team_ids = {}
 
@@ -113,6 +138,12 @@ function SendRoleList(subrole, ply_or_rf, pred)
 	end
 end
 
+---
+-- Sends a message to a list of @{Player}s with the same team based on a filter
+-- @param string team
+-- @param nil|Player|table ply_or_rf
+-- @param function pred the filter @{function}
+-- @realm server
 function SendTeamList(team, ply_or_rf, pred)
 	if team == TEAM_NONE or TEAMS[team].alone then return end
 
@@ -133,6 +164,11 @@ function SendTeamList(team, ply_or_rf, pred)
 	end
 end
 
+---
+-- Sends a message of each confirmed @{Player} to a list of @{Player}s with the same team
+-- @param string team
+-- @param nil|Player|table ply_or_rf
+-- @realm server
 function SendConfirmedTeam(team, ply_or_rf)
 	if team == TEAM_NONE or TEAMS[team].alone then return end
 
@@ -140,14 +176,24 @@ function SendConfirmedTeam(team, ply_or_rf)
 		return p:GetNWBool("body_found")
 	end
 
-	return SendTeamList(team, ply_or_rf, _func)
+	SendTeamList(team, ply_or_rf, _func)
 end
 
+---
+-- Synces a specific @{Player} (SubRole and the team) with a other @{Player}s
+-- @param Player ply
+-- @param nil|Player|table ply_or_rf
+-- @realm server
 function SendPlayerToEveryone(ply, ply_or_rf)
 	return SendRoleListMessage(ply:GetSubRole(), ply:GetTeam(), {ply:EntIndex()}, ply_or_rf)
 end
 
--- TODO Improve, merging data to send netmsg for players that will receive same data
+---
+-- Synces each @{Player} with all the other @{Player}.
+-- Based on the @{ROLE} each @{Player} has, not every @{Player} is aware of the @{ROLE} of each other
+-- @note this should just be used on changing a @{Player}'s @{ROLE} if the current round is active
+-- @todo Improve, merging data to send netmsg for players that will receive same data
+-- @realm server
 function SendFullStateUpdate()
 	local syncTbl = {}
 	local localPly = false
@@ -209,6 +255,10 @@ function SendFullStateUpdate()
 	end
 end
 
+---
+-- Resynces the list of @{Player}s for a given list of @{Player}s
+-- @param nil|Player|table
+-- @realm server
 function SendRoleReset(ply_or_rf)
 	local players = player.GetAll()
 

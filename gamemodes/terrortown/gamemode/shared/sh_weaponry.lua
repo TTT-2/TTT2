@@ -10,8 +10,8 @@ local IsValid = IsValid
 
 ---
 -- Get the type (<code>kind</code>) of a weapon class
--- @str class weapon class
--- @treturn boolean weapon type (<code>kind</code>)
+-- @param string class weapon class
+-- @return boolean weapon type (<code>kind</code>)
 function WEPS.TypeForWeapon(class)
 	local tbl = util.WeaponForClass(class)
 
@@ -20,16 +20,16 @@ end
 
 ---
 -- Checks whether the table is a valid equipment (weapon)
--- @tab wep table that needs to be checked
--- @treturn boolean whether the table is a valid equipment (weapon)
+-- @param table wep table that needs to be checked
+-- @return boolean whether the table is a valid equipment (weapon)
 function WEPS.IsEquipment(wep)
 	return wep and wep.Kind and wep.Kind >= WEAPON_EQUIP
 end
 
 ---
 -- Get the class of the weapon
--- @param wep (@{WEAPON})
--- @treturn nil|string weapon's class
+-- @param Weapon wep
+-- @return nil|string weapon's class
 function WEPS.GetClass(wep)
 	if type(wep) == "table" then
 		return wep.ClassName or wep.Classname or wep.id or wep.name
@@ -40,7 +40,7 @@ end
 
 ---
 -- Toggles the <code>disguised</code>
--- @param ply (<a href="https://wiki.garrysmod.com/page/Category:Player">Player</a>)
+-- @param Player ply
 function WEPS.DisguiseToggle(ply)
 	if IsValid(ply) and ply:IsActiveTraitor() then
 		if not ply:GetNWBool("disguised", false) then

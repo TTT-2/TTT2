@@ -2,6 +2,7 @@
 -- disguiser @{ITEM}
 -- @module DISGUISE
 -- @see ITEM
+
 DISGUISE = CLIENT and {}
 
 if SERVER then
@@ -23,8 +24,9 @@ if CLIENT then
 
 	---
 	-- Creates the Disguiser menu on the parent panel
-	-- @param parent (<a href="https://wiki.garrysmod.com/page/Category:Panel">Panel</a>) parent panel
-	-- @return (<a href="https://wiki.garrysmod.com/page/Category:Panel">Panel</a>) created disguiser menu panel
+	-- @param Panel parent parent panel
+	-- @return Panel created disguiser menu panel
+	-- @realm client
 	function DISGUISE.CreateMenu(parent)
 		trans = trans or LANG.GetTranslation
 
@@ -59,8 +61,9 @@ if CLIENT then
 	end
 
 	---
-	-- Draws the disguise info on screen for the disguised <a href="https://wiki.garrysmod.com/page/Category:Player">Player</a>
-	-- @param client (<a href="https://wiki.garrysmod.com/page/Category:Player">Player</a>) the client
+	-- Draws the disguise info on screen for the disguised @{Player}
+	-- @param Player client the client
+	-- @realm client
 	function DISGUISE.Draw(client)
 		if not client or not client:IsActive() or not client:GetNWBool("disguised", false) then return end
 

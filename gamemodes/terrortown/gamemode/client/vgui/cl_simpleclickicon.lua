@@ -1,4 +1,8 @@
--- Altered version of gmod's SpawnIcon
+---
+-- @class PANEL
+-- @realm client
+-- @section SimpleClickIcon
+-- @desc Altered version of gmod's SpawnIcon
 -- This panel does not deal with models and such
 
 local matHover = Material("vgui/spawnmenu/hover")
@@ -12,6 +16,14 @@ local surface = surface
 local draw = draw
 local vgui = vgui
 
+---
+-- @function GetIconSize()
+-- @return number
+--
+---
+-- @function SetIconSize(i)
+-- @param number i
+---
 AccessorFunc(PANEL, "m_iIconSize", "IconSize")
 
 function PANEL:Init()
@@ -24,6 +36,8 @@ function PANEL:Init()
 	self:SetIconSize(64)
 end
 
+---
+-- @param number mcode mouse key / code
 function PANEL:OnMousePressed(mcode)
 	if mcode == MOUSE_LEFT then
 		if self.OnClick then
@@ -38,6 +52,8 @@ function PANEL:OnMouseReleased()
 
 end
 
+---
+-- @param boolean b
 function PANEL:Toggle(b)
 	self.toggled = b
 end
@@ -77,14 +93,20 @@ function PANEL:PerformLayout()
 	self.Icon:StretchToParent(0, 0, 0, 0)
 end
 
+---
+-- @param Material icon
 function PANEL:SetIcon(icon)
 	self.Icon:SetImage(icon)
 end
 
+---
+-- @return Material
 function PANEL:GetIcon()
 	return self.Icon:GetImage()
 end
 
+---
+-- @param Color c
 function PANEL:SetIconColor(c)
 	self.Icon:SetImageColor(c)
 end
@@ -93,6 +115,10 @@ function PANEL:Think()
 	self.animPress:Run()
 end
 
+---
+-- @param table anim
+-- @param number delta
+-- @param table data
 function PANEL:PressedAnim(anim, delta, data)
 	if anim.Started then return end
 
@@ -109,7 +135,9 @@ end
 
 vgui.Register("SimpleClickIcon", PANEL, "Panel")
 
---
+---
+-- @section LayeredClickIcon
+---
 
 -- reset
 PANEL = {}
@@ -118,7 +146,9 @@ function PANEL:Init()
 	self.Layers = {}
 end
 
+---
 -- Add a panel to this icon. Most recent addition will be the top layer.
+-- @param Panel pnl
 function PANEL:AddLayer(pnl)
 	if not IsValid(pnl) then return end
 
@@ -143,6 +173,8 @@ function PANEL:PerformLayout()
 	end
 end
 
+---
+-- @param Panel pnl
 function PANEL:EnableMousePassthrough(pnl)
 	for _, p in ipairs(self.Layers) do
 		if p == pnl then
@@ -163,6 +195,8 @@ function PANEL:EnableMousePassthrough(pnl)
 	end
 end
 
+---
+-- @param number mcode mouse key / code
 function PANEL:OnMousePressed(mcode)
 	if mcode == MOUSE_LEFT then
 		if self.OnClick then
@@ -175,7 +209,11 @@ end
 
 vgui.Register("LayeredClickIcon", PANEL, "SimpleClickIcon")
 
--- Avatar icon
+---
+-- @section SimpleClickIconAvatar
+-- @desc Avatar icon
+---
+
 PANEL = {}
 
 function PANEL:Init()
@@ -191,14 +229,20 @@ function PANEL:Init()
 	self:AddLayer(self.imgAvatar)
 end
 
+---
+-- @param number s
 function PANEL:SetAvatarSize(s)
 	self.imgAvatar:SetSize(s, s)
 end
 
+---
+-- @param Player ply
 function PANEL:SetPlayer(ply)
 	self.imgAvatar:SetPlayer(ply)
 end
 
+---
+-- @param number mcode mouse key / code
 function PANEL:OnMousePressed(mcode)
 	if mcode == MOUSE_LEFT then
 		if self.OnClick then
@@ -211,13 +255,61 @@ end
 
 vgui.Register("SimpleClickIconAvatar", PANEL, "LayeredClickIcon")
 
--- Labelled icon
+---
+-- @section SimpleClickIconLabelled
+-- @desc Labelled icon
+---
+
 PANEL = {}
 
+---
+-- @function GetIconText()
+-- @return string
+--
+---
+-- @function SetIconText(str)
+-- @param string str
+---
 AccessorFunc(PANEL, "IconText", "IconText")
+
+---
+-- @function GetIconTextColor()
+-- @return Color
+--
+---
+-- @function SetIconTextColor(color)
+-- @param Color color
+---
 AccessorFunc(PANEL, "IconTextColor", "IconTextColor")
+
+---
+-- @function GetIconFont()
+-- @return string
+--
+---
+-- @function SetIconFont(str)
+-- @param string str
+---
 AccessorFunc(PANEL, "IconFont", "IconFont")
+
+---
+-- @function GetIconTextShadow()
+-- @return table
+--
+---
+-- @function SetIconTextShadow(tab)
+-- @param table tab
+---
 AccessorFunc(PANEL, "IconTextShadow", "IconTextShadow")
+
+---
+-- @function GetIconTextPos()
+-- @return table
+--
+---
+-- @function SetIconTextPos(tab)
+-- @param table tab
+---
 AccessorFunc(PANEL, "IconTextPos", "IconTextPos")
 
 function PANEL:Init()
@@ -245,6 +337,11 @@ function PANEL:PerformLayout()
 	return self.BaseClass.PerformLayout(self)
 end
 
+---
+-- @param Color color
+-- @param string font
+-- @param table shadow
+-- @param table pos
 function PANEL:SetIconProperties(color, font, shadow, pos)
 	self:SetIconTextColor(color or self:GetIconTextColor())
 	self:SetIconFont(font or self:GetIconFont())
@@ -252,6 +349,11 @@ function PANEL:SetIconProperties(color, font, shadow, pos)
 	self:SetIconTextPos(pos or self:GetIconTextPos())
 end
 
+---
+-- @param string text
+-- @param Color color
+-- @param string font
+-- @param table pos
 function PANEL:SetLabelText(text, color, font, pos)
 	if self.FakeLabel then
 		local spec = {
@@ -274,6 +376,8 @@ function PANEL:SetLabelText(text, color, font, pos)
 	end
 end
 
+---
+-- @param number mcode mouse key / code
 function PANEL:OnMousePressed(mcode)
 	if mcode == MOUSE_LEFT then
 		if self.OnClick then

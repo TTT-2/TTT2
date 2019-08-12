@@ -1,13 +1,16 @@
---[[
-    A Simple Garry's mod drawing library
-    Copyright (C) 2016 Bull [STEAM_0:0:42437032] [76561198045139792]
-    Freely acquirable at https://github.com/bull29/b_draw-lib
-    You can use this anywhere for any purpose as long as you acredit the work to the original author with this notice.
-    Optionally, if you choose to use this within your own software, it would be much appreciated if you could inform me of it.
-    I love to see what people have done with my code! :)
-
-	-- This code got fixed and modified by the TTT2 dev group, ty for the lib @Bull !
-]]--
+---
+-- @module draw
+-- @author Bull
+-- @author Alf21
+--
+-- @desc A Simple Garry's mod drawing library
+-- Copyright (C) 2016 Bull [STEAM_0:0:42437032] [76561198045139792]
+-- Freely acquirable at https://github.com/bull29/b_draw-lib
+-- You can use this anywhere for any purpose as long as you acredit the work to the original author with this notice.
+-- Optionally, if you choose to use this within your own software, it would be much appreciated if you could inform me of it.
+-- I love to see what people have done with my code! :)
+--
+-- This code got fixed and modified by the TTT2 dev group, ty for the lib @Bull !
 
 file.CreateDir("downloaded_assets")
 
@@ -80,12 +83,26 @@ local function fetchAvatarAsset(id64, size, onFetched)
 	end)
 end
 
+---
+-- Cache an avatar for later use
+-- @param string id64 the steamid64
+-- @param number size the avatar's size, this can be <code>medium</code>, <code>small</code> and <code>large</code>
 function draw.CacheAvatar(id64, size)
 	fetch_asset(fetchAvatarAsset(id64, size, function(url)
 		fetch_asset(url)
 	end))
 end
 
+---
+-- Draws an WebImage
+-- @param string url the url to the WebImage
+-- @param number x
+-- @param number y
+-- @param number width
+-- @param number height
+-- @param Color color
+-- @param Angle angle
+-- @param boolean cornerorigin if it is set to <code>true</code>, the WebImage will be centered based on the x- and y-coordinate
 function draw.WebImage(url, x, y, width, height, color, angle, cornerorigin)
 	color = color or white
 
@@ -103,6 +120,14 @@ function draw.WebImage(url, x, y, width, height, color, angle, cornerorigin)
 	end
 end
 
+---
+-- @todo description
+-- @param string url
+-- @param number parentwidth
+-- @param number parentheight
+-- @param number xrep
+-- @param number yrep
+-- @param Color color
 function draw.SeamlessWebImage(url, parentwidth, parentheight, xrep, yrep, color)
 	color = color or white
 
@@ -115,10 +140,27 @@ function draw.SeamlessWebImage(url, parentwidth, parentheight, xrep, yrep, color
 	end
 end
 
+---
+-- Draws a SteamAvatar while caching it before
+-- @param string id64 the steamid64
+-- @param number size
+-- @param number x
+-- @param number y
+-- @param number width
+-- @param number height
+-- @param Color color
+-- @param Angle ang
+-- @param boolean corner
 function draw.SteamAvatar(id64, size, x, y, width, height, color, ang, corner)
 	draw.WebImage(fetchAvatarAsset(id64, size), x, y, width, height, color, ang, corner)
 end
 
+---
+-- Returns the cached avatar material for a steamid64
+-- @param string id64 the steamid64
+-- @param number size
+-- @param Material fallback material if downloading failed or the resource is missing
+-- @return Material
 function draw.GetAvatarMaterial(id64, size, fallback)
 	return fetch_asset(fetchAvatarAsset(id64, size), fallback)
 end

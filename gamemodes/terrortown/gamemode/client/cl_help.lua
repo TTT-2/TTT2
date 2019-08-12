@@ -1,4 +1,6 @@
--- Help screen
+---
+-- @class HELPSCRN
+-- @desc Help screen
 
 local GetTranslation = LANG.GetTranslation
 local GetPTranslation = LANG.GetParamTranslation
@@ -24,6 +26,7 @@ local function AddBindingCategory(category, parent)
 	local form = vgui.Create("DForm", parent)
 
 	form:SetName(category)
+
 	for _, binding in ipairs(bind.GetSettingsBindings()) do
 		if binding.category == category then
 			local dPlabel = vgui.Create("DLabel")
@@ -49,12 +52,17 @@ local function AddBindingCategory(category, parent)
 
 				curBinding = num
 			end
+
 			form:AddItem(dPlabel, dPBinder)
 		end
 	end
+
 	form:Dock(TOP)
 end
 
+---
+-- Opens the help screen
+-- @realm client
 function HELPSCRN:Show()
 	if helpframe and IsValid(helpframe) then
 		helpframe:Close()
@@ -306,6 +314,11 @@ local function MuteTeamCallback(cv, old, new)
 end
 cvars.AddChangeCallback("ttt_mute_team_check", MuteTeamCallback)
 
+---
+-- Creates the settings for the help screen
+-- @param Panel parent
+-- @realm client
+-- @internal
 function HELPSCRN:CreateInterfaceSettings(parent)
 	local form = vgui.Create("DForm", parent)
 	form:SetName(GetTranslation("set_title_gui"))
@@ -334,7 +347,11 @@ function HELPSCRN:CreateInterfaceSettings(parent)
 	form:Dock(FILL)
 end
 
--- language
+---
+-- Creates the language form for the help screen
+-- @param Panel parent
+-- @realm client
+-- @internal
 function HELPSCRN:CreateLanguageForm(parent)
 	local form = vgui.Create("DForm", parent)
 	form:SetName(GetTranslation("set_title_lang"))
@@ -360,6 +377,11 @@ function HELPSCRN:CreateLanguageForm(parent)
 	form:Dock(FILL)
 end
 
+---
+-- Creates the crosshair settings for the help screen
+-- @param Panel parent
+-- @realm client
+-- @internal
 function HELPSCRN:CreateCrosshairSettings(parent)
 	local form = vgui.Create("DForm", parent)
 	form:SetName(GetTranslation("set_title_cross"))
@@ -427,6 +449,11 @@ function HELPSCRN:CreateCrosshairSettings(parent)
 	form:Dock(FILL)
 end
 
+---
+-- Creates the gameplay settings for the help screen
+-- @param Panel parent
+-- @realm client
+-- @internal
 function HELPSCRN:CreateGameplaySettings(parent)
 	local form = vgui.Create("DForm", parent)
 	form:SetName(GetTranslation("set_title_play"))
@@ -455,7 +482,11 @@ function HELPSCRN:CreateGameplaySettings(parent)
 	form:Dock(FILL)
 end
 
--- Bindings
+---
+-- Creates the bindings menu for the help screen
+-- @param Panel parent
+-- @realm client
+-- @internal
 function HELPSCRN:CreateBindings(parent)
 	AddBindingCategory("TTT2 Bindings", parent)
 	for k, category in ipairs(bind.GetSettingsBindingsCategories()) do
@@ -469,6 +500,12 @@ end
 -- Administration
 -- save the restricted huds list view here to adjust its content in the update listener
 local admin_dlv_rhuds = nil
+
+---
+-- creates the administration form for the help screen
+-- @param Panel parent
+-- @realm client
+-- @internal
 function HELPSCRN:CreateAdministrationForm(parent)
 	local defaultHUDlabel = vgui.Create("DLabel", parent)
 	defaultHUDlabel:SetText(GetTranslation("hud_default") .. ":")
@@ -578,7 +615,12 @@ end)
 local imgpath = "vgui/ttt/help/tut0%d"
 local tutorial_pages = 6
 
--- TODO update tutorial
+---
+-- Creates the tutorial for the help screen
+-- @param Panel parent
+-- @realm client
+-- @todo update tutorial
+-- @internal
 function HELPSCRN:CreateTutorial(parent)
 	--local w, h = parent:GetSize()
 	--local m = 5

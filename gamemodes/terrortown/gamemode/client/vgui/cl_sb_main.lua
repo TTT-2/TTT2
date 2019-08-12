@@ -1,6 +1,8 @@
--- VGUI panel version of the scoreboard, based on TEAM GARRY's sandbox mode
+---
+-- @realm client
+-- @section Scoreboard
+-- @desc VGUI panel version of the scoreboard, based on TEAM GARRY's sandbox mode
 -- scoreboard.
-TTTScoreboard = TTTScoreboard or {}
 
 local surface = surface
 local draw = draw
@@ -23,6 +25,75 @@ ttt_include("vgui__cl_sb_team")
 -- TODO add Team!
 CreateClientConVar("ttt_scoreboard_sorting", "name", true, false, "name | role | karma | score | deaths | ping")
 CreateClientConVar("ttt_scoreboard_ascending", "1", true, false, "Should scoreboard ordering be in ascending order")
+
+
+GROUP_TERROR = 1
+GROUP_NOTFOUND = 2
+GROUP_FOUND = 3
+GROUP_SPEC = 4
+
+GROUP_COUNT = 4
+
+---
+-- Utility function to register a score group
+-- @param string name
+function AddScoreGroup(name)
+	if _G["GROUP_" .. name] then
+		error("Group of name '" .. name .. "' already exists!")
+
+		return
+	end
+
+	GROUP_COUNT = GROUP_COUNT + 1
+
+	_G["GROUP_" .. name] = GROUP_COUNT
+end
+
+---
+-- Returns the score group of a @{Player}
+-- @param Player ply
+-- @return number|string
+function ScoreGroup(ply)
+	if not IsValid(ply) then -- will not match any group panel
+		return -1
+	end
+
+	local group = hook.Call("TTTScoreGroup", nil, ply)
+
+	if group then -- If that hook gave us a group, use it
+		return group
+	end
+
+	if DetectiveMode() and ply:IsSpec() and not ply:Alive() then
+		if ply:GetNWBool("body_found", false) then
+			return GROUP_FOUND
+		else
+			local client = LocalPlayer()
+
+			-- To terrorists, missing players show as alive
+			if client:IsSpec()
+			or client:IsActive() and client:HasTeam(TEAM_TRAITOR)
+			or GetRoundState() ~= ROUND_ACTIVE and client:IsTerror()
+			then
+				return GROUP_NOTFOUND
+			else
+				return GROUP_TERROR
+			end
+		end
+	end
+
+	return ply:IsTerror() and GROUP_TERROR or GROUP_SPEC
+end
+
+---
+-- @class PANEL
+---
+
+---
+-- @section TTTScoreboard
+---
+
+TTTScoreboard = TTTScoreboard or {}
 
 local PANEL = {}
 TTTScoreboard.Logo = surface.GetTextureID("vgui/ttt/score_logo_2")
@@ -61,58 +132,7 @@ local function UntilMapChange()
 	return rounds_left, string.format("%02i:%02i:%02i", h, m, s)
 end
 
-GROUP_TERROR = 1
-GROUP_NOTFOUND = 2
-GROUP_FOUND = 3
-GROUP_SPEC = 4
-
-GROUP_COUNT = 4
-
-function AddScoreGroup(name) -- Utility function to register a score group
-	if _G["GROUP_" .. name] then
-		error("Group of name '" .. name .. "' already exists!")
-
-		return
-	end
-
-	GROUP_COUNT = GROUP_COUNT + 1
-
-	_G["GROUP_" .. name] = GROUP_COUNT
-end
-
-function ScoreGroup(p)
-	if not IsValid(p) then -- will not match any group panel
-		return - 1
-	end
-
-	local group = hook.Call("TTTScoreGroup", nil, p)
-
-	if group then -- If that hook gave us a group, use it
-		return group
-	end
-
-	if DetectiveMode() and p:IsSpec() and not p:Alive() then
-		if p:GetNWBool("body_found", false) then
-			return GROUP_FOUND
-		else
-			local client = LocalPlayer()
-
-			-- To terrorists, missing players show as alive
-			if client:IsSpec()
-			or client:IsActive() and client:HasTeam(TEAM_TRAITOR)
-			or GetRoundState() ~= ROUND_ACTIVE and client:IsTerror()
-			then
-				return GROUP_NOTFOUND
-			else
-				return GROUP_TERROR
-			end
-		end
-	end
-
-	return p:IsTerror() and GROUP_TERROR or GROUP_SPEC
-end
-
-
+---
 -- Comparison functions used to sort scoreboard
 sboard_sort = {
 	name = function(plya, plyb)
@@ -270,16 +290,36 @@ local function column_label_work(self_, table_to_add, label, width, sort_identif
 	return lbl
 end
 
+---
+-- Adds column headers with player-specific data
+-- @param string label
+-- @param any _
+-- @param number width
+-- @param number sort_id
+-- @param function sort_func
+-- @return Panel DLabel
+-- @see PANEL:AddFakeColumn
 function PANEL:AddColumn(label, _, width, sort_id, sort_func)
 	return column_label_work(self, self.cols, label, width, sort_id, sort_func)
 end
 
+---
+-- Returns the current columns
+-- @return table
 function PANEL:GetColumns()
 	return self.cols
 end
 
+---
 -- Adds just column headers without player-specific data
 -- Identical to PANEL:AddColumn except it adds to the sort_headers table instead
+-- @param string label
+-- @param any _
+-- @param number width
+-- @param number sort_id
+-- @param function sort_func
+-- @return Panel DLabel
+-- @see PANEL:AddColumn
 function PANEL:AddFakeColumn(label, _, width, sort_id, sort_func)
 	return column_label_work(self, self.sort_headers, label, width, sort_id, sort_func)
 end
@@ -443,6 +483,8 @@ function PANEL:ApplySchemeSettings()
 	end
 end
 
+---
+-- @param boolean force
 function PANEL:UpdateScoreboard(force)
 	if not force and not self:IsVisible() then return end
 
@@ -478,8 +520,11 @@ end
 
 vgui.Register("TTTScoreboard", PANEL, "Panel")
 
--- PlayerFrame is defined in sandbox and is basically a little scrolling
+---
+-- @section TTTPlayerFrame
+-- @desc PlayerFrame is defined in sandbox and is basically a little scrolling
 -- hack. Just putting it here (slightly modified) because it's tiny.
+---
 
 PANEL = {}
 
@@ -490,10 +535,14 @@ function PANEL:Init()
 	self.scroll = vgui.Create("DVScrollBar", self)
 end
 
+---
+-- @return Panel
 function PANEL:GetCanvas()
 	return self.pnlCanvas
 end
 
+---
+-- @param number dlta
 function PANEL:OnMouseWheeled(dlta)
 	self.scroll:AddScroll(dlta * -2)
 

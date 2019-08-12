@@ -1,8 +1,15 @@
+---
 -- This file contains all shared gamemode hooks needed when the gamemode initializes
+
 local IsValid = IsValid
 local hook = hook
 local team = team
 
+---
+-- Initializes TTT2
+-- @hook
+-- @register
+-- @realm shared
 function GM:TTT2Initialize()
 	-- load all roles
 	roles.OnLoaded()
@@ -19,7 +26,11 @@ function GM:TTT2Initialize()
 	DefaultEquipment = GetDefaultEquipment()
 end
 
+---
 -- Create teams
+-- @hook
+-- @internal
+-- @realm shared
 function GM:CreateTeams()
 	team.SetUp(TEAM_TERROR, "Terrorists", Color(0, 200, 0, 255), false)
 	team.SetUp(TEAM_SPEC, "Spectators", Color(200, 200, 0, 255), true)
@@ -29,7 +40,10 @@ function GM:CreateTeams()
 	team.SetSpawnPoint(TEAM_SPEC, "info_player_deathmatch")
 end
 
+---
 -- Kill footsteps on player and client
+-- @hook
+-- @realm shared
 function GM:PlayerFootstep(ply, pos, foot, sound, volume, rf)
 	if IsValid(ply) and (ply:Crouching() or ply:GetMaxSpeed() < 150 or ply:IsSpec()) then
 		-- do not play anything, just prevent normal sounds from playing
@@ -37,7 +51,10 @@ function GM:PlayerFootstep(ply, pos, foot, sound, volume, rf)
 	end
 end
 
+---
 -- Predicted move speed changes
+-- @hook
+-- @realm shared
 function GM:Move(ply, mv)
 	if ply:IsTerror() then
 		local basemul = 1
@@ -93,6 +110,11 @@ local ttt_playercolors_all_count = #ttt_playercolors.all
 local ttt_playercolors_serious_count = #ttt_playercolors.serious
 
 local colormode = CreateConVar("ttt_playercolor_mode", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+---
+-- @hook
+-- @register
+-- @realm shared
 function GM:TTTPlayerColor(model)
 	local mode = colormode:GetInt()
 
@@ -112,6 +134,9 @@ end
 -- Drowning and such
 local tm, ply, plys
 
+---
+-- @hook
+-- @realm shared
 function GM:Tick()
 	local client = CLIENT and LocalPlayer()
 

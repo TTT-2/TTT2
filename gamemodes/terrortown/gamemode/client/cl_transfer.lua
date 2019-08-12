@@ -1,9 +1,17 @@
--- Credit transfer tab for equipment menu
+---
+-- @section credit_transfer
+-- @desc Credit transfer tab for equipment menu
+
 local GetTranslation = LANG.GetTranslation
 local player = player
 local ipairs = ipairs
 local IsValid = IsValid
 
+---
+-- Creates the credit transfer menu
+-- @param Panel parent
+-- @return Panel the created DForm menu
+-- @realm client
 function CreateTransferMenu(parent)
 	local client = LocalPlayer()
 

@@ -1,6 +1,6 @@
---
--- HUD EDITOR
---
+---
+-- @module HUDEditor
+
 if not HUDEditor then
 	HUDEditor = {}
 	HUDEditor.IsEditing = false
@@ -217,6 +217,9 @@ local function Think_EditLocalHUD()
 	client.activeElement = elem
 end
 
+---
+-- Enables the HUD editing state
+-- @realm client
 function HUDEditor.EditHUD()
 	if HUDEditor.IsEditing == true then return end
 
@@ -238,6 +241,9 @@ function HUDEditor.EditHUD()
 	hook.Add("Think", "TTT2EditHUD", Think_EditLocalHUD)
 end
 
+---
+-- Disables the HUD editing state
+-- @realm client
 function HUDEditor.StopEditHUD()
 	if HUDEditor.IsEditing == false then return end
 
@@ -254,6 +260,10 @@ function HUDEditor.StopEditHUD()
 	end
 end
 
+---
+-- Draws an element with red borders
+-- @realm client
+-- @internal
 function HUDEditor.DrawElem(elem)
 	if not HUDEditor.IsEditing then return end
 

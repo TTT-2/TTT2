@@ -1,4 +1,6 @@
+---
 -- Trouble in Terrorist Town 2
+
 ttt_include("sh_init")
 
 ttt_include("sh_main")
@@ -12,7 +14,7 @@ ttt_include("sv_inventory")
 ttt_include("sh_scoring")
 
 ttt_include("sv_admin")
-ttt_include("sv_traitor_state")
+ttt_include("sv_networking")
 ttt_include("sv_propspec")
 ttt_include("sv_shop")
 ttt_include("sv_weaponry")
@@ -250,7 +252,12 @@ local outdatedAddons = { -- addons that have newer versions in the WS
 
 CHANGED_EQUIPMENT = {}
 
--- Round mechanics
+---
+-- Called after the gamemode loads and starts.
+-- @hook
+-- @realm server
+-- @ref https://wiki.garrysmod.com/page/GM/Initialize
+-- @local
 function GM:Initialize()
 	MsgN("Trouble In Terrorist Town 2 gamemode initializing...")
 	ShowVersion()
@@ -315,8 +322,11 @@ function GM:Initialize()
 	hook.Run("PostInitialize")
 end
 
--- Used to do this in Initialize, but server cfg has not always run yet by that
--- point.
+---
+-- This hook is called to initialize the ConVars.
+-- @note Used to do this in Initialize, but server cfg has not always run yet by that point.
+-- @hook
+-- @realm server
 function GM:InitCvars()
 	MsgN("TTT2 initializing ConVar settings...")
 
@@ -330,10 +340,28 @@ function GM:InitCvars()
 	self.cvar_init = true
 end
 
+---
+-- Called when the game(server) needs to update the text shown in the server browser as the gamemode.
+-- @return string The text to be shown in the server browser as the gamemode
+-- @hook
+-- @realm server
+-- @ref https://wiki.garrysmod.com/page/GM/GetGameDescription
+-- @local
 function GM:GetGameDescription()
 	return self.Name
 end
 
+---
+-- This hook is used to initialize @{ITEM}s, @{Weapon}s and the shops.
+-- Called after all the entities are initialized.
+-- @note At this point the client only knows about the entities that are within the spawnpoints' PVS.
+-- For instance, if the server sends an entity that is not within this
+-- <a href="https://en.wikipedia.org/wiki/Potentially_visible_set">PVS</a>,
+-- the client will receive it as NULL entity.
+-- @hook
+-- @realm server
+-- @ref https://wiki.garrysmod.com/page/GM/InitPostEntity
+-- @local
 function GM:InitPostEntity()
 	MsgN("[TTT2][INFO] Client post-init...")
 
@@ -462,12 +490,22 @@ function GM:InitPostEntity()
 	end)
 end
 
+---
+-- Called after the gamemode has loaded
+-- @hook
+-- @realm server
+-- @ref https://wiki.garrysmod.com/page/GM/PostGamemodeLoaded
+-- @local
 function GM:PostGamemodeLoaded()
 
 end
 
--- ConVar replication is broken in GMod, so we do this.
+---
+-- This hook is used to sync the global networked vars.
+-- @note ConVar replication is broken in GMod, so we do this.
 -- I don't like it any more than you do, dear reader.
+-- @hook
+-- @realm server
 function GM:SyncGlobals()
 	SetGlobalBool("ttt_detective", ttt_detective:GetBool())
 	SetGlobalBool("ttt_haste", ttt_haste:GetBool())
@@ -495,6 +533,10 @@ function GM:SyncGlobals()
 	hook.Run("TTT2SyncGlobals")
 end
 
+---
+-- This @{function} is used to load the shop equipments
+-- @realm server
+-- @internal
 function LoadShopsEquipment()
 	-- initialize shop equipment
 	for _, roleData in ipairs(roles.GetList()) do
@@ -542,15 +584,28 @@ local function TTT2SyncShopsWithServer(len, ply)
 end
 net.Receive("TTT2SyncShopsWithServer", TTT2SyncShopsWithServer)
 
+---
+-- This @{function} is used to trigger the round syncing
+-- @param number state the round state
+-- @param[opt] Player ply if nil, this will broadcast to every connected @{PLayer}
+-- @realm server
 function SendRoundState(state, ply)
 	net.Start("TTT_RoundState")
 	net.WriteUInt(state, 3)
 
-	return ply and net.Send(ply) or net.Broadcast()
+	if IsValid(ply) then
+		net.Send(ply)
+	else
+		net.Broadcast()
+	end
 end
 
--- Round state is encapsulated by set/get so that it can easily be changed to
+---
+-- Sets the current round state
+-- @note Round state is encapsulated by set/get so that it can easily be changed to
 -- eg. a networked var if this proves more convenient
+-- @param number state
+-- @realm server
 function SetRoundState(state)
 	GAMEMODE.round_state = state
 
@@ -559,6 +614,12 @@ function SetRoundState(state)
 	SendRoundState(state)
 end
 
+---
+-- Returns the current round state
+-- @note Round state is encapsulated by set/get so that it can easily be changed to
+-- eg. a networked var if this proves more convenient
+-- @return number
+-- @realm server
 function GetRoundState()
 	return GAMEMODE.round_state
 end
@@ -576,7 +637,14 @@ local function EnoughPlayers()
 	return ready >= ttt_minply:GetInt()
 end
 
--- Used to be in Think/Tick, now in a timer
+---
+-- This @{function} is used to create the timers that checks
+-- whether is the round is able to start (enough players?)
+-- @note Used to be in Think/Tick, now in a timer
+-- @note this stops @{WaitForPlayers}
+-- @realm server
+-- @see WaitForPlayers
+-- @internal
 function WaitingForPlayersChecker()
 	if GetRoundState() == ROUND_WAIT and EnoughPlayers() then
 		timer.Create("wait2prep", 1, 1, PrepareRound)
@@ -584,7 +652,11 @@ function WaitingForPlayersChecker()
 	end
 end
 
+---
 -- Start waiting for players
+-- @realm server
+-- @see WaitingForPlayersChecker
+-- @internal
 function WaitForPlayers()
 	SetRoundState(ROUND_WAIT)
 
@@ -593,10 +665,14 @@ function WaitForPlayers()
 	end
 end
 
--- When a player initially spawns after mapload, everything is a bit strange
+---
+-- Fixes a spectator bug in the beginning
+-- @note When a player initially spawns after mapload, everything is a bit strange
 -- just making him spectator for some reason does not work right. Therefore,
 -- we regularly check for these broken spectators while we wait for players
 -- and immediately fix them.
+-- @realm server
+-- @internal
 function FixSpectators()
 	for _, ply in ipairs(player.GetAll()) do
 		if ply:IsSpec() and not ply:GetRagdollSpec() and ply:GetMoveType() < MOVETYPE_NOCLIP then
@@ -605,7 +681,11 @@ function FixSpectators()
 	end
 end
 
--- Used to be in think, now a timer
+---
+-- This is the win condition checker
+-- @note Used to be in think, now a timer
+-- @realm server
+-- @internal
 local function WinChecker()
 	if GetRoundState() == ROUND_ACTIVE then
 		if CurTime() > GetGlobalFloat("ttt_round_end", 0) then
@@ -646,6 +726,11 @@ local function NameChangeKick()
 	end
 end
 
+---
+-- This @{function} is used to install a timer that checks for name changes
+-- and kicks @{Player} if it's activated
+-- @realm server
+-- @internal
 function StartNameChangeChecks()
 	if not namechangekick:GetBool() then return end
 
@@ -659,20 +744,42 @@ function StartNameChangeChecks()
 	end
 end
 
+---
+-- This function install the win condition checker (with a timer)
+-- @realm server
+-- @internal
+-- @see StopWinChecks
 function StartWinChecks()
 	if not timer.Start("winchecker") then
 		timer.Create("winchecker", 1, 0, WinChecker)
 	end
 end
 
+---
+-- This function stops the win condition checker (the timer)
+-- @realm server
+-- @internal
+-- @see StartWinChecks
 function StopWinChecks()
 	timer.Stop("winchecker")
 end
 
+---
+-- Called right before the map cleans up (usually because @{game.CleanUpMap} was called)
+-- @hook
+-- @realm server
+-- @ref https://wiki.garrysmod.com/page/GM/PreCleanupMap
+-- @local
 function GM:PreCleanupMap()
 	ents.TTT.FixParentedPreCleanup()
 end
 
+---
+-- Called right after the map has cleaned up (usually because game.CleanUpMap was called)
+-- @hook
+-- @realm server
+-- @ref https://wiki.garrysmod.com/page/GM/PostCleanupMap
+-- @local
 function GM:PostCleanupMap()
 	ents.TTT.FixParentedPostCleanup()
 end
@@ -732,20 +839,40 @@ local function CheckForAbort()
 	return false
 end
 
+---
+-- Sets the global round end time var
+-- @param number endtime time
+-- @realm server
+-- @internal
 function SetRoundEnd(endtime)
 	SetGlobalFloat("ttt_round_end", endtime)
 end
 
+---
+-- Increases the global round end time var
+-- @param number endtime time (addition)
+-- @realm server
+-- @internal
 function IncRoundEnd(incr)
 	SetRoundEnd(GetGlobalFloat("ttt_round_end", 0) + incr)
 end
 
+---
+-- Adds a delay before the round begings. This is called before @{hooks/GLOBAL/TTTPrepareRound}
+-- @note Can be used for custom voting systems
+-- @return boolean whether there should be a delay
+-- @return number delay in seconds
+-- @hook
+-- @realm server
 function GM:TTTDelayRoundStartForVote()
-	-- Can be used for custom voting systems
 	--return true, 30
 	return false
 end
 
+---
+-- This @{function} calls @{GM:TTTPrepareRound} and is used to prepare the round
+-- @realm server
+-- @internal
 function PrepareRound()
 	-- Check playercount
 	if CheckForAbort() then return end
@@ -839,6 +966,9 @@ function PrepareRound()
 	ents.TTT.TriggerRoundStateOutputs(ROUND_PREP)
 end
 
+---
+-- Tells the Traitors about their team mates
+-- @realm server
 function TellTraitorsAboutTraitors()
 	local traitornicks = {}
 
@@ -884,6 +1014,10 @@ function TellTraitorsAboutTraitors()
 	end
 end
 
+---
+-- Spawns all @{Player}s
+-- @param boolean dead_only
+-- @realm server
 function SpawnWillingPlayers(dead_only)
 	local plys = player.GetAll()
 	local wave_delay = spawnwaveint:GetFloat()
@@ -962,6 +1096,10 @@ local function InitRoundEndTime()
 	SetRoundEnd(endtime)
 end
 
+---
+-- This @{function} calls @{GM:TTTBeginRound} and is used to start the round
+-- @realm server
+-- @internal
 function BeginRound()
 	GAMEMODE:SyncGlobals()
 
@@ -1023,6 +1161,11 @@ function BeginRound()
 	ents.TTT.TriggerRoundStateOutputs(ROUND_BEGIN)
 end
 
+---
+-- Prints round results / win conditions to the server log
+-- @param string result the winner team
+-- @realm server
+-- @internal
 function PrintResultMessage(result)
 	ServerLog("Round ended.\n")
 
@@ -1054,6 +1197,10 @@ function PrintResultMessage(result)
 	ServerLog("Result: unknown victory condition!\n")
 end
 
+---
+-- Checks whether the map is able to switch based on round limits and time limits
+-- @realm server
+-- @internal
 function CheckForMapSwitch()
 	-- Check for mapswitch
 	local rounds_left = math.max(0, GetGlobalInt("ttt_rounds_left", 6) - 1)
@@ -1082,6 +1229,10 @@ function CheckForMapSwitch()
 	end
 end
 
+---
+-- This @{function} calls @{GM:TTTEndRound} and is used to end the round
+-- @realm server
+-- @internal
 function EndRound(result)
 	PrintResultMessage(result)
 
@@ -1132,6 +1283,11 @@ function EndRound(result)
 	ents.TTT.TriggerRoundStateOutputs(ROUND_POST, result)
 end
 
+---
+-- Called if the map triggers the end based on some defined win or end conditions
+-- @param string wintype
+-- @hook
+-- @realm server
 function GM:MapTriggeredEnd(wintype)
 	if wintype ~= WIN_NONE then
 		self.MapWin = wintype
@@ -1141,7 +1297,11 @@ function GM:MapTriggeredEnd(wintype)
 	end
 end
 
--- The most basic win check is whether both sides have one dude alive
+---
+-- Win checker hook to add your own win conditions
+-- @note The most basic win check is whether both sides have one dude alive
+-- @hook
+-- @realm server
 function GM:TTTCheckForWin()
 	ttt_dbgwin = ttt_dbgwin or CreateConVar("ttt_debug_preventwin", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
@@ -1228,6 +1388,11 @@ local function GetEachRoleCount(ply_count, role_type)
 	return role_count
 end
 
+---
+-- Returns the amount of pre selected @{ROLE}s
+-- @param number subrole subrole id of a @{ROLE}'s index
+-- @return number amount
+-- @realm server
 function GetPreSelectedRole(subrole)
 	local tmp = 0
 
@@ -1248,6 +1413,13 @@ function GetPreSelectedRole(subrole)
 	return tmp
 end
 
+---
+-- Returns all selectable @{ROLE}s based on the amount of @{Player}s
+-- @note This @{function} automatically saves the selectable @{ROLE}s for the current round
+-- @param table plys list of @{Player}s
+-- @param number max_plys amount of maximum @{Player}s
+-- @return table a list of all selectable @{ROLE}s
+-- @realm server
 function GetSelectableRoles(plys, max_plys)
 	if not plys then
 		local tmp = {}
@@ -1579,6 +1751,12 @@ local function SelectBaseRole(choices, prev_roles, roleCount, roleData)
 	return ls
 end
 
+---
+-- Select selectable @{ROLE}s for a given list of @{Player}s
+-- @note This automatically synces with every connected @{Player}
+-- @param table plys list of @{Player}s
+-- @param number max_plys amount of maximum @{Player}s
+-- @realm server
 function SelectRoles(plys, max_plys)
 	local choices = {}
 	local prev_roles = {}
@@ -1710,7 +1888,10 @@ local function ttt_roundrestart(ply, command, args)
 end
 concommand.Add("ttt_roundrestart", ttt_roundrestart)
 
+---
 -- Version announce also used in Initialize
+-- @param Player ply
+-- @realm server
 function ShowVersion(ply)
 	local text = Format("This is [TTT2] Trouble in Terrorist Town 2 (Advanced Update) - by Alf21 (v%s)\n", GAMEMODE.Version)
 

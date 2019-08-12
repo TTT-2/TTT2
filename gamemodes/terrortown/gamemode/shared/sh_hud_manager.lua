@@ -1,3 +1,6 @@
+---
+-- @module HUDManager
+
 HUDManager = {}
 
 local updateListeners = {}
@@ -9,6 +12,11 @@ local model = {
 	defaultHUD = "pure_skin"
 }
 
+---
+-- Returns a model value
+-- @param string key
+-- @return any value
+-- @realm shared
 function HUDManager.GetModelValue(key)
 	if not key then return end
 
@@ -21,6 +29,11 @@ function HUDManager.GetModelValue(key)
 	return val
 end
 
+---
+-- Sets a model value
+-- @param string key
+-- @param any value
+-- @realm shared
 function HUDManager.SetModelValue(key, value)
 	if not key then return end
 
@@ -41,6 +54,10 @@ function HUDManager.SetModelValue(key, value)
 	end
 end
 
+---
+-- Calls a function on updating any attribute
+-- @param function func
+-- @realm shared
 function HUDManager.OnUpdateAnyAttribute(func)
 	if not isfunction(func) then return end
 
@@ -49,6 +66,11 @@ function HUDManager.OnUpdateAnyAttribute(func)
 	end
 end
 
+---
+-- Calls a function on updating a specific attribute
+-- @param string key identifier of the attribute (key)
+-- @param function func
+-- @realm shared
 function HUDManager.OnUpdateAttribute(key, func)
 	if not key or not isfunction(func) then return end
 

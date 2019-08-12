@@ -1,3 +1,6 @@
+---
+-- @module ShopEditor
+
 local net = net
 local table = table
 local pairs = pairs
@@ -14,6 +17,13 @@ end)
 
 ShopEditor.ShopTablePre = "ttt2_shop_"
 
+---
+-- Opens the ShopEditor for a specific @{Player}
+-- @note Just admins are allowed to do so!
+-- @param Player ply
+-- @param string cmd
+-- @param any args
+-- @realm server
 function ShopEditor.ShopEditor(ply, cmd, args)
 	if ply:IsAdmin() then
 		net.Start("newshop")
@@ -22,6 +32,12 @@ function ShopEditor.ShopEditor(ply, cmd, args)
 end
 concommand.Add("shopeditor", ShopEditor.ShopEditor)
 
+---
+-- Initializes the SQL database for the ShopEditor
+-- @param string name sql table name, e.g. the name of a certain @{ROLE}
+-- @return boolean success?
+-- @realm server
+-- @internal
 function ShopEditor.CreateShopDB(name)
 	local result
 
@@ -32,6 +48,10 @@ function ShopEditor.CreateShopDB(name)
 	return result ~= false
 end
 
+---
+-- Initializes a SQL database table for each @{ROLE}
+-- @realm server
+-- @internal
 function ShopEditor.CreateShopDBs()
 	for _, v in ipairs(roles.GetList()) do
 		if v ~= INNOCENT then
@@ -40,6 +60,11 @@ function ShopEditor.CreateShopDBs()
 	end
 end
 
+---
+-- Returns the equipments that are stored in the database for a specific @{ROLE}
+-- @param ROLE roleData
+-- @return table
+-- @realm server
 function ShopEditor.GetShopEquipments(roleData)
 	if roleData == INNOCENT then
 		return {}
@@ -54,6 +79,12 @@ function ShopEditor.GetShopEquipments(roleData)
 	return result
 end
 
+---
+-- Adds an @{ITEM} or @{Weapon} into the shop of a given @{ROLE}
+-- @param Player ply
+-- @param ROLE roleData
+-- @param ITEM|Weapon|table equip
+-- @realm server
 function ShopEditor.AddToShopEditor(ply, roleData, equip)
 	sql.Query("INSERT INTO " .. ShopEditor.ShopTablePre .. roleData.name .. " VALUES ('" .. equip .. "')")
 
@@ -67,6 +98,12 @@ function ShopEditor.AddToShopEditor(ply, roleData, equip)
 	end
 end
 
+---
+-- Removes an @{ITEM} or @{Weapon} from the shop of a given @{ROLE}
+-- @param Player ply
+-- @param ROLE roleData
+-- @param ITEM|Weapon|table equip
+-- @realm server
 function ShopEditor.RemoveFromShopEditor(ply, roleData, equip)
 	sql.Query("DELETE FROM " .. ShopEditor.ShopTablePre .. roleData.name .. " WHERE name='" .. equip .. "'")
 
@@ -122,6 +159,14 @@ local function shopFallback(len, ply)
 end
 net.Receive("shopFallback", shopFallback)
 
+---
+-- Handles a change of a ConVar that is related to the ShopEditor and reinitializes
+-- the shops if needed
+-- @param number subrole subrole id of a @{ROLE}
+-- @param string fallback the fallback @{ROLE}'s name
+-- @param nil|Player|table if this is nil, it will be broadcasted to every available @{Player}
+-- @realm server
+-- @internal
 function ShopEditor.OnChangeWSCVar(subrole, fallback, ply_or_rf)
 	local rd = roles.GetByIndex(subrole)
 
@@ -201,6 +246,10 @@ function ShopEditor.OnChangeWSCVar(subrole, fallback, ply_or_rf)
 	end
 end
 
+---
+-- Initializes the ConVars for each @{ROLE}
+-- @realm server
+-- @internal
 function ShopEditor.SetupShopEditorCVars()
 	for _, v in ipairs(roles.GetList()) do
 		local _func = function(convar_name, value_old, value_new)

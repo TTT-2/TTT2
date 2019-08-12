@@ -1,4 +1,6 @@
--- radar rendering
+---
+-- @module RADAR
+-- @desc radar rendering
 
 local surface = surface
 local math = math
@@ -29,11 +31,19 @@ RADAR.samples = {}
 RADAR.samples_count = 0
 RADAR.called_corpses = {}
 
+---
+-- Disables the scan
+-- @internal
+-- @realm client
 function RADAR:EndScan()
 	self.enable = false
 	self.endtime = CurTime()
 end
 
+---
+-- Clears the radar
+-- @internal
+-- @realm client
 function RADAR:Clear()
 	self:EndScan()
 
@@ -43,6 +53,10 @@ function RADAR:Clear()
 	self.samples_count = 0
 end
 
+---
+-- Updates the radar OR disables it
+-- @internal
+-- @realm client
 function RADAR:Timeout()
 	self:EndScan()
 
@@ -53,7 +67,10 @@ function RADAR:Timeout()
 	end
 end
 
--- cache stuff we'll be drawing
+---
+-- Cache stuff we'll be drawing
+-- @internal
+-- @realm client
 function RADAR.CacheEnts()
 	-- also do some corpse cleanup here
 	for k, corpse in pairs(RADAR.called_corpses) do
@@ -67,17 +84,28 @@ function RADAR.CacheEnts()
 	-- Update bomb positions for those we know about
 	for idx, b in pairs(RADAR.bombs) do
 		local ent = Entity(idx)
-		
+
 		if IsValid(ent) then
 			b.pos = ent:GetPos()
 		end
 	end
 end
 
+---
+-- Called if the radar is equipped
+-- @param Player ply
+-- @hook
+-- @internal
+-- @realm client
 function ITEM:Equip(ply)
 	RunConsoleCommand("ttt_radar_scan")
 end
 
+---
+-- Draws a counter next to the item icon
+-- @hook
+-- @internal
+-- @realm client
 function ITEM:DrawInfo()
 	return tostring(math.Round(math.max(0, RADAR.endtime - CurTime())))
 end
@@ -120,6 +148,11 @@ local function DrawTarget(tgt, size, offset, no_shrink)
 	end
 end
 
+---
+-- Draws the indicator on the screen
+-- @hook
+-- @internal
+-- @realm client
 function RADAR:Draw(client)
 	if not IsValid(client) then return end
 
@@ -267,6 +300,10 @@ local function ReceiveRadarScan()
 end
 net.Receive("TTT_Radar", ReceiveRadarScan)
 
+---
+-- Creates the settings menu
+-- @internal
+-- @realm client
 function RADAR.CreateMenu(parent, frame)
 	GetTranslation = GetTranslation or LANG.GetTranslation
 	GetPTranslation = GetPTranslation or LANG.GetParamTranslation

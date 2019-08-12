@@ -1,4 +1,6 @@
--- Replace old and boring ents with new and shiny SENTs
+---
+-- @module ents.TTT
+-- @desc Replace old and boring ents with new and shiny SENTs
 
 ents.TTT = {}
 
@@ -103,8 +105,11 @@ local function ReplaceWeapons()
 	end
 end
 
+---
 -- Remove ZM ragdolls that don't work, AND old player ragdolls.
 -- Exposed because it's also done at BeginRound
+-- @param boolean player_only
+-- @realm server
 function ents.TTT.RemoveRagdolls(player_only)
 	for _, ent in ipairs(ents.FindByClass("prop_ragdoll")) do
 		if not player_only and string.find(ent:GetModel(), "zm_", 6, true) then
@@ -122,6 +127,10 @@ local function RemoveCrowbars()
 	end
 end
 
+---
+-- Replaces all @{Entities} on the map
+-- @realm server
+-- @internal
 function ents.TTT.ReplaceEntities()
 	ReplaceAmmo()
 	ReplaceWeapons()
@@ -149,7 +158,11 @@ local noop = util.noop
 
 GM.OnEntityCreated = ReplaceOnCreated
 
+---
 -- Helper so we can easily turn off replacement stuff when we don't need it
+-- @param boolean state
+-- @realm server
+-- @internal
 function ents.TTT.SetReplaceChecking(state)
 	if state then
 		GAMEMODE.OnEntityCreated = ReplaceOnCreated
@@ -169,6 +182,10 @@ local broken_parenting_ents = {
 	"func_brush"
 }
 
+---
+-- Fixes parenting bug of broken @{Entity}, before the cleanup
+-- @realm server
+-- @internal
 function ents.TTT.FixParentedPreCleanup()
 	for _, rcls in ipairs(broken_parenting_ents) do
 		for _, v in ipairs(ents.FindByClass(rcls)) do
@@ -183,6 +200,10 @@ function ents.TTT.FixParentedPreCleanup()
 	end
 end
 
+---
+-- Fixes parenting bug of broken @{Entity}, after the cleanup
+-- @realm server
+-- @internal
 function ents.TTT.FixParentedPostCleanup()
 	for _, rcls in ipairs(broken_parenting_ents) do
 		for _, v in ipairs(ents.FindByClass(rcls)) do
@@ -202,6 +223,12 @@ function ents.TTT.FixParentedPostCleanup()
 	end
 end
 
+---
+-- Triggers the round state output for every map setting @{Entity}
+-- @param number r round state
+-- @param any param the data that is assigned to the new event / @{function}
+-- @realm server
+-- @internal
 function ents.TTT.TriggerRoundStateOutputs(r, param)
 	r = r or GetRoundState()
 
@@ -240,6 +267,11 @@ end
 -- Cache this, every ttt_random_weapon uses it in its Init
 local SpawnableSWEPs
 
+---
+-- Returns a list of all spawnable @{Weapon}s
+-- @return table list of @{Weapon}s
+-- @realm server
+-- @internal
 function ents.TTT.GetSpawnableSWEPs()
 	if not SpawnableSWEPs then
 		local tbl = {}
@@ -258,6 +290,11 @@ end
 
 local SpawnableAmmoClasses
 
+---
+-- Returns a list of all spawnable ammo types
+-- @return table
+-- @realm server
+-- @internal
 function ents.TTT.GetSpawnableAmmo()
 	if not SpawnableAmmoClasses then
 		local tbl = {}
@@ -308,6 +345,7 @@ local function PlaceWeapon(swep, pos, ang)
 	return ent
 end
 
+---
 -- Spawns a bunch of guns (scaling with maxplayers count or
 -- by ttt_weapon_spawn_max cvar) at randomly selected
 -- entities of the classes given the table
@@ -383,6 +421,7 @@ local spots_classes2 = {
 	"info_observer_point"
 }
 
+---
 -- TF2 actually has ammo ents and such, but unlike HL2DM there are not enough
 -- different entities to do replacement.
 local function PlaceExtraWeaponsForTF2()
@@ -391,8 +430,11 @@ local function PlaceExtraWeaponsForTF2()
 	PlaceWeaponsAtEnts(spots_classes2)
 end
 
+---
 -- If there are no guns on the map, see if this looks like a TF2/CS:S map and
--- act appropriately
+-- act appropriately. This will try to place some default @{Weapon}s
+-- @realm server
+-- @internal
 function ents.TTT.PlaceExtraWeapons()
 	-- If ents.FindByClass is constructed lazily or is an iterator, doing a
 	-- single loop should be faster than checking the table size.
@@ -422,6 +464,7 @@ function ents.TTT.PlaceExtraWeapons()
 	end
 end
 
+---
 -- Weapon/ammo placement script importing
 local function RemoveWeaponEntities()
 	-- This could be transformed into lots of FindByClass searches, one for every
@@ -488,6 +531,12 @@ local function CreateImportedEnt(clz, pos, ang, kv)
 	return true
 end
 
+---
+-- Checks whether the given map is able to import @{Entity} based on the map's data
+-- @param string map
+-- @return[default=false] boolean
+-- @realm server
+-- @internal
 function ents.TTT.CanImportEntities(map)
 	if not tostring(map) or not use_weapon_spawn_scripts:GetBool() then
 		return false
@@ -581,7 +630,11 @@ local function ImportEntities(map)
 	return true
 end
 
-
+---
+-- Imports @{Weapon}s, @{Entity} and ammo types based on map's data (if possible)
+-- @param string map
+-- @realm server
+-- @internal
 function ents.TTT.ProcessImportScript(map)
 	MsgN("Weapon/ammo placement script found, attempting import...")
 	MsgN("Reading settings from script...")

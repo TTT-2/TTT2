@@ -2,8 +2,8 @@
 -- Bind module.
 -- @module bind
 -- @author saibotk
+-- @desc Source: https://github.com/MysteryPancake/GMod-Binding/
 
--- Source: https://github.com/MysteryPancake/GMod-Binding/
 bind = {}
 
 local tablename = "ttt2_bindings"
@@ -20,6 +20,8 @@ local SettingsBindingsCategories = { "TTT2 Bindings", "Other Bindings" }
 --
 --
 
+---
+-- @internal
 local function DBCreateTable()
 	if not sql.TableExists(tablename) then
 		local result = sql.Query("CREATE TABLE " .. tablename .. " (guid TEXT, name TEXT, button TEXT)")
@@ -31,6 +33,8 @@ local function DBCreateTable()
 	return true
 end
 
+---
+-- @internal
 local function SaveBinding(name, button)
 	if DBCreateTable() then
 		local result = sql.Query("INSERT INTO " .. tablename .. " VALUES('" .. LocalPlayer():SteamID64() .. "', " .. sql.SQLStr(name) .. ", " .. sql.SQLStr(button) .. ")")
@@ -42,6 +46,8 @@ local function SaveBinding(name, button)
 	end
 end
 
+---
+-- @internal
 local function DBRemoveBinding(name, button)
 	print("[TTT2][BIND] Deleting key from DB")
 
@@ -55,6 +61,8 @@ local function DBRemoveBinding(name, button)
 	end
 end
 
+---
+-- @internal
 local function TTT2LoadBindings()
 	print("[TTT2][BIND] Loading button bindings...")
 
@@ -76,6 +84,8 @@ local function TTT2LoadBindings()
 	end
 end
 
+---
+-- @internal
 local function TTT2BindCheckThink()
 	-- Make sure the user is currently not typing anything, to prevent unwanted execution of a binding.
 	if vgui.GetKeyboardFocus() ~= nil then return end
@@ -113,16 +123,18 @@ hook.Add("InitPostEntity", "TTT2LoadBindings", TTT2LoadBindings)
 --
 --
 
---- Returns a table of all the bindings
--- @treturn table
+---
+-- Returns a table of all the bindings
+-- @return table
 function bind.GetTable()
 	return Bindings
 end
 
---- Finds the first button associated with a specific binding and returns
+---
+-- Finds the first button associated with a specific binding and returns
 -- the button. Returns KEY_NONE if no button is found.
--- @str name
--- @treturn number
+-- @param string name
+-- @return number
 function bind.Find(name)
 	if not name then return end
 
@@ -138,10 +150,11 @@ function bind.Find(name)
 end
 
 
---- Finds all buttons associated with a specific binding and returns
+---
+-- Finds all buttons associated with a specific binding and returns
 -- the buttons. Returns an empty table if no button is found.
--- @str name
--- @treturn table
+-- @param string name
+-- @return table
 function bind.FindAll(name)
 	if not name then return end
 
@@ -158,10 +171,11 @@ function bind.FindAll(name)
 	return bt
 end
 
---- Removes the binding (button) with the given identifier.
--- @int btn
--- @str name
--- @bool persistent
+---
+-- Removes the binding (button) with the given identifier.
+-- @param number btn
+-- @param string name
+-- @param boolean persistent
 function bind.Remove(btn, name, persistent)
 	print("[TTT2][BIND] Attempt to remove binding " .. name .. " on button id " .. tonumber(btn))
 
@@ -180,9 +194,10 @@ function bind.Remove(btn, name, persistent)
 	end
 end
 
---- Removes all bindings (buttons) associated with the given identifier.
--- @str name
--- @bool persistent
+---
+-- Removes all bindings (buttons) associated with the given identifier.
+-- @param string name
+-- @param boolean persistent
 function bind.RemoveAll(name, persistent)
 	-- clear all bindings
 	for _, v in ipairs(bind.FindAll(name)) do
@@ -190,11 +205,12 @@ function bind.RemoveAll(name, persistent)
 	end
 end
 
---- Adds an entry to the SettingsBindings table, to easily present them eg. in a GUI.
--- @str name
--- @str label
--- @str[opt] category
--- @int[optchain] defaultKey
+---
+-- Adds an entry to the SettingsBindings table, to easily present them eg. in a GUI.
+-- @param string name
+-- @param string label
+-- @param string[opt] category
+-- @param number[optchain] defaultKey
 function bind.AddSettingsBinding(name, label, category, defaultKey)
 	if not category then
 		category = "Other Bindings"
@@ -223,17 +239,19 @@ function bind.AddSettingsBinding(name, label, category, defaultKey)
 end
 
 
---- Register a function to run when the button for a specific binding is pressed. This will also add the binding to the
+---
+-- Register a function to run when the button for a specific binding is pressed. This will also add the binding to the
 -- BindingsCategories with the default category, otherwise set dontShowOrCategory to true.
 -- If you wish to set a custom category name then set dontShowOrCategory to the category name and optionally also set the
 -- label you wish to be displayed.
 -- You can set a default key as well, so players don't need to bind manually if they don't want to.
--- @str name
--- @tparam function onPressedFunc
--- @tparam function onReleasedFunc
--- @tparam[opt] nil|string|boolean dontShowOrCategory
--- @str[optchain] settingsLabel
--- @int[optchain] defaultKey
+--
+-- @param string name
+-- @param function onPressedFunc
+-- @param function onReleasedFunc
+-- @param[opt] nil|string|boolean dontShowOrCategory
+-- @param string[optchain] settingsLabel
+-- @param number[optchain] defaultKey
 function bind.Register(name, onPressedFunc, onReleasedFunc, dontShowOrCategory, settingsLabel, defaultKey)
 	if not isfunction(onPressedFunc) and not isfunction(onReleasedFunc) then
 		return
@@ -254,10 +272,11 @@ function bind.Register(name, onPressedFunc, onReleasedFunc, dontShowOrCategory, 
 end
 
 
---- Add a binding to run when the button is pressed.
--- @int btn
--- @str name
--- @bool persistent
+---
+-- Add a binding to run when the button is pressed.
+-- @param number btn
+-- @param string name
+-- @param boolean persistent
 function bind.Add(btn, name, persistent)
 	if not name or name == "" or not isnumber(btn) then return end
 
@@ -270,11 +289,12 @@ function bind.Add(btn, name, persistent)
 	end
 end
 
---- Add a binding to run when the button is pressed and clears all previous
+---
+-- Add a binding to run when the button is pressed and clears all previous
 -- buttons that are associated with this identifier.
--- @int btn
--- @str name
--- @bool persistent
+-- @param number btn
+-- @param string name
+-- @param boolean persistent
 function bind.Set(btn, name, persistent)
 	if not name or name == "" or not isnumber(btn) then return end
 
@@ -282,15 +302,17 @@ function bind.Set(btn, name, persistent)
 	bind.Add(btn, name, persistent)
 end
 
---- Returns the SettingsBindings table.
--- @treturn table
+---
+-- Returns the SettingsBindings table.
+-- @return table
 function bind.GetSettingsBindings()
 	return SettingsBindings
 end
 
 
---- Returns the SettingsBindingsCategories table.
--- @treturn table
+---
+-- Returns the SettingsBindingsCategories table.
+-- @return table
 function bind.GetSettingsBindingsCategories()
 	return SettingsBindingsCategories
 end

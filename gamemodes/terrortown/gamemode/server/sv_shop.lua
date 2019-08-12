@@ -1,4 +1,5 @@
-
+---
+-- @section shop
 
 local function RerollShop(ply)
 	if GetGlobalBool("ttt2_random_team_shops") then
@@ -12,8 +13,14 @@ local function HasPendingOrder(ply)
 	return timer.Exists("give_equipment" .. ply:UniqueID())
 end
 
+---
+-- Called whenever a @{Player} tries to order an @{ITEM} or @{Weapon}
+-- @param Player ply
+-- @param string id id of the @{ITEM} or @{Weapon}
+-- @return[default=true] boolean return true to allow buying of an equipment item, false to disallow
+-- @hook
+-- @realm server
 function GM:TTTCanOrderEquipment(ply, id)
-	-- return true to allow buying of an equipment item, false to disallow
 	return true
 end
 
@@ -142,9 +149,16 @@ local function OrderEquipment(ply, cmd, args)
 end
 concommand.Add("ttt_order_equipment", OrderEquipment)
 
+---
+-- Called whenever a @{Player} toggles the disguiser state
+-- @note Can be used to prevent players from using this button.
+-- @param Player ply
+-- @param boolean state
+-- @return boolean return true to prevent using this button.
+-- @hook
+-- @realm server
 function GM:TTTToggleDisguiser(ply, state)
-	-- Can be used to prevent players from using this button.
-	-- return true to prevent it.
+
 end
 
 local function CheatCredits(ply)

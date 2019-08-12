@@ -1,4 +1,8 @@
--- c4 explosive
+---
+-- @class ENT
+-- @realm shared
+-- @section C4
+-- @desc c4 explosive
 
 local math = math
 local ipairs = ipairs
@@ -40,18 +44,78 @@ ENT.CanHavePrints = true
 ENT.CanUseKey = true
 ENT.Avoidable = true
 
+---
+-- @function GetThrower()
+-- @return Entity
+--
+---
+-- @function SetThrower(ent)
+-- @param Entity ent
+---
 AccessorFunc(ENT, "thrower", "Thrower")
 
+---
+-- @function GetRadius()
+-- @return number
+--
+---
+-- @function SetRadius(i)
+-- @param number i
+---
 AccessorFunc(ENT, "radius", "Radius", FORCE_NUMBER)
+
+---
+-- @function GetDmg()
+-- @return number
+--
+---
+-- @function SetDmg(i)
+-- @param number i
+---
 AccessorFunc(ENT, "dmg", "Dmg", FORCE_NUMBER)
 
+---
+-- @function GetArmTime()
+-- @return number
+--
+---
+-- @function SetArmTime(i)
+-- @param number i
+---
 AccessorFunc(ENT, "arm_time", "ArmTime", FORCE_NUMBER)
+
+---
+-- @function GetTimerLength()
+-- @return number
+--
+---
+-- @function SetTimerLength(i)
+-- @param number i
+---
 AccessorFunc(ENT, "timer_length", "TimerLength", FORCE_NUMBER)
 
 -- Generate accessors for DT vars. This way all consumer code can keep accessing
 -- the vars as they always did, the only difference is that behind the scenes
 -- they are set up as DT vars.
+
+---
+-- @function GetExplodeTime()
+-- @return number
+--
+---
+-- @function SetExplodeTime(i)
+-- @param number i
+---
 AccessorFuncDT(ENT, "explode_time", "ExplodeTime")
+
+---
+-- @function GetArmed()
+-- @return boolean
+--
+---
+-- @function SetArmed(bool)
+-- @param boolean bool
+---
 AccessorFuncDT(ENT, "armed", "Armed")
 
 ENT.Beep = 0
@@ -99,12 +163,15 @@ function ENT:Initialize()
 	end
 end
 
+---
+-- @param number length time
 function ENT:SetDetonateTimer(length)
 	self:SetTimerLength(length)
 	self:SetExplodeTime(CurTime() + length)
 end
 
-
+---
+-- @param Entity activator
 function ENT:UseOverride(activator)
 	if IsValid(activator) and activator:IsPlayer() then
 		-- Traitors not allowed to disarm other traitor's C4 until he is dead
@@ -120,6 +187,10 @@ function ENT:UseOverride(activator)
 	end
 end
 
+---
+-- @module ENT
+-- @param number t
+-- @return number
 function ENT.SafeWiresForTime(t)
 	local m = t / 60
 
@@ -136,6 +207,8 @@ function ENT.SafeWiresForTime(t)
 	end
 end
 
+---
+-- @param boolean state
 function ENT:WeldToGround(state)
 	if self.IsOnWall then return end
 
@@ -190,6 +263,10 @@ function ENT:WeldToGround(state)
 	end
 end
 
+---
+-- @param Entity dmgowner
+-- @oaram Vector center
+-- @param number radius
 function ENT:SphereDamage(dmgowner, center, radius)
 	-- It seems intuitive to use FindInSphere here, but that will find all ents
 	-- in the radius, whereas there exist only ~16 players. Hence it is more
@@ -231,6 +308,8 @@ end
 
 local c4boom = Sound("c4.explode")
 
+---
+-- @param table tr Trace Structure
 function ENT:Explode(tr)
 	hook.Call("TTTC4Explode", nil, self)
 
@@ -324,6 +403,8 @@ function ENT:Explode(tr)
 	end
 end
 
+---
+-- @return[default=false] boolean
 function ENT:IsDetectiveNear()
 	local center = self:GetPos()
 	local r = self.DetectiveNearRadius * self.DetectiveNearRadius
@@ -416,6 +497,9 @@ function ENT:Think()
 	end
 end
 
+---
+-- @return boolen
+-- @see ENT:GetArmed
 function ENT:Defusable()
 	return self:GetArmed()
 end
@@ -423,7 +507,10 @@ end
 -- Timer configuration handlign
 
 if SERVER then
+	---
 	-- Inform traitors about us
+	-- @param boolean armed
+	-- @realm server
 	function ENT:SendWarn(armed)
 		net.Start("TTT_C4Warn")
 		net.WriteUInt(self:EntIndex(), 16)
@@ -439,10 +526,15 @@ if SERVER then
 		net.Broadcast()
 	end
 
+	---
+	-- @realm server
 	function ENT:OnRemove()
 		self:SendWarn(false)
 	end
 
+	---
+	-- @param Player ply
+	-- @realm server
 	function ENT:Disarm(ply)
 		local owner = self:GetOwner()
 
@@ -460,6 +552,9 @@ if SERVER then
 		self.DisarmCausedExplosion = false
 	end
 
+	---
+	-- @param Player ply
+	-- @realm server
 	function ENT:FailedDisarm(ply)
 		self.DisarmCausedExplosion = true
 
@@ -469,6 +564,10 @@ if SERVER then
 		self:SetExplodeTime(CurTime() + 0.1)
 	end
 
+	---
+	-- @param Player ply
+	-- @param number time
+	-- @realm server
 	function ENT:Arm(ply, time)
 		-- Initialize armed state
 		self:SetDetonateTimer(time)
@@ -524,6 +623,9 @@ if SERVER then
 		self:SendWarn(true)
 	end
 
+	---
+	-- @param Player ply
+	-- @realm server
 	function ENT:ShowC4Config(ply)
 		-- show menu to player to configure or disarm us
 		net.Start("TTT_C4Config")
@@ -663,6 +765,9 @@ if CLIENT then
 		antialias = false
 	})
 
+	---
+	-- @return table pos
+	-- @realm client
 	function ENT:GetTimerPos()
 		local att = self:GetAttachment(self:LookupAttachment("controlpanel0_ur"))
 		if att then
@@ -683,6 +788,8 @@ if CLIENT then
 	local strtime = util.SimpleTime
 	local max = math.max
 
+	---
+	-- @realm client
 	function ENT:Draw()
 		self:DrawModel()
 

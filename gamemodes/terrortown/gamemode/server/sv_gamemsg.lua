@@ -1,4 +1,6 @@
--- Communicating game state to players
+---
+-- @section GameMessage
+-- @desc Communicating game state to players
 
 local net = net
 local string = string
@@ -6,10 +8,14 @@ local table = table
 local ipairs = ipairs
 local IsValid = IsValid
 
--- NOTE: most uses of the Msg functions here have been moved to the LANG
+---
+-- Sends a GameMessage to every @{Player}
+-- @note most uses of the Msg functions here have been moved to the LANG
 -- functions. These functions are essentially deprecated, though they won't be
 -- removed and can safely be used by SWEPs and the like.
-
+-- @param string msg
+-- @realm server
+-- @deprecated
 function GameMsg(msg)
 	net.Start("TTT_GameMsg")
 	net.WriteString(msg)
@@ -17,6 +23,13 @@ function GameMsg(msg)
 	net.Broadcast()
 end
 
+---
+-- Sends a custom GameMessage to a group of @{Player} in a specific @{Color}
+-- @param nil|Player|table ply_or_rf
+-- @param string msg
+-- @param Color c
+-- @realm server
+-- @deprecated
 function CustomMsg(ply_or_rf, msg, c)
 	c = c or COLOR_WHITE
 
@@ -33,7 +46,13 @@ function CustomMsg(ply_or_rf, msg, c)
 	end
 end
 
+---
 -- Basic status message to single player or a recipientfilter
+-- @param nil|Player|table ply_or_rf
+-- @param string msg
+-- @param boolean traitor_only
+-- @realm server
+-- @deprecated
 function PlayerMsg(ply_or_rf, msg, traitor_only)
 	net.Start("TTT_GameMsg")
 	net.WriteString(msg)
@@ -46,7 +65,12 @@ function PlayerMsg(ply_or_rf, msg, traitor_only)
 	end
 end
 
+---
 -- Subrole-specific message that will appear in a special color
+-- @param nil|Player|table ply_or_rfilter
+-- @param string msg
+-- @realm server
+-- @deprecated
 function TraitorMsg(ply_or_rfilter, msg)
 	PlayerMsg(ply_or_rfilter, msg, true)
 end
@@ -64,7 +88,10 @@ local function RoleChatMsg(sender, msg)
 	end
 end
 
+---
 -- Round start info popup
+-- @realm server
+-- @internal
 function ShowRoundStartPopup()
 	for _, v in ipairs(player.GetAll()) do
 		if IsValid(v) and v:Team() == TEAM_TERROR and v:Alive() then
@@ -73,11 +100,16 @@ function ShowRoundStartPopup()
 	end
 end
 
+---
+-- Returns a list of filtered @{Player}s
+-- @param function pred
+-- @return table
+-- @realm server
 function GetPlayerFilter(pred)
 	local filter = {}
 
 	for _, v in ipairs(player.GetAll()) do
-		if IsValid(v) and pred(v) then
+		if pred(v) then
 			table.insert(filter, v)
 		end
 	end
@@ -85,24 +117,81 @@ function GetPlayerFilter(pred)
 	return filter
 end
 
+---
+-- Returns a list of filtered @{Player}s by the team
+-- @param string team
+-- @param boolean alive_only
+-- @return table
+-- @realm server
+function GetTeamFilter(team, alive_only)
+	return GetPlayerFilter(function(p)
+		return team ~= TEAM_NONE and not TEAMS[team].alone and p:HasTeam(team) and not p:GetSubRoleData().unknownTeam and (not alive_only or p:IsTerror())
+	end)
+end
+
+---
+-- Returns a list of all @{Players} of the Innocent team
+-- @param boolean alive_only
+-- @return table
+-- @realm server
+-- @see GetTeamFilter
 function GetInnocentFilter(alive_only)
 	return GetTeamFilter(TEAM_INNOCENT, alive_only)
 end
 
+---
+-- Returns a list of all @{Players} of the Traitor team
+-- @param boolean alive_only
+-- @return table
+-- @realm server
+-- @see GetTeamFilter
 function GetTraitorFilter(alive_only)
 	return GetTeamFilter(TEAM_TRAITOR, alive_only)
 end
 
-function GetDetectiveFilter(alive_only)
-	return GetRoleFilter(ROLE_DETECTIVE, alive_only)
-end
-
+---
+-- Returns a list of filtered @{Player}s by the @{ROLE}'s index
+-- @note If a BaseRole is given, this will return true for all its SubRoles.
+-- If you just want to filter for a specific SubRole, use @{GetSubRoleFilter} instead
+-- @param number subrole
+-- @param boolean alive_only
+-- @return table
+-- @realm server
+-- @see Player:IsRole
 function GetRoleFilter(subrole, alive_only)
 	return GetPlayerFilter(function(p)
 		return p:IsRole(subrole) and (not alive_only or p:IsTerror())
 	end)
 end
 
+---
+-- Returns a list of filtered @{Player}s by the @{ROLE}'s SubRole index
+-- @param number subrole
+-- @param boolean alive_only
+-- @return table
+-- @realm server
+function GetSubRoleFilter(subrole, alive_only)
+	return GetPlayerFilter(function(p)
+		return p:GetSubRole() == subrole and (not alive_only or p:IsTerror())
+	end)
+end
+
+---
+-- Returns a list of all @{Players} of the Detective @{ROLE}'s index
+-- @param boolean alive_only
+-- @return table
+-- @realm server
+-- @see GetRoleFilter
+function GetDetectiveFilter(alive_only)
+	return GetRoleFilter(ROLE_DETECTIVE, alive_only)
+end
+
+---
+-- Returns a list of all @{Players} of a specific @{ROLE}'s index that are able to chat
+-- @param number subrole
+-- @param boolean alive_only
+-- @return table
+-- @realm server
 function GetRoleChatFilter(subrole, alive_only)
 	if roles.GetByIndex(subrole).disabledTeamChat then
 		return {}
@@ -113,24 +202,25 @@ function GetRoleChatFilter(subrole, alive_only)
 	end)
 end
 
-function GetSubRoleFilter(subrole, alive_only)
-	return GetPlayerFilter(function(p)
-		return p:GetSubRole() == subrole and (not alive_only or p:IsTerror())
-	end)
-end
-
-function GetTeamFilter(team, alive_only)
-	return GetPlayerFilter(function(p)
-		return team ~= TEAM_NONE and not TEAMS[team].alone and p:HasTeam(team) and not p:GetSubRoleData().unknownTeam and (not alive_only or p:IsTerror())
-	end)
-end
-
+---
+-- Returns a list of all @{Players} of a specific team that are able to chat
+-- @param string team
+-- @param boolean alive_only
+-- @return table
+-- @realm server
 function GetTeamChatFilter(team, alive_only)
 	return GetPlayerFilter(function(p)
 		return team ~= TEAM_NONE and not TEAMS[team].alone and p:HasTeam(team) and not p:GetSubRoleData().unknownTeam and not p:GetSubRoleData().disabledTeamChatRec and (not alive_only or p:IsTerror())
 	end)
 end
 
+---
+-- Returns a list of filtered @{Player}s.
+-- This filters the team members of a given @{Player}
+-- @param Player ply
+-- @param boolean alive_only
+-- @return table
+-- @realm server
 function GetTeamMemberFilter(ply, alive_only)
 	return GetPlayerFilter(function(p)
 		return p:IsInTeam(ply) and (not alive_only or p:IsTerror())
@@ -140,6 +230,16 @@ end
 -- Communication control
 CreateConVar("ttt_limit_spectator_chat", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY})
 
+---
+-- Checks whether a @{Player} is able to listen to another @{Player}
+-- @param string text
+-- @param boolean team_only
+-- @param Player listener
+-- @param Player speaker
+-- @return boolean
+-- @hook
+-- @realm server
+-- @internal
 function GM:PlayerCanSeePlayersChat(text, team_only, listener, speaker)
 	if not IsValid(listener) then
 		return false
@@ -201,9 +301,17 @@ local mumbles = {
 	"mfrrm"
 }
 
+---
 -- While a round is active, spectators can only talk among themselves. When they
 -- try to speak to all players they could divulge information about who killed
 -- them. So we mumblify them. In detective mode, we shut them up entirely.
+-- @param Player ply
+-- @param string text
+-- @param boolean team_only
+-- @return string
+-- @hook
+-- @realm server
+-- @internal
 function GM:PlayerSay(ply, text, team_only)
 	if not IsValid(ply) then
 		return text or ""
@@ -316,8 +424,16 @@ local function deathrec(ply, cmd, args)
 end
 concommand.Add("_deathrec", deathrec)
 
+---
 -- Override or hook in plugin for spam prevention and whatnot. Return true
 -- to block a command.
+-- @param Player ply
+-- @param string msg_name
+-- @param Player msg_target
+-- @return[default=nil] boolean
+-- @hook
+-- @register
+-- @realm server
 function GM:TTTPlayerRadioCommand(ply, msg_name, msg_target)
 
 end

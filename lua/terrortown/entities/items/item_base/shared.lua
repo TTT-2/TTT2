@@ -13,7 +13,7 @@ ITEM.Instructions = "" -- some Instructions for this @{ITEM}
 -- for that purpose. If CanBuy is nil this @{ITEM} cannot be bought.
 --   Example: ITEM.CanBuy = { ROLE_TRAITOR }
 -- (just setting to nil here to document its existence, don't make this buyable)
-ITEM.CanBuy = nil -- this @{table} contains a list of subrole ids (@int) which are able to access this @{ITEM} in the shop
+ITEM.CanBuy = nil -- this @{table} contains a list of subrole ids (@param number) which are able to access this @{ITEM} in the shop
 
 ITEM.Category = "TTT" -- the @{ITEM} Category
 
@@ -50,7 +50,9 @@ if CLIENT then
 	-- eg. /materials/vgui/ttt/mycoolserver/mygun.vmt
 
 	---
-	-- Draw some information in a small box next to the icon in the hud if a <a href="https://wiki.garrysmod.com/page/Category:Player">Player</a> is owning this @{ITEM}
+	-- Draw some information in a small box next to the icon in the hud if a @{Player} is owning this @{ITEM}
+	-- @hook
+	-- @realm client
 	function ITEM:DrawInfo()
 
 	end
@@ -58,28 +60,35 @@ end
 
 ---
 -- Called just before entity is deleted. This is used to reset data you set before
--- @param ply (<a href="https://wiki.garrysmod.com/page/Category:Player">Player</a>)
+-- @param Player ply
+-- @hook
+-- @realm shared
 function ITEM:Reset(ply)
 
 end
 
 ---
 -- A player or NPC has picked the @{ITEM} up
--- @param ply (<a href="https://wiki.garrysmod.com/page/Category:Player">Player</a>)
+-- @param Player ply
+-- @hook
+-- @realm shared
 function ITEM:Equip(ply)
 
 end
 
 ---
 -- A player or NPC has bought the @{ITEM}
--- @param ply (<a href="https://wiki.garrysmod.com/page/Category:Player">Player</a>)
+-- @param Player ply
+-- @hook
+-- @realm shared
 function ITEM:Bought(ply)
 
 end
 
 ---
 -- useable, but do not modify this!
--- @treturn boolean whether this @{ITEM} is an equipment
+-- @return boolean whether this @{ITEM} is an equipment
+-- @realm shared
 function ITEM:IsEquipment()
 	return WEPS.IsEquipment(self)
 end

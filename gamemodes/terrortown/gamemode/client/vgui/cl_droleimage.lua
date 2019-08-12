@@ -1,18 +1,112 @@
+---
+-- @class PANEL
+-- @realm client
+-- @section DRoleImage
+
 local PANEL = {}
 
 local math = math
 local surface = surface
 local vgui = vgui
 
+---
+-- @function GetMaterial()
+-- @return Material
+--
+---
+-- @function SetMaterial(material)
+-- @param Material material
+---
 AccessorFunc(PANEL, "m_Material", "Material")
+
+---
+-- @function GetMaterial2()
+-- @return Material
+--
+---
+-- @function SetMaterial2(material)
+-- @param Material material
+---
 AccessorFunc(PANEL, "m_Material2", "Material2")
+
+---
+-- @function GetMaterialOverlay()
+-- @return Material
+--
+---
+-- @function SetMaterialOverlay(material)
+-- @param Material material
+---
 AccessorFunc(PANEL, "m_MaterialOverlay", "MaterialOverlay")
+
+---
+-- @function GetRoleIcon()
+-- @return Material
+--
+---
+-- @function SetRoleIcon(material)
+-- @param Material material
+---
 AccessorFunc(PANEL, "m_RoleIcon", "RoleIcon")
+
+---
+-- @function GetImageColor()
+-- @return Color
+--
+---
+-- @function SetImageColor(color)
+-- @param Color color
+---
 AccessorFunc(PANEL, "m_Color", "ImageColor")
+
+---
+-- @function GetKeepAspect()
+-- @return boolean
+--
+---
+-- @function SetKeepAspect(bool)
+-- @param boolean bool
+---
 AccessorFunc(PANEL, "m_bKeepAspect", "KeepAspect")
+
+---
+-- @function GetMatName()
+-- @return string
+--
+---
+-- @function SetMatName(str)
+-- @param string str
+---
 AccessorFunc(PANEL, "m_strMatName", "MatName")
+
+---
+-- @function GetMatName2()
+-- @return string
+--
+---
+-- @function SetMatName2(str)
+-- @param string str
+---
 AccessorFunc(PANEL, "m_strMatName2", "MatName2")
+
+---
+-- @function GetMatOverName()
+-- @return string
+--
+---
+-- @function SetMatOverName(str)
+-- @param string str
+---
 AccessorFunc(PANEL, "m_strMatOverName", "MatOverName")
+
+---
+-- @function GetRoleIconName()
+-- @return string
+--
+---
+-- @function SetRoleIconName(str)
+-- @param string str
+---
 AccessorFunc(PANEL, "m_strRoleIconName", "RoleIconName")
 
 function PANEL:Init()
@@ -30,16 +124,21 @@ function PANEL:Init()
 	self.ActualHeight = 10
 end
 
-function PANEL:SetOnViewMaterial(MatName, MatName2, RoleIconName, MatOverName)
-	self:SetMatName(MatName)
-	self:SetMatName2(MatName2)
-	self:SetMatOverName(MatOverName)
-	self:SetRoleIconName(RoleIconName)
+---
+-- @param string matName
+-- @param string matName2
+-- @param string roleIconName
+-- @param string matOverName
+function PANEL:SetOnViewMaterial(matName, matName2, roleIconName, matOverName)
+	self:SetMatName(matName)
+	self:SetMatName2(matName2)
+	self:SetMatOverName(matOverName)
+	self:SetRoleIconName(roleIconName)
 
-	self.ImageName = MatName
-	self.ImageName2 = MatName2
-	self.ImageOverlayName = MatOverName
-	self.RoleIconImageName = RoleIconName
+	self.ImageName = matName
+	self.ImageName2 = matName2
+	self.ImageOverlayName = matOverName
+	self.RoleIconImageName = roleIconName
 end
 
 function PANEL:Unloaded()
@@ -89,16 +188,18 @@ function PANEL:DoLoadMaterial()
 	self:InvalidateParent()
 end
 
-function PANEL:SetMaterial(Mat)
+---
+-- @param Material|string mat
+function PANEL:SetMaterial(mat)
 	-- Everybody makes mistakes,
 	-- that's why they put erasers on pencils.
-	if type(Mat) == "string" then
-		self:SetImage(Mat)
+	if type(mat) == "string" then
+		self:SetImage(mat)
 
 		return
 	end
 
-	self.m_Material = Mat
+	self.m_Material = mat
 
 	if not self.m_Material then return end
 
@@ -112,75 +213,89 @@ function PANEL:SetMaterial(Mat)
 	end
 end
 
-function PANEL:SetMaterial2(Mat)
+---
+-- @param Material|string mat
+function PANEL:SetMaterial2(mat)
 	-- Everybody makes mistakes,
 	-- that's why they put erasers on pencils.
-	if type(Mat) == "string" then
-		self:SetImage2(Mat)
+	if type(mat) == "string" then
+		self:SetImage2(mat)
 
 		return
 	end
 
-	self.m_Material2 = Mat
+	self.m_Material2 = mat
 end
 
-function PANEL:SetMaterialOverlay(Mat)
+---
+-- @param Material|string mat
+function PANEL:SetMaterialOverlay(mat)
 	-- Everybody makes mistakes,
 	-- that's why they put erasers on pencils.
-	if type(Mat) == "string" then
-		self:SetImageOverlay(Mat)
+	if type(mat) == "string" then
+		self:SetImageOverlay(mat)
 
 		return
 	end
 
-	self.m_MaterialOverlay = Mat
+	self.m_MaterialOverlay = mat
 end
 
-function PANEL:SetRoleIcon(Mat)
+---
+-- @param Material|string mat
+function PANEL:SetRoleIcon(mat)
 	-- Everybody makes mistakes,
 	-- that's why they put erasers on pencils.
-	if type(Mat) == "string" then
-		self:SetRoleIconImage(Mat)
+	if type(mat) == "string" then
+		self:SetRoleIconImage(mat)
 
 		return
 	end
 
-	self.m_RoleIcon = Mat
+	self.m_RoleIcon = mat
 end
 
+---
+-- @param string strImage The image name
 function PANEL:SetImage(strImage)
 	self.ImageName = strImage
 
-	local Mat = Material(strImage)
+	local mat = Material(strImage)
 
-	self:SetMaterial(Mat)
+	self:SetMaterial(mat)
 	self:FixVertexLitMaterial()
 end
 
+---
+-- @param string strImage2 The image name
 function PANEL:SetImage2(strImage2)
 	self.ImageName2 = strImage2
 
-	local Mat = Material(strImage2)
+	local mat = Material(strImage2)
 
-	self:SetMaterial2(Mat)
+	self:SetMaterial2(mat)
 	self:FixVertexLitMaterial2()
 end
 
+---
+-- @param string strImageOverlay The image overlay name
 function PANEL:SetImageOverlay(strImageOverlay)
 	self.ImageOverlayName = strImageOverlay
 
-	local Mat = Material(strImageOverlay)
+	local mat = Material(strImageOverlay)
 
-	self:SetMaterialOverlay(Mat)
+	self:SetMaterialOverlay(mat)
 	self:FixVertexLitMaterialOverlay()
 end
 
+---
+-- @param string strImage The role icon image name
 function PANEL:SetRoleIconImage(strImage)
 	self.RoleIconImageName = strImage
 
-	local Mat = Material(strImage)
+	local mat = Material(strImage)
 
-	self:SetRoleIcon(Mat)
+	self:SetRoleIcon(mat)
 	self:FixVertexLitRoleIcon()
 end
 
@@ -199,18 +314,26 @@ function PANEL:UnloadRoleIconImage()
 	self.m_RoleIcon = nil
 end
 
+---
+-- @return string
 function PANEL:GetImage()
 	return self.ImageName
 end
 
+---
+-- @return string
 function PANEL:GetImage2()
 	return self.ImageName2
 end
 
+---
+-- @return string
 function PANEL:GetImageOverlay()
 	return self.ImageOverlayName
 end
 
+---
+-- @return string
 function PANEL:GetRoleIconImage()
 	return self.RoleIconImageName
 end
@@ -222,22 +345,22 @@ function PANEL:FixVertexLitMaterial()
 	-- and flicker all about
 	--
 
-	local Mat = self:GetMaterial()
-	local strImage = Mat:GetName()
+	local mat = self:GetMaterial()
+	local strImage = mat:GetName()
 
-	if string.find(Mat:GetShader(), "VertexLitGeneric") or string.find(Mat:GetShader(), "Cable") then
-		local t = Mat:GetString("$basetexture")
+	if string.find(mat:GetShader(), "VertexLitGeneric") or string.find(mat:GetShader(), "Cable") then
+		local t = mat:GetString("$basetexture")
 		if t then
 			local params = {}
 			params["$basetexture"] = t
 			params["$vertexcolor"] = 1
 			params["$vertexalpha"] = 1
 
-			Mat = CreateMaterial(strImage .. "_DImage", "UnlitGeneric", params)
+			mat = CreateMaterial(strImage .. "_DImage", "UnlitGeneric", params)
 		end
 	end
 
-	self:SetMaterial(Mat)
+	self:SetMaterial(mat)
 end
 
 function PANEL:FixVertexLitMaterial2()
@@ -247,22 +370,22 @@ function PANEL:FixVertexLitMaterial2()
 	-- and flicker all about
 	--
 
-	local Mat = self:GetMaterial2()
-	local strImage = Mat:GetName()
+	local mat = self:GetMaterial2()
+	local strImage = mat:GetName()
 
-	if string.find(Mat:GetShader(), "VertexLitGeneric") or string.find(Mat:GetShader(), "Cable") then
-		local t = Mat:GetString("$basetexture")
+	if string.find(mat:GetShader(), "VertexLitGeneric") or string.find(mat:GetShader(), "Cable") then
+		local t = mat:GetString("$basetexture")
 		if t then
 			local params = {}
 			params["$basetexture"] = t
 			params["$vertexcolor"] = 1
 			params["$vertexalpha"] = 1
 
-			Mat = CreateMaterial(strImage .. "_DImage", "UnlitGeneric", params)
+			mat = CreateMaterial(strImage .. "_DImage", "UnlitGeneric", params)
 		end
 	end
 
-	self:SetMaterial2(Mat)
+	self:SetMaterial2(mat)
 end
 
 function PANEL:FixVertexLitMaterialOverlay()
@@ -272,22 +395,22 @@ function PANEL:FixVertexLitMaterialOverlay()
 	-- and flicker all about
 	--
 
-	local Mat = self:GetMaterialOverlay()
-	local strImage = Mat:GetName()
+	local mat = self:GetMaterialOverlay()
+	local strImage = mat:GetName()
 
-	if string.find(Mat:GetShader(), "VertexLitGeneric") or string.find(Mat:GetShader(), "Cable") then
-		local t = Mat:GetString("$basetexture")
+	if string.find(mat:GetShader(), "VertexLitGeneric") or string.find(mat:GetShader(), "Cable") then
+		local t = mat:GetString("$basetexture")
 		if t then
 			local params = {}
 			params["$basetexture"] = t
 			params["$vertexcolor"] = 1
 			params["$vertexalpha"] = 1
 
-			Mat = CreateMaterial(strImage .. "_DImage", "UnlitGeneric", params)
+			mat = CreateMaterial(strImage .. "_DImage", "UnlitGeneric", params)
 		end
 	end
 
-	self:SetMaterialOverlay(Mat)
+	self:SetMaterialOverlay(mat)
 end
 
 function PANEL:FixVertexLitRoleIcon()
@@ -297,22 +420,22 @@ function PANEL:FixVertexLitRoleIcon()
 	-- and flicker all about
 	--
 
-	local Mat = self:GetRoleIcon()
-	local strImage = Mat:GetName()
+	local mat = self:GetRoleIcon()
+	local strImage = mat:GetName()
 
-	if string.find(Mat:GetShader(), "VertexLitGeneric") or string.find(Mat:GetShader(), "Cable") then
-		local t = Mat:GetString("$basetexture")
+	if string.find(mat:GetShader(), "VertexLitGeneric") or string.find(mat:GetShader(), "Cable") then
+		local t = mat:GetString("$basetexture")
 		if t then
 			local params = {}
 			params["$basetexture"] = t
 			params["$vertexcolor"] = 1
 			params["$vertexalpha"] = 1
 
-			Mat = CreateMaterial(strImage .. "_DImage", "UnlitGeneric", params)
+			mat = CreateMaterial(strImage .. "_DImage", "UnlitGeneric", params)
 		end
 	end
 
-	self:SetRoleIcon(Mat)
+	self:SetRoleIcon(mat)
 end
 
 function PANEL:SizeToContents()
@@ -323,6 +446,12 @@ function PANEL:Paint()
 	self:PaintAt(0, 0, self:GetWide(), self:GetTall())
 end
 
+---
+-- @param number x
+-- @param number y
+-- @param number dw
+-- @param number dh
+-- @return[default=true] boolean
 function PANEL:PaintAt(x, y, dw, dh)
 	dw, dh = dw or self:GetWide(), dh or self:GetTall()
 
@@ -422,131 +551,17 @@ function PANEL:PaintAt(x, y, dw, dh)
 	return true
 end
 
-function PANEL:GenerateExample(ClassName, PropertySheet, Width, Height)
-	local ctrl = vgui.Create(ClassName)
+---
+-- @param string className name of a @{Panel}
+-- @param Panel propertySheet the parent element
+-- @param number width
+-- @param number height
+function PANEL:GenerateExample(className, propertySheet, width, height)
+	local ctrl = vgui.Create(className)
 	ctrl:SetImage("brick/brick_model")
 	ctrl:SetSize(200, 200)
 
-	PropertySheet:AddSheet(ClassName, ctrl, nil, true, true)
+	propertySheet:AddSheet(className, ctrl, nil, true, true)
 end
 
 derma.DefineControl("DRoleImage", "A simple role image", PANEL, "DPanel")
-
---
-local matHover = Material("vgui/spawnmenu/hover")
-
-PANEL = {}
-
-AccessorFunc(PANEL, "m_iIconSize", "IconSize")
-
-function PANEL:Init()
-	self.Icon = vgui.Create("DRoleImage", self)
-	self.Icon:SetMouseInputEnabled(false)
-	self.Icon:SetKeyboardInputEnabled(false)
-
-	self.animPress = Derma_Anim("Press", self, self.PressedAnim)
-
-	self:SetIconSize(64)
-end
-
-function PANEL:OnMousePressed(mcode)
-	if mcode == MOUSE_LEFT then
-		self:DoClick()
-
-		self.animPress:Start(0.1)
-	end
-end
-
-function PANEL:OnMouseReleased()
-
-end
-
-function PANEL:DoClick()
-
-end
-
-function PANEL:OpenMenu()
-
-end
-
-function PANEL:ApplySchemeSettings()
-
-end
-
-local oldPaintOver = PANEL.PaintOver
-function PANEL:PaintOver(w, h)
-	if self.toggled then
-		surface.SetDrawColor(0, 200, 0, 255)
-		surface.SetMaterial(matHover)
-
-		self:DrawTexturedRect()
-	end
-
-	if isfunction(oldPaintOver) then
-		oldPaintOver(self, w, h)
-	end
-end
-
-function PANEL:OnCursorEntered()
-	self.PaintOverOld = self.PaintOver
-	self.PaintOver = self.PaintOverHovered
-end
-
-function PANEL:OnCursorExited()
-	if self.PaintOver == self.PaintOverHovered then
-		self.PaintOver = self.PaintOverOld
-	end
-end
-
-function PANEL:PaintOverHovered()
-	if self.animPress:Active() or self.toggled then return end
-
-	surface.SetDrawColor(255, 255, 255, 80)
-	surface.SetMaterial(matHover)
-
-	self:DrawTexturedRect()
-end
-
-function PANEL:PerformLayout()
-	if self.animPress:Active() then return end
-
-	self:SetSize(self.m_iIconSize, self.m_iIconSize)
-
-	self.Icon:StretchToParent(0, 0, 0, 0)
-end
-
-function PANEL:SetIcon(icon)
-	self.Icon:SetImage(icon)
-end
-
-function PANEL:GetIcon()
-	return self.Icon:GetImage()
-end
-
-function PANEL:SetIconColor(c)
-	self.Icon:SetImageColor(c)
-end
-
-function PANEL:Think()
-	self.animPress:Run()
-end
-
-function PANEL:PressedAnim(anim, delta, data)
-	if anim.Started then return end
-
-	if anim.Finished then
-		self.Icon:StretchToParent(0, 0, 0, 0)
-
-		return
-	end
-
-	local border = math.sin(delta * math.pi) * (self.m_iIconSize * 0.05)
-
-	self.Icon:StretchToParent(border, border, border, border)
-end
-
-function PANEL:Toggle(b)
-	self.toggled = b
-end
-
-vgui.Register("SimpleRoleIcon", PANEL, "Panel")

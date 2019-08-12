@@ -1,4 +1,7 @@
--- Display of and interaction with ttt_traitor_button
+---
+-- @class TBHUD
+-- @desc Display of and interaction with ttt_traitor_button
+
 local surface = surface
 local pairs = pairs
 local ipairs = ipairs
@@ -15,6 +18,9 @@ TBHUD.buttons_count = 0
 TBHUD.focus_ent = nil
 TBHUD.focus_stick = 0
 
+---
+-- Clears the list of stored traitor buttons
+-- @realm client
 function TBHUD:Clear()
 	self.buttons = {}
 	self.buttons_count = 0
@@ -23,6 +29,9 @@ function TBHUD:Clear()
 	self.focus_stick = 0
 end
 
+---
+-- Caches every available traitor button on the map for the local @{Player}
+-- @realm client
 function TBHUD:CacheEnts()
 	local ply = LocalPlayer()
 
@@ -37,12 +46,20 @@ function TBHUD:CacheEnts()
 	self.buttons_count = table.Count(self.buttons)
 end
 
+---
+-- Returns whether the local @{Player} is focussing a traitor button
+-- @return boolean
+-- @realm client
 function TBHUD:PlayerIsFocused()
 	local ply = LocalPlayer()
 
 	return IsValid(ply) and ply:IsActive() and ply:HasTeam(TEAM_TRAITOR) and IsValid(self.focus_ent)
 end
 
+---
+-- Runs the "ttt_use_tbutton" concommand to activate the traitor button
+-- @return boolean whether the activation was successful
+-- @realm client
 function TBHUD:UseFocused()
 	if IsValid(self.focus_ent) and self.focus_stick >= CurTime() then
 		RunConsoleCommand("ttt_use_tbutton", tostring(self.focus_ent:EntIndex()))
@@ -57,6 +74,9 @@ end
 
 local confirm_sound = Sound("buttons/button24.wav")
 
+---
+-- Plays a sound and caches all traitor buttons
+-- @realm client
 function TBHUD.ReceiveUseConfirm()
 	surface.PlaySound(confirm_sound)
 
@@ -86,6 +106,10 @@ local use_key = Key("+use", "USE")
 local GetTranslation = LANG.GetTranslation
 local GetPTranslation = LANG.GetParamTranslation
 
+---
+-- Draws the traitor buttons on the HUD
+-- @param Player client This should be the local @{Player}
+-- @realm client
 function TBHUD:Draw(client)
 	if self.buttons_count ~= 0 then
 		surface.SetTexture(tbut_normal)

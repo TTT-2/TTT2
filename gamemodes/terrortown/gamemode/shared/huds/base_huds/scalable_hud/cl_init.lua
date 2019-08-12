@@ -1,3 +1,8 @@
+---
+-- HUD base class.
+-- @module HUD
+-- @section scalable_hud
+
 local base = "hud_base"
 
 local savingKeys
@@ -10,6 +15,11 @@ HUD.basecolor = HUD.defaultcolor
 HUD.defaultscale = 1.0
 HUD.scale = HUD.defaultscale
 
+---
+-- This function will return a table containing all keys that will be stored by
+-- the @{HUD:SaveData} function.
+-- @return table
+-- @realm client
 function HUD:GetSavingKeys()
 	if not savingKeys then
 		savingKeys = BaseClass.GetSavingKeys(self)
@@ -35,6 +45,12 @@ function HUD:GetSavingKeys()
 	return table.Copy(savingKeys)
 end
 
+---
+-- This function will load all saved keys from the Database and will then call
+-- @{HUDELEMENT:LoadData} on all elements, shown by the HUD. After that it will
+-- call @{HUD:PerformLayout}. This function is called when the HUDManager loads
+-- / changes to this HUD.
+-- @realm client
 function HUD:LoadData()
 	BaseClass.LoadData(self)
 
@@ -49,6 +65,10 @@ function HUD:LoadData()
 	end
 end
 
+---
+-- Applies the scaling
+-- @param number scale
+-- @realm client
 function HUD:ApplyScale(scale)
 	for _, elem in ipairs(self:GetElements()) do
 		local el = hudelements.GetStored(elem)
@@ -69,9 +89,14 @@ function HUD:ApplyScale(scale)
 	end
 end
 
+---
+-- This will reset all elements of the HUD and call @{HUDELEMENT:Reset} on its
+-- elements. This will respect the parent -> child relation and only call this
+-- on non-child elements.
+-- @realm client
 function HUD:Reset()
 	self.basecolor = self.defaultcolor
-	
+
 	BaseClass.Reset(self)
 
 	self:ApplyScale(self.scale)

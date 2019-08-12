@@ -1,4 +1,6 @@
--- Corpse functions
+---
+-- @module CORPSE
+-- @desc Corpse functions
 
 -- namespaced because we have no ragdoll metatable
 CORPSE = {}
@@ -22,11 +24,21 @@ util.AddNetworkString("TTT2SendConfirmMsg")
 -- networked data abstraction layer
 local dti = CORPSE.dti
 
+---
+-- Sets a CORPSE found state
+-- @param Entity rag
+-- @param boolean state
+-- @realm server
 function CORPSE.SetFound(rag, state)
 	--rag:SetNWBool("found", state)
 	rag:SetDTBool(dti.BOOL_FOUND, state)
 end
 
+---
+-- Sets a CORPSE owner's nick name
+-- @param Entity rag
+-- @param Player|string ply_or_name
+-- @realm server
 function CORPSE.SetPlayerNick(rag, ply_or_name)
 	-- don't have datatable strings, so use a dt entity for common case of
 	-- still-connected player, and if the player is gone, fall back to nw string
@@ -41,6 +53,11 @@ function CORPSE.SetPlayerNick(rag, ply_or_name)
 	rag:SetNWString("nick", name)
 end
 
+---
+-- Sets a CORPSE amount of credits
+-- @param Entity rag
+-- @param number credits
+-- @realm server
 function CORPSE.SetCredits(rag, credits)
 	--rag:SetNWInt("credits", credits)
 	rag:SetDTInt(dti.INT_CREDITS, credits)
@@ -51,9 +68,17 @@ end
 -- If detective mode, announce when someone's body is found
 local bodyfound = CreateConVar("ttt_announce_body_found", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
+---
+-- Checks whether a @{Player} is able to identify a CORPSE
+-- @note return true to allow corpse identification, false to disallow
+-- @note removed b"was_traitor". Team is available with corpse.was_team
+-- @param Player ply
+-- @param Entity corpse
+-- @return[default=true] boolean
+-- @hook
+-- @register
+-- @realm server
 function GM:TTTCanIdentifyCorpse(ply, corpse)
-	-- return true to allow corpse identification, false to disallow
-	-- TODO removed b"was_traitor". Team is available with corpse.was_team
 	return true
 end
 
@@ -216,13 +241,29 @@ local function bitsRequired(num)
 	return bits
 end
 
+---
+-- Checks whether a @{Player} is able to search a CORPSE based on their position
+-- @note return true to allow corpse search, false to disallow.
+-- @note removed last param is_traitor -> accessable with corpse.was_team
+-- @param Player ply
+-- @param Entity corpse
+-- @param boolean is_covert
+-- @param boolean is_long_range
+-- @return[default=true] boolean
+-- @hook
+-- @register
+-- @realm server
 function GM:TTTCanSearchCorpse(ply, corpse, is_covert, is_long_range)
-	-- return true to allow corpse search, false to disallow.
-	-- TODO removed last param is_traitor -> accessable with corpse.was_team
 	return true
 end
 
+---
 -- Send a usermessage to client containing search results
+-- @param Player ply
+-- @param Entity rag
+-- @param boolean covert
+-- @param boolean long_range
+-- @realm server
 function CORPSE.ShowSearch(ply, rag, covert, long_range)
 	if not IsValid(ply) or not IsValid(rag) then return end
 
@@ -248,7 +289,7 @@ function CORPSE.ShowSearch(ply, rag, covert, long_range)
 	local dtime = rag.time or 0
 
 	local owner = player.GetBySteamID64(rag.sid64)
-	owner = IsValid(owner) and owner:EntIndex() or - 1
+	owner = IsValid(owner) and owner:EntIndex() or -1
 
 	-- basic sanity check
 	if not nick or not eq or not subrole or not team then return end
@@ -352,9 +393,14 @@ function CORPSE.ShowSearch(ply, rag, covert, long_range)
 	end
 end
 
-
+---
 -- Returns a sample for use in dna scanner if the kill fits certain constraints,
 -- else returns nil
+-- @param Player victim
+-- @param Player attacker
+-- @param CTakeDamageInfo dmg
+-- @return table sample
+-- @realm server
 local function GetKillerSample(victim, attacker, dmg)
 	-- only guns and melee damage, not explosions
 	if not dmg:IsBulletDamage() and not dmg:IsDamageType(DMG_SLASH) and not dmg:IsDamageType(DMG_CLUB) then return end
@@ -444,7 +490,13 @@ local rag_collide = CreateConVar("ttt_ragdoll_collide", "0", {FCVAR_NOTIFY, FCVA
 
 realdamageinfo = 0
 
+---
 -- Creates client or server ragdoll depending on settings
+-- @param Player ply
+-- @param Player attacker
+-- @param CTakeDamageInfo dmginfo
+-- @return Entity the CORPSE
+-- @realm server
 function CORPSE.Create(ply, attacker, dmginfo)
 	if not IsValid(ply) then return end
 
