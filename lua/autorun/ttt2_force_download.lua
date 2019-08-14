@@ -73,9 +73,13 @@ if SERVER then
 
 	-- ITEMs
 	resource.AddFile("materials/vgui/ttt/icon_armor.vmt") -- armor
-	resource.AddFile("materials/vgui/ttt/perks/hud_armor.png") -- armor HUD
 	resource.AddFile("materials/vgui/ttt/perks/hud_disguiser.png") -- disguiser
 	resource.AddFile("materials/vgui/ttt/perks/hud_radar.png") -- radar
+
+	resource.AddFile("materials/vgui/ttt/perks/hud_armor.png") -- armor HUD
+	resource.AddFile("materials/vgui/ttt/perks/hud_armor_reinforced.png") -- armor reinforced HUD
+	resource.AddFile("materials/vgui/ttt/hud_armor.png") -- playerinfo armor
+	resource.AddFile("materials/vgui/ttt/hud_armor_reinforced.png") -- playerinfo armor reinforced
 
 	-- pickup symbols
 	resource.AddFile("materials/vgui/ttt/pickup/icon_heavy.png")
