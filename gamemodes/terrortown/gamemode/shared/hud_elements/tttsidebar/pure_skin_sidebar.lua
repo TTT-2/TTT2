@@ -81,7 +81,13 @@ if CLIENT then
 		surface.SetDrawColor(item.hud_color.r, item.hud_color.g, item.hud_color.b, math.Round(factor * 255))
 		surface.DrawRect(pos.x, curY, size.w, size.w)
 
-		util.DrawFilteredTexturedRect(pos.x, curY, size.w, size.w, item.hud, iconAlpha, fontColor)
+
+		local hud_icon = item.hud
+		if not hud_icon.GetTexture then
+			hud_icon = hud_icon[item.active_icon]
+		end
+
+		util.DrawFilteredTexturedRect(pos.x, curY, size.w, size.w, hud_icon, iconAlpha, fontColor)
 
 		self:DrawLines(pos.x, curY, size.w, size.w, item.hud_color.a * factor)
 
@@ -149,6 +155,7 @@ if CLIENT then
 
 		-- draw status
 		for _, status in pairs(STATUS.active) do
+			PrintTable(status)
 			if status.type == 'bad' then
 				status.hud_color = Color(183, 54, 47)
 			end
