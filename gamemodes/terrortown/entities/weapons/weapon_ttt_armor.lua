@@ -28,3 +28,16 @@ function SWEP:Equip(buyer)
         self:Remove()
     end
 end
+
+-- REGISTER STATUS ICONS
+if CLIENT then
+	hook.Add("Initialize", "ttt2_base_register_armor_status", function() 
+		STATUS:RegisterStatus("ttt_weapon_armor", {
+			hud = {
+				Material("vgui/ttt/perks/hud_armor.png"),
+				Material("vgui/ttt/perks/hud_armor_reinforced.png")
+			},
+			type = "good"
+		})
+	end)
+end

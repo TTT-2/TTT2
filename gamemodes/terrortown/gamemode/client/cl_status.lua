@@ -20,10 +20,8 @@ end
 function STATUS:AddStatus(id, active_icon)
     if STATUS.registered[id] == nil then return end
 
-    print("adding status: " .. id)
-
     STATUS.active[id] = table.Copy(STATUS.registered[id])
-    STATUS.active[id].active_icon = active_icon or 1
+    self:SetActiveIcon(id, active_icon or 1)
 end
 
 function STATUS:AddTimedStatus(id, duration, showDuration, active_icon)
@@ -45,11 +43,21 @@ end
 function STATUS:SetActiveIcon(id, active_icon)
     if STATUS.active[id] == nil then return end
 
-    if active_icon < 1 or active_icon > #STATUS.registered[id].hud then
+    local max_amount = (self.registered[id].hud.GetTexture) and 1 or #STATUS.registered[id].hud
+
+    if active_icon < 1 or active_icon > max_amount then
         active_icon = 1
     end
 
     STATUS.active[id].active_icon = active_icon
+end
+
+function STATUS:Registered(id)
+    return (STATUS.registered[id] ~= nil) and true or false
+end
+
+function STATUS:Active(id)
+    return (STATUS.active[id] ~= nil) and true or false
 end
 
 function STATUS:RemoveStatus(id)

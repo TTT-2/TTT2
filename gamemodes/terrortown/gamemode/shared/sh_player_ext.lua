@@ -50,6 +50,10 @@ function plymeta:GetMaxArmor()
 	return self.armor_max or 100
 end
 
+function plymeta:ArmorIsHardened()
+	return self.armor_hardened or false
+end
+
 if SERVER then
 	util.AddNetworkString("ttt2_sync_armor")
 	util.AddNetworkString("ttt2_sync_armor_max")
@@ -59,11 +63,13 @@ if SERVER then
 
 	function plymeta:SetArmor(armor)
 		self.armor = armor
+		self.armor_hardened = (armor > 50) and true or false
 
 		print("Setting armor to: " .. tostring(self.armor))
 
 		net.Start("ttt2_sync_armor")
-		net.WriteUInt(armor, 16)
+		net.WriteUInt(self.armor, 16)
+		net.WriteBool(self.armor_hardened)
 		net.Send(self)
 	end
 	
@@ -114,10 +120,39 @@ if SERVER then
 	end)
 else
 	net.Receive("ttt2_sync_armor", function()
-		LocalPlayer().armor = net.ReadUInt(16)
+		local client = LocalPlayer()
+
+		if not client or not IsValid(client) then return end
+
+		client.armor = net.ReadUInt(16)
+		client.armor_hardened = net.ReadBool()
+
+		-- UPDATE STATUS ICONS
+		-- removed armor
+		if STATUS:Active("ttt_weapon_armor") and client.armor == 0 then
+			print("removing armor status")
+			STATUS:RemoveStatus("ttt_weapon_armor")
+		end
+
+		-- check if hardened
+		local icon_id = client.armor_hardened and 2 or 1
+
+		-- added armor
+		if not STATUS:Active("ttt_weapon_armor") and client.armor > 0 then
+			print("adding armor status")
+			STATUS:AddStatus("ttt_weapon_armor", icon_id)
+		end
+
+		-- normal armor level change
+		if STATUS:Active("ttt_weapon_armor") then
+			print("updating armor status")
+			STATUS:SetActiveIcon("ttt_weapon_armor", icon_id)
+		end
 	end)
 	net.Receive("ttt2_sync_armor_max", function()
-		LocalPlayer().armor_max = net.ReadUInt(16)
+		local client = LocalPlayer()
+
+		client.armor_max = net.ReadUInt(16)
 	end)
 end
 

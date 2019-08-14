@@ -8,8 +8,6 @@ util.AddNetworkString("ttt2_status_effect_remove")
 util.AddNetworkString("ttt2_status_effect_remove_all")
 
 function STATUS:AddStatus(ply, id, active_icon)
-    print("adding status: " .. id)
-
     net.Start("ttt2_status_effect_add")
     net.WriteString(id)
     net.WriteUInt(active_icon or 1, 8)

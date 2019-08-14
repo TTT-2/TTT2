@@ -96,7 +96,7 @@ if CLIENT then
 			if info then
 				-- right bottom corner
 				local tx = pos.x + size.w - 5
-				local ty = curY +  size.w - 2
+				local ty = curY +  size.w - 1
 				local pad = 5 * self.scale
 
 				surface.SetFont("PureSkinItemInfo")
@@ -155,7 +155,6 @@ if CLIENT then
 
 		-- draw status
 		for _, status in pairs(STATUS.active) do
-			PrintTable(status)
 			if status.type == 'bad' then
 				status.hud_color = Color(183, 54, 47)
 			end
