@@ -711,6 +711,15 @@ function plymeta:GetAvoidRole(role)
 end
 
 ---
+-- Returns whether a @{Player} has disabled the selection of the detective role
+-- @note This gives compatibility for some legacy ttt addons
+-- @return boolean
+-- @realm server
+function plymeta:GetAvoidDetective()
+	return self:GetAvoidRole(ROLE_DETECTIVE)
+end
+
+---
 -- Returns whether a @{Player} is able to select a specific @{ROLE}
 -- @param ROLE roleData
 -- @param number choice_count
