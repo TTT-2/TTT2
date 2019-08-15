@@ -715,6 +715,7 @@ end
 -- @note This gives compatibility for some legacy ttt addons
 -- @return boolean
 -- @realm server
+-- @deprecated
 function plymeta:GetAvoidDetective()
 	return self:GetAvoidRole(ROLE_DETECTIVE)
 end
