@@ -217,7 +217,7 @@ if CLIENT then
 			self:DrawBar(nx, ty, bw, bh, Color(234, 41, 41), health / client:GetMaxHealth(), self.scale, "HEALTH: " .. health_print)
 
 			-- draw armor information
-			if armor > 0 then
+			if not GetGlobalBool("ttt_armor_classic", false) and armor > 0 then
 				local icon_mat
 				if client:ArmorIsReinforced() then
 					icon_mat = icon_armor_rei

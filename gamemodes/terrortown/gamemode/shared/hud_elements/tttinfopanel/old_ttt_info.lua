@@ -64,7 +64,7 @@ if CLIENT then
 			local health_y = y + margin
 
 			local health_string = tostring(health)
-			if client:Armor() > 0 then
+			if not GetGlobalBool("ttt_armor_classic", false) and client:Armor() > 0 then
 				health_string = health_string .. " + " .. tostring(client:Armor())
 			end
 

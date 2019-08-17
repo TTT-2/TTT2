@@ -1462,6 +1462,12 @@ function HandlePlayerArmorSystem(ent, infl, att, amount, dmginfo)
 	-- some entities cause this hook to be triggered, ignore 0 damage events
 	if dmginfo:GetDamage() == 0 then return end
 
+	-- fallback for players who prefer the vanilla armor
+	if GetConVar("ttt_armor_classic"):GetBool() and ent:Armor() > 0 then
+		dmginfo:ScaleDamage(0.7)
+		return
+	end
+
 	print("-------------------------------------------------------")
 
 	-- handle different damage type factors

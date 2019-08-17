@@ -101,6 +101,12 @@ if SERVER then
 	CreateConVar('ttt_armor_damage_health_pct', 0.7, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 	CreateConVar('ttt_armor_rei_damage_block_pct', 0.2, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 	CreateConVar('ttt_armor_rei_damage_health_pct', 0.55, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+	CreateConVar('ttt_armor_on_spawn', 0, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+	CreateConVar('ttt_armor_classic', 0, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+	cvars.AddChangeCallback("ttt_armor_classic", function(cv, old, new)
+		SetGlobalBool("ttt_armor_classic", tobool(tonumber(new)))
+	end)
 
 	---
 	-- Sets the armor to a specific value
@@ -137,7 +143,7 @@ if SERVER then
 	end
 
 	hook.Add("PlayerSpawn", "ttt2_player_armor_spawn_reset", function(ply)
-		ply:SetArmor(0)
+		ply:SetArmor(GetConVar("ttt_armor_on_spawn"):GetInt())
 	end)
 else
 	net.Receive("ttt2_sync_armor", function()
@@ -155,7 +161,10 @@ else
 		end
 
 		-- check if reinforced
-		local icon_id = client:ArmorIsReinforced() and 2 or 1
+		local icon_id = 1
+		if not GetGlobalBool("ttt_armor_classic", false) then
+			icon_id = client:ArmorIsReinforced() and 2 or 1
+		end
 
 		-- added armor
 		if not STATUS:Active("ttt_weapon_armor") and client.armor > 0 then
