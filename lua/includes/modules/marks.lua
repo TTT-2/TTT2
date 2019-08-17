@@ -1,12 +1,21 @@
 ---
 -- This is the <code>marks</code> module.
--- It massively improves the performance while rendering an entity (highlighting it) with caching
+-- It massively improves the performance while rendering an entity (highlighting it) with caching (compared with the default halo library)
 -- @author Alf21
+
 module("marks", package.seeall)
 
 local baseclass = baseclass
 local list = list
 local pairs = pairs
+local render = render
+local table = table
+local IsValid = IsValid
+local cam = cam
+local surface = surface
+local hook = hook
+local pairs = pairs
+local ipairs = ipairs
 
 local marksList = {}
 local marksHookInstalled = false
@@ -16,20 +25,32 @@ if SERVER then
 else
 	---
 	-- Renders the entity based on the color
-	-- @tab ents list of <a href="https://wiki.garrysmod.com/page/Category:Entity">Entity</a>
-	-- @param col (<a href="https://wiki.garrysmod.com/page/Category:Color">Color</a>) color of rendering
-	-- @param pos (<a href="https://wiki.garrysmod.com/page/Category:Vector">Vector</a>) position of client's view the rendering starts from
-	-- @param ang (<a href="https://wiki.garrysmod.com/page/Category:Angle">Angle</a>) angle of client's view the rendering starts from
+	-- @param table ents list of @{Entity}
+	-- @param Color col color of rendering
+	-- @param Vector pos position of client's view the rendering starts from
+	-- @param Angle ang angle of client's view the rendering starts from
+	-- @realm client
 	local function Render(ents, col, pos, ang)
+		-- micro-optimization (even not a great effect because it's not used in a big loop. But it's better than nothing)
+		local render = render
+		local cam = cam
+		local surface = surface
+
 		-- check for valid data
 		local tmp = {}
 		local index = 1
-		local remTable = nil
+		local remTable = {}
+		local remSize = 0
 
-		for _, ent in ipairs(ents) do
+		local entsSize = #ents
+		local IsValid = IsValid -- micro optimization
+
+		for i = 1, entsSize do
+			local ent = ents[i]
+
 			if not IsValid(ent) then -- search for invalid data
-				remTable = remTable or {}
-				remTable[#remTable + 1] = ent
+				remSize = remSize + 1
+				remTable[remSize] = ent
 			elseif not ent:IsPlayer() or ent:Alive() and ent:IsTerror() then
 				tmp[index] = ent
 				index = index + 1
@@ -37,11 +58,15 @@ else
 		end
 
 		-- clear invalid data. Should just happen if a player disconnects or an entity is deleted
-		if remTable then
-			for _, ent in ipairs(remTable) do
-				for k, v in ipairs(ents) do
-					if v == ent then
-						table.remove(ents, k)
+		if remSize ~= 0 then
+			local tableRemove = table.remove
+
+			for i = 1, remSize do
+				for x = 1, entsSize do
+					if ents[x] == remTable[i] then
+						tableRemove(ents, x)
+
+						entsSize = entsSize - 1
 
 						break
 					end
@@ -49,7 +74,8 @@ else
 			end
 		end
 
-		if #tmp == 0 then return end
+		local size = #tmp
+		if size == 0 then return end
 
 		render.ClearStencil()
 		render.SetStencilEnable(true)
@@ -62,8 +88,8 @@ else
 		render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_ALWAYS)
 		render.SetBlend(0)
 
-		for _, ent in ipairs(tmp) do
-			ent:DrawModel()
+		for i = 1, size do
+			tmp[i]:DrawModel()
 		end
 
 		render.SetBlend(1)
@@ -74,13 +100,16 @@ else
 
 		cam.Start3D2D(pos, ang, 1)
 
-		surface.SetDrawColor(clr(col))
-		surface.DrawRect(-ScrW(), -ScrH(), ScrW() * 2, ScrH() * 2)
+		local w = ScrW()
+		local h = ScrH()
+
+		surface.SetDrawColor(col.r, col.g, col.b, col.a)
+		surface.DrawRect(-w, -h, w * 2, h * 2)
 
 		cam.End3D2D()
 
-		for _, ent in ipairs(tmp) do
-			ent:DrawModel()
+		for i = 1, size do
+			tmp[i]:DrawModel()
 		end
 
 		render.SetStencilEnable(false)
@@ -88,6 +117,7 @@ else
 
 	---
 	-- Hook that renders the entities with the highlighting
+	-- @realm client
 	local function RenderHook()
 		local client = LocalPlayer()
 		local ang = client:EyeAngles()
@@ -102,6 +132,7 @@ else
 
 	---
 	-- Hook adding
+	-- @realm client
 	local function AddMarksHook()
 		if marksHookInstalled then return end
 
@@ -110,6 +141,7 @@ else
 
 	---
 	-- Hook removing
+	-- @realm client
 	local function RemoveMarksHook()
 		hook.Remove("PostDrawOpaqueRenderables", "RenderMarks")
 
@@ -118,6 +150,7 @@ else
 
 	---
 	-- Initialization of the markers list
+	-- @realm client
 	local function SetupMarkList(col)
 		if not col then return end
 
@@ -129,7 +162,8 @@ else
 	end
 
 	---
-	-- Clearing the cached <a href="https://wiki.garrysmod.com/page/Category:Entity">Entity</a> list
+	-- Clearing the cached @{Entity} list
+	-- @realm client
 	function Clear()
 		marksList = {}
 
@@ -137,18 +171,24 @@ else
 	end
 
 	---
-	-- Removes entities from the <a href="https://wiki.garrysmod.com/page/Category:Entity">Entity</a> list
-	-- @tab ents list of entities that should get removed
+	-- Removes entities from the @{Entity} list
+	-- @param table ents list of entities that should get removed
+	-- @realm client
 	function Remove(ents)
-		if #ents == 0 or table.Count(marksList) == 0 then return end
+		local entsSize = #ents
 
-		for _, ent in ipairs(ents) do
+		if entsSize == 0 or table.Count(marksList) == 0 then return end
+
+		for i = 1, entsSize do
+			local ent = ents[i]
+
 			for _, list in pairs(marksList) do
 				local ret = nil
+				local size = #list.ents
 
-				for k, mark in ipairs(list.ents) do
-					if ent == mark then
-						table.remove(list.ents, k)
+				for x = 1, size do
+					if ent == list.ents[x] then
+						table.remove(list.ents, x)
 
 						ret = true
 
@@ -166,9 +206,10 @@ else
 	end
 
 	---
-	-- Adds entities into the <a href="https://wiki.garrysmod.com/page/Category:Entity">Entity</a> list that should be rendered with a specific <a href="https://wiki.garrysmod.com/page/Category:Color">Color</a>
-	-- @tab ents list of <a href="https://wiki.garrysmod.com/page/Category:Entity">Entity</a> that should be added
-	-- @param col (<a href="https://wiki.garrysmod.com/page/Category:Color">Color</a>) the color the added entities should get rendered
+	-- Adds entities into the @{Entity} list that should be rendered with a specific @{Color}
+	-- @param table ents list of @{Entity} that should be added
+	-- @param Color col the color the added entities should get rendered
+	-- @realm client
 	function Add(ents, col)
 		if #ents == 0 or not col then return end
 
@@ -186,11 +227,12 @@ else
 	end
 
 	---
-	-- Sets entities of the <a href="https://wiki.garrysmod.com/page/Category:Entity">Entity</a> list that based on a specific <a href="https://wiki.garrysmod.com/page/Category:Color">Color</a>.
+	-- Sets entities of the @{Entity} list that based on a specific @{Color}.
 	-- All the other previously inserted entities with the same color will get removed
-	-- @tab ents list of <a href="https://wiki.garrysmod.com/page/Category:Entity">Entity</a> that should be set
-	-- @param col (<a href="https://wiki.garrysmod.com/page/Category:Color">Color</a>) the color the added entities should get rendered
+	-- @param table ents list of @{Entity} that should be set
+	-- @param Color col the color the added entities should get rendered
 	-- @usage marks.Set({}, COLOR_WHITE) -- this will clear all entities rendered in white
+	-- @realm client
 	function Set(ents, col)
 		if not col or not istable(ents) then return end
 

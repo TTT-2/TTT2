@@ -1,9 +1,18 @@
--- Credit transfer tab for equipment menu
+---
+-- @section stop_manager
+-- @desc Credit transfer tab for equipment menu
+
 local GetTranslation = LANG.GetTranslation
 local player = player
 local ipairs = ipairs
 local IsValid = IsValid
 
+---
+-- Initializes the reroll menu
+-- @param Panel parent the shop menu
+-- @return Panel
+-- @realm client
+-- @internal
 function CreateRerollMenu(parent)
 	local client = LocalPlayer()
 
@@ -30,6 +39,7 @@ function CreateRerollMenu(parent)
 	dsubmit.DoClick = function(s)
 		RunConsoleCommand("ttt2_reroll_shop")
 		RunConsoleCommand("ttt_cl_traitorpopup")
+
 		timer.Simple(0.1, function()
 			RunConsoleCommand("ttt_cl_traitorpopup")
 		end)
@@ -42,7 +52,6 @@ function CreateRerollMenu(parent)
 	end
 
 	dform:AddItem(dsubmit)
-
 	dform:Help(LANG.GetParamTranslation("reroll_help", {amount = cost}))
 
 	return dform

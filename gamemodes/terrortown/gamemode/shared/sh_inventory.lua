@@ -1,3 +1,6 @@
+---
+-- @section Inventory
+
 local maxMeleeSlots = CreateConVar("ttt2_max_melee_slots", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of melee weapons, a player can carry (-1 = infinite)")
 local maxSecondarySlots = CreateConVar("ttt2_max_secondary_slots", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of secondary weapons, a player can carry (-1 = infinite)")
 local maxPrimarySlots = CreateConVar("ttt2_max_primary_slots", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of primary weapons, a player can carry (-1 = infinite)")
@@ -63,6 +66,11 @@ ORDERED_SLOT_TABLE = {
 	[WEAPON_CLASS] = "ttt2_max_class_slots"
 }
 
+---
+-- Returns a valid kind
+-- @param number kind
+-- @return number valid kind
+-- @realm shared
 function MakeKindValid(kind)
 	if not kind or kind > WEAPON_CLASS or kind < WEAPON_MELEE then
 		return WEAPON_EXTRA
@@ -71,66 +79,103 @@ function MakeKindValid(kind)
 	end
 end
 
---we appeareantly need to have that, because added and removed entities are sometimes broken on client side and need to get updated later
---additionally spawn can be called when a player is alive in which case he doesn't loose weapons beforehand
+---
+-- Cleans the Inventory if it's dirty
+-- @note we appeareantly need to have that, because added and removed entities are sometimes broken on client side and need to get updated later
+-- additionally spawn can be called when a player is alive in which case he doesn't loose weapons beforehand
+-- @param Player ply
+-- @realm shared
 function CleanupInventoryIfDirty(ply)
 	if not ply.inventory or ply.refresh_inventory_cache then
 		CleanupInventory(ply)
 	end
 end
 
+---
+-- Cleans the Inventory
+-- @param Player ply
+-- @realm shared
 function CleanupInventory(ply)
 	if not IsValid(ply) then return end
+
 	ply.refresh_inventory_cache = false
-	
 	ply.inventory = {}
-	for k, v in pairs(ORDERED_SLOT_TABLE) do
+
+	for k in pairs(ORDERED_SLOT_TABLE) do
 		ply.inventory[k] = {}
 	end
-	
-	--add weapons which are already in inventory
+
+	-- add weapons which are already in inventory
 	local weaponsInInventory = 0
-	for k, v in pairs( ply:GetWeapons() ) do
+	for k, v in pairs(ply:GetWeapons()) do
 		if v.Kind then
 			AddWeaponToInventory(ply, v)
+
 			weaponsInInventory = weaponsInInventory + 1
 		end
 	end
 
-	--no valid weapons found (try again)
+	-- no valid weapons found (try again)
 	if weaponsInInventory == 0 then
 		ply.refresh_inventory_cache = true
 	end
 end
 
+---
+-- Returns whether an inventory slot is free
+-- @param Player ply
+-- @param number kind
+-- @return boolean
+-- @realm shared
 function InventorySlotFree(ply, kind)
-	if not IsValid(ply) then return false end
-	
+	if not IsValid(ply) then
+		return false
+	end
+
 	CleanupInventoryIfDirty(ply)
 
 	local invSlot = MakeKindValid(kind)
-	
 	local slotCount = GetGlobalInt(ORDERED_SLOT_TABLE[invSlot])
 
 	return slotCount < 0 or #ply.inventory[invSlot] < slotCount
 end
 
-function AddWeaponToInventory(ply, wep)	
-	if not IsValid(ply) then return false end
-	
+---
+-- Adds a @{Weapon} into the Inventory
+-- @param Player ply
+-- @param Weapon wep
+-- @return boolean whether it was successful
+-- @realm shared
+function AddWeaponToInventory(ply, wep)
+	if not IsValid(ply) then
+		return false
+	end
+
 	CleanupInventoryIfDirty(ply)
 
 	local invSlot = MakeKindValid(wep.Kind)
-	
+
 	table.insert(ply.inventory[invSlot], wep)
+
+	return true
 end
 
+---
+-- Removes a @{Weapon} from the Inventory
+-- @param Player ply
+-- @param Weapon wep
+-- @return boolean whether it was successful
+-- @realm shared
 function RemoveWeaponFromInventory(ply, wep)
-	if not IsValid(ply) then return false end
+	if not IsValid(ply) then
+		return false
+	end
 
 	CleanupInventoryIfDirty(ply)
 
 	local invSlot = MakeKindValid(wep.Kind)
 
 	table.RemoveByValue(ply.inventory[invSlot], wep)
+
+	return true
 end

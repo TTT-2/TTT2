@@ -1,3 +1,4 @@
+---
 -- Some popup window stuff
 
 local GetTranslation = LANG.GetTranslation
@@ -6,8 +7,8 @@ local ipairs = ipairs
 local timer = timer
 local CreateConVar = CreateConVar
 
+---
 -- Round start
-
 local function GetTextForPlayer(ply)
 	local menukey = Key("+menu_context", "C")
 	local roleData = ply:GetSubRoleData()
@@ -48,6 +49,8 @@ local function GetTextForPlayer(ply)
 end
 
 local startshowtime = CreateConVar("ttt_startpopup_duration", "17", FCVAR_ARCHIVE)
+
+---
 -- shows info about goal and fellow traitors (if any)
 local function RoundStartPopup()
 	-- based on Derma_Message
@@ -104,6 +107,7 @@ local function RoundStartPopup()
 end
 concommand.Add("ttt_cl_startpopup", RoundStartPopup)
 
+---
 -- Idle message
 local function IdlePopup()
 	local w, h = 300, 180

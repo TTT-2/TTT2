@@ -1,4 +1,7 @@
--- we need our own weapon switcher because the hl2 one skips empty weapons
+---
+-- @class WSWITCH
+-- @desc we need our own weapon switcher because the hl2 one skips empty weapons
+
 local table = table
 local pairs = pairs
 local ipairs = ipairs
@@ -25,11 +28,14 @@ local function InsertIfValid(dest, wep)
 	end
 end
 
+---
+-- Updates the weapon cache
+-- @realm client
 function WSWITCH:UpdateWeaponCache()
 	self.WeaponCache = {}
-	
+
 	local inventory = LocalPlayer():GetInventory()
-	
+
 	for kind, convar in ipairs(ORDERED_SLOT_TABLE) do
 		for k,wep in pairs(inventory[kind]) do
 			InsertIfValid(self.WeaponCache, wep)
@@ -37,12 +43,22 @@ function WSWITCH:UpdateWeaponCache()
 	end
 end
 
+---
+-- Sets the current index of the weapon switch and updates the weapon cache
+-- @note If you just wanna select a already carried @{Weapon}, you should
+-- use @{WSWITCH:DoSelect} instead
+-- @param number idx the new index
+-- @realm client
+-- @see WSWITCH:DoSelect
 function WSWITCH:SetSelected(idx)
 	self.Selected = idx
 
 	self:UpdateWeaponCache()
 end
 
+---
+-- Increases the current index of the weapon switch
+-- @realm client
 function WSWITCH:SelectNext()
 	if self.NextSwitch > CurTime() then return end
 
@@ -58,6 +74,9 @@ function WSWITCH:SelectNext()
 	self.NextSwitch = CurTime() + delay
 end
 
+---
+-- Decreases the current index of the weapon switch
+-- @realm client
 function WSWITCH:SelectPrev()
 	if self.NextSwitch > CurTime() then return end
 
@@ -73,7 +92,13 @@ function WSWITCH:SelectPrev()
 	self.NextSwitch = CurTime() + delay
 end
 
--- Select by index
+---
+-- Set the current index of the weapon switch
+-- @note If you wanna select a new picked up @{Weapon},
+-- you should use @{WSWITCH:SetSelected} instead
+-- @param number idx the new index
+-- @realm client
+-- @see WSWITCH:SetSelected
 function WSWITCH:DoSelect(idx)
 	self:SetSelected(idx)
 
@@ -83,7 +108,10 @@ function WSWITCH:DoSelect(idx)
 	end
 end
 
--- Numeric key access to direct slots
+---
+-- Select a specific slot. Numeric key access to direct slots.
+-- @param number slot
+-- @realm client
 function WSWITCH:SelectSlot(slot)
 	if not slot then return end
 
@@ -108,7 +136,9 @@ function WSWITCH:SelectSlot(slot)
 	self.NextSwitch = CurTime() + delay
 end
 
+---
 -- Show the weapon switcher
+-- @realm client
 function WSWITCH:Enable()
 	if self.Show == false then
 		self.Show = true
@@ -135,12 +165,17 @@ function WSWITCH:Enable()
 	self.Stay = self.cv.stay:GetBool()
 end
 
--- Hide switcher
+---
+-- Hide the weapon switcher
+-- @realm client
 function WSWITCH:Disable()
 	self.Show = false
 end
 
+---
 -- Switch to the currently selected weapon
+-- @param boolean noHide
+-- @realm client
 function WSWITCH:ConfirmSelection(noHide)
 	if not noHide then
 		self:Disable()
@@ -155,11 +190,18 @@ function WSWITCH:ConfirmSelection(noHide)
 	end
 end
 
+---
 -- Allow for suppression of the attack command
+-- @realm client
 function WSWITCH:PreventAttack()
 	return self.Show and not self.cv.fast:GetBool()
 end
 
+---
+-- Updates the weapon switcher
+-- @note This is called by @{GM:Tick}
+-- @realm client
+-- @internal
 function WSWITCH:Think()
 	if not self.Show or self.Stay then return end
 
@@ -169,7 +211,10 @@ function WSWITCH:Think()
 	end
 end
 
+---
 -- Instantly select a slot and switch to it, without spending time in menu
+-- @param number slot
+-- @realm client
 function WSWITCH:SelectAndConfirm(slot)
 	if not slot then return end
 

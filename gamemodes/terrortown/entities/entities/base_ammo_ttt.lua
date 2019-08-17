@@ -1,4 +1,9 @@
--- Ammo override base
+---
+-- @class ENT
+-- @realm shared
+-- @section BaseAmmo
+-- @desc Ammo override base
+
 AddCSLuaFile()
 
 local util = util
@@ -13,11 +18,13 @@ ENT.AmmoMax = 10
 ENT.AmmoEntMax = 1
 ENT.Model = Model("models/items/boxsrounds.mdl")
 
+---
 -- bw compat
 function ENT:RealInit()
 
 end
 
+---
 -- Some subclasses want to do stuff before/after initing (eg. setting color)
 -- Using self.BaseClass gave weird problems, so stuff has been moved into a fn
 -- Subclasses can easily call this whenever they want to
@@ -51,8 +58,10 @@ function ENT:Initialize()
 	self.AmmoEntMax = self.AmmoAmount
 end
 
+---
 -- Pseudo-clone of SDK's UTIL_ItemCanBeTouchedByPlayer
 -- aims to prevent picking stuff up through fences and stuff
+-- @param Player ply
 function ENT:PlayerCanPickup(ply)
 	if ply == self:GetOwner() then
 		return false
@@ -74,6 +83,9 @@ function ENT:PlayerCanPickup(ply)
 	return tr.Fraction == 1.0
 end
 
+---
+-- @param Player ply
+-- @return boolean
 function ENT:CheckForWeapon(ply)
 	if not self.CachedWeapons then
 		-- create a cache of what weapon classes use this ammo
@@ -100,6 +112,8 @@ function ENT:CheckForWeapon(ply)
 	return false
 end
 
+---
+-- @param Entity ent
 function ENT:Touch(ent)
 	if SERVER and not self.tickRemoval and ent:IsValid() and ent:IsPlayer() and self:CheckForWeapon(ent) and self:PlayerCanPickup(ent) then
 		local ammo = ent:GetAmmoCount(self.AmmoType)
@@ -123,6 +137,8 @@ end
 
 -- Hack to force ammo to physwake
 if SERVER then
+	---
+	-- @realm server
 	function ENT:Think()
 		if not self.first_think then
 			self:PhysWake()

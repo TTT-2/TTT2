@@ -1,3 +1,6 @@
+---
+-- @module HUDManager
+
 ttt_include("vgui__cl_hudswitcher")
 
 local current_hud_cvar = CreateClientConVar("ttt2_current_hud", HUDManager.GetModelValue("defaultHUD") or "pure_skin", true, true)
@@ -30,6 +33,9 @@ net.Receive("TTT2UpdateHUDManagerRestrictedHUDsAttribute", function()
 	end
 end)
 
+---
+-- (Re)opens the HUDSwitcher
+-- @realm client
 function HUDManager.ShowHUDSwitcher()
 	local client = LocalPlayer()
 
@@ -48,6 +54,9 @@ function HUDManager.ShowHUDSwitcher()
 	client.hudswitcher:MakePopup()
 end
 
+---
+-- Hides the HUDSwitcher
+-- @realm client
 function HUDManager.HideHUDSwitcher()
 	local client = LocalPlayer()
 
@@ -64,13 +73,25 @@ function HUDManager.HideHUDSwitcher()
 	end
 end
 
+---
+-- Draws the current selected HUD
+-- @realm client
 function HUDManager.DrawHUD()
 	if not current_hud_table or not current_hud_table.Draw then return end
 
 	current_hud_table:Draw()
 end
 
--- Paints player status HUD element in the bottom left
+---
+-- Called whenever the HUD should be drawn. Called right before @{GM:HUDDrawScoreBoard} and after @{GM:HUDPaintBackground}.
+-- Not called when the Camera SWEP is equipped. See also @{GM:DrawOverlay}.<br />
+-- Paints @{Player} status HUD element in the bottom left
+-- @note Only be called when r_drawvgui is enabled and the game is not paused.
+-- @2D
+-- @hook
+-- @realm client
+-- @ref https://wiki.garrysmod.com/page/GM/HUDPaint
+-- @local
 function GM:HUDPaint()
 	local client = LocalPlayer()
 
@@ -122,6 +143,17 @@ local gmodhud = {
 	["CHudSecondaryAmmo"] = true
 }
 
+---
+-- Called when the Gamemode is about to draw a given element on the client's HUD (heads-up display).
+-- @note This hook is called HUNDREDS of times per second (more than 5 times per frame on average).
+-- You shouldn't be performing any computationally intensive operations.
+-- @param string name The name of the HUD element. You can find a full list of HUD elements for this hook
+-- <a href="https://wiki.garrysmod.com/page/HUD_Element_List">here</a>.
+-- @return boolean Return false to prevent the given element from being drawn on the client's screen.
+-- @hook
+-- @realm client
+-- @ref https://wiki.garrysmod.com/page/GM/HUDShouldDraw
+-- @local
 function GM:HUDShouldDraw(name)
 	if gmodhud[name] then
 		return false
@@ -159,6 +191,10 @@ local function UpdateHUD(name)
 	hook.Run("TTT2HUDUpdated", name)
 end
 
+---
+-- Returns the current selected @{HUD}
+-- @return string
+-- @realm client
 function HUDManager.GetHUD()
 	local hudvar = current_hud_cvar:GetString()
 
@@ -169,6 +205,11 @@ function HUDManager.GetHUD()
 	return hudvar
 end
 
+---
+-- Sets the @{HUD} (if possible)
+-- @note This will fail if the @{HUD} is not available or restricted by the server
+-- @param string name
+-- @realm client
 function HUDManager.SetHUD(name)
 	local currentHUD = HUDManager.GetHUD()
 
@@ -178,6 +219,9 @@ function HUDManager.SetHUD(name)
 	net.SendToServer()
 end
 
+---
+-- Initializes all @{HUD}s and loads the SQL stored data
+-- @realm client
 function HUDManager.LoadAllHUDS()
 	for _, hud in ipairs(huds.GetList()) do
 		hud:Initialize()
@@ -185,15 +229,18 @@ function HUDManager.LoadAllHUDS()
 	end
 end
 
+---
+-- Requests an update from the server
+-- @realm client
 function HUDManager.RequestFullStateUpdate()
 	MsgN("[TTT2][HUDManager] Requesting a full state update...")
+
 	net.Start("TTT2RequestHUDManagerFullStateUpdate")
 	net.SendToServer()
 end
+hook.Add("TTTInitPostEntity", "RequestHUDManagerStateUpdate", HUDManager.RequestFullStateUpdate)
 
 -- if forced or requested, modified by server restrictions
 net.Receive("TTT2ReceiveHUD", function()
 	UpdateHUD(net.ReadString())
 end)
-
-hook.Add("TTTInitPostEntity", "RequestHUDManagerStateUpdate", HUDManager.RequestFullStateUpdate)

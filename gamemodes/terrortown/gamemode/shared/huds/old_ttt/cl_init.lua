@@ -1,3 +1,8 @@
+---
+-- HUD base class.
+-- @module HUD
+-- @section old_ttt
+
 local surface = surface
 
 -- Fonts
@@ -14,6 +19,15 @@ HUD.Base = base
 HUD.disableHUDEditor = true
 HUD.previewImage = Material("vgui/ttt/huds/old_ttt/preview.png")
 
+---
+-- Draws the old role icon
+-- @param number x
+-- @param number y
+-- @param number w width
+-- @param number h height
+-- @param Material icon the role icon
+-- @param Color color
+-- @realm client
 function DrawOldRoleIcon(x, y, w, h, icon, color)
 	local base = Material("vgui/ttt/dynamic/base")
 	local base_overlay = Material("vgui/ttt/dynamic/base_overlay")
@@ -31,6 +45,9 @@ function DrawOldRoleIcon(x, y, w, h, icon, color)
 	surface.DrawTexturedRect(x, y, w, h)
 end
 
+---
+-- Loads this HUD and connects with special @{HUDELEMENT}
+-- @realm client
 function HUD:Initialize()
 	self:ForceElement("old_ttt_info")
 	self:ForceElement("old_ttt_punchometer")
@@ -43,10 +60,16 @@ function HUD:Initialize()
 	BaseClass.Initialize(self)
 end
 
+---
+-- this is doing nothing, to prevent the hud from saving data to the database
+-- @realm client
 function HUD:SaveData()
-	-- nothing, to prevent the hud from saving data to the database
+
 end
 
+---
+-- this is doing nothing, to prevent the hud from loading data from the database
+-- @realm client
 function HUD:LoadData()
-	-- nothing, to prevent the hud from loading data from the database
+
 end

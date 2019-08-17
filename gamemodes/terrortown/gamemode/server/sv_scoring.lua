@@ -1,4 +1,6 @@
--- Customized scoring
+---
+-- @module SCORE
+-- @desc Customized scoring
 
 local math = math
 local string = string
@@ -21,6 +23,11 @@ SCORE.Events = SCORE.Events or {}
 -- One decent way to reduce data sent turned out to be rounding the time floats.
 -- We don't actually need to know about 10000ths of seconds after all.
 
+---
+-- Adds an event to the synced event table
+-- @param table entry
+-- @param boolean t_override the time override
+-- @realm server
 function SCORE:AddEvent(entry, t_override)
 	entry["t"] = math.Round(t_override or CurTime(), 2)
 
@@ -59,6 +66,13 @@ local function CopyDmg(dmg)
 	return d
 end
 
+---
+-- Handles a kill
+-- @param Player victim
+-- @param Player|Entity attacker
+-- @param CTakeDamageInfo dmginfo
+-- @realm server
+-- @internal
 function SCORE:HandleKill(victim, attacker, dmginfo)
 	if not IsValid(victim) or not victim:IsPlayer() then return end
 
@@ -109,12 +123,19 @@ function SCORE:HandleKill(victim, attacker, dmginfo)
 	self:AddEvent(e)
 end
 
+---
+-- Adds a spawn event to the events list
+-- @param Player ply
+-- @realm server
 function SCORE:HandleSpawn(ply)
 	if ply:Team() == TEAM_TERROR then
 		self:AddEvent({id = EVENT_SPAWN, ni = ply:Nick(), sid = ply:SteamID(), sid64 = ply:SteamID64()})
 	end
 end
 
+---
+-- Handles the @{ROLE} and team selection for every @{Player}
+-- @realm server
 function SCORE:HandleSelection()
 	local tmp = {}
 	local teams = {}
@@ -142,10 +163,21 @@ function SCORE:HandleSelection()
 	self:AddEvent({id = EVENT_SELECTED, rt = tmp, tms = teams})
 end
 
+---
+-- Handles the body-found event
+-- @param Player finder
+-- @param Player found
+-- @realm server
 function SCORE:HandleBodyFound(finder, found)
 	self:AddEvent({id = EVENT_BODYFOUND, ni = finder:Nick(), sid = finder:SteamID(), sid64 = finder:SteamID64(), r = finder:GetBaseRole(), t = finder:GetTeam(), b = found:Nick()})
 end
 
+---
+-- Handles a C4-explosion
+-- @param Player planter
+-- @param number arm_time
+-- @param number exp_time
+-- @realm server
 function SCORE:HandleC4Explosion(planter, arm_time, exp_time)
 	local nick = "Someone"
 
@@ -157,6 +189,12 @@ function SCORE:HandleC4Explosion(planter, arm_time, exp_time)
 	self:AddEvent({id = EVENT_C4EXPLODE, ni = nick}, exp_time)
 end
 
+---
+-- Handles a C4-disarm event
+-- @param Player disarmer
+-- @param Player owner
+-- @param boolean success
+-- @realm server
 function SCORE:HandleC4Disarm(disarmer, owner, success)
 	if disarmer == owner or not IsValid(disarmer) then return end
 
@@ -173,10 +211,20 @@ function SCORE:HandleC4Disarm(disarmer, owner, success)
 	self:AddEvent(ev)
 end
 
+---
+-- Handles the credit-found event
+-- @param Player finder
+-- @param string found_nick
+-- @param number credits
+-- @realm server
 function SCORE:HandleCreditFound(finder, found_nick, credits)
 	self:AddEvent({id = EVENT_CREDITFOUND, ni = finder:Nick(), sid = finder:SteamID(), sid64 = finder:SteamID64(), b = found_nick, cr = credits})
 end
 
+---
+-- Calculates the points based on the stored events
+-- @param string wintype
+-- @realm server
 function SCORE:ApplyEventLogScores(wintype)
 	local scores = {}
 
@@ -214,14 +262,25 @@ function SCORE:ApplyEventLogScores(wintype)
 	end
 end
 
+---
+-- Handles the round-state-change event
+-- @param number newstate the new round state
+-- @realm server
 function SCORE:RoundStateChange(newstate)
 	self:AddEvent({id = EVENT_GAME, state = newstate})
 end
 
+---
+-- Handles the round-complete event
+-- @param string wintype
+-- @realm server
 function SCORE:RoundComplete(wintype)
 	self:AddEvent({id = EVENT_FINISH, win = wintype})
 end
 
+---
+-- Resets all stored events (the events list)
+-- @realm server
 function SCORE:Reset()
 	self.Events = {}
 end
@@ -257,6 +316,9 @@ local function EncodeForStream(events)
 	end
 end
 
+---
+-- Steams the events list to all available @{Player}s
+-- @realm server
 function SCORE:StreamToClients()
 	local s = EncodeForStream(self.Events)
 	if not s then return end -- error occurred

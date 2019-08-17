@@ -1,4 +1,5 @@
--- Define GM12 fonts for compatibility
+---
+-- The main file. Some GAMEMODE hooks and internal @{function}s
 
 local math = math
 local net = net
@@ -11,6 +12,7 @@ local surface = surface
 local CreateConVar = CreateConVar
 local hook = hook
 
+-- Define GM12 fonts for compatibility
 surface.CreateFont("DefaultBold", {font = "Tahoma", size = 13, weight = 1000})
 surface.CreateFont("TabLarge", {font = "Tahoma", size = 13, weight = 700, shadow = true, antialias = false})
 surface.CreateFont("Trebuchet22", {font = "Trebuchet MS", size = 22, weight = 900})
@@ -29,12 +31,14 @@ ttt_include("sh_inventory")
 
 ttt_include("vgui__cl_coloredbox")
 ttt_include("vgui__cl_droleimage")
+ttt_include("vgui__cl_simpleroleicon")
 ttt_include("vgui__cl_simpleicon")
 ttt_include("vgui__cl_simpleclickicon")
 ttt_include("vgui__cl_progressbar")
 ttt_include("vgui__cl_scrolllabel")
 
-ttt_include("cl_radio")
+ttt_include("cl_karma")
+ttt_include("cl_tradio")
 ttt_include("cl_transfer")
 ttt_include("cl_reroll")
 ttt_include("cl_targetid")
@@ -53,6 +57,7 @@ ttt_include("cl_popups")
 ttt_include("cl_equip")
 ttt_include("cl_shopeditor")
 ttt_include("cl_chat")
+ttt_include("cl_radio")
 ttt_include("cl_voice")
 ttt_include("cl_changes")
 ttt_include("cl_inventory")
@@ -60,6 +65,12 @@ ttt_include("cl_status")
 
 ttt_include("sh_sprint")
 
+---
+-- Called after the gamemode loads and starts.
+-- @hook
+-- @realm client
+-- @ref https://wiki.garrysmod.com/page/GM/Initialize
+-- @local
 function GM:Initialize()
 	MsgN("TTT2 Client initializing...")
 
@@ -76,6 +87,17 @@ function GM:Initialize()
 	hook.Run("PostInitialize")
 end
 
+---
+-- This hook is used to initialize @{ITEM}s, @{Weapon}s and the shops.
+-- Called after all the entities are initialized.
+-- @note At this point the client only knows about the entities that are within the spawnpoints' PVS.
+-- For instance, if the server sends an entity that is not within this
+-- <a href="https://en.wikipedia.org/wiki/Potentially_visible_set">PVS</a>,
+-- the client will receive it as NULL entity.
+-- @hook
+-- @realm server
+-- @ref https://wiki.garrysmod.com/page/GM/InitPostEntity
+-- @local
 function GM:InitPostEntity()
 	MsgN("TTT Client post-init...")
 
@@ -166,22 +188,30 @@ function GM:InitPostEntity()
 	RunConsoleCommand("_ttt_request_rolelist")
 end
 
+---
+-- Caches the @{RADAR} and @{TBHUD} @{Entity}
+-- @note Called every second by the "cache_ents" timer
+-- @hook
+-- @realm client
 function GM:DoCacheEnts()
 	RADAR:CacheEnts()
 	TBHUD:CacheEnts()
 end
 
+---
+-- Clears the @{RADAR} and @{TBHUD} @{Entity}
+-- @note Called by the @{GM:ClearClientState} hook
+-- @hook
+-- @realm client
 function GM:HUDClear()
 	RADAR:Clear()
 	TBHUD:Clear()
 end
 
-KARMA = {}
-
-function KARMA.IsEnabled()
-	return GetGlobalBool("ttt_karma", false)
-end
-
+---
+-- Returns the current round state
+-- @return boolean
+-- @realm client
 function GetRoundState()
 	return GAMEMODE.round_state
 end
@@ -329,7 +359,11 @@ local function ReceiveRoundState()
 end
 net.Receive("TTT_RoundState", ReceiveRoundState)
 
+---
 -- Cleanup at start of new round
+-- @note Called if a new round begins (round state changes to <code>ROUND_PREP</code>)
+-- @hook
+-- @realm client
 function GM:ClearClientState()
 	GAMEMODE:HUDClear()
 
@@ -370,6 +404,11 @@ function GM:ClearClientState()
 end
 net.Receive("TTT_ClearClientState", GM.ClearClientState)
 
+---
+-- Cleanup the map at start of new round
+-- @note Called if a new round begins (round state changes to <code>ROUND_PREP</code>)
+-- @hook
+-- @realm client
 function GM:CleanUpMap()
 	-- Ragdolls sometimes stay around on clients. Deleting them can create issues
 	-- so all we can do is try to hide them.
@@ -413,13 +452,41 @@ local function PlayerDeath()
 end
 net.Receive("TTT_PlayerDied", PlayerDeath)
 
+---
+-- Called to determine if the LocalPlayer should be drawn.
+-- @note If you're using this hook to draw a @{Player} for a @{GM:CalcView} hook,
+-- then you may want to consider using the drawviewer variable you can use in your
+-- <a href="https://wiki.garrysmod.com/page/Structures/CamData">CamData structure</a>
+-- table instead.
+-- @important You should visit the linked reference, there could be related issues
+-- @param Player ply The @{Player}
+-- @return[default=false] boolean True to draw the @{Player}, false to hide
+-- @hook
+-- @realm client
+-- @ref https://wiki.garrysmod.com/page/GM/ShouldDrawLocalPlayer
+-- @local
 function GM:ShouldDrawLocalPlayer(ply)
 	return false
 end
 
 local view = {origin = vector_origin, angles = angle_zero, fov = 0}
 
-function GM:CalcView(ply, origin, angles, fov)
+---
+-- Allows override of the default view.
+-- @param Player ply The local @{Player}
+-- @param Vector origin The @{Player}'s view position
+-- @param Angle angles The @{Player}'s view angles
+-- @param number fov Field of view
+-- @param number znear Distance to near clipping plane
+-- @param number zfar Distance to far clipping plane
+-- @return table View data table. See
+-- <a href="https://wiki.garrysmod.com/page/Structures/CamData">CamData structure</a>
+-- structure
+-- @hook
+-- @realm client
+-- @ref https://wiki.garrysmod.com/page/GM/CalcView
+-- @local
+function GM:CalcView(ply, origin, angles, fov, znear, zfar)
 	view.origin = origin
 	view.angles = angles
 	view.fov = fov
@@ -453,17 +520,41 @@ function GM:CalcView(ply, origin, angles, fov)
 	return view
 end
 
-function GM:AddDeathNotice()
+---
+-- Adds a death notice entry.
+-- @param string attacker The name of the attacker
+-- @param number attackerTeam The team of the attacker
+-- @param string inflictor Class name of the @{Entity} inflicting the damage
+-- @param string victim Name of the victim
+-- @param string victimTeam Team of the victim
+-- @hook
+-- @realm client
+-- @ref https://wiki.garrysmod.com/page/GM/AddDeathNotice
+-- @local
+function GM:AddDeathNotice(attacker, attackerTeam, inflictor, victim, victimTeam)
 
 end
 
-function GM:DrawDeathNotice()
+---
+-- This hook is called every frame to draw all of the current death notices.
+-- @param number x X position to draw death notices as a ratio
+-- @param number y Y position to draw death notices as a ratio
+-- @hook
+-- @realm client
+-- @ref https://wiki.garrysmod.com/page/GM/DrawDeathNotice
+-- @local
+function GM:DrawDeathNotice(x, y)
 
 end
 
 -- Simple client-based idle checking
 local idle = {ang = nil, pos = nil, mx = 0, my = 0, t = 0}
 
+---
+-- Checks whether a the local @{Player} is idle and handles everything on it's own
+-- @note This is doing every 5 seconds by the "idlecheck" timer
+-- @realm client
+-- @internal
 function CheckIdle()
 	if not GetGlobalBool("ttt_idle", false) then return end
 
@@ -521,6 +612,17 @@ function CheckIdle()
 	end
 end
 
+---
+-- Called when the entity is created.
+-- @note Some entities on initial map spawn are passed through this hook, and then removed in the same frame.
+-- This is used by the engine to precache things like models and sounds, so always check their validity with @{IsValid}.
+-- @warning Removing the created entity during this event can lead to unexpected problems.
+-- Use <code>@{timer.Simple}( 0, .... )</code> to safely remove the entity.
+-- @param Entity ent The @{Entity}
+-- @hook
+-- @realm client
+-- @ref https://wiki.garrysmod.com/page/GM/OnEntityCreated
+-- @local
 function GM:OnEntityCreated(ent)
 	-- Make ragdolls look like the player that has died
 	if ent:IsRagdoll() then

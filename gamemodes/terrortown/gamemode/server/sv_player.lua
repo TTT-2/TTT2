@@ -1,5 +1,7 @@
--- TODO rework
--- Player spawning/dying
+---
+-- @section player_manager
+-- @todo rework
+-- @desc Player spawning/dying
 
 local math = math
 local table = table
@@ -16,7 +18,17 @@ CreateConVar("ttt_dyingshot", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 CreateConVar("ttt_killer_dna_range", "550", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 CreateConVar("ttt_killer_dna_basetime", "100", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
--- First spawn on the server
+---
+-- First spawn on the server.
+-- Called when the @{Player} spawns for the first time.
+-- See @{GM:PlayerSpawn} for a hook called every @{Player} spawn.
+-- @note This hook is called before the @{Player} has fully loaded, when the @{Player} is still in seeing the "Starting Lua" screen.
+-- For example, trying to use the @{Entity:GetModel} function will return the default model ("player/default.mdl")
+-- @param Player ply The @{Player} who spawned.
+-- @hook
+-- @realm server
+-- @ref https://wiki.garrysmod.com/page/GM/PlayerInitialSpawn
+-- @local
 function GM:PlayerInitialSpawn(ply)
 	if not GAMEMODE.cvar_init then
 		GAMEMODE:InitCvars()
@@ -49,10 +61,18 @@ function GM:PlayerInitialSpawn(ply)
 	net.Send(ply)
 end
 
+---
+-- Called when a @{Player} has been validated by Steam.
+-- @param string name Player name
+-- @param string steamid Player SteamID
+-- @hook
+-- @realm server
+-- @ref https://wiki.garrysmod.com/page/GM/NetworkIDValidated
+-- @local
 function GM:NetworkIDValidated(name, steamid)
 	-- edge case where player authed after initspawn
 	for _, p in ipairs(player.GetAll()) do
-		if IsValid(p) and p:SteamID64() == steamid and p.delay_karma_recall then
+		if IsValid(p) and p:SteamID64() == steamid and p.delay_karma_recall then -- TODO IsValid(p) needed?
 			KARMA.LateRecallAndSet(p)
 
 			return
@@ -60,6 +80,13 @@ function GM:NetworkIDValidated(name, steamid)
 	end
 end
 
+---
+-- Called whenever a @{Player} spawns, including respawns.
+-- @param Player ply The @{Player} who spawned
+-- @hook
+-- @realm server
+-- @ref https://wiki.garrysmod.com/page/GM/PlayerSpawn
+-- @local
 function GM:PlayerSpawn(ply)
 	-- Some spawns may be tilted
 	ply:ResetViewRoll()
@@ -99,8 +126,18 @@ function GM:PlayerSpawn(ply)
 	SCORE:HandleSpawn(ply)
 end
 
-function GM:PlayerSetHandsModel(pl, ent)
-	local simplemodel = player_manager.TranslateToPlayerModelName(pl:GetModel())
+---
+-- Called whenever view model hands needs setting a model.
+-- By default this calls @{Player:GetHandsModel} and if that fails,
+-- sets the hands model according to his @{Player} model.
+-- @param Player ply The @{Player} whose hands needs a model set
+-- @param Entity ent The hands to set model of
+-- @hook
+-- @realm server
+-- @ref https://wiki.garrysmod.com/page/GM/PlayerSetHandsModel
+-- @local
+function GM:PlayerSetHandsModel(ply, ent)
+	local simplemodel = player_manager.TranslateToPlayerModelName(ply:GetModel())
 	local info = player_manager.TranslatePlayerHands(simplemodel)
 
 	if info then
@@ -110,6 +147,17 @@ function GM:PlayerSetHandsModel(pl, ent)
 	end
 end
 
+---
+-- Check if a @{Player} can spawn at a certain spawnpoint.
+-- @param Player ply The @{Player} who is spawned
+-- @param Entity spwn The spawnpoint entity (on the map)
+-- @param boolean force If this is true, it'll kill any players blocking the spawnpoint
+-- @param boolean rigged ?
+-- @return boolean Return true to indicate that the spawnpoint is suitable (Allow for the @{Player} to spawn here), false to prevent spawning
+-- @hook
+-- @realm server
+-- @ref https://wiki.garrysmod.com/page/GM/IsSpawnpointSuitable
+-- @local
 function GM:IsSpawnpointSuitable(ply, spwn, force, rigged)
 	if not IsValid(ply) or not ply:IsTerror() then
 		return true
@@ -154,6 +202,12 @@ local SpawnTypes = {
 	"info_player_teamspawn"
 }
 
+---
+-- Returns a list of all spawnable @{Entity}
+-- @param boolean shuffle whether the table should be shuffled
+-- @param boolean force_all used unless absolutely necessary (includes info_player_start spawns)
+-- @return table
+-- @realm server
 function GetSpawnEnts(shuffled, force_all)
 	local tbl = {}
 
@@ -164,7 +218,6 @@ function GetSpawnEnts(shuffled, force_all)
 			end
 		end
 	end
-
 
 	-- Don't use info_player_start unless absolutely necessary, because eg. TF2
 	-- uses it for observer starts that are in places where players cannot really
@@ -184,6 +237,7 @@ function GetSpawnEnts(shuffled, force_all)
 	return tbl
 end
 
+---
 -- Generate points next to and above the spawn that we can test for suitability
 local function PointsAroundSpawn(spwn)
 	if not IsValid(spwn) then return {} end
@@ -208,6 +262,14 @@ local function PointsAroundSpawn(spwn)
 	}
 end
 
+---
+-- Called to determine a spawn point for a @{Player} to spawn at.
+-- @param Player ply The @{Player} who needs a spawn point
+-- @return Entity The spawnpoint entity to spawn the @{Player} at
+-- @hook
+-- @realm server
+-- @ref https://wiki.garrysmod.com/page/GM/PlayerSelectSpawn
+-- @local
 function GM:PlayerSelectSpawn(ply)
 	if not self.SpawnPoints or #self.SpawnPoints == 0 or not IsTableOfEntitiesValid(self.SpawnPoints) then
 		self.SpawnPoints = GetSpawnEnts(true, false)
@@ -274,6 +336,16 @@ function GM:PlayerSelectSpawn(ply)
 	return picked
 end
 
+---
+-- Called whenever a @{Player} spawns and must choose a model.
+-- A good place to assign a model to a @{Player}.
+-- @note This function may not work in your custom gamemode if you have overridden
+-- your @{GM:PlayerSpawn} and you do not use self.BaseClass.PlayerSpawn or @{hook.Call}.
+-- @param Player ply The @{Player} being chosen
+-- @hook
+-- @realm server
+-- @ref https://wiki.garrysmod.com/page/GM/PlayerSetModel
+-- @local
 function GM:PlayerSetModel(ply)
 	if not IsValid(ply) then return end
 
@@ -285,6 +357,11 @@ function GM:PlayerSetModel(ply)
 	ply:SetColor(COLOR_WHITE)
 end
 
+---
+-- Called when a @{Player} spawns and updates the @{Color}
+-- @param Player ply
+-- @hook
+-- @realm server
 function GM:TTTPlayerSetColor(ply)
 	local c = COLOR_WHITE
 
@@ -298,12 +375,30 @@ function GM:TTTPlayerSetColor(ply)
 	ply:SetPlayerColor(Vector(c.r / 255.0, c.g / 255.0, c.b / 255.0))
 end
 
-
+---
+-- Determines if the @{Player} can kill themselves using the concommands "kill" or "explode".
 -- Only active players can use kill cmd
+-- @param Player ply
+-- @return boolean True if they can suicide.
+-- @hook
+-- @realm server
+-- @ref https://wiki.garrysmod.com/page/GM/CanPlayerSuicide
+-- @local
 function GM:CanPlayerSuicide(ply)
 	return ply:IsTerror()
 end
 
+---
+-- Called whenever a @{Player} attempts to either turn on or off their flashlight,
+-- returning false will deny the change.
+-- @note Also gets called when using @{Player:Flashlight}
+-- @param Player ply The @{Player} who attempts to change their flashlight state.
+-- @param boolean on The new state the @{Player} requested, true for on, false for off.
+-- @return boolean Can toggle the flashlight or not
+-- @hook
+-- @realm server
+-- @ref https://wiki.garrysmod.com/page/GM/PlayerSwitchFlashlight
+-- @local
 function GM:PlayerSwitchFlashlight(ply, on)
 	if not IsValid(ply) then
 		return false
@@ -321,16 +416,50 @@ function GM:PlayerSwitchFlashlight(ply, on)
 	return false
 end
 
+---
+-- Determines if the @{Player} can spray using the "impulse 201" console command.
+-- @note This is blocked if a @{Player} isn't a terrorist
+-- @param Player ply
+-- @return boolean Return false to allow spraying, return true to prevent spraying.
+-- @hook
+-- @realm server
+-- @ref https://wiki.garrysmod.com/page/GM/PlayerSpray
+-- @local
 function GM:PlayerSpray(ply)
 	if not IsValid(ply) or not ply:IsTerror() then
 		return true -- block
 	end
 end
 
+---
+-- Triggered when the @{Player} presses use on an object.
+-- Continuously runs until USE is released but will not activate other Entities
+-- until the USE key is released; dependent on activation type of the @{Entity}.
+-- @note This is just allowed for terrorists
+-- @param Player ply The @{Player} pressing the "use" key.
+-- @param Entity ent The entity which the @{Player} is looking at / activating USE on.
+-- @return boolean Return false if the @{Player} is not allowed to USE the entity.
+-- Do not return true if using a hook, otherwise other mods may not get a chance to block a @{Player}'s use.
+-- @hook
+-- @realm server
+-- @ref https://wiki.garrysmod.com/page/GM/PlayerUse
+-- @local
 function GM:PlayerUse(ply, ent)
 	return ply:IsTerror()
 end
 
+---
+-- Called whenever a @{Player} pressed a key included within the IN keys.
+-- For a more general purpose function that handles all kinds of input, see @{GM:PlayerButtonDown}
+-- @warning Due to this being a predicted hook, @{ParticleEffects} created only serverside
+-- from this hook will not be networked to the client, so make sure to do that on both realms
+-- @predicted
+-- @param Player ply The @{Player} pressing the key. If running client-side, this will always be @{LocalPlayer}
+-- @param number key The key that the @{Player} pressed using <a href="https://wiki.garrysmod.com/page/Enums/IN">IN_Enums</a>.
+-- @hook
+-- @realm server
+-- @ref https://wiki.garrysmod.com/page/GM/KeyPress
+-- @local
 function GM:KeyPress(ply, key)
 	if not IsValid(ply) then return end
 
@@ -410,6 +539,16 @@ function GM:KeyPress(ply, key)
 	end
 end
 
+---
+-- Runs when a IN key was released by a player.
+-- For a more general purpose @{function} that handles all kinds of input, see @{GM:PlayerButtonUp}
+-- @predicted
+-- @param Player ply The @{Player} pressing the key. If running client-side, this will always be @{LocalPlayer}
+-- @param number key The key that the @{Player} pressed using <a href="https://wiki.garrysmod.com/page/Enums/IN">IN_Enums</a>.
+-- @hook
+-- @realm server
+-- @ref https://wiki.garrysmod.com/page/GM/KeyRelease
+-- @local
 function GM:KeyRelease(ply, key)
 	if key == IN_USE and IsValid(ply) and ply:IsTerror() then
 		-- see if we need to do some custom usekey overriding
@@ -441,6 +580,7 @@ function GM:KeyRelease(ply, key)
 	end
 end
 
+---
 -- Normally all dead players are blocked from IN_USE on the server, meaning we
 -- can't let them search bodies. This sucks because searching bodies is
 -- fun. Hence on the client we override +use for specs and use this instead.
@@ -468,6 +608,13 @@ local function SpecUseKey(ply, cmd, arg)
 end
 concommand.Add("ttt_spec_use", SpecUseKey)
 
+---
+-- Called when a @{Player} leaves the server. See the <a href="https://wiki.garrysmod.com/page/Game_Events">player_disconnect gameevent</a> for a shared version of this hook.
+-- @param Player ply
+-- @hook
+-- @realm server
+-- @ref https://wiki.garrysmod.com/page/GM/PlayerDisconnected
+-- @local
 function GM:PlayerDisconnected(ply)
 	-- Prevent the disconnecter from being in the resends
 	if IsValid(ply) then
@@ -485,6 +632,7 @@ function GM:PlayerDisconnected(ply)
 	end
 end
 
+---
 -- Death affairs
 local function CreateDeathEffect(ent, marked)
 	local pos = ent:GetPos() + Vector(0, 0, 20)
@@ -530,6 +678,7 @@ local function PlayDeathSound(victim)
 	sound.Play(deathsounds[math.random(1, deathsounds_count)], victim:GetShootPos(), 90, 100)
 end
 
+---
 -- See if we should award credits now
 local function CheckCreditAward(victim, attacker)
 	if GetRoundState() ~= ROUND_ACTIVE then return end
@@ -607,6 +756,22 @@ local function CheckCreditAward(victim, attacker)
 	end
 end
 
+---
+-- Handles the @{Player}'s death.<br />
+-- This hook is not called if the @{Player} is killed by @{Player:KillSilent}.
+-- See @{GM:PlayerSilentDeath} for that.
+-- <ul>
+-- <li>@{GM:PlayerDeath} is called after this hook</li>
+-- <li>@{GM:PostPlayerDeath} is called after that</li>
+-- </ul>
+-- @note @{Player:Alive} returns true when this is called
+-- @param Player ply
+-- @param Player|Entity attacker @{Player} or @{Entity} that killed the @{Player}
+-- @param CTakeDamageInfo dmginfo
+-- @hook
+-- @realm server
+-- @ref https://wiki.garrysmod.com/page/GM/DoPlayerDeath
+-- @local
 function GM:DoPlayerDeath(ply, attacker, dmginfo)
 	if ply:IsSpec() then return end
 
@@ -713,6 +878,22 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
 	end
 end
 
+---
+-- Called when a @{Player} is killed by @{Player:Kill} or any other normal means.
+-- This hook is not called if the @{Player} is killed by @{Player:KillSilent}. See @{GM:PlayerSilentDeath} for that.
+-- <ul>
+-- <li>@{GM:DoPlayerDeath} is called before this hook.</li>
+-- <li>@{GM:PostPlayerDeath} is called after that</li>
+-- </ul>
+-- See @{Player:LastHitGroup} if you need to get the last hit hitgroup of the @{Player}.
+-- @note @{Player:Alive} will return true in this hook
+-- @param Player victom The @{Player} who died
+-- @param Entity infl @{Entity} used to kill the victim
+-- @param Player|Entity attacker @{Player} or @{Entity} that killed the victim
+-- @hook
+-- @realm server
+-- @ref https://wiki.garrysmod.com/page/GM/PlayerDeath
+-- @local
 function GM:PlayerDeath(victim, infl, attacker)
 	-- tell no one
 	self:PlayerSilentDeath(victim)
@@ -746,11 +927,27 @@ function GM:PlayerDeath(victim, infl, attacker)
 	end)
 end
 
--- kill hl2 beep
+---
+-- Returns whether or not the default death sound should be muted.
+-- @return[default=true] boolean Mute death sound
+-- @note Used here to kill the hl2 beep
+-- @hook
+-- @realm server
+-- @ref https://wiki.garrysmod.com/page/GM/PlayerDeathSound
+-- @local
 function GM:PlayerDeathSound()
 	return true
 end
 
+---
+-- Called right after @{GM:DoPlayerDeath}, @{GM:PlayerDeath} and @{GM:PlayerSilentDeath}.<br />
+-- This hook will be called for all deaths, including @{Player:KillSilent}
+-- @note The @{Player} is considered dead when this is hook is called, @{Player:Alive} will return false.
+-- @param Player ply
+-- @hook
+-- @realm server
+-- @ref https://wiki.garrysmod.com/page/GM/PostPlayerDeath
+-- @local
 function GM:PostPlayerDeath(ply)
 	if GetRoundState() == ROUND_PREP and GetConVar("ttt2_prep_respawn"):GetBool() then -- endless respawn player if he dies in preparing time
 		timer.Simple(1, function()
@@ -763,6 +960,12 @@ function GM:PostPlayerDeath(ply)
 	end
 end
 
+---
+-- Called whenever a @{Player} is a forced spectator, in each server @{GM:Tick}
+-- @param Player ply
+-- @hook
+-- @realm server
+-- @see GM:PlayerDeathThink
 function GM:SpectatorThink(ply)
 	-- when spectating a ragdoll after death
 	if ply:GetRagdollSpec() then
@@ -833,8 +1036,28 @@ function GM:SpectatorThink(ply)
 	end
 end
 
+---
+-- @function GM:PlayerDeathThink(ply)
+-- @desc Called whenever a @{Player} is a forced spectator, in each server @{GM:Tick}
+-- @param Player ply
+-- @hook
+-- @realm server
+-- @see GM:SpectatorThink
 GM.PlayerDeathThink = GM.SpectatorThink
 
+---
+-- Called when a @{Player} has been hit by a trace and damaged (such as from a bullet).
+-- Returning true overrides the damage handling and prevents @{GM:ScalePlayerDamage} from being called.
+-- @param Player ply The @{Player} that has been hit
+-- @param CTakeDamageInfo dmginfo The damage info of the bullet
+-- @param Vector dir Normalized vector direction of the bullet's path
+-- @param table trace The trace of the bullet's path, see
+-- <a href="https://wiki.garrysmod.com/page/Structures/TraceResult">TraceResult structure</a>
+-- @return boolean Override engine handling
+-- @hook
+-- @realm server
+-- @ref https://wiki.garrysmod.com/page/GM/PlayerTraceAttack
+-- @local
 function GM:PlayerTraceAttack(ply, dmginfo, dir, trace)
 	if IsValid(ply.hat) and trace.HitGroup == HITGROUP_HEAD then
 		ply.hat:Drop(dir)
@@ -845,11 +1068,32 @@ function GM:PlayerTraceAttack(ply, dmginfo, dir, trace)
 	return false
 end
 
-
+---
+-- Called when a @{Player} has been hurt by an explosion. Override to disable default sound effect.
+-- @param Player ply @{Player} who has been hurt
+-- @param CTakeDamageInfo dmginfo Damage info from explsion
+-- @hook
+-- @realm server
+-- @ref https://wiki.garrysmod.com/page/GM/OnDamagedByExplosion
+-- @local
 function GM:OnDamagedByExplosion(ply, dmginfo)
 
 end
 
+---
+-- This hook allows you to change how much damage a @{Player} receives when one takes damage to a specific body part.
+-- @note This is not called for all damage a @{Player} receives ( For example fall damage or NPC melee damage ),
+-- so you should use @{GM:EntityTakeDamage} instead if you need to detect ALL damage.
+-- @param Player ply The @{Player} taking damage
+-- @param number hitgroup The hitgroup where the @{Player} took damage. See
+-- <a href="https://wiki.garrysmod.com/page/Enums/HITGROUP">HITGROUP_Enums</a>
+-- @param CTakeDamageInfo dmginfo The damage info
+-- @return boolean Return true to prevent damage that this hook is called for, stop blood particle effects and blood decals.<br />
+-- It is possible to return true only on client ( This will work only in multiplayer ) to stop the effects but still take damage.
+-- @hook
+-- @realm server
+-- @ref https://wiki.garrysmod.com/page/GM/ScalePlayerDamage
+-- @local
 function GM:ScalePlayerDamage(ply, hitgroup, dmginfo)
 	if ply:IsPlayer() and dmginfo:GetAttacker():IsPlayer() and GetRoundState() == 2 then
 		dmginfo:ScaleDamage(0)
@@ -887,9 +1131,18 @@ function GM:ScalePlayerDamage(ply, hitgroup, dmginfo)
 	end
 end
 
--- The GetFallDamage hook does not get called until around 600 speed, which is a
+---
+-- Called when a @{Player} takes damage from falling, allows to override the damage.
+-- @note The GetFallDamage hook does not get called until around 600 speed, which is a
 -- rather high drop already. Hence we do our own fall damage handling in
 -- OnPlayerHitGround.
+-- @param Player ply
+-- @param number speed
+-- @return[default=0] number
+-- @hook
+-- @realm server
+-- @ref https://wiki.garrysmod.com/page/GM/GetFallDamage
+-- @local
 function GM:GetFallDamage(ply, speed)
 	return 0
 end
@@ -901,6 +1154,18 @@ local fallsounds = {
 }
 local fallsounds_count = #fallsounds
 
+---
+-- Called when a @{Player} makes contact with the ground.
+-- @predicted
+-- @param Player ply
+-- @param boolean in_water Did the @{Player} land in water?
+-- @param boolean on_floater Did the @{Player} land on an object floating in the water?
+-- @param number speed The speed at which the @{Player} hit the ground
+-- @return boolean Return true to suppress default action
+-- @hook
+-- @realm server
+-- @ref https://wiki.garrysmod.com/page/GM/OnPlayerHitGround
+-- @local
 function GM:OnPlayerHitGround(ply, in_water, on_floater, speed)
 	if in_water or speed < 450 or not IsValid(ply) then return end
 
@@ -970,13 +1235,27 @@ end
 
 local ttt_postdm = CreateConVar("ttt_postround_dm", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
+---
+-- Returns whether PVP is allowed
+-- @return boolean
+-- @hook
+-- @realm server
 function GM:AllowPVP()
 	local rs = GetRoundState()
 
 	return rs ~= ROUND_PREP and (rs ~= ROUND_POST or ttt_postdm:GetBool())
 end
 
--- No damage during prep, etc
+---
+-- Called when an entity takes damage. You can modify all parts of the damage info in this hook.
+-- @param Entity ent The @{Entity} taking damage
+-- @param CTakeDamageInfo dmginfo Damage info
+-- @return boolean Return true to completely block the damage event
+-- @note e.g. no damage during prep, etc
+-- @hook
+-- @realm server
+-- @ref https://wiki.garrysmod.com/page/GM/EntityTakeDamage
+-- @local
 function GM:EntityTakeDamage(ent, dmginfo)
 	if not IsValid(ent) then return end
 
@@ -1010,6 +1289,16 @@ function GM:EntityTakeDamage(ent, dmginfo)
 	end
 end
 
+---
+-- Called by @{GM:EntityTakeDamage}
+-- @param Entity ent The @{Entity} taking damage
+-- @param Entity infl the inflictor
+-- @param Player|Entity att the attacker
+-- @param number amount amount of damage
+-- @param CTakeDamageInfo dmginfo Damage info
+-- @hook
+-- @realm server
+-- @ref https://wiki.garrysmod.com/page/GM/EntityTakeDamage
 function GM:PlayerTakeDamage(ent, infl, att, amount, dmginfo)
 	-- Change damage attribution if necessary
 	if infl or att then
@@ -1216,43 +1505,108 @@ function HandlePlayerArmorSystem(ent, infl, att, amount, dmginfo)
 	dmginfo:SetDamage(new_damage)
 end
 
-function GM:OnNPCKilled()
+---
+-- Called whenever an @{NPC} is killed
+-- @param NPC npc The killed @{NPC}
+-- @param Entity|Player The NPCs attacker, the @{Entity} that gets the kill credit, for example a @{Player} or an @{NPC}.
+-- @param Entity inflictor Death inflictor. The @{Entity} that did the killing. Not necessarily a @{Weapon}.
+-- @hook
+-- @realm server
+-- @ref https://wiki.garrysmod.com/page/GM/OnNPCKilled
+-- @local
+function GM:OnNPCKilled(npc, attacker, inflictor)
 
 end
 
 -- Drowning and such
 local tm, ply, plys
 
-function GM:ShowHelp(p)
-	if IsValid(p) then
-		p:ConCommand("ttt_helpscreen")
+---
+-- Called when a @{Player} executes gm_showhelp console command. ( Default bind is F1 )
+-- @param Player ply @{Player} who executed the command
+-- @hook
+-- @realm server
+-- @ref https://wiki.garrysmod.com/page/GM/ShowHelp
+-- @local
+function GM:ShowHelp(ply)
+	if IsValid(ply) then
+		ply:ConCommand("ttt_helpscreen")
 	end
 end
 
-function GM:PlayerRequestTeam(p, teamid)
+---
+-- Request a @{Player} to join the team. This function will check if the team is available to join or not.<br />
+-- This hook is called when the @{Player} runs "changeteam" in the console.<br />
+-- To prevent the @{Player} from changing teams, see @{GM:PlayerCanJoinTeam}
+-- @param Player ply The @{Player} to try to put into a team
+-- @param number teamid Team to put the @{Player} into if the checks succeeded
+-- @hook
+-- @realm server
+-- @ref https://wiki.garrysmod.com/page/GM/PlayerRequestTeam
+-- @local
+function GM:PlayerRequestTeam(ply, teamid)
 
 end
 
--- Implementing stuff that should already be in gmod, chpt. 389
-function GM:PlayerEnteredVehicle(p, vehicle, role)
+---
+-- Called when a @{Player} enters a vehicle.<br />
+-- Called just after @{GM:CanPlayerEnterVehicle}.<br />
+-- See also @{GM:PlayerLeaveVehicle}.
+-- @note Implementing stuff that should already be in gmod, chpt. 389
+-- @param Player ply @{Player} who entered vehicle
+-- @param Vehicle vehicle Vehicle the @{Player} entered
+-- @param number role
+-- @hook
+-- @realm server
+-- @ref https://wiki.garrysmod.com/page/GM/PlayerEnteredVehicle
+-- @local
+function GM:PlayerEnteredVehicle(ply, vehicle, role)
 	if IsValid(vehicle) then
-		vehicle:SetNWEntity("ttt_driver", p)
+		vehicle:SetNWEntity("ttt_driver", ply)
 	end
 end
 
-function GM:PlayerLeaveVehicle(p, vehicle)
+---
+-- Called when a @{Player} leaves a vehicle.
+-- @note For vehicles with exit animations, this will be called at the end of the animation, not at the start!
+-- @param Player ply @{Player} who left a vehicle.
+-- @param Vehicle vehicle Vehicle the @{Player} left.
+-- @hook
+-- @realm server
+-- @ref https://wiki.garrysmod.com/page/GM/PlayerLeaveVehicle
+-- @local
+function GM:PlayerLeaveVehicle(ply, vehicle)
 	if IsValid(vehicle) then
 		-- setting nil will not do anything, so bogusify
 		vehicle:SetNWEntity("ttt_driver", vehicle)
 	end
 end
 
-function GM:AllowPlayerPickup(p, obj)
+---
+-- Called when a @{Player} tries to pick up something using the "use" key, return to override.
+-- See @{GM:GravGunPickupAllowed} for the Gravity Gun pickup variant.
+-- @param Player ply The @{Player} trying to pick up something.
+-- @param Entity ent The @{Entity} the @{Player} attempted to pick up.
+-- @return[default=false] boolean Allow the @{Player} to pick up the @{Entity} or not.
+-- @hook
+-- @realm server
+-- @ref https://wiki.garrysmod.com/page/GM/AllowPlayerPickup
+-- @local
+function GM:AllowPlayerPickup(ply, ent)
 	return false
 end
 
-function GM:PlayerShouldTaunt(p, actid)
-	-- Disable taunts, we don't have a system for them (camera freezing etc).
-	-- Mods/plugins that add such a system should override this.
+---
+-- Allows to suppress player taunts.
+-- @note Disable taunts, we don't have a system for them (camera freezing etc).<br />
+-- Mods/plugins that add such a system should override this.
+-- @param Player ply @{Player} who tried to taunt
+-- @param number act Act ID of the taunt player tries to do, see <a href="https://wiki.garrysmod.com/page/Enums/ACT">ACT_Enums</a>
+-- @return[default=false] boolean Return false to disallow player taunting
+-- @hook
+-- @realm server
+-- @ref https://wiki.garrysmod.com/page/GM/PlayerShouldTaunt
+-- @local
+function GM:PlayerShouldTaunt(ply, act)
 	return false
 end

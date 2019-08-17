@@ -1,4 +1,6 @@
--- Random stuff
+---
+-- @section Utils
+-- @desc Random stuff
 
 if not util then return end
 
@@ -10,8 +12,12 @@ local ipairs = ipairs
 local IsValid = IsValid
 local weapons = weapons
 
--- attempts to get the weapon used from a DamageInfo instance needed because the
+---
+-- Attempts to get the weapon used from a DamageInfo instance needed because the
 -- GetAmmoType value is useless and inflictor isn't properly set (yet)
+-- @param CTakeDamageInfo dmg
+-- @return Weapon
+-- @realm shared
 function util.WeaponFromDamage(dmg)
 	local inf = dmg:GetInflictor()
 	local wep
@@ -37,15 +43,20 @@ function util.WeaponFromDamage(dmg)
 	return wep
 end
 
+---
 -- Gets the table for a SWEP or a weapon-SENT (throwing knife), so not
--- equivalent to weapons.Get. Do not modify the table returned by this, consider
+-- equivalent to @{weapons.Get}. Do not modify the table returned by this, consider
 -- as read-only.
+-- @param string class of a @{Weapon}
+-- @return Weapon
+-- @realm shared
 function util.WeaponForClass(cls)
 	local wep = weapons.GetStored(cls)
 
 	if not wep then
 		wep = scripted_ents.GetStored(cls)
 		if wep then
+
 			-- don't like to rely on this, but the alternative is
 			-- scripted_ents.Get which does a full table copy, so only do
 			-- that as last resort
@@ -56,6 +67,11 @@ function util.WeaponForClass(cls)
 	return wep
 end
 
+---
+-- Returns a list of all @{Player}s filtered by a custom filter
+-- @param function filterFn the filter function
+-- @return table
+-- @realm shared
 function util.GetFilteredPlayers(filterFn)
 	local plys = player.GetAll()
 
@@ -74,12 +90,21 @@ function util.GetFilteredPlayers(filterFn)
 	return tmp
 end
 
+---
+-- Returns a list of all alive @{Player}s
+-- @return table
+-- @realm shared
 function util.GetAlivePlayers()
 	return util.GetFilteredPlayers(function(ply)
 		return ply:Alive() and ply:IsTerror()
 	end)
 end
 
+---
+-- Returns the next available @{Player} based on the given @{Player} in the global list
+-- @param Player ply
+-- @return Player
+-- @realm shared
 function util.GetNextAlivePlayer(ply)
 	local alive = util.GetAlivePlayers()
 
@@ -105,18 +130,42 @@ function util.GetNextAlivePlayer(ply)
 	return choice
 end
 
+---
 -- Uppercases the first character only
+-- @param string str
+-- @return string
+-- @realm shared
 function string.Capitalize(str)
 	return string.upper(string.sub(str, 1, 1)) .. string.sub(str, 2)
 end
 
+---
+-- @function util.Capitalize(str)
+-- @desc Uppercases the first character only
+-- @param string str
+-- @return string
+-- @realm shared
+-- @see string.Capitalize
 util.Capitalize = string.Capitalize
 
+---
 -- Color unpacking
+-- @param Color color
+-- @return number red value of the given color
+-- @return number green value of the given color
+-- @return number blue value of the given color
+-- @return number alpha value of the given color
+-- @realm shared
 function clr(color)
 	return color.r, color.g, color.b, color.a
 end
 
+---
+-- This @{function} creates a getter and a setter @{function} based on the name and the prefix "Get" and "Set"
+-- @param table tbl the @{table} that should receive the Getter and Setter @{function}
+-- @param string varname the name the tbl @{table} should have as key value
+-- @param string name the name that should be concatenated to the prefix "Get" and "Set"
+-- @realm shared
 function AccessorFuncDT(tbl, varname, name)
 	tbl["Get" .. name] = function(s)
 		return s.dt and s.dt[varname]
@@ -129,6 +178,13 @@ function AccessorFuncDT(tbl, varname, name)
 	end
 end
 
+---
+-- Paints an effect on the floor
+-- @param number start starting time
+-- @param string effname effect name
+-- @param boolean ignore
+-- @realm shared
+-- @todo improve description
 function util.PaintDown(start, effname, ignore)
 	local btr = util.TraceLine({start = start, endpos = start + Vector(0, 0, -256), filter = ignore, mask = MASK_SOLID})
 
@@ -144,7 +200,13 @@ local function DoBleed(ent)
 	util.PaintDown(ent:GetPos() + jitter, "Blood", ent)
 end
 
+---
 -- Something hurt us, start bleeding for a bit depending on the amount
+-- @param Entity ent
+-- @param CTakeDamageInfo dmg
+-- @param number t times
+-- @realm shared
+-- @todo improve description
 function util.StartBleeding(ent, dmg, t)
 	if dmg < 5 or not IsValid(ent) or ent:IsPlayer() and (not ent:Alive() or not ent:IsTerror()) then return end
 
@@ -163,6 +225,10 @@ end
 
 local zapsound = Sound("npc/assassin/ball_zap1.wav")
 
+---
+-- Creates a destruction sound on a given position
+-- @param Vector pos
+-- @realm shared
 function util.EquipmentDestroyed(pos)
 	local effect = EffectData()
 
@@ -172,7 +238,12 @@ function util.EquipmentDestroyed(pos)
 	sound.Play(zapsound, pos)
 end
 
+---
 -- Useful default behaviour for semi-modal DFrames
+-- @param Panel pnl
+-- @param KEY[https://wiki.garrysmod.com/page/Enums/BUTTON_CODE] kc key
+-- @realm shared
+-- @todo improve description
 function util.BasicKeyHandler(pnl, kc)
 	-- passthrough F5
 	if kc == KEY_F5 then
@@ -182,7 +253,12 @@ function util.BasicKeyHandler(pnl, kc)
 	end
 end
 
--- just for compatibility. All in all, a useless functions (hook.Remove already ignores not existing hooks automatically)
+---
+-- Just for compatibility. All in all, a useless functions (hook.Remove already ignores not existing hooks automatically)
+-- @param string event name of the hook event
+-- @param string name unique name of the specific event hook
+-- @realm shared
+-- @deprecated
 function util.SafeRemoveHook(event, name)
 	local h = hook.GetTable()
 	if h and h[event] and h[event][name] then
@@ -190,16 +266,31 @@ function util.SafeRemoveHook(event, name)
 	end
 end
 
+---
+-- Just a noop @{function} that is doing NOTHING
+-- @realm shared
 function util.noop()
 
 end
 
+---
+-- Just a passthrough @{function} that is doing NOTHING but returning the given value
+-- @param any x
+-- @return any the same as the given x
+-- @realm shared
+-- @see util.noop
 function util.passthrough(x)
 	return x
 end
 
--- Nice Fisher-Yates implementation, from Wikipedia
 local rand = math.random
+
+---
+-- Nice Fisher-Yates implementation, from Wikipedia
+-- Shuffles a @{table}
+-- @param table t
+-- @return table the given t, but sorted
+-- @realm shared
 function table.Shuffle(t)
 	local n = #t
 
@@ -215,7 +306,21 @@ function table.Shuffle(t)
 	return t
 end
 
--- Override with nil check
+---
+-- Checks if a table has a value.
+-- @note For optimization, functions that look for a value by sorting the table should never be needed if you work on a table that you built yourself.
+-- @note Override of the original <a href="https://wiki.garrysmod.com/page/table/HasValue">table.HasValue</a> check with nil check
+-- @warning This function is very inefficient for large tables (O(n)) and should probably not be called in things that run each frame. Instead, consider a table structure such as example 2 below.
+-- @param table tbl Table to check
+-- @param any val Value to search for
+-- @return boolean Returns true if the table has that value, false otherwise
+-- @usage local mytable = { "123", "test" }
+-- print( table.HasValue( mytable, "apple" ), table.HasValue( mytable, "test" ) )
+-- > false true
+-- @usage local mytable = { ["123"] = true, test = true }
+-- print( mytable["apple"], mytable["test"] )
+-- > nil true
+-- @realm shared
 function table.HasValue(tbl, val)
 	if not tbl then return end
 
@@ -228,7 +333,12 @@ function table.HasValue(tbl, val)
 	return false
 end
 
+---
 -- Value equality for tables
+-- @param table a
+-- @param table b
+-- @return boolean
+-- @realm shared
 function table.EqualValues(a, b)
 	if a == b then
 		return true
@@ -243,8 +353,13 @@ function table.EqualValues(a, b)
 	return true
 end
 
+---
 -- Basic table.HasValue pointer checks are insufficient when checking a table of
 -- tables, so this uses table.EqualValues instead.
+-- @param table tbl
+-- @param table needle
+-- @return boolean
+-- @realm shared
 function table.HasTable(tbl, needle)
 	if not tbl then return end
 
@@ -259,7 +374,12 @@ function table.HasTable(tbl, needle)
 	return false
 end
 
+---
 -- Returns copy of table with only specific keys copied
+-- @param table tbl
+-- @param table keys
+-- @return table
+-- @realm shared
 function table.CopyKeys(tbl, keys)
 	if not (tbl and keys) then return end
 
@@ -279,15 +399,12 @@ function table.CopyKeys(tbl, keys)
 	return out
 end
 
--- this fn is just available in the next update
-if not table.IsEmpty then
-	-- checks whether a table is empty
-	function table.IsEmpty(tbl)
-		return next(tbl) == nil
-	end
-end
-
--- this function adds missing values into a table
+---
+-- This @{function} adds missing values into a table
+-- @param table target
+-- @param table source
+-- @param boolean iterable
+-- @realm shared
 function table.AddMissing(target, source, iterable)
 	if #source == 0 then return end
 
@@ -304,15 +421,26 @@ end
 
 local gsub = string.gsub
 
+---
 -- Simple string interpolation:
 -- string.Interp("{killer} killed {victim}", {killer = "Bob", victim = "Joe"})
 -- returns "Bob killed Joe"
 -- No spaces or special chars in parameter name, just alphanumerics.
+-- @param string str
+-- @param table tbl
+-- @return string
+-- @realm shared
 function string.Interp(str, tbl)
 	return gsub(str, "{(%w+)}", tbl)
 end
 
+---
 -- Short helper for input.LookupBinding, returns capitalised key or a default
+-- @param string binding
+-- @param string default
+-- @return string
+-- @realm shared
+-- @ref https://wiki.garrysmod.com/page/input/LookupBinding
 function Key(binding, default)
 	local b = input.LookupBinding(binding)
 	if not b then
@@ -324,13 +452,23 @@ end
 
 local exp = math.exp
 
+---
 -- Equivalent to ExponentialDecay from Source's mathlib.
 -- Convenient for falloff curves.
+-- @param number halflife
+-- @param number dt
+-- @return number
+-- @realm shared
 function math.ExponentialDecay(halflife, dt)
 	-- ln(0.5) = -0.69..
 	return exp((-0.69314718 / halflife) * dt)
 end
 
+---
+-- Debugging function
+-- @param number level required level
+-- @param any ... anything that should be printed
+-- @realm shared
 function Dev(level, ...)
 	if cvars and cvars.Number("developer", 0) >= level then
 		Msg("[TTT dev]")
@@ -346,16 +484,32 @@ function Dev(level, ...)
 	end
 end
 
+---
+-- A simple check whether an @{Entity} is a valid @{Player}
+-- @param Entity ent
+-- @return boolean
+-- @realm shared
 function IsPlayer(ent)
-	return ent and ent:IsValid() and ent:IsPlayer()
+	return ent and IsValid(ent) and ent:IsPlayer()
 end
 
+---
+-- A simple check whether an @{Entity} is a valid ragdoll
+-- @param Entity ent
+-- @return boolean
+-- @realm shared
 function IsRagdoll(ent)
-	return ent and ent:IsValid() and ent:GetClass() == "prop_ragdoll"
+	return ent and IsValid(ent) and ent:GetClass() == "prop_ragdoll"
 end
 
 local band = bit.band
 
+---
+-- Sets the bit of a given value
+-- @param number|table val
+-- @param number|string bit2
+-- @return boolean
+-- @realm shared
 function util.BitSet(val, bit2)
 	if istable(val) then
 		return items.TableHasItem(val, bit2)
@@ -373,11 +527,21 @@ if CLIENT then
 		death = Color(255, 0, 0, 255)
 	}
 
-	-- Is screenpos on screen?
+	---
+	-- Checks whether a given position is on screen
+	-- @param table scrpos table with x and y attributes
+	-- @return boolean
+	-- @realm client
 	function IsOffScreen(scrpos)
 		return not scrpos.visible or scrpos.x < 0 or scrpos.y < 0 or scrpos.x > ScrW() or scrpos.y > ScrH()
 	end
 
+	---
+	-- Creates a @{string} based on the given health and maxhealth
+	-- @param number health
+	-- @param number maxhealth
+	-- @return string
+	-- @realm client
 	function util.HealthToString(health, maxhealth)
 		maxhealth = maxhealth or 100
 
@@ -402,6 +566,11 @@ if CLIENT then
 		min = Color(255, 130, 0, 255),
 	}
 
+	---
+	-- Creates a @{string} based on the given karma and the ttt_karma_max cvar
+	-- @param number karma
+	-- @return string
+	-- @realm client
 	function util.KarmaToString(karma)
 		local maxkarma = GetGlobalInt("ttt_karma_max", 1000)
 
@@ -418,30 +587,54 @@ if CLIENT then
 		end
 	end
 
-	function util.IncludeClientFile(file)
-		include(file)
-	end
-
+	---
+	-- Draws a filtered textured rectangle / image / icon
+	-- @param number x
+	-- @param number y
+	-- @param number w width
+	-- @param number h height
+	-- @param Material material
+	-- @param number alpha
+	-- @param Color rgb the alpha value will be ignored
+	-- @realm client
+	-- @author Mineotopia
 	function util.DrawFilteredTexturedRect(x, y, w, h, material, alpha, rgb)
 		alpha = alpha or 255
-		rgb = rgb or {r=255,g=255,b=255}
+		rgb = rgb or {
+			r = 255,
+			g = 255,
+			b = 255
+		}
 
 		surface.SetDrawColor(rgb.r, rgb.g, rgb.b, alpha)
 		surface.SetMaterial(material)
-		render.PushFilterMag( TEXFILTER.LINEAR )
-		render.PushFilterMin( TEXFILTER.LINEAR )
+
+		render.PushFilterMag(TEXFILTER.LINEAR)
+		render.PushFilterMin(TEXFILTER.LINEAR)
+
 		surface.DrawTexturedRect(x, y, w, h)
+
 		render.PopFilterMag()
 		render.PopFilterMin()
 	end
-else
-	function util.IncludeClientFile(file)
+end
+
+---
+-- Includes a file for a client
+-- @param string file path
+-- @realm shared
+function util.IncludeClientFile(file)
+	if CLIENT then
+		include(file)
+	else
 		AddCSLuaFile(file)
 	end
 end
 
--- Like string.FormatTime but simpler (and working), always a string, no hour
--- support
+---
+-- Like @{string.FormatTime} but simpler (and working), always a string, no hour support
+-- @param number seconds
+-- @param string fmt the <a href="https://wiki.garrysmod.com/page/string/format">format</a>
 function util.SimpleTime(seconds, fmt)
 	if not seconds then
 		seconds = 0

@@ -1,3 +1,6 @@
+---
+-- @module ShopEditor
+
 ttt_include("vgui__cl_shopeditor_buttons")
 ttt_include("vgui__cl_shopeditor_slider")
 
@@ -13,10 +16,19 @@ local pairs = pairs
 local ipairs = ipairs
 local IsValid = IsValid
 
+---
+-- Returns whether the given equipment is not an @{ITEM} (so whether it's a @{Weapon})
+-- @param ITEM|Weapon item
+-- @return boolean
+-- @realm client
 function ShopEditor.ItemIsWeapon(item)
 	return not items.IsItem(item.id)
 end
 
+---
+-- Returns a list of every available equipment
+-- @return table
+-- @realm client
 function ShopEditor.GetEquipmentForRoleAll()
 	-- need to build equipment cache?
 	if not Equipmentnew then
@@ -75,6 +87,17 @@ function ShopEditor.GetEquipmentForRoleAll()
 	return Equipmentnew
 end
 
+---
+-- Creates the item list for a @{Panel}
+-- @param Panel frame
+-- @param number w width
+-- @param number h height
+-- @param table itms @{table} of @{ITEM}s and @{Weapon}s
+-- @param function onClick
+-- @param function updateListItems
+-- @return Panel dlist
+-- @realm client
+-- @internal
 function ShopEditor.CreateItemList(frame, w, h, itms, onClick, updateListItems)
 	if not itms or not onClick and not updateListItems then return end
 
@@ -147,6 +170,11 @@ end
 
 -- ITEM EDITOR
 
+---
+-- Creates the @{ITEM} Editor @{Panel}
+-- @param ITEM|Weapon item
+-- @realm client
+-- @interal
 function ShopEditor.EditItem(item)
 	local ply = LocalPlayer()
 
@@ -154,7 +182,7 @@ function ShopEditor.EditItem(item)
 		ply.shopeditor_itemframes:Close()
 	end
 
-	local w, h = ScrW() / 4, ScrH() / 4
+	local w, h = ScrW() * 0.25, ScrH() * 0.25
 
 	local frame = vgui.Create("DFrame")
 	frame:SetSize(w, h)
@@ -248,6 +276,10 @@ net.Receive("TTT2SESaveItem", function()
 	ShopEditor.ReadItemData()
 end)
 
+---
+-- Creates the list of @{ITEM}s and @{Weapon}s
+-- @realm client
+-- @internal
 function ShopEditor.CreateItemEditor()
 	local ply = LocalPlayer()
 	local w, h = ScrW() - 100, ScrH() - 100
@@ -262,6 +294,7 @@ function ShopEditor.CreateItemEditor()
 
 		ShopEditor.CreateShopEditor()
 	end)
+
 	frame:SetSize(w, h)
 	frame:Center()
 	frame:SetTitle(LANG.GetTranslation("shop_editor_title") .. " -> " .. LANG.GetTranslation("shop_edit_items"))
@@ -300,6 +333,18 @@ function ShopEditor.CreateItemEditor()
 end
 
 -- SHOP LINKER
+
+---
+-- Creates a list of @{ROLE}s
+-- @param Panel frame
+-- @param number w width
+-- @param number h height
+-- @param table rls @{table} of @{ROLE}s
+-- @param function onClick
+-- @param ROLE defaultRoleData
+-- @return Panel dlist
+-- @realm client
+-- @internal
 function ShopEditor.CreateRolesList(frame, w, h, rls, onClick, defaultRoleData)
 	-- Construct icon listing
 	local dlist = vgui.Create("EquipSelect", frame)
@@ -352,6 +397,12 @@ function ShopEditor.CreateRolesList(frame, w, h, rls, onClick, defaultRoleData)
 	return dlist
 end
 
+---
+-- Creates the shop editor @{Panel} for a specific @{ROLE}
+-- @param ROLE roleData
+-- @param function onCreate
+-- @realm client
+-- @internal
 function ShopEditor.CreateOwnShopEditor(roleData, onCreate)
 	local ply = LocalPlayer()
 	local w, h = ScrW() - 100, ScrH() - 100
@@ -366,6 +417,7 @@ function ShopEditor.CreateOwnShopEditor(roleData, onCreate)
 
 		ShopEditor.CreateLinkWithRole(roleData)
 	end)
+
 	frame:SetSize(w, h)
 	frame:Center()
 	frame:SetTitle(LANG.GetTranslation("shop_editor_title") .. " -> " .. LANG.GetParamTranslation("shop_selected", {role = roleData.name}) .. " -> " .. LANG.GetTranslation("shop_create_shop"))
@@ -448,6 +500,11 @@ function ShopEditor.CreateOwnShopEditor(roleData, onCreate)
 	ply.shopeditor_frame = frame
 end
 
+---
+-- Creates another list of @{ROLE}s without the last selected @{ROLE}
+-- @param ROLE roleData
+-- @realm client
+-- @internal
 function ShopEditor.CreateLinkWithRole(roleData)
 	local ply = LocalPlayer()
 	local w, h = ScrW() - 100, ScrH() / 3
@@ -556,6 +613,10 @@ function ShopEditor.CreateLinkWithRole(roleData)
 	ply.shopeditor_frame = frame
 end
 
+---
+-- Creates the first instance of @{ROLE} selection for the shop linking
+-- @realm client
+-- @internal
 function ShopEditor.CreateShopLinker()
 	local ply = LocalPlayer()
 	local w, h = ScrW() - 100, ScrH() / 3
@@ -612,7 +673,7 @@ function ShopEditor.CreateShopLinker()
 	ply.shopeditor_frame = frame
 end
 
-function ShopEditor.shopFallbackAnsw(len)
+local function shopFallbackAnsw(len)
 	local subrole = net.ReadUInt(ROLE_BITS)
 	local fb = net.ReadString()
 
@@ -660,9 +721,9 @@ function ShopEditor.shopFallbackAnsw(len)
 		end
 	end
 end
-net.Receive("shopFallbackAnsw", ShopEditor.shopFallbackAnsw)
+net.Receive("shopFallbackAnsw", shopFallbackAnsw)
 
-function ShopEditor.shopFallbackReset(len)
+local function shopFallbackReset(len)
 	for _, v in ipairs(items.GetList()) do
 		v.CanBuy = {}
 	end
@@ -696,9 +757,9 @@ function ShopEditor.shopFallbackReset(len)
 		end
 	end
 end
-net.Receive("shopFallbackReset", ShopEditor.shopFallbackReset)
+net.Receive("shopFallbackReset", shopFallbackReset)
 
-function ShopEditor.shopFallbackRefresh()
+local function shopFallbackRefresh()
 	local wshop = LocalPlayer().shopeditor
 
 	if wshop and wshop.GetItems then
@@ -720,9 +781,14 @@ function ShopEditor.shopFallbackRefresh()
 		end
 	end
 end
-net.Receive("shopFallbackRefresh", ShopEditor.shopFallbackRefresh)
+net.Receive("shopFallbackRefresh", shopFallbackRefresh)
 
 -- OPTION WINDOW
+
+---
+-- Creates the option @{Panel} for the shop editor
+-- @realm client
+-- @internal
 function ShopEditor.ShowOptions()
 	local ply = LocalPlayer()
 	local w, h = ScrW() * 0.5, ScrH() * 0.5
@@ -737,6 +803,7 @@ function ShopEditor.ShowOptions()
 
 		ShopEditor.CreateShopEditor()
 	end)
+
 	frame:SetSize(w, h)
 	frame:Center()
 	frame:SetTitle(LANG.GetTranslation("shop_editor_title") .. " -> " .. LANG.GetTranslation("shop_settings"))
@@ -839,6 +906,9 @@ end
 
 -- MAIN WINDOW
 
+---
+-- Creates the main instance of the shop editor
+-- @realm client
 function ShopEditor.CreateShopEditor()
 	local ply = LocalPlayer()
 

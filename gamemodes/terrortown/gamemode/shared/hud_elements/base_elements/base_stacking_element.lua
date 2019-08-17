@@ -1,3 +1,7 @@
+---
+-- @module HUDELEMENT
+-- @section base_stacking_element
+
 local base = "dynamic_hud_element"
 
 DEFINE_BASECLASS(base)
@@ -8,6 +12,10 @@ HUDELEMENT.elements = {}
 HUDELEMENT.element_margin = 0
 HUDELEMENT.lastCount = 0
 
+---
+-- Draws the @{HUDELEMENT}
+-- @internal
+-- @realm client
 function HUDELEMENT:Draw()
     --set size beforehand if #elements was reduced to remove flickering
     if #self.elements < self.lastCount then
@@ -34,28 +42,31 @@ function HUDELEMENT:Draw()
     self:SetSize(self.size.w, - math.max(totalHeight, self.minsize.h))
 end
 
---[[----------------------------------------------------------------------------
-	Name: DrawElement(number i, number x, number y, number w, number h)
-	Desc: Override this function to determine how your element i will be drawn,
-          given a position and size
---]]-----------------------------------------------------------------------------
+---
+-- Override this function to determine how your element i will be drawn, given a position and size
+-- @param HUDELEMENT i
+-- @param number x
+-- @param number y
+-- @param number w
+-- @param number h
+-- @hook
+-- @realm client
 function HUDELEMENT:DrawElement(i, x, y, w, h)
 
 end
 
---[[----------------------------------------------------------------------------
-	Name: SetElements(table elements)
-	Desc: Pass a list of elements, which should be drawn. Each element needs
-          a height h.
---]]-----------------------------------------------------------------------------
+---
+-- Pass a list of elements, which should be drawn. Each element needs a height h.
+-- @param table elements list of @{HUDELEMENT}
+-- @realm client
 function HUDELEMENT:SetElements(elements)
     self.elements = elements
 end
 
---[[----------------------------------------------------------------------------
-	Name: SetElementMargin(number margin)
-	Desc: Sets the margin between the elements
---]]-----------------------------------------------------------------------------
+---
+-- Sets the margin between the elements
+-- @param number margin
+-- @realm client
 function HUDELEMENT:SetElementMargin(margin)
     self.element_margin = margin
 end

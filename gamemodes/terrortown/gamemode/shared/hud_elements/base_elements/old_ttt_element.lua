@@ -1,3 +1,7 @@
+---
+-- @module HUDELEMENT
+-- @section old_ttt_element
+
 local surface = surface
 local draw = draw
 local math = math
@@ -39,8 +43,16 @@ if CLIENT then
 	-- Modified RoundedBox
 	HUDELEMENT.Tex_Corner8 = surface.GetTextureID("gui/corner8")
 
-	---- The bar painting is loosely based on:
-	---- http://wiki.garrysmod.com/?title=Creating_a_HUD
+	---
+	-- Draws a rounded bar
+	-- The bar painting is loosely based on: http://wiki.garrysmod.com/?title=Creating_a_HUD
+	-- @param number bs
+	-- @param number x
+	-- @param number y
+	-- @param number w
+	-- @param number h
+	-- @param Color color
+	-- @realm client
 	function HUDELEMENT:RoundedMeter(bs, x, y, w, h, color)
 		surface.SetDrawColor(clr(color))
 
@@ -60,6 +72,14 @@ if CLIENT then
 		end
 	end
 
+	---
+	-- Paints the main bar area
+	-- @param number x
+	-- @param number y
+	-- @param number w
+	-- @param number h
+	-- @param table table of @{Color}. There need to be a .background and a .fill attribute
+	-- @realm client
 	function HUDELEMENT:PaintBar(x, y, w, h, colors, value)
 		value = value or 1
 
@@ -90,7 +110,13 @@ if CLIENT then
 	HUDELEMENT.hastewidth = 80
 	HUDELEMENT.bgheight = 30
 
+	---
 	-- Returns player's ammo information
+	-- @param Player ply
+	-- @return number ammo in the current clip
+	-- @return number maximum ammo of the current clip
+	-- @return number ammo in the inventory
+	-- @realm client
 	function HUDELEMENT:GetAmmo(ply)
 		local weap = ply:GetActiveWeapon()
 
@@ -105,6 +131,14 @@ if CLIENT then
 		return ammo_clip, ammo_max, ammo_inv
 	end
 
+	---
+	-- Draws the main background
+	-- @param number x
+	-- @param number y
+	-- @param number width
+	-- @param number height
+	-- @param Player client should be the <code>LocalPlayer()</code>
+	-- @realm client
 	function HUDELEMENT:DrawBg(x, y, width, height, client)
 		-- Traitor area sizes
 		local th = self.bgheight
@@ -130,6 +164,16 @@ if CLIENT then
 		draw.RoundedBox(8, x, y, tw, th, col)
 	end
 
+	---
+	-- Draws a shadowed text
+	-- @param string text
+	-- @param string font
+	-- @param number x
+	-- @param number y
+	-- @param Color color
+	-- @param number xalign
+	-- @param number yalign
+	-- @realm client
 	function HUDELEMENT:ShadowedText(text, font, x, y, color, xalign, yalign)
 		draw.SimpleText(text, font, x + 2, y + 2, COLOR_BLACK, xalign, yalign)
 		draw.SimpleText(text, font, x, y, color, xalign, yalign)

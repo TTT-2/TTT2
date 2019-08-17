@@ -1,9 +1,35 @@
--- Removed in GM13, still need it
+---
+-- @class PANEL
+-- @realm client
+-- @section HUDSwitcher
+
+local vgui = vgui
+
 local PANEL = {}
 
+---
+-- @function GetBorder()
+-- @return boolean
+--
+---
+-- @function SetBorder(border)
+-- @param boolean border
+---
 AccessorFunc(PANEL, "m_bBorder", "Border")
+
+---
+-- @function GetColor()
+-- @return Color
+--
+---
+-- @function SetColor(color)
+-- @param Color color
+---
 AccessorFunc(PANEL, "m_Color", "Color")
 
+---
+-- @param Panel panel
+-- @param HUDELEMENT hudEl
 local function AddHUDSettings(panel, hudEl)
 	if not IsValid(panel) or not hudEl then return end
 

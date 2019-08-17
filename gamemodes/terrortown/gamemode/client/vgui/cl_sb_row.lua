@@ -1,4 +1,23 @@
--- Scoreboard player score row, based on sandbox version
+---
+-- @realm client
+-- @section Scoreboard
+
+---
+-- @param string steamid64
+function AddTTT2AddonDev(steamid64)
+	if not steamid64 then return end
+
+	addondev_tbl[tostring(steamid64)] = true
+end
+
+---
+-- @class PANEL
+---
+
+---
+-- @section TTTScorePlayerRow
+-- @desc Scoreboard player score row, based on sandbox version
+---
 
 ttt_include("vgui__cl_sb_info")
 
@@ -49,16 +68,10 @@ local streamer_tbl = {
 	["76561198052323988"] = true
 }
 
+--TODO: move into heroes
 local heroes_tbl = {
-	["76561198047819379"] = true, -- Mineotopia
 	["76561198000950884"] = true -- Dhalucard
 }
-
-function AddTTT2AddonDev(steamid64)
-	if not steamid64 then return end
-
-	addondev_tbl[tostring(steamid64)] = true
-end
 
 local namecolor = {
 	default = COLOR_WHITE,
@@ -76,19 +89,19 @@ local iconSizes = 16
 
 local PANEL = {}
 
-local _func1 = function(ply)
+local function _func1(ply)
 	return ply:Ping()
 end
 
-local _func2 = function(ply)
+local function _func2(ply)
 	return ply:Deaths()
 end
 
-local _func3 = function(ply)
+local function _func3(ply)
 	return ply:Frags()
 end
 
-local _func4 = function(ply)
+local function _func4(ply)
 	return math.Round(ply:GetBaseKarma())
 end
 
@@ -176,6 +189,12 @@ function PANEL:Init()
 	self:SetCursor("hand")
 end
 
+---
+-- Adds a column
+-- @param string label
+-- @param function func
+-- @param number width
+-- @return Panel DLabel
 function PANEL:AddColumn(label, func, width)
 	local lbl = vgui.Create("DLabel", self)
 	lbl.GetPlayerText = func
@@ -187,6 +206,7 @@ function PANEL:AddColumn(label, func, width)
 	return lbl
 end
 
+---
 -- Mirror sb_main, of which it and this file both call using the
 --	TTTScoreboardColumns hook, but it is useless in this file
 -- Exists only so the hook wont return an error if it tries to
@@ -196,6 +216,11 @@ function PANEL:AddFakeColumn()
 
 end
 
+---
+-- Updates the color for a @{Player} in the scoreboard
+-- @param Player ply
+-- @return Color
+-- @hook
 function GM:TTTScoreboardColorForPlayer(ply)
 	if IsValid(ply) then
 		local steamid64 = ply:SteamID64()
@@ -221,6 +246,11 @@ function GM:TTTScoreboardColorForPlayer(ply)
 	return namecolor.default
 end
 
+---
+-- Updates the row color for a @{Player} in the scoreboard
+-- @param Player ply
+-- @return Color
+-- @hook
 function GM:TTTScoreboardRowColorForPlayer(ply)
 	local col = Color(0, 0, 0, 0)
 
@@ -247,6 +277,9 @@ local function ColorForPlayer(ply)
 	return namecolor.default
 end
 
+---
+-- @param number width
+-- @param number height
 function PANEL:Paint(width, height)
 	if not IsValid(self.Player) then return end
 
@@ -268,6 +301,8 @@ function PANEL:Paint(width, height)
 	return true
 end
 
+---
+-- @param Player ply
 function PANEL:SetPlayer(ply)
 	self.Player = ply
 	self.avatar:SetPlayer(ply)
@@ -302,6 +337,8 @@ function PANEL:SetPlayer(ply)
 	self:UpdatePlayerData()
 end
 
+---
+-- @return Player
 function PANEL:GetPlayer()
 	return self.Player
 end
@@ -532,10 +569,15 @@ function PANEL:PerformLayout()
 	self.voice:Dock(RIGHT)
 end
 
+---
+-- @param number x
+-- @param number y
 function PANEL:DoClick(x, y)
 	self:SetOpen(not self.open)
 end
 
+---
+-- @param boolean o
 function PANEL:SetOpen(o)
 	if self.open then
 		surface.PlaySound("ui/buttonclickrelease.wav")

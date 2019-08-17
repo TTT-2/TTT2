@@ -1,3 +1,6 @@
+---
+-- @section hud_manager
+
 util.AddNetworkString("TTT2RequestHUD")
 util.AddNetworkString("TTT2ReceiveHUD")
 util.AddNetworkString("TTT2DefaultHUDRequest")
@@ -104,6 +107,10 @@ end
 -- STORE/LOAD FUNCTIONS
 --
 
+---
+-- Stores the data into a defined SQL table
+-- @realm server
+-- @internal
 function HUDManager.StoreData()
 	MsgN("[TTT2][HUDManager] Storing data in database...")
 
@@ -122,6 +129,10 @@ function HUDManager.StoreData()
 	end
 end
 
+---
+-- Loads the data from a defined SQL table
+-- @realm server
+-- @internal
 function HUDManager.LoadData()
 	MsgN("[TTT2][HUDManager] Loading data from database...")
 

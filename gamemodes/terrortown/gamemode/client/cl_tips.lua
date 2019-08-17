@@ -1,4 +1,7 @@
--- Tips panel shown to specs
+---
+-- @module TIPS
+-- @desc Tips panel shown to specs
+
 local math = math
 local table = table
 local pairs = pairs
@@ -22,6 +25,8 @@ PANEL.Colors = {
 	press = COLOR_RED
 }
 
+---
+-- @local
 function PANEL:Paint()
 	-- parent panel will deal with the normal bg, we only need to worry about
 	-- mouse effects
@@ -63,6 +68,8 @@ local tip_params = {
 
 PANEL = {}
 
+---
+-- @local
 function PANEL:Init()
 	self.IdealWidth = 450
 	self.IdealHeight = 45
@@ -107,6 +114,16 @@ function PANEL:Init()
 	self:SetTip(self.TipIndex)
 end
 
+---
+-- @class PANEL
+-- @section TIPS
+---
+
+---
+-- Sets the current tip index
+-- @param number idx
+-- @realm client
+-- @local
 function PANEL:SetTip(idx)
 	if not idx then
 		self:SetVisible(false)
@@ -131,6 +148,12 @@ function PANEL:SetTip(idx)
 	self:InvalidateLayout(true)
 end
 
+---
+-- Increases the current tip index
+-- @param boolean auto If this switched automatically, there will be another delay
+-- than doing it manually
+-- @realm client
+-- @local
 function PANEL:NextTip(auto)
 	if not self.TipIndex then return end
 
@@ -145,6 +168,12 @@ function PANEL:NextTip(auto)
 	self.NextSwitch = CurTime() + (auto and self.AutoDelay or self.ManualDelay)
 end
 
+---
+-- Decreases the current tip index
+-- @param boolean auto If this switched automatically, there will be another delay
+-- than doing it manually
+-- @realm client
+-- @local
 function PANEL:PrevTip(auto)
 	if not self.TipIndex then return end
 
@@ -159,6 +188,8 @@ function PANEL:PrevTip(auto)
 	self.NextSwitch = CurTime() + (auto and self.AutoDelay or self.ManualDelay)
 end
 
+---
+-- @local
 function PANEL:PerformLayout()
 	local m = 8
 	local off_bottom = 10
@@ -211,6 +242,8 @@ function PANEL:PerformLayout()
 	self.bwrap:SetPos(width - self.bwrap:GetWide() - m, height - self.bwrap:GetTall() - m)
 end
 
+---
+-- @local
 function PANEL:ApplySchemeSettings()
 	for _, but in pairs(self.buttons) do
 		but:SetTextColor(COLOR_WHITE)
@@ -224,6 +257,8 @@ function PANEL:ApplySchemeSettings()
 	self.tiptext:SetWrap(true)
 end
 
+---
+-- @local
 function PANEL:Paint(w, h)
 	self.paintColor = self.BgColor
 
@@ -239,6 +274,8 @@ function PANEL:Paint(w, h)
 	draw.RoundedBox(8, 0, 0, w, h, self.BgColor)
 end
 
+---
+-- @local
 function PANEL:Think()
 	if self.NextSwitch < CurTime() then
 		self:NextTip(true)
@@ -247,10 +284,18 @@ end
 
 vgui.Register("TTTTips", PANEL, "Panel")
 
+---
+-- @module TIPS
+-- @section
+---
+
 -- Creation
 
 local tips_panel
 
+---
+-- Creates the @{TIPS} menu
+-- @realm client
 function TIPS.Create()
 	if IsValid(tips_panel) then
 		tips_panel:Remove()
@@ -264,6 +309,9 @@ function TIPS.Create()
 	timer.Simple(0.1, TIPS.Next)
 end
 
+---
+-- Displays the @{TIPS} menu
+-- @realm client
 function TIPS.Show()
 	if not GetConVar("ttt_tips_enable"):GetBool() then return end
 
@@ -274,6 +322,9 @@ function TIPS.Show()
 	tips_panel:SetVisible(true)
 end
 
+---
+-- Hides the @{TIPS} menu
+-- @realm client
 function TIPS.Hide()
 	if tips_panel then
 		tips_panel:SetVisible(false)
@@ -290,12 +341,18 @@ function TIPS.Hide()
 end
 concommand.Add("ttt_tips_hide", TIPS.Hide)
 
+---
+-- Switches to the next tip
+-- @realm client
 function TIPS.Next()
 	if tips_panel then
 		tips_panel:NextTip()
 	end
 end
 
+---
+-- Switches to the previous tip
+-- @realm client
 function TIPS.Prev()
 	if tips_panel then
 		tips_panel:PrevTip()

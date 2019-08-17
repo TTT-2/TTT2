@@ -2,6 +2,7 @@
 -- This is the <code>roles</code> module.
 -- @author Alf21
 -- @author saibotk
+
 module("roles", package.seeall)
 
 local baseclass = baseclass
@@ -19,9 +20,10 @@ local RoleList = RoleList or {}
 
 ---
 -- Copies any missing data from base table to the target table
--- @tab t target table
--- @tab base base (fallback) table
--- @treturn table t target table
+-- @param table t target table
+-- @param table base base (fallback) table
+-- @return table t target table
+-- @realm shared
 local function TableInherit(t, base)
 	for k, v in pairs(base) do
 		if t[k] == nil then
@@ -36,9 +38,10 @@ end
 
 ---
 -- Checks if name is based on base
--- @tab name table to check
--- @tab base base (fallback) table
--- @treturn boolean returns whether name is based on base
+-- @param table name table to check
+-- @param table base base (fallback) table
+-- @return boolean returns whether name is based on base
+-- @realm shared
 function IsBasedOn(name, base)
 	local t = GetStored(name)
 
@@ -59,8 +62,9 @@ end
 
 ---
 -- Automatically generates global vars based on the role data
--- @tab roleData role table
+-- @param table roleData role table
 -- @todo global vars list
+-- @realm shared
 local function SetupGlobals(roleData)
 	print("[TTT2][ROLE] Setting up '" .. roleData.name .. "' role...")
 	local upStr = string.upper(roleData.name)
@@ -83,8 +87,9 @@ end
 
 ---
 -- Automatically generates ConVars based on the role data
--- @tab roleData role table
+-- @param table roleData role table
 -- @todo ConVar list
+-- @realm shared
 local function SetupData(roleData)
 	print("[TTT2][ROLE] Adding '" .. roleData.name .. "' role...")
 
@@ -138,8 +143,9 @@ end
 ---
 -- Used to register your role with the engine.<br />
 -- <b>This is done automatically for all the files in the <code>lua/terrortown/entities/roles</code> folder</b>
--- @tab t role table
--- @str name role name
+-- @param table t role table
+-- @param string name role name
+-- @realm shared
 function Register(t, name)
 	name = string.lower(name)
 
@@ -197,9 +203,10 @@ end
 
 ---
 -- Get a role by name (a copy)
--- @str name role name
--- @tparam[opt] ?table retTbl this table will be modified and returned. If nil, a new table will be created.
--- @treturn table returns the modified retTbl or the new role table
+-- @param string name role name
+-- @param[opt] ?table retTbl this table will be modified and returned. If nil, a new table will be created.
+-- @return table returns the modified retTbl or the new role table
+-- @realm shared
 function Get(name, retTbl)
 	local Stored = GetStored(name)
 	if not Stored then return end
@@ -236,15 +243,17 @@ end
 
 ---
 -- Gets the real role table (not a copy)
--- @str name role name
--- @treturn table returns the real role table
+-- @param string name role name
+-- @return table returns the real role table
+-- @realm shared
 function GetStored(name)
 	return RoleList[name]
 end
 
 ---
--- Get a list of all the registered roles
--- @treturn table all registered roles
+-- Returns a list of all the registered roles
+-- @return table all registered roles
+-- @realm shared
 function GetList()
 	local result = {}
 
@@ -267,15 +276,17 @@ end
 -- <li><code>3</code> = <code>ROLE_ANY</code></li>
 -- <li><code>4</code>, <code>5</code>, <code>6</code> = <code>nop</code></li>
 -- </ul>
--- @treturn number new generated subrole id
+-- @return number new generated subrole id
+-- @realm shared
 function GenerateNewRoleID()
 	return 4 + #GetList()
 end
 
 ---
 -- Get the role table by the role id
--- @int index subrole id
--- @treturn table returns the role table. This will return the <code>INNOCENT</code> role table as fallback.
+-- @param number index subrole id
+-- @return table returns the role table. This will return the <code>INNOCENT</code> role table as fallback.
+-- @realm shared
 function GetByIndex(index)
 	for _, v in pairs(RoleList) do
 		if v.name ~= BASE_ROLE_CLASS and v.index == index then
@@ -288,16 +299,18 @@ end
 
 ---
 -- Get the role table by the role name
--- @str name role name
--- @treturn table returns the role table. This will return the <code>INNOCENT</code> role table as fallback.
+-- @param string name role name
+-- @return table returns the role table. This will return the <code>INNOCENT</code> role table as fallback.
+-- @realm shared
 function GetByName(name)
 	return GetStored(name) or INNOCENT
 end
 
 ---
 -- Get the role table by the role abbreviation
--- @str abbr role abbreviation
--- @treturn table returns the role table. This will return the <code>INNOCENT</code> role table as fallback.
+-- @param string abbr role abbreviation
+-- @return table returns the role table. This will return the <code>INNOCENT</code> role table as fallback.
+-- @realm shared
 function GetByAbbr(abbr)
 	for _, v in pairs(RoleList) do
 		if v.name ~= BASE_ROLE_CLASS and v.abbr == abbr then
@@ -310,9 +323,10 @@ end
 
 ---
 -- Automatically initializes a new role team. This will generate the global var <code>TEAM_[NAME]</code>
--- @str name role team name
--- @tab data role team data
+-- @param string name role team name
+-- @param table data role team data
 -- @todo data table structure
+-- @realm shared
 function InitCustomTeam(name, data) -- creates global var "TEAM_[name]" and other required things
 	local teamname = string.Trim(string.lower(name)) .. "s"
 
@@ -323,7 +337,8 @@ end
 
 ---
 -- Sorts a role table
--- @tab tbl table to sort
+-- @param table tbl table to sort
+-- @realm shared
 function SortTable(tbl)
 	local _func = function(a, b)
 		return a.index < b.index
@@ -334,7 +349,8 @@ end
 
 ---
 -- Get a sorted list of roles that have access to a shop
--- @treturn table list of roles that have access to a shop
+-- @return table list of roles that have access to a shop
+-- @realm shared
 function GetShopRoles()
 	local shopRoles = {}
 
@@ -357,8 +373,9 @@ end
 
 ---
 -- Get the default role table of a specific role team
--- @str team role team name
--- @treturn table returns the role table. This will return the <code>INNOCENT</code> role table as fallback.
+-- @param string team role team name
+-- @return table returns the role table. This will return the <code>INNOCENT</code> role table as fallback.
+-- @realm shared
 function GetDefaultTeamRole(team)
 	if team == TEAM_NONE then return end
 
@@ -373,8 +390,9 @@ end
 
 ---
 -- Get the default role tables of a specific role team
--- @str team role team name
--- @treturn table returns the role tables. This will return the <code>INNOCENT</code> role table as well as its subrole tables as fallback.
+-- @param string team role team name
+-- @return table returns the role tables. This will return the <code>INNOCENT</code> role table as well as its subrole tables as fallback.
+-- @realm shared
 function GetDefaultTeamRoles(team)
 	if team == TEAM_NONE then return end
 
@@ -383,8 +401,9 @@ end
 
 ---
 -- Get a list of team members
--- @str team role team name
--- @treturn table returns the member table of a role team.
+-- @param string team role team name
+-- @return table returns the member table of a role team.
+-- @realm shared
 function GetTeamMembers(team)
 	if team == TEAM_NONE or TEAMS[team].alone then return end
 
@@ -401,7 +420,8 @@ end
 
 ---
 -- Get a list of all teams that are able to win
--- @treturn table returns a list of all teams that are able to win
+-- @return table returns a list of all teams that are able to win
+-- @realm shared
 function GetWinTeams()
 	local winTeams = {}
 
@@ -416,7 +436,8 @@ end
 
 ---
 -- Get a list of all available teams
--- @treturn table returns a list of all available teams
+-- @return table returns a list of all available teams
+-- @realm shared
 function GetAvailableTeams()
 	local availableTeams = {}
 
@@ -431,7 +452,8 @@ end
 
 ---
 -- Get a sorted list of all roles
--- @treturn table returns a list of all roles
+-- @return table returns a list of all roles
+-- @realm shared
 function GetSortedRoles()
 	local rls = {}
 

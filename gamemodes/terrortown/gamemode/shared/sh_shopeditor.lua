@@ -1,3 +1,7 @@
+---
+-- @module ShopEditor
+-- @author Alf21
+
 ShopEditor = ShopEditor or {}
 ShopEditor.savingKeys = {
 	credits = {typ = "number", bits = 8, default = 1}, -- from 0 to 255 (2^8 - 1)
@@ -13,6 +17,10 @@ local net = net
 local pairs = pairs
 local ipairs = ipairs
 
+---
+-- Initializes the default data for an @{ITEM} or @{Weapon}
+-- @param ITEM|Weapon item
+-- @realm shared
 function ShopEditor.InitDefaultData(item)
 	if not item then return end
 
@@ -29,6 +37,13 @@ function ShopEditor.InitDefaultData(item)
 	end
 end
 
+---
+-- Writes the @{ITEM} or @{Weapon} data to the network
+-- @param string messageName
+-- @param string name
+-- @param ITEM|Weapon item
+-- @param table|Player plys
+-- @realm shared
 function ShopEditor.WriteItemData(messageName, name, item, plys)
 	name = GetEquipmentFileName(name)
 
@@ -70,6 +85,11 @@ function ShopEditor.WriteItemData(messageName, name, item, plys)
 	end
 end
 
+---
+-- Reads the @{ITEM} or @{Weapon} data from the network
+-- @return string name of the equipment
+-- @return ITEM|Weapon equipment table
+-- @realm shared
 function ShopEditor.ReadItemData()
 	local equip, name = GetEquipmentByName(net.ReadString())
 

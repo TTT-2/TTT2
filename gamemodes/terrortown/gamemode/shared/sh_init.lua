@@ -1,3 +1,4 @@
+---
 -- This file contains all shared vars, tables and functions
 
 GM.Name = "TTT2 (Advanced Update)"
@@ -114,100 +115,240 @@ SHOP_UNSET = "UNSET"
 -- TODO combine DefaultEquipment[x] and GetRoles()[x] !
 
 -- just compatibality functions
+
+---
+-- Returns a list of all the registered roles
+-- @return table all registered roles
+-- @see roles.GetList
+-- @realm shared
+-- @deprecated
 function GetRoles()
 	return roles.GetList()
 end
 
+---
+-- Sorts a
+-- @return table
+-- @see roles.GetList
+-- @realm shared
+-- @deprecated
 function SortRolesTable(tbl)
 	roles.SortTable(tbl)
 end
 
+---
+-- Get the role table by the role id
+-- @param number index subrole id
+-- @return table returns the role table. This will return the <code>INNOCENT</code> role table as fallback.
+-- @see roles.GetByIndex
+-- @realm shared
+-- @deprecated
 function GetRoleByIndex(index)
 	return roles.GetByIndex(index)
 end
 
+---
+-- Get the role table by the role name
+-- @param string name role name
+-- @return table returns the role table. This will return the <code>INNOCENT</code> role table as fallback.
+-- @see roles.GetByName
+-- @realm shared
+-- @deprecated
 function GetRoleByName(name)
 	return roles.GetByName(name)
 end
 
+---
+-- Get the role table by the role abbreviation
+-- @param string abbr role abbreviation
+-- @return table returns the role table. This will return the <code>INNOCENT</code> role table as fallback.
+-- @see roles.GetByAbbr
+-- @realm shared
+-- @deprecated
 function GetRoleByAbbr(abbr)
 	return roles.GetByAbbr(abbr)
 end
 
+---
+-- Returns the starting credits of a @{ROLE} based on ConVar settings or default traitor settings
+-- @param string abbr abbreviation of a @{ROLE}
+-- @return[default=0] number
+-- @realm shared
+-- @see ROLE:GetStartingCredits
+-- @deprecated
 function GetStartingCredits(abbr)
 	local roleData = roles.GetByAbbr(abbr)
 
 	return roleData:GetStartingCredits()
 end
 
+---
+-- Returns whether a @{ROLE} is able to access the shop based on ConVar settings
+-- @param number subrole subrole id of a @{ROLE}
+-- @return[default=false] boolean
+-- @realm shared
+-- @see ROLE:IsShoppingRole
+-- @deprecated
 function IsShoppingRole(subrole)
 	local roleData = roles.GetByIndex(subrole)
 
 	return roleData:IsShoppingRole()
 end
 
+---
+-- Get a sorted list of roles that have access to a shop
+-- @return table list of roles that have access to a shop
+-- @realm shared
+-- @see roles.GetShopRoles
+-- @deprecated
 function GetShopRoles()
 	return roles.GetShopRoles()
 end
 
+---
+-- Returns whether a @{ROLE} is a BaseRole
+-- @param ROLE roleData
+-- @return boolean
+-- @realm shared
+-- @see ROLE:IsBaseRole
+-- @deprecated
 function IsBaseRole(roleData)
 	return roleData:IsBaseRole()
 end
 
+---
+-- Returns the baserole of a specific @{ROLE}
+-- @param number subrole subrole id of a @{ROLE}
+-- @return number subrole id of the BaseRole (@{ROLE})
+-- @realm shared
+-- @see ROLE:GetBaseRole
+-- @deprecated
 function GetBaseRole(subrole)
-	return roles.GetByIndex(subrole).baserole or subrole
+	return roles.GetByIndex(subrole):GetBaseRole()
 end
 
 if SERVER then
+
+	---
+	-- Checks whether a role is able to get selected (and maybe assigned to a @{Player}) if the round starts
+	-- @param boolean avoidHook should the @{hook.TTT2RoleNotSelectable} hook be ignored?
+	-- @return boolean
+	-- @realm server
+	-- @see ROLE:IsSelectable
+	-- @deprecated
 	function IsRoleSelectable(roleData, avoidHook)
 		return roleData:IsSelectable(avoidHook)
 	end
 end
 
--- includes baserole as well
+---
+-- Returns a list of subroles of this BaseRole (this subrole's BaseRole)
+-- @param number subrole subrole id of a @{ROLE}
+-- @return table list of @{ROLE}
+-- @realm shared
+-- @see ROLE:GetSubRoles
+-- @deprecated
 function GetSubRoles(subrole)
 	local roleData = roles.GetByIndex(subrole)
 
 	return roleData:GetSubRoles()
 end
 
+---
+-- Get the default role table of a specific role team
+-- @param string team role team name
+-- @return table returns the role table. This will return the <code>INNOCENT</code> role table as fallback.
+-- @realm shared
+-- @see roles.GetDefaultTeamRole
+-- @deprecated
 function GetDefaultTeamRole(team)
 	return roles.GetDefaultTeamRole(team)
 end
 
+---
+-- Get the default role tables of a specific role team
+-- @param string team role team name
+-- @return table returns the role tables. This will return the <code>INNOCENT</code> role table as well as its subrole tables as fallback.
+-- @realm shared
+-- @see roles.GetDefaultTeamRoles
+-- @deprecated
 function GetDefaultTeamRoles(team)
 	return roles.GetDefaultTeamRoles(team)
 end
 
+---
+-- Get a list of team members
+-- @param string team role team name
+-- @return table returns the member table of a role team.
+-- @realm shared
+-- @see roles.GetTeamMembers
+-- @deprecated
 function GetTeamMembers(team)
 	return roles.GetTeamMembers(team)
 end
 
+---
+-- Get a list of all teams that are able to win
+-- @return table returns a list of all teams that are able to win
+-- @realm shared
+-- @see roles.GetWinTeams
+-- @deprecated
 function GetWinTeams()
 	return roles.GetWinTeams()
 end
 
+---
+-- Get a list of all available teams
+-- @return table returns a list of all available teams
+-- @realm shared
+-- @see roles.GetAvailableTeams
+-- @deprecated
 function GetAvailableTeams()
 	return roles.GetAvailableTeams()
 end
 
+---
+-- Get a sorted list of all roles
+-- @return table returns a list of all roles
+-- @realm shared
+-- @see roles.GetSortedRoles
+-- @deprecated
 function GetSortedRoles()
 	return roles.GetSortedRoles()
 end
 
+---
+-- Returns a table of all active @{ROLE}
+-- @return table
+-- @realm shared
 function GetActiveRoles()
 	return ACTIVEROLES
 end
 
+---
+-- Returns the amount of assignments of a specific @{ROLE}
+-- @param ROLE rd
+-- @return number
+-- @realm shared
 function GetActiveRolesCount(rd)
 	return ACTIVEROLES[rd] or 0
 end
 
+---
+-- Sets the amount of assignments of a specific @{ROLE}
+-- @param ROLE rd
+-- @param number count
+-- @realm shared
 function SetActiveRolesCount(rd, count)
 	ACTIVEROLES[rd] = count == 0 and nil or count
 end
 
--- default TTT fn
+---
+-- Returns a list of all available traitors
+-- @note default TTT fn
+-- @return table list of @{Player}
+-- @realm shared
+-- @deprecated
 function GetTraitors()
 	local trs = {}
 
@@ -220,11 +361,19 @@ function GetTraitors()
 	return trs
 end
 
--- default TTT fn
+---
+-- Returns the amount of traitors in this round
+-- @note default TTT fn
+-- @return number
+-- @realm shared
+-- @deprecated
 function CountTraitors()
 	return #GetTraitors()
 end
 
+---
+-- Randomizes a @{table}
+-- @realm shared
 function table.Randomize(t)
 	local out = {}
 
@@ -239,6 +388,12 @@ end
 if CLIENT then
 	local SafeTranslate
 
+	---
+	-- Returns an equipment's translation based on the user's language
+	-- @param string name
+	-- @param string printName
+	-- @return string the translated text
+	-- @realm client
 	function GetEquipmentTranslation(name, printName)
 		SafeTranslate = SafeTranslate or LANG.TryTranslation
 
@@ -256,6 +411,10 @@ if CLIENT then
 		return str
 	end
 
+	---
+	-- Sorts an equipment table
+	-- @param table tbl the equipment table
+	-- @realm client
 	function SortEquipmentTable(tbl)
 		if not tbl or #tbl < 2 then return end
 
@@ -357,20 +516,39 @@ ttt_include("sh_item_module")
 -- load non-wrapped modules directly
 require("marks")
 
+---
+-- Returns the equipment's file name
+-- @param string name
+-- @return string
+-- @realm shared
 function GetEquipmentFileName(name)
 	return string.gsub(string.lower(name), "[%W%s]", "_") -- clean string
 end
 
+---
+-- Returns the equipment based on the given name
+-- @param string name
+-- @return ITEM|Weapon item OR weapon
+-- @return string name
+-- @realm shared
 function GetEquipmentByName(name)
 	name = GetEquipmentFileName(name)
 
 	return not items.IsItem(name) and weapons.GetStored(name) or items.GetStored(name), name
 end
 
+---
+-- Returns whether the detective mode is enabled
+-- @return boolean
+-- @realm shared
 function DetectiveMode()
 	return GetGlobalBool("ttt_detective", false)
 end
 
+---
+-- Returns whether the haste mode is enabled
+-- @return boolean
+-- @realm shared
 function HasteMode()
 	return GetGlobalBool("ttt_haste", false)
 end
@@ -389,6 +567,10 @@ local ttt_playermodels = {
 
 local ttt_playermodels_count = #ttt_playermodels
 
+---
+-- Returns a random player model
+-- @return Model model
+-- @realm shared
 function GetRandomPlayerModel()
 	if not ttt2_custom_models:GetBool() then
 		return ttt_playermodels[math.random(1, ttt_playermodels_count)]
@@ -397,9 +579,13 @@ function GetRandomPlayerModel()
 	end
 end
 
--- Weapons and items that come with TTT. Weapons that are not in this list will
+---
+-- Returns the default equipment
+-- @note Weapons and items that come with TTT. Weapons that are not in this list will
 -- get a little marker on their icon if they're buyable, showing they are custom
 -- and unique to the server.
+-- @return table list of default equipment
+-- @realm shared
 function GetDefaultEquipment()
 	local defaultEquipment = {}
 
@@ -429,6 +615,14 @@ hook.Add("TTTPrepareRound", "TTT2SharedPrepareRound", function()
 	math.random(); math.random(); math.random() -- warming up
 end)
 
+---
+-- Checks whether an equipment is buyable
+-- @param table tbl equipment table
+-- @param string team @{ROLE}'s team
+-- @return boolean
+-- @return string text as an icon
+-- @return string result or error
+-- @realm shared
 function EquipmentIsBuyable(tbl, team)
 	if not tbl then
 		return false, "X", "error"

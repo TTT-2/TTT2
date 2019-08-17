@@ -1,4 +1,6 @@
--- Voicechat popup
+---
+-- @module VOICE
+-- @desc Voicechat popup
 
 DEFINE_BASECLASS("gamemode_base")
 
@@ -44,6 +46,13 @@ end
 
 local PlayerVoicePanels = {}
 
+---
+-- Called when a @{Player} starts using voice chat.
+-- @param Player ply @{Player} who started using voice chat
+-- @hook
+-- @realm client
+-- @ref https://wiki.garrysmod.com/page/GM/PlayerStartVoice
+-- @local
 function GM:PlayerStartVoice(ply)
 	if not IsValid(ply) then return end
 
@@ -181,6 +190,13 @@ local function VoiceClean()
 end
 timer.Create("VoiceClean", 10, 0, VoiceClean)
 
+---
+-- Called when @{Player} stops using voice chat.
+-- @param Player ply @{Player} who stopped talking
+-- @param boolean no_reset whether the stored voice state shouldn't reset
+-- @hook
+-- @realm client
+-- @ref https://wiki.garrysmod.com/page/GM/PlayerEndVoice
 function GM:PlayerEndVoice(ply, no_reset)
 	if IsValid(PlayerVoicePanels[ply]) then
 		PlayerVoicePanels[ply]:Remove()
@@ -235,6 +251,11 @@ end
 
 local mute_state = MUTE_NONE
 
+---
+-- Switches the mute state to the next in the list or to the given one
+-- @param number force_state
+-- @return number the new mute_state
+-- @realm client
 function VOICE.CycleMuteState(force_state)
 	mute_state = force_state or next(MuteText, mute_state)
 
@@ -250,6 +271,9 @@ end
 VOICE.battery_max = 100
 VOICE.battery_min = 10
 
+---
+-- Initializes the voice battery
+-- @realm client
 function VOICE.InitBattery()
 	LocalPlayer().voice_battery = VOICE.battery_max
 end
@@ -290,6 +314,11 @@ local function IsRoleChatting(ply)
 	and not ply[tm .. "_gvoice"]
 end
 
+---
+-- Updates the voice battery
+-- @note Called every @{GM:Tick}
+-- @realm client
+-- @internal
 function VOICE.Tick()
 	if not GetGlobalBool("ttt_voice_drain", false) then return end
 
@@ -308,15 +337,27 @@ function VOICE.Tick()
 	end
 end
 
--- Player:IsSpeaking() does not work for localplayer
+---
+-- Returns whether the local @{Player} is speaking
+-- @note @{Player:IsSpeaking} does not work for local @{Player}
+-- @return boolean
+-- @realm client
 function VOICE.IsSpeaking()
 	return LocalPlayer().speaking
 end
 
+---
+-- Sets whether the local @{Player} is speaking
+-- @param boolean state
+-- @realm client
 function VOICE.SetSpeaking(state)
 	LocalPlayer().speaking = state
 end
 
+---
+-- Returns whether the local @{Player} is able to speak
+-- @return boolean
+-- @realm client
 function VOICE.CanSpeak()
 	if not GetGlobalBool("ttt_voice_drain", false) then
 		return true
@@ -329,6 +370,12 @@ end
 
 local speaker = surface.GetTextureID("voice/icntlk_sv")
 
+---
+-- Draws a popup displaying the speaking @{Player}s
+-- @param Player client This should be the local @{Player}
+-- @return boolean
+-- @realm client
+-- @internal
 function VOICE.Draw(client)
 	local b = client.voice_battery
 

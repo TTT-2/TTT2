@@ -1,10 +1,32 @@
-local PANEL = {}
+---
+-- @class PANEL
+-- @realm client
+-- @section DNumSliderWang
 
 local math = math
 local table = table
 local vgui = vgui
 
+local PANEL = {}
+
+---
+-- @function GetDefaultValue()
+-- @return number
+--
+---
+-- @function SetDefaultValue(i)
+-- @param number i
+---
 AccessorFunc(PANEL, "m_fDefaultValue", "DefaultValue")
+
+---
+-- @function GetAutoFocus()
+-- @return boolean
+--
+---
+-- @function SetAutoFocus(bool)
+-- @param boolean bool
+---
 AccessorFunc(PANEL, "m_autoFocus", "AutoFocus")
 
 function PANEL:Init()
@@ -87,6 +109,9 @@ function PANEL:Init()
 	self.Wang = self.Scratch
 end
 
+---
+-- @param number min
+-- @param number max
 function PANEL:SetMinMax(min, max)
 	self.Scratch:SetMin(tonumber(min))
 	self.Scratch:SetMax(tonumber(max))
@@ -101,10 +126,14 @@ function PANEL:SetDark(b)
 	self.Label:SetDark(b)
 end
 
+---
+-- @return number
 function PANEL:GetMin()
 	return self.Scratch:GetMin()
 end
 
+---
+-- @return number
 function PANEL:GetMax()
 	return self.Scratch:GetMax()
 end
@@ -119,6 +148,8 @@ function PANEL:ResetToDefaultValue()
 	self:SetValue(self:GetDefaultValue())
 end
 
+---
+-- @param number min
 function PANEL:SetMin(min)
 	if not min then
 		min = 0
@@ -130,6 +161,8 @@ function PANEL:SetMin(min)
 	self:UpdateNotches()
 end
 
+---
+-- @param number max
 function PANEL:SetMax(max)
 	if not max then
 		max = 0
@@ -152,6 +185,8 @@ function PANEL:SetValue(val)
 	self:ValueChanged(self:GetValue()) -- In most cases this will cause double execution of OnValueChanged
 end
 
+---
+-- @return number float value
 function PANEL:GetValue()
 	return self.Scratch:GetFloatValue()
 end
@@ -164,17 +199,20 @@ function PANEL:SetDecimals(d)
 	self:ValueChanged(self:GetValue()) -- Update the text
 end
 
+---
+-- @return number decimal value
 function PANEL:GetDecimals()
 	return self.Scratch:GetDecimals()
 end
 
---
--- Are we currently changing the value?
---
+---
+-- @return boolean Are we currently changing the value?
 function PANEL:IsEditing()
 	return self.Scratch:IsEditing() or self.TextArea:IsEditing() or self.Slider:IsEditing()
 end
 
+---
+-- @return boolean Are we currently hover the value?
 function PANEL:IsHovered()
 	return self.Scratch:IsHovered() or self.TextArea:IsHovered() or self.Slider:IsHovered() or vgui.GetHoveredPanel() == self
 end
@@ -183,19 +221,30 @@ function PANEL:PerformLayout()
 	self.Label:SetWide(self:GetWide() / 2.4)
 end
 
+---
+-- @param string cvar the convar
+-- @ref https://wiki.garrysmod.com/page/Panel/SetConVar
 function PANEL:SetConVar(cvar)
 	self.Scratch:SetConVar(cvar)
 	self.TextArea:SetConVar(cvar)
 end
 
+---
+-- @param string text
+-- @see PANEL:SetText
 function PANEL:SetText(text)
 	self.Label:SetText(text)
 end
 
+---
+-- @return string
+-- @see PANEL:SetText
 function PANEL:GetText()
 	return self.Label:GetText()
 end
 
+---
+-- @param any val
 function PANEL:ValueChanged(val)
 	val = math.Clamp(tonumber(val) or 0, self:GetMin(), self:GetMax())
 
@@ -208,16 +257,25 @@ function PANEL:ValueChanged(val)
 	self:OnValueChanged(val)
 end
 
+---
+-- @param any val
 function PANEL:OnValueChanged(val)
 	-- For override
 end
 
+---
+-- @param number x
+-- @param number y
+-- @return number fraction A value between 0 and 1
+-- @return number the given y
 function PANEL:TranslateSliderValues(x, y)
 	self:SetValue(self.Scratch:GetMin() + x * self.Scratch:GetRange())
 
 	return self.Scratch:GetFraction(), y
 end
 
+---
+-- @return Panel
 function PANEL:GetTextArea()
 	return self.TextArea
 end
@@ -227,10 +285,10 @@ function PANEL:UpdateNotches()
 
 	self.Slider:SetNotches(nil)
 
-	if range < self:GetWide() / 4 then
-		return self.Slider:SetNotches(range)
+	if range < self:GetWide() * 0.25 then
+		self.Slider:SetNotches(range)
 	else
-		self.Slider:SetNotches(self:GetWide() / 4)
+		self.Slider:SetNotches(self:GetWide() * 0.25)
 	end
 end
 

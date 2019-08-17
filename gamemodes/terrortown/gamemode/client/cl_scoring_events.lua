@@ -1,6 +1,7 @@
--- Event display information for Event Log in the Round Report
-
--- Usage:
+---
+-- @section scoring_manager
+-- @desc Event display information for Event Log in the Round Report
+-- @usage
 -- Declare a *unique* event identifier in a shared file, eg.
 -- EVENT_PANTS = 800
 --
@@ -16,8 +17,7 @@
 --		return myiconmaterial, "MyTooltip"
 --	end
 -- })
-
--- Note that custom events don't have to be in this file, just any file that is
+-- @note Note that custom events don't have to be in this file, just any file that is
 -- loaded on the client.
 
 -- Translation helpers + Shorter name, using it lots
@@ -40,88 +40,89 @@ local wrench_icon = Material("icon16/wrench.png")
 
 -- Round end event
 Event(EVENT_FINISH, {
-		text = function(e)
-			if e.win == WIN_TIMELIMIT then
-				return T("ev_win_time")
-			elseif e.win ~= WIN_NONE then
-				return T("ev_win_" .. e.win)
-			end
-		end,
-
-		icon = function(e)
-			if e.win == WIN_TIMELIMIT then
-				return star_icon, "Timelimit"
-			elseif e.win ~= WIN_NONE then
-				return star_icon, e.win .. " won"
-			end
+	text = function(e)
+		if e.win == WIN_TIMELIMIT then
+			return T("ev_win_time")
+		elseif e.win ~= WIN_NONE then
+			return T("ev_win_" .. e.win)
 		end
+	end,
+
+	icon = function(e)
+		if e.win == WIN_TIMELIMIT then
+			return star_icon, "Timelimit"
+		elseif e.win ~= WIN_NONE then
+			return star_icon, e.win .. " won"
+		end
+	end
 })
 
 -- Round start event
 Event(EVENT_GAME, {
-		text = function(e)
-			if e.state == ROUND_ACTIVE then
-				return T("ev_start")
-			end
-		end,
-
-		icon = function(e)
-			return app_icon, "Game"
+	text = function(e)
+		if e.state == ROUND_ACTIVE then
+			return T("ev_start")
 		end
+	end,
+
+	icon = function(e)
+		return app_icon, "Game"
+	end
 })
 
 -- Credits event
 Event(EVENT_CREDITFOUND, {
-		text = function(e)
-			return PT("ev_credit", {finder = e.ni, num = e.cr, player = e.b})
-		end,
+	text = function(e)
+		return PT("ev_credit", {finder = e.ni, num = e.cr, player = e.b})
+	end,
 
-		icon = function(e)
-			return credit_icon, "Credit found"
-		end
+	icon = function(e)
+		return credit_icon, "Credit found"
+	end
 })
 
 Event(EVENT_BODYFOUND, {
-		text = function(e)
-			return PT("ev_body", {finder = e.ni, victim = e.b})
-		end,
+	text = function(e)
+		return PT("ev_body", {finder = e.ni, victim = e.b})
+	end,
 
-		icon = function(e)
-			return magnifier_icon, "Body discovered"
-		end
+	icon = function(e)
+		return magnifier_icon, "Body discovered"
+	end
 })
 
 -- C4 fun
 Event(EVENT_C4DISARM, {
-		text = function(e)
-			return PT(e.s and "ev_c4_disarm1" or "ev_c4_disarm2", {player = e.ni, owner = e.own or "aliens"})
-		end,
+	text = function(e)
+		return PT(e.s and "ev_c4_disarm1" or "ev_c4_disarm2", {player = e.ni, owner = e.own or "aliens"})
+	end,
 
-		icon = function(e)
-			return wrench_icon, "C4 disarm"
-		end
+	icon = function(e)
+		return wrench_icon, "C4 disarm"
+	end
 })
 
 Event(EVENT_C4EXPLODE, {
-		text = function(e)
-			return PT("ev_c4_boom", {player = e.ni})
-		end,
+	text = function(e)
+		return PT("ev_c4_boom", {player = e.ni})
+	end,
 
-		icon = function(e)
-			return bomb_icon, "C4 exploded"
-		end
+	icon = function(e)
+		return bomb_icon, "C4 exploded"
+	end
 })
 
 Event(EVENT_C4PLANT, {
-		text = function(e)
-			return PT("ev_c4_plant", {player = e.ni})
-		end,
+	text = function(e)
+		return PT("ev_c4_plant", {player = e.ni})
+	end,
 
-		icon = function(e)
-			return bomb_icon, "C4 planted"
-		end
+	icon = function(e)
+		return bomb_icon, "C4 planted"
+	end
 })
 
+---
 -- Helper fn for kill events
 local function GetWeaponName(gun)
 	local wname
@@ -140,6 +141,7 @@ local function GetWeaponName(gun)
 	return wname
 end
 
+---
 -- Generating the text for a kill event requires a lot of logic for special
 -- cases, resulting in a long function, so defining it separately here.
 local function KillText(e)
@@ -238,19 +240,19 @@ local function KillText(e)
 end
 
 Event(EVENT_KILL, {
-		text = KillText,
-		icon = function(e)
-			if e.att.sid64 == e.vic.sid64 or e.att.sid64 == -1 then
-				return smile_icon, "Suicide"
-			end
-
-			local at = e.att.t
-			local vt = e.vic.t
-
-			if at ~= TEAM_NONE and at == vt and not TEAMS[at].alone then
-				return wrong_icon, "Teamkill"
-			else
-				return (at == TEAM_TRAITOR) and right_icon or shield_icon, T(at) .. " killed " .. T(vt)
-			end
+	text = KillText,
+	icon = function(e)
+		if e.att.sid64 == e.vic.sid64 or e.att.sid64 == -1 then
+			return smile_icon, "Suicide"
 		end
+
+		local at = e.att.t
+		local vt = e.vic.t
+
+		if at ~= TEAM_NONE and at == vt and not TEAMS[at].alone then
+			return wrong_icon, "Teamkill"
+		else
+			return (at == TEAM_TRAITOR) and right_icon or shield_icon, T(at) .. " killed " .. T(vt)
+		end
+	end
 })

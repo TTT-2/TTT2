@@ -1,3 +1,8 @@
+---
+-- HUD base class.
+-- @module HUD
+-- @section pure_skin
+
 local surface = surface
 
 -- Fonts
@@ -21,6 +26,9 @@ HUD.Base = base
 
 HUD.previewImage = Material("vgui/ttt/huds/pure_skin/preview.png")
 
+---
+-- Loads this HUD and connects with special @{HUDELEMENT}
+-- @realm client
 function HUD:Initialize()
 	self:ForceElement("pure_skin_playerinfo")
 	self:ForceElement("pure_skin_roundinfo")

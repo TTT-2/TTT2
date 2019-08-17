@@ -1,3 +1,7 @@
+---
+-- @module HUDELEMENT
+-- @section pure_skin_element
+
 local base = "dynamic_hud_element"
 
 DEFINE_BASECLASS(base)
@@ -5,17 +9,43 @@ DEFINE_BASECLASS(base)
 HUDELEMENT.Base = base
 
 if CLIENT then
+	---
+	-- Draws the main background
+	-- @param number x
+	-- @param number y
+	-- @param number w width
+	-- @param number h height
+	-- @param Color c color
+	-- @realm client
 	function HUDELEMENT:DrawBg(x, y, w, h, c)
 		DrawHUDElementBg(x, y, w, h, c)
 	end
 
+	---
+	-- Draws the shadow effect
+	-- @param number x
+	-- @param number y
+	-- @param number w width
+	-- @param number h height
+	-- @param number a alpha of line's color
+	-- @realm client
 	function HUDELEMENT:DrawLines(x, y, w, h, a)
 		a = a or 255
 
 		DrawHUDElementLines(x, y, w, h, a)
 	end
 
-	-- x, y, width, height, color, progress, scale, text, color2, progress2
+	---
+	-- Draws the main background
+	-- @param number x
+	-- @param number y
+	-- @param number w width
+	-- @param number h height
+	-- @param Color c color
+	-- @param number p progress
+	-- @param number s scale
+	-- @param string t text
+	-- @realm client
 	function HUDELEMENT:DrawBar(x, y, w, h, c, p, s, t)
 		s = s or 1
 
@@ -36,6 +66,10 @@ if CLIENT then
 		end
 	end
 
+	---
+	-- Returns @{Color} white OR black based on the bgcolor
+	-- @param Color bgcolor background color
+	-- @realm client
 	function HUDELEMENT:GetDefaultFontColor(bgcolor)
 		local color = 0
 		if bgcolor.r + bgcolor.g + bgcolor.b < 500 then
