@@ -1141,20 +1141,73 @@ function GM:PlayerTakeDamage(ent, infl, att, amount, dmginfo)
 	-- start painting blood decals
 	util.StartBleeding(ent, dmginfo:GetDamage(), 5)
 
-	-- general actions for pvp damage
+	-- handle damage scaling by karma
 	if ent ~= att and IsValid(att) and att:IsPlayer() and GetRoundState() == ROUND_ACTIVE and math.floor(dmginfo:GetDamage()) > 0 then
-
 		-- scale everything to karma damage factor except the knife, because it
 		-- assumes a kill
 		if not dmginfo:IsDamageType(DMG_SLASH) then
 			dmginfo:ScaleDamage(att:GetDamageFactor())
 		end
+	end
+
+	-- before the karma is calculated, but after all other damage hooks / damage change is processed,
+	-- the armor system should come into place (GM functions are called last)
+	HandlePlayerArmorSystem(ent, infl, att, amount, dmginfo)
+
+	-- handle karma change / log etc
+	if ent ~= att and IsValid(att) and att:IsPlayer() and GetRoundState() == ROUND_ACTIVE and math.floor(dmginfo:GetDamage()) > 0 then
 
 		-- process the effects of the damage on karma
 		KARMA.Hurt(att, ent, dmginfo)
 
 		DamageLog(Format("DMG: \t %s [%s] damaged %s [%s] for %d dmg", att:Nick(), att:GetRoleString(), ent:Nick(), ent:GetRoleString(), math.Round(dmginfo:GetDamage())))
 	end
+end
+
+function HandlePlayerArmorSystem(ent, infl, att, amount, dmginfo)
+	-- armor does not help when the head receives damage
+	--if ent:LastHitGroup() == HITGROUP_HEAD then return end
+	-- DISABLED for now since the hook gets called twice, once with 0 damage, but with a hitgroup and once
+	-- with damage but no hitgroup. I have to dig deeper into this
+
+	-- some entities cause this hook to be triggered, ignore 0 damage events
+	if dmginfo:GetDamage() == 0 then return end
+
+	print("-------------------------------------------------------")
+
+	-- handle different damage type factors
+	local armor_factor, body_factor
+	if dmginfo:IsDamageType(DMG_BULLET) or dmginfo:IsDamageType(DMG_CLUB) then -- bullet or crowbar damage
+		armor_factor = 1.0
+		body_factor = 1.0
+		print("damage type    : bullet or crowbar")
+	elseif dmginfo:IsDamageType(DMG_BURN) or dmginfo:IsDamageType(DMG_BLAST) then -- fire or explosion damage
+		armor_factor = 1.5
+		body_factor = 0.75
+		print("damage type    : fire or explosion")
+	else
+		return
+	end
+
+	-- calculate damage
+	local damage = dmginfo:GetDamage()
+	local armor = ent:Armor()
+	
+	print("current HP     : " .. tostring(ent:Health()))
+	print("current Armor  : " .. tostring(armor))
+	print("damage to take : " .. tostring(damage))
+
+	-- normal damage handling when no armor is available
+	if armor == 0 then return end
+
+	armor = armor - GetConVar("ttt_armor_damage_block_pct"):GetFloat() * armor_factor * damage
+	print("armor internal : " .. tostring(armor))
+	ent:SetArmor(math.max(armor, 0))
+	print("new armor      : " .. tostring(ent:Armor()))
+	
+	local new_damage = GetConVar("ttt_armor_damage_health_pct"):GetFloat() * damage * body_factor - math.min(armor, 0)
+	print("calced dmg     : " .. tostring(new_damage))
+	dmginfo:SetDamage(new_damage)
 end
 
 function GM:OnNPCKilled()

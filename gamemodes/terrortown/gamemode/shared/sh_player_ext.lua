@@ -41,7 +41,6 @@ function plymeta:GetRole()
 end
 
 -- ARMOR SYSTEM
-
 function plymeta:Armor()
 	return self.armor or 0
 end
@@ -85,36 +84,6 @@ if SERVER then
 		self:SetArmor(self:Armor() + increaseby)
 	end
 
-	-- split damage between armor and health
-	hook.Add("EntityTakeDamage", "ttt2_player_armor_damage_handling", function(ply, dmg)
-		if not ply or not IsValid(ply) or not ply:IsPlayer() then return end
-
-		-- only affects bullet damage
-		if not dmg:IsBulletDamage() then return end
-
-		-- calculate damage
-		local damage = dmg:GetDamage()
-		local armor = ply:Armor()
-
-		if damage == 0 then return end
-		
-		print("current HP     : " .. tostring(ply:Health()))
-		print("current Armor  : " .. tostring(armor))
-		print("damage to take : " .. tostring(damage))
-
-		-- normal damage handling when no armor is available
-		if armor == 0 then return end
-
-		armor = armor - math.Round(GetConVar("ttt_armor_damage_block_pct"):GetFloat() * damage)
-		print("armor internal : " .. tostring(armor))
-		ply:SetArmor(math.max(armor, 0))
-		print("new armor      : " .. tostring(ply:Armor()))
-		
-		local new_damage = math.Round(GetConVar("ttt_armor_damage_health_pct"):GetFloat() * damage - math.min(armor, 0))
-		print("calced dmg     : " .. tostring(new_damage))
-		dmg:SetDamage(new_damage)
-	end)
-
 	hook.Add("PlayerSpawn", "ttt2_player_armor_spawn_reset", function(ply)
 		ply:SetArmor(0)
 	end)
@@ -122,6 +91,7 @@ else
 	net.Receive("ttt2_sync_armor", function()
 		local client = LocalPlayer()
 
+		-- prevent error from netmessage prior to the client beeing ready
 		if not client or not IsValid(client) then return end
 
 		client.armor = net.ReadUInt(16)
@@ -130,7 +100,6 @@ else
 		-- UPDATE STATUS ICONS
 		-- removed armor
 		if STATUS:Active("ttt_weapon_armor") and client.armor == 0 then
-			print("removing armor status")
 			STATUS:RemoveStatus("ttt_weapon_armor")
 		end
 
@@ -139,13 +108,11 @@ else
 
 		-- added armor
 		if not STATUS:Active("ttt_weapon_armor") and client.armor > 0 then
-			print("adding armor status")
 			STATUS:AddStatus("ttt_weapon_armor", icon_id)
 		end
 
 		-- normal armor level change
 		if STATUS:Active("ttt_weapon_armor") then
-			print("updating armor status")
 			STATUS:SetActiveIcon("ttt_weapon_armor", icon_id)
 		end
 	end)
