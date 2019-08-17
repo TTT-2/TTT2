@@ -68,6 +68,11 @@ local streamer_tbl = {
 	["76561198052323988"] = true
 }
 
+--TODO: move into heroes
+local heroes_tbl = {
+	["76561198000950884"] = true -- Dhalucard
+}
+
 local namecolor = {
 	default = COLOR_WHITE,
 	dev = Color(100, 240, 105, 255),
