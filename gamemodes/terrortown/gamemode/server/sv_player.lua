@@ -1200,12 +1200,18 @@ function HandlePlayerArmorSystem(ent, infl, att, amount, dmginfo)
 	-- normal damage handling when no armor is available
 	if armor == 0 then return end
 
-	armor = armor - GetConVar("ttt_armor_damage_block_pct"):GetFloat() * armor_factor * damage
+	local cv_armor_factor = (armor > 50) and GetConVar("ttt_armor_rei_damage_block_pct"):GetFloat() or GetConVar("ttt_armor_damage_block_pct"):GetFloat()
+	local cv_body_factor = (armor > 50) and GetConVar("ttt_armor_rei_damage_health_pct"):GetFloat() or GetConVar("ttt_armor_damage_health_pct"):GetFloat()
+
+	print("armor factor   : " .. tostring(cv_armor_factor))
+	print("body factor    : " .. tostring(cv_body_factor))
+
+	armor = armor - cv_armor_factor * armor_factor * damage
 	print("armor internal : " .. tostring(armor))
 	ent:SetArmor(math.max(armor, 0))
 	print("new armor      : " .. tostring(ent:Armor()))
 	
-	local new_damage = GetConVar("ttt_armor_damage_health_pct"):GetFloat() * damage * body_factor - math.min(armor, 0)
+	local new_damage = cv_body_factor * body_factor * damage - math.min(armor, 0)
 	print("calced dmg     : " .. tostring(new_damage))
 	dmginfo:SetDamage(new_damage)
 end

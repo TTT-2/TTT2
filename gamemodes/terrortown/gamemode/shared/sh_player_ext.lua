@@ -59,6 +59,8 @@ if SERVER then
 
 	CreateConVar('ttt_armor_damage_block_pct', 0.2, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 	CreateConVar('ttt_armor_damage_health_pct', 0.7, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+	CreateConVar('ttt_armor_rei_damage_block_pct', 0.2, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+	CreateConVar('ttt_armor_rei_damage_health_pct', 0.55, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 	function plymeta:SetArmor(armor)
 		self.armor = armor
