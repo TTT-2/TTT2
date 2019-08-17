@@ -83,8 +83,14 @@ function GM:PostDrawTranslucentRenderables(bDrawingDepth, bDrawingSkybox)
 			local ply = plys[i]
 			local rd = ply:GetSubRoleData()
 
-			local pos = ply:GetPos()
-			pos.z = pos.z + 80
+			local pos = ply:GetBonePosition(6)
+			pos.z = pos.z + 20
+
+			local ea = ply:EyeAngles()
+			ea.pitch = 0
+			local shift = Vector(2,0,0)
+			shift:Rotate(ea)
+			pos:Add(shift)
 
 			if ply ~= client
 			and ply:IsActive()
