@@ -1200,8 +1200,8 @@ function HandlePlayerArmorSystem(ent, infl, att, amount, dmginfo)
 	-- normal damage handling when no armor is available
 	if armor == 0 then return end
 
-	local cv_armor_factor = (armor > 50) and GetConVar("ttt_armor_rei_damage_block_pct"):GetFloat() or GetConVar("ttt_armor_damage_block_pct"):GetFloat()
-	local cv_body_factor = (armor > 50) and GetConVar("ttt_armor_rei_damage_health_pct"):GetFloat() or GetConVar("ttt_armor_damage_health_pct"):GetFloat()
+	local cv_armor_factor = ent:ArmorIsReinforced() and GetConVar("ttt_armor_rei_damage_block_pct"):GetFloat() or GetConVar("ttt_armor_damage_block_pct"):GetFloat()
+	local cv_body_factor = ent:ArmorIsReinforced() and GetConVar("ttt_armor_rei_damage_health_pct"):GetFloat() or GetConVar("ttt_armor_damage_health_pct"):GetFloat()
 
 	print("armor factor   : " .. tostring(cv_armor_factor))
 	print("body factor    : " .. tostring(cv_body_factor))

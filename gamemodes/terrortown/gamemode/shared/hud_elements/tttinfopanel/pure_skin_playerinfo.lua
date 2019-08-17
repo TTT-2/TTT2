@@ -14,7 +14,7 @@ if CLIENT then
 	local const_defaults = {
 		basepos = {x = 0, y = 0},
 		size = {w = 365, h = 146},
-		minsize = {w = 225, h = 146}
+		minsize = {w = 240, h = 146}
 	}
 
 	function HUDELEMENT:Initialize()
@@ -80,6 +80,9 @@ if CLIENT then
 	local watching_icon = Material("vgui/ttt/watching_icon")
 	local credits_default = Material("vgui/ttt/equip/credits_default")
 	local credits_zero = Material("vgui/ttt/equip/credits_zero")
+
+	local icon_armor = Material("vgui/ttt/hud_armor.vmt")
+	local icon_armor_rei = Material("vgui/ttt/hud_armor_reinforced.vmt")
 
 	function HUDELEMENT:Draw()
 		local client = LocalPlayer()
@@ -207,11 +210,35 @@ if CLIENT then
 			-- health bar
 			local health = math.max(0, client:Health())
 			local health_print = tostring(health)
-			if client:Armor() > 0 then
-				health_print = health_print .. " + " .. tostring(client:Armor())
-			end
 
-			self:DrawBar(nx, ty, bw, bh, Color(234, 41, 41), health / client:GetMaxHealth(), self.scale, "HEALTH: " .. health_print, Color(250, 115, 225, 175), client:Armor() / client:GetMaxArmor())
+			local armor = math.max(0, client:Armor())
+			local armor_print = tostring(armor)
+
+			self:DrawBar(nx, ty, bw, bh, Color(234, 41, 41), health / client:GetMaxHealth(), self.scale, "HEALTH: " .. health_print)
+
+			-- draw armor information
+			if armor > 0 then
+				local icon_mat
+				if client:ArmorIsReinforced() then
+					icon_mat = icon_armor_rei
+				else
+					icon_mat = icon_armor
+					--icon_mat = watching_icon
+				end
+				local a_size = bh - math.Round(11 * self.scale)
+				local a_pad = math.Round(5 * self.scale)
+
+				local a_pos_y = ty + math.Round(5 * self.scale)
+				local a_pos_x = nx + bw - math.Round(65 * self.scale)
+
+				local at_pos_y = ty + 1
+				local at_pos_x = a_pos_x + a_size + a_pad
+
+				util.DrawFilteredTexturedRect(a_pos_x + math.Round(2*self.scale), a_pos_y + math.Round(2*self.scale), a_size, a_size, icon_mat, 200, {r=0,g=0,b=0})
+				util.DrawFilteredTexturedRect(a_pos_x + math.Round(self.scale), a_pos_y + math.Round(self.scale), a_size, a_size, icon_mat, 255, {r=0,g=0,b=0})
+				util.DrawFilteredTexturedRect(a_pos_x, a_pos_y, a_size, a_size, icon_mat, 255, {r=255,g=255,b=255})
+				draw.AdvancedText(armor_print, "PureSkinBar", at_pos_x, at_pos_y, self:GetDefaultFontColor(Color(234, 41, 41)), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT, true, self.scale)
+			end
 
 			-- ammo bar
 			ty = ty + bh + spc

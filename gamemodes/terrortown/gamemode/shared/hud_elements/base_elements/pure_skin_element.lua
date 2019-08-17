@@ -16,7 +16,7 @@ if CLIENT then
 	end
 
 	-- x, y, width, height, color, progress, scale, text, color2, progress2
-	function HUDELEMENT:DrawBar(x, y, w, h, c, p, s, t, c2, p2)
+	function HUDELEMENT:DrawBar(x, y, w, h, c, p, s, t)
 		s = s or 1
 
 		surface.SetDrawColor(clr(c))
@@ -26,20 +26,6 @@ if CLIENT then
 
 		surface.SetDrawColor(0, 0, 0, 165)
 		surface.DrawRect(x + w_, y, w - w_, h)
-
-		-- draw sub bar
-		if c2 and p2 > 0 then
-			local sub_h = math.Round(0.1 * h)
-
-			surface.SetDrawColor(0, 0, 0, 130)
-			surface.DrawRect(x, y + h - sub_h -1, w, sub_h + 1)
-
-			p2 = math.min(p2, 1)
-			local w2_ = math.Round(w * p2)
-
-			surface.SetDrawColor(clr(c2))
-			surface.DrawRect(x, y + h - sub_h, w2_, sub_h)
-		end
 
 		-- draw lines around this bar
 		self:DrawLines(x, y, w, h, c.a)

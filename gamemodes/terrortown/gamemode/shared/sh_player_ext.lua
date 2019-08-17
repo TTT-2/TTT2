@@ -49,8 +49,8 @@ function plymeta:GetMaxArmor()
 	return self.armor_max or 100
 end
 
-function plymeta:ArmorIsHardened()
-	return self.armor_hardened or false
+function plymeta:ArmorIsReinforced()
+	return self:Armor() > 50
 end
 
 if SERVER then
@@ -64,13 +64,11 @@ if SERVER then
 
 	function plymeta:SetArmor(armor)
 		self.armor = armor
-		self.armor_hardened = (armor > 50) and true or false
 
 		print("Setting armor to: " .. tostring(self.armor))
 
 		net.Start("ttt2_sync_armor")
 		net.WriteUInt(self.armor, 16)
-		net.WriteBool(self.armor_hardened)
 		net.Send(self)
 	end
 	
@@ -97,7 +95,6 @@ else
 		if not client or not IsValid(client) then return end
 
 		client.armor = net.ReadUInt(16)
-		client.armor_hardened = net.ReadBool()
 
 		-- UPDATE STATUS ICONS
 		-- removed armor
@@ -105,8 +102,8 @@ else
 			STATUS:RemoveStatus("ttt_weapon_armor")
 		end
 
-		-- check if hardened
-		local icon_id = client.armor_hardened and 2 or 1
+		-- check if reinforced
+		local icon_id = client:ArmorIsReinforced() and 2 or 1
 
 		-- added armor
 		if not STATUS:Active("ttt_weapon_armor") and client.armor > 0 then
