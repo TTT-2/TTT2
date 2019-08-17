@@ -1,4 +1,4 @@
-"LightmappedGeneric"
+"UnlitGeneric"
 {
 	"$basetexture" "vgui/ttt/hud_armor_reinforced"
 	"$nocull" 1

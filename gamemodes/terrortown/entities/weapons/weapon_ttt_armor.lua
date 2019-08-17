@@ -11,11 +11,11 @@ if SERVER then
 	AddCSLuaFile()
 else
 	SWEP.PrintName = "Armor"
-    
-    
+	
+	
 	SWEP.Icon = "vgui/ttt/icon_armor"
 	SWEP.EquipMenuData = {
-        type = "Weapon",
+		type = "Weapon",
 		desc = "ttt2_weapon_armor_desc"
 	}
 end
@@ -23,10 +23,10 @@ end
 SWEP.CanBuy = {ROLE_TRAITOR, ROLE_DETECTIVE}
 
 function SWEP:Equip(buyer)
-    if SERVER then
-        buyer:IncreaseArmor(30)
-        self:Remove()
-    end
+	if SERVER then
+		buyer:IncreaseArmor(30)
+		self:Remove()
+	end
 end
 
 -- REGISTER STATUS ICONS

@@ -69,14 +69,26 @@ function plymeta:GetRole()
 end
 
 -- ARMOR SYSTEM
+---
+-- Returns the current armor
+-- @return[default=0] number armor
+-- @realm shared
 function plymeta:Armor()
 	return self.armor or 0
 end
 
+---
+-- Returns the current max armor
+-- @return[default=100] number max armor
+-- @realm shared
 function plymeta:GetMaxArmor()
 	return self.armor_max or 100
 end
 
+---
+-- Returns wether the armor is reinforced
+-- @return boolean is armor reinforced
+-- @realm shared
 function plymeta:ArmorIsReinforced()
 	return self:Armor() > 50
 end
@@ -90,6 +102,10 @@ if SERVER then
 	CreateConVar('ttt_armor_rei_damage_block_pct', 0.2, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 	CreateConVar('ttt_armor_rei_damage_health_pct', 0.55, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
+	---
+	-- Sets the armor to a specific value
+	-- @param number armor the new armor to be set
+	-- @realm server
 	function plymeta:SetArmor(armor)
 		self.armor = armor
 
@@ -100,6 +116,10 @@ if SERVER then
 		net.Send(self)
 	end
 	
+	---
+	-- Sets the max armor to a specific value
+	-- @param number armor_max the new max armor to be set
+	-- @realm server
 	function plymeta:SetMaxArmor(armor_max)
 		self.armor_max = armor_max
 
@@ -108,6 +128,10 @@ if SERVER then
 		net.Send(self)
 	end
 
+	---
+	-- Increases the armor about a specific value
+	-- @param number increaseby the amount to be increased
+	-- @realm server
 	function plymeta:IncreaseArmor(increaseby)
 		self:SetArmor(self:Armor() + increaseby)
 	end

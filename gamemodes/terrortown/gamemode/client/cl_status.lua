@@ -15,12 +15,12 @@ STATUS.active = {}
 function STATUS:RegisterStatus(id, data)
 	if STATUS.registered[id] ~= nil then  -- name is not unique
 		return false
-    end
-    
-    -- support single and multible icons per status effect
-    if data.hud.GetTexture then
-        data.hud = {data.hud}
-    end
+	end
+	
+	-- support single and multible icons per status effect
+	if data.hud.GetTexture then
+		data.hud = {data.hud}
+	end
 
 	STATUS.registered[id] = data
 
@@ -33,10 +33,10 @@ end
 -- @param number active_icon
 -- @realm client
 function STATUS:AddStatus(id, active_icon)
-    if STATUS.registered[id] == nil then return end
+	if STATUS.registered[id] == nil then return end
 
-    STATUS.active[id] = table.Copy(STATUS.registered[id])
-    self:SetActiveIcon(id, active_icon or 1)
+	STATUS.active[id] = table.Copy(STATUS.registered[id])
+	self:SetActiveIcon(id, active_icon or 1)
 end
 
 ---
@@ -70,15 +70,15 @@ end
 -- @param number active_icon
 -- @realm client
 function STATUS:SetActiveIcon(id, active_icon)
-    if STATUS.active[id] == nil then return end
+	if STATUS.active[id] == nil then return end
 
-    local max_amount = (self.registered[id].hud.GetTexture) and 1 or #STATUS.registered[id].hud
+	local max_amount = (self.registered[id].hud.GetTexture) and 1 or #STATUS.registered[id].hud
 
-    if active_icon < 1 or active_icon > max_amount then
-        active_icon = 1
-    end
+	if active_icon < 1 or active_icon > max_amount then
+		active_icon = 1
+	end
 
-    STATUS.active[id].active_icon = active_icon
+	STATUS.active[id].active_icon = active_icon
 end
 
 ---
@@ -87,7 +87,7 @@ end
 -- @return boolean whether the status is registered
 -- @realm client
 function STATUS:Registered(id)
-    return (STATUS.registered[id] ~= nil) and true or false
+	return (STATUS.registered[id] ~= nil) and true or false
 end
 
 ---
@@ -96,7 +96,7 @@ end
 -- @return boolean whether the status is active
 -- @realm client
 function STATUS:Active(id)
-    return (STATUS.active[id] ~= nil) and true or false
+	return (STATUS.active[id] ~= nil) and true or false
 end
 
 ---
@@ -124,15 +124,15 @@ function STATUS:RemoveAll()
 end
 
 net.Receive("ttt2_status_effect_add", function()
-    STATUS:AddStatus(net.ReadString(), net.ReadUInt(8))
+	STATUS:AddStatus(net.ReadString(), net.ReadUInt(8))
 end)
 
 net.Receive("ttt2_status_effect_set_id", function()
-    STATUS:SetActiveIcon(net.ReadString(), net.ReadUInt(8))
+	STATUS:SetActiveIcon(net.ReadString(), net.ReadUInt(8))
 end)
 
 net.Receive("ttt2_status_effect_add_timed", function()
-    STATUS:AddTimedStatus(net.ReadString(), net.ReadUInt(32), net.ReadBool(), net.ReadUInt(8))
+	STATUS:AddTimedStatus(net.ReadString(), net.ReadUInt(32), net.ReadBool(), net.ReadUInt(8))
 end)
 
 net.Receive("ttt2_status_effect_remove", function()
