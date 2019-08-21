@@ -90,7 +90,7 @@ end
 -- @return boolean is armor reinforced
 -- @realm shared
 function plymeta:ArmorIsReinforced()
-	return self:Armor() > 50
+	return GetGlobalBool("ttt_armor_reinforced_enabled") and self:Armor() > GetGlobalInt("ttt_armor_for_reinforced")
 end
 
 if SERVER then
@@ -99,13 +99,19 @@ if SERVER then
 
 	CreateConVar('ttt_armor_damage_block_pct', 0.2, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 	CreateConVar('ttt_armor_damage_health_pct', 0.7, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-	CreateConVar('ttt_armor_rei_damage_block_pct', 0.2, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-	CreateConVar('ttt_armor_rei_damage_health_pct', 0.55, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 	CreateConVar('ttt_armor_on_spawn', 0, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+	CreateConVar('ttt_armor_for_reinforced', 50, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+	CreateConVar('ttt_armor_reinforced_enabled', 1, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 	CreateConVar('ttt_armor_classic', 0, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 	cvars.AddChangeCallback("ttt_armor_classic", function(cv, old, new)
 		SetGlobalBool("ttt_armor_classic", tobool(tonumber(new)))
+	end)
+	cvars.AddChangeCallback("ttt_armor_reinforced_enabled", function(cv, old, new)
+		SetGlobalBool("ttt_armor_reinforced_enabled", tobool(tonumber(new)))
+	end)
+	cvars.AddChangeCallback("ttt_armor_for_reinforced", function(cv, old, new)
+		SetGlobalInt("ttt_armor_for_reinforced", tonumber(new))
 	end)
 
 	---
@@ -150,7 +156,7 @@ else
 		local client = LocalPlayer()
 
 		-- prevent error from netmessage prior to the client beeing ready
-		if not client or not IsValid(client) then return end
+		if not IsValid(client) then return end
 
 		client.armor = net.ReadUInt(16)
 
@@ -162,6 +168,7 @@ else
 
 		-- check if reinforced
 		local icon_id = 1
+
 		if not GetGlobalBool("ttt_armor_classic", false) then
 			icon_id = client:ArmorIsReinforced() and 2 or 1
 		end
@@ -176,6 +183,7 @@ else
 			STATUS:SetActiveIcon("ttt_weapon_armor", icon_id)
 		end
 	end)
+
 	net.Receive("ttt2_sync_armor_max", function()
 		local client = LocalPlayer()
 

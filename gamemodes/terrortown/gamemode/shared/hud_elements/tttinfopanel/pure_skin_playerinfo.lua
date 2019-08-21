@@ -217,14 +217,9 @@ if CLIENT then
 			self:DrawBar(nx, ty, bw, bh, Color(234, 41, 41), health / client:GetMaxHealth(), self.scale, "HEALTH: " .. health_print)
 
 			-- draw armor information
-			if not GetGlobalBool("ttt_armor_classic", false) and armor > 0 then
-				local icon_mat
-				if client:ArmorIsReinforced() then
-					icon_mat = icon_armor_rei
-				else
-					icon_mat = icon_armor
-					--icon_mat = watching_icon
-				end
+			if not GetGlobalBool("ttt_armor_classic", false) and armor > 0 then				
+				local icon_mat = client:ArmorIsReinforced() and icon_armor_rei or icon_armor
+				
 				local a_size = bh - math.Round(11 * self.scale)
 				local a_pad = math.Round(5 * self.scale)
 
@@ -234,9 +229,10 @@ if CLIENT then
 				local at_pos_y = ty + 1
 				local at_pos_x = a_pos_x + a_size + a_pad
 
-				util.DrawFilteredTexturedRect(a_pos_x + math.Round(2*self.scale), a_pos_y + math.Round(2*self.scale), a_size, a_size, icon_mat, 200, {r=0,g=0,b=0})
-				util.DrawFilteredTexturedRect(a_pos_x + math.Round(self.scale), a_pos_y + math.Round(self.scale), a_size, a_size, icon_mat, 255, {r=0,g=0,b=0})
-				util.DrawFilteredTexturedRect(a_pos_x, a_pos_y, a_size, a_size, icon_mat, 255, {r=255,g=255,b=255})
+				util.DrawFilteredTexturedRect(a_pos_x + math.Round(2*self.scale), a_pos_y + math.Round(2*self.scale), a_size, a_size, icon_mat, 200, {r=0, g=0, b=0})
+				util.DrawFilteredTexturedRect(a_pos_x + math.Round(self.scale), a_pos_y + math.Round(self.scale), a_size, a_size, icon_mat, 255, {r=0, g=0, b=0})
+				util.DrawFilteredTexturedRect(a_pos_x, a_pos_y, a_size, a_size, icon_mat, 255, {r=255, g=255, b=255})
+				
 				draw.AdvancedText(armor_print, "PureSkinBar", at_pos_x, at_pos_y, self:GetDefaultFontColor(Color(234, 41, 41)), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT, true, self.scale)
 			end
 

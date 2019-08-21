@@ -8,7 +8,7 @@ STATUS.active = {}
 
 ---
 -- Registers a @{STATUS}
--- @param number id the index of the new status
+-- @param number id The index of the new status
 -- @param table data
 -- @return boolean whether the creation was successfully
 -- @realm client
@@ -36,6 +36,7 @@ function STATUS:AddStatus(id, active_icon)
 	if STATUS.registered[id] == nil then return end
 
 	STATUS.active[id] = table.Copy(STATUS.registered[id])
+
 	self:SetActiveIcon(id, active_icon or 1)
 end
 
@@ -72,7 +73,7 @@ end
 function STATUS:SetActiveIcon(id, active_icon)
 	if STATUS.active[id] == nil then return end
 
-	local max_amount = (self.registered[id].hud.GetTexture) and 1 or #STATUS.registered[id].hud
+	local max_amount = self.registered[id].hud.GetTexture and 1 or #STATUS.registered[id].hud
 
 	if active_icon < 1 or active_icon > max_amount then
 		active_icon = 1
@@ -83,7 +84,7 @@ end
 
 ---
 -- Checks if a @{STATUS} is registered
--- @param number id the index of the status
+-- @param number id The index of the status
 -- @return boolean whether the status is registered
 -- @realm client
 function STATUS:Registered(id)
@@ -92,7 +93,7 @@ end
 
 ---
 -- Checks if a @{STATUS} is active
--- @param number id the index of the status
+-- @param number id The index of the status
 -- @return boolean whether the status is active
 -- @realm client
 function STATUS:Active(id)

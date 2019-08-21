@@ -52,10 +52,10 @@ if CLIENT then
 		surface.SetDrawColor(clr(c))
 		surface.DrawRect(x, y, w, h)
 
-		local w_ = math.Round(w * (p or 1))
+		local w2 = math.Round(w * (p or 1))
 
 		surface.SetDrawColor(0, 0, 0, 165)
-		surface.DrawRect(x + w_, y, w - w_, h)
+		surface.DrawRect(x + w2, y, w - w2, h)
 
 		-- draw lines around this bar
 		self:DrawLines(x, y, w, h, c.a)

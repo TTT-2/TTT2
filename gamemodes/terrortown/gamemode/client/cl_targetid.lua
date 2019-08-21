@@ -89,7 +89,8 @@ function GM:PostDrawTranslucentRenderables(bDrawingDepth, bDrawingSkybox)
 			
 			local ea = ply:EyeAngles()
 			ea.pitch = 0
-			local shift = Vector(2,0,0)
+			
+			local shift = Vector(2, 0, 0)
 			shift:Rotate(ea)
 			pos:Add(shift)
 			

@@ -1465,24 +1465,17 @@ function HandlePlayerArmorSystem(ent, infl, att, amount, dmginfo)
 	-- fallback for players who prefer the vanilla armor
 	if GetConVar("ttt_armor_classic"):GetBool() and ent:Armor() > 0 then
 		dmginfo:ScaleDamage(0.7)
+		
 		return
 	end
 
 	print("-------------------------------------------------------")
 
 	-- handle different damage type factors
-	local armor_factor, body_factor
-	if dmginfo:IsDamageType(DMG_BULLET) or dmginfo:IsDamageType(DMG_CLUB) then -- bullet or crowbar damage
-		armor_factor = 1.0
-		body_factor = 1.0
-		print("damage type	: bullet or crowbar")
-	elseif dmginfo:IsDamageType(DMG_BURN) or dmginfo:IsDamageType(DMG_BLAST) then -- fire or explosion damage
-		armor_factor = 1.5
-		body_factor = 0.75
-		print("damage type	: fire or explosion")
-	else
-		return
-	end
+
+	if not dmginfo:IsDamageType(DMG_BULLET) and not dmginfo:IsDamageType(DMG_CLUB)
+		and not dmginfo:IsDamageType(DMG_BURN) and not dmginfo:IsDamageType(DMG_BLAST)
+	then return end
 
 	-- calculate damage
 	local damage = dmginfo:GetDamage()
@@ -1495,18 +1488,18 @@ function HandlePlayerArmorSystem(ent, infl, att, amount, dmginfo)
 	-- normal damage handling when no armor is available
 	if armor == 0 then return end
 
-	local cv_armor_factor = ent:ArmorIsReinforced() and GetConVar("ttt_armor_rei_damage_block_pct"):GetFloat() or GetConVar("ttt_armor_damage_block_pct"):GetFloat()
-	local cv_body_factor = ent:ArmorIsReinforced() and GetConVar("ttt_armor_rei_damage_health_pct"):GetFloat() or GetConVar("ttt_armor_damage_health_pct"):GetFloat()
+	local cv_armor_factor = GetConVar("ttt_armor_damage_block_pct"):GetFloat()
+	local cv_body_factor = GetConVar("ttt_armor_damage_health_pct"):GetFloat()
+	if ent:ArmorIsReinforced() then
+		cv_body_factor = cv_body_factor - 0.15
+	end
 
-	print("armor factor   : " .. tostring(cv_armor_factor))
-	print("body factor	: " .. tostring(cv_body_factor))
-
-	armor = armor - cv_armor_factor * armor_factor * damage
+	armor = armor - cv_armor_factor * damage
 	print("armor internal : " .. tostring(armor))
 	ent:SetArmor(math.max(armor, 0))
 	print("new armor	  : " .. tostring(ent:Armor()))
 	
-	local new_damage = cv_body_factor * body_factor * damage - math.min(armor, 0)
+	local new_damage = cv_body_factor * damage - math.min(armor, 0)
 	print("calced dmg	 : " .. tostring(new_damage))
 	dmginfo:SetDamage(new_damage)
 end

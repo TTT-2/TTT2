@@ -62,8 +62,8 @@ if CLIENT then
 			-- Draw health
 			local health = math.max(0, client:Health())
 			local health_y = y + margin
-
 			local health_string = tostring(health)
+			
 			if not GetGlobalBool("ttt_armor_classic", false) and client:Armor() > 0 then
 				health_string = health_string .. " + " .. tostring(client:Armor())
 			end

@@ -81,11 +81,7 @@ if CLIENT then
 		surface.SetDrawColor(item.hud_color.r, item.hud_color.g, item.hud_color.b, math.Round(factor * 255))
 		surface.DrawRect(pos.x, curY, size.w, size.w)
 
-
-		local hud_icon = item.hud
-		if not hud_icon.GetTexture then
-			hud_icon = hud_icon[item.active_icon]
-		end
+		local hud_icon = item.hud.GetTexture and item.hud or hud_icon[item.active_icon]
 
 		util.DrawFilteredTexturedRect(pos.x, curY, size.w, size.w, hud_icon, iconAlpha, fontColor)
 
