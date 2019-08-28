@@ -2,20 +2,33 @@ if SERVER then
 	AddCSLuaFile()
 end
 
-ITEM.hud = Material("vgui/ttt/perks/hud_armor.png")
 ITEM.EquipMenuData = {
 	type = "item_passive",
 	name = "item_armor",
 	desc = "item_armor_desc"
 }
-ITEM.material = "vgui/ttt/icon_armor"
-ITEM.CanBuy = nil
-ITEM.oldId = EQUIP_ARMOR or 1
 
-if SERVER then
-	hook.Add("ScalePlayerDamage", "TTTItemArmor", function(ply, _, dmginfo)
-		if dmginfo:IsBulletDamage() and ply:HasEquipmentItem("item_ttt_armor") then
-			dmginfo:ScaleDamage(0.7)
-		end
+ITEM.material = "vgui/ttt/icon_armor"
+ITEM.CanBuy = {ROLE_TRAITOR, ROLE_DETECTIVE}
+ITEM.oldId = EQUIP_ARMOR or 1
+ITEM.limited = false
+
+function ITEM:Equip(buyer)
+	if SERVER then
+		buyer:IncreaseArmor(GetConVar("ttt_armor_buy_value"):GetInt())
+		self:Remove()
+	end
+end
+
+-- REGISTER STATUS ICONS
+if CLIENT then
+	hook.Add("Initialize", "ttt2_base_register_armor_status", function() 
+		STATUS:RegisterStatus("ttt_weapon_armor", {
+			hud = {
+				Material("vgui/ttt/perks/hud_armor.png"),
+				Material("vgui/ttt/perks/hud_armor_reinforced.png")
+			},
+			type = "good"
+		})
 	end)
 end

@@ -130,6 +130,7 @@ local function PreqLabels(parent, x, y)
 	tbl.bought.img:SetImage("vgui/ttt/equip/package.png")
 
 	tbl.bought.Check = function(s, sel)
+		PrintTable(sel)
 		if sel.limited and LocalPlayer():HasBought(tostring(sel.id)) then
 			return false, "X", GetTranslation("equip_stock_deny")
 		else

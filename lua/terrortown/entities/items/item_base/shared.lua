@@ -15,6 +15,9 @@ ITEM.Instructions = "" -- some Instructions for this @{ITEM}
 -- (just setting to nil here to document its existence, don't make this buyable)
 ITEM.CanBuy = nil -- this @{table} contains a list of subrole ids (@param number) which are able to access this @{ITEM} in the shop
 
+-- per default items can be bought only once. However this variable can be set to false to allow multibuy
+ITEM.limited = true
+
 ITEM.Category = "TTT" -- the @{ITEM} Category
 
 if CLIENT then
@@ -64,6 +67,10 @@ end
 -- @hook
 -- @realm shared
 function ITEM:Reset(ply)
+
+end
+
+function ITEM:Remove(ply)
 
 end
 
