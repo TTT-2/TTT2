@@ -70,10 +70,6 @@ function ITEM:Reset(ply)
 
 end
 
-function ITEM:Remove(ply)
-
-end
-
 ---
 -- A player or NPC has picked the @{ITEM} up
 -- @param Player ply

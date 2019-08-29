@@ -103,7 +103,7 @@ local function PreqLabels(parent, x, y)
 	tbl.owned.Check = function(s, sel)
 		if ItemIsWeapon(sel) and not CanCarryWeapon(sel) then
 			return false, MakeKindValid(sel.Kind), GetPTranslation("equip_carry_slot", {slot = MakeKindValid(sel.Kind)})
-		elseif not ItemIsWeapon(sel) and LocalPlayer():HasEquipmentItem(sel.id) then
+		elseif not ItemIsWeapon(sel) and sel.limited and LocalPlayer():HasEquipmentItem(sel.id) then
 			return false, "X", GetTranslation("equip_carry_own")
 		else
 			if ItemIsWeapon(sel) then
@@ -130,7 +130,6 @@ local function PreqLabels(parent, x, y)
 	tbl.bought.img:SetImage("vgui/ttt/equip/package.png")
 
 	tbl.bought.Check = function(s, sel)
-		PrintTable(sel)
 		if sel.limited and LocalPlayer():HasBought(tostring(sel.id)) then
 			return false, "X", GetTranslation("equip_stock_deny")
 		else
@@ -370,7 +369,7 @@ local function CreateEquipmentList(t)
 				if not t.role and ((
 						-- already owned
 						table.HasValue(owned_ids, item.id)
-						or items.IsItem(item.id) and ply:HasEquipmentItem(item.id)
+						or items.IsItem(item.id) and item.limited and ply:HasEquipmentItem(item.id)
 						-- already carrying a weapon for this slot
 						or ItemIsWeapon(item) and not CanCarryWeapon(item)
 						or not EquipmentIsBuyable(item, ply:GetTeam())

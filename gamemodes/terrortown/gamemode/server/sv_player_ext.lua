@@ -190,17 +190,18 @@ end
 -- @param string id
 -- @realm server
 function plymeta:AddEquipmentItem(id)
-	if not self:HasEquipmentItem(id) then
-		self.equipmentItems = self.equipmentItems or {}
-		self.equipmentItems[#self.equipmentItems + 1] = id
+	local item = items.GetStored(id)
+	
+	if item.limited and self:HasEquipmentItem(id) then return end
 
-		local item = items.GetStored(id)
-		if item and isfunction(item.Equip) then
-			item:Equip(self)
-		end
+	self.equipmentItems = self.equipmentItems or {}
+	self.equipmentItems[#self.equipmentItems + 1] = id
 
-		self:SendEquipment()
+	if item and isfunction(item.Equip) then
+		item:Equip(self)
 	end
+
+	self:SendEquipment()
 end
 
 ---
@@ -460,13 +461,17 @@ end
 -- @return boolean success?
 -- @realm server
 function plymeta:GiveEquipmentItem(id)
-	if self:HasEquipmentItem(id) then
-		return false
-	elseif id then
-		self:AddEquipmentItem(id)
+	if not id then return end
 
-		return true
+	local item = items.GetStored(id)
+
+	if item.limited and self:HasEquipmentItem(id) then
+		return false
 	end
+
+	self:AddEquipmentItem(id)
+
+	return true
 end
 
 ---
