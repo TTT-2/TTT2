@@ -3,14 +3,6 @@
 -- @section Scoreboard
 
 ---
--- @param string steamid64
-function AddTTT2AddonDev(steamid64)
-	if not steamid64 then return end
-
-	addondev_tbl[tostring(steamid64)] = true
-end
-
----
 -- @class PANEL
 ---
 
@@ -60,6 +52,14 @@ local vip_tbl = {
 local addondev_tbl = {
 	["76561198052323988"] = true -- LeBroomer
 }
+
+---
+-- @param string steamid64
+function AddTTT2AddonDev(steamid64)
+	if not steamid64 then return end
+
+	addondev_tbl[tostring(steamid64)] = true
+end
 
 local streamer_tbl = {
 	["76561198049831089"] = true,
