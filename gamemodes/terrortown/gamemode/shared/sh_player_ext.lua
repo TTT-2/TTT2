@@ -101,7 +101,7 @@ if SERVER then
 	CreateConVar('ttt_armor_damage_health_pct', 0.7, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 	CreateConVar('ttt_armor_on_spawn', 0, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 	CreateConVar('ttt_armor_for_reinforced', 50, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-	CreateConVar('ttt_armor_buy_value', 30, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+	CreateConVar('ttt_item_armor_value', 30, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 	CreateConVar('ttt_armor_reinforced_enabled', 1, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 	CreateConVar('ttt_armor_classic', 0, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 

@@ -15,7 +15,7 @@ ITEM.limited = false
 
 function ITEM:Equip(buyer)
 	if SERVER then
-		buyer:IncreaseArmor(GetConVar("ttt_armor_buy_value"):GetInt())
+		buyer:IncreaseArmor(GetConVar("ttt_item_armor_value"):GetInt())
 	end
 end
 
