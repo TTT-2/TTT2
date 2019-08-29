@@ -317,10 +317,9 @@ L.item_weapon = "Weapon"
 
 L.item_armor = "Body Armor"
 L.item_armor_desc = [[
-Reduces bullet damage by 30% when
-you get hit.
+Reduces bullet, fire and explosion damage. Depletes over time.
 
-Default equipment for Detectives.]]
+You can buy it multiple times and after reaching a certain armor value, the armor becomes stronger.]]
 
 L.item_radar = "Radar"
 L.item_radar_desc = [[
