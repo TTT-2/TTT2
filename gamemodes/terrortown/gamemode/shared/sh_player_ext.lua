@@ -191,6 +191,9 @@ else
 	net.Receive("ttt2_sync_armor_max", function()
 		local client = LocalPlayer()
 
+		-- prevent error from netmessage prior to the client beeing ready
+		if not IsValid(client) then return end
+
 		client.armor_max = net.ReadUInt(16)
 	end)
 end
