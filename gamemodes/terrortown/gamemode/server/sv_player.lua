@@ -1490,18 +1490,19 @@ function HandlePlayerArmorSystem(ent, infl, att, amount, dmginfo)
 
 	local cv_armor_factor = GetConVar("ttt_armor_damage_block_pct"):GetFloat()
 	local cv_body_factor = GetConVar("ttt_armor_damage_health_pct"):GetFloat()
+	
 	if ent:ArmorIsReinforced() then
 		cv_body_factor = cv_body_factor - 0.15
 	end
 
 	armor = armor - cv_armor_factor * damage
 	print("armor internal : " .. tostring(armor))
-	ent:SetArmor(math.max(armor, 0))
+	ent:SetArmor(math.Round(math.max(armor, 0)))
 	print("new armor	  : " .. tostring(ent:Armor()))
 	
 	local new_damage = cv_body_factor * damage - math.min(armor, 0)
 	print("calced dmg	 : " .. tostring(new_damage))
-	dmginfo:SetDamage(new_damage)
+	dmginfo:SetDamage(math.Round(new_damage))
 end
 
 ---

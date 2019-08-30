@@ -191,15 +191,14 @@ end
 -- @realm server
 function plymeta:AddEquipmentItem(id)
 	local item = items.GetStored(id)
-	
+
+	if not item then return end
 	if item.limited and self:HasEquipmentItem(id) then return end
 
 	self.equipmentItems = self.equipmentItems or {}
 	self.equipmentItems[#self.equipmentItems + 1] = id
 
-	if item and isfunction(item.Equip) then
-		item:Equip(self)
-	end
+	item:Equip(self)
 
 	self:SendEquipment()
 end
@@ -465,7 +464,7 @@ function plymeta:GiveEquipmentItem(id)
 
 	local item = items.GetStored(id)
 
-	if item.limited and self:HasEquipmentItem(id) then
+	if item and item.limited and self:HasEquipmentItem(id) then
 		return false
 	end
 

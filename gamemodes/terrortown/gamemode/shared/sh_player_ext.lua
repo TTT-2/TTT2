@@ -90,7 +90,7 @@ end
 -- @return boolean is armor reinforced
 -- @realm shared
 function plymeta:ArmorIsReinforced()
-	return GetGlobalBool("ttt_armor_reinforced_enabled") and self:Armor() > GetGlobalInt("ttt_armor_for_reinforced")
+	return self.armor_reinforced or false
 end
 
 if SERVER then
@@ -121,11 +121,13 @@ if SERVER then
 	-- @realm server
 	function plymeta:SetArmor(armor)
 		self.armor = armor
+		self.armor_reinforced = GetConVar("ttt_armor_reinforced_enabled"):GetBool() and self:Armor() > GetConVar("ttt_armor_for_reinforced"):GetInt()
 
 		print("Setting armor to: " .. tostring(self.armor))
 
 		net.Start("ttt2_sync_armor")
 		net.WriteUInt(self.armor, 16)
+		net.WriteBool(self.armor_reinforced)
 		net.Send(self)
 	end
 	
@@ -160,6 +162,7 @@ else
 		if not IsValid(client) then return end
 
 		client.armor = net.ReadUInt(16)
+		client.armor_reinforced = net.ReadBool()
 
 		-- UPDATE STATUS ICONS
 		-- removed armor
