@@ -137,6 +137,13 @@ function plymeta:SetRole(subrole, team, forceHooks)
 			hook.Run("TTTPlayerSetColor", self)
 		end
 	end
+
+	-- a hook to handle the rolespecific stuff that should be done on
+	-- rolechange and respawn (while a round is active)
+	if forceHooks or oldSubrole ~= newSubrole or oldTeam ~= newTeam then
+		hook.Run("TTT2PlayerRoleDeinit", self, oldSubrole, oldTeam)
+		hook.Run("TTT2PlayerRoleInit", self, newSubrole, newTeam)
+	end
 end
 
 ---

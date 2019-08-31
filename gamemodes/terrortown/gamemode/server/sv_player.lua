@@ -124,6 +124,12 @@ function GM:PlayerSpawn(ply)
 	ply:SetupHands()
 
 	SCORE:HandleSpawn(ply)
+
+	-- a hook to handle the rolespecific stuff that should be done on
+	-- rolechange and respawn (while a round is active)
+	if ply:IsActive() then -- round is active and player is terror player
+		hook.Run("TTT2PlayerRoleInit", ply, ply:GetSubRole(), ply:GetTeam())
+	end
 end
 
 ---
@@ -923,6 +929,12 @@ function GM:PlayerDeath(victim, infl, attacker)
 			end
 
 			hook.Run("TTT2PostPlayerDeath", victim, infl, attacker)
+		end
+
+		-- a hook to handle the rolespecific stuff that should be done on
+		-- rolechange and respawn (while a round is active)
+		if GetRoundState() == ROUND_ACTIVE then -- round is active and player is terror player
+			hook.Run("TTT2PlayerRoleDeinit", victim, victim:GetSubRole(), victim:GetTeam())
 		end
 	end)
 end
