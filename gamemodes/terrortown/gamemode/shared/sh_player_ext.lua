@@ -97,9 +97,10 @@ if SERVER then
 	util.AddNetworkString("ttt2_sync_armor")
 	util.AddNetworkString("ttt2_sync_armor_max")
 
+	local armor_on_spawn = CreateConVar('ttt_armor_on_spawn', 0, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+	
 	CreateConVar('ttt_armor_damage_block_pct', 0.2, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 	CreateConVar('ttt_armor_damage_health_pct', 0.7, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-	CreateConVar('ttt_armor_on_spawn', 0, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 	CreateConVar('ttt_armor_for_reinforced', 50, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 	CreateConVar('ttt_item_armor_value', 30, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 	CreateConVar('ttt_armor_reinforced_enabled', 1, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
@@ -152,7 +153,7 @@ if SERVER then
 	end
 
 	hook.Add("PlayerSpawn", "ttt2_player_armor_spawn_reset", function(ply)
-		ply:SetArmor(GetConVar("ttt_armor_on_spawn"):GetInt())
+		ply:SetArmor(armor_on_spawn:GetInt())
 	end)
 else
 	net.Receive("ttt2_sync_armor", function()
