@@ -207,7 +207,7 @@ end
 concommand.Add("ttt_transfer_credits", TransferCredits)
 
 local function RerollShopForCredit(ply, cmd, args)
-	if not IsValid(ply) or not ply:IsActiveShopper() then return end
+	if not IsValid(ply) or not ply:IsActiveShopper() or ply:GetCredits() < GetGlobalInt("ttt2_random_shop_reroll_cost") or not GetGlobalBool("ttt2_random_shop_reroll") then return end
 
         ply:SubtractCredits(GetGlobalInt("ttt2_random_shop_reroll_cost"))
 	RerollShop(ply)
