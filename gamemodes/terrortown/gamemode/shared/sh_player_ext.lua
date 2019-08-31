@@ -153,6 +153,10 @@ if SERVER then
 	end
 
 	hook.Add("PlayerSpawn", "ttt2_player_armor_spawn_reset", function(ply)
+		ply:SetArmor(0)
+
+		if not ply:IsTerror() then return end
+
 		ply:SetArmor(armor_on_spawn:GetInt())
 	end)
 else
@@ -1119,7 +1123,7 @@ function plymeta:RoleKnown()
 end
 
 ---
--- Returns whether a @{Player} was revived this round
+-- Returns whether a @{Player} was revived after beeing confirmed this round
 -- @return boolean
 -- @realm shared
 function plymeta:Revived()
