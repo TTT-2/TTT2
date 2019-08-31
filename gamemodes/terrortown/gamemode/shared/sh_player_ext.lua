@@ -97,13 +97,13 @@ if SERVER then
 	util.AddNetworkString("ttt2_sync_armor")
 	util.AddNetworkString("ttt2_sync_armor_max")
 
-	local armor_on_spawn = CreateConVar('ttt_armor_on_spawn', 0, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+	local cv_armor_on_spawn = CreateConVar('ttt_armor_on_spawn', 0, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+	local cv_armor_reinforced_enabled = CreateConVar('ttt_armor_reinforced_enabled', 1, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+	local cv_armor_for_reinforced = CreateConVar('ttt_armor_for_reinforced', 50, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 	
 	CreateConVar('ttt_armor_damage_block_pct', 0.2, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 	CreateConVar('ttt_armor_damage_health_pct', 0.7, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-	CreateConVar('ttt_armor_for_reinforced', 50, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 	CreateConVar('ttt_item_armor_value', 30, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-	CreateConVar('ttt_armor_reinforced_enabled', 1, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 	CreateConVar('ttt_armor_classic', 0, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 	cvars.AddChangeCallback("ttt_armor_classic", function(cv, old, new)
@@ -122,7 +122,7 @@ if SERVER then
 	-- @realm server
 	function plymeta:SetArmor(armor)
 		self.armor = armor
-		self.armor_reinforced = GetConVar("ttt_armor_reinforced_enabled"):GetBool() and self:Armor() > GetConVar("ttt_armor_for_reinforced"):GetInt()
+		self.armor_reinforced = cv_armor_reinforced_enabled:GetBool() and self:Armor() > cv_armor_for_reinforced:GetInt()
 
 		print("Setting armor to: " .. tostring(self.armor))
 
@@ -152,12 +152,20 @@ if SERVER then
 		self:SetArmor(self:Armor() + increaseby)
 	end
 
-	hook.Add("PlayerSpawn", "ttt2_player_armor_spawn_reset", function(ply)
-		ply:SetArmor(0)
+	---
+	-- Decreases the armor about a specific value
+	-- @param number decreaseby the amount to be decreased
+	-- @realm server
+	function plymeta:DecreaseArmor(decreaseby)
+		self:SetArmor(math.max(self:Armor() - decreaseby, 0))
+	end
 
-		if not ply:IsTerror() then return end
-
-		ply:SetArmor(armor_on_spawn:GetInt())
+	hook.Add("TTTBeginRound", "ttt2_player_set_armor_beginround", function(ply)
+		for _, p in ipairs(player.GetAll()) do
+			if p:IsTerror() then 
+				p:SetArmor(cv_armor_on_spawn:GetInt())
+			end
+		end
 	end)
 else
 	net.Receive("ttt2_sync_armor", function()

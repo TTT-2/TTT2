@@ -19,6 +19,12 @@ function ITEM:Equip(buyer)
 	end
 end
 
+function ITEM:Reset(buyer)
+	if SERVER then
+		buyer:DecreaseArmor(GetConVar("ttt_item_armor_value"):GetInt())
+	end
+end
+
 -- REGISTER STATUS ICONS
 if CLIENT then
 	hook.Add("Initialize", "ttt2_base_register_armor_status", function() 
