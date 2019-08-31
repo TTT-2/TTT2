@@ -18,6 +18,8 @@ if SERVER then
 	resource.AddFile("materials/vgui/ttt/dynamic/roles/icon_traitor.vmt")
 	resource.AddFile("materials/vgui/ttt/dynamic/roles/icon_det.vmt")
 	resource.AddFile("materials/vgui/ttt/dynamic/roles/icon_no_team.vmt")
+	
+	resource.AddFile("materials/vgui/ttt/equip/reroll.png")
 
 	-- ShopEditor
 	resource.AddFile("materials/vgui/ttt/dynamic/roles/icon_disabled.vmt")
