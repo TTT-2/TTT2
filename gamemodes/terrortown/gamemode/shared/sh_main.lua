@@ -74,7 +74,11 @@ function GM:Move(ply, mv)
 		mul = basemul * mul * noLag[1]
 
 		if ply.sprintMultiplier and (ply.sprintProgress or 0) > 0 then
-			mul = mul * ply.sprintMultiplier * (ply.sprintMultiplierModifier or 1)
+			local sprintMultiplierModifier = {1}
+			
+			hook.Run("TTT2PlayerSprintMultiplier", ply, sprintMultiplierModifier)
+			
+			mul = mul * ply.sprintMultiplier * sprintMultiplierModifier[1]
 		end
 
 		mv:SetMaxClientSpeed(mv:GetMaxClientSpeed() * mul)
