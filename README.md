@@ -1,4 +1,6 @@
-# TTT2 [Trouble in Terrorist Town 2 (Advanced Update)] // OPEN BETA
+# TTT2 - Trouble in Terrorist Town 2 (Advanced Update)
+![Steam Subscriptions](https://img.shields.io/steam/subscriptions/1357204556) ![Steam Downloads](https://img.shields.io/steam/downloads/1357204556?label=Workshop%20downloads) ![Discord](https://img.shields.io/discord/442107660955942932)  
+
 Find [TTT2 on Steam](https://steamcommunity.com/sharedfiles/filedetails/?id=1357204556)
 
 **This is still a beta version. Bugs are expected and the documentation will follow as soon as possible. [Please report bugs and suggestions here](https://steamcommunity.com/linkfilter/?url=https://github.com/Alf21/TTT2/issues)!**  
