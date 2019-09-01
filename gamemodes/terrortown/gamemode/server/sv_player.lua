@@ -124,9 +124,6 @@ function GM:PlayerSpawn(ply)
 	ply:SetupHands()
 
 	SCORE:HandleSpawn(ply)
-
-	-- reset the armor on spawn
-	ply:ResetArmor()
 end
 
 ---

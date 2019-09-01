@@ -406,6 +406,9 @@ function plymeta:ResetRoundFlags()
 	-- karma
 	self:SetCleanRound(true)
 	self:Freeze(false)
+
+	-- armor
+	self:ResetArmor()
 end
 
 ---
