@@ -125,8 +125,8 @@ function GM:PlayerSpawn(ply)
 
 	SCORE:HandleSpawn(ply)
 
-	-- reset armor of player on spawn
-	ply:SetArmor(0)
+	-- reset the armor on spawn
+	ply:ResetArmor()
 end
 
 ---
@@ -1472,8 +1472,6 @@ function HandlePlayerArmorSystem(ent, infl, att, amount, dmginfo)
 		return
 	end
 
-	print("-------------------------------------------------------")
-
 	-- handle different damage type factors
 
 	if not dmginfo:IsDamageType(DMG_BULLET) and not dmginfo:IsDamageType(DMG_CLUB)
@@ -1483,10 +1481,6 @@ function HandlePlayerArmorSystem(ent, infl, att, amount, dmginfo)
 	-- calculate damage
 	local damage = dmginfo:GetDamage()
 	local armor = ent:Armor()
-	
-	print("current HP	 : " .. tostring(ent:Health()))
-	print("current Armor  : " .. tostring(armor))
-	print("damage to take : " .. tostring(damage))
 
 	-- normal damage handling when no armor is available
 	if armor == 0 then return end
@@ -1499,12 +1493,9 @@ function HandlePlayerArmorSystem(ent, infl, att, amount, dmginfo)
 	end
 
 	armor = armor - cv_armor_factor * damage
-	print("armor internal : " .. tostring(armor))
 	ent:SetArmor(math.Round(math.max(armor, 0)))
-	print("new armor	  : " .. tostring(ent:Armor()))
 	
 	local new_damage = cv_body_factor * damage - math.min(armor, 0)
-	print("calced dmg	 : " .. tostring(new_damage))
 	dmginfo:SetDamage(math.Round(new_damage))
 end
 

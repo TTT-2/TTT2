@@ -124,8 +124,6 @@ if SERVER then
 		self.armor = armor
 		self.armor_reinforced = cv_armor_reinforced_enabled:GetBool() and self:Armor() > cv_armor_for_reinforced:GetInt()
 
-		print("Setting armor to: " .. tostring(self.armor))
-
 		net.Start("ttt2_sync_armor")
 		net.WriteUInt(self.armor, 16)
 		net.WriteBool(self.armor_reinforced)
@@ -158,6 +156,13 @@ if SERVER then
 	-- @realm server
 	function plymeta:DecreaseArmor(decreaseby)
 		self:SetArmor(math.max(self:Armor() - decreaseby, 0))
+	end
+
+	---
+	-- Resets the armor value
+	-- @realm server
+	function plymeta:ResetArmor()
+		self:SetArmor(0)
 	end
 
 	hook.Add("TTTBeginRound", "ttt2_player_set_armor_beginround", function(ply)
