@@ -1162,6 +1162,8 @@ function BeginRound()
 
 	GAMEMODE:UpdatePlayerLoadouts() -- needs to happen when round_active
 
+	ARMOR:InitPlayerArmor()
+
 	hook.Call("TTTBeginRound", GAMEMODE)
 
 	ents.TTT.TriggerRoundStateOutputs(ROUND_BEGIN)

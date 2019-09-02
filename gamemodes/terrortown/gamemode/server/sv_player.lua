@@ -1441,7 +1441,7 @@ function GM:PlayerTakeDamage(ent, infl, att, amount, dmginfo)
 
 	-- before the karma is calculated, but after all other damage hooks / damage change is processed,
 	-- the armor system should come into place (GM functions are called last)
-	HandlePlayerArmorSystem(ent, infl, att, amount, dmginfo)
+	ARMOR:HandlePlayerTakeDamage(ent, infl, att, amount, dmginfo)
 
 	-- handle karma change / log etc
 	if ent ~= att and IsValid(att) and att:IsPlayer() and GetRoundState() == ROUND_ACTIVE and math.floor(dmginfo:GetDamage()) > 0 then
