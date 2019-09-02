@@ -12,9 +12,9 @@ util.AddNetworkString("ttt2_status_effect_remove_all")
 
 ---
 -- Adds a status for a given @{Player}
--- @param Player ply
--- @param string id
--- @param number active_icon
+-- @param Player ply The @{Player} that should receive this status update
+-- @param string id The id of the registered @{STATUS}
+-- @param number active_icon The numeric id of a specific status icon
 -- @realm server
 function STATUS:AddStatus(ply, id, active_icon)
 	net.Start("ttt2_status_effect_add")
@@ -25,9 +25,9 @@ end
 
 ---
 -- Changes the active icon for a specifiv active effect for a given @{Player}
--- @param Player ply
--- @param string id
--- @param number active_icon
+-- @param Player ply The @{Player} that should receive this status update
+-- @param string id The id of the registered @{STATUS}
+-- @param number active_icon The numeric id of a specific status icon
 -- @realm server
 function STATUS:SetActiveIcon(ply, id, active_icon)
 	net.Start("ttt2_status_effect_set_id")
@@ -38,11 +38,12 @@ end
 
 ---
 -- Adds a times status for a given @{Player}
--- @param Player ply
--- @param string id
--- @param number duration the time
--- @param boolean showDuration
--- @param number active_icon
+-- @param Player ply The @{Player} that should receive this status update
+-- @param string id The id of the registered @{STATUS}
+-- @param number duration The duration of the @{STATUS}. If the time elapsed,
+-- the @{STATUS} will be removed automatically
+-- @param boolean showDuration Wether the dureation should be shown
+-- @param number active_icon The numeric id of a specific status icon
 -- @realm server
 function STATUS:AddTimedStatus(ply, id, duration, showDuration, active_icon)
 	net.Start("ttt2_status_effect_add_timed")
@@ -55,8 +56,8 @@ end
 
 ---
 -- Removes a status for a given @{Player}
--- @param Player ply
--- @param string id
+-- @param Player ply The @{Player} that should receive this status update
+-- @param string id The id of the registered @{STATUS}
 -- @realm server
 function STATUS:RemoveStatus(ply, id)
 	net.Start("ttt2_status_effect_remove")
@@ -66,7 +67,7 @@ end
 
 ---
 -- Removes each status for a given @{Player}
--- @param Player ply
+-- @param Player ply The @{Player} that should receive this status update
 -- @realm server
 function STATUS:RemoveAll(ply)
 	net.Start("ttt2_status_effect_remove_all")

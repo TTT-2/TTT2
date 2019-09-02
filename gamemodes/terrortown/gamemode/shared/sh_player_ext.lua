@@ -99,7 +99,7 @@ if SERVER then
 
 	local cv_armor_on_spawn = CreateConVar('ttt_armor_on_spawn', 0, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 	local cv_armor_reinforced_enabled = CreateConVar('ttt_armor_reinforced_enabled', 1, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-	local cv_armor_for_reinforced = CreateConVar('ttt_armor_for_reinforced', 50, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+	local cv_armor_for_reinforced = CreateConVar('ttt_armor_threshold_for_reinforced', 50, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 	
 	CreateConVar('ttt_armor_damage_block_pct', 0.2, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 	CreateConVar('ttt_armor_damage_health_pct', 0.7, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
@@ -112,8 +112,8 @@ if SERVER then
 	cvars.AddChangeCallback("ttt_armor_reinforced_enabled", function(cv, old, new)
 		SetGlobalBool("ttt_armor_reinforced_enabled", tobool(tonumber(new)))
 	end)
-	cvars.AddChangeCallback("ttt_armor_for_reinforced", function(cv, old, new)
-		SetGlobalInt("ttt_armor_for_reinforced", tonumber(new))
+	cvars.AddChangeCallback("ttt_armor_threshold_for_reinforced", function(cv, old, new)
+		SetGlobalInt("ttt_armor_threshold_for_reinforced", tonumber(new))
 	end)
 
 	---
@@ -147,7 +147,7 @@ if SERVER then
 	-- @param number increaseby the amount to be increased
 	-- @realm server
 	function plymeta:IncreaseArmor(increaseby)
-		self:SetArmor(self:Armor() + increaseby)
+		self:SetArmor(self:Armor() + math.max(increaseby, 0))
 	end
 
 	---
@@ -155,7 +155,7 @@ if SERVER then
 	-- @param number decreaseby the amount to be decreased
 	-- @realm server
 	function plymeta:DecreaseArmor(decreaseby)
-		self:SetArmor(math.max(self:Armor() - decreaseby, 0))
+		self:SetArmor(math.max(self:Armor() - math.max(decreaseby, 0), 0))
 	end
 
 	---

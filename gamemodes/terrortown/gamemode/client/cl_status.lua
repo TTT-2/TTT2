@@ -29,8 +29,8 @@ end
 
 ---
 -- Adds a status to the currently active ones
--- @param number id The id of the registered @{STATUS}
--- @param number active_icon
+-- @param string id The id of the registered @{STATUS}
+-- @param number active_icon The numeric id of a specific status icon
 -- @realm client
 function STATUS:AddStatus(id, active_icon)
 	if STATUS.registered[id] == nil then return end
@@ -42,10 +42,11 @@ end
 
 ---
 -- Adds a timed status to the currently active ones
--- @param number id The id of the registered @{STATUS}
+-- @param string id The id of the registered @{STATUS}
 -- @param number duration The duration of the @{STATUS}. If the time elapsed,
 -- the @{STATUS} will be removed automatically
--- @param number active_icon
+-- @param boolean showDuration Wether the dureation should be shown
+-- @param number active_icon The numeric id of a specific status icon
 -- @realm client
 function STATUS:AddTimedStatus(id, duration, showDuration, active_icon)
 	if STATUS.registered[id] == nil or duration == 0 then return end
@@ -67,8 +68,8 @@ end
 
 ---
 -- Changes the active icon for a specifiv active effect for a given @{Player}
--- @param number id The id of the registered @{STATUS}
--- @param number active_icon
+-- @param string id The id of the registered @{STATUS}
+-- @param number active_icon The numeric id of a specific status icon
 -- @realm client
 function STATUS:SetActiveIcon(id, active_icon)
 	if STATUS.active[id] == nil then return end
@@ -84,8 +85,8 @@ end
 
 ---
 -- Checks if a @{STATUS} is registered
--- @param number id The index of the status
--- @return boolean whether the status is registered
+-- @param string id The index of the status
+-- @return boolean Whether the status is registered
 -- @realm client
 function STATUS:Registered(id)
 	return (STATUS.registered[id] ~= nil) and true or false
@@ -93,8 +94,8 @@ end
 
 ---
 -- Checks if a @{STATUS} is active
--- @param number id The index of the status
--- @return boolean whether the status is active
+-- @param string id The index of the status
+-- @return boolean Whether the status is active
 -- @realm client
 function STATUS:Active(id)
 	return (STATUS.active[id] ~= nil) and true or false
@@ -102,7 +103,7 @@ end
 
 ---
 -- Removes a currently active status
--- @param number id The id of the registered @{STATUS}
+-- @param string id The id of the registered @{STATUS}
 -- @realm client
 function STATUS:RemoveStatus(id)
 	if STATUS.active[id] == nil then return end

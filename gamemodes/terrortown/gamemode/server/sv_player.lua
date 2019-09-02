@@ -1454,13 +1454,8 @@ function GM:PlayerTakeDamage(ent, infl, att, amount, dmginfo)
 end
 
 function HandlePlayerArmorSystem(ent, infl, att, amount, dmginfo)
-	-- armor does not help when the head receives damage
-	--if ent:LastHitGroup() == HITGROUP_HEAD then return end
-	-- DISABLED for now since the hook gets called twice, once with 0 damage, but with a hitgroup and once
-	-- with damage but no hitgroup. I have to dig deeper into this
-
 	-- some entities cause this hook to be triggered, ignore 0 damage events
-	if dmginfo:GetDamage() == 0 then return end
+	if dmginfo:GetDamage() <= 0 then return end
 
 	-- fallback for players who prefer the vanilla armor
 	if GetConVar("ttt_armor_classic"):GetBool() and ent:Armor() > 0 then

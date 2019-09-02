@@ -192,8 +192,7 @@ end
 function plymeta:AddEquipmentItem(id)
 	local item = items.GetStored(id)
 
-	if not item then return end
-	if item.limited and self:HasEquipmentItem(id) then return end
+	if not item or (item.limited and self:HasEquipmentItem(id)) then return end
 
 	self.equipmentItems = self.equipmentItems or {}
 	self.equipmentItems[#self.equipmentItems + 1] = id
