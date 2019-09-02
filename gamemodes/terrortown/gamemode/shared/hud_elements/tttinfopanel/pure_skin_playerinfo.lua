@@ -203,18 +203,16 @@ if CLIENT then
 
 			-- draw bars
 			local bw = w2 - self.lpw - self.pad * 2 -- bar width
-			local bh = 26 * self.scale --  bar height
+			local bh = 26 * self.scale -- bar height
 			local sbh = 8 * self.scale -- spring bar height
 			local spc = 7 * self.scale -- space between bars
 
 			-- health bar
 			local health = math.max(0, client:Health())
-			local health_print = tostring(health)
 
 			local armor = math.max(0, client:Armor())
-			local armor_print = tostring(armor)
 
-			self:DrawBar(nx, ty, bw, bh, Color(234, 41, 41), health / client:GetMaxHealth(), self.scale, "HEALTH: " .. health_print)
+			self:DrawBar(nx, ty, bw, bh, Color(234, 41, 41), health / client:GetMaxHealth(), self.scale, "HEALTH: " .. health)
 
 			-- draw armor information
 			if not GetGlobalBool("ttt_armor_classic", false) and armor > 0 then				
@@ -233,7 +231,7 @@ if CLIENT then
 				util.DrawFilteredTexturedRect(a_pos_x + math.Round(self.scale), a_pos_y + math.Round(self.scale), a_size, a_size, icon_mat, 255, {r=0, g=0, b=0})
 				util.DrawFilteredTexturedRect(a_pos_x, a_pos_y, a_size, a_size, icon_mat, 255, {r=255, g=255, b=255})
 				
-				draw.AdvancedText(armor_print, "PureSkinBar", at_pos_x, at_pos_y, self:GetDefaultFontColor(Color(234, 41, 41)), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT, true, self.scale)
+				draw.AdvancedText(armor, "PureSkinBar", at_pos_x, at_pos_y, self:GetDefaultFontColor(Color(234, 41, 41)), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT, true, self.scale)
 			end
 
 			-- ammo bar

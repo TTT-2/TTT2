@@ -62,10 +62,10 @@ if CLIENT then
 			-- Draw health
 			local health = math.max(0, client:Health())
 			local health_y = y + margin
-			local health_string = tostring(health)
+			local health_string = health
 			
 			if not GetGlobalBool("ttt_armor_classic", false) and client:Armor() > 0 then
-				health_string = health_string .. " + " .. tostring(client:Armor())
+				health_string = health_string .. " + " .. client:Armor()
 			end
 
 			self:PaintBar(x + margin, health_y, bar_width, bar_height, self.health_colors, health / client:GetMaxHealth())
