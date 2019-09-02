@@ -30,7 +30,7 @@ end
 ---
 -- Adds a status to the currently active ones
 -- @param string id The id of the registered @{STATUS}
--- @param number active_icon The numeric id of a specific status icon
+-- @param[default=1] number active_icon The numeric id of a specific status icon
 -- @realm client
 function STATUS:AddStatus(id, active_icon)
 	if STATUS.registered[id] == nil then return end
@@ -45,8 +45,8 @@ end
 -- @param string id The id of the registered @{STATUS}
 -- @param number duration The duration of the @{STATUS}. If the time elapsed,
 -- the @{STATUS} will be removed automatically
--- @param boolean showDuration Wether the dureation should be shown
--- @param number active_icon The numeric id of a specific status icon
+-- @param[default=false] boolean showDuration Wether the dureation should be shown
+-- @param[default=1] number active_icon The numeric id of a specific status icon
 -- @realm client
 function STATUS:AddTimedStatus(id, duration, showDuration, active_icon)
 	if STATUS.registered[id] == nil or duration == 0 then return end
@@ -69,14 +69,14 @@ end
 ---
 -- Changes the active icon for a specifiv active effect for a given @{Player}
 -- @param string id The id of the registered @{STATUS}
--- @param number active_icon The numeric id of a specific status icon
+-- @param[default=1] number active_icon The numeric id of a specific status icon
 -- @realm client
 function STATUS:SetActiveIcon(id, active_icon)
 	if STATUS.active[id] == nil then return end
 
 	local max_amount = self.registered[id].hud.GetTexture and 1 or #STATUS.registered[id].hud
 
-	if active_icon < 1 or active_icon > max_amount then
+	if not active_icon or active_icon < 1 or active_icon > max_amount then
 		active_icon = 1
 	end
 

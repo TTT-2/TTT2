@@ -25,15 +25,14 @@ function ITEM:Reset(buyer)
 	end
 end
 
--- REGISTER STATUS ICONS
+-- HANDLE ITEM CLASSIC MODE
 if CLIENT then
-	hook.Add("Initialize", "ttt2_base_register_armor_status", function() 
-		STATUS:RegisterStatus("ttt_weapon_armor", {
-			hud = {
-				Material("vgui/ttt/perks/hud_armor.png"),
-				Material("vgui/ttt/perks/hud_armor_reinforced.png")
-			},
-			type = "good"
-		})
+	hook.Add("TTTBeginRound", "ttt2_base_register_armor_text", function()
+		if GetGlobalBool("ttt_armor_classic") then
+			local item = items.GetStored("item_ttt_armor")
+	
+			-- limit item when in classic mode
+			item.limited = true
+		end
 	end)
 end
