@@ -88,7 +88,7 @@ end
 -- @internal
 local function TTT2BindCheckThink()
 	-- Make sure the user is currently not typing anything, to prevent unwanted execution of a binding.
-	if vgui.GetKeyboardFocus() ~= nil then return end
+	if vgui.GetKeyboardFocus() ~= nil or LocalPlayer():IsTyping() or gui.IsConsoleVisible() then return end
 
 	for btn, tbl in pairs(Bindings) do
 		local cache = input.IsButtonDown(btn)
