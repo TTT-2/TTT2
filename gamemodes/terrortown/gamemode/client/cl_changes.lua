@@ -432,6 +432,33 @@ function CreateChanges()
 	</li>
 	</ul>]])
 
+	AddChange("0.5.6b", [[<ul>
+	<li><b>NEW:</b>
+		<ul>
+			<li>Marks module</li>
+			<li>New sprint hooks for addons</li>
+		</ul>
+	</li>
+	<hr />
+	<li>Improved:
+		<ul>
+			<li>Restrict HUD element movement when element is not rendered</li>
+			<li>Sidebar icons now turn black if the hudcolor is too bright</li>
+			<li>Binding functions are no longer called when in chat or in console</li>
+			<li>Improved rendering of overhead roleicons</li>
+		</ul>
+	</li>
+	<hr />
+	<li>Fixes:
+		<ul>
+			<li>Fixed the shopbug that occured since the new GarrysMod update</li>
+			<li>Fixed search sometimes not working</li>
+			<li>Fixed GetAvoidDetective compatibility</li>
+			<li>Fixel cl_radio error</li>
+		</ul>
+	</li>
+	</ul>]])
+
 	hook.Run("TTT2AddChange", changes, currentVersion)
 end
 
