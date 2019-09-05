@@ -80,7 +80,7 @@ function GM:ChatText(idx, name, text, type)
 end
 
 -- Detectives have a blue name, in both chat and radio messages
-local function AddDetectiveText(ply, text)
+function AddDetectiveText(ply, text)
 	chat.AddText(DETECTIVE.color, ply:Nick(), Color(255, 255, 255), ": " .. text)
 end
 

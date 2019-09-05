@@ -29,15 +29,15 @@ local ttt2_indicator_streamer = "vgui/ttt/ttt2_indicator_streamer"
 local ttt2_indicator_heroes = "vgui/ttt/ttt2_indicator_heroes"
 
 local dev_tbl = {
-	["76561197964193008"] = true,
-	["76561198049831089"] = true,
-	["76561198058039701"] = true,
+	["76561197964193008"] = true, -- Bad King Urgrain
+	["76561198049831089"] = true, -- Alf21
+	["76561198058039701"] = true, -- saibotk
 	["76561198047819379"] = true, -- Mineotopia
-	["76561198052323988"] = true --LeBroomer
+	["76561198052323988"] = true -- LeBroomer
 }
 
 local vip_tbl = {
-	["76561198378608300"] = true, -- SirKadeeka / L$...
+	["76561198378608300"] = true, -- SirKadeeka / $rã£
 	["76561198102780049"] = true, -- Nick
 	["76561198020955880"] = true, -- V3kta
 	["76561198033468770"] = true, -- Dok441
@@ -46,11 +46,18 @@ local vip_tbl = {
 	["76561198162764168"] = true, -- DerJohn
 	["76561198132229662"] = true, -- Satton RU
 	["76561198007725535"] = true, -- Skatcat
-	["76561197989909602"] = true -- Tobiti
+	["76561197989909602"] = true, -- Tobiti
+	["76561193855292718"] = true, -- Lunex
+	["76561198076404571"] = true, -- Histalek
+	["76561198042086461"] = true, -- James
+	["76561193814529882"] = true -- Trystan
 }
 
 local addondev_tbl = {
-	["76561198052323988"] = true -- LeBroomer
+	["76561198102780049"] = true, -- Nick
+	["76561197989909602"] = true, -- Tobiti
+	["76561198076404571"] = true, -- Histalek
+	["76561198027025876"] = true -- 8Z
 }
 
 ---

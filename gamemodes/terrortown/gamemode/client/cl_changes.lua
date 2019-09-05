@@ -432,6 +432,50 @@ function CreateChanges()
 	</li>
 	</ul>]])
 
+	AddChange("0.5.6b", [[<ul>
+	<li><b>NEW:</b>
+		<ul>
+			<li>Marks module</li>
+			<li>New sprint and stamina hooks for add-ons</li>
+			<li>Added a documentation of TTT2</li>
+			<li>Added GetColumns function for the scoreboard</li>
+		</ul>
+	</li>
+	<hr />
+	<li>Improved:
+		<ul>
+			<li>Restrict HUD element movement when element is not rendered</li>
+			<li>Sidebar icons now turn black if the hudcolor is too bright</li>
+			<li>Binding functions are no longer called when in chat or in console</li>
+			<li>Improved the functionality of the binding system</li>
+			<li>Improved rendering of overhead role icons</li>
+			<li>Improved equipment searching</li>
+			<li>Improved the project structure</li>
+			<li>Improved shadow color for dark texts</li>
+			<li>Some small performance improvements</li>
+			<li>Removed some unnecessary debug messages</li>
+			<li>Updated the TTT2 .fgd file</li>
+		</ul>
+	</li>
+	<hr />
+	<li>Fixes:
+		<ul>
+			<li>Fixed the shop bug that occured since the new GMod update</li>
+			<li>Fixed search sometimes not working</li>
+			<li>Fixed a shop reroll bug</li>
+			<li>Fixed GetAvoidDetective compatibility</li>
+			<li>Fixel two cl_radio errors</li>
+			<li>Fixed animation names</li>
+			<li>Fixed wrong karma print</li>
+			<li>Fixed a language module bug</li>
+			<li>Fixed an inconsistency in TellTraitorsAboutTraitors function</li>
+			<li>Fixed the empty weaponswitch bug on first spawn</li>
+			<li>Fixed an error in the shadow rendering of a font</li>
+			<li>Small bugfixes</li>
+		</ul>
+	</li>
+	</ul>]])
+
 	hook.Run("TTT2AddChange", changes, currentVersion)
 end
 

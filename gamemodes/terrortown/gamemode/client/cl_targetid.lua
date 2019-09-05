@@ -93,7 +93,7 @@ function GM:PostDrawTranslucentRenderables(bDrawingDepth, bDrawingSkybox)
 			local shift = Vector(2, 0, 0)
 			shift:Rotate(ea)
 			pos:Add(shift)
-			
+
 			if ply ~= client
 			and ply:IsActive()
 			and ply:IsSpecial()

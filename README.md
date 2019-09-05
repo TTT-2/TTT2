@@ -1,7 +1,14 @@
-# TTT2 [Trouble in Terrorist Town 2 (Advanced Update)] // OPEN BETA
+# TTT2 - Trouble in Terrorist Town 2 (Advanced Update)
+[![Build Status](https://ci.neoxult.de/buildStatus/icon?job=TTT2%2Fmaster)](https://ci.neoxult.de/job/TTT2/job/master/)
+[![Steam Subscriptions](https://img.shields.io/steam/subscriptions/1357204556)](https://steamcommunity.com/sharedfiles/filedetails/?id=1357204556) 
+[![Steam Downloads](https://img.shields.io/steam/downloads/1357204556)](https://steamcommunity.com/sharedfiles/filedetails/?id=1357204556) 
+[![Discord](https://img.shields.io/discord/442107660955942932)](https://discord.gg/9njYXGY)  
+
+TTT2 is an updated version of the TTT gamemode for [Garry's Mod](https://gmod.facepunch.com/).
+
 Find [TTT2 on Steam](https://steamcommunity.com/sharedfiles/filedetails/?id=1357204556)
 
-**This is still a beta version. Bugs are expected and the documentation will follow as soon as possible. [Please report bugs and suggestions here](https://steamcommunity.com/linkfilter/?url=https://github.com/Alf21/TTT2/issues)!**  
+**This is still a beta version. Bugs are expected and the documentation will follow as soon as possible. [Please report bugs and suggestions here](https://github.com/Alf21/TTT2/issues)!**  
   
 * Discord: [https://discord.gg/9njYXGY](https://discord.gg/9njYXGY)  
 * Source: [https://github.com/Alf21/TTT2](https://github.com/Alf21/TTT2)  
@@ -9,35 +16,27 @@ Find [TTT2 on Steam](https://steamcommunity.com/sharedfiles/filedetails/?id=1357
 * Designguidelines: [https://github.com/Alf21/TTT2/blob/master/DESIGNGUIDELINES.md](https://github.com/Alf21/TTT2/blob/master/DESIGNGUIDELINES.md)
 * GLua Beautifier: [https://gist.github.com/Alf21/e86601521f67fcbb88ddc34bfa778727](https://gist.github.com/Alf21/e86601521f67fcbb88ddc34bfa778727)
   
-<br />
-  
 ## MOTIVATION
 
-TTT2 was the next logical step after TTT was such a massive success. It is a spiritual successor to this classic gamemode by Bad King Urgrain which aims to introduce many new features, to fix old bugs and to lift the user interface into a modern era.  
-  
-<br />
-  
+TTT2 was the next logical step after TTT was such a massive success. It is a spiritual successor to this classic gamemode by Bad King Urgrain, which aims to introduce many new features, to fix old bugs and to lift the user interface into a modern era.  
+
 ## ADDONS
 
-We know that TTT lives from its huge community and all its great addons. Because of this, **compatibility** is one of the highest priorities. Almost every item that works with TTT also works well with TTT2. There are a few minor exceptions though. Addons that modify the hud, eg. Octagonal HUD, will not work with TTT2. If you plan on creating a new HUD for TTT2, you have to use the way more powerful hud system from TTT2. Additionally addons that rely on roles may not work as intended with the newly added roles.  
+We know that TTT lives from its huge community and all its great addons. Because of this, **compatibility** is one of the highest priorities. Almost every item that works with TTT also works well with TTT2. There are a few minor exceptions though. Addons that modify the HUD, eg. Octagonal HUD, will not work with TTT2. If you plan on creating a new HUD for TTT2, you have to use the way more powerful HUD system from TTT2. Additionally addons that rely on roles may not work as intended with the newly added roles.  
   
 Check out [this workshop list](https://steamcommunity.com/sharedfiles/filedetails/?id=1584725582) for addons that were reworked for TTT2.  
   
 **Hint:** You do not need addons like “Better Equipment Menu”, “Drowning Indicator” or “TTT Sprint”, because features like these are included in TTT2 by default.  
   
-<br />
-
 ## NEW GAMEMODES
 
 There are a few new gamemodes based on TTT2. Click on these icons to open a list of needed addons to play these currently available official gamemodes.  
   
 <a href="https://steamcommunity.com/sharedfiles/filedetails/?id=1672031318"><img src="https://i.imgur.com/5JAsxin.png"></a> <a href="https://steamcommunity.com/sharedfiles/filedetails/?id=1672014264"><img src="https://i.imgur.com/qwEkCPb.png"></a>  
-  
-<br />
 
 ## SETUP
 
-The setup is fairly easy. Just subscribe to TTT2 and the addons you want to use and get started. It’s recommended to use ULX to set it up ingame, there’s an [ULX addon for TTT2](https://steamcommunity.com/sharedfiles/filedetails/?id=1362430347). Commands for the weaponshop etc are found in [this wiki article](https://steamcommunity.com/linkfilter/?url=https://github.com/Alf21/TTT2/wiki/Commands).  
+The setup is fairly easy. Just subscribe to TTT2 and the addons you want to use and get started. It’s recommended to use ULX to set it up ingame, there’s an [ULX addon for TTT2](https://steamcommunity.com/sharedfiles/filedetails/?id=1362430347). Commands for the weaponshop etc are found in [this wiki article](https://github.com/Alf21/TTT2/wiki/Commands).  
   
 <br />
 <br />
