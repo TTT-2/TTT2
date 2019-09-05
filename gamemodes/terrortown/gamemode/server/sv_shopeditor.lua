@@ -28,6 +28,8 @@ function ShopEditor.ShopEditor(ply, cmd, args)
 	if ply:IsAdmin() then
 		net.Start("newshop")
 		net.Send(ply)
+	else
+		ply:ChatPrint("[TTT2][INFO] You need to be an admin to access the ShopEditor!")
 	end
 end
 concommand.Add("shopeditor", ShopEditor.ShopEditor)

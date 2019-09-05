@@ -915,6 +915,8 @@ function ShopEditor.CreateShopEditor()
 	if IsValid(ply.shopeditor_frame) then
 		ply.shopeditor_frame:Close()
 
+		ply.shopeditor_frame = nil -- fix some edge cases
+
 		return
 	end
 
