@@ -16,7 +16,7 @@ function STATUS:RegisterStatus(id, data)
 	if STATUS.registered[id] ~= nil then  -- name is not unique
 		return false
 	end
-	
+
 	-- support single and multible icons per status effect
 	if data.hud.GetTexture then
 		data.hud = {data.hud}
@@ -53,14 +53,14 @@ function STATUS:AddTimedStatus(id, duration, showDuration, active_icon)
 
 	self:AddStatus(id, active_icon)
 
-	STATUS.active[id].displaytime = CurTime() + duration
+	self.active[id].displaytime = CurTime() + duration
 
 	timer.Create(id, duration, 1, function()
 		self:RemoveStatus(id)
 	end)
 
 	if showDuration then
-		STATUS.active[id].DrawInfo = function(self)
+		self.active[id].DrawInfo = function(self)
 			return tostring(math.Round(math.max(0, self.displaytime - CurTime())))
 		end
 	end

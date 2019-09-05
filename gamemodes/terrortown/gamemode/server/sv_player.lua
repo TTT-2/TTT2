@@ -316,7 +316,7 @@ function GM:PlayerSelectSpawn(ply)
 					rig_spwn:SetPos(rig)
 					rig_spwn:Spawn()
 
-					ErrorNoHalt("TTT2 WARNING: Map has too few spawn points, using a rigged spawn for ".. tostring(ply) .. "\n")
+					ErrorNoHalt("TTT2 WARNING: Map has too few spawn points, using a rigged spawn for " .. tostring(ply) .. "\n")
 
 					self.HaveRiggedSpawn = true
 
@@ -1432,11 +1432,9 @@ function GM:PlayerTakeDamage(ent, infl, att, amount, dmginfo)
 
 	-- handle damage scaling by karma
 	if IsValid(att) and att:IsPlayer() and GetRoundState() == ROUND_ACTIVE and math.floor(dmginfo:GetDamage()) > 0 then
-		if ent ~= att then
+		if ent ~= att and not dmginfo:IsDamageType(DMG_SLASH) then
 			-- scale everything to karma damage factor except the knife, because it assumes a kill
-			if not dmginfo:IsDamageType(DMG_SLASH) then
-				dmginfo:ScaleDamage(att:GetDamageFactor())
-			end
+			dmginfo:ScaleDamage(att:GetDamageFactor())
 		end
 
 		-- before the karma is calculated, but after all other damage hooks / damage change is processed,
@@ -1464,9 +1462,6 @@ end
 function GM:OnNPCKilled(npc, attacker, inflictor)
 
 end
-
--- Drowning and such
-local tm, ply, plys
 
 ---
 -- Called when a @{Player} executes gm_showhelp console command. ( Default bind is F1 )

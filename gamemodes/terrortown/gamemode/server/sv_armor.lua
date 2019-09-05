@@ -15,13 +15,13 @@ util.AddNetworkString("ttt2_sync_armor_max")
 
 -- SET UP CONVARS
 ARMOR.cv = {}
-ARMOR.cv.armor_on_spawn = CreateConVar('ttt_armor_on_spawn', 0, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-ARMOR.cv.armor_is_reinforced_enabled = CreateConVar('ttt_armor_is_reinforced_enabled', 1, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-ARMOR.cv.armor_threshold_for_reinforced = CreateConVar('ttt_armor_threshold_for_reinforced', 50, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-ARMOR.cv.armor_damage_block_pct = CreateConVar('ttt_armor_damage_block_pct', 0.2, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-ARMOR.cv.armor_damage_health_pct = CreateConVar('ttt_armor_damage_health_pct', 0.7, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-ARMOR.cv.armor_classic = CreateConVar('ttt_armor_classic', 0, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-ARMOR.cv.item_armor_value = CreateConVar('ttt_item_armor_value', 30, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+ARMOR.cv.armor_on_spawn = CreateConVar("ttt_armor_on_spawn", 0, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+ARMOR.cv.armor_is_reinforced_enabled = CreateConVar("ttt_armor_is_reinforced_enabled", 1, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+ARMOR.cv.armor_threshold_for_reinforced = CreateConVar("ttt_armor_threshold_for_reinforced", 50, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+ARMOR.cv.armor_damage_block_pct = CreateConVar("ttt_armor_damage_block_pct", 0.2, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+ARMOR.cv.armor_damage_health_pct = CreateConVar("ttt_armor_damage_health_pct", 0.7, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+ARMOR.cv.armor_classic = CreateConVar("ttt_armor_classic", 0, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+ARMOR.cv.item_armor_value = CreateConVar("ttt_item_armor_value", 30, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 cvars.AddChangeCallback("ttt_armor_classic", function(cv, old, new)
 	SetGlobalBool("ttt_armor_classic", tobool(tonumber(new)))
@@ -116,9 +116,9 @@ end
 -- Sets the initial @{Player} Armor, called in @{GM:TTTBeginRound}
 -- @realm server
 -- @internal
-function ARMOR:InitPlayerArmor() 
+function ARMOR:InitPlayerArmor()
 	for _, p in ipairs(player.GetAll()) do
-		if p:IsTerror() then 
+		if p:IsTerror() then
 			p:SetArmor(self.cv.armor_on_spawn:GetInt())
 		end
 	end
@@ -140,7 +140,7 @@ function ARMOR:HandlePlayerTakeDamage(ply, infl, att, amount, dmginfo)
 		if dmginfo:IsDamageType(DMG_BULLET) or dmginfo:IsDamageType(DMG_CLUB) then
 			dmginfo:ScaleDamage(0.7)
 		end
-		
+
 		return
 	end
 
@@ -158,13 +158,13 @@ function ARMOR:HandlePlayerTakeDamage(ply, infl, att, amount, dmginfo)
 
 	self.cv.armor_factor = self.cv.armor_damage_block_pct:GetFloat()
 	self.cv.health_factor = self.cv.armor_damage_health_pct:GetFloat()
-	
+
 	if ply:ArmorIsReinforced() then
 		self.cv.health_factor = self.cv.health_factor - 0.15
 	end
 
 	ply:DecreaseArmor(self.cv.armor_factor * damage)
-	
+
 	local new_damage = self.cv.health_factor * damage - math.min(armor, 0)
 	dmginfo:SetDamage(new_damage)
 end

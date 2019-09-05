@@ -226,7 +226,6 @@ local function CreateEquipmentList(t)
 
 	local ply = LocalPlayer()
 	local currole = ply:GetSubRole()
-	local credits = ply:GetCredits()
 
 	local itemSize = 64
 
@@ -283,7 +282,7 @@ local function CreateEquipmentList(t)
 
 	for k, item in ipairs(itms) do
 		local equipName = GetEquipmentTranslation(item.name, item.PrintName)
-		
+
 		if t.search and string.find(string.lower(equipName), string.lower(t.search)) or not t.search then
 			local ic = nil
 
