@@ -85,6 +85,8 @@ function GM:Initialize()
 
 	self.BaseClass:Initialize()
 
+	ARMOR:Initialize()
+
 	hook.Run("TTT2FinishedLoading")
 
 	hook.Run("PostInitialize")

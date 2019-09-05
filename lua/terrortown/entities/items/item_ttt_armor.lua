@@ -21,7 +21,7 @@ end
 
 function ITEM:Reset(buyer)
 	if SERVER then
-		buyer:DecreaseArmor(GetConVar("ttt_item_armor_value"):GetInt())
+		buyer:RemoveArmor(GetConVar("ttt_item_armor_value"):GetInt())
 	end
 end
 

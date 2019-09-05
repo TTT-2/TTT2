@@ -24,68 +24,108 @@ ARMOR.cv.armor_classic = CreateConVar('ttt_armor_classic', 0, {FCVAR_NOTIFY, FCV
 ARMOR.cv.item_armor_value = CreateConVar('ttt_item_armor_value', 30, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 cvars.AddChangeCallback("ttt_armor_classic", function(cv, old, new)
-    SetGlobalBool("ttt_armor_classic", tobool(tonumber(new)))
+	SetGlobalBool("ttt_armor_classic", tobool(tonumber(new)))
 end)
 cvars.AddChangeCallback("ttt_armor_is_reinforced_enabled", function(cv, old, new)
-    SetGlobalBool("ttt_armor_is_reinforced_enabled", tobool(tonumber(new)))
+	SetGlobalBool("ttt_armor_is_reinforced_enabled", tobool(tonumber(new)))
 end)
 cvars.AddChangeCallback("ttt_armor_threshold_for_reinforced", function(cv, old, new)
-    SetGlobalInt("ttt_armor_threshold_for_reinforced", tonumber(new))
+	SetGlobalInt("ttt_armor_threshold_for_reinforced", tonumber(new))
 end)
 
 
 -- SERVERSIDE ARMOR FUNCTIONS
 ---
--- Sets the armor to a specific value
+-- Sets the @{ARMOR} to a specific value
 -- @param number armor the new armor to be set
 -- @realm server
-function plymeta:SetArmor(armor)
-    self.armor = armor
-    self.armor_is_reinforced = ARMOR.cv.armor_is_reinforced_enabled:GetBool() and self:Armor() > ARMOR.cv.armor_threshold_for_reinforced:GetInt()
+function plymeta:SetArmorValue(armor)
+	self.armor = math.Clamp(armor, 0, self:GetMaxArmor())
+	self.armor_is_reinforced = ARMOR.cv.armor_is_reinforced_enabled:GetBool() and self:GetArmor() > ARMOR.cv.armor_threshold_for_reinforced:GetInt()
 
-    net.Start("ttt2_sync_armor")
-    net.WriteUInt(math.Round(self.armor), 16)
-    net.WriteBool(self.armor_is_reinforced)
-    net.Send(self)
+	print("new armor value: " .. self.armor)
+
+	net.Start("ttt2_sync_armor")
+	net.WriteUInt(math.Round(self.armor), 16)
+	net.WriteBool(self.armor_is_reinforced)
+	net.Send(self)
 end
 
 ---
--- Sets the max armor to a specific value
+-- Sets the max @{ARMOR} to a specific value
 -- @param number armor_max the new max armor to be set
 -- @realm server
 function plymeta:SetMaxArmor(armor_max)
-    self.armor_max = armor_max
+	print("setting max armor to: " .. armor_max)
 
-    net.Start("ttt2_sync_armor_max")
-    net.WriteUInt(math.Round(armor_max), 16)
-    net.Send(self)
+	self.armor_max = math.max(armor_max, 0)
+
+	net.Start("ttt2_sync_armor_max")
+	net.WriteUInt(math.Round(armor_max), 16)
+	net.Send(self)
+end
+
+function plymeta:SetArmor(armor)
+	print("setting armor to: " .. armor)
+
+	if armor > self:GetMaxArmor() then
+		self:SetMaxArmor(armor)
+	end
+
+	self:SetArmorValue(armor)
 end
 
 ---
--- Increases the armor about a specific value
+-- Increases the @{ARMOR} directly about a specific value
 -- @param number increaseby the amount to be increased
 -- @realm server
 function plymeta:IncreaseArmor(increaseby)
-    self:SetArmor(self:Armor() + math.max(increaseby, 0))
+	self:SetArmor(self:GetArmor() + math.max(increaseby, 0))
 end
 
 ---
--- Decreases the armor about a specific value
+-- Decreases the @{ARMOR} directly about a specific value
 -- @param number decreaseby the amount to be decreased
 -- @realm server
 function plymeta:DecreaseArmor(decreaseby)
-    self:SetArmor(math.max(self:Armor() - math.max(decreaseby, 0), 0))
+	self:SetArmor(math.max(self:GetArmor() - math.max(decreaseby, 0), 0))
 end
 
 ---
--- Resets the armor value
+-- Decreases the @{ARMOR} about a scaled specific value depending on the current max value
+-- @param number decreaseby the amount to be decreased
+-- @realm server
+function plymeta:RemoveArmor(remove)
+	if self:GetMaxArmor() == 0 then
+		self:SetArmor(0)
+	end
+
+	local multiplier = self:GetArmor() / self:GetMaxArmor()
+
+	self:DecreaseArmor(remove * multiplier)
+end
+
+---
+-- Resets the @{ARMOR} value including the max value, called in @{GM:PlayerSpawn}
 -- @realm server
 function plymeta:ResetArmor()
-    self:SetArmor(0)
+	self:SetArmor(0)
 end
 
 ---
--- Handles the armor of a @{Player}, called by @{GM:PlayerTakeDamage}
+-- Sets the initial @{Player} Armor, called in @{GM:TTTBeginRound}
+-- @realm server
+-- @internal
+function ARMOR:InitPlayerArmor() 
+	for _, p in ipairs(player.GetAll()) do
+		if p:IsTerror() then 
+			p:SetArmor(self.cv.armor_on_spawn:GetInt())
+		end
+	end
+end
+
+---
+-- Handles the @{ARMOR} of a @{Player}, called by @{GM:PlayerTakeDamage}
 -- @param Player ply The @{Player} taking damage
 -- @param Entity infl The inflictor
 -- @param Player|Entity att The attacker
@@ -94,15 +134,12 @@ end
 -- @realm server
 -- @internal
 function ARMOR:HandlePlayerTakeDamage(ply, infl, att, amount, dmginfo)
-	-- some entities cause this hook to be triggered, ignore 0 damage events
-	if dmginfo:GetDamage() <= 0 then return end
-
 	-- fallback for players who prefer the vanilla armor
-    if self.cv.armor_classic:GetBool() and ply:Armor() > 0 then
-        -- classic armor only shields from bullet/crowbar damage
-        if dmginfo:IsDamageType(DMG_BULLET) or dmginfo:IsDamageType(DMG_CLUB) then
-            dmginfo:ScaleDamage(0.7)
-        end
+	if self.cv.armor_classic:GetBool() and ply:GetArmor() > 0 then
+		-- classic armor only shields from bullet/crowbar damage
+		if dmginfo:IsDamageType(DMG_BULLET) or dmginfo:IsDamageType(DMG_CLUB) then
+			dmginfo:ScaleDamage(0.7)
+		end
 		
 		return
 	end
@@ -114,7 +151,7 @@ function ARMOR:HandlePlayerTakeDamage(ply, infl, att, amount, dmginfo)
 
 	-- calculate damage
 	local damage = dmginfo:GetDamage()
-	local armor = ply:Armor()
+	local armor = ply:GetArmor()
 
 	-- normal damage handling when no armor is available
 	if armor == 0 then return end
@@ -126,21 +163,8 @@ function ARMOR:HandlePlayerTakeDamage(ply, infl, att, amount, dmginfo)
 		self.cv.health_factor = self.cv.health_factor - 0.15
 	end
 
-	armor = armor - self.cv.armor_factor * damage
-	ply:SetArmor(math.max(armor, 0))
+	ply:DecreaseArmor(self.cv.armor_factor * damage)
 	
 	local new_damage = self.cv.health_factor * damage - math.min(armor, 0)
 	dmginfo:SetDamage(new_damage)
-end
-
----
--- Sets the initial @{Player} Armor, called at @{GM:TTTBeginRound}
--- @realm server
--- @internal
-function ARMOR:InitPlayerArmor() 
-    for _, p in ipairs(player.GetAll()) do
-        if p:IsTerror() then 
-            p:SetArmor(self.cv.armor_on_spawn:GetInt())
-        end
-    end
 end

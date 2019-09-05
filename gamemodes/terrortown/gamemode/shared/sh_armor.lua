@@ -11,7 +11,7 @@ end
 -- Returns the current armor
 -- @return[default=0] number armor
 -- @realm shared
-function plymeta:Armor()
+function plymeta:GetArmor()
 	return self.armor or 0
 end
 
@@ -20,7 +20,7 @@ end
 -- @return[default=100] number max armor
 -- @realm shared
 function plymeta:GetMaxArmor()
-	return self.armor_max or 100
+	return self.armor_max or 0
 end
 
 ---

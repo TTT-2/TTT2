@@ -210,7 +210,7 @@ if CLIENT then
 			-- health bar
 			local health = math.max(0, client:Health())
 
-			local armor = math.max(0, client:Armor())
+			local armor = math.max(0, client:GetArmor())
 
 			self:DrawBar(nx, ty, bw, bh, Color(234, 41, 41), health / client:GetMaxHealth(), self.scale, "HEALTH: " .. health)
 

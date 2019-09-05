@@ -1431,25 +1431,24 @@ function GM:PlayerTakeDamage(ent, infl, att, amount, dmginfo)
 	util.StartBleeding(ent, dmginfo:GetDamage(), 5)
 
 	-- handle damage scaling by karma
-	if ent ~= att and IsValid(att) and att:IsPlayer() and GetRoundState() == ROUND_ACTIVE and math.floor(dmginfo:GetDamage()) > 0 then
-		-- scale everything to karma damage factor except the knife, because it
-		-- assumes a kill
-		if not dmginfo:IsDamageType(DMG_SLASH) then
-			dmginfo:ScaleDamage(att:GetDamageFactor())
+	if IsValid(att) and att:IsPlayer() and GetRoundState() == ROUND_ACTIVE and math.floor(dmginfo:GetDamage()) > 0 then
+		if ent ~= att then
+			-- scale everything to karma damage factor except the knife, because it assumes a kill
+			if not dmginfo:IsDamageType(DMG_SLASH) then
+				dmginfo:ScaleDamage(att:GetDamageFactor())
+			end
 		end
-	end
 
-	-- before the karma is calculated, but after all other damage hooks / damage change is processed,
-	-- the armor system should come into place (GM functions are called last)
-	ARMOR:HandlePlayerTakeDamage(ent, infl, att, amount, dmginfo)
+		-- before the karma is calculated, but after all other damage hooks / damage change is processed,
+		-- the armor system should come into place (GM functions are called last)
+		ARMOR:HandlePlayerTakeDamage(ent, infl, att, amount, dmginfo)
 
-	-- handle karma change / log etc
-	if ent ~= att and IsValid(att) and att:IsPlayer() and GetRoundState() == ROUND_ACTIVE and math.floor(dmginfo:GetDamage()) > 0 then
+		if ent ~= att then
+			-- process the effects of the damage on karma
+			KARMA.Hurt(att, ent, dmginfo)
 
-		-- process the effects of the damage on karma
-		KARMA.Hurt(att, ent, dmginfo)
-
-		DamageLog(Format("DMG: \t %s [%s] damaged %s [%s] for %d dmg", att:Nick(), att:GetRoleString(), ent:Nick(), ent:GetRoleString(), math.Round(dmginfo:GetDamage())))
+			DamageLog(Format("DMG: \t %s [%s] damaged %s [%s] for %d dmg", att:Nick(), att:GetRoleString(), ent:Nick(), ent:GetRoleString(), math.Round(dmginfo:GetDamage())))
+		end
 	end
 end
 

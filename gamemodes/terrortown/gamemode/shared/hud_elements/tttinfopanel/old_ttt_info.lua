@@ -64,8 +64,8 @@ if CLIENT then
 			local health_y = y + margin
 			local health_string = health
 			
-			if not GetGlobalBool("ttt_armor_classic", false) and client:Armor() > 0 then
-				health_string = health_string .. " + " .. client:Armor()
+			if not GetGlobalBool("ttt_armor_classic", false) and client:GetArmor() > 0 then
+				health_string = health_string .. " + " .. client:GetArmor()
 			end
 
 			self:PaintBar(x + margin, health_y, bar_width, bar_height, self.health_colors, health / client:GetMaxHealth())
