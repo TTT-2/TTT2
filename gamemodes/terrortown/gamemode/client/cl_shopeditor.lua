@@ -591,7 +591,7 @@ function ShopEditor.CreateLinkWithRole(roleData)
 					net.WriteString(s.roleData.name)
 					net.SendToServer()
 				else
-					ShopEditor.shopFallbackRefresh()
+					ShopEditor.ShopFallbackRefresh()
 				end
 			end)
 		end
@@ -759,7 +759,11 @@ local function shopFallbackReset(len)
 end
 net.Receive("shopFallbackReset", shopFallbackReset)
 
-local function shopFallbackRefresh()
+---
+-- Refreshes the shop and toggles (de-/activates) the items
+-- @realm client
+-- @internal
+function ShopEditor.ShopFallbackRefresh()
 	local wshop = LocalPlayer().shopeditor
 
 	if wshop and wshop.GetItems then
@@ -781,7 +785,7 @@ local function shopFallbackRefresh()
 		end
 	end
 end
-net.Receive("shopFallbackRefresh", shopFallbackRefresh)
+net.Receive("shopFallbackRefresh", ShopEditor.ShopFallbackRefresh)
 
 -- OPTION WINDOW
 
