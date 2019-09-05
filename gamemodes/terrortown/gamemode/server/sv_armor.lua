@@ -36,7 +36,7 @@ end)
 
 -- SERVERSIDE ARMOR FUNCTIONS
 ---
--- Sets the @{ARMOR} to a specific value
+-- Sets the @{ARMOR} to a specific value that is capped by the max armor value
 -- @param number armor the new armor to be set
 -- @realm server
 function plymeta:SetArmorValue(armor)
@@ -65,6 +65,10 @@ function plymeta:SetMaxArmor(armor_max)
 	net.Send(self)
 end
 
+---
+-- Sets the @{ARMOR} to a specific value while also increasing (if necessary) the max value
+-- @param number armor the new armor to be set
+-- @realm server
 function plymeta:SetArmor(armor)
 	print("setting armor to: " .. armor)
 
@@ -93,7 +97,7 @@ end
 
 ---
 -- Decreases the @{ARMOR} about a scaled specific value depending on the current max value
--- @param number decreaseby the amount to be decreased
+-- @param number remove the amount to be decreased
 -- @realm server
 function plymeta:RemoveArmor(remove)
 	if self:GetMaxArmor() == 0 then

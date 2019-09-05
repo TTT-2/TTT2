@@ -49,7 +49,7 @@ end
 -- @param[default=1] number active_icon The numeric id of a specific status icon
 -- @realm client
 function STATUS:AddTimedStatus(id, duration, showDuration, active_icon)
-	if STATUS.registered[id] == nil or duration == 0 then return end
+	if self.registered[id] == nil or duration == 0 then return end
 
 	self:AddStatus(id, active_icon)
 
@@ -60,8 +60,8 @@ function STATUS:AddTimedStatus(id, duration, showDuration, active_icon)
 	end)
 
 	if showDuration then
-		self.active[id].DrawInfo = function(self)
-			return tostring(math.Round(math.max(0, self.displaytime - CurTime())))
+		self.active[id].DrawInfo = function(slf)
+			return tostring(math.ceil(math.max(0, slf.displaytime - CurTime())))
 		end
 	end
 end
