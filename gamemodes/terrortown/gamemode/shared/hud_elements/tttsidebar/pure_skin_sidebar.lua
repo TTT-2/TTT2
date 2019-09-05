@@ -193,6 +193,6 @@ if CLIENT then
 		end
 
 		self:SetSize(self.size.w, - math.max(height, self.minsize.h)) -- adjust the size
-			self:SetPos(basepos.x, startY - height)
+		self:SetPos(basepos.x, startY - height)
 	end
 end
