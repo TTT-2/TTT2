@@ -476,6 +476,16 @@ function CreateChanges()
 	</li>
 	</ul>]])
 
+	AddChange("0.5.6b-h1 (Hotfix)", [[<ul>
+	<li><b>Fixes:</b>
+		<ul>
+			<li>Traitor shop bug (caused by the september'19 GMod update)</li>
+			<li>ShopEditor bugs and added a response for non-admins</li>
+			<li>Glitching head icons</li>
+		</ul>
+	</li>
+	</ul>]])
+
 	hook.Run("TTT2AddChange", changes, currentVersion)
 end
 
