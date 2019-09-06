@@ -363,7 +363,7 @@ end
 -- @ref https://wiki.garrysmod.com/page/GM/InitPostEntity
 -- @local
 function GM:InitPostEntity()
-	GAMEMODE:SyncGlobals()
+	GAMEMODE:InitCvars()
 
 	MsgN("[TTT2][INFO] Client post-init...")
 
