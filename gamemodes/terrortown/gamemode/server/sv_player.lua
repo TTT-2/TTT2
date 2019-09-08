@@ -128,7 +128,7 @@ function GM:PlayerSpawn(ply)
 	-- a hook to handle the rolespecific stuff that should be done on
 	-- rolechange and respawn (while a round is active)
 	if ply:IsActive() then -- round is active and player is terror player
-		hook.Run("TTT2PlayerInitRole", ply, false, ply:GetSubRole(), ply:GetTeam())
+		hook.Run("TTT2GiveRoleLoadout", ply, false, ply:GetSubRole(), ply:GetTeam())
 	end
 end
 
@@ -909,7 +909,7 @@ function GM:PlayerDeath(victim, infl, attacker)
 			-- a hook to handle the rolespecific stuff that should be done on death or rolechange
 			-- this hook is called prior to setting the player team to spectator!
 			if victim:IsActive() then -- round is active and player was terror player
-				hook.Run("TTT2PlayerDeinitRole", victim, victim:GetSubRole(), victim:GetTeam())
+				hook.Run("TTT2RemoveRoleLoadout", victim, false, victim:GetSubRole(), victim:GetTeam())
 			end
 			
 			victim:SetTeam(TEAM_SPEC)

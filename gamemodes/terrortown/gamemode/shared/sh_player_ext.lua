@@ -141,8 +141,8 @@ function plymeta:SetRole(subrole, team, forceHooks)
 	-- a hook to handle the rolespecific stuff that should be done on
 	-- rolechange and respawn (while a round is active)
 	if SERVER then
-		hook.Run("TTT2PlayerDeinitRole", self, oldSubrole, oldTeam)
-		hook.Run("TTT2PlayerInitRole", self, true, newSubrole, newTeam)
+		hook.Run("TTT2RemoveRoleLoadout", self, true, oldSubrole, oldTeam)
+		hook.Run("TTT2GiveRoleLoadout", self, true, newSubrole, newTeam)
 	end
 end
 
