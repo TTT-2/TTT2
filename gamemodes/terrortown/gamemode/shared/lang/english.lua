@@ -1172,6 +1172,9 @@ L.f1_settings_hudswitcher_desc_layout_editor = "Change element's\nposition and s
 L.f1_settings_hudswitcher_button_layout_editor = "Layout Editor"
 L.f1_settings_hudswitcher_desc_hud_not_supported = "! THIS HUD DOES NOT SUPPORT THE HUD EDITOR !"
 
+L.f1_bind_reset_default = "Default"
+L.f1_bind_disable_bind = "Disable"
+
 L.ttt2_bindings_new = "New bound key for {name}: {key}"
 L.hud_default = "Default HUD"
 L.hud_force = "Force HUD"

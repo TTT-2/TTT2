@@ -1158,6 +1158,9 @@ L.f1_settings_hudswitcher_desc_layout_editor = "Ändere Elementposition\nund -gr
 L.f1_settings_hudswitcher_button_layout_editor = "Layout Editor"
 L.f1_settings_hudswitcher_desc_hud_not_supported = "! DIESES HUD UNTERSTÜTZT NICHT DEN HUD EDITOR !"
 
+L.f1_bind_reset_default = "Standard"
+L.f1_bind_disable_bind = "Deaktivieren"
+
 L.ttt2_bindings_new = "Neue Tasetenbelegung für {name}: {key}"
 L.hud_default = "Standard HUD"
 L.hud_force = "Erzwungenes HUD"
