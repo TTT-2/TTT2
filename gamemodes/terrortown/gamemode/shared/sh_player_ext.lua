@@ -137,6 +137,13 @@ function plymeta:SetRole(subrole, team, forceHooks)
 			hook.Run("TTTPlayerSetColor", self)
 		end
 	end
+
+	if SERVER then 
+		local role_new = roles.GetByIndex(newSubrole)
+		local role_old = roles.GetByIndex(oldSubrole)
+		role_old:RemoveRoleLoadout(self, true)
+		role_new:GiveRoleLoadout(self, true)
+	end
 end
 
 ---

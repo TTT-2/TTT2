@@ -93,3 +93,25 @@ function ROLE:GetSubRoles()
 
 	return tmp
 end
+
+if SERVER then
+	---
+	-- Function that is overwritten by the role and is called on rolechange and respawn.
+	-- It is used to give the rolespecific loadout.
+	-- @param PLAYER ply
+	-- @param boolean isRoleChange This is true for a rolechange, but not for a respawn
+	-- @realm server
+	function ROLE:GiveRoleLoadout(ply, isRoleChange)
+		
+	end
+
+	---
+	-- Function that is overwritten by the role and is called on rolechange and death.
+	-- It is used to remove the rolespecific loadout.
+	-- @param PLAYER ply
+	-- @param boolean isRoleChange This is true for a rolechange, but not for death
+	-- @realm server
+	function ROLE:RemoveRoleLoadout(ply, isRoleChange)
+
+	end
+end
