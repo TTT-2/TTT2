@@ -43,8 +43,6 @@ function plymeta:SetArmorValue(armor)
 	self.armor = math.Clamp(armor, 0, self:GetMaxArmor())
 	self.armor_is_reinforced = ARMOR.cv.armor_is_reinforced_enabled:GetBool() and self:GetArmor() > ARMOR.cv.armor_threshold_for_reinforced:GetInt()
 
-	print("new armor value: " .. self.armor)
-
 	net.Start("ttt2_sync_armor")
 	net.WriteUInt(math.Round(self.armor), 16)
 	net.WriteBool(self.armor_is_reinforced)
@@ -56,8 +54,6 @@ end
 -- @param number armor_max the new max armor to be set
 -- @realm server
 function plymeta:SetMaxArmor(armor_max)
-	print("setting max armor to: " .. armor_max)
-
 	self.armor_max = math.max(armor_max, 0)
 
 	net.Start("ttt2_sync_armor_max")
@@ -70,8 +66,6 @@ end
 -- @param number armor the new armor to be set
 -- @realm server
 function plymeta:SetArmor(armor)
-	print("setting armor to: " .. armor)
-
 	if armor > self:GetMaxArmor() then
 		self:SetMaxArmor(armor)
 	end
