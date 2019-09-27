@@ -273,9 +273,10 @@ end
 
 
 ---
--- Add a binding to run when the button is pressed.
--- @param number btn
--- @param string name
+-- Add a binding to run a command when the button is pressed. This function is not used to register a new binding shown in 
+-- the UI, but to bind a specific key to a command
+-- @param number btn The button ID, see: <a href="BUTTON_CODE_Enums">https://wiki.garrysmod.com/page/Enums/BUTTON_CODE</a>
+-- @param string name The command that should be executed
 -- @param boolean persistent
 function bind.Add(btn, name, persistent)
 	if not name or name == "" or not isnumber(btn) then return end

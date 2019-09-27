@@ -83,16 +83,9 @@ function GM:PostDrawTranslucentRenderables(bDrawingDepth, bDrawingSkybox)
 		for i = 1, #plys do
 			local ply = plys[i]
 			local rd = ply:GetSubRoleData()
-			
-			local pos = ply:GetBonePosition(6)
-			pos.z = pos.z + 20
-			
-			local ea = ply:EyeAngles()
-			ea.pitch = 0
-			
-			local shift = Vector(2, 0, 0)
-			shift:Rotate(ea)
-			pos:Add(shift)
+
+			local pos = ply:GetPos()
+			pos.z = pos.z + 80
 
 			if ply ~= client
 			and ply:IsActive()
@@ -104,8 +97,8 @@ function GM:PostDrawTranslucentRenderables(bDrawingDepth, bDrawingSkybox)
 				local incol = ply:GetRoleColor()
 
 				-- start linear filter
-				render.PushFilterMag( TEXFILTER.LINEAR )
-				render.PushFilterMin( TEXFILTER.LINEAR )
+				render.PushFilterMag(TEXFILTER.LINEAR)
+				render.PushFilterMin(TEXFILTER.LINEAR)
 
 				-- draw color
 				render.SetMaterial(base)
@@ -117,7 +110,7 @@ function GM:PostDrawTranslucentRenderables(bDrawingDepth, bDrawingSkybox)
 
 				-- draw shadow
 				render.SetMaterial(icon)
-				render.DrawQuadEasy(Vector(pos.x, pos.y, pos.z+ 0.2), dir, 8, 8, Color(0, 0, 0, 180), 180)
+				render.DrawQuadEasy(Vector(pos.x, pos.y, pos.z + 0.2), dir, 8, 8, Color(0, 0, 0, 180), 180)
 
 				-- draw icon
 				render.SetMaterial(icon)

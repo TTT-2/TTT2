@@ -25,21 +25,64 @@ local helpframe
 local function AddBindingCategory(category, parent)
 	local form = vgui.Create("DForm", parent)
 
-	form:SetName(category)
+	form:SetName(LANG.TryTranslation(category))
 
 	for _, binding in ipairs(bind.GetSettingsBindings()) do
 		if binding.category == category then
+			local grid = vgui.Create("DGrid")
+			grid:SetCols(3)
+			grid:SetColWide(120)
+			
+			local grid_extra = vgui.Create("DGrid")
+			grid_extra:SetCols(2)
+			grid_extra:SetColWide(60)
+
+			form:AddItem(grid)
+
 			local dPlabel = vgui.Create("DLabel")
-			dPlabel:SetText(binding.label)
+			dPlabel:SetText(LANG.TryTranslation(binding.label))
 			dPlabel:SetTextColor(COLOR_BLACK)
 			dPlabel:SetContentAlignment(5) -- center
 
+			grid:AddItem(dPlabel)
+
+			
+			-- Keybind function
 			local dPBinder = vgui.Create("DBinder")
-			dPBinder:SetSize(170, 30)
+			dPBinder:SetSize(100, 25)
 
 			local curBinding = bind.Find(binding.name)
 			dPBinder:SetValue(curBinding)
 
+			grid:AddItem(dPBinder)
+			grid:AddItem(grid_extra)
+
+			-- RESET Button
+			local bindResetButton = vgui.Create("DButton")
+			bindResetButton:SetText(GetTranslation("f1_bind_reset_default"))
+			bindResetButton:SetSize(55, 25)
+
+			if binding.defaultKey ~= nil then
+				bindResetButton.DoClick = function()
+					bind.Set(binding.defaultKey, binding.name, true)
+					dPBinder:SetValue(bind.Find(binding.name))
+				end
+			else
+				bindResetButton:SetDisabled(true)
+			end			
+			grid_extra:AddItem(bindResetButton)
+
+			-- DISABLE Button
+			local bindDisableButton = vgui.Create("DButton")
+			bindDisableButton:SetText(GetTranslation("f1_bind_disable_bind"))
+			bindDisableButton:SetSize(55, 25)
+			bindDisableButton.DoClick = function()
+				bind.Remove(curBinding, binding.name, true)
+				dPBinder:SetValue(bind.Find(binding.name))
+			end
+			grid_extra:AddItem(bindDisableButton)
+
+			-- onchange function
 			function dPBinder:OnChange(num)
 				if num == 0 then
 					bind.Remove(curBinding, binding.name)
@@ -52,8 +95,6 @@ local function AddBindingCategory(category, parent)
 
 				curBinding = num
 			end
-
-			form:AddItem(dPlabel, dPBinder)
 		end
 	end
 

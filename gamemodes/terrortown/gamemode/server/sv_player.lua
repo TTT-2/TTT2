@@ -30,10 +30,6 @@ CreateConVar("ttt_killer_dna_basetime", "100", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 -- @ref https://wiki.garrysmod.com/page/GM/PlayerInitialSpawn
 -- @local
 function GM:PlayerInitialSpawn(ply)
-	if not GAMEMODE.cvar_init then
-		GAMEMODE:InitCvars()
-	end
-
 	ply:InitialSpawn()
 
 	local rstate = GetRoundState() or ROUND_WAIT
