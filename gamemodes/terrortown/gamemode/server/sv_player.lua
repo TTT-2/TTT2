@@ -120,6 +120,12 @@ function GM:PlayerSpawn(ply)
 	ply:SetupHands()
 
 	SCORE:HandleSpawn(ply)
+
+	-- a hook to handle the rolespecific stuff that should be done on
+	-- rolechange and respawn (while a round is active)
+	if ply:IsActive() then
+		roles.GetByIndex(ply:GetSubRole()):GiveRoleLoadout(ply, false)
+	end
 end
 
 ---
@@ -896,6 +902,12 @@ function GM:PlayerDeath(victim, infl, attacker)
 
 	timer.Simple(0, function()
 		if IsValid(victim) then
+			-- a hook to handle the rolespecific stuff that should be done on
+			-- rolechange and respawn (while a round is active)
+			if victim:IsActive() then
+				roles.GetByIndex(victim:GetSubRole()):RemoveRoleLoadout(victim, false)
+			end
+
 			victim:SetTeam(TEAM_SPEC)
 			victim:Freeze(false)
 			victim:SetRagdollSpec(true)
