@@ -112,7 +112,7 @@ function SQL.ParseData(tbl, keys)
 end
 
 ---
--- Transformes a string into a data string (to work with MySQL)
+-- Transformes a string into a data string (to work with SQL)
 -- @param string key
 -- @param table data data table with data.typ
 -- @return string data string
@@ -121,17 +121,19 @@ end
 function SQL.ParseDataString(key, data)
 	if key == "BaseClass" then return end
 
+	local sanitizedKey = sql.SQLStr(key, true)
+
 	if data.typ == "bool" or data.typ == "number" then
-		return key .. " INTEGER"
+		return sanitizedKey .. " INTEGER"
 	elseif data.typ == "pos" then
-		return key .. "_x INTEGER," .. key .. "_y INTEGER"
+		return sanitizedKey .. "_x INTEGER," .. sanitizedKey .. "_y INTEGER"
 	elseif data.typ == "size" then
-		return key .. "_w INTEGER," .. key .. "_h INTEGER"
+		return sanitizedKey .. "_w INTEGER," .. sanitizedKey .. "_h INTEGER"
 	elseif data.typ == "color" then
-		return key .. "_r INTEGER," .. key .. "_g INTEGER," .. key .. "_b INTEGER," .. key .. "_a INTEGER"
+		return sanitizedKey .. "_r INTEGER," .. sanitizedKey .. "_g INTEGER," .. sanitizedKey .. "_b INTEGER," .. sanitizedKey .. "_a INTEGER"
 	end
 
-	return key .. " TEXT"
+	return sanitizedKey .. " TEXT"
 end
 
 --
@@ -140,12 +142,12 @@ end
 --
 
 ---
--- Builds a MySQL "Insert" @{string}
--- @param string tableName name of the MySQL table
+-- Builds a SQL "Insert" @{string}
+-- @param string tableName name of the database table
 -- @param string name ?
 -- @param table tbl data @{table}
 -- @param table keys keys for the data @{table}
--- @return string MySQL "Insert" @{string}
+-- @return string SQL "Insert" @{string}
 -- @realm shared
 -- @todo usage
 function SQL.BuildInsertString(tableName, name, tbl, keys)
@@ -153,16 +155,16 @@ function SQL.BuildInsertString(tableName, name, tbl, keys)
 
 	local tmp = SQL.ParseData(tbl, keys)
 
-	local str = "INSERT INTO " .. tableName .. " (name"
+	local str = "INSERT INTO " .. sql.SQLStr(tableName) .. " (name"
 
 	for k in pairs(tmp) do
-		str = str .. "," .. k
+		str = str .. "," .. sql.SQLStr(k)
 	end
 
-	str = str .. ") VALUES ('" .. name .. "'"
+	str = str .. ") VALUES (" .. sql.SQLStr(name)
 
 	for _, v in pairs(tmp) do
-		str = str .. ",'" .. v .. "'"
+		str = str .. "," .. sql.SQLStr(v)
 	end
 
 	str = str .. ")"
@@ -171,12 +173,12 @@ function SQL.BuildInsertString(tableName, name, tbl, keys)
 end
 
 ---
--- Builds a MySQL "Update" @{string}
--- @param string tableName name of the MySQL table
+-- Builds a SQL "Update" @{string}
+-- @param string tableName name of the database table
 -- @param string name ?
 -- @param table tbl data @{table}
 -- @param table keys keys for the data @{table}
--- @return string MySQL "Update" @{string}
+-- @return string SQL "Update" @{string}
 -- @realm shared
 -- @todo usage
 function SQL.BuildUpdateString(tableName, name, tbl, keys)
@@ -185,7 +187,7 @@ function SQL.BuildUpdateString(tableName, name, tbl, keys)
 	local tmp = SQL.ParseData(tbl, keys)
 
 	local b = true
-	local str = "UPDATE " .. tableName .. " SET "
+	local str = "UPDATE " .. sql.SQLStr(tableName) .. " SET "
 
 	for k, v in pairs(tmp) do
 		if not b then
@@ -193,26 +195,26 @@ function SQL.BuildUpdateString(tableName, name, tbl, keys)
 		end
 
 		b = false
-		str = str .. k .. "='" .. v .. "'"
+		str = str .. sql.SQLStr(k) .. "=" .. sql.SQLStr(v)
 	end
 
-	str = str .. " WHERE name='" .. name .. "'"
+	str = str .. " WHERE name=" .. sql.SQLStr(name)
 
 	return str
 end
 
 ---
--- Creates the MySQL table
--- @param string tableName the MySQL table name
+-- Creates the database table
+-- @param string tableName the database table name
 -- @param table keys the keys for the data @{table}
--- @return boolean Whether the MySQL table was created successfully
+-- @return boolean Whether the database table was created successfully
 -- @realm shared
 -- @todo usage
 function SQL.CreateSqlTable(tableName, keys)
 	local result
 
 	if not sql.TableExists(tableName) then
-		local str = "CREATE TABLE " .. tableName .. " (name TEXT PRIMARY KEY"
+		local str = "CREATE TABLE " .. sql.SQLStr(tableName) .. " (name TEXT PRIMARY KEY"
 
 		for key, data in pairs(keys) do
 			str = str .. ", " .. SQL.ParseDataString(key, data)
@@ -222,7 +224,7 @@ function SQL.CreateSqlTable(tableName, keys)
 
 		result = sql.Query(str)
 	else
-		local clmns = sql.Query("PRAGMA table_info(" .. tableName .. ")")
+		local clmns = sql.Query("PRAGMA table_info(" .. sql.SQLStr(tableName) .. ")")
 
 		for key, data in pairs(keys) do
 			local exists = false
@@ -241,7 +243,7 @@ function SQL.CreateSqlTable(tableName, keys)
 				local resArr = string.Explode(",", res)
 
 				for _, query in ipairs(resArr) do
-					sql.Query("ALTER TABLE " .. tableName .. " ADD " .. query)
+					sql.Query("ALTER TABLE " .. sql.SQLStr(tableName) .. " ADD " .. query)
 				end
 			end
 		end
@@ -251,8 +253,8 @@ function SQL.CreateSqlTable(tableName, keys)
 end
 
 ---
--- Initializes a MySQL table and inserts all necessary data
--- @param string tableName name of the MySQL table
+-- Initializes a database table and inserts all necessary data
+-- @param string tableName name of the database table
 -- @param string name ?
 -- @param table tbl data @{table}
 -- @param table keys keys for the data @{table}
@@ -270,8 +272,8 @@ function SQL.Init(tableName, name, tbl, keys)
 end
 
 ---
--- Saves a MySQL table and updates all necessary data
--- @param string tableName name of the MySQL table
+-- Saves/updates all necessary data in the database table.
+-- @param string tableName name of the database table
 -- @param string name ?
 -- @param table tbl data @{table}
 -- @param table keys keys for the data @{table}
@@ -289,8 +291,8 @@ function SQL.Save(tableName, name, tbl, keys)
 end
 
 ---
--- Loads a MySQL table and set all necessary data of the data @{table}
--- @param string tableName name of the MySQL table
+-- Loads a databse table and set all necessary data of the data @{table}
+-- @param string tableName name of the database table
 -- @param string name ?
 -- @param table tbl data @{table}
 -- @param table keys keys for the data @{table}
@@ -300,7 +302,7 @@ end
 function SQL.Load(tableName, name, tbl, keys)
 	if not keys or table.IsEmpty(keys) then return end
 
-	local result = sql.Query("SELECT * FROM " .. tableName .. " WHERE name = '" .. name .. "'")
+	local result = sql.Query("SELECT * FROM " .. sql.SQLStr(tableName) .. " WHERE name = " .. sql.SQLStr(name))
 
 	if not result or not result[1] then
 		return false, false
