@@ -32,11 +32,11 @@ local function AddBindingCategory(category, parent)
 			-- creating two grids:
 			-- GRID: tooltip, bindingbutton and extra button area
 			-- GRIDEXTRA: inside the last GRID box, houses default and disable buttons
-			local dPGrid = vgui.Create("DdPGrid")
+			local dPGrid = vgui.Create("DGrid")
 			dPGrid:SetCols(3)
 			dPGrid:SetColWide(120)
 			
-			local dPGridExtra = vgui.Create("DdPGrid")
+			local dPGridExtra = vgui.Create("DGrid")
 			dPGridExtra:SetCols(2)
 			dPGridExtra:SetColWide(60)
 
