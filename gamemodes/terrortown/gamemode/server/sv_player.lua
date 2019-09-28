@@ -124,8 +124,7 @@ function GM:PlayerSpawn(ply)
 	-- a hook to handle the rolespecific stuff that should be done on
 	-- rolechange and respawn (while a round is active)
 	if ply:IsActive() then
-		local role = roles.GetByIndex(ply:GetSubRole())
-		role:GiveRoleLoadout(ply, false)
+		roles.GetByIndex(ply:GetSubRole()):GiveRoleLoadout(ply, false)
 	end
 end
 
@@ -906,8 +905,7 @@ function GM:PlayerDeath(victim, infl, attacker)
 			-- a hook to handle the rolespecific stuff that should be done on
 			-- rolechange and respawn (while a round is active)
 			if victim:IsActive() then
-				local role = roles.GetByIndex(victim:GetSubRole())
-				role:RemoveRoleLoadout(victim, false)
+				roles.GetByIndex(victim:GetSubRole()):RemoveRoleLoadout(victim, false)
 			end
 
 			victim:SetTeam(TEAM_SPEC)
