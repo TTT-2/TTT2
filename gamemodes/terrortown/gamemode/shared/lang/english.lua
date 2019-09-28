@@ -1174,6 +1174,9 @@ L.f1_settings_hudswitcher_desc_hud_not_supported = "! THIS HUD DOES NOT SUPPORT 
 
 L.f1_bind_reset_default = "Default"
 L.f1_bind_disable_bind = "Disable"
+L.f1_bind_description = "Klick and press a button to bind a key."
+L.f1_bind_reset_default_description = "Reset to default value."
+L.f1_bind_disable_description = "Disable this bind."
 
 L.ttt2_bindings_new = "New bound key for {name}: {key}"
 L.hud_default = "Default HUD"
