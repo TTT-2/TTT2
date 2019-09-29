@@ -119,9 +119,8 @@ if CLIENT then
 			local tgt = client:GetObserverTarget()
 
 			if cactive then
-				local icon = Material(rd.icon)
-				if icon then
-					util.DrawFilteredTexturedRect(x2 + 4, y2 + 4, self.lpw - 8, self.lpw - 8, icon)
+				if rd.iconMaterial then
+					util.DrawFilteredTexturedRect(x2 + 4, y2 + 4, self.lpw - 8, self.lpw - 8, rd.iconMaterial)
 				end
 			elseif IsValid(tgt) and tgt:IsPlayer() then
 				util.DrawFilteredTexturedRect(x2 + 4, y2 + 4, self.lpw - 8, self.lpw - 8, watching_icon)

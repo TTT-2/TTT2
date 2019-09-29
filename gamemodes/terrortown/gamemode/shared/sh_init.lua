@@ -91,10 +91,12 @@ ROLE_NONE = ROLE_INNOCENT
 TEAMS = TEAMS or {
 	[TEAM_INNOCENT] = {
 		icon = "vgui/ttt/dynamic/roles/icon_inno",
+		iconMaterial = Material("vgui/ttt/dynamic/roles/icon_inno"),
 		color = Color(80, 173, 59, 255)
 	},
 	[TEAM_TRAITOR] = {
 		icon = "vgui/ttt/dynamic/roles/icon_traitor",
+		iconMaterial = Material("vgui/ttt/dynamic/roles/icon_traitor"),
 		color = Color(209, 43, 39, 255)
 	}
 }

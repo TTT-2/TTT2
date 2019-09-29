@@ -31,6 +31,11 @@ local ClassHint = {
 	}
 }
 
+-- cached materials for overhead icons and outlines
+local propspec_outline = Material("models/props_combine/portalball001_sheet")
+local base = Material("vgui/ttt/dynamic/sprite_base")
+local base_overlay = Material("vgui/ttt/dynamic/sprite_base_overlay")
+
 ---
 -- Returns the localized ClassHint table
 -- Access for servers to display hints using their own HUD/UI.
@@ -55,12 +60,56 @@ function GM:AddClassHint(cls, hint)
 	ClassHint[cls] = table.Copy(hint)
 end
 
--- "T" indicator above traitors
-indicator_col = Color(255, 255, 255, 130)
+---
+-- Function that handles the drawing of the overhead roleicons, it does not check wether
+-- the icon should be drawn or not, that has to be handled prior to calling this function
+-- @param @{PLAYER} ply The player to receive an overhead icon
+-- @realm client
+function DrawOverheadRoleIcon(ply)
+	local client = LocalPlayer()
 
-local propspec_outline = Material("models/props_combine/portalball001_sheet")
-local base = Material("vgui/ttt/dynamic/sprite_base")
-local base_overlay = Material("vgui/ttt/dynamic/sprite_base_overlay")
+	-- get position of player
+	local pos = ply:GetPos()
+	pos.z = pos.z + 80
+	
+	-- get eye angle of player
+	local ea = ply:EyeAngles()
+	ea.pitch = 0
+
+	-- shift overheadicon in eyedirection of player
+	local shift = Vector(6, 0, 0)
+	shift:Rotate(ea)
+	pos:Add(shift)
+
+	local dir = (client:GetForward() * -1)
+	local rd = ply:GetSubRoleData()
+
+	if ply ~= client then
+		-- start linear filter
+		render.PushFilterMag(TEXFILTER.LINEAR)
+		render.PushFilterMin(TEXFILTER.LINEAR)
+
+		-- draw color
+		render.SetMaterial(base)
+		render.DrawQuadEasy(pos, dir, 10, 10, ply:GetRoleColor(), 180)
+
+		-- draw border overlay
+		render.SetMaterial(base_overlay)
+		render.DrawQuadEasy(pos, dir, 10, 10, Color(255, 255, 255, 255), 180)
+
+		-- draw shadow
+		render.SetMaterial(rd.iconMaterial)
+		render.DrawQuadEasy(Vector(pos.x, pos.y, pos.z + 0.2), dir, 8, 8, Color(0, 0, 0, 180), 180)
+
+		-- draw icon
+		render.SetMaterial(rd.iconMaterial)
+		render.DrawQuadEasy(Vector(pos.x, pos.y, pos.z + 0.5), dir, 8, 8, Color(255, 255, 255, 255), 180)
+
+		-- stop linear filter
+		render.PopFilterMag()
+		render.PopFilterMin()
+	end
+end
 
 ---
 -- Called after all translucent entities are drawn.
@@ -78,48 +127,17 @@ function GM:PostDrawTranslucentRenderables(bDrawingDepth, bDrawingSkybox)
 	local client = LocalPlayer()
 	local plys = GetPlayers()
 
+	-- OVERHEAD ICONS
 	if client:IsSpecial() then
-		dir = (client:GetForward() * -1)
-
 		for i = 1, #plys do
 			local ply = plys[i]
-			local rd = ply:GetSubRoleData()
 
-			local pos = ply:GetPos()
-			pos.z = pos.z + 80
-
-			if ply ~= client
-			and ply:IsActive()
+			if ply:IsActive()
 			and ply:IsSpecial()
 			and (not client:IsActive() or ply:IsInTeam(client))
 			and not ply:GetSubRoleData().avoidTeamIcons
 			then
-				local icon = Material(rd.icon)
-				local incol = ply:GetRoleColor()
-
-				-- start linear filter
-				render.PushFilterMag(TEXFILTER.LINEAR)
-				render.PushFilterMin(TEXFILTER.LINEAR)
-
-				-- draw color
-				render.SetMaterial(base)
-				render.DrawQuadEasy(pos, dir, 10, 10, incol, 180)
-
-				-- draw border overlay
-				render.SetMaterial(base_overlay)
-				render.DrawQuadEasy(pos, dir, 10, 10, Color(255, 255, 255, 255), 180)
-
-				-- draw shadow
-				render.SetMaterial(icon)
-				render.DrawQuadEasy(Vector(pos.x, pos.y, pos.z + 0.2), dir, 8, 8, Color(0, 0, 0, 180), 180)
-
-				-- draw icon
-				render.SetMaterial(icon)
-				render.DrawQuadEasy(Vector(pos.x, pos.y, pos.z + 0.5), dir, 8, 8, Color(255, 255, 255, 255), 180)
-
-				-- stop linear filter
-				render.PopFilterMag()
-				render.PopFilterMin()
+				DrawOverheadRoleIcon(ply)
 			end
 		end
 	end
