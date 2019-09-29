@@ -367,16 +367,16 @@ if SERVER then
 		return fallbackTable
 	end
 
-	local function GetValidTeamShops(fallback)
+	local function GetValidTeamShops(fallback, amount, team, fallbackTable)
 		local teamShops = RANDOMTEAMSHOPS
 
 		if team and not teamShops[fallback] then
-			if amount < length then
+			if amount < #fallbackTable then
 				teamShops[fallback] = {}
 
 				local tmp2 = {}
 
-				for _, equip in ipairs(fallbackTable) do
+				for _, equip in ipairs(fallbackTable) do -- TODO use numeric for loop with precached #fallbackTable
 					if not equip.notBuyable then
 						if equip.NoRandom then
 							amount = amount - 1
@@ -430,14 +430,10 @@ if SERVER then
 			local fallback = GetShopFallback(rd.index)
 
 			if not RANDOMSAVEDSHOPS[fallback] then
-				local amount = val
 				local fallbackTable = GetValidShopFallbackTable(fallback)
 
 				RANDOMSAVEDSHOPS[fallback] = fallbackTable
-
-				local length = #fallbackTable
-
-				RANDOMTEAMSHOPS = GetValidTeamShops(fallback)
+				RANDOMTEAMSHOPS = GetValidTeamShops(fallback, val, team, fallbackTable)
 			end
 		end
 

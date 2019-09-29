@@ -1415,11 +1415,12 @@ function GetPreSelectedRole(subrole)
 	return tmp
 end
 
-local function AddAvailableRoles(roleData, tbl, iTbl, forced)
+local function AddAvailableRoles(roleData, tbl, iTbl, forced, max_plys)
 	local b = true
 
 	if not forced then
-		local strTmp = "ttt_" .. roleData.name .. "_random"
+		strTmp = "ttt_" .. roleData.name .. "_random"
+
 		local r = ConVarExists(strTmp) and GetConVar(strTmp):GetInt() or 0
 
 		if r <= 0 then
@@ -1496,7 +1497,7 @@ function GetSelectableRoles(plys, max_plys)
 				if not checked[v.baserole] then
 					checked[v.baserole] = true
 
-					AddAvailableRoles(v, tmpTbl, iTmpTbl, forcedRolesTbl[v.baserole])
+					AddAvailableRoles(v, tmpTbl, iTmpTbl, forcedRolesTbl[v.baserole], max_plys)
 				end
 
 				-- continue if baserole is not available
@@ -1507,7 +1508,7 @@ function GetSelectableRoles(plys, max_plys)
 			end
 
 			-- now check for subrole availability
-			AddAvailableRoles(v, tmpTbl, iTmpTbl, forcedRolesTbl[roleData.index])
+			AddAvailableRoles(v, tmpTbl, iTmpTbl, forcedRolesTbl[v.index], max_plys)
 		end
 	end
 
