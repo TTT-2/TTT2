@@ -377,14 +377,14 @@ if SERVER then
 				local tmp2 = {}
 
 				for _, equip in ipairs(fallbackTable) do -- TODO use numeric for loop with precached #fallbackTable
-					if not equip.notBuyable then
-						if equip.NoRandom then
-							amount = amount - 1
+					if equip.notBuyable then continue end
 
-							teamShops[fallback][#teamShops[fallback] + 1] = equip
-						else
-							tmp2[#tmp2 + 1] = equip
-						end
+					if equip.NoRandom then
+						amount = amount - 1
+
+						teamShops[fallback][#teamShops[fallback] + 1] = equip
+					else
+						tmp2[#tmp2 + 1] = equip
 					end
 				end
 
