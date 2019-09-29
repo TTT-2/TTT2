@@ -179,8 +179,8 @@ function TBHUD:Draw(client)
 		surface.SetTextColor(255, 50, 50, 255)
 		surface.SetFont("TabLarge")
 
-		local x = scrpos.x + sz + 10
-		local y = scrpos.y - sz - 3
+		x = scrpos.x + sz + 10
+		y = scrpos.y - sz - 3
 
 		surface.SetTextPos(x, y)
 		surface.DrawText(focus_ent:GetDescription())

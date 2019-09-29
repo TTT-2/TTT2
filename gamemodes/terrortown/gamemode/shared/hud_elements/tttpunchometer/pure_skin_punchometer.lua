@@ -42,7 +42,7 @@ if CLIENT then
 		const_defaults["basepos"] = {x = ScrW() * 0.5 - self.size.w * 0.5, y = self.margin + 72 * self.scale}
 
 		return const_defaults
- 	end
+	end
 
 	-- Paint punch-o-meter
 	function HUDELEMENT:PunchPaint()

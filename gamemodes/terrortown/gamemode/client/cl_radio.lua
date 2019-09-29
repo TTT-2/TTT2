@@ -10,6 +10,8 @@ local ipairs = ipairs
 local timer = timer
 local util = util
 
+local radioframe
+
 RADIO = {}
 RADIO.Show = false
 
@@ -59,26 +61,24 @@ local function RadioThink(s)
 	s:SetText(s.id .. tgt)
 	s:SizeToContents()
 
+	if not IsValid(radioframe) then return end
 	radioframe:ForceResize()
 end
 
 local function RadioResize(s)
-	w = 0
-
+	local w = 0
 	local label
 
 	for _, v in pairs(s.Items) do
 		label = v:GetChild(0)
 
-		if label:GetWide() > w then
+		if IsValid(label) and label:GetWide() > w then
 			w = label:GetWide()
 		end
 	end
 
 	s:SetWide(w + 20)
 end
-
-local radioframe
 
 ---
 -- Displays the radio commands for the local @{Player}

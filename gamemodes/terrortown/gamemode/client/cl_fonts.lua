@@ -23,7 +23,7 @@ local function getScaleModifier(scale)
 
 	for _, scl in ipairs(FONTS.Scales) do
 	  if scaleFactor <= scl then
-      return scl
+			return scl
 	  end
 	end
 

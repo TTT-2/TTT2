@@ -6,7 +6,6 @@
 local math = math
 local table = table
 local player = player
-local pairs = pairs
 local ipairs = ipairs
 local net = net
 local IsValid = IsValid

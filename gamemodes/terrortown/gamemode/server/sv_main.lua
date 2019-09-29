@@ -1415,6 +1415,29 @@ function GetPreSelectedRole(subrole)
 	return tmp
 end
 
+local function AddAvailableRoles(roleData, tbl, iTbl, forced)
+	local b = true
+
+	if not forced then
+		local strTmp = "ttt_" .. roleData.name .. "_random"
+		local r = ConVarExists(strTmp) and GetConVar(strTmp):GetInt() or 0
+
+		if r <= 0 then
+			b = false
+		elseif r < 100 then
+			b = math.random(1, 100) <= r
+		end
+	end
+
+	if b then
+		local tmp2 = GetEachRoleCount(max_plys, roleData.name) - GetPreSelectedRole(roleData.index)
+		if tmp2 > 0 then
+			tbl[roleData] = tmp2
+			iTbl[#iTbl + 1] = roleData
+		end
+	end
+end
+
 ---
 -- Returns all selectable @{ROLE}s based on the amount of @{Player}s
 -- @note This @{function} automatically saves the selectable @{ROLE}s for the current round
@@ -1471,30 +1494,9 @@ function GetSelectableRoles(plys, max_plys)
 				local rd = roles.GetByIndex(v.baserole)
 
 				if not checked[v.baserole] then
-					local forced = forcedRolesTbl[v.baserole] -- add forced role definitely, randomness doesn't matter
-					local b = true
-
 					checked[v.baserole] = true
 
-					if not forced then
-						strTmp = "ttt_" .. rd.name .. "_random"
-
-						local r = ConVarExists(strTmp) and GetConVar(strTmp):GetInt() or 0
-
-						if r <= 0 then
-							b = false
-						elseif r < 100 then
-							b = math.random(1, 100) <= r
-						end
-					end
-
-					if b then
-						local tmp2 = GetEachRoleCount(max_plys, rd.name) - GetPreSelectedRole(rd.index)
-						if tmp2 > 0 then
-							tmpTbl[rd] = tmp2
-							iTmpTbl[#iTmpTbl + 1] = rd
-						end
-					end
+					AddAvailableRoles(v, tmpTbl, iTmpTbl, forcedRolesTbl[v.baserole])
 				end
 
 				-- continue if baserole is not available
@@ -1505,28 +1507,7 @@ function GetSelectableRoles(plys, max_plys)
 			end
 
 			-- now check for subrole availability
-			local forced = forcedRolesTbl[v.index] -- add forced role definitely, randomness doesn't matter
-			local b = true
-
-			if not forced then
-				strTmp = "ttt_" .. v.name .. "_random"
-
-				local r = ConVarExists(strTmp) and GetConVar(strTmp):GetInt() or 0
-
-				if r <= 0 then
-					b = false
-				elseif r < 100 then
-					b = math.random(1, 100) <= r
-				end
-			end
-
-			if b then
-				local tmp2 = GetEachRoleCount(max_plys, v.name) - GetPreSelectedRole(v.index)
-				if tmp2 > 0 then
-					tmpTbl[v] = tmp2
-					iTmpTbl[#iTmpTbl + 1] = v
-				end
-			end
+			AddAvailableRoles(v, tmpTbl, iTmpTbl, forcedRolesTbl[roleData.index])
 		end
 	end
 

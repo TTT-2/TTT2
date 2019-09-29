@@ -512,6 +512,12 @@ function CreateChanges()
 		<h2>Improved:</h2>
 		<ul>
 			<li>Dynamic loading of role icons</li>
+			<li>Improved performance slightly</li>
+			<li>Improved code consistency</li>
+		</ul>
+		<h2>Fixed:</h2>
+		<ul>
+			<li>team confirmation convar issue in network-syncing</li>
 		</ul>
 	]], os.time({year = 2019, month = 10, day = 29}))
 

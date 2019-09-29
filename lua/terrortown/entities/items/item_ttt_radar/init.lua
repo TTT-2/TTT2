@@ -7,6 +7,32 @@ local net = net
 local table = table
 local ipairs = ipairs
 local IsValid = IsValid
+local hook = hook
+
+local function GetSubRoleForRadar(ply, p)
+	local subrole = -1
+
+	if not p:IsPlayer() then
+		-- Decoys appear as innocents for non-traitors
+		if not ply:HasTeam(TEAM_TRAITOR) then
+			subrole = ROLE_INNOCENT
+		else
+			subrole = -1
+		end
+	else
+		local tmp = hook.Run("TTT2ModifyRadarRole", ply, p)
+
+		if tmp then
+			subrole = tmp
+		elseif not ply:HasTeam(TEAM_TRAITOR) then
+			subrole = ROLE_INNOCENT
+		else
+			subrole = (p:IsInTeam(ply) or p:GetSubRoleData().visibleForTraitors) and p:GetSubRole() or ROLE_INNOCENT
+		end
+	end
+
+	return subrole
+end
 
 local function ttt_radar_scan(ply, cmd, args)
 	if IsValid(ply) and ply:IsTerror() then
@@ -44,30 +70,10 @@ local function ttt_radar_scan(ply, cmd, args)
 					pos.y = math.Round(pos.y)
 					pos.z = math.Round(pos.z)
 
-					local subrole
-
-					if not p:IsPlayer() then
-						-- Decoys appear as innocents for non-traitors
-						if not ply:HasTeam(TEAM_TRAITOR) then
-							subrole = ROLE_INNOCENT
-						else
-							subrole = -1
-						end
-					else
-						local tmp = hook.Run("TTT2ModifyRadarRole", ply, p)
-
-						if tmp then
-							subrole = tmp
-						elseif not ply:HasTeam(TEAM_TRAITOR) then
-							subrole = ROLE_INNOCENT
-						else
-							subrole = (p:IsInTeam(ply) or p:GetSubRoleData().visibleForTraitors) and p:GetSubRole() or ROLE_INNOCENT
-						end
-					end
-
+					local subrole = GetSubRoleForRadar(ply, p)
 					local _tmp = {subrole = subrole, pos = pos}
 
-					table.insert(targets, _tmp)
+					targets[#targets + 1] = _tmp
 				end
 			end
 
