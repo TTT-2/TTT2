@@ -139,6 +139,9 @@ local function SetupData(roleData)
 	roleData.defaultTeam = roleData.defaultTeam or TEAM_NONE -- fix defaultTeam
 	roleData.icon = roleData.icon or ("vgui/ttt/dynamic/roles/icon_" .. roleData.abbr)
 
+	-- set a roledata icon material to prevent creating new materials each frame
+	roleData.iconMaterial = Material(roleData.icon)
+
 	print("[TTT2][ROLE] Added '" .. roleData.name .. "' role (index: " .. roleData.index .. ")")
 end
 
@@ -333,6 +336,8 @@ function InitCustomTeam(name, data) -- creates global var "TEAM_[name]" and othe
 	local teamname = string.Trim(string.lower(name)) .. "s"
 
 	_G["TEAM_" .. string.upper(name)] = teamname
+
+	data.iconMaterial = Material(data.icon)
 
 	TEAMS[teamname] = data
 end

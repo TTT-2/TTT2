@@ -122,13 +122,12 @@ if CLIENT then
 
 				if team ~= TEAM_NONE and round_state == ROUND_ACTIVE and not TEAMS[team].alone then
 					local t = TEAMS[team]
-					local icon = Material(t.icon)
 
-					if icon then
+					if t.iconMaterial then
 						local c = t.color or Color(0, 0, 0, 255)
 						local tx = x + tmp + smargin
 
-						DrawOldRoleIcon(tx, traitor_y, bgheight, bgheight, icon, c)
+						DrawOldRoleIcon(tx, traitor_y, bgheight, bgheight, t.iconMaterial, c)
 					end
 				end
 			end

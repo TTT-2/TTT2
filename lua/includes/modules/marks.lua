@@ -2,6 +2,7 @@
 -- This is the <code>marks</code> module.
 -- It massively improves the performance while rendering an entity (highlighting it) with caching (compared with the default halo library)
 -- @author Alf21
+-- TODO make marksList sequential
 
 module("marks", package.seeall)
 
@@ -12,7 +13,6 @@ local cam = cam
 local surface = surface
 local hook = hook
 local pairs = pairs
-local ipairs = ipairs
 
 local marksList = {}
 local marksHookInstalled = false

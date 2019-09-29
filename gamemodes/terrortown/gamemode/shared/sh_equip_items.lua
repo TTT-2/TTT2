@@ -346,6 +346,65 @@ if SERVER then
 		end
 	end
 
+	local function GetValidShopFallbackTable(fallback)
+		local fallbackTable = GetShopFallbackTable(fallback)
+		if not fallbackTable then
+			fallbackTable = {}
+
+			for _, equip in ipairs(items.GetList()) do
+				if not equip.CanBuy or not table.HasValue(equip.CanBuy, fallback) then continue end
+
+				fallbackTable[#fallbackTable + 1] = equip
+			end
+
+			for _, equip in ipairs(weapons.GetList()) do
+				if not equip.CanBuy or not table.HasValue(equip.CanBuy, fallback) then continue end
+
+				fallbackTable[#fallbackTable + 1] = equip
+			end
+		end
+
+		return fallbackTable
+	end
+
+	local function GetValidTeamShops(fallback, amount, team, fallbackTable)
+		local teamShops = RANDOMTEAMSHOPS
+
+		if team and not teamShops[fallback] then
+			if amount < #fallbackTable then
+				teamShops[fallback] = {}
+
+				local tmp2 = {}
+
+				for _, equip in ipairs(fallbackTable) do -- TODO use numeric for loop with precached #fallbackTable
+					if equip.notBuyable then continue end
+
+					if equip.NoRandom then
+						amount = amount - 1
+
+						teamShops[fallback][#teamShops[fallback] + 1] = equip
+					else
+						tmp2[#tmp2 + 1] = equip
+					end
+				end
+
+				if amount > 0 then
+					for i = 1, amount do
+						local rndm = math.random(1, #tmp2)
+
+						teamShops[fallback][#teamShops[fallback] + 1] = tmp2[rndm]
+
+						table.remove(tmp2, rndm)
+					end
+				end
+			else
+				teamShops[fallback] = fallbackTable
+			end
+		end
+
+		return teamShops
+	end
+
 	---
 	-- Update the random shops
 	-- @param table plys list of @{Player}
@@ -371,60 +430,10 @@ if SERVER then
 			local fallback = GetShopFallback(rd.index)
 
 			if not RANDOMSAVEDSHOPS[fallback] then
-				local amount = val
-				local fallbackTable = GetShopFallbackTable(fallback)
-
-				if not fallbackTable then
-					fallbackTable = {}
-
-					for _, equip in ipairs(items.GetList()) do
-						if not equip.CanBuy or not table.HasValue(equip.CanBuy, fallback) then continue end
-
-						fallbackTable[#fallbackTable + 1] = equip
-					end
-
-					for _, equip in ipairs(weapons.GetList()) do
-						if not equip.CanBuy or not table.HasValue(equip.CanBuy, fallback) then continue end
-
-						fallbackTable[#fallbackTable + 1] = equip
-					end
-				end
+				local fallbackTable = GetValidShopFallbackTable(fallback)
 
 				RANDOMSAVEDSHOPS[fallback] = fallbackTable
-
-				local length = #fallbackTable
-
-				if team and not RANDOMTEAMSHOPS[fallback] then
-					if amount < length then
-						RANDOMTEAMSHOPS[fallback] = {}
-
-						local tmp2 = {}
-
-						for _, equip in ipairs(fallbackTable) do
-							if not equip.notBuyable then
-								if equip.NoRandom then
-									amount = amount - 1
-
-									RANDOMTEAMSHOPS[fallback][#RANDOMTEAMSHOPS[fallback] + 1] = equip
-								else
-									tmp2[#tmp2 + 1] = equip
-								end
-							end
-						end
-
-						if amount > 0 then
-							for i = 1, amount do
-								local rndm = math.random(1, #tmp2)
-
-								RANDOMTEAMSHOPS[fallback][#RANDOMTEAMSHOPS[fallback] + 1] = tmp2[rndm]
-
-								table.remove(tmp2, rndm)
-							end
-						end
-					else
-						RANDOMTEAMSHOPS[fallback] = fallbackTable
-					end
-				end
+				RANDOMTEAMSHOPS = GetValidTeamShops(fallback, val, team, fallbackTable)
 			end
 		end
 
@@ -475,7 +484,7 @@ if SERVER then
 		SyncRandomShops(plys)
 	end
 
-  ---
+	---
 	-- Reset the random shops for a @{ROLE}
 	-- @param number role subrole id of a @{ROLE}
 	-- @param number amount
@@ -1091,47 +1100,50 @@ else -- CLIENT
 
 		buff = buff .. net.ReadString()
 
-		if cont then
+		-- wait for the complete message
+		if cont then return end
+
+		-- do stuff with buffer contents
+		local json_shop = buff -- util.Decompress(buff)
+
+		-- flush
+		buff = ""
+
+		if not json_shop then
+			ErrorNoHalt("SHOP decompression failed!\n")
+
 			return
-		else
-			-- do stuff with buffer contents
-			local json_shop = buff -- util.Decompress(buff)
+		end
 
-			if not json_shop then
-				ErrorNoHalt("SHOP decompression failed!\n")
-			else
-				-- convert the json string back to a table
-				local tmp = util.JSONToTable(json_shop)
+		-- convert the json string back to a table
+		local tmp = util.JSONToTable(json_shop)
 
-				if istable(tmp) then
-					for subrole, tbl in pairs(tmp) do
-						-- init
-						Equipment = Equipment or {}
+		if not istable(tmp) then
+			ErrorNoHalt("SHOP decoding failed!\n")
 
-						if not Equipment[subrole] then
-							GetEquipmentForRole(nil, subrole, true) -- TODO test
-						end
+			return
+		end
 
-						for _, equip in pairs(tbl) do
-							local equip_table = not items.IsItem(equip) and weapons.GetStored(equip) or items.GetStored(equip)
-							if equip_table then
-								equip_table.CanBuy = equip_table.CanBuy or {}
+		for subrole, tbl in pairs(tmp) do
+			-- init
+			Equipment = Equipment or {}
 
-								if add then
-									AddEquipmentToRoleEquipment(subrole, equip_table)
-								else
-									RemoveEquipmentFromRoleEquipment(subrole, equip_table)
-								end
-							end
-						end
-					end
-				else
-					ErrorNoHalt("SHOP decoding failed!\n")
-				end
+			if not Equipment[subrole] then
+				GetEquipmentForRole(nil, subrole, true) -- TODO test
 			end
 
-			-- flush
-			buff = ""
+			for _, equip in pairs(tbl) do
+				local equip_table = not items.IsItem(equip) and weapons.GetStored(equip) or items.GetStored(equip)
+				if not equip_table then continue end
+
+				equip_table.CanBuy = equip_table.CanBuy or {}
+
+				if add then
+					AddEquipmentToRoleEquipment(subrole, equip_table)
+				else
+					RemoveEquipmentFromRoleEquipment(subrole, equip_table)
+				end
+			end
 		end
 	end
 	net.Receive("TTT2SyncEquipment", TTT2SyncEquipment)

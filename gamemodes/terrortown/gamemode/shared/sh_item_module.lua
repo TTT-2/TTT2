@@ -56,7 +56,7 @@ ITEM = oldITEM
 hook.Add("TTTInitPostEntity", "InitTTT2OldItems", function()
 	for subrole, tbl in pairs(EquipmentItems or {}) do
 		for _, v in ipairs(tbl) do
-			if not v.avoidTTT2 then continue end
+			if v.avoidTTT2 then continue end
 
 			local name = v.ClassName or v.name or WEPS.GetClass(v)
 			if not name then continue end

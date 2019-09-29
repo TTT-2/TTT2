@@ -3,8 +3,8 @@
 -- @desc Credit transfer tab for equipment menu
 
 local GetTranslation = LANG.GetTranslation
+local GetParamTranslation = LANG.GetParamTranslation
 local vgui = vgui
-local LANG = LANG
 
 ---
 -- Initializes the reroll menu
@@ -23,7 +23,7 @@ function CreateRerollMenu(parent)
 	local cost = GetGlobalInt("ttt2_random_shop_reroll_cost")
 
 	if client:GetCredits() <= 0 then
-		dform:Help(LANG.GetParamTranslation("reroll_no_credits", {amount = cost}))
+		dform:Help(GetParamTranslation("reroll_no_credits", {amount = cost}))
 
 		return dform
 	end
@@ -51,7 +51,7 @@ function CreateRerollMenu(parent)
 	end
 
 	dform:AddItem(dsubmit)
-	dform:Help(LANG.GetParamTranslation("reroll_help", {amount = cost}))
+	dform:Help(GetParamTranslation("reroll_help", {amount = cost}))
 
 	return dform
 end

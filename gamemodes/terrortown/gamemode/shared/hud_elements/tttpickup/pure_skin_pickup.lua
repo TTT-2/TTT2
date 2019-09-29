@@ -135,7 +135,6 @@ if CLIENT then
 
 		local alpha = 255
 		local delta = (item.time + item.holdtime - CurTime()) / item.holdtime
-		--local colordelta = math.Clamp(delta, 0.6, 0.7) -- TODO necessary?
 
 		if delta > 1 - item.fadein then
 			alpha = math.Clamp((1.0 - delta) * (255 / item.fadein), 1, 255)
