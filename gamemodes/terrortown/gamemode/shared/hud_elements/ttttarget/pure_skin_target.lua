@@ -33,9 +33,9 @@ if CLIENT then -- CLIENT
 
 	function HUDELEMENT:GetDefaults()
 		const_defaults["basepos"] = {x = 10 * self.scale, y = ScrH() - self.size.h - 146 * self.scale - self.pad - 10 * self.scale}
-		
+
 		return const_defaults
- 	end
+	end
 
 	function HUDELEMENT:PerformLayout()
 		self.scale = self:GetHUDScale()

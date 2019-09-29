@@ -121,7 +121,7 @@ if CLIENT then
 		local weap = ply:GetActiveWeapon()
 
 		if not weap or not ply:Alive() then
-			return - 1
+			return -1
 		end
 
 		local ammo_inv = weap.Ammo1 and weap:Ammo1() or 0

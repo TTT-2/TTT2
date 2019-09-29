@@ -1473,6 +1473,8 @@ function GetSelectableRoles(plys, max_plys)
 		checked[v.index] = true
 
 		if v ~= INNOCENT and v ~= TRAITOR and (newRolesEnabled or v == DETECTIVE) and v:IsSelectable() then
+
+			-- at first, check for baserole availibility
 			if v.baserole and v.baserole ~= ROLE_INNOCENT and v.baserole ~= ROLE_TRAITOR then
 				local rd = roles.GetByIndex(v.baserole)
 
@@ -1503,12 +1505,14 @@ function GetSelectableRoles(plys, max_plys)
 					end
 				end
 
+				-- continue if baserole is not available
 				local base_count = tmpTbl[rd]
 				if not base_count or base_count < 1 then
 					continue
 				end
 			end
 
+			-- now check for subrole availability
 			local forced = forcedRolesTbl[v.index] -- add forced role definitely, randomness doesn't matter
 			local b = true
 
@@ -1678,23 +1682,21 @@ local function SelectForcedRoles(max_plys, roleCount, allSelectableRoles, choice
 				local pick = math.random(1, #ps)
 				local ply = ps[pick]
 
-				if c < role_count then
-					table.remove(transformed[subrole], pick)
+				if c >= role_count then break end
 
-					PLYFORCEDROLES[ply:UniqueID()] = nil
-					PLYFINALROLES[ply] = PLYFINALROLES[ply] or subrole
-					c = c + 1
+				table.remove(transformed[subrole], pick)
 
-					for k, p in ipairs(choices) do
-						if p == ply then
-							table.remove(choices, k)
-						end
-					end
+				PLYFORCEDROLES[ply:UniqueID()] = nil
+				PLYFINALROLES[ply] = PLYFINALROLES[ply] or subrole
+				c = c + 1
 
-					hook.Run("TTT2ReceivedForcedRole", ply, rd, true)
-				else
-					break
+				for k, p in ipairs(choices) do
+					if p ~= ply then continue end
+
+					table.remove(choices, k)
 				end
+
+				hook.Run("TTT2ReceivedForcedRole", ply, rd, true)
 			end
 		end
 	end

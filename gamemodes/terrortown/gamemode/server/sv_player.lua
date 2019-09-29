@@ -120,6 +120,12 @@ function GM:PlayerSpawn(ply)
 	ply:SetupHands()
 
 	SCORE:HandleSpawn(ply)
+
+	-- a hook to handle the rolespecific stuff that should be done on
+	-- rolechange and respawn (while a round is active)
+	if ply:IsActive() then
+		roles.GetByIndex(ply:GetSubRole()):GiveRoleLoadout(ply, false)
+	end
 end
 
 ---
@@ -777,7 +783,6 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
 
 		if IsValid(wep) and wep.DyingShot and not ply.was_headshot and dmginfo:IsBulletDamage() then
 			local fired = wep:DyingShot()
-
 			if fired then return end
 		end
 
@@ -788,7 +793,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
 	end
 
 	-- Drop all weapons
-	for _, wep in pairs(ply:GetWeapons()) do
+	for _, wep in ipairs(ply:GetWeapons()) do
 		WEPS.DropNotifiedWeapon(ply, wep, true) -- with ammo in them
 
 		if isfunction(wep.DampenDrop) then
@@ -896,6 +901,12 @@ function GM:PlayerDeath(victim, infl, attacker)
 
 	timer.Simple(0, function()
 		if IsValid(victim) then
+			-- a hook to handle the rolespecific stuff that should be done on
+			-- rolechange and respawn (while a round is active)
+			if victim:IsActive() then
+				roles.GetByIndex(victim:GetSubRole()):RemoveRoleLoadout(victim, false)
+			end
+
 			victim:SetTeam(TEAM_SPEC)
 			victim:Freeze(false)
 			victim:SetRagdollSpec(true)

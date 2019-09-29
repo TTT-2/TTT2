@@ -1,8 +1,6 @@
 local draw = draw
 local surface = surface
 local math = math
-local IsValid = IsValid
-local TryTranslation = LANG.TryTranslation
 
 local base = "base_stacking_element"
 
@@ -19,11 +17,11 @@ if CLIENT then
 	local pad = 8
 
 	HUDELEMENT.SlotIcons = {[WEAPON_HEAVY] = Material("vgui/ttt/pickup/icon_heavy.png"),
-				[WEAPON_PISTOL] = Material("vgui/ttt/pickup/icon_pistol.png"),
-				[WEAPON_NADE] = Material("vgui/ttt/pickup/icon_nades.png"),
-				[WEAPON_SPECIAL] = Material("vgui/ttt/pickup/icon_special.png"),
-				[WEAPON_EXTRA] = Material("vgui/ttt/pickup/icon_extra.png"),
-				[WEAPON_CLASS] = Material("vgui/ttt/pickup/icon_class.png")
+		[WEAPON_PISTOL] = Material("vgui/ttt/pickup/icon_pistol.png"),
+		[WEAPON_NADE] = Material("vgui/ttt/pickup/icon_nades.png"),
+		[WEAPON_SPECIAL] = Material("vgui/ttt/pickup/icon_special.png"),
+		[WEAPON_EXTRA] = Material("vgui/ttt/pickup/icon_extra.png"),
+		[WEAPON_CLASS] = Material("vgui/ttt/pickup/icon_class.png")
 	}
 
 	HUDELEMENT.icon_item = Material("vgui/ttt/pickup/icon_special.png")
@@ -132,12 +130,12 @@ if CLIENT then
 		PICKUP.RemoveOutdatedValues()
 	end
 
-	function HUDELEMENT:DrawElement(i, x, y, w, h)	
+	function HUDELEMENT:DrawElement(i, x, y, w, h)
 		local item = PICKUP.items[i]
 
 		local alpha = 255
 		local delta = (item.time + item.holdtime - CurTime()) / item.holdtime
-		local colordelta = math.Clamp(delta, 0.6, 0.7)
+		--local colordelta = math.Clamp(delta, 0.6, 0.7) -- TODO necessary?
 
 		if delta > 1 - item.fadein then
 			alpha = math.Clamp((1.0 - delta) * (255 / item.fadein), 1, 255)

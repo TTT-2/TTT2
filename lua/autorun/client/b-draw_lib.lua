@@ -34,10 +34,10 @@ local function fetch_asset(url, fallback)
 		return mats[url]
 	end
 
-	local crc = crc(url)
+	local crcUrl = crc(url)
 
-	if exists("downloaded_assets/" .. crc .. ".png", "DATA") then
-		mats[url] = Material("data/downloaded_assets/" .. crc .. ".png")
+	if exists("downloaded_assets/" .. crcUrl .. ".png", "DATA") then
+		mats[url] = Material("data/downloaded_assets/" .. crcUrl .. ".png")
 
 		return mats[url]
 	end
@@ -45,9 +45,9 @@ local function fetch_asset(url, fallback)
 	mats[url] = fallback or _error
 
 	fetch(url, function(data)
-		write("downloaded_assets/" .. crc .. ".png", data)
+		write("downloaded_assets/" .. crcUrl .. ".png", data)
 
-		mats[url] = Material("data/downloaded_assets/" .. crc .. ".png")
+		mats[url] = Material("data/downloaded_assets/" .. crcUrl .. ".png")
 	end)
 
 	return mats[url]

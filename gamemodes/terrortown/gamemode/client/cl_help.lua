@@ -29,58 +29,65 @@ local function AddBindingCategory(category, parent)
 
 	for _, binding in ipairs(bind.GetSettingsBindings()) do
 		if binding.category == category then
-			local grid = vgui.Create("DGrid")
-			grid:SetCols(3)
-			grid:SetColWide(120)
-			
-			local grid_extra = vgui.Create("DGrid")
-			grid_extra:SetCols(2)
-			grid_extra:SetColWide(60)
+			-- creating two grids:
+			-- GRID: tooltip, bindingbutton and extra button area
+			-- GRIDEXTRA: inside the last GRID box, houses default and disable buttons
+			local dPGrid = vgui.Create("DGrid")
+			dPGrid:SetCols(3)
+			dPGrid:SetColWide(120)
 
-			form:AddItem(grid)
+			local dPGridExtra = vgui.Create("DGrid")
+			dPGridExtra:SetCols(2)
+			dPGridExtra:SetColWide(60)
 
+			form:AddItem(dPGrid)
+
+			-- Keybind Label
 			local dPlabel = vgui.Create("DLabel")
 			dPlabel:SetText(LANG.TryTranslation(binding.label))
 			dPlabel:SetTextColor(COLOR_BLACK)
 			dPlabel:SetContentAlignment(5) -- center
 
-			grid:AddItem(dPlabel)
+			dPGrid:AddItem(dPlabel)
 
-			
-			-- Keybind function
+
+			-- Keybind Button
 			local dPBinder = vgui.Create("DBinder")
 			dPBinder:SetSize(100, 25)
 
 			local curBinding = bind.Find(binding.name)
 			dPBinder:SetValue(curBinding)
+			dPBinder:SetTooltip(GetTranslation("f1_bind_description"))
 
-			grid:AddItem(dPBinder)
-			grid:AddItem(grid_extra)
+			dPGrid:AddItem(dPBinder)
+			dPGrid:AddItem(dPGridExtra)
 
-			-- RESET Button
-			local bindResetButton = vgui.Create("DButton")
-			bindResetButton:SetText(GetTranslation("f1_bind_reset_default"))
-			bindResetButton:SetSize(55, 25)
+			-- DEFAULT Button
+			local dPBindResetButton = vgui.Create("DButton")
+			dPBindResetButton:SetText(GetTranslation("f1_bind_reset_default"))
+			dPBindResetButton:SetSize(55, 25)
+			dPBindResetButton:SetTooltip(GetTranslation("f1_bind_reset_default_description"))
 
 			if binding.defaultKey ~= nil then
-				bindResetButton.DoClick = function()
+				dPBindResetButton.DoClick = function()
 					bind.Set(binding.defaultKey, binding.name, true)
 					dPBinder:SetValue(bind.Find(binding.name))
 				end
 			else
-				bindResetButton:SetDisabled(true)
-			end			
-			grid_extra:AddItem(bindResetButton)
+				dPBindResetButton:SetDisabled(true)
+			end
+			dPGridExtra:AddItem(dPBindResetButton)
 
 			-- DISABLE Button
-			local bindDisableButton = vgui.Create("DButton")
-			bindDisableButton:SetText(GetTranslation("f1_bind_disable_bind"))
-			bindDisableButton:SetSize(55, 25)
-			bindDisableButton.DoClick = function()
+			local dPBindDisableButton = vgui.Create("DButton")
+			dPBindDisableButton:SetText(GetTranslation("f1_bind_disable_bind"))
+			dPBindDisableButton:SetSize(55, 25)
+			dPBindDisableButton:SetTooltip(GetTranslation("f1_bind_disable_description"))
+			dPBindDisableButton.DoClick = function()
 				bind.Remove(curBinding, binding.name, true)
 				dPBinder:SetValue(bind.Find(binding.name))
 			end
-			grid_extra:AddItem(bindDisableButton)
+			dPGridExtra:AddItem(dPBindDisableButton)
 
 			-- onchange function
 			function dPBinder:OnChange(num)
@@ -172,7 +179,7 @@ function HELPSCRN:Show()
 	local cols = 4
 	local btnWidth = math.Round((w2 - pad * (cols + 1)) / cols)
 	local btnHeight = btnWidth * 0.75
-	local settings_panel_default_bgcol = Color( 160, 160, 160, 255 )
+	local settings_panel_default_bgcol = Color(160, 160, 160, 255)
 
 	local tbl = {
 		[1] = {
@@ -183,9 +190,10 @@ function HELPSCRN:Show()
 				if not frm then return end
 
 				local oldClose = frm.OnClose
-				frm.OnClose = function(slf)
+
+				frm.OnClose = function(slf2)
 					if isfunction(oldClose) then
-						oldClose(slf)
+						oldClose(slf2)
 					end
 
 					if not client.settingsFrameForceClose then
@@ -530,11 +538,13 @@ end
 -- @internal
 function HELPSCRN:CreateBindings(parent)
 	AddBindingCategory("TTT2 Bindings", parent)
+
 	for k, category in ipairs(bind.GetSettingsBindingsCategories()) do
 		if k > 2 then
 			AddBindingCategory(category, parent)
 		end
 	end
+
 	AddBindingCategory("Other Bindings", parent)
 end
 
@@ -551,13 +561,16 @@ function HELPSCRN:CreateAdministrationForm(parent)
 	local defaultHUDlabel = vgui.Create("DLabel", parent)
 	defaultHUDlabel:SetText(GetTranslation("hud_default") .. ":")
 	defaultHUDlabel:Dock(TOP)
+
 	local defaultHUDCb = vgui.Create("DComboBox", parent)
 	defaultHUDCb:SetValue(HUDManager.GetModelValue("defaultHUD") or "None")
-	defaultHUDCb.OnSelect = function (self, index, value)
+
+	defaultHUDCb.OnSelect = function(_, _, value)
 		net.Start("TTT2DefaultHUDRequest")
 		net.WriteString(value == "None" and "" or value)
 		net.SendToServer()
 	end
+
 	for _, v in ipairs(huds.GetList()) do
 		defaultHUDCb:AddChoice(v.id)
 	end
@@ -567,14 +580,18 @@ function HELPSCRN:CreateAdministrationForm(parent)
 	local forceHUDlabel = vgui.Create("DLabel", parent)
 	forceHUDlabel:SetText(GetTranslation("hud_force") .. ":")
 	forceHUDlabel:Dock(TOP)
+
 	local forceHUDCb = vgui.Create("DComboBox", parent)
 	forceHUDCb:SetValue(HUDManager.GetModelValue("forcedHUD") or "None")
-	forceHUDCb.OnSelect = function (self, index, value)
+
+	forceHUDCb.OnSelect = function(_, _, value)
 		net.Start("TTT2ForceHUDRequest")
 		net.WriteString(value == "None" and "" or value)
 		net.SendToServer()
 	end
+
 	forceHUDCb:AddChoice("None")
+
 	for _, v in ipairs(huds.GetList()) do
 		forceHUDCb:AddChoice(v.id)
 	end
@@ -587,31 +604,35 @@ function HELPSCRN:CreateAdministrationForm(parent)
 
 	admin_dlv_rhuds = vgui.Create("DListView", parent)
 	admin_dlv_rhuds:SetHeight(100)
-	admin_dlv_rhuds:SetMultiSelect( false )
-	admin_dlv_rhuds:AddColumn( "HUD" )
-	admin_dlv_rhuds:AddColumn( "Restricted" )
+	admin_dlv_rhuds:SetMultiSelect(false)
+	admin_dlv_rhuds:AddColumn("HUD")
+	admin_dlv_rhuds:AddColumn("Restricted")
 
 	local restrictedHUDs = HUDManager.GetModelValue("restrictedHUDs")
 	local allHUDs = huds.GetList()
+
 	for _, v in ipairs(allHUDs) do
 		admin_dlv_rhuds:AddLine(v.id, table.HasValue(restrictedHUDs, v.id) and "true" or "false")
 	end
+
 	admin_dlv_rhuds:Dock(TOP)
 
-	function admin_dlv_rhuds:DoDoubleClick( lineID, line )
+	function admin_dlv_rhuds:DoDoubleClick(lineID, line)
 		net.Start("TTT2RestrictHUDRequest")
-		net.WriteString(line:GetColumnText( 1 ))
-		net.WriteBool(not tobool(line:GetColumnText( 2 )))
+		net.WriteString(line:GetColumnText(1))
+		net.WriteBool(not tobool(line:GetColumnText(2)))
 		net.SendToServer()
 	end
-
 end
 
 HUDManager.OnUpdateAttribute("restrictedHUDs", function()
 	if not admin_dlv_rhuds or not IsValid(admin_dlv_rhuds) then return end
+
 	admin_dlv_rhuds:Clear()
+
 	local r = HUDManager.GetModelValue("restrictedHUDs")
 	local a = huds.GetList()
+
 	for _, v in ipairs(a) do
 		admin_dlv_rhuds:AddLine(v.id, table.HasValue(r, v.id) and "true" or "false")
 	end
@@ -624,6 +645,7 @@ net.Receive("TTT2RestrictHUDResponse", function()
 
 	if not accepted then
 		ply:ChatPrint("[TTT2][HUDManager] " .. GetParamTranslation("hud_restricted_failed", {hudname = hudname}))
+
 		return
 	end
 end)
@@ -635,6 +657,7 @@ net.Receive("TTT2ForceHUDResponse", function()
 
 	if not accepted then
 		ply:ChatPrint("[TTT2][HUDManager] " .. GetParamTranslation("hud_forced_failed", {hudname = hudname}))
+
 		return
 	end
 end)
@@ -646,6 +669,7 @@ net.Receive("TTT2DefaultHUDResponse", function()
 
 	if not accepted then
 		ply:ChatPrint("[TTT2][HUDManager] " .. GetParamTranslation("hud_default_failed", {hudname = hudname}))
+
 		return
 	end
 end)

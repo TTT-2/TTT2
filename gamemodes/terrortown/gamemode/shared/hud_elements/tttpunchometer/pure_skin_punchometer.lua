@@ -14,7 +14,7 @@ if CLIENT then
 	local draw_col = Color(205, 155, 0, 255)
 
 	local pad = 7
-	local margin= 14
+	local margin = 14
 
 	local const_defaults = {
 		basepos = {x = 0, y = 0},
@@ -40,7 +40,7 @@ if CLIENT then
 
 	function HUDELEMENT:GetDefaults()
 		const_defaults["basepos"] = {x = ScrW() * 0.5 - self.size.w * 0.5, y = self.margin + 72 * self.scale}
-		
+
 		return const_defaults
  	end
 
@@ -75,8 +75,6 @@ if CLIENT then
 	end
 
 	function HUDELEMENT:PerformLayout()
-		local size = self:GetSize()
-
 		self.scale = self:GetHUDScale()
 		self.basecolor = self:GetHUDBasecolor()
 		self.pad = pad * self.scale
@@ -109,7 +107,7 @@ if CLIENT then
 		else
 			draw.AdvancedText(interp(L.spec_help, key_params), "TabLarge", x + self.size.w * 0.5, y, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, true, self.scale)
 			if GetConVar("ttt_spectator_mode"):GetBool() then
-				draw.AdvancedText(interp(L.spec_help2, key_params), "TabLarge", x + self.size.w * 0.5, y +20, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, true, self.scale)
+				draw.AdvancedText(interp(L.spec_help2, key_params), "TabLarge", x + self.size.w * 0.5, y + 20, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, true, self.scale)
 			end
 		end
 	end

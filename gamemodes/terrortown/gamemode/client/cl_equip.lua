@@ -213,6 +213,18 @@ vgui.Register("EquipSelect", PANEL, "DPanelSelect")
 -- Create Equipment GUI / refresh
 --
 
+local function PerformStarLayout(s)
+	s:AlignTop(2)
+	s:AlignRight(2)
+	s:SetSize(12, 12)
+end
+
+local function PerformMarkerLayout(s)
+	s:AlignBottom(2)
+	s:AlignRight(2)
+	s:SetSize(16, 16)
+end
+
 local function CreateEquipmentList(t)
 	if not t then
 		t = {}
@@ -250,9 +262,9 @@ local function CreateEquipmentList(t)
 	-- Determine if we already have equipment
 	local owned_ids = {}
 
-	for _, wep in pairs(ply:GetWeapons()) do
-		if IsValid(wep) and wep.IsEquipment and wep:IsEquipment() then
-			table.insert(owned_ids, wep:GetClass())
+	for _, wep in ipairs(ply:GetWeapons()) do
+		if wep.IsEquipment and wep:IsEquipment() then
+			owned_ids[#owned_ids + 1] = wep:GetClass()
 		end
 	end
 
@@ -295,11 +307,8 @@ local function CreateEquipmentList(t)
 					local marker = vgui.Create("DImage")
 					marker:SetImage("vgui/ttt/custom_marker")
 
-					marker.PerformLayout = function(s)
-						s:AlignBottom(2)
-						s:AlignRight(2)
-						s:SetSize(16, 16)
-					end
+					marker.PerformLayout = PerformMarkerLayout
+
 					marker:SetTooltip(GetTranslation("equip_custom"))
 
 					ic:AddLayer(marker)
@@ -318,11 +327,7 @@ local function CreateEquipmentList(t)
 						local star = vgui.Create("DImage")
 						star:SetImage("icon16/star.png")
 
-						star.PerformLayout = function(s)
-							s:AlignTop(2)
-							s:AlignRight(2)
-							s:SetSize(12, 12)
-						end
+						star.PerformLayout = PerformStarLayout
 
 						star:SetTooltip("Favorite")
 
@@ -374,7 +379,7 @@ local function CreateEquipmentList(t)
 						or not EquipmentIsBuyable(item, ply:GetTeam())
 						-- already bought the item before
 						or item.limited and ply:HasBought(item.id)
-					) or (item.credits or 1) > ply:GetCredits()
+					) or (item.credits or 1) > credits
 				) then
 					ic:SetIconColor(color_darkened)
 				end

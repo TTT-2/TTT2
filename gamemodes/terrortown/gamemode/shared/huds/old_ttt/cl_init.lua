@@ -29,11 +29,11 @@ HUD.previewImage = Material("vgui/ttt/huds/old_ttt/preview.png")
 -- @param Color color
 -- @realm client
 function DrawOldRoleIcon(x, y, w, h, icon, color)
-	local base = Material("vgui/ttt/dynamic/base")
+	local base_mat = Material("vgui/ttt/dynamic/base")
 	local base_overlay = Material("vgui/ttt/dynamic/base_overlay")
 
 	surface.SetDrawColor(color.r, color.g, color.b, color.a)
-	surface.SetMaterial(base)
+	surface.SetMaterial(base_mat)
 	surface.DrawTexturedRect(x, y, w, h)
 
 	surface.SetDrawColor(color.r, color.g, color.b, color.a)

@@ -78,7 +78,7 @@ if CLIENT then
 		const_defaults["basepos"] = {x = ScrW() - self.margin - self.size.w, y = self.margin}
 
 		return const_defaults
- 	end
+	end
 
 	function HUDELEMENT:PerformLayout()
 		self.scale = self:GetHUDScale()
@@ -222,7 +222,7 @@ if CLIENT then
 
 	function HUDELEMENT:Draw()
 		local running_y = self.pos.y
-		
+
 		for k, item in pairs(MSTACK.msgs) do
 			if item.time < CurTime() then
 				if not item.ready then

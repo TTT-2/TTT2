@@ -296,22 +296,23 @@ hook.Add("Think", "GS_CrazyPhysics", function()
 				KillVelocity(pEntity)
 
 				timer.Simple(gs_crazyphysics_defusetime:GetFloat(), function()
-					if IsValid(pEntity) then
-						pEntity:SetLocalVelocity(vector_origin) -- ::SetLocalVelocity
-						pEntity:SetVelocity(vector_origin) -- ::SetBaseVelocity
-						SetAbsVelocity(pEntity, vector_origin) -- ::SetAbsVelocity
+					if not IsValid(pEntity) then return end
 
-						for i3 = 0, pEntity:GetPhysicsObjectCount() - 1 do
-							local pPhysObj2 = pEntity:GetPhysicsObjectNum(i3)
-							pPhysObj2:EnableMotion(true)
-							pPhysObj2:SetVelocity(vector_origin)
-							pPhysObj2:SetVelocityInstantaneous(vector_origin)
-							pPhysObj2:Wake()
-							pPhysObj2:RecheckCollisionFilter()
-						end
+					pEntity:SetLocalVelocity(vector_origin) -- ::SetLocalVelocity
+					pEntity:SetVelocity(vector_origin) -- ::SetBaseVelocity
 
-						pEntity:CollisionRulesChanged()
+					SetAbsVelocity(pEntity, vector_origin) -- ::SetAbsVelocity
+
+					for i3 = 0, pEntity:GetPhysicsObjectCount() - 1 do
+						local pPhysObj2 = pEntity:GetPhysicsObjectNum(i3)
+						pPhysObj2:EnableMotion(true)
+						pPhysObj2:SetVelocity(vector_origin)
+						pPhysObj2:SetVelocityInstantaneous(vector_origin)
+						pPhysObj2:Wake()
+						pPhysObj2:RecheckCollisionFilter()
 					end
+
+					pEntity:CollisionRulesChanged()
 				end)
 
 				local vObjectPos, aObjectRot

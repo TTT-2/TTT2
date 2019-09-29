@@ -57,7 +57,7 @@ if CLIENT then
 		local weap = ply:GetActiveWeapon()
 
 		if not weap or not ply:Alive() then
-			return - 1
+			return -1
 		end
 
 		local ammo_inv = weap.Ammo1 and weap:Ammo1() or 0
@@ -122,7 +122,7 @@ if CLIENT then
 			local tgt = client:GetObserverTarget()
 
 			if cactive then
-				local icon = Material("vgui/ttt/dynamic/roles/icon_" .. rd.abbr)
+				local icon = Material(rd.icon)
 				if icon then
 					util.DrawFilteredTexturedRect(x2 + 4, y2 + 4, self.lpw - 8, self.lpw - 8, icon)
 				end

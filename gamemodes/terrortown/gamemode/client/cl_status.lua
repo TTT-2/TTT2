@@ -56,6 +56,8 @@ function STATUS:AddTimedStatus(id, duration, showDuration, active_icon)
 	self.active[id].displaytime = CurTime() + duration
 
 	timer.Create(id, duration, 1, function()
+		if not self then return end
+
 		self:RemoveStatus(id)
 	end)
 

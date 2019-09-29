@@ -9,7 +9,6 @@ local matHover = Material("vgui/spawnmenu/hover")
 local PANEL = {}
 
 local math = math
-local table = table
 local ipairs = ipairs
 local IsValid = IsValid
 local surface = surface

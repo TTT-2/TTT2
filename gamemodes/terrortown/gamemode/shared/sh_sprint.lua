@@ -87,7 +87,7 @@ hook.Add("Think", "TTT2PlayerSprinting", function()
 		if not ply.sprintTS then continue end
 
 		local timeElapsed = CurTime() - ply.sprintTS
-			
+
 		local modifier = {1} -- Multiple hooking support
 		if not ply.isSprinting then
 			hook.Run("TTT2StaminaRegen", ply, modifier)

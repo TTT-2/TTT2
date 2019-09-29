@@ -56,49 +56,49 @@ ITEM = oldITEM
 hook.Add("TTTInitPostEntity", "InitTTT2OldItems", function()
 	for subrole, tbl in pairs(EquipmentItems or {}) do
 		for _, v in ipairs(tbl) do
-			if not v.avoidTTT2 then
-				local name = v.ClassName or v.name or WEPS.GetClass(v)
-				if name then
-					local item = items.GetStored(GetEquipmentFileName(name))
-					if not item then
-						local ITEMDATA = table.Copy(v)
-						ITEMDATA.oldId = v.id
-						ITEMDATA.id = name
-						ITEMDATA.EquipMenuData = v.EquipMenuData or {
-							type = v.type,
-							name = v.name,
-							desc = v.desc
-						}
-						ITEMDATA.type = nil
-						ITEMDATA.desc = nil
-						ITEMDATA.name = name
-						ITEMDATA.material = v.material
-						ITEMDATA.CanBuy = {subrole}
+			if not v.avoidTTT2 then continue end
 
-						-- reset this old hud bool
-						if ITEMDATA.hud == true then
-							ITEMDATA.oldHud = true
-							ITEMDATA.hud = nil
-						end
+			local name = v.ClassName or v.name or WEPS.GetClass(v)
+			if not name then continue end
 
-						-- set the converted indicator
-						ITEMDATA.converted = true
+			local item = items.GetStored(GetEquipmentFileName(name))
+			if not item then
+				local ITEMDATA = table.Copy(v)
+				ITEMDATA.oldId = v.id
+				ITEMDATA.id = name
+				ITEMDATA.EquipMenuData = v.EquipMenuData or {
+					type = v.type,
+					name = v.name,
+					desc = v.desc
+				}
+				ITEMDATA.type = nil
+				ITEMDATA.desc = nil
+				ITEMDATA.name = name
+				ITEMDATA.material = v.material
+				ITEMDATA.CanBuy = {subrole}
 
-						-- don't add icon and desc to the search panel if it's not intended
-						ITEMDATA.noCorpseSearch = ITEMDATA.noCorpseSearch or true
+				-- reset this old hud bool
+				if ITEMDATA.hud == true then
+					ITEMDATA.oldHud = true
+					ITEMDATA.hud = nil
+				end
 
-						items.Register(ITEMDATA, GetEquipmentFileName(name))
+				-- set the converted indicator
+				ITEMDATA.converted = true
 
-						timer.Simple(0, function()
-							print("[TTT2][INFO] Automatically converted not adjusted ITEM", name, ITEMDATA.oldId)
-						end)
-					else
-						item.CanBuy = item.CanBuy or {}
+				-- don't add icon and desc to the search panel if it's not intended
+				ITEMDATA.noCorpseSearch = ITEMDATA.noCorpseSearch or true
 
-						if not table.HasValue(item.CanBuy, subrole) then
-							item.CanBuy[#item.CanBuy + 1] = subrole
-						end
-					end
+				items.Register(ITEMDATA, GetEquipmentFileName(name))
+
+				timer.Simple(0, function()
+					print("[TTT2][INFO] Automatically converted not adjusted ITEM", name, ITEMDATA.oldId)
+				end)
+			else
+				item.CanBuy = item.CanBuy or {}
+
+				if not table.HasValue(item.CanBuy, subrole) then
+					item.CanBuy[#item.CanBuy + 1] = subrole
 				end
 			end
 		end

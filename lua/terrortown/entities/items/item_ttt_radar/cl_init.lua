@@ -6,7 +6,6 @@ local surface = surface
 local math = math
 local GetTranslation
 local GetPTranslation
-local FormatTime = util.SimpleTime
 local table = table
 local net = net
 local pairs = pairs

@@ -226,13 +226,7 @@ function CLSCORE:BuildScorePanel(dpanel)
 					team[id] = team[id] or ""
 
 					if not rls[id][sr] then
-						local roleData = roles.GetByIndex(sr)
-
-						if role[id] ~= "" then
-							role[id] = role[id] .. "/"
-						end
-
-						role[id] = role[id] .. T(roleData.name)
+						role[id] = (role[id] ~= "" and (role[id] .. "/")) .. T(roles.GetByIndex(sr).name)
 						rls[id][sr] = true
 					end
 				end
@@ -246,11 +240,7 @@ function CLSCORE:BuildScorePanel(dpanel)
 					team[id] = team[id] or ""
 
 					if tm ~= TEAM_NONE and not teams[id][tm] then
-						if team[id] ~= "" then
-							team[id] = team[id] .. "/"
-						end
-
-						team[id] = team[id] .. T(tm)
+						team[id] = (team[id] ~= "" and (team[id] .. "/")) .. T(tm)
 						teams[id][tm] = true
 					end
 				end
@@ -281,22 +271,12 @@ function CLSCORE:BuildScorePanel(dpanel)
 					end
 
 					if not rls[id][ev.r] then
-						local roleData = roles.GetByIndex(ev.r)
-
-						if role[id] ~= "" then
-							role[id] = role[id] .. "/"
-						end
-
-						role[id] = role[id] .. T(roleData.name)
+						role[id] = (role[id] ~= "" and (role[id] .. "/")) .. T(roles.GetByIndex(ev.r).name)
 						rls[id][ev.r] = true
 					end
 
 					if ev.t ~= TEAM_NONE and not teams[id][ev.t] then
-						if team[id] ~= "" then
-							team[id] = team[id] .. "/"
-						end
-
-						team[id] = team[id] .. T(ev.t)
+						team[id] = (team[id] ~= "" and (team[id] .. "/")) .. T(ev.t)
 						teams[id][ev.t] = true
 					end
 				end
@@ -701,7 +681,7 @@ function CLSCORE:Init(events)
 	local nicks = {}
 
 	for _, e in pairs(events) do
-		if e.id == EVENT_SPAWN and e.sid64 != nil then
+		if e.id == EVENT_SPAWN and e.sid64 ~= nil then
 			scores[e.sid64] = ScoreInit()
 			nicks[e.sid64] = e.ni
 		end

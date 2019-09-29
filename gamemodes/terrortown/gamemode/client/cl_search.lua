@@ -99,12 +99,8 @@ local function IconForInfoType(t, data)
 	local mat = TypeToMat[t]
 
 	if type(mat) == "table" then
-		if t == "role" then
-			if not mat[data] then
-				TypeToMat.role[data] = roles.GetByIndex(data).abbr
-			end
-
-			base = "vgui/ttt/dynamic/roles/icon_"
+		if t == "role" and not mat[data] then
+			TypeToMat[t][data] = roles.GetByIndex(data).icon
 		end
 
 		mat = mat[data]
@@ -118,10 +114,10 @@ local function IconForInfoType(t, data)
 
 	-- ugly special casing for weapons, because they are more likely to be
 	-- customized and hence need more freedom in their icon filename
-	if t ~= "wep" then
-		return base .. mat
-	else
+	if t == "wep" or t == "role" then
 		return mat
+	else
+		return base .. mat
 	end
 end
 

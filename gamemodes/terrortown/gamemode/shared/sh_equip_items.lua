@@ -346,7 +346,7 @@ if SERVER then
 		end
 	end
 
-  ---
+	---
 	-- Update the random shops
 	-- @param table plys list of @{Player}
 	-- @param number val
@@ -378,15 +378,15 @@ if SERVER then
 					fallbackTable = {}
 
 					for _, equip in ipairs(items.GetList()) do
-						if equip.CanBuy and table.HasValue(equip.CanBuy, fallback) then
-							fallbackTable[#fallbackTable + 1] = equip
-						end
+						if not equip.CanBuy or not table.HasValue(equip.CanBuy, fallback) then continue end
+
+						fallbackTable[#fallbackTable + 1] = equip
 					end
 
 					for _, equip in ipairs(weapons.GetList()) do
-						if equip.CanBuy and table.HasValue(equip.CanBuy, fallback) then
-							fallbackTable[#fallbackTable + 1] = equip
-						end
+						if not equip.CanBuy or not table.HasValue(equip.CanBuy, fallback) then continue end
+
+						fallbackTable[#fallbackTable + 1] = equip
 					end
 				end
 
@@ -443,22 +443,20 @@ if SERVER then
 
 				if not srd:IsShoppingRole() then continue end
 
-				local fallbackTable = RANDOMSAVEDSHOPS[GetShopFallback(srd.index)]
-				local length = #fallbackTable
 				local amount = val
 				local tmp2 = {}
 
 				RANDOMSHOP[ply] = {}
 
-				for _, equip in ipairs(fallbackTable) do
-					if not equip.notBuyable then
-						if equip.NoRandom then
-							amount = amount - 1
+				for _, equip in ipairs(RANDOMSAVEDSHOPS[GetShopFallback(srd.index)]) do
+					if equip.notBuyable then continue end
 
-							RANDOMSHOP[ply][#RANDOMSHOP[ply] + 1] = equip
-						else
-							tmp2[#tmp2 + 1] = equip
-						end
+					if equip.NoRandom then
+						amount = amount - 1
+
+						RANDOMSHOP[ply][#RANDOMSHOP[ply] + 1] = equip
+					else
+						tmp2[#tmp2 + 1] = equip
 					end
 				end
 

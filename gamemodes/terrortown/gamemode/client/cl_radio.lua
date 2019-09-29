@@ -44,6 +44,40 @@ local function tagPlayer(ply, rCmd)
 	end
 end
 
+local function RadioThink(s)
+	local tgt, v = RADIO:GetTarget()
+	if s.target == tgt then return end
+
+	s.target = tgt
+
+	tgt = string.Interp(s.txt, {player = RADIO.ToPrintable(tgt)})
+
+	if v then
+		tgt = util.Capitalize(tgt)
+	end
+
+	s:SetText(s.id .. tgt)
+	s:SizeToContents()
+
+	radioframe:ForceResize()
+end
+
+local function RadioResize(s)
+	w = 0
+
+	local label
+
+	for _, v in pairs(s.Items) do
+		label = v:GetChild(0)
+
+		if label:GetWide() > w then
+			w = label:GetWide()
+		end
+	end
+
+	s:SetWide(w + 20)
+end
+
 local radioframe
 
 ---
@@ -53,8 +87,9 @@ local radioframe
 -- @realm client
 function RADIO:ShowRadioCommands(state)
 	if not state then
-		if radioframe and radioframe:IsValid() then
+		if IsValid(radioframe) then
 			radioframe:Remove()
+
 			radioframe = nil
 
 			-- don't capture keys
@@ -62,7 +97,6 @@ function RADIO:ShowRadioCommands(state)
 		end
 	else
 		local client = LocalPlayer()
-
 		if not IsValid(client) then return end
 
 		if not radioframe then
@@ -77,21 +111,7 @@ function RADIO:ShowRadioCommands(state)
 			radioframe:CenterVertical()
 
 			-- ASS
-			radioframe.ForceResize = function(s)
-				w = 0
-
-				local label
-
-				for _, v in pairs(s.Items) do
-					label = v:GetChild(0)
-
-					if label:GetWide() > w then
-						w = label:GetWide()
-					end
-				end
-
-				s:SetWide(w + 20)
-			end
+			radioframe.ForceResize = RadioResize
 
 			for key, command in ipairs(self.Commands) do
 				local dlabel = vgui.Create("DLabel", radioframe)
@@ -113,24 +133,7 @@ function RADIO:ShowRadioCommands(state)
 					dlabel.target = nil
 					dlabel.id = id
 					dlabel.txt = GetTranslation(command.text)
-					dlabel.Think = function(s)
-						local tgt, v = RADIO:GetTarget()
-
-						if s.target ~= tgt then
-							s.target = tgt
-
-							tgt = string.Interp(s.txt, {player = RADIO.ToPrintable(tgt)})
-
-							if v then
-								tgt = util.Capitalize(tgt)
-							end
-
-							s:SetText(s.id .. tgt)
-							s:SizeToContents()
-
-							radioframe:ForceResize()
-						end
-					end
+					dlabel.Think = RadioThink
 				end
 
 				radioframe:AddItem(dlabel)

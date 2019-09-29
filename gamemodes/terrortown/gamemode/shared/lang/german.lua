@@ -1160,6 +1160,9 @@ L.f1_settings_hudswitcher_desc_hud_not_supported = "! DIESES HUD UNTERSTÜTZT NI
 
 L.f1_bind_reset_default = "Standard"
 L.f1_bind_disable_bind = "Deaktivieren"
+L.f1_bind_description = "Klicke und drücke einen Knopf um ihn zu setzen."
+L.f1_bind_reset_default_description = "Auf Standardwert zurücksetzen."
+L.f1_bind_disable_description = "Deaktiviere diese Bindung."
 
 L.ttt2_bindings_new = "Neue Tasetenbelegung für {name}: {key}"
 L.hud_default = "Standard HUD"

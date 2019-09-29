@@ -67,6 +67,7 @@ end
 -- @realm shared
 local function SetupGlobals(roleData)
 	print("[TTT2][ROLE] Setting up '" .. roleData.name .. "' role...")
+
 	local upStr = string.upper(roleData.name)
 
 	_G["ROLE_" .. upStr] = roleData.index
@@ -74,14 +75,14 @@ local function SetupGlobals(roleData)
 	_G["SHOP_FALLBACK_" .. upStr] = roleData.name
 
 	local plymeta = FindMetaTable("Player")
-	if plymeta then
-		-- e.g. IsJackal() will match each subrole of the jackal as well as the jackal as the baserole
-		plymeta["Is" .. roleData.name:gsub("^%l", string.upper)] = function(slf)
-			local br = slf:GetBaseRole()
-			local sr = slf:GetSubRole()
+	if not plymeta then return end
 
-			return roleData.baserole and sr == roleData.index or not roleData.baserole and br == roleData.index
-		end
+	-- e.g. IsJackal() will match each subrole of the jackal as well as the jackal as the baserole
+	plymeta["Is" .. roleData.name:gsub("^%l", string.upper)] = function(slf)
+		local br = slf:GetBaseRole()
+		local sr = slf:GetSubRole()
+
+		return roleData.baserole and sr == roleData.index or not roleData.baserole and br == roleData.index
 	end
 end
 
@@ -134,8 +135,9 @@ local function SetupData(roleData)
 		CreateConVar("ttt_credits_" .. roleData.name .. "kill", tostring(conVarData.traitorKill), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 	end
 
-	-- fix defaultTeam
-	roleData.defaultTeam = roleData.defaultTeam or TEAM_NONE
+	-- set fallback data if not already exists
+	roleData.defaultTeam = roleData.defaultTeam or TEAM_NONE -- fix defaultTeam
+	roleData.icon = roleData.icon or ("vgui/ttt/dynamic/roles/icon_" .. roleData.abbr)
 
 	print("[TTT2][ROLE] Added '" .. roleData.name .. "' role (index: " .. roleData.index .. ")")
 end

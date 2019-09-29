@@ -5,9 +5,6 @@
 
 module("marks", package.seeall)
 
-local baseclass = baseclass
-local list = list
-local pairs = pairs
 local render = render
 local table = table
 local IsValid = IsValid
@@ -31,11 +28,6 @@ else
 	-- @param Angle ang angle of client's view the rendering starts from
 	-- @realm client
 	local function Render(ents, col, pos, ang)
-		-- micro-optimization (even not a great effect because it's not used in a big loop. But it's better than nothing)
-		local render = render
-		local cam = cam
-		local surface = surface
-
 		-- check for valid data
 		local tmp = {}
 		local index = 1
@@ -43,7 +35,6 @@ else
 		local remSize = 0
 
 		local entsSize = #ents
-		local IsValid = IsValid -- micro optimization
 
 		for i = 1, entsSize do
 			local ent = ents[i]

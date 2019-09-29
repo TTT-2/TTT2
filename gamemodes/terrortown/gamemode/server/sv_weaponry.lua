@@ -12,7 +12,6 @@ local ipairs = ipairs
 local IsValid = IsValid
 local table = table
 local timer = timer
-local net = net
 local hook = hook
 
 local IsEquipment = WEPS.IsEquipment
@@ -145,7 +144,7 @@ local function GetResetLoadoutWeapons(ply)
 
 	ply.loadoutWeps = ply.loadoutWeps or {}
 
-	for _, wep in pairs(ply:GetWeapons()) do
+	for _, wep in ipairs(ply:GetWeapons()) do
 		local cls = WEPS.GetClass(wep)
 
 		if table.HasValue(ply.loadoutWeps, cls) and cls ~= "weapon_ttt_unarmed" then
@@ -489,9 +488,7 @@ local function DropActiveAmmo(ply)
 
 	local wep = ply:GetActiveWeapon()
 
-	if not IsValid(wep) then return end
-
-	if not wep.AmmoEnt then return end
+	if not IsValid(wep) or not wep.AmmoEnt then return end
 
 	local amt = wep:Clip1()
 

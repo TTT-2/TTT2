@@ -107,7 +107,8 @@ function CleanupInventory(ply)
 
 	-- add weapons which are already in inventory
 	local weaponsInInventory = 0
-	for k, v in pairs(ply:GetWeapons()) do
+
+	for _, v in ipairs(ply:GetWeapons()) do
 		if v.Kind then
 			AddWeaponToInventory(ply, v)
 

@@ -71,7 +71,6 @@ if CLIENT then
 	-- @param Color bgcolor background color
 	-- @realm client
 	function HUDELEMENT:GetDefaultFontColor(bgcolor)
-		local color = 0
 		if bgcolor.r + bgcolor.g + bgcolor.b < 500 then
 			return COLOR_WHITE
 		else

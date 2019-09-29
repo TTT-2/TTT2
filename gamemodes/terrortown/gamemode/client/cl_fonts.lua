@@ -21,9 +21,9 @@ local function getScaleModifier(scale)
 	local scaleFactor = isvector(scale) and math.max(scale.x, math.max(scale.y, scale.z)) or scale
 	scaleFactor = tonumber(scaleFactor)
 
-	for _, scale in ipairs(FONTS.Scales) do
-	  if scaleFactor <= scale then
-	      return scale
+	for _, scl in ipairs(FONTS.Scales) do
+	  if scaleFactor <= scl then
+      return scl
 	  end
 	end
 
@@ -40,19 +40,19 @@ end
 -- @realm client
 -- @todo usage of table structure
 function surface.CreateAdvancedFont(fontName, fontData)
-  local originalSize = fontData.size or 13
+	local originalSize = fontData.size or 13
 
-  FONTS.fonts[fontName] = {}
+	FONTS.fonts[fontName] = {}
 
-  for _, scale in ipairs(FONTS.Scales) do
-    local scaledFontName = scale == 1 and fontName or fontName .. tostring(scale)
+	for _, scale in ipairs(FONTS.Scales) do
+		local scaledFontName = scale == 1 and fontName or fontName .. tostring(scale)
 
-    --create font
-    fontData.size = scale * originalSize
-    surface.CreateFont(scaledFontName, fontData)
+		--create font
+		fontData.size = scale * originalSize
+		surface.CreateFont(scaledFontName, fontData)
 
-    FONTS.fonts[fontName][scale] = scaledFontName
-  end
+		FONTS.fonts[fontName][scale] = scaledFontName
+	end
 end
 
 ---

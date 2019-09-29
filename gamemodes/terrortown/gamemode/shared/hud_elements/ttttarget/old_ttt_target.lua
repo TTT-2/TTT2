@@ -27,7 +27,7 @@ if CLIENT then -- CLIENT
 		local parent = self:GetParentRelation()
 		local parentEl = hudelements.GetStored(parent)
 		local x, y = 15, ScrH() - height - self.maxheight - self.margin
-		
+
 		if parentEl then
 			x = parentEl.pos.x
 			y = parentEl.pos.y - self.margin - height - 30

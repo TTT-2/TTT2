@@ -377,7 +377,7 @@ function ShopEditor.CreateRolesList(frame, w, h, rls, onClick, defaultRoleData)
 				ic.Icon:SetRoleIconImage("vgui/ttt/dynamic/roles/icon_shop_default")
 				ic:SetTooltip(SafeTranslate("shop_default"))
 			else
-				ic.Icon:SetRoleIconImage("vgui/ttt/dynamic/roles/icon_" .. roleData.abbr)
+				ic.Icon:SetRoleIconImage(roleData.icon)
 				ic:SetTooltip(SafeTranslate("shop_link") .. ": " .. SafeTranslate(roleData.name))
 			end
 		end

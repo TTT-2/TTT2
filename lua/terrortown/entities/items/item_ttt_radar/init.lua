@@ -35,39 +35,39 @@ local function ttt_radar_scan(ply, cmd, args)
 				table.Add(scan_ents, ents.FindByClass("ttt_decoy"))
 
 				for _, p in ipairs(scan_ents) do
-					if IsValid(p) and ply ~= p and (p:IsPlayer() and p:IsTerror() and not p:GetNWBool("disguised", false) or not p:IsPlayer()) then
-						local pos = p:LocalToWorld(p:OBBCenter())
+					if not IsValid(p) or ply == p or p:IsPlayer() and (not p:IsTerror() or p:GetNWBool("disguised", false)) then continue end
 
-						-- Round off, easier to send and inaccuracy does not matter
-						pos.x = math.Round(pos.x)
-						pos.y = math.Round(pos.y)
-						pos.z = math.Round(pos.z)
+					local pos = p:LocalToWorld(p:OBBCenter())
 
-						local subrole
+					-- Round off, easier to send and inaccuracy does not matter
+					pos.x = math.Round(pos.x)
+					pos.y = math.Round(pos.y)
+					pos.z = math.Round(pos.z)
 
-						if not p:IsPlayer() then
-							-- Decoys appear as innocents for non-traitors
-							if not ply:HasTeam(TEAM_TRAITOR) then
-								subrole = ROLE_INNOCENT
-							else
-								subrole = -1
-							end
+					local subrole
+
+					if not p:IsPlayer() then
+						-- Decoys appear as innocents for non-traitors
+						if not ply:HasTeam(TEAM_TRAITOR) then
+							subrole = ROLE_INNOCENT
 						else
-							local tmp = hook.Run("TTT2ModifyRadarRole", ply, p)
-
-							if tmp then
-								subrole = tmp
-							elseif not ply:HasTeam(TEAM_TRAITOR) then
-								subrole = ROLE_INNOCENT
-							else
-								subrole = (p:IsInTeam(ply) or p:GetSubRoleData().visibleForTraitors) and p:GetSubRole() or ROLE_INNOCENT
-							end
+							subrole = -1
 						end
+					else
+						local tmp = hook.Run("TTT2ModifyRadarRole", ply, p)
 
-						local _tmp = {subrole = subrole, pos = pos}
-
-						table.insert(targets, _tmp)
+						if tmp then
+							subrole = tmp
+						elseif not ply:HasTeam(TEAM_TRAITOR) then
+							subrole = ROLE_INNOCENT
+						else
+							subrole = (p:IsInTeam(ply) or p:GetSubRoleData().visibleForTraitors) and p:GetSubRole() or ROLE_INNOCENT
+						end
 					end
+
+					local _tmp = {subrole = subrole, pos = pos}
+
+					table.insert(targets, _tmp)
 				end
 			end
 

@@ -5,7 +5,6 @@
 
 local PANEL = {}
 
-local math = math
 local surface = surface
 local vgui = vgui
 

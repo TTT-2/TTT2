@@ -5,7 +5,6 @@
 local GetTranslation = LANG.GetTranslation
 local player = player
 local ipairs = ipairs
-local IsValid = IsValid
 
 ---
 -- Creates the credit transfer menu
@@ -39,6 +38,7 @@ function CreateTransferMenu(parent)
 	dpick.OnSelect = function(s, idx, val, data)
 		if data then
 			selected_sid = data
+
 			dsubmit:SetDisabled(false)
 		end
 	end

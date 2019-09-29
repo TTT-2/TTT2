@@ -508,6 +508,13 @@ function CreateChanges()
 		</ul>
 	]], os.time({year = 2019, month = 09, day = 06}))
 
+	AddChange("TTT2 Base - v0.5.7b", [[
+		<h2>Improved:</h2>
+		<ul>
+			<li>Dynamic loading of role icons</li>
+		</ul>
+	]], os.time({year = 2019, month = 10, day = 29}))
+
 	-- run hook for other addons to add their changelog as well
 	hook.Run("TTT2AddChange", changes, currentVersion)
 end
@@ -526,7 +533,7 @@ local function MakePanel(panel, change)
 	end
 
 	header = header .. "</h1>"
-	
+
 	local html = vgui.Create("DHTML", panel)
 
 	html:SetHTML(htmlStart .. header .. change.text .. htmlEnd)
