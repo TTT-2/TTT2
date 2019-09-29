@@ -39,7 +39,7 @@ end)
 -- Sets the @{ARMOR} to a specific value that is capped by the max armor value
 -- @param number armor the new armor to be set
 -- @realm server
-function plymeta:SetArmorValue(armor)
+function plymeta:SetArmorCapped(armor)
 	self.armor = math.Clamp(armor, 0, self:GetMaxArmor())
 	self.armor_is_reinforced = ARMOR.cv.armor_is_reinforced_enabled:GetBool() and self:GetArmor() > ARMOR.cv.armor_threshold_for_reinforced:GetInt()
 
@@ -70,7 +70,7 @@ function plymeta:SetArmor(armor)
 		self:SetMaxArmor(armor)
 	end
 
-	self:SetArmorValue(armor)
+	self:SetArmorCapped(armor)
 end
 
 ---
@@ -90,17 +90,28 @@ function plymeta:DecreaseArmor(decreaseby)
 end
 
 ---
--- Decreases the @{ARMOR} about a scaled specific value depending on the current max value
+-- Increases the @{ARMOR} directly about a specific value, proxyfunction for @{plymeta:IncreaseArmor}.
+-- Mostly used when an armor item is received
+-- @param number decreaseby the amount to be decreased
+-- @realm server
+function plymeta:GiveArmor(armor)
+	self:IncreaseArmor(armor)
+end
+
+---
+-- Decreases the @{ARMOR} about a scaled specific value depending on the current max value,
+-- while the maxarmor gets decreased too
 -- @param number remove the amount to be decreased
 -- @realm server
 function plymeta:RemoveArmor(remove)
 	if self:GetMaxArmor() == 0 then
-		self:SetArmor(0)
+		self:SetArmorCapped(0)
 	end
 
-	local multiplier = self:GetArmor() / self:GetMaxArmor()
-
-	self:DecreaseArmor(remove * multiplier)
+	-- the new armor is never higher than the old one
+	-- it is calculated by substracting the removevalue from the previous maxvalue
+	self:SetArmorCapped( math.min(self:GetMaxArmor() - remove, self:GetArmor()) )
+	self:SetMaxArmor(self:GetArmor())
 end
 
 ---
@@ -108,6 +119,7 @@ end
 -- @realm server
 function plymeta:ResetArmor()
 	self:SetArmor(0)
+	self:SetMaxArmor(0)
 end
 
 ---
