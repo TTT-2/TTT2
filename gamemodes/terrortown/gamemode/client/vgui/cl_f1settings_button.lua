@@ -93,7 +93,7 @@ end
 -- @param string strName
 -- @param any strArgs
 function PANEL:SetConsoleCommand(strName, strArgs)
-	self.DoClick = function(self, val)
+	self.DoClick = function(_, _)
 		RunConsoleCommand(strName, strArgs)
 	end
 end

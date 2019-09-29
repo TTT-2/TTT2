@@ -57,8 +57,6 @@ if CLIENT then
 	end
 
 	function HUDELEMENT:PerformLayout()
-		local basepos = self:GetBasePos()
-
 		BaseClass.PerformLayout(self)
 	end
 

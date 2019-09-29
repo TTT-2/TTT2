@@ -318,7 +318,7 @@ function GM:PlayerSelectSpawn(ply)
 					rig_spwn:SetPos(rig)
 					rig_spwn:Spawn()
 
-					ErrorNoHalt("TTT2 WARNING: Map has too few spawn points, using a rigged spawn for ".. tostring(ply) .. "\n")
+					ErrorNoHalt("TTT2 WARNING: Map has too few spawn points, using a rigged spawn for " .. tostring(ply) .. "\n")
 
 					self.HaveRiggedSpawn = true
 
@@ -783,7 +783,6 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
 
 		if IsValid(wep) and wep.DyingShot and not ply.was_headshot and dmginfo:IsBulletDamage() then
 			local fired = wep:DyingShot()
-
 			if fired then return end
 		end
 
@@ -794,7 +793,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
 	end
 
 	-- Drop all weapons
-	for _, wep in pairs(ply:GetWeapons()) do
+	for _, wep in ipairs(ply:GetWeapons()) do
 		WEPS.DropNotifiedWeapon(ply, wep, true) -- with ammo in them
 
 		if isfunction(wep.DampenDrop) then
@@ -1466,9 +1465,6 @@ end
 function GM:OnNPCKilled(npc, attacker, inflictor)
 
 end
-
--- Drowning and such
-local tm, ply, plys
 
 ---
 -- Called when a @{Player} executes gm_showhelp console command. ( Default bind is F1 )

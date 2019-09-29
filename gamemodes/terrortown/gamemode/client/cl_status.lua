@@ -46,12 +46,14 @@ function STATUS:AddTimedStatus(id, duration, showDuration)
 	STATUS.active[id].displaytime = CurTime() + duration
 
 	timer.Create(id, duration, 1, function()
+		if not self then return end
+
 		self:RemoveStatus(id)
 	end)
 
 	if showDuration then
-		STATUS.active[id].DrawInfo = function(self)
-			return tostring(math.Round(math.max(0, self.displaytime - CurTime())))
+		STATUS.active[id].DrawInfo = function(slf)
+			return tostring(math.Round(math.max(0, slf.displaytime - CurTime())))
 		end
 	end
 end

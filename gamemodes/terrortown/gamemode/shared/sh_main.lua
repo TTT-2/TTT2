@@ -75,9 +75,9 @@ function GM:Move(ply, mv)
 
 		if ply.sprintMultiplier and (ply.sprintProgress or 0) > 0 then
 			local sprintMultiplierModifier = {1}
-			
+
 			hook.Run("TTT2PlayerSprintMultiplier", ply, sprintMultiplierModifier)
-			
+
 			mul = mul * ply.sprintMultiplier * sprintMultiplierModifier[1]
 		end
 

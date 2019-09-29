@@ -28,6 +28,7 @@ local function CreateEditOptions(x, y)
 	editClose.OnMousePressed = function(slf, keyCode)
 		HUDEditor.StopEditHUD()
 		HUDManager.ShowHUDSwitcher()
+
 		menu:Remove()
 	end
 
@@ -60,6 +61,7 @@ local function Think_EditLocalHUD()
 					local elObj = hudelements.GetStored(el)
 					if elObj and elObj:IsInPos(x, y) then
 						elem = elObj
+
 						break
 					end
 				end
@@ -102,6 +104,7 @@ local function Think_EditLocalHUD()
 					if elem:ShouldDraw() then -- restrict movement when element is hidden
 						-- move on axis when shift is pressed
 						local new_x, new_y
+
 						if shift_pressed then
 							if math.abs(dif_x) > math.abs(dif_y) then
 								new_x = dif_x + client.base.x
@@ -124,27 +127,33 @@ local function Think_EditLocalHUD()
 				else -- resize mode
 					-- calc base data while checking for the shift key
 					local additional_w, additional_h
-					if (shift_pressed and trans_data.edge) or elem:AspectRatioIsLocked() then
+
+					if shift_pressed and trans_data.edge or elem:AspectRatioIsLocked() then
 						if dif_x * trans_data.direction_x * client.size.h > dif_y * trans_data.direction_y * client.size.w then
 							dif_x = math.Round(dif_y * trans_data.direction_y * client.aspect) * trans_data.direction_x
 						else
 							dif_y = math.Round(dif_x * trans_data.direction_x / client.aspect) * trans_data.direction_y
 						end
 					end
+
 					additional_w = dif_x * trans_data.direction_x
 					additional_h = dif_y * trans_data.direction_y
 
 					-- calc and clamp new data
-					local new_w_p, new_w_m, new_h_p, new_h_m = 0,0,0,0
+					local new_w_p, new_w_m, new_h_p, new_h_m = 0, 0, 0, 0
+
 					if trans_data.x_p then
 						new_w_p = math.Clamp(additional_w, (-1) * client.size.w, ScrW() - (client.size.w + client.base.x))
 					end
+
 					if trans_data.x_m then
 						new_w_m = math.Clamp(additional_w, (-1) * client.size.w, client.base.x)
 					end
+
 					if trans_data.y_p then
 						new_h_p = math.Clamp(additional_h, (-1) * client.size.h, ScrH() - (client.size.h + client.base.y))
 					end
+
 					if trans_data.y_m then
 						new_h_m = math.Clamp(additional_h, (-1) * client.size.h, client.base.y)
 					end

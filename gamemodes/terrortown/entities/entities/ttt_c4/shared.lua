@@ -417,10 +417,8 @@ function ENT:IsDetectiveNear()
 			diff = center - ply:GetPos()
 			d = diff:Dot(diff)
 
-			if d < r then
-				if ply:HasWeapon("weapon_ttt_defuser") then
-					return true
-				end
+			if d < r and ply:HasWeapon("weapon_ttt_defuser") then
+				return true
 			end
 		end
 	end
@@ -600,7 +598,6 @@ if SERVER then
 
 		-- random selection process, lot like traitor selection
 		local safe_count = self.SafeWiresForTime(time)
-		local safes = {}
 		local picked = 0
 
 		while picked < safe_count do

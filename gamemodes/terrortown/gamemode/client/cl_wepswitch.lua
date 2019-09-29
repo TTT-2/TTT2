@@ -226,17 +226,15 @@ local function QuickSlot(ply, cmd, args)
 	if not IsValid(ply) or not args or #args ~= 1 then return end
 
 	local slot = tonumber(args)
-
 	if not slot then return end
 
 	local wep = ply:GetActiveWeapon()
+	if not IsValid(wep) then return end
 
-	if IsValid(wep) then
-		if MakeKindValid(wep.Kind) == slot - 1 then
-			RunConsoleCommand("lastinv")
-		else
-			WSWITCH:SelectAndConfirm(slot)
-		end
+	if MakeKindValid(wep.Kind) == slot - 1 then
+		RunConsoleCommand("lastinv")
+	else
+		WSWITCH:SelectAndConfirm(slot)
 	end
 end
 concommand.Add("ttt_quickslot", QuickSlot)

@@ -459,12 +459,10 @@ function HUDELEMENT:OnHovered(x, y)
 	end
 
 	-- locked aspect ratio has to be a special case to not break movement
-	if self:AspectRatioIsLocked() then
-		-- ignore if mouse is on center
-		if not (row[2] and col[2]) then
-			row[2] = false
-			col[2] = false
-		end
+	-- ignore if mouse is on center
+	if self:AspectRatioIsLocked() and not (row[2] and col[2]) then
+		row[2] = false
+		col[2] = false
 	end
 
 	return row, col

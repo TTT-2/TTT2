@@ -62,7 +62,7 @@ if CLIENT then
 		end
 
 		local fontColor = self:GetDefaultFontColor(item.hud_color)
-		local iconAlpha = fontColor.r > 60 and 175 or 250 
+		local iconAlpha = fontColor.r > 60 and 175 or 250
 
 		curY = curY - size.w
 
@@ -149,15 +149,15 @@ if CLIENT then
 
 		-- draw status
 		for _, status in pairs(STATUS.active) do
-			if status.type == 'bad' then
+			if status.type == "bad" then
 				status.hud_color = Color(183, 54, 47)
 			end
 
-			if status.type == 'good' then
+			if status.type == "good" then
 				status.hud_color = Color(36, 115, 51)
 			end
 
-			if status.type == 'default' then
+			if status.type == "default" then
 				status.hud_color = Color(self.basecolor.r, self.basecolor.g, self.basecolor.b)
 			end
 
@@ -191,6 +191,6 @@ if CLIENT then
 		end
 
 		self:SetSize(self.size.w, - math.max(height, self.minsize.h)) -- adjust the size
-        	self:SetPos(basepos.x, startY - height)
+		self:SetPos(basepos.x, startY - height)
 	end
 end

@@ -102,7 +102,7 @@ if SERVER then
 	-- @param boolean isRoleChange This is true for a rolechange, but not for a respawn
 	-- @realm server
 	function ROLE:GiveRoleLoadout(ply, isRoleChange)
-		
+
 	end
 
 	---

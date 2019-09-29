@@ -104,6 +104,7 @@ local function IdentifyBody(ply, rag)
 		local rd = roles.GetByIndex(subrole)
 		local roletext = "body_found_" .. rd.abbr
 		local clr = rag.role_color
+		local bool = GetGlobalBool("ttt2_confirm_team")
 
 		net.Start("TTT2SendConfirmMsg")
 
@@ -120,8 +121,6 @@ local function IdentifyBody(ply, rag)
 		net.WriteUInt(clr.g, 8)
 		net.WriteUInt(clr.b, 8)
 		net.WriteUInt(clr.a, 8)
-
-		local bool = GetGlobalBool("ttt2_confirm_team")
 
 		net.WriteBool(bool)
 

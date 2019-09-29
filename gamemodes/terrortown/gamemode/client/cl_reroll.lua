@@ -3,9 +3,8 @@
 -- @desc Credit transfer tab for equipment menu
 
 local GetTranslation = LANG.GetTranslation
-local player = player
-local ipairs = ipairs
-local IsValid = IsValid
+local vgui = vgui
+local LANG = LANG
 
 ---
 -- Initializes the reroll menu

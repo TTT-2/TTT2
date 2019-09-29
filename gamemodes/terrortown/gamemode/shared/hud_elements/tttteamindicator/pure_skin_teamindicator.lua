@@ -42,7 +42,7 @@ if CLIENT then
 
 	function HUDELEMENT:GetDefaults()
 		return const_defaults
- 	end
+	end
 
 	function HUDELEMENT:PerformLayout()
 		local parent_pos = self.parentInstance:GetPos()

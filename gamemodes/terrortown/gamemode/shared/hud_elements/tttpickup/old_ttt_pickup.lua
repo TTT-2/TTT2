@@ -1,8 +1,6 @@
 local draw = draw
 local surface = surface
 local math = math
-local IsValid = IsValid
-local TryTranslation = LANG.TryTranslation
 
 local base = "base_stacking_element"
 
@@ -18,12 +16,12 @@ if CLIENT then
 
 	HUDELEMENT.margin = 10
 	HUDELEMENT.barcorner = surface.GetTextureID("gui/corner8")
-	HUDELEMENT.PickupHistoryTop = ScrH() / 2
+	HUDELEMENT.PickupHistoryTop = ScrH() * 0.5
 
 	local const_defaults = {
 		basepos = {x = 0, y = 0},
-		size = {w = 200, h = -20},
-		minsize = {w = 200, h = 20}
+		size = {w = 200, h = -height},
+		minsize = {w = 200, h = height}
 	}
 
 	function HUDELEMENT:Initialize()
@@ -35,7 +33,7 @@ if CLIENT then
 	end
 
 	function HUDELEMENT:GetDefaults()
-		const_defaults["basepos"] = {x = ScrW() - width - 20, y = ScrH() / 2}
+		const_defaults["basepos"] = {x = ScrW() - width - 20, y = ScrH() * 0.5}
 
 		return const_defaults
 	end
@@ -49,10 +47,10 @@ if CLIENT then
 		local pad = 10
 
 		draw.RoundedBox(8, x, y, w, h, Color(20, 20, 20, math.Clamp(alpha, 0, 200)))
-
 		surface.SetTexture(self.barcorner)
 
 		local tipColor = LocalPlayer():GetRoleDkColor()
+
 		if item.type == PICKUP_ITEM then
 			tipColor = Color(255, 255, 255, 255)
 		elseif item.type == PICKUP_AMMO then
@@ -95,12 +93,12 @@ if CLIENT then
 		PICKUP.RemoveOutdatedValues()
 	end
 
-	function HUDELEMENT:DrawElement(i, x, y, w, h)	
+	function HUDELEMENT:DrawElement(i, x, y, w, h)
 		local item = PICKUP.items[i]
 
 		local alpha = 255
 		local delta = (item.time + item.holdtime - CurTime()) / item.holdtime
-		local colordelta = math.Clamp(delta, 0.6, 0.7)
+		--local colordelta = math.Clamp(delta, 0.6, 0.7) -- TODO necessary?
 
 		if delta > 1 - item.fadein then
 			alpha = math.Clamp((1.0 - delta) * (255 / item.fadein), 1, 255)

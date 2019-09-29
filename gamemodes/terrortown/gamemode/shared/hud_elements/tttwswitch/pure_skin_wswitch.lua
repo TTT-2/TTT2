@@ -144,7 +144,7 @@ if CLIENT then
 	end
 
 	function HUDELEMENT:DrawElement(i, x, y, w, h)
-		local active = WSWITCH.Selected == i 
+		local active = WSWITCH.Selected == i
 
 		local tipCol = self:DrawBarBg(x, y, w, h, active)
 

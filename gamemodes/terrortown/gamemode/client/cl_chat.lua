@@ -4,8 +4,9 @@
 DEFINE_BASECLASS("gamemode_base")
 
 local GetTranslation = LANG.GetTranslation
-local GetPTranslation = LANG.GetParamTranslation
 local string = string
+local chat = chat
+local net = net
 
 local function LastWordsRecv()
 	local sender = net.ReadEntity()

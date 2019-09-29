@@ -35,9 +35,9 @@ if CLIENT then
 
 	function HUDELEMENT:GetDefaults()
 		const_defaults["basepos"] = {x = math.Round(ScrW() * 0.5 - self.size.w * 0.5), y = 4 * self.scale}
-		
+
 		return const_defaults
- 	end
+	end
 
 	function HUDELEMENT:PerformLayout()
 		local defaults = self:GetDefaults()

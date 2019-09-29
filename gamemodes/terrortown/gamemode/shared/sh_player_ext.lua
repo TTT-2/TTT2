@@ -138,7 +138,7 @@ function plymeta:SetRole(subrole, team, forceHooks)
 		end
 	end
 
-	if SERVER then 
+	if SERVER then
 		roles.GetByIndex(newSubrole):RemoveRoleLoadout(self, true)
 		roles.GetByIndex(oldSubrole):GiveRoleLoadout(self, true)
 	end
