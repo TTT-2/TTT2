@@ -238,6 +238,7 @@ local function CreateEquipmentList(t)
 
 	local ply = LocalPlayer()
 	local currole = ply:GetSubRole()
+	local credits = ply:GetCredits()
 
 	local itemSize = 64
 
