@@ -119,7 +119,7 @@ if CLIENT then
 			local tgt = client:GetObserverTarget()
 
 			if cactive then
-				local icon = Material("vgui/ttt/dynamic/roles/icon_" .. rd.abbr)
+				local icon = Material(rd.icon)
 				if icon then
 					util.DrawFilteredTexturedRect(x2 + 4, y2 + 4, self.lpw - 8, self.lpw - 8, icon)
 				end

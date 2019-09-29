@@ -94,7 +94,7 @@ function GM:PostDrawTranslucentRenderables(bDrawingDepth, bDrawingSkybox)
 			and (not client:IsActive() or ply:IsInTeam(client))
 			and not ply:GetSubRoleData().avoidTeamIcons
 			then
-				local icon = Material("vgui/ttt/dynamic/roles/icon_" .. rd.abbr)
+				local icon = Material(rd.icon)
 				local incol = ply:GetRoleColor()
 
 				-- start linear filter
