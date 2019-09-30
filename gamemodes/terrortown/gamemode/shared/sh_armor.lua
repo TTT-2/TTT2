@@ -28,5 +28,5 @@ end
 -- @return boolean is armor reinforced
 -- @realm shared
 function plymeta:ArmorIsReinforced()
-	return self.armor_is_reinforced or false
+	return GetGlobalBool("ttt_armor_enable_reinforced", false) and self:GetArmor() > GetGlobalInt("ttt_armor_threshold_for_reinforced", 0)
 end

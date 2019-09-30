@@ -45,7 +45,6 @@ net.Receive("ttt2_sync_armor", function()
 	if not IsValid(client) then return end
 
 	client.armor = net.ReadUInt(16)
-	client.armor_is_reinforced = net.ReadBool()
 
 	-- UPDATE STATUS ICONS
 	HandleArmorStatusIcons(client)

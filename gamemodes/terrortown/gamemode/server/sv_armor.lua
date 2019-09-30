@@ -16,7 +16,7 @@ util.AddNetworkString("ttt2_sync_armor_max")
 -- SET UP CONVARS
 ARMOR.cv = {}
 ARMOR.cv.armor_on_spawn = CreateConVar("ttt_armor_on_spawn", 0, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-ARMOR.cv.armor_is_reinforced_enabled = CreateConVar("ttt_armor_is_reinforced_enabled", 1, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+ARMOR.cv.armor_enable_reinforced = CreateConVar("ttt_armor_enable_reinforced", 1, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 ARMOR.cv.armor_threshold_for_reinforced = CreateConVar("ttt_armor_threshold_for_reinforced", 50, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 ARMOR.cv.armor_damage_block_pct = CreateConVar("ttt_armor_damage_block_pct", 0.2, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 ARMOR.cv.armor_damage_health_pct = CreateConVar("ttt_armor_damage_health_pct", 0.7, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
@@ -26,8 +26,8 @@ ARMOR.cv.item_armor_value = CreateConVar("ttt_item_armor_value", 30, {FCVAR_NOTI
 cvars.AddChangeCallback("ttt_armor_classic", function(cv, old, new)
 	SetGlobalBool("ttt_armor_classic", tobool(tonumber(new)))
 end)
-cvars.AddChangeCallback("ttt_armor_is_reinforced_enabled", function(cv, old, new)
-	SetGlobalBool("ttt_armor_is_reinforced_enabled", tobool(tonumber(new)))
+cvars.AddChangeCallback("ttt_armor_enable_reinforced", function(cv, old, new)
+	SetGlobalBool("ttt_armor_enable_reinforced", tobool(tonumber(new)))
 end)
 cvars.AddChangeCallback("ttt_armor_threshold_for_reinforced", function(cv, old, new)
 	SetGlobalInt("ttt_armor_threshold_for_reinforced", tonumber(new))
@@ -41,11 +41,9 @@ end)
 -- @realm server
 function plymeta:SetArmor(armor)
 	self.armor = math.Clamp(armor, 0, self:GetMaxArmor())
-	self.armor_is_reinforced = ARMOR.cv.armor_is_reinforced_enabled:GetBool() and self:GetArmor() > ARMOR.cv.armor_threshold_for_reinforced:GetInt()
 
 	net.Start("ttt2_sync_armor")
 	net.WriteUInt(math.Round(self.armor), 16)
-	net.WriteBool(self.armor_is_reinforced)
 	net.Send(self)
 end
 
@@ -70,13 +68,8 @@ end
 -- @param number armor The amount to be increased
 -- @realm server
 function plymeta:GiveArmor(armor)
-	local armor_abs = self:GetArmor() + math.max(armor, 0)
-
-	if armor_abs > self:GetMaxArmor() then
-		self:SetMaxArmor(armor_abs)
-	end
-
-	self:SetArmor(armor_abs)
+	self:GiveMaxArmorValue(armor)
+	self:GiveArmorValue(armor)
 end
 
 ---
@@ -85,25 +78,42 @@ end
 -- @param number remove The amount to be decreased
 -- @realm server
 function plymeta:RemoveArmor(armor)
-	if self:GetMaxArmor() == 0 then
-		self:SetArmor(0)
-	end
-
-	-- the new armor is never higher than the old one
-	-- it is calculated by substracting the armor value from the previous maxvalue
-	self:SetArmor( math.min(self:GetMaxArmor() - armor, self:GetArmor()) )
-	self:SetMaxArmor(self:GetArmor())
+	self:RemoveArmorValue(armor)
+	self:RemoveMaxArmorValue(armor)
 end
 
 ---
--- Decreases the @{ARMOR} directly about a specific value, while keeping the max value.
--- Mostly used on use of the armor internally. To remove a player's armor(item),
--- @{plymeta:RemoveArmor()} should be used!
+-- Decreases the @{ARMOR} directly about a specific value while keeping the max value.
+-- To remove a player's armor(item), @{plymeta:RemoveArmor()} should be used!
 -- @param number armor The amount to be decreased
 -- @realm server
--- @internal
-function plymeta:DecreaseArmor(armor)
-	self:SetArmor(math.max(self:GetArmor() - math.max(armor, 0), 0))
+function plymeta:RemoveArmorValue(armor)
+	self:SetArmor(self:GetArmor() - math.max(armor, 0))
+end
+
+---
+-- Increases the @{ARMOR} directly about a specific value while keeping the max value.
+-- To add a player's armor(item), @{plymeta:GiveArmor()} should be used!
+-- @param number armor The amount to be increased
+-- @realm server
+function plymeta:GiveArmorValue(armor)
+	self:SetArmor(self:GetArmor() + math.max(armor, 0))
+end
+
+---
+-- Decreases the maximum @{ARMOR} directly about a specific value.
+-- @param number armor The amount to be decreased
+-- @realm server
+function plymeta:RemoveMaxArmorValue(armor)
+	self:SetMaxArmor(self:GetMaxArmor() - math.max(armor, 0))
+end
+
+---
+-- Increases the maximum @{ARMOR} directly about a specific value.
+-- @param number armor The amount to be increased
+-- @realm server
+function plymeta:GiveMaxArmorValue(armor)
+	self:SetMaxArmor(self:GetMaxArmor() + math.max(armor, 0))
 end
 
 ---
@@ -168,7 +178,7 @@ function ARMOR:HandlePlayerTakeDamage(ply, infl, att, amount, dmginfo)
 		self.cv.health_factor = self.cv.health_factor - 0.15
 	end
 
-	ply:DecreaseArmor(self.cv.armor_factor * damage)
+	ply:RemoveArmorValue(self.cv.armor_factor * damage)
 
 	local new_damage = self.cv.health_factor * damage - math.min(armor, 0)
 	dmginfo:SetDamage(new_damage)
