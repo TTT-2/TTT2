@@ -36,8 +36,8 @@ end)
 
 -- SERVERSIDE ARMOR FUNCTIONS
 ---
--- Sets the @{ARMOR} to a specific value that is capped by the max armor value
--- @param number armor the new armor to be set
+-- Sets the @{ARMOR} to a specific value that is capped by the maximum armor value.
+-- @param number armor The new armor to be set
 -- @realm server
 function plymeta:SetArmor(armor)
 	self.armor = math.Clamp(armor, 0, self:GetMaxArmor())
@@ -50,8 +50,8 @@ function plymeta:SetArmor(armor)
 end
 
 ---
--- Sets the max @{ARMOR} to a specific value
--- @param number armor_max the new max armor to be set
+-- Sets the max @{ARMOR} value to a specific value.
+-- @param number armor_max The new max armor to be set
 -- @realm server
 function plymeta:SetMaxArmor(armor_max)
 	self.armor_max = math.max(armor_max, 0)
@@ -59,42 +59,24 @@ function plymeta:SetMaxArmor(armor_max)
 	net.Start("ttt2_sync_armor_max")
 	net.WriteUInt(math.Round(armor_max), 16)
 	net.Send(self)
+
+	-- make sure armor is always smaller than the max armor
+	self:SetArmor(math.min(self:GetMaxArmor(), self:GetArmor()))
 end
 
 ---
--- Sets the @{ARMOR} to a specific value while also increasing (if necessary) the max value.
--- @param number armor the new armor to be set
--- @realm server
-function plymeta:SetArmorUnbound(armor)
-	if armor > self:GetMaxArmor() then
-		self:SetMaxArmor(armor)
-	end
-
-	self:SetArmor(armor)
-end
-
----
--- Decreases the @{ARMOR} directly about a specific value, while keeping the max value.
--- Mostly used on use of the armor.
--- @param number decreaseby the amount to be decreased
--- @realm server
-function plymeta:DecreaseArmor(decreaseby)
-	self:SetArmorUnbound(math.max(self:GetArmor() - math.max(decreaseby, 0), 0))
-end
-
----
--- Increases the @{ARMOR} directly about a specific value, while also increasing the maxvalue.
--- Mostly used when an armor item is received.
--- @param number decreaseby the amount to be decreased
+-- Increases the @{ARMOR} directly about a specific value, while also increasing the maximum
+-- armor value. Mostly used when an armor item is given.
+-- @param number decreaseby The amount to be decreased
 -- @realm server
 function plymeta:GiveArmor(armor)
-	self:SetArmorUnbound(self:GetArmor() + math.max(increaseby, 0))
+	self:SetArmorAndMax(self:GetArmor() + math.max(armor, 0))
 end
 
 ---
 -- Decreases the @{ARMOR} about a scaled specific value depending on the current max value,
--- while the maxarmor gets decreased too
--- @param number remove the amount to be decreased
+-- while the maximum armor value gets decreased too.
+-- @param number remove The amount to be decreased
 -- @realm server
 function plymeta:RemoveArmor(remove)
 	if self:GetMaxArmor() == 0 then
@@ -108,10 +90,35 @@ function plymeta:RemoveArmor(remove)
 end
 
 ---
+-- Sets the @{ARMOR} to a specific value while also increasing (if necessary) the max value.
+-- This function shouldn't be used as it is internal, use @{plymeta:GiveArmor()} instead.
+-- @param number armor The new armor to be set
+-- @realm server
+-- @internal
+function plymeta:SetArmorAndMax(armor)
+	if armor > self:GetMaxArmor() then
+		self:SetMaxArmor(armor)
+	end
+
+	self:SetArmor(armor)
+end
+
+---
+-- Decreases the @{ARMOR} directly about a specific value, while keeping the max value.
+-- Mostly used on use of the armor internally. To remove a player's armor(item),
+-- @{plymeta:RemoveArmor()} should be used!
+-- @param number decreaseby The amount to be decreased
+-- @realm server
+-- @internal
+function plymeta:DecreaseArmor(decreaseby)
+	self:SetArmorAndMax(math.max(self:GetArmor() - math.max(decreaseby, 0), 0))
+end
+
+---
 -- Resets the @{ARMOR} value including the max value, called in @{GM:PlayerSpawn}.
 -- @realm server
+-- @internal
 function plymeta:ResetArmor()
-	self:SetArmorUnbound(0)
 	self:SetMaxArmor(0)
 end
 
@@ -122,7 +129,7 @@ end
 function ARMOR:InitPlayerArmor()
 	for _, p in ipairs(player.GetAll()) do
 		if p:IsTerror() then
-			p:SetArmorUnbound(self.cv.armor_on_spawn:GetInt())
+			p:SetArmorAndMax(self.cv.armor_on_spawn:GetInt())
 		end
 	end
 end
