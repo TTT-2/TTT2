@@ -68,8 +68,8 @@ end
 -- @param number armor The amount to be increased
 -- @realm server
 function plymeta:GiveArmor(armor)
-	self:GiveMaxArmorValue(armor)
-	self:GiveArmorValue(armor)
+	self:IncreaseMaxArmorValue(armor)
+	self:IncreaseArmorValue(armor)
 end
 
 ---
@@ -78,8 +78,7 @@ end
 -- @param number remove The amount to be decreased
 -- @realm server
 function plymeta:RemoveArmor(armor)
-	self:RemoveArmorValue(armor)
-	self:RemoveMaxArmorValue(armor)
+	self:DecreaseMaxArmorValue(armor)
 end
 
 ---
@@ -87,7 +86,7 @@ end
 -- To remove a player's armor(item), @{plymeta:RemoveArmor()} should be used!
 -- @param number armor The amount to be decreased
 -- @realm server
-function plymeta:RemoveArmorValue(armor)
+function plymeta:DecreaseArmorValue(armor)
 	self:SetArmor(self:GetArmor() - math.max(armor, 0))
 end
 
@@ -96,7 +95,7 @@ end
 -- To add a player's armor(item), @{plymeta:GiveArmor()} should be used!
 -- @param number armor The amount to be increased
 -- @realm server
-function plymeta:GiveArmorValue(armor)
+function plymeta:IncreaseArmorValue(armor)
 	self:SetArmor(self:GetArmor() + math.max(armor, 0))
 end
 
@@ -104,7 +103,7 @@ end
 -- Decreases the maximum @{ARMOR} directly about a specific value.
 -- @param number armor The amount to be decreased
 -- @realm server
-function plymeta:RemoveMaxArmorValue(armor)
+function plymeta:DecreaseMaxArmorValue(armor)
 	self:SetMaxArmor(self:GetMaxArmor() - math.max(armor, 0))
 end
 
@@ -112,7 +111,7 @@ end
 -- Increases the maximum @{ARMOR} directly about a specific value.
 -- @param number armor The amount to be increased
 -- @realm server
-function plymeta:GiveMaxArmorValue(armor)
+function plymeta:IncreaseMaxArmorValue(armor)
 	self:SetMaxArmor(self:GetMaxArmor() + math.max(armor, 0))
 end
 
@@ -178,7 +177,7 @@ function ARMOR:HandlePlayerTakeDamage(ply, infl, att, amount, dmginfo)
 		self.cv.health_factor = self.cv.health_factor - 0.15
 	end
 
-	ply:RemoveArmorValue(self.cv.armor_factor * damage)
+	ply:DecreaseArmorValue(self.cv.armor_factor * damage)
 
 	local new_damage = self.cv.health_factor * damage - math.min(armor, 0)
 	dmginfo:SetDamage(new_damage)
