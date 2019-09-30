@@ -67,10 +67,16 @@ end
 ---
 -- Increases the @{ARMOR} directly about a specific value, while also increasing the maximum
 -- armor value. Mostly used when an armor item is given.
--- @param number decreaseby The amount to be decreased
+-- @param number armor The amount to be increased
 -- @realm server
 function plymeta:GiveArmor(armor)
-	self:SetArmorAndMax(self:GetArmor() + math.max(armor, 0))
+	local armor_abs = self:GetArmor() + math.max(armor, 0)
+
+	if armor_abs > self:GetMaxArmor() then
+		self:SetMaxArmor(armor_abs)
+	end
+
+	self:SetArmor(armor_abs)
 end
 
 ---
@@ -78,40 +84,26 @@ end
 -- while the maximum armor value gets decreased too.
 -- @param number remove The amount to be decreased
 -- @realm server
-function plymeta:RemoveArmor(remove)
+function plymeta:RemoveArmor(armor)
 	if self:GetMaxArmor() == 0 then
 		self:SetArmor(0)
 	end
 
 	-- the new armor is never higher than the old one
-	-- it is calculated by substracting the removevalue from the previous maxvalue
-	self:SetArmor( math.min(self:GetMaxArmor() - remove, self:GetArmor()) )
+	-- it is calculated by substracting the armor value from the previous maxvalue
+	self:SetArmor( math.min(self:GetMaxArmor() - armor, self:GetArmor()) )
 	self:SetMaxArmor(self:GetArmor())
-end
-
----
--- Sets the @{ARMOR} to a specific value while also increasing (if necessary) the max value.
--- This function shouldn't be used as it is internal, use @{plymeta:GiveArmor()} instead.
--- @param number armor The new armor to be set
--- @realm server
--- @internal
-function plymeta:SetArmorAndMax(armor)
-	if armor > self:GetMaxArmor() then
-		self:SetMaxArmor(armor)
-	end
-
-	self:SetArmor(armor)
 end
 
 ---
 -- Decreases the @{ARMOR} directly about a specific value, while keeping the max value.
 -- Mostly used on use of the armor internally. To remove a player's armor(item),
 -- @{plymeta:RemoveArmor()} should be used!
--- @param number decreaseby The amount to be decreased
+-- @param number armor The amount to be decreased
 -- @realm server
 -- @internal
-function plymeta:DecreaseArmor(decreaseby)
-	self:SetArmorAndMax(math.max(self:GetArmor() - math.max(decreaseby, 0), 0))
+function plymeta:DecreaseArmor(armor)
+	self:SetArmor(math.max(self:GetArmor() - math.max(armor, 0), 0))
 end
 
 ---
@@ -119,17 +111,20 @@ end
 -- @realm server
 -- @internal
 function plymeta:ResetArmor()
+	self:SetArmor(0)
 	self:SetMaxArmor(0)
 end
 
 ---
--- Sets the initial @{Player} Armor, called in @{GM:TTTBeginRound}.
+-- Sets the initial @{Player} Armor, called in @{GM:TTTBeginRound} after (dumb) players
+-- are respawned. Therefore no armor has to be reset and it is safe that the player
+-- receives their armor.
 -- @realm server
 -- @internal
 function ARMOR:InitPlayerArmor()
 	for _, p in ipairs(player.GetAll()) do
 		if p:IsTerror() then
-			p:SetArmorAndMax(self.cv.armor_on_spawn:GetInt())
+			p:GiveArmor(self.cv.armor_on_spawn:GetInt())
 		end
 	end
 end
