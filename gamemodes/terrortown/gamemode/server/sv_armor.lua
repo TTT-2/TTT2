@@ -40,10 +40,10 @@ end)
 -- @param number armor The new armor to be set
 -- @realm server
 function plymeta:SetArmor(armor)
-	self.armor = math.Clamp(armor, 0, self:GetMaxArmor())
+	self.armor = math.Clamp(math.Round(armor), 0, self:GetMaxArmor())
 
 	net.Start("ttt2_sync_armor")
-	net.WriteUInt(math.Round(self.armor), 16)
+	net.WriteUInt(self.armor, 16)
 	net.Send(self)
 end
 
@@ -52,14 +52,14 @@ end
 -- @param number armor_max The new max armor to be set
 -- @realm server
 function plymeta:SetMaxArmor(armor_max)
-	self.armor_max = math.max(armor_max, 0)
+	self.armor_max = math.max(math.Round(armor_max), 0)
 
 	net.Start("ttt2_sync_armor_max")
-	net.WriteUInt(math.Round(armor_max), 16)
+	net.WriteUInt(self.armor_max, 16)
 	net.Send(self)
 
 	-- make sure armor is always smaller than the max armor
-	self:SetArmor(math.min(self:GetMaxArmor(), self:GetArmor()))
+	self:SetArmor(math.min(self.armor_max, self:GetArmor()))
 end
 
 ---
@@ -148,8 +148,18 @@ end
 -- @realm server
 -- @internal
 function ARMOR:HandlePlayerTakeDamage(ply, infl, att, amount, dmginfo)
+	local armor = ply:GetArmor()
+
+	-- normal damage handling when no armor is available
+	if armor == 0 then return end
+
+	-- handle different damage type factors, only these four damage types are valid
+	if not dmginfo:IsDamageType(DMG_BULLET) and not dmginfo:IsDamageType(DMG_CLUB)
+		and not dmginfo:IsDamageType(DMG_BURN) and not dmginfo:IsDamageType(DMG_BLAST)
+	then return end
+
 	-- fallback for players who prefer the vanilla armor
-	if self.cv.armor_classic:GetBool() and ply:GetArmor() > 0 then
+	if self.cv.armor_classic:GetBool() then
 		-- classic armor only shields from bullet/crowbar damage
 		if dmginfo:IsDamageType(DMG_BULLET) or dmginfo:IsDamageType(DMG_CLUB) then
 			dmginfo:ScaleDamage(0.7)
@@ -158,17 +168,8 @@ function ARMOR:HandlePlayerTakeDamage(ply, infl, att, amount, dmginfo)
 		return
 	end
 
-	-- handle different damage type factors, only these four damage types are valid
-	if not dmginfo:IsDamageType(DMG_BULLET) and not dmginfo:IsDamageType(DMG_CLUB)
-		and not dmginfo:IsDamageType(DMG_BURN) and not dmginfo:IsDamageType(DMG_BLAST)
-	then return end
-
 	-- calculate damage
 	local damage = dmginfo:GetDamage()
-	local armor = ply:GetArmor()
-
-	-- normal damage handling when no armor is available
-	if armor == 0 then return end
 
 	self.cv.armor_factor = self.cv.armor_damage_block_pct:GetFloat()
 	self.cv.health_factor = self.cv.armor_damage_health_pct:GetFloat()
@@ -178,7 +179,5 @@ function ARMOR:HandlePlayerTakeDamage(ply, infl, att, amount, dmginfo)
 	end
 
 	ply:DecreaseArmorValue(self.cv.armor_factor * damage)
-
-	local new_damage = self.cv.health_factor * damage - math.min(armor, 0)
-	dmginfo:SetDamage(new_damage)
+	dmginfo:SetDamage(self.cv.health_factor * damage - math.min(armor, 0))
 end

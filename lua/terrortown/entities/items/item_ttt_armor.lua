@@ -30,6 +30,7 @@ if CLIENT then
 	hook.Add("TTTBeginRound", "ttt2_base_register_armor_text", function()
 		if GetGlobalBool("ttt_armor_classic") then
 			local item = items.GetStored("item_ttt_armor")
+			if not item then return end
 
 			-- limit item when in classic mode
 			item.limited = true

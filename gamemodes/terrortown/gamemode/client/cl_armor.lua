@@ -3,7 +3,7 @@ ARMOR = {}
 -- HANDLE ARMOR STATUS ICONS
 -- init icons
 function ARMOR:Initialize()
-	STATUS:RegisterStatus("ttt_weapon_armor", {
+	STATUS:RegisterStatus("ttt_armor_status", {
 		hud = {
 			Material("vgui/ttt/perks/hud_armor.png"),
 			Material("vgui/ttt/perks/hud_armor_reinforced.png")
@@ -15,8 +15,12 @@ end
 -- switch between icons
 local function HandleArmorStatusIcons(ply)
 	-- removed armor
-	if STATUS:Active("ttt_weapon_armor") and ply.armor == 0 then
-		STATUS:RemoveStatus("ttt_weapon_armor")
+	if ply.armor <= 0 then
+		if STATUS:Active("ttt_armor_status") then
+			STATUS:RemoveStatus("ttt_armor_status")
+		end
+
+		return
 	end
 
 	-- check if reinforced
@@ -27,13 +31,13 @@ local function HandleArmorStatusIcons(ply)
 	end
 
 	-- added armor
-	if not STATUS:Active("ttt_weapon_armor") and ply.armor > 0 then
-		STATUS:AddStatus("ttt_weapon_armor", icon_id)
+	if not STATUS:Active("ttt_armor_status") then
+		STATUS:AddStatus("ttt_armor_status", icon_id)
 	end
 
 	-- normal armor level change
-	if STATUS:Active("ttt_weapon_armor") then
-		STATUS:SetActiveIcon("ttt_weapon_armor", icon_id)
+	if STATUS:Active("ttt_armor_status") then
+		STATUS:SetActiveIcon("ttt_armor_status", icon_id)
 	end
 end
 
