@@ -65,7 +65,7 @@ end
 -- the icon should be drawn or not, that has to be handled prior to calling this function
 -- @param @{PLAYER} ply The player to receive an overhead icon
 -- @realm client
-function DrawOverheadRoleIcon(ply)
+function DrawOverheadRoleIcon(ply, ricon, rcolor)
 	local client = LocalPlayer()
 
 	-- get position of player
@@ -82,7 +82,6 @@ function DrawOverheadRoleIcon(ply)
 	pos:Add(shift)
 
 	local dir = (client:GetForward() * -1)
-	local rd = ply:GetSubRoleData()
 
 	if ply ~= client then
 		-- start linear filter
@@ -91,18 +90,18 @@ function DrawOverheadRoleIcon(ply)
 
 		-- draw color
 		render.SetMaterial(base)
-		render.DrawQuadEasy(pos, dir, 10, 10, ply:GetRoleColor(), 180)
+		render.DrawQuadEasy(pos, dir, 10, 10, rcolor, 180)
 
 		-- draw border overlay
 		render.SetMaterial(base_overlay)
 		render.DrawQuadEasy(pos, dir, 10, 10, Color(255, 255, 255, 255), 180)
 
 		-- draw shadow
-		render.SetMaterial(rd.iconMaterial)
+		render.SetMaterial(ricon)
 		render.DrawQuadEasy(Vector(pos.x, pos.y, pos.z + 0.2), dir, 8, 8, Color(0, 0, 0, 180), 180)
 
 		-- draw icon
-		render.SetMaterial(rd.iconMaterial)
+		render.SetMaterial(ricon)
 		render.DrawQuadEasy(Vector(pos.x, pos.y, pos.z + 0.5), dir, 8, 8, Color(255, 255, 255, 255), 180)
 
 		-- stop linear filter
@@ -131,13 +130,14 @@ function GM:PostDrawTranslucentRenderables(bDrawingDepth, bDrawingSkybox)
 	if client:IsSpecial() then
 		for i = 1, #plys do
 			local ply = plys[i]
+			local rd = ply:GetSubRoleData()
 
 			if ply:IsActive()
 			and ply:IsSpecial()
 			and (not client:IsActive() or ply:IsInTeam(client))
-			and not ply:GetSubRoleData().avoidTeamIcons
+			and not rd.avoidTeamIcons
 			then
-				DrawOverheadRoleIcon(ply)
+				DrawOverheadRoleIcon(ply, rd.iconMaterial, ply:GetRoleColor())
 			end
 		end
 	end
