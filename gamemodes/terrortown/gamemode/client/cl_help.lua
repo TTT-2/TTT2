@@ -44,9 +44,10 @@ local function AddBindingCategory(category, parent)
 
 			-- Keybind Label
 			local dPlabel = vgui.Create("DLabel")
-			dPlabel:SetText(LANG.TryTranslation(binding.label))
+			dPlabel:SetText(LANG.TryTranslation(binding.label) .. ":")
 			dPlabel:SetTextColor(COLOR_BLACK)
-			dPlabel:SetContentAlignment(5) -- center
+			dPlabel:SetContentAlignment(4)
+			dPlabel:SetSize(120, 25)
 
 			dPGrid:AddItem(dPlabel)
 
