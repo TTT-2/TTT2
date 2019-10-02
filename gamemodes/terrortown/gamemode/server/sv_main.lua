@@ -25,6 +25,9 @@ ttt_include("sv_scoring")
 ttt_include("sv_corpse")
 ttt_include("sv_status")
 
+ttt_include("sv_armor")
+ttt_include("sh_armor")
+
 ttt_include("sh_player_ext")
 
 ttt_include("sv_player_ext")
@@ -517,6 +520,9 @@ function GM:SyncGlobals()
 	SetGlobalBool("ttt_highlight_vip", GetConVar("ttt_highlight_vip"):GetBool())
 	SetGlobalBool("ttt_highlight_addondev", GetConVar("ttt_highlight_addondev"):GetBool())
 	SetGlobalBool("ttt_highlight_supporter", GetConVar("ttt_highlight_supporter"):GetBool())
+	SetGlobalBool("ttt_armor_classic", GetConVar("ttt_armor_classic"):GetBool())
+	SetGlobalBool("ttt_armor_enable_reinforced", GetConVar("ttt_armor_enable_reinforced"):GetBool())
+	SetGlobalInt("ttt_armor_threshold_for_reinforced", GetConVar("ttt_armor_threshold_for_reinforced"):GetInt())
 	SetGlobalBool("ttt_locational_voice", GetConVar("ttt_locational_voice"):GetBool())
 	SetGlobalInt("ttt_idle_limit", idle_time:GetInt())
 	SetGlobalBool("ttt_idle", idle_enabled:GetBool())
@@ -1157,6 +1163,8 @@ function BeginRound()
 	ServerLog("Round proper has begun...\n")
 
 	GAMEMODE:UpdatePlayerLoadouts() -- needs to happen when round_active
+
+	ARMOR:InitPlayerArmor()
 
 	hook.Call("TTTBeginRound", GAMEMODE)
 

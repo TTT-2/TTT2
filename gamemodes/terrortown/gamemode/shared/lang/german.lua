@@ -315,9 +315,9 @@ L.item_weapon = "Waffe"
 
 L.item_armor = "Körperrüstung"
 L.item_armor_desc = [[
-Verringere den Schaden durch Kugeln um 30%.
+Verringere den Schaden durch Kugeln, Feuer und Explosionen. Geht mit der Zeit kaputt.
 
-Standardausrüstung für Detektive.]]
+Du kannst es mehrfach kaufen. Beim Erreichen eines gewissen Rüstungswert wird die Rüstung stärker.]]
 
 L.item_radar = "Radar"
 L.item_radar_desc = [[

@@ -2,6 +2,7 @@ TTT2DIR = "terrortown/gamemode/"
 
 TTTFiles = {
 	-- client files
+	cl_armor = {file = "cl_armor.lua", on = "client"},
 	cl_awards = {file = "cl_awards.lua", on = "client"},
 	cl_changes = {file = "cl_changes.lua", on = "client"},
 	cl_chat = {file = "cl_chat.lua", on = "client"},
@@ -34,6 +35,7 @@ TTTFiles = {
 	cl_wepswitch = {file = "cl_wepswitch.lua", on = "client"},
 
 	-- shared files
+	sh_armor = {file = "sh_armor.lua", on = "shared"},
 	sh_corpse = {file = "sh_corpse.lua", on = "shared"},
 	sh_equip_items = {file = "sh_equip_items.lua", on = "shared"},
 	sh_hud_manager = {file = "sh_hud_manager.lua", on = "shared"},
@@ -74,6 +76,7 @@ TTTFiles = {
 if SERVER then
 	local tmp = { -- server files, don't show them for the client
 		sv_admin = {file = "sv_admin.lua", on = "server"},
+		sv_armor = {file = "sv_armor.lua", on = "server"},
 		sv_corpse = {file = "sv_corpse.lua", on = "server"},
 		sv_ent_replace = {file = "sv_ent_replace.lua", on = "server"},
 		sv_entity = {file = "sv_entity.lua", on = "server"},

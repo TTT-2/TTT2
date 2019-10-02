@@ -62,9 +62,14 @@ if CLIENT then
 			-- Draw health
 			local health = math.max(0, client:Health())
 			local health_y = y + margin
+			local health_string = health
+
+			if not GetGlobalBool("ttt_armor_classic", false) and client:GetArmor() > 0 then
+				health_string = health_string .. " + " .. client:GetArmor()
+			end
 
 			self:PaintBar(x + margin, health_y, bar_width, bar_height, self.health_colors, health / client:GetMaxHealth())
-			self:ShadowedText(tostring(health), "HealthAmmo", x + bar_width, health_y, COLOR_WHITE, TEXT_ALIGN_RIGHT, TEXT_ALIGN_RIGHT)
+			self:ShadowedText(health_string, "HealthAmmo", x + bar_width, health_y, COLOR_WHITE, TEXT_ALIGN_RIGHT, TEXT_ALIGN_RIGHT)
 
 			if ttt_health_label:GetBool() then
 				local health_status = util.HealthToString(health, client:GetMaxHealth())

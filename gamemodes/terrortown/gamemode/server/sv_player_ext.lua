@@ -189,18 +189,18 @@ end
 -- Gives a specific @{ITEM} (if possible)
 -- @param string id
 -- @realm server
+-- @internal
 function plymeta:AddEquipmentItem(id)
-	if not self:HasEquipmentItem(id) then
-		self.equipmentItems = self.equipmentItems or {}
-		self.equipmentItems[#self.equipmentItems + 1] = id
+	local item = items.GetStored(id)
 
-		local item = items.GetStored(id)
-		if item and isfunction(item.Equip) then
-			item:Equip(self)
-		end
+	if not item or item.limited and self:HasEquipmentItem(id) then return end
 
-		self:SendEquipment()
-	end
+	self.equipmentItems = self.equipmentItems or {}
+	self.equipmentItems[#self.equipmentItems + 1] = id
+
+	item:Equip(self)
+
+	self:SendEquipment()
 end
 
 ---
@@ -210,6 +210,7 @@ end
 function plymeta:RemoveEquipmentItem(id)
 	if self:HasEquipmentItem(id) then
 		local item = items.GetStored(id)
+
 		if item and isfunction(item.Reset) then
 			item:Reset(self)
 		end
@@ -406,6 +407,9 @@ function plymeta:ResetRoundFlags()
 	-- karma
 	self:SetCleanRound(true)
 	self:Freeze(false)
+
+	-- armor
+	self:ResetArmor()
 end
 
 ---
@@ -455,18 +459,22 @@ function plymeta:GiveEquipmentWeapon(cls)
 end
 
 ---
--- Gives an @{ITEM} to a @{Player}
+-- Gives an @{ITEM} to a @{Player} and returns whether it was successful
 -- @param string id
 -- @return boolean success?
 -- @realm server
 function plymeta:GiveEquipmentItem(id)
-	if self:HasEquipmentItem(id) then
-		return false
-	elseif id then
-		self:AddEquipmentItem(id)
+	if not id then return end
 
-		return true
+	local item = items.GetStored(id)
+
+	if not item or item.limited and self:HasEquipmentItem(id) then
+		return false
 	end
+
+	self:AddEquipmentItem(id)
+
+	return true
 end
 
 ---

@@ -992,7 +992,7 @@ function plymeta:RoleKnown()
 end
 
 ---
--- Returns whether a @{Player} was revived this round
+-- Returns whether a @{Player} was revived after beeing confirmed this round
 -- @return boolean
 -- @realm shared
 function plymeta:Revived()

@@ -14,7 +14,7 @@ if CLIENT then
 	local const_defaults = {
 		basepos = {x = 0, y = 0},
 		size = {w = 365, h = 146},
-		minsize = {w = 225, h = 146}
+		minsize = {w = 240, h = 146}
 	}
 
 	function HUDELEMENT:Initialize()
@@ -80,6 +80,9 @@ if CLIENT then
 	local watching_icon = Material("vgui/ttt/watching_icon")
 	local credits_default = Material("vgui/ttt/equip/credits_default")
 	local credits_zero = Material("vgui/ttt/equip/credits_zero")
+
+	local icon_armor = Material("vgui/ttt/hud_armor.vmt")
+	local icon_armor_rei = Material("vgui/ttt/hud_armor_reinforced.vmt")
 
 	function HUDELEMENT:Draw()
 		local client = LocalPlayer()
@@ -199,14 +202,38 @@ if CLIENT then
 
 			-- draw bars
 			local bw = w2 - self.lpw - self.pad * 2 -- bar width
-			local bh = 26 * self.scale --  bar height
+			local bh = 26 * self.scale -- bar height
 			local sbh = 8 * self.scale -- spring bar height
 			local spc = 7 * self.scale -- space between bars
 
 			-- health bar
 			local health = math.max(0, client:Health())
+			local armor = client:GetArmor()
 
 			self:DrawBar(nx, ty, bw, bh, Color(234, 41, 41), health / client:GetMaxHealth(), self.scale, "HEALTH: " .. health)
+
+			-- draw armor information
+			if not GetGlobalBool("ttt_armor_classic", false) and armor > 0 then
+				local icon_mat = client:ArmorIsReinforced() and icon_armor_rei or icon_armor
+
+				local a_size = bh - math.Round(11 * self.scale)
+				local a_pad = math.Round(5 * self.scale)
+
+				local a_pos_y = ty + a_pad
+				local a_pos_x = nx + bw - math.Round(65 * self.scale)
+
+				local at_pos_y = ty + 1
+				local at_pos_x = a_pos_x + a_size + a_pad
+
+				local ss = math.Round(self.scale)
+				local ss2 = math.Round(2 * self.scale)
+
+				util.DrawFilteredTexturedRect(a_pos_x + ss2, a_pos_y + ss2, a_size, a_size, icon_mat, 200, {r = 0, g = 0, b = 0})
+				util.DrawFilteredTexturedRect(a_pos_x + ss, a_pos_y + ss, a_size, a_size, icon_mat, 255, {r = 0, g = 0, b = 0})
+				util.DrawFilteredTexturedRect(a_pos_x, a_pos_y, a_size, a_size, icon_mat, 255, {r = 255, g = 255, b = 255})
+
+				draw.AdvancedText(armor, "PureSkinBar", at_pos_x, at_pos_y, self:GetDefaultFontColor(Color(234, 41, 41)), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT, true, self.scale)
+			end
 
 			-- ammo bar
 			ty = ty + bh + spc

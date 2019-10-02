@@ -120,7 +120,7 @@ function GM:PlayerSpawn(ply)
 
 	SCORE:HandleSpawn(ply)
 
-	-- a hook to handle the rolespecific stuff that should be done on
+	-- a function to handle the rolespecific stuff that should be done on
 	-- rolechange and respawn (while a round is active)
 	if ply:IsActive() then
 		roles.GetByIndex(ply:GetSubRole()):GiveRoleLoadout(ply, false)
@@ -900,7 +900,7 @@ function GM:PlayerDeath(victim, infl, attacker)
 
 	timer.Simple(0, function()
 		if IsValid(victim) then
-			-- a hook to handle the rolespecific stuff that should be done on
+			-- a function to handle the rolespecific stuff that should be done on
 			-- rolechange and respawn (while a round is active)
 			if victim:IsActive() then
 				roles.GetByIndex(victim:GetSubRole()):RemoveRoleLoadout(victim, false)
@@ -1436,19 +1436,23 @@ function GM:PlayerTakeDamage(ent, infl, att, amount, dmginfo)
 	-- start painting blood decals
 	util.StartBleeding(ent, dmginfo:GetDamage(), 5)
 
-	-- general actions for pvp damage
-	if ent ~= att and IsValid(att) and att:IsPlayer() and GetRoundState() == ROUND_ACTIVE and math.floor(dmginfo:GetDamage()) > 0 then
-
-		-- scale everything to karma damage factor except the knife, because it
-		-- assumes a kill
-		if not dmginfo:IsDamageType(DMG_SLASH) then
+	-- handle damage scaling by karma
+	if IsValid(att) and att:IsPlayer() and GetRoundState() == ROUND_ACTIVE and math.floor(dmginfo:GetDamage()) > 0 then
+		if ent ~= att and not dmginfo:IsDamageType(DMG_SLASH) then
+			-- scale everything to karma damage factor except the knife, because it assumes a kill
 			dmginfo:ScaleDamage(att:GetDamageFactor())
 		end
 
-		-- process the effects of the damage on karma
-		KARMA.Hurt(att, ent, dmginfo)
+		-- before the karma is calculated, but after all other damage hooks / damage change is processed,
+		-- the armor system should come into place (GM functions are called last)
+		ARMOR:HandlePlayerTakeDamage(ent, infl, att, amount, dmginfo)
 
-		DamageLog(Format("DMG: \t %s [%s] damaged %s [%s] for %d dmg", att:Nick(), att:GetRoleString(), ent:Nick(), ent:GetRoleString(), math.Round(dmginfo:GetDamage())))
+		if ent ~= att then
+			-- process the effects of the damage on karma
+			KARMA.Hurt(att, ent, dmginfo)
+
+			DamageLog(Format("DMG: \t %s [%s] damaged %s [%s] for %d dmg", att:Nick(), att:GetRoleString(), ent:Nick(), ent:GetRoleString(), math.Round(dmginfo:GetDamage())))
+		end
 	end
 end
 

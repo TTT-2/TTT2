@@ -63,6 +63,9 @@ ttt_include("cl_changes")
 ttt_include("cl_inventory")
 ttt_include("cl_status")
 
+ttt_include("cl_armor")
+ttt_include("sh_armor")
+
 ttt_include("sh_sprint")
 
 ---
@@ -81,6 +84,8 @@ function GM:Initialize()
 	LANG.Init()
 
 	self.BaseClass:Initialize()
+
+	ARMOR:Initialize()
 
 	hook.Run("TTT2FinishedLoading")
 

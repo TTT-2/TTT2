@@ -81,7 +81,9 @@ if CLIENT then
 		surface.SetDrawColor(item.hud_color.r, item.hud_color.g, item.hud_color.b, math.Round(factor * 255))
 		surface.DrawRect(pos.x, curY, size.w, size.w)
 
-		util.DrawFilteredTexturedRect(pos.x, curY, size.w, size.w, item.hud, iconAlpha, fontColor)
+		local hud_icon = item.hud.GetTexture and item.hud or item.hud[item.active_icon]
+
+		util.DrawFilteredTexturedRect(pos.x, curY, size.w, size.w, hud_icon, iconAlpha, fontColor)
 
 		self:DrawLines(pos.x, curY, size.w, size.w, item.hud_color.a * factor)
 
@@ -90,7 +92,7 @@ if CLIENT then
 			if info then
 				-- right bottom corner
 				local tx = pos.x + size.w - 5
-				local ty = curY +  size.w - 2
+				local ty = curY +  size.w - 1
 				local pad = 5 * self.scale
 
 				surface.SetFont("PureSkinItemInfo")
