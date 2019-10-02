@@ -30,15 +30,15 @@ local function HandleArmorStatusIcons(ply)
 		icon_id = ply:ArmorIsReinforced() and 2 or 1
 	end
 
-	-- added armor
-	if not STATUS:Active("ttt_armor_status") then
-		STATUS:AddStatus("ttt_armor_status", icon_id)
-	end
-
-	-- normal armor level change
+	-- normal armor level change (update)
 	if STATUS:Active("ttt_armor_status") then
 		STATUS:SetActiveIcon("ttt_armor_status", icon_id)
+
+		return
 	end
+
+	-- added armor if not active
+	STATUS:AddStatus("ttt_armor_status", icon_id)
 end
 
 -- SERVER -> CLIENT ARMOR SYNCING
