@@ -178,6 +178,11 @@ function ARMOR:HandlePlayerTakeDamage(ply, infl, att, amount, dmginfo)
 		self.cv.health_factor = self.cv.health_factor - 0.15
 	end
 
+	-- The armor offset is used to catch the damage that should be taken,
+	-- if the armor is not strong enough to take that many hitpoints.
+	-- It is zero as long as the armor is able to take the damage.
+	local armor_offset = -1 * math.min(armor - self.cv.armor_factor * damage, 0)
+
 	ply:DecreaseArmorValue(self.cv.armor_factor * damage)
-	dmginfo:SetDamage(self.cv.health_factor * damage - math.min(armor, 0))
+	dmginfo:SetDamage(self.cv.health_factor * damage + armor_offset)
 end
