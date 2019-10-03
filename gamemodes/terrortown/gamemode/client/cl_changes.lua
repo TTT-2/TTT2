@@ -509,17 +509,43 @@ function CreateChanges()
 	]], os.time({year = 2019, month = 09, day = 06}))
 
 	AddChange("TTT2 Base - v0.5.7b", [[
+		<h2>New:</h2>
+		<ul>
+			<li>New Loadout Give/Remove functions to cleanup role code and fix item raceconditions</li>
+			<ul>
+				<li>Roles now always get their equipment on time</li>
+				<li>On role changes, old equipment gets removed first</li>
+			</ul>
+			<li>New armor system</li>
+			<ul>
+				<li>Armor is now displayed in the HUD</li>
+				<li>Previously it was a simple stacking percetual calculation, which got stupid with multiple armor effects. Three times armoritems with 70% damage each resulted in 34% damage recveived</li>
+				<li>The new system has an internal armor value that is displayed in the HUD</li>
+				<li>It works basically the same as the vanilla system, only the stacking is a bit different</li>
+				<li>Reaching an armor value of 50 (by default) increases its strength</li>
+				<li>Armor depletes over time</li>
+			</ul>
+			<li>Allowed items to be buyed mulible times, if <i>.limited</i> is set to <i>true</i></li>
+		</ul>
+		<br>
 		<h2>Improved:</h2>
 		<ul>
 			<li>Dynamic loading of role icons</li>
 			<li>Improved performance slightly</li>
 			<li>Improved code consistency</li>
+			<li>Caching role icons in <i>ROLE.iconMaterial</i> to prevent recreation of icon materials</li>
+			<li>Improved bindings menu and added language support</li>
+			<li>Improved SQL module</li>
+			<li>Improved radar icon</li>
+			<li>Made parameterized overheadicon function callable</li>
 		</ul>
+		<br>
 		<h2>Fixed:</h2>
 		<ul>
-			<li>team confirmation convar issue in network-syncing</li>
+			<li>Team confirmation convar issue in network-syncing</li>
+			<li>Reset radar timer on item remove, fixes problems with rolechanges</li>
 		</ul>
-	]], os.time({year = 2019, month = 10, day = 29}))
+	]], os.time({year = 2019, month = 10, day = 06}))
 
 	-- run hook for other addons to add their changelog as well
 	hook.Run("TTT2AddChange", changes, currentVersion)
