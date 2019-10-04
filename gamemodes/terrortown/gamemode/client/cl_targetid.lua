@@ -71,7 +71,7 @@ function DrawOverheadRoleIcon(ply, ricon, rcolor)
 	-- get position of player
 	local pos = ply:GetPos()
 	pos.z = pos.z + 80
-	
+
 	-- get eye angle of player
 	local ea = ply:EyeAngles()
 	ea.pitch = 0

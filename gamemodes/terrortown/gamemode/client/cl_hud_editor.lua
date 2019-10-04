@@ -133,7 +133,7 @@ local function TryMoveLocalHUD(elem, dif_x, dif_y, shift_pressed)
 	if not elem:ShouldDraw() then return end -- restrict movement when element is hidden
 
 	local client = LocalPlayer()
-	
+
 	-- move on axis when shift is pressed
 	local new_x, new_y
 
@@ -240,8 +240,6 @@ local function Think_EditLocalHUD()
 			client.activeElement:PerformLayout()
 		end
 	end
-
-	
 end
 
 ---
