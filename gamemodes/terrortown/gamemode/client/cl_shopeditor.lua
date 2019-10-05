@@ -832,15 +832,8 @@ function ShopEditor.ShowOptions()
 	help:Dock(TOP)
 
 	local tmp = {}
-	local tbl = {
-		[1] = {name = "ttt2_random_shops", typ = "number", bits = 8},
-		[2] = {name = "ttt2_random_team_shops",  typ = "bool"},
-		[3] = {name = "ttt2_random_shop_reroll", typ = "bool"},
-		[4] = {name = "ttt2_random_shop_reroll_cost", typ = "number", bits = 8},
-		[5] = {name = "ttt2_random_shop_reroll_per_buy", typ = "bool"}
-	}
 
-	for key, data in ipairs(tbl) do
+	for key, data in ipairs(ShopEditor.cvars) do
 		local el
 
 		if data.typ == "number" then
@@ -884,7 +877,7 @@ function ShopEditor.ShowOptions()
 	saveButton:Dock(BOTTOM)
 
 	saveButton.DoClick = function()
-		for key, data in pairs(tbl) do
+		for key, data in ipairs(ShopEditor.cvars) do
 			net.Start("TTT2UpdateCVar")
 			net.WriteString(data.name)
 

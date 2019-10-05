@@ -10,8 +10,15 @@ local util = util
 util.AddNetworkString("newshop")
 util.AddNetworkString("TTT2UpdateCVar")
 
-net.Receive("TTT2UpdateCVar", function()
-	RunConsoleCommand(net.ReadString(), net.ReadString())
+net.Receive("TTT2UpdateCVar", function(_, ply)
+	if not IsValid(ply) or not ply:IsAdmin() then return end
+
+	local cvar = net.ReadString()
+	local val = net.ReadString()
+
+	if not table.HasValue(ShopEditor.cvars, val) then return end
+
+	RunConsoleCommand(cvar, val)
 end)
 
 ShopEditor.ShopTablePre = "ttt2_shop_"
