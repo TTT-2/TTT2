@@ -833,7 +833,7 @@ function ShopEditor.ShowOptions()
 
 	local tmp = {}
 
-	for key, data in ipairs(ShopEditor.cvars) do
+	for key, data in pairs(ShopEditor.cvars) do
 		local el
 
 		if data.typ == "number" then
@@ -853,8 +853,8 @@ function ShopEditor.ShowOptions()
 			el = checkbox
 		end
 
-		el:SetText(data.name)
-		el:SetValue(GetGlobalInt(data.name))
+		el:SetText(key)
+		el:SetValue(GetGlobalInt(key))
 		el:Dock(TOP)
 		el:DockMargin(4, 0, 0, 0)
 
@@ -877,18 +877,18 @@ function ShopEditor.ShowOptions()
 	saveButton:Dock(BOTTOM)
 
 	saveButton.DoClick = function()
-		for key, data in ipairs(ShopEditor.cvars) do
-			net.Start("TTT2UpdateCVar")
-			net.WriteString(data.name)
+		for key, data in pairs(ShopEditor.cvars) do
+			if not IsValid(tmp[key]) then continue end
 
-			if IsValid(tmp[key]) then
-				if data.typ == "number" then
-					net.WriteString(tostring(math.Round(tmp[key]:GetValue())))
-				elseif data.typ == "bool" then
-					net.WriteString(tmp[key]:GetChecked() and "1" or "0")
-				else
-					net.WriteString(tmp[key]:GetValue())
-				end
+			net.Start("TTT2UpdateCVar")
+			net.WriteString(key)
+
+			if data.typ == "number" then
+				net.WriteString(tostring(math.Round(tmp[key]:GetValue())))
+			elseif data.typ == "bool" then
+				net.WriteString(tmp[key]:GetChecked() and "1" or "0")
+			else
+				net.WriteString(tmp[key]:GetValue())
 			end
 
 			net.SendToServer()
