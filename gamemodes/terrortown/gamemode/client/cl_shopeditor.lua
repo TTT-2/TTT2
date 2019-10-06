@@ -248,18 +248,18 @@ function ShopEditor.EditItem(item)
 		}
 
 		for key, data in pairs(ShopEditor.savingKeys) do
-			if not wTable[key] then
-				if IsValid(tmp[key]) then
-					if data.typ == "number" then
-						wTable[key] = math.Round(tmp[key]:GetValue())
-					elseif data.typ == "bool" then
-						wTable[key] = tmp[key]:GetChecked()
-					else
-						wTable[key] = tmp[key]:GetValue()
-					end
+			if wTable[key] then continue end
+
+			if IsValid(tmp[key]) then
+				if data.typ == "number" then
+					wTable[key] = math.Round(tmp[key]:GetValue())
+				elseif data.typ == "bool" then
+					wTable[key] = tmp[key]:GetChecked()
 				else
-					wTable[key] = item[key]
+					wTable[key] = tmp[key]:GetValue()
 				end
+			else
+				wTable[key] = item[key]
 			end
 		end
 
