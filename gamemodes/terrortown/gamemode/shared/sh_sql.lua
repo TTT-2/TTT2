@@ -315,12 +315,10 @@ function SQL.Load(tableName, name, tbl, keys)
 		if key == "BaseClass" then continue end
 
 		local nres = SQL.GetParsedData(key, data, res)
-		if nres ~= nil and (tbl[key] == nil or tbl[key] ~= nres) then
-			if nres ~= "NULL" then
-				tbl[key] = nres -- override with saved one
-				changed = true
-			end
-		end
+		if nres == nil or nres == "NULL" or tbl[key] == nres then continue end
+
+		tbl[key] = nres -- override with saved one
+		changed = true
 	end
 
 	return true, changed
