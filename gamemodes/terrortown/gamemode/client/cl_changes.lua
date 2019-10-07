@@ -539,7 +539,7 @@ function CreateChanges()
 			<li>Improved SQL module</li>
 			<li>Improved radar icon</li>
 			<li>Made parameterized overheadicon function callable</li>
-			<li>Pmproved coderedablity by refactoring huge parts</li>
+			<li>Improved codereadablity by refactoring huge parts</li>
 		</ul>
 		<br>
 		<h2>Fixed:</h2>
