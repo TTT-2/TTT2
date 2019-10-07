@@ -1,12 +1,30 @@
 ---
 -- @module ROLE
 -- @author Alf21
+-- @author saibotk
 
 ---
--- This function is called before initializing a @{ROLE}
+-- This function is called before initializing a @{ROLE}, but after all
+-- global variables like "ROLE_TRAITOR" have been initialized.
+-- Use this function to define role attributes, which is dependant on other
+-- global variables (eg. from other roles).
+-- This is mostly used to register the defaultTeam, shopFallback, etc...
 -- @hook
 -- @realm shared
 function ROLE:PreInitialize()
+
+end
+
+---
+-- This function is called after all roles have been loaded with their
+-- ConVars, that are created for each role automatically, and their global
+-- variables.
+-- Please use this function to register your SubRole with the BaseRole, by
+-- calling @{roles.SetBaseRole} and initialize any other needed data
+-- (eg. @{LANG} function calls).
+-- @hook
+-- @realm shared
+function ROLE:Initialize()
 
 end
 
@@ -41,32 +59,17 @@ end
 -- @return boolean
 -- @realm shared
 function ROLE:IsBaseRole()
-	return self.baserole
+	return self.baserole == nil
 end
 
 ---
 -- Connects a SubRole with its BaseRole
 -- @param ROLE baserole the BaseRole
--- @usage -- inside of e.g. this hook:
--- @usage hook.Add("TTT2BaseRoleInit", "TTT2ConnectBaseRole" .. baserole .. "With_" .. roleData.name, ...)
+-- @deprecated
 -- @realm shared
 function ROLE:SetBaseRole(baserole)
-	if self.baserole then
-		error("[TTT2][ROLE-SYSTEM][ERROR] BaseRole of " .. self.name .. " already set (" .. self.baserole .. ")!")
-	else
-		local br = roles.GetByIndex(baserole)
-
-		if br.baserole then
-			error("[TTT2][ROLE-SYSTEM][ERROR] Your requested BaseRole can't be any BaseRole of another SubRole because it's a SubRole as well.")
-
-			return
-		end
-
-		self.baserole = baserole
-		self.defaultTeam = br.defaultTeam
-
-		print("[TTT2][ROLE-SYSTEM] Connected '" .. self.name .. "' subrole with baserole '" .. br.name .. "'")
-	end
+	print("[TTT2][DEPRECATION] ROLE:SetBaseRole will be removed in the near future! You should call roles.SetBaseRole(self, ROLENAME) in the ROLE:Initialize() function!")
+	roles.SetBaseRole(self, baserole)
 end
 
 ---

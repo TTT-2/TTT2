@@ -194,14 +194,21 @@ function OnLoaded()
 		baseclass.Set(k, v)
 
 		if k ~= BASE_ROLE_CLASS then
+			v:PreInitialize()
+		end
+	end
+
+	-- Setup data (eg. convars for all roles)
+	for _, v in pairs(RoleList) do
+		if v.name ~= BASE_ROLE_CLASS then
 			SetupData(v)
 		end
 	end
 
-	-- Call PreInitialize on all roles
+	-- Call Initialize() on all roles
 	for _, v in pairs(RoleList) do
 		if v.name ~= BASE_ROLE_CLASS then
-			v:PreInitialize()
+			v:Initialize()
 		end
 	end
 end
@@ -476,4 +483,29 @@ function GetSortedRoles()
 	SortTable(rls)
 
 	return rls
+end
+
+---
+-- Connects a SubRole with its BaseRole.
+-- @notice This will also set the defaultTeam variable to the BaseRole's team.
+-- @param ROLE roleTable the role table (of the SubRole)
+-- @param ROLE baserole the BaseRole
+-- @realm shared
+function SetBaseRole(roleTable, baserole)
+	if roleTable.baserole then
+		error("[TTT2][ROLE-SYSTEM][ERROR] BaseRole of " .. roleTable.name .. " already set (" .. roleTable.baserole .. ")!")
+	else
+		local br = roles.GetByIndex(baserole)
+
+		if br.baserole then
+			error("[TTT2][ROLE-SYSTEM][ERROR] Your requested BaseRole can't be any BaseRole of another SubRole because it's a SubRole as well.")
+
+			return
+		end
+
+		roleTable.baserole = baserole
+		roleTable.defaultTeam = br.defaultTeam
+
+		print("[TTT2][ROLE-SYSTEM] Connected '" .. roleTable.name .. "' subrole with baserole '" .. br.name .. "'")
+	end
 end
