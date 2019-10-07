@@ -41,7 +41,7 @@ end
 -- @return boolean
 -- @realm shared
 function ROLE:IsBaseRole()
-	return self.baserole
+	return self.baserole == nil
 end
 
 ---
