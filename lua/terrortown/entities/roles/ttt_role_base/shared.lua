@@ -9,6 +9,7 @@
 -- Use this function to define role attributes, which is dependant on other
 -- global variables (eg. from other roles).
 -- This is mostly used to register the defaultTeam, shopFallback, etc...
+-- @hook
 -- @realm shared
 function ROLE:PreInitialize()
 
@@ -21,6 +22,7 @@ end
 -- Please use this function to register your SubRole with the BaseRole, by
 -- calling @{roles.SetBaseRole} and initialize any other needed data
 -- (eg. @{LANG} function calls).
+-- @hook
 -- @realm shared
 function ROLE:Initialize()
 
@@ -63,6 +65,7 @@ end
 ---
 -- Connects a SubRole with its BaseRole
 -- @param ROLE baserole the BaseRole
+-- @deprecated
 -- @realm shared
 function ROLE:SetBaseRole(baserole)
 	print("[TTT2][DEPRECATION] ROLE:SetBaseRole will be removed in the near future! You should call roles.SetBaseRole(self, ROLENAME) in the ROLE:Initialize() function!")
