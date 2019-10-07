@@ -63,26 +63,10 @@ end
 ---
 -- Connects a SubRole with its BaseRole
 -- @param ROLE baserole the BaseRole
--- @usage -- inside of e.g. this hook:
--- @usage hook.Add("TTT2BaseRoleInit", "TTT2ConnectBaseRole" .. baserole .. "With_" .. roleData.name, ...)
 -- @realm shared
 function ROLE:SetBaseRole(baserole)
-	if self.baserole then
-		error("[TTT2][ROLE-SYSTEM][ERROR] BaseRole of " .. self.name .. " already set (" .. self.baserole .. ")!")
-	else
-		local br = roles.GetByIndex(baserole)
-
-		if br.baserole then
-			error("[TTT2][ROLE-SYSTEM][ERROR] Your requested BaseRole can't be any BaseRole of another SubRole because it's a SubRole as well.")
-
-			return
-		end
-
-		self.baserole = baserole
-		self.defaultTeam = br.defaultTeam
-
-		print("[TTT2][ROLE-SYSTEM] Connected '" .. self.name .. "' subrole with baserole '" .. br.name .. "'")
-	end
+	print("[TTT2][DEPRECATION] ROLE:SetBaseRole will be removed in the near future! You should call roles.SetBaseRole(self, ROLENAME) in the ROLE:Initialize() function!")
+	roles.SetBaseRole(self, baserole)
 end
 
 ---
