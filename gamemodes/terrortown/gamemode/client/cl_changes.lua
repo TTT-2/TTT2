@@ -516,6 +516,7 @@ function CreateChanges()
 				<li>Roles now always get their equipment on time</li>
 				<li>On role changes, old equipment gets removed first</li>
 			</ul>
+			<li>New Role Init system - fixes sometimes unavailable shops even if set</li>
 			<li>New armor system</li>
 			<ul>
 				<li>Armor is now displayed in the HUD</li>
@@ -538,12 +539,14 @@ function CreateChanges()
 			<li>Improved SQL module</li>
 			<li>Improved radar icon</li>
 			<li>Made parameterized overheadicon function callable</li>
+			<li>Pmproved coderedablity by refactoring huge parts</li>
 		</ul>
 		<br>
 		<h2>Fixed:</h2>
 		<ul>
 			<li>Team confirmation convar issue in network-syncing</li>
 			<li>Reset radar timer on item remove, fixes problems with rolechanges</li>
+			<li>Fixed an exploid where players could send network messages to run admin commands on the server</li>
 		</ul>
 	]], os.time({year = 2019, month = 10, day = 06}))
 
