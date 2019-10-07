@@ -1,12 +1,28 @@
 ---
 -- @module ROLE
 -- @author Alf21
+-- @author saibotk
 
 ---
--- This function is called before initializing a @{ROLE}
--- @hook
+-- This function is called before initializing a @{ROLE}, but after all
+-- global variables like "ROLE_TRAITOR" have been initialized.
+-- Use this function to define role attributes, which is dependant on other
+-- global variables (eg. from other roles).
+-- This is mostly used to register the defaultTeam, shopFallback, etc...
 -- @realm shared
 function ROLE:PreInitialize()
+
+end
+
+---
+-- This function is called after all roles have been loaded with their
+-- ConVars, that are created for each role automatically, and their global
+-- variables.
+-- Please use this function to register your SubRole with the BaseRole, by
+-- calling @{roles.SetBaseRole} and initialize any other needed data
+-- (eg. @{LANG} function calls).
+-- @realm shared
+function ROLE:Initialize()
 
 end
 

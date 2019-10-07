@@ -194,14 +194,21 @@ function OnLoaded()
 		baseclass.Set(k, v)
 
 		if k ~= BASE_ROLE_CLASS then
+			v:PreInitialize()
+		end
+	end
+
+	-- Setup data (eg. convars for all roles)
+	for _, v in pairs(RoleList) do
+		if v.name ~= BASE_ROLE_CLASS then
 			SetupData(v)
 		end
 	end
 
-	-- Call PreInitialize on all roles
+	-- Call Initialize() on all roles
 	for _, v in pairs(RoleList) do
 		if v.name ~= BASE_ROLE_CLASS then
-			v:PreInitialize()
+			v:Initialize()
 		end
 	end
 end
