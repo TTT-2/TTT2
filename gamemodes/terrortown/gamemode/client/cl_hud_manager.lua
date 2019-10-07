@@ -171,8 +171,6 @@ local function UpdateHUD(name)
 		return
 	end
 
-	MsgN("[TTT2][DEBUG] Received HUD Update with HUD: " .. tostring(name))
-
 	HUDEditor.StopEditHUD()
 
 	-- save the old HUDs values

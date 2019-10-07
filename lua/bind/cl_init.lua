@@ -38,10 +38,8 @@ end
 local function SaveBinding(name, button)
 	if DBCreateTable() then
 		local result = sql.Query("INSERT INTO " .. tablename .. " VALUES('" .. LocalPlayer():SteamID64() .. "', " .. sql.SQLStr(name) .. ", " .. sql.SQLStr(button) .. ")")
-		if result ~= false then
-			print("[TTT2][BIND] Saved binding...")
-		else
-			print("[TTT2][BIND][ERROR] Wasn't able to save binding...")
+		if result == false then
+			print("[TTT2][BIND][ERROR] Wasn't able to save binding to database...")
 		end
 	end
 end
@@ -49,14 +47,10 @@ end
 ---
 -- @internal
 local function DBRemoveBinding(name, button)
-	print("[TTT2][BIND] Deleting key from DB")
-
 	if DBCreateTable() then
 		local result = sql.Query("DELETE FROM " .. tablename .. " WHERE guid = '" .. LocalPlayer():SteamID64() .. "' AND name = " .. sql.SQLStr(name) .. " AND button = " .. sql.SQLStr(button) )
-		if result ~= false then
-			print("[TTT2][BIND] Removed binding...")
-		else
-			print("[TTT2][BIND][ERROR] Wasn't able to remove binding...")
+		if result == false then
+			print("[TTT2][BIND][ERROR] Wasn't able to remove binding from database...")
 		end
 	end
 end
@@ -64,8 +58,6 @@ end
 ---
 -- @internal
 local function TTT2LoadBindings()
-	print("[TTT2][BIND] Loading button bindings...")
-
 	if DBCreateTable() then
 		local result = sql.Query("SELECT * FROM " .. tablename .. " WHERE guid = '" .. LocalPlayer():SteamID64() .. "'")
 		if istable(result) then
@@ -177,15 +169,11 @@ end
 -- @param string name
 -- @param boolean persistent
 function bind.Remove(btn, name, persistent)
-	print("[TTT2][BIND] Attempt to remove binding " .. name .. " on button id " .. tonumber(btn))
-
 	if persistent then
 		DBRemoveBinding(name, btn) -- Still try to delete from DB
 	end
 
 	if not Bindings[btn] then return end
-
-	print("[TTT2][BIND] removing binding")
 
 	for i, v in pairs(Bindings[btn]) do
 		if v == name then
@@ -273,7 +261,7 @@ end
 
 
 ---
--- Add a binding to run a command when the button is pressed. This function is not used to register a new binding shown in 
+-- Add a binding to run a command when the button is pressed. This function is not used to register a new binding shown in
 -- the UI, but to bind a specific key to a command
 -- @param number btn The button ID, see: <a href="BUTTON_CODE_Enums">https://wiki.garrysmod.com/page/Enums/BUTTON_CODE</a>
 -- @param string name The command that should be executed

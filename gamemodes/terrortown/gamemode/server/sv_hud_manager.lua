@@ -182,8 +182,6 @@ net.Receive("TTT2RequestHUD", function(_, ply)
 	local oldHUD = net.ReadString() -- current HUD as fallback
 	local forced = HUDManager.GetModelValue("forcedHUD")
 
-	MsgN("[TTT2][DEBUG] User " .. ply:Nick() .. " requested to change the HUD to " .. tostring(hudname) .. ", alternative: " .. tostring(oldHUD))
-
 	if not forced then
 		local restrictions = HUDManager.GetModelValue("restrictedHUDs") or {}
 		local restricted = false
@@ -221,8 +219,6 @@ net.Receive("TTT2RequestHUD", function(_, ply)
 	if not hudToSendTbl or hudToSendTbl.isAbstract then
 		hudToSend = HUDManager.GetModelValue("defaultHUD") or "pure_skin"
 	end
-
-	MsgN("[TTT2][DEBUG] The user will receive the HUD: " .. hudToSend)
 
 	net.Start("TTT2ReceiveHUD")
 	net.WriteString(hudToSend)
