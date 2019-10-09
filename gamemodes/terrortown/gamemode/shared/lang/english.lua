@@ -1177,6 +1177,9 @@ L.f1_bind_description = "Click and press a button to bind a key."
 L.f1_bind_reset_default_description = "Reset to default value."
 L.f1_bind_disable_description = "Disable this bind."
 
+L.f1_bind_weaponswitch = "Switch Weapon"
+L.f1_bind_sprint = "Sprint"
+
 L.ttt2_bindings_new = "New bound key for {name}: {key}"
 L.hud_default = "Default HUD"
 L.hud_force = "Force HUD"

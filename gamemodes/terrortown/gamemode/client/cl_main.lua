@@ -27,6 +27,7 @@ ttt_include("sh_scoring")
 ttt_include("sh_corpse")
 ttt_include("sh_player_ext")
 ttt_include("sh_weaponry")
+ttt_include("sh_weapon_pickup")
 ttt_include("sh_inventory")
 
 ttt_include("vgui__cl_coloredbox")

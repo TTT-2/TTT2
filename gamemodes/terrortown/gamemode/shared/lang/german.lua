@@ -1164,6 +1164,9 @@ L.f1_bind_description = "Klicke und drücke einen Knopf um ihn zu setzen."
 L.f1_bind_reset_default_description = "Auf Standardwert zurücksetzen."
 L.f1_bind_disable_description = "Deaktiviere diese Bindung."
 
+L.f1_bind_weaponswitch = "Waffe Wechseln"
+L.f1_bind_sprint = "Sprinten"
+
 L.ttt2_bindings_new = "Neue Tasetenbelegung für {name}: {key}"
 L.hud_default = "Standard HUD"
 L.hud_force = "Erzwungenes HUD"
