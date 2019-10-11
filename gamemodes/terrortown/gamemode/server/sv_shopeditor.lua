@@ -126,6 +126,8 @@ end
 
 util.AddNetworkString("shop")
 local function shop(len, ply)
+	if not IsValid(ply) or not ply:IsAdmin() then return end
+
 	local add = net.ReadBool()
 	local subrole = net.ReadUInt(ROLE_BITS)
 	local eq = net.ReadString()
@@ -142,7 +144,9 @@ end
 net.Receive("shop", shop)
 
 util.AddNetworkString("TTT2SESaveItem")
-local function TTT2SESaveItem()
+local function TTT2SESaveItem(len, ply)
+	if not IsValid(ply) or not ply:IsAdmin() then return end
+
 	local name, item = ShopEditor.ReadItemData()
 
 	if not item then return end
@@ -157,6 +161,8 @@ util.AddNetworkString("shopFallbackAnsw")
 util.AddNetworkString("shopFallbackReset")
 util.AddNetworkString("shopFallbackRefresh")
 local function shopFallback(len, ply)
+	if not IsValid(ply) or not ply:IsAdmin() then return end
+
 	local subrole = net.ReadUInt(ROLE_BITS)
 	local fallback = net.ReadString()
 
