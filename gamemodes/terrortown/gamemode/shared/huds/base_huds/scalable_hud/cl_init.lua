@@ -10,10 +10,19 @@ local savingKeys
 DEFINE_BASECLASS(base)
 
 HUD.Base = base
-HUD.defaultcolor = Color(49, 71, 94)
-HUD.basecolor = HUD.defaultcolor
 HUD.defaultscale = 1.0
 HUD.scale = HUD.defaultscale
+
+---
+-- This will initialize the HUD, by calling @{HUDELEMENT:Initialize} on its
+-- elements, respecting the parent -> child relations. It will also call
+-- @{HUD:PerformLayout} before setting the HUDELEMENT.initialized parameter.
+-- @realm client
+function HUD:Initialize()
+	self.basecolor = self.defaultcolor
+
+	BaseClass.Initialize(self)
+end
 
 ---
 -- This function will return a table containing all keys that will be stored by
