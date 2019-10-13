@@ -394,6 +394,8 @@ function HELPSCRN:CreateInterfaceSettings(parent)
 
 	cb = form:CheckBox(GetTranslation("set_cues"), "ttt_cl_soundcues")
 
+	cb = form:CheckBox(GetTranslation("weapon_switch_draw_halo"), "ttt_weapon_switch_draw_halo")
+
 	form:Dock(FILL)
 end
 

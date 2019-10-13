@@ -36,6 +36,8 @@ end
 
 
 if CLIENT then
+	local cv_draw_halo = CreateClientConVar("ttt_weapon_switch_draw_halo", 1, true, false)
+
 	bind.Register("ttt2_weaponswitch", function()
 		net.Start("ttt2_switch_weapon")
 		net.WriteString(GetRoundState())
@@ -43,6 +45,8 @@ if CLIENT then
 	end, nil, "TTT2 Bindings", "f1_bind_weaponswitch", KEY_E)
 
 	hook.Add("PreDrawHalos", "WeaponDrawHalo", function()
+		if not cv_draw_halo:GetBool() then return end
+
 		local client = LocalPlayer()
 
 		if not IsValid(client) or not client:IsTerror() then return end
@@ -50,10 +54,7 @@ if CLIENT then
 		local tracedWeapon = client:GetEyeTrace().Entity
 
 		if not IsValid(tracedWeapon) or not tracedWeapon:IsWeapon() then return end
-
-		local distance = client:GetPos():Distance(tracedWeapon:GetPos())
-
-		if distance > 100 then return end
+		if client:GetPos():Distance(tracedWeapon:GetPos()) > 100 then return end
 
 		halo.Add({tracedWeapon}, Color(250, 210, 210), 3, 3, 2)
 	end)
