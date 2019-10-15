@@ -15,12 +15,12 @@ local surface = surface
 local hook = hook
 local pairs = pairs
 
-local marksList = {}
-local marksHookInstalled = false
-
 if SERVER then
 	AddCSLuaFile()
 else
+	local marksList = {}
+	local marksHookInstalled = false
+
 	---
 	-- Renders the entity based on the color
 	-- @param table ents list of @{Entity}
