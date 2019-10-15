@@ -3,6 +3,7 @@
 -- It massively improves the performance while rendering an entity (highlighting it) with caching (compared with the default halo library)
 -- @author Alf21
 -- TODO make marksList sequential
+-- TODO improve storing of list sizes
 
 module("marks", package.seeall)
 

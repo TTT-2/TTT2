@@ -516,6 +516,9 @@ ttt_include("sh_item_module")
 -- load non-wrapped modules directly
 require("marks")
 
+-- TODO load modules that are currently not included in gmod but waiting for merge
+require("outline")
+
 ---
 -- Returns the equipment's file name
 -- @param string name

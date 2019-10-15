@@ -25,6 +25,7 @@ DEFINE_BASECLASS(base)
 HUD.Base = base
 
 HUD.previewImage = Material("vgui/ttt/huds/pure_skin/preview.png")
+HUD.defaultcolor = Color(49, 71, 94)
 
 ---
 -- Loads this HUD and connects with special @{HUDELEMENT}
