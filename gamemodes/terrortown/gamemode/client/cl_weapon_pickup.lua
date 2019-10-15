@@ -1,4 +1,5 @@
 local cv_draw_halo = CreateClientConVar("ttt_weapon_switch_draw_halo", "1", true, false)
+local defaultCol = Color(250, 210, 210)
 
 bind.Register("ttt2_weaponswitch", function()
 	net.Start("ttt2_switch_weapon")
@@ -16,17 +17,17 @@ local function DrawWeaponOutlines()
 	if not IsValid(tracedWeapon) or not tracedWeapon:IsWeapon()
 	or client:GetPos():Distance(tracedWeapon:GetPos()) > 100 then return end
 
-	halo.Add({tracedWeapon}, Color(250, 210, 210), 3, 3, 2)
+	outline.Add({tracedWeapon}, client:GetRoleColor() or defaultCol, OUTLINE_MODE_VISIBLE)
 end
 
 if cv_draw_halo:GetBool() then
-	hook.Add("PreDrawHalos", "WeaponDrawHalo", DrawWeaponOutlines)
+	hook.Add("PreDrawOutlines", "WeaponDrawOutline", DrawWeaponOutlines)
 end
 
 cvars.AddChangeCallback(cv_draw_halo:GetName(), function(name, old, new)
 	if tonumber(new) == 1 then
-		hook.Add("PreDrawHalos", "WeaponDrawHalo", DrawWeaponOutlines)
+		hook.Add("PreDrawOutlines", "WeaponDrawOutline", DrawWeaponOutlines)
 	else
-		hook.Remove("PreDrawHalos", "WeaponDrawHalo")
+		hook.Remove("PreDrawOutlines", "WeaponDrawOutline")
 	end
 end, cv_draw_halo:GetName())

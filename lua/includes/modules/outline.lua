@@ -96,7 +96,7 @@ local function Render()
 			local ent = ents[j]
 
 			if not IsValid(ent)
- 			or mode == OUTLINE_MODE_NOTVISIBLE and IsLineOfSightClear(ent)
+			or mode == OUTLINE_MODE_NOTVISIBLE and IsLineOfSightClear(ent)
 			or mode == OUTLINE_MODE_VISIBLE and not IsLineOfSightClear(ent) then
 				continue
 			end
