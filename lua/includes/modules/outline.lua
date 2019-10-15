@@ -2,6 +2,10 @@
 -- Outline module
 -- @author https://github.com/ShadowBonnieRUS
 
+local render = render
+local cam = cam
+local surface = surface
+
 OUTLINE_MODE_BOTH = 0
 OUTLINE_MODE_NOTVISIBLE = 1
 OUTLINE_MODE_VISIBLE = 2
@@ -53,6 +57,7 @@ end
 
 local function Render()
 	local client = LocalPlayer()
+	local IsLineOfSightClear = client.IsLineOfSightClear
 	local scene = render.GetRenderTarget()
 
 	render.CopyRenderTargetToTexture(storeTexture)
@@ -90,12 +95,11 @@ local function Render()
 		for j = 1, #ents do
 			local ent = ents[j]
 
-			if not IsValid(ent) then continue end
-
-			local lineOfSight = client:IsLineOfSightClear(ent)
-
- 			if mode == OUTLINE_MODE_NOTVISIBLE and lineOfSight
-			or mode == OUTLINE_MODE_VISIBLE and not lineOfSight then continue end
+			if not IsValid(ent)
+ 			or mode == OUTLINE_MODE_NOTVISIBLE and IsLineOfSightClear(ent)
+			or mode == OUTLINE_MODE_VISIBLE and not IsLineOfSightClear(ent) then
+				continue
+			end
 
 			RenderEnt = ent
 
