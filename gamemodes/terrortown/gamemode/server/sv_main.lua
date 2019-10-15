@@ -34,7 +34,7 @@ ttt_include("sv_player_ext")
 ttt_include("sv_player")
 
 ttt_include("sh_sprint")
-ttt_include("sh_weapon_pickup")
+ttt_include("sv_weapon_pickup")
 
 -- Localize stuff we use often. It's like Lua go-faster stripes.
 local math = math
