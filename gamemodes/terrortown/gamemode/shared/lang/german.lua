@@ -1063,7 +1063,7 @@ L.set_avoid_tip = "Aktiviere diese Funktion, damit du nicht als {role} ausgewäh
 
 -- v24
 L.drop_no_ammo = "Du hast zu wenig Munition im Magazin, um eine Munitionskiste fallenzulassen."
-L.drop_ammo_prevented = "Etwas hindert dich daran deine Munuition fallenzulassen."
+L.drop_ammo_prevented = "Etwas hindert dich daran deine Munition fallenzulassen."
 
 -- v31
 L.set_cross_brightness = "Fadenkreuz Helligkeit"

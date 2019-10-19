@@ -554,6 +554,7 @@ function CreateChanges()
 		<h2>New:</h2>
 		<ul>
 			<li>Added the outline module for better performance</li>
+			<li><i>TTT2DropAmmo</i> hook to prevent/change the ammo drop of a wepon.</li>
 		</ul>
 		<br>
 		<h2>Fixed:</h2>
