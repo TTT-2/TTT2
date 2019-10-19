@@ -496,6 +496,8 @@ end
 function SetBaseRole(roleTable, baserole)
 	if roleTable.baserole then
 		error("[TTT2][ROLE-SYSTEM][ERROR] BaseRole of " .. roleTable.name .. " already set (" .. roleTable.baserole .. ")!")
+	elseif roleTable.index == baserole then
+		error("[TTT2][ROLE-SYSTEM][ERROR] BaseRole " .. roleTable.name .. " can't be a baserole of itself!")
 	else
 		local br = roles.GetByIndex(baserole)
 
