@@ -494,7 +494,7 @@ local function DropActiveAmmo(ply)
 
 	if hook.Run("TTT2DropAmmo", ply, hook_data) == false then
 		LANG.Msg(ply, "drop_ammo_prevented")
-		
+
 		return
 	end
 
