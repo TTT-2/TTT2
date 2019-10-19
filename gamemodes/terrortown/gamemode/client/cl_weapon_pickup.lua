@@ -1,12 +1,6 @@
 local cv_draw_halo = CreateClientConVar("ttt_weapon_switch_draw_halo", "1", true, false)
 local defaultCol = Color(250, 210, 210)
 
-bind.Register("ttt2_weaponswitch", function()
-	net.Start("ttt2_switch_weapon")
-	net.WriteString(GetRoundState())
-	net.SendToServer()
-end, nil, "TTT2 Bindings", "f1_bind_weaponswitch", KEY_E)
-
 local function DrawWeaponOutlines()
 	local client = LocalPlayer()
 
@@ -19,6 +13,15 @@ local function DrawWeaponOutlines()
 
 	outline.Add({tracedWeapon}, client:GetRoleColor() or defaultCol, OUTLINE_MODE_VISIBLE)
 end
+
+local function AttemptWeaponSwitch()
+	net.Start("ttt2_switch_weapon")
+	net.WriteString(GetRoundState())
+	net.SendToServer()
+end
+
+-- register a binding for the weapon switch, the default should be the use key
+bind.Register("ttt2_weaponswitch", AttemptWeaponSwitch, nil, "TTT2 Bindings", "f1_bind_weaponswitch", input.GetKeyCode(input.LookupBinding("+use")))
 
 if cv_draw_halo:GetBool() then
 	hook.Add("PreDrawOutlines", "WeaponDrawOutline", DrawWeaponOutlines)
