@@ -96,9 +96,10 @@ local function IdentifyBody(ply, rag)
 
 	local finder = ply:Nick()
 	local nick = CORPSE.GetPlayerNick(rag, "")
+	local notConfirmed = not CORPSE.GetFound(rag, false)
 
 	-- Register find
-	if not CORPSE.GetFound(rag, false) then -- will return either false or a valid ply
+	if notConfirmed then -- will return either false or a valid ply
 		local deadply = player.GetBySteamID64(rag.sid64)
 		if deadply and not deadply:Alive() and hook.Run("TTT2ConfirmPlayer", deadply, ply, rag) ~= false then
 			deadply:ConfirmPlayer(true)
@@ -136,7 +137,7 @@ local function IdentifyBody(ply, rag)
 	end
 
 	-- Announce body
-	if bodyfound:GetBool() and not CORPSE.GetFound(rag, false) then
+	if bodyfound:GetBool() and notConfirmed then
 		local subrole = rag.was_role
 		local team = rag.was_team
 		local rd = roles.GetByIndex(subrole)
