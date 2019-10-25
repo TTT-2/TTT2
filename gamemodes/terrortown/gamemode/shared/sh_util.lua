@@ -595,18 +595,14 @@ if CLIENT then
 	-- @param number h height
 	-- @param Material material
 	-- @param number alpha
-	-- @param Color rgb the alpha value will be ignored
+	-- @param Color col the alpha value will be ignored
 	-- @realm client
 	-- @author Mineotopia
-	function util.DrawFilteredTexturedRect(x, y, w, h, material, alpha, rgb)
+	function util.DrawFilteredTexturedRect(x, y, w, h, material, alpha, col)
 		alpha = alpha or 255
-		rgb = rgb or {
-			r = 255,
-			g = 255,
-			b = 255
-		}
+		col = col or COLOR_WHITE
 
-		surface.SetDrawColor(rgb.r, rgb.g, rgb.b, alpha)
+		surface.SetDrawColor(col.r, col.g, col.b, alpha)
 		surface.SetMaterial(material)
 
 		render.PushFilterMag(TEXFILTER.LINEAR)
