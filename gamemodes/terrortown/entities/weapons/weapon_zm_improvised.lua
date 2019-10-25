@@ -174,7 +174,15 @@ function SWEP:PrimaryAttack()
 				-- do a bullet just to make blood decals work sanely
 				-- need to disable lagcomp because firebullets does its own
 				owner:LagCompensation(false)
-				owner:FireBullets({Num = 1, Src = spos, Dir = owner:GetAimVector(), Spread = Vector(0, 0, 0), Tracer = 0, Force = 1, Damage = 0})
+				owner:FireBullets({
+					Num = 1,
+					Src = spos,
+					Dir = owner:GetAimVector(),
+					Spread = Vector(0, 0, 0),
+					Tracer = 0,
+					Force = 1,
+					Damage = 0
+				})
 			else
 				util.Effect("Impact", edata)
 			end
@@ -198,8 +206,7 @@ function SWEP:PrimaryAttack()
 
 		if IsValid(hitEnt) then
 			if self:OpenEnt(hitEnt) == OPEN_NO and IsValid(trEnt) then
-				-- See if there's a nodraw thing we should open
-				self:OpenEnt(trEnt)
+				self:OpenEnt(trEnt) -- See if there's a nodraw thing we should open
 			end
 
 			local dmg = DamageInfo()
