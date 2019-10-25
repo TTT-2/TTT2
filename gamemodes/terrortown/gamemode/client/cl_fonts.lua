@@ -1,6 +1,7 @@
 ---
 -- @author LeBroomer
 -- @author Alf21
+-- @author saibotk
 
 -- micro-optimization stuff
 local draw = draw
@@ -145,4 +146,66 @@ function draw.AdvancedText(text, font, x, y, color, xalign, yalign, shadow, scal
 	  render.PopFilterMag()
 	  render.PopFilterMin()
 	end
+end
+
+---
+-- Returns a list of lines to wrap the text matching the given width
+-- @param string text
+-- @param number width
+-- @param string font
+-- @return table
+-- @realm client
+function WrapText(text, width, font)
+	-- Oh joy, I get to write my own wrapping function. Thanks Lua!
+	-- Splits a string into a table of strings that are under the given width.
+
+	if not text then return end
+
+	surface.SetFont(font or "DefaultBold")
+
+	-- Any wrapping required?
+	local w, h = surface.GetTextSize(text)
+
+	if w <= width then
+		return {text}, w, h -- Nope, but wrap in table for uniformity
+	end
+
+	local words = string.Explode(" ", text) -- No spaces means you're screwed
+	local lines = {""}
+
+	for i, wrd in ipairs(words) do
+		if i == 1 then
+			-- add the first word whether or not it matches the size to prevent
+			-- weird empty first lines and ' ' in front of the first line
+			lines[1] = wrd
+
+			continue
+		end
+
+		local l = #lines
+		local added = lines[l] .. " " .. wrd
+
+		w = surface.GetTextSize(added)
+
+		if w > width then
+			table.insert(lines, wrd) -- New line needed
+		else
+			lines[l] = added -- Safe to tack it on
+		end
+	end
+
+	-- get length of longest line
+	local length = 0
+
+	for _, line in ipairs(lines) do
+		local w = surface.GetTextSize(text)
+
+		if w > length then
+			length = w
+		end
+	end
+
+	local w, h = surface.GetTextSize(text)
+
+	return lines, length, h * #lines
 end

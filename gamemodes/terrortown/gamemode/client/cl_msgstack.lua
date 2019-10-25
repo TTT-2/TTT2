@@ -109,53 +109,6 @@ function MSTACK:AddMessage(text, traitor_only)
 	end
 end
 
----
--- Returns a list of lines to wrap the text matching the given width
--- @param string text
--- @param number width
--- @param string font
--- @return table
--- @realm client
-function MSTACK:WrapText(text, width, font)
-	-- Oh joy, I get to write my own wrapping function. Thanks Lua!
-	-- Splits a string into a table of strings that are under the given width.
-
-	surface.SetFont(font or "DefaultBold")
-
-	-- Any wrapping required?
-	local w = surface.GetTextSize(text)
-
-	if w <= width then
-		return {text} -- Nope, but wrap in table for uniformity
-	end
-
-	local words = string.Explode(" ", text) -- No spaces means you're screwed
-	local lines = {""}
-
-	for i, wrd in ipairs(words) do
-		if i == 1 then
-			-- add the first word whether or not it matches the size to prevent
-			-- weird empty first lines and ' ' in front of the first line
-			lines[1] = wrd
-
-			continue
-		end
-
-		local l = #lines
-		local added = lines[l] .. " " .. wrd
-
-		w = surface.GetTextSize(added)
-
-		if w > width then
-			table.insert(lines, wrd) -- New line needed
-		else
-			lines[l] = added -- Safe to tack it on
-		end
-	end
-
-	return lines
-end
-
 -- Game state message channel
 local function ReceiveGameMsg()
 	local text = net.ReadString()
