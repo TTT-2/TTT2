@@ -16,6 +16,9 @@ local IsValid = IsValid
 local CreateConVar = CreateConVar
 local hook = hook
 
+local disable_spectatorsoutline = CreateClientConVar("ttt2_disable_spectatorsoutline", "0", true, true)
+local disable_overheadicons = CreateClientConVar("ttt2_disable_overheadicons", "0", true, true)
+
 local key_params = {
 	usekey = Key("+use", "USE"),
 	walkkey = Key("+walk", "WALK")
@@ -128,23 +131,7 @@ function GM:PostDrawTranslucentRenderables(bDrawingDepth, bDrawingSkybox)
 	local client = LocalPlayer()
 	local plys = GetPlayers()
 
-	-- OVERHEAD ICONS
-	if client:IsSpecial() then
-		for i = 1, #plys do
-			local ply = plys[i]
-			local rd = ply:GetSubRoleData()
-
-			if ply:IsActive()
-			and ply:IsSpecial()
-			and (not client:IsActive() or ply:IsInTeam(client))
-			and not rd.avoidTeamIcons
-			then
-				DrawOverheadRoleIcon(ply, rd.iconMaterial, ply:GetRoleColor())
-			end
-		end
-	end
-
-	if client:Team() == TEAM_SPEC then
+	if client:Team() == TEAM_SPEC and not disable_spectatorsoutline:GetBool() then
 		cam.Start3D(EyePos(), EyeAngles())
 
 		for i = 1, #plys do
@@ -166,6 +153,24 @@ function GM:PostDrawTranslucentRenderables(bDrawingDepth, bDrawingSkybox)
 		end
 
 		cam.End3D()
+	end
+
+	if disable_overheadicons:GetBool() then return end
+
+	-- OVERHEAD ICONS
+	if client:IsSpecial() then
+		for i = 1, #plys do
+			local ply = plys[i]
+			local rd = ply:GetSubRoleData()
+
+			if ply:IsActive()
+			and ply:IsSpecial()
+			and (not client:IsActive() or ply:IsInTeam(client))
+			and not rd.avoidTeamIcons
+			then
+				DrawOverheadRoleIcon(ply, rd.iconMaterial, ply:GetRoleColor())
+			end
+		end
 	end
 end
 
@@ -241,10 +246,10 @@ function GM:HUDDrawTargetID()
 	endpos:Add(startpos)
 
 	local trace = util.TraceLine({
-			start = startpos,
-			endpos = endpos,
-			mask = MASK_SHOT,
-			filter = client:GetObserverMode() == OBS_MODE_IN_EYE and {client, client:GetObserverTarget()} or client
+		start = startpos,
+		endpos = endpos,
+		mask = MASK_SHOT,
+		filter = client:GetObserverMode() == OBS_MODE_IN_EYE and {client, client:GetObserverTarget()} or client
 	})
 
 	local ent = trace.Entity

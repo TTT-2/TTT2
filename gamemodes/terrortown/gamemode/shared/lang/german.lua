@@ -1176,3 +1176,11 @@ L.hud_restricted_failed = "Es ist fehlgeschlagen {hudname} zu beschränken. Bist
 L.shop_role_select = "Wähle eine Rolle"
 L.shop_role_selected = "Der {roles} Shop wurde gewählt!"
 L.shop_search = "Suche"
+
+L.button_save = "Sichern"
+
+L.disable_spectatorsoutline = "Deaktiviere Zuschauerumrandungen"
+L.disable_spectatorsoutline_tip = "Deaktiviert die Umrandungen um ein Objekt, in dem sich ein Zuschauer befindet (+Performance)"
+
+L.disable_overheadicons = "Deaktiviere Rollenicons"
+L.disable_overheadicons_tip = "Deaktiviert die Rollenicons über den Köpfen der Spieler (+Performance)"
