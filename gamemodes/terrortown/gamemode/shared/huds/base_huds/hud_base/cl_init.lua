@@ -4,6 +4,8 @@
 -- @author saibotk
 -- @author LeBroomer
 
+local table = table
+
 HUD.forcedElements = {}
 HUD.disabledTypes = {}
 

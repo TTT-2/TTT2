@@ -5,8 +5,6 @@
 
 local base = "hud_base"
 
-local hudelements = hudelements
-
 local savingKeys
 
 DEFINE_BASECLASS(base)
