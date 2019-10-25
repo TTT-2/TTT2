@@ -253,13 +253,15 @@ function GM:TTTScoreboardColorForPlayer(ply)
 	return namecolor.default
 end
 
+local color_trans = Color(0, 0, 0, 0)
+
 ---
 -- Updates the row color for a @{Player} in the scoreboard
 -- @param Player ply
 -- @return Color
 -- @hook
 function GM:TTTScoreboardRowColorForPlayer(ply)
-	local col = Color(0, 0, 0, 0)
+	local col = color_trans
 
 	if IsValid(ply) and ply.GetRoleColor and ply:GetRoleColor() and ply:GetSubRole() and ply:GetSubRole() ~= ROLE_INNOCENT then
 		col = table.Copy(ply:GetRoleColor())

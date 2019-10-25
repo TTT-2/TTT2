@@ -162,9 +162,9 @@ if CLIENT then
 			surface.DrawRect(tmp_x, tmp_y, self.ply_ind_size, self.ply_ind_size)
 
 			if ply:Revived() then
-				util.DrawFilteredTexturedRect(tmp_x + 3, tmp_y + 3, self.ply_ind_size - 6, self.ply_ind_size - 6, self.icon_revived, 180, {r = 0, g = 0, b = 0})
+				util.DrawFilteredTexturedRect(tmp_x + 3, tmp_y + 3, self.ply_ind_size - 6, self.ply_ind_size - 6, self.icon_revived, 180, COLOR_BLACK)
 			elseif ply:OnceFound() and not ply:RoleKnown() then -- draw marker on indirect confirmed bodies
-				util.DrawFilteredTexturedRect(tmp_x + 3, tmp_y + 3, self.ply_ind_size - 6, self.ply_ind_size - 6, self.icon_in_conf, 120, {r = 0, g = 0, b = 0})
+				util.DrawFilteredTexturedRect(tmp_x + 3, tmp_y + 3, self.ply_ind_size - 6, self.ply_ind_size - 6, self.icon_in_conf, 120, COLOR_BLACK)
 			end
 
 			-- draw lines around the element
