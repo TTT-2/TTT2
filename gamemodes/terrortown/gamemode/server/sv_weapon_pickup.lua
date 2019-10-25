@@ -19,7 +19,7 @@ net.Receive("ttt2_switch_weapon", function(_, ply)
 	end
 
 	if not IsValid(throwWeapon) or not throwWeapon.AllowDrop
- 	or ply:GetPos():Distance(tracedWeapon:GetPos()) > 100 then
+	or ply:GetPos():Distance(tracedWeapon:GetPos()) > 100 then
 		return
 	end
 
