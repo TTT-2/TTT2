@@ -11,6 +11,7 @@ local pairs = pairs
 local ipairs = ipairs
 local IsValid = IsValid
 local weapons = weapons
+local GetPlayers = player.GetAll
 
 ---
 -- Attempts to get the weapon used from a DamageInfo instance needed because the
@@ -73,7 +74,7 @@ end
 -- @return table
 -- @realm shared
 function util.GetFilteredPlayers(filterFn)
-	local plys = player.GetAll()
+	local plys = GetPlayers()
 
 	if not isfunction(filterFn) then
 		return plys
@@ -81,9 +82,9 @@ function util.GetFilteredPlayers(filterFn)
 
 	local tmp = {}
 
-	for _, ply in ipairs(plys) do
-		if filterFn(ply) then
-			table.insert(tmp, ply)
+	for i = 1, #plys do
+		if filterFn(plys[i]) then
+			tmp[#tmp + 1] = plys[i]
 		end
 	end
 
