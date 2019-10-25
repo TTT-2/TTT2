@@ -26,7 +26,7 @@ net.Receive("TTT2UpdateHUDManagerRestrictedHUDsAttribute", function()
 		local tab = {}
 
 		for i = 1, len do
-			table.insert(tab, net.ReadString())
+			tab[i] = net.ReadString()
 		end
 
 		HUDManager.SetModelValue("restrictedHUDs", tab)
