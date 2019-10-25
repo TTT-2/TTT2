@@ -10,7 +10,6 @@ HUDELEMENT.Base = base
 
 local draw = draw
 local huds = huds
-local HUDManager = HUDManager
 
 if CLIENT then
 	local defaultColor = Color(49, 71, 94)

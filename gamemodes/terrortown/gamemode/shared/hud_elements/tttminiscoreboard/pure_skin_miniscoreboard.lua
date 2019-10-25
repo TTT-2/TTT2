@@ -88,7 +88,7 @@ if CLIENT then
 		self.margin = margin * self.scale
 		self.element_margin = element_margin * self.scale
 		self.ply_ind_size = math.Round((h - self.element_margin - self.margin * 2) * 0.5)
-		self.column_count = math.Round(#self.curPlayerCount * 0.5)
+		self.column_count = math.Round(self.curPlayerCount * 0.5)
 
 		local w = self.element_margin * (self.column_count - 1) + self.ply_ind_size * self.column_count + 2 * self.margin
 
@@ -124,20 +124,20 @@ if CLIENT then
 
 	function HUDELEMENT:Draw()
 		-- just update every 0.1 seconds; TODO maybe add a client ConVar
-		if self.lastUpdate + 0.1 > CurTime() then return end
+		if self.lastUpdate + 0.1 < CurTime() then
+			local plys = util.GetFilteredPlayers(function(ply)
+				return ply:IsTerror() or ply:IsDeadTerror()
+			end)
 
-		local plys = util.GetFilteredPlayers(function(ply)
-			return ply:IsTerror() or ply:IsDeadTerror()
-		end)
+			if #plys ~= self.curPlayerCount then
+				plysList = plys
+				self.curPlayerCount = #plys
 
-		if #plys ~= self.curPlayerCount then
-			plysList = plys
-			self.curPlayerCount = #plys
+				self:PerformLayout()
 
-			self:PerformLayout()
-
-			-- sort playerlist: confirmed players should be in the first position
-			table.sort(plysList, SortMiniscoreboardFunc)
+				-- sort playerlist: confirmed players should be in the first position
+				table.sort(plysList, SortMiniscoreboardFunc)
+			end
 		end
 
 		-- draw bg and shadow
