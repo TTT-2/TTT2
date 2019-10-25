@@ -17,6 +17,8 @@ if CLIENT then
 		minsize = {w = 0, h = 0}
 	}
 
+	local plysList = plysList or {}
+
 	local function SortMiniscoreboardFunc(a, b)
 		if not a:OnceFound() then
 			return false
@@ -47,14 +49,14 @@ if CLIENT then
 		self.scale = 1.0
 		self.basecolor = self:GetHUDBasecolor()
 
-		self.plysList = util.GetFilteredPlayers(function (ply)
+		plysList = util.GetFilteredPlayers(function (ply)
 			return ply:IsTerror() or ply:IsDeadTerror()
 		end)
 
-		self.curPlayerCount = #self.plysList
+		self.curPlayerCount = #plysList
 
 		-- sort playerlist: confirmed players should be in the first position
-		table.sort(self.plysList, SortMiniscoreboardFunc)
+		table.sort(plysList, SortMiniscoreboardFunc)
 
 		self.lastUpdate = CurTime()
 
@@ -117,7 +119,7 @@ if CLIENT then
 
 	hook.Add("TTT2ConfirmedBody", "TTT2UpdateMiniscoreboardFound", function()
 		-- sort playerlist: confirmed players should be in the first position
-		table.sort(self.plysList, SortMiniscoreboardFunc)
+		table.sort(plysList, SortMiniscoreboardFunc)
 	end)
 
 	function HUDELEMENT:Draw()
@@ -129,13 +131,13 @@ if CLIENT then
 		end)
 
 		if #plys ~= self.curPlayerCount then
-			self.plysList = plys
+			plysList = plys
 			self.curPlayerCount = #plys
 
 			self:PerformLayout()
 
 			-- sort playerlist: confirmed players should be in the first position
-			table.sort(self.plysList, SortMiniscoreboardFunc)
+			table.sort(plysList, SortMiniscoreboardFunc)
 		end
 
 		-- draw bg and shadow
@@ -149,7 +151,7 @@ if CLIENT then
 		local tmp_x, tmp_y = self.pos.x, self.pos.y
 
 		for i = 1, self.curPlayerCount do
-			local ply = self.plysList[i]
+			local ply = plysList[i]
 
 			tmp_x = self.pos.x + self.margin + (self.element_margin + self.ply_ind_size) * math.floor((i - 1) * 0.5)
 			tmp_y = self.pos.y + self.margin + (self.element_margin + self.ply_ind_size) * ((i - 1) % row_count)

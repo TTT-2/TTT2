@@ -94,6 +94,9 @@ local function IdentifyBody(ply, rag)
 
 	if not hook.Run("TTTCanIdentifyCorpse", ply, rag) then return end
 
+	local finder = ply:Nick()
+	local nick = CORPSE.GetPlayerNick(rag, "")
+
 	-- Register find
 	if not CORPSE.GetFound(rag, false) then -- will return either false or a valid ply
 		local deadply = player.GetBySteamID64(rag.sid64)
@@ -131,9 +134,6 @@ local function IdentifyBody(ply, rag)
 			end
 		end
 	end
-
-	local finder = ply:Nick()
-	local nick = CORPSE.GetPlayerNick(rag, "")
 
 	-- Announce body
 	if bodyfound:GetBool() and not CORPSE.GetFound(rag, false) then
