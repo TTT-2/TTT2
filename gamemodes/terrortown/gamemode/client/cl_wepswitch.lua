@@ -123,9 +123,16 @@ function WSWITCH:SelectSlot(slot)
 	-- find which idx in the weapon table has the slot we want
 	local toselect = self.Selected
 
+	local activeWeapon = LocalPlayer():GetActiveWeapon()
+	local activeWepCls = IsValid(activeWeapon) and WEPS.GetClass(activeWeapon) or nil
+
+	local WEPSGetClass = WEPS.GetClass
+
 	for k, w in ipairs(self.WeaponCache) do
 		if MakeKindValid(w.Kind) == slot then
 			toselect = k
+
+			if activeWepCls and WEPSGetClass(w) == activeWepCls then continue end
 
 			break
 		end
