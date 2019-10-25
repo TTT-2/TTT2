@@ -63,9 +63,9 @@ end
 -- @return boolean
 -- @realm client
 function HUD:ShouldShow(elementType)
-	local el = self:GetElementByType(elementType)
-	if el then
-		if el.togglable and not GetGlobalBool("ttt2_elem_toggled_" .. el.id, false) then
+	local elem = self:GetElementByType(elementType)
+	if elem then
+		if elem.togglable and not GetGlobalBool("ttt2_elem_toggled_" .. elem.id, false) then
 			return false
 		end
 
@@ -225,8 +225,6 @@ function HUD:GetElementByType(elementType)
 	return elementTbl
 end
 
-local cachedElems = {}
-
 ---
 -- This returns a table with all the specific elements the HUD has. One element
 -- per type, respecting the forcedElements and otherwise taking the first found
@@ -234,8 +232,8 @@ local cachedElems = {}
 -- @return table
 -- @realm client
 function HUD:GetElements()
-	if cachedElems[self.id] then
-		return cachedElems[self.id]
+	if self.cachedElems then
+		return self.cachedElems
 	end
 
 	-- loop through all types and if the hud does not provide an element take the first found instance for the type
@@ -251,7 +249,7 @@ function HUD:GetElements()
 		end
 	end
 
-	cachedElems[self.id] = elems
+	self.cachedElems = elems
 
 	return elems
 end
