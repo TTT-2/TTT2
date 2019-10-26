@@ -31,7 +31,7 @@ SCORE.Events = SCORE.Events or {}
 function SCORE:AddEvent(entry, t_override)
 	entry["t"] = math.Round(t_override or CurTime(), 2)
 
-	table.insert(self.Events, entry)
+	self.Events[#self.Events + 1] = entry
 end
 
 local function CopyDmg(dmg)
@@ -141,22 +141,26 @@ function SCORE:HandleSelection()
 	local teams = {}
 	local subrole, team
 
-	for _, ply in ipairs(player.GetAll()) do
+	local plys = player.GetAll()
+
+	for i = 1, #plys do
+		local ply = plys[i]
+
 		subrole = ply:GetSubRole()
 		team = ply:GetTeam()
 		tmp[subrole] = tmp[subrole] or {}
 
 		if ply:SteamID64() == nil then
 			print("[TTT2] ERROR: Player has no steamID64")
+
 			break
 		end
 
-		table.insert(tmp[subrole], ply:SteamID64())
+		tmp[subrole][#tmp[subrole] + 1] = ply:SteamID64()
 
 		if team ~= TEAM_NONE then
 			teams[team] = teams[team] or {}
-
-			table.insert(teams[team], ply:SteamID64())
+			teams[team][#teams[team] + 1] = ply:SteamID64()
 		end
 	end
 
@@ -227,12 +231,13 @@ end
 -- @realm server
 function SCORE:ApplyEventLogScores(wintype)
 	local scores = {}
+	local plys = player.GetAll()
 
-	for _, ply in ipairs(player.GetAll()) do
-		if ply:SteamID64() == nil then
+	for i = 1, #plys do
+		if plys[i]:SteamID64() == nil then
 			print("[TTT2] ERROR: Player has no steamID64")
 		else
-			scores[ply:SteamID64()] = {}
+			scores[plys[i]:SteamID64()] = {}
 		end
 	end
 
@@ -332,17 +337,17 @@ function SCORE:StreamToClients()
 	while #s ~= 0 do
 		local bit = string.sub(s, 1, max - 1)
 
-		table.insert(cut, bit)
+		cut[#cut + 1] = bit
 
 		s = string.sub(s, max, -1)
 	end
 
 	local parts = #cut
 
-	for k, bit in ipairs(cut) do
+	for k = 1, parts do
 		net.Start("TTT_ReportStream")
 		net.WriteBit(k ~= parts) -- continuation bit, 1 if there's more coming
-		net.WriteString(bit)
+		net.WriteString(parts[k])
 		net.Broadcast()
 	end
 end
