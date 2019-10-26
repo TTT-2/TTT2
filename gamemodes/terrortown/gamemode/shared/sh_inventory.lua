@@ -86,9 +86,9 @@ end
 -- @param Player ply
 -- @realm shared
 function CleanupInventoryIfDirty(ply)
-	if not ply.inventory or ply.refresh_inventory_cache then
-		CleanupInventory(ply)
-	end
+	if ply.inventory and not ply.refresh_inventory_cache then return end
+
+	CleanupInventory(ply)
 end
 
 ---
@@ -107,13 +107,14 @@ function CleanupInventory(ply)
 
 	-- add weapons which are already in inventory
 	local weaponsInInventory = 0
+	local weps = ply:GetWeapons()
 
-	for _, v in ipairs(ply:GetWeapons()) do
-		if v.Kind then
-			AddWeaponToInventory(ply, v)
+	for i = 1, #weps do
+		if not weps[i].Kind then continue end
 
-			weaponsInInventory = weaponsInInventory + 1
-		end
+		AddWeaponToInventory(ply, weps[i])
+
+		weaponsInInventory = weaponsInInventory + 1
 	end
 
 	-- no valid weapons found (try again)
@@ -156,7 +157,7 @@ function AddWeaponToInventory(ply, wep)
 
 	local invSlot = MakeKindValid(wep.Kind)
 
-	table.insert(ply.inventory[invSlot], wep)
+	ply.inventory[invSlot][#ply.inventory[invSlot] + 1] = wep
 
 	return true
 end
