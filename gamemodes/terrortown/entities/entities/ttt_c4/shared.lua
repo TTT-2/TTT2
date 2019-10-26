@@ -5,7 +5,6 @@
 -- @desc c4 explosive
 
 local math = math
-local ipairs = ipairs
 local hook = hook
 local table = table
 local net = net
@@ -279,30 +278,32 @@ function ENT:SphereDamage(dmgowner, center, radius)
 	local d = 0.0
 	local diff = nil
 	local dmg = 0
+	local plys = player.GetAll()
 
-	for _, ply in ipairs(player.GetAll()) do
-		if ply:Team() == TEAM_TERROR then
+	for i = 1, #plys do
+		local ply = plys[i]
 
-			-- dot of the difference with itself is distance squared
-			diff = center - ply:GetPos()
-			d = diff:Dot(diff)
+		if ply:Team() ~= TEAM_TERROR then continue end
 
-			if d < r then
-				-- deadly up to a certain range, then a quick falloff within 100 units
-				d = math.max(0, math.sqrt(d) - 490)
-				dmg = -0.01 * (d * d) + 125
+		-- dot of the difference with itself is distance squared
+		diff = center - ply:GetPos()
+		d = diff:Dot(diff)
 
-				local dmginfo = DamageInfo()
-				dmginfo:SetDamage(dmg)
-				dmginfo:SetAttacker(dmgowner)
-				dmginfo:SetInflictor(self)
-				dmginfo:SetDamageType(DMG_BLAST)
-				dmginfo:SetDamageForce(center - ply:GetPos())
-				dmginfo:SetDamagePosition(ply:GetPos())
+		if d >= r then continue end
 
-				ply:TakeDamageInfo(dmginfo)
-			end
-		end
+		-- deadly up to a certain range, then a quick falloff within 100 units
+		d = math.max(0, math.sqrt(d) - 490)
+		dmg = -0.01 * (d * d) + 125
+
+		local dmginfo = DamageInfo()
+		dmginfo:SetDamage(dmg)
+		dmginfo:SetAttacker(dmgowner)
+		dmginfo:SetInflictor(self)
+		dmginfo:SetDamageType(DMG_BLAST)
+		dmginfo:SetDamageForce(center - ply:GetPos())
+		dmginfo:SetDamagePosition(ply:GetPos())
+
+		ply:TakeDamageInfo(dmginfo)
 	end
 end
 
@@ -410,16 +411,19 @@ function ENT:IsDetectiveNear()
 	local r = self.DetectiveNearRadius * self.DetectiveNearRadius
 	local d = 0.0
 	local diff = nil
+	local plys = player.GetAll()
 
-	for _, ply in ipairs(player.GetAll()) do
-		if ply:IsActiveDetective() then
-			-- dot of the difference with itself is distance squared
-			diff = center - ply:GetPos()
-			d = diff:Dot(diff)
+	for i = 1, #plys do
+		local ply = plys[i]
 
-			if d < r and ply:HasWeapon("weapon_ttt_defuser") then
-				return true
-			end
+		if not ply:IsActiveDetective() then continue end
+
+		-- dot of the difference with itself is distance squared
+		diff = center - ply:GetPos()
+		d = diff:Dot(diff)
+
+		if d < r and ply:HasWeapon("weapon_ttt_defuser") then
+			return true
 		end
 	end
 
@@ -790,16 +794,15 @@ if CLIENT then
 	function ENT:Draw()
 		self:DrawModel()
 
-		if self:GetArmed() then
-			local angpos_ur = self:GetTimerPos()
+		if not self:GetArmed() then return end
 
-			if angpos_ur then
-				cam.Start3D2D(angpos_ur.Pos, angpos_ur.Ang, 0.2)
+		local angpos_ur = self:GetTimerPos()
+		if not angpos_ur then return end
 
-				draw.DrawText(strtime(max(0, self:GetExplodeTime() - CurTime()), "%02i:%02i"), "C4ModelTimer", -1, 1, COLOR_RED, TEXT_ALIGN_RIGHT)
+		cam.Start3D2D(angpos_ur.Pos, angpos_ur.Ang, 0.2)
 
-				cam.End3D2D()
-			end
-		end
+		draw.DrawText(strtime(max(0, self:GetExplodeTime() - CurTime()), "%02i:%02i"), "C4ModelTimer", -1, 1, COLOR_RED, TEXT_ALIGN_RIGHT)
+
+		cam.End3D2D()
 	end
 end
