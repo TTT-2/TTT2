@@ -96,9 +96,48 @@ local function IdentifyBody(ply, rag)
 
 	local finder = ply:Nick()
 	local nick = CORPSE.GetPlayerNick(rag, "")
+	local notConfirmed = not CORPSE.GetFound(rag, false)
+
+	-- Register find
+	if notConfirmed then -- will return either false or a valid ply
+		local deadply = player.GetBySteamID64(rag.sid64)
+		if deadply and not deadply:Alive() and hook.Run("TTT2ConfirmPlayer", deadply, ply, rag) ~= false then
+			deadply:ConfirmPlayer(true)
+
+			SendPlayerToEveryone(deadply) -- confirm player for everyone
+
+			SCORE:HandleBodyFound(ply, deadply)
+		end
+
+		hook.Call("TTTBodyFound", GAMEMODE, ply, deadply, rag)
+
+		if hook.Run("TTT2SetCorpseFound", deadply, ply, rag) ~= false then
+			CORPSE.SetFound(rag, true)
+		end
+	end
+
+	if GetConVar("ttt2_confirm_killlist"):GetBool() then
+		-- Handle kill list
+		for _, vicsid in ipairs(rag.kills) do
+			-- filter out disconnected (and bots !)
+			local vic = player.GetBySteamID64(vicsid)
+
+			-- is this an unconfirmed dead?
+			if IsValid(vic) and not vic:GetNWBool("body_found", false) then
+				LANG.Msg("body_confirm", {finder = finder, victim = vic:Nick()})
+
+				vic:ConfirmPlayer(false)
+
+				-- however, do not mark body as found. This lets players find the
+				-- body later and get the benefits of that
+				--local vicrag = vic.server_ragdoll
+				--CORPSE.SetFound(vicrag, true)
+			end
+		end
+	end
 
 	-- Announce body
-	if bodyfound:GetBool() and not CORPSE.GetFound(rag, false) then
+	if bodyfound:GetBool() and notConfirmed then
 		local subrole = rag.was_role
 		local team = rag.was_team
 		local rd = roles.GetByIndex(subrole)
@@ -133,43 +172,6 @@ local function IdentifyBody(ply, rag)
 		end
 
 		net.Broadcast()
-	end
-
-	-- Register find
-	if not CORPSE.GetFound(rag, false) then -- will return either false or a valid ply
-		local deadply = player.GetBySteamID64(rag.sid64)
-		if deadply and not deadply:Alive() and hook.Run("TTT2ConfirmPlayer", deadply, ply, rag) ~= false then
-			deadply:ConfirmPlayer(true)
-			SendPlayerToEveryone(deadply) -- confirm player for everyone
-
-			SCORE:HandleBodyFound(ply, deadply)
-		end
-
-		hook.Call("TTTBodyFound", GAMEMODE, ply, deadply, rag)
-
-		if hook.Run("TTT2SetCorpseFound", deadply, ply, rag) ~= false then
-			CORPSE.SetFound(rag, true)
-		end
-	end
-
-	if GetConVar("ttt2_confirm_killlist"):GetBool() then
-		-- Handle kill list
-		for _, vicsid in ipairs(rag.kills) do
-			-- filter out disconnected (and bots !)
-			local vic = player.GetBySteamID64(vicsid)
-
-			-- is this an unconfirmed dead?
-			if IsValid(vic) and not vic:GetNWBool("body_found", false) then
-				LANG.Msg("body_confirm", {finder = finder, victim = vic:Nick()})
-
-				vic:ConfirmPlayer(false)
-
-				-- however, do not mark body as found. This lets players find the
-				-- body later and get the benefits of that
-				--local vicrag = vic.server_ragdoll
-				--CORPSE.SetFound(vicrag, true)
-			end
-		end
 	end
 end
 

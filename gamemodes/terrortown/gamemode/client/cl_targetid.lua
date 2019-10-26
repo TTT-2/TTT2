@@ -2,6 +2,7 @@
 --
 
 local util = util
+local render = render
 local surface = surface
 local draw = draw
 local GetPTranslation = LANG.GetParamTranslation
@@ -14,6 +15,9 @@ local ipairs = ipairs
 local IsValid = IsValid
 local CreateConVar = CreateConVar
 local hook = hook
+
+local disable_spectatorsoutline = CreateClientConVar("ttt2_disable_spectatorsoutline", "0", true, true)
+local disable_overheadicons = CreateClientConVar("ttt2_disable_overheadicons", "0", true, true)
 
 local key_params = {
 	usekey = Key("+use", "USE"),
@@ -60,6 +64,8 @@ function GM:AddClassHint(cls, hint)
 	ClassHint[cls] = table.Copy(hint)
 end
 
+local color_blacktrans = Color(0, 0, 0, 180)
+
 ---
 -- Function that handles the drawing of the overhead roleicons, it does not check wether
 -- the icon should be drawn or not, that has to be handled prior to calling this function
@@ -67,6 +73,7 @@ end
 -- @realm client
 function DrawOverheadRoleIcon(ply, ricon, rcolor)
 	local client = LocalPlayer()
+	if ply == client then return end
 
 	-- get position of player
 	local pos = ply:GetPos()
@@ -81,33 +88,31 @@ function DrawOverheadRoleIcon(ply, ricon, rcolor)
 	shift:Rotate(ea)
 	pos:Add(shift)
 
-	local dir = (client:GetForward() * -1)
+	local dir = client:GetForward() * -1
 
-	if ply ~= client then
-		-- start linear filter
-		render.PushFilterMag(TEXFILTER.LINEAR)
-		render.PushFilterMin(TEXFILTER.LINEAR)
+	-- start linear filter
+	render.PushFilterMag(TEXFILTER.LINEAR)
+	render.PushFilterMin(TEXFILTER.LINEAR)
 
-		-- draw color
-		render.SetMaterial(base)
-		render.DrawQuadEasy(pos, dir, 10, 10, rcolor, 180)
+	-- draw color
+	render.SetMaterial(base)
+	render.DrawQuadEasy(pos, dir, 10, 10, rcolor, 180)
 
-		-- draw border overlay
-		render.SetMaterial(base_overlay)
-		render.DrawQuadEasy(pos, dir, 10, 10, Color(255, 255, 255, 255), 180)
+	-- draw border overlay
+	render.SetMaterial(base_overlay)
+	render.DrawQuadEasy(pos, dir, 10, 10, COLOR_WHITE, 180)
 
-		-- draw shadow
-		render.SetMaterial(ricon)
-		render.DrawQuadEasy(Vector(pos.x, pos.y, pos.z + 0.2), dir, 8, 8, Color(0, 0, 0, 180), 180)
+	-- draw shadow
+	render.SetMaterial(ricon)
+	render.DrawQuadEasy(Vector(pos.x, pos.y, pos.z + 0.2), dir, 8, 8, color_blacktrans, 180)
 
-		-- draw icon
-		render.SetMaterial(ricon)
-		render.DrawQuadEasy(Vector(pos.x, pos.y, pos.z + 0.5), dir, 8, 8, Color(255, 255, 255, 255), 180)
+	-- draw icon
+	render.SetMaterial(ricon)
+	render.DrawQuadEasy(Vector(pos.x, pos.y, pos.z + 0.5), dir, 8, 8, COLOR_WHITE, 180)
 
-		-- stop linear filter
-		render.PopFilterMag()
-		render.PopFilterMin()
-	end
+	-- stop linear filter
+	render.PopFilterMag()
+	render.PopFilterMin()
 end
 
 ---
@@ -126,23 +131,7 @@ function GM:PostDrawTranslucentRenderables(bDrawingDepth, bDrawingSkybox)
 	local client = LocalPlayer()
 	local plys = GetPlayers()
 
-	-- OVERHEAD ICONS
-	if client:IsSpecial() then
-		for i = 1, #plys do
-			local ply = plys[i]
-			local rd = ply:GetSubRoleData()
-
-			if ply:IsActive()
-			and ply:IsSpecial()
-			and (not client:IsActive() or ply:IsInTeam(client))
-			and not rd.avoidTeamIcons
-			then
-				DrawOverheadRoleIcon(ply, rd.iconMaterial, ply:GetRoleColor())
-			end
-		end
-	end
-
-	if client:Team() == TEAM_SPEC then
+	if client:Team() == TEAM_SPEC and not disable_spectatorsoutline:GetBool() then
 		cam.Start3D(EyePos(), EyeAngles())
 
 		for i = 1, #plys do
@@ -164,6 +153,24 @@ function GM:PostDrawTranslucentRenderables(bDrawingDepth, bDrawingSkybox)
 		end
 
 		cam.End3D()
+	end
+
+	if disable_overheadicons:GetBool() then return end
+
+	-- OVERHEAD ICONS
+	if client:IsSpecial() then
+		for i = 1, #plys do
+			local ply = plys[i]
+			local rd = ply:GetSubRoleData()
+
+			if ply:IsActive()
+			and ply:IsSpecial()
+			and (not client:IsActive() or ply:IsInTeam(client))
+			and not rd.avoidTeamIcons
+			then
+				DrawOverheadRoleIcon(ply, rd.iconMaterial, ply:GetRoleColor())
+			end
+		end
 	end
 end
 
@@ -239,10 +246,10 @@ function GM:HUDDrawTargetID()
 	endpos:Add(startpos)
 
 	local trace = util.TraceLine({
-			start = startpos,
-			endpos = endpos,
-			mask = MASK_SHOT,
-			filter = client:GetObserverMode() == OBS_MODE_IN_EYE and {client, client:GetObserverTarget()} or client
+		start = startpos,
+		endpos = endpos,
+		mask = MASK_SHOT,
+		filter = client:GetObserverMode() == OBS_MODE_IN_EYE and {client, client:GetObserverTarget()} or client
 	})
 
 	local ent = trace.Entity

@@ -5,6 +5,11 @@
 -- @author LeBroomer
 
 local surface = surface
+local table = table
+local draw = draw
+local SQL = SQL
+local hudelements = hudelements
+local math = math
 
 local zero_tbl_pos = {
 	x = 0,
@@ -57,7 +62,11 @@ HUDELEMENT.edit_live_data = {
 function HUDELEMENT:ApplyToChildren(funcName, ...)
 	if not funcName then return end
 
-	for _, elem in ipairs(self:GetChildren()) do
+	local children = self:GetChildren()
+
+	for i = 1, #children do
+		local elem = children[i]
+
 		local elemtbl = hudelements.GetStored(elem)
 		if elemtbl then
 			if isfunction(elemtbl[funcName]) then
@@ -317,7 +326,7 @@ end
 -- @realm client
 function HUDELEMENT:AddChild(elementid)
 	if not table.HasValue(self.children, elementid) then
-		table.insert(self.children, elementid)
+		self.children[#self.children + 1] = elementid
 	end
 end
 
@@ -359,7 +368,8 @@ function HUDELEMENT:GetBorderParams()
 		local x_min, y_min, x_max, y_max = pos.x, pos.y, pos.x + size.w, pos.y + size.h
 
 		-- iterate over children
-		for _, elem_str in ipairs(children) do
+		for i = 1, #children do
+			local elem_str = children[i]
 			local elem = hudelements.GetStored(elem_str)
 
 			local hud = huds.GetStored(HUDManager.GetHUD())
@@ -694,7 +704,6 @@ function HUDELEMENT:LoadData()
 	-- load and initialize the elements data from database
 	if SQL.CreateSqlTable("ttt2_hudelements", skeys) then
 		local loaded = SQL.Load("ttt2_hudelements", self.id, loadedData, skeys)
-
 		if not loaded then
 			SQL.Init("ttt2_hudelements", self.id, self, skeys)
 		end

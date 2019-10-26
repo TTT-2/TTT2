@@ -394,6 +394,12 @@ function HELPSCRN:CreateInterfaceSettings(parent)
 
 	cb = form:CheckBox(GetTranslation("set_cues"), "ttt_cl_soundcues")
 
+	cb = form:CheckBox(GetTranslation("disable_spectatorsoutline"), "ttt2_disable_spectatorsoutline")
+	cb:SetTooltip(GetTranslation("disable_spectatorsoutline_tip"))
+
+	cb = form:CheckBox(GetTranslation("disable_overheadicons"), "ttt2_disable_overheadicons")
+	cb:SetTooltip(GetTranslation("disable_overheadicons_tip"))
+
 	form:Dock(FILL)
 end
 
