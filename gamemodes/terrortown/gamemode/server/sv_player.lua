@@ -32,6 +32,7 @@ function GM:PlayerInitialSpawn(ply)
 	ply:InitialSpawn()
 
 	local rstate = GetRoundState() or ROUND_WAIT
+
 	-- We should update the traitor list, if we are not about to send it
 	-- sending roles for spectators
 	if rstate <= ROUND_PREP then
@@ -66,12 +67,16 @@ end
 -- @local
 function GM:NetworkIDValidated(name, steamid)
 	-- edge case where player authed after initspawn
-	for _, p in ipairs(player.GetAll()) do
-		if IsValid(p) and p:SteamID64() == steamid and p.delay_karma_recall then -- TODO IsValid(p) needed?
-			KARMA.LateRecallAndSet(p)
+	local plys = player.GetAll()
 
-			return
-		end
+	for i = 1, #plys do
+		local p = plys[i]
+
+		if not IsValid(p) or p:SteamID64() ~= steamid or not p.delay_karma_recall then continue end
+
+		KARMA.LateRecallAndSet(p)
+
+		return
 	end
 end
 
@@ -178,13 +183,15 @@ function GM:IsSpawnpointSuitable(ply, spwn, force, rigged)
 
 	local blocking = ents.FindInBox(pos + Vector(-16, - 16, 0), pos + Vector(16, 16, 64))
 
-	for _, p in ipairs(blocking) do
-		if IsValid(p) and p:IsPlayer() and p:IsTerror() and p:Alive() then
-			if force then
-				p:Kill()
-			else
-				return false
-			end
+	for i = 1, #blocking do
+		local pl = blocking[i]
+
+		if not IsValid(pl) or not pl:IsPlayer() or not pl:IsTerror() or not pl:Alive() then continue end
+
+		if force then
+			pl:Kill()
+		else
+			return false
 		end
 	end
 
@@ -212,11 +219,14 @@ local SpawnTypes = {
 function GetSpawnEnts(shuffled, force_all)
 	local tbl = {}
 
-	for _, classname in ipairs(SpawnTypes) do
-		for _, e in ipairs(ents.FindByClass(classname)) do
-			if not e.BeingRemoved then
-				tbl[#tbl + 1] = e
-			end
+	for i = 1, #SpawnTypes do
+		local classname = SpawnTypes[i]
+		local entsTbl = ents.FindByClass(classname)
+
+		for k = 1, #entsTbl do
+			if entsTbl[k].BeingRemoved then continue end
+
+			tbl[#tbl + 1] = entsTbl[k]
 		end
 	end
 
@@ -224,10 +234,12 @@ function GetSpawnEnts(shuffled, force_all)
 	-- uses it for observer starts that are in places where players cannot really
 	-- spawn well. At all.
 	if force_all or #tbl == 0 then
-		for _, e in ipairs(ents.FindByClass("info_player_start")) do
-			if not e.BeingRemoved then
-				tbl[#tbl + 1] = e
-			end
+		local startTbl = ents.FindByClass("info_player_start")
+
+		for k = 1, #startTbl do
+			if startTbl[k].BeingRemoved then continue end
+
+			tbl[#tbl + 1] = startTbl[k]
 		end
 	end
 
@@ -294,44 +306,43 @@ function GM:PlayerSelectSpawn(ply)
 
 	-- Optimistic attempt: assume there are sufficient spawns for all and one is
 	-- free
-	for _, spwn in ipairs(self.SpawnPoints) do
-		if self:IsSpawnpointSuitable(ply, spwn, false) then
-			return spwn
-		end
+	for i = 1, #self.SpawnPoints do
+		if not self:IsSpawnpointSuitable(ply, self.SpawnPoints[i], false) then continue end
+
+		return self.SpawnPoints[i]
 	end
 
 	-- That did not work, so now look around spawns
 	local picked = nil
 
-	for _, spwn in ipairs(self.SpawnPoints) do
-		picked = spwn -- just to have something if all else fails
+	for i = 1, #self.SpawnPoints do
+		picked = self.SpawnPoints[i] -- just to have something if all else fails
 
 		-- See if we can jury rig a spawn near this one
-		local rigged = PointsAroundSpawn(spwn)
+		local rigged = PointsAroundSpawn(picked)
 
-		for _, rig in ipairs(rigged) do
-			if self:IsSpawnpointSuitable(ply, rig, false, true) then
-				local rig_spwn = ents.Create("info_player_terrorist")
+		for k = 1, #rigged do
+			if not self:IsSpawnpointSuitable(ply, rigged[k], false, true) then continue end
 
-				if IsValid(rig_spwn) then
-					rig_spwn:SetPos(rig)
-					rig_spwn:Spawn()
+			local rig_spwn = ents.Create("info_player_terrorist")
+			if not IsValid(rig_spwn) then continue end
 
-					ErrorNoHalt("TTT2 WARNING: Map has too few spawn points, using a rigged spawn for " .. tostring(ply) .. "\n")
+			rig_spwn:SetPos(rigged[k])
+			rig_spwn:Spawn()
 
-					self.HaveRiggedSpawn = true
+			ErrorNoHalt("TTT2 WARNING: Map has too few spawn points, using a rigged spawn for " .. tostring(ply) .. "\n")
 
-					return rig_spwn
-				end
-			end
+			self.HaveRiggedSpawn = true
+
+			return rig_spwn
 		end
 	end
 
 	-- Last attempt, force one
-	for _, spwn in ipairs(self.SpawnPoints) do
-		if self:IsSpawnpointSuitable(ply, spwn, true) then
-			return spwn
-		end
+	for i = 1, #self.SpawnPoints do
+		if not self:IsSpawnpointSuitable(ply, self.SpawnPoints[i], true) then continue end
+
+		return self.SpawnPoints[i]
 	end
 
 	return picked
@@ -465,78 +476,78 @@ function GM:KeyPress(ply, key)
 	if not IsValid(ply) then return end
 
 	-- Spectator keys
-	if ply:IsSpec() and not ply:GetRagdollSpec() then
-		if ply.propspec then
-			return PROPSPEC.Key(ply, key)
+	if not ply:IsSpec() or ply:GetRagdollSpec() then return end
+
+	if ply.propspec then
+		return PROPSPEC.Key(ply, key)
+	end
+
+	ply:ResetViewRoll()
+
+	if key == IN_ATTACK then
+		-- snap to random guy
+		ply:Spectate(OBS_MODE_ROAMING)
+		ply:SetEyeAngles(angle_zero) -- After exiting propspec, this could be set to awkward values
+		ply:SpectateEntity(nil)
+
+		local alive = util.GetAlivePlayers()
+
+		local alive_count = #alive
+		if alive_count < 1 then return end
+
+		local target = alive[math.random(1, alive_count)]
+
+		if IsValid(target) then
+			--ply:SetPos(target:EyePos())
+			--ply:SetEyeAngles(target:EyeAngles())
+			ply:Spectate(OBS_MODE_IN_EYE)
+			ply:SpectateEntity(target)
+		end
+	elseif key == IN_ATTACK2 then
+		-- spectate either the next guy or a random guy in chase
+		local target = util.GetNextAlivePlayer(ply:GetObserverTarget())
+
+		if IsValid(target) then
+			ply:Spectate(ply.spec_mode or OBS_MODE_IN_EYE)
+			ply:SpectateEntity(target)
+		end
+	elseif key == IN_DUCK then
+		local pos = ply:GetPos()
+		local ang = ply:EyeAngles()
+
+		local target = ply:GetObserverTarget()
+
+		if IsValid(target) and target:IsPlayer() then
+			pos = target:EyePos()
+			ang = target:EyeAngles()
 		end
 
-		ply:ResetViewRoll()
+		-- reset
+		ply:Spectate(OBS_MODE_ROAMING)
+		ply:SpectateEntity(nil)
 
-		if key == IN_ATTACK then
-			-- snap to random guy
-			ply:Spectate(OBS_MODE_ROAMING)
-			ply:SetEyeAngles(angle_zero) -- After exiting propspec, this could be set to awkward values
-			ply:SpectateEntity(nil)
+		ply:SetPos(pos)
+		ply:SetEyeAngles(ang)
 
-			local alive = util.GetAlivePlayers()
-
-			local alive_count = #alive
-			if alive_count < 1 then return end
-
-			local target = alive[math.random(1, alive_count)]
-
-			if IsValid(target) then
-				--ply:SetPos(target:EyePos())
-				--ply:SetEyeAngles(target:EyeAngles())
-				ply:Spectate(OBS_MODE_IN_EYE)
-				ply:SpectateEntity(target)
-			end
-		elseif key == IN_ATTACK2 then
-			-- spectate either the next guy or a random guy in chase
-			local target = util.GetNextAlivePlayer(ply:GetObserverTarget())
-
-			if IsValid(target) then
-				ply:Spectate(ply.spec_mode or OBS_MODE_IN_EYE)
-				ply:SpectateEntity(target)
-			end
-		elseif key == IN_DUCK then
-			local pos = ply:GetPos()
-			local ang = ply:EyeAngles()
-
-			local target = ply:GetObserverTarget()
-
-			if IsValid(target) and target:IsPlayer() then
-				pos = target:EyePos()
-				ang = target:EyeAngles()
-			end
-
-			-- reset
-			ply:Spectate(OBS_MODE_ROAMING)
-			ply:SpectateEntity(nil)
-
-			ply:SetPos(pos)
-			ply:SetEyeAngles(ang)
-
-			return true
-		elseif key == IN_JUMP then
-			-- unfuck if you're on a ladder etc
-			if ply:GetMoveType() ~= MOVETYPE_NOCLIP then
-				ply:SetMoveType(MOVETYPE_NOCLIP)
-			end
-		elseif key == IN_RELOAD then
-			local tgt = ply:GetObserverTarget()
-
-			if not IsValid(tgt) or not tgt:IsPlayer() then return end
-
-			if not ply.spec_mode or ply.spec_mode == OBS_MODE_IN_EYE then
-				ply.spec_mode = OBS_MODE_CHASE
-			elseif ply.spec_mode == OBS_MODE_CHASE then
-				ply.spec_mode = OBS_MODE_IN_EYE
-			end
-			-- roam stays roam
-
-			ply:Spectate(ply.spec_mode)
+		return true
+	elseif key == IN_JUMP then
+		-- unfuck if you're on a ladder etc
+		if ply:GetMoveType() ~= MOVETYPE_NOCLIP then
+			ply:SetMoveType(MOVETYPE_NOCLIP)
 		end
+	elseif key == IN_RELOAD then
+		local tgt = ply:GetObserverTarget()
+
+		if not IsValid(tgt) or not tgt:IsPlayer() then return end
+
+		if not ply.spec_mode or ply.spec_mode == OBS_MODE_IN_EYE then
+			ply.spec_mode = OBS_MODE_CHASE
+		elseif ply.spec_mode == OBS_MODE_CHASE then
+			ply.spec_mode = OBS_MODE_IN_EYE
+		end
+		-- roam stays roam
+
+		ply:Spectate(ply.spec_mode)
 	end
 end
 
@@ -551,33 +562,33 @@ end
 -- @ref https://wiki.garrysmod.com/page/GM/KeyRelease
 -- @local
 function GM:KeyRelease(ply, key)
-	if key == IN_USE and IsValid(ply) and ply:IsTerror() then
-		-- see if we need to do some custom usekey overriding
-		local tr = util.TraceLine({
-				start = ply:GetShootPos(),
-				endpos = ply:GetShootPos() + ply:GetAimVector() * 84,
-				filter = ply,
-				mask = MASK_SHOT
-		})
+	if key ~= IN_USE or not IsValid(ply) or not ply:IsTerror() then return end
 
-		if tr.Hit and IsValid(tr.Entity) then
-			if tr.Entity.CanUseKey and tr.Entity.UseOverride then
-				local phys = tr.Entity:GetPhysicsObject()
+	-- see if we need to do some custom usekey overriding
+	local tr = util.TraceLine({
+		start = ply:GetShootPos(),
+		endpos = ply:GetShootPos() + ply:GetAimVector() * 84,
+		filter = ply,
+		mask = MASK_SHOT
+	})
 
-				if IsValid(phys) and not phys:HasGameFlag(FVPHYSICS_PLAYER_HELD) then
-					tr.Entity:UseOverride(ply)
+	if not tr.Hit or not IsValid(tr.Entity) then return end
 
-					return true
-				else
-					-- do nothing, can't +use held objects
-					return true
-				end
-			elseif tr.Entity.player_ragdoll then
-				CORPSE.ShowSearch(ply, tr.Entity, ply:KeyDown(IN_WALK) or ply:KeyDownLast(IN_WALK)) -- Body Corpse Search Identify TODO
+	if tr.Entity.CanUseKey and tr.Entity.UseOverride then
+		local phys = tr.Entity:GetPhysicsObject()
 
-				return true
-			end
+		if IsValid(phys) and not phys:HasGameFlag(FVPHYSICS_PLAYER_HELD) then
+			tr.Entity:UseOverride(ply)
+
+			return true
+		else
+			-- do nothing, can't +use held objects
+			return true
 		end
+	elseif tr.Entity.player_ragdoll then
+		CORPSE.ShowSearch(ply, tr.Entity, ply:KeyDown(IN_WALK) or ply:KeyDownLast(IN_WALK)) -- Body Corpse Search Identify TODO
+
+		return true
 	end
 end
 
@@ -586,25 +597,25 @@ end
 -- can't let them search bodies. This sucks because searching bodies is
 -- fun. Hence on the client we override +use for specs and use this instead.
 local function SpecUseKey(ply, cmd, arg)
-	if IsValid(ply) and ply:IsSpec() then
-		-- longer range than normal use
-		local tr = util.QuickTrace(ply:GetShootPos(), ply:GetAimVector() * 128, ply)
+	if not IsValid(ply) or not ply:IsSpec() then return end
 
-		if tr.Hit and IsValid(tr.Entity) then
-			if tr.Entity.player_ragdoll then
-				if not ply:KeyDown(IN_WALK) then
-					CORPSE.ShowSearch(ply, tr.Entity)
-				else
-					ply:Spectate(OBS_MODE_IN_EYE)
-					ply:SpectateEntity(tr.Entity)
-				end
-			elseif tr.Entity:IsPlayer() and tr.Entity:IsActive() then
-				ply:Spectate(ply.spec_mode or OBS_MODE_IN_EYE)
-				ply:SpectateEntity(tr.Entity)
-			else
-				PROPSPEC.Target(ply, tr.Entity)
-			end
+	-- longer range than normal use
+	local tr = util.QuickTrace(ply:GetShootPos(), ply:GetAimVector() * 128, ply)
+
+	if not tr.Hit or not IsValid(tr.Entity) then return end
+
+	if tr.Entity.player_ragdoll then
+		if not ply:KeyDown(IN_WALK) then
+			CORPSE.ShowSearch(ply, tr.Entity)
+		else
+			ply:Spectate(OBS_MODE_IN_EYE)
+			ply:SpectateEntity(tr.Entity)
 		end
+	elseif tr.Entity:IsPlayer() and tr.Entity:IsActive() then
+		ply:Spectate(ply.spec_mode or OBS_MODE_IN_EYE)
+		ply:SpectateEntity(tr.Entity)
+	else
+		PROPSPEC.Target(ply, tr.Entity)
 	end
 end
 concommand.Add("ttt_spec_use", SpecUseKey)
@@ -712,13 +723,15 @@ local function CheckCreditAward(victim, attacker)
 		local terror_dead = 0
 		local terror_total = 0
 
-		for _, ply in ipairs(player.GetAll()) do
-			if not ply:IsInTeam(attacker) then
-				if ply:IsTerror() then
-					terror_alive = terror_alive + 1
-				elseif ply:IsDeadTerror() then
-					terror_dead = terror_dead + 1
-				end
+		local plys = player.GetAll()
+
+		for i = 1, #plys do
+			if plys[i]:IsInTeam(attacker) then continue end
+
+			if plys[i]:IsTerror() then
+				terror_alive = terror_alive + 1
+			elseif plys[i]:IsDeadTerror() then
+				terror_dead = terror_dead + 1
 			end
 		end
 
@@ -741,7 +754,9 @@ local function CheckCreditAward(victim, attacker)
 
 			-- If size is 0, awards are off
 			if amt > 0 then
-				for _, ply in ipairs(player.GetAll()) do
+				for k = 1, #plys do
+					local ply = plys[k]
+
 					if ply:IsActive() and ply:IsShopper() and ply:IsInTeam(attacker) and not ply:GetSubRoleData().preventKillCredits then
 						ply:AddCredits(amt)
 
@@ -792,7 +807,11 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
 	end
 
 	-- Drop all weapons
-	for _, wep in ipairs(ply:GetWeapons()) do
+	local weps = ply:GetWeapons()
+
+	for i = 1, #weps do
+		local wep = weps[i]
+
 		WEPS.DropNotifiedWeapon(ply, wep, true) -- with ammo in them
 
 		if isfunction(wep.DampenDrop) then
@@ -899,37 +918,37 @@ function GM:PlayerDeath(victim, infl, attacker)
 	self:PlayerSilentDeath(victim)
 
 	timer.Simple(0, function()
-		if IsValid(victim) then
-			-- a function to handle the rolespecific stuff that should be done on
-			-- rolechange and respawn (while a round is active)
-			if victim:IsActive() then
-				roles.GetByIndex(victim:GetSubRole()):RemoveRoleLoadout(victim, false)
-			end
+		if not IsValid(victim) then return end
 
-			victim:SetTeam(TEAM_SPEC)
-			victim:Freeze(false)
-			victim:SetRagdollSpec(true)
-			victim:Spectate(OBS_MODE_IN_EYE)
-
-			local rag_ent = victim.server_ragdoll or victim:GetRagdollEntity()
-
-			victim:SpectateEntity(rag_ent)
-			victim:Flashlight(false)
-			victim:Extinguish()
-
-			net.Start("TTT_PlayerDied")
-			net.Send(victim)
-
-			if HasteMode() and GetRoundState() == ROUND_ACTIVE and not hook.Run("TTT2ShouldSkipHaste", victim, attacker) then
-				IncRoundEnd(GetConVar("ttt_haste_minutes_per_death"):GetFloat() * 60)
-			end
-
-			if IsValid(attacker) and attacker:IsPlayer() and attacker ~= victim and attacker:IsActive() then
-				victim.killerSpec = attacker
-			end
-
-			hook.Run("TTT2PostPlayerDeath", victim, infl, attacker)
+		-- a function to handle the rolespecific stuff that should be done on
+		-- rolechange and respawn (while a round is active)
+		if victim:IsActive() then
+			victim:GetSubRoleData():RemoveRoleLoadout(victim, false)
 		end
+
+		victim:SetTeam(TEAM_SPEC)
+		victim:Freeze(false)
+		victim:SetRagdollSpec(true)
+		victim:Spectate(OBS_MODE_IN_EYE)
+
+		local rag_ent = victim.server_ragdoll or victim:GetRagdollEntity()
+
+		victim:SpectateEntity(rag_ent)
+		victim:Flashlight(false)
+		victim:Extinguish()
+
+		net.Start("TTT_PlayerDied")
+		net.Send(victim)
+
+		if HasteMode() and GetRoundState() == ROUND_ACTIVE and not hook.Run("TTT2ShouldSkipHaste", victim, attacker) then
+			IncRoundEnd(GetConVar("ttt_haste_minutes_per_death"):GetFloat() * 60)
+		end
+
+		if IsValid(attacker) and attacker:IsPlayer() and attacker ~= victim and attacker:IsActive() then
+			victim.killerSpec = attacker
+		end
+
+		hook.Run("TTT2PostPlayerDeath", victim, infl, attacker)
 	end)
 end
 
@@ -955,15 +974,16 @@ end
 -- @ref https://wiki.garrysmod.com/page/GM/PostPlayerDeath
 -- @local
 function GM:PostPlayerDeath(ply)
-	if GetRoundState() == ROUND_PREP and GetConVar("ttt2_prep_respawn"):GetBool() then -- endless respawn player if he dies in preparing time
-		timer.Simple(1, function()
-			if IsValid(ply) then
-				ply:SpawnForRound(true)
+	-- endless respawn player if he dies in preparing time
+	if GetRoundState() ~= ROUND_PREP or not GetConVar("ttt2_prep_respawn"):GetBool() then return end
 
-				hook.Call("PlayerLoadout", GAMEMODE, ply)
-			end
-		end)
-	end
+	timer.Simple(1, function()
+		if not IsValid(ply) then return end
+
+		ply:SpawnForRound(true)
+
+		hook.Call("PlayerLoadout", GAMEMODE, ply)
+	end)
 end
 
 ---
@@ -1234,7 +1254,7 @@ function GM:OnPlayerHitGround(ply, in_water, on_floater, speed)
 
 		-- play CS:S fall sound if we got somewhat significant damage
 		if damage > 5 then
-			sound.Play(fallsounds[math.random(1, fallsounds_count)], ply:GetShootPos(), 55 + math.Clamp(damage, 0, 50), 100)
+			sound.Play(fallsounds[math.random(fallsounds_count)], ply:GetShootPos(), 55 + math.Clamp(damage, 0, 50), 100)
 		end
 	end
 end
@@ -1477,9 +1497,9 @@ end
 -- @ref https://wiki.garrysmod.com/page/GM/ShowHelp
 -- @local
 function GM:ShowHelp(ply)
-	if IsValid(ply) then
-		ply:ConCommand("ttt_helpscreen")
-	end
+	if not IsValid(ply) then return end
+
+	ply:ConCommand("ttt_helpscreen")
 end
 
 ---
@@ -1509,9 +1529,9 @@ end
 -- @ref https://wiki.garrysmod.com/page/GM/PlayerEnteredVehicle
 -- @local
 function GM:PlayerEnteredVehicle(ply, vehicle, role)
-	if IsValid(vehicle) then
-		vehicle:SetNWEntity("ttt_driver", ply)
-	end
+	if not IsValid(vehicle) then return end
+
+	vehicle:SetNWEntity("ttt_driver", ply)
 end
 
 ---
@@ -1524,10 +1544,10 @@ end
 -- @ref https://wiki.garrysmod.com/page/GM/PlayerLeaveVehicle
 -- @local
 function GM:PlayerLeaveVehicle(ply, vehicle)
-	if IsValid(vehicle) then
-		-- setting nil will not do anything, so bogusify
-		vehicle:SetNWEntity("ttt_driver", vehicle)
-	end
+	if not IsValid(vehicle) then return end
+
+	-- setting nil will not do anything, so bogusify
+	vehicle:SetNWEntity("ttt_driver", vehicle)
 end
 
 ---
