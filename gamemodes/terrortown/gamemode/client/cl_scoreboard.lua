@@ -7,11 +7,11 @@ ttt_include("vgui__cl_sb_main")
 sboard_panel = nil
 
 local function ScoreboardRemove()
-	if sboard_panel then
-		sboard_panel:Remove()
+	if not sboard_panel then return end
 
-		sboard_panel = nil
-	end
+	sboard_panel:Remove()
+
+	sboard_panel = nil
 end
 hook.Add("TTTLanguageChanged", "RebuildScoreboard", ScoreboardRemove)
 
@@ -56,9 +56,9 @@ function GM:ScoreboardHide()
 
 	gui.EnableScreenClicker(false)
 
-	if sboard_panel then
-		sboard_panel:SetVisible(false)
-	end
+	if not sboard_panel then return end
+
+	sboard_panel:SetVisible(false)
 end
 
 ---
