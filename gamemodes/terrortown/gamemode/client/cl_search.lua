@@ -122,7 +122,7 @@ local function IconForInfoType(t, data)
 end
 
 local pfmc_tbl = {
-	nick = function(search, d)
+	nick = function(search, d, raw)
 		search.nick.text = PT("search_nick", {player = d})
 		search.nick.p = 1
 		search.nick.nick = d
@@ -245,7 +245,7 @@ function PreprocSearch(raw)
 		}
 
 		if isfunction(pfmc_tbl[t]) then
-			pfmc_tbl[t](search, d)
+			pfmc_tbl[t](search, d, raw)
 		else
 			search[t] = nil
 		end
