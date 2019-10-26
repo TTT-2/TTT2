@@ -179,8 +179,10 @@ end
 -- @realm shared
 function KillsToPoints(score)
 	local sc = score.bonus - score.suicides + (score.deaths == 0 and 1 or 0)
+	local scoreEv = score.ev
 
-	for _, ev in ipairs(score.ev) do
+	for i = 1, #scoreEv do
+		local ev = scoreEv[i]
 		local roleData = roles.GetByIndex(ev.r)
 
 		if ev.t ~= TEAM_NONE and ev.t == ev.v and not TEAMS[ev.t].alone then -- teamkill
@@ -237,25 +239,33 @@ local WeaponNames
 -- @return table
 -- @realm shared
 function GetWeaponClassNames()
-	if not WeaponNames then
-		local tbl = {}
-
-		for _, v in ipairs(weapons.GetList()) do
-			if v and v.WeaponID then
-				tbl[v.WeaponID] = WEPS.GetClass(v)
-			end
-		end
-
-		for _, v in pairs(scripted_ents.GetList()) do
-			local id = v and (v.WeaponID or (v.t and v.t.WeaponID))
-
-			if id then
-				tbl[id] = WEPS.GetClass(v)
-			end
-		end
-
-		WeaponNames = tbl
+	if WeaponNames then
+		return WeaponNames
 	end
+
+	local tbl = {}
+	local weps = weapons.GetList()
+
+	for i = 1, #weps do
+		local v = weps[i]
+
+		if v == nil or v.WeaponID == nil then continue end
+
+		tbl[v.WeaponID] = WEPS.GetClass(v)
+	end
+
+	local scriptedEnts = scripted_ents.GetList()
+
+	for i = 1, #scriptedEnts do
+		local v = scriptedEnts[i]
+		local id = v and (v.WeaponID or (v.t and v.t.WeaponID))
+
+		if id == nil then continue end
+
+		tbl[id] = WEPS.GetClass(v)
+	end
+
+	WeaponNames = tbl
 
 	return WeaponNames
 end
