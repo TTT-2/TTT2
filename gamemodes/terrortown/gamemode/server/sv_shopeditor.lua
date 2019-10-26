@@ -60,10 +60,14 @@ end
 -- @realm server
 -- @internal
 function ShopEditor.CreateShopDBs()
-	for _, v in ipairs(roles.GetList()) do
-		if v ~= INNOCENT then
-			ShopEditor.CreateShopDB(v.name)
-		end
+	local rlsList = roles.GetList()
+
+	for i = 1, #rlsList do
+		local rd = rlsList[i]
+
+		if rd == INNOCENT then continue end
+
+		ShopEditor.CreateShopDB(rd.name)
 	end
 end
 
@@ -100,8 +104,10 @@ function ShopEditor.AddToShopEditor(ply, roleData, equip)
 	AddEquipmentToRole(roleData.index, eq)
 
 	-- last but not least, notify each player
-	for _, v in ipairs(player.GetAll()) do
-		v:ChatPrint("[TTT2][SHOP] " .. ply:Nick() .. " added '" .. equip .. "' into the shop of the " .. roleData.name)
+	local plys = player.GetAll()
+
+	for i = 1, #plys do
+		plys[i]:ChatPrint("[TTT2][SHOP] " .. ply:Nick() .. " added '" .. equip .. "' into the shop of the " .. roleData.name)
 	end
 end
 
@@ -119,12 +125,15 @@ function ShopEditor.RemoveFromShopEditor(ply, roleData, equip)
 	RemoveEquipmentFromRole(roleData.index, eq)
 
 	-- last but not least, notify each player
-	for _, v in ipairs(player.GetAll()) do
-		v:ChatPrint("[TTT2][SHOP] " .. ply:Nick() .. " removed '" .. equip .. "' from the shop of the " .. roleData.name)
+	local plys = player.GetAll()
+
+	for i = 1, #plys do
+		plys[i]:ChatPrint("[TTT2][SHOP] " .. ply:Nick() .. " removed '" .. equip .. "' from the shop of the " .. roleData.name)
 	end
 end
 
 util.AddNetworkString("shop")
+
 local function shop(len, ply)
 	if not IsValid(ply) or not ply:IsAdmin() then return end
 
@@ -144,6 +153,7 @@ end
 net.Receive("shop", shop)
 
 util.AddNetworkString("TTT2SESaveItem")
+
 local function TTT2SESaveItem(len, ply)
 	if not IsValid(ply) or not ply:IsAdmin() then return end
 
@@ -160,6 +170,7 @@ util.AddNetworkString("shopFallback")
 util.AddNetworkString("shopFallbackAnsw")
 util.AddNetworkString("shopFallbackReset")
 util.AddNetworkString("shopFallbackRefresh")
+
 local function shopFallback(len, ply)
 	if not IsValid(ply) or not ply:IsAdmin() then return end
 
@@ -186,27 +197,37 @@ function ShopEditor.OnChangeWSCVar(subrole, fallback, ply_or_rf)
 	SYNC_EQUIP[subrole] = {}
 
 	-- reset equipment
-	for _, v in ipairs(items.GetList()) do
-		if v.CanBuy then
-			for k, vi in ipairs(v.CanBuy) do
-				if vi == subrole then
-					table.remove(v.CanBuy, k)
+	local itms = items.GetList()
 
-					break
-				end
-			end
+	for i = 1, #itms do
+		local v = itms[i]
+		local canBuy = v.CanBuy
+
+		if not canBuy then continue end
+
+		for k = 1, #canBuy do
+			if canBuy[k] ~= subrole then continue end
+
+			table.remove(canBuy, k)
+
+			break
 		end
 	end
 
-	for _, v in ipairs(weapons.GetList()) do
-		if v.CanBuy then
-			for k, vi in ipairs(v.CanBuy) do
-				if vi == subrole then
-					table.remove(v.CanBuy, k)
+	local weps = weapons.GetList()
 
-					break
-				end
-			end
+	for i = 1, #weps do
+		local v = weps[i]
+		local canBuy = v.CanBuy
+
+		if not canBuy then continue end
+
+		for k = 1, #canBuy do
+			if canBuy[k] ~= subrole then continue end
+
+			table.remove(canBuy, k)
+
+			break
 		end
 	end
 
@@ -221,40 +242,41 @@ function ShopEditor.OnChangeWSCVar(subrole, fallback, ply_or_rf)
 		net.Broadcast()
 	end
 
-	if fallback ~= SHOP_DISABLED then
-		if fallback ~= SHOP_UNSET and fallback == rd.name then
-			LoadSingleShopEquipment(rd)
+	if fallback == SHOP_DISABLED then return end
 
-			ply_or_rf = ply_or_rf or player.GetAll()
+	if fallback ~= SHOP_UNSET and fallback == rd.name then
+		LoadSingleShopEquipment(rd)
 
-			if not istable(ply_or_rf) then
-				ply_or_rf = {ply_or_rf}
-			end
+		ply_or_rf = ply_or_rf or player.GetAll()
 
-			for _, ply in ipairs(ply_or_rf) do
-				SyncEquipment(ply)
-			end
+		if not istable(ply_or_rf) then
+			ply_or_rf = {ply_or_rf}
+		end
 
-			net.Start("shopFallbackRefresh")
+		for i = 1, #ply_or_rf do
+			SyncEquipment(ply_or_rf[i])
+		end
 
-			if ply_or_rf then
-				net.Send(ply_or_rf)
-			else
-				net.Broadcast()
-			end
-		elseif fallback == SHOP_UNSET then
-			if rd.fallbackTable then
+		net.Start("shopFallbackRefresh")
 
-				-- set everything
-				for _, eq in ipairs(rd.fallbackTable) do
-					local eqTbl = not items.IsItem(eq.id) and weapons.GetStored(eq.id) or items.GetStored(eq.id)
-					if eqTbl then
-						eqTbl.CanBuy = eqTbl.CanBuy or {}
+		if ply_or_rf then
+			net.Send(ply_or_rf)
+		else
+			net.Broadcast()
+		end
+	elseif fallback == SHOP_UNSET then
+		local flbTbl = rd.fallbackTable
+		if not flbTbl then return end
 
-						table.insert(eqTbl.CanBuy, subrole)
-					end
-				end
-			end
+		-- set everything
+		for i = 1, #flbTbl do
+			local eq = flbTbl[i]
+
+			local eqTbl = not items.IsItem(eq.id) and weapons.GetStored(eq.id) or items.GetStored(eq.id)
+			if not eqTbl then continue end
+
+			eqTbl.CanBuy = eqTbl.CanBuy or {}
+			eqTbl.CanBuy[#eqTbl.CanBuy + 1] = subrole
 		end
 	end
 end
@@ -264,13 +286,18 @@ end
 -- @realm server
 -- @internal
 function ShopEditor.SetupShopEditorCVars()
-	for _, v in ipairs(roles.GetList()) do
+	local rlsList = roles.GetList()
+
+	for i = 1, #rlsList do
+		local v = rlsList[i]
+
 		local _func = function(convar_name, value_old, value_new)
-			if value_old ~= value_new then
-				print(convar_name .. ": Changing fallback from " .. value_old .. " to " .. value_new)
-				SetGlobalString("ttt_" .. v.abbr .. "_shop_fallback", value_new)
-				ShopEditor.OnChangeWSCVar(v.index, value_new)
-			end
+			if value_old == value_new then return end
+
+			print(convar_name .. ": Changing fallback from " .. value_old .. " to " .. value_new)
+
+			SetGlobalString("ttt_" .. v.abbr .. "_shop_fallback", value_new)
+			ShopEditor.OnChangeWSCVar(v.index, value_new)
 		end
 
 		cvars.AddChangeCallback("ttt_" .. v.abbr .. "_shop_fallback", _func)
