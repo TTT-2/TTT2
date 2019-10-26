@@ -132,7 +132,11 @@ function MSTACK:WrapText(text, width, font)
 	local words = string.Explode(" ", text) -- No spaces means you're screwed
 	local lines = {""}
 
-	for i, wrd in ipairs(words) do
+	local surfaceGetTextSize = surface.GetTextSize
+
+	for i = 1, #words do
+		local wrd = words[i]
+
 		if i == 1 then
 			-- add the first word whether or not it matches the size to prevent
 			-- weird empty first lines and ' ' in front of the first line
@@ -144,10 +148,10 @@ function MSTACK:WrapText(text, width, font)
 		local l = #lines
 		local added = lines[l] .. " " .. wrd
 
-		w = surface.GetTextSize(added)
+		w = surfaceGetTextSize(added)
 
 		if w > width then
-			table.insert(lines, wrd) -- New line needed
+			lines[l + 1] = wrd -- New line needed
 		else
 			lines[l] = added -- Safe to tack it on
 		end
@@ -169,7 +173,7 @@ net.Receive("TTT_GameMsg", ReceiveGameMsg)
 
 local function ReceiveCustomMsg()
 	local text = net.ReadString()
-	local c = Color(255, 255, 255)
+	local c = table.Copy(COLOR_WHITE)
 
 	c.r = net.ReadUInt(8)
 	c.g = net.ReadUInt(8)
