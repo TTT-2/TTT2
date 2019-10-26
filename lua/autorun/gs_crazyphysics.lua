@@ -43,7 +43,6 @@ if CLIENT then
 		net.ReadVector(), net.ReadAngle(), net.ReadVector()))
 	end)
 
-
 	net.Receive("GS_CrazyPhysics_Defuse_Object", function()
 		chat.AddText(DebugMessage(false, "Entity [" .. net.ReadUInt(16) .. "][" .. net.ReadString() .. "]",
 		net.ReadVector(), net.ReadAngle(), net.ReadVector(), net.ReadVector(), net.ReadAngle(), net.ReadVector()))
@@ -186,16 +185,16 @@ local function IdentifyCorpse(pCorpse)
 	if ttt_announce_body_found:GetBool() then
 		if GetGlobalBool("ttt2_confirm_team") then -- TODO adjust the new messages
 			LANG.Msg("body_found", {
-					finder = "The Server",
-					victim = CORPSE.GetPlayerNick(pCorpse, nil) or pPlayer:GetName(),
-					role = LANG.Param("body_found_" .. roles.GetByIndex(nRole).abbr),
-					team = LANG.Param(nTeam)
+				finder = "The Server",
+				victim = CORPSE.GetPlayerNick(pCorpse, nil) or pPlayer:GetName(),
+				role = LANG.Param("body_found_" .. roles.GetByIndex(nRole).abbr),
+				team = LANG.Param(nTeam)
 			})
 		else
 			LANG.Msg("body_found", {
-					finder = "The Server",
-					victim = CORPSE.GetPlayerNick(pCorpse, nil) or pPlayer:GetName(),
-					role = LANG.Param("body_found_" .. roles.GetByIndex(nRole).abbr)
+				finder = "The Server",
+				victim = CORPSE.GetPlayerNick(pCorpse, nil) or pPlayer:GetName(),
+				role = LANG.Param("body_found_" .. roles.GetByIndex(nRole).abbr)
 			})
 		end
 	end
@@ -206,14 +205,14 @@ local function IdentifyCorpse(pCorpse)
 			for i = 1, #tKills do
 				local pVictim = player.GetBySteamID64(tKills[i])
 
-				if IsValid(pVictim) and not pVictim:GetNWBool("body_found") then
-					pVictim:SetNWBool("body_found", true)
+				if not IsValid(pVictim) or pVictim:GetNWBool("body_found") then continue end
 
-					LANG.Msg("body_confirm", {
-							finder = "The Server",
-							victim = pVictim:GetName()
-					})
-				end
+				pVictim:SetNWBool("body_found", true)
+
+				LANG.Msg("body_confirm", {
+					finder = "The Server",
+					victim = pVictim:GetName()
+				})
 			end
 		end
 	end
@@ -243,6 +242,7 @@ local function SendMessage(bRemove, bCheckObjectVel, pEntity, vEntityPos, aEntit
 end
 
 local flNextCheck = 0
+
 hook.Add("Think", "GS_CrazyPhysics", function()
 	if not gs_crazyphysics:GetBool() then return end
 
