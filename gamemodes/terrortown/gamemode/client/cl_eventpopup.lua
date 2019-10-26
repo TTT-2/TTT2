@@ -17,8 +17,8 @@ function EPOP:AddMessage(title, text, disp_time, icon_tbl)
 
 	self.msg.title = title
 	self.msg.text = text
-	self.msg.icon_tbl = icon_tbl
-	self.msg.time = CurTime() + disp_time
+	self.msg.icon_tbl = icon_tbl or {}
+	self.msg.time = CurTime() + (disp_time or 4)
 end
 
 ---

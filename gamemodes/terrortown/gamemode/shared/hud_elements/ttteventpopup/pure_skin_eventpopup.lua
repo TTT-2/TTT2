@@ -12,6 +12,7 @@ if CLIENT then
 	}
 
 	local pad = 14
+	local icon_size = 64
 
 	local titlefont = "PureSkinRole"
 	local textfont = "PureSkinMSTACKMsg"
@@ -44,6 +45,7 @@ if CLIENT then
 	function HUDELEMENT:PerformLayout()
 		self.scale = self:GetHUDScale()
 		self.pad = pad * self.scale
+		self.icon_size = icon_size * self.scale
 
 		self.basecolor = self:GetHUDBasecolor()
 
@@ -88,6 +90,16 @@ if CLIENT then
 			table.insert(item.pos.text_y, item.pos.title_y[#item.pos.title_y] + height_title_line + self.pad + (i - 1) * height_text_line)
 		end
 
+		-- add item positions
+		local icon_amt = #item.icon_tbl
+		local icon_start_x = item.pos.center_x - math.Round(0.5 * (icon_amt * self.icon_size + math.max(0, icon_amt - 1) * self.pad))
+
+		item.pos.icon_y = item.pos.y + item.size.h + self.pad
+		item.pos.icon_x = {icon_start_x}
+		for i = 2, icon_amt do
+			table.insert(item.pos.icon_x, icon_start_x + (i - 1) * (self.icon_size + self.pad))
+		end
+
 		-- mark as ready
 		item.ready = true
 	end
@@ -100,6 +112,9 @@ if CLIENT then
 			msg = {}
 			msg.title = "A Test Popup, now with a multiline title, how NICE."
 			msg.text = "Well, hello there! This is a fancy popup with some special information. The text can be also multiline, how fancy! Ugh, I could add so much more text if I'd had any ideas..."
+
+			local icon = Material('vgui/ttt/hud_icon_infinishoot.png')
+			msg.icon_tbl = {icon, icon, icon, icon, icon}
 		end
 
 		-- prepare item, caches the data of the element to improve performance
@@ -116,6 +131,10 @@ if CLIENT then
 		end
 		for i = 1, #msg.text_wrapped do
 			draw.AdvancedText(msg.text_wrapped[i], textfont, msg.pos.center_x, msg.pos.text_y[i], self:GetDefaultFontColor(self.basecolor), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, true, self.scale)
+		end
+		print(#msg.icon_tbl)
+		for i = 1, #msg.icon_tbl do
+			util.DrawFilteredTexturedRect(msg.pos.icon_x[i], msg.pos.icon_y, self.icon_size, self.icon_size, msg.icon_tbl[i])
 		end
 
 		-- draw lines around the element
