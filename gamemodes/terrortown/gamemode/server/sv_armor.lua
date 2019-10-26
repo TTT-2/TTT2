@@ -7,11 +7,9 @@ end
 
 ARMOR = {}
 
-
 -- SET UP NETWORK STRINGS
 util.AddNetworkString("ttt2_sync_armor")
 util.AddNetworkString("ttt2_sync_armor_max")
-
 
 -- SET UP CONVARS
 ARMOR.cv = {}
@@ -26,13 +24,14 @@ ARMOR.cv.item_armor_value = CreateConVar("ttt_item_armor_value", 30, {FCVAR_NOTI
 cvars.AddChangeCallback("ttt_armor_classic", function(cv, old, new)
 	SetGlobalBool("ttt_armor_classic", tobool(tonumber(new)))
 end)
+
 cvars.AddChangeCallback("ttt_armor_enable_reinforced", function(cv, old, new)
 	SetGlobalBool("ttt_armor_enable_reinforced", tobool(tonumber(new)))
 end)
+
 cvars.AddChangeCallback("ttt_armor_threshold_for_reinforced", function(cv, old, new)
 	SetGlobalInt("ttt_armor_threshold_for_reinforced", tonumber(new))
 end)
-
 
 -- SERVERSIDE ARMOR FUNCTIONS
 ---
@@ -131,10 +130,14 @@ end
 -- @realm server
 -- @internal
 function ARMOR:InitPlayerArmor()
-	for _, p in ipairs(player.GetAll()) do
-		if p:IsTerror() then
-			p:GiveArmor(self.cv.armor_on_spawn:GetInt())
-		end
+	local plys = player.GetAll()
+
+	for i = 1, #plys do
+		local ply = plys[i]
+
+		if not ply:IsTerror() then continue end
+
+		ply:GiveArmor(self.cv.armor_on_spawn:GetInt())
 	end
 end
 
