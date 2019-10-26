@@ -118,14 +118,29 @@ function WSWITCH:SelectSlot(slot)
 	self:Enable()
 	self:UpdateWeaponCache()
 
-	--slot = slot - 1
-
 	-- find which idx in the weapon table has the slot we want
 	local toselect = self.Selected
 
-	for k, w in ipairs(self.WeaponCache) do
-		if MakeKindValid(w.Kind) == slot then
-			toselect = k
+	local activeWeapon = LocalPlayer():GetActiveWeapon()
+	local cache = self.WeaponCache
+	local cacheCount = #cache
+	local activeSlot = 1
+
+	-- if the current weapon is active
+	-- and the current weapon is in the same slot as the requested slot
+	if IsValid(activeWeapon) and MakeKindValid(activeWeapon.Kind) == slot then
+		activeSlot = toselect + 1 -- start with index of the next weapon
+
+		-- reset index if it's bigger than available weapons or the weapon at this index isn't at the same slot
+		if activeSlot > cacheCount or MakeKindValid(cache[activeSlot].Kind) ~= slot then
+			activeSlot = 1
+		end
+	end
+
+	-- do the weapon switch to the selected slot
+	for i = activeSlot, cacheCount do
+		if MakeKindValid(cache[i].Kind) == slot then
+			toselect = i
 
 			break
 		end

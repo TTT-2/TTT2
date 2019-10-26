@@ -65,6 +65,7 @@ ttt_include("cl_status")
 
 ttt_include("cl_armor")
 ttt_include("sh_armor")
+ttt_include("cl_weapon_pickup")
 
 ttt_include("sh_sprint")
 
@@ -279,7 +280,7 @@ end
 concommand.Add("ttt_print_playercount", ttt_print_playercount)
 
 -- optional sound cues on round start and end
-CreateConVar("ttt_cl_soundcues", "0", FCVAR_ARCHIVE)
+local ttt_cl_soundcues = CreateConVar("ttt_cl_soundcues", "0", FCVAR_ARCHIVE)
 
 local cues = {
 	Sound("ttt/thump01e.mp3"),
@@ -287,7 +288,7 @@ local cues = {
 }
 
 local function PlaySoundCue()
-	if GetConVar("ttt_cl_soundcues"):GetBool() then
+	if ttt_cl_soundcues:GetBool() then
 		surface.PlaySound(cues[math.random(1, #cues)])
 	end
 end

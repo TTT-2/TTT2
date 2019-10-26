@@ -281,6 +281,7 @@ L.set_fastswmenu_tip = "When fast weapons switch is enabled, the menu switcher m
 L.set_wswitch = "Disable weapon switch menu auto-closing"
 L.set_wswitch_tip = "By default the weapon switcher automatically closes a few seconds after you last scroll. Enable this to make it stay up."
 L.set_cues = "Play sound cue when a round begins or ends"
+L.weapon_switch_draw_halo = "Drawn an outline around weapons while looking at them"
 
 
 L.set_title_play = "Gameplay settings"
@@ -1177,6 +1178,9 @@ L.f1_bind_disable_bind = "Disable"
 L.f1_bind_description = "Click and press a button to bind a key."
 L.f1_bind_reset_default_description = "Reset to default value."
 L.f1_bind_disable_description = "Disable this bind."
+
+L.f1_bind_weaponswitch = "Switch Weapon"
+L.f1_bind_sprint = "Sprint"
 
 L.ttt2_bindings_new = "New bound key for {name}: {key}"
 L.hud_default = "Default HUD"
