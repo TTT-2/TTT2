@@ -225,6 +225,8 @@ local ring_tex = surface.GetTextureID("effects/select_ring")
 local rag_color = Color(200, 200, 200, 255)
 local MAX_TRACE_LENGTH = math.sqrt(3) * 32768
 
+local cv_draw_halo = CreateClientConVar("ttt_weapon_switch_draw_halo", "1", true, false)
+
 ---
 -- Called from @{GM:HUDPaint} to draw @{Player} info when you hover over a @{Player} with your crosshair or mouse.
 -- @hook
@@ -252,9 +254,34 @@ function GM:HUDDrawTargetID()
 		filter = client:GetObserverMode() == OBS_MODE_IN_EYE and {client, client:GetObserverTarget()} or client
 	})
 
+	-- this is the entity the player is looking at right now
 	local ent = trace.Entity
+	local distance = trace.StartPos:Distance(trace.HitPos)
 
+	-- make sure it is a valid entity
 	if not IsValid(ent) or ent.NoTarget then return end
+
+	-- combine data into a table to read them inside a hook
+	local data = {
+		ent = ent,
+		distance = distance
+	}
+
+	-- preset a table of values that can be changes with a hook
+	local params = {
+		DrawOutline = false,
+		OutlineColor = COLOR_WHITE
+	}
+
+	-- now run a hook that can be used by addon devs that changes the appearance
+	-- of the targetid
+	hook.Run("TTTRenderEntityInfo", data, params)
+
+	if params.DrawOutline and cv_draw_halo:GetBool() then
+		outline.Add(ent, params.OutlineColor, OUTLINE_MODE_VISIBLE)
+	end
+
+	-- END TODO
 
 	-- some bools for caching what kind of ent we are looking at
 	local target_role
@@ -451,3 +478,15 @@ function GM:HUDDrawTargetID()
 		draw.SimpleText(text, font, x, y, c)
 	end
 end
+
+
+-- handle looking at weapons
+hook.Add("TTTRenderEntityInfo", "TTT2HighlightWeapons", function(data, params)
+	local client = LocalPlayer()
+
+	if data.distance > 100 or not data.ent:IsWeapon() then return end
+	if not IsValid(client) or not client:IsTerror() or not client:Alive() then return end
+
+	params.DrawOutline = true
+	params.OutlineColor = client:GetRoleColor()
+end)
