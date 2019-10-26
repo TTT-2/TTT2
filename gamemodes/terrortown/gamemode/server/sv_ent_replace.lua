@@ -6,7 +6,6 @@ ents.TTT = {}
 
 local math = math
 local pairs = pairs
-local ipairs = ipairs
 local util = util
 local IsValid = IsValid
 local CreateConVar = CreateConVar
