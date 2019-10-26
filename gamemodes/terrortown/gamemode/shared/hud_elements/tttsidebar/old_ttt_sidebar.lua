@@ -56,42 +56,42 @@ if CLIENT then
 		local curY = pos.y
 
 		-- at first, calculate old items because they don't take care of the new ones
-		for _, itemCls in ipairs(itms) do
-			local item = items.GetStored(itemCls)
-			if item and item.oldHud then
-				curY = curY - 80
-			end
+		for i = 1, #itms do
+			local item = items.GetStored(itms[i])
+			if not item or not item.oldHud then continue end
+
+			curY = curY - 80
 		end
 
 		-- now draw our new items automatically
-		for _, itemCls in ipairs(itms) do
-			local item = items.GetStored(itemCls)
-			if item and item.hud then
-				surface.SetMaterial(old_ttt_bg)
-				surface.SetDrawColor(255, 255, 255, 255)
-				surface.DrawTexturedRect(pos.x-1, curY, size, size)
+		for i = 1, #itms do
+			local item = items.GetStored(itms[i])
+			if not item or not item.hud then continue end
 
-				util.DrawFilteredTexturedRect(pos.x + 0.1 * size, curY + 0.1 * size, size - 0.2 * size, size - 0.2 * size, item.hud, 175)
+			surface.SetMaterial(old_ttt_bg)
+			surface.SetDrawColor(255, 255, 255, 255)
+			surface.DrawTexturedRect(pos.x-1, curY, size, size)
 
-				if isfunction(item.DrawInfo) then
-					local info = item:DrawInfo()
-					if info then
-						-- right bottom corner
-						local tx = pos.x + size
-						local ty = curY + size
-						local pad = 5
+			util.DrawFilteredTexturedRect(pos.x + 0.1 * size, curY + 0.1 * size, size - 0.2 * size, size - 0.2 * size, item.hud, 175)
 
-						surface.SetFont("ItemInfo")
+			if isfunction(item.DrawInfo) then
+				local info = item:DrawInfo()
+				if info then
+					-- right bottom corner
+					local tx = pos.x + size
+					local ty = curY + size
+					local pad = 5
 
-						local infoW, infoH = surface.GetTextSize(info)
+					surface.SetFont("ItemInfo")
 
-						draw.RoundedBox(4, tx - infoW * 0.5 - pad, ty - infoH * 0.5, infoW + pad * 2, infoH, COLOR_DARKGREY)
-						draw.DrawText(info, "ItemInfo", tx, ty - infoH * 0.5, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-					end
+					local infoW, infoH = surface.GetTextSize(info)
+
+					draw.RoundedBox(4, tx - infoW * 0.5 - pad, ty - infoH * 0.5, infoW + pad * 2, infoH, COLOR_DARKGREY)
+					draw.DrawText(info, "ItemInfo", tx, ty - infoH * 0.5, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				end
-
-				curY = curY - (size + size * 0.25)
 			end
+
+			curY = curY - (size + size * 0.25)
 		end
 
 		self:SetSize(size, curY - basepos.y)

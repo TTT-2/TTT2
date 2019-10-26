@@ -89,10 +89,9 @@ if CLIENT then
 
 		-- Fill
 		local width = w * math.Clamp(value, 0, 1)
+		if width <= 0 then return end
 
-		if width > 0 then
-			self:RoundedMeter(8, x, y, width, h, colors.fill)
-		end
+		self:RoundedMeter(8, x, y, width, h, colors.fill)
 	end
 
 	HUDELEMENT.roundstate_string = {

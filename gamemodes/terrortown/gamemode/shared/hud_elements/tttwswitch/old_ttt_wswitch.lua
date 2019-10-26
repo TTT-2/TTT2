@@ -60,7 +60,6 @@ if CLIENT then
 		BaseClass.PerformLayout(self)
 	end
 
-
 	function HUDELEMENT:DrawBarBg(x, y, w, h, col)
 		local rx = round(x - 4)
 		local ry = round(y - h * 0.5 - 4)
@@ -153,7 +152,7 @@ if CLIENT then
 		local count = table.Count(weps)
 
 		for i = 1, count do
-			table.insert(weaponList, {h = height})
+			weaponList[i] = {h = height}
 		end
 
 		self:SetElements(weaponList)

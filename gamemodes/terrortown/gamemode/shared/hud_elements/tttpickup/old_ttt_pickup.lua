@@ -80,9 +80,9 @@ if CLIENT then
 		local pickupList = {}
 
 		for k, v in pairs(PICKUP.items) do
-			if v.time < CurTime() then
-				table.insert(pickupList, {h = 20})
-			end
+			if v.time >= CurTime() then continue end
+
+			pickupList[#pickupList + 1] = {h = 20}
 		end
 
 		self:SetElements(pickupList)
