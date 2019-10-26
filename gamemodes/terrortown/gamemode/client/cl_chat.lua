@@ -8,6 +8,10 @@ local string = string
 local chat = chat
 local net = net
 
+local color_1 = Color(150, 150, 150)
+local color_2 = Color(50, 200, 255)
+local color_3 = Color(0, 200, 0)
+
 local function LastWordsRecv()
 	local sender = net.ReadEntity()
 	local words = net.ReadString()
@@ -18,15 +22,18 @@ local function LastWordsRecv()
 	local nick = validSender and sender:Nick() or "<Unknown>"
 
 	chat.AddText(
-		Color(150, 150, 150),
+		color_1,
 		Format("(%s) ", string.upper(GetTranslation("last_words"))),
-		was_detective and Color(50, 200, 255) or Color(0, 200, 0),
+		was_detective and color_2 or color_3,
 		nick,
 		COLOR_WHITE,
 		": " .. words
 	)
 end
 net.Receive("TTT_LastWordsMsg", LastWordsRecv)
+
+local color_4 = Color(255, 200, 20)
+local color_5 = Color(255, 255, 200)
 
 local function TTT_RoleChat()
 	local sender = net.ReadEntity()
@@ -39,9 +46,9 @@ local function TTT_RoleChat()
 	chat.AddText(
 		sender:GetRoleColor(),
 		Format("(%s) ", string.upper(GetTranslation(roleData.name))),
-		Color(255, 200, 20),
+		color_4,
 		sender:Nick(),
-		Color(255, 255, 200),
+		color_5,
 		": " .. text
 	)
 end
@@ -82,7 +89,7 @@ end
 
 -- Detectives have a blue name, in both chat and radio messages
 function AddDetectiveText(ply, text)
-	chat.AddText(DETECTIVE.color, ply:Nick(), Color(255, 255, 255), ": " .. text)
+	chat.AddText(DETECTIVE.color, ply:Nick(), COLOR_WHITE, ": " .. text)
 end
 
 ---
