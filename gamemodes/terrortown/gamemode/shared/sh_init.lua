@@ -5,7 +5,7 @@ GM.Name = "TTT2 (Advanced Update)"
 GM.Author = "Bad King Urgrain, Alf21, tkindanight, Mineotopia, LeBroomer"
 GM.Email = ""
 GM.Website = "ttt.badking.net, ttt2.informaskill.de"
-GM.Version = "0.5.8b"
+GM.Version = "0.5.9b"
 GM.Customized = true
 
 TTT2 = true -- identifier for TTT2. Just use "if TTT2 then ... end"
@@ -351,11 +351,12 @@ end
 -- @deprecated
 function GetTraitors()
 	local trs = {}
+	local plys = player.GetAll()
 
-	for _, v in ipairs(player.GetAll()) do
-		if v:IsTraitor() then
-			trs[#trs + 1] = v
-		end
+	for i = 1, #plys do
+		if not plys[i]:IsTraitor() then continue end
+
+		trs[#trs + 1] = plys[i]
 	end
 
 	return trs
@@ -378,7 +379,7 @@ function table.Randomize(t)
 	local out = {}
 
 	while #t > 0 do
-		table.insert(out, table.remove(t, math.random(#t)))
+		out[#out + 1] = table.remove(t, math.random(#t))
 	end
 
 	t = out
@@ -399,6 +400,7 @@ if CLIENT then
 
 		local val = printName
 		local str = SafeTranslate(val)
+
 		if str == val and name then
 			val = name
 			str = SafeTranslate(val)
@@ -576,7 +578,7 @@ local ttt_playermodels_count = #ttt_playermodels
 -- @realm shared
 function GetRandomPlayerModel()
 	if not ttt2_custom_models:GetBool() then
-		return ttt_playermodels[math.random(1, ttt_playermodels_count)]
+		return ttt_playermodels[math.random(ttt_playermodels_count)]
 	else
 		return ttt_playermodels[1]
 	end
@@ -591,11 +593,14 @@ end
 -- @realm shared
 function GetDefaultEquipment()
 	local defaultEquipment = {}
+	local rlsList = roles.GetList()
 
-	for _, v in ipairs(roles.GetList()) do
-		if v.defaultEquipment then
-			defaultEquipment[v.index] = v.defaultEquipment
-		end
+	for i = 1, #rlsList do
+		local v = rlsList[i]
+
+		if not v.defaultEquipment then continue end
+
+		defaultEquipment[v.index] = v.defaultEquipment
 	end
 
 	return defaultEquipment
@@ -640,12 +645,15 @@ function EquipmentIsBuyable(tbl, team)
 
 	if tbl.minPlayers and tbl.minPlayers > 1 then
 		local choices = {}
+		local plys = player.GetAll()
 
-		for _, v in ipairs(player.GetAll()) do
+		for i = 1, #plys do
+			local v = plys[i]
+
 			-- everyone on the forcespec team is in specmode
-			if IsValid(v) and not v:GetForceSpec() then
-				table.insert(choices, v)
-			end
+			if not IsValid(v) or v:GetForceSpec() then continue end
+
+			choices[#choices + 1] = v
 		end
 
 		if #choices < tbl.minPlayers then
