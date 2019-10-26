@@ -139,28 +139,28 @@ SWEP.ReloadAnim = ACT_VM_RELOAD
 
 SWEP.fingerprints = {}
 
-local sparkle = CLIENT and CreateConVar("ttt_crazy_sparks", "0", FCVAR_ARCHIVE)
+local sparkle = CLIENT and CreateClientConVar("ttt_crazy_sparks", "0", true)
 
 -- crosshair
 if CLIENT then
-	local sights_opacity = CreateConVar("ttt_ironsights_crosshair_opacity", "0.8", FCVAR_ARCHIVE)
-	local crosshair_brightness = CreateConVar("ttt_crosshair_brightness", "1.0", FCVAR_ARCHIVE)
-	local crosshair_size = CreateConVar("ttt_crosshair_size", "1.0", FCVAR_ARCHIVE)
-	local disable_crosshair = CreateConVar("ttt_disable_crosshair", "0", FCVAR_ARCHIVE)
-	local enable_color_crosshair = CreateConVar("ttt_crosshair_color_enable", "0", FCVAR_ARCHIVE)
-	local crosshair_color_r = CreateConVar("ttt_crosshair_color_r", "30", FCVAR_ARCHIVE)
-	local crosshair_color_g = CreateConVar("ttt_crosshair_color_g", "160", FCVAR_ARCHIVE)
-	local crosshair_color_b = CreateConVar("ttt_crosshair_color_b", "160", FCVAR_ARCHIVE)
+	local sights_opacity = CreateClientConVar("ttt_ironsights_crosshair_opacity", "0.8", true)
+	local crosshair_brightness = CreateClientConVar("ttt_crosshair_brightness", "1.0", true)
+	local crosshair_size = CreateClientConVar("ttt_crosshair_size", "1.0", true)
+	local disable_crosshair = CreateClientConVar("ttt_disable_crosshair", "0", true)
+	local enable_color_crosshair = CreateClientConVar("ttt_crosshair_color_enable", "0", true)
+	local crosshair_color_r = CreateClientConVar("ttt_crosshair_color_r", "30", true)
+	local crosshair_color_g = CreateClientConVar("ttt_crosshair_color_g", "160", true)
+	local crosshair_color_b = CreateClientConVar("ttt_crosshair_color_b", "160", true)
 
-	local enable_gap_crosshair = CreateConVar("ttt_crosshair_gap_enable", "0", FCVAR_ARCHIVE)
-	local crosshair_gap = CreateConVar("ttt_crosshair_gap", "0", FCVAR_ARCHIVE)
+	local enable_gap_crosshair = CreateClientConVar("ttt_crosshair_gap_enable", "0", true)
+	local crosshair_gap = CreateClientConVar("ttt_crosshair_gap", "0", true)
 
-	local crosshair_opacity = CreateConVar("ttt_crosshair_opacity", "1", FCVAR_ARCHIVE)
-	local crosshair_static = CreateConVar("ttt_crosshair_static", "0", FCVAR_ARCHIVE)
-	local crosshair_weaponscale = CreateConVar("ttt_crosshair_weaponscale", "1", FCVAR_ARCHIVE)
-	local crosshair_thickness = CreateConVar("ttt_crosshair_thickness", "1", FCVAR_ARCHIVE)
-	local crosshair_outlinethickness = CreateConVar("ttt_crosshair_outlinethickness", "0", FCVAR_ARCHIVE)
-	local enable_dot_crosshair = CreateConVar("ttt_crosshair_dot", "0", FCVAR_ARCHIVE)
+	local crosshair_opacity = CreateClientConVar("ttt_crosshair_opacity", "1", true)
+	local crosshair_static = CreateClientConVar("ttt_crosshair_static", "0", true)
+	local crosshair_weaponscale = CreateClientConVar("ttt_crosshair_weaponscale", "1", true)
+	local crosshair_thickness = CreateClientConVar("ttt_crosshair_thickness", "1", true)
+	local crosshair_outlinethickness = CreateClientConVar("ttt_crosshair_outlinethickness", "0", true)
+	local enable_dot_crosshair = CreateClientConVar("ttt_crosshair_dot", "0", true)
 
 	---
 	-- @realm client
