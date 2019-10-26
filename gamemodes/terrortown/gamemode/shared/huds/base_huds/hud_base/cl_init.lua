@@ -92,7 +92,7 @@ function HUD:PerformLayout()
 		if not elem then
 			Msg("Error: Hudelement not found during PerformLayout: " .. elemName)
 
-			return
+			continue
 		end
 
 		if not elem:IsChild() then
@@ -117,7 +117,7 @@ function HUD:Initialize()
 		if not elem then
 			Msg("Error: HUD " .. (self.id or "?") .. " has unknown element named " .. elemName .. "\n")
 
-			return
+			continue
 		end
 
 		if not elem:IsChild() then
@@ -135,7 +135,7 @@ function HUD:Initialize()
 		if not elem then
 			Msg("Error: HUD " .. (self.id or "?") .. " has unknown element named " .. elemName .. "\n")
 
-			return
+			continue
 		end
 
 		elem.initialized = true
@@ -281,9 +281,11 @@ function HUD:DrawElemAndChildren(elem)
 		local child = hudelements.GetStored(childName)
 		if not child then
 			MsgN("Error: Hudelement with name " .. childName .. " not found!")
-		else
-			self:DrawElemAndChildren(child)
+
+			continue
 		end
+
+		self:DrawElemAndChildren(child)
 	end
 
 	elem:Draw()
@@ -308,7 +310,7 @@ function HUD:Draw()
 		if not elem then
 			MsgN("Error: Hudelement with name " .. elemName .. " not found!")
 
-			return
+			continue
 		end
 
 		if elem.type and not elem:IsChild() then
@@ -332,7 +334,7 @@ function HUD:Reset()
 		if not elem then
 			Msg("Error: Hudelement not found during Reset: " .. elemName)
 
-			return
+			continue
 		end
 
 		if not elem:IsChild() then
