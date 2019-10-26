@@ -23,9 +23,9 @@ local delay = 0.03
 local showtime = 3
 
 local function InsertIfValid(dest, wep)
-	if IsValid(wep) then
-		table.insert(dest, wep)
-	end
+	if not IsValid(wep) then return end
+
+	dest[#dest + 1] = wep
 end
 
 ---
@@ -36,8 +36,8 @@ function WSWITCH:UpdateWeaponCache()
 
 	local inventory = LocalPlayer():GetInventory()
 
-	for kind, convar in ipairs(ORDERED_SLOT_TABLE) do
-		for k,wep in pairs(inventory[kind]) do
+	for kind = 1, #ORDERED_SLOT_TABLE do
+		for _, wep in pairs(inventory[kind]) do
 			InsertIfValid(self.WeaponCache, wep)
 		end
 	end
@@ -65,6 +65,7 @@ function WSWITCH:SelectNext()
 	self:Enable()
 
 	local s = self.Selected + 1
+
 	if s > #self.WeaponCache then
 		s = 1
 	end
@@ -122,9 +123,10 @@ function WSWITCH:SelectSlot(slot)
 
 	-- find which idx in the weapon table has the slot we want
 	local toselect = self.Selected
+	local cachedWeapons = self.WeaponCache
 
-	for k, w in ipairs(self.WeaponCache) do
-		if MakeKindValid(w.Kind) == slot then
+	for k = 1, #cachedWeapons do
+		if MakeKindValid(cachedWeapons[k].Kind) == slot then
 			toselect = k
 
 			break
@@ -149,9 +151,10 @@ function WSWITCH:Enable()
 
 		-- make our active weapon the initial selection
 		local toselect = 1
+		local cachedWeapons = self.WeaponCache
 
-		for k, w in ipairs(self.WeaponCache) do
-			if w == wep_active then
+		for k = 1, #cachedWeapons do
+			if cachedWeapons[k] == wep_active then
 				toselect = k
 
 				break
@@ -181,7 +184,11 @@ function WSWITCH:ConfirmSelection(noHide)
 		self:Disable()
 	end
 
-	for k, w in ipairs(self.WeaponCache) do
+	local cachedWeapons = self.WeaponCache
+
+	for k = 1, #cachedWeapons do
+		local w = cachedWeapons[k]
+
 		if k == self.Selected and IsValid(w) then
 			input.SelectWeapon(w)
 
@@ -218,8 +225,8 @@ end
 function WSWITCH:SelectAndConfirm(slot)
 	if not slot then return end
 
-	WSWITCH:SelectSlot(slot)
-	WSWITCH:ConfirmSelection()
+	self:SelectSlot(slot)
+	self:ConfirmSelection()
 end
 
 local function QuickSlot(ply, cmd, args)
