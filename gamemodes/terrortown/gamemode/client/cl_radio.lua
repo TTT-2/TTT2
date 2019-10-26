@@ -48,6 +48,7 @@ end
 
 local function RadioThink(s)
 	local tgt, v = RADIO:GetTarget()
+
 	if s.target == tgt then return end
 
 	s.target = tgt
@@ -62,19 +63,21 @@ local function RadioThink(s)
 	s:SizeToContents()
 
 	if not IsValid(radioframe) then return end
+
 	radioframe:ForceResize()
 end
 
 local function RadioResize(s)
 	local w = 0
 	local label
+	local itms = s.Items
 
-	for _, v in pairs(s.Items) do
-		label = v:GetChild(0)
+	for i = 1, #itms do
+		label = itms[i]:GetChild(0)
 
-		if IsValid(label) and label:GetWide() > w then
-			w = label:GetWide()
-		end
+		if not IsValid(label) or label:GetWide() <= w then continue end
+
+		w = label:GetWide()
 	end
 
 	s:SetWide(w + 20)
@@ -87,14 +90,16 @@ end
 -- @realm client
 function RADIO:ShowRadioCommands(state)
 	if not state then
-		if IsValid(radioframe) then
-			radioframe:Remove()
+		if not IsValid(radioframe) then return end
 
-			radioframe = nil
+		radioframe:Remove()
 
-			-- don't capture keys
-			self.Show = false
-		end
+		radioframe = nil
+
+		-- don't capture keys
+		self.Show = false
+
+		return
 	else
 		local client = LocalPlayer()
 		if not IsValid(client) then return end
@@ -113,13 +118,18 @@ function RADIO:ShowRadioCommands(state)
 			-- ASS
 			radioframe.ForceResize = RadioResize
 
-			for key, command in ipairs(self.Commands) do
+			local commands = self.Commands
+			local text_nobody = GetTranslation("quick_nobody")
+			local text_id = key .. ": "
+
+			for key = 1, #commands do
+				local command = commands[i]
 				local dlabel = vgui.Create("DLabel", radioframe)
-				local id = key .. ": "
+				local id = text_id
 				local txt = id
 
 				if command.format then
-					txt = txt .. GetPTranslation(command.text, {player = GetTranslation("quick_nobody")})
+					txt = txt .. GetPTranslation(command.text, {player = text_nobody})
 				else
 					txt = txt .. GetTranslation(command.text)
 				end
@@ -152,9 +162,9 @@ function RADIO:ShowRadioCommands(state)
 		self.Show = true
 
 		timer.Create("radiocmdshow", 3, 1, function()
-			if RADIO then
-				RADIO:ShowRadioCommands(false)
-			end
+			if not RADIO then return end
+
+			RADIO:ShowRadioCommands(false)
 		end)
 	end
 end
@@ -166,13 +176,13 @@ end
 -- @realm client
 function RADIO:SendCommand(slotidx)
 	local c = self.Commands[slotidx]
-	if c then
-		RunConsoleCommand("ttt_radio", c.cmd)
+	if not c then return end
 
-		tagPlayer(self:GetTarget(), c.cmd)
+	RunConsoleCommand("ttt_radio", c.cmd)
 
-		self:ShowRadioCommands(false)
-	end
+	tagPlayer(self:GetTarget(), c.cmd)
+
+	self:ShowRadioCommands(false)
 end
 
 ---
@@ -182,7 +192,6 @@ end
 -- @realm client
 function RADIO:GetTargetType()
 	local client = LocalPlayer()
-
 	if not IsValid(client) then return end
 
 	local trace = client:GetEyeTrace(MASK_SHOT)
@@ -283,17 +292,20 @@ local function RadioCommand(ply, cmd, arg)
 	-- this will not be what is shown, but what is stored in case this message
 	-- has to be used as last words (which will always be english for now)
 	local text
+	local commands = RADIO.Commands
 
-	for _, msg in ipairs(RADIO.Commands) do
-		if msg.cmd == msg_type then
-			local eng = LANG.GetTranslationFromLanguage(msg.text, "english")
-			local _tmp = {player = RADIO.ToPrintable(target)}
+	for i = 1, #commands do
+		local msg = commands[i]
 
-			text = msg.format and string.Interp(eng, _tmp) or eng
-			msg_name = msg.text
+		if msg.cmd ~= msg_type then continue end
 
-			break
-		end
+		local eng = LANG.GetTranslationFromLanguage(msg.text, "english")
+		local _tmp = {player = RADIO.ToPrintable(target)}
+
+		text = msg.format and string.Interp(eng, _tmp) or eng
+		msg_name = msg.text
+
+		break
 	end
 
 	if not text then
@@ -319,9 +331,10 @@ end
 
 local function RadioComplete(cmd, arg)
 	local c = {}
+	local commands = RADIO.Commands
 
-	for _, cmd2 in ipairs(RADIO.Commands) do
-		table.insert(c, "ttt_radio " .. cmd2.cmd)
+	for i = 1, #commands do
+		c[i] = "ttt_radio " .. commands[i].cmd
 	end
 
 	return c
@@ -382,7 +395,7 @@ local radio_gestures = {
 -- @realm client
 function GM:PlayerSentRadioCommand(ply, name, target)
 	local act = radio_gestures[name]
-	if act then
-		ply:AnimPerformGesture(act)
-	end
+	if not act then return end
+
+	ply:AnimPerformGesture(act)
 end
