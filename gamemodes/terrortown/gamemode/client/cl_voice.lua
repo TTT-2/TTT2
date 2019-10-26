@@ -156,7 +156,6 @@ local function ReceiveVoiceState()
 	if GAMEMODE.round_state ~= ROUND_ACTIVE then return end
 
 	local lply = LocalPlayer()
-
 	if not IsValid(lply) then return end
 
 	local ply = player.GetByID(idx)
@@ -173,19 +172,19 @@ local function ReceiveVoiceState()
 
 	ply[tm .. "_gvoice"] = state
 
-	if IsValid(PlayerVoicePanels[ply]) then
-		PlayerVoicePanels[ply].Color = state and VP_GREEN or (ply:GetRoleColor() or VP_RED)
-	end
+	if not IsValid(PlayerVoicePanels[ply]) then return end
+
+	PlayerVoicePanels[ply].Color = state and VP_GREEN or (ply:GetRoleColor() or VP_RED)
 end
 net.Receive("TTT_RoleVoiceState", ReceiveVoiceState)
 
 local function VoiceClean()
-	if PlayerVoicePanels then
-		for ply, pnl in pairs(PlayerVoicePanels) do
-			if not IsValid(pnl) or not IsValid(ply) then
-				GAMEMODE:PlayerEndVoice(ply)
-			end
-		end
+	if not PlayerVoicePanels then return end
+
+	for ply, pnl in pairs(PlayerVoicePanels) do
+		if IsValid(pnl) and IsValid(ply) then continue end
+
+		GAMEMODE:PlayerEndVoice(ply)
 	end
 end
 timer.Create("VoiceClean", 10, 0, VoiceClean)
@@ -206,6 +205,7 @@ function GM:PlayerEndVoice(ply, no_reset)
 
 	if IsValid(ply) and not no_reset then
 		local tm = ply:GetTeam()
+
 		if tm ~= TEAM_NONE and not TEAMS[tm].alone then
 			ply[tm .. "_gvoice"] = false
 		end
@@ -243,10 +243,10 @@ local MuteText = {
 }
 
 local function SetMuteState(state)
-	if MutedState then
-		MutedState:SetText(string.upper(GetTranslation(MuteText[state])))
-		MutedState:SetVisible(state ~= MUTE_NONE)
-	end
+	if not MutedState then return end
+
+	MutedState:SetText(string.upper(GetTranslation(MuteText[state])))
+	MutedState:SetVisible(state ~= MUTE_NONE)
 end
 
 local mute_state = MUTE_NONE
