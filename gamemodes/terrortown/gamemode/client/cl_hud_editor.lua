@@ -1,6 +1,9 @@
 ---
 -- @module HUDEditor
 
+local mathRound = math.Round
+local mathClamp = math.Clamp
+
 if not HUDEditor then
 	HUDEditor = {}
 	HUDEditor.IsEditing = false
@@ -41,8 +44,10 @@ end
 local function GetClickedElement(x, y)
 	local hud = huds.GetStored(HUDManager.GetHUD())
 	if hud then
-		for _, el in ipairs(hud:GetElements()) do
-			local elObj = hudelements.GetStored(el)
+		local elems = hud:GetElements()
+
+		for i = 1, #elems do
+			local elObj = hudelements.GetStored(elems[i])
 			if elObj and elObj:IsInPos(x, y) then
 				return elObj
 			end
@@ -58,9 +63,9 @@ local function TryResizeLocalHUD(elem, trans_data, dif_x, dif_y, shift_pressed)
 
 	if shift_pressed and trans_data.edge or elem:AspectRatioIsLocked() then
 		if dif_x * trans_data.direction_x * client.size.h > dif_y * trans_data.direction_y * client.size.w then
-			dif_x = math.Round(dif_y * trans_data.direction_y * client.aspect) * trans_data.direction_x
+			dif_x = mathRound(dif_y * trans_data.direction_y * client.aspect) * trans_data.direction_x
 		else
-			dif_y = math.Round(dif_x * trans_data.direction_x / client.aspect) * trans_data.direction_y
+			dif_y = mathRound(dif_x * trans_data.direction_x / client.aspect) * trans_data.direction_y
 		end
 	end
 
@@ -71,19 +76,19 @@ local function TryResizeLocalHUD(elem, trans_data, dif_x, dif_y, shift_pressed)
 	local new_w_p, new_w_m, new_h_p, new_h_m = 0, 0, 0, 0
 
 	if trans_data.x_p then
-		new_w_p = math.Clamp(additional_w, (-1) * client.size.w, ScrW() - (client.size.w + client.base.x))
+		new_w_p = mathClamp(additional_w, -1 * client.size.w, ScrW() - (client.size.w + client.base.x))
 	end
 
 	if trans_data.x_m then
-		new_w_m = math.Clamp(additional_w, (-1) * client.size.w, client.base.x)
+		new_w_m = mathClamp(additional_w, -1 * client.size.w, client.base.x)
 	end
 
 	if trans_data.y_p then
-		new_h_p = math.Clamp(additional_h, (-1) * client.size.h, ScrH() - (client.size.h + client.base.y))
+		new_h_p = mathClamp(additional_h, -1 * client.size.h, ScrH() - (client.size.h + client.base.y))
 	end
 
 	if trans_data.y_m then
-		new_h_m = math.Clamp(additional_h, (-1) * client.size.h, client.base.y)
+		new_h_m = mathClamp(additional_h, -1 * client.size.h, client.base.y)
 	end
 
 	-- get min data for this element
@@ -91,29 +96,29 @@ local function TryResizeLocalHUD(elem, trans_data, dif_x, dif_y, shift_pressed)
 
 	-- combine new size data
 	local new_w, new_h, new_x, new_y
-	if (client.size.w + new_w_p < min.w and new_w_m == 0) then -- limit scale of only the right side of the element
+	if client.size.w + new_w_p < min.w and new_w_m == 0 then -- limit scale of only the right side of the element
 		new_w = min.w
 		new_x = client.base.x
-	elseif (client.size.w + new_w_m < min.w and new_w_p == 0) then -- limit scale of only the left side of the element
+	elseif client.size.w + new_w_m < min.w and new_w_p == 0 then -- limit scale of only the left side of the element
 		new_w = min.w
 		new_x = client.base.x + client.size.w - min.w
-	elseif (client.size.w + new_w_p + new_w_m < min.w) then -- limit scale of both sides of the element
+	elseif client.size.w + new_w_p + new_w_m < min.w then -- limit scale of both sides of the element
 		new_w = min.w
-		new_x = client.base.x + math.Round((client.size.w - min.w) / 2)
+		new_x = client.base.x + mathRound((client.size.w - min.w) * 0.5)
 	else
 		new_w = client.size.w + new_w_p + new_w_m
 		new_x = client.base.x - new_w_m
 	end
 
-	if (client.size.h + new_h_p < min.h and new_h_m == 0) then -- limit scale of only the bottom side of the element
+	if client.size.h + new_h_p < min.h and new_h_m == 0 then -- limit scale of only the bottom side of the element
 		new_h = min.h
 		new_y = client.base.y
-	elseif (client.size.h + new_h_m < min.h and new_h_p == 0) then -- limit scale of only the top side of the element
+	elseif client.size.h + new_h_m < min.h and new_h_p == 0 then -- limit scale of only the top side of the element
 		new_h = min.h
 		new_y = client.base.y + client.size.h - min.h
-	elseif (client.size.h + new_h_p + new_h_m < min.h) then -- limit scale of both sides of the element
+	elseif client.size.h + new_h_p + new_h_m < min.h then -- limit scale of both sides of the element
 		new_h = min.h
-		new_y = client.base.y + math.Round((client.size.h - min.h) / 2)
+		new_y = client.base.y + mathRound((client.size.h - min.h) * 0.5)
 	else
 		new_h = client.size.h + new_h_p + new_h_m
 		new_y = client.base.y - new_h_m
@@ -151,15 +156,15 @@ local function TryMoveLocalHUD(elem, dif_x, dif_y, shift_pressed)
 	end
 
 	-- clamp values between min and max
-	new_x = math.Clamp(new_x, 0, ScrW() - client.size.w - (client.pos.x - client.base.x))
-	new_y = math.Clamp(new_y, 0, ScrH() - client.size.h - (client.pos.y - client.base.y))
+	new_x = mathClamp(new_x, 0, ScrW() - client.size.w - (client.pos.x - client.base.x))
+	new_y = mathClamp(new_y, 0, ScrH() - client.size.h - (client.pos.y - client.base.y))
 
 	elem:SetBasePos(new_x, new_y)
 end
 
 local function Think_EditLocalHUD()
 	local client = LocalPlayer()
-	local x, y = math.Round(gui.MouseX()), math.Round(gui.MouseY())
+	local x, y = mathRound(gui.MouseX()), mathRound(gui.MouseY())
 
 	local mouse_down = input.IsMouseDown(MOUSE_LEFT)
 
@@ -179,10 +184,10 @@ local function Think_EditLocalHUD()
 	end
 
 	-- mouse rising/falling edge detection
-	if (not client.mouse_clicked_prev and mouse_down) then
+	if not client.mouse_clicked_prev and mouse_down then
 		client.mouse_clicked = true
 		client.mouse_clicked_prev = true
-	elseif (client.mouse_clicked_prev and not mouse_down) then
+	elseif client.mouse_clicked_prev and not mouse_down then
 		client.mouse_clicked_prev = false
 	end
 
@@ -297,6 +302,6 @@ function HUDEditor.DrawElem(elem)
 	elem:DrawSize()
 
 	if not client.activeElement then
-		elem:DrawHovered(math.Round(gui.MouseX()), math.Round(gui.MouseY()))
+		elem:DrawHovered(mathRound(gui.MouseX()), mathRound(gui.MouseY()))
 	end
 end
