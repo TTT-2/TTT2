@@ -229,22 +229,21 @@ function SQL.CreateSqlTable(tableName, keys)
 		for key, data in pairs(keys) do
 			local exists = false
 
-			for _, col in ipairs(clmns) do
-				if col.name == key then
-					exists = true
-				end
+			for i = 1, #clmns do
+				if clmns[i].name ~= key then continue end
+
+				exists = true
 			end
 
-			if not exists then
-				local res = SQL.ParseDataString(key, data)
+			if exists then continue end
 
-				if not res then continue end
+			local res = SQL.ParseDataString(key, data)
+			if not res then continue end
 
-				local resArr = string.Explode(",", res)
+			local resArr = string.Explode(",", res)
 
-				for _, query in ipairs(resArr) do
-					sql.Query("ALTER TABLE " .. sql.SQLStr(tableName) .. " ADD " .. query)
-				end
+			for i = 1, #resArr do
+				sql.Query("ALTER TABLE " .. sql.SQLStr(tableName) .. " ADD " .. resArr[i])
 			end
 		end
 	end
@@ -265,7 +264,6 @@ function SQL.Init(tableName, name, tbl, keys)
 	if not keys or table.IsEmpty(keys) then return end
 
 	local query = SQL.BuildInsertString(tableName, name, tbl, keys)
-
 	if not query then return end
 
 	return sql.Query(query)
@@ -284,7 +282,6 @@ function SQL.Save(tableName, name, tbl, keys)
 	if not keys or table.IsEmpty(keys) then return end
 
 	local query = SQL.BuildUpdateString(tableName, name, tbl, keys)
-
 	if not query then return end
 
 	return sql.Query(query)
