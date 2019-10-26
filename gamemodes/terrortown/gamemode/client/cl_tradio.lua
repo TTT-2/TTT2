@@ -30,10 +30,9 @@ local smatrix = {
 
 local function PlayRadioSound(snd)
 	local r = LocalPlayer().radio
+	if not IsValid(r) then return end
 
-	if IsValid(r) then
-		RunConsoleCommand("ttt_radio_play", tostring(r:EntIndex()), snd)
-	end
+	RunConsoleCommand("ttt_radio_play", tostring(r:EntIndex()), snd)
 end
 
 local function ButtonClickPlay(s)
@@ -52,10 +51,12 @@ local function CreateSoundBoard(parent)
 
 	local x, y = 0, 0
 
-	for ri, row in ipairs(smatrix) do
+	for ri = 1, ver do
+		local row = ver[ri]
 		local rj = ri - 1 -- easier for computing x, y
 
-		for rk, snd in ipairs(row) do
+		for rk = 1, #row do
+			local snd = row[rk]
 			local rl = rk - 1
 
 			y = rj * m + rj * bh
