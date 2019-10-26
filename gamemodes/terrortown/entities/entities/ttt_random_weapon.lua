@@ -41,15 +41,14 @@ function ENT:Initialize()
 			if ent.AmmoEnt and self.AutoAmmo > 0 then
 				for i = 1, self.AutoAmmo do
 					local ammo = ents.Create(ent.AmmoEnt)
+					if not IsValid(ammo) then continue end
 
-					if IsValid(ammo) then
-						pos.z = pos.z + 3 -- shift every box up a bit
+					pos.z = pos.z + 3 -- shift every box up a bit
 
-						ammo:SetPos(pos)
-						ammo:SetAngles(VectorRand():Angle())
-						ammo:Spawn()
-						ammo:PhysWake()
-					end
+					ammo:SetPos(pos)
+					ammo:SetAngles(VectorRand():Angle())
+					ammo:Spawn()
+					ammo:PhysWake()
 				end
 			end
 		end
