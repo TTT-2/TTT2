@@ -2,6 +2,7 @@ if SERVER then
 	AddCSLuaFile()
 
 	CreateConVar("ttt_crowbar_unlocks", "1", FCVAR_ARCHIVE)
+	CreateConVar("ttt_crowbar_pushforce", "395", FCVAR_NOTIFY)
 end
 
 SWEP.HoldType = "melee"
@@ -244,7 +245,7 @@ function SWEP:SecondaryAttack()
 	local ply = tr.Entity
 
 	if tr.Hit and IsValid(ply) and ply:IsPlayer() and (owner:EyePos() - tr.HitPos):Length() < 100 then
-		if SERVER and not ply:IsFrozen() and not hook.Run("TTT2PlayerPreventPush", ply) then
+		if SERVER and not ply:IsFrozen() and not hook.Run("TTT2PlayerPreventPush", owner, ply) then
 			local pushvel = tr.Normal * GetConVar("ttt_crowbar_pushforce"):GetFloat()
 			pushvel.z = math.Clamp(pushvel.z, 50, 100) -- limit the upward force to prevent launching
 

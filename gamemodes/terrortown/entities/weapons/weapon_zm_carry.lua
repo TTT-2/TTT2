@@ -50,17 +50,59 @@ SWEP.CarryHack = nil
 SWEP.Constr = nil
 SWEP.PrevOwner = nil
 
-local allow_rag = CreateConVar("ttt_ragdoll_carrying", "1")
-local prop_force = CreateConVar("ttt_prop_carrying_force", "60000")
-local no_throw = CreateConVar("ttt_no_prop_throwing", "0")
-local pin_rag = CreateConVar("ttt_ragdoll_pinning", "1")
-local pin_rag_inno = CreateConVar("ttt_ragdoll_pinning_innocents", "0")
+-- ConVar syncing
+if SERVER then
+	local allow_rag = CreateConVar("ttt_ragdoll_carrying", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+	local prop_force = CreateConVar("ttt_prop_carrying_force", "60000", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+	local no_throw = CreateConVar("ttt_no_prop_throwing", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+	local pin_rag = CreateConVar("ttt_ragdoll_pinning", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+	local pin_rag_inno = CreateConVar("ttt_ragdoll_pinning_innocents", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
--- Allowing weapon pickups can allow players to cause a crash in the physics
--- system (ie. not fixable). Tuning the range seems to make this more
--- difficult. Not sure why. It's that kind of crash.
-local allow_wep = CreateConVar("ttt_weapon_carrying", "0")
-local wep_range = CreateConVar("ttt_weapon_carrying_range", "50")
+	-- Allowing weapon pickups can allow players to cause a crash in the physics
+	-- system (ie. not fixable). Tuning the range seems to make this more
+	-- difficult. Not sure why. It's that kind of crash.
+	local allow_wep = CreateConVar("ttt_weapon_carrying", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+	local wep_range = CreateConVar("ttt_weapon_carrying_range", "50", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+	hook.Add("TTT2SyncGlobals", "TTT2SyncCarryGlobals", function()
+		SetGlobalBool(allow_rag:GetName(), allow_rag:GetBool())
+		SetGlobalInt(prop_force:GetName(), prop_force:GetInt())
+		SetGlobalBool(no_throw:GetName(), no_throw:GetBool())
+		SetGlobalBool(pin_rag:GetName(), pin_rag:GetBool())
+		SetGlobalBool(pin_rag_inno:GetName(), pin_rag_inno:GetBool())
+
+		SetGlobalBool(allow_wep:GetName(), allow_wep:GetBool())
+		SetGlobalInt(wep_range:GetName(), wep_range:GetInt())
+	end)
+
+	cvars.AddChangeCallback(allow_rag:GetName(), function(name, old, new)
+		SetGlobalBool(allow_rag:GetName(), tonumber(new) == 1)
+	end, allow_rag:GetName())
+
+	cvars.AddChangeCallback(prop_force:GetName(), function(name, old, new)
+		SetGlobalInt(prop_force:GetName(), tonumber(new))
+	end, prop_force:GetName())
+
+	cvars.AddChangeCallback(no_throw:GetName(), function(name, old, new)
+		SetGlobalBool(no_throw:GetName(), tonumber(new) == 1)
+	end, no_throw:GetName())
+
+	cvars.AddChangeCallback(pin_rag:GetName(), function(name, old, new)
+		SetGlobalBool(pin_rag:GetName(), tonumber(new) == 1)
+	end, pin_rag:GetName())
+
+	cvars.AddChangeCallback(pin_rag_inno:GetName(), function(name, old, new)
+		SetGlobalBool(pin_rag_inno:GetName(), tonumber(new) == 1)
+	end, pin_rag_inno:GetName())
+
+	cvars.AddChangeCallback(allow_wep:GetName(), function(name, old, new)
+		SetGlobalBool(allow_wep:GetName(), tonumber(new) == 1)
+	end, allow_wep:GetName())
+
+	cvars.AddChangeCallback(wep_range:GetName(), function(name, old, new)
+		SetGlobalInt(wep_range:GetName(), tonumber(new))
+	end, wep_range:GetName())
+end
 
 -- not customizable via convars as some objects rely on not being carryable for
 -- gameplay purposes
@@ -135,7 +177,7 @@ function SWEP:Reset(keep_velocity)
 			phys:EnableMotion(true)
 		end
 
-		if not keep_velocity and (no_throw:GetBool() or self.EntHolding:GetClass() == "prop_ragdoll") then
+		if not keep_velocity and (GetGlobalBool("ttt_no_prop_throwing") or self.EntHolding:GetClass() == "prop_ragdoll") then
 			KillVelocity(self.EntHolding)
 		end
 	end
@@ -253,8 +295,8 @@ function SWEP:MoveObject(phys, pdir, maxforce, is_ragdoll)
 end
 
 function SWEP:GetRange(target)
-	if IsValid(target) and target:IsWeapon() and allow_wep:GetBool() then
-		return wep_range:GetFloat()
+	if IsValid(target) and target:IsWeapon() and GetGlobalBool("ttt_weapon_carrying") then
+		return GetGlobalInt("ttt_weapon_carrying_range")
 	elseif IsValid(target) and target:GetClass() == "prop_ragdoll" then
 		return 75
 	else
@@ -271,8 +313,8 @@ function SWEP:AllowPickup(target)
 	and phys:GetMass() < CARRY_WEIGHT_LIMIT
 	and not PlayerStandsOn(target)
 	and target.CanPickup ~= false
-	and (target:GetClass() ~= "prop_ragdoll" or allow_rag:GetBool())
-	and (not target:IsWeapon() or allow_wep:GetBool())
+	and (target:GetClass() ~= "prop_ragdoll" or GetGlobalBool("ttt_ragdoll_carrying"))
+	and (not target:IsWeapon() or GetGlobalBool("ttt_weapon_carrying"))
 	and not hook.Run("TTT2PlayerPreventPickupEnt", ply, target)
 end
 
@@ -418,7 +460,7 @@ function SWEP:Pickup()
 			entphys:AddGameFlag(FVPHYSICS_PLAYER_HELD)
 
 			local bone = math.Clamp(trace.PhysicsBone, 0, 1)
-			local max_force = prop_force:GetInt()
+			local max_force = GetGlobalInt("ttt_prop_carrying_force")
 
 			if ent:GetClass() == "prop_ragdoll" then
 				self.dt.carried_rag = ent
@@ -479,7 +521,7 @@ function SWEP:Drop()
 		end
 
 		-- Try to limit ragdoll slinging
-		if no_throw:GetBool() or ent:GetClass() == "prop_ragdoll" then
+		if GetGlobalBool("ttt_no_prop_throwing") or ent:GetClass() == "prop_ragdoll" then
 			KillVelocity(ent)
 		end
 
@@ -505,7 +547,7 @@ local function RagdollPinnedTakeDamage(rag, dmginfo)
 end
 
 function SWEP:PinRagdoll()
-	if not pin_rag:GetBool() or not self:GetOwner():IsTraitor() and not pin_rag_inno:GetBool() then return end
+	if not GetGlobalBool("ttt_ragdoll_pinning") or not self:GetOwner():IsTraitor() and not GetGlobalBool("ttt_ragdoll_pinning_innocents") then return end
 
 	local rag = self.EntHolding
 	local ply = self:GetOwner()
@@ -571,7 +613,7 @@ end
 
 if SERVER then
 	function SWEP:Initialize()
-		self.dt.can_rag_pin = pin_rag:GetBool()
+		self.dt.can_rag_pin = GetGlobalBool("ttt_ragdoll_pinning")
 		self.dt.carried_rag = nil
 
 		return self.BaseClass.Initialize(self)
