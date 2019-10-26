@@ -159,7 +159,9 @@ function WrapText(text, width, font)
 	-- Oh joy, I get to write my own wrapping function. Thanks Lua!
 	-- Splits a string into a table of strings that are under the given width.
 
-	if not text then return end
+	if not text then
+		return {}, 0, 0
+	end
 
 	surface.SetFont(font or "DefaultBold")
 
@@ -198,13 +200,14 @@ function WrapText(text, width, font)
 	local length = 0
 
 	for _, line in ipairs(lines) do
-		local w = surface.GetTextSize(text)
+		local w = surface.GetTextSize(line)
 
 		if w > length then
 			length = w
 		end
 	end
 
+	-- get height of lines
 	local w, h = surface.GetTextSize(text)
 
 	return lines, length, h * #lines
