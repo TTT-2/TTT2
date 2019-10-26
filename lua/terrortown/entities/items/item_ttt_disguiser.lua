@@ -90,25 +90,25 @@ if CLIENT then
 	hook.Add("TTTEquipmentTabs", "TTTItemDisguiser", function(dsheet)
 		trans = trans or LANG.GetTranslation
 
-		if LocalPlayer():HasEquipmentItem("item_ttt_disguiser") then
-			local ddisguise = DISGUISE.CreateMenu(dsheet)
+		if not LocalPlayer():HasEquipmentItem("item_ttt_disguiser") then return end
 
-			dsheet:AddSheet(trans("disg_name"), ddisguise, "icon16/user.png", false, false, trans("equip_tooltip_disguise"))
-		end
+		local ddisguise = DISGUISE.CreateMenu(dsheet)
+
+		dsheet:AddSheet(trans("disg_name"), ddisguise, "icon16/user.png", false, false, trans("equip_tooltip_disguise"))
 	end)
 else
 	local function SetDisguise(ply, cmd, args)
 		if not IsValid(ply) or not ply:IsActive() and ply:HasTeam(TEAM_TRAITOR) then return end
 
-		if ply:HasEquipmentItem("item_ttt_disguiser") then
-			local state = #args == 1 and tobool(args[1])
+		if not ply:HasEquipmentItem("item_ttt_disguiser") then return end
 
-			if hook.Run("TTTToggleDisguiser", ply, state) then return end
+		local state = #args == 1 and tobool(args[1])
 
-			ply:SetNWBool("disguised", state)
+		if hook.Run("TTTToggleDisguiser", ply, state) then return end
 
-			LANG.Msg(ply, state and "disg_turned_on" or "disg_turned_off")
-		end
+		ply:SetNWBool("disguised", state)
+
+		LANG.Msg(ply, state and "disg_turned_on" or "disg_turned_off")
 	end
 	concommand.Add("ttt_set_disguise", SetDisguise)
 end
