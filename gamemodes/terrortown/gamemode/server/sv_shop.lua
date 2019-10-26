@@ -88,12 +88,12 @@ local function OrderEquipment(ply, cmd, args)
 		if GetGlobalInt("ttt2_random_shops") > 0 and RANDOMSHOP[ply] and #RANDOMSHOP[ply] > 0 then
 			local key = false
 
-			for _, equip in ipairs(RANDOMSHOP[ply]) do
-				if equip.id == id then
-					key = true
+			for i = 1, #RANDOMSHOP[ply] do
+				if RANDOMSHOP[ply][i].id ~= id then continue end
 
-					break
-				end
+				key = true
+
+				break
 			end
 
 			if not key then
@@ -162,9 +162,9 @@ function GM:TTTToggleDisguiser(ply, state)
 end
 
 local function CheatCredits(ply)
-	if IsValid(ply) then
-		ply:AddCredits(10)
-	end
+	if not IsValid(ply) then return end
+
+	ply:AddCredits(10)
 end
 concommand.Add("ttt_cheat_credits", CheatCredits, nil, nil, FCVAR_CHEAT)
 
@@ -176,33 +176,33 @@ local function TransferCredits(ply, cmd, args)
 	local sid64 = tostring(args[1])
 	local credits = tonumber(args[2])
 
-	if sid64 and credits then
-		local target = player.GetBySteamID64(sid64)
+	if sid64 == nil or not credits then return end
 
-		if not IsValid(target)
-		or target == ply
-		then
-			LANG.Msg(ply, "xfer_no_recip")
+	local target = player.GetBySteamID64(sid64)
 
-			return
-		end
+	if not IsValid(target)
+	or target == ply
+	then
+		LANG.Msg(ply, "xfer_no_recip")
 
-		if ply:GetCredits() < credits then
-			LANG.Msg(ply, "xfer_no_credits")
-
-			return
-		end
-
-		credits = math.Clamp(credits, 0, ply:GetCredits())
-
-		if credits == 0 then return end
-
-		ply:SubtractCredits(credits)
-		target:AddCredits(credits)
-
-		LANG.Msg(ply, "xfer_success", {player = target:Nick()})
-		LANG.Msg(target, "xfer_received", {player = ply:Nick(), num = credits})
+		return
 	end
+
+	if ply:GetCredits() < credits then
+		LANG.Msg(ply, "xfer_no_credits")
+
+		return
+	end
+
+	credits = math.Clamp(credits, 0, ply:GetCredits())
+
+	if credits == 0 then return end
+
+	ply:SubtractCredits(credits)
+	target:AddCredits(credits)
+
+	LANG.Msg(ply, "xfer_success", {player = target:Nick()})
+	LANG.Msg(target, "xfer_received", {player = ply:Nick(), num = credits})
 end
 concommand.Add("ttt_transfer_credits", TransferCredits)
 
