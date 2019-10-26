@@ -70,7 +70,6 @@ function GetEquipmentBase(data, eq)
 	end
 
 	local name = WEPS.GetClass(eq)
-
 	if not name then return end
 
 	local tbl = {
@@ -130,14 +129,14 @@ function AddWeaponIntoFallbackTable(wepClass, roleData)
 	wep.CanBuy = wep.CanBuy or {}
 
 	if not table.HasValue(wep.CanBuy, roleData.index) then
-		table.insert(wep.CanBuy, roleData.index)
+		wep.CanBuy[#wep.CanBuy + 1] = roleData.index
 	end
 
 	local eq = CreateEquipment(wep)
 	if not eq then return end
 
 	if not table.HasValue(roleData.fallbackTable, eq) then
-		table.insert(roleData.fallbackTable, eq)
+		roleData.fallbackTable[#roleData.fallbackTable + 1] = eq
 	end
 end
 
@@ -170,7 +169,7 @@ function GetShopFallback(subrole, tbl)
 
 		fb, subrole = GetShopFallback(fb, tbl)
 	elseif not table.HasValue(tbl, fb) then
-		table.insert(tbl, fb)
+		tbl[#tbl + 1] = fb
 
 		local nfb
 
@@ -241,34 +240,44 @@ if CLIENT then
 			local tbl = {}
 
 			-- find buyable items to load info from
-			for _, v in ipairs(items.GetList()) do
+			local itms = items.GetList()
+
+			for i = 1, #itms do
+				local v = itms[i]
+
 				if v and not v.Doublicated and v.CanBuy and table.HasValue(v.CanBuy, fallback) then
 					local data = v.EquipMenuData or {}
 
 					local base = GetEquipmentBase(data, v)
 					if base then
-						table.insert(tbl, base)
+						tbl[#tbl + 1] = base
 					end
 				end
 			end
 
 			-- find buyable weapons to load info from
-			for _, v in ipairs(weapons.GetList()) do
+			local weps = weapons.GetList()
+
+			for i = 1, #weps do
+				local v = weps[i]
+
 				if v and not v.Doublicated and v.CanBuy and table.HasValue(v.CanBuy, fallback) then
 					local data = v.EquipMenuData or {}
 
 					local base = GetEquipmentBase(data, v)
 					if base then
-						table.insert(tbl, base)
+						tbl[#tbl + 1] = base
 					end
 				end
 			end
 
 			-- mark custom items
-			for _, i in ipairs(tbl) do
-				if i and i.id then
-					i.custom = not table.HasValue(DefaultEquipment[fallback], i.id) -- TODO
-				end
+			for k = 1, #tbl do
+				local i = tbl[k]
+
+				if not i or not i.id then continue end
+
+				i.custom = not table.HasValue(DefaultEquipment[fallback], i.id) -- TODO
 			end
 
 			Equipment[fallback] = tbl
@@ -312,8 +321,8 @@ if SERVER then
 
 			local tmp = {}
 
-			for _, equip in ipairs(tbl) do
-				tmp[#tmp + 1] = equip.id
+			for i = 1, #tbl do
+				tmp[#tmp + 1] = tbl[i].id
 			end
 
 			if #tmp <= 0 then continue end
@@ -330,17 +339,17 @@ if SERVER then
 			while #s ~= 0 do
 				local bit = string.sub(s, 1, max - 1)
 
-				table.insert(cut, bit)
+				cut[#cut + 1] = bit
 
 				s = string.sub(s, max, - 1)
 			end
 
 			local parts = #cut
 
-			for k, bit in ipairs(cut) do
+			for k = 1, #cut do
 				net.Start("TTT2SyncRandomShops")
 				net.WriteBit(k ~= parts) -- continuation bit, 1 if there's more coming
-				net.WriteString(bit)
+				net.WriteString(cut[i])
 				net.Send(ply)
 			end
 		end
@@ -351,13 +360,21 @@ if SERVER then
 		if not fallbackTable then
 			fallbackTable = {}
 
-			for _, equip in ipairs(items.GetList()) do
+			local itms = items.GetList()
+
+			for i = 1, #itms do
+				local equip = itms[i]
+
 				if not equip.CanBuy or not table.HasValue(equip.CanBuy, fallback) then continue end
 
 				fallbackTable[#fallbackTable + 1] = equip
 			end
 
-			for _, equip in ipairs(weapons.GetList()) do
+			local weps = weapons.GetList()
+
+			for i = 1, #weps do
+				local equip = weps[i]
+
 				if not equip.CanBuy or not table.HasValue(equip.CanBuy, fallback) then continue end
 
 				fallbackTable[#fallbackTable + 1] = equip
@@ -371,12 +388,16 @@ if SERVER then
 		local teamShops = RANDOMTEAMSHOPS
 
 		if team and not teamShops[fallback] then
-			if amount < #fallbackTable then
+			local fallbackTblCount = #fallbackTable
+
+			if amount < fallbackTblCount then
 				teamShops[fallback] = {}
 
 				local tmp2 = {}
 
-				for _, equip in ipairs(fallbackTable) do -- TODO use numeric for loop with precached #fallbackTable
+				for i = 1, fallbackTblCount do
+					local equip = fallbackTable[i]
+
 					if equip.notBuyable then continue end
 
 					if equip.NoRandom then
@@ -390,7 +411,7 @@ if SERVER then
 
 				if amount > 0 then
 					for i = 1, amount do
-						local rndm = math.random(1, #tmp2)
+						local rndm = math.random(#tmp2)
 
 						teamShops[fallback][#teamShops[fallback] + 1] = tmp2[rndm]
 
@@ -414,8 +435,8 @@ if SERVER then
 	-- @realm server
 	function UpdateRandomShops(plys, val, team)
 		if plys then
-			for _, ply in ipairs(plys) do
-				RANDOMSHOP[ply] = {} -- reset ply
+			for i = 1, #plys do
+				RANDOMSHOP[plys[i]] = {} -- reset ply
 			end
 		else
 			RANDOMSHOP = {} -- reset everyone
@@ -439,7 +460,10 @@ if SERVER then
 
 		-- now set the individual random shop
 		if team then -- the shop is synced with the team
-			for _, ply in ipairs(plys and plys or player.GetAll()) do
+			local tmpTbl = plys and plys or player.GetAll()
+
+			for i = 1, #tmpTbl do
+				local ply = tmpTbl[i]
 				local srd = ply:GetSubRoleData()
 
 				if not srd:IsShoppingRole() then continue end
@@ -447,7 +471,10 @@ if SERVER then
 				RANDOMSHOP[ply] = RANDOMTEAMSHOPS[GetShopFallback(srd.index)]
 			end
 		else -- every player has his own shop
-			for _, ply in ipairs(plys and plys or player.GetAll()) do
+			local tmpTbl = plys and plys or player.GetAll()
+
+			for i = 1, #tmpTbl do
+				local ply = tmpTbl[i]
 				local srd = ply:GetSubRoleData()
 
 				if not srd:IsShoppingRole() then continue end
@@ -457,7 +484,11 @@ if SERVER then
 
 				RANDOMSHOP[ply] = {}
 
-				for _, equip in ipairs(RANDOMSAVEDSHOPS[GetShopFallback(srd.index)]) do
+				local cachedTbl = RANDOMSAVEDSHOPS[GetShopFallback(srd.index)]
+
+				for k = 1, #cachedTbl do
+					local equip = cachedTbl[k]
+
 					if equip.notBuyable then continue end
 
 					if equip.NoRandom then
@@ -471,7 +502,7 @@ if SERVER then
 
 				if amount > 0 then
 					for i = 1, amount do
-						local rndm = math.random(1, #tmp2)
+						local rndm = math.random(#tmp2)
 
 						RANDOMSHOP[ply][#RANDOMSHOP[ply] + 1] = tmp2[rndm]
 
@@ -498,10 +529,14 @@ if SERVER then
 		RANDOMSAVEDSHOPS[fallback] = nil
 
 		local plys_with_fb = {}
-		for _, ply in ipairs(player.GetAll()) do
-			if GetShopFallback(ply:GetSubRole()) == fallback then
-				table.insert(plys_with_fb, ply)
-			end
+		local plys = player.GetAll()
+
+		for i = 1, #plys do
+			local ply = plys[i]
+
+			if GetShopFallback(ply:GetSubRole()) ~= fallback then continue end
+
+			plys_with_fb[#plys_with_fb + 1] = ply
 		end
 
 		UpdateRandomShops(plys_with_fb, amount, team)
@@ -532,7 +567,6 @@ if SERVER then
 		SetGlobalBool("ttt2_random_shop_reroll", tobool(new))
 	end, "ttt2updatererollglobal")
 
-
 	cvars.AddChangeCallback("ttt2_random_shop_reroll_cost", function(name, old, new)
 		SetGlobalInt("ttt2_random_shop_reroll_cost", tonumber(new))
 	end, "ttt2updatererollcostglobal")
@@ -543,16 +577,16 @@ if SERVER then
 
 	hook.Add("TTTPrepareRound", "TTT2InitRandomShops", function()
 		local amount = GetGlobalInt("ttt2_random_shops")
-		if amount > 0 then
-			UpdateRandomShops(nil, amount, GetGlobalBool("ttt2_random_team_shops", true))
-		end
+		if amount <= 0 then return end
+
+		UpdateRandomShops(nil, amount, GetGlobalBool("ttt2_random_team_shops", true))
 	end)
 
 	hook.Add("TTT2UpdateSubrole", "TTT2UpdateRandomShop", function(ply)
 		local amount = GetGlobalInt("ttt2_random_shops")
-		if amount > 0 then
-			UpdateRandomShops({ply}, amount, GetGlobalBool("ttt2_random_team_shops", true))
-		end
+		if amount <= 0 then return end
+
+		UpdateRandomShops({ply}, amount, GetGlobalBool("ttt2_random_team_shops", true))
 	end)
 
 	hook.Add("PlayerInitialSpawn", "TTT2InitRandomShops", function(ply)
@@ -564,9 +598,9 @@ if SERVER then
 		SetGlobalInt("ttt2_random_shop_reroll_cost", random_shop_reroll_cost:GetInt())
 		SetGlobalBool("ttt2_random_shop_reroll_per_buy", random_shop_reroll_per_buy:GetBool())
 
-		if amount > 0 then
-			SyncRandomShops({ply})
-		end
+		if amount <= 0 then return end
+
+		SyncRandomShops({ply})
 	end)
 else
 	local buff = ""
@@ -591,7 +625,8 @@ else
 				if istable(tmp) then
 					local tmp2 = {}
 
-					for _, id in ipairs(tmp) do
+					for i = 1, #tmp do
+						local id = tmp[i]
 						local equip = not items.IsItem(id) and weapons.GetStored(id) or items.GetStored(id)
 
 						tmp2[#tmp2 + 1] = equip
@@ -621,11 +656,13 @@ function GetModifiedEquipment(ply, fallback)
 	if ply and fallback and RANDOMSHOP[ply] and GetGlobalInt("ttt2_random_shops") > 0 then
 		local tmp = {}
 
-		for _, equip in ipairs(RANDOMSHOP[ply]) do
+		for i = 1, #RANDOMSHOP[ply] do
+			local equip = RANDOMSHOP[ply][i]
+
 			for _, eq in pairs(fallback) do
-				if eq.id == equip.id then
-					tmp[#tmp + 1] = eq
-				end
+				if eq.id ~= equip.id then continue end
+
+				tmp[#tmp + 1] = eq
 			end
 		end
 
@@ -650,12 +687,16 @@ function GenerateNewEquipmentID()
 	local val = EQUIP_MAX
 
 	timer.Simple(0, function()
-		for _, v in ipairs(items.GetList()) do
-			if v.oldId == val and v.id then
-				print("[TTT2][WARNING] TTT2 doesn't support old items completely since they are limited to an amount of 16. If the item '" .. v.id .. "' with id '" .. val .. "' doesn't work as intended, modify the old item and use the new items system instead.")
+		local itms = items.GetList()
 
-				break
-			end
+		for i = 1, #itms do
+			local v = itms[i]
+
+			if v.oldId ~= val or not v.id then continue end
+
+			print("[TTT2][WARNING] TTT2 doesn't support old items completely since they are limited to an amount of 16. If the item '" .. v.id .. "' with id '" .. val .. "' doesn't work as intended, modify the old item and use the new items system instead.")
+
+			break
 		end
 	end)
 
@@ -687,19 +728,23 @@ end
 -- @internal
 -- @realm shared
 function InitFallbackShops()
-	for _, v in ipairs({TRAITOR, DETECTIVE}) do
-		local fallback = GetShopFallbackTable(v.index)
-		if fallback then
-			for _, eq in ipairs(fallback) do
-				local equip = GetEquipmentByName(eq.id)
-				if equip then
-					equip.CanBuy = equip.CanBuy or {}
+	local tbl = {TRAITOR, DETECTIVE}
 
-					if not table.HasValue(equip.CanBuy, v.index) then
-						table.insert(equip.CanBuy, v.index)
-					end
-				end
-			end
+	for i = 1, #tbl do
+		local v = tbl[i]
+
+		local fallback = GetShopFallbackTable(v.index)
+		if not fallback then continue end
+
+		for k = 1, #fallback do
+			local equip = GetEquipmentByName(fallback[k].id)
+			if not equip then continue end
+
+			equip.CanBuy = equip.CanBuy or {}
+
+			if table.HasValue(equip.CanBuy, v.index) then continue end
+
+			equip.CanBuy[#equip.CanBuy + 1] = v.index
 		end
 	end
 end
@@ -718,15 +763,15 @@ function InitFallbackShop(roleData, fallbackTable, avoidSet)
 
 	local fallback = GetShopFallbackTable(roleData.index)
 	if fallback then
-		for _, eq in ipairs(fallbackTable) do
-			local equip = GetEquipmentByName(eq.id)
-			if equip then
-				equip.CanBuy = equip.CanBuy or {}
+		for i = 1, #fallbackTable do
+			local equip = GetEquipmentByName(fallbackTable[i].id)
+			if not equip then continue end
 
-				if not table.HasValue(equip.CanBuy, roleData.index) then
-					table.insert(equip.CanBuy, roleData.index)
-				end
-			end
+			equip.CanBuy = equip.CanBuy or {}
+
+			if table.HasValue(equip.CanBuy, roleData.index) then continue end
+
+			equip.CanBuy[#equip.CanBuy + 1] = roleData.index
 		end
 	end
 end
@@ -740,18 +785,18 @@ end
 -- @realm shared
 function AddToShopFallback(fallback, subrole, eq)
 	if not table.HasValue(fallback, eq) then
-		table.insert(fallback, eq)
+		fallback[#fallback + 1] = eq
 	end
 
 	if GetShopFallbackTable(subrole) then
 		local equip = GetEquipmentByName(eq.id)
-		if equip then
-			equip.CanBuy = equip.CanBuy or {}
+		if not equip then return end
 
-			if not table.HasValue(equip.CanBuy, subrole) then
-				table.insert(equip.CanBuy, subrole)
-			end
-		end
+		equip.CanBuy = equip.CanBuy or {}
+
+		if table.HasValue(equip.CanBuy, subrole) then return end
+
+		equip.CanBuy[#equip.CanBuy + 1] = subrole
 	end
 end
 
@@ -764,27 +809,31 @@ local function InitDefaultEquipmentForRole(roleData)
 	local tbl = {}
 
 	-- find buyable items to load info from
-	for _, v in ipairs(itms) do
-		if v and not v.Doublicated and v.CanBuy and table.HasValue(v.CanBuy, roleData.index) then
-			local data = v.EquipMenuData or {}
+	for i = 1, #itms do
+		local v = itms[i]
 
-			local base = GetEquipmentBase(data, v)
-			if base then
-				tbl[#tbl + 1] = base
-			end
-		end
+		if not v or v.Doublicated or not v.CanBuy or not table.HasValue(v.CanBuy, roleData.index) then continue end
+
+		local data = v.EquipMenuData or {}
+
+		local base = GetEquipmentBase(data, v)
+		if not base then continue end
+
+		tbl[#tbl + 1] = base
 	end
 
 	-- find buyable weapons to load info from
-	for _, v in ipairs(sweps) do
-		if v and not v.Doublicated and v.CanBuy and table.HasValue(v.CanBuy, roleData.index) then
-			local data = v.EquipMenuData or {}
+	for i = 1, #sweps do
+		local v = sweps[i]
 
-			local base = GetEquipmentBase(data, v)
-			if base then
-				tbl[#tbl + 1] = base
-			end
-		end
+		if not v or v.Doublicated or not v.CanBuy or not table.HasValue(v.CanBuy, roleData.index) then continue end
+
+		local data = v.EquipMenuData or {}
+
+		local base = GetEquipmentBase(data, v)
+		if not base then continue end
+
+		tbl[#tbl + 1] = base
 	end
 
 	-- mark custom items
@@ -832,18 +881,18 @@ if SERVER then
 		while #s ~= 0 do
 			local bit = string.sub(s, 1, max - 1)
 
-			table.insert(cut, bit)
+			cut[#cut + 1] = bit
 
 			s = string.sub(s, max, - 1)
 		end
 
 		local parts = #cut
 
-		for k, bit in ipairs(cut) do
+		for k = 1, parts do
 			net.Start("TTT2SyncEquipment")
 			net.WriteBool(add)
 			net.WriteBit(k ~= parts) -- continuation bit, 1 if there's more coming
-			net.WriteString(bit)
+			net.WriteString(cut[k])
 			net.Send(ply)
 		end
 	end
@@ -871,18 +920,18 @@ if SERVER then
 		while #s ~= 0 do
 			local bit = string.sub(s, 1, max - 1)
 
-			table.insert(cut, bit)
+			cut[#cut + 1] = bit
 
 			s = string.sub(s, max, - 1)
 		end
 
 		local parts = #cut
 
-		for k, bit in ipairs(cut) do
+		for k = 1, parts do
 			net.Start("TTT2SyncEquipment")
 			net.WriteBool(add)
 			net.WriteBit(k ~= parts) -- continuation bit, 1 if there's more coming
-			net.WriteString(bit)
+			net.WriteString(cut[k])
 			net.Send(ply)
 		end
 	end
@@ -905,21 +954,21 @@ if SERVER then
 		-- init equipment
 		local result = ShopEditor.GetShopEquipments(roleData)
 
-		for _, v in ipairs(result) do
-			local equip = GetEquipmentByName(v.name)
-			if equip then
-				equip.CanBuy = equip.CanBuy or {}
+		for i = 1, #result do
+			local equip = GetEquipmentByName(result[i].name)
+			if not equip then continue end
 
-				if not table.HasValue(equip.CanBuy, roleData.index) then
-					table.insert(equip.CanBuy, roleData.index)
-				end
-				--
+			equip.CanBuy = equip.CanBuy or {}
 
-				SYNC_EQUIP[roleData.index] = SYNC_EQUIP[roleData.index] or {}
+			if not table.HasValue(equip.CanBuy, roleData.index) then
+				equip.CanBuy[#equip.CanBuy + 1] = roleData.index
+			end
+			--
 
-				if not table.HasValue(SYNC_EQUIP[roleData.index], equip.id) then
-					table.insert(SYNC_EQUIP[roleData.index], equip.id)
-				end
+			SYNC_EQUIP[roleData.index] = SYNC_EQUIP[roleData.index] or {}
+
+			if not table.HasValue(SYNC_EQUIP[roleData.index], equip.id) then
+				SYNC_EQUIP[roleData.index][#SYNC_EQUIP[roleData.index] + 1] = equip.id
 			end
 		end
 	end
@@ -933,18 +982,20 @@ if SERVER then
 		equip_table.CanBuy = equip_table.CanBuy or {}
 
 		if not table.HasValue(equip_table.CanBuy, subrole) then
-			table.insert(equip_table.CanBuy, subrole)
+			equip_table.CanBuy[#equip_table.CanBuy + 1] = subrole
 		end
 		--
 
 		SYNC_EQUIP[subrole] = SYNC_EQUIP[subrole] or {}
 
 		if not table.HasValue(SYNC_EQUIP[subrole], equip_table.id) then
-			table.insert(SYNC_EQUIP[subrole], equip_table.id)
+			SYNC_EQUIP[subrole][#SYNC_EQUIP[subrole] + 1] = equip_table.id
 		end
 
-		for _, v in ipairs(player.GetAll()) do
-			SyncSingleEquipment(v, subrole, equip_table.id, true)
+		local plys = player.GetAll()
+
+		for i = 1, #plys do
+			SyncSingleEquipment(plys[i], subrole, equip_table.id, true)
 		end
 	end
 
@@ -957,12 +1008,12 @@ if SERVER then
 		if not equip_table.CanBuy then
 			equip_table.CanBuy = {}
 		else
-			for k, v in ipairs(equip_table.CanBuy) do
-				if v == subrole then
-					table.remove(equip_table.CanBuy, k)
+			for k = 1, #equip_table.CanBuy do
+				if equip_table.CanBuy[k] ~= subrole then continue end
 
-					break
-				end
+				table.remove(equip_table.CanBuy, k)
+
+				break
 			end
 		end
 		--
@@ -970,34 +1021,36 @@ if SERVER then
 		SYNC_EQUIP[subrole] = SYNC_EQUIP[subrole] or {}
 
 		for k, v in pairs(SYNC_EQUIP[subrole]) do
-			if v == equip_table.id then
-				table.remove(SYNC_EQUIP[subrole], k)
+			if v ~= equip_table.id then continue end
 
-				break
-			end
+			table.remove(SYNC_EQUIP[subrole], k)
+
+			break
 		end
 
-		for _, v in ipairs(player.GetAll()) do
-			SyncSingleEquipment(v, subrole, equip_table.id, false)
+		local plys = player.GetAll()
+
+		for i = 1, #plys do
+			SyncSingleEquipment(plys[i], subrole, equip_table.id, false)
 		end
 	end
 
 	hook.Add("TTT2UpdateTeam", "TTT2SyncTeambuyEquipment", function(ply, oldTeam, team)
-		if TEAMBUYTABLE then
-			if oldTeam and oldTeam ~= TEAM_NONE then
-				net.Start("TTT2ResetTBEq")
-				net.WriteString(oldTeam)
-				net.Send(ply)
-			end
+		if not TEAMBUYTABLE then return end
 
-			if team and team ~= TEAM_NONE and not TEAMS[team].alone and TEAMBUYTABLE[team] then
-				local filter = GetTeamFilter(team)
+		if oldTeam and oldTeam ~= TEAM_NONE then
+			net.Start("TTT2ResetTBEq")
+			net.WriteString(oldTeam)
+			net.Send(ply)
+		end
 
-				for id in pairs(TEAMBUYTABLE[team]) do
-					net.Start("TTT2ReceiveTBEq")
-					net.WriteString(id)
-					net.Send(filter)
-				end
+		if team and team ~= TEAM_NONE and not TEAMS[team].alone and TEAMBUYTABLE[team] then
+			local filter = GetTeamFilter(team)
+
+			for id in pairs(TEAMBUYTABLE[team]) do
+				net.Start("TTT2ReceiveTBEq")
+				net.WriteString(id)
+				net.Send(filter)
 			end
 		end
 	end)
@@ -1042,7 +1095,7 @@ else -- CLIENT
 		equip.CanBuy = equip.CanBuy or {}
 
 		if not table.HasValue(equip.CanBuy, subrole) then
-			table.insert(equip.CanBuy, subrole)
+			equip.CanBuy[#equip.CanBuy + 1] = subrole
 		end
 
 		if equip and not equip.Doublicated then
@@ -1062,7 +1115,7 @@ else -- CLIENT
 		Equipment[subrole] = Equipment[subrole] or {}
 
 		if toadd and not EquipmentTableHasValue(Equipment[subrole], toadd) then
-			table.insert(Equipment[subrole], toadd)
+			Equipment[subrole][#Equipment[subrole] + 1] = toadd
 		end
 	end
 
@@ -1072,20 +1125,20 @@ else -- CLIENT
 	-- @param table equip
 	-- @realm client
 	function RemoveEquipmentFromRoleEquipment(subrole, equip)
-		for k, v in ipairs(equip.CanBuy) do
-			if v == subrole then
-				table.remove(equip.CanBuy, k)
+		for k = 1, #equip.CanBuy do
+			if equip.CanBuy[k] ~= subrole then continue end
 
-				break
-			end
+			table.remove(equip.CanBuy, k)
+
+			break
 		end
 
 		for k, eq in pairs(Equipment[subrole]) do
-			if eq.id == equip.id then
-				table.remove(Equipment[subrole], k)
+			if eq.id ~= equip.id then continue end
 
-				break
-			end
+			table.remove(Equipment[subrole], k)
+
+			break
 		end
 	end
 
