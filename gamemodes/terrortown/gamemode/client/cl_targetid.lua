@@ -155,21 +155,19 @@ function GM:PostDrawTranslucentRenderables(bDrawingDepth, bDrawingSkybox)
 		cam.End3D()
 	end
 
-	if disable_overheadicons:GetBool() then return end
-
 	-- OVERHEAD ICONS
-	if client:IsSpecial() then
-		for i = 1, #plys do
-			local ply = plys[i]
-			local rd = ply:GetSubRoleData()
+	if disable_overheadicons:GetBool() or not client:IsSpecial() then return end
 
-			if ply:IsActive()
-			and ply:IsSpecial()
-			and (not client:IsActive() or ply:IsInTeam(client))
-			and not rd.avoidTeamIcons
-			then
-				DrawOverheadRoleIcon(ply, rd.iconMaterial, ply:GetRoleColor())
-			end
+	for i = 1, #plys do
+		local ply = plys[i]
+		local rd = ply:GetSubRoleData()
+
+		if ply:IsActive()
+		and ply:IsSpecial()
+		and (not client:IsActive() or ply:IsInTeam(client))
+		and not rd.avoidTeamIcons
+		then
+			DrawOverheadRoleIcon(ply, rd.iconMaterial, ply:GetRoleColor())
 		end
 	end
 end
@@ -183,8 +181,11 @@ local function DrawPropSpecLabels(client)
 
 	local tgt, scrpos, text
 	local w = 0
+	local plys = player.GetAll()
 
-	for _, ply in ipairs(player.GetAll()) do
+	for i = 1, #plys do
+		local ply = plys[i]
+
 		if ply:IsSpec() then
 			surface.SetTextColor(220, 200, 0, 120)
 
@@ -205,13 +206,13 @@ local function DrawPropSpecLabels(client)
 			scrpos = scrpos:ToScreen()
 		end
 
-		if scrpos and not IsOffScreen(scrpos) then
-			text = ply:Nick()
-			w = surface.GetTextSize(text)
+		if scrpos == nil or IsOffScreen(scrpos) then continue end
 
-			surface.SetTextPos(scrpos.x - w * 0.5, scrpos.y)
-			surface.DrawText(text)
-		end
+		text = ply:Nick()
+		w = surface.GetTextSize(text)
+
+		surface.SetTextPos(scrpos.x - w * 0.5, scrpos.y)
+		surface.DrawText(text)
 	end
 end
 
