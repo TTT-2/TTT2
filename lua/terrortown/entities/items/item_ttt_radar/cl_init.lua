@@ -61,9 +61,9 @@ function RADAR:Timeout()
 
 	local client = LocalPlayer()
 
-	if self.repeating and client and client:HasEquipmentItem("item_ttt_radar") then
-		RunConsoleCommand("ttt_radar_scan")
-	end
+	if not self.repeating or not IsValid(client) or not client:HasEquipmentItem("item_ttt_radar") then return end
+
+	RunConsoleCommand("ttt_radar_scan")
 end
 
 ---
@@ -283,18 +283,16 @@ local function ReceiveRadarScan()
 		pos.y = net.ReadInt(32)
 		pos.z = net.ReadInt(32)
 
-		local _tmp = {subrole = sr, pos = pos}
-
-		table.insert(RADAR.targets, _tmp)
+		RADAR.targets[#RADAR.targets + 1] = {subrole = sr, pos = pos}
 	end
 
 	RADAR.enable = true
 	RADAR.endtime = CurTime() + RADAR.duration
 
 	timer.Create("radartimeout", RADAR.duration + 1, 1, function()
-		if RADAR then
-			RADAR:Timeout()
-		end
+		if not RADAR then return end
+
+		RADAR:Timeout()
 	end)
 end
 net.Receive("TTT_Radar", ReceiveRadarScan)

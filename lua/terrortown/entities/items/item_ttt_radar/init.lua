@@ -9,10 +9,10 @@ local ipairs = ipairs
 local IsValid = IsValid
 local hook = hook
 
-local function GetSubRoleForRadar(ply, p)
+local function GetSubRoleForRadar(ply, pl)
 	local subrole = -1
 
-	if not p:IsPlayer() then
+	if not pl:IsPlayer() then
 		-- Decoys appear as innocents for non-traitors
 		if not ply:HasTeam(TEAM_TRAITOR) then
 			subrole = ROLE_INNOCENT
@@ -20,14 +20,14 @@ local function GetSubRoleForRadar(ply, p)
 			subrole = -1
 		end
 	else
-		local tmp = hook.Run("TTT2ModifyRadarRole", ply, p)
+		local tmp = hook.Run("TTT2ModifyRadarRole", ply, pl)
 
 		if tmp then
 			subrole = tmp
 		elseif not ply:HasTeam(TEAM_TRAITOR) then
 			subrole = ROLE_INNOCENT
 		else
-			subrole = (p:IsInTeam(ply) or p:GetSubRoleData().visibleForTraitors) and p:GetSubRole() or ROLE_INNOCENT
+			subrole = (pl:IsInTeam(ply) or pl:GetSubRoleData().visibleForTraitors) and pl:GetSubRole() or ROLE_INNOCENT
 		end
 	end
 
@@ -35,62 +35,67 @@ local function GetSubRoleForRadar(ply, p)
 end
 
 local function ttt_radar_scan(ply, cmd, args)
-	if IsValid(ply) and ply:IsTerror() then
-		if ply:HasEquipmentItem("item_ttt_radar") then
-			if ply.radar_charge > CurTime() then
-				LANG.Msg(ply, "radar_charging")
+	if not IsValid(ply) or not ply:IsTerror() then return end
 
-				return
-			end
+	if not ply:HasEquipmentItem("item_ttt_radar") then
+		LANG.Msg(ply, "radar_not_owned")
 
-			ply.radar_charge = CurTime() + chargetime
+		return
+	end
 
-			local targets, customradar
+	if ply.radar_charge > CurTime() then
+		LANG.Msg(ply, "radar_charging")
 
-			if ply:GetSubRoleData() and ply:GetSubRoleData().CustomRadar then
-				customradar = ply:GetSubRoleData().CustomRadar(ply)
-			end
+		return
+	end
 
-			if istable(customradar) then
-				targets = table.Copy(customradar)
-			else -- if we get no value we use default radar
-				targets = {}
+	ply.radar_charge = CurTime() + chargetime
 
-				local scan_ents = player.GetAll()
+	local targets, customradar
 
-				table.Add(scan_ents, ents.FindByClass("ttt_decoy"))
+	if ply:GetSubRoleData() and ply:GetSubRoleData().CustomRadar then
+		customradar = ply:GetSubRoleData().CustomRadar(ply)
+	end
 
-				for _, p in ipairs(scan_ents) do
-					if not IsValid(p) or ply == p or p:IsPlayer() and (not p:IsTerror() or p:GetNWBool("disguised", false)) then continue end
+	if istable(customradar) then
+		targets = table.Copy(customradar)
+	else -- if we get no value we use default radar
+		targets = {}
 
-					local pos = p:LocalToWorld(p:OBBCenter())
+		local scan_ents = player.GetAll()
 
-					-- Round off, easier to send and inaccuracy does not matter
-					pos.x = math.Round(pos.x)
-					pos.y = math.Round(pos.y)
-					pos.z = math.Round(pos.z)
+		table.Add(scan_ents, ents.FindByClass("ttt_decoy"))
 
-					local subrole = GetSubRoleForRadar(ply, p)
-					local _tmp = {subrole = subrole, pos = pos}
+		for i = 1, #scan_ents then
+			local pl = scan_ents[i]
+			if not IsValid(pl) or ply == pl or pl:IsPlayer() and (not pl:IsTerror() or pl:GetNWBool("disguised", false)) then continue end
 
-					targets[#targets + 1] = _tmp
-				end
-			end
+			local pos = pl:LocalToWorld(pl:OBBCenter())
 
-			net.Start("TTT_Radar")
-			net.WriteUInt(#targets, 8)
+			-- Round off, easier to send and inaccuracy does not matter
+			pos.x = math.Round(pos.x)
+			pos.y = math.Round(pos.y)
+			pos.z = math.Round(pos.z)
 
-			for _, tgt in ipairs(targets) do
-				net.WriteUInt(tgt.subrole, ROLE_BITS)
-				net.WriteInt(tgt.pos.x, 32)
-				net.WriteInt(tgt.pos.y, 32)
-				net.WriteInt(tgt.pos.z, 32)
-			end
+			local subrole = GetSubRoleForRadar(ply, pl)
+			local _tmp = {subrole = subrole, pos = pos}
 
-			net.Send(ply)
-		else
-			LANG.Msg(ply, "radar_not_owned")
+			targets[#targets + 1] = _tmp
 		end
 	end
+
+	net.Start("TTT_Radar")
+	net.WriteUInt(#targets, 8)
+
+	for i = 1, #targets do
+		local tgt = targets[i]
+
+		net.WriteUInt(tgt.subrole, ROLE_BITS)
+		net.WriteInt(tgt.pos.x, 32)
+		net.WriteInt(tgt.pos.y, 32)
+		net.WriteInt(tgt.pos.z, 32)
+	end
+
+	net.Send(ply)
 end
 concommand.Add("ttt_radar_scan", ttt_radar_scan)
