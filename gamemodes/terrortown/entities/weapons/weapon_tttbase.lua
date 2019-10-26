@@ -5,7 +5,6 @@
 
 local math = math
 local table = table
-local pairs = pairs
 local util = util
 local IsValid = IsValid
 local CreateConVar = CreateConVar

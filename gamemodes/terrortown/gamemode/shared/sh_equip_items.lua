@@ -500,7 +500,7 @@ if SERVER then
 				end
 
 				if amount > 0 then
-					for i = 1, amount do
+					for k = 1, amount do
 						local rndm = math.random(#tmp2)
 
 						RANDOMSHOP[ply][#RANDOMSHOP[ply] + 1] = tmp2[rndm]

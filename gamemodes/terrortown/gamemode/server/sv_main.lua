@@ -1880,8 +1880,6 @@ function SelectRoles(plys, max_plys)
 	local tmpTbl = {}
 
 	-- get selectable baseroles (except traitor and innocent)
-	local rlsList = roles.GetList()
-
 	for i = 1, #rlsList do
 		local v = rlsList[i]
 

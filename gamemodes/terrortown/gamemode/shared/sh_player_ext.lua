@@ -5,7 +5,6 @@
 
 local net = net
 local table = table
-local pairs = pairs
 local IsValid = IsValid
 local hook = hook
 
