@@ -390,7 +390,7 @@ function table.CopyKeys(tbl, keys)
 	for _, k in pairs(keys) do
 		val = tbl[k]
 
-		if type(val) == "table" then
+		if istable(val) then
 			out[k] = table.Copy(val)
 		else
 			out[k] = val
@@ -471,18 +471,18 @@ end
 -- @param any ... anything that should be printed
 -- @realm shared
 function Dev(level, ...)
-	if cvars and cvars.Number("developer", 0) >= level then
-		Msg("[TTT dev]")
-		-- table.concat does not tostring, derp
+	if not cvars or cvars.Number("developer", 0) < level then return end
 
-		local params = {...}
+	Msg("[TTT dev]")
+	-- table.concat does not tostring, derp
 
-		for i = 1, #params do
-			Msg(" " .. tostring(params[i]))
-		end
+	local params = {...}
 
-		Msg("\n")
+	for i = 1, #params do
+		Msg(" " .. tostring(params[i]))
 	end
+
+	Msg("\n")
 end
 
 ---
