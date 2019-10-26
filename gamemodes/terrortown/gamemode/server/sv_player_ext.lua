@@ -750,7 +750,7 @@ function plymeta:CanSelectRole(roleData, choice_count, role_count)
 	return (
 		choice_count <= role_count
 		or self:GetBaseKarma() > min_karmas and GAMEMODE.LastRole[self:SteamID64()] == ROLE_INNOCENT
-		or math.random(1, 3) == 2
+		or math.random(3) == 2
 	) and (choice_count <= role_count or not self:GetAvoidRole(roleData.index))
 end
 

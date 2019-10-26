@@ -288,7 +288,7 @@ local cues = {
 local cueCount = #cues
 
 local function PlaySoundCue()
-	if not GetConVar("ttt_cl_soundcues"):GetBool() then return end
+	if not ttt_cl_soundcues:GetBool() then return end
 
 	surface.PlaySound(cues[math.random(cueCount)])
 end

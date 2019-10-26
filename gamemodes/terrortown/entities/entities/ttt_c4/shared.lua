@@ -605,7 +605,7 @@ if SERVER then
 		local picked = 0
 
 		while picked < safe_count do
-			local pick = math.random(1, #choices)
+			local pick = math.random(#choices)
 			local w = choices[pick]
 
 			if not self.SafeWires[w] then

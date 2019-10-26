@@ -127,7 +127,7 @@ ExplosiveGrant = AWARDS.ExplosiveGrant -- just for compatibility
 function AWARDS.ExplodedSelf(events, scores, players, traitors)
 	for _, e in pairs(events) do
 		if e.id == EVENT_KILL and is_dmg(e.dmg.t, DMG_BLAST) and e.att.sid64 == e.vic.sid64 then
-			return {title = T("aw_exp2_title"), text = T("aw_exp2_text"), nick = e.vic.ni, priority = math.random(1, 4)}
+			return {title = T("aw_exp2_title"), text = T("aw_exp2_text"), nick = e.vic.ni, priority = math.random(4)}
 		end
 	end
 end
@@ -236,7 +236,7 @@ function AWARDS.FallDeath(events, scores, players, traitors)
 			if e.att.ni ~= "" then
 				return {title = T("aw_fal1_title"), nick = e.att.ni, text = T("aw_fal1_text"), priority = math.random(7, 15)}
 			else
-				return {title = T("aw_fal2_title"), nick = e.vic.ni, text = T("aw_fal2_text"), priority = math.random(1, 5)}
+				return {title = T("aw_fal2_title"), nick = e.vic.ni, text = T("aw_fal2_text"), priority = math.random(5)}
 			end
 		end
 	end

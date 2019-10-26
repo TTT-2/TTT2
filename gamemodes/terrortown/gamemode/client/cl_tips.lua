@@ -109,7 +109,7 @@ function PANEL:Init()
 	self.buttons.close:SetText("X")
 	self.buttons.close:SetConsoleCommand("ttt_tips_hide")
 
-	self.TipIndex = math.random(1, #tip_ids) or 0
+	self.TipIndex = math.random(#tip_ids) or 0
 
 	self:SetTip(self.TipIndex)
 end

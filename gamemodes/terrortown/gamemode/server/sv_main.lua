@@ -1499,7 +1499,7 @@ local function AddAvailableRoles(roleData, tbl, iTbl, forced, max_plys)
 		if r <= 0 then
 			b = false
 		elseif r < 100 then
-			b = math.random(1, 100) <= r
+			b = math.random(100) <= r
 		end
 	end
 
@@ -1628,7 +1628,7 @@ function GetSelectableRoles(plys, max_plys)
 	for i = 1, #iTmpTbl do
 		if max_roles and roles_count >= max_roles then break end
 
-		local rnd = math.random(1, #iTmpTbl)
+		local rnd = math.random(#iTmpTbl)
 		local v = iTmpTbl[rnd]
 
 		table.remove(iTmpTbl, rnd)
@@ -1667,11 +1667,11 @@ local function SetRoleTypes(choices, prev_roles, roleCount, availableRoles, defa
 	local availableRoles_i = #availableRoles
 
 	while choices_i > 0 and availableRoles_i > 0 do
-		local pick = math.random(1, choices_i)
+		local pick = math.random(choices_i)
 		local pply = choices[pick]
 
 		if IsValid(pply) then
-			local vpick = math.random(1, availableRoles_i)
+			local vpick = math.random(availableRoles_i)
 			local v = availableRoles[vpick]
 			local type_count = roleCount[v.index]
 
@@ -1684,7 +1684,7 @@ local function SetRoleTypes(choices, prev_roles, roleCount, availableRoles, defa
 				pply:GetBaseKarma() > min_karmas
 				and table.HasValue(prev_roles[ROLE_INNOCENT], pply)
 				and not pply:GetAvoidRole(v.index)
-				or math.random(1, 3) == 2
+				or math.random(3) == 2
 			) then
 				PLYFINALROLES[pply] = PLYFINALROLES[pply] or v.index
 
@@ -1735,7 +1735,7 @@ local function SelectForcedRoles(max_plys, roleCount, allSelectableRoles, choice
 			local a = #ps
 
 			for i = 1, a do
-				local pick = math.random(1, #ps)
+				local pick = math.random(#ps)
 				local ply = ps[pick]
 
 				if c >= role_count then break end
@@ -1788,7 +1788,7 @@ local function SelectBaseRole(choices, prev_roles, roleCount, roleData)
 
 	while rs < roleCount[roleData.index] and #choices > 0 do
 		-- select random index in choices table
-		local pick = math.random(1, #choices)
+		local pick = math.random(#choices)
 
 		-- the player we consider
 		local pply = choices[pick]
@@ -1805,7 +1805,7 @@ local function SelectBaseRole(choices, prev_roles, roleCount, roleData)
 					pply:GetBaseKarma() > min_karmas
 					and table.HasValue(prev_roles[ROLE_INNOCENT], pply)
 					and not pply:GetAvoidRole(roleData.index)
-					or math.random(1, 3) == 2
+					or math.random(3) == 2
 				)
 			)
 		) then

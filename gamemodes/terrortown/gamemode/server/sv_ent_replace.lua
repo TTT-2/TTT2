@@ -393,7 +393,7 @@ local function PlaceWeaponsAtEnts(spots_classes)
 	local w
 
 	for _, v in RandomPairs(spots) do
-		w = spawnables[math.random(1, #spawnables)]
+		w = spawnables[math.random(#spawnables)]
 
 		if w and IsValid(v) and util.IsInWorld(v:GetPos()) then
 			local spawned = PlaceWeapon(w, v:GetPos(), v:GetAngles())
@@ -404,7 +404,7 @@ local function PlaceWeaponsAtEnts(spots_classes)
 			-- we need the spawned ent that has inherited the goods from the
 			-- basegrenade swep.
 			if spawned and spawned.IsGrenade then
-				w = spawnables[math.random(1, #spawnables)]
+				w = spawnables[math.random(#spawnables)]
 
 				if w then
 					PlaceWeapon(w, v:GetPos(), v:GetAngles())

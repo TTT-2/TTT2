@@ -494,7 +494,7 @@ function GM:KeyPress(ply, key)
 		local alive_count = #alive
 		if alive_count < 1 then return end
 
-		local target = alive[math.random(1, alive_count)]
+		local target = alive[math.random(alive_count)]
 
 		if IsValid(target) then
 			--ply:SetPos(target:EyePos())
@@ -686,7 +686,7 @@ local deathsounds_count = #deathsounds
 local function PlayDeathSound(victim)
 	if not IsValid(victim) then return end
 
-	sound.Play(deathsounds[math.random(1, deathsounds_count)], victim:GetShootPos(), 90, 100)
+	sound.Play(deathsounds[math.random(deathsounds_count)], victim:GetShootPos(), 90, 100)
 end
 
 ---
@@ -1025,7 +1025,7 @@ function GM:SpectatorThink(ply)
 				local spec_spawns_count = #spec_spawns
 
 				if spec_spawns_count > 0 then
-					local spawn = spec_spawns[math.random(1, spec_spawns_count)]
+					local spawn = spec_spawns[math.random(spec_spawns_count)]
 
 					ply:SetPos(spawn:GetPos())
 					ply:SetEyeAngles(spawn:GetAngles())
