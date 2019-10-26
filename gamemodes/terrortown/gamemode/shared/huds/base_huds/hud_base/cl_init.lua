@@ -89,14 +89,14 @@ function HUD:PerformLayout()
 		local elemName = elems[i]
 
 		local elem = hudelements.GetStored(elemName)
-		if elem then
-			if not elem:IsChild() then
-				elem:PerformLayout()
-			end
-		else
+		if not elem then
 			Msg("Error: Hudelement not found during PerformLayout: " .. elemName)
 
 			return
+		end
+
+		if not elem:IsChild() then
+			elem:PerformLayout()
 		end
 	end
 end
@@ -114,12 +114,14 @@ function HUD:Initialize()
 		local elemName = elems[i]
 
 		local elem = hudelements.GetStored(elemName)
-		if elem then
-			if not elem:IsChild() then
-				elem:Initialize()
-			end
-		else
+		if not elem then
 			Msg("Error: HUD " .. (self.id or "?") .. " has unknown element named " .. elemName .. "\n")
+
+			return
+		end
+
+		if not elem:IsChild() then
+			elem:Initialize()
 		end
 	end
 
@@ -130,11 +132,13 @@ function HUD:Initialize()
 		local elemName = elems[i]
 
 		local elem = hudelements.GetStored(elemName)
-		if elem then
-			elem.initialized = true
-		else
+		if not elem then
 			Msg("Error: HUD " .. (self.id or "?") .. " has unknown element named " .. elemName .. "\n")
+
+			return
 		end
+
+		elem.initialized = true
 	end
 end
 
@@ -216,11 +220,11 @@ function HUD:GetElementByType(elementType)
 		for i = 1, #availableElements do
 			local el = availableElements[i]
 
-			if self:CanUseElement(el) then
-				elementTbl = el
+			if not self:CanUseElement(el) then continue end
 
-				break
-			end
+			elementTbl = el
+
+			break
 		end
 	end
 
@@ -246,9 +250,9 @@ function HUD:GetElements()
 		local typ = elemTypes[i]
 
 		local el = self:GetElementByType(typ)
-		if el then
-			elems[#elems + 1] = el.id
-		end
+		if not el then continue end
+
+		elems[#elems + 1] = el.id
 	end
 
 	self.cachedElems = elems
@@ -325,14 +329,14 @@ function HUD:Reset()
 		local elemName = elems[i]
 
 		local elem = hudelements.GetStored(elemName)
-		if elem then
-			if not elem:IsChild() then
-				elem:Reset()
-			end
-		else
+		if not elem then
 			Msg("Error: Hudelement not found during Reset: " .. elemName)
 
 			return
+		end
+
+		if not elem:IsChild() then
+			elem:Reset()
 		end
 	end
 end
@@ -353,9 +357,9 @@ function HUD:SaveData()
 		local elemName = elems[i]
 
 		local elem = hudelements.GetStored(elemName)
-		if elem then
-			elem:SaveData()
-		end
+		if not elem then continue end
+
+		elem:SaveData()
 	end
 end
 
@@ -384,9 +388,9 @@ function HUD:LoadData()
 		local elemName = elems[i]
 
 		local elem = hudelements.GetStored(elemName)
-		if elem then
-			elem:LoadData()
-		end
+		if not elem then continue end
+
+		elem:LoadData()
 	end
 
 	self:PerformLayout()
