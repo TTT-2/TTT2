@@ -2,8 +2,6 @@
 -- @module PICKUP
 
 local TryTranslation = LANG.TryTranslation
-local table = table
-local pairs = pairs
 local IsValid = IsValid
 
 PICKUP = {}

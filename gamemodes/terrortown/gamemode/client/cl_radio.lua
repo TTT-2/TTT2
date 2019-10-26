@@ -4,11 +4,9 @@
 
 local GetTranslation = LANG.GetTranslation
 local GetPTranslation = LANG.GetParamTranslation
-local table = table
-local pairs = pairs
-local ipairs = ipairs
 local timer = timer
 local util = util
+local pairs = pairs
 
 local radioframe
 
@@ -70,10 +68,9 @@ end
 local function RadioResize(s)
 	local w = 0
 	local label
-	local itms = s.Items
 
-	for i = 1, #itms do
-		label = itms[i]:GetChild(0)
+	for _, v in pairs(s.Items) do
+		label = v:GetChild(0)
 
 		if not IsValid(label) or label:GetWide() <= w then continue end
 
@@ -120,12 +117,11 @@ function RADIO:ShowRadioCommands(state)
 
 			local commands = self.Commands
 			local text_nobody = GetTranslation("quick_nobody")
-			local text_id = key .. ": "
 
 			for key = 1, #commands do
-				local command = commands[i]
+				local command = commands[key]
 				local dlabel = vgui.Create("DLabel", radioframe)
-				local id = text_id
+				local id = key .. ": "
 				local txt = id
 
 				if command.format then
