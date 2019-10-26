@@ -65,8 +65,9 @@ local function ttt_radar_scan(ply, cmd, args)
 
 		table.Add(scan_ents, ents.FindByClass("ttt_decoy"))
 
-		for i = 1, #scan_ents then
+		for i = 1, #scan_ents do
 			local pl = scan_ents[i]
+
 			if not IsValid(pl) or ply == pl or pl:IsPlayer() and (not pl:IsTerror() or pl:GetNWBool("disguised", false)) then continue end
 
 			local pos = pl:LocalToWorld(pl:OBBCenter())

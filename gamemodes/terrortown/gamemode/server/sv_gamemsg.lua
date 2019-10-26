@@ -89,7 +89,7 @@ end
 -- Round start info popup
 -- @realm server
 -- @internal
-function ShowRoundStartPopup() TODO
+function ShowRoundStartPopup()
 	local plys = player.GetAll()
 
 	for i = 1, #plys do

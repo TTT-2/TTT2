@@ -345,10 +345,10 @@ if SERVER then
 
 			local parts = #cut
 
-			for k = 1, #cut do
+			for k = 1, parts do
 				net.Start("TTT2SyncRandomShops")
 				net.WriteBit(k ~= parts) -- continuation bit, 1 if there's more coming
-				net.WriteString(cut[i])
+				net.WriteString(cut[k])
 				net.Send(ply)
 			end
 		end

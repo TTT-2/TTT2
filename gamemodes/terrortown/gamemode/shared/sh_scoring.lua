@@ -253,12 +253,8 @@ function GetWeaponClassNames()
 		tbl[v.WeaponID] = WEPS.GetClass(v)
 	end
 
-	local scriptedEnts = scripted_ents.GetList()
-
-	for i = 1, #scriptedEnts do
-		local v = scriptedEnts[i]
-		local id = v and (v.WeaponID or (v.t and v.t.WeaponID))
-
+	for _, v in pairs(scripted_ents.GetList()) do
+		local id = istable(v) and (v.WeaponID or (v.t and v.t.WeaponID)) or nil
 		if id == nil then continue end
 
 		tbl[id] = WEPS.GetClass(v)

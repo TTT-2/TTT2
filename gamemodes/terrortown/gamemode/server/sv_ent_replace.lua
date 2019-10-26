@@ -317,20 +317,19 @@ local SpawnableAmmoClasses
 -- @realm server
 -- @internal
 function ents.TTT.GetSpawnableAmmo()
-	if not SpawnableAmmoClasses then
-		local tbl = {}
-		local scriptedEnts = scripted_ents.GetList()
-
-		for k = 1, #scriptedEnts do
-			local v = scriptedEnts[k]
-
-			if v.AutoSpawnable or v.t and v.t.AutoSpawnable then
-				tbl[#tbl + 1] = k
-			end
-		end
-
-		SpawnableAmmoClasses = tbl
+	if SpawnableAmmoClasses then
+		return SpawnableAmmoClasses
 	end
+
+	local tbl = {}
+
+	for k, v in pairs(scripted_ents.GetList()) do
+		if istable(v) and v.AutoSpawnable or v.t and v.t.AutoSpawnable then
+			tbl[#tbl + 1] = k
+		end
+	end
+
+	SpawnableAmmoClasses = tbl
 
 	return SpawnableAmmoClasses
 end

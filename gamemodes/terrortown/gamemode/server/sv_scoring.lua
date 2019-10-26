@@ -346,7 +346,7 @@ function SCORE:StreamToClients()
 	for k = 1, parts do
 		net.Start("TTT_ReportStream")
 		net.WriteBit(k ~= parts) -- continuation bit, 1 if there's more coming
-		net.WriteString(parts[k])
+		net.WriteString(cut[k])
 		net.Broadcast()
 	end
 end

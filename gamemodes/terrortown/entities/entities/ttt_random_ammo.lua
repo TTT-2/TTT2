@@ -15,18 +15,15 @@ ENT.Base = "base_point"
 --
 function ENT:Initialize()
 	local ammos = ents.TTT.GetSpawnableAmmo()
+	if not ammos then return end
 
-	if ammos then
-		local cls = ammos[math.random(1, #ammos)]
-		local ent = ents.Create(cls)
-
-		if IsValid(ent) then
-			ent:SetPos(self:GetPos())
-			ent:SetAngles(self:GetAngles())
-			ent:Spawn()
-			ent:PhysWake()
-		end
-
-		self:Remove()
+	local ent = ents.Create(ammos[math.random(#ammos)])
+	if IsValid(ent) then
+		ent:SetPos(self:GetPos())
+		ent:SetAngles(self:GetAngles())
+		ent:Spawn()
+		ent:PhysWake()
 	end
+
+	self:Remove()
 end

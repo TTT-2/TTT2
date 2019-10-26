@@ -309,7 +309,7 @@ end
 -- @see plymeta:RemoveBought
 function plymeta:AddBought(id)
 	self.bought = self.bought or {}
-	self.bought[self.bought + 1] = tostring(id)
+	self.bought[#self.bought + 1] = tostring(id)
 
 	BUYTABLE[id] = true
 
