@@ -58,6 +58,7 @@ local firstpreptime = CreateConVar("ttt_firstpreptime", "60", {FCVAR_NOTIFY, FCV
 
 local ttt_haste = CreateConVar("ttt_haste", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 local haste_starting = CreateConVar("ttt_haste_starting_minutes", "5", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
 CreateConVar("ttt_haste_minutes_per_death", "0.5", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 local spawnwaveint = CreateConVar("ttt_spawn_wave_interval", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
@@ -379,7 +380,9 @@ function GM:InitPostEntity()
 
 	-- load and initialize all SWEPs and all ITEMs from database
 	if SQL.CreateSqlTable("ttt2_items", ShopEditor.savingKeys) then
-		for _, eq in ipairs(itms) do
+		for i = 1, #itms do
+			local eq = itms[i]
+
 			ShopEditor.InitDefaultData(eq)
 
 			local name = GetEquipmentFileName(WEPS.GetClass(eq))
@@ -392,7 +395,9 @@ function GM:InitPostEntity()
 			end
 		end
 
-		for _, wep in ipairs(sweps) do
+		for i = 1, #sweps do
+			local wep = sweps[i]
+
 			ShopEditor.InitDefaultData(wep)
 
 			local name = GetEquipmentFileName(WEPS.GetClass(wep))
@@ -406,39 +411,38 @@ function GM:InitPostEntity()
 		end
 	end
 
-	-- init items
-	for _, wep in ipairs(itms) do
-		CreateEquipment(wep)
+	for i = 1, #itms do
+		local itm = itms[i]
+
+		CreateEquipment(itm) -- init items
+
+		itm.CanBuy = {} -- reset normal items equipment
 	end
 
-	-- init weapons
-	for _, wep in ipairs(sweps) do
-		CreateEquipment(wep)
-	end
+	for i = 1, #sweps do
+		local wep = sweps[i]
 
-	-- reset normal weapons equipment
-	for _, item in ipairs(itms) do
-		item.CanBuy = {}
-	end
+		CreateEquipment(wep) -- init weapons
 
-	-- reset normal weapons equipment
-	for _, wep in ipairs(sweps) do
-		wep.CanBuy = {}
+		wep.CanBuy = {}	-- reset normal weapons equipment
 	end
 
 	-- init hudelements fns
-	for _, hudelem in ipairs(hudelements.GetList()) do
-		if hudelem.togglable then
-			local nm = "ttt2_elem_toggled_" .. hudelem.id
-			local ret = CreateConVar(nm, "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+	local hudElems = hudelements.GetList()
 
-			SetGlobalBool(nm, ret:GetBool())
+	for i = 1, #hudElems do
+		local hudelem = hudElems[i]
 
-			cvars.AddChangeCallback(nm, function(cvarName, old, new)
-				SetGlobalBool(cvarName, tobool(new))
-			end,
-			"CVAR_" .. nm)
-		end
+		if not hudelem.togglable then continue end
+
+		local nm = "ttt2_elem_toggled_" .. hudelem.id
+		local ret = CreateConVar(nm, "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+		SetGlobalBool(nm, ret:GetBool())
+
+		cvars.AddChangeCallback(nm, function(cvarName, old, new)
+			SetGlobalBool(cvarName, tobool(new))
+		end, "CVAR_" .. nm)
 	end
 
 	-- initialize fallback shops
@@ -462,8 +466,10 @@ function GM:InitPostEntity()
 		hook.Run("TTT2ModifyOutdatedAddons", outdatedAddons)
 
 		local c = 0
+		local addns = engine.GetAddons()
 
-		for _, addon in ipairs(engine.GetAddons()) do
+		for i = 1, #addns do
+			local addon = addns[i]
 			local key = tostring(addon.wsid)
 
 			local buggy_addon = buggyAddons[key]
@@ -532,8 +538,12 @@ function GM:SyncGlobals()
 	SetGlobalFloat("ttt_voice_drain_admin", voice_drain_admin:GetFloat())
 	SetGlobalFloat("ttt_voice_drain_recharge", voice_drain_recharge:GetFloat())
 
-	for _, v in ipairs(roles.GetList()) do
-		SetGlobalString("ttt_" .. v.abbr .. "_shop_fallback", GetConVar("ttt_" .. v.abbr .. "_shop_fallback"):GetString())
+	local rlsList = roles.GetList()
+
+	for i = 1, #rlsList do
+		local abbr = rlsList[i].abbr
+
+		SetGlobalString("ttt_" .. abbr .. "_shop_fallback", GetConVar("ttt_" .. abbr .. "_shop_fallback"):GetString())
 	end
 
 	SetGlobalBool("ttt2_confirm_team", confirm_team:GetBool())
@@ -547,17 +557,23 @@ end
 -- @internal
 function LoadShopsEquipment()
 	-- initialize shop equipment
-	for _, roleData in ipairs(roles.GetList()) do
+	local rlsList = roles.GetList()
+
+	for i = 1, #rlsList do
+		local roleData = rlsList[i]
+
 		local shopFallback = GetConVar("ttt_" .. roleData.abbr .. "_shop_fallback"):GetString()
-		if shopFallback == roleData.name then
-			LoadSingleShopEquipment(roleData)
-		end
+		if shopFallback ~= roleData.name then continue end
+
+		LoadSingleShopEquipment(roleData)
 	end
 end
 
 local function TTT2SyncShopsWithServer(len, ply)
 	-- at first, sync items
-	for _, tbl in ipairs(CHANGED_EQUIPMENT) do
+	for i = 1, #CHANGED_EQUIPMENT do
+		local tbl = CHANGED_EQUIPMENT[i]
+
 		ShopEditor.WriteItemData("TTT2SyncDBItems", tbl[1], tbl[2])
 	end
 
@@ -636,10 +652,14 @@ local function EnoughPlayers()
 	local ready = 0
 
 	-- only count truly available players, i.e. no forced specs
-	for _, ply in ipairs(player.GetAll()) do
-		if IsValid(ply) and ply:ShouldSpawn() then
-			ready = ready + 1
-		end
+	local plys = player.GetAll()
+
+	for i = 1, #plys do
+		local ply = plys[i]
+
+		if not IsValid(ply) or not ply:ShouldSpawn() then continue end
+
+		ready = ready + 1
 	end
 
 	return ready >= ttt_minply:GetInt()
@@ -654,10 +674,10 @@ end
 -- @see WaitForPlayers
 -- @internal
 function WaitingForPlayersChecker()
-	if GetRoundState() == ROUND_WAIT and EnoughPlayers() then
-		timer.Create("wait2prep", 1, 1, PrepareRound)
-		timer.Stop("waitingforply")
-	end
+	if GetRoundState() ~= ROUND_WAIT or not EnoughPlayers() then return end
+
+	timer.Create("wait2prep", 1, 1, PrepareRound)
+	timer.Stop("waitingforply")
 end
 
 ---
@@ -668,9 +688,9 @@ end
 function WaitForPlayers()
 	SetRoundState(ROUND_WAIT)
 
-	if not timer.Start("waitingforply") then
-		timer.Create("waitingforply", 2, 0, WaitingForPlayersChecker)
-	end
+	if timer.Start("waitingforply") then return end
+
+	timer.Create("waitingforply", 2, 0, WaitingForPlayersChecker)
 end
 
 ---
@@ -682,10 +702,14 @@ end
 -- @realm server
 -- @internal
 function FixSpectators()
-	for _, ply in ipairs(player.GetAll()) do
-		if ply:IsSpec() and not ply:GetRagdollSpec() and ply:GetMoveType() < MOVETYPE_NOCLIP then
-			ply:Spectate(OBS_MODE_ROAMING)
-		end
+	local plys = player.GetAll()
+
+	for i = 1, #plys do
+		local ply = plys[i]
+
+		if not ply:IsSpec() or ply:GetRagdollSpec() or ply:GetMoveType() >= MOVETYPE_NOCLIP then continue end
+
+		ply:Spectate(OBS_MODE_ROAMING)
 	end
 end
 
@@ -695,15 +719,16 @@ end
 -- @realm server
 -- @internal
 local function WinChecker()
-	if GetRoundState() == ROUND_ACTIVE then
-		if CurTime() > GetGlobalFloat("ttt_round_end", 0) then
-			EndRound(WIN_TIMELIMIT)
-		elseif not ttt_dbgwin:GetBool() then
-			win = hook.Run("TTT2PreWinChecker") or hook.Call("TTTCheckForWin", GAMEMODE)
-			if win ~= WIN_NONE then
-				EndRound(win)
-			end
-		end
+	if GetRoundState() ~= ROUND_ACTIVE then return end
+
+	if CurTime() > GetGlobalFloat("ttt_round_end", 0) then
+		EndRound(WIN_TIMELIMIT)
+	elseif not ttt_dbgwin:GetBool() then
+		win = hook.Run("TTT2PreWinChecker") or hook.Call("TTTCheckForWin", GAMEMODE)
+
+		if win == WIN_NONE then return end
+
+		EndRound(win)
 	end
 end
 
@@ -714,22 +739,28 @@ local function NameChangeKick()
 		return
 	end
 
-	if GetRoundState() == ROUND_ACTIVE then
-		for _, ply in ipairs(player.GetHumans()) do
-			if ply.spawn_nick then
-				if ply.has_spawned and ply.spawn_nick ~= ply:Nick() and not hook.Call("TTTNameChangeKick", GAMEMODE, ply) then
-					local t = namechangebtime:GetInt()
-					local msg = "Changed name during a round"
+	if GetRoundState() ~= ROUND_ACTIVE then return end
 
-					if t > 0 then
-						ply:KickBan(t, msg)
-					else
-						ply:Kick(msg)
-					end
-				end
-			else
-				ply.spawn_nick = ply:Nick()
-			end
+	local hmns = player.GetHumans()
+
+	for i = 1, #hmns do
+		local ply = hmns[i]
+
+		if not ply.spawn_nick then
+			ply.spawn_nick = ply:Nick()
+
+			continue
+		end
+
+		if not ply.has_spawned or ply.spawn_nick == ply:Nick() or hook.Call("TTTNameChangeKick", GAMEMODE, ply) then continue end
+
+		local t = namechangebtime:GetInt()
+		local msg = "Changed name during a round"
+
+		if t > 0 then
+			ply:KickBan(t, msg)
+		else
+			ply:Kick(msg)
 		end
 	end
 end
@@ -743,7 +774,11 @@ function StartNameChangeChecks()
 	if not namechangekick:GetBool() then return end
 
 	-- bring nicks up to date, may have been changed during prep/post
-	for _, ply in ipairs(player.GetAll()) do
+	local plys = player.GetAll()
+
+	for i = 1, #plys do
+		local ply = plys[i]
+
 		ply.spawn_nick = ply:Nick()
 	end
 
@@ -796,7 +831,11 @@ local function CleanUp()
 	game.CleanUpMap()
 
 	-- Strip players now, so that their weapons are not seen by ReplaceEntities
-	for _, v in ipairs(player.GetAll()) do
+	local plys = player.GetAll()
+
+	for i = 1, #plys do
+		local v = plys[i]
+
 		v:StripWeapons()
 		v:SetRole(ROLE_INNOCENT) -- will reset team automatically
 	end
@@ -964,8 +1003,10 @@ function PrepareRound()
 	-- In case client's cleanup fails, make client set all players to innocent role
 	timer.Simple(1, SendRoleReset)
 
-	for _, v in ipairs(player.GetAll()) do
-		v:SetTargetPlayer(nil)
+	local plys = player.GetAll()
+
+	for i = 1, #plys do
+		plys[i]:SetTargetPlayer(nil)
 	end
 
 	-- Tell hooks and map we started prep
@@ -974,51 +1015,58 @@ function PrepareRound()
 	ents.TTT.TriggerRoundStateOutputs(ROUND_PREP)
 end
 
+local function TraitorSorting(a, b)
+	return a and b and a:upper() < b:upper()
+end
+
 ---
 -- Tells the Traitors about their team mates
 -- @realm server
 function TellTraitorsAboutTraitors()
 	local traitornicks = {}
+	local plys = player.GetAll()
 
-	for _, v in ipairs(player.GetAll()) do
-		if v:HasTeam(TEAM_TRAITOR) then
-			traitornicks[#traitornicks + 1] = v:Nick()
-		end
+	for i = 1, #plys do
+		local v = plys[i]
+
+		if not v:HasTeam(TEAM_TRAITOR) then continue end
+
+		traitornicks[#traitornicks + 1] = v:Nick()
 	end
 
-	for _, v in ipairs(player.GetAll()) do
-		if v:HasTeam(TEAM_TRAITOR) then
+	for i = 1, #plys do
+		local v = plys[i]
 
-			local tmp = table.Copy(traitornicks)
+		if not v:HasTeam(TEAM_TRAITOR) then continue end
 
-			local shouldShow = hook.Run("TTT2TellTraitors", tmp, v)
+		local tmp = table.Copy(traitornicks)
 
-			if shouldShow == false or tmp == nil or #tmp == 0 then continue end
+		local shouldShow = hook.Run("TTT2TellTraitors", tmp, v)
 
-			if #tmp == 1 then
-				LANG.Msg(v, "round_traitors_one")
-				return
-			end
+		if shouldShow == false or tmp == nil or #tmp == 0 then continue end
 
-			if #tmp >= 3 then
-				table.sort(tmp, function(a, b)
-					return a and b and a:upper() < b:upper()
-				end)
-			end
+		if #tmp == 1 then
+			LANG.Msg(v, "round_traitors_one")
 
-			local names = ""
-
-			for _, name in ipairs(tmp) do
-				if name ~= v:Nick() then
-					names = names .. name .. ", "
-				end
-			end
-
-			names = string.sub(names, 1, -3)
-
-			LANG.Msg(v, "round_traitors_more", {names = names})
-
+			return
 		end
+
+		if #tmp >= 3 then
+			table.sort(tmp, TraitorSorting)
+		end
+
+		local names = ""
+
+		for k = 1, #tmp do
+			local name = tmp[k]
+			if name == v:Nick() then continue end
+
+			names = names .. name .. ", "
+		end
+
+		names = string.sub(names, 1, -3)
+
+		LANG.Msg(v, "round_traitors_more", {names = names})
 	end
 end
 
@@ -1033,8 +1081,8 @@ function SpawnWillingPlayers(dead_only)
 	-- simple method, should make this a case of the other method once that has
 	-- been tested.
 	if wave_delay <= 0 or dead_only then
-		for _, ply in ipairs(plys) do
-			ply:SpawnForRound(dead_only)
+		for i = 1, #plys do
+			plys[i]:SpawnForRound(dead_only)
 		end
 	else
 		-- wave method
@@ -1053,8 +1101,13 @@ function SpawnWillingPlayers(dead_only)
 			local c = 0
 			-- fill the available spawnpoints with players that need
 			-- spawning
-			while c < num_spawns and #to_spawn > 0 do
-				for k, ply in ipairs(to_spawn) do
+
+			local spawnCount = #to_spawn
+
+			while c < num_spawns and spawnCount > 0 do
+				for k = 1, spawnCount do
+					local ply = to_spawn[k]
+
 					if IsValid(ply) and ply:SpawnForRound() then
 						-- a spawn ent is now occupied
 						c = c + 1
@@ -1076,11 +1129,13 @@ function SpawnWillingPlayers(dead_only)
 
 			if #to_spawn == 0 then
 				timer.Remove("spawnwave")
+
 				MsgN("Spawn waves ending, all players spawned.")
 			end
 		end
 
 		MsgN("Spawn waves starting.")
+
 		timer.Create("spawnwave", wave_delay, 0, sfn)
 
 		-- already run one wave, which may stop the timer if everyone is spawned
@@ -1265,8 +1320,10 @@ function EndRound(result)
 	StopWinChecks()
 
 	-- send each client the role setup, reveal every player
-	for _, v in ipairs(roles.GetList()) do
-		SendSubRoleList(v.index)
+	local rlsList = roles.GetList()
+
+	for i = 1, #rlsList do
+		SendSubRoleList(rlsList[i].index)
 	end
 
 	-- We may need to start a timer for a mapswitch, or start a vote
@@ -1328,8 +1385,10 @@ function GM:TTTCheckForWin()
 	end
 
 	local alive = {}
+	local plys = player.GetAll()
 
-	for _, v in ipairs(player.GetAll()) do
+	for i = 1, #plys do
+		local v = plys[i]
 		local tm = v:GetTeam()
 
 		if (v:IsTerror() or v.forceRevive) and not v:GetSubRoleData().preventWin and tm ~= TEAM_NONE then
@@ -1342,7 +1401,9 @@ function GM:TTTCheckForWin()
 	local checkedTeams = {}
 	local b = 0
 
-	for _, team in ipairs(alive) do
+	for i = 1, #alive do
+		local team = alive[i]
+
 		if not checkedTeams[team] or TEAMS[team].alone then
 			-- prevent win of custom role -> maybe own win conditions
 			b = b + 1
@@ -1407,10 +1468,14 @@ function GetPreSelectedRole(subrole)
 	local tmp = 0
 
 	if GetRoundState() == ROUND_ACTIVE then
-		for _, ply in ipairs(player.GetAll()) do
-			if IsValid(ply) and not ply:GetForceSpec() and ply:GetSubRole() == subrole then
-				tmp = tmp + 1
-			end
+		local plys = player.GetAll()
+
+		for i = 1, #plys do
+			local ply = plys[i]
+
+			if not IsValid(ply) or ply:GetForceSpec() or ply:GetSubRole() ~= subrole then continue end
+
+			tmp = tmp + 1
 		end
 	elseif PLYFINALROLES then
 		for ply, sr in pairs(PLYFINALROLES) do
@@ -1457,8 +1522,11 @@ end
 function GetSelectableRoles(plys, max_plys)
 	if not plys then
 		local tmp = {}
+		local allPlys = player.GetAll()
 
-		for _, v in ipairs(player.GetAll()) do
+		for i = 1, #allPlys do
+			local v = allPlys[i]
+
 			-- everyone on the spec team is in specmode
 			if IsValid(v) and not v:GetForceSpec() and (not plys or table.HasValue(plys, v)) and not hook.Run("TTT2DisableRoleSelection", v) then
 				tmp[#tmp + 1] = v
@@ -1480,6 +1548,7 @@ function GetSelectableRoles(plys, max_plys)
 		[INNOCENT] = GetEachRoleCount(max_plys, INNOCENT.name) - GetPreSelectedRole(ROLE_INNOCENT),
 		[TRAITOR] = GetEachRoleCount(max_plys, TRAITOR.name) - GetPreSelectedRole(ROLE_TRAITOR)
 	}
+
 	local newRolesEnabled = GetConVar("ttt_newroles_enabled"):GetBool()
 	local forcedRolesTbl = {}
 
@@ -1490,8 +1559,11 @@ function GetSelectableRoles(plys, max_plys)
 	local tmpTbl = {}
 	local iTmpTbl = {}
 	local checked = {}
+	local rlsList = roles.GetList()
 
-	for _, v in ipairs(roles.GetList()) do
+	for i = 1, #rlsList do
+		local v = rlsList[i]
+
 		if checked[v.index] then continue end
 
 		checked[v.index] = true
@@ -1632,7 +1704,9 @@ local function SetRoleTypes(choices, prev_roles, roleCount, availableRoles, defa
 	end
 
 	if defaultRole then
-		for _, ply in ipairs(choices) do
+		for i = 1, #choices do
+			local ply = choices[i]
+
 			PLYFINALROLES[ply] = PLYFINALROLES[ply] or defaultRole
 		end
 	end
@@ -1672,8 +1746,8 @@ local function SelectForcedRoles(max_plys, roleCount, allSelectableRoles, choice
 				PLYFINALROLES[ply] = PLYFINALROLES[ply] or subrole
 				c = c + 1
 
-				for k, p in ipairs(choices) do
-					if p ~= ply then continue end
+				for k = 1, #choices do
+					if choices[k] ~= ply then continue end
 
 					table.remove(choices, k)
 				end
@@ -1758,7 +1832,11 @@ function SelectRoles(plys, max_plys)
 
 	GAMEMODE.LastRole = GAMEMODE.LastRole or {}
 
-	for _, v in ipairs(player.GetAll()) do
+	local allPlys = player.GetAll()
+
+	for i = 1, #allPlys do
+		local v = allPlys[i]
+
 		-- everyone on the spec team is in specmode
 		if not v:GetForceSpec() and (not plys or table.HasValue(plys, v)) and not hook.Run("TTT2DisableRoleSelection", v) then
 			if not plys then
@@ -1795,25 +1873,32 @@ function SelectRoles(plys, max_plys)
 		[1] = TRAITOR,
 		[2] = INNOCENT
 	}
+
 	local tmpTbl = {}
 
 	-- get selectable baseroles (except traitor and innocent)
-	for _, v in ipairs(roles.GetList()) do
-		if v ~= TRAITOR and v ~= INNOCENT and not table.HasValue(tmpTbl, v) and selectableRoles[v] and not v.baserole then
-			tmpTbl[#tmpTbl + 1] = v
-		end
+	local rlsList = roles.GetList()
+
+	for i = 1, #rlsList do
+		local v = rlsList[i]
+
+		if v == TRAITOR or v == INNOCENT or table.HasValue(tmpTbl, v) or not selectableRoles[v] or v.baserole then continue end
+
+		tmpTbl[#tmpTbl + 1] = v
 	end
 
 	-- randomize order of custom roles, but keep traitor as first and innocent as second
 	for i = 1, #tmpTbl do
-		local rnd = math.random(1, #tmpTbl)
+		local rnd = math.random(#tmpTbl)
 
 		list[#list + 1] = tmpTbl[rnd]
 
 		table.remove(tmpTbl, rnd)
 	end
 
-	for _, roleData in ipairs(list) do
+	for i = 1, #list do
+		local roleData = list[i]
+
 		if #choices == 0 then break end
 
 		-- if roleData == INNOCENT then just remove the random ply from choices
@@ -1827,21 +1912,24 @@ function SelectRoles(plys, max_plys)
 
 	-- last but not least, upgrade the innos and players without any role to special/normal innos
 	local innos = {}
-	for _, ply in ipairs(plys) do
+
+	for i = 1, #plys do
+		local ply = plys[i]
+
 		PLYFINALROLES[ply] = PLYFINALROLES[ply] or ROLE_INNOCENT
 
-		if PLYFINALROLES[ply] == ROLE_INNOCENT then
-			innos[#innos + 1] = ply
+		if PLYFINALROLES[ply] ~= ROLE_INNOCENT then continue end
 
-			PLYFINALROLES[ply] = nil -- reset it to update it in UpgradeRoles
-		end
+		innos[#innos + 1] = ply
+		PLYFINALROLES[ply] = nil -- reset it to update it in UpgradeRoles
 	end
 
 	UpgradeRoles(innos, prev_roles, roleCount, selectableRoles, INNOCENT)
 
 	GAMEMODE.LastRole = {}
 
-	for _, ply in ipairs(plys) do
+	for i = 1, #plys do
+		local ply = plys[i]
 		local subrole = PLYFINALROLES[ply] or ROLE_INNOCENT
 
 		ply:SetRole(subrole, nil, true)
@@ -1851,8 +1939,8 @@ function SelectRoles(plys, max_plys)
 	end
 
 	-- just set the credits after all roles were selected (to fix alone traitor bug)
-	for _, ply in ipairs(plys) do
-		ply:SetDefaultCredits()
+	for i = 1, #plys do
+		plys[i]:SetDefaultCredits()
 	end
 
 	PLYFINALROLES = {}
@@ -1898,18 +1986,18 @@ end
 concommand.Add("ttt_version", ShowVersion)
 
 local function ttt_toggle_newroles(ply)
-	if ply:IsAdmin() then
-		local b = not GetConVar("ttt_newroles_enabled"):GetBool()
+	if not ply:IsAdmin() then return end
 
-		RunConsoleCommand("ttt_newroles_enabled", b and "1" or "0")
+	local b = not GetConVar("ttt_newroles_enabled"):GetBool()
 
-		local word = "enabled"
+	RunConsoleCommand("ttt_newroles_enabled", b and "1" or "0")
 
-		if not b then
-			word = "disabled"
-		end
+	local word = "enabled"
 
-		ply:PrintMessage(HUD_PRINTNOTIFY, "You " .. word .. " the new roles for TTT!")
+	if not b then
+		word = "disabled"
 	end
+
+	ply:PrintMessage(HUD_PRINTNOTIFY, "You " .. word .. " the new roles for TTT!")
 end
 concommand.Add("ttt_toggle_newroles", ttt_toggle_newroles)
