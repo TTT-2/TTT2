@@ -105,6 +105,7 @@ if CLIENT then
 	end
 
 	function HUDELEMENT:Draw()
+		local size = self:GetSize()
 		local msg = EPOP.msg
 
 		-- fallback for hud-editor
@@ -137,5 +138,7 @@ if CLIENT then
 
 		-- draw lines around the element
 		self:DrawLines(msg.pos.x, msg.pos.y, msg.size.w, msg.size.h, self.basecolor.a)
+
+		self:SetSize(size.w, msg.size.h)
 	end
 end
