@@ -21,14 +21,16 @@ local function getScaleModifier(scale)
 	local scaleFactor = isvector(scale) and math.max(scale.x, math.max(scale.y, scale.z)) or scale
 	scaleFactor = tonumber(scaleFactor)
 
-	for _, scl in ipairs(FONTS.Scales) do
-	  if scaleFactor <= scl then
-			return scl
+	local FONTScales = FONTS.Scales
+
+	for i = 1, #FONTScales do
+	  if scaleFactor <= FONTScales[i] then
+			return FONTScales[i]
 	  end
 	end
 
 	--fallback (return the last scale)
-	return FONTS.Scales[#FONTS.Scales]
+	return FONTSScales[#FONTSScales]
 end
 
 ---
@@ -49,6 +51,7 @@ function surface.CreateAdvancedFont(fontName, fontData)
 
 		--create font
 		fontData.size = scale * originalSize
+
 		surface.CreateFont(scaledFontName, fontData)
 
 		FONTS.fonts[fontName][scale] = scaledFontName
@@ -86,6 +89,8 @@ function draw.ShadowedText(text, font, x, y, color, xalign, yalign, scaleModifie
 	drawSimpleText(text, font, x, y, color, xalign, yalign)
 end
 
+local drawShadowedText = draw.ShadowedText
+
 ---
 -- Draws an advanced text (scalable)
 -- @note You should use @{surface.CreateAdvancedFont} before trying to access the font
@@ -105,10 +110,11 @@ end
 -- @realm client
 function draw.AdvancedText(text, font, x, y, color, xalign, yalign, shadow, scale)
 	local scaleModifier = 1.0
+	local t_font = FONTS.fonts[font]
 
-	if FONTS.fonts[font] then
+	if t_font then
 	  scaleModifier = getScaleModifier(scale)
-	  font = FONTS.fonts[font][scaleModifier]
+	  font = t_font[scaleModifier]
 	  scale = scale / scaleModifier
 	end
 
@@ -134,7 +140,7 @@ function draw.AdvancedText(text, font, x, y, color, xalign, yalign, shadow, scal
 	end
 
 	if shadow then
-	  draw.ShadowedText(text, font, x, y, color, xalign, yalign, scaleModifier)
+	  drawShadowedText(text, font, x, y, color, xalign, yalign, scaleModifier)
 	else
 	  drawSimpleText(text, font, x, y, color, xalign, yalign)
 	end
