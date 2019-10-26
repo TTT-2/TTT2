@@ -38,17 +38,18 @@ function HUDManager.SetModelValue(key, value)
 	if not key then return end
 
 	local oldvalue = model[key]
+
 	model[key] = value
 
 	if oldvalue ~= value then -- equal check does not work as expected for tables (always true)!
 		-- call all listeners, that the value has changed
-		for _, func in ipairs(updateAnyListeners) do
-			func()
+		for i = 1, #updateAnyListeners do
+			updateAnyListeners[i]()
 		end
 
 		if updateListeners[key] then
-			for _, func in ipairs(updateListeners[key]) do
-				func(value, oldvalue)
+			for i = 1, #updateListeners[key] do
+				updateListeners[key][i](value, oldvalue)
 			end
 		end
 	end
@@ -62,7 +63,7 @@ function HUDManager.OnUpdateAnyAttribute(func)
 	if not isfunction(func) then return end
 
 	if not table.HasValue(updateAnyListeners, func) then
-		table.insert(updateAnyListeners, func)
+		updateAnyListeners[#updateAnyListeners + 1] = func
 	end
 end
 
@@ -77,7 +78,7 @@ function HUDManager.OnUpdateAttribute(key, func)
 	updateListeners[key] = updateListeners[key] or {}
 
 	if not table.HasValue(updateListeners[key], func) then
-		table.insert(updateListeners[key], func)
+		updateListeners[key][#updateListeners[key] + 1] = func
 	end
 end
 
