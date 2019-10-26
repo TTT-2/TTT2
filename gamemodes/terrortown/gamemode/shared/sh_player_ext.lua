@@ -6,7 +6,6 @@
 local net = net
 local table = table
 local pairs = pairs
-local ipairs = ipairs
 local IsValid = IsValid
 local hook = hook
 
@@ -798,7 +797,7 @@ if CLIENT then
 	}
 
 	-- Insert all the "simple" gestures that do not need weight control
-	for _, a in ipairs{
+	local gestTbl = {
 		ACT_GMOD_GESTURE_AGREE,
 		ACT_GMOD_GESTURE_DISAGREE,
 		ACT_GMOD_GESTURE_WAVE,
@@ -812,7 +811,11 @@ if CLIENT then
 		ACT_GMOD_GESTURE_ITEM_PLACE,
 		ACT_GMOD_GESTURE_ITEM_DROP,
 		ACT_GMOD_GESTURE_ITEM_GIVE
-	} do
+	}
+
+	for _i = 1, #gestTbl do
+		local a = gestTbl[_i]
+
 		act_runner[a] = MakeSimpleRunner(a)
 	end
 

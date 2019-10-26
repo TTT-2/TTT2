@@ -46,7 +46,10 @@ function surface.CreateAdvancedFont(fontName, fontData)
 
 	FONTS.fonts[fontName] = {}
 
-	for _, scale in ipairs(FONTS.Scales) do
+	local fontsScTbl = FONTS.Scales
+
+	for i = 1, #fontsScTbl do
+		local scale = fontsScTbl[i]
 		local scaledFontName = scale == 1 and fontName or fontName .. tostring(scale)
 
 		--create font

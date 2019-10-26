@@ -4,7 +4,6 @@
 
 local surface = surface
 local pairs = pairs
-local ipairs = ipairs
 local math = math
 local abs = math.abs
 local table = table

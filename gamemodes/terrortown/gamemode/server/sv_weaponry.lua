@@ -8,7 +8,6 @@ util.AddNetworkString("TTT2AddWeaponToInventory")
 util.AddNetworkString("TTT2RemoveWeaponFromInventory")
 
 -- Weapon system, pickup limits, etc
-local ipairs = ipairs
 local IsValid = IsValid
 local table = table
 local timer = timer

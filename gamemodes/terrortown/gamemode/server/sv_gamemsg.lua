@@ -5,7 +5,6 @@
 local net = net
 local string = string
 local table = table
-local ipairs = ipairs
 local IsValid = IsValid
 
 ---

@@ -41,7 +41,6 @@ local table = table
 local net = net
 local player = player
 local pairs = pairs
-local ipairs = ipairs
 local timer = timer
 local util = util
 local IsValid = IsValid
@@ -1862,7 +1861,11 @@ function SelectRoles(plys, max_plys)
 
 	hook.Run("TTT2ModifySelectableRoles", selectableRoles)
 
-	for _, v in ipairs(roles.GetList()) do
+	local rlsList = roles.GetList()
+
+	for i = 1, #rlsList do
+		local v = rlsList[i]
+
 		roleCount[v.index] = selectableRoles[v] or 0
 	end
 

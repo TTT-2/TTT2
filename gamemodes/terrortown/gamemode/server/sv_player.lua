@@ -6,7 +6,6 @@
 local math = math
 local table = table
 local player = player
-local ipairs = ipairs
 local net = net
 local IsValid = IsValid
 local hook = hook
@@ -707,8 +706,11 @@ local function CheckCreditAward(victim, attacker)
 	-- DET KILLED ANOTHER TEAM AWARD
 	if attacker:GetBaseRole() == ROLE_DETECTIVE and not victim:IsInTeam(attacker) then
 		local amt = math.ceil(ConVarExists("ttt_" .. rd.abbr .. "_credits_traitordead") and GetConVar("ttt_" .. rd.abbr .. "_credits_traitordead"):GetInt() or 1)
+		local plys = player.GetAll()
 
-		for _, ply in ipairs(player.GetAll()) do
+		for i = 1, #plys do
+			local ply = plys[i]
+
 			if ply:IsActive() and ply:IsShopper() and ply:GetBaseRole() == ROLE_DETECTIVE then
 				ply:AddCredits(amt)
 			end

@@ -9,7 +9,6 @@ local math = math
 local table = table
 local net = net
 local player = player
-local ipairs = ipairs
 local timer = timer
 local util = util
 local IsValid = IsValid

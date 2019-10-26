@@ -11,7 +11,6 @@ local GetLang = LANG.GetUnsafeLanguageTable
 local GetPlayers = player.GetAll
 local math = math
 local table = table
-local ipairs = ipairs
 local IsValid = IsValid
 local CreateConVar = CreateConVar
 local hook = hook

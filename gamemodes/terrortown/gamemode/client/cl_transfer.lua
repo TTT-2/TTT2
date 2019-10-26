@@ -4,7 +4,6 @@
 
 local GetTranslation = LANG.GetTranslation
 local player = player
-local ipairs = ipairs
 
 ---
 -- Creates the credit transfer menu

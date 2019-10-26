@@ -87,7 +87,10 @@ function Register(t, name)
 		--
 		-- For each entity using this class
 		--
-		for _, entity in ipairs(ents.FindByClass(name)) do
+		local entsTbl = ents.FindByClass(name)
+
+		for i = 1, #entsTbl do
+			local entity = entsTbl[i]
 
 			--
 			-- Replace the contents with this entity table
@@ -103,7 +106,11 @@ function Register(t, name)
 		end
 
 		-- Update HUD table of entities that are based on this HUD
-		for _, e in ipairs(ents.GetAll()) do
+		entsTbl = ents.GetAll()
+
+		for i = 1, #entsTbl do
+			local e = entsTbl[i]
+
 			if IsBasedOn(e:GetClass(), name) then
 				table.Merge(e, Get(e:GetClass()))
 
@@ -241,7 +248,7 @@ function GetAllTypeElements(type)
 
 	for _, v in pairs(HUDElementList) do
 		if v.type and v.type == type then
-			table.insert(retTbl, v)
+			retTbl[#retTbl + 1] = v
 		end
 	end
 
@@ -281,8 +288,8 @@ function RegisterChildRelation(childid, parentid, parent_is_type)
 	else
 		local elems = GetAllTypeElements(parentid)
 
-		for elem in ipairs(elems) do
-			elem:AddChild(childid)
+		for i = 1, #elems do
+			elems[i]:AddChild(childid)
 		end
 	end
 

@@ -31,7 +31,6 @@ KARMA.cv.bantime = CreateConVar("ttt_karma_low_ban_minutes", "60", {FCVAR_NOTIFY
 
 local config = KARMA.cv
 
-local ipairs = ipairs
 local IsValid = IsValid
 local hook = hook
 

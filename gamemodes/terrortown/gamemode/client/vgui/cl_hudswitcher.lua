@@ -178,8 +178,11 @@ function PANEL:Init()
 	end
 
 	local sheets = {}
+	local huds = huds.GetList()
 
-	for _, hud in ipairs(huds.GetList()) do
+	for i = 1, #huds do
+		local hud = huds[i]
+
 		local panel = vgui.Create("DPanel", dcsheet)
 		panel:Dock(FILL)
 
@@ -238,14 +241,16 @@ function PANEL:Init()
 	hook.Add("TTT2HUDUpdated", "TTT2HUDUpdateHUDSwitcher", function(name)
 		if not sheets then return end
 
-		for _, v in ipairs(sheets) do
-			if name == v.Panel.hudid then
-				dcsheet:SetActiveButton(v.Button)
+		for i = 1, #sheets do
+			local v = sheets[i]
 
-				self:SetTitle(LANG.GetTranslation("f1_settings_hudswitcher_title") .. " - " .. name)
+			if name ~= v.Panel.hudid then continue end
 
-				break
-			end
+			dcsheet:SetActiveButton(v.Button)
+
+			self:SetTitle(LANG.GetTranslation("f1_settings_hudswitcher_title") .. " - " .. name)
+
+			break
 		end
 	end)
 end

@@ -8,7 +8,6 @@ local SafeTranslate = LANG.TryTranslation
 local table = table
 local net = net
 local pairs = pairs
-local ipairs = ipairs
 local IsValid = IsValid
 local hook = hook
 
@@ -46,7 +45,11 @@ local curSearch = curSearch
 --
 
 local function RolenameToRole(val)
-	for _, v in ipairs(roles.GetList()) do
+	local rlsList = roles.GetList()
+
+	for i = 1, #rlsList do
+		local v = rlsList[i]
+
 		if SafeTranslate(v.name) == val then
 			return v.index
 		end
@@ -262,8 +265,11 @@ local function CreateEquipmentList(t)
 
 	-- Determine if we already have equipment
 	local owned_ids = {}
+	local weps = ply:GetWeapons()
 
-	for _, wep in ipairs(ply:GetWeapons()) do
+	for i = 1, #weps do
+		local wep = weps[i]
+
 		if wep.IsEquipment and wep:IsEquipment() then
 			owned_ids[#owned_ids + 1] = wep:GetClass()
 		end
@@ -277,9 +283,9 @@ local function CreateEquipmentList(t)
 	local itms = {}
 	local tmp = GetEquipmentForRole(ply, currole, t.notalive)
 
-	for _, v in ipairs(tmp) do
-		if not v.notBuyable then
-			itms[#itms + 1] = v
+	for i = 1, #tmp do
+		if not tmp[i].notBuyable then
+			itms[#itms + 1] = tmp[i]
 		end
 	end
 
@@ -293,7 +299,8 @@ local function CreateEquipmentList(t)
 	local steamid = ply:SteamID64()
 	local col = ply:GetRoleColor()
 
-	for k, item in ipairs(itms) do
+	for k = 1, #itms do
+		local item = itms[k]
 		local equipName = GetEquipmentTranslation(item.name, item.PrintName)
 
 		if t.search and string.find(string.lower(equipName), string.lower(t.search)) or not t.search then
@@ -607,9 +614,11 @@ function TraitorMenuPopup()
 		drolesel:SetPos(m, dsph + m * 2)
 		drolesel:MoveBelow(dsearch, m)
 
-		for _, v in ipairs(roles.GetList()) do
-			if v:IsShoppingRole() then
-				drolesel:AddChoice(SafeTranslate(v.name))
+		local rlsList = roles.GetList()
+
+		for k = 1, #rlsList do
+			if rlsList[k]:IsShoppingRole() then
+				drolesel:AddChoice(SafeTranslate(rlsList[k].name))
 			end
 		end
 
@@ -617,6 +626,7 @@ function TraitorMenuPopup()
 
 		drolesel.OnSelect = function(panel, index, value)
 			print(LANG.GetParamTranslation("shop_role_selected", {role = value}))
+
 			dnotaliveHelp:SetText("")
 			CreateEquipmentList({role = RolenameToRole(value), search = dsearch:GetValue(), notalive = notalive})
 		end
@@ -654,7 +664,9 @@ function TraitorMenuPopup()
 	local dfields = {}
 	local _tmp = {"name", "type", "desc"}
 
-	for _, k in ipairs(_tmp) do
+	for i = 1, #_tmp do
+		local k = _tmp[i]
+
 		dfields[k] = vgui.Create("DLabel", dinfo)
 		dfields[k]:SetTooltip(GetTranslation("equip_spec_" .. k))
 		dfields[k]:SetPos(m * 3, m * 2)

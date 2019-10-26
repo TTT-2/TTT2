@@ -4,7 +4,6 @@
 
 TRADIO = {}
 
-local ipairs = ipairs
 local IsValid = IsValid
 
 local sound_names = {

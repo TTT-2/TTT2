@@ -7,7 +7,6 @@ local table = table
 local net = net
 local player = player
 local pairs = pairs
-local ipairs = ipairs
 local util = util
 local hook = hook
 

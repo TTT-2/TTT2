@@ -5,7 +5,6 @@ local chargetime = 30
 
 local net = net
 local table = table
-local ipairs = ipairs
 local IsValid = IsValid
 local hook = hook
 

@@ -23,7 +23,6 @@ ShopEditor.cvars = {
 
 local net = net
 local pairs = pairs
-local ipairs = ipairs
 
 ---
 -- Initializes the default data for an @{ITEM} or @{Weapon}

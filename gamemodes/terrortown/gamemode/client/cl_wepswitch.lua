@@ -4,7 +4,6 @@
 
 local table = table
 local pairs = pairs
-local ipairs = ipairs
 local IsValid = IsValid
 local CreateConVar = CreateConVar
 

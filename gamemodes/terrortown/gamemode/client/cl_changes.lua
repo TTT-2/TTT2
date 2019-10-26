@@ -628,7 +628,9 @@ function ShowChanges()
 		end
 	end)
 
-	for _, change in ipairs(changes) do
+	for i = 1, #changes do
+		local change = changes[i]
+
 		local panel = vgui.Create("DPanel", sheet)
 		panel:Dock(FILL)
 

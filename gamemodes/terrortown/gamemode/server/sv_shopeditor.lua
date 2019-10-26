@@ -3,7 +3,6 @@
 
 local net = net
 local table = table
-local ipairs = ipairs
 local sql = sql
 local util = util
 

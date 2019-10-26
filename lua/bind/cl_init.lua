@@ -4,6 +4,8 @@
 -- @author saibotk
 -- @desc Source: https://github.com/MysteryPancake/GMod-Binding/
 
+local ipairs = ipairs
+
 bind = {}
 
 local tablename = "ttt2_bindings"

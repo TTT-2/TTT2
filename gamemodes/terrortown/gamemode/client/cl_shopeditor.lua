@@ -13,7 +13,6 @@ local math = math
 local table = table
 local net = net
 local pairs = pairs
-local ipairs = ipairs
 local IsValid = IsValid
 
 ---
@@ -453,12 +452,12 @@ function ShopEditor.CreateOwnShopEditor(roleData, onCreate)
 			eq.CanBuy = eq.CanBuy or {}
 
 			if table.HasValue(eq.CanBuy, roleData.index) then
-				for k, v in ipairs(eq.CanBuy) do
-					if v == roleData.index then
-						table.remove(eq.CanBuy, k)
+				for k = 1, #eq.CanBuy do
+					if eq.CanBuy[k] ~= roleData.index then continue end
 
-						break
-					end
+					table.remove(eq.CanBuy, k)
+
+					break
 				end
 
 				-- remove
@@ -468,7 +467,7 @@ function ShopEditor.CreateOwnShopEditor(roleData, onCreate)
 				net.WriteString(eq.id)
 				net.SendToServer()
 			else
-				table.insert(eq.CanBuy, roleData.index)
+				eq.CanBuy[#eq.CanBuy + 1] = roleData.index
 
 				-- add
 				net.Start("shop")

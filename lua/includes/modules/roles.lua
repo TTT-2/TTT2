@@ -8,7 +8,6 @@ module("roles", package.seeall)
 local baseclass = baseclass
 local list = list
 local pairs = pairs
-local ipairs = ipairs
 
 if SERVER then
 	AddCSLuaFile()
@@ -424,10 +423,11 @@ function GetTeamMembers(team)
 	if team == TEAM_NONE or TEAMS[team].alone then return end
 
 	local tmp = {}
+	local plys = player.GetAll()
 
-	for _, v in ipairs(player.GetAll()) do
-		if v:HasTeam(team) then
-			table.insert(tmp, v)
+	for i = 1, #plys do
+		if plys[i]:HasTeam(team) then
+			tmp[#tmp + 1] = plys[i]
 		end
 	end
 
@@ -443,7 +443,7 @@ function GetWinTeams()
 
 	for _, v in pairs(RoleList) do
 		if v.name ~= BASE_ROLE_CLASS and v.defaultTeam ~= TEAM_NONE and not table.HasValue(winTeams, v.defaultTeam) and not v.preventWin then
-			table.insert(winTeams, v.defaultTeam)
+			winTeams[#winTeams + 1] = v.defaultTeam
 		end
 	end
 
