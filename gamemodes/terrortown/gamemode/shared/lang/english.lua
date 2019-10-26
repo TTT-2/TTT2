@@ -1076,6 +1076,7 @@ L.set_avoid_tip = "Enable this to ask the server not to select you as {role} if 
 
 -- v24
 L.drop_no_ammo = "Insufficient ammo in your weapon's clip to drop as an ammo box."
+L.drop_ammo_prevented = "Something prevents you from dropping your ammo."
 
 -- v31
 L.set_cross_brightness = "Crosshair brightness"
@@ -1194,3 +1195,9 @@ L.shop_role_selected = "{roles}'s shop was selected!"
 L.shop_search = "Search"
 
 L.button_save = "Save"
+
+L.disable_spectatorsoutline = "Deactivates spectators' outlines"
+L.disable_spectatorsoutline_tip = "Deactivates the outlines around object controlled by spectators (+Performance)"
+
+L.disable_overheadicons = "Deactivates role icons"
+L.disable_overheadicons_tip = "Deactivates the role icons on top of every player (+Performance)"

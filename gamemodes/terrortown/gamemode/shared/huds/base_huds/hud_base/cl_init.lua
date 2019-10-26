@@ -4,6 +4,8 @@
 -- @author saibotk
 -- @author LeBroomer
 
+local table = table
+
 HUD.forcedElements = {}
 HUD.disabledTypes = {}
 
@@ -51,7 +53,7 @@ end
 -- @param string elementType
 -- @realm client
 function HUD:HideType(elementType)
-	table.insert(self.disabledTypes, elementType)
+	self.disabledTypes[elementType] = true
 end
 
 ---
@@ -63,9 +65,9 @@ end
 -- @return boolean
 -- @realm client
 function HUD:ShouldShow(elementType)
-	local el = self:GetElementByType(elementType)
-	if el then
-		if el.togglable and not GetGlobalBool("ttt2_elem_toggled_" .. el.id, false) then
+	local elem = self:GetElementByType(elementType)
+	if elem then
+		if elem.togglable and not GetGlobalBool("ttt2_elem_toggled_" .. elem.id, false) then
 			return false
 		end
 
@@ -81,7 +83,11 @@ end
 -- loads new values either for itself (eg. basecolor) or for its children.
 -- @realm client
 function HUD:PerformLayout()
-	for _, elemName in ipairs(self:GetElements()) do
+	local elems = self:GetElements()
+
+	for i = 1, #elems do
+		local elemName = elems[i]
+
 		local elem = hudelements.GetStored(elemName)
 		if elem then
 			if not elem:IsChild() then
@@ -101,27 +107,33 @@ end
 -- @{HUD:PerformLayout} before setting the HUDELEMENT.initialized parameter.
 -- @realm client
 function HUD:Initialize()
+	local elems = self:GetElements()
+
 	-- Initialize elements default values
-	for _, v in ipairs(self:GetElements()) do
-		local elem = hudelements.GetStored(v)
+	for i = 1, #elems do
+		local elemName = elems[i]
+
+		local elem = hudelements.GetStored(elemName)
 		if elem then
 			if not elem:IsChild() then
 				elem:Initialize()
 			end
 		else
-			Msg("Error: HUD " .. (self.id or "?") .. " has unknown element named " .. v .. "\n")
+			Msg("Error: HUD " .. (self.id or "?") .. " has unknown element named " .. elemName .. "\n")
 		end
 	end
 
 	self:PerformLayout()
 
 	-- Initialize elements default values
-	for _, v in ipairs(self:GetElements()) do
-		local elem = hudelements.GetStored(v)
+	for i = 1, #elems do
+		local elemName = elems[i]
+
+		local elem = hudelements.GetStored(elemName)
 		if elem then
 			elem.initialized = true
 		else
-			Msg("Error: HUD " .. (self.id or "?") .. " has unknown element named " .. v .. "\n")
+			Msg("Error: HUD " .. (self.id or "?") .. " has unknown element named " .. elemName .. "\n")
 		end
 	end
 end
@@ -146,16 +158,22 @@ end
 -- @realm client
 function HUD:CanUseElement(elementTbl)
 	-- return false if the table is empty.
-	if not elementTbl then return false end
+	if not elementTbl then
+		return false
+	end
 
 	-- return false if the element is disabled unless it is forced and it is not forced in this HUD.
-	if elementTbl.disabledUnlessForced and not table.HasValue(self.forcedElements, elementTbl.id) then return false end
+	if elementTbl.disabledUnlessForced and not table.HasValue(self.forcedElements, elementTbl.id) then
+		return false
+	end
 
 	-- check if the element is a child and if it is parent element is a part of this HUD.
 	if elementTbl:IsChild() then
 		local parent, parentIsType = elementTbl:GetParentRelation()
 
-		if not parent or parentIsType == nil then return false end
+		if not parent or parentIsType == nil then
+			return false
+		end
 
 		-- find the parent element, if the element is bound to a type call this method again implicitly (check if element is used by the HUD) and if not,
 		-- get the specific element and call this method on it.
@@ -177,7 +195,7 @@ end
 -- @realm client
 function HUD:GetElementByType(elementType)
 	-- element type is hidden in this HUD so return nil
-	if table.HasValue(self.disabledTypes, elementType) then return nil end
+	if self.disabledTypes[elementType] then return end
 
 	local forcedElement = self.forcedElements[elementType]
 	local elementTbl = nil
@@ -195,9 +213,12 @@ function HUD:GetElementByType(elementType)
 		local availableElements = hudelements.GetAllTypeElements(elementType)
 
 		-- find first valid element
-		for _, el in ipairs(availableElements) do
+		for i = 1, #availableElements do
+			local el = availableElements[i]
+
 			if self:CanUseElement(el) then
 				elementTbl = el
+
 				break
 			end
 		end
@@ -210,19 +231,27 @@ end
 -- This returns a table with all the specific elements the HUD has. One element
 -- per type, respecting the forcedElements and otherwise taking the first found
 -- implementation.
--- @todo TODO optimize / cache maybe?!
 -- @return table
 -- @realm client
 function HUD:GetElements()
+	if self.cachedElems then
+		return self.cachedElems
+	end
+
 	-- loop through all types and if the hud does not provide an element take the first found instance for the type
 	local elems = {}
+	local elemTypes = hudelements.GetElementTypes()
 
-	for _, typ in ipairs(hudelements.GetElementTypes()) do
+	for i = 1, #elemTypes do
+		local typ = elemTypes[i]
+
 		local el = self:GetElementByType(typ)
 		if el then
 			elems[#elems + 1] = el.id
 		end
 	end
+
+	self.cachedElems = elems
 
 	return elems
 end
@@ -242,10 +271,12 @@ function HUD:DrawElemAndChildren(elem)
 
 	local children = elem:GetChildren()
 
-	for _, v in ipairs(children) do
-		local child = hudelements.GetStored(v)
+	for i = 1, #children do
+		local childName = children[i]
+
+		local child = hudelements.GetStored(childName)
 		if not child then
-			MsgN("Error: Hudelement with name " .. v .. " not found!")
+			MsgN("Error: Hudelement with name " .. childName .. " not found!")
 		else
 			self:DrawElemAndChildren(child)
 		end
@@ -264,10 +295,15 @@ end
 -- a child and have a HUDELEMENT.type (these are all non-base elements).
 -- @realm client
 function HUD:Draw()
-	for _, elemName in ipairs(self:GetElements()) do
+	local elems = self:GetElements()
+
+	for i = 1, #elems do
+		local elemName = elems[i]
+
 		local elem = hudelements.GetStored(elemName)
 		if not elem then
 			MsgN("Error: Hudelement with name " .. elemName .. " not found!")
+
 			return
 		end
 
@@ -283,7 +319,11 @@ end
 -- on non-child elements.
 -- @realm client
 function HUD:Reset()
-	for _, elemName in ipairs(self:GetElements()) do
+	local elems = self:GetElements()
+
+	for i = 1, #elems do
+		local elemName = elems[i]
+
 		local elem = hudelements.GetStored(elemName)
 		if elem then
 			if not elem:IsChild() then
@@ -306,11 +346,15 @@ function HUD:SaveData()
 	-- save data for the HUD
 	SQL.Save("ttt2_huds", self.id, self, self:GetSavingKeys())
 
+	local elems = self:GetElements()
+
 	-- save data of all elements of this HUD
-	for _, elem in ipairs(self:GetElements()) do
-		local el = hudelements.GetStored(elem)
-		if el then
-			el:SaveData()
+	for i = 1, #elems do
+		local elemName = elems[i]
+
+		local elem = hudelements.GetStored(elemName)
+		if elem then
+			elem:SaveData()
 		end
 	end
 end
@@ -333,11 +377,15 @@ function HUD:LoadData()
 		end
 	end
 
+	local elems = self:GetElements()
+
 	-- load data of all elements in this HUD
-	for _, elem in ipairs(self:GetElements()) do
-		local el = hudelements.GetStored(elem)
-		if el then
-			el:LoadData()
+	for i = 1, #elems do
+		local elemName = elems[i]
+
+		local elem = hudelements.GetStored(elemName)
+		if elem then
+			elem:LoadData()
 		end
 	end
 

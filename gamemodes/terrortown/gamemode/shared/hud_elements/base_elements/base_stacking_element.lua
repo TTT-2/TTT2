@@ -17,29 +17,35 @@ HUDELEMENT.lastCount = 0
 -- @internal
 -- @realm client
 function HUDELEMENT:Draw()
-    --set size beforehand if #elements was reduced to remove flickering
-    if #self.elements < self.lastCount then
-        local height = 0
-        for k, el in ipairs(self.elements) do
-            height = height + el.h + self.element_margin
-        end
+	local elems = self.elements
 
-        self:SetSize(self.size.w, -height)
-    end
+	-- set size beforehand if #elements was reduced to remove flickering
+	if #elems < self.lastCount then
+		local height = 0
 
-    --draw all elements
-    local running_y = self.pos.y
+		for i = 1, #elems do
+			height = height + elems[i].h + self.element_margin
+		end
 
-    for k, el in ipairs(self.elements) do
-        self:DrawElement(k, self.pos.x, running_y, self.size.w, el.h)
+		self:SetSize(self.size.w, -height)
+	end
 
-        running_y = running_y + el.h + self.element_margin
-    end
+	-- draw all elements
+	local running_y = self.pos.y
 
-    local totalHeight = running_y - self.pos.y
+	for i = 1, #elems do
+		local el = elems[i]
 
-    self.lastCount = #self.elements
-    self:SetSize(self.size.w, - math.max(totalHeight, self.minsize.h))
+		self:DrawElement(i, self.pos.x, running_y, self.size.w, el.h)
+
+		running_y = running_y + el.h + self.element_margin
+	end
+
+	local totalHeight = running_y - self.pos.y
+
+	self.lastCount = #elems
+
+	self:SetSize(self.size.w, - math.max(totalHeight, self.minsize.h))
 end
 
 ---
@@ -60,7 +66,7 @@ end
 -- @param table elements list of @{HUDELEMENT}
 -- @realm client
 function HUDELEMENT:SetElements(elements)
-    self.elements = elements
+	self.elements = elements
 end
 
 ---
@@ -68,5 +74,5 @@ end
 -- @param number margin
 -- @realm client
 function HUDELEMENT:SetElementMargin(margin)
-    self.element_margin = margin
+	self.element_margin = margin
 end

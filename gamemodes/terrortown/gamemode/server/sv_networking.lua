@@ -198,13 +198,16 @@ function SendFullStateUpdate()
 	local syncTbl = {}
 	local localPly = false
 	local players = player.GetAll()
+	local plyCount = #players
 
-	for _, ply in ipairs(players) do
+	for i = 1, plyCount do
+		local ply = players[i]
 		local tmp = {}
 		local team = ply:GetTeam()
 		local roleData = ply:GetSubRoleData()
 
-		for _, v in ipairs(players) do
+		for k = 1, plyCount do
+			local v = players[k]
 			local rd = v:GetSubRoleData()
 
 			if not roleData.unknownTeam and v:HasTeam(team)
@@ -261,11 +264,16 @@ end
 -- @realm server
 function SendRoleReset(ply_or_rf)
 	local players = player.GetAll()
+	local plyCount = #players
 
-	for _, ply in ipairs(players) do
+	for i = 1, plyCount do
+		local ply = players[i]
+
 		TTT2NETTABLE[ply] = TTT2NETTABLE[ply] or {}
 
-		for _, p in ipairs(players) do
+		for k = 1, plyCount do
+			local p = players[k]
+
 			TTT2NETTABLE[ply][p] = {ROLE_INNOCENT, TEAM_INNOCENT}
 		end
 	end
@@ -371,7 +379,6 @@ concommand.Add("ttt_force_detective", ttt_force_detective, nil, nil, FCVAR_CHEAT
 
 local function ttt_force_role(ply, cmd, args, argStr)
 	local role = tonumber(args[1])
-
 	if not role then return end
 
 	local rd
@@ -384,13 +391,13 @@ local function ttt_force_role(ply, cmd, args, argStr)
 		end
 	end
 
-	if rd and not rd.notSelectable then
-		ply:SetRole(role)
+	if not rd or rd.notSelectable then return end
 
-		SendFullStateUpdate()
+	ply:SetRole(role)
 
-		ply:ChatPrint("You changed to '" .. rd.name .. "' (index: " .. role .. ")")
-	end
+	SendFullStateUpdate()
+
+	ply:ChatPrint("You changed to '" .. rd.name .. "' (index: " .. role .. ")")
 end
 concommand.Add("ttt_force_role", ttt_force_role, nil, nil, FCVAR_CHEAT)
 
@@ -401,37 +408,37 @@ end
 concommand.Add("get_role", get_role)
 
 local function ttt_toggle_role(ply, cmd, args, argStr)
-	if ply:IsAdmin() then
-		local role = tonumber(args[1])
-		local roleData = roles.GetByIndex(role)
-		local currentState = not GetConVar("ttt_" .. roleData.name .. "_enabled"):GetBool()
+	if not ply:IsAdmin() then return end
 
-		local word = currentState and "disabled" or "enabled"
+	local role = tonumber(args[1])
+	local roleData = roles.GetByIndex(role)
+	local currentState = not GetConVar("ttt_" .. roleData.name .. "_enabled"):GetBool()
 
-		RunConsoleCommand("ttt_" .. roleData.name .. "_enabled", currentState and "1" or "0")
+	local word = currentState and "disabled" or "enabled"
 
-		ply:ChatPrint("You " .. word .. " role with index '" .. role .. "(" .. roleData.name .. ")'. This will take effect in the next role selection!")
-	end
+	RunConsoleCommand("ttt_" .. roleData.name .. "_enabled", currentState and "1" or "0")
+
+	ply:ChatPrint("You " .. word .. " role with index '" .. role .. "(" .. roleData.name .. ")'. This will take effect in the next role selection!")
 end
 concommand.Add("ttt_toggle_role", ttt_toggle_role)
 
 local function force_spectate(ply, cmd, arg)
-	if IsValid(ply) then
-		if #arg == 1 and tonumber(arg[1]) == 0 then
-			ply:SetForceSpec(false)
-		else
-			if not ply:IsSpec() then
-				ply:Kill()
-			end
+	if not IsValid(ply) then return end
 
-			GAMEMODE:PlayerSpawnAsSpectator(ply)
-
-			ply:SetTeam(TEAM_SPEC)
-			ply:SetForceSpec(true)
-			ply:Spawn()
-
-			ply:SetRagdollSpec(false) -- dying will enable this, we don't want it here
+	if #arg == 1 and tonumber(arg[1]) == 0 then
+		ply:SetForceSpec(false)
+	else
+		if not ply:IsSpec() then
+			ply:Kill()
 		end
+
+		GAMEMODE:PlayerSpawnAsSpectator(ply)
+
+		ply:SetTeam(TEAM_SPEC)
+		ply:SetForceSpec(true)
+		ply:Spawn()
+
+		ply:SetRagdollSpec(false) -- dying will enable this, we don't want it here
 	end
 end
 concommand.Add("ttt_spectate", force_spectate)
@@ -442,16 +449,16 @@ end
 net.Receive("TTT_Spectate", TTT_Spectate)
 
 local function ttt_roles_index(ply)
-	if ply:IsAdmin() then
-		ply:ChatPrint("[TTT2] roles_index...")
-		ply:ChatPrint("----------------")
-		ply:ChatPrint("[Role] | [Index]")
+	if not ply:IsAdmin() then return end
 
-		for _, v in ipairs(roles.GetSortedRoles()) do
-			ply:ChatPrint(v.name .. " | " .. v.index)
-		end
+	ply:ChatPrint("[TTT2] roles_index...")
+	ply:ChatPrint("----------------")
+	ply:ChatPrint("[Role] | [Index]")
 
-		ply:ChatPrint("----------------")
+	for _, v in ipairs(roles.GetSortedRoles()) do
+		ply:ChatPrint(v.name .. " | " .. v.index)
 	end
+
+	ply:ChatPrint("----------------")
 end
 concommand.Add("ttt_roles_index", ttt_roles_index)

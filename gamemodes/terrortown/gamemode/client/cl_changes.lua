@@ -550,6 +550,20 @@ function CreateChanges()
 		</ul>
 	]], os.time({year = 2019, month = 10, day = 06}))
 
+	AddChange("TTT2 Base - v0.5.8b", [[
+		<h2>New:</h2>
+		<ul>
+			<li>Added the outline module for better performance</li>
+			<li><i>TTT2DropAmmo</i> hook to prevent/change the ammo drop of a weapon</li>
+		</ul>
+		<br>
+		<h2>Fixed:</h2>
+		<ul>
+			<li>Fixed a bug with baserole initialization</li>
+			<li>Small other bugfixes</li>
+		</ul>
+	]], os.time({year = 2019, month = 10, day = 19}))
+
 	-- run hook for other addons to add their changelog as well
 	hook.Run("TTT2AddChange", changes, currentVersion)
 end

@@ -1064,6 +1064,7 @@ L.set_avoid_tip = "Aktiviere diese Funktion, damit du nicht als {role} ausgewäh
 
 -- v24
 L.drop_no_ammo = "Du hast zu wenig Munition im Magazin, um eine Munitionskiste fallenzulassen."
+L.drop_ammo_prevented = "Etwas hindert dich daran deine Munition fallenzulassen."
 
 -- v31
 L.set_cross_brightness = "Fadenkreuz Helligkeit"
@@ -1179,3 +1180,11 @@ L.hud_restricted_failed = "Es ist fehlgeschlagen {hudname} zu beschränken. Bist
 L.shop_role_select = "Wähle eine Rolle"
 L.shop_role_selected = "Der {roles} Shop wurde gewählt!"
 L.shop_search = "Suche"
+
+L.button_save = "Sichern"
+
+L.disable_spectatorsoutline = "Deaktiviere Zuschauerumrandungen"
+L.disable_spectatorsoutline_tip = "Deaktiviert die Umrandungen um ein Objekt, in dem sich ein Zuschauer befindet (+Performance)"
+
+L.disable_overheadicons = "Deaktiviere Rollenicons"
+L.disable_overheadicons_tip = "Deaktiviert die Rollenicons über den Köpfen der Spieler (+Performance)"

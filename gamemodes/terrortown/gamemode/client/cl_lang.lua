@@ -464,7 +464,8 @@ local styledmessages = {
 		"tele_no_mark_ground",
 		"tele_no_mark_crouch",
 
-		"drop_no_ammo"
+		"drop_no_ammo",
+		"drop_ammo_prevented"
 	}
 }
 

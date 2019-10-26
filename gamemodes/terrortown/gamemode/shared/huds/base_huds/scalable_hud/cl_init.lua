@@ -63,13 +63,17 @@ end
 function HUD:LoadData()
 	BaseClass.LoadData(self)
 
-	for _, elem in ipairs(self:GetElements()) do
-		local el = hudelements.GetStored(elem)
-		if el then
-			local min_size = el:GetDefaults().minsize
+	local elems = self:GetElements()
 
-			el:SetMinSize(min_size.w * self.scale, min_size.h * self.scale)
-			el:PerformLayout()
+	for i = 1, #elems do
+		local elemName = elems[i]
+
+		local elem = hudelements.GetStored(elemName)
+		if elem then
+			local min_size = elem:GetDefaults().minsize
+
+			elem:SetMinSize(min_size.w * self.scale, min_size.h * self.scale)
+			elem:PerformLayout()
 		end
 	end
 end
@@ -79,21 +83,25 @@ end
 -- @param number scale
 -- @realm client
 function HUD:ApplyScale(scale)
-	for _, elem in ipairs(self:GetElements()) do
-		local el = hudelements.GetStored(elem)
-		if el then
-			local size = el:GetSize()
-			local min_size = el:GetMinSize()
+	local elems = self:GetElements()
 
-			el:SetMinSize(min_size.w * scale, min_size.h * scale)
-			el:SetSize(size.w * scale, size.h * scale)
-			el:PerformLayout()
+	for i = 1, #elems do
+		local elemName = elems[i]
+
+		local elem = hudelements.GetStored(elemName)
+		if elem then
+			local size = elem:GetSize()
+			local min_size = elem:GetMinSize()
+
+			elem:SetMinSize(min_size.w * scale, min_size.h * scale)
+			elem:SetSize(size.w * scale, size.h * scale)
+			elem:PerformLayout()
 
 			--reset position to new calculated default position
-			local defaultPos = el:GetDefaults().basepos
+			local defaultPos = elem:GetDefaults().basepos
 
-			el:SetBasePos(defaultPos.x, defaultPos.y)
-			el:PerformLayout()
+			elem:SetBasePos(defaultPos.x, defaultPos.y)
+			elem:PerformLayout()
 		end
 	end
 end

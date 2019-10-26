@@ -490,7 +490,15 @@ local function DropActiveAmmo(ply)
 
 	if not IsValid(wep) or not wep.AmmoEnt then return end
 
-	local amt = wep:Clip1()
+	local hook_data = {wep:Clip1()}
+
+	if hook.Run("TTT2DropAmmo", ply, hook_data) == false then
+		LANG.Msg(ply, "drop_ammo_prevented")
+
+		return
+	end
+
+	local amt = hook_data[1]
 
 	if amt < 1 or amt <= wep.Primary.ClipSize * 0.25 then
 		LANG.Msg(ply, "drop_no_ammo")

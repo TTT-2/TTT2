@@ -11,6 +11,7 @@ local pairs = pairs
 local ipairs = ipairs
 local IsValid = IsValid
 local weapons = weapons
+local GetPlayers = player.GetAll
 
 ---
 -- Attempts to get the weapon used from a DamageInfo instance needed because the
@@ -73,7 +74,7 @@ end
 -- @return table
 -- @realm shared
 function util.GetFilteredPlayers(filterFn)
-	local plys = player.GetAll()
+	local plys = GetPlayers()
 
 	if not isfunction(filterFn) then
 		return plys
@@ -81,9 +82,9 @@ function util.GetFilteredPlayers(filterFn)
 
 	local tmp = {}
 
-	for _, ply in ipairs(plys) do
-		if filterFn(ply) then
-			table.insert(tmp, ply)
+	for i = 1, #plys do
+		if filterFn(plys[i]) then
+			tmp[#tmp + 1] = plys[i]
 		end
 	end
 
@@ -595,18 +596,14 @@ if CLIENT then
 	-- @param number h height
 	-- @param Material material
 	-- @param number alpha
-	-- @param Color rgb the alpha value will be ignored
+	-- @param Color col the alpha value will be ignored
 	-- @realm client
 	-- @author Mineotopia
-	function util.DrawFilteredTexturedRect(x, y, w, h, material, alpha, rgb)
+	function util.DrawFilteredTexturedRect(x, y, w, h, material, alpha, col)
 		alpha = alpha or 255
-		rgb = rgb or {
-			r = 255,
-			g = 255,
-			b = 255
-		}
+		col = col or COLOR_WHITE
 
-		surface.SetDrawColor(rgb.r, rgb.g, rgb.b, alpha)
+		surface.SetDrawColor(col.r, col.g, col.b, alpha)
 		surface.SetMaterial(material)
 
 		render.PushFilterMag(TEXFILTER.LINEAR)
