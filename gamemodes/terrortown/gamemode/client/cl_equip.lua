@@ -419,6 +419,8 @@ end
 --
 --
 
+local color_bggrey = Color(90, 90, 95, 255)
+
 ---
 -- Creates / opens the shop frame
 -- @realm client
@@ -644,7 +646,7 @@ function TraitorMenuPopup()
 
 	-- item info pane
 	local dinfo = vgui.Create("DScrollPanel", dinfobg)
-	dinfo:SetBackgroundColor(Color(90, 90, 95, 255))
+	dinfo:SetBackgroundColor(color_bggrey)
 	dinfo:SetPaintBackground(true)
 	dinfo:SetPos(0, 0)
 	dinfo:StretchToParent(0, 0, m * 2, m * 2)
@@ -816,7 +818,6 @@ concommand.Add("ttt_cl_traitorpopup_close", ForceCloseTraitorMenu)
 
 local function ReceiveEquipment()
 	local ply = LocalPlayer()
-
 	if not IsValid(ply) then return end
 
 	local eqAmount = net.ReadUInt(16)
@@ -827,27 +828,33 @@ local function ReceiveEquipment()
 		tmp[#tmp + 1] = net.ReadString()
 	end
 
-	-- reset all old items
-	for k, v in ipairs(ply:GetEquipmentItems()) do
-		if not table.HasValue(tmp, v) then
-			local item = items.GetStored(v)
-			if item and isfunction(item.Reset) then
-				item:Reset(ply)
-			end
+	local equipItems = ply:GetEquipmentItems()
 
-			table.insert(toRem, 1, k)
+	-- reset all old items
+	for k = 1, #equipItems do
+		local v = equipItems[k]
+
+		if table.HasValue(tmp, v) then continue end
+
+		local item = items.GetStored(v)
+		if item and isfunction(item.Reset) then
+			item:Reset(ply)
 		end
+
+		table.insert(toRem, 1, k)
 	end
 
 	-- remove finally
-	for _, key in ipairs(toRem) do
-		table.remove(ply:GetEquipmentItems(), key)
+	for i = 1, #toRem do
+		table.remove(equipItems, toRem[i])
 	end
 
 	-- now equip the items the player doesn't own
-	for _, v in ipairs(tmp) do
-		if not table.HasValue(ply:GetEquipmentItems(), v) then
-			ply.equipmentItems[#ply.equipmentItems + 1] = v
+	for k = 1, #tmp do
+		local v = tmp[k]
+
+		if not table.HasValue(equipItems, v) then
+			equipItems[#equipItems + 1] = v
 
 			local item = items.GetStored(v)
 			if item and isfunction(item.Equip) then
@@ -860,7 +867,6 @@ net.Receive("TTT_Equipment", ReceiveEquipment)
 
 local function ReceiveCredits()
 	local ply = LocalPlayer()
-
 	if not IsValid(ply) then return end
 
 	ply.equipment_credits = net.ReadUInt(8)
@@ -871,7 +877,6 @@ local r = 0
 
 local function ReceiveBought()
 	local ply = LocalPlayer()
-
 	if not IsValid(ply) then return end
 
 	ply.bought = {}
@@ -880,9 +885,8 @@ local function ReceiveBought()
 
 	for i = 1, num do
 		local s = net.ReadString()
-
 		if s ~= "" then
-			table.insert(ply.bought, s)
+			ply.bought[#ply.bought + 1] = s
 
 			BUYTABLE[s] = true
 
@@ -959,33 +963,33 @@ end
 
 -- Closes menu when roles are selected
 hook.Add("TTTBeginRound", "TTTBEMCleanUp", function()
-	if IsValid(eqframe) then
-		eqframe:Close()
-	end
+	if not IsValid(eqframe) then return end
+
+	eqframe:Close()
 end)
 
 -- Closes menu when round is overwritten
 hook.Add("TTTEndRound", "TTTBEMCleanUp", function()
-	if IsValid(eqframe) then
-		eqframe:Close()
-	end
+	if not IsValid(eqframe) then return end
+
+	eqframe:Close()
 end)
 
 -- Search text field focus hooks
 local function getKeyboardFocus(pnl)
-	if eqframe and IsValid(eqframe) and pnl:HasParent(eqframe) then
+	if IsValid(eqframe) and pnl:HasParent(eqframe) then
 		eqframe:SetKeyboardInputEnabled(true)
 	end
 
-	if pnl.selectAll then
-		pnl:SelectAllText()
-	end
+	if not pnl.selectAll then return end
+
+	pnl:SelectAllText()
 end
 hook.Add("OnTextEntryGetFocus", "BEM_GetKeyboardFocus", getKeyboardFocus)
 
 local function loseKeyboardFocus(pnl)
-	if eqframe and IsValid(eqframe) and pnl:HasParent(eqframe) then
-		eqframe:SetKeyboardInputEnabled(false)
-	end
+	if not IsValid(eqframe) or not pnl:HasParent(eqframe) then return end
+
+	eqframe:SetKeyboardInputEnabled(false)
 end
 hook.Add("OnTextEntryLoseFocus", "BEM_LoseKeyboardFocus", loseKeyboardFocus)
