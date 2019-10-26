@@ -3,7 +3,6 @@
 -- @ref https://wiki.garrysmod.com/page/Category:Entity
 
 local meta = FindMetaTable("Entity")
-
 if not meta then return end
 
 ---
@@ -20,9 +19,9 @@ end
 -- @return number the time the damage owner was set
 -- @realm server
 function meta:GetDamageOwner()
-	if self.dmg_owner then
-		return self.dmg_owner.ply, self.dmg_owner.t
-	end
+	if self.dmg_owner == nil then return end
+
+	return self.dmg_owner.ply, self.dmg_owner.t
 end
 
 ---
