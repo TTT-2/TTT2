@@ -204,9 +204,9 @@ else
 		local mdl = net.ReadString()
 		local ply = net.ReadEntity()
 
-		if IsValid(ply) then
-			ply:SetModel(mdl)
-		end
+		if not IsValid(ply) then return end
+
+		ply:SetModel(mdl)
 	end)
 
 	net.Receive("TTT2SyncSubroleModel", function()
@@ -217,9 +217,9 @@ else
 			mdl = nil
 		end
 
-		if IsValid(ply) then
-			ply:SetSubRoleModel(mdl)
-		end
+		if not IsValid(ply) then return end
+
+		ply:SetSubRoleModel(mdl)
 	end)
 end
 
@@ -237,16 +237,16 @@ end
 -- @param string team a @{ROLE}'s team
 -- @realm shared
 function plymeta:UpdateTeam(team)
-	if not team or team ~= TEAM_NOCHANGE then
-		local oldTeam = self:GetTeam()
+	if team == TEAM_NOCHANGE then return end
 
-		self.roleteam = team or TEAM_NONE
+	local oldTeam = self:GetTeam()
 
-		local newTeam = self:GetTeam()
+	self.roleteam = team or TEAM_NONE
 
-		if oldTeam ~= newTeam then
-			hook.Run("TTT2UpdateTeam", self, oldTeam, newTeam)
-		end
+	local newTeam = self:GetTeam()
+
+	if oldTeam ~= newTeam then
+		hook.Run("TTT2UpdateTeam", self, oldTeam, newTeam)
 	end
 end
 
@@ -304,10 +304,13 @@ end
 -- @return[default=INNOCENT] ROLE
 -- @realm shared
 function plymeta:GetSubRoleData()
-	for _, v in ipairs(roles.GetList()) do
-		if v.index == self:GetSubRole() then
-			return v
-		end
+	local rlsList = roles.GetList()
+	local subrl = self:GetSubRole()
+
+	for i = 1, #rlsList do
+		if rlsList[i].index ~= subrl then continue end
+
+		return rlsList[i]
 	end
 
 	return INNOCENT
@@ -318,10 +321,13 @@ end
 -- @return[default=INNOCENT] ROLE
 -- @realm shared
 function plymeta:GetBaseRoleData()
-	for _, v in ipairs(roles.GetList()) do
-		if v.index == self:GetBaseRole() then
-			return v
-		end
+	local rlsList = roles.GetList()
+	local bsrl = self:GetBaseRole()
+
+	for i = 1, #rlsList do
+		if rlsList[i].index ~= bsrl then continue end
+
+		return rlsList[i]
 	end
 
 	return INNOCENT
@@ -487,10 +493,14 @@ end
 -- @return boolean
 -- @realm shared
 function plymeta:HasEquipmentWeapon()
-	for _, wep in pairs(self:GetWeapons()) do
-		if IsValid(wep) and WEPS.IsEquipment(wep) then
-			return true
-		end
+	local weps = self:GetWeapons()
+
+	for i = 1, #weps do
+		local wep = weps[i]
+
+		if not IsValid(wep) or not WEPS.IsEquipment(wep) then continue end
+
+		return true
 	end
 
 	return false
@@ -507,10 +517,12 @@ function plymeta:CanCarryWeapon(wep)
 	end
 
 	-- appeareantly TTT can't handle two times the same weapon
-	for k, v in pairs(self:GetWeapons()) do
-		if WEPS.GetClass(wep) == v:GetClass() then
-			return false
-		end
+	local weps = self:GetWeapons()
+
+	for k = 1, #weps do
+		if WEPS.GetClass(wep) ~= weps[k]:GetClass() then continue end
+
+		return false
 	end
 
 	return self:CanCarryType(wep.Kind)
@@ -545,9 +557,7 @@ end
 -- @return table
 -- @realm shared
 function plymeta:GetWeaponsOnSlot(slot)
-	if slot > WEAPON_CLASS then
-		return
-	end
+	if slot > WEAPON_CLASS then return end
 
 	return self:GetInventory()[slot]
 end
@@ -666,8 +676,8 @@ function plymeta:HasEquipmentItem(id)
 			return true
 		end
 
-		for _, itemId in ipairs(itms) do
-			local item = items.GetStored(itemId)
+		for i = 1, #itms do
+			local item = items.GetStored(itms[i])
 			if item and item.oldId and item.oldId == id then
 				return true
 			end
@@ -693,10 +703,14 @@ if CLIENT then
 	-- @return boolean
 	-- @realm shared
 	function plymeta:HasWeapon(cls) -- Server has this, but isn't shared for some reason
-		for _, wep in pairs(self:GetWeapons()) do
-			if IsValid(wep) and wep:GetClass() == cls then
-				return true
-			end
+		local weps = self:GetWeapons()
+
+		for i = 1, #weps do
+			local wep = weps[i]
+
+			if not IsValid(wep) or wep:GetClass() ~= cls then continue end
+
+			return true
 		end
 
 		return false
@@ -830,12 +844,12 @@ if CLIENT then
 	-- Perform a gesture update
 	-- @realm client
 	function plymeta:AnimUpdateGesture()
-		if self.GestureRunner then
-			self.GestureWeight = self:GestureRunner(self.GestureWeight)
+		if not self.GestureRunner then return end
 
-			if self.GestureWeight <= 0 then
-				self.GestureRunner = nil
-			end
+		self.GestureWeight = self:GestureRunner(self.GestureWeight)
+
+		if self.GestureWeight <= 0 then
+			self.GestureRunner = nil
 		end
 	end
 
@@ -864,9 +878,9 @@ if CLIENT then
 		local ply = net.ReadEntity()
 		local act = net.ReadUInt(16)
 
-		if IsValid(ply) and act then
-			ply:AnimPerformGesture(act)
-		end
+		if not IsValid(ply) or act == nil then return end
+
+		ply:AnimPerformGesture(act)
 	end
 	net.Receive("TTT_PerformGesture", TTT_PerformGesture)
 else -- SERVER
@@ -1073,15 +1087,16 @@ function plymeta:SetModel(mdlName)
 end
 
 hook.Add("TTTEndRound", "TTTEndRound4TTT2TargetPlayer", function()
-	for _, pl in ipairs(player.GetAll()) do
-		pl.targetPlayer = nil
+	local plys = player.GetAll()
+
+	for i = 1, #plys do
+		plys[i].targetPlayer = nil
 	end
 end)
 
 if CLIENT then
 	net.Receive("StartDrowning", function()
 		local client = LocalPlayer()
-
 		if not IsValid(client) then return end
 
 		local bool = net.ReadBool()
@@ -1091,7 +1106,6 @@ if CLIENT then
 
 	net.Receive("TTT2TargetPlayer", function(len)
 		local client = LocalPlayer()
-
 		if not IsValid(client) then return end
 
 		local target = net.ReadEntity()
