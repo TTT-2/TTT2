@@ -4,7 +4,8 @@ local HUDELEMENTS_SHARED_FUNCTIONS_FOLDER = "shared_base"
 local HUDELEMENTS_ABSTRACT_FOLDER = "base_elements"
 
 local function includeFoldersFiles(pathBase, folder, filestbl)
-	for _, fl in ipairs(filestbl) do
+	for i = 1, #filestbl do
+		local fl = filestbl[i]
 		local filename = pathBase .. folder .. "/" .. fl
 
 		if SERVER then
@@ -29,12 +30,15 @@ local pathBase = "terrortown/gamemode/shared/hud_elements/"
 
 local _, pathFolders = file.Find(pathBase .. "*", "LUA")
 
-for _, typ in ipairs(pathFolders) do
+for i = 1, #pathFolders do
+	local typ = pathFolders[i]
 	local shortPath = pathBase .. typ .. "/"
 	local pathFiles = file.Find(shortPath .. "*.lua", "LUA")
 
 	-- include HUD Elements files
-	for _, fl in ipairs(pathFiles) do
+	for k = 1, #pathFiles do
+		local fl = pathFiles[k]
+
 		HUDELEMENT = {}
 
 		if SERVER then
@@ -57,14 +61,17 @@ for _, typ in ipairs(pathFolders) do
 	-- include HUD Elements folders
 	local _, subFolders = file.Find(shortPath .. "*", "LUA")
 
-	for _, folder in ipairs(subFolders) do
+	for k = 1, #subFolders do
+		local folder = subFolders[k]
 		local subFiles = file.Find(shortPath .. folder .. "/*.lua", "LUA")
 
 		-- add special folder to clients, this is for shared functions between
 		-- different implementations of element types
 		if folder == HUDELEMENTS_SHARED_FUNCTIONS_FOLDER then
-			for _, fl in ipairs(subFiles) do
+			for kk = 1, #subFiles do
+				local fl = subFiles[kk]
 				local filename = pathBase .. folder .. "/" .. fl
+
 				if SERVER then
 					AddCSLuaFile(filename)
 				end
