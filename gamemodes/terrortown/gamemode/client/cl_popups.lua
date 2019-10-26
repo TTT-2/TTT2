@@ -22,14 +22,24 @@ local function GetTextForPlayer(ply)
 		end
 	else
 		local traitors = roles.GetTeamMembers(TEAM_TRAITOR)
-		if #traitors > 1 then
-			local traitorlist = ""
+		local traitorsCount = #traitors
 
-			for _, p in ipairs(traitors) do
-				if p ~= ply then
-					traitorlist = traitorlist .. string.rep(" ", 42) .. p:Nick() .. "\n"
-				end
+		if traitorsCount > 1 then
+			local traitorlist = {}
+
+			for i = 1, traitorsCount do
+				local p = traitors[i]
+
+				if p == ply then continue end
+
+				local index = #traitorlist
+
+				traitorlist[index + 1] = string.rep(" ", 42)
+				traitorlist[index + 2] = p:Nick()
+				traitorlist[index + 3] = "\n"
 			end
+
+			traitorlist = table.concat(traitorlist)
 
 			local fallback = GetGlobalString("ttt_" .. roleData.abbr .. "_shop_fallback")
 			if fallback == SHOP_DISABLED or hook.Run("TTT2PreventAccessShop", ply) then
@@ -50,6 +60,10 @@ end
 
 local startshowtime = CreateConVar("ttt_startpopup_duration", "17", FCVAR_ARCHIVE)
 
+local function drawFunc(s, w, h)
+	draw.RoundedBox(8, 0, 0, w, h, s.paintColor)
+end
+
 ---
 -- shows info about goal and fellow traitors (if any)
 local function RoundStartPopup()
@@ -57,7 +71,6 @@ local function RoundStartPopup()
 	if startshowtime:GetInt() <= 0 then return end
 
 	local client = LocalPlayer()
-
 	if not client then return end
 
 	local dframe = vgui.Create("Panel")
@@ -67,9 +80,7 @@ local function RoundStartPopup()
 
 	dframe.paintColor = Color(0, 0, 0, 200)
 
-	local paintFn = function(s, w, h)
-		draw.RoundedBox(8, 0, 0, w, h, s.paintColor)
-	end
+	local paintFn = drawFunc
 
 	if huds and HUDManager then
 		local hud = huds.GetStored(HUDManager.GetHUD())
@@ -100,9 +111,9 @@ local function RoundStartPopup()
 	dframe:AlignBottom(10)
 
 	timer.Simple(startshowtime:GetInt(), function()
-		if IsValid(dframe) then
-			dframe:Remove()
-		end
+		if not IsValid(dframe) then return end
+
+		dframe:Remove()
 	end)
 end
 concommand.Add("ttt_cl_startpopup", RoundStartPopup)
@@ -138,6 +149,8 @@ local function IdlePopup()
 	cancel:SetText(GetTranslation("idle_popup_close"))
 
 	cancel.DoClick = function()
+		if not IsValid(dframe) then return end
+
 		dframe:Close()
 	end
 
@@ -147,6 +160,8 @@ local function IdlePopup()
 	disable:SetText(GetTranslation("idle_popup_off"))
 
 	disable.DoClick = function()
+		if not IsValid(dframe) then return end
+
 		RunConsoleCommand("ttt_spectator_mode", "0")
 
 		dframe:Close()
