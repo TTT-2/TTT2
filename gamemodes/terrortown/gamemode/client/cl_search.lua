@@ -121,6 +121,114 @@ local function IconForInfoType(t, data)
 	end
 end
 
+local pfmc_tbl = {
+	nick = function(search, d)
+		search.nick.text = PT("search_nick", {player = d})
+		search.nick.p = 1
+		search.nick.nick = d
+	end,
+	role = function(search, d)
+		local rd = roles.GetByIndex(d)
+
+		search.role.text = T("search_role_" .. rd.abbr)
+		search.role.color = raw["role_color"] or rd.color
+		search.role.p = 2
+	end,
+	team = function(search, d)
+		search.team.text = "Team: " .. d .. "." -- will be merged with role later
+	end,
+	words = function(search, d)
+		if d == "" then return end
+
+		-- only append "--" if there's no ending interpunction
+		local final = string.match(d, "[\\.\\!\\?]$") ~= nil
+
+		search.words.text = PT("search_words", {lastwords = d .. (final and "" or "--.")})
+	end,
+	c4 = function(search, d)
+		if d <= 0 then return end
+
+		search.c4.text = PT("search_c4", {num = d})
+	end,
+	dmg = function(search, d)
+		search.dmg.text = DmgToText(d)
+		search.dmg.p = 12
+	end,
+	wep = function(search, d)
+		local wep = util.WeaponForClass(d)
+		local wname = wep and LANG.TryTranslation(wep.PrintName)
+
+		if not wname then return end
+
+		search.wep.text = PT("search_weapon", {weapon = wname})
+	end,
+	head = function(search, d)
+		search.head.p = 15
+
+		if not d then return end
+
+		search.head.text = T("search_head")
+	end,
+	dtime = function(search, d)
+		if d == 0 then return end
+
+		local ftime = util.SimpleTime(d, "%02i:%02i")
+
+		search.dtime.text = PT("search_time", {time = ftime})
+		search.dtime.text_icon = ftime
+		search.dtime.p = 8
+	end,
+	stime = function(search, d)
+		if d <= 0 then return end
+
+		local ftime = util.SimpleTime(d, "%02i:%02i")
+
+		search.stime.text = PT("search_dna", {time = ftime})
+		search.stime.text_icon = ftime
+	end,
+	kills = function(search, d)
+		local num = table.Count(d)
+
+		if num == 1 then
+			local vic = Entity(d[1])
+			local dc = d[1] == -1 -- disconnected
+
+			if dc or IsValid(vic) and vic:IsPlayer() then
+				search.kills.text = PT("search_kills1", {player = dc and "<Disconnected>" or vic:Nick()})
+			end
+		elseif num > 1 then
+			local txt = T("search_kills2") .. "\n"
+			local nicks = {}
+
+			for k, idx in pairs(d) do
+				local vic = Entity(idx)
+				local dc = idx == -1
+
+				if dc or IsValid(vic) and vic:IsPlayer() then
+					nicks[#nicks + 1] = dc and "<Disconnected>" or vic:Nick()
+				end
+			end
+
+			local last = #nicks
+
+			txt = txt .. table.concat(nicks, "\n", 1, last)
+			search.kills.text = txt
+		end
+
+		search.kills.p = 30
+	end,
+	lastid = function(search, d)
+		if not d or d.idx == -1 then return end
+
+		local ent = Entity(d.idx)
+
+		if not IsValid(ent) or not ent:IsPlayer() then return end
+
+		search.lastid.text = PT("search_eyes", {player = ent:Nick()})
+		search.lastid.ply = ent
+	end,
+}
+
 ---
 -- Creates a table with icons, text,... out of search_raw table
 -- @param table raw
@@ -136,101 +244,9 @@ function PreprocSearch(raw)
 			p = 10 -- sorting number
 		}
 
-		if t == "nick" then
-			search[t].text = PT("search_nick", {player = d})
-			search[t].p = 1
-			search[t].nick = d
-		elseif t == "role" then
-			local rd = roles.GetByIndex(d)
-
-			search[t].text = T("search_role_" .. rd.abbr)
-			search[t].color = raw["role_color"] or rd.color
-			search[t].p = 2
-		elseif t == "team" then
-			search[t].text = "Team: " .. d .. "." -- will be merged with role later
-		elseif t == "words" then
-			if d ~= "" then
-				-- only append "--" if there's no ending interpunction
-				local final = string.match(d, "[\\.\\!\\?]$") ~= nil
-
-				search[t].text = PT("search_words", {lastwords = d .. (final and "" or "--.")})
-			end
-		elseif t == "c4" then
-			if d > 0 then
-				search[t].text = PT("search_c4", {num = d})
-			end
-		elseif t == "dmg" then
-			search[t].text = DmgToText(d)
-			search[t].p = 12
-		elseif t == "wep" then
-			local wep = util.WeaponForClass(d)
-			local wname = wep and LANG.TryTranslation(wep.PrintName)
-
-			if wname then
-				search[t].text = PT("search_weapon", {weapon = wname})
-			end
-		elseif t == "head" then
-			if d then
-				search[t].text = T("search_head")
-			end
-
-			search[t].p = 15
-		elseif t == "dtime" then
-			if d ~= 0 then
-				local ftime = util.SimpleTime(d, "%02i:%02i")
-
-				search[t].text = PT("search_time", {time = ftime})
-				search[t].text_icon = ftime
-				search[t].p = 8
-			end
-		elseif t == "stime" then
-			if d > 0 then
-				local ftime = util.SimpleTime(d, "%02i:%02i")
-
-				search[t].text = PT("search_dna", {time = ftime})
-				search[t].text_icon = ftime
-			end
-		elseif t == "kills" then
-			local num = table.Count(d)
-
-			if num == 1 then
-				local vic = Entity(d[1])
-				local dc = d[1] == -1 -- disconnected
-
-				if dc or IsValid(vic) and vic:IsPlayer() then
-					search[t].text = PT("search_kills1", {player = dc and "<Disconnected>" or vic:Nick()})
-				end
-			elseif num > 1 then
-				local txt = T("search_kills2") .. "\n"
-				local nicks = {}
-
-				for k, idx in pairs(d) do
-					local vic = Entity(idx)
-					local dc = idx == -1
-
-					if dc or IsValid(vic) and vic:IsPlayer() then
-						table.insert(nicks, dc and "<Disconnected>" or vic:Nick())
-					end
-				end
-
-				local last = #nicks
-
-				txt = txt .. table.concat(nicks, "\n", 1, last)
-				search[t].text = txt
-			end
-
-			search[t].p = 30
-		elseif t == "lastid" then
-			if d and d.idx ~= -1 then
-				local ent = Entity(d.idx)
-
-				if IsValid(ent) and ent:IsPlayer() then
-					search[t].text = PT("search_eyes", {player = ent:Nick()})
-					search[t].ply = ent
-				end
-			end
+		if isfunction(pfmc_tbl[t]) then
+			pfmc_tbl[t](search, d)
 		else
-			-- Not matching a type, so don't display
 			search[t] = nil
 		end
 
@@ -254,7 +270,11 @@ function PreprocSearch(raw)
 		end
 	end
 
-	for _, item in ipairs(items.GetList()) do
+	local itms = items.GetList()
+
+	for i = 1, #itms do
+		local item = itms[i]
+
 		if not item.noCorpseSearch and raw["eq_" .. item.id] then
 			local highest = 0
 
@@ -328,13 +348,12 @@ local function SearchInfoController(search, dactive, dtext)
 		end
 
 		dactive:SetImage(icon)
-		dactive:SetImageColor(data.color or Color(255, 255, 255, 255))
+		dactive:SetImageColor(data.color or COLOR_WHITE)
 	end
 end
 
 local function ShowSearchScreen(search_raw)
 	local client = LocalPlayer()
-
 	if not IsValid(client) then return end
 
 	local m = 8
@@ -435,8 +454,7 @@ local function ShowSearchScreen(search_raw)
 
 	dcall.DoClick = function(s)
 		client.called_corpses = client.called_corpses or {}
-
-		table.insert(client.called_corpses, search_raw.eidx)
+		client.called_corpses[#client.called_corpses + 1] = search_raw.eidx
 
 		s:SetDisabled(true)
 
@@ -514,22 +532,21 @@ local function ShowSearchScreen(search_raw)
 end
 
 local function StoreSearchResult(search)
-	if search.owner then
-		-- if existing result was not ours, it was detective's, and should not
-		-- be overwritten
-		local ply = search.owner
+	if not search.owner then return end
 
-		if not ply.search_result or ply.search_result.show then
-			ply.search_result = search
+	-- if existing result was not ours, it was detective's, and should not
+	-- be overwritten
+	local ply = search.owner
 
-			-- this is useful for targetid
-			local rag = Entity(search.eidx)
+	if ply.search_result and not ply.search_result.show then return end
 
-			if IsValid(rag) then
-				rag.search_result = search
-			end
-		end
-	end
+	ply.search_result = search
+
+	-- this is useful for targetid
+	local rag = Entity(search.eidx)
+	if not IsValid(rag) then return end
+
+	rag.search_result = search
 end
 
 local function bitsRequired(num)
@@ -560,7 +577,6 @@ local function TTTRagdollSearch()
 	end
 
 	search.nick = net.ReadString()
-
 	search.role_color = net.ReadColor()
 
 	-- Equipment
@@ -590,11 +606,13 @@ local function TTTRagdollSearch()
 	-- Players killed
 	local num_kills = net.ReadUInt(8)
 	if num_kills > 0 then
-		search.kills = {}
+		t_kills = {}
 
 		for i = 1, num_kills do
-			table.insert(search.kills, net.ReadUInt(8))
+			t_kills[i] = net.ReadUInt(8)
 		end
+
+		search.kills = t_kills
 	else
 		search.kills = nil
 	end
