@@ -9,9 +9,7 @@ MSTACK.last = 0
 
 -- Localise some libs
 local table = table
-local surface = surface
 local net = net
-local ipairs = ipairs
 
 local traitor_msg_bg = Color(255, 0, 0, 255)
 

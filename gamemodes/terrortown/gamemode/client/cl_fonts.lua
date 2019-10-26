@@ -2,14 +2,17 @@
 -- @author LeBroomer
 -- @author Alf21
 -- @author saibotk
+-- @author Mineotopia
 
--- micro-optimization stuff
+-- Localise some libs
 local draw = draw
 local surface = surface
 local drawSimpleText = draw.SimpleText
 local table = table
 local cam = cam
 local render = render
+local surface = surface
+local ipairs = ipairs
 
 FONTS = {}
 FONTS.fonts = {}
@@ -200,15 +203,15 @@ function WrapText(text, width, font)
 	local length = 0
 
 	for _, line in ipairs(lines) do
-		local w = surface.GetTextSize(line)
+		local line_w = surface.GetTextSize(line)
 
-		if w > length then
-			length = w
+		if line_w > length then
+			length = line_w
 		end
 	end
 
 	-- get height of lines
-	local w, h = surface.GetTextSize(text)
+	local _, line_h = surface.GetTextSize(text)
 
-	return lines, length, h * #lines
+	return lines, length, line_h * #lines
 end

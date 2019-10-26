@@ -93,7 +93,6 @@ if CLIENT then
 	end
 
 	function HUDELEMENT:Draw()
-		local client = LocalPlayer()
 		local msg = EPOP.msg
 
 		-- fallback for hud-editor
