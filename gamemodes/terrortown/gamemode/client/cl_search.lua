@@ -127,17 +127,17 @@ local pfmc_tbl = {
 		search.nick.p = 1
 		search.nick.nick = d
 	end,
-	role = function(search, d)
+	role = function(search, d, raw)
 		local rd = roles.GetByIndex(d)
 
 		search.role.text = T("search_role_" .. rd.abbr)
 		search.role.color = raw["role_color"] or rd.color
 		search.role.p = 2
 	end,
-	team = function(search, d)
+	team = function(search, d, raw)
 		search.team.text = "Team: " .. d .. "." -- will be merged with role later
 	end,
-	words = function(search, d)
+	words = function(search, d, raw)
 		if d == "" then return end
 
 		-- only append "--" if there's no ending interpunction
@@ -145,16 +145,16 @@ local pfmc_tbl = {
 
 		search.words.text = PT("search_words", {lastwords = d .. (final and "" or "--.")})
 	end,
-	c4 = function(search, d)
+	c4 = function(search, d, raw)
 		if d <= 0 then return end
 
 		search.c4.text = PT("search_c4", {num = d})
 	end,
-	dmg = function(search, d)
+	dmg = function(search, d, raw)
 		search.dmg.text = DmgToText(d)
 		search.dmg.p = 12
 	end,
-	wep = function(search, d)
+	wep = function(search, d, raw)
 		local wep = util.WeaponForClass(d)
 		local wname = wep and LANG.TryTranslation(wep.PrintName)
 
@@ -162,14 +162,14 @@ local pfmc_tbl = {
 
 		search.wep.text = PT("search_weapon", {weapon = wname})
 	end,
-	head = function(search, d)
+	head = function(search, d, raw)
 		search.head.p = 15
 
 		if not d then return end
 
 		search.head.text = T("search_head")
 	end,
-	dtime = function(search, d)
+	dtime = function(search, d, raw)
 		if d == 0 then return end
 
 		local ftime = util.SimpleTime(d, "%02i:%02i")
@@ -178,7 +178,7 @@ local pfmc_tbl = {
 		search.dtime.text_icon = ftime
 		search.dtime.p = 8
 	end,
-	stime = function(search, d)
+	stime = function(search, d, raw)
 		if d <= 0 then return end
 
 		local ftime = util.SimpleTime(d, "%02i:%02i")
@@ -186,7 +186,7 @@ local pfmc_tbl = {
 		search.stime.text = PT("search_dna", {time = ftime})
 		search.stime.text_icon = ftime
 	end,
-	kills = function(search, d)
+	kills = function(search, d, raw)
 		local num = table.Count(d)
 
 		if num == 1 then
@@ -217,7 +217,7 @@ local pfmc_tbl = {
 
 		search.kills.p = 30
 	end,
-	lastid = function(search, d)
+	lastid = function(search, d, raw)
 		if not d or d.idx == -1 then return end
 
 		local ent = Entity(d.idx)
