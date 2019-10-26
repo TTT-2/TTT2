@@ -10,8 +10,8 @@ local net = net
 local IsValid = IsValid
 local hook = hook
 
-CreateConVar("ttt_bots_are_spectators", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-CreateConVar("ttt_dyingshot", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local ttt_bots_are_spectators = CreateConVar("ttt_bots_are_spectators", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local ttt_dyingshot = CreateConVar("ttt_dyingshot", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 CreateConVar("ttt_killer_dna_range", "550", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 CreateConVar("ttt_killer_dna_basetime", "100", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
@@ -46,7 +46,7 @@ function GM:PlayerInitialSpawn(ply)
 	end
 
 	-- Handle spec bots
-	if ply:IsBot() and GetConVar("ttt_bots_are_spectators"):GetBool() then
+	if ply:IsBot() and ttt_bots_are_spectators:GetBool() then
 		ply:SetTeam(TEAM_SPEC)
 		ply:SetForceSpec(true)
 	end
@@ -794,7 +794,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
 	if ply:IsSpec() then return end
 
 	-- Experimental: Fire a last shot if ironsighting and not headshot
-	if GetConVar("ttt_dyingshot"):GetBool() then
+	if ttt_dyingshot:GetBool() then
 		local wep = ply:GetActiveWeapon()
 
 		if IsValid(wep) and wep.DyingShot and not ply.was_headshot and dmginfo:IsBulletDamage() then
