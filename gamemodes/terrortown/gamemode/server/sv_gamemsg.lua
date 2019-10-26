@@ -78,25 +78,27 @@ end
 -- Teamchat
 local function RoleChatMsg(sender, msg)
 	local tm = sender:GetTeam()
-	if tm ~= TEAM_NONE and not sender:GetSubRoleData().disabledTeamChat and not TEAMS[tm].alone then
-		if hook.Run("TTT2AvoidTeamChat", sender, tm, msg) == false then return end
+	if tm == TEAM_NONE or sender:GetSubRoleData().disabledTeamChat or TEAMS[tm].alone or hook.Run("TTT2AvoidTeamChat", sender, tm, msg) == false then return end
 
-		net.Start("TTT_RoleChat")
-		net.WriteEntity(sender)
-		net.WriteString(msg)
-		net.Send(GetTeamChatFilter(tm))
-	end
+	net.Start("TTT_RoleChat")
+	net.WriteEntity(sender)
+	net.WriteString(msg)
+	net.Send(GetTeamChatFilter(tm))
 end
 
 ---
 -- Round start info popup
 -- @realm server
 -- @internal
-function ShowRoundStartPopup()
-	for _, v in ipairs(player.GetAll()) do
-		if IsValid(v) and v:Team() == TEAM_TERROR and v:Alive() then
-			v:ConCommand("ttt_cl_startpopup")
-		end
+function ShowRoundStartPopup() TODO
+	local plys = player.GetAll()
+
+	for i = 1, #plys do
+		local v = plys[i]
+
+		if not IsValid(v) or v:Team() ~= TEAM_TERROR or not v:Alive() then continue end
+
+		v:ConCommand("ttt_cl_startpopup")
 	end
 end
 
@@ -107,11 +109,12 @@ end
 -- @realm server
 function GetPlayerFilter(pred)
 	local filter = {}
+	local plys = player.GetAll()
 
-	for _, v in ipairs(player.GetAll()) do
-		if pred(v) then
-			table.insert(filter, v)
-		end
+	for i = 1, #plys do
+		if not pred(plys[i]) then continue end
+
+		filter[#filter + 1] = plys[i]
 	end
 
 	return filter
@@ -322,20 +325,21 @@ function GM:PlayerSay(ply, text, team_only)
 
 		if team and not DetectiveMode() then
 			local filtered = {}
+			local parts = string.Explode(" ", text)
 
-			for _, v in ipairs(string.Explode(" ", text)) do
+			for i = 1, #parts do
 				-- grab word characters and whitelisted interpunction
 				-- necessary or leetspeek will be used (by trolls especially)
-				local word, interp = string.match(v, "(%a*)([%.,!%?]*)")
+				local word, interp = string.match(parts[i], "(%a*)([%.,!%?]*)")
 
 				if word ~= "" then
-					table.insert(filtered, mumbles[math.random(1, #mumbles)] .. interp)
+					filtered[#filtered + 1] = mumbles[math.random(#mumbles)] .. interp
 				end
 			end
 
 			-- make sure we have something to say
 			if #filtered < 1 then
-				table.insert(filtered, mumbles[math.random(1, #mumbles)])
+				filtered[#filtered + 1] = mumbles[math.random(#mumbles)]
 			end
 
 			table.insert(filtered, 1, "[MUMBLED]")
@@ -374,52 +378,54 @@ local function LastWordsMsg(ply, words)
 end
 
 local function deathrec(ply, cmd, args)
-	if IsValid(ply) and not ply:Alive() and #args > 1 then
-		local id = tonumber(args[1])
+	if not IsValid(ply) or ply:Alive() or #args <= 1 then return end
 
-		if id and ply.last_words_id and id == ply.last_words_id then
-			-- never allow multiple last word stuff
-			ply.last_words_id = nil
+	local id = tonumber(args[1])
 
-			-- we will be storing this on the ragdoll
-			local rag = ply.server_ragdoll
+	if not id or not ply.last_words_id or id ~= ply.last_words_id then
+		ply.last_words_id = nil
 
-			if not (IsValid(rag) and rag.player_ragdoll) then
-				rag = nil
-			end
+		return
+	end
 
-			-- last id'd person
-			local last_seen = tonumber(args[2])
+	-- never allow multiple last word stuff
+	ply.last_words_id = nil
 
-			if last_seen then
-				local ent = Entity(last_seen)
+	-- we will be storing this on the ragdoll
+	local rag = ply.server_ragdoll
 
-				if IsValid(ent) and ent:IsPlayer() and rag and not rag.lastid then
-					rag.lastid = {ent = ent, t = CurTime()}
-				end
-			end
+	if not (IsValid(rag) and rag.player_ragdoll) then
+		rag = nil
+	end
 
-			-- last words
-			local words = string.Trim(args[3])
+	-- last id'd person
+	local last_seen = tonumber(args[2])
 
-			-- nothing of interest
-			if string.len(words) < 2 then return end
+	if last_seen then
+		local ent = Entity(last_seen)
 
-			-- ignore admin commands
-			local firstchar = string.sub(words, 1, 1)
-
-			if firstchar == "!" or firstchar == "@" or firstchar == "/" then return end
-
-			if ttt_lastwords:GetBool() or ply.death_type == KILL_FALL then
-				LastWordsMsg(ply, words)
-			end
-
-			if rag and not rag.last_words then
-				rag.last_words = words
-			end
-		else
-			ply.last_words_id = nil
+		if IsValid(ent) and ent:IsPlayer() and rag and not rag.lastid then
+			rag.lastid = {ent = ent, t = CurTime()}
 		end
+	end
+
+	-- last words
+	local words = string.Trim(args[3])
+
+	-- nothing of interest
+	if string.len(words) < 2 then return end
+
+	-- ignore admin commands
+	local firstchar = string.sub(words, 1, 1)
+
+	if firstchar == "!" or firstchar == "@" or firstchar == "/" then return end
+
+	if ttt_lastwords:GetBool() or ply.death_type == KILL_FALL then
+		LastWordsMsg(ply, words)
+	end
+
+	if rag and not rag.last_words then
+		rag.last_words = words
 	end
 end
 concommand.Add("_deathrec", deathrec)
@@ -439,44 +445,44 @@ function GM:TTTPlayerRadioCommand(ply, msg_name, msg_target)
 end
 
 local function ttt_radio_send(ply, cmd, args)
-	if IsValid(ply) and ply:IsTerror() and #args == 2 then
-		local msg_name = args[1]
-		local msg_target = args[2]
+	if not IsValid(ply) or not ply:IsTerror() or #args ~= 2 then return end
 
-		local name = ""
-		local rag_name = nil
+	local msg_name = args[1]
+	local msg_target = args[2]
 
-		if tonumber(msg_target) then
-			-- player or corpse ent idx
-			local ent = Entity(tonumber(msg_target))
+	local name = ""
+	local rag_name = nil
 
-			if IsValid(ent) then
-				if ent:IsPlayer() then
-					name = ent:Nick()
-				elseif ent:GetClass() == "prop_ragdoll" then
-					name = LANG.NameParam("quick_corpse_id")
-					rag_name = CORPSE.GetPlayerNick(ent, "A Terrorist")
-				end
+	if tonumber(msg_target) then
+		-- player or corpse ent idx
+		local ent = Entity(tonumber(msg_target))
+
+		if IsValid(ent) then
+			if ent:IsPlayer() then
+				name = ent:Nick()
+			elseif ent:GetClass() == "prop_ragdoll" then
+				name = LANG.NameParam("quick_corpse_id")
+				rag_name = CORPSE.GetPlayerNick(ent, "A Terrorist")
 			end
-
-			msg_target = ent
-		else
-			-- lang string
-			name = LANG.NameParam(msg_target)
 		end
 
-		if hook.Call("TTTPlayerRadioCommand", GAMEMODE, ply, msg_name, msg_target) then return end
-
-		net.Start("TTT_RadioMsg")
-		net.WriteEntity(ply)
-		net.WriteString(msg_name)
-		net.WriteString(name)
-
-		if rag_name then
-			net.WriteString(rag_name)
-		end
-
-		net.Broadcast()
+		msg_target = ent
+	else
+		-- lang string
+		name = LANG.NameParam(msg_target)
 	end
+
+	if hook.Call("TTTPlayerRadioCommand", GAMEMODE, ply, msg_name, msg_target) then return end
+
+	net.Start("TTT_RadioMsg")
+	net.WriteEntity(ply)
+	net.WriteString(msg_name)
+	net.WriteString(name)
+
+	if rag_name then
+		net.WriteString(rag_name)
+	end
+
+	net.Broadcast()
 end
 concommand.Add("_ttt_radio_send", ttt_radio_send)
