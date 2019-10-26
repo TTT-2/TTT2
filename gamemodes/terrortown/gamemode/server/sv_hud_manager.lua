@@ -54,8 +54,8 @@ local function DB_GetStringTable(db_table)
 		if istable(res) then
 			local tab = {}
 
-			for _, v in ipairs(res) do
-				table.insert(tab, v.name)
+			for i = 1, #res do
+				tab[#tab + 1] = res[i].name
 			end
 
 			return tab
@@ -89,8 +89,8 @@ local function syncModelRestrictedHUDsAttribute(ply)
 	if istable(value) then
 		net.WriteUInt(#value, 16)
 
-		for _, v in ipairs(value) do
-			net.WriteString(v)
+		for i = 1, #value do
+			net.WriteString(value[i])
 		end
 	else
 		net.WriteUInt(0, 16)
@@ -123,8 +123,10 @@ function HUDManager.StoreData()
 	sql.Query("DROP TABLE " .. HUD_MANAGER_SQL_RESTRICTEDHUDS_TABLE)
 
 	if DB_EnsureTableExists(HUD_MANAGER_SQL_RESTRICTEDHUDS_TABLE, "name TEXT PRIMARY KEY") then
-		for _, v in ipairs(HUDManager.GetModelValue("restrictedHUDs")) do
-			sql.Query("INSERT INTO " .. HUD_MANAGER_SQL_RESTRICTEDHUDS_TABLE .. " VALUES(" .. sql.SQLStr(v) .. ")")
+		local restrictedHuds = HUDManager.GetModelValue("restrictedHUDs")
+
+		for i = 1, #restrictedHuds do
+			sql.Query("INSERT INTO " .. HUD_MANAGER_SQL_RESTRICTEDHUDS_TABLE .. " VALUES(" .. sql.SQLStr(restrictedHuds[i]) .. ")")
 		end
 	end
 end
@@ -186,9 +188,10 @@ net.Receive("TTT2RequestHUD", function(_, ply)
 		local restrictions = HUDManager.GetModelValue("restrictedHUDs") or {}
 		local restricted = false
 
-		for _, v in ipairs(restrictions) do
-			if v == hudname then
+		for i = 1, #restrictions do
+			if restrictions[i] == hudname then
 				restricted = true
+
 				break
 			end
 		end
@@ -198,8 +201,8 @@ net.Receive("TTT2RequestHUD", function(_, ply)
 			restricted = false
 			hudname = oldHUD
 
-			for _, v in ipairs(restrictions) do
-				if v == hudname then
+			for i = 1, #restrictions do
+				if restrictions[i] == hudname then
 					restricted = true
 
 					break
@@ -289,7 +292,7 @@ net.Receive("TTT2RestrictHUDRequest", function(_, ply)
 			local restrictedHUDs = HUDManager.GetModelValue("restrictedHUDs") or {}
 
 			if shouldBeRestricted and not table.HasValue(restrictedHUDs, HUDToRestrict) then
-				table.insert(restrictedHUDs, HUDToRestrict)
+				restrictedHUDs[#restrictedHUDs + 1] = HUDToRestrict
 			elseif not shouldBeRestricted then
 				table.RemoveByValue(restrictedHUDs, HUDToRestrict)
 			end
