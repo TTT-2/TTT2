@@ -52,7 +52,7 @@ local tips_bg = Color(0, 0, 0, 200)
 local tip_ids = {}
 
 for i = 1, 40 do
-	table.insert(tip_ids, i)
+	tip_ids[i] = i
 end
 
 table.Shuffle(tip_ids)
@@ -361,9 +361,9 @@ end
 
 local function TipsCallback(cv, prev, new)
 	if tobool(new) then
-		if LocalPlayer():IsSpec() then
-			TIPS.Show()
-		end
+		if not LocalPlayer():IsSpec() then return end
+
+		TIPS.Show()
 	else
 		TIPS.Hide()
 	end
