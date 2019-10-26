@@ -38,6 +38,7 @@ SWEP.Secondary.Delay = 5
 
 SWEP.Kind = WEAPON_MELEE
 SWEP.WeaponID = AMMO_CROWBAR
+
 SWEP.InLoadoutFor = {
 	ROLE_INNOCENT,
 	ROLE_TRAITOR,
@@ -266,10 +267,6 @@ function SWEP:SecondaryAttack()
 	if isfunction(owner.LagCompensation) then
 		owner:LagCompensation(false)
 	end
-end
-
-function SWEP:GetClass()
-	return "weapon_zm_improvised"
 end
 
 function SWEP:OnDrop()

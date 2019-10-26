@@ -35,6 +35,12 @@ SWEP.Secondary.Delay = 0.1
 
 SWEP.Kind = WEAPON_CARRY
 
+SWEP.InLoadoutFor = {
+	ROLE_INNOCENT,
+	ROLE_TRAITOR,
+	ROLE_DETECTIVE
+}
+
 SWEP.AllowDelete = false
 SWEP.AllowDrop = false
 SWEP.NoSights = true
@@ -45,7 +51,7 @@ SWEP.Constr = nil
 SWEP.PrevOwner = nil
 
 local allow_rag = CreateConVar("ttt_ragdoll_carrying", "1")
-local prop_force = 50
+local prop_force = CreateConVar("ttt_prop_carrying_force", "60000")
 local no_throw = CreateConVar("ttt_no_prop_throwing", "0")
 local pin_rag = CreateConVar("ttt_ragdoll_pinning", "1")
 local pin_rag_inno = CreateConVar("ttt_ragdoll_pinning_innocents", "0")
@@ -267,6 +273,7 @@ function SWEP:AllowPickup(target)
 	and target.CanPickup ~= false
 	and (target:GetClass() ~= "prop_ragdoll" or allow_rag:GetBool())
 	and (not target:IsWeapon() or allow_wep:GetBool())
+	and not hook.Run("TTT2PlayerPreventPickupEnt", ply, target)
 end
 
 function SWEP:DoAttack(pickup)
@@ -291,7 +298,7 @@ function SWEP:DoAttack(pickup)
 		return
 	end
 
-	local ply = self.Owner
+	local ply = self:GetOwner()
 	local trace = ply:GetEyeTrace(MASK_SHOT)
 	local trEnt = trace.Entity
 
@@ -353,6 +360,8 @@ function SWEP:DoAttack(pickup)
 	end
 end
 
+local color_cached = Color(50, 250, 50, 240)
+
 -- Perform a pickup
 function SWEP:Pickup()
 	if CLIENT or IsValid(self.EntHolding) then return end
@@ -367,14 +376,12 @@ function SWEP:Pickup()
 	if IsValid(ent) and IsValid(entphys) then
 		local carryHack = ents.Create("prop_physics")
 
-		self.CarryHack = carryHack
-
 		if IsValid(carryHack) then
 			carryHack:SetPos(ent:GetPos())
 
 			carryHack:SetModel("models/weapons/w_bugbait.mdl")
 
-			carryHack:SetColor(Color(50, 250, 50, 240))
+			carryHack:SetColor(color_cached)
 			carryHack:SetNoDraw(true)
 			carryHack:DrawShadow(false)
 
@@ -384,7 +391,7 @@ function SWEP:Pickup()
 			carryHack:SetSolid(SOLID_NONE)
 
 			-- set the desired angles before adding the constraint
-			carryHack:SetAngles(self:GetOwner():GetAngles())
+			carryHack:SetAngles(ply:GetAngles())
 
 			carryHack:Spawn()
 
@@ -411,7 +418,7 @@ function SWEP:Pickup()
 			entphys:AddGameFlag(FVPHYSICS_PLAYER_HELD)
 
 			local bone = math.Clamp(trace.PhysicsBone, 0, 1)
-			local max_force = prop_force
+			local max_force = prop_force:GetInt()
 
 			if ent:GetClass() == "prop_ragdoll" then
 				self.dt.carried_rag = ent
@@ -423,6 +430,8 @@ function SWEP:Pickup()
 
 			self.Constr = constraint.Weld(carryHack, ent, 0, bone, max_force, true)
 		end
+
+		self.CarryHack = carryHack
 	end
 end
 
