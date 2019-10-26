@@ -64,6 +64,7 @@ ttt_include("cl_status")
 
 ttt_include("cl_armor")
 ttt_include("sh_armor")
+ttt_include("cl_weapon_pickup")
 
 ttt_include("sh_sprint")
 
@@ -278,7 +279,7 @@ end
 concommand.Add("ttt_print_playercount", ttt_print_playercount)
 
 -- optional sound cues on round start and end
-CreateConVar("ttt_cl_soundcues", "0", FCVAR_ARCHIVE)
+local ttt_cl_soundcues = CreateConVar("ttt_cl_soundcues", "0", FCVAR_ARCHIVE)
 
 local cues = {
 	Sound("ttt/thump01e.mp3"),

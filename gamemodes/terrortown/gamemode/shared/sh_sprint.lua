@@ -69,7 +69,7 @@ else
 	end,
 	function()
 		PlayerSprint(false)
-	end, "TTT2 Bindings", "TTT2 Sprint", KEY_LSHIFT)
+	end, "TTT2 Bindings", "f1_bind_sprint", KEY_LSHIFT)
 end
 
 hook.Add("Think", "TTT2PlayerSprinting", function()

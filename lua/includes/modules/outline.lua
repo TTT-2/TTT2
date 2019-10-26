@@ -2,11 +2,13 @@
 -- Outline module
 -- @author https://github.com/ShadowBonnieRUS
 
-module("outline", package.seeall)
-
 local render = render
 local cam = cam
 local surface = surface
+local hook = hook
+local Material = Material
+
+module("outline", package.seeall)
 
 if SERVER then
 	AddCSLuaFile()

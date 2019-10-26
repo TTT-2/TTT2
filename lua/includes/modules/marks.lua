@@ -5,8 +5,6 @@
 -- TODO make marksList sequential
 -- TODO improve storing of list sizes
 
-module("marks", package.seeall)
-
 local render = render
 local table = table
 local IsValid = IsValid
@@ -14,6 +12,8 @@ local cam = cam
 local surface = surface
 local hook = hook
 local pairs = pairs
+
+module("marks", package.seeall)
 
 if SERVER then
 	AddCSLuaFile()
@@ -28,7 +28,7 @@ else
 	-- @param Vector pos position of client's view the rendering starts from
 	-- @param Angle ang angle of client's view the rendering starts from
 	-- @realm client
-	local function Render(ents, col, pos, ang)
+	local function Render(ents, col, pos, ang, w, h)
 		-- check for valid data
 		local tmp = {}
 		local index = 1
@@ -92,9 +92,6 @@ else
 
 		cam.Start3D2D(pos, ang, 1)
 
-		local w = ScrW()
-		local h = ScrH()
-
 		surface.SetDrawColor(col.r, col.g, col.b, col.a)
 		surface.DrawRect(-w, -h, w * 2, h * 2)
 
@@ -117,8 +114,11 @@ else
 
 		ang = Angle(ang.p + 90, ang.y, 0)
 
+		local w = ScrW()
+		local h = ScrH()
+
 		for _, list in pairs(marksList) do
-			Render(list.ents, list.col, pos, ang)
+			Render(list.ents, list.col, pos, ang, w, h)
 		end
 	end
 

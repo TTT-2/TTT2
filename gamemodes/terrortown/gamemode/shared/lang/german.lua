@@ -279,6 +279,7 @@ L.set_fastswmenu_tip = "Wenn der schnelle Waffenwechsel aktiv ist, wird das Waff
 L.set_wswitch = "Verhindere das automatische Schließen des Waffenwechselmenüs."
 L.set_wswitch_tip = "Normalerweise schließt das Waffenwechselmenü automatisch nach ein paar Sekunden, nachdem du zuletzt gescrollet hast. Aktiviere dies, damit es geöffnet bleibt."
 L.set_cues = "Spiele einen Ton ab, wenn eine Runde beginnt oder endet"
+L.weapon_switch_draw_halo = "Zeichne eine Linie um Waffen, die man anschaut"
 
 
 L.set_title_play = "Spieleinstellungen"
@@ -1164,6 +1165,9 @@ L.f1_bind_disable_bind = "Deaktivieren"
 L.f1_bind_description = "Klicke und drücke einen Knopf um ihn zu setzen."
 L.f1_bind_reset_default_description = "Auf Standardwert zurücksetzen."
 L.f1_bind_disable_description = "Deaktiviere diese Bindung."
+
+L.f1_bind_weaponswitch = "Waffe Wechseln"
+L.f1_bind_sprint = "Sprinten"
 
 L.ttt2_bindings_new = "Neue Tasetenbelegung für {name}: {key}"
 L.hud_default = "Standard HUD"
