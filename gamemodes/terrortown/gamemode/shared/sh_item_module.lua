@@ -8,7 +8,9 @@ local itemsPre = "terrortown/entities/items/"
 local itemsFiles = file.Find(itemsPre .. "*.lua", "LUA")
 local _, itemsFolders = file.Find(itemsPre .. "*", "LUA")
 
-for _, fl in ipairs(itemsFiles) do
+for i = 1, #itemsFiles do
+	local fl = itemsFiles[i]
+
 	ITEM = {}
 
 	include(itemsPre .. fl)
@@ -20,12 +22,16 @@ for _, fl in ipairs(itemsFiles) do
 	ITEM = nil
 end
 
-for _, folder in ipairs(itemsFolders) do
+for i = 1, #itemsFolders do
+	local folder = itemsFolders[i]
+
 	ITEM = {}
 
 	local subFiles = file.Find(itemsPre .. folder .. "/*.lua", "LUA")
 
-	for _, fl in ipairs(subFiles) do
+	for k = 1, #subFiles do
+		local fl = subFiles[k]
+
 		if fl == "init.lua" then
 			if SERVER then
 				include(itemsPre .. folder .. "/" .. fl)
@@ -55,7 +61,9 @@ ITEM = oldITEM
 -- Initialize old items and convert them to the new item system
 hook.Add("TTTInitPostEntity", "InitTTT2OldItems", function()
 	for subrole, tbl in pairs(EquipmentItems or {}) do
-		for _, v in ipairs(tbl) do
+		for i = 1, #tbl do
+			local v = tbl[i]
+
 			if v.avoidTTT2 then continue end
 
 			local name = v.ClassName or v.name or WEPS.GetClass(v)
@@ -92,6 +100,8 @@ hook.Add("TTTInitPostEntity", "InitTTT2OldItems", function()
 				items.Register(ITEMDATA, GetEquipmentFileName(name))
 
 				timer.Simple(0, function()
+					if not ITEMDATA then return end
+
 					print("[TTT2][INFO] Automatically converted not adjusted ITEM", name, ITEMDATA.oldId)
 				end)
 			else
