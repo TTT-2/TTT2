@@ -210,7 +210,6 @@ local subtitle_color = Color(210, 210, 210)
 
 local minimalist = CreateConVar("ttt_minimal_targetid", "0", FCVAR_ARCHIVE)
 
-local ring_tex = surface.GetTextureID("effects/select_ring")
 local rag_color = Color(200, 200, 200, 255)
 local MAX_TRACE_LENGTH = math.sqrt(3) * 32768
 
@@ -306,7 +305,7 @@ function GM:HUDDrawTargetID()
 	local key_box_w = key_string_w + 5 * pad
 	local key_box_h = key_string_h + 2 * pad
 	local key_box_x = center_x - key_box_w - 2 * pad - 2 -- -2 because of border width
-	local key_box_y = center_y + 4 * pad
+	local key_box_y = center_y + 42
 
 	local key_string_x = key_box_x + math.Round(0.5 * key_box_w) - 1
 	local key_string_y = key_box_y + math.Round(0.5 * key_box_h) - 1
@@ -587,6 +586,8 @@ hook.Add("TTTRenderEntityInfo", "TTT2HighlightWeapons", function(data, params)
 	params.outlineColor = client:GetRoleColor()
 end)
 
+local ring_tex = Material("effects/select_ring")
+
 -- handle looking at players
 hook.Add("TTTRenderEntityInfo", "TTT2HighlightPlayers", function(data, params)
 	local client = LocalPlayer()
@@ -618,6 +619,13 @@ hook.Add("TTTRenderEntityInfo", "TTT2HighlightPlayers", function(data, params)
 	-- TODO: this detective check has to be removed from here
 	if data.ent.GetSubRole and (rstate > ROUND_PREP and data.ent:IsDetective() or rstate == ROUND_ACTIVE and data.ent:IsSpecial()) then
 		target_role = data.ent:GetSubRoleData()
+	end
+
+	-- add glowing ring around crosshair when role is known
+	if target_role then
+		local icon_size = 64
+
+		draw.DrawFilteredTexture(math.Round(0.5 * (ScrW() - icon_size)), math.Round(0.5 * (ScrH() - icon_size)), icon_size, icon_size, ring_tex, 200, target_role.color)
 	end
 
 	params.drawInfo = true
