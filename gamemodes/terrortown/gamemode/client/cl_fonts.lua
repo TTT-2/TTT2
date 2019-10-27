@@ -22,9 +22,9 @@ local function getScaleModifier(scale)
 	scaleFactor = tonumber(scaleFactor)
 
 	for _, scl in ipairs(FONTS.Scales) do
-	  if scaleFactor <= scl then
+		if scaleFactor <= scl then
 			return scl
-	  end
+		end
 	end
 
 	--fallback (return the last scale)
@@ -83,6 +83,7 @@ function draw.ShadowedText(text, font, x, y, color, xalign, yalign, scaleModifie
 
 	drawSimpleText(text, font, x + dScaleModifier, y + dScaleModifier, tmpCol, xalign, yalign)
 	drawSimpleText(text, font, x + scaleModifier, y + scaleModifier, tmpCol, xalign, yalign)
+	drawSimpleText(text, font, x + scaleModifier, y + scaleModifier, tmpCol, xalign, yalign)
 	drawSimpleText(text, font, x, y, color, xalign, yalign)
 end
 
@@ -91,7 +92,7 @@ end
 -- @note You should use @{surface.CreateAdvancedFont} before trying to access the font
 -- @2D
 -- @param string text The text to be drawn
--- @param string font The font. See @{surface.CreateAdvancedFont} to create your own. The original font should be always created, see @{surface.CreateFont}.
+-- @param [default="DefaultBold"] string font The font. See @{surface.CreateAdvancedFont} to create your own. The original font should be always created, see @{surface.CreateFont}.
 -- @param number x The X Coordinate
 -- @param number y The Y Coordinate
 -- @param Color color The color of the text. Uses the Color structure.
@@ -107,9 +108,9 @@ function draw.AdvancedText(text, font, x, y, color, xalign, yalign, shadow, scal
 	local scaleModifier = 1.0
 
 	if FONTS.fonts[font] then
-	  scaleModifier = getScaleModifier(scale)
-	  font = FONTS.fonts[font][scaleModifier]
-	  scale = scale / scaleModifier
+		scaleModifier = getScaleModifier(scale)
+		font = FONTS.fonts[font][scaleModifier]
+		scale = scale / scaleModifier
 	end
 
 	local scaled = isvector(scale) or scale ~= 1.0
@@ -119,30 +120,44 @@ function draw.AdvancedText(text, font, x, y, color, xalign, yalign, shadow, scal
 		local hw = ScrW() * 0.5
 		local hh = ScrH() * 0.5
 
-	  mat = Matrix()
-	  mat:Translate(Vector(x, y))
-	  mat:Scale(isvector(scale) and scale or Vector(scale, scale, scale))
-	  mat:Translate(-Vector(hw, hh))
+		mat = Matrix()
+		mat:Translate(Vector(x, y))
+		mat:Scale(isvector(scale) and scale or Vector(scale, scale, scale))
+		mat:Translate(-Vector(hw, hh))
 
-	  render.PushFilterMag(TEXFILTER.LINEAR)
-	  render.PushFilterMin(TEXFILTER.LINEAR)
+		render.PushFilterMag(TEXFILTER.LINEAR)
+		render.PushFilterMin(TEXFILTER.LINEAR)
 
-	  cam.PushModelMatrix(mat)
+		cam.PushModelMatrix(mat)
 
-	  x = hw
-	  y = hh
+		x = hw
+		y = hh
 	end
 
 	if shadow then
-	  draw.ShadowedText(text, font, x, y, color, xalign, yalign, scaleModifier)
+		draw.ShadowedText(text, font, x, y, color, xalign, yalign, scaleModifier)
 	else
-	  drawSimpleText(text, font, x, y, color, xalign, yalign)
+		drawSimpleText(text, font, x, y, color, xalign, yalign)
 	end
 
 	if scaled then
-	  cam.PopModelMatrix(mat)
+		cam.PopModelMatrix(mat)
 
-	  render.PopFilterMag()
-	  render.PopFilterMin()
+		render.PopFilterMag()
+		render.PopFilterMin()
 	end
+end
+
+---
+-- Returns the size of a inserted string
+-- @param string text The text that the length should be calculated
+-- @param [default="DefaultBold"] string font The font ID
+-- @warning This function changes the font to the passed font
+-- @return number, number w, h The size of the given text
+-- @2D
+-- @realm client
+function draw.GetTextSize(text, font)
+	surface.SetFont(font or "DefaultBold")
+
+	return surface.GetTextSize(text)
 end

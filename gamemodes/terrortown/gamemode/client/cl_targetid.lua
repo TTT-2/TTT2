@@ -5,35 +5,18 @@ local util = util
 local render = render
 local surface = surface
 local draw = draw
-local GetPTranslation = LANG.GetParamTranslation
-local GetRaw = LANG.GetRawTranslation
-local GetLang = LANG.GetUnsafeLanguageTable
+local GetPT = LANG.GetParamTranslation
+local TryT = LANG.TryTranslation
 local GetPlayers = player.GetAll
 local math = math
 local table = table
 local ipairs = ipairs
 local IsValid = IsValid
-local CreateConVar = CreateConVar
 local hook = hook
 
 local disable_spectatorsoutline = CreateClientConVar("ttt2_disable_spectatorsoutline", "0", true, true)
 local disable_overheadicons = CreateClientConVar("ttt2_disable_overheadicons", "0", true, true)
 
-local key_params = {
-	usekey = Key("+use", "USE"),
-	walkkey = Key("+walk", "WALK")
-}
-
-local ClassHint = {
-	prop_ragdoll = {
-		name = "corpse",
-		hint = "corpse_hint",
-
-		fmt = function(ent, txt)
-			return GetPTranslation(txt, key_params)
-		end
-	}
-}
 
 -- cached materials for overhead icons and outlines
 local propspec_outline = Material("models/props_combine/portalball001_sheet")
@@ -215,15 +198,15 @@ local function DrawPropSpecLabels(client)
 	end
 end
 
--- Crosshair affairs
+surface.CreateFont("TargetID_Key", {font = "Trebuchet24", size = 26, weight = 900})
+surface.CreateFont("TargetID_Title", {font = "Trebuchet24", size = 20, weight = 900})
+surface.CreateFont("TargetID_Subtitle", {font = "Trebuchet24", size = 17, weight = 300})
+surface.CreateFont("TargetID_Description", {font = "Trebuchet24", size = 15, weight = 300})
 
-surface.CreateFont("TargetIDSmall2", {font = "TargetID", size = 16, weight = 1000})
-
-local minimalist = CreateConVar("ttt_minimal_targetid", "0", FCVAR_ARCHIVE)
-local magnifier_mat = Material("icon16/magnifier.png")
-local ring_tex = surface.GetTextureID("effects/select_ring")
-local rag_color = Color(200, 200, 200, 255)
+local minimalist = CreateClientConVar("ttt_minimal_targetid", "0", FCVAR_ARCHIVE)
+local cv_draw_halo = CreateClientConVar("ttt_entity_draw_halo", "1", true, false)
 local MAX_TRACE_LENGTH = math.sqrt(3) * 32768
+local subtitle_color = Color(210, 210, 210)
 
 ---
 -- Called from @{GM:HUDPaint} to draw @{Player} info when you hover over a @{Player} with your crosshair or mouse.
@@ -233,7 +216,6 @@ local MAX_TRACE_LENGTH = math.sqrt(3) * 32768
 -- @local
 function GM:HUDDrawTargetID()
 	local client = LocalPlayer()
-	local L = GetLang()
 
 	if hook.Call("HUDShouldDraw", GAMEMODE, "TTTPropSpec") then
 		DrawPropSpecLabels(client)
@@ -252,202 +234,295 @@ function GM:HUDDrawTargetID()
 		filter = client:GetObserverMode() == OBS_MODE_IN_EYE and {client, client:GetObserverTarget()} or client
 	})
 
+	-- this is the entity the player is looking at right now
 	local ent = trace.Entity
+	local distance = trace.StartPos:Distance(trace.HitPos)
 
+	-- make sure it is a valid entity
 	if not IsValid(ent) or ent.NoTarget then return end
-
-	-- some bools for caching what kind of ent we are looking at
-	local target_role
-	local target_corpse = false
-	local text = nil
-	local color = COLOR_WHITE
 
 	-- if a vehicle, we identify the driver instead
 	if IsValid(ent:GetNWEntity("ttt_driver", nil)) then
 		ent = ent:GetNWEntity("ttt_driver", nil)
-
-		if ent == client then return end
 	end
 
-	local cls = ent:GetClass()
-	local minimal = minimalist:GetBool()
-	local hint = not minimal and (ent.TargetIDHint or ClassHint[cls])
+	-- only add onscreen infos when the entity isn't the local player
+	if ent == client then return end
 
-	if ent:IsPlayer() then
-		local obsTgt = client:GetObserverTarget()
+	-- combine data into a table to read them inside a hook
+	local data = {
+		ent = ent,
+		distance = distance
+	}
 
-		if client:IsSpec() and IsValid(obsTgt) and ent == obsTgt then
-			return
-		elseif ent:GetNWBool("disguised", false) then
-			client.last_id = nil
+	-- preset a table of values that can be changes with a hook
+	local params = {
+		drawInfo = false,
+		drawOutline = false,
+		outlineColor = COLOR_WHITE,
+		displayInfo = {
+			key = nil,
+			icon = nil,
+			iconColor = COLOR_WHITE,
+			title = {text = "", color = COLOR_WHITE},
+			subtitle = {text = "", color = subtitle_color},
+			desc = {}
+		}
+	}
 
-			if client:IsInTeam(ent) and not client:GetSubRoleData().unknownTeam or client:IsSpec() then
-				text = ent:Nick() .. L.target_disg
-			else
-				-- Do not show anything
-				return
-			end
+	-- call internal targetID functions first
+	HUDDrawTargetIDWeapons(data, params)
+	HUDDrawTargetIDPlayers(data, params)
+	HUDDrawTargetIDRagdolls(data, params)
+	HUDDrawTargetIDC4(data, params)
 
-			color = COLOR_RED
-		else
-			text = ent:Nick()
-			client.last_id = ent
-		end
+	-- now run a hook that can be used by addon devs that changes the appearance
+	-- of the targetid
+	hook.Run("TTTRenderEntityInfo", data, params)
 
-		local _ -- Stop global clutter
+	-- drawn an outline around the entity if defined
+	if params.drawOutline and cv_draw_halo:GetBool() then
+		outline.Add(data.ent, params.outlineColor, OUTLINE_MODE_VISIBLE)
+	end
 
-		-- in minimalist targetID, colour nick with health level
-		if minimal then
-			_, color = util.HealthToString(ent:Health(), ent:GetMaxHealth())
-		end
+	if not params.drawInfo then return end
 
-		local rstate = GetRoundState()
+	local center_x = math.Round(0.5 * ScrW(), 0)
+	local center_y = math.Round(0.5 * ScrH(), 0)
 
-		if ent.GetSubRole and (rstate > ROUND_PREP and ent:IsDetective() or rstate == ROUND_ACTIVE and ent:IsSpecial()) then
-			target_role = ent:GetSubRole()
-		end
-	elseif cls == "prop_ragdoll" then
-		-- only show this if the ragdoll has a nick, else it could be a mattress
-		if not CORPSE.GetPlayerNick(ent, false) then return end
+	-- render on display text
+	local pad = 4
+	local pad2 = pad * 2
 
-		target_corpse = true
+	-- draw key and keybox
+	-- the keyboxsize gets used as reference value since in most cases a key will be rendered
+	-- therefore the key size gets calculated every time, even if no key is set
+	local key_string = params.displayInfo.key and string.upper(input.GetKeyName(params.displayInfo.key)) or ""
 
-		if CORPSE.GetFound(ent, false) or not DetectiveMode() then
-			text = CORPSE.GetPlayerNick(ent, "A Terrorist")
-		else
-			text = L.target_unid
-			color = COLOR_YELLOW
-		end
-	elseif not hint then
-		-- Not something to ID and not something to hint about
+	local key_string_w, key_string_h = draw.GetTextSize(key_string, "TargetID_Key")
+
+	local key_box_w = key_string_w + 5 * pad
+	local key_box_h = key_string_h + pad2
+	local key_box_x = center_x - key_box_w - pad2 - 2 -- -2 because of border width
+	local key_box_y = center_y + 42
+
+	local key_string_x = key_box_x + math.Round(0.5 * key_box_w) - 1
+	local key_string_y = key_box_y + math.Round(0.5 * key_box_h) - 1
+
+	if params.displayInfo.key then
+		draw.OutlinedShadowedBox(key_box_x, key_box_y, key_box_w, key_box_h, 1, COLOR_WHITE)
+		draw.ShadowedText(key_string, "TargetID_Key", key_string_x, key_string_y, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+	end
+
+	-- draw icon
+	if params.displayInfo.icon then
+		local icon_x = params.displayInfo.key and (key_box_x - key_box_w - pad2) or center_x - key_box_h - pad2 - 2
+		local icon_y = key_box_y
+
+		draw.FilteredShadowedTexture(icon_x, icon_y, key_box_h, key_box_h, params.displayInfo.icon, params.displayInfo.iconColor.a, params.displayInfo.iconColor)
+	end
+
+	-- draw title
+	local title_string = params.displayInfo.title.text or ""
+
+	local _, title_string_h = draw.GetTextSize(title_string, "TargetID_Title")
+
+	local title_string_x = center_x + pad2
+	local title_string_y = key_box_y + title_string_h - 4
+
+	draw.ShadowedText(title_string, "TargetID_Title", title_string_x, title_string_y, params.displayInfo.title.color, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+
+	-- draw subtitle
+	local subtitle_string = params.displayInfo.subtitle.text or ""
+
+	local subtitle_string_x = center_x + pad2
+	local subtitle_string_y = key_box_y + key_box_h + 2
+
+	draw.ShadowedText(subtitle_string, "TargetID_Subtitle", subtitle_string_x, subtitle_string_y, params.displayInfo.subtitle.color, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+
+	-- in minimalist mode, no descriptions should be shown
+	if minimalist:GetBool() then return end
+
+	-- draw description text
+	local desc_lines = params.displayInfo.desc
+
+	local desc_string_x = center_x + pad2
+	local desc_string_y = key_box_y + key_box_h + 4 * pad
+	local desc_line_h = 17
+	local desc_line_amount = #desc_lines
+
+	for i = 1, desc_line_amount do
+		local text = desc_lines[i].text or ""
+		local color = desc_lines[i].color or COLOR_WHITE
+
+		draw.ShadowedText(text, "TargetID_Description", desc_string_x, desc_string_y, color, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+
+		desc_string_y = desc_string_y + desc_line_h
+	end
+
+	-- draw spacer line
+	local spacer_line_x = center_x - 1
+	local spacer_line_y = key_box_y
+	local spacer_line_l = key_box_h + ((desc_line_amount > 0) and (4 * pad + desc_line_h * desc_line_amount - 3) or 0)
+
+	draw.ShadowedLine(spacer_line_x, spacer_line_y, spacer_line_x, spacer_line_y + spacer_line_l, COLOR_WHITE)
+end
+
+-- handle looking at weapons
+function HUDDrawTargetIDWeapons(data, params)
+	local client = LocalPlayer()
+
+	if not IsValid(client) or not client:IsTerror() or not client:Alive()
+	or data.distance > 100 or not data.ent:IsWeapon() then
 		return
 	end
 
-	local x_orig = ScrW() * 0.5
-	local x = x_orig
-	local y = ScrH() * 0.5
-	local w, h = 0, 0 -- text width/height, reused several times
+	local weapon_name
 
-	if target_role then
-		surface.SetTexture(ring_tex)
-
-		local c = roles.GetByIndex(target_role).color
-
-		surface.SetDrawColor(c.r, c.g, c.b, 200)
-		surface.DrawTexturedRect(x - 32, y - 32, 64, 64)
-	end
-
-	y = y + 30
-
-	local font = "TargetID"
-
-	surface.SetFont(font)
-
-	-- Draw main title, ie. nickname
-	if text then
-		w, h = surface.GetTextSize(text)
-		x = x - w * 0.5
-
-		draw.SimpleText(text, font, x + 1, y + 1, COLOR_BLACK)
-		draw.SimpleText(text, font, x, y, color)
-
-		-- for ragdolls searched by detectives, add icon
-		if ent.search_result and client:IsDetective() then
-
-			-- if I am detective and I know a search result for this corpse, then I
-			-- have searched it or another detective has
-			surface.SetMaterial(magnifier_mat)
-			surface.SetDrawColor(200, 200, 255, 255)
-			surface.DrawTexturedRect(x + w + 5, y, 16, 16)
-		end
-
-		y = y + h + 4
-	end
-
-	-- Minimalist target ID only draws a health-coloured nickname, no hints, no
-	-- karma, no tag
-	if minimal then return end
-
-	-- Draw subtitle: health or type
-	local c = rag_color
-
-	if ent:IsPlayer() then
-		text, c = util.HealthToString(ent:Health(), ent:GetMaxHealth())
-
-		-- HealthToString returns a string id, need to look it up
-		text = L[text]
-	elseif hint then
-		text = GetRaw(hint.name) or hint.name
+	if not data.ent.GetPrintName then
+		weapon_name = data.ent:GetPrintName() or data.ent.PrintName or data.ent:GetClass() or "..."
 	else
-		return
+		weapon_name = data.ent.PrintName or data.ent:GetClass() or "..."
 	end
 
-	font = "TargetIDSmall2"
+	params.drawInfo = true
+	params.displayInfo.key = bind.Find("ttt2_weaponswitch")
+	params.displayInfo.title.text = TryT(weapon_name)
+	params.displayInfo.subtitle.text = TryT("target_switch_weapon")
 
-	surface.SetFont(font)
+	params.drawOutline = true
+	params.outlineColor = client:GetRoleColor()
+end
 
-	w, h = surface.GetTextSize(text)
-	x = x_orig - w * 0.5
+local ring_tex = Material("effects/select_ring")
+local icon_role_not_known = Material("vgui/ttt/dynamic/roles/icon_role_not_known")
 
-	draw.SimpleText(text, font, x + 1, y + 1, COLOR_BLACK)
-	draw.SimpleText(text, font, x, y, c)
+-- handle looking at players
+function HUDDrawTargetIDPlayers(data, params)
+	local client = LocalPlayer()
+	local obsTgt = client:GetObserverTarget()
 
-	font = "TargetIDSmall"
-	surface.SetFont(font)
+	-- has to be a player
+	if not data.ent:IsPlayer() then return end
 
-	-- Draw second subtitle: karma
-	if ent:IsPlayer() and KARMA.IsEnabled() then
-		text, c = util.KarmaToString(ent:GetBaseKarma())
+	local disguised = data.ent:GetNWBool("disguised", false)
 
-		text = L[text]
+	-- oof TTT, why so hacky?! Sets last seen player. Dear reader I don't like this as well, but it has to stay that way
+	-- for compatibility reasons. At least it is uncluttered now!
+	client.last_id = disguised and nil or data.ent
 
-		w, h = surface.GetTextSize(text)
-		y = y + h + 5
-		x = x_orig - w * 0.5
+	-- do not show information when observing a player
+	if client:IsSpec() and IsValid(obsTgt) and data.ent == obsTgt then return end
 
-		draw.SimpleText(text, font, x + 1, y + 1, COLOR_BLACK)
-		draw.SimpleText(text, font, x, y, c)
+	-- disguised players are not shown to normal players, except: same team, unknown team or to spectators
+	if disguised and not (client:IsInTeam(ent) and not client:GetSubRoleData().unknownTeam or client:IsSpec()) then return end
+
+	-- show the role of a player if it is known to the client
+	local rstate = GetRoundState()
+	local target_role
+
+	-- TODO: this detective check has to be removed from here
+	if data.ent.GetSubRole and (rstate > ROUND_PREP and data.ent:IsDetective() or rstate == ROUND_ACTIVE and data.ent:IsSpecial()) then
+		target_role = data.ent:GetSubRoleData()
 	end
 
-	-- Draw key hint
-	if hint and hint.hint then
-		if not hint.fmt then
-			text = GetRaw(hint.hint) or hint.hint
-		else
-			text = hint.fmt(ent, hint.hint)
-		end
-
-		w, h = surface.GetTextSize(text)
-		x = x_orig - w * 0.5
-		y = y + h + 5
-
-		draw.SimpleText(text, font, x + 1, y + 1, COLOR_BLACK)
-		draw.SimpleText(text, font, x, y, COLOR_LGRAY)
-	end
-
-	text = nil
-
+	-- add glowing ring around crosshair when role is known
 	if target_role then
-		local rd = roles.GetByIndex(target_role)
+		local icon_size = 64
 
-		text = L["target_" .. rd.name]
-		c = IsValid(ent) and ent:GetRoleColor() or rd.color
+		draw.FilteredTexture(math.Round(0.5 * (ScrW() - icon_size)), math.Round(0.5 * (ScrH() - icon_size)), icon_size, icon_size, ring_tex, 200, target_role.color)
 	end
 
-	if ent.sb_tag and ent.sb_tag.txt then
-		text = L[ent.sb_tag.txt]
-		c = ent.sb_tag.color
-	elseif target_corpse and client:IsActive() and client:IsShopper() and CORPSE.GetCredits(ent, 0) > 0 then
-		text = L.target_credits
-		c = COLOR_YELLOW
+	params.drawInfo = true
+	params.displayInfo.icon = target_role and target_role.iconMaterial or icon_role_not_known
+	params.displayInfo.iconColor = target_role and data.ent:GetRoleColor() or COLOR_LGRAY
+
+	local h_string, h_color = util.HealthToString(data.ent:Health(), data.ent:GetMaxHealth())
+
+	params.displayInfo.title.text = data.ent:Nick()
+	params.displayInfo.subtitle.text = TryT(h_string)
+	params.displayInfo.subtitle.color = h_color
+
+	-- add karma string if karma is enabled
+	if KARMA.IsEnabled() then
+		local k_string, k_color = util.KarmaToString(data.ent:GetBaseKarma())
+
+		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
+			text = TryT(k_string),
+			color = k_color
+		}
 	end
 
-	if text then
-		w, h = surface.GetTextSize(text)
-		x = x_orig - w * 0.5
-		y = y + h + 5
-
-		draw.SimpleText(text, font, x + 1, y + 1, COLOR_BLACK)
-		draw.SimpleText(text, font, x, y, c)
+	-- add scoreboard tags if tag is set
+	if data.ent.sb_tag and data.ent.sb_tag.txt then
+		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
+			text = TryT(data.ent.sb_tag.txt),
+			color = data.ent.sb_tag.color
+		}
 	end
+
+	-- add hints to the player
+	local hint = data.ent.TargetIDHint
+	if hint and hint.hint then
+		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
+			text = hint.fmt(data.ent, hint.hint),
+			color = COLOR_LGRAY
+		}
+	end
+
+	-- we can now add the disguised info to the playername since a previous check already returned
+	-- the code for players in other teams
+	if disguised then
+		params.displayInfo.title.text = params.displayInfo.title.text .. " " .. string.upper(TryT("target_disg"))
+		params.displayInfo.title.color = COLOR_RED
+	end
+end
+
+local rag_color = Color(225, 220, 210)
+local icon_corpse = Material("vgui/ttt/dynamic/roles/icon_corpse")
+local key_params = {
+	usekey = Key("+use", "USE"),
+	walkkey = Key("+walk", "WALK")
+}
+
+-- handle looking ragdolls
+function HUDDrawTargetIDRagdolls(data, params)
+	local client = LocalPlayer()
+
+	-- has to be a ragdoll
+	if data.ent:GetClass() ~= "prop_ragdoll" then return end
+
+	-- only show this if the ragdoll has a nick, else it could be a mattress
+	if not CORPSE.GetPlayerNick(data.ent, false) then return end
+
+	local corpse_found = CORPSE.GetFound(data.ent, false) or not DetectiveMode()
+
+	params.drawInfo = true
+	params.displayInfo.icon = corpse_found and CORPSE.GetPlayer(data.ent):GetSubRoleData().iconMaterial or icon_corpse
+	params.displayInfo.iconColor = COLOR_YELLOW
+
+	params.displayInfo.title.text = corpse_found and CORPSE.GetPlayerNick(data.ent, "A Terrorist") or TryT("target_unid")
+	params.displayInfo.title.color = corpse_found and rag_color or COLOR_YELLOW
+	params.displayInfo.subtitle.text = GetPT("corpse_hint", key_params)
+
+	-- add hints to the corpse
+	local hint = data.ent.TargetIDHint
+	if hint and hint.hint then
+		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
+			text = hint.fmt(data.ent, hint.hint),
+			color = COLOR_LGRAY
+		}
+	end
+
+	-- add credits info when corpse has credits
+	if client:IsActive() and client:IsShopper() and CORPSE.GetCredits(data.ent, 0) > 0 then
+		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
+			text = TryT("target_credits"),
+			color = COLOR_YELLOW
+		}
+	end
+
+	-- add outline when ragdoll is reachable
+	params.drawOutline = data.distance <= 100
+	params.outlineColor = COLOR_YELLOW
 end

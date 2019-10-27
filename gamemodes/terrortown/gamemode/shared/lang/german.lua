@@ -279,7 +279,7 @@ L.set_fastswmenu_tip = "Wenn der schnelle Waffenwechsel aktiv ist, wird das Waff
 L.set_wswitch = "Verhindere das automatische Schließen des Waffenwechselmenüs."
 L.set_wswitch_tip = "Normalerweise schließt das Waffenwechselmenü automatisch nach ein paar Sekunden, nachdem du zuletzt gescrollet hast. Aktiviere dies, damit es geöffnet bleibt."
 L.set_cues = "Spiele einen Ton ab, wenn eine Runde beginnt oder endet"
-L.weapon_switch_draw_halo = "Zeichne eine Linie um Waffen, die man anschaut"
+L.entity_draw_halo = "Zeichne eine Linie um einige Entities, die man anschaut"
 
 
 L.set_title_play = "Spieleinstellungen"
@@ -594,15 +594,17 @@ L.karma_min = "Verantwortungslos"
 
 -- TargetID misc
 L.corpse = "Leiche"
-L.corpse_hint = "Drücke {usekey} zum Durchsuchen. {walkkey} + {usekey} um verdeckt zu untersuchen."
+L.corpse_hint = "Drücke [{usekey}] zum Durchsuchen. [{walkkey} + {usekey}] um verdeckt zu untersuchen."
 
-L.target_disg = " (GETARNT)"
+L.target_disg = "gestarnt"
 L.target_unid = "Unidentifizierter Körper"
 
-L.target_traitor = "VERRÄTER"
-L.target_detective = "DETEKTIV"
-
 L.target_credits = "Durchsuche, um ungenutzte Credits zu erhalten."
+
+L.target_switch_weapon = "Drücke [Knopf] um mit aktueller Waffe zu tauschen"
+L.target_c4 = "Drücke [Knopf] um C4 Menü zu öffnen"
+L.target_c4_armed = "Drücke [Knopf] um C4 zu entschärfen"
+L.target_c4_not_disarmable = "Du kannst kein C4 eines lebenden Teamkollegen entschärfen"
 
 -- Traitor buttons (HUD buttons with hand icons that only traitors can see)
 L.tbut_single = "Einmaliger Gebrauch"
