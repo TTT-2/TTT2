@@ -1,5 +1,3 @@
-local defaultCol = Color(250, 210, 210)
-
 local function GetPickableWeaponInFront()
 	local client = LocalPlayer()
 

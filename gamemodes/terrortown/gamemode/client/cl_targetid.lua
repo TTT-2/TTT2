@@ -6,7 +6,6 @@ local render = render
 local surface = surface
 local draw = draw
 local GetPTranslation = LANG.GetParamTranslation
-local GetRaw = LANG.GetRawTranslation
 local TryT = LANG.TryTranslation
 local GetLang = LANG.GetUnsafeLanguageTable
 local GetPlayers = player.GetAll
@@ -14,7 +13,6 @@ local math = math
 local table = table
 local ipairs = ipairs
 local IsValid = IsValid
-local CreateConVar = CreateConVar
 local hook = hook
 
 local disable_spectatorsoutline = CreateClientConVar("ttt2_disable_spectatorsoutline", "0", true, true)
@@ -219,7 +217,6 @@ local subtitle_color = Color(210, 210, 210)
 -- @local
 function GM:HUDDrawTargetID()
 	local client = LocalPlayer()
-	local L = GetLang()
 
 	if hook.Call("HUDShouldDraw", GAMEMODE, "TTTPropSpec") then
 		DrawPropSpecLabels(client)
@@ -331,7 +328,7 @@ function GM:HUDDrawTargetID()
 	-- draw title
 	local title_string = params.displayInfo.title.text or ""
 
-	local title_string_w, title_string_h = draw.GetTextSize(title_string, "TargetID_Title")
+	local _, title_string_h = draw.GetTextSize(title_string, "TargetID_Title")
 
 	local title_string_x = center_x + 2 * pad
 	local title_string_y = key_box_y + title_string_h - 4
@@ -340,8 +337,6 @@ function GM:HUDDrawTargetID()
 
 	-- draw subtitle
 	local subtitle_string = params.displayInfo.subtitle.text or ""
-
-	local subtitle_string_w, title_string_h = draw.GetTextSize(subtitle_string, "TargetID_Subtitle")
 
 	local subtitle_string_x = center_x + 2 * pad
 	local subtitle_string_y = key_box_y + key_box_h + 2
@@ -399,6 +394,8 @@ hook.Add("TTTRenderEntityInfo", "TTT2HighlightPlayers", function(data, params)
 	-- has to be a player
 	if not data.ent:IsPlayer() then return end
 
+	local disguised = data.ent:GetNWBool("disguised", false)
+
 	-- oof TTT, why so hacky?! Sets last seen player. Dear reader I don't like this as well, but it has to stay that way
 	-- for compatibility reasons. At least it is uncluttered now!
 	if disguised then
@@ -409,8 +406,6 @@ hook.Add("TTTRenderEntityInfo", "TTT2HighlightPlayers", function(data, params)
 
 	-- do not show information when observing a player
 	if client:IsSpec() and IsValid(obsTgt) and data.ent == obsTgt then return end
-
-	local disguised = data.ent:GetNWBool("disguised", false)
 
 	-- disguised players are not shown to normal players, except: same team, unknown team or to spectators
 	if disguised and not (client:IsInTeam(ent) and not client:GetSubRoleData().unknownTeam or client:IsSpec()) then return end
