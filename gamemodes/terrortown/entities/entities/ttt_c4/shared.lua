@@ -806,11 +806,13 @@ if CLIENT then
 	end
 
 	-- handle looking at C4
-	hook.Add("TTTRenderEntityInfo", "TTT2HighlightC4", function(data, params)
+	function HUDDrawTargetIDC4(data, params)
 		local client = LocalPlayer()
 
-		if data.distance > 100 or data.ent:GetClass() ~= "ttt_c4" then return end
-		if not IsValid(client) or not client:IsTerror() or not client:Alive() then return end
+		if not IsValid(client) or not client:IsTerror() or not client:Alive() then
+		or data.distance > 100 or data.ent:GetClass() ~= "ttt_c4"
+			return
+		end
 
 		params.drawInfo = true
 		params.displayInfo.key = input.GetKeyCode(input.LookupBinding("+use"))
@@ -826,5 +828,5 @@ if CLIENT then
 
 		params.drawOutline = true
 		params.outlineColor = client:GetRoleColor()
-	end)
+	end
 end

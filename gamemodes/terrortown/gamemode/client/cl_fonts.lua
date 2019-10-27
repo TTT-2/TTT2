@@ -152,6 +152,7 @@ end
 -- Returns the size of a inserted string
 -- @param string text The text that the length should be calculated
 -- @param [default="DefaultBold"] string font The font ID
+-- @warning This function changes the font to the passed font
 -- @return number, number w, h The size of the given text
 -- @2D
 -- @realm client

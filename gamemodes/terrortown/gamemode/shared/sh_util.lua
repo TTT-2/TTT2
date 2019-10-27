@@ -597,12 +597,13 @@ if CLIENT then
 	-- @param Material material
 	-- @param number alpha
 	-- @param Color col the alpha value will be ignored
+	-- @deprecated draw.FilteredTexture should be used instead
 	-- @realm client
 	-- @author Mineotopia
 	function util.DrawFilteredTexturedRect(x, y, w, h, material, alpha, col)
-		--print("[TTT2][DEPRECATION][util.DrawFilteredTexturedRect] draw.DrawFilteredTexture should be used instead")
+		--print("[TTT2][DEPRECATION][util.DrawFilteredTexturedRect] draw.FilteredTexture should be used instead")
 
-		draw.DrawFilteredTexture(x, y, w, h, material, alpha, col)
+		draw.FilteredTexture(x, y, w, h, material, alpha, col)
 	end
 end
 

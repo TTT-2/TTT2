@@ -270,6 +270,12 @@ function GM:HUDDrawTargetID()
 		}
 	}
 
+	-- call internal targetID functions first
+	HUDDrawTargetIDWeapons(data, params)
+	HUDDrawTargetIDPlayers(data, params)
+	HUDDrawTargetIDRagdolls(data, params)
+	HUDDrawTargetIDC4(data, params)
+
 	-- now run a hook that can be used by addon devs that changes the appearance
 	-- of the targetid
 	hook.Run("TTTRenderEntityInfo", data, params)
@@ -309,12 +315,10 @@ function GM:HUDDrawTargetID()
 
 	-- draw icon
 	if params.displayInfo.icon then
-		local icon_w = key_box_h
-		local icon_h = key_box_h
-		local icon_x = params.displayInfo.key and (key_box_x - key_box_w - 2 * pad) or center_x - icon_w - 2 * pad - 2
+		local icon_x = params.displayInfo.key and (key_box_x - key_box_w - 2 * pad) or center_x - key_box_h - 2 * pad - 2
 		local icon_y = key_box_y
 
-		draw.DrawFilteredShadowedTexture(icon_x, icon_y, icon_w, icon_h, params.displayInfo.icon, params.displayInfo.iconColor.a, params.displayInfo.iconColor)
+		draw.FilteredShadowedTexture(icon_x, icon_y, key_box_h, key_box_h, params.displayInfo.icon, params.displayInfo.iconColor.a, params.displayInfo.iconColor)
 	end
 
 	-- draw title
@@ -339,13 +343,16 @@ function GM:HUDDrawTargetID()
 	if minimalist:GetBool() then return end
 
 	-- draw description text
+	local desc_lines = params.displayInfo.desc
+
 	local desc_string_x = center_x + 2 * pad
 	local desc_string_y = key_box_y + key_box_h + 4 * pad
 	local desc_line_h = 17
+	local desc_line_amount = #desc_lines
 
-	for i = 1, #params.displayInfo.desc do
-		local text = params.displayInfo.desc[i].text or ""
-		local color = params.displayInfo.desc[i].color or COLOR_WHITE
+	for i = 1, desc_line_amount do
+		local text = desc_lines[i].text or ""
+		local color = desc_lines[i].color or COLOR_WHITE
 
 		draw.ShadowedText(text, "TargetID_Description", desc_string_x, desc_string_y, color, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
 
@@ -355,14 +362,14 @@ function GM:HUDDrawTargetID()
 	-- draw spacer line
 	local spacer_line_x = center_x - 1
 	local spacer_line_y = key_box_y
-	local spacer_line_l = key_box_h + ((#params.displayInfo.desc > 0) and (4 * pad + desc_line_h * #params.displayInfo.desc - 3) or 0)
+	local spacer_line_l = key_box_h + ((desc_line_amount > 0) and (4 * pad + desc_line_h * desc_line_amount - 3) or 0)
 
-	draw.DrawShadowedLine(spacer_line_x, spacer_line_y, spacer_line_x, spacer_line_y + spacer_line_l, COLOR_WHITE)
+	draw.ShadowedLine(spacer_line_x, spacer_line_y, spacer_line_x, spacer_line_y + spacer_line_l, COLOR_WHITE)
 end
 
 
 -- handle looking at weapons
-hook.Add("TTTRenderEntityInfo", "TTT2HighlightWeapons", function(data, params)
+function HUDDrawTargetIDWeapons(data, params)
 	local client = LocalPlayer()
 
 	if data.distance > 100 or not data.ent:IsWeapon() then return end
@@ -382,13 +389,13 @@ hook.Add("TTTRenderEntityInfo", "TTT2HighlightWeapons", function(data, params)
 
 	params.drawOutline = true
 	params.outlineColor = client:GetRoleColor()
-end)
+end
 
 local ring_tex = Material("effects/select_ring")
 local icon_role_not_known = Material("vgui/ttt/dynamic/roles/icon_role_not_known")
 
 -- handle looking at players
-hook.Add("TTTRenderEntityInfo", "TTT2HighlightPlayers", function(data, params)
+function HUDDrawTargetIDPlayers(data, params)
 	local client = LocalPlayer()
 	local obsTgt = client:GetObserverTarget()
 
@@ -424,7 +431,7 @@ hook.Add("TTTRenderEntityInfo", "TTT2HighlightPlayers", function(data, params)
 	if target_role then
 		local icon_size = 64
 
-		draw.DrawFilteredTexture(math.Round(0.5 * (ScrW() - icon_size)), math.Round(0.5 * (ScrH() - icon_size)), icon_size, icon_size, ring_tex, 200, target_role.color)
+		draw.FilteredTexture(math.Round(0.5 * (ScrW() - icon_size)), math.Round(0.5 * (ScrH() - icon_size)), icon_size, icon_size, ring_tex, 200, target_role.color)
 	end
 
 	params.drawInfo = true
@@ -459,7 +466,7 @@ hook.Add("TTTRenderEntityInfo", "TTT2HighlightPlayers", function(data, params)
 		params.displayInfo.title.text = params.displayInfo.title.text .. " " .. string.upper(TryT("target_disg"))
 		params.displayInfo.title.color = COLOR_RED
 	end
-end)
+end
 
 local rag_color = Color(225, 220, 210)
 local icon_corpse = Material("vgui/ttt/dynamic/roles/icon_corpse")
@@ -469,7 +476,7 @@ local key_params = {
 }
 
 -- handle looking ragdolls
-hook.Add("TTTRenderEntityInfo", "TTT2HighlightRagdolls", function(data, params)
+function HUDDrawTargetIDRagdolls(data, params)
 	local client = LocalPlayer()
 
 	-- has to be a ragdoll
@@ -502,4 +509,4 @@ hook.Add("TTTRenderEntityInfo", "TTT2HighlightRagdolls", function(data, params)
 	-- add outline when ragdoll is reachable
 	params.drawOutline = data.distance <= 100
 	params.outlineColor = COLOR_YELLOW
-end)
+end

@@ -58,7 +58,7 @@ end
 -- @param [default=COLOR_WHITE] Color color The color of the line
 -- @2D
 -- @realm client
-function draw.DrawLine(startX, startY, endX, endY, color)
+function draw.Line(startX, startY, endX, endY, color)
 	surface.SetDrawColor(color or COLOR_WHITE)
 	surface.DrawLine(startX, startY, endX, endY)
 end
@@ -72,16 +72,16 @@ end
 -- @param [default=COLOR_WHITE] Color color The color of the line
 -- @2D
 -- @realm client
-function draw.DrawShadowedLine(startX, startY, endX, endY, color)
+function draw.ShadowedLine(startX, startY, endX, endY, color)
 	color = color or COLOR_WHITE
 
 	local tmpCol = color.r + color.g + color.b > 200 and tableCopy(shadowColorDark) or tableCopy(shadowColorWhite)
 	tmpCol.a = tmpCol.a * (color.a / 255.0)
 
-	draw.DrawLine(startX + 2, startY + 2, endX + 2, endY + 2, tmpCol)
-	draw.DrawLine(startX + 1, startY + 1, endX + 1, endY + 1, tmpCol)
-	draw.DrawLine(startX + 1, startY + 1, endX + 1, endY + 1, tmpCol)
-	draw.DrawLine(startX, startY, endX, endY, color)
+	draw.Line(startX + 2, startY + 2, endX + 2, endY + 2, tmpCol)
+	draw.Line(startX + 1, startY + 1, endX + 1, endY + 1, tmpCol)
+	draw.Line(startX + 1, startY + 1, endX + 1, endY + 1, tmpCol)
+	draw.Line(startX, startY, endX, endY, color)
 end
 
 ---
@@ -95,7 +95,7 @@ end
 -- @param [default=COLOR_WHITE] Color col the alpha value will be ignored
 -- @2D
 -- @realm client
-function draw.DrawFilteredTexture(x, y, w, h, material, alpha, color)
+function draw.FilteredTexture(x, y, w, h, material, alpha, color)
 	alpha = alpha or 255
 	color = color or COLOR_WHITE
 
@@ -122,15 +122,15 @@ end
 -- @param [default=COLOR_WHITE] Color col the alpha value will be ignored
 -- @2D
 -- @realm client
-function draw.DrawFilteredShadowedTexture(x, y, w, h, material, alpha, color)
+function draw.FilteredShadowedTexture(x, y, w, h, material, alpha, color)
 	alpha = alpha or 255
 	color = color or COLOR_WHITE
 
 	local tmpCol = color.r + color.g + color.b > 200 and tableCopy(shadowColorDark) or tableCopy(shadowColorWhite)
 	tmpCol.a = tmpCol.a * (alpha / 255.0)
 
-	draw.DrawFilteredTexture(x + 2, y + 2, w, h, material, tmpCol.a, tmpCol)
-	draw.DrawFilteredTexture(x + 1, y + 1, w, h, material, tmpCol.a, tmpCol)
-	draw.DrawFilteredTexture(x, y, w, h, material, alpha, color)
+	draw.FilteredTexture(x + 2, y + 2, w, h, material, tmpCol.a, tmpCol)
+	draw.FilteredTexture(x + 1, y + 1, w, h, material, tmpCol.a, tmpCol)
+	draw.FilteredTexture(x, y, w, h, material, alpha, color)
 end
 
