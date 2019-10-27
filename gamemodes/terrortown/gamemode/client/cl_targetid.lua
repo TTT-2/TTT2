@@ -219,6 +219,7 @@ end
 surface.CreateFont("TargetID_Key", {font = "Trebuchet24", size = 26, weight = 900})
 surface.CreateFont("TargetID_Title", {font = "Trebuchet24", size = 22, weight = 900})
 surface.CreateFont("TargetID_Subtitle", {font = "Trebuchet24", size = 16, weight = 600})
+surface.CreateFont("TargetID_Description", {font = "Trebuchet24", size = 16, weight = 400})
 
 local subtitle_color = Color(210, 210, 210)
 
@@ -306,55 +307,63 @@ function GM:HUDDrawTargetID()
 	local center_y = math.Round(0.5 * ScrH(), 0)
 
 	-- render on display text
-	if params.displayInfo.key then
-		local pad = 4
+	local pad = 4
 
-		-- draw key and keybox
-		local key_string = string.upper(input.GetKeyName(params.displayInfo.key))
+	-- draw key and keybox
+	local key_string = string.upper(input.GetKeyName(params.displayInfo.key) or "")
 
-		local key_string_w, key_string_h = draw.GetTextSize(key_string, "TargetID_Key")
+	local key_string_w, key_string_h = draw.GetTextSize(key_string, "TargetID_Key")
 
-		local key_box_w = key_string_w + 5 * pad
-		local key_box_h = key_string_h + 2 * pad
-		local key_box_x = center_x - key_box_w - 2 * pad - 2 -- -2 because of border width
-		local key_box_y = center_y + 4 * pad
+	local key_box_w = key_string_w + 5 * pad
+	local key_box_h = key_string_h + 2 * pad
+	local key_box_x = center_x - key_box_w - 2 * pad - 2 -- -2 because of border width
+	local key_box_y = center_y + 4 * pad
 
-		local key_string_x = key_box_x + math.Round(0.5 * key_box_w) - 1
-		local key_string_y = key_box_y + math.Round(0.5 * key_box_h) - 1
+	local key_string_x = key_box_x + math.Round(0.5 * key_box_w) - 1
+	local key_string_y = key_box_y + math.Round(0.5 * key_box_h) - 1
 
-		draw.OutlinedShadowedBox(key_box_x, key_box_y, key_box_w, key_box_h, 1, COLOR_WHITE)
-		draw.ShadowedText(key_string, "TargetID_Key", key_string_x, key_string_y, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+	draw.OutlinedShadowedBox(key_box_x, key_box_y, key_box_w, key_box_h, 1, COLOR_WHITE)
+	draw.ShadowedText(key_string, "TargetID_Key", key_string_x, key_string_y, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
-		-- draw spacer line
-		local spacer_line_x = center_x - 1
-		local spacer_line_y = key_box_y
-		local spacer_line_l = key_box_h
+	-- draw spacer line
+	local spacer_line_x = center_x - 1
+	local spacer_line_y = key_box_y
+	local spacer_line_l = key_box_h
 
-		draw.DrawShadowedLine(spacer_line_x, spacer_line_y, spacer_line_x, spacer_line_y + spacer_line_l, COLOR_WHITE)
+	draw.DrawShadowedLine(spacer_line_x, spacer_line_y, spacer_line_x, spacer_line_y + spacer_line_l, COLOR_WHITE)
 
-		-- draw title
-		local title_string = params.displayInfo.title.text or ""
+	-- draw title
+	local title_string = params.displayInfo.title.text or ""
 
-		local title_string_w, title_string_h = draw.GetTextSize(title_string, "TargetID_Title")
+	local title_string_w, title_string_h = draw.GetTextSize(title_string, "TargetID_Title")
 
-		local title_string_x = center_x + 2 * pad
-		local title_string_y = key_box_y + title_string_h - 4
+	local title_string_x = center_x + 2 * pad
+	local title_string_y = key_box_y + title_string_h - 4
 
-		draw.ShadowedText(title_string, "TargetID_Title", title_string_x, title_string_y, params.displayInfo.title.color, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+	draw.ShadowedText(title_string, "TargetID_Title", title_string_x, title_string_y, params.displayInfo.title.color, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 
-		-- draw subtitle
-		local subtitle_string = params.displayInfo.subtitle.text or ""
+	-- draw subtitle
+	local subtitle_string = params.displayInfo.subtitle.text or ""
 
-		local subtitle_string_w, title_string_h = draw.GetTextSize(subtitle_string, "TargetID_Subtitle")
+	local subtitle_string_w, title_string_h = draw.GetTextSize(subtitle_string, "TargetID_Subtitle")
 
-		local subtitle_string_x = center_x + 2 * pad
-		local subtitle_string_y = key_box_y + key_box_h + 2
+	local subtitle_string_x = center_x + 2 * pad
+	local subtitle_string_y = key_box_y + key_box_h + 2
 
-		draw.ShadowedText(subtitle_string, "TargetID_Subtitle", subtitle_string_x, subtitle_string_y, params.displayInfo.subtitle.color, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
-	else
+	draw.ShadowedText(subtitle_string, "TargetID_Subtitle", subtitle_string_x, subtitle_string_y, params.displayInfo.subtitle.color, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 
+	-- draw description text
+	local desc_string_x = center_x
+	local desc_string_y = key_box_y + key_box_h + 4 * pad
+
+	for i = 1, #params.displayInfo.desc do
+		local text = params.displayInfo.desc[i].text
+		local color = params.displayInfo.desc[i].color
+
+		draw.ShadowedText(text, "TargetID_Description", desc_string_x, desc_string_y, color, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+
+		desc_string_y = desc_string_y + 20
 	end
-
 
 
 
