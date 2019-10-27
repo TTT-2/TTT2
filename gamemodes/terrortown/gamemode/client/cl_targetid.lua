@@ -261,6 +261,14 @@ function GM:HUDDrawTargetID()
 	-- make sure it is a valid entity
 	if not IsValid(ent) or ent.NoTarget then return end
 
+	-- if a vehicle, we identify the driver instead
+	if IsValid(ent:GetNWEntity("ttt_driver", nil)) then
+		ent = ent:GetNWEntity("ttt_driver", nil)
+	end
+
+	-- only add onscreen infos when the entity isn't the local player
+	if ent == client then return end
+
 	-- combine data into a table to read them inside a hook
 	local data = {
 		ent = ent,
@@ -278,23 +286,19 @@ function GM:HUDDrawTargetID()
 	hook.Run("TTTRenderEntityInfo", data, params)
 
 	if params.DrawOutline and cv_draw_halo:GetBool() then
-		outline.Add(ent, params.OutlineColor, OUTLINE_MODE_VISIBLE)
+		outline.Add(data.ent, params.OutlineColor, OUTLINE_MODE_VISIBLE)
 	end
 
 	-- END TODO
 
+	--[[
 	-- some bools for caching what kind of ent we are looking at
 	local target_role
 	local target_corpse = false
 	local text = nil
 	local color = COLOR_WHITE
 
-	-- if a vehicle, we identify the driver instead
-	if IsValid(ent:GetNWEntity("ttt_driver", nil)) then
-		ent = ent:GetNWEntity("ttt_driver", nil)
-
-		if ent == client then return end
-	end
+	
 
 	local cls = ent:GetClass()
 	local minimal = minimalist:GetBool()
@@ -477,6 +481,7 @@ function GM:HUDDrawTargetID()
 		draw.SimpleText(text, font, x + 1, y + 1, COLOR_BLACK)
 		draw.SimpleText(text, font, x, y, c)
 	end
+	--]]
 end
 
 
@@ -489,4 +494,42 @@ hook.Add("TTTRenderEntityInfo", "TTT2HighlightWeapons", function(data, params)
 
 	params.DrawOutline = true
 	params.OutlineColor = client:GetRoleColor()
+end)
+
+-- handle looking at players
+hook.Add("TTTRenderEntityInfo", "TTT2HighlightPlayers", function(data, params)
+	local client = LocalPlayer()
+	local obsTgt = client:GetObserverTarget()
+
+	-- has to be a player
+	if not data.ent:IsPlayer() then return end
+
+	-- do not show information when observing a player
+	if client:IsSpec() and IsValid(obsTgt) and data.ent == obsTgt then return end
+
+	local disguised = data.ent:GetNWBool("disguised", false)
+
+	-- disguised players are not shown to normal players, except: same team, unknown team or to spectators
+	if disguised and not (client:IsInTeam(ent) and not client:GetSubRoleData().unknownTeam or client:IsSpec()) then return end
+
+	-- show the role of a player if it is known to the client
+	local rstate = GetRoundState()
+	local target_role
+
+	-- TODO: this detective check has to be removed from here
+	if data.ent.GetSubRole and (rstate > ROUND_PREP and data.ent:IsDetective() or rstate == ROUND_ACTIVE and data.ent:IsSpecial()) then
+		target_role = data.ent:GetSubRole()
+	end
+
+
+	-- TODO generate text
+	--text = ent:Nick() .. L.target_disg
+
+	-- oof TTT, why so hacky?! Set last seen player, dear ready I don't like this at well, but it has to stay that way
+	-- for compatibility reasons. At least it is uncluttered now!
+	if disguised then
+		client.last_id = nil
+	else
+		client.last_id = data.ent
+	end
 end)
