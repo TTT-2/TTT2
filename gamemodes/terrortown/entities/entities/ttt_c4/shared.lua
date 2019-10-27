@@ -813,7 +813,7 @@ if CLIENT then
 		if not IsValid(client) or not client:IsTerror() or not client:Alive() then return end
 
 		params.drawInfo = true
-		params.displayInfo.key = input.GetKeyCode(input.LookupBinding('+use'))
+		params.displayInfo.key = input.GetKeyCode(input.LookupBinding("+use"))
 		params.displayInfo.title.text = TryT(data.ent.PrintName)
 		params.displayInfo.subtitle.text = data.ent:GetArmed() and TryT("target_c4_armed") or TryT("target_c4")
 
