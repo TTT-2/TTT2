@@ -199,9 +199,9 @@ local function DrawPropSpecLabels(client)
 end
 
 surface.CreateFont("TargetID_Key", {font = "Trebuchet24", size = 26, weight = 900})
-surface.CreateFont("TargetID_Title", {font = "Trebuchet24", size = 22, weight = 900})
-surface.CreateFont("TargetID_Subtitle", {font = "Trebuchet24", size = 16, weight = 600})
-surface.CreateFont("TargetID_Description", {font = "Trebuchet24", size = 16, weight = 400})
+surface.CreateFont("TargetID_Title", {font = "Trebuchet24", size = 20, weight = 900})
+surface.CreateFont("TargetID_Subtitle", {font = "Trebuchet24", size = 17, weight = 300})
+surface.CreateFont("TargetID_Description", {font = "Trebuchet24", size = 15, weight = 300})
 
 local minimalist = CreateClientConVar("ttt_minimal_targetid", "0", FCVAR_ARCHIVE)
 local cv_draw_halo = CreateClientConVar("ttt_entity_draw_halo", "1", true, false)
@@ -317,13 +317,6 @@ function GM:HUDDrawTargetID()
 		draw.DrawFilteredShadowedTexture(icon_x, icon_y, icon_w, icon_h, params.displayInfo.icon, params.displayInfo.iconColor.a, params.displayInfo.iconColor)
 	end
 
-	-- draw spacer line
-	local spacer_line_x = center_x - 1
-	local spacer_line_y = key_box_y
-	local spacer_line_l = key_box_h
-
-	draw.DrawShadowedLine(spacer_line_x, spacer_line_y, spacer_line_x, spacer_line_y + spacer_line_l, COLOR_WHITE)
-
 	-- draw title
 	local title_string = params.displayInfo.title.text or ""
 
@@ -346,17 +339,26 @@ function GM:HUDDrawTargetID()
 	if minimalist:GetBool() then return end
 
 	-- draw description text
-	local desc_string_x = center_x
+	local desc_string_x = center_x + 2 * pad
 	local desc_string_y = key_box_y + key_box_h + 4 * pad
 
 	for i = 1, #params.displayInfo.desc do
 		local text = params.displayInfo.desc[i].text or ""
 		local color = params.displayInfo.desc[i].color or COLOR_WHITE
 
-		draw.ShadowedText(text, "TargetID_Description", desc_string_x, desc_string_y, color, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+		draw.ShadowedText(text, "TargetID_Description", desc_string_x, desc_string_y, color, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
 
-		desc_string_y = desc_string_y + 20
+		desc_string_y = desc_string_y + 17
 	end
+
+	_, desc_h = draw.GetTextSize(" ", "TargetID_Description")
+
+	-- draw spacer line
+	local spacer_line_x = center_x - 1
+	local spacer_line_y = key_box_y
+	local spacer_line_l = key_box_h + ((#params.displayInfo.desc > 0) and (4 * pad + desc_h * #params.displayInfo.desc) or 0)
+
+	draw.DrawShadowedLine(spacer_line_x, spacer_line_y, spacer_line_x, spacer_line_y + spacer_line_l, COLOR_WHITE)
 end
 
 
@@ -384,6 +386,7 @@ hook.Add("TTTRenderEntityInfo", "TTT2HighlightWeapons", function(data, params)
 end)
 
 local ring_tex = Material("effects/select_ring")
+local icon_role_not_known = Material("vgui/ttt/dynamic/roles/icon_role_not_known")
 
 -- handle looking at players
 hook.Add("TTTRenderEntityInfo", "TTT2HighlightPlayers", function(data, params)
@@ -426,7 +429,7 @@ hook.Add("TTTRenderEntityInfo", "TTT2HighlightPlayers", function(data, params)
 	end
 
 	params.drawInfo = true
-	params.displayInfo.icon = target_role and target_role.iconMaterial or nil
+	params.displayInfo.icon = target_role and target_role.iconMaterial or icon_role_not_known
 	params.displayInfo.iconColor = target_role and data.ent:GetRoleColor() or COLOR_WHITE
 
 	local h_string, h_color = util.HealthToString(data.ent:Health(), data.ent:GetMaxHealth())
@@ -479,7 +482,7 @@ hook.Add("TTTRenderEntityInfo", "TTT2HighlightRagdolls", function(data, params)
 	local corpse_found = CORPSE.GetFound(data.ent, false) or not DetectiveMode()
 
 	params.drawInfo = true
-	params.displayInfo.icon = icon_corpse
+	params.displayInfo.icon = corpse_found and CORPSE.GetPlayer(data.ent):GetSubRoleData().iconMaterial or icon_corpse
 	params.displayInfo.iconColor = COLOR_YELLOW
 
 	params.displayInfo.title.text = corpse_found and CORPSE.GetPlayerNick(data.ent, "A Terrorist") or TryT("target_unid")

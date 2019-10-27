@@ -806,7 +806,7 @@ if CLIENT then
 	end
 
 	-- handle looking at C4
-	hook.Add("TTTRenderEntityInfo", "TTT2HighlightWeapons", function(data, params)
+	hook.Add("TTTRenderEntityInfo", "TTT2HighlightC4", function(data, params)
 		local client = LocalPlayer()
 
 		if data.distance > 100 or data.ent:GetClass() ~= "ttt_c4" then return end
@@ -815,7 +815,14 @@ if CLIENT then
 		params.drawInfo = true
 		params.displayInfo.key = input.GetKeyCode(input.LookupBinding("+use"))
 		params.displayInfo.title.text = TryT(data.ent.PrintName)
+
+		-- TODO this will be doable after the introduction of the unknown_role_state
+		--if data.ent:GetArmed() and data.ent.Owner ~= client and IsValid(data.ent.Owner) and data.ent.Owner:Alive() and data.ent:GetTeam() == client:GetTeam() then
+		--	params.displayInfo.subtitle.text = TryT("target_c4_not_disarmable")
+		--	params.displayInfo.subtitle.color = COLOR_ORANGE
+		--else
 		params.displayInfo.subtitle.text = data.ent:GetArmed() and TryT("target_c4_armed") or TryT("target_c4")
+		--end
 
 		params.drawOutline = true
 		params.outlineColor = client:GetRoleColor()

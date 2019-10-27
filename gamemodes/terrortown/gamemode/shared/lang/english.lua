@@ -613,6 +613,7 @@ L.target_credits = "Search to receive unspent credits"
 L.target_switch_weapon = "Press [key] to swap with your current weapon"
 L.target_c4 = "Press [key] to open C4 menu"
 L.target_c4_armed = "Press [key] to disarm C4"
+L.target_c4_not_disarmable = "You can't disarm C4 of a living teammate"
 
 -- Traitor buttons (HUD buttons with hand icons that only traitors can see)
 L.tbut_single = "Single use"
