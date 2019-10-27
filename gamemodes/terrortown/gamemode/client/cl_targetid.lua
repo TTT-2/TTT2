@@ -292,6 +292,7 @@ function GM:HUDDrawTargetID()
 
 	-- render on display text
 	local pad = 4
+	local pad2 = pad * 2
 
 	-- draw key and keybox
 	-- the keyboxsize gets used as reference value since in most cases a key will be rendered
@@ -301,8 +302,8 @@ function GM:HUDDrawTargetID()
 	local key_string_w, key_string_h = draw.GetTextSize(key_string, "TargetID_Key")
 
 	local key_box_w = key_string_w + 5 * pad
-	local key_box_h = key_string_h + 2 * pad
-	local key_box_x = center_x - key_box_w - 2 * pad - 2 -- -2 because of border width
+	local key_box_h = key_string_h + pad2
+	local key_box_x = center_x - key_box_w - pad2 - 2 -- -2 because of border width
 	local key_box_y = center_y + 42
 
 	local key_string_x = key_box_x + math.Round(0.5 * key_box_w) - 1
@@ -315,7 +316,7 @@ function GM:HUDDrawTargetID()
 
 	-- draw icon
 	if params.displayInfo.icon then
-		local icon_x = params.displayInfo.key and (key_box_x - key_box_w - 2 * pad) or center_x - key_box_h - 2 * pad - 2
+		local icon_x = params.displayInfo.key and (key_box_x - key_box_w - pad2) or center_x - key_box_h - pad2 - 2
 		local icon_y = key_box_y
 
 		draw.FilteredShadowedTexture(icon_x, icon_y, key_box_h, key_box_h, params.displayInfo.icon, params.displayInfo.iconColor.a, params.displayInfo.iconColor)
@@ -326,7 +327,7 @@ function GM:HUDDrawTargetID()
 
 	local _, title_string_h = draw.GetTextSize(title_string, "TargetID_Title")
 
-	local title_string_x = center_x + 2 * pad
+	local title_string_x = center_x + pad2
 	local title_string_y = key_box_y + title_string_h - 4
 
 	draw.ShadowedText(title_string, "TargetID_Title", title_string_x, title_string_y, params.displayInfo.title.color, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
@@ -334,7 +335,7 @@ function GM:HUDDrawTargetID()
 	-- draw subtitle
 	local subtitle_string = params.displayInfo.subtitle.text or ""
 
-	local subtitle_string_x = center_x + 2 * pad
+	local subtitle_string_x = center_x + pad2
 	local subtitle_string_y = key_box_y + key_box_h + 2
 
 	draw.ShadowedText(subtitle_string, "TargetID_Subtitle", subtitle_string_x, subtitle_string_y, params.displayInfo.subtitle.color, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
@@ -345,7 +346,7 @@ function GM:HUDDrawTargetID()
 	-- draw description text
 	local desc_lines = params.displayInfo.desc
 
-	local desc_string_x = center_x + 2 * pad
+	local desc_string_x = center_x + pad2
 	local desc_string_y = key_box_y + key_box_h + 4 * pad
 	local desc_line_h = 17
 	local desc_line_amount = #desc_lines
@@ -367,15 +368,17 @@ function GM:HUDDrawTargetID()
 	draw.ShadowedLine(spacer_line_x, spacer_line_y, spacer_line_x, spacer_line_y + spacer_line_l, COLOR_WHITE)
 end
 
-
 -- handle looking at weapons
 function HUDDrawTargetIDWeapons(data, params)
 	local client = LocalPlayer()
 
-	if data.distance > 100 or not data.ent:IsWeapon() then return end
-	if not IsValid(client) or not client:IsTerror() or not client:Alive() then return end
+	if not IsValid(client) or not client:IsTerror() or not client:Alive()
+	or data.distance > 100 or not data.ent:IsWeapon() then
+		return
+	end
 
 	local weapon_name
+
 	if not data.ent.GetPrintName then
 		weapon_name = data.ent:GetPrintName() or data.ent.PrintName or data.ent:GetClass() or "..."
 	else
@@ -406,11 +409,7 @@ function HUDDrawTargetIDPlayers(data, params)
 
 	-- oof TTT, why so hacky?! Sets last seen player. Dear reader I don't like this as well, but it has to stay that way
 	-- for compatibility reasons. At least it is uncluttered now!
-	if disguised then
-		client.last_id = nil
-	else
-		client.last_id = data.ent
-	end
+	client.last_id = disguised and nil or data.ent
 
 	-- do not show information when observing a player
 	if client:IsSpec() and IsValid(obsTgt) and data.ent == obsTgt then return end
@@ -439,6 +438,7 @@ function HUDDrawTargetIDPlayers(data, params)
 	params.displayInfo.iconColor = target_role and data.ent:GetRoleColor() or COLOR_LGRAY
 
 	local h_string, h_color = util.HealthToString(data.ent:Health(), data.ent:GetMaxHealth())
+
 	params.displayInfo.title.text = data.ent:Nick()
 	params.displayInfo.subtitle.text = TryT(h_string)
 	params.displayInfo.subtitle.color = h_color
@@ -446,18 +446,28 @@ function HUDDrawTargetIDPlayers(data, params)
 	-- add karma string if karma is enabled
 	if KARMA.IsEnabled() then
 		local k_string, k_color = util.KarmaToString(data.ent:GetBaseKarma())
-		params.displayInfo.desc[#params.displayInfo.desc + 1] = {text = TryT(k_string), color = k_color}
+
+		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
+			text = TryT(k_string),
+			color = k_color
+		}
 	end
 
 	-- add scoreboard tags if tag is set
 	if data.ent.sb_tag and data.ent.sb_tag.txt then
-		params.displayInfo.desc[#params.displayInfo.desc + 1] = {text = TryT(data.ent.sb_tag.txt), color = data.ent.sb_tag.color}
+		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
+			text = TryT(data.ent.sb_tag.txt),
+			color = data.ent.sb_tag.color
+		}
 	end
 
 	-- add hints to the player
 	local hint = data.ent.TargetIDHint
 	if hint and hint.hint then
-		params.displayInfo.desc[#params.displayInfo.desc + 1] = {text = hint.fmt(data.ent, hint.hint), color = COLOR_LGRAY}
+		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
+			text = hint.fmt(data.ent, hint.hint),
+			color = COLOR_LGRAY
+		}
 	end
 
 	-- we can now add the disguised info to the playername since a previous check already returned
@@ -498,12 +508,18 @@ function HUDDrawTargetIDRagdolls(data, params)
 	-- add hints to the corpse
 	local hint = data.ent.TargetIDHint
 	if hint and hint.hint then
-		params.displayInfo.desc[#params.displayInfo.desc + 1] = {text = hint.fmt(data.ent, hint.hint), color = COLOR_LGRAY}
+		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
+			text = hint.fmt(data.ent, hint.hint),
+			color = COLOR_LGRAY
+		}
 	end
 
 	-- add credits info when corpse has credits
 	if client:IsActive() and client:IsShopper() and CORPSE.GetCredits(data.ent, 0) > 0 then
-		params.displayInfo.desc[#params.displayInfo.desc + 1] = {text = TryT("target_credits"), color = COLOR_YELLOW}
+		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
+			text = TryT("target_credits"),
+			color = COLOR_YELLOW
+		}
 	end
 
 	-- add outline when ragdoll is reachable
