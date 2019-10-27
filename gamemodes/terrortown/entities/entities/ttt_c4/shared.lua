@@ -755,6 +755,8 @@ if SERVER then
 end
 
 if CLIENT then
+	local TryT = LANG.TryTranslation
+
 	surface.CreateFont("C4ModelTimer", {
 		font = "Default",
 		size = 13,
@@ -802,4 +804,20 @@ if CLIENT then
 			end
 		end
 	end
+
+	-- handle looking at C4
+	hook.Add("TTTRenderEntityInfo", "TTT2HighlightWeapons", function(data, params)
+		local client = LocalPlayer()
+
+		if data.distance > 100 or data.ent:GetClass() ~= "ttt_c4" then return end
+		if not IsValid(client) or not client:IsTerror() or not client:Alive() then return end
+
+		params.drawInfo = true
+		params.displayInfo.key = input.GetKeyCode(input.LookupBinding('+use'))
+		params.displayInfo.title.text = TryT(data.ent.PrintName)
+		params.displayInfo.subtitle.text = data.ent:GetArmed() and TryT("target_c4_armed") or TryT("target_c4")
+
+		params.drawOutline = true
+		params.outlineColor = client:GetRoleColor()
+	end)
 end
