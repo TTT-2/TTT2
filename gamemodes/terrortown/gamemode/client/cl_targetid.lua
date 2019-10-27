@@ -281,11 +281,13 @@ function GM:HUDDrawTargetID()
 
 	-- preset a table of values that can be changes with a hook
 	local params = {
-		drawText = false,
+		drawInfo = false,
 		drawOutline = false,
 		outlineColor = COLOR_WHITE,
 		displayInfo = {
 			key = nil,
+			icon = nil,
+			iconColor = COLOR_WHITE,
 			title = {text = "", color = COLOR_WHITE},
 			subtitle = {text = "", color = subtitle_color},
 			desc = {}
@@ -301,7 +303,7 @@ function GM:HUDDrawTargetID()
 		outline.Add(data.ent, params.outlineColor, OUTLINE_MODE_VISIBLE)
 	end
 
-	if not params.drawText then return end
+	if not params.drawInfo then return end
 
 	local center_x = math.Round(0.5 * ScrW(), 0)
 	local center_y = math.Round(0.5 * ScrH(), 0)
@@ -310,7 +312,9 @@ function GM:HUDDrawTargetID()
 	local pad = 4
 
 	-- draw key and keybox
-	local key_string = string.upper(input.GetKeyName(params.displayInfo.key) or "")
+	-- the keyboxsize gets used as reference value since in most cases a key will be rendered
+	-- therefore the key size gets calculated every time, even if no key is set
+	local key_string = params.displayInfo.key and string.upper(input.GetKeyName(params.displayInfo.key)) or ""
 
 	local key_string_w, key_string_h = draw.GetTextSize(key_string, "TargetID_Key")
 
@@ -322,8 +326,20 @@ function GM:HUDDrawTargetID()
 	local key_string_x = key_box_x + math.Round(0.5 * key_box_w) - 1
 	local key_string_y = key_box_y + math.Round(0.5 * key_box_h) - 1
 
-	draw.OutlinedShadowedBox(key_box_x, key_box_y, key_box_w, key_box_h, 1, COLOR_WHITE)
-	draw.ShadowedText(key_string, "TargetID_Key", key_string_x, key_string_y, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+	if params.displayInfo.key then
+		draw.OutlinedShadowedBox(key_box_x, key_box_y, key_box_w, key_box_h, 1, COLOR_WHITE)
+		draw.ShadowedText(key_string, "TargetID_Key", key_string_x, key_string_y, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+	end
+
+	-- draw icon
+	if params.displayInfo.icon then
+		local icon_w = key_box_h
+		local icon_h = key_box_h
+		local icon_x = params.displayInfo.key and (key_box_x - key_box_w - 2 * pad) or center_x - icon_w - 2 * pad - 2
+		local icon_y = key_box_y
+
+		draw.DrawFilteredShadowedTexture(icon_x, icon_y, icon_w, icon_h, params.displayInfo.icon, params.displayInfo.iconColor.a, params.displayInfo.iconColor)
+	end
 
 	-- draw spacer line
 	local spacer_line_x = center_x - 1
@@ -357,8 +373,8 @@ function GM:HUDDrawTargetID()
 	local desc_string_y = key_box_y + key_box_h + 4 * pad
 
 	for i = 1, #params.displayInfo.desc do
-		local text = params.displayInfo.desc[i].text
-		local color = params.displayInfo.desc[i].color
+		local text = params.displayInfo.desc[i].text or ""
+		local color = params.displayInfo.desc[i].color or COLOR_WHITE
 
 		draw.ShadowedText(text, "TargetID_Description", desc_string_x, desc_string_y, color, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
 
@@ -443,7 +459,7 @@ function GM:HUDDrawTargetID()
 		local c = roles.GetByIndex(target_role).color
 
 		surface.SetDrawColor(c.r, c.g, c.b, 200)
-		surface.DrawTexturedRect(x - 32, y - 32, 64, 64)
+		surface.drawInfouredRect(x - 32, y - 32, 64, 64)
 	end
 
 	y = y + 30
@@ -467,7 +483,7 @@ function GM:HUDDrawTargetID()
 			-- have searched it or another detective has
 			surface.SetMaterial(magnifier_mat)
 			surface.SetDrawColor(200, 200, 255, 255)
-			surface.DrawTexturedRect(x + w + 5, y, 16, 16)
+			surface.drawInfouredRect(x + w + 5, y, 16, 16)
 		end
 
 		y = y + h + 4
@@ -577,10 +593,10 @@ hook.Add("TTTRenderEntityInfo", "TTT2HighlightWeapons", function(data, params)
 		weapon_name = data.ent.PrintName or data.ent:GetClass() or "..."
 	end
 
-	params.drawText = true
+	params.drawInfo = true
 	params.displayInfo.key = bind.Find("ttt2_weaponswitch")
 	params.displayInfo.title.text = TryT(weapon_name)
-	params.displayInfo.subtitle.text = TryT('target_switch_weapon')
+	params.displayInfo.subtitle.text = TryT("target_switch_weapon")
 
 	params.drawOutline = true
 	params.outlineColor = client:GetRoleColor()
@@ -593,6 +609,14 @@ hook.Add("TTTRenderEntityInfo", "TTT2HighlightPlayers", function(data, params)
 
 	-- has to be a player
 	if not data.ent:IsPlayer() then return end
+
+	-- oof TTT, why so hacky?! Sets last seen player. Dear reader I don't like this as well, but it has to stay that way
+	-- for compatibility reasons. At least it is uncluttered now!
+	if disguised then
+		client.last_id = nil
+	else
+		client.last_id = data.ent
+	end
 
 	-- do not show information when observing a player
 	if client:IsSpec() and IsValid(obsTgt) and data.ent == obsTgt then return end
@@ -608,19 +632,33 @@ hook.Add("TTTRenderEntityInfo", "TTT2HighlightPlayers", function(data, params)
 
 	-- TODO: this detective check has to be removed from here
 	if data.ent.GetSubRole and (rstate > ROUND_PREP and data.ent:IsDetective() or rstate == ROUND_ACTIVE and data.ent:IsSpecial()) then
-		target_role = data.ent:GetSubRole()
+		target_role = data.ent:GetSubRoleData()
 	end
 
+	params.drawInfo = true
+	params.displayInfo.icon = target_role and target_role.iconMaterial or nil
+	params.displayInfo.iconColor = target_role and data.ent:GetRoleColor() or COLOR_WHITE
 
-	-- TODO generate text
-	--text = ent:Nick() .. L.target_disg
+	local h_string, h_color = util.HealthToString(data.ent:Health(), data.ent:GetMaxHealth())
+	params.displayInfo.title.text = data.ent:Nick()
+	params.displayInfo.subtitle.text = TryT(h_string)
+	params.displayInfo.subtitle.color = h_color
 
-	-- oof TTT, why so hacky?! Set last seen player, dear ready I don't like this at well, but it has to stay that way
-	-- for compatibility reasons. At least it is uncluttered now!
+	-- add karam string if karma is enabled
+	if KARMA.IsEnabled() then
+		local k_string, k_color = util.KarmaToString(data.ent:GetBaseKarma())
+		params.displayInfo.desc[#params.displayInfo.desc + 1] = {text = TryT(k_string), color = k_color}
+	end
+
+	-- add scoreboard tags if tag is set
+	if data.ent.sb_tag and data.ent.sb_tag.txt then
+		params.displayInfo.desc[#params.displayInfo.desc + 1] = {text = TryT(data.ent.sb_tag.txt), color = data.ent.sb_tag.color}
+	end
+
+	-- we can now add the disguised info to the playername since a previous check already returned
+	-- the code for players in other teams
 	if disguised then
-		client.last_id = nil
-	else
-		client.last_id = data.ent
+		params.displayInfo.title.text = params.displayInfo.title.text .. " " .. string.upper(TryT("target_disg"))
 	end
 end)
 

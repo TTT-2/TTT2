@@ -83,3 +83,54 @@ function draw.DrawShadowedLine(startX, startY, endX, endY, color)
 	draw.DrawLine(startX + 1, startY + 1, endX + 1, endY + 1, tmpCol)
 	draw.DrawLine(startX, startY, endX, endY, color)
 end
+
+---
+-- Draws a filtered textured rectangle / image / icon
+-- @param number x
+-- @param number y
+-- @param number w width
+-- @param number h height
+-- @param Material material
+-- @param [default=255] number alpha
+-- @param [default=COLOR_WHITE] Color col the alpha value will be ignored
+-- @2D
+-- @realm client
+function draw.DrawFilteredTexture(x, y, w, h, material, alpha, color)
+	alpha = alpha or 255
+	color = color or COLOR_WHITE
+
+	surface.SetDrawColor(color.r, color.g, color.b, alpha)
+	surface.SetMaterial(material)
+
+	render.PushFilterMag(TEXFILTER.LINEAR)
+	render.PushFilterMin(TEXFILTER.LINEAR)
+
+	surface.DrawTexturedRect(x, y, w, h)
+
+	render.PopFilterMag()
+	render.PopFilterMin()
+end
+
+---
+-- Draws a filtered textured rectangle / image / icon with shadow
+-- @param number x
+-- @param number y
+-- @param number w width
+-- @param number h height
+-- @param Material material
+-- @param [default=255] number alpha
+-- @param [default=COLOR_WHITE] Color col the alpha value will be ignored
+-- @2D
+-- @realm client
+function draw.DrawFilteredShadowedTexture(x, y, w, h, material, alpha, color)
+	alpha = alpha or 255
+	color = color or COLOR_WHITE
+
+	local tmpCol = color.r + color.g + color.b > 200 and tableCopy(shadowColorDark) or tableCopy(shadowColorWhite)
+	tmpCol.a = tmpCol.a * (alpha / 255.0)
+
+	draw.DrawFilteredTexture(x + 2, y + 2, w, h, material, tmpCol.a, tmpCol)
+	draw.DrawFilteredTexture(x + 1, y + 1, w, h, material, tmpCol.a, tmpCol)
+	draw.DrawFilteredTexture(x, y, w, h, material, alpha, color)
+end
+
