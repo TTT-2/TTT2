@@ -809,8 +809,8 @@ if CLIENT then
 	function HUDDrawTargetIDC4(data, params)
 		local client = LocalPlayer()
 
-		if not IsValid(client) or not client:IsTerror() or not client:Alive() then
-		or data.distance > 100 or data.ent:GetClass() ~= "ttt_c4"
+		if not IsValid(client) or not client:IsTerror() or not client:Alive()
+		or data.distance > 100 or data.ent:GetClass() ~= "ttt_c4" then
 			return
 		end
 
