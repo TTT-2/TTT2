@@ -20,21 +20,6 @@ local hook = hook
 local disable_spectatorsoutline = CreateClientConVar("ttt2_disable_spectatorsoutline", "0", true, true)
 local disable_overheadicons = CreateClientConVar("ttt2_disable_overheadicons", "0", true, true)
 
-local key_params = {
-	usekey = Key("+use", "USE"),
-	walkkey = Key("+walk", "WALK")
-}
-
-local ClassHint = {
-	prop_ragdoll = {
-		name = "corpse",
-		hint = "corpse_hint",
-
-		fmt = function(ent, txt)
-			return GetPTranslation(txt, key_params)
-		end
-	}
-}
 
 -- cached materials for overhead icons and outlines
 local propspec_outline = Material("models/props_combine/portalball001_sheet")
@@ -224,7 +209,7 @@ surface.CreateFont("TargetID_Description", {font = "Trebuchet24", size = 16, wei
 local subtitle_color = Color(210, 210, 210)
 
 local minimalist = CreateConVar("ttt_minimal_targetid", "0", FCVAR_ARCHIVE)
-local magnifier_mat = Material("icon16/magnifier.png")
+
 local ring_tex = surface.GetTextureID("effects/select_ring")
 local rag_color = Color(200, 200, 200, 255)
 local MAX_TRACE_LENGTH = math.sqrt(3) * 32768
@@ -644,7 +629,7 @@ hook.Add("TTTRenderEntityInfo", "TTT2HighlightPlayers", function(data, params)
 	params.displayInfo.subtitle.text = TryT(h_string)
 	params.displayInfo.subtitle.color = h_color
 
-	-- add karam string if karma is enabled
+	-- add karma string if karma is enabled
 	if KARMA.IsEnabled() then
 		local k_string, k_color = util.KarmaToString(data.ent:GetBaseKarma())
 		params.displayInfo.desc[#params.displayInfo.desc + 1] = {text = TryT(k_string), color = k_color}
@@ -655,13 +640,25 @@ hook.Add("TTTRenderEntityInfo", "TTT2HighlightPlayers", function(data, params)
 		params.displayInfo.desc[#params.displayInfo.desc + 1] = {text = TryT(data.ent.sb_tag.txt), color = data.ent.sb_tag.color}
 	end
 
+	-- add hints to the player
+	local hint = data.ent.TargetIDHint
+	if hint and hint.hint then
+		params.displayInfo.desc[#params.displayInfo.desc + 1] = {text = hint.fmt(data.ent, hint.hint), color = COLOR_LGRAY}
+	end
+
 	-- we can now add the disguised info to the playername since a previous check already returned
 	-- the code for players in other teams
 	if disguised then
 		params.displayInfo.title.text = params.displayInfo.title.text .. " " .. string.upper(TryT("target_disg"))
+		params.displayInfo.title.color = COLOR_RED
 	end
 end)
 
+local icon_corpse = Material("vgui/ttt/dynamic/roles/icon_corpse")
+local key_params = {
+	usekey = Key("+use", "USE"),
+	walkkey = Key("+walk", "WALK")
+}
 
 -- handle looking ragdolls
 hook.Add("TTTRenderEntityInfo", "TTT2HighlightRagdolls", function(data, params)
@@ -672,11 +669,24 @@ hook.Add("TTTRenderEntityInfo", "TTT2HighlightRagdolls", function(data, params)
 	-- only show this if the ragdoll has a nick, else it could be a mattress
 	if not CORPSE.GetPlayerNick(data.ent, false) then return end
 
-	-- TODO text
-	--if CORPSE.GetFound(ent, false) or not DetectiveMode() then
-	--	text = CORPSE.GetPlayerNick(ent, "A Terrorist")
-	--else
-	--	text = L.target_unid
-	--	color = COLOR_YELLOW
-	--end
+	local corpse_found = CORPSE.GetFound(data.ent, false) or not DetectiveMode()
+
+	params.drawInfo = true
+	params.displayInfo.icon = icon_corpse
+	params.displayInfo.iconColor = COLOR_YELLOW
+
+	params.displayInfo.title.text = corpse_found and CORPSE.GetPlayerNick(data.ent, "A Terrorist") or TryT("target_unid")
+	params.displayInfo.title.color = corpse_found and COLOR_WHITE or COLOR_YELLOW
+	params.displayInfo.subtitle.text = GetPTranslation("corpse_hint", key_params)
+
+	-- add hints to the corpse
+	local hint = data.ent.TargetIDHint
+	if hint and hint.hint then
+		params.displayInfo.desc[#params.displayInfo.desc + 1] = {text = hint.fmt(data.ent, hint.hint), color = COLOR_LGRAY}
+	end
+
+	-- add credits info when corpse has credits
+	if client:IsActive() and client:IsShopper() and CORPSE.GetCredits(data.ent, 0) > 0 then
+		params.displayInfo.desc[#params.displayInfo.desc + 1] = {text = TryT("target_credits"), color = COLOR_YELLOW}
+	end
 end)

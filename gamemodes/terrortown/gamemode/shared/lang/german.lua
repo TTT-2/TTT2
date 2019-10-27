@@ -594,7 +594,7 @@ L.karma_min = "Verantwortungslos"
 
 -- TargetID misc
 L.corpse = "Leiche"
-L.corpse_hint = "Drücke {usekey} zum Durchsuchen. {walkkey} + {usekey} um verdeckt zu untersuchen."
+L.corpse_hint = "Drücke [{usekey}] zum Durchsuchen. [{walkkey} + {usekey}] um verdeckt zu untersuchen."
 
 L.target_disg = "gestarnt"
 L.target_unid = "Unidentifizierter Körper"
