@@ -605,13 +605,12 @@ L.karma_min = "Liability"
 L.corpse = "Corpse"
 L.corpse_hint = "Press {usekey} to search. {walkkey} + {usekey} to search covertly."
 
-L.target_disg = " (DISGUISED)"
+L.target_disg = "disguised"
 L.target_unid = "Unidentified body"
 
-L.target_traitor = "TRAITOR"
-L.target_detective = "DETECTIVE"
-
 L.target_credits = "Search to receive unspent credits"
+
+L.target_switch_weapon = "Press [key] to swap with your current weapon"
 
 -- Traitor buttons (HUD buttons with hand icons that only traitors can see)
 L.tbut_single = "Single use"

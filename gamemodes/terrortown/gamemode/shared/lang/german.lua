@@ -596,13 +596,12 @@ L.karma_min = "Verantwortungslos"
 L.corpse = "Leiche"
 L.corpse_hint = "Drücke {usekey} zum Durchsuchen. {walkkey} + {usekey} um verdeckt zu untersuchen."
 
-L.target_disg = " (GETARNT)"
+L.target_disg = "gestarnt"
 L.target_unid = "Unidentifizierter Körper"
 
-L.target_traitor = "VERRÄTER"
-L.target_detective = "DETEKTIV"
-
 L.target_credits = "Durchsuche, um ungenutzte Credits zu erhalten."
+
+L.target_switch_weapon = "Drücke [Knopf] um mit aktueller Waffe zu tauschen"
 
 -- Traitor buttons (HUD buttons with hand icons that only traitors can see)
 L.tbut_single = "Einmaliger Gebrauch"

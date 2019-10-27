@@ -7,6 +7,7 @@ local surface = surface
 local draw = draw
 local GetPTranslation = LANG.GetParamTranslation
 local GetRaw = LANG.GetRawTranslation
+local TryT = LANG.TryTranslation
 local GetLang = LANG.GetUnsafeLanguageTable
 local GetPlayers = player.GetAll
 local math = math
@@ -284,8 +285,8 @@ function GM:HUDDrawTargetID()
 		outlineColor = COLOR_WHITE,
 		displayInfo = {
 			key = nil,
-			title = "",
-			subtitle = "",
+			title = {text = "", color = COLOR_WHITE},
+			subtitle = {text = "", color = subtitle_color},
 			desc = {}
 		}
 	}
@@ -332,24 +333,24 @@ function GM:HUDDrawTargetID()
 		draw.DrawShadowedLine(spacer_line_x, spacer_line_y, spacer_line_x, spacer_line_y + spacer_line_l, COLOR_WHITE)
 
 		-- draw title
-		local title_string = params.displayInfo.title or ""
+		local title_string = params.displayInfo.title.text or ""
 
 		local title_string_w, title_string_h = draw.GetTextSize(title_string, "TargetID_Title")
 
 		local title_string_x = center_x + 2 * pad
 		local title_string_y = key_box_y + title_string_h - 4
 
-		draw.ShadowedText(title_string, "TargetID_Title", title_string_x, title_string_y, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+		draw.ShadowedText(title_string, "TargetID_Title", title_string_x, title_string_y, params.displayInfo.title.color, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 
 		-- draw subtitle
-		local subtitle_string = params.displayInfo.subtitle or ""
+		local subtitle_string = params.displayInfo.subtitle.text or ""
 
 		local subtitle_string_w, title_string_h = draw.GetTextSize(subtitle_string, "TargetID_Subtitle")
 
 		local subtitle_string_x = center_x + 2 * pad
 		local subtitle_string_y = key_box_y + key_box_h + 2
 
-		draw.ShadowedText(subtitle_string, "TargetID_Subtitle", subtitle_string_x, subtitle_string_y, subtitle_color, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+		draw.ShadowedText(subtitle_string, "TargetID_Subtitle", subtitle_string_x, subtitle_string_y, params.displayInfo.subtitle.color, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 	else
 
 	end
@@ -569,19 +570,8 @@ hook.Add("TTTRenderEntityInfo", "TTT2HighlightWeapons", function(data, params)
 
 	params.drawText = true
 	params.displayInfo.key = bind.Find("ttt2_weaponswitch")
-	params.displayInfo.title = LANG.TryTranslation(weapon_name)
-	params.displayInfo.subtitle = "Press [key] to swap with your current weapon"
-
-	params.drawOutline = true
-	params.outlineColor = client:GetRoleColor()
-end)
-
--- handle looking at ammo boxes
-hook.Add("TTTRenderEntityInfo", "TTT2HighlightAmmoboxes", function(data, params)
-	local client = LocalPlayer()
-
-	if data.distance > 100 or not data.ent.AmmoType then return end
-	if not IsValid(client) or not client:IsTerror() or not client:Alive() then return end
+	params.displayInfo.title.text = TryT(weapon_name)
+	params.displayInfo.subtitle.text = TryT('target_switch_weapon')
 
 	params.drawOutline = true
 	params.outlineColor = client:GetRoleColor()
