@@ -76,6 +76,7 @@ hook.Add("TTTInitPostEntity", "InitTTT2OldItems", function()
 				ITEMDATA.name = name
 				ITEMDATA.material = v.material
 				ITEMDATA.CanBuy = {subrole}
+				ITEMDATA.limited = v.limited or v.LimitedStock or true
 
 				-- reset this old hud bool
 				if ITEMDATA.hud == true then
