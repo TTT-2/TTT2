@@ -5,9 +5,8 @@ local util = util
 local render = render
 local surface = surface
 local draw = draw
-local GetPTranslation = LANG.GetParamTranslation
+local GetPT = LANG.GetParamTranslation
 local TryT = LANG.TryTranslation
-local GetLang = LANG.GetUnsafeLanguageTable
 local GetPlayers = player.GetAll
 local math = math
 local table = table
@@ -485,7 +484,7 @@ hook.Add("TTTRenderEntityInfo", "TTT2HighlightRagdolls", function(data, params)
 
 	params.displayInfo.title.text = corpse_found and CORPSE.GetPlayerNick(data.ent, "A Terrorist") or TryT("target_unid")
 	params.displayInfo.title.color = corpse_found and rag_color or COLOR_YELLOW
-	params.displayInfo.subtitle.text = GetPTranslation("corpse_hint", key_params)
+	params.displayInfo.subtitle.text = GetPT("corpse_hint", key_params)
 
 	-- add hints to the corpse
 	local hint = data.ent.TargetIDHint
