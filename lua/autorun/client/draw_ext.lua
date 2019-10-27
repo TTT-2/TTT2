@@ -1,9 +1,11 @@
 ---
 -- @author Mineotopia
 
+local render = render
 local surface = surface
 local draw = draw
 local tableCopy = table.Copy
+local mathRound = math.Round
 
 local shadowColorDark = Color(0, 0, 0, 220)
 local shadowColorWhite = Color(0, 0, 0, 75)
@@ -22,10 +24,13 @@ function draw.OutlinedBox(x, y, w, h, t, color)
 	t = t or 1
 
 	surface.SetDrawColor(color or COLOR_WHITE)
+
 	for i = 0, t - 1 do
 		surface.DrawOutlinedRect(x + i, y + i, w - i * 2, h - i * 2)
 	end
 end
+
+local drawOutlinedBox = draw.OutlinedBox
 
 ---
 -- A function to draw an outlined box with a shadow
@@ -41,12 +46,12 @@ function draw.OutlinedShadowedBox(x, y, w, h, t, color)
 	color = color or COLOR_WHITE
 
 	local tmpCol = color.r + color.g + color.b > 200 and tableCopy(shadowColorDark) or tableCopy(shadowColorWhite)
-	tmpCol.a = tmpCol.a * (color.a / 255.0)
+	tmpCol.a = mathRound(tmpCol.a * (color.a / 255))
 
-	draw.OutlinedBox(x + 2, y + 2, w, h, t, tmpCol)
-	draw.OutlinedBox(x + 1, y + 1, w, h, t, tmpCol)
-	draw.OutlinedBox(x + 1, y + 1, w, h, t, tmpCol)
-	draw.OutlinedBox(x, y, w, h, t, color)
+	drawOutlinedBox(x + 2, y + 2, w, h, t, tmpCol)
+	drawOutlinedBox(x + 1, y + 1, w, h, t, tmpCol)
+	drawOutlinedBox(x + 1, y + 1, w, h, t, tmpCol)
+	drawOutlinedBox(x, y, w, h, t, color)
 end
 
 ---
@@ -63,6 +68,8 @@ function draw.Line(startX, startY, endX, endY, color)
 	surface.DrawLine(startX, startY, endX, endY)
 end
 
+local drawLine = draw.Line
+
 ---
 -- A function to draw an outlined box with a shadow
 -- @param number startX The x position to start the line
@@ -76,12 +83,12 @@ function draw.ShadowedLine(startX, startY, endX, endY, color)
 	color = color or COLOR_WHITE
 
 	local tmpCol = color.r + color.g + color.b > 200 and tableCopy(shadowColorDark) or tableCopy(shadowColorWhite)
-	tmpCol.a = tmpCol.a * (color.a / 255.0)
+	tmpCol.a = mathRound(tmpCol.a * (color.a / 255))
 
-	draw.Line(startX + 2, startY + 2, endX + 2, endY + 2, tmpCol)
-	draw.Line(startX + 1, startY + 1, endX + 1, endY + 1, tmpCol)
-	draw.Line(startX + 1, startY + 1, endX + 1, endY + 1, tmpCol)
-	draw.Line(startX, startY, endX, endY, color)
+	drawLine(startX + 2, startY + 2, endX + 2, endY + 2, tmpCol)
+	drawLine(startX + 1, startY + 1, endX + 1, endY + 1, tmpCol)
+	drawLine(startX + 1, startY + 1, endX + 1, endY + 1, tmpCol)
+	drawLine(startX, startY, endX, endY, color)
 end
 
 ---
@@ -111,6 +118,8 @@ function draw.FilteredTexture(x, y, w, h, material, alpha, color)
 	render.PopFilterMin()
 end
 
+local drawFilteredTexture = draw.FilteredTexture
+
 ---
 -- Draws a filtered textured rectangle / image / icon with shadow
 -- @param number x
@@ -127,10 +136,9 @@ function draw.FilteredShadowedTexture(x, y, w, h, material, alpha, color)
 	color = color or COLOR_WHITE
 
 	local tmpCol = color.r + color.g + color.b > 200 and tableCopy(shadowColorDark) or tableCopy(shadowColorWhite)
-	tmpCol.a = tmpCol.a * (alpha / 255.0)
+	tmpCol.a = mathRound(tmpCol.a * (alpha / 255))
 
-	draw.FilteredTexture(x + 2, y + 2, w, h, material, tmpCol.a, tmpCol)
-	draw.FilteredTexture(x + 1, y + 1, w, h, material, tmpCol.a, tmpCol)
-	draw.FilteredTexture(x, y, w, h, material, alpha, color)
+	drawFilteredTexture(x + 2, y + 2, w, h, material, tmpCol.a, tmpCol)
+	drawFilteredTexture(x + 1, y + 1, w, h, material, tmpCol.a, tmpCol)
+	drawFilteredTexture(x, y, w, h, material, alpha, color)
 end
-
