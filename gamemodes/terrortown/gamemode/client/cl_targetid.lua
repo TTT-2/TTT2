@@ -496,4 +496,8 @@ hook.Add("TTTRenderEntityInfo", "TTT2HighlightRagdolls", function(data, params)
 	if client:IsActive() and client:IsShopper() and CORPSE.GetCredits(data.ent, 0) > 0 then
 		params.displayInfo.desc[#params.displayInfo.desc + 1] = {text = TryT("target_credits"), color = COLOR_YELLOW}
 	end
+
+	-- add outline when ragdoll is reachable
+	params.drawOutline = data.distance <= 100
+	params.outlineColor = COLOR_YELLOW
 end)
