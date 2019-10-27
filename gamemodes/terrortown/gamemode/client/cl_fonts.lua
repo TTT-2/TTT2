@@ -83,6 +83,7 @@ function draw.ShadowedText(text, font, x, y, color, xalign, yalign, scaleModifie
 
 	drawSimpleText(text, font, x + dScaleModifier, y + dScaleModifier, tmpCol, xalign, yalign)
 	drawSimpleText(text, font, x + scaleModifier, y + scaleModifier, tmpCol, xalign, yalign)
+	drawSimpleText(text, font, x + scaleModifier, y + scaleModifier, tmpCol, xalign, yalign)
 	drawSimpleText(text, font, x, y, color, xalign, yalign)
 end
 
