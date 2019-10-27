@@ -215,9 +215,11 @@ local function DrawPropSpecLabels(client)
 	end
 end
 
--- Crosshair affairs
+surface.CreateFont("TargetID_Key", {font = "Trebuchet24", size = 26, weight = 900})
+surface.CreateFont("TargetID_Title", {font = "Trebuchet24", size = 22, weight = 900})
+surface.CreateFont("TargetID_Subtitle", {font = "Trebuchet24", size = 16, weight = 600})
 
-surface.CreateFont("TargetIDSmall2", {font = "TargetID", size = 16, weight = 1000})
+local subtitle_color = Color(210, 210, 210)
 
 local minimalist = CreateConVar("ttt_minimal_targetid", "0", FCVAR_ARCHIVE)
 local magnifier_mat = Material("icon16/magnifier.png")
@@ -277,17 +279,83 @@ function GM:HUDDrawTargetID()
 
 	-- preset a table of values that can be changes with a hook
 	local params = {
-		DrawOutline = false,
-		OutlineColor = COLOR_WHITE
+		drawText = false,
+		drawOutline = false,
+		outlineColor = COLOR_WHITE,
+		displayInfo = {
+			key = nil,
+			title = "",
+			subtitle = "",
+			desc = {}
+		}
 	}
 
 	-- now run a hook that can be used by addon devs that changes the appearance
 	-- of the targetid
 	hook.Run("TTTRenderEntityInfo", data, params)
 
-	if params.DrawOutline and cv_draw_halo:GetBool() then
-		outline.Add(data.ent, params.OutlineColor, OUTLINE_MODE_VISIBLE)
+	-- drawn an outline around the entity if defined
+	if params.drawOutline and cv_draw_halo:GetBool() then
+		outline.Add(data.ent, params.outlineColor, OUTLINE_MODE_VISIBLE)
 	end
+
+	if not params.drawText then return end
+
+	local center_x = math.Round(0.5 * ScrW(), 0)
+	local center_y = math.Round(0.5 * ScrH(), 0)
+
+	-- render on display text
+	if params.displayInfo.key then
+		local pad = 4
+
+		-- draw key and keybox
+		local key_string = string.upper(input.GetKeyName(params.displayInfo.key))
+
+		local key_string_w, key_string_h = draw.GetTextSize(key_string, "TargetID_Key")
+
+		local key_box_w = key_string_w + 5 * pad
+		local key_box_h = key_string_h + 2 * pad
+		local key_box_x = center_x - key_box_w - 2 * pad - 2 -- -2 because of border width
+		local key_box_y = center_y + 4 * pad
+
+		local key_string_x = key_box_x + math.Round(0.5 * key_box_w) - 1
+		local key_string_y = key_box_y + math.Round(0.5 * key_box_h) - 1
+
+		draw.OutlinedShadowedBox(key_box_x, key_box_y, key_box_w, key_box_h, 1, COLOR_WHITE)
+		draw.ShadowedText(key_string, "TargetID_Key", key_string_x, key_string_y, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+
+		-- draw spacer line
+		local spacer_line_x = center_x - 1
+		local spacer_line_y = key_box_y
+		local spacer_line_l = key_box_h
+
+		draw.DrawShadowedLine(spacer_line_x, spacer_line_y, spacer_line_x, spacer_line_y + spacer_line_l, COLOR_WHITE)
+
+		-- draw title
+		local title_string = params.displayInfo.title or ""
+
+		local title_string_w, title_string_h = draw.GetTextSize(title_string, "TargetID_Title")
+
+		local title_string_x = center_x + 2 * pad
+		local title_string_y = key_box_y + title_string_h - 4
+
+		draw.ShadowedText(title_string, "TargetID_Title", title_string_x, title_string_y, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+
+		-- draw subtitle
+		local subtitle_string = params.displayInfo.subtitle or ""
+
+		local subtitle_string_w, title_string_h = draw.GetTextSize(subtitle_string, "TargetID_Subtitle")
+
+		local subtitle_string_x = center_x + 2 * pad
+		local subtitle_string_y = key_box_y + key_box_h + 2
+
+		draw.ShadowedText(subtitle_string, "TargetID_Subtitle", subtitle_string_x, subtitle_string_y, subtitle_color, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+	else
+
+	end
+
+
+
 
 	-- END TODO
 
@@ -492,8 +560,31 @@ hook.Add("TTTRenderEntityInfo", "TTT2HighlightWeapons", function(data, params)
 	if data.distance > 100 or not data.ent:IsWeapon() then return end
 	if not IsValid(client) or not client:IsTerror() or not client:Alive() then return end
 
-	params.DrawOutline = true
-	params.OutlineColor = client:GetRoleColor()
+	local weapon_name
+	if not data.ent.GetPrintName then
+		weapon_name = data.ent:GetPrintName() or data.ent.PrintName or data.ent:GetClass() or "..."
+	else
+		weapon_name = data.ent.PrintName or data.ent:GetClass() or "..."
+	end
+
+	params.drawText = true
+	params.displayInfo.key = bind.Find("ttt2_weaponswitch")
+	params.displayInfo.title = LANG.TryTranslation(weapon_name)
+	params.displayInfo.subtitle = "Press [key] to swap with your current weapon"
+
+	params.drawOutline = true
+	params.outlineColor = client:GetRoleColor()
+end)
+
+-- handle looking at ammo boxes
+hook.Add("TTTRenderEntityInfo", "TTT2HighlightAmmoboxes", function(data, params)
+	local client = LocalPlayer()
+
+	if data.distance > 100 or not data.ent.AmmoType then return end
+	if not IsValid(client) or not client:IsTerror() or not client:Alive() then return end
+
+	params.drawOutline = true
+	params.outlineColor = client:GetRoleColor()
 end)
 
 -- handle looking at players
@@ -532,4 +623,23 @@ hook.Add("TTTRenderEntityInfo", "TTT2HighlightPlayers", function(data, params)
 	else
 		client.last_id = data.ent
 	end
+end)
+
+
+-- handle looking ragdolls
+hook.Add("TTTRenderEntityInfo", "TTT2HighlightRagdolls", function(data, params)
+	local client = LocalPlayer()
+
+	if data.ent:GetClass() ~= "prop_ragdoll" then return end
+
+	-- only show this if the ragdoll has a nick, else it could be a mattress
+	if not CORPSE.GetPlayerNick(data.ent, false) then return end
+
+	-- TODO text
+	--if CORPSE.GetFound(ent, false) or not DetectiveMode() then
+	--	text = CORPSE.GetPlayerNick(ent, "A Terrorist")
+	--else
+	--	text = L.target_unid
+	--	color = COLOR_YELLOW
+	--end
 end)
