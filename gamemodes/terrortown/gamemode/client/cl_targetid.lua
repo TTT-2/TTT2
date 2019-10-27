@@ -341,6 +341,7 @@ function GM:HUDDrawTargetID()
 	-- draw description text
 	local desc_string_x = center_x + 2 * pad
 	local desc_string_y = key_box_y + key_box_h + 4 * pad
+	local desc_line_h = 17
 
 	for i = 1, #params.displayInfo.desc do
 		local text = params.displayInfo.desc[i].text or ""
@@ -348,15 +349,13 @@ function GM:HUDDrawTargetID()
 
 		draw.ShadowedText(text, "TargetID_Description", desc_string_x, desc_string_y, color, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
 
-		desc_string_y = desc_string_y + 17
+		desc_string_y = desc_string_y + desc_line_h
 	end
-
-	_, desc_h = draw.GetTextSize(" ", "TargetID_Description")
 
 	-- draw spacer line
 	local spacer_line_x = center_x - 1
 	local spacer_line_y = key_box_y
-	local spacer_line_l = key_box_h + ((#params.displayInfo.desc > 0) and (4 * pad + desc_h * #params.displayInfo.desc) or 0)
+	local spacer_line_l = key_box_h + ((#params.displayInfo.desc > 0) and (4 * pad + desc_line_h * #params.displayInfo.desc - 3) or 0)
 
 	draw.DrawShadowedLine(spacer_line_x, spacer_line_y, spacer_line_x, spacer_line_y + spacer_line_l, COLOR_WHITE)
 end
@@ -430,7 +429,7 @@ hook.Add("TTTRenderEntityInfo", "TTT2HighlightPlayers", function(data, params)
 
 	params.drawInfo = true
 	params.displayInfo.icon = target_role and target_role.iconMaterial or icon_role_not_known
-	params.displayInfo.iconColor = target_role and data.ent:GetRoleColor() or COLOR_WHITE
+	params.displayInfo.iconColor = target_role and data.ent:GetRoleColor() or COLOR_LGRAY
 
 	local h_string, h_color = util.HealthToString(data.ent:Health(), data.ent:GetMaxHealth())
 	params.displayInfo.title.text = data.ent:Nick()
