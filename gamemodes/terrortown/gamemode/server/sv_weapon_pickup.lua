@@ -26,12 +26,16 @@ net.Receive("ttt2_switch_weapon", function(_, ply)
 	ply:DropWeapon(throwWeapon)
 
 	local wepCls = tracedWeapon:GetClass()
-	local clip1 = tracedWeapon:Clip1()
+	local clip1 = isfunction(tracedWeapon.Clip1) and tracedWeapon:Clip1() or 0
 
 	tracedWeapon:Remove()
 
 	local newWep = ply:Give(wepCls)
-	newWep:SetClip1(clip1)
+	if not IsValid(newWep) then return end
+
+	if isfunction(newWep.SetClip1) then
+		newWep:SetClip1(clip1)
+	end
 
 	ply:SelectWeapon(wepCls)
 end)

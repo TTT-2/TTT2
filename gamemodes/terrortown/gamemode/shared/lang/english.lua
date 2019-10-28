@@ -281,7 +281,7 @@ L.set_fastswmenu_tip = "When fast weapons switch is enabled, the menu switcher m
 L.set_wswitch = "Disable weapon switch menu auto-closing"
 L.set_wswitch_tip = "By default the weapon switcher automatically closes a few seconds after you last scroll. Enable this to make it stay up."
 L.set_cues = "Play sound cue when a round begins or ends"
-L.weapon_switch_draw_halo = "Drawn an outline around weapons while looking at them"
+L.entity_draw_halo = "Drawn an outline around some entities while looking at them"
 
 
 L.set_title_play = "Gameplay settings"
@@ -603,15 +603,17 @@ L.karma_min = "Liability"
 
 -- TargetID misc
 L.corpse = "Corpse"
-L.corpse_hint = "Press {usekey} to search. {walkkey} + {usekey} to search covertly."
+L.corpse_hint = "Press [{usekey}] to search. [{walkkey} + {usekey}] to search covertly."
 
-L.target_disg = " (DISGUISED)"
+L.target_disg = "disguised"
 L.target_unid = "Unidentified body"
 
-L.target_traitor = "TRAITOR"
-L.target_detective = "DETECTIVE"
-
 L.target_credits = "Search to receive unspent credits"
+
+L.target_switch_weapon = "Press [key] to swap with your current weapon"
+L.target_c4 = "Press [key] to open C4 menu"
+L.target_c4_armed = "Press [key] to disarm C4"
+L.target_c4_not_disarmable = "You can't disarm C4 of a living teammate"
 
 -- Traitor buttons (HUD buttons with hand icons that only traitors can see)
 L.tbut_single = "Single use"
