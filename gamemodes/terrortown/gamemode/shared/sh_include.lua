@@ -33,6 +33,7 @@ TTTFiles = {
 	cl_tips = {file = "cl_tips.lua", on = "client"},
 	cl_transfer = {file = "cl_transfer.lua", on = "client"},
 	cl_voice = {file = "cl_voice.lua", on = "client"},
+	cl_weapon_pickup = {file = "cl_weapon_pickup.lua", on = "client"},
 	cl_wepswitch = {file = "cl_wepswitch.lua", on = "client"},
 
 	-- shared files
@@ -95,6 +96,7 @@ if SERVER then
 		sv_status = {file = "sv_status.lua", on = "server"},
 		sv_networking = {file = "sv_networking.lua", on = "server"},
 		sv_voice = {file = "sv_voice.lua", on = "server"},
+		sv_weapon_pickup = {file = "sv_weapon_pickup.lua", on = "server"},
 		sv_weaponry = {file = "sv_weaponry.lua", on = "server"},
 	}
 

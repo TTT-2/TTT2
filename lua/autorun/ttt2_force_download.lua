@@ -18,6 +18,8 @@ if SERVER then
 	resource.AddFile("materials/vgui/ttt/dynamic/roles/icon_traitor.vmt")
 	resource.AddFile("materials/vgui/ttt/dynamic/roles/icon_det.vmt")
 	resource.AddFile("materials/vgui/ttt/dynamic/roles/icon_no_team.vmt")
+	resource.AddFile("materials/vgui/ttt/dynamic/roles/icon_role_not_known.vmt")
+	resource.AddFile("materials/vgui/ttt/dynamic/roles/icon_corpse.vmt")
 
 	resource.AddFile("materials/vgui/ttt/equip/reroll.png")
 
@@ -75,6 +77,7 @@ if SERVER then
 
 	-- ITEMs
 	resource.AddFile("materials/vgui/ttt/icon_armor.vmt") -- armor
+	resource.AddFile("materials/vgui/ttt/missing_equip_icon.vmt")
 	resource.AddFile("materials/vgui/ttt/perks/hud_disguiser.png") -- disguiser
 	resource.AddFile("materials/vgui/ttt/perks/hud_radar.png") -- radar
 

@@ -555,7 +555,7 @@ function GM:KeyRelease(ply, key)
 		-- see if we need to do some custom usekey overriding
 		local tr = util.TraceLine({
 				start = ply:GetShootPos(),
-				endpos = ply:GetShootPos() + ply:GetAimVector() * 84,
+				endpos = ply:GetShootPos() + ply:GetAimVector() * 100,
 				filter = ply,
 				mask = MASK_SHOT
 		})

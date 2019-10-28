@@ -545,7 +545,7 @@ end
 
 local search = {}
 
-local function TTT_RagdollSearch()
+local function TTTRagdollSearch()
 	search = {}
 
 	-- Basic info
@@ -625,9 +625,9 @@ local function TTT_RagdollSearch()
 
 	search = nil
 end
-net.Receive("TTT_RagdollSearch", TTT_RagdollSearch)
+net.Receive("TTT_RagdollSearch", TTTRagdollSearch)
 
-local function TTT2_ConfirmMsg()
+local function TTT2ConfirmMsg()
 	local msgName = net.ReadString()
 	local sid64 = net.ReadString()
 	local clr = Color(net.ReadUInt(8), net.ReadUInt(8), net.ReadUInt(8), net.ReadUInt(8))
@@ -648,6 +648,8 @@ local function TTT2_ConfirmMsg()
 		img = draw.GetAvatarMaterial(sid64, "medium", img)
 	end
 
+	hook.Run("TTT2ConfirmedBody", tbl.finder, tbl.victim)
+
 	MSTACK:AddColoredImagedMessage(LANG.GetParamTranslation(msgName, tbl), clr, img)
 end
-net.Receive("TTT2SendConfirmMsg", TTT2_ConfirmMsg)
+net.Receive("TTT2SendConfirmMsg", TTT2ConfirmMsg)

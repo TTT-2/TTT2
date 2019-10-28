@@ -69,6 +69,7 @@ if CLIENT then
 		BaseClass.PerformLayout(self)
 	end
 
+	local color_tip = Color(205, 155, 0, 255)
 
 	function HUDELEMENT:DrawBar(x, y, w, h, alpha, item)
 
@@ -77,14 +78,14 @@ if CLIENT then
 		self.drawer:DrawBg(x, y, w, h, barColor)
 
 		--draw tip
-		local tipColor = Color(255, 255, 255, 255)
+		local tipColor = COLOR_WHITE
 		local icon = self.icon_item
 
 		if item.type == PICKUP_WEAPON then
 			tipColor = LocalPlayer():GetRoleColor()
 			icon = self.SlotIcons[item.kind] or self.icon_item
 		elseif item.type == PICKUP_AMMO then
-			tipColor = Color(205, 155, 0, 255)
+			tipColor = color_tip
 			icon = self.icon_ammo
 		end
 
@@ -101,6 +102,7 @@ if CLIENT then
 		--draw name text
 		local fontColor = self.drawer:GetDefaultFontColor(self.basecolor)
 		fontColor = Color(fontColor.r, fontColor.g, fontColor.b, alpha)
+
 		draw.AdvancedText(item.name, font, x + self.tipsize + self.pad, y + h * 0.5, fontColor, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, true, self.scale)
 
 		--draw amount text
@@ -115,10 +117,13 @@ if CLIENT then
 
 	function HUDELEMENT:Draw()
 		local pickupList = {}
+		local i = 0
 
 		for k, v in pairs(PICKUP.items) do
 			if v.time < CurTime() then
-				table.insert(pickupList, {h = self.element_height})
+				i = i + 1
+
+				pickupList[i] = {h = self.element_height}
 			end
 		end
 

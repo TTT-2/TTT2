@@ -279,6 +279,7 @@ L.set_fastswmenu_tip = "Wenn der schnelle Waffenwechsel aktiv ist, wird das Waff
 L.set_wswitch = "Verhindere das automatische Schließen des Waffenwechselmenüs."
 L.set_wswitch_tip = "Normalerweise schließt das Waffenwechselmenü automatisch nach ein paar Sekunden, nachdem du zuletzt gescrollet hast. Aktiviere dies, damit es geöffnet bleibt."
 L.set_cues = "Spiele einen Ton ab, wenn eine Runde beginnt oder endet"
+L.entity_draw_halo = "Zeichne eine Linie um einige Entities, die man anschaut"
 
 
 L.set_title_play = "Spieleinstellungen"
@@ -593,15 +594,17 @@ L.karma_min = "Verantwortungslos"
 
 -- TargetID misc
 L.corpse = "Leiche"
-L.corpse_hint = "Drücke {usekey} zum Durchsuchen. {walkkey} + {usekey} um verdeckt zu untersuchen."
+L.corpse_hint = "Drücke [{usekey}] zum Durchsuchen. [{walkkey} + {usekey}] um verdeckt zu untersuchen."
 
-L.target_disg = " (GETARNT)"
+L.target_disg = "gestarnt"
 L.target_unid = "Unidentifizierter Körper"
 
-L.target_traitor = "VERRÄTER"
-L.target_detective = "DETEKTIV"
-
 L.target_credits = "Durchsuche, um ungenutzte Credits zu erhalten."
+
+L.target_switch_weapon = "Drücke [Knopf] um mit aktueller Waffe zu tauschen"
+L.target_c4 = "Drücke [Knopf] um C4 Menü zu öffnen"
+L.target_c4_armed = "Drücke [Knopf] um C4 zu entschärfen"
+L.target_c4_not_disarmable = "Du kannst kein C4 eines lebenden Teamkollegen entschärfen"
 
 -- Traitor buttons (HUD buttons with hand icons that only traitors can see)
 L.tbut_single = "Einmaliger Gebrauch"
@@ -1165,6 +1168,9 @@ L.f1_bind_description = "Klicke und drücke einen Knopf um ihn zu setzen."
 L.f1_bind_reset_default_description = "Auf Standardwert zurücksetzen."
 L.f1_bind_disable_description = "Deaktiviere diese Bindung."
 
+L.f1_bind_weaponswitch = "Waffe Wechseln"
+L.f1_bind_sprint = "Sprinten"
+
 L.ttt2_bindings_new = "Neue Tasetenbelegung für {name}: {key}"
 L.hud_default = "Standard HUD"
 L.hud_force = "Erzwungenes HUD"
@@ -1176,3 +1182,11 @@ L.hud_restricted_failed = "Es ist fehlgeschlagen {hudname} zu beschränken. Bist
 L.shop_role_select = "Wähle eine Rolle"
 L.shop_role_selected = "Der {roles} Shop wurde gewählt!"
 L.shop_search = "Suche"
+
+L.button_save = "Sichern"
+
+L.disable_spectatorsoutline = "Deaktiviere Zuschauerumrandungen"
+L.disable_spectatorsoutline_tip = "Deaktiviert die Umrandungen um ein Objekt, in dem sich ein Zuschauer befindet (+Performance)"
+
+L.disable_overheadicons = "Deaktiviere Rollenicons"
+L.disable_overheadicons_tip = "Deaktiviert die Rollenicons über den Köpfen der Spieler (+Performance)"

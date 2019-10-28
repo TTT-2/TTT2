@@ -177,7 +177,7 @@ function ENT:UseOverride(activator)
 		-- Traitors not allowed to disarm other traitor's C4 until he is dead
 		local owner = self:GetOwner()
 
-		if self:GetArmed() and owner ~= activator and activator:GetTraitor() and (IsValid(owner) and owner:Alive() and owner:GetTraitor()) then
+		if self:GetArmed() and owner ~= activator and IsValid(owner) and owner:Alive() and owner:GetTeam() == activator:GetTeam() then
 			LANG.Msg(activator, "c4_no_disarm")
 
 			return
@@ -755,6 +755,8 @@ if SERVER then
 end
 
 if CLIENT then
+	local TryT = LANG.TryTranslation
+
 	surface.CreateFont("C4ModelTimer", {
 		font = "Default",
 		size = 13,
@@ -801,5 +803,30 @@ if CLIENT then
 				cam.End3D2D()
 			end
 		end
+	end
+
+	-- handle looking at C4
+	function HUDDrawTargetIDC4(data, params)
+		local client = LocalPlayer()
+
+		if not IsValid(client) or not client:IsTerror() or not client:Alive()
+		or data.distance > 100 or data.ent:GetClass() ~= "ttt_c4" then
+			return
+		end
+
+		params.drawInfo = true
+		params.displayInfo.key = input.GetKeyCode(input.LookupBinding("+use"))
+		params.displayInfo.title.text = TryT(data.ent.PrintName)
+
+		-- TODO this will be doable after the introduction of the unknown_role_state
+		--if data.ent:GetArmed() and data.ent.Owner ~= client and IsValid(data.ent.Owner) and data.ent.Owner:Alive() and data.ent:GetTeam() == client:GetTeam() then
+		--	params.displayInfo.subtitle.text = TryT("target_c4_not_disarmable")
+		--	params.displayInfo.subtitle.color = COLOR_ORANGE
+		--else
+		params.displayInfo.subtitle.text = data.ent:GetArmed() and TryT("target_c4_armed") or TryT("target_c4")
+		--end
+
+		params.drawOutline = true
+		params.outlineColor = client:GetRoleColor()
 	end
 end
