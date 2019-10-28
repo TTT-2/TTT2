@@ -374,10 +374,10 @@ function GM:HUDDrawTargetID()
 	-- draw spacer line
 	local spacer_line_x = center_x - 1
 	local spacer_line_y = key_box_y
-	
+
 	local spacer_line_icon_l = (icon_y and icon_y or spacer_line_y) - spacer_line_y
 	local spacer_line_text_l = key_box_h + ((desc_line_amount > 0) and (4 * pad + desc_line_h * desc_line_amount - 3) or 0)
-	
+
 	local spacer_line_l = (spacer_line_icon_l > spacer_line_text_l) and spacer_line_icon_l or spacer_line_text_l
 
 	draw.ShadowedLine(spacer_line_x, spacer_line_y, spacer_line_x, spacer_line_y + spacer_line_l, COLOR_WHITE)
@@ -430,7 +430,7 @@ function HUDDrawTargetIDPlayers(data, params)
 	if client:IsSpec() and IsValid(obsTgt) and data.ent == obsTgt then return end
 
 	-- disguised players are not shown to normal players, except: same team, unknown team or to spectators
-	if disguised and not (client:IsInTeam(ent) and not client:GetSubRoleData().unknownTeam or client:IsSpec()) then return end
+	if disguised and not (client:IsInTeam(data.ent) and not client:GetSubRoleData().unknownTeam or client:IsSpec()) then return end
 
 	-- show the role of a player if it is known to the client
 	local rstate = GetRoundState()
