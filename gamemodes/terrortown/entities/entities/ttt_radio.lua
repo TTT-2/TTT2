@@ -34,11 +34,13 @@ function ENT:Initialize()
 		self:SetUseType(SIMPLE_USE)
 	end
 
-	local client = LocalPlayer()
-
 	-- Register with owner
-	if CLIENT and client == self:GetOwner() then
-		LocalPlayer().radio = self
+	if CLIENT then
+		local client = LocalPlayer()
+		
+		if client == self:GetOwner() then
+			client.radio = self
+		end
 	end
 
 	self.SoundQueue = {}
@@ -47,7 +49,7 @@ function ENT:Initialize()
 end
 
 function ENT:UseOverride(activator)
-	if IsValid(activator) and activator:IsPlayer() and activator:GetTeam() == self:GetOwner():GetTeam() then
+	if IsValid(activator) and activator:IsPlayer() and activator:GetTeam() == owner:GetTeam() then
 		local prints = self.fingerprints or {}
 		self:Remove()
 
@@ -57,6 +59,8 @@ function ENT:UseOverride(activator)
 			wep.fingerprints = wep.fingerprints or {}
 			table.Add(wep.fingerprints, prints)
 		end
+	else
+		LANG.Msg(activator, "radio_pickup_wrong_team")
 	end
 end
 
@@ -81,10 +85,12 @@ function ENT:OnTakeDamage(dmginfo)
 end
 
 function ENT:OnRemove()
-	local client = LocalPlayer()
+	if CLIENT then
+		local client = LocalPlayer()
+		
+		if client ~= self:GetOwner() then return end
 
-	if CLIENT and client == self:GetOwner() then
-		LocalPlayer().radio = nil
+		client.radio = nil
 	end
 end
 
@@ -249,6 +255,29 @@ function ENT:Think()
 
 		-- always do slf, makes timing work out a little better
 		nextplay = CurTime() + self.SoundDelay
+	end
+end
+
+if CLIENT then
+	local TryT = LANG.TryTranslation
+
+	-- handle looking at radio
+	function HUDDrawTargetIDRadio(data, params)
+		local client = LocalPlayer()
+
+		if not IsValid(client) or not client:IsTerror() or not client:Alive()
+		or data.distance > 100 or data.ent:GetClass() ~= "ttt_radio" then
+			return
+		end
+
+		params.drawInfo = true
+		params.displayInfo.key = input.GetKeyCode(input.LookupBinding("+use"))
+		params.displayInfo.title.text = TryT(data.ent.PrintName)
+
+		params.displayInfo.subtitle.text = TryT("target_pickup")
+
+		params.drawOutline = true
+		params.outlineColor = client:GetRoleColor()
 	end
 end
 

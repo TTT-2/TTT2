@@ -278,6 +278,7 @@ function GM:HUDDrawTargetID()
 	HUDDrawTargetIDPlayers(data, params)
 	HUDDrawTargetIDRagdolls(data, params)
 	HUDDrawTargetIDC4(data, params)
+	HUDDrawTargetIDRadio(data, params)
 
 	-- now run a hook that can be used by addon devs that changes the appearance
 	-- of the targetid

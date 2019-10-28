@@ -177,6 +177,8 @@ L.quick_traitor = "{player} is a Traitor!"
 L.quick_inno = "{player} is innocent."
 L.quick_check = "Anyone still alive?"
 
+l.radio_pickup_wrong_team = "You can't pick up the radio from another team."
+
 -- {player} in the quickchat text normally becomes a player nickname, but can
 -- also be one of the below.  Keep these lowercase.
 L.quick_nobody = "nobody"
@@ -616,6 +618,8 @@ L.target_switch_weapon = "Press [key] to swap with your current weapon"
 L.target_c4 = "Press [key] to open C4 menu"
 L.target_c4_armed = "Press [key] to disarm C4"
 L.target_c4_not_disarmable = "You can't disarm C4 of a living teammate"
+
+L.target_pickup = "Press [key] to pick up"
 
 -- Traitor buttons (HUD buttons with hand icons that only traitors can see)
 L.tbut_single = "Single use"
