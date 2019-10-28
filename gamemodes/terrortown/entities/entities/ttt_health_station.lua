@@ -32,13 +32,13 @@ if CLIENT then
 		}
 
 		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
-			text = (hstation_charge > 0) and ParT('hstation_charge', {charge = hstation_charge}) or TryT("hstation_empty"),
+			text = (hstation_charge > 0) and ParT("hstation_charge", {charge = hstation_charge}) or TryT("hstation_empty"),
 			color = (hstation_charge > 0) and DETECTIVE.bgcolor or COLOR_ORANGE
 		}
 
 		if client:Health() == client:GetMaxHealth() then
 			params.displayInfo.desc[#params.displayInfo.desc + 1] = {
-				text = TryT('hstation_maxhealth'),
+				text = TryT("hstation_maxhealth"),
 				color = COLOR_ORANGE
 			}
 		end
@@ -185,7 +185,7 @@ if SERVER then
 		local att = dmginfo:GetAttacker()
 		local placer = self:GetPlacer()
 		if IsPlayer(att) then
-			DamageLog(Format("DMG: \t %s [%s] damaged health station [%s] for %d dmg", att:Nick(), att:GetRoleString(),  (IsPlayer(placer) and placer:Nick() or "<disconnected>"), dmginfo:GetDamage()))
+			DamageLog(Format("DMG: \t %s [%s] damaged health station [%s] for %d dmg", att:Nick(), att:GetRoleString(), IsPlayer(placer) and placer:Nick() or "<disconnected>", dmginfo:GetDamage()))
 		end
 
 		if self:Health() < 0 then
