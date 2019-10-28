@@ -219,7 +219,7 @@ function draw.GetWrappedText(text, width, font)
 
 	return lines, length, line_h * lns
 end
-  
+
 -- Returns the size of a inserted string
 -- @param string text The text that the length should be calculated
 -- @param [default="DefaultBold"] string font The font ID
