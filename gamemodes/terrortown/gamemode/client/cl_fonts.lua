@@ -11,7 +11,6 @@ local drawSimpleText = draw.SimpleText
 local table = table
 local cam = cam
 local render = render
-local ipairs = ipairs
 
 FONTS = {}
 FONTS.fonts = {}

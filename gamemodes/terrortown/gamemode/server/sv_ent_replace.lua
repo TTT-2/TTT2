@@ -642,7 +642,7 @@ local function ImportEntities(map)
 	local num = 0
 
 	local stringmatch = string.match
-	local tonumber = tonumber
+	local tonum = tonumber
 
 	for k = 1, #lines do
 		local line = lines[k]
@@ -658,10 +658,10 @@ local function ImportEntities(map)
 			local pos
 
 			local posraw = string.Explode(" ", data[2])
-			pos = Vector(tonumber(posraw[1]), tonumber(posraw[2]), tonumber(posraw[3]))
+			pos = Vector(tonum(posraw[1]), tonum(posraw[2]), tonum(posraw[3]))
 
 			local angraw = string.Explode(" ", data[3])
-			ang = Angle(tonumber(angraw[1]), tonumber(angraw[2]), tonumber(angraw[3]))
+			ang = Angle(tonum(angraw[1]), tonum(angraw[2]), tonum(angraw[3]))
 
 			-- Random weapons have a useful keyval
 			local kv = {}
@@ -669,7 +669,7 @@ local function ImportEntities(map)
 			if data[4] then
 				local kvraw = string.Explode(" ", data[4])
 				local key = kvraw[1]
-				local val = tonumber(kvraw[2])
+				local val = tonum(kvraw[2])
 
 				if key and val then
 					kv[key] = val
