@@ -49,7 +49,7 @@ function ENT:Initialize()
 end
 
 function ENT:UseOverride(activator)
-	if IsValid(activator) and activator:IsPlayer() and activator:GetTeam() == owner:GetTeam() then
+	if IsValid(activator) and activator:IsPlayer() and activator:GetTeam() == self:GetOwner():GetTeam() then
 		local prints = self.fingerprints or {}
 
 		self:Remove()
@@ -73,7 +73,7 @@ function ENT:OnTakeDamage(dmginfo)
 
 	self:SetHealth(self:Health() - dmginfo:GetDamage())
 
-	if self:Health() >= 0 then return end
+	if self:Health() > 0 then return end
 
 	self:Remove()
 
@@ -274,7 +274,7 @@ if CLIENT then
 	local TryT = LANG.TryTranslation
 
 	-- handle looking at radio
-	function HUDDrawTargetIDRadio(data, params)
+	hook.Add("TTTRenderEntityInfo", "HUDDrawTargetIDRadio", function(data, params)
 		local client = LocalPlayer()
 
 		if not IsValid(client) or not client:IsTerror() or not client:Alive()
@@ -288,9 +288,13 @@ if CLIENT then
 
 		params.displayInfo.subtitle.text = TryT("target_pickup")
 
+		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
+			text = TryT("radio_short_desc"),
+		}
+
 		params.drawOutline = true
 		params.outlineColor = client:GetRoleColor()
-	end
+	end)
 else -- SERVER
 	local soundtypes = {
 		"scream", "shotgun", "explosion",
@@ -300,8 +304,7 @@ else -- SERVER
 	};
 
 	local function RadioCmd(ply, cmd, args)
-		if not IsValid(ply) or not ply:IsActiveTraitor()
-		or not #args == 2 then return end
+		if not IsValid(ply) or not ply:IsActive() or not #args == 2 then return end
 
 		local eidx = tonumber(args[1])
 		local snd = tostring(args[2])
@@ -309,6 +312,8 @@ else -- SERVER
 		if not eidx or not snd then return end
 
 		local radio = Entity(eidx)
+
+		if ply:GetTeam() ~= radio:GetOwner():GetTeam() then return end
 
 		if not IsValid(radio) or radio:GetOwner() ~= ply or radio:GetClass() ~= "ttt_radio" then return end
 
