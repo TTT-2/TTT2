@@ -178,6 +178,7 @@ L.quick_inno = "{player} ist unschuldig."
 L.quick_check = "Lebt noch irgendjemand?"
 
 L.radio_pickup_wrong_team = "Du kannst nicht das Radio eines anderen Teams aufheben."
+L.radio_short_desc = "Waffengeräusche sind Musik für mich"
 
 -- {player} in the quickchat text normally becomes a player nickname, but can
 -- also be one of the below.  Keep these lowercase.
@@ -617,6 +618,7 @@ L.target_switch_weapon = "Drücke [Knopf] um mit aktueller Waffe zu tauschen"
 L.target_c4 = "Drücke [Knopf] um C4 Menü zu öffnen"
 L.target_c4_armed = "Drücke [Knopf] um C4 zu entschärfen"
 L.target_c4_not_disarmable = "Du kannst kein C4 eines lebenden Teamkollegen entschärfen"
+L.c4_short_desc = "Etwas sehr explosives"
 
 L.target_pickup = "Drücke [Knopf] um aufzuheben"
 

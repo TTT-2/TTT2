@@ -288,6 +288,10 @@ if CLIENT then
 
 		params.displayInfo.subtitle.text = TryT("target_pickup")
 
+		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
+			text = TryT("radio_short_desc"),
+		}
+
 		params.drawOutline = true
 		params.outlineColor = client:GetRoleColor()
 	end)

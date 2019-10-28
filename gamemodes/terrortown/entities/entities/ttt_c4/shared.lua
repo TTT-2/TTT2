@@ -826,6 +826,10 @@ if CLIENT then
 		params.displayInfo.subtitle.text = data.ent:GetArmed() and TryT("target_c4_armed") or TryT("target_c4")
 		--end
 
+		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
+			text = TryT("c4_short_desc"),
+		}
+
 		params.drawOutline = true
 		params.outlineColor = client:GetRoleColor()
 	end)
