@@ -274,7 +274,7 @@ if CLIENT then
 	local TryT = LANG.TryTranslation
 
 	-- handle looking at radio
-	function HUDDrawTargetIDRadio(data, params)
+	hook.Add("TTTRenderEntityInfo", "HUDDrawTargetIDRadio", function(data, params)
 		local client = LocalPlayer()
 
 		if not IsValid(client) or not client:IsTerror() or not client:Alive()
@@ -290,7 +290,7 @@ if CLIENT then
 
 		params.drawOutline = true
 		params.outlineColor = client:GetRoleColor()
-	end
+	end)
 else -- SERVER
 	local soundtypes = {
 		"scream", "shotgun", "explosion",

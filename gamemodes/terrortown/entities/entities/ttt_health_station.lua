@@ -166,7 +166,7 @@ else
 	local ParT = LANG.GetParamTranslation
 
 	-- handle looking at healthstation
-	function HUDDrawTargetIDHealthStation(data, params)
+	hook.Add("TTTRenderEntityInfo", "HUDDrawTargetIDHealthStation", function(data, params)
 		local client = LocalPlayer()
 
 		if not IsValid(client) or not client:IsTerror() or not client:Alive()
@@ -199,5 +199,5 @@ else
 
 		params.drawOutline = true
 		params.outlineColor = client:GetRoleColor()
-	end
+	end)
 end

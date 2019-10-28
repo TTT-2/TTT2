@@ -84,7 +84,7 @@ if CLIENT then
 	local TryT = LANG.TryTranslation
 
 	-- handle looking at decoy
-	function HUDDrawTargetIDDecoy(data, params)
+	hook.Add("TTTRenderEntityInfo", "HUDDrawTargetIDDecoy", function(data, params)
 		local client = LocalPlayer()
 
 		if not IsValid(client) or not client:IsTerror() or not client:Alive()
@@ -111,5 +111,5 @@ if CLIENT then
 
 		params.drawOutline = true
 		params.outlineColor = client:GetRoleColor()
-	end
+	end)
 end

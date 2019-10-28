@@ -806,7 +806,7 @@ if CLIENT then
 	end
 
 	-- handle looking at C4
-	function HUDDrawTargetIDC4(data, params)
+	hook.Add("TTTRenderEntityInfo", "HUDDrawTargetIDC4", function(data, params)
 		local client = LocalPlayer()
 
 		if not IsValid(client) or not client:IsTerror() or not client:Alive()
@@ -828,5 +828,5 @@ if CLIENT then
 
 		params.drawOutline = true
 		params.outlineColor = client:GetRoleColor()
-	end
+	end)
 end
