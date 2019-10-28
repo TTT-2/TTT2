@@ -300,8 +300,7 @@ else -- SERVER
 	};
 
 	local function RadioCmd(ply, cmd, args)
-		if not IsValid(ply) or not ply:IsActiveTraitor()
-		or not #args == 2 then return end
+		if not IsValid(ply) or not ply:IsActive() or not #args == 2 then return end
 
 		local eidx = tonumber(args[1])
 		local snd = tostring(args[2])
@@ -309,6 +308,8 @@ else -- SERVER
 		if not eidx or not snd then return end
 
 		local radio = Entity(eidx)
+
+		if ply:GetTeam() ~= radio:GetOwner():GetTeam() then return end
 
 		if not IsValid(radio) or radio:GetOwner() ~= ply or radio:GetClass() ~= "ttt_radio" then return end
 
