@@ -50,57 +50,57 @@ function SWEP:OnDrop()
 end
 
 function SWEP:PrimaryAttack()
-	self:SetNextPrimaryFire( CurTime() + self.Primary.Delay )
+	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 	self:DecoyStick()
 end
 
 function SWEP:SecondaryAttack()
-	self:SetNextSecondaryFire( CurTime() + self.Secondary.Delay )
+	self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
 
 	self:DecoyStick()
 end
 
-local throwsound = Sound( "Weapon_SLAM.SatchelThrow" )
+local throwsound = Sound("Weapon_SLAM.SatchelThrow")
 
 -- Drop is disabled to prevent traitors from placing the decoy in unreachable
 -- places.
 function SWEP:DecoyDrop()
-if SERVER then
-	local ply = self:GetOwner()
+	if SERVER then
+		local ply = self:GetOwner()
 
-	if not IsValid(ply) then return end
-	if self.Planted then return end
+		if not IsValid(ply) then return end
+		if self.Planted then return end
 
-	local vsrc = ply:GetShootPos()
-	local vang = ply:GetAimVector()
-	local vvel = ply:GetVelocity()
+		local vsrc = ply:GetShootPos()
+		local vang = ply:GetAimVector()
+		local vvel = ply:GetVelocity()
 
-	local vthrow = vvel + vang * 200
-	local decoy = ents.Create("ttt_decoy")
+		local vthrow = vvel + vang * 200
+		local decoy = ents.Create("ttt_decoy")
 
-	if not IsValid(decoy) then return end
+		if not IsValid(decoy) then return end
 
-	decoy:SetPos(vsrc + vang * 10)
-	decoy:SetOwner(ply)
-	decoy:SetNWString("decoy_owner_team", ply:GetTeam())
-	decoy:Spawn()
-	decoy:PointAtEntity(ply)
+		decoy:SetPos(vsrc + vang * 10)
+		decoy:SetOwner(ply)
+		decoy:SetNWString("decoy_owner_team", ply:GetTeam())
+		decoy:Spawn()
+		decoy:PointAtEntity(ply)
 
-	local ang = decoy:GetAngles()
-	ang:RotateAroundAxis(ang:Right(), 90)
-	decoy:SetAngles(ang)
-	decoy:PhysWake()
+		local ang = decoy:GetAngles()
+		ang:RotateAroundAxis(ang:Right(), 90)
+		decoy:SetAngles(ang)
+		decoy:PhysWake()
 
-	local phys = decoy:GetPhysicsObject()
+		local phys = decoy:GetPhysicsObject()
 
-	if IsValid(phys) then
-		phys:SetVelocity(vthrow)
+		if IsValid(phys) then
+			phys:SetVelocity(vthrow)
+		end
+
+		self:PlacedDecoy(decoy)
 	end
 
-	self:PlacedDecoy(decoy)
-end
-
-self:EmitSound(throwsound)
+	self:EmitSound(throwsound)
 end
 
 if SERVER then
