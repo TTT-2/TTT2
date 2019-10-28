@@ -73,7 +73,7 @@ function ENT:OnTakeDamage(dmginfo)
 
 	self:SetHealth(self:Health() - dmginfo:GetDamage())
 
-	if self:Health() >= 0 then return end
+	if self:Health() > 0 then return end
 
 	self:Remove()
 

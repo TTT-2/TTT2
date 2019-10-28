@@ -45,6 +45,7 @@ function ENT:UseOverride(activator)
 
 	if not activator:CanCarryType(self.WeaponKind or WEAPON_EQUIP2) then
 		LANG.Msg(activator, "decoy_no_room")
+
 		return
 	end
 
@@ -58,18 +59,18 @@ function ENT:OnTakeDamage(dmginfo)
 	self:TakePhysicsDamage(dmginfo)
 	self:SetHealth(self:Health() - dmginfo:GetDamage())
 
-	if self:Health() < 0 then
-		self:Remove()
+	if self:Health() > 0 then return end
 
-		local effect = EffectData()
+	self:Remove()
 
-		effect:SetOrigin(self:GetPos())
-		util.Effect("cball_explode", effect)
-		sound.Play(zapsound, self:GetPos())
+	local effect = EffectData()
+	effect:SetOrigin(self:GetPos())
 
-		if IsValid(self:GetOwner()) then
-			LANG.Msg(self:GetOwner(), "decoy_broken")
-		end
+	util.Effect("cball_explode", effect)
+	sound.Play(zapsound, self:GetPos())
+
+	if IsValid(self:GetOwner()) then
+		LANG.Msg(self:GetOwner(), "decoy_broken")
 	end
 end
 
