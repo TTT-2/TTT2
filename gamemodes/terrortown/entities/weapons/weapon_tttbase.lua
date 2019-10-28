@@ -7,9 +7,9 @@ local math = math
 local table = table
 local util = util
 local IsValid = IsValid
-local CreateConVar = CreateConVar
 local surface = surface
 local draw = draw
+local CreateClientConVar = CreateClientConVar
 
 if SERVER then
 	AddCSLuaFile()
@@ -338,13 +338,13 @@ function SWEP:CanSecondaryAttack()
 end
 
 local function Sparklies(attacker, tr, dmginfo)
-	if tr.HitWorld and tr.MatType == MAT_METAL then
-		local eff = EffectData()
-		eff:SetOrigin(tr.HitPos)
-		eff:SetNormal(tr.HitNormal)
+	if not tr.HitWorld or tr.MatType ~= MAT_METAL then return end
 
-		util.Effect("cball_bounce", eff)
-	end
+	local eff = EffectData()
+	eff:SetOrigin(tr.HitPos)
+	eff:SetNormal(tr.HitNormal)
+
+	util.Effect("cball_bounce", eff)
 end
 
 ---
@@ -494,43 +494,6 @@ function SWEP:DampenDrop()
 	end
 end
 
-local SF_WEAPON_START_CONSTRAINED = 1
-
----
--- Picked up by player. Transfer of stored ammo and such.
--- @param Player newowner
-function SWEP:Equip(newowner)
-	if SERVER then
-		if self:IsOnFire() then
-			self:Extinguish()
-		end
-
-		self.fingerprints = self.fingerprints or {}
-
-		if not table.HasValue(self.fingerprints, newowner) then
-			table.insert(self.fingerprints, newowner)
-		end
-
-		if self:HasSpawnFlags(SF_WEAPON_START_CONSTRAINED) then
-			-- If this weapon started constrained, unset that spawnflag, or the
-			-- weapon will be re-constrained and float
-			local flags = self:GetSpawnFlags()
-			local newflags = bit.band(flags, bit.bnot(SF_WEAPON_START_CONSTRAINED))
-
-			self:SetKeyValue("spawnflags", newflags)
-		end
-	end
-
-	if SERVER and IsValid(newowner) and self.StoredAmmo > 0 and self.Primary.Ammo ~= "none" then
-		local ammo = newowner:GetAmmoCount(self.Primary.Ammo)
-		local given = math.min(self.StoredAmmo, self.Primary.ClipMax - ammo)
-
-		newowner:GiveAmmo(given, self.Primary.Ammo)
-
-		self.StoredAmmo = 0
-	end
-end
-
 ---
 -- We were bought as special equipment, some weapons will want to do something
 -- extra for their buyer
@@ -542,13 +505,13 @@ end
 ---
 -- @param boolean b
 function SWEP:SetIronsights(b)
-	if b ~= self:GetIronsights() then
-		self:SetIronsightsPredicted(b)
-		self:SetIronsightsTime(CurTime())
+	if b == self:GetIronsights() then return end
 
-		if CLIENT then
-			self:CalcViewModel()
-		end
+	self:SetIronsightsPredicted(b)
+	self:SetIronsightsTime(CurTime())
+
+	if CLIENT then
+		self:CalcViewModel()
 	end
 end
 
@@ -591,7 +554,7 @@ end
 function SWEP:Initialize()
 	if CLIENT and self:Clip1() == -1 then
 		self:SetClip1(self.Primary.DefaultClip)
-	elseif SERVER then
+	else -- SERVER
 		self.fingerprints = {}
 
 		self:SetIronsights(false)
@@ -605,111 +568,148 @@ function SWEP:Initialize()
 	end
 end
 
-function SWEP:CalcViewModel()
-	if not CLIENT or not IsFirstTimePredicted() then return end
+if SERVER then
+	local SF_WEAPON_START_CONSTRAINED = 1
 
-	self.bIron = self:GetIronsights()
-	self.fIronTime = self:GetIronsightsTime()
-	self.fCurrentTime = CurTime()
-	self.fCurrentSysTime = SysTime()
-end
+	---
+	-- Picked up by player. Transfer of stored ammo and such.
+	-- @param Player newowner
+	function SWEP:Equip(newowner)
+		if self:IsOnFire() then
+			self:Extinguish()
+		end
 
--- Note that if you override Think in your SWEP, you should call
--- BaseClass.Think(self) so as not to break ironsights
-function SWEP:Think()
-	self:CalcViewModel()
-end
+		self.fingerprints = self.fingerprints or {}
 
----
--- @return boolean
-function SWEP:DyingShot()
-	local fired = false
+		if not table.HasValue(self.fingerprints, newowner) then
+			self.fingerprints[#self.fingerprints + 1] = newowner
+		end
 
-	if self:GetIronsights() then
+		if self:HasSpawnFlags(SF_WEAPON_START_CONSTRAINED) then
+			-- If this weapon started constrained, unset that spawnflag, or the
+			-- weapon will be re-constrained and float
+			local flags = self:GetSpawnFlags()
+			local newflags = bit.band(flags, bit.bnot(SF_WEAPON_START_CONSTRAINED))
+
+			self:SetKeyValue("spawnflags", newflags)
+		end
+
+		if IsValid(newowner) and self.StoredAmmo > 0 and self.Primary.Ammo ~= "none" then
+			local ammo = newowner:GetAmmoCount(self.Primary.Ammo)
+			local given = math.min(self.StoredAmmo, self.Primary.ClipMax - ammo)
+
+			newowner:GiveAmmo(given, self.Primary.Ammo)
+
+			self.StoredAmmo = 0
+		end
+	end
+
+	---
+	-- @return boolean
+	function SWEP:DyingShot()
+		if not self:GetIronsights() then
+			return false
+		end
+
 		self:SetIronsights(false)
 
 		if self:GetNextPrimaryFire() > CurTime() then
-			return fired
+			return false
 		end
 
 		-- Owner should still be alive here
-		if IsValid(self:GetOwner()) then
-			local punch = self.Primary.Recoil or 5
-
-			-- Punch view to disorient aim before firing dying shot
-			local eyeang = self:GetOwner():EyeAngles()
-			eyeang.pitch = eyeang.pitch - math.Rand(-punch, punch)
-			eyeang.yaw = eyeang.yaw - math.Rand(-punch, punch)
-
-			self:GetOwner():SetEyeAngles(eyeang)
-
-			MsgN(self:GetOwner():Nick() .. " fired his DYING SHOT")
-
-			self:GetOwner().dying_wep = self
-
-			self:PrimaryAttack(true)
-
-			fired = true
+		if not IsValid(self:GetOwner()) then
+			return false
 		end
+
+		local punch = self.Primary.Recoil or 5
+
+		-- Punch view to disorient aim before firing dying shot
+		local eyeang = self:GetOwner():EyeAngles()
+		eyeang.pitch = eyeang.pitch - math.Rand(-punch, punch)
+		eyeang.yaw = eyeang.yaw - math.Rand(-punch, punch)
+
+		self:GetOwner():SetEyeAngles(eyeang)
+
+		MsgN(self:GetOwner():Nick() .. " fired his DYING SHOT")
+
+		self:GetOwner().dying_wep = self
+
+		self:PrimaryAttack(true)
+
+		return true
+	end
+else -- CLIENT
+	function SWEP:CalcViewModel()
+		if not IsFirstTimePredicted() then return end
+
+		self.bIron = self:GetIronsights()
+		self.fIronTime = self:GetIronsightsTime()
+		self.fCurrentTime = CurTime()
+		self.fCurrentSysTime = SysTime()
 	end
 
-	return fired
-end
+	-- Note that if you override Think in your SWEP, you should call
+	-- BaseClass.Think(self) so as not to break ironsights
+	function SWEP:Think()
+		self:CalcViewModel()
+	end
 
-local ttt_lowered = CreateConVar("ttt_ironsights_lowered", "1", FCVAR_ARCHIVE)
-local host_timescale = GetConVar("host_timescale")
-local LOWER_POS = Vector(0, 0, -2)
-local IRONSIGHT_TIME = 0.25
+	local ttt_lowered = CreateClientConVar("ttt_ironsights_lowered", "1", true)
+	local host_timescale = GetConVar("host_timescale")
+	local LOWER_POS = Vector(0, 0, -2)
+	local IRONSIGHT_TIME = 0.25
 
----
--- @param Vector pos
--- @param Angle ang
--- @return Vector
--- @return Angle
-function SWEP:GetViewModelPosition(pos, ang)
-	if not self.IronSightsPos or self.bIron == nil then
+	---
+	-- @param Vector pos
+	-- @param Angle ang
+	-- @return Vector
+	-- @return Angle
+	function SWEP:GetViewModelPosition(pos, ang)
+		if not self.IronSightsPos or self.bIron == nil then
+			return pos, ang
+		end
+
+		local bIron = self.bIron
+		local time = self.fCurrentTime + (SysTime() - self.fCurrentSysTime) * game.GetTimeScale() * host_timescale:GetFloat()
+
+		if bIron then
+			self.SwayScale = 0.3
+			self.BobScale = 0.1
+		else
+			self.SwayScale = 1.0
+			self.BobScale = 1.0
+		end
+
+		local fIronTime = self.fIronTime
+
+		if not bIron and fIronTime < time - IRONSIGHT_TIME then
+			return pos, ang
+		end
+
+		local mul = 1.0
+
+		if fIronTime > time - IRONSIGHT_TIME then
+			mul = math.Clamp((time - fIronTime) / IRONSIGHT_TIME, 0, 1)
+
+			if not bIron then
+				mul = 1 - mul
+			end
+		end
+
+		local offset = self.IronSightsPos + (ttt_lowered:GetBool() and LOWER_POS or vector_origin)
+
+		if self.IronSightsAng then
+			ang = Angle(ang)
+			ang:RotateAroundAxis(ang:Right(), self.IronSightsAng.x * mul)
+			ang:RotateAroundAxis(ang:Up(), self.IronSightsAng.y * mul)
+			ang:RotateAroundAxis(ang:Forward(), self.IronSightsAng.z * mul)
+		end
+
+		pos = pos + offset.x * ang:Right() * mul
+		pos = pos + offset.y * ang:Forward() * mul
+		pos = pos + offset.z * ang:Up() * mul
+
 		return pos, ang
 	end
-
-	local bIron = self.bIron
-	local time = self.fCurrentTime + (SysTime() - self.fCurrentSysTime) * game.GetTimeScale() * host_timescale:GetFloat()
-
-	if bIron then
-		self.SwayScale = 0.3
-		self.BobScale = 0.1
-	else
-		self.SwayScale = 1.0
-		self.BobScale = 1.0
-	end
-
-	local fIronTime = self.fIronTime
-
-	if not bIron and fIronTime < time - IRONSIGHT_TIME then
-		return pos, ang
-	end
-
-	local mul = 1.0
-
-	if fIronTime > time - IRONSIGHT_TIME then
-		mul = math.Clamp((time - fIronTime) / IRONSIGHT_TIME, 0, 1)
-
-		if not bIron then
-			mul = 1 - mul
-		end
-	end
-
-	local offset = self.IronSightsPos + (ttt_lowered:GetBool() and LOWER_POS or vector_origin)
-
-	if self.IronSightsAng then
-		ang = Angle(ang)
-		ang:RotateAroundAxis(ang:Right(), self.IronSightsAng.x * mul)
-		ang:RotateAroundAxis(ang:Up(), self.IronSightsAng.y * mul)
-		ang:RotateAroundAxis(ang:Forward(), self.IronSightsAng.z * mul)
-	end
-
-	pos = pos + offset.x * ang:Right() * mul
-	pos = pos + offset.y * ang:Forward() * mul
-	pos = pos + offset.z * ang:Up() * mul
-
-	return pos, ang
 end
