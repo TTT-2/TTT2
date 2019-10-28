@@ -438,7 +438,7 @@ function HUDDrawTargetIDPlayers(data, params)
 
 	params.drawInfo = true
 	params.displayInfo.icon = target_role and target_role.iconMaterial or icon_role_not_known
-	params.displayInfo.iconColor = target_role and data.ent:GetRoleColor() or COLOR_LGRAY
+	params.displayInfo.iconColor = target_role and data.ent:GetRoleColor() or COLOR_SLATEGRAY
 
 	local h_string, h_color = util.HealthToString(data.ent:Health(), data.ent:GetMaxHealth())
 
@@ -481,7 +481,6 @@ function HUDDrawTargetIDPlayers(data, params)
 	end
 end
 
-local rag_color = Color(225, 220, 210)
 local icon_corpse = Material("vgui/ttt/dynamic/roles/icon_corpse")
 local key_params = {
 	usekey = Key("+use", "USE"),
@@ -505,7 +504,7 @@ function HUDDrawTargetIDRagdolls(data, params)
 	params.displayInfo.iconColor = COLOR_YELLOW
 
 	params.displayInfo.title.text = corpse_found and CORPSE.GetPlayerNick(data.ent, "A Terrorist") or TryT("target_unid")
-	params.displayInfo.title.color = corpse_found and rag_color or COLOR_YELLOW
+	params.displayInfo.title.color = COLOR_YELLOW
 	params.displayInfo.subtitle.text = GetPT("corpse_hint", key_params)
 
 	-- add hints to the corpse
