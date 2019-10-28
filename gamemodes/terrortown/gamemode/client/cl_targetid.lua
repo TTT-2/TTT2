@@ -526,7 +526,7 @@ function HUDDrawTargetIDRagdolls(data, params)
 
 	params.displayInfo.title.text = corpse_found and CORPSE.GetPlayerNick(data.ent, "A Terrorist") or TryT("target_unid")
 	params.displayInfo.title.color = COLOR_YELLOW
-	params.displayInfo.subtitle.text = GetPT("corpse_hint", key_params)
+	params.displayInfo.subtitle.text = (data.distance <= 100) and GetPT("corpse_hint", key_params) or TryT("corpse_too_far_away")
 
 	-- add hints to the corpse
 	local hint = data.ent.TargetIDHint

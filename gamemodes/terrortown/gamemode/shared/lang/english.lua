@@ -604,6 +604,7 @@ L.karma_min = "Liability"
 -- TargetID misc
 L.corpse = "Corpse"
 L.corpse_hint = "Press [{usekey}] to search. [{walkkey} + {usekey}] to search covertly."
+L.corpse_too_far_away = "Corpse too far away to search."
 L.corpse_searched_by_detective = "Corpse was searched by a detective"
 
 L.target_disg = "disguised"
