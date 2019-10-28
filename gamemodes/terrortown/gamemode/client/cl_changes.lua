@@ -324,7 +324,7 @@ function CreateChanges()
 			<li>Fixed kill-list confirm role syncing bug</li>
 			<li>Fixed crosshair reset bug</li>
 			<li>Fixed confirm button on corpse search still showing after the corpse was confirmed or when a player was spectating</li>
-			<li>Fixed MSTACK:WrapText containing a ' ' in its first row</li>
+			<li>Fixed draw.GetWrappedText() containing a ' ' in its first row</li>
 			<li>Fixed shop item information not readable when the panel is too small -> added a scrollbar</li>
 			<li>Fixed shop item being displayed as unbuyable when the items price is set to 0 credits</li>
 			<li>Other small bugfixes</li>

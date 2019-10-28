@@ -1,14 +1,17 @@
 ---
 -- @author LeBroomer
 -- @author Alf21
+-- @author saibotk
+-- @author Mineotopia
 
--- micro-optimization stuff
+-- Localise some libs
 local draw = draw
 local surface = surface
 local drawSimpleText = draw.SimpleText
 local table = table
 local cam = cam
 local render = render
+local ipairs = ipairs
 
 FONTS = {}
 FONTS.fonts = {}
@@ -77,7 +80,7 @@ function draw.ShadowedText(text, font, x, y, color, xalign, yalign, scaleModifie
 	scaleModifier = scaleModifier or 1.0
 
 	local tmpCol = color.r + color.g + color.b > 200 and table.Copy(shadowColorDark) or table.Copy(shadowColorWhite)
-	tmpCol.a = tmpCol.a * (color.a / 255.0)
+	tmpCol.a = math.Round(tmpCol.a * (color.a / 255))
 
 	local dScaleModifier = 2 * scaleModifier
 
@@ -149,6 +152,74 @@ function draw.AdvancedText(text, font, x, y, color, xalign, yalign, shadow, scal
 end
 
 ---
+-- Returns a list of lines to wrap the text matching the given width
+-- @param string text
+-- @param number width
+-- @param string font
+-- @return table
+-- @realm client
+function draw.GetWrappedText(text, width, font)
+	-- Oh joy, I get to write my own wrapping function. Thanks Lua!
+	-- Splits a string into a table of strings that are under the given width.
+
+	if not text then
+		return {}, 0, 0
+	end
+
+	surface.SetFont(font or "DefaultBold")
+
+	-- Any wrapping required?
+	local w, h = surface.GetTextSize(text)
+
+	if w <= width then
+		return {text}, w, h -- Nope, but wrap in table for uniformity
+	end
+
+	local words = string.Explode(" ", text) -- No spaces means you're screwed
+	local lines = {""}
+
+	for i = 1, #words do
+		local wrd = words[i]
+
+		if i == 1 then
+			-- add the first word whether or not it matches the size to prevent
+			-- weird empty first lines and ' ' in front of the first line
+			lines[1] = wrd
+
+			continue
+		end
+
+		local lns = #lines
+		local added = lines[lns] .. " " .. wrd
+
+		w = surface.GetTextSize(added)
+
+		if w > width then
+			lines[lns + 1] = wrd -- New line needed
+		else
+			lines[lns] = added -- Safe to tack it on
+		end
+	end
+
+	local lns = #lines
+
+	-- get length of longest line
+	local length = 0
+
+	for i = 1, lns do
+		local line_w = surface.GetTextSize(lines[i])
+
+		if line_w > length then
+			length = line_w
+		end
+	end
+
+	-- get height of lines
+	local _, line_h = surface.GetTextSize(text)
+
+	return lines, length, line_h * lns
+end
+
 -- Returns the size of a inserted string
 -- @param string text The text that the length should be calculated
 -- @param [default="DefaultBold"] string font The font ID
