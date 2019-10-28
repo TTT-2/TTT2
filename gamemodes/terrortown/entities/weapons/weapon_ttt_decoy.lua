@@ -1,10 +1,6 @@
 if SERVER then
 	AddCSLuaFile()
-end
-
-SWEP.HoldType = "normal"
-
-if CLIENT then
+else -- CLIENT
 	SWEP.PrintName = "decoy_name"
 	SWEP.Slot = 7
 
@@ -15,12 +11,14 @@ if CLIENT then
 	SWEP.EquipMenuData = {
 		type = "item_weapon",
 		desc = "decoy_desc"
-	};
+	}
 
 	SWEP.Icon = "vgui/ttt/icon_beacon"
 end
 
 SWEP.Base = "weapon_tttbase"
+
+SWEP.HoldType = "normal"
 
 SWEP.ViewModel = "models/weapons/v_crowbar.mdl"
 SWEP.WorldModel = "models/props_lab/reciever01b.mdl"
@@ -56,7 +54,6 @@ end
 
 function SWEP:SecondaryAttack()
 	self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
-
 	self:DecoyStick()
 end
 
@@ -68,8 +65,7 @@ function SWEP:DecoyDrop()
 	if SERVER then
 		local ply = self:GetOwner()
 
-		if not IsValid(ply) then return end
-		if self.Planted then return end
+		if not IsValid(ply) or self.Planted then return end
 
 		local vsrc = ply:GetShootPos()
 		local vang = ply:GetAimVector()
@@ -88,11 +84,11 @@ function SWEP:DecoyDrop()
 
 		local ang = decoy:GetAngles()
 		ang:RotateAroundAxis(ang:Right(), 90)
+
 		decoy:SetAngles(ang)
 		decoy:PhysWake()
 
 		local phys = decoy:GetPhysicsObject()
-
 		if IsValid(phys) then
 			phys:SetVelocity(vthrow)
 		end
@@ -107,12 +103,12 @@ if SERVER then
 	function SWEP:DecoyStick()
 		local ply = self:GetOwner()
 
-		if not IsValid(ply) then return end
-		if self.Planted then return end
+		if not IsValid(ply) or self.Planted then return end
 
 		local ignore = {ply, self}
 		local spos = ply:GetShootPos()
 		local epos = spos + ply:GetAimVector() * 80
+
 		local tr = util.TraceLine({
 			start = spos,
 			endpos = epos,
@@ -123,7 +119,6 @@ if SERVER then
 		if not tr.HitWorld then return end
 
 		local decoy = ents.Create("ttt_decoy")
-
 		if not IsValid(decoy) then return end
 
 		decoy:PointAtEntity(ply)
@@ -146,18 +141,18 @@ if SERVER then
 		decoy:Spawn()
 
 		local phys = decoy:GetPhysicsObject()
-
 		if IsValid(phys) then
 			phys:EnableMotion(false)
 		end
 
 		decoy.IsOnWall = true
+
 		self:PlacedDecoy(decoy)
 	end
 
 	-- add hook that changes all decoys
 	hook.Add("TTT2UpdateTeam", "TTT2DecoyUpdateTeam", function(ply, oldTeam, newTeam)
-		if not ply.decoy then return end
+		if not IsValid(ply.decoy) then return end
 
 		ply.decoy:SetNWString("decoy_owner_team", newTeam)
 	end)
@@ -165,6 +160,7 @@ end
 
 function SWEP:PlacedDecoy(decoy)
 	self:GetOwner().decoy = decoy
+
 	self:TakePrimaryAmmo(1)
 
 	if not self:CanPrimaryAttack() then
@@ -178,13 +174,13 @@ function SWEP:Reload()
 	return false
 end
 
-function SWEP:OnRemove()
-	if CLIENT and IsValid(self:GetOwner()) and self:GetOwner() == LocalPlayer() and self:GetOwner():Alive() then
+if CLIENT then
+	function SWEP:OnRemove()
+		if not IsValid(self:GetOwner()) or self:GetOwner() ~= LocalPlayer() or not self:GetOwner():Alive() then return end
+
 		RunConsoleCommand("lastinv")
 	end
-end
 
-if CLIENT then
 	function SWEP:Initialize()
 		self:AddHUDHelp("decoy_help_pri", nil, true)
 
