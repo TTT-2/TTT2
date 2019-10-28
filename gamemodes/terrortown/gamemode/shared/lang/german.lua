@@ -385,6 +385,8 @@ L.decoy_no_room = "Du kannst diese Attrappe nicht tragen."
 L.decoy_broken = "Deine Attrappe wurde zerstört!"
 
 L.decoy_help_pri = "{primaryfire} platziert die Attrappe."
+L.decoy_short_desc = "Diese Attrappe erzeugt ein gefälschtes Radar-Signal sichtbar für andere Teams"
+
 L.decoy_desc = [[
 Zeigt Detektiven ein gefälschtes Radar-Signal
 und bewirkt, dass der DNA-Scanner den

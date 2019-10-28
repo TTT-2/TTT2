@@ -278,7 +278,8 @@ function GM:HUDDrawTargetID()
 	HUDDrawTargetIDRagdolls(data, params)
 	HUDDrawTargetIDC4(data, params)
 	HUDDrawTargetIDRadio(data, params)
-	HUDDrawTargetIDGealthStation(data, params)
+	HUDDrawTargetIDHealthStation(data, params)
+	HUDDrawTargetIDDecoy(data, params)
 
 	-- now run a hook that can be used by addon devs that changes the appearance
 	-- of the targetid

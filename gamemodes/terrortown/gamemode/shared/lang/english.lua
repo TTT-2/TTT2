@@ -389,6 +389,7 @@ L.decoy_no_room = "You cannot carry this decoy."
 L.decoy_broken = "Your Decoy has been destroyed!"
 
 L.decoy_help_pri = "{primaryfire} plants the Decoy."
+L.decoy_short_desc = "This decoy creates a fake radar point visible for other teams"
 
 L.decoy_desc = [[
 Shows a fake radar sign to detectives,

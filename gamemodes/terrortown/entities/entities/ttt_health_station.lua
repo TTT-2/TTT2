@@ -1,6 +1,7 @@
 ---- Health dispenser
-
-AddCSLuaFile()
+if SERVER then
+	AddCSLuaFile()
+end
 
 if CLIENT then
 	-- this entity can be DNA-sampled so we need some display info
@@ -11,7 +12,7 @@ if CLIENT then
 	local ParT = LANG.GetParamTranslation
 
 	-- handle looking at healthstation
-	function HUDDrawTargetIDGealthStation(data, params)
+	function HUDDrawTargetIDHealthStation(data, params)
 		local client = LocalPlayer()
 
 		if not IsValid(client) or not client:IsTerror() or not client:Alive()
