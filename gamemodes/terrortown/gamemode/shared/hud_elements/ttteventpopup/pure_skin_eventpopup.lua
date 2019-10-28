@@ -125,15 +125,7 @@ if CLIENT then
 		local fadetime = 1.5
 		local timediff = msg.time - CurTime()
 		local opacity = (timediff > fadetime) and 255 or math.Round(255 * timediff / fadetime)
-		local opacity_color = math.Round(opacity / 255 * self.basecolor.a)
 
-		-- calculate colors based on fading
-		local back_color = {
-			r = self.basecolor.r,
-			g = self.basecolor.g,
-			b = self.basecolor.b,
-			a = opacity_color
-		}
 		local font_color_tmp = self:GetDefaultFontColor(self.basecolor)
 		local font_color = {
 			r = font_color_tmp.r,
@@ -141,9 +133,6 @@ if CLIENT then
 			b = font_color_tmp.b,
 			a = opacity
 		}
-
-		-- draw bg and shadow
-		self:DrawBg(msg.pos.x, msg.pos.y, msg.size.w, msg.size.h, back_color)
 
 		-- draw content
 		for i = 1, #msg.title_wrapped do
@@ -156,9 +145,6 @@ if CLIENT then
 		for i = 1, #msg.icon_tbl do
 			util.DrawFilteredTexturedRect(msg.pos.icon_x[i], msg.pos.icon_y, self.icon_size, self.icon_size, msg.icon_tbl[i], opacity)
 		end
-
-		-- draw lines around the element
-		self:DrawLines(msg.pos.x, msg.pos.y, msg.size.w, msg.size.h, opacity_color)
 
 		self:SetSize(size.w, msg.size.h)
 	end
