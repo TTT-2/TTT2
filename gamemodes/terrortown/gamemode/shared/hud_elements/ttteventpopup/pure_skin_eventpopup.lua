@@ -124,6 +124,7 @@ if CLIENT then
 			msg.title = "A Test Popup, now with a multiline title, how NICE."
 			msg.text = "Well, hello there! This is a fancy popup with some special information. The text can be also multiline, how fancy! Ugh, I could add so much more text if I'd had any ideas..."
 			msg.icon_tbl = {}
+			msg.time = CurTime() + 5
 		end
 
 		-- prepare item, caches the data of the element to improve performance
@@ -133,7 +134,7 @@ if CLIENT then
 
 		-- calculate fadeout
 		local fadetime = 1.5
-		local timediff = msg.time - CurTime()
+		local timediff = HUDEditor.IsEditing and 5 or msg.time - CurTime()
 		local opacity = (timediff > fadetime) and 255 or math.Round(255 * timediff / fadetime)
 
 		local font_color_tmp = self:GetDefaultFontColor(self.basecolor)
