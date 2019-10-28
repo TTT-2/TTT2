@@ -177,7 +177,7 @@ L.quick_traitor = "{player} is a Traitor!"
 L.quick_inno = "{player} is innocent."
 L.quick_check = "Anyone still alive?"
 
-l.radio_pickup_wrong_team = "You can't pick up the radio from another team."
+L.radio_pickup_wrong_team = "You can't pick up the radio from another team."
 
 -- {player} in the quickchat text normally becomes a player nickname, but can
 -- also be one of the below.  Keep these lowercase.
