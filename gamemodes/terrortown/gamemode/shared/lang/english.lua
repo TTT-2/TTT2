@@ -390,6 +390,7 @@ L.decoy_broken = "Your Decoy has been destroyed!"
 
 L.decoy_help_pri = "{primaryfire} plants the Decoy."
 L.decoy_short_desc = "This decoy creates a fake radar point visible for other teams"
+L.decoy_pickup_wrong_team = "You Can't pick it up as it belongs to a different team"
 
 L.decoy_desc = [[
 Shows a fake radar sign to detectives,

@@ -82,6 +82,7 @@ if SERVER then
 
 	decoy:SetPos(vsrc + vang * 10)
 	decoy:SetOwner(ply)
+	decoy:SetNWString("decoy_owner_team", ply:GetTeam())
 	decoy:Spawn()
 	decoy:PointAtEntity(ply)
 	
@@ -131,6 +132,7 @@ if SERVER then
 		decoy:SetPos(tr_ent.HitPos + ang:Forward() * 2.5)
 		decoy:SetAngles(ang)
 		decoy:SetOwner(ply)
+		decoy:SetNWString("decoy_owner_team", ply:GetTeam())
 		decoy:Spawn()
 		
 		local phys = decoy:GetPhysicsObject()
@@ -142,6 +144,13 @@ if SERVER then
 		decoy.IsOnWall = true
 		self:PlacedDecoy(decoy)
 	end
+
+	-- add hook that changes all decoys
+	hook.Add("TTT2UpdateTeam", "TTT2DecoyUpdateTeam", function(ply, oldTeam, newTeam)
+		if not ply.decoy then return end
+
+		ply.decoy:SetNWString("decoy_owner_team", newTeam)
+	end)
 end
 
 function SWEP:PlacedDecoy(decoy)

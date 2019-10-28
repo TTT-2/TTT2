@@ -41,7 +41,7 @@ function ENT:Initialize()
 end
 
 function ENT:UseOverride(activator)
-	if not IsValid(activator) or self:GetOwner() ~= activator then return end
+	if not IsValid(activator) or self:GetNWString("decoy_owner_team", "none") ~= activator:GetTeam() then return end
 
 	if not activator:CanCarryType(self.WeaponKind or WEAPON_EQUIP2) then
 		LANG.Msg(activator, "decoy_no_room")
@@ -98,8 +98,15 @@ if CLIENT then
 		params.displayInfo.subtitle.text = TryT("target_pickup")
 
 		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
-			text = TryT("decoy_short_desc"),
+			text = TryT("decoy_short_desc")
 		}
+
+		if data.ent:GetNWString("decoy_owner_team", "none") ~= client:GetTeam() then
+			params.displayInfo.desc[#params.displayInfo.desc + 1] = {
+				text = TryT("decoy_pickup_wrong_team"),
+				color = COLOR_ORANGE
+			}
+		end
 
 		params.drawOutline = true
 		params.outlineColor = client:GetRoleColor()

@@ -386,6 +386,7 @@ L.decoy_broken = "Deine Attrappe wurde zerstört!"
 
 L.decoy_help_pri = "{primaryfire} platziert die Attrappe."
 L.decoy_short_desc = "Diese Attrappe erzeugt ein gefälschtes Radar-Signal sichtbar für andere Teams"
+L.decoy_pickup_wrong_team = "Du kannst sie nicht aufnehmen, da sie einem anderen Team gehört"
 
 L.decoy_desc = [[
 Zeigt Detektiven ein gefälschtes Radar-Signal
