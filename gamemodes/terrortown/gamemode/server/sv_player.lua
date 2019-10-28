@@ -728,11 +728,13 @@ local function CheckCreditAward(victim, attacker)
 		local plys = player.GetAll()
 
 		for i = 1, #plys do
-			if plys[i]:IsInTeam(attacker) then continue end
+			local ply = plys[i]
 
-			if plys[i]:IsTerror() then
+			if ply:IsInTeam(attacker) then continue end
+
+			if ply:IsTerror() then
 				terror_alive = terror_alive + 1
-			elseif plys[i]:IsDeadTerror() then
+			elseif ply:IsDeadTerror() then
 				terror_dead = terror_dead + 1
 			end
 		end

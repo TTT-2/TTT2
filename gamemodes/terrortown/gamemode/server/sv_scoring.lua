@@ -231,24 +231,26 @@ end
 function SCORE:ApplyEventLogScores(wintype)
 	local scores = {}
 	local plys = player.GetAll()
+	local ply
 
 	for i = 1, #plys do
-		if plys[i]:SteamID64() == nil then
+		ply = plys[i]
+
+		if ply:SteamID64() == nil then
 			print("[TTT2] ERROR: Player has no steamID64")
 		else
-			scores[plys[i]:SteamID64()] = {}
+			scores[ply:SteamID64()] = {}
 		end
 	end
 
 	-- individual scores, and count those left alive
 	local scored_log = ScoreEventLog(self.Events, scores)
 	local bonus = ScoreTeamBonus(scored_log, wintype)
-	local ply
 
 	for sid64, s in pairs(scored_log) do
 		ply = player.GetBySteamID64(sid64)
 
-		if ply and ply:ShouldScore() then
+		if IsValid(ply) and ply:ShouldScore() then
 			ply:AddFrags(KillsToPoints(s))
 			ply:AddFrags(bonus[sid64])
 		end

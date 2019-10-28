@@ -516,9 +516,10 @@ function plymeta:CanCarryWeapon(wep)
 
 	-- appeareantly TTT can't handle two times the same weapon
 	local weps = self:GetWeapons()
+	local wepCls = WEPS.GetClass(wep)
 
 	for k = 1, #weps do
-		if WEPS.GetClass(wep) ~= weps[k]:GetClass() then continue end
+		if wepCls ~= weps[k]:GetClass() then continue end
 
 		return false
 	end

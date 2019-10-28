@@ -237,12 +237,13 @@ if CLIENT then
 		-- need to build equipment cache?
 		if not Equipment[fallback] then
 			local tbl = {}
+			local v
 
 			-- find buyable items to load info from
 			local itms = items.GetList()
 
 			for i = 1, #itms do
-				local v = itms[i]
+				v = itms[i]
 
 				if v and not v.Doublicated and v.CanBuy and table.HasValue(v.CanBuy, fallback) then
 					local data = v.EquipMenuData or {}
@@ -258,7 +259,7 @@ if CLIENT then
 			local weps = weapons.GetList()
 
 			for i = 1, #weps do
-				local v = weps[i]
+				v = weps[i]
 
 				if v and not v.Doublicated and v.CanBuy and table.HasValue(v.CanBuy, fallback) then
 					local data = v.EquipMenuData or {}
@@ -272,11 +273,11 @@ if CLIENT then
 
 			-- mark custom items
 			for k = 1, #tbl do
-				local i = tbl[k]
+				v = tbl[k]
 
-				if not i or not i.id then continue end
+				if not v or not v.id then continue end
 
-				i.custom = not table.HasValue(DefaultEquipment[fallback], i.id) -- TODO
+				v.custom = not table.HasValue(DefaultEquipment[fallback], v.id) -- TODO
 			end
 
 			Equipment[fallback] = tbl
@@ -457,10 +458,13 @@ if SERVER then
 			end
 		end
 
+		local tmpTbl = plys or player.GetAll()
+
+		local mathrandom = math.random
+		local tableremove = table.remove
+
 		-- now set the individual random shop
 		if team then -- the shop is synced with the team
-			local tmpTbl = plys and plys or player.GetAll()
-
 			for i = 1, #tmpTbl do
 				local ply = tmpTbl[i]
 				local srd = ply:GetSubRoleData()
@@ -470,8 +474,6 @@ if SERVER then
 				RANDOMSHOP[ply] = RANDOMTEAMSHOPS[GetShopFallback(srd.index)]
 			end
 		else -- every player has his own shop
-			local tmpTbl = plys and plys or player.GetAll()
-
 			for i = 1, #tmpTbl do
 				local ply = tmpTbl[i]
 				local srd = ply:GetSubRoleData()
@@ -501,11 +503,11 @@ if SERVER then
 
 				if amount > 0 then
 					for k = 1, amount do
-						local rndm = math.random(#tmp2)
+						local rndm = mathrandom(#tmp2)
 
 						RANDOMSHOP[ply][#RANDOMSHOP[ply] + 1] = tmp2[rndm]
 
-						table.remove(tmp2, rndm)
+						tableremove(tmp2, rndm)
 					end
 				end
 			end
@@ -1004,13 +1006,17 @@ if SERVER then
 	-- @param table equip_table
 	-- @realm server
 	function RemoveEquipmentFromRole(subrole, equip_table)
+		local tableremove = table.remove
+
 		if not equip_table.CanBuy then
 			equip_table.CanBuy = {}
 		else
-			for k = 1, #equip_table.CanBuy do
-				if equip_table.CanBuy[k] ~= subrole then continue end
+			local canBuyTbl = equip_table.CanBuy
 
-				table.remove(equip_table.CanBuy, k)
+			for k = 1, #canBuyTbl do
+				if canBuyTbl[k] ~= subrole then continue end
+
+				tableremove(canBuyTbl, k)
 
 				break
 			end
@@ -1022,7 +1028,7 @@ if SERVER then
 		for k, v in pairs(SYNC_EQUIP[subrole]) do
 			if v ~= equip_table.id then continue end
 
-			table.remove(SYNC_EQUIP[subrole], k)
+			tableremove(SYNC_EQUIP[subrole], k)
 
 			break
 		end
@@ -1124,10 +1130,13 @@ else -- CLIENT
 	-- @param table equip
 	-- @realm client
 	function RemoveEquipmentFromRoleEquipment(subrole, equip)
-		for k = 1, #equip.CanBuy do
-			if equip.CanBuy[k] ~= subrole then continue end
+		local canBuyTbl = equip.CanBuy
+		local tableremove = table.remove
 
-			table.remove(equip.CanBuy, k)
+		for k = 1, #canBuyTbl do
+			if canBuyTbl[k] ~= subrole then continue end
+
+			tableremove(canBuyTbl, k)
 
 			break
 		end
@@ -1135,7 +1144,7 @@ else -- CLIENT
 		for k, eq in pairs(Equipment[subrole]) do
 			if eq.id ~= equip.id then continue end
 
-			table.remove(Equipment[subrole], k)
+			tableremove(Equipment[subrole], k)
 
 			break
 		end

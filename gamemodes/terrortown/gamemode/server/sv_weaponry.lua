@@ -55,48 +55,54 @@ end
 local loadout_weapons = {}
 
 local function GetLoadoutWeapons(subrole)
-	if not loadout_weapons[subrole] then
-		loadout_weapons[subrole] = {}
+	local tmpLoadoutWeps = loadout_weapons[subrole]
 
-		local weps = weapons.GetList()
+	if tmpLoadoutWeps then
+		return tmpLoadoutWeps
+	end
 
-		for i = 1, #weps do
-			local w = weps[i]
+	tmpLoadoutWeps = {}
 
-			if type(w.InLoadoutFor) ~= "table" or w.Doublicated then continue end
+	local weps = weapons.GetList()
 
-			local cls = WEPS.GetClass(w)
+	for i = 1, #weps do
+		local w = weps[i]
 
-			if table.HasValue(w.InLoadoutFor, subrole) then
-				if not table.HasValue(loadout_weapons[subrole], cls) then
-					loadout_weapons[subrole][#loadout_weapons[subrole] + 1] = cls
-				end
-			elseif table.HasValue(w.InLoadoutFor, ROLE_INNOCENT) then -- setup for new roles
-				w.InLoadoutFor[#w.InLoadoutFor + 1] = subrole
+		if type(w.InLoadoutFor) ~= "table" or w.Doublicated then continue end
 
-				if not table.HasValue(loadout_weapons[subrole], cls) then
-					loadout_weapons[subrole][#loadout_weapons[subrole] + 1] = cls
-				end
+		local cls = WEPS.GetClass(w)
+
+		if table.HasValue(w.InLoadoutFor, subrole) then
+			if not table.HasValue(tmpLoadoutWeps, cls) then
+				tmpLoadoutWeps[#tmpLoadoutWeps + 1] = cls
+			end
+		elseif table.HasValue(w.InLoadoutFor, ROLE_INNOCENT) then -- setup for new roles
+			w.InLoadoutFor[#w.InLoadoutFor + 1] = subrole
+
+			if not table.HasValue(tmpLoadoutWeps, cls) then
+				tmpLoadoutWeps[#tmpLoadoutWeps + 1] = cls
 			end
 		end
-
-		-- default loadout, insert it at the end
-		local default = {
-			"weapon_zm_carry",
-			"weapon_ttt_unarmed",
-			"weapon_zm_improvised"
-		}
-
-		for i = 1, #default do
-			local def = default[i]
-
-			if table.HasValue(loadout_weapons[subrole], def) then continue end
-
-			loadout_weapons[subrole][#loadout_weapons[subrole] + 1] = def
-		end
-
-		hook.Run("TTT2ModifyDefaultLoadout", loadout_weapons, subrole)
 	end
+
+	-- default loadout, insert it at the end
+	local default = {
+		"weapon_zm_carry",
+		"weapon_ttt_unarmed",
+		"weapon_zm_improvised"
+	}
+
+	for i = 1, #default do
+		local def = default[i]
+
+		if table.HasValue(tmpLoadoutWeps, def) then continue end
+
+		tmpLoadoutWeps[#tmpLoadoutWeps + 1] = def
+	end
+
+	loadout_weapons[subrole] = tmpLoadoutWeps
+
+	hook.Run("TTT2ModifyDefaultLoadout", loadout_weapons, subrole)
 
 	return loadout_weapons[subrole]
 end
@@ -192,33 +198,39 @@ local loadout_items = {}
 
 -- Get loadout items.
 local function GetLoadoutItems(subrole)
-	if not loadout_items[subrole] then
-		loadout_items[subrole] = {}
+	local tmpLoadoutItems = loadout_items[subrole]
 
-		local itms = items.GetList()
+	if tmpLoadoutItems then
+		return tmpLoadoutItems
+	end
 
-		for i = 1, #itms do
-			local w = itms[i]
+	tmpLoadoutItems = {}
 
-			if type(w.InLoadoutFor) ~= "table" or w.Doublicated then continue end
+	local itms = items.GetList()
 
-			local cls = w.id
+	for i = 1, #itms do
+		local w = itms[i]
 
-			if table.HasValue(w.InLoadoutFor, subrole) then
-				if not table.HasValue(loadout_items[subrole], cls) then
-					loadout_items[subrole][#loadout_items[subrole] + 1] = cls
-				end
-			elseif table.HasValue(w.InLoadoutFor, ROLE_INNOCENT) then -- setup for new roles
-				w.InLoadoutFor[#w.InLoadoutFor + 1] = subrole
+		if type(w.InLoadoutFor) ~= "table" or w.Doublicated then continue end
 
-				if not table.HasValue(loadout_items[subrole], cls) then
-					loadout_items[subrole][#loadout_items[subrole] + 1] = cls
-				end
+		local cls = w.id
+
+		if table.HasValue(w.InLoadoutFor, subrole) then
+			if not table.HasValue(tmpLoadoutItems, cls) then
+				tmpLoadoutItems[#tmpLoadoutItems + 1] = cls
+			end
+		elseif table.HasValue(w.InLoadoutFor, ROLE_INNOCENT) then -- setup for new roles
+			w.InLoadoutFor[#w.InLoadoutFor + 1] = subrole
+
+			if not table.HasValue(tmpLoadoutItems, cls) then
+				tmpLoadoutItems[#tmpLoadoutItems + 1] = cls
 			end
 		end
-
-		hook.Run("TTT2ModifyDefaultLoadout", loadout_items, subrole)
 	end
+
+	loadout_items[subrole] = tmpLoadoutItems
+
+	hook.Run("TTT2ModifyDefaultLoadout", loadout_items, subrole)
 
 	return loadout_items[subrole]
 end
@@ -226,17 +238,17 @@ end
 -- Give player loadout items he should have for his subrole that he does not have
 -- yet
 local function GiveLoadoutItem(ply, cls)
-	if not ply:HasEquipmentItem(cls) then
-		local item = ply:GiveItem(cls)
+	if ply:HasEquipmentItem(cls) then return end
 
-		ply.loadoutItems = ply.loadoutItems or {}
+	local item = ply:GiveItem(cls)
 
-		if not table.HasValue(ply.loadoutItems, cls) then
-			ply.loadoutItems[#ply.loadoutItems + 1] = cls
-		end
+	ply.loadoutItems = ply.loadoutItems or {}
 
-		return item
+	if not table.HasValue(ply.loadoutItems, cls) then
+		ply.loadoutItems[#ply.loadoutItems + 1] = cls
 	end
+
+	return item
 end
 
 local function GiveLoadoutItems(ply)
@@ -256,12 +268,12 @@ end
 
 local function ResetLoadoutItems(ply)
 	local itms = GetModifiedEquipment(ply, items.GetRoleItems(ply:GetSubRole()))
-	if itms then
-		for i = 1, #itms do
-			if not itms[i].loadout then continue end
+	if itms == nil then return end
 
-			ply:RemoveItem(itms[i].id)
-		end
+	for i = 1, #itms do
+		if not itms[i].loadout then continue end
+
+		ply:RemoveItem(itms[i].id)
 	end
 end
 
@@ -381,15 +393,17 @@ function GM:PlayerLoadout(ply)
 		end
 	end
 
+	local loudoutWeps = ply.loadoutWeps
+
 	for i = 1, #tmp do
 		local cls = tmp[i]
 
 		ply:StripWeapon(cls)
 
-		for k = 1, #ply.loadoutWeps do
-			if cls ~= ply.loadoutWeps[k] then continue end
+		for k = 1, #loudoutWeps do
+			if cls ~= loudoutWeps[k] then continue end
 
-			table.remove(ply.loadoutWeps, k)
+			table.remove(loudoutWeps, k)
 
 			break
 		end

@@ -606,7 +606,7 @@ local function TTTRagdollSearch()
 	-- Players killed
 	local num_kills = net.ReadUInt(8)
 	if num_kills > 0 then
-		t_kills = {}
+		local t_kills = {}
 
 		for i = 1, num_kills do
 			t_kills[i] = net.ReadUInt(8)

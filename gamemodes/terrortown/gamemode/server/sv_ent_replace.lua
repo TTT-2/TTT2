@@ -115,11 +115,12 @@ end
 -- @realm server
 function ents.TTT.RemoveRagdolls(player_only)
 	local ragdolls = ents.FindByClass("prop_ragdoll")
+	local stringfind = string.find
 
 	for i = 1, #ragdolls do
 		local ent = ragdolls[i]
 
-		if not player_only and string.find(ent:GetModel(), "zm_", 6, true) then
+		if not player_only and stringfind(ent:GetModel(), "zm_", 6, true) then
 			ent:Remove()
 		elseif ent.player_ragdoll then
 			ent:Remove() -- cleanup ought to catch these but you know
@@ -192,8 +193,10 @@ local broken_parenting_ents = {
 -- @realm server
 -- @internal
 function ents.TTT.FixParentedPreCleanup()
+	local entsFindByClass = ents.FindByClass
+
 	for i = 1, #broken_parenting_ents do
-		local entits = ents.FindByClass(broken_parenting_ents[i])
+		local entits = entsFindByClass(broken_parenting_ents[i])
 
 		for k = 1, #entits do
 			local v = entits[k]
@@ -214,8 +217,11 @@ end
 -- @realm server
 -- @internal
 function ents.TTT.FixParentedPostCleanup()
+	local entsFindByClass = ents.FindByClass
+	local entsFindByName = ents.FindByName
+
 	for i = 1, #broken_parenting_ents do
-		local entits = ents.FindByClass(broken_parenting_ents[i])
+		local entits = entsFindByClass(broken_parenting_ents[i])
 
 		for k = 1, #entits do
 			local v = entits[k]
@@ -226,7 +232,7 @@ function ents.TTT.FixParentedPostCleanup()
 				v:SetPos(v.OrigPos)
 			end
 
-			local parents = ents.FindByName(v.CachedParentName)
+			local parents = entsFindByName(v.CachedParentName)
 			if #parents == 1 then
 				local parent = parents[1]
 
@@ -494,21 +500,26 @@ end
 ---
 -- Weapon/ammo placement script importing
 local function RemoveWeaponEntities()
+	local ent
+	local entsFindByClass = ents.FindByClass
+
 	-- This could be transformed into lots of FindByClass searches, one for every
 	-- key in the replace tables. Hopefully this is faster as more of the work is
 	-- done on the C side. Hard to measure.
-	local itemEnts = ents.FindByClass("item_*")
+	local itemEnts = entsFindByClass("item_*")
 
 	for i = 1, #itemEnts do
-		if not hl2_ammo_replace[itemEnts[i]:GetClass()] then continue end
+		ent = itemEnts[i]
 
-		itemEnts[i]:Remove()
+		if not hl2_ammo_replace[ent:GetClass()] then continue end
+
+		ent:Remove()
 	end
 
-	local wepEnts = ents.FindByClass("weapon_*")
+	local wepEnts = entsFindByClass("weapon_*")
 
 	for i = 1, #wepEnts do
-		local ent = wepEnts[i]
+		ent = wepEnts[i]
 
 		if not hl2_weapon_replace[ent:GetClass()] and ent:GetClass() ~= "weapon_zm_improvised" then continue end
 
@@ -518,7 +529,7 @@ local function RemoveWeaponEntities()
 	local spawnableAmmoEnts = ents.TTT.GetSpawnableAmmo()
 
 	for i = 1, #spawnableAmmoEnts do
-		local ammoClsEnts = ents.FindByClass(spawnableAmmoEnts[i])
+		local ammoClsEnts = entsFindByClass(spawnableAmmoEnts[i])
 
 		for k = 1, #ammoClsEnts do
 			ammoClsEnts[k]:Remove()
@@ -526,10 +537,10 @@ local function RemoveWeaponEntities()
 	end
 
 	local spawnableWepEnts = ents.TTT.GetSpawnableSWEPs()
+	local WEPSGetClass = WEPS.GetClass
 
 	for i = 1, #spawnableWepEnts do
-		local cn = WEPS.GetClass(spawnableWepEnts[i])
-		local wepClsEnts = ents.FindByClass(cn)
+		local wepClsEnts = entsFindByClass(WEPSGetClass(spawnableWepEnts[i]))
 
 		for k = 1, #wepClsEnts do
 			wepClsEnts[k]:Remove()
@@ -599,12 +610,14 @@ local function ImportSettings(map)
 	local settings = {}
 	local lines = string.Explode("\n", buf)
 
+	local stringmatch = string.match
+
 	for k = 1, #lines do
 		local line = lines[k]
 
-		if not string.match(line, "^setting") then continue end
+		if not stringmatch(line, "^setting") then continue end
 
-		local key, val = string.match(line, "^setting:\t(%w*) ([0-9]*)")
+		local key, val = stringmatch(line, "^setting:\t(%w*) ([0-9]*)")
 
 		val = tonumber(val)
 
@@ -628,10 +641,13 @@ local function ImportEntities(map)
 	local lines = string.Explode("\n", buf)
 	local num = 0
 
+	local stringmatch = string.match
+	local tonumber = tonumber
+
 	for k = 1, #lines do
 		local line = lines[k]
 
-		if string.match(line, "^#") or string.match(line, "^setting") or line == "" or string.byte(line) == 0 then continue end
+		if stringmatch(line, "^#") or stringmatch(line, "^setting") or line == "" or string.byte(line) == 0 then continue end
 
 		local data = string.Explode("\t", line)
 		local fail = true -- pessimism

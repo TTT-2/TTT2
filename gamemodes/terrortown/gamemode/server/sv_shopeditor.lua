@@ -104,9 +104,11 @@ function ShopEditor.AddToShopEditor(ply, roleData, equip)
 
 	-- last but not least, notify each player
 	local plys = player.GetAll()
+	local nick = ply:Nick()
+	local rdName = roleData.name
 
 	for i = 1, #plys do
-		plys[i]:ChatPrint("[TTT2][SHOP] " .. ply:Nick() .. " added '" .. equip .. "' into the shop of the " .. roleData.name)
+		plys[i]:ChatPrint("[TTT2][SHOP] " .. nick .. " added '" .. equip .. "' into the shop of the " .. rdName)
 	end
 end
 
@@ -125,9 +127,11 @@ function ShopEditor.RemoveFromShopEditor(ply, roleData, equip)
 
 	-- last but not least, notify each player
 	local plys = player.GetAll()
+	local nick = ply:Nick()
+	local rdName = roleData.name
 
 	for i = 1, #plys do
-		plys[i]:ChatPrint("[TTT2][SHOP] " .. ply:Nick() .. " removed '" .. equip .. "' from the shop of the " .. roleData.name)
+		plys[i]:ChatPrint("[TTT2][SHOP] " .. nick .. " removed '" .. equip .. "' from the shop of the " .. rdName)
 	end
 end
 

@@ -51,7 +51,7 @@ local function CreateSoundBoard(parent)
 	local x, y = 0, 0
 
 	for ri = 1, ver do
-		local row = ver[ri]
+		local row = smatrix[ri]
 		local rj = ri - 1 -- easier for computing x, y
 
 		for rk = 1, #row do

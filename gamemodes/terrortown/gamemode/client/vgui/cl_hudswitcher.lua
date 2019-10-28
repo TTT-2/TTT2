@@ -178,10 +178,10 @@ function PANEL:Init()
 	end
 
 	local sheets = {}
-	local huds = huds.GetList()
+	local hudLists = huds.GetList()
 
-	for i = 1, #huds do
-		local hud = huds[i]
+	for i = 1, #hudLists do
+		local hud = hudLists[i]
 
 		local panel = vgui.Create("DPanel", dcsheet)
 		panel:Dock(FILL)

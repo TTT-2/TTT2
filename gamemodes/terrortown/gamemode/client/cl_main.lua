@@ -137,13 +137,14 @@ function GM:InitPostEntity()
 		wep.CanBuy = {} -- reset normal weapons equipment
 	end
 
-	local roleList = roles.GetList()
+	-- TODO why should Equipment be nil?
+	if istable(Equipment) then
+		local roleList = roles.GetList()
 
-	-- reset normal equipment tables
-	for i = 1, #roleList do
-		if not Equipment then continue end
-
-		Equipment[roleList[i].index] = {}
+		-- reset normal equipment tables
+		for i = 1, #roleList do
+			Equipment[roleList[i].index] = {}
+		end
 	end
 
 	-- initialize fallback shops
@@ -285,12 +286,11 @@ local cues = {
 	Sound("ttt/thump01e.mp3"),
 	Sound("ttt/thump02e.mp3")
 }
-local cueCount = #cues
 
 local function PlaySoundCue()
 	if not ttt_cl_soundcues:GetBool() then return end
 
-	surface.PlaySound(cues[math.random(cueCount)])
+	surface.PlaySound(cues[math.random(#cues)])
 end
 
 GM.TTTBeginRound = PlaySoundCue

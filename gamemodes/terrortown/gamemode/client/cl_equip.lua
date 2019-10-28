@@ -617,8 +617,10 @@ function TraitorMenuPopup()
 		local rlsList = roles.GetList()
 
 		for k = 1, #rlsList do
-			if rlsList[k]:IsShoppingRole() then
-				drolesel:AddChoice(SafeTranslate(rlsList[k].name))
+			local v = rlsList[k]
+
+			if v:IsShoppingRole() then
+				drolesel:AddChoice(SafeTranslate(v.name))
 			end
 		end
 
