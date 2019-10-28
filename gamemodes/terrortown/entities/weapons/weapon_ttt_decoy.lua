@@ -15,7 +15,7 @@ if CLIENT then
 	SWEP.EquipMenuData = {
 		type = "item_weapon",
 		desc = "decoy_desc"
-	};
+	}
 
 	SWEP.Icon = "vgui/ttt/icon_beacon"
 end
@@ -62,8 +62,7 @@ end
 
 local throwsound = Sound("Weapon_SLAM.SatchelThrow")
 
--- Drop is disabled to prevent traitors from placing the decoy in unreachable
--- places.
+-- Drop is disabled to prevent traitors from placing the decoy in unreachable places.
 function SWEP:DecoyDrop()
 	if SERVER then
 		local ply = self:GetOwner()
