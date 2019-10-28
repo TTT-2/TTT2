@@ -23,20 +23,22 @@ function ENT:Initialize()
 	self:SetMoveType(MOVETYPE_VPHYSICS)
 	self:SetSolid(SOLID_VPHYSICS)
 	self:SetCollisionGroup(COLLISION_GROUP_NONE)
+
 	if SERVER then
 		self:SetMaxHealth(40)
 	end
+
 	self:SetHealth(40)
 
 	if SERVER then
 		self:SetUseType(SIMPLE_USE)
 	end
 
+	local client = LocalPlayer()
+
 	-- Register with owner
-	if CLIENT then
-		if LocalPlayer() == self:GetOwner() then
-			LocalPlayer().radio = self
-		end
+	if CLIENT and client == self:GetOwner() then
+		LocalPlayer().radio = self
 	end
 
 	self.SoundQueue = {}
@@ -50,6 +52,7 @@ function ENT:UseOverride(activator)
 		self:Remove()
 
 		local wep = activator:Give("weapon_ttt_radio")
+
 		if IsValid(wep) then
 			wep.fingerprints = wep.fingerprints or {}
 			table.Add(wep.fingerprints, prints)
@@ -78,10 +81,10 @@ function ENT:OnTakeDamage(dmginfo)
 end
 
 function ENT:OnRemove()
-	if CLIENT then
-		if LocalPlayer() == self:GetOwner() then
-			LocalPlayer().radio = nil
-		end
+	local client = LocalPlayer()
+
+	if CLIENT and client == self:GetOwner() then
+		LocalPlayer().radio = nil
 	end
 end
 
@@ -175,8 +178,6 @@ local gunsounds = {
 	}
 };
 
-
-
 function ENT:PlayDelayedSound(snd, ampl, last)
 	-- maybe we can get destroyed while a timer is still up
 	if IsValid(self) then
@@ -186,31 +187,31 @@ function ENT:PlayDelayedSound(snd, ampl, last)
 
 		sound.Play(snd, self:GetPos(), ampl)
 		self.Playing = not last
-
-		--print("Playing", snd, last)
 	end
 end
 
 function ENT:PlaySound(snd)
 	local pos = self:GetPos()
-	local this = self
+	local slf = self
+
 	if simplesounds[snd] then
 		sound.Play(table.Random(simplesounds[snd]), pos)
 	elseif gunsounds[snd] then
 		local gunsound = gunsounds[snd]
 		local times = math.random(gunsound.times[1], gunsound.times[2])
 		local t = 0
-		for i=1, times do
-			timer.Simple(t,
-						function()
-							if IsValid(this) then
-							this:PlayDelayedSound(gunsound.sound, gunsound.ampl or 90, (i == times))
-							end
-						end)
+
+		for i = 1, times do
+			timer.Simple(t, function()
+				if not IsValid(slf) then return end
+
+				slf:PlayDelayedSound(gunsound.sound, gunsound.ampl or 90, i == times)
+			end)
+
 			if gunsound.burst then
-			t = t + gunsound.delay
+				t = t + gunsound.delay
 			else
-			t = t + math.Rand(gunsound.delay, gunsound.delay * 2)
+				t = t + math.Rand(gunsound.delay, gunsound.delay * 2)
 			end
 		end
 	elseif serialsounds[snd] then
@@ -219,18 +220,20 @@ function ENT:PlaySound(snd)
 		local times = math.random(serialsound.times[1], serialsound.times[2])
 		local t = 0
 		local idx = 1
-		for i=1, times do
-			local sound = serialsound.sound[idx]
-			timer.Simple(t,
-						function()
-							if IsValid(this) then
-							this:PlayDelayedSound(sound, serialsound.ampl or 75, (i == times))
-							end
-						end)
+
+		for i = 1, times do
+			timer.Simple(t, function()
+				if not IsValid(slf) then return end
+
+				slf:PlayDelayedSound(serialsound.sound[idx], serialsound.ampl or 75, i == times)
+			end)
 
 			t = t + serialsound.delay
 			idx = idx + 1
-			if idx > num then idx = 1 end
+
+			if idx > num then
+				idx = 1
+			end
 		end
 	end
 end
@@ -244,7 +247,7 @@ function ENT:Think()
 			self:PlaySound(snd)
 		end
 
-		-- always do this, makes timing work out a little better
+		-- always do slf, makes timing work out a little better
 		nextplay = CurTime() + self.SoundDelay
 	end
 end
@@ -263,12 +266,14 @@ if SERVER then
 
 		local eidx = tonumber(args[1])
 		local snd = tostring(args[2])
+
 		if not eidx or not snd then return end
 
 		local radio = Entity(eidx)
+
 		if not IsValid(radio) then return end
-		if not (radio:GetOwner() == ply) then return end
-		if not (radio:GetClass() == "ttt_radio") then return end
+		if radio:GetOwner() ~= ply then return end
+		if radio:GetClass() ~= "ttt_radio" then return end
 
 		if not table.HasValue(soundtypes, snd) then
 			print("Received radio sound not in table from", ply)
