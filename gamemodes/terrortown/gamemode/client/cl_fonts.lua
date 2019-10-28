@@ -157,7 +157,7 @@ end
 -- @param string font
 -- @return table
 -- @realm client
-function WrapText(text, width, font)
+function draw.GetWrappedText(text, width, font)
 	-- Oh joy, I get to write my own wrapping function. Thanks Lua!
 	-- Splits a string into a table of strings that are under the given width.
 
@@ -177,7 +177,9 @@ function WrapText(text, width, font)
 	local words = string.Explode(" ", text) -- No spaces means you're screwed
 	local lines = {""}
 
-	for i, wrd in ipairs(words) do
+	for i = 1, #words do
+		local wrd = words[i]
+
 		if i == 1 then
 			-- add the first word whether or not it matches the size to prevent
 			-- weird empty first lines and ' ' in front of the first line
@@ -186,23 +188,25 @@ function WrapText(text, width, font)
 			continue
 		end
 
-		local l = #lines
-		local added = lines[l] .. " " .. wrd
+		local lns = #lines
+		local added = lines[lns] .. " " .. wrd
 
 		w = surface.GetTextSize(added)
 
 		if w > width then
-			table.insert(lines, wrd) -- New line needed
+			lines[lns + 1] = wrd -- New line needed
 		else
-			lines[l] = added -- Safe to tack it on
+			lines[lns] = added -- Safe to tack it on
 		end
 	end
+
+	local lns = #lines
 
 	-- get length of longest line
 	local length = 0
 
-	for _, line in ipairs(lines) do
-		local line_w = surface.GetTextSize(line)
+	for i = 1, lns do
+		local line_w = surface.GetTextSize(lines[i])
 
 		if line_w > length then
 			length = line_w
@@ -212,5 +216,5 @@ function WrapText(text, width, font)
 	-- get height of lines
 	local _, line_h = surface.GetTextSize(text)
 
-	return lines, length, line_h * #lines
+	return lines, length, line_h * lns
 end

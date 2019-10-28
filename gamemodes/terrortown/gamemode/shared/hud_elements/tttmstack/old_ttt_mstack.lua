@@ -101,7 +101,7 @@ if CLIENT then
 			item.title_spec.font = imagedmsgfont
 			item.title_spec.font_height = draw.GetFontHeight(item.title_spec.font)
 
-			item.title_wrapped = WrapText(item.title, max_text_width, item.title_spec.font)
+			item.title_wrapped = draw.GetWrappedText(item.title, max_text_width, item.title_spec.font)
 			item.title_wrapped = item.title and item.title_wrapped or {}
 			-- calculate the new height
 			item_height = item_height + top_margin + title_bottom_margin + #item.title_wrapped * (item.title_spec.font_height + line_margin) - line_margin
@@ -109,7 +109,7 @@ if CLIENT then
 
 		item.text_spec.font_height = draw.GetFontHeight(item.text_spec.font)
 
-		item.text_wrapped = WrapText(item.text, max_text_width, item.text_spec.font)
+		item.text_wrapped = draw.GetWrappedText(item.text, max_text_width, item.text_spec.font)
 
 		-- Height depends on number of lines, which is equal to number of table
 		-- elements of the wrapped item.text
