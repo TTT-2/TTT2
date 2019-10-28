@@ -41,15 +41,15 @@ function ENT:Initialize()
 end
 
 function ENT:UseOverride(activator)
-	if IsValid(activator) and self:GetOwner() == activator then
-		if not activator:CanCarryType(self.WeaponKind or WEAPON_EQUIP2) then
-			LANG.Msg(activator, "decoy_no_room")
-			return
-		end
+	if not IsValid(activator) or self:GetOwner() ~= activator then return end
 
-		activator:Give("weapon_ttt_decoy")
-		self:Remove()
+	if not activator:CanCarryType(self.WeaponKind or WEAPON_EQUIP2) then
+		LANG.Msg(activator, "decoy_no_room")
+		return
 	end
+
+	activator:Give("weapon_ttt_decoy")
+	self:Remove()
 end
 
 local zapsound = Sound("npc/assassin/ball_zap1.wav")
@@ -81,7 +81,6 @@ end
 
 if CLIENT then
 	local TryT = LANG.TryTranslation
-	local ParT = LANG.GetParamTranslation
 
 	-- handle looking at decoy
 	function HUDDrawTargetIDDecoy(data, params)
