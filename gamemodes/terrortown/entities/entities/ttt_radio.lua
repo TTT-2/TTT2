@@ -37,7 +37,7 @@ function ENT:Initialize()
 	-- Register with owner
 	if CLIENT then
 		local client = LocalPlayer()
-		
+
 		if client == self:GetOwner() then
 			client.radio = self
 		end
@@ -87,7 +87,7 @@ end
 function ENT:OnRemove()
 	if CLIENT then
 		local client = LocalPlayer()
-		
+
 		if client ~= self:GetOwner() then return end
 
 		client.radio = nil
