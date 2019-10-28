@@ -411,7 +411,12 @@ bestimmtes Geräusch.]]
 
 -- Health station
 L.hstation_name = "Gesundheitsstation"
-L.hstation_hint = "Drücke {usekey} um Leben zu regenerieren. Ladung: {num}."
+L.hstation_subtitle = "Drücke [Knopf] um Leben zu regenerieren."
+L.hstation_charge = "Verbleibende Ladung der Gesundheitsstation: {charge}"
+L.hstation_empty = "Es ist keine Ladung mehr in der Gesundheitsstation enthalten"
+L.hstation_maxhealth = "Du hast bereits dein maximales Leben erreicht"
+L.hstation_short_desc = "Die Gesundheitsstation lädt sich langsam über die Zeit wieder auf"
+
 L.hstation_broken = "Deine Gesundheitsstation wurde zerstört!"
 L.hstation_help = "{primaryfire} platziert die Gesundheitsstation."
 

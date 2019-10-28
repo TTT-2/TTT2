@@ -417,7 +417,12 @@ sound.]]
 
 -- Health station
 L.hstation_name = "Health Station"
-L.hstation_hint = "Press {usekey} to receive health. Charge: {num}."
+L.hstation_subtitle = "Press [key] to receive health."
+L.hstation_charge = "Remaining charge of health station: {charge}"
+L.hstation_empty = "There is no more charge left in this health station"
+L.hstation_maxhealth = "You've reached your maximum health"
+L.hstation_short_desc = "The heath station slowly recharges over time"
+
 L.hstation_broken = "Your Health Station has been destroyed!"
 L.hstation_help = "{primaryfire} places the Health Station."
 
