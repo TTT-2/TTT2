@@ -74,7 +74,7 @@ if SERVER then
 	local vsrc = ply:GetShootPos()
 	local vang = ply:GetAimVector()
 	local vvel = ply:GetVelocity()
-	
+
 	local vthrow = vvel + vang * 200
 	local decoy = ents.Create("ttt_decoy")
 
@@ -85,7 +85,7 @@ if SERVER then
 	decoy:SetNWString("decoy_owner_team", ply:GetTeam())
 	decoy:Spawn()
 	decoy:PointAtEntity(ply)
-	
+
 	local ang = decoy:GetAngles()
 	ang:RotateAroundAxis(ang:Right(), 90)
 	decoy:SetAngles(ang)
@@ -113,7 +113,12 @@ if SERVER then
 		local ignore = {ply, self}
 		local spos = ply:GetShootPos()
 		local epos = spos + ply:GetAimVector() * 80
-		local tr = util.TraceLine({start=spos, endpos=epos, filter=ignore, mask=MASK_SOLID})
+		local tr = util.TraceLine({
+			start = spos,
+			endpos = epos,
+			filter = ignore,
+			mask = MASK_SOLID
+		})
 
 		if not tr.HitWorld then return end
 
@@ -123,7 +128,12 @@ if SERVER then
 
 		decoy:PointAtEntity(ply)
 
-		local tr_ent = util.TraceEntity({start=spos, endpos=epos, filter=ignore, mask=MASK_SOLID}, decoy)
+		local tr_ent = util.TraceEntity({
+			start = spos,
+			endpos = epos,
+			filter = ignore,
+			mask = MASK_SOLID
+		}, decoy)
 
 		if not tr_ent.HitWorld then return end
 
@@ -134,7 +144,7 @@ if SERVER then
 		decoy:SetOwner(ply)
 		decoy:SetNWString("decoy_owner_team", ply:GetTeam())
 		decoy:Spawn()
-		
+
 		local phys = decoy:GetPhysicsObject()
 
 		if IsValid(phys) then
@@ -190,7 +200,7 @@ end
 
 function SWEP:DrawWorldModel()
 	if IsValid(self:GetOwner()) then return end
-	
+
 	self:DrawModel()
 end
 
