@@ -265,7 +265,7 @@ function GM:HUDDrawTargetID()
 		outlineColor = COLOR_WHITE,
 		displayInfo = {
 			key = nil,
-			icon = nil,
+			icon = {},
 			iconColor = COLOR_WHITE,
 			title = {text = "", color = COLOR_WHITE},
 			subtitle = {text = "", color = subtitle_color},
@@ -318,11 +318,19 @@ function GM:HUDDrawTargetID()
 	end
 
 	-- draw icon
-	if params.displayInfo.icon then
-		local icon_x = params.displayInfo.key and (key_box_x - key_box_w - pad2) or center_x - key_box_h - pad2 - 2
-		local icon_y = key_box_y
+	local icon_amount = #params.displayInfo.icon
+	local icon_x, icon_y
 
-		draw.FilteredShadowedTexture(icon_x, icon_y, key_box_h, key_box_h, params.displayInfo.icon, params.displayInfo.iconColor.a, params.displayInfo.iconColor)
+	if icon_amount > 0 then
+		icon_x = center_x - key_box_h - pad2
+		icon_y = params.displayInfo.key and (key_box_y + key_box_h + pad2) or center_y + key_box_h + pad2 + 1
+
+		for i = 1, icon_amount do
+			local icon = params.displayInfo.icon[i]
+
+			draw.FilteredShadowedTexture(icon_x, icon_y, key_box_h, key_box_h, icon.material, icon.color.a, icon.color)
+			icon_y = icon_y + key_box_h
+		end
 	end
 
 	-- draw title
@@ -366,7 +374,11 @@ function GM:HUDDrawTargetID()
 	-- draw spacer line
 	local spacer_line_x = center_x - 1
 	local spacer_line_y = key_box_y
-	local spacer_line_l = key_box_h + ((desc_line_amount > 0) and (4 * pad + desc_line_h * desc_line_amount - 3) or 0)
+	
+	local spacer_line_icon_l = (icon_y and icon_y or spacer_line_y) - spacer_line_y
+	local spacer_line_text_l = key_box_h + ((desc_line_amount > 0) and (4 * pad + desc_line_h * desc_line_amount - 3) or 0)
+	
+	local spacer_line_l = (spacer_line_icon_l > spacer_line_text_l) and spacer_line_icon_l or spacer_line_text_l
 
 	draw.ShadowedLine(spacer_line_x, spacer_line_y, spacer_line_x, spacer_line_y + spacer_line_l, COLOR_WHITE)
 end
@@ -437,8 +449,12 @@ function HUDDrawTargetIDPlayers(data, params)
 	end
 
 	params.drawInfo = true
-	params.displayInfo.icon = target_role and target_role.iconMaterial or icon_role_not_known
-	params.displayInfo.iconColor = target_role and data.ent:GetRoleColor() or COLOR_SLATEGRAY
+	params.displayInfo.icon = {
+		{
+			material = target_role and target_role.iconMaterial or icon_role_not_known,
+			color = target_role and data.ent:GetRoleColor() or COLOR_SLATEGRAY
+		}
+	}
 
 	local h_string, h_color = util.HealthToString(data.ent:Health(), data.ent:GetMaxHealth())
 
@@ -500,8 +516,12 @@ function HUDDrawTargetIDRagdolls(data, params)
 	local corpse_found = CORPSE.GetFound(data.ent, false) or not DetectiveMode()
 
 	params.drawInfo = true
-	params.displayInfo.icon = corpse_found and CORPSE.GetPlayer(data.ent):GetSubRoleData().iconMaterial or icon_corpse
-	params.displayInfo.iconColor = COLOR_YELLOW
+	params.displayInfo.icon = {
+		{
+			material = corpse_found and CORPSE.GetPlayer(data.ent):GetSubRoleData().iconMaterial or icon_corpse,
+			color = COLOR_YELLOW
+		}
+	}
 
 	params.displayInfo.title.text = corpse_found and CORPSE.GetPlayerNick(data.ent, "A Terrorist") or TryT("target_unid")
 	params.displayInfo.title.color = COLOR_YELLOW
