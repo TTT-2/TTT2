@@ -80,7 +80,7 @@ function draw.ShadowedText(text, font, x, y, color, xalign, yalign, scaleModifie
 	scaleModifier = scaleModifier or 1.0
 
 	local tmpCol = color.r + color.g + color.b > 200 and table.Copy(shadowColorDark) or table.Copy(shadowColorWhite)
-	tmpCol.a = tmpCol.a * (color.a / 255.0)
+	tmpCol.a = math.Round(tmpCol.a * (color.a / 255))
 
 	local dScaleModifier = 2 * scaleModifier
 

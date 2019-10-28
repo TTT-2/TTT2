@@ -31,7 +31,10 @@ if CLIENT then
 	-- parameter overwrites end
 
 	function HUDELEMENT:GetDefaults()
-		const_defaults["basepos"] = {x = math.Round((ScrW() - self.size.w) * 0.5), y = math.Round((ScrH() - self.size.h) * 0.5) - 250}
+		const_defaults["basepos"] = {
+			x = math.Round((ScrW() - self.size.w) * 0.5),
+			y = math.Round((ScrH() - self.size.h) * 0.5) - 250
+		}
 
 		return const_defaults
 	end
@@ -61,33 +64,39 @@ if CLIENT then
 		local size = self:GetSize()
 		local pos = self:GetPos()
 		local width_title, width_text, height_title, height_text = 0, 0, 0, 0
+		local pad2 = 2 * self.pad
 
 		-- wrap title if needed
-		item.title_wrapped, width_title, height_title = draw.GetWrappedText(item.title, size.w - 2 * self.pad, titlefont)
+		item.title_wrapped, width_title, height_title = draw.GetWrappedText(item.title, size.w - pad2, titlefont)
 
 		-- wrap text if needed
-		item.text_wrapped, width_text, height_text = draw.GetWrappedText(item.text, size.w - 2 * self.pad, textfont)
+		item.text_wrapped, width_text, height_text = draw.GetWrappedText(item.text, size.w - pad2, textfont)
 
 		item.size = {}
-		item.size.w = ((width_title > width_text) and width_title or width_text) + 2 * self.pad
-		item.size.h = height_title + 2 * self.pad + height_text + ((height_text > 0) and self.pad or 0)
+		item.size.w = ((width_title > width_text) and width_title or width_text) + pad2
+		item.size.h = height_title + pad2 + height_text + ((height_text > 0) and self.pad or 0)
 
 		item.pos = {}
 		item.pos.y = pos.y
 		item.pos.x = pos.x + math.Round(0.5 * (size.w - item.size.w))
 		item.pos.center_x = pos.x + math.Round(0.5 * size.w)
 
+		local wrappedItems = #item.title_wrapped
+
 		-- precalculate text positions
-		local height_title_line = height_title / #item.title_wrapped
-		local height_text_line = height_text / #item.text_wrapped
+		local height_title_line = height_title / wrappedItems
+		local height_text_line = height_text / wrappedItems
 
 		item.pos.title_y = {}
-		for i = 1, #item.title_wrapped do
-			table.insert(item.pos.title_y, pos.y + self.pad + (i - 1) * height_title_line)
+
+		for i = 1, wrappedItems do
+			item.pos.title_y[i] = pos.y + self.pad + (i - 1) * height_title_line
 		end
+
 		item.pos.text_y = {}
+
 		for i = 1, #item.text_wrapped do
-			table.insert(item.pos.text_y, item.pos.title_y[#item.pos.title_y] + height_title_line + self.pad + (i - 1) * height_text_line)
+			item.pos.text_y[i] = item.pos.title_y[wrappedItems] + height_title_line + self.pad + (i - 1) * height_text_line
 		end
 
 		-- add item positions
@@ -96,8 +105,9 @@ if CLIENT then
 
 		item.pos.icon_y = item.pos.y + item.size.h + self.pad
 		item.pos.icon_x = {icon_start_x}
-		for i = 2, icon_amt do
-			table.insert(item.pos.icon_x, icon_start_x + (i - 1) * (self.icon_size + self.pad))
+
+		for i = 1, icon_amt do
+			item.pos.icon_x[i] = icon_start_x + (i * 2 - 1) * (self.icon_size + self.pad)
 		end
 
 		-- mark as ready
@@ -135,15 +145,22 @@ if CLIENT then
 		}
 
 		-- draw content
-		for i = 1, #msg.title_wrapped do
-			draw.AdvancedText(msg.title_wrapped[i], titlefont, msg.pos.center_x, msg.pos.title_y[i], font_color, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, true, self.scale)
-		end
-		for i = 1, #msg.text_wrapped do
-			draw.AdvancedText(msg.text_wrapped[i], textfont, msg.pos.center_x, msg.pos.text_y[i], font_color, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, true, self.scale)
+		local wrappedTitles = msg.title_wrapped
+
+		for i = 1, #wrappedTitles do
+			draw.AdvancedText(wrappedTitles[i], titlefont, msg.pos.center_x, msg.pos.title_y[i], font_color, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, true, self.scale)
 		end
 
-		for i = 1, #msg.icon_tbl do
-			util.DrawFilteredTexturedRect(msg.pos.icon_x[i], msg.pos.icon_y, self.icon_size, self.icon_size, msg.icon_tbl[i], opacity)
+		local wrappedTexts = msg.text_wrapped
+
+		for i = 1, #wrappedTexts do
+			draw.AdvancedText(wrappedTexts[i], textfont, msg.pos.center_x, msg.pos.text_y[i], font_color, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, true, self.scale)
+		end
+
+		local wrappedIcons = msg.icon_tbl
+
+		for i = 1, #wrappedIcons do
+			util.DrawFilteredTexturedRect(msg.pos.icon_x[i], msg.pos.icon_y, self.icon_size, self.icon_size, wrappedIcons[i], opacity)
 		end
 
 		self:SetSize(size.w, msg.size.h)

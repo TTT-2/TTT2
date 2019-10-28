@@ -102,7 +102,7 @@ if CLIENT then
 			item.title_spec.font_height = draw.GetFontHeight(item.title_spec.font)
 
 			item.title_wrapped = draw.GetWrappedText(item.title, max_text_width, item.title_spec.font)
-			item.title_wrapped = item.title and item.title_wrapped or {}
+
 			-- calculate the new height
 			item_height = item_height + top_margin + title_bottom_margin + #item.title_wrapped * (item.title_spec.font_height + line_margin) - line_margin
 		end
