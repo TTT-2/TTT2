@@ -203,6 +203,9 @@ surface.CreateFont("TargetID_Title", {font = "Trebuchet24", size = 20, weight = 
 surface.CreateFont("TargetID_Subtitle", {font = "Trebuchet24", size = 17, weight = 300})
 surface.CreateFont("TargetID_Description", {font = "Trebuchet24", size = 15, weight = 300})
 
+-- keep this font for compatibility reasons
+surface.CreateFont("TargetIDSmall2", {font = "TargetID", size = 16, weight = 1000})
+
 local minimalist = CreateClientConVar("ttt_minimal_targetid", "0", FCVAR_ARCHIVE)
 local cv_draw_halo = CreateClientConVar("ttt_entity_draw_halo", "1", true, false)
 local MAX_TRACE_LENGTH = math.sqrt(3) * 32768
