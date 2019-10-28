@@ -82,10 +82,11 @@ if CLIENT then
 		item.pos.center_x = pos.x + math.Round(0.5 * size.w)
 
 		local wrappedItems = #item.title_wrapped
+		local wrappedTexts = #item.text_wrapped
 
 		-- precalculate text positions
 		local height_title_line = height_title / wrappedItems
-		local height_text_line = height_text / wrappedItems
+		local height_text_line = height_text / wrappedTexts
 
 		item.pos.title_y = {}
 
@@ -95,7 +96,7 @@ if CLIENT then
 
 		item.pos.text_y = {}
 
-		for i = 1, #item.text_wrapped do
+		for i = 1, wrappedTexts do
 			item.pos.text_y[i] = item.pos.title_y[wrappedItems] + height_title_line + self.pad + (i - 1) * height_text_line
 		end
 
