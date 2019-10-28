@@ -514,11 +514,12 @@ function HUDDrawTargetIDRagdolls(data, params)
 	if not CORPSE.GetPlayerNick(data.ent, false) then return end
 
 	local corpse_found = CORPSE.GetFound(data.ent, false) or not DetectiveMode()
+	local corpse_ent = CORPSE.GetPlayer(data.ent)
 
 	params.drawInfo = true
 	params.displayInfo.icon = {
 		{
-			material = corpse_found and CORPSE.GetPlayer(data.ent):GetSubRoleData().iconMaterial or icon_corpse,
+			material = (corpse_found and corpse_ent) and corpse_ent:GetSubRoleData().iconMaterial or icon_corpse,
 			color = COLOR_YELLOW
 		}
 	}
