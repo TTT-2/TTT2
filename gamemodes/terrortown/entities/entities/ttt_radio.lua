@@ -49,7 +49,7 @@ function ENT:Initialize()
 end
 
 function ENT:UseOverride(activator)
-	if IsValid(activator) and activator:IsPlayer() and activator:GetTeam() == owner:GetTeam() then
+	if IsValid(activator) and activator:IsPlayer() and activator:GetTeam() == self:GetOwner():GetTeam() then
 		local prints = self.fingerprints or {}
 
 		self:Remove()
