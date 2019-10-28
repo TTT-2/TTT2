@@ -17,7 +17,6 @@ local hook = hook
 local disable_spectatorsoutline = CreateClientConVar("ttt2_disable_spectatorsoutline", "0", true, true)
 local disable_overheadicons = CreateClientConVar("ttt2_disable_overheadicons", "0", true, true)
 
-
 -- cached materials for overhead icons and outlines
 local propspec_outline = Material("models/props_combine/portalball001_sheet")
 local base = Material("vgui/ttt/dynamic/sprite_base")

@@ -1,8 +1,8 @@
 ---- Radio equipment playing distraction sounds
 
-AddCSLuaFile()
-
-if CLIENT then
+if SERVER then
+	AddCSLuaFile()
+else
 	-- this entity can be DNA-sampled so we need some display info
 	ENT.Icon = "vgui/ttt/icon_radio"
 	ENT.PrintName = "radio_name"
@@ -51,12 +51,14 @@ end
 function ENT:UseOverride(activator)
 	if IsValid(activator) and activator:IsPlayer() and activator:GetTeam() == owner:GetTeam() then
 		local prints = self.fingerprints or {}
+
 		self:Remove()
 
 		local wep = activator:Give("weapon_ttt_radio")
 
 		if IsValid(wep) then
 			wep.fingerprints = wep.fingerprints or {}
+
 			table.Add(wep.fingerprints, prints)
 		end
 	else
@@ -70,22 +72,24 @@ function ENT:OnTakeDamage(dmginfo)
 	self:TakePhysicsDamage(dmginfo)
 
 	self:SetHealth(self:Health() - dmginfo:GetDamage())
-	if self:Health() < 0 then
-		self:Remove()
 
-		local effect = EffectData()
-		effect:SetOrigin(self:GetPos())
-		util.Effect("cball_explode", effect)
-		sound.Play(zapsound, self:GetPos())
+	if self:Health() >= 0 then return end
 
-		if IsValid(self:GetOwner()) then
-			LANG.Msg(self:GetOwner(), "radio_broken")
-		end
+	self:Remove()
+
+	local effect = EffectData()
+	effect:SetOrigin(self:GetPos())
+
+	util.Effect("cball_explode", effect)
+	sound.Play(zapsound, self:GetPos())
+
+	if IsValid(self:GetOwner()) then
+		LANG.Msg(self:GetOwner(), "radio_broken")
 	end
 end
 
-function ENT:OnRemove()
-	if CLIENT then
+if CLIENT then
+	function ENT:OnRemove()
 		local client = LocalPlayer()
 
 		if client ~= self:GetOwner() then return end
@@ -96,7 +100,7 @@ end
 
 function ENT:AddSound(snd)
 	if #self.SoundQueue < self.SoundLimit then
-		table.insert(self.SoundQueue, snd)
+		self.SoundQueue[#self.SoundQueue + 1] = snd
 	end
 end
 
@@ -110,13 +114,19 @@ local simplesounds = {
 	explosion = {
 		Sound("BaseExplosionEffect.Sound")
 	}
-};
+}
 
 local serialsounds = {
 	footsteps = {
 		sound = {
-			{Sound("player/footsteps/concrete1.wav"), Sound("player/footsteps/concrete2.wav")},
-			{Sound("player/footsteps/concrete3.wav"), Sound("player/footsteps/concrete4.wav")}
+			{
+				Sound("player/footsteps/concrete1.wav"),
+				Sound("player/footsteps/concrete2.wav")
+			},
+			{
+				Sound("player/footsteps/concrete3.wav"),
+				Sound("player/footsteps/concrete4.wav")
+			}
 		},
 		times = {8, 16},
 		delay = 0.35,
@@ -131,69 +141,72 @@ local serialsounds = {
 		delay = 4,
 	},
 	beeps = {
-		sound = { Sound("weapons/c4/c4_beep1.wav") },
+		sound = {
+			Sound("weapons/c4/c4_beep1.wav")
+		},
 		delay = 0.75,
 		times = {8, 12},
 		ampl = 70
 	}
-};
+}
 
 local gunsounds = {
 	shotgun = {
-		sound = Sound( "Weapon_XM1014.Single" ),
+		sound = Sound("Weapon_XM1014.Single"),
 		delay = 0.8,
 		times = {1, 3},
 		burst = false
 	},
 	pistol = {
-		sound = Sound( "Weapon_FiveSeven.Single" ),
+		sound = Sound("Weapon_FiveSeven.Single"),
 		delay = 0.4,
 		times = {2, 4},
 		burst = false
 	},
 	mac10 = {
-		sound = Sound( "Weapon_mac10.Single" ),
+		sound = Sound("Weapon_mac10.Single"),
 		delay = 0.065,
 		times = {5, 10},
 		burst = true
 	},
 	deagle = {
-		sound = Sound( "Weapon_Deagle.Single" ),
+		sound = Sound("Weapon_Deagle.Single"),
 		delay = 0.6,
 		times = {1, 3},
 		burst = false
 	},
 	m16 = {
-		sound = Sound( "Weapon_M4A1.Single" ),
+		sound = Sound("Weapon_M4A1.Single"),
 		delay = 0.2,
 		times = {1, 5},
 		burst = true
 	},
 	rifle = {
-		sound = Sound( "weapons/scout/scout_fire-1.wav" ),
+		sound = Sound("weapons/scout/scout_fire-1.wav"),
 		delay = 1.5,
 		times = {1, 1},
 		burst = false,
 		ampl = 80
 	},
 	huge = {
-		sound = Sound( "Weapon_m249.Single" ),
+		sound = Sound("Weapon_m249.Single"),
 		delay = 0.055,
 		times = {6, 12},
 		burst = true
 	}
-};
+}
 
 function ENT:PlayDelayedSound(snd, ampl, last)
 	-- maybe we can get destroyed while a timer is still up
-	if IsValid(self) then
-		if istable(snd) then
-			snd = table.Random(snd)
-		end
+	if not IsValid(self) then return end
 
-		sound.Play(snd, self:GetPos(), ampl)
-		self.Playing = not last
+	if istable(snd) then
+		snd = table.Random(snd)
 	end
+
+	sound.Play(snd, self:GetPos(), ampl)
+
+	self.Playing = not last
 end
 
 function ENT:PlaySound(snd)
@@ -247,15 +260,14 @@ end
 local nextplay = 0
 
 function ENT:Think()
-	if CurTime() > nextplay and #self.SoundQueue > 0 then
-		if not self.Playing then
-			local snd = table.remove(self.SoundQueue, 1)
-			self:PlaySound(snd)
-		end
+	if CurTime() <= nextplay or #self.SoundQueue <= 0 then return end
 
-		-- always do slf, makes timing work out a little better
-		nextplay = CurTime() + self.SoundDelay
+	if not self.Playing then
+		self:PlaySound(table.remove(self.SoundQueue, 1))
 	end
+
+	-- always do slf, makes timing work out a little better
+	nextplay = CurTime() + self.SoundDelay
 end
 
 if CLIENT then
@@ -279,9 +291,7 @@ if CLIENT then
 		params.drawOutline = true
 		params.outlineColor = client:GetRoleColor()
 	end
-end
-
-if SERVER then
+else -- SERVER
 	local soundtypes = {
 		"scream", "shotgun", "explosion",
 		"pistol", "mac10", "deagle",
@@ -290,8 +300,8 @@ if SERVER then
 	};
 
 	local function RadioCmd(ply, cmd, args)
-		if not IsValid(ply) or not ply:IsActiveTraitor() then return end
-		if not (#args == 2) then return end
+		if not IsValid(ply) or not ply:IsActiveTraitor()
+		or not #args == 2 then return end
 
 		local eidx = tonumber(args[1])
 		local snd = tostring(args[2])
@@ -300,12 +310,11 @@ if SERVER then
 
 		local radio = Entity(eidx)
 
-		if not IsValid(radio) then return end
-		if radio:GetOwner() ~= ply then return end
-		if radio:GetClass() ~= "ttt_radio" then return end
+		if not IsValid(radio) or radio:GetOwner() ~= ply or radio:GetClass() ~= "ttt_radio" then return end
 
 		if not table.HasValue(soundtypes, snd) then
 			print("Received radio sound not in table from", ply)
+
 			return
 		end
 
