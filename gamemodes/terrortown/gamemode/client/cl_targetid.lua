@@ -519,7 +519,7 @@ function HUDDrawTargetIDRagdolls(data, params)
 	params.drawInfo = true
 	params.displayInfo.icon = {
 		{
-			material = (corpse_found and corpse_ent) and corpse_ent:GetSubRoleData().iconMaterial or icon_corpse,
+			material = (corpse_found and corpse_ent.GetSubRoleData) and corpse_ent:GetSubRoleData().iconMaterial or icon_corpse,
 			color = COLOR_YELLOW
 		}
 	}
