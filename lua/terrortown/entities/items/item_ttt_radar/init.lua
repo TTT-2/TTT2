@@ -14,7 +14,7 @@ local function GetSubRoleForRadar(ply, p)
 
 	if not p:IsPlayer() then
 		-- Decoys appear as innocents for non-traitors
-		if not ply:HasTeam(TEAM_TRAITOR) then
+		if p:GetNWString("decoy_owner_team", "none") ~= ply:GetTeam() then
 			subrole = ROLE_INNOCENT
 		else
 			subrole = -1
