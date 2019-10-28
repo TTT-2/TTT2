@@ -537,6 +537,14 @@ function HUDDrawTargetIDRagdolls(data, params)
 		}
 	end
 
+	-- add info if searched by detectives
+	if data.ent.search_result and client:IsDetective() then
+		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
+			text = TryT("corpse_searched_by_detective"),
+			color = DETECTIVE.bgcolor
+		}
+	end
+
 	-- add credits info when corpse has credits
 	if client:IsActive() and client:IsShopper() and CORPSE.GetCredits(data.ent, 0) > 0 then
 		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
