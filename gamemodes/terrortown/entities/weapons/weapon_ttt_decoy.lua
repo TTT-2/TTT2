@@ -51,13 +51,18 @@ end
 
 function SWEP:PrimaryAttack()
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
-	self:DecoyStick()
+
+	if SERVER then
+		self:DecoyStick()
+	then
 end
 
 function SWEP:SecondaryAttack()
 	self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
 
-	self:DecoyStick()
+	if SERVER then
+		self:DecoyStick()
+	then
 end
 
 local throwsound = Sound("Weapon_SLAM.SatchelThrow")
