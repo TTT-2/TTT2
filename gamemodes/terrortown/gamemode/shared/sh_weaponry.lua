@@ -42,12 +42,12 @@ end
 -- Toggles the <code>disguised</code>
 -- @param Player ply
 function WEPS.DisguiseToggle(ply)
-	if IsValid(ply) and ply:IsActiveTraitor() then
-		if not ply:GetNWBool("disguised", false) then
-			RunConsoleCommand("ttt_set_disguise", "1")
-		else
-			RunConsoleCommand("ttt_set_disguise", "0")
-		end
+	if not IsValid(ply) or not ply:IsActiveTraitor() then return end
+
+	if not ply:GetNWBool("disguised", false) then
+		RunConsoleCommand("ttt_set_disguise", "1")
+	else
+		RunConsoleCommand("ttt_set_disguise", "0")
 	end
 end
 concommand.Add("ttt_toggle_disguise", WEPS.DisguiseToggle)

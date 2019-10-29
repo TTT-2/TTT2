@@ -88,9 +88,9 @@ function PROPSPEC.End(ply)
 	ply:ResetViewRoll()
 
 	timer.Simple(0.1, function()
-		if IsValid(ply) then
-			ply:ResetViewRoll()
-		end
+		if not IsValid(ply) then return end
+
+		ply:ResetViewRoll()
 	end)
 end
 
@@ -184,11 +184,11 @@ local propspec_retime = CreateConVar("ttt_spec_prop_rechargetime", "1", {FCVAR_N
 function PROPSPEC.Recharge(ply)
 	local pr = ply.propspec
 
-	if pr.retime < CurTime() then
-		pr.punches = math.min(pr.punches + 1, pr.max)
+	if pr.retime >= CurTime() then return end
 
-		ply:SetNWFloat("specpunches", pr.punches / pr.max)
+	pr.punches = math.min(pr.punches + 1, pr.max)
 
-		pr.retime = CurTime() + propspec_retime:GetFloat()
-	end
+	ply:SetNWFloat("specpunches", pr.punches / pr.max)
+
+	pr.retime = CurTime() + propspec_retime:GetFloat()
 end

@@ -44,13 +44,11 @@ function LANG.CreateLanguage(lang_name)
 
 		-- when a string is not found in the active or the default language, an
 		-- error message is shown
-		setmetatable(LANG.Strings[lang_name],
-			{
-				__index = function(tbl, name)
-					return Format("[ERROR: Translation of %s not found]", name), false
-				end
-			}
-		)
+		setmetatable(LANG.Strings[lang_name], {
+			__index = function(tbl, name)
+				return Format("[ERROR: Translation of %s not found]", name), false
+			end
+		})
 	end
 
 	return LANG.Strings[lang_name]
@@ -203,11 +201,9 @@ function SetFallback(tbl)
 	-- than using branching ("return lang[x] or default[x] or errormsg") and
 	-- allows fallback to occur even when consumer code directly accesses the
 	-- lang table for speed (eg. in a rendering hook).
-	setmetatable(tbl,
-		{
-			__index = cached_default
-		}
-	)
+	setmetatable(tbl, {
+		__index = cached_default
+	})
 end
 
 ---
@@ -305,7 +301,7 @@ function LANG.GetLanguages()
 	local langs = {}
 
 	for lang, strings in pairs(LANG.Strings) do
-		table.insert(langs, lang)
+		langs[#langs + 1] = lang
 	end
 
 	return langs

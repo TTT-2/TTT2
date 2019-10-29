@@ -23,7 +23,6 @@ ShopEditor.cvars = {
 
 local net = net
 local pairs = pairs
-local ipairs = ipairs
 
 ---
 -- Initializes the default data for an @{ITEM} or @{Weapon}
@@ -73,10 +72,10 @@ function ShopEditor.WriteItemData(messageName, name, item, plys)
 	if SERVER then
 		local matched = false
 
-		for k, tbl in ipairs(CHANGED_EQUIPMENT) do
-			if tbl[1] == name then
-				matched = true
-			end
+		for k = 1, #CHANGED_EQUIPMENT do
+			if CHANGED_EQUIPMENT[k][1] ~= name then continue end
+
+			matched = true
 		end
 
 		if not matched then

@@ -5,12 +5,11 @@
 
 local math = math
 local table = table
-local pairs = pairs
 local util = util
 local IsValid = IsValid
-local CreateConVar = CreateConVar
 local surface = surface
 local draw = draw
+local CreateClientConVar = CreateClientConVar
 
 if SERVER then
 	AddCSLuaFile()
@@ -139,28 +138,28 @@ SWEP.ReloadAnim = ACT_VM_RELOAD
 
 SWEP.fingerprints = {}
 
-local sparkle = CLIENT and CreateConVar("ttt_crazy_sparks", "0", FCVAR_ARCHIVE)
+local sparkle = CLIENT and CreateClientConVar("ttt_crazy_sparks", "0", true)
 
 -- crosshair
 if CLIENT then
-	local sights_opacity = CreateConVar("ttt_ironsights_crosshair_opacity", "0.8", FCVAR_ARCHIVE)
-	local crosshair_brightness = CreateConVar("ttt_crosshair_brightness", "1.0", FCVAR_ARCHIVE)
-	local crosshair_size = CreateConVar("ttt_crosshair_size", "1.0", FCVAR_ARCHIVE)
-	local disable_crosshair = CreateConVar("ttt_disable_crosshair", "0", FCVAR_ARCHIVE)
-	local enable_color_crosshair = CreateConVar("ttt_crosshair_color_enable", "0", FCVAR_ARCHIVE)
-	local crosshair_color_r = CreateConVar("ttt_crosshair_color_r", "30", FCVAR_ARCHIVE)
-	local crosshair_color_g = CreateConVar("ttt_crosshair_color_g", "160", FCVAR_ARCHIVE)
-	local crosshair_color_b = CreateConVar("ttt_crosshair_color_b", "160", FCVAR_ARCHIVE)
+	local sights_opacity = CreateClientConVar("ttt_ironsights_crosshair_opacity", "0.8", true)
+	local crosshair_brightness = CreateClientConVar("ttt_crosshair_brightness", "1.0", true)
+	local crosshair_size = CreateClientConVar("ttt_crosshair_size", "1.0", true)
+	local disable_crosshair = CreateClientConVar("ttt_disable_crosshair", "0", true)
+	local enable_color_crosshair = CreateClientConVar("ttt_crosshair_color_enable", "0", true)
+	local crosshair_color_r = CreateClientConVar("ttt_crosshair_color_r", "30", true)
+	local crosshair_color_g = CreateClientConVar("ttt_crosshair_color_g", "160", true)
+	local crosshair_color_b = CreateClientConVar("ttt_crosshair_color_b", "160", true)
 
-	local enable_gap_crosshair = CreateConVar("ttt_crosshair_gap_enable", "0", FCVAR_ARCHIVE)
-	local crosshair_gap = CreateConVar("ttt_crosshair_gap", "0", FCVAR_ARCHIVE)
+	local enable_gap_crosshair = CreateClientConVar("ttt_crosshair_gap_enable", "0", true)
+	local crosshair_gap = CreateClientConVar("ttt_crosshair_gap", "0", true)
 
-	local crosshair_opacity = CreateConVar("ttt_crosshair_opacity", "1", FCVAR_ARCHIVE)
-	local crosshair_static = CreateConVar("ttt_crosshair_static", "0", FCVAR_ARCHIVE)
-	local crosshair_weaponscale = CreateConVar("ttt_crosshair_weaponscale", "1", FCVAR_ARCHIVE)
-	local crosshair_thickness = CreateConVar("ttt_crosshair_thickness", "1", FCVAR_ARCHIVE)
-	local crosshair_outlinethickness = CreateConVar("ttt_crosshair_outlinethickness", "0", FCVAR_ARCHIVE)
-	local enable_dot_crosshair = CreateConVar("ttt_crosshair_dot", "0", FCVAR_ARCHIVE)
+	local crosshair_opacity = CreateClientConVar("ttt_crosshair_opacity", "1", true)
+	local crosshair_static = CreateClientConVar("ttt_crosshair_static", "0", true)
+	local crosshair_weaponscale = CreateClientConVar("ttt_crosshair_weaponscale", "1", true)
+	local crosshair_thickness = CreateClientConVar("ttt_crosshair_thickness", "1", true)
+	local crosshair_outlinethickness = CreateClientConVar("ttt_crosshair_outlinethickness", "0", true)
+	local enable_dot_crosshair = CreateClientConVar("ttt_crosshair_dot", "0", true)
 
 	---
 	-- @realm client
@@ -339,13 +338,13 @@ function SWEP:CanSecondaryAttack()
 end
 
 local function Sparklies(attacker, tr, dmginfo)
-	if tr.HitWorld and tr.MatType == MAT_METAL then
-		local eff = EffectData()
-		eff:SetOrigin(tr.HitPos)
-		eff:SetNormal(tr.HitNormal)
+	if not tr.HitWorld or tr.MatType ~= MAT_METAL then return end
 
-		util.Effect("cball_bounce", eff)
-	end
+	local eff = EffectData()
+	eff:SetOrigin(tr.HitPos)
+	eff:SetNormal(tr.HitNormal)
+
+	util.Effect("cball_bounce", eff)
 end
 
 ---
@@ -447,6 +446,7 @@ end
 
 function SWEP:OnRestore()
 	self.NextSecondaryAttack = 0
+
 	self:SetIronsights(false)
 end
 
@@ -460,21 +460,25 @@ end
 -- The OnDrop() hook is useless for this as it happens AFTER the drop. OwnerChange
 -- does not occur when a drop happens for some reason. Hence this thing.
 function SWEP:PreDrop()
-	if SERVER and IsValid(self:GetOwner()) and self.Primary.Ammo ~= "none" then
-		local ammo = self:Ammo1()
+	if CLIENT or not IsValid(self:GetOwner()) or self.Primary.Ammo == "none" then return end
 
-		-- Do not drop ammo if we have another gun that uses this type
-		for _, w in pairs(self:GetOwner():GetWeapons()) do
-			if IsValid(w) and w ~= self and w:GetPrimaryAmmoType() == self:GetPrimaryAmmoType() then
-				ammo = 0
-			end
-		end
+	local ammo = self:Ammo1()
 
-		self.StoredAmmo = ammo
+	-- Do not drop ammo if we have another gun that uses this type
+	local weps = self:GetOwner():GetWeapons()
 
-		if ammo > 0 then
-			self:GetOwner():RemoveAmmo(ammo, self.Primary.Ammo)
-		end
+	for i = 1, #weps do
+		local w = weps[i]
+
+		if not IsValid(w) or w == self or w:GetPrimaryAmmoType() ~= self:GetPrimaryAmmoType() then continue end
+
+		ammo = 0
+	end
+
+	self.StoredAmmo = ammo
+
+	if ammo > 0 then
+		self:GetOwner():RemoveAmmo(ammo, self.Primary.Ammo)
 	end
 end
 
@@ -497,28 +501,28 @@ local SF_WEAPON_START_CONSTRAINED = 1
 -- Picked up by player. Transfer of stored ammo and such.
 -- @param Player newowner
 function SWEP:Equip(newowner)
-	if SERVER then
-		if self:IsOnFire() then
-			self:Extinguish()
-		end
+	if CLIENT then return end
 
-		self.fingerprints = self.fingerprints or {}
-
-		if not table.HasValue(self.fingerprints, newowner) then
-			table.insert(self.fingerprints, newowner)
-		end
-
-		if self:HasSpawnFlags(SF_WEAPON_START_CONSTRAINED) then
-			-- If this weapon started constrained, unset that spawnflag, or the
-			-- weapon will be re-constrained and float
-			local flags = self:GetSpawnFlags()
-			local newflags = bit.band(flags, bit.bnot(SF_WEAPON_START_CONSTRAINED))
-
-			self:SetKeyValue("spawnflags", newflags)
-		end
+	if self:IsOnFire() then
+		self:Extinguish()
 	end
 
-	if SERVER and IsValid(newowner) and self.StoredAmmo > 0 and self.Primary.Ammo ~= "none" then
+	self.fingerprints = self.fingerprints or {}
+
+	if not table.HasValue(self.fingerprints, newowner) then
+		self.fingerprints[#self.fingerprints + 1] = newowner
+	end
+
+	if self:HasSpawnFlags(SF_WEAPON_START_CONSTRAINED) then
+		-- If this weapon started constrained, unset that spawnflag, or the
+		-- weapon will be re-constrained and float
+		local flags = self:GetSpawnFlags()
+		local newflags = bit.band(flags, bit.bnot(SF_WEAPON_START_CONSTRAINED))
+
+		self:SetKeyValue("spawnflags", newflags)
+	end
+
+	if IsValid(newowner) and self.StoredAmmo > 0 and self.Primary.Ammo ~= "none" then
 		local ammo = newowner:GetAmmoCount(self.Primary.Ammo)
 		local given = math.min(self.StoredAmmo, self.Primary.ClipMax - ammo)
 
@@ -539,13 +543,13 @@ end
 ---
 -- @param boolean b
 function SWEP:SetIronsights(b)
-	if b ~= self:GetIronsights() then
-		self:SetIronsightsPredicted(b)
-		self:SetIronsightsTime(CurTime())
+	if b == self:GetIronsights() then return end
 
-		if CLIENT then
-			self:CalcViewModel()
-		end
+	self:SetIronsightsPredicted(b)
+	self:SetIronsightsTime(CurTime())
+
+	if CLIENT then
+		self:CalcViewModel()
 	end
 end
 
@@ -620,37 +624,38 @@ end
 ---
 -- @return boolean
 function SWEP:DyingShot()
-	local fired = false
-
-	if self:GetIronsights() then
-		self:SetIronsights(false)
-
-		if self:GetNextPrimaryFire() > CurTime() then
-			return fired
-		end
-
-		-- Owner should still be alive here
-		if IsValid(self:GetOwner()) then
-			local punch = self.Primary.Recoil or 5
-
-			-- Punch view to disorient aim before firing dying shot
-			local eyeang = self:GetOwner():EyeAngles()
-			eyeang.pitch = eyeang.pitch - math.Rand(-punch, punch)
-			eyeang.yaw = eyeang.yaw - math.Rand(-punch, punch)
-
-			self:GetOwner():SetEyeAngles(eyeang)
-
-			MsgN(self:GetOwner():Nick() .. " fired his DYING SHOT")
-
-			self:GetOwner().dying_wep = self
-
-			self:PrimaryAttack(true)
-
-			fired = true
-		end
+	if not self:GetIronsights() then
+		return false
 	end
 
-	return fired
+	self:SetIronsights(false)
+
+	if self:GetNextPrimaryFire() > CurTime() then
+		return false
+	end
+
+	-- Owner should still be alive here
+	local owner = self:GetOwner()
+	if not IsValid(owner) then
+		return false
+	end
+
+	local punch = self.Primary.Recoil or 5
+
+	-- Punch view to disorient aim before firing dying shot
+	local eyeang = owner:EyeAngles()
+	eyeang.pitch = eyeang.pitch - math.Rand(-punch, punch)
+	eyeang.yaw = eyeang.yaw - math.Rand(-punch, punch)
+
+	owner:SetEyeAngles(eyeang)
+
+	MsgN(owner:Nick() .. " fired his DYING SHOT")
+
+	owner.dying_wep = self
+
+	self:PrimaryAttack(true)
+
+	return true
 end
 
 local ttt_lowered = CreateConVar("ttt_ironsights_lowered", "1", FCVAR_ARCHIVE)

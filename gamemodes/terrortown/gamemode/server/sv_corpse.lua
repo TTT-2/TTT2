@@ -9,7 +9,6 @@ local math = math
 local table = table
 local net = net
 local player = player
-local ipairs = ipairs
 local timer = timer
 local util = util
 local IsValid = IsValid
@@ -118,21 +117,25 @@ local function IdentifyBody(ply, rag)
 
 	if GetConVar("ttt2_confirm_killlist"):GetBool() then
 		-- Handle kill list
-		for _, vicsid in ipairs(rag.kills) do
+		local ragKills = rag.kills
+
+		for i = 1, #ragKills do
+			local vicsid = ragKills[i]
+
 			-- filter out disconnected (and bots !)
 			local vic = player.GetBySteamID64(vicsid)
 
 			-- is this an unconfirmed dead?
-			if IsValid(vic) and not vic:GetNWBool("body_found", false) then
-				LANG.Msg("body_confirm", {finder = finder, victim = vic:Nick()})
+			if not IsValid(vic) or vic:GetNWBool("body_found", false) then continue end
 
-				vic:ConfirmPlayer(false)
+			LANG.Msg("body_confirm", {finder = finder, victim = vic:Nick()})
 
-				-- however, do not mark body as found. This lets players find the
-				-- body later and get the benefits of that
-				--local vicrag = vic.server_ragdoll
-				--CORPSE.SetFound(vicrag, true)
-			end
+			vic:ConfirmPlayer(false)
+
+			-- however, do not mark body as found. This lets players find the
+			-- body later and get the benefits of that
+			--local vicrag = vic.server_ragdoll
+			--CORPSE.SetFound(vicrag, true)
 		end
 	end
 
@@ -211,7 +214,6 @@ local function ttt_call_detective(ply, cmd, args)
 	if not ply:IsActive() then return end
 
 	local eidx = tonumber(args[1])
-
 	if not eidx then return end
 
 	local rag = Entity(eidx)
@@ -330,12 +332,15 @@ function CORPSE.ShowSearch(ply, rag, covert, long_range)
 
 	-- build list of people this player killed
 	local kill_entids = {}
+	local ragKills = rag.kills
 
-	for _, vicsid in ipairs(rag.kills) do
+	for i = 1, #ragKills do
+		local vicsid = ragKills[i]
+
 		-- also send disconnected players as a marker
 		local vic = player.GetBySteamID64(vicsid)
 
-		table.insert(kill_entids, IsValid(vic) and vic:EntIndex() or - 1)
+		kill_entids[#kill_entids + 1] = IsValid(vic) and vic:EntIndex() or -1
 	end
 
 	local lastid = -1
@@ -355,8 +360,8 @@ function CORPSE.ShowSearch(ply, rag, covert, long_range)
 
 	net.WriteUInt(#eq, 16) -- Equipment (16 = max.)
 
-	for _, itemCls in ipairs(eq) do
-		net.WriteString(itemCls)
+	for i = 1, #eq do
+		net.WriteString(eq[i])
 	end
 
 	net.WriteUInt(subrole, ROLE_BITS) -- (... bits)
@@ -370,8 +375,8 @@ function CORPSE.ShowSearch(ply, rag, covert, long_range)
 
 	net.WriteUInt(#kill_entids, 8)
 
-	for _, idx in ipairs(kill_entids) do
-		net.WriteUInt(idx, 8) -- first game.MaxPlayers() of entities are for players.
+	for i = 1, #kill_entids do
+		net.WriteUInt(kill_entids[i], 8) -- first game.MaxPlayers() of entities are for players.
 	end
 
 	net.WriteUInt(lastid, 8)
@@ -450,7 +455,9 @@ local function GetSceneDataFromPlayer(ply)
 		cycle = ply:GetCycle()
 	}
 
-	for _, param in ipairs(poseparams) do
+	for i = 1, #poseparams do
+		local param = poseparams[i]
+
 		data[param] = ply:GetPoseParameter(param)
 	end
 
@@ -502,7 +509,6 @@ function CORPSE.Create(ply, attacker, dmginfo)
 	if not IsValid(ply) then return end
 
 	local rag = ents.Create("prop_ragdoll")
-
 	if not IsValid(rag) then return end
 
 	rag:SetPos(ply:GetPos())
@@ -583,6 +589,8 @@ function CORPSE.Create(ply, attacker, dmginfo)
 		local efn = ply.effect_fn
 
 		timer.Simple(0, function()
+			if not IsValid(rag) then return end
+
 			efn(rag)
 		end)
 	end

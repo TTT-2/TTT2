@@ -69,12 +69,12 @@ function HUD:LoadData()
 		local elemName = elems[i]
 
 		local elem = hudelements.GetStored(elemName)
-		if elem then
-			local min_size = elem:GetDefaults().minsize
+		if not elem then continue end
 
-			elem:SetMinSize(min_size.w * self.scale, min_size.h * self.scale)
-			elem:PerformLayout()
-		end
+		local min_size = elem:GetDefaults().minsize
+
+		elem:SetMinSize(min_size.w * self.scale, min_size.h * self.scale)
+		elem:PerformLayout()
 	end
 end
 
@@ -89,20 +89,20 @@ function HUD:ApplyScale(scale)
 		local elemName = elems[i]
 
 		local elem = hudelements.GetStored(elemName)
-		if elem then
-			local size = elem:GetSize()
-			local min_size = elem:GetMinSize()
+		if not elem then continue end
 
-			elem:SetMinSize(min_size.w * scale, min_size.h * scale)
-			elem:SetSize(size.w * scale, size.h * scale)
-			elem:PerformLayout()
+		local size = elem:GetSize()
+		local min_size = elem:GetMinSize()
 
-			--reset position to new calculated default position
-			local defaultPos = elem:GetDefaults().basepos
+		elem:SetMinSize(min_size.w * scale, min_size.h * scale)
+		elem:SetSize(size.w * scale, size.h * scale)
+		elem:PerformLayout()
 
-			elem:SetBasePos(defaultPos.x, defaultPos.y)
-			elem:PerformLayout()
-		end
+		--reset position to new calculated default position
+		local defaultPos = elem:GetDefaults().basepos
+
+		elem:SetBasePos(defaultPos.x, defaultPos.y)
+		elem:PerformLayout()
 	end
 end
 

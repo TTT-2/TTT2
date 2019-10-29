@@ -126,8 +126,8 @@ if CLIENT then
 		local num_icons = 0
 		local num_items = 0
 
-		for _, itemCls in ipairs(itms) do
-			local item = items.GetStored(itemCls)
+		for i = 1, #itms do
+			local item = items.GetStored(itms[i])
 
 			if item and item.hud then
 				num_items = num_items + 1
@@ -183,13 +183,12 @@ if CLIENT then
 		end
 
 		-- draw items
-		for _, itemCls in ipairs(itms) do
-			local item = items.GetStored(itemCls)
+		for i = 1, #itms do
+			local item = items.GetStored(itms[i])
+			if not item or not item.hud then continue end
 
-			if item and item.hud then
-				item.hud_color = Color(self.basecolor.r, self.basecolor.g, self.basecolor.b)
-				curY = self:DrawIcon(curY, item)
-			end
+			item.hud_color = Color(self.basecolor.r, self.basecolor.g, self.basecolor.b)
+			curY = self:DrawIcon(curY, item)
 		end
 
 		self:SetSize(self.size.w, - math.max(height, self.minsize.h)) -- adjust the size

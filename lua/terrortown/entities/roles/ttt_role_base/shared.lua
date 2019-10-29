@@ -87,10 +87,13 @@ end
 function ROLE:GetSubRoles()
 	local br = self:GetBaseRole()
 	local tmp = {}
+	local rlsList = roles.GetList()
 
-	for _, v in ipairs(roles.GetList()) do
+	for k = 1, #rlsList do
+		local v = rlsList[k]
+
 		if v.baserole and v.baserole == br or v.index == br then
-			table.insert(tmp, v)
+			tmp[#tmp + 1] = v
 		end
 	end
 

@@ -41,11 +41,9 @@ local PT = LANG.GetParamTranslation
 -- @internal
 function CLSCORE:GetDisplay(key, event)
 	local displayfns = self.EventDisplay[event.id]
-
 	if not displayfns then return end
 
 	local keyfn = displayfns[key]
-
 	if not keyfn then return end
 
 	return keyfn(event)

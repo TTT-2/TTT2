@@ -5,7 +5,6 @@
 local net = net
 local table = table
 local pairs = pairs
-local ipairs = ipairs
 local IsValid = IsValid
 local hook = hook
 
@@ -153,25 +152,29 @@ end
 function plymeta:SetDefaultCredits()
 	if hook.Run("TTT2SetDefaultCredits", self) then return end
 
-	if self:IsShopper() then
-		local rd = self:GetSubRoleData()
-		local name = rd.index == ROLE_TRAITOR and "ttt_credits_starting" or "ttt_" .. rd.abbr .. "_credits_starting"
-
-		if self:HasTeam(TEAM_TRAITOR) then
-			local c = ConVarExists(name) and GetConVar(name):GetFloat() or 0
-			local member_one = #roles.GetTeamMembers(TEAM_TRAITOR) == 1
-
-			if not rd.preventTraitorAloneCredits and member_one then
-				c = c + (ConVarExists("ttt_credits_alonebonus") and GetConVar("ttt_credits_alonebonus"):GetFloat() or 0)
-			end
-
-			self:SetCredits(math.ceil(hook.Run("TTT2ModifyDefaultTraitorCredits", self, c) or c))
-		else
-			self:SetCredits(math.ceil(ConVarExists(name) and GetConVar(name):GetFloat() or 0))
-		end
-	else
+	if not self:IsShopper() then
 		self:SetCredits(0)
+
+		return
 	end
+
+	local rd = self:GetSubRoleData()
+	local name = rd.index == ROLE_TRAITOR and "ttt_credits_starting" or "ttt_" .. rd.abbr .. "_credits_starting"
+
+	if not self:HasTeam(TEAM_TRAITOR) then
+		self:SetCredits(math.ceil(ConVarExists(name) and GetConVar(name):GetFloat() or 0))
+
+		return
+	end
+
+	local c = ConVarExists(name) and GetConVar(name):GetFloat() or 0
+	local member_one = #roles.GetTeamMembers(TEAM_TRAITOR) == 1
+
+	if not rd.preventTraitorAloneCredits and member_one then
+		c = c + (ConVarExists("ttt_credits_alonebonus") and GetConVar("ttt_credits_alonebonus"):GetFloat() or 0)
+	end
+
+	self:SetCredits(math.ceil(hook.Run("TTT2ModifyDefaultTraitorCredits", self, c) or c))
 end
 
 ---
@@ -208,23 +211,25 @@ end
 -- @param string id
 -- @realm server
 function plymeta:RemoveEquipmentItem(id)
-	if self:HasEquipmentItem(id) then
-		local item = items.GetStored(id)
+	if not self:HasEquipmentItem(id) then return end
 
-		if item and isfunction(item.Reset) then
-			item:Reset(self)
-		end
+	local item = items.GetStored(id)
 
-		for k, v in ipairs(self:GetEquipmentItems()) do
-			if v == id then
-				table.remove(self.equipmentItems, k)
-
-				break
-			end
-		end
-
-		self:SendEquipment()
+	if item and isfunction(item.Reset) then
+		item:Reset(self)
 	end
+
+	local equipItems = self:GetEquipmentItems()
+
+	for k = 1, #equipItems do
+		if equipItems[k] == id then
+			table.remove(self.equipmentItems, k)
+
+			break
+		end
+	end
+
+	self:SendEquipment()
 end
 
 ---
@@ -248,8 +253,10 @@ end
 -- Resets the equipment of a @{Player}
 -- @realm server
 function plymeta:ResetEquipment()
-	for _, id in ipairs(self:GetEquipmentItems()) do
-		local item = items.GetStored(id)
+	local equipItems = self:GetEquipmentItems()
+
+	for i = 1, #equipItems do
+		local item = items.GetStored(equipItems[i])
 		if item and isfunction(item.Reset) then
 			item:Reset(self)
 		end
@@ -264,21 +271,23 @@ end
 -- Sends the list of bought @{ITEM}s and @{Weapon}s to the @{Player}
 -- @realm server
 function plymeta:SendBought()
+	local bought = self.bought
+
 	-- Send all as string, even though equipment are numbers, for simplicity
 	net.Start("TTT_Bought")
-	net.WriteUInt(#self.bought, 8)
+	net.WriteUInt(#bought, 8)
 
-	for _, v in ipairs(self.bought) do
-		net.WriteString(v)
+	for i = 1, #bought do
+		net.WriteString(bought[i])
 	end
 
 	net.Send(self)
 end
 
 local function ttt_resend_bought(ply)
-	if IsValid(ply) then
-		ply:SendBought()
-	end
+	if not IsValid(ply) then return end
+
+	ply:SendBought()
 end
 concommand.Add("ttt_resend_bought", ttt_resend_bought)
 
@@ -300,8 +309,7 @@ end
 -- @see plymeta:RemoveBought
 function plymeta:AddBought(id)
 	self.bought = self.bought or {}
-
-	table.insert(self.bought, tostring(id))
+	self.bought[#self.bought + 1] = tostring(id)
 
 	BUYTABLE[id] = true
 
@@ -337,12 +345,12 @@ function plymeta:RemoveBought(id)
 
 	self.bought = self.bought or {}
 
-	for k, iid in ipairs(self.bought) do
-		if iid == tostring(id) then
-			key = k
+	for k = 1, #self.bought do
+		if self.bought[k] ~= tostring(id) then continue end
 
-			break
-		end
+		key = k
+
+		break
 	end
 
 	if key then
@@ -398,8 +406,10 @@ function plymeta:ResetRoundFlags()
 	-- communication
 	self.mute_team = -1
 
-	for _, team in ipairs(roles.GetWinTeams()) do
-		self[team .. "_gvoice"] = false
+	local winTms = roles.GetWinTeams()
+
+	for i = 1, #winTms do
+		self[winTms[i] .. "_gvoice"] = false
 	end
 
 	self:SetNWBool("disguised", false)
@@ -440,9 +450,9 @@ function plymeta:GiveEquipmentWeapon(cls)
 			local slf = self
 
 			timer.Create(tmr, 1, 0, function()
-				if IsValid(slf) then
-					slf:GiveEquipmentWeapon(cls)
-				end
+				if not IsValid(slf) then return end
+
+				slf:GiveEquipmentWeapon(cls)
 			end)
 		end
 
@@ -499,8 +509,7 @@ function plymeta:RecordKill(victim)
 	if not IsValid(victim) then return end
 
 	self.kills = self.kills or {}
-
-	table.insert(self.kills, victim:SteamID64())
+	self.kills[#self.kills + 1] = victim:SteamID64()
 end
 
 ---
@@ -550,9 +559,9 @@ function plymeta:SendLastWords(dmginfo)
 	local ply = self
 
 	timer.Simple(2, function()
-		if IsValid(ply) then
-			ply:ResetLastWords()
-		end
+		if not IsValid(ply) then return end
+
+		ply:ResetLastWords()
 	end)
 end
 
@@ -562,11 +571,11 @@ end
 function plymeta:ResetViewRoll()
 	local ang = self:EyeAngles()
 
-	if ang.r ~= 0 then
-		ang.r = 0
+	if ang.r == 0 then return end
 
-		self:SetEyeAngles(ang)
-	end
+	ang.r = 0
+
+	self:SetEyeAngles(ang)
 end
 
 ---
@@ -741,7 +750,7 @@ function plymeta:CanSelectRole(roleData, choice_count, role_count)
 	return (
 		choice_count <= role_count
 		or self:GetBaseKarma() > min_karmas and GAMEMODE.LastRole[self:SteamID64()] == ROLE_INNOCENT
-		or math.random(1, 3) == 2
+		or math.random(3) == 2
 	) and (choice_count <= role_count or not self:GetAvoidRole(roleData.index))
 end
 
@@ -749,29 +758,33 @@ end
 -- Function taken from Trouble in Terrorist Town Commands (https://github.com/bender180/Trouble-in-Terrorist-Town-ULX-Commands)
 --
 local function FindCorpse(ply)
-	for _, ent in ipairs(ents.FindByClass("prop_ragdoll")) do
+	local ragdolls = ents.FindByClass("prop_ragdoll")
+
+	for i = 1, #ragdolls do
+		local ent = ragdolls[i]
+
 		if ent.uqid == ply:UniqueID() and IsValid(ent) then
 			return ent or false
 		end
 	end
 end
 
-local Positions = {}
+local poss = {}
 
 -- Populate Around Player
 for i = 0, 360, 22.5 do
-	table.insert(Positions, Vector(math.cos(i), math.sin(i), 0))
+	poss[#poss + 1] = Vector(math.cos(i), math.sin(i), 0)
 end
 
-table.insert(Positions, Vector(0, 0, 1)) -- Populate Above Player
+poss[#poss + 1] = Vector(0, 0, 1) -- Populate Above Player
 
 local function FindCorpsePosition(corpse)
 	local size = Vector(32, 32, 72)
 	local startPos = corpse:GetPos() + Vector(0, 0, size.z * 0.5)
-	local len = #Positions
+	local len = #poss
 
 	for i = 1, len do
-		local v = Positions[i]
+		local v = poss[i]
 		local pos = startPos + v * size * 1.5
 
 		local tr = {}
@@ -812,53 +825,53 @@ function plymeta:Revive(delay, fn, check, needcorpse, force, onFail)
 	ply.reviving = true
 
 	timer.Create(name, delay, 1, function()
-		if IsValid(ply) then
-			ply.forceRevive = nil
-			ply.reviving = nil
+		if not IsValid(ply) then return end
 
-			if not isfunction(check) or check(ply) then
-				local corpse = FindCorpse(ply)
+		ply.forceRevive = nil
+		ply.reviving = nil
 
-				if needcorpse and (not IsValid(corpse) or corpse:IsOnFire()) then
-					ply:ChatPrint("You have not been revived because your body no longer exists.")
+		if not isfunction(check) or check(ply) then
+			local corpse = FindCorpse(ply)
 
-					timer.Remove(name) -- TODO needed?
+			if needcorpse and (not IsValid(corpse) or corpse:IsOnFire()) then
+				ply:ChatPrint("You have not been revived because your body no longer exists.")
 
-					return
-				end
+				timer.Remove(name) -- TODO needed?
 
-				ply:SpawnForRound(true)
-
-				if IsValid(corpse) then
-					local spawnPos = FindCorpsePosition(corpse)
-					if spawnPos then
-						ply:SetPos(spawnPos)
-						ply:SetEyeAngles(Angle(0, corpse:GetAngles().y, 0))
-					end
-				end
-
-				hook.Call("PlayerLoadout", GAMEMODE, ply)
-
-				ply:SetMaxHealth(100)
-
-				local credits = CORPSE.GetCredits(corpse, 0)
-
-				ply:SetCredits(credits)
-
-				if IsValid(corpse) then
-					corpse:Remove()
-				end
-
-				DamageLog("TTT2Revive: " .. ply:Nick() .. " has been respawned.")
-
-				if isfunction(fn) then
-					fn(ply)
-				end
-			elseif isfunction(onFail) then
-				ply:ChatPrint("Revive failed...")
-
-				onFail(ply)
+				return
 			end
+
+			ply:SpawnForRound(true)
+
+			if IsValid(corpse) then
+				local spawnPos = FindCorpsePosition(corpse)
+				if spawnPos then
+					ply:SetPos(spawnPos)
+					ply:SetEyeAngles(Angle(0, corpse:GetAngles().y, 0))
+				end
+			end
+
+			hook.Call("PlayerLoadout", GAMEMODE, ply)
+
+			ply:SetMaxHealth(100)
+
+			local credits = CORPSE.GetCredits(corpse, 0)
+
+			ply:SetCredits(credits)
+
+			if IsValid(corpse) then
+				corpse:Remove()
+			end
+
+			DamageLog("TTT2Revive: " .. ply:Nick() .. " has been respawned.")
+
+			if isfunction(fn) then
+				fn(ply)
+			end
+		elseif isfunction(onFail) then
+			ply:ChatPrint("Revive failed...")
+
+			onFail(ply)
 		end
 	end)
 end
@@ -871,9 +884,10 @@ function plymeta:SelectRandomRole(avoidRoles)
 	local selectableRoles = GetSelectableRoles()
 	local availableRoles = {}
 	local roleCount = {}
+	local plys = player.GetAll()
 
-	for _, ply in ipairs(player.GetAll()) do
-		local rd = ply:GetSubRoleData()
+	for i = 1, #plys do
+		local rd = plys[i]:GetSubRoleData()
 
 		roleCount[rd] = (roleCount[rd] or 0) + 1
 	end
@@ -886,7 +900,7 @@ function plymeta:SelectRandomRole(avoidRoles)
 
 	if #availableRoles < 1 then return end
 
-	self:SetRole(availableRoles[math.random(1, #availableRoles)])
+	self:SetRole(availableRoles[math.random(#availableRoles)])
 
 	SendFullStateUpdate()
 end
@@ -968,10 +982,12 @@ end
 
 hook.Add("TTTBeginRound", "TTT2GivePendingItems", function()
 	for ply, tbl in pairs(pendingItems) do
-		if IsValid(ply) then
-			for _, item in ipairs(tbl) do
-				ply:GiveItem(item)
-			end
+		if not IsValid(ply) then continue end
+
+		local plyGiveItem = ply.GiveItem
+
+		for i = 1, #tbl do
+			plyGiveItem(tbl[i])
 		end
 	end
 
@@ -980,14 +996,18 @@ end)
 
 -- reset confirm state only on round begin, not on revive
 hook.Add("TTTBeginRound", "TTT2ResetRoleState_Begin", function()
-	for _,p in ipairs(player.GetAll()) do
-		p:ResetConfirmPlayer()
+	local plys = player.GetAll()
+
+	for i = 1, #plys do
+		plys[i]:ResetConfirmPlayer()
 	end
 end)
 
 -- additionally reset confirm state on round end to prevent short blinking of confirmed roles on round start
 hook.Add("TTTEndRound", "TTT2ResetRoleState_End", function()
-	for _,p in ipairs(player.GetAll()) do
-		p:ResetConfirmPlayer()
+	local plys = player.GetAll()
+
+	for i = 1, #plys do
+		plys[i]:ResetConfirmPlayer()
 	end
 end)

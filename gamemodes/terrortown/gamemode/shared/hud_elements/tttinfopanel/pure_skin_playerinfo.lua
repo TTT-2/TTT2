@@ -75,9 +75,9 @@ if CLIENT then
 		The function should also take care of managing the visibility by returning nil to tell the UI that nothing should be displayed
 	]]--
 	function HUDELEMENT:SetSecondaryRoleInfoFunction(func)
-		if func and isfunction(func) then
-			self.secondaryRoleInformationFunc = func
-		end
+		if not isfunction(func) then return end
+
+		self.secondaryRoleInformationFunc = func
 	end
 
 	local watching_icon = Material("vgui/ttt/watching_icon")

@@ -94,7 +94,10 @@ function Register(t, name)
 		--
 		-- For each entity using this class
 		--
-		for _, entity in ipairs(ents.FindByClass(name)) do
+		local entsTbl = ents.FindByClass(name)
+
+		for i = 1, #entsTbl do
+			local entity = entsTbl[i]
 
 			--
 			-- Replace the contents with this entity table
@@ -110,13 +113,17 @@ function Register(t, name)
 		end
 
 		-- Update item table of entities that are based on this item
-		for _, e in ipairs(ents.GetAll()) do
-			if IsBasedOn(e:GetClass(), name) then
-				table.Merge(e, Get(e:GetClass()))
+		entsTbl = ents.GetAll()
 
-				if isfunction(e.OnReloaded) then
-					e:OnReloaded()
-				end
+		for i = 1, #entsTbl do
+			local eq = entsTbl[i]
+
+			if not IsBasedOn(eq:GetClass(), name) then continue end
+
+			table.Merge(eq, Get(eq:GetClass()))
+
+			if isfunction(eq.OnReloaded) then
+				eq:OnReloaded()
 			end
 		end
 	end
@@ -270,7 +277,9 @@ function GetRoleItems(subrole)
 	local itms = GetList()
 	local tbl = {}
 
-	for _, item in ipairs(itms) do
+	for i = 1, #itms do
+		local item = itms[i]
+
 		if item and item.CanBuy and table.HasValue(item.CanBuy, subrole) then
 			tbl[#tbl + 1] = item
 		end

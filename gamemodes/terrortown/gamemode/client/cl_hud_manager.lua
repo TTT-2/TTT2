@@ -221,7 +221,11 @@ end
 -- Initializes all @{HUD}s and loads the SQL stored data
 -- @realm client
 function HUDManager.LoadAllHUDS()
-	for _, hud in ipairs(huds.GetList()) do
+	local hudsTbl = huds.GetList()
+
+	for i = 1, #hudsTbl do
+		local hud = hudsTbl[i]
+
 		hud:Initialize()
 		hud:LoadData()
 	end

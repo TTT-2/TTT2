@@ -2,6 +2,8 @@
 -- @module HUDELEMENT
 -- @section pure_skin_element
 
+local surface = surface
+
 local base = "dynamic_hud_element"
 
 DEFINE_BASECLASS(base)

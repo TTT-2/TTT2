@@ -134,7 +134,7 @@ if CLIENT then
 		local count = table.Count(weps)
 
 		for i = 1, count do
-			table.insert(weaponList, {h = self.element_height})
+			weaponList[i] = {h = self.element_height}
 		end
 
 		self:SetElements(weaponList)

@@ -68,14 +68,16 @@ function HUDELEMENT:ApplyToChildren(funcName, ...)
 		local elem = children[i]
 
 		local elemtbl = hudelements.GetStored(elem)
-		if elemtbl then
-			if isfunction(elemtbl[funcName]) then
-				elemtbl[funcName](elemtbl, ...)
-			else
-				MsgN("ERROR: HUDElement " .. (self.id or "?") .. " has child named " .. elem .. " with unknown function " .. funcName .. " \n")
-			end
-		else
+		if not elemtbl then
 			Msg("ERROR: HUDElement " .. (self.id or "?") .. " has unknown child element named " .. elem .. " when applying a function to all children: " .. funcName .. " \n")
+
+			continue
+		end
+
+		if isfunction(elemtbl[funcName]) then
+			elemtbl[funcName](elemtbl, ...)
+		else
+			MsgN("ERROR: HUDElement " .. (self.id or "?") .. " has child named " .. elem .. " with unknown function " .. funcName .. " \n")
 		end
 	end
 end

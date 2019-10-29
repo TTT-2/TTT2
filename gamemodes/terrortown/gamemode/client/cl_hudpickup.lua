@@ -2,8 +2,6 @@
 -- @module PICKUP
 
 local TryTranslation = LANG.TryTranslation
-local table = table
-local pairs = pairs
 local IsValid = IsValid
 
 PICKUP = {}
@@ -25,7 +23,7 @@ local function InsertNewPickupItem()
 		pickup.time = PICKUP.last + 0.05
 	end
 
-	table.insert(PICKUP.items, pickup)
+	PICKUP.items[#PICKUP.items + 1] = pickup
 
 	PICKUP.last = pickup.time
 
@@ -86,10 +84,13 @@ function GM:HUDAmmoPickedUp(itemName, amount)
 
 	local itemname_trans = TryTranslation(string.lower("ammo_" .. itemName))
 
-	if PICKUP.items then
+	local cachedPickups = PICKUP.items
+	if cachedPickups then
 		local localized_name = string.upper(itemname_trans)
 
-		for _, v in pairs(PICKUP.items) do
+		for k = 1, #cachedPickups do
+			local v = cachedPickups[k]
+
 			if v.name == localized_name and CurTime() - v.firstTime < 0.5 then
 				v.amount = tostring(tonumber(v.amount) + amount)
 				v.time = CurTime() - v.fadein
@@ -111,21 +112,22 @@ end
 -- @realm client
 -- @internal
 function PICKUP.RemoveOutdatedValues()
-	local itemCount = #PICKUP.items
+	local cachedPickups = PICKUP.items
+	local itemCount = #cachedPickups
 
 	local j = 1
 
 	for i = 1, itemCount do
-		if not PICKUP.items[i].remove then
-	    if (i ~= j) then
+		if not cachedPickups[i].remove then
+	    if i ~= j then
 				-- Keep i's value, move it to j's pos.
-				PICKUP.items[j] = PICKUP.items[i]
-				PICKUP.items[i] = nil
+				cachedPickups[j] = cachedPickups[i]
+				cachedPickups[i] = nil
 	    end
 
 	    j = j + 1
 		else
-			PICKUP.items[i] = nil
+			cachedPickups[i] = nil
 		end
 	end
 end

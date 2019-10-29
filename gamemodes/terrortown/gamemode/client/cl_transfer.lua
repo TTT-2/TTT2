@@ -4,7 +4,6 @@
 
 local GetTranslation = LANG.GetTranslation
 local player = player
-local ipairs = ipairs
 
 ---
 -- Creates the credit transfer menu
@@ -46,9 +45,13 @@ function CreateTransferMenu(parent)
 	dpick:SetWide(250)
 
 	-- fill combobox
-	for _, p in ipairs(player.GetAll()) do
-		if p ~= client and p:IsActive() and (not p:GetSubRoleData().unknownTeam or p:IsRole(ROLE_DETECTIVE) and client:IsRole(ROLE_DETECTIVE)) and p:IsInTeam(client) then
-			dpick:AddChoice(p:Nick(), p:SteamID64())
+	local plys = player.GetAll()
+
+	for i = 1, #plys do
+		local ply = plys[i]
+
+		if ply ~= client and ply:IsActive() and (not ply:GetSubRoleData().unknownTeam or ply:IsRole(ROLE_DETECTIVE) and client:IsRole(ROLE_DETECTIVE)) and ply:IsInTeam(client) then
+			dpick:AddChoice(ply:Nick(), ply:SteamID64())
 		end
 	end
 

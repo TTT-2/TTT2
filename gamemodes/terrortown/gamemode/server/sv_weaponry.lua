@@ -8,7 +8,6 @@ util.AddNetworkString("TTT2AddWeaponToInventory")
 util.AddNetworkString("TTT2RemoveWeaponFromInventory")
 
 -- Weapon system, pickup limits, etc
-local ipairs = ipairs
 local IsValid = IsValid
 local table = table
 local timer = timer
@@ -56,42 +55,54 @@ end
 local loadout_weapons = {}
 
 local function GetLoadoutWeapons(subrole)
-	if not loadout_weapons[subrole] then
-		loadout_weapons[subrole] = {}
+	local tmpLoadoutWeps = loadout_weapons[subrole]
 
-		for _, w in ipairs(weapons.GetList()) do
-			if type(w.InLoadoutFor) == "table" and not w.Doublicated then
-				local cls = WEPS.GetClass(w)
-
-				if table.HasValue(w.InLoadoutFor, subrole) then
-					if not table.HasValue(loadout_weapons[subrole], cls) then
-						table.insert(loadout_weapons[subrole], cls)
-					end
-				elseif table.HasValue(w.InLoadoutFor, ROLE_INNOCENT) then -- setup for new roles
-					table.insert(w.InLoadoutFor, subrole)
-
-					if not table.HasValue(loadout_weapons[subrole], cls) then
-						table.insert(loadout_weapons[subrole], cls)
-					end
-				end
-			end
-		end
-
-		-- default loadout, insert it at the end
-		local default = {
-			"weapon_zm_carry",
-			"weapon_ttt_unarmed",
-			"weapon_zm_improvised"
-		}
-
-		for _, def in ipairs(default) do
-			if not table.HasValue(loadout_weapons[subrole], def) then
-				table.insert(loadout_weapons[subrole], def)
-			end
-		end
-
-		hook.Run("TTT2ModifyDefaultLoadout", loadout_weapons, subrole)
+	if tmpLoadoutWeps then
+		return tmpLoadoutWeps
 	end
+
+	tmpLoadoutWeps = {}
+
+	local weps = weapons.GetList()
+
+	for i = 1, #weps do
+		local w = weps[i]
+
+		if type(w.InLoadoutFor) ~= "table" or w.Doublicated then continue end
+
+		local cls = WEPS.GetClass(w)
+
+		if table.HasValue(w.InLoadoutFor, subrole) then
+			if not table.HasValue(tmpLoadoutWeps, cls) then
+				tmpLoadoutWeps[#tmpLoadoutWeps + 1] = cls
+			end
+		elseif table.HasValue(w.InLoadoutFor, ROLE_INNOCENT) then -- setup for new roles
+			w.InLoadoutFor[#w.InLoadoutFor + 1] = subrole
+
+			if not table.HasValue(tmpLoadoutWeps, cls) then
+				tmpLoadoutWeps[#tmpLoadoutWeps + 1] = cls
+			end
+		end
+	end
+
+	-- default loadout, insert it at the end
+	local default = {
+		"weapon_zm_carry",
+		"weapon_ttt_unarmed",
+		"weapon_zm_improvised"
+	}
+
+	for i = 1, #default do
+		local def = default[i]
+
+		if table.HasValue(tmpLoadoutWeps, def) then continue end
+
+		tmpLoadoutWeps[#tmpLoadoutWeps + 1] = def
+	end
+
+	loadout_weapons[subrole] = tmpLoadoutWeps
+
+	hook.Run("TTT2ModifyDefaultLoadout", loadout_weapons, subrole)
 
 	return loadout_weapons[subrole]
 end
@@ -99,17 +110,17 @@ end
 -- Give player loadout weapons he should have for his subrole that he does not have
 -- yet
 local function GiveLoadoutWeapon(ply, cls)
-	if not ply:HasWeapon(cls) and ply:CanCarryType(WEPS.TypeForWeapon(cls)) then
-		local wep = ply:Give(cls)
+	if ply:HasWeapon(cls) or not ply:CanCarryType(WEPS.TypeForWeapon(cls)) then return end
 
-		ply.loadoutWeps = ply.loadoutWeps or {}
+	local wep = ply:Give(cls)
 
-		if not table.HasValue(ply.loadoutWeps, cls) then
-			ply.loadoutWeps[#ply.loadoutWeps + 1] = cls
-		end
+	ply.loadoutWeps = ply.loadoutWeps or {}
 
-		return wep
+	if not table.HasValue(ply.loadoutWeps, cls) then
+		ply.loadoutWeps[#ply.loadoutWeps + 1] = cls
 	end
+
+	return wep
 end
 
 local function GiveLoadoutWeapons(ply)
@@ -118,10 +129,12 @@ local function GiveLoadoutWeapons(ply)
 
 	if not weps then return end
 
-	for _, cls in ipairs(weps) do
-		if not ply:HasWeapon(cls) and ply:CanCarryType(WEPS.TypeForWeapon(cls)) then
-			GiveLoadoutWeapon(ply, cls)
-		end
+	for i = 1, #weps do
+		local cls = weps[i]
+
+		if ply:HasWeapon(cls) or not ply:CanCarryType(WEPS.TypeForWeapon(cls)) then continue end
+
+		GiveLoadoutWeapon(ply, cls)
 	end
 end
 
@@ -131,8 +144,8 @@ local function GetGiveLoadoutWeapons(ply)
 	local tmp = {}
 
 	if weps then
-		for _, cls in ipairs(weps) do
-			tmp[#tmp + 1] = cls
+		for i = 1, #weps do
+			tmp[#tmp + 1] = weps[i]
 		end
 	end
 
@@ -144,8 +157,10 @@ local function GetResetLoadoutWeapons(ply)
 
 	ply.loadoutWeps = ply.loadoutWeps or {}
 
-	for _, wep in ipairs(ply:GetWeapons()) do
-		local cls = WEPS.GetClass(wep)
+	local weps = ply:GetWeapons()
+
+	for i = 1, #weps do
+		local cls = WEPS.GetClass(weps[i])
 
 		if table.HasValue(ply.loadoutWeps, cls) and cls ~= "weapon_ttt_unarmed" then
 			tmp[#tmp + 1] = cls
@@ -167,7 +182,9 @@ local function HasLoadoutWeapons(ply)
 		return true
 	end
 
-	for _, cls in ipairs(weps) do
+	for i = 1, #weps do
+		local cls = weps[i]
+
 		if not ply:HasWeapon(cls) and ply:CanCarryType(WEPS.TypeForWeapon(cls)) then
 			return false
 		end
@@ -181,29 +198,39 @@ local loadout_items = {}
 
 -- Get loadout items.
 local function GetLoadoutItems(subrole)
-	if not loadout_items[subrole] then
-		loadout_items[subrole] = {}
+	local tmpLoadoutItems = loadout_items[subrole]
 
-		for _, w in ipairs(items.GetList()) do
-			if type(w.InLoadoutFor) == "table" and not w.Doublicated then
-				local cls = w.id
+	if tmpLoadoutItems then
+		return tmpLoadoutItems
+	end
 
-				if table.HasValue(w.InLoadoutFor, subrole) then
-					if not table.HasValue(loadout_items[subrole], cls) then
-						table.insert(loadout_items[subrole], cls)
-					end
-				elseif table.HasValue(w.InLoadoutFor, ROLE_INNOCENT) then -- setup for new roles
-					table.insert(w.InLoadoutFor, subrole)
+	tmpLoadoutItems = {}
 
-					if not table.HasValue(loadout_items[subrole], cls) then
-						table.insert(loadout_items[subrole], cls)
-					end
-				end
+	local itms = items.GetList()
+
+	for i = 1, #itms do
+		local w = itms[i]
+
+		if type(w.InLoadoutFor) ~= "table" or w.Doublicated then continue end
+
+		local cls = w.id
+
+		if table.HasValue(w.InLoadoutFor, subrole) then
+			if not table.HasValue(tmpLoadoutItems, cls) then
+				tmpLoadoutItems[#tmpLoadoutItems + 1] = cls
+			end
+		elseif table.HasValue(w.InLoadoutFor, ROLE_INNOCENT) then -- setup for new roles
+			w.InLoadoutFor[#w.InLoadoutFor + 1] = subrole
+
+			if not table.HasValue(tmpLoadoutItems, cls) then
+				tmpLoadoutItems[#tmpLoadoutItems + 1] = cls
 			end
 		end
-
-		hook.Run("TTT2ModifyDefaultLoadout", loadout_items, subrole)
 	end
+
+	loadout_items[subrole] = tmpLoadoutItems
+
+	hook.Run("TTT2ModifyDefaultLoadout", loadout_items, subrole)
 
 	return loadout_items[subrole]
 end
@@ -211,17 +238,17 @@ end
 -- Give player loadout items he should have for his subrole that he does not have
 -- yet
 local function GiveLoadoutItem(ply, cls)
-	if not ply:HasEquipmentItem(cls) then
-		local item = ply:GiveItem(cls)
+	if ply:HasEquipmentItem(cls) then return end
 
-		ply.loadoutItems = ply.loadoutItems or {}
+	local item = ply:GiveItem(cls)
 
-		if not table.HasValue(ply.loadoutItems, cls) then
-			ply.loadoutItems[#ply.loadoutItems + 1] = cls
-		end
+	ply.loadoutItems = ply.loadoutItems or {}
 
-		return item
+	if not table.HasValue(ply.loadoutItems, cls) then
+		ply.loadoutItems[#ply.loadoutItems + 1] = cls
 	end
+
+	return item
 end
 
 local function GiveLoadoutItems(ply)
@@ -230,21 +257,23 @@ local function GiveLoadoutItems(ply)
 
 	if not itms then return end
 
-	for _, cls in ipairs(itms) do
-		if not ply:HasEquipmentItem(cls) then
-			GiveLoadoutItem(ply, cls)
-		end
+	for i = 1, #itms do
+		local cls = itms[i]
+
+		if ply:HasEquipmentItem(cls) then continue end
+
+		GiveLoadoutItem(ply, cls)
 	end
 end
 
 local function ResetLoadoutItems(ply)
 	local itms = GetModifiedEquipment(ply, items.GetRoleItems(ply:GetSubRole()))
-	if itms then
-		for _, item in ipairs(itms) do
-			if item.loadout then
-				ply:RemoveItem(item.id)
-			end
-		end
+	if itms == nil then return end
+
+	for i = 1, #itms do
+		if not itms[i].loadout then continue end
+
+		ply:RemoveItem(itms[i].id)
 	end
 end
 
@@ -270,25 +299,26 @@ CreateConVar("ttt_detective_hats", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 -- Just hats right now
 local function GiveLoadoutSpecial(ply)
-	if ply:IsActive() and ply:GetBaseRole() == ROLE_DETECTIVE and GetConVar("ttt_detective_hats"):GetBool() and CanWearHat(ply) then
-		if not IsValid(ply.hat) then
-			local hat = ents.Create("ttt_hat_deerstalker")
-
-			if not IsValid(hat) then return end
-
-			hat:SetPos(ply:GetPos() + Vector(0, 0, 70))
-			hat:SetAngles(ply:GetAngles())
-			hat:SetParent(ply)
-
-			ply.hat = hat
-
-			hat:Spawn()
-		end
-	else
+	if not ply:IsActive() or ply:GetBaseRole() ~= ROLE_DETECTIVE or not GetConVar("ttt_detective_hats"):GetBool() or not CanWearHat(ply) then
 		SafeRemoveEntity(ply.hat)
 
 		ply.hat = nil
+
+		return
 	end
+
+	if IsValid(ply.hat) then return end
+
+	local hat = ents.Create("ttt_hat_deerstalker")
+	if not IsValid(hat) then return end
+
+	hat:SetPos(ply:GetPos() + Vector(0, 0, 70))
+	hat:SetAngles(ply:GetAngles())
+	hat:SetParent(ply)
+
+	ply.hat = hat
+
+	hat:Spawn()
 end
 
 ---
@@ -326,68 +356,73 @@ end
 -- @ref https://wiki.garrysmod.com/page/GM/PlayerLoadout
 -- @local
 function GM:PlayerLoadout(ply)
-	if IsValid(ply) and not ply:IsSpec() then
-		CleanupInventoryAndNotifyClient(ply)
+	if not IsValid(ply) or ply:IsSpec() then return end
 
-		ResetLoadoutItems(ply)
+	CleanupInventoryAndNotifyClient(ply)
 
-		-- give default items
-		GiveLoadoutItems(ply)
+	ResetLoadoutItems(ply)
 
-		-- reset default loadout
-		local reset = GetResetLoadoutWeapons(ply)
+	-- give default items
+	GiveLoadoutItems(ply)
 
-		-- hand out weaponry
-		local give = GetGiveLoadoutWeapons(ply)
+	-- reset default loadout
+	local reset = GetResetLoadoutWeapons(ply)
 
-		local tmp = {}
+	-- hand out weaponry
+	local give = GetGiveLoadoutWeapons(ply)
 
-		-- check which weapon the player should get/loose
-		for k, cls in ipairs(reset) do
-			local has = false
+	local tmp = {}
 
-			for k2, cls2 in ipairs(give) do
-				if cls == cls2 then
-					has = true
+	-- check which weapon the player should get/loose
+	for k = 1, #reset do
+		local cls = reset[k]
+		local has = false
 
-					table.remove(give, k2)
+		for k2 = 1, #give do
+			if cls ~= give[k2] then continue end
 
-					break
-				end
-			end
+			has = true
 
-			if not has then
-				tmp[#tmp + 1] = cls
-			end
+			table.remove(give, k2)
+
+			break
 		end
 
-		for _, cls in ipairs(tmp) do
-			ply:StripWeapon(cls)
-
-			for k, v in ipairs(ply.loadoutWeps) do
-				if cls == v then
-					table.remove(ply.loadoutWeps, k)
-
-					break
-				end
-			end
+		if not has then
+			tmp[#tmp + 1] = cls
 		end
+	end
 
-		for _, cls in ipairs(give) do
-			GiveLoadoutWeapon(ply, cls)
+	local loudoutWeps = ply.loadoutWeps
+
+	for i = 1, #tmp do
+		local cls = tmp[i]
+
+		ply:StripWeapon(cls)
+
+		for k = 1, #loudoutWeps do
+			if cls ~= loudoutWeps[k] then continue end
+
+			table.remove(loudoutWeps, k)
+
+			break
 		end
+	end
 
-		GiveLoadoutSpecial(ply)
+	for i = 1, #give do
+		GiveLoadoutWeapon(ply, give[i])
+	end
 
-		if not HasLoadoutWeapons(ply) then
-			MsgN("Could not spawn all loadout weapons for " .. ply:Nick() .. ", will retry.")
+	GiveLoadoutSpecial(ply)
 
-			local timerId = ply:EntIndex()
+	if not HasLoadoutWeapons(ply) then
+		MsgN("Could not spawn all loadout weapons for " .. ply:Nick() .. ", will retry.")
 
-			timer.Create("lateloadout" .. timerId, 1, 0, function()
-				LateLoadout(timerId)
-			end)
-		end
+		local timerId = ply:EntIndex()
+
+		timer.Create("lateloadout" .. timerId, 1, 0, function()
+			LateLoadout(timerId)
+		end)
 	end
 end
 
@@ -398,8 +433,10 @@ end
 -- @realm server
 -- @ref https://wiki.garrysmod.com/page/GM/PlayerLoadout
 function GM:UpdatePlayerLoadouts()
-	for _, ply in ipairs(player.GetAll()) do
-		hook.Call("PlayerLoadout", GAMEMODE, ply)
+	local plys = player.GetAll()
+
+	for i = 1, #plys do
+		hook.Call("PlayerLoadout", GAMEMODE, plys[i])
 	end
 end
 
@@ -415,15 +452,14 @@ local function ForceWeaponSwitch(ply, cmd, args)
 	-- Worked around it by giving every weapon a single Clip2 round.
 	-- Works because no weapon uses those.
 	local wep = ply:GetWeapon(wepname)
+	if not IsValid(wep) then return end
 
-	if IsValid(wep) then
-		-- Weapons apparently not guaranteed to have this
-		if wep.SetClip2 then
-			wep:SetClip2(1)
-		end
-
-		ply:SelectWeapon(wepname)
+	-- Weapons apparently not guaranteed to have this
+	if wep.SetClip2 then
+		wep:SetClip2(1)
 	end
+
+	ply:SelectWeapon(wepname)
 end
 concommand.Add("wepswitch", ForceWeaponSwitch)
 
@@ -438,28 +474,28 @@ concommand.Add("wepswitch", ForceWeaponSwitch)
 -- @realm server
 -- @module WEPS
 function WEPS.DropNotifiedWeapon(ply, wep, death_drop)
-	if IsValid(ply) and IsValid(wep) then
-		-- Hack to tell the weapon it's about to be dropped and should do what it
-		-- must right now
-		if wep.PreDrop then
-			wep:PreDrop(death_drop)
-		end
+	if not IsValid(ply) or not IsValid(wep) then return end
 
-		-- PreDrop might destroy weapon
-		if not IsValid(wep) then return end
-
-		-- Tag this weapon as dropped, so that if it's a special weapon we do not
-		-- auto-pickup when nearby.
-		wep.IsDropped = true
-
-		ply:DropWeapon(wep)
-
-		wep:PhysWake()
-
-		-- After dropping a weapon, always switch to holstered, so that traitors
-		-- will never accidentally pull out a traitor weapon
-		ply:SelectWeapon("weapon_ttt_unarmed")
+	-- Hack to tell the weapon it's about to be dropped and should do what it
+	-- must right now
+	if wep.PreDrop then
+		wep:PreDrop(death_drop)
 	end
+
+	-- PreDrop might destroy weapon
+	if not IsValid(wep) then return end
+
+	-- Tag this weapon as dropped, so that if it's a special weapon we do not
+	-- auto-pickup when nearby.
+	wep.IsDropped = true
+
+	ply:DropWeapon(wep)
+
+	wep:PhysWake()
+
+	-- After dropping a weapon, always switch to holstered, so that traitors
+	-- will never accidentally pull out a traitor weapon
+	ply:SelectWeapon("weapon_ttt_unarmed")
 end
 
 local function DropActiveWeapon(ply)
@@ -535,9 +571,9 @@ local function DropActiveAmmo(ply)
 	box.AmmoAmount = amt
 
 	timer.Simple(2, function()
-		if IsValid(box) then
-			box:SetOwner(nil)
-		end
+		if not IsValid(box) then return end
+
+		box:SetOwner(nil)
 	end)
 end
 concommand.Add("ttt_dropammo", DropActiveAmmo)
@@ -606,7 +642,11 @@ end
 -- @realm server
 -- @module WEPS
 function WEPS.ForcePrecache()
-	for _, w in ipairs(weapons.GetList()) do
+	local weps = weapons.GetList()
+
+	for i = 1, #weps do
+		local w = weps[i]
+
 		if w.WorldModel then
 			util.PrecacheModel(w.WorldModel)
 		end
@@ -621,11 +661,15 @@ end
 local crowbar_delay = CreateConVar("ttt2_crowbar_shove_delay", "1.0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 local function ChangeShoveDelay()
-	for _, wep in ipairs(weapons.GetList()) do
+	local weps = weapons.GetList()
+
+	for i = 1, #weps do
+		local wep = weps[i]
+
 		--all weapons on the WEAPON_MELEE slot should be Crowbars or Crowbar alikes
-		if wep.Kind and wep.Kind == WEAPON_MELEE then
-			wep.Secondary.Delay = crowbar_delay:GetFloat()
-		end
+		if not wep.Kind or wep.Kind ~= WEAPON_MELEE then continue end
+
+		wep.Secondary.Delay = crowbar_delay:GetFloat()
 	end
 end
 

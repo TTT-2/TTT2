@@ -120,7 +120,7 @@ net.Receive("TTT_GameMsg", ReceiveGameMsg)
 
 local function ReceiveCustomMsg()
 	local text = net.ReadString()
-	local c = Color(255, 255, 255)
+	local c = table.Copy(COLOR_WHITE)
 
 	c.r = net.ReadUInt(8)
 	c.g = net.ReadUInt(8)

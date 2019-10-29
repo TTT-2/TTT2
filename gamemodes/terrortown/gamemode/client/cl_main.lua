@@ -4,7 +4,6 @@
 local math = math
 local net = net
 local player = player
-local ipairs = ipairs
 local timer = timer
 local util = util
 local IsValid = IsValid
@@ -117,42 +116,35 @@ function GM:InitPostEntity()
 
 	local itms = items.GetList()
 
-	-- initialize the default data
-	for _, eq in ipairs(itms) do
-		ShopEditor.InitDefaultData(eq)
-	end
+	-- load items
+	for i = 1, #itms do
+		local itm = itms[i]
 
-	-- init items
-	for _, eq in ipairs(itms) do
-		CreateEquipment(eq)
-	end
+		ShopEditor.InitDefaultData(itm) -- initialize the default data
+		CreateEquipment(itm) -- init items
 
-	-- reset normal items equipment
-	for _, eq in ipairs(itms) do
-		eq.CanBuy = {}
+		itm.CanBuy = {} -- reset normal items equipment
 	end
 
 	local sweps = weapons.GetList()
 
-	-- init normal weapons equipment
-	for _, wep in ipairs(sweps) do
-		ShopEditor.InitDefaultData(wep)
+	-- load sweps
+	for i = 1, #sweps do
+		local wep = sweps[i]
+
+		ShopEditor.InitDefaultData(wep) -- init normal weapons equipment
+		CreateEquipment(wep) -- init weapons
+
+		wep.CanBuy = {} -- reset normal weapons equipment
 	end
 
-	-- init weapons
-	for _, wep in ipairs(sweps) do
-		CreateEquipment(wep)
-	end
+	-- TODO why should Equipment be nil?
+	if istable(Equipment) then
+		local roleList = roles.GetList()
 
-	-- reset normal weapons equipment
-	for _, wep in ipairs(sweps) do
-		wep.CanBuy = {}
-	end
-
-	-- reset normal equipment tables
-	for _, role in ipairs(roles.GetList()) do
-		if Equipment then
-			Equipment[role.index] = {}
+		-- reset normal equipment tables
+		for i = 1, #roleList do
+			Equipment[roleList[i].index] = {}
 		end
 	end
 
@@ -185,8 +177,10 @@ function GM:InitPostEntity()
 	end
 
 	-- cache players avatar
-	for _, v in ipairs(player.GetAll()) do
-		draw.CacheAvatar(v:SteamID64(), "medium") -- caching
+	local plys = player.GetAll()
+
+	for i = 1, #plys do
+		draw.CacheAvatar(plys[i]:SteamID64(), "medium") -- caching
 	end
 
 	timer.Create("cache_ents", 1, 0, GAMEMODE.DoCacheEnts)
@@ -224,6 +218,8 @@ function GetRoundState()
 end
 
 local function RoundStateChange(o, n)
+	local plys = player.GetAll()
+
 	if n == ROUND_PREP then
 		-- prep starts
 		GAMEMODE:ClearClientState()
@@ -243,8 +239,8 @@ local function RoundStateChange(o, n)
 		CLSCORE:ClearPanel()
 
 		-- people may have died and been searched during prep
-		for _, p in ipairs(player.GetAll()) do
-			p.search_result = nil
+		for i = 1, #plys do
+			plys[i].search_result = nil
 		end
 
 		-- clear blood decals produced during prep
@@ -268,9 +264,13 @@ local function RoundStateChange(o, n)
 	end
 
 	-- whatever round state we get, clear out the voice flags
-	for _, v in ipairs(player.GetAll()) do
-		for _, team in ipairs(roles.GetWinTeams()) do
-			v[team .. "_gvoice"] = false
+	local winTeams = roles.GetWinTeams()
+
+	for i = 1, #plys do
+		local pl = plys[i]
+
+		for k = 1, #winTeams do
+			pl[winTeams[k] .. "_gvoice"] = false
 		end
 	end
 end
@@ -289,9 +289,9 @@ local cues = {
 }
 
 local function PlaySoundCue()
-	if ttt_cl_soundcues:GetBool() then
-		surface.PlaySound(cues[math.random(1, #cues)])
-	end
+	if not ttt_cl_soundcues:GetBool() then return end
+
+	surface.PlaySound(cues[math.random(#cues)])
 end
 
 GM.TTTBeginRound = PlaySoundCue
@@ -316,8 +316,10 @@ end
 net.Receive("TTT_Role", ReceiveRole)
 
 local function ReceiveRoleReset()
-	for _, ply in ipairs(player.GetAll()) do
-		ply:SetRole(ROLE_INNOCENT, TEAM_INNOCENT)
+	local plys = player.GetAll()
+
+	for i = 1, #plys do
+		plys[i]:SetRole(ROLE_INNOCENT, TEAM_INNOCENT)
 	end
 end
 net.Receive("TTT_RoleReset", ReceiveRoleReset)
@@ -325,6 +327,7 @@ net.Receive("TTT_RoleReset", ReceiveRoleReset)
 -- role test
 local function TTT2TestRole()
 	local client = LocalPlayer()
+	if not IsValid(client) then return end
 
 	client:ChatPrint("Your current role is: '" .. client:GetSubRoleData().name .. "'")
 end
@@ -335,6 +338,9 @@ local function ReceiveRoleList()
 	local team = net.ReadString()
 	local num_ids = net.ReadUInt(8)
 
+	local teamNotNone = team ~= TEAM_NONE
+	local teamAlone = TEAMS[team].alone
+
 	for i = 1, num_ids do
 		local eidx = net.ReadUInt(7) + 1 -- we - 1 worldspawn=0
 		local ply = player.GetByID(eidx)
@@ -344,7 +350,7 @@ local function ReceiveRoleList()
 
 			local plyrd = ply:GetSubRoleData()
 
-			if team ~= TEAM_NONE and not plyrd.unknownTeam and not plyrd.disabledTeamVoice and not TEAMS[team].alone then
+			if teamNotNone and not plyrd.unknownTeam and not plyrd.disabledTeamVoice and not teamAlone then
 				ply[team .. "_gvoice"] = false -- assume role's chat by default
 			end
 		end
@@ -391,25 +397,30 @@ function GM:ClearClientState()
 
 	VOICE.InitBattery()
 
-	for _, p in ipairs(player.GetAll()) do
-		if IsValid(p) then
-			p.sb_tag = nil
+	local plys = player.GetAll()
 
-			p:SetRole(ROLE_INNOCENT)
+	for i = 1, #plys do
+		local pl = plys[i]
+		if not IsValid(pl) then continue end
 
-			p.search_result = nil
-		end
+		pl.sb_tag = nil
+
+		pl:SetRole(ROLE_INNOCENT)
+
+		pl.search_result = nil
 	end
 
 	VOICE.CycleMuteState(MUTE_NONE)
 
 	RunConsoleCommand("ttt_mute_team_check", "0")
 
-	if GAMEMODE.ForcedMouse then
-		gui.EnableScreenClicker(false)
-	end
+	if not GAMEMODE.ForcedMouse then return end
+
+	gui.EnableScreenClicker(false)
 end
 net.Receive("TTT_ClearClientState", GM.ClearClientState)
+
+local color_trans = Color(0, 0, 0, 0)
 
 ---
 -- Cleanup the map at start of new round
@@ -419,22 +430,28 @@ net.Receive("TTT_ClearClientState", GM.ClearClientState)
 function GM:CleanUpMap()
 	-- Ragdolls sometimes stay around on clients. Deleting them can create issues
 	-- so all we can do is try to hide them.
-	for _, ent in ipairs(ents.FindByClass("prop_ragdoll")) do
-		if IsValid(ent) and CORPSE.GetPlayerNick(ent, "") ~= "" then
-			ent:SetNoDraw(true)
-			ent:SetSolid(SOLID_NONE)
-			ent:SetColor(Color(0, 0, 0, 0))
+	local ragdolls = ents.FindByClass("prop_ragdoll")
 
-			-- Horrible hack to make targetid ignore this ent, because we can't
-			-- modify the collision group clientside.
-			ent.NoTarget = true
-		end
+	for i = 1, #ragdolls do
+		local ent = ragdolls[i]
+
+		if not IsValid(ent) or CORPSE.GetPlayerNick(ent, "") == "" then continue end
+
+		ent:SetNoDraw(true)
+		ent:SetSolid(SOLID_NONE)
+		ent:SetColor(color_trans)
+
+		-- Horrible hack to make targetid ignore this ent, because we can't
+		-- modify the collision group clientside.
+		ent.NoTarget = true
 	end
 
 	game.CleanUpMap()
 end
 
 net.Receive("TTT2SyncDBItems", function()
+	if not ShopEditor then return end
+
 	ShopEditor.ReadItemData()
 end)
 
@@ -455,6 +472,8 @@ end
 net.Receive("TTT_PlayerSpawned", PlayerSpawn)
 
 local function PlayerDeath()
+	if not TIPS then return end
+
 	TIPS.Show()
 end
 net.Receive("TTT_PlayerDied", PlayerDeath)
@@ -518,7 +537,6 @@ function GM:CalcView(ply, origin, angles, fov, znear, zfar)
 
 	if IsValid(wep) then
 		local func = wep.CalcView
-
 		if func then
 			view.origin, view.angles, view.fov = func(wep, ply, origin * 1, angles * 1, fov)
 		end
@@ -555,7 +573,13 @@ function GM:DrawDeathNotice(x, y)
 end
 
 -- Simple client-based idle checking
-local idle = {ang = nil, pos = nil, mx = 0, my = 0, t = 0}
+local idle = {
+	ang = nil,
+	pos = nil,
+	mx = 0,
+	my = 0,
+	t = 0
+}
 
 ---
 -- Checks whether a the local @{Player} is idle and handles everything on it's own
@@ -566,7 +590,6 @@ function CheckIdle()
 	if not GetGlobalBool("ttt_idle", false) then return end
 
 	local client = LocalPlayer()
-
 	if not IsValid(client) then return end
 
 	if not idle.ang or not idle.pos then

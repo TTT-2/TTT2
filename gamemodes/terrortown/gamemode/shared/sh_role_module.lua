@@ -6,7 +6,9 @@ local rolesPre = "terrortown/entities/roles/"
 local rolesFiles = file.Find(rolesPre .. "*.lua", "LUA")
 local _, rolesFolders = file.Find(rolesPre .. "*", "LUA")
 
-for _, fl in ipairs(rolesFiles) do
+for i = 1, #rolesFiles do
+	local fl = rolesFiles[i]
+
 	ROLE = {}
 
 	local cls = string.sub(fl, 0, #fl - 4)
@@ -20,13 +22,17 @@ for _, fl in ipairs(rolesFiles) do
 	ROLE = nil
 end
 
-for _, folder in ipairs(rolesFolders) do
+for i = 1, #rolesFolders do
+	local folder = rolesFolders[i]
+
 	ROLE = {}
 	ROLE.name = folder
 
 	local subFiles = file.Find(rolesPre .. folder .. "/*.lua", "LUA")
 
-	for _, fl in ipairs(subFiles) do
+	for k = 1, #subFiles do
+		local fl = subFiles[k]
+
 		if fl == "init.lua" then
 			if SERVER then
 				include(rolesPre .. folder .. "/" .. fl)

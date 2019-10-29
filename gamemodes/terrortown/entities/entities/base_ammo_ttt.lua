@@ -4,7 +4,9 @@
 -- @section BaseAmmo
 -- @desc Ammo override base
 
-AddCSLuaFile()
+if SERVER then
+	AddCSLuaFile()
+end
 
 local util = util
 local hook = hook
@@ -77,7 +79,12 @@ function ENT:PlayerCanPickup(ply)
 	local spos = phys:IsValid() and phys:GetPos() or ent:OBBCenter()
 	local epos = ply:GetShootPos() -- equiv to EyePos in SDK
 
-	local tr = util.TraceLine({start = spos, endpos = epos, filter = {ply, ent}, mask = MASK_SOLID})
+	local tr = util.TraceLine({
+		start = spos,
+		endpos = epos,
+		filter = {ply, ent},
+		mask = MASK_SOLID
+	})
 
 	-- can pickup if trace was not stopped
 	return tr.Fraction == 1.0
@@ -90,21 +97,30 @@ function ENT:CheckForWeapon(ply)
 	if not self.CachedWeapons then
 		-- create a cache of what weapon classes use this ammo
 		local tbl = {}
+		local weps = weapons.GetList()
+		local cls = self:GetClass()
 
-		for _, v in ipairs(weapons.GetList()) do
-			if v.AmmoEnt == self:GetClass() then
-				tbl[#tbl + 1] = WEPS.GetClass(v)
+		local WEPSGetClass = WEPS.GetClass
+
+		for i = 1, #weps do
+			local v = weps[i]
+
+			if v.AmmoEnt == cls then
+				tbl[#tbl + 1] = WEPSGetClass(v)
 			end
 		end
 
 		self.CachedWeapons = tbl
 	end
 
+	local plyHasWeapon = ply.HasWeapon
+	local cached = self.CachedWeapons
+
 	-- Check if player has a weapon that we know needs us. This is called in
 	-- Touch, which is called many a time, so we use the cache here to avoid
 	-- looping through every weapon the player has to check their AmmoEnt.
-	for _, w in ipairs(self.CachedWeapons) do
-		if ply:HasWeapon(w) then
+	for i = 1, #cached do
+		if plyHasWeapon(ply, cached[i]) then
 			return true
 		end
 	end

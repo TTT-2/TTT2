@@ -7,7 +7,6 @@ TTT2NETTABLE = {}
 local net = net
 local table = table
 local pairs = pairs
-local ipairs = ipairs
 local IsValid = IsValid
 local player = player
 local hook = hook
@@ -28,7 +27,8 @@ function SendRoleListMessage(subrole, team, sids, ply_or_rf)
 		tmp = {ply_or_rf}
 	end
 
-	for _, ply in ipairs(tmp) do
+	for _i = 1, #tmp do
+		local ply = tmp[_i]
 		local adds = {}
 		local localPly = false
 		local num_ids = #sids
@@ -51,7 +51,7 @@ function SendRoleListMessage(subrole, team, sids, ply_or_rf)
 					and not hook.Run("TTT2OverrideDisabledSync", ply, p)
 					then continue end
 
-					table.insert(adds, eidx)
+					adds[#adds + 1] = eidx
 				else
 					localPly = true
 				end
@@ -94,14 +94,16 @@ end
 -- @see SendRoleList
 function SendSubRoleList(subrole, ply_or_rf, pred)
 	local team_ids = {}
+	local plys = player.GetAll()
 
-	for _, v in ipairs(player.GetAll()) do
+	for i = 1, #plys do
+		local v = plys[i]
+
 		if v:GetSubRole() == subrole and (not pred or (pred and pred(v))) then
 			local team = v:GetTeam()
 			if team ~= TEAM_NONE and not TEAMS[team].alone then
 				team_ids[team] = team_ids[team] or {} -- create table if it does not exists
-
-				table.insert(team_ids[team], v:EntIndex())
+				team_ids[team][#team_ids[team] + 1] = v:EntIndex()
 			end
 		end
 	end
@@ -121,14 +123,16 @@ end
 -- @see SendSubRoleList
 function SendRoleList(subrole, ply_or_rf, pred)
 	local team_ids = {}
+	local plys = player.GetAll()
 
-	for _, v in ipairs(player.GetAll()) do
+	for i = 1, #plys do
+		local v = plys[i]
+
 		if v:IsRole(subrole) and (not pred or (pred and pred(v))) then
 			local team = v:GetTeam()
 			if team ~= TEAM_NONE and not TEAMS[team].alone then
 				team_ids[team] = team_ids[team] or {} -- create table if it does not exists
-
-				table.insert(team_ids[team], v:EntIndex())
+				team_ids[team][#team_ids[team] + 1] = v:EntIndex()
 			end
 		end
 	end
@@ -148,14 +152,16 @@ function SendTeamList(team, ply_or_rf, pred)
 	if team == TEAM_NONE or TEAMS[team].alone then return end
 
 	local team_ids = {}
+	local plys = player.GetAll()
 
-	for _, v in ipairs(player.GetAll()) do
+	for i = 1, #plys do
+		local v = plys[i]
+
 		if v:HasTeam(team) and (not pred or (pred and pred(v))) then
 			local subrole = v:GetSubRole()
 
 			team_ids[subrole] = team_ids[subrole] or {} -- create table if it does not exists
-
-			table.insert(team_ids[subrole], v:EntIndex())
+			team_ids[subrole][#team_ids[subrole] + 1] = v:EntIndex()
 		end
 	end
 
@@ -233,8 +239,7 @@ function SendFullStateUpdate()
 			if p ~= ply then
 				syncTbl[ply][t[2]] = syncTbl[ply][t[2]] or {}
 				syncTbl[ply][t[2]][t[1]] = syncTbl[ply][t[2]][t[1]] or {}
-
-				table.insert(syncTbl[ply][t[2]][t[1]], p:EntIndex())
+				syncTbl[ply][t[2]][t[1]][#syncTbl[ply][t[2]][t[1]] + 1] = p:EntIndex()
 			elseif not TTT2NETTABLE[ply][p] or TTT2NETTABLE[ply][p][1] ~= t[1] or TTT2NETTABLE[ply][p][2] ~= t[2] then
 				localPly = true
 			end
@@ -296,8 +301,10 @@ local function ttt_request_rolelist(ply)
 		local tmp = {}
 		local team = ply:GetTeam()
 		local roleData = ply:GetSubRoleData()
+		local plys = player.GetAll()
 
-		for _, v in ipairs(player.GetAll()) do
+		for i = 1, #plys do
+			local v = plys[i]
 			local rd = v:GetSubRoleData()
 
 			if not ply:GetSubRoleData().unknownTeam and v:HasTeam(team)
@@ -323,8 +330,7 @@ local function ttt_request_rolelist(ply)
 			if p ~= ply then
 				tbl[t[2]] = tbl[t[2]] or {}
 				tbl[t[2]][t[1]] = tbl[t[2]][t[1]] or {}
-
-				table.insert(tbl[t[2]][t[1]], p:EntIndex())
+				tbl[t[2]][t[1]][#tbl[t[2]][t[1]] + 1] = p:EntIndex()
 			elseif not TTT2NETTABLE[ply][p] or TTT2NETTABLE[ply][p][1] ~= t[1] or TTT2NETTABLE[ply][p][2] ~= t[2] then
 				localPly = true
 			end
@@ -382,10 +388,11 @@ local function ttt_force_role(ply, cmd, args, argStr)
 	if not role then return end
 
 	local rd
+	local rlsList = roles.GetList()
 
-	for _, v in ipairs(roles.GetList()) do
-		if v.index == role then
-			rd = v
+	for i = 1, #rlsList do
+		if rlsList[i].index == role then
+			rd = rlsList[i]
 
 			break
 		end
@@ -455,7 +462,11 @@ local function ttt_roles_index(ply)
 	ply:ChatPrint("----------------")
 	ply:ChatPrint("[Role] | [Index]")
 
-	for _, v in ipairs(roles.GetSortedRoles()) do
+	local rlsList = roles.GetSortedRoles()
+
+	for i = 1, #rlsList do
+		local v = rlsList[i]
+
 		ply:ChatPrint(v.name .. " | " .. v.index)
 	end
 

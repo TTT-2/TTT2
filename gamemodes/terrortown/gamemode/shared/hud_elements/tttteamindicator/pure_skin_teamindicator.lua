@@ -80,6 +80,7 @@ if CLIENT then
 
 		local iconSize = h - self.pad * 2
 		local icon, c
+
 		if LocalPlayer():Alive() and LocalPlayer():IsTerror() then
 			if (team == TEAM_NONE or not tm or tm.alone) then -- support roles without a team
 				icon = material_no_team

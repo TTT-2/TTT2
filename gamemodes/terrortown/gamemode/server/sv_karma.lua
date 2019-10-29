@@ -31,7 +31,6 @@ KARMA.cv.bantime = CreateConVar("ttt_karma_low_ban_minutes", "60", {FCVAR_NOTIFY
 
 local config = KARMA.cv
 
-local ipairs = ipairs
 local IsValid = IsValid
 local hook = hook
 
@@ -277,7 +276,11 @@ function KARMA.RoundIncrement()
 	local healbonus = config.roundheal:GetFloat()
 	local cleanbonus = config.clean:GetFloat()
 
-	for _, ply in ipairs(player.GetAll()) do
+	local plys = player.GetAll()
+
+	for i = 1, #plys do
+		local ply = plys[i]
+
 		if ply:IsDeadTerror() and ply.death_type ~= KILL_SUICIDE or not ply:IsSpec() then
 			local bonus = healbonus + (ply:GetCleanRound() and cleanbonus or 0)
 
@@ -296,7 +299,11 @@ end
 -- When a new round starts, Live karma becomes Base karma
 -- @realm server
 function KARMA.Rebase()
-	for _, ply in ipairs(player.GetAll()) do
+	local plys = player.GetAll()
+
+	for i = 1, #plys do
+		local ply = plys[i]
+
 		if IsDebug() then
 			print(ply, "rebased from ", ply:GetBaseKarma(), " to ", ply:GetLiveKarma())
 		end
@@ -309,8 +316,10 @@ end
 -- Apply karma to damage factor for all players
 -- @realm server
 function KARMA.ApplyKarmaAll()
-	for _, ply in ipairs(player.GetAll()) do
-		KARMA.ApplyKarma(ply)
+	local plys = player.GetAll()
+
+	for i = 1, #plys do
+		KARMA.ApplyKarma(plys[i])
 	end
 end
 
@@ -343,8 +352,10 @@ function KARMA.RoundEnd()
 		KARMA.RememberAll()
 
 		if config.autokick:GetBool() then
-			for _, ply in ipairs(player.GetAll()) do
-				KARMA.CheckAutoKick(ply)
+			local plys = player.GetAll()
+
+			for i = 1, #plys do
+				KARMA.CheckAutoKick(plys[i])
 			end
 		end
 	end
@@ -357,7 +368,11 @@ function KARMA.RoundBegin()
 	KARMA.InitState()
 
 	if KARMA.IsEnabled() then
-		for _, ply in ipairs(player.GetAll()) do
+		local plys = player.GetAll()
+
+		for i = 1, #plys do
+			local ply = plys[i]
+
 			KARMA.ApplyKarma(ply)
 			KARMA.NotifyPlayer(ply)
 		end
@@ -394,6 +409,7 @@ function KARMA.Remember(ply)
 
 	if ply:SteamID64() == nil then
 		print("[TTT2] ERROR: Player has no steamID64")
+
 		return
 	end
 
@@ -438,8 +454,10 @@ end
 -- @realm server
 -- @see KARMA.Remember
 function KARMA.RememberAll()
-	for _, ply in ipairs(player.GetAll()) do
-		KARMA.Remember(ply)
+	local plys = player.GetAll()
+
+	for i = 1, #plys do
+		KARMA.Remember(plys[i])
 	end
 end
 
@@ -450,28 +468,26 @@ local reason = "Karma too low"
 -- @param Player ply
 -- @realm server
 function KARMA.CheckAutoKick(ply)
-	if ply:GetBaseKarma() <= config.kicklevel:GetInt() then
-		if hook.Call("TTTKarmaLow", GAMEMODE, ply) == false then return end
+	if ply:GetBaseKarma() > config.kicklevel:GetInt() or hook.Call("TTTKarmaLow", GAMEMODE, ply) == false then return end
 
-		ServerLog(ply:Nick() .. " autokicked/banned for low karma.\n")
+	ServerLog(ply:Nick() .. " autokicked/banned for low karma.\n")
 
-		-- flag player as autokicked so we don't perform the normal player
-		-- disconnect logic
-		ply.karma_kicked = true
+	-- flag player as autokicked so we don't perform the normal player
+	-- disconnect logic
+	ply.karma_kicked = true
 
-		if config.persist:GetBool() then
-			local k = math.Clamp(config.starting:GetFloat() * 0.8, config.kicklevel:GetFloat() * 1.1, config.max:GetFloat())
+	if config.persist:GetBool() then
+		local k = math.Clamp(config.starting:GetFloat() * 0.8, config.kicklevel:GetFloat() * 1.1, config.max:GetFloat())
 
-			ply:SetPData("karma_stored", k)
+		ply:SetPData("karma_stored", k)
 
-			KARMA.RememberedPlayers[ply:SteamID64()] = k
-		end
+		KARMA.RememberedPlayers[ply:SteamID64()] = k
+	end
 
-		if config.autoban:GetBool() then
-			ply:KickBan(config.bantime:GetInt(), reason)
-		else
-			ply:Kick(reason)
-		end
+	if config.autoban:GetBool() then
+		ply:KickBan(config.bantime:GetInt(), reason)
+	else
+		ply:Kick(reason)
 	end
 end
 
@@ -480,12 +496,16 @@ end
 -- @param function printfn
 -- @realm server
 function KARMA.PrintAll(printfn)
-	for _, ply in ipairs(player.GetAll()) do
+	local plys = player.GetAll()
+
+	for i = 1, #plys do
+		local ply = plys[i]
+
 		printfn(Format("%s : Live = %f -- Base = %f -- Dmg = %f\n",
-				ply:Nick(),
-				ply:GetLiveKarma(),
-				ply:GetBaseKarma(),
-				ply:GetDamageFactor() * 100
+			ply:Nick(),
+			ply:GetLiveKarma(),
+			ply:GetBaseKarma(),
+			ply:GetDamageFactor() * 100
 		))
 	end
 end

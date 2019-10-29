@@ -13,7 +13,6 @@ local math = math
 local table = table
 local net = net
 local pairs = pairs
-local ipairs = ipairs
 local IsValid = IsValid
 
 ---
@@ -31,58 +30,66 @@ end
 -- @realm client
 function ShopEditor.GetEquipmentForRoleAll()
 	-- need to build equipment cache?
-	if not Equipmentnew then
-		-- start with all the non-weapon goodies
-		local tbl = {}
-
-		local eject = {
-			"weapon_fists",
-			"weapon_ttt_unarmed",
-			"weapon_zm_carry",
-			"bobs_blacklisted"
-		}
-
-		hook.Run("TTT2ModifyShopEditorIgnoreEquip", eject) -- possibility to modify from externally
-
-		-- find buyable items to load info from
-		for _, v in ipairs(items.GetList()) do
-			local name = WEPS.GetClass(v)
-
-			if name
-			and not v.Doublicated
-			and not string.match(name, "base")
-			and not table.HasValue(eject, name)
-			then
-				if v.id then
-					table.insert(tbl, v)
-				else
-					ErrorNoHalt("[TTT2][SHOPEDITOR][ERROR] Item without id:")
-					PrintTable(v)
-				end
-			end
-		end
-
-		-- find buyable weapons to load info from
-		for _, v in ipairs(weapons.GetList()) do
-			local name = WEPS.GetClass(v)
-
-			if name
-			and not v.Doublicated
-			and not string.match(name, "base")
-			and not string.match(name, "event")
-			and not table.HasValue(eject, name)
-			then
-				if v.id then
-					table.insert(tbl, v)
-				else
-					ErrorNoHalt("[TTT2][SHOPEDITOR][ERROR] Weapon without id:")
-					PrintTable(v)
-				end
-			end
-		end
-
-		Equipmentnew = tbl
+	if Equipmentnew ~= nil then
+		return Equipmentnew
 	end
+
+	-- start with all the non-weapon goodies
+	local tbl = {}
+
+	local eject = {
+		"weapon_fists",
+		"weapon_ttt_unarmed",
+		"weapon_zm_carry",
+		"bobs_blacklisted"
+	}
+
+	hook.Run("TTT2ModifyShopEditorIgnoreEquip", eject) -- possibility to modify from externally
+
+	local itms = items.GetList()
+
+	-- find buyable items to load info from
+	for i = 1, #itms do
+		local v = itms[i]
+		local name = WEPS.GetClass(v)
+
+		if name
+		and not v.Doublicated
+		and not string.match(name, "base")
+		and not table.HasValue(eject, name)
+		then
+			if v.id then
+				tbl[#tbl + 1] = v
+			else
+				ErrorNoHalt("[TTT2][SHOPEDITOR][ERROR] Item without id:")
+				PrintTable(v)
+			end
+		end
+	end
+
+	-- find buyable weapons to load info from
+	local weps = weapons.GetList()
+
+	for i = 1, #weps do
+		local v = weps[i]
+		local name = WEPS.GetClass(v)
+
+		if name
+		and not v.Doublicated
+		and not string.match(name, "base")
+		and not string.match(name, "event")
+		and not table.HasValue(eject, name)
+		then
+			if v.id then
+				tbl[#tbl + 1] = v
+			else
+				ErrorNoHalt("[TTT2][SHOPEDITOR][ERROR] Weapon without id:")
+				PrintTable(v)
+			end
+		end
+	end
+
+	Equipmentnew = tbl
 
 	return Equipmentnew
 end
@@ -445,12 +452,12 @@ function ShopEditor.CreateOwnShopEditor(roleData, onCreate)
 			eq.CanBuy = eq.CanBuy or {}
 
 			if table.HasValue(eq.CanBuy, roleData.index) then
-				for k, v in ipairs(eq.CanBuy) do
-					if v == roleData.index then
-						table.remove(eq.CanBuy, k)
+				for k = 1, #eq.CanBuy do
+					if eq.CanBuy[k] ~= roleData.index then continue end
 
-						break
-					end
+					table.remove(eq.CanBuy, k)
+
+					break
 				end
 
 				-- remove
@@ -460,7 +467,7 @@ function ShopEditor.CreateOwnShopEditor(roleData, onCreate)
 				net.WriteString(eq.id)
 				net.SendToServer()
 			else
-				table.insert(eq.CanBuy, roleData.index)
+				eq.CanBuy[#eq.CanBuy + 1] = roleData.index
 
 				-- add
 				net.Start("shop")
@@ -544,8 +551,8 @@ function ShopEditor.CreateLinkWithRole(roleData)
 	-- remove innocents
 	local key
 
-	for k, v in ipairs(rls) do
-		if v == INNOCENT then
+	for k = 1, #rls do
+		if rls[k] == INNOCENT then
 			key = k
 		end
 	end
@@ -553,8 +560,8 @@ function ShopEditor.CreateLinkWithRole(roleData)
 	table.remove(rls, key)
 
 	-- change position of own shop
-	for k, v in ipairs(rls) do
-		if v == roleData then
+	for k = 1, #rls do
+		if rls[k] == roleData then
 			key = k
 		end
 	end
@@ -651,8 +658,8 @@ function ShopEditor.CreateShopLinker()
 
 	local key
 
-	for k, v in ipairs(rls) do
-		if v == INNOCENT then
+	for k = 1, #rls do
+		if rls[k] == INNOCENT then
 			key = k
 		end
 	end
@@ -680,59 +687,79 @@ local function shopFallbackAnsw(len)
 	-- reset everything
 	Equipment[subrole] = {}
 
-	for _, v in ipairs(items.GetList()) do
-		if v.CanBuy then
-			for k, vi in ipairs(v.CanBuy) do
-				if vi == subrole then
-					table.remove(v.CanBuy, k)
+	local itms = items.GetList()
 
-					break
-				end
+	for i = 1, #itms do
+		local v = itms[i]
+		local canBuy = v.CanBuy
+
+		if not canBuy then continue end
+
+		for k = 1, #canBuy do
+			if canBuy[k] == subrole then
+				table.remove(canBuy, k)
+
+				break
 			end
 		end
 	end
 
-	for _, v in ipairs(weapons.GetList()) do
-		if v.CanBuy then
-			for k, vi in ipairs(v.CanBuy) do
-				if vi == subrole then
-					table.remove(v.CanBuy, k)
+	local weps = weapons.GetList()
 
-					break
-				end
+	for i = 1, #weps do
+		local v = weps[i]
+		local canBuy = v.CanBuy
+
+		if not canBuy then continue end
+
+		for k = 1, #canBuy do
+			if canBuy[k] == subrole then
+				table.remove(canBuy, k)
+
+				break
 			end
 		end
 	end
 
 	if fb == SHOP_UNSET then
 		local roleData = roles.GetByIndex(subrole)
-		if roleData.fallbackTable then
-			-- set everything
-			for _, eq in ipairs(roleData.fallbackTable) do
-				local equip = not items.IsItem(eq.id) and weapons.GetStored(eq.id) or items.GetStored(eq.id)
-				if equip then
-					equip.CanBuy = equip.CanBuy or {}
 
-					table.insert(equip.CanBuy, subrole)
-				end
+		local flbTbl = roleData.fallbackTable
+		if not flbTbl then return end
 
-				table.insert(Equipment[subrole], eq)
+		-- set everything
+		for i = 1, #flbTbl do
+			local eq = flbTbl[i]
+
+			local equip = not items.IsItem(eq.id) and weapons.GetStored(eq.id) or items.GetStored(eq.id)
+			if equip then
+				equip.CanBuy = equip.CanBuy or {}
+				equip.CanBuy[#equip.CanBuy + 1] = subrole
 			end
+
+			Equipment[subrole][#Equipment[subrole] + 1] = eq
 		end
 	end
 end
 net.Receive("shopFallbackAnsw", shopFallbackAnsw)
 
 local function shopFallbackReset(len)
-	for _, v in ipairs(items.GetList()) do
-		v.CanBuy = {}
+	local itms = items.GetList()
+
+	for i = 1, #itms do
+		itms[i].CanBuy = {}
 	end
 
-	for _, v in ipairs(weapons.GetList()) do
-		v.CanBuy = {}
+	local weps = weapons.GetList()
+
+	for i = 1, #weps do
+		weps[i].CanBuy = {}
 	end
 
-	for _, rd in ipairs(roles.GetList()) do
+	local rlsList = roles.GetList()
+
+	for i = 1, #rlsList do
+		local rd = rlsList[i]
 		local subrole = rd.index
 		local fb = GetGlobalString("ttt_" .. rd.abbr .. "_shop_fallback")
 
@@ -741,18 +768,21 @@ local function shopFallbackReset(len)
 
 		if fb == SHOP_UNSET then
 			local roleData = roles.GetByIndex(subrole)
-			if roleData.fallbackTable then
-				-- set everything
-				for _, eq in ipairs(roleData.fallbackTable) do
-					local equip = not items.IsItem(eq.id) and weapons.GetStored(eq.id) or items.GetStored(eq.id)
-					if equip then
-						equip.CanBuy = equip.CanBuy or {}
+			local flbTbl = roleData.fallbackTable
 
-						table.insert(equip.CanBuy, subrole)
-					end
+			if not flbTbl then continue end
 
-					table.insert(Equipment[subrole], eq)
+			-- set everything
+			for k = 1, #flbTbl do
+				local eq = flbTbl[k]
+
+				local equip = not items.IsItem(eq.id) and weapons.GetStored(eq.id) or items.GetStored(eq.id)
+				if equip then
+					equip.CanBuy = equip.CanBuy or {}
+					equip.CanBuy[#equip.CanBuy + 1] = subrole
 				end
+
+				Equipment[subrole][#Equipment[subrole] + 1] = eq
 			end
 		end
 	end

@@ -4,7 +4,6 @@
 
 local surface = surface
 local pairs = pairs
-local ipairs = ipairs
 local math = math
 local abs = math.abs
 local table = table
@@ -38,7 +37,11 @@ function TBHUD:CacheEnts()
 	self.buttons = {}
 
 	if IsValid(ply) and ply:IsActive() and ply:HasTeam(TEAM_TRAITOR) then
-		for _, ent in ipairs(ents.FindByClass("ttt_traitor_button")) do
+		local btns = ents.FindByClass("ttt_traitor_button")
+
+		for i = 1, #btns do
+			local ent = btns[i]
+
 			self.buttons[ent:EntIndex()] = ent
 		end
 	end
@@ -133,8 +136,10 @@ function TBHUD:Draw(client)
 
 		if IsOffScreen(scrpos) or not but:IsUsable() then continue end
 
+		local usableRange = but:GetUsableRange()
+
 		d = pos - plypos
-		d = d:Dot(d) / (but:GetUsableRange() ^ 2)
+		d = d:Dot(d) / (usableRange * usableRange)
 
 		-- draw if this button is within range, with alpha based on distance
 		if d >= 1 then continue end

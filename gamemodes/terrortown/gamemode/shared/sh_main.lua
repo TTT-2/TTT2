@@ -56,34 +56,34 @@ end
 -- @hook
 -- @realm shared
 function GM:Move(ply, mv)
-	if ply:IsTerror() then
-		local basemul = 1
-		local slowed = false
+	if not ply:IsTerror() then return end
 
-		-- Slow down ironsighters
-		local wep = ply:GetActiveWeapon()
+	local basemul = 1
+	local slowed = false
 
-		if IsValid(wep) and wep.GetIronsights and wep:GetIronsights() then
-			basemul = 120 / 220
-			slowed = true
-		end
+	-- Slow down ironsighters
+	local wep = ply:GetActiveWeapon()
 
-		local noLag = {1}
-
-		local mul = hook.Call("TTTPlayerSpeedModifier", GAMEMODE, ply, slowed, mv, noLag) or 1
-		mul = basemul * mul * noLag[1]
-
-		if ply.sprintMultiplier and (ply.sprintProgress or 0) > 0 then
-			local sprintMultiplierModifier = {1}
-
-			hook.Run("TTT2PlayerSprintMultiplier", ply, sprintMultiplierModifier)
-
-			mul = mul * ply.sprintMultiplier * sprintMultiplierModifier[1]
-		end
-
-		mv:SetMaxClientSpeed(mv:GetMaxClientSpeed() * mul)
-		mv:SetMaxSpeed(mv:GetMaxSpeed() * mul)
+	if IsValid(wep) and wep.GetIronsights and wep:GetIronsights() then
+		basemul = 120 / 220
+		slowed = true
 	end
+
+	local noLag = {1}
+
+	local mul = hook.Call("TTTPlayerSpeedModifier", GAMEMODE, ply, slowed, mv, noLag) or 1
+	mul = basemul * mul * noLag[1]
+
+	if ply.sprintMultiplier and (ply.sprintProgress or 0) > 0 then
+		local sprintMultiplierModifier = {1}
+
+		hook.Run("TTT2PlayerSprintMultiplier", ply, sprintMultiplierModifier)
+
+		mul = mul * ply.sprintMultiplier * sprintMultiplierModifier[1]
+	end
+
+	mv:SetMaxClientSpeed(mv:GetMaxClientSpeed() * mul)
+	mv:SetMaxSpeed(mv:GetMaxSpeed() * mul)
 end
 
 local ttt_playercolors = {
@@ -123,9 +123,9 @@ function GM:TTTPlayerColor(model)
 	local mode = colormode:GetInt()
 
 	if mode == 1 then
-		return ttt_playercolors.serious[math.random(1, ttt_playercolors_serious_count)]
+		return ttt_playercolors.serious[math.random(ttt_playercolors_serious_count)]
 	elseif mode == 2 then
-		return ttt_playercolors.all[math.random(1, ttt_playercolors_all_count)]
+		return ttt_playercolors.all[math.random(ttt_playercolors_all_count)]
 	elseif mode == 3 then
 		-- Full randomness
 		return Color(math.random(0, 255), math.random(0, 255), math.random(0, 255))
