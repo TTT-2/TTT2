@@ -501,34 +501,34 @@ local SF_WEAPON_START_CONSTRAINED = 1
 -- Picked up by player. Transfer of stored ammo and such.
 -- @param Player newowner
 function SWEP:Equip(newowner)
-	if SERVER then
-		if self:IsOnFire() then
-			self:Extinguish()
-		end
+	if CLIENT then return end
 
-		self.fingerprints = self.fingerprints or {}
+	if self:IsOnFire() then
+		self:Extinguish()
+	end
 
-		if not table.HasValue(self.fingerprints, newowner) then
-			self.fingerprints[#self.fingerprints + 1] = newowner
-		end
+	self.fingerprints = self.fingerprints or {}
 
-		if self:HasSpawnFlags(SF_WEAPON_START_CONSTRAINED) then
-			-- If this weapon started constrained, unset that spawnflag, or the
-			-- weapon will be re-constrained and float
-			local flags = self:GetSpawnFlags()
-			local newflags = bit.band(flags, bit.bnot(SF_WEAPON_START_CONSTRAINED))
+	if not table.HasValue(self.fingerprints, newowner) then
+		self.fingerprints[#self.fingerprints + 1] = newowner
+	end
 
-			self:SetKeyValue("spawnflags", newflags)
-		end
+	if self:HasSpawnFlags(SF_WEAPON_START_CONSTRAINED) then
+		-- If this weapon started constrained, unset that spawnflag, or the
+		-- weapon will be re-constrained and float
+		local flags = self:GetSpawnFlags()
+		local newflags = bit.band(flags, bit.bnot(SF_WEAPON_START_CONSTRAINED))
 
-		if IsValid(newowner) and self.StoredAmmo > 0 and self.Primary.Ammo ~= "none" then
-			local ammo = newowner:GetAmmoCount(self.Primary.Ammo)
-			local given = math.min(self.StoredAmmo, self.Primary.ClipMax - ammo)
+		self:SetKeyValue("spawnflags", newflags)
+	end
 
-			newowner:GiveAmmo(given, self.Primary.Ammo)
+	if IsValid(newowner) and self.StoredAmmo > 0 and self.Primary.Ammo ~= "none" then
+		local ammo = newowner:GetAmmoCount(self.Primary.Ammo)
+		local given = math.min(self.StoredAmmo, self.Primary.ClipMax - ammo)
 
-			self.StoredAmmo = 0
-		end
+		newowner:GiveAmmo(given, self.Primary.Ammo)
+
+		self.StoredAmmo = 0
 	end
 end
 
