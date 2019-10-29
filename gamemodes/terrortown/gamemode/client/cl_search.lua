@@ -445,7 +445,7 @@ local function ShowSearchScreen(search_raw)
 		RunConsoleCommand("ttt_confirm_death", search_raw.eidx, id, search_raw.lrng)
 	end
 
-	dconfirm:SetDisabled(client:IsSpec() or search_raw.owner and IsValid(search_raw.owner) and search_raw.owner:GetNWBool("body_found", false))
+	dconfirm:SetDisabled(client:IsSpec() or search_raw.owner and IsValid(search_raw.owner) and search_raw.owner.networking.bodyFound)
 
 	local dcall = vgui.Create("DButton", dcont)
 	dcall:SetPos(m * 2 + bw_large, by)
@@ -665,8 +665,6 @@ local function TTT2ConfirmMsg()
 	if sid64 ~= "" then
 		img = draw.GetAvatarMaterial(sid64, "medium", img)
 	end
-
-	hook.Run("TTT2ConfirmedBody", tbl.finder, tbl.victim)
 
 	MSTACK:AddColoredImagedMessage(LANG.GetParamTranslation(msgName, tbl), clr, img)
 end

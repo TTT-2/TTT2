@@ -992,12 +992,50 @@ function plymeta:SetSubRoleModel(mdl)
 	end
 end
 
+if SERVER then
+	util.AddNetworkString("TTT2ConfirmPlayer")
+	util.AddNetworkString("TTT2UpdateBodyFound")
+end
+---
+-- Update player corpse state
+-- @param[opt] boolean announceRole
+-- @realm server
+function plymeta:ConfirmPlayer(announceRole)
+	if self.networking.firstFound < 0 then
+		self.networking.firstFound = CurTime()
+	end
+
+	self.networking.lastFound = CurTime()
+
+	if announceRole then
+		self.networking.roleFound = true
+	end
+
+	hook.Run("TTT2ConfirmedPlayer", rag, ply)
+
+	if SERVER then
+		self:SetNWBool("body_found", true) -- TODO just for compatibility
+
+		self.networking.bodyFound = true
+
+		net.Start("TTT2UpdateBodyFound")
+		net.WriteEntity(self)
+		net.WriteBool(true)
+		net.Broadcast()
+
+		net.Start("TTT2ConfirmPlayer")
+		net.WriteEntity(self)
+		net.WriteBool(announceRole)
+		net.Broadcast()
+	end
+end
+
 ---
 -- Returns the @{Player} corpse state (found?)
 -- @return boolean
 -- @realm shared
 function plymeta:OnceFound()
-	return self:GetNWFloat("t_first_found", -1) >= 0
+	return self.networking.firstFound >= 0
 end
 
 ---
@@ -1005,7 +1043,7 @@ end
 -- @return boolean
 -- @realm shared
 function plymeta:RoleKnown()
-	return self:GetNWBool("role_found", false)
+	return self.networking.roleFound
 end
 
 ---
@@ -1013,7 +1051,7 @@ end
 -- @return boolean
 -- @realm shared
 function plymeta:Revived()
-	return not self:GetNWBool("body_found", false) and self:OnceFound()
+	return not self.networking.bodyFound and self:OnceFound()
 end
 
 ---
@@ -1021,7 +1059,7 @@ end
 -- @return boolean
 -- @realm shared
 function plymeta:GetFirstFound()
-	return math.Round(self:GetNWFloat("t_first_found", -1))
+	return math.Round(self.networking.firstFound)
 end
 
 ---
@@ -1029,7 +1067,16 @@ end
 -- @return boolean
 -- @realm shared
 function plymeta:GetLastFound()
-	return math.Round(self:GetNWFloat("t_last_found", -1))
+	return math.Round(self.networking.lastFound)
+end
+
+function plymeta:ResetNetworkingData()
+	self.networking = {
+		bodyFound = false,
+		firstFound = -1,
+		lastFound = -1,
+		roleFound = false,
+	}
 end
 
 ---

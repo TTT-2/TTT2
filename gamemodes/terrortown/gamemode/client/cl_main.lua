@@ -36,6 +36,7 @@ ttt_include("vgui__cl_simpleclickicon")
 ttt_include("vgui__cl_progressbar")
 ttt_include("vgui__cl_scrolllabel")
 
+ttt_include("cl_networking")
 ttt_include("cl_karma")
 ttt_include("cl_tradio")
 ttt_include("cl_transfer")
@@ -383,8 +384,6 @@ function GM:ClearClientState()
 	local client = LocalPlayer()
 	if not client.SetRole then return end -- code not loaded yet
 
-	client:SetRole(ROLE_INNOCENT)
-
 	client.equipmentItems = {}
 	client.equipment_credits = 0
 	client.bought = {}
@@ -406,6 +405,9 @@ function GM:ClearClientState()
 		pl.sb_tag = nil
 
 		pl:SetRole(ROLE_INNOCENT)
+
+		-- networking
+		pl:ResetNetworkingData()
 
 		pl.search_result = nil
 	end

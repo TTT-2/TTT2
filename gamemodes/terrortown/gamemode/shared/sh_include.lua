@@ -18,6 +18,7 @@ TTTFiles = {
 	cl_keys = {file = "cl_keys.lua", on = "client"},
 	cl_main = {file = "cl_main.lua", on = "client"},
 	cl_msgstack = {file = "cl_msgstack.lua", on = "client"},
+	cl_networking = {file = "cl_networking.lua", on = "client"},
 	cl_popups = {file = "cl_popups.lua", on = "client"},
 	cl_radio = {file = "cl_radio.lua", on = "client"},
 	cl_reroll = {file = "cl_reroll.lua", on = "client"},

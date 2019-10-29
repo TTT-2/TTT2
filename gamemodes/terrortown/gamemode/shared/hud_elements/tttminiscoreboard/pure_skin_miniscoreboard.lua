@@ -117,7 +117,7 @@ if CLIENT then
 		return hook.Run("TTT2ModifyMiniscoreboardColor", ply, color) or color
 	end
 
-	hook.Add("TTT2ConfirmedBody", "TTT2UpdateMiniscoreboardFound", function()
+	hook.Add("TTT2ConfirmedPlayer", "TTT2UpdateMiniscoreboardFound", function()
 		-- sort playerlist: confirmed players should be in the first position
 		table.sort(plysList, SortMiniscoreboardFunc)
 	end)

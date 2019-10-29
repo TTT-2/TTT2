@@ -397,7 +397,10 @@ function plymeta:ResetRoundFlags()
 	self.decoy = nil
 
 	-- corpse
-	self:SetNWBool("body_found", false)
+	self:SetNWBool("body_found", false) -- TODO just for compatibility
+
+	-- networking
+	self:ResetNetworkingData()
 
 	self.kills = {}
 	self.dying_wep = nil
@@ -949,35 +952,6 @@ function plymeta:RemoveItem(id)
 	self:RemoveBought(id)
 end
 
----
--- Update player corpse state
--- @param[opt] boolean announceRole
--- @realm server
-function plymeta:ConfirmPlayer(announceRole)
-	if self:GetNWFloat("t_first_found", -1) < 0 then
-		self:SetNWFloat("t_first_found", CurTime())
-	end
-
-	self:SetNWFloat("t_last_found", CurTime())
-
-	if announceRole then
-		self:SetNWBool("role_found", true)
-	end
-
-	self:SetNWBool("body_found", true)
-end
-
----
--- Resets the confirmation of a @{Player}
--- @realm server
-function plymeta:ResetConfirmPlayer()
-	-- body_found is reset on the player reset
-	self:SetNWBool("role_found", false)
-
-	self:SetNWFloat("t_first_found", -1)
-	self:SetNWFloat("t_last_found", -1)
-end
-
 -- TODO REMOVE THIS
 
 hook.Add("TTTBeginRound", "TTT2GivePendingItems", function()
@@ -992,22 +966,4 @@ hook.Add("TTTBeginRound", "TTT2GivePendingItems", function()
 	end
 
 	pendingItems = {}
-end)
-
--- reset confirm state only on round begin, not on revive
-hook.Add("TTTBeginRound", "TTT2ResetRoleState_Begin", function()
-	local plys = player.GetAll()
-
-	for i = 1, #plys do
-		plys[i]:ResetConfirmPlayer()
-	end
-end)
-
--- additionally reset confirm state on round end to prevent short blinking of confirmed roles on round start
-hook.Add("TTTEndRound", "TTT2ResetRoleState_End", function()
-	local plys = player.GetAll()
-
-	for i = 1, #plys do
-		plys[i]:ResetConfirmPlayer()
-	end
 end)
