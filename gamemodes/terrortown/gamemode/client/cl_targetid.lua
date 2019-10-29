@@ -16,7 +16,6 @@ local hook = hook
 local disable_spectatorsoutline = CreateClientConVar("ttt2_disable_spectatorsoutline", "0", true, true)
 local disable_overheadicons = CreateClientConVar("ttt2_disable_overheadicons", "0", true, true)
 
-
 -- cached materials for overhead icons and outlines
 local propspec_outline = Material("models/props_combine/portalball001_sheet")
 local base = Material("vgui/ttt/dynamic/sprite_base")
@@ -265,7 +264,7 @@ function GM:HUDDrawTargetID()
 		outlineColor = COLOR_WHITE,
 		displayInfo = {
 			key = nil,
-			icon = nil,
+			icon = {},
 			iconColor = COLOR_WHITE,
 			title = {text = "", color = COLOR_WHITE},
 			subtitle = {text = "", color = subtitle_color},
@@ -277,7 +276,6 @@ function GM:HUDDrawTargetID()
 	HUDDrawTargetIDWeapons(data, params)
 	HUDDrawTargetIDPlayers(data, params)
 	HUDDrawTargetIDRagdolls(data, params)
-	HUDDrawTargetIDC4(data, params)
 
 	-- now run a hook that can be used by addon devs that changes the appearance
 	-- of the targetid
@@ -318,11 +316,19 @@ function GM:HUDDrawTargetID()
 	end
 
 	-- draw icon
-	if params.displayInfo.icon then
-		local icon_x = params.displayInfo.key and (key_box_x - key_box_w - pad2) or center_x - key_box_h - pad2 - 2
-		local icon_y = key_box_y
+	local icon_amount = #params.displayInfo.icon
+	local icon_x, icon_y
 
-		draw.FilteredShadowedTexture(icon_x, icon_y, key_box_h, key_box_h, params.displayInfo.icon, params.displayInfo.iconColor.a, params.displayInfo.iconColor)
+	if icon_amount > 0 then
+		icon_x = center_x - key_box_h - pad2
+		icon_y = params.displayInfo.key and (key_box_y + key_box_h + pad2) or center_y + key_box_h + pad2 + 1
+
+		for i = 1, icon_amount do
+			local icon = params.displayInfo.icon[i]
+
+			draw.FilteredShadowedTexture(icon_x, icon_y, key_box_h, key_box_h, icon.material, icon.color.a, icon.color)
+			icon_y = icon_y + key_box_h
+		end
 	end
 
 	-- draw title
@@ -366,7 +372,11 @@ function GM:HUDDrawTargetID()
 	-- draw spacer line
 	local spacer_line_x = center_x - 1
 	local spacer_line_y = key_box_y
-	local spacer_line_l = key_box_h + ((desc_line_amount > 0) and (4 * pad + desc_line_h * desc_line_amount - 3) or 0)
+
+	local spacer_line_icon_l = (icon_y and icon_y or spacer_line_y) - spacer_line_y
+	local spacer_line_text_l = key_box_h + ((desc_line_amount > 0) and (4 * pad + desc_line_h * desc_line_amount - 3) or 0)
+
+	local spacer_line_l = (spacer_line_icon_l > spacer_line_text_l) and spacer_line_icon_l or spacer_line_text_l
 
 	draw.ShadowedLine(spacer_line_x, spacer_line_y, spacer_line_x, spacer_line_y + spacer_line_l, COLOR_WHITE)
 end
@@ -418,7 +428,7 @@ function HUDDrawTargetIDPlayers(data, params)
 	if client:IsSpec() and IsValid(obsTgt) and data.ent == obsTgt then return end
 
 	-- disguised players are not shown to normal players, except: same team, unknown team or to spectators
-	if disguised and not (client:IsInTeam(ent) and not client:GetSubRoleData().unknownTeam or client:IsSpec()) then return end
+	if disguised and not (client:IsInTeam(data.ent) and not client:GetSubRoleData().unknownTeam or client:IsSpec()) then return end
 
 	-- show the role of a player if it is known to the client
 	local rstate = GetRoundState()
@@ -437,8 +447,12 @@ function HUDDrawTargetIDPlayers(data, params)
 	end
 
 	params.drawInfo = true
-	params.displayInfo.icon = target_role and target_role.iconMaterial or icon_role_not_known
-	params.displayInfo.iconColor = target_role and data.ent:GetRoleColor() or COLOR_LGRAY
+	params.displayInfo.icon = {
+		{
+			material = target_role and target_role.iconMaterial or icon_role_not_known,
+			color = target_role and data.ent:GetRoleColor() or COLOR_SLATEGRAY
+		}
+	}
 
 	local h_string, h_color = util.HealthToString(data.ent:Health(), data.ent:GetMaxHealth())
 
@@ -481,7 +495,6 @@ function HUDDrawTargetIDPlayers(data, params)
 	end
 end
 
-local rag_color = Color(225, 220, 210)
 local icon_corpse = Material("vgui/ttt/dynamic/roles/icon_corpse")
 local key_params = {
 	usekey = Key("+use", "USE"),
@@ -499,14 +512,19 @@ function HUDDrawTargetIDRagdolls(data, params)
 	if not CORPSE.GetPlayerNick(data.ent, false) then return end
 
 	local corpse_found = CORPSE.GetFound(data.ent, false) or not DetectiveMode()
+	local corpse_ent = CORPSE.GetPlayer(data.ent)
 
 	params.drawInfo = true
-	params.displayInfo.icon = corpse_found and CORPSE.GetPlayer(data.ent):GetSubRoleData().iconMaterial or icon_corpse
-	params.displayInfo.iconColor = COLOR_YELLOW
+	params.displayInfo.icon = {
+		{
+			material = (corpse_found and corpse_ent.GetSubRoleData) and corpse_ent:GetSubRoleData().iconMaterial or icon_corpse,
+			color = COLOR_YELLOW
+		}
+	}
 
 	params.displayInfo.title.text = corpse_found and CORPSE.GetPlayerNick(data.ent, "A Terrorist") or TryT("target_unid")
-	params.displayInfo.title.color = corpse_found and rag_color or COLOR_YELLOW
-	params.displayInfo.subtitle.text = GetPT("corpse_hint", key_params)
+	params.displayInfo.title.color = COLOR_YELLOW
+	params.displayInfo.subtitle.text = (data.distance <= 100) and GetPT("corpse_hint", key_params) or TryT("corpse_too_far_away")
 
 	-- add hints to the corpse
 	local hint = data.ent.TargetIDHint
@@ -514,6 +532,14 @@ function HUDDrawTargetIDRagdolls(data, params)
 		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
 			text = hint.fmt(data.ent, hint.hint),
 			color = COLOR_LGRAY
+		}
+	end
+
+	-- add info if searched by detectives
+	if data.ent.search_result and client:IsDetective() then
+		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
+			text = TryT("corpse_searched_by_detective"),
+			color = DETECTIVE.bgcolor
 		}
 	end
 

@@ -177,6 +177,9 @@ L.quick_traitor = "{player} is a Traitor!"
 L.quick_inno = "{player} is innocent."
 L.quick_check = "Anyone still alive?"
 
+L.radio_pickup_wrong_team = "You can't pick up the radio from another team."
+L.radio_short_desc = "Weapon sounds are music to me"
+
 -- {player} in the quickchat text normally becomes a player nickname, but can
 -- also be one of the below.  Keep these lowercase.
 L.quick_nobody = "nobody"
@@ -387,6 +390,8 @@ L.decoy_no_room = "You cannot carry this decoy."
 L.decoy_broken = "Your Decoy has been destroyed!"
 
 L.decoy_help_pri = "{primaryfire} plants the Decoy."
+L.decoy_short_desc = "This decoy creates a fake radar point visible for other teams"
+L.decoy_pickup_wrong_team = "You Can't pick it up as it belongs to a different team"
 
 L.decoy_desc = [[
 Shows a fake radar sign to detectives,
@@ -415,7 +420,12 @@ sound.]]
 
 -- Health station
 L.hstation_name = "Health Station"
-L.hstation_hint = "Press {usekey} to receive health. Charge: {num}."
+L.hstation_subtitle = "Press [key] to receive health."
+L.hstation_charge = "Remaining charge of health station: {charge}"
+L.hstation_empty = "There is no more charge left in this health station"
+L.hstation_maxhealth = "You've reached your maximum health"
+L.hstation_short_desc = "The heath station slowly recharges over time"
+
 L.hstation_broken = "Your Health Station has been destroyed!"
 L.hstation_help = "{primaryfire} places the Health Station."
 
@@ -604,6 +614,8 @@ L.karma_min = "Liability"
 -- TargetID misc
 L.corpse = "Corpse"
 L.corpse_hint = "Press [{usekey}] to search. [{walkkey} + {usekey}] to search covertly."
+L.corpse_too_far_away = "Corpse too far away to search."
+L.corpse_searched_by_detective = "Corpse was searched by a detective"
 
 L.target_disg = "disguised"
 L.target_unid = "Unidentified body"
@@ -614,6 +626,9 @@ L.target_switch_weapon = "Press [key] to swap with your current weapon"
 L.target_c4 = "Press [key] to open C4 menu"
 L.target_c4_armed = "Press [key] to disarm C4"
 L.target_c4_not_disarmable = "You can't disarm C4 of a living teammate"
+L.c4_short_desc = "Something very explosive"
+
+L.target_pickup = "Press [key] to pick up"
 
 -- Traitor buttons (HUD buttons with hand icons that only traitors can see)
 L.tbut_single = "Single use"
