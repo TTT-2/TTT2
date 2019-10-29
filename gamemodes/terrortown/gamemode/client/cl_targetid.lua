@@ -298,7 +298,7 @@ function GM:HUDDrawTargetID()
 	-- draw key and keybox
 	-- the keyboxsize gets used as reference value since in most cases a key will be rendered
 	-- therefore the key size gets calculated every time, even if no key is set
-	local key_string = params.displayInfo.key and string.upper(input.GetKeyName(params.displayInfo.key)) or ""
+	local key_string = string.upper(params.displayInfo.key and input.GetKeyName(params.displayInfo.key) or "")
 
 	local key_string_w, key_string_h = draw.GetTextSize(key_string, "TargetID_Key")
 
