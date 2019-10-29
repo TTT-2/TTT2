@@ -31,7 +31,7 @@ function ENT:KeyValue(key, value)
 	elseif key == "receive" then
 		self.teamReceiver = nil
 
-		if type(value) == "string" and _G[value] then
+		if isstring(value) and _G[value] then
 			self.teamReceiver = _G[value]
 			value = RECEIVE_CUSTOMROLE
 		end

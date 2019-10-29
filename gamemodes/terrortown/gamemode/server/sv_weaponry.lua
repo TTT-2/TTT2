@@ -68,7 +68,7 @@ local function GetLoadoutWeapons(subrole)
 	for i = 1, #weps do
 		local w = weps[i]
 
-		if type(w.InLoadoutFor) ~= "table" or w.Doublicated then continue end
+		if not istable(w.InLoadoutFor) or w.Doublicated then continue end
 
 		local cls = WEPS.GetClass(w)
 
@@ -211,7 +211,7 @@ local function GetLoadoutItems(subrole)
 	for i = 1, #itms do
 		local w = itms[i]
 
-		if type(w.InLoadoutFor) ~= "table" or w.Doublicated then continue end
+		if not istable(w.InLoadoutFor) or w.Doublicated then continue end
 
 		local cls = w.id
 

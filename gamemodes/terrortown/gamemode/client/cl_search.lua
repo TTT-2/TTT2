@@ -98,13 +98,13 @@ local function IconForInfoType(t, data)
 	local base = "vgui/ttt/icon_"
 	local mat = TypeToMat[t]
 
-	if type(mat) == "table" then
+	if istable(mat) then
 		if t == "role" and not mat[data] then
 			TypeToMat[t][data] = roles.GetByIndex(data).icon
 		end
 
 		mat = mat[data]
-	elseif type(mat) == "function" then
+	elseif isfunction(mat) then
 		mat = mat(data)
 	end
 

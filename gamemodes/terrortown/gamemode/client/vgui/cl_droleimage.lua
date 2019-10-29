@@ -192,7 +192,7 @@ end
 function PANEL:SetMaterial(mat)
 	-- Everybody makes mistakes,
 	-- that's why they put erasers on pencils.
-	if type(mat) == "string" then
+	if isstring(mat) then
 		self:SetImage(mat)
 
 		return
@@ -217,7 +217,7 @@ end
 function PANEL:SetMaterial2(mat)
 	-- Everybody makes mistakes,
 	-- that's why they put erasers on pencils.
-	if type(mat) == "string" then
+	if isstring(mat) then
 		self:SetImage2(mat)
 
 		return
@@ -231,7 +231,7 @@ end
 function PANEL:SetMaterialOverlay(mat)
 	-- Everybody makes mistakes,
 	-- that's why they put erasers on pencils.
-	if type(mat) == "string" then
+	if isstring(mat) then
 		self:SetImageOverlay(mat)
 
 		return
@@ -245,7 +245,7 @@ end
 function PANEL:SetRoleIcon(mat)
 	-- Everybody makes mistakes,
 	-- that's why they put erasers on pencils.
-	if type(mat) == "string" then
+	if isstring(mat) then
 		self:SetRoleIconImage(mat)
 
 		return

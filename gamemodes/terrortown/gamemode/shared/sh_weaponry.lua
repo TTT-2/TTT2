@@ -31,7 +31,7 @@ end
 -- @param Weapon wep
 -- @return nil|string weapon's class
 function WEPS.GetClass(wep)
-	if type(wep) == "table" then
+	if istable(wep) then
 		return wep.ClassName or wep.Classname or wep.id or wep.name
 	elseif IsValid(wep) then
 		return wep:GetClass()

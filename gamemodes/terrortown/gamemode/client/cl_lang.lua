@@ -351,7 +351,7 @@ end
 -- @param string|function style style name or @{function}
 -- @realm client
 function LANG.SetStyle(name, style)
-	if type(style) == "string" then
+	if isstring(style) then
 		style = LANG.Styles[style]
 	end
 
@@ -380,7 +380,7 @@ function LANG.ProcessMsg(name, params)
 	if params then
 		-- some of our params may be string names themselves
 		for k, v in pairs(params) do
-			if type(v) == "string" then
+			if isstring(v) then
 				local name2 = LANG.GetNameParam(v)
 
 				--if not name2 then

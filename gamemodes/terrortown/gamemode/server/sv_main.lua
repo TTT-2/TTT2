@@ -1245,7 +1245,7 @@ function PrintResultMessage(result)
 
 		return
 	else
-		if type(result) == "number" then
+		if isnumber(result) then
 			if result == WIN_TRAITOR then
 				result = TEAM_TRAITOR
 			elseif result == WIN_INNOCENT then
