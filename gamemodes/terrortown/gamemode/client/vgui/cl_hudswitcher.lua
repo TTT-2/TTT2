@@ -179,9 +179,12 @@ function PANEL:Init()
 
 	local sheets = {}
 	local hudLists = huds.GetList()
+	local restrictedHUDs = HUDManager.GetModelValue("restrictedHUDs")
 
 	for i = 1, #hudLists do
 		local hud = hudLists[i]
+
+		if table.HasValue(restrictedHUDs, hud.id) then continue end
 
 		local panel = vgui.Create("DPanel", dcsheet)
 		panel:Dock(FILL)
