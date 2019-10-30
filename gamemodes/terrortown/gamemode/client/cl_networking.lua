@@ -10,6 +10,6 @@ local function TTT2UpdateBodyFound()
 	local ply = net.ReadEntity()
 	if not IsValid(ply) then return end
 
-	ply.networking.bodyFound = net.ReadBool()
+	ply:SetNetworkingData("bodyFound", net.ReadBool())
 end
 net.Receive("TTT2UpdateBodyFound", TTT2UpdateBodyFound)

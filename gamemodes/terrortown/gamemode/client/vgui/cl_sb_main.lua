@@ -65,7 +65,7 @@ function ScoreGroup(ply)
 	end
 
 	if DetectiveMode() and ply:IsSpec() and not ply:Alive() then
-		if ply.networking.bodyFound then
+		if ply:GetNetworkingData("bodyFound") then
 			return GROUP_FOUND
 		else
 			local client = LocalPlayer()

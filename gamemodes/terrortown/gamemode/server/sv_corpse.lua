@@ -126,7 +126,7 @@ local function IdentifyBody(ply, rag)
 			local vic = player.GetBySteamID64(vicsid)
 
 			-- is this an unconfirmed dead?
-			if not IsValid(vic) or vic.networking.bodyFound then continue end
+			if not IsValid(vic) or vic:GetNetworkingData("bodyFound") then continue end
 
 			LANG.Msg("body_confirm", {finder = finder, victim = vic:Nick()})
 
@@ -539,7 +539,6 @@ function CORPSE.Create(ply, attacker, dmginfo)
 	rag.equipment = table.Copy(ply:GetEquipmentItems())
 	rag.was_role = ply:GetSubRole()
 	rag.role_color = ply:GetRoleColor()
-	rag.networking = {} -- networking data storage
 
 	rag.was_team = ply:GetTeam()
 	rag.bomb_wire = ply.bomb_wire

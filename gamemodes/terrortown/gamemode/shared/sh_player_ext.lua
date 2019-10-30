@@ -996,27 +996,27 @@ if SERVER then
 	util.AddNetworkString("TTT2ConfirmPlayer")
 	util.AddNetworkString("TTT2UpdateBodyFound")
 end
+
 ---
 -- Update player corpse state
 -- @param[opt] boolean announceRole
 -- @realm server
 function plymeta:ConfirmPlayer(announceRole)
-	if self.networking.firstFound < 0 then
-		self.networking.firstFound = CurTime()
+	if self:GetNetworkingData("firstFound") <= 0 then
+		self:SetNetworkingData("firstFound", CurTime())
 	end
 
-	self.networking.lastFound = CurTime()
+	self:SetNetworkingData("lastFound", CurTime())
 
 	if announceRole then
-		self.networking.roleFound = true
+		self:SetNetworkingData("roleFound", true)
 	end
 
 	hook.Run("TTT2ConfirmedPlayer", rag, ply)
 
 	if SERVER then
 		self:SetNWBool("body_found", true) -- TODO just for compatibility
-
-		self.networking.bodyFound = true
+		self:SetNetworkingData("bodyFound", true)
 
 		net.Start("TTT2UpdateBodyFound")
 		net.WriteEntity(self)
@@ -1035,7 +1035,7 @@ end
 -- @return boolean
 -- @realm shared
 function plymeta:OnceFound()
-	return self.networking.firstFound >= 0
+	return self:GetNetworkingData("firstFound") > 0
 end
 
 ---
@@ -1043,7 +1043,7 @@ end
 -- @return boolean
 -- @realm shared
 function plymeta:RoleKnown()
-	return self.networking.roleFound
+	return self:GetNetworkingData("roleFound")
 end
 
 ---
@@ -1051,7 +1051,7 @@ end
 -- @return boolean
 -- @realm shared
 function plymeta:Revived()
-	return not self.networking.bodyFound and self:OnceFound()
+	return not self:GetNetworkingData("bodyFound") and self:OnceFound()
 end
 
 ---
@@ -1059,7 +1059,7 @@ end
 -- @return boolean
 -- @realm shared
 function plymeta:GetFirstFound()
-	return math.Round(self.networking.firstFound)
+	return math.Round(self:GetNetworkingData("firstFound"))
 end
 
 ---
@@ -1067,16 +1067,7 @@ end
 -- @return boolean
 -- @realm shared
 function plymeta:GetLastFound()
-	return math.Round(self.networking.lastFound)
-end
-
-function plymeta:ResetNetworkingData()
-	self.networking = {
-		bodyFound = false,
-		firstFound = -1,
-		lastFound = -1,
-		roleFound = false,
-	}
+	return math.Round(self:GetNetworkingData("lastFound"))
 end
 
 ---

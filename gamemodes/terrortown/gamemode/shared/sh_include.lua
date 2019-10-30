@@ -49,6 +49,7 @@ TTTFiles = {
 	sh_item_module = {file = "sh_item_module.lua", on = "shared"},
 	sh_lang = {file = "sh_lang.lua", on = "shared"},
 	sh_main = {file = "sh_main.lua", on = "shared"},
+	sh_networking = {file = "sh_networking.lua", on = "shared"},
 	sh_player_ext = {file = "sh_player_ext.lua", on = "shared"},
 	sh_role_module = {file = "sh_role_module.lua", on = "shared"},
 	sh_scoring = {file = "sh_scoring.lua", on = "shared"},

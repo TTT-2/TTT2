@@ -152,8 +152,7 @@ local function IdentifyCorpse(pCorpse)
 
 	if IsValid(pPlayer) then
 		pPlayer:SetNWBool("body_found", true) -- TODO just for compatibility
-
-		pPlayer.networking.bodyFound = true
+		pPlayer:SetNetworkingData("bodyFound", true)
 
 		net.Start("TTT2UpdateBodyFound")
 		net.WriteEntity(pPlayer)
@@ -176,8 +175,7 @@ local function IdentifyCorpse(pCorpse)
 
 			if IsValid(pPlayer) then
 				pPlayer:SetNWBool("body_found", true) -- TODO just for compatibility
-
-				pPlayer.networking.bodyFound = true
+				pPlayer:SetNetworkingData("bodyFound", true)
 
 				net.Start("TTT2UpdateBodyFound")
 				net.WriteEntity(pPlayer)
@@ -219,11 +217,10 @@ local function IdentifyCorpse(pCorpse)
 			for i = 1, #tKills do
 				local pVictim = player.GetBySteamID64(tKills[i])
 
-				if not IsValid(pVictim) or pVictim.networking.bodyFound then continue end
+				if not IsValid(pVictim) or pVictim:GetNetworkingData("bodyFound") then continue end
 
 				pVictim:SetNWBool("body_found", true) -- TODO just for compatibility
-
-				pVictim.networking.bodyFound = true
+				pVictim:SetNetworkingData("bodyFound", true)
 
 				net.Start("TTT2UpdateBodyFound")
 				net.WriteEntity(pVictim)

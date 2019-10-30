@@ -32,18 +32,16 @@ function GM:PlayerInitialSpawn(ply)
 
 	local rstate = GetRoundState() or ROUND_WAIT
 
-	-- We should update the traitor list, if we are not about to send it
-	-- sending roles for spectators
-	if rstate <= ROUND_PREP then
-		SendFullStateUpdate() -- TODO needed?
-	end
-
 	-- Game has started, tell this guy (spec) where the round is at
 	if rstate ~= ROUND_WAIT then
 		SendRoundState(rstate, ply)
-
-		timer.Simple(1, SendFullStateUpdate)
 	end
+
+	-- We should update the traitor list, if we are not about to send it
+	-- sending roles for spectators
+	-- delaying, edge case if a player joins
+	timer.Simple(1, SendFullStateUpdate)
+	timer.Simple(10, SendFullStateUpdate)
 
 	-- Handle spec bots
 	if ply:IsBot() and ttt_bots_are_spectators:GetBool() then
@@ -51,7 +49,17 @@ function GM:PlayerInitialSpawn(ply)
 		ply:SetForceSpec(true)
 	end
 
-	-- maybe show credits
+	-- sync network storage
+	local plys = player.GetAll()
+
+	for i = 1, #plys do
+		local pl = plys[i]
+		if pl == ply then continue end
+
+		ply:SyncNetworkingData(pl)
+	end
+
+	-- maybe show changes
 	net.Start("TTT2DevChanges")
 	net.Send(ply)
 end
