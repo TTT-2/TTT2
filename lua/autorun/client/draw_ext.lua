@@ -140,8 +140,8 @@ function draw.FilteredShadowedTexture(x, y, w, h, material, alpha, color, scale)
 	local tmpCol = color.r + color.g + color.b > 200 and tableCopy(shadowColorDark) or tableCopy(shadowColorWhite)
 	tmpCol.a = mathRound(tmpCol.a * (alpha / 255))
 
-	local shift_tex_1 = math.Round(scale)
-	local shift_tex_2 = math.Round(2 * scale)
+	local shift_tex_1 = mathRound(scale)
+	local shift_tex_2 = mathRound(2 * scale)
 
 	drawFilteredTexture(x + shift_tex_2, y + shift_tex_2, w, h, material, tmpCol.a, tmpCol)
 	drawFilteredTexture(x + shift_tex_1, y + shift_tex_1, w, h, material, tmpCol.a, tmpCol)
