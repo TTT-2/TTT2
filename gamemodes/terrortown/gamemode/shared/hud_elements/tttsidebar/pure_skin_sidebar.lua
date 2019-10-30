@@ -83,7 +83,7 @@ if CLIENT then
 
 		local hud_icon = item.hud.GetTexture and item.hud or item.hud[item.active_icon]
 
-		draw.FilteredTexture(pos.x, curY, size.w, size.w, hud_icon, iconAlpha, fontColor)
+		draw.FilteredShadowedTexture(pos.x, curY, size.w, size.w, hud_icon, iconAlpha, fontColor, self.scale)
 
 		self:DrawLines(pos.x, curY, size.w, size.w, item.hud_color.a * factor)
 
