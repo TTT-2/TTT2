@@ -56,9 +56,9 @@ if CLIENT then -- CLIENT
 		draw.AdvancedText(name, "PureSkinBar", x + self.iconSize + self.pad, y + h * 0.5, self:GetDefaultFontColor(self.basecolor), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, true, self.scale)
 		self:DrawLines(x, y, w, h, self.basecolor.a)
 
-		local nSize = self.iconSize - 8
+		local nSize = self.iconSize - 16
 
-		draw.FilteredShadowedTexture(x, y + 2 - (nSize - h), nSize, nSize, self.icon, 255, self:GetDefaultFontColor(self.basecolor), self.scale)
+		draw.FilteredShadowedTexture(x, y - 2 - (nSize - h), nSize, nSize, self.icon, 255, self:GetDefaultFontColor(self.basecolor), self.scale)
 	end
 
 	function HUDELEMENT:ShouldDraw()
