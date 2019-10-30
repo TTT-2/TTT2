@@ -94,7 +94,7 @@ if CLIENT then
 		surface.DrawRect(x, y, self.tipsize, h)
 
 		--draw icon
-		util.DrawFilteredTexturedRect(x, y, h, h, icon, math.Round(alpha * 0.75))
+		draw.FilteredTexture(x, y, h, h, icon, math.Round(alpha * 0.75))
 
 		-- draw lines around the element
 		self.drawer:DrawLines(x, y, w, h, alpha)

@@ -135,10 +135,10 @@ if CLIENT then
 
 			if cactive then
 				if rd.iconMaterial then
-					util.DrawFilteredTexturedRect(x2 + 4, y2 + 4, t_lpw - 8, t_lpw - 8, rd.iconMaterial)
+					draw.FilteredShadowedTexture(x2 + 4, y2 + 4, t_lpw - 8, t_lpw - 8, rd.iconMaterial, 255, self:GetDefaultFontColor(c), t_scale)
 				end
 			elseif IsValid(tgt) and tgt:IsPlayer() then
-				util.DrawFilteredTexturedRect(x2 + 4, y2 + 4, t_lpw - 8, t_lpw - 8, watching_icon)
+				draw.FilteredShadowedTexture(x2 + 4, y2 + 4, t_lpw - 8, t_lpw - 8, watching_icon, 255, self:GetDefaultFontColor(c), t_scale)
 			end
 
 			-- draw role string name
@@ -237,12 +237,7 @@ if CLIENT then
 				local at_pos_y = ty + 1
 				local at_pos_x = a_pos_x + a_size + a_pad
 
-				local ss = math.Round(t_scale)
-				local ss2 = math.Round(2 * t_scale)
-
-				util.DrawFilteredTexturedRect(a_pos_x + ss2, a_pos_y + ss2, a_size, a_size, icon_mat, 200, COLOR_BLACK)
-				util.DrawFilteredTexturedRect(a_pos_x + ss, a_pos_y + ss, a_size, a_size, icon_mat, 255, COLOR_BLACK)
-				util.DrawFilteredTexturedRect(a_pos_x, a_pos_y, a_size, a_size, icon_mat, 255, COLOR_WHITE)
+				draw.FilteredShadowedTexture(a_pos_x, a_pos_y, a_size, a_size, icon_mat, 255, COLOR_WHITE, t_scale)
 
 				draw.AdvancedText(armor, "PureSkinBar", at_pos_x, at_pos_y, self:GetDefaultFontColor(color_health), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT, true, t_scale)
 			end
@@ -274,9 +269,9 @@ if CLIENT then
 				local x2_pad = math.Round((t_lpw - coinSize) * 0.5)
 
 				if client:GetCredits() > 0 then
-					util.DrawFilteredTexturedRect(x2 + x2_pad, y2 + h2 - coinSize - x2_pad, coinSize, coinSize, credits_default, 200)
+					draw.FilteredTexture(x2 + x2_pad, y2 + h2 - coinSize - x2_pad, coinSize, coinSize, credits_default, 200)
 				else
-					util.DrawFilteredTexturedRect(x2 + x2_pad, y2 + h2 - coinSize - x2_pad, coinSize, coinSize, credits_zero, 100)
+					draw.FilteredTexture(x2 + x2_pad, y2 + h2 - coinSize - x2_pad, coinSize, coinSize, credits_zero, 100)
 				end
 			end
 		end

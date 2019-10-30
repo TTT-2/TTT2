@@ -102,7 +102,7 @@ if CLIENT then
 		surface.DrawRect(x + self.pad, y + self.pad, iconSize, iconSize)
 
 		if icon then
-			util.DrawFilteredTexturedRect(x + self.pad, y + self.pad, iconSize, iconSize, icon)
+			draw.FilteredShadowedTexture(x + self.pad, y + self.pad, iconSize, iconSize, icon, 255, self:GetDefaultFontColor(c), self.scale)
 		end
 
 		-- draw lines around the element

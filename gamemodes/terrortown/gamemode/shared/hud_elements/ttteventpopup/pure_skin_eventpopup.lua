@@ -162,7 +162,7 @@ if CLIENT then
 		local wrappedIcons = msg.icon_tbl
 
 		for i = 1, #wrappedIcons do
-			util.DrawFilteredTexturedRect(msg.pos.icon_x[i], msg.pos.icon_y, self.icon_size, self.icon_size, wrappedIcons[i], opacity)
+			draw.FilteredTexture(msg.pos.icon_x[i], msg.pos.icon_y, self.icon_size, self.icon_size, wrappedIcons[i], opacity)
 		end
 
 		self:SetSize(size.w, msg.size.h)

@@ -129,16 +129,21 @@ local drawFilteredTexture = draw.FilteredTexture
 -- @param Material material
 -- @param [default=255] number alpha
 -- @param [default=COLOR_WHITE] Color col the alpha value will be ignored
+-- @param [default=1.0] number scale A scaling factor that is used for the shadows
 -- @2D
 -- @realm client
-function draw.FilteredShadowedTexture(x, y, w, h, material, alpha, color)
+function draw.FilteredShadowedTexture(x, y, w, h, material, alpha, color, scale)
 	alpha = alpha or 255
 	color = color or COLOR_WHITE
+	scale = scale or 1
 
 	local tmpCol = color.r + color.g + color.b > 200 and tableCopy(shadowColorDark) or tableCopy(shadowColorWhite)
 	tmpCol.a = mathRound(tmpCol.a * (alpha / 255))
 
-	drawFilteredTexture(x + 2, y + 2, w, h, material, tmpCol.a, tmpCol)
-	drawFilteredTexture(x + 1, y + 1, w, h, material, tmpCol.a, tmpCol)
+	local shift_tex_1 = math.Round(scale)
+	local shift_tex_2 = math.Round(2 * scale)
+
+	drawFilteredTexture(x + shift_tex_2, y + shift_tex_2, w, h, material, tmpCol.a, tmpCol)
+	drawFilteredTexture(x + shift_tex_1, y + shift_tex_1, w, h, material, tmpCol.a, tmpCol)
 	drawFilteredTexture(x, y, w, h, material, alpha, color)
 end
