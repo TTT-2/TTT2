@@ -311,6 +311,9 @@ function GM:HUDDrawTargetID()
 	local key_string_y = key_box_y + math.Round(0.5 * key_box_h) - 1
 
 	if params.displayInfo.key then
+		surface.SetDrawColor(0, 0, 0, 150)
+		surface.DrawRect(key_box_x, key_box_y, key_box_w, key_box_h)
+
 		draw.OutlinedShadowedBox(key_box_x, key_box_y, key_box_w, key_box_h, 1, COLOR_WHITE)
 		draw.ShadowedText(key_string, "TargetID_Key", key_string_x, key_string_y, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
