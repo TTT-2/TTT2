@@ -154,11 +154,6 @@ local function IdentifyCorpse(pCorpse)
 		pPlayer:SetNWBool("body_found", true) -- TODO just for compatibility
 		pPlayer:SetNetworkingData("bodyFound", true)
 
-		net.Start("TTT2UpdateBodyFound")
-		net.WriteEntity(pPlayer)
-		net.WriteBool(true)
-		net.Broadcast()
-
 		nRole = pCorpse.was_role or pPlayer:GetSubRole()
 		nTeam = pCorpse.was_team or pPlayer:GetTeam()
 		--[[
@@ -176,11 +171,6 @@ local function IdentifyCorpse(pCorpse)
 			if IsValid(pPlayer) then
 				pPlayer:SetNWBool("body_found", true) -- TODO just for compatibility
 				pPlayer:SetNetworkingData("bodyFound", true)
-
-				net.Start("TTT2UpdateBodyFound")
-				net.WriteEntity(pPlayer)
-				net.WriteBool(true)
-				net.Broadcast()
 
 				nRole = pCorpse.was_role or pPlayer:GetSubRole()
 				nTeam = pCorpse.was_team or pPlayer:GetTeam()
@@ -221,11 +211,6 @@ local function IdentifyCorpse(pCorpse)
 
 				pVictim:SetNWBool("body_found", true) -- TODO just for compatibility
 				pVictim:SetNetworkingData("bodyFound", true)
-
-				net.Start("TTT2UpdateBodyFound")
-				net.WriteEntity(pVictim)
-				net.WriteBool(true)
-				net.Broadcast()
 
 				LANG.Msg("body_confirm", {
 					finder = "The Server",

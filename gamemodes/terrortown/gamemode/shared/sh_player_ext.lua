@@ -994,7 +994,6 @@ end
 
 if SERVER then
 	util.AddNetworkString("TTT2ConfirmPlayer")
-	util.AddNetworkString("TTT2UpdateBodyFound")
 end
 
 ---
@@ -1002,32 +1001,36 @@ end
 -- @param[opt] boolean announceRole
 -- @realm server
 function plymeta:ConfirmPlayer(announceRole)
-	if self:GetNetworkingData("firstFound") <= 0 then
-		self:SetNetworkingData("firstFound", CurTime())
-	end
-
-	self:SetNetworkingData("lastFound", CurTime())
-
-	if announceRole then
-		self:SetNetworkingData("roleFound", true)
-	end
-
-	hook.Run("TTT2ConfirmedPlayer", rag, ply)
-
 	if SERVER then
+		if self:GetNetworkingData("firstFound") <= 0 then
+			self:SetNetworkingData("firstFound", CurTime())
+		end
+
+		self:SetNetworkingData("lastFound", CurTime())
+
+		if announceRole then
+			self:SetNetworkingData("roleFound", true)
+		end
+
 		self:SetNWBool("body_found", true) -- TODO just for compatibility
 		self:SetNetworkingData("bodyFound", true)
 
-		net.Start("TTT2UpdateBodyFound")
-		net.WriteEntity(self)
-		net.WriteBool(true)
-		net.Broadcast()
-
 		net.Start("TTT2ConfirmPlayer")
 		net.WriteEntity(self)
-		net.WriteBool(announceRole)
 		net.Broadcast()
 	end
+
+	hook.Run("TTT2ConfirmedPlayer", self)
+end
+
+if CLIENT then
+	local function TTT2UpdatePlayerConfirmed()
+		local ply = net.ReadEntity()
+		if not IsValid(ply) then return end
+
+		ply:ConfirmPlayer()
+	end
+	net.Receive("TTT2ConfirmPlayer", TTT2UpdatePlayerConfirmed)
 end
 
 ---
