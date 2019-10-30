@@ -3,20 +3,20 @@ ROLE.Base = "ttt_role_base"
 ROLE.index = ROLE_DETECTIVE
 
 function ROLE:PreInitialize()
-	ROLE.color = Color(31, 77, 191, 255)
+	self.color = Color(31, 77, 191, 255)
 
-	ROLE.abbr = "det"
+	self.abbr = "det"
 
-	ROLE.defaultTeam = TEAM_INNOCENT
-	ROLE.defaultEquipment = SPECIAL_EQUIPMENT
+	self.defaultTeam = TEAM_INNOCENT
+	self.defaultEquipment = SPECIAL_EQUIPMENT
 
-	ROLE.scoreKillsMultiplier = 1
-	ROLE.scoreTeamKillsMultiplier = -8
-	ROLE.fallbackTable = {}
-	ROLE.unknownTeam = true
+	self.scoreKillsMultiplier = 1
+	self.scoreTeamKillsMultiplier = -8
+	self.fallbackTable = {}
+	self.unknownTeam = true
 
 	-- conVarData
-	ROLE.conVarData = {
+	self.conVarData = {
 		pct = 0.13,
 		maximum = 32,
 		minPlayers = 8,
