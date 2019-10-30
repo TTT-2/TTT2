@@ -180,6 +180,40 @@ function AccessorFuncDT(tbl, varname, name)
 end
 
 ---
+-- Darkens a given @{Color} value
+-- @param Color color The original color value
+-- @param number value The value to darken the color [0..255]
+-- @return Color The darkened color
+-- @realm shared
+function util.ColorDarken(color, value)
+	value = math.Clamp(value, 0, 255)
+
+	return Color(
+		math.max(color.r - value, 0),
+		math.max(color.g - value, 0),
+		math.max(color.b - value, 0),
+		color.a
+	)
+end
+
+---
+-- Lightens a given @{Color} value
+-- @param Color color The original color value
+-- @param number value The value to lighten the color [0..255]
+-- @return Color The lightened color
+-- @realm shared
+function util.ColorLighten(color, value)
+	value = math.Clamp(value, 0, 255)
+
+	return Color(
+		math.min(color.r + value, 255),
+		math.min(color.g + value, 255),
+		math.min(color.b + value, 255),
+		color.a
+	)
+end
+
+---
 -- Paints an effect on the floor
 -- @param number start starting time
 -- @param string effname effect name

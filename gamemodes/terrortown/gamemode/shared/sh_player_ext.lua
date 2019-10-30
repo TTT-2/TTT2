@@ -120,8 +120,8 @@ function plymeta:SetRole(subrole, team, forceHooks)
 	-- ye olde hooks
 	if newSubrole ~= oldSubrole or forceHooks then
 		self:SetRoleColor(rd.color)
-		self:SetRoleDkColor(rd.dkcolor)
-		self:SetRoleBgColor(rd.bgcolor)
+		self:SetRoleDkColor(util.ColorDarken(rd.color, 30))
+		self:SetRoleBgColor(util.ColorLighten(rd.color, 30))
 
 		if SERVER then
 			hook.Call("PlayerLoadout", GAMEMODE, self)
