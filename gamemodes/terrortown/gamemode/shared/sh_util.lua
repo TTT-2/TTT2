@@ -224,6 +224,10 @@ function util.StartBleeding(ent, dmg, t)
 	end)
 end
 
+function util.StopBleeding(ent)
+	timer.Remove("bleed" .. ent:EntIndex())
+end
+
 local zapsound = Sound("npc/assassin/ball_zap1.wav")
 
 ---

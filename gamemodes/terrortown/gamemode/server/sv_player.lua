@@ -87,6 +87,9 @@ end
 -- @ref https://wiki.garrysmod.com/page/GM/PlayerSpawn
 -- @local
 function GM:PlayerSpawn(ply)
+	-- stop bleeding
+	util.StopBleeding(ply)
+
 	-- Some spawns may be tilted
 	ply:ResetViewRoll()
 
@@ -918,6 +921,9 @@ end
 -- @ref https://wiki.garrysmod.com/page/GM/PlayerDeath
 -- @local
 function GM:PlayerDeath(victim, infl, attacker)
+	-- stop bleeding
+	util.StopBleeding(victim)
+
 	-- tell no one
 	self:PlayerSilentDeath(victim)
 
