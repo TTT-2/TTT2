@@ -23,8 +23,8 @@ net.Receive("ttt2_switch_weapon", function(_, ply)
 	-- if current weapon should be dropped, make dure this weapon is allowed to be dropped
 	if IsValid(throwWeapon) and not throwWeapon.AllowDrop then return end
 
-	-- only throw active weapon when weapon is switched
-	if IsValid(throwWeapon) then
+	-- only throw active weapon when weapon is switched and no slot is free
+	if IsValid(throwWeapon) and not InventorySlotFree(ply, throwWeapon.Kind) then
 		ply:DropWeapon(throwWeapon)
 	end
 
