@@ -121,7 +121,7 @@ function draw.AdvancedText(text, font, x, y, color, xalign, yalign, shadow, scal
 	if t_font then
 	  scaleModifier = getScaleModifier(scale)
 	  font = t_font[scaleModifier]
-	  scale = scale / scaleModifier	
+	  scale = scale / scaleModifier
 	end
 
 	local scaled = isvector(scale) or scale ~= 1.0
