@@ -104,7 +104,7 @@ if CLIENT then
 	end
 
 	function HUDELEMENT:PrepareItem(item, bg_color)
-		local max_text_width = math.Round((self.size.w - self.pad * 2 - self.leftPad) / self.scale)
+		local max_text_width = self.size.w - self.pad * 2 - self.leftPad
 		local item_height = self.pad * 2
 
 		item.text_spec = table.Copy(base_text_display_options)
@@ -116,13 +116,13 @@ if CLIENT then
 		item.col.a_max = item.col.a
 
 		if item.image then
-			max_text_width = math.Round((self.text_width - self.leftImagePad - self.image_size) / self.scale)
+			max_text_width = self.text_width - self.leftImagePad - self.image_size
 			item.text_spec.font = imagedmsgfont
 			item.title_spec = table.Copy(base_text_display_options)
 			item.title_spec.font = imagedmsgfont
 			item.title_spec.font_height = draw.GetFontHeight(item.title_spec.font) * self.scale
 
-			item.title_wrapped = draw.GetWrappedText(item.title, max_text_width, item.title_spec.font)
+			item.title_wrapped = draw.GetWrappedText(item.title, max_text_width, item.title_spec.font, self.scale)
 
 			-- calculate the new height
 			item_height = item_height + self.top_margin + self.title_bottom_margin + #item.title_wrapped * (item.title_spec.font_height + self.line_margin) - self.line_margin
@@ -130,7 +130,7 @@ if CLIENT then
 
 		item.text_spec.font_height = draw.GetFontHeight(item.text_spec.font) * self.scale
 
-		item.text_wrapped = draw.GetWrappedText(item.text, max_text_width, item.text_spec.font)
+		item.text_wrapped = draw.GetWrappedText(item.text, max_text_width, item.text_spec.font, self.scale)
 
 		-- Height depends on number of lines, which is equal to number of table
 		-- elements of the wrapped item.text

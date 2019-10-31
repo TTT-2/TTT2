@@ -67,10 +67,10 @@ if CLIENT then
 		local pad2 = 2 * self.pad
 
 		-- wrap title if needed
-		item.title_wrapped, width_title, height_title = draw.GetWrappedText(item.title, size.w - pad2, titlefont)
+		item.title_wrapped, width_title, height_title = draw.GetWrappedText(item.title, size.w - pad2, titlefont, self.scale)
 
 		-- wrap text if needed
-		item.text_wrapped, width_text, height_text = draw.GetWrappedText(item.text, size.w - pad2, textfont)
+		item.text_wrapped, width_text, height_text = draw.GetWrappedText(item.text, size.w - pad2, textfont, self.scale)
 
 		item.size = {}
 		item.size.w = ((width_title > width_text) and width_title or width_text) + pad2

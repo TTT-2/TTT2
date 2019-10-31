@@ -26,8 +26,8 @@ local function getScaleModifier(scale)
 	local FONTScales = FONTS.Scales
 
 	for i = 1, #FONTScales do
-	  if scaleFactor <= FONTScales[i] then
-			return FONTScales[i]
+	  if scaleFactor < FONTScales[i] then
+			return i - 1 > 0 and FONTScales[i - 1] or FONTScales[i]
 	  end
 	end
 
@@ -164,11 +164,15 @@ end
 -- @param string text
 -- @param number width
 -- @param string font
+-- @param number scale
 -- @return table
 -- @realm client
-function draw.GetWrappedText(text, width, font)
+function draw.GetWrappedText(text, width, font, scale)
 	-- Oh joy, I get to write my own wrapping function. Thanks Lua!
 	-- Splits a string into a table of strings that are under the given width.
+
+	scale = scale or 1.0
+	width = width / scale
 
 	if not text then
 		return {}, 0, 0
@@ -225,7 +229,7 @@ function draw.GetWrappedText(text, width, font)
 	-- get height of lines
 	local _, line_h = surface.GetTextSize(text)
 
-	return lines, length, line_h * lns
+	return lines, length * scale, line_h * lns * scale
 end
 
 -- Returns the size of a inserted string
