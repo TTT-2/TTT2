@@ -106,7 +106,7 @@ function SWEP:PrimaryAttack()
 		start = spos,
 		endpos = sdest,
 		filter = self:GetOwner(),
-		mask=MASK_SHOT
+		mask = MASK_SHOT
 	})
 	local ent = tr.Entity
 
@@ -134,7 +134,7 @@ function SWEP:PrimaryAttack()
 end
 
 function SWEP:GatherRagdollSample(ent)
-	local sample = ent.killer_sample or {t=0, killer=nil}
+	local sample = ent.killer_sample or {t = 0, killer = nil}
 	local ply = sample.killer
 	if (not IsValid(ply)) and sample.killer_sid then
 		ply = player.GetBySteamID(sample.killer_sid)
@@ -170,7 +170,7 @@ function SWEP:GatherObjectSample(ent)
 	if ent:GetClass() == "ttt_c4" and ent:GetArmed() then
 		self:Report("dna_armed")
 	else
-		local collected, old, own = self:AddItemSample(ent)
+		local collected, _, _ = self:AddItemSample(ent)
 
 		if collected == -1 then
 			self:Report("dna_limit")
@@ -216,7 +216,12 @@ function SWEP:AddItemSample(ent)
 		local own = 0
 
 		for _, p in pairs(ent.fingerprints) do
-			local prnt = {source=ent, ply=p, type=SAMPLE_ITEM, cls=ent:GetClass()}
+			local prnt = {
+				source = ent,
+				ply = p,
+				type = SAMPLE_ITEM,
+				cls = ent:GetClass()
+			}
 
 			if p == self:GetOwner() then
 				own = own + 1
@@ -246,7 +251,7 @@ function SWEP:RemoveItemSample(idx)
 	end
 
 	table.remove(self.ItemSamples, idx)
-	
+
 	self:SendPrints(false)
 end
 
@@ -353,7 +358,7 @@ if SERVER then
 			end
 		elseif self.NowRepeating and IsValid(self:GetOwner()) then
 			-- owner changed his mind since running last scan?
-			if self:GetRepeating() then 
+			if self:GetRepeating() then
 				self:PerformScan(self:GetLastScanned(), true)
 			else
 				self.NowRepeating = self:GetRepeating()
@@ -393,7 +398,7 @@ if CLIENT then
 			start = spos,
 			endpos = sdest,
 			filter = self:GetOwner(),
-			mask=MASK_SHOT
+			mask = MASK_SHOT
 		})
 		local ent = tr.Entity
 
@@ -434,9 +439,9 @@ if CLIENT then
 		if ent and can_sample then
 			surface.SetFont("DefaultFixedDropShadow")
 			surface.SetTextColor(0, 255, 0, 255)
-			surface.SetTextPos( x + length*2, y - length*2 )
+			surface.SetTextPos(x + length * 2, y - length * 2)
 			surface.DrawText(T("dna_hud_type") .. ": " .. (ent:GetClass() == "prop_ragdoll" and T("dna_hud_body") or T("dna_hud_item")))
-			surface.SetTextPos( x + length*2, y - length*2 + 15)
+			surface.SetTextPos(x + length * 2, y - length * 2 + 15)
 			surface.DrawText("ID:   #" .. ent:EntIndex())
 		end
 	end
@@ -479,7 +484,7 @@ if CLIENT then
 		dpanel:SetMouseInputEnabled(true)
 
 		local wrap = vgui.Create("DPanel", dpanel)
-		wrap:StretchToParent(m/2, m + 15, m/2, m + bh)
+		wrap:StretchToParent(m * 0.5, m + 15, m * 0.5, m + bh)
 		wrap:SetPaintBackground(false)
 
 		-- item sample listing
@@ -501,7 +506,7 @@ if CLIENT then
 			scanned_pnl:SetIconColor(COLOR_WHITE)
 		end
 
-		if ilist.VBar then 
+		if ilist.VBar then
 			ilist.VBar:Remove()
 			ilist.VBar = nil
 		end
@@ -605,7 +610,7 @@ if CLIENT then
 		mwrap:SetPaintBackground(false)
 		mwrap:SetPos(m,100)
 		mwrap:SetSize(370, 90)
-		
+
 		local bar = vgui.Create("TTTProgressBar", mwrap)
 		bar:SetSize(370, 35)
 		bar:SetPos(0, 0)
@@ -656,7 +661,7 @@ if CLIENT then
 		-- CLOSE
 		local dbut = vgui.Create("DButton", dpanel)
 		dbut:SetSize(bw, bh)
-		dbut:SetPos(m, h - bh - m/1.5)
+		dbut:SetPos(m, h - bh - m * 0.667)
 		dbut:CenterHorizontal()
 		dbut:SetText(T("close"))
 		dbut.DoClick = function() dpanel:Close() end
@@ -711,7 +716,7 @@ if CLIENT then
 		local num = net.ReadUInt(8)
 		local item_prints = {}
 
-		for i=1, num do
+		for i = 1, num do
 			local ent = net.ReadString()
 			table.insert(item_prints, ent)
 		end
@@ -764,7 +769,7 @@ if CLIENT then
 else -- SERVER
 	local function ScanPrint(ply, cmd, args)
 		local tester = GetTester(ply)
-		
+
 		if not IsValid(tester) then return end
 		if #args ~= 1 then return end
 
