@@ -211,7 +211,6 @@ if CLIENT then
 	hook.Add("TTTRenderEntityInfo", "HUDDrawTargetIDBinocular", function(data, params)
 		local client = LocalPlayer()
 		local c_wep = client:GetActiveWeapon()
-		local role_color = client:GetRoleColor()
 
 		if not IsValid(client) or not client:IsTerror() or not client:Alive()
 		or data.ent:GetClass() ~= "prop_ragdoll" or c_wep:GetClass() ~= "weapon_ttt_binoculars" then
@@ -220,7 +219,7 @@ if CLIENT then
 
 		-- draw progress
 		if not c_wep.dt.processing then return end
-		
+
 		local progress = math.Round(math.Clamp((CurTime() - c_wep.dt.start_time) / c_wep.ProcessingDelay * 100, 0, 100))
 
 		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
@@ -235,7 +234,6 @@ if CLIENT then
 		local length = 35
 		local gap = 15
 		local thickness = math.floor(GetConVar("ttt_crosshair_thickness"):GetFloat())
-		local thickness = 2
 		local offset = thickness * 0.5
 
 		surface.SetDrawColor(clr(hud_color))
