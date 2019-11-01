@@ -372,6 +372,7 @@ L.vis_name = "Visualisierer"
 L.vis_hint = "Drücke {usekey} zum Aufheben (nur Detektive)."
 
 L.vis_help_pri = "{primaryfire} lässt das aktivierte Gerät fallen."
+L.vis_short_desc = "Visualisiert den Tatort, wenn das Opfer an einer Schusswunde starb"
 
 L.vis_desc = [[
 Tatort-Visualisierungs-Gerät.

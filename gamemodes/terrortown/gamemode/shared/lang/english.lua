@@ -376,6 +376,7 @@ L.vis_name = "Visualizer"
 L.vis_hint = "Press {usekey} to pick up (Detectives only)."
 
 L.vis_help_pri = "{primaryfire} drops the activated device."
+L.vis_short_desc = "Visualizes a crimeszene if the victim died by a gunshot wound"
 
 L.vis_desc = [[
 Crime scene visualization device.
