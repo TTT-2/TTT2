@@ -615,6 +615,7 @@ L.karma_min = "Liability"
 L.corpse = "Corpse"
 L.corpse_hint = "Press [{usekey}] to search. [{walkkey} + {usekey}] to search covertly."
 L.corpse_too_far_away = "Corpse too far away to search."
+L.corpse_binoculars = "Press [{key}] to search corpse with binoculars."
 L.corpse_searched_by_detective = "Corpse was searched by a detective"
 
 L.target_disg = "disguised"
@@ -1124,8 +1125,9 @@ L.dna_hud_type = "TYPE"
 L.dna_hud_body = "BODY"
 L.dna_hud_item = "ITEM"
 
-L.binoc_zoom_level = "LEVEL"
+L.binoc_zoom_level = "Zoom Level"
 L.binoc_body = "BODY DETECTED"
+L.binoc_progress = "Search progress: {progress}%"
 
 L.idle_popup_title = "Idle"
 

@@ -507,6 +507,7 @@ local key_params = {
 -- handle looking ragdolls
 function HUDDrawTargetIDRagdolls(data, params)
 	local client = LocalPlayer()
+	local c_wep = client:GetActiveWeapon()
 
 	-- has to be a ragdoll
 	if data.ent:GetClass() ~= "prop_ragdoll" then return end
@@ -516,6 +517,7 @@ function HUDDrawTargetIDRagdolls(data, params)
 
 	local corpse_found = CORPSE.GetFound(data.ent, false) or not DetectiveMode()
 	local corpse_ent = CORPSE.GetPlayer(data.ent)
+	local binoculars_useable = IsValid(c_wep) and c_wep:GetClass() == "weapon_ttt_binoculars" or false
 
 	params.drawInfo = true
 	params.displayInfo.icon = {
@@ -527,7 +529,14 @@ function HUDDrawTargetIDRagdolls(data, params)
 
 	params.displayInfo.title.text = corpse_found and CORPSE.GetPlayerNick(data.ent, "A Terrorist") or TryT("target_unid")
 	params.displayInfo.title.color = COLOR_YELLOW
-	params.displayInfo.subtitle.text = (data.distance <= 100) and GetPT("corpse_hint", key_params) or TryT("corpse_too_far_away")
+
+	if data.distance <= 100 then
+		params.displayInfo.subtitle.text = GetPT("corpse_hint", key_params)
+	elseif binoculars_useable then
+		params.displayInfo.subtitle.text = GetPT("corpse_binoculars", {key = Key("+attack", "ATTACK")})
+	else
+		params.displayInfo.subtitle.text = TryT("corpse_too_far_away")
+	end
 
 	-- add hints to the corpse
 	local hint = data.ent.TargetIDHint
@@ -555,6 +564,6 @@ function HUDDrawTargetIDRagdolls(data, params)
 	end
 
 	-- add outline when ragdoll is reachable
-	params.drawOutline = data.distance <= 100
+	params.drawOutline = binoculars_useable or data.distance <= 100
 	params.outlineColor = COLOR_YELLOW
 end

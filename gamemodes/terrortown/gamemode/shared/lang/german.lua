@@ -607,6 +607,7 @@ L.karma_min = "Verantwortungslos"
 L.corpse = "Leiche"
 L.corpse_hint = "Drücke [{usekey}] zum Durchsuchen. [{walkkey} + {usekey}] um verdeckt zu untersuchen."
 L.corpse_too_far_away = "Leiche zu weit weg zum Untersuchen."
+L.corpse_binoculars = "Drücke [{key}] um Leiche mit Fernglas zu untersuchen."
 L.corpse_searched_by_detective = "Diese Leiche wurde von einem Detektiv untersucht"
 
 L.target_disg = "gestarnt"
@@ -1112,8 +1113,9 @@ L.dna_hud_type = "TYPE"
 L.dna_hud_body = "BODY"
 L.dna_hud_item = "ITEM"
 
-L.binoc_zoom_level = "LEVEL"
+L.binoc_zoom_level = "Zoom Stufe"
 L.binoc_body = "BODY DETECTED"
+L.binoc_progress = "Durchsuchungsfortschritt: {progress}%"
 
 L.idle_popup_title = "Idle"
 
