@@ -617,6 +617,7 @@ L.target_credits = "Durchsuche, um ungenutzte Credits zu erhalten."
 L.target_switch_weapon = "Drücke [Knopf] um mit aktueller Waffe zu tauschen"
 L.target_c4 = "Drücke [Knopf] um C4 Menü zu öffnen"
 L.target_c4_armed = "Drücke [Knopf] um C4 zu entschärfen"
+L.target_c4_armed_defuser = "Drücke [Knopf] um Entschärfer zu verwenden"
 L.target_c4_not_disarmable = "Du kannst kein C4 eines lebenden Teamkollegen entschärfen"
 L.c4_short_desc = "Etwas sehr explosives"
 
