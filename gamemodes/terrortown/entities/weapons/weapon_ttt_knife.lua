@@ -51,8 +51,8 @@ SWEP.IsSilent = true
 SWEP.DeploySpeed = 2
 
 function SWEP:PrimaryAttack()
-	self.Weapon:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
-	self.Weapon:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
+	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
+	self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
 
 	if not IsValid(self:GetOwner()) then return end
 
@@ -75,14 +75,19 @@ function SWEP:PrimaryAttack()
 
 	-- Hull might hit environment stuff that line does not hit
 	if not IsValid(tr.Entity) then
-		tr = util.TraceLine({start=spos, endpos=sdest, filter=self:GetOwner(), mask=MASK_SHOT_HULL})
+		tr = util.TraceLine({
+			start = spos,
+			endpos = sdest,
+			filter = self:GetOwner(),
+			mask = MASK_SHOT_HULL
+		})
 	end
 
 	local hitEnt = tr.Entity
 
 	-- effects
 	if IsValid(hitEnt) then
-		self.Weapon:SendWeaponAnim( ACT_VM_HITCENTER )
+		self:SendWeaponAnim( ACT_VM_HITCENTER )
 
 		local edata = EffectData()
 		edata:SetStart(spos)
@@ -94,7 +99,7 @@ function SWEP:PrimaryAttack()
 			util.Effect("BloodImpact", edata)
 		end
 	else
-		self.Weapon:SendWeaponAnim(ACT_VM_MISSCENTER)
+		self:SendWeaponAnim(ACT_VM_MISSCENTER)
 	end
 
 	if SERVER then
@@ -113,7 +118,7 @@ function SWEP:PrimaryAttack()
 			local dmg = DamageInfo()
 			dmg:SetDamage(self.Primary.Damage)
 			dmg:SetAttacker(self:GetOwner())
-			dmg:SetInflictor(self.Weapon or self)
+			dmg:SetInflictor(self)
 			dmg:SetDamageForce(self:GetOwner():GetAimVector() * 5)
 			dmg:SetDamagePosition(self:GetOwner():GetPos())
 			dmg:SetDamageType(DMG_SLASH)
@@ -131,7 +136,7 @@ function SWEP:StabKill(tr, spos, sdest)
 	local dmg = DamageInfo()
 	dmg:SetDamage(2000)
 	dmg:SetAttacker(self:GetOwner())
-	dmg:SetInflictor(self.Weapon or self)
+	dmg:SetInflictor(self)
 	dmg:SetDamageForce(self:GetOwner():GetAimVector())
 	dmg:SetDamagePosition(self:GetOwner():GetPos())
 	dmg:SetDamageType(DMG_SLASH)
@@ -141,12 +146,22 @@ function SWEP:StabKill(tr, spos, sdest)
 	-- hope our effect_fn trace has more luck
 
 	-- first a straight up line trace to see if we aimed nicely
-	local retr = util.TraceLine({start=spos, endpos=sdest, filter=self:GetOwner(), mask=MASK_SHOT_HULL})
+	local retr = util.TraceLine({
+		start = spos,
+		endpos = sdest,
+		filter = self:GetOwner(),
+		mask = MASK_SHOT_HULL
+	})
 
 	-- if that fails, just trace to worldcenter so we have SOMETHING
-	if retr.Entity != target then
+	if retr.Entity ~= target then
 		local center = target:LocalToWorld(target:OBBCenter())
-		retr = util.TraceLine({start=spos, endpos=center, filter=self:GetOwner(), mask=MASK_SHOT_HULL})
+		retr = util.TraceLine({
+			start = spos,
+			endpos = center,
+			filter = self:GetOwner(),
+			mask = MASK_SHOT_HULL
+		})
 	end
 
 	-- create knife effect creation fn
@@ -158,12 +173,16 @@ function SWEP:StabKill(tr, spos, sdest)
 	ang:RotateAroundAxis(ang:Right(), -90)
 	pos = pos - (ang:Forward() * 7)
 
-	local prints = self.fingerprints
 	local ignore = self:GetOwner()
 
 	target.effect_fn = function(rag)
 		-- we might find a better location
-		local rtr = util.TraceLine({start=pos, endpos=pos + norm * 40, filter=ignore, mask=MASK_SHOT_HULL})
+		local rtr = util.TraceLine({
+			start = pos,
+			endpos = pos + norm * 40,
+			filter = ignore,
+			mask = MASK_SHOT_HULL
+		})
 
 		if IsValid(rtr.Entity) and rtr.Entity == rag then
 			bone = rtr.PhysicsBone
@@ -204,10 +223,10 @@ function SWEP:StabKill(tr, spos, sdest)
 end
 
 function SWEP:SecondaryAttack()
-	self.Weapon:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
-	self.Weapon:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
+	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
+	self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
 
-	self.Weapon:SendWeaponAnim(ACT_VM_MISSCENTER)
+	self:SendWeaponAnim(ACT_VM_MISSCENTER)
 
 	if SERVER then
 		local ply = self:GetOwner()
@@ -260,8 +279,8 @@ function SWEP:SecondaryAttack()
 end
 
 function SWEP:Equip()
-	self.Weapon:SetNextPrimaryFire(CurTime() + self.Primary.Delay * 1.5)
-	self.Weapon:SetNextSecondaryFire(CurTime() + self.Secondary.Delay * 1.5)
+	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay * 1.5)
+	self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay * 1.5)
 end
 
 function SWEP:PreDrop()
