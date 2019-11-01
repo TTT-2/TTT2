@@ -43,13 +43,15 @@ end
 function ENT:UseOverride(activator)
 	if not IsValid(activator) or self:GetNWString("decoy_owner_team", "none") ~= activator:GetTeam() then return end
 
-	if not activator:CanCarryType(self.WeaponKind or WEAPON_EQUIP2) then
+	-- picks up weapon, switches if possible and needed, returns weapon if successful
+	local wep = activator:PickupWeaponClass("weapon_ttt_decoy")
+
+	if not IsValid(wep) then
 		LANG.Msg(activator, "decoy_no_room")
 
 		return
 	end
 
-	activator:Give("weapon_ttt_decoy")
 	self:Remove()
 end
 

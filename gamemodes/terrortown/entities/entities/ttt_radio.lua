@@ -51,16 +51,16 @@ end
 function ENT:UseOverride(activator)
 	if IsValid(activator) and activator:IsPlayer() and activator:GetTeam() == self:GetOwner():GetTeam() then
 		local prints = self.fingerprints or {}
+		
+		-- picks up weapon, switches if possible and needed, returns weapon if successful
+		local wep = activator:PickupWeaponClass("weapon_ttt_radio")
+		
+		if not IsValid(wep) then return end
 
 		self:Remove()
 
-		local wep = activator:Give("weapon_ttt_radio")
-
-		if IsValid(wep) then
-			wep.fingerprints = wep.fingerprints or {}
-
-			table.Add(wep.fingerprints, prints)
-		end
+		wep.fingerprints = wep.fingerprints or {}
+		table.Add(wep.fingerprints, prints)
 	else
 		LANG.Msg(activator, "radio_pickup_wrong_team")
 	end

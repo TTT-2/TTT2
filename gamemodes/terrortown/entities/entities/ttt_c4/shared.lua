@@ -713,22 +713,23 @@ if SERVER then
 		if IsValid(bomb) and bomb:GetClass() == "ttt_c4" and not bomb:GetArmed() then
 			if bomb:GetPos():Distance(ply:GetPos()) > 256 then
 				return
-			elseif not ply:CanCarryType(WEAPON_EQUIP1) then
-				LANG.Msg(ply, "c4_no_room")
 			else
 				local prints = bomb.fingerprints or {}
 
 				hook.Call("TTTC4Pickup", nil, bomb, ply)
 
-				local wep = ply:Give("weapon_ttt_c4")
+				-- picks up weapon, switches if possible and needed, returns weapon if successful
+				local wep = ply:PickupWeaponClass("weapon_ttt_c4")
 
-				if IsValid(wep) then
-					wep.fingerprints = wep.fingerprints or {}
+				if not IsValid(wep) then
+					LANG.Msg(ply, "c4_no_room")
 
-					table.Add(wep.fingerprints, prints)
-
-					bomb:Remove()
+					return
 				end
+
+				wep.fingerprints = wep.fingerprints or {}
+				table.Add(wep.fingerprints, prints)
+				bomb:Remove()
 			end
 		end
 	end

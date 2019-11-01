@@ -1,5 +1,70 @@
 util.AddNetworkString("ttt2_switch_weapon")
 
+local plymeta = FindMetaTable("Player")
+if not plymeta then
+	Error("FAILED TO FIND PLAYER TABLE")
+
+	return
+end
+
+function plymeta:PickupWeapon(wep)
+	local throwWeapon = self:GetActiveWeapon()
+
+	if not IsValid(throwWeapon) or not throwWeapon.AllowDrop or throwWeapon.Kind ~= wep.Kind then
+		local weps = self.inventory[MakeKindValid(wep.Kind)]
+
+		-- reset throwWeapon, will be set to a weapon, if throwable weapon is found
+		throwWeapon = nil
+
+		-- get droppable weapon from given slot
+		for i = 1, #weps do
+			throwWeapon = weps[i]
+
+			-- found a weapon that is allowed to be dropped
+			if IsValid(throwWeapon) and throwWeapon.AllowDrop then
+				break
+			end
+		end
+	end
+
+	-- make sure the found weapon is allowed to be dropped. If no droppable weapon
+	-- was found and no slot is free, the weapon switch can not proceed
+	if not InventorySlotFree(self, wep.Kind) and IsValid(throwWeapon) and not throwWeapon.AllowDrop then return end
+
+	-- check if weapon pickup/switch is possible
+	self.WeaponSwitchFlag = true
+	if not self:CanPickupWeapon(wep) then return end
+
+	-- only throw active weapon when weapon is switched and no slot is free
+	if IsValid(throwWeapon) and not InventorySlotFree(self, throwWeapon.Kind) then
+		self:DropWeapon(throwWeapon)
+	end
+
+	local wepCls = wep:GetClass()
+	local clip1 = isfunction(wep.Clip1) and wep:Clip1() or 0
+
+	wep:Remove()
+
+	local newWep = self:Give(wepCls)
+	if not IsValid(newWep) then return end
+
+	if isfunction(newWep.SetClip1) then
+		newWep:SetClip1(clip1)
+	end
+
+	self:SelectWeapon(wepCls)
+
+	return newWep
+end
+
+function plymeta:PickupWeaponClass(wepCls)
+	local wep = ents.Create(wepCls)
+
+	if not IsValid(wep) or not wep:IsWeapon() then return end
+
+	return self:PickupWeapon(wep)
+end
+
 net.Receive("ttt2_switch_weapon", function(_, ply)
 	-- player and wepaon must be valid
 	if not IsValid(ply) or not ply:IsTerror() or not ply:Alive() then return end
@@ -12,33 +77,7 @@ net.Receive("ttt2_switch_weapon", function(_, ply)
 	-- do not pickup weapon if too far away
 	if ply:GetPos():Distance(tracedWeapon:GetPos()) > 100 then return end
 
-	local throwWeapon = ply:GetActiveWeapon()
-
-	if not IsValid(throwWeapon) or not throwWeapon.AllowDrop or throwWeapon.Kind ~= tracedWeapon.Kind then
-		local weps = ply.inventory[MakeKindValid(tracedWeapon.Kind)]
-
-		throwWeapon = weps[1]
+	if not IsValid(ply:PickupWeapon(tracedWeapon)) then
+		LANG.Msg(activator, "pickup_no_room")
 	end
-
-	-- if current weapon should be dropped, make dure this weapon is allowed to be dropped
-	if IsValid(throwWeapon) and not throwWeapon.AllowDrop then return end
-
-	-- only throw active weapon when weapon is switched and no slot is free
-	if IsValid(throwWeapon) and not InventorySlotFree(ply, throwWeapon.Kind) then
-		ply:DropWeapon(throwWeapon)
-	end
-
-	local wepCls = tracedWeapon:GetClass()
-	local clip1 = isfunction(tracedWeapon.Clip1) and tracedWeapon:Clip1() or 0
-
-	tracedWeapon:Remove()
-
-	local newWep = ply:Give(wepCls)
-	if not IsValid(newWep) then return end
-
-	if isfunction(newWep.SetClip1) then
-		newWep:SetClip1(clip1)
-	end
-
-	ply:SelectWeapon(wepCls)
 end)
