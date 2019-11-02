@@ -180,6 +180,20 @@ function AccessorFuncDT(tbl, varname, name)
 end
 
 ---
+-- Returns @{Color} white or black based on the passed color value
+-- @param Color bgcolor background color
+-- @return Color The color based on the background color
+-- @2D
+-- @realm shared
+function util.GetDefaultColor(bgcolor)
+	if bgcolor.r + bgcolor.g + bgcolor.b < 500 then
+		return COLOR_WHITE
+	else
+		return COLOR_BLACK
+	end
+end
+
+---
 -- Paints an effect on the floor
 -- @param number start starting time
 -- @param string effname effect name

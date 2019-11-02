@@ -135,10 +135,10 @@ if CLIENT then
 
 			if cactive then
 				if rd.iconMaterial then
-					draw.FilteredShadowedTexture(x2 + 4, y2 + 4, t_lpw - 8, t_lpw - 8, rd.iconMaterial, 255, draw.GetDefaultColor(c), t_scale)
+					draw.FilteredShadowedTexture(x2 + 4, y2 + 4, t_lpw - 8, t_lpw - 8, rd.iconMaterial, 255, util.GetDefaultColor(c), t_scale)
 				end
 			elseif IsValid(tgt) and tgt:IsPlayer() then
-				draw.FilteredShadowedTexture(x2 + 4, y2 + 4, t_lpw - 8, t_lpw - 8, watching_icon, 255, draw.GetDefaultColor(c), t_scale)
+				draw.FilteredShadowedTexture(x2 + 4, y2 + 4, t_lpw - 8, t_lpw - 8, watching_icon, 255, util.GetDefaultColor(c), t_scale)
 			end
 
 			-- draw role string name
@@ -175,7 +175,7 @@ if CLIENT then
 
 			role_scale_multiplier = math.Clamp(role_scale_multiplier, 0.55, 0.85) * t_scale
 
-			draw.AdvancedText(string.upper(text), "PureSkinRole", nx, ry, draw.GetDefaultColor(t_basecolor), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, true, Vector(role_scale_multiplier * 0.9, role_scale_multiplier, role_scale_multiplier))
+			draw.AdvancedText(string.upper(text), "PureSkinRole", nx, ry, util.GetDefaultColor(t_basecolor), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, true, Vector(role_scale_multiplier * 0.9, role_scale_multiplier, role_scale_multiplier))
 		end
 
 		-- player informations
@@ -201,7 +201,7 @@ if CLIENT then
 					surface.SetDrawColor(clr(secInfoTbl.color))
 					surface.DrawRect(nx2, ny, sri_width, nh)
 
-					draw.AdvancedText(sri_text_caps, "PureSkinBar", nx2 + sri_width * 0.5, ry, draw.GetDefaultColor(secInfoTbl.color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, true, t_scale)
+					draw.AdvancedText(sri_text_caps, "PureSkinBar", nx2 + sri_width * 0.5, ry, util.GetDefaultColor(secInfoTbl.color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, true, t_scale)
 
 					-- draw lines around the element
 					self:DrawLines(nx2, ny, sri_width, nh, secInfoTbl.color.a)
@@ -239,7 +239,7 @@ if CLIENT then
 
 				draw.FilteredShadowedTexture(a_pos_x, a_pos_y, a_size, a_size, icon_mat, 255, COLOR_WHITE, t_scale)
 
-				draw.AdvancedText(armor, "PureSkinBar", at_pos_x, at_pos_y, draw.GetDefaultColor(color_health), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT, true, t_scale)
+				draw.AdvancedText(armor, "PureSkinBar", at_pos_x, at_pos_y, util.GetDefaultColor(color_health), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT, true, t_scale)
 			end
 
 			-- ammo bar

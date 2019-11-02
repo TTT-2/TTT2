@@ -138,7 +138,7 @@ if CLIENT then
 		local timediff = HUDEditor.IsEditing and 5 or msg.time - CurTime()
 		local opacity = (timediff > fadetime) and 255 or math.Round(255 * timediff / fadetime)
 
-		local font_color_tmp = draw.GetDefaultColor(self.basecolor)
+		local font_color_tmp = util.GetDefaultColor(self.basecolor)
 		local font_color = {
 			r = font_color_tmp.r,
 			g = font_color_tmp.g,

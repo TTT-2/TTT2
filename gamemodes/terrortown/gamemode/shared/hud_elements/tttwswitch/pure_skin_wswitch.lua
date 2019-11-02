@@ -90,10 +90,10 @@ if CLIENT then
 		end
 
 		--define colors
-		local text_color = draw.GetDefaultColor(self.basecolor)
+		local text_color = util.GetDefaultColor(self.basecolor)
 		text_color = active and text_color or Color(text_color.r, text_color.g, text_color.b, text_color.r > 128 and 100 or 180)
 
-		local number_color = draw.GetDefaultColor(tip_color)
+		local number_color = util.GetDefaultColor(tip_color)
 		number_color = active and number_color or Color(number_color.r, number_color.g, number_color.b, number_color.r > 128 and 100 or 180)
 
 		local empty_color = active and color_empty or color_empty_dark

@@ -244,17 +244,3 @@ function draw.GetTextSize(text, font)
 
 	return surface.GetTextSize(text)
 end
-
----
--- Returns @{Color} white OR black based on the bgcolor
--- @param Color bgcolor background color
--- @return Color The color based on the background color
--- @2D
--- @realm client
-function draw.GetDefaultColor(bgcolor)
-	if bgcolor.r + bgcolor.g + bgcolor.b < 500 then
-		return COLOR_WHITE
-	else
-		return COLOR_BLACK
-	end
-end
