@@ -33,12 +33,13 @@ function plymeta:PickupWeapon(wep)
 
 	-- check if weapon pickup/switch is possible
 	self.WeaponSwitchFlag = true
+
 	if not self:CanPickupWeapon(wep) then return end
 
 	-- only throw active weapon when weapon is switched and no slot is free
 	if IsValid(throwWeapon) and not InventorySlotFree(self, throwWeapon.Kind) then
 		-- prepare the weapon for the drop (move ammo etc)
-		if throwWeapon.PreDrop then
+		if isfunction(throwWeapon.PreDrop) then
 			throwWeapon:PreDrop()
 		end
 
@@ -73,6 +74,7 @@ function plymeta:PickupWeapon(wep)
 	if isfunction(newWep.SetClip1) then
 		newWep:SetClip1(clip1)
 	end
+
 	self:GiveAmmo(ammo_num, ammo_type)
 
 	-- auto select newly picked up weapon

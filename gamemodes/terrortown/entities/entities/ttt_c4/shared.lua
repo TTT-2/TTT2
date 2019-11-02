@@ -728,7 +728,9 @@ if SERVER then
 				end
 
 				wep.fingerprints = wep.fingerprints or {}
+
 				table.Add(wep.fingerprints, prints)
+
 				bomb:Remove()
 			end
 		end

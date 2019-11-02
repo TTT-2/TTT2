@@ -30,10 +30,9 @@ local cv_auto_pickup = CreateConVar("ttt_weapon_autopickup", "0", {FCVAR_ARCHIVE
 -- @local
 function GM:PlayerCanPickupWeapon(ply, wep)
 	-- Flags shpuld be reset no matter what happens afterwards --> cache them here
-	local cflag_giveItem = ply.GiveItemFunctionFlag
-	ply.GiveItemFunctionFlag = false
+	local cflag_giveItem, cflag_weaponSwitch = ply.GiveItemFunctionFlag, ply.WeaponSwitchFlag
 
-	local cflag_weaponSwitch = ply.WeaponSwitchFlag
+	ply.GiveItemFunctionFlag = false
 	ply.WeaponSwitchFlag = false
 
 	if not IsValid(wep) or not IsValid(ply) then return end
@@ -64,7 +63,11 @@ function GM:PlayerCanPickupWeapon(ply, wep)
 		return false
 	end
 
-	local tr = util.TraceEntity({start = wep:GetPos(), endpos = ply:GetShootPos(), mask = MASK_SOLID}, wep)
+	local tr = util.TraceEntity({
+		start = wep:GetPos(),
+		endpos = ply:GetShootPos(),
+		mask = MASK_SOLID
+	}, wep)
 
 	if tr.Fraction == 1.0 or tr.Entity == ply then
 		wep:SetPos(ply:GetShootPos())
