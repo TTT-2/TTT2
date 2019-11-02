@@ -515,7 +515,7 @@ function HUDDrawTargetIDRagdolls(data, params)
 	if not CORPSE.GetPlayerNick(data.ent, false) then return end
 
 	local corpse_found = CORPSE.GetFound(data.ent, false) or not DetectiveMode()
-	local role_found = orpse_found and data.ent.search_result and data.ent.search_result.role
+	local role_found = corpse_found and data.ent.search_result and data.ent.search_result.role
 
 	params.drawInfo = true
 	params.displayInfo.icon = {
