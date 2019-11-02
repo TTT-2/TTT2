@@ -68,6 +68,16 @@ if CLIENT then
 		end
 	end
 
+	---
+	-- Returns @{Color} white OR black based on the bgcolor
+	-- Deprecated: Please us util.GetDefaultColor(color) instead
+	-- @param Color bgcolor background color
+	-- @realm client
+	-- @deprectated
+	function HUDELEMENT:GetDefaultFontColor(bgcolor)
+		return util.GetDefaultColor(bgcolor)
+	end
+
 	HUDELEMENT.roundstate_string = {
 		[ROUND_WAIT] = "round_wait",
 		[ROUND_PREP] = "round_prep",
