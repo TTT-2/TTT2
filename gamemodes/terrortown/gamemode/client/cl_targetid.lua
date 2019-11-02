@@ -328,8 +328,9 @@ function GM:HUDDrawTargetID()
 
 		for i = 1, icon_amount do
 			local icon = params.displayInfo.icon[i]
+			local color = icon.color or COLOR_WHITE
 
-			draw.FilteredShadowedTexture(icon_x, icon_y, key_box_h, key_box_h, icon.material, icon.color.a, icon.color)
+			draw.FilteredShadowedTexture(icon_x, icon_y, key_box_h, key_box_h, icon.material, color.a, color)
 			icon_y = icon_y + key_box_h
 		end
 	end
