@@ -64,20 +64,18 @@ if CLIENT then
 
 		-- draw text
 		if t then
-			draw.AdvancedText(t, "PureSkinBar", x + 14, y + 1, self:GetDefaultFontColor(c), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT, true, s)
+			draw.AdvancedText(t, "PureSkinBar", x + 14, y + 1, util.GetDefaultColor(c), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT, true, s)
 		end
 	end
 
 	---
 	-- Returns @{Color} white OR black based on the bgcolor
+	-- Deprecated: Please us util.GetDefaultColor(color) instead
 	-- @param Color bgcolor background color
 	-- @realm client
+	-- @deprectated
 	function HUDELEMENT:GetDefaultFontColor(bgcolor)
-		if bgcolor.r + bgcolor.g + bgcolor.b < 500 then
-			return COLOR_WHITE
-		else
-			return COLOR_BLACK
-		end
+		return util.GetDefaultColor(bgcolor)
 	end
 
 	HUDELEMENT.roundstate_string = {
