@@ -215,7 +215,7 @@ function SWEP:AddPlayerSample(corpse, killer)
 end
 
 function SWEP:AddItemSample(ent)
-	if #self.ItemSamples > self.MaxItemSamples then
+	if #self.ItemSamples >= self.MaxItemSamples then
 		return -1
 	end
 
@@ -245,7 +245,8 @@ function SWEP:AddItemSample(ent)
 			DamageLog("SAMPLE:\t " .. owner:Nick() .. " retrieved DNA of " .. (IsValid(p) and p:Nick() or "<disconnected>") .. " from " .. ent:GetClass())
 
 			new = new + 1
-			hook.Call("TTTFoundDNA", GAMEMODE, owner, p, ent)
+
+			hook.Run("TTTFoundDNA", owner, p, ent)
 		end
 	end
 
@@ -432,8 +433,8 @@ if CLIENT then
 
 		if IsValid(ent) then
 			-- weapon or dropped equipment OR knife in corpse, or a ragdoll
-			if (ent:IsWeapon() or ent.CanHavePrints or ent:GetNWBool("HasPrints", false) or
-			ent:GetClass() == "prop_ragdoll" and CORPSE.GetPlayerNick(ent, false) and CORPSE.GetFound(ent, false))
+			if ent:IsWeapon() or ent.CanHavePrints or ent:GetNWBool("HasPrints", false)
+			or ent:GetClass() == "prop_ragdoll" and CORPSE.GetPlayerNick(ent, false) and CORPSE.GetFound(ent, false)
 			then
 				surface.SetDrawColor(0, 255, 0, 255)
 				gap = 0
@@ -735,7 +736,7 @@ if CLIENT then
 		for i = 1, num do
 			local ent = net.ReadString()
 
-			item_prints[#item_prints + 1] = ent
+			item_prints[i] = ent
 		end
 
 		if should_open then
