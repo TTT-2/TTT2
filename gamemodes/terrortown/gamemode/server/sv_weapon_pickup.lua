@@ -37,21 +37,45 @@ function plymeta:PickupWeapon(wep)
 
 	-- only throw active weapon when weapon is switched and no slot is free
 	if IsValid(throwWeapon) and not InventorySlotFree(self, throwWeapon.Kind) then
-		self:DropWeapon(throwWeapon)
+		-- prepare the weapon for the drop (move ammo etc)
+		if throwWeapon.PreDrop then
+			throwWeapon:PreDrop()
+		end
+
+		-- PreDrop sometimes makes the weapon non-valid, therefore we have to check again
+		if IsValid(throwWeapon) then
+			-- set IsDropped to true to prevent auto pickup of equipitems
+			throwWeapon.IsDropped = true
+
+			-- drop the old weapon
+			self:DropWeapon(throwWeapon)
+
+			-- wake the pysics of the dropped weapon
+			throwWeapon:PhysWake()
+		end
 	end
 
+	-- get and cache data of weapon that has to be picked up
 	local wepCls = wep:GetClass()
 	local clip1 = isfunction(wep.Clip1) and wep:Clip1() or 0
+	local ammo_num = wep.StoredAmmo or 0
+	local ammo_type = wep:GetPrimaryAmmoType()
 
+	-- remove the weapon since it will be placed in the player inventory
 	wep:Remove()
 
+	-- give the weapon to the player
 	local newWep = self:Give(wepCls)
+
 	if not IsValid(newWep) then return end
 
+	-- copy data from picked up weapon
 	if isfunction(newWep.SetClip1) then
 		newWep:SetClip1(clip1)
 	end
+	self:GiveAmmo(ammo_num, ammo_type)
 
+	-- auto select newly picked up weapon
 	self:SelectWeapon(wepCls)
 
 	return newWep

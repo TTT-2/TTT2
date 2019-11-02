@@ -43,7 +43,7 @@ function GM:PlayerCanPickupWeapon(ply, wep)
 	end
 
 	-- prevent picking up weapons for ammo
-	if ply:HasWeapon(WEPS.GetClass(wep)) then
+	if ply:HasWeapon(WEPS.GetClass(wep)) and not cflag_weaponSwitch then
 		return false
 	end
 
