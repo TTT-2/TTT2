@@ -208,6 +208,8 @@ if CLIENT then
 	local GetPT = LANG.GetParamTranslation
 	local hud_color = Color(60, 220, 20, 255)
 
+	local cv_thickness = GetConVar("ttt_crosshair_thickness")
+
 	hook.Add("TTTRenderEntityInfo", "HUDDrawTargetIDBinocular", function(data, params)
 		local client = LocalPlayer()
 		local c_wep = client:GetActiveWeapon()
@@ -233,7 +235,7 @@ if CLIENT then
 
 		local length = 35
 		local gap = 15
-		local thickness = math.floor(GetConVar("ttt_crosshair_thickness"):GetFloat())
+		local thickness = math.floor(cv_thickness:GetFloat())
 		local offset = thickness * 0.5
 
 		surface.SetDrawColor(clr(hud_color))
