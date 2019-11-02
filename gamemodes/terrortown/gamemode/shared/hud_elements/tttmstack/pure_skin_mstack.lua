@@ -16,7 +16,7 @@ if CLIENT then
 		yalign = TEXT_ALIGN_TOP
 	}
 
-	local leftPad = 14
+	local leftPad = 10
 	local margin = 5
 	local line_margin = 6
 	local top_margin = 4
@@ -105,7 +105,6 @@ if CLIENT then
 
 	function HUDELEMENT:PrepareItem(item, bg_color)
 		local max_text_width = self.size.w - self.pad * 2 - self.leftPad
-		local item_height = self.pad * 2
 
 		item.text_spec = table.Copy(base_text_display_options)
 
@@ -123,18 +122,28 @@ if CLIENT then
 			item.title_spec.font_height = draw.GetFontHeight(item.title_spec.font) * self.scale
 
 			item.title_wrapped = draw.GetWrappedText(item.title, max_text_width, item.title_spec.font, self.scale)
-
-			-- calculate the new height
-			item_height = item_height + self.top_margin + self.title_bottom_margin + #item.title_wrapped * (item.title_spec.font_height + self.line_margin) - self.line_margin
 		end
 
 		item.text_spec.font_height = draw.GetFontHeight(item.text_spec.font) * self.scale
 
 		item.text_wrapped = draw.GetWrappedText(item.text, max_text_width, item.text_spec.font, self.scale)
 
+		local title_lines = item.title_wrapped and #item.title_wrapped or 0
+		local text_lines = item.text_wrapped and #item.text_wrapped or 0
+
+		local text_height = ((title_lines > 0) and (title_lines * item.title_spec.font_height) or 0) + ((text_lines > 0) and (text_lines * item.text_spec.font_height) or 0)
+		text_height = text_height + math.max(title_lines + text_lines - 1, 0) * self.line_margin
+
+		if not item.image or text_height > self.imageMinHeight then
+			item.init_y = 0
+		else
+			item.init_y = 0.5 * (self.imageMinHeight - text_height)
+			item.text_spec.yalign = TEXT_ALIGN_CENTER
+		end
+
 		-- Height depends on number of lines, which is equal to number of table
 		-- elements of the wrapped item.text
-		item_height = item_height + #item.text_wrapped * (item.text_spec.font_height + self.line_margin) - self.line_margin
+		local item_height = text_height + 2 * self.pad
 
 		if item.image then
 			item_height = math.max(item_height, self.imageMinHeight)
@@ -177,7 +186,7 @@ if CLIENT then
 
 		-- Text
 		local tx = self.pos.x + self.image_size + self.pad + self.leftImagePad
-		local ty = pos_y + self.pad + self.top_margin
+		local ty = pos_y + item.init_y + self.pad
 
 		-- draw the title text
 		local title_spec = item.title_spec
@@ -187,7 +196,6 @@ if CLIENT then
 			title_spec.text = item.title_wrapped[i]
 			title_spec.pos = {tx, ty}
 
-			--draw.TextShadow(title_spec, 1, alpha)
 			draw.AdvancedText(title_spec.text, title_spec.font, title_spec.pos[1], title_spec.pos[2], title_spec.color, title_spec.xalign, title_spec.yalign, true, self.scale)
 
 			ty = ty + title_spec.font_height + self.line_margin
@@ -203,7 +211,6 @@ if CLIENT then
 			text_spec.text = item.text_wrapped[i]
 			text_spec.pos = {tx, ty}
 
-			--draw.TextShadow(text_spec, 1, alpha)
 			draw.AdvancedText(text_spec.text, text_spec.font, text_spec.pos[1], text_spec.pos[2], text_spec.color, text_spec.xalign, text_spec.yalign, true, self.scale)
 
 			ty = ty + text_spec.font_height + self.line_margin
