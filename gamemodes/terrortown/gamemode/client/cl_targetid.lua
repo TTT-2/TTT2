@@ -269,6 +269,10 @@ function GM:HUDDrawTargetID()
 			title = {text = "", color = COLOR_WHITE},
 			subtitle = {text = "", color = subtitle_color},
 			desc = {}
+		},
+		ref_position = {
+			x = math.Round(0.5 * ScrW(), 0),
+			y = math.Round(0.5 * ScrH(), 0) + 42
 		}
 	}
 
@@ -288,9 +292,6 @@ function GM:HUDDrawTargetID()
 
 	if not params.drawInfo then return end
 
-	local center_x = math.Round(0.5 * ScrW(), 0)
-	local center_y = math.Round(0.5 * ScrH(), 0)
-
 	-- render on display text
 	local pad = 4
 	local pad2 = pad * 2
@@ -304,8 +305,8 @@ function GM:HUDDrawTargetID()
 
 	local key_box_w = key_string_w + 5 * pad
 	local key_box_h = key_string_h + pad2
-	local key_box_x = center_x - key_box_w - pad2 - 2 -- -2 because of border width
-	local key_box_y = center_y + 42
+	local key_box_x = params.ref_position.x - key_box_w - pad2 - 2 -- -2 because of border width
+	local key_box_y = params.ref_position.y
 
 	local key_string_x = key_box_x + math.Round(0.5 * key_box_w) - 1
 	local key_string_y = key_box_y + math.Round(0.5 * key_box_h) - 1
@@ -323,8 +324,8 @@ function GM:HUDDrawTargetID()
 	local icon_x, icon_y
 
 	if icon_amount > 0 then
-		icon_x = center_x - key_box_h - pad2
-		icon_y = params.displayInfo.key and (key_box_y + key_box_h + pad2) or center_y + key_box_h + pad2 + 1
+		icon_x = params.ref_position.x - key_box_h - pad2
+		icon_y = params.displayInfo.key and (key_box_y + key_box_h + pad2) or key_box_y + 1
 
 		for i = 1, icon_amount do
 			local icon = params.displayInfo.icon[i]
@@ -340,7 +341,7 @@ function GM:HUDDrawTargetID()
 
 	local _, title_string_h = draw.GetTextSize(title_string, "TargetID_Title")
 
-	local title_string_x = center_x + pad2
+	local title_string_x = params.ref_position.x + pad2
 	local title_string_y = key_box_y + title_string_h - 4
 
 	draw.ShadowedText(title_string, "TargetID_Title", title_string_x, title_string_y, params.displayInfo.title.color, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
@@ -348,7 +349,7 @@ function GM:HUDDrawTargetID()
 	-- draw subtitle
 	local subtitle_string = params.displayInfo.subtitle.text or ""
 
-	local subtitle_string_x = center_x + pad2
+	local subtitle_string_x = params.ref_position.x + pad2
 	local subtitle_string_y = key_box_y + key_box_h + 2
 
 	draw.ShadowedText(subtitle_string, "TargetID_Subtitle", subtitle_string_x, subtitle_string_y, params.displayInfo.subtitle.color, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
@@ -359,7 +360,7 @@ function GM:HUDDrawTargetID()
 	-- draw description text
 	local desc_lines = params.displayInfo.desc
 
-	local desc_string_x = center_x + pad2
+	local desc_string_x = params.ref_position.x + pad2
 	local desc_string_y = key_box_y + key_box_h + 4 * pad
 	local desc_line_h = 17
 	local desc_line_amount = #desc_lines
@@ -374,7 +375,7 @@ function GM:HUDDrawTargetID()
 	end
 
 	-- draw spacer line
-	local spacer_line_x = center_x - 1
+	local spacer_line_x = params.ref_position.x - 1
 	local spacer_line_y = key_box_y
 
 	local spacer_line_icon_l = (icon_y and icon_y or spacer_line_y) - spacer_line_y
