@@ -391,8 +391,8 @@ function CORPSE.ShowSearch(ply, rag, covert, long_range)
 	-- 133 + string data + #kill_entids * 8 + team + 1
 	-- 200 + ?
 
-	-- If found by detective, send to all, else just the finder
-	if ply:IsActiveRole(ROLE_DETECTIVE) then
+	-- If found by detective or searched publicly, send to all, else just the finder
+	if ply:IsActiveRole(ROLE_DETECTIVE) or not covert then
 		net.Broadcast()
 	else
 		net.Send(ply)
