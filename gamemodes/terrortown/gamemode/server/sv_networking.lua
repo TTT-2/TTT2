@@ -47,7 +47,7 @@ function SendRoleListMessage(subrole, team, sids, ply_or_rf)
 
 					if p:GetSubRoleData().disableSync
 					and rs == ROUND_ACTIVE
-					and not p:GetNetworkingData("bodyFound")
+					and not p:GetNetworkingBool("bodyFound")
 					and not hook.Run("TTT2OverrideDisabledSync", ply, p)
 					then continue end
 
@@ -179,7 +179,7 @@ function SendConfirmedTeam(team, ply_or_rf)
 	if team == TEAM_NONE or TEAMS[team].alone then return end
 
 	local _func = function(p)
-		return p:GetNetworkingData("bodyFound")
+		return p:GetNetworkingBool("bodyFound")
 	end
 
 	SendTeamList(team, ply_or_rf, _func)
@@ -217,7 +217,7 @@ function SendFullStateUpdate()
 			local rd = v:GetSubRoleData()
 
 			if not roleData.unknownTeam and v:HasTeam(team)
-			or v:GetNetworkingData("bodyFound")
+			or v:GetNetworkingBool("bodyFound")
 			or team == TEAM_TRAITOR and rd.visibleForTraitors
 			or roleData.networkRoles and table.HasValue(roleData.networkRoles, rd)
 			or v:GetBaseRole() == ROLE_DETECTIVE
@@ -308,7 +308,7 @@ local function ttt_request_rolelist(ply)
 			local rd = v:GetSubRoleData()
 
 			if not ply:GetSubRoleData().unknownTeam and v:HasTeam(team)
-			or v:GetNetworkingData("bodyFound")
+			or v:GetNetworkingBool("bodyFound")
 			or team == TEAM_TRAITOR and rd.visibleForTraitors
 			or roleData.networkRoles and table.HasValue(roleData.networkRoles, rd)
 			or v:GetBaseRole() == ROLE_DETECTIVE

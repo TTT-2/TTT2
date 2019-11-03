@@ -49,16 +49,6 @@ function GM:PlayerInitialSpawn(ply)
 		ply:SetForceSpec(true)
 	end
 
-	-- sync network storage
-	local plys = player.GetAll()
-
-	for i = 1, #plys do
-		local pl = plys[i]
-		if pl == ply then continue end
-
-		ply:SyncNetworkingData(pl)
-	end
-
 	-- maybe show changes
 	net.Start("TTT2DevChanges")
 	net.Send(ply)

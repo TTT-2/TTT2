@@ -406,8 +406,7 @@ function GM:ClearClientState()
 
 		pl:SetRole(ROLE_INNOCENT)
 
-		-- networking
-		pl:ResetNetworkingData()
+		-- TODO reset bodyFound, lastFound etc. manually to save networking capacity
 
 		pl.search_result = nil
 	end
