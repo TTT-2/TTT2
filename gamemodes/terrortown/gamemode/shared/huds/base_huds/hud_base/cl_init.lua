@@ -140,6 +140,9 @@ function HUD:Initialize()
 
 		elem.initialized = true
 	end
+
+	-- Cache elements after initialization
+	self.cachedElems = elems
 end
 
 ---
@@ -198,6 +201,18 @@ end
 -- @return table
 -- @realm client
 function HUD:GetElementByType(elementType)
+	-- If elements are cached, only check them, instead of searching for a suitable one again.
+	if self.cachedElems ~= nil then
+		for i = 1, #self.cachedElems do
+			local cachedElem = hudelements.GetStored(self.cachedElems[i])
+			if cachedElem.type == elementType then
+				return cachedElem
+			end
+		end
+
+		return
+	end
+
 	-- element type is hidden in this HUD so return nil
 	if self.disabledTypes[elementType] then return end
 
@@ -254,8 +269,6 @@ function HUD:GetElements()
 
 		elems[#elems + 1] = el.id
 	end
-
-	self.cachedElems = elems
 
 	return elems
 end
