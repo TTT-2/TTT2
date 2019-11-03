@@ -26,3 +26,47 @@ end
 
 -- register a binding for the weapon switch, the default should be the use key
 bind.Register("ttt2_weaponswitch", AttemptWeaponSwitch, nil, "TTT2 Bindings", "f1_bind_weaponswitch", input.GetKeyCode(input.LookupBinding("+use")))
+
+SWITCHMODE_PICKUP = 0
+SWITCHMODE_SWITCH = 1
+SWITCHMODE_NOSPACE = 2
+
+function GetPickupMode(wep)
+	local client = LocalPlayer()
+	local throwWeapon = client:GetActiveWeapon()
+
+	-- while iterating over the inventory this variable is set to true, if a slow was found
+	-- regardless of the dropability of the selected weapon
+	local found_any_slot = false
+
+	if not IsValid(throwWeapon) or not throwWeapon.AllowDrop or throwWeapon.Kind ~= wep.Kind then
+		local weps = client.inventory[MakeKindValid(wep.Kind)]
+
+		-- reset throwWeapon, will be set to a weapon, if throwable weapon is found
+		throwWeapon = nil
+
+		-- get droppable weapon from given slot
+		for i = 1, #weps do
+			-- found a weapon that is allowed to be dropped
+			if IsValid(weps[i]) then
+				found_any_slot = true
+
+				if weps[i].AllowDrop then
+					throwWeapon = weps[i]
+
+					break
+				end
+			end
+		end
+	end
+
+	local ret_dropwep_mode = SWITCHMODE_PICKUP
+
+	if IsValid(throwWeapon) then
+		ret_dropwep_mode = SWITCHMODE_SWITCH
+	elseif found_any_slot then
+		ret_dropwep_mode = SWITCHMODE_NOSPACE
+	end
+
+	return ret_dropwep_mode, throwWeapon
+end

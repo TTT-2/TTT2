@@ -617,7 +617,6 @@ L.target_unid = "Unidentifizierter Körper"
 
 L.target_credits = "Durchsuche, um ungenutzte Credits zu erhalten."
 
-L.target_switch_weapon = "Drücke [Knopf] um mit aktueller Waffe zu tauschen"
 L.target_c4 = "Drücke [Knopf] um C4 Menü zu öffnen"
 L.target_c4_armed = "Drücke [Knopf] um C4 zu entschärfen"
 L.target_c4_armed_defuser = "Drücke [Knopf] um Entschärfer zu verwenden"
@@ -625,6 +624,12 @@ L.target_c4_not_disarmable = "Du kannst kein C4 eines lebenden Teamkollegen ents
 L.c4_short_desc = "Etwas sehr explosives"
 
 L.target_pickup = "Drücke [Knopf] um aufzuheben"
+L.target_slot_info = "Inventarplatz: {slot}"
+L.target_pickup_weapon = "Drücke [Knopf] um Waffe aufzuheben"
+L.target_switch_weapon = "Drücke [Knopf] um mit aktueller Waffe zu tauschen"
+L.target_switch_weapon_nospace = "Es ist kein Invetarplatz frei für diese Waffe"
+L.target_switch_drop_weapon_info = "Lasse {name} aus Inventarplatz {slot} fallen"
+L.target_switch_drop_weapon_info_noslot = "In Inventatplatz {slot} ist keine wegwerfbare Waffe"
 
 -- Traitor buttons (HUD buttons with hand icons that only traitors can see)
 L.tbut_single = "Einmaliger Gebrauch"

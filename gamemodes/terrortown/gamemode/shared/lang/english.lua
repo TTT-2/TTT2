@@ -625,7 +625,6 @@ L.target_unid = "Unidentified body"
 
 L.target_credits = "Search to receive unspent credits"
 
-L.target_switch_weapon = "Press [key] to swap with your current weapon"
 L.target_c4 = "Press [key] to open C4 menu"
 L.target_c4_armed = "Press [key] to disarm C4"
 L.target_c4_armed_defuser = "Press [key] to use defuser"
@@ -633,6 +632,12 @@ L.target_c4_not_disarmable = "You can't disarm C4 of a living teammate"
 L.c4_short_desc = "Something very explosive"
 
 L.target_pickup = "Press [key] to pick up"
+L.target_slot_info = "Slot: {slot}"
+L.target_pickup_weapon = "Press [key] to pickup weapon"
+L.target_switch_weapon = "Press [key] to swap with your current weapon"
+L.target_switch_weapon_nospace = "There is no inventory slot available for this weapon"
+L.target_switch_drop_weapon_info = "Dropping {name} from slot {slot}"
+L.target_switch_drop_weapon_info_noslot = "There is no dropable weapon in slot {slot}"
 
 -- Traitor buttons (HUD buttons with hand icons that only traitors can see)
 L.tbut_single = "Single use"
