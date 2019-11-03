@@ -16,6 +16,7 @@ end
 
 if SERVER then
 	util.AddNetworkString("TTT2SyncNetworkingData")
+	util.AddNetworkString("TTT2SyncNetworkingNewData")
 	util.AddNetworkString("TTT2RequestNetworkingData")
 	util.AddNetworkString("TTT2RemovePlayerNetworkingData")
 end
@@ -27,8 +28,8 @@ roleFound = {value = false, type = "bool"},
 bodyFound = {value = false, type = "bool"},
 ]]--
 
-local syncedDataTable = syncedDataTable or {} -- iteratable  table, e.g. {key = lastFound, value = 0, type = "number", unsigned = true}
-local lookupTable = lookupTable or {} -- this should not be accessable externally. A simple key-value transformed TTT2NW.syncedDataTable copy
+local lookupTable = lookupTable or {} -- this should not be accessable externally. A simple key-value transformed and networked syncedDataTable copy
+local syncedDataTable = SERVER and (syncedDataTable or {}) or nil -- iteratable table, e.g. {key = lastFound, value = 0, type = "number", unsigned = true}
 local playerReady = SERVER and (playerReady or {}) or nil -- key = player, value = bool; Stores which player is ready to receive data
 
 local function GetNetworkingFallbackTable()
@@ -76,27 +77,6 @@ local function WriteNetworkingData(ply, k)
 		net.WriteString(v.value)
 	end
 end
-
---[[ TODO
-for k, v in pairs(lookupTable) do
-	local nwStr = "TTT2SyncNetworkingData_" .. k
-
-	if SERVER then
-		util.AddNetworkString(nwStr)
-	end
-
-	lookupTable[k].nwStr = nwStr
-
-	if CLIENT then
-		net.Receive(nwStr, function()
-			local ply = net.ReadEntity()
-			if not IsValid(ply) then return end
-
-			ReadNetworkingData(ply, k)
-		end)
-	end
-end
-]]--
 
 ---
 -- Returns the stored networking key
@@ -157,10 +137,52 @@ if SERVER then
 
 		dataTbl.value = val
 
+		local plys = ply_or_rf or player.GetAll()
+		local tmp = {}
+		local ply
+
+		for i = 1, #plys do
+			ply = plys[i]
+
+			if not ply:IsNetworkingSynced() then continue end
+
+			tmp[#tmp + 1] = ply
+		end
+
 		if oldVal == nil then
-				-- TODO add networking data to synced table
-				-- TODO add message to queue
-				-- TODO if ready, send data to the stored players
+			-- insert new data in networking storage
+			local dataTbl = {}
+			dataTbl.key = key
+			dataTbl.value = nil
+			dataTbl.type = data.type
+			dataTbl.bits = data.bits
+			dataTbl.unsinged = data.unsigned
+
+			local index = #syncedDataTable + 1
+
+			syncedDataTable[index] = dataTbl
+			lookupTable[key] = dataTbl
+
+			-- reserving network message for networking data
+			local nwStr = "TTT2SyncNetworkingData_" .. key
+
+			util.AddNetworkString(nwStr)
+
+			lookupTable[key].nwStr = nwStr
+
+			-- adding networking data to synced table and data with the same message
+			net.Start("TTT2SyncNetworkingNewData")
+
+			net.WriteUInt(index - 1, 16) -- there is no table with index 0 so decreasing it
+			net.WriteString(key)
+			net.WriteString(data.type)
+			net.WriteUInt(data.bits - 1, 5) -- max 32 bits
+			net.WriteBool(data.unsinged)
+			net.WriteEntity(self)
+
+			WriteNetworkingData(self, key)
+
+			net.Send(tmp)
 
 			return
 		end
@@ -171,23 +193,7 @@ if SERVER then
 
 			WriteNetworkingData(self, key)
 
-			--if ply_or_rf then
-			--	net.Send(ply_or_rf)
-			--else
-				local plys = player.GetAll()
-				local tmp = {}
-				local ply
-
-				for i = 1, #plys do
-					ply = plys[i]
-
-					if not ply:IsNetworkingSynced() then continue end
-
-					tmp[#tmp + 1] = ply
-				end
-
-				net.Send(tmp)
-			--end
+			net.Send(tmp)
 		end
 	end
 
@@ -198,18 +204,20 @@ if SERVER then
 		})
 	end
 
-	function plymeta:SetNetworkingInt(key, val)
+	function plymeta:SetNetworkingInt(key, val, bits)
 		self:SetNetworkingRawData(key, {
 			value = val,
 			type = "number",
+			bits = bits,
 		})
 	end
 
-	function plymeta:SetNetworkingUInt(key, val)
+	function plymeta:SetNetworkingUInt(key, val, bits)
 		self:SetNetworkingRawData(key, {
 			value = val,
 			type = "number",
 			unsinged = true,
+			bits = bits,
 		})
 	end
 
@@ -269,6 +277,40 @@ else
 		net.Start("TTT2RequestNetworkingData")
 		net.SendToServer()
 	end)
+
+	local function TTT2SyncNetworkingNewData()
+		local index = net.ReadUInt(16) + 1
+		local key = net.ReadString()
+
+		-- insert new data in networking storage
+		local dataTbl = {}
+		dataTbl.key = key
+		dataTbl.type = net.ReadString()
+		dataTbl.bits = net.ReadUInt(5) + 1 -- max 32 bits
+		dataTbl.unsinged = net.ReadBool()
+		dataTbl.value = nil
+
+		syncedDataTable[index] = dataTbl
+		lookupTable[key] = dataTbl
+
+		local ply = net.ReadEntity()
+		if IsValid(ply) then
+			WriteNetworkingData(ply, key)
+		end
+
+		local nwStr = "TTT2SyncNetworkingData_" .. key
+
+		lookupTable[key].nwStr = nwStr
+
+		local function RecFnc()
+			local ply = net.ReadEntity()
+			if not IsValid(ply) then return end
+
+			ReadNetworkingData(ply, key)
+		end
+		net.Receive(nwStr, RecFnc)
+	end
+	net.Receive("TTT2SyncNetworkingNewData", TTT2SyncNetworkingNewData)
 
 	local function TTT2SyncNetworkingData()
 		local ply = net.ReadEntity()
