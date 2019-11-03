@@ -218,11 +218,11 @@ local function HueShift(hue, shift)
 	hue = hue + shift
 
 	while hue >= 360 do
-		hue = hue - 360.0
+		hue = hue - 360
 	end
 
 	while hue < 0 do
-		hue = hue + 360.0
+		hue = hue + 360
 	end
 
 	return hue
