@@ -67,10 +67,10 @@ if CLIENT then
 		local pad2 = 2 * self.pad
 
 		-- wrap title if needed
-		item.title_wrapped, width_title, height_title = draw.GetWrappedText(item.title, size.w - pad2, titlefont)
+		item.title_wrapped, width_title, height_title = draw.GetWrappedText(item.title, size.w - pad2, titlefont, self.scale)
 
 		-- wrap text if needed
-		item.text_wrapped, width_text, height_text = draw.GetWrappedText(item.text, size.w - pad2, textfont)
+		item.text_wrapped, width_text, height_text = draw.GetWrappedText(item.text, size.w - pad2, textfont, self.scale)
 
 		item.size = {}
 		item.size.w = ((width_title > width_text) and width_title or width_text) + pad2
@@ -138,7 +138,7 @@ if CLIENT then
 		local timediff = HUDEditor.IsEditing and 5 or msg.time - CurTime()
 		local opacity = (timediff > fadetime) and 255 or math.Round(255 * timediff / fadetime)
 
-		local font_color_tmp = self:GetDefaultFontColor(self.basecolor)
+		local font_color_tmp = util.GetDefaultColor(self.basecolor)
 		local font_color = {
 			r = font_color_tmp.r,
 			g = font_color_tmp.g,
@@ -162,7 +162,7 @@ if CLIENT then
 		local wrappedIcons = msg.icon_tbl
 
 		for i = 1, #wrappedIcons do
-			util.DrawFilteredTexturedRect(msg.pos.icon_x[i], msg.pos.icon_y, self.icon_size, self.icon_size, wrappedIcons[i], opacity)
+			draw.FilteredTexture(msg.pos.icon_x[i], msg.pos.icon_y, self.icon_size, self.icon_size, wrappedIcons[i], opacity)
 		end
 
 		self:SetSize(size.w, msg.size.h)

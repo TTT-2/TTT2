@@ -94,13 +94,13 @@ if CLIENT then
 		surface.DrawRect(x, y, self.tipsize, h)
 
 		--draw icon
-		util.DrawFilteredTexturedRect(x, y, h, h, icon, math.Round(alpha * 0.75))
+		draw.FilteredShadowedTexture(x, y, h, h, icon, math.Round(alpha * 0.75), util.GetDefaultColor(tipColor), self.scale)
 
 		-- draw lines around the element
 		self.drawer:DrawLines(x, y, w, h, alpha)
 
 		--draw name text
-		local fontColor = self.drawer:GetDefaultFontColor(self.basecolor)
+		local fontColor = util.GetDefaultColor(self.basecolor)
 		fontColor = Color(fontColor.r, fontColor.g, fontColor.b, alpha)
 
 		draw.AdvancedText(item.name, font, x + self.tipsize + self.pad, y + h * 0.5, fontColor, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, true, self.scale)

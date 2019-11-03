@@ -87,6 +87,9 @@ end
 -- @ref https://wiki.garrysmod.com/page/GM/PlayerSpawn
 -- @local
 function GM:PlayerSpawn(ply)
+	-- stop bleeding
+	util.StopBleeding(ply)
+
 	-- Some spawns may be tilted
 	ply:ResetViewRoll()
 
@@ -566,7 +569,7 @@ function GM:KeyRelease(ply, key)
 	-- see if we need to do some custom usekey overriding
 	local tr = util.TraceLine({
 		start = ply:GetShootPos(),
-		endpos = ply:GetShootPos() + ply:GetAimVector() * 84,
+		endpos = ply:GetShootPos() + ply:GetAimVector() * 100,
 		filter = ply,
 		mask = MASK_SHOT
 	})
@@ -918,6 +921,9 @@ end
 -- @ref https://wiki.garrysmod.com/page/GM/PlayerDeath
 -- @local
 function GM:PlayerDeath(victim, infl, attacker)
+	-- stop bleeding
+	util.StopBleeding(victim)
+
 	-- tell no one
 	self:PlayerSilentDeath(victim)
 

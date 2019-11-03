@@ -61,7 +61,7 @@ if CLIENT then
 			item.hud_color = self.basecolor
 		end
 
-		local fontColor = self:GetDefaultFontColor(item.hud_color)
+		local fontColor = util.GetDefaultColor(item.hud_color)
 		local iconAlpha = fontColor.r > 60 and 175 or 250
 
 		curY = curY - size.w
@@ -83,7 +83,7 @@ if CLIENT then
 
 		local hud_icon = item.hud.GetTexture and item.hud or item.hud[item.active_icon]
 
-		util.DrawFilteredTexturedRect(pos.x, curY, size.w, size.w, hud_icon, iconAlpha, fontColor)
+		draw.FilteredShadowedTexture(pos.x, curY, size.w, size.w, hud_icon, iconAlpha, fontColor, self.scale)
 
 		self:DrawLines(pos.x, curY, size.w, size.w, item.hud_color.a * factor)
 

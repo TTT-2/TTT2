@@ -1011,3 +1011,34 @@ hook.Add("TTTEndRound", "TTT2ResetRoleState_End", function()
 		plys[i]:ResetConfirmPlayer()
 	end
 end)
+
+-- The give function is cached to extend it later on.
+-- The extension is needed to set a flag prior to picking up weapons.
+-- This flag is used to distinguish between weapons picked up by walking
+-- over them and weapons picked up by ply:Give()
+local plymeta_old_give = plymeta.Give
+function plymeta:Give(weaponClassName, bNoAmmo)
+	self.GiveItemFunctionFlag = true
+
+	return plymeta_old_give(self, weaponClassName, bNoAmmo or false)
+end
+
+---
+-- Returns wether or not a player can pick up a weapon
+-- @param Weapon wep The weapon object
+-- @returns boolean
+function plymeta:CanPickupWeapon(wep)
+	self.GiveItemFunctionFlag = true
+
+	return hook.Run("PlayerCanPickupWeapon", self, wep)
+end
+
+---
+-- Returns wether or not a player can pick up a weapon
+-- @param string wepCls The weapon object classname
+-- @returns boolean
+function plymeta:CanPickupWeaponClass(wepCls)
+	local wep = ents.Create(wepCls)
+
+	return self:CanPickupWeapon(wep)
+end

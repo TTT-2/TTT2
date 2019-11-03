@@ -310,6 +310,7 @@ L.buy_pending = "You already have an order pending, wait until you receive it."
 L.buy_received = "You have received your special equipment."
 
 L.drop_no_room = "You have no room here to drop your weapon!"
+L.pickup_no_room = "You have no space in your inventory for this weapon kind"
 
 L.disg_turned_on = "Disguise enabled!"
 L.disg_turned_off = "Disguise disabled."
@@ -376,6 +377,7 @@ L.vis_name = "Visualizer"
 L.vis_hint = "Press {usekey} to pick up (Detectives only)."
 
 L.vis_help_pri = "{primaryfire} drops the activated device."
+L.vis_short_desc = "Visualizes a crimeszene if the victim died by a gunshot wound"
 
 L.vis_desc = [[
 Crime scene visualization device.
@@ -615,6 +617,7 @@ L.karma_min = "Liability"
 L.corpse = "Corpse"
 L.corpse_hint = "Press [{usekey}] to search. [{walkkey} + {usekey}] to search covertly."
 L.corpse_too_far_away = "Corpse too far away to search."
+L.corpse_binoculars = "Press [{key}] to search corpse with binoculars."
 L.corpse_searched_by_detective = "Corpse was searched by a detective"
 
 L.target_disg = "disguised"
@@ -625,6 +628,7 @@ L.target_credits = "Search to receive unspent credits"
 L.target_switch_weapon = "Press [key] to swap with your current weapon"
 L.target_c4 = "Press [key] to open C4 menu"
 L.target_c4_armed = "Press [key] to disarm C4"
+L.target_c4_armed_defuser = "Press [key] to use defuser"
 L.target_c4_not_disarmable = "You can't disarm C4 of a living teammate"
 L.c4_short_desc = "Something very explosive"
 
@@ -1123,8 +1127,9 @@ L.dna_hud_type = "TYPE"
 L.dna_hud_body = "BODY"
 L.dna_hud_item = "ITEM"
 
-L.binoc_zoom_level = "LEVEL"
+L.binoc_zoom_level = "Zoom Level"
 L.binoc_body = "BODY DETECTED"
+L.binoc_progress = "Search progress: {progress}%"
 
 L.idle_popup_title = "Idle"
 

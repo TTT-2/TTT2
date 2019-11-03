@@ -308,6 +308,7 @@ L.buy_pending = "Du hast bereits eine Bestellung aufgegeben, warte bis du sie er
 L.buy_received = "Du hast deine Spezialausrüstung erhalten."
 
 L.drop_no_room = "Du hast hier keinen Platz um deine Waffe fallen zu lassen!"
+L.pickup_no_room = "Du kast keinen Platz für diese Waffe in deinem Inventar"
 
 L.disg_turned_on = "Tarnung aktiviert!"
 L.disg_turned_off = "Tarnung deaktiviert!"
@@ -372,6 +373,7 @@ L.vis_name = "Visualisierer"
 L.vis_hint = "Drücke {usekey} zum Aufheben (nur Detektive)."
 
 L.vis_help_pri = "{primaryfire} lässt das aktivierte Gerät fallen."
+L.vis_short_desc = "Visualisiert den Tatort, wenn das Opfer an einer Schusswunde starb"
 
 L.vis_desc = [[
 Tatort-Visualisierungs-Gerät.
@@ -607,6 +609,7 @@ L.karma_min = "Verantwortungslos"
 L.corpse = "Leiche"
 L.corpse_hint = "Drücke [{usekey}] zum Durchsuchen. [{walkkey} + {usekey}] um verdeckt zu untersuchen."
 L.corpse_too_far_away = "Leiche zu weit weg zum Untersuchen."
+L.corpse_binoculars = "Drücke [{key}] um Leiche mit Fernglas zu untersuchen."
 L.corpse_searched_by_detective = "Diese Leiche wurde von einem Detektiv untersucht"
 
 L.target_disg = "gestarnt"
@@ -617,6 +620,7 @@ L.target_credits = "Durchsuche, um ungenutzte Credits zu erhalten."
 L.target_switch_weapon = "Drücke [Knopf] um mit aktueller Waffe zu tauschen"
 L.target_c4 = "Drücke [Knopf] um C4 Menü zu öffnen"
 L.target_c4_armed = "Drücke [Knopf] um C4 zu entschärfen"
+L.target_c4_armed_defuser = "Drücke [Knopf] um Entschärfer zu verwenden"
 L.target_c4_not_disarmable = "Du kannst kein C4 eines lebenden Teamkollegen entschärfen"
 L.c4_short_desc = "Etwas sehr explosives"
 
@@ -1111,8 +1115,9 @@ L.dna_hud_type = "TYPE"
 L.dna_hud_body = "BODY"
 L.dna_hud_item = "ITEM"
 
-L.binoc_zoom_level = "LEVEL"
+L.binoc_zoom_level = "Zoom Stufe"
 L.binoc_body = "BODY DETECTED"
+L.binoc_progress = "Durchsuchungsfortschritt: {progress}%"
 
 L.idle_popup_title = "Idle"
 

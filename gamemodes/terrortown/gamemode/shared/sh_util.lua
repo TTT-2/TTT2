@@ -212,6 +212,19 @@ function util.ColorLighten(color, value)
 		color.a
 	)
 end
+  
+-- Returns @{Color} white or black based on the passed color value
+-- @param Color bgcolor background color
+-- @return Color The color based on the background color
+-- @2D
+-- @realm shared
+function util.GetDefaultColor(bgcolor)
+	if bgcolor.r + bgcolor.g + bgcolor.b < 500 then
+		return COLOR_WHITE
+	else
+		return COLOR_BLACK
+	end
+end
 
 ---
 -- Paints an effect on the floor
@@ -256,6 +269,10 @@ function util.StartBleeding(ent, dmg, t)
 	timer.Create("bleed" .. ent:EntIndex(), delay, times, function()
 		DoBleed(ent)
 	end)
+end
+
+function util.StopBleeding(ent)
+	timer.Remove("bleed" .. ent:EntIndex())
 end
 
 local zapsound = Sound("npc/assassin/ball_zap1.wav")
