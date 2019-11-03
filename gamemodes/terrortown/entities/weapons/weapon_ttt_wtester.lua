@@ -413,8 +413,13 @@ if CLIENT then
 	local T = LANG.GetTranslation
 	local PT = LANG.GetParamTranslation
 	local TT = LANG.TryTranslation
+	local mathfloor = math.floor
 
-	local cv_thickness = GetConVar("ttt_crosshair_thickness")
+	local cv_thickness
+
+	hook.Add("Initialize", "LocalizeConVarWtester", function()
+		cv_thickness = GetConVar("ttt_crosshair_thickness")
+	end)
 
 	function SWEP:DrawHUD()
 		self:DrawHelp()
@@ -434,7 +439,7 @@ if CLIENT then
 
 		local length = 20
 		local gap = 6
-		local thickness = math.floor(cv_thickness:GetFloat())
+		local thickness = mathfloor(cv_thickness and cv_thickness:GetFloat() or 1)
 		local offset = thickness * 0.5
 
 		local can_sample = false

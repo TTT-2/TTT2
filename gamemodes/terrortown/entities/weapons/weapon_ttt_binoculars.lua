@@ -219,16 +219,22 @@ if CLIENT then
 
 	local hud_color = Color(60, 220, 20, 255)
 
-	local cv_thickness = GetConVar("ttt_crosshair_thickness")
+	local cv_thickness
+
+	hook.Add("Initialize", "LocalizeConVarBinocular", function()
+		cv_thickness = GetConVar("ttt_crosshair_thickness")
+	end)
 
 	hook.Add("TTTRenderEntityInfo", "HUDDrawTargetIDBinocular", function(data, params)
 		local client = LocalPlayer()
+
+		if not IsValid(client) or not client:IsTerror() or not client:Alive() then return end
+
 		local c_wep = client:GetActiveWeapon()
 
-		if not IsValid(client) or not client:IsTerror() or not client:Alive()
-		or data.ent:GetClass() ~= "prop_ragdoll" or c_wep:GetClass() ~= "weapon_ttt_binoculars" then
-			return
-		end
+		if not IsValid(c_wep) then return end
+
+		if data.ent:GetClass() ~= "prop_ragdoll" or c_wep:GetClass() ~= "weapon_ttt_binoculars" then return end
 
 		-- draw progress
 		if not c_wep.dt.processing then return end
@@ -246,7 +252,7 @@ if CLIENT then
 
 		local length = 35
 		local gap = 15
-		local thickness = math.floor(cv_thickness:GetFloat())
+		local thickness = math.floor(cv_thickness and cv_thickness:GetFloat() or 1)
 		local offset = thickness * 0.5
 
 		surface.SetDrawColor(clr(hud_color))
