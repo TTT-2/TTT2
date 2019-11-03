@@ -212,11 +212,40 @@ function util.ColorLighten(color, value)
 		color.a
 	)
 end
-  
--- Returns @{Color} white or black based on the passed color value
+
+-- shifts the hue
+local function HueShift(hue, shift)
+	hue = hue + shift
+
+	while hue >= 360 do
+		hue = hue - 360.0
+	end
+
+	while hue < 0 do
+		hue = hue + 360.0
+	end
+
+	return hue
+end
+
+---
+-- Returns the complementary value of a @{Color}
+-- @param Color color The original color value
+-- @return Color The complementary color
+-- @realm shared
+function util.ColorComplementary(color)
+	local c_hsv, saturation, value = ColorToHSV(color)
+
+	local c_new = HSVToColor(HueShift(c_hsv, 180), saturation, value)
+	c_new.a = color.a
+
+	return c_new
+end
+
+---
+-- Returns white or black @{Color} based on the passed color value
 -- @param Color bgcolor background color
 -- @return Color The color based on the background color
--- @2D
 -- @realm shared
 function util.GetDefaultColor(bgcolor)
 	if bgcolor.r + bgcolor.g + bgcolor.b < 500 then
