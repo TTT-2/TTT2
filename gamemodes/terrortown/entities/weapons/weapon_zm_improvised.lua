@@ -141,7 +141,7 @@ function SWEP:PrimaryAttack()
 	end
 
 	local spos = owner:GetShootPos()
-	local sdest = spos + owner:GetAimVector() * 70
+	local sdest = spos + owner:GetAimVector() * 100
 
 	local tr_main = util.TraceLine({
 		start = spos,
