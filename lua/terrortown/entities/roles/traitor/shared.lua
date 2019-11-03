@@ -1,22 +1,26 @@
 ROLE.Base = "ttt_role_base"
 
 ROLE.index = ROLE_TRAITOR
-ROLE.color = Color(209, 43, 39, 255)
-ROLE.dkcolor = Color(127, 3, 0, 255)
-ROLE.bgcolor = Color(31, 164, 40, 255)
-ROLE.abbr = "traitor"
-ROLE.defaultTeam = TEAM_TRAITOR
-ROLE.defaultEquipment = TRAITOR_EQUIPMENT
-ROLE.visibleForTraitors = true -- just for a better performance
-ROLE.buildin = true
-ROLE.surviveBonus = 0.5
-ROLE.scoreKillsMultiplier = 5
-ROLE.scoreTeamKillsMultiplier = -16
-ROLE.fallbackTable = {}
 
--- conVarData
-ROLE.conVarData = {
-	pct = 0.4,
-	maximum = 32,
-	minPlayers = 1
-}
+function ROLE:PreInitialize()
+	self.color = Color(209, 43, 39, 255)
+
+	self.abbr = "traitor"
+
+	self.defaultTeam = TEAM_TRAITOR
+	self.defaultEquipment = TRAITOR_EQUIPMENT
+
+	self.visibleForTraitors = true -- just for a better performance
+	self.builtin = true
+	self.surviveBonus = 0.5
+	self.scoreKillsMultiplier = 5
+	self.scoreTeamKillsMultiplier = -16
+	self.fallbackTable = {}
+
+	-- conVarData
+	self.conVarData = {
+		pct = 0.4,
+		maximum = 32,
+		minPlayers = 1
+	}
+end

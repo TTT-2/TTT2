@@ -180,10 +180,72 @@ function AccessorFuncDT(tbl, varname, name)
 end
 
 ---
--- Returns @{Color} white or black based on the passed color value
+-- Darkens a given @{Color} value
+-- @param Color color The original color value
+-- @param number value The value to darken the color [0..255]
+-- @return Color The darkened color
+-- @realm shared
+function util.ColorDarken(color, value)
+	value = math.Clamp(value, 0, 255)
+
+	return Color(
+		math.max(color.r - value, 0),
+		math.max(color.g - value, 0),
+		math.max(color.b - value, 0),
+		color.a
+	)
+end
+
+---
+-- Lightens a given @{Color} value
+-- @param Color color The original color value
+-- @param number value The value to lighten the color [0..255]
+-- @return Color The lightened color
+-- @realm shared
+function util.ColorLighten(color, value)
+	value = math.Clamp(value, 0, 255)
+
+	return Color(
+		math.min(color.r + value, 255),
+		math.min(color.g + value, 255),
+		math.min(color.b + value, 255),
+		color.a
+	)
+end
+
+-- shifts the hue
+local function HueShift(hue, shift)
+	hue = hue + shift
+
+	while hue >= 360 do
+		hue = hue - 360
+	end
+
+	while hue < 0 do
+		hue = hue + 360
+	end
+
+	return hue
+end
+
+---
+-- Returns the complementary value of a @{Color}
+-- @param Color color The original color value
+-- @return Color The complementary color
+-- @realm shared
+function util.ColorComplementary(color)
+	local c_hsv, saturation, value = ColorToHSV(color)
+
+	local c_new = HSVToColor(HueShift(c_hsv, 180), saturation, value)
+	c_new.a = color.a
+
+	return c_new
+end
+
+---
+-- Returns white or black @{Color} based on the passed color value
 -- @param Color bgcolor background color
 -- @return Color The color based on the background color
--- @2D
 -- @realm shared
 function util.GetDefaultColor(bgcolor)
 	if bgcolor.r + bgcolor.g + bgcolor.b < 500 then

@@ -109,7 +109,7 @@ local function SetupData(roleData)
 			CreateConVar("ttt_" .. roleData.name .. "_karma_min", tostring(conVarData.minKarma), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 		end
 
-		if not roleData.buildin then
+		if not roleData.builtin then
 			CreateConVar("ttt_" .. roleData.name .. "_random", tostring(conVarData.random or 100), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 			CreateConVar("ttt_" .. roleData.name .. "_enabled", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})

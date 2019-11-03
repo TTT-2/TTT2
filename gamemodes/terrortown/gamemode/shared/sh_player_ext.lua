@@ -120,8 +120,9 @@ function plymeta:SetRole(subrole, team, forceHooks)
 	-- ye olde hooks
 	if newSubrole ~= oldSubrole or forceHooks then
 		self:SetRoleColor(rd.color)
-		self:SetRoleDkColor(rd.dkcolor)
-		self:SetRoleBgColor(rd.bgcolor)
+		self:SetRoleDkColor(util.ColorDarken(rd.color, 30))
+		self:SetRoleLtColor(util.ColorLighten(rd.color, 30))
+		self:SetRoleBgColor(util.ColorComplementary(rd.color))
 
 		if SERVER then
 			hook.Call("PlayerLoadout", GAMEMODE, self)
@@ -167,7 +168,7 @@ end
 -- @return[default=Color(28, 116, 10, 255)] Color
 -- @realm shared
 function plymeta:GetRoleDkColor()
-	return self.roleDkColor or INNOCENT.dkcolor
+	return self.roleDkColor or Color(28, 116, 10, 255)
 end
 
 ---
@@ -179,11 +180,27 @@ function plymeta:SetRoleDkColor(col)
 end
 
 ---
+-- Returns the current @{ROLE}'s lighter color
+-- @return[default=Color(28, 116, 10, 255)] Color
+-- @realm shared
+function plymeta:GetRoleLtColor()
+	return self.roleLtColor or Color(110, 200, 70, 255)
+end
+
+---
+-- Sets the current @{ROLE}'s lighter color and modifies it if hooked
+-- @param Color col
+-- @realm shared
+function plymeta:SetRoleLtColor(col)
+	self.roleLtColor = hook.Run("TTT2ModifyRoleLtColor", self, col) or col
+end
+
+---
 -- Returns the current @{ROLE}'s background color
 -- @return[default=Color(200, 68, 81, 255)] Color
 -- @realm shared
 function plymeta:GetRoleBgColor()
-	return self.roleBgColor or INNOCENT.bgcolor
+	return self.roleBgColor or Color(200, 68, 81, 255)
 end
 
 ---
