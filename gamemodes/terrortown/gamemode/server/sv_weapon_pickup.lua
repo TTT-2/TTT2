@@ -1,4 +1,5 @@
 util.AddNetworkString("ttt2_switch_weapon")
+util.AddNetworkString("ttt2_switch_weapon_update_cache")
 
 local plymeta = FindMetaTable("Player")
 if not plymeta then
@@ -10,8 +11,15 @@ end
 function plymeta:PickupWeapon(wep)
 	local throwWeapon = self:GetActiveWeapon()
 
+	-- this variable defines if the dropped weapon is the currently selected weapon
+	-- it is needed to determine weather or not hidden pickup/drop is possible
+	local isActiveWepon = true
+
 	if not IsValid(throwWeapon) or not throwWeapon.AllowDrop or throwWeapon.Kind ~= wep.Kind then
 		local weps = self.inventory[MakeKindValid(wep.Kind)]
+
+		-- the currently selected weapon will not be dropped, therefore this is set to false
+		isActiveWepon = false
 
 		-- reset throwWeapon, will be set to a weapon, if throwable weapon is found
 		throwWeapon = nil
@@ -77,8 +85,16 @@ function plymeta:PickupWeapon(wep)
 
 	self:GiveAmmo(ammo_num, ammo_type)
 
-	-- auto select newly picked up weapon
-	self:SelectWeapon(wepCls)
+	-- auto select newly picked up weapon when alt is not pressed
+	-- but autoselect weapon if picked up weapon is dropped
+	if isActiveWepon or not self:KeyDown(IN_WALK) and not self:KeyDownLast(IN_WALK) then
+		self:SelectWeapon(wepCls)
+	end
+
+	-- there is a glitch that picking up a weapon does not refresh the weapon cache on
+	-- the client. Therefore the client has to be notified to updated its cache
+	net.Start("ttt2_switch_weapon_update_cache")
+	net.Send(self)
 
 	return newWep
 end

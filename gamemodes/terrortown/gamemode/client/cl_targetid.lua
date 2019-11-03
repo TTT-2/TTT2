@@ -386,6 +386,11 @@ function GM:HUDDrawTargetID()
 	draw.ShadowedLine(spacer_line_x, spacer_line_y, spacer_line_x, spacer_line_y + spacer_line_l, COLOR_WHITE)
 end
 
+local key_params = {
+	usekey = Key("+use", "USE"),
+	walkkey = Key("+walk", "WALK")
+}
+
 -- handle looking at weapons
 function HUDDrawTargetIDWeapons(data, params)
 	local client = LocalPlayer()
@@ -395,7 +400,7 @@ function HUDDrawTargetIDWeapons(data, params)
 		return
 	end
 
-	local dropwep_mode, throwWeapon = GetPickupMode(data.ent)
+	local dropwep_mode, throwWeapon, isActiveWeapon = GetPickupMode(data.ent)
 	local kind_pickup_wep = MakeKindValid(data.ent.Kind)
 
 	local weapon_name
@@ -411,9 +416,9 @@ function HUDDrawTargetIDWeapons(data, params)
 	params.displayInfo.title.text = TryT(weapon_name) .. " [" .. GetPT("target_slot_info", {slot = kind_pickup_wep}) .. "]"
 
 	if dropwep_mode == SWITCHMODE_PICKUP then
-		params.displayInfo.subtitle.text = TryT("target_pickup_weapon")
+		params.displayInfo.subtitle.text = TryT("target_pickup_weapon") .. (not isActiveWeapon and GetPT("target_pickup_weapon_hidden", key_params) or "")
 	elseif dropwep_mode == SWITCHMODE_SWITCH then
-		params.displayInfo.subtitle.text = TryT("target_switch_weapon")
+		params.displayInfo.subtitle.text = TryT("target_switch_weapon") .. (not isActiveWeapon and GetPT("target_switch_weapon_hidden", key_params) or "")
 	elseif dropwep_mode == SWITCHMODE_NOSPACE then
 		params.displayInfo.subtitle.text = TryT("target_switch_weapon_nospace")
 	end
@@ -536,10 +541,6 @@ function HUDDrawTargetIDPlayers(data, params)
 end
 
 local icon_corpse = Material("vgui/ttt/dynamic/roles/icon_corpse")
-local key_params = {
-	usekey = Key("+use", "USE"),
-	walkkey = Key("+walk", "WALK")
-}
 
 -- handle looking ragdolls
 function HUDDrawTargetIDRagdolls(data, params)
