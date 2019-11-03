@@ -310,6 +310,7 @@ L.buy_pending = "You already have an order pending, wait until you receive it."
 L.buy_received = "You have received your special equipment."
 
 L.drop_no_room = "You have no room here to drop your weapon!"
+L.pickup_no_room = "You have no space in your inventory for this weapon kind"
 
 L.disg_turned_on = "Disguise enabled!"
 L.disg_turned_off = "Disguise disabled."

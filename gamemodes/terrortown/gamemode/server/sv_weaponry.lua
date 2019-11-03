@@ -12,8 +12,11 @@ local IsValid = IsValid
 local table = table
 local timer = timer
 local hook = hook
+local CreateConVar = CreateConVar
 
 local IsEquipment = WEPS.IsEquipment
+
+local cv_auto_pickup = CreateConVar("ttt_weapon_autopickup", "0", {FCVAR_ARCHIVE, FCVAR_NOTIFY})
 
 ---
 -- Returns whether or not a @{Player} is allowed to pick up a @{Weapon}
@@ -26,23 +29,45 @@ local IsEquipment = WEPS.IsEquipment
 -- @ref https://wiki.garrysmod.com/page/GM/PlayerCanPickupWeapon
 -- @local
 function GM:PlayerCanPickupWeapon(ply, wep)
+	-- Flags shpuld be reset no matter what happens afterwards --> cache them here
+	local cflag_giveItem, cflag_weaponSwitch = ply.GiveItemFunctionFlag, ply.WeaponSwitchFlag
+
+	ply.GiveItemFunctionFlag = false
+	ply.WeaponSwitchFlag = false
+
 	if not IsValid(wep) or not IsValid(ply) then return end
 
 	if ply:IsSpec() then
 		return false
 	end
 
-	local wepClass = WEPS.GetClass(wep)
-
-	-- Disallow picking up for ammo
-	if ply:HasWeapon(wepClass)
-	or not ply:CanCarryWeapon(wep)
-	or IsEquipment(wep) and wep.IsDropped and not ply:KeyDown(IN_USE)
-	then
+	-- prevent picking up weapons for ammo
+	if ply:HasWeapon(WEPS.GetClass(wep)) and not cflag_weaponSwitch then
 		return false
 	end
 
-	local tr = util.TraceEntity({start = wep:GetPos(), endpos = ply:GetShootPos(), mask = MASK_SOLID}, wep)
+	if not InventorySlotFree(ply, wep.Kind) and not cflag_weaponSwitch then
+		return false
+	end
+
+	-- if weapon is given by ply:Give function, this flag is set
+	if cflag_giveItem then
+		return true
+	end
+
+	if not cv_auto_pickup:GetBool() then
+		return false
+	end
+
+	if IsEquipment(wep) and wep.IsDropped then
+		return false
+	end
+
+	local tr = util.TraceEntity({
+		start = wep:GetPos(),
+		endpos = ply:GetShootPos(),
+		mask = MASK_SOLID
+	}, wep)
 
 	if tr.Fraction == 1.0 or tr.Entity == ply then
 		wep:SetPos(ply:GetShootPos())
