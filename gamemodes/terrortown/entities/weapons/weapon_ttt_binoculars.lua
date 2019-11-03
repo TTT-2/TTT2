@@ -17,7 +17,7 @@ if CLIENT then
 	SWEP.EquipMenuData = {
 		type  = "item_weapon",
 		desc  = "binoc_desc"
-	};
+	}
 
 	SWEP.Icon = "vgui/ttt/icon_binoc"
 end
@@ -50,7 +50,7 @@ SWEP.ZoomLevels = {
 	30,
 	20,
 	10
-};
+}
 
 SWEP.ProcessingDelay = 5
 
@@ -66,13 +66,13 @@ end
 function SWEP:PrimaryAttack()
 	self:SetNextPrimaryFire(CurTime() + 0.1)
 
-	if self:IsTargetingCorpse() and not self.dt.processing then
-		self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
+	if not self:IsTargetingCorpse() or self.dt.processing then return end
 
-		if SERVER then
-			self.dt.processing = true
-			self.dt.start_time = CurTime()
-		end
+	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
+
+	if SERVER then
+		self.dt.processing = true
+		self.dt.start_time = CurTime()
 	end
 end
 
@@ -92,12 +92,14 @@ function SWEP:SecondaryAttack()
 end
 
 function SWEP:SetZoom(level)
-	if SERVER then
-		self.dt.zoom = level
-		self:GetOwner():SetFOV(self.ZoomLevels[level], 0.3)
+	if CLIENT then return end
 
-		self:GetOwner():DrawViewModel(false)
-	end
+	local owner = self:GetOwner()
+
+	self.dt.zoom = level
+
+	owner:SetFOV(self.ZoomLevels[level], 0.3)
+	owner:DrawViewModel(false)
 end
 
 function SWEP:CycleZoom()
@@ -112,6 +114,7 @@ end
 
 function SWEP:PreDrop()
 	self:SetZoom(1)
+
 	self.dt.processing = false
 
 	return self.BaseClass.PreDrop(self)
@@ -119,6 +122,7 @@ end
 
 function SWEP:Holster()
 	self:SetZoom(1)
+
 	self.dt.processing = false
 
 	return true
@@ -134,7 +138,6 @@ function SWEP:Deploy()
 	return true
 end
 
-
 function SWEP:Reload()
 	return false
 end
@@ -149,9 +152,12 @@ end
 local confirm = Sound("npc/turret_floor/click1.wav")
 
 function SWEP:IdentifyCorpse()
+	local owner = self:GetOwner()
+
 	if SERVER then
-		local tr = self:GetOwner():GetEyeTrace(MASK_SHOT)
-		CORPSE.ShowSearch(self:GetOwner(), tr.Entity, false, true)
+		local tr = owner:GetEyeTrace(MASK_SHOT)
+
+		CORPSE.ShowSearch(owner, tr.Entity, false, true)
 	elseif IsFirstTimePredicted() then
 		LocalPlayer():EmitSound(confirm)
 	end
@@ -162,24 +168,26 @@ function SWEP:Think()
 
 	if not self.dt.processing then return end
 
-	if self:IsTargetingCorpse() then
-		if CurTime() > (self.dt.start_time + self.ProcessingDelay) then
-			self:IdentifyCorpse()
+	if not self:IsTargetingCorpse() then
+		self.dt.processing = false
+		self.dt.start_time = 0
 
-			self.dt.processing = false
-			self.dt.start_time = 0
-		end
-	else
+		return
+	end
+
+	if CurTime() > (self.dt.start_time + self.ProcessingDelay) then
+		self:IdentifyCorpse()
+
 		self.dt.processing = false
 		self.dt.start_time = 0
 	end
 end
 
-
-
 if CLIENT then
 	function SWEP:OnRemove()
-		if not IsValid(self:GetOwner()) or self:GetOwner() ~= LocalPlayer() or not self:GetOwner():Alive() then return end
+		local owner = self:GetOwner()
+
+		if not IsValid(owner) or owner ~= LocalPlayer() or not owner:Alive() then return end
 
 		RunConsoleCommand("lastinv")
 	end
@@ -206,6 +214,9 @@ if CLIENT then
 
 	local TryT = LANG.TryTranslation
 	local GetPT = LANG.GetParamTranslation
+	local mathRound = math.Round
+	local mathClamp = math.Clamp
+
 	local hud_color = Color(60, 220, 20, 255)
 
 	local cv_thickness = GetConVar("ttt_crosshair_thickness")
@@ -222,7 +233,7 @@ if CLIENT then
 		-- draw progress
 		if not c_wep.dt.processing then return end
 
-		local progress = math.Round(math.Clamp((CurTime() - c_wep.dt.start_time) / c_wep.ProcessingDelay * 100, 0, 100))
+		local progress = mathRound(mathClamp((CurTime() - c_wep.dt.start_time) / c_wep.ProcessingDelay * 100, 0, 100))
 
 		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
 			text = GetPT("binoc_progress", {progress = progress}),
@@ -242,11 +253,11 @@ if CLIENT then
 
 		-- change scope when looking at corpse
 		if self:IsTargetingCorpse() then
-			gap = 2 * thickness
+			gap = thickness * 2
 		end
 
-		local x = ScrW() / 2.0
-		local y = ScrH() / 2.0
+		local x = ScrW() * 0.5
+		local y = ScrH() * 0.5
 
 		surface.DrawRect(x - length, y - offset, length - gap, thickness)
 		surface.DrawRect(x + gap, y - offset, length - gap, thickness)

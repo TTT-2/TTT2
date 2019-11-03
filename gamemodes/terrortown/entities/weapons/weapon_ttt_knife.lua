@@ -15,7 +15,7 @@ if CLIENT then
 	SWEP.EquipMenuData = {
 		type = "item_weapon",
 		desc = "knife_desc"
-	};
+	}
 
 	SWEP.Icon = "vgui/ttt/icon_knife"
 	SWEP.IconLetter = "j"
@@ -51,23 +51,25 @@ SWEP.IsSilent = true
 SWEP.DeploySpeed = 2
 
 function SWEP:PrimaryAttack()
+	local owner = self:GetOwner()
+
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 	self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
 
-	if not IsValid(self:GetOwner()) then return end
+	if not IsValid(owner) then return end
 
-	self:GetOwner():LagCompensation(true)
+	owner:LagCompensation(true)
 
-	local spos = self:GetOwner():GetShootPos()
-	local sdest = spos + (self:GetOwner():GetAimVector() * 100)
+	local spos = owner:GetShootPos()
+	local sdest = spos + owner:GetAimVector() * 100
 
-	local kmins = Vector(1,1,1) * -10
-	local kmaxs = Vector(1,1,1) * 10
+	local kmins = Vector(-10, -10, -10)
+	local kmaxs = Vector(10, 10, 10)
 
 	local tr = util.TraceHull({
 		start = spos,
 		endpos = sdest,
-		filter = self:GetOwner(),
+		filter = owner,
 		mask = MASK_SHOT_HULL,
 		mins = kmins,
 		maxs = kmaxs
@@ -78,7 +80,7 @@ function SWEP:PrimaryAttack()
 		tr = util.TraceLine({
 			start = spos,
 			endpos = sdest,
-			filter = self:GetOwner(),
+			filter = owner,
 			mask = MASK_SHOT_HULL
 		})
 	end
@@ -87,7 +89,7 @@ function SWEP:PrimaryAttack()
 
 	-- effects
 	if IsValid(hitEnt) then
-		self:SendWeaponAnim( ACT_VM_HITCENTER )
+		self:SendWeaponAnim(ACT_VM_HITCENTER)
 
 		local edata = EffectData()
 		edata:SetStart(spos)
@@ -103,7 +105,7 @@ function SWEP:PrimaryAttack()
 	end
 
 	if SERVER then
-		self:GetOwner():SetAnimation(PLAYER_ATTACK1)
+		owner:SetAnimation(PLAYER_ATTACK1)
 	end
 
 
@@ -117,28 +119,29 @@ function SWEP:PrimaryAttack()
 		else
 			local dmg = DamageInfo()
 			dmg:SetDamage(self.Primary.Damage)
-			dmg:SetAttacker(self:GetOwner())
+			dmg:SetAttacker(owner)
 			dmg:SetInflictor(self)
-			dmg:SetDamageForce(self:GetOwner():GetAimVector() * 5)
-			dmg:SetDamagePosition(self:GetOwner():GetPos())
+			dmg:SetDamageForce(owner:GetAimVector() * 5)
+			dmg:SetDamagePosition(owner:GetPos())
 			dmg:SetDamageType(DMG_SLASH)
 
-			hitEnt:DispatchTraceAttack(dmg, spos + (self:GetOwner():GetAimVector() * 3), sdest)
+			hitEnt:DispatchTraceAttack(dmg, spos + (owner:GetAimVector() * 3), sdest)
 		end
 	end
 
-	self:GetOwner():LagCompensation(false)
+	owner:LagCompensation(false)
 end
 
 function SWEP:StabKill(tr, spos, sdest)
+	local owner = self:GetOwner()
 	local target = tr.Entity
 
 	local dmg = DamageInfo()
 	dmg:SetDamage(2000)
-	dmg:SetAttacker(self:GetOwner())
+	dmg:SetAttacker(owner)
 	dmg:SetInflictor(self)
-	dmg:SetDamageForce(self:GetOwner():GetAimVector())
-	dmg:SetDamagePosition(self:GetOwner():GetPos())
+	dmg:SetDamageForce(owner:GetAimVector())
+	dmg:SetDamagePosition(owner:GetPos())
 	dmg:SetDamageType(DMG_SLASH)
 
 	-- now that we use a hull trace, our hitpos is guaranteed to be
@@ -149,17 +152,18 @@ function SWEP:StabKill(tr, spos, sdest)
 	local retr = util.TraceLine({
 		start = spos,
 		endpos = sdest,
-		filter = self:GetOwner(),
+		filter = owner,
 		mask = MASK_SHOT_HULL
 	})
 
 	-- if that fails, just trace to worldcenter so we have SOMETHING
 	if retr.Entity ~= target then
 		local center = target:LocalToWorld(target:OBBCenter())
+
 		retr = util.TraceLine({
 			start = spos,
 			endpos = center,
-			filter = self:GetOwner(),
+			filter = owner,
 			mask = MASK_SHOT_HULL
 		})
 	end
@@ -168,27 +172,28 @@ function SWEP:StabKill(tr, spos, sdest)
 	local bone = retr.PhysicsBone
 	local pos = retr.HitPos
 	local norm = tr.Normal
-	local ang = Angle(-28,0,0) + norm:Angle()
+	local ang = Angle(-28, 0, 0) + norm:Angle()
 
 	ang:RotateAroundAxis(ang:Right(), -90)
-	pos = pos - (ang:Forward() * 7)
 
-	local ignore = self:GetOwner()
+	pos = pos - (ang:Forward() * 7)
 
 	target.effect_fn = function(rag)
 		-- we might find a better location
 		local rtr = util.TraceLine({
 			start = pos,
 			endpos = pos + norm * 40,
-			filter = ignore,
+			filter = owner,
 			mask = MASK_SHOT_HULL
 		})
 
 		if IsValid(rtr.Entity) and rtr.Entity == rag then
 			bone = rtr.PhysicsBone
 			pos = rtr.HitPos
-			ang = Angle(-28,0,0) + rtr.Normal:Angle()
+
+			ang = Angle(-28, 0, 0) + rtr.Normal:Angle()
 			ang:RotateAroundAxis(ang:Right(), -90)
+
 			pos = pos - (ang:Forward() * 10)
 		end
 
@@ -197,6 +202,7 @@ function SWEP:StabKill(tr, spos, sdest)
 		knife:SetPos(pos)
 		knife:SetCollisionGroup(COLLISION_GROUP_DEBRIS)
 		knife:SetAngles(ang)
+
 		knife.CanPickup = false
 
 		knife:Spawn()
@@ -210,12 +216,13 @@ function SWEP:StabKill(tr, spos, sdest)
 		constraint.Weld(rag, knife, bone, 0, 0, true)
 
 		-- need to close over knife in order to keep a valid ref to it
-		rag:CallOnRemove("ttt_knife_cleanup", function() SafeRemoveEntity(knife) end)
+		rag:CallOnRemove("ttt_knife_cleanup", function()
+			SafeRemoveEntity(knife)
+		end)
 	end
 
-
 	-- seems the spos and sdest are purely for effects/forces?
-	target:DispatchTraceAttack(dmg, spos + (self:GetOwner():GetAimVector() * 3), sdest)
+	target:DispatchTraceAttack(dmg, spos + (owner:GetAimVector() * 3), sdest)
 
 	-- target appears to die right there, so we could theoretically get to
 	-- the ragdoll in here...
@@ -228,54 +235,55 @@ function SWEP:SecondaryAttack()
 
 	self:SendWeaponAnim(ACT_VM_MISSCENTER)
 
-	if SERVER then
-		local ply = self:GetOwner()
+	if CLIENT then return end
 
-		if not IsValid(ply) then return end
+	local ply = self:GetOwner()
 
-		ply:SetAnimation( PLAYER_ATTACK1 )
+	if not IsValid(ply) then return end
 
-		local ang = ply:EyeAngles()
+	ply:SetAnimation(PLAYER_ATTACK1)
 
-		if ang.p < 90 then
-			ang.p = -10 + ang.p * ((90 + 10) / 90)
-		else
-			ang.p = 360 - ang.p
-			ang.p = -10 + ang.p * -((90 + 10) / 90)
-		end
+	local ang = ply:EyeAngles()
 
-		local vel = math.Clamp((90 - ang.p) * 5.5, 550, 800)
-		local vfw = ang:Forward()
-		local vrt = ang:Right()
-
-		local src = ply:GetPos() + (ply:Crouching() and ply:GetViewOffsetDucked() or ply:GetViewOffset())
-		src = src + (vfw * 1) + (vrt * 3)
-
-		local thr = vfw * vel + ply:GetVelocity()
-
-		local knife_ang = Angle(-28,0,0) + ang
-		knife_ang:RotateAroundAxis(knife_ang:Right(), -90)
-
-		local knife = ents.Create("ttt_knife_proj")
-
-		if not IsValid(knife) then return end
-
-		knife:SetPos(src)
-		knife:SetAngles(knife_ang)
-		knife:Spawn()
-		knife.Damage = self.Primary.Damage
-		knife:SetOwner(ply)
-
-		local phys = knife:GetPhysicsObject()
-
-		if IsValid(phys) then
-			phys:SetVelocity(thr)
-			phys:AddAngleVelocity(Vector(0, 1500, 0))
-			phys:Wake()
-		end
-
-		self:Remove()
+	if ang.p < 90 then
+		ang.p = -10 + ang.p * ((90 + 10) / 90)
+	else
+		ang.p = 360 - ang.p
+		ang.p = -10 + ang.p * -((90 + 10) / 90)
 	end
+
+	local vel = math.Clamp((90 - ang.p) * 5.5, 550, 800)
+	local vfw = ang:Forward()
+	local vrt = ang:Right()
+
+	local src = ply:GetPos() + (ply:Crouching() and ply:GetViewOffsetDucked() or ply:GetViewOffset())
+	src = src + (vfw * 1) + (vrt * 3)
+
+	local thr = vfw * vel + ply:GetVelocity()
+
+	local knife_ang = Angle(-28, 0, 0) + ang
+	knife_ang:RotateAroundAxis(knife_ang:Right(), -90)
+
+	local knife = ents.Create("ttt_knife_proj")
+
+	if not IsValid(knife) then return end
+
+	knife:SetPos(src)
+	knife:SetAngles(knife_ang)
+	knife:Spawn()
+	knife:SetOwner(ply)
+
+	knife.Damage = self.Primary.Damage
+
+	local phys = knife:GetPhysicsObject()
+
+	if IsValid(phys) then
+		phys:SetVelocity(thr)
+		phys:AddAngleVelocity(Vector(0, 1500, 0))
+		phys:Wake()
+	end
+
+	self:Remove()
 end
 
 function SWEP:Equip()
@@ -289,7 +297,11 @@ function SWEP:PreDrop()
 end
 
 function SWEP:OnRemove()
-	if CLIENT and IsValid(self:GetOwner()) and self:GetOwner() == LocalPlayer() and self:GetOwner():Alive() then
+	if SERVER then return end
+
+	local owner = self:GetOwner()
+
+	if IsValid(owner) and owner == LocalPlayer() and sowner:Alive() then
 		RunConsoleCommand("lastinv")
 	end
 end
@@ -315,13 +327,14 @@ if CLIENT then
 		}
 
 		-- draw instant-kill maker
-		local x = ScrW() / 2.0
-		local y = ScrH() / 2.0
+		local x = ScrW() * 0.5
+		local y = ScrH() * 0.5
 
 		surface.SetDrawColor(clr(role_color))
 
 		local outer = 20
 		local inner = 10
+
 		surface.DrawLine(x - outer, y - outer, x - inner, y - inner)
 		surface.DrawLine(x + outer, y + outer, x + inner, y + inner)
 

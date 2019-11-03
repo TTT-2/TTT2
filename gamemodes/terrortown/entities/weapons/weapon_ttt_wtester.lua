@@ -2,6 +2,9 @@ if SERVER then
 	AddCSLuaFile()
 end
 
+local math = math
+local table = table
+
 DEFINE_BASECLASS "weapon_tttbase"
 
 SWEP.HoldType = "normal"
@@ -110,6 +113,7 @@ function SWEP:PrimaryAttack()
 		filter = owner,
 		mask = MASK_SHOT
 	})
+
 	local ent = tr.Entity
 
 	owner:LagCompensation(false)
@@ -122,18 +126,18 @@ function SWEP:PrimaryAttack()
 		return
 	end
 
-	if SERVER then
-		if ent:GetClass() == "prop_ragdoll" and ent.killer_sample then
-			if CORPSE.GetFound(ent, false) then
-				self:GatherRagdollSample(ent)
-			else
-				self:Report("dna_identify")
-			end
-		elseif ent.fingerprints and #ent.fingerprints > 0 then
-			self:GatherObjectSample(ent)
+	if CLIENT then return end
+
+	if ent:GetClass() == "prop_ragdoll" and ent.killer_sample then
+		if CORPSE.GetFound(ent, false) then
+			self:GatherRagdollSample(ent)
 		else
-			self:Report("dna_notfound")
+			self:Report("dna_identify")
 		end
+	elseif ent.fingerprints and #ent.fingerprints > 0 then
+		self:GatherObjectSample(ent)
+	else
+		self:Report("dna_notfound")
 	end
 end
 
@@ -141,8 +145,8 @@ function SWEP:GatherRagdollSample(ent)
 	local sample = ent.killer_sample or {t = 0, killer = nil}
 	local ply = sample.killer
 
-	if not IsValid(ply) and sample.killer_sid then
-		ply = player.GetBySteamID(sample.killer_sid)
+	if not IsValid(ply) and sample.killer_sid64 then
+		ply = player.GetBySteamID64(sample.killer_sid64)
 	end
 
 	if IsValid(ply) then
@@ -190,28 +194,28 @@ function SWEP:Report(msg, params)
 end
 
 function SWEP:AddPlayerSample(corpse, killer)
-	if #self.ItemSamples < self.MaxItemSamples then
-		local owner = self:GetOwner()
-
-		local prnt = {
-			source = corpse,
-			ply = killer,
-			type = SAMPLE_PLAYER,
-			cls = killer:GetClass()
-		}
-
-		if not table.HasTable(self.ItemSamples, prnt) then
-			self.ItemSamples[#self.ItemSamples + 1] = prnt
-
-			DamageLog("SAMPLE:\t " .. owner:Nick() .. " retrieved DNA of " .. (IsValid(killer) and killer:Nick() or "<disconnected>") .. " from corpse of " .. (IsValid(corpse) and CORPSE.GetPlayerNick(corpse) or "<invalid>"))
-
-			hook.Call("TTTFoundDNA", GAMEMODE, owner, killer, corpse)
-		end
-
-		return true
+	if #self.ItemSamples >= self.MaxItemSamples then
+		return false
 	end
 
-	return false
+	local owner = self:GetOwner()
+
+	local prnt = {
+		source = corpse,
+		ply = killer,
+		type = SAMPLE_PLAYER,
+		cls = killer:GetClass()
+	}
+
+	if not table.HasTable(self.ItemSamples, prnt) then
+		self.ItemSamples[#self.ItemSamples + 1] = prnt
+
+		DamageLog("SAMPLE:\t " .. owner:Nick() .. " retrieved DNA of " .. (IsValid(killer) and killer:Nick() or "<disconnected>") .. " from corpse of " .. (IsValid(corpse) and CORPSE.GetPlayerNick(corpse) or "<invalid>"))
+
+		hook.Call("TTTFoundDNA", GAMEMODE, owner, killer, corpse)
+	end
+
+	return true
 end
 
 function SWEP:AddItemSample(ent)
@@ -227,7 +231,9 @@ function SWEP:AddItemSample(ent)
 
 	local owner = self:GetOwner()
 
-	for _, p in pairs(ent.fingerprints) do
+	for i = 1, #ent.fingerprints do
+		local p = ent.fingerprints[i]
+
 		local prnt = {
 			source = ent,
 			ply = p,
@@ -308,8 +314,9 @@ if SERVER then
 	end
 
 	function SWEP:ClearScanState()
-		self:SetLastScanned(-1)
 		self.NowRepeating = nil
+
+		self:SetLastScanned(-1)
 		self:SendScan(nil)
 	end
 
@@ -364,6 +371,7 @@ if SERVER then
 
 		self:SendScan(pos)
 		self:SetLastScanned(idx)
+
 		self.NowRepeating = self:GetRepeating()
 
 		local dist = math.ceil(owner:GetPos():Distance(pos))
@@ -372,11 +380,10 @@ if SERVER then
 	end
 
 	function SWEP:Think()
-		if self:GetCharge() < MAX_CHARGE then
-			if self.NextCharge < CurTime() then
-				self:SetCharge(math.min(MAX_CHARGE, self:GetCharge() + CHARGE_RATE))
-				self.NextCharge = CurTime() + CHARGE_DELAY
-			end
+		if self:GetCharge() < MAX_CHARGE and self.NextCharge < CurTime() then
+			self:SetCharge(math.min(MAX_CHARGE, self:GetCharge() + CHARGE_RATE))
+
+			self.NextCharge = CurTime() + CHARGE_DELAY
 		elseif self.NowRepeating and IsValid(self:GetOwner()) then
 			-- owner changed his mind since running last scan?
 			if self:GetRepeating() then
@@ -422,11 +429,12 @@ if CLIENT then
 			filter = owner,
 			mask = MASK_SHOT
 		})
+
 		local ent = tr.Entity
 
 		local length = 20
 		local gap = 6
-		local thickness = math.floor(cv_tickness:GetFloat())
+		local thickness = math.floor(cv_thickness:GetFloat())
 		local offset = thickness * 0.5
 
 		local can_sample = false
@@ -458,8 +466,10 @@ if CLIENT then
 		if ent and can_sample then
 			surface.SetFont("DefaultFixedDropShadow")
 			surface.SetTextColor(0, 255, 0, 255)
+
 			surface.SetTextPos(x + length * 2, y - length * 2)
 			surface.DrawText(T("dna_hud_type") .. ": " .. (ent:GetClass() == "prop_ragdoll" and T("dna_hud_body") or T("dna_hud_item")))
+
 			surface.SetTextPos(x + length * 2, y - length * 2 + 15)
 			surface.DrawText("ID:   #" .. ent:EntIndex())
 		end
@@ -656,7 +666,7 @@ if CLIENT then
 			if not IsValid(ilist) then return end
 
 			local i = ilist.SelectedPanel
-			
+
 			if not IsValid(i) then return end
 
 			RunConsoleCommand("ttt_wtester_scan", i.key)
@@ -734,9 +744,7 @@ if CLIENT then
 		local item_prints = {}
 
 		for i = 1, num do
-			local ent = net.ReadString()
-
-			item_prints[i] = ent
+			item_prints[i] = net.ReadString()
 		end
 
 		if should_open then
@@ -777,9 +785,9 @@ if CLIENT then
 	net.Receive("TTT_ScanResult", RecvScan)
 
 	function SWEP:ClosePrintsPanel()
-		if IsValid(printspanel) then
-			printspanel:Close()
-		end
+		if not IsValid(printspanel) then return end
+
+		printspanel:Close()
 	end
 
 else -- SERVER
@@ -812,9 +820,9 @@ else -- SERVER
 end
 
 function SWEP:OnRemove()
-	if CLIENT then
-		self:ClosePrintsPanel()
-	end
+	if SERVER then return end
+
+	self:ClosePrintsPanel()
 end
 
 function SWEP:OnDrop()
@@ -846,8 +854,8 @@ end
 
 if CLIENT then
 	function SWEP:DrawWorldModel()
-		if not IsValid(self:GetOwner()) then
-			self:DrawModel()
-		end
+		if IsValid(self:GetOwner()) then return end
+
+		self:DrawModel()
 	end
 end
