@@ -134,10 +134,12 @@ if CLIENT then
 		local text_height = ((title_lines > 0) and (title_lines * item.title_spec.font_height) or 0) + ((text_lines > 0) and (text_lines * item.text_spec.font_height) or 0)
 		text_height = text_height + math.max(title_lines + text_lines - 1, 0) * self.line_margin
 
-		if not item.image or text_height > self.imageMinHeight then
+		if not item.image and text_height < self.image_size then
 			item.init_y = 0
-		else
-			item.init_y = 0.5 * (self.imageMinHeight - text_height)
+		elseif item.image and text_height > self.image_size then -- display text next to image (higher than image)
+			item.init_y = 0.5 * self.pad
+		else -- display text next to image (centered)
+			item.init_y = 0.5 * (self.imageMinHeight - text_height) + self.pad
 			item.text_spec.yalign = TEXT_ALIGN_CENTER
 		end
 
@@ -186,7 +188,7 @@ if CLIENT then
 
 		-- Text
 		local tx = self.pos.x + self.image_size + self.pad + self.leftImagePad
-		local ty = pos_y + item.init_y + self.pad
+		local ty = pos_y + item.init_y
 
 		-- draw the title text
 		local title_spec = item.title_spec
