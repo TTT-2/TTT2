@@ -519,6 +519,7 @@ function HUDDrawTargetIDRagdolls(data, params)
 
 	local corpse_found = CORPSE.GetFound(data.ent, false) or not DetectiveMode()
 	local role_found = corpse_found and data.ent.search_result and data.ent.search_result.role
+	local binoculars_useable = IsValid(c_wep) and c_wep:GetClass() == "weapon_ttt_binoculars" or false
 
 	params.drawInfo = true
 	params.displayInfo.icon = {
