@@ -187,7 +187,7 @@ else
 
 		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
 			text = (hstation_charge > 0) and ParT("hstation_charge", {charge = hstation_charge}) or TryT("hstation_empty"),
-			color = (hstation_charge > 0) and DETECTIVE.bgcolor or COLOR_ORANGE
+			color = (hstation_charge > 0) and DETECTIVE.ltcolor or COLOR_ORANGE
 		}
 
 		if client:Health() == client:GetMaxHealth() then
