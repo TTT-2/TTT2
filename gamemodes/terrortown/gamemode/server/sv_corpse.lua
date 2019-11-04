@@ -514,6 +514,7 @@ function CORPSE.Create(ply, attacker, dmginfo)
 
 	rag:SetPos(ply:GetPos())
 	rag:SetModel(ply:GetModel())
+	rag:SetSkin(ply:GetSkin())
 	rag:SetAngles(ply:GetAngles())
 	rag:SetColor(ply:GetColor())
 
