@@ -76,6 +76,9 @@ function plymeta:PickupWeapon(wep)
 	-- give the weapon to the player
 	local newWep = self:Give(wepCls)
 
+	-- equip this weapon after pickup to activate some weapon specific features
+	newWep:Equip(self)
+
 	if not IsValid(newWep) then return end
 
 	-- copy data from picked up weapon
