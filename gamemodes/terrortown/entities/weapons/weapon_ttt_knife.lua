@@ -311,15 +311,16 @@ if CLIENT then
 
 	hook.Add("TTTRenderEntityInfo", "HUDDrawTargetIDKnife", function(data, params)
 		local client = LocalPlayer()
-		local c_wep = client:GetActiveWeapon()
-		local role_color = client:GetRoleColor()
 
 		if not IsValid(client) or not client:IsTerror() or not client:Alive()
 		or data.distance > 100 or not data.ent:IsPlayer() then
 			return
 		end
 
-		if c_wep:GetClass() ~= "weapon_ttt_knife" or c_wep.Primary.Damage + 10 < data.ent:Health() then return end
+		local c_wep = client:GetActiveWeapon()
+		local role_color = client:GetRoleColor()
+
+		if not IsValid(c_wep) or c_wep:GetClass() ~= "weapon_ttt_knife" or c_wep.Primary.Damage + 10 < data.ent:Health() then return end
 
 		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
 			text = TryT("knife_instant"),
