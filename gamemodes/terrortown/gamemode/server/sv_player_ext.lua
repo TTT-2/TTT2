@@ -1027,6 +1027,7 @@ end
 -- Returns wether or not a player can pick up a weapon
 -- @param Weapon wep The weapon object
 -- @returns boolean
+-- @realm server
 function plymeta:CanPickupWeapon(wep)
 	self.GiveItemFunctionFlag = true
 
@@ -1037,8 +1038,67 @@ end
 -- Returns wether or not a player can pick up a weapon
 -- @param string wepCls The weapon object classname
 -- @returns boolean
+-- @realm server
 function plymeta:CanPickupWeaponClass(wepCls)
 	local wep = ents.Create(wepCls)
 
 	return self:CanPickupWeapon(wep)
+end
+
+---
+-- This function simplifies the weapon pickup process for a player by
+-- handling all the needed calls.
+-- @param Weapon wep The weapon object
+-- @returns Weapon if successful, nil if not
+-- @realm server
+function plymeta:PickupWeapon(wep, dropBlockingWeapon)
+	if not IsValid(wep) then return end
+
+	-- Now comes the tricky part: Since Gmod doesn't allow us to pick up weapons by
+	-- calling a simple function while also keeping all the weapon specific params
+	-- set in the runtime, we have to use the GM:PlayerCanPickupWeapon hook in a
+	-- slightly hacky way
+
+	-- first we have to check if the player can pick up the weapon at all by running the
+	-- hook manually. This has to be done since the normal pickup is handled internally 
+	-- and is therefore not accessable for us
+	if not self:CanPickupWeapon(wep) then return end
+
+	-- if parameter is set the currently blocking weapon should be dropped
+	if dropBlockingWeapon then
+		local dropWeapon, isActiveWeapon = GetBlockingWeapon(self, wep)
+
+		PrepareAndDropWeapon(dropWeapon)
+
+		-- set flag to new weapon that is used to autoselect it later on
+		wep.oldWasActiveWeapon = isActiveWeapon
+	end
+
+	-- if a pickup is possible, the weapon gets a flag set and is teleported to the feet
+	-- of the player
+
+	wep.AttemptWeaponPickup = true
+	-- TODO weapon teleport
+
+	return wep
+end
+
+function plymeta:PickupWeaponClass(wepCls)
+	local wep = ents.Create(wepCls)
+
+	return self:PickupWeapon(wep)
+end
+
+function plymeta:PickupAndSwitchWeapon(wep)
+	if not IsValid(wep) then return end
+
+	-- setting a flag that the weapon should be switched. This is needed inside the
+	-- GM:PlayerCanPickupWeapon to ignore no empty slot available
+	ply.WeaponSwitchFlag = true
+end
+
+function plymeta:PickupAndSwitchWeaponClass(wepCls)
+	local wep = ents.Create(wepCls)
+
+	return self:PickupAndSwitchWeapon(wep)
 end
