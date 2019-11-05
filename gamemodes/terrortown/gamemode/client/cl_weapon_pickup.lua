@@ -24,6 +24,11 @@ local function AttemptWeaponSwitch()
 	lastRequest = CurTime()
 end
 
+-- picking up a weapon should update the client weapon cache
+net.Receive("ttt2_switch_weapon_update_cache", function()
+	WSWITCH:UpdateWeaponCache()
+end)
+
 -- register a binding for the weapon switch, the default should be the use key
 bind.Register("ttt2_weaponswitch", AttemptWeaponSwitch, nil, "TTT2 Bindings", "f1_bind_weaponswitch", input.GetKeyCode(input.LookupBinding("+use")))
 

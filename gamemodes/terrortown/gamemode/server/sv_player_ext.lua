@@ -1070,7 +1070,11 @@ function plymeta:PickupWeapon(wep, dropBlockingWeapon)
 	if dropBlockingWeapon then
 		local dropWeapon, isActiveWeapon = GetBlockingWeapon(self, wep)
 
+		print("DW: " .. tostring(dropWeapon))
+
 		PrepareAndDropWeapon(self, dropWeapon)
+
+		if not InventorySlotFree(self, wep.Kind) then return end
 
 		-- set flag to new weapon that is used to autoselect it later on
 		wep.wp__oldWasActiveWeapon = isActiveWeapon
@@ -1086,6 +1090,23 @@ end
 
 function plymeta:PickupWeaponClass(wepCls, dropBlockingWeapon)
 	local wep = ents.Create(wepCls)
+	local pWep
 
-	return self:PickupWeapon(wep, dropBlockingWeapon)
+	-- if parameter is set the currently blocking weapon should be dropped
+	if dropBlockingWeapon then
+		local dropWeapon, isActiveWeapon = GetBlockingWeapon(self, wep)
+
+		print("DW: " .. tostring(dropWeapon))
+
+		PrepareAndDropWeapon(self, dropWeapon)
+
+		if not InventorySlotFree(self, wep.Kind) then return end
+
+		pWep = self:Give(wepCls)
+
+		-- set flag to new weapon that is used to autoselect it later on
+		pWep.wp__oldWasActiveWeapon = isActiveWeapon
+	end
+
+	return pWep
 end

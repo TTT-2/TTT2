@@ -634,10 +634,17 @@ function GM:WeaponEquip(wep, ply)
 
 	if IsValid(ply) and wep.Kind then
 		AddWeaponToInventoryAndNotifyClient(ply, wep)
+
+		-- there is a glitch that picking up a weapon does not refresh the weapon cache on
+		-- the client. Therefore the client has to be notified to updated its cache
+		net.Start("ttt2_switch_weapon_update_cache")
+		net.Send(ply)
 	end
 
 	-- handle all this stuff in the next frame since the owner is not yet valid
 	timer.Simple(0, function()
+		if not IsValid(ply) or not IsValid(wep) then return end
+
 		if wep:IsOnFire() then
 			wep:Extinguish()
 		end
@@ -673,8 +680,6 @@ function GM:WeaponEquip(wep, ply)
 
 			ply:SelectWeapon(WEPS.GetClass(wep))
 		end
-
-		AddWeaponToInventoryAndNotifyClient(ply, wep)
 	end)
 end
 
@@ -692,6 +697,11 @@ end
 function GM:PlayerDroppedWeapon(ply, wep)
 	if IsValid(wep) and IsValid(ply) and wep.Kind then
 		RemoveWeaponFromInventoryAndNotifyClient(ply, wep)
+
+		-- there is a glitch that picking up a weapon does not refresh the weapon cache on
+		-- the client. Therefore the client has to be notified to updated its cache
+		net.Start("ttt2_switch_weapon_update_cache")
+		net.Send(ply)
 	end
 end
 

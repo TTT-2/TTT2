@@ -31,10 +31,10 @@ function GetBlockingWeapon(ply, wep)
 
 	-- get droppable weapon from given slot
 	for i = 1, #weps do
-		throwWeapon = weps[i]
-
 		-- found a weapon that is allowed to be dropped
-		if IsValid(throwWeapon) and throwWeapon.AllowDrop then
+		if IsValid(weps[i]) and weps[i].AllowDrop then
+			throwWeapon = weps[i]
+
 			break
 		end
 	end
