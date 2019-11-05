@@ -530,6 +530,12 @@ function SWEP:Equip(newowner)
 
 		self.StoredAmmo = 0
 	end
+
+	if self.wp__oldWasActiveWeapon or not newowner:KeyDown(IN_WALK) and not newowner:KeyDownLast(IN_WALK) then
+		self.wp__oldWasActiveWeapon = false
+
+		newowner:SelectWeapon(WEPS.GetClass(self))
+	end
 end
 
 ---
