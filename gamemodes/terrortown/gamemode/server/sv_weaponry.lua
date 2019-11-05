@@ -29,11 +29,12 @@ local cv_auto_pickup = CreateConVar("ttt_weapon_autopickup", "0", {FCVAR_ARCHIVE
 -- @ref https://wiki.garrysmod.com/page/GM/PlayerCanPickupWeapon
 -- @local
 function GM:PlayerCanPickupWeapon(ply, wep)
-	-- Flags shpuld be reset no matter what happens afterwards --> cache them here
-	local cflag_giveItem, cflag_weaponSwitch = ply.GiveItemFunctionFlag, ply.WeaponSwitchFlag
+	-- Flags should be reset no matter what happens afterwards --> cache them here
+	local cflag_giveItem, cflag_weaponSwitch, cflag_weaponPickup = ply.wp__GiveItemFunctionFlag, wep.wp__WeaponSwitchFlag, wep.wp__AttemptWeaponPickup
 
-	ply.GiveItemFunctionFlag = false
-	ply.WeaponSwitchFlag = false
+	ply.wp__GiveItemFunctionFlag = false
+	wep.wp__WeaponSwitchFlag = false
+	wep.wp__AttemptWeaponPickup = false
 
 	if not IsValid(wep) or not IsValid(ply) then return end
 
@@ -52,6 +53,10 @@ function GM:PlayerCanPickupWeapon(ply, wep)
 
 	-- if weapon is given by ply:Give function, this flag is set
 	if cflag_giveItem then
+		return true
+	end
+
+	if cflag_weaponPickup then
 		return true
 	end
 

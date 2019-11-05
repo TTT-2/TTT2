@@ -1018,7 +1018,7 @@ end)
 -- over them and weapons picked up by ply:Give()
 local plymeta_old_give = plymeta.Give
 function plymeta:Give(weaponClassName, bNoAmmo)
-	self.GiveItemFunctionFlag = true
+	self.wp__GiveItemFunctionFlag = true
 
 	return plymeta_old_give(self, weaponClassName, bNoAmmo or false)
 end
@@ -1029,7 +1029,7 @@ end
 -- @returns boolean
 -- @realm server
 function plymeta:CanPickupWeapon(wep)
-	self.GiveItemFunctionFlag = true
+	self.wp__GiveItemFunctionFlag = true
 
 	return hook.Run("PlayerCanPickupWeapon", self, wep)
 end
@@ -1062,43 +1062,30 @@ function plymeta:PickupWeapon(wep, dropBlockingWeapon)
 	-- first we have to check if the player can pick up the weapon at all by running the
 	-- hook manually. This has to be done since the normal pickup is handled internally 
 	-- and is therefore not accessable for us
+	wep.wp__WeaponSwitchFlag = dropBlockingWeapon
+
 	if not self:CanPickupWeapon(wep) then return end
 
 	-- if parameter is set the currently blocking weapon should be dropped
 	if dropBlockingWeapon then
 		local dropWeapon, isActiveWeapon = GetBlockingWeapon(self, wep)
 
-		PrepareAndDropWeapon(dropWeapon)
+		PrepareAndDropWeapon(self, dropWeapon)
 
 		-- set flag to new weapon that is used to autoselect it later on
-		wep.oldWasActiveWeapon = isActiveWeapon
+		wep.wp__oldWasActiveWeapon = isActiveWeapon
 	end
 
 	-- if a pickup is possible, the weapon gets a flag set and is teleported to the feet
 	-- of the player
-
-	wep.AttemptWeaponPickup = true
-	-- TODO weapon teleport
+	wep.wp__AttemptWeaponPickup = true
+	wep:SetPos(self:GetPos())
 
 	return wep
 end
 
-function plymeta:PickupWeaponClass(wepCls)
+function plymeta:PickupWeaponClass(wepCls, dropBlockingWeapon)
 	local wep = ents.Create(wepCls)
 
-	return self:PickupWeapon(wep)
-end
-
-function plymeta:PickupAndSwitchWeapon(wep)
-	if not IsValid(wep) then return end
-
-	-- setting a flag that the weapon should be switched. This is needed inside the
-	-- GM:PlayerCanPickupWeapon to ignore no empty slot available
-	ply.WeaponSwitchFlag = true
-end
-
-function plymeta:PickupAndSwitchWeaponClass(wepCls)
-	local wep = ents.Create(wepCls)
-
-	return self:PickupAndSwitchWeapon(wep)
+	return self:PickupWeapon(wep, dropBlockingWeapon)
 end

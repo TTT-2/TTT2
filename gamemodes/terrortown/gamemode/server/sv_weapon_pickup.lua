@@ -42,7 +42,7 @@ function GetBlockingWeapon(ply, wep)
 	return throwWeapon, false
 end
 
-function PrepareAndDropWeapon(wep)
+function PrepareAndDropWeapon(ply, wep)
 	if not IsValid(wep) then return end
 
 	if isfunction(wep.PreDrop) then
@@ -56,7 +56,7 @@ function PrepareAndDropWeapon(wep)
 	wep.IsDropped = true
 
 	-- drop the old weapon
-	self:DropWeapon(wep)
+	ply:DropWeapon(wep)
 
 	-- wake the pysics of the dropped weapon
 	wep:PhysWake()
@@ -176,9 +176,7 @@ net.Receive("ttt2_switch_weapon", function(_, ply)
 	-- do not pickup weapon if too far away
 	if ply:GetPos():Distance(tracedWeapon:GetPos()) > 100 then return end
 
-	PrepareWeaponPickup(ply, tracedWeapon)
-
-	--if not IsValid(ply:PickupWeapon(tracedWeapon)) then
-	--	LANG.Msg(activator, "pickup_no_room")
-	--end
+	if not IsValid(ply:PickupWeapon(tracedWeapon, true)) then
+		LANG.Msg(activator, "pickup_no_room")
+	end
 end)
