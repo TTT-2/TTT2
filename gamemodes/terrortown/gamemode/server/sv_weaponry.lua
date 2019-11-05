@@ -666,11 +666,18 @@ function GM:WeaponEquip(wep, ply)
 			wep.StoredAmmo = 0
 		end
 
+		-- autoselect weapon when the new weapon has the same slot than the old one
+		-- do not autoselect when ALT is pressed
 		if wep.wp__oldWasActiveWeapon or not ply:KeyDown(IN_WALK) and not ply:KeyDownLast(IN_WALK) then
 			wep.wp__oldWasActiveWeapon = false
 
 			ply:SelectWeapon(WEPS.GetClass(wep))
 		end
+
+		-- there is a glitch that picking up a weapon does not refresh the weapon cache on
+		-- the client. Therefore the client has to be notified to updated its cache
+		net.Start("ttt2_switch_weapon_update_cache")
+		net.Send(ply)
 	end)
 end
 
