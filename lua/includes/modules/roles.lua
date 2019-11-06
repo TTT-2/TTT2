@@ -6,7 +6,6 @@
 module("roles", package.seeall)
 
 local baseclass = baseclass
-local list = list
 local pairs = pairs
 
 if SERVER then

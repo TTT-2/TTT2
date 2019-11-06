@@ -6,7 +6,6 @@
 module("items", package.seeall)
 
 local baseclass = baseclass
-local list = list
 local pairs = pairs
 
 if SERVER then
@@ -67,8 +66,6 @@ end
 -- @realm shared
 function Register(t, name)
 	name = string.lower(name)
-
-	local old = ItemList[name]
 
 	t.ClassName = name
 	t.id = name
