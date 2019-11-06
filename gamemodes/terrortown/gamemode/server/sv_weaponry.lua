@@ -609,8 +609,6 @@ local function DropActiveAmmo(ply)
 end
 concommand.Add("ttt_dropammo", DropActiveAmmo)
 
-local SF_WEAPON_START_CONSTRAINED = 1
-
 ---
 -- Called as a @{Weapon} entity is picked up by a @{Player}.<br />
 -- See also @{GM:PlayerDroppedWeapon}
@@ -644,34 +642,6 @@ function GM:WeaponEquip(wep, ply)
 
 	local function WeaponEquipNextFrame()
 		if not IsValid(ply) or not IsValid(wep) then return end
-
-		if wep:IsOnFire() then
-			wep:Extinguish()
-		end
-
-		wep.fingerprints = wep.fingerprints or {}
-
-		if not table.HasValue(wep.fingerprints, ply) then
-			wep.fingerprints[#wep.fingerprints + 1] = ply
-		end
-
-		if wep:HasSpawnFlags(SF_WEAPON_START_CONSTRAINED) then
-			-- If this weapon started constrained, unset that spawnflag, or the
-			-- weapon will be re-constrained and float
-			local flags = wep:GetSpawnFlags()
-			local newflags = bit.band(flags, bit.bnot(SF_WEAPON_START_CONSTRAINED))
-
-			wep:SetKeyValue("spawnflags", newflags)
-		end
-
-		if IsValid(ply) and wep.StoredAmmo > 0 and wep.Primary.Ammo ~= "none" then
-			local ammo = ply:GetAmmoCount(wep.Primary.Ammo)
-			local given = math.min(wep.StoredAmmo, wep.Primary.ClipMax - ammo)
-
-			ply:GiveAmmo(given, wep.Primary.Ammo)
-
-			wep.StoredAmmo = 0
-		end
 
 		-- autoselect weapon when the new weapon has the same slot than the old one
 		-- do not autoselect when ALT is pressed
