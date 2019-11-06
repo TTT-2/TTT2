@@ -169,12 +169,6 @@ function Register(t, name)
 	end
 
 	RoleList[name] = t
-
-	list.Set("Roles", name, {
-			ClassName = name,
-			name = name,
-			id = t.index
-	})
 end
 
 ---
