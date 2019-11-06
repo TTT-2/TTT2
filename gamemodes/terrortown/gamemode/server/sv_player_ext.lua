@@ -1103,7 +1103,7 @@ end
 -- @returns Weapon if successful, nil if not
 -- @realm server
 function plymeta:PickupWeaponClass(wepCls, dropBlockingWeapon)
-	local wep = ents.Create(wepCls)
+	local wep = weapons.GetStored(wepCls)
 	local pWep
 
 	-- if parameter is set the currently blocking weapon should be dropped

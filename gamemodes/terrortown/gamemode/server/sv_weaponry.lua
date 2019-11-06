@@ -642,8 +642,7 @@ function GM:WeaponEquip(wep, ply)
 		net.Send(ply)
 	end
 
-	-- handle all this stuff in the next frame since the owner is not yet valid
-	timer.Simple(0, function()
+	local function WeaponEquipNextFrame()
 		if not IsValid(ply) or not IsValid(wep) then return end
 
 		if wep:IsOnFire() then
@@ -681,7 +680,10 @@ function GM:WeaponEquip(wep, ply)
 
 			ply:SelectWeapon(WEPS.GetClass(wep))
 		end
-	end)
+	end
+
+	-- handle all this stuff in the next frame since the owner is not yet valid
+	timer.Simple(0, WeaponEquipNextFrame)
 end
 
 ---
@@ -696,14 +698,14 @@ end
 -- @ref https://wiki.garrysmod.com/page/GM/PlayerDroppedWeapon
 -- @local
 function GM:PlayerDroppedWeapon(ply, wep)
-	if IsValid(wep) and IsValid(ply) and wep.Kind then
-		RemoveWeaponFromInventoryAndNotifyClient(ply, wep)
+	if not IsValid(wep) or not IsValid(ply) or not wep.Kind then return end
 
-		-- there is a glitch that picking up a weapon does not refresh the weapon cache on
-		-- the client. Therefore the client has to be notified to updated its cache
-		net.Start("ttt2_switch_weapon_update_cache")
-		net.Send(ply)
-	end
+	RemoveWeaponFromInventoryAndNotifyClient(ply, wep)
+
+	-- there is a glitch that picking up a weapon does not refresh the weapon cache on
+	-- the client. Therefore the client has to be notified to updated its cache
+	net.Start("ttt2_switch_weapon_update_cache")
+	net.Send(ply)
 end
 
 ---
