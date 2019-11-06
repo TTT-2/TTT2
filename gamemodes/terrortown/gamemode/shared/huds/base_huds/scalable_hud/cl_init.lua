@@ -19,7 +19,7 @@ HUD.scale = HUD.defaultscale
 -- @{HUD:PerformLayout} before setting the HUDELEMENT.initialized parameter.
 -- @realm client
 function HUD:Initialize()
-	self.basecolor = self.defaultcolor
+	self.basecolor = table.Copy(self.defaultcolor)
 
 	BaseClass.Initialize(self)
 end
@@ -37,6 +37,7 @@ function HUD:GetSavingKeys()
 			desc = LANG.GetTranslation("f1_settings_hudswitcher_desc_basecolor"),
 			OnChange = function(slf, col)
 				slf:PerformLayout()
+				slf:SaveData()
 			end
 		}
 		savingKeys.scale = {
@@ -112,7 +113,7 @@ end
 -- on non-child elements.
 -- @realm client
 function HUD:Reset()
-	self.basecolor = self.defaultcolor
+	self.basecolor = table.Copy(self.defaultcolor)
 
 	BaseClass.Reset(self)
 
