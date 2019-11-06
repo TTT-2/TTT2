@@ -29,11 +29,11 @@ local cv_auto_pickup = CreateConVar("ttt_weapon_autopickup", "0", {FCVAR_ARCHIVE
 -- @ref https://wiki.garrysmod.com/page/GM/PlayerCanPickupWeapon
 -- @local
 function GM:PlayerCanPickupWeapon(ply, wep)
-	-- Flags shpuld be reset no matter what happens afterwards --> cache them here
-	local cflag_giveItem, cflag_weaponSwitch = ply.GiveItemFunctionFlag, ply.WeaponSwitchFlag
+	-- Flags should be reset no matter what happens afterwards --> cache them here
+	local cflag_giveItem, cflag_weaponSwitch, cflag_weaponPickup = ply.wp__GiveItemFunctionFlag, wep.wp__WeaponSwitchFlag, wep.wp__AttemptWeaponPickup
 
-	ply.GiveItemFunctionFlag = false
-	ply.WeaponSwitchFlag = false
+	ply.wp__GiveItemFunctionFlag = false
+	wep.wp__WeaponSwitchFlag = false
 
 	if not IsValid(wep) or not IsValid(ply) then return end
 
@@ -52,6 +52,12 @@ function GM:PlayerCanPickupWeapon(ply, wep)
 
 	-- if weapon is given by ply:Give function, this flag is set
 	if cflag_giveItem then
+		return true
+	end
+
+	if cflag_weaponPickup and cflag_weaponPickup == ply then
+		wep.wp__AttemptWeaponPickup = nil
+
 		return true
 	end
 
@@ -627,7 +633,27 @@ function GM:WeaponEquip(wep, ply)
 
 	if IsValid(ply) and wep.Kind then
 		AddWeaponToInventoryAndNotifyClient(ply, wep)
+
+		-- there is a glitch that picking up a weapon does not refresh the weapon cache on
+		-- the client. Therefore the client has to be notified to updated its cache
+		net.Start("ttt2_switch_weapon_update_cache")
+		net.Send(ply)
 	end
+
+	local function WeaponEquipNextFrame()
+		if not IsValid(ply) or not IsValid(wep) then return end
+
+		-- autoselect weapon when the new weapon has the same slot than the old one
+		-- do not autoselect when ALT is pressed
+		if wep.wp__oldWasActiveWeapon or not ply:KeyDown(IN_WALK) and not ply:KeyDownLast(IN_WALK) then
+			wep.wp__oldWasActiveWeapon = false
+
+			ply:SelectWeapon(WEPS.GetClass(wep))
+		end
+	end
+
+	-- handle all this stuff in the next frame since the owner is not yet valid
+	timer.Simple(0, WeaponEquipNextFrame)
 end
 
 ---
@@ -642,9 +668,14 @@ end
 -- @ref https://wiki.garrysmod.com/page/GM/PlayerDroppedWeapon
 -- @local
 function GM:PlayerDroppedWeapon(ply, wep)
-	if IsValid(wep) and IsValid(ply) and wep.Kind then
-		RemoveWeaponFromInventoryAndNotifyClient(ply, wep)
-	end
+	if not IsValid(wep) or not IsValid(ply) or not wep.Kind then return end
+
+	RemoveWeaponFromInventoryAndNotifyClient(ply, wep)
+
+	-- there is a glitch that picking up a weapon does not refresh the weapon cache on
+	-- the client. Therefore the client has to be notified to updated its cache
+	net.Start("ttt2_switch_weapon_update_cache")
+	net.Send(ply)
 end
 
 ---

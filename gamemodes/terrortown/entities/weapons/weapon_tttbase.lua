@@ -501,8 +501,6 @@ local SF_WEAPON_START_CONSTRAINED = 1
 -- Picked up by player. Transfer of stored ammo and such.
 -- @param Player newowner
 function SWEP:Equip(newowner)
-	if CLIENT then return end
-
 	if self:IsOnFire() then
 		self:Extinguish()
 	end

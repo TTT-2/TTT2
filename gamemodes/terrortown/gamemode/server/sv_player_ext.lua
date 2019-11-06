@@ -1018,7 +1018,7 @@ end)
 -- over them and weapons picked up by ply:Give()
 local plymeta_old_give = plymeta.Give
 function plymeta:Give(weaponClassName, bNoAmmo)
-	self.GiveItemFunctionFlag = true
+	self.wp__GiveItemFunctionFlag = true
 
 	return plymeta_old_give(self, weaponClassName, bNoAmmo or false)
 end
@@ -1027,8 +1027,9 @@ end
 -- Returns wether or not a player can pick up a weapon
 -- @param Weapon wep The weapon object
 -- @returns boolean
+-- @realm server
 function plymeta:CanPickupWeapon(wep)
-	self.GiveItemFunctionFlag = true
+	self.wp__GiveItemFunctionFlag = true
 
 	return hook.Run("PlayerCanPickupWeapon", self, wep)
 end
@@ -1037,8 +1038,87 @@ end
 -- Returns wether or not a player can pick up a weapon
 -- @param string wepCls The weapon object classname
 -- @returns boolean
+-- @realm server
 function plymeta:CanPickupWeaponClass(wepCls)
 	local wep = ents.Create(wepCls)
 
 	return self:CanPickupWeapon(wep)
+end
+
+---
+-- This function simplifies the weapon pickup process for a player by
+-- handling all the needed calls.
+-- @param Weapon wep The weapon object
+-- @param boolean dropBlockingWeapon Should the currently selecten weapon be dropped
+-- @returns Weapon if successful, nil if not
+-- @realm server
+function plymeta:PickupWeapon(wep, dropBlockingWeapon)
+	if not IsValid(wep) then return end
+
+	-- Now comes the tricky part: Since Gmod doesn't allow us to pick up weapons by
+	-- calling a simple function while also keeping all the weapon specific params
+	-- set in the runtime, we have to use the GM:PlayerCanPickupWeapon hook in a
+	-- slightly hacky way
+
+	-- first we have to check if the player can pick up the weapon at all by running the
+	-- hook manually. This has to be done since the normal pickup is handled internally 
+	-- and is therefore not accessable for us
+	wep.wp__WeaponSwitchFlag = dropBlockingWeapon
+
+	if not self:CanPickupWeapon(wep) then return end
+
+	-- if parameter is set the currently blocking weapon should be dropped
+	if dropBlockingWeapon then
+		local dropWeapon, isActiveWeapon = self:GetBlockingWeapon(wep)
+
+		self:PrepareAndDropWeapon(dropWeapon)
+
+		if not InventorySlotFree(self, wep.Kind) then return end
+
+		-- set flag to new weapon that is used to autoselect it later on
+		wep.wp__oldWasActiveWeapon = isActiveWeapon
+	end
+
+	-- the flag is set to the player to stop other players from auto-picking up this weapon
+	wep.wp__AttemptWeaponPickup = self
+
+	-- if a pickup is possible, the weapon gets a flag set and is teleported to the feet
+	-- of the player
+	-- IMPORTANT: If the weapon gets teleported into other entities, it gets stuck. Therefore
+	-- the weapon is teleported to half player height
+	local pWepPos = self:EyePos()
+	pWepPos.z = pWepPos.z - 15 -- -15 to move it outside the viewing area
+
+	wep:SetPos(pWepPos)
+	wep:PhysicsDestroy()
+
+	return wep
+end
+
+---
+-- This function simplifies the weapon class giving process for a player by
+-- handling all the needed calls.
+-- @param string wepCls The weapon class
+-- @param boolean dropBlockingWeapon Should the currently selecten weapon be dropped
+-- @returns Weapon if successful, nil if not
+-- @realm server
+function plymeta:PickupWeaponClass(wepCls, dropBlockingWeapon)
+	local wep = weapons.GetStored(wepCls)
+	local pWep
+
+	-- if parameter is set the currently blocking weapon should be dropped
+	if dropBlockingWeapon then
+		local dropWeapon, isActiveWeapon = self:GetBlockingWeapon(wep)
+
+		self:PrepareAndDropWeapon(dropWeapon)
+
+		if not InventorySlotFree(self, wep.Kind) then return end
+
+		pWep = self:Give(wepCls)
+
+		-- set flag to new weapon that is used to autoselect it later on
+		pWep.wp__oldWasActiveWeapon = isActiveWeapon
+	end
+
+	return pWep
 end

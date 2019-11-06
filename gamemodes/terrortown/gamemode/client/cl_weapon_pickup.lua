@@ -16,7 +16,7 @@ end
 local lastRequest = 0
 
 local function AttemptWeaponSwitch()
-	if GetPickableWeaponInFront() == nil or lastRequest + 0.2 > CurTime() then return end
+	if GetPickableWeaponInFront() == nil or lastRequest + 0.5 > CurTime() then return end
 
 	net.Start("ttt2_switch_weapon")
 	net.SendToServer()
