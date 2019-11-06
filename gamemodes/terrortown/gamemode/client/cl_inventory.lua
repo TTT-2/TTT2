@@ -6,8 +6,6 @@ net.Receive("TTT2CleanupInventory", function()
 	if not IsValid(client) then return end
 
 	client.refresh_inventory_cache = true
-
-	WSWITCH:UpdateWeaponCache()
 end)
 
 net.Receive("TTT2AddWeaponToInventory", function()
@@ -15,8 +13,6 @@ net.Receive("TTT2AddWeaponToInventory", function()
 	if not IsValid(client) then return end
 
 	client.refresh_inventory_cache = true
-
-	WSWITCH:UpdateWeaponCache()
 end)
 
 net.Receive("TTT2RemoveWeaponFromInventory", function()
@@ -24,6 +20,4 @@ net.Receive("TTT2RemoveWeaponFromInventory", function()
 	if not IsValid(client) then return end
 
 	client.refresh_inventory_cache = true
-
-	WSWITCH:UpdateWeaponCache()
 end)
