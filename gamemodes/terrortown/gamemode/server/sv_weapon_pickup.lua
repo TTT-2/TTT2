@@ -8,14 +8,18 @@ if not plymeta then
 	return
 end
 
-function GetBlockingWeapon(ply, wep)
+---
+-- A simple handler to get the weapon blocking a new weapon from beeing picked up
+-- @param Weapon wep The new weapon that should be added to the player inventory
+-- @return Weapon, boolean The blocking weapon, active weapon?
+function plymeta:GetBlockingWeapon(wep)
 	-- no weapon is blocking if there is an inventory slot free
-	if InventorySlotFree(ply, wep.Kind) then
+	if InventorySlotFree(self, wep.Kind) then
 		return nil, false
 	end
 
 	-- start the drop weapon check by checking the active weapon
-	local throwWeapon = ply:GetActiveWeapon()
+	local throwWeapon = self:GetActiveWeapon()
 
 	-- if the currently selected weapon is the blocking weapon, return this one
 	if IsValid(throwWeapon) and throwWeapon.AllowDrop and throwWeapon.Kind == wep.Kind then
@@ -24,16 +28,18 @@ function GetBlockingWeapon(ply, wep)
 
 	-- the slot of the selected weapon is not blocking the pickup, check the other slots
 	-- as well
-	local weps = ply.inventory[MakeKindValid(wep.Kind)]
+	local weps = self.inventory[MakeKindValid(wep.Kind)]
 
 	-- reset throwWeapon, will be set to a weapon, if throwable weapon is found
 	throwWeapon = nil
 
 	-- get droppable weapon from given slot
 	for i = 1, #weps do
+		local wep_iter = weps[i]
+
 		-- found a weapon that is allowed to be dropped
-		if IsValid(weps[i]) and weps[i].AllowDrop then
-			throwWeapon = weps[i]
+		if IsValid(wep_iter) and wep_iter.AllowDrop then
+			throwWeapon = wep_iter
 
 			break
 		end
@@ -42,7 +48,11 @@ function GetBlockingWeapon(ply, wep)
 	return throwWeapon, false
 end
 
-function PrepareAndDropWeapon(ply, wep)
+---
+-- This function handles the weapon drop including ammo handling, flags etc
+-- @param Weapon wep The weapon to be dropped
+-- @realm server
+function plymeta:PrepareAndDropWeapon(wep)
 	if not IsValid(wep) then return end
 
 	if isfunction(wep.PreDrop) then
@@ -56,7 +66,7 @@ function PrepareAndDropWeapon(ply, wep)
 	wep.IsDropped = true
 
 	-- drop the old weapon
-	ply:DropWeapon(wep)
+	self:DropWeapon(wep)
 
 	-- wake the pysics of the dropped weapon
 	wep:PhysWake()

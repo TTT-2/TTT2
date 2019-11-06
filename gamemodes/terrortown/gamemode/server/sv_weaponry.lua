@@ -34,7 +34,6 @@ function GM:PlayerCanPickupWeapon(ply, wep)
 
 	ply.wp__GiveItemFunctionFlag = false
 	wep.wp__WeaponSwitchFlag = false
-	wep.wp__AttemptWeaponPickup = false
 
 	if not IsValid(wep) or not IsValid(ply) then return end
 
@@ -56,7 +55,8 @@ function GM:PlayerCanPickupWeapon(ply, wep)
 		return true
 	end
 
-	if cflag_weaponPickup then
+	if cflag_weaponPickup and cflag_weaponPickup == ply then
+		wep.wp__AttemptWeaponPickup = nil
 		return true
 	end
 

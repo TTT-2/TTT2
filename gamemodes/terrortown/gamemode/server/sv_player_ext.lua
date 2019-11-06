@@ -1049,6 +1049,7 @@ end
 -- This function simplifies the weapon pickup process for a player by
 -- handling all the needed calls.
 -- @param Weapon wep The weapon object
+-- @param boolean dropBlockingWeapon Should the currently selecten weapon be dropped
 -- @returns Weapon if successful, nil if not
 -- @realm server
 function plymeta:PickupWeapon(wep, dropBlockingWeapon)
@@ -1068,9 +1069,9 @@ function plymeta:PickupWeapon(wep, dropBlockingWeapon)
 
 	-- if parameter is set the currently blocking weapon should be dropped
 	if dropBlockingWeapon then
-		local dropWeapon, isActiveWeapon = GetBlockingWeapon(self, wep)
+		local dropWeapon, isActiveWeapon = self:GetBlockingWeapon(wep)
 
-		PrepareAndDropWeapon(self, dropWeapon)
+		self:PrepareAndDropWeapon(dropWeapon)
 
 		if not InventorySlotFree(self, wep.Kind) then return end
 
@@ -1078,30 +1079,37 @@ function plymeta:PickupWeapon(wep, dropBlockingWeapon)
 		wep.wp__oldWasActiveWeapon = isActiveWeapon
 	end
 
-	wep.wp__AttemptWeaponPickup = true
+	-- the flag is set to the player to stop other players from auto-picking up this weapon
+	wep.wp__AttemptWeaponPickup = self
 
 	-- if a pickup is possible, the weapon gets a flag set and is teleported to the feet
 	-- of the player
 	-- IMPORTANT: If the weapon gets teleported into other entities, it gets stuck. Therefore
 	-- the weapon is teleported to half player height
 	local pFootPos = self:GetPos()
-
-	pFootPos.z = pFootPos.z + 32
+	pFootPos.z = pFootPos.z + 50 -- +50 because it has to be higher than the drop position
 
 	wep:SetPos(pFootPos)
 
 	return wep
 end
 
+---
+-- This function simplifies the weapon class giving process for a player by
+-- handling all the needed calls.
+-- @param string wepCls The weapon class
+-- @param boolean dropBlockingWeapon Should the currently selecten weapon be dropped
+-- @returns Weapon if successful, nil if not
+-- @realm server
 function plymeta:PickupWeaponClass(wepCls, dropBlockingWeapon)
 	local wep = ents.Create(wepCls)
 	local pWep
 
 	-- if parameter is set the currently blocking weapon should be dropped
 	if dropBlockingWeapon then
-		local dropWeapon, isActiveWeapon = GetBlockingWeapon(self, wep)
+		local dropWeapon, isActiveWeapon = self:GetBlockingWeapon(wep)
 
-		PrepareAndDropWeapon(self, dropWeapon)
+		self:PrepareAndDropWeapon(dropWeapon)
 
 		if not InventorySlotFree(self, wep.Kind) then return end
 
