@@ -36,6 +36,14 @@ function GM:PlayerCanPickupWeapon(ply, wep)
 	wep.wp__WeaponSwitchFlag = false
 	wep.wp__AttemptWeaponPickup = false
 
+	if cflag_weaponPickup then
+		print("---------------------")
+		print(tostring(cflag_giveItem))
+		print(tostring(cflag_weaponSwitch))
+		print(tostring(ply:HasWeapon(WEPS.GetClass(wep))))
+		print(tostring(InventorySlotFree(ply, wep.Kind)))
+	end
+
 	if not IsValid(wep) or not IsValid(ply) then return end
 
 	if ply:IsSpec() then

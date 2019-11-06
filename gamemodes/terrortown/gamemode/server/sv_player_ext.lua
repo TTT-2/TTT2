@@ -1070,8 +1070,6 @@ function plymeta:PickupWeapon(wep, dropBlockingWeapon)
 	if dropBlockingWeapon then
 		local dropWeapon, isActiveWeapon = GetBlockingWeapon(self, wep)
 
-		print("DW: " .. tostring(dropWeapon))
-
 		PrepareAndDropWeapon(self, dropWeapon)
 
 		if not InventorySlotFree(self, wep.Kind) then return end
@@ -1080,10 +1078,17 @@ function plymeta:PickupWeapon(wep, dropBlockingWeapon)
 		wep.wp__oldWasActiveWeapon = isActiveWeapon
 	end
 
+	wep.wp__AttemptWeaponPickup = true
+
 	-- if a pickup is possible, the weapon gets a flag set and is teleported to the feet
 	-- of the player
-	wep.wp__AttemptWeaponPickup = true
-	wep:SetPos(self:GetPos())
+	-- IMPORTANT: If the weapon gets teleported into other entities, it gets stuck. Therefore
+	-- the weapon is teleported to half player height
+	local pFootPos = self:GetPos()
+
+	pFootPos.z = pFootPos.z + 32
+
+	wep:SetPos(pFootPos)
 
 	return wep
 end
@@ -1095,8 +1100,6 @@ function plymeta:PickupWeaponClass(wepCls, dropBlockingWeapon)
 	-- if parameter is set the currently blocking weapon should be dropped
 	if dropBlockingWeapon then
 		local dropWeapon, isActiveWeapon = GetBlockingWeapon(self, wep)
-
-		print("DW: " .. tostring(dropWeapon))
 
 		PrepareAndDropWeapon(self, dropWeapon)
 
