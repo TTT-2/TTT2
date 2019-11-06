@@ -1086,10 +1086,11 @@ function plymeta:PickupWeapon(wep, dropBlockingWeapon)
 	-- of the player
 	-- IMPORTANT: If the weapon gets teleported into other entities, it gets stuck. Therefore
 	-- the weapon is teleported to half player height
-	local pFootPos = self:GetPos()
-	pFootPos.z = pFootPos.z + 50 -- +50 because it has to be higher than the drop position
+	local pWepPos = self:EyePos()
+	pWepPos.z = pWepPos.z - 15 -- -15 to move it outside the viewing area
 
-	wep:SetPos(pFootPos)
+	wep:SetPos(pWepPos)
+	wep:PhysicsDestroy()
 
 	return wep
 end

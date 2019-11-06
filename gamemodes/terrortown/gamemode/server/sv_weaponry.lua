@@ -57,6 +57,7 @@ function GM:PlayerCanPickupWeapon(ply, wep)
 
 	if cflag_weaponPickup and cflag_weaponPickup == ply then
 		wep.wp__AttemptWeaponPickup = nil
+
 		return true
 	end
 
