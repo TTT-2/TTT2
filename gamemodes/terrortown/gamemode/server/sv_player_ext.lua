@@ -1055,6 +1055,19 @@ end
 function plymeta:PickupWeapon(wep, dropBlockingWeapon)
 	if not IsValid(wep) then return end
 
+	-- if this weapon is already flagged by a different player, the pickup shouldn't happen
+	if wep.wpickup_player then return end
+
+	-- if the player tries to pickup another weapon while the pickup process of a previous
+	-- weapon is still running, the old flags have to be reset
+	if self.wpickup_weapon then
+		-- clearing the player flag of this weapon, freeing it to every other player
+		self.wpickup_weapon.wpickup_player = nil
+
+		-- reenable the physics of the weapon to let it drop back to the ground
+		self.wpickup_weapon:PhysWake()
+	end
+
 	-- Now comes the tricky part: Since Gmod doesn't allow us to pick up weapons by
 	-- calling a simple function while also keeping all the weapon specific params
 	-- set in the runtime, we have to use the GM:PlayerCanPickupWeapon hook in a
@@ -1079,8 +1092,11 @@ function plymeta:PickupWeapon(wep, dropBlockingWeapon)
 		wep.wp__oldWasActiveWeapon = isActiveWeapon
 	end
 
-	-- the flag is set to the player to stop other players from auto-picking up this weapon
-	wep.wp__AttemptWeaponPickup = self
+	-- this flag is set to the player to make sure he only picks up this weapon
+	self.wpickup_weapon = wep
+
+	-- the flag is set to the weapon to stop other players from auto-picking up this weapon
+	wep.wpickup_player = self
 
 	-- if a pickup is possible, the weapon gets a flag set and is teleported to the feet
 	-- of the player

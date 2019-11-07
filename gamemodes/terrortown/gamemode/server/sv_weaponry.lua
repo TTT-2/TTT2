@@ -30,12 +30,19 @@ local cv_auto_pickup = CreateConVar("ttt_weapon_autopickup", "0", {FCVAR_ARCHIVE
 -- @local
 function GM:PlayerCanPickupWeapon(ply, wep)
 	-- Flags should be reset no matter what happens afterwards --> cache them here
-	local cflag_giveItem, cflag_weaponSwitch, cflag_weaponPickup = ply.wp__GiveItemFunctionFlag, wep.wp__WeaponSwitchFlag, wep.wp__AttemptWeaponPickup
+	local cflag_giveItem, cflag_weaponSwitch = ply.wp__GiveItemFunctionFlag, wep.wp__WeaponSwitchFlag
 
 	ply.wp__GiveItemFunctionFlag = false
 	wep.wp__WeaponSwitchFlag = false
 
 	if not IsValid(wep) or not IsValid(ply) then return end
+
+	if wep.wpickup_player or ply.wpickup_weapon then
+		print("-----------------")
+		print(wep:GetClass())
+		print(tostring(wep.wpickup_player))
+		print(tostring(ply.wpickup_weapon))
+	end
 
 	if ply:IsSpec() then
 		return false
@@ -50,21 +57,38 @@ function GM:PlayerCanPickupWeapon(ply, wep)
 		return false
 	end
 
-	-- if weapon is given by ply:Give function, this flag is set
+	-- if weapon is given by ply:Give function, it should always be inserted into the player inventory
 	if cflag_giveItem then
 		return true
 	end
 
-	if cflag_weaponPickup and cflag_weaponPickup == ply then
-		wep.wp__AttemptWeaponPickup = nil
+	-- if triggered by weapon switch the weapon should be inserted into the player inventory
+	-- this should only happen when the following two flags are set arcordingly
+	if wep.wpickup_player and wep.wpickup_player == ply
+	and ply.wpickup_weapon and ply.wpickup_weapon == wep
+	then
+		-- these flags shouldn't be reset on first call of this hook since GMOD might do stupid things
+		-- while attempting to pickup a weapon
+		-- therefore these flags keep their value until the weapon is picked up or the player attempts
+		-- another pickup
+		wep.wpickup_player = nil
+		ply.wpickup_weapon = nil
 
 		return true
 	end
 
+	-- do not automatically pick up a weapon if the player already has the pickup
+	-- weapon flag set
+	if ply.wp__AttemptWeaponPickup then
+		return false
+	end
+
+	-- if the auto pickup convar is set to false, no weapons should be picked up automatically
 	if not cv_auto_pickup:GetBool() then
 		return false
 	end
 
+	-- if it is a dropped equipment item, it shouldn't be picked up automatically
 	if IsEquipment(wep) and wep.IsDropped then
 		return false
 	end
