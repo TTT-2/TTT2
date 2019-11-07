@@ -15,6 +15,7 @@ end
 
 local lastRequest = 0
 
+-- sends  a request to the server that this client wants to pickup/switch a weapon
 local function AttemptWeaponSwitch()
 	if GetPickableWeaponInFront() == nil or lastRequest + 0.25 > CurTime() then return end
 
@@ -36,6 +37,11 @@ SWITCHMODE_PICKUP = 0
 SWITCHMODE_SWITCH = 1
 SWITCHMODE_NOSPACE = 2
 
+---
+-- returns some wepon pickup/switch related information about a given weapon
+-- @param Weapon wep The weapon we want to get information about
+-- @return number, Weapon, boolean The weapon pickup/switch mode, the weapon that is dropped, dropped weapon = active weapon?
+-- @realm client
 function GetPickupMode(wep)
 	local client = LocalPlayer()
 	local throwWeapon = client:GetActiveWeapon()

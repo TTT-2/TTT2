@@ -37,22 +37,21 @@ function GM:PlayerCanPickupWeapon(ply, wep)
 
 	if not IsValid(wep) or not IsValid(ply) then return end
 
-	if wep.wpickup_player or ply.wpickup_weapon then
-		print("-----------------")
-		print(wep:GetClass())
-		print(tostring(wep.wpickup_player))
-		print(tostring(ply.wpickup_weapon))
-	end
-
+	-- spectators are not allowed to pickup weapons
 	if ply:IsSpec() then
 		return false
 	end
 
-	-- prevent picking up weapons for ammo
+	-- prevent picking up weapons of the same class a player already has (for ammo if auto-pickup is enabled)
+	-- exception: this hook is called to check if a player can pick up weapon while dropping
+	-- the current weapon
 	if ply:HasWeapon(WEPS.GetClass(wep)) and not cflag_weaponSwitch then
 		return false
 	end
 
+	-- block pickup when there is no slot free
+	-- exception: this hook is called to check if a player can pick up weapon while dropping
+	-- the current weapon
 	if not InventorySlotFree(ply, wep.Kind) and not cflag_weaponSwitch then
 		return false
 	end
@@ -93,6 +92,7 @@ function GM:PlayerCanPickupWeapon(ply, wep)
 		return false
 	end
 
+	-- Who knows what happens here?!
 	local tr = util.TraceEntity({
 		start = wep:GetPos(),
 		endpos = ply:GetShootPos(),
