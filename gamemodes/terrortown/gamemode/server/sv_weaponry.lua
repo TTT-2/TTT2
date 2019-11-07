@@ -62,7 +62,7 @@ function GM:PlayerCanPickupWeapon(ply, wep)
 	end
 
 	-- if triggered by weapon switch the weapon should be inserted into the player inventory
-	-- this should only happen when the following two flags are set arcordingly
+	-- this should only happen when the following two flags are set accordingly
 	if wep.wpickup_player and wep.wpickup_player == ply
 	and ply.wpickup_weapon and ply.wpickup_weapon == wep
 	then
@@ -78,7 +78,13 @@ function GM:PlayerCanPickupWeapon(ply, wep)
 
 	-- do not automatically pick up a weapon if the player already has the pickup
 	-- weapon flag set
-	if ply.wp__AttemptWeaponPickup then
+	if ply.wpickup_weapon then
+		return false
+	end
+
+	-- stop other players from automatically picking up a weapon when a player already set
+	-- the pickup flag
+	if wep.wpickup_player then
 		return false
 	end
 
@@ -674,6 +680,9 @@ function GM:WeaponEquip(wep, ply)
 
 			ply:SelectWeapon(WEPS.GetClass(wep))
 		end
+
+		-- since the weapon pickup sets the weapon to invisible, it has to be reset here
+		wep:SetNoDraw(false)
 	end
 
 	-- handle all this stuff in the next frame since the owner is not yet valid

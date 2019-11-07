@@ -1066,6 +1066,9 @@ function plymeta:PickupWeapon(wep, dropBlockingWeapon)
 
 		-- reenable the physics of the weapon to let it drop back to the ground
 		self.wpickup_weapon:PhysWake()
+
+		-- make weapon visible again when dropped
+		self.wpickup_weapon:SetNoDraw(false)
 	end
 
 	-- Now comes the tricky part: Since Gmod doesn't allow us to pick up weapons by
@@ -1090,6 +1093,11 @@ function plymeta:PickupWeapon(wep, dropBlockingWeapon)
 
 		-- set flag to new weapon that is used to autoselect it later on
 		wep.wp__oldWasActiveWeapon = isActiveWeapon
+
+		-- set to holstered if current weapon is dropped to prevent short crowbar selection
+		if isActiveWeapon then
+			self:SelectWeapon("weapon_ttt_unarmed")
+		end
 	end
 
 	-- this flag is set to the player to make sure he only picks up this weapon
@@ -1107,6 +1115,9 @@ function plymeta:PickupWeapon(wep, dropBlockingWeapon)
 
 	wep:SetPos(pWepPos)
 	wep:PhysicsDestroy()
+
+	-- make weapon invisible to prevent stuck weapon in player sight
+	wep:SetNoDraw(true)
 
 	return wep
 end
