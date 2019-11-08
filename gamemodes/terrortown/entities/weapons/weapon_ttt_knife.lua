@@ -301,7 +301,7 @@ function SWEP:OnRemove()
 
 	local owner = self:GetOwner()
 
-	if IsValid(owner) and owner == LocalPlayer() and sowner:Alive() then
+	if IsValid(owner) and owner == LocalPlayer() and owner:Alive() then
 		RunConsoleCommand("lastinv")
 	end
 end

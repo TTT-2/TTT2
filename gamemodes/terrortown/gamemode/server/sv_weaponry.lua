@@ -29,13 +29,13 @@ local cv_auto_pickup = CreateConVar("ttt_weapon_autopickup", "0", {FCVAR_ARCHIVE
 -- @ref https://wiki.garrysmod.com/page/GM/PlayerCanPickupWeapon
 -- @local
 function GM:PlayerCanPickupWeapon(ply, wep)
+	if not IsValid(wep) or not IsValid(ply) then return end
+
 	-- Flags should be reset no matter what happens afterwards --> cache them here
 	local cflag_giveItem, cflag_weaponSwitch = ply.wp__GiveItemFunctionFlag, wep.wp__WeaponSwitchFlag
 
 	ply.wp__GiveItemFunctionFlag = false
 	wep.wp__WeaponSwitchFlag = false
-
-	if not IsValid(wep) or not IsValid(ply) then return end
 
 	-- spectators are not allowed to pickup weapons
 	if ply:IsSpec() then
@@ -663,11 +663,6 @@ function GM:WeaponEquip(wep, ply)
 
 	if IsValid(ply) and wep.Kind then
 		AddWeaponToInventoryAndNotifyClient(ply, wep)
-
-		-- there is a glitch that picking up a weapon does not refresh the weapon cache on
-		-- the client. Therefore the client has to be notified to updated its cache
-		net.Start("ttt2_switch_weapon_update_cache")
-		net.Send(ply)
 	end
 
 	local function WeaponEquipNextFrame()
@@ -675,11 +670,16 @@ function GM:WeaponEquip(wep, ply)
 
 		-- autoselect weapon when the new weapon has the same slot than the old one
 		-- do not autoselect when ALT is pressed
-		if wep.wp__oldWasActiveWeapon or not ply:KeyDown(IN_WALK) and not ply:KeyDownLast(IN_WALK) then
-			wep.wp__oldWasActiveWeapon = false
+		if wep.wpickup_autoSelect then
+			wep.wpickup_autoSelect = nil
 
 			ply:SelectWeapon(WEPS.GetClass(wep))
 		end
+
+		-- there is a glitch that picking up a weapon does not refresh the weapon cache on
+		-- the client. Therefore the client has to be notified to updated its cache
+		net.Start("ttt2_switch_weapon_update_cache")
+		net.Send(ply)
 
 		-- since the weapon pickup sets the weapon to invisible, it has to be reset here
 		wep:SetNoDraw(false)

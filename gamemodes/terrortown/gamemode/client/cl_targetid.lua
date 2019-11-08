@@ -400,7 +400,7 @@ function HUDDrawTargetIDWeapons(data, params)
 		return
 	end
 
-	local dropwep_mode, throwWeapon, isActiveWeapon = GetPickupMode(data.ent)
+	local dropWeapon, isActiveWeapon, switchMode = GetBlockingWeapon(client, data.ent)
 	local kind_pickup_wep = MakeKindValid(data.ent.Kind)
 
 	local weapon_name
@@ -415,35 +415,35 @@ function HUDDrawTargetIDWeapons(data, params)
 	params.displayInfo.key = bind.Find("ttt2_weaponswitch")
 	params.displayInfo.title.text = TryT(weapon_name) .. " [" .. GetPT("target_slot_info", {slot = kind_pickup_wep}) .. "]"
 
-	if dropwep_mode == SWITCHMODE_PICKUP then
+	if switchMode == SWITCHMODE_PICKUP then
 		params.displayInfo.subtitle.text = TryT("target_pickup_weapon") .. (not isActiveWeapon and GetPT("target_pickup_weapon_hidden", key_params) or "")
-	elseif dropwep_mode == SWITCHMODE_SWITCH then
+	elseif switchMode == SWITCHMODE_SWITCH then
 		params.displayInfo.subtitle.text = TryT("target_switch_weapon") .. (not isActiveWeapon and GetPT("target_switch_weapon_hidden", key_params) or "")
-	elseif dropwep_mode == SWITCHMODE_NOSPACE then
+	elseif switchMode == SWITCHMODE_NOSPACE then
 		params.displayInfo.subtitle.text = TryT("target_switch_weapon_nospace")
 	end
 
-	if dropwep_mode == SWITCHMODE_SWITCH then
-		local kind_throw_wep = MakeKindValid(throwWeapon.Kind)
-		local throwWeapon_name
+	if switchMode == SWITCHMODE_SWITCH then
+		local dropWepKind = MakeKindValid(dropWeapon.Kind)
+		local dropWeapon_name
 
-		if not throwWeapon.GetPrintName then
-			throwWeapon_name = throwWeapon:GetPrintName() or throwWeapon.PrintName or throwWeapon:GetClass() or "..."
+		if not dropWeapon.GetPrintName then
+			dropWeapon_name = dropWeapon:GetPrintName() or dropWeapon.PrintName or dropWeapon:GetClass() or "..."
 		else
-			throwWeapon_name = throwWeapon.PrintName or throwWeapon:GetClass() or "..."
+			dropWeapon_name = dropWeapon.PrintName or dropWeapon:GetClass() or "..."
 		end
 
 		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
-			text = GetPT("target_switch_drop_weapon_info", {slot = kind_throw_wep, name = TryT(throwWeapon_name)}),
+			text = GetPT("target_switch_drop_weapon_info", {slot = dropWepKind, name = TryT(dropWeapon_name)}),
 			color = COLOR_ORANGE
 		}
 	end
 
-	if dropwep_mode == SWITCHMODE_NOSPACE then
-		local kind_throw_wep = MakeKindValid(data.ent.Kind)
+	if switchMode == SWITCHMODE_NOSPACE then
+		local dropWepKind = MakeKindValid(data.ent.Kind)
 
 		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
-			text = GetPT("target_switch_drop_weapon_info_noslot", {slot = kind_throw_wep}),
+			text = GetPT("target_switch_drop_weapon_info_noslot", {slot = dropWepKind}),
 			color = COLOR_ORANGE
 		}
 	end

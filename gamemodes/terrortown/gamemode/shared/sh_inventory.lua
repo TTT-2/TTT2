@@ -142,6 +142,64 @@ function InventorySlotFree(ply, kind)
 	return slotCount < 0 or #ply.inventory[invSlot] < slotCount
 end
 
+SWITCHMODE_PICKUP = 0
+SWITCHMODE_SWITCH = 1
+SWITCHMODE_NOSPACE = 2
+
+---
+-- A simple handler to get the weapon blocking a new weapon from beeing picked up
+-- @param Weapon wep The new weapon that should be added to the player inventory
+-- @return Weapon, boolean The blocking weapon, active weapon?, switchmode
+-- @ream shared
+function GetBlockingWeapon(ply, wep)
+	-- start the drop weapon check by checking the active weapon
+	local activeWeapon = ply:GetActiveWeapon()
+	local throwWeapon, switchMode
+
+	-- if the player already has this weapon class, the weapon has to be dropped
+	if ply:HasWeapon(WEPS.GetClass(wep)) then
+		throwWeapon = ply:GetWeapon(WEPS.GetClass(wep))
+		switchMode = SWITCHMODE_SWITCH
+
+	-- if the player has a slot free while also not yet having this weapon class
+	elseif InventorySlotFree(ply, wep.Kind) then
+		throwWeapon = nil
+		switchMode = SWITCHMODE_PICKUP
+
+	-- if the player has already a weapon with the same class selected - drop this one
+	elseif IsValid(activeWeapon) and activeWeapon.AllowDrop and activeWeapon.Kind == wep.Kind then
+		throwWeapon = activeWeapon
+		switchMode = SWITCHMODE_SWITCH
+
+	-- try to find a dropable weapon in the selected slot
+	else
+		local weps = ply.inventory[MakeKindValid(wep.Kind)]
+		switchMode = SWITCHMODE_NOSPACE
+
+		-- get droppable weapon from given slot
+		for i = 1, #weps do
+			local wep_iter = weps[i]
+
+			-- found a weapon that is allowed to be dropped
+			if IsValid(wep_iter) and wep_iter.AllowDrop then
+				throwWeapon = wep_iter
+				switchMode = SWITCHMODE_SWITCH
+
+				break
+			end
+		end
+	end
+
+	-- now make sure the selected weapon is valid and dropable
+	if IsValid(throwWeapon) and not throwWeapon.AllowDrop then
+		throwWeapon = nil
+		switchMode = SWITCHMODE_NOSPACE
+	end
+
+	return throwWeapon, throwWeapon == activeWeapon, switchMode
+end
+
+
 ---
 -- Adds a @{Weapon} into the Inventory
 -- @param Player ply

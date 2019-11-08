@@ -1049,10 +1049,16 @@ end
 -- This function simplifies the weapon pickup process for a player by
 -- handling all the needed calls.
 -- @param Weapon wep The weapon object
--- @param boolean dropBlockingWeapon Should the currently selecten weapon be dropped
+-- @param [default=false] boolean dropBlockingWeapon Should the currently selecten weapon be dropped
+-- @param boolean shouldAutoSelect Should this weapon be autoselected after equip, if not set this value is set by player keypress
 -- @returns Weapon if successful, nil if not
 -- @realm server
-function plymeta:PickupWeapon(wep, dropBlockingWeapon)
+function plymeta:PickupWeapon(wep, dropBlockingWeapon, shouldAutoSelect)
+	-- if the variable is not set, set it fitting to the keypress
+	if shouldAutoSelect == nil then
+		shouldAutoSelect = not self:KeyDown(IN_WALK) and not self:KeyDownLast(IN_WALK)
+	end
+
 	if not IsValid(wep) then return end
 
 	-- if this weapon is already flagged by a different player, the pickup shouldn't happen
@@ -1060,11 +1066,12 @@ function plymeta:PickupWeapon(wep, dropBlockingWeapon)
 
 	-- if the player tries to pickup another weapon while the pickup process of a previous
 	-- weapon is still running, the old flags have to be reset
-	if self.wpickup_weapon then
+	if IsValid(self.wpickup_weapon) then
 		-- clearing the player flag of this weapon, freeing it to every other player
 		self.wpickup_weapon.wpickup_player = nil
 
 		-- reenable the physics of the weapon to let it drop back to the ground
+		self.wpickup_weapon:PhysicsInit(SOLID_VPHYSICS)
 		self.wpickup_weapon:PhysWake()
 
 		-- make weapon visible again when dropped
@@ -1085,14 +1092,14 @@ function plymeta:PickupWeapon(wep, dropBlockingWeapon)
 
 	-- if parameter is set the currently blocking weapon should be dropped
 	if dropBlockingWeapon then
-		local dropWeapon, isActiveWeapon = self:GetBlockingWeapon(wep)
+		local dropWeapon, isActiveWeapon, switchMode = GetBlockingWeapon(self, wep)
+
+		if switchMode == SWITCHMODE_NOSPACE then return end
 
 		self:PrepareAndDropWeapon(dropWeapon)
 
-		if not InventorySlotFree(self, wep.Kind) then return end
-
 		-- set flag to new weapon that is used to autoselect it later on
-		wep.wp__oldWasActiveWeapon = isActiveWeapon
+		shouldAutoSelect = shouldAutoSelect or isActiveWeapon
 
 		-- set to holstered if current weapon is dropped to prevent short crowbar selection
 		if isActiveWeapon then
@@ -1119,6 +1126,9 @@ function plymeta:PickupWeapon(wep, dropBlockingWeapon)
 	-- make weapon invisible to prevent stuck weapon in player sight
 	wep:SetNoDraw(true)
 
+	-- set autoselect flag
+	wep.wpickup_autoSelect = shouldAutoSelect
+
 	return wep
 end
 
@@ -1126,25 +1136,31 @@ end
 -- This function simplifies the weapon class giving process for a player by
 -- handling all the needed calls.
 -- @param string wepCls The weapon class
--- @param boolean dropBlockingWeapon Should the currently selecten weapon be dropped
+-- @param [default=false] boolean dropBlockingWeapon Should the currently selecten weapon be dropped
+-- @param boolean shouldAutoSelect Should this weapon be autoselected after equip, if not set this value is set by player keypress
 -- @returns Weapon if successful, nil if not
 -- @realm server
-function plymeta:PickupWeaponClass(wepCls, dropBlockingWeapon)
+function plymeta:PickupWeaponClass(wepCls, dropBlockingWeapon, shouldAutoSelect)
+	-- if the variable is not set, set it fitting to the keypress
+	if shouldAutoSelect == nil then
+		shouldAutoSelect = not self:KeyDown(IN_WALK) and not self:KeyDownLast(IN_WALK)
+	end
+
 	local wep = weapons.GetStored(wepCls)
 	local pWep
 
 	-- if parameter is set the currently blocking weapon should be dropped
 	if dropBlockingWeapon then
-		local dropWeapon, isActiveWeapon = self:GetBlockingWeapon(wep)
+		local dropWeapon, isActiveWeapon, switchMode = GetBlockingWeapon(self, wep)
+
+		if switchMode == SWITCHMODE_NOSPACE then return end
 
 		self:PrepareAndDropWeapon(dropWeapon)
-
-		if not InventorySlotFree(self, wep.Kind) then return end
 
 		pWep = self:Give(wepCls)
 
 		-- set flag to new weapon that is used to autoselect it later on
-		pWep.wp__oldWasActiveWeapon = isActiveWeapon
+		pWep.wpickup_autoSelect = shouldAutoSelect or isActiveWeapon
 	end
 
 	return pWep
