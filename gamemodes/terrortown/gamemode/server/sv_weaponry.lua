@@ -16,7 +16,7 @@ local CreateConVar = CreateConVar
 
 local IsEquipment = WEPS.IsEquipment
 
-local cv_auto_pickup = CreateConVar("ttt_weapon_autopickup", "0", {FCVAR_ARCHIVE, FCVAR_NOTIFY})
+local cv_auto_pickup = CreateConVar("ttt_weapon_autopickup", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY})
 
 ---
 -- Returns whether or not a @{Player} is allowed to pick up a @{Weapon}
@@ -681,8 +681,8 @@ function GM:WeaponEquip(wep, ply)
 		net.Start("ttt2_switch_weapon_update_cache")
 		net.Send(ply)
 
-		-- since the weapon pickup sets the weapon to invisible, it has to be reset here
-		wep:SetNoDraw(false)
+		-- since the weapon pickup changes some weapon data, it has to be reset here
+		ResetWeapon(wep)
 	end
 
 	-- handle all this stuff in the next frame since the owner is not yet valid

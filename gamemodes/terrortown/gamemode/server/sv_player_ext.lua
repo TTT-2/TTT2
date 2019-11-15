@@ -1066,17 +1066,7 @@ function plymeta:PickupWeapon(wep, dropBlockingWeapon, shouldAutoSelect)
 
 	-- if the player tries to pickup another weapon while the pickup process of a previous
 	-- weapon is still running, the old flags have to be reset
-	if IsValid(self.wpickup_weapon) then
-		-- clearing the player flag of this weapon, freeing it to every other player
-		self.wpickup_weapon.wpickup_player = nil
-
-		-- reenable the physics of the weapon to let it drop back to the ground
-		self.wpickup_weapon:PhysicsInit(SOLID_VPHYSICS)
-		self.wpickup_weapon:PhysWake()
-
-		-- make weapon visible again when dropped
-		self.wpickup_weapon:SetNoDraw(false)
-	end
+	ResetWeapon(self.wpickup_weapon)
 
 	-- Now comes the tricky part: Since Gmod doesn't allow us to pick up weapons by
 	-- calling a simple function while also keeping all the weapon specific params
@@ -1121,7 +1111,12 @@ function plymeta:PickupWeapon(wep, dropBlockingWeapon, shouldAutoSelect)
 	pWepPos.z = pWepPos.z - 15 -- -15 to move it outside the viewing area
 
 	wep:SetPos(pWepPos)
+
+	-- destroy physics to let weapon float in the air
 	wep:PhysicsDestroy()
+
+	-- set collision group to IN_VEHICLE to be nonexistent, bullets can pass through it
+	wep:SetCollisionGroup(COLLISION_GROUP_IN_VEHICLE)
 
 	-- make weapon invisible to prevent stuck weapon in player sight
 	wep:SetNoDraw(true)

@@ -32,6 +32,23 @@ function plymeta:PrepareAndDropWeapon(wep)
 	wep:PhysWake()
 end
 
+function ResetWeapon(wep)
+	if not IsValid(wep) then return end
+
+	-- clearing the player flag of this weapon, freeing it to every other player
+	wep.wpickup_player = nil
+
+	-- reenable the physics of the weapon to let it drop back to the ground
+	wep:PhysicsInit(SOLID_VPHYSICS)
+	wep:PhysWake()
+
+	-- reset weapon collisions
+	wep:SetCollisionGroup(COLLISION_GROUP_WEAPON)
+
+	-- make weapon visible again when dropped
+	wep:SetNoDraw(false)
+end
+
 net.Receive("ttt2_switch_weapon", function(_, ply)
 	-- player and wepaon must be valid
 	if not IsValid(ply) or not ply:IsTerror() or not ply:Alive() then return end

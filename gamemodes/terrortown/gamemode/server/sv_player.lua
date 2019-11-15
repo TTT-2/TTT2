@@ -630,9 +630,12 @@ concommand.Add("ttt_spec_use", SpecUseKey)
 -- @ref https://wiki.garrysmod.com/page/GM/PlayerDisconnected
 -- @local
 function GM:PlayerDisconnected(ply)
-	-- Prevent the disconnecter from being in the resends
 	if IsValid(ply) then
+		-- Prevent the disconnected player from being in the resends
 		ply:SetRole(ROLE_NONE)
+
+		-- abort the weapon pickup when a player disconnects
+		ResetWeapon(ply.wpickup_weapon)
 	end
 
 	if GetRoundState() ~= ROUND_PREP then
@@ -926,6 +929,9 @@ function GM:PlayerDeath(victim, infl, attacker)
 
 	-- tell no one
 	self:PlayerSilentDeath(victim)
+
+	-- abort the weapon pickup when a player dies
+	ResetWeapon(victim.wpickup_weapon)
 
 	timer.Simple(0, function()
 		if not IsValid(victim) then return end
