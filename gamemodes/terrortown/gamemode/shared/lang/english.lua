@@ -19,7 +19,7 @@ L.traitors = "TEAM Traitors"
 L.ttt2_desc_none = "Currently you don't have a role!"
 L.ttt2_desc_innocent = "Your goal is to survive the Traitors!"
 L.ttt2_desc_traitor = "Kill every other role with the help of the Traitorshop ([C])!"
-L.ttt2_desc_detective = "You are an Innocent! Help the Innocents to survive or to find the Traitors!"
+L.ttt2_desc_detective = "You are a Detective! Help the Innocents to survive or to find the Traitors!"
 
 -- Round status messages
 L.round_minplayers = "Not enough players to start a new round..."
@@ -284,7 +284,7 @@ L.set_fastswmenu_tip = "When fast weapons switch is enabled, the menu switcher m
 L.set_wswitch = "Disable weapon switch menu auto-closing"
 L.set_wswitch_tip = "By default the weapon switcher automatically closes a few seconds after you last scroll. Enable this to make it stay up."
 L.set_cues = "Play sound cue when a round begins or ends"
-L.entity_draw_halo = "Drawn an outline around some entities while looking at them"
+L.entity_draw_halo = "Draw an outline around some entities while looking at them"
 
 
 L.set_title_play = "Gameplay settings"
@@ -324,7 +324,7 @@ L.item_armor = "Body Armor"
 L.item_armor_desc = [[
 Reduces bullet, fire and explosion damage. Depletes over time.
 
-You can buy it multiple times and after reaching a certain armor value, the armor becomes stronger.]]
+It can be purchased multiple times. After reaching a specific armor value, the armor becomes stronger.]]
 
 L.item_radar = "Radar"
 L.item_radar_desc = [[
@@ -377,7 +377,7 @@ L.vis_name = "Visualizer"
 L.vis_hint = "Press {usekey} to pick up (Detectives only)."
 
 L.vis_help_pri = "{primaryfire} drops the activated device."
-L.vis_short_desc = "Visualizes a crimeszene if the victim died by a gunshot wound"
+L.vis_short_desc = "Visualizes a crime scene if the victim died by a gunshot wound"
 
 L.vis_desc = [[
 Crime scene visualization device.
@@ -616,9 +616,9 @@ L.karma_min = "Liability"
 -- TargetID misc
 L.corpse = "Corpse"
 L.corpse_hint = "Press [{usekey}] to search. [{walkkey} + {usekey}] to search covertly."
-L.corpse_too_far_away = "Corpse too far away to search."
+L.corpse_too_far_away = "The corpse is too far away."
 L.corpse_binoculars = "Press [{key}] to search corpse with binoculars."
-L.corpse_searched_by_detective = "Corpse was searched by a detective"
+L.corpse_searched_by_detective = "This corpse was searched by a detective"
 
 L.target_disg = "disguised"
 L.target_unid = "Unidentified body"
@@ -639,7 +639,7 @@ L.target_pickup_weapon_hidden = ", hold {walkkey} for hidden pickup"
 L.target_switch_weapon_hidden = ", hold {walkkey} for hidden switch"
 L.target_switch_weapon_nospace = "There is no inventory slot available for this weapon"
 L.target_switch_drop_weapon_info = "Dropping {name} from slot {slot}"
-L.target_switch_drop_weapon_info_noslot = "There is no dropable weapon in slot {slot}"
+L.target_switch_drop_weapon_info_noslot = "There is no droppable weapon in slot {slot}"
 
 -- Traitor buttons (HUD buttons with hand icons that only traitors can see)
 L.tbut_single = "Single use"
@@ -664,7 +664,7 @@ L.punch_bonus = "Your bad score lowered your punch-o-meter limit by {num}"
 L.punch_malus = "Your good score increased your punch-o-meter limit by {num}!"
 
 L.spec_help = "Click to spectate players, or press {usekey} on a physics object to possess it."
-L.spec_help2 = "To leave the spectator mode you have to open the menu by pressing {helpkey}, goto 'gameplay' and toggle the specator mode."
+L.spec_help2 = "To leave the spectator mode, open the menu by pressing {helpkey}, go to 'gameplay' and toggle the spectator mode."
 
 -- Info popups shown when the round starts
 
@@ -1113,9 +1113,6 @@ L.set_cross_size = "Crosshair size"
 -- 5-25-15
 L.hat_retrieve = "You picked up a Detective's hat."
 
--- 3-9-2017
-L.sb_sortby = "Sort By:"
-
 -- 2018-07-24
 L.equip_tooltip_main = "Equipment menu"
 L.equip_tooltip_radar = "Radar control"
@@ -1169,7 +1166,7 @@ L.shop_edit_items = "Edit Items"
 L.shop_edit_shop = "Edit Shop"
 L.shop_create_shop = "Create Custom Shop"
 L.shop_selected = "Selected {role}"
-L.shop_settings_desc = "Change the values to adapt Random Shop ConVars. Don't forget to save afterwards!"
+L.shop_settings_desc = "Change the values to adapt Random Shop ConVars. Don't forget to save your changes!"
 
 L.f1_settings_changes_title = "Changes"
 L.f1_settings_hudswitcher_title = "HUD Switcher"
