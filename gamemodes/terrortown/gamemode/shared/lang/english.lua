@@ -102,7 +102,7 @@ L.equip_spec_desc = "Description"
 
 L.equip_confirm = "Buy equipment"
 
-L.equip_not_alive = "You can view all available items by selecting a role on the right. Dont forget to mark your favorites!"
+L.equip_not_alive = "You can view all available items by selecting a role on the right. Don't forget to mark your favorites!"
 
 -- Disguiser tab in equipment menu
 L.disg_name = "Disguiser"
@@ -425,7 +425,7 @@ L.hstation_name = "Health Station"
 L.hstation_subtitle = "Press [key] to receive health."
 L.hstation_charge = "Remaining charge of health station: {charge}"
 L.hstation_empty = "There is no more charge left in this health station"
-L.hstation_maxhealth = "You've reached your maximum health"
+L.hstation_maxhealth = "Your health is full"
 L.hstation_short_desc = "The heath station slowly recharges over time"
 
 L.hstation_broken = "Your Health Station has been destroyed!"
