@@ -701,6 +701,15 @@ function GM:PostCleanupMap()
 	ents.TTT.FixParentedPostCleanup()
 end
 
+---
+-- Called if CheckMapSwitch has determined that a map change should happen
+-- @note Can be used for custom map voting system. Just hook this and return true to override.
+-- @hook
+-- @realm server
+function GM:TTT2LoadNextMap()
+	timer.Simple(15, game.LoadNextMap)
+end
+
 local function CleanUp()
 	game.CleanUpMap()
 
@@ -1162,7 +1171,7 @@ function CheckForMapSwitch()
 
 	if switchmap then
 		timer.Stop("end2prep")
-		timer.Simple(15, game.LoadNextMap)
+		hook.Run("TTT2LoadNextMap")
 	else
 		LANG.Msg("limit_left", {num = rounds_left, time = math.ceil(time_left / 60), mapname = nextmap})
 	end
