@@ -96,6 +96,8 @@ local ttt_minply = CreateConVar("ttt_minimum_players", "2", {FCVAR_NOTIFY, FCVAR
 -- respawn if dead in preparing time
 CreateConVar("ttt2_prep_respawn", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
+local map_switch_delay = CreateConVar("ttt2_map_switch_delay", "15", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Time that passes before the map is changed after the last round ends or the timer runs out", 0)
+
 -- toggle whether ragdolls should be confirmed in DetectiveMode() without clicking on "confirm" espacially
 CreateConVar("ttt_identify_body_woconfirm", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Toggles whether ragdolls should be confirmed in DetectiveMode() without clicking on confirm espacially")
 
@@ -702,12 +704,12 @@ function GM:PostCleanupMap()
 end
 
 ---
--- Called if CheckMapSwitch has determined that a map change should happen
+-- Called if CheckForMapSwitch has determined that a map change should happen
 -- @note Can be used for custom map voting system. Just hook this and return true to override.
 -- @hook
 -- @realm server
-function GM:TTT2LoadNextMap()
-	timer.Simple(15, game.LoadNextMap)
+function GM:TTT2LoadNextMap(nextmap)
+	timer.Simple(map_switch_delay:GetFloat(), game.LoadNextMap)
 end
 
 local function CleanUp()
@@ -1171,7 +1173,8 @@ function CheckForMapSwitch()
 
 	if switchmap then
 		timer.Stop("end2prep")
-		hook.Run("TTT2LoadNextMap")
+		
+		hook.Run("TTT2LoadNextMap", nextmap)
 	else
 		LANG.Msg("limit_left", {num = rounds_left, time = math.ceil(time_left / 60), mapname = nextmap})
 	end
