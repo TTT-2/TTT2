@@ -706,9 +706,18 @@ end
 ---
 -- Called if CheckForMapSwitch has determined that a map change should happen
 -- @note Can be used for custom map voting system. Just hook this and return true to override.
+-- @param string nextmap next map that would be loaded according to the file that is set by the mapcyclefile convar
+-- @param number rounds_left number of rounds left before the next map switch
+-- @param number time_left time left before the next map switch in seconds
 -- @hook
 -- @realm server
-function GM:TTT2LoadNextMap(nextmap)
+function GM:TTT2LoadNextMap(nextmap, rounds_left, time_left)
+	if rounds_left <= 0 then
+		LANG.Msg("limit_round", {mapname = nextmap})
+	elseif time_left <= 0 then
+		LANG.Msg("limit_time", {mapname = nextmap})
+	end
+
 	timer.Simple(map_switch_delay:GetFloat(), game.LoadNextMap)
 end
 
@@ -1158,25 +1167,14 @@ function CheckForMapSwitch()
 	SetGlobalInt("ttt_rounds_left", rounds_left)
 
 	local time_left = math.max(0, time_limit:GetInt() * 60 - CurTime())
-	local switchmap = false
 	local nextmap = string.upper(game.GetMapNext())
 
-	if rounds_left <= 0 then
-		LANG.Msg("limit_round", {mapname = nextmap})
-
-		switchmap = true
-	elseif time_left <= 0 then
-		LANG.Msg("limit_time", {mapname = nextmap})
-
-		switchmap = true
-	end
-
-	if switchmap then
+	if rounds_left <= 0 or time_left <= 0 then
 		timer.Stop("end2prep")
-		
-		hook.Run("TTT2LoadNextMap", nextmap)
+
+		hook.Run("TTT2LoadNextMap", nextmap, rounds_left, time_left)
 	else
-		LANG.Msg("limit_left", {num = rounds_left, time = math.ceil(time_left / 60), mapname = nextmap})
+		LANG.Msg("limit_left", {num = rounds_left, time = math.ceil(time_left / 60)})
 	end
 end
 

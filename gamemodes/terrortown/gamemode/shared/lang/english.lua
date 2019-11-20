@@ -40,7 +40,7 @@ L.win_showreport = "Let's look at the round report for {num} seconds."
 
 L.limit_round = "Round limit reached. {mapname} will load soon."
 L.limit_time = "Time limit reached. {mapname} will load soon."
-L.limit_left = "{num} round(s) or {time} minutes remaining before the map changes to {mapname}."
+L.limit_left = "{num} round(s) or {time} minutes remaining before the map changes."
 
 -- Credit awards
 L.credit_all = "Your team have been awarded {num} equipment credit(s) for your performance."
