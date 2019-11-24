@@ -96,6 +96,8 @@ local ttt_minply = CreateConVar("ttt_minimum_players", "2", {FCVAR_NOTIFY, FCVAR
 -- respawn if dead in preparing time
 CreateConVar("ttt2_prep_respawn", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
+local map_switch_delay = CreateConVar("ttt2_map_switch_delay", "15", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Time that passes before the map is changed after the last round ends or the timer runs out", 0)
+
 -- toggle whether ragdolls should be confirmed in DetectiveMode() without clicking on "confirm" espacially
 CreateConVar("ttt_identify_body_woconfirm", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Toggles whether ragdolls should be confirmed in DetectiveMode() without clicking on confirm espacially")
 
@@ -701,6 +703,24 @@ function GM:PostCleanupMap()
 	ents.TTT.FixParentedPostCleanup()
 end
 
+---
+-- Called if CheckForMapSwitch has determined that a map change should happen
+-- @note Can be used for custom map voting system. Just hook this and return true to override.
+-- @param string nextmap next map that would be loaded according to the file that is set by the mapcyclefile convar
+-- @param number rounds_left number of rounds left before the next map switch
+-- @param number time_left time left before the next map switch in seconds
+-- @hook
+-- @realm server
+function GM:TTT2LoadNextMap(nextmap, rounds_left, time_left)
+	if rounds_left <= 0 then
+		LANG.Msg("limit_round", {mapname = nextmap})
+	elseif time_left <= 0 then
+		LANG.Msg("limit_time", {mapname = nextmap})
+	end
+
+	timer.Simple(map_switch_delay:GetFloat(), game.LoadNextMap)
+end
+
 local function CleanUp()
 	game.CleanUpMap()
 
@@ -1147,24 +1167,14 @@ function CheckForMapSwitch()
 	SetGlobalInt("ttt_rounds_left", rounds_left)
 
 	local time_left = math.max(0, time_limit:GetInt() * 60 - CurTime())
-	local switchmap = false
 	local nextmap = string.upper(game.GetMapNext())
 
-	if rounds_left <= 0 then
-		LANG.Msg("limit_round", {mapname = nextmap})
-
-		switchmap = true
-	elseif time_left <= 0 then
-		LANG.Msg("limit_time", {mapname = nextmap})
-
-		switchmap = true
-	end
-
-	if switchmap then
+	if rounds_left <= 0 or time_left <= 0 then
 		timer.Stop("end2prep")
-		timer.Simple(15, game.LoadNextMap)
+
+		hook.Run("TTT2LoadNextMap", nextmap, rounds_left, time_left)
 	else
-		LANG.Msg("limit_left", {num = rounds_left, time = math.ceil(time_left / 60), mapname = nextmap})
+		LANG.Msg("limit_left", {num = rounds_left, time = math.ceil(time_left / 60)})
 	end
 end
 
