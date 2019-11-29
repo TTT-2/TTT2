@@ -35,6 +35,23 @@ bodyFound = {value = false, type = "bool"},
 local lookupTable = lookupTable or {} -- this should not be accessable externally. A simple key-value transformed and networked syncedDataTable copy with same data references!
 local syncedDataTable = syncedDataTable or {} -- iteratable table, e.g. {key = lastFound, value = 0, type = "number", unsigned = true}
 
+local function WriteNetworkingData(data, val)
+	if CLIENT or not data then return end
+
+	if data.type == "number" then
+		if data.unsigned then
+			net.WriteUInt(val, data.bits or 32)
+		else
+			net.WriteInt(val, data.bits or 32)
+		end
+	elseif data.type == "bool" then
+		net.WriteBool(val)
+	elseif data.type == "float" then
+		net.WriteFloat(val)
+	else
+		net.WriteString(val)
+	end
+end
 
 ---
 -- Returns whether the player is able to receive networking data
@@ -63,11 +80,8 @@ function plymeta:SetNetworkingRawData(key, data, ply_or_rf)
 		ply = plys[i]
 
 		local dataTbl = SERVER and lookupTable[self][ply][key] or lookupTable[ply][key]
-		if dataTbl == nil then
 
-		end
-
-		oldVal = dataTbl.value
+		oldVal = dataTbl and dataTbl.value or nil
 
 		if oldVal ~= nil then
 			val = hook.Run("TTT2UpdatingNetworkingData", self, ply, key, oldVal, val) or val
@@ -75,7 +89,7 @@ function plymeta:SetNetworkingRawData(key, data, ply_or_rf)
 			val = hook.Run("TTT2InitializeNetworkingData", self, ply, key, val) or val
 		end
 
-		if dataTbl.value == val then continue end
+		if oldVal == val then continue end
 
 		dataTbl.value = val
 
@@ -158,8 +172,8 @@ end
 function plymeta:GetNetworkingRawData(target, key)
 	if not self:IsNetworkingSynced() or not target:IsNetworkingSynced() then return end
 
-  	local data = CLIENT and lookupTable[target][key] or lookupTable[self][target][key]
-  	if data == nil then return end
+	local data = CLIENT and lookupTable[target][key] or lookupTable[self][target][key]
+	if data == nil then return end
 
 	return data.value
 end
@@ -189,24 +203,6 @@ local function GenerateNetworkingDataString(key)
 end
 
 if SERVER then
-	local function WriteNetworkingData(data, val)
-		if not data then return end
-
-		if data.type == "number" then
-			if data.unsigned then
-				net.WriteUInt(val, data.bits or 32)
-			else
-				net.WriteInt(val, data.bits or 32)
-			end
-		elseif data.type == "bool" then
-			net.WriteBool(val)
-		elseif data.type == "float" then
-			net.WriteFloat(val)
-		else
-			net.WriteString(val)
-		end
-	end
-
 	-- TODO loop through plyVals to send compressed net messages
 	function plymeta:InsertNewNetworkingData(key, valTbl, data, ply_or_rf, tmp)
 		-- reserving network message for networking data

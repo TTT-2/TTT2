@@ -1192,12 +1192,15 @@ function BeginRound()
 	-- Edge case where a player joins just as the round starts and is picked as
 	-- traitor, but for whatever reason does not get the traitor state msg. So
 	-- re-send after a second just to make sure everyone is getting it.
-	-- TODO improve
-	timer.Simple(1, SendFullStateUpdate)
-	timer.Simple(10, SendFullStateUpdate)
+	-- TODO test
+	-- TODO SendFullStateUpdate should use the networking queuing system to keep consistent data
+	SendFullStateUpdate()
+	--timer.Simple(1, SendFullStateUpdate)
+	--timer.Simple(10, SendFullStateUpdate)
 
 	SCORE:HandleSelection() -- log traitors and detectives
 
+	-- TODO fix with one single netmsg
 	-- Give the StateUpdate messages ample time to arrive
 	timer.Simple(1.5, TellTraitorsAboutTraitors)
 	timer.Simple(2.5, ShowRoundStartPopup)
