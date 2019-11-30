@@ -137,7 +137,7 @@ function plymeta:SetNetworkingUInt(key, val, bits)
 	self:SetNetworkingRawData(key, {
 		value = val,
 		type = "number",
-		unsinged = true,
+		unsigned = true,
 		bits = bits,
 	})
 end

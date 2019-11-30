@@ -33,7 +33,7 @@ function NWLib.WriteNewDataTbl(index, key, data, val)
 	net.WriteString(key)
 	net.WriteString(data.type)
 	net.WriteUInt(data.bits - 1, 5) -- max 32 bits
-	net.WriteBool(data.unsinged)
+	net.WriteBool(data.unsigned)
 
 	NWLib.WriteNetworkingData(data, val)
 end
@@ -53,7 +53,7 @@ function plymeta:InsertNewNetworkingData(key, plyVals, data, ply_or_rf)
 		dataTbl.value = NWLib.ParseData(val, data.type)
 		dataTbl.type = data.type
 		dataTbl.bits = data.bits
-		dataTbl.unsinged = data.unsigned
+		dataTbl.unsigned = data.unsigned
 
 		local index = #NWLib.syncedDataTable[self][ply] + 1
 

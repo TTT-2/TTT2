@@ -34,7 +34,7 @@ function NWLib.ReadNewDataTbl()
 	dataTbl.key = k
 	dataTbl.typ = net.ReadString()
 	dataTbl.bits = net.ReadUInt(5) + 1
-	dataTbl.unsinged = net.ReadBool()
+	dataTbl.unsigned = net.ReadBool()
 
 	-- TODO update data for any player with default one
 	NWLib.syncedDataTable[client]
@@ -67,7 +67,7 @@ local function TTT2SyncNetworkingNewData()
 	dataTbl.key = key
 	dataTbl.type = net.ReadString()
 	dataTbl.bits = net.ReadUInt(5) + 1 -- max 32 bits
-	dataTbl.unsinged = net.ReadBool()
+	dataTbl.unsigned = net.ReadBool()
 	dataTbl.value = nil
 
 	NWLib.syncedDataTable[ply] = NWLib.syncedDataTable[ply] or {}
