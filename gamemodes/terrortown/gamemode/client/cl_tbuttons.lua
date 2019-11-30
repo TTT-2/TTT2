@@ -147,7 +147,7 @@ function TBHUD:Draw(client)
 		surface.SetDrawColor(255, 255, 255, 200 * (1 - d))
 		surface.SetTexture(tbut_normal)
 		surface.DrawTexturedRect(scrpos.x - mid, scrpos.y - mid, size, size)
-		
+
 		surface.SetDrawColor(col.r, col.g, col.b, 200 * (1 - d))
 		surface.SetTexture(tbut_outline)
 		surface.DrawTexturedRect(scrpos.x - mid, scrpos.y - mid, size, size)
@@ -184,7 +184,7 @@ function TBHUD:Draw(client)
 		surface.SetDrawColor(255, 255, 255, 200)
 		surface.SetTexture(tbut_focus)
 		surface.DrawTexturedRect(scrpos.x - mid, scrpos.y - mid, size, size)
-		
+
 		surface.SetDrawColor(col.r, col.g, col.b, 200)
 		surface.SetTexture(tbut_outline)
 		surface.DrawTexturedRect(scrpos.x - mid, scrpos.y - mid, size, size)

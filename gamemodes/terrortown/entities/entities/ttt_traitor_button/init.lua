@@ -90,7 +90,7 @@ function ENT:TraitorUse(ply)
         return false
     end
 
-    net.Start("TTT_ConfirmUseTButton") 
+    net.Start("TTT_ConfirmUseTButton")
     net.Send(ply)
 
     -- send output to all entities linked to us
