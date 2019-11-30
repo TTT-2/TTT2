@@ -100,6 +100,15 @@ function ROLE:GetSubRoles()
 	return tmp
 end
 
+---
+-- Returns whether a @{ROLE} can use traitor buttons
+-- @return boolean
+-- @realm shared
+function ROLE:CanUseTraitorButton()
+	local cv = GetConVar("ttt_" .. self.name .. "_traitor_button")
+	return cv and cv:GetBool()
+end
+
 if SERVER then
 	---
 	-- Function that is overwritten by the role and is called on rolechange and respawn.

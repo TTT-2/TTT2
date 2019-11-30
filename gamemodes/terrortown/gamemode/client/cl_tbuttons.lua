@@ -36,7 +36,7 @@ function TBHUD:CacheEnts()
 
 	self.buttons = {}
 
-	if IsValid(ply) and ply:IsActive() and ply:HasTeam(TEAM_TRAITOR) then
+	if IsValid(ply) and ply:IsActive() and ply:GetSubRoleData():CanUseTraitorButton() then
 		local btns = ents.FindByClass("ttt_traitor_button")
 
 		for i = 1, #btns do
@@ -56,7 +56,7 @@ end
 function TBHUD:PlayerIsFocused()
 	local ply = LocalPlayer()
 
-	return IsValid(ply) and ply:IsActive() and ply:HasTeam(TEAM_TRAITOR) and IsValid(self.focus_ent)
+	return IsValid(ply) and ply:IsActive() and ply:GetSubRoleData():CanUseTraitorButton() and IsValid(self.focus_ent)
 end
 
 ---
@@ -97,8 +97,9 @@ local function ComputeRangeFactor(plypos, tgtpos)
 end
 ]]--
 
-local tbut_normal = surface.GetTextureID("vgui/ttt/tbut_hand_line")
-local tbut_focus = surface.GetTextureID("vgui/ttt/tbut_hand_filled")
+local tbut_normal = surface.GetTextureID("vgui/ttt/ttt2_hand_line")
+local tbut_focus = surface.GetTextureID("vgui/ttt/ttt2_hand_filled")
+local tbut_outline = surface.GetTextureID("vgui/ttt/ttt2_hand_outline")
 
 local size = 32
 local mid = size * 0.5
@@ -116,8 +117,6 @@ local GetPTranslation = LANG.GetParamTranslation
 function TBHUD:Draw(client)
 	if self.buttons_count == 0 then return end
 
-	surface.SetTexture(tbut_normal)
-
 	-- we're doing slowish distance computation here, so lots of probably
 	-- ineffective micro-optimization
 	local plypos = client:GetPos()
@@ -126,6 +125,7 @@ function TBHUD:Draw(client)
 	local pos, scrpos, d
 	local focus_ent
 	local focus_d, focus_scrpos_x, focus_scrpos_y = 0, midscreen_x, midscreen_y
+	local col = client:GetRoleColor()
 
 	-- draw icon on HUD for every button within range
 	for _, but in pairs(self.buttons) do
@@ -145,6 +145,11 @@ function TBHUD:Draw(client)
 		if d >= 1 then continue end
 
 		surface.SetDrawColor(255, 255, 255, 200 * (1 - d))
+		surface.SetTexture(tbut_normal)
+		surface.DrawTexturedRect(scrpos.x - mid, scrpos.y - mid, size, size)
+		
+		surface.SetDrawColor(col.r, col.g, col.b, 200 * (1 - d))
+		surface.SetTexture(tbut_outline)
 		surface.DrawTexturedRect(scrpos.x - mid, scrpos.y - mid, size, size)
 
 		if d <= focus_d then continue end
@@ -176,12 +181,16 @@ function TBHUD:Draw(client)
 		local sz = 16
 
 		-- redraw in-focus version of icon
-		surface.SetTexture(tbut_focus)
 		surface.SetDrawColor(255, 255, 255, 200)
+		surface.SetTexture(tbut_focus)
+		surface.DrawTexturedRect(scrpos.x - mid, scrpos.y - mid, size, size)
+		
+		surface.SetDrawColor(col.r, col.g, col.b, 200)
+		surface.SetTexture(tbut_outline)
 		surface.DrawTexturedRect(scrpos.x - mid, scrpos.y - mid, size, size)
 
 		-- description
-		surface.SetTextColor(255, 50, 50, 255)
+		surface.SetTextColor(col.r, col.g, col.b, 255)
 		surface.SetFont("TabLarge")
 
 		x = scrpos.x + sz + 10

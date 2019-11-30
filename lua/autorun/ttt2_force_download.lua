@@ -71,6 +71,11 @@ if SERVER then
 	resource.AddFile("materials/vgui/ttt/ttt2_indicator_streamer.vmt") -- streamer
 	resource.AddFile("materials/vgui/ttt/ttt2_indicator_heroes.vmt") -- ttt2 heroes
 
+	-- traitorbutton
+	resource.AddFile("materials/vgui/ttt/ttt2_hand_line.vmt") -- ttt2 traitor button hand unfocused
+	resource.AddFile("materials/vgui/ttt/ttt2_hand_filled.vmt") -- ttt2 traitor button hand focused
+	resource.AddFile("materials/vgui/ttt/ttt2_hand_outline.vmt") -- ttt2 traitor button hand outline
+
 	-- miniscoreboard indicator
 	resource.AddFile("materials/vgui/ttt/indirect_confirmed.vmt")
 	resource.AddFile("materials/vgui/ttt/revived.vmt")
