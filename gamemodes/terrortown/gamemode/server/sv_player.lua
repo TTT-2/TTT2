@@ -30,6 +30,19 @@ CreateConVar("ttt_killer_dna_basetime", "100", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 function GM:PlayerInitialSpawn(ply)
 	ply:InitialSpawn()
 
+	-- Handle spec bots
+	if ply:IsBot() and ttt_bots_are_spectators:GetBool() then
+		ply:SetTeam(TEAM_SPEC)
+		ply:SetForceSpec(true)
+	end
+end
+
+---
+-- Called when the @{Player} is ready to receive networking data.
+-- @param Player ply
+-- @hook
+-- @realm shared
+function GM:TTT2SyncNetworkingData(ply)
 	local rstate = GetRoundState() or ROUND_WAIT
 
 	-- Game has started, tell this guy (spec) where the round is at
@@ -37,17 +50,7 @@ function GM:PlayerInitialSpawn(ply)
 		SendRoundState(rstate, ply)
 	end
 
-	-- We should update the traitor list, if we are not about to send it
-	-- sending roles for spectators
-	-- delaying, edge case if a player joins
-	timer.Simple(1, SendFullStateUpdate)
-	timer.Simple(10, SendFullStateUpdate)
-
-	-- Handle spec bots
-	if ply:IsBot() and ttt_bots_are_spectators:GetBool() then
-		ply:SetTeam(TEAM_SPEC)
-		ply:SetForceSpec(true)
-	end
+	SendFullStateUpdate()
 
 	-- maybe show changes
 	net.Start("TTT2DevChanges")
