@@ -53,6 +53,16 @@ local function WriteNetworkingData(data, val)
 	end
 end
 
+local function ParseData(val, typ)
+	if data.type == "number" or data.type == "float" then
+		return tonumber(val)
+	elseif data.type == "bool" then
+		return tobool(val)
+	end
+
+	return tostring(val)
+end
+
 ---
 -- Returns whether the player is able to receive networking data
 -- @return bool
@@ -112,7 +122,7 @@ function plymeta:SetNetworkingRawData(key, data, ply_or_rf)
 	if CLIENT then return end
 
 	if #missingValPlys > 0 then
-		self:InsertNewNetworkingData(key, plyVals, data, missingValPlys, tmp)
+		self:InsertNewNetworkingData(key, plyVals, data, missingValPlys)
 	end
 
 	local nwStr = GenerateNetworkingDataString(key)
@@ -203,53 +213,60 @@ local function GenerateNetworkingDataString(key)
 end
 
 if SERVER then
-	-- TODO loop through plyVals to send compressed net messages
-	function plymeta:InsertNewNetworkingData(key, valTbl, data, ply_or_rf, tmp)
+	local function WriteNewDataTbl(index, key, data, val)
+		net.WriteUInt(index - 1, 16) -- there is no table with index 0 so decreasing it
+		net.WriteString(key)
+		net.WriteString(data.type)
+		net.WriteUInt(data.bits - 1, 5) -- max 32 bits
+		net.WriteBool(data.unsinged)
+
+		WriteNetworkingData(data, val)
+	end
+
+	function plymeta:InsertNewNetworkingData(key, plyVals, data, ply_or_rf)
 		-- reserving network message for networking data
 		local nwStr = GenerateNetworkingDataString(key)
 
 		util.AddNetworkString(nwStr)
 
-		for val, plyTbl in pairs(tmp) do
+		-- TODO sync dataTbl once and write val for each player afterwards
+
+		for ply, val in pairs(plyVals) do
 			-- insert new data in networking storage
 			local dataTbl = {}
 			dataTbl.key = key
-			dataTbl.value = val
+			dataTbl.value = ParseData(val, data.type)
 			dataTbl.type = data.type
 			dataTbl.bits = data.bits
 			dataTbl.unsinged = data.unsigned
 
-			local index = #syncedDataTable + 1
+			local index = #syncedDataTable[self][ply] + 1
 
-			syncedDataTable[index] = dataTbl
-			lookupTable[key] = dataTbl
+			syncedDataTable[self][ply][index] = dataTbl
+			lookupTable[self][ply][key] = dataTbl
 
 			-- adding networking data to synced table and data with the same message
 			net.Start("TTT2SyncNetworkingNewData")
-			net.WriteEntity(self)
+			net.WriteEntity(ply)
 
-			net.WriteUInt(index - 1, 16) -- there is no table with index 0 so decreasing it
-			net.WriteString(key)
-			net.WriteString(data.type)
-			net.WriteUInt(data.bits - 1, 5) -- max 32 bits
-			net.WriteBool(data.unsinged)
+			WriteNewDataTbl(index, key, data, dataTbl.value)
 
-			WriteNetworkingData(self, key) -- TODO
-
-			net.Send(plyTbl) -- TODO just if the plys are in tmp tbl too!
+			net.Send(self)
 		end
 	end
 
 	---
-	-- Syncs the networking data of a @{Player} with the current @{Player} COMPLETELY
-	function plymeta:SyncNetworkingData(ply)
-		if not IsValid(ply) or not ply:IsNetworkingSynced() or lookupTable[self][ply] == nil then return end
+	-- Initializes the networking data of a @{Player}
+	function plymeta:InitializeNetworkingData()
+		if not self:IsNetworkingSynced() or lookupTable[self][self] == nil then return end
 
 		net.Start("TTT2SyncNetworkingData")
-		net.WriteEntity(ply)
 
-		for k in pairs(lookupTable[self][ply]) do
-			WriteNetworkingData(ply, k)
+		local tmpTbl = syncedDataTable[self][self]
+
+		for i = 1, #tmpTbl do
+			WriteNewDataTbl(index, key, data, dataTbl.value)
+			WriteNetworkingData(data, tmpTbl[i].value)
 		end
 
 		net.Send(self)
@@ -273,9 +290,9 @@ if SERVER then
 			lookupTable[dataHolder][requestingPly] = {}
 		end
 
-		hook.Run("TTT2SyncNetworkingData", requestingPly)
+		requestingPly:InitializeNetworkingData()
 
-		requestingPly:SyncNetworkingData()
+		hook.Run("TTT2SyncNetworkingData", requestingPly)
 	end
 	net.Receive("TTT2RequestNetworkingData", TTT2RequestNetworkingData)
 
@@ -294,16 +311,6 @@ if SERVER then
 		end
 	end)
 else
-	-- player requesting data
-	hook.Add("SetupMove", "TTT2SetupNetworking", function(ply)
-		if ply ~= LocalPlayer() or ply.networkInitialized then return end
-
-		ply.networkInitialized = true
-
-		net.Start("TTT2RequestNetworkingData")
-		net.SendToServer()
-	end)
-
 	local function ReadNetworkingData(ply, k, data)
 		if not lookupTable[ply] then return end
 
@@ -324,6 +331,35 @@ else
 			ply:SetNetworkingString(k, net.ReadString())
 		end
 	end
+
+	local function ReadNewDataTbl()
+		local index = net.ReadUInt(16) + 1
+		local k = net.ReadString()
+
+		local dataTbl = {}
+		dataTbl.key = k
+		dataTbl.typ = net.ReadString()
+		dataTbl.bits = net.ReadUInt(5) + 1
+		dataTbl.unsinged = net.ReadBool()
+
+		-- TODO update data for any player with default one
+		syncedDataTable[client]
+		lookupTable[ply][k] = dataTbl
+
+		ReadNetworkingData(ply, k, dataTbl)
+
+		return dataTbl
+	end
+
+	-- player requesting data
+	hook.Add("SetupMove", "TTT2SetupNetworking", function(ply)
+		if ply ~= LocalPlayer() or ply.networkInitialized then return end
+
+		ply.networkInitialized = true
+
+		net.Start("TTT2RequestNetworkingData")
+		net.SendToServer()
+	end)
 
 	local function TTT2SyncNetworkingNewData()
 		local ply = net.ReadEntity()
@@ -346,27 +382,24 @@ else
 		lookupTable[ply] = lookupTable[ply] or {}
 		lookupTable[ply][key] = dataTbl
 
-		-- TODO
-		WriteNetworkingData(ply, key)
-
 		local function RecFnc()
 			local ply = net.ReadEntity()
 			if not IsValid(ply) then return end
 
-			-- TODO
-			ReadNetworkingData(ply, key)
+			ReadNetworkingData(ply, key, dataTbl)
 		end
 		net.Receive(nwStr, RecFnc)
 	end
 	net.Receive("TTT2SyncNetworkingNewData", TTT2SyncNetworkingNewData)
 
-	-- TODO
 	local function TTT2SyncNetworkingData()
-		local ply = net.ReadEntity()
-		if not IsValid(ply) then return end
+		local client = LocalPlayer()
+		if not IsValid(client) then return end
 
-		for k, v in pairs(lookupTable) do
-			ReadNetworkingData(ply, k)
+		local tmpTbl = syncedDataTable[client]
+
+		for i = 1, #tmpTbl do
+			ReadNetworkingData(client, tmpTbl[i].key, tmpTbl[i])
 		end
 	end
 	net.Receive("TTT2SyncNetworkingData", TTT2SyncNetworkingData)

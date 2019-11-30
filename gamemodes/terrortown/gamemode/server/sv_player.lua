@@ -39,9 +39,10 @@ end
 
 ---
 -- Called when the @{Player} is ready to receive networking data.
+-- @param Player ply
 -- @hook
 -- @realm shared
-function GM:TTT2SyncNetworkingData()
+function GM:TTT2SyncNetworkingData(ply)
 	local rstate = GetRoundState() or ROUND_WAIT
 
 	-- Game has started, tell this guy (spec) where the round is at
