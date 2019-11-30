@@ -271,7 +271,7 @@ L.set_tips = "Show gameplay tips at the bottom of the screen while spectating"
 L.set_startpopup = "Start of round info popup duration"
 L.set_startpopup_tip = "When the round starts, a small popup appears at the bottom of your screen for a few seconds. Change the time it displays for here."
 
-L.set_cross_opacity = "Ironsight crosshair opacity"
+L.set_cross_opacity = "Crosshair opacity"
 L.set_cross_disable = "Disable crosshair completely"
 L.set_minimal_id = "Minimalist Target ID under crosshair (no karma text, hints, etc)"
 L.set_healthlabel = "Show health status label on health bar"
@@ -392,14 +392,14 @@ L.decoy_no_room = "You cannot carry this decoy."
 L.decoy_broken = "Your Decoy has been destroyed!"
 
 L.decoy_help_pri = "{primaryfire} plants the Decoy."
-L.decoy_short_desc = "This decoy creates a fake radar point visible for other teams"
-L.decoy_pickup_wrong_team = "You Can't pick it up as it belongs to a different team"
+L.decoy_short_desc = "This decoy shows a fake radar sign visible for other teams"
+L.decoy_pickup_wrong_team = "You can't pick it up as it belongs to a different team"
 
 L.decoy_desc = [[
-Shows a fake radar sign to detectives,
-and makes their DNA scanner show the
-location of the Decoy if they scan for
-your DNA.]]
+Shows a fake radar sign to other teams,
+and makes the DNA scanner show the
+location of the Decoy if someone scans
+for your DNA.]]
 
 -- Defuser
 L.defuser_name = "Defuser"
@@ -1141,12 +1141,12 @@ L.idle_popup_title = "Idle"
 L.set_title_cross = "Crosshair settings"
 
 L.set_cross_color_enable = "Enable custom crosshair color"
-L.set_cross_color = "Custom crosshair color"
+L.set_cross_color = "Custom crosshair color:"
 L.set_cross_gap_enable = "Enable custom crosshair gap"
 L.set_cross_gap = "Custom crosshair gap"
 L.set_cross_static_enable = "Enable static crosshair"
 L.set_ironsight_cross_opacity = "Ironsight crosshair opacity"
-L.set_cross_weaponscale_enable = "Enable weapon crosshair scale"
+L.set_cross_weaponscale_enable = "Enable different crosshair scales for different weapons"
 L.set_cross_thickness = "Crosshair thickness"
 L.set_cross_outlinethickness = "Crosshair outline thickness"
 L.set_cross_dot_enable = "Enable crosshair dot"
@@ -1200,10 +1200,10 @@ L.f1_settings_hudswitcher_button_layout_editor = "Layout Editor"
 L.f1_settings_hudswitcher_desc_hud_not_supported = "! THIS HUD DOES NOT SUPPORT THE HUD EDITOR !"
 
 L.f1_bind_reset_default = "Default"
-L.f1_bind_disable_bind = "Disable"
+L.f1_bind_disable_bind = "Clear"
 L.f1_bind_description = "Click and press a button to bind a key."
-L.f1_bind_reset_default_description = "Reset to default value."
-L.f1_bind_disable_description = "Disable this bind."
+L.f1_bind_reset_default_description = "Reset to default key."
+L.f1_bind_disable_description = "Clear this bind's key."
 
 L.f1_bind_weaponswitch = "Switch Weapon"
 L.f1_bind_sprint = "Sprint"
