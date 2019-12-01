@@ -18,13 +18,16 @@ function ENT:IsUsable()
 end
 
 ---
--- Returns whether the role can use this specific button
--- @param table roleData role table
+-- Returns whether the player can use this specific button
+-- @param Player ply Player
 -- @return boolean
 -- @realm shared
-function ENT:RoleCanUse(roleData)
+function ENT:PlayerRoleCanUse(ply)
   local role = self:GetRole()
   local team = self:GetTeam()
 
-  return (role == "none" or role == roleData.name) and (team == "none" or team == roleData.defaultTeam)
+  local curRol = ply:GetRoleStringRaw()
+  local curTeam = ply:GetTeam()
+
+  return (role == "none" or role == curRol) and (team == "none" or team == curTeam)
 end

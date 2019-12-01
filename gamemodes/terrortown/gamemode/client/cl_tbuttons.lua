@@ -36,18 +36,14 @@ function TBHUD:CacheEnts()
 
 	self.buttons = {}
 
-	if IsValid(ply) and ply:IsActive() then
-		local roleData = ply:GetSubRoleData()
+	if IsValid(ply) and ply:IsActive() and ply:GetSubRoleData():CanUseTraitorButton() then
+		local btns = ents.FindByClass("ttt_traitor_button")
 
-		if roleData:CanUseTraitorButton() then
-			local btns = ents.FindByClass("ttt_traitor_button")
+		for i = 1, #btns do
+			local ent = btns[i]
 
-			for i = 1, #btns do
-				local ent = btns[i]
-
-				if ent.RoleCanUse and ent:RoleCanUse(roleData) then
-					self.buttons[ent:EntIndex()] = ent
-				end
+			if ent.PlayerRoleCanUse and ent:PlayerRoleCanUse(ply) then
+				self.buttons[ent:EntIndex()] = ent
 			end
 		end
 	end

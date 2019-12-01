@@ -1,4 +1,5 @@
 AddCSLuaFile("shared.lua")
+include("shared.lua")
 
 -- serverside only
 ENT.RemoveOnPress = false
@@ -89,9 +90,7 @@ function ENT:TraitorUse(ply)
 		return false
 	end
 
-	local roleData = ply:GetSubRoleData()
-
-	if not roleData:CanUseTraitorButton() and self:RoleCanUse(roleData)
+	if not ply:GetSubRoleData():CanUseTraitorButton() or not self:PlayerRoleCanUse(ply)
 	or not self:IsUsable()
 	or self:GetPos():Distance(ply:GetPos()) > self:GetUsableRange() then
 		return false
@@ -134,14 +133,13 @@ end
 local function TraitorUseCmd(ply, cmd, args)
 	if #args ~= 1 or not IsValid(ply) then return end
 
-	local roleData = ply:GetSubRoleData()
-	if not roleData:CanUseTraitorButton() then return end
+	if not ply:GetSubRoleData():CanUseTraitorButton() then return end
 
 	local idx = tonumber(args[1])
 	if not idx then return end
 
 	local ent = Entity(idx)
-	if IsValid(ent) and ent:GetClass() == "ttt_traitor_button" and ent.RoleCanUse and ent:RoleCanUse(roleData) and ent.TraitorUse then
+	if IsValid(ent) and ent:GetClass() == "ttt_traitor_button" and ent.PlayerRoleCanUse and ent:PlayerRoleCanUse(ply) and ent.TraitorUse then
 		ent:TraitorUse(ply)
 	end
 end
