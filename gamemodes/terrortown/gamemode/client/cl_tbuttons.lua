@@ -150,13 +150,15 @@ function TBHUD:Draw(client)
 		-- draw if this button is within range, with alpha based on distance
 		if d >= 1 then continue end
 
+		local scrPosXMid, scrPosYMid = scrpos.x - mid, scrpos.y - mid
+
 		surface.SetDrawColor(255, 255, 255, 200 * (1 - d))
 		surface.SetTexture(tbut_normal)
-		surface.DrawTexturedRect(scrpos.x - mid, scrpos.y - mid, size, size)
+		surface.DrawTexturedRect(scrPosXMid, scrPosYMid, size, size)
 
 		surface.SetDrawColor(col.r, col.g, col.b, 200 * (1 - d))
 		surface.SetTexture(tbut_outline)
-		surface.DrawTexturedRect(scrpos.x - mid, scrpos.y - mid, size, size)
+		surface.DrawTexturedRect(scrPosXMid, scrPosYMid, size, size)
 
 		if d <= focus_d then continue end
 
@@ -183,17 +185,18 @@ function TBHUD:Draw(client)
 		self.focus_stick = CurTime() + 0.1
 
 		scrpos = focus_ent:GetPos():ToScreen()
+		scrPosXMid, scrPosYMid = scrpos.x - mid, scrpos.y - mid
 
 		local sz = 16
 
 		-- redraw in-focus version of icon
 		surface.SetDrawColor(255, 255, 255, 200)
 		surface.SetTexture(tbut_focus)
-		surface.DrawTexturedRect(scrpos.x - mid, scrpos.y - mid, size, size)
+		surface.DrawTexturedRect(scrPosXMid, scrPosYMid, size, size)
 
 		surface.SetDrawColor(col.r, col.g, col.b, 200)
 		surface.SetTexture(tbut_outline)
-		surface.DrawTexturedRect(scrpos.x - mid, scrpos.y - mid, size, size)
+		surface.DrawTexturedRect(scrPosXMid, scrPosYMid, size, size)
 
 		-- description
 		surface.SetTextColor(col.r, col.g, col.b, 255)
