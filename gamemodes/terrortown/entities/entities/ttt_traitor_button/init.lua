@@ -35,6 +35,9 @@ function ENT:Initialize()
 
     self:SetDescription(self.RawDescription or "?")
 
+    self:SetRole(self.Role or "none")
+    self:SetTeam(self.Team or "none")
+
     self.RawDelay = nil
     self.RawDescription = nil
 end
@@ -52,11 +55,14 @@ function ENT:KeyValue(key, value)
         end
     elseif key == "RemoveOnPress" then
         self[key] = tobool(value)
+    elseif key == "role" then
+        self.Role = tostring(value)
+    elseif key == "team" then
+        self.Team = tostring(value)
     else
         self:SetNetworkKeyValue(key, value)
     end
 end
-
 
 function ENT:AcceptInput(name, activator)
     if name == "Toggle" then
@@ -79,7 +85,9 @@ function GAMEMODE:TTTCanUseTraitorButton(ent, ply)
 end
 
 function ENT:TraitorUse(ply)
-    if not (IsValid(ply) and ply:GetSubRoleData():CanUseTraitorButton()) then return false end
+    if not (IsValid(ply)) then return false end
+    local roleData = ply:GetSubRoleData()
+    if not (roleData:CanUseTraitorButton() and self:RoleCanUse(roleData)) then return false end
     if not self:IsUsable() then return false end
 
     if self:GetPos():Distance(ply:GetPos()) > self:GetUsableRange() then return false end
@@ -116,12 +124,17 @@ end
 local function TraitorUseCmd(ply, cmd, args)
     if #args != 1 then return end
 
-    if IsValid(ply) and ply:GetSubRoleData():CanUseTraitorButton() then
-        local idx = tonumber(args[1])
-        if idx then
-            local ent = Entity(idx)
-            if IsValid(ent) and ent:GetClass() == "ttt_traitor_button" and ent.TraitorUse then
-                ent:TraitorUse(ply)
+    if IsValid(ply) then
+        local roleData = ply:GetSubRoleData()
+        if roleData:CanUseTraitorButton() then
+            local idx = tonumber(args[1])
+            if idx then
+                local ent = Entity(idx)
+                if IsValid(ent) and ent:GetClass() == "ttt_traitor_button" then
+                    if ent.RoleCanUse and ent:RoleCanUse(roleData) and ent.TraitorUse then
+                        ent:TraitorUse(ply)
+                    end
+                end
             end
         end
     end
