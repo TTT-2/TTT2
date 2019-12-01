@@ -10,37 +10,9 @@ util.AddNetworkString("TTT2SyncNetworkingNewData")
 util.AddNetworkString("TTT2RequestNetworkingData")
 util.AddNetworkString("TTT2RemovePlayerNetworkingData")
 
-function NWLib.WriteNetworkingData(data, val)
-	if not data then return end
-
-	if data.type == "number" then
-		if data.unsigned then
-			net.WriteUInt(val, data.bits or 32)
-		else
-			net.WriteInt(val, data.bits or 32)
-		end
-	elseif data.type == "bool" then
-		net.WriteBool(val)
-	elseif data.type == "float" then
-		net.WriteFloat(val)
-	else
-		net.WriteString(val)
-	end
-end
-
-function NWLib.WriteNewDataTbl(index, key, data, val)
-	net.WriteUInt(index - 1, 16) -- there is no table with index 0 so decreasing it
-	net.WriteString(key)
-	net.WriteString(data.type)
-	net.WriteUInt(data.bits - 1, 5) -- max 32 bits
-	net.WriteBool(data.unsigned)
-
-	NWLib.WriteNetworkingData(data, val)
-end
-
 function plymeta:InsertNewNetworkingData(key, plyVals, data, ply_or_rf)
 	-- reserving network message for networking data
-	local nwStr = NWLib.GenerateNetworkingDataString(key)
+	local nwStr = nwlib.GenerateNetworkingDataString(key)
 
 	util.AddNetworkString(nwStr)
 
@@ -50,7 +22,7 @@ function plymeta:InsertNewNetworkingData(key, plyVals, data, ply_or_rf)
 		-- insert new data in networking storage
 		local dataTbl = {}
 		dataTbl.key = key
-		dataTbl.value = NWLib.ParseData(val, data.type)
+		dataTbl.value = nwlib.ParseData(val, data.type)
 		dataTbl.type = data.type
 		dataTbl.bits = data.bits
 		dataTbl.unsigned = data.unsigned
@@ -64,7 +36,7 @@ function plymeta:InsertNewNetworkingData(key, plyVals, data, ply_or_rf)
 		net.Start("TTT2SyncNetworkingNewData")
 		net.WriteEntity(ply)
 
-		NWLib.WriteNewDataTbl(index, key, data, dataTbl.value)
+		nwlib.WriteNewDataTbl(index, key, data, dataTbl.value)
 
 		net.Send(self)
 	end
@@ -80,8 +52,8 @@ function plymeta:InitializeNetworkingData()
 	local tmpTbl = NWLib.syncedDataTable[self][self]
 
 	for i = 1, #tmpTbl do
-		NWLib.WriteNewDataTbl(index, key, data, dataTbl.value)
-		NWLib.WriteNetworkingData(data, tmpTbl[i].value)
+		nwlib.WriteNewDataTbl(index, key, data, dataTbl.value)
+		nwlib.WriteNetworkingData(data, tmpTbl[i].value)
 	end
 
 	net.Send(self)

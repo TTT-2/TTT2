@@ -1,7 +1,6 @@
 ---
 -- simple player-based networking system, just a temporary solution to tackle the problem of delay-synced NWVars
 
--- TODO request from client (SetupMove hook), hook and answer from server
 -- TODO remove player from syncedPlayer list if disconnected
 -- TODO networking limit of 65535 bits
 -- TODO add syncing list, like net.WriteX -> decreasing amount of network message and compress into one. Using ply:PushNetworkingData or smth
@@ -29,20 +28,6 @@ bodyFound = {value = false, type = "bool"},
 -- on clients, there is just one table, because the client just needs to know about his own data storage (T1 key == player the data is about)
 NWLib.lookupTable = NWLib.lookupTable or {} -- this should not be accessable externally. A simple key-value transformed and networked NWLib.syncedDataTable copy with same data references!
 NWLib.syncedDataTable = NWLib.syncedDataTable or {} -- iteratable table, e.g. {key = lastFound, value = 0, type = "number", unsigned = true}
-
-function NWLib.ParseData(val, typ)
-	if data.type == "number" or data.type == "float" then
-		return tonumber(val)
-	elseif data.type == "bool" then
-		return tobool(val)
-	end
-
-	return tostring(val)
-end
-
-function NWLib.GenerateNetworkingDataString(key)
-	return "TTT2SyncNetworkingData_" .. key
-end
 
 ---
 -- Returns whether the player is able to receive networking data
