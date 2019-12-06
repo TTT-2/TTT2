@@ -81,7 +81,6 @@ if SERVER then
 		sv_admin = {file = "sv_admin.lua", on = "server"},
 		sv_armor = {file = "sv_armor.lua", on = "server"},
 		sv_corpse = {file = "sv_corpse.lua", on = "server"},
-		sv_damage_indicator = {file = "sv_damage_indicator.lua", on = "server"},
 		sv_ent_replace = {file = "sv_ent_replace.lua", on = "server"},
 		sv_entity = {file = "sv_entity.lua", on = "server"},
 		sv_gamemsg = {file = "sv_gamemsg.lua", on = "server"},
