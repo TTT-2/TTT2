@@ -247,13 +247,20 @@ function HELPSCRN:Show()
 			end
 		},
 		[7] = {
+			id = "damageIndicator",
+			getContent = self.CreateDamageIndicatorSettings,
+			getTitle = function()
+				return GetTranslation("f1_settings_dmgindicator_title")
+			end
+		},
+		[8] = {
 			id = "language",
 			getContent = self.CreateLanguageForm,
 			getTitle = function()
 				return GetTranslation("f1_settings_language_title")
 			end
 		},
-		[8] = {
+		[9] = {
 			id = "administration",
 			getContent = self.CreateAdministrationForm,
 			shouldShow = function()
@@ -503,6 +510,50 @@ function HELPSCRN:CreateCrosshairSettings(parent)
 
 	cb = form:CheckBox(GetTranslation("set_lowsights"), "ttt_ironsights_lowered")
 	cb:SetTooltip(GetTranslation("set_lowsights_tip"))
+
+	form:Dock(FILL)
+end
+
+---
+-- Creates the damage indicator settings for the help screen
+-- @param Panel parent
+-- @realm client
+-- @internal
+function HELPSCRN:CreateDamageIndicatorSettings(parent)
+	local form = vgui.Create("DForm", parent)
+	form:SetName(GetTranslation("f1_dmgindicator_title"))
+
+	form:CheckBox(GetTranslation("f1_dmgindicator_enable"), "ttt_dmgindicator_enable")
+
+	local dmode = vgui.Create("DComboBox", form)
+	dmode:SetConVar("ttt_dmgindicator_mode")
+
+	for name, _ in pairs(DMGINDICATOR.themes) do
+		dmode:AddChoice(name)
+	end
+
+	-- Why is DComboBox not updating the cvar by default?
+	dmode.OnSelect = function(idx, val, data)
+		RunConsoleCommand("ttt_dmgindicator_mode", data)
+	end
+
+	form:Help(GetTranslation("f1_dmgindicator_mode"))
+	form:AddItem(dmode)
+
+	local cb = form:NumSlider(GetTranslation("f1_dmgindicator_duration"), "ttt_dmgindicator_duration", 0, 30, 2)
+	if cb.Label then
+		cb.Label:SetWrap(true)
+	end
+
+	cb = form:NumSlider(GetTranslation("f1_dmgindicator_maxdamage"), "ttt_dmgindicator_maxdamage", 0, 100, 1)
+	if cb.Label then
+		cb.Label:SetWrap(true)
+	end
+
+	cb = form:NumSlider(GetTranslation("f1_dmgindicator_maxalpha"), "ttt_dmgindicator_maxalpha", 0, 255, 0)
+	if cb.Label then
+		cb.Label:SetWrap(true)
+	end
 
 	form:Dock(FILL)
 end
