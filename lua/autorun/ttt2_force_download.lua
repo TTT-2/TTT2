@@ -94,4 +94,8 @@ if SERVER then
 	resource.AddFile("materials/vgui/ttt/pickup/icon_extra.png")
 	resource.AddFile("materials/vgui/ttt/pickup/icon_class.png")
 	resource.AddFile("materials/vgui/ttt/pickup/icon_ammo.png")
+
+	-- dmgindicator themes
+	resource.AddFile("materials/vgui/ttt/dmgindicator/themes/Default.png")
+	resource.AddFile("materials/vgui/ttt/dmgindicator/themes/Vanilla.png")
 end
