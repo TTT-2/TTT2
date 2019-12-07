@@ -8,21 +8,20 @@ module("nwlib", package.seeall)
 ---
 -- @param string key
 -- @param string typ
--- @param nil|number bitsOrValue
--- @param nil|bool numberUnsigned
--- @param any numberValue
-function GenerateDataTable(key, typ, bitsOrValue, numberUnsigned, numberValue)
+-- @param nil|number bits
+-- @param nil|bool unsigned
+-- @param any value
+function GenerateDataTable(key, typ, bits, unsigned, value)
 	local dataTbl = {}
 	dataTbl.key = key
 	dataTbl.type = typ
 
 	if typ == "number" then
-		dataTbl.bits = bitsOrValue
-		dataTbl.unsigned = numberUnsigned
-		dataTbl.value = numberValue
-	else
-		dataTbl.value = bitsOrValue
+		dataTbl.bits = bits
+		dataTbl.unsigned = unsigned
 	end
+
+	dataTbl.value = value
 
 	return dataTbl
 end

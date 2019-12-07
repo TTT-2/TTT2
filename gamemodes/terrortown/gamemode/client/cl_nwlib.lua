@@ -1,9 +1,4 @@
-local plymeta = FindMetaTable("Player")
-if not plymeta then
-	Error("FAILED TO FIND PLAYER TABLE")
-
-	return
-end
+-- TODO resetting disconnected player needed?
 
 -- player requesting data
 hook.Add("SetupMove", "TTT2SetupNetworking", function(ply)
@@ -21,28 +16,25 @@ local function TTT2SyncNetworkingNewData()
 
 	local index = net.ReadUInt(16) + 1
 	local key = net.ReadString()
+	local typ = net.ReadString()
 
 	-- insert new data in networking storage
-	local dataTbl = {}
-	dataTbl.key = key
-	dataTbl.type = net.ReadString()
-	dataTbl.bits = net.ReadUInt(5) + 1 -- max 32 bits
-	dataTbl.unsigned = net.ReadBool()
-	dataTbl.value = nil
+	local dataTbl
 
-	NWLib.syncedDataTable[ply] = NWLib.syncedDataTable[ply] or {}
-	NWLib.syncedDataTable[ply][index] = dataTbl
+	if typ == "number" then
+		dataTbl = GenerateDataTable(key, typ, net.ReadUInt(5) + 1, net.ReadBool())
+	else
+		dataTbl = GenerateDataTable(key, typ)
+	end
 
-	NWLib.lookupTable[ply] = NWLib.lookupTable[ply] or {}
-	NWLib.lookupTable[ply][key] = dataTbl
+	ply.ttt2nwlib.synced[index] = dataTbl
+	ply.ttt2nwlib.lookUp[key] = dataTbl
 
 	local function RecFnc()
 		local ply = net.ReadEntity()
 		if not IsValid(ply) then return end
 
-		if not NWLib.lookupTable[ply] then return end
-
-		local data = NWLib.lookupTable[ply][k]
+		local data = ply.ttt2nwlib.lookUp[k]
 		if not data then return end
 
 		data.value = nwlib.ReadNetworkingData(dataTbl) -- TODO
@@ -55,18 +47,38 @@ local function TTT2SyncNetworkingData()
 	local client = LocalPlayer()
 	if not IsValid(client) then return end
 
-	local tmpTbl = NWLib.syncedDataTable[client]
-
-	if not NWLib.lookupTable[ply] then return end
+	local tmpTbl = client.ttt2nwlib.synced
 
 	for i = 1, #tmpTbl do
 		local tbl = tmpTbl[i]
 		local key = tbl.key
 
-		local data = NWLib.lookupTable[ply][key]
+		local data = client.ttt2nwlib.lookUp[key]
 		if not data then continue end
 
 		data.value = nwlib.ReadNetworkingData(tbl) -- TODO
 	end
 end
 net.Receive("TTT2SyncNetworkingData", TTT2SyncNetworkingData)
+
+--------------------------------------------------------------------------------
+--------------------------------- INITIAL SYNC ---------------------------------
+--------------------------------------------------------------------------------
+
+local function TTT2StartInitialNWDataSyncing()
+	local requestingPly = net.ReadEntity()
+	if not IsValid(requestingPly) then return end
+
+	requestingPly:InitializeNetworkingData(true)
+
+	requestingPly.ttt2nwlib.isSynced = false
+end
+net.Receive("TTT2StartInitialNWDataSyncing", TTT2StartInitialNWDataSyncing)
+
+local function TTT2FinishInitialNWDataSyncing()
+	local requestingPly = net.ReadEntity()
+	if not IsValid(requestingPly) then return end
+
+	requestingPly.ttt2nwlib.isSynced = true
+end
+net.Receive("TTT2FinishInitialNWDataSyncing", TTT2FinishInitialNWDataSyncing)

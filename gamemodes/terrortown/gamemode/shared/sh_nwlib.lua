@@ -1,10 +1,10 @@
 ---
--- simple player-based networking system, just a temporary solution to tackle the problem of delay-synced NWVars
+-- complex player-based networking system, just a temporary solution to tackle the problem of delay-synced NWVars
 
--- TODO remove player from syncedPlayer list if disconnected
 -- TODO networking limit of 65535 bits
 -- TODO add syncing list, like net.WriteX -> decreasing amount of network message and compress into one. Using ply:PushNetworkingData or smth
 --			instead of writing string as index, writing number for list index
+-- TODO add global function to keep some vars everytime synced like nwvars (not player based)
 
 local plymeta = FindMetaTable("Player")
 if not plymeta then
@@ -13,28 +13,53 @@ if not plymeta then
 	return
 end
 
-NWLib = NWLib or {}
+---
+-- Initializes the data storage for a player
+function plymeta:InitializeNetworkingData(initial)
+	-- these tables have on server two included tables:
+	-- 		T1: key == player connected with the data
+	-- 		T2: key == player the data is about
+	-- on clients, there is just one table, because the client just needs to know about his own data storage (T1 key == player the data is about)
 
---[[
-firstFound = {value = 0, type = "number", unsigned = true},
-lastFound = {value = 0, type = "number", unsigned = true},
-roleFound = {value = false, type = "bool"},
-bodyFound = {value = false, type = "bool"},
-]]--
+	self.ttt2nwlib = self.ttt2nwlib or {}
+	self.ttt2nwlib.lookUp = self.ttt2nwlib.lookUp or {} -- this should not be accessable externally. A simple key-value transformed and networked plymeta.ttt2nwlib.synced copy with same data references!
+	self.ttt2nwlib.synced = self.ttt2nwlib.synced or {} -- iteratable table, e.g. {key = lastFound, value = 0, type = "number", unsigned = true}
 
--- these tables have on server two included tables:
--- 		T1: key == player connected with the data
--- 		T2: key == player the data is about
--- on clients, there is just one table, because the client just needs to know about his own data storage (T1 key == player the data is about)
-NWLib.lookupTable = NWLib.lookupTable or {} -- this should not be accessable externally. A simple key-value transformed and networked NWLib.syncedDataTable copy with same data references!
-NWLib.syncedDataTable = NWLib.syncedDataTable or {} -- iteratable table, e.g. {key = lastFound, value = 0, type = "number", unsigned = true}
+	local sid64 = SERVER and self:SteamID64() or nil
+
+	if SERVER then
+		self.ttt2nwlib.lookUp[sid64] = self.ttt2nwlib.lookUp[sid64] or {}
+		self.ttt2nwlib.synced[sid64] = self.ttt2nwlib.synced[sid64] or {}
+	end
+
+	if not initial then return end
+
+	local plys = player.GetAll()
+	local dataHolder
+
+	for i = 1, #plys do
+		if SERVER then
+			dataHolder = plys[i].ttt2nwlib
+
+			-- insert requesting player with default data for any player (including own player (self))
+			dataHolder.synced[sid64] = {}
+			dataHolder.lookUp[sid64] = {}
+		else
+			dataHolder = plys[i]:InitializeNetworkingData(false) -- initialize new data for any player
+		end
+	end
+end
 
 ---
 -- Returns whether the player is able to receive networking data
 -- @return bool
 function plymeta:IsNetworkingSynced()
-  return NWLib.lookupTable[self] ~= nil
+  return SERVER and self.ttt2nwlib ~= nil or self.ttt2nwlib.isSynced == true
 end
+
+--------------------------------------------------------------------------------
+------------------------------------ SETTER ------------------------------------
+--------------------------------------------------------------------------------
 
 ---
 -- Sets the networking data
@@ -48,14 +73,15 @@ function plymeta:SetNetworkingRawData(key, data, ply_or_rf)
 	local val = data.value
 	local plys = ply_or_rf or player.GetAll()
 	local tmp = SERVER and {} or nil
-	local ply, oldVal
+	local ply, oldVal, sid64
 	local missingValPlys = SERVER and {} or nil
 	local plyVals = SERVER and {} or nil
 
 	for i = 1, #plys do
 		ply = plys[i]
+		sid64 = ply:SteamID64()
 
-		local dataTbl = SERVER and NWLib.lookupTable[self][ply][key] or NWLib.lookupTable[ply][key]
+		local dataTbl = SERVER and self.ttt2nwlib.lookUp[sid64][key] or ply.ttt2nwlib.lookUp[key]
 
 		oldVal = dataTbl and dataTbl.value or nil
 
@@ -91,13 +117,13 @@ function plymeta:SetNetworkingRawData(key, data, ply_or_rf)
 		self:InsertNewNetworkingData(key, plyVals, data, missingValPlys)
 	end
 
-	local nwStr = NWLib.GenerateNetworkingDataString(key)
+	local nwStr = nwlib.GenerateNetworkingDataString(key)
 
 	for val, plyTbl in pairs(tmp) do
 		net.Start(nwStr)
 		net.WriteEntity(self)
 
-		NWLib.WriteNetworkingData(data, val)
+		nwlib.WriteNetworkingData(data, val)
 
 		net.Send(plyTbl)
 	end
@@ -141,6 +167,10 @@ function plymeta:SetNetworkingString(key, val)
 	})
 end
 
+--------------------------------------------------------------------------------
+------------------------------------ GETTER ------------------------------------
+--------------------------------------------------------------------------------
+
 ---
 -- Returns the stored networking key
 -- @param string key
@@ -148,7 +178,7 @@ end
 function plymeta:GetNetworkingRawData(target, key)
 	if not self:IsNetworkingSynced() or not target:IsNetworkingSynced() then return end
 
-	local data = CLIENT and NWLib.lookupTable[target][key] or NWLib.lookupTable[self][target][key]
+	local data = CLIENT and target.ttt2nwlib.lookUp[key] or self.ttt2nwlib.lookUp[target:SteamID64()][key]
 	if data == nil then return end
 
 	return data.value
