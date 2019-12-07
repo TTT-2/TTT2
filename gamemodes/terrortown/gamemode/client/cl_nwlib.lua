@@ -69,7 +69,7 @@ local function TTT2StartInitialNWDataSyncing()
 	local requestingPly = net.ReadEntity()
 	if not IsValid(requestingPly) then return end
 
-	requestingPly:InitializeNetworkingData(true)
+	requestingPly:InitializeNetworkingData(LocalPlayer() == requestingPly)
 
 	requestingPly.ttt2nwlib.isSynced = false
 end
