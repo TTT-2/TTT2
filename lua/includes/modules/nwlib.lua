@@ -3,7 +3,29 @@ local tostring = tostring
 local tonumber = tonumber
 local tobool = tobool
 
-module("marks", package.seeall)
+module("nwlib", package.seeall)
+
+---
+-- @param string key
+-- @param string typ
+-- @param nil|number bitsOrValue
+-- @param nil|bool numberUnsigned
+-- @param any numberValue
+function GenerateDataTable(key, typ, bitsOrValue, numberUnsigned, numberValue)
+	local dataTbl = {}
+	dataTbl.key = key
+	dataTbl.type = typ
+
+	if typ == "number" then
+		dataTbl.bits = bitsOrValue
+		dataTbl.unsigned = numberUnsigned
+		dataTbl.value = numberValue
+	else
+		dataTbl.value = bitsOrValue
+	end
+
+	return dataTbl
+end
 
 if SERVER then
 	AddCSLuaFile()
@@ -58,17 +80,20 @@ else
 		end
 	end
 
+	---
+	-- Initializes a new table data index for any player
+	-- @local
 	function ReadNewDataTbl()
 		local index = net.ReadUInt(16) + 1
 		local k = net.ReadString()
+		local typ = net.ReadString()
 
-		local dataTbl = {}
-		dataTbl.key = k
-		dataTbl.type = net.ReadString()
+		local dataTbl
 
-		if dataTbl.type == "number" then
-			dataTbl.bits = net.ReadUInt(5) + 1
-			dataTbl.unsigned = net.ReadBool()
+		if typ == "number" then
+			dataTbl = GenerateDataTable(k, typ, net.ReadUInt(5) + 1, net.ReadBool())
+		else
+			dataTbl = GenerateDataTable(k, typ)
 		end
 
 		dataTbl.value = ReadNetworkingData(dataTbl)
