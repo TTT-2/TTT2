@@ -1,3 +1,5 @@
+AddCSLuaFile("cl_init.lua")
+
 local plymeta = FindMetaTable("Player")
 if not plymeta then
 	Error("FAILED TO FIND PLAYER TABLE")
@@ -5,13 +7,13 @@ if not plymeta then
 	return
 end
 
-util.AddNetworkString("TTT2SyncNetworkingData")
-util.AddNetworkString("TTT2SyncNetworkingNewData")
-util.AddNetworkString("TTT2RequestNetworkingData")
-util.AddNetworkString("TTT2RemovePlayerNetworkingData")
-util.AddNetworkString("TTT2StartInitialNWDataSyncing")
-util.AddNetworkString("TTT2FinishInitialNWDataSyncing")
-util.AddNetworkString("TTT2ClearNWDataSyncedPlayer")
+util.AddNetworkString("NWLibSyncNetworkingData")
+util.AddNetworkString("NWLibSyncNetworkingNewData")
+util.AddNetworkString("NWLibRequestNetworkingData")
+util.AddNetworkString("NWLibRemovePlayerNetworkingData")
+util.AddNetworkString("NWLibStartInitialNWDataSyncing")
+util.AddNetworkString("NWLibFinishInitialNWDataSyncing")
+util.AddNetworkString("NWLibClearNWDataSyncedPlayer")
 
 function plymeta:InsertNewNetworkingData(key, plyVals, data, ply_or_rf)
 	-- reserving network message for networking data
@@ -26,13 +28,13 @@ function plymeta:InsertNewNetworkingData(key, plyVals, data, ply_or_rf)
 
 		-- insert new data in networking storage
 		local dataTbl = GenerateDataTable(key, data.type, data.bits, data.unsigned, nwlib.ParseData(val, data.type))
-		local index = #self.ttt2nwlib.synced[sid64] + 1
+		local index = #self.nwlib.synced[sid64] + 1
 
-		self.ttt2nwlib.synced[sid64][index] = dataTbl
-		self.ttt2nwlib.lookUp[sid64][key] = dataTbl
+		self.nwlib.synced[sid64][index] = dataTbl
+		self.nwlib.lookUp[sid64][key] = dataTbl
 
 		-- adding networking data to synced table and data with the same message
-		net.Start("TTT2SyncNetworkingNewData")
+		net.Start("NWLibSyncNetworkingNewData")
 		net.WriteEntity(ply)
 
 		nwlib.WriteNewDataTbl(index, key, data, dataTbl.value)
@@ -46,9 +48,9 @@ end
 function plymeta:StartSyncingNetworkingData()
 	if not self:IsNetworkingSynced() then return end
 
-	net.Start("TTT2SyncNetworkingData")
+	net.Start("NWLibSyncNetworkingData")
 
-	local tmpTbl = self.ttt2nwlib.synced[self:SteamID64()]
+	local tmpTbl = self.nwlib.synced[self:SteamID64()]
 
 	for i = 1, #tmpTbl do
 		nwlib.WriteNewDataTbl(index, key, data, dataTbl.value)
@@ -58,43 +60,43 @@ function plymeta:StartSyncingNetworkingData()
 	net.Send(self)
 end
 
-local function TTT2RequestNetworkingData(_, requestingPly)
+local function NWLibRequestNetworkingData(_, requestingPly)
 	if not IsValid(requestingPly) then return end
 
 	-- create a new player data storage
 	requestingPly:InitializeNetworkingData(true)
 
-	net.Start("TTT2StartInitialNWDataSyncing")
+	net.Start("NWLibStartInitialNWDataSyncing")
 	net.WriteEntity(requestingPly)
 	net.Broadcast()
 
 	requestingPly:StartSyncingNetworkingData()
 
-	hook.Run("TTT2SyncNetworkingData", requestingPly)
+	hook.Run("NWLibSyncNetworkingData", requestingPly)
 
-	net.Start("TTT2FinishInitialNWDataSyncing")
+	net.Start("NWLibFinishInitialNWDataSyncing")
 	net.WriteEntity(requestingPly)
 	net.Broadcast()
 end
-net.Receive("TTT2RequestNetworkingData", TTT2RequestNetworkingData)
+net.Receive("NWLibRequestNetworkingData", NWLibRequestNetworkingData)
 
 -- player disconnecting
-hook.Add("PlayerDisconnected", "TTT2RemovePlayerNetworkingData", function(discPly)
-	discPly.ttt2nwlib.synced = nil
-	discPly.ttt2nwlib.lookUp = nil
+hook.Add("PlayerDisconnected", "NWLibRemovePlayerNetworkingData", function(discPly)
+	discPly.nwlib.synced = nil
+	discPly.nwlib.lookUp = nil
 
 	local steamid64 = discPly:SteamID64()
 	local plys = player.GetAll()
 	local dataHolderNWLib
 
 	for i = 1, #plys do
-		dataHolderNWLib = plys[i].ttt2nwlib
+		dataHolderNWLib = plys[i].nwlib
 
 		dataHolderNWLib.synced[steamid64] = nil
 		dataHolderNWLib.lookUp[steamid64] = nil
 	end
 
-	net.Start("TTT2ClearNWDataSyncedPlayer")
+	net.Start("NWLibClearNWDataSyncedPlayer")
 	net.WriteString(steamid64)
 	net.Broadcast()
 end)

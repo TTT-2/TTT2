@@ -42,7 +42,7 @@ end
 -- @param Player ply
 -- @hook
 -- @realm shared
-function GM:TTT2SyncNetworkingData(ply)
+function GM:NWLibSyncNetworkingData(ply)
 	local rstate = GetRoundState() or ROUND_WAIT
 
 	-- Game has started, tell this guy (spec) where the round is at

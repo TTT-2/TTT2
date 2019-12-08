@@ -28,8 +28,6 @@ ttt_include("sv_status")
 ttt_include("sv_armor")
 ttt_include("sh_armor")
 
-ttt_include("sh_nwlib")
-ttt_include("sv_nwlib")
 ttt_include("sh_player_ext")
 
 ttt_include("sv_player_ext")

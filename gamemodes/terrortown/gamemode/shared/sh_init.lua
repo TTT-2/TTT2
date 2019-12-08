@@ -517,11 +517,20 @@ ttt_include("sh_role_module")
 ttt_include("sh_item_module")
 
 -- load non-wrapped modules directly
-require("nwlib")
 require("marks")
 
 -- TODO load modules that are currently not included in gmod but waiting for merge
 require("outline")
+
+-- include nwlib
+require("nwlib")
+include("nwlib/shared.lua")
+
+if SERVER then
+	include("nwlib/init.lua")
+else
+	include("nwlib/cl_init.lua")
+end
 
 ---
 -- Returns the equipment's file name

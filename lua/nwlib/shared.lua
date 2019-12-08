@@ -1,3 +1,7 @@
+if SERVER then
+	AddCSLuaFile()
+end
+
 ---
 -- complex player-based networking system, just a temporary solution to tackle the problem of delay-synced NWVars
 
@@ -21,15 +25,15 @@ function plymeta:InitializeNetworkingData(initial)
 	-- 		T2: key == player the data is about
 	-- on clients, there is just one table, because the client just needs to know about his own data storage (T1 key == player the data is about)
 
-	self.ttt2nwlib = self.ttt2nwlib or {}
-	self.ttt2nwlib.lookUp = self.ttt2nwlib.lookUp or {} -- this should not be accessable externally. A simple key-value transformed and networked plymeta.ttt2nwlib.synced copy with same data references!
-	self.ttt2nwlib.synced = self.ttt2nwlib.synced or {} -- iteratable table, e.g. {key = lastFound, value = 0, type = "number", unsigned = true}
+	self.nwlib = self.nwlib or {}
+	self.nwlib.lookUp = self.nwlib.lookUp or {} -- this should not be accessable externally. A simple key-value transformed and networked plymeta.nwlib.synced copy with same data references!
+	self.nwlib.synced = self.nwlib.synced or {} -- iteratable table, e.g. {key = lastFound, value = 0, type = "number", unsigned = true}
 
 	local sid64 = SERVER and self:SteamID64() or nil
 
 	if SERVER then
-		self.ttt2nwlib.lookUp[sid64] = self.ttt2nwlib.lookUp[sid64] or {}
-		self.ttt2nwlib.synced[sid64] = self.ttt2nwlib.synced[sid64] or {}
+		self.nwlib.lookUp[sid64] = self.nwlib.lookUp[sid64] or {}
+		self.nwlib.synced[sid64] = self.nwlib.synced[sid64] or {}
 	end
 
 	if not initial then return end
@@ -39,7 +43,7 @@ function plymeta:InitializeNetworkingData(initial)
 
 	for i = 1, #plys do
 		if SERVER then
-			dataHolder = plys[i].ttt2nwlib
+			dataHolder = plys[i].nwlib
 
 			-- insert requesting player with default data for any player (including own player (self))
 			dataHolder.synced[sid64] = {}
@@ -54,7 +58,7 @@ end
 -- Returns whether the player is able to receive networking data
 -- @return bool
 function plymeta:IsNetworkingSynced()
-  return SERVER and self.ttt2nwlib ~= nil or self.ttt2nwlib.isSynced == true
+  return SERVER and self.nwlib ~= nil or self.nwlib.isSynced == true
 end
 
 --------------------------------------------------------------------------------
@@ -81,14 +85,14 @@ function plymeta:SetNetworkingRawData(key, data, ply_or_rf)
 		ply = plys[i]
 		sid64 = ply:SteamID64()
 
-		local dataTbl = SERVER and self.ttt2nwlib.lookUp[sid64][key] or ply.ttt2nwlib.lookUp[key]
+		local dataTbl = SERVER and self.nwlib.lookUp[sid64][key] or ply.nwlib.lookUp[key]
 
 		oldVal = dataTbl and dataTbl.value or nil
 
 		if oldVal ~= nil then
-			val = hook.Run("TTT2UpdatingNetworkingData", self, ply, key, oldVal, val) or val
+			val = hook.Run("NWLibUpdateData", self, ply, key, oldVal, val) or val
 		else
-			val = hook.Run("TTT2InitializeNetworkingData", self, ply, key, val) or val
+			val = hook.Run("NWLibInitializeData", self, ply, key, val) or val
 		end
 
 		if oldVal == val then continue end
@@ -178,7 +182,7 @@ end
 function plymeta:GetNetworkingRawData(target, key)
 	if not self:IsNetworkingSynced() or not target:IsNetworkingSynced() then return end
 
-	local data = CLIENT and target.ttt2nwlib.lookUp[key] or self.ttt2nwlib.lookUp[target:SteamID64()][key]
+	local data = CLIENT and target.nwlib.lookUp[key] or self.nwlib.lookUp[target:SteamID64()][key]
 	if data == nil then return end
 
 	return data.value
