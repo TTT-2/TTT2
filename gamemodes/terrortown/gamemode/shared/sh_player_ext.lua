@@ -1002,18 +1002,18 @@ end
 -- @realm server
 function plymeta:ConfirmPlayer(announceRole)
 	if SERVER then
-		if self:GetNetworkingUInt("firstFound") <= 0 then
-			self:SetNetworkingUInt("firstFound", CurTime())
+		if self:GetNWLibUInt("firstFound") <= 0 then
+			self:SetNWLibUInt("firstFound", CurTime())
 		end
 
-		self:SetNetworkingUInt("lastFound", CurTime())
+		self:SetNWLibUInt("lastFound", CurTime())
 
 		if announceRole then
-			self:SetNetworkingBool("roleFound", true)
+			self:SetNWLibBool("roleFound", true)
 		end
 
 		self:SetNWBool("body_found", true) -- TODO just for compatibility
-		self:SetNetworkingBool("bodyFound", true)
+		self:SetNWLibBool("bodyFound", true)
 
 		net.Start("TTT2ConfirmPlayer")
 		net.WriteEntity(self)
@@ -1038,7 +1038,7 @@ end
 -- @return boolean
 -- @realm shared
 function plymeta:OnceFound()
-	return self:GetNetworkingUInt("firstFound") > 0
+	return self:GetNWLibUInt("firstFound") > 0
 end
 
 ---
@@ -1046,7 +1046,7 @@ end
 -- @return boolean
 -- @realm shared
 function plymeta:RoleKnown()
-	return self:GetNetworkingBool("roleFound")
+	return self:GetNWLibBool("roleFound")
 end
 
 ---
@@ -1054,7 +1054,7 @@ end
 -- @return boolean
 -- @realm shared
 function plymeta:Revived()
-	return not self:GetNetworkingBool("bodyFound") and self:OnceFound()
+	return not self:GetNWLibBool("bodyFound") and self:OnceFound()
 end
 
 ---
@@ -1062,7 +1062,7 @@ end
 -- @return boolean
 -- @realm shared
 function plymeta:GetFirstFound()
-	return math.Round(self:GetNetworkingUInt("firstFound"))
+	return math.Round(self:GetNWLibUInt("firstFound"))
 end
 
 ---
@@ -1070,7 +1070,7 @@ end
 -- @return boolean
 -- @realm shared
 function plymeta:GetLastFound()
-	return math.Round(self:GetNetworkingUInt("lastFound"))
+	return math.Round(self:GetNWLibUInt("lastFound"))
 end
 
 ---

@@ -46,7 +46,7 @@ end
 ---
 -- Initializes the networking data of a @{Player}
 function plymeta:StartSyncingNetworkingData()
-	if not self:IsNetworkingSynced() then return end
+	if not self:IsNWLibSynced() then return end
 
 	net.Start("NWLibSyncNetworkingData")
 
@@ -64,7 +64,7 @@ local function NWLibRequestNetworkingData(_, requestingPly)
 	if not IsValid(requestingPly) then return end
 
 	-- create a new player data storage
-	requestingPly:InitializeNetworkingData(true)
+	requestingPly:InitNWLibData(true)
 
 	net.Start("NWLibStartInitialNWDataSyncing")
 	net.WriteEntity(requestingPly)

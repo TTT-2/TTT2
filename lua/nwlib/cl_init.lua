@@ -69,7 +69,7 @@ local function NWLibStartInitialNWDataSyncing()
 	local requestingPly = net.ReadEntity()
 	if not IsValid(requestingPly) then return end
 
-	requestingPly:InitializeNetworkingData(LocalPlayer() == requestingPly)
+	requestingPly:InitNWLibData(LocalPlayer() == requestingPly)
 
 	requestingPly.nwlib.isSynced = false
 end

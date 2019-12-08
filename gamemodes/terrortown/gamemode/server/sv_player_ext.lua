@@ -401,10 +401,10 @@ function plymeta:ResetRoundFlags()
 
 	-- networking
 	-- TODO reset bodyFound, lastFound etc. manually to save networking capacity (seperately)
-	self:SetNetworkingBool("bodyFound", false)
-	self:SetNetworkingBool("roleFound", false)
-	self:SetNetworkingUInt("firstFound", 0)
-	self:SetNetworkingUInt("lastFound", 0)
+	self:SetNWLibBool("bodyFound", false)
+	self:SetNWLibBool("roleFound", false)
+	self:SetNWLibUInt("firstFound", 0)
+	self:SetNWLibUInt("lastFound", 0)
 
 	self.kills = {}
 	self.dying_wep = nil

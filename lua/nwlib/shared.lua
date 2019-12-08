@@ -19,7 +19,7 @@ end
 
 ---
 -- Initializes the data storage for a player
-function plymeta:InitializeNetworkingData(initial)
+function plymeta:InitNWLibData(initial)
 	-- these tables have on server two included tables:
 	-- 		T1: key == player connected with the data
 	-- 		T2: key == player the data is about
@@ -49,7 +49,7 @@ function plymeta:InitializeNetworkingData(initial)
 			dataHolder.synced[sid64] = {}
 			dataHolder.lookUp[sid64] = {}
 		else
-			dataHolder = plys[i]:InitializeNetworkingData(false) -- initialize new data for any player
+			dataHolder = plys[i]:InitNWLibData(false) -- initialize new data for any player
 		end
 	end
 end
@@ -57,7 +57,7 @@ end
 ---
 -- Returns whether the player is able to receive networking data
 -- @return bool
-function plymeta:IsNetworkingSynced()
+function plymeta:IsNWLibSynced()
   return SERVER and self.nwlib ~= nil or self.nwlib.isSynced == true
 end
 
@@ -71,7 +71,7 @@ end
 -- @param string key
 -- @param table data
 -- @param table ply_or_rf
-function plymeta:SetNetworkingRawData(key, data, ply_or_rf)
+function plymeta:SetNWLibRawData(key, data, ply_or_rf)
 	if data == nil then return end
 
 	local val = data.value
@@ -133,23 +133,23 @@ function plymeta:SetNetworkingRawData(key, data, ply_or_rf)
 	end
 end
 
-function plymeta:SetNetworkingBool(key, val)
-	self:SetNetworkingRawData(key, {
+function plymeta:SetNWLibBool(key, val)
+	self:SetNWLibRawData(key, {
 		value = val,
 		type = "bool",
 	})
 end
 
-function plymeta:SetNetworkingInt(key, val, bits)
-	self:SetNetworkingRawData(key, {
+function plymeta:SetNWLibInt(key, val, bits)
+	self:SetNWLibRawData(key, {
 		value = val,
 		type = "number",
 		bits = bits,
 	})
 end
 
-function plymeta:SetNetworkingUInt(key, val, bits)
-	self:SetNetworkingRawData(key, {
+function plymeta:SetNWLibUInt(key, val, bits)
+	self:SetNWLibRawData(key, {
 		value = val,
 		type = "number",
 		unsigned = true,
@@ -157,15 +157,15 @@ function plymeta:SetNetworkingUInt(key, val, bits)
 	})
 end
 
-function plymeta:SetNetworkingFloat(key, val)
-	self:SetNetworkingRawData(key, {
+function plymeta:SetNWLibFloat(key, val)
+	self:SetNWLibRawData(key, {
 		value = val,
 		type = "float",
 	})
 end
 
-function plymeta:SetNetworkingString(key, val)
-	self:SetNetworkingRawData(key, {
+function plymeta:SetNWLibString(key, val)
+	self:SetNWLibRawData(key, {
 		value = val,
 		type = "string",
 	})
@@ -179,8 +179,8 @@ end
 -- Returns the stored networking key
 -- @param string key
 -- @return any value
-function plymeta:GetNetworkingRawData(target, key)
-	if not self:IsNetworkingSynced() or not target:IsNetworkingSynced() then return end
+function plymeta:GetNWLibRawData(target, key)
+	if not self:IsNWLibSynced() or not target:IsNWLibSynced() then return end
 
 	local data = CLIENT and target.nwlib.lookUp[key] or self.nwlib.lookUp[target:SteamID64()][key]
 	if data == nil then return end
@@ -188,22 +188,22 @@ function plymeta:GetNetworkingRawData(target, key)
 	return data.value
 end
 
-function plymeta:GetNetworkingBool(target, key)
-	return tonumber(self:GetNetworkingRawData(target, key) or 0) == 1
+function plymeta:GetNWLibBool(target, key)
+	return tonumber(self:GetNWLibRawData(target, key) or 0) == 1
 end
 
-function plymeta:GetNetworkingInt(target, key)
-	return tonumber(self:GetNetworkingRawData(target, key) or 0)
+function plymeta:GetNWLibInt(target, key)
+	return tonumber(self:GetNWLibRawData(target, key) or 0)
 end
 
-function plymeta:GetNetworkingUInt(target, key)
-	return tonumber(self:GetNetworkingRawData(target, key) or 0)
+function plymeta:GetNWLibUInt(target, key)
+	return tonumber(self:GetNWLibRawData(target, key) or 0)
 end
 
-function plymeta:GetNetworkingFloat(target, key)
-	return tonumber(self:GetNetworkingRawData(target, key) or 0)
+function plymeta:GetNWLibFloat(target, key)
+	return tonumber(self:GetNWLibRawData(target, key) or 0)
 end
 
-function plymeta:GetNetworkingString(target, key)
-	return tostring(self:GetNetworkingRawData(target, key) or "")
+function plymeta:GetNWLibString(target, key)
+	return tostring(self:GetNWLibRawData(target, key) or "")
 end
