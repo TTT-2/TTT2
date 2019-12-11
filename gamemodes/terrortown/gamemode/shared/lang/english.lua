@@ -1169,7 +1169,7 @@ L.shop_selected = "Selected {role}"
 L.shop_settings_desc = "Change the values to adapt Random Shop ConVars. Don't forget to save your changes!"
 
 L.f1_settings_changes_title = "Changes"
-L.f1_settings_hudswitcher_title = "HUD Editor"
+L.f1_settings_hudswitcher_title = "HUD Switcher"
 L.f1_settings_bindings_title = "Key Bindings"
 L.f1_settings_interface_title = "Interface"
 L.f1_settings_gameplay_title = "Gameplay"
