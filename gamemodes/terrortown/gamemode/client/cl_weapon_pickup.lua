@@ -27,7 +27,10 @@ end
 
 -- picking up a weapon should update the client weapon cache
 net.Receive("ttt2_switch_weapon_update_cache", function()
-	WSWITCH:UpdateWeaponCache()
+	-- this for now is a workaround to test if the timing of the refresh is the problem
+	timer.Simple(0.25, function()
+		WSWITCH:UpdateWeaponCache()
+	end)
 end)
 
 -- register a binding for the weapon switch, the default should be the use key

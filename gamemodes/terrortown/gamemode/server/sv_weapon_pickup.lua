@@ -35,6 +35,12 @@ end
 function ResetWeapon(wep)
 	if not IsValid(wep) then return end
 
+	-- removing timers
+	if wep.wpickup_player then
+		timer.Remove("WeaponPickupRandomPos_" .. tostring(wep.wpickup_player:SteamID64()))
+		timer.Remove("WeaponPickupCancel_" .. tostring(wep.wpickup_player:SteamID64()))
+	end
+
 	-- clearing the player flag of this weapon, freeing it to every other player
 	wep.wpickup_player = nil
 
