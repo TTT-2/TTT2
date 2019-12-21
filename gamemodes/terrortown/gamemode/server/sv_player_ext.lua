@@ -1137,6 +1137,8 @@ function plymeta:PickupWeapon(wep, dropBlockingWeapon, shouldAutoSelect)
 	-- a position where a player is unable to pick it up, even if there is nothing that hinders
 	-- it from being picked up. Therefore we randomise the position a bit.
 	local function SetWeaponPos()
+		if not IsValid(self) or not IsValid(wep) then return end
+
 		-- if a pickup is possible, the weapon gets a flag set and is teleported to the feet
 		-- of the player
 		-- IMPORTANT: If the weapon gets teleported into other entities, it gets stuck. Therefore
