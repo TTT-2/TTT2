@@ -164,6 +164,9 @@ util.AddNetworkString("TTT2ReceiveTBEq")
 util.AddNetworkString("TTT2ReceiveGBEq")
 util.AddNetworkString("TTT2ResetTBEq")
 util.AddNetworkString("TTT2PlayerAuthedShared")
+util.AddNetworkString("TTT2ToggleTButton")
+util.AddNetworkString("TTT2SendTButtonConfig")
+util.AddNetworkString("TTT2RequestTButtonConfig")
 
 CHANGED_EQUIPMENT = {}
 

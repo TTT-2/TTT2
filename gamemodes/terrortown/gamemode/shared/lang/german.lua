@@ -633,11 +633,19 @@ L.target_switch_weapon_nospace = "Es ist kein Invetarplatz frei für diese Waffe
 L.target_switch_drop_weapon_info = "Lasse {name} aus Inventarplatz {slot} fallen"
 L.target_switch_drop_weapon_info_noslot = "In Inventatplatz {slot} ist keine wegwerfbare Waffe"
 
--- Traitor buttons (HUD buttons with hand icons that only traitors can see)
+-- HUD buttons with hand icons that only some roles can see and use
 L.tbut_single = "Einmaliger Gebrauch"
 L.tbut_reuse = "Wiederverwendbar"
 L.tbut_retime = "Wiederverwendbar nach {num} Sekunden"
 L.tbut_help = "Drücke {key} zum Aktivieren"
+L.tbut_role_toggle = "ALT+{key} zum Umschalten für {role}"
+L.tbut_role_config = "Rolle: {current}"
+L.tbut_team_toggle = "SHIFT+ALT+{key} zum Umschalten für {team}"
+L.tbut_team_config = "Team: {current}"
+L.tbut_intended_config = "Voreinstellung des Maperstellers"
+L.tbut_allow = "Erlaubt"
+L.tbut_prohib = "Verboten"
+L.tbut_default = "Standard"
 
 -- Equipment info lines (on the left above the health/ammo panel)
 L.disg_hud = "Getarnt. Dein Name ist ausgeblendet."
