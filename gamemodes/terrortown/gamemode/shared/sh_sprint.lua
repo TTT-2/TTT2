@@ -44,7 +44,6 @@ if SERVER then
 		ply.oldSprintProgress = ply.sprintProgress
 		ply.sprintMultiplier = bool and (1 + maxSprintMul:GetFloat()) or nil
 		ply.isSprinting = bool
-		ply.sprintTS = CurTime()
 	end)
 else
 	local function PlayerSprint(bool)
@@ -55,7 +54,6 @@ else
 		client.oldSprintProgress = client.sprintProgress
 		client.sprintMultiplier = bool and (1 + GetGlobalFloat("ttt2_sprint_max", 0)) or nil
 		client.isSprinting = bool
-		client.sprintTS = CurTime()
 
 		net.Start("TTT2SprintToggle")
 		net.WriteBool(bool)
@@ -85,24 +83,25 @@ hook.Add("Think", "TTT2PlayerSprinting", function()
 
 	for i = 1, #plys do
 		local ply = plys[i]
+		local wantsToMove = ply:KeyDown(IN_FORWARD) or ply:KeyDown(IN_BACK) or ply:KeyDown(IN_MOVERIGHT) or ply:KeyDown(IN_MOVELEFT)
 
-		if not ply.sprintTS then continue end
+		if ply.sprintProgress == 1 and (not ply.isSprinting or not wantsToMove) then continue end
+		if ply.sprintProgress == 0 and ply.isSprinting and wantsToMove then continue end
 
-		local timeElapsed = CurTime() - ply.sprintTS
 		local modifier = {1} -- Multiple hooking support
 
-		if not ply.isSprinting then
+		if not ply.isSprinting or not wantsToMove then
 			hook.Run("TTT2StaminaRegen", ply, modifier)
 
-			ply.sprintProgress = math.min((ply.oldSprintProgress or 0) + timeElapsed * modifier[1] * GetGlobalFloat("ttt2_sprint_stamina_regeneration"), 1)
-		else
+			--ply.sprintProgress = math.min((ply.oldSprintProgress or 0) + timeElapsed * modifier[1] * GetGlobalFloat("ttt2_sprint_stamina_regeneration"), 1)
+			ply.sprintProgress = math.min((ply.oldSprintProgress or 0) + FrameTime() * modifier[1] * GetGlobalFloat("ttt2_sprint_stamina_regeneration"), 1)
+			ply.oldSprintProgress = ply.sprintProgress
+		elseif wantsToMove then
 			hook.Run("TTT2StaminaDrain", ply, modifier)
 
-			ply.sprintProgress = math.max((ply.oldSprintProgress or 0) - timeElapsed * modifier[1] * GetGlobalFloat("ttt2_sprint_stamina_consumption"), 0)
-		end
-
-		if ply.sprintProgress == 1 then
-			ply.sprintTS = nil
+			--ply.sprintProgress = math.max((ply.oldSprintProgress or 0) - timeElapsed * modifier[1] * GetGlobalFloat("ttt2_sprint_stamina_consumption"), 0)
+			ply.sprintProgress = math.max((ply.oldSprintProgress or 0) - FrameTime() * modifier[1] * GetGlobalFloat("ttt2_sprint_stamina_consumption"), 0)
+			ply.oldSprintProgress = ply.sprintProgress
 		end
 	end
 end)
