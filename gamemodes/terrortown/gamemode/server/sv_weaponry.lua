@@ -746,6 +746,18 @@ function WEPS.ForcePrecache()
 	end
 end
 
+function WEPS.IsInstalled(cls)
+	local weps = weapons.GetList()
+
+	for i = 1, #weps do
+		if weps[i].ClassName == cls then
+			return true
+		end
+	end
+
+	return false
+end
+
 --manipulate shove attack for all crowbar alikes
 local crowbar_delay = CreateConVar("ttt2_crowbar_shove_delay", "1.0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
