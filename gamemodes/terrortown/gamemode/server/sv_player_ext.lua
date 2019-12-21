@@ -1020,7 +1020,13 @@ local plymeta_old_give = plymeta.Give
 function plymeta:Give(weaponClassName, bNoAmmo)
 	self.wp__GiveItemFunctionFlag = true
 
-	return plymeta_old_give(self, weaponClassName, bNoAmmo or false)
+	local wep = plymeta_old_give(self, weaponClassName, bNoAmmo or false)
+
+	-- the flag has to be reset on the outside of the hook since returning
+	-- false somewhere prevents GM:PlayerCanPickupWeapon from being executed
+	self.wp__GiveItemFunctionFlag = nil
+
+	return wep
 end
 
 ---
@@ -1031,7 +1037,13 @@ end
 function plymeta:CanPickupWeapon(wep)
 	self.wp__GiveItemFunctionFlag = true
 
-	return hook.Run("PlayerCanPickupWeapon", self, wep)
+	local can_pickup = hook.Run("PlayerCanPickupWeapon", self, wep)
+
+	-- the flag has to be reset on the outside of the hook since returning
+	-- false somewhere prevents GM:PlayerCanPickupWeapon from being executed
+	self.wp__GiveItemFunctionFlag = nil
+
+	return can_pickup
 end
 
 ---
@@ -1078,7 +1090,14 @@ function plymeta:PickupWeapon(wep, dropBlockingWeapon, shouldAutoSelect)
 	-- and is therefore not accessable for us
 	wep.wp__WeaponSwitchFlag = dropBlockingWeapon
 
-	if not self:CanPickupWeapon(wep) then return end
+	local canPickupWeapon = self:CanPickupWeapon(wep)
+
+	-- the flag has to be reset on the outside of the hook since returning
+	-- false somewhere prevents GM:PlayerCanPickupWeapon from being executed
+	wep.wp__WeaponSwitchFlag = nil
+
+	if not canPickupWeapon then return end
+
 
 	-- if parameter is set the currently blocking weapon should be dropped
 	if dropBlockingWeapon then

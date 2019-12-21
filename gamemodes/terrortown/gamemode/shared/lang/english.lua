@@ -271,7 +271,7 @@ L.set_tips = "Show gameplay tips at the bottom of the screen while spectating"
 L.set_startpopup = "Start of round info popup duration"
 L.set_startpopup_tip = "When the round starts, a small popup appears at the bottom of your screen for a few seconds. Change the time it displays for here."
 
-L.set_cross_opacity = "Ironsight crosshair opacity"
+L.set_cross_opacity = "Crosshair opacity"
 L.set_cross_disable = "Disable crosshair completely"
 L.set_minimal_id = "Minimalist Target ID under crosshair (no karma text, hints, etc)"
 L.set_healthlabel = "Show health status label on health bar"
@@ -392,14 +392,14 @@ L.decoy_no_room = "You cannot carry this decoy."
 L.decoy_broken = "Your Decoy has been destroyed!"
 
 L.decoy_help_pri = "{primaryfire} plants the Decoy."
-L.decoy_short_desc = "This decoy creates a fake radar point visible for other teams"
-L.decoy_pickup_wrong_team = "You Can't pick it up as it belongs to a different team"
+L.decoy_short_desc = "This decoy shows a fake radar sign visible for other teams"
+L.decoy_pickup_wrong_team = "You can't pick it up as it belongs to a different team"
 
 L.decoy_desc = [[
-Shows a fake radar sign to detectives,
-and makes their DNA scanner show the
-location of the Decoy if they scan for
-your DNA.]]
+Shows a fake radar sign to other teams,
+and makes the DNA scanner show the
+location of the Decoy if someone scans
+for your DNA.]]
 
 -- Defuser
 L.defuser_name = "Defuser"
@@ -1141,12 +1141,12 @@ L.idle_popup_title = "Idle"
 L.set_title_cross = "Crosshair settings"
 
 L.set_cross_color_enable = "Enable custom crosshair color"
-L.set_cross_color = "Custom crosshair color"
+L.set_cross_color = "Custom crosshair color:"
 L.set_cross_gap_enable = "Enable custom crosshair gap"
 L.set_cross_gap = "Custom crosshair gap"
 L.set_cross_static_enable = "Enable static crosshair"
 L.set_ironsight_cross_opacity = "Ironsight crosshair opacity"
-L.set_cross_weaponscale_enable = "Enable weapon crosshair scale"
+L.set_cross_weaponscale_enable = "Enable different crosshair scales for different weapons"
 L.set_cross_thickness = "Crosshair thickness"
 L.set_cross_outlinethickness = "Crosshair outline thickness"
 L.set_cross_dot_enable = "Enable crosshair dot"
@@ -1178,7 +1178,7 @@ L.f1_settings_language_title = "Language"
 L.f1_settings_administration_title = "Administration"
 L.f1_settings_shop_title = "Equipment Shop"
 
-L.f1_settings_shop_desc_shopopen = "Should the shop be opened/closed instead of the score menu during preparing / at the end of a round?"
+L.f1_settings_shop_desc_shopopen = "Open the shop by pressing the shop key instead of the score menu during preparing / at the end of a round?"
 L.f1_settings_shop_title_layout = "Item List Layout"
 L.f1_settings_shop_desc_num_columns = "Number of columns"
 L.f1_settings_shop_desc_num_rows = "Number of rows"
@@ -1191,7 +1191,7 @@ L.f1_settings_shop_desc_show_favourite = "Show favourite item marker"
 L.f1_shop_restricted = "Individual changes to the equipment shop layout are not allowed on this server. Please contact a server admin for details."
 
 L.f1_settings_hudswitcher_desc_basecolor = "Base Color"
-L.f1_settings_hudswitcher_desc_hud_scale = "HUD Scale (resets positions)"
+L.f1_settings_hudswitcher_desc_hud_scale = "HUD Scale (resets saved changes)"
 L.f1_settings_hudswitcher_button_close = "Close"
 L.f1_settings_hudswitcher_desc_reset = "Reset HUD's data"
 L.f1_settings_hudswitcher_button_reset = "Reset"
@@ -1200,21 +1200,21 @@ L.f1_settings_hudswitcher_button_layout_editor = "Layout Editor"
 L.f1_settings_hudswitcher_desc_hud_not_supported = "! THIS HUD DOES NOT SUPPORT THE HUD EDITOR !"
 
 L.f1_bind_reset_default = "Default"
-L.f1_bind_disable_bind = "Disable"
+L.f1_bind_disable_bind = "Clear"
 L.f1_bind_description = "Click and press a button to bind a key."
-L.f1_bind_reset_default_description = "Reset to default value."
-L.f1_bind_disable_description = "Disable this bind."
+L.f1_bind_reset_default_description = "Reset to default key."
+L.f1_bind_disable_description = "Clear this bind's key."
+L.ttt2_bindings_new = "New bound key for {name}: {key}"
 
 L.f1_bind_weaponswitch = "Switch Weapon"
 L.f1_bind_sprint = "Sprint"
 
-L.ttt2_bindings_new = "New bound key for {name}: {key}"
 L.hud_default = "Default HUD"
-L.hud_force = "Force HUD"
-L.hud_restricted = "Restrict HUDs"
-L.hud_default_failed = "Failed to set the HUD {hudname} as new default. Are you an admin and does this HUD even exist?"
-L.hud_forced_failed = "Failed to force the HUD {hudname}. Are you an admin and does this HUD even exist?"
-L.hud_restricted_failed = "Failed to restrict the HUD {hudname}. Are you an admin?"
+L.hud_force = "Forced HUD"
+L.hud_restricted = "Restricted HUDs"
+L.hud_default_failed = "Failed to set the HUD {hudname} as new default. You don't have permission to do that, or this HUD doesn't exist."
+L.hud_forced_failed = "Failed to force the HUD {hudname}. You don't have permission to do that, or this HUD doesn't exist."
+L.hud_restricted_failed = "Failed to restrict the HUD {hudname}. You don't have permission to do that."
 
 L.shop_role_select = "Select a role"
 L.shop_role_selected = "{roles}'s shop was selected!"
@@ -1222,8 +1222,8 @@ L.shop_search = "Search"
 
 L.button_save = "Save"
 
-L.disable_spectatorsoutline = "Deactivates spectators' outlines"
-L.disable_spectatorsoutline_tip = "Deactivates the outlines around object controlled by spectators (+Performance)"
+L.disable_spectatorsoutline = "Disable controlled objects' outlines"
+L.disable_spectatorsoutline_tip = "Disables the outlines around objects controlled by spectators (+Performance)"
 
-L.disable_overheadicons = "Deactivates role icons"
-L.disable_overheadicons_tip = "Deactivates the role icons on top of every player (+Performance)"
+L.disable_overheadicons = "Disable role icons"
+L.disable_overheadicons_tip = "Disables the role icons over the players' heads (+Performance)"
