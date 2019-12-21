@@ -1122,13 +1122,13 @@ function plymeta:PickupWeapon(wep, dropBlockingWeapon, shouldAutoSelect)
 	wep.wpickup_player = self
 
 	-- destroy physics to let weapon float in the air
-	--wep:PhysicsDestroy()
+	wep:PhysicsDestroy()
 
 	-- set collision group to IN_VEHICLE to be nonexistent, bullets can pass through it
 	wep:SetCollisionGroup(COLLISION_GROUP_IN_VEHICLE)
 
 	-- make weapon invisible to prevent stuck weapon in player sight
-	--wep:SetNoDraw(true)
+	wep:SetNoDraw(true)
 
 	-- set autoselect flag
 	wep.wpickup_autoSelect = shouldAutoSelect
