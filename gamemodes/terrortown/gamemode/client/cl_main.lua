@@ -62,6 +62,7 @@ ttt_include("cl_voice")
 ttt_include("cl_changes")
 ttt_include("cl_inventory")
 ttt_include("cl_status")
+ttt_include("cl_player_ext")
 
 ttt_include("cl_armor")
 ttt_include("sh_armor")

@@ -15,6 +15,10 @@ if not plymeta then
 	return
 end
 
+util.AddNetworkString("StartDrowning")
+util.AddNetworkString("TTT2TargetPlayer")
+util.AddNetworkString("TTT2SetPlayerReady")
+
 ---
 -- Sets whether a @{Player} is spectating the own ragdoll
 -- @param boolean s
@@ -978,6 +982,21 @@ function plymeta:ResetConfirmPlayer()
 	self:SetNWFloat("t_last_found", -1)
 end
 
+---
+-- On the server, we just send the client a message that the player is
+-- performing a gesture. This allows the client to decide whether it should
+-- play, depending on eg. a cvar.
+-- @param ACT[https://wiki.garrysmod.com/page/Enums/ACT] act The activity (ACT) or sequence that should be played
+-- @realm server
+function plymeta:AnimPerformGesture(act)
+	if not act then return end
+
+	net.Start("TTT_PerformGesture")
+	net.WriteEntity(self)
+	net.WriteUInt(act, 16)
+	net.Broadcast()
+end
+
 -- TODO REMOVE THIS
 
 hook.Add("TTTBeginRound", "TTT2GivePendingItems", function()
@@ -1201,3 +1220,13 @@ function plymeta:PickupWeaponClass(wepCls, dropBlockingWeapon, shouldAutoSelect)
 
 	return pWep
 end
+
+-- receives the PlayerReady flag from the client and calls the serverwide hook
+local function SetPlayerReady(_, ply)
+	if not IsValid(ply) then return end
+
+	ply.is_ready = true
+
+	hook.Run("TTT2PlayerReady", ply)
+end
+net.Receive("TTT2SetPlayerReady", SetPlayerReady)
