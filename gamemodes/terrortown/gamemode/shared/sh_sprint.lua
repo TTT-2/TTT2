@@ -46,27 +46,52 @@ if SERVER then
 		ply.isSprinting = bool
 	end)
 else
-	local function PlayerSprint(bool)
+	local lastPress = 0
+
+	local function PlayerSprint(trySprinting, bind)
 		local client = LocalPlayer()
 
-		if bool and not GetGlobalBool("ttt2_sprint_enabled", true) or not bool and not client.isSprinting then return end
+		if trySprinting and not GetGlobalBool("ttt2_sprint_enabled", true) then return end
+		if not trySprinting and not client.isSprinting or trySprinting and client.isSprinting then return end
+		if client.isSprinting and (client.useSprintBind and not bind or not client.useSprintBind and bind) then return end
 
 		client.oldSprintProgress = client.sprintProgress
-		client.sprintMultiplier = bool and (1 + GetGlobalFloat("ttt2_sprint_max", 0)) or nil
-		client.isSprinting = bool
+		client.sprintMultiplier = trySprinting and (1 + GetGlobalFloat("ttt2_sprint_max", 0)) or nil
+		client.isSprinting = trySprinting
+		client.useSprintBind = bind
 
 		net.Start("TTT2SprintToggle")
-		net.WriteBool(bool)
+		net.WriteBool(trySprinting)
 		net.SendToServer()
 	end
 
+	hook.Add("KeyPress", "TTT2DoublePressSprint", function(ply, key)
+		if not IsFirstTimePredicted() then return end
+		if key == IN_FORWARD and not ply.isSprinting then
+			local time = CurTime()
+
+			if time - lastPress < 0.4 then
+				PlayerSprint(true, false)
+			end
+
+			lastPress = time
+		end
+	end)
+
+	hook.Add("KeyRelease", "TTT2EndDoublePressSprint", function(ply, key)
+		if not IsFirstTimePredicted() then return end
+		if key == IN_FORWARD and ply.isSprinting then
+			PlayerSprint(false, false)
+		end
+	end)
+
 	bind.Register("ttt2_sprint", function()
 		if not LocalPlayer().preventSprint then
-			PlayerSprint(true)
+			PlayerSprint(true, true)
 		end
 	end,
 	function()
-		PlayerSprint(false)
+		PlayerSprint(false, true)
 	end, "TTT2 Bindings", "f1_bind_sprint", KEY_LSHIFT)
 end
 
