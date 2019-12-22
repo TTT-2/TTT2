@@ -37,6 +37,7 @@ function TBHUD:CacheEnts()
 
 	if IsValid(ply) and ply:IsActive() then
 		local admin = ply:IsAdmin()
+		local team = ply:GetTeam()
 		local btns = ents.FindByClass("ttt_traitor_button")
 
 		for i = 1, #btns do
@@ -48,8 +49,8 @@ function TBHUD:CacheEnts()
 					["ent"] = ent, ["access"] = access,
 					["overrideRole"] = overrideRole, ["overrideTeam"] = overrideTeam,
 					["roleIntend"] = roleIntend, ["teamIntend"] = teamIntend,
-					["admin"] = ply:IsAdmin(), ["roleColor"] = ply:GetRoleColor(),
-					["teamColor"] = TEAMS[ply:GetTeam()].color or Color(0, 0, 0, 255)
+					["admin"] = admin, ["roleColor"] = ply:GetRoleColor(),
+					["teamColor"] = TEAMS and TEAMS[team] and TEAMS[team].color or Color(0, 0, 0, 255)
 				}
 			end
 		end
