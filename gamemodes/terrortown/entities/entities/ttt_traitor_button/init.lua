@@ -90,11 +90,9 @@ end
 net.Receive("TTT2ToggleTButton", function(len, ply)
 	local ent = net.ReadEntity()
 	local teamMode = net.ReadBool()
-	if IsValid(ent) then
-		if ply:IsAdmin() then
-			UpdateMapConfig(ent, ply:GetRoleStringRaw(), ply:GetTeam(), teamMode)
-			SendMapConfig(true)
-		end
+	if IsValid(ent) and ply:IsAdmin() then
+		UpdateMapConfig(ent, ply:GetRoleStringRaw(), ply:GetTeam(), teamMode)
+		SendMapConfig(true)
 	end
 end)
 

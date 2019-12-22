@@ -27,7 +27,7 @@ function ENT:SetupDataTables()
 end
 
 function ENT:IsUsable()
-  	return not self:GetLocked() and self:GetNextUseTime() < CurTime()
+	return not self:GetLocked() and self:GetNextUseTime() < CurTime()
 end
 
 ---
