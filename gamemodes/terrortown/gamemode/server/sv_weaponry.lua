@@ -705,6 +705,12 @@ function GM:PlayerDroppedWeapon(ply, wep)
 
 	RemoveWeaponFromInventoryAndNotifyClient(ply, wep)
 
+	-- you can drop a weapon prior to calling WEP:EQUIP, therefore the pickup process
+	-- has to be stopped if it is still running
+	if wep.wpickup_player then
+		ResetWeapon(wep)
+	end
+
 	-- there is a glitch that picking up a weapon does not refresh the weapon cache on
 	-- the client. Therefore the client has to be notified to updated its cache
 	net.Start("ttt2_switch_weapon_update_cache")
