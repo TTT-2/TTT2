@@ -24,6 +24,7 @@ ttt_include("sv_ent_replace")
 ttt_include("sv_scoring")
 ttt_include("sv_corpse")
 ttt_include("sv_status")
+ttt_include("sv_loadingscreen")
 
 ttt_include("sv_armor")
 ttt_include("sh_armor")

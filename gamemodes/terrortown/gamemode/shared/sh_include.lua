@@ -99,6 +99,7 @@ if SERVER then
 		sv_weapon_pickup = {file = "sv_weapon_pickup.lua", on = "server"},
 		sv_weaponry = {file = "sv_weaponry.lua", on = "server"},
 		sv_addonchecker = {file = "sv_addonchecker.lua", on = "server"},
+		sv_loadingscreen = {file = "sv_loadingscreen.lua", on = "server"},
 	}
 
 	table.Merge(TTTFiles, tmp)
