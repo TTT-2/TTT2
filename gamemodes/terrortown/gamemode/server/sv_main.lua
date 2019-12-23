@@ -863,6 +863,9 @@ function PrepareRound()
 		GAMEMODE.FirstRound = false
 	end
 
+	-- remove decals
+	util.ClearDecals()
+
 	-- Piggyback on "round end" time global var to show end of phase timer
 	SetRoundEnd(CurTime() + ptime)
 
@@ -1071,6 +1074,9 @@ function BeginRound()
 
 	-- Remove their ragdolls
 	ents.TTT.RemoveRagdolls(true)
+
+	-- remove decals
+	util.ClearDecals()
 
 	if CheckForAbort() then return end
 
