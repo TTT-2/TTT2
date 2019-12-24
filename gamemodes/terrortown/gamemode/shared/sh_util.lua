@@ -277,6 +277,11 @@ local decals = {}
 -- @return string The unique id of the decal
 -- @realm shared
 function util.DecalRemovable(id, name, startpos, endpos, filter)
+	-- make sure each name is unique
+	if decals[id] then
+		return util.DecalRemovable(id .. '_', name, startpos, endpos, filter)
+	end
+
 	-- cache added decal
 	decals[id] = {
 		name = name,
