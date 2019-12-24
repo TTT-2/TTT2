@@ -344,7 +344,7 @@ function util.PaintDown(start, effname, ignore)
 		mask = MASK_SOLID
 	})
 
-	util.Decal(effname, btr.HitPos + btr.HitNormal, btr.HitPos - btr.HitNormal)
+	util.Decal(effname, btr.HitPos + btr.HitNormal, btr.HitPos - btr.HitNormal, ignore)
 end
 
 function util.PaintDownRemovable(id, start, effname, ignore)
@@ -355,7 +355,7 @@ function util.PaintDownRemovable(id, start, effname, ignore)
 		mask = MASK_SOLID
 	})
 
-	util.DecalRemovable(id, effname, btr.HitPos + btr.HitNormal, btr.HitPos - btr.HitNormal)
+	util.DecalRemovable(id, effname, btr.HitPos + btr.HitNormal, btr.HitPos - btr.HitNormal, ignore)
 end
 
 local function DoBleed(ent)
