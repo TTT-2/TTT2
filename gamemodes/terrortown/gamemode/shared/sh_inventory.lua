@@ -144,7 +144,8 @@ end
 
 SWITCHMODE_PICKUP = 0
 SWITCHMODE_SWITCH = 1
-SWITCHMODE_NOSPACE = 2
+SWITCHMODE_FULLINV = 2
+SWITCHMODE_NOSPACE = 3
 
 ---
 -- A simple handler to get the weapon blocking a new weapon from beeing picked up
@@ -156,8 +157,15 @@ function GetBlockingWeapon(ply, wep)
 	local activeWeapon = ply:GetActiveWeapon()
 	local throwWeapon, switchMode
 
+	local tr = util.QuickTrace(ply:GetShootPos(), ply:GetAimVector() * 32, ply)
+
+	-- if there is no room to drop the weapon, the pickup should be prohibited
+	if tr.HitWorld then
+		throwWeapon = nil
+		switchMode = SWITCHMODE_NOSPACE
+
 	-- if the player already has this weapon class, the weapon has to be dropped
-	if ply:HasWeapon(WEPS.GetClass(wep)) then
+	elseif ply:HasWeapon(WEPS.GetClass(wep)) then
 		throwWeapon = ply:GetWeapon(WEPS.GetClass(wep))
 		switchMode = SWITCHMODE_SWITCH
 
@@ -174,7 +182,7 @@ function GetBlockingWeapon(ply, wep)
 	-- try to find a dropable weapon in the selected slot
 	else
 		local weps = ply.inventory[MakeKindValid(wep.Kind)]
-		switchMode = SWITCHMODE_NOSPACE
+		switchMode = SWITCHMODE_FULLINV
 
 		-- get droppable weapon from given slot
 		for i = 1, #weps do
@@ -193,7 +201,7 @@ function GetBlockingWeapon(ply, wep)
 	-- now make sure the selected weapon is valid and dropable
 	if IsValid(throwWeapon) and not throwWeapon.AllowDrop then
 		throwWeapon = nil
-		switchMode = SWITCHMODE_NOSPACE
+		switchMode = SWITCHMODE_FULLINV
 	end
 
 	return throwWeapon, throwWeapon == activeWeapon, switchMode

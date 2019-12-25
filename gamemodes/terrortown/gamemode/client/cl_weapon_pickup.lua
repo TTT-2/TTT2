@@ -15,7 +15,7 @@ end
 
 local lastRequest = 0
 
--- sends  a request to the server that this client wants to pickup/switch a weapon
+-- sends a request to the server that this client wants to pickup/switch a weapon
 local function AttemptWeaponSwitch()
 	if GetPickableWeaponInFront() == nil or lastRequest + 0.25 > CurTime() then return end
 

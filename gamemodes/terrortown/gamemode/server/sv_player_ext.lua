@@ -1141,7 +1141,7 @@ function plymeta:PickupWeapon(wep, dropBlockingWeapon, shouldAutoSelect)
 	if dropBlockingWeapon then
 		local dropWeapon, isActiveWeapon, switchMode = GetBlockingWeapon(self, wep)
 
-		if switchMode == SWITCHMODE_NOSPACE then return end
+		if switchMode == SWITCHMODE_FULLINV then return end
 
 		self:SafeDropWeapon(dropWeapon, true)
 
@@ -1231,7 +1231,7 @@ function plymeta:PickupWeaponClass(wepCls, dropBlockingWeapon, shouldAutoSelect)
 	if dropBlockingWeapon then
 		local dropWeapon, isActiveWeapon, switchMode = GetBlockingWeapon(self, wep)
 
-		if switchMode == SWITCHMODE_NOSPACE then return end
+		if switchMode == SWITCHMODE_FULLINV or switchMode == SWITCHMODE_NOSPACE then return end
 
 		self:SafeDropWeapon(dropWeapon, true)
 
