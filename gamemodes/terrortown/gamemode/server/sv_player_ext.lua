@@ -1049,6 +1049,26 @@ function plymeta:Give(weaponClassName, bNoAmmo)
 end
 
 ---
+-- Called to drop a weapon in a safe manner (e.g. preparing and space-check)
+-- @param Weapon wep
+-- @realm server
+function plymeta:SafeDropWeapon(wep, keep_selection)
+	if not IsValid(wep) or not wep.AllowDrop then return end
+
+	local tr = util.QuickTrace(self:GetShootPos(), self:GetAimVector() * 32, self)
+
+	if tr.HitWorld then
+		LANG.Msg(self, "drop_no_room")
+
+		return
+	end
+
+	self:AnimPerformGesture(ACT_GMOD_GESTURE_ITEM_PLACE)
+
+	WEPS.DropNotifiedWeapon(self, wep, false, keep_selection)
+end
+
+---
 -- Returns wether or not a player can pick up a weapon
 -- @param Weapon wep The weapon object
 -- @returns boolean
@@ -1123,7 +1143,7 @@ function plymeta:PickupWeapon(wep, dropBlockingWeapon, shouldAutoSelect)
 
 		if switchMode == SWITCHMODE_NOSPACE then return end
 
-		self:PrepareAndDropWeapon(dropWeapon)
+		self:SafeDropWeapon(dropWeapon, true)
 
 		-- set flag to new weapon that is used to autoselect it later on
 		shouldAutoSelect = shouldAutoSelect or isActiveWeapon
@@ -1176,11 +1196,14 @@ function plymeta:PickupWeapon(wep, dropBlockingWeapon, shouldAutoSelect)
 	-- initial teleport the weapon to the player pos
 	SetWeaponPos()
 
+	wep.name_timer_pos = "WeaponPickupRandomPos_" .. self:SteamID64()
+	wep.name_timer_cancel = "WeaponPickupCancel_" .. self:SteamID64()
+
 	-- update the weapon pos
-	timer.Create("WeaponPickupRandomPos_" .. tostring(self:SteamID64()), 0.2, 8, SetWeaponPos)
+	timer.Create(wep.name_timer_pos, 0.2, 8, SetWeaponPos)
 
 	-- after 1.5 seconds, the pickup should be canceled
-	timer.Create("WeaponPickupCancel_" .. tostring(self:SteamID64()), 1.5, 1, function()
+	timer.Create(wep.name_timer_cancel, 1.5, 1, function()
 		ResetWeapon(wep)
 	end)
 
@@ -1210,7 +1233,7 @@ function plymeta:PickupWeaponClass(wepCls, dropBlockingWeapon, shouldAutoSelect)
 
 		if switchMode == SWITCHMODE_NOSPACE then return end
 
-		self:PrepareAndDropWeapon(dropWeapon)
+		self:SafeDropWeapon(dropWeapon, true)
 
 		pWep = self:Give(wepCls)
 

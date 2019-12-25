@@ -69,10 +69,7 @@ function GM:PlayerCanPickupWeapon(ply, wep)
 		-- these flags shouldn't be reset on first call of this hook since GMOD might do stupid things
 		-- while attempting to pickup a weapon
 		-- therefore these flags keep their value until the weapon is picked up or the player attempts
-		-- another pickup
-		wep.wpickup_player = nil
-		ply.wpickup_weapon = nil
-
+		-- another pickup and are cleared in ResetWeapon()
 		return true
 	end
 
@@ -534,7 +531,7 @@ concommand.Add("wepswitch", ForceWeaponSwitch)
 -- @param boolean death_drop
 -- @realm server
 -- @module WEPS
-function WEPS.DropNotifiedWeapon(ply, wep, death_drop)
+function WEPS.DropNotifiedWeapon(ply, wep, death_drop, keep_selection)
 	if not IsValid(ply) or not IsValid(wep) then return end
 
 	-- Hack to tell the weapon it's about to be dropped and should do what it
@@ -556,27 +553,15 @@ function WEPS.DropNotifiedWeapon(ply, wep, death_drop)
 
 	-- After dropping a weapon, always switch to holstered, so that traitors
 	-- will never accidentally pull out a traitor weapon
-	ply:SelectWeapon("weapon_ttt_unarmed")
+	if not keep_selection then
+		ply:SelectWeapon("weapon_ttt_unarmed")
+	end
 end
 
 local function DropActiveWeapon(ply)
 	if not IsValid(ply) then return end
 
-	local wep = ply:GetActiveWeapon()
-
-	if not IsValid(wep) or not wep.AllowDrop then return end
-
-	local tr = util.QuickTrace(ply:GetShootPos(), ply:GetAimVector() * 32, ply)
-
-	if tr.HitWorld then
-		LANG.Msg(ply, "drop_no_room")
-
-		return
-	end
-
-	ply:AnimPerformGesture(ACT_GMOD_GESTURE_ITEM_PLACE)
-
-	WEPS.DropNotifiedWeapon(ply, wep)
+	ply:SafeDropWeapon(ply:GetActiveWeapon(), false)
 end
 concommand.Add("ttt_dropweapon", DropActiveWeapon)
 
@@ -704,12 +689,6 @@ function GM:PlayerDroppedWeapon(ply, wep)
 	if not IsValid(wep) or not IsValid(ply) or not wep.Kind then return end
 
 	RemoveWeaponFromInventoryAndNotifyClient(ply, wep)
-
-	-- you can drop a weapon prior to calling WEP:EQUIP, therefore the pickup process
-	-- has to be stopped if it is still running
-	if wep.wpickup_player then
-		ResetWeapon(wep)
-	end
 
 	-- there is a glitch that picking up a weapon does not refresh the weapon cache on
 	-- the client. Therefore the client has to be notified to updated its cache
