@@ -319,7 +319,7 @@ function util.RemoveDecal(id)
 	RunConsoleCommand("r_cleardecals")
 
 	for did, decal in pairs(decals) do
-		util.DecalRemovable(did, decal.name, decal.startpos, decal.endpos, decal.filter)
+		utilDecal(decal.name, decal.startpos, decal.endpos, decal.filter)
 	end
 end
 
