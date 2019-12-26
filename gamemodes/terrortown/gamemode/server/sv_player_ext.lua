@@ -399,6 +399,7 @@ function plymeta:ResetRoundFlags()
 	self.bomb_wire = nil
 	self.radar_charge = 0
 	self.decoy = nil
+	timer.Remove("give_equipment" .. self:UniqueID())
 
 	-- corpse
 	self:SetNWBool("body_found", false)
@@ -1125,7 +1126,7 @@ function plymeta:PickupWeapon(wep, dropBlockingWeapon, shouldAutoSelect)
 	-- slightly hacky way
 
 	-- first we have to check if the player can pick up the weapon at all by running the
-	-- hook manually. This has to be done since the normal pickup is handled internally 
+	-- hook manually. This has to be done since the normal pickup is handled internally
 	-- and is therefore not accessable for us
 	wep.wp__WeaponSwitchFlag = dropBlockingWeapon
 
