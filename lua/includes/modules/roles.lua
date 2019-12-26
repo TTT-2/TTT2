@@ -140,6 +140,11 @@ local function SetupData(roleData)
 	-- set a roledata icon material to prevent creating new materials each frame
 	roleData.iconMaterial = Material(roleData.icon)
 
+	-- set default colors
+	roleData.dkcolor = util.ColorDarken(roleData.color, 30)
+	roleData.ltcolor = util.ColorLighten(roleData.color, 30)
+	roleData.bgcolor = util.ColorComplementary(roleData.color)
+
 	print("[TTT2][ROLE] Added '" .. roleData.name .. "' role (index: " .. roleData.index .. ")")
 end
 
