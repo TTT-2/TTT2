@@ -15,7 +15,7 @@ end
 
 local lastRequest = 0
 
--- sends  a request to the server that this client wants to pickup/switch a weapon
+-- sends a request to the server that this client wants to pickup/switch a weapon
 local function AttemptWeaponSwitch()
 	if GetPickableWeaponInFront() == nil or lastRequest + 0.25 > CurTime() then return end
 
@@ -27,7 +27,14 @@ end
 
 -- picking up a weapon should update the client weapon cache
 net.Receive("ttt2_switch_weapon_update_cache", function()
-	WSWITCH:UpdateWeaponCache()
+	-- this for now is a workaround to test if the timing of the refresh is the problem
+	timer.Simple(0.25, function()
+		local client = LocalPlayer()
+
+		if not IsValid(client) or not client:IsReady() then return end
+
+		WSWITCH:UpdateWeaponCache()
+	end)
 end)
 
 -- register a binding for the weapon switch, the default should be the use key

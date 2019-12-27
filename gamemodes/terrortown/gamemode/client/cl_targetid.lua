@@ -419,7 +419,7 @@ function HUDDrawTargetIDWeapons(data, params)
 		params.displayInfo.subtitle.text = TryT("target_pickup_weapon") .. (not isActiveWeapon and GetPT("target_pickup_weapon_hidden", key_params) or "")
 	elseif switchMode == SWITCHMODE_SWITCH then
 		params.displayInfo.subtitle.text = TryT("target_switch_weapon") .. (not isActiveWeapon and GetPT("target_switch_weapon_hidden", key_params) or "")
-	elseif switchMode == SWITCHMODE_NOSPACE then
+	elseif switchMode == SWITCHMODE_FULLINV then
 		params.displayInfo.subtitle.text = TryT("target_switch_weapon_nospace")
 	end
 
@@ -439,11 +439,18 @@ function HUDDrawTargetIDWeapons(data, params)
 		}
 	end
 
-	if switchMode == SWITCHMODE_NOSPACE then
+	if switchMode == SWITCHMODE_FULLINV then
 		local dropWepKind = MakeKindValid(data.ent.Kind)
 
 		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
 			text = GetPT("target_switch_drop_weapon_info_noslot", {slot = dropWepKind}),
+			color = COLOR_ORANGE
+		}
+	end
+
+	if switchMode == SWITCHMODE_NOSPACE then
+		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
+			text = GetPT("drop_no_room"),
 			color = COLOR_ORANGE
 		}
 	end

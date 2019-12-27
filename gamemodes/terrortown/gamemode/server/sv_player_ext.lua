@@ -15,6 +15,10 @@ if not plymeta then
 	return
 end
 
+util.AddNetworkString("StartDrowning")
+util.AddNetworkString("TTT2TargetPlayer")
+util.AddNetworkString("TTT2SetPlayerReady")
+
 ---
 -- Sets whether a @{Player} is spectating the own ragdoll
 -- @param boolean s
@@ -395,6 +399,7 @@ function plymeta:ResetRoundFlags()
 	self.bomb_wire = nil
 	self.radar_charge = 0
 	self.decoy = nil
+	timer.Remove("give_equipment" .. self:UniqueID())
 
 	-- corpse
 	self:SetNWBool("body_found", false)
@@ -978,6 +983,21 @@ function plymeta:ResetConfirmPlayer()
 	self:SetNWFloat("t_last_found", -1)
 end
 
+---
+-- On the server, we just send the client a message that the player is
+-- performing a gesture. This allows the client to decide whether it should
+-- play, depending on eg. a cvar.
+-- @param ACT[https://wiki.garrysmod.com/page/Enums/ACT] act The activity (ACT) or sequence that should be played
+-- @realm server
+function plymeta:AnimPerformGesture(act)
+	if not act then return end
+
+	net.Start("TTT_PerformGesture")
+	net.WriteEntity(self)
+	net.WriteUInt(act, 16)
+	net.Broadcast()
+end
+
 -- TODO REMOVE THIS
 
 hook.Add("TTTBeginRound", "TTT2GivePendingItems", function()
@@ -1027,6 +1047,26 @@ function plymeta:Give(weaponClassName, bNoAmmo)
 	self.wp__GiveItemFunctionFlag = nil
 
 	return wep
+end
+
+---
+-- Called to drop a weapon in a safe manner (e.g. preparing and space-check)
+-- @param Weapon wep
+-- @realm server
+function plymeta:SafeDropWeapon(wep, keep_selection)
+	if not IsValid(wep) or not wep.AllowDrop then return end
+
+	local tr = util.QuickTrace(self:GetShootPos(), self:GetAimVector() * 32, self)
+
+	if tr.HitWorld then
+		LANG.Msg(self, "drop_no_room")
+
+		return
+	end
+
+	self:AnimPerformGesture(ACT_GMOD_GESTURE_ITEM_PLACE)
+
+	WEPS.DropNotifiedWeapon(self, wep, false, keep_selection)
 end
 
 ---
@@ -1086,7 +1126,7 @@ function plymeta:PickupWeapon(wep, dropBlockingWeapon, shouldAutoSelect)
 	-- slightly hacky way
 
 	-- first we have to check if the player can pick up the weapon at all by running the
-	-- hook manually. This has to be done since the normal pickup is handled internally 
+	-- hook manually. This has to be done since the normal pickup is handled internally
 	-- and is therefore not accessable for us
 	wep.wp__WeaponSwitchFlag = dropBlockingWeapon
 
@@ -1098,14 +1138,13 @@ function plymeta:PickupWeapon(wep, dropBlockingWeapon, shouldAutoSelect)
 
 	if not canPickupWeapon then return end
 
-
 	-- if parameter is set the currently blocking weapon should be dropped
 	if dropBlockingWeapon then
 		local dropWeapon, isActiveWeapon, switchMode = GetBlockingWeapon(self, wep)
 
-		if switchMode == SWITCHMODE_NOSPACE then return end
+		if switchMode == SWITCHMODE_FULLINV then return end
 
-		self:PrepareAndDropWeapon(dropWeapon)
+		self:SafeDropWeapon(dropWeapon, true)
 
 		-- set flag to new weapon that is used to autoselect it later on
 		shouldAutoSelect = shouldAutoSelect or isActiveWeapon
@@ -1122,15 +1161,6 @@ function plymeta:PickupWeapon(wep, dropBlockingWeapon, shouldAutoSelect)
 	-- the flag is set to the weapon to stop other players from auto-picking up this weapon
 	wep.wpickup_player = self
 
-	-- if a pickup is possible, the weapon gets a flag set and is teleported to the feet
-	-- of the player
-	-- IMPORTANT: If the weapon gets teleported into other entities, it gets stuck. Therefore
-	-- the weapon is teleported to half player height
-	local pWepPos = self:EyePos()
-	pWepPos.z = pWepPos.z - 15 -- -15 to move it outside the viewing area
-
-	wep:SetPos(pWepPos)
-
 	-- destroy physics to let weapon float in the air
 	wep:PhysicsDestroy()
 
@@ -1142,6 +1172,41 @@ function plymeta:PickupWeapon(wep, dropBlockingWeapon, shouldAutoSelect)
 
 	-- set autoselect flag
 	wep.wpickup_autoSelect = shouldAutoSelect
+
+	-- Since we all love GMOD we do some really funny things here. Sometimes the weapon is in
+	-- a position where a player is unable to pick it up, even if there is nothing that hinders
+	-- it from being picked up. Therefore we randomise the position a bit.
+	local function SetWeaponPos()
+		if not IsValid(self) or not IsValid(wep) then return end
+
+		-- if a pickup is possible, the weapon gets a flag set and is teleported to the feet
+		-- of the player
+		-- IMPORTANT: If the weapon gets teleported into other entities, it gets stuck. Therefore
+		-- the weapon is teleported to half player height
+		local pWepPos = self:EyePos()
+		pWepPos.z = pWepPos.z - 20 -- -20 to move it outside the viewing area
+
+		-- randomise position
+		pWepPos.x = pWepPos.x + math.random(-10, 10)
+		pWepPos.y = pWepPos.y + math.random(-10, 10)
+		pWepPos.z = pWepPos.z + math.random(-10, 10)
+
+		wep:SetPos(pWepPos)
+	end
+
+	-- initial teleport the weapon to the player pos
+	SetWeaponPos()
+
+	wep.name_timer_pos = "WeaponPickupRandomPos_" .. self:SteamID64()
+	wep.name_timer_cancel = "WeaponPickupCancel_" .. self:SteamID64()
+
+	-- update the weapon pos
+	timer.Create(wep.name_timer_pos, 0.2, 8, SetWeaponPos)
+
+	-- after 1.5 seconds, the pickup should be canceled
+	timer.Create(wep.name_timer_cancel, 1.5, 1, function()
+		ResetWeapon(wep)
+	end)
 
 	return wep
 end
@@ -1167,9 +1232,9 @@ function plymeta:PickupWeaponClass(wepCls, dropBlockingWeapon, shouldAutoSelect)
 	if dropBlockingWeapon then
 		local dropWeapon, isActiveWeapon, switchMode = GetBlockingWeapon(self, wep)
 
-		if switchMode == SWITCHMODE_NOSPACE then return end
+		if switchMode == SWITCHMODE_FULLINV or switchMode == SWITCHMODE_NOSPACE then return end
 
-		self:PrepareAndDropWeapon(dropWeapon)
+		self:SafeDropWeapon(dropWeapon, true)
 
 		pWep = self:Give(wepCls)
 
@@ -1179,3 +1244,13 @@ function plymeta:PickupWeaponClass(wepCls, dropBlockingWeapon, shouldAutoSelect)
 
 	return pWep
 end
+
+-- receives the PlayerReady flag from the client and calls the serverwide hook
+local function SetPlayerReady(_, ply)
+	if not IsValid(ply) then return end
+
+	ply.is_ready = true
+
+	hook.Run("TTT2PlayerReady", ply)
+end
+net.Receive("TTT2SetPlayerReady", SetPlayerReady)
