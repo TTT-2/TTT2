@@ -1007,7 +1007,7 @@ hook.Add("TTTBeginRound", "TTT2GivePendingItems", function()
 		local plyGiveItem = ply.GiveItem
 
 		for i = 1, #tbl do
-			plyGiveItem(tbl[i])
+			plyGiveItem(ply, tbl[i])
 		end
 	end
 
