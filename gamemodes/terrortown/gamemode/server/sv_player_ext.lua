@@ -194,16 +194,16 @@ end
 
 ---
 -- Gives a specific @{ITEM} (if possible)
--- @param string id
+-- @param string cls
 -- @realm server
 -- @internal
-function plymeta:AddEquipmentItem(id)
-	local item = items.GetStored(id)
+function plymeta:AddEquipmentItem(cls)
+	local item = items.GetStored(cls)
 
-	if not item or item.limited and self:HasEquipmentItem(id) then return end
+	if not item or item.limited and self:HasEquipmentItem(cls) then return end
 
 	self.equipmentItems = self.equipmentItems or {}
-	self.equipmentItems[#self.equipmentItems + 1] = id
+	self.equipmentItems[#self.equipmentItems + 1] = cls
 
 	item:Equip(self)
 
@@ -212,12 +212,12 @@ end
 
 ---
 -- Removes a specific @{ITEM}
--- @param string id
+-- @param string cls
 -- @realm server
-function plymeta:RemoveEquipmentItem(id)
-	if not self:HasEquipmentItem(id) then return end
+function plymeta:RemoveEquipmentItem(cls)
+	if not self:HasEquipmentItem(cls) then return end
 
-	local item = items.GetStored(id)
+	local item = items.GetStored(cls)
 
 	if item and isfunction(item.Reset) then
 		item:Reset(self)
@@ -226,7 +226,7 @@ function plymeta:RemoveEquipmentItem(id)
 	local equipItems = self:GetEquipmentItems()
 
 	for k = 1, #equipItems do
-		if equipItems[k] == id then
+		if equipItems[k] == cls then
 			table.remove(self.equipmentItems, k)
 
 			break
@@ -308,28 +308,28 @@ end
 -- Adds an @{ITEM} or a @{Weapon} into the bought list of a @{Player}
 -- @note This will disable another purchase of the same equipment
 -- if this equipment is limited
--- @param string id
+-- @param string cls
 -- @realm server
 -- @see plymeta:RemoveBought
-function plymeta:AddBought(id)
+function plymeta:AddBought(cls)
 	self.bought = self.bought or {}
-	self.bought[#self.bought + 1] = tostring(id)
+	self.bought[#self.bought + 1] = tostring(cls)
 
-	BUYTABLE[id] = true
+	BUYTABLE[cls] = true
 
 	net.Start("TTT2ReceiveGBEq")
-	net.WriteString(id)
+	net.WriteString(cls)
 	net.Broadcast()
 
 	local team = self:GetTeam()
 
 	if team and team ~= TEAM_NONE and not TEAMS[team].alone then
 		TEAMBUYTABLE[team] = TEAMBUYTABLE[team] or {}
-		TEAMBUYTABLE[team][id] = true
+		TEAMBUYTABLE[team][cls] = true
 
 		if SERVER then
 			net.Start("TTT2ReceiveTBEq")
-			net.WriteString(id)
+			net.WriteString(cls)
 			net.Send(GetTeamFilter(team))
 		end
 	end
@@ -341,16 +341,16 @@ end
 -- Removes an @{ITEM} or a @{Weapon} from the bought list of a @{Player}
 -- @note This will enable another purchase of the same equipment
 -- if this equipment is limited
--- @param string id
+-- @param string cls
 -- @realm server
 -- @see plymeta:AddBought
-function plymeta:RemoveBought(id)
+function plymeta:RemoveBought(cls)
 	local key
 
 	self.bought = self.bought or {}
 
 	for k = 1, #self.bought do
-		if self.bought[k] ~= tostring(id) then continue end
+		if self.bought[k] ~= tostring(cls) then continue end
 
 		key = k
 
@@ -475,19 +475,19 @@ end
 
 ---
 -- Gives an @{ITEM} to a @{Player} and returns whether it was successful
--- @param string id
+-- @param string cls
 -- @return boolean success?
 -- @realm server
-function plymeta:GiveEquipmentItem(id)
-	if not id then return end
+function plymeta:GiveEquipmentItem(cls)
+	if not cls then return end
 
-	local item = items.GetStored(id)
+	local item = items.GetStored(cls)
 
-	if not item or item.limited and self:HasEquipmentItem(id) then
+	if not item or item.limited and self:HasEquipmentItem(cls) then
 		return false
 	end
 
-	self:AddEquipmentItem(id)
+	self:AddEquipmentItem(cls)
 
 	return true
 end
@@ -914,20 +914,20 @@ local pendingItems = {}
 
 ---
 -- Gives an @{ITEM} to a @{Player}
--- @param string id
+-- @param string cls
 -- @realm server
-function plymeta:GiveItem(id)
+function plymeta:GiveItem(cls)
 	if GetRoundState() == ROUND_PREP then
 		pendingItems[self] = pendingItems[self] or {}
-		pendingItems[self][#pendingItems[self] + 1] = id
+		pendingItems[self][#pendingItems[self] + 1] = cls
 
 		return
 	end
 
-	self:GiveEquipmentItem(id)
-	self:AddBought(id)
+	self:GiveEquipmentItem(cls)
+	self:AddBought(cls)
 
-	local item = items.GetStored(id)
+	local item = items.GetStored(cls)
 	if item and isfunction(item.Bought) then
 		item:Bought(self)
 	end
@@ -938,20 +938,20 @@ function plymeta:GiveItem(id)
 		if not IsValid(ply) then return end
 
 		net.Start("TTT_BoughtItem")
-		net.WriteString(id)
+		net.WriteString(cls)
 		net.Send(ply)
 	end)
 
-	hook.Run("TTTOrderedEquipment", self, id, items.IsItem(id) and id or false)
+	hook.Run("TTTOrderedEquipment", self, cls, items.IsItem(cls) and cls or false)
 end
 
 ---
 -- Removes an @{ITEM} from a @{Player}
--- @param string id
+-- @param string cls
 -- @realm server
-function plymeta:RemoveItem(id)
-	self:RemoveEquipmentItem(id)
-	self:RemoveBought(id)
+function plymeta:RemoveItem(cls)
+	self:RemoveEquipmentItem(cls)
+	self:RemoveBought(cls)
 end
 
 ---
