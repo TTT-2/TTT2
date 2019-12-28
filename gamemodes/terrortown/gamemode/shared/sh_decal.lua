@@ -1,5 +1,5 @@
 ---
--- @sectoin Decal
+-- @section Decal
 -- @desc Outsourced the decal releavant stuff to its own file
 -- @author Mineotopia
 
@@ -8,10 +8,10 @@
 -- specific decals, this is changed in this hacky implementation
 -- This works mostly good, however only for decals added with LUA. Decals added
 -- internally are not handled by these functions and therefore vanish when another
--- decal is removed. This might be improved in the future
+-- decal is removed. This might be improved in the future.
 
 if CLIENT then
-	-- cache original decal
+	-- cache original decal function
 	local utilDecal = util.Decal
 
 	-- table of all added decals
