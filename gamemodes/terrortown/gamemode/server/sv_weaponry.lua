@@ -639,6 +639,11 @@ concommand.Add("ttt_dropammo", DropActiveAmmo)
 -- @ref https://wiki.garrysmod.com/page/GM/WeaponEquip
 -- @local
 function GM:WeaponEquip(wep, ply)
+	if IsValid(ply) then
+		-- allow the player to pick up another weapon
+		ply.wpickup_waitequip = false
+	end
+
 	if IsValid(wep) and not wep.Kind then
 		-- only remove if they lack critical stuff
 		wep:Remove()

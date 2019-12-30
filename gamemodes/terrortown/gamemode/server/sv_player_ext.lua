@@ -1106,6 +1106,12 @@ end
 -- @returns Weapon if successful, nil if not
 -- @realm server
 function plymeta:PickupWeapon(wep, dropBlockingWeapon, shouldAutoSelect)
+	-- If the player has picked up a weapon, but not yet received it, ignore this request
+	-- to prevent GMod from making the weapon unusable and behaving weird
+	if self.wpickup_waitequip then
+		return nil
+	end
+
 	-- if the variable is not set, set it fitting to the keypress
 	if shouldAutoSelect == nil then
 		shouldAutoSelect = not self:KeyDown(IN_WALK) and not self:KeyDownLast(IN_WALK)
@@ -1115,10 +1121,6 @@ function plymeta:PickupWeapon(wep, dropBlockingWeapon, shouldAutoSelect)
 
 	-- if this weapon is already flagged by a different player, the pickup shouldn't happen
 	if wep.wpickup_player then return end
-
-	-- if the player tries to pickup another weapon while the pickup process of a previous
-	-- weapon is still running, the old flags have to be reset
-	ResetWeapon(self.wpickup_weapon)
 
 	-- Now comes the tricky part: Since Gmod doesn't allow us to pick up weapons by
 	-- calling a simple function while also keeping all the weapon specific params
@@ -1193,6 +1195,9 @@ function plymeta:PickupWeapon(wep, dropBlockingWeapon, shouldAutoSelect)
 
 		wep:SetPos(pWepPos)
 	end
+
+	-- we have picked up the weapon, but still have to wait until the player actually received it
+	self.wpickup_waitequip = true
 
 	-- initial teleport the weapon to the player pos
 	SetWeaponPos()

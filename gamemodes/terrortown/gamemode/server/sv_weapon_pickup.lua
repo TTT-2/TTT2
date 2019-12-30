@@ -29,6 +29,9 @@ function ResetWeapon(wep)
 		wep.name_timer_cancel = nil
 	end)
 
+	-- clear the wait flag in case the reset was after pickup but before equip
+	wep.wpickup_player.wpickup_waitequip = false
+
 	-- clearing the player/weapon flag of this weapon/player, freeing it to every other player
 	wep.wpickup_player.wpickup_weapon = nil
 	wep.wpickup_player = nil
