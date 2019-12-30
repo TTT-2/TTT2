@@ -709,3 +709,24 @@ function util.SimpleTime(seconds, fmt)
 
 	return string.format(fmt, m, s, ms)
 end
+
+---
+-- When overwriting a gamefunction, the old one has to be cached in order to still use it.
+-- This creates an infinite recursion problem (stack overflow). Registering the function with
+-- this helper function fixes the problem.
+-- @param string name The name of the original function
+-- @return Function The pointer to the original functions
+-- @realm shared
+function util.OverwriteFunction(name)
+	local str = string.Split(name, ".")
+
+	if not _G[name .. "_backup"] then
+		if #str == 1 then
+			_G[name .. "_backup"] = _G[str[1]]
+		elseif #str == 2 then
+			_G[name .. "_backup"] = _G[str[1]][str[2]]
+		end
+	end
+
+	return _G[name .. "_backup"]
+end

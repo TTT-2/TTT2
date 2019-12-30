@@ -12,9 +12,7 @@
 
 if CLIENT then
 	-- Cache original decal function, but make sure that no infinite recursion (stack overflow)
-	-- is created by executing a test decal which returns the previous decal function
-	-- it it is already overwritten. This fixes the hotreloading problem with overwritten functions
-	utilDecal = util.Decal("overwrite_test") or util.Decal
+	local utilDecal = util.OverwriteFunction("util.Decal")
 
 	-- table of all added decals
 	local decals = {}
@@ -98,7 +96,7 @@ if SERVER then
 	util.AddNetworkString("TTT2AddDecal")
 
 	-- cache original game.AddDecal
-	local gameAddDecal = game.AddDecal
+	local gameAddDecal = util.OverwriteFunction("game.AddDecal")
 
 	---
 	-- Registers a new decal. When called on the server, the decal is registered on both client and server.
@@ -185,11 +183,6 @@ end
 -- @return string The unique id of the decal
 -- @realm shared
 function util.Decal(name, startpos, endpos, filter, playerlist)
-	-- return prevoious util.Decal if it was already overwritten
-	if name == "overwrite_test" then
-		return utilDecal
-	end
-
 	-- call the removable decal function, unique name is handled on the client
 	util.DecalRemovable(name, name, startpos, endpos, filter, playerlist)
 end
