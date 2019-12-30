@@ -72,7 +72,7 @@ if CLIENT then
 	end
 
 	-- mirror the function calls from the server to the client
-	net.Receive("TTT2AddDecal", function()
+	net.Receive("TTT2RegDecal", function()
 		game.AddDecal(net.ReadString(), net.ReadTable())
 	end)
 
@@ -93,7 +93,7 @@ if SERVER then
 	util.AddNetworkString("TTT2AddDecal")
 	util.AddNetworkString("TTT2RemoveDecal")
 	util.AddNetworkString("TTT2ClearDecals")
-	util.AddNetworkString("TTT2AddDecal")
+	util.AddNetworkString("TTT2RegDecal")
 
 	-- cache original game.AddDecal
 	local gameAddDecal = util.OverwriteFunction("game.AddDecal")
@@ -111,7 +111,7 @@ if SERVER then
 
 		gameAddDecal(decalName, materialName)
 
-		net.Start("TTT2AddDecal")
+		net.Start("TTT2RegDecal")
 		net.WriteString(decalName)
 		net.WriteTable(materialName)
 		net.Broadcast()
