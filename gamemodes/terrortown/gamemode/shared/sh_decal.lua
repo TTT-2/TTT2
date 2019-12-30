@@ -11,8 +11,10 @@
 -- decal is removed. This might be improved in the future.
 
 if CLIENT then
-	-- cache original decal function
-	local utilDecal = util.Decal
+	-- Cache original decal function, but make sure that no infinite recursion (stack overflow)
+	-- is created by executing a test decal which returns the previous decal function
+	-- it it is already overwritten. This fixes the hotreloading problem with overwritten functions
+	utilDecal = util.Decal("overwrite_test") or util.Decal
 
 	-- table of all added decals
 	local decals = {}
@@ -183,6 +185,11 @@ end
 -- @return string The unique id of the decal
 -- @realm shared
 function util.Decal(name, startpos, endpos, filter, playerlist)
+	-- return prevoious util.Decal if it was already overwritten
+	if name == "overwrite_test" then
+		return utilDecal
+	end
+
 	-- call the removable decal function, unique name is handled on the client
 	util.DecalRemovable(name, name, startpos, endpos, filter, playerlist)
 end
