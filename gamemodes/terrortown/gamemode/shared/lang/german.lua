@@ -38,9 +38,9 @@ L.win_innocents = "Die Innos haben gewonnen!"
 L.win_bees = "Die Bienen haben gewonnen! (Es ist ein Unentschieden)"
 L.win_showreport = "Schauen wir uns den Rundenbericht die nächste(n) {num} Sekunde(n) an."
 
-L.limit_round = "Rundenlimit erreicht. {mapname} wird bald geladen."
-L.limit_time = "Zeitlimit erreicht. {mapname} wird bald geladen."
-L.limit_left = "{num} Runde(n) oder {time} Minute(n) verbleibend bis die Map zu {mapname} gewechselt wird."
+L.limit_round = "Rundenlimit erreicht. Die nächste Map wird bald geladen."
+L.limit_time = "Zeitlimit erreicht. Die nächste Map wird bald geladen."
+L.limit_left = "{num} Runde(n) oder {time} Minute(n) verbleibend bis die Map gewechselt wird."
 
 -- Credit awards
 L.credit_all = "Deinem Team wurde(n) {num} Ausrüstungs-Credit(s) für eure Leistung gegeben."

@@ -38,8 +38,8 @@ L.win_innocents = "The Innos have won!"
 L.win_bees = "The Bees has won! (Its a draw)"
 L.win_showreport = "Let's look at the round report for {num} seconds."
 
-L.limit_round = "Round limit reached. {mapname} will load soon."
-L.limit_time = "Time limit reached. {mapname} will load soon."
+L.limit_round = "Round limit reached. The next map will load soon."
+L.limit_time = "Time limit reached. The next map will load soon."
 L.limit_left = "{num} round(s) or {time} minutes remaining before the map changes."
 
 -- Credit awards
