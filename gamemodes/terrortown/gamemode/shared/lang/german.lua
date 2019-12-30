@@ -1107,10 +1107,11 @@ L.hat_retrieve = "Du hast den Hut eines Detektivs aufgehoben."
 L.sb_sortby = "Sortiere nach:"
 
 -- 2018-07-24
-L.equip_tooltip_main = "Ausrüstung"
-L.equip_tooltip_radar = "Radar"
-L.equip_tooltip_disguise = "Tarnung"
-L.equip_tooltip_radio = "Radio"
+L.equip_tooltip_main = "Ausrüstungsmenü"
+L.equip_tooltip_radar = "Radar-Einstellungen"
+L.equip_tooltip_disguise = "Tarnungs-Einstellungen"
+L.equip_tooltip_radio = "Radio-Einstellungen"
+L.equip_tooltip_reroll = "Items neu ausrollen"
 L.equip_tooltip_xfer = "Credits transferieren"
 
 L.confgrenade_name = "Discombobulator"
