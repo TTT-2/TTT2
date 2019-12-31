@@ -639,9 +639,10 @@ concommand.Add("ttt_dropammo", DropActiveAmmo)
 -- @ref https://wiki.garrysmod.com/page/GM/WeaponEquip
 -- @local
 function GM:WeaponEquip(wep, ply)
+	print("Equip", wep)
 	if IsValid(ply) then
 		-- allow the player to pick up another weapon
-		ply.wpickup_waitequip = false
+
 	end
 
 	if IsValid(wep) and not wep.Kind then
@@ -656,6 +657,8 @@ function GM:WeaponEquip(wep, ply)
 	end
 
 	local function WeaponEquipNextFrame()
+		print("EquipNF", wep)
+
 		if not IsValid(ply) or not IsValid(wep) then return end
 
 		-- autoselect weapon when the new weapon has the same slot than the old one
@@ -672,7 +675,7 @@ function GM:WeaponEquip(wep, ply)
 		net.Send(ply)
 
 		-- since the weapon pickup changes some weapon data, it has to be reset here
-		ResetWeapon(wep)
+		ResetWeapon(wep, "EquipNF")
 	end
 
 	-- handle all this stuff in the next frame since the owner is not yet valid
@@ -691,12 +694,21 @@ end
 -- @ref https://wiki.garrysmod.com/page/GM/PlayerDroppedWeapon
 -- @local
 function GM:PlayerDroppedWeapon(ply, wep)
+	print("Drop", wep, not IsValid(wep), not IsValid(ply), not wep.Kind)
 	if not IsValid(wep) or not IsValid(ply) or not wep.Kind then return end
+
+	if wep.name_timer_pos then
+		timer.Remove(wep.name_timer_pos)
+	end
+
+	if wep.name_timer_cancel then
+		timer.Remove(wep.name_timer_cancel)
+	end
 
 	RemoveWeaponFromInventoryAndNotifyClient(ply, wep)
 
 	-- there is a glitch that picking up a weapon does not refresh the weapon cache on
-	-- the client. Therefore the client has to be notified to updated its cache
+	-- the client. Therefore the client has to be notified to update its cache
 	net.Start("ttt2_switch_weapon_update_cache")
 	net.Send(ply)
 end

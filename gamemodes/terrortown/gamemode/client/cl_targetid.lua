@@ -232,12 +232,13 @@ function GM:HUDDrawTargetID()
 	local trace = util.TraceLine({
 		start = startpos,
 		endpos = endpos,
-		mask = MASK_SHOT,
+		--mask = MASK_ALL,
 		filter = client:GetObserverMode() == OBS_MODE_IN_EYE and {client, client:GetObserverTarget()} or client
 	})
 
 	-- this is the entity the player is looking at right now
 	local ent = trace.Entity
+	chat.AddText(tostring(ent) .. tostring(CurTime()))
 	local distance = trace.StartPos:Distance(trace.HitPos)
 
 	-- make sure it is a valid entity
@@ -396,7 +397,7 @@ function HUDDrawTargetIDWeapons(data, params)
 	local client = LocalPlayer()
 
 	if not IsValid(client) or not client:IsTerror() or not client:Alive()
-	or data.distance > 100 or not data.ent:IsWeapon() then
+	or data.distance > 1000 or not data.ent:IsWeapon() then
 		return
 	end
 

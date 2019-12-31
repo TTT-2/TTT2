@@ -1109,18 +1109,28 @@ function plymeta:PickupWeapon(wep, dropBlockingWeapon, shouldAutoSelect)
 	-- If the player has picked up a weapon, but not yet received it, ignore this request
 	-- to prevent GMod from making the weapon unusable and behaving weird
 	if self.wpickup_waitequip then
-		return nil
+		return
 	end
+	-- prevent race conditions
+	self.wpickup_waitequip = true
 
 	-- if the variable is not set, set it fitting to the keypress
 	if shouldAutoSelect == nil then
 		shouldAutoSelect = not self:KeyDown(IN_WALK) and not self:KeyDownLast(IN_WALK)
 	end
 
-	if not IsValid(wep) then return end
+	if not IsValid(wep) then
+		self.wpickup_waitequip = false
+		return
+	end
 
 	-- if this weapon is already flagged by a different player, the pickup shouldn't happen
-	if wep.wpickup_player then return end
+	if wep.wpickup_player then
+		self.wpickup_waitequip = false
+		return
+	end
+
+	print("Pickup", wep)
 
 	-- Now comes the tricky part: Since Gmod doesn't allow us to pick up weapons by
 	-- calling a simple function while also keeping all the weapon specific params
@@ -1133,12 +1143,16 @@ function plymeta:PickupWeapon(wep, dropBlockingWeapon, shouldAutoSelect)
 	wep.wp__WeaponSwitchFlag = dropBlockingWeapon
 
 	local canPickupWeapon = self:CanPickupWeapon(wep)
+	--local canPickupWeapon = true
 
 	-- the flag has to be reset on the outside of the hook since returning
 	-- false somewhere prevents GM:PlayerCanPickupWeapon from being executed
 	wep.wp__WeaponSwitchFlag = nil
 
-	if not canPickupWeapon then return end
+	if not canPickupWeapon then
+		self.wpickup_waitequip = false
+		return
+	end
 
 	-- if parameter is set the currently blocking weapon should be dropped
 	if dropBlockingWeapon then
@@ -1146,7 +1160,11 @@ function plymeta:PickupWeapon(wep, dropBlockingWeapon, shouldAutoSelect)
 
 		if switchMode == SWITCHMODE_FULLINV then return end
 
+		-- Very very rarely happens but definitely breaks the weapon and should be avoided at all costs
+		if dropWeapon == wep then return end
+
 		self:SafeDropWeapon(dropWeapon, true)
+		--self:DropWeapon(dropWeapon)
 
 		-- set flag to new weapon that is used to autoselect it later on
 		shouldAutoSelect = shouldAutoSelect or isActiveWeapon
@@ -1157,64 +1175,117 @@ function plymeta:PickupWeapon(wep, dropBlockingWeapon, shouldAutoSelect)
 		end
 	end
 
-	-- this flag is set to the player to make sure he only picks up this weapon
-	self.wpickup_weapon = wep
+	timer.Create("WeaponPickup_" .. self:SteamID64(), 0, 1, function()
+		-- this flag is set to the player to make sure he only picks up this weapon
+		self.wpickup_weapon = wep
 
-	-- the flag is set to the weapon to stop other players from auto-picking up this weapon
-	wep.wpickup_player = self
+		-- the flag is set to the weapon to stop other players from auto-picking up this weapon
+		wep.wpickup_player = self
 
-	-- destroy physics to let weapon float in the air
-	wep:PhysicsDestroy()
+		-- destroy physics to let weapon float in the air
+		wep:PhysicsDestroy()
 
-	-- set collision group to IN_VEHICLE to be nonexistent, bullets can pass through it
-	wep:SetCollisionGroup(COLLISION_GROUP_IN_VEHICLE)
+		-- set collision group to IN_VEHICLE to be nonexistent, bullets can pass through it
+		wep:SetCollisionGroup(COLLISION_GROUP_IN_VEHICLE)
 
-	-- make weapon invisible to prevent stuck weapon in player sight
-	wep:SetNoDraw(true)
+		-- make weapon invisible to prevent stuck weapon in player sight
+		wep:SetNoDraw(true)
 
-	-- set autoselect flag
-	wep.wpickup_autoSelect = shouldAutoSelect
+		-- set autoselect flag
+		wep.wpickup_autoSelect = shouldAutoSelect
 
-	-- Since we all love GMOD we do some really funny things here. Sometimes the weapon is in
-	-- a position where a player is unable to pick it up, even if there is nothing that hinders
-	-- it from being picked up. Therefore we randomise the position a bit.
-	local function SetWeaponPos()
-		if not IsValid(self) or not IsValid(wep) then return end
+		-- Since we all love GMOD we do some really funny things here. Sometimes the weapon is in
+		-- a position where a player is unable to pick it up, even if there is nothing that hinders
+		-- it from being picked up. Therefore we randomise the position a bit.
+		local function SetWeaponPos()
+			if not IsValid(self) or not IsValid(wep) or not self.wpickup_waitequip then return end
+			print("SetWeaponPos", wep)
 
-		-- if a pickup is possible, the weapon gets a flag set and is teleported to the feet
-		-- of the player
-		-- IMPORTANT: If the weapon gets teleported into other entities, it gets stuck. Therefore
-		-- the weapon is teleported to half player height
-		local pWepPos = self:EyePos()
-		pWepPos.z = pWepPos.z - 20 -- -20 to move it outside the viewing area
+			-- if a pickup is possible, the weapon gets a flag set and is teleported to the feet
+			-- of the player
+			-- IMPORTANT: If the weapon gets teleported into other entities, it gets stuck. Therefore
+			-- the weapon is teleported to half player height
+			local pWepPos = self:EyePos()
+			pWepPos.z = pWepPos.z - 20 -- -20 to move it outside the viewing area
 
-		-- randomise position
-		pWepPos.x = pWepPos.x + math.random(-10, 10)
-		pWepPos.y = pWepPos.y + math.random(-10, 10)
-		pWepPos.z = pWepPos.z + math.random(-10, 10)
+			-- randomise position
+			pWepPos.x = pWepPos.x + math.random(-10, 10)
+			pWepPos.y = pWepPos.y + math.random(-10, 10)
+			pWepPos.z = pWepPos.z + math.random(-10, 10)
 
-		wep:SetPos(pWepPos)
-	end
+			wep:SetPos(pWepPos)
+		end
 
-	-- we have picked up the weapon, but still have to wait until the player actually received it
-	self.wpickup_waitequip = true
+		-- initial teleport the weapon to the player pos
+		SetWeaponPos()
 
-	-- initial teleport the weapon to the player pos
-	SetWeaponPos()
+		wep.name_timer_pos = "WeaponPickupRandomPos_" .. self:SteamID64()
+		wep.name_timer_cancel = "WeaponPickupCancel_" .. self:SteamID64()
 
-	wep.name_timer_pos = "WeaponPickupRandomPos_" .. self:SteamID64()
-	wep.name_timer_cancel = "WeaponPickupCancel_" .. self:SteamID64()
+		-- update the weapon pos
+		timer.Create(wep.name_timer_pos, 0.2, 1, SetWeaponPos)
 
-	-- update the weapon pos
-	timer.Create(wep.name_timer_pos, 0.2, 8, SetWeaponPos)
-
-	-- after 1.5 seconds, the pickup should be canceled
-	timer.Create(wep.name_timer_cancel, 1.5, 1, function()
-		ResetWeapon(wep)
+		-- after 1.5 seconds, the pickup should be canceled
+		timer.Create(wep.name_timer_cancel, 1.5, 1, function()
+			ResetWeapon(wep, "Timeout")
+		end)
 	end)
 
 	return wep
 end
+
+concommand.Add("teststart", function(ply, cmd, args)
+	--PrintTable( weapons.GetList() )
+	local sg = ents.Create("weapon_zm_rifle")
+	local sg1 = ents.Create("weapon_zm_rifle")
+	local sg2 = ents.Create("weapon_zm_mac10")
+	local sg3 = ents.Create("weapon_ttt_m16")
+	local sg4 = ents.Create("weapon_zm_shotgun")
+	local weps = { sg1, sg2, sg3, sg4 }
+	local pos = ply:GetPos()
+	sg:SetPos(Vector(pos.x - 300, pos.y, pos.z))
+	sg1:SetPos(Vector(pos.x - 100, pos.y, pos.z))
+	sg2:SetPos(Vector(pos.x - 200, pos.y, pos.z))
+	sg3:SetPos(Vector(pos.x + 100, pos.y, pos.z))
+	sg4:SetPos(Vector(pos.x + 200, pos.y, pos.z))
+	sg:Spawn()
+	sg1:Spawn()
+	sg2:Spawn()
+	sg3:Spawn()
+	sg4:Spawn()
+
+	local switch = 0
+	local last = 0
+	function pickup()
+		if switch < 100 then
+			if not ply.wpickup_waitequip then
+				local wep = math.random(1, 3)
+				wep = wep == last and wep + 1 or wep
+				last = wep
+				switch = switch + 1
+				print("             ")
+				ply:PickupWeapon(weps[wep], true, true)
+			end
+			timer.Create(ply:Nick(), 0, 1, pickup)
+		end
+	end
+	pickup()
+end)
+
+concommand.Add("teststop", function(ply, cmd, args)
+	timer.Remove(ply:Nick())
+end)
+
+concommand.Add("test", function(ply, cmd, args)
+	--PrintTable(ply:GetActiveWeapon():GetKeyValues())
+	for i = 0, 20 do
+		local sg1 = ents.Create("weapon_zm_rifle")
+		local pos = ply:GetPos()
+		pos.x = pos.x + i * 10
+		sg1:SetPos(pos)
+		sg1:Spawn()
+	end
+end)
 
 ---
 -- This function simplifies the weapon class giving process for a player by
