@@ -84,7 +84,7 @@ L.equip_tabtitle = "Ausrüstung bestellen"
 L.equip_cost = "Du hast {num} Credit(s) übrig."
 L.equip_help_cost = "Jedes Ausrüstungsteil, das du kaufst, kostet 1 Credit."
 
-L.equip_help_carry = "Du kannst nur das Kaufen, für das du auch Platz hast."
+L.equip_help_carry = "Du kannst nur das kaufen, für das du auch Platz hast."
 L.equip_carry = "Du kannst diese Ausrüstung tragen."
 L.equip_carry_own = "Du trägst dieses Teil bereits."
 L.equip_carry_slot = "Du trägst bereits eine Waffe in Slot {slot}."
