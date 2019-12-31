@@ -1200,6 +1200,13 @@ L.f1_bind_disable_description = "Deaktiviere diese Bindung."
 L.f1_bind_weaponswitch = "Waffe Wechseln"
 L.f1_bind_sprint = "Sprinten"
 
+L.f1_dmgindicator_title = "Schadensanzeige Einstellungen"
+L.f1_dmgindicator_enable = "Aktivieren"
+L.f1_dmgindicator_mode = "Schadensanzeige-Thema"
+L.f1_dmgindicator_duration = "Sekunden, die die Schadensanzeige sichtbar ist"
+L.f1_dmgindicator_maxdamage = "Erlittener Schaden für maximale Sichtbarkeit"
+L.f1_dmgindicator_maxalpha = "Maximaler Transparenzwert"
+
 L.ttt2_bindings_new = "Neue Tasetenbelegung für {name}: {key}"
 L.hud_default = "Standard HUD"
 L.hud_force = "Erzwungenes HUD"
