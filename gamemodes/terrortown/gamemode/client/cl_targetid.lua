@@ -450,7 +450,7 @@ function HUDDrawTargetIDWeapons(data, params)
 
 	if switchMode == SWITCHMODE_NOSPACE then
 		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
-			text = GetPT("drop_no_room"),
+			text = TryT("drop_no_room"),
 			color = COLOR_ORANGE
 		}
 	end
