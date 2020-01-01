@@ -97,5 +97,6 @@ if SERVER then
 
 	-- dmgindicator themes
 	resource.AddFile("materials/vgui/ttt/dmgindicator/themes/Default.png")
+	resource.AddFile("materials/vgui/ttt/dmgindicator/themes/Simple.png")
 	resource.AddFile("materials/vgui/ttt/dmgindicator/themes/Vanilla.png")
 end
