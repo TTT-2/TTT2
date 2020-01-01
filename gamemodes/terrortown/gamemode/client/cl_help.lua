@@ -653,7 +653,7 @@ net.Receive("TTT2RestrictHUDResponse", function()
 	local ply = LocalPlayer()
 
 	if not accepted then
-		ply:ChatPrint("[TTT2][HUDManager] " .. GetParamTranslation("hud_restricted_failed", {hudname = hudname}))
+		ply:ChatPrint("[TTT2][HUDManager] " .. GetPTranslation("hud_restricted_failed", {hudname = hudname}))
 
 		return
 	end
@@ -665,7 +665,7 @@ net.Receive("TTT2ForceHUDResponse", function()
 	local ply = LocalPlayer()
 
 	if not accepted then
-		ply:ChatPrint("[TTT2][HUDManager] " .. GetParamTranslation("hud_forced_failed", {hudname = hudname}))
+		ply:ChatPrint("[TTT2][HUDManager] " .. GetPTranslation("hud_forced_failed", {hudname = hudname}))
 
 		return
 	end
@@ -677,7 +677,7 @@ net.Receive("TTT2DefaultHUDResponse", function()
 	local ply = LocalPlayer()
 
 	if not accepted then
-		ply:ChatPrint("[TTT2][HUDManager] " .. GetParamTranslation("hud_default_failed", {hudname = hudname}))
+		ply:ChatPrint("[TTT2][HUDManager] " .. GetPTranslation("hud_default_failed", {hudname = hudname}))
 
 		return
 	end
