@@ -18,7 +18,7 @@ local function ReadMapConfig()
 
 		if content then
 			TButtonMapConfig = util.JSONToTable(content) or {}
-			for id,_ in pairs(TButtonMapConfig) do
+			for id in pairs(TButtonMapConfig) do
 				local ent = ents.GetMapCreatedEntity(tonumber(id))
 				if IsValid(ent) then
 					MapButtonEntIndexMapping[ent:EntIndex()] = id
@@ -46,45 +46,43 @@ local function SendMapConfig(skipRead, ply)
 end
 
 local function UpdateMapConfig(ent, roleRawString, team, teamMode)
-	if IsValid(ent) then
-		local mapID = ent:MapCreationID()
-		if mapID ~= -1 then
-			local currentJSON = ReadMapConfig()
-			currentJSON[mapID] = currentJSON[mapID] or {}
-			currentJSON[mapID].Override = currentJSON[mapID].Override or {}
-			currentJSON[mapID].Override.Role = currentJSON[mapID].Override.Role or {}
-			currentJSON[mapID].Override.Team = currentJSON[mapID].Override.Team or {}
-			currentJSON[mapID].Description = ent:GetDescription()
+	if not IsValid(ent) then return false end
 
-			if teamMode then
-				local cur = currentJSON[mapID].Override.Team[team]
-				if cur == nil then
-					currentJSON[mapID].Override.Team[team] = true
-				elseif cur then
-					currentJSON[mapID].Override.Team[team] = false
-				else
-					currentJSON[mapID].Override.Team[team] = nil
-				end
-			else
-				local cur = currentJSON[mapID].Override.Role[roleRawString]
-				if cur == nil then
-					currentJSON[mapID].Override.Role[roleRawString] = true
-				elseif cur then
-					currentJSON[mapID].Override.Role[roleRawString] = false
-				else
-					currentJSON[mapID].Override.Role[roleRawString] = nil
-				end
-			end
+	local mapID = ent:MapCreationID()
+	if mapID == -1 then return false end
 
-			file.Write("ttt2tbuttons/" .. game.GetMap() .. ".json", util.TableToJSON(currentJSON, true))
-			TButtonMapConfig = currentJSON
-			MapButtonEntIndexMapping[mapID] = ent:EntIndex()
+	local currentJSON = ReadMapConfig()
+	currentJSON[mapID] = currentJSON[mapID] or {}
+	currentJSON[mapID].Override = currentJSON[mapID].Override or {}
+	currentJSON[mapID].Override.Role = currentJSON[mapID].Override.Role or {}
+	currentJSON[mapID].Override.Team = currentJSON[mapID].Override.Team or {}
+	currentJSON[mapID].Description = ent:GetDescription()
 
-			return true
+	if teamMode then
+		local cur = currentJSON[mapID].Override.Team[team]
+		if cur == nil then
+			currentJSON[mapID].Override.Team[team] = true
+		elseif cur then
+			currentJSON[mapID].Override.Team[team] = false
+		else
+			currentJSON[mapID].Override.Team[team] = nil
+		end
+	else
+		local cur = currentJSON[mapID].Override.Role[roleRawString]
+		if cur == nil then
+			currentJSON[mapID].Override.Role[roleRawString] = true
+		elseif cur then
+			currentJSON[mapID].Override.Role[roleRawString] = false
+		else
+			currentJSON[mapID].Override.Role[roleRawString] = nil
 		end
 	end
 
-	return false
+	file.Write("ttt2tbuttons/" .. game.GetMap() .. ".json", util.TableToJSON(currentJSON, true))
+	TButtonMapConfig = currentJSON
+	MapButtonEntIndexMapping[mapID] = ent:EntIndex()
+
+	return true
 end
 
 net.Receive("TTT2ToggleTButton", function(len, ply)
@@ -101,7 +99,7 @@ net.Receive("TTT2RequestTButtonConfig", function(len, ply)
 end)
 
 hook.Add("TTTInitPostEntity", "TTT2TButtonsCacheInitialize", function()
-	--Initially send the map config
+	-- Initially send the map config
 	SendMapConfig()
 end)
 
@@ -137,7 +135,7 @@ function ENT:Initialize()
 	self:SetDescription(self.RawDescription or "?")
 
 	self:SetRole(self.Role or "none")
-	self:SetTeam(self.Team or "none")
+	self:SetTeam(self.Team or TEAM_NONE)
 
 	self.RawDelay = nil
 	self.RawDescription = nil

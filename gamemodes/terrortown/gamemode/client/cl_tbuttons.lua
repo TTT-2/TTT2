@@ -50,7 +50,7 @@ function TBHUD:CacheEnts()
 					["overrideRole"] = overrideRole, ["overrideTeam"] = overrideTeam,
 					["roleIntend"] = roleIntend, ["teamIntend"] = teamIntend,
 					["admin"] = admin, ["roleColor"] = ply:GetRoleColor(),
-					["teamColor"] = TEAMS and TEAMS[team] and TEAMS[team].color or Color(0, 0, 0, 255)
+					["teamColor"] = TEAMS and TEAMS[team] and TEAMS[team].color or COLOR_BLACK
 				}
 			end
 		end
@@ -147,13 +147,11 @@ function TBHUD:Draw(client)
 	local pos, scrpos, d
 	local focus_but
 	local focus_d, focus_scrpos_x, focus_scrpos_y = 0, midscreen_x, midscreen_y
-	local innerColor = Color(255, 255, 255)
-
 	-- draw icon on HUD for every button within range
 	for _, val in pairs(self.buttons) do
 		local ent = val.ent
-		local teamAccess = val.overrideTeam or val.access and val.teamIntend ~= "none" and val.overrideRole == nil and val.overrideTeam == nil
-		local outlineColor = teamAccess and val.teamColor or val.roleColor or Color(0, 0, 0, 255)
+		local teamAccess = val.overrideTeam or val.access and val.teamIntend ~= TEAM_NONE and val.overrideRole == nil and val.overrideTeam == nil
+		local outlineColor = teamAccess and val.teamColor or val.roleColor or COLOR_BLACK
 
 		if not IsValid(ent) or not ent.IsUsable then continue end
 
@@ -173,7 +171,7 @@ function TBHUD:Draw(client)
 		local scrPosXMid, scrPosYMid = scrpos.x - mid, scrpos.y - mid
 
 		if val.access then
-			surface.SetDrawColor(innerColor.r, innerColor.g, innerColor.b, 200 * (1 - d))
+			surface.SetDrawColor(COLOR_WHITE.r, COLOR_WHITE.g, COLOR_WHITE.b, 200 * (1 - d))
 			surface.SetTexture(tbut_normal)
 			surface.DrawTexturedRect(scrPosXMid, scrPosYMid, size, size)
 		end
@@ -213,7 +211,7 @@ function TBHUD:Draw(client)
 
 		-- redraw in-focus version of icon
 		if val.access then
-			surface.SetDrawColor(innerColor.r, innerColor.g, innerColor.b, 200)
+			surface.SetDrawColor(COLOR_WHITE.r, COLOR_WHITE.g, COLOR_WHITE.b, 200)
 			surface.SetTexture(tbut_focus)
 			surface.DrawTexturedRect(scrPosXMid, scrPosYMid, size, size)
 		end
@@ -244,14 +242,14 @@ function TBHUD:Draw(client)
 			surface.DrawText(GetPTranslation("tbut_retime", {num = focus_but.ent:GetDelay()}))
 		end
 
-		if (focus_but.access) then
+		if focus_but.access then
 			y = y + 12
 
 			surface.SetTextPos(x, y)
 			surface.DrawText(GetPTranslation("tbut_help", {key = use_key}))
 		end
 
-		if (focus_but.admin) then
+		if focus_but.admin then
 			y = y + 24
 
 			surface.SetTextPos(x, y)
@@ -284,7 +282,7 @@ function TBHUD:Draw(client)
 			y = y + 12
 
 			local l_roleIntend = focus_but.roleIntend == "none" and "tbut_default" or focus_but.roleIntend
-			local l_teamIntend = focus_but.teamIntend == "none" and "tbut_default" or focus_but.teamIntend
+			local l_teamIntend = focus_but.teamIntend == TEAM_NONE and "tbut_default" or focus_but.teamIntend
 
 			surface.SetTextPos(x, y)
 			surface.DrawText(GetPTranslation("tbut_role_config", {current = LANG.GetRawTranslation(l_roleIntend) or l_roleIntend}))

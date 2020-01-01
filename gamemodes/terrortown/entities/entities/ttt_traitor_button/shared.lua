@@ -61,7 +61,7 @@ function ENT:PlayerRoleCanUse(ply)
 	if self:IsGeneric() then
 		return ply:GetSubRoleData():CanUseTraitorButton(), overrideRole, overrideTeam, role, team
 	else
-		return (role == "none" or role == curRol) and (team == "none" or team == curTeam), overrideRole, overrideTeam, role, team
+		return (role == "none" or role == curRol) and (team == TEAM_NONE or team == curTeam), overrideRole, overrideTeam, role, team
 	end
 end
 
@@ -73,5 +73,5 @@ function ENT:IsGeneric()
 	local role = self:GetRole()
 	local team = self:GetTeam()
 
-	return role == "none" and team == "none"
+	return role == "none" and team == TEAM_NONE
 end
