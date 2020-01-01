@@ -19,7 +19,7 @@ local maxDamageAmount = 0.0
 local function collectDmgIndicatorTextures()
 	local pathBase = "materials/vgui/ttt/dmgindicator/themes/"
 
-	local materials, _ = file.Find(pathBase .. "*.png", "GAME")
+	local materials = file.Find(pathBase .. "*.png", "GAME")
 
 	for i = 1, #materials do
 		local material = materials[i]
@@ -35,9 +35,7 @@ collectDmgIndicatorTextures()
 net.Receive("ttt2_damage_received", function()
 	local damageReceived = net.ReadFloat()
 
-	if damageReceived <= 0 then
-		return
-	end
+	if damageReceived <= 0 then return end
 
 	lastDamage = CurTime()
 	maxDamageAmount = math.min(1.0, math.max(damageAmount, 0.0) + damageReceived / DMGINDICATOR.cv.maxdamage:GetFloat())
@@ -45,9 +43,7 @@ net.Receive("ttt2_damage_received", function()
 end)
 
 function GM:HUDPaintBackground()
-	if not DMGINDICATOR.cv.enable:GetBool() then
-		return
-	end
+	if not DMGINDICATOR.cv.enable:GetBool() then return end
 
 	local indicatorDuration = DMGINDICATOR.cv.duration:GetFloat()
 

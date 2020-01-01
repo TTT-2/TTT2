@@ -528,7 +528,7 @@ function HELPSCRN:CreateDamageIndicatorSettings(parent)
 	local dmode = vgui.Create("DComboBox", form)
 	dmode:SetConVar("ttt_dmgindicator_mode")
 
-	for name, _ in pairs(DMGINDICATOR.themes) do
+	for name in pairs(DMGINDICATOR.themes) do
 		dmode:AddChoice(name)
 	end
 
