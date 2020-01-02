@@ -238,7 +238,6 @@ function GM:HUDDrawTargetID()
 
 	-- this is the entity the player is looking at right now
 	local ent = trace.Entity
-	chat.AddText(tostring(ent) .. tostring(CurTime()))
 	local distance = trace.StartPos:Distance(trace.HitPos)
 
 	-- make sure it is a valid entity

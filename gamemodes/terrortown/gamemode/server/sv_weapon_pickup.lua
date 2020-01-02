@@ -8,7 +8,7 @@ if not plymeta then
 	return
 end
 
-function ResetWeapon(wep, reason)
+function ResetWeapon(wep)
 	if not IsValid(wep) then return end
 
 	-- weapon is already reset, another cancel can cause problems
@@ -25,7 +25,6 @@ function ResetWeapon(wep, reason)
 	-- causes an error since the identifier should never be nil
 	-- GMOD - WTF?!
 	timer.Simple(0, function()
-		print("Reset", wep, reason)
 		if not IsValid(wep) then return end
 
 		wep.name_timer_pos = nil
@@ -38,20 +37,6 @@ function ResetWeapon(wep, reason)
 	-- clearing the player/weapon flag of this weapon/player, freeing it to every other player
 	wep.wpickup_player.wpickup_weapon = nil
 	wep.wpickup_player = nil
-
-	-- reenable the physics of the weapon to let it drop back to the ground
-
-	-- Always returns false
-	--[[wep:PhysicsInit(SOLID_VPHYSICS)
-	wep:PhysWake()
-
-	timer.Simple(0, function()
-		local phys = wep:GetPhysicsObject()
-		if (phys:IsValid()) then
-			phys:Wake()
-		end
-		print("Reset", wep, phys)
-	end)]]
 
 	-- reset weapon collisions
 	wep:SetCollisionGroup(COLLISION_GROUP_WEAPON)
