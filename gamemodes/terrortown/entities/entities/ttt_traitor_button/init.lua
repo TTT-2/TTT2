@@ -7,23 +7,29 @@ TButtonMapConfig = {}
 MapButtonEntIndexMapping = {}
 
 local lastRead = -1
+local dir = "ttt2tbuttons"
+local path = dir .. "/" .. game.GetMap() .. ".json"
 
 local function ReadMapConfig()
-	file.CreateDir("ttt2tbuttons")
-	local modTime = (not file.Exists("ttt2tbuttons/" .. game.GetMap() .. ".json", "DATA") and (lastRead + 1)) or file.Time("ttt2tbuttons/" .. game.GetMap() .. ".json", "DATA")
+	file.CreateDir(dir)
+	local modTime = (not file.Exists(path, "DATA") and (lastRead + 1)) or file.Time(path, "DATA")
 
-	if modTime > lastRead then
-		lastRead = modTime
-		local content = file.Read("ttt2tbuttons/" .. game.GetMap() .. ".json", "DATA")
+	if modTime <= lastRead then
+		return TButtonMapConfig
+	end
 
-		if content then
-			TButtonMapConfig = util.JSONToTable(content) or {}
-			for id in pairs(TButtonMapConfig) do
-				local ent = ents.GetMapCreatedEntity(tonumber(id))
-				if IsValid(ent) then
-					MapButtonEntIndexMapping[ent:EntIndex()] = id
-				end
-			end
+	lastRead = modTime
+	local content = file.Read(path, "DATA")
+
+	if not content then
+		return TButtonMapConfig
+	end
+
+	TButtonMapConfig = util.JSONToTable(content) or {}
+	for id in pairs(TButtonMapConfig) do
+		local ent = ents.GetMapCreatedEntity(tonumber(id))
+		if IsValid(ent) then
+			MapButtonEntIndexMapping[ent:EntIndex()] = id
 		end
 	end
 
@@ -78,7 +84,7 @@ local function UpdateMapConfig(ent, roleRawString, team, teamMode)
 		end
 	end
 
-	file.Write("ttt2tbuttons/" .. game.GetMap() .. ".json", util.TableToJSON(currentJSON, true))
+	file.Write(path, util.TableToJSON(currentJSON, true))
 	TButtonMapConfig = currentJSON
 	MapButtonEntIndexMapping[mapID] = ent:EntIndex()
 

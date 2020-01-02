@@ -1,3 +1,5 @@
+--- Special button usable from range if your role has access to it
+
 if CLIENT then
 	net.Receive("TTT2SendTButtonConfig", function(len, ply)
 		TButtonMapConfig = net.ReadTable()
@@ -10,8 +12,6 @@ if CLIENT then
 		net.SendToServer()
 	end)
 end
-
---- Special button only for traitors and usable from range
 
 ENT.Type = "anim"
 ENT.Base = "base_anim"
