@@ -308,7 +308,9 @@ L.buy_pending = "Du hast bereits eine Bestellung aufgegeben, warte bis du sie er
 L.buy_received = "Du hast deine Spezialausrüstung erhalten."
 
 L.drop_no_room = "Du hast hier keinen Platz, um deine Waffe fallen zu lassen!"
-L.pickup_no_room = "Du kast keinen Platz für diese Waffe in deinem Inventar"
+L.pickup_fail = "Du kannst das nicht aufheben"
+L.pickup_no_room = "Du hast keinen Platz für diese Waffe in deinem Inventar"
+L.pickup_pending = "Du hebst bereits eine Waffe auf, warte bis du sie erhältst"
 
 L.disg_turned_on = "Tarnung aktiviert!"
 L.disg_turned_off = "Tarnung deaktiviert!"

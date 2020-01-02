@@ -15,8 +15,6 @@ function ResetWeapon(wep)
 	if not wep.wpickup_player then return end
 
 	-- removing timers
-	timer.Pause(wep.name_timer_pos)
-	timer.Pause(wep.name_timer_cancel)
 	timer.Remove(wep.name_timer_pos)
 	timer.Remove(wep.name_timer_cancel)
 
@@ -32,7 +30,8 @@ function ResetWeapon(wep)
 	end)
 
 	-- clear the wait flag in case the reset was after pickup but before equip
-	wep.wpickup_player.wpickup_waitequip = false
+	wep.wpickup_player.wpickup_waitequip = wep.wpickup_player.wpickup_waitequip or {}
+	wep.wpickup_player.wpickup_waitequip[wep.Kind] = nil
 
 	-- clearing the player/weapon flag of this weapon/player, freeing it to every other player
 	wep.wpickup_player.wpickup_weapon = nil
@@ -57,7 +56,5 @@ net.Receive("ttt2_switch_weapon", function(_, ply)
 	-- do not pickup weapon if too far away
 	if ply:GetPos():Distance(tracedWeapon:GetPos()) > 100 then return end
 
-	if not IsValid(ply:PickupWeapon(tracedWeapon, true)) then
-		LANG.Msg(ply, "pickup_no_room")
-	end
+	ply:PickupWeapon(tracedWeapon, true)
 end)

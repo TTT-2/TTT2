@@ -1106,13 +1106,16 @@ end
 -- @returns Weapon if successful, nil if not
 -- @realm server
 function plymeta:PickupWeapon(wep, dropBlockingWeapon, shouldAutoSelect)
+	local kind = wep.Kind
+	self.wpickup_waitequip = self.wpickup_waitequip or {}
+
 	-- If the player has picked up a weapon, but not yet received it, ignore this request
 	-- to prevent GMod from making the weapon unusable and behaving weird
-	if self.wpickup_waitequip then
+	if self.wpickup_waitequip[kind] then
+		LANG.Msg(self, "pickup_pending")
+
 		return
 	end
-	-- prevent race conditions
-	self.wpickup_waitequip = true
 
 	-- if the variable is not set, set it fitting to the keypress
 	if shouldAutoSelect == nil then
@@ -1120,17 +1123,14 @@ function plymeta:PickupWeapon(wep, dropBlockingWeapon, shouldAutoSelect)
 	end
 
 	if not IsValid(wep) then
-		self.wpickup_waitequip = false
+		ErrorNoHalt(tostring(self) .. " tried to pickup an invalid weapon " .. tostring(wep) .. "\n")
+		LANG.Msg(self, "pickup_fail")
+
 		return
 	end
 
 	-- if this weapon is already flagged by a different player, the pickup shouldn't happen
-	if wep.wpickup_player then
-		self.wpickup_waitequip = false
-		return
-	end
-
-	print("Pickup", wep)
+	if wep.wpickup_player then return end
 
 	-- Now comes the tricky part: Since Gmod doesn't allow us to pick up weapons by
 	-- calling a simple function while also keeping all the weapon specific params
@@ -1143,14 +1143,14 @@ function plymeta:PickupWeapon(wep, dropBlockingWeapon, shouldAutoSelect)
 	wep.wp__WeaponSwitchFlag = dropBlockingWeapon
 
 	local canPickupWeapon = self:CanPickupWeapon(wep)
-	--local canPickupWeapon = true
 
 	-- the flag has to be reset on the outside of the hook since returning
 	-- false somewhere prevents GM:PlayerCanPickupWeapon from being executed
 	wep.wp__WeaponSwitchFlag = nil
 
 	if not canPickupWeapon then
-		self.wpickup_waitequip = false
+		LANG.Msg(self, "pickup_no_room")
+
 		return
 	end
 
@@ -1158,13 +1158,16 @@ function plymeta:PickupWeapon(wep, dropBlockingWeapon, shouldAutoSelect)
 	if dropBlockingWeapon then
 		local dropWeapon, isActiveWeapon, switchMode = GetBlockingWeapon(self, wep)
 
-		if switchMode == SWITCHMODE_FULLINV then return end
+		if switchMode == SWITCHMODE_FULLINV then
+			LANG.Msg(self, "pickup_no_room")
+
+			return
+		end
 
 		-- Very very rarely happens but definitely breaks the weapon and should be avoided at all costs
 		if dropWeapon == wep then return end
 
 		self:SafeDropWeapon(dropWeapon, true)
-		--self:DropWeapon(dropWeapon)
 
 		-- set flag to new weapon that is used to autoselect it later on
 		shouldAutoSelect = shouldAutoSelect or isActiveWeapon
@@ -1175,7 +1178,10 @@ function plymeta:PickupWeapon(wep, dropBlockingWeapon, shouldAutoSelect)
 		end
 	end
 
-	timer.Create("WeaponPickup_" .. self:SteamID64(), 0, 1, function()
+	-- prevent race conditions
+	self.wpickup_waitequip[kind] = true
+
+	timer.Create(kind .. "_WeaponPickup_" .. self:SteamID64(), 0, 1, function()
 		-- this flag is set to the player to make sure he only picks up this weapon
 		self.wpickup_weapon = wep
 
@@ -1198,7 +1204,7 @@ function plymeta:PickupWeapon(wep, dropBlockingWeapon, shouldAutoSelect)
 		-- a position where a player is unable to pick it up, even if there is nothing that hinders
 		-- it from being picked up. Therefore we randomise the position a bit.
 		local function SetWeaponPos()
-			if not IsValid(self) or not IsValid(wep) or not self.wpickup_waitequip then return end
+			if not IsValid(self) or not IsValid(wep) or not self.wpickup_waitequip[kind] then return end
 
 			-- if a pickup is possible, the weapon gets a flag set and is teleported to the feet
 			-- of the player
@@ -1218,8 +1224,8 @@ function plymeta:PickupWeapon(wep, dropBlockingWeapon, shouldAutoSelect)
 		-- initial teleport the weapon to the player pos
 		SetWeaponPos()
 
-		wep.name_timer_pos = "WeaponPickupRandomPos_" .. self:SteamID64()
-		wep.name_timer_cancel = "WeaponPickupCancel_" .. self:SteamID64()
+		wep.name_timer_pos = kind .. "_WeaponPickupRandomPos_" .. self:SteamID64()
+		wep.name_timer_cancel = kind .. "_WeaponPickupCancel_" .. self:SteamID64()
 
 		-- update the weapon pos
 		timer.Create(wep.name_timer_pos, 0.2, 1, SetWeaponPos)
