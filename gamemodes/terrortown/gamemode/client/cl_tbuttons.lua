@@ -147,6 +147,8 @@ function TBHUD:Draw(client)
 	local pos, scrpos, d
 	local focus_but
 	local focus_d, focus_scrpos_x, focus_scrpos_y = 0, midscreen_x, midscreen_y
+	local showToAdmins = GetConVar("ttt2_tbutton_admin_show"):GetBool()
+
 	-- draw icon on HUD for every button within range
 	for _, val in pairs(self.buttons) do
 		local ent = val.ent
@@ -161,6 +163,8 @@ function TBHUD:Draw(client)
 		if IsOffScreen(scrpos) or not ent:IsUsable() then continue end
 
 		local usableRange = ent:GetUsableRange()
+
+		if not val.access and not showToAdmins then continue end
 
 		d = pos - plypos
 		d = d:Dot(d) / (usableRange * usableRange)

@@ -1,5 +1,7 @@
 --- Special button usable from range if your role has access to it
 
+CreateConVar("ttt2_tbutton_admin_show", 0, { FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED }, "Always show the buttons to admins in range", 0, 1)
+
 if CLIENT then
 	net.Receive("TTT2SendTButtonConfig", function(len, ply)
 		TButtonMapConfig = net.ReadTable()
