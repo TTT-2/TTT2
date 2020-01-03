@@ -65,6 +65,7 @@ ttt_include("cl_status")
 ttt_include("cl_player_ext")
 
 ttt_include("cl_armor")
+ttt_include("cl_damage_indicator")
 ttt_include("sh_armor")
 ttt_include("cl_weapon_pickup")
 
