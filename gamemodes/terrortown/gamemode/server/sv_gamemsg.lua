@@ -320,9 +320,9 @@ function GM:PlayerSay(ply, text, team_only)
 	end
 
 	if GetRoundState() == ROUND_ACTIVE then
-		local team = ply:Team() == TEAM_SPEC
+		local team_spec = ply:Team() == TEAM_SPEC
 
-		if team and not DetectiveMode() then
+		if team_spec and not DetectiveMode() then
 			local filtered = {}
 			local parts = string.Explode(" ", text)
 
@@ -344,10 +344,14 @@ function GM:PlayerSay(ply, text, team_only)
 			table.insert(filtered, 1, "[MUMBLED]")
 
 			return table.concat(filtered, " ")
-		elseif team_only and not team and ply:IsSpecial() then
+		elseif team_only and not team_spec and ply:IsSpecial() then
 			RoleChatMsg(ply, text)
 
 			return ""
+		elseif not team_only and not team_spec then
+			if ply:GetSubRoleData().disabledGeneralChat or hook.Run("TTT2AvoidGeneralChat", ply, text) == false then
+				return ""
+			end
 		end
 	end
 
