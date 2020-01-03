@@ -8,6 +8,15 @@ if LANG then return end
 
 LANG = {}
 
+-- define LANG.Msg modes
+MSG_MSTACK_ROLE = 10
+MSG_MSTACK_WARN = 11
+MSG_MSTACK_PLAIN = 12
+
+MSG_CHAT_ROLE = 20
+MSG_CHAT_WARN = 21
+MSG_CHAT_PLAIN = 22
+
 util.IncludeClientFile("terrortown/gamemode/client/cl_lang.lua")
 
 local net = net
@@ -36,19 +45,19 @@ if SERVER then
 	-- Sends a message to (a) specific target(s) in their selected language
 	-- @param[opt] number|table|Player arg1 the target(s) that should receive this message
 	-- @param string arg2 the translation key name
-	-- @param any arg3 params
+	-- @param any arg4 params
 	-- @note Can be called as:
-	--   1) LANG.Msg(ply, name, params)  -- sent to ply
-	--   2) LANG.Msg(name, params)       -- sent to all
-	--   3) LANG.Msg(role, name, params) -- sent to plys with role
+	--   1) LANG.Msg(ply, name, params, mode)  -- sent to ply
+	--   2) LANG.Msg(name, params, mode)       -- sent to all
+	--   3) LANG.Msg(role, name, params, mode) -- sent to plys with role
 	-- @realm server
-	function LANG.Msg(arg1, arg2, arg3)
+	function LANG.Msg(arg1, arg2, arg3, arg4)
 		if isstring(arg1) then
-			LANG.ProcessMsg(nil, arg1, arg2)
+			LANG.ProcessMsg(nil, arg1, arg2, arg3)
 		elseif isnumber(arg1) then
-			LANG.ProcessMsg(GetRoleChatFilter(arg1), arg2, arg3)
+			LANG.ProcessMsg(GetRoleChatFilter(arg1), arg2, arg3, arg4)
 		else
-			LANG.ProcessMsg(arg1, arg2, arg3)
+			LANG.ProcessMsg(arg1, arg2, arg3, arg4)
 		end
 	end
 
@@ -59,16 +68,20 @@ if SERVER then
 	-- @param any params params
 	-- @realm server
 	-- @internal
-	function LANG.ProcessMsg(send_to, name, params)
+	function LANG.ProcessMsg(send_to, name, params, mode)
 		-- don't want to send to null ents, but can't just IsValid send_to because
 		-- it may be a recipientfilter, so type check first
 		if type(send_to) == "Player" and not IsValid(send_to) then return end
+
+		-- make mode valid, use MSG_MSTACK_PLAIN as default since it was always this way
+		mode = mode or MSG_MSTACK_PLAIN
 
 		-- number of keyval param pairs to send
 		local c = params and count(params) or 0
 
 		net.Start("TTT_LangMsg")
 		net.WriteString(name)
+		net.WriteUInt(mode, 8)
 		net.WriteUInt(c, 8)
 
 		if c > 0 then
@@ -93,8 +106,8 @@ if SERVER then
 	-- @param any params params
 	-- @realm server
 	-- @internal
-	function LANG.MsgAll(name, params)
-		LANG.Msg(nil, name, params)
+	function LANG.MsgAll(name, params, mode)
+		LANG.Msg(nil, name, params, mode)
 	end
 
 	CreateConVar("ttt_lang_serverdefault", "english", FCVAR_ARCHIVE)
@@ -108,9 +121,12 @@ if SERVER then
 	end
 
 	concommand.Add("_ttt_request_serverlang", ServerLangRequest)
-else -- CLIENT
+end
+
+if CLIENT then
 	local function RecvMsg()
 		local name = net.ReadString()
+		local mode = net.ReadUInt(8)
 		local c = net.ReadUInt(8)
 
 		local params
@@ -123,10 +139,12 @@ else -- CLIENT
 			end
 		end
 
-		LANG.Msg(name, params)
+		-- this is LANG.ProcessMsg
+		LANG.Msg(name, params, mode)
 	end
 	net.Receive("TTT_LangMsg", RecvMsg)
 
+	-- maybe this really strange coding style has a reason ...
 	LANG.Msg = LANG.ProcessMsg
 
 	local function RecvServerLang()

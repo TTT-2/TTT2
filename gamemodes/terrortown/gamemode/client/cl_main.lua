@@ -228,7 +228,7 @@ local function RoundStateChange(o, n)
 
 		-- show warning to spec mode players
 		if GetConVar("ttt_spectator_mode"):GetBool() and IsValid(LocalPlayer()) then
-			LANG.Msg("spec_mode_warning")
+			LANG.Msg("spec_mode_warning", nil, MSG_CHAT_WARN)
 		end
 
 		-- reset cached server language in case it has changed

@@ -575,7 +575,7 @@ local function DropActiveAmmo(ply)
 	local hook_data = {wep:Clip1()}
 
 	if hook.Run("TTT2DropAmmo", ply, hook_data) == false then
-		LANG.Msg(ply, "drop_ammo_prevented")
+		LANG.Msg(ply, "drop_ammo_prevented", nil, MSG_CHAT_WARN)
 
 		return
 	end
@@ -583,7 +583,7 @@ local function DropActiveAmmo(ply)
 	local amt = hook_data[1]
 
 	if amt < 1 or amt <= wep.Primary.ClipSize * 0.25 then
-		LANG.Msg(ply, "drop_no_ammo")
+		LANG.Msg(ply, "drop_no_ammo", nil, MSG_CHAT_WARN)
 
 		return
 	end
