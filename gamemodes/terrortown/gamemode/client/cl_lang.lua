@@ -340,6 +340,13 @@ LANG.Styles = {
 	[MSG_CHAT_PLAIN] = chat.AddText
 }
 
+LANG.StylesOld = {
+	default = LANG.Styles[MSG_MSTACK_PLAIN],
+	rolecolour = LANG.Styles[MSG_MSTACK_ROLE],
+	chat_warn = LANG.Styles[MSG_CHAT_WARN],
+	chat_plain = LANG.Styles[MSG_CHAT_PLAIN]
+}
+
 ---
 -- Table mapping message name => message style name. If no message style is
 -- defined, the default style is used. This is the case for the vast majority of
@@ -374,11 +381,13 @@ end
 ---
 -- Set a style by name or directly as style-function
 -- @param string name style name
--- @param string|function style style name or @{function}
+-- @param string|number|function style style name or @{function}
 -- @realm client
 function LANG.SetStyle(name, style)
-	if isstring(style) then
+	if isnumber(style) then
 		style = LANG.Styles[style]
+	elseif isstring(style) then
+		style = LANG.StylesOld[style]
 	end
 
 	LANG.MsgStyle[name] = style
