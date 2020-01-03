@@ -353,11 +353,11 @@ local function CanWearHat(ply)
 	return table.HasValue(Hattables, path[3])
 end
 
-CreateConVar("ttt_detective_hats", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local cv_ttt_detective_hats = CreateConVar("ttt_detective_hats", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 -- Just hats right now
 local function GiveLoadoutSpecial(ply)
-	if not ply:IsActive() or ply:GetBaseRole() ~= ROLE_DETECTIVE or not GetConVar("ttt_detective_hats"):GetBool() or not CanWearHat(ply) then
+	if not ply:IsActive() or ply:GetBaseRole() ~= ROLE_DETECTIVE or not cv_ttt_detective_hats:GetBool() or not CanWearHat(ply) then
 		SafeRemoveEntity(ply.hat)
 
 		ply.hat = nil

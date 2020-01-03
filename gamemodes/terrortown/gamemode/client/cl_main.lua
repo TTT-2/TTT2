@@ -11,6 +11,8 @@ local surface = surface
 local CreateConVar = CreateConVar
 local hook = hook
 
+local cv_ttt_spectator_mode
+
 -- Define GM12 fonts for compatibility
 surface.CreateFont("DefaultBold", {font = "Tahoma", size = 13, weight = 1000})
 surface.CreateFont("TabLarge", {font = "Tahoma", size = 13, weight = 700, shadow = true, antialias = false})
@@ -82,6 +84,7 @@ function GM:Initialize()
 	hook.Run("TTT2Initialize")
 
 	GAMEMODE.round_state = ROUND_WAIT
+	cv_ttt_spectator_mode = GetConVar("ttt_spectator_mode")
 
 	LANG.Init()
 
@@ -162,7 +165,7 @@ function GM:InitPostEntity()
 	net.SendToServer()
 
 	net.Start("TTT_Spectate")
-	net.WriteBool(GetConVar("ttt_spectator_mode"):GetBool())
+	net.WriteBool(cv_ttt_spectator_mode:GetBool())
 	net.SendToServer()
 
 	if not game.SinglePlayer() then
@@ -227,7 +230,7 @@ local function RoundStateChange(o, n)
 		GAMEMODE:CleanUpMap()
 
 		-- show warning to spec mode players
-		if GetConVar("ttt_spectator_mode"):GetBool() and IsValid(LocalPlayer()) then
+		if cv_ttt_spectator_mode:GetBool() and IsValid(LocalPlayer()) then
 			LANG.Msg("spec_mode_warning")
 		end
 

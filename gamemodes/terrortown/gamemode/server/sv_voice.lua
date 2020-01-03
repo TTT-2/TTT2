@@ -18,7 +18,7 @@ function MuteForRestart(state)
 end
 
 -- Communication control
-CreateConVar("ttt_limit_spectator_voice", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+cv_ttt_limit_spectator_voice = CreateConVar("ttt_limit_spectator_voice", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 local loc_voice = CreateConVar("ttt_locational_voice", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
@@ -47,7 +47,7 @@ function GM:PlayerCanHearPlayersVoice(listener, speaker)
 	end
 
 	-- limited if specific convar is on, or we're in detective mode
-	local limit = DetectiveMode() or GetConVar("ttt_limit_spectator_voice"):GetBool()
+	local limit = DetectiveMode() or cv_ttt_limit_spectator_voice:GetBool()
 
 	-- Spectators should not be heard by living players during round
 	if speaker:IsSpec() and not listener:IsSpec() and limit and GetRoundState() == ROUND_ACTIVE then

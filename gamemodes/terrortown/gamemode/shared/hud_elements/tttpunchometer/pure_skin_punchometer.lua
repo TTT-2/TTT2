@@ -29,6 +29,8 @@ if CLIENT then
 		self.pad = pad
 		self.margin = margin
 
+		self.cv_ttt_spectator_mode = GetConVar("ttt_spectator_mode");
+
 		BaseClass.Initialize(self)
 	end
 
@@ -106,7 +108,7 @@ if CLIENT then
 			self:PunchPaint() -- punch bar if you are spectator and inside of an entity
 		else
 			draw.AdvancedText(interp(L.spec_help, key_params), "TabLarge", x + self.size.w * 0.5, y, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, true, self.scale)
-			if GetConVar("ttt_spectator_mode"):GetBool() then
+			if self.cv_ttt_spectator_mode:GetBool() then
 				draw.AdvancedText(interp(L.spec_help2, key_params), "TabLarge", x + self.size.w * 0.5, y + 20, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, true, self.scale)
 			end
 		end

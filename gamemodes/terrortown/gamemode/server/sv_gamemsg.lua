@@ -230,7 +230,7 @@ function GetTeamMemberFilter(ply, alive_only)
 end
 
 -- Communication control
-CreateConVar("ttt_limit_spectator_chat", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY})
+local cv_ttt_limit_spectator_chat = CreateConVar("ttt_limit_spectator_chat", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY})
 
 ---
 -- Checks whether a @{Player} is able to listen to another @{Player}
@@ -259,7 +259,7 @@ function GM:PlayerCanSeePlayersChat(text, team_only, listener, speaker)
 	local lTeam = listener:Team() == TEAM_SPEC
 
 	if GetRoundState() ~= ROUND_ACTIVE -- Round isn't active
-	or not GetConVar("ttt_limit_spectator_chat"):GetBool() -- Spectators can chat freely
+	or not cv_ttt_limit_spectator_chat:GetBool() -- Spectators can chat freely
 	or not DetectiveMode() -- Mumbling
 	or not sTeam and (team_only and not speaker:IsSpecial() or not team_only) -- If someone alive talks (and not a special role in teamchat's case)
 	or not sTeam and team_only and (
