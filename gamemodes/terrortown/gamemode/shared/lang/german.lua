@@ -667,7 +667,7 @@ L.spec_help2 = "Zum Verlassen des Zuschauer-Modus öffne das Menü mit {helpkey}
 -- quotes. That's a Lua thing. Every line break (enter) will show up in-game.
 L.info_popup_innocent = [[Du bist ein unschuldiger Terrorist!
 Aber es gibt Verräter… Wem kannst du trauen, und wem füllst du den Körper mit Blei?
-Gib acht und arbeite mit anderen zusammen, um zu überleben!]]
+Gib Acht und arbeite mit anderen zusammen, um zu überleben!]]
 
 L.info_popup_detective = [[Du bist ein Detektiv! Das Terroristen Hauptquartier hat dir spezielle Ressourcen gegeben, um die Verräter zu finden.
 Benutze sie, um den Unschuldigen zu helfen, aber sei auf der Hut: Die Verräter werden zusehen dich als erstes zu töten!
@@ -999,7 +999,7 @@ L.aw_mac1_title = "Pray and Slay"
 L.aw_mac1_text = "tötete {num} Leute mit der MAC10, sagte allerdings nicht wie viel Munition er dafür gebraucht hat."
 
 L.aw_mac2_title = "Mac and Cheese"
-L.aw_mac2_text = "fragt sich, was passieren würde, wenn man zwei MAC10s gleichzeitig benutzen würde. Zwei Mal {num}?"
+L.aw_mac2_text = "fragt sich, was passieren würde, wenn man zwei MAC10s gleichzeitig benutzen würde. Zweimal {num}?"
 
 L.aw_sip1_title = "Ruhe"
 L.aw_sip1_text = "stellt {num} Leute mit einer schallgedämpften Pistole stumm."
