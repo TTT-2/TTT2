@@ -24,6 +24,7 @@ ttt_include("sv_ent_replace")
 ttt_include("sv_scoring")
 ttt_include("sv_corpse")
 ttt_include("sv_status")
+ttt_include("sv_loadingscreen")
 
 ttt_include("sv_armor")
 ttt_include("sh_armor")
@@ -113,6 +114,7 @@ CreateConVar("ttt_max_roles", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amoun
 CreateConVar("ttt_max_roles_pct", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different roles based on player amount. ttt_max_roles needs to be 0")
 CreateConVar("ttt_max_baseroles", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different baseroles")
 CreateConVar("ttt_max_baseroles_pct", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different baseroles based on player amount. ttt_max_baseroles needs to be 0")
+CreateConVar("ttt_enforce_playermodel", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Whether or not to enforce terrorist playermodels. Set to 0 for compatibility with Enhanced Playermodel Selector")
 
 -- debuggery
 local ttt_dbgwin = CreateConVar("ttt_debug_preventwin", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
@@ -863,6 +865,9 @@ function PrepareRound()
 		GAMEMODE.FirstRound = false
 	end
 
+	-- remove decals
+	util.ClearDecals()
+
 	-- Piggyback on "round end" time global var to show end of phase timer
 	SetRoundEnd(CurTime() + ptime)
 
@@ -1071,6 +1076,9 @@ function BeginRound()
 
 	-- Remove their ragdolls
 	ents.TTT.RemoveRagdolls(true)
+
+	-- remove decals
+	util.ClearDecals()
 
 	if CheckForAbort() then return end
 

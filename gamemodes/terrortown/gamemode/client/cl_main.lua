@@ -62,6 +62,7 @@ ttt_include("cl_voice")
 ttt_include("cl_changes")
 ttt_include("cl_inventory")
 ttt_include("cl_status")
+ttt_include("cl_player_ext")
 
 ttt_include("cl_armor")
 ttt_include("cl_damage_indicator")
@@ -233,6 +234,9 @@ local function RoundStateChange(o, n)
 
 		-- reset cached server language in case it has changed
 		RunConsoleCommand("_ttt_request_serverlang")
+
+		-- clear decals in cache from previous round
+		util.ClearDecals()
 	elseif n == ROUND_ACTIVE then
 		-- round starts
 		VOICE.CycleMuteState(MUTE_NONE)
@@ -245,7 +249,7 @@ local function RoundStateChange(o, n)
 		end
 
 		-- clear blood decals produced during prep
-		RunConsoleCommand("r_cleardecals")
+		util.ClearDecals()
 
 		GAMEMODE.StartingPlayers = #util.GetAlivePlayers()
 	elseif n == ROUND_POST then
