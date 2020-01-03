@@ -109,11 +109,11 @@ local confirm_team = CreateConVar("ttt2_confirm_team", "0", {FCVAR_NOTIFY, FCVAR
 CreateConVar("ttt2_confirm_killlist", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 -- innos min pct
-CreateConVar("ttt_min_inno_pct", "0.47", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Minimum multiplicator for each player to calculate the minimum amount of innocents")
-CreateConVar("ttt_max_roles", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different roles")
-CreateConVar("ttt_max_roles_pct", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different roles based on player amount. ttt_max_roles needs to be 0")
-CreateConVar("ttt_max_baseroles", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different baseroles")
-CreateConVar("ttt_max_baseroles_pct", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different baseroles based on player amount. ttt_max_baseroles needs to be 0")
+local cv_ttt_min_inno_pct = CreateConVar("ttt_min_inno_pct", "0.47", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Minimum multiplicator for each player to calculate the minimum amount of innocents")
+local cv_ttt_max_roles = CreateConVar("ttt_max_roles", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different roles")
+local cv_ttt_max_roles_pct =  CreateConVar("ttt_max_roles_pct", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different roles based on player amount. ttt_max_roles needs to be 0")
+local cv_ttt_max_baseroles = CreateConVar("ttt_max_baseroles", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different baseroles")
+local cv_ttt_max_baseroles_pct = CreateConVar("ttt_max_baseroles_pct", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different baseroles based on player amount. ttt_max_baseroles needs to be 0")
 CreateConVar("ttt_enforce_playermodel", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Whether or not to enforce terrorist playermodels. Set to 0 for compatibility with Enhanced Playermodel Selector")
 
 -- debuggery
@@ -1320,9 +1320,7 @@ end
 
 local function GetEachRoleCount(ply_count, role_type)
 	if role_type == INNOCENT.name then
-		local min_innos = GetConVar("ttt_min_inno_pct")
-
-		return min_innos and math.floor(ply_count * min_innos:GetFloat()) or 0
+		return math.floor(ply_count * cv_ttt_min_inno_pct:GetFloat()) or 0
 	end
 
 	if ply_count < GetConVar("ttt_" .. role_type .. "_min_players"):GetInt() then
@@ -1488,32 +1486,20 @@ function GetSelectableRoles(plys, max_plys)
 	local baseroles_count = 2
 
 	-- yea it begins
-	local max_roles = GetConVar("ttt_max_roles")
-	if max_roles then
-		max_roles = max_roles:GetInt()
+	local max_roles = cv_ttt_max_roles:GetInt()
+	if max_roles == 0 then
+		max_roles = math.floor(cv_ttt_max_roles_pct:GetFloat() * max_plys)
 		if max_roles == 0 then
-			max_roles = GetConVar("ttt_max_roles_pct")
-			if max_roles then
-				max_roles = math.floor(max_roles:GetFloat() * max_plys)
-				if max_roles == 0 then
-					max_roles = nil
-				end
-			end
+			max_roles = nil
 		end
 	end
 
 	-- damn, not again
-	local max_baseroles = GetConVar("ttt_max_baseroles")
-	if max_baseroles then
-		max_baseroles = max_baseroles:GetInt()
+	local max_baseroles = cv_ttt_max_baseroles:GetInt()
+	if max_baseroles == 0 then
+		max_baseroles = math.floor(cv_ttt_max_baseroles_pct:GetFloat() * max_plys)
 		if max_baseroles == 0 then
-			max_baseroles = GetConVar("ttt_max_baseroles_pct")
-			if max_baseroles then
-				max_baseroles = math.floor(max_baseroles:GetFloat() * max_plys)
-				if max_baseroles == 0 then
-					max_baseroles = nil
-				end
-			end
+			max_baseroles = nil
 		end
 	end
 

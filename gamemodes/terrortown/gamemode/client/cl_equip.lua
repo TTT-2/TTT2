@@ -110,7 +110,8 @@ local function PreqLabels(parent, x, y)
 			return false, "X", GetTranslation("equip_carry_own")
 		else
 			if ItemIsWeapon(sel) then
-				local maxCount = GetConVar(ORDERED_SLOT_TABLE[MakeKindValid(sel.Kind)]):GetInt()
+				local cv_maxCount = GetConVar(ORDERED_SLOT_TABLE[MakeKindValid(sel.Kind)])
+				local maxCount = cv_maxCount and cv_maxCount:GetInt() or 0
 				maxCount = maxCount < 0 and "∞" or maxCount
 				return true, " " .. #LocalPlayer():GetWeaponsOnSlot(MakeKindValid(sel.Kind)) .. " / " .. maxCount, GetTranslation("equip_carry")
 			else

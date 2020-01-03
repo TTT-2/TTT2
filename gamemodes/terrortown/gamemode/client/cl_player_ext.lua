@@ -105,7 +105,7 @@ for _i = 1, #gestTbl do
 	act_runner[a] = MakeSimpleRunner(a)
 end
 
-CreateConVar("ttt_show_gestures", "1", FCVAR_ARCHIVE)
+local cv_ttt_show_gestures = CreateConVar("ttt_show_gestures", "1", FCVAR_ARCHIVE)
 
 ---
 -- Perform the gesture using the GestureRunner system. If custom_runner is
@@ -115,7 +115,7 @@ CreateConVar("ttt_show_gestures", "1", FCVAR_ARCHIVE)
 -- @return boolean success?
 -- @realm client
 function plymeta:AnimPerformGesture(act, custom_runner)
-	if not ConVarExists("ttt_show_gestures") or GetConVar("ttt_show_gestures"):GetInt() == 0 then return end
+	if not cv_ttt_show_gestures or cv_ttt_show_gestures:GetInt() == 0 then return end
 
 	local runner = custom_runner or act_runner[act]
 

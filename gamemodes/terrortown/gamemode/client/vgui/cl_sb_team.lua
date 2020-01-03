@@ -130,6 +130,9 @@ function PANEL:UpdateSortCache()
 		table.insert(self.rows_sorted, row)
 	end
 
+	local cv_ttt_scoreboard_sorting = GetConVar("ttt_scoreboard_sorting")
+	local cv_ttt_scoreboard_ascending = GetConVar("ttt_scoreboard_ascending")
+
 	table.sort(self.rows_sorted, function(rowa, rowb)
 		local plya = rowa:GetPlayer()
 		local plyb = rowb:GetPlayer()
@@ -142,7 +145,7 @@ function PANEL:UpdateSortCache()
 			return true
 		end
 
-		local sort_mode = GetConVar("ttt_scoreboard_sorting"):GetString()
+		local sort_mode = cv_ttt_scoreboard_sorting:GetString()
 		local sort_func = sboard_sort[sort_mode]
 
 		local comp = 0
@@ -159,7 +162,7 @@ function PANEL:UpdateSortCache()
 			ret = strlower(plya:GetName()) > strlower(plyb:GetName())
 		end
 
-		if GetConVar("ttt_scoreboard_ascending"):GetBool() then
+		if cv_ttt_scoreboard_ascending:GetBool() then
 			ret = not ret
 		end
 
