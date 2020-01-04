@@ -46,19 +46,22 @@ if SERVER then
 		ply.isSprinting = bool
 	end)
 else
+	-- The helptext can't be changed once the convar was created, so we go with english, since it is probably the most common lang
+	local doubletap_sprint_anykey = CreateClientConVar("ttt2_doubletap_sprint_anykey", 0, true, false, LANG.GetTranslationFromLanguage("doubletap_sprint_anykey", "english"), 0, 1)
 	local lastPress = 0
+	local lastPressedMoveKey = nil
 
-	local function PlayerSprint(trySprinting, bind)
+	local function PlayerSprint(trySprinting, moveKey)
 		local client = LocalPlayer()
 
 		if trySprinting and not GetGlobalBool("ttt2_sprint_enabled", true) then return end
 		if not trySprinting and not client.isSprinting or trySprinting and client.isSprinting then return end
-		if client.isSprinting and (client.useSprintBind and not bind or not client.useSprintBind and bind) then return end
+		if client.isSprinting and (client.moveKey and not moveKey or not client.moveKey and moveKey) then return end
 
 		client.oldSprintProgress = client.sprintProgress
 		client.sprintMultiplier = trySprinting and (1 + GetGlobalFloat("ttt2_sprint_max", 0)) or nil
 		client.isSprinting = trySprinting
-		client.useSprintBind = bind
+		client.moveKey = moveKey
 
 		net.Start("TTT2SprintToggle")
 		net.WriteBool(trySprinting)
@@ -66,32 +69,38 @@ else
 	end
 
 	hook.Add("KeyPress", "TTT2DoublePressSprint", function(ply, key)
-		if not IsFirstTimePredicted() then return end
-		if key == IN_FORWARD and not ply.isSprinting then
-			local time = CurTime()
+		if not IsFirstTimePredicted() or ply.isSprinting then return end
+		if key ~= IN_FORWARD and key ~= IN_BACK and key ~= IN_MOVERIGHT and key ~= IN_MOVELEFT then return end
 
-			if time - lastPress < 0.4 then
-				PlayerSprint(true, false)
-			end
+		local time = CurTime()
 
-			lastPress = time
+		if lastPressedMoveKey == key and time - lastPress < 0.4 then
+			PlayerSprint(true, key)
 		end
+
+		lastPressedMoveKey = key
+		lastPress = time
 	end)
 
 	hook.Add("KeyRelease", "TTT2EndDoublePressSprint", function(ply, key)
-		if not IsFirstTimePredicted() then return end
-		if key == IN_FORWARD and ply.isSprinting then
-			PlayerSprint(false, false)
-		end
+		if not IsFirstTimePredicted() or not ply.isSprinting then return end
+
+		local moveKey = ply.moveKey
+		local wantsToMove = ply:KeyDown(IN_FORWARD) or ply:KeyDown(IN_BACK) or ply:KeyDown(IN_MOVERIGHT) or ply:KeyDown(IN_MOVELEFT)
+		local anyKey = doubletap_sprint_anykey:GetBool()
+
+		if not moveKey or anyKey and wantsToMove or not anyKey and key ~= moveKey then return end
+
+		PlayerSprint(false, key)
 	end)
 
 	bind.Register("ttt2_sprint", function()
 		if not LocalPlayer().preventSprint then
-			PlayerSprint(true, true)
+			PlayerSprint(true)
 		end
 	end,
 	function()
-		PlayerSprint(false, true)
+		PlayerSprint(false)
 	end, "TTT2 Bindings", "f1_bind_sprint", KEY_LSHIFT)
 end
 
