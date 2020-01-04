@@ -16,6 +16,8 @@ local ttt_dyingshot = CreateConVar("ttt_dyingshot", "0", {FCVAR_NOTIFY, FCVAR_AR
 CreateConVar("ttt_killer_dna_range", "550", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 CreateConVar("ttt_killer_dna_basetime", "100", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
+util.AddNetworkString("ttt2_damage_received")
+
 ---
 -- First spawn on the server.
 -- Called when the @{Player} spawns for the first time.
@@ -1357,7 +1359,7 @@ function GM:PlayerTakeDamage(ent, infl, att, amount, dmginfo)
 		if hurter and IsValid(hurter:GetDamageOwner()) then
 			owner, owner_time = hurter:GetDamageOwner()
 
-			-- barrel bangs can hurt us even if we threw them, but that's our fault
+		-- barrel bangs can hurt us even if we threw them, but that's our fault
 		elseif hurter and ent == hurter:GetPhysicsAttacker() and dmginfo:IsDamageType(DMG_BLAST) then
 			owner = ent
 		elseif hurter and hurter:IsVehicle() and IsValid(hurter:GetDriver()) then
@@ -1490,6 +1492,11 @@ function GM:PlayerTakeDamage(ent, infl, att, amount, dmginfo)
 			DamageLog(Format("DMG: \t %s [%s] damaged %s [%s] for %d dmg", att:Nick(), att:GetRoleString(), ent:Nick(), ent:GetRoleString(), math.Round(dmginfo:GetDamage())))
 		end
 	end
+
+	-- send damage information to client
+	net.Start("ttt2_damage_received")
+	net.WriteFloat(amount)
+	net.Send(ent)
 end
 
 ---

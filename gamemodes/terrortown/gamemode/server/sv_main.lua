@@ -109,11 +109,12 @@ local confirm_team = CreateConVar("ttt2_confirm_team", "0", {FCVAR_NOTIFY, FCVAR
 CreateConVar("ttt2_confirm_killlist", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 -- innos min pct
-CreateConVar("ttt_min_inno_pct", "0.47", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Minimum multiplicator for each player to calculate the minimum amount of innocents")
-CreateConVar("ttt_max_roles", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different roles")
-CreateConVar("ttt_max_roles_pct", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different roles based on player amount. ttt_max_roles needs to be 0")
-CreateConVar("ttt_max_baseroles", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different baseroles")
-CreateConVar("ttt_max_baseroles_pct", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different baseroles based on player amount. ttt_max_baseroles needs to be 0")
+local cv_ttt_min_inno_pct = CreateConVar("ttt_min_inno_pct", "0.47", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Minimum multiplicator for each player to calculate the minimum amount of innocents")
+local cv_ttt_max_roles = CreateConVar("ttt_max_roles", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different roles")
+local cv_ttt_max_roles_pct =  CreateConVar("ttt_max_roles_pct", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different roles based on player amount. ttt_max_roles needs to be 0")
+local cv_ttt_max_baseroles = CreateConVar("ttt_max_baseroles", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different baseroles")
+local cv_ttt_max_baseroles_pct = CreateConVar("ttt_max_baseroles_pct", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different baseroles based on player amount. ttt_max_baseroles needs to be 0")
+CreateConVar("ttt_enforce_playermodel", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Whether or not to enforce terrorist playermodels. Set to 0 for compatibility with Enhanced Playermodel Selector")
 
 -- debuggery
 local ttt_dbgwin = CreateConVar("ttt_debug_preventwin", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
@@ -395,25 +396,16 @@ end
 -- @hook
 -- @realm server
 function GM:SyncGlobals()
-	SetGlobalBool("ttt_detective", ttt_detective:GetBool())
-	SetGlobalBool("ttt_haste", ttt_haste:GetBool())
-	SetGlobalInt("ttt_time_limit_minutes", time_limit:GetInt())
-	SetGlobalBool("ttt_highlight_admins", GetConVar("ttt_highlight_admins"):GetBool())
-	SetGlobalBool("ttt_highlight_dev", GetConVar("ttt_highlight_dev"):GetBool())
-	SetGlobalBool("ttt_highlight_vip", GetConVar("ttt_highlight_vip"):GetBool())
-	SetGlobalBool("ttt_highlight_addondev", GetConVar("ttt_highlight_addondev"):GetBool())
-	SetGlobalBool("ttt_highlight_supporter", GetConVar("ttt_highlight_supporter"):GetBool())
-	SetGlobalBool("ttt_armor_classic", GetConVar("ttt_armor_classic"):GetBool())
-	SetGlobalBool("ttt_armor_enable_reinforced", GetConVar("ttt_armor_enable_reinforced"):GetBool())
-	SetGlobalInt("ttt_armor_threshold_for_reinforced", GetConVar("ttt_armor_threshold_for_reinforced"):GetInt())
-	SetGlobalBool("ttt_locational_voice", GetConVar("ttt_locational_voice"):GetBool())
-	SetGlobalInt("ttt_idle_limit", idle_time:GetInt())
-	SetGlobalBool("ttt_idle", idle_enabled:GetBool())
+	SetGlobalBool(ttt_detective:GetName(), ttt_detective:GetBool())
+	SetGlobalBool(ttt_haste:GetName(), ttt_haste:GetBool())
+	SetGlobalInt(time_limit:GetName(), time_limit:GetInt())
+	SetGlobalInt(idle_time:GetName(), idle_time:GetInt())
+	SetGlobalBool(idle_enabled:GetName(), idle_enabled:GetBool())
 
-	SetGlobalBool("ttt_voice_drain", voice_drain:GetBool())
-	SetGlobalFloat("ttt_voice_drain_normal", voice_drain_normal:GetFloat())
-	SetGlobalFloat("ttt_voice_drain_admin", voice_drain_admin:GetFloat())
-	SetGlobalFloat("ttt_voice_drain_recharge", voice_drain_recharge:GetFloat())
+	SetGlobalBool(voice_drain:GetName(), voice_drain:GetBool())
+	SetGlobalFloat(voice_drain_normal:GetName(), voice_drain_normal:GetFloat())
+	SetGlobalFloat(voice_drain_admin:GetName(), voice_drain_admin:GetFloat())
+	SetGlobalFloat(voice_drain_recharge:GetName(), voice_drain_recharge:GetFloat())
 
 	local rlsList = roles.GetList()
 
@@ -427,6 +419,42 @@ function GM:SyncGlobals()
 
 	hook.Run("TTT2SyncGlobals")
 end
+
+cvars.AddChangeCallback(ttt_detective:GetName(), function(cv, old, new)
+	SetGlobalBool(ttt_detective:GetName(), tobool(tonumber(new)))
+end)
+
+cvars.AddChangeCallback(ttt_haste:GetName(), function(cv, old, new)
+	SetGlobalBool(ttt_haste:GetName(), tobool(tonumber(new)))
+end)
+
+cvars.AddChangeCallback(time_limit:GetName(), function(cv, old, new)
+	SetGlobalBool(time_limit:GetName(), tonumber(new))
+end)
+
+cvars.AddChangeCallback(idle_time:GetName(), function(cv, old, new)
+	SetGlobalBool(idle_time:GetName(), tonumber(new))
+end)
+
+cvars.AddChangeCallback(idle_enabled:GetName(), function(cv, old, new)
+	SetGlobalBool(idle_enabled:GetName(), tobool(tonumber(new)))
+end)
+
+cvars.AddChangeCallback(voice_drain:GetName(), function(cv, old, new)
+	SetGlobalBool(voice_drain:GetName(), tobool(tonumber(new)))
+end)
+
+cvars.AddChangeCallback(voice_drain_normal:GetName(), function(cv, old, new)
+	SetGlobalBool(voice_drain_normal:GetName(), tonumber(new))
+end)
+
+cvars.AddChangeCallback(voice_drain_admin:GetName(), function(cv, old, new)
+	SetGlobalBool(voice_drain_admin:GetName(), tonumber(new))
+end)
+
+cvars.AddChangeCallback(voice_drain_recharge:GetName(), function(cv, old, new)
+	SetGlobalBool(voice_drain_recharge:GetName(), tonumber(new))
+end)
 
 ---
 -- This @{function} is used to load the shop equipments
@@ -864,6 +892,9 @@ function PrepareRound()
 		GAMEMODE.FirstRound = false
 	end
 
+	-- remove decals
+	util.ClearDecals()
+
 	-- Piggyback on "round end" time global var to show end of phase timer
 	SetRoundEnd(CurTime() + ptime)
 
@@ -1072,6 +1103,9 @@ function BeginRound()
 
 	-- Remove their ragdolls
 	ents.TTT.RemoveRagdolls(true)
+
+	-- remove decals
+	util.ClearDecals()
 
 	if CheckForAbort() then return end
 
@@ -1313,9 +1347,7 @@ end
 
 local function GetEachRoleCount(ply_count, role_type)
 	if role_type == INNOCENT.name then
-		local min_innos = GetConVar("ttt_min_inno_pct")
-
-		return min_innos and math.floor(ply_count * min_innos:GetFloat()) or 0
+		return math.floor(ply_count * cv_ttt_min_inno_pct:GetFloat()) or 0
 	end
 
 	if ply_count < GetConVar("ttt_" .. role_type .. "_min_players"):GetInt() then
@@ -1481,32 +1513,20 @@ function GetSelectableRoles(plys, max_plys)
 	local baseroles_count = 2
 
 	-- yea it begins
-	local max_roles = GetConVar("ttt_max_roles")
-	if max_roles then
-		max_roles = max_roles:GetInt()
+	local max_roles = cv_ttt_max_roles:GetInt()
+	if max_roles == 0 then
+		max_roles = math.floor(cv_ttt_max_roles_pct:GetFloat() * max_plys)
 		if max_roles == 0 then
-			max_roles = GetConVar("ttt_max_roles_pct")
-			if max_roles then
-				max_roles = math.floor(max_roles:GetFloat() * max_plys)
-				if max_roles == 0 then
-					max_roles = nil
-				end
-			end
+			max_roles = nil
 		end
 	end
 
 	-- damn, not again
-	local max_baseroles = GetConVar("ttt_max_baseroles")
-	if max_baseroles then
-		max_baseroles = max_baseroles:GetInt()
+	local max_baseroles = cv_ttt_max_baseroles:GetInt()
+	if max_baseroles == 0 then
+		max_baseroles = math.floor(cv_ttt_max_baseroles_pct:GetFloat() * max_plys)
 		if max_baseroles == 0 then
-			max_baseroles = GetConVar("ttt_max_baseroles_pct")
-			if max_baseroles then
-				max_baseroles = math.floor(max_baseroles:GetFloat() * max_plys)
-				if max_baseroles == 0 then
-					max_baseroles = nil
-				end
-			end
+			max_baseroles = nil
 		end
 	end
 

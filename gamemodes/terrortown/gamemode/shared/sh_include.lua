@@ -6,6 +6,7 @@ TTTFiles = {
 	cl_awards = {file = "cl_awards.lua", on = "client"},
 	cl_changes = {file = "cl_changes.lua", on = "client"},
 	cl_chat = {file = "cl_chat.lua", on = "client"},
+	cl_damage_indicator = {file = "cl_damage_indicator.lua", on = "client"},
 	cl_equip = {file = "cl_equip.lua", on = "client"},
 	cl_eventpopup = {file = "cl_eventpopup.lua", on = "client"},
 	cl_fonts = {file = "cl_fonts.lua", on = "client"},
@@ -18,6 +19,7 @@ TTTFiles = {
 	cl_keys = {file = "cl_keys.lua", on = "client"},
 	cl_main = {file = "cl_main.lua", on = "client"},
 	cl_msgstack = {file = "cl_msgstack.lua", on = "client"},
+	cl_player_ext = {file = "cl_player_ext.lua", on = "client"},
 	cl_popups = {file = "cl_popups.lua", on = "client"},
 	cl_radio = {file = "cl_radio.lua", on = "client"},
 	cl_reroll = {file = "cl_reroll.lua", on = "client"},
@@ -39,6 +41,7 @@ TTTFiles = {
 	-- shared files
 	sh_armor = {file = "sh_armor.lua", on = "shared"},
 	sh_corpse = {file = "sh_corpse.lua", on = "shared"},
+	sh_decal = {file = "sh_decal.lua", on = "shared"},
 	sh_equip_items = {file = "sh_equip_items.lua", on = "shared"},
 	sh_hud_manager = {file = "sh_hud_manager.lua", on = "shared"},
 	sh_hud_module = {file = "sh_hud_module.lua", on = "shared"},

@@ -23,9 +23,8 @@ local IsValid = IsValid
 ttt_include("vgui__cl_sb_team")
 
 -- TODO add Team!
-CreateClientConVar("ttt_scoreboard_sorting", "name", true, false, "name | role | karma | score | deaths | ping")
-CreateClientConVar("ttt_scoreboard_ascending", "1", true, false, "Should scoreboard ordering be in ascending order")
-
+local cv_ttt_scoreboard_sorting = CreateClientConVar("ttt_scoreboard_sorting", "name", true, false, "name | role | karma | score | deaths | ping")
+local cv_ttt_scoreboard_ascending = CreateClientConVar("ttt_scoreboard_ascending", "1", true, false, "Should scoreboard ordering be in ascending order")
 
 GROUP_TERROR = 1
 GROUP_NOTFOUND = 2
@@ -232,14 +231,11 @@ local function sort_header_handler(self_, lbl)
 	return function()
 		surface.PlaySound("ui/buttonclick.wav")
 
-		local sorting = GetConVar("ttt_scoreboard_sorting")
-		local ascending = GetConVar("ttt_scoreboard_ascending")
-
-		if lbl.HeadingIdentifier == sorting:GetString() then
-			ascending:SetBool(not ascending:GetBool())
+		if lbl.HeadingIdentifier == cv_ttt_scoreboard_sorting:GetString() then
+			cv_ttt_scoreboard_ascending:SetBool(not cv_ttt_scoreboard_ascending:GetBool())
 		else
-			sorting:SetString(lbl.HeadingIdentifier)
-			ascending:SetBool(true)
+			cv_ttt_scoreboard_sorting:SetString(lbl.HeadingIdentifier)
+			cv_ttt_scoreboard_ascending:SetBool(true)
 		end
 
 		for _, scoregroup in pairs(self_.ply_groups) do
@@ -458,7 +454,7 @@ function PANEL:ApplySchemeSettings()
 	self.hostname:SetTextColor(COLOR_BLACK)
 	self.mapchange:SetTextColor(COLOR_WHITE)
 
-	local sorting = GetConVar("ttt_scoreboard_sorting"):GetString()
+	local sorting = cv_ttt_scoreboard_sorting:GetString()
 	local highlight_color = Color(175, 175, 175, 255)
 	local default_color = COLOR_WHITE
 
