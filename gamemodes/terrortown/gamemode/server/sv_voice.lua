@@ -22,6 +22,14 @@ local cv_ttt_limit_spectator_voice = CreateConVar("ttt_limit_spectator_voice", "
 
 local loc_voice = CreateConVar("ttt_locational_voice", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
+hook.Add("TTT2SyncGlobals", "AddVoiceGlobals", function()
+	SetGlobalBool(loc_voice:GetName(), loc_voice:GetBool())
+end)
+
+cvars.AddChangeCallback(loc_voice:GetName(), function(cv, old, new)
+	SetGlobalBool(loc_voice:GetName(), tobool(tonumber(new)))
+end)
+
 -- TODO
 ---
 -- Decides whether a @{Player} can hear another @{Player} using voice chat.
