@@ -396,7 +396,7 @@ end
 -- @hook
 -- @realm server
 function GM:SyncGlobals()
-	SetGlobalBool(ttt_detective:GetName(), ttt_detective:GetBool())
+	SetGlobalBool("ttt_detective", ttt_detective:GetBool())
 	SetGlobalBool(ttt_haste:GetName(), ttt_haste:GetBool())
 	SetGlobalInt(time_limit:GetName(), time_limit:GetInt())
 	SetGlobalInt(idle_time:GetName(), idle_time:GetInt())
@@ -421,7 +421,7 @@ function GM:SyncGlobals()
 end
 
 cvars.AddChangeCallback(ttt_detective:GetName(), function(cv, old, new)
-	SetGlobalBool(ttt_detective:GetName(), tobool(tonumber(new)))
+	SetGlobalBool("ttt_detective", tobool(tonumber(new)))
 end)
 
 cvars.AddChangeCallback(ttt_haste:GetName(), function(cv, old, new)
@@ -429,11 +429,11 @@ cvars.AddChangeCallback(ttt_haste:GetName(), function(cv, old, new)
 end)
 
 cvars.AddChangeCallback(time_limit:GetName(), function(cv, old, new)
-	SetGlobalBool(time_limit:GetName(), tonumber(new))
+	SetGlobalInt(time_limit:GetName(), tonumber(new))
 end)
 
 cvars.AddChangeCallback(idle_time:GetName(), function(cv, old, new)
-	SetGlobalBool(idle_time:GetName(), tonumber(new))
+	SetGlobalInt(idle_time:GetName(), tonumber(new))
 end)
 
 cvars.AddChangeCallback(idle_enabled:GetName(), function(cv, old, new)
@@ -445,15 +445,15 @@ cvars.AddChangeCallback(voice_drain:GetName(), function(cv, old, new)
 end)
 
 cvars.AddChangeCallback(voice_drain_normal:GetName(), function(cv, old, new)
-	SetGlobalBool(voice_drain_normal:GetName(), tonumber(new))
+	SetGlobalFloat(voice_drain_normal:GetName(), tonumber(new))
 end)
 
 cvars.AddChangeCallback(voice_drain_admin:GetName(), function(cv, old, new)
-	SetGlobalBool(voice_drain_admin:GetName(), tonumber(new))
+	SetGlobalFloat(voice_drain_admin:GetName(), tonumber(new))
 end)
 
 cvars.AddChangeCallback(voice_drain_recharge:GetName(), function(cv, old, new)
-	SetGlobalBool(voice_drain_recharge:GetName(), tonumber(new))
+	SetGlobalFloat(voice_drain_recharge:GetName(), tonumber(new))
 end)
 
 ---
