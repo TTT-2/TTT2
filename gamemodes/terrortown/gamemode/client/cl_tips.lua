@@ -9,7 +9,7 @@ local timer = timer
 local IsValid = IsValid
 local CreateConVar = CreateConVar
 
-CreateConVar("ttt_tips_enable", "1", FCVAR_ARCHIVE)
+local cv_ttt_tips_enable = CreateConVar("ttt_tips_enable", "1", FCVAR_ARCHIVE)
 
 local draw = draw
 local GetTranslation = LANG.GetTranslation
@@ -313,7 +313,7 @@ end
 -- Displays the @{TIPS} menu
 -- @realm client
 function TIPS.Show()
-	if not GetConVar("ttt_tips_enable"):GetBool() then return end
+	if not cv_ttt_tips_enable:GetBool() then return end
 
 	if not tips_panel then
 		TIPS.Create()

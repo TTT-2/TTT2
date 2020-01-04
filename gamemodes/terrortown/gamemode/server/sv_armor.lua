@@ -21,16 +21,22 @@ ARMOR.cv.armor_damage_health_pct = CreateConVar("ttt_armor_damage_health_pct", 0
 ARMOR.cv.armor_classic = CreateConVar("ttt_armor_classic", 0, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 ARMOR.cv.item_armor_value = CreateConVar("ttt_item_armor_value", 30, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
-cvars.AddChangeCallback("ttt_armor_classic", function(cv, old, new)
-	SetGlobalBool("ttt_armor_classic", tobool(tonumber(new)))
+hook.Add("TTT2SyncGlobals", "AddArmorGlobals", function()
+	SetGlobalBool(ARMOR.cv.armor_classic:GetName(), ARMOR.cv.armor_classic:GetBool())
+	SetGlobalBool(ARMOR.cv.armor_enable_reinforced:GetName(), ARMOR.cv.armor_enable_reinforced:GetBool())
+	SetGlobalBool(ARMOR.cv.armor_threshold_for_reinforced:GetName(), ARMOR.cv.armor_threshold_for_reinforced:GetInt())
 end)
 
-cvars.AddChangeCallback("ttt_armor_enable_reinforced", function(cv, old, new)
-	SetGlobalBool("ttt_armor_enable_reinforced", tobool(tonumber(new)))
+cvars.AddChangeCallback(ARMOR.cv.armor_classic:GetName(), function(cv, old, new)
+	SetGlobalBool(ARMOR.cv.armor_classic:GetName(), tobool(tonumber(new)))
 end)
 
-cvars.AddChangeCallback("ttt_armor_threshold_for_reinforced", function(cv, old, new)
-	SetGlobalInt("ttt_armor_threshold_for_reinforced", tonumber(new))
+cvars.AddChangeCallback(ARMOR.cv.armor_enable_reinforced:GetName(), function(cv, old, new)
+	SetGlobalBool(ARMOR.cv.armor_enable_reinforced:GetName(), tobool(tonumber(new)))
+end)
+
+cvars.AddChangeCallback(ARMOR.cv.armor_threshold_for_reinforced:GetName(), function(cv, old, new)
+	SetGlobalInt(ARMOR.cv.armor_threshold_for_reinforced:GetName(), tonumber(new))
 end)
 
 -- SERVERSIDE ARMOR FUNCTIONS

@@ -127,6 +127,12 @@ if SERVER then
 	-- @param [default=nil] Entity playerlist If set, it defines which player will see the decal; visible to all players if not set
 	-- @realm server
 	function util.DecalRemovable(id, name, startpos, endpos, filter, playerlist)
+		if isfunction(filter) then
+			filter = nil
+
+			print("Warning: Do not set the filter to a function if used on a server.")
+		end
+
 		filter = istable(filter) and filter or {filter}
 
 		net.Start("TTT2AddDecal")

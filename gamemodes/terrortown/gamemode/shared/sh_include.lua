@@ -6,6 +6,7 @@ TTTFiles = {
 	cl_awards = {file = "cl_awards.lua", on = "client"},
 	cl_changes = {file = "cl_changes.lua", on = "client"},
 	cl_chat = {file = "cl_chat.lua", on = "client"},
+	cl_damage_indicator = {file = "cl_damage_indicator.lua", on = "client"},
 	cl_equip = {file = "cl_equip.lua", on = "client"},
 	cl_eventpopup = {file = "cl_eventpopup.lua", on = "client"},
 	cl_fonts = {file = "cl_fonts.lua", on = "client"},
