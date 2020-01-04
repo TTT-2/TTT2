@@ -355,7 +355,7 @@ local function ReceiveRoleList()
 
 			local plyrd = ply:GetSubRoleData()
 
-			if teamNoteam ~= TEAM_NONEtNone and not plyrd.unknownTeam and not plyrd.disabledTeamVoice and not TEAMS[team].alone then
+			if team ~= TEAM_NONE and not plyrd.unknownTeam and not plyrd.disabledTeamVoice and not TEAMS[team].alone then
 				ply[team .. "_gvoice"] = false -- assume role's chat by default
 			end
 		end
