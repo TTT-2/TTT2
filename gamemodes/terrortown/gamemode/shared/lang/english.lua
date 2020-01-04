@@ -1236,3 +1236,6 @@ L.disable_spectatorsoutline_tip = "Disables the outlines around objects controll
 
 L.disable_overheadicons = "Disable role icons"
 L.disable_overheadicons_tip = "Disables the role icons over the players' heads (+Performance)"
+
+L.disable_doubletap_sprint = "Disable doubletap Sprint"
+L.disable_doubletap_sprint_tip = "Disables Sprinting when double tapping the forward-move Key"

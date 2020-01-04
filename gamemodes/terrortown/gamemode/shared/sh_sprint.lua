@@ -46,6 +46,9 @@ if SERVER then
 		ply.isSprinting = bool
 	end)
 else
+
+	local disable_doubletap_sprint = CreateClientConVar("ttt2_disable_doubletap_sprint", "0", true, true)
+
 	local lastPress = 0
 
 	local function PlayerSprint(trySprinting, bind)
@@ -66,7 +69,7 @@ else
 	end
 
 	hook.Add("KeyPress", "TTT2DoublePressSprint", function(ply, key)
-		if not IsFirstTimePredicted() then return end
+		if not IsFirstTimePredicted() or disable_doubletap_sprint:GetBool() then return end
 		if key == IN_FORWARD and not ply.isSprinting then
 			local time = CurTime()
 
