@@ -94,4 +94,15 @@ if SERVER then
 	resource.AddFile("materials/vgui/ttt/pickup/icon_extra.png")
 	resource.AddFile("materials/vgui/ttt/pickup/icon_class.png")
 	resource.AddFile("materials/vgui/ttt/pickup/icon_ammo.png")
+
+	-- loading screen
+	resource.AddFile("materials/vgui/ttt/loadingscreen/loading.html")
+	resource.AddFile("materials/vgui/ttt/loadingscreen/loading.css")
+	resource.AddFile("materials/vgui/ttt/loadingscreen/img/bg.jpg")
+	resource.AddFile("materials/vgui/ttt/loadingscreen/img/TTT2Icon.png")
+
+	-- dmgindicator themes
+	resource.AddFile("materials/vgui/ttt/dmgindicator/themes/Default.png")
+	resource.AddFile("materials/vgui/ttt/dmgindicator/themes/Simple.png")
+	resource.AddFile("materials/vgui/ttt/dmgindicator/themes/Vanilla.png")
 end

@@ -8,7 +8,7 @@ STATUS.active = {}
 
 ---
 -- Registers a @{STATUS}
--- @param number id The index of the new status
+-- @param string id The index of the new status
 -- @param table data
 -- @return boolean whether the creation was successfully
 -- @realm client

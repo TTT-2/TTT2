@@ -184,6 +184,15 @@ function SWEP:Think()
 end
 
 if CLIENT then
+	local TryT = LANG.TryTranslation
+	local GetPT = LANG.GetParamTranslation
+	local mathRound = math.Round
+	local mathClamp = math.Clamp
+
+	local hud_color = Color(60, 220, 20, 255)
+
+	local cv_thickness
+
 	function SWEP:OnRemove()
 		local owner = self:GetOwner()
 
@@ -194,6 +203,7 @@ if CLIENT then
 
 	function SWEP:Initialize()
 		self:AddHUDHelp("binoc_help_pri", "binoc_help_sec", true)
+		cv_thickness = GetConVar("ttt_crosshair_thickness")
 
 		return self.BaseClass.Initialize(self)
 	end
@@ -211,19 +221,6 @@ if CLIENT then
 
 		return -1
 	end
-
-	local TryT = LANG.TryTranslation
-	local GetPT = LANG.GetParamTranslation
-	local mathRound = math.Round
-	local mathClamp = math.Clamp
-
-	local hud_color = Color(60, 220, 20, 255)
-
-	local cv_thickness
-
-	hook.Add("Initialize", "LocalizeConVarBinocular", function()
-		cv_thickness = GetConVar("ttt_crosshair_thickness")
-	end)
 
 	hook.Add("TTTRenderEntityInfo", "HUDDrawTargetIDBinocular", function(data, params)
 		local client = LocalPlayer()

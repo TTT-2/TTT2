@@ -97,13 +97,13 @@ if SERVER then
 		LANG.Msg(nil, name, params)
 	end
 
-	CreateConVar("ttt_lang_serverdefault", "english", FCVAR_ARCHIVE)
+	local cv_ttt_lang_serverdefault = CreateConVar("ttt_lang_serverdefault", "english", FCVAR_ARCHIVE)
 
 	local function ServerLangRequest(ply, cmd, args)
 		if not IsValid(ply) then return end
 
 		net.Start("TTT_ServerLang")
-		net.WriteString(GetConVar("ttt_lang_serverdefault"):GetString())
+		net.WriteString(cv_ttt_lang_serverdefault:GetString())
 		net.Send(ply)
 	end
 

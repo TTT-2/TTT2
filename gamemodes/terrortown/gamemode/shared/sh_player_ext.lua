@@ -127,8 +127,10 @@ function plymeta:SetRole(subrole, team, forceHooks)
 		if SERVER then
 			hook.Call("PlayerLoadout", GAMEMODE, self)
 
-			-- update subroleModel
-			self:SetModel(self:GetSubRoleModel())
+			if GetConVar("ttt_enforce_playermodel"):GetBool() then
+				-- update subroleModel
+				self:SetModel(self:GetSubRoleModel())
+			end
 
 			-- Always clear color state, may later be changed in TTTPlayerSetColor
 			self:SetColor(COLOR_WHITE)
