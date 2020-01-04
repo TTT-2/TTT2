@@ -7,7 +7,7 @@ KARMA = {}
 -- ply steamid -> karma table for disconnected players who might reconnect
 KARMA.RememberedPlayers = {}
 
--- Convars, more convenient access than GetConVar bla bla
+-- Convars, more convenient access than GetConVar
 KARMA.cv = {}
 KARMA.cv.enabled = CreateConVar("ttt_karma", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 KARMA.cv.strict = CreateConVar("ttt_karma_strict", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})

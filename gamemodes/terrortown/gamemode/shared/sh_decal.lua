@@ -11,8 +11,8 @@
 -- decal is removed. This might be improved in the future.
 
 if CLIENT then
-	-- cache original decal function
-	local utilDecal = util.Decal
+	-- Cache original decal function, but make sure that no infinite recursion (stack overflow)
+	local utilDecal = util.OverwriteFunction("util.Decal")
 
 	-- table of all added decals
 	local decals = {}
@@ -72,7 +72,7 @@ if CLIENT then
 	end
 
 	-- mirror the function calls from the server to the client
-	net.Receive("TTT2AddDecal", function()
+	net.Receive("TTT2RegDecal", function()
 		game.AddDecal(net.ReadString(), net.ReadTable())
 	end)
 
@@ -93,10 +93,10 @@ if SERVER then
 	util.AddNetworkString("TTT2AddDecal")
 	util.AddNetworkString("TTT2RemoveDecal")
 	util.AddNetworkString("TTT2ClearDecals")
-	util.AddNetworkString("TTT2AddDecal")
+	util.AddNetworkString("TTT2RegDecal")
 
 	-- cache original game.AddDecal
-	local gameAddDecal = game.AddDecal
+	local gameAddDecal = util.OverwriteFunction("game.AddDecal")
 
 	---
 	-- Registers a new decal. When called on the server, the decal is registered on both client and server.
@@ -111,7 +111,7 @@ if SERVER then
 
 		gameAddDecal(decalName, materialName)
 
-		net.Start("TTT2AddDecal")
+		net.Start("TTT2RegDecal")
 		net.WriteString(decalName)
 		net.WriteTable(materialName)
 		net.Broadcast()
@@ -127,6 +127,12 @@ if SERVER then
 	-- @param [default=nil] Entity playerlist If set, it defines which player will see the decal; visible to all players if not set
 	-- @realm server
 	function util.DecalRemovable(id, name, startpos, endpos, filter, playerlist)
+		if isfunction(filter) then
+			filter = nil
+
+			print("Warning: Do not set the filter to a function if used on a server.")
+		end
+
 		filter = istable(filter) and filter or {filter}
 
 		net.Start("TTT2AddDecal")

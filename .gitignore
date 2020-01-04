@@ -46,6 +46,9 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+# IntelliJ-based IDE files
+.idea/*
+
 # Custom files
 .ftpconfig
 .glualint.json

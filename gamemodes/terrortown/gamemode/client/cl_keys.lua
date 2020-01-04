@@ -4,6 +4,7 @@
 
 local timer = timer
 local IsValid = IsValid
+local cv_sv_cheats = GetConVar("sv_cheats")
 
 local function SendWeaponDrop()
 	RunConsoleCommand("ttt_dropweapon")
@@ -127,7 +128,7 @@ function GM:PlayerBindPress(ply, bind, pressed)
 			end
 		end
 	elseif bind == "noclip" and pressed then
-		if not GetConVar("sv_cheats"):GetBool() then
+		if not cv_sv_cheats:GetBool() then
 			RunConsoleCommand("ttt_equipswitch")
 
 			return true
