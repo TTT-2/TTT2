@@ -230,7 +230,7 @@ function GetTeamMemberFilter(ply, alive_only)
 end
 
 -- Communication control
-CreateConVar("ttt_limit_spectator_chat", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY})
+local cv_ttt_limit_spectator_chat = CreateConVar("ttt_limit_spectator_chat", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY})
 
 ---
 -- Checks whether a @{Player} is able to listen to another @{Player}
@@ -259,7 +259,7 @@ function GM:PlayerCanSeePlayersChat(text, team_only, listener, speaker)
 	local lTeam = listener:Team() == TEAM_SPEC
 
 	if GetRoundState() ~= ROUND_ACTIVE -- Round isn't active
-	or not GetConVar("ttt_limit_spectator_chat"):GetBool() -- Spectators can chat freely
+	or not cv_ttt_limit_spectator_chat:GetBool() -- Spectators can chat freely
 	or not DetectiveMode() -- Mumbling
 	or not sTeam and (team_only and not speaker:IsSpecial() or not team_only) -- If someone alive talks (and not a special role in teamchat's case)
 	or not sTeam and team_only and (
@@ -320,9 +320,9 @@ function GM:PlayerSay(ply, text, team_only)
 	end
 
 	if GetRoundState() == ROUND_ACTIVE then
-		local team = ply:Team() == TEAM_SPEC
+		local team_spec = ply:Team() == TEAM_SPEC
 
-		if team and not DetectiveMode() then
+		if team_spec and not DetectiveMode() then
 			local filtered = {}
 			local parts = string.Explode(" ", text)
 
@@ -344,10 +344,14 @@ function GM:PlayerSay(ply, text, team_only)
 			table.insert(filtered, 1, "[MUMBLED]")
 
 			return table.concat(filtered, " ")
-		elseif team_only and not team and ply:IsSpecial() then
+		elseif team_only and not team_spec and ply:IsSpecial() then
 			RoleChatMsg(ply, text)
 
 			return ""
+		elseif not team_only and not team_spec then
+			if ply:GetSubRoleData().disabledGeneralChat or hook.Run("TTT2AvoidGeneralChat", ply, text) == false then
+				return ""
+			end
 		end
 	end
 

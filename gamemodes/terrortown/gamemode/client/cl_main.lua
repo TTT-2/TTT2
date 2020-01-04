@@ -11,6 +11,8 @@ local surface = surface
 local CreateConVar = CreateConVar
 local hook = hook
 
+local cv_ttt_spectator_mode
+
 -- Define GM12 fonts for compatibility
 surface.CreateFont("DefaultBold", {font = "Tahoma", size = 13, weight = 1000})
 surface.CreateFont("TabLarge", {font = "Tahoma", size = 13, weight = 700, shadow = true, antialias = false})
@@ -62,8 +64,10 @@ ttt_include("cl_voice")
 ttt_include("cl_changes")
 ttt_include("cl_inventory")
 ttt_include("cl_status")
+ttt_include("cl_player_ext")
 
 ttt_include("cl_armor")
+ttt_include("cl_damage_indicator")
 ttt_include("sh_armor")
 ttt_include("cl_weapon_pickup")
 
@@ -81,6 +85,7 @@ function GM:Initialize()
 	hook.Run("TTT2Initialize")
 
 	GAMEMODE.round_state = ROUND_WAIT
+	cv_ttt_spectator_mode = GetConVar("ttt_spectator_mode")
 
 	LANG.Init()
 
@@ -161,7 +166,7 @@ function GM:InitPostEntity()
 	net.SendToServer()
 
 	net.Start("TTT_Spectate")
-	net.WriteBool(GetConVar("ttt_spectator_mode"):GetBool())
+	net.WriteBool(cv_ttt_spectator_mode:GetBool())
 	net.SendToServer()
 
 	if not game.SinglePlayer() then
@@ -226,12 +231,15 @@ local function RoundStateChange(o, n)
 		GAMEMODE:CleanUpMap()
 
 		-- show warning to spec mode players
-		if GetConVar("ttt_spectator_mode"):GetBool() and IsValid(LocalPlayer()) then
+		if cv_ttt_spectator_mode:GetBool() and IsValid(LocalPlayer()) then
 			LANG.Msg("spec_mode_warning")
 		end
 
 		-- reset cached server language in case it has changed
 		RunConsoleCommand("_ttt_request_serverlang")
+
+		-- clear decals in cache from previous round
+		util.ClearDecals()
 	elseif n == ROUND_ACTIVE then
 		-- round starts
 		VOICE.CycleMuteState(MUTE_NONE)
@@ -244,7 +252,7 @@ local function RoundStateChange(o, n)
 		end
 
 		-- clear blood decals produced during prep
-		RunConsoleCommand("r_cleardecals")
+		util.ClearDecals()
 
 		GAMEMODE.StartingPlayers = #util.GetAlivePlayers()
 	elseif n == ROUND_POST then
@@ -338,9 +346,6 @@ local function ReceiveRoleList()
 	local team = net.ReadString()
 	local num_ids = net.ReadUInt(8)
 
-	local teamNotNone = team ~= TEAM_NONE
-	local teamAlone = TEAMS[team].alone
-
 	for i = 1, num_ids do
 		local eidx = net.ReadUInt(7) + 1 -- we - 1 worldspawn=0
 		local ply = player.GetByID(eidx)
@@ -350,7 +355,7 @@ local function ReceiveRoleList()
 
 			local plyrd = ply:GetSubRoleData()
 
-			if teamNotNone and not plyrd.unknownTeam and not plyrd.disabledTeamVoice and not teamAlone then
+			if teamNoteam ~= TEAM_NONEtNone and not plyrd.unknownTeam and not plyrd.disabledTeamVoice and not TEAMS[team].alone then
 				ply[team .. "_gvoice"] = false -- assume role's chat by default
 			end
 		end

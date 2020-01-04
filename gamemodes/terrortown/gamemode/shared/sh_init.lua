@@ -507,6 +507,7 @@ COLOR_OLIVE = Color(100, 100, 0, 255)
 
 -- include ttt required files
 ttt_include("sh_util")
+ttt_include("sh_decal")
 ttt_include("sh_lang")
 ttt_include("sh_sql")
 ttt_include("sh_hud_module")

@@ -69,10 +69,7 @@ function GM:PlayerCanPickupWeapon(ply, wep)
 		-- these flags shouldn't be reset on first call of this hook since GMOD might do stupid things
 		-- while attempting to pickup a weapon
 		-- therefore these flags keep their value until the weapon is picked up or the player attempts
-		-- another pickup
-		wep.wpickup_player = nil
-		ply.wpickup_weapon = nil
-
+		-- another pickup and are cleared in ResetWeapon()
 		return true
 	end
 
@@ -356,11 +353,11 @@ local function CanWearHat(ply)
 	return table.HasValue(Hattables, path[3])
 end
 
-CreateConVar("ttt_detective_hats", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local cv_ttt_detective_hats = CreateConVar("ttt_detective_hats", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 -- Just hats right now
 local function GiveLoadoutSpecial(ply)
-	if not ply:IsActive() or ply:GetBaseRole() ~= ROLE_DETECTIVE or not GetConVar("ttt_detective_hats"):GetBool() or not CanWearHat(ply) then
+	if not ply:IsActive() or ply:GetBaseRole() ~= ROLE_DETECTIVE or not cv_ttt_detective_hats:GetBool() or not CanWearHat(ply) then
 		SafeRemoveEntity(ply.hat)
 
 		ply.hat = nil
@@ -534,7 +531,7 @@ concommand.Add("wepswitch", ForceWeaponSwitch)
 -- @param boolean death_drop
 -- @realm server
 -- @module WEPS
-function WEPS.DropNotifiedWeapon(ply, wep, death_drop)
+function WEPS.DropNotifiedWeapon(ply, wep, death_drop, keep_selection)
 	if not IsValid(ply) or not IsValid(wep) then return end
 
 	-- Hack to tell the weapon it's about to be dropped and should do what it
@@ -556,27 +553,15 @@ function WEPS.DropNotifiedWeapon(ply, wep, death_drop)
 
 	-- After dropping a weapon, always switch to holstered, so that traitors
 	-- will never accidentally pull out a traitor weapon
-	ply:SelectWeapon("weapon_ttt_unarmed")
+	if not keep_selection then
+		ply:SelectWeapon("weapon_ttt_unarmed")
+	end
 end
 
 local function DropActiveWeapon(ply)
 	if not IsValid(ply) then return end
 
-	local wep = ply:GetActiveWeapon()
-
-	if not IsValid(wep) or not wep.AllowDrop then return end
-
-	local tr = util.QuickTrace(ply:GetShootPos(), ply:GetAimVector() * 32, ply)
-
-	if tr.HitWorld then
-		LANG.Msg(ply, "drop_no_room")
-
-		return
-	end
-
-	ply:AnimPerformGesture(ACT_GMOD_GESTURE_ITEM_PLACE)
-
-	WEPS.DropNotifiedWeapon(ply, wep)
+	ply:SafeDropWeapon(ply:GetActiveWeapon(), false)
 end
 concommand.Add("ttt_dropweapon", DropActiveWeapon)
 
@@ -744,6 +729,18 @@ function WEPS.ForcePrecache()
 			util.PrecacheModel(w.ViewModel)
 		end
 	end
+end
+
+function WEPS.IsInstalled(cls)
+	local weps = weapons.GetList()
+
+	for i = 1, #weps do
+		if weps[i].ClassName == cls then
+			return true
+		end
+	end
+
+	return false
 end
 
 --manipulate shove attack for all crowbar alikes
