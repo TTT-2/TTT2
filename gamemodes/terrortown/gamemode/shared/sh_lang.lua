@@ -9,13 +9,15 @@ if LANG then return end
 LANG = {}
 
 -- define LANG.Msg modes
-MSG_MSTACK_ROLE = 10
-MSG_MSTACK_WARN = 11
-MSG_MSTACK_PLAIN = 12
+MSG_MSTACK_ROLE = 0
+MSG_MSTACK_WARN = 1
+MSG_MSTACK_PLAIN = 2
 
-MSG_CHAT_ROLE = 20
-MSG_CHAT_WARN = 21
-MSG_CHAT_PLAIN = 22
+MSG_CHAT_ROLE = 3
+MSG_CHAT_WARN = 4
+MSG_CHAT_PLAIN = 5
+
+MSG_MODE_BITS = 4
 
 util.IncludeClientFile("terrortown/gamemode/client/cl_lang.lua")
 
@@ -81,7 +83,7 @@ if SERVER then
 
 		net.Start("TTT_LangMsg")
 		net.WriteString(name)
-		net.WriteUInt(mode, 8)
+		net.WriteUInt(mode, MSG_MODE_BITS)
 		net.WriteUInt(c, 8)
 
 		if c > 0 then
@@ -126,7 +128,7 @@ end
 if CLIENT then
 	local function RecvMsg()
 		local name = net.ReadString()
-		local mode = net.ReadUInt(8)
+		local mode = net.ReadUInt(MSG_MODE_BITS)
 		local c = net.ReadUInt(8)
 
 		local params

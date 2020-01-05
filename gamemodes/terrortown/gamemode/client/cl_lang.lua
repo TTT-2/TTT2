@@ -359,19 +359,12 @@ LANG.MsgStyle = {}
 -- @return function style table
 -- @realm client
 function LANG.GetStyle(name, mode)
-	print("name: " .. tostring(name))
-	print("mode: " .. tostring(mode))
-
 	-- use this as a fallback in case a style is registered
 	if LANG.MsgStyle[name] then
-		print("style exists")
-
 		return LANG.MsgStyle[name]
 	end
 
 	if mode and LANG.Styles[mode] then
-		print("using a mode")
-
 		return LANG.Styles[mode]
 	end
 
