@@ -390,9 +390,6 @@ function HELPSCRN:CreateInterfaceSettings(parent)
 
 	form:CheckBox(GetTranslation("set_healthlabel"), "ttt_health_label")
 
-	cb = form:CheckBox(GetTranslation("set_fastsw"), "ttt_weaponswitcher_fast")
-	cb:SetTooltip(GetTranslation("set_fastsw_tip"))
-
 	cb = form:CheckBox(GetTranslation("set_fastsw_menu"), "ttt_weaponswitcher_displayfast")
 	cb:SetTooltip(GetTranslation("set_fastswmenu_tip"))
 
@@ -580,6 +577,12 @@ function HELPSCRN:CreateGameplaySettings(parent)
 
 	cb = form:CheckBox(GetTranslation("set_specmode"), "ttt_spectator_mode")
 	cb:SetTooltip(GetTranslation("set_specmode_tip"))
+
+	cb = form:CheckBox(GetTranslation("set_fastsw"), "ttt_weaponswitcher_fast")
+	cb:SetTooltip(GetTranslation("set_fastsw_tip"))
+
+	cb = form:CheckBox(GetTranslation("doubletap_sprint_anykey"), "ttt2_doubletap_sprint_anykey")
+	cb:SetTooltip(GetTranslation("doubletap_sprint_anykey_tip"))
 
 	-- TODO what is the following reason?
 	-- For some reason this one defaulted to on, unlike other checkboxes, so
