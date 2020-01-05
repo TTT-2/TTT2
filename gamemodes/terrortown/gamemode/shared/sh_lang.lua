@@ -17,7 +17,7 @@ MSG_CHAT_ROLE = 3
 MSG_CHAT_WARN = 4
 MSG_CHAT_PLAIN = 5
 
-MSG_MODE_BITS = 4
+MSG_MODE_BITS = 3
 
 util.IncludeClientFile("terrortown/gamemode/client/cl_lang.lua")
 
