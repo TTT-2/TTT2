@@ -972,7 +972,7 @@ function TellTraitorsAboutTraitors()
 		if shouldShow == false or tmp == nil or #tmp == 0 then continue end
 
 		if #tmp == 1 then
-			LANG.Msg(v, "round_traitors_one")
+			LANG.Msg(v, "round_traitors_one", nil, MSG_MSTACK_ROLE)
 
 			return
 		end
@@ -992,7 +992,7 @@ function TellTraitorsAboutTraitors()
 
 		names = string.sub(names, 1, -3)
 
-		LANG.Msg(v, "round_traitors_more", {names = names})
+		LANG.Msg(v, "round_traitors_more", {names = names}, MSG_MSTACK_ROLE)
 	end
 end
 
