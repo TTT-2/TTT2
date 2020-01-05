@@ -47,7 +47,8 @@ if SERVER then
 	end)
 else
 	-- The helptext can't be changed once the convar was created, so we go with english, since it is probably the most common lang
-	local doubletap_sprint_anykey = CreateClientConVar("ttt2_doubletap_sprint_anykey", 0, true, false, LANG.GetTranslationFromLanguage("doubletap_sprint_anykey", "english"), 0, 1)
+	local doubletap_sprint_anykey = CreateClientConVar("ttt2_doubletap_sprint_anykey", 0, true, false, LANG.GetTranslationFromLanguage("disable_doubletap_sprint", "english"), 0, 1)
+	local disable_doubletap_sprint = CreateClientConVar("ttt2_disable_doubletap_sprint", "0", true, false, LANG.GetTranslationFromLanguage("doubletap_sprint_anykey", "english"), 0, 1)
 	local lastPress = 0
 	local lastPressedMoveKey = nil
 
@@ -69,7 +70,7 @@ else
 	end
 
 	hook.Add("KeyPress", "TTT2DoublePressSprint", function(ply, key)
-		if not IsFirstTimePredicted() or ply.isSprinting then return end
+		if not IsFirstTimePredicted() or ply.isSprinting or disable_doubletap_sprint:GetBool() then return end
 		if key ~= IN_FORWARD and key ~= IN_BACK and key ~= IN_MOVERIGHT and key ~= IN_MOVELEFT then return end
 
 		local time = CurTime()

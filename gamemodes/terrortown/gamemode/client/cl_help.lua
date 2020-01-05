@@ -406,9 +406,6 @@ function HELPSCRN:CreateInterfaceSettings(parent)
 	cb = form:CheckBox(GetTranslation("disable_overheadicons"), "ttt2_disable_overheadicons")
 	cb:SetTooltip(GetTranslation("disable_overheadicons_tip"))
 
-	cb = form:CheckBox(GetTranslation("disable_doubletap_sprint"), "ttt2_disable_doubletap_sprint")
-	cb:SetTooltip(GetTranslation("disable_doubletap_sprint_tip"))
-
 	form:Dock(FILL)
 end
 
@@ -586,6 +583,9 @@ function HELPSCRN:CreateGameplaySettings(parent)
 
 	cb = form:CheckBox(GetTranslation("doubletap_sprint_anykey"), "ttt2_doubletap_sprint_anykey")
 	cb:SetTooltip(GetTranslation("doubletap_sprint_anykey_tip"))
+
+	cb = form:CheckBox(GetTranslation("disable_doubletap_sprint"), "ttt2_disable_doubletap_sprint")
+	cb:SetTooltip(GetTranslation("disable_doubletap_sprint_tip"))
 
 	-- TODO what is the following reason?
 	-- For some reason this one defaulted to on, unlike other checkboxes, so
