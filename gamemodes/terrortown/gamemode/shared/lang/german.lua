@@ -1227,5 +1227,6 @@ L.disable_spectatorsoutline_tip = "Deaktiviert die Umrandungen um ein Objekt, in
 L.disable_overheadicons = "Deaktiviere Rollenicons"
 L.disable_overheadicons_tip = "Deaktiviert die Rollenicons über den Köpfen der Spieler (+Performance)"
 
-L.disable_doubletap_sprint = "Deaktiviere 'doubletap' Sprinten"
-L.disable_doubletap_sprint_tip = "Deaktiviert das Sprinten wenn die Nach-Vorne-Gehen Taste doppelt gedrückt wird"
+-- 2020-01-04
+L.doubletap_sprint_anykey = "Setze Double-Tap Sprinten fort, bis du stehen bleibst"
+L.doubletap_sprint_anykey_tip = "So lange du dich weiterhin bewegst, wird das Sprinten fortgesetzt"

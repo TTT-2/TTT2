@@ -1059,7 +1059,7 @@ function plymeta:SafeDropWeapon(wep, keep_selection)
 	local tr = util.QuickTrace(self:GetShootPos(), self:GetAimVector() * 32, self)
 
 	if tr.HitWorld then
-		LANG.Msg(self, "drop_no_room")
+		LANG.Msg(self, "drop_no_room", nil, MSG_CHAT_WARN)
 
 		return
 	end

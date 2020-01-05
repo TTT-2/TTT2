@@ -96,8 +96,7 @@ if SERVER then
 	resource.AddFile("materials/vgui/ttt/pickup/icon_ammo.png")
 
 	-- loading screen
-	resource.AddFile("materials/vgui/ttt/loadingscreen/loading.html")
-	resource.AddFile("materials/vgui/ttt/loadingscreen/loading.css")
+	resource.AddFile("materials/vgui/ttt/loadingscreen/loading.vtf")
 	resource.AddFile("materials/vgui/ttt/loadingscreen/img/bg.jpg")
 	resource.AddFile("materials/vgui/ttt/loadingscreen/img/TTT2Icon.png")
 

@@ -177,7 +177,7 @@ function ENT:UseOverride(activator)
 		local owner = self:GetOwner()
 
 		if self:GetArmed() and owner ~= activator and IsValid(owner) and owner:Alive() and owner:GetTeam() == activator:GetTeam() then
-			LANG.Msg(activator, "c4_no_disarm")
+			LANG.Msg(activator, "c4_no_disarm", nil, MSG_MSTACK_ROLE)
 
 			return
 		end

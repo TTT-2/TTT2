@@ -51,7 +51,7 @@ local function OrderEquipment(ply, cmd, args)
 	-- some weapons can only be bought once per player per round, this used to be
 	-- defined in a table here, but is now in the SWEP's table
 	if equip_table and equip_table.limited and ply:HasBought(id) then
-		LANG.Msg(ply, "buy_no_stock")
+		LANG.Msg(ply, "buy_no_stock", nil, MSG_MSTACK_ROLE)
 
 		return
 	end
@@ -69,7 +69,7 @@ local function OrderEquipment(ply, cmd, args)
 		-- if we have a pending order because we are in a confined space, don't
 		-- start a new one
 		if HasPendingOrder(ply) then
-			LANG.Msg(ply, "buy_pending")
+			LANG.Msg(ply, "buy_pending", nil, MSG_MSTACK_ROLE)
 
 			return
 		end
@@ -122,7 +122,7 @@ local function OrderEquipment(ply, cmd, args)
 
 	ply:SubtractCredits(credits)
 
-	LANG.Msg(ply, "buy_received")
+	LANG.Msg(ply, "buy_received", nil, MSG_MSTACK_ROLE)
 
 	ply:AddBought(id)
 
@@ -183,13 +183,13 @@ local function TransferCredits(ply, cmd, args)
 	if not IsValid(target)
 	or target == ply
 	then
-		LANG.Msg(ply, "xfer_no_recip")
+		LANG.Msg(ply, "xfer_no_recip", nil, MSG_MSTACK_ROLE)
 
 		return
 	end
 
 	if ply:GetCredits() < credits then
-		LANG.Msg(ply, "xfer_no_credits")
+		LANG.Msg(ply, "xfer_no_credits", nil, MSG_MSTACK_ROLE)
 
 		return
 	end
@@ -201,8 +201,8 @@ local function TransferCredits(ply, cmd, args)
 	ply:SubtractCredits(credits)
 	target:AddCredits(credits)
 
-	LANG.Msg(ply, "xfer_success", {player = target:Nick()})
-	LANG.Msg(target, "xfer_received", {player = ply:Nick(), num = credits})
+	LANG.Msg(ply, "xfer_success", {player = target:Nick()}, MSG_MSTACK_ROLE)
+	LANG.Msg(target, "xfer_received", {player = ply:Nick(), num = credits}, MSG_MSTACK_ROLE)
 end
 concommand.Add("ttt_transfer_credits", TransferCredits)
 
