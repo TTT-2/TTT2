@@ -1230,3 +1230,6 @@ L.disable_overheadicons_tip = "Deaktiviert die Rollenicons über den Köpfen der
 -- 2020-01-04
 L.doubletap_sprint_anykey = "Setze Double-Tap Sprinten fort, bis du stehen bleibst"
 L.doubletap_sprint_anykey_tip = "So lange du dich weiterhin bewegst, wird das Sprinten fortgesetzt"
+
+L.disable_doubletap_sprint = "Deaktiviere Double-Tap Sprinten"
+L.disable_doubletap_sprint_tip = "Deaktiviert das Auslösen des Sprinten durch Double-Tap einer Bewegungstaste"

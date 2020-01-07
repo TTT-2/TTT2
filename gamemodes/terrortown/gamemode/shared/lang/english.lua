@@ -1240,3 +1240,6 @@ L.disable_overheadicons_tip = "Disables the role icons over the players' heads (
 -- 2020-01-04
 L.doubletap_sprint_anykey = "Continue double tap sprinting until you stop moving"
 L.doubletap_sprint_anykey_tip = "You will keep sprinting as long as you keep moving"
+
+L.disable_doubletap_sprint = "Disable double tap sprinting"
+L.disable_doubletap_sprint_tip = "Double tapping a movement key will no longer cause you to sprint"
