@@ -641,7 +641,7 @@ concommand.Add("ttt_dropammo", DropActiveAmmo)
 function GM:WeaponEquip(wep, ply)
 	if not IsValid(ply) or not IsValid(wep) then return end
 
-	if IsValid(wep) and not wep.Kind then
+	if not wep.Kind then
 		-- only remove if they lack critical stuff
 		wep:Remove()
 
