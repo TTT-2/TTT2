@@ -14,8 +14,8 @@ if CLIENT then
 	local pad = 14
 	local icon_size = 64
 
-	local titlefont = "PureSkinRole"
-	local textfont = "PureSkinMSTACKMsg"
+	local titlefont = "PureSkinPopupTitle"
+	local textfont = "PureSkinPopupText"
 
 	function HUDELEMENT:Initialize()
 		self.pad = pad
@@ -67,10 +67,10 @@ if CLIENT then
 		local pad2 = 2 * self.pad
 
 		-- wrap title if needed
-		item.title_wrapped, width_title, height_title = draw.GetWrappedText(item.title, size.w - pad2, titlefont, self.scale)
+		item.title_wrapped, width_title, height_title = draw.GetWrappedText(item.title.text, size.w - pad2, titlefont, self.scale)
 
 		-- wrap text if needed
-		item.text_wrapped, width_text, height_text = draw.GetWrappedText(item.text, size.w - pad2, textfont, self.scale)
+		item.text_wrapped, width_text, height_text = draw.GetWrappedText(item.text.text, size.w - pad2, textfont, self.scale)
 
 		item.size = {}
 		item.size.w = ((width_title > width_text) and width_title or width_text) + pad2
@@ -135,28 +135,23 @@ if CLIENT then
 
 		-- calculate fadeout
 		local fadetime = 1.5
-		local timediff = HUDEditor.IsEditing and 5 or msg.time - CurTime()
+		local timediff = HUDEditor.IsEditing and 5 or (msg.time - CurTime())
 		local opacity = (timediff > fadetime) and 255 or math.Round(255 * timediff / fadetime)
 
-		local font_color_tmp = util.GetDefaultColor(self.basecolor)
-		local font_color = {
-			r = font_color_tmp.r,
-			g = font_color_tmp.g,
-			b = font_color_tmp.b,
-			a = opacity
-		}
+		local ctmp_title = msg.title.color or COLOR_WHITE
+		local ctmp_text = msg.text.color or COLOR_WHITE
 
 		-- draw content
 		local wrappedTitles = msg.title_wrapped
 
 		for i = 1, #wrappedTitles do
-			draw.AdvancedText(wrappedTitles[i], titlefont, msg.pos.center_x, msg.pos.title_y[i], font_color, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, true, self.scale)
+			draw.AdvancedText(wrappedTitles[i], titlefont, msg.pos.center_x, msg.pos.title_y[i], Color(ctmp_title.r, ctmp_title.g, ctmp_title.b, opacity), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, true, self.scale)
 		end
 
 		local wrappedTexts = msg.text_wrapped
 
 		for i = 1, #wrappedTexts do
-			draw.AdvancedText(wrappedTexts[i], textfont, msg.pos.center_x, msg.pos.text_y[i], font_color, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, true, self.scale)
+			draw.AdvancedText(wrappedTexts[i], textfont, msg.pos.center_x, msg.pos.text_y[i], Color(ctmp_text.r, ctmp_text.g, ctmp_text.b, opacity), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, true, self.scale)
 		end
 
 		local wrappedIcons = msg.icon_tbl
