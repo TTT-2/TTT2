@@ -1097,6 +1097,65 @@ function plymeta:CanPickupWeaponClass(wepCls)
 	return self:CanPickupWeapon(wep)
 end
 
+-- Since we all love GMOD we do some really funny things here. Sometimes the weapon is in
+-- a position where a player is unable to pick it up, even if there is nothing that hinders
+-- it from being picked up. Therefore we randomise the position a bit.
+local function SetWeaponPos(ply, wep, kind)
+	if not IsValid(ply) or not IsValid(wep) or not kind or not ply.wpickup_waitequip[kind] then return end
+
+	-- if a pickup is possible, the weapon gets a flag set and is teleported to the feet
+	-- of the player
+	-- IMPORTANT: If the weapon gets teleported into other entities, it gets stuck. Therefore
+	-- the weapon is teleported to half player height
+	local pWepPos = ply:EyePos()
+	pWepPos.z = pWepPos.z - 20 -- -20 to move it outside the viewing area
+
+	-- randomise position
+	pWepPos.x = pWepPos.x + math.random(-10, 10)
+	pWepPos.y = pWepPos.y + math.random(-10, 10)
+	pWepPos.z = pWepPos.z + math.random(-10, 10)
+
+	wep:SetPos(pWepPos)
+end
+
+local function ActualWeaponPickup(ply, wep, kind, shouldAutoSelect)
+	if not IsValid(ply) or not IsValid(wep) or not kind or not ply.wpickup_waitequip[kind] then return end
+
+	-- this flag is set to the player to make sure he only picks up this weapon
+	ply.wpickup_weapon = wep
+
+	-- the flag is set to the weapon to stop other players from auto-picking up this weapon
+	wep.wpickup_player = ply
+
+	-- destroy physics to let weapon float in the air
+	wep:PhysicsDestroy()
+
+	-- set collision group to IN_VEHICLE to be nonexistent, bullets can pass through it
+	wep:SetCollisionGroup(COLLISION_GROUP_IN_VEHICLE)
+
+	-- make weapon invisible to prevent stuck weapon in player sight
+	wep:SetNoDraw(true)
+
+	-- set autoselect flag
+	wep.wpickup_autoSelect = shouldAutoSelect
+
+	-- initial teleport the weapon to the player pos
+	SetWeaponPos(ply, wep, kind)
+
+	wep.name_timer_pos = kind .. "_WeaponPickupRandomPos_" .. ply:SteamID64()
+	wep.name_timer_cancel = kind .. "_WeaponPickupCancel_" .. ply:SteamID64()
+
+	-- update the weapon pos
+	timer.Create(wep.name_timer_pos, 0.2, 1, function()
+		SetWeaponPos(ply, wep, kind)
+	end)
+
+	-- after 1.5 seconds, the pickup should be canceled
+	timer.Create(wep.name_timer_cancel, 1.5, 1, function()
+		ResetWeapon(wep)
+	end)
+end
+
 ---
 -- This function simplifies the weapon pickup process for a player by
 -- handling all the needed calls.
@@ -1182,58 +1241,7 @@ function plymeta:PickupWeapon(wep, dropBlockingWeapon, shouldAutoSelect)
 	self.wpickup_waitequip[kind] = true
 
 	timer.Create(kind .. "_WeaponPickup_" .. self:SteamID64(), 0, 1, function()
-		-- this flag is set to the player to make sure he only picks up this weapon
-		self.wpickup_weapon = wep
-
-		-- the flag is set to the weapon to stop other players from auto-picking up this weapon
-		wep.wpickup_player = self
-
-		-- destroy physics to let weapon float in the air
-		wep:PhysicsDestroy()
-
-		-- set collision group to IN_VEHICLE to be nonexistent, bullets can pass through it
-		wep:SetCollisionGroup(COLLISION_GROUP_IN_VEHICLE)
-
-		-- make weapon invisible to prevent stuck weapon in player sight
-		wep:SetNoDraw(true)
-
-		-- set autoselect flag
-		wep.wpickup_autoSelect = shouldAutoSelect
-
-		-- Since we all love GMOD we do some really funny things here. Sometimes the weapon is in
-		-- a position where a player is unable to pick it up, even if there is nothing that hinders
-		-- it from being picked up. Therefore we randomise the position a bit.
-		local function SetWeaponPos()
-			if not IsValid(self) or not IsValid(wep) or not self.wpickup_waitequip[kind] then return end
-
-			-- if a pickup is possible, the weapon gets a flag set and is teleported to the feet
-			-- of the player
-			-- IMPORTANT: If the weapon gets teleported into other entities, it gets stuck. Therefore
-			-- the weapon is teleported to half player height
-			local pWepPos = self:EyePos()
-			pWepPos.z = pWepPos.z - 20 -- -20 to move it outside the viewing area
-
-			-- randomise position
-			pWepPos.x = pWepPos.x + math.random(-10, 10)
-			pWepPos.y = pWepPos.y + math.random(-10, 10)
-			pWepPos.z = pWepPos.z + math.random(-10, 10)
-
-			wep:SetPos(pWepPos)
-		end
-
-		-- initial teleport the weapon to the player pos
-		SetWeaponPos()
-
-		wep.name_timer_pos = kind .. "_WeaponPickupRandomPos_" .. self:SteamID64()
-		wep.name_timer_cancel = kind .. "_WeaponPickupCancel_" .. self:SteamID64()
-
-		-- update the weapon pos
-		timer.Create(wep.name_timer_pos, 0.2, 1, SetWeaponPos)
-
-		-- after 1.5 seconds, the pickup should be canceled
-		timer.Create(wep.name_timer_cancel, 1.5, 1, function()
-			ResetWeapon(wep, "Timeout")
-		end)
+		ActualWeaponPickup(self, wep, kind, shouldAutoSelect)
 	end)
 
 	return wep

@@ -639,16 +639,17 @@ concommand.Add("ttt_dropammo", DropActiveAmmo)
 -- @ref https://wiki.garrysmod.com/page/GM/WeaponEquip
 -- @local
 function GM:WeaponEquip(wep, ply)
+	if not IsValid(ply) or not IsValid(wep) then return end
+
 	if IsValid(wep) and not wep.Kind then
 		-- only remove if they lack critical stuff
 		wep:Remove()
 
 		ErrorNoHalt("Equipped weapon " .. wep:GetClass() .. " is not compatible with TTT\n")
+		return
 	end
 
-	if IsValid(ply) and wep.Kind then
-		AddWeaponToInventoryAndNotifyClient(ply, wep)
-	end
+	AddWeaponToInventoryAndNotifyClient(ply, wep)
 
 	local function WeaponEquipNextFrame()
 		if not IsValid(ply) or not IsValid(wep) then return end
