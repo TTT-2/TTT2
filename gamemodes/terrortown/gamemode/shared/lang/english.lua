@@ -641,11 +641,19 @@ L.target_switch_weapon_nospace = "There is no inventory slot available for this 
 L.target_switch_drop_weapon_info = "Dropping {name} from slot {slot}"
 L.target_switch_drop_weapon_info_noslot = "There is no droppable weapon in slot {slot}"
 
--- Traitor buttons (HUD buttons with hand icons that only traitors can see)
+-- HUD buttons with hand icons that only some roles can see and use
 L.tbut_single = "Single use"
 L.tbut_reuse = "Reusable"
 L.tbut_retime = "Reusable after {num} sec"
 L.tbut_help = "Press {key} to activate"
+L.tbut_role_toggle = "ALT+{key} to toggle for {role}"
+L.tbut_role_config = "Role: {current}"
+L.tbut_team_toggle = "SHIFT+ALT+{key} to toggle for {team}"
+L.tbut_team_config = "Team: {current}"
+L.tbut_intended_config = "Intended config by map creator"
+L.tbut_allow = "Allow"
+L.tbut_prohib = "Prohibit"
+L.tbut_default = "Default"
 
 -- Equipment info lines (on the left above the health/ammo panel)
 L.disg_hud = "Disguised. Your name is hidden."

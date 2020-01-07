@@ -87,7 +87,13 @@ function GM:PlayerBindPress(ply, bind, pressed)
 
 			return true
 		elseif TBHUD:PlayerIsFocused() then
-			return TBHUD:UseFocused()
+			if input.IsButtonDown(KEY_LALT) then
+				-- Try to change the access to the button for your current role or team
+				return TBHUD:ToggleFocused(input.IsButtonDown(KEY_LSHIFT))
+			else
+				-- Try to use the button that is currently focused
+				return TBHUD:UseFocused()
+			end
 		end
 	elseif string.sub(bind, 1, 4) == "slot" and pressed then
 		local idx = tonumber(string.sub(bind, 5, - 1)) or 1

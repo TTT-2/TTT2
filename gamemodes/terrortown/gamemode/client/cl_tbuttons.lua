@@ -14,7 +14,7 @@ TBHUD = {}
 TBHUD.buttons = {}
 TBHUD.buttons_count = 0
 
-TBHUD.focus_ent = nil
+TBHUD.focus_but = nil
 TBHUD.focus_stick = 0
 
 ---
@@ -24,7 +24,7 @@ function TBHUD:Clear()
 	self.buttons = {}
 	self.buttons_count = 0
 
-	self.focus_ent = nil
+	self.focus_but = nil
 	self.focus_stick = 0
 end
 
@@ -33,16 +33,26 @@ end
 -- @realm client
 function TBHUD:CacheEnts()
 	local ply = LocalPlayer()
-
 	self.buttons = {}
 
-	if IsValid(ply) and ply:IsActive() and ply:HasTeam(TEAM_TRAITOR) then
+	if IsValid(ply) and ply:IsActive() then
+		local admin = ply:IsAdmin()
+		local team = ply:GetTeam()
 		local btns = ents.FindByClass("ttt_traitor_button")
 
 		for i = 1, #btns do
 			local ent = btns[i]
+			local access, overrideRole, overrideTeam, roleIntend, teamIntend = ent:PlayerRoleCanUse(ply)
 
-			self.buttons[ent:EntIndex()] = ent
+			if admin or access then
+				self.buttons[ent:EntIndex()] = {
+					["ent"] = ent, ["access"] = access,
+					["overrideRole"] = overrideRole, ["overrideTeam"] = overrideTeam,
+					["roleIntend"] = roleIntend, ["teamIntend"] = teamIntend,
+					["admin"] = admin, ["roleColor"] = ply:GetRoleColor(),
+					["teamColor"] = TEAMS and TEAMS[team] and TEAMS[team].color or COLOR_BLACK
+				}
+			end
 		end
 	end
 
@@ -56,7 +66,7 @@ end
 function TBHUD:PlayerIsFocused()
 	local ply = LocalPlayer()
 
-	return IsValid(ply) and ply:IsActive() and ply:HasTeam(TEAM_TRAITOR) and IsValid(self.focus_ent)
+	return IsValid(ply) and ply:IsActive() and self.focus_but and (self.focus_but.access or self.focus_but.admin) and IsValid(self.focus_but.ent)
 end
 
 ---
@@ -64,10 +74,32 @@ end
 -- @return boolean whether the activation was successful
 -- @realm client
 function TBHUD:UseFocused()
-	if IsValid(self.focus_ent) and self.focus_stick >= CurTime() then
-		RunConsoleCommand("ttt_use_tbutton", tostring(self.focus_ent:EntIndex()))
+	local buttonChecks = self.focus_but and IsValid(self.focus_but.ent) and self.focus_but.access and self.focus_stick >= CurTime()
 
-		self.focus_ent = nil
+	if buttonChecks then
+		RunConsoleCommand("ttt_use_tbutton", tostring(self.focus_but.ent:EntIndex()))
+		self.focus_but = nil
+
+		return true
+	else
+		return false
+	end
+end
+
+---
+-- Sends a request to server to change the access to the tbutton
+-- @param boolean teamMode does this change apply to the current role or team
+-- @return boolean whether the request was sent to server
+-- @realm client
+function TBHUD:ToggleFocused(teamMode)
+	local buttonChecks = self.focus_but and IsValid(self.focus_but.ent) and self.focus_but.admin and self.focus_stick >= CurTime()
+
+	if buttonChecks then
+		net.Start("TTT2ToggleTButton")
+		net.WriteEntity(self.focus_but.ent)
+		net.WriteBool(teamMode)
+		net.SendToServer()
+		self.focus_but = nil
 
 		return true
 	else
@@ -87,18 +119,9 @@ function TBHUD.ReceiveUseConfirm()
 end
 net.Receive("TTT_ConfirmUseTButton", TBHUD.ReceiveUseConfirm)
 
---[[
-local function ComputeRangeFactor(plypos, tgtpos)
-	local d = tgtpos - plypos
-
-	d = d:Dot(d)
-
-	return d / range
-end
-]]--
-
-local tbut_normal = surface.GetTextureID("vgui/ttt/tbut_hand_line")
-local tbut_focus = surface.GetTextureID("vgui/ttt/tbut_hand_filled")
+local tbut_normal = surface.GetTextureID("vgui/ttt/ttt2_hand_line")
+local tbut_focus = surface.GetTextureID("vgui/ttt/ttt2_hand_filled")
+local tbut_outline = surface.GetTextureID("vgui/ttt/ttt2_hand_outline")
 
 local size = 32
 local mid = size * 0.5
@@ -116,27 +139,32 @@ local GetPTranslation = LANG.GetParamTranslation
 function TBHUD:Draw(client)
 	if self.buttons_count == 0 then return end
 
-	surface.SetTexture(tbut_normal)
-
 	-- we're doing slowish distance computation here, so lots of probably
 	-- ineffective micro-optimization
 	local plypos = client:GetPos()
 	local midscreen_x = ScrW() * 0.5
 	local midscreen_y = ScrH() * 0.5
 	local pos, scrpos, d
-	local focus_ent
+	local focus_but
 	local focus_d, focus_scrpos_x, focus_scrpos_y = 0, midscreen_x, midscreen_y
+	local showToAdmins = GetConVar("ttt2_tbutton_admin_show"):GetBool()
 
 	-- draw icon on HUD for every button within range
-	for _, but in pairs(self.buttons) do
-		if not IsValid(but) or not but.IsUsable then continue end
+	for _, val in pairs(self.buttons) do
+		local ent = val.ent
+		local teamAccess = val.overrideTeam or val.access and val.teamIntend ~= TEAM_NONE and val.overrideRole == nil and val.overrideTeam == nil
+		local outlineColor = teamAccess and val.teamColor or val.roleColor or COLOR_BLACK
 
-		pos = but:GetPos()
+		if not IsValid(ent) or not ent.IsUsable then continue end
+
+		pos = ent:GetPos()
 		scrpos = pos:ToScreen()
 
-		if IsOffScreen(scrpos) or not but:IsUsable() then continue end
+		if IsOffScreen(scrpos) or not ent:IsUsable() then continue end
 
-		local usableRange = but:GetUsableRange()
+		local usableRange = ent:GetUsableRange()
+
+		if not val.access and not showToAdmins then continue end
 
 		d = pos - plypos
 		d = d:Dot(d) / (usableRange * usableRange)
@@ -144,8 +172,17 @@ function TBHUD:Draw(client)
 		-- draw if this button is within range, with alpha based on distance
 		if d >= 1 then continue end
 
-		surface.SetDrawColor(255, 255, 255, 200 * (1 - d))
-		surface.DrawTexturedRect(scrpos.x - mid, scrpos.y - mid, size, size)
+		local scrPosXMid, scrPosYMid = scrpos.x - mid, scrpos.y - mid
+
+		if val.access then
+			surface.SetDrawColor(COLOR_WHITE.r, COLOR_WHITE.g, COLOR_WHITE.b, 200 * (1 - d))
+			surface.SetTexture(tbut_normal)
+			surface.DrawTexturedRect(scrPosXMid, scrPosYMid, size, size)
+		end
+
+		surface.SetDrawColor(outlineColor.r, outlineColor.g, outlineColor.b, 200 * (1 - d))
+		surface.SetTexture(tbut_outline)
+		surface.DrawTexturedRect(scrPosXMid, scrPosYMid, size, size)
 
 		if d <= focus_d then continue end
 
@@ -156,55 +193,108 @@ function TBHUD:Draw(client)
 		or y >= focus_range
 		or x >= focus_scrpos_x
 		or y >= focus_scrpos_y
-		or self.focus_stick >= CurTime() and but ~= self.focus_ent then
+		or self.focus_stick >= CurTime() and (ent ~= (self.focus_but and self.focus_but.ent or nil)) then
 			continue
 		end
 
 		-- avoid constantly switching focus every frame causing
 		-- 2+ buttons to appear in focus, instead "stick" to one
 		-- ent for a very short time to ensure consistency
-		focus_ent = but
+		focus_but = val
 
 		-- draw extra graphics and information for button when it's in-focus
-		if not IsValid(focus_ent) then continue end
+		if not focus_but or not IsValid(focus_but.ent) then continue end
 
-		self.focus_ent = focus_ent
+		self.focus_but = focus_but
 		self.focus_stick = CurTime() + 0.1
 
-		scrpos = focus_ent:GetPos():ToScreen()
+		scrpos = focus_but.ent:GetPos():ToScreen()
+		scrPosXMid, scrPosYMid = scrpos.x - mid, scrpos.y - mid
 
 		local sz = 16
 
 		-- redraw in-focus version of icon
-		surface.SetTexture(tbut_focus)
-		surface.SetDrawColor(255, 255, 255, 200)
-		surface.DrawTexturedRect(scrpos.x - mid, scrpos.y - mid, size, size)
+		if val.access then
+			surface.SetDrawColor(COLOR_WHITE.r, COLOR_WHITE.g, COLOR_WHITE.b, 200)
+			surface.SetTexture(tbut_focus)
+			surface.DrawTexturedRect(scrPosXMid, scrPosYMid, size, size)
+		end
+
+		surface.SetDrawColor(outlineColor.r, outlineColor.g, outlineColor.b, 200)
+		surface.SetTexture(tbut_outline)
+		surface.DrawTexturedRect(scrPosXMid, scrPosYMid, size, size)
 
 		-- description
-		surface.SetTextColor(255, 50, 50, 255)
+		surface.SetTextColor(outlineColor.r, outlineColor.g, outlineColor.b, 255)
 		surface.SetFont("TabLarge")
 
 		x = scrpos.x + sz + 10
 		y = scrpos.y - sz - 3
 
 		surface.SetTextPos(x, y)
-		surface.DrawText(focus_ent:GetDescription())
+		surface.DrawText(focus_but.ent:GetDescription())
 
 		y = y + 12
 
 		surface.SetTextPos(x, y)
 
-		if focus_ent:GetDelay() < 0 then
+		if focus_but.ent:GetDelay() < 0 then
 			surface.DrawText(GetTranslation("tbut_single"))
-		elseif focus_ent:GetDelay() == 0 then
+		elseif focus_but.ent:GetDelay() == 0 then
 			surface.DrawText(GetTranslation("tbut_reuse"))
 		else
-			surface.DrawText(GetPTranslation("tbut_retime", {num = focus_ent:GetDelay()}))
+			surface.DrawText(GetPTranslation("tbut_retime", {num = focus_but.ent:GetDelay()}))
 		end
 
-		y = y + 12
+		if focus_but.access then
+			y = y + 12
 
-		surface.SetTextPos(x, y)
-		surface.DrawText(GetPTranslation("tbut_help", {key = use_key}))
+			surface.SetTextPos(x, y)
+			surface.DrawText(GetPTranslation("tbut_help", {key = use_key}))
+		end
+
+		if focus_but.admin then
+			y = y + 24
+
+			surface.SetTextPos(x, y)
+			surface.DrawText(GetPTranslation("tbut_role_toggle", {key = use_key, role = LocalPlayer():GetRoleString()}))
+
+			y = y + 12
+
+			surface.SetTextPos(x, y)
+			surface.DrawText(GetPTranslation("tbut_team_toggle", {key = use_key, team = GetTranslation(LocalPlayer():GetTeam())}))
+
+			y = y + 12
+
+			local l_role = focus_but.overrideRole == nil and "tbut_default" or focus_but.overrideRole and "tbut_allow" or "tbut_prohib"
+			local l_team = focus_but.overrideTeam == nil and "tbut_default" or focus_but.overrideTeam and "tbut_allow" or "tbut_prohib"
+
+			surface.SetTextPos(x, y)
+			surface.DrawText(GetPTranslation("tbut_role_config", {current = GetTranslation(l_role)}))
+
+			x = x + 100
+
+			surface.SetTextPos(x, y)
+			surface.DrawText(GetPTranslation("tbut_team_config", {current = GetTranslation(l_team)}))
+
+			x = x - 100
+			y = y + 24
+
+			surface.SetTextPos(x, y)
+			surface.DrawText(GetTranslation("tbut_intended_config"))
+
+			y = y + 12
+
+			local l_roleIntend = focus_but.roleIntend == "none" and "tbut_default" or focus_but.roleIntend
+			local l_teamIntend = focus_but.teamIntend == TEAM_NONE and "tbut_default" or focus_but.teamIntend
+
+			surface.SetTextPos(x, y)
+			surface.DrawText(GetPTranslation("tbut_role_config", {current = LANG.GetRawTranslation(l_roleIntend) or l_roleIntend}))
+
+			x = x + 100
+
+			surface.SetTextPos(x, y)
+			surface.DrawText(GetPTranslation("tbut_team_config", {current = LANG.GetRawTranslation(l_teamIntend) or l_teamIntend}))
+		end
 	end
 end
