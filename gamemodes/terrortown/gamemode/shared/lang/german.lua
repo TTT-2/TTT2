@@ -419,7 +419,7 @@ bestimmtes Geräusch.]]
 
 -- Health station
 L.hstation_name = "Gesundheitsstation"
-L.hstation_subtitle = "Drücke [Knopf] um Leben zu regenerieren."
+L.hstation_subtitle = "Drücke [{usekey}] um Leben zu regenerieren."
 L.hstation_charge = "Verbleibende Ladung der Gesundheitsstation: {charge}"
 L.hstation_empty = "Es ist keine Ladung mehr in der Gesundheitsstation enthalten"
 L.hstation_maxhealth = "Du hast bereits dein maximales Leben erreicht"
@@ -619,28 +619,36 @@ L.target_unid = "Unidentifizierter Körper"
 
 L.target_credits = "Durchsuche, um ungenutzte Credits zu erhalten."
 
-L.target_switch_weapon = "Drücke [Knopf] um mit aktueller Waffe zu tauschen"
-L.target_c4 = "Drücke [Knopf] um C4 Menü zu öffnen"
-L.target_c4_armed = "Drücke [Knopf] um C4 zu entschärfen"
-L.target_c4_armed_defuser = "Drücke [Knopf] um Entschärfer zu verwenden"
+L.target_c4 = "Drücke [{usekey}] um C4 Menü zu öffnen"
+L.target_c4_armed = "Drücke [{usekey}] um C4 zu entschärfen"
+L.target_c4_armed_defuser = "Drücke [{usekey}] um Entschärfer zu verwenden"
 L.target_c4_not_disarmable = "Du kannst kein C4 eines lebenden Teamkollegen entschärfen"
 L.c4_short_desc = "Etwas sehr explosives"
 
-L.target_pickup = "Drücke [Knopf] um aufzuheben"
+L.target_pickup = "Drücke [{usekey}] um aufzuheben"
 L.target_slot_info = "Inventarplatz: {slot}"
-L.target_pickup_weapon = "Drücke [Knopf] um Waffe aufzuheben"
-L.target_switch_weapon = "Drücke [Knopf] um mit aktueller Waffe zu tauschen"
-L.target_pickup_weapon_hidden = ", halte {walkkey} für verstecktes Aufheben"
-L.target_switch_weapon_hidden = ", halte {walkkey} für verstecktes Tauschen"
+L.target_pickup_weapon = "Drücke [{usekey}] um Waffe aufzuheben"
+L.target_switch_weapon = "Drücke [{usekey}] um mit aktueller Waffe zu tauschen"
+L.target_pickup_weapon_hidden = ", drücke [{usekey} + {walkkey}] für verstecktes Aufheben"
+L.target_switch_weapon_hidden = ", drücke [{usekey} + {walkkey}] für verstecktes Tauschen"
 L.target_switch_weapon_nospace = "Es ist kein Invetarplatz frei für diese Waffe"
 L.target_switch_drop_weapon_info = "Lasse {name} aus Inventarplatz {slot} fallen"
 L.target_switch_drop_weapon_info_noslot = "In Inventatplatz {slot} ist keine wegwerfbare Waffe"
 
--- Traitor buttons (HUD buttons with hand icons that only traitors can see)
+-- HUD buttons with hand icons that only some roles can see and use
 L.tbut_single = "Einmaliger Gebrauch"
 L.tbut_reuse = "Wiederverwendbar"
 L.tbut_retime = "Wiederverwendbar nach {num} Sekunden"
-L.tbut_help = "Drücke {key} zum Aktivieren"
+L.tbut_help = "Drücke [{usekey}] zum Aktivieren"
+L.tbut_role_toggle = "[{walkkey} + {usekey}] zum Umschalten dieses Knopfes für {role}"
+L.tbut_role_config = "Rolle: {current}"
+L.tbut_team_toggle = "[SHIFT + {walkkey} + {usekey}] zum Umschalten dieses Knopfes für Team {team}"
+L.tbut_team_config = "Team: {current}"
+L.tbut_current_config = "Aktuelle Einstellung:"
+L.tbut_intended_config = "Voreinstellung des Maperstellers:"
+L.tbut_allow = "Erlaubt"
+L.tbut_prohib = "Verboten"
+L.tbut_default = "Standard"
 
 -- Equipment info lines (on the left above the health/ammo panel)
 L.disg_hud = "Getarnt. Dein Name ist ausgeblendet."
@@ -1230,3 +1238,10 @@ L.disable_spectatorsoutline_tip = "Deaktiviert die Umrandungen um ein Objekt, in
 
 L.disable_overheadicons = "Deaktiviere Rollenicons"
 L.disable_overheadicons_tip = "Deaktiviert die Rollenicons über den Köpfen der Spieler (+Performance)"
+
+-- 2020-01-04
+L.doubletap_sprint_anykey = "Setze Double-Tap Sprinten fort, bis du stehen bleibst"
+L.doubletap_sprint_anykey_tip = "So lange du dich weiterhin bewegst, wird das Sprinten fortgesetzt"
+
+L.disable_doubletap_sprint = "Deaktiviere Double-Tap Sprinten"
+L.disable_doubletap_sprint_tip = "Deaktiviert das Auslösen des Sprinten durch Double-Tap einer Bewegungstaste"

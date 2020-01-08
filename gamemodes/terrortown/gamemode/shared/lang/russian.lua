@@ -418,7 +418,7 @@ L.flare_desc = [[
 
 -- Health station
 L.hstation_name = "Лечебная станция"
-L.hstation_subtitle = "[key]: восстановить здоровье."
+L.hstation_subtitle = "[{usekey}]: восстановить здоровье."
 L.hstation_charge = "Осталось заряда: {charge}."
 L.hstation_empty = "В Лечебной станции кончился заряд здоровья."
 L.hstation_maxhealth = "Вы полностью здоровы."
@@ -617,18 +617,18 @@ L.target_detective = "ДЕТЕКТИВ"
 
 L.target_credits = "Осмотрите тело, чтобы получить неиспользованные кредиты."
 
-L.target_c4 = "[key]: открыть меню C4."
-L.target_c4_armed = "[key]: обезвредить C4."
-L.target_c4_armed_defuser = "[key]: использовать Набор сапёра."
+L.target_c4 = "[{usekey}]: открыть меню C4."
+L.target_c4_armed = "[{usekey}]: обезвредить C4."
+L.target_c4_armed_defuser = "[{usekey}]: использовать Набор сапёра."
 L.target_c4_not_disarmable = "Нельзя обезвредить C4 живого напарника."
 L.c4_short_desc = "Кое-что крайне взрывоопасное."
 
-L.target_pickup = "[key]: подобрать."
+L.target_pickup = "[{usekey}]: подобрать."
 L.target_slot_info = "Слот: {slot}"
-L.target_pickup_weapon = "[key]: подобрать оружие."
-L.target_switch_weapon = "[key]: заменить текущее оружие на это."
-L.target_pickup_weapon_hidden = " {usekey}+{walkkey}: подобрать незаметно."
-L.target_switch_weapon_hidden = " {usekey}+{walkkey}: заменить незаметно."
+L.target_pickup_weapon = "[{usekey}]: подобрать оружие."
+L.target_switch_weapon = "[{usekey}]: заменить текущее оружие на это."
+L.target_pickup_weapon_hidden = " [{usekey} + {walkkey}]: подобрать незаметно."
+L.target_switch_weapon_hidden = " [{usekey} + {walkkey}]: заменить незаметно."
 L.target_switch_weapon_nospace = "Нет свободного слота для этого оружия."
 L.target_switch_drop_weapon_info = "Из слота {slot} будет выброшен (-а) {name}."
 L.target_switch_drop_weapon_info_noslot = "В слоте {slot} нет выбрасываемого оружия."
@@ -637,7 +637,7 @@ L.target_switch_drop_weapon_info_noslot = "В слоте {slot} нет выбр�
 L.tbut_single = "Одноразовое использование."
 L.tbut_reuse = "Многоразовое использование."
 L.tbut_retime = "Можно использовать повторно через {num} сек."
-L.tbut_help = "Нажмите {key}, чтобы активировать."
+L.tbut_help = "Нажмите [{usekey}], чтобы активировать."
 
 -- Equipment info lines (on the left above the health/ammo panel)
 L.disg_hud = "Вы замаскированы. Информация о вас скрыта."

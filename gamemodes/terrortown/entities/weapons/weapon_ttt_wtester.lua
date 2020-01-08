@@ -193,7 +193,7 @@ function SWEP:GatherObjectSample(ent)
 end
 
 function SWEP:Report(msg, params)
-	LANG.Msg(self:GetOwner(), msg, params)
+	LANG.Msg(self:GetOwner(), msg, params, MSG_MSTACK_ROLE)
 end
 
 function SWEP:AddPlayerSample(corpse, killer)

@@ -21,6 +21,7 @@ function ROLE:PreInitialize()
 	self.conVarData = {
 		pct = 0.4,
 		maximum = 32,
-		minPlayers = 1
+		minPlayers = 1,
+		traitorButton = 1
 	}
 end

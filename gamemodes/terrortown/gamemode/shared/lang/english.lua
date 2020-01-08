@@ -424,7 +424,7 @@ sound.]]
 
 -- Health station
 L.hstation_name = "Health Station"
-L.hstation_subtitle = "Press [key] to receive health."
+L.hstation_subtitle = "Press [{usekey}] to receive health."
 L.hstation_charge = "Remaining charge of health station: {charge}"
 L.hstation_empty = "There is no more charge left in this health station"
 L.hstation_maxhealth = "Your health is full"
@@ -627,27 +627,36 @@ L.target_unid = "Unidentified body"
 
 L.target_credits = "Search to receive unspent credits"
 
-L.target_c4 = "Press [key] to open C4 menu"
-L.target_c4_armed = "Press [key] to disarm C4"
-L.target_c4_armed_defuser = "Press [key] to use defuser"
+L.target_c4 = "Press [{usekey}] to open C4 menu"
+L.target_c4_armed = "Press [{usekey}] to disarm C4"
+L.target_c4_armed_defuser = "Press [{usekey}] to use defuser"
 L.target_c4_not_disarmable = "You can't disarm C4 of a living teammate"
 L.c4_short_desc = "Something very explosive"
 
-L.target_pickup = "Press [key] to pick up"
+L.target_pickup = "Press [{usekey}] to pick up"
 L.target_slot_info = "Slot: {slot}"
-L.target_pickup_weapon = "Press [key] to pickup weapon"
-L.target_switch_weapon = "Press [key] to swap with your current weapon"
-L.target_pickup_weapon_hidden = ", hold {walkkey} for hidden pickup"
-L.target_switch_weapon_hidden = ", hold {walkkey} for hidden switch"
+L.target_pickup_weapon = "Press [{usekey}] to pickup weapon"
+L.target_switch_weapon = "Press [{usekey}] to swap with your current weapon"
+L.target_pickup_weapon_hidden = ", press [{usekey} + {walkkey}] for hidden pickup"
+L.target_switch_weapon_hidden = ", press [{usekey} + {walkkey}] for hidden switch"
 L.target_switch_weapon_nospace = "There is no inventory slot available for this weapon"
 L.target_switch_drop_weapon_info = "Dropping {name} from slot {slot}"
 L.target_switch_drop_weapon_info_noslot = "There is no droppable weapon in slot {slot}"
 
--- Traitor buttons (HUD buttons with hand icons that only traitors can see)
+-- HUD buttons with hand icons that only some roles can see and use
 L.tbut_single = "Single use"
 L.tbut_reuse = "Reusable"
 L.tbut_retime = "Reusable after {num} sec"
-L.tbut_help = "Press {key} to activate"
+L.tbut_help = "Press [{usekey}] to activate"
+L.tbut_role_toggle = "[{walkkey} + {usekey}] to toggle this button for {role}"
+L.tbut_role_config = "Role: {current}"
+L.tbut_team_toggle = "[SHIFT + {walkkey} + {usekey}] to toggle this button for team {team}"
+L.tbut_team_config = "Team: {current}"
+L.tbut_current_config = "Current config:"
+L.tbut_intended_config = "Intended config by map creator:"
+L.tbut_allow = "Allow"
+L.tbut_prohib = "Prohibit"
+L.tbut_default = "Default"
 
 -- Equipment info lines (on the left above the health/ammo panel)
 L.disg_hud = "Disguised. Your name is hidden."
@@ -1238,3 +1247,10 @@ L.disable_spectatorsoutline_tip = "Disables the outlines around objects controll
 
 L.disable_overheadicons = "Disable role icons"
 L.disable_overheadicons_tip = "Disables the role icons over the players' heads (+Performance)"
+
+-- 2020-01-04
+L.doubletap_sprint_anykey = "Continue double tap sprinting until you stop moving"
+L.doubletap_sprint_anykey_tip = "You will keep sprinting as long as you keep moving"
+
+L.disable_doubletap_sprint = "Disable double tap sprinting"
+L.disable_doubletap_sprint_tip = "Double tapping a movement key will no longer cause you to sprint"

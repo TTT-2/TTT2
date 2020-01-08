@@ -773,7 +773,7 @@ local function CheckCreditAward(victim, attacker)
 						ply:AddCredits(amt)
 
 						--LANG.Msg(GetRoleTeamFilter(TEAM_TRAITOR, true), "credit_kill_all", {num = amt})
-						LANG.Msg(ply, "credit_all", {num = amt})
+						LANG.Msg(ply, "credit_all", {num = amt}, MSG_MSTACK_ROLE)
 					end
 				end
 			end
@@ -904,7 +904,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
 		if reward > 0 then
 			attacker:AddCredits(reward)
 
-			LANG.Msg(attacker, "credit_kill", {num = reward, role = LANG.NameParam(ply:GetRoleString())}) -- TODO rework
+			LANG.Msg(attacker, "credit_kill", {num = reward, role = LANG.NameParam(ply:GetRoleString())}, MSG_MSTACK_ROLE) -- TODO rework
 		end
 	end
 end

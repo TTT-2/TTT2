@@ -15,6 +15,9 @@ surface.CreateAdvancedFont("PureSkinWepNum", {font = "Trebuchet24", size = 21, w
 surface.CreateAdvancedFont("PureSkinItemInfo", {font = "Trebuchet24", size = 14, weight = 700})
 surface.CreateAdvancedFont("PureSkinTimeLeft", {font = "Trebuchet24", size = 24, weight = 800})
 
+surface.CreateAdvancedFont("PureSkinPopupTitle", {font = "Trebuchet24", size = 48, weight = 600})
+surface.CreateAdvancedFont("PureSkinPopupText", {font = "Trebuchet18", size = 18, weight = 600})
+
 -- base drawing functions
 include("cl_drawing_functions.lua")
 

@@ -311,23 +311,40 @@ end
 -- Table of styles that can take a string and display it in some position,
 -- colour, etc.
 LANG.Styles = {
-	default = function(text)
+	[MSG_MSTACK_ROLE] = function(text)
+		MSTACK:AddColoredBgMessage(text, LocalPlayer():GetRoleColor())
+
+		print("[TTT2] Role:	" .. text)
+	end,
+
+	[MSG_MSTACK_WARN] = function(text)
+		MSTACK:AddColoredBgMessage(text, COLOR_RED)
+
+		print("[TTT2] Warn:	" .. text)
+	end,
+
+	[MSG_MSTACK_PLAIN] = function(text)
 		MSTACK:AddMessage(text)
 
 		print("[TTT2]:	" .. text)
 	end,
 
-	rolecolour = function(text)
-		MSTACK:AddColoredBgMessage(text, LocalPlayer():GetRoleColor())
-
-		print("[TTT2]:	" .. text)
+	[MSG_CHAT_ROLE] = function(text)
+		chat.AddText(LocalPlayer():GetRoleColor(), text)
 	end,
 
-	chat_warn = function(text)
+	[MSG_CHAT_WARN] = function(text)
 		chat.AddText(COLOR_RED, text)
 	end,
 
-	chat_plain = chat.AddText
+	[MSG_CHAT_PLAIN] = chat.AddText
+}
+
+LANG.StylesOld = {
+	default = LANG.Styles[MSG_MSTACK_PLAIN],
+	rolecolour = LANG.Styles[MSG_MSTACK_ROLE],
+	chat_warn = LANG.Styles[MSG_CHAT_WARN],
+	chat_plain = LANG.Styles[MSG_CHAT_PLAIN]
 }
 
 ---
@@ -341,18 +358,29 @@ LANG.MsgStyle = {}
 -- @param string name style name
 -- @return function style table
 -- @realm client
-function LANG.GetStyle(name)
-	return LANG.MsgStyle[name] or LANG.Styles.default
+function LANG.GetStyle(name, mode)
+	-- use this as a fallback in case a style is registered
+	if LANG.MsgStyle[name] then
+		return LANG.MsgStyle[name]
+	end
+
+	if mode and LANG.Styles[mode] then
+		return LANG.Styles[mode]
+	end
+
+	return LANG.Styles[MSG_MSTACK_PLAIN]
 end
 
 ---
 -- Set a style by name or directly as style-function
 -- @param string name style name
--- @param string|function style style name or @{function}
+-- @param string|number|function style style name or @{function}
 -- @realm client
 function LANG.SetStyle(name, style)
-	if isstring(style) then
+	if isnumber(style) then
 		style = LANG.Styles[style]
+	elseif isstring(style) then
+		style = LANG.StylesOld[style]
 	end
 
 	LANG.MsgStyle[name] = style
@@ -372,7 +400,7 @@ end
 -- @param string name the requested translation identifier (key)
 -- @param table params
 -- @realm client
-function LANG.ProcessMsg(name, params)
+function LANG.ProcessMsg(name, params, mode)
 	local raw = LANG.GetTranslation(name)
 
 	local text = raw
@@ -395,7 +423,7 @@ function LANG.ProcessMsg(name, params)
 		text = interp(raw, params)
 	end
 
-	LANG.ShowStyledMsg(text, LANG.GetStyle(name))
+	LANG.ShowStyledMsg(text, LANG.GetStyle(name, mode))
 end
 
 -- Message style declarations
@@ -408,60 +436,26 @@ end
 -- Styles of custom SWEP messages and such should use LANG.SetStyle in their
 -- script. The SWEP stuff here might be moved out to the SWEPS too.
 
+-- TODO the remaining messages here are moved to their fitting ents as soon as 
+-- we move them all into our main repo
+
 local styledmessages = {
-	rolecolour = {
-		"round_traitors_one",
-		"round_traitors_more",
-
-		"buy_no_stock",
-		"buy_pending",
-		"buy_received",
-
-		"xfer_no_recip",
-		"xfer_no_credits",
-		"xfer_success",
-		"xfer_received",
-
-		"c4_no_disarm",
-
+	rolecolour = { -- TODO move to teleporter
 		"tele_failed",
 		"tele_no_mark",
-		"tele_marked",
-
-		"dna_identify",
-		"dna_notfound",
-		"dna_limit",
-		"dna_decayed",
-		"dna_killer",
-		"dna_no_killer",
-		"dna_armed",
-		"dna_object",
-		"dna_gone",
-
-		"credit_all",
-		"credit_kill"
+		"tele_marked"
 	},
 
-	chat_plain = {
-		"body_call",
+	chat_plain = { -- TODO move to disguiser
 		"disg_turned_on",
 		"disg_turned_off"
 	},
 
-	chat_warn = {
-		"spec_mode_warning",
-		"radar_not_owned",
-		"radar_charging",
-		"drop_no_room",
-		"body_burning",
-
+	chat_warn = { -- TODO move to teleporter
 		"tele_no_ground",
 		"tele_no_crouch",
 		"tele_no_mark_ground",
-		"tele_no_mark_crouch",
-
-		"drop_no_ammo",
-		"drop_ammo_prevented"
+		"tele_no_mark_crouch"
 	}
 }
 
