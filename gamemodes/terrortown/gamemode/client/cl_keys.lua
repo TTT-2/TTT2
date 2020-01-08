@@ -87,7 +87,7 @@ function GM:PlayerBindPress(ply, bind, pressed)
 
 			return true
 		elseif TBHUD:PlayerIsFocused() then
-			if input.IsButtonDown(KEY_LALT) then
+			if ply:KeyDown(IN_WALK) then
 				-- Try to change the access to the button for your current role or team
 				return TBHUD:ToggleFocused(input.IsButtonDown(KEY_LSHIFT))
 			else
