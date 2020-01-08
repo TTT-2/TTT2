@@ -510,9 +510,9 @@ function HUDDrawTargetIDWeapons(data, params)
 	params.displayInfo.title.text = TryT(weapon_name) .. " [" .. GetPT("target_slot_info", {slot = kind_pickup_wep}) .. "]"
 
 	if switchMode == SWITCHMODE_PICKUP then
-		params.displayInfo.subtitle.text = TryT("target_pickup_weapon") .. (not isActiveWeapon and GetPT("target_pickup_weapon_hidden", key_params) or "")
+		params.displayInfo.subtitle.text = GetPT("target_pickup_weapon", key_params) .. (not isActiveWeapon and GetPT("target_pickup_weapon_hidden", key_params) or "")
 	elseif switchMode == SWITCHMODE_SWITCH then
-		params.displayInfo.subtitle.text = TryT("target_switch_weapon") .. (not isActiveWeapon and GetPT("target_switch_weapon_hidden", key_params) or "")
+		params.displayInfo.subtitle.text = GetPT("target_switch_weapon", key_params) .. (not isActiveWeapon and GetPT("target_switch_weapon_hidden", key_params) or "")
 	elseif switchMode == SWITCHMODE_FULLINV then
 		params.displayInfo.subtitle.text = TryT("target_switch_weapon_nospace")
 	end
