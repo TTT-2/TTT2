@@ -12,6 +12,7 @@ local path = dir .. "/" .. game.GetMap() .. ".json"
 
 local function ReadMapConfig()
 	file.CreateDir(dir)
+
 	local modTime = (not file.Exists(path, "DATA") and (lastRead + 1)) or file.Time(path, "DATA")
 
 	if modTime <= lastRead then
@@ -26,6 +27,7 @@ local function ReadMapConfig()
 	end
 
 	TButtonMapConfig = util.JSONToTable(content) or {}
+
 	for id in pairs(TButtonMapConfig) do
 		local ent = ents.GetMapCreatedEntity(tonumber(id))
 		if IsValid(ent) then
@@ -44,6 +46,7 @@ local function SendMapConfig(skipRead, ply)
 	net.Start("TTT2SendTButtonConfig")
 	net.WriteTable(TButtonMapConfig)
 	net.WriteTable(MapButtonEntIndexMapping)
+
 	if IsValid(ply) and ply:IsPlayer() then
 		net.Send(ply)
 	else
@@ -91,15 +94,6 @@ local function UpdateMapConfig(ent, roleRawString, team, teamMode)
 	return true
 end
 
-net.Receive("TTT2ToggleTButton", function(len, ply)
-	local ent = net.ReadEntity()
-	local teamMode = net.ReadBool()
-	if IsValid(ent) and ply:IsAdmin() then
-		UpdateMapConfig(ent, ply:GetRoleStringRaw(), ply:GetTeam(), teamMode)
-		SendMapConfig(true)
-	end
-end)
-
 net.Receive("TTT2RequestTButtonConfig", function(len, ply)
 	SendMapConfig(false, ply)
 end)
@@ -107,6 +101,28 @@ end)
 hook.Add("TTTInitPostEntity", "TTT2TButtonsCacheInitialize", function()
 	-- Initially send the map config
 	SendMapConfig()
+end)
+
+net.Receive("TTT2ToggleTButton", function(len, ply)
+	local ent = net.ReadEntity()
+	local teamMode = net.ReadBool()
+
+	if not IsValid(ply) or not IsValid(ent) or not ply:IsAdmin() then return end
+
+	UpdateMapConfig(ent, ply:GetRoleStringRaw(), ply:GetTeam(), teamMode)
+	SendMapConfig(true)
+end)
+
+local function ActivateTButton(ply, ent)
+	if not IsValid(ply) or not IsValid(ent) or ent:GetClass() ~= "ttt_traitor_button" then return end
+
+	if not ent.PlayerRoleCanUse or not ent:PlayerRoleCanUse(ply) or not ent.TraitorUse then return end
+
+	ent:TraitorUse(ply)
+end
+
+net.Receive("TTT2ActivateTButton", function(len, ply)
+	ActivateTButton(ply, net.ReadEntity())
 end)
 
 ENT.RemoveOnPress = false
@@ -207,7 +223,7 @@ function ENT:TraitorUse(ply)
 
 	if not use then
 		if message then
-			TraitorMsg(ply, message)
+			LANG.Msg(ply, message, nil, MSG_MSTACK_ROLE)
 		end
 
 		return false
@@ -237,15 +253,14 @@ function ENT:UpdateTransmitState()
 	return TRANSMIT_ALWAYS
 end
 
+-- keep the noombmessage (aka. concommand) for compatibility
 local function TraitorUseCmd(ply, cmd, args)
 	if #args ~= 1 or not IsValid(ply) then return end
 
 	local idx = tonumber(args[1])
+
 	if not idx then return end
 
-	local ent = Entity(idx)
-	if IsValid(ent) and ent:GetClass() == "ttt_traitor_button" and ent.PlayerRoleCanUse and ent:PlayerRoleCanUse(ply) and ent.TraitorUse then
-		ent:TraitorUse(ply)
-	end
+	ActivateTButton(Entity(idx))
 end
 concommand.Add("ttt_use_tbutton", TraitorUseCmd)

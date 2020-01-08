@@ -77,7 +77,10 @@ function TBHUD:UseFocused()
 	local buttonChecks = self.focus_but and IsValid(self.focus_but.ent) and self.focus_but.access and self.focus_stick >= CurTime()
 
 	if buttonChecks then
-		RunConsoleCommand("ttt_use_tbutton", tostring(self.focus_but.ent:EntIndex()))
+		net.Start("TTT2ActivateTButton")
+		net.WriteEntity(self.focus_but.ent)
+		net.SendToServer()
+
 		self.focus_but = nil
 
 		return true
@@ -99,6 +102,7 @@ function TBHUD:ToggleFocused(teamMode)
 		net.WriteEntity(self.focus_but.ent)
 		net.WriteBool(teamMode)
 		net.SendToServer()
+
 		self.focus_but = nil
 
 		return true
@@ -143,8 +147,6 @@ function TBHUD:Draw(client)
 	local focus_but
 	local focus_d, focus_scrpos_x, focus_scrpos_y = 0, midscreen_x, midscreen_y
 	local showToAdmins = GetConVar("ttt2_tbutton_admin_show"):GetBool()
-
-	self.g_focus_but = nil
 
 	-- draw icon on HUD for every button within range
 	for _, val in pairs(self.buttons) do
@@ -194,8 +196,6 @@ function TBHUD:Draw(client)
 		-- 2+ buttons to appear in focus, instead "stick" to one
 		-- ent for a very short time to ensure consistency
 		focus_but = val
-
-		self.g_focus_but = val
 
 		-- draw extra graphics and information for button when it's in-focus
 		if not focus_but or not IsValid(focus_but.ent) then continue end

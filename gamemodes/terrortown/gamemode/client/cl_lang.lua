@@ -401,7 +401,7 @@ end
 -- @param table params
 -- @realm client
 function LANG.ProcessMsg(name, params, mode)
-	local raw = LANG.GetTranslation(name)
+	local raw = LANG.TryTranslation(name)
 
 	local text = raw
 

@@ -231,8 +231,9 @@ function GM:HUDDrawTargetID()
 
 	local ent, distance
 
-	if TBHUD.g_focus_but then
-		ent = TBHUD.g_focus_but.ent
+	-- if the user is looking at a traitor button, it should always be handled with priority
+	if TBHUD.focus_but and IsValid(TBHUD.focus_but.ent) and TBHUD.focus_but.access and TBHUD.focus_stick >= CurTime() then
+		ent = TBHUD.focus_but.ent
 
 		distance = startpos:Distance(ent:GetPos())
 	else
