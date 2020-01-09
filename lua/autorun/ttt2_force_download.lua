@@ -106,7 +106,7 @@ if SERVER then
 	resource.AddFile("materials/vgui/ttt/loadingscreen/img/TTT2Icon.png")
 
 	-- dmgindicator themes
-	resource.AddFile("materials/vgui/ttt/dmgindicator/themes/Default.png")
-	resource.AddFile("materials/vgui/ttt/dmgindicator/themes/Simple.png")
-	resource.AddFile("materials/vgui/ttt/dmgindicator/themes/Vanilla.png")
+	resource.AddFile("materials/vgui/ttt/dmgindicator/themes/default.png")
+	resource.AddFile("materials/vgui/ttt/dmgindicator/themes/simple.png")
+	resource.AddFile("materials/vgui/ttt/dmgindicator/themes/vanilla.png")
 end
