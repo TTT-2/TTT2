@@ -703,10 +703,10 @@ function HUDDrawTargetIDRagdolls(data, params)
 	end
 
 	-- add info if searched by detectives
-	if data.ent.search_result and client:IsDetective() then
+	if data.ent.search_result and data.ent.search_result.detective_search and client:IsDetective() then
 		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
 			text = TryT("corpse_searched_by_detective"),
-			color = DETECTIVE.bgcolor
+			color = DETECTIVE.ltcolor
 		}
 	end
 

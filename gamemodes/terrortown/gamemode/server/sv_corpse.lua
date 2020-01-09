@@ -391,6 +391,9 @@ function CORPSE.ShowSearch(ply, rag, covert, long_range)
 	-- 133 + string data + #kill_entids * 8 + team + 1
 	-- 200 + ?
 
+	-- workaround to make sure only detective searches are added to the scoreboard
+	net.WriteBool(ply:IsActiveRole(ROLE_DETECTIVE))
+
 	-- If found by detective or searched publicly, send to all, else just the finder
 	if ply:IsActiveRole(ROLE_DETECTIVE) or not covert then
 		net.Broadcast()

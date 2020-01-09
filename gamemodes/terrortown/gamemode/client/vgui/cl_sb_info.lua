@@ -83,6 +83,8 @@ end
 function PANEL:UpdatePlayerData()
 	if not IsValid(self.Player) then return end
 
+	if not self.Player.search_result.show then return end
+
 	if not self.Player.search_result then
 		self.Help:SetVisible(true)
 
