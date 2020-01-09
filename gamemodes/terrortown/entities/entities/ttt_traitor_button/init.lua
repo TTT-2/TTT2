@@ -109,6 +109,16 @@ net.Receive("TTT2ToggleTButton", function(len, ply)
 
 	if not IsValid(ply) or not IsValid(ent) or not ply:IsAdmin() then return end
 
+	local use, message = hook.Run("TTTCanToggleTraitorButton", ent, ply)
+
+	if not use then
+		if message then
+			LANG.Msg(ply, message, nil, MSG_MSTACK_ROLE)
+		end
+
+		return
+	end
+
 	UpdateMapConfig(ent, ply:GetRoleStringRaw(), ply:GetTeam(), teamMode)
 	SendMapConfig(true)
 end)
@@ -117,6 +127,16 @@ local function ActivateTButton(ply, ent)
 	if not IsValid(ply) or not IsValid(ent) or ent:GetClass() ~= "ttt_traitor_button" then return end
 
 	if not ent.PlayerRoleCanUse or not ent:PlayerRoleCanUse(ply) or not ent.TraitorUse then return end
+
+	local use, message = hook.Run("TTTCanUseTraitorButton", ent, ply)
+
+	if not use then
+		if message then
+			LANG.Msg(ply, message, nil, MSG_MSTACK_ROLE)
+		end
+
+		return
+	end
 
 	ent:TraitorUse(ply)
 end
@@ -208,6 +228,13 @@ function GAMEMODE:TTTCanUseTraitorButton(ent, ply)
 	return true
 end
 
+function GAMEMODE:TTTCanToggleTraitorButton(ent, ply)
+	-- Can be used to prevent admins from toggling modes this button.
+	-- Return a boolean and a message that can shows up if you can't toggle the button.
+	-- Example: return false, "Not allowed".
+	return true
+end
+
 function ENT:TraitorUse(ply)
 	if not IsValid(ply) then
 		return false
@@ -216,16 +243,6 @@ function ENT:TraitorUse(ply)
 	if not self:PlayerRoleCanUse(ply)
 	or not self:IsUsable()
 	or self:GetPos():Distance(ply:GetPos()) > self:GetUsableRange() then
-		return false
-	end
-
-	local use, message = hook.Run("TTTCanUseTraitorButton", self, ply)
-
-	if not use then
-		if message then
-			LANG.Msg(ply, message, nil, MSG_MSTACK_ROLE)
-		end
-
 		return false
 	end
 
