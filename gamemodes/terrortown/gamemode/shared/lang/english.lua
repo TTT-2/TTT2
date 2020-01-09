@@ -652,6 +652,7 @@ L.tbut_team_toggle = "[SHIFT + {walkkey} + {usekey}] to toggle this button for t
 L.tbut_team_config = "Team: {current}"
 L.tbut_current_config = "Current config:"
 L.tbut_intended_config = "Intended config by map creator:"
+L.tbut_admin_mode_only = "Only visble to you because you're an admin and '{cv}'' is set to '1'"
 L.tbut_allow = "Allow"
 L.tbut_prohib = "Prohibit"
 L.tbut_default = "Default"

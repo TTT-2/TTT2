@@ -201,16 +201,13 @@ function TBHUD:Draw(client)
 		if not focus_but or not IsValid(focus_but.ent) then continue end
 
 		self.focus_but = focus_but
-		self.focus_stick = CurTime() + 0.1
+		self.focus_stick = CurTime() + 0.01
 
 		scrpos = focus_but.ent:GetPos():ToScreen()
 		scrPosXMid, scrPosYMid = scrpos.x - mid, scrpos.y - mid
 
 		-- redraw in-focus version of icon
-		if val.access then
-			draw.FilteredTexture(scrPosXMid, scrPosYMid, size, size, tbut_focus, 200, COLOR_WHITE)
-		end
-
-		draw.FilteredTexture(scrPosXMid, scrPosYMid, size, size, tbut_outline, 200 * (1 - d), outlineColor)
+		draw.FilteredTexture(scrPosXMid, scrPosYMid, size, size, tbut_focus, 220, COLOR_WHITE)
+		draw.FilteredTexture(scrPosXMid, scrPosYMid, size, size, tbut_outline, 220, outlineColor)
 	end
 end

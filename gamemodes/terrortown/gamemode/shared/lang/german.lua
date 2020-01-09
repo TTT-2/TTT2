@@ -644,6 +644,7 @@ L.tbut_team_toggle = "[SHIFT + {walkkey} + {usekey}] zum Umschalten dieses Knopf
 L.tbut_team_config = "Team: {current}"
 L.tbut_current_config = "Aktuelle Einstellung:"
 L.tbut_intended_config = "Voreinstellung des Maperstellers:"
+L.tbut_admin_mode_only = "Nur sichtbar für dich, da du ein Admin bist und '{cv}'' auf '1' gesetzt ist"
 L.tbut_allow = "Erlaubt"
 L.tbut_prohib = "Verboten"
 L.tbut_default = "Standard"

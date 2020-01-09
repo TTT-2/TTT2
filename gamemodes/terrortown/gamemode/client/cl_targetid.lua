@@ -232,7 +232,7 @@ function GM:HUDDrawTargetID()
 	local ent, distance
 
 	-- if the user is looking at a traitor button, it should always be handled with priority
-	if TBHUD.focus_but and IsValid(TBHUD.focus_but.ent) and TBHUD.focus_but.access and TBHUD.focus_stick >= CurTime() then
+	if TBHUD.focus_but and IsValid(TBHUD.focus_but.ent) and (TBHUD.focus_but.access or TBHUD.focus_but.admin) and TBHUD.focus_stick >= CurTime() then
 		ent = TBHUD.focus_but.ent
 
 		distance = startpos:Distance(ent:GetPos())
@@ -405,6 +405,7 @@ local key_params = {
 -- handle looking at traitor buttons
 function HUDDrawTargetIDTButtons(data, params)
 	local client = LocalPlayer()
+	local admin_mode = GetConVar("ttt2_tbutton_admin_show")
 
 	if not IsValid(client) or not client:IsTerror() or not client:Alive()
 	or data.ent:GetClass() ~= "ttt_traitor_button" or data.distance > data.ent:GetUsableRange() then
@@ -432,7 +433,9 @@ function HUDDrawTargetIDTButtons(data, params)
 		color = client:GetRoleColor()
 	}
 
-	if not GetConVar("ttt2_tbutton_admin_show"):GetBool() or not client:IsAdmin() then return end
+	if not admin_mode:GetBool() or not client:IsAdmin() then return end
+
+	local but = TBHUD.focus_but
 
 	params.displayInfo.desc[#params.displayInfo.desc + 1] = {
 		text = "",
@@ -464,8 +467,8 @@ function HUDDrawTargetIDTButtons(data, params)
 		color = COLOR_WHITE
 	}
 
-	local l_role = TBHUD.g_focus_but.overrideRole == nil and "tbut_default" or TBHUD.g_focus_but.overrideRole and "tbut_allow" or "tbut_prohib"
-	local l_team = TBHUD.g_focus_but.overrideTeam == nil and "tbut_default" or TBHUD.g_focus_but.overrideTeam and "tbut_allow" or "tbut_prohib"
+	local l_role = but.overrideRole == nil and "tbut_default" or but.overrideRole and "tbut_allow" or "tbut_prohib"
+	local l_team = but.overrideTeam == nil and "tbut_default" or but.overrideTeam and "tbut_allow" or "tbut_prohib"
 
 	params.displayInfo.desc[#params.displayInfo.desc + 1] = {
 		text = GetPT("tbut_role_config", {current = TryT(l_role)}) .. ", " .. GetPT("tbut_team_config", {current = TryT(l_team)}),
@@ -477,12 +480,24 @@ function HUDDrawTargetIDTButtons(data, params)
 		color = COLOR_WHITE
 	}
 
-	local l_roleIntend = TBHUD.g_focus_but.roleIntend == "none" and "tbut_default" or TBHUD.g_focus_but.roleIntend
-	local l_teamIntend = TBHUD.g_focus_but.teamIntend == TEAM_NONE and "tbut_default" or TBHUD.g_focus_but.teamIntend
+	local l_roleIntend = but.roleIntend == "none" and "tbut_default" or but.roleIntend
+	local l_teamIntend = but.teamIntend == TEAM_NONE and "tbut_default" or but.teamIntend
 
 	params.displayInfo.desc[#params.displayInfo.desc + 1] = {
 		text = GetPT("tbut_role_config", {current = LANG.GetRawTranslation(l_roleIntend) or l_roleIntend}) .. ", " .. GetPT("tbut_team_config", {current = LANG.GetRawTranslation(l_teamIntend) or l_teamIntend}),
 		color = COLOR_LGRAY
+	}
+
+	if not TBHUD.focus_but.admin or TBHUD.focus_but.access then return end
+
+	params.displayInfo.desc[#params.displayInfo.desc + 1] = {
+		text = "",
+		color = COLOR_WHITE
+	}
+
+	params.displayInfo.desc[#params.displayInfo.desc + 1] = {
+		text = GetPT("tbut_admin_mode_only", {cv = admin_mode:GetName()}),
+		color = COLOR_ORANGE
 	}
 end
 
