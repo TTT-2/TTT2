@@ -635,8 +635,8 @@ local function TTTRagdollSearch()
 	-- searched by detective?
 	search.detective_search = net.ReadBool()
 
-	-- update search.show based on detective_search
-	search.show = search.show or search.detective_search
+	-- set search.show_sb based on detective_search or self search
+	search.show_sb = search.show or search.detective_search
 
 	hook.Call("TTTBodySearchEquipment", nil, search, eq)
 
