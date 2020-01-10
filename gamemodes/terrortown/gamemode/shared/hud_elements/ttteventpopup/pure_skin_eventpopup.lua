@@ -121,11 +121,16 @@ if CLIENT then
 
 		-- fallback for hud-editor
 		if not msg then
-			msg = {}
-			msg.title = "A Test Popup, now with a multiline title, how NICE."
-			msg.text = "Well, hello there! This is a fancy popup with some special information. The text can be also multiline, how fancy! Ugh, I could add so much more text if I'd had any ideas..."
-			msg.icon_tbl = {}
-			msg.time = CurTime() + 5
+			msg = {
+				title = {
+					text = "A Test Popup, now with a multiline title, how NICE."
+				},
+				text = {
+					text = "Well, hello there! This is a fancy popup with some special information. The text can be also multiline, how fancy! Ugh, I could add so much more text if I'd had any ideas..."
+				},
+				icon_tbl = {},
+				time = CurTime() + 5
+			}
 		end
 
 		-- prepare item, caches the data of the element to improve performance
