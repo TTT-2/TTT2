@@ -21,6 +21,8 @@ local IsValid = IsValid
 local surface = surface
 local vgui = vgui
 
+local color_trans = Color(0, 0, 0, 0)
+
 local ttt2_indicator_dev = "vgui/ttt/ttt2_indicator_dev"
 local ttt2_indicator_vip = "vgui/ttt/ttt2_indicator_vip"
 local ttt2_indicator_addondev = "vgui/ttt/ttt2_indicator_addondev"
@@ -252,8 +254,6 @@ function GM:TTTScoreboardColorForPlayer(ply)
 
 	return namecolor.default
 end
-
-local color_trans = Color(0, 0, 0, 0)
 
 ---
 -- Updates the row color for a @{Player} in the scoreboard

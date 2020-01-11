@@ -21,6 +21,20 @@ local propspec_outline = Material("models/props_combine/portalball001_sheet")
 local base = Material("vgui/ttt/dynamic/sprite_base")
 local base_overlay = Material("vgui/ttt/dynamic/sprite_base_overlay")
 
+surface.CreateFont("TargetID_Key", {font = "Trebuchet24", size = 26, weight = 900})
+surface.CreateFont("TargetID_Title", {font = "Trebuchet24", size = 20, weight = 900})
+surface.CreateFont("TargetID_Subtitle", {font = "Trebuchet24", size = 17, weight = 300})
+surface.CreateFont("TargetID_Description", {font = "Trebuchet24", size = 15, weight = 300})
+
+-- keep this font for compatibility reasons
+surface.CreateFont("TargetIDSmall2", {font = "TargetID", size = 16, weight = 1000})
+
+local minimalist = CreateClientConVar("ttt_minimal_targetid", "0", FCVAR_ARCHIVE)
+local cv_draw_halo = CreateClientConVar("ttt_entity_draw_halo", "1", true, false)
+local MAX_TRACE_LENGTH = math.sqrt(3) * 32768
+local subtitle_color = Color(210, 210, 210)
+local color_blacktrans = Color(0, 0, 0, 180)
+
 ---
 -- Returns the localized ClassHint table
 -- Access for servers to display hints using their own HUD/UI.
@@ -44,8 +58,6 @@ end
 function GM:AddClassHint(cls, hint)
 	ClassHint[cls] = table.Copy(hint)
 end
-
-local color_blacktrans = Color(0, 0, 0, 180)
 
 ---
 -- Function that handles the drawing of the overhead roleicons, it does not check wether
@@ -196,19 +208,6 @@ local function DrawPropSpecLabels(client)
 		surface.DrawText(text)
 	end
 end
-
-surface.CreateFont("TargetID_Key", {font = "Trebuchet24", size = 26, weight = 900})
-surface.CreateFont("TargetID_Title", {font = "Trebuchet24", size = 20, weight = 900})
-surface.CreateFont("TargetID_Subtitle", {font = "Trebuchet24", size = 17, weight = 300})
-surface.CreateFont("TargetID_Description", {font = "Trebuchet24", size = 15, weight = 300})
-
--- keep this font for compatibility reasons
-surface.CreateFont("TargetIDSmall2", {font = "TargetID", size = 16, weight = 1000})
-
-local minimalist = CreateClientConVar("ttt_minimal_targetid", "0", FCVAR_ARCHIVE)
-local cv_draw_halo = CreateClientConVar("ttt_entity_draw_halo", "1", true, false)
-local MAX_TRACE_LENGTH = math.sqrt(3) * 32768
-local subtitle_color = Color(210, 210, 210)
 
 ---
 -- Called from @{GM:HUDPaint} to draw @{Player} info when you hover over a @{Player} with your crosshair or mouse.

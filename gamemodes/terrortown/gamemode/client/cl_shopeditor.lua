@@ -5,6 +5,7 @@ ttt_include("vgui__cl_shopeditor_buttons")
 ttt_include("vgui__cl_shopeditor_slider")
 
 local COLOR_GREY = COLOR_GREY or Color(120, 120, 120, 255)
+local itemBoxColor = Color(100, 100, 100)
 
 local Equipmentnew
 local SafeTranslate = LANG.TryTranslation
@@ -201,7 +202,7 @@ function ShopEditor.EditItem(item)
 	frame:SetMouseInputEnabled(true)
 
 	function frame:Paint(w2, h2)
-		draw.RoundedBox(0, 0, 0, w2, h2, Color(100, 100, 100))
+		draw.RoundedBox(0, 0, 0, w2, h2, itemBoxColor)
 	end
 
 	function frame:OnClose()
@@ -311,7 +312,7 @@ function ShopEditor.CreateItemEditor()
 	frame:SetMouseInputEnabled(true)
 
 	function frame:Paint(w2, h2)
-		draw.RoundedBox(0, 0, 0, w2, h2, Color(100, 100, 100))
+		draw.RoundedBox(0, 0, 0, w2, h2, itemBoxColor)
 	end
 
 	function frame:OnClose()
@@ -434,7 +435,7 @@ function ShopEditor.CreateOwnShopEditor(roleData, onCreate)
 	frame:SetMouseInputEnabled(true)
 
 	function frame:Paint(w2, h2)
-		draw.RoundedBox(0, 0, 0, w2, h2, Color(100, 100, 100))
+		draw.RoundedBox(0, 0, 0, w2, h2, itemBoxColor)
 	end
 
 	function frame:OnClose()
@@ -535,7 +536,7 @@ function ShopEditor.CreateLinkWithRole(roleData)
 	frame:SetMouseInputEnabled(true)
 
 	function frame:Paint(w2, h2)
-		draw.RoundedBox(0, 0, 0, w2, h2, Color(100, 100, 100))
+		draw.RoundedBox(0, 0, 0, w2, h2, itemBoxColor)
 	end
 
 	function frame:OnClose()
@@ -647,7 +648,7 @@ function ShopEditor.CreateShopLinker()
 	frame:SetMouseInputEnabled(true)
 
 	function frame:Paint(w2, h2)
-		draw.RoundedBox(0, 0, 0, w2, h2, Color(100, 100, 100))
+		draw.RoundedBox(0, 0, 0, w2, h2, itemBoxColor)
 	end
 
 	function frame:OnClose()
@@ -847,7 +848,7 @@ function ShopEditor.ShowOptions()
 	frame:SetMouseInputEnabled(true)
 
 	function frame:Paint(w2, h2)
-		draw.RoundedBox(0, 0, 0, w2, h2, Color(100, 100, 100))
+		draw.RoundedBox(0, 0, 0, w2, h2, itemBoxColor)
 	end
 
 	function frame:OnClose()
@@ -960,7 +961,7 @@ function ShopEditor.CreateShopEditor()
 	frame:SetMouseInputEnabled(true)
 
 	function frame:Paint(w2, h2)
-		draw.RoundedBox(0, 0, 0, w2, h2, Color(100, 100, 100))
+		draw.RoundedBox(0, 0, 0, w2, h2, itemBoxColor)
 	end
 
 	function frame:OnClose()

@@ -24,7 +24,7 @@ if CLIENT then
 	col_active = {
 		bg = Color(20, 20, 20, 250),
 		text_empty = Color(200, 20, 20, 255),
-		text = Color(255, 255, 255, 255),
+		text = COLOR_WHITE,
 		shadow = 255
 	}
 

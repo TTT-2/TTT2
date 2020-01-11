@@ -9,6 +9,8 @@ HUDELEMENT.Base = base
 
 if CLIENT then
 	local padding = 10
+	local color_badstatus = Color(183, 54, 47)
+	local color_goodstatus = Color(36, 115, 51)
 
 	local const_defaults = {
 		basepos = {x = 0, y = 0},
@@ -152,11 +154,11 @@ if CLIENT then
 		-- draw status
 		for _, status in pairs(STATUS.active) do
 			if status.type == "bad" then
-				status.hud_color = Color(183, 54, 47)
+				status.hud_color = color_badstatus
 			end
 
 			if status.type == "good" then
-				status.hud_color = Color(36, 115, 51)
+				status.hud_color = color_goodstatus
 			end
 
 			if status.type == "default" then

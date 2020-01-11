@@ -11,6 +11,9 @@ if CLIENT then
 	local element_margin = 6
 	local row_count = 2
 
+	local color_blacktrans = Color(0, 0, 0, 130)
+	local color_indirconfirm = Color(215, 215, 215, 155)
+
 	local const_defaults = {
 		basepos = {x = 0, y = 0},
 		size = {w = 72, h = 72},
@@ -97,9 +100,6 @@ if CLIENT then
 
 		BaseClass.PerformLayout(self)
 	end
-
-	local color_blacktrans = Color(0, 0, 0, 130)
-	local color_indirconfirm = Color(215, 215, 215, 155)
 
 	local function GetMSBColorForPlayer(ply)
 		local color = color_blacktrans -- not yet confirmed

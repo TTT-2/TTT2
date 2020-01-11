@@ -7,6 +7,8 @@ local changesPanel
 local changes
 local currentVersion
 
+local btnPanelColor = Color(22, 42, 57)
+
 ---
 -- Adds a change into the changes list
 -- @param string version
@@ -635,7 +637,7 @@ function ShowChanges()
 		panel:Dock(FILL)
 
 		panel.Paint = function(slf, w, h)
-			draw.RoundedBox(4, 0, 0, w, h, Color(22, 42, 57))
+			draw.RoundedBox(4, 0, 0, w, h, btnPanelColor)
 		end
 
 		local leftBtn = sheet:AddSheet(change.version, panel).Button
