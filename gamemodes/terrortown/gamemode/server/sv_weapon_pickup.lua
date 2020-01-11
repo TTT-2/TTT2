@@ -29,13 +29,13 @@ function ResetWeapon(wep)
 		wep.name_timer_cancel = nil
 	end)
 
+	-- clear the wait flag in case the reset was after pickup but before equip
+	wep.wpickup_player.wpickup_waitequip = wep.wpickup_player.wpickup_waitequip or {}
+	wep.wpickup_player.wpickup_waitequip[wep.Kind] = nil
+
 	-- clearing the player/weapon flag of this weapon/player, freeing it to every other player
 	wep.wpickup_player.wpickup_weapon = nil
 	wep.wpickup_player = nil
-
-	-- reenable the physics of the weapon to let it drop back to the ground
-	wep:PhysicsInit(SOLID_VPHYSICS)
-	wep:PhysWake()
 
 	-- reset weapon collisions
 	wep:SetCollisionGroup(COLLISION_GROUP_WEAPON)
@@ -56,7 +56,5 @@ net.Receive("ttt2_switch_weapon", function(_, ply)
 	-- do not pickup weapon if too far away
 	if ply:GetPos():Distance(tracedWeapon:GetPos()) > 100 then return end
 
-	if not IsValid(ply:PickupWeapon(tracedWeapon, true)) then
-		LANG.Msg(ply, "pickup_no_room")
-	end
+	ply:PickupWeapon(tracedWeapon, true)
 end)

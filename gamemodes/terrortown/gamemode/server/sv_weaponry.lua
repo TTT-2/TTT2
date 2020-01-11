@@ -639,16 +639,17 @@ concommand.Add("ttt_dropammo", DropActiveAmmo)
 -- @ref https://wiki.garrysmod.com/page/GM/WeaponEquip
 -- @local
 function GM:WeaponEquip(wep, ply)
-	if IsValid(wep) and not wep.Kind then
+	if not IsValid(ply) or not IsValid(wep) then return end
+
+	if not wep.Kind then
 		-- only remove if they lack critical stuff
 		wep:Remove()
 
 		ErrorNoHalt("Equipped weapon " .. wep:GetClass() .. " is not compatible with TTT\n")
+		return
 	end
 
-	if IsValid(ply) and wep.Kind then
-		AddWeaponToInventoryAndNotifyClient(ply, wep)
-	end
+	AddWeaponToInventoryAndNotifyClient(ply, wep)
 
 	local function WeaponEquipNextFrame()
 		if not IsValid(ply) or not IsValid(wep) then return end
@@ -688,10 +689,18 @@ end
 function GM:PlayerDroppedWeapon(ply, wep)
 	if not IsValid(wep) or not IsValid(ply) or not wep.Kind then return end
 
+	if wep.name_timer_pos then
+		timer.Remove(wep.name_timer_pos)
+	end
+
+	if wep.name_timer_cancel then
+		timer.Remove(wep.name_timer_cancel)
+	end
+
 	RemoveWeaponFromInventoryAndNotifyClient(ply, wep)
 
 	-- there is a glitch that picking up a weapon does not refresh the weapon cache on
-	-- the client. Therefore the client has to be notified to updated its cache
+	-- the client. Therefore the client has to be notified to update its cache
 	net.Start("ttt2_switch_weapon_update_cache")
 	net.Send(ply)
 end

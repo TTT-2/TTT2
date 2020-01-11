@@ -38,8 +38,8 @@ L.win_innocents = "The Innos have won!"
 L.win_bees = "The Bees has won! (Its a draw)"
 L.win_showreport = "Let's look at the round report for {num} seconds."
 
-L.limit_round = "Round limit reached. {mapname} will load soon."
-L.limit_time = "Time limit reached. {mapname} will load soon."
+L.limit_round = "Round limit reached. The next map will load soon."
+L.limit_time = "Time limit reached. The next map will load soon."
 L.limit_left = "{num} round(s) or {time} minutes remaining before the map changes."
 
 -- Credit awards
@@ -310,7 +310,9 @@ L.buy_pending = "You already have an order pending, wait until you receive it."
 L.buy_received = "You have received your special equipment."
 
 L.drop_no_room = "You have no room here to drop your weapon!"
+L.pickup_fail = "You cannot pick up this"
 L.pickup_no_room = "You have no space in your inventory for this weapon kind"
+L.pickup_pending = "You already picked up a weapon, wait until you receive it"
 
 L.disg_turned_on = "Disguise enabled!"
 L.disg_turned_off = "Disguise disabled."
