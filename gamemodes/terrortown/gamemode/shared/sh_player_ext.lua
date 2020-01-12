@@ -7,6 +7,7 @@ local net = net
 local table = table
 local IsValid = IsValid
 local hook = hook
+local math = math
 
 local plymeta = FindMetaTable("Player")
 if not plymeta then
@@ -15,7 +16,9 @@ if not plymeta then
 	return
 end
 
-local math = math
+local defaultRoleDkColor = Color(28, 116, 10, 255)
+local defaultRoleLtColor = Color(110, 200, 70, 255)
+local defaultRoleBgColor = Color(200, 68, 81, 255)
 
 ---
 -- Checks whether a player is a available terrorist (not a spectator)
@@ -170,7 +173,7 @@ end
 -- @return[default=Color(28, 116, 10, 255)] Color
 -- @realm shared
 function plymeta:GetRoleDkColor()
-	return self.roleDkColor or Color(28, 116, 10, 255)
+	return self.roleDkColor or defaultRoleDkColor
 end
 
 ---
@@ -186,7 +189,7 @@ end
 -- @return[default=Color(28, 116, 10, 255)] Color
 -- @realm shared
 function plymeta:GetRoleLtColor()
-	return self.roleLtColor or Color(110, 200, 70, 255)
+	return self.roleLtColor or defaultRoleLtColor
 end
 
 ---
@@ -202,7 +205,7 @@ end
 -- @return[default=Color(200, 68, 81, 255)] Color
 -- @realm shared
 function plymeta:GetRoleBgColor()
-	return self.roleBgColor or Color(200, 68, 81, 255)
+	return self.roleBgColor or defaultRoleBgColor
 end
 
 ---

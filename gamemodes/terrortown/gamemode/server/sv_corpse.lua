@@ -225,7 +225,7 @@ local function ttt_call_detective(ply, cmd, args)
 			net.WriteVector(rag:GetPos())
 			net.Send(GetRoleChatFilter(ROLE_DETECTIVE, true))
 
-			LANG.Msg("body_call", {player = ply:Nick(), victim = CORPSE.GetPlayerNick(rag, "someone")})
+			LANG.Msg("body_call", {player = ply:Nick(), victim = CORPSE.GetPlayerNick(rag, "someone")}, MSG_CHAT_PLAIN)
 		else
 			LANG.Msg(ply, "body_call_error")
 		end
@@ -271,7 +271,7 @@ function CORPSE.ShowSearch(ply, rag, covert, long_range)
 	if not IsValid(ply) or not IsValid(rag) then return end
 
 	if rag:IsOnFire() then
-		LANG.Msg(ply, "body_burning")
+		LANG.Msg(ply, "body_burning", nil, MSG_CHAT_WARN)
 
 		return
 	end
@@ -390,6 +390,9 @@ function CORPSE.ShowSearch(ply, rag, covert, long_range)
 
 	-- 133 + string data + #kill_entids * 8 + team + 1
 	-- 200 + ?
+
+	-- workaround to make sure only detective searches are added to the scoreboard
+	net.WriteBool(ply:IsActiveRole(ROLE_DETECTIVE))
 
 	-- If found by detective or searched publicly, send to all, else just the finder
 	if ply:IsActiveRole(ROLE_DETECTIVE) or not covert then

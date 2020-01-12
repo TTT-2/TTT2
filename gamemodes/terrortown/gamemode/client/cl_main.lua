@@ -232,7 +232,7 @@ local function RoundStateChange(o, n)
 
 		-- show warning to spec mode players
 		if cv_ttt_spectator_mode:GetBool() and IsValid(LocalPlayer()) then
-			LANG.Msg("spec_mode_warning")
+			LANG.Msg("spec_mode_warning", nil, MSG_CHAT_WARN)
 		end
 
 		-- reset cached server language in case it has changed
@@ -355,7 +355,7 @@ local function ReceiveRoleList()
 
 			local plyrd = ply:GetSubRoleData()
 
-			if teamNoteam ~= TEAM_NONEtNone and not plyrd.unknownTeam and not plyrd.disabledTeamVoice and not TEAMS[team].alone then
+			if team ~= TEAM_NONE and not plyrd.unknownTeam and not plyrd.disabledTeamVoice and not TEAMS[team].alone then
 				ply[team .. "_gvoice"] = false -- assume role's chat by default
 			end
 		end

@@ -177,7 +177,7 @@ function ENT:UseOverride(activator)
 		local owner = self:GetOwner()
 
 		if self:GetArmed() and owner ~= activator and IsValid(owner) and owner:Alive() and owner:GetTeam() == activator:GetTeam() then
-			LANG.Msg(activator, "c4_no_disarm")
+			LANG.Msg(activator, "c4_no_disarm", nil, MSG_MSTACK_ROLE)
 
 			return
 		end
@@ -763,6 +763,12 @@ end
 
 if CLIENT then
 	local TryT = LANG.TryTranslation
+	local GetPT = LANG.GetParamTranslation
+
+	local key_params = {
+		usekey = Key("+use", "USE"),
+		walkkey = Key("+walk", "WALK")
+	}
 
 	surface.CreateFont("C4ModelTimer", {
 		font = "Default",
@@ -828,11 +834,11 @@ if CLIENT then
 		params.displayInfo.title.text = TryT(data.ent.PrintName)
 
 		if data.ent:GetArmed() and defuser_useable then
-			params.displayInfo.subtitle.text = TryT("target_c4_armed_defuser")
+			params.displayInfo.subtitle.text = GetPT("target_c4_armed_defuser", key_params)
 		elseif data.ent:GetArmed() then
-			params.displayInfo.subtitle.text = TryT("target_c4_armed")
+			params.displayInfo.subtitle.text = GetPT("target_c4_armed", key_params)
 		else
-			params.displayInfo.subtitle.text = TryT("target_c4")
+			params.displayInfo.subtitle.text = GetPT("target_c4", key_params)
 		end
 
 		params.displayInfo.desc[#params.displayInfo.desc + 1] = {

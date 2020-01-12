@@ -37,7 +37,9 @@ function ROLE:GetStartingCredits()
 		return GetConVar("ttt_credits_starting"):GetInt()
 	end
 
-	return ConVarExists("ttt_" .. self.abbr .. "_credits_starting") and GetConVar("ttt_" .. self.abbr .. "_credits_starting"):GetInt() or 0
+	local cv = GetConVar("ttt_" .. self.abbr .. "_credits_starting")
+
+	return cv and cv:GetInt() or 0
 end
 
 ---
@@ -69,6 +71,7 @@ end
 -- @realm shared
 function ROLE:SetBaseRole(baserole)
 	print("[TTT2][DEPRECATION] ROLE:SetBaseRole will be removed in the near future! You should call roles.SetBaseRole(self, ROLENAME) in the ROLE:Initialize() function!")
+
 	roles.SetBaseRole(self, baserole)
 end
 
@@ -98,6 +101,16 @@ function ROLE:GetSubRoles()
 	end
 
 	return tmp
+end
+
+---
+-- Returns whether a @{ROLE} can use traitor buttons
+-- @return boolean
+-- @realm shared
+function ROLE:CanUseTraitorButton()
+	local cv = GetConVar("ttt_" .. self.name .. "_traitor_button")
+
+	return cv and cv:GetBool()
 end
 
 if SERVER then

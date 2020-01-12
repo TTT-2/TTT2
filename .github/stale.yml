@@ -4,10 +4,7 @@ daysUntilStale: 60
 daysUntilClose: 7
 # Issues with these labels will never be considered stale
 exemptLabels:
-  - CRITICAL
-  - NEW Role
-  - NEW Addon
-  - enhancement
+  - accepted
 # Label to use when marking an issue as stale
 staleLabel: stale
 # Comment to post when marking an issue as stale. Set to `false` to disable

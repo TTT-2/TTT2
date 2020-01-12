@@ -11,6 +11,18 @@ if CLIENT then
 	local lpw = 44 -- left panel width
 	local sri_text_width_padding = 8 -- secondary role information padding (needed for size calculations)
 
+	local watching_icon = Material("vgui/ttt/watching_icon")
+	local credits_default = Material("vgui/ttt/equip/credits_default")
+	local credits_zero = Material("vgui/ttt/equip/credits_zero")
+
+	local icon_armor = Material("vgui/ttt/hud_armor.vmt")
+	local icon_armor_rei = Material("vgui/ttt/hud_armor_reinforced.vmt")
+
+	local color_sprint = Color(36, 154, 198)
+	local color_defaultgrey = Color(100, 100, 100, 200)
+	local color_health = Color(234, 41, 41)
+	local color_ammoBar = Color(238, 151, 0)
+
 	local const_defaults = {
 		basepos = {x = 0, y = 0},
 		size = {w = 365, h = 146},
@@ -79,17 +91,6 @@ if CLIENT then
 
 		self.secondaryRoleInformationFunc = func
 	end
-
-	local watching_icon = Material("vgui/ttt/watching_icon")
-	local credits_default = Material("vgui/ttt/equip/credits_default")
-	local credits_zero = Material("vgui/ttt/equip/credits_zero")
-
-	local icon_armor = Material("vgui/ttt/hud_armor.vmt")
-	local icon_armor_rei = Material("vgui/ttt/hud_armor_reinforced.vmt")
-
-	local color_sprint = Color(36, 154, 198)
-	local color_defaultgrey = Color(100, 100, 100, 200)
-	local color_health = Color(234, 41, 41)
 
 	function HUDELEMENT:Draw()
 		local client = LocalPlayer()
@@ -252,7 +253,7 @@ if CLIENT then
 				if ammo_clip ~= -1 then
 					local text = string.format("%i + %02i", ammo_clip, ammo_inv)
 
-					self:DrawBar(nx, ty, bw, bh, Color(238, 151, 0), ammo_clip / ammo_max, t_scale, text)
+					self:DrawBar(nx, ty, bw, bh, color_ammoBar, ammo_clip / ammo_max, t_scale, text)
 				end
 			end
 

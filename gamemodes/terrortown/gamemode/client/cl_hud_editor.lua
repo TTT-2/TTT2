@@ -263,9 +263,11 @@ function HUDEditor.EditHUD()
 
 	gui.EnableScreenClicker(true)
 
-	chat.AddText("[TTT2][INFO] Hover over the elements and press [LMB] and move the mouse to ", Color(20, 150, 245), "move", Color(151, 211, 255), " or ", Color(245, 30, 80), "resize", Color(151, 211, 255), " it.")
-	chat.AddText("[TTT2][INFO] Press and hold the ", Color(255, 255, 255), "alt-key", Color(151, 211, 255), " for symmetric resizing.")
-	chat.AddText("[TTT2][INFO] Press and hold the ", Color(255, 255, 255), "shift-key", Color(151, 211, 255), " to move on axis and to keep the aspect ratio.")
+	local colorText = Color(151, 211, 255)
+
+	chat.AddText("[TTT2][INFO] Hover over the elements and press [LMB] and move the mouse to ", Color(20, 150, 245), "move", colorText, " or ", Color(245, 30, 80), "resize", colorText, " it.")
+	chat.AddText("[TTT2][INFO] Press and hold the ", COLOR_WHITE, "alt-key", colorText, " for symmetric resizing.")
+	chat.AddText("[TTT2][INFO] Press and hold the ", COLOR_WHITE, "shift-key", colorText, " to move on axis and to keep the aspect ratio.")
 	chat.AddText("[TTT2][INFO] Press [RMB] -> 'close' to exit the HUD editor!")
 
 	hook.Add("Think", "TTT2EditHUD", Think_EditLocalHUD)

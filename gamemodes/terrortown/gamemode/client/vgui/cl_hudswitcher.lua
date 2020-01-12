@@ -180,6 +180,8 @@ function PANEL:Init()
 	local sheets = {}
 	local hudLists = huds.GetList()
 	local restrictedHUDs = HUDManager.GetModelValue("restrictedHUDs")
+	local colorHUDBoxEnabled = Color(155, 155, 155, 255)
+	local colorHUDBoxDisabled = Color(255, 0, 0)
 
 	for i = 1, #hudLists do
 		local hud = hudLists[i]
@@ -192,10 +194,10 @@ function PANEL:Init()
 		panel.hudid = hud.id
 
 		panel.Paint = function(slf, w, h)
-			draw.RoundedBox(4, 0, 0, w, h, hud.disableHUDEditor and Color(255, 0, 0) or Color(155, 155, 155, 255))
+			draw.RoundedBox(4, 0, 0, w, h, hud.disableHUDEditor and colorHUDBoxDisabled or colorHUDBoxEnabled)
 
 			if hud.disableHUDEditor then
-				draw.DrawText(LANG.GetTranslation("f1_settings_hudswitcher_desc_hud_not_supported"), "DermaDefault", w * 0.5, 10, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.DrawText(LANG.GetTranslation("f1_settings_hudswitcher_desc_hud_not_supported"), "DermaDefault", w * 0.5, 10, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
 		end
 

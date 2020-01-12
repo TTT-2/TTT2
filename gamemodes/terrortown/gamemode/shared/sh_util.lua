@@ -629,7 +629,7 @@ if CLIENT then
 	end
 
 	local karmacolors = {
-		max = Color(255, 255, 255, 255),
+		max = COLOR_WHITE,
 		high = Color(255, 240, 135, 255),
 		med = Color(245, 220, 60, 255),
 		low = Color(255, 180, 0, 255),
