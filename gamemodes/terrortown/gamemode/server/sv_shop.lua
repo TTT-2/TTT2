@@ -16,138 +16,147 @@ end
 ---
 -- Called whenever a @{Player} tries to order an @{ITEM} or @{Weapon}
 -- @param Player ply
--- @param string id id of the @{ITEM} or @{Weapon}
+-- @param string id id of the @{ITEM} or @{Weapon}, old id for @{ITEM} and class for @{Weapon}
+-- @param bool is_item is id an @{ITEM} or @{Weapon}
 -- @return[default=true] boolean return true to allow buying of an equipment item, false to disallow
 -- @hook
 -- @realm server
-function GM:TTTCanOrderEquipment(ply, id)
+function GM:TTTCanOrderEquipment(ply, id, is_item)
 	return true
 end
 
+local function IsPartOfShop(ply, cls)
+	if GetGlobalInt("ttt2_random_shops") == 0 or not RANDOMSHOP[ply] or #RANDOMSHOP[ply] == 0 then
+		return true
+	end
+
+	for i = 1, #RANDOMSHOP[ply] do
+		if RANDOMSHOP[ply][i].id ~= cls then continue end
+
+		return true
+	end
+
+	print(ply, "tried to buy a prohibited item/weapon!")
+
+	return false
+end
+
 -- Equipment buying
-local function OrderEquipment(ply, cmd, args)
-	if not IsValid(ply) or #args ~= 1 then return end
+local function OrderEquipment(ply, cls)
+	if not IsValid(ply) or not cls or not ply:IsActive() then return end
+
+	-- if we have a pending order because we are in a confined space, don't
+	-- start a new one
+	if HasPendingOrder(ply) then
+		LANG.Msg(ply, "buy_pending", nil, MSG_MSTACK_ROLE)
+
+		return
+	end
 
 	local subrole = GetShopFallback(ply:GetSubRole())
-
-	if not ply:IsActive() then return end
-
 	local rd = roles.GetByIndex(subrole)
 
 	local shopFallback = GetGlobalString("ttt_" .. rd.abbr .. "_shop_fallback")
 	if shopFallback == SHOP_DISABLED then return end
 
-	-- it's an item if the arg is an id instead of an ent name
-	local id = args[1]
+	local is_item = items.IsItem(cls)
 
-	if not hook.Run("TTTCanOrderEquipment", ply, id) then return end
+	-- The item/weapon might not even be part of the current shop
+	if not IsPartOfShop(ply, cls) then return end
 
-	local is_item = items.IsItem(id)
+	-- we use weapons.Get since we can't guarantee that no hook will try to modify it
+	local equip_table = not is_item and weapons.Get(cls) or items.Get(cls)
 
-	-- we use weapons.GetStored to save time on an unnecessary copy, we will not
-	-- be modifying it
-	local equip_table = not is_item and weapons.GetStored(id) or items.GetStored(id)
-
-	-- some weapons can only be bought once per player per round, this used to be
-	-- defined in a table here, but is now in the SWEP's table
-	if equip_table and equip_table.limited and ply:HasBought(id) then
-		LANG.Msg(ply, "buy_no_stock", nil, MSG_MSTACK_ROLE)
+	if not equip_table then
+		print(ply, "tried to buy equip that doesn't exists", cls)
 
 		return
 	end
 
-	local credits
+	-- Check for minimum players, global limit, team limit and player limit
+	if not EquipmentIsBuyable(equip_table, ply) then return end
 
-	if equip_table then
-		-- weapon whitelist check
-		if not table.HasValue(equip_table.CanBuy, subrole) or equip_table.notBuyable then
-			print(ply, "tried to buy equip his subrole is not permitted to buy")
+	-- still support old items
+	local idOrCls = (is_item and equip_table.oldId or nil) or cls
 
-			return
-		end
+	local credits = equip_table.credits or 1
 
-		-- if we have a pending order because we are in a confined space, don't
-		-- start a new one
-		if HasPendingOrder(ply) then
-			LANG.Msg(ply, "buy_pending", nil, MSG_MSTACK_ROLE)
+	if credits > ply:GetCredits() then
+		print(ply, "tried to buy item/weapon, but didn't have enough credits")
 
-			return
-		end
+		return
+	end
 
-		-- the item is just buyable if there is a special amount of players
-		if not EquipmentIsBuyable(equip_table, ply:GetTeam()) then return end
+	-- keep compatibility with old addons
+	if not hook.Run("TTTCanOrderEquipment", ply, idOrCls, is_item) then return end
 
-		credits = equip_table.credits or 1
+	-- add our own hook with more consistent equip table parameter and some more information
+	local prohibit, ignoreCost, message = hook.Run("TTT2CanOrderEquipment", ply, equip_table, is_item, credits)
 
-		if credits > ply:GetCredits() then
-			print(ply, "tried to buy item/weapon, but didn't had enough credits")
+	if message then
+		LANG.Msg(ply, message, nil, MSG_MSTACK_ROLE)
+	end
 
-			return
-		end
+	if prohibit then
+		return
+	end
 
-		if GetGlobalInt("ttt2_random_shops") > 0 and RANDOMSHOP[ply] and #RANDOMSHOP[ply] > 0 then
-			local key = false
+	if not ignoreCost then
+		ply:SubtractCredits(credits)
+	end
 
-			for i = 1, #RANDOMSHOP[ply] do
-				if RANDOMSHOP[ply][i].id ~= id then continue end
+	ply:AddBought(cls)
 
-				key = true
-
-				break
-			end
-
-			if not key then
-				print(ply, "tried to buy item/weapon, but didn't allowed to do so!")
-
-				return
-			end
-		end
-
-		-- no longer restricted to only WEAPON_EQUIP weapons, just anything that
-		-- is whitelisted and carryable
-		if not is_item then
-			if ply:CanCarryWeapon(equip_table) then
-				ply:GiveEquipmentWeapon(id)
-			else
-				return
-			end
-		else
-			ply:GiveEquipmentItem(id)
-		end
+	-- no longer restricted to only WEAPON_EQUIP weapons, just anything that
+	-- is whitelisted and carryable
+	if is_item then
+		ply:GiveEquipmentItem(cls)
 	else
-		print(ply, "tried to buy equip that doesn't exists", id)
-
-		return
+		ply:GiveEquipmentWeapon(cls)
 	end
-
-	ply:SubtractCredits(credits)
 
 	LANG.Msg(ply, "buy_received", nil, MSG_MSTACK_ROLE)
-
-	ply:AddBought(id)
 
 	timer.Simple(0.5, function()
 		if not IsValid(ply) then return end
 
 		net.Start("TTT_BoughtItem")
-		net.WriteString(id)
+		net.WriteString(cls)
 		net.Send(ply)
 	end)
 
-	if is_item and equip_table and isfunction(equip_table.Bought) then
+	if isfunction(equip_table.Bought) then
 		equip_table:Bought(ply)
 	end
-
-	-- still support old items
-	local id2 = (is_item and equip_table.oldId or nil) or id
-
-	hook.Call("TTTOrderedEquipment", GAMEMODE, ply, id2, is_item and id2 or false)
 
 	if GetGlobalBool("ttt2_random_shop_reroll_per_buy") then
 		RerollShop(ply)
 	end
+
+	-- keep compatibility with old addons
+	hook.Run("TTTOrderedEquipment", ply, id, is_item)
+
+	-- add our own hook with more consistent equip table parameter
+	hook.Run("TTT2OrderedEquipment", ply, equip_table, is_item, credits, ignoreCost or false)
 end
-concommand.Add("ttt_order_equipment", OrderEquipment)
+
+local function NetOrderEquipment(len, ply)
+	local cls = net.ReadString()
+
+	if #cls == 0 then return end
+
+	OrderEquipment(ply, cls)
+end
+
+local function ConOrderEquipment(ply, cmd, args)
+	if #args ~= 1 then return end
+
+	OrderEquipment(ply, args[1])
+end
+
+net.Receive("TTT2OrderEquipment", NetOrderEquipment)
+
+concommand.Add("ttt_order_equipment", ConOrderEquipment)
 
 ---
 -- Called whenever a @{Player} toggles the disguiser state

@@ -195,12 +195,13 @@ end
 ---
 -- Gives a specific @{ITEM} (if possible)
 -- @param string cls
+-- @return @{ITEM} or false
 -- @realm server
 -- @internal
 function plymeta:AddEquipmentItem(cls)
 	local item = items.GetStored(cls)
 
-	if not item or item.limited and self:HasEquipmentItem(cls) then return end
+	if not item or item.limited and self:HasEquipmentItem(cls) then return false end
 
 	self.equipmentItems = self.equipmentItems or {}
 	self.equipmentItems[#self.equipmentItems + 1] = cls
@@ -208,6 +209,7 @@ function plymeta:AddEquipmentItem(cls)
 	item:Equip(self)
 
 	self:SendEquipment()
+	return item
 end
 
 ---
@@ -234,6 +236,14 @@ function plymeta:RemoveEquipmentItem(cls)
 	end
 
 	self:SendEquipment()
+end
+
+---
+-- Removes a specific @{Weapon}
+-- @param string cls
+-- @realm server
+function plymeta:RemoveEquipmentWeapon(cls)
+	self:StripWeapon(cls)
 end
 
 ---
@@ -433,8 +443,14 @@ end
 -- the map, keep trying until the @{Player} has moved to a better spot where it
 -- does work.
 -- @param string cls @{Weapon}'s class
+-- @param function callback Will be called if weapon was given successfully,
+-- takes the @{Player}, cls and created @{Weapon} as parameters, can be nil
 -- @realm server
-function plymeta:GiveEquipmentWeapon(cls)
+function plymeta:GiveEquipmentWeapon(cls, callback)
+	if not cls then return end
+
+	if not self:CanCarryWeapon(weapons.GetStored(cls)) then return end
+
 	-- Referring to players by SteamID64 because a player may disconnect while his
 	-- unique timer still runs, in which case we want to be able to stop it. For
 	-- that we need its name, and hence his SteamID64.
@@ -457,7 +473,7 @@ function plymeta:GiveEquipmentWeapon(cls)
 			timer.Create(tmr, 1, 0, function()
 				if not IsValid(slf) then return end
 
-				slf:GiveEquipmentWeapon(cls)
+				slf:GiveEquipmentWeapon(cls, callback)
 			end)
 		end
 
@@ -466,7 +482,12 @@ function plymeta:GiveEquipmentWeapon(cls)
 		-- can stop retrying, if we were
 		timer.Remove(tmr)
 
-		if w.WasBought then
+		if isfunction(callback) then
+			-- basically a delayed/asynchronous return, necessary due to the timers
+			callback(self, cls, w)
+		end
+
+		if isfunction(w.WasBought) then
 			-- some weapons give extra ammo after being bought, etc
 			w:WasBought(self)
 		end
@@ -476,10 +497,10 @@ end
 ---
 -- Gives an @{ITEM} to a @{Player} and returns whether it was successful
 -- @param string cls
--- @return boolean success?
+-- @return @{ITEM} or false
 -- @realm server
 function plymeta:GiveEquipmentItem(cls)
-	if not cls then return end
+	if not cls then return false end
 
 	local item = items.GetStored(cls)
 
@@ -487,9 +508,7 @@ function plymeta:GiveEquipmentItem(cls)
 		return false
 	end
 
-	self:AddEquipmentItem(cls)
-
-	return true
+	return self:AddEquipmentItem(cls)
 end
 
 ---
@@ -941,8 +960,6 @@ function plymeta:GiveItem(cls)
 		net.WriteString(cls)
 		net.Send(ply)
 	end)
-
-	hook.Run("TTTOrderedEquipment", self, cls, items.IsItem(cls) and cls or false)
 end
 
 ---
@@ -951,6 +968,15 @@ end
 -- @realm server
 function plymeta:RemoveItem(cls)
 	self:RemoveEquipmentItem(cls)
+	self:RemoveBought(cls)
+end
+
+---
+-- Removes a @{Weapon} from a @{Player}
+-- @param string cls
+-- @realm server
+function plymeta:RemoveWeapon(cls)
+	self:RemoveEquipmentWeapon(cls)
 	self:RemoveBought(cls)
 end
 
