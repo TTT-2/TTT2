@@ -1,3 +1,22 @@
+local function PlayerSprint(trySprinting, moveKey)
+	if SERVER then return end
+
+	local client = LocalPlayer()
+
+	if trySprinting and not GetGlobalBool("ttt2_sprint_enabled", true) then return end
+	if not trySprinting and not client.isSprinting or trySprinting and client.isSprinting then return end
+	if client.isSprinting and (client.moveKey and not moveKey or not client.moveKey and moveKey) then return end
+
+	client.oldSprintProgress = client.sprintProgress
+	client.sprintMultiplier = trySprinting and (1 + GetGlobalFloat("ttt2_sprint_max", 0)) or nil
+	client.isSprinting = trySprinting
+	client.moveKey = moveKey
+
+	net.Start("TTT2SprintToggle")
+	net.WriteBool(trySprinting)
+	net.SendToServer()
+end
+
 if SERVER then
 	util.AddNetworkString("TTT2SprintToggle")
 
@@ -52,23 +71,6 @@ else
 	local lastPress = 0
 	local lastPressedMoveKey = nil
 
-	local function PlayerSprint(trySprinting, moveKey)
-		local client = LocalPlayer()
-
-		if trySprinting and not GetGlobalBool("ttt2_sprint_enabled", true) then return end
-		if not trySprinting and not client.isSprinting or trySprinting and client.isSprinting then return end
-		if client.isSprinting and (client.moveKey and not moveKey or not client.moveKey and moveKey) then return end
-
-		client.oldSprintProgress = client.sprintProgress
-		client.sprintMultiplier = trySprinting and (1 + GetGlobalFloat("ttt2_sprint_max", 0)) or nil
-		client.isSprinting = trySprinting
-		client.moveKey = moveKey
-
-		net.Start("TTT2SprintToggle")
-		net.WriteBool(trySprinting)
-		net.SendToServer()
-	end
-
 	hook.Add("KeyPress", "TTT2DoublePressSprint", function(ply, key)
 		if not IsFirstTimePredicted() or ply.isSprinting or disable_doubletap_sprint:GetBool() then return end
 		if key ~= IN_FORWARD and key ~= IN_BACK and key ~= IN_MOVERIGHT and key ~= IN_MOVELEFT then return end
@@ -121,7 +123,18 @@ hook.Add("Think", "TTT2PlayerSprinting", function()
 		local wantsToMove = ply:KeyDown(IN_FORWARD) or ply:KeyDown(IN_BACK) or ply:KeyDown(IN_MOVERIGHT) or ply:KeyDown(IN_MOVELEFT)
 
 		if ply.sprintProgress == 1 and (not ply.isSprinting or not wantsToMove) then continue end
-		if ply.sprintProgress == 0 and ply.isSprinting and wantsToMove then continue end
+		if ply.sprintProgress == 0 and ply.isSprinting and wantsToMove then
+			ply.sprintResetDelayCounter = ply.sprintResetDelayCounter + FrameTime()
+
+			-- If the player keeps sprinting even though they have no stamina, start refreshing stamina after 1.5 seconds automatically
+			if CLIENT and ply.sprintResetDelayCounter > 1.5 then
+				PlayerSprint(false, ply.moveKey)
+			end
+
+			continue
+		end
+
+		ply.sprintResetDelayCounter = 0
 
 		local modifier = {1} -- Multiple hooking support
 
