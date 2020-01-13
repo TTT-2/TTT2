@@ -675,7 +675,7 @@ function EquipmentIsBuyable(tbl, ply)
 	end
 
 	-- weapon whitelist check
-	if not table.HasValue(tbl.CanBuy, GetShopFallback(ply:GetSubRole())) then
+	if not tbl.CanBuy[GetShopFallback(ply:GetSubRole())] then
 		return false, "X", "Your role can't buy this equipment."
 	end
 
