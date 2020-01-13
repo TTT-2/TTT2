@@ -4,6 +4,7 @@
 
 local timer = timer
 local IsValid = IsValid
+local UpdateInputSprintFunc
 local cv_sv_cheats = GetConVar("sv_cheats")
 
 local function SendWeaponDrop()
@@ -174,6 +175,13 @@ function GM:KeyPress(ply, key)
 		end
 
 		timer.Simple(0.05, _func)
+	elseif key == IN_FORWARD or key == IN_BACK or key == IN_MOVERIGHT or key == IN_MOVELEFT then
+		UpdateInputSprintFunc = UpdateInputSprintFunc or UpdateInputSprint
+
+		-- Might not be loaded yet due to load order
+		if UpdateInputSprintFunc then
+			UpdateInputSprintFunc(ply, key, true)
+		end
 	end
 end
 
@@ -199,6 +207,13 @@ function GM:KeyRelease(ply, key)
 		end
 
 		timer.Simple(0.05, _func)
+	elseif key == IN_FORWARD or key == IN_BACK or key == IN_MOVERIGHT or key == IN_MOVELEFT then
+		UpdateInputSprintFunc = UpdateInputSprintFunc or UpdateInputSprint
+
+		-- Might not be loaded yet due to load order
+		if UpdateInputSprintFunc then
+			UpdateInputSprintFunc(ply, key, false)
+		end
 	end
 end
 

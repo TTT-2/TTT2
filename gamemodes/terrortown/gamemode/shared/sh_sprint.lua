@@ -71,31 +71,30 @@ else
 	local lastPress = 0
 	local lastPressedMoveKey = nil
 
-	hook.Add("KeyPress", "TTT2DoublePressSprint", function(ply, key)
-		if not IsFirstTimePredicted() or ply.isSprinting or disable_doubletap_sprint:GetBool() then return end
-		if key ~= IN_FORWARD and key ~= IN_BACK and key ~= IN_MOVERIGHT and key ~= IN_MOVELEFT then return end
+	function UpdateInputSprint(ply, key, pressed)
+		if pressed then
+			if ply.isSprinting or disable_doubletap_sprint:GetBool() then return end
 
-		local time = CurTime()
+			local time = CurTime()
 
-		if lastPressedMoveKey == key and time - lastPress < 0.4 then
-			PlayerSprint(true, key)
+			if lastPressedMoveKey == key and time - lastPress < 0.4 then
+				PlayerSprint(true, key)
+			end
+
+			lastPressedMoveKey = key
+			lastPress = time
+		else
+			if not ply.isSprinting then return end
+
+			local moveKey = ply.moveKey
+			local wantsToMove = ply:KeyDown(IN_FORWARD) or ply:KeyDown(IN_BACK) or ply:KeyDown(IN_MOVERIGHT) or ply:KeyDown(IN_MOVELEFT)
+			local anyKey = doubletap_sprint_anykey:GetBool()
+
+			if not moveKey or anyKey and wantsToMove or not anyKey and key ~= moveKey then return end
+
+			PlayerSprint(false, key)
 		end
-
-		lastPressedMoveKey = key
-		lastPress = time
-	end)
-
-	hook.Add("KeyRelease", "TTT2EndDoublePressSprint", function(ply, key)
-		if not IsFirstTimePredicted() or not ply.isSprinting then return end
-
-		local moveKey = ply.moveKey
-		local wantsToMove = ply:KeyDown(IN_FORWARD) or ply:KeyDown(IN_BACK) or ply:KeyDown(IN_MOVERIGHT) or ply:KeyDown(IN_MOVELEFT)
-		local anyKey = doubletap_sprint_anykey:GetBool()
-
-		if not moveKey or anyKey and wantsToMove or not anyKey and key ~= moveKey then return end
-
-		PlayerSprint(false, key)
-	end)
+	end
 
 	bind.Register("ttt2_sprint", function()
 		if not LocalPlayer().preventSprint then
@@ -107,7 +106,7 @@ else
 	end, "TTT2 Bindings", "f1_bind_sprint", KEY_LSHIFT)
 end
 
-hook.Add("Think", "TTT2PlayerSprinting", function()
+function UpdateSprint()
 	local client
 
 	if CLIENT then
@@ -150,4 +149,4 @@ hook.Add("Think", "TTT2PlayerSprinting", function()
 			ply.oldSprintProgress = ply.sprintProgress
 		end
 	end
-end)
+end
