@@ -242,9 +242,7 @@ end
 -- Removes a specific @{Weapon}
 -- @param string cls
 -- @realm server
-function plymeta:RemoveEquipmentWeapon(cls)
-	self:StripWeapon(cls)
-end
+plymeta.RemoveEquipmentWeapon = plymeta.StripWeapon
 
 ---
 -- Synces the server stored equipment with the @{Player}
