@@ -639,7 +639,7 @@ function EquipmentIsBuyable(tbl, ply)
 		return false, "X", "error"
 	end
 
-	team = ply:GetTeam()
+	local team = ply:GetTeam()
 
 	if not tbl.id then
 		ErrorNoHalt("[TTT2][ERROR] Missing id in table:", tbl)
