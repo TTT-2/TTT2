@@ -64,8 +64,8 @@ local function OrderEquipment(ply, cls)
 	-- The item/weapon might not even be part of the current shop
 	if not IsPartOfShop(ply, cls) then return end
 
-	-- we use weapons.Get since we can't guarantee that no hook will try to modify it
-	local equip_table = not is_item and weapons.Get(cls) or items.Get(cls)
+	-- we use weapons.GetStored to save time on an unnecessary copy, we will not be modifying it
+	local equip_table = not is_item and weapons.GetStored(cls) or items.GetStored(cls)
 
 	if not equip_table then
 		print(ply, "tried to buy equip that doesn't exists", cls)
@@ -90,14 +90,14 @@ local function OrderEquipment(ply, cls)
 	-- keep compatibility with old addons
 	if not hook.Run("TTTCanOrderEquipment", ply, idOrCls, is_item) then return end
 
-	-- add our own hook with more consistent equip table parameter and some more information
-	local prohibit, ignoreCost, message = hook.Run("TTT2CanOrderEquipment", ply, equip_table, is_item, credits)
+	-- add our own hook with more consistent class parameter and some more information
+	local allow, ignoreCost, message = hook.Run("TTT2CanOrderEquipment", ply, cls, is_item, credits)
 
 	if message then
 		LANG.Msg(ply, message, nil, MSG_MSTACK_ROLE)
 	end
 
-	if prohibit then
+	if allow == false then
 		return
 	end
 
@@ -134,10 +134,10 @@ local function OrderEquipment(ply, cls)
 	end
 
 	-- keep compatibility with old addons
-	hook.Run("TTTOrderedEquipment", ply, id, is_item)
+	hook.Run("TTTOrderedEquipment", ply, idOrCls, is_item)
 
-	-- add our own hook with more consistent equip table parameter
-	hook.Run("TTT2OrderedEquipment", ply, equip_table, is_item, credits, ignoreCost or false)
+	-- add our own hook with more consistent class parameter
+	hook.Run("TTT2OrderedEquipment", ply, cls, is_item, credits, ignoreCost or false)
 end
 
 local function NetOrderEquipment(len, ply)
