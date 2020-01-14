@@ -8,39 +8,34 @@ if not plymeta then
 	return
 end
 
----
--- This function handles the weapon drop including ammo handling, flags etc
--- @param Weapon wep The weapon to be dropped
--- @realm server
-function plymeta:PrepareAndDropWeapon(wep)
-	if not IsValid(wep) then return end
-
-	if isfunction(wep.PreDrop) then
-		wep:PreDrop()
-	end
-
-	-- PreDrop sometimes makes the weapon non-valid, therefore we have to check again
-	if not IsValid(wep) then return end
-
-	-- set IsDropped to true to prevent auto pickup of equipitems
-	wep.IsDropped = true
-
-	-- drop the old weapon
-	self:DropWeapon(wep)
-
-	-- wake the pysics of the dropped weapon
-	wep:PhysWake()
-end
-
 function ResetWeapon(wep)
 	if not IsValid(wep) then return end
 
-	-- clearing the player flag of this weapon, freeing it to every other player
-	wep.wpickup_player = nil
+	-- weapon is already reset, another cancel can cause problems
+	if not wep.wpickup_player then return end
 
-	-- reenable the physics of the weapon to let it drop back to the ground
-	wep:PhysicsInit(SOLID_VPHYSICS)
-	wep:PhysWake()
+	-- removing timers
+	timer.Remove(wep.name_timer_pos)
+	timer.Remove(wep.name_timer_cancel)
+
+	-- one important thing to know is, that timer.Remove is executed in the next
+	-- frame, setting the variable to nil right after the call of timer.Remove
+	-- causes an error since the identifier should never be nil
+	-- GMOD - WTF?!
+	timer.Simple(0, function()
+		if not IsValid(wep) then return end
+
+		wep.name_timer_pos = nil
+		wep.name_timer_cancel = nil
+	end)
+
+	-- clear the wait flag in case the reset was after pickup but before equip
+	wep.wpickup_player.wpickup_waitequip = wep.wpickup_player.wpickup_waitequip or {}
+	wep.wpickup_player.wpickup_waitequip[wep.Kind] = nil
+
+	-- clearing the player/weapon flag of this weapon/player, freeing it to every other player
+	wep.wpickup_player.wpickup_weapon = nil
+	wep.wpickup_player = nil
 
 	-- reset weapon collisions
 	wep:SetCollisionGroup(COLLISION_GROUP_WEAPON)
@@ -61,7 +56,5 @@ net.Receive("ttt2_switch_weapon", function(_, ply)
 	-- do not pickup weapon if too far away
 	if ply:GetPos():Distance(tracedWeapon:GetPos()) > 100 then return end
 
-	if not IsValid(ply:PickupWeapon(tracedWeapon, true)) then
-		LANG.Msg(ply, "pickup_no_room")
-	end
+	ply:PickupWeapon(tracedWeapon, true)
 end)

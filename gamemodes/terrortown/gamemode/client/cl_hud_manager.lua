@@ -140,7 +140,8 @@ local gmodhud = {
 	["CHudHealth"] = true,
 	["CHudBattery"] = true,
 	["CHudAmmo"] = true,
-	["CHudSecondaryAmmo"] = true
+	["CHudSecondaryAmmo"] = true,
+	["CHudDamageIndicator"] = true
 }
 
 ---

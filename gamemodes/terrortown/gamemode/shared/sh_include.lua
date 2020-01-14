@@ -6,6 +6,7 @@ TTTFiles = {
 	cl_awards = {file = "cl_awards.lua", on = "client"},
 	cl_changes = {file = "cl_changes.lua", on = "client"},
 	cl_chat = {file = "cl_chat.lua", on = "client"},
+	cl_damage_indicator = {file = "cl_damage_indicator.lua", on = "client"},
 	cl_equip = {file = "cl_equip.lua", on = "client"},
 	cl_eventpopup = {file = "cl_eventpopup.lua", on = "client"},
 	cl_fonts = {file = "cl_fonts.lua", on = "client"},
@@ -18,6 +19,7 @@ TTTFiles = {
 	cl_keys = {file = "cl_keys.lua", on = "client"},
 	cl_main = {file = "cl_main.lua", on = "client"},
 	cl_msgstack = {file = "cl_msgstack.lua", on = "client"},
+	cl_player_ext = {file = "cl_player_ext.lua", on = "client"},
 	cl_popups = {file = "cl_popups.lua", on = "client"},
 	cl_radio = {file = "cl_radio.lua", on = "client"},
 	cl_reroll = {file = "cl_reroll.lua", on = "client"},
@@ -39,6 +41,7 @@ TTTFiles = {
 	-- shared files
 	sh_armor = {file = "sh_armor.lua", on = "shared"},
 	sh_corpse = {file = "sh_corpse.lua", on = "shared"},
+	sh_decal = {file = "sh_decal.lua", on = "shared"},
 	sh_equip_items = {file = "sh_equip_items.lua", on = "shared"},
 	sh_hud_manager = {file = "sh_hud_manager.lua", on = "shared"},
 	sh_hud_module = {file = "sh_hud_module.lua", on = "shared"},
@@ -77,6 +80,7 @@ TTTFiles = {
 
 if SERVER then
 	local tmp = { -- server files, don't show them for the client
+		sv_addonchecker = {file = "sv_addonchecker.lua", on = "server"},
 		sv_admin = {file = "sv_admin.lua", on = "server"},
 		sv_armor = {file = "sv_armor.lua", on = "server"},
 		sv_corpse = {file = "sv_corpse.lua", on = "server"},
@@ -85,8 +89,10 @@ if SERVER then
 		sv_gamemsg = {file = "sv_gamemsg.lua", on = "server"},
 		sv_hud_manager = {file = "sv_hud_manager.lua", on = "server"},
 		sv_inventory = {file = "sv_inventory.lua", on = "server"},
-		sv_main = {file = "sv_main.lua", on = "server"},
 		sv_karma = {file = "sv_karma.lua", on = "server"},
+		sv_loadingscreen = {file = "sv_loadingscreen.lua", on = "server"},
+		sv_main = {file = "sv_main.lua", on = "server"},
+		sv_networking = {file = "sv_networking.lua", on = "server"},
 		sv_player_ext = {file = "sv_player_ext.lua", on = "server"},
 		sv_player = {file = "sv_player.lua", on = "server"},
 		sv_propspec = {file = "sv_propspec.lua", on = "server"},
@@ -94,11 +100,9 @@ if SERVER then
 		sv_shop = {file = "sv_shop.lua", on = "server"},
 		sv_shopeditor = {file = "sv_shopeditor.lua", on = "server"},
 		sv_status = {file = "sv_status.lua", on = "server"},
-		sv_networking = {file = "sv_networking.lua", on = "server"},
 		sv_voice = {file = "sv_voice.lua", on = "server"},
 		sv_weapon_pickup = {file = "sv_weapon_pickup.lua", on = "server"},
 		sv_weaponry = {file = "sv_weaponry.lua", on = "server"},
-		sv_addonchecker = {file = "sv_addonchecker.lua", on = "server"},
 	}
 
 	table.Merge(TTTFiles, tmp)

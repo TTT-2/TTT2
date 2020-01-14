@@ -17,6 +17,12 @@ if CLIENT then
 		minsize = {w = 0, h = 0}
 	}
 
+	function HUDELEMENT:Initialize()
+		self.cv_ttt_spectator_mode = GetConVar("ttt_spectator_mode");
+
+		BaseClass.Initialize(self)
+	end
+
 	function HUDELEMENT:GetDefaults()
 		return const_defaults
 	end
@@ -70,7 +76,7 @@ if CLIENT then
 		else
 			self:ShadowedText(interp(L.spec_help, key_params), "TabLarge", ScrW() * 0.5, margin, COLOR_WHITE, TEXT_ALIGN_CENTER)
 
-			if GetConVar("ttt_spectator_mode"):GetBool() then
+			if self.cv_ttt_spectator_mode:GetBool() then
 				self:ShadowedText(interp(L.spec_help2, key_params), "TabLarge",ScrW() * 0.5, margin + 20, COLOR_WHITE, TEXT_ALIGN_CENTER)
 			end
 		end

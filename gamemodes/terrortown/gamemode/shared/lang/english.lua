@@ -38,8 +38,8 @@ L.win_innocents = "The Innos have won!"
 L.win_bees = "The Bees has won! (Its a draw)"
 L.win_showreport = "Let's look at the round report for {num} seconds."
 
-L.limit_round = "Round limit reached. {mapname} will load soon."
-L.limit_time = "Time limit reached. {mapname} will load soon."
+L.limit_round = "Round limit reached. The next map will load soon."
+L.limit_time = "Time limit reached. The next map will load soon."
 L.limit_left = "{num} round(s) or {time} minutes remaining before the map changes."
 
 -- Credit awards
@@ -271,7 +271,7 @@ L.set_tips = "Show gameplay tips at the bottom of the screen while spectating"
 L.set_startpopup = "Start of round info popup duration"
 L.set_startpopup_tip = "When the round starts, a small popup appears at the bottom of your screen for a few seconds. Change the time it displays for here."
 
-L.set_cross_opacity = "Ironsight crosshair opacity"
+L.set_cross_opacity = "Crosshair opacity"
 L.set_cross_disable = "Disable crosshair completely"
 L.set_minimal_id = "Minimalist Target ID under crosshair (no karma text, hints, etc)"
 L.set_healthlabel = "Show health status label on health bar"
@@ -310,7 +310,9 @@ L.buy_pending = "You already have an order pending, wait until you receive it."
 L.buy_received = "You have received your special equipment."
 
 L.drop_no_room = "You have no room here to drop your weapon!"
+L.pickup_fail = "You cannot pick up this"
 L.pickup_no_room = "You have no space in your inventory for this weapon kind"
+L.pickup_pending = "You already picked up a weapon, wait until you receive it"
 
 L.disg_turned_on = "Disguise enabled!"
 L.disg_turned_off = "Disguise disabled."
@@ -392,14 +394,14 @@ L.decoy_no_room = "You cannot carry this decoy."
 L.decoy_broken = "Your Decoy has been destroyed!"
 
 L.decoy_help_pri = "{primaryfire} plants the Decoy."
-L.decoy_short_desc = "This decoy creates a fake radar point visible for other teams"
-L.decoy_pickup_wrong_team = "You Can't pick it up as it belongs to a different team"
+L.decoy_short_desc = "This decoy shows a fake radar sign visible for other teams"
+L.decoy_pickup_wrong_team = "You can't pick it up as it belongs to a different team"
 
 L.decoy_desc = [[
-Shows a fake radar sign to detectives,
-and makes their DNA scanner show the
-location of the Decoy if they scan for
-your DNA.]]
+Shows a fake radar sign to other teams,
+and makes the DNA scanner show the
+location of the Decoy if someone scans
+for your DNA.]]
 
 -- Defuser
 L.defuser_name = "Defuser"
@@ -422,7 +424,7 @@ sound.]]
 
 -- Health station
 L.hstation_name = "Health Station"
-L.hstation_subtitle = "Press [key] to receive health."
+L.hstation_subtitle = "Press [{usekey}] to receive health."
 L.hstation_charge = "Remaining charge of health station: {charge}"
 L.hstation_empty = "There is no more charge left in this health station"
 L.hstation_maxhealth = "Your health is full"
@@ -625,27 +627,37 @@ L.target_unid = "Unidentified body"
 
 L.target_credits = "Search to receive unspent credits"
 
-L.target_c4 = "Press [key] to open C4 menu"
-L.target_c4_armed = "Press [key] to disarm C4"
-L.target_c4_armed_defuser = "Press [key] to use defuser"
+L.target_c4 = "Press [{usekey}] to open C4 menu"
+L.target_c4_armed = "Press [{usekey}] to disarm C4"
+L.target_c4_armed_defuser = "Press [{usekey}] to use defuser"
 L.target_c4_not_disarmable = "You can't disarm C4 of a living teammate"
 L.c4_short_desc = "Something very explosive"
 
-L.target_pickup = "Press [key] to pick up"
+L.target_pickup = "Press [{usekey}] to pick up"
 L.target_slot_info = "Slot: {slot}"
-L.target_pickup_weapon = "Press [key] to pickup weapon"
-L.target_switch_weapon = "Press [key] to swap with your current weapon"
-L.target_pickup_weapon_hidden = ", hold {walkkey} for hidden pickup"
-L.target_switch_weapon_hidden = ", hold {walkkey} for hidden switch"
+L.target_pickup_weapon = "Press [{usekey}] to pickup weapon"
+L.target_switch_weapon = "Press [{usekey}] to swap with your current weapon"
+L.target_pickup_weapon_hidden = ", press [{usekey} + {walkkey}] for hidden pickup"
+L.target_switch_weapon_hidden = ", press [{usekey} + {walkkey}] for hidden switch"
 L.target_switch_weapon_nospace = "There is no inventory slot available for this weapon"
 L.target_switch_drop_weapon_info = "Dropping {name} from slot {slot}"
 L.target_switch_drop_weapon_info_noslot = "There is no droppable weapon in slot {slot}"
 
--- Traitor buttons (HUD buttons with hand icons that only traitors can see)
+-- HUD buttons with hand icons that only some roles can see and use
 L.tbut_single = "Single use"
 L.tbut_reuse = "Reusable"
 L.tbut_retime = "Reusable after {num} sec"
-L.tbut_help = "Press {key} to activate"
+L.tbut_help = "Press [{usekey}] to activate"
+L.tbut_role_toggle = "[{walkkey} + {usekey}] to toggle this button for {role}"
+L.tbut_role_config = "Role: {current}"
+L.tbut_team_toggle = "[SHIFT + {walkkey} + {usekey}] to toggle this button for team {team}"
+L.tbut_team_config = "Team: {current}"
+L.tbut_current_config = "Current config:"
+L.tbut_intended_config = "Intended config by map creator:"
+L.tbut_admin_mode_only = "Only visble to you because you're an admin and '{cv}'' is set to '1'"
+L.tbut_allow = "Allow"
+L.tbut_prohib = "Prohibit"
+L.tbut_default = "Default"
 
 -- Equipment info lines (on the left above the health/ammo panel)
 L.disg_hud = "Disguised. Your name is hidden."
@@ -1141,12 +1153,12 @@ L.idle_popup_title = "Idle"
 L.set_title_cross = "Crosshair settings"
 
 L.set_cross_color_enable = "Enable custom crosshair color"
-L.set_cross_color = "Custom crosshair color"
+L.set_cross_color = "Custom crosshair color:"
 L.set_cross_gap_enable = "Enable custom crosshair gap"
 L.set_cross_gap = "Custom crosshair gap"
 L.set_cross_static_enable = "Enable static crosshair"
 L.set_ironsight_cross_opacity = "Ironsight crosshair opacity"
-L.set_cross_weaponscale_enable = "Enable weapon crosshair scale"
+L.set_cross_weaponscale_enable = "Enable different crosshair scales for different weapons"
 L.set_cross_thickness = "Crosshair thickness"
 L.set_cross_outlinethickness = "Crosshair outline thickness"
 L.set_cross_dot_enable = "Enable crosshair dot"
@@ -1174,11 +1186,12 @@ L.f1_settings_bindings_title = "Key Bindings"
 L.f1_settings_interface_title = "Interface"
 L.f1_settings_gameplay_title = "Gameplay"
 L.f1_settings_crosshair_title = "Crosshair"
+L.f1_settings_dmgindicator_title = "Damage Indicator"
 L.f1_settings_language_title = "Language"
 L.f1_settings_administration_title = "Administration"
 L.f1_settings_shop_title = "Equipment Shop"
 
-L.f1_settings_shop_desc_shopopen = "Should the shop be opened/closed instead of the score menu during preparing / at the end of a round?"
+L.f1_settings_shop_desc_shopopen = "Open the shop by pressing the shop key instead of the score menu during preparing / at the end of a round?"
 L.f1_settings_shop_title_layout = "Item List Layout"
 L.f1_settings_shop_desc_num_columns = "Number of columns"
 L.f1_settings_shop_desc_num_rows = "Number of rows"
@@ -1191,7 +1204,7 @@ L.f1_settings_shop_desc_show_favourite = "Show favourite item marker"
 L.f1_shop_restricted = "Individual changes to the equipment shop layout are not allowed on this server. Please contact a server admin for details."
 
 L.f1_settings_hudswitcher_desc_basecolor = "Base Color"
-L.f1_settings_hudswitcher_desc_hud_scale = "HUD Scale (resets positions)"
+L.f1_settings_hudswitcher_desc_hud_scale = "HUD Scale (resets saved changes)"
 L.f1_settings_hudswitcher_button_close = "Close"
 L.f1_settings_hudswitcher_desc_reset = "Reset HUD's data"
 L.f1_settings_hudswitcher_button_reset = "Reset"
@@ -1200,21 +1213,29 @@ L.f1_settings_hudswitcher_button_layout_editor = "Layout Editor"
 L.f1_settings_hudswitcher_desc_hud_not_supported = "! THIS HUD DOES NOT SUPPORT THE HUD EDITOR !"
 
 L.f1_bind_reset_default = "Default"
-L.f1_bind_disable_bind = "Disable"
+L.f1_bind_disable_bind = "Clear"
 L.f1_bind_description = "Click and press a button to bind a key."
-L.f1_bind_reset_default_description = "Reset to default value."
-L.f1_bind_disable_description = "Disable this bind."
+L.f1_bind_reset_default_description = "Reset to default key."
+L.f1_bind_disable_description = "Clear this bind's key."
+L.ttt2_bindings_new = "New bound key for {name}: {key}"
 
 L.f1_bind_weaponswitch = "Switch Weapon"
 L.f1_bind_sprint = "Sprint"
 
+L.f1_dmgindicator_title = "Damage Indicator settings"
+L.f1_dmgindicator_enable = "Enable"
+L.f1_dmgindicator_mode = "Select Damage Indicator theme"
+L.f1_dmgindicator_duration = "Seconds the damage indicator is visible after a hit"
+L.f1_dmgindicator_maxdamage = "Damage needed for the maximum opacity"
+L.f1_dmgindicator_maxalpha = "Damage Indicators maximum opacity"
+
 L.ttt2_bindings_new = "New bound key for {name}: {key}"
 L.hud_default = "Default HUD"
-L.hud_force = "Force HUD"
-L.hud_restricted = "Restrict HUDs"
-L.hud_default_failed = "Failed to set the HUD {hudname} as new default. Are you an admin and does this HUD even exist?"
-L.hud_forced_failed = "Failed to force the HUD {hudname}. Are you an admin and does this HUD even exist?"
-L.hud_restricted_failed = "Failed to restrict the HUD {hudname}. Are you an admin?"
+L.hud_force = "Forced HUD"
+L.hud_restricted = "Restricted HUDs"
+L.hud_default_failed = "Failed to set the HUD {hudname} as new default. You don't have permission to do that, or this HUD doesn't exist."
+L.hud_forced_failed = "Failed to force the HUD {hudname}. You don't have permission to do that, or this HUD doesn't exist."
+L.hud_restricted_failed = "Failed to restrict the HUD {hudname}. You don't have permission to do that."
 
 L.shop_role_select = "Select a role"
 L.shop_role_selected = "{roles}'s shop was selected!"
@@ -1222,8 +1243,15 @@ L.shop_search = "Search"
 
 L.button_save = "Save"
 
-L.disable_spectatorsoutline = "Deactivates spectators' outlines"
-L.disable_spectatorsoutline_tip = "Deactivates the outlines around object controlled by spectators (+Performance)"
+L.disable_spectatorsoutline = "Disable controlled objects' outlines"
+L.disable_spectatorsoutline_tip = "Disables the outlines around objects controlled by spectators (+Performance)"
 
-L.disable_overheadicons = "Deactivates role icons"
-L.disable_overheadicons_tip = "Deactivates the role icons on top of every player (+Performance)"
+L.disable_overheadicons = "Disable role icons"
+L.disable_overheadicons_tip = "Disables the role icons over the players' heads (+Performance)"
+
+-- 2020-01-04
+L.doubletap_sprint_anykey = "Continue double tap sprinting until you stop moving"
+L.doubletap_sprint_anykey_tip = "You will keep sprinting as long as you keep moving"
+
+L.disable_doubletap_sprint = "Disable double tap sprinting"
+L.disable_doubletap_sprint_tip = "Double tapping a movement key will no longer cause you to sprint"

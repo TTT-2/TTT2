@@ -8,12 +8,12 @@ TTT2 is an updated version of the TTT gamemode for [Garry's Mod](https://gmod.fa
 
 Find [TTT2 on Steam](https://steamcommunity.com/sharedfiles/filedetails/?id=1357204556)
 
-**This is still a beta version. Bugs are expected and the documentation will follow as soon as possible. [Please report bugs and suggestions here](https://github.com/Alf21/TTT2/issues)!**  
+**This is still a beta version. Bugs are expected and the documentation will follow as soon as possible. [Please report bugs and suggestions here](https://github.com/TTT-2/TTT2/issues)!**  
   
 * Discord: [https://discord.gg/9njYXGY](https://discord.gg/9njYXGY)  
-* Source: [https://github.com/Alf21/TTT2](https://github.com/Alf21/TTT2)  
-* Wiki: [https://github.com/Alf21/TTT2/wiki](https://github.com/Alf21/TTT2/wiki)
-* Designguidelines: [https://github.com/Alf21/TTT2/blob/master/DESIGNGUIDELINES.md](https://github.com/Alf21/TTT2/blob/master/DESIGNGUIDELINES.md)
+* Source: [https://github.com/TTT-2/TTT2](https://github.com/TTT-2/TTT2)  
+* Wiki: [https://github.com/TTT-2/TTT2/wiki](https://github.com/TTT-2/TTT2/wiki)
+* Designguidelines: [https://github.com/TTT-2/TTT2/blob/master/DESIGNGUIDELINES.md](https://github.com/TTT-2/TTT2/blob/master/DESIGNGUIDELINES.md)
 * GLua Beautifier: [https://gist.github.com/Alf21/e86601521f67fcbb88ddc34bfa778727](https://gist.github.com/Alf21/e86601521f67fcbb88ddc34bfa778727)
   
 ## MOTIVATION
@@ -36,7 +36,7 @@ There are a few new gamemodes based on TTT2. Click on these icons to open a list
 
 ## SETUP
 
-The setup is fairly easy. Just subscribe to TTT2 and the addons you want to use and get started. It’s recommended to use ULX to set it up ingame, there’s an [ULX addon for TTT2](https://steamcommunity.com/sharedfiles/filedetails/?id=1362430347). Commands for the weaponshop etc are found in [this wiki article](https://github.com/Alf21/TTT2/wiki/Commands).  
+The setup is fairly easy. Just subscribe to TTT2 and the addons you want to use and get started. It’s recommended to use ULX to set it up ingame, there’s an [ULX addon for TTT2](https://steamcommunity.com/sharedfiles/filedetails/?id=1362430347). Commands for the weaponshop etc are found in [this wiki article](https://github.com/TTT-2/TTT2/wiki/Commands).  
   
 <br />
 <br />

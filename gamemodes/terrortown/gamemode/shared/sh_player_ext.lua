@@ -7,6 +7,7 @@ local net = net
 local table = table
 local IsValid = IsValid
 local hook = hook
+local math = math
 
 local plymeta = FindMetaTable("Player")
 if not plymeta then
@@ -15,7 +16,9 @@ if not plymeta then
 	return
 end
 
-local math = math
+local defaultRoleDkColor = Color(28, 116, 10, 255)
+local defaultRoleLtColor = Color(110, 200, 70, 255)
+local defaultRoleBgColor = Color(200, 68, 81, 255)
 
 ---
 -- Checks whether a player is a available terrorist (not a spectator)
@@ -120,15 +123,17 @@ function plymeta:SetRole(subrole, team, forceHooks)
 	-- ye olde hooks
 	if newSubrole ~= oldSubrole or forceHooks then
 		self:SetRoleColor(rd.color)
-		self:SetRoleDkColor(util.ColorDarken(rd.color, 30))
-		self:SetRoleLtColor(util.ColorLighten(rd.color, 30))
-		self:SetRoleBgColor(util.ColorComplementary(rd.color))
+		self:SetRoleDkColor(rd.dkcolor)
+		self:SetRoleLtColor(rd.ltcolor)
+		self:SetRoleBgColor(rd.bgcolor)
 
 		if SERVER then
 			hook.Call("PlayerLoadout", GAMEMODE, self)
 
-			-- update subroleModel
-			self:SetModel(self:GetSubRoleModel())
+			if GetConVar("ttt_enforce_playermodel"):GetBool() then
+				-- update subroleModel
+				self:SetModel(self:GetSubRoleModel())
+			end
 
 			-- Always clear color state, may later be changed in TTTPlayerSetColor
 			self:SetColor(COLOR_WHITE)
@@ -168,7 +173,7 @@ end
 -- @return[default=Color(28, 116, 10, 255)] Color
 -- @realm shared
 function plymeta:GetRoleDkColor()
-	return self.roleDkColor or Color(28, 116, 10, 255)
+	return self.roleDkColor or defaultRoleDkColor
 end
 
 ---
@@ -184,7 +189,7 @@ end
 -- @return[default=Color(28, 116, 10, 255)] Color
 -- @realm shared
 function plymeta:GetRoleLtColor()
-	return self.roleLtColor or Color(110, 200, 70, 255)
+	return self.roleLtColor or defaultRoleLtColor
 end
 
 ---
@@ -200,7 +205,7 @@ end
 -- @return[default=Color(200, 68, 81, 255)] Color
 -- @realm shared
 function plymeta:GetRoleBgColor()
-	return self.roleBgColor or Color(200, 68, 81, 255)
+	return self.roleBgColor or defaultRoleBgColor
 end
 
 ---
@@ -711,43 +716,6 @@ function plymeta:HasEquipment()
 	return self:HasEquipmentItem() or self:HasEquipmentWeapon()
 end
 
-if CLIENT then
-
-	---
-	-- Returns if @{Player} has a specific @{Weapon}
-	-- @param string cls @{Weapon}'s class name
-	-- @return boolean
-	-- @realm shared
-	function plymeta:HasWeapon(cls) -- Server has this, but isn't shared for some reason
-		local weps = self:GetWeapons()
-
-		for i = 1, #weps do
-			local wep = weps[i]
-
-			if not IsValid(wep) or wep:GetClass() ~= cls then continue end
-
-			return true
-		end
-
-		return false
-	end
-
-	local ply = LocalPlayer
-	local gmod_GetWeapons = plymeta.GetWeapons
-
-	---
-	-- Returns all @{Weapon}s a @{Player} is owning
-	-- @return table
-	-- @realm shared
-	function plymeta:GetWeapons() -- Server has this, but isn't shared for some reason
-		if self ~= ply() then
-			return {}
-		else
-			return gmod_GetWeapons(self)
-		end
-	end
-end
-
 ---
 -- Overrides GetEyeTrace for an optional trace mask param. Technically traces
 -- like GetEyeTraceNoCursor but who wants to type that all the time, and we
@@ -768,161 +736,6 @@ function plymeta:GetEyeTrace(mask)
 	self.LastPlayerTraceMask = mask
 
 	return self.PlayerTrace
-end
-
--- TODO move this to client file
-if CLIENT then
-	---
-	-- Applies a animation gesture
-	-- @param ACT[https://wiki.garrysmod.com/page/Enums/ACT] act The activity (ACT) or sequence that should be played
-	-- @param number weight The weight this slot should be set to. Value must be ranging from 0 to 1.
-	-- @realm client
-	-- @see https://wiki.garrysmod.com/page/Player/AnimRestartGesture
-	-- @see https://wiki.garrysmod.com/page/Player/AnimSetGestureWeight
-	function plymeta:AnimApplyGesture(act, weight)
-		self:AnimRestartGesture(GESTURE_SLOT_CUSTOM, act, true) -- true = autokill
-		self:AnimSetGestureWeight(GESTURE_SLOT_CUSTOM, weight)
-	end
-
-	local function MakeSimpleRunner(act)
-		return function (ply, w)
-			-- just let this gesture play itself and get out of its way
-			if w == 0 then
-				ply:AnimApplyGesture(act, 1)
-
-				return 1
-			else
-				return 0
-			end
-		end
-	end
-
-	-- act -> gesture runner fn
-	local act_runner = {
-		-- ear grab needs weight control
-		-- sadly it's currently the only one
-		[ACT_GMOD_IN_CHAT] = function (ply, w)
-			local dest = ply:IsSpeaking() and 1 or 0
-
-			w = math.Approach(w, dest, FrameTime() * 10)
-			if w > 0 then
-				ply:AnimApplyGesture(ACT_GMOD_IN_CHAT, w)
-			end
-
-			return w
-		end
-	}
-
-	-- Insert all the "simple" gestures that do not need weight control
-	local gestTbl = {
-		ACT_GMOD_GESTURE_AGREE,
-		ACT_GMOD_GESTURE_DISAGREE,
-		ACT_GMOD_GESTURE_WAVE,
-		ACT_GMOD_GESTURE_BECON,
-		ACT_GMOD_GESTURE_BOW,
-		ACT_GMOD_TAUNT_SALUTE,
-		ACT_GMOD_TAUNT_CHEER,
-		ACT_SIGNAL_FORWARD,
-		ACT_SIGNAL_HALT,
-		ACT_SIGNAL_GROUP,
-		ACT_GMOD_GESTURE_ITEM_PLACE,
-		ACT_GMOD_GESTURE_ITEM_DROP,
-		ACT_GMOD_GESTURE_ITEM_GIVE
-	}
-
-	for _i = 1, #gestTbl do
-		local a = gestTbl[_i]
-
-		act_runner[a] = MakeSimpleRunner(a)
-	end
-
-	CreateConVar("ttt_show_gestures", "1", FCVAR_ARCHIVE)
-
-	---
-	-- Perform the gesture using the GestureRunner system. If custom_runner is
-	-- non-nil, it will be used instead of the default runner for the act.
-	-- @param ACT[https://wiki.garrysmod.com/page/Enums/ACT] act The activity (ACT) or sequence that should be played
-	-- @param table custom_runner
-	-- @return boolean success?
-	-- @realm client
-	function plymeta:AnimPerformGesture(act, custom_runner)
-		if not ConVarExists("ttt_show_gestures") or GetConVar("ttt_show_gestures"):GetInt() == 0 then return end
-
-		local runner = custom_runner or act_runner[act]
-
-		if not runner then
-			return false
-		end
-
-		self.GestureWeight = 0
-		self.GestureRunner = runner
-
-		return true
-	end
-
-	---
-	-- Perform a gesture update
-	-- @realm client
-	function plymeta:AnimUpdateGesture()
-		if not self.GestureRunner then return end
-
-		self.GestureWeight = self:GestureRunner(self.GestureWeight)
-
-		if self.GestureWeight <= 0 then
-			self.GestureRunner = nil
-		end
-	end
-
-	---
-	-- @hook
-	-- @param Player ply The player to update the animation info for.
-	-- @param Vector vel The player's velocity.
-	-- @param number maxseqgroundspeed Speed of the animation - used for playback rate scaling.
-	-- @return any ?
-	-- @realm client
-	function GM:UpdateAnimation(ply, vel, maxseqgroundspeed)
-		ply:AnimUpdateGesture()
-
-		return self.BaseClass.UpdateAnimation(self, ply, vel, maxseqgroundspeed)
-	end
-
-	---
-	-- @param Player ply
-	-- @hook
-	-- @realm client
-	function GM:GrabEarAnimation(ply)
-
-	end
-
-	local function TTT_PerformGesture()
-		local ply = net.ReadEntity()
-		local act = net.ReadUInt(16)
-
-		if not IsValid(ply) or act == nil then return end
-
-		ply:AnimPerformGesture(act)
-	end
-	net.Receive("TTT_PerformGesture", TTT_PerformGesture)
-else -- SERVER
-	---
-	-- On the server, we just send the client a message that the player is
-	-- performing a gesture. This allows the client to decide whether it should
-	-- play, depending on eg. a cvar.
-	-- @param ACT[https://wiki.garrysmod.com/page/Enums/ACT] act The activity (ACT) or sequence that should be played
-	-- @realm server
-	function plymeta:AnimPerformGesture(act)
-		if not act then return end
-
-		net.Start("TTT_PerformGesture")
-		net.WriteEntity(self)
-		net.WriteUInt(act, 16)
-		net.Broadcast()
-	end
-end
-
-if SERVER then
-	util.AddNetworkString("StartDrowning")
-	util.AddNetworkString("TTT2TargetPlayer")
 end
 
 ---
@@ -1050,6 +863,15 @@ function plymeta:GetLastFound()
 end
 
 ---
+-- Returns wether the player is ready. A player is ready when he is able to look
+-- around and move (first call of @{GM:SetupMove})
+-- @return boolean
+-- @realm shared
+function plymeta:IsReady()
+	return self.is_ready or false
+end
+
+---
 -- Sets the @{Player}'s @{Model}
 -- @param string mdlName
 -- @note override to fix PS/ModelSelector/... issues
@@ -1113,29 +935,3 @@ hook.Add("TTTEndRound", "TTTEndRound4TTT2TargetPlayer", function()
 		plys[i].targetPlayer = nil
 	end
 end)
-
-if CLIENT then
-	net.Receive("StartDrowning", function()
-		local client = LocalPlayer()
-		if not IsValid(client) then return end
-
-		local bool = net.ReadBool()
-
-		client:StartDrowning(bool, bool and net.ReadUInt(16), bool and net.ReadUInt(16))
-	end)
-
-	net.Receive("TTT2TargetPlayer", function(len)
-		local client = LocalPlayer()
-		if not IsValid(client) then return end
-
-		local target = net.ReadEntity()
-
-		if not IsValid(target) or not target:IsPlayer() or target:IsWorld() then
-			target = nil
-		end
-
-		if target == nil or IsValid(target) and target:IsActive() and target:Alive() then
-			client:SetTargetPlayer(target)
-		end
-	end)
-end

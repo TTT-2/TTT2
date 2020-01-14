@@ -165,6 +165,11 @@ else
 	local TryT = LANG.TryTranslation
 	local ParT = LANG.GetParamTranslation
 
+	local key_params = {
+		usekey = Key("+use", "USE"),
+		walkkey = Key("+walk", "WALK")
+	}
+
 	-- handle looking at healthstation
 	hook.Add("TTTRenderEntityInfo", "HUDDrawTargetIDHealthStation", function(data, params)
 		local client = LocalPlayer()
@@ -177,7 +182,7 @@ else
 		params.drawInfo = true
 		params.displayInfo.key = input.GetKeyCode(input.LookupBinding("+use"))
 		params.displayInfo.title.text = TryT(data.ent.PrintName)
-		params.displayInfo.subtitle.text = TryT("hstation_subtitle")
+		params.displayInfo.subtitle.text = ParT("hstation_subtitle", key_params)
 
 		local hstation_charge = data.ent:GetStoredHealth() or 0
 

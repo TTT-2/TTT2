@@ -115,6 +115,8 @@ local function SetupData(roleData)
 		end
 	end
 
+	CreateConVar("ttt_" .. roleData.name .. "_traitor_button", tostring(conVarData.traitorButton or 0), {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
+
 	CreateConVar("ttt_" .. roleData.abbr .. "_credits_starting", tostring(conVarData.credits or 0), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 	CreateConVar("ttt_" .. roleData.abbr .. "_credits_traitorkill", tostring(conVarData.creditsTraitorKill or 0), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 	CreateConVar("ttt_" .. roleData.abbr .. "_credits_traitordead", tostring(conVarData.creditsTraitorDead or 0), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
@@ -139,6 +141,11 @@ local function SetupData(roleData)
 
 	-- set a roledata icon material to prevent creating new materials each frame
 	roleData.iconMaterial = Material(roleData.icon)
+
+	-- set default colors
+	roleData.dkcolor = util.ColorDarken(roleData.color, 30)
+	roleData.ltcolor = util.ColorLighten(roleData.color, 30)
+	roleData.bgcolor = util.ColorComplementary(roleData.color)
 
 	print("[TTT2][ROLE] Added '" .. roleData.name .. "' role (index: " .. roleData.index .. ")")
 end

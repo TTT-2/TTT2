@@ -15,6 +15,7 @@ if CLIENT then
 	local tipsize = element_height
 	local margin = 5
 	local pad = 8
+	local color_tip = Color(205, 155, 0, 255)
 
 	HUDELEMENT.SlotIcons = {[WEAPON_HEAVY] = Material("vgui/ttt/pickup/icon_heavy.png"),
 		[WEAPON_PISTOL] = Material("vgui/ttt/pickup/icon_pistol.png"),
@@ -68,8 +69,6 @@ if CLIENT then
 
 		BaseClass.PerformLayout(self)
 	end
-
-	local color_tip = Color(205, 155, 0, 255)
 
 	function HUDELEMENT:DrawBar(x, y, w, h, alpha, item)
 

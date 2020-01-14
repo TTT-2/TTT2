@@ -632,6 +632,12 @@ local function TTTRagdollSearch()
 	-- long range
 	search.lrng = net.ReadBit()
 
+	-- searched by detective?
+	search.detective_search = net.ReadBool()
+
+	-- set search.show_sb based on detective_search or self search
+	search.show_sb = search.show or search.detective_search
+
 	hook.Call("TTTBodySearchEquipment", nil, search, eq)
 
 	if search.show then

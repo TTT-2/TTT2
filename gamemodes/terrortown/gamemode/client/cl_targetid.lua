@@ -21,6 +21,20 @@ local propspec_outline = Material("models/props_combine/portalball001_sheet")
 local base = Material("vgui/ttt/dynamic/sprite_base")
 local base_overlay = Material("vgui/ttt/dynamic/sprite_base_overlay")
 
+surface.CreateFont("TargetID_Key", {font = "Trebuchet24", size = 26, weight = 900})
+surface.CreateFont("TargetID_Title", {font = "Trebuchet24", size = 20, weight = 900})
+surface.CreateFont("TargetID_Subtitle", {font = "Trebuchet24", size = 17, weight = 300})
+surface.CreateFont("TargetID_Description", {font = "Trebuchet24", size = 15, weight = 300})
+
+-- keep this font for compatibility reasons
+surface.CreateFont("TargetIDSmall2", {font = "TargetID", size = 16, weight = 1000})
+
+local minimalist = CreateClientConVar("ttt_minimal_targetid", "0", FCVAR_ARCHIVE)
+local cv_draw_halo = CreateClientConVar("ttt_entity_draw_halo", "1", true, false)
+local MAX_TRACE_LENGTH = math.sqrt(3) * 32768
+local subtitle_color = Color(210, 210, 210)
+local color_blacktrans = Color(0, 0, 0, 180)
+
 ---
 -- Returns the localized ClassHint table
 -- Access for servers to display hints using their own HUD/UI.
@@ -44,8 +58,6 @@ end
 function GM:AddClassHint(cls, hint)
 	ClassHint[cls] = table.Copy(hint)
 end
-
-local color_blacktrans = Color(0, 0, 0, 180)
 
 ---
 -- Function that handles the drawing of the overhead roleicons, it does not check wether
@@ -197,19 +209,6 @@ local function DrawPropSpecLabels(client)
 	end
 end
 
-surface.CreateFont("TargetID_Key", {font = "Trebuchet24", size = 26, weight = 900})
-surface.CreateFont("TargetID_Title", {font = "Trebuchet24", size = 20, weight = 900})
-surface.CreateFont("TargetID_Subtitle", {font = "Trebuchet24", size = 17, weight = 300})
-surface.CreateFont("TargetID_Description", {font = "Trebuchet24", size = 15, weight = 300})
-
--- keep this font for compatibility reasons
-surface.CreateFont("TargetIDSmall2", {font = "TargetID", size = 16, weight = 1000})
-
-local minimalist = CreateClientConVar("ttt_minimal_targetid", "0", FCVAR_ARCHIVE)
-local cv_draw_halo = CreateClientConVar("ttt_entity_draw_halo", "1", true, false)
-local MAX_TRACE_LENGTH = math.sqrt(3) * 32768
-local subtitle_color = Color(210, 210, 210)
-
 ---
 -- Called from @{GM:HUDPaint} to draw @{Player} info when you hover over a @{Player} with your crosshair or mouse.
 -- @hook
@@ -229,16 +228,26 @@ function GM:HUDDrawTargetID()
 	endpos:Mul(MAX_TRACE_LENGTH)
 	endpos:Add(startpos)
 
-	local trace = util.TraceLine({
-		start = startpos,
-		endpos = endpos,
-		mask = MASK_SHOT,
-		filter = client:GetObserverMode() == OBS_MODE_IN_EYE and {client, client:GetObserverTarget()} or client
-	})
+	local ent, distance
 
-	-- this is the entity the player is looking at right now
-	local ent = trace.Entity
-	local distance = trace.StartPos:Distance(trace.HitPos)
+	-- if the user is looking at a traitor button, it should always be handled with priority
+	if TBHUD.focus_but and IsValid(TBHUD.focus_but.ent) and (TBHUD.focus_but.access or TBHUD.focus_but.admin) and TBHUD.focus_stick >= CurTime() then
+		ent = TBHUD.focus_but.ent
+
+		distance = startpos:Distance(ent:GetPos())
+	else
+		local trace = util.TraceLine({
+			start = startpos,
+			endpos = endpos,
+			mask = MASK_SHOT,
+			filter = client:GetObserverMode() == OBS_MODE_IN_EYE and {client, client:GetObserverTarget()} or client
+		})
+
+		-- this is the entity the player is looking at right now
+		ent = trace.Entity
+
+		distance = trace.StartPos:Distance(trace.HitPos)
+	end
 
 	-- make sure it is a valid entity
 	if not IsValid(ent) or ent.NoTarget then return end
@@ -277,6 +286,7 @@ function GM:HUDDrawTargetID()
 	}
 
 	-- call internal targetID functions first
+	HUDDrawTargetIDTButtons(data, params)
 	HUDDrawTargetIDWeapons(data, params)
 	HUDDrawTargetIDPlayers(data, params)
 	HUDDrawTargetIDRagdolls(data, params)
@@ -391,6 +401,105 @@ local key_params = {
 	walkkey = Key("+walk", "WALK")
 }
 
+-- handle looking at traitor buttons
+function HUDDrawTargetIDTButtons(data, params)
+	local client = LocalPlayer()
+	local admin_mode = GetConVar("ttt2_tbutton_admin_show")
+
+	if not IsValid(client) or not client:IsTerror() or not client:Alive()
+	or data.ent:GetClass() ~= "ttt_traitor_button" or data.distance > data.ent:GetUsableRange() then
+		return
+	end
+
+	params.drawInfo = true
+
+	params.displayInfo.key = input.GetKeyCode(key_params.usekey)
+
+	params.displayInfo.title.text = data.ent:GetDescription() == "?" and "Traitor Button" or data.ent:GetDescription()
+	params.displayInfo.subtitle.text = GetPT("tbut_help", key_params)
+
+	local special_info
+	if data.ent:GetDelay() < 0 then
+		special_info = TryT("tbut_single")
+	elseif data.ent:GetDelay() == 0 then
+		special_info = TryT("tbut_reuse")
+	else
+		special_info = GetPT("tbut_retime", {num = data.ent:GetDelay()})
+	end
+
+	params.displayInfo.desc[#params.displayInfo.desc + 1] = {
+		text = special_info,
+		color = client:GetRoleColor()
+	}
+
+	if not admin_mode:GetBool() or not client:IsAdmin() then return end
+
+	local but = TBHUD.focus_but
+
+	params.displayInfo.desc[#params.displayInfo.desc + 1] = {
+		text = "",
+		color = COLOR_WHITE
+	}
+
+	params.displayInfo.desc[#params.displayInfo.desc + 1] = {
+		text = "ADMIN AREA:",
+		color = COLOR_WHITE
+	}
+
+	params.displayInfo.desc[#params.displayInfo.desc + 1] = {
+		text = GetPT("tbut_role_toggle", {usekey = key_params.usekey, walkkey = key_params.walkkey, role = client:GetRoleString()}),
+		color = COLOR_WHITE
+	}
+
+	params.displayInfo.desc[#params.displayInfo.desc + 1] = {
+		text = GetPT("tbut_team_toggle", {usekey = key_params.usekey, walkkey = key_params.walkkey, team = client:GetTeam():gsub("^%l", string.upper)}),
+		color = COLOR_WHITE
+	}
+
+	params.displayInfo.desc[#params.displayInfo.desc + 1] = {
+		text = "",
+		color = COLOR_WHITE
+	}
+
+	params.displayInfo.desc[#params.displayInfo.desc + 1] = {
+		text = TryT("tbut_current_config"),
+		color = COLOR_WHITE
+	}
+
+	local l_role = but.overrideRole == nil and "tbut_default" or but.overrideRole and "tbut_allow" or "tbut_prohib"
+	local l_team = but.overrideTeam == nil and "tbut_default" or but.overrideTeam and "tbut_allow" or "tbut_prohib"
+
+	params.displayInfo.desc[#params.displayInfo.desc + 1] = {
+		text = GetPT("tbut_role_config", {current = TryT(l_role)}) .. ", " .. GetPT("tbut_team_config", {current = TryT(l_team)}),
+		color = COLOR_LGRAY
+	}
+
+	params.displayInfo.desc[#params.displayInfo.desc + 1] = {
+		text = TryT("tbut_intended_config"),
+		color = COLOR_WHITE
+	}
+
+	local l_roleIntend = but.roleIntend == "none" and "tbut_default" or but.roleIntend
+	local l_teamIntend = but.teamIntend == TEAM_NONE and "tbut_default" or but.teamIntend
+
+	params.displayInfo.desc[#params.displayInfo.desc + 1] = {
+		text = GetPT("tbut_role_config", {current = LANG.GetRawTranslation(l_roleIntend) or l_roleIntend}) .. ", " .. GetPT("tbut_team_config", {current = LANG.GetRawTranslation(l_teamIntend) or l_teamIntend}),
+		color = COLOR_LGRAY
+	}
+
+	if not TBHUD.focus_but.admin or TBHUD.focus_but.access then return end
+
+	params.displayInfo.desc[#params.displayInfo.desc + 1] = {
+		text = "",
+		color = COLOR_WHITE
+	}
+
+	params.displayInfo.desc[#params.displayInfo.desc + 1] = {
+		text = GetPT("tbut_admin_mode_only", {cv = admin_mode:GetName()}),
+		color = COLOR_ORANGE
+	}
+end
+
 -- handle looking at weapons
 function HUDDrawTargetIDWeapons(data, params)
 	local client = LocalPlayer()
@@ -416,10 +525,10 @@ function HUDDrawTargetIDWeapons(data, params)
 	params.displayInfo.title.text = TryT(weapon_name) .. " [" .. GetPT("target_slot_info", {slot = kind_pickup_wep}) .. "]"
 
 	if switchMode == SWITCHMODE_PICKUP then
-		params.displayInfo.subtitle.text = TryT("target_pickup_weapon") .. (not isActiveWeapon and GetPT("target_pickup_weapon_hidden", key_params) or "")
+		params.displayInfo.subtitle.text = GetPT("target_pickup_weapon", key_params) .. (not isActiveWeapon and GetPT("target_pickup_weapon_hidden", key_params) or "")
 	elseif switchMode == SWITCHMODE_SWITCH then
-		params.displayInfo.subtitle.text = TryT("target_switch_weapon") .. (not isActiveWeapon and GetPT("target_switch_weapon_hidden", key_params) or "")
-	elseif switchMode == SWITCHMODE_NOSPACE then
+		params.displayInfo.subtitle.text = GetPT("target_switch_weapon", key_params) .. (not isActiveWeapon and GetPT("target_switch_weapon_hidden", key_params) or "")
+	elseif switchMode == SWITCHMODE_FULLINV then
 		params.displayInfo.subtitle.text = TryT("target_switch_weapon_nospace")
 	end
 
@@ -439,11 +548,18 @@ function HUDDrawTargetIDWeapons(data, params)
 		}
 	end
 
-	if switchMode == SWITCHMODE_NOSPACE then
+	if switchMode == SWITCHMODE_FULLINV then
 		local dropWepKind = MakeKindValid(data.ent.Kind)
 
 		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
 			text = GetPT("target_switch_drop_weapon_info_noslot", {slot = dropWepKind}),
+			color = COLOR_ORANGE
+		}
+	end
+
+	if switchMode == SWITCHMODE_NOSPACE then
+		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
+			text = TryT("drop_no_room"),
 			color = COLOR_ORANGE
 		}
 	end
@@ -586,10 +702,10 @@ function HUDDrawTargetIDRagdolls(data, params)
 	end
 
 	-- add info if searched by detectives
-	if data.ent.search_result and client:IsDetective() then
+	if data.ent.search_result and data.ent.search_result.detective_search and client:IsDetective() then
 		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
 			text = TryT("corpse_searched_by_detective"),
-			color = DETECTIVE.bgcolor
+			color = DETECTIVE.ltcolor
 		}
 	end
 

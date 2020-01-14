@@ -21,6 +21,8 @@ local IsValid = IsValid
 local surface = surface
 local vgui = vgui
 
+local color_trans = Color(0, 0, 0, 0)
+
 local ttt2_indicator_dev = "vgui/ttt/ttt2_indicator_dev"
 local ttt2_indicator_vip = "vgui/ttt/ttt2_indicator_vip"
 local ttt2_indicator_addondev = "vgui/ttt/ttt2_indicator_addondev"
@@ -47,10 +49,11 @@ local vip_tbl = {
 	["76561198132229662"] = true, -- Satton RU
 	["76561198007725535"] = true, -- Skatcat
 	["76561197989909602"] = true, -- Tobiti
-	["76561193855292718"] = true, -- Lunex
+	["76561198150260014"] = true, -- Lunex
 	["76561198076404571"] = true, -- Histalek
 	["76561198042086461"] = true, -- James
-	["76561193814529882"] = true -- Trystan
+	["76561193814529882"] = true, -- Trystan
+	["76561198056317817"] = true -- Menof36go
 }
 
 local addondev_tbl = {
@@ -84,7 +87,7 @@ local namecolor = {
 	default = COLOR_WHITE,
 	dev = Color(100, 240, 105, 255),
 	vip = Color(220, 55, 55, 255),
-	addondev = Color(30, 105, 300, 255),
+	addondev = Color(30, 105, 30, 255),
 	admin = Color(255, 210, 35, 255),
 	streamer = Color(100, 70, 140, 255),
 	heroes = Color(70, 125, 110, 255)
@@ -252,8 +255,6 @@ function GM:TTTScoreboardColorForPlayer(ply)
 
 	return namecolor.default
 end
-
-local color_trans = Color(0, 0, 0, 0)
 
 ---
 -- Updates the row color for a @{Player} in the scoreboard

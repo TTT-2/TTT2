@@ -255,19 +255,6 @@ function util.GetDefaultColor(bgcolor)
 	end
 end
 
----
--- Paints an effect on the floor
--- @param number start starting time
--- @param string effname effect name
--- @param boolean ignore
--- @realm shared
--- @todo improve description
-function util.PaintDown(start, effname, ignore)
-	local btr = util.TraceLine({start = start, endpos = start + Vector(0, 0, -256), filter = ignore, mask = MASK_SOLID})
-
-	util.Decal(effname, btr.HitPos + btr.HitNormal, btr.HitPos - btr.HitNormal)
-end
-
 local function DoBleed(ent)
 	if not IsValid(ent) or (ent:IsPlayer() and (not ent:Alive() or not ent:IsTerror())) then return end
 
@@ -296,6 +283,8 @@ function util.StartBleeding(ent, dmg, t)
 	end
 
 	timer.Create("bleed" .. ent:EntIndex(), delay, times, function()
+		if not IsValid(ent) then return end
+
 		DoBleed(ent)
 	end)
 end
@@ -640,7 +629,7 @@ if CLIENT then
 	end
 
 	local karmacolors = {
-		max = Color(255, 255, 255, 255),
+		max = COLOR_WHITE,
 		high = Color(255, 240, 135, 255),
 		med = Color(245, 220, 60, 255),
 		low = Color(255, 180, 0, 255),
@@ -719,4 +708,25 @@ function util.SimpleTime(seconds, fmt)
 	local m = seconds % 60
 
 	return string.format(fmt, m, s, ms)
+end
+
+---
+-- When overwriting a gamefunction, the old one has to be cached in order to still use it.
+-- This creates an infinite recursion problem (stack overflow). Registering the function with
+-- this helper function fixes the problem.
+-- @param string name The name of the original function
+-- @return Function The pointer to the original functions
+-- @realm shared
+function util.OverwriteFunction(name)
+	local str = string.Split(name, ".")
+
+	if not _G[name .. "_backup"] then
+		if #str == 1 then
+			_G[name .. "_backup"] = _G[str[1]]
+		elseif #str == 2 then
+			_G[name .. "_backup"] = _G[str[1]][str[2]]
+		end
+	end
+
+	return _G[name .. "_backup"]
 end

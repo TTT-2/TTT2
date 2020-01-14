@@ -11,6 +11,8 @@ local net = net
 local color_1 = Color(150, 150, 150)
 local color_2 = Color(50, 200, 255)
 local color_3 = Color(0, 200, 0)
+local color_4 = Color(255, 200, 20)
+local color_5 = Color(255, 255, 200)
 
 local function LastWordsRecv()
 	local sender = net.ReadEntity()
@@ -31,9 +33,6 @@ local function LastWordsRecv()
 	)
 end
 net.Receive("TTT_LastWordsMsg", LastWordsRecv)
-
-local color_4 = Color(255, 200, 20)
-local color_5 = Color(255, 255, 200)
 
 local function TTT_RoleChat()
 	local sender = net.ReadEntity()

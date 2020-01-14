@@ -61,6 +61,8 @@ local MAX_CHARGE = 1250
 local SAMPLE_PLAYER = 1
 local SAMPLE_ITEM   = 2
 
+local cv_thickness
+
 AccessorFuncDT(SWEP, "charge", "Charge")
 AccessorFuncDT(SWEP, "last_scanned", "LastScanned")
 
@@ -89,6 +91,7 @@ function SWEP:Initialize()
 
 	if CLIENT then
 		self:AddHUDHelp("dna_help_primary", "dna_help_secondary", true)
+		cv_thickness = GetConVar("ttt_crosshair_thickness")
 	end
 
 	return self.BaseClass.Initialize(self)
@@ -190,7 +193,7 @@ function SWEP:GatherObjectSample(ent)
 end
 
 function SWEP:Report(msg, params)
-	LANG.Msg(self:GetOwner(), msg, params)
+	LANG.Msg(self:GetOwner(), msg, params, MSG_MSTACK_ROLE)
 end
 
 function SWEP:AddPlayerSample(corpse, killer)
@@ -414,12 +417,6 @@ if CLIENT then
 	local PT = LANG.GetParamTranslation
 	local TT = LANG.TryTranslation
 	local mathfloor = math.floor
-
-	local cv_thickness
-
-	hook.Add("Initialize", "LocalizeConVarWtester", function()
-		cv_thickness = GetConVar("ttt_crosshair_thickness")
-	end)
 
 	function SWEP:DrawHUD()
 		self:DrawHelp()
