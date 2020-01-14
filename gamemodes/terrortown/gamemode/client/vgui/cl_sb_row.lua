@@ -52,7 +52,8 @@ local vip_tbl = {
 	["76561198150260014"] = true, -- Lunex
 	["76561198076404571"] = true, -- Histalek
 	["76561198042086461"] = true, -- James
-	["76561193814529882"] = true -- Trystan
+	["76561193814529882"] = true, -- Trystan
+	["76561198056317817"] = true -- Menof36go
 }
 
 local addondev_tbl = {
