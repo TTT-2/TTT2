@@ -195,13 +195,13 @@ end
 ---
 -- Gives a specific @{ITEM} (if possible)
 -- @param string cls
--- @return @{ITEM} or false
+-- @return @{ITEM} or nil
 -- @realm server
 -- @internal
 function plymeta:AddEquipmentItem(cls)
 	local item = items.GetStored(cls)
 
-	if not item or item.limited and self:HasEquipmentItem(cls) then return false end
+	if not item or item.limited and self:HasEquipmentItem(cls) then return end
 
 	self.equipmentItems = self.equipmentItems or {}
 	self.equipmentItems[#self.equipmentItems + 1] = cls
@@ -209,6 +209,7 @@ function plymeta:AddEquipmentItem(cls)
 	item:Equip(self)
 
 	self:SendEquipment()
+
 	return item
 end
 
@@ -495,15 +496,15 @@ end
 ---
 -- Gives an @{ITEM} to a @{Player} and returns whether it was successful
 -- @param string cls
--- @return @{ITEM} or false
+-- @return @{ITEM} or nil
 -- @realm server
 function plymeta:GiveEquipmentItem(cls)
-	if not cls then return false end
+	if not cls then return end
 
 	local item = items.GetStored(cls)
 
 	if not item or item.limited and self:HasEquipmentItem(cls) then
-		return false
+		return
 	end
 
 	return self:AddEquipmentItem(cls)

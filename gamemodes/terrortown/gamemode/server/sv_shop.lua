@@ -148,7 +148,7 @@ local function NetOrderEquipment(len, ply)
 	OrderEquipment(ply, cls)
 end
 
-local function ConOrderEquipment(ply, cmd, args)
+local function ConCommandOrderEquipment(ply, cmd, args)
 	if #args ~= 1 then return end
 
 	OrderEquipment(ply, args[1])
@@ -156,7 +156,7 @@ end
 
 net.Receive("TTT2OrderEquipment", NetOrderEquipment)
 
-concommand.Add("ttt_order_equipment", ConOrderEquipment)
+concommand.Add("ttt_order_equipment", ConCommandOrderEquipment)
 
 ---
 -- Called whenever a @{Player} toggles the disguiser state

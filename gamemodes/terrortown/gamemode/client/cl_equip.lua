@@ -72,7 +72,7 @@ end
 
 local function PreqLabels(parent, x, y)
 	local tbl = {}
-	local ply = LocalPlayer()
+	local client = LocalPlayer()
 	tbl.credits = vgui.Create("DLabel", parent)
 	--tbl.credits:SetTooltip(GetTranslation("equip_help_cost"))
 	tbl.credits:SetPos(x, y)
@@ -86,7 +86,7 @@ local function PreqLabels(parent, x, y)
 
 	-- remaining credits text
 	tbl.credits.Check = function(s, sel)
-		local credits = ply:GetCredits()
+		local credits = client:GetCredits()
 		local cr = sel and sel.credits or 1
 
 		return credits >= cr, " " .. cr .. " / " .. credits, GetPTranslation("equip_cost", {num = credits})
@@ -107,14 +107,14 @@ local function PreqLabels(parent, x, y)
 	tbl.owned.Check = function(s, sel)
 		if ItemIsWeapon(sel) and not CanCarryWeapon(sel) then
 			return false, MakeKindValid(sel.Kind), GetPTranslation("equip_carry_slot", {slot = MakeKindValid(sel.Kind)})
-		elseif not ItemIsWeapon(sel) and sel.limited and ply:HasEquipmentItem(sel.id) then
+		elseif not ItemIsWeapon(sel) and sel.limited and client:HasEquipmentItem(sel.id) then
 			return false, "X", GetTranslation("equip_carry_own")
 		else
 			if ItemIsWeapon(sel) then
 				local cv_maxCount = GetConVar(ORDERED_SLOT_TABLE[MakeKindValid(sel.Kind)])
 				local maxCount = cv_maxCount and cv_maxCount:GetInt() or 0
 				maxCount = maxCount < 0 and "∞" or maxCount
-				return true, " " .. #ply:GetWeaponsOnSlot(MakeKindValid(sel.Kind)) .. " / " .. maxCount, GetTranslation("equip_carry")
+				return true, " " .. #client:GetWeaponsOnSlot(MakeKindValid(sel.Kind)) .. " / " .. maxCount, GetTranslation("equip_carry")
 			else
 				return true, "✔", GetTranslation("equip_carry")
 			end
@@ -135,7 +135,7 @@ local function PreqLabels(parent, x, y)
 	tbl.bought.img:SetImage("vgui/ttt/equip/package.png")
 
 	tbl.bought.Check = function(s, sel)
-		if sel.limited and ply:HasBought(tostring(sel.id)) then
+		if sel.limited and client:HasBought(tostring(sel.id)) then
 			return false, "X", GetTranslation("equip_stock_deny")
 		else
 			return true, "✔", GetTranslation("equip_stock_ok")
@@ -156,7 +156,7 @@ local function PreqLabels(parent, x, y)
 	tbl.info.img:SetImage("vgui/ttt/equip/icon_info")
 
 	tbl.info.Check = function(s, sel)
-		return EquipmentIsBuyable(sel, ply)
+		return EquipmentIsBuyable(sel, client)
 	end
 
 	for _, pnl in pairs(tbl) do
