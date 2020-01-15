@@ -135,18 +135,13 @@ function GM:TTTPlayerColor(model)
 	return COLOR_WHITE
 end
 
-local UpdateSprintFunc
+local UpdateSprint = UpdateSprint
 
 ---
 -- @hook
 -- @realm shared
 function GM:Think()
-	UpdateSprintFunc = UpdateSprintFunc or UpdateSprint
-
-	-- Might not be loaded yet due to load order
-	if UpdateSprintFunc then
-		UpdateSprintFunc()
-	end
+	UpdateSprint()
 end
 
 -- Drowning and such

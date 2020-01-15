@@ -3,6 +3,7 @@
 
 ttt_include("sh_init")
 
+ttt_include("sh_sprint")
 ttt_include("sh_main")
 ttt_include("sh_shopeditor")
 
@@ -34,7 +35,6 @@ ttt_include("sh_player_ext")
 ttt_include("sv_player_ext")
 ttt_include("sv_player")
 
-ttt_include("sh_sprint")
 ttt_include("sv_weapon_pickup")
 ttt_include("sv_addonchecker")
 
