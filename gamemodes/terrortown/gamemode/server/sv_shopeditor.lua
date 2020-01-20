@@ -2,7 +2,6 @@
 -- @module ShopEditor
 
 local net = net
-local table = table
 local sql = sql
 local util = util
 
