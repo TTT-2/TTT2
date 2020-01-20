@@ -485,11 +485,6 @@ function plymeta:GiveEquipmentWeapon(cls, callback)
 			-- basically a delayed/asynchronous return, necessary due to the timers
 			callback(self, cls, w)
 		end
-
-		if isfunction(w.WasBought) then
-			-- some weapons give extra ammo after being bought, etc
-			w:WasBought(self)
-		end
 	end
 end
 

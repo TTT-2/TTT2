@@ -126,10 +126,7 @@ function AddWeaponIntoFallbackTable(wepClass, roleData)
 	if not wep then return end
 
 	wep.CanBuy = wep.CanBuy or {}
-
-	if not table.HasValue(wep.CanBuy, roleData.index) then
-		wep.CanBuy[#wep.CanBuy + 1] = roleData.index
-	end
+	wep.CanBuy[roleData.index] = roleData.index
 
 	local eq = CreateEquipment(wep)
 	if not eq then return end
@@ -245,7 +242,7 @@ if CLIENT then
 			for i = 1, #itms do
 				v = itms[i]
 
-				if v and not v.Doublicated and v.CanBuy and table.HasValue(v.CanBuy, fallback) then
+				if v and not v.Doublicated and v.CanBuy and v.CanBuy[fallback] then
 					local data = v.EquipMenuData or {}
 
 					local base = GetEquipmentBase(data, v)
@@ -261,7 +258,7 @@ if CLIENT then
 			for i = 1, #weps do
 				v = weps[i]
 
-				if v and not v.Doublicated and v.CanBuy and table.HasValue(v.CanBuy, fallback) then
+				if v and not v.Doublicated and v.CanBuy and v.CanBuy[fallback] then
 					local data = v.EquipMenuData or {}
 
 					local base = GetEquipmentBase(data, v)
@@ -365,7 +362,7 @@ if SERVER then
 			for i = 1, #itms do
 				local equip = itms[i]
 
-				if not equip.CanBuy or not table.HasValue(equip.CanBuy, fallback) then continue end
+				if not equip.CanBuy or not equip.CanBuy[fallback] then continue end
 
 				fallbackTable[#fallbackTable + 1] = equip
 			end
@@ -375,7 +372,7 @@ if SERVER then
 			for i = 1, #weps do
 				local equip = weps[i]
 
-				if not equip.CanBuy or not table.HasValue(equip.CanBuy, fallback) then continue end
+				if not equip.CanBuy or not equip.CanBuy[fallback] then continue end
 
 				fallbackTable[#fallbackTable + 1] = equip
 			end
@@ -742,10 +739,7 @@ function InitFallbackShops()
 			if not equip then continue end
 
 			equip.CanBuy = equip.CanBuy or {}
-
-			if table.HasValue(equip.CanBuy, v.index) then continue end
-
-			equip.CanBuy[#equip.CanBuy + 1] = v.index
+			equip.CanBuy[v.index] = v.index
 		end
 	end
 end
@@ -769,10 +763,7 @@ function InitFallbackShop(roleData, fallbackTable, avoidSet)
 			if not equip then continue end
 
 			equip.CanBuy = equip.CanBuy or {}
-
-			if table.HasValue(equip.CanBuy, roleData.index) then continue end
-
-			equip.CanBuy[#equip.CanBuy + 1] = roleData.index
+			equip.CanBuy[roleData.index] = roleData.index
 		end
 	end
 end
@@ -794,10 +785,8 @@ function AddToShopFallback(fallback, subrole, eq)
 		if not equip then return end
 
 		equip.CanBuy = equip.CanBuy or {}
-
-		if table.HasValue(equip.CanBuy, subrole) then return end
-
-		equip.CanBuy[#equip.CanBuy + 1] = subrole
+		print("AddToShopFallBack", fallback, subrole, eq)
+		equip.CanBuy[subrole] = subrole
 	end
 end
 
@@ -813,7 +802,7 @@ local function InitDefaultEquipmentForRole(roleData)
 	for i = 1, #itms do
 		local v = itms[i]
 
-		if not v or v.Doublicated or not v.CanBuy or not table.HasValue(v.CanBuy, roleData.index) then continue end
+		if not v or v.Doublicated or not v.CanBuy or not v.CanBuy[roleData.index] then continue end
 
 		local data = v.EquipMenuData or {}
 
@@ -827,7 +816,7 @@ local function InitDefaultEquipmentForRole(roleData)
 	for i = 1, #sweps do
 		local v = sweps[i]
 
-		if not v or v.Doublicated or not v.CanBuy or not table.HasValue(v.CanBuy, roleData.index) then continue end
+		if not v or v.Doublicated or not v.CanBuy or not v.CanBuy[roleData.index] then continue end
 
 		local data = v.EquipMenuData or {}
 
@@ -960,10 +949,8 @@ if SERVER then
 			if not equip then continue end
 
 			equip.CanBuy = equip.CanBuy or {}
+			equip.CanBuy[roleData.index] = roleData.index
 
-			if not table.HasValue(equip.CanBuy, roleData.index) then
-				equip.CanBuy[#equip.CanBuy + 1] = roleData.index
-			end
 			--
 
 			SYNC_EQUIP[roleData.index] = SYNC_EQUIP[roleData.index] or {}
@@ -981,10 +968,8 @@ if SERVER then
 	-- @realm server
 	function AddEquipmentToRole(subrole, equip_table)
 		equip_table.CanBuy = equip_table.CanBuy or {}
+		equip_table.CanBuy[subrole] = subrole
 
-		if not table.HasValue(equip_table.CanBuy, subrole) then
-			equip_table.CanBuy[#equip_table.CanBuy + 1] = subrole
-		end
 		--
 
 		SYNC_EQUIP[subrole] = SYNC_EQUIP[subrole] or {}
@@ -1011,15 +996,7 @@ if SERVER then
 		if not equip_table.CanBuy then
 			equip_table.CanBuy = {}
 		else
-			local canBuyTbl = equip_table.CanBuy
-
-			for k = 1, #canBuyTbl do
-				if canBuyTbl[k] ~= subrole then continue end
-
-				tableremove(canBuyTbl, k)
-
-				break
-			end
+			equip_table.CanBuy[subrole] = nil
 		end
 		--
 
@@ -1098,10 +1075,7 @@ else -- CLIENT
 
 		-- find buyable equip to load info from
 		equip.CanBuy = equip.CanBuy or {}
-
-		if not table.HasValue(equip.CanBuy, subrole) then
-			equip.CanBuy[#equip.CanBuy + 1] = subrole
-		end
+		equip.CanBuy[subrole] = subrole
 
 		if equip and not equip.Doublicated then
 			local data = equip.EquipMenuData or {}
@@ -1130,16 +1104,9 @@ else -- CLIENT
 	-- @param table equip
 	-- @realm client
 	function RemoveEquipmentFromRoleEquipment(subrole, equip)
-		local canBuyTbl = equip.CanBuy
 		local tableremove = table.remove
 
-		for k = 1, #canBuyTbl do
-			if canBuyTbl[k] ~= subrole then continue end
-
-			tableremove(canBuyTbl, k)
-
-			break
-		end
+		equip.CanBuy[subrole] = nil
 
 		for k, eq in pairs(Equipment[subrole]) do
 			if eq.id ~= equip.id then continue end

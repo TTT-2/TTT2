@@ -208,13 +208,7 @@ function ShopEditor.OnChangeWSCVar(subrole, fallback, ply_or_rf)
 
 		if not canBuy then continue end
 
-		for k = 1, #canBuy do
-			if canBuy[k] ~= subrole then continue end
-
-			table.remove(canBuy, k)
-
-			break
-		end
+		canBuy[subrole] = nil
 	end
 
 	local weps = weapons.GetList()
@@ -225,13 +219,7 @@ function ShopEditor.OnChangeWSCVar(subrole, fallback, ply_or_rf)
 
 		if not canBuy then continue end
 
-		for k = 1, #canBuy do
-			if canBuy[k] ~= subrole then continue end
-
-			table.remove(canBuy, k)
-
-			break
-		end
+		canBuy[subrole] = nil
 	end
 
 	-- reset and set if it's a fallback
@@ -279,7 +267,7 @@ function ShopEditor.OnChangeWSCVar(subrole, fallback, ply_or_rf)
 			if not eqTbl then continue end
 
 			eqTbl.CanBuy = eqTbl.CanBuy or {}
-			eqTbl.CanBuy[#eqTbl.CanBuy + 1] = subrole
+			eqTbl.CanBuy[subrole] = subrole
 		end
 	end
 end

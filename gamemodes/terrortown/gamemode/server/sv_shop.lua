@@ -74,7 +74,14 @@ local function OrderEquipment(ply, cls)
 	end
 
 	-- Check for minimum players, global limit, team limit and player limit
-	if not EquipmentIsBuyable(equip_table, ply) then return end
+	local buyable, _, reason = EquipmentIsBuyable(equip_table, ply)
+	if not buyable then
+		if reason then
+			LANG.Msg(ply, reason, nil, MSG_MSTACK_ROLE)
+		end
+
+		return
+	end
 
 	-- still support old items
 	local idOrCls = (is_item and equip_table.oldId or nil) or cls
@@ -110,9 +117,18 @@ local function OrderEquipment(ply, cls)
 	-- no longer restricted to only WEAPON_EQUIP weapons, just anything that
 	-- is whitelisted and carryable
 	if is_item then
-		ply:GiveEquipmentItem(cls)
+		local item = ply:GiveEquipmentItem(cls)
+
+		if isfunction(item.Bought) then
+			item:Bought(ply)
+		end
 	else
-		ply:GiveEquipmentWeapon(cls)
+		ply:GiveEquipmentWeapon(cls, function(p, c, w)
+			if isfunction(w.WasBought) then
+				-- some weapons give extra ammo after being bought, etc
+				w:WasBought(p)
+			end
+		end)
 	end
 
 	LANG.Msg(ply, "buy_received", nil, MSG_MSTACK_ROLE)
@@ -124,10 +140,6 @@ local function OrderEquipment(ply, cls)
 		net.WriteString(cls)
 		net.Send(ply)
 	end)
-
-	if isfunction(equip_table.Bought) then
-		equip_table:Bought(ply)
-	end
 
 	if GetGlobalBool("ttt2_random_shop_reroll_per_buy") then
 		RerollShop(ply)

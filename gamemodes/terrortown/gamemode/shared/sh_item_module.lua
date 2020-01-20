@@ -17,6 +17,15 @@ for i = 1, #itemsFiles do
 
 	local cls = string.sub(fl, 0, #fl - 4)
 
+	ITEM.CanBuy = ITEM.CanBuy or {}
+	local CanBuy = {}
+
+	for _, subrole in pairs(ITEM.CanBuy) do
+		CanBuy[subrole] = subrole
+	end
+
+	ITEM.CanBuy = CanBuy
+
 	items.Register(ITEM, cls)
 
 	ITEM = nil
@@ -51,6 +60,15 @@ for i = 1, #itemsFolders do
 		end
 	end
 
+	ITEM.CanBuy = ITEM.CanBuy or {}
+	local CanBuy = {}
+
+	for _, subrole in pairs(ITEM.CanBuy) do
+		CanBuy[subrole] = subrole
+	end
+
+	ITEM.CanBuy = CanBuy
+
 	items.Register(ITEM, folder)
 
 	ITEM = nil
@@ -83,7 +101,7 @@ hook.Add("TTTInitPostEntity", "InitTTT2OldItems", function()
 				ITEMDATA.desc = nil
 				ITEMDATA.name = name
 				ITEMDATA.material = v.material
-				ITEMDATA.CanBuy = {subrole}
+				ITEMDATA.CanBuy = { [subrole] = subrole }
 				ITEMDATA.limited = v.limited or v.LimitedStock or true
 
 				-- reset this old hud bool
@@ -107,10 +125,7 @@ hook.Add("TTTInitPostEntity", "InitTTT2OldItems", function()
 				end)
 			else
 				item.CanBuy = item.CanBuy or {}
-
-				if not table.HasValue(item.CanBuy, subrole) then
-					item.CanBuy[#item.CanBuy + 1] = subrole
-				end
+				item.CanBuy[subrole] = subrole
 			end
 		end
 	end
