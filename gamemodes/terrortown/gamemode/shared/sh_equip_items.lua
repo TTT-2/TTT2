@@ -727,6 +727,8 @@ end
 -- @realm shared
 function InitFallbackShops()
 	local tbl = {TRAITOR, DETECTIVE}
+	local itms = items.GetList()
+	local weps = weapons.GetList()
 
 	for i = 1, #tbl do
 		local v = tbl[i]
@@ -836,11 +838,44 @@ local function InitDefaultEquipmentForRole(roleData)
 	roleData.fallbackTable = tbl
 end
 
+local function CleanUpDefaultCanBuyIndices()
+	local itms = items.GetList()
+
+	-- load items
+	for i = 1, #itms do
+		local itm = itms[i]
+		local CanBuy = {}
+		itm.CanBuy = itm.CanBuy or {}
+
+		for _, subrole in pairs(itm.CanBuy) do
+			CanBuy[subrole] = subrole
+		end
+
+		itm.CanBuy = CanBuy
+	end
+
+	local sweps = weapons.GetList()
+
+	-- load sweps
+	for i = 1, #sweps do
+		local wep = sweps[i]
+		local CanBuy = {}
+		wep.CanBuy = wep.CanBuy or {}
+
+		for _, subrole in pairs(wep.CanBuy) do
+			CanBuy[subrole] = subrole
+		end
+
+		wep.CanBuy = CanBuy
+	end
+end
+
 ---
 -- Initializes the default equipment for traitors and detectives
 -- @internal
 -- @realm shared
 function InitDefaultEquipment()
+	CleanUpDefaultCanBuyIndices()
 	InitDefaultEquipmentForRole(TRAITOR)
 	InitDefaultEquipmentForRole(DETECTIVE)
 end
