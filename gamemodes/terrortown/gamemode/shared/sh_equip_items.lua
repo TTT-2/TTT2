@@ -727,8 +727,6 @@ end
 -- @realm shared
 function InitFallbackShops()
 	local tbl = {TRAITOR, DETECTIVE}
-	local itms = items.GetList()
-	local weps = weapons.GetList()
 
 	for i = 1, #tbl do
 		local v = tbl[i]
