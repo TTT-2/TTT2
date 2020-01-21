@@ -17,15 +17,6 @@ for i = 1, #itemsFiles do
 
 	local cls = string.sub(fl, 0, #fl - 4)
 
-	ITEM.CanBuy = ITEM.CanBuy or {}
-	local CanBuy = {}
-
-	for _, subrole in pairs(ITEM.CanBuy) do
-		CanBuy[subrole] = subrole
-	end
-
-	ITEM.CanBuy = CanBuy
-
 	items.Register(ITEM, cls)
 
 	ITEM = nil
@@ -60,14 +51,6 @@ for i = 1, #itemsFolders do
 		end
 	end
 
-	ITEM.CanBuy = ITEM.CanBuy or {}
-	local CanBuy = {}
-
-	for _, subrole in pairs(ITEM.CanBuy) do
-		CanBuy[subrole] = subrole
-	end
-
-	ITEM.CanBuy = CanBuy
 
 	items.Register(ITEM, folder)
 

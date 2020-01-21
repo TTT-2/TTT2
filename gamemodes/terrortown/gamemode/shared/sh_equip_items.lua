@@ -785,7 +785,6 @@ function AddToShopFallback(fallback, subrole, eq)
 		if not equip then return end
 
 		equip.CanBuy = equip.CanBuy or {}
-		print("AddToShopFallBack", fallback, subrole, eq)
 		equip.CanBuy[subrole] = subrole
 	end
 end
@@ -836,6 +835,24 @@ local function InitDefaultEquipmentForRole(roleData)
 	roleData.fallbackTable = tbl
 end
 
+
+---
+-- A table with structure tbl[key] = value is turned into tbl[value] = value by this function.
+-- This allows you to easily access the table using the value as an index.
+-- This function is destructive! If you want to preserve the table, you have to copy it first.
+local function ValueToKey(tbl)
+	local tmp = tmp or {}
+
+	for key, value in pairs(tbl) do
+		tmp[value] = value
+		tbl[key] = nil
+	end
+
+	for key, _ in pairs(tmp) do
+		tbl[key] = tmp[key]
+	end
+end
+
 ---
 -- Cleans up the structure of the CanBuy table of all weapons and items.
 -- After calling this, all keys will be equal to their value. This allows access in O(1) rather than O(n).
@@ -848,14 +865,8 @@ local function CleanUpDefaultCanBuyIndices()
 	-- load items
 	for i = 1, #itms do
 		local itm = itms[i]
-		local CanBuy = {}
 		itm.CanBuy = itm.CanBuy or {}
-
-		for _, subrole in pairs(itm.CanBuy) do
-			CanBuy[subrole] = subrole
-		end
-
-		itm.CanBuy = CanBuy
+		ValueToKey(itm.CanBuy)
 	end
 
 	local sweps = weapons.GetList()
@@ -863,14 +874,8 @@ local function CleanUpDefaultCanBuyIndices()
 	-- load sweps
 	for i = 1, #sweps do
 		local wep = sweps[i]
-		local CanBuy = {}
 		wep.CanBuy = wep.CanBuy or {}
-
-		for _, subrole in pairs(wep.CanBuy) do
-			CanBuy[subrole] = subrole
-		end
-
-		wep.CanBuy = CanBuy
+		ValueToKey(wep.CanBuy)
 	end
 end
 
