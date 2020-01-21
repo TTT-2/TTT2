@@ -838,6 +838,12 @@ local function InitDefaultEquipmentForRole(roleData)
 	roleData.fallbackTable = tbl
 end
 
+---
+-- Cleans up the structure of the CanBuy table of all weapons and items.
+-- After calling this, all keys will be equal to their value. This allows access in O(1) rather than O(n).
+-- table.HasValue is still supported, but please just check if the key is not nil instead.
+-- @internal
+-- @realm shared
 local function CleanUpDefaultCanBuyIndices()
 	local itms = items.GetList()
 

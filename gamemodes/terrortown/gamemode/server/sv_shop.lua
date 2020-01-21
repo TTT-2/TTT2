@@ -104,9 +104,7 @@ local function OrderEquipment(ply, cls)
 		LANG.Msg(ply, message, nil, MSG_MSTACK_ROLE)
 	end
 
-	if allow == false then
-		return
-	end
+	if allow == false then return end
 
 	if not ignoreCost then
 		ply:SubtractCredits(credits)
@@ -155,19 +153,15 @@ end
 local function NetOrderEquipment(len, ply)
 	local cls = net.ReadString()
 
-	if #cls == 0 then return end
-
 	OrderEquipment(ply, cls)
 end
+net.Receive("TTT2OrderEquipment", NetOrderEquipment)
 
 local function ConCommandOrderEquipment(ply, cmd, args)
 	if #args ~= 1 then return end
 
 	OrderEquipment(ply, args[1])
 end
-
-net.Receive("TTT2OrderEquipment", NetOrderEquipment)
-
 concommand.Add("ttt_order_equipment", ConCommandOrderEquipment)
 
 ---
