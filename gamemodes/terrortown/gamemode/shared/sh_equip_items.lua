@@ -839,7 +839,7 @@ end
 ---
 -- A table with structure tbl[key] = value is turned into tbl[value] = value by this function.
 -- This allows you to easily access the table using the value as an index.
--- This function is destructive! If you want to preserve the table, you have to copy it first.
+-- @warning This function is destructive! If you want to preserve the table, you have to copy it first.
 local function ValueToKey(tbl)
 	local tmp = tmp or {}
 
@@ -848,7 +848,7 @@ local function ValueToKey(tbl)
 		tbl[key] = nil
 	end
 
-	for key, _ in pairs(tmp) do
+	for key in pairs(tmp) do
 		tbl[key] = tmp[key]
 	end
 end
