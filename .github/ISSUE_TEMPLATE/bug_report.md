@@ -39,7 +39,7 @@ A clear and concise description of what you expected to happen.
 
 ## Context (please provide as much as you can):
 
-- Collection-Link of your Server: [e.g. https://steamcommunity.com/workshop/filedetails/?id=1357745995]
+- Collection-Link of your Server: [e.g. https://steamcommunity.com/sharedfiles/filedetails/?id=1888516630]
 - **All** Server-Errors in the server console
 - Client-Errors in the developer console
 - other Addons installed in your Servers `addons`-folder
