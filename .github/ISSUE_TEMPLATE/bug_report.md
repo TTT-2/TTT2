@@ -3,9 +3,12 @@ name: Bug report
 about: Create a report to help us improve
 ---
 
-## Please make sure to read the [FAQ](https://github.com/TTT-2/TTT2/wiki/faq) first!
+## Disclaimer
 
-## Your Version of TTT2
+If you are missing the following information: "Your Version of TTT2" and "Describe the Bug" your Issue will be closed!
+Also please make sure to read the [FAQ](https://github.com/TTT-2/TTT2/wiki/faq) first!
+
+## Your Version of TTT2 (mandatory)
 
 Do you use the Workshop Version of TTT2 or did you pull a Version from GitHub?  
 If the latter is the case please also provide the (shortened) commithash. (executing `git log -n 1 --pretty=format:"%h"` in your Servers TTT2 repository will provide it to you)
