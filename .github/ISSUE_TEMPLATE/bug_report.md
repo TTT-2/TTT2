@@ -11,15 +11,17 @@ Also please make sure to read the [FAQ](https://github.com/TTT-2/TTT2/wiki/faq) 
 ## Your Version of TTT2 (mandatory)
 
 Do you use the Workshop Version of TTT2 or did you pull a Version from GitHub?  
-If the latter is the case please also provide the (shortened) commithash. (executing `git log -n 1 --pretty=format:"%h"` in your Servers TTT2 repository will provide it to you)
+If the latter is the case please also provide the (shortened) commithash.  
+(executing `git log -n 1 --pretty=format:"%h"` in your Servers TTT2 repository will provide it to you)
 
 ## Video
 
-If it's a very strange problem, it's better to add a video to see what happens. This step can replace the following steps: "Screenshots", "To Reproduce" and "Describe the bug"
+If it's a very strange problem, it's better to add a video to see what happens. This step can replace the following steps: "Describe the bug", "To Reproduce"
 
-## Describe the bug
+## Describe the bug (mandatory)
 
 A clear and concise description of what the bug is.
+An Error is **not** a description.
 
 ## To Reproduce
 
@@ -34,16 +36,13 @@ Steps to reproduce the behaviour:
 
 A clear and concise description of what you expected to happen.
 
-## Screenshots
-
-If applicable, add screenshots to help explain your problem.
-
 ## Context (please provide as much as you can):
 
 - Collection-Link of your Server: [e.g. https://steamcommunity.com/workshop/filedetails/?id=1357745995]
 - **All** Server-Errors in the server console
 - Client-Errors in the developer console
-- Addons
+- other Addons installed in your Servers `addons`-folder
+- screenshots
 
 ## Additional context
 
