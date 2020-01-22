@@ -5,7 +5,7 @@ about: Create a report to help us improve
 
 ## Disclaimer
 
-If you are missing the following information: "Your Version of TTT2" and "Describe the Bug" your Issue will be closed!
+If you are missing the following information: "Your Version of TTT2" and "Describe the Bug" your Issue will be closed!  
 Also please make sure to read the [FAQ](https://github.com/TTT-2/TTT2/wiki/faq) first!
 
 ## Your Version of TTT2 (mandatory)
@@ -16,7 +16,8 @@ If the latter is the case please also provide the (shortened) commithash.
 
 ## Video
 
-If it's a very strange problem, it's better to add a video to see what happens. This step can replace the following steps: "Describe the bug", "To Reproduce"
+If it's a very strange problem, it's better to add a video to see what happens.  
+This step can replace the following steps: "Describe the bug", "To Reproduce"
 
 ## Describe the bug (mandatory)
 
