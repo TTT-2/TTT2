@@ -5,11 +5,10 @@ about: Create a report to help us improve
 
 ## Disclaimer
 
-If you are missing the following information:
+If you are missing the following information your Issue will be closed!
 
 - "Your Version of TTT2"
 - "Describe the Bug"
-  your Issue will be closed!
 
 Also please make sure to read the [FAQ](https://github.com/TTT-2/TTT2/wiki/faq) first!
 
