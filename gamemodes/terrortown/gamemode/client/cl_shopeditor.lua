@@ -452,14 +452,8 @@ function ShopEditor.CreateOwnShopEditor(roleData, onCreate)
 		if eq then
 			eq.CanBuy = eq.CanBuy or {}
 
-			if table.HasValue(eq.CanBuy, roleData.index) then
-				for k = 1, #eq.CanBuy do
-					if eq.CanBuy[k] ~= roleData.index then continue end
-
-					table.remove(eq.CanBuy, k)
-
-					break
-				end
+			if eq.CanBuy[roleData.index] then
+				eq.CanBuy[roleData.index] = nil
 
 				-- remove
 				net.Start("shop")
@@ -468,7 +462,7 @@ function ShopEditor.CreateOwnShopEditor(roleData, onCreate)
 				net.WriteString(eq.id)
 				net.SendToServer()
 			else
-				eq.CanBuy[#eq.CanBuy + 1] = roleData.index
+				eq.CanBuy[roleData.index] = roleData.index
 
 				-- add
 				net.Start("shop")
@@ -485,7 +479,7 @@ function ShopEditor.CreateOwnShopEditor(roleData, onCreate)
 			if eq then
 				eq.CanBuy = eq.CanBuy or {}
 
-				if table.HasValue(eq.CanBuy, roleData.index) then
+				if eq.CanBuy[roleData.index] then
 					v:Toggle(true)
 				else
 					v:Toggle(false)
@@ -696,13 +690,7 @@ local function shopFallbackAnsw(len)
 
 		if not canBuy then continue end
 
-		for k = 1, #canBuy do
-			if canBuy[k] == subrole then
-				table.remove(canBuy, k)
-
-				break
-			end
-		end
+		canBuy[subrole] = nil
 	end
 
 	local weps = weapons.GetList()
@@ -713,13 +701,7 @@ local function shopFallbackAnsw(len)
 
 		if not canBuy then continue end
 
-		for k = 1, #canBuy do
-			if canBuy[k] == subrole then
-				table.remove(canBuy, k)
-
-				break
-			end
-		end
+		canBuy[subrole] = nil
 	end
 
 	if fb == SHOP_UNSET then
@@ -735,7 +717,7 @@ local function shopFallbackAnsw(len)
 			local equip = not items.IsItem(eq.id) and weapons.GetStored(eq.id) or items.GetStored(eq.id)
 			if equip then
 				equip.CanBuy = equip.CanBuy or {}
-				equip.CanBuy[#equip.CanBuy + 1] = subrole
+				equip.CanBuy[subrole] = subrole
 			end
 
 			Equipment[subrole][#Equipment[subrole] + 1] = eq
@@ -780,7 +762,7 @@ local function shopFallbackReset(len)
 				local equip = not items.IsItem(eq.id) and weapons.GetStored(eq.id) or items.GetStored(eq.id)
 				if equip then
 					equip.CanBuy = equip.CanBuy or {}
-					equip.CanBuy[#equip.CanBuy + 1] = subrole
+					equip.CanBuy[subrole] = subrole
 				end
 
 				Equipment[subrole][#Equipment[subrole] + 1] = eq
@@ -806,7 +788,7 @@ function ShopEditor.ShopFallbackRefresh()
 				if equip then
 					equip.CanBuy = equip.CanBuy or {}
 
-					if table.HasValue(equip.CanBuy, wshop.selectedRole) then
+					if equip.CanBuy[wshop.selectedRole] then
 						v:Toggle(true)
 					else
 						v:Toggle(false)
