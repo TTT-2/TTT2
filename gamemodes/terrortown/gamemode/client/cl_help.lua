@@ -110,14 +110,14 @@ local function AddBindingCategory(category, parent)
 end
 
 function HELPSCRN.IsOpen()
-	return helpframe and IsValid(helpframe) or IsValid(LocalPlayer().settingsFrame)
+	return IsValid(helpframe) or IsValid(LocalPlayer().settingsFrame)
 end
 
 ---
 -- Opens the help screen
 -- @realm client
 function HELPSCRN:Show()
-	if helpframe and IsValid(helpframe) then
+	if IsValid(helpframe) then
 		helpframe:Close()
 
 		return
