@@ -25,6 +25,50 @@ local MutedState
 
 g_VoicePanelList = nil
 
+local function VoiceTryEnable()
+	if not VOICE.IsSpeaking() and VOICE.CanSpeak() then
+		VOICE.IsTeam = false
+		RunConsoleCommand("+voicerecord")
+	end
+end
+
+local function VoiceTryDisable()
+	if VOICE.IsSpeaking() and not VOICE.IsTeam then
+		RunConsoleCommand("-voicerecord")
+	end
+end
+
+local function VoiceTeamTryEnable()
+	local ply = LocalPlayer()
+
+	if not IsValid(ply) then return end
+
+	local plyrd = ply:GetSubRoleData()
+
+	if not VOICE.IsSpeaking() and VOICE.CanSpeak() and ply:IsActive() and not plyrd.unknownTeam and not plyrd.disabledTeamVoice then
+		VOICE.IsTeam = true
+		RunConsoleCommand("+voicerecord")
+	end
+end
+
+local function VoiceTeamTryDisable()
+	local ply = LocalPlayer()
+
+	if not IsValid(ply) then return end
+
+	local plyrd = ply:GetSubRoleData()
+
+	if VOICE.IsSpeaking() and VOICE.IsTeam then
+		RunConsoleCommand("-voicerecord")
+	end
+end
+
+-- register a binding for the general voicechat
+bind.Register("ttt2_voice", VoiceTryEnable, VoiceTryDisable, "TTT2 Bindings", "f1_bind_voice", input.GetKeyCode(input.LookupBinding("+voicerecord") or KEY_X))
+
+-- register a binding for the team voicechat
+bind.Register("ttt2_voice_team", VoiceTeamTryEnable, VoiceTeamTryDisable, "TTT2 Bindings", "f1_bind_voice_team", input.GetKeyCode(input.LookupBinding("+speed") or KEY_LSHIFT))
+
 -- 255 at 100
 -- 5 at 5000
 local function VoiceNotifyThink(pnl)
@@ -70,15 +114,11 @@ function GM:PlayerStartVoice(ply)
 		if client:IsActive() and not clrd.unknownTeam and not clrd.disabledTeamVoice then
 			local tm = client:GetTeam()
 			if tm ~= TEAM_NONE and not TEAMS[tm].alone then
-				if not client:KeyDown(IN_SPEED) and not client:KeyDownLast(IN_SPEED) then
-					client[tm .. "_gvoice"] = true
-
-					RunConsoleCommand("tvog", "1")
-				else
-					client[tm .. "_gvoice"] = false
-
-					RunConsoleCommand("tvog", "0")
-				end
+				net.Start("TTT2RoleGlobalVoice")
+				local state = not VOICE.IsTeam
+				client[tm .. "_gvoice"] = state
+				net.WriteBool(state)
+				net.SendToServer()
 			end
 		end
 
@@ -359,6 +399,10 @@ end
 -- @return boolean
 -- @realm client
 function VOICE.CanSpeak()
+	if not GetGlobalBool("sv_voiceenable", true) then
+		return false
+	end
+
 	if not GetGlobalBool("ttt_voice_drain", false) then
 		return true
 	end

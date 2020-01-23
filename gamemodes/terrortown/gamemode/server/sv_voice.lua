@@ -20,9 +20,12 @@ end
 -- Communication control
 local cv_ttt_limit_spectator_voice = CreateConVar("ttt_limit_spectator_voice", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
+local sv_voiceenable = GetConVar("sv_voiceenable")
+
 local loc_voice = CreateConVar("ttt_locational_voice", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 hook.Add("TTT2SyncGlobals", "AddVoiceGlobals", function()
+	SetGlobalBool(sv_voiceenable:GetName(), sv_voiceenable:GetBool())
 	SetGlobalBool(loc_voice:GetName(), loc_voice:GetBool())
 end)
 
@@ -119,24 +122,35 @@ local function SendRoleVoiceState(speaker)
 	end
 end
 
-local function RoleGlobalVoice(ply, cmd, args)
+local function RoleGlobalVoice(ply, state)
 	if not IsValid(ply) or not ply:IsActive() or ply:GetSubRoleData().unknownTeam or ply:GetSubRoleData().disabledTeamVoice then return end
 
 	local tm = ply:GetTeam()
 	if tm == TEAM_NONE or TEAMS[tm].alone then return end
 
-	if #args ~= 1 then return end
-
-	local state = tonumber(args[1])
-
-	ply[tm .. "_gvoice"] = state == 1
+	ply[tm .. "_gvoice"] = state
 
 	SendRoleVoiceState(ply)
 end
-concommand.Add("tvog", RoleGlobalVoice)
 
-local function MuteTeam(ply, cmd, args)
-	if not IsValid(ply) or not #args == 1 and tonumber(args[1]) then return end
+local function NetRoleGlobalVoice(len, ply)
+	local state = net.ReadBool()
+
+	RoleGlobalVoice(ply, state)
+end
+net.Receive("TTT2RoleGlobalVoice", NetRoleGlobalVoice)
+
+local function ConCommandRoleGlobalVoice(ply, cmd, args)
+	if #args ~= 1 then return end
+
+	local state = tonumber(args[1]) == 1
+
+	RoleGlobalVoice(ply, state)
+end
+concommand.Add("tvog", ConCommandRoleGlobalVoice)
+
+local function MuteTeam(ply, state)
+	if not IsValid(ply) then return end
 
 	if not ply:IsSpec() then
 		ply.mute_team = -1
@@ -144,16 +158,29 @@ local function MuteTeam(ply, cmd, args)
 		return
 	end
 
-	local t = tonumber(args[1])
+	ply.mute_team = state
 
-	ply.mute_team = t
-
-	if t == MUTE_ALL then
+	if state == MUTE_ALL then
 		ply:ChatPrint("All muted.")
-	elseif t == MUTE_NONE or t == TEAM_UNASSIGNED or not team.Valid(t) then
+	elseif state == MUTE_NONE or state == TEAM_UNASSIGNED or not team.Valid(state) then
 		ply:ChatPrint("None muted.")
 	else
-		ply:ChatPrint(team.GetName(t) .. " muted.")
+		ply:ChatPrint(team.GetName(state) .. " muted.")
 	end
 end
-concommand.Add("ttt_mute_team", MuteTeam)
+
+local function NetMuteTeam(len, ply)
+	local state = net.ReadBool()
+
+	MuteTeam(ply, state)
+end
+net.Receive("TTT2MuteTeam", NetMuteTeam)
+
+local function ConCommandMuteTeam(ply, cmd, args)
+	if not #args == 1 and tonumber(args[1]) then return end
+
+	local state = tonumber(args[1])
+
+	MuteTeam(ply, state)
+end
+concommand.Add("ttt_mute_team", ConCommandMuteTeam)
