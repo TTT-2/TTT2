@@ -52,12 +52,6 @@ local function VoiceTeamTryEnable()
 end
 
 local function VoiceTeamTryDisable()
-	local ply = LocalPlayer()
-
-	if not IsValid(ply) then return end
-
-	local plyrd = ply:GetSubRoleData()
-
 	if VOICE.IsSpeaking() and VOICE.IsTeam then
 		RunConsoleCommand("-voicerecord")
 	end

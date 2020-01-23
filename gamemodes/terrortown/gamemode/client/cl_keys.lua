@@ -2,7 +2,6 @@
 -- @section key_manager
 -- @desc Key overrides for TTT specific keyboard functions
 
-local timer = timer
 local IsValid = IsValid
 local UpdateInputSprint = UpdateInputSprint
 local cv_sv_cheats = GetConVar("sv_cheats")
