@@ -26,6 +26,8 @@ local MutedState
 g_VoicePanelList = nil
 
 local function VoiceTryEnable()
+	if not hook.Run("TTT2CanUseVoiceChat", LocalPlayer()) then return end
+
 	if not VOICE.IsSpeaking() and VOICE.CanSpeak() then
 		VOICE.IsTeam = false
 		RunConsoleCommand("+voicerecord")
@@ -39,6 +41,8 @@ local function VoiceTryDisable()
 end
 
 local function VoiceTeamTryEnable()
+	if not hook.Run("TTT2CanUseTeamVoiceChat", LocalPlayer()) then return end
+
 	local ply = LocalPlayer()
 
 	if not IsValid(ply) then return end
@@ -80,6 +84,24 @@ local function VoiceNotifyThink(pnl)
 	local d = client:GetPos():Distance(pnl.ply:GetPos())
 
 	pnl:SetAlpha(math.max(-0.1 * d + 255, 15))
+end
+
+---
+-- Whether or not the @{Player} use the voice chat.
+-- @param Player ply @{Player} who wants to use the voice chat
+-- @hook
+-- @realm client
+function GM:TTT2CanUseVoiceChat(ply)
+	return true
+end
+
+---
+-- Whether or not the @{Player} use the team voice chat.
+-- @param Player ply @{Player} who wants to use the team voice chat
+-- @hook
+-- @realm client
+function GM:TTT2CanUseTeamVoiceChat(ply)
+	return true
 end
 
 local PlayerVoicePanels = {}
