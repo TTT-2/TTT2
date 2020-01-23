@@ -22,6 +22,7 @@ ttt_include("cl_fonts")
 
 ttt_include("sh_init")
 
+ttt_include("sh_sprint")
 ttt_include("sh_main")
 ttt_include("sh_shopeditor")
 ttt_include("sh_scoring")
@@ -70,8 +71,6 @@ ttt_include("cl_armor")
 ttt_include("cl_damage_indicator")
 ttt_include("sh_armor")
 ttt_include("cl_weapon_pickup")
-
-ttt_include("sh_sprint")
 
 ---
 -- Called after the gamemode loads and starts.
