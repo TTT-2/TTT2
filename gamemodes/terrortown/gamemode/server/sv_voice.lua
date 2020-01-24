@@ -48,7 +48,7 @@ local function PlayerCanHearTeam(listener, speaker, speakerTeam)
 	if speakerTeam == TEAM_NONE or speakerSubRoleData.unknownTeam or speakerSubRoleData.disabledTeamVoice then return false, false end
 	-- Listener checks
 	if listener:GetSubRoleData().disabledTeamVoiceRecv or not listener:IsActive() or not listener:IsInTeam(speaker) then return false, false end
-	if TEAMS[team].alone then return false, false end
+	if TEAMS[speakerTeam].alone then return false, false end
 
 	return true, loc_voice:GetBool()
 end
@@ -102,9 +102,9 @@ end
 
 local function SendRoleVoiceState(speaker)
 	local tm = speaker:GetTeam()
-	if tm == TEAM_NONE or TEAMS[tm].alone then return end
+	local isGlobal = speaker[tm .. "_gvoice"]
 
-	local state = speaker[tm .. "_gvoice"]
+	if isGlobal then return end
 
 	-- send umsg to living traitors that this is traitor-only talk
 	local rf = GetTeamMemberFilter(speaker, true)
@@ -113,7 +113,7 @@ local function SendRoleVoiceState(speaker)
 	-- we can fit it into a mere byte by being cheeky.
 	net.Start("TTT_RoleVoiceState")
 	net.WriteUInt(speaker:EntIndex() - 1, 7) -- player ids can only be 1-128
-	net.WriteBit(state)
+	net.WriteBit(isTeam)
 
 	if rf then
 		net.Send(rf)
@@ -122,31 +122,30 @@ local function SendRoleVoiceState(speaker)
 	end
 end
 
-local function RoleGlobalVoice(ply, state)
-	if not IsValid(ply) or not ply:IsActive() or ply:GetSubRoleData().unknownTeam or ply:GetSubRoleData().disabledTeamVoice then return end
+local function RoleGlobalVoice(ply, isGlobal)
+	if not IsValid(ply) or not ply:IsActive() then return end
 
 	local tm = ply:GetTeam()
-	if tm == TEAM_NONE or TEAMS[tm].alone then return end
 
-	ply[tm .. "_gvoice"] = state
+	ply[tm .. "_gvoice"] = isGlobal
 	ply.blockVoice = hook.Run("TTT2CanUseVoiceChat", ply, tm)
 
 	SendRoleVoiceState(ply)
 end
 
 local function NetRoleGlobalVoice(len, ply)
-	local state = net.ReadBool()
+	local isGlobal = net.ReadBool()
 
-	RoleGlobalVoice(ply, state)
+	RoleGlobalVoice(ply, isGlobal)
 end
 net.Receive("TTT2RoleGlobalVoice", NetRoleGlobalVoice)
 
 local function ConCommandRoleGlobalVoice(ply, cmd, args)
 	if #args ~= 1 then return end
 
-	local state = tonumber(args[1]) == 1
+	local isGlobal = tobool(args[1])
 
-	RoleGlobalVoice(ply, state)
+	RoleGlobalVoice(ply, isGlobal)
 end
 concommand.Add("tvog", ConCommandRoleGlobalVoice)
 

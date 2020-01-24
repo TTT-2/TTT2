@@ -26,39 +26,59 @@ local MutedState
 g_VoicePanelList = nil
 
 local function VoiceTryEnable()
-	if not hook.Run("TTT2CanUseVoiceChat", LocalPlayer()) then return end
+	local client = LocalPlayer()
+
+	if not hook.Run("TTT2CanUseVoiceChat", client, false) then return false end
 
 	if not VOICE.IsSpeaking() and VOICE.CanSpeak() then
-		VOICE.IsTeam = false
+		VOICE.isTeam = false
 		RunConsoleCommand("+voicerecord")
+
+		return true
 	end
+
+	return false
 end
 
 local function VoiceTryDisable()
-	if VOICE.IsSpeaking() and not VOICE.IsTeam then
+	if VOICE.IsSpeaking() and not VOICE.isTeam then
 		RunConsoleCommand("-voicerecord")
+
+		return true
 	end
+
+	return false
 end
 
 local function VoiceTeamTryEnable()
-	if not hook.Run("TTT2CanUseTeamVoiceChat", LocalPlayer()) then return end
+	local client = LocalPlayer()
 
-	local ply = LocalPlayer()
+	if not hook.Run("TTT2CanUseVoiceChat", client, true) then return false end
 
-	if not IsValid(ply) then return end
+	if not IsValid(client) then return false end
 
-	local plyrd = ply:GetSubRoleData()
+	local clientrd = client:GetSubRoleData()
+	local tm = client:GetTeam()
 
-	if not VOICE.IsSpeaking() and VOICE.CanSpeak() and ply:IsActive() and not plyrd.unknownTeam and not plyrd.disabledTeamVoice then
-		VOICE.IsTeam = true
+	if not VOICE.IsSpeaking() and VOICE.CanSpeak() and client:IsActive() and tm ~= TEAM_NONE
+	and not TEAMS[tm].alone and not clientrd.unknownTeam and not clientrd.disabledTeamVoice then
+		VOICE.isTeam = true
 		RunConsoleCommand("+voicerecord")
+
+		return true
 	end
+
+	return false
 end
 
 local function VoiceTeamTryDisable()
-	if VOICE.IsSpeaking() and VOICE.IsTeam then
+	if VOICE.IsSpeaking() and VOICE.isTeam then
 		RunConsoleCommand("-voicerecord")
+
+		return true
 	end
+
+	return false
 end
 
 -- register a binding for the general voicechat
@@ -89,18 +109,10 @@ end
 ---
 -- Whether or not the @{Player} use the voice chat.
 -- @param Player ply @{Player} who wants to use the voice chat
+-- @param boolean isTeam Are they trying to use the team voice chat
 -- @hook
 -- @realm client
-function GM:TTT2CanUseVoiceChat(ply)
-	return true
-end
-
----
--- Whether or not the @{Player} use the team voice chat.
--- @param Player ply @{Player} who wants to use the team voice chat
--- @hook
--- @realm client
-function GM:TTT2CanUseTeamVoiceChat(ply)
+function GM:TTT2CanUseVoiceChat(ply, isTeam)
 	return true
 end
 
@@ -127,15 +139,15 @@ function GM:PlayerStartVoice(ply)
 	if client == ply then
 		local clrd = client:GetSubRoleData()
 
-		if client:IsActive() and not clrd.unknownTeam and not clrd.disabledTeamVoice then
+		if client:IsActive() then
 			local tm = client:GetTeam()
-			if tm ~= TEAM_NONE and not TEAMS[tm].alone then
-				net.Start("TTT2RoleGlobalVoice")
-				local state = not VOICE.IsTeam
-				client[tm .. "_gvoice"] = state
-				net.WriteBool(state)
-				net.SendToServer()
-			end
+
+			local isGlobal = not VOICE.isTeam
+			client[tm .. "_gvoice"] = isGlobal
+
+			net.Start("TTT2RoleGlobalVoice")
+			net.WriteBool(isGlobal)
+			net.SendToServer()
 		end
 
 		VOICE.SetSpeaking(true)
@@ -206,7 +218,7 @@ end
 
 local function ReceiveVoiceState()
 	local idx = net.ReadUInt(7) + 1 -- we -1 serverside
-	local state = net.ReadBit() == 1
+	local isGlobal = net.ReadBit() == 1
 
 	-- prevent glitching due to chat starting/ending across round boundary
 	if GAMEMODE.round_state ~= ROUND_ACTIVE then return end
@@ -226,11 +238,11 @@ local function ReceiveVoiceState()
 
 	if tm == TEAM_NONE or TEAMS[tm].alone then return end
 
-	ply[tm .. "_gvoice"] = state
+	ply[tm .. "_gvoice"] = isGlobal
 
 	if not IsValid(PlayerVoicePanels[ply]) then return end
 
-	PlayerVoicePanels[ply].Color = state and VP_GREEN or (ply:GetRoleColor() or VP_RED)
+	PlayerVoicePanels[ply].Color = isGlobal and VP_GREEN or (ply:GetRoleColor() or VP_RED)
 end
 net.Receive("TTT_RoleVoiceState", ReceiveVoiceState)
 
