@@ -174,7 +174,7 @@ function bind.IsPressed(name)
 
 	local buttons = bind.FindAll(name)
 
-	for i=1, #buttons do
+	for i = 1, #buttons do
 		if WasPressed[buttons[i]] then
 			return true
 		end

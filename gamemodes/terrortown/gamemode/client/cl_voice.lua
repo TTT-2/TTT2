@@ -136,19 +136,15 @@ function GM:PlayerStartVoice(ply)
 	GAMEMODE:PlayerEndVoice(ply, true)
 
 	-- Tell server this is global
-	if client == ply then
-		local clrd = client:GetSubRoleData()
+	if client == ply and client:IsActive() then
+		local tm = client:GetTeam()
 
-		if client:IsActive() then
-			local tm = client:GetTeam()
+		local isGlobal = not VOICE.isTeam
+		client[tm .. "_gvoice"] = isGlobal
 
-			local isGlobal = not VOICE.isTeam
-			client[tm .. "_gvoice"] = isGlobal
-
-			net.Start("TTT2RoleGlobalVoice")
-			net.WriteBool(isGlobal)
-			net.SendToServer()
-		end
+		net.Start("TTT2RoleGlobalVoice")
+		net.WriteBool(isGlobal)
+		net.SendToServer()
 
 		VOICE.SetSpeaking(true)
 	end

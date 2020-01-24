@@ -33,7 +33,7 @@ cvars.AddChangeCallback(loc_voice:GetName(), function(cv, old, new)
 	SetGlobalBool(loc_voice:GetName(), tobool(tonumber(new)))
 end)
 
-local function PlayerCanHearSpectator(listener, speaker)
+local function PlayerCanHearSpectator(listener, speaker, roundState)
 	local isSpec = listener:IsSpec()
 	-- limited if specific convar is on, or we're in detective mode
 	local limit = DetectiveMode() or cv_ttt_limit_spectator_voice:GetBool()
