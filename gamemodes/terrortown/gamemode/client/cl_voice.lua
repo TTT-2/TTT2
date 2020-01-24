@@ -110,6 +110,7 @@ end
 -- Whether or not the @{Player} use the voice chat.
 -- @param Player ply @{Player} who wants to use the voice chat
 -- @param boolean isTeam Are they trying to use the team voice chat
+-- @return boolean Whether or not the @{Player} can use the voice chat
 -- @hook
 -- @realm client
 function GM:TTT2CanUseVoiceChat(ply, isTeam)
