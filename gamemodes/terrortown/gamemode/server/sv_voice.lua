@@ -20,15 +20,43 @@ end
 -- Communication control
 local cv_ttt_limit_spectator_voice = CreateConVar("ttt_limit_spectator_voice", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
+local sv_voiceenable = GetConVar("sv_voiceenable")
+
 local loc_voice = CreateConVar("ttt_locational_voice", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 hook.Add("TTT2SyncGlobals", "AddVoiceGlobals", function()
+	SetGlobalBool(sv_voiceenable:GetName(), sv_voiceenable:GetBool())
 	SetGlobalBool(loc_voice:GetName(), loc_voice:GetBool())
 end)
 
 cvars.AddChangeCallback(loc_voice:GetName(), function(cv, old, new)
 	SetGlobalBool(loc_voice:GetName(), tobool(tonumber(new)))
 end)
+
+local function PlayerCanHearSpectator(listener, speaker, roundState)
+	local isSpec = listener:IsSpec()
+	-- limited if specific convar is on, or we're in detective mode
+	local limit = DetectiveMode() or cv_ttt_limit_spectator_voice:GetBool()
+
+	return isSpec or not limit or roundState ~= ROUND_ACTIVE, not isSpec and loc_voice:GetBool() and roundState ~= ROUND_POST
+end
+
+local function PlayerCanHearTeam(listener, speaker, speakerTeam)
+	local speakerSubRoleData = speaker:GetSubRoleData()
+
+	-- Speaker checks
+	if speakerTeam == TEAM_NONE or speakerSubRoleData.unknownTeam or speakerSubRoleData.disabledTeamVoice then return false, false end
+	-- Listener checks
+	if listener:GetSubRoleData().disabledTeamVoiceRecv or not listener:IsActive() or not listener:IsInTeam(speaker) then return false, false end
+	if TEAMS[speakerTeam].alone then return false, false end
+
+	return true, loc_voice:GetBool()
+end
+
+local function PlayerIsMuted(listener, speaker)
+	-- Enforced silence and specific mute
+	if mute_all or listener:IsSpec() and listener.mute_team == speaker:Team() or listener.mute_team == MUTE_ALL then return true end
+end
 
 -- TODO
 ---
@@ -45,63 +73,38 @@ end)
 -- @ref https://wiki.garrysmod.com/page/GM/PlayerCanHearPlayersVoice
 -- @local
 function GM:PlayerCanHearPlayersVoice(listener, speaker)
-	-- Enforced silence
-	if mute_all then
-		return false, false
-	end
+	if speaker.blockVoice then return false, false end
 
 	if not IsValid(speaker) or not IsValid(listener) or listener == speaker then
 		return false, false
 	end
 
-	-- limited if specific convar is on, or we're in detective mode
-	local limit = DetectiveMode() or cv_ttt_limit_spectator_voice:GetBool()
+	local speakerTeam = speaker:GetTeam()
+	local roundState = GetRoundState()
 
-	-- Spectators should not be heard by living players during round
-	if speaker:IsSpec() and not listener:IsSpec() and limit and GetRoundState() == ROUND_ACTIVE then
+	if PlayerIsMuted(listener, speaker) then
 		return false, false
-	end
-
-	-- Specific mute
-	if listener:IsSpec() and listener.mute_team == speaker:Team() or listener.mute_team == MUTE_ALL then
-		return false, false
-	end
-
-	-- Specs should not hear each other locationally
-	if speaker:IsSpec() and listener:IsSpec() then
-		return true, false
 	end
 
 	-- custom post-settings
 	local res1, res2 = hook.Run("TTT2PostPlayerCanHearPlayersVoice", listener, speaker)
 
-	if res1 ~= nil then
-		return res1, res2 or false
+	if res1 ~= nil then return res1, res2 or false end
+
+	if speaker:IsSpec() then
+		return PlayerCanHearSpectator(listener, speaker, roundState)
+	elseif speaker[speakerTeam .. "_gvoice"] then
+		return true, loc_voice:GetBool() and roundState ~= ROUND_POST
+	else
+		return PlayerCanHearTeam(listener, speaker, speakerTeam)
 	end
-
-	-- Traitors "team"chat by default, non-locationally
-	local tm = speaker:GetTeam()
-	local sprd = speaker:GetSubRoleData()
-
-	if tm ~= TEAM_NONE and speaker:IsActive() and not sprd.unknownTeam and not sprd.disabledTeamVoice and not listener:GetSubRoleData().disabledTeamVoiceRecv and not TEAMS[tm].alone then
-		if speaker[tm .. "_gvoice"] then
-			return true, loc_voice:GetBool()
-		elseif listener:IsActive() and listener:IsInTeam(speaker) then
-			return true, false
-		else
-			-- unless <Team>_gvoice is true, other teams can't hear speaker
-			return false, false
-		end
-	end
-
-	return true, loc_voice:GetBool() and GetRoundState() ~= ROUND_POST
 end
 
 local function SendRoleVoiceState(speaker)
 	local tm = speaker:GetTeam()
-	if tm == TEAM_NONE or TEAMS[tm].alone then return end
+	local isGlobal = speaker[tm .. "_gvoice"]
 
-	local state = speaker[tm .. "_gvoice"]
+	if isGlobal then return end
 
 	-- send umsg to living traitors that this is traitor-only talk
 	local rf = GetTeamMemberFilter(speaker, true)
@@ -110,7 +113,7 @@ local function SendRoleVoiceState(speaker)
 	-- we can fit it into a mere byte by being cheeky.
 	net.Start("TTT_RoleVoiceState")
 	net.WriteUInt(speaker:EntIndex() - 1, 7) -- player ids can only be 1-128
-	net.WriteBit(state)
+	net.WriteBit(isTeam)
 
 	if rf then
 		net.Send(rf)
@@ -119,24 +122,35 @@ local function SendRoleVoiceState(speaker)
 	end
 end
 
-local function RoleGlobalVoice(ply, cmd, args)
-	if not IsValid(ply) or not ply:IsActive() or ply:GetSubRoleData().unknownTeam or ply:GetSubRoleData().disabledTeamVoice then return end
+local function RoleGlobalVoice(ply, isGlobal)
+	if not IsValid(ply) or not ply:IsActive() then return end
 
 	local tm = ply:GetTeam()
-	if tm == TEAM_NONE or TEAMS[tm].alone then return end
 
-	if #args ~= 1 then return end
-
-	local state = tonumber(args[1])
-
-	ply[tm .. "_gvoice"] = state == 1
+	ply[tm .. "_gvoice"] = isGlobal
+	ply.blockVoice = hook.Run("TTT2CanUseVoiceChat", ply, tm)
 
 	SendRoleVoiceState(ply)
 end
-concommand.Add("tvog", RoleGlobalVoice)
 
-local function MuteTeam(ply, cmd, args)
-	if not IsValid(ply) or not #args == 1 and tonumber(args[1]) then return end
+local function NetRoleGlobalVoice(len, ply)
+	local isGlobal = net.ReadBool()
+
+	RoleGlobalVoice(ply, isGlobal)
+end
+net.Receive("TTT2RoleGlobalVoice", NetRoleGlobalVoice)
+
+local function ConCommandRoleGlobalVoice(ply, cmd, args)
+	if #args ~= 1 then return end
+
+	local isGlobal = tobool(args[1])
+
+	RoleGlobalVoice(ply, isGlobal)
+end
+concommand.Add("tvog", ConCommandRoleGlobalVoice)
+
+local function MuteTeam(ply, state)
+	if not IsValid(ply) then return end
 
 	if not ply:IsSpec() then
 		ply.mute_team = -1
@@ -144,16 +158,29 @@ local function MuteTeam(ply, cmd, args)
 		return
 	end
 
-	local t = tonumber(args[1])
+	ply.mute_team = state
 
-	ply.mute_team = t
-
-	if t == MUTE_ALL then
+	if state == MUTE_ALL then
 		ply:ChatPrint("All muted.")
-	elseif t == MUTE_NONE or t == TEAM_UNASSIGNED or not team.Valid(t) then
+	elseif state == MUTE_NONE or state == TEAM_UNASSIGNED or not team.Valid(state) then
 		ply:ChatPrint("None muted.")
 	else
-		ply:ChatPrint(team.GetName(t) .. " muted.")
+		ply:ChatPrint(team.GetName(state) .. " muted.")
 	end
 end
-concommand.Add("ttt_mute_team", MuteTeam)
+
+local function NetMuteTeam(len, ply)
+	local state = net.ReadBool()
+
+	MuteTeam(ply, state)
+end
+net.Receive("TTT2MuteTeam", NetMuteTeam)
+
+local function ConCommandMuteTeam(ply, cmd, args)
+	if not #args == 1 and tonumber(args[1]) then return end
+
+	local state = tonumber(args[1])
+
+	MuteTeam(ply, state)
+end
+concommand.Add("ttt_mute_team", ConCommandMuteTeam)

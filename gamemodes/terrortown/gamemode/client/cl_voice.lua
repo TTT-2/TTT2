@@ -25,6 +25,68 @@ local MutedState
 
 g_VoicePanelList = nil
 
+local function VoiceTryEnable()
+	local client = LocalPlayer()
+
+	if not hook.Run("TTT2CanUseVoiceChat", client, false) then return false end
+
+	if not VOICE.IsSpeaking() and VOICE.CanSpeak() then
+		VOICE.isTeam = false
+		RunConsoleCommand("+voicerecord")
+
+		return true
+	end
+
+	return false
+end
+
+local function VoiceTryDisable()
+	if VOICE.IsSpeaking() and not VOICE.isTeam then
+		RunConsoleCommand("-voicerecord")
+
+		return true
+	end
+
+	return false
+end
+
+local function VoiceTeamTryEnable()
+	local client = LocalPlayer()
+
+	if not hook.Run("TTT2CanUseVoiceChat", client, true) then return false end
+
+	if not IsValid(client) then return false end
+
+	local clientrd = client:GetSubRoleData()
+	local tm = client:GetTeam()
+
+	if not VOICE.IsSpeaking() and VOICE.CanSpeak() and client:IsActive() and tm ~= TEAM_NONE
+	and not TEAMS[tm].alone and not clientrd.unknownTeam and not clientrd.disabledTeamVoice then
+		VOICE.isTeam = true
+		RunConsoleCommand("+voicerecord")
+
+		return true
+	end
+
+	return false
+end
+
+local function VoiceTeamTryDisable()
+	if VOICE.IsSpeaking() and VOICE.isTeam then
+		RunConsoleCommand("-voicerecord")
+
+		return true
+	end
+
+	return false
+end
+
+-- register a binding for the general voicechat
+bind.Register("ttt2_voice", VoiceTryEnable, VoiceTryDisable, "TTT2 Bindings", "f1_bind_voice", input.GetKeyCode(input.LookupBinding("+voicerecord") or KEY_X))
+
+-- register a binding for the team voicechat
+bind.Register("ttt2_voice_team", VoiceTeamTryEnable, VoiceTeamTryDisable, "TTT2 Bindings", "f1_bind_voice_team", input.GetKeyCode(input.LookupBinding("+speed") or KEY_LSHIFT))
+
 -- 255 at 100
 -- 5 at 5000
 local function VoiceNotifyThink(pnl)
@@ -42,6 +104,17 @@ local function VoiceNotifyThink(pnl)
 	local d = client:GetPos():Distance(pnl.ply:GetPos())
 
 	pnl:SetAlpha(math.max(-0.1 * d + 255, 15))
+end
+
+---
+-- Whether or not the @{Player} use the voice chat.
+-- @param Player ply @{Player} who wants to use the voice chat
+-- @param boolean isTeam Are they trying to use the team voice chat
+-- @return boolean Whether or not the @{Player} can use the voice chat
+-- @hook
+-- @realm client
+function GM:TTT2CanUseVoiceChat(ply, isTeam)
+	return true
 end
 
 local PlayerVoicePanels = {}
@@ -64,23 +137,15 @@ function GM:PlayerStartVoice(ply)
 	GAMEMODE:PlayerEndVoice(ply, true)
 
 	-- Tell server this is global
-	if client == ply then
-		local clrd = client:GetSubRoleData()
+	if client == ply and client:IsActive() then
+		local tm = client:GetTeam()
 
-		if client:IsActive() and not clrd.unknownTeam and not clrd.disabledTeamVoice then
-			local tm = client:GetTeam()
-			if tm ~= TEAM_NONE and not TEAMS[tm].alone then
-				if not client:KeyDown(IN_SPEED) and not client:KeyDownLast(IN_SPEED) then
-					client[tm .. "_gvoice"] = true
+		local isGlobal = not VOICE.isTeam
+		client[tm .. "_gvoice"] = isGlobal
 
-					RunConsoleCommand("tvog", "1")
-				else
-					client[tm .. "_gvoice"] = false
-
-					RunConsoleCommand("tvog", "0")
-				end
-			end
-		end
+		net.Start("TTT2RoleGlobalVoice")
+		net.WriteBool(isGlobal)
+		net.SendToServer()
 
 		VOICE.SetSpeaking(true)
 	end
@@ -150,7 +215,7 @@ end
 
 local function ReceiveVoiceState()
 	local idx = net.ReadUInt(7) + 1 -- we -1 serverside
-	local state = net.ReadBit() == 1
+	local isGlobal = net.ReadBit() == 1
 
 	-- prevent glitching due to chat starting/ending across round boundary
 	if GAMEMODE.round_state ~= ROUND_ACTIVE then return end
@@ -170,11 +235,11 @@ local function ReceiveVoiceState()
 
 	if tm == TEAM_NONE or TEAMS[tm].alone then return end
 
-	ply[tm .. "_gvoice"] = state
+	ply[tm .. "_gvoice"] = isGlobal
 
 	if not IsValid(PlayerVoicePanels[ply]) then return end
 
-	PlayerVoicePanels[ply].Color = state and VP_GREEN or (ply:GetRoleColor() or VP_RED)
+	PlayerVoicePanels[ply].Color = isGlobal and VP_GREEN or (ply:GetRoleColor() or VP_RED)
 end
 net.Receive("TTT_RoleVoiceState", ReceiveVoiceState)
 
@@ -359,6 +424,10 @@ end
 -- @return boolean
 -- @realm client
 function VOICE.CanSpeak()
+	if not GetGlobalBool("sv_voiceenable", true) then
+		return false
+	end
+
 	if not GetGlobalBool("ttt_voice_drain", false) then
 		return true
 	end

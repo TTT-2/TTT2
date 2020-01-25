@@ -171,6 +171,8 @@ util.AddNetworkString("TTT2ToggleTButton")
 util.AddNetworkString("TTT2SendTButtonConfig")
 util.AddNetworkString("TTT2RequestTButtonConfig")
 util.AddNetworkString("TTT2OrderEquipment")
+util.AddNetworkString("TTT2RoleGlobalVoice")
+util.AddNetworkString("TTT2MuteTeam")
 
 CHANGED_EQUIPMENT = {}
 
