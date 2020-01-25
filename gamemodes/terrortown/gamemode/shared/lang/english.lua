@@ -1221,6 +1221,8 @@ L.ttt2_bindings_new = "New bound key for {name}: {key}"
 
 L.f1_bind_weaponswitch = "Switch Weapon"
 L.f1_bind_sprint = "Sprint"
+L.f1_bind_voice = "Global Voice Chat"
+L.f1_bind_voice_team = "Team Voice Chat"
 
 L.f1_dmgindicator_title = "Damage Indicator settings"
 L.f1_dmgindicator_enable = "Enable"

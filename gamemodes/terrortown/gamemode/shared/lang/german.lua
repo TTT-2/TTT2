@@ -1211,6 +1211,8 @@ L.f1_bind_disable_description = "Deaktiviere diese Bindung."
 
 L.f1_bind_weaponswitch = "Waffe wechseln"
 L.f1_bind_sprint = "Sprinten"
+L.f1_bind_voice = "Globaler Sprachchat"
+L.f1_bind_voice_team = "Team-Sprachchat"
 
 L.f1_dmgindicator_title = "Schadensanzeige Einstellungen"
 L.f1_dmgindicator_enable = "Aktivieren"

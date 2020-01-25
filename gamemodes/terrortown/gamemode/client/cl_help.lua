@@ -109,11 +109,15 @@ local function AddBindingCategory(category, parent)
 	form:Dock(TOP)
 end
 
+function HELPSCRN.IsOpen()
+	return IsValid(helpframe) or IsValid(LocalPlayer().settingsFrame)
+end
+
 ---
 -- Opens the help screen
 -- @realm client
 function HELPSCRN:Show()
-	if helpframe and IsValid(helpframe) then
+	if IsValid(helpframe) then
 		helpframe:Close()
 
 		return
@@ -363,11 +367,9 @@ end
 cvars.AddChangeCallback("ttt_spectator_mode", SpectateCallback)
 
 local function MuteTeamCallback(cv, old, new)
-	local num = tonumber(new)
-
-	if num and (num == 0 or num == 1) then
-		RunConsoleCommand("ttt_mute_team", num)
-	end
+	net.Start("TTT2MuteTeam")
+	net.WriteBool(tobool(new))
+	net.SendToServer()
 end
 cvars.AddChangeCallback("ttt_mute_team_check", MuteTeamCallback)
 
