@@ -670,7 +670,7 @@ function EquipmentIsBuyable(tbl, ply)
 		end
 	end
 
-	if tbl.globalLimited and BUYTABLE[tbl.id] or team and tbl.teamLimited and TEAMS[team] and not TEAMS[team].alone and TEAMBUYTABLE[team] and TEAMBUYTABLE[team][tbl.id] or ply:HasBought(tbl.ClassName) then
+	if tbl.globalLimited and BUYTABLE[tbl.id] or team and tbl.teamLimited and TEAMS[team] and not TEAMS[team].alone and TEAMBUYTABLE[team] and TEAMBUYTABLE[team][tbl.id] or tbl.limited and ply:HasBought(tbl.ClassName) then
 		return false, "X", "This equipment is limited and is already bought."
 	end
 
