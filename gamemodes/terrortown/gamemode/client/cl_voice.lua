@@ -137,7 +137,7 @@ function GM:PlayerStartVoice(ply)
 	GAMEMODE:PlayerEndVoice(ply, true)
 
 	-- Tell server this is global
-	if client == ply and client:IsActive() then
+	if client == ply then
 		local tm = client:GetTeam()
 
 		local isGlobal = not VOICE.isTeam
