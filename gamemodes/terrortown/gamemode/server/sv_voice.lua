@@ -123,7 +123,7 @@ local function SendRoleVoiceState(speaker)
 end
 
 local function RoleGlobalVoice(ply, isGlobal)
-	if not IsValid(ply) or not ply:IsActive() then return end
+	if not IsValid(ply) then return end
 
 	local tm = ply:GetTeam()
 
