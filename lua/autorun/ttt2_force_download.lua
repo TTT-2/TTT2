@@ -39,6 +39,8 @@ if SERVER then
 	resource.AddFile("materials/vgui/ttt/dynamic/sprite_base.vmt")
 	resource.AddFile("materials/vgui/ttt/dynamic/sprite_base_overlay.vmt")
 
+	resource.AddFile("materials/vgui/ttt/dynamic/icon_button_pointer.vmt")
+
 	resource.AddFile("materials/vgui/ttt/icon_drown.vmt")
 
 	-- old ttt hud items background
