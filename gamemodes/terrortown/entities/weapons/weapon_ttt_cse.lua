@@ -137,6 +137,7 @@ if CLIENT then
 	end
 
 	local TryT = LANG.TryTranslation
+	local ParT = LANG.GetParamTranslation
 
 	hook.Add("TTTRenderEntityInfo", "HUDDrawTargetIDVisualizer", function(data, params)
 		local client = LocalPlayer()
@@ -149,7 +150,7 @@ if CLIENT then
 		params.drawInfo = true
 		params.displayInfo.key = input.GetKeyCode(input.LookupBinding("+use"))
 		params.displayInfo.title.text = TryT("vis_name")
-		params.displayInfo.subtitle.text = TryT("target_pickup")
+		params.displayInfo.subtitle.text = ParT("target_pickup", {usekey = Key("+use", "USE")})
 
 		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
 			text = TryT("vis_short_desc")
