@@ -2,8 +2,8 @@
 -- @section key_manager
 -- @desc Key overrides for TTT specific keyboard functions
 
-local timer = timer
 local IsValid = IsValid
+local UpdateInputSprint = UpdateInputSprint
 local cv_sv_cheats = GetConVar("sv_cheats")
 
 local function SendWeaponDrop()
@@ -30,17 +30,17 @@ end
 -- @note To stop the user from using +attack, +left and any other movement commands
 -- of the sort, please look into using @{GM:StartCommand} instead
 -- @param Player ply The @{Player} who used the command; this will always be equal to LocalPlayer
--- @param string bind The bind command
+-- @param string bindName The bind command
 -- @param boolean pressed If the bind was activated or deactivated
 -- @return boolean Return true to prevent the bind
 -- @hook
 -- @realm client
 -- @ref https://wiki.garrysmod.com/page/GM/PlayerBindPress
 -- @local
-function GM:PlayerBindPress(ply, bind, pressed)
+function GM:PlayerBindPress(ply, bindName, pressed)
 	if not IsValid(ply) then return end
 
-	if bind == "invnext" and pressed then
+	if bindName == "invnext" and pressed then
 		if ply:IsSpec() then
 			TIPS.Next()
 		else
@@ -48,7 +48,7 @@ function GM:PlayerBindPress(ply, bind, pressed)
 		end
 
 		return true
-	elseif bind == "invprev" and pressed then
+	elseif bindName == "invprev" and pressed then
 		if ply:IsSpec() then
 			TIPS.Prev()
 		else
@@ -56,7 +56,7 @@ function GM:PlayerBindPress(ply, bind, pressed)
 		end
 
 		return true
-	elseif bind == "+attack" then
+	elseif bindName == "+attack" then
 		if WSWITCH:PreventAttack() then
 			if not pressed then
 				WSWITCH:ConfirmSelection()
@@ -64,24 +64,7 @@ function GM:PlayerBindPress(ply, bind, pressed)
 
 			return true
 		end
-	elseif bind == "+sprint" then
-
-		-- just run concommand if the player is able to use the voice chat
-		local team = ply:GetTeam()
-		local plyrd = ply:GetSubRoleData()
-
-		if team ~= TEAM_NONE and not plyrd.unknownTeam and not plyrd.disabledTeamVoice and not TEAMS[team].alone then
-
-			-- set voice type here just in case shift is no longer down when the
-			-- PlayerStartVoice hook runs, which might be the case when switching to
-			-- steam overlay
-			ply[team .. "_gvoice"] = false
-
-			RunConsoleCommand("tvog", "0")
-		end
-
-		return true
-	elseif bind == "+use" and pressed then
+	elseif bindName == "+use" and pressed then
 		if ply:IsSpec() then
 			RunConsoleCommand("ttt_spec_use")
 
@@ -95,8 +78,8 @@ function GM:PlayerBindPress(ply, bind, pressed)
 				return TBHUD:UseFocused()
 			end
 		end
-	elseif string.sub(bind, 1, 4) == "slot" and pressed then
-		local idx = tonumber(string.sub(bind, 5, - 1)) or 1
+	elseif string.sub(bindName, 1, 4) == "slot" and pressed then
+		local idx = tonumber(string.sub(bindName, 5, - 1)) or 1
 
 		-- if radiomenu is open, override weapon select
 		if RADIO.Show then
@@ -106,22 +89,24 @@ function GM:PlayerBindPress(ply, bind, pressed)
 		end
 
 		return true
-	elseif string.find(bind, "zoom") and pressed then
+	elseif string.find(bindName, "zoom") and pressed then
 		-- open or close radio
 		RADIO:ShowRadioCommands(not RADIO.Show)
 
 		return true
-	elseif bind == "+voicerecord" then
-		if not VOICE.CanSpeak() then
-			return true
-		end
-	elseif bind == "gm_showteam" and pressed and ply:IsSpec() then
+	elseif bindName == "+voicerecord" then
+		-- This blocks the old Garry's Mod bind
+		return true
+	elseif bindName == "-voicerecord" then
+		-- This blocks the old Garry's Mod bind
+		return true
+	elseif bindName == "gm_showteam" and pressed and ply:IsSpec() then
 		local m = VOICE.CycleMuteState()
 
 		RunConsoleCommand("ttt_mute_team", m)
 
 		return true
-	elseif bind == "+duck" and pressed and ply:IsSpec() then
+	elseif bindName == "+duck" and pressed and ply:IsSpec() then
 		if not IsValid(ply:GetObserverTarget()) then
 			if GAMEMODE.ForcedMouse then
 				gui.EnableScreenClicker(false)
@@ -133,17 +118,17 @@ function GM:PlayerBindPress(ply, bind, pressed)
 				GAMEMODE.ForcedMouse = true
 			end
 		end
-	elseif bind == "noclip" and pressed then
+	elseif bindName == "noclip" and pressed then
 		if not cv_sv_cheats:GetBool() then
 			RunConsoleCommand("ttt_equipswitch")
 
 			return true
 		end
-	elseif (bind == "gmod_undo" or bind == "undo") and pressed then
+	elseif (bindName == "gmod_undo" or bindName == "undo") and pressed then
 		RunConsoleCommand("ttt_dropammo")
 
 		return true
-	elseif bind == "phys_swap" and pressed then
+	elseif bindName == "phys_swap" and pressed then
 		RunConsoleCommand("ttt_quickslot", "5")
 	end
 end
@@ -165,15 +150,8 @@ end
 function GM:KeyPress(ply, key)
 	if not IsFirstTimePredicted() or not IsValid(ply) or ply ~= LocalPlayer() then return end
 
-	local plyrd = ply:GetSubRoleData()
-
-	--if key == IN_SPEED and ply:IsActiveTraitor() then
-	if key == IN_SPEED and ply:IsActive() and not plyrd.unknownTeam and not plyrd.disabledTeamVoice then
-		local _func = function()
-			RunConsoleCommand("+voicerecord")
-		end
-
-		timer.Simple(0.05, _func)
+	if key == IN_FORWARD or key == IN_BACK or key == IN_MOVERIGHT or key == IN_MOVELEFT then
+		UpdateInputSprint(ply, key, true)
 	end
 end
 
@@ -190,15 +168,8 @@ end
 function GM:KeyRelease(ply, key)
 	if not IsFirstTimePredicted() or not IsValid(ply) or ply ~= LocalPlayer() then return end
 
-	local plyrd = ply:GetSubRoleData()
-
-	--if key == IN_SPEED and ply:IsActiveTraitor() then
-	if key == IN_SPEED and ply:IsActive() and not plyrd.unknownTeam and not plyrd.disabledTeamVoice then
-		local _func = function()
-			RunConsoleCommand("-voicerecord")
-		end
-
-		timer.Simple(0.05, _func)
+	if key == IN_FORWARD or key == IN_BACK or key == IN_MOVERIGHT or key == IN_MOVELEFT then
+		UpdateInputSprint(ply, key, false)
 	end
 end
 

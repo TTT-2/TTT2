@@ -52,7 +52,8 @@ local vip_tbl = {
 	["76561198150260014"] = true, -- Lunex
 	["76561198076404571"] = true, -- Histalek
 	["76561198042086461"] = true, -- James
-	["76561193814529882"] = true -- Trystan
+	["76561193814529882"] = true, -- Trystan
+	["76561198056317817"] = true -- Menof36go
 }
 
 local addondev_tbl = {
@@ -405,7 +406,7 @@ function PANEL:UpdatePlayerData()
 	self.tag:SetText(ptag and GetTranslation(ptag.txt) or "")
 	self.tag:SetTextColor(ptag and ptag.color or COLOR_WHITE)
 
-	self.sresult:SetVisible(ply.search_result ~= nil)
+	self.sresult:SetVisible(ply.search_result and ply.search_result.detective_search)
 
 	-- more blue if a detective searched them
 	if ply.search_result and (LocalPlayer():IsDetective() or not ply.search_result.show) then

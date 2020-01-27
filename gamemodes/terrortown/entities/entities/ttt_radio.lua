@@ -272,6 +272,7 @@ end
 
 if CLIENT then
 	local TryT = LANG.TryTranslation
+	local ParT = LANG.GetParamTranslation
 
 	-- handle looking at radio
 	hook.Add("TTTRenderEntityInfo", "HUDDrawTargetIDRadio", function(data, params)
@@ -286,7 +287,7 @@ if CLIENT then
 		params.displayInfo.key = input.GetKeyCode(input.LookupBinding("+use"))
 		params.displayInfo.title.text = TryT(data.ent.PrintName)
 
-		params.displayInfo.subtitle.text = TryT("target_pickup")
+		params.displayInfo.subtitle.text = ParT("target_pickup", {usekey = Key("+use", "USE")})
 
 		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
 			text = TryT("radio_short_desc"),

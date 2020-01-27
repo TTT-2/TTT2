@@ -207,7 +207,7 @@ function TBHUD:Draw(client)
 		scrPosXMid, scrPosYMid = scrpos.x - mid, scrpos.y - mid
 
 		-- redraw in-focus version of icon
-		draw.FilteredTexture(scrPosXMid, scrPosYMid, size, size, tbut_focus, 220, COLOR_WHITE)
-		draw.FilteredTexture(scrPosXMid, scrPosYMid, size, size, tbut_outline, 220, outlineColor)
+		draw.FilteredTexture(scrPosXMid - 3 , scrPosYMid - 3, size + 6, size + 6, tbut_focus, 200, COLOR_WHITE)
+		draw.FilteredTexture(scrPosXMid - 3, scrPosYMid - 3, size + 6, size + 6, tbut_outline, 150, outlineColor)
 	end
 end

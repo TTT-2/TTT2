@@ -16,11 +16,6 @@ local hook = hook
 local disable_spectatorsoutline = CreateClientConVar("ttt2_disable_spectatorsoutline", "0", true, true)
 local disable_overheadicons = CreateClientConVar("ttt2_disable_overheadicons", "0", true, true)
 
--- cached materials for overhead icons and outlines
-local propspec_outline = Material("models/props_combine/portalball001_sheet")
-local base = Material("vgui/ttt/dynamic/sprite_base")
-local base_overlay = Material("vgui/ttt/dynamic/sprite_base_overlay")
-
 surface.CreateFont("TargetID_Key", {font = "Trebuchet24", size = 26, weight = 900})
 surface.CreateFont("TargetID_Title", {font = "Trebuchet24", size = 20, weight = 900})
 surface.CreateFont("TargetID_Subtitle", {font = "Trebuchet24", size = 17, weight = 300})
@@ -34,6 +29,17 @@ local cv_draw_halo = CreateClientConVar("ttt_entity_draw_halo", "1", true, false
 local MAX_TRACE_LENGTH = math.sqrt(3) * 32768
 local subtitle_color = Color(210, 210, 210)
 local color_blacktrans = Color(0, 0, 0, 180)
+
+-- cached materials for overhead icons and outlines
+local propspec_outline = Material("models/props_combine/portalball001_sheet")
+local base = Material("vgui/ttt/dynamic/sprite_base")
+local base_overlay = Material("vgui/ttt/dynamic/sprite_base_overlay")
+
+-- materials for targetid
+local ring_tex = Material("effects/select_ring")
+local icon_role_not_known = Material("vgui/ttt/dynamic/roles/icon_role_not_known")
+local icon_corpse = Material("vgui/ttt/dynamic/roles/icon_corpse")
+local icon_tbutton = Material("vgui/ttt/dynamic/icon_button_pointer")
 
 ---
 -- Returns the localized ClassHint table
@@ -413,10 +419,18 @@ function HUDDrawTargetIDTButtons(data, params)
 
 	params.drawInfo = true
 
-	params.displayInfo.key = input.GetKeyCode(key_params.usekey)
+	if TBHUD.focus_but.admin and not TBHUD.focus_but.access then
+		params.displayInfo.icon[#params.displayInfo.icon + 1] = {
+			material = icon_tbutton,
+			color = COLOR_LGRAY
+		}
+		params.displayInfo.subtitle.text = TryT("tbut_help_admin")
+	else
+		params.displayInfo.key = input.GetKeyCode(key_params.usekey)
+		params.displayInfo.subtitle.text = GetPT("tbut_help", key_params)
+	end
 
 	params.displayInfo.title.text = data.ent:GetDescription() == "?" and "Traitor Button" or data.ent:GetDescription()
-	params.displayInfo.subtitle.text = GetPT("tbut_help", key_params)
 
 	local special_info
 	if data.ent:GetDelay() < 0 then
@@ -568,9 +582,6 @@ function HUDDrawTargetIDWeapons(data, params)
 	params.outlineColor = client:GetRoleColor()
 end
 
-local ring_tex = Material("effects/select_ring")
-local icon_role_not_known = Material("vgui/ttt/dynamic/roles/icon_role_not_known")
-
 -- handle looking at players
 function HUDDrawTargetIDPlayers(data, params)
 	local client = LocalPlayer()
@@ -655,8 +666,6 @@ function HUDDrawTargetIDPlayers(data, params)
 		params.displayInfo.title.color = COLOR_RED
 	end
 end
-
-local icon_corpse = Material("vgui/ttt/dynamic/roles/icon_corpse")
 
 -- handle looking ragdolls
 function HUDDrawTargetIDRagdolls(data, params)
