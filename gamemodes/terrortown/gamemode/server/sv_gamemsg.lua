@@ -267,7 +267,7 @@ function GM:PlayerCanSeePlayersChat(text, teamOnly, reader, sender)
 		and not sender:GetSubRoleData().unknownTeam
 		and not sender:GetSubRoleData().disabledTeamChat
 		and not reader:GetSubRoleData().disabledTeamChatRecv
-		and hook.Run("TTT2CanSeeChat", reader, sender, teamOnly) ~= false -- if the sender and reader are in same team
+		and hook.Run("TTT2CanSeeChat", reader, sender, teamOnly) ~= true
 	) or sTeam and lTeam then -- If the sender and reader are spectators
 		return true
 	end
