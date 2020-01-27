@@ -233,46 +233,58 @@ end
 local cv_ttt_limit_spectator_chat = CreateConVar("ttt_limit_spectator_chat", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY})
 
 ---
--- Checks whether a @{Player} is able to listen to another @{Player}
+-- Returns whether or not the @{Player} can see the other @{Player}'s chat.
 -- @param string text
--- @param boolean team_only
--- @param Player listener
--- @param Player speaker
+-- @param boolean teamOnly
+-- @param Player reader
+-- @param Player sender
 -- @return boolean
 -- @hook
 -- @realm server
 -- @internal
-function GM:PlayerCanSeePlayersChat(text, team_only, listener, speaker)
-	if not IsValid(listener) then
+function GM:PlayerCanSeePlayersChat(text, teamOnly, reader, sender)
+	if not IsValid(reader) then
 		return false
 	end
 
-	if not IsValid(speaker) then
-		if IsEntity(speaker) then
+	if not IsValid(sender) then
+		if IsEntity(sender) then
 			return true
 		else
 			return false
 		end
 	end
 
-	local sTeam = speaker:Team() == TEAM_SPEC
-	local lTeam = listener:Team() == TEAM_SPEC
+	local sTeam = sender:Team() == TEAM_SPEC
+	local lTeam = reader:Team() == TEAM_SPEC
 
 	if GetRoundState() ~= ROUND_ACTIVE -- Round isn't active
 	or not cv_ttt_limit_spectator_chat:GetBool() -- Spectators can chat freely
 	or not DetectiveMode() -- Mumbling
-	or not sTeam and (team_only and not speaker:IsSpecial() or not team_only) -- If someone alive talks (and not a special role in teamchat's case)
-	or not sTeam and team_only and (
-		speaker:IsInTeam(listener)
-		and not speaker:GetSubRoleData().unknownTeam
-		and not speaker:GetSubRoleData().disabledTeamChat
-		and not listener:GetSubRoleData().disabledTeamChatRecv
-		and hook.Run("TTT2AvoidTeamVoiceChat", speaker, listener) ~= false -- if the speaker and listener are in same team
-	) or sTeam and lTeam then -- If the speaker and listener are spectators
+	or not sTeam and (teamOnly and not sender:IsSpecial() or not teamOnly) -- If someone alive talks (and not a special role in teamchat's case)
+	or not sTeam and teamOnly and (
+		sender:IsInTeam(reader)
+		and not sender:GetSubRoleData().unknownTeam
+		and not sender:GetSubRoleData().disabledTeamChat
+		and not reader:GetSubRoleData().disabledTeamChatRecv
+		and hook.Run("TTT2CanSeeChat", reader, sender, teamOnly) ~= false -- if the sender and reader are in same team
+	) or sTeam and lTeam then -- If the sender and reader are spectators
 		return true
 	end
 
 	return false
+end
+
+---
+-- Whether or not the @{Player} can receive the chat message.
+-- @param Player reader @{Player} who can receive chat
+-- @param Player isTeam @{Player} who speaks
+-- @param boolean isTeam Are they trying to use the team chat
+-- @return boolean Return true if the reader should be able to see the message of the sender, false if they shouldn't
+-- @hook
+-- @realm server
+function GM:TTT2CanSeeChat(reader, sender, isTeam)
+	return true
 end
 
 local mumbles = {
@@ -309,12 +321,12 @@ local mumbles = {
 -- them. So we mumblify them. In detective mode, we shut them up entirely.
 -- @param Player ply
 -- @param string text
--- @param boolean team_only
+-- @param boolean teamOnly
 -- @return string
 -- @hook
 -- @realm server
 -- @internal
-function GM:PlayerSay(ply, text, team_only)
+function GM:PlayerSay(ply, text, teamOnly)
 	if not IsValid(ply) then
 		return text or ""
 	end
@@ -344,11 +356,11 @@ function GM:PlayerSay(ply, text, team_only)
 			table.insert(filtered, 1, "[MUMBLED]")
 
 			return table.concat(filtered, " ")
-		elseif team_only and not team_spec and ply:IsSpecial() then
+		elseif teamOnly and not team_spec and ply:IsSpecial() then
 			RoleChatMsg(ply, text)
 
 			return ""
-		elseif not team_only and not team_spec then
+		elseif not teamOnly and not team_spec then
 			if ply:GetSubRoleData().disabledGeneralChat or hook.Run("TTT2AvoidGeneralChat", ply, text) == false then
 				return ""
 			end

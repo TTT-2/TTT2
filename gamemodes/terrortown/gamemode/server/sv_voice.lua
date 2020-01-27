@@ -58,7 +58,10 @@ local function PlayerIsMuted(listener, speaker)
 	if mute_all or listener:IsSpec() and listener.mute_team == speaker:Team() or listener.mute_team == MUTE_ALL then return true end
 end
 
--- TODO
+local function PlayerCanHearGlobal(roundState)
+	return true, loc_voice:GetBool() and roundState ~= ROUND_POST
+end
+
 ---
 -- Decides whether a @{Player} can hear another @{Player} using voice chat.
 -- @note This hook is called several times a tick, so ensure your code is efficient.
@@ -67,7 +70,6 @@ end
 -- @param Player speaker The talking @{Player}
 -- @return boolean Return true if the listener should hear the talker, false if they shouldn't
 -- @return boolean 3D sound. If set to true, will fade out the sound the further away listener is from the talker, the voice will also be in stereo, and not mono
--- @todo Improve the code
 -- @hook
 -- @realm server
 -- @ref https://wiki.garrysmod.com/page/GM/PlayerCanHearPlayersVoice
@@ -87,17 +89,30 @@ function GM:PlayerCanHearPlayersVoice(listener, speaker)
 	end
 
 	-- custom post-settings
-	local res1, res2 = hook.Run("TTT2PostPlayerCanHearPlayersVoice", listener, speaker)
+	local can_hear, is_locational = hook.Run("TTT2CanHearVoiceChat", listener, speaker, not speaker[speakerTeam .. "_gvoice"])
 
-	if res1 ~= nil then return res1, res2 or false end
+	if can_hear ~= nil then return can_hear, is_locational or false end
 
 	if speaker:IsSpec() then
 		return PlayerCanHearSpectator(listener, speaker, roundState)
 	elseif speaker[speakerTeam .. "_gvoice"] then
-		return true, loc_voice:GetBool() and roundState ~= ROUND_POST
+		return PlayerCanHearGlobal(roundState)
 	else
 		return PlayerCanHearTeam(listener, speaker, speakerTeam)
 	end
+end
+
+---
+-- Whether or not the @{Player} hear the voice chat.
+-- @param Player listener @{Player} who can receive voice chat
+-- @param Player speaker @{Player} who speaks
+-- @param boolean isTeam Are they trying to use the team voice chat
+-- @return boolean Return true if the listener should hear the talker, false if they shouldn't, nil if it should stay default
+-- @return boolean 3D sound. If set to true, will fade out the sound the further away listener is from the talker, the voice will also be in stereo, and not mono
+-- @hook
+-- @realm server
+function GM:TTT2CanHearVoiceChat(listener, speaker, isTeam)
+
 end
 
 local function SendRoleVoiceState(speaker)
@@ -128,7 +143,7 @@ local function RoleGlobalVoice(ply, isGlobal)
 	local tm = ply:GetTeam()
 
 	ply[tm .. "_gvoice"] = isGlobal
-	ply.blockVoice = hook.Run("TTT2CanUseVoiceChat", ply, tm)
+	ply.blockVoice = hook.Run("TTT2CanUseVoiceChat", ply, not isGlobal) == false
 
 	SendRoleVoiceState(ply)
 end

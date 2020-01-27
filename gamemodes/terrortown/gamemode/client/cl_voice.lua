@@ -28,7 +28,7 @@ g_VoicePanelList = nil
 local function VoiceTryEnable()
 	local client = LocalPlayer()
 
-	if not hook.Run("TTT2CanUseVoiceChat", client, false) then return false end
+	if hook.Run("TTT2CanUseVoiceChat", client, false) == false then return false end
 
 	if not VOICE.IsSpeaking() and VOICE.CanSpeak() then
 		VOICE.isTeam = false
@@ -53,7 +53,7 @@ end
 local function VoiceTeamTryEnable()
 	local client = LocalPlayer()
 
-	if not hook.Run("TTT2CanUseVoiceChat", client, true) then return false end
+	if hook.Run("TTT2CanUseVoiceChat", client, true) == false then return false end
 
 	if not IsValid(client) then return false end
 
@@ -104,17 +104,6 @@ local function VoiceNotifyThink(pnl)
 	local d = client:GetPos():Distance(pnl.ply:GetPos())
 
 	pnl:SetAlpha(math.max(-0.1 * d + 255, 15))
-end
-
----
--- Whether or not the @{Player} use the voice chat.
--- @param Player ply @{Player} who wants to use the voice chat
--- @param boolean isTeam Are they trying to use the team voice chat
--- @return boolean Whether or not the @{Player} can use the voice chat
--- @hook
--- @realm client
-function GM:TTT2CanUseVoiceChat(ply, isTeam)
-	return true
 end
 
 local PlayerVoicePanels = {}
