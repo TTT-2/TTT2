@@ -28,7 +28,9 @@ g_VoicePanelList = nil
 local function VoiceTryEnable()
 	local client = LocalPlayer()
 
-	if hook.Run("TTT2CanUseVoiceChat", client, false) == false then return false end
+	if hook.Run("TTT2CanUseVoiceChat", client, false) == false then
+		return false
+	end
 
 	if not VOICE.IsSpeaking() and VOICE.CanSpeak() then
 		VOICE.isTeam = false

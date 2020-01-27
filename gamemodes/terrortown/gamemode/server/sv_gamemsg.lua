@@ -247,12 +247,8 @@ function GM:PlayerCanSeePlayersChat(text, teamOnly, reader, sender)
 		return false
 	end
 
-	if not IsValid(sender) then
-		if IsEntity(sender) then
-			return true
-		else
-			return false
-		end
+	if not IsValid(sender) and IsEntity(sender) then
+		return true
 	end
 
 	local sTeam = sender:Team() == TEAM_SPEC

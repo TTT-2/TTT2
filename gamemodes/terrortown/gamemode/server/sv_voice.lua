@@ -91,7 +91,9 @@ function GM:PlayerCanHearPlayersVoice(listener, speaker)
 	-- custom post-settings
 	local can_hear, is_locational = hook.Run("TTT2CanHearVoiceChat", listener, speaker, not speaker[speakerTeam .. "_gvoice"])
 
-	if can_hear ~= nil then return can_hear, is_locational or false end
+	if can_hear ~= nil then
+		return can_hear, is_locational or false
+	end
 
 	if speaker:IsSpec() then
 		return PlayerCanHearSpectator(listener, speaker, roundState)
