@@ -37,13 +37,13 @@ local function ttt_radar_scan(ply, cmd, args)
 	if not IsValid(ply) or not ply:IsTerror() then return end
 
 	if not ply:HasEquipmentItem("item_ttt_radar") then
-		LANG.Msg(ply, "radar_not_owned")
+		LANG.Msg(ply, "radar_not_owned", nil, MSG_CHAT_WARN)
 
 		return
 	end
 
 	if ply.radar_charge > CurTime() then
-		LANG.Msg(ply, "radar_charging")
+		LANG.Msg(ply, "radar_charging", nil, MSG_CHAT_WARN)
 
 		return
 	end

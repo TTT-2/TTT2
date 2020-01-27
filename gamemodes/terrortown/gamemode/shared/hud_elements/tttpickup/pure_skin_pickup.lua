@@ -15,6 +15,7 @@ if CLIENT then
 	local tipsize = element_height
 	local margin = 5
 	local pad = 8
+	local color_tip = Color(205, 155, 0, 255)
 
 	HUDELEMENT.SlotIcons = {[WEAPON_HEAVY] = Material("vgui/ttt/pickup/icon_heavy.png"),
 		[WEAPON_PISTOL] = Material("vgui/ttt/pickup/icon_pistol.png"),
@@ -69,8 +70,6 @@ if CLIENT then
 		BaseClass.PerformLayout(self)
 	end
 
-	local color_tip = Color(205, 155, 0, 255)
-
 	function HUDELEMENT:DrawBar(x, y, w, h, alpha, item)
 
 		-- draw bg and shadow
@@ -94,13 +93,13 @@ if CLIENT then
 		surface.DrawRect(x, y, self.tipsize, h)
 
 		--draw icon
-		util.DrawFilteredTexturedRect(x, y, h, h, icon, math.Round(alpha * 0.75))
+		draw.FilteredShadowedTexture(x, y, h, h, icon, math.Round(alpha * 0.75), util.GetDefaultColor(tipColor), self.scale)
 
 		-- draw lines around the element
 		self.drawer:DrawLines(x, y, w, h, alpha)
 
 		--draw name text
-		local fontColor = self.drawer:GetDefaultFontColor(self.basecolor)
+		local fontColor = util.GetDefaultColor(self.basecolor)
 		fontColor = Color(fontColor.r, fontColor.g, fontColor.b, alpha)
 
 		draw.AdvancedText(item.name, font, x + self.tipsize + self.pad, y + h * 0.5, fontColor, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, true, self.scale)

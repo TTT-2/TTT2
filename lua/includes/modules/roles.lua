@@ -6,7 +6,6 @@
 module("roles", package.seeall)
 
 local baseclass = baseclass
-local list = list
 local pairs = pairs
 
 if SERVER then
@@ -109,12 +108,14 @@ local function SetupData(roleData)
 			CreateConVar("ttt_" .. roleData.name .. "_karma_min", tostring(conVarData.minKarma), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 		end
 
-		if not roleData.buildin then
+		if not roleData.builtin then
 			CreateConVar("ttt_" .. roleData.name .. "_random", tostring(conVarData.random or 100), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 			CreateConVar("ttt_" .. roleData.name .. "_enabled", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 		end
 	end
+
+	CreateConVar("ttt_" .. roleData.name .. "_traitor_button", tostring(conVarData.traitorButton or 0), {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
 
 	CreateConVar("ttt_" .. roleData.abbr .. "_credits_starting", tostring(conVarData.credits or 0), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 	CreateConVar("ttt_" .. roleData.abbr .. "_credits_traitorkill", tostring(conVarData.creditsTraitorKill or 0), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
@@ -140,6 +141,11 @@ local function SetupData(roleData)
 
 	-- set a roledata icon material to prevent creating new materials each frame
 	roleData.iconMaterial = Material(roleData.icon)
+
+	-- set default colors
+	roleData.dkcolor = util.ColorDarken(roleData.color, 30)
+	roleData.ltcolor = util.ColorLighten(roleData.color, 30)
+	roleData.bgcolor = util.ColorComplementary(roleData.color)
 
 	print("[TTT2][ROLE] Added '" .. roleData.name .. "' role (index: " .. roleData.index .. ")")
 end
@@ -169,12 +175,6 @@ function Register(t, name)
 	end
 
 	RoleList[name] = t
-
-	list.Set("Roles", name, {
-			ClassName = name,
-			name = name,
-			id = t.index
-	})
 end
 
 ---

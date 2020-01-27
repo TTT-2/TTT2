@@ -13,6 +13,7 @@ if CLIENT then
 	local height = 20
 	local font = "DefaultBold"
 	local bordersize = 8
+	local colorTipAmmo = Color(205, 155, 0, 255)
 
 	HUDELEMENT.margin = 10
 	HUDELEMENT.barcorner = surface.GetTextureID("gui/corner8")
@@ -42,7 +43,6 @@ if CLIENT then
 		BaseClass.PerformLayout(self)
 	end
 
-
 	function HUDELEMENT:DrawBar(x, y, w, h, tipSize, alpha, item)
 		local pad = 10
 
@@ -52,9 +52,9 @@ if CLIENT then
 		local tipColor = LocalPlayer():GetRoleDkColor()
 
 		if item.type == PICKUP_ITEM then
-			tipColor = Color(255, 255, 255, 255)
+			tipColor = COLOR_WHITE
 		elseif item.type == PICKUP_AMMO then
-			tipColor = Color(205, 155, 0, 255)
+			tipColor = colorTipAmmo
 		end
 
 		surface.SetDrawColor(tipColor.r, tipColor.g, tipColor.b, alpha)

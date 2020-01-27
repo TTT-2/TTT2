@@ -12,8 +12,11 @@ local IsValid = IsValid
 local table = table
 local timer = timer
 local hook = hook
+local CreateConVar = CreateConVar
 
 local IsEquipment = WEPS.IsEquipment
+
+local cv_auto_pickup = CreateConVar("ttt_weapon_autopickup", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY})
 
 ---
 -- Returns whether or not a @{Player} is allowed to pick up a @{Weapon}
@@ -28,21 +31,76 @@ local IsEquipment = WEPS.IsEquipment
 function GM:PlayerCanPickupWeapon(ply, wep)
 	if not IsValid(wep) or not IsValid(ply) then return end
 
+	-- Flags should be reset no matter what happens afterwards --> cache them here
+	local cflag_giveItem, cflag_weaponSwitch = ply.wp__GiveItemFunctionFlag, wep.wp__WeaponSwitchFlag
+
+	ply.wp__GiveItemFunctionFlag = false
+	wep.wp__WeaponSwitchFlag = false
+
+	-- spectators are not allowed to pickup weapons
 	if ply:IsSpec() then
 		return false
 	end
 
-	local wepClass = WEPS.GetClass(wep)
-
-	-- Disallow picking up for ammo
-	if ply:HasWeapon(wepClass)
-	or not ply:CanCarryWeapon(wep)
-	or IsEquipment(wep) and wep.IsDropped and not ply:KeyDown(IN_USE)
-	then
+	-- prevent picking up weapons of the same class a player already has (for ammo if auto-pickup is enabled)
+	-- exception: this hook is called to check if a player can pick up weapon while dropping
+	-- the current weapon
+	if ply:HasWeapon(WEPS.GetClass(wep)) and not cflag_weaponSwitch then
 		return false
 	end
 
-	local tr = util.TraceEntity({start = wep:GetPos(), endpos = ply:GetShootPos(), mask = MASK_SOLID}, wep)
+	-- block pickup when there is no slot free
+	-- exception: this hook is called to check if a player can pick up weapon while dropping
+	-- the current weapon
+	if not InventorySlotFree(ply, wep.Kind) and not cflag_weaponSwitch then
+		return false
+	end
+
+	-- if weapon is given by ply:Give function, it should always be inserted into the player inventory
+	if cflag_giveItem then
+		return true
+	end
+
+	-- if triggered by weapon switch the weapon should be inserted into the player inventory
+	-- this should only happen when the following two flags are set accordingly
+	if wep.wpickup_player and wep.wpickup_player == ply
+	and ply.wpickup_weapon and ply.wpickup_weapon == wep
+	then
+		-- these flags shouldn't be reset on first call of this hook since GMOD might do stupid things
+		-- while attempting to pickup a weapon
+		-- therefore these flags keep their value until the weapon is picked up or the player attempts
+		-- another pickup and are cleared in ResetWeapon()
+		return true
+	end
+
+	-- do not automatically pick up a weapon if the player already has the pickup
+	-- weapon flag set
+	if ply.wpickup_weapon then
+		return false
+	end
+
+	-- stop other players from automatically picking up a weapon when a player already set
+	-- the pickup flag
+	if wep.wpickup_player then
+		return false
+	end
+
+	-- if the auto pickup convar is set to false, no weapons should be picked up automatically
+	if not cv_auto_pickup:GetBool() then
+		return false
+	end
+
+	-- if it is a dropped equipment item, it shouldn't be picked up automatically
+	if IsEquipment(wep) and wep.IsDropped then
+		return false
+	end
+
+	-- Who knows what happens here?!
+	local tr = util.TraceEntity({
+		start = wep:GetPos(),
+		endpos = ply:GetShootPos(),
+		mask = MASK_SOLID
+	}, wep)
 
 	if tr.Fraction == 1.0 or tr.Entity == ply then
 		wep:SetPos(ply:GetShootPos())
@@ -295,11 +353,11 @@ local function CanWearHat(ply)
 	return table.HasValue(Hattables, path[3])
 end
 
-CreateConVar("ttt_detective_hats", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local cv_ttt_detective_hats = CreateConVar("ttt_detective_hats", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 -- Just hats right now
 local function GiveLoadoutSpecial(ply)
-	if not ply:IsActive() or ply:GetBaseRole() ~= ROLE_DETECTIVE or not GetConVar("ttt_detective_hats"):GetBool() or not CanWearHat(ply) then
+	if not ply:IsActive() or ply:GetBaseRole() ~= ROLE_DETECTIVE or not cv_ttt_detective_hats:GetBool() or not CanWearHat(ply) then
 		SafeRemoveEntity(ply.hat)
 
 		ply.hat = nil
@@ -441,29 +499,6 @@ function GM:UpdatePlayerLoadouts()
 end
 
 ---
--- Weapon switching
-local function ForceWeaponSwitch(ply, cmd, args)
-	if not ply:IsPlayer() then return end
-
-	local wepname = args[1]
-	if not wepname then return end
-
-	-- Turns out even SelectWeapon refuses to switch to empty guns, gah.
-	-- Worked around it by giving every weapon a single Clip2 round.
-	-- Works because no weapon uses those.
-	local wep = ply:GetWeapon(wepname)
-	if not IsValid(wep) then return end
-
-	-- Weapons apparently not guaranteed to have this
-	if wep.SetClip2 then
-		wep:SetClip2(1)
-	end
-
-	ply:SelectWeapon(wepname)
-end
-concommand.Add("wepswitch", ForceWeaponSwitch)
-
----
 -- Weapon dropping
 
 ---
@@ -473,7 +508,7 @@ concommand.Add("wepswitch", ForceWeaponSwitch)
 -- @param boolean death_drop
 -- @realm server
 -- @module WEPS
-function WEPS.DropNotifiedWeapon(ply, wep, death_drop)
+function WEPS.DropNotifiedWeapon(ply, wep, death_drop, keep_selection)
 	if not IsValid(ply) or not IsValid(wep) then return end
 
 	-- Hack to tell the weapon it's about to be dropped and should do what it
@@ -495,27 +530,15 @@ function WEPS.DropNotifiedWeapon(ply, wep, death_drop)
 
 	-- After dropping a weapon, always switch to holstered, so that traitors
 	-- will never accidentally pull out a traitor weapon
-	ply:SelectWeapon("weapon_ttt_unarmed")
+	if not keep_selection then
+		ply:SelectWeapon("weapon_ttt_unarmed")
+	end
 end
 
 local function DropActiveWeapon(ply)
 	if not IsValid(ply) then return end
 
-	local wep = ply:GetActiveWeapon()
-
-	if not IsValid(wep) or not wep.AllowDrop then return end
-
-	local tr = util.QuickTrace(ply:GetShootPos(), ply:GetAimVector() * 32, ply)
-
-	if tr.HitWorld then
-		LANG.Msg(ply, "drop_no_room")
-
-		return
-	end
-
-	ply:AnimPerformGesture(ACT_GMOD_GESTURE_ITEM_PLACE)
-
-	WEPS.DropNotifiedWeapon(ply, wep)
+	ply:SafeDropWeapon(ply:GetActiveWeapon(), false)
 end
 concommand.Add("ttt_dropweapon", DropActiveWeapon)
 
@@ -529,7 +552,7 @@ local function DropActiveAmmo(ply)
 	local hook_data = {wep:Clip1()}
 
 	if hook.Run("TTT2DropAmmo", ply, hook_data) == false then
-		LANG.Msg(ply, "drop_ammo_prevented")
+		LANG.Msg(ply, "drop_ammo_prevented", nil, MSG_CHAT_WARN)
 
 		return
 	end
@@ -537,7 +560,7 @@ local function DropActiveAmmo(ply)
 	local amt = hook_data[1]
 
 	if amt < 1 or amt <= wep.Primary.ClipSize * 0.25 then
-		LANG.Msg(ply, "drop_no_ammo")
+		LANG.Msg(ply, "drop_no_ammo", nil, MSG_CHAT_WARN)
 
 		return
 	end
@@ -593,16 +616,40 @@ concommand.Add("ttt_dropammo", DropActiveAmmo)
 -- @ref https://wiki.garrysmod.com/page/GM/WeaponEquip
 -- @local
 function GM:WeaponEquip(wep, ply)
-	if IsValid(wep) and not wep.Kind then
+	if not IsValid(ply) or not IsValid(wep) then return end
+
+	if not wep.Kind then
 		-- only remove if they lack critical stuff
 		wep:Remove()
 
 		ErrorNoHalt("Equipped weapon " .. wep:GetClass() .. " is not compatible with TTT\n")
+		return
 	end
 
-	if IsValid(ply) and wep.Kind then
-		AddWeaponToInventoryAndNotifyClient(ply, wep)
+	AddWeaponToInventoryAndNotifyClient(ply, wep)
+
+	local function WeaponEquipNextFrame()
+		if not IsValid(ply) or not IsValid(wep) then return end
+
+		-- autoselect weapon when the new weapon has the same slot than the old one
+		-- do not autoselect when ALT is pressed
+		if wep.wpickup_autoSelect then
+			wep.wpickup_autoSelect = nil
+
+			ply:SelectWeapon(WEPS.GetClass(wep))
+		end
+
+		-- there is a glitch that picking up a weapon does not refresh the weapon cache on
+		-- the client. Therefore the client has to be notified to updated its cache
+		net.Start("ttt2_switch_weapon_update_cache")
+		net.Send(ply)
+
+		-- since the weapon pickup changes some weapon data, it has to be reset here
+		ResetWeapon(wep)
 	end
+
+	-- handle all this stuff in the next frame since the owner is not yet valid
+	timer.Simple(0, WeaponEquipNextFrame)
 end
 
 ---
@@ -617,9 +664,22 @@ end
 -- @ref https://wiki.garrysmod.com/page/GM/PlayerDroppedWeapon
 -- @local
 function GM:PlayerDroppedWeapon(ply, wep)
-	if IsValid(wep) and IsValid(ply) and wep.Kind then
-		RemoveWeaponFromInventoryAndNotifyClient(ply, wep)
+	if not IsValid(wep) or not IsValid(ply) or not wep.Kind then return end
+
+	if wep.name_timer_pos then
+		timer.Remove(wep.name_timer_pos)
 	end
+
+	if wep.name_timer_cancel then
+		timer.Remove(wep.name_timer_cancel)
+	end
+
+	RemoveWeaponFromInventoryAndNotifyClient(ply, wep)
+
+	-- there is a glitch that picking up a weapon does not refresh the weapon cache on
+	-- the client. Therefore the client has to be notified to update its cache
+	net.Start("ttt2_switch_weapon_update_cache")
+	net.Send(ply)
 end
 
 ---
@@ -655,6 +715,18 @@ function WEPS.ForcePrecache()
 			util.PrecacheModel(w.ViewModel)
 		end
 	end
+end
+
+function WEPS.IsInstalled(cls)
+	local weps = weapons.GetList()
+
+	for i = 1, #weps do
+		if weps[i].ClassName == cls then
+			return true
+		end
+	end
+
+	return false
 end
 
 --manipulate shove attack for all crowbar alikes

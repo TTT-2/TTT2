@@ -6,7 +6,6 @@
 module("hudelements", package.seeall)
 
 local baseclass = baseclass
-local list = list
 local pairs = pairs
 
 if SERVER then
@@ -66,60 +65,10 @@ end
 function Register(t, name)
 	name = string.lower(name)
 
-	local old = HUDElementList[name]
-
 	t.ClassName = name
 	t.id = name
 
 	HUDElementList[name] = t
-
-	list.Set("HUDElement", name, {
-			ClassName = name,
-			id = name
-	})
-
-	--
-	-- If we're reloading this entity class
-	-- then refresh all the existing entities.
-	--
-	if old ~= nil then
-
-		--
-		-- For each entity using this class
-		--
-		local entsTbl = ents.FindByClass(name)
-
-		for i = 1, #entsTbl do
-			local entity = entsTbl[i]
-
-			--
-			-- Replace the contents with this entity table
-			--
-			table.Merge(entity, t)
-
-			--
-			-- Call OnReloaded hook (if it has one)
-			--
-			if isfunction(entity.OnReloaded) then
-				entity:OnReloaded()
-			end
-		end
-
-		-- Update HUD table of entities that are based on this HUD
-		entsTbl = ents.GetAll()
-
-		for i = 1, #entsTbl do
-			local e = entsTbl[i]
-
-			if IsBasedOn(e:GetClass(), name) then
-				table.Merge(e, Get(e:GetClass()))
-
-				if isfunction(e.OnReloaded) then
-					e:OnReloaded()
-				end
-			end
-		end
-	end
 end
 
 ---

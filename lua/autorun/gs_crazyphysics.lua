@@ -71,7 +71,8 @@ local tEntitiesToCheck = {
 
 local bTTT
 local tIdentifyEntities
-local ttt_announce_body_found
+local cv_ttt_announce_body_found
+local cv_ttt2_confirm_killlist
 
 hook.Add("Initialize", "TTT2GSCrazyPhysics", function()
 	-- Change check if your terrortown folder is named something different
@@ -82,7 +83,8 @@ hook.Add("Initialize", "TTT2GSCrazyPhysics", function()
 			prop_ragdoll = true
 		}
 
-		ttt_announce_body_found = GetConVar("ttt_announce_body_found")
+		cv_ttt_announce_body_found = GetConVar("ttt_announce_body_found")
+		cv_ttt2_confirm_killlist = GetConVar("ttt2_confirm_killlist")
 	end
 end)
 
@@ -184,7 +186,7 @@ local function IdentifyCorpse(pCorpse)
 		end
 	end
 
-	if ttt_announce_body_found:GetBool() then
+	if cv_ttt_announce_body_found:GetBool() then
 		if GetGlobalBool("ttt2_confirm_team") then -- TODO adjust the new messages
 			LANG.Msg("body_found", {
 				finder = "The Server",
@@ -201,7 +203,7 @@ local function IdentifyCorpse(pCorpse)
 		end
 	end
 
-	if GetConVar("ttt2_confirm_killlist"):GetBool() then
+	if cv_ttt2_confirm_killlist:GetBool() then
 		local tKills = pCorpse.kills
 		if tKills then
 			for i = 1, #tKills do

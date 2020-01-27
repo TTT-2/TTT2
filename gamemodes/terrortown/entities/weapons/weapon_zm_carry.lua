@@ -255,7 +255,7 @@ if SERVER then
 
 		local owner = self:GetOwner()
 
-		self.CarryHack:SetPos(owner:EyePos() + owner:GetAimVector() * 70)
+		self.CarryHack:SetPos(owner:EyePos() + owner:GetAimVector() * 100)
 		self.CarryHack:SetAngles(owner:GetAngles())
 
 		self.EntHolding:PhysWake()

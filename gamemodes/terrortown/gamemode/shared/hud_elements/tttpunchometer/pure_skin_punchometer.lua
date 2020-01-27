@@ -29,6 +29,8 @@ if CLIENT then
 		self.pad = pad
 		self.margin = margin
 
+		self.cv_ttt_spectator_mode = GetConVar("ttt_spectator_mode");
+
 		BaseClass.Initialize(self)
 	end
 
@@ -58,7 +60,7 @@ if CLIENT then
 		self:DrawBar(x + self.pad, y + self.pad, w - self.pad * 2, h - self.pad * 2, draw_col, punch, self.scale, L.punch_title)
 		self:DrawLines(x, y, w, h, self.basecolor.a)
 
-		draw.AdvancedText(L.punch_help, "TabLarge", x + w * 0.5, y, self:GetDefaultFontColor(self.basecolor), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, true, self.scale)
+		draw.AdvancedText(L.punch_help, "TabLarge", x + w * 0.5, y, util.GetDefaultColor(self.basecolor), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, true, self.scale)
 
 		local bonus = client:GetNWInt("bonuspunches", 0)
 		if bonus ~= 0 then
@@ -70,7 +72,7 @@ if CLIENT then
 				text = interp(L.punch_malus, {num = bonus})
 			end
 
-			draw.AdvancedText(text, "TabLarge", x + w * 0.5, y + self.margin * 2 + 20, self:GetDefaultFontColor(self.basecolor), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, true, self.scale)
+			draw.AdvancedText(text, "TabLarge", x + w * 0.5, y + self.margin * 2 + 20, util.GetDefaultColor(self.basecolor), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, true, self.scale)
 		end
 	end
 
@@ -106,7 +108,7 @@ if CLIENT then
 			self:PunchPaint() -- punch bar if you are spectator and inside of an entity
 		else
 			draw.AdvancedText(interp(L.spec_help, key_params), "TabLarge", x + self.size.w * 0.5, y, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, true, self.scale)
-			if GetConVar("ttt_spectator_mode"):GetBool() then
+			if self.cv_ttt_spectator_mode:GetBool() then
 				draw.AdvancedText(interp(L.spec_help2, key_params), "TabLarge", x + self.size.w * 0.5, y + 20, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, true, self.scale)
 			end
 		end

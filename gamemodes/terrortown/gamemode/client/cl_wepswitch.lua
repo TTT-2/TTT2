@@ -30,9 +30,13 @@ end
 -- Updates the weapon cache
 -- @realm client
 function WSWITCH:UpdateWeaponCache()
+	local client = LocalPlayer()
+
+	if not IsValid(client) then return end
+
 	self.WeaponCache = {}
 
-	local inventory = LocalPlayer():GetInventory()
+	local inventory = client:GetInventory()
 
 	for kind = 1, #ORDERED_SLOT_TABLE do
 		for _, wep in pairs(inventory[kind]) do

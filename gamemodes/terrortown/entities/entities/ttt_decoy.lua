@@ -43,13 +43,15 @@ end
 function ENT:UseOverride(activator)
 	if not IsValid(activator) or self:GetNWString("decoy_owner_team", "none") ~= activator:GetTeam() then return end
 
-	if not activator:CanCarryType(self.WeaponKind or WEAPON_EQUIP2) then
+	-- picks up weapon, switches if possible and needed, returns weapon if successful
+	local wep = activator:PickupWeaponClass("weapon_ttt_decoy", true)
+
+	if not IsValid(wep) then
 		LANG.Msg(activator, "decoy_no_room")
 
 		return
 	end
 
-	activator:Give("weapon_ttt_decoy")
 	self:Remove()
 end
 
@@ -82,6 +84,7 @@ end
 
 if CLIENT then
 	local TryT = LANG.TryTranslation
+	local ParT = LANG.GetParamTranslation
 
 	-- handle looking at decoy
 	hook.Add("TTTRenderEntityInfo", "HUDDrawTargetIDDecoy", function(data, params)
@@ -96,7 +99,7 @@ if CLIENT then
 		params.displayInfo.key = input.GetKeyCode(input.LookupBinding("+use"))
 		params.displayInfo.title.text = TryT("decoy_name")
 
-		params.displayInfo.subtitle.text = TryT("target_pickup")
+		params.displayInfo.subtitle.text = ParT("target_pickup", {usekey = Key("+use", "USE")})
 
 		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
 			text = TryT("decoy_short_desc")

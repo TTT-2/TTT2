@@ -16,6 +16,8 @@ local ttt_dyingshot = CreateConVar("ttt_dyingshot", "0", {FCVAR_NOTIFY, FCVAR_AR
 CreateConVar("ttt_killer_dna_range", "550", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 CreateConVar("ttt_killer_dna_basetime", "100", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
+util.AddNetworkString("ttt2_damage_received")
+
 ---
 -- First spawn on the server.
 -- Called when the @{Player} spawns for the first time.
@@ -88,6 +90,9 @@ end
 -- @ref https://wiki.garrysmod.com/page/GM/PlayerSpawn
 -- @local
 function GM:PlayerSpawn(ply)
+	-- stop bleeding
+	util.StopBleeding(ply)
+
 	-- Some spawns may be tilted
 	ply:ResetViewRoll()
 
@@ -567,7 +572,7 @@ function GM:KeyRelease(ply, key)
 	-- see if we need to do some custom usekey overriding
 	local tr = util.TraceLine({
 		start = ply:GetShootPos(),
-		endpos = ply:GetShootPos() + ply:GetAimVector() * 84,
+		endpos = ply:GetShootPos() + ply:GetAimVector() * 100,
 		filter = ply,
 		mask = MASK_SHOT
 	})
@@ -628,9 +633,12 @@ concommand.Add("ttt_spec_use", SpecUseKey)
 -- @ref https://wiki.garrysmod.com/page/GM/PlayerDisconnected
 -- @local
 function GM:PlayerDisconnected(ply)
-	-- Prevent the disconnecter from being in the resends
 	if IsValid(ply) then
+		-- Prevent the disconnected player from being in the resends
 		ply:SetRole(ROLE_NONE)
+
+		-- abort the weapon pickup when a player disconnects
+		ResetWeapon(ply.wpickup_weapon)
 	end
 
 	if GetRoundState() ~= ROUND_PREP then
@@ -766,7 +774,7 @@ local function CheckCreditAward(victim, attacker)
 						ply:AddCredits(amt)
 
 						--LANG.Msg(GetRoleTeamFilter(TEAM_TRAITOR, true), "credit_kill_all", {num = amt})
-						LANG.Msg(ply, "credit_all", {num = amt})
+						LANG.Msg(ply, "credit_all", {num = amt}, MSG_MSTACK_ROLE)
 					end
 				end
 			end
@@ -897,7 +905,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
 		if reward > 0 then
 			attacker:AddCredits(reward)
 
-			LANG.Msg(attacker, "credit_kill", {num = reward, role = LANG.NameParam(ply:GetRoleString())}) -- TODO rework
+			LANG.Msg(attacker, "credit_kill", {num = reward, role = LANG.NameParam(ply:GetRoleString())}, MSG_MSTACK_ROLE) -- TODO rework
 		end
 	end
 end
@@ -919,8 +927,14 @@ end
 -- @ref https://wiki.garrysmod.com/page/GM/PlayerDeath
 -- @local
 function GM:PlayerDeath(victim, infl, attacker)
+	-- stop bleeding
+	util.StopBleeding(victim)
+
 	-- tell no one
 	self:PlayerSilentDeath(victim)
+
+	-- abort the weapon pickup when a player dies
+	ResetWeapon(victim.wpickup_weapon)
 
 	timer.Simple(0, function()
 		if not IsValid(victim) then return end
@@ -1346,7 +1360,7 @@ function GM:PlayerTakeDamage(ent, infl, att, amount, dmginfo)
 		if hurter and IsValid(hurter:GetDamageOwner()) then
 			owner, owner_time = hurter:GetDamageOwner()
 
-			-- barrel bangs can hurt us even if we threw them, but that's our fault
+		-- barrel bangs can hurt us even if we threw them, but that's our fault
 		elseif hurter and ent == hurter:GetPhysicsAttacker() and dmginfo:IsDamageType(DMG_BLAST) then
 			owner = ent
 		elseif hurter and hurter:IsVehicle() and IsValid(hurter:GetDriver()) then
@@ -1479,6 +1493,11 @@ function GM:PlayerTakeDamage(ent, infl, att, amount, dmginfo)
 			DamageLog(Format("DMG: \t %s [%s] damaged %s [%s] for %d dmg", att:Nick(), att:GetRoleString(), ent:Nick(), ent:GetRoleString(), math.Round(dmginfo:GetDamage())))
 		end
 	end
+
+	-- send damage information to client
+	net.Start("ttt2_damage_received")
+	net.WriteFloat(amount)
+	net.Send(ent)
 end
 
 ---

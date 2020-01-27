@@ -225,7 +225,7 @@ local function ttt_call_detective(ply, cmd, args)
 			net.WriteVector(rag:GetPos())
 			net.Send(GetRoleChatFilter(ROLE_DETECTIVE, true))
 
-			LANG.Msg("body_call", {player = ply:Nick(), victim = CORPSE.GetPlayerNick(rag, "someone")})
+			LANG.Msg("body_call", {player = ply:Nick(), victim = CORPSE.GetPlayerNick(rag, "someone")}, MSG_CHAT_PLAIN)
 		else
 			LANG.Msg(ply, "body_call_error")
 		end
@@ -271,7 +271,7 @@ function CORPSE.ShowSearch(ply, rag, covert, long_range)
 	if not IsValid(ply) or not IsValid(rag) then return end
 
 	if rag:IsOnFire() then
-		LANG.Msg(ply, "body_burning")
+		LANG.Msg(ply, "body_burning", nil, MSG_CHAT_WARN)
 
 		return
 	end
@@ -391,8 +391,11 @@ function CORPSE.ShowSearch(ply, rag, covert, long_range)
 	-- 133 + string data + #kill_entids * 8 + team + 1
 	-- 200 + ?
 
-	-- If found by detective, send to all, else just the finder
-	if ply:IsActiveRole(ROLE_DETECTIVE) then
+	-- workaround to make sure only detective searches are added to the scoreboard
+	net.WriteBool(ply:IsActiveRole(ROLE_DETECTIVE) and not covert)
+
+	-- If searched publicly, send to all, else just the finder
+	if not covert then
 		net.Broadcast()
 	else
 		net.Send(ply)
@@ -427,6 +430,7 @@ local function GetKillerSample(victim, attacker, dmg)
 	local sample = {}
 	sample.killer = attacker
 	sample.killer_sid = attacker:SteamID64()
+	sample.killer_sid64 = attacker:SteamID64()
 	sample.victim = victim
 	sample.t = CurTime() + (-1 * (0.019 * dist) ^ 2 + (ConVarExists("ttt_killer_dna_basetime") and GetConVar("ttt_killer_dna_basetime"):GetInt() or 0))
 
@@ -513,6 +517,7 @@ function CORPSE.Create(ply, attacker, dmginfo)
 
 	rag:SetPos(ply:GetPos())
 	rag:SetModel(ply:GetModel())
+	rag:SetSkin(ply:GetSkin())
 	rag:SetAngles(ply:GetAngles())
 	rag:SetColor(ply:GetColor())
 

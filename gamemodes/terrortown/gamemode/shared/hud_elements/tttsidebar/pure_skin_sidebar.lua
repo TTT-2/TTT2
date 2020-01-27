@@ -9,6 +9,8 @@ HUDELEMENT.Base = base
 
 if CLIENT then
 	local padding = 10
+	local color_badstatus = Color(183, 54, 47)
+	local color_goodstatus = Color(36, 115, 51)
 
 	local const_defaults = {
 		basepos = {x = 0, y = 0},
@@ -61,7 +63,7 @@ if CLIENT then
 			item.hud_color = self.basecolor
 		end
 
-		local fontColor = self:GetDefaultFontColor(item.hud_color)
+		local fontColor = util.GetDefaultColor(item.hud_color)
 		local iconAlpha = fontColor.r > 60 and 175 or 250
 
 		curY = curY - size.w
@@ -83,7 +85,7 @@ if CLIENT then
 
 		local hud_icon = item.hud.GetTexture and item.hud or item.hud[item.active_icon]
 
-		util.DrawFilteredTexturedRect(pos.x, curY, size.w, size.w, hud_icon, iconAlpha, fontColor)
+		draw.FilteredShadowedTexture(pos.x, curY, size.w, size.w, hud_icon, iconAlpha, fontColor, self.scale)
 
 		self:DrawLines(pos.x, curY, size.w, size.w, item.hud_color.a * factor)
 
@@ -152,11 +154,11 @@ if CLIENT then
 		-- draw status
 		for _, status in pairs(STATUS.active) do
 			if status.type == "bad" then
-				status.hud_color = Color(183, 54, 47)
+				status.hud_color = color_badstatus
 			end
 
 			if status.type == "good" then
-				status.hud_color = Color(36, 115, 51)
+				status.hud_color = color_goodstatus
 			end
 
 			if status.type == "default" then

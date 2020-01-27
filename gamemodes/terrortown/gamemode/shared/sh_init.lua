@@ -507,6 +507,7 @@ COLOR_OLIVE = Color(100, 100, 0, 255)
 
 -- include ttt required files
 ttt_include("sh_util")
+ttt_include("sh_decal")
 ttt_include("sh_lang")
 ttt_include("sh_sql")
 ttt_include("sh_hud_module")
@@ -637,21 +638,28 @@ end)
 ---
 -- Checks whether an equipment is buyable
 -- @param table tbl equipment table
--- @param string team @{ROLE}'s team
+-- @param @{Player} player
 -- @return boolean
 -- @return string text as an icon
 -- @return string result or error
 -- @realm shared
-function EquipmentIsBuyable(tbl, team)
-	if not tbl then
+function EquipmentIsBuyable(tbl, ply)
+	local valPly = IsValid(ply) and ply:IsPlayer()
+	if not tbl or not valPly then
 		return false, "X", "error"
 	end
+
+	local team = ply:GetTeam()
 
 	if not tbl.id then
 		ErrorNoHalt("[TTT2][ERROR] Missing id in table:", tbl)
 		PrintTable(tbl)
 
 		return false, "X", "ID error"
+	end
+
+	if tbl.notBuyable then
+		return false, "X", "This equipment cannot be bought."
 	end
 
 	if tbl.minPlayers and tbl.minPlayers > 1 then
@@ -672,8 +680,13 @@ function EquipmentIsBuyable(tbl, team)
 		end
 	end
 
-	if tbl.globalLimited and BUYTABLE[tbl.id] or team and tbl.teamLimited and TEAMS[team] and not TEAMS[team].alone and TEAMBUYTABLE[team] and TEAMBUYTABLE[team][tbl.id] then
+	if tbl.globalLimited and BUYTABLE[tbl.id] or team and tbl.teamLimited and TEAMS[team] and not TEAMS[team].alone and TEAMBUYTABLE[team] and TEAMBUYTABLE[team][tbl.id] or tbl.limited and ply:HasBought(tbl.ClassName) then
 		return false, "X", "This equipment is limited and is already bought."
+	end
+
+	-- weapon whitelist check
+	if not tbl.CanBuy[GetShopFallback(ply:GetSubRole())] then
+		return false, "X", "Your role can't buy this equipment."
 	end
 
 	return true, "✔", "ok"

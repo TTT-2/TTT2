@@ -124,7 +124,7 @@ if CLIENT then
 					local t = TEAMS[team]
 
 					if t.iconMaterial then
-						local c = t.color or Color(0, 0, 0, 255)
+						local c = t.color or COLOR_BLACK
 						local tx = x + tmp + smargin
 
 						DrawOldRoleIcon(tx, traitor_y, bgheight, bgheight, t.iconMaterial, c)

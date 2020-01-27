@@ -5,6 +5,7 @@ ttt_include("vgui__cl_shopeditor_buttons")
 ttt_include("vgui__cl_shopeditor_slider")
 
 local COLOR_GREY = COLOR_GREY or Color(120, 120, 120, 255)
+local itemBoxColor = Color(100, 100, 100)
 
 local Equipmentnew
 local SafeTranslate = LANG.TryTranslation
@@ -201,7 +202,7 @@ function ShopEditor.EditItem(item)
 	frame:SetMouseInputEnabled(true)
 
 	function frame:Paint(w2, h2)
-		draw.RoundedBox(0, 0, 0, w2, h2, Color(100, 100, 100))
+		draw.RoundedBox(0, 0, 0, w2, h2, itemBoxColor)
 	end
 
 	function frame:OnClose()
@@ -311,7 +312,7 @@ function ShopEditor.CreateItemEditor()
 	frame:SetMouseInputEnabled(true)
 
 	function frame:Paint(w2, h2)
-		draw.RoundedBox(0, 0, 0, w2, h2, Color(100, 100, 100))
+		draw.RoundedBox(0, 0, 0, w2, h2, itemBoxColor)
 	end
 
 	function frame:OnClose()
@@ -434,7 +435,7 @@ function ShopEditor.CreateOwnShopEditor(roleData, onCreate)
 	frame:SetMouseInputEnabled(true)
 
 	function frame:Paint(w2, h2)
-		draw.RoundedBox(0, 0, 0, w2, h2, Color(100, 100, 100))
+		draw.RoundedBox(0, 0, 0, w2, h2, itemBoxColor)
 	end
 
 	function frame:OnClose()
@@ -451,14 +452,8 @@ function ShopEditor.CreateOwnShopEditor(roleData, onCreate)
 		if eq then
 			eq.CanBuy = eq.CanBuy or {}
 
-			if table.HasValue(eq.CanBuy, roleData.index) then
-				for k = 1, #eq.CanBuy do
-					if eq.CanBuy[k] ~= roleData.index then continue end
-
-					table.remove(eq.CanBuy, k)
-
-					break
-				end
+			if eq.CanBuy[roleData.index] then
+				eq.CanBuy[roleData.index] = nil
 
 				-- remove
 				net.Start("shop")
@@ -467,7 +462,7 @@ function ShopEditor.CreateOwnShopEditor(roleData, onCreate)
 				net.WriteString(eq.id)
 				net.SendToServer()
 			else
-				eq.CanBuy[#eq.CanBuy + 1] = roleData.index
+				eq.CanBuy[roleData.index] = roleData.index
 
 				-- add
 				net.Start("shop")
@@ -484,7 +479,7 @@ function ShopEditor.CreateOwnShopEditor(roleData, onCreate)
 			if eq then
 				eq.CanBuy = eq.CanBuy or {}
 
-				if table.HasValue(eq.CanBuy, roleData.index) then
+				if eq.CanBuy[roleData.index] then
 					v:Toggle(true)
 				else
 					v:Toggle(false)
@@ -535,7 +530,7 @@ function ShopEditor.CreateLinkWithRole(roleData)
 	frame:SetMouseInputEnabled(true)
 
 	function frame:Paint(w2, h2)
-		draw.RoundedBox(0, 0, 0, w2, h2, Color(100, 100, 100))
+		draw.RoundedBox(0, 0, 0, w2, h2, itemBoxColor)
 	end
 
 	function frame:OnClose()
@@ -647,7 +642,7 @@ function ShopEditor.CreateShopLinker()
 	frame:SetMouseInputEnabled(true)
 
 	function frame:Paint(w2, h2)
-		draw.RoundedBox(0, 0, 0, w2, h2, Color(100, 100, 100))
+		draw.RoundedBox(0, 0, 0, w2, h2, itemBoxColor)
 	end
 
 	function frame:OnClose()
@@ -695,13 +690,7 @@ local function shopFallbackAnsw(len)
 
 		if not canBuy then continue end
 
-		for k = 1, #canBuy do
-			if canBuy[k] == subrole then
-				table.remove(canBuy, k)
-
-				break
-			end
-		end
+		canBuy[subrole] = nil
 	end
 
 	local weps = weapons.GetList()
@@ -712,13 +701,7 @@ local function shopFallbackAnsw(len)
 
 		if not canBuy then continue end
 
-		for k = 1, #canBuy do
-			if canBuy[k] == subrole then
-				table.remove(canBuy, k)
-
-				break
-			end
-		end
+		canBuy[subrole] = nil
 	end
 
 	if fb == SHOP_UNSET then
@@ -734,7 +717,7 @@ local function shopFallbackAnsw(len)
 			local equip = not items.IsItem(eq.id) and weapons.GetStored(eq.id) or items.GetStored(eq.id)
 			if equip then
 				equip.CanBuy = equip.CanBuy or {}
-				equip.CanBuy[#equip.CanBuy + 1] = subrole
+				equip.CanBuy[subrole] = subrole
 			end
 
 			Equipment[subrole][#Equipment[subrole] + 1] = eq
@@ -779,7 +762,7 @@ local function shopFallbackReset(len)
 				local equip = not items.IsItem(eq.id) and weapons.GetStored(eq.id) or items.GetStored(eq.id)
 				if equip then
 					equip.CanBuy = equip.CanBuy or {}
-					equip.CanBuy[#equip.CanBuy + 1] = subrole
+					equip.CanBuy[subrole] = subrole
 				end
 
 				Equipment[subrole][#Equipment[subrole] + 1] = eq
@@ -805,7 +788,7 @@ function ShopEditor.ShopFallbackRefresh()
 				if equip then
 					equip.CanBuy = equip.CanBuy or {}
 
-					if table.HasValue(equip.CanBuy, wshop.selectedRole) then
+					if equip.CanBuy[wshop.selectedRole] then
 						v:Toggle(true)
 					else
 						v:Toggle(false)
@@ -847,7 +830,7 @@ function ShopEditor.ShowOptions()
 	frame:SetMouseInputEnabled(true)
 
 	function frame:Paint(w2, h2)
-		draw.RoundedBox(0, 0, 0, w2, h2, Color(100, 100, 100))
+		draw.RoundedBox(0, 0, 0, w2, h2, itemBoxColor)
 	end
 
 	function frame:OnClose()
@@ -960,7 +943,7 @@ function ShopEditor.CreateShopEditor()
 	frame:SetMouseInputEnabled(true)
 
 	function frame:Paint(w2, h2)
-		draw.RoundedBox(0, 0, 0, w2, h2, Color(100, 100, 100))
+		draw.RoundedBox(0, 0, 0, w2, h2, itemBoxColor)
 	end
 
 	function frame:OnClose()

@@ -4,6 +4,7 @@
 local IsValid = IsValid
 local hook = hook
 local team = team
+local UpdateSprint = UpdateSprint
 
 ---
 -- Initializes TTT2
@@ -133,6 +134,13 @@ function GM:TTTPlayerColor(model)
 
 	-- No coloring
 	return COLOR_WHITE
+end
+
+---
+-- @hook
+-- @realm shared
+function GM:Think()
+	UpdateSprint()
 end
 
 -- Drowning and such

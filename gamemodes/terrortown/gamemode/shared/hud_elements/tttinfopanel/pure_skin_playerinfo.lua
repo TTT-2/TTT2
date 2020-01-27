@@ -11,6 +11,18 @@ if CLIENT then
 	local lpw = 44 -- left panel width
 	local sri_text_width_padding = 8 -- secondary role information padding (needed for size calculations)
 
+	local watching_icon = Material("vgui/ttt/watching_icon")
+	local credits_default = Material("vgui/ttt/equip/credits_default")
+	local credits_zero = Material("vgui/ttt/equip/credits_zero")
+
+	local icon_armor = Material("vgui/ttt/hud_armor.vmt")
+	local icon_armor_rei = Material("vgui/ttt/hud_armor_reinforced.vmt")
+
+	local color_sprint = Color(36, 154, 198)
+	local color_defaultgrey = Color(100, 100, 100, 200)
+	local color_health = Color(234, 41, 41)
+	local color_ammoBar = Color(238, 151, 0)
+
 	local const_defaults = {
 		basepos = {x = 0, y = 0},
 		size = {w = 365, h = 146},
@@ -80,17 +92,6 @@ if CLIENT then
 		self.secondaryRoleInformationFunc = func
 	end
 
-	local watching_icon = Material("vgui/ttt/watching_icon")
-	local credits_default = Material("vgui/ttt/equip/credits_default")
-	local credits_zero = Material("vgui/ttt/equip/credits_zero")
-
-	local icon_armor = Material("vgui/ttt/hud_armor.vmt")
-	local icon_armor_rei = Material("vgui/ttt/hud_armor_reinforced.vmt")
-
-	local color_sprint = Color(36, 154, 198)
-	local color_defaultgrey = Color(100, 100, 100, 200)
-	local color_health = Color(234, 41, 41)
-
 	function HUDELEMENT:Draw()
 		local client = LocalPlayer()
 		local calive = client:Alive() and client:IsTerror()
@@ -135,10 +136,10 @@ if CLIENT then
 
 			if cactive then
 				if rd.iconMaterial then
-					util.DrawFilteredTexturedRect(x2 + 4, y2 + 4, t_lpw - 8, t_lpw - 8, rd.iconMaterial)
+					draw.FilteredShadowedTexture(x2 + 4, y2 + 4, t_lpw - 8, t_lpw - 8, rd.iconMaterial, 255, util.GetDefaultColor(c), t_scale)
 				end
 			elseif IsValid(tgt) and tgt:IsPlayer() then
-				util.DrawFilteredTexturedRect(x2 + 4, y2 + 4, t_lpw - 8, t_lpw - 8, watching_icon)
+				draw.FilteredShadowedTexture(x2 + 4, y2 + 4, t_lpw - 8, t_lpw - 8, watching_icon, 255, util.GetDefaultColor(c), t_scale)
 			end
 
 			-- draw role string name
@@ -175,7 +176,7 @@ if CLIENT then
 
 			role_scale_multiplier = math.Clamp(role_scale_multiplier, 0.55, 0.85) * t_scale
 
-			draw.AdvancedText(string.upper(text), "PureSkinRole", nx, ry, self:GetDefaultFontColor(t_basecolor), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, true, Vector(role_scale_multiplier * 0.9, role_scale_multiplier, role_scale_multiplier))
+			draw.AdvancedText(string.upper(text), "PureSkinRole", nx, ry, util.GetDefaultColor(t_basecolor), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, true, Vector(role_scale_multiplier * 0.9, role_scale_multiplier, role_scale_multiplier))
 		end
 
 		-- player informations
@@ -201,7 +202,7 @@ if CLIENT then
 					surface.SetDrawColor(clr(secInfoTbl.color))
 					surface.DrawRect(nx2, ny, sri_width, nh)
 
-					draw.AdvancedText(sri_text_caps, "PureSkinBar", nx2 + sri_width * 0.5, ry, self:GetDefaultFontColor(secInfoTbl.color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, true, t_scale)
+					draw.AdvancedText(sri_text_caps, "PureSkinBar", nx2 + sri_width * 0.5, ry, util.GetDefaultColor(secInfoTbl.color), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, true, t_scale)
 
 					-- draw lines around the element
 					self:DrawLines(nx2, ny, sri_width, nh, secInfoTbl.color.a)
@@ -237,14 +238,9 @@ if CLIENT then
 				local at_pos_y = ty + 1
 				local at_pos_x = a_pos_x + a_size + a_pad
 
-				local ss = math.Round(t_scale)
-				local ss2 = math.Round(2 * t_scale)
+				draw.FilteredShadowedTexture(a_pos_x, a_pos_y, a_size, a_size, icon_mat, 255, COLOR_WHITE, t_scale)
 
-				util.DrawFilteredTexturedRect(a_pos_x + ss2, a_pos_y + ss2, a_size, a_size, icon_mat, 200, COLOR_BLACK)
-				util.DrawFilteredTexturedRect(a_pos_x + ss, a_pos_y + ss, a_size, a_size, icon_mat, 255, COLOR_BLACK)
-				util.DrawFilteredTexturedRect(a_pos_x, a_pos_y, a_size, a_size, icon_mat, 255, COLOR_WHITE)
-
-				draw.AdvancedText(armor, "PureSkinBar", at_pos_x, at_pos_y, self:GetDefaultFontColor(color_health), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT, true, t_scale)
+				draw.AdvancedText(armor, "PureSkinBar", at_pos_x, at_pos_y, util.GetDefaultColor(color_health), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT, true, t_scale)
 			end
 
 			-- ammo bar
@@ -257,7 +253,7 @@ if CLIENT then
 				if ammo_clip ~= -1 then
 					local text = string.format("%i + %02i", ammo_clip, ammo_inv)
 
-					self:DrawBar(nx, ty, bw, bh, Color(238, 151, 0), ammo_clip / ammo_max, t_scale, text)
+					self:DrawBar(nx, ty, bw, bh, color_ammoBar, ammo_clip / ammo_max, t_scale, text)
 				end
 			end
 
@@ -274,9 +270,9 @@ if CLIENT then
 				local x2_pad = math.Round((t_lpw - coinSize) * 0.5)
 
 				if client:GetCredits() > 0 then
-					util.DrawFilteredTexturedRect(x2 + x2_pad, y2 + h2 - coinSize - x2_pad, coinSize, coinSize, credits_default, 200)
+					draw.FilteredTexture(x2 + x2_pad, y2 + h2 - coinSize - x2_pad, coinSize, coinSize, credits_default, 200)
 				else
-					util.DrawFilteredTexturedRect(x2 + x2_pad, y2 + h2 - coinSize - x2_pad, coinSize, coinSize, credits_zero, 100)
+					draw.FilteredTexture(x2 + x2_pad, y2 + h2 - coinSize - x2_pad, coinSize, coinSize, credits_zero, 100)
 				end
 			end
 		end

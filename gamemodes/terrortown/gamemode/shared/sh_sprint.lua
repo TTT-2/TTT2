@@ -1,3 +1,22 @@
+local function PlayerSprint(trySprinting, moveKey)
+	if SERVER then return end
+
+	local client = LocalPlayer()
+
+	if trySprinting and not GetGlobalBool("ttt2_sprint_enabled", true) then return end
+	if not trySprinting and not client.isSprinting or trySprinting and client.isSprinting then return end
+	if client.isSprinting and (client.moveKey and not moveKey or not client.moveKey and moveKey) then return end
+
+	client.oldSprintProgress = client.sprintProgress
+	client.sprintMultiplier = trySprinting and (1 + GetGlobalFloat("ttt2_sprint_max", 0)) or nil
+	client.isSprinting = trySprinting
+	client.moveKey = moveKey
+
+	net.Start("TTT2SprintToggle")
+	net.WriteBool(trySprinting)
+	net.SendToServer()
+end
+
 if SERVER then
 	util.AddNetworkString("TTT2SprintToggle")
 
@@ -44,22 +63,37 @@ if SERVER then
 		ply.oldSprintProgress = ply.sprintProgress
 		ply.sprintMultiplier = bool and (1 + maxSprintMul:GetFloat()) or nil
 		ply.isSprinting = bool
-		ply.sprintTS = CurTime()
 	end)
 else
-	local function PlayerSprint(bool)
-		local client = LocalPlayer()
+	-- The helptext can't be changed once the convar was created, so we go with english, since it is probably the most common lang
+	local doubletap_sprint_anykey = CreateClientConVar("ttt2_doubletap_sprint_anykey", 0, true, false, LANG.GetTranslationFromLanguage("doubletap_sprint_anykey", "english"), 0, 1)
+	local disable_doubletap_sprint = CreateClientConVar("ttt2_disable_doubletap_sprint", "0", true, false, LANG.GetTranslationFromLanguage("disable_doubletap_sprint", "english"), 0, 1)
+	local lastPress = 0
+	local lastPressedMoveKey = nil
 
-		if bool and not GetGlobalBool("ttt2_sprint_enabled", true) or not bool and not client.isSprinting then return end
+	function UpdateInputSprint(ply, key, pressed)
+		if pressed then
+			if ply.isSprinting or disable_doubletap_sprint:GetBool() then return end
 
-		client.oldSprintProgress = client.sprintProgress
-		client.sprintMultiplier = bool and (1 + GetGlobalFloat("ttt2_sprint_max", 0)) or nil
-		client.isSprinting = bool
-		client.sprintTS = CurTime()
+			local time = CurTime()
 
-		net.Start("TTT2SprintToggle")
-		net.WriteBool(bool)
-		net.SendToServer()
+			if lastPressedMoveKey == key and time - lastPress < 0.4 then
+				PlayerSprint(true, key)
+			end
+
+			lastPressedMoveKey = key
+			lastPress = time
+		else
+			if not ply.isSprinting then return end
+
+			local moveKey = ply.moveKey
+			local wantsToMove = ply:KeyDown(IN_FORWARD) or ply:KeyDown(IN_BACK) or ply:KeyDown(IN_MOVERIGHT) or ply:KeyDown(IN_MOVELEFT)
+			local anyKey = doubletap_sprint_anykey:GetBool()
+
+			if not moveKey or anyKey and wantsToMove or not anyKey and key ~= moveKey then return end
+
+			PlayerSprint(false, key)
+		end
 	end
 
 	bind.Register("ttt2_sprint", function()
@@ -72,7 +106,7 @@ else
 	end, "TTT2 Bindings", "f1_bind_sprint", KEY_LSHIFT)
 end
 
-hook.Add("Think", "TTT2PlayerSprinting", function()
+function UpdateSprint()
 	local client
 
 	if CLIENT then
@@ -85,24 +119,34 @@ hook.Add("Think", "TTT2PlayerSprinting", function()
 
 	for i = 1, #plys do
 		local ply = plys[i]
+		local wantsToMove = ply:KeyDown(IN_FORWARD) or ply:KeyDown(IN_BACK) or ply:KeyDown(IN_MOVERIGHT) or ply:KeyDown(IN_MOVELEFT)
 
-		if not ply.sprintTS then continue end
+		if ply.sprintProgress == 1 and (not ply.isSprinting or not wantsToMove) then continue end
+		if ply.sprintProgress == 0 and ply.isSprinting and wantsToMove then
+			ply.sprintResetDelayCounter = ply.sprintResetDelayCounter + FrameTime()
 
-		local timeElapsed = CurTime() - ply.sprintTS
+			-- If the player keeps sprinting even though they have no stamina, start refreshing stamina after 1.5 seconds automatically
+			if CLIENT and ply.sprintResetDelayCounter > 1.5 then
+				PlayerSprint(false, ply.moveKey)
+			end
+
+			continue
+		end
+
+		ply.sprintResetDelayCounter = 0
+
 		local modifier = {1} -- Multiple hooking support
 
-		if not ply.isSprinting then
+		if not ply.isSprinting or not wantsToMove then
 			hook.Run("TTT2StaminaRegen", ply, modifier)
 
-			ply.sprintProgress = math.min((ply.oldSprintProgress or 0) + timeElapsed * modifier[1] * GetGlobalFloat("ttt2_sprint_stamina_regeneration"), 1)
-		else
+			ply.sprintProgress = math.min((ply.oldSprintProgress or 0) + FrameTime() * modifier[1] * GetGlobalFloat("ttt2_sprint_stamina_regeneration"), 1)
+			ply.oldSprintProgress = ply.sprintProgress
+		elseif wantsToMove then
 			hook.Run("TTT2StaminaDrain", ply, modifier)
 
-			ply.sprintProgress = math.max((ply.oldSprintProgress or 0) - timeElapsed * modifier[1] * GetGlobalFloat("ttt2_sprint_stamina_consumption"), 0)
-		end
-
-		if ply.sprintProgress == 1 then
-			ply.sprintTS = nil
+			ply.sprintProgress = math.max((ply.oldSprintProgress or 0) - FrameTime() * modifier[1] * GetGlobalFloat("ttt2_sprint_stamina_consumption"), 0)
+			ply.oldSprintProgress = ply.sprintProgress
 		end
 	end
-end)
+end

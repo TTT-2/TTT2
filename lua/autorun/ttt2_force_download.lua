@@ -39,6 +39,8 @@ if SERVER then
 	resource.AddFile("materials/vgui/ttt/dynamic/sprite_base.vmt")
 	resource.AddFile("materials/vgui/ttt/dynamic/sprite_base_overlay.vmt")
 
+	resource.AddFile("materials/vgui/ttt/dynamic/icon_button_pointer.vmt")
+
 	resource.AddFile("materials/vgui/ttt/icon_drown.vmt")
 
 	-- old ttt hud items background
@@ -71,6 +73,11 @@ if SERVER then
 	resource.AddFile("materials/vgui/ttt/ttt2_indicator_streamer.vmt") -- streamer
 	resource.AddFile("materials/vgui/ttt/ttt2_indicator_heroes.vmt") -- ttt2 heroes
 
+	-- traitorbutton
+	resource.AddFile("materials/vgui/ttt/ttt2_hand_line.vmt") -- ttt2 traitor button hand unfocused
+	resource.AddFile("materials/vgui/ttt/ttt2_hand_filled.vmt") -- ttt2 traitor button hand focused
+	resource.AddFile("materials/vgui/ttt/ttt2_hand_outline.vmt") -- ttt2 traitor button hand outline
+
 	-- miniscoreboard indicator
 	resource.AddFile("materials/vgui/ttt/indirect_confirmed.vmt")
 	resource.AddFile("materials/vgui/ttt/revived.vmt")
@@ -94,4 +101,14 @@ if SERVER then
 	resource.AddFile("materials/vgui/ttt/pickup/icon_extra.png")
 	resource.AddFile("materials/vgui/ttt/pickup/icon_class.png")
 	resource.AddFile("materials/vgui/ttt/pickup/icon_ammo.png")
+
+	-- loading screen
+	resource.AddFile("materials/vgui/ttt/loadingscreen/loading.vtf")
+	resource.AddFile("materials/vgui/ttt/loadingscreen/img/bg.jpg")
+	resource.AddFile("materials/vgui/ttt/loadingscreen/img/TTT2Icon.png")
+
+	-- dmgindicator themes
+	resource.AddFile("materials/vgui/ttt/dmgindicator/themes/default.png")
+	resource.AddFile("materials/vgui/ttt/dmgindicator/themes/simple.png")
+	resource.AddFile("materials/vgui/ttt/dmgindicator/themes/vanilla.png")
 end

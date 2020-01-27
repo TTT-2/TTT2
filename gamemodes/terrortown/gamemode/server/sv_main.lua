@@ -3,6 +3,7 @@
 
 ttt_include("sh_init")
 
+ttt_include("sh_sprint")
 ttt_include("sh_main")
 ttt_include("sh_shopeditor")
 
@@ -24,6 +25,7 @@ ttt_include("sv_ent_replace")
 ttt_include("sv_scoring")
 ttt_include("sv_corpse")
 ttt_include("sv_status")
+ttt_include("sv_loadingscreen")
 
 ttt_include("sv_armor")
 ttt_include("sh_armor")
@@ -33,8 +35,8 @@ ttt_include("sh_player_ext")
 ttt_include("sv_player_ext")
 ttt_include("sv_player")
 
-ttt_include("sh_sprint")
 ttt_include("sv_weapon_pickup")
+ttt_include("sv_addonchecker")
 
 -- Localize stuff we use often. It's like Lua go-faster stripes.
 local math = math
@@ -95,6 +97,8 @@ local ttt_minply = CreateConVar("ttt_minimum_players", "2", {FCVAR_NOTIFY, FCVAR
 -- respawn if dead in preparing time
 CreateConVar("ttt2_prep_respawn", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
+local map_switch_delay = CreateConVar("ttt2_map_switch_delay", "15", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Time that passes before the map is changed after the last round ends or the timer runs out", 0)
+
 -- toggle whether ragdolls should be confirmed in DetectiveMode() without clicking on "confirm" espacially
 CreateConVar("ttt_identify_body_woconfirm", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Toggles whether ragdolls should be confirmed in DetectiveMode() without clicking on confirm espacially")
 
@@ -105,11 +109,12 @@ local confirm_team = CreateConVar("ttt2_confirm_team", "0", {FCVAR_NOTIFY, FCVAR
 CreateConVar("ttt2_confirm_killlist", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 -- innos min pct
-CreateConVar("ttt_min_inno_pct", "0.47", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Minimum multiplicator for each player to calculate the minimum amount of innocents")
-CreateConVar("ttt_max_roles", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different roles")
-CreateConVar("ttt_max_roles_pct", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different roles based on player amount. ttt_max_roles needs to be 0")
-CreateConVar("ttt_max_baseroles", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different baseroles")
-CreateConVar("ttt_max_baseroles_pct", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different baseroles based on player amount. ttt_max_baseroles needs to be 0")
+local cv_ttt_min_inno_pct = CreateConVar("ttt_min_inno_pct", "0.47", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Minimum multiplicator for each player to calculate the minimum amount of innocents")
+local cv_ttt_max_roles = CreateConVar("ttt_max_roles", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different roles")
+local cv_ttt_max_roles_pct =  CreateConVar("ttt_max_roles_pct", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different roles based on player amount. ttt_max_roles needs to be 0")
+local cv_ttt_max_baseroles = CreateConVar("ttt_max_baseroles", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different baseroles")
+local cv_ttt_max_baseroles_pct = CreateConVar("ttt_max_baseroles_pct", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different baseroles based on player amount. ttt_max_baseroles needs to be 0")
+CreateConVar("ttt_enforce_playermodel", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Whether or not to enforce terrorist playermodels. Set to 0 for compatibility with Enhanced Playermodel Selector")
 
 -- debuggery
 local ttt_dbgwin = CreateConVar("ttt_debug_preventwin", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
@@ -161,98 +166,13 @@ util.AddNetworkString("TTT2ReceiveTBEq")
 util.AddNetworkString("TTT2ReceiveGBEq")
 util.AddNetworkString("TTT2ResetTBEq")
 util.AddNetworkString("TTT2PlayerAuthedShared")
-
-local buggyAddons = { -- addons that do not work (well) with TTT2
-	["656662924"] = "1367128301", -- Killer Notifier by nerzlakai96
-	["167547072"] = "1367128301", -- Killer Notifier by StarFox
-
-	["649273679"] = "1367128301", -- Role Counter by Zaratusa
-
-	["1531794562"] = "1367128301", -- Killer Info by wurffl
-	["257624318"] = "1367128301", -- Killer info by DerRene
-
-	["308966836"] = "1473581448", -- Death Faker by Exho
-	["922007616"] = "1473581448", -- Death Faker by BocciardoLight
-	["785423990"] = "1473581448", -- Death Faker by markusmarkusz
-	["236217898"] = "1473581448", -- Death Faker by jayjayjay1
-	["912181642"] = "1473581448", -- Death Faker by w4rum
-
-	["127865722"] = "1362430347", -- TTT ULX by Bender180
-
-	["305101059"] = "", -- ID Bomb by MolagA
-
-	["663328966"] = "", -- damagelogs by Hundreth
-
-	["404599106"] = "", -- SpectatorDeathmatch by P4sca1 [EGM]
-
-	["253737047"] = "1398388611", -- Golden Deagle by Zaratusa
-	["637848943"] = "1398388611", -- Golden Deagle by Zaratusa
-	["1376434172"] = "1398388611", -- Golden Deagle by DaniX_Chile
-	["1434026961"] = "1398388611", -- Golden Deagle by Mangonaut
-	["303535203"] = "1398388611", -- Golden Deagle by Navusaur
-	["1325415810"] = "1398388611", -- Golden Deagle by Faedon | Max
-	["648505481"] = "1398388611", -- Golden Deagle by TypicalRookie
-	["659643589"] = "1398388611", -- Golden Deagle by 中國是同性戀
-
-	["828347015"] = "1566390281", -- TTT Totem
-
-	["644532564"] = "", -- TTT Totem content
-
-	["1092556189"] = "", -- Town of Terror by Jenssons
-
-	["1215502383"] = "" -- Custom Roles by Noxx
-}
-
-local outdatedAddons = { -- addons that have newer versions in the WS
-	["940215686"] = "1637001449", -- Clairvoyancy by Doctor Jew
-	["654341247"] = "1637001449", -- Clairvoyancy by Liberty
-
-	["130051756"] = "1584675927", -- Spartan Kick by uacnix
-	["122277196"] = "1584675927", -- Spartan Kick by Chowder908
-	["922510848"] = "1584675927", -- Spartan Kick by BocciardoLight
-	["282584080"] = "1584675927", -- Spartan Kick by Porter
-	["1092632443"] = "1584675927", -- Spartan Kick by Jenssons
-
-	["1523332573"] = "1584780982", -- Thomas by Tubner
-	["962093923"] = "1584780982", -- Thomas by ThunfischArnold
-	["1479128258"] = "1584780982", -- Thomas by JollyJelly1001
-	["1390915062"] = "1584780982", -- Thomas by Doc Snyder
-	["1171584841"] = "1584780982", -- Thomas by Maxdome
-	["811718553"] = "1584780982", -- Thomas by Mr C Funk
-
-	["922355426"] = "1629914760", -- Melon Mine by Phoenixf129
-	["960077088"] = "1629914760", -- Melon Mine by TheSoulrester
-
-	["309299668"] = "1630269736", -- Martyrdom by Exho
-	["1324649928"] = "1630269736", -- Martyrdom by Doctor Jew
-	["899206223"] = "1630269736", -- Martyrdom by Koksgesicht
-
-	["652046425"] = "1640512667", -- Juggernaut Suit by Zaratusa
-
-	["652046425"] = "1470823315", -- Beartrap by Milkwater
-	["652046425"] = "407751746", -- Beartrap by Nerdhive
-
-	["273623128"] = "842302491", -- Juggernaut by Hoff
-	["1387914296"] = "842302491", -- Juggernaut by Schmitler
-	["1371596971"] = "842302491", -- Juggernaut by Amenius
-	["860794236"] = "842302491", -- Juggernaut by Menzek
-	["1198504029"] = "842302491", -- Juggernaut by RedocPlays
-	["911658617"] = "842302491", -- Juggernaut by Luchix
-	["869353740"] = "842302491", -- Juggernaut by Railroad Engineer 111
-
-	["310403937"] = "1662844145", -- Prop Disguiser by Exho
-	["843092697"] = "1662844145", -- Prop Disguiser by Soren
-	["937535488"] = "1662844145", -- Prop Disguiser by St Addi
-	["1168304202"] = "1662844145", -- Prop Disguiser by Izellix
-	["1361103159"] = "1662844145", -- Prop Disguiser by Derp altamas
-	["1301826793"] = "1662844145", -- Prop Disguiser by Akechi
-
-	["254779132"] = "810154456", -- Dead Ringer by Porter
-	["1315377462"] = "810154456", -- Dead Ringer by MuratYilderimTM
-	["240281783"] = "810154456", -- Dead Ringer by Niandra
-
-	["863963592"] = "1815518231" -- Super Soda by ---
-}
+util.AddNetworkString("TTT2ActivateTButton")
+util.AddNetworkString("TTT2ToggleTButton")
+util.AddNetworkString("TTT2SendTButtonConfig")
+util.AddNetworkString("TTT2RequestTButtonConfig")
+util.AddNetworkString("TTT2OrderEquipment")
+util.AddNetworkString("TTT2RoleGlobalVoice")
+util.AddNetworkString("TTT2MuteTeam")
 
 CHANGED_EQUIPMENT = {}
 
@@ -462,42 +382,7 @@ function GM:InitPostEntity()
 	WEPS.ForcePrecache()
 
 	timer.Simple(0, function()
-		hook.Run("TTT2ModifyIncompatibleAddons", buggyAddons)
-		hook.Run("TTT2ModifyOutdatedAddons", outdatedAddons)
-
-		local c = 0
-		local addns = engine.GetAddons()
-
-		for i = 1, #addns do
-			local addon = addns[i]
-			local key = tostring(addon.wsid)
-
-			local buggy_addon = buggyAddons[key]
-			if buggy_addon then
-				c = c + 1
-				buggyAddons[key] = nil
-
-				if buggy_addon ~= "" then
-					buggy_addon = "\nThere is a compatible Add-On available at: https://steamcommunity.com/sharedfiles/filedetails/?id=" .. buggy_addon
-				end
-
-				ErrorNoHalt((c == 1 and "\n\n" or "") .. "[TTT2][ERROR]Incompatible Add-On detected: " .. addon.title .. " (WS-ID: '" .. addon.wsid .. "')." .. buggy_addon .. "\n\n")
-			end
-
-			local outdated_addon = outdatedAddons[key]
-			if outdated_addon then
-				c = c + 1
-				buggyAddons[key] = nil
-
-				if outdated_addon ~= "" then
-					outdated_addon = "\nThere is an updated Add-On available at: https://steamcommunity.com/sharedfiles/filedetails/?id=" .. outdated_addon
-				end
-
-				ErrorNoHalt((c == 1 and "\n\n" or "") .. "[TTT2][ERROR]Outdated Add-On detected: " .. addon.title .. " (WS-ID: '" .. addon.wsid .. "').\nYour version does work with TTT2, but there's an addon which uses some of the new features of TTT2." .. outdated_addon .. "\n\n")
-			end
-		end
-
-		buggyAddons = nil -- delete
+		Addonchecker:Check()
 	end)
 end
 
@@ -519,24 +404,15 @@ end
 -- @realm server
 function GM:SyncGlobals()
 	SetGlobalBool("ttt_detective", ttt_detective:GetBool())
-	SetGlobalBool("ttt_haste", ttt_haste:GetBool())
-	SetGlobalInt("ttt_time_limit_minutes", time_limit:GetInt())
-	SetGlobalBool("ttt_highlight_admins", GetConVar("ttt_highlight_admins"):GetBool())
-	SetGlobalBool("ttt_highlight_dev", GetConVar("ttt_highlight_dev"):GetBool())
-	SetGlobalBool("ttt_highlight_vip", GetConVar("ttt_highlight_vip"):GetBool())
-	SetGlobalBool("ttt_highlight_addondev", GetConVar("ttt_highlight_addondev"):GetBool())
-	SetGlobalBool("ttt_highlight_supporter", GetConVar("ttt_highlight_supporter"):GetBool())
-	SetGlobalBool("ttt_armor_classic", GetConVar("ttt_armor_classic"):GetBool())
-	SetGlobalBool("ttt_armor_enable_reinforced", GetConVar("ttt_armor_enable_reinforced"):GetBool())
-	SetGlobalInt("ttt_armor_threshold_for_reinforced", GetConVar("ttt_armor_threshold_for_reinforced"):GetInt())
-	SetGlobalBool("ttt_locational_voice", GetConVar("ttt_locational_voice"):GetBool())
-	SetGlobalInt("ttt_idle_limit", idle_time:GetInt())
-	SetGlobalBool("ttt_idle", idle_enabled:GetBool())
+	SetGlobalBool(ttt_haste:GetName(), ttt_haste:GetBool())
+	SetGlobalInt(time_limit:GetName(), time_limit:GetInt())
+	SetGlobalInt(idle_time:GetName(), idle_time:GetInt())
+	SetGlobalBool(idle_enabled:GetName(), idle_enabled:GetBool())
 
-	SetGlobalBool("ttt_voice_drain", voice_drain:GetBool())
-	SetGlobalFloat("ttt_voice_drain_normal", voice_drain_normal:GetFloat())
-	SetGlobalFloat("ttt_voice_drain_admin", voice_drain_admin:GetFloat())
-	SetGlobalFloat("ttt_voice_drain_recharge", voice_drain_recharge:GetFloat())
+	SetGlobalBool(voice_drain:GetName(), voice_drain:GetBool())
+	SetGlobalFloat(voice_drain_normal:GetName(), voice_drain_normal:GetFloat())
+	SetGlobalFloat(voice_drain_admin:GetName(), voice_drain_admin:GetFloat())
+	SetGlobalFloat(voice_drain_recharge:GetName(), voice_drain_recharge:GetFloat())
 
 	local rlsList = roles.GetList()
 
@@ -550,6 +426,42 @@ function GM:SyncGlobals()
 
 	hook.Run("TTT2SyncGlobals")
 end
+
+cvars.AddChangeCallback(ttt_detective:GetName(), function(cv, old, new)
+	SetGlobalBool("ttt_detective", tobool(tonumber(new)))
+end)
+
+cvars.AddChangeCallback(ttt_haste:GetName(), function(cv, old, new)
+	SetGlobalBool(ttt_haste:GetName(), tobool(tonumber(new)))
+end)
+
+cvars.AddChangeCallback(time_limit:GetName(), function(cv, old, new)
+	SetGlobalInt(time_limit:GetName(), tonumber(new))
+end)
+
+cvars.AddChangeCallback(idle_time:GetName(), function(cv, old, new)
+	SetGlobalInt(idle_time:GetName(), tonumber(new))
+end)
+
+cvars.AddChangeCallback(idle_enabled:GetName(), function(cv, old, new)
+	SetGlobalBool(idle_enabled:GetName(), tobool(tonumber(new)))
+end)
+
+cvars.AddChangeCallback(voice_drain:GetName(), function(cv, old, new)
+	SetGlobalBool(voice_drain:GetName(), tobool(tonumber(new)))
+end)
+
+cvars.AddChangeCallback(voice_drain_normal:GetName(), function(cv, old, new)
+	SetGlobalFloat(voice_drain_normal:GetName(), tonumber(new))
+end)
+
+cvars.AddChangeCallback(voice_drain_admin:GetName(), function(cv, old, new)
+	SetGlobalFloat(voice_drain_admin:GetName(), tonumber(new))
+end)
+
+cvars.AddChangeCallback(voice_drain_recharge:GetName(), function(cv, old, new)
+	SetGlobalFloat(voice_drain_recharge:GetName(), tonumber(new))
+end)
 
 ---
 -- This @{function} is used to load the shop equipments
@@ -827,6 +739,24 @@ function GM:PostCleanupMap()
 	ents.TTT.FixParentedPostCleanup()
 end
 
+---
+-- Called if CheckForMapSwitch has determined that a map change should happen
+-- @note Can be used for custom map voting system. Just hook this and return true to override.
+-- @param string nextmap next map that would be loaded according to the file that is set by the mapcyclefile convar
+-- @param number rounds_left number of rounds left before the next map switch
+-- @param number time_left time left before the next map switch in seconds
+-- @hook
+-- @realm server
+function GM:TTT2LoadNextMap(nextmap, rounds_left, time_left)
+	if rounds_left <= 0 then
+		LANG.Msg("limit_round", {mapname = nextmap})
+	elseif time_left <= 0 then
+		LANG.Msg("limit_time", {mapname = nextmap})
+	end
+
+	timer.Simple(map_switch_delay:GetFloat(), game.LoadNextMap)
+end
+
 local function CleanUp()
 	game.CleanUpMap()
 
@@ -969,6 +899,9 @@ function PrepareRound()
 		GAMEMODE.FirstRound = false
 	end
 
+	-- remove decals
+	util.ClearDecals()
+
 	-- Piggyback on "round end" time global var to show end of phase timer
 	SetRoundEnd(CurTime() + ptime)
 
@@ -1046,7 +979,7 @@ function TellTraitorsAboutTraitors()
 		if shouldShow == false or tmp == nil or #tmp == 0 then continue end
 
 		if #tmp == 1 then
-			LANG.Msg(v, "round_traitors_one")
+			LANG.Msg(v, "round_traitors_one", nil, MSG_MSTACK_ROLE)
 
 			return
 		end
@@ -1066,7 +999,7 @@ function TellTraitorsAboutTraitors()
 
 		names = string.sub(names, 1, -3)
 
-		LANG.Msg(v, "round_traitors_more", {names = names})
+		LANG.Msg(v, "round_traitors_more", {names = names}, MSG_MSTACK_ROLE)
 	end
 end
 
@@ -1178,6 +1111,9 @@ function BeginRound()
 	-- Remove their ragdolls
 	ents.TTT.RemoveRagdolls(true)
 
+	-- remove decals
+	util.ClearDecals()
+
 	if CheckForAbort() then return end
 
 	-- Select traitors & co. This is where things really start so we can't abort
@@ -1276,24 +1212,14 @@ function CheckForMapSwitch()
 	SetGlobalInt("ttt_rounds_left", rounds_left)
 
 	local time_left = math.max(0, time_limit:GetInt() * 60 - CurTime())
-	local switchmap = false
 	local nextmap = string.upper(game.GetMapNext())
 
-	if rounds_left <= 0 then
-		LANG.Msg("limit_round", {mapname = nextmap})
-
-		switchmap = true
-	elseif time_left <= 0 then
-		LANG.Msg("limit_time", {mapname = nextmap})
-
-		switchmap = true
-	end
-
-	if switchmap then
+	if rounds_left <= 0 or time_left <= 0 then
 		timer.Stop("end2prep")
-		timer.Simple(15, game.LoadNextMap)
+
+		hook.Run("TTT2LoadNextMap", nextmap, rounds_left, time_left)
 	else
-		LANG.Msg("limit_left", {num = rounds_left, time = math.ceil(time_left / 60), mapname = nextmap})
+		LANG.Msg("limit_left", {num = rounds_left, time = math.ceil(time_left / 60)})
 	end
 end
 
@@ -1431,9 +1357,7 @@ end
 
 local function GetEachRoleCount(ply_count, role_type)
 	if role_type == INNOCENT.name then
-		local min_innos = GetConVar("ttt_min_inno_pct")
-
-		return min_innos and math.floor(ply_count * min_innos:GetFloat()) or 0
+		return math.floor(ply_count * cv_ttt_min_inno_pct:GetFloat()) or 0
 	end
 
 	if ply_count < GetConVar("ttt_" .. role_type .. "_min_players"):GetInt() then
@@ -1599,32 +1523,20 @@ function GetSelectableRoles(plys, max_plys)
 	local baseroles_count = 2
 
 	-- yea it begins
-	local max_roles = GetConVar("ttt_max_roles")
-	if max_roles then
-		max_roles = max_roles:GetInt()
+	local max_roles = cv_ttt_max_roles:GetInt()
+	if max_roles == 0 then
+		max_roles = math.floor(cv_ttt_max_roles_pct:GetFloat() * max_plys)
 		if max_roles == 0 then
-			max_roles = GetConVar("ttt_max_roles_pct")
-			if max_roles then
-				max_roles = math.floor(max_roles:GetFloat() * max_plys)
-				if max_roles == 0 then
-					max_roles = nil
-				end
-			end
+			max_roles = nil
 		end
 	end
 
 	-- damn, not again
-	local max_baseroles = GetConVar("ttt_max_baseroles")
-	if max_baseroles then
-		max_baseroles = max_baseroles:GetInt()
+	local max_baseroles = cv_ttt_max_baseroles:GetInt()
+	if max_baseroles == 0 then
+		max_baseroles = math.floor(cv_ttt_max_baseroles_pct:GetFloat() * max_plys)
 		if max_baseroles == 0 then
-			max_baseroles = GetConVar("ttt_max_baseroles_pct")
-			if max_baseroles then
-				max_baseroles = math.floor(max_baseroles:GetFloat() * max_plys)
-				if max_baseroles == 0 then
-					max_baseroles = nil
-				end
-			end
+			max_baseroles = nil
 		end
 	end
 

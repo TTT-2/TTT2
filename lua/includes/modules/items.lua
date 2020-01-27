@@ -6,7 +6,6 @@
 module("items", package.seeall)
 
 local baseclass = baseclass
-local list = list
 local pairs = pairs
 
 if SERVER then
@@ -68,65 +67,10 @@ end
 function Register(t, name)
 	name = string.lower(name)
 
-	local old = ItemList[name]
-
 	t.ClassName = name
 	t.id = name
 
 	ItemList[name] = t
-
-	list.Set("Item", name, {
-			ClassName = name,
-			id = name,
-			PrintName = t.PrintName or t.ClassName,
-			Category = t.Category or "Other",
-			Spawnable = t.Spawnable,
-			AdminOnly = t.AdminOnly,
-			ScriptedEntityType = t.ScriptedEntityType
-	})
-
-	--
-	-- If we're reloading this entity class
-	-- then refresh all the existing entities.
-	--
-	if old ~= nil then
-
-		--
-		-- For each entity using this class
-		--
-		local entsTbl = ents.FindByClass(name)
-
-		for i = 1, #entsTbl do
-			local entity = entsTbl[i]
-
-			--
-			-- Replace the contents with this entity table
-			--
-			table.Merge(entity, t)
-
-			--
-			-- Call OnReloaded hook (if it has one)
-			--
-			if isfunction(entity.OnReloaded) then
-				entity:OnReloaded()
-			end
-		end
-
-		-- Update item table of entities that are based on this item
-		entsTbl = ents.GetAll()
-
-		for i = 1, #entsTbl do
-			local eq = entsTbl[i]
-
-			if not IsBasedOn(eq:GetClass(), name) then continue end
-
-			table.Merge(eq, Get(eq:GetClass()))
-
-			if isfunction(eq.OnReloaded) then
-				eq:OnReloaded()
-			end
-		end
-	end
 end
 
 

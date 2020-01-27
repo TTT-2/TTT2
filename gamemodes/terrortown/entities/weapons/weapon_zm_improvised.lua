@@ -56,6 +56,8 @@ SWEP.AllowDelete = false -- never removed for weapon reduction
 SWEP.AllowDrop = false
 
 local sound_single = Sound("Weapon_Crowbar.Single")
+local cv_crowbar_unlocks
+local cv_crowbar_pushforce
 
 -- only open things that have a name (and are therefore likely to be meant to
 -- open) and are the right class. Opening behaviour also differs per class, so
@@ -88,10 +90,19 @@ local function CrowbarCanUnlock(t)
 	return not GAMEMODE.crowbar_unlocks or GAMEMODE.crowbar_unlocks[t]
 end
 
+function SWEP:Initialize()
+	if SERVER then
+		cv_crowbar_unlocks = GetConVar("ttt_crowbar_unlocks")
+		cv_crowbar_pushforce = GetConVar("ttt_crowbar_pushforce")
+	end
+
+	return self.BaseClass.Initialize(self)
+end
+
 -- will open door AND return what it did
 function SWEP:OpenEnt(hitEnt)
 	-- Get ready for some prototype-quality code, all ye who read this
-	if SERVER and GetConVar("ttt_crowbar_unlocks"):GetBool() then
+	if SERVER and cv_crowbar_unlocks:GetBool() then
 		local openable = OpenableEnt(hitEnt)
 
 		if openable == OPEN_DOOR or openable == OPEN_ROT then
@@ -141,7 +152,7 @@ function SWEP:PrimaryAttack()
 	end
 
 	local spos = owner:GetShootPos()
-	local sdest = spos + owner:GetAimVector() * 70
+	local sdest = spos + owner:GetAimVector() * 100
 
 	local tr_main = util.TraceLine({
 		start = spos,
@@ -246,7 +257,7 @@ function SWEP:SecondaryAttack()
 
 	if tr.Hit and IsValid(ply) and ply:IsPlayer() and (owner:EyePos() - tr.HitPos):Length() < 100 then
 		if SERVER and not ply:IsFrozen() and not hook.Run("TTT2PlayerPreventPush", owner, ply) then
-			local pushvel = tr.Normal * GetConVar("ttt_crowbar_pushforce"):GetFloat()
+			local pushvel = tr.Normal * cv_crowbar_pushforce:GetFloat()
 			pushvel.z = math.Clamp(pushvel.z, 50, 100) -- limit the upward force to prevent launching
 
 			ply:SetVelocity(ply:GetVelocity() + pushvel)

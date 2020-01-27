@@ -177,7 +177,7 @@ function ENT:UseOverride(activator)
 		local owner = self:GetOwner()
 
 		if self:GetArmed() and owner ~= activator and IsValid(owner) and owner:Alive() and owner:GetTeam() == activator:GetTeam() then
-			LANG.Msg(activator, "c4_no_disarm")
+			LANG.Msg(activator, "c4_no_disarm", nil, MSG_MSTACK_ROLE)
 
 			return
 		end
@@ -713,22 +713,25 @@ if SERVER then
 		if IsValid(bomb) and bomb:GetClass() == "ttt_c4" and not bomb:GetArmed() then
 			if bomb:GetPos():Distance(ply:GetPos()) > 256 then
 				return
-			elseif not ply:CanCarryType(WEAPON_EQUIP1) then
-				LANG.Msg(ply, "c4_no_room")
 			else
 				local prints = bomb.fingerprints or {}
 
 				hook.Call("TTTC4Pickup", nil, bomb, ply)
 
-				local wep = ply:Give("weapon_ttt_c4")
+				-- picks up weapon, switches if possible and needed, returns weapon if successful
+				local wep = ply:PickupWeaponClass("weapon_ttt_c4", true)
 
-				if IsValid(wep) then
-					wep.fingerprints = wep.fingerprints or {}
+				if not IsValid(wep) then
+					LANG.Msg(ply, "c4_no_room")
 
-					table.Add(wep.fingerprints, prints)
-
-					bomb:Remove()
+					return
 				end
+
+				wep.fingerprints = wep.fingerprints or {}
+
+				table.Add(wep.fingerprints, prints)
+
+				bomb:Remove()
 			end
 		end
 	end
@@ -760,6 +763,12 @@ end
 
 if CLIENT then
 	local TryT = LANG.TryTranslation
+	local GetPT = LANG.GetParamTranslation
+
+	local key_params = {
+		usekey = Key("+use", "USE"),
+		walkkey = Key("+walk", "WALK")
+	}
 
 	surface.CreateFont("C4ModelTimer", {
 		font = "Default",
@@ -811,23 +820,26 @@ if CLIENT then
 	-- handle looking at C4
 	hook.Add("TTTRenderEntityInfo", "HUDDrawTargetIDC4", function(data, params)
 		local client = LocalPlayer()
+		local c_wep = client:GetActiveWeapon()
 
 		if not IsValid(client) or not client:IsTerror() or not client:Alive()
 		or data.distance > 100 or data.ent:GetClass() ~= "ttt_c4" then
 			return
 		end
 
+		local defuser_useable = (IsValid(c_wep) and data.ent:GetArmed()) and c_wep:GetClass() == "weapon_ttt_defuser" or false
+
 		params.drawInfo = true
-		params.displayInfo.key = input.GetKeyCode(input.LookupBinding("+use"))
+		params.displayInfo.key = defuser_useable and input.GetKeyCode(input.LookupBinding("+attack")) or input.GetKeyCode(input.LookupBinding("+use"))
 		params.displayInfo.title.text = TryT(data.ent.PrintName)
 
-		-- TODO this will be doable after the introduction of the unknown_role_state
-		--if data.ent:GetArmed() and data.ent.Owner ~= client and IsValid(data.ent.Owner) and data.ent.Owner:Alive() and data.ent:GetTeam() == client:GetTeam() then
-		--	params.displayInfo.subtitle.text = TryT("target_c4_not_disarmable")
-		--	params.displayInfo.subtitle.color = COLOR_ORANGE
-		--else
-		params.displayInfo.subtitle.text = data.ent:GetArmed() and TryT("target_c4_armed") or TryT("target_c4")
-		--end
+		if data.ent:GetArmed() and defuser_useable then
+			params.displayInfo.subtitle.text = GetPT("target_c4_armed_defuser", key_params)
+		elseif data.ent:GetArmed() then
+			params.displayInfo.subtitle.text = GetPT("target_c4_armed", key_params)
+		else
+			params.displayInfo.subtitle.text = GetPT("target_c4", key_params)
+		end
 
 		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
 			text = TryT("c4_short_desc"),

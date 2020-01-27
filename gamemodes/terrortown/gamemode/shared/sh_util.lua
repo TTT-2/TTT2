@@ -180,16 +180,79 @@ function AccessorFuncDT(tbl, varname, name)
 end
 
 ---
--- Paints an effect on the floor
--- @param number start starting time
--- @param string effname effect name
--- @param boolean ignore
+-- Darkens a given @{Color} value
+-- @param Color color The original color value
+-- @param number value The value to darken the color [0..255]
+-- @return Color The darkened color
 -- @realm shared
--- @todo improve description
-function util.PaintDown(start, effname, ignore)
-	local btr = util.TraceLine({start = start, endpos = start + Vector(0, 0, -256), filter = ignore, mask = MASK_SOLID})
+function util.ColorDarken(color, value)
+	value = math.Clamp(value, 0, 255)
 
-	util.Decal(effname, btr.HitPos + btr.HitNormal, btr.HitPos - btr.HitNormal)
+	return Color(
+		math.max(color.r - value, 0),
+		math.max(color.g - value, 0),
+		math.max(color.b - value, 0),
+		color.a
+	)
+end
+
+---
+-- Lightens a given @{Color} value
+-- @param Color color The original color value
+-- @param number value The value to lighten the color [0..255]
+-- @return Color The lightened color
+-- @realm shared
+function util.ColorLighten(color, value)
+	value = math.Clamp(value, 0, 255)
+
+	return Color(
+		math.min(color.r + value, 255),
+		math.min(color.g + value, 255),
+		math.min(color.b + value, 255),
+		color.a
+	)
+end
+
+-- shifts the hue
+local function HueShift(hue, shift)
+	hue = hue + shift
+
+	while hue >= 360 do
+		hue = hue - 360
+	end
+
+	while hue < 0 do
+		hue = hue + 360
+	end
+
+	return hue
+end
+
+---
+-- Returns the complementary value of a @{Color}
+-- @param Color color The original color value
+-- @return Color The complementary color
+-- @realm shared
+function util.ColorComplementary(color)
+	local c_hsv, saturation, value = ColorToHSV(color)
+
+	local c_new = HSVToColor(HueShift(c_hsv, 180), saturation, value)
+	c_new.a = color.a
+
+	return c_new
+end
+
+---
+-- Returns white or black @{Color} based on the passed color value
+-- @param Color bgcolor background color
+-- @return Color The color based on the background color
+-- @realm shared
+function util.GetDefaultColor(bgcolor)
+	if bgcolor.r + bgcolor.g + bgcolor.b < 500 then
+		return COLOR_WHITE
+	else
+		return COLOR_BLACK
+	end
 end
 
 local function DoBleed(ent)
@@ -220,8 +283,14 @@ function util.StartBleeding(ent, dmg, t)
 	end
 
 	timer.Create("bleed" .. ent:EntIndex(), delay, times, function()
+		if not IsValid(ent) then return end
+
 		DoBleed(ent)
 	end)
+end
+
+function util.StopBleeding(ent)
+	timer.Remove("bleed" .. ent:EntIndex())
 end
 
 local zapsound = Sound("npc/assassin/ball_zap1.wav")
@@ -560,7 +629,7 @@ if CLIENT then
 	end
 
 	local karmacolors = {
-		max = Color(255, 255, 255, 255),
+		max = COLOR_WHITE,
 		high = Color(255, 240, 135, 255),
 		med = Color(245, 220, 60, 255),
 		low = Color(255, 180, 0, 255),
@@ -639,4 +708,25 @@ function util.SimpleTime(seconds, fmt)
 	local m = seconds % 60
 
 	return string.format(fmt, m, s, ms)
+end
+
+---
+-- When overwriting a gamefunction, the old one has to be cached in order to still use it.
+-- This creates an infinite recursion problem (stack overflow). Registering the function with
+-- this helper function fixes the problem.
+-- @param string name The name of the original function
+-- @return Function The pointer to the original functions
+-- @realm shared
+function util.OverwriteFunction(name)
+	local str = string.Split(name, ".")
+
+	if not _G[name .. "_backup"] then
+		if #str == 1 then
+			_G[name .. "_backup"] = _G[str[1]]
+		elseif #str == 2 then
+			_G[name .. "_backup"] = _G[str[1]][str[2]]
+		end
+	end
+
+	return _G[name .. "_backup"]
 end
