@@ -55,7 +55,9 @@ end
 local function VoiceTeamTryEnable()
 	local client = LocalPlayer()
 
-	if hook.Run("TTT2CanUseVoiceChat", client, true) == false then return false end
+	if hook.Run("TTT2CanUseVoiceChat", client, true) == false then
+		return false
+	end
 
 	if not IsValid(client) then return false end
 
