@@ -557,7 +557,7 @@ function CreateChanges()
 		<ul>
 			<li>Added new weapon switch system</li>
 			<ul>
-				<li>Players can now manualla pick up weapons</li>
+				<li>Players can now manually pick up focused weapons</li>
 				<li>If the slot is blocked, the current weapon is automatically dropped</li>
 				<li>Added new convar to prevent auto pickup: <i>ttt_weapon_autopickup (default: 1)</i></li>
 			</ul>
@@ -574,25 +574,24 @@ function CreateChanges()
 			<li>Added a new <i>TTT2PlayerReady</i> hook that is called once a player is ingame and can move around</li>
 			<li>Added new removable decals</li>
 			<li>Added a new default loading screen</li>
-			<li>Added a new default loading screen</li>
 			<li>Added new convar to allow Enhanced Player Model Selector to overwrite TTT2 models: <i>ttt_enforce_playermodel (default: 1)</i></li>
 			<li>Added new hooks to jam the chat</li>
 			<li>Allow any key double tap sprint</li>
-			<li>Regen sprint if exhausted after delay</li>
-			<li>Moved voice binds to the TTT2 binding system (F1 menu)</li>
+			<li>Regenerate sprint stamina after a delay if exhausted</li>
+			<li>Moved voice bindings to the TTT2 binding system (F1 menu)</li>
 		</ul>
 		<br>
 		<h2>Improved:</h2>
 		<ul>
 			<li>Microoptimization to improve code performance</li>
 			<li>Improved the icon rendering for the pure_skin HUD</li>
-			<li>Improved multi line text rendering in the mstack</li>
+			<li>Improved multi line text rendering in the MSTACK</li>
 			<li>Improved role color handling</li>
 			<li>Improved language (german, english, russian)</li>
 			<li>Improved traitor buttons</li>
 			<ul>
 				<li>By default only players in the traitor team can use them</li>
-				<li>Each role has a convar to enable traitor button usage for them - yes, innocents can use traitorbuttons if you want to</li>
+				<li>Each role has a convar to enable traitor button usage for them - yes, innocents can use traitor buttons if you want to</li>
 				<li>There is an admin mode to edit each button individually</li>
 				<li>Uses the new targetID</li>
 			</ul>
