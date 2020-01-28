@@ -243,12 +243,8 @@ local cv_ttt_limit_spectator_chat = CreateConVar("ttt_limit_spectator_chat", "1"
 -- @realm server
 -- @internal
 function GM:PlayerCanSeePlayersChat(text, teamOnly, reader, sender)
-	if not IsValid(reader) then
+	if not IsValid(reader) or not IsValid(sender) then
 		return false
-	end
-
-	if not IsValid(sender) and IsEntity(sender) then
-		return true
 	end
 
 	local sTeam = sender:Team() == TEAM_SPEC
@@ -274,7 +270,7 @@ end
 ---
 -- Whether or not the @{Player} can receive the chat message.
 -- @param Player reader @{Player} who can receive chat
--- @param Player isTeam @{Player} who speaks
+-- @param Player sender @{Player} who speaks
 -- @param boolean isTeam Are they trying to use the team chat
 -- @return boolean Return true if the reader should be able to see the message of the sender, false if they shouldn't
 -- @hook
