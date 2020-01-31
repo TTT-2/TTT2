@@ -73,7 +73,7 @@ else
 
 	function UpdateInputSprint(ply, key, pressed)
 		if pressed then
-			if ply.isSprinting or disable_doubletap_sprint:GetBool() then return end
+			if ply.isSprinting or disable_doubletap_sprint:GetBool() or ply.preventSprint then return end
 
 			local time = CurTime()
 
