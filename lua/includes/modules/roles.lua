@@ -115,7 +115,7 @@ local function SetupData(roleData)
 		end
 	end
 
-	CreateConVar("ttt_" .. roleData.name .. "_traitor_button", tostring(conVarData.traitorButton or 0), {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
+	CreateConVar("ttt_" .. roleData.name .. "_traitor_button", tostring(conVarData.traitorButton or 0), SERVER and {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED} or FCVAR_REPLICATED)
 
 	CreateConVar("ttt_" .. roleData.abbr .. "_credits_starting", tostring(conVarData.credits or 0), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 	CreateConVar("ttt_" .. roleData.abbr .. "_credits_traitorkill", tostring(conVarData.creditsTraitorKill or 0), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
