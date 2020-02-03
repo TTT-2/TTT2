@@ -9,6 +9,8 @@ local util = util
 local IsValid = IsValid
 local surface = surface
 local draw = draw
+local CLIENT = CLIENT
+local SERVER = SERVER
 local CreateClientConVar = CreateClientConVar
 
 if SERVER then
@@ -138,7 +140,15 @@ SWEP.ReloadAnim = ACT_VM_RELOAD
 
 SWEP.fingerprints = {}
 
+-- Time needed to enter / leave the ironsight in seconds
+SWEP.IronSightTime = 0.25
+-- The position offset applied when entering the ironsight
+SWEP.IronSightPos = Vector(0, 0, 0)
+-- The rotational offset applied when entering the ironsight
+SWEP.IronSightsAng = Vector(0, 0, 0)
+
 local sparkle = CLIENT and CreateClientConVar("ttt_crazy_sparks", "0", true)
+local ttt2_hold_aim = CLIENT and CreateClientConVar("ttt2_hold_aim", 0, true, false, LANG.GetTranslationFromLanguage("hold_aim", "english"), 0, 1)
 
 -- crosshair
 if CLIENT then
@@ -162,6 +172,7 @@ if CLIENT then
 	local enable_dot_crosshair = CreateClientConVar("ttt_crosshair_dot", "0", true)
 
 	---
+	-- @see https://wiki.facepunch.com/gmod/WEAPON:DrawHUD
 	-- @realm client
 	function SWEP:DrawHUD()
 		if self.HUDHelp then
@@ -227,6 +238,7 @@ if CLIENT then
 
 	-- Many non-gun weapons benefit from some help
 	local help_spec = {text = "", font = "TabLarge", xalign = TEXT_ALIGN_CENTER}
+
 	function SWEP:DrawHelp()
 		local data = self.HUDHelp
 		local translate = data.translatable
@@ -273,8 +285,11 @@ if CLIENT then
 end
 
 ---
+-- Called if the player presses IN_ATTACK (Default: Left Mouse Button)
 -- Shooting functions largely copied from weapon_cs_base
 -- @param boolean worldsnd
+-- @see https://wiki.facepunch.com/gmod/WEAPON:PrimaryAttack
+-- @realm shared
 function SWEP:PrimaryAttack(worldsnd)
 	self:SetNextSecondaryFire(CurTime() + self.Primary.Delay)
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
@@ -310,7 +325,10 @@ function SWEP:DryFire(setnext)
 end
 
 ---
+-- Helper function for checking for no ammo.
 -- @return boolean
+-- @see https://wiki.facepunch.com/gmod/WEAPON:CanPrimaryAttack
+-- @realm shared
 function SWEP:CanPrimaryAttack()
 	if not IsValid(self:GetOwner()) then return end
 
@@ -324,7 +342,10 @@ function SWEP:CanPrimaryAttack()
 end
 
 ---
+-- Helper function for checking for no ammo.
 -- @return boolean
+-- @see https://wiki.facepunch.com/gmod/WEAPON:CanSecondaryAttack
+-- @realm shared
 function SWEP:CanSecondaryAttack()
 	if not IsValid(self:GetOwner()) then return end
 
@@ -348,10 +369,13 @@ local function Sparklies(attacker, tr, dmginfo)
 end
 
 ---
+-- A convenience function to shoot bullets
 -- @param CTakeDamageInfo dmg
 -- @param number recoil
 -- @param number numbul
 -- @param number cone
+-- @see https://wiki.facepunch.com/gmod/WEAPON:ShootBullet
+-- @realm shared
 function SWEP:ShootBullet(dmg, recoil, numbul, cone)
 	self:SendWeaponAnim(self.PrimaryAnim)
 
@@ -407,51 +431,81 @@ end
 -- @param Player victim
 -- @param CTakeDamageInfo dmginfo
 -- @return number
+-- @realm shared
 function SWEP:GetHeadshotMultiplier(victim, dmginfo)
 	return self.HeadshotMultiplier
 end
 
 ---
 -- @return boolean
+-- @realm shared
 function SWEP:IsEquipment()
 	return WEPS.IsEquipment(self)
 end
 
+---
+-- This hook draws the selection icon in the weapon selection menu.
+-- @see https://wiki.facepunch.com/gmod/WEAPON:DrawWeaponSelection
+-- @realm client
 function SWEP:DrawWeaponSelection()
 
 end
 
+---
+-- Called if the player presses IN_ATTACK2 (Default: Right mouse button).
+-- You can override it to implement special attacks, but it is usually reserved for aiming with ironsights.
+-- @see https://wiki.facepunch.com/gmod/WEAPON:SecondaryAttack
+-- @realm shared
 function SWEP:SecondaryAttack()
 	if self.NoSights or not self.IronSightsPos then return end
 
-	self:SetIronsights(not self:GetIronsights())
+	local bIronsights = self:GetIronsights()
+
+	self:SetIronsights(not bIronsights)
+	self:SetZoom(not bIronsights)
 	self:SetNextSecondaryFire(CurTime() + 0.3)
 end
 
 ---
+-- Called when player has just switched to this weapon.
 -- @return[default=true] boolean
+-- @see https://wiki.facepunch.com/gmod/WEAPON:Deploy
+-- @realm shared
 function SWEP:Deploy()
 	self:SetIronsights(false)
+	self:SetZoom(false)
 
 	return true
 end
 
+---
+-- Called if the player presses IN_RELOAD
+-- @see https://wiki.facepunch.com/gmod/WEAPON:Reload
+-- @realm shared
 function SWEP:Reload()
 	if self:Clip1() == self.Primary.ClipSize or self:GetOwner():GetAmmoCount(self.Primary.Ammo) <= 0 then return end
 
 	self:DefaultReload(self.ReloadAnim)
 	self:SetIronsights(false)
+	self:SetZoom(false)
 end
 
-
+---
+-- Called when the weapon entity is reloaded on a changelevel event
+-- @see https://wiki.facepunch.com/gmod/WEAPON:OnRestore
+-- @realm shared
 function SWEP:OnRestore()
 	self.NextSecondaryAttack = 0
 
 	self:SetIronsights(false)
+	self:SetZoom(false)
 end
 
 ---
+-- Returns how much of primary ammo the player has
 -- @return number|boolean
+-- @see https://wiki.facepunch.com/gmod/WEAPON:Ammo1
+-- @realm shared
 function SWEP:Ammo1()
 	return IsValid(self:GetOwner()) and self:GetOwner():GetAmmoCount(self.Primary.Ammo) or false
 end
@@ -459,6 +513,7 @@ end
 ---
 -- The OnDrop() hook is useless for this as it happens AFTER the drop. OwnerChange
 -- does not occur when a drop happens for some reason. Hence this thing.
+-- @realm server
 function SWEP:PreDrop()
 	if CLIENT or not IsValid(self:GetOwner()) or self.Primary.Ammo == "none" then return end
 
@@ -482,6 +537,9 @@ function SWEP:PreDrop()
 	end
 end
 
+---
+-- Helper function to slow down dropped weapons
+-- @realm server
 function SWEP:DampenDrop()
 	-- For some reason gmod drops guns on death at a speed of 400 units, which
 	-- catapults them away from the body. Here we want people to actually be able
@@ -498,8 +556,11 @@ end
 local SF_WEAPON_START_CONSTRAINED = 1
 
 ---
--- Picked up by player. Transfer of stored ammo and such.
+-- Called when a player has picked the weapon up
+-- Transfers the currently stored ammo to the new player and updates the fingerprints
 -- @param Player newowner
+-- @see https://wiki.facepunch.com/gmod/WEAPON:Equip
+-- @realm server
 function SWEP:Equip(newowner)
 	if self:IsOnFire() then
 		self:Extinguish()
@@ -534,12 +595,24 @@ end
 -- We were bought as special equipment, some weapons will want to do something
 -- extra for their buyer
 -- @param Player buyer
+-- @realm server
 function SWEP:WasBought(buyer)
 
 end
 
 ---
+-- Zoom in or out. Use this in combination with SetIronsights.
+-- Look at weapon_ttt_m16 for an example of how to use this.
+-- @param boolean zoomIn
+-- @realm shared
+function SWEP:SetZoom(zoomIn)
+
+end
+
+---
+-- Sets the flag signaling whether or not the ironsights should be used
 -- @param boolean b
+-- @realm shared
 function SWEP:SetIronsights(b)
 	if b == self:GetIronsights() then return end
 
@@ -552,7 +625,9 @@ function SWEP:SetIronsights(b)
 end
 
 ---
+-- Gets the flag signaling whether or not the ironsights should be used
 -- @return boolean
+-- @realm shared
 function SWEP:GetIronsights()
 	return self:GetIronsightsPredicted()
 end
@@ -561,32 +636,47 @@ end
 -- Dummy functions that will be replaced when SetupDataTables runs. These are
 -- here for when that does not happen (due to e.g. stacking base classes)
 -- @return[default=-1] number
+-- @realm shared
 function SWEP:GetIronsightsTime()
 	return -1
 end
 
+-- Dummy functions that will be replaced when SetupDataTables runs. These are
+-- here for when that does not happen (due to e.g. stacking base classes)
 function SWEP:SetIronsightsTime()
 
 end
 
----
--- @return boolean
+-- Dummy functions that will be replaced when SetupDataTables runs. These are
+-- here for when that does not happen (due to e.g. stacking base classes)
+-- @return[default=false] boolean
+-- @realm shared
 function SWEP:GetIronsightsPredicted()
 	return false
 end
 
+-- Dummy functions that will be replaced when SetupDataTables runs. These are
+-- here for when that does not happen (due to e.g. stacking base classes)
+-- @realm shared
 function SWEP:SetIronsightsPredicted()
 
 end
 
 ---
--- Set up ironsights dt bool. Weapons using their own DT vars will have to make
--- sure they call this.
+-- Called when the SWEP should set up its Data Tables.
+-- Sets up the networked vars for ironsights.
+-- @warning Weapons using their own DT vars will have to make sure they call this.
+-- @see https://wiki.facepunch.com/gmod/WEAPON:SetupDataTables
+-- @realm shared
 function SWEP:SetupDataTables()
 	self:NetworkVar("Bool", 3, "IronsightsPredicted")
 	self:NetworkVar("Float", 3, "IronsightsTime")
 end
 
+---
+-- Called when the weapon entity is created.
+-- @see https://wiki.facepunch.com/gmod/WEAPON:Initialize
+-- @realm shared
 function SWEP:Initialize()
 	if CLIENT and self:Clip1() == -1 then
 		self:SetClip1(self.Primary.DefaultClip)
@@ -594,6 +684,7 @@ function SWEP:Initialize()
 		self.fingerprints = {}
 
 		self:SetIronsights(false)
+		self:SetZoom(false)
 	end
 
 	self:SetDeploySpeed(self.DeploySpeed)
@@ -604,6 +695,8 @@ function SWEP:Initialize()
 	end
 end
 
+---
+-- @realm client
 function SWEP:CalcViewModel()
 	if not CLIENT or not IsFirstTimePredicted() then return end
 
@@ -613,20 +706,27 @@ function SWEP:CalcViewModel()
 	self.fCurrentSysTime = SysTime()
 end
 
--- Note that if you override Think in your SWEP, you should call
--- BaseClass.Think(self) so as not to break ironsights
+---
+-- Called when the swep thinks.
+-- @warning If you override Think in your SWEP, you should call BaseClass.Think(self) so as not to break ironsights
+-- @see https://wiki.facepunch.com/gmod/WEAPON:Think
+-- @realm shared
 function SWEP:Think()
 	self:CalcViewModel()
 end
 
 ---
+-- Experimental. Enables a feature that causes a player who is using his ironsights and is killed (by a gun, and not a headshot) to fire an inaccurate dying shot.
 -- @return boolean
+-- @see http://www.troubleinterroristtown.com/config-and-commands/convars#TOC-Other-gameplay-settings
+-- @realm server
 function SWEP:DyingShot()
 	if not self:GetIronsights() then
 		return false
 	end
 
 	self:SetIronsights(false)
+	self:SetZoom(false)
 
 	if self:GetNextPrimaryFire() > CurTime() then
 		return false
@@ -662,10 +762,13 @@ local LOWER_POS = Vector(0, 0, -2)
 local IRONSIGHT_TIME = 0.25
 
 ---
+-- This hook allows you to adjust view model position and angles.
 -- @param Vector pos
 -- @param Angle ang
 -- @return Vector
 -- @return Angle
+-- @see https://wiki.facepunch.com/gmod/WEAPON:GetViewModelPosition
+-- @realm client
 function SWEP:GetViewModelPosition(pos, ang)
 	if not self.IronSightsPos or self.bIron == nil then
 		return pos, ang
@@ -712,4 +815,40 @@ function SWEP:GetViewModelPosition(pos, ang)
 	pos = pos + offset.z * ang:Up() * mul
 
 	return pos, ang
+end
+
+---
+-- Tell the server about the users preference regarding holding aim or toggle aim,
+-- necessary to avoid prediction issues
+local function UpdateHoldAimCV()
+	net.Start("TTT2ResetIronSights")
+	net.WriteBool(ttt2_hold_aim:GetBool())
+	net.SendToServer()
+end
+
+hook.Add("KeyRelease", "TTT2ResetIronSightsHook", function(ply, key)
+	if key ~= IN_ATTACK2 or not IsValid(ply) then return end
+
+	if not (CLIENT and ttt2_hold_aim:GetBool() or SERVER and ply.holdAim) then return end
+
+	local wep = ply:GetActiveWeapon()
+
+	if not IsValid(wep) or not wep:GetIronsights() then return end
+
+	wep:SetIronsights(false)
+	wep:SetZoom(false)
+end)
+
+if CLIENT then
+	hook.Add("InitPostEntity", "TTT2InitHoldAimCV", function()
+		UpdateHoldAimCV()
+	end)
+
+	cvars.AddChangeCallback("ttt2_hold_aim", function(cvar, old, new)
+		UpdateHoldAimCV()
+	end)
+else
+	net.Receive("TTT2ResetIronSights", function(len, ply)
+		ply.holdAim = net.ReadBool()
+	end)
 end
