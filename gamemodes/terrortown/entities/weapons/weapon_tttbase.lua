@@ -637,12 +637,14 @@ function SWEP:GetIronsightsTime()
 	return -1
 end
 
+---
 -- Dummy functions that will be replaced when SetupDataTables runs. These are
 -- here for when that does not happen (due to e.g. stacking base classes)
 function SWEP:SetIronsightsTime()
 
 end
 
+---
 -- Dummy functions that will be replaced when SetupDataTables runs. These are
 -- here for when that does not happen (due to e.g. stacking base classes)
 -- @return[default=false] boolean
@@ -651,6 +653,7 @@ function SWEP:GetIronsightsPredicted()
 	return false
 end
 
+---
 -- Dummy functions that will be replaced when SetupDataTables runs. These are
 -- here for when that does not happen (due to e.g. stacking base classes)
 -- @realm shared
@@ -817,12 +820,12 @@ end
 -- Tell the server about the users preference regarding holding aim or toggle aim,
 -- necessary to avoid prediction issues
 local function UpdateHoldAimCV()
-	net.Start("TTT2ResetIronSights")
+	net.Start("TTT2UpdateHoldAimConvar")
 	net.WriteBool(ttt2_hold_aim:GetBool())
 	net.SendToServer()
 end
 
-hook.Add("KeyRelease", "TTT2ResetIronSightsHook", function(ply, key)
+hook.Add("KeyRelease", "TTT2ResetIronSights", function(ply, key)
 	if key ~= IN_ATTACK2 or not IsValid(ply) then return end
 
 	if not (CLIENT and ttt2_hold_aim:GetBool() or SERVER and ply.holdAim) then return end
@@ -844,7 +847,7 @@ if CLIENT then
 		UpdateHoldAimCV()
 	end)
 else
-	net.Receive("TTT2ResetIronSights", function(len, ply)
+	net.Receive("TTT2UpdateHoldAimConvar", function(len, ply)
 		ply.holdAim = net.ReadBool()
 	end)
 end
