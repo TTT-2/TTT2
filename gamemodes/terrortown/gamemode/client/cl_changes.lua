@@ -552,19 +552,66 @@ function CreateChanges()
 		</ul>
 	]], os.time({year = 2019, month = 10, day = 06}))
 
-	AddChange("TTT2 Base - v0.5.8b", [[
+	AddChange("TTT2 Base - v0.6b", [[
 		<h2>New:</h2>
 		<ul>
+			<li>Added new weapon switch system</li>
+			<ul>
+				<li>Players can now manually pick up focused weapons</li>
+				<li>If the slot is blocked, the current weapon is automatically dropped</li>
+				<li>Added new convar to prevent auto pickup: <i>ttt_weapon_autopickup (default: 1)</i></li>
+			</ul>
+			<li>Added new targetID system</li>
+			<ul>
+				<li>Looking at entities shows now more detailed ans structured info</li>
+				<li>Integrated into the new weapon switch system</li>
+				<li>Supports all TTT entities by default</li>
+				<li>Added a new hook to add targetID support to custom entities: <i>TTTRenderEntityInfo</i></li>
+			</ul>
 			<li>Added the outline module for better performance</li>
 			<li><i>TTT2DropAmmo</i> hook to prevent/change the ammo drop of a weapon</li>
+			<li>Added new HUD element: the eventpopup</li>
+			<li>Added a new <i>TTT2PlayerReady</i> hook that is called once a player is ingame and can move around</li>
+			<li>Added new removable decals</li>
+			<li>Added a new default loading screen</li>
+			<li>Added new convar to allow Enhanced Player Model Selector to overwrite TTT2 models: <i>ttt_enforce_playermodel (default: 1)</i></li>
+			<li>Added new hooks to jam the chat</li>
+			<li>Allow any key double tap sprint</li>
+			<li>Regenerate sprint stamina after a delay if exhausted</li>
+			<li>Moved voice bindings to the TTT2 binding system (F1 menu)</li>
+		</ul>
+		<br>
+		<h2>Improved:</h2>
+		<ul>
+			<li>Microoptimization to improve code performance</li>
+			<li>Improved the icon rendering for the pure_skin HUD</li>
+			<li>Improved multi line text rendering in the MSTACK</li>
+			<li>Improved role color handling</li>
+			<li>Improved language (german, english, russian)</li>
+			<li>Improved traitor buttons</li>
+			<ul>
+				<li>By default only players in the traitor team can use them</li>
+				<li>Each role has a convar to enable traitor button usage for them - yes, innocents can use traitor buttons if you want to</li>
+				<li>There is an admin mode to edit each button individually</li>
+				<li>Uses the new targetID</li>
+			</ul>
+			<li>Improved damage indicator overlay with customizability in the F1 settings</li>
 		</ul>
 		<br>
 		<h2>Fixed:</h2>
 		<ul>
 			<li>Fixed a bug with baserole initialization</li>
 			<li>Small other bugfixes</li>
+			<li>added legacy supported for limited items</li>
+			<li>fixed C4 defuse for non-traitor roles</li>
+			<li>fixed radio, works now for all roles</li>
+			<li>restricted huds are hidden in HUD Switcher</li>
+			<li>fixed ragdoll skins (hairstyles, outfits, ...)</li>
+			<li>Prevent give_equipment timer to block the shop in the next round</li>
+			<li>Fix sprint consuming stamina when there is no move input</li>
+			<li>Fix confirmation of players with no team</li>
 		</ul>
-	]], os.time({year = 2019, month = 10, day = 19}))
+	]], os.time({year = 2020, month = 02, day = 01}))
 
 	-- run hook for other addons to add their changelog as well
 	hook.Run("TTT2AddChange", changes, currentVersion)

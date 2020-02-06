@@ -15,6 +15,11 @@ if SERVER then
 	AddCSLuaFile()
 end
 
+if CLIENT then
+	-- hud help font
+	surface.CreateFont("weapon_hud_help", {font = "Trebuchet24", size = 14, weight = 600})
+end
+
 --   TTT SPECIAL EQUIPMENT FIELDS
 
 -- This must be set to one of the WEAPON_ types in TTT weapons for weapon
@@ -226,7 +231,6 @@ if CLIENT then
 	local GetPTranslation = LANG.GetParamTranslation
 
 	-- Many non-gun weapons benefit from some help
-	local help_spec = {text = "", font = "TabLarge", xalign = TEXT_ALIGN_CENTER}
 	function SWEP:DrawHelp()
 		local data = self.HUDHelp
 		local translate = data.translatable
@@ -238,18 +242,12 @@ if CLIENT then
 			secondary = secondary and GetPTranslation(secondary, data.translate_params)
 		end
 
-		help_spec.pos = {ScrW() * 0.5, ScrH() - 40}
-		help_spec.text = secondary or primary
-
-		draw.TextShadow(help_spec, 2)
+		draw.ShadowedText(secondary or primary, "weapon_hud_help", ScrW() * 0.5, ScrH() - 40, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
 
 		-- if no secondary exists, primary is drawn at the bottom and no top line
 		-- is drawn
 		if secondary then
-			help_spec.pos[2] = ScrH() - 60
-			help_spec.text = primary
-
-			draw.TextShadow(help_spec, 2)
+			draw.ShadowedText(primary, "weapon_hud_help", ScrW() * 0.5, ScrH() - 60, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
 		end
 	end
 
