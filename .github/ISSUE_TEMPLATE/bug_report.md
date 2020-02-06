@@ -14,9 +14,11 @@ Also please make sure to read the [FAQ](https://github.com/TTT-2/TTT2/wiki/faq) 
 
 ## Your Version of TTT2 (mandatory)
 
-Do you use the Workshop Version of TTT2 or did you pull a Version from GitHub?  
-If the latter is the case please also provide the (shortened) commithash.  
-(executing `git log -n 1 --pretty=format:"%h"` in your Servers TTT2 repository will provide it to you)
+Leave one of the following:
+
+- Workshopversion from Steam
+- Latest GitHub Version
+- Non-latest GitHub Version (please provide what you can to specify)
 
 ## Video
 
