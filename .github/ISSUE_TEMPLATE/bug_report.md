@@ -46,8 +46,8 @@ A clear and concise description of what you expected to happen.
 - Collection-Link of your Server: [e.g. https://steamcommunity.com/sharedfiles/filedetails/?id=1888516630]
 - **All** Server-Errors in the server console
 - Client-Errors in the developer console
-- other Addons installed in your Servers `addons`-folder
-- screenshots
+- Other Addons installed in your Servers `addons`-folder
+- Screenshots
 
 ## Additional context
 
