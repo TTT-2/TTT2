@@ -27,7 +27,6 @@ surface.CreateFont("TargetIDSmall2", {font = "TargetID", size = 16, weight = 100
 local minimalist = CreateClientConVar("ttt_minimal_targetid", "0", FCVAR_ARCHIVE)
 local cv_draw_halo = CreateClientConVar("ttt_entity_draw_halo", "1", true, false)
 local MAX_TRACE_LENGTH = math.sqrt(3) * 32768
-local subtitle_color = Color(210, 210, 210)
 local color_blacktrans = Color(0, 0, 0, 180)
 
 -- cached materials for overhead icons and outlines
@@ -280,26 +279,25 @@ function GM:HUDDrawTargetID()
 		displayInfo = {
 			key = nil,
 			icon = {},
-			iconColor = COLOR_WHITE,
-			title = {text = "", color = COLOR_WHITE},
-			subtitle = {text = "", color = subtitle_color},
+			title = {icons = {}, text = "", color = COLOR_WHITE},
+			subtitle = {icons = {}, text = "", color = COLOR_LLGRAY},
 			desc = {}
 		},
-		ref_position = {
+		refPosition = {
 			x = math.Round(0.5 * ScrW(), 0),
 			y = math.Round(0.5 * ScrH(), 0) + 42
 		}
 	}
 
 	-- call internal targetID functions first
-	HUDDrawTargetIDTButtons(data, params)
-	HUDDrawTargetIDWeapons(data, params)
-	HUDDrawTargetIDPlayers(data, params)
-	HUDDrawTargetIDRagdolls(data, params)
+	HUDDrawTargetIDTButtons(TARGET_DATA:BindTarget(data, params))
+	HUDDrawTargetIDWeapons(TARGET_DATA:BindTarget(data, params))
+	HUDDrawTargetIDPlayers(TARGET_DATA:BindTarget(data, params))
+	HUDDrawTargetIDRagdolls(TARGET_DATA:BindTarget(data, params))
 
 	-- now run a hook that can be used by addon devs that changes the appearance
 	-- of the targetid
-	hook.Run("TTTRenderEntityInfo", data, params)
+	hook.Run("TTTRenderEntityInfo", TARGET_DATA:BindTarget(data, params))
 
 	-- drawn an outline around the entity if defined
 	if params.drawOutline and cv_draw_halo:GetBool() then
@@ -321,8 +319,8 @@ function GM:HUDDrawTargetID()
 
 	local key_box_w = key_string_w + 5 * pad
 	local key_box_h = key_string_h + pad2
-	local key_box_x = params.ref_position.x - key_box_w - pad2 - 2 -- -2 because of border width
-	local key_box_y = params.ref_position.y
+	local key_box_x = params.refPosition.x - key_box_w - pad2 - 2 -- -2 because of border width
+	local key_box_y = params.refPosition.y
 
 	local key_string_x = key_box_x + math.Round(0.5 * key_box_w) - 1
 	local key_string_y = key_box_y + math.Round(0.5 * key_box_h) - 1
@@ -340,7 +338,7 @@ function GM:HUDDrawTargetID()
 	local icon_x, icon_y
 
 	if icon_amount > 0 then
-		icon_x = params.ref_position.x - key_box_h - pad2
+		icon_x = params.refPosition.x - key_box_h - pad2
 		icon_y = params.displayInfo.key and (key_box_y + key_box_h + pad2) or key_box_y + 1
 
 		for i = 1, icon_amount do
@@ -357,7 +355,7 @@ function GM:HUDDrawTargetID()
 
 	local _, title_string_h = draw.GetTextSize(title_string, "TargetID_Title")
 
-	local title_string_x = params.ref_position.x + pad2
+	local title_string_x = params.refPosition.x + pad2
 	local title_string_y = key_box_y + title_string_h - 4
 
 	draw.ShadowedText(title_string, "TargetID_Title", title_string_x, title_string_y, params.displayInfo.title.color, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
@@ -365,7 +363,7 @@ function GM:HUDDrawTargetID()
 	-- draw subtitle
 	local subtitle_string = params.displayInfo.subtitle.text or ""
 
-	local subtitle_string_x = params.ref_position.x + pad2
+	local subtitle_string_x = params.refPosition.x + pad2
 	local subtitle_string_y = key_box_y + key_box_h + 2
 
 	draw.ShadowedText(subtitle_string, "TargetID_Subtitle", subtitle_string_x, subtitle_string_y, params.displayInfo.subtitle.color, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
@@ -376,7 +374,7 @@ function GM:HUDDrawTargetID()
 	-- draw description text
 	local desc_lines = params.displayInfo.desc
 
-	local desc_string_x = params.ref_position.x + pad2
+	local desc_string_x = params.refPosition.x + pad2
 	local desc_string_y = key_box_y + key_box_h + 4 * pad
 	local desc_line_h = 17
 	local desc_line_amount = #desc_lines
@@ -391,7 +389,7 @@ function GM:HUDDrawTargetID()
 	end
 
 	-- draw spacer line
-	local spacer_line_x = params.ref_position.x - 1
+	local spacer_line_x = params.refPosition.x - 1
 	local spacer_line_y = key_box_y
 
 	local spacer_line_icon_l = (icon_y and icon_y or spacer_line_y) - spacer_line_y
@@ -400,6 +398,15 @@ function GM:HUDDrawTargetID()
 	local spacer_line_l = (spacer_line_icon_l > spacer_line_text_l) and spacer_line_icon_l or spacer_line_text_l
 
 	draw.ShadowedLine(spacer_line_x, spacer_line_y, spacer_line_x, spacer_line_y + spacer_line_l, COLOR_WHITE)
+end
+
+---
+-- Add targetid info to a focused entity
+-- @param @{TARGET_DATA} tdata The @{TARGET_DATA} data object to which contains all information
+-- @hook
+-- @realm client
+function GM:TTTRenderEntityInfo(tdata)
+
 end
 
 local key_params = {
@@ -515,37 +522,53 @@ function HUDDrawTargetIDTButtons(data, params)
 end
 
 -- handle looking at weapons
-function HUDDrawTargetIDWeapons(data, params)
+function HUDDrawTargetIDWeapons(tdata)
 	local client = LocalPlayer()
+	local ent = tdata:GetEntity()
 
 	if not IsValid(client) or not client:IsTerror() or not client:Alive()
-	or data.distance > 100 or not data.ent:IsWeapon() then
+	or not IsValid(ent) or tdata:GetEntityDistance() > 100 or not ent:IsWeapon() then
 		return
 	end
 
-	local dropWeapon, isActiveWeapon, switchMode = GetBlockingWeapon(client, data.ent)
-	local kind_pickup_wep = MakeKindValid(data.ent.Kind)
+	local dropWeapon, isActiveWeapon, switchMode = GetBlockingWeapon(client, ent)
+	local kind_pickup_wep = MakeKindValid(ent.Kind)
 
 	local weapon_name
 
-	if not data.ent.GetPrintName then
-		weapon_name = data.ent:GetPrintName() or data.ent.PrintName or data.ent:GetClass() or "..."
+	if not ent.GetPrintName then
+		weapon_name = ent:GetPrintName() or ent.PrintName or ent:GetClass() or "..."
 	else
-		weapon_name = data.ent.PrintName or data.ent:GetClass() or "..."
+		weapon_name = ent.PrintName or ent:GetClass() or "..."
 	end
 
-	params.drawInfo = true
-	params.displayInfo.key = bind.Find("ttt2_weaponswitch")
-	params.displayInfo.title.text = TryT(weapon_name) .. " [" .. GetPT("target_slot_info", {slot = kind_pickup_wep}) .. "]"
+	-- enable targetID rendering
+	tdata:EnableText()
+	tdata:EnableOutline()
+	tdata:SetOutlineColor(client:GetRoleColor())
 
+	-- general info
+	tdata:SetKey(bind.Find("ttt2_weaponswitch"))
+	tdata:SetTitle(
+		TryT(weapon_name) .. " [" .. GetPT("target_slot_info", {slot = kind_pickup_wep}) .. "]"
+	)
+
+	-- set subtitle depending on the switchmode
 	if switchMode == SWITCHMODE_PICKUP then
-		params.displayInfo.subtitle.text = GetPT("target_pickup_weapon", key_params) .. (not isActiveWeapon and GetPT("target_pickup_weapon_hidden", key_params) or "")
+		tdata:SetSubtitle(
+			GetPT("target_pickup_weapon", key_params) .. (not isActiveWeapon and GetPT("target_pickup_weapon_hidden", key_params) or "")
+		)
 	elseif switchMode == SWITCHMODE_SWITCH then
-		params.displayInfo.subtitle.text = GetPT("target_switch_weapon", key_params) .. (not isActiveWeapon and GetPT("target_switch_weapon_hidden", key_params) or "")
+		tdata:SetSubtitle(
+			GetPT("target_switch_weapon", key_params) .. (not isActiveWeapon and GetPT("target_switch_weapon_hidden", key_params) or "")
+		)
 	elseif switchMode == SWITCHMODE_FULLINV then
-		params.displayInfo.subtitle.text = TryT("target_switch_weapon_nospace")
+		tdata:SetSubtitle(
+			TryT("target_switch_weapon_nospace")
+		)
 	end
 
+	-- add additional dropping info if weapon is switched
 	if switchMode == SWITCHMODE_SWITCH then
 		local dropWepKind = MakeKindValid(dropWeapon.Kind)
 		local dropWeapon_name
@@ -556,30 +579,29 @@ function HUDDrawTargetIDWeapons(data, params)
 			dropWeapon_name = dropWeapon.PrintName or dropWeapon:GetClass() or "..."
 		end
 
-		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
-			text = GetPT("target_switch_drop_weapon_info", {slot = dropWepKind, name = TryT(dropWeapon_name)}),
-			color = COLOR_ORANGE
-		}
+		tdata:AddDescriptionLine(
+			GetPT("target_switch_drop_weapon_info", {slot = dropWepKind, name = TryT(dropWeapon_name)}),
+			COLOR_ORANGE
+		)
 	end
 
+	-- add info about full inventory
 	if switchMode == SWITCHMODE_FULLINV then
-		local dropWepKind = MakeKindValid(data.ent.Kind)
+		local dropWepKind = MakeKindValid(ent.Kind)
 
-		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
-			text = GetPT("target_switch_drop_weapon_info_noslot", {slot = dropWepKind}),
-			color = COLOR_ORANGE
-		}
+		tdata:AddDescriptionLine(
+			GetPT("target_switch_drop_weapon_info_noslot", {slot = dropWepKind}),
+			COLOR_ORANGE
+		)
 	end
 
+	-- add info if your weapon can not be dropped
 	if switchMode == SWITCHMODE_NOSPACE then
-		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
-			text = TryT("drop_no_room"),
-			color = COLOR_ORANGE
-		}
+		tdata:AddDescriptionLine(
+			TryT("drop_no_room"),
+			COLOR_ORANGE
+		)
 	end
-
-	params.drawOutline = true
-	params.outlineColor = client:GetRoleColor()
 end
 
 -- handle looking at players

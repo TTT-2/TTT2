@@ -29,6 +29,7 @@ TTTFiles = {
 	cl_search = {file = "cl_search.lua", on = "client"},
 	cl_shopeditor = {file = "cl_shopeditor.lua", on = "client"},
 	cl_status = {file = "cl_status.lua", on = "client"},
+	cl_target_data = {file = "cl_target_data.lua", on = "client"},
 	cl_targetid = {file = "cl_targetid.lua", on = "client"},
 	cl_tbuttons = {file = "cl_tbuttons.lua", on = "client"},
 	cl_tradio = {file = "cl_tradio.lua", on = "client"},
@@ -122,7 +123,7 @@ function ttt_include(filename)
 	local fd = TTTFiles[filename]
 
 	if not fd then
-		error("[TTT2][ERROR] Tried to include a not existant file" .. filename)
+		error("[TTT2][ERROR] Tried to include a not existant file " .. filename)
 	end
 
 	local file = fd.file
