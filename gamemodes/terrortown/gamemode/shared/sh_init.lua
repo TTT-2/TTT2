@@ -671,7 +671,17 @@ function EquipmentIsBuyable(tbl, ply)
 	end
 
 	if tbl.globalLimited and BUYTABLE[tbl.id] or team and tbl.teamLimited and TEAMS[team] and not TEAMS[team].alone and TEAMBUYTABLE[team] and TEAMBUYTABLE[team][tbl.id] or tbl.limited and ply:HasBought(tbl.ClassName) then
-		return false, "X", "This equipment is limited and is already bought."
+		return false, "X", "This equipment is limited and was already bought."
+	end
+
+	local isItem = items.IsItem(tbl.id)
+
+	if isItem and tbl.limited and ply:HasEquipmentItem(tbl.id) then
+		return false, "X", "You can only have this item once."
+	end
+
+	if not isItem and not ply:CanCarryWeapon(tbl) then
+		return false, "X", "You have no free space in your inventory for this weapon."
 	end
 
 	-- weapon whitelist check

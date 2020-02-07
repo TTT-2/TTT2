@@ -273,13 +273,8 @@ local function CreateEquipmentList(t)
 		local wep = weps[i]
 
 		if wep.IsEquipment and wep:IsEquipment() then
-			owned_ids[#owned_ids + 1] = wep:GetClass()
+			owned_ids[wep:GetClass()] = true
 		end
-	end
-
-	-- Stick to one value for no equipment
-	if #owned_ids == 0 then
-		owned_ids = nil
 	end
 
 	local itms = {}
@@ -382,13 +377,8 @@ local function CreateEquipmentList(t)
 				-- If we cannot order this item, darken it
 				if not t.role and ((
 						-- already owned
-						table.HasValue(owned_ids, item.id)
-						or items.IsItem(item.id) and item.limited and ply:HasEquipmentItem(item.id)
-						-- already carrying a weapon for this slot
-						or ItemIsWeapon(item) and not CanCarryWeapon(item)
+						owned_ids[item.ClassName]
 						or not EquipmentIsBuyable(item, ply)
-						-- already bought the item before
-						or item.limited and ply:HasBought(item.id)
 					) or (item.credits or 1) > credits
 				) then
 					ic:SetIconColor(color_darkened)
