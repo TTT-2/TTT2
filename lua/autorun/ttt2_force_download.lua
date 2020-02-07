@@ -111,4 +111,8 @@ if SERVER then
 	resource.AddFile("materials/vgui/ttt/dmgindicator/themes/default.png")
 	resource.AddFile("materials/vgui/ttt/dmgindicator/themes/simple.png")
 	resource.AddFile("materials/vgui/ttt/dmgindicator/themes/vanilla.png")
+
+	-- target ID inline icons
+	resource.AddFile("materials/vgui/ttt/tid_credits.vmt")
+	resource.AddFile("materials/vgui/ttt/tid_detective.vmt")
 end

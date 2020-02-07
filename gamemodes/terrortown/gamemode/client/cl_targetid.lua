@@ -39,6 +39,8 @@ local ring_tex = Material("effects/select_ring")
 local icon_role_not_known = Material("vgui/ttt/dynamic/roles/icon_role_not_known")
 local icon_corpse = Material("vgui/ttt/dynamic/roles/icon_corpse")
 local icon_tbutton = Material("vgui/ttt/dynamic/icon_button_pointer")
+local icon_tid_credits = Material("vgui/ttt/tid_credits")
+local icon_tid_detective = Material("vgui/ttt/tid_detective")
 
 ---
 -- Returns the localized ClassHint table
@@ -399,7 +401,7 @@ function GM:HUDDrawTargetID()
 		local color = desc_lines[i].color
 		local desc_string_x_loop = desc_string_x
 
-		for j = 1, #params.displayInfo.subtitle.icons do
+		for j = 1, #icons do
 			draw.FilteredShadowedTexture(desc_string_x_loop, desc_string_y - 13, 11, 11, icons[j], color.a, color)
 
 			desc_string_x_loop = desc_string_x_loop + 14
@@ -786,7 +788,8 @@ function HUDDrawTargetIDRagdolls(tdata)
 	if ent.search_result and ent.search_result.detective_search and client:IsDetective() then
 		tdata:AddDescriptionLine(
 			TryT("corpse_searched_by_detective"),
-			DETECTIVE.ltcolor
+			DETECTIVE.ltcolor,
+			{icon_tid_detective}
 		)
 	end
 
@@ -794,7 +797,8 @@ function HUDDrawTargetIDRagdolls(tdata)
 	if client:IsActive() and client:IsShopper() and CORPSE.GetCredits(ent, 0) > 0 then
 		tdata:AddDescriptionLine(
 			TryT("target_credits"),
-			COLOR_YELLOW
+			COLOR_YELLOW,
+			{icon_tid_credits}
 		)
 	end
 end
