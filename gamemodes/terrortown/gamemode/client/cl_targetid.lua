@@ -385,31 +385,33 @@ function GM:HUDDrawTargetID()
 	draw.ShadowedText(subtitle_string, "TargetID_Subtitle", subtitle_string_x, subtitle_string_y, params.displayInfo.subtitle.color, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 
 	-- in minimalist mode, no descriptions should be shown
-	if minimalist:GetBool() then return end
+	local desc_line_amount, desc_line_h = 0, 0
 
-	-- draw description text
-	local desc_lines = params.displayInfo.desc
+	if not minimalist:GetBool() then
+		-- draw description text
+		local desc_lines = params.displayInfo.desc
 
-	local desc_string_x = params.refPosition.x + pad2
-	local desc_string_y = key_box_y + key_box_h + 8 * pad
-	local desc_line_h = 17
-	local desc_line_amount = #desc_lines
+		local desc_string_x = params.refPosition.x + pad2
+		local desc_string_y = key_box_y + key_box_h + 8 * pad
+		desc_line_h = 17
+		desc_line_amount = #desc_lines
 
-	for i = 1, desc_line_amount do
-		local text = desc_lines[i].text
-		local icons = desc_lines[i].icons
-		local color = desc_lines[i].color
-		local desc_string_x_loop = desc_string_x
+		for i = 1, desc_line_amount do
+			local text = desc_lines[i].text
+			local icons = desc_lines[i].icons
+			local color = desc_lines[i].color
+			local desc_string_x_loop = desc_string_x
 
-		for j = 1, #icons do
-			draw.FilteredShadowedTexture(desc_string_x_loop, desc_string_y - 13, 11, 11, icons[j], color.a, color)
+			for j = 1, #icons do
+				draw.FilteredShadowedTexture(desc_string_x_loop, desc_string_y - 13, 11, 11, icons[j], color.a, color)
 
-			desc_string_x_loop = desc_string_x_loop + 14
+				desc_string_x_loop = desc_string_x_loop + 14
+			end
+
+			draw.ShadowedText(text, "TargetID_Description", desc_string_x_loop, desc_string_y, color, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+
+			desc_string_y = desc_string_y + desc_line_h
 		end
-
-		draw.ShadowedText(text, "TargetID_Description", desc_string_x_loop, desc_string_y, color, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
-
-		desc_string_y = desc_string_y + desc_line_h
 	end
 
 	-- draw spacer line
