@@ -456,7 +456,7 @@ function HUDDrawTargetIDTButtons(tdata)
 	tdata:EnableText()
 
 	-- set the title of the traitor button
-	tdata:SetTile(
+	tdata:SetTitle(
 		ent:GetDescription() == "?" and "Traitor Button" or ent:GetDescription()
 	)
 
