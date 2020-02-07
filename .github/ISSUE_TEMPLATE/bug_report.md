@@ -5,32 +5,32 @@ about: Create a report to help us improve
 
 ## Disclaimer
 
-If you are missing the following information your Issue will be closed!
+If you are missing the following information your issue will be closed!
 
-- "Your Version of TTT2"
-- "Describe the Bug"
+- "Your version of TTT2"
+- "Describe the bug"
 
 Also please make sure to read the [FAQ](https://github.com/TTT-2/TTT2/wiki/faq) first!
 
-## Your Version of TTT2 (mandatory)
+## Your version of TTT2 (mandatory)
 
 Leave one of the following:
 
-- Workshopversion from Steam
-- Latest GitHub Version
-- Non-latest GitHub Version (please provide what you can to specify)
+- Workshop version from Steam
+- Latest GitHub version
+- Non-latest GitHub version (please provide what you can to specify)
 
 ## Video
 
 If it's a very strange problem, it's better to add a video to see what happens.  
-This step can replace the following steps: "Describe the bug", "To Reproduce"
+This step can replace the following steps: "Describe the bug", "To reproduce"
 
 ## Describe the bug (mandatory)
 
 A clear and concise description of what the bug is.
-An Error is **not** a description.
+An error is **not** a description.
 
-## To Reproduce
+## To reproduce
 
 Steps to reproduce the behaviour:
 
@@ -43,12 +43,12 @@ Steps to reproduce the behaviour:
 
 A clear and concise description of what you expected to happen.
 
-## Context (please provide as much as you can):
+## Context (please provide as much as you can)
 
-- Collection-Link of your Server: [e.g. https://steamcommunity.com/sharedfiles/filedetails/?id=1888516630]
-- **All** Server-Errors in the server console
-- Client-Errors in the developer console
-- Other Addons installed in your Servers `addons`-folder
+- Collection link of your Server: [e.g. https://steamcommunity.com/sharedfiles/filedetails/?id=1888516630]
+- **All** Server errors in the server console
+- Client errors in the developer console
+- Other addons installed in your servers `addons` folder
 - Screenshots
 
 ## Additional context
