@@ -360,6 +360,12 @@ function GM:HUDDrawTargetID()
 	local title_string_x = params.refPosition.x + pad2
 	local title_string_y = key_box_y + title_string_h - 4
 
+	for i = 1, #params.displayInfo.title.icons do
+		draw.FilteredShadowedTexture(title_string_x, title_string_y - 16, 14, 14, params.displayInfo.title.icons[i], params.displayInfo.title.color.a, params.displayInfo.title.color)
+
+		title_string_x = title_string_x + 18
+	end
+
 	draw.ShadowedText(title_string, "TargetID_Title", title_string_x, title_string_y, params.displayInfo.title.color, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 
 	-- draw subtitle
@@ -367,6 +373,12 @@ function GM:HUDDrawTargetID()
 
 	local subtitle_string_x = params.refPosition.x + pad2
 	local subtitle_string_y = key_box_y + key_box_h + 2
+
+	for i = 1, #params.displayInfo.subtitle.icons do
+		draw.FilteredShadowedTexture(subtitle_string_x, subtitle_string_y - 14, 12, 12, params.displayInfo.subtitle.icons[i], params.displayInfo.subtitle.color.a, params.displayInfo.subtitle.color)
+
+		subtitle_string_x = subtitle_string_x + 16
+	end
 
 	draw.ShadowedText(subtitle_string, "TargetID_Subtitle", subtitle_string_x, subtitle_string_y, params.displayInfo.subtitle.color, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 
@@ -377,15 +389,23 @@ function GM:HUDDrawTargetID()
 	local desc_lines = params.displayInfo.desc
 
 	local desc_string_x = params.refPosition.x + pad2
-	local desc_string_y = key_box_y + key_box_h + 4 * pad
+	local desc_string_y = key_box_y + key_box_h + 8 * pad
 	local desc_line_h = 17
 	local desc_line_amount = #desc_lines
 
 	for i = 1, desc_line_amount do
-		local text = desc_lines[i].text or ""
-		local color = desc_lines[i].color or COLOR_WHITE
+		local text = desc_lines[i].text
+		local icons = desc_lines[i].icons
+		local color = desc_lines[i].color
+		local desc_string_x_loop = desc_string_x
 
-		draw.ShadowedText(text, "TargetID_Description", desc_string_x, desc_string_y, color, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+		for j = 1, #params.displayInfo.subtitle.icons do
+			draw.FilteredShadowedTexture(desc_string_x_loop, desc_string_y - 13, 11, 11, icons[j], color.a, color)
+
+			desc_string_x_loop = desc_string_x_loop + 14
+		end
+
+		draw.ShadowedText(text, "TargetID_Description", desc_string_x_loop, desc_string_y, color, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 
 		desc_string_y = desc_string_y + desc_line_h
 	end
@@ -661,7 +681,7 @@ function HUDDrawTargetIDPlayers(tdata)
 	local h_string, h_color = util.HealthToString(ent:Health(), ent:GetMaxHealth())
 
 	tdata:SetTitle(
-		ent:Nick() .. " " .. (disguised and string.upper(TryT("target_disg"))),
+		ent:Nick() .. " " .. (disguised and string.upper(TryT("target_disg")) or ""),
 		disguised and COLOR_RED
 	)
 
@@ -732,7 +752,7 @@ function HUDDrawTargetIDRagdolls(tdata)
 		COLOR_YELLOW
 	)
 
-	if data.distance <= 100 then
+	if tdata:GetEntityDistance() <= 100 then
 		tdata:SetSubtitle(
 			GetPT("corpse_hint", key_params)
 		)
