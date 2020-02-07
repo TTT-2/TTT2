@@ -9,8 +9,6 @@ local util = util
 local IsValid = IsValid
 local surface = surface
 local draw = draw
-local CLIENT = CLIENT
-local SERVER = SERVER
 local CreateClientConVar = CreateClientConVar
 
 if SERVER then
@@ -152,8 +150,8 @@ SWEP.IronSightPos = Vector(0, 0, 0)
 -- The rotational offset applied when entering the ironsight
 SWEP.IronSightsAng = Vector(0, 0, 0)
 
-local sparkle = CLIENT and CreateClientConVar("ttt_crazy_sparks", "0", true)
-local ttt2_hold_aim = CLIENT and CreateClientConVar("ttt2_hold_aim", 0, true, false, LANG.GetTranslationFromLanguage("hold_aim", "english"), 0, 1)
+local sparkle = CLIENT and CreateClientConVar("ttt_crazy_sparks", "0", true) or nil
+local ttt2_hold_aim = CLIENT and CreateClientConVar("ttt2_hold_aim", 0, true, false, LANG.GetTranslationFromLanguage("hold_aim", "english"), 0, 1) or nil
 
 -- crosshair
 if CLIENT then
@@ -455,10 +453,10 @@ end
 function SWEP:SecondaryAttack()
 	if self.NoSights or not self.IronSightsPos then return end
 
-	local bIronsights = self:GetIronsights()
+	local bNotIronsights = not self:GetIronsights()
 
-	self:SetIronsights(not bIronsights)
-	self:SetZoom(not bIronsights)
+	self:SetIronsights(bNotIronsights)
+	self:SetZoom(bNotIronsights)
 	self:SetNextSecondaryFire(CurTime() + 0.3)
 end
 
