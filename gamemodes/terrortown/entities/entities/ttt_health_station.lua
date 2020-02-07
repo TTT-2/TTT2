@@ -171,38 +171,48 @@ else
 	}
 
 	-- handle looking at healthstation
-	hook.Add("TTTRenderEntityInfo", "HUDDrawTargetIDHealthStation", function(data, params)
+	hook.Add("TTTRenderEntityInfo", "HUDDrawTargetIDHealthStation", function(tdata)
 		local client = LocalPlayer()
+		local ent = tdata:GetEntity()
 
 		if not IsValid(client) or not client:IsTerror() or not client:Alive()
-		or data.distance > 100 or data.ent:GetClass() ~= "ttt_health_station" then
+		or not IsValid(ent) or tdata:GetEntityDistance() > 100 or ent:GetClass() ~= "ttt_health_station" then
 			return
 		end
 
-		params.drawInfo = true
-		params.displayInfo.key = input.GetKeyCode(input.LookupBinding("+use"))
-		params.displayInfo.title.text = TryT(data.ent.PrintName)
-		params.displayInfo.subtitle.text = ParT("hstation_subtitle", key_params)
+		-- enable targetID rendering
+		tdata:EnableText()
+		tdata:EnableOutline()
+		tdata:SetOutlineColor(client:GetRoleColor())
 
-		local hstation_charge = data.ent:GetStoredHealth() or 0
+		tdata:AddTitle(
+			TryT(ent.PrintName)
+		)
 
-		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
-			text = TryT("hstation_short_desc"),
-		}
+		tdata:AddSubtitle(
+			ParT("hstation_subtitle", key_params)
+		)
 
-		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
-			text = (hstation_charge > 0) and ParT("hstation_charge", {charge = hstation_charge}) or TryT("hstation_empty"),
-			color = (hstation_charge > 0) and DETECTIVE.ltcolor or COLOR_ORANGE
-		}
+		tdata:AddKeyBinding(
+			"+use"
+		)
 
-		if client:Health() == client:GetMaxHealth() then
-			params.displayInfo.desc[#params.displayInfo.desc + 1] = {
-				text = TryT("hstation_maxhealth"),
-				color = COLOR_ORANGE
-			}
-		end
+		local hstation_charge = ent:GetStoredHealth() or 0
 
-		params.drawOutline = true
-		params.outlineColor = client:GetRoleColor()
+		tdata:AddDescriptionLine(
+			TryT("hstation_short_desc")
+		)
+
+		tdata:AddDescriptionLine(
+			(hstation_charge > 0) and ParT("hstation_charge", {charge = hstation_charge}) or TryT("hstation_empty"),
+			(hstation_charge > 0) and DETECTIVE.ltcolor or COLOR_ORANGE
+		)
+
+		if client:Health() >= client:GetMaxHealth() then return end
+
+		tdata:AddDescriptionLine(
+			TryT("hstation_maxhealth"),
+			COLOR_ORANGE
+		)
 	end)
 end

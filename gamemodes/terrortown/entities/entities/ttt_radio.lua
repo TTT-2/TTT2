@@ -275,28 +275,39 @@ if CLIENT then
 	local ParT = LANG.GetParamTranslation
 
 	-- handle looking at radio
-	hook.Add("TTTRenderEntityInfo", "HUDDrawTargetIDRadio", function(data, params)
+	hook.Add("TTTRenderEntityInfo", "HUDDrawTargetIDRadio", function(tdata)
 		local client = LocalPlayer()
+		local ent = tdata:GetEntity()
 
 		if not IsValid(client) or not client:IsTerror() or not client:Alive()
-		or data.distance > 100 or data.ent:GetClass() ~= "ttt_radio" then
+		or tdata:GetEntityDistance() > 100 or ent:GetClass() ~= "ttt_radio" then
 			return
 		end
 
-		params.drawInfo = true
-		params.displayInfo.key = input.GetKeyCode(input.LookupBinding("+use"))
-		params.displayInfo.title.text = TryT(data.ent.PrintName)
+		-- enable targetID rendering
+		tdata:EnableText()
+		tdata:EnableOutline()
+		tdata:SetOutlineColor(client:GetRoleColor())
 
-		params.displayInfo.subtitle.text = ParT("target_pickup", {usekey = Key("+use", "USE")})
+		tdata:SetTitle(
+			TryT(ent.PrintName)
+		)
 
-		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
-			text = TryT("radio_short_desc"),
-		}
+		tdata:SetSubtitle(
+			ParT("target_pickup", {usekey = Key("+use", "USE")})
+		)
 
-		params.drawOutline = true
-		params.outlineColor = client:GetRoleColor()
+		tdata:SetKeyBinding(
+			"+use"
+		)
+
+		tdata:AddDescriptionLine(
+			TryT("radio_short_desc")
+		)
 	end)
-else -- SERVER
+end
+
+if SERVER then
 	local soundtypes = {
 		"scream",
 		"shotgun",

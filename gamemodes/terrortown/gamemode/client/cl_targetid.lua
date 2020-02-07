@@ -289,15 +289,17 @@ function GM:HUDDrawTargetID()
 		}
 	}
 
-	-- call internal targetID functions first
-	HUDDrawTargetIDTButtons(TARGET_DATA:BindTarget(data, params))
-	HUDDrawTargetIDWeapons(TARGET_DATA:BindTarget(data, params))
-	HUDDrawTargetIDPlayers(TARGET_DATA:BindTarget(data, params))
-	HUDDrawTargetIDRagdolls(TARGET_DATA:BindTarget(data, params))
+	-- call internal targetID functions first so the data can be modified by addons
+	local tdata = TARGET_DATA:BindTarget(data, params)
+
+	HUDDrawTargetIDTButtons(tdata)
+	HUDDrawTargetIDWeapons(tdata)
+	HUDDrawTargetIDPlayers(tdata)
+	HUDDrawTargetIDRagdolls(tdata)
 
 	-- now run a hook that can be used by addon devs that changes the appearance
 	-- of the targetid
-	hook.Run("TTTRenderEntityInfo", TARGET_DATA:BindTarget(data, params))
+	hook.Run("TTTRenderEntityInfo", tdata)
 
 	-- drawn an outline around the entity if defined
 	if params.drawOutline and cv_draw_halo:GetBool() then
@@ -415,110 +417,121 @@ local key_params = {
 }
 
 -- handle looking at traitor buttons
-function HUDDrawTargetIDTButtons(data, params)
+function HUDDrawTargetIDTButtons(tdata)
 	local client = LocalPlayer()
+	local ent = tdata:GetEntity()
+
 	local admin_mode = GetConVar("ttt2_tbutton_admin_show")
 
 	if not IsValid(client) or not client:IsTerror() or not client:Alive()
-	or data.ent:GetClass() ~= "ttt_traitor_button" or data.distance > data.ent:GetUsableRange() then
+	or not IsValid(ent) or ent:GetClass() ~= "ttt_traitor_button" or tdata:GetEntityDistance() > ent:GetUsableRange() then
 		return
 	end
 
-	params.drawInfo = true
+	-- enable targetID rendering
+	tdata:EnableText()
 
+	-- set the title of the traitor button
+	tdata:SetTile(
+		ent:GetDescription() == "?" and "Traitor Button" or ent:GetDescription()
+	)
+
+	-- set the subtitle and icon depending on the currently used mode
 	if TBHUD.focus_but.admin and not TBHUD.focus_but.access then
-		params.displayInfo.icon[#params.displayInfo.icon + 1] = {
-			material = icon_tbutton,
-			color = COLOR_LGRAY
-		}
-		params.displayInfo.subtitle.text = TryT("tbut_help_admin")
+		tdata:AddIcon(
+			icon_tbutton,
+			COLOR_LGRAY
+		)
+
+		tdata:SetSubtitle(
+			TryT("tbut_help_admin")
+		)
 	else
-		params.displayInfo.key = input.GetKeyCode(key_params.usekey)
-		params.displayInfo.subtitle.text = GetPT("tbut_help", key_params)
+		tdata:SetKey(
+			input.GetKeyCode(key_params.usekey)
+		)
+
+		tdata:SetSubtitle(
+			GetPT("tbut_help", key_params)
+		)
 	end
 
-	params.displayInfo.title.text = data.ent:GetDescription() == "?" and "Traitor Button" or data.ent:GetDescription()
-
-	local special_info
-	if data.ent:GetDelay() < 0 then
-		special_info = TryT("tbut_single")
-	elseif data.ent:GetDelay() == 0 then
-		special_info = TryT("tbut_reuse")
+	-- add description time with some general info about this specific traitor button
+	if ent:GetDelay() < 0 then
+		tdata:AddDescriptionLine(
+			TryT("tbut_single"),
+			client:GetRoleColor()
+		)
+	elseif ent:GetDelay() == 0 then
+		tdata:AddDescriptionLine(
+			TryT("tbut_reuse"),
+			client:GetRoleColor()
+		)
 	else
-		special_info = GetPT("tbut_retime", {num = data.ent:GetDelay()})
+		tdata:AddDescriptionLine(
+			GetPT("tbut_retime", {num = ent:GetDelay()}),
+			client:GetRoleColor()
+		)
 	end
 
-	params.displayInfo.desc[#params.displayInfo.desc + 1] = {
-		text = special_info,
-		color = client:GetRoleColor()
-	}
-
+	-- only add more information if in admin mode
 	if not admin_mode:GetBool() or not client:IsAdmin() then return end
 
 	local but = TBHUD.focus_but
 
-	params.displayInfo.desc[#params.displayInfo.desc + 1] = {
-		text = "",
-		color = COLOR_WHITE
-	}
+	tdata:AddDescriptionLine() -- adding empty line
 
-	params.displayInfo.desc[#params.displayInfo.desc + 1] = {
-		text = "ADMIN AREA:",
-		color = COLOR_WHITE
-	}
+	tdata:AddDescriptionLine(
+		"ADMIN AREA:",
+		COLOR_WHITE
+	)
 
-	params.displayInfo.desc[#params.displayInfo.desc + 1] = {
-		text = GetPT("tbut_role_toggle", {usekey = key_params.usekey, walkkey = key_params.walkkey, role = client:GetRoleString()}),
-		color = COLOR_WHITE
-	}
+	tdata:AddDescriptionLine(
+		GetPT("tbut_role_toggle", {usekey = key_params.usekey, walkkey = key_params.walkkey, role = client:GetRoleString()}),
+		COLOR_WHITE
+	)
 
-	params.displayInfo.desc[#params.displayInfo.desc + 1] = {
-		text = GetPT("tbut_team_toggle", {usekey = key_params.usekey, walkkey = key_params.walkkey, team = client:GetTeam():gsub("^%l", string.upper)}),
-		color = COLOR_WHITE
-	}
+	tdata:AddDescriptionLine(
+		GetPT("tbut_team_toggle", {usekey = key_params.usekey, walkkey = key_params.walkkey, team = client:GetTeam():gsub("^%l", string.upper)}),
+		COLOR_WHITE
+	)
 
-	params.displayInfo.desc[#params.displayInfo.desc + 1] = {
-		text = "",
-		color = COLOR_WHITE
-	}
+	tdata:AddDescriptionLine() -- adding empty line
 
-	params.displayInfo.desc[#params.displayInfo.desc + 1] = {
-		text = TryT("tbut_current_config"),
-		color = COLOR_WHITE
-	}
+	tdata:AddDescriptionLine(
+		TryT("tbut_current_config"),
+		COLOR_WHITE
+	)
 
 	local l_role = but.overrideRole == nil and "tbut_default" or but.overrideRole and "tbut_allow" or "tbut_prohib"
 	local l_team = but.overrideTeam == nil and "tbut_default" or but.overrideTeam and "tbut_allow" or "tbut_prohib"
 
-	params.displayInfo.desc[#params.displayInfo.desc + 1] = {
-		text = GetPT("tbut_role_config", {current = TryT(l_role)}) .. ", " .. GetPT("tbut_team_config", {current = TryT(l_team)}),
-		color = COLOR_LGRAY
-	}
+	tdata:AddDescriptionLine(
+		GetPT("tbut_role_config", {current = TryT(l_role)}) .. ", " .. GetPT("tbut_team_config", {current = TryT(l_team)}),
+		COLOR_LGRAY
+	)
 
-	params.displayInfo.desc[#params.displayInfo.desc + 1] = {
-		text = TryT("tbut_intended_config"),
-		color = COLOR_WHITE
-	}
+	tdata:AddDescriptionLine(
+		TryT("tbut_intended_config"),
+		COLOR_WHITE
+	)
 
 	local l_roleIntend = but.roleIntend == "none" and "tbut_default" or but.roleIntend
 	local l_teamIntend = but.teamIntend == TEAM_NONE and "tbut_default" or but.teamIntend
 
-	params.displayInfo.desc[#params.displayInfo.desc + 1] = {
-		text = GetPT("tbut_role_config", {current = LANG.GetRawTranslation(l_roleIntend) or l_roleIntend}) .. ", " .. GetPT("tbut_team_config", {current = LANG.GetRawTranslation(l_teamIntend) or l_teamIntend}),
-		color = COLOR_LGRAY
-	}
+	tdata:AddDescriptionLine(
+		GetPT("tbut_role_config", {current = LANG.GetRawTranslation(l_roleIntend) or l_roleIntend}) .. ", " .. GetPT("tbut_team_config", {current = LANG.GetRawTranslation(l_teamIntend) or l_teamIntend}),
+		COLOR_LGRAY
+	)
 
 	if not TBHUD.focus_but.admin or TBHUD.focus_but.access then return end
 
-	params.displayInfo.desc[#params.displayInfo.desc + 1] = {
-		text = "",
-		color = COLOR_WHITE
-	}
+	tdata:AddDescriptionLine() -- adding empty line
 
-	params.displayInfo.desc[#params.displayInfo.desc + 1] = {
-		text = GetPT("tbut_admin_mode_only", {cv = admin_mode:GetName()}),
-		color = COLOR_ORANGE
-	}
+	tdata:AddDescriptionLine(
+		GetPT("tbut_admin_mode_only", {cv = admin_mode:GetName()}),
+		COLOR_ORANGE
+	)
 end
 
 -- handle looking at weapons
@@ -605,32 +618,33 @@ function HUDDrawTargetIDWeapons(tdata)
 end
 
 -- handle looking at players
-function HUDDrawTargetIDPlayers(data, params)
+function HUDDrawTargetIDPlayers(tdata)
 	local client = LocalPlayer()
+	local ent = tdata:GetEntity()
 	local obsTgt = client:GetObserverTarget()
 
 	-- has to be a player
-	if not data.ent:IsPlayer() then return end
+	if not ent:IsPlayer() then return end
 
-	local disguised = data.ent:GetNWBool("disguised", false)
+	local disguised = ent:GetNWBool("disguised", false)
 
 	-- oof TTT, why so hacky?! Sets last seen player. Dear reader I don't like this as well, but it has to stay that way
 	-- for compatibility reasons. At least it is uncluttered now!
-	client.last_id = disguised and nil or data.ent
+	client.last_id = disguised and nil or ent
 
 	-- do not show information when observing a player
-	if client:IsSpec() and IsValid(obsTgt) and data.ent == obsTgt then return end
+	if client:IsSpec() and IsValid(obsTgt) and ent == obsTgt then return end
 
 	-- disguised players are not shown to normal players, except: same team, unknown team or to spectators
-	if disguised and not (client:IsInTeam(data.ent) and not client:GetSubRoleData().unknownTeam or client:IsSpec()) then return end
+	if disguised and not (client:IsInTeam(ent) and not client:GetSubRoleData().unknownTeam or client:IsSpec()) then return end
 
 	-- show the role of a player if it is known to the client
 	local rstate = GetRoundState()
 	local target_role
 
-	-- TODO: this detective check has to be removed from here
-	if data.ent.GetSubRole and (rstate > ROUND_PREP and data.ent:IsDetective() or rstate == ROUND_ACTIVE and data.ent:IsSpecial()) then
-		target_role = data.ent:GetSubRoleData()
+	-- TODO: this detective check has to be removed from here and be replaced with a general role flag
+	if ent.GetSubRole and (rstate > ROUND_PREP and ent:IsDetective() or rstate == ROUND_ACTIVE and ent:IsSpecial()) then
+		target_role = ent:GetSubRoleData()
 	end
 
 	-- add glowing ring around crosshair when role is known
@@ -640,115 +654,127 @@ function HUDDrawTargetIDPlayers(data, params)
 		draw.FilteredTexture(math.Round(0.5 * (ScrW() - icon_size)), math.Round(0.5 * (ScrH() - icon_size)), icon_size, icon_size, ring_tex, 200, target_role.color)
 	end
 
-	params.drawInfo = true
-	params.displayInfo.icon = {
-		{
-			material = target_role and target_role.iconMaterial or icon_role_not_known,
-			color = target_role and data.ent:GetRoleColor() or COLOR_SLATEGRAY
-		}
-	}
+	-- enable targetID rendering
+	tdata:EnableText()
 
-	local h_string, h_color = util.HealthToString(data.ent:Health(), data.ent:GetMaxHealth())
+	-- add title and subtitle to the focused ent
+	local h_string, h_color = util.HealthToString(ent:Health(), ent:GetMaxHealth())
 
-	params.displayInfo.title.text = data.ent:Nick()
-	params.displayInfo.subtitle.text = TryT(h_string)
-	params.displayInfo.subtitle.color = h_color
+	tdata:SetTitle(
+		ent:Nick() .. " " .. (disguised and string.upper(TryT("target_disg"))),
+		disguised and COLOR_RED
+	)
+
+	tdata:SetSubtitle(
+		TryT(h_string),
+		h_color
+	)
+
+	-- add icon to the element
+	tdata:AddIcon(
+		target_role and target_role.iconMaterial or icon_role_not_known,
+		target_role and ent:GetRoleColor() or COLOR_SLATEGRAY
+	)
 
 	-- add karma string if karma is enabled
 	if KARMA.IsEnabled() then
-		local k_string, k_color = util.KarmaToString(data.ent:GetBaseKarma())
+		local k_string, k_color = util.KarmaToString(ent:GetBaseKarma())
 
-		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
-			text = TryT(k_string),
-			color = k_color
-		}
+		tdata:AddDescriptionLine(
+			TryT(k_string),
+			k_color
+		)
 	end
 
 	-- add scoreboard tags if tag is set
-	if data.ent.sb_tag and data.ent.sb_tag.txt then
-		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
-			text = TryT(data.ent.sb_tag.txt),
-			color = data.ent.sb_tag.color
-		}
+	if ent.sb_tag and ent.sb_tag.txt then
+		tdata:AddDescriptionLine(
+			TryT(ent.sb_tag.txt),
+			ent.sb_tag.color
+		)
 	end
 
 	-- add hints to the player
-	local hint = data.ent.TargetIDHint
-	if hint and hint.hint then
-		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
-			text = hint.fmt(data.ent, hint.hint),
-			color = COLOR_LGRAY
-		}
-	end
+	local hint = ent.TargetIDHint
 
-	-- we can now add the disguised info to the playername since a previous check already returned
-	-- the code for players in other teams
-	if disguised then
-		params.displayInfo.title.text = params.displayInfo.title.text .. " " .. string.upper(TryT("target_disg"))
-		params.displayInfo.title.color = COLOR_RED
+	if hint and hint.hint then
+		tdata:AddDescriptionLine(
+			hint.fmt(ent, hint.hint),
+			COLOR_LGRAY
+		)
 	end
 end
 
 -- handle looking ragdolls
-function HUDDrawTargetIDRagdolls(data, params)
+function HUDDrawTargetIDRagdolls(tdata)
 	local client = LocalPlayer()
+	local ent = tdata:GetEntity()
 	local c_wep = client:GetActiveWeapon()
 
 	-- has to be a ragdoll
-	if data.ent:GetClass() ~= "prop_ragdoll" then return end
+	if not IsValid(ent) or ent:GetClass() ~= "prop_ragdoll" then return end
 
 	-- only show this if the ragdoll has a nick, else it could be a mattress
-	if not CORPSE.GetPlayerNick(data.ent, false) then return end
+	if not CORPSE.GetPlayerNick(ent, false) then return end
 
-	local corpse_found = CORPSE.GetFound(data.ent, false) or not DetectiveMode()
-	local role_found = corpse_found and data.ent.search_result and data.ent.search_result.role
+	local corpse_found = CORPSE.GetFound(ent, false) or not DetectiveMode()
+	local role_found = corpse_found and ent.search_result and ent.search_result.role
 	local binoculars_useable = IsValid(c_wep) and c_wep:GetClass() == "weapon_ttt_binoculars" or false
 
-	params.drawInfo = true
-	params.displayInfo.icon = {
-		{
-			material = role_found and roles.GetByIndex(data.ent.search_result.role).iconMaterial or icon_corpse,
-			color = COLOR_YELLOW
-		}
-	}
+	-- enable targetID rendering
+	tdata:EnableText()
+	tdata:EnableOutline()
+	tdata:SetOutlineColor(COLOR_YELLOW)
 
-	params.displayInfo.title.text = corpse_found and CORPSE.GetPlayerNick(data.ent, "A Terrorist") or TryT("target_unid")
-	params.displayInfo.title.color = COLOR_YELLOW
+	-- add title and subtitle to the focused ent
+	tdata:SetTitle(
+		corpse_found and CORPSE.GetPlayerNick(ent, "A Terrorist") or TryT("target_unid"),
+		COLOR_YELLOW
+	)
 
 	if data.distance <= 100 then
-		params.displayInfo.subtitle.text = GetPT("corpse_hint", key_params)
+		tdata:SetSubtitle(
+			GetPT("corpse_hint", key_params)
+		)
 	elseif binoculars_useable then
-		params.displayInfo.subtitle.text = GetPT("corpse_binoculars", {key = Key("+attack", "ATTACK")})
+		tdata:SetSubtitle(
+			GetPT("corpse_binoculars", {key = Key("+attack", "ATTACK")})
+		)
 	else
-		params.displayInfo.subtitle.text = TryT("corpse_too_far_away")
+		tdata:SetSubtitle(
+			TryT("corpse_too_far_away")
+		)
 	end
 
+	-- add icon to the element
+	tdata:AddIcon(
+		role_found and roles.GetByIndex(ent.search_result.role).iconMaterial or icon_corpse,
+		COLOR_YELLOW
+	)
+
 	-- add hints to the corpse
-	local hint = data.ent.TargetIDHint
+	local hint = ent.TargetIDHint
+
 	if hint and hint.hint then
-		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
-			text = hint.fmt(data.ent, hint.hint),
-			color = COLOR_LGRAY
-		}
+		tdata:AddDescriptionLine(
+			hint.fmt(ent, hint.hint),
+			COLOR_LGRAY
+		)
 	end
 
 	-- add info if searched by detectives
-	if data.ent.search_result and data.ent.search_result.detective_search and client:IsDetective() then
-		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
-			text = TryT("corpse_searched_by_detective"),
-			color = DETECTIVE.ltcolor
-		}
+	if ent.search_result and ent.search_result.detective_search and client:IsDetective() then
+		tdata:AddDescriptionLine(
+			TryT("corpse_searched_by_detective"),
+			DETECTIVE.ltcolor
+		)
 	end
 
 	-- add credits info when corpse has credits
-	if client:IsActive() and client:IsShopper() and CORPSE.GetCredits(data.ent, 0) > 0 then
-		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
-			text = TryT("target_credits"),
-			color = COLOR_YELLOW
-		}
+	if client:IsActive() and client:IsShopper() and CORPSE.GetCredits(ent, 0) > 0 then
+		tdata:AddDescriptionLine(
+			TryT("target_credits"),
+			COLOR_YELLOW
+		)
 	end
-
-	-- add outline when ragdoll is reachable
-	params.drawOutline = binoculars_useable or data.distance <= 100
-	params.outlineColor = COLOR_YELLOW
 end

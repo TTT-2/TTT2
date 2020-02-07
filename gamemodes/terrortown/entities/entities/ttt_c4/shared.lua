@@ -818,34 +818,47 @@ if CLIENT then
 	end
 
 	-- handle looking at C4
-	hook.Add("TTTRenderEntityInfo", "HUDDrawTargetIDC4", function(data, params)
+	hook.Add("TTTRenderEntityInfo", "HUDDrawTargetIDC4", function(tdata)
 		local client = LocalPlayer()
+		local ent = tdata:GetEntity()
 		local c_wep = client:GetActiveWeapon()
 
 		if not IsValid(client) or not client:IsTerror() or not client:Alive()
-		or data.distance > 100 or data.ent:GetClass() ~= "ttt_c4" then
+		or not IsValid(ent) or tdata:GetEntityDistance() > 100 or data.ent:GetClass() ~= "ttt_c4" then
 			return
 		end
 
-		local defuser_useable = (IsValid(c_wep) and data.ent:GetArmed()) and c_wep:GetClass() == "weapon_ttt_defuser" or false
+		local defuser_useable = (IsValid(c_wep) and ent:GetArmed()) and c_wep:GetClass() == "weapon_ttt_defuser" or false
 
-		params.drawInfo = true
-		params.displayInfo.key = defuser_useable and input.GetKeyCode(input.LookupBinding("+attack")) or input.GetKeyCode(input.LookupBinding("+use"))
-		params.displayInfo.title.text = TryT(data.ent.PrintName)
+		-- enable targetID rendering
+		tdata:EnableText()
+		tdata:EnableOutline()
+		tdata:SetOutlineColor(client:GetRoleColor())
 
-		if data.ent:GetArmed() and defuser_useable then
-			params.displayInfo.subtitle.text = GetPT("target_c4_armed_defuser", key_params)
-		elseif data.ent:GetArmed() then
-			params.displayInfo.subtitle.text = GetPT("target_c4_armed", key_params)
+		tdata:SetTitle(
+			TryT(ent.PrintName)
+		)
+
+		if ent:GetArmed() and defuser_useable then
+			tdata:SetSubtitle(
+				GetPT("target_c4_armed_defuser", key_params)
+			)
+		elseif ent:GetArmed() then
+			tdata:SetSubtitle(
+				GetPT("target_c4_armed", key_params)
+			)
 		else
-			params.displayInfo.subtitle.text = GetPT("target_c4", key_params)
+			tdata:SetSubtitle(
+				GetPT("target_c4", key_params)
+			)
 		end
 
-		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
-			text = TryT("c4_short_desc"),
-		}
+		tdata:AddKeyBinding(
+			defuser_useable and "+attack" or "+use"
+		)
 
-		params.drawOutline = true
-		params.outlineColor = client:GetRoleColor()
+		tdata:AddDescriptionLine(
+			TryT("c4_short_desc")
+		)
 	end)
 end

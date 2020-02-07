@@ -222,8 +222,9 @@ if CLIENT then
 		return -1
 	end
 
-	hook.Add("TTTRenderEntityInfo", "HUDDrawTargetIDBinocular", function(data, params)
+	hook.Add("TTTRenderEntityInfo", "HUDDrawTargetIDBinocular", function(tdata)
 		local client = LocalPlayer()
+		local ent = tdata:GetEntity()
 
 		if not IsValid(client) or not client:IsTerror() or not client:Alive() then return end
 
@@ -231,17 +232,17 @@ if CLIENT then
 
 		if not IsValid(c_wep) then return end
 
-		if data.ent:GetClass() ~= "prop_ragdoll" or c_wep:GetClass() ~= "weapon_ttt_binoculars" then return end
+		if not IsValid(ent) or ent:GetClass() ~= "prop_ragdoll" or c_wep:GetClass() ~= "weapon_ttt_binoculars" then return end
 
 		-- draw progress
 		if not c_wep.dt.processing then return end
 
 		local progress = mathRound(mathClamp((CurTime() - c_wep.dt.start_time) / c_wep.ProcessingDelay * 100, 0, 100))
 
-		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
-			text = GetPT("binoc_progress", {progress = progress}),
-			color = hud_color
-		}
+		tdata:AddDescriptionLine(
+			GetPT("binoc_progress", {progress = progress}),
+			hud_color
+		)
 	end)
 
 	function SWEP:DrawHUD()

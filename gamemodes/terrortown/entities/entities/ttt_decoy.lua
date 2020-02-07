@@ -87,32 +87,41 @@ if CLIENT then
 	local ParT = LANG.GetParamTranslation
 
 	-- handle looking at decoy
-	hook.Add("TTTRenderEntityInfo", "HUDDrawTargetIDDecoy", function(data, params)
+	hook.Add("TTTRenderEntityInfo", "HUDDrawTargetIDDecoy", function(tdata)
 		local client = LocalPlayer()
+		local ent = tdata:GetEntity()
 
 		if not IsValid(client) or not client:IsTerror() or not client:Alive()
-		or data.distance > 100 or data.ent:GetClass() ~= "ttt_decoy" then
+		or not IsValid(ent) or tdata:GetEntityDistance() > 100 or ent:GetClass() ~= "ttt_decoy" then
 			return
 		end
 
-		params.drawInfo = true
-		params.displayInfo.key = input.GetKeyCode(input.LookupBinding("+use"))
-		params.displayInfo.title.text = TryT("decoy_name")
+		-- enable targetID rendering
+		tdata:EnableText()
+		tdata:EnableOutline()
+		tdata:SetOutlineColor(client:GetRoleColor())
 
-		params.displayInfo.subtitle.text = ParT("target_pickup", {usekey = Key("+use", "USE")})
+		tdata:SetTitle(
+			TryT("decoy_name")
+		)
 
-		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
-			text = TryT("decoy_short_desc")
-		}
+		tdata:SetSubtitle(
+			ParT("target_pickup", {usekey = Key("+use", "USE")})
+		)
 
-		if data.ent:GetNWString("decoy_owner_team", "none") ~= client:GetTeam() then
-			params.displayInfo.desc[#params.displayInfo.desc + 1] = {
-				text = TryT("decoy_pickup_wrong_team"),
-				color = COLOR_ORANGE
-			}
-		end
+		tdata:SetKeyBinding(
+			"+use"
+		)
 
-		params.drawOutline = true
-		params.outlineColor = client:GetRoleColor()
+		tdata:AddDescriptionLine(
+			TryT("decoy_short_desc")
+		)
+
+		if ent:GetNWString("decoy_owner_team", "none") == client:GetTeam() then return end
+
+		tdata:AddDescriptionLine(
+			TryT("decoy_pickup_wrong_team"),
+			COLOR_ORANGE
+		)
 	end)
 end
