@@ -193,7 +193,7 @@ else
 			ParT("hstation_subtitle", key_params)
 		)
 
-		tdata:AddKeyBinding(
+		tdata:SetKeyBinding(
 			"+use"
 		)
 

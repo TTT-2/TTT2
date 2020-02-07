@@ -120,7 +120,7 @@ local interp = string.Interp
 -- @{LANG.GetTranslation}.
 -- @param string name string key identifier for the translated @{string}
 -- @param table params
--- @return nil|string
+-- @return nil|string, number The translated string, the number of replacements that happened
 -- @realm client
 -- @see LANG.GetPTranslation
 function LANG.GetParamTranslation(name, params)

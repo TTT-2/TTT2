@@ -824,7 +824,7 @@ if CLIENT then
 		local c_wep = client:GetActiveWeapon()
 
 		if not IsValid(client) or not client:IsTerror() or not client:Alive()
-		or not IsValid(ent) or tdata:GetEntityDistance() > 100 or data.ent:GetClass() ~= "ttt_c4" then
+		or not IsValid(ent) or tdata:GetEntityDistance() > 100 or ent:GetClass() ~= "ttt_c4" then
 			return
 		end
 
@@ -853,7 +853,7 @@ if CLIENT then
 			)
 		end
 
-		tdata:AddKeyBinding(
+		tdata:SetKeyBinding(
 			defuser_useable and "+attack" or "+use"
 		)
 

@@ -54,7 +54,7 @@ end
 -- @param [default=Color(255, 255, 255, 255)] Color The outline color
 -- @realm client
 function TARGET_DATA:SetOutlineColor(color)
-	self.params.outlineColor = color or COLOR_WHITE
+	self.params.outlineColor = IsColor(color) and color or COLOR_WHITE
 end
 
 ---
@@ -92,7 +92,7 @@ end
 -- Sets a key to be displayed in the targetID element based on a key binding
 -- @param string key_binding The key binding like "+use".
 -- @realm client
-function TARGET_DATA:SetKeyBiding(key_binding)
+function TARGET_DATA:SetKeyBinding(key_binding)
 	self.params.displayInfo.key = input.GetKeyCode(input.LookupBinding(key_binding))
 end
 
@@ -105,7 +105,7 @@ end
 function TARGET_DATA:AddIcon(material, color)
 	self.params.displayInfo.icon[#self.params.displayInfo.icon + 1] = {
 		material = material,
-		color = color or COLOR_WHITE
+		color = IsColor(color) and color or COLOR_WHITE
 	}
 
 	return #self.params.displayInfo.icon
@@ -120,7 +120,7 @@ end
 function TARGET_DATA:SetTitle(text, color, inline_icons)
 	self.params.displayInfo.title = {
 		text = text or "",
-		color = color or COLOR_WHITE,
+		color = IsColor(color) and color or COLOR_WHITE,
 		icons = inline_icons or {}
 	}
 end
@@ -134,7 +134,7 @@ end
 function TARGET_DATA:SetSubtitle(text, color, inline_icons)
 	self.params.displayInfo.subtitle = {
 		text = text or "",
-		color = color or COLOR_LLGRAY,
+		color = IsColor(color) and color or COLOR_LLGRAY,
 		icons = inline_icons or {}
 	}
 end
@@ -149,7 +149,7 @@ end
 function TARGET_DATA:AddDescriptionLine(text, color, inline_icons)
 	self.params.displayInfo.desc[#self.params.displayInfo.desc + 1] = {
 		text = text or "",
-		color = color or COLOR_WHITE,
+		color = IsColor(color) and color or COLOR_WHITE,
 		icons = inline_icons or {}
 	}
 
