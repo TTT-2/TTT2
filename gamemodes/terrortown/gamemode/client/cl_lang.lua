@@ -11,7 +11,6 @@ LANG.Strings = {}
 
 local table = table
 local pairs = pairs
-local ConVarExists = ConVarExists
 local CreateConVar = CreateConVar
 
 local ttt_language = CreateConVar("ttt_language", "auto", FCVAR_ARCHIVE)

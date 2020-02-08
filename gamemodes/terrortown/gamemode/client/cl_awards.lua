@@ -182,39 +182,35 @@ end
 FirstBlood = AWARDS.FirstBlood -- just for compatibility
 
 ---
+-- See if there is one killer responsible for all kills of either team
 -- @param table events
 -- @param table scores
 -- @param table players list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
 -- @param table traitors list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
 -- @realm client
 function AWARDS.AllKills(events, scores, players, traitors)
-	-- see if there is one killer responsible for all kills of either team
-
-	local killed_traitors, killed_not_traitors
+	local killedTraitors, killedNoTraitors
 
 	for id, s in pairs(scores) do
-		local oneTraitor = true
-		local oneNotTraitor = true
-
 		for _, ev in ipairs(s.ev) do
 			if ev.v == TEAM_TRAITOR then
-				if not killed_traitors then
-					killed_traitors = id
-				elseif killed_traitors ~= id then
-					oneTraitor = false
+				if not killedTraitors then
+					killedTraitors = id
+				elseif killedTraitors ~= id then
+					killedTraitors = -1
 				end
 			else
-				if not killed_not_traitors then
-					killed_not_traitors = id
-				elseif killed_not_traitors ~= id then
-					oneNotTraitor = false
+				if not killedNoTraitors then
+					killedNoTraitors = id
+				elseif killedNoTraitors ~= id then
+					killedNoTraitors = -1
 				end
 			end
 		end
 	end
 
-	if oneTraitor and not table.HasValue(traitors, killed_traitors) then
-		local killer = players[killed_traitors]
+	if killedTraitors and killedTraitors ~= -1 and not table.HasValue(traitors, killedTraitors) then
+		local killer = players[killedTraitors]
 		if not killer then return end
 
 		return {
@@ -225,8 +221,8 @@ function AWARDS.AllKills(events, scores, players, traitors)
 		}
 	end
 
-	if oneNotTraitor and table.HasValue(traitors, killed_not_traitors) then
-		local killer = players[killed_not_traitors]
+	if killedNoTraitors and killedNoTraitors ~= -1 and table.HasValue(traitors, killedNoTraitors) then
+		local killer = players[killedNoTraitors]
 		if not killer then return end
 
 		return {

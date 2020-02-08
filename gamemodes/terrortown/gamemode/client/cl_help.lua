@@ -569,8 +569,11 @@ function HELPSCRN:CreateGameplaySettings(parent)
 	form:SetName(GetTranslation("set_title_play"))
 
 	local cb
+	local rlsList = roles.GetList()
 
-	for _, v in ipairs(roles.GetList()) do
+	for i = 1, #rlsList do
+		local v = rlsList[i]
+
 		if ConVarExists("ttt_avoid_" .. v.name) then
 			local rolename = GetTranslation(v.name)
 
