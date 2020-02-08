@@ -139,23 +139,23 @@ if CLIENT then
 	local TryT = LANG.TryTranslation
 	local ParT = LANG.GetParamTranslation
 
-	hook.Add("TTTRenderEntityInfo", "HUDDrawTargetIDVisualizer", function(tdata)
+	hook.Add("TTTRenderEntityInfo", "HUDDrawTargetIDVisualizer", function(tData)
 		local client = LocalPlayer()
-		local ent = tdata:GetEntity()
+		local ent = tData:GetEntity()
 
 		if not IsValid(client) or not client:IsTerror() or not client:Alive()
-		or tdata:GetEntityDistance() > 100 or ent:GetClass() ~= "ttt_cse_proj" then
+		or tData:GetEntityDistance() > 100 or ent:GetClass() ~= "ttt_cse_proj" then
 			return
 		end
 
 		-- enable targetID rendering
-		tdata:EnableText()
-		tdata:EnableOutline()
-		tdata:SetOutlineColor(client:GetRoleColor())
+		tData:EnableText()
+		tData:EnableOutline()
+		tData:SetOutlineColor(client:GetRoleColor())
 
-		tdata:SetTitle(TryT("vis_name"))
-		tdata:SetSubtitle(ParT("target_pickup", {usekey = Key("+use", "USE")}))
-		tdata:SetKeyBinding("+use")
-		tdata:AddDescriptionLine(TryT("vis_short_desc"))
+		tData:SetTitle(TryT("vis_name"))
+		tData:SetSubtitle(ParT("target_pickup", {usekey = Key("+use", "USE")}))
+		tData:SetKeyBinding("+use")
+		tData:AddDescriptionLine(TryT("vis_short_desc"))
 	end)
 end

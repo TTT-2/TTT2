@@ -171,36 +171,36 @@ else
 	}
 
 	-- handle looking at healthstation
-	hook.Add("TTTRenderEntityInfo", "HUDDrawTargetIDHealthStation", function(tdata)
+	hook.Add("TTTRenderEntityInfo", "HUDDrawTargetIDHealthStation", function(tData)
 		local client = LocalPlayer()
-		local ent = tdata:GetEntity()
+		local ent = tData:GetEntity()
 
 		if not IsValid(client) or not client:IsTerror() or not client:Alive()
-		or not IsValid(ent) or tdata:GetEntityDistance() > 100 or ent:GetClass() ~= "ttt_health_station" then
+		or not IsValid(ent) or tData:GetEntityDistance() > 100 or ent:GetClass() ~= "ttt_health_station" then
 			return
 		end
 
 		-- enable targetID rendering
-		tdata:EnableText()
-		tdata:EnableOutline()
-		tdata:SetOutlineColor(client:GetRoleColor())
+		tData:EnableText()
+		tData:EnableOutline()
+		tData:SetOutlineColor(client:GetRoleColor())
 
-		tdata:AddTitle(TryT(ent.PrintName))
-		tdata:AddSubtitle(ParT("hstation_subtitle", key_params))
-		tdata:SetKeyBinding("+use")
+		tData:AddTitle(TryT(ent.PrintName))
+		tData:AddSubtitle(ParT("hstation_subtitle", key_params))
+		tData:SetKeyBinding("+use")
 
 		local hstation_charge = ent:GetStoredHealth() or 0
 
-		tdata:AddDescriptionLine(TryT("hstation_short_desc"))
+		tData:AddDescriptionLine(TryT("hstation_short_desc"))
 
-		tdata:AddDescriptionLine(
+		tData:AddDescriptionLine(
 			(hstation_charge > 0) and ParT("hstation_charge", {charge = hstation_charge}) or TryT("hstation_empty"),
 			(hstation_charge > 0) and DETECTIVE.ltcolor or COLOR_ORANGE
 		)
 
 		if client:Health() >= client:GetMaxHealth() then return end
 
-		tdata:AddDescriptionLine(
+		tData:AddDescriptionLine(
 			TryT("hstation_maxhealth"),
 			COLOR_ORANGE
 		)

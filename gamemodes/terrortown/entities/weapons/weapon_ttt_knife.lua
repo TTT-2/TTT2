@@ -309,12 +309,12 @@ end
 if CLIENT then
 	local TryT = LANG.TryTranslation
 
-	hook.Add("TTTRenderEntityInfo", "HUDDrawTargetIDKnife", function(tdata)
+	hook.Add("TTTRenderEntityInfo", "HUDDrawTargetIDKnife", function(tData)
 		local client = LocalPlayer()
-		local ent = tdata:GetEntity()
+		local ent = tData:GetEntity()
 
 		if not IsValid(client) or not client:IsTerror() or not client:Alive()
-		or tdata:GetEntityDistance() > 100 or not ent:IsPlayer() then
+		or tData:GetEntityDistance() > 100 or not ent:IsPlayer() then
 			return
 		end
 
@@ -324,10 +324,10 @@ if CLIENT then
 		if not IsValid(c_wep) or c_wep:GetClass() ~= "weapon_ttt_knife" or c_wep.Primary.Damage + 10 < ent:Health() then return end
 
 		-- enable targetID rendering
-		tdata:EnableOutline()
-		tdata:SetOutlineColor(client:GetRoleColor())
+		tData:EnableOutline()
+		tData:SetOutlineColor(client:GetRoleColor())
 
-		tdata:AddDescriptionLine(
+		tData:AddDescriptionLine(
 			TryT("knife_instant"),
 			role_color
 		)
