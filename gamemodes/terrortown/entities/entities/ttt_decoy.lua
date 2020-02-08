@@ -101,21 +101,10 @@ if CLIENT then
 		tdata:EnableOutline()
 		tdata:SetOutlineColor(client:GetRoleColor())
 
-		tdata:SetTitle(
-			TryT("decoy_name")
-		)
-
-		tdata:SetSubtitle(
-			ParT("target_pickup", {usekey = Key("+use", "USE")})
-		)
-
-		tdata:SetKeyBinding(
-			"+use"
-		)
-
-		tdata:AddDescriptionLine(
-			TryT("decoy_short_desc")
-		)
+		tdata:SetTitle(TryT("decoy_name"))
+		tdata:SetSubtitle(ParT("target_pickup", {usekey = Key("+use", "USE")}))
+		tdata:SetKeyBinding("+use")
+		tdata:AddDescriptionLine(TryT("decoy_short_desc"))
 
 		if ent:GetNWString("decoy_owner_team", "none") == client:GetTeam() then return end
 

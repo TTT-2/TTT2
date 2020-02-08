@@ -153,20 +153,9 @@ if CLIENT then
 		tdata:EnableOutline()
 		tdata:SetOutlineColor(client:GetRoleColor())
 
-		tdata:SetTitle(
-			TryT("vis_name")
-		)
-
-		tdata:SetSubtitle(
-			ParT("target_pickup", {usekey = Key("+use", "USE")})
-		)
-
-		tdata:AddKeyBinding(
-			"+use"
-		)
-
-		tdata:AddDescriptionLine(
-			TryT("vis_short_desc")
-		)
+		tdata:SetTitle(TryT("vis_name"))
+		tdata:SetSubtitle(ParT("target_pickup", {usekey = Key("+use", "USE")}))
+		tdata:SetKeyBinding("+use")
+		tdata:AddDescriptionLine(TryT("vis_short_desc"))
 	end)
 end

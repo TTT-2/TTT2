@@ -835,30 +835,17 @@ if CLIENT then
 		tdata:EnableOutline()
 		tdata:SetOutlineColor(client:GetRoleColor())
 
-		tdata:SetTitle(
-			TryT(ent.PrintName)
-		)
+		tdata:SetTitle(TryT(ent.PrintName))
 
 		if ent:GetArmed() and defuser_useable then
-			tdata:SetSubtitle(
-				GetPT("target_c4_armed_defuser", key_params)
-			)
+			tdata:SetSubtitle(GetPT("target_c4_armed_defuser", key_params))
 		elseif ent:GetArmed() then
-			tdata:SetSubtitle(
-				GetPT("target_c4_armed", key_params)
-			)
+			tdata:SetSubtitle(GetPT("target_c4_armed", key_params))
 		else
-			tdata:SetSubtitle(
-				GetPT("target_c4", key_params)
-			)
+			tdata:SetSubtitle(GetPT("target_c4", key_params))
 		end
 
-		tdata:SetKeyBinding(
-			defuser_useable and "+attack" or "+use"
-		)
-
-		tdata:AddDescriptionLine(
-			TryT("c4_short_desc")
-		)
+		tdata:SetKeyBinding(defuser_useable and "+attack" or "+use")
+		tdata:AddDescriptionLine(TryT("c4_short_desc"))
 	end)
 end

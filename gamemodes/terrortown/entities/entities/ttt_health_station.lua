@@ -185,23 +185,13 @@ else
 		tdata:EnableOutline()
 		tdata:SetOutlineColor(client:GetRoleColor())
 
-		tdata:AddTitle(
-			TryT(ent.PrintName)
-		)
-
-		tdata:AddSubtitle(
-			ParT("hstation_subtitle", key_params)
-		)
-
-		tdata:SetKeyBinding(
-			"+use"
-		)
+		tdata:AddTitle(TryT(ent.PrintName))
+		tdata:AddSubtitle(ParT("hstation_subtitle", key_params))
+		tdata:SetKeyBinding("+use")
 
 		local hstation_charge = ent:GetStoredHealth() or 0
 
-		tdata:AddDescriptionLine(
-			TryT("hstation_short_desc")
-		)
+		tdata:AddDescriptionLine(TryT("hstation_short_desc"))
 
 		tdata:AddDescriptionLine(
 			(hstation_charge > 0) and ParT("hstation_charge", {charge = hstation_charge}) or TryT("hstation_empty"),

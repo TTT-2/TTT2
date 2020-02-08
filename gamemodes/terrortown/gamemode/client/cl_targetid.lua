@@ -464,9 +464,7 @@ function HUDDrawTargetIDTButtons(tdata)
 	tdata:EnableText()
 
 	-- set the title of the traitor button
-	tdata:SetTitle(
-		ent:GetDescription() == "?" and "Traitor Button" or ent:GetDescription()
-	)
+	tdata:SetTitle(ent:GetDescription() == "?" and "Traitor Button" or ent:GetDescription())
 
 	-- set the subtitle and icon depending on the currently used mode
 	if TBHUD.focus_but.admin and not TBHUD.focus_but.access then
@@ -475,17 +473,11 @@ function HUDDrawTargetIDTButtons(tdata)
 			COLOR_LGRAY
 		)
 
-		tdata:SetSubtitle(
-			TryT("tbut_help_admin")
-		)
+		tdata:SetSubtitle(TryT("tbut_help_admin"))
 	else
-		tdata:SetKey(
-			input.GetKeyCode(key_params.usekey)
-		)
+		tdata:SetKey(input.GetKeyCode(key_params.usekey))
 
-		tdata:SetSubtitle(
-			GetPT("tbut_help", key_params)
-		)
+		tdata:SetSubtitle(GetPT("tbut_help", key_params))
 	end
 
 	-- add description time with some general info about this specific traitor button
@@ -594,23 +586,16 @@ function HUDDrawTargetIDWeapons(tdata)
 
 	-- general info
 	tdata:SetKey(bind.Find("ttt2_weaponswitch"))
-	tdata:SetTitle(
-		TryT(weapon_name) .. " [" .. GetPT("target_slot_info", {slot = kind_pickup_wep}) .. "]"
-	)
+
+	tdata:SetTitle(TryT(weapon_name) .. " [" .. GetPT("target_slot_info", {slot = kind_pickup_wep}) .. "]")
 
 	-- set subtitle depending on the switchmode
 	if switchMode == SWITCHMODE_PICKUP then
-		tdata:SetSubtitle(
-			GetPT("target_pickup_weapon", key_params) .. (not isActiveWeapon and GetPT("target_pickup_weapon_hidden", key_params) or "")
-		)
+		tdata:SetSubtitle(GetPT("target_pickup_weapon", key_params) .. (not isActiveWeapon and GetPT("target_pickup_weapon_hidden", key_params) or ""))
 	elseif switchMode == SWITCHMODE_SWITCH then
-		tdata:SetSubtitle(
-			GetPT("target_switch_weapon", key_params) .. (not isActiveWeapon and GetPT("target_switch_weapon_hidden", key_params) or "")
-		)
+		tdata:SetSubtitle(GetPT("target_switch_weapon", key_params) .. (not isActiveWeapon and GetPT("target_switch_weapon_hidden", key_params) or ""))
 	elseif switchMode == SWITCHMODE_FULLINV then
-		tdata:SetSubtitle(
-			TryT("target_switch_weapon_nospace")
-		)
+		tdata:SetSubtitle(TryT("target_switch_weapon_nospace"))
 	end
 
 	-- add additional dropping info if weapon is switched
@@ -765,17 +750,11 @@ function HUDDrawTargetIDRagdolls(tdata)
 	)
 
 	if tdata:GetEntityDistance() <= 100 then
-		tdata:SetSubtitle(
-			GetPT("corpse_hint", key_params)
-		)
+		tdata:SetSubtitle(GetPT("corpse_hint", key_params))
 	elseif binoculars_useable then
-		tdata:SetSubtitle(
-			GetPT("corpse_binoculars", {key = Key("+attack", "ATTACK")})
-		)
+		tdata:SetSubtitle(GetPT("corpse_binoculars", {key = Key("+attack", "ATTACK")}))
 	else
-		tdata:SetSubtitle(
-			TryT("corpse_too_far_away")
-		)
+		tdata:SetSubtitle(TryT("corpse_too_far_away"))
 	end
 
 	-- add icon to the element
