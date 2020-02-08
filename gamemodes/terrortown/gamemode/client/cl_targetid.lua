@@ -275,14 +275,22 @@ function GM:HUDDrawTargetID()
 
 	-- preset a table of values that can be changes with a hook
 	local params = {
-		drawInfo = false,
-		drawOutline = false,
+		drawInfo = nil,
+		drawOutline = nil,
 		outlineColor = COLOR_WHITE,
 		displayInfo = {
 			key = nil,
 			icon = {},
-			title = {icons = {}, text = "", color = COLOR_WHITE},
-			subtitle = {icons = {}, text = "", color = COLOR_LLGRAY},
+			title = {
+				icons = {},
+				text = "",
+				color = COLOR_WHITE
+			},
+			subtitle = {
+				icons = {},
+				text = "",
+				color = COLOR_LLGRAY
+			},
 			desc = {}
 		},
 		refPosition = {
@@ -303,7 +311,7 @@ function GM:HUDDrawTargetID()
 	-- of the targetid
 	hook.Run("TTTRenderEntityInfo", tdata)
 
-	-- drawn an outline around the entity if defined
+	-- draws an outline around the entity if defined
 	if params.drawOutline and cv_draw_halo:GetBool() then
 		outline.Add(data.ent, params.outlineColor, OUTLINE_MODE_VISIBLE)
 	end

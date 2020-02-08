@@ -1,6 +1,8 @@
 ---
 -- @author Mineotopia
 
+local IsColor = IsColor
+
 TARGET_DATA = {}
 
 ---
@@ -34,19 +36,29 @@ function TARGET_DATA:GetEntityDistance()
 end
 
 ---
--- Enables/Disables the outline around a focused entity
+-- Enables/Disables the outline around a focused entity, can't be enabled if set
+-- to false from another call
 -- @param [default=true] boolean enb_outline A boolean defining the outline state
 -- @realm client
 function TARGET_DATA:EnableOutline(enb_outline)
-	self.params.drawOutline = enb_outline or true
+	-- only set if not already set to false
+	if self.params.drawOutline == false then return end
+
+	-- set to true if true or nil, but keep false
+	self.params.drawOutline = (enb_outline == nil) and true or enb_outline
 end
 
 ---
--- Enables/Disables the targetID text and icons
--- @param [default=true] boolean enb_text A boolean defining the text stat
+-- Enables/Disables the targetID text and icons, can't be enabled if set
+-- to false from another call
+-- @param [default=true] boolean enb_text A boolean defining the text state
 -- @realm client
 function TARGET_DATA:EnableText(enb_text)
-	self.params.drawInfo = enb_text or true
+	-- only set if not already set to false
+	if self.params.drawInfo == false then return end
+
+	-- set to true if true or nil, but keep false
+	self.params.drawInfo = (enb_text == nil) and true or enb_text
 end
 
 ---
@@ -103,12 +115,14 @@ end
 -- @return number The amount of icons that are currently in the table
 -- @realm client
 function TARGET_DATA:AddIcon(material, color)
-	self.params.displayInfo.icon[#self.params.displayInfo.icon + 1] = {
+	local amount = #self.params.displayInfo.icon + 1
+
+	self.params.displayInfo.icon[amount] = {
 		material = material,
 		color = IsColor(color) and color or COLOR_WHITE
 	}
 
-	return #self.params.displayInfo.icon
+	return amount
 end
 
 ---
@@ -147,13 +161,15 @@ end
 -- @return number The amount of description lines that are currently in the table
 -- @realm client
 function TARGET_DATA:AddDescriptionLine(text, color, inline_icons)
-	self.params.displayInfo.desc[#self.params.displayInfo.desc + 1] = {
+	local amount = #self.params.displayInfo.desc + 1
+
+	self.params.displayInfo.desc[amount] = {
 		text = text or "",
 		color = IsColor(color) and color or COLOR_WHITE,
 		icons = inline_icons or {}
 	}
 
-	return #self.params.displayInfo.desc
+	return amount
 end
 
 ---
