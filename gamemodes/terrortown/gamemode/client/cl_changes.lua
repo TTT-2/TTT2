@@ -1,13 +1,20 @@
 ---
 -- @section changes
+-- TODO fetch changes dynamically from external http request
 
+-- some micro-optimizations (localizing globals)
+local os = os
+local hook = hook
+local IsValid = IsValid
+local vgui = vgui
+local draw = draw
+local table = table
+
+-- internal
 local changesVersion = CreateClientConVar("changes_version", "v0.0.0.0")
-
-local changesPanel
-local changes
-local currentVersion
-
 local btnPanelColor = Color(22, 42, 57)
+
+local changesPanel, changes, currentVersion
 
 ---
 -- Adds a change into the changes list
@@ -641,6 +648,14 @@ local function MakePanel(panel, change)
 	panel.htmlSheet = html
 end
 
+local function SortChanges(a, b)
+	if a.date < 0 and b.date < 0 then
+		return a.date < b.date
+	end
+
+	return a.date > b.date
+end
+
 ---
 -- Displays the changes window
 -- @realm client
@@ -669,13 +684,7 @@ function ShowChanges()
 	sheet.Navigation:SetWidth(256)
 
 	-- sort changes list by date
-	table.sort(changes, function(a, b)
-		if a.date < 0 and b.date < 0 then
-			return a.date < b.date
-		else
-			return a.date > b.date
-		end
-	end)
+	table.sort(changes, SortChanges)
 
 	for i = 1, #changes do
 		local change = changes[i]
@@ -720,9 +729,9 @@ function ShowChanges()
 end
 
 net.Receive("TTT2DevChanges", function(len)
-	if changesVersion:GetString() ~= GAMEMODE.Version then
-		ShowChanges()
+	if changesVersion:GetString() == GAMEMODE.Version then return end
 
-		RunConsoleCommand("changes_version", GAMEMODE.Version)
-	end
+	ShowChanges()
+
+	RunConsoleCommand("changes_version", GAMEMODE.Version)
 end)

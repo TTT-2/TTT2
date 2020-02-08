@@ -118,7 +118,9 @@ function GM:HUDPaint()
 		hook.Call("HUDDrawTargetID", GAMEMODE)
 	end
 
-	HUDManager.DrawHUD()
+	if hook.Call("HUDShouldDraw", GAMEMODE, "TTTHUDManager") then
+		HUDManager.DrawHUD()
+	end
 
 	if not client:Alive() or client:Team() == TEAM_SPEC then return end
 
@@ -165,7 +167,6 @@ end
 
 local function UpdateHUD(name)
 	local hudEl = huds.GetStored(name)
-
 	if not hudEl then
 		MsgN("Error: HUD with name " .. name .. " was not found!")
 
@@ -183,7 +184,6 @@ local function UpdateHUD(name)
 
 	-- Initialize elements
 	hudEl:Initialize()
-
 	hudEl:LoadData()
 
 	-- call all listeners

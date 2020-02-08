@@ -865,7 +865,9 @@ local function CleanUpDefaultCanBuyIndices()
 	-- load items
 	for i = 1, #itms do
 		local itm = itms[i]
+
 		itm.CanBuy = itm.CanBuy or {}
+
 		ValueToKey(itm.CanBuy)
 	end
 
@@ -874,7 +876,9 @@ local function CleanUpDefaultCanBuyIndices()
 	-- load sweps
 	for i = 1, #sweps do
 		local wep = sweps[i]
+
 		wep.CanBuy = wep.CanBuy or {}
+		
 		ValueToKey(wep.CanBuy)
 	end
 end

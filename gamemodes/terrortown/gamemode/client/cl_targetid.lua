@@ -1,5 +1,6 @@
 ---
 --
+-- TODO fix visible overhead icon if spectating another player being dead
 
 local util = util
 local render = render
@@ -348,6 +349,7 @@ function GM:HUDDrawTargetID()
 			local color = icon.color or COLOR_WHITE
 
 			draw.FilteredShadowedTexture(icon_x, icon_y, key_box_h, key_box_h, icon.material, color.a, color)
+			
 			icon_y = icon_y + key_box_h
 		end
 	end
@@ -413,7 +415,7 @@ function HUDDrawTargetIDTButtons(data, params)
 	local admin_mode = GetConVar("ttt2_tbutton_admin_show")
 
 	if not IsValid(client) or not client:IsTerror() or not client:Alive()
-	or data.ent:GetClass() ~= "ttt_traitor_button" or data.distance > data.ent:GetUsableRange() then
+	or data.ent:GetClass() ~= "ttt_traitor_button" or data.distance > data.ent:GetUsableRange() then 
 		return
 	end
 

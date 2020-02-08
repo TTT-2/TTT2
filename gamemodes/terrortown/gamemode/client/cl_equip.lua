@@ -112,8 +112,10 @@ local function PreqLabels(parent, x, y)
 		else
 			if ItemIsWeapon(sel) then
 				local cv_maxCount = GetConVar(ORDERED_SLOT_TABLE[MakeKindValid(sel.Kind)])
+
 				local maxCount = cv_maxCount and cv_maxCount:GetInt() or 0
 				maxCount = maxCount < 0 and "∞" or maxCount
+				
 				return true, " " .. #client:GetWeaponsOnSlot(MakeKindValid(sel.Kind)) .. " / " .. maxCount, GetTranslation("equip_carry")
 			else
 				return true, "✔", GetTranslation("equip_carry")
@@ -235,7 +237,13 @@ local function CreateEquipmentList(t)
 		t = {}
 	end
 
-	setmetatable(t, {__index = {search = nil, role = nil, notalive = false}})
+	setmetatable(t, {
+		__index = {
+			search = nil, 
+			role = nil, 
+			notalive = false
+		}
+	})
 
 	if t.search == LANG.GetTranslation("shop_search") .. "..." or t.search == "" then
 		t.search = nil
@@ -260,7 +268,7 @@ local function CreateEquipmentList(t)
 	if IsValid(dlist) then
 		dlist:Clear()
 	else
-		TraitorMenuPopup() --TODO Check
+		TraitorMenuPopup() -- TODO Check
 
 		return
 	end

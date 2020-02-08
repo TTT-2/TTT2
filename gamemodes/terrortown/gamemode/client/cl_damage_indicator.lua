@@ -16,15 +16,14 @@ local lastDamage = CurTime()
 local damageAmount = 0.0
 local maxDamageAmount = 0.0
 
-local function collectDmgIndicatorTextures()
-	local pathBase = "materials/vgui/ttt/dmgindicator/themes/"
+local materialStringBase = "vgui/ttt/dmgindicator/themes/"
+local pathBase = "materials/" .. materialStringBase
 
+local function collectDmgIndicatorTextures()
 	local materials = file.Find(pathBase .. "*.png", "GAME")
 
 	for i = 1, #materials do
 		local material = materials[i]
-		local materialStringBase = "vgui/ttt/dmgindicator/themes/"
-
 		local materialName = string.StripExtension(material)
 
 		DMGINDICATOR.themes[materialName] = Material(materialStringBase .. material)
@@ -34,7 +33,6 @@ collectDmgIndicatorTextures()
 
 net.Receive("ttt2_damage_received", function()
 	local damageReceived = net.ReadFloat()
-
 	if damageReceived <= 0 then return end
 
 	lastDamage = CurTime()
@@ -48,10 +46,11 @@ function GM:HUDPaintBackground()
 	local indicatorDuration = DMGINDICATOR.cv.duration:GetFloat()
 
 	if damageAmount > 0 then
+		local theme = DMGINDICATOR.themes[DMGINDICATOR.cv.mode:GetString()] or DMGINDICATOR.themes["Default"]
 		local remainingTimeFactor = math.max(0, indicatorDuration - (CurTime() - lastDamage)) / indicatorDuration
+		
 		damageAmount = maxDamageAmount * remainingTimeFactor
 
-		local theme = DMGINDICATOR.themes[DMGINDICATOR.cv.mode:GetString()] or DMGINDICATOR.themes["Default"]
 		surface.SetDrawColor(255, 255, 255, DMGINDICATOR.cv.maxalpha:GetInt() * damageAmount)
 		surface.SetMaterial(theme)
 		surface.DrawTexturedRect(0, 0, ScrW(), ScrH())

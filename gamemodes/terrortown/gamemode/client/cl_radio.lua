@@ -157,7 +157,7 @@ function RADIO:ShowRadioCommands(state)
 		-- capture slot keys while we're open
 		self.Show = true
 
-		timer.Create("radiocmdshow", 3, 1, function()
+		timer.Create("radiocmdshow", 3, 1, function() -- TODO 3s reliable?
 			if not RADIO then return end
 
 			RADIO:ShowRadioCommands(false)
@@ -191,7 +191,6 @@ function RADIO:GetTargetType()
 	if not IsValid(client) then return end
 
 	local trace = client:GetEyeTrace(MASK_SHOT)
-
 	if not trace or not trace.Hit or not IsValid(trace.Entity) then return end
 
 	local ent = trace.Entity

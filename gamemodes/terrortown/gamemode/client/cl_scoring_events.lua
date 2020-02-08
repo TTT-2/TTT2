@@ -73,7 +73,11 @@ Event(EVENT_GAME, {
 -- Credits event
 Event(EVENT_CREDITFOUND, {
 	text = function(e)
-		return PT("ev_credit", {finder = e.ni, num = e.cr, player = e.b})
+		return PT("ev_credit", {
+			finder = e.ni, 
+			num = e.cr, 
+			player = e.b
+		})
 	end,
 
 	icon = function(e)
@@ -83,7 +87,10 @@ Event(EVENT_CREDITFOUND, {
 
 Event(EVENT_BODYFOUND, {
 	text = function(e)
-		return PT("ev_body", {finder = e.ni, victim = e.b})
+		return PT("ev_body", {
+			finder = e.ni, 
+			victim = e.b
+		})
 	end,
 
 	icon = function(e)
@@ -94,7 +101,10 @@ Event(EVENT_BODYFOUND, {
 -- C4 fun
 Event(EVENT_C4DISARM, {
 	text = function(e)
-		return PT(e.s and "ev_c4_disarm1" or "ev_c4_disarm2", {player = e.ni, owner = e.own or "aliens"})
+		return PT(e.s and "ev_c4_disarm1" or "ev_c4_disarm2", {
+			player = e.ni,
+			owner = e.own or "aliens"
+		})
 	end,
 
 	icon = function(e)

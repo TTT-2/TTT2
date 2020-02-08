@@ -283,7 +283,7 @@ end
 -- the HUDEditors elements on top.
 -- @param table elem
 -- @realm client
-function HUD:DrawElemAndChildren(elem)
+function HUD:DrawElemAndChildren(elem) -- TODO improve performance by using a final drawing list instead of checking every elem in every frame whether it should be drawn
 	if not elem.initialized or not elem.type or not hook.Call("HUDShouldDraw", GAMEMODE, elem.type) or not self:ShouldShow(elem.type) or not elem:ShouldDraw() then return end
 
 	local children = elem:GetChildren()
