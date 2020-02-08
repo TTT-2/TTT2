@@ -273,7 +273,7 @@ function GM:HUDDrawTargetID()
 		distance = distance
 	}
 
-	-- preset a table of values that can be changes with a hook
+	-- preset a table of values that can be changed with a hook
 	local params = {
 		drawInfo = nil,
 		drawOutline = nil,
@@ -435,8 +435,8 @@ function GM:HUDDrawTargetID()
 end
 
 ---
--- Add targetid info to a focused entity
--- @param @{TARGET_DATA} tdata The @{TARGET_DATA} data object to which contains all information
+-- Add targetID info to a focused entity
+-- @param @{TARGET_DATA} tdata The @{TARGET_DATA} data object which contains all information
 -- @hook
 -- @realm client
 function GM:TTTRenderEntityInfo(tdata)
