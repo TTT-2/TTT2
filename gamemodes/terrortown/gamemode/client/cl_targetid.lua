@@ -464,7 +464,7 @@ function HUDDrawTargetIDDoors(tData)
 	tData:EnableText()
 
 	tData:SetTitle(TryT("name_door"))
-	tData:SetSubtitle(ent:IsDoorOpen() and PartT("door_open", key_params) or PartT("door_close", key_params))
+	tData:SetSubtitle(ent:IsDoorOpen() and PartT("door_close", key_params) or PartT("door_open", key_params))
 
 	tData:SetKey(input.GetKeyCode(key_params.usekey))
 

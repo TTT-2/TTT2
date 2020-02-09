@@ -61,6 +61,8 @@ function GM:AcceptInput(ent, name, activator, caller, data)
 
 		-- check if the assumed state was correct
 		timer.Create("ttt2_recheck_door_lock_" .. ent:EntIndex(), 1, 1, function()
+			if not IsValid(ent) then return end
+
 			ent:SetNWBool("ttt2_door_locked", ent:GetInternalVariable("m_bLocked") or false)
 		end)
 	elseif name == "unlock" then
@@ -70,16 +72,22 @@ function GM:AcceptInput(ent, name, activator, caller, data)
 
 		-- check if the assumed state was correct
 		timer.Create("ttt2_recheck_door_unlock_" .. ent:EntIndex(), 1, 1, function()
+			if not IsValid(ent) then return end
+
 			ent:SetNWBool("ttt2_door_locked", ent:GetInternalVariable("m_bLocked") or false)
 		end)
 	elseif name == "Use" then
 		-- upon triggering the state change of the door, the state does not change
 		-- instanly but after the animation finished. Therefore we calculate an assumned
 		-- value on the fly and check the real state a few seconds later
-		ent:SetNWBool("ttt2_door_open", not ent:GetNWBool("ttt2_door_open", false))
+		if not ent:IsDoorLocked() then
+			ent:SetNWBool("ttt2_door_open", not ent:GetNWBool("ttt2_door_open", false))
+		end
 
 		-- check if the assumed state was correct
 		timer.Create("ttt2_recheck_door_use_" .. ent:EntIndex(), 2.5, 1, function()
+			if not IsValid(ent) or ent:IsDoorLocked() then return end
+
 			ent:SetNWBool("ttt2_door_open", ent:InternalIsDoorOpen() or false)
 		end)
 	end
