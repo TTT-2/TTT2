@@ -243,7 +243,6 @@ local function CreateEquipmentList(t)
 
 	local ply = LocalPlayer()
 	local currole = ply:GetSubRole()
-	local credits = ply:GetCredits()
 
 	local itemSize = 64
 
@@ -282,12 +281,27 @@ local function CreateEquipmentList(t)
 
 	for i = 1, #tmp do
 		if not tmp[i].notBuyable then
+			-- We need them anyways and this way we don't have to calculate them multiple times when sorting
+			tmp[i].cachedEquipmentTranslation = GetEquipmentTranslation(tmp[i].name, tmp[i].PrintName)
 			itms[#itms + 1] = tmp[i]
 		end
 	end
 
 	if #itms == 0 and not t.notalive then
 		ply:ChatPrint("[TTT2][SHOP] You need to run 'shopeditor' as admin in the developer console to create a shop for this role. Link it with another shop or click on the icons to add weapons and items to the shop.")
+	else
+		table.sort(itms, function(itmA, itmB)
+			-- Passive items come first
+			if itmA.type == "item_passive" and itmB.type ~= "item_passive" then return true end
+			if itmA.type ~= "item_passive" and itmB.type == "item_passive" then return false end
+
+			-- Active items come after
+			if itmA.type == "item_active" and itmB.type ~= "item_active" then return true end
+			if itmA.type ~= "item_active" and itmB.type == "item_active" then return false end
+
+			-- Now sort the rest lexicographically case-insensitive ascending
+			return string.upper(itmA.cachedEquipmentTranslation) < string.upper(itmB.cachedEquipmentTranslation)
+		end)
 	end
 
 	-- temp table for sorting
@@ -298,7 +312,15 @@ local function CreateEquipmentList(t)
 
 	for k = 1, #itms do
 		local item = itms[k]
-		local equipName = GetEquipmentTranslation(item.name, item.PrintName)
+
+		local buyable, icon, message = EquipmentIsBuyable(item, ply)
+
+		local hide = hook.Run("TTT2HideEquipment", ply, item.ClassName, items.IsItem(item.ClassName), buyable)
+
+		-- Skip icon generation if this item is supposed to be hidden
+		if hide then continue end
+
+		local equipName = item.cachedEquipmentTranslation
 
 		if t.search and string.find(string.lower(equipName), string.lower(t.search)) or not t.search then
 			local ic = nil
@@ -375,12 +397,7 @@ local function CreateEquipmentList(t)
 				ic:SetTooltip(tip)
 
 				-- If we cannot order this item, darken it
-				if not t.role and ((
-						-- already owned
-						owned_ids[item.ClassName]
-						or not EquipmentIsBuyable(item, ply)
-					) or (item.credits or 1) > credits
-				) then
+				if not t.role and (owned_ids[item.ClassName] or not buyable) then
 					ic:SetIconColor(color_darkened)
 				end
 

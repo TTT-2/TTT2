@@ -97,18 +97,7 @@ local function OrderEquipment(ply, cls)
 	-- keep compatibility with old addons
 	if not hook.Run("TTTCanOrderEquipment", ply, idOrCls, is_item) then return end
 
-	-- add our own hook with more consistent class parameter and some more information
-	local allow, ignoreCost, message = hook.Run("TTT2CanOrderEquipment", ply, cls, is_item, credits)
-
-	if message then
-		LANG.Msg(ply, message, nil, MSG_MSTACK_ROLE)
-	end
-
-	if allow == false then return end
-
-	if not ignoreCost then
-		ply:SubtractCredits(credits)
-	end
+	ply:SubtractCredits(credits)
 
 	ply:AddBought(cls)
 

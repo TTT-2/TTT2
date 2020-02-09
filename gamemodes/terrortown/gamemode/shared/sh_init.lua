@@ -689,5 +689,16 @@ function EquipmentIsBuyable(tbl, ply)
 		return false, "X", "Your role can't buy this equipment."
 	end
 
+	-- add our own hook with more consistent class parameter and some more information
+	local allow, ignoreCost, message = hook.Run("TTT2CanOrderEquipment", ply, table.ClassName, isItem, tbl.credits)
+
+	if allow == false then
+		return false, "X", message or "You can't buy this."
+	end
+
+	if not ignoreCost and (tbl.credits or 1) > ply:GetCredits() then
+		return false, "X", "You can't afford this equipment."
+	end
+
 	return true, "✔", "ok"
 end

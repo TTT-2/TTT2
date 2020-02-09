@@ -398,22 +398,18 @@ if SERVER then
 					if equip.notBuyable then continue end
 
 					if equip.NoRandom then
-						amount = amount - 1
-
 						teamShops[fallback][#teamShops[fallback] + 1] = equip
 					else
 						tmp2[#tmp2 + 1] = equip
 					end
 				end
 
-				if amount > 0 then
-					for i = 1, amount do
-						local rndm = math.random(#tmp2)
+				for i = 1, amount do
+					local rndm = math.random(#tmp2)
 
-						teamShops[fallback][#teamShops[fallback] + 1] = tmp2[rndm]
+					teamShops[fallback][#teamShops[fallback] + 1] = tmp2[rndm]
 
-						table.remove(tmp2, rndm)
-					end
+					table.remove(tmp2, rndm)
 				end
 			else
 				teamShops[fallback] = fallbackTable
@@ -490,22 +486,18 @@ if SERVER then
 					if equip.notBuyable then continue end
 
 					if equip.NoRandom then
-						amount = amount - 1
-
 						RANDOMSHOP[ply][#RANDOMSHOP[ply] + 1] = equip
 					else
 						tmp2[#tmp2 + 1] = equip
 					end
 				end
 
-				if amount > 0 then
-					for k = 1, amount do
-						local rndm = mathrandom(#tmp2)
+				for k = 1, amount do
+					local rndm = mathrandom(#tmp2)
 
-						RANDOMSHOP[ply][#RANDOMSHOP[ply] + 1] = tmp2[rndm]
+					RANDOMSHOP[ply][#RANDOMSHOP[ply] + 1] = tmp2[rndm]
 
-						tableremove(tmp2, rndm)
-					end
+					tableremove(tmp2, rndm)
 				end
 			end
 		end
