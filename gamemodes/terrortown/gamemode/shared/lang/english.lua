@@ -1258,3 +1258,7 @@ L.doubletap_sprint_anykey_tip = "You will keep sprinting as long as you keep mov
 
 L.disable_doubletap_sprint = "Disable double tap sprinting"
 L.disable_doubletap_sprint_tip = "Double tapping a movement key will no longer cause you to sprint"
+
+-- 2020-02-03
+L.hold_aim = "Hold to aim"
+L.hold_aim_tip = "You will keep using the ironsights as long as you keep holding secondary attack (default: right mouse button)"

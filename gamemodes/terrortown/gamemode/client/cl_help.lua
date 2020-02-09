@@ -583,6 +583,9 @@ function HELPSCRN:CreateGameplaySettings(parent)
 	cb = form:CheckBox(GetTranslation("set_fastsw"), "ttt_weaponswitcher_fast")
 	cb:SetTooltip(GetTranslation("set_fastsw_tip"))
 
+	cb = form:CheckBox(GetTranslation("hold_aim"), "ttt2_hold_aim")
+	cb:SetTooltip(GetTranslation("hold_aim_tip"))
+
 	cb = form:CheckBox(GetTranslation("doubletap_sprint_anykey"), "ttt2_doubletap_sprint_anykey")
 	cb:SetTooltip(GetTranslation("doubletap_sprint_anykey_tip"))
 

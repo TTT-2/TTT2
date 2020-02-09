@@ -174,6 +174,7 @@ util.AddNetworkString("TTT2RequestTButtonConfig")
 util.AddNetworkString("TTT2OrderEquipment")
 util.AddNetworkString("TTT2RoleGlobalVoice")
 util.AddNetworkString("TTT2MuteTeam")
+util.AddNetworkString("TTT2UpdateHoldAimConvar")
 
 CHANGED_EQUIPMENT = {}
 
