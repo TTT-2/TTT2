@@ -1258,3 +1258,9 @@ L.doubletap_sprint_anykey_tip = "You will keep sprinting as long as you keep mov
 
 L.disable_doubletap_sprint = "Disable double tap sprinting"
 L.disable_doubletap_sprint_tip = "Double tapping a movement key will no longer cause you to sprint"
+
+-- 2020-02-09
+L.name_door = "Door"
+L.door_open = "Press [{usekey}] to open door."
+L.door_close = "Press [{usekey}] to close door."
+L.door_locked = "This door is locked"

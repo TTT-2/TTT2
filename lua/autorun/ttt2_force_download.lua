@@ -115,4 +115,5 @@ if SERVER then
 	-- target ID inline icons
 	resource.AddFile("materials/vgui/ttt/tid_credits.vmt")
 	resource.AddFile("materials/vgui/ttt/tid_detective.vmt")
+	resource.AddFile("materials/vgui/ttt/tid_locked.vmt")
 end

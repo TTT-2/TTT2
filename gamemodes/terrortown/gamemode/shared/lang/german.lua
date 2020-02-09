@@ -1249,3 +1249,9 @@ L.doubletap_sprint_anykey_tip = "So lange du dich weiterhin bewegst, wird das Sp
 
 L.disable_doubletap_sprint = "Deaktiviere Double-Tap Sprinten"
 L.disable_doubletap_sprint_tip = "Deaktiviert das Auslösen des Sprinten durch Double-Tap einer Bewegungstaste"
+
+-- 2020-02-09
+L.name_door = "Tür"
+L.door_open = "Drücke [{usekey}] um Tür zu öffnen."
+L.door_close = "Press [{usekey}] um Tür zu schließen."
+L.door_locked = "Diese Tür ist verschlossen"
