@@ -103,7 +103,7 @@ end
 
 local entmeta = FindMetaTable("Entity")
 if not entmeta then
-	assert(entmeta, "FAILED TO FIND PLAYER TABLE")
+	assert(entmeta, "FAILED TO FIND ENTITY TABLE")
 
 	return
 end
