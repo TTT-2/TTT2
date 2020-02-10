@@ -526,6 +526,7 @@ require("outline")
 
 include("ttt2/extensions/net.lua")
 include("ttt2/extensions/string.lua")
+include("ttt2/extensions/table.lua")
 
 ---
 -- Returns the equipment's file name
