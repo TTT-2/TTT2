@@ -679,7 +679,7 @@ function HUDDrawTargetIDPlayers(tData)
 
 	tData:SetTitle(
 		ent:Nick() .. " " .. (disguised and string.upper(TryT("target_disg")) or ""),
-		disguised and COLOR_RED
+		disguised and COLOR_RED or nil
 	)
 
 	tData:SetSubtitle(

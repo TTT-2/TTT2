@@ -173,6 +173,46 @@ function TARGET_DATA:AddDescriptionLine(text, color, inline_icons)
 end
 
 ---
+-- Returns wether or not a title has been set
+-- @return boolean True if a title is set
+-- @realm client
+function TARGET_DATA:HasTitle()
+	return self.params.displayInfo.title and self.params.displayInfo.title ~= ""
+end
+
+---
+-- Returns wether or not a subtitle has been set
+-- @return boolean True if a subtitle is set
+-- @realm client
+function TARGET_DATA:HasSubtitle()
+	return self.params.displayInfo.subtitle and self.params.displayInfo.subtitle ~= ""
+end
+
+---
+-- Returns the amount of set description lines
+-- @return number Amount of existing description lines
+-- @realm client
+function TARGET_DATA:GetAmountDescriptionLines()
+	return #self.params.displayInfo.desc
+end
+
+---
+-- Returns wether or not a key has been set
+-- @return boolean True if a key is set
+-- @realm client
+function TARGET_DATA:HasKey()
+	return self.params.displayInfo.key ~= nil
+end
+
+---
+-- Returns the amount of set icons
+-- @return number Amount of existing icons
+-- @realm client
+function TARGET_DATA:GetAmountIcons()
+	return #self.params.displayInfo.icon
+end
+
+---
 -- Returns the raw data tables of the targetID element to me modified by experienced users
 -- @return table, table The table of the entity data, the table of the targetID element parameters
 function TARGET_DATA:GetRaw()
