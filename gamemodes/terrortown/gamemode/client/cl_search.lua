@@ -303,7 +303,14 @@ function PreprocSearch(raw)
 				end
 			end
 
-			search["eq_" .. item.id] = {img = item.corpseIcon or item.material, text = text, p = highest + 1}
+			-- add item to body search if flag is set
+			if item.populateSearch then
+				search["eq_" .. item.id] = {
+					img = item.corpseIcon or item.material,
+					text = text,
+					p = highest + 1
+				}
+			end
 		end
 	end
 
