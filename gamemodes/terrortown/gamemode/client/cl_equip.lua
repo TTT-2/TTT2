@@ -313,7 +313,7 @@ local function CreateEquipmentList(t)
 	for k = 1, #itms do
 		local item = itms[k]
 
-		local buyable, icon, message = EquipmentIsBuyable(item, ply)
+		local buyable = EquipmentIsBuyable(item, ply)
 
 		local hide = hook.Run("TTT2HideEquipment", ply, item.ClassName, items.IsItem(item.ClassName), buyable)
 
