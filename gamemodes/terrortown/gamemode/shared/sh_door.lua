@@ -109,7 +109,7 @@ end
 local entmeta = assert(FindMetaTable("Entity"), "FAILED TO FIND ENTITY TABLE")
 
 ---
--- Return wether this entiy is a door or not
+-- Returns whether this entity is a door or not
 -- @return boolean Returns true if it is a valid door
 -- @realm shared
 function entmeta:IsDoor()

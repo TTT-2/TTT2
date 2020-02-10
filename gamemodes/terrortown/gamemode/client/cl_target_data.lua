@@ -173,7 +173,7 @@ function TARGET_DATA:AddDescriptionLine(text, color, inline_icons)
 end
 
 ---
--- Returns wether or not a title has been set
+-- Returns whether or not a title has been set
 -- @return boolean True if a title is set
 -- @realm client
 function TARGET_DATA:HasTitle()
@@ -181,7 +181,7 @@ function TARGET_DATA:HasTitle()
 end
 
 ---
--- Returns wether or not a subtitle has been set
+-- Returns whether or not a subtitle has been set
 -- @return boolean True if a subtitle is set
 -- @realm client
 function TARGET_DATA:HasSubtitle()
@@ -197,7 +197,7 @@ function TARGET_DATA:GetAmountDescriptionLines()
 end
 
 ---
--- Returns wether or not a key has been set
+-- Returns whether or not a key has been set
 -- @return boolean True if a key is set
 -- @realm client
 function TARGET_DATA:HasKey()

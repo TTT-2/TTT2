@@ -68,7 +68,7 @@ function GM:AddClassHint(cls, hint)
 end
 
 ---
--- Function that handles the drawing of the overhead roleicons, it does not check wether
+-- Function that handles the drawing of the overhead roleicons, it does not check whether
 -- the icon should be drawn or not, that has to be handled prior to calling this function
 -- @param @{PLAYER} ply The player to receive an overhead icon
 -- @realm client
