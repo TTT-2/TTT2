@@ -24,6 +24,8 @@ LANG.ServerLanguage = "english"
 local cached_default = {}
 local cached_active = {}
 
+local warn_color = Color(255, 70, 45)
+
 ---
 -- Creates a new language
 -- @param string lang_name the new language name
@@ -321,7 +323,7 @@ LANG.Styles = {
 	end,
 
 	[MSG_MSTACK_WARN] = function(text)
-		MSTACK:AddColoredBgMessage(text, COLOR_RED)
+		MSTACK:AddColoredBgMessage(text, warn_color)
 
 		print("[TTT2] Warn:	" .. text)
 	end,
@@ -337,7 +339,7 @@ LANG.Styles = {
 	end,
 
 	[MSG_CHAT_WARN] = function(text)
-		chat.AddText(COLOR_RED, text)
+		chat.AddText(warn_color, text)
 	end,
 
 	[MSG_CHAT_PLAIN] = chat.AddText
