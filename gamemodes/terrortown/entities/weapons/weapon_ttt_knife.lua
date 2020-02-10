@@ -309,23 +309,28 @@ end
 if CLIENT then
 	local TryT = LANG.TryTranslation
 
-	hook.Add("TTTRenderEntityInfo", "HUDDrawTargetIDKnife", function(data, params)
+	hook.Add("TTTRenderEntityInfo", "HUDDrawTargetIDKnife", function(tData)
 		local client = LocalPlayer()
+		local ent = tData:GetEntity()
 
 		if not IsValid(client) or not client:IsTerror() or not client:Alive()
-		or data.distance > 100 or not data.ent:IsPlayer() then
+		or tData:GetEntityDistance() > 100 or not ent:IsPlayer() then
 			return
 		end
 
 		local c_wep = client:GetActiveWeapon()
 		local role_color = client:GetRoleColor()
 
-		if not IsValid(c_wep) or c_wep:GetClass() ~= "weapon_ttt_knife" or c_wep.Primary.Damage + 10 < data.ent:Health() then return end
+		if not IsValid(c_wep) or c_wep:GetClass() ~= "weapon_ttt_knife" or c_wep.Primary.Damage + 10 < ent:Health() then return end
 
-		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
-			text = TryT("knife_instant"),
-			color = role_color
-		}
+		-- enable targetID rendering
+		tData:EnableOutline()
+		tData:SetOutlineColor(client:GetRoleColor())
+
+		tData:AddDescriptionLine(
+			TryT("knife_instant"),
+			role_color
+		)
 
 		-- draw instant-kill maker
 		local x = ScrW() * 0.5
@@ -341,8 +346,5 @@ if CLIENT then
 
 		surface.DrawLine(x - outer, y + outer, x - inner, y + inner)
 		surface.DrawLine(x + outer, y - outer, x + inner, y - inner)
-
-		params.drawOutline = true
-		params.outlineColor = client:GetRoleColor()
 	end)
 end

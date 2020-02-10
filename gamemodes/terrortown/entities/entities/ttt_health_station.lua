@@ -171,38 +171,38 @@ else
 	}
 
 	-- handle looking at healthstation
-	hook.Add("TTTRenderEntityInfo", "HUDDrawTargetIDHealthStation", function(data, params)
+	hook.Add("TTTRenderEntityInfo", "HUDDrawTargetIDHealthStation", function(tData)
 		local client = LocalPlayer()
+		local ent = tData:GetEntity()
 
 		if not IsValid(client) or not client:IsTerror() or not client:Alive()
-		or data.distance > 100 or data.ent:GetClass() ~= "ttt_health_station" then
+		or not IsValid(ent) or tData:GetEntityDistance() > 100 or ent:GetClass() ~= "ttt_health_station" then
 			return
 		end
 
-		params.drawInfo = true
-		params.displayInfo.key = input.GetKeyCode(input.LookupBinding("+use"))
-		params.displayInfo.title.text = TryT(data.ent.PrintName)
-		params.displayInfo.subtitle.text = ParT("hstation_subtitle", key_params)
+		-- enable targetID rendering
+		tData:EnableText()
+		tData:EnableOutline()
+		tData:SetOutlineColor(client:GetRoleColor())
 
-		local hstation_charge = data.ent:GetStoredHealth() or 0
+		tData:SetTitle(TryT(ent.PrintName))
+		tData:SetSubtitle(ParT("hstation_subtitle", key_params))
+		tData:SetKeyBinding("+use")
 
-		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
-			text = TryT("hstation_short_desc"),
-		}
+		local hstation_charge = ent:GetStoredHealth() or 0
 
-		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
-			text = (hstation_charge > 0) and ParT("hstation_charge", {charge = hstation_charge}) or TryT("hstation_empty"),
-			color = (hstation_charge > 0) and DETECTIVE.ltcolor or COLOR_ORANGE
-		}
+		tData:AddDescriptionLine(TryT("hstation_short_desc"))
 
-		if client:Health() == client:GetMaxHealth() then
-			params.displayInfo.desc[#params.displayInfo.desc + 1] = {
-				text = TryT("hstation_maxhealth"),
-				color = COLOR_ORANGE
-			}
-		end
+		tData:AddDescriptionLine(
+			(hstation_charge > 0) and ParT("hstation_charge", {charge = hstation_charge}) or TryT("hstation_empty"),
+			(hstation_charge > 0) and DETECTIVE.ltcolor or COLOR_ORANGE
+		)
 
-		params.drawOutline = true
-		params.outlineColor = client:GetRoleColor()
+		if client:Health() >= client:GetMaxHealth() then return end
+
+		tData:AddDescriptionLine(
+			TryT("hstation_maxhealth"),
+			COLOR_ORANGE
+		)
 	end)
 end
