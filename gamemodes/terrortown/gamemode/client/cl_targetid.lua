@@ -5,7 +5,7 @@ local util = util
 local render = render
 local surface = surface
 local draw = draw
-local PartT = LANG.GetParamTranslation
+local ParT = LANG.GetParamTranslation
 local TryT = LANG.TryTranslation
 local GetPlayers = player.GetAll
 local math = math
@@ -463,7 +463,7 @@ function HUDDrawTargetIDDoors(tData)
 	tData:EnableText()
 
 	tData:SetTitle(TryT("name_door"))
-	tData:SetSubtitle(ent:IsDoorOpen() and PartT("door_close", key_params) or PartT("door_open", key_params))
+	tData:SetSubtitle(ent:IsDoorOpen() and ParT("door_close", key_params) or ParT("door_open", key_params))
 
 	tData:SetKey(input.GetKeyCode(key_params.usekey))
 
@@ -521,7 +521,7 @@ function HUDDrawTargetIDTButtons(tData)
 		)
 	else
 		tData:AddDescriptionLine(
-			PartT("tbut_retime", {num = ent:GetDelay()}),
+			ParT("tbut_retime", {num = ent:GetDelay()}),
 			client:GetRoleColor()
 		)
 	end
@@ -539,12 +539,12 @@ function HUDDrawTargetIDTButtons(tData)
 	)
 
 	tData:AddDescriptionLine(
-		PartT("tbut_role_toggle", {usekey = key_params.usekey, walkkey = key_params.walkkey, role = client:GetRoleString()}),
+		ParT("tbut_role_toggle", {usekey = key_params.usekey, walkkey = key_params.walkkey, role = client:GetRoleString()}),
 		COLOR_WHITE
 	)
 
 	tData:AddDescriptionLine(
-		PartT("tbut_team_toggle", {usekey = key_params.usekey, walkkey = key_params.walkkey, team = client:GetTeam():gsub("^%l", string.upper)}),
+		ParT("tbut_team_toggle", {usekey = key_params.usekey, walkkey = key_params.walkkey, team = client:GetTeam():gsub("^%l", string.upper)}),
 		COLOR_WHITE
 	)
 
@@ -559,7 +559,7 @@ function HUDDrawTargetIDTButtons(tData)
 	local l_team = but.overrideTeam == nil and "tbut_default" or but.overrideTeam and "tbut_allow" or "tbut_prohib"
 
 	tData:AddDescriptionLine(
-		PartT("tbut_role_config", {current = TryT(l_role)}) .. ", " .. PartT("tbut_team_config", {current = TryT(l_team)}),
+		ParT("tbut_role_config", {current = TryT(l_role)}) .. ", " .. ParT("tbut_team_config", {current = TryT(l_team)}),
 		COLOR_LGRAY
 	)
 
@@ -572,7 +572,7 @@ function HUDDrawTargetIDTButtons(tData)
 	local l_teamIntend = but.teamIntend == TEAM_NONE and "tbut_default" or but.teamIntend
 
 	tData:AddDescriptionLine(
-		PartT("tbut_role_config", {current = LANG.GetRawTranslation(l_roleIntend) or l_roleIntend}) .. ", " .. PartT("tbut_team_config", {current = LANG.GetRawTranslation(l_teamIntend) or l_teamIntend}),
+		ParT("tbut_role_config", {current = LANG.GetRawTranslation(l_roleIntend) or l_roleIntend}) .. ", " .. ParT("tbut_team_config", {current = LANG.GetRawTranslation(l_teamIntend) or l_teamIntend}),
 		COLOR_LGRAY
 	)
 
@@ -615,13 +615,13 @@ function HUDDrawTargetIDWeapons(tData)
 	-- general info
 	tData:SetKey(bind.Find("ttt2_weaponswitch"))
 
-	tData:SetTitle(TryT(weapon_name) .. " [" .. PartT("target_slot_info", {slot = kind_pickup_wep}) .. "]")
+	tData:SetTitle(TryT(weapon_name) .. " [" .. ParT("target_slot_info", {slot = kind_pickup_wep}) .. "]")
 
 	-- set subtitle depending on the switchmode
 	if switchMode == SWITCHMODE_PICKUP then
-		tData:SetSubtitle(PartT("target_pickup_weapon", key_params) .. (not isActiveWeapon and PartT("target_pickup_weapon_hidden", key_params) or ""))
+		tData:SetSubtitle(ParT("target_pickup_weapon", key_params) .. (not isActiveWeapon and ParT("target_pickup_weapon_hidden", key_params) or ""))
 	elseif switchMode == SWITCHMODE_SWITCH then
-		tData:SetSubtitle(PartT("target_switch_weapon", key_params) .. (not isActiveWeapon and PartT("target_switch_weapon_hidden", key_params) or ""))
+		tData:SetSubtitle(ParT("target_switch_weapon", key_params) .. (not isActiveWeapon and ParT("target_switch_weapon_hidden", key_params) or ""))
 	elseif switchMode == SWITCHMODE_FULLINV then
 		tData:SetSubtitle(TryT("target_switch_weapon_nospace"))
 	end
@@ -638,7 +638,7 @@ function HUDDrawTargetIDWeapons(tData)
 		end
 
 		tData:AddDescriptionLine(
-			PartT("target_switch_drop_weapon_info", {slot = dropWepKind, name = TryT(dropWeapon_name)}),
+			ParT("target_switch_drop_weapon_info", {slot = dropWepKind, name = TryT(dropWeapon_name)}),
 			COLOR_ORANGE
 		)
 	end
@@ -648,7 +648,7 @@ function HUDDrawTargetIDWeapons(tData)
 		local dropWepKind = MakeKindValid(ent.Kind)
 
 		tData:AddDescriptionLine(
-			PartT("target_switch_drop_weapon_info_noslot", {slot = dropWepKind}),
+			ParT("target_switch_drop_weapon_info_noslot", {slot = dropWepKind}),
 			COLOR_ORANGE
 		)
 	end
@@ -778,9 +778,9 @@ function HUDDrawTargetIDRagdolls(tData)
 	)
 
 	if tData:GetEntityDistance() <= 100 then
-		tData:SetSubtitle(PartT("corpse_hint", key_params))
+		tData:SetSubtitle(ParT("corpse_hint", key_params))
 	elseif binoculars_useable then
-		tData:SetSubtitle(PartT("corpse_binoculars", {key = Key("+attack", "ATTACK")}))
+		tData:SetSubtitle(ParT("corpse_binoculars", {key = Key("+attack", "ATTACK")}))
 	else
 		tData:SetSubtitle(TryT("corpse_too_far_away"))
 	end
