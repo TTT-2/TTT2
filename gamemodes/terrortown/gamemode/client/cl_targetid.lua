@@ -505,7 +505,7 @@ function HUDDrawTargetIDTButtons(tData)
 	else
 		tData:SetKey(input.GetKeyCode(key_params.usekey))
 
-		tData:SetSubtitle(GetPT("tbut_help", key_params))
+		tData:SetSubtitle(ParT("tbut_help", key_params))
 	end
 
 	-- add description time with some general info about this specific traitor button
@@ -581,7 +581,7 @@ function HUDDrawTargetIDTButtons(tData)
 	tData:AddDescriptionLine() -- adding empty line
 
 	tData:AddDescriptionLine(
-		GetPT("tbut_admin_mode_only", {cv = admin_mode:GetName()}),
+		ParT("tbut_admin_mode_only", {cv = admin_mode:GetName()}),
 		COLOR_ORANGE
 	)
 end
