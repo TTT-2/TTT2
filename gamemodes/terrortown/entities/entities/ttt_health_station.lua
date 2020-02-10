@@ -185,8 +185,8 @@ else
 		tData:EnableOutline()
 		tData:SetOutlineColor(client:GetRoleColor())
 
-		tData:AddTitle(TryT(ent.PrintName))
-		tData:AddSubtitle(ParT("hstation_subtitle", key_params))
+		tData:SetTitle(TryT(ent.PrintName))
+		tData:SetSubtitle(ParT("hstation_subtitle", key_params))
 		tData:SetKeyBinding("+use")
 
 		local hstation_charge = ent:GetStoredHealth() or 0

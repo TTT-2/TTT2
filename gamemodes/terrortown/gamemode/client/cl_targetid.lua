@@ -419,7 +419,6 @@ function GM:HUDDrawTargetID()
 			end
 
 			draw.ShadowedText(text, "TargetID_Description", desc_string_x_loop, desc_string_y, color, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
-
 			desc_string_y = desc_string_y + desc_line_h
 		end
 	end
@@ -506,7 +505,7 @@ function HUDDrawTargetIDTButtons(tData)
 	else
 		tData:SetKey(input.GetKeyCode(key_params.usekey))
 
-		tData:SetSubtitle(PartT("tbut_help", key_params))
+		tData:SetSubtitle(GetPT("tbut_help", key_params))
 	end
 
 	-- add description time with some general info about this specific traitor button
@@ -582,7 +581,7 @@ function HUDDrawTargetIDTButtons(tData)
 	tData:AddDescriptionLine() -- adding empty line
 
 	tData:AddDescriptionLine(
-		PartT("tbut_admin_mode_only", {cv = admin_mode:GetName()}),
+		GetPT("tbut_admin_mode_only", {cv = admin_mode:GetName()}),
 		COLOR_ORANGE
 	)
 end
@@ -708,7 +707,7 @@ function HUDDrawTargetIDPlayers(tData)
 
 	tData:SetTitle(
 		ent:Nick() .. " " .. (disguised and string.upper(TryT("target_disg")) or ""),
-		disguised and COLOR_RED
+		disguised and COLOR_RED or nil
 	)
 
 	tData:SetSubtitle(

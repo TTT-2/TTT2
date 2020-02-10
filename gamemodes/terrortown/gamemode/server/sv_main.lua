@@ -7,6 +7,7 @@ ttt_include("sh_sprint")
 ttt_include("sh_main")
 ttt_include("sh_shopeditor")
 ttt_include("sh_entity_ext")
+ttt_include("sh_voice")
 
 ttt_include("sv_shopeditor")
 ttt_include("sv_karma")
@@ -78,8 +79,8 @@ CreateConVar("ttt_credits_alonebonus", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 CreateConVar("ttt_use_weapon_spawn_scripts", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 CreateConVar("ttt_weapon_spawn_count", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
-local round_limit = CreateConVar("ttt_round_limit", "6", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
-local time_limit = CreateConVar("ttt_time_limit_minutes", "75", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
+local round_limit = CreateConVar("ttt_round_limit", "6", SERVER and {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED} or FCVAR_REPLICATED)
+local time_limit = CreateConVar("ttt_time_limit_minutes", "75", SERVER and {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED} or FCVAR_REPLICATED)
 
 local idle_enabled = CreateConVar("ttt_idle", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 local idle_time = CreateConVar("ttt_idle_limit", "180", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
@@ -174,6 +175,7 @@ util.AddNetworkString("TTT2RequestTButtonConfig")
 util.AddNetworkString("TTT2OrderEquipment")
 util.AddNetworkString("TTT2RoleGlobalVoice")
 util.AddNetworkString("TTT2MuteTeam")
+util.AddNetworkString("TTT2UpdateHoldAimConvar")
 
 CHANGED_EQUIPMENT = {}
 
