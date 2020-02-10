@@ -125,7 +125,7 @@ function ttt_include(filename)
 	local fd = TTTFiles[filename]
 
 	if not fd then
-		error("[TTT2][ERROR] Tried to include a not existant file " .. filename)
+		error("[TTT2][ERROR] Tried to include missing file " .. filename)
 	end
 
 	local file = fd.file

@@ -101,12 +101,7 @@ end
 -- @ref https://wiki.facepunch.com/gmod/Entity
 -- @desc shared extensions to entity table
 
-local entmeta = FindMetaTable("Entity")
-if not entmeta then
-	assert(entmeta, "FAILED TO FIND ENTITY TABLE")
-
-	return
-end
+local entmeta = assert(FindMetaTable("Entity"), "FAILED TO FIND ENTITY TABLE")
 
 ---
 -- Return wether this entiy is a door or not
