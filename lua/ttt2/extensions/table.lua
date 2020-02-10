@@ -36,7 +36,6 @@ end
 -- @param dataTable table the table to traverse and set the value in.
 -- @param path table the table with keys that will be used to traverse the tree (in order).
 function table.SetWithPath(dataTable, path, value)
-	assert(dataTable, "table.SetWithPath(..) missing dataTable parameter.")
 	assert(path, "table.SetWithPath(..) missing path parameter.")
 
 	-- Convert single key to table
@@ -44,7 +43,7 @@ function table.SetWithPath(dataTable, path, value)
 		path = { path }
 	end
 
-	local currentDataTable = dataTable
+	local currentDataTable = dataTable or {}
 
 	-- Create new table entries along the path if they do not exist
 	-- This will be done until the second last table is reached.
