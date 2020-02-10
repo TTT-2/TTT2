@@ -1,5 +1,10 @@
 --- DOORS MODULE STUFF ---
 
+---
+-- @module door
+-- @author Mineotopia
+-- @desc A bunch of functions that handle all doors found on a map
+
 door = {}
 door.__doors = {}
 door.__valid_doors = {
@@ -26,7 +31,6 @@ function door.SetUp()
 		if CLIENT then continue end
 
 		ent:SetNWBool("ttt2_door_locked", ent:GetInternalVariable("m_bLocked") or false)
-		ent:SetNWBool("ttt2_door_forceclosed", ent:GetInternalVariable("forceclosed") or false)
 		ent:SetNWBool("ttt2_door_forceclosed", ent:GetInternalVariable("forceclosed") or false)
 		ent:SetNWBool("ttt2_door_open", ent:InternalIsDoorOpen() or false)
 	end
@@ -98,6 +102,7 @@ end
 
 ---
 -- @module Entity
+-- @author Mineotopia
 -- @ref https://wiki.facepunch.com/gmod/Entity
 -- @desc shared extensions to entity table
 

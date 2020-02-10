@@ -30,7 +30,7 @@ ttt_include("sh_corpse")
 ttt_include("sh_player_ext")
 ttt_include("sh_weaponry")
 ttt_include("sh_inventory")
-ttt_include("sh_entity_ext")
+ttt_include("sh_door")
 ttt_include("sh_voice")
 
 ttt_include("vgui__cl_coloredbox")
