@@ -385,58 +385,6 @@ function table.Randomize(t)
 	t = out
 end
 
--- TODO move to client file
-if CLIENT then
-	local SafeTranslate
-
-	---
-	-- Returns an equipment's translation based on the user's language
-	-- @param string name
-	-- @param string printName
-	-- @return string the translated text
-	-- @realm client
-	function GetEquipmentTranslation(name, printName)
-		SafeTranslate = SafeTranslate or LANG.TryTranslation
-
-		local val = printName
-		local str = SafeTranslate(val)
-
-		if str == val and name then
-			val = name
-			str = SafeTranslate(val)
-		end
-
-		if str == val and printName then
-			str = printName
-		end
-
-		return str
-	end
-
-	---
-	-- Sorts an equipment table
-	-- @param table tbl the equipment table
-	-- @realm client
-	function SortEquipmentTable(tbl)
-		if not tbl or #tbl < 2 then return end
-
-		local _func = function(adata, bdata)
-			a = adata.id
-			b = bdata.id
-
-			if tonumber(a) and not tonumber(b) then
-				return true
-			elseif tonumber(b) and not tonumber(a) then
-				return false
-			else
-				return a < b
-			end
-		end
-
-		table.sort(tbl, _func)
-	end
-end
-
 -- Game event log defs
 EVENT_KILL = 1
 EVENT_SPAWN = 2

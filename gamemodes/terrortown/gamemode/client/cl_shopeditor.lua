@@ -9,12 +9,15 @@ local itemBoxColor = Color(100, 100, 100)
 
 local Equipmentnew
 local SafeTranslate = LANG.TryTranslation
+local SortEquipmentTable = SortEquipmentTable
 
 local math = math
 local table = table
 local net = net
 local pairs = pairs
 local IsValid = IsValid
+
+local Comparator = ComparatorClassNameCaseSensitiveAscending
 
 ---
 -- Returns whether the given equipment is not an @{ITEM} (so whether it's a @{Weapon})
@@ -328,7 +331,7 @@ function ShopEditor.CreateItemEditor()
 
 	local itms = ShopEditor.GetEquipmentForRoleAll()
 
-	SortEquipmentTable(itms)
+	SortEquipmentTable(itms, Comparator)
 
 	ShopEditor.CreateItemList(frame, w, h, itms, function(s)
 		ShopEditor.EditItem(s.item)
@@ -445,7 +448,7 @@ function ShopEditor.CreateOwnShopEditor(roleData, onCreate)
 
 	local itms = ShopEditor.GetEquipmentForRoleAll()
 
-	SortEquipmentTable(itms)
+	SortEquipmentTable(itms, Comparator)
 
 	ShopEditor.CreateItemList(frame, w, h, itms, function(slf)
 		local eq = not items.IsItem(slf.item) and weapons.GetStored(slf.item.id) or items.GetStored(slf.item.id)

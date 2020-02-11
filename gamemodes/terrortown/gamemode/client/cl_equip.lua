@@ -39,10 +39,89 @@ local color_darkened = Color(255, 255, 255, 80)
 local eqframe = eqframe
 local dlist = dlist
 local curSearch = curSearch
+local SafeTranslate = LANG.TryTranslation
 
 --
 --     GENERAL HELPER FUNCTIONS
 --
+
+---
+-- Returns an equipment's translation based on the user's language
+-- @param string name
+-- @param string printName
+-- @return string the translated text
+-- @realm client
+function GetEquipmentTranslation(name, printName)
+	local val = printName
+	local str = SafeTranslate(val)
+
+	if str == val and name then
+		val = name
+		str = SafeTranslate(val)
+	end
+
+	if str == val and printName then
+		str = printName
+	end
+
+	return str
+end
+
+---
+-- Comparator function to sort an equipment table
+-- Compares the translated names lexicographically case insensitive ascending, but makes sure that passive items always come first and active items come second
+-- @param {@Item} or {@Weapon} eqA
+-- @param {@Item} or {@Weapon} eqB
+-- @return boolean true if the first equipment should come first in the sorted table and false else
+-- @realm client
+function ComparatorTranslatedNameCategorisedCaseInsensitiveAscending(eqA, eqB)
+	-- Passive items come first
+	if eqA.type == "item_passive" and eqB.type ~= "item_passive" then return true end
+	if eqA.type ~= "item_passive" and eqB.type == "item_passive" then return false end
+
+	-- Active items come after
+	if eqA.type == "item_active" and eqB.type ~= "item_active" then return true end
+	if eqA.type ~= "item_active" and eqB.type == "item_active" then return false end
+
+	eqA.cachedEquipmentTranslation = eqA.cachedEquipmentTranslation or GetEquipmentTranslation(eqA.name, eqA.PrintName)
+	eqB.cachedEquipmentTranslation = eqB.cachedEquipmentTranslation or GetEquipmentTranslation(eqB.name, eqB.PrintName)
+
+	-- Now sort the rest lexicographically case-insensitive ascending
+	return string.upper(eqA.cachedEquipmentTranslation) < string.upper(eqB.cachedEquipmentTranslation)
+end
+
+---
+-- Comparator function to sort an equipment table
+-- Compares the class names lexicographically case sensitive ascending
+-- @param {@Item} or {@Weapon} eqA
+-- @param {@Item} or {@Weapon} eqB
+-- @return boolean true if the first equipment should come first in the sorted table and false else
+-- @realm client
+function ComparatorClassNameCaseSensitiveAscending(eqA, eqB)
+	a = eqA.id
+	b = eqB.id
+
+	if tonumber(a) and not tonumber(b) then
+		return true
+	elseif tonumber(b) and not tonumber(a) then
+		return false
+	else
+		return a < b
+	end
+end
+
+local Comparator = ComparatorTranslatedNameCategorisedCaseInsensitiveAscending
+
+---
+-- Sorts an equipment table
+-- @param table tbl the equipment table
+-- @param function Comparator receives two equipments as argument and returns true if the first equipment should come first in the sorted table and false else
+-- @realm client
+function SortEquipmentTable(tbl, Comparator)
+	if not tbl or #tbl < 2 or not isfunction(Comparator) then return end
+
+	table.sort(tbl, Comparator)
+end
 
 local function RolenameToRole(val)
 	local rlsList = roles.GetList()
@@ -290,18 +369,7 @@ local function CreateEquipmentList(t)
 	if #itms == 0 and not t.notalive then
 		ply:ChatPrint("[TTT2][SHOP] You need to run 'shopeditor' as admin in the developer console to create a shop for this role. Link it with another shop or click on the icons to add weapons and items to the shop.")
 	else
-		table.sort(itms, function(itmA, itmB)
-			-- Passive items come first
-			if itmA.type == "item_passive" and itmB.type ~= "item_passive" then return true end
-			if itmA.type ~= "item_passive" and itmB.type == "item_passive" then return false end
-
-			-- Active items come after
-			if itmA.type == "item_active" and itmB.type ~= "item_active" then return true end
-			if itmA.type ~= "item_active" and itmB.type == "item_active" then return false end
-
-			-- Now sort the rest lexicographically case-insensitive ascending
-			return string.upper(itmA.cachedEquipmentTranslation) < string.upper(itmB.cachedEquipmentTranslation)
-		end)
+		SortEquipmentTable(itms, Comparator)
 	end
 
 	-- temp table for sorting
