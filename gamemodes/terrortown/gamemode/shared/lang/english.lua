@@ -1265,3 +1265,6 @@ L.hold_aim_tip = "You will keep using the ironsights as long as you keep holding
 
 -- 2020-02-11
 L.automoved_to_spec = "(AUTOMATED MESSAGE) I have been moved to the Spectator team because I was idle/AFK."
+L.muted_all = "Mute all players."
+L.muted_none = "Mute no player."
+L.muted_team = "Mute team {team}."

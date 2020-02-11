@@ -1256,3 +1256,6 @@ L.hold_aim_tip = "Solange du die Sekundärfeuertaste hältst, bleibst du anvisie
 
 -- 2020-02-11
 L.automoved_to_spec = "(AUTOMATISCHE NACHRICHT) Ich wurde in das Zuschauerteam geschoben, da ich untätig/AFK war."
+L.muted_all = "Alle Spieler stummgestellt."
+L.muted_none = "Kein Spieler stummgestellt."
+L.muted_team = "Team {team} stummgestellt."
