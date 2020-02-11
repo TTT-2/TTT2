@@ -1253,3 +1253,6 @@ L.disable_doubletap_sprint_tip = "Deaktiviert das Auslösen des Sprinten durch D
 -- 2020-02-03
 L.hold_aim = "Halten zum Anvisieren"
 L.hold_aim_tip = "Solange du die Sekundärfeuertaste hältst, bleibst du anvisiert (Standard: Rechte Maustaste)"
+
+-- 2020-02-11
+L.automoved_to_spec = "(AUTOMATISCHE NACHRICHT) Ich wurde in das Zuschauerteam geschoben, da ich untätig/AFK war."

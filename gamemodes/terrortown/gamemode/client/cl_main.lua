@@ -10,6 +10,7 @@ local IsValid = IsValid
 local surface = surface
 local CreateConVar = CreateConVar
 local hook = hook
+local TryT = LANG.TryTranslation
 
 local cv_ttt_spectator_mode = cv_ttt_spectator_mode or nil
 
@@ -630,7 +631,7 @@ function CheckIdle()
 			idle.pos = client:GetPos()
 			idle.t = CurTime()
 		elseif CurTime() > idle.t + idle_limit then
-			RunConsoleCommand("say", "(AUTOMATED MESSAGE) I have been moved to the Spectator team because I was idle/AFK.")
+			RunConsoleCommand("say", TryT("automoved_to_spec"))
 
 			timer.Simple(0.3, function()
 				RunConsoleCommand("ttt_spectator_mode", 1)
