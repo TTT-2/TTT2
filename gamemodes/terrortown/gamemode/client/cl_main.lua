@@ -11,7 +11,7 @@ local surface = surface
 local CreateConVar = CreateConVar
 local hook = hook
 
-local cv_ttt_spectator_mode
+local cv_ttt_spectator_mode = cv_ttt_spectator_mode or nil
 
 -- Define GM12 fonts for compatibility
 surface.CreateFont("DefaultBold", {font = "Tahoma", size = 13, weight = 1000})
