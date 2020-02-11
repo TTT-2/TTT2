@@ -39,7 +39,6 @@ local color_darkened = Color(255, 255, 255, 80)
 local eqframe = eqframe
 local dlist = dlist
 local curSearch = curSearch
-local SafeTranslate = LANG.TryTranslation
 
 --
 --     GENERAL HELPER FUNCTIONS
@@ -115,12 +114,12 @@ local Comparator = ComparatorTranslatedNameCategorisedCaseInsensitiveAscending
 ---
 -- Sorts an equipment table
 -- @param table tbl the equipment table
--- @param function Comparator receives two equipments as argument and returns true if the first equipment should come first in the sorted table and false else
+-- @param function Comp A comparator function that receives two equipments as argument and returns true if the first equipment should come first in the sorted table and false else
 -- @realm client
-function SortEquipmentTable(tbl, Comparator)
-	if not tbl or #tbl < 2 or not isfunction(Comparator) then return end
+function SortEquipmentTable(tbl, Comp)
+	if not tbl or #tbl < 2 or not isfunction(Comp) then return end
 
-	table.sort(tbl, Comparator)
+	table.sort(tbl, Comp)
 end
 
 local function RolenameToRole(val)
