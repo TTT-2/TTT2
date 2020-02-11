@@ -1268,3 +1268,9 @@ L.name_door = "Door"
 L.door_open = "Press [{usekey}] to open door."
 L.door_close = "Press [{usekey}] to close door."
 L.door_locked = "This door is locked"
+
+-- 2020-02-11
+L.automoved_to_spec = "(AUTOMATED MESSAGE) I have been moved to the Spectator team because I was idle/AFK."
+L.muted_all = "Mute all players."
+L.muted_none = "Mute no player."
+L.muted_team = "Mute team {team}."

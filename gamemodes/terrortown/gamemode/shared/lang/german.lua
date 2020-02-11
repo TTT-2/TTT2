@@ -1259,3 +1259,9 @@ L.name_door = "Tür"
 L.door_open = "Drücke [{usekey}] um Tür zu öffnen."
 L.door_close = "Press [{usekey}] um Tür zu schließen."
 L.door_locked = "Diese Tür ist verschlossen"
+
+-- 2020-02-11
+L.automoved_to_spec = "(AUTOMATISCHE NACHRICHT) Ich wurde in das Zuschauerteam geschoben, da ich untätig/AFK war."
+L.muted_all = "Alle Spieler stummgestellt."
+L.muted_none = "Kein Spieler stummgestellt."
+L.muted_team = "Team {team} stummgestellt."

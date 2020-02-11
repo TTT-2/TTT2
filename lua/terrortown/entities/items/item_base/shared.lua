@@ -41,6 +41,9 @@ if CLIENT then
 	-- equipment menu (if buyable), etc.
 	ITEM.material = "vgui/ttt/icon_nades" -- most generic icon I guess
 
+	-- set to false if item should no be shown in body search
+	ITEM.populateSearch = true
+
 	-- You can make your own @{ITEM} icon using the template in:
 	--   /garrysmod/gamemodes/terrortown/template/
 
