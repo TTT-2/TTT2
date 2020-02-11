@@ -83,21 +83,23 @@ function GM:PlayerCanHearPlayersVoice(listener, speaker)
 
 	local speakerTeam = speaker:GetTeam()
 	local roundState = GetRoundState()
+	local isGlobalVoice = speaker[speakerTeam .. "_gvoice"]
 
 	if PlayerIsMuted(listener, speaker) then
 		return false, false
 	end
 
 	-- custom post-settings
-	local can_hear, is_locational = hook.Run("TTT2CanHearVoiceChat", listener, speaker, not speaker[speakerTeam .. "_gvoice"])
+	local can_hear, is_locational = hook.Run("TTT2CanHearVoiceChat", listener, speaker, not isGlobalVoice)
 
 	if can_hear ~= nil then
 		return can_hear, is_locational or false
 	end
 
-	if speaker:IsSpec() then
+	if speaker:IsSpec() and isGlobalVoice then
+		-- Check that the speaker was not previously sending voice on the team chat
 		return PlayerCanHearSpectator(listener, speaker, roundState)
-	elseif speaker[speakerTeam .. "_gvoice"] then
+	elseif isGlobalVoice then
 		return PlayerCanHearGlobal(roundState)
 	else
 		return PlayerCanHearTeam(listener, speaker, speakerTeam)
