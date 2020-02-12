@@ -1305,14 +1305,14 @@ function GM:EntityTakeDamage(ent, dmginfo)
 
 	local att = dmginfo:GetAttacker()
 
-	if not GAMEMODE:AllowPVP() then
+	if not hook.Run("AllowPVP") then
 		-- if player vs player damage, or if damage versus a prop, then zero
 		if ent:IsExplosive() or ent:IsPlayer() and IsValid(att) and att:IsPlayer() then
 			dmginfo:ScaleDamage(0)
 			dmginfo:SetDamage(0)
 		end
 	elseif ent:IsPlayer() then
-		GAMEMODE:PlayerTakeDamage(ent, dmginfo:GetInflictor(), att, dmginfo:GetDamage(), dmginfo)
+		hook.Run("PlayerTakeDamage", ent, dmginfo:GetInflictor(), att, dmginfo:GetDamage(), dmginfo)
 	elseif ent:IsExplosive() then
 		-- When a barrel hits a player, that player damages the barrel because
 		-- Source physics. This gives stupid results like a player who gets hit
@@ -1344,6 +1344,7 @@ end
 -- @realm server
 -- @ref https://wiki.garrysmod.com/page/GM/EntityTakeDamage
 function GM:PlayerTakeDamage(ent, infl, att, amount, dmginfo)
+	print("player take damage")
 	-- Change damage attribution if necessary
 	if infl or att then
 		local hurter, owner, owner_time
