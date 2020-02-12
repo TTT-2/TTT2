@@ -1344,7 +1344,6 @@ end
 -- @realm server
 -- @ref https://wiki.garrysmod.com/page/GM/EntityTakeDamage
 function GM:PlayerTakeDamage(ent, infl, att, amount, dmginfo)
-	print("player take damage")
 	-- Change damage attribution if necessary
 	if infl or att then
 		local hurter, owner, owner_time
