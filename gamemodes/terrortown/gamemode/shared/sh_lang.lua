@@ -25,20 +25,24 @@ local net = net
 local table = table
 local pairs = pairs
 
--- Add all lua files in our /lang/ dir
-local dir = GM.FolderName or "terrortown"
-local files = file.Find(dir .. "/gamemode/shared/lang/*.lua", "LUA")
+function LANG.SetupFiles(lang_path)
+	-- Add all lua files in our /lang/ dir
+	local files = file.Find(lang_path .. "*.lua", "LUA")
 
-for _, fname in pairs(files) do
-	local path = dir .. "/gamemode/shared/lang/" .. fname
+	for _, fname in pairs(files) do
+		local path = lang_path .. fname
 
-	-- filter out directories and temp files (like .lua~)
-	if string.Right(fname, 3) == "lua" then
-		util.IncludeClientFile(path)
+		-- filter out directories and temp files (like .lua~)
+		if string.Right(fname, 3) == "lua" then
+			util.IncludeClientFile(path)
 
-		MsgN("Included TTT language file: " .. fname)
+			MsgN("Included TTT language file: " .. fname)
+		end
 	end
 end
+
+-- load default TTT2 language files
+LANG.SetupFiles((GM.FolderName or "terrortown") .. "/gamemode/shared/lang/")
 
 if SERVER then
 	local count = table.Count

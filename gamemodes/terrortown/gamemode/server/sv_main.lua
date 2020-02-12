@@ -192,6 +192,9 @@ function GM:Initialize()
 
 	hook.Run("TTT2FinishedLoading")
 
+	-- load addon language files
+	LANG.SetupFiles("lang/")
+
 	ShopEditor.SetupShopEditorCVars()
 	ShopEditor.CreateShopDBs()
 
