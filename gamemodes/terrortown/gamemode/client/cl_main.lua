@@ -20,6 +20,7 @@ ttt_include("cl_fonts")
 
 ttt_include("sh_init")
 
+ttt_include("sh_network_sync")
 ttt_include("sh_sprint")
 ttt_include("sh_main")
 ttt_include("sh_shopeditor")
@@ -39,6 +40,7 @@ ttt_include("vgui__cl_simpleclickicon")
 ttt_include("vgui__cl_progressbar")
 ttt_include("vgui__cl_scrolllabel")
 
+ttt_include("cl_network_sync")
 ttt_include("cl_karma")
 ttt_include("cl_tradio")
 ttt_include("cl_transfer")

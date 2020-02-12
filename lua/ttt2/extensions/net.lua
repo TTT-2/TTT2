@@ -31,8 +31,8 @@ end
 -- @param table|player|nil client SERVERSIDE only! Optional, use it to send a Stream to a single client or a group of clients.
 -- @realm shared
 function net.SendStream(messageId, data, client)
-	local jsonString = util.TableToJSON(data)
-	local split = string.SplitAtSize(jsonString, net.STREAM_FRAGMENTATION_SIZE)
+	local encodedString = spon.encode(data)
+	local split = string.SplitAtSize(encodedString, net.STREAM_FRAGMENTATION_SIZE)
 	for i = 1, #split do
 		net.Start(NETMSG_STREAM)
 		-- Write the messageId
@@ -86,7 +86,7 @@ local function ReceiveStream()
 	-- Check if there are still fragments on their way
 	if not fragmented then
 		-- Otherwise this was the last packet, so reconstruct the data
-		local jsonStr = table.concat(net.stream_cache[messageId])
+		local encodedStr = table.concat(net.stream_cache[messageId])
 		local callback = net.stream_callbacks[messageId]
 
 		-- Clear cache
@@ -94,7 +94,7 @@ local function ReceiveStream()
 
 		-- Check if a callback is registered
 		if isfunction(callback) then
-			callback(util.JSONToTable(jsonStr))
+			callback(spon.decode(encodedStr))
 		end
 	end
 end

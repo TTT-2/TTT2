@@ -1307,6 +1307,8 @@ local function SetPlayerReady(_, ply)
 
 	ply.is_ready = true
 
+	TTT2NET:SendFullStateUpdate(ply)
+
 	hook.Run("TTT2PlayerReady", ply)
 end
 net.Receive("TTT2SetPlayerReady", SetPlayerReady)

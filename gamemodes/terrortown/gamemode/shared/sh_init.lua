@@ -524,6 +524,7 @@ require("marks")
 -- TODO load modules that are currently not included in gmod but waiting for merge
 require("outline")
 
+include("includes/modules/spon.lua")
 include("ttt2/extensions/net.lua")
 include("ttt2/extensions/string.lua")
 include("ttt2/extensions/table.lua")

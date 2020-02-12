@@ -649,6 +649,8 @@ function GM:PlayerDisconnected(ply)
 	if KARMA.IsEnabled() then
 		KARMA.Remember(ply)
 	end
+
+	TTT2NET:ResetClient(ply)
 end
 
 ---
