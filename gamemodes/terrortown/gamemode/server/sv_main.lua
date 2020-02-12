@@ -192,7 +192,7 @@ function GM:Initialize()
 
 	hook.Run("TTT2FinishedLoading")
 
-	-- load addon language files
+	-- check for language files to mark them as downloadable for clients
 	LANG.SetupFiles("lang/")
 
 	ShopEditor.SetupShopEditorCVars()

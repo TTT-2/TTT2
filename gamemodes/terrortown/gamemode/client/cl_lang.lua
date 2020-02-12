@@ -174,6 +174,12 @@ end
 function LANG.GetUnsafeNamed(lang_name)
 	lang_name = lang_name and string.lower(lang_name)
 
+	if not LANG.IsLanguage(lang_name) then
+		ErrorNoHalt(Format("Failed to get '%s': language does not exist.\n", tostring(lang_name)))
+
+		return
+	end
+
 	return LANG.Strings[lang_name]
 end
 
@@ -182,10 +188,10 @@ end
 -- @param string name string key identifier for the language
 -- @return nil|table
 -- @realm client
-function LANG.GetOrCreateLanguage(lang_name)
+function LANG.GetLanguageTable(lang_name)
 	lang_name = lang_name and string.lower(lang_name)
 
-	if not LANG.Strings[lang_name] then
+	if not LANG.IsLanguage(lang_name) then
 		LANG.CreateLanguage(lang_name)
 	end
 

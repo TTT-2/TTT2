@@ -41,7 +41,7 @@ function LANG.SetupFiles(lang_path)
 	end
 end
 
--- load default TTT2 language files
+-- load default TTT2 language files or mark them as downloadable on the server
 LANG.SetupFiles((GM.FolderName or "terrortown") .. "/gamemode/shared/lang/")
 
 if SERVER then
