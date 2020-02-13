@@ -303,9 +303,8 @@ function TTT2NET:SendMetaDataUpdate(path)
 		path = { path }
 	end
 
-	-- Check for a valid metadata entry
+	-- Check for a metadata entry
 	local metadata = table.GetWithPath(data_store_metadata, path)
-	assert(metadata, "[TTT2NET] SendMetaDataUpdate(): Metadata table is not initialized for this path!")
 
 	-- Write meta data
 	net.Start(TTT2NET.NETMSG_META_UPDATE)
@@ -425,6 +424,11 @@ function TTT2NET:NetWritePath(path)
 end
 
 function TTT2NET:NetWriteMetaData(metadata)
+	net.WriteBool(metadata == nil)
+	if metadata == nil then
+		return
+	end
+
 	net.WriteString(metadata.type)
 	if metadata.type == "int" then
 		net.WriteUInt(metadata.bits, 6) -- max 32 bits

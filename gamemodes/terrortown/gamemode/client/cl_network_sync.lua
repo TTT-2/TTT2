@@ -58,7 +58,6 @@ local function ReceiveMetaDataUpdate()
 
 	print("Received Meta data update")
 	PrintTable(path)
-	PrintTable(metadata)
 
 	-- Set the new metadata
 	table.SetWithPath(data_store_metadata, path, metadata)
@@ -130,6 +129,11 @@ function TTT2NET:NetReadPath()
 end
 
 function TTT2NET:NetReadMetaData()
+	-- If the null flag is set, then return null
+	if net.ReadBool() then
+		return
+	end
+
 	local metadata = {}
 	metadata.type = net.ReadString()
 
