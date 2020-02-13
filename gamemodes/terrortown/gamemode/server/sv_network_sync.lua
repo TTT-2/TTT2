@@ -396,11 +396,13 @@ end
 
 -- TODO add ratelimit?
 function TTT2NET:SendFullStateUpdate(client)
-	if not table.HasValue(initialized_clients, client) then
+	print("[TTT2NET] Sending full state update...")
+
+	if IsPlayer(client) and not table.HasValue(initialized_clients, client) then
 		initialized_clients[#initialized_clients + 1] = client
 	end
 
-	local receivers = not istable(client) and {client} or client or initialized_clients
+	local receivers = IsPlayer(client) and { client } or client ~= nil and client or initialized_clients
 
 	for i = 1, #receivers do
 		local data = {
