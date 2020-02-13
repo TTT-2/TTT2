@@ -36,7 +36,7 @@ function TTT2NET:GetOnPlayer(path, ply)
 end
 
 function TTT2NET:Debug()
-	print("[TTT2NET DEBUG: Global data table]")
+	print("[TTT2NET DEBUG:]")
 	PrintTable(data_listeners)
 	PrintTable(data_store_metadata)
 	PrintTable(data_store)
@@ -44,7 +44,7 @@ end
 
 -- TODO this will not call any callback method
 local function ReceiveFullStateUpdate(result)
-	print("Received data:")
+	print("Received FullStateUpdate with the following data:")
 	PrintTable(result)
 	data_store_metadata = result.meta
 	data_store = result.data
@@ -57,7 +57,7 @@ local function ReceiveMetaDataUpdate()
 	local metadata = TTT2NET:NetReadMetaData()
 
 	print("Received Meta data update")
-	PrintTable(path)
+	print(table.concat(path, "."))
 
 	-- Set the new metadata
 	table.SetWithPath(data_store_metadata, path, metadata)
@@ -81,8 +81,7 @@ local function ReceiveDataUpdate()
 	local oldval = TTT2NET:Get(path)
 
 	print("Received data update")
-	PrintTable(path)
-	print(newval)
+	print(table.concat(path, "."))
 
 	table.SetWithPath(data_store, path, newval)
 

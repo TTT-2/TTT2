@@ -410,7 +410,7 @@ function TTT2NET:SendFullStateUpdate(client)
 			data = self:DataTableWithOverrides(receivers[i], data_store_metadata)
 		}
 
-		net.SendStream(TTT2NET.NET_STREAM_FULL_STATE_UPDATE, data, receivers)
+		net.SendStream(TTT2NET.NET_STREAM_FULL_STATE_UPDATE, data, receivers[i])
 	end
 
 
