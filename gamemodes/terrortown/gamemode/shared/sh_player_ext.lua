@@ -827,7 +827,7 @@ end
 -- @return boolean
 -- @realm shared
 function plymeta:OnceFound()
-	return (TTT2NET:GetOnPlayer("t_first_found", self) or -1) >= 0
+	return self:GetNWFloat("t_first_found", -1) >= 0
 end
 
 ---
@@ -835,8 +835,7 @@ end
 -- @return boolean
 -- @realm shared
 function plymeta:RoleKnown()
-	local val = TTT2NET:GetOnPlayer("role_found", self) or false
-	return val
+	return self:GetNWBool("role_found", false)
 end
 
 ---
@@ -852,8 +851,7 @@ end
 -- @return boolean
 -- @realm shared
 function plymeta:GetFirstFound()
-	local val = TTT2NET:GetOnPlayer("t_first_found", self) or -1
-	return math.Round(val)
+	return math.Round(self:GetNWFloat("t_first_found", -1))
 end
 
 ---
@@ -861,8 +859,7 @@ end
 -- @return boolean
 -- @realm shared
 function plymeta:GetLastFound()
-	local val = TTT2NET:GetOnPlayer("t_last_found", self) or -1
-	return math.Round(val)
+	return math.Round(self:GetNWFloat("t_last_found", -1))
 end
 
 ---
