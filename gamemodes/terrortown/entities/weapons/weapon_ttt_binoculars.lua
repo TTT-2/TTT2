@@ -91,7 +91,7 @@ function SWEP:SecondaryAttack()
 	self.dt.start_time = 0
 end
 
-function SWEP:SetZoom(level)
+function SWEP:SetZoomLevel(level)
 	if CLIENT then return end
 
 	local owner = self:GetOwner()
@@ -109,11 +109,11 @@ function SWEP:CycleZoom()
 		self.dt.zoom = 1
 	end
 
-	self:SetZoom(self.dt.zoom)
+	self:SetZoomLevel(self.dt.zoom)
 end
 
 function SWEP:PreDrop()
-	self:SetZoom(1)
+	self:SetZoomLevel(1)
 
 	self.dt.processing = false
 
@@ -121,7 +121,7 @@ function SWEP:PreDrop()
 end
 
 function SWEP:Holster()
-	self:SetZoom(1)
+	self:SetZoomLevel(1)
 
 	self.dt.processing = false
 
@@ -133,7 +133,7 @@ function SWEP:Deploy()
 		self:GetOwner():DrawViewModel(false)
 	end
 
-	self:SetZoom(1)
+	self:SetZoomLevel(1)
 
 	return true
 end
