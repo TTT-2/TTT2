@@ -85,7 +85,7 @@ function TTT2NET:SetMetaDataOnPlayer(path, metadata, ply)
 
 	-- Add the prefix for the correct table with the specific player
 	table.insert(path, 1, "players")
-	table.insert(path, 2, ply:SteamID64())
+	table.insert(path, 2, ply:EntIndex())
 
 	self:SetMetaData(path, metadata)
 end
@@ -96,7 +96,7 @@ end
 --
 -- @Note This meta data information is only used to to
 function TTT2NET:Set(path, meta, value, client)
-	local clientId = client and client:SteamID64() or nil
+	local clientId = client and client:EntIndex() or nil
 
 	-- Convert path with single key to table
 	if not istable(path) then
@@ -157,11 +157,11 @@ function TTT2NET:RemoveOverrides(path)
 	local playerIds = table.GetKeys(currentDataTable[lastKey])
 	local receivers = {}
 
-	-- Check all keys if they are a SteamID64 and resolve them to the player instance
+	-- Check all keys if they are a valid EntIndex and resolve them to the player instance
 	for i = 1, #playerIds do
-		local ply = player.GetBySteamID64(playerIds[i])
-		-- ply will be false if no player is found
-		if ply then
+		local ply = Entity(playerIds[i])
+		-- ply will be nil if no entity is found
+		if IsEntity(ply) and ply:IsPlayer() then
 			receivers[#receivers + 1] = ply
 		end
 	end
@@ -193,13 +193,13 @@ function TTT2NET:RemoveOverridesOnPlayer(path, ply)
 
 	-- Add the prefix for the correct table with the specific player
 	table.insert(path, 1, "players")
-	table.insert(path, 2, ply:SteamID64())
+	table.insert(path, 2, ply:EntIndex())
 
 	self:RemoveOverrides(path)
 end
 
 function TTT2NET:Get(path, client)
-	local clientId = client and client:SteamID64() or nil
+	local clientId = client and client:EntIndex() or nil
 
 	-- Convert path with single key to table
 	if not istable(path) then
@@ -241,7 +241,7 @@ function TTT2NET:GetWithOverride(path, client)
 	if not istable(path) then
 		path = { path }
 	end
-	local clientId = client:SteamID64()
+	local clientId = client:EntIndex()
 
 	local overridePath = table.Copy(path)
 	overridePath[#overridePath + 1] = clientId
@@ -266,7 +266,7 @@ function TTT2NET:SetOnPlayer(path, meta, value, ply, client)
 
 	-- Add the prefix for the correct table with the specific player
 	table.insert(path, 1, "players")
-	table.insert(path, 2, ply:SteamID64())
+	table.insert(path, 2, ply:EntIndex())
 
 	self:Set(path, meta, value, client)
 end
@@ -279,7 +279,7 @@ function TTT2NET:GetOnPlayer(path, ply, client)
 
 	-- Add the prefix for the correct table with the specific player
 	table.insert(path, 1, "players")
-	table.insert(path, 2, ply:SteamID64())
+	table.insert(path, 2, ply:EntIndex())
 
 	return self:Get(path, client)
 end
@@ -333,6 +333,7 @@ function TTT2NET:RemoveOverride(client, curTable, path)
 end
 
 function TTT2NET:ResetClient(client)
+	print("[TTT2NET] Called ResetClient for entity with index: " .. client:EntIndex())
 	table.RemoveByValue(initialized_clients, client)
 
 	-- Clear up the player specific data table

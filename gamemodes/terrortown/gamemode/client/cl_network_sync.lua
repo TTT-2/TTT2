@@ -30,7 +30,7 @@ function TTT2NET:GetOnPlayer(path, ply)
 
 	-- Add the prefix for the correct table with the specific player
 	table.insert(path, 1, "players")
-	table.insert(path, 2, ply:SteamID64())
+	table.insert(path, 2, ply:EntIndex())
 
 	return self:Get(path, client)
 end
@@ -208,7 +208,7 @@ function TTT2NET:OnUpdateOnPlayer(path, ply, func)
 
 	-- Add the prefix for the correct table with the specific player
 	table.insert(path, 1, "players")
-	table.insert(path, 2, ply:SteamID64())
+	table.insert(path, 2, ply:EntIndex())
 
 	self:OnUpdate(path, func)
 end
