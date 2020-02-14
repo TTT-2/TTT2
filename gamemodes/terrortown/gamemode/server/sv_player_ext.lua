@@ -1090,7 +1090,7 @@ function plymeta:SafeDropWeapon(wep, keep_selection)
 end
 
 ---
--- Returns wether or not a player can pick up a weapon
+-- Returns whether or not a player can pick up a weapon
 -- @param Weapon wep The weapon object
 -- @returns boolean
 -- @realm server
@@ -1107,7 +1107,7 @@ function plymeta:CanPickupWeapon(wep)
 end
 
 ---
--- Returns wether or not a player can pick up a weapon
+-- Returns whether or not a player can pick up a weapon
 -- @param string wepCls The weapon object classname
 -- @returns boolean
 -- @realm server

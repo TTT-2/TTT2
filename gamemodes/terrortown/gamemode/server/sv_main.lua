@@ -6,6 +6,7 @@ ttt_include("sh_init")
 ttt_include("sh_sprint")
 ttt_include("sh_main")
 ttt_include("sh_shopeditor")
+ttt_include("sh_door")
 ttt_include("sh_voice")
 
 ttt_include("sv_shopeditor")
@@ -739,6 +740,9 @@ end
 -- @local
 function GM:PostCleanupMap()
 	ents.TTT.FixParentedPostCleanup()
+
+	-- init door entities
+	door.SetUp()
 end
 
 ---

@@ -863,7 +863,7 @@ function plymeta:GetLastFound()
 end
 
 ---
--- Returns wether the player is ready. A player is ready when he is able to look
+-- Returns whether the player is ready. A player is ready when he is able to look
 -- around and move (first call of @{GM:SetupMove})
 -- @return boolean
 -- @realm shared

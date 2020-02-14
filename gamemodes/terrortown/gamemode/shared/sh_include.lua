@@ -43,6 +43,7 @@ TTTFiles = {
 	sh_armor = {file = "sh_armor.lua", on = "shared"},
 	sh_corpse = {file = "sh_corpse.lua", on = "shared"},
 	sh_decal = {file = "sh_decal.lua", on = "shared"},
+	sh_door = {file = "sh_door.lua", on = "shared"},
 	sh_equip_items = {file = "sh_equip_items.lua", on = "shared"},
 	sh_hud_manager = {file = "sh_hud_manager.lua", on = "shared"},
 	sh_hud_module = {file = "sh_hud_module.lua", on = "shared"},
@@ -124,7 +125,7 @@ function ttt_include(filename)
 	local fd = TTTFiles[filename]
 
 	if not fd then
-		error("[TTT2][ERROR] Tried to include a not existant file " .. filename)
+		error("[TTT2][ERROR] Tried to include missing file " .. filename)
 	end
 
 	local file = fd.file

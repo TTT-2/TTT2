@@ -146,7 +146,7 @@ function HUD:Initialize()
 end
 
 ---
--- Returns wether or not the HUD has an element for the given type.
+-- Returns whether or not the HUD has an element for the given type.
 -- See @{HUD:GetElementByType} for an explaination when a HUD 'has' an element.
 -- @param string elementType
 -- @return boolean

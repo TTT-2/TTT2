@@ -1264,5 +1264,11 @@ L.disable_doubletap_sprint_tip = "Double tapping a movement key will no longer c
 L.hold_aim = "Hold to aim"
 L.hold_aim_tip = "You will keep using the ironsights as long as you keep holding secondary attack (default: right mouse button)"
 
+-- 2020-02-09
+L.name_door = "Door"
+L.door_open = "Press [{usekey}] to open door."
+L.door_close = "Press [{usekey}] to close door."
+L.door_locked = "This door is locked"
+
 -- 2020-02-11
 L.automoved_to_spec = "(AUTOMATED MESSAGE) I have been moved to the Spectator team because I was idle/AFK."
