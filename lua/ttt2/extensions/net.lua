@@ -29,7 +29,7 @@ end
 -- @param table|player|nil client SERVERSIDE only! Optional, use it to send a stream to a single client or a group of clients.
 -- @realm shared
 function net.SendStream(messageId, data, client)
-	local encodedString = spon.encode(data)
+	local encodedString = pon.encode(data)
 	local split = string.SplitAtSize(encodedString, net.STREAM_FRAGMENTATION_SIZE)
 	for i = 1, #split do
 		net.Start(NETMSG_STREAM)
@@ -92,7 +92,7 @@ local function ReceiveStream()
 
 		-- Check if a callback is registered
 		if isfunction(callback) then
-			callback(spon.decode(encodedStr))
+			callback(pon.decode(encodedStr))
 		end
 	end
 end

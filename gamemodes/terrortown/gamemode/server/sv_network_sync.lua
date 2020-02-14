@@ -434,7 +434,7 @@ end
 net.Receive(TTT2NET.NETMSG_REQUEST_FULL_STATE_UPDATE, ClientRequestFullStateUpdate)
 
 function TTT2NET:NetWritePath(path)
-	net.WriteString(spon.encode(path))
+	net.WriteString(pon.encode(path))
 end
 
 function TTT2NET:NetWriteMetaData(metadata)

@@ -241,7 +241,7 @@ end
 function TTT2NET:NetReadPath()
 	local result = net.ReadString()
 
-	return spon.decode(result)
+	return pon.decode(result)
 end
 
 ---
