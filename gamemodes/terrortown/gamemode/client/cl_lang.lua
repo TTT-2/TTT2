@@ -66,7 +66,7 @@ end
 -- @return string the inserted string_name parameter
 -- @realm client
 function LANG.AddToLanguage(lang_name, string_name, string_text)
-	lang_name = lang_name and string.lower(lang_name)
+	lang_name = lang_name and string.lower(lang_name) or nil
 
 	if not LANG.IsLanguage(lang_name) then
 		ErrorNoHalt(Format("Failed to add '%s' to language '%s': language does not exist.\n", tostring(string_name), tostring(lang_name)))
@@ -172,7 +172,7 @@ end
 -- @return nil|table
 -- @realm client
 function LANG.GetUnsafeNamed(lang_name)
-	lang_name = lang_name and string.lower(lang_name)
+	lang_name = lang_name and string.lower(lang_name) or nil
 
 	if not LANG.IsLanguage(lang_name) then
 		ErrorNoHalt(Format("Failed to get '%s': language does not exist.\n", tostring(lang_name)))
@@ -188,8 +188,8 @@ end
 -- @param string name string key identifier for the language
 -- @return nil|table
 -- @realm client
-function LANG.GetLanguageTable(lang_name)
-	lang_name = lang_name and string.lower(lang_name)
+function LANG.GetLanguageTableReference(lang_name)
+	lang_name = lang_name and string.lower(lang_name) or nil
 
 	if not LANG.IsLanguage(lang_name) then
 		LANG.CreateLanguage(lang_name)
@@ -239,7 +239,7 @@ end
 -- @param string lang_name the new language name
 -- @realm client
 function LANG.SetActiveLanguage(lang_name)
-	lang_name = lang_name and string.lower(lang_name)
+	lang_name = lang_name and string.lower(lang_name) or nil
 
 	if LANG.IsLanguage(lang_name) then
 		local old_name = LANG.ActiveLanguage
@@ -302,7 +302,7 @@ end
 function LANG.IsLanguage(lang_name)
 	if not lang_name then return end
 
-	return LANG.Strings[string.lower(lang_name)]
+	return LANG.Strings[string.lower(lang_name)] ~= nil
 end
 
 local function LanguageChanged(cv, old, new)
