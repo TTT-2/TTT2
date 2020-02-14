@@ -46,7 +46,7 @@ function LANG.SetupFiles(lang_path, deepsearch)
 			local subname = sub_folders[k]
 			local files = file.Find(lang_path .. subname .. "/*.lua", "LUA")
 
-			if not files then return end
+			if not files then continue end
 
 			for i = 1, #files do
 				file_paths[#file_paths + 1] = lang_path .. subname .. "/" .. files[i]
