@@ -201,7 +201,7 @@ function TBHUD:Draw(client)
 		if not focus_but or not IsValid(focus_but.ent) then continue end
 
 		self.focus_but = focus_but
-		self.focus_stick = CurTime() + 0.01
+		self.focus_stick = CurTime() + 0.1
 
 		scrpos = focus_but.ent:GetPos():ToScreen()
 		scrPosXMid, scrPosYMid = scrpos.x - mid, scrpos.y - mid

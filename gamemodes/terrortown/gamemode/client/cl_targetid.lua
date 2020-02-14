@@ -492,7 +492,7 @@ function HUDDrawTargetIDTButtons(tData)
 	tData:EnableText()
 
 	-- set the title of the traitor button
-	tData:SetTitle(ent:GetDescription() == "?" and "Traitor Button" or ent:GetDescription())
+	tData:SetTitle(ent:GetDescription() == "?" and "Traitor Button" or TryT(ent:GetDescription()))
 
 	-- set the subtitle and icon depending on the currently used mode
 	if TBHUD.focus_but.admin and not TBHUD.focus_but.access then
