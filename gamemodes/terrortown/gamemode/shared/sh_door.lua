@@ -125,9 +125,7 @@ local entmeta = assert(FindMetaTable("Entity"), "FAILED TO FIND ENTITY TABLE")
 -- @return boolean Returns true if it is a valid door
 -- @realm shared
 function entmeta:IsDoor()
-	local valid_door_cls = door.GetValid()
-
-	if IsValid(self) and valid_door_cls[self:GetClass()] then
+	if IsValid(self) and door.GetValid()[self:GetClass()] then
 		return true
 	end
 
