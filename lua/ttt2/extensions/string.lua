@@ -5,13 +5,12 @@
 AddCSLuaFile()
 
 ---
--- Receive a stream message, usually for data that can be longer than
--- the 64kb limit of a single net message. This will register a callback
--- for a specific messageId and execute it when the stream was received and
--- the data is reconstructed from all fragments.
+-- Split a string into smaller strings.
+-- This will split a given string in parts, with a maximum size of the given splitSize.
 --
--- @param string messageId a unique message id similar to the network strings
--- @param function callback This is the function that is called after the data was received.
+-- @param string str The string to operate on.
+-- @param int splitSize This is the size, after which the string is split.
+-- @return table The table that contains the strings.
 -- @realm shared
 function string.SplitAtSize(str, splitSize)
 	local result = {}

@@ -22,13 +22,11 @@ end
 ---
 -- Initiates a stream message, usually for data that can be longer than
 -- the 64kb limit of a single net message. This will split up the data and send them in
--- smaller fragments. The data will be converted to a json string during this process.
---
--- @note The restrictions on the {@util.TableToJSON} function, which is used to convert the data.
+-- smaller fragments. The data will be converted (with sPON) to an encoded string during this process.
 --
 -- @param string messageId a unique message id similar to the network strings
 -- @param table data the data table to send, this will be reconstructed at the client.
--- @param table|player|nil client SERVERSIDE only! Optional, use it to send a Stream to a single client or a group of clients.
+-- @param table|player|nil client SERVERSIDE only! Optional, use it to send a stream to a single client or a group of clients.
 -- @realm shared
 function net.SendStream(messageId, data, client)
 	local encodedString = spon.encode(data)

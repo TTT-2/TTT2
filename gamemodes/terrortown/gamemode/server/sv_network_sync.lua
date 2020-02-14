@@ -3,22 +3,16 @@
 -- @author saibotk
 
 -- Only send to clients, that already requested a full state update,
--- which indirectly show that they are ready to receive and are not
+-- which indirectly shows that they are ready to receive and are not
 -- loading the gamemode anymore.
 local initialized_clients = {}
 
 -- Global data tables
 -- The meta data table to store information about the type of the data (used to correctly send the data)
-local data_store_metadata = {
-	global = {},
-	players = {}
-}
+local data_store_metadata = {}
 
 -- The general value storage
-local data_store = {
-	global = {},
-	players = {}
-}
+local data_store = {}
 
 -- Register network message names
 util.AddNetworkString(TTT2NET.NETMSG_META_UPDATE)
@@ -284,17 +278,33 @@ function TTT2NET:GetOnPlayer(path, ply, client)
 	return self:Get(path, client)
 end
 
+---
+-- Prints out all TTT2NET related tables, for debugging purposes.
 function TTT2NET:Debug()
-	print("[TTT2NET DEBUG] Initialized players:")
+	print("[TTT2NET] Debug:")
+	print("Initialized clients:")
 	PrintTable(initialized_clients)
-	print("[TTT2NET DEBUG] Table content below:")
+	print("Meta data table:")
 	PrintTable(data_store_metadata)
+	print("Data store table:")
 	PrintTable(data_store)
 end
 
+local function NWVarSyncProxyCallback(ent, name, oldval, newval, path, meta)
+	TTT2NET:SetOnPlayer(path or name, meta, newval, ent)
+end
+
 -- TODO
-function TTT2NET:SyncWithNWVar(key, nwent, nwkey)
-	-- TODO implement
+function TTT2NET:SyncWithNWVar(meta, nwent, nwkey, path)
+	assert(IsEntity(nwent), "SyncWithNWVar() received an invalid entity!")
+
+	-- React to changes to nwvars
+	nwent:SetNWVarProxy(nwkey, function (ent, name, oldval, newval)
+		NWVarSyncProxyCallback(ent, name, oldval, newval, path, meta)
+	end)
+
+	-- React to changes in the TTT2NET data table
+	-- TODO
 end
 
 function TTT2NET:SendMetaDataUpdate(path)
@@ -333,7 +343,8 @@ function TTT2NET:RemoveOverride(client, curTable, path)
 end
 
 function TTT2NET:ResetClient(client)
-	print("[TTT2NET] Called ResetClient for entity with index: " .. client:EntIndex())
+	assert(IsEntity(client), "ResetClient() client is not a valid Entity!")
+
 	table.RemoveByValue(initialized_clients, client)
 
 	-- Clear up the player specific data table
