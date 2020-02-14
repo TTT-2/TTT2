@@ -412,6 +412,7 @@ function plymeta:ResetRoundFlags()
 
 	-- corpse
 	self:SetNWBool("body_found", false)
+	self:TTT2NETSetBool("body_found", false)
 
 	self.kills = {}
 	self.dying_wep = nil
@@ -981,15 +982,19 @@ end
 function plymeta:ConfirmPlayer(announceRole)
 	if self:GetNWFloat("t_first_found", -1) < 0 then
 		self:SetNWFloat("t_first_found", CurTime())
+		self:TTT2NETSetFloat("t_first_found", CurTime())
 	end
 
 	self:SetNWFloat("t_last_found", CurTime())
+	self:TTT2NETSetFloat("t_last_found", CurTime())
 
 	if announceRole then
 		self:SetNWBool("role_found", true)
+		self:TTT2NETSetBool("role_found", true)
 	end
 
 	self:SetNWBool("body_found", true)
+	self:TTT2NETSetBool("body_found", true)
 end
 
 ---
@@ -998,9 +1003,11 @@ end
 function plymeta:ResetConfirmPlayer()
 	-- body_found is reset on the player reset
 	self:SetNWBool("role_found", false)
-
+	self:TTT2NETSetBool("role_found", false)
 	self:SetNWFloat("t_first_found", -1)
+	self:TTT2NETSetFloat("t_first_found", -1)
 	self:SetNWFloat("t_last_found", -1)
+	self:TTT2NETSetFloat("t_last_found", -1)
 end
 
 ---
