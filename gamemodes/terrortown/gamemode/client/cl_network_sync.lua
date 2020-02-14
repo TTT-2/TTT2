@@ -367,17 +367,17 @@ function plymeta:TTT2NETGetBool(path, fallback)
 end
 
 function plymeta:TTT2NETGetInt(path, fallback)
-	return tonumber(TTT2NET:GetOnPlayer(path, self)) or fallback
+	return tonumber(TTT2NET:GetOnPlayer(path, self) or fallback)
 end
 
 function plymeta:TTT2NETGetUInt(path, fallback)
-	return tonumber(TTT2NET:GetOnPlayer(path, self)) or fallback
+	return tonumber(TTT2NET:GetOnPlayer(path, self) or fallback)
 end
 
 function plymeta:TTT2NETGetFloat(path, fallback)
-	return tonumber(TTT2NET:GetOnPlayer(path, self)) or fallback
+	return tonumber(TTT2NET:GetOnPlayer(path, self) or fallback)
 end
 
 function plymeta:TTT2NETGetString(path, fallback)
-	return tostring(TTT2NET:GetOnPlayer(path, self)) or fallback
+	return tostring(TTT2NET:GetOnPlayer(path, self) or fallback)
 end
