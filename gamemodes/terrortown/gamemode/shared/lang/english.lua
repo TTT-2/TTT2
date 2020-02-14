@@ -669,6 +669,7 @@ L.mute_living = "Living players muted"
 L.mute_specs = "Spectators muted"
 L.mute_all = "All muted"
 L.mute_off = "None muted"
+L.mute_team = "{team} muted."
 
 -- Spectators and prop possession
 L.punch_title = "PUNCH-O-METER"
@@ -1271,6 +1272,3 @@ L.door_locked = "This door is locked"
 
 -- 2020-02-11
 L.automoved_to_spec = "(AUTOMATED MESSAGE) I have been moved to the Spectator team because I was idle/AFK."
-L.muted_all = "Mute all players."
-L.muted_none = "Mute no player."
-L.muted_team = "Mute team {team}."

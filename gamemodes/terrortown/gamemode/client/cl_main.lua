@@ -10,9 +10,6 @@ local IsValid = IsValid
 local surface = surface
 local CreateConVar = CreateConVar
 local hook = hook
-local TryT = LANG.TryTranslation
-
-local cv_ttt_spectator_mode = cv_ttt_spectator_mode or nil
 
 -- Define GM12 fonts for compatibility
 surface.CreateFont("DefaultBold", {font = "Tahoma", size = 13, weight = 1000})
@@ -76,6 +73,9 @@ ttt_include("cl_damage_indicator")
 ttt_include("sh_armor")
 ttt_include("cl_weapon_pickup")
 
+-- all files are loaded
+local TryT = LANG.TryTranslation
+
 ---
 -- Called after the gamemode loads and starts.
 -- @hook
@@ -88,7 +88,6 @@ function GM:Initialize()
 	hook.Run("TTT2Initialize")
 
 	GAMEMODE.round_state = ROUND_WAIT
-	cv_ttt_spectator_mode = GetConVar("ttt_spectator_mode")
 
 	LANG.Init()
 
@@ -169,7 +168,7 @@ function GM:InitPostEntity()
 	net.SendToServer()
 
 	net.Start("TTT_Spectate")
-	net.WriteBool(cv_ttt_spectator_mode:GetBool())
+	net.WriteBool(GetConVar("ttt_spectator_mode"):GetBool())
 	net.SendToServer()
 
 	if not game.SinglePlayer() then
@@ -234,7 +233,7 @@ local function RoundStateChange(o, n)
 		GAMEMODE:CleanUpMap()
 
 		-- show warning to spec mode players
-		if cv_ttt_spectator_mode:GetBool() and IsValid(LocalPlayer()) then
+		if GetConVar("ttt_spectator_mode"):GetBool() and IsValid(LocalPlayer()) then
 			LANG.Msg("spec_mode_warning", nil, MSG_CHAT_WARN)
 		end
 
