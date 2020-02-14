@@ -471,3 +471,46 @@ function TTT2NET:NetWriteData(metadata, val)
 		net.WriteString(val)
 	end
 end
+
+-- Player extensions
+local plymeta = assert(FindMetaTable("Player"), "FAILED TO FIND PLAYER TABLE")
+
+function plymeta:TTT2NETGetBool(path, fallback)
+	return TTT2NET:GetOnPlayer(path, self) or fallback
+end
+
+function plymeta:TTT2NETGetInt(path, fallback)
+	return tonumber(TTT2NET:GetOnPlayer(path, self)) or fallback
+end
+
+function plymeta:TTT2NETGetUInt(path, fallback)
+	return tonumber(TTT2NET:GetOnPlayer(path, self)) or fallback
+end
+
+function plymeta:TTT2NETGetFloat(path, fallback)
+	return tonumber(TTT2NET:GetOnPlayer(path, self)) or fallback
+end
+
+function plymeta:TTT2NETGetString(path, fallback)
+	return tostring(TTT2NET:GetOnPlayer(path, self)) or fallback
+end
+
+function plymeta:TTT2NETSetBool(path, value)
+	TTT2NET:SetOnPlayer(path, { type = "bool" }, value, self)
+end
+
+function plymeta:TTT2NETSetInt(path, value)
+	TTT2NET:SetOnPlayer(path, { type = "int" }, value, self)
+end
+
+function plymeta:TTT2NETSetUInt(path, value)
+	TTT2NET:SetOnPlayer(path, { type = "int", unsigned = true }, value, self)
+end
+
+function plymeta:TTT2NETSetFloat(path, value)
+	TTT2NET:SetOnPlayer(path, { type = "float" }, value, self)
+end
+
+function plymeta:TTT2NETSetString(path, value)
+	TTT2NET:SetOnPlayer(path, { type = "string" }, value, self)
+end

@@ -358,3 +358,26 @@ function TTT2NET:OnUpdateOnPlayer(path, ply, func)
 
 	self:OnUpdate(path, func)
 end
+
+-- Player extensions
+local plymeta = assert(FindMetaTable("Player"), "FAILED TO FIND PLAYER TABLE")
+
+function plymeta:TTT2NETGetBool(path, fallback)
+	return TTT2NET:GetOnPlayer(path, self) or fallback
+end
+
+function plymeta:TTT2NETGetInt(path, fallback)
+	return tonumber(TTT2NET:GetOnPlayer(path, self)) or fallback
+end
+
+function plymeta:TTT2NETGetUInt(path, fallback)
+	return tonumber(TTT2NET:GetOnPlayer(path, self)) or fallback
+end
+
+function plymeta:TTT2NETGetFloat(path, fallback)
+	return tonumber(TTT2NET:GetOnPlayer(path, self)) or fallback
+end
+
+function plymeta:TTT2NETGetString(path, fallback)
+	return tostring(TTT2NET:GetOnPlayer(path, self)) or fallback
+end
