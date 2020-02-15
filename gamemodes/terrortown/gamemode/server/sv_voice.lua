@@ -120,11 +120,6 @@ function GM:TTT2CanHearVoiceChat(listener, speaker, isTeam)
 end
 
 local function SendRoleVoiceState(speaker)
-	local tm = speaker:GetTeam()
-	local isGlobal = speaker[tm .. "_gvoice"]
-
-	if isGlobal then return end
-
 	-- send umsg to living traitors that this is traitor-only talk
 	local rf = GetTeamMemberFilter(speaker, true)
 
@@ -132,7 +127,7 @@ local function SendRoleVoiceState(speaker)
 	-- we can fit it into a mere byte by being cheeky.
 	net.Start("TTT_RoleVoiceState")
 	net.WriteUInt(speaker:EntIndex() - 1, 7) -- player ids can only be 1-128
-	net.WriteBit(isTeam)
+	net.WriteBit(speaker[speaker:GetTeam() .. "_gvoice"])
 
 	if rf then
 		net.Send(rf)
@@ -144,9 +139,7 @@ end
 local function RoleGlobalVoice(ply, isGlobal)
 	if not IsValid(ply) then return end
 
-	local tm = ply:GetTeam()
-
-	ply[tm .. "_gvoice"] = isGlobal
+	ply[ply:GetTeam() .. "_gvoice"] = isGlobal
 	ply.blockVoice = hook.Run("TTT2CanUseVoiceChat", ply, not isGlobal) == false
 
 	SendRoleVoiceState(ply)
