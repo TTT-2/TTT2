@@ -210,7 +210,7 @@ if SERVER then
 				if not IsValid(ent) or ent:IsDoorLocked() or ent:DoorIsTransitioning() then return end
 
 				-- update door state
-				ent:SetNWBool("ttt2_door_open", ent:InternalIsDoorOpen() or false)
+				ent:SetNWBool("ttt2_door_open", IsDoorOpen(ent) or false)
 
 				-- remove timer since transition is now stopped
 				timer.Remove("ttt2_recheck_door_use_" .. ent:EntIndex())
