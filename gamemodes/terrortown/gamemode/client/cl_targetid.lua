@@ -455,7 +455,7 @@ function HUDDrawTargetIDDoors(tData)
 	local ent = tData:GetEntity()
 
 	if not IsValid(client) or not client:IsTerror() or not client:Alive()
-	or not IsValid(ent) or not ent:IsDoor() or not ent:UseOpensDoor() or tData:GetEntityDistance() > 100 then
+	or not IsValid(ent) or not ent:IsDoor() or not ent:PlayerCanOpenDoor() or tData:GetEntityDistance() > 90 then
 		return
 	end
 

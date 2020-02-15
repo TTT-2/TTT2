@@ -1,9 +1,4 @@
---- DOORS MODULE STUFF ---
-
----
--- @module door
--- @author Mineotopia
--- @desc A bunch of functions that handle all doors found on a map
+--- LOCAL DOOR RELATED STUFF ---
 
 local door_list = {
 	doors = {}
@@ -18,6 +13,79 @@ local valid_doors = {
 		["prop_door_rotating"] = true
 	}
 }
+
+-- Returns if a door is open
+local function IsDoorOpen(ent)
+	if CLIENT then return end
+
+	local cls = ent:GetClass()
+
+	if door.IsValidNormal(cls) then
+		return ent:GetInternalVariable("m_eDoorState") ~= 0
+	elseif door.IsValidSpecial(cls) then
+		return ent:GetInternalVariable("m_toggle_state") == 0
+	end
+
+	return false
+end
+
+-- Returns if a player can interact with a door
+local function PlayerCanUseDoor(ent)
+	if CLIENT then return end
+
+	local cls = ent:GetClass()
+
+	if door.IsValidNormal(cls) then
+		-- 32768: ignore player +use
+		return not ent:HasSpawnFlags(32768)
+	elseif door.IsValidSpecial(cls) then
+		-- 256: use opens
+		return ent:HasSpawnFlags(256)
+	end
+
+	return false
+end
+
+-- Returns if touching a door opens it
+local function PlayerCanTouchDoor(ent)
+	if CLIENT then return end
+
+	local cls = ent:GetClass()
+
+	if door.IsValidNormal(cls) then
+		-- this door type has no touch mode
+		return false
+	elseif door.IsValidSpecial(cls) then
+		-- 1024: touch opens
+		return ent:HasSpawnFlags(1024)
+	end
+
+	return false
+end
+
+-- Returns if a door autocloses after some time
+local function DoorAutoCloses(ent)
+	if CLIENT then return end
+
+	local cls = ent:GetClass()
+
+	if door.IsValidNormal(cls) then
+		-- 8192: door closes on use
+		return not ent:HasSpawnFlags(8192)
+	elseif door.IsValidSpecial(cls) then
+		-- 1024: touch opens
+		return not ent:HasSpawnFlags(32)
+	end
+
+	return false
+end
+
+--- DOORS MODULE STUFF ---
+
+---
+-- @module door
+-- @author Mineotopia
+-- @desc A bunch of functions that handle all doors found on a map
 
 door = {}
 
@@ -42,7 +110,11 @@ function door.SetUp()
 
 		ent:SetNWBool("ttt2_door_locked", ent:GetInternalVariable("m_bLocked") or false)
 		ent:SetNWBool("ttt2_door_forceclosed", ent:GetInternalVariable("forceclosed") or false)
-		ent:SetNWBool("ttt2_door_open", ent:InternalIsDoorOpen() or false)
+		ent:SetNWBool("ttt2_door_open", IsDoorOpen(ent) or false)
+
+		ent:SetNWBool("ttt2_door_player_use", PlayerCanUseDoor(ent))
+		ent:SetNWBool("ttt2_door_player_touch", PlayerCanTouchDoor(ent))
+		ent:SetNWBool("ttt2_door_auto_close", DoorAutoCloses(ent))
 	end
 
 	door_list.doors = doors
@@ -54,6 +126,22 @@ end
 -- @realm shared
 function door.GetValid()
 	return valid_doors
+end
+
+---
+-- Returns if a passed door class is a valid normal door (prop_door_rotating)
+-- @return boolean True if it is a valid normal door
+-- @realm shared
+function door.IsValidNormal(cls)
+	return valid_doors.normal[cls] or false
+end
+
+---
+-- Returns if a passed door class is a valid special door (func_door, func_door_rotating)
+-- @return boolean True if it is a valid special door
+-- @realm shared
+function door.IsValidSpecial(cls)
+	return valid_doors.special[cls] or false
 end
 
 ---
@@ -168,7 +256,7 @@ function entmeta:IsDoorLocked()
 end
 
 ---
--- Returns if a door is forceclosed, traitor room doors for example are forceclosed
+-- Returns if a door is forceclosed, if it forceclosed it will close no matter what
 -- @return boolean The door state; true: forceclosed, false: not forceclosed, nil: no valid door
 -- @realm shared
 function entmeta:IsDoorForceclosed()
@@ -179,13 +267,43 @@ end
 
 ---
 -- Returns if this door can be opened with the use key, traitor room doors or doors
--- opened with a button press can't be opened with the use key
+-- opened with a button press can't be opened with the use key for example
 -- @return boolean If the door can be opened with the use key
 -- @realm shared
 function entmeta:UseOpensDoor()
 	if not self:IsDoor() then return end
 
-	return not door.GetValid().special[self:GetClass()] or not self:IsDoorForceclosed()
+	return self:GetNWBool("ttt2_door_player_use", false)
+end
+
+---
+-- Returns if this door can be opened by close proximity of a player
+-- @return boolean If the door can be opened with proximity
+-- @realm shared
+function entmeta:TouchOpensDoor()
+	if not self:IsDoor() then return end
+
+	return self:GetNWBool("ttt2_door_player_touch", false)
+end
+
+---
+-- Returns if this door can be opened by a player
+-- @return boolean If the door can be opened
+-- @realm shared
+function entmeta:PlayerCanOpenDoor()
+	if not self:IsDoor() then return end
+
+	return self:UseOpensDoor() or self:TouchOpensDoor()
+end
+
+---
+-- Returns if this door closes automatically after a certain time
+-- @return boolean If the door closes automatically
+-- @realm shared
+function entmeta:DoorAutoCloses()
+	if not self:IsDoor() then return end
+
+	return self:GetNWBool("ttt2_door_auto_close", false)
 end
 
 ---
@@ -214,33 +332,6 @@ if SERVER then
 	end
 
 	---
-	-- Returns if a door is open
-	-- @return boolean The door state; true: open, false: close, nil: no valid door
-	-- @internal
-	-- @realm server
-	function entmeta:InternalIsDoorOpen()
-		if not self:IsDoor() then return end
-
-		local cls = self:GetClass()
-
-		if cls == "func_door" or cls == "func_door_rotating" then
-			return self:GetInternalVariable("m_toggle_state") == 0
-		elseif cls == "prop_door_rotating" then
-			return self:GetInternalVariable("m_eDoorState") ~= 0
-		end
-	end
-
-	---
-	-- Returns if a door autocloses after a given time
-	-- @return boolean If the door autocloses
-	-- @realm server
-	function entmeta:DoesAutoClose()
-		if not self:IsDoor() then return end
-
-		return self:GetInternalVariable("m_flMoveDoneTime") ~= -1
-	end
-
-	---
 	-- Returns if a door is currently transitioning between beeing opened and closed
 	-- @return boolean The door state; true: open, false: close, nil: no valid door
 	-- @realm server
@@ -249,20 +340,20 @@ if SERVER then
 
 		local cls = self:GetClass()
 
-		if cls == "func_door" or cls == "func_door_rotating" then
+		if door.IsValidNormal(cls) then
 			-- some doors have an auto-close feature
-			if self:DoesAutoClose() and self:GetInternalVariable("m_toggle_state") == 0 then
-				return true
-			end
-
-			return self:GetInternalVariable("m_toggle_state") == 2 or self:GetInternalVariable("m_toggle_state") == 3
-		elseif cls == "prop_door_rotating" then
-			-- some doors have an auto-close feature
-			if self:DoesAutoClose() and self:GetInternalVariable("m_eDoorState") == 2 then
+			if self:DoorAutoCloses() and self:GetInternalVariable("m_eDoorState") == 2 then
 				return true
 			end
 
 			return self:GetInternalVariable("m_eDoorState") == 1 or self:GetInternalVariable("m_eDoorState") == 3
+		elseif door.IsValidSpecial(cls) then
+			-- some doors have an auto-close feature
+			if self:DoorAutoCloses() and self:GetInternalVariable("m_toggle_state") == 0 then
+				return true
+			end
+
+			return self:GetInternalVariable("m_toggle_state") == 2 or self:GetInternalVariable("m_toggle_state") == 3
 		end
 	end
 end
