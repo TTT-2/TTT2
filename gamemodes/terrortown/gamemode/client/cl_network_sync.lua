@@ -26,9 +26,7 @@ function TTT2NET:Get(path)
 	end
 
 	-- Prevent wrong data being returned, when no metadata entry exists
-	if table.GetWithPath(data_store_metadata, path) == nil then
-		return
-	end
+	if table.GetWithPath(data_store_metadata, path) == nil then return end
 
 	return table.GetWithPath(data_store, path)
 end
@@ -223,6 +221,7 @@ function TTT2NET:CallOnUpdate(path, oldval, newval)
 
 		-- Remove the last path element and save in reversePath to let the parent callbacks know which value has changed
 		table.insert(reversePath, 1, currentPath[#currentPath])
+
 		currentPath[#currentPath] = nil
 	end
 end
@@ -250,9 +249,7 @@ end
 -- @return table The metadata table
 function TTT2NET:NetReadMetaData()
 	-- If the null flag is set, then return null
-	if net.ReadBool() then
-		return
-	end
+	if net.ReadBool() then return end
 
 	local metadata = {}
 	metadata.type = net.ReadString()
@@ -274,9 +271,7 @@ end
 -- @return any The data that was read
 function TTT2NET:NetReadData(metadata)
 	-- If the null flag is set, then return null
-	if net.ReadBool() then
-		return
-	end
+	if net.ReadBool() then return end
 
 	if metadata.type == "int" then
 		if metadata.unsigned then

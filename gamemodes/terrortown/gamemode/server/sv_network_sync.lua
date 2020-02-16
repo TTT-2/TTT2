@@ -138,6 +138,7 @@ function TTT2NET:Set(path, meta, value, client)
 	end
 
 	local metadata = meta or table.GetWithPath(data_store_metadata, path)
+
 	assert(metadata, "[TTT2NET] Set() called but no metadata entry or metadata parameter found!")
 
 	-- Set the meta data, this will only send / update if the meta data has changed
@@ -176,8 +177,9 @@ function TTT2NET:RemoveOverrides(path)
 	-- Traverse the path in the data_store table.
 	-- This will be done until the second last table is reached, so we still have a reference to the parent table.
 	for i = 1, (#path - 1) do
-		if currentDataTable == nil then return end
 		currentDataTable = currentDataTable[path[i]]
+
+		if currentDataTable == nil then return end
 	end
 
 	local lastKey = path[#path]
@@ -195,6 +197,7 @@ function TTT2NET:RemoveOverrides(path)
 	for i = 1, #playerIds do
 		local ply = Entity(playerIds[i])
 		-- ply will be nil if no entity is found
+
 		if IsEntity(ply) and ply:IsPlayer() then
 			receivers[#receivers + 1] = ply
 		end
@@ -279,6 +282,7 @@ function TTT2NET:GetWithOverride(path, client)
 	if not istable(path) then
 		path = { path }
 	end
+
 	local clientId = client:EntIndex()
 
 	local overridePath = table.Copy(path)
@@ -472,6 +476,7 @@ function TTT2NET:SendDataUpdate(path, client)
 
 	-- Check for a valid metadata entry
 	local metadata = table.GetWithPath(data_store_metadata, path)
+
 	assert(metadata, "[TTT2NET] SendDataUpdate(): Metadata table is not initialized for this path.")
 
 	-- Only send to the client (or table of clients) that was specified or the already initialized clients
@@ -482,7 +487,6 @@ function TTT2NET:SendDataUpdate(path, client)
 	-- For each receiver send the data
 	for i = 1, #receivers do
 		local receiver = receivers[i]
-
 		local value = self:GetWithOverride(path, receiver)
 
 		net.Start(TTT2NET.NETMSG_DATA_UPDATE)
@@ -534,7 +538,6 @@ end
 --
 -- @param Player|table|nil client The client/list of clients or nil for all known clients, to send the update to
 function TTT2NET:SendFullStateUpdate(client)
-
 	-- Wrap the given receivers to a table
 	local receivers = not istable(client) and { client } or initialized_clients
 
@@ -580,14 +583,18 @@ end
 --
 -- @param table metadata The metadata to send
 function TTT2NET:NetWriteMetaData(metadata)
-	net.WriteBool(metadata == nil)
-	if metadata == nil then
+	local isMetadataNil = metadata == nil
+
+	net.WriteBool(isMetadataNil)
+
+	if isMetadataNil then
 		return
 	end
 
 	net.WriteString(metadata.type)
+
 	if metadata.type == "int" then
-		net.WriteUInt(metadata.bits, 6) -- max 32 bits
+		net.WriteUInt(metadata.bits, 6) -- 6 bits, so we can safely send the maximum bit count of 32 bits
 		net.WriteBool(metadata.unsigned)
 	end
 end
@@ -601,8 +608,11 @@ end
 -- @param any|nil val The value to send, can also be nil
 function TTT2NET:NetWriteData(metadata, val)
 	-- Check if the value is nil, to also allow setting a value to nil
-	net.WriteBool(val == nil)
-	if val == nil then
+	local isValNil = val == nil
+
+	net.WriteBool(isValNil)
+
+	if isValNil then
 		return
 	end
 
@@ -645,7 +655,10 @@ end
 -- @param int|nil value The value to set
 -- @param int|nil bits The bits that this int needs to be stored (optional, otherwise a default of 32 is used)
 function plymeta:TTT2NETSetInt(path, value, bits)
-	TTT2NET:SetOnPlayer(path, { type = "int", bits = bits }, value, self)
+	TTT2NET:SetOnPlayer(path, {
+			type = "int",
+			bits = bits
+		}, value, self)
 end
 
 ---
@@ -655,7 +668,11 @@ end
 -- @param uint|nil value The value to set
 -- @param int|nil bits The bits that this int needs to be stored (optional, otherwise a default of 32 is used)
 function plymeta:TTT2NETSetUInt(path, value, bits)
-	TTT2NET:SetOnPlayer(path, { type = "int", unsigned = true, bits = bits }, value, self)
+	TTT2NET:SetOnPlayer(path, {
+			type = "int",
+			unsigned = true,
+			bits = bits
+		}, value, self)
 end
 
 ---

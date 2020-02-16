@@ -24,6 +24,7 @@ function table.GetWithPath(dataTable, path)
 
 	for i = 1, #path do
 		if currentDataTable == nil then return end
+
 		currentDataTable = currentDataTable[path[i]]
 	end
 

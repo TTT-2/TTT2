@@ -31,6 +31,7 @@ end
 function net.SendStream(messageId, data, client)
 	local encodedString = pon.encode(data)
 	local split = string.SplitAtSize(encodedString, net.STREAM_FRAGMENTATION_SIZE)
+
 	for i = 1, #split do
 		net.Start(NETMSG_STREAM)
 		-- Write the messageId
@@ -64,6 +65,7 @@ end
 function net.ReceiveStream(messageId, callback)
 	-- has to be saved as string, otherwise the key lookups will fail on the table
 	local msg = tostring(util.CRC(messageId))
+
 	net.stream_callbacks[msg] = callback
 end
 
@@ -76,6 +78,7 @@ local function ReceiveStream()
 	local messageId = tostring(net.ReadUInt(32))
 	local fragmented = net.ReadBool()
 	local data = net.ReadString()
+
 	-- Create cache table if it does not exist yet for this message
 	net.stream_cache[messageId] = net.stream_cache[messageId] or {}
 	-- Write data to cache table

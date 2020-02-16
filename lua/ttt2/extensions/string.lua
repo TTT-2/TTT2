@@ -24,6 +24,7 @@ function string.SplitAtSize(str, splitSize)
 	local integralPart, fractionalPart = math.modf(size / splitSize)
 	-- If the number can not be perfectly divided into the given size, we have to add another for the last part
 	local splitCount = (fractionalPart == 0) and integralPart or (integralPart + 1)
+
 	for i = 1, splitCount do
 		-- first need to subtract one of the iterator, because we want to calculate the end position of the previous split.
 		-- And add one to the result because lua starts with 1 instead of 0.
