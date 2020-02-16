@@ -506,6 +506,17 @@ COLOR_PINK = Color(255, 0, 255, 255)
 COLOR_ORANGE = Color(250, 100, 0, 255)
 COLOR_OLIVE = Color(100, 100, 0, 255)
 
+-- load non-wrapped modules directly
+require("marks")
+
+-- TODO load modules that are currently not included in gmod but waiting for merge
+require("outline")
+
+include("includes/modules/pon.lua")
+include("ttt2/extensions/net.lua")
+include("ttt2/extensions/string.lua")
+include("ttt2/extensions/table.lua")
+
 -- include ttt required files
 ttt_include("sh_util")
 ttt_include("sh_decal")
@@ -517,17 +528,6 @@ ttt_include("sh_hud_manager")
 ttt_include("sh_equip_items")
 ttt_include("sh_role_module")
 ttt_include("sh_item_module")
-
--- load non-wrapped modules directly
-require("marks")
-
--- TODO load modules that are currently not included in gmod but waiting for merge
-require("outline")
-
-include("includes/modules/pon.lua")
-include("ttt2/extensions/net.lua")
-include("ttt2/extensions/string.lua")
-include("ttt2/extensions/table.lua")
 
 ---
 -- Returns the equipment's file name

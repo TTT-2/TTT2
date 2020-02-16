@@ -35,8 +35,23 @@ if CLIENT then
 		return true
 	end
 
+	local refreshPaths = {
+		["t_first_found"] = true,
+		["t_last_found"] = true,
+		["role_found"] = true,
+		["body_found"] = true
+	}
+
 	function HUDELEMENT:PreInitialize()
 		hudelements.RegisterChildRelation(self.id, "pure_skin_roundinfo", false)
+
+		-- resort miniscoreboard if body_found is changed
+		TTT2NET:OnUpdate("players", function(oldval, newval, reversePath)
+			if not refreshPaths[reversePath[2]] then return end
+
+			-- sort playerlist: confirmed players should be in the first position
+			table.sort(plysList, SortMiniscoreboardFunc)
+		end)
 	end
 
 	HUDELEMENT.icon_in_conf = Material("vgui/ttt/indirect_confirmed")
@@ -116,11 +131,6 @@ if CLIENT then
 
 		return hook.Run("TTT2ModifyMiniscoreboardColor", ply, color) or color
 	end
-
-	hook.Add("TTT2ConfirmedBody", "TTT2UpdateMiniscoreboardFound", function()
-		-- sort playerlist: confirmed players should be in the first position
-		table.sort(plysList, SortMiniscoreboardFunc)
-	end)
 
 	function HUDELEMENT:Draw()
 		-- just update every 0.1 seconds; TODO maybe add a client ConVar
