@@ -784,7 +784,7 @@ function HUDDrawTargetIDRagdolls(tData)
 
 	-- enable targetID rendering
 	tData:EnableText()
-	tData:EnableOutline()
+	tData:EnableOutline(tData:GetEntityDistance() <= 100)
 	tData:SetOutlineColor(COLOR_YELLOW)
 
 	-- add title and subtitle to the focused ent
