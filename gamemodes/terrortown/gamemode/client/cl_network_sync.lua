@@ -20,15 +20,19 @@ local data_listeners = {}
 -- @param any|table path The path to get the value from (this is the absolute path from the root so "global"/"players" etc is not yet included)
 -- @return any The value at the given path or nil if the path does not exist, the value is actually nil or there is no metadata entry for the path
 function TTT2NET:Get(path)
+	local tmpPath
+
 	-- Convert path with single key to table
 	if not istable(path) then
-		path = { path }
+		tmpPath = { path }
+	else
+		tmpPath = table.Copy(path)
 	end
 
 	-- Prevent wrong data being returned, when no metadata entry exists
-	if table.GetWithPath(data_store_metadata, path) == nil then return end
+	if table.GetWithPath(data_store_metadata, tmpPath) == nil then return end
 
-	return table.GetWithPath(data_store, path)
+	return table.GetWithPath(data_store, tmpPath)
 end
 
 ---
@@ -39,15 +43,19 @@ end
 -- @param any|table path The path to get the value from (no need to prepend a "global" as this will be done already)
 -- @return any The value at the given path or nil if the path does not exist, the value is actually nil or there is no metadata entry for the path
 function TTT2NET:GetGlobal(path)
+	local tmpPath
+
 	-- Convert path with single key to table
 	if not istable(path) then
-		path = { path }
+		tmpPath = { path }
+	else
+		tmpPath = table.Copy(path)
 	end
 
 	-- Add the prefix for the correct table
-	table.insert(path, 1, "global")
+	table.insert(tmpPath, 1, "global")
 
-	return self:Get(path)
+	return self:Get(tmpPath)
 end
 
 ---
@@ -59,16 +67,20 @@ end
 -- @param Entity The player from which we want to get the data
 -- @return any The value at the given path or nil if the path does not exist, the value is actually nil or there is no metadata entry for the path
 function TTT2NET:GetOnPlayer(path, ply)
+	local tmpPath
+
 	-- Convert path with single key to table
 	if not istable(path) then
-		path = { path }
+		tmpPath = { path }
+	else
+		tmpPath = table.Copy(path)
 	end
 
 	-- Add the prefix for the correct table with the specific player
-	table.insert(path, 1, "players")
-	table.insert(path, 2, ply:EntIndex())
+	table.insert(tmpPath, 1, "players")
+	table.insert(tmpPath, 2, ply:EntIndex())
 
-	return self:Get(path, client)
+	return self:Get(tmpPath, client)
 end
 
 ---
@@ -90,13 +102,13 @@ end
 --
 -- @internal
 local function CallCallbacksOnTree(oldData, curPath)
-	curPath = not istable(curPath) and { curPath } or curPath or {}
-	local curNode = table.GetWithPath(data_store_metadata, curPath)
+	local tmpPath = not istable(curPath) and { curPath } or table.Copy(curPath) or {}
+	local curNode = table.GetWithPath(data_store_metadata, tmpPath)
 
 	-- Go through all keys that the current node has
 	for key in pairs(curNode) do
 		local nextNode = curNode[key]
-		local nextPath = table.Copy(curPath)
+		local nextPath = table.Copy(tmpPath)
 		nextPath[#nextPath + 1] = key
 
 		if nextNode.type then
@@ -195,16 +207,20 @@ function TTT2NET:CallOnUpdate(path, oldval, newval)
 	-- Skip if the value did not change
 	if oldval == newval then return end
 
+	local tmpPath
+
 	-- Convert path with single key to table
 	if not istable(path) then
-		path = { path }
+		tmpPath = { path }
+	else
+		tmpPath = table.Copy(path)
 	end
 
-	local currentPath = table.Copy(path)
+	local currentPath = table.Copy(tmpPath)
 	local reversePath = {}
 
 	-- Traverse the path tree up from the bottom and call all their listeners
-	for y = 1, #path do
+	for y = 1, #tmpPath do
 		-- Add the special key for the "callbacks" to the path
 		currentPath[#currentPath + 1] = "__callbacks"
 
@@ -297,16 +313,20 @@ end
 function TTT2NET:OnUpdate(path, func)
 	assert(isfunction(func), "[TTT2NET] OnUpdate called with an invalid function.")
 
+	local tmpPath
+
 	-- Convert path with single key to table
 	if not istable(path) then
-		path = { path }
+		tmpPath = { path }
+	else
+		tmpPath = table.Copy(path)
 	end
 
 	-- Add the special callback key to the path
-	path[#path + 1] = "__callbacks"
+	tmpPath[#tmpPath + 1] = "__callbacks"
 
 	-- Get the registered callbacks table for the given path
-	local registeredCallbacks = table.GetWithPath(data_listeners, path) or {}
+	local registeredCallbacks = table.GetWithPath(data_listeners, tmpPath) or {}
 
 	-- Check if this function is not already registered, to avoid duplicates
 	if table.HasValue(registeredCallbacks, func) then return end
@@ -315,7 +335,7 @@ function TTT2NET:OnUpdate(path, func)
 	registeredCallbacks[#registeredCallbacks + 1] = func
 
 	-- Set the callback table again
-	table.SetWithPath(data_listeners, path, registeredCallbacks)
+	table.SetWithPath(data_listeners, tmpPath, registeredCallbacks)
 end
 
 ---
@@ -324,15 +344,19 @@ end
 -- @param any|table path The path to register the callback on
 -- @param function func The callback function that should be executed
 function TTT2NET:OnUpdateGlobal(path, func)
+	local tmpPath
+
 	-- Convert path with single key to table
 	if not istable(path) then
-		path = { path }
+		tmpPath = { path }
+	else
+		tmpPath = table.Copy(path)
 	end
 
 	-- Add the prefix for the correct table
-	table.insert(path, 1, "global")
+	table.insert(tmpPath, 1, "global")
 
-	self:OnUpdate(path, func)
+	self:OnUpdate(tmpPath, func)
 end
 
 ---
@@ -342,14 +366,18 @@ end
 -- @param Entity ply The player that this data entry is from
 -- @param function func The callback function that should be executed
 function TTT2NET:OnUpdateOnPlayer(path, ply, func)
+	local tmpPath
+
 	-- Convert path with single key to table
 	if not istable(path) then
-		path = { path }
+		tmpPath = { path }
+	else
+		tmpPath = table.Copy(path)
 	end
 
 	-- Add the prefix for the correct table with the specific player
-	table.insert(path, 1, "players")
-	table.insert(path, 2, ply:EntIndex())
+	table.insert(tmpPath, 1, "players")
+	table.insert(tmpPath, 2, ply:EntIndex())
 
-	self:OnUpdate(path, func)
+	self:OnUpdate(tmpPath, func)
 end
