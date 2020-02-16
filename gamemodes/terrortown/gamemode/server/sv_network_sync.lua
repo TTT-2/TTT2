@@ -174,6 +174,8 @@ function TTT2NET:RemoveOverrides(path)
 
 	local currentDataTable = data_store
 
+	if currentDataTable == nil then return end
+
 	-- Traverse the path in the data_store table.
 	-- This will be done until the second last table is reached, so we still have a reference to the parent table.
 	for i = 1, (#path - 1) do
@@ -184,8 +186,8 @@ function TTT2NET:RemoveOverrides(path)
 
 	local lastKey = path[#path]
 
-	-- If the table does not even exist, then exit
-	if currentDataTable == nil or currentDataTable[lastKey] == nil then return end
+	-- If the table does not have the last key, then exit
+	if currentDataTable[lastKey] == nil then return end
 
 	local defaultValue = currentDataTable[lastKey].default
 
@@ -587,9 +589,7 @@ function TTT2NET:NetWriteMetaData(metadata)
 
 	net.WriteBool(isMetadataNil)
 
-	if isMetadataNil then
-		return
-	end
+	if isMetadataNil then return end
 
 	net.WriteString(metadata.type)
 
@@ -612,9 +612,7 @@ function TTT2NET:NetWriteData(metadata, val)
 
 	net.WriteBool(isValNil)
 
-	if isValNil then
-		return
-	end
+	if isValNil then return end
 
 	-- Decide on how to send the data, or fallback to string
 	if metadata.type == "int" then
@@ -656,9 +654,9 @@ end
 -- @param int|nil bits The bits that this int needs to be stored (optional, otherwise a default of 32 is used)
 function plymeta:TTT2NETSetInt(path, value, bits)
 	TTT2NET:SetOnPlayer(path, {
-			type = "int",
-			bits = bits
-		}, value, self)
+		type = "int",
+		bits = bits
+	}, value, self)
 end
 
 ---
@@ -669,10 +667,10 @@ end
 -- @param int|nil bits The bits that this int needs to be stored (optional, otherwise a default of 32 is used)
 function plymeta:TTT2NETSetUInt(path, value, bits)
 	TTT2NET:SetOnPlayer(path, {
-			type = "int",
-			unsigned = true,
-			bits = bits
-		}, value, self)
+		type = "int",
+		unsigned = true,
+		bits = bits
+	}, value, self)
 end
 
 ---
