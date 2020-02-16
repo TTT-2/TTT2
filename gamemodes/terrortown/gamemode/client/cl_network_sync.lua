@@ -300,7 +300,7 @@ end
 -- @param the path to watch for changes
 -- @param function func
 function TTT2NET:OnUpdate(path, func)
-	assert(isfunction(func), "OnUpdate called with an invalid function.")
+	assert(isfunction(func), "[TTT2NET] OnUpdate called with an invalid function.")
 
 	-- Convert path with single key to table
 	if not istable(path) then
@@ -357,27 +357,4 @@ function TTT2NET:OnUpdateOnPlayer(path, ply, func)
 	table.insert(path, 2, ply:EntIndex())
 
 	self:OnUpdate(path, func)
-end
-
--- Player extensions
-local plymeta = assert(FindMetaTable("Player"), "FAILED TO FIND PLAYER TABLE")
-
-function plymeta:TTT2NETGetBool(path, fallback)
-	return TTT2NET:GetOnPlayer(path, self) or fallback
-end
-
-function plymeta:TTT2NETGetInt(path, fallback)
-	return tonumber(TTT2NET:GetOnPlayer(path, self) or fallback)
-end
-
-function plymeta:TTT2NETGetUInt(path, fallback)
-	return tonumber(TTT2NET:GetOnPlayer(path, self) or fallback)
-end
-
-function plymeta:TTT2NETGetFloat(path, fallback)
-	return tonumber(TTT2NET:GetOnPlayer(path, self) or fallback)
-end
-
-function plymeta:TTT2NETGetString(path, fallback)
-	return tostring(TTT2NET:GetOnPlayer(path, self) or fallback)
 end
