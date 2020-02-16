@@ -101,7 +101,7 @@ if SERVER then
 	-- loading screen
 	resource.AddFile("materials/vgui/ttt/loadingscreen/loading.vtf")
 	resource.AddFile("materials/vgui/ttt/loadingscreen/img/bg.jpg")
-	resource.AddFile("materials/vgui/ttt/loadingscreen/img/TTT2Icon.png")
+	resource.AddFile("materials/vgui/ttt/loadingscreen/img/ttt2_loading_logo.png")
 
 	-- dmgindicator themes
 	resource.AddFile("materials/vgui/ttt/dmgindicator/themes/default.png")
