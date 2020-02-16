@@ -872,6 +872,16 @@ function plymeta:IsReady()
 end
 
 ---
+-- This hook is called once the player is ready on client and server. This means that
+-- the client is able to handle data from the server
+-- @param Player ply The @{Player} that is now ready
+-- @hook
+-- @realm shared
+function GM:TTT2PlayerReady(ply)
+
+end
+
+---
 -- Sets the @{Player}'s @{Model}
 -- @param string mdlName
 -- @note override to fix PS/ModelSelector/... issues
