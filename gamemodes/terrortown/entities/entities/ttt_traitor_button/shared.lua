@@ -1,6 +1,16 @@
 --- Special button usable from range if your role has access to it
 
-CreateConVar("ttt2_tbutton_admin_show", "0", SERVER and {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_REPLICATED} or {FCVAR_REPLICATED}, "Always show the buttons to admins in range", 0, 1)
+local cv_tbutton = CreateConVar("ttt2_tbutton_admin_show", "0", {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "Always show the buttons to admins in range", 0, 1)
+
+if SERVER then
+	hook.Add("TTT2SyncGlobals", "AddTButtonGlobals", function()
+		SetGlobalBool(cv_tbutton:GetName(), cv_tbutton:GetBool())
+	end)
+
+	cvars.AddChangeCallback(cv_tbutton:GetName(), function(cv, old, new)
+		SetGlobalBool(cv_tbutton:GetName(), tobool(tonumber(new)))
+	end)
+end
 
 if CLIENT then
 	net.Receive("TTT2SendTButtonConfig", function(len, ply)

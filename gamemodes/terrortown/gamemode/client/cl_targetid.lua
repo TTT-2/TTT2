@@ -497,7 +497,7 @@ function HUDDrawTargetIDTButtons(tData)
 	local client = LocalPlayer()
 	local ent = tData:GetEntity()
 
-	local admin_mode = GetConVar("ttt2_tbutton_admin_show")
+	local admin_mode = GetGloablBool("ttt2_tbutton_admin_show", false)
 
 	if not IsValid(client) or not client:IsTerror() or not client:Alive()
 	or not IsValid(ent) or ent:GetClass() ~= "ttt_traitor_button" or tData:GetEntityDistance() > ent:GetUsableRange() then
@@ -543,7 +543,7 @@ function HUDDrawTargetIDTButtons(tData)
 	end
 
 	-- only add more information if in admin mode
-	if not admin_mode:GetBool() or not client:IsAdmin() then return end
+	if not admin_mode or not client:IsAdmin() then return end
 
 	local but = TBHUD.focus_but
 
@@ -597,7 +597,7 @@ function HUDDrawTargetIDTButtons(tData)
 	tData:AddDescriptionLine() -- adding empty line
 
 	tData:AddDescriptionLine(
-		ParT("tbut_admin_mode_only", {cv = admin_mode:GetName()}),
+		ParT("tbut_admin_mode_only", {cv = "ttt2_tbutton_admin_show"}),
 		COLOR_ORANGE
 	)
 end
