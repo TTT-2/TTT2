@@ -524,6 +524,11 @@ require("marks")
 -- TODO load modules that are currently not included in gmod but waiting for merge
 require("outline")
 
+include("includes/modules/pon.lua")
+include("ttt2/extensions/net.lua")
+include("ttt2/extensions/string.lua")
+include("ttt2/extensions/table.lua")
+
 ---
 -- Returns the equipment's file name
 -- @param string name
