@@ -36,12 +36,13 @@ local base_overlay = Material("vgui/ttt/dynamic/sprite_base_overlay")
 
 -- materials for targetid
 local ring_tex = Material("effects/select_ring")
-local icon_role_not_known = Material("vgui/ttt/dynamic/roles/icon_role_not_known")
-local icon_corpse = Material("vgui/ttt/dynamic/roles/icon_corpse")
-local icon_tbutton = Material("vgui/ttt/dynamic/icon_button_pointer")
-local icon_tid_credits = Material("vgui/ttt/tid_credits")
-local icon_tid_detective = Material("vgui/ttt/tid_detective")
-local icon_tid_locked = Material("vgui/ttt/tid_locked")
+local icon_role_not_known = Material("vgui/ttt/tid/tid_big_role_not_known")
+local icon_corpse = Material("vgui/ttt/tid/tid_big_corpse")
+local icon_tbutton = Material("vgui/ttt/tid/tid_big_tbutton_pointer")
+local icon_tid_credits = Material("vgui/ttt/tid/tid_credits")
+local icon_tid_detective = Material("vgui/ttt/tid/tid_detective")
+local icon_tid_locked = Material("vgui/ttt/tid/tid_locked")
+local icon_tid_auto_close = Material("vgui/ttt/tid/tid_auto_close")
 
 ---
 -- Returns the localized ClassHint table
@@ -463,7 +464,14 @@ function HUDDrawTargetIDDoors(tData)
 	tData:EnableText()
 
 	tData:SetTitle(TryT("name_door"))
-	tData:SetSubtitle(ent:IsDoorOpen() and ParT("door_close", key_params) or ParT("door_open", key_params))
+
+	if ent:UseOpensDoor() and not ent:TouchOpensDoor() then
+		tData:SetSubtitle(ent:IsDoorOpen() and ParT("door_close", key_params) or ParT("door_open", key_params))
+	elseif not ent:UseOpensDoor() and ent:TouchOpensDoor() then
+		tData:SetSubtitle(TryT("door_open_touch"))
+	else
+		tData:SetSubtitle(ParT("door_open_touch_and_use", key_params))
+	end
 
 	tData:SetKey(input.GetKeyCode(key_params.usekey))
 
@@ -472,6 +480,14 @@ function HUDDrawTargetIDDoors(tData)
 			TryT("door_locked"),
 			COLOR_ORANGE,
 			{icon_tid_locked}
+		)
+	end
+
+	if ent:DoorAutoCloses() then
+		tData:AddDescriptionLine(
+			TryT("door_auto_closes"),
+			COLOR_SLATEGRAY,
+			{icon_tid_auto_close}
 		)
 	end
 end

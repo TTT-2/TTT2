@@ -1,6 +1,6 @@
 "UnlitGeneric"
 {
-	"$basetexture" "vgui/ttt/tid_credits"
+	"$basetexture" "vgui/ttt/tid/tid_auto_close"
 	"$nocull" 1
 	"$nodecal" 1
 	"$nolod" 1

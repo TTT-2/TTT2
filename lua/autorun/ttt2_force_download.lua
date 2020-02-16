@@ -18,8 +18,6 @@ if SERVER then
 	resource.AddFile("materials/vgui/ttt/dynamic/roles/icon_traitor.vmt")
 	resource.AddFile("materials/vgui/ttt/dynamic/roles/icon_det.vmt")
 	resource.AddFile("materials/vgui/ttt/dynamic/roles/icon_no_team.vmt")
-	resource.AddFile("materials/vgui/ttt/dynamic/roles/icon_role_not_known.vmt")
-	resource.AddFile("materials/vgui/ttt/dynamic/roles/icon_corpse.vmt")
 
 	resource.AddFile("materials/vgui/ttt/equip/reroll.png")
 
@@ -38,8 +36,6 @@ if SERVER then
 
 	resource.AddFile("materials/vgui/ttt/dynamic/sprite_base.vmt")
 	resource.AddFile("materials/vgui/ttt/dynamic/sprite_base_overlay.vmt")
-
-	resource.AddFile("materials/vgui/ttt/dynamic/icon_button_pointer.vmt")
 
 	resource.AddFile("materials/vgui/ttt/icon_drown.vmt")
 
@@ -112,8 +108,14 @@ if SERVER then
 	resource.AddFile("materials/vgui/ttt/dmgindicator/themes/simple.png")
 	resource.AddFile("materials/vgui/ttt/dmgindicator/themes/vanilla.png")
 
+	-- target ID icons
+	resource.AddFile("materials/vgui/ttt/tid/tid_big_role_not_known.vmt")
+	resource.AddFile("materials/vgui/ttt/tid/tid_big_corpse.vmt")
+	resource.AddFile("materials/vgui/ttt/tidd/tid_big_tbutton_pointer.vmt")
+
 	-- target ID inline icons
-	resource.AddFile("materials/vgui/ttt/tid_credits.vmt")
-	resource.AddFile("materials/vgui/ttt/tid_detective.vmt")
-	resource.AddFile("materials/vgui/ttt/tid_locked.vmt")
+	resource.AddFile("materials/vgui/ttt/tid/tid_credits.vmt")
+	resource.AddFile("materials/vgui/ttt/tid/tid_detective.vmt")
+	resource.AddFile("materials/vgui/ttt/tid/tid_locked.vmt")
+	resource.AddFile("materials/vgui/ttt/tid/tid_auto_close.vmt")
 end

@@ -1272,3 +1272,9 @@ L.door_locked = "This door is locked"
 
 -- 2020-02-11
 L.automoved_to_spec = "(AUTOMATED MESSAGE) I have been moved to the Spectator team because I was idle/AFK."
+
+-- 2020-02-16
+L.door_auto_closes = "This door closes automatically"
+L.door_open_touch = "Walk into door to open."
+L.door_open_touch_and_use = "Walk into door or press [{usekey}] to open."
+L.hud_health = "Health"
