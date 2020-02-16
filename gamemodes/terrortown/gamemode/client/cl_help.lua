@@ -92,14 +92,13 @@ local function AddBindingCategory(category, parent)
 
 			-- onchange function
 			function dPBinder:OnChange(num)
-				if num == 0 then
-					bind.Remove(curBinding, binding.name)
-				else
-					bind.Remove(curBinding, binding.name)
-					bind.Add(num, binding.name, true)
+				bind.Remove(curBinding, binding.name, true)
 
-					LocalPlayer():ChatPrint(GetPTranslation("ttt2_bindings_new", {name = binding.name, key = input.GetKeyName(num)}))
+				if num ~= 0 then
+					bind.Add(num, binding.name, true)
 				end
+
+				LocalPlayer():ChatPrint(GetPTranslation("ttt2_bindings_new", {name = binding.name, key = input.GetKeyName(num) or "NONE"}))
 
 				curBinding = num
 			end

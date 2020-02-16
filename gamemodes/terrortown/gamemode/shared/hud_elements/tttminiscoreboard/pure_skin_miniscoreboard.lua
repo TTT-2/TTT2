@@ -47,6 +47,7 @@ if CLIENT then
 
 		-- resort miniscoreboard if body_found is changed
 		TTT2NET:OnUpdate("players", function(oldval, newval, reversePath)
+			-- check if path of changed value is one of our releavant paths
 			if not refreshPaths[reversePath[2]] then return end
 
 			-- sort playerlist: confirmed players should be in the first position

@@ -611,10 +611,10 @@ function CreateChanges()
 			<li>Fixed a bug with baserole initialization</li>
 			<li>Small other bugfixes</li>
 			<li>added legacy supported for limited items</li>
-			<li>fixed C4 defuse for non-traitor roles</li>
-			<li>fixed radio, works now for all roles</li>
-			<li>restricted huds are hidden in HUD Switcher</li>
-			<li>fixed ragdoll skins (hairstyles, outfits, ...)</li>
+			<li>Fixed C4 defuse for non-traitor roles</li>
+			<li>Fixed radio, works now for all roles</li>
+			<li>Restricted huds are hidden in HUD Switcher</li>
+			<li>Fixed ragdoll skins (hairstyles, outfits, ...)</li>
 			<li>Prevent give_equipment timer to block the shop in the next round</li>
 			<li>Fix sprint consuming stamina when there is no move input</li>
 			<li>Fix confirmation of players with no team</li>
