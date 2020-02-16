@@ -153,6 +153,7 @@ local function IdentifyCorpse(pCorpse)
 	local nTeam = TEAM_INNOCENT
 
 	if IsValid(pPlayer) then
+		pPlayer:SetNWBool("body_found", true)
 		pPlayer:TTT2NETSetBool("body_found", true)
 
 		nRole = pCorpse.was_role or pPlayer:GetSubRole()
@@ -170,6 +171,7 @@ local function IdentifyCorpse(pCorpse)
 			pPlayer = player.GetBySteamID64(sSteamID)
 
 			if IsValid(pPlayer) then
+				pPlayer:SetNWBool("body_found", true)
 				pPlayer:TTT2NETSetBool("body_found", true)
 
 				nRole = pCorpse.was_role or pPlayer:GetSubRole()
@@ -209,6 +211,7 @@ local function IdentifyCorpse(pCorpse)
 
 				if not IsValid(pVictim) or pVictim:TTT2NETGetBool("body_found") then continue end
 
+				pVictim:SetNWBool("body_found", true)
 				pVictim:TTT2NETSetBool("body_found", true)
 
 				LANG.Msg("body_confirm", {
