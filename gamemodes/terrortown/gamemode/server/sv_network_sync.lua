@@ -484,7 +484,7 @@ function TTT2NET:SendDataUpdate(path, client)
 	-- Only send to the client (or table of clients) that was specified or the already initialized clients
 	-- This will check if client is a table or a single client and format it to a table and otherwise use
 	-- the initialized_clients list.
-	local receivers = not istable(client) and { client } or initialized_clients
+	local receivers = istable(client) and client or client and { client } or initialized_clients
 
 	-- For each receiver send the data
 	for i = 1, #receivers do
