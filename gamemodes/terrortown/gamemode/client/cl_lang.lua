@@ -66,7 +66,7 @@ end
 -- @return string the inserted string_name parameter
 -- @realm client
 function LANG.AddToLanguage(lang_name, string_name, string_text)
-	lang_name = lang_name and string.lower(lang_name)
+	lang_name = lang_name and string.lower(lang_name) or nil
 
 	if not LANG.IsLanguage(lang_name) then
 		ErrorNoHalt(Format("Failed to add '%s' to language '%s': language does not exist.\n", tostring(string_name), tostring(lang_name)))
@@ -167,12 +167,35 @@ function LANG.GetUnsafeLanguageTable()
 end
 
 ---
--- Returns a translated @{string} text (if possible) directly from the language table
--- @param string name string key identifier for the translated @{string}
--- @return nil|string
+-- Returns the reference to a language table if it exists
+-- @param string name string key identifier for the language
+-- @return nil|table
 -- @realm client
-function LANG.GetUnsafeNamed(name)
-	return LANG.Strings[name]
+function LANG.GetUnsafeNamed(lang_name)
+	lang_name = lang_name and string.lower(lang_name) or nil
+
+	if not LANG.IsLanguage(lang_name) then
+		ErrorNoHalt(Format("Failed to get '%s': language does not exist.\n", tostring(lang_name)))
+
+		return
+	end
+
+	return LANG.Strings[lang_name]
+end
+
+---
+-- Returns the reference to a language table if it exists, creates a new language if it did not exist
+-- @param string name string key identifier for the language
+-- @return nil|table
+-- @realm client
+function LANG.GetLanguageTableReference(lang_name)
+	lang_name = lang_name and string.lower(lang_name) or nil
+
+	if not LANG.IsLanguage(lang_name) then
+		LANG.CreateLanguage(lang_name)
+	end
+
+	return LANG.Strings[lang_name]
 end
 
 ---
@@ -216,7 +239,7 @@ end
 -- @param string lang_name the new language name
 -- @realm client
 function LANG.SetActiveLanguage(lang_name)
-	lang_name = lang_name and string.lower(lang_name)
+	lang_name = lang_name and string.lower(lang_name) or nil
 
 	if LANG.IsLanguage(lang_name) then
 		local old_name = LANG.ActiveLanguage
@@ -279,7 +302,7 @@ end
 function LANG.IsLanguage(lang_name)
 	if not lang_name then return end
 
-	return LANG.Strings[string.lower(lang_name)]
+	return LANG.Strings[string.lower(lang_name)] ~= nil
 end
 
 local function LanguageChanged(cv, old, new)

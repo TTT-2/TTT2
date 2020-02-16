@@ -89,6 +89,9 @@ function GM:Initialize()
 
 	GAMEMODE.round_state = ROUND_WAIT
 
+	-- load addon language files
+	LANG.SetupFiles("lang/", true)
+
 	LANG.Init()
 
 	self.BaseClass:Initialize()

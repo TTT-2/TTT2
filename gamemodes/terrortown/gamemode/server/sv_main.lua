@@ -193,6 +193,9 @@ function GM:Initialize()
 
 	hook.Run("TTT2FinishedLoading")
 
+	-- check for language files to mark them as downloadable for clients
+	LANG.SetupFiles("lang/", true)
+
 	ShopEditor.SetupShopEditorCVars()
 	ShopEditor.CreateShopDBs()
 
