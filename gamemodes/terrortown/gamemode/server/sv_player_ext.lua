@@ -411,7 +411,7 @@ function plymeta:ResetRoundFlags()
 	timer.Remove("give_equipment" .. self:UniqueID())
 
 	-- corpse
-	self:SetNWBool("body_found", false)
+	self:TTT2NETSetBool("body_found", false)
 
 	self.kills = {}
 	self.dying_wep = nil
@@ -980,16 +980,16 @@ end
 -- @realm server
 function plymeta:ConfirmPlayer(announceRole)
 	if self:GetNWFloat("t_first_found", -1) < 0 then
-		self:SetNWFloat("t_first_found", CurTime())
+		self:TTT2NETSetFloat("t_first_found", CurTime())
 	end
 
-	self:SetNWFloat("t_last_found", CurTime())
+	self:TTT2NETSetFloat("t_last_found", CurTime())
 
 	if announceRole then
-		self:SetNWBool("role_found", true)
+		self:TTT2NETSetBool("role_found", true)
 	end
 
-	self:SetNWBool("body_found", true)
+	self:TTT2NETSetBool("body_found", true)
 end
 
 ---
@@ -997,10 +997,9 @@ end
 -- @realm server
 function plymeta:ResetConfirmPlayer()
 	-- body_found is reset on the player reset
-	self:SetNWBool("role_found", false)
-
-	self:SetNWFloat("t_first_found", -1)
-	self:SetNWFloat("t_last_found", -1)
+	self:TTT2NETSetBool("role_found", false)
+	self:TTT2NETSetFloat("t_first_found", -1)
+	self:TTT2NETSetFloat("t_last_found", -1)
 end
 
 ---
@@ -1307,6 +1306,10 @@ local function SetPlayerReady(_, ply)
 
 	ply.is_ready = true
 
+	-- Sync NWVars
+	TTT2NET:SyncWithNWVar("body_found", { type = "bool" }, ply, "body_found")
+
+	-- Send full state update to client
 	TTT2NET:SendFullStateUpdate(ply)
 
 	hook.Run("TTT2PlayerReady", ply)

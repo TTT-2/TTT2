@@ -153,7 +153,7 @@ local function IdentifyCorpse(pCorpse)
 	local nTeam = TEAM_INNOCENT
 
 	if IsValid(pPlayer) then
-		pPlayer:SetNWBool("body_found", true)
+		pPlayer:TTT2NETSetBool("body_found", true)
 
 		nRole = pCorpse.was_role or pPlayer:GetSubRole()
 		nTeam = pCorpse.was_team or pPlayer:GetTeam()
@@ -170,7 +170,7 @@ local function IdentifyCorpse(pCorpse)
 			pPlayer = player.GetBySteamID64(sSteamID)
 
 			if IsValid(pPlayer) then
-				pPlayer:SetNWBool("body_found", true)
+				pPlayer:TTT2NETSetBool("body_found", true)
 
 				nRole = pCorpse.was_role or pPlayer:GetSubRole()
 				nTeam = pCorpse.was_team or pPlayer:GetTeam()
@@ -207,9 +207,9 @@ local function IdentifyCorpse(pCorpse)
 			for i = 1, #tKills do
 				local pVictim = player.GetBySteamID64(tKills[i])
 
-				if not IsValid(pVictim) or pVictim:GetNWBool("body_found") then continue end
+				if not IsValid(pVictim) or pVictim:TTT2NETGetBool("body_found") then continue end
 
-				pVictim:SetNWBool("body_found", true)
+				pVictim:TTT2NETSetBool("body_found", true)
 
 				LANG.Msg("body_confirm", {
 					finder = "The Server",
