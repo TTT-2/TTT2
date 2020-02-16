@@ -497,7 +497,7 @@ function HUDDrawTargetIDTButtons(tData)
 	local client = LocalPlayer()
 	local ent = tData:GetEntity()
 
-	local admin_mode = GetGloablBool("ttt2_tbutton_admin_show", false)
+	local admin_mode = GetGlobalBool("ttt2_tbutton_admin_show", false)
 
 	if not IsValid(client) or not client:IsTerror() or not client:Alive()
 	or not IsValid(ent) or ent:GetClass() ~= "ttt_traitor_button" or tData:GetEntityDistance() > ent:GetUsableRange() then
