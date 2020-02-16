@@ -137,7 +137,7 @@ L.xfer_received = "{player} has given you {num} credit."
 -- Reroll tab in equipment menu
 L.reroll_name = "Reroll"
 L.reroll_menutitle = "Reroll Items"
-L.reroll_no_credits = "You need no credits to reroll!"
+L.reroll_no_credits = "You need {amount} credits to reroll!"
 L.reroll_button = "Reroll"
 L.reroll_help = "Use {amount} credits to get new items in your shop!"
 

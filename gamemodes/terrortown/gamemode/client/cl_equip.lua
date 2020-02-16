@@ -721,7 +721,7 @@ function TraitorMenuPopup()
 	end
 
 	-- Random Shop Rerolling
-	if credits > 0 and GetGlobalInt("ttt2_random_shops") > 0 and GetGlobalBool("ttt2_random_shop_reroll") then
+	if GetGlobalInt("ttt2_random_shops") > 0 and GetGlobalBool("ttt2_random_shop_reroll") then
 		local dtransfer = CreateRerollMenu(dsheet)
 
 		dsheet:AddSheet(GetTranslation("reroll_name"), dtransfer, "vgui/ttt/equip/reroll.png", false, false, GetTranslation("equip_tooltip_reroll"))
