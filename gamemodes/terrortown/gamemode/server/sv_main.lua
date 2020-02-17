@@ -1026,11 +1026,7 @@ function SpawnWillingPlayers(dead_only)
 	-- been tested.
 	if wave_delay <= 0 or dead_only then
 		for i = 1, #plys do
-			local ply = plys[i]
-
-			if not IsValid(ply) then return end
-
-			ply:SpawnForRound(dead_only)
+			plys[i]:SpawnForRound(dead_only)
 		end
 	else
 		-- wave method
@@ -1038,7 +1034,7 @@ function SpawnWillingPlayers(dead_only)
 		local to_spawn = {}
 
 		for _, ply in RandomPairs(plys) do
-			if IsValid(ply) and ply:ShouldSpawn() then
+			if ply:ShouldSpawn() then
 				to_spawn[#to_spawn + 1] = ply
 
 				GAMEMODE:PlayerSpawnAsSpectator(ply)
