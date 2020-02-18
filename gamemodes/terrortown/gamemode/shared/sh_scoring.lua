@@ -187,7 +187,7 @@ function KillsToPoints(score)
 		if ev.t ~= TEAM_NONE and ev.t == ev.v and not TEAMS[ev.t].alone then -- teamkill
 			sc = sc + roleData.scoreTeamKillsMultiplier
 		else -- legit kill
-			sc = sc + roleData.scoreKillsMultiplier
+			sc = sc + (roleData.scoreKillsMultiplier or 0)
 		end
 	end
 
