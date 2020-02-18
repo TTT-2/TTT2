@@ -185,7 +185,7 @@ function KillsToPoints(score)
 		local roleData = roles.GetByIndex(ev.r)
 
 		if ev.t ~= TEAM_NONE and ev.t == ev.v and not TEAMS[ev.t].alone then -- teamkill
-			sc = sc + roleData.scoreTeamKillsMultiplier
+			sc = sc + (roleData.scoreKillsMultiplier or 0)
 		else -- legit kill
 			sc = sc + (roleData.scoreKillsMultiplier or 0)
 		end
