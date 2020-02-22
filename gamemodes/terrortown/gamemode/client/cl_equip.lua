@@ -33,6 +33,8 @@ local color_bad = Color(244, 67, 54, 255)
 --local color_good = Color(76, 175, 80, 255)
 local color_darkened = Color(255, 255, 255, 80)
 
+local fallback_mat = Material("vgui/ttt/dynamic/icon_base")
+
 -- Buyable weapons are loaded automatically. Buyable items are defined in
 -- equip_items_shd.lua
 
@@ -309,7 +311,7 @@ local function CreateEquipmentList(t)
 			local ic = nil
 
 			-- Create icon panel
-			if item.material and item.material ~= "vgui/ttt/icon_id" then
+			if item.ttt2material then
 				ic = vgui.Create("LayeredIcon", dlist)
 
 				if item.custom and showCustomVar:GetBool() then
@@ -364,10 +366,10 @@ local function CreateEquipmentList(t)
 				end
 
 				ic:SetIconSize(itemSize or 64)
-				ic:SetIcon(item.material)
-			elseif item.model and item.model ~= "models/weapons/w_bugbait.mdl" then
+				ic:SetMaterial(item.ttt2material)
+			elseif item.ttt2model then
 				ic = vgui.Create("SpawnIcon", dlist)
-				ic:SetModel(item.model)
+				ic:SetModel(item.ttt2model)
 			else
 				print("Equipment item does not have model or material specified: " .. tostring(item) .. "\n")
 			end
@@ -978,6 +980,27 @@ function GM:OnContextMenuOpen()
 		RunConsoleCommand("ttt_cl_traitorpopup")
 	end
 end
+
+-- Preload materials for the shop
+hook.Add("PostInitPostEntity", "TTTCacheEquipMaterials", function()
+	local itms = ShopEditor.GetEquipmentForRoleAll()
+
+	for _, item in pairs(itms) do
+		if item.material and item.material ~= "vgui/ttt/icon_id" then
+			item.ttt2material = Material(item.material)
+			if item.ttt2material:IsError() then
+				-- Setting fallback material
+				item.ttt2material = fallback_mat
+			end
+		elseif item.model and item.model ~= "models/weapons/w_bugbait.mdl" then
+			--do not use fallback mat and use model instead
+			item.ttt2material = nil
+			item.ttt2model = model
+		else
+			--no material or model this is probably no item to show
+		end
+	end
+end)
 
 -- Closes menu when roles are selected
 hook.Add("TTTBeginRound", "TTTBEMCleanUp", function()
