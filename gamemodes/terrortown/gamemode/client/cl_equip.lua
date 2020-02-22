@@ -33,7 +33,7 @@ local color_bad = Color(244, 67, 54, 255)
 --local color_good = Color(76, 175, 80, 255)
 local color_darkened = Color(255, 255, 255, 80)
 
-local fallback_mat = Material("vgui/ttt/dynamic/icon_base")
+local fallback_mat = Material("vgui/ttt/icon_missing")
 
 -- Buyable weapons are loaded automatically. Buyable items are defined in
 -- equip_items_shd.lua
