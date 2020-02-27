@@ -78,7 +78,7 @@ TEAM_TRAITOR = "traitors"
 TEAM_NOCHANGE = "nochange"
 
 -- max networking bits to send roles numbers
-ROLE_BITS = 5
+ROLE_BITS = 8
 
 -- override default settings of ttt to make it compatible with other addons
 -- Player roles
