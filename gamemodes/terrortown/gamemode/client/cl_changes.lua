@@ -622,6 +622,20 @@ function CreateChanges()
 		</ul>
 	]], os.time({year = 2020, month = 02, day = 16}))
 
+	AddChange("TTT2 Base - v0.6.1b", [[
+		<h2>Fixed:</h2>
+		<ul>
+			<li>Fixed a bug with the spawn wave interval</li>
+		</ul>
+	]], os.time({year = 2020, month = 02, day = 17}))
+
+	AddChange("TTT2 Base - v0.6.2b", [[
+		<h2>Fixed:</h2>
+		<ul>
+			<li>Increased the maximum number of roles that can be used. (Fixes weird role issues with many roles installed)</li>
+		</ul>
+	]], os.time({year = 2020, month = 03, day = 1}))
+
 	-- run hook for other addons to add their changelog as well
 	hook.Run("TTT2AddChange", changes, currentVersion)
 end
