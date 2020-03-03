@@ -9,6 +9,7 @@ ttt_include("sh_shopeditor")
 ttt_include("sh_network_sync")
 ttt_include("sh_door")
 ttt_include("sh_voice")
+ttt_include("sh_vskin")
 
 ttt_include("sv_network_sync")
 ttt_include("sv_shopeditor")
@@ -197,6 +198,10 @@ function GM:Initialize()
 
 	-- check for language files to mark them as downloadable for clients
 	LANG.SetupFiles("lang/", true)
+
+	-- load skin files
+	VSKIN.SetupFiles("terrortown/gamemode/shared/vskins/")
+	VSKIN.SetupFiles("vskins/")
 
 	ShopEditor.SetupShopEditorCVars()
 	ShopEditor.CreateShopDBs()

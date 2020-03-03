@@ -1,17 +1,17 @@
 
 local PANEL = {}
 
-AccessorFunc(PANEL, "m_bIsMenuComponent",	"IsMenu",			FORCE_BOOL)
-AccessorFunc(PANEL, "m_bDraggable",		"Draggable",		FORCE_BOOL)
-AccessorFunc(PANEL, "m_bSizable",			"Sizable",			FORCE_BOOL)
-AccessorFunc(PANEL, "m_bScreenLock",		"ScreenLock",		FORCE_BOOL)
-AccessorFunc(PANEL, "m_bDeleteOnClose",	"DeleteOnClose",	FORCE_BOOL)
-AccessorFunc(PANEL, "m_bPaintShadow",		"PaintShadow",		FORCE_BOOL)
+AccessorFunc(PANEL, "m_bIsMenuComponent", "IsMenu", FORCE_BOOL)
+AccessorFunc(PANEL, "m_bDraggable", "Draggable", FORCE_BOOL)
+AccessorFunc(PANEL, "m_bSizable", "Sizable", FORCE_BOOL)
+AccessorFunc(PANEL, "m_bScreenLock", "ScreenLock", FORCE_BOOL)
+AccessorFunc(PANEL, "m_bDeleteOnClose", "DeleteOnClose", FORCE_BOOL)
+AccessorFunc(PANEL, "m_bPaintShadow", "PaintShadow", FORCE_BOOL)
 
-AccessorFunc(PANEL, "m_iMinWidth",			"MinWidth",			FORCE_NUMBER)
-AccessorFunc(PANEL, "m_iMinHeight",		"MinHeight",		FORCE_NUMBER)
+AccessorFunc(PANEL, "m_iMinWidth", "MinWidth", FORCE_NUMBER)
+AccessorFunc(PANEL, "m_iMinHeight", "MinHeight", FORCE_NUMBER)
 
-AccessorFunc(PANEL, "m_bBackgroundBlur",	"BackgroundBlur",	FORCE_BOOL)
+AccessorFunc(PANEL, "m_bBackgroundBlur", "BackgroundBlur", FORCE_BOOL)
 
 function PANEL:Init()
 	self:SetFocusTopLevel(true)
@@ -123,20 +123,6 @@ function PANEL:IsActive()
 	return false
 end
 
-function PANEL:SetIcon(str)
-	if not str and IsValid(self.imgIcon) then
-		return self.imgIcon:Remove() -- We are instructed to get rid of the icon, do it and bail.
-	end
-
-	if not IsValid(self.imgIcon) then
-		self.imgIcon = vgui.Create("DImage", self)
-	end
-
-	if IsValid(self.imgIcon) then
-		self.imgIcon:SetMaterial(Material(str))
-	end
-end
-
 function PANEL:Think()
 	local mousex = math.Clamp(gui.MouseX(), 1, ScrW() - 1)
 	local mousey = math.Clamp(gui.MouseY(), 1, ScrH() - 1)
@@ -181,13 +167,13 @@ function PANEL:Think()
 
 	local screenX, screenY = self:LocalToScreen(0, 0)
 
-	if self.Hovered and self.m_bSizable and mousex > (screenX + self:GetWide() - 20) and mousey > (screenY + self:GetTall() - VSKIN:GetHeaderHeight()) then
+	if self.Hovered and self.m_bSizable and mousex > (screenX + self:GetWide() - 20) and mousey > (screenY + self:GetTall() - VSKIN.GetHeaderHeight()) then
 		self:SetCursor("sizenwse")
 
 		return
 	end
 
-	if self.Hovered and self:GetDraggable() and mousey < (screenY + VSKIN:GetHeaderHeight()) then
+	if self.Hovered and self:GetDraggable() and mousey < (screenY + VSKIN.GetHeaderHeight()) then
 		self:SetCursor("sizeall")
 
 		return
@@ -214,7 +200,7 @@ end
 function PANEL:OnMousePressed()
 	local screenX, screenY = self:LocalToScreen(0, 0)
 
-	if self.m_bSizable and gui.MouseX() > (screenX + self:GetWide() - 20) and gui.MouseY() > (screenY + self:GetTall() - VSKIN:GetHeaderHeight()) then
+	if self.m_bSizable and gui.MouseX() > (screenX + self:GetWide() - 20) and gui.MouseY() > (screenY + self:GetTall() - VSKIN.GetHeaderHeight()) then
 		self.Sizing = {
 			gui.MouseX() - self:GetWide(),
 			gui.MouseY() - self:GetTall()
@@ -225,7 +211,7 @@ function PANEL:OnMousePressed()
 		return
 	end
 
-	if self:GetDraggable() and gui.MouseY() < (screenY + VSKIN:GetHeaderHeight()) then
+	if self:GetDraggable() and gui.MouseY() < (screenY + VSKIN.GetHeaderHeight()) then
 		self.Dragging = {
 			gui.MouseX() - self.x,
 			gui.MouseY() - self.y
@@ -244,7 +230,7 @@ function PANEL:OnMouseReleased()
 end
 
 function PANEL:PerformLayout()
-	local size = VSKIN:GetHeaderHeight()
+	local size = VSKIN.GetHeaderHeight()
 
 	self.btnClose:SetPos(self:GetWide() - size, 0)
 	self.btnClose:SetSize(size, size)

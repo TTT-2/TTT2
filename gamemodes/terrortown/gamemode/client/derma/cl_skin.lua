@@ -9,14 +9,14 @@ surface.CreateAdvancedFont("DermaTTT2Title", {font = "Trebuchet24", size = 26, w
 surface.CreateAdvancedFont("DermaTTT2TitleSmall", {font = "Trebuchet24", size = 18, weight = 600})
 
 function SKIN:PaintFrame(panel, w, h)
-	local bgcolor = VSKIN:GetBackgroundColor()
-	local accentColor = VSKIN:GetAccentColor()
-	local adcolor = VSKIN:GetDarkAccentColor()
-	local sdcolor = VSKIN:GetShadowColor()
-	local titleTextColor = VSKIN:GetTitleTextColor()
+	local bgcolor = VSKIN.GetBackgroundColor()
+	local accentColor = VSKIN.GetAccentColor()
+	local adcolor = VSKIN.GetDarkAccentColor()
+	local sdcolor = VSKIN.GetShadowColor()
+	local titleTextColor = VSKIN.GetTitleTextColor()
 
-	local sdsize = VSKIN:GetShadowSize()
-	local hdsize = VSKIN:GetHeaderHeight()
+	local sdsize = VSKIN.GetShadowSize()
+	local hdsize = VSKIN.GetHeaderHeight()
 
 	if not panel:HasHierarchicalFocus() then
 		bgcolor = util.ColorLighten(bgcolor, 25)
@@ -49,8 +49,8 @@ end
 function SKIN:PaintWindowCloseButton(panel, w, h)
 	if not panel.m_bBackground then return end
 
-	local accentColor = VSKIN:GetAccentColor()
-	local titleTextColor = VSKIN:GetTitleTextColor()
+	local accentColor = VSKIN.GetAccentColor()
+	local titleTextColor = VSKIN.GetTitleTextColor()
 
 	if panel:GetDisabled() then
 		return DrawClose(w, h, accentColor, util.ColorAlpha(titleTextColor, 70))
@@ -79,8 +79,8 @@ end
 function SKIN:PaintWindowBackButton(panel, w, h)
 	if not panel.m_bBackground then return end
 
-	local accentColor = VSKIN:GetAccentColor()
-	local titleTextColor = VSKIN:GetTitleTextColor()
+	local accentColor = VSKIN.GetAccentColor()
+	local titleTextColor = VSKIN.GetTitleTextColor()
 
 	if panel:GetDisabled() then
 		return DrawBack(w, h, panel, accentColor, util.ColorAlpha(titleTextColor, 70))

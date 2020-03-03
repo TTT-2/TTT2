@@ -31,6 +31,7 @@ ttt_include("sh_weaponry")
 ttt_include("sh_inventory")
 ttt_include("sh_door")
 ttt_include("sh_voice")
+ttt_include("sh_vskin")
 
 ttt_include("vgui__cl_coloredbox")
 ttt_include("vgui__cl_droleimage")
@@ -97,6 +98,13 @@ function GM:Initialize()
 
 	-- load addon language files
 	LANG.SetupFiles("lang/", true)
+
+	-- load skin files
+	VSKIN.SetupFiles("terrortown/gamemode/shared/vskins/")
+	VSKIN.SetupFiles("vskins/")
+
+	-- select skin (TODO: Read from database)
+	VSKIN.SelectVSkin("light")
 
 	LANG.Init()
 
