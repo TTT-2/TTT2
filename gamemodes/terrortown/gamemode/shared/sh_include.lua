@@ -37,6 +37,7 @@ TTTFiles = {
 	cl_tips = {file = "cl_tips.lua", on = "client"},
 	cl_transfer = {file = "cl_transfer.lua", on = "client"},
 	cl_voice = {file = "cl_voice.lua", on = "client"},
+	cl_vskin = {file = "cl_vskin.lua", on = "client"},
 	cl_weapon_pickup = {file = "cl_weapon_pickup.lua", on = "client"},
 	cl_wepswitch = {file = "cl_wepswitch.lua", on = "client"},
 
@@ -81,6 +82,10 @@ TTTFiles = {
 	vgui__cl_simpleclickicon = {file = "vgui/cl_simpleclickicon.lua", on = "client"},
 	vgui__cl_simpleicon = {file = "vgui/cl_simpleicon.lua", on = "client"},
 	vgui__cl_simpleroleicon = {file = "vgui/cl_simpleroleicon.lua", on = "client"},
+
+	-- derma client files
+	derma__cl_skin = {file = "derma/cl_skin.lua", on = "client"},
+	derma__dframe = {file = "derma/vgui/dframe_ttt2.lua", on = "client"},
 }
 
 if SERVER then

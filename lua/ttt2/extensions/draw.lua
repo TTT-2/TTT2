@@ -60,6 +60,15 @@ function draw.OutlinedShadowedBox(x, y, w, h, t, color)
 	drawOutlinedBox(x, y, w, h, t, color)
 end
 
+---
+-- A function to draws a simple box without a radius
+-- @param number x The x position to start the box
+-- @param number y The y position to start the box
+-- @param number w The width of the box
+-- @param number h The height of the box
+-- @param [default=COLOR_WHITE] Color color The color of the box
+-- @2D
+-- @realm client
 function draw.Box(x, y, w, h, color)
 	surface.SetDrawColor(color or COLOR_WHITE)
 	surface.DrawRect(x, y, w, h)

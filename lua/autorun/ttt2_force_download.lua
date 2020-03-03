@@ -118,4 +118,8 @@ if SERVER then
 	resource.AddFile("materials/vgui/ttt/tid/tid_detective.vmt")
 	resource.AddFile("materials/vgui/ttt/tid/tid_locked.vmt")
 	resource.AddFile("materials/vgui/ttt/tid/tid_auto_close.vmt")
+
+	-- derma skin graphics
+	resource.AddFile("Materials/vgui/ttt/derma/icon_close.vmt")
+	resource.AddFile("Materials/vgui/ttt/derma/icon_back.vmt")
 end

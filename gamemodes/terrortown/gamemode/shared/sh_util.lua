@@ -180,6 +180,21 @@ function AccessorFuncDT(tbl, varname, name)
 end
 
 ---
+-- Sets the alpha of a given @{Color} value
+-- @param Color color The original color value
+-- @param number value The alpha value [0..255]
+-- @return Color The changed color
+-- @realm shared
+function util.ColorAlpha(color, alpha)
+	return Color(
+		color.r,
+		color.g,
+		color.b,
+		alpha
+	)
+end
+
+---
 -- Darkens a given @{Color} value
 -- @param Color color The original color value
 -- @param number value The value to darken the color [0..255]

@@ -41,6 +41,7 @@ ttt_include("vgui__cl_progressbar")
 ttt_include("vgui__cl_scrolllabel")
 
 ttt_include("derma__cl_skin")
+ttt_include("derma__dframe")
 
 ttt_include("cl_network_sync")
 ttt_include("cl_karma")
@@ -71,6 +72,7 @@ ttt_include("cl_changes")
 ttt_include("cl_inventory")
 ttt_include("cl_status")
 ttt_include("cl_player_ext")
+ttt_include("cl_vskin")
 
 ttt_include("cl_armor")
 ttt_include("cl_damage_indicator")
