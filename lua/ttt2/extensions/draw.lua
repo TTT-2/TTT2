@@ -1,5 +1,11 @@
 ---
+-- draw extension functions
 -- @author Mineotopia
+
+AddCSLuaFile()
+
+-- the rest of the draw library is client only
+if SERVER then return end
 
 local render = render
 local surface = surface
@@ -52,6 +58,11 @@ function draw.OutlinedShadowedBox(x, y, w, h, t, color)
 	drawOutlinedBox(x + 1, y + 1, w, h, t, tmpCol)
 	drawOutlinedBox(x + 1, y + 1, w, h, t, tmpCol)
 	drawOutlinedBox(x, y, w, h, t, color)
+end
+
+function draw.Box(x, y, w, h, color)
+	surface.SetDrawColor(color or COLOR_WHITE)
+	surface.DrawRect(x, y, w, h)
 end
 
 ---

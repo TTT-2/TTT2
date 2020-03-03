@@ -40,6 +40,8 @@ ttt_include("vgui__cl_simpleclickicon")
 ttt_include("vgui__cl_progressbar")
 ttt_include("vgui__cl_scrolllabel")
 
+ttt_include("derma__cl_skin")
+
 ttt_include("cl_network_sync")
 ttt_include("cl_karma")
 ttt_include("cl_tradio")
