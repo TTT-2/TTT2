@@ -1,4 +1,4 @@
--- English language strings
+-- Polish language strings
 
 local L = LANG.CreateLanguage("Polski")
 
