@@ -63,6 +63,30 @@ function VSKIN.GetAccentColor()
 end
 
 ---
+-- Returns the hovered accent color of the currently selected vskin
+-- @return [default=Color(255, 255, 255, 255)] Color The hovered accent color
+-- @realm client
+function VSKIN.GetHoverAccentColor()
+	if not VSKIN.skins[VSKIN.selected] then
+		return COLOR_WHITE
+	end
+
+	return VSKIN.skins[VSKIN.selected].colors.accent_hover
+end
+
+---
+-- Returns the active accent color of the currently selected vskin
+-- @return [default=Color(255, 255, 255, 255)] Color The active accent color
+-- @realm client
+function VSKIN.GetActiveAccentColor()
+	if not VSKIN.skins[VSKIN.selected] then
+		return COLOR_WHITE
+	end
+
+	return VSKIN.skins[VSKIN.selected].colors.accent_active
+end
+
+---
 -- Returns the dark accent color of the currently selected vskin
 -- @return [default=Color(255, 255, 255, 255)] Color The dark accent color
 -- @realm client
@@ -72,6 +96,54 @@ function VSKIN.GetDarkAccentColor()
 	end
 
 	return VSKIN.skins[VSKIN.selected].colors.accent_dark
+end
+
+---
+-- Returns the scrollbar color of the currently selected vskin
+-- @return [default=Color(255, 255, 255, 255)] Color The scrollbar color
+-- @realm client
+function VSKIN.GetScrollbarColor()
+	if not VSKIN.skins[VSKIN.selected] then
+		return COLOR_WHITE
+	end
+
+	return VSKIN.skins[VSKIN.selected].colors.scroll
+end
+
+---
+-- Returns the hovered scrollbar color of the currently selected vskin
+-- @return [default=Color(255, 255, 255, 255)] Color The hovered scrollbar color
+-- @realm client
+function VSKIN.GetHoverScrollbarColor()
+	if not VSKIN.skins[VSKIN.selected] then
+		return COLOR_WHITE
+	end
+
+	return VSKIN.skins[VSKIN.selected].colors.scroll_hover
+end
+
+---
+-- Returns the active scrollbar color of the currently selected vskin
+-- @return [default=Color(255, 255, 255, 255)] Color The active scrollbar color
+-- @realm client
+function VSKIN.GetActiveScrollbarColor()
+	if not VSKIN.skins[VSKIN.selected] then
+		return COLOR_WHITE
+	end
+
+	return VSKIN.skins[VSKIN.selected].colors.scroll_active
+end
+
+---
+-- Returns the scrollbar track color of the currently selected vskin
+-- @return [default=Color(255, 255, 255, 255)] Color The scrollbar track color
+-- @realm client
+function VSKIN.GetScrollbarTrackColor()
+	if not VSKIN.skins[VSKIN.selected] then
+		return COLOR_WHITE
+	end
+
+	return VSKIN.skins[VSKIN.selected].colors.scroll_track
 end
 
 ---
@@ -120,6 +192,30 @@ function VSKIN.GetHeaderHeight()
 	end
 
 	return VSKIN.skins[VSKIN.selected].params.header_height
+end
+
+---
+-- Returns the border size of the currently selected vskin
+-- @return [default=3] number The border size
+-- @realm client
+function VSKIN.GetBorderSize()
+	if not VSKIN.skins[VSKIN.selected] then
+		return 3
+	end
+
+	return VSKIN.skins[VSKIN.selected].params.border_size
+end
+
+---
+-- Returns the corner radius of the currently selected vskin
+-- @return [default=6] number The corner radius
+-- @realm client
+function VSKIN.GetCornerRadius()
+	if not VSKIN.skins[VSKIN.selected] then
+		return 6
+	end
+
+	return VSKIN.skins[VSKIN.selected].params.corner_radius
 end
 
 -- use https://wiki.facepunch.com/gmod/Panel:InvalidateLayout on skin change

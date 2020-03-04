@@ -51,6 +51,8 @@ function PANEL:Init()
 	self:SetMinWidth(50)
 	self:SetMinHeight(50)
 
+	self:DockPadding(5, VSKIN.GetHeaderHeight() + VSKIN.GetBorderSize() + 5, 5, 5)
+
 	-- This turns off the engine drawing
 	self:SetPaintBackgroundEnabled(false)
 	self:SetPaintBorderEnabled(false)

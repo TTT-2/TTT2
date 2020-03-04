@@ -4,41 +4,50 @@ local materialBack = Material("vgui/ttt/derma/icon_back")
 local SKIN = {}
 SKIN.Name = "ttt2_default"
 
+local TryT = LANG.TryTranslation
+
 -- register fonts
 surface.CreateAdvancedFont("DermaTTT2Title", {font = "Trebuchet24", size = 26, weight = 300})
 surface.CreateAdvancedFont("DermaTTT2TitleSmall", {font = "Trebuchet24", size = 18, weight = 600})
 
+--[[---------------------------------------------------------
+	Frame
+-----------------------------------------------------------]]
 function SKIN:PaintFrame(panel, w, h)
-	local bgcolor = VSKIN.GetBackgroundColor()
-	local accentColor = VSKIN.GetAccentColor()
-	local adcolor = VSKIN.GetDarkAccentColor()
-	local sdcolor = VSKIN.GetShadowColor()
-	local titleTextColor = VSKIN.GetTitleTextColor()
+	local colorBackground = VSKIN.GetBackgroundColor()
+	local colorAccent = VSKIN.GetAccentColor()
+	local colorAccentDark = VSKIN.GetDarkAccentColor()
+	local colorShadow = VSKIN.GetShadowColor()
+	local colorTitleText = VSKIN.GetTitleTextColor()
 
-	local sdsize = VSKIN.GetShadowSize()
-	local hdsize = VSKIN.GetHeaderHeight()
+	local sizeShadow = VSKIN.GetShadowSize()
+	local sizeHeader = VSKIN.GetHeaderHeight()
+	local sizeBorder = VSKIN.GetBorderSize()
 
 	if not panel:HasHierarchicalFocus() then
-		bgcolor = util.ColorLighten(bgcolor, 25)
+		colorBackground = util.ColorLighten(colorBackground, 25)
 	end
 
 	-- DRAW SHADOW (disable clipping)
 	if panel.m_bPaintShadow then
 		DisableClipping(true)
-		draw.RoundedBox(sdsize, -sdsize, -sdsize, w + 2 * sdsize, h + 2 * sdsize, sdcolor)
+		draw.RoundedBox(sizeShadow, -sizeShadow, -sizeShadow, w + 2 * sizeShadow, h + 2 * sizeShadow, colorShadow)
 		DisableClipping(false)
 	end
 
 	-- draw main panel box
-	draw.Box(0, 0, w, h, bgcolor)
+	draw.Box(0, 0, w, h, colorBackground)
 
 	-- draw panel header area
-	draw.Box(0, 0, w, hdsize, accentColor)
-	draw.Box(0, hdsize, w, 3, adcolor)
+	draw.Box(0, 0, w, sizeHeader, colorAccent)
+	draw.Box(0, sizeHeader, w, sizeBorder, colorAccentDark)
 
-	draw.ShadowedText(panel:GetTitle(), panel:GetTitleFont(), 0.5 * w, 0.5 * hdsize, titleTextColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1)
+	draw.ShadowedText(TryT(panel:GetTitle()), panel:GetTitleFont(), 0.5 * w, 0.5 * sizeHeader, colorTitleText, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1)
 end
 
+--[[---------------------------------------------------------
+	Button
+-----------------------------------------------------------]]
 local function DrawClose(w, h, backgroundColor, textColor, shift)
 	local padding = 15
 
@@ -49,22 +58,24 @@ end
 function SKIN:PaintWindowCloseButton(panel, w, h)
 	if not panel.m_bBackground then return end
 
-	local accentColor = VSKIN.GetAccentColor()
-	local titleTextColor = VSKIN.GetTitleTextColor()
+	local colorAccent = VSKIN.GetAccentColor()
+	local colorAccentHover = VSKIN.GetHoverAccentColor()
+	local colorAccentActive = VSKIN.GetActiveAccentColor()
+	local colorTitleText = VSKIN.GetTitleTextColor()
 
 	if panel:GetDisabled() then
-		return DrawClose(w, h, accentColor, util.ColorAlpha(titleTextColor, 70), 0)
+		return DrawClose(w, h, colorAccent, util.ColorAlpha(colorTitleText, 70), 0)
 	end
 
 	if panel.Depressed or panel:IsSelected() then
-		return DrawClose(w, h, util.ColorLighten(accentColor, 40), util.ColorAlpha(titleTextColor, 200), 1)
+		return DrawClose(w, h, colorAccentActive, util.ColorAlpha(colorTitleText, 200), 1)
 	end
 
 	if panel.Hovered then
-		return DrawClose(w, h, util.ColorLighten(accentColor, 20), titleTextColor, 0)
+		return DrawClose(w, h, colorAccentHover, colorTitleText, 0)
 	end
 
-	return DrawClose(w, h, accentColor, util.ColorAlpha(titleTextColor, 150), 0)
+	return DrawClose(w, h, colorAccent, util.ColorAlpha(colorTitleText, 150), 0)
 end
 
 local function DrawBack(w, h, panel, backgroundColor, textColor, shift)
@@ -79,22 +90,97 @@ end
 function SKIN:PaintWindowBackButton(panel, w, h)
 	if not panel.m_bBackground then return end
 
-	local accentColor = VSKIN.GetAccentColor()
-	local titleTextColor = VSKIN.GetTitleTextColor()
+	local colorAccent = VSKIN.GetAccentColor()
+	local colorAccentHover = VSKIN.GetHoverAccentColor()
+	local colorAccentActive = VSKIN.GetActiveAccentColor()
+	local colorTitleText = VSKIN.GetTitleTextColor()
 
 	if panel:GetDisabled() then
-		return DrawBack(w, h, panel, accentColor, util.ColorAlpha(titleTextColor, 70), 0)
+		return DrawBack(w, h, panel, colorAccent, util.ColorAlpha(colorTitleText, 70), 0)
 	end
 
 	if panel.Depressed or panel:IsSelected() then
-		return DrawBack(w, h, panel, util.ColorLighten(accentColor, 40), util.ColorAlpha(titleTextColor, 200), 1)
+		return DrawBack(w, h, panel, colorAccentActive, util.ColorAlpha(colorTitleText, 200), 1)
 	end
 
 	if panel.Hovered then
-		return DrawBack(w, h, panel, util.ColorLighten(accentColor, 20), titleTextColor, 0)
+		return DrawBack(w, h, panel, colorAccentHover, colorTitleText, 0)
 	end
 
-	return DrawBack(w, h, panel, accentColor, util.ColorAlpha(titleTextColor, 150), 0)
+	return DrawBack(w, h, panel, colorAccent, util.ColorAlpha(colorTitleText, 150), 0)
+end
+
+--[[---------------------------------------------------------
+	ScrollBar
+-----------------------------------------------------------]]
+function SKIN:PaintVScrollBar(panel, w, h)
+	local colorScrollbarTrack = VSKIN.GetScrollbarTrackColor()
+
+	return draw.RoundedBox(6, 0, 0, w, h, colorScrollbarTrack)
+end
+
+function SKIN:PaintScrollBarGrip(panel, w, h)
+	local colorScrollbar = VSKIN.GetScrollbarColor()
+	local colorScrollbarHover = VSKIN.GetHoverScrollbarColor()
+	local colorScrollbarActive = VSKIN.GetActiveScrollbarColor()
+
+	if panel:GetDisabled() then
+		return self.tex.Scroller.ButtonV_Disabled( 0, 0, w, h )
+	end
+
+	if panel.Depressed then
+		return draw.RoundedBox(6, 0, 0, w, h, colorScrollbarActive)
+	end
+
+	if panel.Hovered then
+		return draw.RoundedBox(6, 0, 0, w, h, colorScrollbarHover)
+	end
+
+	return draw.RoundedBox(6, 0, 0, w, h, colorScrollbar)
+end
+
+function SKIN:PaintButtonDown(panel, w, h)
+	if not panel.m_bBackground then return end
+
+	local colorAccent = VSKIN.GetAccentColor()
+	local colorAccentHover = VSKIN.GetHoverAccentColor()
+	local colorAccentActive = VSKIN.GetActiveAccentColor()
+
+	if panel:GetDisabled() then
+		return self.tex.Scroller.DownButton_Dead( 0, 0, w, h )
+	end
+
+	if panel.Depressed or panel:IsSelected() then
+		return draw.RoundedBox(6, 0, 0, w, h, colorAccentActive)
+	end
+
+	if panel.Hovered then
+		return draw.RoundedBox(6, 0, 0, w, h, colorAccentHover)
+	end
+
+	return draw.RoundedBox(6, 0, 0, w, h, colorAccent)
+end
+
+function SKIN:PaintButtonUp(panel, w, h)
+	if not panel.m_bBackground then return end
+
+	local colorAccent = VSKIN.GetAccentColor()
+	local colorAccentHover = VSKIN.GetHoverAccentColor()
+	local colorAccentActive = VSKIN.GetActiveAccentColor()
+
+	if panel:GetDisabled() then
+		return self.tex.Scroller.DownButton_Dead( 0, 0, w, h )
+	end
+
+	if panel.Depressed or panel:IsSelected() then
+		return draw.RoundedBox(6, 0, 0, w, h, colorAccentActive)
+	end
+
+	if panel.Hovered then
+		return draw.RoundedBox(6, 0, 0, w, h, colorAccentHover)
+	end
+
+	return draw.RoundedBox(6, 0, 0, w, h, colorAccent)
 end
 
 -- REGISTER DERMA SKIN
