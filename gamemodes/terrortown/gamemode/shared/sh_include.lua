@@ -87,6 +87,7 @@ TTTFiles = {
 	-- derma client files
 	derma__cl_skin = {file = "derma/cl_skin.lua", on = "client"},
 	derma__dframe = {file = "derma/vgui/dframe_ttt2.lua", on = "client"},
+	derma__dmenubutton = {file = "derma/vgui/dmenuButton_ttt2.lua", on = "client"},
 }
 
 if SERVER then

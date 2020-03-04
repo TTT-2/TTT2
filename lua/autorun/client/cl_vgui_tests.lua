@@ -19,10 +19,12 @@ concommand.Add("vguitest", function()
 	List:SetSpaceY(5) -- Sets the space in between the panels on the Y Axis by 5
 	List:SetSpaceX(5) -- Sets the space in between the panels on the X Axis by 5
 
-	for i = 1, 20 do -- Make a loop to create a bunch of panels inside of the DIconLayout
-		local ListItem = List:Add("DPanel") -- Add DPanel to the DIconLayout
-		ListItem:SetSize((1100 - 10 - 35) / 4, 150) -- Set the size of it
-		-- You don't need to set the position, that is done automatically.
+	for i = 1, 20 do
+		local ListItem = List:Add("DMenuButtonTTT2")
+		ListItem:SetSize((1100 - 10 - 30) / 3, 120)
+		ListItem:SetTitle("A Menu Option")
+		ListItem:SetDescription("Some Settings, Other Settings, More Settings, So Many Settings, Infinite Cool Stuff")
+		ListItem:SetImage(Material("vgui/ttt/dynamic/roles/icon_inno"))
 	end
 
 	local ListLabel = List:Add( "DLabel" ) -- Add a label that will be the only panel on its row

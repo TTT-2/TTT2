@@ -194,7 +194,7 @@ function PANEL:Paint(w, h)
 		Derma_DrawBackgroundBlur(self, self.m_fCreateTime)
 	end
 
-	derma.SkinHook("Paint", "Frame", self, w, h)
+	derma.SkinHook("Paint", "FrameTTT2", self, w, h)
 
 	return true
 end

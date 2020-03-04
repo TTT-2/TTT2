@@ -43,6 +43,7 @@ ttt_include("vgui__cl_scrolllabel")
 
 ttt_include("derma__cl_skin")
 ttt_include("derma__dframe")
+ttt_include("derma__dmenubutton")
 
 ttt_include("cl_network_sync")
 ttt_include("cl_karma")
