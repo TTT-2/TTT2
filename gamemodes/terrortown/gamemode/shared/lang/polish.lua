@@ -674,7 +674,7 @@ L.punch_bonus  = "Twój słaby wynik pomniejszył twój limit punch-o-metera o {
 L.punch_malus  = "Twój dobry wynik powiększył twój limit punch-o-metera o {num}!"
 
 L.spec_help    = "Kliknij by obserować gracza, lub kliknij {usekey} na obiekt fizyczny, by go posiąść."
-L.spec_help2 = "Aby opuścić tryb widza, naciśnij guzik {helpkey}, idź do 'gameplay' i zmień spectator mode."
+L.spec_help2 = "Aby opuścić tryb widza, naciśnij guzik {helpkey}, idź do 'rozgrywa' i zmień tryb obserwatora."
 
 -- Info popups shown when the round starts
 
