@@ -311,7 +311,7 @@ local function CreateEquipmentList(t)
 			local ic = nil
 
 			-- Create icon panel
-			if item.ttt2material then
+			if item.ttt2_cached_material then
 				ic = vgui.Create("LayeredIcon", dlist)
 
 				if item.custom and showCustomVar:GetBool() then
@@ -366,10 +366,10 @@ local function CreateEquipmentList(t)
 				end
 
 				ic:SetIconSize(itemSize or 64)
-				ic:SetMaterial(item.ttt2material)
-			elseif item.ttt2model then
+				ic:SetMaterial(item.ttt2_cached_material)
+			elseif item.ttt2_cached_model then
 				ic = vgui.Create("SpawnIcon", dlist)
-				ic:SetModel(item.ttt2model)
+				ic:SetModel(item.ttt2_cached_model)
 			else
 				print("Equipment item does not have model or material specified: " .. tostring(item) .. "\n")
 			end
@@ -982,22 +982,21 @@ function GM:OnContextMenuOpen()
 end
 
 -- Preload materials for the shop
-hook.Add("PostInitPostEntity", "TTTCacheEquipMaterials", function()
+hook.Add("PostInitPostEntity", "TTT2CacheEquipMaterials", function()
 	local itms = ShopEditor.GetEquipmentForRoleAll()
 
 	for _, item in pairs(itms) do
+		--if there is no material or model, the item should probably not be available in the shop
 		if item.material and item.material ~= "vgui/ttt/icon_id" then
-			item.ttt2material = Material(item.material)
-			if item.ttt2material:IsError() then
+			item.ttt2_cached_material = Material(item.material)
+			if item.ttt2_cached_material:IsError() then
 				-- Setting fallback material
-				item.ttt2material = fallback_mat
+				item.ttt2_cached_material = fallback_mat
 			end
 		elseif item.model and item.model ~= "models/weapons/w_bugbait.mdl" then
 			--do not use fallback mat and use model instead
-			item.ttt2material = nil
-			item.ttt2model = model
-		else
-			--no material or model this is probably no item to show
+			item.ttt2_cached_material = nil
+			item.ttt2_cached_model = model
 		end
 	end
 end)
