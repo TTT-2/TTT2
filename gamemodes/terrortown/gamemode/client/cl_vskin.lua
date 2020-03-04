@@ -4,9 +4,9 @@
 
 VSKIN = VSKIN or {}
 
-VSKIN.skins = {}
+VSKIN.skins = VSKIN.skins or {}
 
-VSKIN.selected = ""
+VSKIN.selected = VSKIN.selected or ""
 
 ---
 -- Register a new vskin
