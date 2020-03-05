@@ -33,6 +33,8 @@ local color_bad = Color(244, 67, 54, 255)
 --local color_good = Color(76, 175, 80, 255)
 local color_darkened = Color(255, 255, 255, 80)
 
+local fallback_mat = Material("vgui/ttt/missing_equip_icon")
+
 -- Buyable weapons are loaded automatically. Buyable items are defined in
 -- equip_items_shd.lua
 
@@ -309,7 +311,7 @@ local function CreateEquipmentList(t)
 			local ic = nil
 
 			-- Create icon panel
-			if item.material and item.material ~= "vgui/ttt/icon_id" then
+			if item.ttt2_cached_material then
 				ic = vgui.Create("LayeredIcon", dlist)
 
 				if item.custom and showCustomVar:GetBool() then
@@ -364,10 +366,10 @@ local function CreateEquipmentList(t)
 				end
 
 				ic:SetIconSize(itemSize or 64)
-				ic:SetIcon(item.material)
-			elseif item.model and item.model ~= "models/weapons/w_bugbait.mdl" then
+				ic:SetMaterial(item.ttt2_cached_material)
+			elseif item.ttt2_cached_model then
 				ic = vgui.Create("SpawnIcon", dlist)
-				ic:SetModel(item.model)
+				ic:SetModel(item.ttt2_cached_model)
 			else
 				print("Equipment item does not have model or material specified: " .. tostring(item) .. "\n")
 			end
@@ -978,6 +980,26 @@ function GM:OnContextMenuOpen()
 		RunConsoleCommand("ttt_cl_traitorpopup")
 	end
 end
+
+-- Preload materials for the shop
+hook.Add("PostInitPostEntity", "TTT2CacheEquipMaterials", function()
+	local itms = ShopEditor.GetEquipmentForRoleAll()
+
+	for _, item in pairs(itms) do
+		--if there is no material or model, the item should probably not be available in the shop
+		if item.material and item.material ~= "vgui/ttt/icon_id" then
+			item.ttt2_cached_material = Material(item.material)
+			if item.ttt2_cached_material:IsError() then
+				-- Setting fallback material
+				item.ttt2_cached_material = fallback_mat
+			end
+		elseif item.model and item.model ~= "models/weapons/w_bugbait.mdl" then
+			--do not use fallback mat and use model instead
+			item.ttt2_cached_material = nil
+			item.ttt2_cached_model = model
+		end
+	end
+end)
 
 -- Closes menu when roles are selected
 hook.Add("TTTBeginRound", "TTTBEMCleanUp", function()

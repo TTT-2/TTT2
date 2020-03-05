@@ -1306,9 +1306,6 @@ local function SetPlayerReady(_, ply)
 
 	ply.is_ready = true
 
-	-- Sync NWVars
-	TTT2NET:SyncWithNWVar("body_found", { type = "bool" }, ply, "body_found")
-
 	-- Send full state update to client
 	TTT2NET:SendFullStateUpdate(ply)
 

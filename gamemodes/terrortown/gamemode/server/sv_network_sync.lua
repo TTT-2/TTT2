@@ -38,6 +38,7 @@ util.AddNetworkString(TTT2NET.NETMSG_REQUEST_FULL_STATE_UPDATE)
 ---
 -- Set the value of an NWVar to the value at the specified path.
 -- @note This will need a correct metadata to function, as this will decide on what functions to use when setting the NWVar (eg. SetNWBool etc).
+-- @note This will always sync the default value for the path, and ignore any overrides for specific clients, as NWVars cannot be set for each client.
 --
 -- @param table|any path The path to take the value from
 -- @param table|nil meta The metadata for the path (or empty to use an existing metadata entry)
@@ -175,6 +176,7 @@ end
 -- exist and is provided as a parameter. This can only be left empty, when the path already has a valid metadata entry.
 -- This will automatically synchronize the new data to the clients.
 -- When the additional client parameter is set, the data will be saved as an override for that specific client/entity.
+-- This will also take care of syncing the value to all registered NWVars, if the path leads to a player specific key.
 --
 -- @param any|table path The path to set the data for
 -- @param table|nil meta The metadata for the path (or empty to use an existing metadata entry)
@@ -212,6 +214,22 @@ function TTT2NET:Set(path, meta, value, client)
 
 	-- Sync the new value
 	self:SendDataUpdate(tmpPath, client)
+
+	-- Sync all registered nwvars to the new value
+	-- Only attempt to sync, if the path leads to a player, which NWVars can be synced to.
+	if #path < 2 or path[1] ~= "players" then return end
+
+	-- Get the entity associated to the path
+	local ent = Entity(path[2])
+
+	assert(IsEntity(ent), "[TTT2NET] Set() used on a path with an invalid entity!")
+
+	-- Get all registered nwvars
+	local nwvars = table.GetWithPath(data_synced_nwvars, tmpPath) or {}
+
+	for i = 1, #nwvars do
+		SyncNWVarWithPath(tmpPath, metadata, ent, nwvars[i])
+	end
 end
 
 ---
@@ -447,14 +465,6 @@ function TTT2NET:SetOnPlayer(path, meta, value, ply, client)
 	table.insert(tmpPath, 2, ply:EntIndex())
 
 	self:Set(tmpPath, meta, value, client)
-
-	-- Get all registered nwvars
-	local nwvars = table.GetWithPath(data_synced_nwvars, tmpPath) or {}
-
-	-- Sync all registered nwvars to the new value
-	for i = 1, #nwvars do
-		SyncNWVarWithPath(tmpPath, meta, ply, nwvars[i])
-	end
 end
 
 ---
@@ -752,6 +762,7 @@ end
 -- @note The setting / getting the NWVars, depends on the metadata, so make sure to set a correct value for the type.
 -- @note You cannot use the unsigned, as NWVars do not have a function for unsigned integers.
 -- @note When a client sets the NWVar locally, this will not be reflected in the data table!
+-- @note This will always sync the default value for the path, and ignore any overrides for specific clients, as NWVars cannot be set for each client.
 --
 -- @param any|table path The path to sync the nwvar with
 -- @param table|nil meta The metadata

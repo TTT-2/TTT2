@@ -53,6 +53,10 @@ function GM:PlayerInitialSpawn(ply)
 		ply:SetForceSpec(true)
 	end
 
+	-- Sync NWVars
+	-- Needs to be done here, to include bots (also this wont send any net messages to the initialized player)
+	TTT2NET:SyncWithNWVar("body_found", { type = "bool" }, ply, "body_found")
+
 	-- maybe show credits
 	net.Start("TTT2DevChanges")
 	net.Send(ply)
