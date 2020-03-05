@@ -98,6 +98,11 @@ function PANEL:SetIcon(icon)
 	self.Icon:SetImage(icon)
 end
 
+-- @param Material icon
+function PANEL:SetMaterial(material)
+	self.Icon:SetMaterial(material)
+end
+
 ---
 -- @return Material
 function PANEL:GetIcon()
