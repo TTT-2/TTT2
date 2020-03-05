@@ -133,57 +133,34 @@ function HELPSCRN:Show()
 
 	client.settingsFrameForceClose = nil
 
-	local margin = 15
 	local minWidth, minHeight = 630, 470
-	local w, h = math.max(minWidth, math.Round(ScrW() * 0.6)), math.max(minHeight, math.Round(ScrH() * 0.8))
+	local w, h = 1100, 700
 
-	local dframe = vgui.Create("DFrame")
+	local dframe = vgui.Create("DFrameTTT2")
 	dframe:SetSize(w, h)
 	dframe:Center()
-	dframe:SetTitle(GetTranslation("help_title"))
+	dframe:SetTitle("help_title")
 	dframe:SetVisible(true)
+	dframe:SetDraggable(true)
 	dframe:ShowCloseButton(true)
-	dframe:SetMouseInputEnabled(true)
+	dframe:ShowBackButton(false)
 	dframe:SetDeleteOnClose(true)
-
-	local bw, bh = 50, 25
-
-	local dbut = vgui.Create("DButton", dframe)
-	dbut:SetSize(bw, bh)
-	dbut:SetPos(w - bw - margin, h - bh - margin * 0.5)
-	dbut:SetText(GetTranslation("close"))
-
-	dbut.DoClick = function()
-		dframe:Close()
-	end
-
-	local w2, h2 = w - margin * 2, h - margin * 3 - bh
-
-	local dtabs = vgui.Create("DPropertySheet", dframe)
-	dtabs:SetPos(margin, margin * 2)
-	dtabs:SetSize(w2, h2)
-
-	-- now fill with content
-
-	local padding = (dtabs:GetPadding()) * 2
+	dframe:SetSkin("ttt2_default")
 
 	-- TTT Settings
-	local pad = 10
+	local pad = 5
 
-	local scrollPanel = vgui.Create("DScrollPanel", dtabs)
-	scrollPanel:StretchToParent(0, 0, padding, 0)
-
-	dtabs:AddSheet(GetTranslation("help_settings"), scrollPanel, "icon16/wrench.png", false, false, GetTranslation("help_settings_tip"))
+	local scrollPanel = vgui.Create("DScrollPanel", dframe)
+	scrollPanel:Dock(FILL)
 
 	local dsettings = vgui.Create("DIconLayout", scrollPanel)
 	dsettings:Dock(FILL)
 	dsettings:SetSpaceX(pad)
 	dsettings:SetSpaceY(pad)
 
-	local cols = 4
-	local btnWidth = math.Round((w2 - pad * (cols + 1)) / cols)
-	local btnHeight = btnWidth * 0.75
-	local settings_panel_default_bgcol = Color(160, 160, 160, 255)
+	local cols = 3
+	local btnWidth = math.Round((w - 2 * pad * (cols + 1)) / cols)
+	local btnHeight = 120
 
 	local tbl = {
 		[1] = {
@@ -208,7 +185,7 @@ function HELPSCRN:Show()
 				client.settingsFrame = frm
 			end,
 			getTitle = function()
-				return GetTranslation("f1_settings_changes_title")
+				return "f1_settings_changes_title"
 			end
 		},
 		[2] = {
@@ -218,59 +195,68 @@ function HELPSCRN:Show()
 				HUDManager.ShowHUDSwitcher()
 			end,
 			getTitle = function()
-				return GetTranslation("f1_settings_hudswitcher_title")
+				return "f1_settings_hudswitcher_title"
 			end
 		},
 		[3] = {
 			id = "bindings",
 			getContent = self.CreateBindings,
 			getTitle = function()
-				return GetTranslation("f1_settings_bindings_title")
+				return "f1_settings_bindings_title"
 			end
 		},
 		[4] = {
 			id = "interface",
 			getContent = self.CreateInterfaceSettings,
 			getTitle = function()
-				return GetTranslation("f1_settings_interface_title")
+				return "f1_settings_interface_title"
 			end
 		},
 		[5] = {
 			id = "gameplay",
 			getContent = self.CreateGameplaySettings,
 			getTitle = function()
-				return GetTranslation("f1_settings_gameplay_title")
+				return "f1_settings_gameplay_title"
 			end
 		},
 		[6] = {
 			id = "crosshair",
 			getContent = self.CreateCrosshairSettings,
 			getTitle = function()
-				return GetTranslation("f1_settings_crosshair_title")
+				return "f1_settings_crosshair_title"
 			end
 		},
 		[7] = {
 			id = "damageIndicator",
 			getContent = self.CreateDamageIndicatorSettings,
 			getTitle = function()
-				return GetTranslation("f1_settings_dmgindicator_title")
+				return "f1_settings_dmgindicator_title"
 			end
 		},
 		[8] = {
 			id = "language",
 			getContent = self.CreateLanguageForm,
 			getTitle = function()
-				return GetTranslation("f1_settings_language_title")
+				return "f1_settings_language_title"
 			end
 		},
 		[9] = {
+			id = "fallback",
+			onclick = function(slf)
+				self:CreateCompatibilityPanel()
+			end,
+			getTitle = function()
+				return "f1_settings_fallback"
+			end
+		},
+		[10] = {
 			id = "administration",
 			getContent = self.CreateAdministrationForm,
 			shouldShow = function()
 				return LocalPlayer():IsAdmin()
 			end,
 			getTitle = function()
-				return GetTranslation("f1_settings_administration_title")
+				return "f1_settings_administration_title"
 			end
 		}
 	}
@@ -280,13 +266,13 @@ function HELPSCRN:Show()
 	for _, data in ipairs(tbl) do
 		if isfunction(data.shouldShow) and not data.shouldShow() then continue end
 
-		local title = string.upper(isfunction(data.getTitle) and data.getTitle() or data.id)
+		local title = isfunction(data.getTitle) and data.getTitle() or data.id
 
-		local settingsButton = dsettings:Add("DF1SettingsButton")
+		local settingsButton = dsettings:Add("DMenuButtonTTT2")
 		settingsButton:SetSize(btnWidth, btnHeight)
-		settingsButton:SetFont("SettingsButtonFont")
-		settingsButton:SetText(title)
-		settingsButton:SetTextColor(COLOR_BLACK)
+		settingsButton:SetTitle(title)
+		settingsButton:SetDescription("Some Settings, Other Settings, More Settings, So Many Settings, Infinite Cool Stuff")
+		settingsButton:SetImage(Material("vgui/ttt/dynamic/roles/icon_inno"))
 
 		settingsButton.DoClick = function(slf)
 			dframe:Close()
@@ -297,20 +283,19 @@ function HELPSCRN:Show()
 				return
 			end
 
-			local frame = vgui.Create("DFrame")
-			frame:SetSize(minWidth, minHeight)
+			local frame = vgui.Create("DFrameTTT2")
+			frame:SetSize(w, h)
 			frame:Center()
-			frame:SetTitle(title)
+			frame:SetTitle("help_title")
 			frame:SetVisible(true)
+			frame:SetDraggable(true)
 			frame:ShowCloseButton(true)
-			frame:SetMouseInputEnabled(true)
+			frame:ShowBackButton(true)
 			frame:SetDeleteOnClose(true)
-
-			frame.OnClose = function(frm)
-				if not client.settingsFrameForceClose then
-					self:Show()
-				end
-			end
+			frame:SetSkin("ttt2_default")
+			frame:RegisterBackFunction(function()
+				self:Show()
+			end)
 
 			local pnl = vgui.Create("DScrollPanel", frame)
 			pnl:SetVerticalScrollbarEnabled(true)
@@ -322,25 +307,12 @@ function HELPSCRN:Show()
 				data.getContent(self, pnl)
 			end
 
-			--
 			frame:MakePopup()
 			frame:SetKeyboardInputEnabled(false)
 
 			client.settingsFrame = frame
 		end
 	end
-
-	-- Tutorial
-	local tutparent = vgui.Create("DPanel", dtabs)
-	tutparent:SetPaintBackground(false)
-	tutparent:StretchToParent(margin, 0, 0, 0)
-
-	self:CreateTutorial(tutparent)
-
-	dtabs:AddSheet(GetTranslation("help_tut"), tutparent, "icon16/book_open.png", false, false, GetTranslation("help_tut_tip"))
-
-	-- extern support
-	hook.Call("TTTSettingsTabs", GAMEMODE, dtabs)
 
 	--
 	dframe:MakePopup()
@@ -371,6 +343,44 @@ local function MuteTeamCallback(cv, old, new)
 	net.SendToServer()
 end
 cvars.AddChangeCallback("ttt_mute_team_check", MuteTeamCallback)
+
+function HELPSCRN:CreateCompatibilityPanel(parent)
+	local margin_x = 5
+	local margin_y = 30
+
+	local dframe2 = vgui.Create("DFrame")
+	dframe2:SetSize(630, 470)
+	dframe2:Center()
+	dframe2:SetTitle(GetTranslation("help_title"))
+	dframe2:SetVisible(true)
+	dframe2:ShowCloseButton(true)
+	dframe2:MakePopup()
+
+	local dtabs = vgui.Create("DPropertySheet", dframe2)
+	dtabs:SetPos(margin_x, margin_y)
+	dtabs:SetSize(630 - 2 * margin_x, 470 - 2 * margin_y)
+
+	-- Compatibility Info
+	local compatinfo = vgui.Create("DPanel", dtabs)
+	compatinfo:SetPaintBackground(false)
+	compatinfo:StretchToParent(margin_x, 0, 0, 0)
+
+	self:CreateCompatInfo(compatinfo)
+
+	dtabs:AddSheet(GetTranslation("help_settings_compat"), compatinfo, "icon16/wrench.png", false, false, GetTranslation("help_settings_tip"))
+
+	-- Tutorial
+	local tutparent = vgui.Create("DPanel", dtabs)
+	tutparent:SetPaintBackground(false)
+	tutparent:StretchToParent(margin_x, 0, 0, 0)
+
+	self:CreateTutorial(tutparent)
+
+	dtabs:AddSheet(GetTranslation("help_tut"), tutparent, "icon16/book_open.png", false, false, GetTranslation("help_tut_tip"))
+
+	-- extern support
+	hook.Run("TTTSettingsTabs", dtabs)
+end
 
 ---
 -- Creates the settings for the help screen
@@ -749,6 +759,17 @@ end)
 
 local imgpath = "vgui/ttt/help/tut0%d"
 local tutorial_pages = 6
+
+---
+-- Creates the tutorial for the help screen
+-- @param Panel parent
+-- @realm client
+-- @todo update tutorial
+-- @internal
+function HELPSCRN:CreateCompatInfo(parent)
+
+end
+
 
 ---
 -- Creates the tutorial for the help screen
