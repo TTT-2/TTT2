@@ -636,6 +636,20 @@ function CreateChanges()
 		</ul>
 	]], os.time({year = 2020, month = 03, day = 1}))
 
+	AddChange("TTT2 Base - v0.6.3b", [[
+		<h2>New:</h2>
+		<ul>
+			<li>Added a Polish translation (Thanks @Wukerr)</li>
+			<li>Added fallback icons for equipment</li>
+		</ul>
+		<br>
+		<h2>Fixed:</h2>
+		<ul>
+			<li>Fix <i>body_found</i> for bots</li>
+			<li>Fix NWVarSyncing when using <i>TTT2NET:Set()</i></li>
+		</ul>
+	]], os.time({year = 2020, month = 03, day = 5}))
+
 	-- run hook for other addons to add their changelog as well
 	hook.Run("TTT2AddChange", changes, currentVersion)
 end
