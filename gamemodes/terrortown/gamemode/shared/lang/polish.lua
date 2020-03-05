@@ -35,6 +35,7 @@ L.round_traitors_more = "Zdrajco, to są twoi sojusznicy: {names}"
 L.win_time         = "Czas minął. Zdrajcy przegrali."
 L.win_traitors     = "Zdrajcy wygrali!"
 L.win_innocents    = "Zdrajcy zostali pokonani!"
+L.win_bees         = "Wygrały pszczoły! (To oznacza remis)"
 L.win_showreport   = "Spójrzmy na raport rundy na {num} sekund."
 
 L.limit_round      = "Limit rund osiągnięty. {mapname} wkrótce się załaduje."
