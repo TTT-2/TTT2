@@ -678,6 +678,22 @@ local function MakePanel(panel, change)
 	panel.htmlSheet = html
 end
 
+
+function GetSortedChanges()
+	CreateChanges()
+
+	-- sort changes list by date
+	table.sort(changes, function(a, b)
+		if a.date < 0 and b.date < 0 then
+			return a.date < b.date
+		else
+			return a.date > b.date
+		end
+	end)
+
+	return changes
+end
+
 ---
 -- Displays the changes window
 -- @realm client

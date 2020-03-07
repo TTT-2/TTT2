@@ -206,7 +206,10 @@ function HELPSCRN:ShowSubMenu(x, y, data)
 
 		settingsButton.DoClick = function(slf)
 			contentAreaScroll:Clear()
-			menuTbl[i].populateFn(contentAreaScroll)
+
+			if isfunction(menuTbl[1].populateFn) then
+				menuTbl[i].populateFn(contentAreaScroll)
+			end
 
 			-- handle the set/unset of active buttons for the draw process
 			lastActive:SetActive(false)
@@ -218,7 +221,9 @@ function HELPSCRN:ShowSubMenu(x, y, data)
 
 	-- autoselect first entry
 	if #menuTbl >= 1 then
-		menuTbl[1].populateFn(contentAreaScroll)
+		if isfunction(menuTbl[1].populateFn) then
+			menuTbl[1].populateFn(contentAreaScroll)
+		end
 
 		-- handle the set of active buttons for the draw process
 		navAreaScrollGrid:GetChild(0):SetActive()

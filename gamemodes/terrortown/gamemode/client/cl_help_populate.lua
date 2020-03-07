@@ -1,6 +1,22 @@
 ---
 -- MAIN MENU CONTENT
 
+local function AddChangelog(helpData)
+	local bindingsData = helpData:RegisterSubMenu("ttt2_changelog")
+
+	bindingsData:SetTitle("f1_settings_changes_title")
+	bindingsData:SetDescription("Some cool text will be here...")
+	bindingsData:SetIcon(Material("vgui/ttt/dynamic/roles/icon_inno"))
+end
+
+local function AddGuide(helpData)
+	local bindingsData = helpData:RegisterSubMenu("ttt2_guide")
+
+	bindingsData:SetTitle("f1_settings_guide_title")
+	bindingsData:SetDescription("Some cool text will be here...")
+	bindingsData:SetIcon(Material("vgui/ttt/dynamic/roles/icon_inno"))
+end
+
 local function AddBindings(helpData)
 	local bindingsData = helpData:RegisterSubMenu("ttt2_bindings")
 
@@ -9,8 +25,43 @@ local function AddBindings(helpData)
 	bindingsData:SetIcon(Material("vgui/ttt/dynamic/roles/icon_inno"))
 end
 
+local function AddAppearance(helpData)
+	local bindingsData = helpData:RegisterSubMenu("ttt2_appearance")
+
+	bindingsData:SetTitle("f1_settings_appearance_title")
+	bindingsData:SetDescription("Some cool text will be here...")
+	bindingsData:SetIcon(Material("vgui/ttt/dynamic/roles/icon_inno"))
+end
+
+local function AddAddons(helpData)
+	local bindingsData = helpData:RegisterSubMenu("ttt2_addons")
+
+	bindingsData:SetTitle("f1_settings_addons_title")
+	bindingsData:SetDescription("Some cool text will be here...")
+	bindingsData:SetIcon(Material("vgui/ttt/dynamic/roles/icon_inno"))
+end
+
+local function AddLegacy(helpData)
+	-- check if there are any legacy menues by probing the hook
+	hook.Run("TTTSettingsTabs", vgui.Create("DPropertySheet"))
+
+	if #dtabs:GetItems() == 0 then return end
+
+	-- there is at least one item, use this
+	local bindingsData = helpData:RegisterSubMenu("ttt2_legacy")
+
+	bindingsData:SetTitle("f1_settings_legacy_title")
+	bindingsData:SetDescription("Some cool text will be here...")
+	bindingsData:SetIcon(Material("vgui/ttt/dynamic/roles/icon_inno"))
+end
+
 function InternalModifyMainMenu(helpData)
+	AddChangelog(helpData)
+	AddGuide(helpData)
 	AddBindings(helpData)
+	AddAppearance(helpData)
+	AddAddons(helpData)
+	AddLegacy(helpData)
 end
 
 
@@ -103,7 +154,76 @@ local function AddBindingCategory(category, parent)
 	form:Dock(TOP)
 end
 
+local htmlStart = [[
+	<head>
+		<style>
+			body {
+				font-family: Trebuchet, Verdana;
+				background-color: rgb(22, 42, 57);
+				color: white;
+				font-weight: 100;
+			}
+			body * {
+				font-size: 13pt;
+			}
+			h1 {
+				font-size: 16pt;
+				text-decoration: underline;
+			}
+		</style>
+	</head>
+	<body>
+]]
+
+local htmlEnd = [[
+	</body>
+]]
+
 local subMenuFunctions = {
+	["ttt2_changelog"] = function(helpData)
+		local changelog = GetSortedChanges()
+
+		for i = 1, #changelog do
+			local change = changelog[i]
+
+			local changelogData = helpData:PopulateSubMenu("ttt2_sub_changes_" .. tostring(i))
+
+			changelogData:SetTitle(change.version)
+			changelogData:PopulatePanel(function(parent)
+				local header = "<h1>" .. change.version .. " Update"
+
+				if change.date > 0 then
+					header = header .. " <i> - (date: " .. os.date("%Y/%m/%d", change.date) .. ")</i>"
+				end
+
+				header = header .. "</h1>"
+
+				local html = vgui.Create("DHTML", parent)
+				html:SetSize(500,500)
+				html:Dock(FILL)
+				html:SetHTML(htmlStart .. header .. change.text .. htmlEnd)
+				--html:DockMargin(10, 10, 10, 10)
+
+				--parent.htmlSheet = html
+			end)
+		end
+	end,
+	["ttt2_guide"] = function(helpData)
+		-- gameplay
+		local gameplayData = helpData:PopulateSubMenu("ttt2_sub_gameplay")
+
+		gameplayData:SetTitle("ttt2_gameplay")
+
+		-- roles
+		local roleData = helpData:PopulateSubMenu("ttt2_sub_roles")
+
+		roleData:SetTitle("ttt2_roles")
+
+		-- equipment
+		local equipmentData = helpData:PopulateSubMenu("ttt2_sub_equipment")
+
+		equipmentData:SetTitle("ttt2_equipment")
+	end,
 	["ttt2_bindings"] = function(helpData)
 		local bindingsData = helpData:PopulateSubMenu("ttt2_sub_bindings")
 
@@ -119,12 +239,36 @@ local subMenuFunctions = {
 
 			AddBindingCategory("Other Bindings", parent)
 		end)
+	end,
+	["ttt2_appearance"] = function(helpData)
+		-- HUD editor
+		local hudData = helpData:PopulateSubMenu("ttt2_sub_hud_editor")
+
+		hudData:SetTitle("ttt2_hud_editor")
+
+		-- VSKIN
+		local vskinData = helpData:PopulateSubMenu("ttt2_sub_vskin")
+
+		vskinData:SetTitle("ttt2_vskin")
+
+		-- damage indicator
+		local damageData = helpData:PopulateSubMenu("ttt2_sub_damage_indicator")
+
+		damageData:SetTitle("ttt2_damage_indicator")
+
+		-- performance
+		local performanceData = helpData:PopulateSubMenu("ttt2_sub_performance")
+
+		performanceData:SetTitle("ttt2_gperformance")
+
+		-- miscellaneous
+		local miscellaneousData = helpData:PopulateSubMenu("ttt2_sub_miscellaneous")
+
+		miscellaneousData:SetTitle("ttt2_miscellaneous")
 	end
 }
 
 function InternalModifySubMenu(helpData, menuId)
-	print("menuId: " .. tostring(menuId))
-
 	if not subMenuFunctions[menuId] then return end
 
 	subMenuFunctions[menuId](helpData)
