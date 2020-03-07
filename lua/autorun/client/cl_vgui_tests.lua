@@ -38,32 +38,24 @@ concommand.Add("vguitest", function()
 end)
 
 concommand.Add("vguitest2", function()
-	local Frame = vgui.Create( "DFrame" ) -- Create a Frame to contain everything.
-	Frame:SetTitle( "DIconLayout Example" )
-	Frame:SetSize(1100, 700)
-	Frame:Center()
-	Frame:MakePopup()
+	local frame = vgui.Create( "DFrame" )
+	frame:SetSize( 300, 500 )
+	frame:Center()
+	frame:MakePopup()
 
-	local Scroll = vgui.Create( "DScrollPanel", Frame ) -- Create the Scroll panel
-	Scroll:Dock( FILL )
+	local dtree  = vgui.Create( "DTree", frame )
+	dtree:Dock( FILL )
 
-	local List = vgui.Create( "DIconLayout", Scroll )
-	List:Dock( FILL )
-	List:SetSpaceY( 5 ) -- Sets the space in between the panels on the Y Axis by 5
-	List:SetSpaceX( 5 ) -- Sets the space in between the panels on the X Axis by 5
-
-	for i = 1, 20 do -- Make a loop to create a bunch of panels inside of the DIconLayout
-		local ListItem = List:Add( "DPanel" ) -- Add DPanel to the DIconLayout
-		ListItem:SetSize( 80, 40 ) -- Set the size of it
-		-- You don't need to set the position, that is done automatically.
-	end
-
-	local ListLabel = List:Add( "DLabel" ) -- Add a label that will be the only panel on its row
-	ListLabel.OwnLine = true -- The magic variable that specifies this item has its own line all for itself
-	ListLabel:SetText( "Hello World!" )
-
-	for i = 1, 5 do
-		local ListItem = List:Add( "DPanel" )
-		ListItem:SetSize( 80, 40 )
-	end
+	local node = dtree:AddNode( "Node One" )
+	local node = dtree:AddNode( "Node Two" )
+	local cnode = node:AddNode( "Node 2.1" )
+	local cnode = node:AddNode( "Node 2.2" )
+	local cnode = node:AddNode( "Node 2.3" )
+	local cnode = node:AddNode( "Node 2.4" )
+	local cnode = node:AddNode( "Node 2.5" )
+	local gcnode = cnode:AddNode( "Node 2.5" )
+	local cnode = node:AddNode( "Node 2.6" )
+	local node = dtree:AddNode( "Node Three ( Maps Folder )" )
+	node:MakeFolder( "maps", "GAME", true )
+	local node = dtree:AddNode( "Node Four" )
 end)

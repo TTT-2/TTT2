@@ -10,6 +10,8 @@ TTTFiles = {
 	cl_equip = {file = "cl_equip.lua", on = "client"},
 	cl_eventpopup = {file = "cl_eventpopup.lua", on = "client"},
 	cl_fonts = {file = "cl_fonts.lua", on = "client"},
+	cl_help_data = {file = "cl_help_data.lua", on = "client"},
+	cl_help_populate = {file = "cl_help_populate.lua", on = "client"},
 	cl_help = {file = "cl_help.lua", on = "client"},
 	cl_hud_editor = {file = "cl_hud_editor.lua", on = "client"},
 	cl_hud_manager = {file = "cl_hud_manager.lua", on = "client"},
@@ -87,7 +89,10 @@ TTTFiles = {
 	-- derma client files
 	derma__cl_skin = {file = "derma/cl_skin.lua", on = "client"},
 	derma__dframe = {file = "derma/vgui/dframe_ttt2.lua", on = "client"},
-	derma__dmenubutton = {file = "derma/vgui/dmenuButton_ttt2.lua", on = "client"},
+	derma__dmenubutton = {file = "derma/vgui/dmenubutton_ttt2.lua", on = "client"},
+	derma__dsubmenubutton = {file = "derma/vgui/dsubmenubutton_ttt2.lua", on = "client"},
+	derma__dnavpanel = {file = "derma/vgui/dnavpanel_ttt2.lua", on = "client"},
+	derma__dcontentpanel = {file = "derma/vgui/dcontentpanel_ttt2.lua", on = "client"},
 }
 
 if SERVER then

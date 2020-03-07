@@ -18,127 +18,53 @@ surface.CreateFont("SettingsButtonFont", {font = "Trebuchet24", size = 24, weigh
 CreateConVar("ttt_spectator_mode", "0", FCVAR_ARCHIVE)
 CreateConVar("ttt_mute_team_check", "0")
 
+-- store the helpscreen in here to allow toggling with key
+local menuCache = {
+	mainMenu,
+	subMenu
+}
+
+-- DEFINE SIZE
+local w, h = 1100, 700
+local pad = 5
+local cols = 3
+local widthMainButton = math.Round((w - 2 * pad * (cols + 1)) / cols)
+local heightMainButton = 120
+
+local widthNav, heightNav = 300, 700
+local widthNavHeader, heightNavHeader = 299, 80
+local widthNavContent, heightNavContent = 299, 620
+local widthContent, heightContent = 800, 700
+local widthButtonPnl, heightButtonPanel = 800, 80
+local widthNavButton, heightNavButton = 299, 50
+
 HELPSCRN = {}
 
-local helpframe
-
-local function AddBindingCategory(category, parent)
-	local form = vgui.Create("DForm", parent)
-
-	form:SetName(LANG.TryTranslation(category))
-
-	for _, binding in ipairs(bind.GetSettingsBindings()) do
-		if binding.category == category then
-			-- creating two grids:
-			-- GRID: tooltip, bindingbutton and extra button area
-			-- GRIDEXTRA: inside the last GRID box, houses default and disable buttons
-			local dPGrid = vgui.Create("DGrid")
-			dPGrid:SetCols(3)
-			dPGrid:SetColWide(120)
-
-			local dPGridExtra = vgui.Create("DGrid")
-			dPGridExtra:SetCols(2)
-			dPGridExtra:SetColWide(60)
-
-			form:AddItem(dPGrid)
-
-			-- Keybind Label
-			local dPlabel = vgui.Create("DLabel")
-			dPlabel:SetText(LANG.TryTranslation(binding.label) .. ":")
-			dPlabel:SetTextColor(COLOR_BLACK)
-			dPlabel:SetContentAlignment(4)
-			dPlabel:SetSize(120, 25)
-
-			dPGrid:AddItem(dPlabel)
-
-
-			-- Keybind Button
-			local dPBinder = vgui.Create("DBinder")
-			dPBinder:SetSize(100, 25)
-
-			local curBinding = bind.Find(binding.name)
-			dPBinder:SetValue(curBinding)
-			dPBinder:SetTooltip(GetTranslation("f1_bind_description"))
-
-			dPGrid:AddItem(dPBinder)
-			dPGrid:AddItem(dPGridExtra)
-
-			-- DEFAULT Button
-			local dPBindResetButton = vgui.Create("DButton")
-			dPBindResetButton:SetText(GetTranslation("f1_bind_reset_default"))
-			dPBindResetButton:SetSize(55, 25)
-			dPBindResetButton:SetTooltip(GetTranslation("f1_bind_reset_default_description"))
-
-			if binding.defaultKey ~= nil then
-				dPBindResetButton.DoClick = function()
-					bind.Set(binding.defaultKey, binding.name, true)
-					dPBinder:SetValue(bind.Find(binding.name))
-				end
-			else
-				dPBindResetButton:SetDisabled(true)
-			end
-			dPGridExtra:AddItem(dPBindResetButton)
-
-			-- DISABLE Button
-			local dPBindDisableButton = vgui.Create("DButton")
-			dPBindDisableButton:SetText(GetTranslation("f1_bind_disable_bind"))
-			dPBindDisableButton:SetSize(55, 25)
-			dPBindDisableButton:SetTooltip(GetTranslation("f1_bind_disable_description"))
-			dPBindDisableButton.DoClick = function()
-				bind.Remove(curBinding, binding.name, true)
-				dPBinder:SetValue(bind.Find(binding.name))
-			end
-			dPGridExtra:AddItem(dPBindDisableButton)
-
-			-- onchange function
-			function dPBinder:OnChange(num)
-				bind.Remove(curBinding, binding.name, true)
-
-				if num ~= 0 then
-					bind.Add(num, binding.name, true)
-				end
-
-				LocalPlayer():ChatPrint(GetPTranslation("ttt2_bindings_new", {name = binding.name, key = input.GetKeyName(num) or "NONE"}))
-
-				curBinding = num
-			end
-		end
-	end
-
-	form:Dock(TOP)
-end
-
 function HELPSCRN.IsOpen()
-	return IsValid(helpframe) or IsValid(LocalPlayer().settingsFrame)
+	return IsValid(menuCache.mainMenu) or IsValid(LocalPlayer().settingsFrame)
 end
 
+-- TODO set pos based on last pos!
 ---
 -- Opens the help screen
 -- @realm client
-function HELPSCRN:Show()
-	if IsValid(helpframe) then
-		helpframe:Close()
+function HELPSCRN:Show(x, y)
+	-- F1 PRESSED: CLOSE MAIN MENU IF MENU IS ALREADY OPENED
+	if IsValid(menuCache.mainMenu) then
+		menuCache.mainMenu:Close()
 
 		return
 	end
 
-	local client = LocalPlayer()
-	client.hudswitcherSettingsF1 = nil
-
-	if client.settingsFrame and IsValid(client.settingsFrame) then
-		client.settingsFrameForceClose = true
-
-		client.settingsFrame:Close()
+	-- F1 PRESSED: CLOSE SUB MENU IF MENU IS ALREADY OPENED
+	if IsValid(menuCache.subMenu) then
+		menuCache.subMenu:Close()
 	end
 
-	client.settingsFrameForceClose = nil
-
-	local minWidth, minHeight = 630, 470
-	local w, h = 1100, 700
-
+	-- SET UP MAIN FRAME
 	local dframe = vgui.Create("DFrameTTT2")
 	dframe:SetSize(w, h)
-	dframe:Center()
+	dframe:SetPos(x or 0.5 * (ScrW() - w), y or 0.5 * (ScrH() - h)) -- keep old position
 	dframe:SetTitle("help_title")
 	dframe:SetVisible(true)
 	dframe:SetDraggable(true)
@@ -147,184 +73,188 @@ function HELPSCRN:Show()
 	dframe:SetDeleteOnClose(true)
 	dframe:SetSkin("ttt2_default")
 
-	-- TTT Settings
-	local pad = 5
-
+	-- MAKE MAIN FRAME SCROLEABLE
 	local scrollPanel = vgui.Create("DScrollPanel", dframe)
 	scrollPanel:Dock(FILL)
 
+	-- SPLIT FRAME INTO A GRID LAYOUT
 	local dsettings = vgui.Create("DIconLayout", scrollPanel)
 	dsettings:Dock(FILL)
 	dsettings:SetSpaceX(pad)
 	dsettings:SetSpaceY(pad)
 
-	local cols = 3
-	local btnWidth = math.Round((w - 2 * pad * (cols + 1)) / cols)
-	local btnHeight = 120
+	-- GENERATE MENU CONTENT
+	local menuTbl = {}
+	local helpData = HELP_DATA:BindData(menuTbl)
 
-	local tbl = {
-		[1] = {
-			id = "changes",
-			onclick = function(slf)
-				local frm = ShowChanges()
+	InternalModifyMainMenu(helpData)
 
-				if not frm then return end
+	hook.Run("TTT2ModifyMainMenu", helpData)
 
-				local oldClose = frm.OnClose
+	for i = 1, #menuTbl do
+		local data = menuTbl[i]
 
-				frm.OnClose = function(slf2)
-					if isfunction(oldClose) then
-						oldClose(slf2)
-					end
+		-- do not show if it is admin only and the player is no admin
+		if data.adminOnly and not LocalPlayer():IsAdmin() then continue end
 
-					if not client.settingsFrameForceClose then
-						self:Show()
-					end
-				end
-
-				client.settingsFrame = frm
-			end,
-			getTitle = function()
-				return "f1_settings_changes_title"
-			end
-		},
-		[2] = {
-			id = "hudSwitcher",
-			onclick = function(slf)
-				client.hudswitcherSettingsF1 = true
-				HUDManager.ShowHUDSwitcher()
-			end,
-			getTitle = function()
-				return "f1_settings_hudswitcher_title"
-			end
-		},
-		[3] = {
-			id = "bindings",
-			getContent = self.CreateBindings,
-			getTitle = function()
-				return "f1_settings_bindings_title"
-			end
-		},
-		[4] = {
-			id = "interface",
-			getContent = self.CreateInterfaceSettings,
-			getTitle = function()
-				return "f1_settings_interface_title"
-			end
-		},
-		[5] = {
-			id = "gameplay",
-			getContent = self.CreateGameplaySettings,
-			getTitle = function()
-				return "f1_settings_gameplay_title"
-			end
-		},
-		[6] = {
-			id = "crosshair",
-			getContent = self.CreateCrosshairSettings,
-			getTitle = function()
-				return "f1_settings_crosshair_title"
-			end
-		},
-		[7] = {
-			id = "damageIndicator",
-			getContent = self.CreateDamageIndicatorSettings,
-			getTitle = function()
-				return "f1_settings_dmgindicator_title"
-			end
-		},
-		[8] = {
-			id = "language",
-			getContent = self.CreateLanguageForm,
-			getTitle = function()
-				return "f1_settings_language_title"
-			end
-		},
-		[9] = {
-			id = "fallback",
-			onclick = function(slf)
-				self:CreateCompatibilityPanel()
-			end,
-			getTitle = function()
-				return "f1_settings_fallback"
-			end
-		},
-		[10] = {
-			id = "administration",
-			getContent = self.CreateAdministrationForm,
-			shouldShow = function()
-				return LocalPlayer():IsAdmin()
-			end,
-			getTitle = function()
-				return "f1_settings_administration_title"
-			end
-		}
-	}
-
-	hook.Run("TTT2ModifySettingsList", tbl)
-
-	for _, data in ipairs(tbl) do
-		if isfunction(data.shouldShow) and not data.shouldShow() then continue end
-
-		local title = isfunction(data.getTitle) and data.getTitle() or data.id
+		-- do not show if the shouldShow function returnes false
+		if isfunction(data.shouldShowFn) and not data.shouldShowFn() then continue end
 
 		local settingsButton = dsettings:Add("DMenuButtonTTT2")
-		settingsButton:SetSize(btnWidth, btnHeight)
-		settingsButton:SetTitle(title)
-		settingsButton:SetDescription("Some Settings, Other Settings, More Settings, So Many Settings, Infinite Cool Stuff")
-		settingsButton:SetImage(Material("vgui/ttt/dynamic/roles/icon_inno"))
+		settingsButton:SetSize(widthMainButton, heightMainButton)
+		settingsButton:SetTitle(data.title or data.id)
+		settingsButton:SetDescription(data.description)
+		settingsButton:SetImage(data.iconMat)
 
 		settingsButton.DoClick = function(slf)
 			dframe:Close()
 
-			if isfunction(data.onclick) then
-				data.onclick(slf)
+			local posX, posY = dframe:GetPos()
 
-				return
-			end
-
-			local frame = vgui.Create("DFrameTTT2")
-			frame:SetSize(w, h)
-			frame:Center()
-			frame:SetTitle("help_title")
-			frame:SetVisible(true)
-			frame:SetDraggable(true)
-			frame:ShowCloseButton(true)
-			frame:ShowBackButton(true)
-			frame:SetDeleteOnClose(true)
-			frame:SetSkin("ttt2_default")
-			frame:RegisterBackFunction(function()
-				self:Show()
-			end)
-
-			local pnl = vgui.Create("DScrollPanel", frame)
-			pnl:SetVerticalScrollbarEnabled(true)
-			pnl:Dock(FILL)
-			pnl:SetPaintBackground(true)
-			pnl:SetBackgroundColor(settings_panel_default_bgcol)
-
-			if isfunction(data.getContent) then
-				data.getContent(self, pnl)
-			end
-
-			frame:MakePopup()
-			frame:SetKeyboardInputEnabled(false)
-
-			client.settingsFrame = frame
+			self:ShowSubMenu(posX, posY, data)
 		end
 	end
 
-	--
 	dframe:MakePopup()
 	dframe:SetKeyboardInputEnabled(false)
 
-	helpframe = dframe
+	menuCache.mainMenu = dframe
+end
+
+function HELPSCRN:ShowSubMenu(x, y, data)
+	--if isfunction(data.onClickFn) then
+	--	data.onClickFn(slf)
+
+	--	return
+	--end
+
+	local frame = vgui.Create("DFrameTTT2")
+	frame:SetSize(w, h)
+	frame:SetPos(x, y)
+	frame:SetTitle(data.title or data.id)
+	frame:SetVisible(true)
+	frame:SetDraggable(true)
+	frame:ShowCloseButton(true)
+	frame:ShowBackButton(true)
+	frame:SetDeleteOnClose(true)
+	frame:SetSkin("ttt2_default")
+	frame:SetPadding(0, 0, 0, 0)
+
+	frame:RegisterBackFunction(function()
+		self:Show(frame:GetPos())
+	end)
+
+	local navArea = vgui.Create("DNavPanelTTT2", frame)
+	navArea:SetSize(widthNav, heightNav - VSKIN.GetHeaderHeight() - VSKIN.GetBorderSize())
+	navArea:SetPos(0, 0)
+	navArea:Dock(LEFT)
+
+	local navAreaHeader = vgui.Create("DPanel", navArea)
+	navAreaHeader:SetPos(0, 0)
+	navAreaHeader:SetSize(widthNavHeader, heightNavHeader)
+
+	local navAreaHeaderText = vgui.Create("DLabel", navAreaHeader)
+	navAreaHeaderText:SetText("MENU")
+	navAreaHeaderText:Dock(BOTTOM)
+
+	local navAreaContent = vgui.Create("DPanel", navArea)
+	navAreaContent:SetPos(0, heightNavHeader)
+	navAreaContent:SetSize(widthNavContent, heightNavContent)
+
+	-- MAKE NAV AREA SCROLEABLE
+	local navAreaScroll = vgui.Create("DScrollPanel", navAreaContent)
+	navAreaScroll:SetVerticalScrollbarEnabled(true)
+	navAreaScroll:Dock(FILL)
+
+	-- SPLIT NAV AREA INTO A GRID LAYOUT
+	local navAreaScrollGrid = vgui.Create("DIconLayout", navAreaScroll)
+	navAreaScrollGrid:Dock(FILL)
+	navAreaScrollGrid:SetSpaceY(pad)
+
+	local contentArea = vgui.Create("DContentPanelTTT2", frame)
+	contentArea:SetSize(widthContent, heightContent - VSKIN.GetHeaderHeight() - VSKIN.GetBorderSize())
+	contentArea:SetPos(widthNav, 0)
+	contentArea:DockPadding(5, 5, 5, 5)
+	contentArea:Dock(TOP)
+
+	local contentAreaScroll = vgui.Create("DScrollPanel", contentArea)
+	contentAreaScroll:SetVerticalScrollbarEnabled(true)
+	contentAreaScroll:Dock(FILL)
+	--pnl:SetPaintBackground(true)
+	--pnl:SetBackgroundColor(settings_panel_default_bgcol)
+
+	-- CALCULATE SIZES
+	--local showButtons = isfunction(self.populateButtonFn)
+
+	-- GENERATE MENU CONTENT
+	local menuTbl = {}
+	local helpData = SUB_HELP_DATA:BindData(menuTbl)
+
+	InternalModifySubMenu(helpData, data.id)
+
+	hook.Run("TTT2ModifySubMenu", helpData, data.id)
+
+	-- cache reference to last active button
+	local lastActive
+
+	for i = 1, #menuTbl do
+		local subData = menuTbl[i]
+
+		local settingsButton = navAreaScrollGrid:Add("DSubMenuButtonTTT2")
+		settingsButton:SetSize(widthNavButton, heightNavButton)
+		settingsButton:SetTitle(subData.title or subData.id)
+
+		settingsButton.DoClick = function(slf)
+			contentAreaScroll:Clear()
+			menuTbl[i].populateFn(contentAreaScroll)
+
+			-- handle the set/unset of active buttons for the draw process
+			lastActive:SetActive(false)
+			slf:SetActive()
+
+			lastActive = slf
+		end
+	end
+
+	-- autoselect first entry
+	if #menuTbl >= 1 then
+		menuTbl[1].populateFn(contentAreaScroll)
+
+		-- handle the set of active buttons for the draw process
+		navAreaScrollGrid:GetChild(0):SetActive()
+
+		lastActive = navAreaScrollGrid:GetChild(0)
+	end
+
+	frame:MakePopup()
+	frame:SetKeyboardInputEnabled(false)
+
+	menuCache.subMenu = frame
 end
 
 local function ShowTTTHelp(ply, cmd, args)
 	HELPSCRN:Show()
 end
 concommand.Add("ttt_helpscreen", ShowTTTHelp)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 -- Some spectator mode bookkeeping
 
@@ -377,9 +307,31 @@ function HELPSCRN:CreateCompatibilityPanel(parent)
 	self:CreateTutorial(tutparent)
 
 	dtabs:AddSheet(GetTranslation("help_tut"), tutparent, "icon16/book_open.png", false, false, GetTranslation("help_tut_tip"))
+	dtabs:AddSheet(GetTranslation("help_tut2"), tutparent, "icon16/book_open.png", false, false, GetTranslation("help_tut_tip"))
+	dtabs:AddSheet(GetTranslation("help_tut3"), tutparent, "icon16/book_open.png", false, false, GetTranslation("help_tut_tip"))
 
 	-- extern support
 	hook.Run("TTTSettingsTabs", dtabs)
+
+	print("listing children:")
+	--for _, v in ipairs(dtabs:GetChild(0):GetChildren()) do
+	--	PrintTable(v:GetTable())
+	--	print("------------------------------------------------------------------")
+	--end
+
+	--PrintTable(dtabs:GetChildren())
+	-- 1: is always the tab bar
+	--for i, v in ipairs(dtabs:GetChildren()) do
+	--	PrintTable(v:GetTable())
+	--	print("------------------------------------------------------------------")
+	--end
+
+	local children = dtabs:GetItems()
+	for i = 1, #children do
+		local child = children[i]
+
+		print(child.Name)
+	end
 end
 
 ---
@@ -611,22 +563,6 @@ function HELPSCRN:CreateGameplaySettings(parent)
 	form:Dock(FILL)
 end
 
----
--- Creates the bindings menu for the help screen
--- @param Panel parent
--- @realm client
--- @internal
-function HELPSCRN:CreateBindings(parent)
-	AddBindingCategory("TTT2 Bindings", parent)
-
-	for k, category in ipairs(bind.GetSettingsBindingsCategories()) do
-		if k > 2 then
-			AddBindingCategory(category, parent)
-		end
-	end
-
-	AddBindingCategory("Other Bindings", parent)
-end
 
 -- Administration
 -- save the restricted huds list view here to adjust its content in the update listener

@@ -48,6 +48,26 @@ function SKIN:PaintFrameTTT2(panel, w, h)
 end
 
 --[[---------------------------------------------------------
+	Panel
+-----------------------------------------------------------]]
+function SKIN:PaintPanel(panel, w, h)
+
+end
+
+function SKIN:PaintNavPanelTTT2(panel, w, h)
+	local colorBackground = VSKIN.GetBackgroundColor()
+	local colorLine = ColorAlpha(util.GetDefaultColor(colorBackground), 200)
+
+	draw.Box(w - 1, 0, 1, h, colorLine)
+end
+
+function SKIN:PaintContentPanelTTT2(panel, w, h)
+	local colorBackground = ColorAlpha(util.GetDefaultColor(VSKIN.GetBackgroundColor()), 20)
+
+	draw.Box(0, 0, w, h, colorBackground)
+end
+
+--[[---------------------------------------------------------
 	Button
 -----------------------------------------------------------]]
 local function DrawClose(w, h, colorBackground, colorText, shift)
@@ -66,18 +86,18 @@ function SKIN:PaintWindowCloseButton(panel, w, h)
 	local colorTitleText = VSKIN.GetTitleTextColor()
 
 	if panel:GetDisabled() then
-		return DrawClose(w, h, colorAccent, util.ColorAlpha(colorTitleText, 70), 0)
+		return DrawClose(w, h, colorAccent, ColorAlpha(colorTitleText, 70), 0)
 	end
 
 	if panel.Depressed or panel:IsSelected() then
-		return DrawClose(w, h, colorAccentActive, util.ColorAlpha(colorTitleText, 200), 1)
+		return DrawClose(w, h, colorAccentActive, ColorAlpha(colorTitleText, 200), 1)
 	end
 
 	if panel.Hovered then
 		return DrawClose(w, h, colorAccentHover, colorTitleText, 0)
 	end
 
-	return DrawClose(w, h, colorAccent, util.ColorAlpha(colorTitleText, 150), 0)
+	return DrawClose(w, h, colorAccent, ColorAlpha(colorTitleText, 150), 0)
 end
 
 local function DrawBack(w, h, panel, colorBackground, colorText, shift)
@@ -98,18 +118,18 @@ function SKIN:PaintWindowBackButton(panel, w, h)
 	local colorTitleText = VSKIN.GetTitleTextColor()
 
 	if panel:GetDisabled() then
-		return DrawBack(w, h, panel, colorAccent, util.ColorAlpha(colorTitleText, 70), 0)
+		return DrawBack(w, h, panel, colorAccent, ColorAlpha(colorTitleText, 70), 0)
 	end
 
 	if panel.Depressed or panel:IsSelected() then
-		return DrawBack(w, h, panel, colorAccentActive, util.ColorAlpha(colorTitleText, 200), 1)
+		return DrawBack(w, h, panel, colorAccentActive, ColorAlpha(colorTitleText, 200), 1)
 	end
 
 	if panel.Hovered then
 		return DrawBack(w, h, panel, colorAccentHover, colorTitleText, 0)
 	end
 
-	return DrawBack(w, h, panel, colorAccent, util.ColorAlpha(colorTitleText, 150), 0)
+	return DrawBack(w, h, panel, colorAccent, ColorAlpha(colorTitleText, 150), 0)
 end
 
 --[[---------------------------------------------------------
@@ -223,7 +243,7 @@ function SKIN:PaintMenuButtonTTT2(panel, w, h)
 
 	local colorBackground = VSKIN.GetBackgroundColor()
 
-	local colorText = util.ColorAlpha(util.GetDefaultColor(colorBackground), 200)
+	local colorText = ColorAlpha(util.GetDefaultColor(colorBackground), 200)
 	local colorTextHover = Color(colorText.r, colorText.g, colorText.b, colorText.a * 1.2)
 	local colorIcon = Color(colorText.r, colorText.g, colorText.b, colorText.a * 0.2)
 	local colorHover = Color(colorText.r, colorText.g, colorText.b, colorText.a * 0.3)
@@ -241,6 +261,61 @@ function SKIN:PaintMenuButtonTTT2(panel, w, h)
 	end
 
 	return DrawMenuButton(w, h, panel, colorIcon, colorIcon, colorText, 0)
+end
+
+local function DrawSubMenuButton(w, h, panel, sizeBorder, colorBackground, colorBar, colorText)
+	draw.Box(0, 0, sizeBorder, h, colorBar)
+	draw.Box(sizeBorder, 0, w - sizeBorder, h, colorBackground)
+
+	draw.SimpleText(
+		panel:GetTitle(),
+		panel:GetTitleFont(),
+		sizeBorder + 20,
+		0.5 * h,
+		colorText,
+		TEXT_ALIGN_LEFT,
+		TEXT_ALIGN_CENTER
+	)
+end
+
+function SKIN:PaintSubMenuButtonTTT2(panel, w, h)
+	if not panel.m_bBackground then return end
+
+	local colorElemBackground = VSKIN.GetBackgroundColor()
+
+	local colorText = util.ColorLighten(util.GetDefaultColor(colorElemBackground), 75)
+	local colorTextHover = util.GetHoverColor(colorText)
+	local colorTextActive = util.GetActiveColor(colorText)
+
+	local colorAccent = VSKIN.GetAccentColor()
+	local colorAccentHover = util.GetHoverColor(colorAccent)
+	local colorAccentActive = util.GetActiveColor(colorAccent)
+
+	local colorBackground = ColorAlpha(colorAccent, 50)
+	local colorBackgroundHover = util.GetHoverColor(colorBackground)
+	local colorBackgroundActive = util.GetActiveColor(colorBackground)
+
+	if not panel:IsActive() then
+		colorAccent = colorElemBackground
+		colorBackground = colorElemBackground
+	end
+
+	local sizeBorder = VSKIN.GetBorderSize()
+
+
+	if panel:GetDisabled() then
+		return self.tex.Button_Dead( 0, 0, w, h)
+	end
+
+	if panel.Depressed or panel:IsSelected() or panel:GetToggle() then
+		return DrawSubMenuButton(w, h, panel, sizeBorder, colorBackgroundActive, colorAccentActive, colorTextActive)
+	end
+
+	if panel.Hovered then
+		return DrawSubMenuButton(w, h, panel, sizeBorder, colorBackgroundHover, colorAccentHover, colorTextHover)
+	end
+
+	return DrawSubMenuButton(w, h, panel, sizeBorder, colorBackground, colorAccent, colorText)
 end
 
 -- REGISTER DERMA SKIN

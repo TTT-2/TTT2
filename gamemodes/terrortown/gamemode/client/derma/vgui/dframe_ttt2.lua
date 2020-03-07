@@ -51,8 +51,6 @@ function PANEL:Init()
 	self:SetMinWidth(50)
 	self:SetMinHeight(50)
 
-	self:DockPadding(5, VSKIN.GetHeaderHeight() + VSKIN.GetBorderSize() + 5, 5, 5)
-
 	-- This turns off the engine drawing
 	self:SetPaintBackgroundEnabled(false)
 	self:SetPaintBorderEnabled(false)
@@ -63,6 +61,8 @@ function PANEL:Init()
 		text = "Window",
 		font = "DermaTTT2Title"
 	}
+
+	self:SetPadding(5, 5, 5, 5)
 end
 
 function PANEL:SetTitle(strTitle)
@@ -79,6 +79,21 @@ end
 
 function PANEL:GetTitleFont()
 	return self.title.font
+end
+
+function PANEL:SetPadding(left, top, right, bottom)
+	self.padding = {
+		left = left,
+		top = top,
+		right = right,
+		bottom = bottom
+	}
+
+	self:UpdatePadding()
+end
+
+function PANEL:UpdatePadding()
+	self:DockPadding(self.padding.left, VSKIN.GetHeaderHeight() + VSKIN.GetBorderSize() + self.padding.top, self.padding.right, self.padding.bottom)
 end
 
 function PANEL:ShowCloseButton(bShow)
@@ -239,6 +254,8 @@ function PANEL:PerformLayout()
 
 	self.btnBack:SetPos(0, 0)
 	self.btnBack:SetSize(100, size)
+
+	self:UpdatePadding()
 end
 
 derma.DefineControl("DFrameTTT2", "A simple window", PANEL, "EditablePanel")

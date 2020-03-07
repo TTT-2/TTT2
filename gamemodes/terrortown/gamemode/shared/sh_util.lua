@@ -180,21 +180,6 @@ function AccessorFuncDT(tbl, varname, name)
 end
 
 ---
--- Sets the alpha of a given @{Color} value
--- @param Color color The original color value
--- @param number value The alpha value [0..255]
--- @return Color The changed color
--- @realm shared
-function util.ColorAlpha(color, alpha)
-	return Color(
-		color.r,
-		color.g,
-		color.b,
-		alpha
-	)
-end
-
----
 -- Darkens a given @{Color} value
 -- @param Color color The original color value
 -- @param number value The value to darken the color [0..255]
@@ -259,14 +244,44 @@ end
 
 ---
 -- Returns white or black @{Color} based on the passed color value
--- @param Color bgcolor background color
+-- @param Color color background color
 -- @return Color The color based on the background color
 -- @realm shared
-function util.GetDefaultColor(bgcolor)
-	if bgcolor.r + bgcolor.g + bgcolor.b < 500 then
+function util.GetDefaultColor(color)
+	if color.r + color.g + color.b < 500 then
 		return COLOR_WHITE
 	else
 		return COLOR_BLACK
+	end
+end
+
+---
+-- Returns a hovercolor which is just a lightened or darkened color based
+-- on the sourcecolor
+-- @param Color color The original color
+-- @param [default=20] number value The amount to change
+-- @return Color The color based on the original color
+-- @realm shared
+function util.GetHoverColor(color, value)
+	if color.r + color.g + color.b < 500 then
+		return util.ColorLighten(color, value or 20)
+	else
+		return util.ColorDarken(color, value or 20)
+	end
+end
+
+---
+-- Returns a activecolor which is just a lightened or darkened color based
+-- on the sourcecolor
+-- @param Color color The original color
+-- @param [default=40] number value The amount to change
+-- @return Color The color based on the original color
+-- @realm shared
+function util.GetActiveColor(color, value)
+	if color.r + color.g + color.b < 500 then
+		return util.ColorLighten(color, value or 40)
+	else
+		return util.ColorDarken(color, value or 40)
 	end
 end
 
