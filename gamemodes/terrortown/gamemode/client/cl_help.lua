@@ -9,14 +9,25 @@ local ipairs = ipairs
 local IsValid = IsValid
 local ConVarExists = ConVarExists
 local CreateConVar = CreateConVar
-local surface = surface
-
-ttt_include("vgui__cl_f1settings_button")
-
-surface.CreateFont("SettingsButtonFont", {font = "Trebuchet24", size = 24, weight = 1000})
 
 CreateConVar("ttt_spectator_mode", "0", FCVAR_ARCHIVE)
 CreateConVar("ttt_mute_team_check", "0")
+
+-- SET UP HELPSCRN AND INCLUDE ADDITIONAL FILES
+HELPSCRN = {
+	populate = {},
+	subPopulate = {}
+}
+
+ttt_include("cl_help_populate")
+ttt_include("cl_help_populate_addons")
+ttt_include("cl_help_populate_appearance")
+ttt_include("cl_help_populate_bindings")
+ttt_include("cl_help_populate_changelog")
+ttt_include("cl_help_populate_gameplay")
+ttt_include("cl_help_populate_guide")
+ttt_include("cl_help_populate_language")
+ttt_include("cl_help_populate_legacy")
 
 -- store the helpscreen in here to allow toggling with key
 local menuCache = {
@@ -25,10 +36,11 @@ local menuCache = {
 }
 
 -- DEFINE SIZE
+HELPSCRN.pad = 5
+
 local w, h = 1100, 700
-local pad = 5
 local cols = 3
-local widthMainButton = math.Round((w - 2 * pad * (cols + 1)) / cols)
+local widthMainButton = math.Round((w - 2 * HELPSCRN.pad * (cols + 1)) / cols)
 local heightMainButton = 120
 
 local widthNav, heightNav = 300, 700
@@ -37,8 +49,6 @@ local widthNavContent, heightNavContent = 299, 620
 local widthContent, heightContent = 800, 700
 local widthButtonPnl, heightButtonPanel = 800, 80
 local widthNavButton, heightNavButton = 299, 50
-
-HELPSCRN = {}
 
 function HELPSCRN.IsOpen()
 	return IsValid(menuCache.mainMenu) or IsValid(LocalPlayer().settingsFrame)
@@ -80,8 +90,8 @@ function HELPSCRN:Show(x, y)
 	-- SPLIT FRAME INTO A GRID LAYOUT
 	local dsettings = vgui.Create("DIconLayout", scrollPanel)
 	dsettings:Dock(FILL)
-	dsettings:SetSpaceX(pad)
-	dsettings:SetSpaceY(pad)
+	dsettings:SetSpaceX(HELPSCRN.pad)
+	dsettings:SetSpaceY(HELPSCRN.pad)
 
 	-- GENERATE MENU CONTENT
 	local menuTbl = {}
@@ -121,6 +131,34 @@ function HELPSCRN:Show(x, y)
 	menuCache.mainMenu = dframe
 end
 
+local function BuildContentArea(parent, menuData)
+	parent:Clear()
+
+	local w2, h2 = parent:GetSize()
+
+	-- CALCULATE SIZE BASED ON EXISTENCE OF BUTTON PANEL
+	if isfunction(menuData.populateButtonFn) then
+		h2 = h2 - heightButtonPanel
+	end
+
+	-- ADD CONTENT BOX AND CONTENT
+	local contentAreaScroll = vgui.Create("DScrollPanel", parent)
+	contentAreaScroll:SetVerticalScrollbarEnabled(true)
+	contentAreaScroll:SetSize(w2, h2)
+	contentAreaScroll:Dock(TOP)
+
+	if isfunction(menuData.populateFn) then
+		menuData.populateFn(contentAreaScroll)
+	end
+
+	-- ADD BUTTON BOX AND BUTTONS
+	if isfunction(menuData.populateButtonFn) then
+		local buttonArea = vgui.Create("DButtonPanelTTT2", parent)
+		buttonArea:SetSize(w2, heightButtonPanel)
+		buttonArea:Dock(BOTTOM)
+	end
+end
+
 function HELPSCRN:ShowSubMenu(x, y, data)
 	--if isfunction(data.onClickFn) then
 	--	data.onClickFn(slf)
@@ -144,6 +182,7 @@ function HELPSCRN:ShowSubMenu(x, y, data)
 		self:Show(frame:GetPos())
 	end)
 
+	-- BUILD GENERAL BOX STRUCTURE
 	local navArea = vgui.Create("DNavPanelTTT2", frame)
 	navArea:SetSize(widthNav, heightNav - VSKIN.GetHeaderHeight() - VSKIN.GetBorderSize())
 	navArea:SetPos(0, 0)
@@ -169,22 +208,13 @@ function HELPSCRN:ShowSubMenu(x, y, data)
 	-- SPLIT NAV AREA INTO A GRID LAYOUT
 	local navAreaScrollGrid = vgui.Create("DIconLayout", navAreaScroll)
 	navAreaScrollGrid:Dock(FILL)
-	navAreaScrollGrid:SetSpaceY(pad)
+	navAreaScrollGrid:SetSpaceY(HELPSCRN.pad)
 
 	local contentArea = vgui.Create("DContentPanelTTT2", frame)
 	contentArea:SetSize(widthContent, heightContent - VSKIN.GetHeaderHeight() - VSKIN.GetBorderSize())
 	contentArea:SetPos(widthNav, 0)
-	contentArea:DockPadding(5, 5, 5, 5)
+	contentArea:DockPadding(HELPSCRN.pad, HELPSCRN.pad, HELPSCRN.pad, HELPSCRN.pad)
 	contentArea:Dock(TOP)
-
-	local contentAreaScroll = vgui.Create("DScrollPanel", contentArea)
-	contentAreaScroll:SetVerticalScrollbarEnabled(true)
-	contentAreaScroll:Dock(FILL)
-	--pnl:SetPaintBackground(true)
-	--pnl:SetBackgroundColor(settings_panel_default_bgcol)
-
-	-- CALCULATE SIZES
-	--local showButtons = isfunction(self.populateButtonFn)
 
 	-- GENERATE MENU CONTENT
 	local menuTbl = {}
@@ -205,11 +235,7 @@ function HELPSCRN:ShowSubMenu(x, y, data)
 		settingsButton:SetTitle(subData.title or subData.id)
 
 		settingsButton.DoClick = function(slf)
-			contentAreaScroll:Clear()
-
-			if isfunction(menuTbl[1].populateFn) then
-				menuTbl[i].populateFn(contentAreaScroll)
-			end
+			BuildContentArea(contentArea, menuTbl[i])
 
 			-- handle the set/unset of active buttons for the draw process
 			lastActive:SetActive(false)
@@ -221,9 +247,7 @@ function HELPSCRN:ShowSubMenu(x, y, data)
 
 	-- autoselect first entry
 	if #menuTbl >= 1 then
-		if isfunction(menuTbl[1].populateFn) then
-			menuTbl[1].populateFn(contentAreaScroll)
-		end
+		BuildContentArea(contentArea, menuTbl[1])
 
 		-- handle the set of active buttons for the draw process
 		navAreaScrollGrid:GetChild(0):SetActive()
@@ -278,295 +302,6 @@ local function MuteTeamCallback(cv, old, new)
 	net.SendToServer()
 end
 cvars.AddChangeCallback("ttt_mute_team_check", MuteTeamCallback)
-
-function HELPSCRN:CreateCompatibilityPanel(parent)
-	local margin_x = 5
-	local margin_y = 30
-
-	local dframe2 = vgui.Create("DFrame")
-	dframe2:SetSize(630, 470)
-	dframe2:Center()
-	dframe2:SetTitle(GetTranslation("help_title"))
-	dframe2:SetVisible(true)
-	dframe2:ShowCloseButton(true)
-	dframe2:MakePopup()
-
-	local dtabs = vgui.Create("DPropertySheet", dframe2)
-	dtabs:SetPos(margin_x, margin_y)
-	dtabs:SetSize(630 - 2 * margin_x, 470 - 2 * margin_y)
-
-	-- Compatibility Info
-	local compatinfo = vgui.Create("DPanel", dtabs)
-	compatinfo:SetPaintBackground(false)
-	compatinfo:StretchToParent(margin_x, 0, 0, 0)
-
-	self:CreateCompatInfo(compatinfo)
-
-	dtabs:AddSheet(GetTranslation("help_settings_compat"), compatinfo, "icon16/wrench.png", false, false, GetTranslation("help_settings_tip"))
-
-	-- Tutorial
-	local tutparent = vgui.Create("DPanel", dtabs)
-	tutparent:SetPaintBackground(false)
-	tutparent:StretchToParent(margin_x, 0, 0, 0)
-
-	self:CreateTutorial(tutparent)
-
-	dtabs:AddSheet(GetTranslation("help_tut"), tutparent, "icon16/book_open.png", false, false, GetTranslation("help_tut_tip"))
-	dtabs:AddSheet(GetTranslation("help_tut2"), tutparent, "icon16/book_open.png", false, false, GetTranslation("help_tut_tip"))
-	dtabs:AddSheet(GetTranslation("help_tut3"), tutparent, "icon16/book_open.png", false, false, GetTranslation("help_tut_tip"))
-
-	-- extern support
-	hook.Run("TTTSettingsTabs", dtabs)
-
-	print("listing children:")
-	--for _, v in ipairs(dtabs:GetChild(0):GetChildren()) do
-	--	PrintTable(v:GetTable())
-	--	print("------------------------------------------------------------------")
-	--end
-
-	--PrintTable(dtabs:GetChildren())
-	-- 1: is always the tab bar
-	--for i, v in ipairs(dtabs:GetChildren()) do
-	--	PrintTable(v:GetTable())
-	--	print("------------------------------------------------------------------")
-	--end
-
-	local children = dtabs:GetItems()
-	for i = 1, #children do
-		local child = children[i]
-
-		print(child.Name)
-	end
-end
-
----
--- Creates the settings for the help screen
--- @param Panel parent
--- @realm client
--- @internal
-function HELPSCRN:CreateInterfaceSettings(parent)
-	local form = vgui.Create("DForm", parent)
-	form:SetName(GetTranslation("set_title_gui"))
-	form:CheckBox(GetTranslation("set_tips"), "ttt_tips_enable")
-
-	local cb = form:NumSlider(GetTranslation("set_startpopup"), "ttt_startpopup_duration", 0, 60, 0)
-	if cb.Label then
-		cb.Label:SetWrap(true)
-	end
-
-	cb:SetTooltip(GetTranslation("set_startpopup_tip"))
-
-	form:CheckBox(GetTranslation("set_healthlabel"), "ttt_health_label")
-
-	cb = form:CheckBox(GetTranslation("set_fastsw_menu"), "ttt_weaponswitcher_displayfast")
-	cb:SetTooltip(GetTranslation("set_fastswmenu_tip"))
-
-	cb = form:CheckBox(GetTranslation("set_wswitch"), "ttt_weaponswitcher_stay")
-	cb:SetTooltip(GetTranslation("set_wswitch_tip"))
-
-	cb = form:CheckBox(GetTranslation("set_cues"), "ttt_cl_soundcues")
-
-	cb = form:CheckBox(GetTranslation("entity_draw_halo"), "ttt_entity_draw_halo")
-
-	cb = form:CheckBox(GetTranslation("disable_spectatorsoutline"), "ttt2_disable_spectatorsoutline")
-	cb:SetTooltip(GetTranslation("disable_spectatorsoutline_tip"))
-
-	cb = form:CheckBox(GetTranslation("disable_overheadicons"), "ttt2_disable_overheadicons")
-	cb:SetTooltip(GetTranslation("disable_overheadicons_tip"))
-
-	form:Dock(FILL)
-end
-
----
--- Creates the language form for the help screen
--- @param Panel parent
--- @realm client
--- @internal
-function HELPSCRN:CreateLanguageForm(parent)
-	local form = vgui.Create("DForm", parent)
-	form:SetName(GetTranslation("set_title_lang"))
-
-	local dlang = vgui.Create("DComboBox", form)
-	dlang:SetConVar("ttt_language")
-	dlang:AddChoice("Server default", "auto")
-
-	for _, lang in pairs(LANG.GetLanguages()) do
-		dlang:AddChoice(string.Capitalize(lang), lang)
-	end
-
-	-- Why is DComboBox not updating the cvar by default?
-	dlang.OnSelect = function(idx, val, data)
-		RunConsoleCommand("ttt_language", data)
-	end
-
-	dlang.Think = dlang.ConVarStringThink
-
-	form:Help(GetTranslation("set_lang"))
-	form:AddItem(dlang)
-
-	form:Dock(FILL)
-end
-
----
--- Creates the crosshair settings for the help screen
--- @param Panel parent
--- @realm client
--- @internal
-function HELPSCRN:CreateCrosshairSettings(parent)
-	local form = vgui.Create("DForm", parent)
-	form:SetName(GetTranslation("set_title_cross"))
-
-	form:CheckBox(GetTranslation("set_cross_color_enable"), "ttt_crosshair_color_enable")
-
-	local cm = vgui.Create("DColorMixer")
-	cm:SetLabel(GetTranslation("set_cross_color"))
-	cm:SetTall(120)
-	cm:SetAlphaBar(false)
-	cm:SetPalette(false)
-	cm:SetColor(Color(30, 160, 160, 255))
-	cm:SetConVarR("ttt_crosshair_color_r")
-	cm:SetConVarG("ttt_crosshair_color_g")
-	cm:SetConVarB("ttt_crosshair_color_b")
-
-	form:AddItem(cm)
-
-	form:CheckBox(GetTranslation("set_cross_gap_enable"), "ttt_crosshair_gap_enable")
-
-	local cb = form:NumSlider(GetTranslation("set_cross_gap"), "ttt_crosshair_gap", 0, 30, 0)
-	if cb.Label then
-		cb.Label:SetWrap(true)
-	end
-
-	cb = form:NumSlider(GetTranslation("set_cross_opacity"), "ttt_crosshair_opacity", 0, 1, 1)
-	if cb.Label then
-		cb.Label:SetWrap(true)
-	end
-
-	cb = form:NumSlider(GetTranslation("set_ironsight_cross_opacity"), "ttt_ironsights_crosshair_opacity", 0, 1, 1)
-	if cb.Label then
-		cb.Label:SetWrap(true)
-	end
-
-	cb = form:NumSlider(GetTranslation("set_cross_brightness"), "ttt_crosshair_brightness", 0, 1, 1)
-	if cb.Label then
-		cb.Label:SetWrap(true)
-	end
-
-	cb = form:NumSlider(GetTranslation("set_cross_size"), "ttt_crosshair_size", 0.1, 3, 1)
-	if cb.Label then
-		cb.Label:SetWrap(true)
-	end
-
-	cb = form:NumSlider(GetTranslation("set_cross_thickness"), "ttt_crosshair_thickness", 1, 10, 0)
-	if cb.Label then
-		cb.Label:SetWrap(true)
-	end
-
-	cb = form:NumSlider(GetTranslation("set_cross_outlinethickness"), "ttt_crosshair_outlinethickness", 0, 5, 0)
-	if cb.Label then
-		cb.Label:SetWrap(true)
-	end
-
-	form:CheckBox(GetTranslation("set_cross_disable"), "ttt_disable_crosshair")
-	form:CheckBox(GetTranslation("set_minimal_id"), "ttt_minimal_targetid")
-	form:CheckBox(GetTranslation("set_cross_static_enable"), "ttt_crosshair_static")
-	form:CheckBox(GetTranslation("set_cross_dot_enable"), "ttt_crosshair_dot")
-	form:CheckBox(GetTranslation("set_cross_weaponscale_enable"), "ttt_crosshair_weaponscale")
-
-	cb = form:CheckBox(GetTranslation("set_lowsights"), "ttt_ironsights_lowered")
-	cb:SetTooltip(GetTranslation("set_lowsights_tip"))
-
-	form:Dock(FILL)
-end
-
----
--- Creates the damage indicator settings for the help screen
--- @param Panel parent
--- @realm client
--- @internal
-function HELPSCRN:CreateDamageIndicatorSettings(parent)
-	local form = vgui.Create("DForm", parent)
-	form:SetName(GetTranslation("f1_dmgindicator_title"))
-
-	form:CheckBox(GetTranslation("f1_dmgindicator_enable"), "ttt_dmgindicator_enable")
-
-	local dmode = vgui.Create("DComboBox", form)
-	dmode:SetConVar("ttt_dmgindicator_mode")
-
-	for name in pairs(DMGINDICATOR.themes) do
-		dmode:AddChoice(name)
-	end
-
-	-- Why is DComboBox not updating the cvar by default?
-	dmode.OnSelect = function(idx, val, data)
-		RunConsoleCommand("ttt_dmgindicator_mode", data)
-	end
-
-	form:Help(GetTranslation("f1_dmgindicator_mode"))
-	form:AddItem(dmode)
-
-	local cb = form:NumSlider(GetTranslation("f1_dmgindicator_duration"), "ttt_dmgindicator_duration", 0, 30, 2)
-	if cb.Label then
-		cb.Label:SetWrap(true)
-	end
-
-	cb = form:NumSlider(GetTranslation("f1_dmgindicator_maxdamage"), "ttt_dmgindicator_maxdamage", 0, 100, 1)
-	if cb.Label then
-		cb.Label:SetWrap(true)
-	end
-
-	cb = form:NumSlider(GetTranslation("f1_dmgindicator_maxalpha"), "ttt_dmgindicator_maxalpha", 0, 255, 0)
-	if cb.Label then
-		cb.Label:SetWrap(true)
-	end
-
-	form:Dock(FILL)
-end
-
----
--- Creates the gameplay settings for the help screen
--- @param Panel parent
--- @realm client
--- @internal
-function HELPSCRN:CreateGameplaySettings(parent)
-	local form = vgui.Create("DForm", parent)
-	form:SetName(GetTranslation("set_title_play"))
-
-	local cb
-
-	for _, v in ipairs(roles.GetList()) do
-		if ConVarExists("ttt_avoid_" .. v.name) then
-			local rolename = GetTranslation(v.name)
-
-			cb = form:CheckBox(GetPTranslation("set_avoid", rolename), "ttt_avoid_" .. v.name)
-			cb:SetTooltip(GetPTranslation("set_avoid_tip", rolename))
-		end
-	end
-
-	cb = form:CheckBox(GetTranslation("set_specmode"), "ttt_spectator_mode")
-	cb:SetTooltip(GetTranslation("set_specmode_tip"))
-
-	cb = form:CheckBox(GetTranslation("set_fastsw"), "ttt_weaponswitcher_fast")
-	cb:SetTooltip(GetTranslation("set_fastsw_tip"))
-
-	cb = form:CheckBox(GetTranslation("hold_aim"), "ttt2_hold_aim")
-	cb:SetTooltip(GetTranslation("hold_aim_tip"))
-
-	cb = form:CheckBox(GetTranslation("doubletap_sprint_anykey"), "ttt2_doubletap_sprint_anykey")
-	cb:SetTooltip(GetTranslation("doubletap_sprint_anykey_tip"))
-
-	cb = form:CheckBox(GetTranslation("disable_doubletap_sprint"), "ttt2_disable_doubletap_sprint")
-	cb:SetTooltip(GetTranslation("disable_doubletap_sprint_tip"))
-
-	-- TODO what is the following reason?
-	-- For some reason this one defaulted to on, unlike other checkboxes, so
-	-- force it to the actual value of the cvar (which defaults to off)
-	local mute = form:CheckBox(GetTranslation("set_mute"), "ttt_mute_team_check")
-	mute:SetValue(GetConVar("ttt_mute_team_check"):GetBool())
-	mute:SetTooltip(GetTranslation("set_mute_tip"))
-
-	form:Dock(FILL)
-end
 
 
 -- Administration

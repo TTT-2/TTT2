@@ -47,6 +47,7 @@ ttt_include("derma__dmenubutton")
 ttt_include("derma__dsubmenubutton")
 ttt_include("derma__dnavpanel")
 ttt_include("derma__dcontentpanel")
+ttt_include("derma__dbuttonpanel")
 
 ttt_include("cl_network_sync")
 ttt_include("cl_karma")

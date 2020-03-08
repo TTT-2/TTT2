@@ -61,6 +61,13 @@ function SKIN:PaintNavPanelTTT2(panel, w, h)
 	draw.Box(w - 1, 0, 1, h, colorLine)
 end
 
+function SKIN:PaintButtonPanelTTT2(panel, w, h)
+	local colorBackground = VSKIN.GetBackgroundColor()
+	local colorLine = ColorAlpha(util.GetDefaultColor(colorBackground), 200)
+
+	draw.Box(0, 0, w, 1, colorLine)
+end
+
 function SKIN:PaintContentPanelTTT2(panel, w, h)
 	local colorBackground = ColorAlpha(util.GetDefaultColor(VSKIN.GetBackgroundColor()), 20)
 

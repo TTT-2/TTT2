@@ -11,7 +11,6 @@ TTTFiles = {
 	cl_eventpopup = {file = "cl_eventpopup.lua", on = "client"},
 	cl_fonts = {file = "cl_fonts.lua", on = "client"},
 	cl_help_data = {file = "cl_help_data.lua", on = "client"},
-	cl_help_populate = {file = "cl_help_populate.lua", on = "client"},
 	cl_help = {file = "cl_help.lua", on = "client"},
 	cl_hud_editor = {file = "cl_hud_editor.lua", on = "client"},
 	cl_hud_manager = {file = "cl_hud_manager.lua", on = "client"},
@@ -72,7 +71,6 @@ TTTFiles = {
 	-- vgui client files
 	vgui__cl_coloredbox = {file = "vgui/cl_coloredbox.lua", on = "client"},
 	vgui__cl_droleimage = {file = "vgui/cl_droleimage.lua", on = "client"},
-	vgui__cl_f1settings_button = {file = "vgui/cl_f1settings_button.lua", on = "client"},
 	vgui__cl_hudswitcher = {file = "vgui/cl_hudswitcher.lua", on = "client"},
 	vgui__cl_progressbar = {file = "vgui/cl_progressbar.lua", on = "client"},
 	vgui__cl_sb_info = {file = "vgui/cl_sb_info.lua", on = "client"},
@@ -93,6 +91,18 @@ TTTFiles = {
 	derma__dsubmenubutton = {file = "derma/vgui/dsubmenubutton_ttt2.lua", on = "client"},
 	derma__dnavpanel = {file = "derma/vgui/dnavpanel_ttt2.lua", on = "client"},
 	derma__dcontentpanel = {file = "derma/vgui/dcontentpanel_ttt2.lua", on = "client"},
+	derma__dbuttonpanel = {file = "derma/vgui/dbuttonpanel_ttt2.lua", on = "client"},
+
+	-- cl_help client files
+	cl_help_populate = {file = "cl_help/populate.lua", on = "client"},
+	cl_help_populate_addons = {file = "cl_help/populate_addons.lua", on = "client"},
+	cl_help_populate_appearance = {file = "cl_help/populate_appearance.lua", on = "client"},
+	cl_help_populate_bindings = {file = "cl_help/populate_bindings.lua", on = "client"},
+	cl_help_populate_changelog = {file = "cl_help/populate_changelog.lua", on = "client"},
+	cl_help_populate_gameplay = {file = "cl_help/populate_gameplay.lua", on = "client"},
+	cl_help_populate_guide = {file = "cl_help/populate_guide.lua", on = "client"},
+	cl_help_populate_language = {file = "cl_help/populate_language.lua", on = "client"},
+	cl_help_populate_legacy = {file = "cl_help/populate_legacy.lua", on = "client"},
 }
 
 if SERVER then
