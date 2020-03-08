@@ -135,6 +135,7 @@ local function BuildContentArea(parent, menuData)
 	parent:Clear()
 
 	local w2, h2 = parent:GetSize()
+	local _, p1, _, p2 = parent:GetDockPadding()
 
 	-- CALCULATE SIZE BASED ON EXISTENCE OF BUTTON PANEL
 	if isfunction(menuData.populateButtonFn) then
@@ -144,7 +145,7 @@ local function BuildContentArea(parent, menuData)
 	-- ADD CONTENT BOX AND CONTENT
 	local contentAreaScroll = vgui.Create("DScrollPanel", parent)
 	contentAreaScroll:SetVerticalScrollbarEnabled(true)
-	contentAreaScroll:SetSize(w2, h2)
+	contentAreaScroll:SetSize(w2, h2 - p1 - p2)
 	contentAreaScroll:Dock(TOP)
 
 	if isfunction(menuData.populateFn) then

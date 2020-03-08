@@ -15,6 +15,7 @@ VSKIN.RegisterVSkin("light", {
 	params = {
 		shadow_size = 4,
 		header_height = 45,
+		collapsable_height = 30,
 		border_size = 3,
 		corner_radius = 6
 	}

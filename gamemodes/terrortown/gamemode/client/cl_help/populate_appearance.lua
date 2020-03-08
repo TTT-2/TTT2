@@ -1,5 +1,5 @@
 local function PopulateCrosshairPanel(parent)
-	local form = vgui.Create("DForm", parent)
+	local form = vgui.Create("DFormTTT2", parent)
 	form:SetName("set_title_cross")
 
 	form:CheckBox("set_cross_color_enable", "ttt_crosshair_color_enable")
@@ -62,11 +62,11 @@ local function PopulateCrosshairPanel(parent)
 	cb = form:CheckBox("set_lowsights", "ttt_ironsights_lowered")
 	cb:SetTooltip("set_lowsights_tip")
 
-	form:Dock(FILL)
+	form:Dock(TOP)
 end
 
 local function PopulateDamagePanel(parent)
-	local form = vgui.Create("DForm", parent)
+	local form = vgui.Create("DFormTTT2", parent)
 	form:SetName("f1_dmgindicator_title")
 
 	form:CheckBox("f1_dmgindicator_enable", "ttt_dmgindicator_enable")
@@ -101,11 +101,11 @@ local function PopulateDamagePanel(parent)
 		cb.Label:SetWrap(true)
 	end
 
-	form:Dock(FILL)
+	form:Dock(TOP)
 end
 
 local function PopulatePerformancePanel(parent)
-	local form = vgui.Create("DForm", parent)
+	local form = vgui.Create("DFormTTT2", parent)
 	form:SetName("set_title_gui")
 	form:CheckBox("set_tips", "ttt_tips_enable")
 
@@ -119,11 +119,11 @@ local function PopulatePerformancePanel(parent)
 	cb = form:CheckBox("disable_overheadicons", "ttt2_disable_overheadicons")
 	cb:SetTooltip("disable_overheadicons_tip")
 
-	form:Dock(FILL)
+	form:Dock(TOP)
 end
 
 local function PopulateInterfacePanel(parent)
-	local form = vgui.Create("DForm", parent)
+	local form = vgui.Create("DFormTTT2", parent)
 	form:SetName("set_title_gui")
 	form:CheckBox("set_tips", "ttt_tips_enable")
 
@@ -146,7 +146,7 @@ local function PopulateInterfacePanel(parent)
 
 	cb = form:CheckBox("set_cues", "ttt_cl_soundcues")
 
-	form:Dock(FILL)
+	form:Dock(TOP)
 end
 
 ---

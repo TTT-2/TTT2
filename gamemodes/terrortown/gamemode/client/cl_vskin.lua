@@ -195,6 +195,18 @@ function VSKIN.GetHeaderHeight()
 end
 
 ---
+-- Returns the collapsable height of the currently selected vskin
+-- @return [default=45] number The collapsable height
+-- @realm client
+function VSKIN.GetCollapsableHeight()
+	if not VSKIN.skins[VSKIN.selected] then
+		return 30
+	end
+
+	return VSKIN.skins[VSKIN.selected].params.collapsable_height
+end
+
+---
 -- Returns the border size of the currently selected vskin
 -- @return [default=3] number The border size
 -- @realm client

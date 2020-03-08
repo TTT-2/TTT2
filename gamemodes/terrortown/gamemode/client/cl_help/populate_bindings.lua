@@ -1,5 +1,5 @@
 local function AddBindingCategory(category, parent)
-	local form = vgui.Create("DForm", parent)
+	local form = vgui.Create("DFormTTT2", parent)
 
 	form:SetName(category)
 

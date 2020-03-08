@@ -325,5 +325,84 @@ function SKIN:PaintSubMenuButtonTTT2(panel, w, h)
 	return DrawSubMenuButton(w, h, panel, sizeBorder, colorBackground, colorAccent, colorText)
 end
 
+--[[---------------------------------------------------------
+	CheckBox
+-----------------------------------------------------------]]
+local function DrawCheckBox(w, h, panel, colorOutline, colorBox, colorCenter)
+	draw.RoundedBox(4, 0, 0, w, h, colorOutline)
+	draw.RoundedBox(4, 1, 1, w - 2, h - 2, colorBox)
+	draw.RoundedBox(2, 4, 4, w - 8, h - 8, colorCenter)
+end
+
+function SKIN:PaintCheckBox(panel, w, h)
+	local colorBackground = VSKIN.GetBackgroundColor()
+	local colorDefault = util.GetDefaultColor(colorBackground)
+	local colorAccent = VSKIN.GetAccentColor()
+
+	if panel:GetChecked() then
+		local colorOutline = util.GetChangedColor(colorDefault, 50)
+		local colorBox = colorBackground
+		local colorCenter = colorAccent
+		local colorCenterHover = ColorAlpha(util.GetHoverColor(colorCenter), 200)
+
+		if panel:GetDisabled() then
+			self.tex.CheckboxD_Checked( 0, 0, w, h )
+		elseif panel.Hovered then
+			DrawCheckBox(w, h, panel, colorOutline, colorBox, colorCenterHover)
+		else
+			DrawCheckBox(w, h, panel, colorOutline, colorBox, colorCenter)
+		end
+	else
+		local colorOutline = util.GetChangedColor(colorDefault, 50)
+		local colorBox = colorBackground
+		local colorCenter = Color(0, 0, 0, 0)
+		local colorCenterHover = ColorAlpha(util.GetHoverColor(colorAccent), 100)
+
+		if panel:GetDisabled() then
+			self.tex.CheckboxD( 0, 0, w, h )
+		elseif panel.Hovered then
+			DrawCheckBox(w, h, panel, colorOutline, colorBox, colorCenterHover)
+		else
+			DrawCheckBox(w, h, panel, colorOutline, colorBox, colorCenter)
+		end
+	end
+end
+
+--[[---------------------------------------------------------
+	CollapsibleCategory
+-----------------------------------------------------------]]
+function SKIN:PaintCollapsibleCategoryTTT2(panel, w, h)
+	local colorBackground = VSKIN.GetBackgroundColor()
+	local colorAccent = VSKIN.GetAccentColor()
+
+	local sizeBorder = VSKIN.GetBorderSize()
+
+	local w2, h2 = panel:GetSize()
+	print(h)
+	print(h2)
+	print("........")
+
+	draw.Box(0, 0, w, h, colorBackground)
+	draw.Box(0, h - sizeBorder, w, sizeBorder, colorAccent)
+end
+
+function SKIN:PaintCategoryHeaderTTT2(panel, w, h)
+	local colorBackground = VSKIN.GetBackgroundColor()
+
+	local colorText = util.GetDefaultColor(colorBackground)
+
+	draw.Box(0, 0, w, h, colorBackground)
+
+	draw.SimpleText(
+		string.upper(panel.text),
+		panel:GetFont(),
+		0.5 * h,
+		0.5 * h,
+		colorText,
+		TEXT_ALIGN_LEFT,
+		TEXT_ALIGN_CENTER
+	)
+end
+
 -- REGISTER DERMA SKIN
 derma.DefineSkin(SKIN.Name, "TTT2 default skin for all vgui elements", SKIN)

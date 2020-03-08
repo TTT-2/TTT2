@@ -1,5 +1,5 @@
 local function PopulateGeneralPanel(parent)
-	local form = vgui.Create("DForm", parent)
+	local form = vgui.Create("DFormTTT2", parent)
 	form:SetName("set_title_play")
 
 	local cb
@@ -26,11 +26,11 @@ local function PopulateGeneralPanel(parent)
 	mute:SetValue(GetConVar("ttt_mute_team_check"):GetBool())
 	mute:SetTooltip("set_mute_tip")
 
-	form:Dock(FILL)
+	form:Dock(TOP)
 end
 
 local function PopulateRolesPanel(parent)
-	local form = vgui.Create("DForm", parent)
+	local form = vgui.Create("DFormTTT2", parent)
 	form:SetName("set_title_avoid_roles")
 
 	local cb
@@ -44,7 +44,7 @@ local function PopulateRolesPanel(parent)
 		end
 	end
 
-	form:Dock(FILL)
+	form:Dock(TOP)
 end
 
 ---
