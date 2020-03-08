@@ -51,6 +51,8 @@ ttt_include("derma__dbuttonpanel")
 ttt_include("derma__dcategoryheader")
 ttt_include("derma__dcategorycollapse")
 ttt_include("derma__dform")
+ttt_include("derma__dbutton")
+ttt_include("derma__dbinder")
 
 ttt_include("cl_network_sync")
 ttt_include("cl_karma")

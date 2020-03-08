@@ -20,7 +20,7 @@ local function PopulateLanguagePanel(parent)
 	form:Help("set_lang")
 	form:AddItem(dlang)
 
-	form:Dock(DFormTTT2)
+	form:Dock(TOP)
 end
 
 ---

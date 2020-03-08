@@ -95,6 +95,8 @@ TTTFiles = {
 	derma__dcategoryheader = {file = "derma/vgui/dcategoryheader_ttt2.lua", on = "client"},
 	derma__dcategorycollapse = {file = "derma/vgui/dcategorycollapse_ttt2.lua", on = "client"},
 	derma__dform = {file = "derma/vgui/dform_ttt2.lua", on = "client"},
+	derma__dbutton = {file = "derma/vgui/dbutton_ttt2.lua", on = "client"},
+	derma__dbinder = {file = "derma/vgui/dbinder_ttt2.lua", on = "client"},
 
 	-- cl_help client files
 	cl_help_populate = {file = "cl_help/populate.lua", on = "client"},

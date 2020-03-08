@@ -1,7 +1,7 @@
 local materialClose = Material("vgui/ttt/derma/icon_close")
 local materialBack = Material("vgui/ttt/derma/icon_back")
 
-local SKIN = {}
+SKIN = {}
 SKIN.Name = "ttt2_default"
 
 local TryT = LANG.TryTranslation
@@ -377,11 +377,6 @@ function SKIN:PaintCollapsibleCategoryTTT2(panel, w, h)
 
 	local sizeBorder = VSKIN.GetBorderSize()
 
-	local w2, h2 = panel:GetSize()
-	print(h)
-	print(h2)
-	print("........")
-
 	draw.Box(0, 0, w, h, colorBackground)
 	draw.Box(0, h - sizeBorder, w, sizeBorder, colorAccent)
 end
@@ -403,6 +398,20 @@ function SKIN:PaintCategoryHeaderTTT2(panel, w, h)
 		TEXT_ALIGN_CENTER
 	)
 end
+
+function SKIN:PaintButton(panel, w, h)
+	return draw.Box(0, 0, w, h, COLOR_RED)
+end
+
+function SKIN:PaintButtonTTT2(panel, w, h)
+	return draw.Box(0, 0, w, h, COLOR_RED)
+end
+
+PrintTable(SKIN)
+
+--function SKIN:PaintBinderTTT2(panel, w, h)
+--	return draw.RoundedBox(4, 0, 0, w, h, COLOR_RED)
+--end
 
 -- REGISTER DERMA SKIN
 derma.DefineSkin(SKIN.Name, "TTT2 default skin for all vgui elements", SKIN)

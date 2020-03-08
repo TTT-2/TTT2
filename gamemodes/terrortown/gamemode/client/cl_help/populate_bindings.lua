@@ -29,7 +29,7 @@ local function AddBindingCategory(category, parent)
 
 
 			-- Keybind Button
-			local dPBinder = vgui.Create("DBinder")
+			local dPBinder = vgui.Create("DBinderTTT2")
 			dPBinder:SetSize(100, 25)
 
 			local curBinding = bind.Find(binding.name)
