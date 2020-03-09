@@ -5,39 +5,41 @@ AccessorFunc(PANEL, "m_bBorder", "DrawBorder", FORCE_BOOL)
 function PANEL:Init()
 	self:SetContentAlignment(5)
 
-	self:SetDrawBorder(true)
-	self:SetPaintBackground(true)
+	--self:SetDrawBorder(true)
+	--self:SetPaintBackground(true)
 
 	self:SetTall(22)
 	self:SetMouseInputEnabled(true)
 	self:SetKeyboardInputEnabled(true)
 
 	self:SetCursor("hand")
-	self:SetFont("DermaDefault")
+	self:SetFont("DermaTTT2Button")
 
-	--self.text = ""
+	self.text = ""
 
 	-- remove label and overwrite function
-	--self:SetText("")
-	--self.SetText = function(slf, text)
-	--	slf.text = text
-	--end
+	self:SetText("")
+	self.SetText = function(slf, text)
+		slf.text = text
+	end
 end
 
---function PANEL:GetText()
---	return self.text
---end
+function PANEL:GetText()
+	return self.text
+end
 
 function PANEL:IsDown()
 	return self.Depressed
 end
 
 function PANEL:Paint(w, h)
-	--draw.RoundedBox(5, 0, 0, w, h, COLOR_RED)
-	derma.SkinHook("Paint", "ButtonTTT2", self, w, h)
-	hook.Call("PaintButtonTTT2", SKIN, self, w, h)
-	--SKIN:PaintButtonTTT2(self, w, h)
-
+	-- I'm a bit lost here right now. For some reason the derma hook
+	-- does not work here, even though this code is identical to
+	-- the other buttons. Therefore I use a classical hook here
+	-- because that works. It breaks the purpose of skins though.
+	-- But it is the best solution for now, feel free to solve.
+	hook.Call("PaintButtonTTT2", SKINTTT2, self, w, h)
+	--derma.SkinHook("Paint", "ButtonTTT2", self, w, h)
 
 	return false
 end

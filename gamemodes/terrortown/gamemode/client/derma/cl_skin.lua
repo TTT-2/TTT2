@@ -1,7 +1,12 @@
 local materialClose = Material("vgui/ttt/derma/icon_close")
 local materialBack = Material("vgui/ttt/derma/icon_back")
 
-SKIN = {}
+-- The skin variable should be local. Hovever the problem with
+-- the skinhook forces me to use a global variable since the
+-- functions have to be called with a normal hook.
+SKINTTT2 = {}
+
+local SKIN = {}
 SKIN.Name = "ttt2_default"
 
 local TryT = LANG.TryTranslation
@@ -11,6 +16,7 @@ surface.CreateAdvancedFont("DermaTTT2Title", {font = "Trebuchet24", size = 26, w
 surface.CreateAdvancedFont("DermaTTT2TitleSmall", {font = "Trebuchet24", size = 18, weight = 600})
 surface.CreateAdvancedFont("DermaTTT2MenuButtonTitle", {font = "Trebuchet24", size = 18, weight = 600})
 surface.CreateAdvancedFont("DermaTTT2MenuButtonDescription", {font = "Trebuchet24", size = 13, weight = 300})
+surface.CreateAdvancedFont("DermaTTT2Button", {font = "Trebuchet24", size = 14, weight = 600})
 
 --[[---------------------------------------------------------
 	Frame
@@ -399,19 +405,58 @@ function SKIN:PaintCategoryHeaderTTT2(panel, w, h)
 	)
 end
 
-function SKIN:PaintButton(panel, w, h)
-	return draw.Box(0, 0, w, h, COLOR_RED)
+local function DrawButton(w, h, panel, sizeBorder, colorLine, colorBox, colorText)
+	draw.RoundedBox(5, 0, 0, w, h, colorBox)
+	draw.Box(0, h - 2 * sizeBorder, w, sizeBorder, colorLine)
+
+	draw.SimpleText(
+		string.upper(panel:GetText()),
+		panel:GetFont(),
+		0.5 * w,
+		0.5 * (h - sizeBorder),
+		colorText,
+		TEXT_ALIGN_CENTER,
+		TEXT_ALIGN_CENTER
+	)
 end
 
 function SKIN:PaintButtonTTT2(panel, w, h)
-	return draw.Box(0, 0, w, h, COLOR_RED)
+	local colorAccent = VSKIN.GetAccentColor()
+	local colorAccentHover = util.GetHoverColor(colorAccent)
+	local colorAccentActive = util.GetActiveColor(colorAccent)
+
+	local colorAccentDark = VSKIN.GetDarkAccentColor()
+	local colorAccentDarkHover = util.GetHoverColor(colorAccentDark)
+	local colorAccentDarkActive = util.GetActiveColor(colorAccentDark)
+
+	local colorAccentDisabled = util.GetChangedColor(util.GetDefaultColor(VSKIN.GetBackgroundColor()), 175)
+	local colorAccentDarkDisabled = util.GetChangedColor(util.GetDefaultColor(VSKIN.GetBackgroundColor()), 125)
+
+	local sizeBorder = VSKIN.GetBorderSize()
+
+	if panel:GetDisabled() then
+		local colorText = util.GetDefaultColor(colorAccentDisabled)
+
+		return DrawButton(w, h, panel, sizeBorder, colorAccentDarkDisabled, colorAccentDisabled, colorText)
+	end
+
+	if panel.Depressed or panel:IsSelected() or panel:GetToggle() then
+		local colorText = util.GetDefaultColor(colorAccent)
+
+		return DrawButton(w, h, panel, sizeBorder, colorAccentDarkActive, colorAccentActive, colorText)
+	end
+
+	if panel.Hovered then
+		local colorText = util.GetDefaultColor(colorAccent)
+
+		return DrawButton(w, h, panel, sizeBorder, colorAccentDarkHover, colorAccentHover, colorText)
+	end
+
+	local colorText = util.GetDefaultColor(colorAccent)
+
+	return DrawButton(w, h, panel, sizeBorder, colorAccentDark, colorAccent, colorText)
 end
-
-PrintTable(SKIN)
-
---function SKIN:PaintBinderTTT2(panel, w, h)
---	return draw.RoundedBox(4, 0, 0, w, h, COLOR_RED)
---end
+SKINTTT2.PaintButtonTTT2 = SKIN.PaintButtonTTT2 -- weird derma skin hook workaround
 
 -- REGISTER DERMA SKIN
 derma.DefineSkin(SKIN.Name, "TTT2 default skin for all vgui elements", SKIN)

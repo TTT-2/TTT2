@@ -9,40 +9,48 @@ local function AddBindingCategory(category, parent)
 			-- GRID: tooltip, bindingbutton and extra button area
 			-- GRIDEXTRA: inside the last GRID box, houses default and disable buttons
 			local dPGrid = vgui.Create("DGrid")
-			dPGrid:SetCols(3)
-			dPGrid:SetColWide(120)
+			dPGrid:SetCols(1)
+			dPGrid:SetColWide(1000)
 
-			local dPGridExtra = vgui.Create("DGrid")
-			dPGridExtra:SetCols(2)
-			dPGridExtra:SetColWide(60)
+			--local dPGridExtra = vgui.Create("DGrid")
+			--dPGridExtra:SetCols(2)
 
 			form:AddItem(dPGrid)
 
+			local dPanel = vgui.Create("DPanel")
+			dPanel:SetSize(1000, 1000)
+			--dPanel:SizeToChildren(false, true)
+			dPGrid:AddItem(dPanel)
+
 			-- Keybind Label
-			local dPlabel = vgui.Create("DLabel")
+			local dPlabel = vgui.Create("DLabel", dPanel)
 			dPlabel:SetText(binding.label .. ":")
 			dPlabel:SetTextColor(COLOR_BLACK)
 			dPlabel:SetContentAlignment(4)
-			dPlabel:SetSize(120, 25)
-
-			dPGrid:AddItem(dPlabel)
+			dPlabel:SetSize(150, 35)
+			dPlabel:DockMargin(0, 0, 15, 0)
+			--dPGrid:AddItem(dPlabel)
 
 
 			-- Keybind Button
-			local dPBinder = vgui.Create("DBinderTTT2")
-			dPBinder:SetSize(100, 25)
+			local dPBinder = vgui.Create("DBinderTTT2", dPanel)
+			dPBinder:SetSize(150, 35)
+			dPBinder:SetPos(165, 0)
+			--dPBinder:DockMargin(0, 0, 15, 0)
 
 			local curBinding = bind.Find(binding.name)
 			dPBinder:SetValue(curBinding)
 			dPBinder:SetTooltip("f1_bind_description")
 
-			dPGrid:AddItem(dPBinder)
-			dPGrid:AddItem(dPGridExtra)
+			--dPGrid:AddItem(dPBinder)
+			--dPGrid:AddItem(dPGridExtra)
 
 			-- DEFAULT Button
-			local dPBindResetButton = vgui.Create("DButton")
+			local dPBindResetButton = vgui.Create("DButtonTTT2", dPanel)
 			dPBindResetButton:SetText("f1_bind_reset_default")
-			dPBindResetButton:SetSize(55, 25)
+			dPBindResetButton:SetSize(75, 35)
+			dPBindResetButton:SetPos(350, 0)
+			--dPBindResetButton:DockMargin(0, 0, 15, 0)
 			dPBindResetButton:SetTooltip("f1_bind_reset_default_description")
 
 			if binding.defaultKey ~= nil then
@@ -53,18 +61,19 @@ local function AddBindingCategory(category, parent)
 			else
 				dPBindResetButton:SetDisabled(true)
 			end
-			dPGridExtra:AddItem(dPBindResetButton)
+			--dPGridExtra:AddItem(dPBindResetButton)
 
 			-- DISABLE Button
-			local dPBindDisableButton = vgui.Create("DButton")
+			local dPBindDisableButton = vgui.Create("DButtonTTT2", dPanel)
 			dPBindDisableButton:SetText("f1_bind_disable_bind")
-			dPBindDisableButton:SetSize(55, 25)
+			dPBindDisableButton:SetSize(75, 35)
+			dPBindDisableButton:SetPos(440, 0)
 			dPBindDisableButton:SetTooltip("f1_bind_disable_description")
 			dPBindDisableButton.DoClick = function()
 				bind.Remove(curBinding, binding.name, true)
 				dPBinder:SetValue(bind.Find(binding.name))
 			end
-			dPGridExtra:AddItem(dPBindDisableButton)
+			--dPGridExtra:AddItem(dPBindDisableButton)
 
 			-- onchange function
 			function dPBinder:OnChange(num)
