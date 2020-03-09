@@ -3,7 +3,11 @@ local function AddBindingCategory(category, parent)
 
 	form:SetName(category)
 
-	for _, binding in ipairs(bind.GetSettingsBindings()) do
+	local bindings = bind.GetSettingsBindings()
+
+	for i = 1, #bindings do
+		local binding = binding[i]
+
 		if binding.category == category then
 			-- creating two grids:
 			-- GRID: tooltip, bindingbutton and extra button area
@@ -120,8 +124,12 @@ HELPSCRN.subPopulate["ttt2_bindings"] = function(helpData, id)
 	bindingsData:PopulatePanel(function(parent)
 		AddBindingCategory("TTT2 Bindings", parent)
 
-		for k, category in ipairs(bind.GetSettingsBindingsCategories()) do
-			if k > 2 then
+		local categories = bind.GetSettingsBindingsCategories()
+
+		for i = 1, #categories do
+			local category = categories[i]
+
+			if i > 2 then
 				AddBindingCategory(category, parent)
 			end
 		end

@@ -34,8 +34,11 @@ local function PopulateRolesPanel(parent)
 	form:SetName("set_title_avoid_roles")
 
 	local cb
+	local roles = roles.GetList()
 
-	for _, v in ipairs(roles.GetList()) do
+	for i = 1, #roles do
+		local v = roles[i]
+
 		if ConVarExists("ttt_avoid_" .. v.name) then
 			local rolename = v.name
 

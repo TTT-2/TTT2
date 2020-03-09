@@ -4,10 +4,8 @@
 
 local GetTranslation = LANG.GetTranslation
 local GetPTranslation = LANG.GetParamTranslation
-local pairs = pairs
 local ipairs = ipairs
 local IsValid = IsValid
-local ConVarExists = ConVarExists
 local CreateConVar = CreateConVar
 
 CreateConVar("ttt_spectator_mode", "0", FCVAR_ARCHIVE)
@@ -47,7 +45,7 @@ local widthNav, heightNav = 300, 700
 local widthNavHeader, heightNavHeader = 299, 80
 local widthNavContent, heightNavContent = 299, 620
 local widthContent, heightContent = 800, 700
-local widthButtonPnl, heightButtonPanel = 800, 80
+local heightButtonPanel = 80
 local widthNavButton, heightNavButton = 299, 50
 
 function HELPSCRN.IsOpen()
