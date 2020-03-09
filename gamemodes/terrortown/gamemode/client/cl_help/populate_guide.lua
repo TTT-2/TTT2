@@ -7,8 +7,8 @@
 HELPSCRN.populate["ttt2_guide"] = function(helpData, id)
 	local bindingsData = helpData:RegisterSubMenu(id)
 
-	bindingsData:SetTitle("f1_settings_guide_title")
-	bindingsData:SetDescription("Some cool text will be here...")
+	bindingsData:SetTitle("menu_guide_title")
+	bindingsData:SetDescription("menu_guide_description")
 	bindingsData:SetIcon(Material("vgui/ttt/dynamic/roles/icon_inno"))
 end
 
@@ -22,15 +22,15 @@ HELPSCRN.subPopulate["ttt2_guide"] = function(helpData, id)
 	-- gameplay
 	local gameplayData = helpData:PopulateSubMenu(id .. "_gameplay")
 
-	gameplayData:SetTitle("ttt2_gameplay")
+	gameplayData:SetTitle("submenu_guide_gameplay_title")
 
 	-- roles
 	local roleData = helpData:PopulateSubMenu(id .. "_roles")
 
-	roleData:SetTitle("ttt2_roles")
+	roleData:SetTitle("submenu_guide_roles_title")
 
 	-- equipment
 	local equipmentData = helpData:PopulateSubMenu(id .. "_equipment")
 
-	equipmentData:SetTitle("ttt2_equipment")
+	equipmentData:SetTitle("submenu_guide_equipment_title")
 end

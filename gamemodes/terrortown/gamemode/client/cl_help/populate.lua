@@ -16,7 +16,7 @@ local mainMenuOrder = {
 -- @realm client
 function InternalModifyMainMenu(helpData)
 	for i = 1, #mainMenuOrder do
-		local id = mainMenuOrder[id]
+		local id = mainMenuOrder[i]
 
 		HELPSCRN.populate[id](helpData, id)
 	end

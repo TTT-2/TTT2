@@ -158,8 +158,8 @@ end
 HELPSCRN.populate["ttt2_appearance"] = function(helpData, id)
 	local bindingsData = helpData:RegisterSubMenu(id)
 
-	bindingsData:SetTitle("f1_settings_appearance_title")
-	bindingsData:SetDescription("Some cool text will be here...")
+	bindingsData:SetTitle("menu_appearance_title")
+	bindingsData:SetDescription("menu_appearance_description")
 	bindingsData:SetIcon(Material("vgui/ttt/dynamic/roles/icon_inno"))
 end
 
@@ -173,12 +173,12 @@ HELPSCRN.subPopulate["ttt2_appearance"] = function(helpData, id)
 	-- general
 	local generalData = helpData:PopulateSubMenu(id .. "_general")
 
-	generalData:SetTitle("ttt2_general")
+	generalData:SetTitle("submenu_appearance_general_title")
 
-	-- HUD editor
-	local hudData = helpData:PopulateSubMenu(id .. "_hud_editor")
+	-- HUD switcher
+	local hudData = helpData:PopulateSubMenu(id .. "_hud_switcher")
 
-	hudData:SetTitle("ttt2_hud_editor")
+	hudData:SetTitle("submenu_appearance_hudswitcher_title")
 	hudData:PopulateButtonPanel(function(parent)
 
 	end)
@@ -190,39 +190,39 @@ HELPSCRN.subPopulate["ttt2_appearance"] = function(helpData, id)
 	-- VSKIN
 	local vskinData = helpData:PopulateSubMenu(id .. "_vskin")
 
-	vskinData:SetTitle("ttt2_vskin")
+	vskinData:SetTitle("submenu_appearance_vskin_title")
 
 	-- targetID
 	local targetData = helpData:PopulateSubMenu(id .. "_target_id")
 
-	targetData:SetTitle("ttt2_target_id")
+	targetData:SetTitle("submenu_appearance_targetid_title")
 
 	-- crosshair
 	local crosshairData = helpData:PopulateSubMenu(id .. "_crosshair")
 
-	crosshairData:SetTitle("ttt2_crosshair")
+	crosshairData:SetTitle("submenu_appearance_crosshair_title")
 	crosshairData:PopulatePanel(PopulateCrosshairPanel)
 
 	-- damage indicator
 	local damageData = helpData:PopulateSubMenu(id .. "_damage_indicator")
 
-	damageData:SetTitle("ttt2_damage_indicator")
+	damageData:SetTitle("submenu_appearance_dmgindicator_title")
 	damageData:PopulatePanel(PopulateDamagePanel)
 
 	-- performance
 	local performanceData = helpData:PopulateSubMenu(id .. "_performance")
 
-	performanceData:SetTitle("ttt2_performance")
+	performanceData:SetTitle("submenu_appearance_performance_title")
 	performanceData:PopulatePanel(PopulatePerformancePanel)
 
 	-- interface
 	local interfaceData = helpData:PopulateSubMenu(id .. "_interface")
 
-	interfaceData:SetTitle("ttt2_interface")
+	interfaceData:SetTitle("submenu_appearance_interface_title")
 	interfaceData:PopulatePanel(PopulateInterfacePanel)
 
 	-- miscellaneous
 	local miscellaneousData = helpData:PopulateSubMenu(id .. "_miscellaneous")
 
-	miscellaneousData:SetTitle("ttt2_miscellaneous")
+	miscellaneousData:SetTitle("submenu_appearance_miscellaneous_title")
 end

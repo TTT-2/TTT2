@@ -6,7 +6,7 @@ local function AddBindingCategory(category, parent)
 	local bindings = bind.GetSettingsBindings()
 
 	for i = 1, #bindings do
-		local binding = binding[i]
+		local binding = bindings[i]
 
 		if binding.category == category then
 			-- creating two grids:
@@ -50,26 +50,26 @@ local function AddBindingCategory(category, parent)
 			--dPGrid:AddItem(dPGridExtra)
 
 			-- DEFAULT Button
-			local dPBindResetButton = vgui.Create("DButtonTTT2", dPanel)
-			dPBindResetButton:SetText("f1_bind_reset_default")
-			dPBindResetButton:SetSize(75, 35)
-			dPBindResetButton:SetPos(350, 0)
-			--dPBindResetButton:DockMargin(0, 0, 15, 0)
-			dPBindResetButton:SetTooltip("f1_bind_reset_default_description")
+			local dPBindDefaultButton = vgui.Create("DButtonTTT2", dPanel)
+			dPBindDefaultButton:SetText("button_bind_default")
+			dPBindDefaultButton:SetSize(75, 35)
+			dPBindDefaultButton:SetPos(350, 0)
+			--dPBindDefaultButton:DockMargin(0, 0, 15, 0)
+			dPBindDefaultButton:SetTooltip("f1_bind_reset_default_description")
 
 			if binding.defaultKey ~= nil then
-				dPBindResetButton.DoClick = function()
+				dPBindDefaultButton.DoClick = function()
 					bind.Set(binding.defaultKey, binding.name, true)
 					dPBinder:SetValue(bind.Find(binding.name))
 				end
 			else
-				dPBindResetButton:SetDisabled(true)
+				dPBindDefaultButton:SetDisabled(true)
 			end
-			--dPGridExtra:AddItem(dPBindResetButton)
+			--dPGridExtra:AddItem(dPBindDefaultButton)
 
 			-- DISABLE Button
 			local dPBindDisableButton = vgui.Create("DButtonTTT2", dPanel)
-			dPBindDisableButton:SetText("f1_bind_disable_bind")
+			dPBindDisableButton:SetText("button_bind_disable")
 			dPBindDisableButton:SetSize(75, 35)
 			dPBindDisableButton:SetPos(440, 0)
 			dPBindDisableButton:SetTooltip("f1_bind_disable_description")
@@ -106,8 +106,8 @@ end
 HELPSCRN.populate["ttt2_bindings"] = function(helpData, id)
 	local bindingsData = helpData:RegisterSubMenu(id)
 
-	bindingsData:SetTitle("f1_settings_bindings_title")
-	bindingsData:SetDescription("Some cool text will be here...")
+	bindingsData:SetTitle("menu_bindings_title")
+	bindingsData:SetDescription("menu_bindings_description")
 	bindingsData:SetIcon(Material("vgui/ttt/dynamic/roles/icon_inno"))
 end
 
@@ -120,7 +120,7 @@ end
 HELPSCRN.subPopulate["ttt2_bindings"] = function(helpData, id)
 	local bindingsData = helpData:PopulateSubMenu(id .. "_bindings")
 
-	bindingsData:SetTitle("ttt2_bindings")
+	bindingsData:SetTitle("submenu_bindings_bindings_title")
 	bindingsData:PopulatePanel(function(parent)
 		AddBindingCategory("TTT2 Bindings", parent)
 

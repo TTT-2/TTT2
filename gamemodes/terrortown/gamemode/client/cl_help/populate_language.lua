@@ -32,8 +32,8 @@ end
 HELPSCRN.populate["ttt2_language"] = function(helpData, id)
 	local languageData = helpData:RegisterSubMenu(id)
 
-	languageData:SetTitle("f1_settings_language_title")
-	languageData:SetDescription("Some cool text will be here...")
+	languageData:SetTitle("menu_anguage_title")
+	languageData:SetDescription("menu_anguage_description")
 	languageData:SetIcon(Material("vgui/ttt/dynamic/roles/icon_inno"))
 end
 
@@ -46,6 +46,6 @@ end
 HELPSCRN.subPopulate["ttt2_language"] = function(helpData, id)
 	local languageData = helpData:PopulateSubMenu(id .. "_language")
 
-	languageData:SetTitle("ttt2_language")
+	languageData:SetTitle("submenu_language_language_title")
 	languageData:PopulatePanel(PopulateLanguagePanel)
 end

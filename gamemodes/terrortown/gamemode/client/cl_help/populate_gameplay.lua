@@ -59,8 +59,8 @@ end
 HELPSCRN.populate["ttt2_gameplay"] = function(helpData, id)
 	local bindingsData = helpData:RegisterSubMenu(id)
 
-	bindingsData:SetTitle("f1_settings_gameplay_title")
-	bindingsData:SetDescription("Some cool text will be here...")
+	bindingsData:SetTitle("menu_gameplay_title")
+	bindingsData:SetDescription("menu_gameplay_description")
 	bindingsData:SetIcon(Material("vgui/ttt/dynamic/roles/icon_inno"))
 end
 
@@ -73,11 +73,11 @@ end
 HELPSCRN.subPopulate["ttt2_gameplay"] = function(helpData, id)
 	local generalData = helpData:PopulateSubMenu(id .. "_general")
 
-	generalData:SetTitle("ttt2_gameplay_general")
+	generalData:SetTitle("submenu_gameplay_general_title")
 	generalData:PopulatePanel(PopulateGeneralPanel)
 
 	local rolesData = helpData:PopulateSubMenu(id .. "_avoid_roles")
 
-	rolesData:SetTitle("ttt2_gameplay_avoid_roles")
+	rolesData:SetTitle("submenu_gameplay_avoidroles_title")
 	rolesData:PopulatePanel(PopulateRolesPanel)
 end

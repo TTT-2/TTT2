@@ -7,8 +7,8 @@
 HELPSCRN.populate["ttt2_addons"] = function(helpData, id)
 	local bindingsData = helpData:RegisterSubMenu(id)
 
-	bindingsData:SetTitle("f1_settings_addons_title")
-	bindingsData:SetDescription("Some cool text will be here...")
+	bindingsData:SetTitle("menu_addons_title")
+	bindingsData:SetDescription("menu_addons_description")
 	bindingsData:SetIcon(Material("vgui/ttt/dynamic/roles/icon_inno"))
 end
 

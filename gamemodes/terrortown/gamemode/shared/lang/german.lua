@@ -1173,6 +1173,54 @@ L.shop_create_shop = "Erstelle eigenen Shop"
 L.shop_selected = "{role} ausgewählt"
 L.shop_settings_desc = "Ändere die Werte, um den Random-Shop anzupassen. Vergiss nicht am Ende zu speichern!"
 
+L.ttt2_bindings_new = "Neue Tastenbelegung für {name}: {key}"
+
+L.hud_default = "Standard HUD"
+L.hud_force = "Erzwungenes HUD"
+L.hud_restricted = "Beschränkte HUDs"
+L.hud_default_failed = "Es ist fehlgeschlagen {hudname} als Standard HUD zu setzen. Bist du Admin und existiert dieses HUD überhaupt?"
+L.hud_forced_failed = "Es ist fehlgeschlagen {hudname} zu erzwingen. Bist du Admin und existiert dieses HUD überhaupt?"
+L.hud_restricted_failed = "Es ist fehlgeschlagen {hudname} zu beschränken. Bist du Admin?"
+
+L.shop_role_select = "Wähle eine Rolle"
+L.shop_role_selected = "Der {roles} Shop wurde gewählt!"
+L.shop_search = "Suche"
+
+L.button_save = "Sichern"
+
+L.disable_spectatorsoutline = "Deaktiviere Zuschauerumrandungen"
+L.disable_spectatorsoutline_tip = "Deaktiviert die Umrandungen um ein Objekt, in dem sich ein Zuschauer befindet (+Performance)"
+
+L.disable_overheadicons = "Deaktiviere Rollenicons"
+L.disable_overheadicons_tip = "Deaktiviert die Rollenicons über den Köpfen der Spieler (+Performance)"
+
+-- 2020-01-04
+L.doubletap_sprint_anykey = "Setze Double-Tap Sprinten fort, bis du stehen bleibst"
+L.doubletap_sprint_anykey_tip = "So lange du dich weiterhin bewegst, wird das Sprinten fortgesetzt"
+
+L.disable_doubletap_sprint = "Deaktiviere Double-Tap Sprinten"
+L.disable_doubletap_sprint_tip = "Deaktiviert das Auslösen des Sprinten durch Double-Tap einer Bewegungstaste"
+
+-- 2020-02-03
+L.hold_aim = "Halten zum Anvisieren"
+L.hold_aim_tip = "Solange du die Sekundärfeuertaste hältst, bleibst du anvisiert (Standard: Rechte Maustaste)"
+
+-- 2020-02-09
+L.name_door = "Tür"
+L.door_open = "Drücke [{usekey}] um Tür zu öffnen."
+L.door_close = "Drücke [{usekey}] um Tür zu schließen."
+L.door_locked = "Diese Tür ist verschlossen"
+
+-- 2020-02-11
+L.automoved_to_spec = "(AUTOMATISCHE NACHRICHT) Ich wurde in das Zuschauerteam geschoben, da ich untätig/AFK war."
+
+-- 2020-02-16
+L.door_auto_closes = "Diese Tür schließt automatisch"
+L.door_open_touch = "Laufe gegen die Tür um sie zu öffnen."
+L.door_open_touch_and_use = "Laufe gegen die Tür oder drücke [{usekey}] um Tür zu öffnen."
+L.hud_health = "Leben"
+
+-- 2020-03-09
 L.f1_settings_changes_title = "Änderungen"
 L.f1_settings_hudswitcher_title = "HUD Wechsler"
 L.f1_settings_bindings_title = "Tastenbelegungen"
@@ -1222,50 +1270,3 @@ L.f1_dmgindicator_mode = "Schadensanzeige-Thema"
 L.f1_dmgindicator_duration = "Sekunden, die die Schadensanzeige sichtbar ist"
 L.f1_dmgindicator_maxdamage = "Erlittener Schaden für maximale Sichtbarkeit"
 L.f1_dmgindicator_maxalpha = "Maximaler Transparenzwert"
-
-L.ttt2_bindings_new = "Neue Tastenbelegung für {name}: {key}"
-
-L.hud_default = "Standard HUD"
-L.hud_force = "Erzwungenes HUD"
-L.hud_restricted = "Beschränkte HUDs"
-L.hud_default_failed = "Es ist fehlgeschlagen {hudname} als Standard HUD zu setzen. Bist du Admin und existiert dieses HUD überhaupt?"
-L.hud_forced_failed = "Es ist fehlgeschlagen {hudname} zu erzwingen. Bist du Admin und existiert dieses HUD überhaupt?"
-L.hud_restricted_failed = "Es ist fehlgeschlagen {hudname} zu beschränken. Bist du Admin?"
-
-L.shop_role_select = "Wähle eine Rolle"
-L.shop_role_selected = "Der {roles} Shop wurde gewählt!"
-L.shop_search = "Suche"
-
-L.button_save = "Sichern"
-
-L.disable_spectatorsoutline = "Deaktiviere Zuschauerumrandungen"
-L.disable_spectatorsoutline_tip = "Deaktiviert die Umrandungen um ein Objekt, in dem sich ein Zuschauer befindet (+Performance)"
-
-L.disable_overheadicons = "Deaktiviere Rollenicons"
-L.disable_overheadicons_tip = "Deaktiviert die Rollenicons über den Köpfen der Spieler (+Performance)"
-
--- 2020-01-04
-L.doubletap_sprint_anykey = "Setze Double-Tap Sprinten fort, bis du stehen bleibst"
-L.doubletap_sprint_anykey_tip = "So lange du dich weiterhin bewegst, wird das Sprinten fortgesetzt"
-
-L.disable_doubletap_sprint = "Deaktiviere Double-Tap Sprinten"
-L.disable_doubletap_sprint_tip = "Deaktiviert das Auslösen des Sprinten durch Double-Tap einer Bewegungstaste"
-
--- 2020-02-03
-L.hold_aim = "Halten zum Anvisieren"
-L.hold_aim_tip = "Solange du die Sekundärfeuertaste hältst, bleibst du anvisiert (Standard: Rechte Maustaste)"
-
--- 2020-02-09
-L.name_door = "Tür"
-L.door_open = "Drücke [{usekey}] um Tür zu öffnen."
-L.door_close = "Drücke [{usekey}] um Tür zu schließen."
-L.door_locked = "Diese Tür ist verschlossen"
-
--- 2020-02-11
-L.automoved_to_spec = "(AUTOMATISCHE NACHRICHT) Ich wurde in das Zuschauerteam geschoben, da ich untätig/AFK war."
-
--- 2020-02-16
-L.door_auto_closes = "Diese Tür schließt automatisch"
-L.door_open_touch = "Laufe gegen die Tür um sie zu öffnen."
-L.door_open_touch_and_use = "Laufe gegen die Tür oder drücke [{usekey}] um Tür zu öffnen."
-L.hud_health = "Leben"

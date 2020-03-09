@@ -18,7 +18,7 @@ function PANEL:Init()
 
 	self.contents = {
 		title = "",
-		title_font = "DermaTTT2MenuButtonTitle",
+		title_font = "DermaTTT2SubMenuButtonTitle",
 		selected = false
 	}
 end

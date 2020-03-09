@@ -29,8 +29,8 @@ HELPSCRN.populate["ttt2_legacy"] = function(helpData, id)
 	-- there is at least one item, use this
 	local bindingsData = helpData:RegisterSubMenu(id)
 
-	bindingsData:SetTitle("f1_settings_legacy_title")
-	bindingsData:SetDescription("Some cool text will be here...")
+	bindingsData:SetTitle("menu_legacy_title")
+	bindingsData:SetDescription("menu_legacy_description")
 	bindingsData:SetIcon(Material("vgui/ttt/dynamic/roles/icon_inno"))
 end
 

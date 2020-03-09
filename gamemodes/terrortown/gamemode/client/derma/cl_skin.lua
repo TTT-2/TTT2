@@ -14,8 +14,9 @@ local TryT = LANG.TryTranslation
 -- register fonts
 surface.CreateAdvancedFont("DermaTTT2Title", {font = "Trebuchet24", size = 26, weight = 300})
 surface.CreateAdvancedFont("DermaTTT2TitleSmall", {font = "Trebuchet24", size = 18, weight = 600})
-surface.CreateAdvancedFont("DermaTTT2MenuButtonTitle", {font = "Trebuchet24", size = 18, weight = 600})
-surface.CreateAdvancedFont("DermaTTT2MenuButtonDescription", {font = "Trebuchet24", size = 13, weight = 300})
+surface.CreateAdvancedFont("DermaTTT2MenuButtonTitle", {font = "Trebuchet24", size = 22, weight = 300})
+surface.CreateAdvancedFont("DermaTTT2MenuButtonDescription", {font = "Trebuchet24", size = 14, weight = 300})
+surface.CreateAdvancedFont("DermaTTT2SubMenuButtonTitle", {font = "Trebuchet24", size = 18, weight = 600})
 surface.CreateAdvancedFont("DermaTTT2Button", {font = "Trebuchet24", size = 14, weight = 600})
 
 --[[---------------------------------------------------------
@@ -94,9 +95,10 @@ function SKIN:PaintWindowCloseButton(panel, w, h)
 	if not panel.m_bBackground then return end
 
 	local colorAccent = VSKIN.GetAccentColor()
-	local colorAccentHover = VSKIN.GetHoverAccentColor()
-	local colorAccentActive = VSKIN.GetActiveAccentColor()
-	local colorTitleText = VSKIN.GetTitleTextColor()
+	local colorAccentHover = util.GetHoverColor(colorAccent)
+	local colorAccentActive = util.GetActiveColor(colorAccent)
+
+	local colorTitleText = util.GetDefaultColor(colorAccent)
 
 	if panel:GetDisabled() then
 		return DrawClose(w, h, colorAccent, ColorAlpha(colorTitleText, 70), 0)
@@ -119,16 +121,26 @@ local function DrawBack(w, h, panel, colorBackground, colorText, shift)
 
 	draw.Box(0, 0, w, h, colorBackground)
 	draw.FilteredShadowedTexture(padding_w, padding_h + shift, h - 2 * padding_h, h - 2 * padding_h, materialBack, colorText.a, colorText)
-	draw.ShadowedText("back", "DermaTTT2TitleSmall", h - padding_w, 0.5 * h + shift, colorText, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1)
+	draw.ShadowedText(
+		TryT("button_menu_back"),
+		"DermaTTT2TitleSmall",
+		h - padding_w,
+		0.5 * h + shift,
+		colorText,
+		TEXT_ALIGN_LEFT,
+		TEXT_ALIGN_CENTER,
+		1
+	)
 end
 
 function SKIN:PaintWindowBackButton(panel, w, h)
 	if not panel.m_bBackground then return end
 
 	local colorAccent = VSKIN.GetAccentColor()
-	local colorAccentHover = VSKIN.GetHoverAccentColor()
-	local colorAccentActive = VSKIN.GetActiveAccentColor()
-	local colorTitleText = VSKIN.GetTitleTextColor()
+	local colorAccentHover = util.GetHoverColor(colorAccent)
+	local colorAccentActive = util.GetActiveColor(colorAccent)
+
+	local colorTitleText = util.GetDefaultColor(colorAccent)
 
 	if panel:GetDisabled() then
 		return DrawBack(w, h, panel, colorAccent, ColorAlpha(colorTitleText, 70), 0)
@@ -156,8 +168,8 @@ end
 
 function SKIN:PaintScrollBarGrip(panel, w, h)
 	local colorScrollbar = VSKIN.GetScrollbarColor()
-	local colorScrollbarHover = VSKIN.GetHoverScrollbarColor()
-	local colorScrollbarActive = VSKIN.GetActiveScrollbarColor()
+	local colorScrollbarHover = util.GetHoverColor(colorScrollbar)
+	local colorScrollbarActive = util.GetActiveColor(colorScrollbar)
 
 	local sizeCornerRadius = VSKIN.GetCornerRadius()
 
@@ -180,8 +192,8 @@ function SKIN:PaintButtonDown(panel, w, h)
 	if not panel.m_bBackground then return end
 
 	local colorAccent = VSKIN.GetAccentColor()
-	local colorAccentHover = VSKIN.GetHoverAccentColor()
-	local colorAccentActive = VSKIN.GetActiveAccentColor()
+	local colorAccentHover = util.GetHoverColor(colorAccent)
+	local colorAccentActive = util.GetActiveColor(colorAccent)
 
 	local sizeCornerRadius = VSKIN.GetCornerRadius()
 
@@ -204,8 +216,8 @@ function SKIN:PaintButtonUp(panel, w, h)
 	if not panel.m_bBackground then return end
 
 	local colorAccent = VSKIN.GetAccentColor()
-	local colorAccentHover = VSKIN.GetHoverAccentColor()
-	local colorAccentActive = VSKIN.GetActiveAccentColor()
+	local colorAccentHover = util.GetHoverColor(colorAccent)
+	local colorAccentActive = util.GetActiveColor(colorAccent)
 
 	local sizeCornerRadius = VSKIN.GetCornerRadius()
 
@@ -224,27 +236,33 @@ function SKIN:PaintButtonUp(panel, w, h)
 	return draw.RoundedBox(sizeCornerRadius, 0, 0, w, h, colorAccent)
 end
 
-local function DrawMenuButton(w, h, panel, colorOutline, colorIcon, colorText, shift)
+local function DrawMenuButton(w, h, panel, colorOutline, colorIcon, colorText, colorDescription, shift)
 	local padding = 10
 
 	draw.OutlinedBox(0, 0, w, h, 1, colorOutline)
 	draw.FilteredTexture(padding, padding + shift, h - 2 * padding, h - 2 * padding, panel:GetImage(), colorIcon.a, colorIcon)
-	draw.ShadowedText(TryT(panel:GetTitle()), panel:GetTitleFont(), h, padding + shift, colorText, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1)
+	draw.SimpleText(
+		TryT(panel:GetTitle()),
+		panel:GetTitleFont(),
+		h,
+		padding + shift,
+		colorText,
+		TEXT_ALIGN_LEFT,
+		TEXT_ALIGN_TOP
+	)
 
-	local colorDescription = Color(colorText.r, colorText.g, colorText.b, colorText.a * 0.75)
 	local desc_wrapped = draw.GetWrappedText(TryT(panel:GetDescription()), w - h - 2 * padding, panel:GetDescriptionFont())
 
 	local line_pos = 35
 	for i = 1, #desc_wrapped do
-		draw.ShadowedText(
+		draw.SimpleText(
 			desc_wrapped[i],
 			panel:GetDescriptionFont(),
 			h,
 			line_pos + padding + shift,
 			colorDescription,
 			TEXT_ALIGN_LEFT,
-			TEXT_ALIGN_TOP,
-			1
+			TEXT_ALIGN_TOP
 		)
 
 		line_pos = line_pos + 20
@@ -256,24 +274,28 @@ function SKIN:PaintMenuButtonTTT2(panel, w, h)
 
 	local colorBackground = VSKIN.GetBackgroundColor()
 
-	local colorText = ColorAlpha(util.GetDefaultColor(colorBackground), 200)
-	local colorTextHover = Color(colorText.r, colorText.g, colorText.b, colorText.a * 1.2)
-	local colorIcon = Color(colorText.r, colorText.g, colorText.b, colorText.a * 0.2)
-	local colorHover = Color(colorText.r, colorText.g, colorText.b, colorText.a * 0.3)
+	local colorDefault = util.GetDefaultColor(colorBackground)
+
+	local colorText = util.GetChangedColor(colorDefault, 100)
+	local colorTextHover = util.GetChangedColor(colorDefault, 75)
+	local colorDescription = util.GetChangedColor(colorDefault, 175)
+	local colorDescriptionHover = util.GetChangedColor(colorDefault, 150)
+	local colorIcon = util.GetChangedColor(colorDefault, 225)
+	local colorIconHover = util.GetChangedColor(colorDefault, 200)
 
 	if panel:GetDisabled() then
 		return self.tex.Button_Dead( 0, 0, w, h)
 	end
 
 	if panel.Depressed or panel:IsSelected() or panel:GetToggle() then
-		return DrawMenuButton(w, h, panel, colorTextHover, colorHover, colorTextHover, 1)
+		return DrawMenuButton(w, h, panel, colorTextHover, colorIconHover, colorTextHover, colorDescriptionHover, 1)
 	end
 
 	if panel.Hovered then
-		return DrawMenuButton(w, h, panel, colorTextHover, colorHover, colorTextHover, 0)
+		return DrawMenuButton(w, h, panel, colorTextHover, colorIconHover, colorTextHover, colorDescriptionHover, 0)
 	end
 
-	return DrawMenuButton(w, h, panel, colorIcon, colorIcon, colorText, 0)
+	return DrawMenuButton(w, h, panel, colorIcon, colorIcon, colorText, colorDescription, 0)
 end
 
 local function DrawSubMenuButton(w, h, panel, sizeBorder, colorBackground, colorBar, colorText)
@@ -281,7 +303,7 @@ local function DrawSubMenuButton(w, h, panel, sizeBorder, colorBackground, color
 	draw.Box(sizeBorder, 0, w - sizeBorder, h, colorBackground)
 
 	draw.SimpleText(
-		panel:GetTitle(),
+		TryT(panel:GetTitle()),
 		panel:GetTitleFont(),
 		sizeBorder + 20,
 		0.5 * h,
@@ -410,7 +432,7 @@ local function DrawButton(w, h, panel, sizeBorder, colorLine, colorBox, colorTex
 	draw.Box(0, h - 2 * sizeBorder, w, sizeBorder, colorLine)
 
 	draw.SimpleText(
-		string.upper(panel:GetText()),
+		string.upper(TryT(panel:GetText())),
 		panel:GetFont(),
 		0.5 * w,
 		0.5 * (h - sizeBorder),
