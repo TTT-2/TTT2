@@ -263,7 +263,7 @@ end
 -- @return Color The color based on the original color
 -- @realm shared
 function util.GetChangedColor(color, value)
-	if color.r + color.g + color.b < 500 then
+	if color.r + color.g + color.b < 383 then
 		return util.ColorLighten(color, value or 20)
 	else
 		return util.ColorDarken(color, value or 20)

@@ -1,3 +1,5 @@
+local materialIcon = Material("vgui/ttt/derma/helpscreen/changelog")
+
 local htmlStart = [[
 	<head>
 		<style>
@@ -34,7 +36,7 @@ HELPSCRN.populate["ttt2_changelog"] = function(helpData, id)
 
 	bindingsData:SetTitle("menu_changelog_title")
 	bindingsData:SetDescription("menu_changelog_description")
-	bindingsData:SetIcon(Material("vgui/ttt/dynamic/roles/icon_inno"))
+	bindingsData:SetIcon(materialIcon)
 end
 
 
@@ -63,7 +65,7 @@ HELPSCRN.subPopulate["ttt2_changelog"] = function(helpData, id)
 			header = header .. "</h1>"
 
 			local html = vgui.Create("DHTML", parent)
-			html:SetSize(500,500)
+			html:SetSize(500, 500)
 			html:Dock(FILL)
 			html:SetHTML(htmlStart .. header .. change.text .. htmlEnd)
 			--html:DockMargin(10, 10, 10, 10)

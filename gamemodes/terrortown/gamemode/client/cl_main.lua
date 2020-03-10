@@ -115,8 +115,7 @@ function GM:Initialize()
 	VSKIN.SetupFiles("terrortown/gamemode/shared/vskins/")
 	VSKIN.SetupFiles("vskins/")
 
-	-- select skin (TODO: Read from database)
-	VSKIN.SelectVSkin("light")
+	VSKIN.SelectVSkin()
 
 	LANG.Init()
 

@@ -1,3 +1,31 @@
+local materialIcon = Material("vgui/ttt/derma/helpscreen/appearance")
+
+local function PopulateVSkinPanel(parent)
+	local form = vgui.Create("DFormTTT2", parent)
+	form:SetName("set_title_vskin")
+
+	--ttt2_selected_vskin
+
+	local vskins = VSKIN.GetVSkinList()
+	local combobox = form:ComboBox("select_vskin")
+
+	for i = 1, #vskins do
+		local vskin = vskins[i]
+
+		combobox:AddChoice(vskin)
+
+		if vskin == VSKIN.GetVSkinName() then
+			combobox:ChooseOption(vskin, i)
+		end
+	end
+
+	combobox.OnSelect = function(self, index, value)
+		VSKIN.SelectVSkin(value)
+	end
+
+	form:Dock(TOP)
+end
+
 local function PopulateCrosshairPanel(parent)
 	local form = vgui.Create("DFormTTT2", parent)
 	form:SetName("set_title_cross")
@@ -160,7 +188,7 @@ HELPSCRN.populate["ttt2_appearance"] = function(helpData, id)
 
 	bindingsData:SetTitle("menu_appearance_title")
 	bindingsData:SetDescription("menu_appearance_description")
-	bindingsData:SetIcon(Material("vgui/ttt/dynamic/roles/icon_inno"))
+	bindingsData:SetIcon(materialIcon)
 end
 
 ---
@@ -191,6 +219,7 @@ HELPSCRN.subPopulate["ttt2_appearance"] = function(helpData, id)
 	local vskinData = helpData:PopulateSubMenu(id .. "_vskin")
 
 	vskinData:SetTitle("submenu_appearance_vskin_title")
+	vskinData:PopulatePanel(PopulateVSkinPanel)
 
 	-- targetID
 	local targetData = helpData:PopulateSubMenu(id .. "_target_id")

@@ -33,9 +33,9 @@ function SKIN:PaintFrameTTT2(panel, w, h)
 	local sizeHeader = VSKIN.GetHeaderHeight()
 	local sizeBorder = VSKIN.GetBorderSize()
 
-	if not panel:HasHierarchicalFocus() then
-		colorBackground = util.ColorLighten(colorBackground, 25)
-	end
+	--if not panel:HasHierarchicalFocus() then
+	--	colorBackground = util.ColorLighten(colorBackground, 25)
+	--end
 
 	-- DRAW SHADOW (disable clipping)
 	if panel.m_bPaintShadow then
@@ -237,21 +237,22 @@ function SKIN:PaintButtonUp(panel, w, h)
 end
 
 local function DrawMenuButton(w, h, panel, colorOutline, colorIcon, colorText, colorDescription, shift)
-	local padding = 10
+	local padding_text = 10
+	local padding_icon = 25
 
 	draw.OutlinedBox(0, 0, w, h, 1, colorOutline)
-	draw.FilteredTexture(padding, padding + shift, h - 2 * padding, h - 2 * padding, panel:GetImage(), colorIcon.a, colorIcon)
+	draw.FilteredTexture(padding_icon, padding_icon + shift, h - 2 * padding_icon, h - 2 * padding_icon, panel:GetImage(), colorIcon.a, colorIcon)
 	draw.SimpleText(
 		TryT(panel:GetTitle()),
 		panel:GetTitleFont(),
 		h,
-		padding + shift,
+		padding_text + shift,
 		colorText,
 		TEXT_ALIGN_LEFT,
 		TEXT_ALIGN_TOP
 	)
 
-	local desc_wrapped = draw.GetWrappedText(TryT(panel:GetDescription()), w - h - 2 * padding, panel:GetDescriptionFont())
+	local desc_wrapped = draw.GetWrappedText(TryT(panel:GetDescription()), w - h - 2 * padding_text, panel:GetDescriptionFont())
 
 	local line_pos = 35
 	for i = 1, #desc_wrapped do
@@ -259,7 +260,7 @@ local function DrawMenuButton(w, h, panel, colorOutline, colorIcon, colorText, c
 			desc_wrapped[i],
 			panel:GetDescriptionFont(),
 			h,
-			line_pos + padding + shift,
+			line_pos + padding_text + shift,
 			colorDescription,
 			TEXT_ALIGN_LEFT,
 			TEXT_ALIGN_TOP
@@ -276,23 +277,23 @@ function SKIN:PaintMenuButtonTTT2(panel, w, h)
 
 	local colorDefault = util.GetDefaultColor(colorBackground)
 
-	local colorText = util.GetChangedColor(colorDefault, 100)
-	local colorTextHover = util.GetChangedColor(colorDefault, 75)
-	local colorDescription = util.GetChangedColor(colorDefault, 175)
-	local colorDescriptionHover = util.GetChangedColor(colorDefault, 150)
-	local colorIcon = util.GetChangedColor(colorDefault, 225)
-	local colorIconHover = util.GetChangedColor(colorDefault, 200)
+	local colorText = util.GetChangedColor(colorDefault, 65)
+	local colorTextHover = util.GetChangedColor(colorDefault, 50)
+	local colorDescription = util.GetChangedColor(colorDefault, 145)
+	local colorDescriptionHover = util.GetChangedColor(colorDefault, 135)
+	local colorIcon = util.GetChangedColor(colorDefault, 170)
+	local colorIconHover = util.GetChangedColor(colorDefault, 160)
 
 	if panel:GetDisabled() then
 		return self.tex.Button_Dead( 0, 0, w, h)
 	end
 
 	if panel.Depressed or panel:IsSelected() or panel:GetToggle() then
-		return DrawMenuButton(w, h, panel, colorTextHover, colorIconHover, colorTextHover, colorDescriptionHover, 1)
+		return DrawMenuButton(w, h, panel, colorDescriptionHover, colorIconHover, colorTextHover, colorDescriptionHover, 1)
 	end
 
 	if panel.Hovered then
-		return DrawMenuButton(w, h, panel, colorTextHover, colorIconHover, colorTextHover, colorDescriptionHover, 0)
+		return DrawMenuButton(w, h, panel, colorDescriptionHover, colorIconHover, colorTextHover, colorDescriptionHover, 0)
 	end
 
 	return DrawMenuButton(w, h, panel, colorIcon, colorIcon, colorText, colorDescription, 0)
@@ -318,7 +319,7 @@ function SKIN:PaintSubMenuButtonTTT2(panel, w, h)
 
 	local colorElemBackground = VSKIN.GetBackgroundColor()
 
-	local colorText = util.ColorLighten(util.GetDefaultColor(colorElemBackground), 75)
+	local colorText = util.GetChangedColor(util.GetDefaultColor(colorElemBackground), 75)
 	local colorTextHover = util.GetHoverColor(colorText)
 	local colorTextActive = util.GetActiveColor(colorText)
 

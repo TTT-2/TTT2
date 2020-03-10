@@ -1,3 +1,5 @@
+local materialIcon = Material("vgui/ttt/derma/helpscreen/addons")
+
 ---
 -- Function to populate main menu
 -- @param table helpData The main menu data object
@@ -9,7 +11,7 @@ HELPSCRN.populate["ttt2_addons"] = function(helpData, id)
 
 	bindingsData:SetTitle("menu_addons_title")
 	bindingsData:SetDescription("menu_addons_description")
-	bindingsData:SetIcon(Material("vgui/ttt/dynamic/roles/icon_inno"))
+	bindingsData:SetIcon(materialIcon)
 end
 
 ---

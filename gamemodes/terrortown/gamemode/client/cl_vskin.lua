@@ -2,6 +2,8 @@
 -- A handler of the skin colors
 -- @author Mineotopia
 
+local cv_selectedVSkin = CreateConVar("ttt2_selected_vskin", "ttt2_light", {FCVAR_ARCHIVE})
+
 VSKIN = VSKIN or {}
 
 VSKIN.skins = VSKIN.skins or {}
@@ -25,17 +27,46 @@ end
 
 ---
 -- Select a registered vskin
--- @param string name The unique name of the vskin
+-- @param string name The unique name of the vskin, if nil the convar value is read
 -- @return boolean Returns true if skin was selected
 -- @realm client
 function VSKIN.SelectVSkin(skinName)
+	if not skinName then
+		VSKIN.selected = cv_selectedVSkin:GetString()
+
+		return true
+	end
+
 	if not VSKIN.skins[skinName] then
 		return false
 	end
 
 	VSKIN.selected = skinName
+	cv_selectedVSkin:SetString(skinName)
 
 	return true
+end
+
+---
+-- Returns a table of the names of all registered vskins
+-- @return table The list of all names
+-- @realm client
+function VSKIN.GetVSkinList()
+	local names = {}
+
+	for name, _ in pairs(VSKIN.skins) do
+		names[#names + 1] = name
+	end
+
+	return names
+end
+
+---
+-- Returns the name of the currently selected skin
+-- @return string The name of the skin
+-- @realm client
+function VSKIN.GetVSkinName()
+	return VSKIN.selected
 end
 
 ---

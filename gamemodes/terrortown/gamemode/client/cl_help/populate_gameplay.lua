@@ -1,3 +1,5 @@
+local materialIcon = Material("vgui/ttt/derma/helpscreen/gameplay")
+
 local function PopulateGeneralPanel(parent)
 	local form = vgui.Create("DFormTTT2", parent)
 	form:SetName("set_title_play")
@@ -61,7 +63,7 @@ HELPSCRN.populate["ttt2_gameplay"] = function(helpData, id)
 
 	bindingsData:SetTitle("menu_gameplay_title")
 	bindingsData:SetDescription("menu_gameplay_description")
-	bindingsData:SetIcon(Material("vgui/ttt/dynamic/roles/icon_inno"))
+	bindingsData:SetIcon(materialIcon)
 end
 
 ---

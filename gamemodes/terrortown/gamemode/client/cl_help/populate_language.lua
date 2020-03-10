@@ -1,3 +1,5 @@
+local materialIcon = Material("vgui/ttt/derma/helpscreen/language")
+
 local function PopulateLanguagePanel(parent)
 	local form = vgui.Create("DFormTTT2", parent)
 	form:SetName("set_title_lang")
@@ -34,7 +36,7 @@ HELPSCRN.populate["ttt2_language"] = function(helpData, id)
 
 	languageData:SetTitle("menu_anguage_title")
 	languageData:SetDescription("menu_anguage_description")
-	languageData:SetIcon(Material("vgui/ttt/dynamic/roles/icon_inno"))
+	languageData:SetIcon(materialIcon)
 end
 
 ---

@@ -1,3 +1,5 @@
+local materialIcon = Material("vgui/ttt/derma/helpscreen/legacy")
+
 -- get all registered legacy tabs
 local function GetLegacyTabs()
 	local dtabs = vgui.Create("DPropertySheet")
@@ -31,7 +33,7 @@ HELPSCRN.populate["ttt2_legacy"] = function(helpData, id)
 
 	bindingsData:SetTitle("menu_legacy_title")
 	bindingsData:SetDescription("menu_legacy_description")
-	bindingsData:SetIcon(Material("vgui/ttt/dynamic/roles/icon_inno"))
+	bindingsData:SetIcon(materialIcon)
 end
 
 ---

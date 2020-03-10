@@ -1,3 +1,5 @@
+local materialIcon = Material("vgui/ttt/derma/helpscreen/bindings")
+
 local function AddBindingCategory(category, parent)
 	local form = vgui.Create("DFormTTT2", parent)
 
@@ -108,7 +110,7 @@ HELPSCRN.populate["ttt2_bindings"] = function(helpData, id)
 
 	bindingsData:SetTitle("menu_bindings_title")
 	bindingsData:SetDescription("menu_bindings_description")
-	bindingsData:SetIcon(Material("vgui/ttt/dynamic/roles/icon_inno"))
+	bindingsData:SetIcon(materialIcon)
 end
 
 ---
