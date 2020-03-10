@@ -56,9 +56,9 @@ L.body_found       = "{finder} znalazł ciało {victim}. {role}"
 L.body_found_team = "{finder} znalazł ciało {victim}. {role} ({team})"
 
 -- The {role} in body_found will be replaced by one of the following:
-L.body_found_t     = "On był zdrajcą!"
-L.body_found_d     = "On był detektywem."
-L.body_found_i     = "On był niewinny."
+L.body_found_traitor      = "On był zdrajcą!"
+L.body_found_det    = "On był detektywem."
+L.body_found_inno    = "On był niewinny."
 
 L.body_confirm     = "{finder} potwierdził śmierć {victim}."
 
