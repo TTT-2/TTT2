@@ -27,12 +27,8 @@ ttt_include("cl_help_populate_guide")
 ttt_include("cl_help_populate_language")
 ttt_include("cl_help_populate_legacy")
 
--- store the helpscreen in here to allow toggling with key
-local menuCache = {
-	frame = nil,
-	hidden = false,
-	isSub = false
-}
+-- store the helpscreen info
+local menuOpen = nil
 
 -- DEFINE SIZE
 HELPSCRN.pad = 5
@@ -50,75 +46,20 @@ local heightButtonPanel = 80
 local widthNavButton, heightNavButton = 299, 50
 
 ---
--- Return wether a menu is opened (hidden menues are counted as open as well)
-function HELPSCRN:IsOpen()
-	return IsValid(menuCache.mainMenu) or IsValid(menuCache.subMenu)
-end
-
----
--- Hides currently open menu, does nothing if no menu is opened
--- @realm client
-function HELPSCRN:Hide()
-	if not IsValid(menuCache.frame) then return end
-
-	menuCache.frame:SetDeleteOnClose(false)
-	menuCache.frame:Close()
-
-	menuCache.hidden = true
-end
-
----
--- Unhides currently open menu, does nothing if no menu was hidden
--- @realm client
-function HELPSCRN:Unhide()
-	if not menuCache.hidden or not IsValid(menuCache.frame) then return end
-
-	menuCache.frame:SetDeleteOnClose(true)
-	menuCache.frame:SetVisible(true)
-	menuCache.frame:MakePopup()
-
-	menuCache.hidden = false
-
-	-- if hud editor was opened, it should be closed
-	HUDEditor.StopEditHUD()
-end
-
-local function SetupFrame()
-	if IsValid(menuCache.frame) then return end
-
-	menuCache.frame = vgui.Create("DFrameTTT2")
-	menuCache.frame:SetSize(w, h)
-	menuCache.frame:Center()
-	menuCache.frame:SetTitle("help_title")
-	menuCache.frame:SetVisible(true)
-	menuCache.frame:SetDraggable(true)
-	menuCache.frame:ShowCloseButton(true)
-	menuCache.frame:SetDeleteOnClose(true)
-	menuCache.frame:SetBackgroundBlur(true)
-	menuCache.frame:SetSkin("ttt2_default")
-
-	menuCache.frame:MakePopup()
-	menuCache.frame:SetKeyboardInputEnabled(false)
-end
-
----
 -- Opens the help screen
 -- @realm client
 function HELPSCRN:ShowMainMenu()
 	-- IF MENU ELEMENT DOES NOT ALREADY EXIST, CREATE IT
-	SetupFrame()
+	local frame = VHDL.GenerateFrame(w, h, "help_title")
 
 	-- INIT MAIN MENU SPECIFIC STUFF
-	menuCache.frame:Clear()
-	menuCache.frame:InitButtons()
-	menuCache.frame:ShowBackButton(false)
-	menuCache.frame:SetPadding(5, 5, 5, 5)
+	frame:SetPadding(5, 5, 5, 5)
 
 	-- MARK AS MAIN MENU
-	menuCache.isSub = false
+	menuOpen = "main"
 
 	-- MAKE MAIN FRAME SCROLEABLE
-	local scrollPanel = vgui.Create("DScrollPanel", menuCache.frame)
+	local scrollPanel = vgui.Create("DScrollPanel", frame)
 	scrollPanel:Dock(FILL)
 
 	-- SPLIT FRAME INTO A GRID LAYOUT
@@ -189,23 +130,21 @@ end
 
 function HELPSCRN:ShowSubMenu(data)
 	-- IF MENU ELEMENT DOES NOT ALREADY EXIST, CREATE IT
-	SetupFrame()
+	local frame = VHDL.GenerateFrame(w, h, data.title or data.id)
 
 	-- INIT SUB MENU SPECIFIC STUFF
-	menuCache.frame:Clear()
-	menuCache.frame:InitButtons()
-	menuCache.frame:ShowBackButton(true)
-	menuCache.frame:SetPadding(0, 0, 0, 0)
+	frame:ShowBackButton(true)
+	frame:SetPadding(0, 0, 0, 0)
 
-	menuCache.frame:RegisterBackFunction(function()
+	frame:RegisterBackFunction(function()
 		self:ShowMainMenu()
 	end)
 
 	-- MARK AS SUBMENU
-	menuCache.isSub = true
+	menuOpen = "sub"
 
 	-- BUILD GENERAL BOX STRUCTURE
-	local navArea = vgui.Create("DNavPanelTTT2", menuCache.frame)
+	local navArea = vgui.Create("DNavPanelTTT2", frame)
 	navArea:SetSize(widthNav, heightNav - VSKIN.GetHeaderHeight() - VSKIN.GetBorderSize())
 	navArea:SetPos(0, 0)
 	navArea:Dock(LEFT)
@@ -232,7 +171,7 @@ function HELPSCRN:ShowSubMenu(data)
 	navAreaScrollGrid:Dock(FILL)
 	navAreaScrollGrid:SetSpaceY(HELPSCRN.pad)
 
-	local contentArea = vgui.Create("DContentPanelTTT2", menuCache.frame)
+	local contentArea = vgui.Create("DContentPanelTTT2", frame)
 	contentArea:SetSize(widthContent, heightContent - VSKIN.GetHeaderHeight() - VSKIN.GetBorderSize())
 	contentArea:SetPos(widthNav, 0)
 	contentArea:DockPadding(HELPSCRN.pad, HELPSCRN.pad, HELPSCRN.pad, HELPSCRN.pad)
@@ -280,18 +219,21 @@ end
 
 local function ShowTTTHelp(ply, cmd, args)
 	-- F1 PRESSED: CLOSE MAIN MENU IF MENU IS ALREADY OPENED
-	if not menuCache.isSub and IsValid(menuCache.frame) then
-		menuCache.frame:Close()
+	if menuOpen == "main" and VHDL.IsOpen() then
+		VHDL.CloseFrame()
 
 		return
 	end
 
 	-- F1 PRESSED AND MENU IS HIDDEN: UNHIDE
-	if menuCache.hidden then
-		HELPSCRN:Unhide()
+	if menuOpen and VHDL.IsHidden() then
+		VHDL.UnhideFrame()
 
 		return
 	end
+
+	-- DO NOTHING IF OTHER MENU IS OPEN
+	if not menuOpen and VHDL.IsOpen() then return end
 
 	-- F1 PRESSED: CLOSE SUB MENU IF MENU IS ALREADY OPENED
 	-- AND OPEN MAIN MENU IN GENERAL

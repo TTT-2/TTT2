@@ -3,6 +3,7 @@
 -- @author Mineotopia
 
 local cv_selectedVSkin = CreateConVar("ttt2_selected_vskin", "ttt2_light", {FCVAR_ARCHIVE})
+local cv_blurVSkin = CreateConVar("ttt2_vskin_blur", 1, {FCVAR_ARCHIVE})
 
 VSKIN = VSKIN or {}
 
@@ -44,6 +45,8 @@ function VSKIN.SelectVSkin(skinName)
 	VSKIN.selected = skinName
 	cv_selectedVSkin:SetString(skinName)
 
+	VHDL.UpdateVSkinSetting("skin")
+
 	return true
 end
 
@@ -67,6 +70,24 @@ end
 -- @realm client
 function VSKIN.GetVSkinName()
 	return VSKIN.selected
+end
+
+---
+-- Sets the background blur state
+-- @param [default=true] boolean state
+-- @realm client
+function VSKIN.SetBlurBackground(state)
+	cv_blurVSkin:SetBool(state == nil and true or state)
+
+	VHDL.UpdateVSkinSetting("blur")
+end
+
+---
+-- Returns if the background of vskin elements should
+-- be blurred or not
+-- @realm client
+function VSKIN.ShouldBlurBackground()
+	return cv_blurVSkin:GetBool()
 end
 
 ---
@@ -94,30 +115,6 @@ function VSKIN.GetAccentColor()
 end
 
 ---
--- Returns the hovered accent color of the currently selected vskin
--- @return [default=Color(255, 255, 255, 255)] Color The hovered accent color
--- @realm client
-function VSKIN.GetHoverAccentColor()
-	if not VSKIN.skins[VSKIN.selected] then
-		return COLOR_WHITE
-	end
-
-	return VSKIN.skins[VSKIN.selected].colors.accent_hover
-end
-
----
--- Returns the active accent color of the currently selected vskin
--- @return [default=Color(255, 255, 255, 255)] Color The active accent color
--- @realm client
-function VSKIN.GetActiveAccentColor()
-	if not VSKIN.skins[VSKIN.selected] then
-		return COLOR_WHITE
-	end
-
-	return VSKIN.skins[VSKIN.selected].colors.accent_active
-end
-
----
 -- Returns the dark accent color of the currently selected vskin
 -- @return [default=Color(255, 255, 255, 255)] Color The dark accent color
 -- @realm client
@@ -139,30 +136,6 @@ function VSKIN.GetScrollbarColor()
 	end
 
 	return VSKIN.skins[VSKIN.selected].colors.scroll
-end
-
----
--- Returns the hovered scrollbar color of the currently selected vskin
--- @return [default=Color(255, 255, 255, 255)] Color The hovered scrollbar color
--- @realm client
-function VSKIN.GetHoverScrollbarColor()
-	if not VSKIN.skins[VSKIN.selected] then
-		return COLOR_WHITE
-	end
-
-	return VSKIN.skins[VSKIN.selected].colors.scroll_hover
-end
-
----
--- Returns the active scrollbar color of the currently selected vskin
--- @return [default=Color(255, 255, 255, 255)] Color The active scrollbar color
--- @realm client
-function VSKIN.GetActiveScrollbarColor()
-	if not VSKIN.skins[VSKIN.selected] then
-		return COLOR_WHITE
-	end
-
-	return VSKIN.skins[VSKIN.selected].colors.scroll_active
 end
 
 ---
@@ -260,10 +233,3 @@ function VSKIN.GetCornerRadius()
 
 	return VSKIN.skins[VSKIN.selected].params.corner_radius
 end
-
--- use https://wiki.facepunch.com/gmod/Panel:InvalidateLayout on skin change
--- to run PerformLayout on all elements
-
-
-
-

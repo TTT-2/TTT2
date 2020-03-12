@@ -33,6 +33,13 @@ local function PopulateHUDSwitcherPanel(parent)
 	form2:SetName("set_title_hud_customize")
 
 	form2:Dock(TOP)
+
+	-- REGISTER UNHIDE FUNCTION TO STOP HUD EDITOR
+	VHDL.RegisterCallback("unhide", function(menu)
+		print("unhiding")
+
+		HUDEditor.StopEditHUD()
+	end)
 end
 
 local function PopulateVSkinPanel(parent)
@@ -54,6 +61,13 @@ local function PopulateVSkinPanel(parent)
 
 	combobox.OnSelect = function(self, index, value)
 		VSKIN.SelectVSkin(value)
+	end
+
+	local cb = form:CheckBox("set_blur_enable")
+	cb:SetValue(VSKIN.ShouldBlurBackground())
+
+	cb.OnChange = function(self, value)
+		VSKIN.SetBlurBackground(value)
 	end
 
 	form:Dock(TOP)
@@ -265,7 +279,8 @@ HELPSCRN.subPopulate["ttt2_appearance"] = function(helpData, id)
 			if not currentHUDName then return end
 
 			HUDEditor.EditHUD(currentHUDName)
-			HELPSCRN:Hide()
+
+			VHDL.HideFrame()
 		end
 	end)
 
