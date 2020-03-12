@@ -36,8 +36,6 @@ local function PopulateHUDSwitcherPanel(parent)
 
 	-- REGISTER UNHIDE FUNCTION TO STOP HUD EDITOR
 	VHDL.RegisterCallback("unhide", function(menu)
-		print("unhiding")
-
 		HUDEditor.StopEditHUD()
 	end)
 end

@@ -61,19 +61,17 @@ function VHDL.ClearFrame(w, h, title)
 		if shouldCancel then return end
 	end
 
+	local oldW, oldH = VHDL.menuCache.frame:GetSize()
+	local oldTitle = VHDL.menuCache.frame:GetTitle()
+
 	VHDL.menuCache.frame:Clear()
 	VHDL.menuCache.frame:InitButtons()
 
-	local oldW, oldH = VHDL.menuCache.frame:GetSize()
+	VHDL.menuCache.frame:SetSize(w or oldW, h or oldH)
+	VHDL.menuCache.frame:Center()
+	VHDL.menuCache.frame:SetTitle(title or oldTitle)
 
-	if w or h then
-		VHDL.menuCache.frame:SetSize(w or oldW, h or oldH)
-		VHDL.menuCache.frame:Center()
-	end
-
-	if title then
-		VHDL.menuCache.frame:SetTitle(title)
-	end
+	VHDL.callback.frame = {}
 
 	return VHDL.menuCache.frame
 end
@@ -95,6 +93,7 @@ function VHDL.CloseFrame()
 	VHDL.menuCache.frame:Close()
 
 	VHDL.menuCache.frame = nil
+	VHDL.callback.frame = {}
 end
 
 ---

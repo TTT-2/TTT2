@@ -52,7 +52,7 @@ function HELPSCRN:ShowMainMenu()
 	-- IF MENU ELEMENT DOES NOT ALREADY EXIST, CREATE IT
 	local frame
 	if helpMenuOpen and VHDL.IsOpen() then
-		frame = VHDL.ClearFrame()
+		frame = VHDL.ClearFrame(w, h, "help_title")
 	else
 		frame = VHDL.GenerateFrame(w, h, "help_title", true)
 	end
@@ -137,13 +137,12 @@ function HELPSCRN:ShowSubMenu(data)
 	-- IF MENU ELEMENT DOES NOT ALREADY EXIST, CREATE IT
 	local frame
 	if helpMenuOpen and VHDL.IsOpen() then
-		frame = VHDL.ClearFrame()
+		frame = VHDL.ClearFrame(w, h, data.title or data.id)
 	else
 		frame = VHDL.GenerateFrame(w, h, data.title or data.id, true)
 	end
 
 	-- INIT SUB MENU SPECIFIC STUFF
-	frame:SetTitle(title)
 	frame:ShowBackButton(true)
 	frame:SetPadding(0, 0, 0, 0)
 

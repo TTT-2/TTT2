@@ -87,6 +87,7 @@ ttt_include("cl_status")
 ttt_include("cl_player_ext")
 ttt_include("cl_vskin")
 ttt_include("cl_vhdl")
+ttt_include("cl_glapp")
 
 ttt_include("cl_armor")
 ttt_include("cl_damage_indicator")
