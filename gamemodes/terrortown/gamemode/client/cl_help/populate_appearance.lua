@@ -1,10 +1,43 @@
 local materialIcon = Material("vgui/ttt/derma/helpscreen/appearance")
 
+local function PopulateHUDSwitcherPanel(parent)
+	local form = vgui.Create("DFormTTT2", parent)
+	form:SetName("set_title_hud_select")
+
+	local currentHUDName = HUDManager.GetHUD()
+	local huds = huds.GetList()
+	local restrictedHUDs = HUDManager.GetModelValue("restrictedHUDs")
+
+	local combobox = form:ComboBox("select_hud")
+
+	for i = 1, #huds do
+		local hud = huds[i]
+
+		-- do not add HUD to the selection list if restricted
+		if table.HasValue(restrictedHUDs, hud.id) then continue end
+
+		combobox:AddChoice(hud.id)
+
+		if hud.id == currentHUDName then
+			combobox:ChooseOption(hud.id, i)
+		end
+	end
+
+	combobox.OnSelect = function(self, index, value)
+		HUDManager.SetHUD(value)
+	end
+
+	form:Dock(TOP)
+
+	local form2 = vgui.Create("DFormTTT2", parent)
+	form2:SetName("set_title_hud_customize")
+
+	form2:Dock(TOP)
+end
+
 local function PopulateVSkinPanel(parent)
 	local form = vgui.Create("DFormTTT2", parent)
 	form:SetName("set_title_vskin")
-
-	--ttt2_selected_vskin
 
 	local vskins = VSKIN.GetVSkinList()
 	local combobox = form:ComboBox("select_vskin")
@@ -207,13 +240,34 @@ HELPSCRN.subPopulate["ttt2_appearance"] = function(helpData, id)
 	local hudData = helpData:PopulateSubMenu(id .. "_hud_switcher")
 
 	hudData:SetTitle("submenu_appearance_hudswitcher_title")
+	hudData:PopulatePanel(PopulateHUDSwitcherPanel)
 	hudData:PopulateButtonPanel(function(parent)
+		local buttonReset = vgui.Create("DButtonTTT2", parent)
+		buttonReset:SetText("Reset")
+		buttonReset:SetSize(100, 45)
+		buttonReset:SetPos(475, 20)
+		buttonReset.DoClick = function(btn)
+			local currentHUD = huds.GetStored(HUDManager.GetHUD())
 
+			if not currentHUD then return end
+
+			currentHUD:Reset()
+			currentHUD:SaveData()
+		end
+
+		local buttonEditor = vgui.Create("DButtonTTT2", parent)
+		buttonEditor:SetText("HUD Editor")
+		buttonEditor:SetSize(175, 45)
+		buttonEditor:SetPos(600, 20)
+		buttonEditor.DoClick = function(btn)
+			local currentHUDName = HUDManager.GetHUD()
+
+			if not currentHUDName then return end
+
+			HUDEditor.EditHUD(currentHUDName)
+			HELPSCRN:Hide()
+		end
 	end)
-
-	--local currentHUD = HUDManager.GetHUD()
-	--local hudLists = huds.GetList()
-	--local restrictedHUDs = HUDManager.GetModelValue("restrictedHUDs")
 
 	-- VSKIN
 	local vskinData = helpData:PopulateSubMenu(id .. "_vskin")

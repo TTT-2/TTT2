@@ -17,6 +17,31 @@ function PANEL:Init()
 	self:SetFocusTopLevel(true)
 	self:SetPaintShadow(true)
 
+	self:InitButtons()
+
+	self:SetDraggable(true)
+	self:SetSizable(false)
+	self:SetScreenLock(false)
+	self:SetDeleteOnClose(true)
+
+	self:SetMinWidth(50)
+	self:SetMinHeight(50)
+
+	-- This turns off the engine drawing
+	self:SetPaintBackgroundEnabled(false)
+	self:SetPaintBorderEnabled(false)
+
+	self.m_fCreateTime = SysTime()
+
+	self.title = {
+		text = "Window",
+		font = "DermaTTT2Title"
+	}
+
+	self:SetPadding(5, 5, 5, 5)
+end
+
+function PANEL:InitButtons()
 	-- add close button
 	self.btnClose = vgui.Create("DButton", self)
 	self.btnClose:SetText("")
@@ -42,27 +67,6 @@ function PANEL:Init()
 	self.btnBack.Paint = function(panel, w, h)
 		derma.SkinHook("Paint", "WindowBackButton", panel, w, h)
 	end
-
-	self:SetDraggable(true)
-	self:SetSizable(false)
-	self:SetScreenLock(false)
-	self:SetDeleteOnClose(true)
-
-	self:SetMinWidth(50)
-	self:SetMinHeight(50)
-
-	-- This turns off the engine drawing
-	self:SetPaintBackgroundEnabled(false)
-	self:SetPaintBorderEnabled(false)
-
-	self.m_fCreateTime = SysTime()
-
-	self.title = {
-		text = "Window",
-		font = "DermaTTT2Title"
-	}
-
-	self:SetPadding(5, 5, 5, 5)
 end
 
 function PANEL:SetTitle(strTitle)

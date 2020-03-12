@@ -29,8 +29,9 @@ ttt_include("cl_help_populate_legacy")
 
 -- store the helpscreen in here to allow toggling with key
 local menuCache = {
-	mainMenu,
-	subMenu
+	frame = nil,
+	hidden = false,
+	isSub = false
 }
 
 -- DEFINE SIZE
@@ -48,41 +49,76 @@ local widthContent, heightContent = 800, 700
 local heightButtonPanel = 80
 local widthNavButton, heightNavButton = 299, 50
 
-function HELPSCRN.IsOpen()
-	return IsValid(menuCache.mainMenu) or IsValid(LocalPlayer().settingsFrame)
+---
+-- Return wether a menu is opened (hidden menues are counted as open as well)
+function HELPSCRN:IsOpen()
+	return IsValid(menuCache.mainMenu) or IsValid(menuCache.subMenu)
 end
 
--- TODO set pos based on last pos!
+---
+-- Hides currently open menu, does nothing if no menu is opened
+-- @realm client
+function HELPSCRN:Hide()
+	if not IsValid(menuCache.frame) then return end
+
+	menuCache.frame:SetDeleteOnClose(false)
+	menuCache.frame:Close()
+
+	menuCache.hidden = true
+end
+
+---
+-- Unhides currently open menu, does nothing if no menu was hidden
+-- @realm client
+function HELPSCRN:Unhide()
+	if not menuCache.hidden or not IsValid(menuCache.frame) then return end
+
+	menuCache.frame:SetDeleteOnClose(true)
+	menuCache.frame:SetVisible(true)
+	menuCache.frame:MakePopup()
+
+	menuCache.hidden = false
+
+	-- if hud editor was opened, it should be closed
+	HUDEditor.StopEditHUD()
+end
+
+local function SetupFrame()
+	if IsValid(menuCache.frame) then return end
+
+	menuCache.frame = vgui.Create("DFrameTTT2")
+	menuCache.frame:SetSize(w, h)
+	menuCache.frame:Center()
+	menuCache.frame:SetTitle("help_title")
+	menuCache.frame:SetVisible(true)
+	menuCache.frame:SetDraggable(true)
+	menuCache.frame:ShowCloseButton(true)
+	menuCache.frame:SetDeleteOnClose(true)
+	menuCache.frame:SetBackgroundBlur(true)
+	menuCache.frame:SetSkin("ttt2_default")
+
+	menuCache.frame:MakePopup()
+	menuCache.frame:SetKeyboardInputEnabled(false)
+end
+
 ---
 -- Opens the help screen
 -- @realm client
-function HELPSCRN:Show(x, y)
-	-- F1 PRESSED: CLOSE MAIN MENU IF MENU IS ALREADY OPENED
-	if IsValid(menuCache.mainMenu) then
-		menuCache.mainMenu:Close()
+function HELPSCRN:ShowMainMenu()
+	-- IF MENU ELEMENT DOES NOT ALREADY EXIST, CREATE IT
+	SetupFrame()
 
-		return
-	end
+	-- INIT MAIN MENU SPECIFIC STUFF
+	menuCache.frame:Clear()
+	menuCache.frame:InitButtons()
+	menuCache.frame:ShowBackButton(false)
+	menuCache.frame:SetPadding(5, 5, 5, 5)
 
-	-- F1 PRESSED: CLOSE SUB MENU IF MENU IS ALREADY OPENED
-	if IsValid(menuCache.subMenu) then
-		menuCache.subMenu:Close()
-	end
-
-	-- SET UP MAIN FRAME
-	local dframe = vgui.Create("DFrameTTT2")
-	dframe:SetSize(w, h)
-	dframe:SetPos(x or 0.5 * (ScrW() - w), y or 0.5 * (ScrH() - h)) -- keep old position
-	dframe:SetTitle("help_title")
-	dframe:SetVisible(true)
-	dframe:SetDraggable(true)
-	dframe:ShowCloseButton(true)
-	dframe:ShowBackButton(false)
-	dframe:SetDeleteOnClose(true)
-	dframe:SetSkin("ttt2_default")
+	-- MARK AS MAIN MENU
+	menuCache.isSub = false
 
 	-- MAKE MAIN FRAME SCROLEABLE
-	local scrollPanel = vgui.Create("DScrollPanel", dframe)
+	local scrollPanel = vgui.Create("DScrollPanel", menuCache.frame)
 	scrollPanel:Dock(FILL)
 
 	-- SPLIT FRAME INTO A GRID LAYOUT
@@ -115,18 +151,9 @@ function HELPSCRN:Show(x, y)
 		settingsButton:SetImage(data.iconMat)
 
 		settingsButton.DoClick = function(slf)
-			dframe:Close()
-
-			local posX, posY = dframe:GetPos()
-
-			self:ShowSubMenu(posX, posY, data)
+			self:ShowSubMenu(data)
 		end
 	end
-
-	dframe:MakePopup()
-	dframe:SetKeyboardInputEnabled(false)
-
-	menuCache.mainMenu = dframe
 end
 
 local function BuildContentArea(parent, menuData)
@@ -155,34 +182,30 @@ local function BuildContentArea(parent, menuData)
 		local buttonArea = vgui.Create("DButtonPanelTTT2", parent)
 		buttonArea:SetSize(w2, heightButtonPanel)
 		buttonArea:Dock(BOTTOM)
+
+		menuData.populateButtonFn(buttonArea)
 	end
 end
 
-function HELPSCRN:ShowSubMenu(x, y, data)
-	--if isfunction(data.onClickFn) then
-	--	data.onClickFn(slf)
+function HELPSCRN:ShowSubMenu(data)
+	-- IF MENU ELEMENT DOES NOT ALREADY EXIST, CREATE IT
+	SetupFrame()
 
-	--	return
-	--end
+	-- INIT SUB MENU SPECIFIC STUFF
+	menuCache.frame:Clear()
+	menuCache.frame:InitButtons()
+	menuCache.frame:ShowBackButton(true)
+	menuCache.frame:SetPadding(0, 0, 0, 0)
 
-	local frame = vgui.Create("DFrameTTT2")
-	frame:SetSize(w, h)
-	frame:SetPos(x, y)
-	frame:SetTitle(data.title or data.id)
-	frame:SetVisible(true)
-	frame:SetDraggable(true)
-	frame:ShowCloseButton(true)
-	frame:ShowBackButton(true)
-	frame:SetDeleteOnClose(true)
-	frame:SetSkin("ttt2_default")
-	frame:SetPadding(0, 0, 0, 0)
-
-	frame:RegisterBackFunction(function()
-		self:Show(frame:GetPos())
+	menuCache.frame:RegisterBackFunction(function()
+		self:ShowMainMenu()
 	end)
 
+	-- MARK AS SUBMENU
+	menuCache.isSub = true
+
 	-- BUILD GENERAL BOX STRUCTURE
-	local navArea = vgui.Create("DNavPanelTTT2", frame)
+	local navArea = vgui.Create("DNavPanelTTT2", menuCache.frame)
 	navArea:SetSize(widthNav, heightNav - VSKIN.GetHeaderHeight() - VSKIN.GetBorderSize())
 	navArea:SetPos(0, 0)
 	navArea:Dock(LEFT)
@@ -209,7 +232,7 @@ function HELPSCRN:ShowSubMenu(x, y, data)
 	navAreaScrollGrid:Dock(FILL)
 	navAreaScrollGrid:SetSpaceY(HELPSCRN.pad)
 
-	local contentArea = vgui.Create("DContentPanelTTT2", frame)
+	local contentArea = vgui.Create("DContentPanelTTT2", menuCache.frame)
 	contentArea:SetSize(widthContent, heightContent - VSKIN.GetHeaderHeight() - VSKIN.GetBorderSize())
 	contentArea:SetPos(widthNav, 0)
 	contentArea:DockPadding(HELPSCRN.pad, HELPSCRN.pad, HELPSCRN.pad, HELPSCRN.pad)
@@ -253,15 +276,26 @@ function HELPSCRN:ShowSubMenu(x, y, data)
 
 		lastActive = navAreaScrollGrid:GetChild(0)
 	end
-
-	frame:MakePopup()
-	frame:SetKeyboardInputEnabled(false)
-
-	menuCache.subMenu = frame
 end
 
 local function ShowTTTHelp(ply, cmd, args)
-	HELPSCRN:Show()
+	-- F1 PRESSED: CLOSE MAIN MENU IF MENU IS ALREADY OPENED
+	if not menuCache.isSub and IsValid(menuCache.frame) then
+		menuCache.frame:Close()
+
+		return
+	end
+
+	-- F1 PRESSED AND MENU IS HIDDEN: UNHIDE
+	if menuCache.hidden then
+		HELPSCRN:Unhide()
+
+		return
+	end
+
+	-- F1 PRESSED: CLOSE SUB MENU IF MENU IS ALREADY OPENED
+	-- AND OPEN MAIN MENU IN GENERAL
+	HELPSCRN:ShowMainMenu()
 end
 concommand.Add("ttt_helpscreen", ShowTTTHelp)
 

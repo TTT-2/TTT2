@@ -29,8 +29,7 @@ local function CreateEditOptions(x, y)
 
 	local editClose = menu:AddOption(LANG.GetTranslation("f1_settings_hudswitcher_button_close"))
 	editClose.OnMousePressed = function(slf, keyCode)
-		HUDEditor.StopEditHUD()
-		HUDManager.ShowHUDSwitcher()
+		HELPSCRN:Unhide()
 
 		menu:Remove()
 	end
