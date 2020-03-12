@@ -28,7 +28,7 @@ ttt_include("cl_help_populate_language")
 ttt_include("cl_help_populate_legacy")
 
 -- store the helpscreen info
-local menuOpen = nil
+local helpMenuOpen = nil
 
 -- DEFINE SIZE
 HELPSCRN.pad = 5
@@ -50,13 +50,18 @@ local widthNavButton, heightNavButton = 299, 50
 -- @realm client
 function HELPSCRN:ShowMainMenu()
 	-- IF MENU ELEMENT DOES NOT ALREADY EXIST, CREATE IT
-	local frame = VHDL.GenerateFrame(w, h, "help_title")
+	local frame
+	if helpMenuOpen and VHDL.IsOpen() then
+		frame = VHDL.ClearFrame()
+	else
+		frame = VHDL.GenerateFrame(w, h, "help_title", true)
+	end
 
 	-- INIT MAIN MENU SPECIFIC STUFF
 	frame:SetPadding(5, 5, 5, 5)
 
 	-- MARK AS MAIN MENU
-	menuOpen = "main"
+	helpMenuOpen = "main"
 
 	-- MAKE MAIN FRAME SCROLEABLE
 	local scrollPanel = vgui.Create("DScrollPanel", frame)
@@ -130,9 +135,15 @@ end
 
 function HELPSCRN:ShowSubMenu(data)
 	-- IF MENU ELEMENT DOES NOT ALREADY EXIST, CREATE IT
-	local frame = VHDL.GenerateFrame(w, h, data.title or data.id)
+	local frame
+	if helpMenuOpen and VHDL.IsOpen() then
+		frame = VHDL.ClearFrame()
+	else
+		frame = VHDL.GenerateFrame(w, h, data.title or data.id, true)
+	end
 
 	-- INIT SUB MENU SPECIFIC STUFF
+	frame:SetTitle(title)
 	frame:ShowBackButton(true)
 	frame:SetPadding(0, 0, 0, 0)
 
@@ -141,7 +152,7 @@ function HELPSCRN:ShowSubMenu(data)
 	end)
 
 	-- MARK AS SUBMENU
-	menuOpen = "sub"
+	helpMenuOpen = "sub"
 
 	-- BUILD GENERAL BOX STRUCTURE
 	local navArea = vgui.Create("DNavPanelTTT2", frame)
@@ -219,21 +230,21 @@ end
 
 local function ShowTTTHelp(ply, cmd, args)
 	-- F1 PRESSED: CLOSE MAIN MENU IF MENU IS ALREADY OPENED
-	if menuOpen == "main" and VHDL.IsOpen() then
+	if helpMenuOpen == "main" and VHDL.IsOpen() then
 		VHDL.CloseFrame()
 
 		return
 	end
 
 	-- F1 PRESSED AND MENU IS HIDDEN: UNHIDE
-	if menuOpen and VHDL.IsHidden() then
+	if helpMenuOpen and VHDL.IsHidden() then
 		VHDL.UnhideFrame()
 
 		return
 	end
 
 	-- DO NOTHING IF OTHER MENU IS OPEN
-	if not menuOpen and VHDL.IsOpen() then return end
+	if not helpMenuOpen and VHDL.IsOpen() then return end
 
 	-- F1 PRESSED: CLOSE SUB MENU IF MENU IS ALREADY OPENED
 	-- AND OPEN MAIN MENU IN GENERAL
