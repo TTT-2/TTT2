@@ -65,6 +65,7 @@ function HUD:LoadData()
 	BaseClass.LoadData(self)
 
 	local elems = self:GetElements()
+	local scale = GLAPP.GetGlobalScale()
 
 	for i = 1, #elems do
 		local elemName = elems[i]
@@ -74,7 +75,7 @@ function HUD:LoadData()
 
 		local min_size = elem:GetDefaults().minsize
 
-		elem:SetMinSize(min_size.w * self.scale, min_size.h * self.scale)
+		elem:SetMinSize(min_size.w * scale, min_size.h * scale)
 		elem:PerformLayout()
 	end
 end
@@ -117,5 +118,5 @@ function HUD:Reset()
 
 	BaseClass.Reset(self)
 
-	self:ApplyScale(self.scale)
+	self:ApplyScale(GLAPP.GetGlobalScale())
 end

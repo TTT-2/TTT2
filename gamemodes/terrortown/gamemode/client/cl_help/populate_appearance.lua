@@ -1,5 +1,48 @@
 local materialIcon = Material("vgui/ttt/derma/helpscreen/appearance")
 
+local function PopulateGeneralPanel(parent)
+	local form = vgui.Create("DFormTTT2", parent)
+	form:SetName("set_title_color")
+
+	form:Help("help_color_desc")
+
+	local cb = form:CheckBox("set_global_color_enable")
+
+	cb:SetValue(GLAPP.ShouldUseGlobalFocusColor())
+
+	cb.OnChange = function(self, value)
+		GLAPP.SetUseGlobalFocusColor(value)
+	end
+
+	local cm = vgui.Create("DColorMixer")
+	cm:SetLabel("set_global_focus_color")
+	cm:SetTall(120)
+	cm:SetAlphaBar(false)
+	cm:SetPalette(false)
+	cm:SetColor(GLAPP.GetFocusColor())
+
+	cm.ValueChanged = function(self, color)
+		GLAPP.SetFocusColor(color)
+	end
+
+	form:AddItem(cm)
+
+	form:Help("help_scale_factor")
+
+	local ns = form:NumSlider("set_scale_factor", nil, 0.1, 3, 1)
+	if ns.Label then
+		ns.Label:SetWrap(true)
+	end
+
+	ns:SetValue(GLAPP.GetGlobalScale())
+
+	ns.OnValueChanged = function(self, value)
+		GLAPP.SetGlobalScale(value)
+	end
+
+	form:Dock(TOP)
+end
+
 local function PopulateHUDSwitcherPanel(parent)
 	local form = vgui.Create("DFormTTT2", parent)
 	form:SetName("set_title_hud_select")
@@ -71,23 +114,18 @@ local function PopulateVSkinPanel(parent)
 	form:Dock(TOP)
 end
 
+local function PopulateTargetIDPanel(parent)
+	local form = vgui.Create("DFormTTT2", parent)
+	form:SetName("set_title_targetid")
+
+	form:CheckBox("set_minimal_id", "ttt_minimal_targetid")
+
+	form:Dock(TOP)
+end
+
 local function PopulateCrosshairPanel(parent)
 	local form = vgui.Create("DFormTTT2", parent)
 	form:SetName("set_title_cross")
-
-	form:CheckBox("set_cross_color_enable", "ttt_crosshair_color_enable")
-
-	local cm = vgui.Create("DColorMixer")
-	cm:SetLabel("set_cross_color")
-	cm:SetTall(120)
-	cm:SetAlphaBar(false)
-	cm:SetPalette(false)
-	cm:SetColor(Color(30, 160, 160, 255))
-	cm:SetConVarR("ttt_crosshair_color_r")
-	cm:SetConVarG("ttt_crosshair_color_g")
-	cm:SetConVarB("ttt_crosshair_color_b")
-
-	form:AddItem(cm)
 
 	form:CheckBox("set_cross_gap_enable", "ttt_crosshair_gap_enable")
 
@@ -127,7 +165,6 @@ local function PopulateCrosshairPanel(parent)
 	end
 
 	form:CheckBox("set_cross_disable", "ttt_disable_crosshair")
-	form:CheckBox("set_minimal_id", "ttt_minimal_targetid")
 	form:CheckBox("set_cross_static_enable", "ttt_crosshair_static")
 	form:CheckBox("set_cross_dot_enable", "ttt_crosshair_dot")
 	form:CheckBox("set_cross_weaponscale_enable", "ttt_crosshair_weaponscale")
@@ -247,6 +284,7 @@ HELPSCRN.subPopulate["ttt2_appearance"] = function(helpData, id)
 	local generalData = helpData:PopulateSubMenu(id .. "_general")
 
 	generalData:SetTitle("submenu_appearance_general_title")
+	generalData:PopulatePanel(PopulateGeneralPanel)
 
 	-- HUD switcher
 	local hudData = helpData:PopulateSubMenu(id .. "_hud_switcher")
@@ -292,6 +330,7 @@ HELPSCRN.subPopulate["ttt2_appearance"] = function(helpData, id)
 	local targetData = helpData:PopulateSubMenu(id .. "_target_id")
 
 	targetData:SetTitle("submenu_appearance_targetid_title")
+	targetData:PopulatePanel(PopulateTargetIDPanel)
 
 	-- crosshair
 	local crosshairData = helpData:PopulateSubMenu(id .. "_crosshair")

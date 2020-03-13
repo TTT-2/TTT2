@@ -119,6 +119,9 @@ function GM:Initialize()
 
 	VSKIN.SelectVSkin()
 
+	-- initialize scale callbacks
+	GLAPP.RegisterScaleChangeCallback(HUDManager.ResetHUD)
+
 	LANG.Init()
 
 	self.BaseClass:Initialize()

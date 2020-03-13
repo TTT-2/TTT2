@@ -220,4 +220,15 @@ function GM:SetupMove(ply, mv, cmd)
 	net.SendToServer()
 
 	hook.Run("TTT2PlayerReady", ply)
+
+	-- check if a resolution change happened while
+	-- the gamemode was inactive
+	oldScrW = GLAPP.GetLastWidth()
+	oldScrH = GLAPP.GetLastHeight()
+	scrW = ScrW()
+	scrH = ScrH()
+
+	if oldScrH ~= scrH or oldScrW ~= scrW then
+		hook.Run("TTT2ChangedResolution", oldScrW, oldScrH, scrW, scrH)
+	end
 end

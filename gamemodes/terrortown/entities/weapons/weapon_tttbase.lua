@@ -212,19 +212,17 @@ if CLIENT then
 			surface.DrawRect(x - offset - outline, y + gap - outline, thickness + outline * 2, length - gap + outline * 2)
 		end
 
-		if enable_color_crosshair:GetBool() then
-			surface.SetDrawColor(crosshair_color_r:GetInt() * bright, crosshair_color_g:GetInt() * bright, crosshair_color_b:GetInt() * bright, 255 * alpha)
-		else
-			-- somehow it seems this can be called before my player metatable
-			-- additions have loaded
-			if client.GetSubRoleData then
-				local col = client:GetRoleColor()
+		-- set up crosshair color
+		local color = client.GetSubRoleData and client:GetRoleColor() or COLOR_WHITE
 
-				surface.SetDrawColor(col.r * bright, col.g * bright, col.b * bright, 255 * alpha)
-			else
-				surface.SetDrawColor(0, 255 * bright, 0, 255 * alpha)
-			end
-		end
+		color = GLAPP.ValidateFocusColor(color)
+
+		surface.SetDrawColor(
+			color.r * bright,
+			color.g * bright,
+			color.b * bright,
+			255 * alpha
+		)
 
 		-- draw crosshair dot
 		if enable_dot_crosshair:GetBool() then

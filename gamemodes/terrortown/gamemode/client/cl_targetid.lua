@@ -316,7 +316,11 @@ function GM:HUDDrawTargetID()
 
 	-- draws an outline around the entity if defined
 	if params.drawOutline and cv_draw_halo:GetBool() then
-		outline.Add(data.ent, params.outlineColor, OUTLINE_MODE_VISIBLE)
+		outline.Add(
+			data.ent,
+			GLAPP.ValidateFocusColor(params.outlineColor),
+			OUTLINE_MODE_VISIBLE
+		)
 	end
 
 	if not params.drawInfo then return end

@@ -101,10 +101,7 @@ function GM:HUDPaint()
 	local changed = false
 
 	if client.oldScrW and client.oldScrW ~= scrW and client.oldScrH and client.oldScrH ~= scrH then
-		local hud = huds.GetStored(HUDManager.GetHUD())
-		if hud then
-			hud:Reset()
-		end
+		hook.Run("TTT2ChangedResolution", client.oldScrW, client.oldScrH, scrW, scrH)
 
 		changed = true
 	end
@@ -133,6 +130,23 @@ function GM:HUDPaint()
 	if hook.Call("HUDShouldDraw", GAMEMODE, "TTTVoice") then
 		VOICE.Draw(client)
 	end
+end
+
+---
+-- A hook that is called once the resolution is changed.
+-- Additionally it is called directly after @{GM:TTT2PlayerReady}
+-- if the resolution was changed without the gamemode
+-- being loaded
+-- @param number oldScrW The old screen width
+-- @param number oldScrH The old screen height
+-- @param number scrW The new screen width
+-- @param number scrH The new screen height
+-- @hook
+-- @ream client
+function GM:TTT2ChangedResolution(oldScrW, oldScrH, scrW, scrH)
+	-- resolution has changed, update resolution in GLAPP
+	-- to handle dynamic resolution changes
+	GLAPP.UpdateResolution(scrW, scrH)
 end
 
 -- Hide the standard HUD stuff
@@ -206,7 +220,8 @@ end
 
 ---
 -- Sets the @{HUD} (if possible)
--- @note This will fail if the @{HUD} is not available or restricted by the server
+-- @note This will fail if the @{HUD} is not available or is 
+-- restricted by the server
 -- @param string name
 -- @realm client
 function HUDManager.SetHUD(name)
@@ -216,6 +231,17 @@ function HUDManager.SetHUD(name)
 	net.WriteString(name or currentHUD)
 	net.WriteString(currentHUD)
 	net.SendToServer()
+end
+
+---
+-- Resets the current HUD if possible
+-- @realm client
+function HUDManager.ResetHUD()
+	local hud = huds.GetStored(HUDManager.GetHUD())
+
+	if not hud then return end
+
+	hud:Reset()
 end
 
 ---
