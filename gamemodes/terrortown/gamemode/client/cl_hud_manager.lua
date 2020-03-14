@@ -1,8 +1,6 @@
 ---
 -- @module HUDManager
 
-ttt_include("vgui__cl_hudswitcher")
-
 local current_hud_cvar = CreateClientConVar("ttt2_current_hud", HUDManager.GetModelValue("defaultHUD") or "pure_skin", true, true)
 local current_hud_table = nil
 
@@ -32,46 +30,6 @@ net.Receive("TTT2UpdateHUDManagerRestrictedHUDsAttribute", function()
 		HUDManager.SetModelValue("restrictedHUDs", tab)
 	end
 end)
-
----
--- (Re)opens the HUDSwitcher
--- @realm client
-function HUDManager.ShowHUDSwitcher()
-	local client = LocalPlayer()
-
-	if IsValid(client.hudswitcher) then
-		client.hudswitcher.forceClosing = true
-
-		client.hudswitcher:Remove()
-	end
-
-	client.hudswitcher = vgui.Create("HUDSwitcher")
-
-	if client.hudswitcherSettingsF1 then
-		client.settingsFrame = client.hudswitcher
-	end
-
-	client.hudswitcher:MakePopup()
-end
-
----
--- Hides the HUDSwitcher
--- @realm client
-function HUDManager.HideHUDSwitcher()
-	local client = LocalPlayer()
-
-	if IsValid(client.hudswitcher) then
-		-- this will differentiate between user closed and closed by this method,
-		-- so that this method is called when the user closed the frame by clicking on the X button
-		client.hudswitcher.forceClosing = true
-
-		client.hudswitcher:Remove()
-	end
-
-	if not client.settingsFrameForceClose and not HUDEditor.IsEditing then
-		HELPSCRN:Show()
-	end
-end
 
 ---
 -- Draws the current selected HUD
@@ -189,7 +147,9 @@ local function UpdateHUD(name)
 	HUDEditor.StopEditHUD()
 
 	-- save the old HUDs values
-	if current_hud_table then current_hud_table:SaveData() end
+	if current_hud_table then
+		current_hud_table:SaveData()
+	end
 
 	current_hud_cvar:SetString(name)
 
@@ -220,9 +180,9 @@ end
 
 ---
 -- Sets the @{HUD} (if possible)
--- @note This will fail if the @{HUD} is not available or is 
+-- @note This will fail if the @{HUD} is not available or is
 -- restricted by the server
--- @param string name
+-- @param string name The name of the HUD
 -- @realm client
 function HUDManager.SetHUD(name)
 	local currentHUD = HUDManager.GetHUD()

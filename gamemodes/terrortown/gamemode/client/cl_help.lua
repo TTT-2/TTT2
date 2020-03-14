@@ -102,34 +102,43 @@ function HELPSCRN:ShowMainMenu()
 	end
 end
 
-local function BuildContentArea(parent, menuData)
-	parent:Clear()
+function HELPSCRN:GetOpenMenu()
+	return helpMenuOpen and self.menuData.id
+end
 
-	local w2, h2 = parent:GetSize()
-	local _, p1, _, p2 = parent:GetDockPadding()
+function HELPSCRN:SetupContentArea(parent, menuData)
+	self.parent = parent
+	self.menuData = menuData
+end
+
+function HELPSCRN:BuildContentArea()
+	self.parent:Clear()
+
+	local w2, h2 = self.parent:GetSize()
+	local _, p1, _, p2 = self.parent:GetDockPadding()
 
 	-- CALCULATE SIZE BASED ON EXISTENCE OF BUTTON PANEL
-	if isfunction(menuData.populateButtonFn) then
+	if isfunction(self.menuData.populateButtonFn) then
 		h2 = h2 - heightButtonPanel
 	end
 
 	-- ADD CONTENT BOX AND CONTENT
-	local contentAreaScroll = vgui.Create("DScrollPanel", parent)
+	local contentAreaScroll = vgui.Create("DScrollPanel", self.parent)
 	contentAreaScroll:SetVerticalScrollbarEnabled(true)
 	contentAreaScroll:SetSize(w2, h2 - p1 - p2)
 	contentAreaScroll:Dock(TOP)
 
-	if isfunction(menuData.populateFn) then
-		menuData.populateFn(contentAreaScroll)
+	if isfunction(self.menuData.populateFn) then
+		self.menuData.populateFn(contentAreaScroll)
 	end
 
 	-- ADD BUTTON BOX AND BUTTONS
-	if isfunction(menuData.populateButtonFn) then
-		local buttonArea = vgui.Create("DButtonPanelTTT2", parent)
+	if isfunction(self.menuData.populateButtonFn) then
+		local buttonArea = vgui.Create("DButtonPanelTTT2", self.parent)
 		buttonArea:SetSize(w2, heightButtonPanel)
 		buttonArea:Dock(BOTTOM)
 
-		menuData.populateButtonFn(buttonArea)
+		self.menuData.populateButtonFn(buttonArea)
 	end
 end
 
@@ -206,7 +215,8 @@ function HELPSCRN:ShowSubMenu(data)
 		settingsButton:SetTitle(subData.title or subData.id)
 
 		settingsButton.DoClick = function(slf)
-			BuildContentArea(contentArea, menuTbl[i])
+			HELPSCRN:SetupContentArea(contentArea, menuTbl[i])
+			HELPSCRN:BuildContentArea()
 
 			-- handle the set/unset of active buttons for the draw process
 			lastActive:SetActive(false)
@@ -218,7 +228,8 @@ function HELPSCRN:ShowSubMenu(data)
 
 	-- autoselect first entry
 	if #menuTbl >= 1 then
-		BuildContentArea(contentArea, menuTbl[1])
+		HELPSCRN:SetupContentArea(contentArea, menuTbl[1])
+		HELPSCRN:BuildContentArea()
 
 		-- handle the set of active buttons for the draw process
 		navAreaScrollGrid:GetChild(0):SetActive()

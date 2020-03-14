@@ -66,10 +66,16 @@ function VHDL.ClearFrame(w, h, title)
 
 	VHDL.menuCache.frame:Clear()
 	VHDL.menuCache.frame:InitButtons()
+	VHDL.menuCache.frame:ShowBackButton(false)
 
-	VHDL.menuCache.frame:SetSize(w or oldW, h or oldH)
-	VHDL.menuCache.frame:Center()
-	VHDL.menuCache.frame:SetTitle(title or oldTitle)
+	if w ~= oldW or h ~= oldH then
+		VHDL.menuCache.frame:SetSize(w or oldW, h or oldH)
+		VHDL.menuCache.frame:Center()
+	end
+
+	if title ~= oldTitle then
+		VHDL.menuCache.frame:SetTitle(title or oldTitle)
+	end
 
 	VHDL.callback.frame = {}
 
@@ -174,6 +180,8 @@ local function InternalUpdateVSkinSetting(name, panel)
 		panel:InvalidateLayout()
 	elseif name == "skin" then
 		panel:InvalidateLayout()
+	elseif name == "general_rebuild" then
+		panel:InvalidateLayout()
 	end
 end
 
@@ -191,6 +199,13 @@ function VHDL.UpdateVSkinSetting(name)
 	if IsValid(VHDL.menuCache.hidden) then
 		InternalUpdateVSkinSetting(name, VHDL.menuCache.hidden)
 	end
+end
+
+---
+-- Rebuilds the whole menu without a specific changed settings
+-- @realm client
+function VHDL.Rebuild()
+	VHDL.UpdateVSkinSetting("general_rebuild")
 end
 
 ---

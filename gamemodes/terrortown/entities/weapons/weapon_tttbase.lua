@@ -159,10 +159,6 @@ if CLIENT then
 	local crosshair_brightness = CreateClientConVar("ttt_crosshair_brightness", "1.0", true)
 	local crosshair_size = CreateClientConVar("ttt_crosshair_size", "1.0", true)
 	local disable_crosshair = CreateClientConVar("ttt_disable_crosshair", "0", true)
-	local enable_color_crosshair = CreateClientConVar("ttt_crosshair_color_enable", "0", true)
-	local crosshair_color_r = CreateClientConVar("ttt_crosshair_color_r", "30", true)
-	local crosshair_color_g = CreateClientConVar("ttt_crosshair_color_g", "160", true)
-	local crosshair_color_b = CreateClientConVar("ttt_crosshair_color_b", "160", true)
 
 	local enable_gap_crosshair = CreateClientConVar("ttt_crosshair_gap_enable", "0", true)
 	local crosshair_gap = CreateClientConVar("ttt_crosshair_gap", "0", true)

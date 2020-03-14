@@ -40,16 +40,6 @@ function HUD:GetSavingKeys()
 				slf:SaveData()
 			end
 		}
-		savingKeys.scale = {
-			typ = "number",
-			desc = LANG.GetTranslation("f1_settings_hudswitcher_desc_hud_scale"),
-			OnChange = function(slf, val)
-				slf.scale = val
-
-				slf:Reset()
-				slf:SaveData()
-			end
-		}
 	end
 
 	return table.Copy(savingKeys)

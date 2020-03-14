@@ -73,7 +73,6 @@ TTTFiles = {
 	-- vgui client files
 	vgui__cl_coloredbox = {file = "vgui/cl_coloredbox.lua", on = "client"},
 	vgui__cl_droleimage = {file = "vgui/cl_droleimage.lua", on = "client"},
-	vgui__cl_hudswitcher = {file = "vgui/cl_hudswitcher.lua", on = "client"},
 	vgui__cl_progressbar = {file = "vgui/cl_progressbar.lua", on = "client"},
 	vgui__cl_sb_info = {file = "vgui/cl_sb_info.lua", on = "client"},
 	vgui__cl_sb_main = {file = "vgui/cl_sb_main.lua", on = "client"},

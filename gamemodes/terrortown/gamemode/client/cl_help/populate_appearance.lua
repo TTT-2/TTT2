@@ -38,9 +38,108 @@ local function PopulateGeneralPanel(parent)
 
 	ns.OnValueChanged = function(self, value)
 		GLAPP.SetGlobalScale(value)
+
+		-- reset to make sure it is only in valid steps
+		self:SetValue(GLAPP.GetGlobalScale())
 	end
 
 	form:Dock(TOP)
+end
+
+local function PopulateHUDSwitcherPanelSettings(parent, currentHUD)
+	parent:Clear()
+
+	if not currentHUD.GetSavingKeys then return end
+
+	for key, data in pairs(currentHUD:GetSavingKeys() or {}) do
+		local el
+		local container
+
+		if data.typ == "color" then
+			el = vgui.Create("DColorMixer")
+			el:SetSize(267, 186)
+
+			if currentHUD[key] then
+				el:SetColor(currentHUD[key])
+			end
+
+			function el:ValueChanged(col)
+				currentHUD[key] = col
+
+				if isfunction(data.OnChange) then
+					data.OnChange(currentHUD, col)
+				end
+			end
+		elseif data.typ == "number" then
+			el = vgui.Create("DNumSliderWang")
+			el:SetSize(600, 20)
+			el:SetMin(0.1)
+			el:SetMax(4.0)
+			el:SetDecimals(1)
+
+			if currentHUD[key] then
+				el:SetDefaultValue(currentHUD[key])
+				el:SetValue(math.Round(currentHUD[key], 1))
+			end
+
+			function el:OnValueChanged(val)
+				val = math.Round(val, 1)
+
+				if val ~= math.Round(currentHUD[key], 1) then
+					if isfunction(data.OnChange) then
+						data.OnChange(currentHUD, val)
+					end
+
+					currentHUD[key] = val
+				end
+			end
+		end
+
+		if el then
+			local add = false
+
+			if not container then
+				container = vgui.Create("DPanel")
+				add = true
+			end
+
+			local label = vgui.Create("DLabel", container)
+			label:SetText((data.desc or key) .. ":")
+			label:SetTextColor(COLOR_BLACK)
+			label:SetContentAlignment(5) -- center
+			label:SizeToContents()
+			label:DockMargin(20, 0, 0, 0)
+			label:DockPadding(10, 0, 10, 0)
+			label:Dock(LEFT)
+
+			if add then
+				el:SetParent(container)
+			end
+
+			el:DockPadding(10, 0, 10, 0)
+			el:DockMargin(20, 0, 0, 0)
+			el:Dock(LEFT)
+
+			local w, h = el:GetSize()
+			local lw, lh = label:GetSize()
+
+			w = w + 10
+			h = h + 10
+			lw = lw + 10
+			lh = lh + 10
+
+			if w < lw then
+				w = lw
+			end
+
+			h = h + lh
+
+			container:SetSize(w, h)
+			container:SetParent(parent)
+			container:DockPadding(0, 10, 0, 10)
+			container:Dock(TOP)
+		end
+	end
 end
 
 local function PopulateHUDSwitcherPanel(parent)
@@ -48,13 +147,14 @@ local function PopulateHUDSwitcherPanel(parent)
 	form:SetName("set_title_hud_select")
 
 	local currentHUDName = HUDManager.GetHUD()
-	local huds = huds.GetList()
+	local currentHUD = huds.GetStored(currentHUDName)
+	local hudList = huds.GetList()
 	local restrictedHUDs = HUDManager.GetModelValue("restrictedHUDs")
 
 	local combobox = form:ComboBox("select_hud")
 
-	for i = 1, #huds do
-		local hud = huds[i]
+	for i = 1, #hudList do
+		local hud = hudList[i]
 
 		-- do not add HUD to the selection list if restricted
 		if table.HasValue(restrictedHUDs, hud.id) then continue end
@@ -75,6 +175,8 @@ local function PopulateHUDSwitcherPanel(parent)
 	local form2 = vgui.Create("DFormTTT2", parent)
 	form2:SetName("set_title_hud_customize")
 
+	PopulateHUDSwitcherPanelSettings(form2, currentHUD)
+
 	form2:Dock(TOP)
 
 	-- REGISTER UNHIDE FUNCTION TO STOP HUD EDITOR
@@ -82,6 +184,14 @@ local function PopulateHUDSwitcherPanel(parent)
 		HUDEditor.StopEditHUD()
 	end)
 end
+
+hook.Add("TTT2HUDUpdated", "UpdateHUDSwitcherData", function(name)
+	if HELPSCRN:GetOpenMenu() ~= "ttt2_appearance_hud_switcher" then return end
+
+	-- rebuild the content area so that data is refreshed
+	-- based on the newly selected HUD
+	HELPSCRN:BuildContentArea()
+end)
 
 local function PopulateVSkinPanel(parent)
 	local form = vgui.Create("DFormTTT2", parent)
