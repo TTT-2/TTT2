@@ -7,13 +7,15 @@ local table = table
 
 DEFINE_BASECLASS "weapon_tttbase"
 
-SWEP.HoldType = "normal"
+SWEP.HoldType = "pistol"
 
 if CLIENT then
 	SWEP.PrintName = "dna_name"
 	SWEP.Slot = 8
 
-	SWEP.ViewModelFOV = 10
+	SWEP.ViewModelFOV = 54
+	SWEP.ViewModelFlip = false
+	SWEP.UseHands = true
 	SWEP.DrawCrosshair = false
 
 	SWEP.EquipMenuData = {
@@ -26,8 +28,8 @@ end
 
 SWEP.Base = "weapon_tttbase"
 
-SWEP.ViewModel = "models/weapons/v_crowbar.mdl"
-SWEP.WorldModel = "models/props_lab/huladoll.mdl"
+SWEP.ViewModel = "models/weapons/v_ttt2_dna_scanner.mdl"
+SWEP.WorldModel = "models/weapons/w_ttt2_dna_scanner.mdl"
 
 SWEP.Primary.ClipSize = -1
 SWEP.Primary.DefaultClip = -1
@@ -50,6 +52,7 @@ SWEP.NoSights = true
 SWEP.Range = 175
 SWEP.ItemSamples = {}
 SWEP.NowRepeating = nil
+SWEP.success = false
 
 local MAX_ITEM = 30
 SWEP.MaxItemSamples = MAX_ITEM
@@ -63,6 +66,9 @@ local SAMPLE_ITEM   = 2
 
 local cv_thickness
 
+local beep_success = Sound("buttons/blip2.wav")
+local beep_miss = Sound("player/suit_denydevice.wav")
+
 AccessorFuncDT(SWEP, "charge", "Charge")
 AccessorFuncDT(SWEP, "last_scanned", "LastScanned")
 
@@ -74,6 +80,29 @@ else
 
 		return IsValid(ply) and ply:GetInfoNum("ttt_dna_scan_repeat", 1) == 1
 	end
+end
+
+local customMaterial
+local exampleRT
+if CLIENT then
+	-- Create render target
+	exampleRT = GetRenderTarget( "example_rt", 1024, 1024 )
+
+		-- Draw to the render target
+	render.PushRenderTarget( exampleRT )
+	cam.Start2D()
+		-- Draw background
+		surface.SetDrawColor( 0, 0, 0, 255 )
+		surface.DrawRect( 0, 0, 1024, 1024 )
+
+		-- Draw some foreground stuff
+		surface.SetDrawColor( 255, 0, 0, 255 )
+		surface.DrawRect( 0, 0, 256, 256 )
+	cam.End2D()
+	render.PopRenderTarget()
+
+	customMaterial = Material("models/ttt2_dna_scanner/screen")
+	customMaterial:SetTexture( "$basetexture", exampleRT )
 end
 
 SWEP.NextCharge = 0
@@ -97,10 +126,10 @@ function SWEP:Initialize()
 	return self.BaseClass.Initialize(self)
 end
 
-local beep_miss = Sound("player/suit_denydevice.wav")
-
 function SWEP:PrimaryAttack()
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
+
+	self:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
 
 	local owner = self:GetOwner()
 
@@ -122,25 +151,33 @@ function SWEP:PrimaryAttack()
 	owner:LagCompensation(false)
 
 	if not IsValid(ent) or ent:IsPlayer() then
-		if CLIENT then
-			owner:EmitSound(beep_miss)
-		end
-
+		self.success = false
+		owner:EmitSound(beep_miss)
 		return
 	end
+	self.success = true
 
 	if CLIENT then return end
 
+	self.success = false
 	if ent:GetClass() == "prop_ragdoll" and ent.killer_sample then
 		if CORPSE.GetFound(ent, false) then
 			self:GatherRagdollSample(ent)
+			self.success = true
 		else
 			self:Report("dna_identify")
 		end
 	elseif ent.fingerprints and #ent.fingerprints > 0 then
 		self:GatherObjectSample(ent)
+		self.success = true
 	else
 		self:Report("dna_notfound")
+	end
+
+	if self.success then
+		owner:EmitSound(beep_success)
+	else
+		owner:EmitSound(beep_miss)
 	end
 end
 
@@ -763,8 +800,6 @@ if CLIENT then
 	end
 	net.Receive("TTT_ShowPrints", RecvPrints)
 
-	local beep_success = Sound("buttons/blip2.wav")
-
 	local function RecvScan()
 		local clear = net.ReadBit() == 1
 
@@ -790,6 +825,30 @@ if CLIENT then
 		if not IsValid(printspanel) then return end
 
 		printspanel:Close()
+	end
+
+	function SWEP:PreDrawViewModel(vm, weapon, ply)
+		if self.success then
+			-- Draw to the render target
+			render.PushRenderTarget( exampleRT )
+			render.Clear(200, 200, 200, 255)
+			cam.Start2D()
+				-- Draw some foreground stuff
+				surface.SetDrawColor( 0, 255, 0, 255 )
+				surface.DrawRect( 0, 0, 256, 256 )
+			cam.End2D()
+			render.PopRenderTarget()
+		else
+			-- Draw to the render target
+			render.PushRenderTarget( exampleRT )
+			render.Clear(200, 200, 200, 255)
+			cam.Start2D()
+				-- Draw some foreground stuff
+				surface.SetDrawColor( 255, 0, 0, 255 )
+				surface.DrawRect( 0, 0, 256, 256 )
+			cam.End2D()
+			render.PopRenderTarget()
+		end
 	end
 
 else -- SERVER
@@ -847,17 +906,8 @@ function SWEP:Deploy()
 	local owner = self:GetOwner()
 
 	if SERVER and IsValid(owner) then
-		owner:DrawViewModel(false)
 		owner.scanner_weapon = self
 	end
 
 	return true
-end
-
-if CLIENT then
-	function SWEP:DrawWorldModel()
-		if IsValid(self:GetOwner()) then return end
-
-		self:DrawModel()
-	end
 end
