@@ -33,13 +33,7 @@ function PANEL:IsDown()
 end
 
 function PANEL:Paint(w, h)
-	-- I'm a bit lost here right now. For some reason the derma hook
-	-- does not work here, even though this code is identical to
-	-- the other buttons. Therefore I use a classical hook here
-	-- because that works. It breaks the purpose of skins though.
-	-- But it is the best solution for now, feel free to solve.
-	hook.Call("PaintButtonTTT2", SKINTTT2, self, w, h)
-	--derma.SkinHook("Paint", "ButtonTTT2", self, w, h)
+	derma.SkinHook("Paint", "ButtonTTT2", self, w, h)
 
 	return false
 end

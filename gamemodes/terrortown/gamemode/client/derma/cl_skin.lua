@@ -1,11 +1,6 @@
 local materialClose = Material("vgui/ttt/derma/icon_close")
 local materialBack = Material("vgui/ttt/derma/icon_back")
 
--- The skin variable should be local. Hovever the problem with
--- the skinhook forces me to use a global variable since the
--- functions have to be called with a normal hook.
-SKINTTT2 = {}
-
 local SKIN = {}
 SKIN.Name = "ttt2_default"
 
@@ -479,7 +474,6 @@ function SKIN:PaintButtonTTT2(panel, w, h)
 
 	return DrawButton(w, h, panel, sizeBorder, colorAccentDark, colorAccent, colorText)
 end
-SKINTTT2.PaintButtonTTT2 = SKIN.PaintButtonTTT2 -- weird derma skin hook workaround
 
 -- REGISTER DERMA SKIN
 derma.DefineSkin(SKIN.Name, "TTT2 default skin for all vgui elements", SKIN)
