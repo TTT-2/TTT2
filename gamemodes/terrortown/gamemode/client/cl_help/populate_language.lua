@@ -4,8 +4,8 @@ local function PopulateLanguagePanel(parent)
 	local form = vgui.Create("DFormTTT2", parent)
 	form:SetName("set_title_lang")
 
-	local dlang = vgui.Create("DComboBox", form)
-	dlang:SetConVar("ttt_language")
+	local dlang = form:ComboBox("set_lang", "ttt_language")
+
 	dlang:AddChoice("Server default", "auto")
 
 	for _, lang in pairs(LANG.GetLanguages()) do
@@ -17,9 +17,6 @@ local function PopulateLanguagePanel(parent)
 
 		VHDL.UpdateVSkinSetting("language")
 	end
-
-	form:Help("set_lang")
-	form:AddItem(dlang)
 
 	form:Dock(TOP)
 end

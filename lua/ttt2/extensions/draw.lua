@@ -88,25 +88,20 @@ function draw.OutlinedCircle(x, y, r, color)
 	surface.DrawCircle(x, y, r, color.r, color.g, color.b, color.a)
 end
 
+---
+-- A function to draws a circle
+-- @param number x The center x position to start the circle
+-- @param number y The center y position to start the circle
+-- @param number r The radius of the circle
+-- @param [default=COLOR_WHITE] Color color The color of the circle
+-- @2D
+-- @realm client
 function draw.Circle(x, y, r, color)
 	draw.NoTexture()
-	surface.SetDrawColor(color)
+	surface.SetDrawColor(color or COLOR_WHITE)
 
 	for i = 1, 90 do
 		surface.DrawTexturedRectRotated(x, y, r, r, i)
-	end
-end
-
-function draw.CircleCustom(x, y, w, h, ang, color, x0, y0)
-	for i = 0, ang do
-		local c = math.cos(math.rad(i))
-		local s = math.sin(math.rad(i))
-		local newx = y0 * s - x0 * c
-		local newy = y0 * c + x0 * s
-
-		draw.NoTexture()
-		surface.SetDrawColor(color)
-		surface.DrawTexturedRectRotated(x + newx,y + newy,w,h,i)
 	end
 end
 
