@@ -1,5 +1,7 @@
 local materialClose = Material("vgui/ttt/derma/icon_close")
 local materialBack = Material("vgui/ttt/derma/icon_back")
+local materialCollapseOpened = Material("vgui/ttt/derma/icon_collapse_opened")
+local materialCollapseClosed = Material("vgui/ttt/derma/icon_collapse_closed")
 
 local SKIN = {}
 SKIN.Name = "ttt2_default"
@@ -13,6 +15,9 @@ surface.CreateAdvancedFont("DermaTTT2MenuButtonTitle", {font = "Trebuchet24", si
 surface.CreateAdvancedFont("DermaTTT2MenuButtonDescription", {font = "Trebuchet24", size = 14, weight = 300})
 surface.CreateAdvancedFont("DermaTTT2SubMenuButtonTitle", {font = "Trebuchet24", size = 18, weight = 600})
 surface.CreateAdvancedFont("DermaTTT2Button", {font = "Trebuchet24", size = 14, weight = 600})
+surface.CreateAdvancedFont("DermaTTT2CatHeader", {font = "Trebuchet24", size = 16, weight = 900})
+surface.CreateAdvancedFont("DermaTTT2Text", {font = "Trebuchet24", size = 16, weight = 300})
+surface.CreateAdvancedFont("DermaTTT2TextLarge", {font = "Trebuchet24", size = 18, weight = 300})
 
 --[[---------------------------------------------------------
 	Frame
@@ -232,22 +237,22 @@ function SKIN:PaintButtonUp(panel, w, h)
 end
 
 local function DrawMenuButton(w, h, panel, colorOutline, colorIcon, colorText, colorDescription, shift)
-	local padding_text = 10
-	local padding_icon = 25
+	local paddingText = 10
+	local paddingIcon = 25
 
 	draw.OutlinedBox(0, 0, w, h, 1, colorOutline)
-	draw.FilteredTexture(padding_icon, padding_icon + shift, h - 2 * padding_icon, h - 2 * padding_icon, panel:GetImage(), colorIcon.a, colorIcon)
+	draw.FilteredTexture(paddingIcon, paddingIcon + shift, h - 2 * paddingIcon, h - 2 * paddingIcon, panel:GetImage(), colorIcon.a, colorIcon)
 	draw.SimpleText(
 		TryT(panel:GetTitle()),
 		panel:GetTitleFont(),
 		h,
-		padding_text + shift,
+		paddingText + shift,
 		colorText,
 		TEXT_ALIGN_LEFT,
 		TEXT_ALIGN_TOP
 	)
 
-	local desc_wrapped = draw.GetWrappedText(TryT(panel:GetDescription()), w - h - 2 * padding_text, panel:GetDescriptionFont())
+	local desc_wrapped = draw.GetWrappedText(TryT(panel:GetDescription()), w - h - 2 * paddingText, panel:GetDescriptionFont())
 
 	local line_pos = 35
 	for i = 1, #desc_wrapped do
@@ -255,7 +260,7 @@ local function DrawMenuButton(w, h, panel, colorOutline, colorIcon, colorText, c
 			desc_wrapped[i],
 			panel:GetDescriptionFont(),
 			h,
-			line_pos + padding_text + shift,
+			line_pos + paddingText + shift,
 			colorDescription,
 			TEXT_ALIGN_LEFT,
 			TEXT_ALIGN_TOP
@@ -352,44 +357,59 @@ end
 --[[---------------------------------------------------------
 	CheckBox
 -----------------------------------------------------------]]
-local function DrawCheckBox(w, h, panel, colorOutline, colorBox, colorCenter)
-	draw.RoundedBox(4, 0, 0, w, h, colorOutline)
-	draw.RoundedBox(4, 1, 1, w - 2, h - 2, colorBox)
-	draw.RoundedBox(2, 4, 4, w - 8, h - 8, colorCenter)
+local function DrawCheckBox(w, h, offset, panel, colorBox, colorCenter)
+	draw.RoundedBox(4, 0, 0, w, h, colorBox)
+	draw.RoundedBox(4, offset + 3, 3, h - 6, h - 6, colorCenter)
 end
 
 function SKIN:PaintCheckBox(panel, w, h)
 	local colorBackground = VSKIN.GetBackgroundColor()
-	local colorDefault = util.GetDefaultColor(colorBackground)
+
+	local colorBox = util.GetChangedColor(colorBackground, 15)
+
 	local colorAccent = VSKIN.GetAccentColor()
+	local colorAccentHover = ColorAlpha(util.GetHoverColor(colorAccent), 200)
 
 	if panel:GetChecked() then
-		local colorOutline = util.GetChangedColor(colorDefault, 50)
-		local colorBox = colorBackground
-		local colorCenter = colorAccent
-		local colorCenterHover = ColorAlpha(util.GetHoverColor(colorCenter), 200)
-
 		if panel:GetDisabled() then
 			self.tex.CheckboxD_Checked( 0, 0, w, h )
 		elseif panel.Hovered then
-			DrawCheckBox(w, h, panel, colorOutline, colorBox, colorCenterHover)
+			DrawCheckBox(w, h, w - h, panel, colorBox, colorAccentHover)
 		else
-			DrawCheckBox(w, h, panel, colorOutline, colorBox, colorCenter)
+			DrawCheckBox(w, h, w - h, panel, colorBox, colorAccent)
 		end
 	else
-		local colorOutline = util.GetChangedColor(colorDefault, 50)
-		local colorBox = colorBackground
-		local colorCenter = Color(0, 0, 0, 0)
-		local colorCenterHover = ColorAlpha(util.GetHoverColor(colorAccent), 100)
+		local colorCenter = util.GetChangedColor(colorBackground, 150)
 
 		if panel:GetDisabled() then
 			self.tex.CheckboxD( 0, 0, w, h )
 		elseif panel.Hovered then
-			DrawCheckBox(w, h, panel, colorOutline, colorBox, colorCenterHover)
+			DrawCheckBox(w, h, 0, panel, colorBox, colorAccentHover)
 		else
-			DrawCheckBox(w, h, panel, colorOutline, colorBox, colorCenter)
+			DrawCheckBox(w, h, 0, panel, colorBox, colorCenter)
 		end
 	end
+end
+
+function SKIN:PaintCheckBoxLabel(panel, w, h)
+	local colorBackground = VSKIN.GetBackgroundColor()
+
+	local colorBox = util.GetChangedColor(colorBackground, 150)
+	local colorText = util.GetDefaultColor(colorBox)
+
+	local sizeCornerRadius = VSKIN.GetCornerRadius()
+
+	draw.RoundedBox(sizeCornerRadius, 0, 0, w, h, colorBox)
+
+	draw.SimpleText(
+		TryT(panel:GetText()),
+		panel:GetFont(),
+		panel:GetTextPosition(),
+		0.5 * h,
+		colorText,
+		TEXT_ALIGN_LEFT,
+		TEXT_ALIGN_CENTER
+	)
 end
 
 --[[---------------------------------------------------------
@@ -406,16 +426,28 @@ function SKIN:PaintCollapsibleCategoryTTT2(panel, w, h)
 end
 
 function SKIN:PaintCategoryHeaderTTT2(panel, w, h)
+	local paddingX = 10
+	local paddingY = 10
+
 	local colorBackground = VSKIN.GetBackgroundColor()
 
-	local colorText = util.GetDefaultColor(colorBackground)
+	local colorLine = util.GetChangedColor(colorBackground, 50)
+
+	local colorText = util.GetChangedColor(util.GetDefaultColor(colorBackground), 50)
 
 	draw.Box(0, 0, w, h, colorBackground)
 
+	if panel:GetParent():GetExpanded() then
+		draw.Line(0, h - 1, w, h - 1, colorLine)
+		draw.FilteredShadowedTexture(paddingX, paddingY + 1, h - 2 * paddingY, h - 2 * paddingY, materialCollapseOpened, colorText.a * 0.5, colorText)
+	else
+		draw.FilteredShadowedTexture(paddingX, paddingY, h - 2 * paddingY, h - 2 * paddingY, materialCollapseClosed, colorText.a * 0.5, colorText)
+	end
+
 	draw.SimpleText(
-		string.upper(panel.text),
+		string.upper(TryT(panel.text)),
 		panel:GetFont(),
-		0.5 * h,
+		h,
 		0.5 * h,
 		colorText,
 		TEXT_ALIGN_LEFT,
@@ -474,6 +506,197 @@ function SKIN:PaintButtonTTT2(panel, w, h)
 
 	return DrawButton(w, h, panel, sizeBorder, colorAccentDark, colorAccent, colorText)
 end
+
+function SKIN:PaintLabelTTT2(panel, w, h)
+	local colorBackground = VSKIN.GetBackgroundColor()
+
+	local colorText = util.GetChangedColor(util.GetDefaultColor(colorBackground), 40)
+
+	draw.SimpleText(
+		TryT(panel:GetText()),
+		panel:GetFont(),
+		0,
+		0.5 * h,
+		colorText,
+		TEXT_ALIGN_LEFT,
+		TEXT_ALIGN_CENTER
+	)
+end
+
+function SKIN:PaintFormLabelTTT2(panel, w, h)
+	local colorBackground = VSKIN.GetBackgroundColor()
+
+	local colorBox = util.GetChangedColor(colorBackground, 150)
+	local colorText = util.GetDefaultColor(colorBox)
+
+	local sizeCornerRadius = VSKIN.GetCornerRadius()
+
+	draw.RoundedBox(sizeCornerRadius, 0, 0, w + 2 * sizeCornerRadius, h, colorBox)
+
+	draw.SimpleText(
+		TryT(panel:GetText()),
+		panel:GetFont(),
+		10,
+		0.5 * h,
+		colorText,
+		TEXT_ALIGN_LEFT,
+		TEXT_ALIGN_CENTER
+	)
+end
+
+function SKIN:PaintMenuLabelTTT2(panel, w, h)
+	local colorBackground = VSKIN.GetBackgroundColor()
+
+	local colorText = util.GetChangedColor(util.GetDefaultColor(colorBackground), 150)
+
+	draw.SimpleText(
+		TryT(panel:GetText()),
+		panel:GetFont(),
+		0,
+		0.5 * h,
+		colorText,
+		TEXT_ALIGN_LEFT,
+		TEXT_ALIGN_CENTER
+	)
+end
+
+function SKIN:PaintHelpLabelTTT2(panel, w, h)
+	local colorBackground = VSKIN.GetBackgroundColor()
+
+	local colorBox = util.GetChangedColor(colorBackground, 20)
+	local colorBar = util.GetChangedColor(colorBackground, 80)
+	local colorText = util.GetChangedColor(util.GetDefaultColor(colorBox), 40)
+
+	draw.Box(0, 0, w, h, colorBox)
+	draw.Box(0, 0, 4, h, colorBar)
+
+	local textTranslated = TryT(panel:GetText())
+
+	local textWrapped = draw.GetWrappedText(
+		textTranslated,
+		w - 2 * panel.paddingX,
+		panel:GetFont()
+	)
+
+	local _, heightText = draw.GetTextSize(textTranslated, panel:GetFont())
+
+	local posY = panel.paddingY
+	for i = 1, #textWrapped do
+		draw.SimpleText(
+			textWrapped[i],
+			panel:GetFont(),
+			panel.paddingX,
+			posY,
+			colorText,
+			TEXT_ALIGN_LEFT,
+			TEXT_ALIGN_TOP
+		)
+
+		posY = posY + heightText
+	end
+end
+
+function SKIN:PaintNumSlider(panel, w, h)
+	local colorBackground = VSKIN.GetBackgroundColor()
+
+	local colorOutline = util.GetChangedColor(colorBackground, 150)
+	local colorBox = util.GetChangedColor(colorBackground, 15)
+
+	local sizeCornerRadius = VSKIN.GetCornerRadius()
+
+	draw.Box(0, 0, w, h, colorOutline)
+	draw.RoundedBox(sizeCornerRadius, 1, 1, w - 2, h - 2, colorBox)
+end
+
+function SKIN:PaintSliderTextAreaTTT2(panel, w, h)
+	local colorBackground = VSKIN.GetBackgroundColor()
+
+	local colorBox = util.GetChangedColor(colorBackground, 150)
+	local colorText = util.GetDefaultColor(colorBox)
+
+	local sizeCornerRadius = VSKIN.GetCornerRadius()
+
+	DisableClipping(true)
+	draw.RoundedBox(sizeCornerRadius, 0 - 2 * sizeCornerRadius, 0, w + 2 * sizeCornerRadius, h, colorBox)
+	DisableClipping(false)
+
+	draw.SimpleText(
+		panel:GetText(),
+		panel:GetFont(),
+		0.5 * w,
+		0.5 * h,
+		colorText,
+		TEXT_ALIGN_CENTER,
+		TEXT_ALIGN_CENTER
+	)
+end
+
+--[[---------------------------------------------------------
+	ComboBox
+-----------------------------------------------------------]]
+local function DrawComboBox(w, h, panel, sizeCornerRadius, colorBox, colorText)
+	draw.RoundedBox(sizeCornerRadius, 1, 1, w - 2, h - 2, colorBox)
+	draw.SimpleText(
+		TryT(panel:GetText()),
+		panel:GetFont(),
+		10,
+		0.5 * h,
+		colorText,
+		TEXT_ALIGN_LEFT,
+		TEXT_ALIGN_CENTER
+	)
+end
+
+function SKIN:PaintComboBoxTTT2(panel, w, h)
+	local colorBackground = VSKIN.GetBackgroundColor()
+
+	local colorOutline = util.GetChangedColor(colorBackground, 150)
+	local colorBox = util.GetChangedColor(colorBackground, 15)
+	local colorBoxHover = util.GetHoverColor(colorBox)
+	local colorBoxActive = util.GetActiveColor(colorBox)
+
+	local colorText = util.GetChangedColor(util.GetDefaultColor(colorBox), 50)
+
+	local sizeCornerRadius = VSKIN.GetCornerRadius()
+
+	draw.Box(0, 0, sizeCornerRadius, h, colorOutline)
+	draw.RoundedBox(sizeCornerRadius, 0, 0, w, h, colorOutline)
+
+	if panel:GetDisabled() then
+		return self.tex.Input.ComboBox.Disabled( 0, 0, w, h )
+	end
+
+	if panel.Depressed or panel:IsMenuOpen() then
+		return DrawComboBox(w, h, panel, sizeCornerRadius, colorBoxActive, colorText)
+	end
+
+	if panel.Hovered then
+		return DrawComboBox(w, h, panel, sizeCornerRadius, colorBoxHover, colorText)
+	end
+
+	return DrawComboBox(w, h, panel, sizeCornerRadius, colorBox, colorText)
+end
+
+--[[
+function SKIN:PaintMenu(panel, w, h)
+	draw.Box(0, 0, w, h, COLOR_RED)
+end
+
+function SKIN:PaintMenuOption(panel, w, h)
+	if panel.m_bBackground && !panel:IsEnabled() then
+		surface.SetDrawColor(Color( 0, 0, 0, 50 ))
+		surface.DrawRect( 0, 0, w, h )
+	end
+
+	if panel.m_bBackground && ( panel.Hovered || panel.Highlight) then
+		draw.Box(0, 0, w, h, COLOR_YELLOW)
+	end
+
+	if ( panel:GetChecked() ) then
+		self.tex.Menu_Check( 5, h / 2 - 7, 15, 15 )
+	end
+end
+]]
 
 -- REGISTER DERMA SKIN
 derma.DefineSkin(SKIN.Name, "TTT2 default skin for all vgui elements", SKIN)

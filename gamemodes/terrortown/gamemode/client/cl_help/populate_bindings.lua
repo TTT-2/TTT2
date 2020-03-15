@@ -11,52 +11,38 @@ local function AddBindingCategory(category, parent)
 		local binding = bindings[i]
 
 		if binding.category == category then
-			-- creating two grids:
-			-- GRID: tooltip, bindingbutton and extra button area
-			-- GRIDEXTRA: inside the last GRID box, houses default and disable buttons
 			local dPGrid = vgui.Create("DGrid")
 			dPGrid:SetCols(1)
 			dPGrid:SetColWide(1000)
-
-			--local dPGridExtra = vgui.Create("DGrid")
-			--dPGridExtra:SetCols(2)
+			dPGrid:SetRowHeight(45)
 
 			form:AddItem(dPGrid)
 
 			local dPanel = vgui.Create("DPanel")
 			dPanel:SetSize(1000, 1000)
-			--dPanel:SizeToChildren(false, true)
 			dPGrid:AddItem(dPanel)
 
 			-- Keybind Label
-			local dPlabel = vgui.Create("DLabel", dPanel)
+			local dPlabel = vgui.Create("DLabelTTT2", dPanel)
 			dPlabel:SetText(binding.label .. ":")
 			dPlabel:SetTextColor(COLOR_BLACK)
 			dPlabel:SetContentAlignment(4)
 			dPlabel:SetSize(150, 35)
-			dPlabel:DockMargin(0, 0, 15, 0)
-			--dPGrid:AddItem(dPlabel)
-
 
 			-- Keybind Button
 			local dPBinder = vgui.Create("DBinderTTT2", dPanel)
 			dPBinder:SetSize(150, 35)
 			dPBinder:SetPos(165, 0)
-			--dPBinder:DockMargin(0, 0, 15, 0)
 
 			local curBinding = bind.Find(binding.name)
 			dPBinder:SetValue(curBinding)
 			dPBinder:SetTooltip("f1_bind_description")
-
-			--dPGrid:AddItem(dPBinder)
-			--dPGrid:AddItem(dPGridExtra)
 
 			-- DEFAULT Button
 			local dPBindDefaultButton = vgui.Create("DButtonTTT2", dPanel)
 			dPBindDefaultButton:SetText("button_bind_default")
 			dPBindDefaultButton:SetSize(75, 35)
 			dPBindDefaultButton:SetPos(350, 0)
-			--dPBindDefaultButton:DockMargin(0, 0, 15, 0)
 			dPBindDefaultButton:SetTooltip("f1_bind_reset_default_description")
 
 			if binding.defaultKey ~= nil then
@@ -67,7 +53,6 @@ local function AddBindingCategory(category, parent)
 			else
 				dPBindDefaultButton:SetDisabled(true)
 			end
-			--dPGridExtra:AddItem(dPBindDefaultButton)
 
 			-- DISABLE Button
 			local dPBindDisableButton = vgui.Create("DButtonTTT2", dPanel)
@@ -79,7 +64,6 @@ local function AddBindingCategory(category, parent)
 				bind.Remove(curBinding, binding.name, true)
 				dPBinder:SetValue(bind.Find(binding.name))
 			end
-			--dPGridExtra:AddItem(dPBindDisableButton)
 
 			-- onchange function
 			function dPBinder:OnChange(num)

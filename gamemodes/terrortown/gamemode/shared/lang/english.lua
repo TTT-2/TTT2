@@ -1230,6 +1230,8 @@ L.door_open_touch_and_use = "Walk into door or press [{usekey}] to open."
 L.hud_health = "Health"
 
 -- 2020-03-09
+L.menu_name = "MENU"
+
 L.menu_changelog_title = "Changelog"
 L.menu_guide_title = "TTT2 Guide"
 L.menu_bindings_title = "Key Bindings"
@@ -1276,6 +1278,9 @@ L.label_menu_menu = "MENU"
 L.button_menu_back = "back"
 L.button_bind_default = "Default"
 L.button_bind_disable = "Clear"
+
+L.help_color_desc = "If this setting is enabled, a global color can be chosen that will be used for the targetID outline and the crosshair."
+L.help_scale_factor = "This scale factor influences all UI elements (HUD, vgui and targetID). It is automatically updated if the screen resolution is changed. Changing this value will reset the HUD!"
 
 
 

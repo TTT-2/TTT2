@@ -172,9 +172,16 @@ function HELPSCRN:ShowSubMenu(data)
 	navAreaHeader:SetPos(0, 0)
 	navAreaHeader:SetSize(widthNavHeader, heightNavHeader)
 
-	local navAreaHeaderText = vgui.Create("DLabel", navAreaHeader)
-	navAreaHeaderText:SetText("MENU")
+	local navAreaHeaderText = vgui.Create("DLabelTTT2", navAreaHeader)
+	navAreaHeaderText:SetText("menu_name")
+	navAreaHeaderText:DockMargin(15, 0, 0, 5)
 	navAreaHeaderText:Dock(BOTTOM)
+	navAreaHeaderText:SetFont("DermaTTT2TextLarge")
+	navAreaHeaderText.Paint = function(slf, width, height)
+		derma.SkinHook("Paint", "MenuLabelTTT2", slf, width, height)
+
+		return true
+	end
 
 	local navAreaContent = vgui.Create("DPanel", navArea)
 	navAreaContent:SetPos(0, heightNavHeader)

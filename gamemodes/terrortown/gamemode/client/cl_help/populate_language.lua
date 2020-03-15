@@ -12,12 +12,11 @@ local function PopulateLanguagePanel(parent)
 		dlang:AddChoice(string.Capitalize(lang), lang)
 	end
 
-	-- Why is DComboBox not updating the cvar by default?
 	dlang.OnSelect = function(idx, val, data)
 		RunConsoleCommand("ttt_language", data)
-	end
 
-	dlang.Think = dlang.ConVarStringThink
+		VHDL.UpdateVSkinSetting("language")
+	end
 
 	form:Help("set_lang")
 	form:AddItem(dlang)

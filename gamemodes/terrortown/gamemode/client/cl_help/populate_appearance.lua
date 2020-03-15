@@ -14,18 +14,20 @@ local function PopulateGeneralPanel(parent)
 		GLAPP.SetUseGlobalFocusColor(value)
 	end
 
-	local cm = vgui.Create("DColorMixer")
-	cm:SetLabel("set_global_focus_color")
-	cm:SetTall(120)
-	cm:SetAlphaBar(false)
-	cm:SetPalette(false)
-	cm:SetColor(GLAPP.GetFocusColor())
+	local cm = form:ColorMixer("set_global_focus_color", GLAPP.GetFocusColor(), false, false)
+
+	--local cm = vgui.Create("DColorMixer")
+	--cm:SetLabel("set_global_focus_color")
+	--cm:SetTall(120)
+	--cm:SetAlphaBar(false)
+	--cm:SetPalette(false)
+	--cm:SetColor(GLAPP.GetFocusColor())
 
 	cm.ValueChanged = function(self, color)
 		GLAPP.SetFocusColor(color)
 	end
 
-	form:AddItem(cm)
+	--form:AddItem(cm)
 
 	form:Help("help_scale_factor")
 
@@ -291,20 +293,15 @@ local function PopulateDamagePanel(parent)
 
 	form:CheckBox("f1_dmgindicator_enable", "ttt_dmgindicator_enable")
 
-	local dmode = vgui.Create("DComboBox", form)
-	dmode:SetConVar("ttt_dmgindicator_mode")
+	local dmode = form:ComboBox("f1_dmgindicator_mode", "ttt_dmgindicator_mode")
 
 	for name in pairs(DMGINDICATOR.themes) do
 		dmode:AddChoice(name)
 	end
 
-	-- Why is DComboBox not updating the cvar by default?
 	dmode.OnSelect = function(idx, val, data)
 		RunConsoleCommand("ttt_dmgindicator_mode", data)
 	end
-
-	form:Help("f1_dmgindicator_mode")
-	form:AddItem(dmode)
 
 	local cb = form:NumSlider("f1_dmgindicator_duration", "ttt_dmgindicator_duration", 0, 30, 2)
 	if cb.Label then

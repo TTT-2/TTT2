@@ -122,6 +122,8 @@ if SERVER then
 	-- derma skin graphics
 	resource.AddFile("Materials/vgui/ttt/derma/icon_close.vmt")
 	resource.AddFile("Materials/vgui/ttt/derma/icon_back.vmt")
+	resource.AddFile("Materials/vgui/ttt/derma/icon_collapse_closed.vmt")
+	resource.AddFile("Materials/vgui/ttt/derma/icon_collapse_opened.vmt")
 	resource.AddFile("Materials/vgui/ttt/derma/helpscreen/addons.vmt")
 	resource.AddFile("Materials/vgui/ttt/derma/helpscreen/appearance.vmt")
 	resource.AddFile("Materials/vgui/ttt/derma/helpscreen/bindings.vmt")

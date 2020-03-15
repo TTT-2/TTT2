@@ -3,7 +3,7 @@ local PANEL = {}
 function PANEL:Init()
 	self:SetContentAlignment(4)
 	self:SetTextInset(5, 0)
-	self:SetFont("DermaDefaultBold")
+	self:SetFont("DermaTTT2CatHeader")
 
 	self.text = ""
 

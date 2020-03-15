@@ -33,7 +33,7 @@ function PANEL:Clear()
 	self.Items = {}
 end
 
-function PANEL:AddItem(left, right)
+function PANEL:AddItem(left, right, drawBackground)
 	self:InvalidateLayout()
 
 	local Panel = vgui.Create("DSizeToContents", self)
@@ -47,21 +47,31 @@ function PANEL:AddItem(left, right)
 		left:SetParent(Panel)
 		left:Dock(LEFT)
 		left:InvalidateLayout(true)
-		left:SetSize(100, 20)
+		left:SetSize(312, 20)
 
 		right:SetParent(Panel)
-		right:SetPos(110, 0)
+		right:SetPos(312, 0)
 		right:InvalidateLayout(true)
 	elseif IsValid(left) then
 		left:SetParent(Panel)
 		left:Dock(TOP)
 	end
 
+	if drawBackground then
+		Panel:DockMargin(10, 10, 10, 10)
+
+		Panel.Paint = function(slf, w, h)
+			derma.SkinHook("Paint", "FormLabelTTT2", slf, w - 13, h)
+
+			return true
+		end
+	end
+
 	self.Items[#self.Items + 1] = Panel
 end
 
 function PANEL:TextEntry(strLabel, strConVar)
-	local left = vgui.Create("DLabel", self)
+	local left = vgui.Create("DLabelTTT2", self)
 
 	left:SetText(strLabel)
 	left:SetDark(true)
@@ -77,20 +87,27 @@ function PANEL:TextEntry(strLabel, strConVar)
 end
 
 function PANEL:ComboBox(strLabel, strConVar)
-	local left = vgui.Create("DLabel", self)
+	local left = vgui.Create("DLabelTTT2", self)
 
 	left:SetText(strLabel)
 	left:SetDark(true)
 
-	local right = vgui.Create("DComboBox", self)
+	local right = vgui.Create("DComboBoxTTT2", self)
 
 	right:SetConVar(strConVar)
-	right:Dock(FILL)
+	right:SetTall(32)
+	right:Dock(TOP)
 
 	function right:OnSelect(index, value, data)
 		if not self.m_strConVar then return end
 
 		RunConsoleCommand(self.m_strConVar, tostring(data or value))
+	end
+
+	left.Paint = function(slf, w, h)
+		derma.SkinHook("Paint", "FormLabelTTT2", slf, w, h)
+
+		return true
 	end
 
 	self:AddItem(left, right)
@@ -99,7 +116,7 @@ function PANEL:ComboBox(strLabel, strConVar)
 end
 
 function PANEL:NumberWang(strLabel, strConVar, numMin, numMax, numDecimals)
-	local left = vgui.Create("DLabel", self)
+	local left = vgui.Create("DLabelTTT2", self)
 
 	left:SetText(strLabel)
 	left:SetDark(true)
@@ -125,7 +142,6 @@ function PANEL:NumSlider(strLabel, strConVar, numMin, numMax, numDecimals)
 
 	left:SetText(strLabel)
 	left:SetMinMax(numMin, numMax)
-	left:SetDark(true)
 
 	if numDecimals ~= nil then
 		left:SetDecimals(numDecimals)
@@ -134,17 +150,60 @@ function PANEL:NumSlider(strLabel, strConVar, numMin, numMax, numDecimals)
 	left:SetConVar(strConVar)
 	left:SizeToContents()
 
+	left.TextArea.Paint = function(slf, w, h)
+		derma.SkinHook("Paint", "SliderTextAreaTTT2", slf, w, h)
+
+		return true
+	end
+
+	left.Label.Paint = function(slf, w, h)
+		derma.SkinHook("Paint", "FormLabelTTT2", slf, w, h)
+
+		return true
+	end
+
+	left.TextArea:SetFont("DermaTTT2Text")
+	left.Label:SetFont("DermaTTT2Text")
+
 	self:AddItem(left, nil)
 
 	return left
 end
 
-function PANEL:CheckBox(strLabel, strConVar)
-	local left = vgui.Create("DCheckBoxLabel", self)
+function PANEL:ColorMixer(strLabel, defaultColor, showAlphaBar, showPalette)
+	local left = vgui.Create("DLabelTTT2", self)
 
 	left:SetText(strLabel)
 	left:SetDark(true)
+
+	local right = vgui.Create("DColorMixer", self)
+
+	right:SetColor(defaultColor or COLOR_WHITE)
+	right:SetAlphaBar(showAlphaBar or false)
+	right:SetPalette(showPalette or false)
+	right:SetTall(200)
+	right:DockMargin(10, 10, 10, 10)
+
+	right.PerformLayout = function(slf, w, h)
+		local parentW = slf:GetParent():GetSize()
+		local _, _, parentPadRight = slf:GetParent():GetDockPadding()
+		local posX = slf:GetPos()
+
+		slf:SetWide(parentW - parentPadRight - posX)
+	end
+
+	self:AddItem(left, right)
+
+	return right, left
+end
+
+function PANEL:CheckBox(strLabel, strConVar)
+	local left = vgui.Create("DCheckBoxLabelTTT2", self)
+
+	left:SetText(strLabel)
 	left:SetConVar(strConVar)
+
+	left:SetTall(32)
 
 	self:AddItem(left, nil)
 
@@ -152,15 +211,33 @@ function PANEL:CheckBox(strLabel, strConVar)
 end
 
 function PANEL:Help(strHelp)
-	local left = vgui.Create("DLabel", self)
+	local left = vgui.Create("DLabelTTT2", self)
 
-	left:SetDark(true)
-	left:SetWrap(true)
-	left:SetTextInset(0, 0)
 	left:SetText(strHelp)
 	left:SetContentAlignment(7)
 	left:SetAutoStretchVertical(true)
-	left:DockMargin(8, 0, 8, 8)
+
+	left.paddingX = 10
+	left.paddingY = 5
+
+	left.Paint = function(slf, w, h)
+		derma.SkinHook("Paint", "HelpLabelTTT2", slf, w, h)
+
+		return true
+	end
+
+	left.PerformLayout = function(slf, w, h)
+		local textTranslated = LANG.TryTranslation(slf:GetText())
+
+		local textWrapped = draw.GetWrappedText(
+			textTranslated,
+			w - 2 * slf.paddingX,
+			slf:GetFont()
+		)
+		local _, heightText = draw.GetTextSize(textTranslated, slf:GetFont())
+
+		slf:SetSize(w, heightText * #textWrapped + 2 * slf.paddingY)
+	end
 
 	self:AddItem(left, nil)
 
@@ -176,7 +253,7 @@ function PANEL:ControlHelp(strHelp)
 	Panel:Dock(TOP)
 	Panel:InvalidateLayout()
 
-	local left = vgui.Create("DLabel", Panel)
+	local left = vgui.Create("DLabelTTT2", Panel)
 
 	left:SetDark(true)
 	left:SetWrap(true)
@@ -198,7 +275,7 @@ end
 	need to add the "10" to the arguments, like so
 	Button("LabelName", "maxplayers", "10")
 -----------------------------------------------------------]]
-function PANEL:Button(strName, strConCommand, ... --[[ console command args!! --]])
+function PANEL:Button(strName, strConCommand, ...)
 	local left = vgui.Create("DButton", self)
 
 	if strConCommand then
@@ -221,7 +298,7 @@ end
 
 function PANEL:ListBox(strLabel)
 	if strLabel then
-		local left = vgui.Create("DLabel", self)
+		local left = vgui.Create("DLabelTTT2", self)
 
 		left:SetText(strLabel)
 		left:SetDark(true)

@@ -180,6 +180,8 @@ local function InternalUpdateVSkinSetting(name, panel)
 		panel:InvalidateLayout()
 	elseif name == "skin" then
 		panel:InvalidateLayout()
+	elseif name == "language" then
+		panel:InvalidateLayout()
 	elseif name == "general_rebuild" then
 		panel:InvalidateLayout()
 	end

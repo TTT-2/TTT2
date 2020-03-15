@@ -75,6 +75,42 @@ function draw.Box(x, y, w, h, color)
 end
 
 ---
+-- A function to draws a circle outline
+-- @param number x The center x position to start the circle
+-- @param number y The center y position to start the circle
+-- @param number r The radius of the circle
+-- @param [default=COLOR_WHITE] Color color The color of the circle
+-- @2D
+-- @realm client
+function draw.OutlinedCircle(x, y, r, color)
+	color = color or COLOR_WHITE
+
+	surface.DrawCircle(x, y, r, color.r, color.g, color.b, color.a)
+end
+
+function draw.Circle(x, y, r, color)
+	draw.NoTexture()
+	surface.SetDrawColor(color)
+
+	for i = 1, 90 do
+		surface.DrawTexturedRectRotated(x, y, r, r, i)
+	end
+end
+
+function draw.CircleCustom(x, y, w, h, ang, color, x0, y0)
+	for i = 0, ang do
+		local c = math.cos(math.rad(i))
+		local s = math.sin(math.rad(i))
+		local newx = y0 * s - x0 * c
+		local newy = y0 * c + x0 * s
+
+		draw.NoTexture()
+		surface.SetDrawColor(color)
+		surface.DrawTexturedRectRotated(x + newx,y + newy,w,h,i)
+	end
+end
+
+---
 -- A function to draw an outlined box with a shadow
 -- @param number startX The x position to start the line
 -- @param number startY The y position to start the line

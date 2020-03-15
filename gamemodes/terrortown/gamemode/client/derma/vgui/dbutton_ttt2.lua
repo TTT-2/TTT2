@@ -58,4 +58,4 @@ end
 --	PropertySheet:AddSheet(ClassName, ctrl, nil, true, true)
 --end
 
-derma.DefineControl("DButtonTTT2", "A standard Button", PANEL, "DLabel")
+derma.DefineControl("DButtonTTT2", "A standard Button", PANEL, "DLabelTTT2")
