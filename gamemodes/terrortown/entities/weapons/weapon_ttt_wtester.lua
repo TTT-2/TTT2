@@ -34,7 +34,7 @@ SWEP.WorldModel = "models/weapons/w_ttt2_dna_scanner.mdl"
 SWEP.Primary.ClipSize = -1
 SWEP.Primary.DefaultClip = -1
 SWEP.Primary.Automatic = false
-SWEP.Primary.Delay = 1
+SWEP.Primary.Delay = 0.5
 SWEP.Primary.Ammo = "none"
 
 SWEP.Secondary.ClipSize = -1
@@ -49,6 +49,7 @@ SWEP.WeaponID = AMMO_WTESTER
 SWEP.InLoadoutFor = {ROLE_DETECTIVE}
 SWEP.AutoSpawnable = false
 SWEP.NoSights = true
+
 SWEP.Range = 175
 SWEP.ItemSamples = {}
 SWEP.NowRepeating = nil
@@ -68,6 +69,11 @@ local cv_thickness
 
 local beep_success = Sound("buttons/blip2.wav")
 local beep_miss = Sound("player/suit_denydevice.wav")
+local dna_icon = Material("vgui/ttt/icon_wtester")
+local dna_screen_success = Material("models/ttt2_dna_scanner/Check.png")
+local dna_screen_fail = Material("models/ttt2_dna_scanner/Fail.png")
+local dna_screen_arrow = Material("models/ttt2_dna_scanner/Arrow.png")
+local dna_screen_circle = Material("models/ttt2_dna_scanner/Circle.png")
 
 AccessorFuncDT(SWEP, "charge", "Charge")
 AccessorFuncDT(SWEP, "last_scanned", "LastScanned")
@@ -80,29 +86,6 @@ else
 
 		return IsValid(ply) and ply:GetInfoNum("ttt_dna_scan_repeat", 1) == 1
 	end
-end
-
-local customMaterial
-local exampleRT
-if CLIENT then
-	-- Create render target
-	exampleRT = GetRenderTarget( "example_rt", 1024, 1024 )
-
-		-- Draw to the render target
-	render.PushRenderTarget( exampleRT )
-	cam.Start2D()
-		-- Draw background
-		surface.SetDrawColor( 0, 0, 0, 255 )
-		surface.DrawRect( 0, 0, 1024, 1024 )
-
-		-- Draw some foreground stuff
-		surface.SetDrawColor( 255, 0, 0, 255 )
-		surface.DrawRect( 0, 0, 256, 256 )
-	cam.End2D()
-	render.PopRenderTarget()
-
-	customMaterial = Material("models/ttt2_dna_scanner/screen")
-	customMaterial:SetTexture( "$basetexture", exampleRT )
 end
 
 SWEP.NextCharge = 0
@@ -121,6 +104,19 @@ function SWEP:Initialize()
 	if CLIENT then
 		self:AddHUDHelp("dna_help_primary", "dna_help_secondary", true)
 		cv_thickness = GetConVar("ttt_crosshair_thickness")
+
+
+		-- Create render target
+		self.scannerScreenTex = GetRenderTarget( "scanner_screen_tex", 512, 512 )
+
+		self.scannerScreenMat = CreateMaterial( "scanner_screen_mat", "UnlitGeneric", {
+					["$basetexture"] = self.scannerScreenTex,
+					["$basetexturetransform"] = "center .5 .5 scale 1 1 rotate 180 translate 0 0"} )
+
+		self.scannerScreenMat:SetTexture( "$basetexture", self.scannerScreenTex )
+		self:SetSubMaterial(0, "!scanner_screen_mat")
+
+		surface.CreateAdvancedFont("DNAScannerDistanceFont", {font = "Trebuchet24", size = 32, weight = 1200})
 	end
 
 	return self.BaseClass.Initialize(self)
@@ -419,7 +415,7 @@ if SERVER then
 		self:SetCharge(math.max(0, self:GetCharge() - math.max(50, dist * 0.5)))
 	end
 
-	function SWEP:Think()
+	function SWEP:PassiveThink()
 		if self:GetCharge() < MAX_CHARGE and self.NextCharge < CurTime() then
 			self:SetCharge(math.min(MAX_CHARGE, self:GetCharge() + CHARGE_RATE))
 
@@ -455,64 +451,29 @@ if CLIENT then
 	local TT = LANG.TryTranslation
 	local mathfloor = math.floor
 
-	function SWEP:DrawHUD()
-		self:DrawHelp()
+	-- target ID function
+	hook.Add("TTTRenderEntityInfo", "TTT2DNAScannerInfo", function(tData)
+		local client = LocalPlayer()
+		local ent = tData:GetEntity()
+		
+		if not IsValid(client:GetActiveWeapon()) or client:GetActiveWeapon():GetClass() ~= "weapon_ttt_wtester" or tData:GetEntityDistance() > 400 or not IsValid(ent) then return end
 
-		local owner = self:GetOwner()
-		local spos = owner:GetShootPos()
-		local sdest = spos + owner:GetAimVector() * self.Range
-
-		local tr = util.TraceLine({
-			start = spos,
-			endpos = sdest,
-			filter = owner,
-			mask = MASK_SHOT
-		})
-
-		local ent = tr.Entity
-
-		local length = 20
-		local gap = 6
-		local thickness = mathfloor(cv_thickness and cv_thickness:GetFloat() or 1)
-		local offset = thickness * 0.5
-
-		local can_sample = false
-
-		if IsValid(ent) then
-			-- weapon or dropped equipment OR knife in corpse, or a ragdoll
-			if ent:IsWeapon() or ent.CanHavePrints or ent:GetNWBool("HasPrints", false)
-			or ent:GetClass() == "prop_ragdoll" and CORPSE.GetPlayerNick(ent, false) and CORPSE.GetFound(ent, false)
-			then
-				surface.SetDrawColor(0, 255, 0, 255)
-				gap = 0
-				can_sample = true
-			else
-				surface.SetDrawColor(255, 0, 0, 200)
-				gap = 0
-			end
+		local weapon = client:GetActiveWeapon()
+		local distance = tData:GetEntityDistance()
+		
+		-- add an empty line if there's already data in the description area
+		if tData:GetAmountDescriptionLines() > 0 then
+			tData:AddDescriptionLine()
+		end
+		
+		if ent:IsWeapon() or ent.CanHavePrints or ent:GetNWBool("HasPrints", false)
+		or ent:GetClass() == "prop_ragdoll" and CORPSE.GetPlayerNick(ent, false) and CORPSE.GetFound(ent, false)
+		then
+			tData:AddDescriptionLine("Scan possible", COLOR_GREEN, {dna_icon})
 		else
-			surface.SetDrawColor(255, 255, 255, 200)
+			tData:AddDescriptionLine("No scan possible", COLOR_RED, {dna_icon})
 		end
-
-		local x = ScrW() * 0.5
-		local y = ScrH() * 0.5
-
-		surface.DrawRect(x - length, y - offset, length - gap, thickness)
-		surface.DrawRect(x + gap, y - offset, length - gap, thickness)
-		surface.DrawRect(x - offset, y - length, thickness, length - gap)
-		surface.DrawRect(x - offset, y + gap, thickness, length - gap)
-
-		if ent and can_sample then
-			surface.SetFont("DefaultFixedDropShadow")
-			surface.SetTextColor(0, 255, 0, 255)
-
-			surface.SetTextPos(x + length * 2, y - length * 2)
-			surface.DrawText(T("dna_hud_type") .. ": " .. (ent:GetClass() == "prop_ragdoll" and T("dna_hud_body") or T("dna_hud_item")))
-
-			surface.SetTextPos(x + length * 2, y - length * 2 + 15)
-			surface.DrawText("ID:   #" .. ent:EntIndex())
-		end
-	end
+	end)
 
 	local basedir = "vgui/ttt/icon_"
 
@@ -827,28 +788,75 @@ if CLIENT then
 		printspanel:Close()
 	end
 
-	function SWEP:PreDrawViewModel(vm, weapon, ply)
-		if self.success then
-			-- Draw to the render target
-			render.PushRenderTarget( exampleRT )
-			render.Clear(200, 200, 200, 255)
-			cam.Start2D()
-				-- Draw some foreground stuff
-				surface.SetDrawColor( 0, 255, 0, 255 )
-				surface.DrawRect( 0, 0, 256, 256 )
-			cam.End2D()
-			render.PopRenderTarget()
+	
+	local function DrawTexturedRectRotatedPoint( x, y, w, h, rot, x0, y0 )
+	
+		local c = math.cos( math.rad( rot ) )
+		local s = math.sin( math.rad( rot ) )
+		
+		local newx = y0 * s - x0 * c
+		local newy = y0 * c + x0 * s
+		
+		surface.DrawTexturedRectRotated( x + newx, y + newy, w, h, rot )
+		
+	end
+
+	function SWEP:FillScannerScreen()
+		-- Draw to the render target
+		render.PushRenderTarget( self.scannerScreenTex )
+		render.Clear(220, 220, 220, 255, true, true)
+		cam.Start2D()
+		
+		local showCross = CurTime() > self:GetNextPrimaryFire()
+		
+		if showCross then
+			if RADAR.samples_count > 0  then
+				local targetPos = RADAR.samples[1].pos
+				local scannerPos = self:GetPos()
+				local vectorToPos = targetPos - scannerPos
+				local angleToPos = vectorToPos:Angle()
+				local arrowRotation = angleToPos.yaw - EyeAngles().yaw
+
+				local distance = LocalPlayer():GetPos():Distance(targetPos)
+				surface.SetDrawColor( 236, 174, 23, 255 )
+				surface.SetMaterial( dna_screen_arrow )
+				DrawTexturedRectRotatedPoint( 256, 256, 190, 190, arrowRotation, 0, -170 )
+				draw.AdvancedText( math.Round(distance), "DNAScannerDistanceFont", 256, 256, Color(50, 50, 50), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER , false, 3)
+
+				surface.SetDrawColor( 50, 50, 50, 255 )
+				surface.SetMaterial( dna_screen_circle )
+				surface.DrawTexturedRect( 116, 116, 276, 276 )	
+			else
+				draw.AdvancedText( "Ready", "DNAScannerDistanceFont", 256, 256, Color(50, 50, 50), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER , false, 3)
+			end
 		else
-			-- Draw to the render target
-			render.PushRenderTarget( exampleRT )
-			render.Clear(200, 200, 200, 255)
-			cam.Start2D()
-				-- Draw some foreground stuff
-				surface.SetDrawColor( 255, 0, 0, 255 )
-				surface.DrawRect( 0, 0, 256, 256 )
-			cam.End2D()
-			render.PopRenderTarget()
+			if self.success then
+				surface.SetDrawColor( 50, 50, 50, 255 )
+				surface.SetMaterial( dna_screen_success )
+				surface.DrawTexturedRect( 192, 192, 128, 128 )
+			else
+				surface.SetDrawColor( 50, 50, 50, 255 )
+				surface.SetMaterial( dna_screen_fail )
+				surface.DrawTexturedRect( 192, 192, 128, 128 )	
+			end
 		end
+
+		cam.End2D()
+		render.PopRenderTarget()
+	end
+
+	function SWEP:PreDrawViewModel()
+		self:FillScannerScreen()
+		self.Owner:GetViewModel():SetSubMaterial(0, "!scanner_screen_mat")
+	end
+
+	function SWEP:PostDrawViewModel()
+		self.Owner:GetViewModel():SetSubMaterial(0, nil)
+	end
+
+	function SWEP:DrawWorldModel()
+		self:FillScannerScreen()
+		self:DrawModel()
 	end
 
 else -- SERVER
@@ -878,6 +886,20 @@ else -- SERVER
 		tester:RemoveItemSample(idx)
 	end
 	concommand.Add("ttt_wtester_remove", RemoveSample)
+
+	hook.Add("Tick", "TTT2DNAScannerThink", function()
+		if CLIENT then return end
+		
+		plys = player.GetAll()
+
+		for i = 1, #plys do
+			-- Run DNA Scanner think also when it is not deployed
+			local ply = plys[i]
+			if IsValid(ply) and ply:HasWeapon("weapon_ttt_wtester") then
+				ply:GetWeapon("weapon_ttt_wtester"):PassiveThink()
+			end
+		end
+	end)
 end
 
 function SWEP:OnRemove()
@@ -890,24 +912,6 @@ function SWEP:OnDrop()
 
 end
 
-function SWEP:PreDrop()
-	local owner = self:GetOwner()
-
-	if not IsValid(owner) then return end
-
-	owner.scanner_weapon = nil
-end
-
 function SWEP:Reload()
 	return false
-end
-
-function SWEP:Deploy()
-	local owner = self:GetOwner()
-
-	if SERVER and IsValid(owner) then
-		owner.scanner_weapon = self
-	end
-
-	return true
 end
