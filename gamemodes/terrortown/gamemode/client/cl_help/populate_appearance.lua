@@ -16,18 +16,9 @@ local function PopulateGeneralPanel(parent)
 
 	local cm = form:ColorMixer("set_global_focus_color", GLAPP.GetFocusColor(), false, false)
 
-	--local cm = vgui.Create("DColorMixer")
-	--cm:SetLabel("set_global_focus_color")
-	--cm:SetTall(120)
-	--cm:SetAlphaBar(false)
-	--cm:SetPalette(false)
-	--cm:SetColor(GLAPP.GetFocusColor())
-
 	cm.ValueChanged = function(self, color)
 		GLAPP.SetFocusColor(color)
 	end
-
-	--form:AddItem(cm)
 
 	form:Help("help_scale_factor")
 
@@ -51,21 +42,13 @@ end
 local function PopulateHUDSwitcherPanelSettings(parent, currentHUD)
 	parent:Clear()
 
-	if not currentHUD.GetSavingKeys then return end
+	parent:Help("help_hud_special_settings")
 
 	for key, data in pairs(currentHUD:GetSavingKeys() or {}) do
-		local el
-		local container
-
 		if data.typ == "color" then
-			el = vgui.Create("DColorMixer")
-			el:SetSize(267, 186)
+			local cm = parent:ColorMixer(data.desc or key, currentHUD[key] or COLOR_WHITE, true, true)
 
-			if currentHUD[key] then
-				el:SetColor(currentHUD[key])
-			end
-
-			function el:ValueChanged(col)
+			function cm:ValueChanged(col)
 				currentHUD[key] = col
 
 				if isfunction(data.OnChange) then
@@ -73,18 +56,14 @@ local function PopulateHUDSwitcherPanelSettings(parent, currentHUD)
 				end
 			end
 		elseif data.typ == "number" then
-			el = vgui.Create("DNumSliderWang")
-			el:SetSize(600, 20)
-			el:SetMin(0.1)
-			el:SetMax(4.0)
-			el:SetDecimals(1)
+			local ns = parent:NumSlider(data.desc or key, nil, 0.1, 4.0, 1)
 
 			if currentHUD[key] then
-				el:SetDefaultValue(currentHUD[key])
-				el:SetValue(math.Round(currentHUD[key], 1))
+				ns:SetDefaultValue(currentHUD[key])
+				ns:SetValue(math.Round(currentHUD[key], 1))
 			end
 
-			function el:OnValueChanged(val)
+			function ns:OnValueChanged(val)
 				val = math.Round(val, 1)
 
 				if val ~= math.Round(currentHUD[key], 1) then
@@ -153,6 +132,13 @@ local function PopulateHUDSwitcherPanel(parent)
 	local hudList = huds.GetList()
 	local restrictedHUDs = HUDManager.GetModelValue("restrictedHUDs")
 
+	if not currentHUD.GetSavingKeys then
+		form:Help("help_hud_game_reload")
+		form:Dock(TOP)
+
+		return
+	end
+
 	local combobox = form:ComboBox("select_hud")
 
 	for i = 1, #hudList do
@@ -192,12 +178,14 @@ hook.Add("TTT2HUDUpdated", "UpdateHUDSwitcherData", function(name)
 
 	-- rebuild the content area so that data is refreshed
 	-- based on the newly selected HUD
-	HELPSCRN:BuildContentArea()
+	VHDL.Rebuild()
 end)
 
 local function PopulateVSkinPanel(parent)
 	local form = vgui.Create("DFormTTT2", parent)
 	form:SetName("set_title_vskin")
+
+	form:Help("help_vskin_info")
 
 	local vskins = VSKIN.GetVSkinList()
 	local combobox = form:ComboBox("select_vskin")
@@ -229,6 +217,8 @@ end
 local function PopulateTargetIDPanel(parent)
 	local form = vgui.Create("DFormTTT2", parent)
 	form:SetName("set_title_targetid")
+
+	form:Help("help_targetid_info")
 
 	form:CheckBox("set_minimal_id", "ttt_minimal_targetid")
 
@@ -291,7 +281,7 @@ local function PopulateDamagePanel(parent)
 	local form = vgui.Create("DFormTTT2", parent)
 	form:SetName("f1_dmgindicator_title")
 
-	form:CheckBox("f1_dmgindicator_enable", "ttt_dmgindicator_enable")
+	local dmgEnb = form:CheckBox("f1_dmgindicator_enable", "ttt_dmgindicator_enable")
 
 	local dmode = form:ComboBox("f1_dmgindicator_mode", "ttt_dmgindicator_mode")
 
@@ -303,19 +293,23 @@ local function PopulateDamagePanel(parent)
 		RunConsoleCommand("ttt_dmgindicator_mode", data)
 	end
 
-	local cb = form:NumSlider("f1_dmgindicator_duration", "ttt_dmgindicator_duration", 0, 30, 2)
-	if cb.Label then
-		cb.Label:SetWrap(true)
-	end
+	local ns_1 = form:NumSlider("f1_dmgindicator_duration", "ttt_dmgindicator_duration", 0, 30, 2)
 
-	cb = form:NumSlider("f1_dmgindicator_maxdamage", "ttt_dmgindicator_maxdamage", 0, 100, 1)
-	if cb.Label then
-		cb.Label:SetWrap(true)
-	end
+	local ns_2 = form:NumSlider("f1_dmgindicator_maxdamage", "ttt_dmgindicator_maxdamage", 0, 100, 1)
 
-	cb = form:NumSlider("f1_dmgindicator_maxalpha", "ttt_dmgindicator_maxalpha", 0, 255, 0)
-	if cb.Label then
-		cb.Label:SetWrap(true)
+	local ns_3 = form:NumSlider("f1_dmgindicator_maxalpha", "ttt_dmgindicator_maxalpha", 0, 255, 0)
+
+	-- SET / UPDATE ENABLED STATE
+	local function changeState(state)
+		dmode:SetEnabled(state)
+		ns_1:SetEnabled(state)
+		ns_2:SetEnabled(state)
+		ns_3:SetEnabled(state)
+	end
+	changeState(GetConVar("ttt_dmgindicator_enable"):GetBool())
+
+	dmgEnb.OnChange = function(slf, value)
+		changeState(value)
 	end
 
 	form:Dock(TOP)

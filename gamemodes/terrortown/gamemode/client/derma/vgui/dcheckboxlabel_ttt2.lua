@@ -37,6 +37,18 @@ function PANEL:Toggle()
 	self.Button:Toggle()
 end
 
+function PANEL:SetDisabled(bDisabled)
+	self.m_bDisabled = bDisabled
+
+	if bDisabled then
+		self:SetAlpha(75)
+		self:SetMouseInputEnabled(false)
+	else
+		self:SetAlpha(255)
+		self:SetMouseInputEnabled(true)
+	end
+end
+
 function PANEL:PerformLayout()
 	local x = self.m_iIndent or 0
 

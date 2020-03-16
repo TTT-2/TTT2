@@ -144,7 +144,7 @@ end
 -- <a href="https://en.wikipedia.org/wiki/Potentially_visible_set">PVS</a>,
 -- the client will receive it as NULL entity.
 -- @hook
--- @realm server
+-- @realm shared
 -- @ref https://wiki.garrysmod.com/page/GM/InitPostEntity
 -- @local
 function GM:InitPostEntity()
@@ -230,6 +230,16 @@ function GM:InitPostEntity()
 
 	RunConsoleCommand("_ttt_request_serverlang")
 	RunConsoleCommand("_ttt_request_rolelist")
+end
+
+---
+-- Called when gamemode has been reloaded by auto refresh.
+-- @hook
+-- @realm shared
+-- @ref https://wiki.facepunch.com/gmod/GM:OnReloaded
+function GM:OnReloaded()
+	-- rebuild menues on game reload
+	VHDL.Rebuild()
 end
 
 ---

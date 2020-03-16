@@ -1281,6 +1281,10 @@ L.button_bind_disable = "Clear"
 
 L.help_color_desc = "If this setting is enabled, a global color can be chosen that will be used for the targetID outline and the crosshair."
 L.help_scale_factor = "This scale factor influences all UI elements (HUD, vgui and targetID). It is automatically updated if the screen resolution is changed. Changing this value will reset the HUD!"
+L.help_hud_game_reload = "The HUD is not available right now. The game has to be reloaded."
+L.help_hud_special_settings = "These are specific settings of this HUD."
+L.help_vskin_info = "VSkin (vgui skin) is the skin applied to all menu elements like the current one. Skins can be easily created with a simple lua script and can change colors and some size parameters."
+L.help_targetid_info = "TargetID is the information rendered when focusing an entity. A fixed color can be set in the general settings panel."
 
 
 

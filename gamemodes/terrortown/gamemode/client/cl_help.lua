@@ -12,9 +12,10 @@ CreateConVar("ttt_spectator_mode", "0", FCVAR_ARCHIVE)
 CreateConVar("ttt_mute_team_check", "0")
 
 -- SET UP HELPSCRN AND INCLUDE ADDITIONAL FILES
-HELPSCRN = {
+HELPSCRN = HELPSCRN or {
 	populate = {},
-	subPopulate = {}
+	subPopulate = {},
+	nameMenuOpen = nil
 }
 
 ttt_include("cl_help_populate")
@@ -26,9 +27,6 @@ ttt_include("cl_help_populate_gameplay")
 ttt_include("cl_help_populate_guide")
 ttt_include("cl_help_populate_language")
 ttt_include("cl_help_populate_legacy")
-
--- store the helpscreen info
-local helpMenuOpen = nil
 
 -- DEFINE SIZE
 HELPSCRN.pad = 5
@@ -51,7 +49,7 @@ local widthNavButton, heightNavButton = 299, 50
 function HELPSCRN:ShowMainMenu()
 	-- IF MENU ELEMENT DOES NOT ALREADY EXIST, CREATE IT
 	local frame
-	if helpMenuOpen and VHDL.IsOpen() then
+	if self.nameMenuOpen and VHDL.IsOpen() then
 		frame = VHDL.ClearFrame(w, h, "help_title")
 	else
 		frame = VHDL.GenerateFrame(w, h, "help_title", true)
@@ -61,7 +59,7 @@ function HELPSCRN:ShowMainMenu()
 	frame:SetPadding(5, 5, 5, 5)
 
 	-- MARK AS MAIN MENU
-	helpMenuOpen = "main"
+	self.nameMenuOpen = "main"
 
 	-- MAKE MAIN FRAME SCROLEABLE
 	local scrollPanel = vgui.Create("DScrollPanel", frame)
@@ -103,7 +101,7 @@ function HELPSCRN:ShowMainMenu()
 end
 
 function HELPSCRN:GetOpenMenu()
-	return helpMenuOpen and self.menuData.id
+	return self.nameMenuOpen and self.menuData.id
 end
 
 function HELPSCRN:SetupContentArea(parent, menuData)
@@ -145,7 +143,7 @@ end
 function HELPSCRN:ShowSubMenu(data)
 	-- IF MENU ELEMENT DOES NOT ALREADY EXIST, CREATE IT
 	local frame
-	if helpMenuOpen and VHDL.IsOpen() then
+	if self.nameMenuOpen and VHDL.IsOpen() then
 		frame = VHDL.ClearFrame(w, h, data.title or data.id)
 	else
 		frame = VHDL.GenerateFrame(w, h, data.title or data.id, true)
@@ -160,7 +158,7 @@ function HELPSCRN:ShowSubMenu(data)
 	end)
 
 	-- MARK AS SUBMENU
-	helpMenuOpen = "sub"
+	self.nameMenuOpen = "sub"
 
 	-- BUILD GENERAL BOX STRUCTURE
 	local navArea = vgui.Create("DNavPanelTTT2", frame)
@@ -243,25 +241,34 @@ function HELPSCRN:ShowSubMenu(data)
 
 		lastActive = navAreaScrollGrid:GetChild(0)
 	end
+
+	-- REGISTER REBUILD CALLABCK
+	VHDL.RegisterCallback("rebuild", function(menu)
+		print(tostring(HELPSCRN.nameMenuOpen))
+
+		if HELPSCRN.nameMenuOpen ~= "sub" then return end
+
+		HELPSCRN:BuildContentArea()
+	end)
 end
 
 local function ShowTTTHelp(ply, cmd, args)
 	-- F1 PRESSED: CLOSE MAIN MENU IF MENU IS ALREADY OPENED
-	if helpMenuOpen == "main" and VHDL.IsOpen() then
+	if HELPSCRN.nameMenuOpen == "main" and VHDL.IsOpen() then
 		VHDL.CloseFrame()
 
 		return
 	end
 
 	-- F1 PRESSED AND MENU IS HIDDEN: UNHIDE
-	if helpMenuOpen and VHDL.IsHidden() then
+	if HELPSCRN.nameMenuOpen and VHDL.IsHidden() then
 		VHDL.UnhideFrame()
 
 		return
 	end
 
 	-- DO NOTHING IF OTHER MENU IS OPEN
-	if not helpMenuOpen and VHDL.IsOpen() then return end
+	if not HELPSCRN.nameMenuOpen and VHDL.IsOpen() then return end
 
 	-- F1 PRESSED: CLOSE SUB MENU IF MENU IS ALREADY OPENED
 	-- AND OPEN MAIN MENU IN GENERAL

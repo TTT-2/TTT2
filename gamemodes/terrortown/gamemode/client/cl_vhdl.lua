@@ -2,14 +2,15 @@
 -- A vgui handler
 -- @author Mineotopia
 
-VHDL = VHDL or {}
-VHDL.menuCache = {
-	frame = nil,
-	hidden = nil
-}
-VHDL.callback = {
-	frame = {},
-	hidden = {}
+VHDL = VHDL or {
+	menuCache = {
+		frame = nil,
+		hidden = nil
+	},
+	callback = {
+		frame = {},
+		hidden = {}
+	}
 }
 
 -- Call this function to create a new frame. Clears
@@ -207,6 +208,18 @@ end
 -- Rebuilds the whole menu without a specific changed settings
 -- @realm client
 function VHDL.Rebuild()
+	print("rebuilding ...")
+
+	if isfunction(VHDL.callback.frame["rebuild"]) then
+		print("frame")
+		VHDL.callback.frame["rebuild"](VHDL.menuCache.frame)
+	end
+
+	if isfunction(VHDL.callback.hidden["rebuild"]) then
+		print("hidden")
+		VHDL.callback.hidden["rebuild"](VHDL.menuCache.hidden)
+	end
+
 	VHDL.UpdateVSkinSetting("general_rebuild")
 end
 

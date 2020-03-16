@@ -162,6 +162,18 @@ function PANEL:NumSlider(strLabel, strConVar, numMin, numMax, numDecimals)
 		return true
 	end
 
+	left.SetDisabled = function(slf, bDisabled)
+		slf.m_bDisabled = bDisabled
+
+		if bDisabled then
+			slf:SetAlpha(50)
+			slf:SetMouseInputEnabled(false)
+		else
+			slf:SetAlpha(255)
+			slf:SetMouseInputEnabled(true)
+		end
+	end
+
 	left.TextArea:SetFont("DermaTTT2Text")
 	left.Label:SetFont("DermaTTT2Text")
 
