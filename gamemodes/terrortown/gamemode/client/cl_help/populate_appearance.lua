@@ -31,11 +31,8 @@ local function PopulateGeneralPanel(parent)
 		max = 3,
 		decimal = 1,
 		initial = GLAPP.GetGlobalScale(),
-		onValueChanged = function(self, value)
+		onValueChanged = function(_, value)
 			GLAPP.SetGlobalScale(value)
-
-			-- reset to make sure it is only in valid steps
-			self:SetValue(GLAPP.GetGlobalScale())
 		end
 	})
 end

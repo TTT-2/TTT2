@@ -50,8 +50,6 @@ end
 -- @param number scale The scale as a floating point value
 -- @realm client
 function GLAPP.SetGlobalScale(scale)
-	scale = math.Round(scale, 1)
-
 	local oldScale = GLAPP.GetGlobalScale()
 
 	if oldScale == scale then return end
