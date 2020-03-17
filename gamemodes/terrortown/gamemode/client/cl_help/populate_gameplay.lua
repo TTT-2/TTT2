@@ -1,41 +1,42 @@
 local materialIcon = Material("vgui/ttt/derma/helpscreen/gameplay")
 
 local function PopulateGeneralPanel(parent)
-	local form = vgui.Create("DFormTTT2", parent)
-	form:SetName("set_title_play")
+	local form = CreateForm(parent, "set_title_play")
 
-	local cb
+	form:MakeCheckBox({
+		label = "set_specmode",
+		convar = "ttt_spectator_mode"
+	})
 
-	cb = form:CheckBox("set_specmode", "ttt_spectator_mode")
-	cb:SetTooltip("set_specmode_tip")
+	form:MakeCheckBox({
+		label = "set_fastsw",
+		convar = "ttt_weaponswitcher_fast"
+	})
 
-	cb = form:CheckBox("set_fastsw", "ttt_weaponswitcher_fast")
-	cb:SetTooltip("set_fastsw_tip")
+	form:MakeCheckBox({
+		label = "hold_aim",
+		convar = "ttt2_hold_aim"
+	})
 
-	cb = form:CheckBox("hold_aim", "ttt2_hold_aim")
-	cb:SetTooltip("hold_aim_tip")
+	form:MakeCheckBox({
+		label = "set_mute",
+		convar = "ttt_mute_team_check"
+	})
 
-	cb = form:CheckBox("doubletap_sprint_anykey", "ttt2_doubletap_sprint_anykey")
-	cb:SetTooltip("doubletap_sprint_anykey_tip")
+	form:MakeCheckBox({
+		label = "doubletap_sprint_anykey",
+		convar = "ttt2_doubletap_sprint_anykey"
+	})
 
-	cb = form:CheckBox("disable_doubletap_sprint", "ttt2_disable_doubletap_sprint")
-	cb:SetTooltip("disable_doubletap_sprint_tip")
-
-	-- TODO what is the following reason?
-	-- For some reason this one defaulted to on, unlike other checkboxes, so
-	-- force it to the actual value of the cvar (which defaults to off)
-	local mute = form:CheckBox("set_mute", "ttt_mute_team_check")
-	mute:SetValue(GetConVar("ttt_mute_team_check"):GetBool())
-	mute:SetTooltip("set_mute_tip")
-
-	form:Dock(TOP)
+	form:MakeCheckBox({
+		label = "disable_doubletap_sprint",
+		convar = "ttt2_disable_doubletap_sprint"
+	})
 end
 
 local function PopulateRolesPanel(parent)
-	local form = vgui.Create("DFormTTT2", parent)
-	form:SetName("set_title_avoid_roles")
+	local form = CreateForm(parent, "set_title_avoid_roles")
 
-	local cb
 	local roles = roles.GetList()
 
 	for i = 1, #roles do
@@ -44,8 +45,10 @@ local function PopulateRolesPanel(parent)
 		if ConVarExists("ttt_avoid_" .. v.name) then
 			local rolename = v.name
 
-			cb = form:CheckBox(rolename, "ttt_avoid_" .. v.name)
-			cb:SetTooltip("avoid_role")
+			form:MakeCheckBox({
+				label = rolename,
+				convar = "ttt_avoid_" .. rolename
+			})
 		end
 	end
 

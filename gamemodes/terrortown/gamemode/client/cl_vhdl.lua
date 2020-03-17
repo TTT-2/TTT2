@@ -208,15 +208,11 @@ end
 -- Rebuilds the whole menu without a specific changed settings
 -- @realm client
 function VHDL.Rebuild()
-	print("rebuilding ...")
-
 	if isfunction(VHDL.callback.frame["rebuild"]) then
-		print("frame")
 		VHDL.callback.frame["rebuild"](VHDL.menuCache.frame)
 	end
 
 	if isfunction(VHDL.callback.hidden["rebuild"]) then
-		print("hidden")
 		VHDL.callback.hidden["rebuild"](VHDL.menuCache.hidden)
 	end
 

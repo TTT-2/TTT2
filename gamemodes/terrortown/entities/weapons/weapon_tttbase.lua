@@ -156,9 +156,8 @@ local ttt2_hold_aim = CLIENT and CreateClientConVar("ttt2_hold_aim", 0, true, fa
 -- crosshair
 if CLIENT then
 	local sights_opacity = CreateClientConVar("ttt_ironsights_crosshair_opacity", "0.8", true)
-	local crosshair_brightness = CreateClientConVar("ttt_crosshair_brightness", "1.0", true)
 	local crosshair_size = CreateClientConVar("ttt_crosshair_size", "1.0", true)
-	local disable_crosshair = CreateClientConVar("ttt_disable_crosshair", "0", true)
+	local enable_crosshair = CreateClientConVar("ttt_enable_crosshair", "1", true)
 
 	local enable_gap_crosshair = CreateClientConVar("ttt_crosshair_gap_enable", "0", true)
 	local crosshair_gap = CreateClientConVar("ttt_crosshair_gap", "0", true)
@@ -180,7 +179,7 @@ if CLIENT then
 
 		local client = LocalPlayer()
 
-		if disable_crosshair:GetBool() or not IsValid(client) or client.isSprinting and not GetGlobalBool("ttt2_sprint_crosshair", false) then return end
+		if not enable_crosshair:GetBool() or not IsValid(client) or client.isSprinting and not GetGlobalBool("ttt2_sprint_crosshair", false) then return end
 
 		local sights = not self.NoSights and self:GetIronsights()
 		local x = math.floor(ScrW() * 0.5)
@@ -193,7 +192,6 @@ if CLIENT then
 		end
 
 		local alpha = sights and sights_opacity:GetFloat() or crosshair_opacity:GetFloat()
-		local bright = crosshair_brightness:GetFloat() or 1
 		local gap = enable_gap_crosshair:GetBool() and math.floor(timescale * crosshair_gap:GetFloat()) or math.floor(20 * scale * timescale * (sights and 0.8 or 1))
 		local thickness = crosshair_thickness:GetFloat()
 		local outline = math.floor(crosshair_outlinethickness:GetFloat())
@@ -214,9 +212,9 @@ if CLIENT then
 		color = GLAPP.ValidateFocusColor(color)
 
 		surface.SetDrawColor(
-			color.r * bright,
-			color.g * bright,
-			color.b * bright,
+			color.r,
+			color.g,
+			color.b,
 			255 * alpha
 		)
 

@@ -2,7 +2,7 @@
 -- A handler of the skin colors
 -- @author Mineotopia
 
-local cv_selectedVSkin = CreateConVar("ttt2_selected_vskin", "ttt2_light", {FCVAR_ARCHIVE})
+local cv_selectedVSkin = CreateConVar("ttt2_selected_vskin", "dark_ttt2", {FCVAR_ARCHIVE})
 local cv_blurVSkin = CreateConVar("ttt2_vskin_blur", 1, {FCVAR_ARCHIVE})
 
 VSKIN = VSKIN or {}

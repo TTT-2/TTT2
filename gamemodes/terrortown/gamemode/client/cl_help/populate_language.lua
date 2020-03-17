@@ -1,24 +1,21 @@
 local materialIcon = Material("vgui/ttt/derma/helpscreen/language")
 
 local function PopulateLanguagePanel(parent)
-	local form = vgui.Create("DFormTTT2", parent)
-	form:SetName("set_title_lang")
+	local form = CreateForm(parent, "set_title_lang")
 
-	local dlang = form:ComboBox("set_lang", "ttt_language")
+	local dlang = form:MakeComboBox({
+		label = "set_lang",
+		convar = "ttt_language",
+		onSelect = function(slf, index, value, rawdata)
+			VHDL.UpdateVSkinSetting("language")
+		end
+	})
 
+	-- since these are no simple strings, the choices have to be added manually
 	dlang:AddChoice("Server default", "auto")
-
 	for _, lang in pairs(LANG.GetLanguages()) do
 		dlang:AddChoice(string.Capitalize(lang), lang)
 	end
-
-	dlang.OnSelect = function(idx, val, data)
-		RunConsoleCommand("ttt_language", data)
-
-		VHDL.UpdateVSkinSetting("language")
-	end
-
-	form:Dock(TOP)
 end
 
 ---

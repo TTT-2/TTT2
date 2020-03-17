@@ -1121,7 +1121,6 @@ L.drop_no_ammo = "Insufficient ammo in your weapon's clip to drop as an ammo box
 L.drop_ammo_prevented = "Something prevents you from dropping your ammo."
 
 -- v31
-L.set_cross_brightness = "Crosshair brightness"
 L.set_cross_size = "Crosshair size"
 
 -- 5-25-15

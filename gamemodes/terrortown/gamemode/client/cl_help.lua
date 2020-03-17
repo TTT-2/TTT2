@@ -12,11 +12,13 @@ CreateConVar("ttt_spectator_mode", "0", FCVAR_ARCHIVE)
 CreateConVar("ttt_mute_team_check", "0")
 
 -- SET UP HELPSCRN AND INCLUDE ADDITIONAL FILES
-HELPSCRN = HELPSCRN or {
-	populate = {},
-	subPopulate = {},
-	nameMenuOpen = nil
-}
+HELPSCRN = HELPSCRN or {}
+
+HELPSCRN.populate = HELPSCRN.populate or {}
+HELPSCRN.subPopulate = HELPSCRN.subPopulate or {}
+HELPSCRN.nameMenuOpen = HELPSCRN.nameMenuOpen or nil
+HELPSCRN.parent = HELPSCRN.parent or nil
+HELPSCRN.menuData = HELPSCRN.menuData or nil
 
 ttt_include("cl_help_populate")
 ttt_include("cl_help_populate_addons")
@@ -110,6 +112,8 @@ function HELPSCRN:SetupContentArea(parent, menuData)
 end
 
 function HELPSCRN:BuildContentArea()
+	if not IsValid(self.parent) then return end
+
 	self.parent:Clear()
 
 	local w2, h2 = self.parent:GetSize()
@@ -244,8 +248,6 @@ function HELPSCRN:ShowSubMenu(data)
 
 	-- REGISTER REBUILD CALLABCK
 	VHDL.RegisterCallback("rebuild", function(menu)
-		print(tostring(HELPSCRN.nameMenuOpen))
-
 		if HELPSCRN.nameMenuOpen ~= "sub" then return end
 
 		HELPSCRN:BuildContentArea()

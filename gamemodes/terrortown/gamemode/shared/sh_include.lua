@@ -101,6 +101,7 @@ TTTFiles = {
 	derma__vgui__dlabel = {file = "derma/vgui/dlabel_ttt2.lua", on = "client"},
 	derma__vgui__dcombobox = {file = "derma/vgui/dcombobox_ttt2.lua", on = "client"},
 	derma__vgui__dcheckboxlabel = {file = "derma/vgui/dcheckboxlabel_ttt2.lua", on = "client"},
+	derma__vgui__dnumslider = {file = "derma/vgui/dnumslider_ttt2.lua", on = "client"},
 
 	-- cl_help client files
 	cl_help_populate = {file = "cl_help/populate.lua", on = "client"},

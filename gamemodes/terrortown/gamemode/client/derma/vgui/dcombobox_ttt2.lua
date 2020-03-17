@@ -44,6 +44,10 @@ function PANEL:GetOptionText(id)
 	return self.Choices[id]
 end
 
+function PANEL:GetOptionId(name)
+	return table.KeyFromValue(self.Choices, name) or 1
+end
+
 function PANEL:GetOptionData(id)
 	return self.Data[id]
 end
@@ -80,18 +84,27 @@ function PANEL:ChooseOption(value, index)
 
 	self:SetText(value)
 
-	-- This should really be the here, but it is too late now and convar changes are handled differently by different child elements
-	--self:ConVarChanged(self.Data[ index ])
+	-- This should really be the here, but it is too late now and
+	-- convar changes are handled differently by different child
+	-- elements
+	-- self:ConVarChanged(self.Data[index])
 	self.selected = index
-	self:OnSelect(index, value, self.Data[ index ])
+	self:OnSelect(index, value, self.Data[index])
 end
 
-function PANEL:ChooseOptionID(index)
-	local value = self:GetOptionText(index)
-	self:ChooseOption(value, index)
+function PANEL:ChooseOptionId(index)
+	local name = self:GetOptionText(index)
+
+	self:ChooseOption(name, index)
 end
 
-function PANEL:GetSelectedID()
+function PANEL:ChooseOptionName(name)
+	local index = self:GetOptionId(name)
+
+	self:ChooseOption(name, index)
+end
+
+function PANEL:GetSelectedId()
 	return self.selected
 end
 

@@ -1063,7 +1063,6 @@ L.set_avoid_det_tip = "Włącz, by serwer wiedział, że nie chcesz być nigdy d
 L.drop_no_ammo = "Niewystarczająca ilość amunicji w magazynku twojej broni do upuszczenia pudełka amunicji."
 
 --- v31
-L.set_cross_brightness = "Jasność celownika"
 L.set_cross_size = "Wielkość celownika"
 
 --- 5-25-15

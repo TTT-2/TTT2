@@ -8,6 +8,8 @@ SKIN.Name = "ttt2_default"
 
 local TryT = LANG.TryTranslation
 
+local alphaDisabled = 100
+
 -- register fonts
 surface.CreateAdvancedFont("DermaTTT2Title", {font = "Trebuchet24", size = 26, weight = 300})
 surface.CreateAdvancedFont("DermaTTT2TitleSmall", {font = "Trebuchet24", size = 18, weight = 600})
@@ -100,7 +102,7 @@ function SKIN:PaintWindowCloseButton(panel, w, h)
 
 	local colorTitleText = util.GetDefaultColor(colorAccent)
 
-	if panel:GetDisabled() then
+	if not panel:IsEnabled() then
 		return DrawClose(w, h, colorAccent, ColorAlpha(colorTitleText, 70), 0)
 	end
 
@@ -142,7 +144,7 @@ function SKIN:PaintWindowBackButton(panel, w, h)
 
 	local colorTitleText = util.GetDefaultColor(colorAccent)
 
-	if panel:GetDisabled() then
+	if not panel:IsEnabled() then
 		return DrawBack(w, h, panel, colorAccent, ColorAlpha(colorTitleText, 70), 0)
 	end
 
@@ -173,7 +175,7 @@ function SKIN:PaintScrollBarGrip(panel, w, h)
 
 	local sizeCornerRadius = VSKIN.GetCornerRadius()
 
-	if panel:GetDisabled() then
+	if not panel:IsEnabled() then
 		return self.tex.Scroller.ButtonV_Disabled( 0, 0, w, h )
 	end
 
@@ -197,7 +199,7 @@ function SKIN:PaintButtonDown(panel, w, h)
 
 	local sizeCornerRadius = VSKIN.GetCornerRadius()
 
-	if panel:GetDisabled() then
+	if not panel:IsEnabled() then
 		return self.tex.Scroller.DownButton_Dead( 0, 0, w, h )
 	end
 
@@ -221,7 +223,7 @@ function SKIN:PaintButtonUp(panel, w, h)
 
 	local sizeCornerRadius = VSKIN.GetCornerRadius()
 
-	if panel:GetDisabled() then
+	if not panel:IsEnabled() then
 		return self.tex.Scroller.DownButton_Dead( 0, 0, w, h )
 	end
 
@@ -284,7 +286,7 @@ function SKIN:PaintMenuButtonTTT2(panel, w, h)
 	local colorIcon = util.GetChangedColor(colorDefault, 170)
 	local colorIconHover = util.GetChangedColor(colorDefault, 160)
 
-	if panel:GetDisabled() then
+	if not panel:IsEnabled() then
 		return self.tex.Button_Dead( 0, 0, w, h)
 	end
 
@@ -339,7 +341,7 @@ function SKIN:PaintSubMenuButtonTTT2(panel, w, h)
 	local sizeBorder = VSKIN.GetBorderSize()
 
 
-	if panel:GetDisabled() then
+	if not panel:IsEnabled() then
 		return self.tex.Button_Dead( 0, 0, w, h)
 	end
 
@@ -370,8 +372,14 @@ function SKIN:PaintCheckBox(panel, w, h)
 	local colorAccent = VSKIN.GetAccentColor()
 	local colorAccentHover = ColorAlpha(util.GetHoverColor(colorAccent), 200)
 
+	if not panel:IsEnabled() then
+		colorBox = ColorAlpha(colorBox, alphaDisabled)
+		colorAccent = ColorAlpha(colorAccent, alphaDisabled)
+		colorAccentHover = ColorAlpha(colorAccentHover, alphaDisabled)
+	end
+
 	if panel:GetChecked() then
-		if panel:GetDisabled() then
+		if not panel:IsEnabled() then
 			self.tex.CheckboxD_Checked( 0, 0, w, h )
 		elseif panel.Hovered then
 			DrawCheckBox(w, h, w - h, panel, colorBox, colorAccentHover)
@@ -381,7 +389,7 @@ function SKIN:PaintCheckBox(panel, w, h)
 	else
 		local colorCenter = util.GetChangedColor(colorBackground, 150)
 
-		if panel:GetDisabled() then
+		if not panel:IsEnabled() then
 			self.tex.CheckboxD( 0, 0, w, h )
 		elseif panel.Hovered then
 			DrawCheckBox(w, h, 0, panel, colorBox, colorAccentHover)
@@ -398,6 +406,11 @@ function SKIN:PaintCheckBoxLabel(panel, w, h)
 	local colorText = util.GetDefaultColor(colorBox)
 
 	local sizeCornerRadius = VSKIN.GetCornerRadius()
+
+	if not panel:IsEnabled() then
+		colorBox = ColorAlpha(colorBox, alphaDisabled)
+		colorText = ColorAlpha(colorText, alphaDisabled)
+	end
 
 	draw.RoundedBox(sizeCornerRadius, 0, 0, w, h, colorBox)
 
@@ -484,7 +497,7 @@ function SKIN:PaintButtonTTT2(panel, w, h)
 
 	local sizeBorder = VSKIN.GetBorderSize()
 
-	if panel:GetDisabled() then
+	if not panel:IsEnabled() then
 		local colorText = util.GetDefaultColor(colorAccentDisabled)
 
 		return DrawButton(w, h, panel, sizeBorder, colorAccentDarkDisabled, colorAccentDisabled, colorText)
@@ -529,9 +542,14 @@ function SKIN:PaintFormLabelTTT2(panel, w, h)
 	local colorBox = util.GetChangedColor(colorBackground, 150)
 	local colorText = util.GetDefaultColor(colorBox)
 
+	if not panel:IsEnabled() then
+		colorBox = ColorAlpha(colorBox, alphaDisabled)
+		colorText = ColorAlpha(colorText, alphaDisabled)
+	end
+
 	local sizeCornerRadius = VSKIN.GetCornerRadius()
 
-	draw.RoundedBox(sizeCornerRadius, 0, 0, w + 2 * sizeCornerRadius, h, colorBox)
+	draw.RoundedBoxEx(sizeCornerRadius, 0, 0, w, h, colorBox, true, false, true, false)
 
 	draw.SimpleText(
 		TryT(panel:GetText()),
@@ -596,11 +614,16 @@ function SKIN:PaintHelpLabelTTT2(panel, w, h)
 	end
 end
 
-function SKIN:PaintNumSlider(panel, w, h)
+function SKIN:PaintNumSliderTTT2(panel, w, h)
 	local colorBackground = VSKIN.GetBackgroundColor()
 
 	local colorOutline = util.GetChangedColor(colorBackground, 150)
 	local colorBox = util.GetChangedColor(colorBackground, 15)
+
+	if not panel:IsEnabled() then
+		colorOutline = ColorAlpha(colorOutline, alphaDisabled)
+		colorBox = ColorAlpha(colorBox, alphaDisabled)
+	end
 
 	local sizeCornerRadius = VSKIN.GetCornerRadius()
 
@@ -614,11 +637,14 @@ function SKIN:PaintSliderTextAreaTTT2(panel, w, h)
 	local colorBox = util.GetChangedColor(colorBackground, 150)
 	local colorText = util.GetDefaultColor(colorBox)
 
+	if not panel:IsEnabled() then
+		colorBox = ColorAlpha(colorBox, alphaDisabled)
+		colorText = ColorAlpha(colorText, alphaDisabled)
+	end
+
 	local sizeCornerRadius = VSKIN.GetCornerRadius()
 
-	DisableClipping(true)
-	draw.RoundedBox(sizeCornerRadius, 0 - 2 * sizeCornerRadius, 0, w + 2 * sizeCornerRadius, h, colorBox)
-	DisableClipping(false)
+	draw.RoundedBoxEx(sizeCornerRadius, 0, 0, w, h, colorBox, false, true, false, true)
 
 	draw.SimpleText(
 		panel:GetText(),
@@ -659,22 +685,33 @@ function SKIN:PaintComboBoxTTT2(panel, w, h)
 
 	local sizeCornerRadius = VSKIN.GetCornerRadius()
 
-	draw.Box(0, 0, sizeCornerRadius, h, colorOutline)
-	draw.RoundedBox(sizeCornerRadius, 0, 0, w, h, colorOutline)
+	if not panel:IsEnabled() then
+		colorBoxActive = ColorAlpha(colorBoxActive, alphaDisabled)
+		colorText = ColorAlpha(colorText, alphaDisabled)
+		colorOutline = ColorAlpha(colorOutline, alphaDisabled)
 
-	if panel:GetDisabled() then
-		return self.tex.Input.ComboBox.Disabled( 0, 0, w, h )
+		draw.RoundedBoxEx(sizeCornerRadius, 0, 0, w, h, colorOutline, false, true, false, true)
+		DrawComboBox(w, h, panel, sizeCornerRadius, colorBoxActive, colorText)
+
+		return
 	end
 
 	if panel.Depressed or panel:IsMenuOpen() then
-		return DrawComboBox(w, h, panel, sizeCornerRadius, colorBoxActive, colorText)
+		draw.RoundedBoxEx(sizeCornerRadius, 0, 0, w, h, colorOutline, false, true, false, true)
+		DrawComboBox(w, h, panel, sizeCornerRadius, colorBoxActive, colorText)
+
+		return
 	end
 
 	if panel.Hovered then
-		return DrawComboBox(w, h, panel, sizeCornerRadius, colorBoxHover, colorText)
+		draw.RoundedBoxEx(sizeCornerRadius, 0, 0, w, h, colorOutline, false, true, false, true)
+		DrawComboBox(w, h, panel, sizeCornerRadius, colorBoxHover, colorText)
+
+		return
 	end
 
-	return DrawComboBox(w, h, panel, sizeCornerRadius, colorBox, colorText)
+	draw.RoundedBoxEx(sizeCornerRadius, 0, 0, w, h, colorOutline, false, true, false, true)
+	DrawComboBox(w, h, panel, sizeCornerRadius, colorBox, colorText)
 end
 
 --[[

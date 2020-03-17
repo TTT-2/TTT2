@@ -1110,7 +1110,6 @@ L.drop_no_ammo = "Du hast zu wenig Munition im Magazin, um eine Munitionskiste f
 L.drop_ammo_prevented = "Etwas hindert dich daran deine Munition fallenzulassen."
 
 -- v31
-L.set_cross_brightness = "Fadenkreuz Helligkeit"
 L.set_cross_size = "Fadenkreuz Größe"
 
 -- 5-25-15

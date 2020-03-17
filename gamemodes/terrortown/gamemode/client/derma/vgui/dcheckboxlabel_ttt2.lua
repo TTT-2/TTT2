@@ -6,15 +6,40 @@ function PANEL:Init()
 	self.Button = vgui.Create("DCheckBox", self)
 	self.Button.OnChange = function(_, val)
 		self:OnChange(val)
+
+		-- enable / disable slaves on change
+		self:UpdateSlaves(val)
 	end
 
 	self:SetFont("DermaTTT2Text")
+
+	-- store slaves in here to be updates on change of this value
+	self.slaves = {}
+end
+
+function PANEL:UpdateSlaves(val)
+	for i = 1, #self.slaves do
+		self.slaves[i]:SetEnabled(val)
+	end
 end
 
 function PANEL:Paint(w, h)
 	derma.SkinHook("Paint", "CheckBoxLabel", self, w, h)
 
 	return true
+end
+
+function PANEL:SetEnabled(enabled)
+	self:SetDisabled(not enabled)
+
+	self.Button:SetEnabled(enabled)
+
+	-- make sure sub-slaves are updated as well
+	if not enabled then
+		self:UpdateSlaves(false)
+	else
+		self:UpdateSlaves(self.Button:GetChecked())
+	end
 end
 
 function PANEL:SetConVar(cvar)
@@ -37,30 +62,22 @@ function PANEL:Toggle()
 	self.Button:Toggle()
 end
 
-function PANEL:SetDisabled(bDisabled)
-	self.m_bDisabled = bDisabled
-
-	if bDisabled then
-		self:SetAlpha(75)
-		self:SetMouseInputEnabled(false)
-	else
-		self:SetAlpha(255)
-		self:SetMouseInputEnabled(true)
-	end
+function PANEL:AddSlave(slave)
+	self.slaves[#self.slaves + 1] = slave
 end
 
 function PANEL:PerformLayout()
 	local x = self.m_iIndent or 0
 
 	local height = self:GetTall()
-	local heightButton = 0.8 * height
-	local widthButton = 1.3 * height
-	local paddingButton = 0.5 * (height - heightButton)
+	local paddingButton = 4
+	local heightButton = height - 2 * paddingButton
+	local widthButton = 1.5 * heightButton
 
 	self.Button:SetSize(widthButton, heightButton)
 	self.Button:SetPos(x + paddingButton, paddingButton)
 
-	self.textPos = 2 * paddingButton + widthButton + x
+	self.textPos = 2 * paddingButton + widthButton + x + 5
 end
 
 function PANEL:GetTextPosition()

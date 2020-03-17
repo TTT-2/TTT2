@@ -56,6 +56,7 @@ ttt_include("derma__vgui__dbinder")
 ttt_include("derma__vgui__dlabel")
 ttt_include("derma__vgui__dcombobox")
 ttt_include("derma__vgui__dcheckboxlabel")
+ttt_include("derma__vgui__dnumslider")
 
 ttt_include("cl_network_sync")
 ttt_include("cl_karma")

@@ -1,18 +1,19 @@
 local materialIcon = Material("vgui/ttt/derma/helpscreen/appearance")
 
 local function PopulateGeneralPanel(parent)
-	local form = vgui.Create("DFormTTT2", parent)
-	form:SetName("set_title_color")
+	local form = CreateForm(parent, "set_title_color")
 
-	form:Help("help_color_desc")
+	form:MakeHelp({
+		label = "help_color_desc"
+	})
 
-	local cb = form:CheckBox("set_global_color_enable")
-
-	cb:SetValue(GLAPP.ShouldUseGlobalFocusColor())
-
-	cb.OnChange = function(self, value)
-		GLAPP.SetUseGlobalFocusColor(value)
-	end
+	form:MakeCheckBox({
+		label = "set_global_color_enable",
+		initial = GLAPP.ShouldUseGlobalFocusColor(),
+		onChange = function(_, value)
+			GLAPP.SetUseGlobalFocusColor(value)
+		end
+	})
 
 	local cm = form:ColorMixer("set_global_focus_color", GLAPP.GetFocusColor(), false, false)
 
@@ -20,29 +21,31 @@ local function PopulateGeneralPanel(parent)
 		GLAPP.SetFocusColor(color)
 	end
 
-	form:Help("help_scale_factor")
+	form:MakeHelp({
+		label = "help_scale_factor"
+	})
 
-	local ns = form:NumSlider("set_scale_factor", nil, 0.1, 3, 1)
-	if ns.Label then
-		ns.Label:SetWrap(true)
-	end
+	form:MakeSlider({
+		label = "set_scale_factor",
+		min = 0.1,
+		max = 3,
+		decimal = 1,
+		initial = GLAPP.GetGlobalScale(),
+		onValueChanged = function(self, value)
+			GLAPP.SetGlobalScale(value)
 
-	ns:SetValue(GLAPP.GetGlobalScale())
-
-	ns.OnValueChanged = function(self, value)
-		GLAPP.SetGlobalScale(value)
-
-		-- reset to make sure it is only in valid steps
-		self:SetValue(GLAPP.GetGlobalScale())
-	end
-
-	form:Dock(TOP)
+			-- reset to make sure it is only in valid steps
+			self:SetValue(GLAPP.GetGlobalScale())
+		end
+	})
 end
 
 local function PopulateHUDSwitcherPanelSettings(parent, currentHUD)
 	parent:Clear()
 
-	parent:Help("help_hud_special_settings")
+	parent:MakeHelp({
+		label = "help_hud_special_settings"
+	})
 
 	for key, data in pairs(currentHUD:GetSavingKeys() or {}) do
 		if data.typ == "color" then
@@ -55,6 +58,7 @@ local function PopulateHUDSwitcherPanelSettings(parent, currentHUD)
 					data.OnChange(currentHUD, col)
 				end
 			end
+
 		elseif data.typ == "number" then
 			local ns = parent:NumSlider(data.desc or key, nil, 0.1, 4.0, 1)
 
@@ -75,71 +79,25 @@ local function PopulateHUDSwitcherPanelSettings(parent, currentHUD)
 				end
 			end
 		end
-
-		if el then
-			local add = false
-
-			if not container then
-				container = vgui.Create("DPanel")
-				add = true
-			end
-
-			local label = vgui.Create("DLabel", container)
-			label:SetText((data.desc or key) .. ":")
-			label:SetTextColor(COLOR_BLACK)
-			label:SetContentAlignment(5) -- center
-			label:SizeToContents()
-			label:DockMargin(20, 0, 0, 0)
-			label:DockPadding(10, 0, 10, 0)
-			label:Dock(LEFT)
-
-			if add then
-				el:SetParent(container)
-			end
-
-			el:DockPadding(10, 0, 10, 0)
-			el:DockMargin(20, 0, 0, 0)
-			el:Dock(LEFT)
-
-			local w, h = el:GetSize()
-			local lw, lh = label:GetSize()
-
-			w = w + 10
-			h = h + 10
-			lw = lw + 10
-			lh = lh + 10
-
-			if w < lw then
-				w = lw
-			end
-
-			h = h + lh
-
-			container:SetSize(w, h)
-			container:SetParent(parent)
-			container:DockPadding(0, 10, 0, 10)
-			container:Dock(TOP)
-		end
 	end
 end
 
 local function PopulateHUDSwitcherPanel(parent)
-	local form = vgui.Create("DFormTTT2", parent)
-	form:SetName("set_title_hud_select")
+	local form = CreateForm(parent, "set_title_hud_select")
 
 	local currentHUDName = HUDManager.GetHUD()
 	local currentHUD = huds.GetStored(currentHUDName)
 	local hudList = huds.GetList()
 	local restrictedHUDs = HUDManager.GetModelValue("restrictedHUDs")
+	local validHUDs = {}
 
 	if not currentHUD.GetSavingKeys then
-		form:Help("help_hud_game_reload")
-		form:Dock(TOP)
+		form:MakeHelp({
+			label = "help_hud_game_reload"
+		})
 
 		return
 	end
-
-	local combobox = form:ComboBox("select_hud")
 
 	for i = 1, #hudList do
 		local hud = hudList[i]
@@ -147,25 +105,19 @@ local function PopulateHUDSwitcherPanel(parent)
 		-- do not add HUD to the selection list if restricted
 		if table.HasValue(restrictedHUDs, hud.id) then continue end
 
-		combobox:AddChoice(hud.id)
+		validHUDs[#validHUDs + 1] = hud
+	end
 
-		if hud.id == currentHUDName then
-			combobox:ChooseOption(hud.id, i)
+	form:MakeComboBox({
+		label = "select_hud",
+		choices = validHUDs,
+		selectName = huds.GetStored(HUDManager.GetHUD()),
+		onSelect = function(_, _, value)
+			HUDManager.SetHUD(value)
 		end
-	end
+	})
 
-	combobox.OnSelect = function(self, index, value)
-		HUDManager.SetHUD(value)
-	end
-
-	form:Dock(TOP)
-
-	local form2 = vgui.Create("DFormTTT2", parent)
-	form2:SetName("set_title_hud_customize")
-
-	PopulateHUDSwitcherPanelSettings(form2, currentHUD)
-
-	form2:Dock(TOP)
+	PopulateHUDSwitcherPanelSettings(CreateForm(parent, "set_title_hud_customize"), currentHUD)
 
 	-- REGISTER UNHIDE FUNCTION TO STOP HUD EDITOR
 	VHDL.RegisterCallback("unhide", function(menu)
@@ -182,182 +134,245 @@ hook.Add("TTT2HUDUpdated", "UpdateHUDSwitcherData", function(name)
 end)
 
 local function PopulateVSkinPanel(parent)
-	local form = vgui.Create("DFormTTT2", parent)
-	form:SetName("set_title_vskin")
+	local form = CreateForm(parent, "set_title_vskin")
 
-	form:Help("help_vskin_info")
+	form:MakeHelp({
+		label = "help_vskin_info"
+	})
 
-	local vskins = VSKIN.GetVSkinList()
-	local combobox = form:ComboBox("select_vskin")
-
-	for i = 1, #vskins do
-		local vskin = vskins[i]
-
-		combobox:AddChoice(vskin)
-
-		if vskin == VSKIN.GetVSkinName() then
-			combobox:ChooseOption(vskin, i)
+	form:MakeComboBox({
+		label = "select_vskin",
+		choices = VSKIN.GetVSkinList(),
+		selectName = VSKIN.GetVSkinName(),
+		onSelect = function(_, _, value)
+			VSKIN.SelectVSkin(value)
 		end
-	end
+	})
 
-	combobox.OnSelect = function(self, index, value)
-		VSKIN.SelectVSkin(value)
-	end
-
-	local cb = form:CheckBox("set_blur_enable")
-	cb:SetValue(VSKIN.ShouldBlurBackground())
-
-	cb.OnChange = function(self, value)
-		VSKIN.SetBlurBackground(value)
-	end
-
-	form:Dock(TOP)
+	form:MakeCheckBox({
+		label = "set_blur_enable",
+		initial = VSKIN.ShouldBlurBackground(),
+		onChange = function(_, value)
+			VSKIN.SetBlurBackground(value)
+		end
+	})
 end
 
 local function PopulateTargetIDPanel(parent)
-	local form = vgui.Create("DFormTTT2", parent)
-	form:SetName("set_title_targetid")
+	local form = CreateForm(parent, "set_title_targetid")
 
-	form:Help("help_targetid_info")
+	form:MakeHelp({
+		label = "help_targetid_info"
+	})
 
-	form:CheckBox("set_minimal_id", "ttt_minimal_targetid")
-
-	form:Dock(TOP)
+	form:MakeCheckBox({
+		label = "set_minimal_id",
+		convar = "ttt_minimal_targetid"
+	})
 end
 
 local function PopulateCrosshairPanel(parent)
-	local form = vgui.Create("DFormTTT2", parent)
-	form:SetName("set_title_cross")
+	local form = CreateForm(parent, "set_title_cross")
 
-	form:CheckBox("set_cross_gap_enable", "ttt_crosshair_gap_enable")
+	-- store the reference to the checkbox in a variable
+	-- because the other settings are enabled based on
+	-- the state of this checkbox
+	local crossEnb = form:MakeCheckBox({
+		label = "set_cross_enable",
+		convar = "ttt_enable_crosshair"
+	})
 
-	local cb = form:NumSlider("set_cross_gap", "ttt_crosshair_gap", 0, 30, 0)
-	if cb.Label then
-		cb.Label:SetWrap(true)
-	end
+	-- store the reference to the checkbox in a variable
+	-- because the other settings are enabled based on
+	-- the state of this checkbox
+	local crossGapEnb = form:MakeCheckBox({
+		label = "set_cross_gap_enable",
+		convar = "ttt_crosshair_gap_enable",
+		master = crossEnb
+	})
 
-	cb = form:NumSlider("set_cross_opacity", "ttt_crosshair_opacity", 0, 1, 1)
-	if cb.Label then
-		cb.Label:SetWrap(true)
-	end
+	form:MakeSlider({
+		label = "set_cross_gap",
+		convar = "ttt_crosshair_gap",
+		min = 0,
+		max = 30,
+		decimal = 0,
+		-- this master depends on crossEnb, therefore this
+		-- slider also depends on crossEnb, while also depending
+		-- on crossGapEnb
+		master = crossGapEnb
+	})
 
-	cb = form:NumSlider("set_ironsight_cross_opacity", "ttt_ironsights_crosshair_opacity", 0, 1, 1)
-	if cb.Label then
-		cb.Label:SetWrap(true)
-	end
+	form:MakeSlider({
+		label = "set_cross_opacity",
+		convar = "ttt_crosshair_opacity",
+		min = 0,
+		max = 1,
+		decimal = 1,
+		master = crossEnb
+	})
 
-	cb = form:NumSlider("set_cross_brightness", "ttt_crosshair_brightness", 0, 1, 1)
-	if cb.Label then
-		cb.Label:SetWrap(true)
-	end
+	form:MakeSlider({
+		label = "set_ironsight_cross_opacity",
+		convar = "ttt_ironsights_crosshair_opacity",
+		min = 0,
+		max = 1,
+		decimal = 1,
+		master = crossEnb
+	})
 
-	cb = form:NumSlider("set_cross_size", "ttt_crosshair_size", 0.1, 3, 1)
-	if cb.Label then
-		cb.Label:SetWrap(true)
-	end
+	form:MakeSlider({
+		label = "set_cross_size",
+		convar = "ttt_crosshair_size",
+		min = 0.1,
+		max = 3,
+		decimal = 1,
+		master = crossEnb
+	})
 
-	cb = form:NumSlider("set_cross_thickness", "ttt_crosshair_thickness", 1, 10, 0)
-	if cb.Label then
-		cb.Label:SetWrap(true)
-	end
+	form:MakeSlider({
+		label = "set_cross_thickness",
+		convar = "ttt_crosshair_thickness",
+		min = 1,
+		max = 10,
+		decimal = 0,
+		master = crossEnb
+	})
 
-	cb = form:NumSlider("set_cross_outlinethickness", "ttt_crosshair_outlinethickness", 0, 5, 0)
-	if cb.Label then
-		cb.Label:SetWrap(true)
-	end
+	form:MakeSlider({
+		label = "set_cross_outlinethickness",
+		convar = "ttt_crosshair_outlinethickness",
+		min = 0,
+		max = 5,
+		decimal = 0,
+		master = crossEnb
+	})
 
-	form:CheckBox("set_cross_disable", "ttt_disable_crosshair")
-	form:CheckBox("set_cross_static_enable", "ttt_crosshair_static")
-	form:CheckBox("set_cross_dot_enable", "ttt_crosshair_dot")
-	form:CheckBox("set_cross_weaponscale_enable", "ttt_crosshair_weaponscale")
+	form:MakeCheckBox({
+		label = "set_cross_static_enable",
+		convar = "ttt_crosshair_static",
+		master = crossEnb
+	})
 
-	cb = form:CheckBox("set_lowsights", "ttt_ironsights_lowered")
-	cb:SetTooltip("set_lowsights_tip")
+	form:MakeCheckBox({
+		label = "set_cross_dot_enable",
+		convar = "ttt_crosshair_dot",
+		master = crossEnb
+	})
 
-	form:Dock(TOP)
+	form:MakeCheckBox({
+		label = "set_cross_weaponscale_enable",
+		convar = "ttt_crosshair_weaponscale",
+		master = crossEnb
+	})
+
+	form:MakeCheckBox({
+		label = "set_lowsights",
+		convar = "ttt_ironsights_lowered",
+		master = crossEnb
+	})
 end
 
 local function PopulateDamagePanel(parent)
-	local form = vgui.Create("DFormTTT2", parent)
-	form:SetName("f1_dmgindicator_title")
+	local form = CreateForm(parent, "f1_dmgindicator_title")
 
-	local dmgEnb = form:CheckBox("f1_dmgindicator_enable", "ttt_dmgindicator_enable")
+	-- store the reference to the checkbox in a variable
+	-- because the other settings are enabled based on
+	-- the state of this checkbox
+	local dmgEnb = form:MakeCheckBox({
+		label = "f1_dmgindicator_enable",
+		convar = "ttt_dmgindicator_enable"
+	})
 
-	local dmode = form:ComboBox("f1_dmgindicator_mode", "ttt_dmgindicator_mode")
+	form:MakeComboBox({
+		label = "f1_dmgindicator_mode",
+		convar = "ttt_dmgindicator_mode",
+		choices = DMGINDICATOR.GetThemeNames(),
+		master = dmgEnb
+	})
 
-	for name in pairs(DMGINDICATOR.themes) do
-		dmode:AddChoice(name)
-	end
+	form:MakeSlider({
+		label = "f1_dmgindicator_duration",
+		convar = "ttt_dmgindicator_duration",
+		min = 0,
+		max = 30,
+		decimal = 2,
+		master = dmgEnb
+	})
 
-	dmode.OnSelect = function(idx, val, data)
-		RunConsoleCommand("ttt_dmgindicator_mode", data)
-	end
+	form:MakeSlider({
+		label = "f1_dmgindicator_maxdamage",
+		convar = "ttt_dmgindicator_duration",
+		min = 0,
+		max = 100,
+		decimal = 1,
+		master = dmgEnb
+	})
 
-	local ns_1 = form:NumSlider("f1_dmgindicator_duration", "ttt_dmgindicator_duration", 0, 30, 2)
-
-	local ns_2 = form:NumSlider("f1_dmgindicator_maxdamage", "ttt_dmgindicator_maxdamage", 0, 100, 1)
-
-	local ns_3 = form:NumSlider("f1_dmgindicator_maxalpha", "ttt_dmgindicator_maxalpha", 0, 255, 0)
-
-	-- SET / UPDATE ENABLED STATE
-	local function changeState(state)
-		dmode:SetEnabled(state)
-		ns_1:SetEnabled(state)
-		ns_2:SetEnabled(state)
-		ns_3:SetEnabled(state)
-	end
-	changeState(GetConVar("ttt_dmgindicator_enable"):GetBool())
-
-	dmgEnb.OnChange = function(slf, value)
-		changeState(value)
-	end
-
-	form:Dock(TOP)
+	form:MakeSlider({
+		label = "f1_dmgindicator_maxalpha",
+		convar = "ttt_dmgindicator_maxalpha",
+		min = 0,
+		max = 255,
+		decimal = 0,
+		master = dmgEnb
+	})
 end
 
 local function PopulatePerformancePanel(parent)
-	local form = vgui.Create("DFormTTT2", parent)
-	form:SetName("set_title_gui")
-	form:CheckBox("set_tips", "ttt_tips_enable")
+	local form = CreateForm(parent, "set_title_gui")
 
-	local cb
+	form:MakeCheckBox({
+		label = "set_tips",
+		convar = "ttt_tips_enable"
+	})
 
-	cb = form:CheckBox("entity_draw_halo", "ttt_entity_draw_halo")
+	form:MakeCheckBox({
+		label = "entity_draw_halo",
+		convar = "ttt_entity_draw_halo"
+	})
 
-	cb = form:CheckBox("disable_spectatorsoutline", "ttt2_disable_spectatorsoutline")
-	cb:SetTooltip("disable_spectatorsoutline_tip")
+	form:MakeCheckBox({
+		label = "disable_spectatorsoutline",
+		convar = "ttt2_disable_spectatorsoutline"
+	})
 
-	cb = form:CheckBox("disable_overheadicons", "ttt2_disable_overheadicons")
-	cb:SetTooltip("disable_overheadicons_tip")
-
-	form:Dock(TOP)
+	form:MakeCheckBox({
+		label = "disable_overheadicons",
+		convar = "ttt2_disable_overheadicons"
+	})
 end
 
 local function PopulateInterfacePanel(parent)
-	local form = vgui.Create("DFormTTT2", parent)
-	form:SetName("set_title_gui")
-	form:CheckBox("set_tips", "ttt_tips_enable")
+	local form = CreateForm(parent, "set_title_gui")
 
-	local cb
+	form:MakeCheckBox({
+		label = "set_tips",
+		convar = "ttt_tips_enable"
+	})
 
-	cb = form:NumSlider("set_startpopup", "ttt_startpopup_duration", 0, 60, 0)
-	if cb.Label then
-		cb.Label:SetWrap(true)
-	end
+	form:MakeSlider({
+		label = "set_startpopup",
+		convar = "ttt_startpopup_duration",
+		min = 0,
+		max = 60,
+		decimal = 0
+	})
 
-	cb:SetTooltip("set_startpopup_tip")
+	form:MakeCheckBox({
+		label = "set_fastsw_menu",
+		convar = "ttt_weaponswitcher_displayfast"
+	})
 
-	form:CheckBox("set_healthlabel", "ttt_health_label")
+	form:MakeCheckBox({
+		label = "set_wswitch",
+		convar = "ttt_weaponswitcher_stay"
+	})
 
-	cb = form:CheckBox("set_fastsw_menu", "ttt_weaponswitcher_displayfast")
-	cb:SetTooltip("set_fastswmenu_tip")
-
-	cb = form:CheckBox("set_wswitch", "ttt_weaponswitcher_stay")
-	cb:SetTooltip("set_wswitch_tip")
-
-	cb = form:CheckBox("set_cues", "ttt_cl_soundcues")
-
-	form:Dock(TOP)
+	form:MakeCheckBox({
+		label = "set_cues",
+		convar = "ttt_cl_soundcues"
+	})
 end
 
 ---
