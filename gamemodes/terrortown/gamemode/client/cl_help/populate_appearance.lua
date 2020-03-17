@@ -105,13 +105,13 @@ local function PopulateHUDSwitcherPanel(parent)
 		-- do not add HUD to the selection list if restricted
 		if table.HasValue(restrictedHUDs, hud.id) then continue end
 
-		validHUDs[#validHUDs + 1] = hud
+		validHUDs[#validHUDs + 1] = hud.id
 	end
 
 	form:MakeComboBox({
 		label = "select_hud",
 		choices = validHUDs,
-		selectName = huds.GetStored(HUDManager.GetHUD()),
+		selectName = currentHUDName,
 		onSelect = function(_, _, value)
 			HUDManager.SetHUD(value)
 		end
