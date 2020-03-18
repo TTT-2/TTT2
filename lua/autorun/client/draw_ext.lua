@@ -1,3 +1,4 @@
+if engine.ActiveGamemode()!="terrortown"then return end--block if TTT is not running
 ---
 -- @author Mineotopia
 
