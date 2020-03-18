@@ -41,7 +41,7 @@ SWEP.Secondary.ClipSize = -1
 SWEP.Secondary.DefaultClip = -1
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = "none"
-SWEP.Secondary.Delay = 2
+SWEP.Secondary.Delay = 0
 
 SWEP.Kind = WEAPON_ROLE
 SWEP.CanBuy = nil -- no longer a buyable thing
@@ -52,17 +52,18 @@ SWEP.NoSights = true
 
 SWEP.Range = 175
 SWEP.ItemSamples = {}
-SWEP.ScanSuccess = false
+SWEP.ScanSuccess = 0
 SWEP.ScanTime = CurTime()
 SWEP.ActiveSample = 1
 
-local MAX_ITEM = 30
+SWEP.MAX_ITEM = 4
 
-local CHARGE_DELAY = 0.1
-local CHARGE_RATE = 3
-local MAX_CHARGE = 1250
+SWEP.CHARGE_DELAY = 0.1
+SWEP.CHARGE_RATE = 300
+SWEP.MAX_CHARGE = 1250
 
 local beep_success = Sound("buttons/blip2.wav")
+local beep_match = Sound("buttons/blip1.wav")
 local beep_miss = Sound("player/suit_denydevice.wav")
 local dna_icon = Material("vgui/ttt/icon_wtester")
 local dna_screen_success = Material("models/ttt2_dna_scanner/Check.png")
@@ -85,7 +86,19 @@ function SWEP:SetupDataTables()
 end
 
 function SWEP:Initialize()
-	self:SetCharge(MAX_CHARGE)
+	--debug stuff
+	
+	-- plys = player.GetAll()
+	-- for i = 1, #plys do
+	-- 	local ply = plys[i]
+	-- 	if SERVER then
+	-- 		self.ItemSamples[i] = ply
+	-- 	else
+	-- 		self.ItemSamples[i] = true
+	-- 	end	
+	-- end
+	
+	self:SetCharge(self.MAX_CHARGE)
 
 	if CLIENT then
 		self:AddHUDHelp("dna_help_primary", "dna_help_secondary", true)
@@ -136,21 +149,33 @@ function SWEP:PrimaryAttack()
 end
 
 function SWEP:SecondaryAttack()
-	self:SetNextSecondaryFire(CurTime() + 0.05)
-	if not IsFirstTimePredicted() or #self.ItemSamples == 0 then return end
+	if not IsFirstTimePredicted() then return end
+	self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
+
+	self.ActiveSample = (self.ActiveSample % self.MAX_ITEM) + 1
+end
+
+function SWEP:Reload()
+	if not IsFirstTimePredicted() then return end
 
 	self:RemoveItemSample(self.ActiveSample)
 end
 
-function SWEP:Reload()
-	if not IsFirstTimePredicted() or #self.ItemSamples == 0 then return end
-
-	self.ActiveSample = (self.ActiveSample % #self.ItemSamples) + 1
+function SWEP:Report(successful, msg, params, oldFound)	
+	if msg then
+		LANG.Msg(self:GetOwner(), msg, params, MSG_MSTACK_ROLE)
+	end
+	
+	net.Start("TTT2ScanFeedback")
+	net.WriteBool(successful)
+	net.WriteBool(oldFound or false)
+	net.WriteUInt(self.ActiveSample, 8)
+	net.Send(self:GetOwner())
 end
 
 function SWEP:GatherDNA(ent)
 	if not IsValid(ent) or ent:IsPlayer() then
-		self:Report(0)
+		self:Report(false)
 		return
 	end
 
@@ -159,7 +184,7 @@ function SWEP:GatherDNA(ent)
 	elseif ent.fingerprints and #ent.fingerprints > 0 then
 		self:GatherObjectSample(ent)
 	else
-		self:Report(0, "dna_notfound")
+		self:Report(false, "dna_notfound")
 	end
 end
 
@@ -173,7 +198,7 @@ function SWEP:GatherRagdollSample(ent)
 
 	if IsValid(ply) then
 		if sample.t < CurTime() then
-			self:Report(0, "dna_decayed")
+			self:Report(false, "dna_decayed")
 
 			return
 		end
@@ -181,120 +206,99 @@ function SWEP:GatherRagdollSample(ent)
 		self:AddPlayerSample(ent, ply)
 	elseif not ply then
 		-- not valid but not nil -> disconnected?
-		self:Report(0, "dna_no_killer")
+		self:Report(false, "dna_no_killer")
 	else
-		self:Report(0, "dna_notfound")
+		self:Report(false, "dna_notfound")
 	end
 end
 
 function SWEP:GatherObjectSample(ent)
 	if ent:GetClass() == "ttt_c4" and ent:GetArmed() then
-		self:Report(0, "dna_armed")
+		self:Report(false, "dna_armed")
 	else
 		self:AddItemSample(ent)
 	end
 end
 
-function SWEP:Report(new, msg, params, old, oldIndex)	
-	if msg then
-		LANG.Msg(self:GetOwner(), msg, params, MSG_MSTACK_ROLE)
+local function firstFreeIndex(tbl, max, best)
+	if not tbl[best] then
+		return best 
 	end
 	
-	if not old then
-		old = 0
+	for i = 1, max do
+		if not tbl[i] then
+			return i
+		end
 	end
-	
-	net.Start("TTT2ScanFeedback")
-	net.WriteUInt(new, 8)
-	net.WriteUInt(old, 8)
-	if(old > 0) then
-		net.WriteUInt(oldIndex, 8)
-	end
-	net.Send(self:GetOwner())
 end
 
 function SWEP:AddPlayerSample(corpse, killer)
-	if #self.ItemSamples >= MAX_ITEM then
-		self:Report(0, "dna_limit")
+	if table.Count(self.ItemSamples) >= self.MAX_ITEM then
+		self:Report(false, "dna_limit")
 		return
 	end
 
 	local owner = self:GetOwner()
 
-	if not table.HasValue(self.ItemSamples, killer) then
-		self.ItemSamples[#self.ItemSamples + 1] = killer
+	if table.HasValue(self.ItemSamples, killer) then
+		local foundIndex =  table.KeyFromValue(self.ItemSamples, killer)
+		self:Report(false, "dna_duplicate", nil, true)
+		self.ActiveSample = foundIndex
+	else
+		local index = firstFreeIndex(self.ItemSamples, self.MAX_ITEM, self.ActiveSample)
+		self.ActiveSample = index
+		self.ItemSamples[index] = killer
 
 		DamageLog("SAMPLE:\t " .. owner:Nick() .. " retrieved DNA of " .. (IsValid(killer) and killer:Nick() or "<disconnected>") .. " from corpse of " .. (IsValid(corpse) and CORPSE.GetPlayerNick(corpse) or "<invalid>"))
 
 		hook.Call("TTTFoundDNA", GAMEMODE, owner, killer, corpse)
-		self:Report(1, "dna_killer")
-		self.ActiveSample = #self.ItemSamples
-	else
-		local foundIndex =  table.KeyFromValue(self.ItemSamples, killer)
-		self:Report(0, "dna_duplicate", nil, 1, foundIndex)
-		self.ActiveSample = foundIndex
+		self:Report(true, "dna_killer")
 	end
 
-	if self:GetCharge() == MAX_CHARGE then
+	if self:GetCharge() == self.MAX_CHARGE then
 		self:PerformScan(self.ActiveSample)
 	end
 end
 
 function SWEP:AddItemSample(ent)
-	if #self.ItemSamples >= MAX_ITEM then
-		self:Report(0, "dna_limit")
+	if table.Count(self.ItemSamples) >= self.MAX_ITEM then
+		self:Report(false, "dna_limit")
 		return
 	end
-
-	table.Shuffle(ent.fingerprints)
-
-	local new = 0
-	local old = 0
-	local lastOldIndexFound = 0
-	local own = 0
 
 	local owner = self:GetOwner()
 
 	local limitExceeded = false
-	for i = 1, #ent.fingerprints do
-		if #self.ItemSamples >= MAX_ITEM then
-			limitExceeded = true
-			break
-		end
-
+	for i = #ent.fingerprints, 1 do
 		local ply = ent.fingerprints[i]
 
 		if ply == 1 then
-			own = own + 1
+			--skip your own prints
 		elseif table.HasValue(self.ItemSamples, ply) then
-			old = old + 1
-			lastOldIndexFound = table.KeyFromValue(self.ItemSamples, ply)
+			self.ActiveSample  = table.KeyFromValue(self.ItemSamples, ply)
+
+			self:Report(false, "dna_object_old", nil, true)
+			return
 		else
-			self.ItemSamples[#self.ItemSamples + 1] = ply
+			local index = firstFreeIndex(self.ItemSamples, self.MAX_ITEM, self.ActiveSample)
+			self.ActiveSample = index
+			self.ItemSamples[index] = ply
 
 			DamageLog("SAMPLE:\t " .. owner:Nick() .. " retrieved DNA of " .. (IsValid(p) and p:Nick() or "<disconnected>") .. " from " .. ent:GetClass())
 
-			new = new + 1
-
 			hook.Run("TTTFoundDNA", owner, p, ent)
+			self:Report(true, "dna_object", {num = new})
+			return
 		end
 	end
 
-	if new == 0 and old == 0 then
-		self:Report(0, "dna_notfound")
-	elseif new == 0 then
-		self:Report(0, "dna_object_old", nil, old, lastOldIndexFound)
-	elseif limitExceeded then
-		self:Report(new, "dna_object_limit", {num = new})
-	else
-		self:Report(new, "dna_object", {num = new})
-	end
+	self:Report(0, "dna_notfound")
 end
 
 function SWEP:RemoveItemSample(idx)
 	if not self.ItemSamples[idx] then return end
 
-	table.remove(self.ItemSamples, idx)
+	self.ItemSamples[idx] = nil
 
 	if CLIENT then return end
 
@@ -339,7 +343,7 @@ if SERVER then
 	end
 
 	function SWEP:PerformScan(idx, repeated)
-		if self:GetCharge() < MAX_CHARGE then return end
+		if self:GetCharge() < self.MAX_CHARGE then return end
 
 		local owner = self:GetOwner()
 		local ply = self.ItemSamples[idx]
@@ -375,10 +379,10 @@ if SERVER then
 	end
 
 	function SWEP:PassiveThink()
-		if self:GetCharge() < MAX_CHARGE and self.NextCharge < CurTime() then
-			self:SetCharge(math.min(MAX_CHARGE, self:GetCharge() + CHARGE_RATE))
+		if self:GetCharge() < self.MAX_CHARGE and self.NextCharge < CurTime() then
+			self:SetCharge(math.min(self.MAX_CHARGE, self:GetCharge() + self.CHARGE_RATE))
 
-			self.NextCharge = CurTime() + CHARGE_DELAY
+			self.NextCharge = CurTime() + self.CHARGE_DELAY
 		elseif IsValid(self:GetOwner()) then
 			self:PerformScan(self.ActiveSample, true)
 		end
@@ -451,24 +455,24 @@ if CLIENT then
 		
 		local scanner = LocalPlayer():GetWeapon("weapon_ttt_wtester")
 
-		local new = net.ReadUInt(8)
-		local old = net.ReadUInt(8)
-		local oldIndex
-		if old > 0 then
-			oldIndex = net.ReadUInt(8)
+		local successful = net.ReadBool()
+		local oldFound = net.ReadBool()
+		
+		if successful or oldFound then
+			scanner.ActiveSample = net.ReadUInt(8)
 		end
-
-		for i = 1, new do
-			scanner.ItemSamples[#scanner.ItemSamples + 1] = true
-		end
-
-		scanner.ScanSuccess = new > 0
 		scanner.ScanTime = CurTime()
 
-		if scanner.ScanSuccess then
+		if successful then
+			scanner.ItemSamples[scanner.ActiveSample] = true
 			scanner:EmitSound(beep_success)
+			scanner.ScanSuccess = 1
+		elseif oldFound then
+			scanner:EmitSound(beep_match)
+			scanner.ScanSuccess = 2
 		else
 			scanner:EmitSound(beep_miss)
+			scanner.ScanSuccess = 0
 		end
 	end
 	net.Receive("TTT2ScanFeedback", ScanFeedback)
@@ -514,10 +518,12 @@ if CLIENT then
 				draw.AdvancedText( "Ready", "DNAScannerDistanceFont", 256, 256, Color(50, 50, 50), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER , false, 3)
 			end
 		else
-			if self.ScanSuccess then
+			if self.ScanSuccess == 1 then
 				surface.SetDrawColor( 50, 50, 50, 255 )
 				surface.SetMaterial( dna_screen_success )
 				surface.DrawTexturedRect( 192, 192, 128, 128 )
+			elseif self.ScanSuccess == 2 then
+				draw.AdvancedText( "Match", "DNAScannerDistanceFont", 256, 256, Color(50, 50, 50), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER , false, 3)
 			else
 				surface.SetDrawColor( 50, 50, 50, 255 )
 				surface.SetMaterial( dna_screen_fail )

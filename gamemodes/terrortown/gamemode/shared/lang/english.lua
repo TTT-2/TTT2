@@ -517,7 +517,6 @@ L.dna_no_killer = "The DNA could not be retrieved (killer disconnected?)."
 L.dna_armed = "This bomb is live! Disarm it first!"
 L.dna_object = "Collected {num} new DNA sample(s) from the object."
 L.dna_object_old = "You already have all the DNA samples in your scanner"
-L.dna_object_limit = "Too many fingerprints to gather. Collected only {num} sample(s)."
 L.dna_gone = "DNA not detected in area."
 
 L.dna_desc = [[
