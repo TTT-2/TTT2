@@ -1,7 +1,7 @@
 -- This file forces clients to download the icons
 -- If you are distributing those files via FastDL, comment out the line below.
 
-if engine.ActiveGamemode()=="terrortown"then
+if engine.ActiveGamemode() == "terrortown" then
 	-- logo
 	resource.AddFile("gamemodes/terrortown/logo.png")
 	resource.AddFile("materials/vgui/ttt/score_logo_2.vmt")
