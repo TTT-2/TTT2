@@ -1,3 +1,4 @@
+if engine.ActiveGamemode()!="terrortown"then return end--block if TTT is not running
 ---
 -- Entity Crash Catcher v2
 -- This script detects entities that are moving too fast, leading to a potential server crash
