@@ -73,6 +73,10 @@ HUDManager.OnUpdateAttribute("restrictedHUDs", function()
 	VHDL.Rebuild()
 end)
 
+local function PopulateRandomShopPanel(parent)
+
+end
+
 ---
 -- Function to populate main menu
 -- @param table helpData The main menu data object
@@ -100,4 +104,9 @@ HELPSCRN.subPopulate["ttt2_administration"] = function(helpData, id)
 
 	hudData:SetTitle("submenu_administration_hud_title")
 	hudData:PopulatePanel(PopulateHUDPanel)
+
+	local shopData = helpData:PopulateSubMenu(id .. "_random_shop")
+
+	shopData:SetTitle("submenu_administration_random_shop")
+	shopData:PopulatePanel(PopulateRandomShopPanel)
 end

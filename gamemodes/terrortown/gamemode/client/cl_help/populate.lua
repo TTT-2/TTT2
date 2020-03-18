@@ -10,7 +10,9 @@ local mainMenuOrder = {
 }
 
 local mainMenuAdminOrder = {
-	"ttt2_administration"
+	"ttt2_administration",
+	"ttt2_equipment",
+	"ttt2_shops"
 }
 
 ---

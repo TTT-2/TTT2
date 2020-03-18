@@ -42,7 +42,9 @@ ttt_include("cl_help__populate_gameplay")
 ttt_include("cl_help__populate_guide")
 ttt_include("cl_help__populate_language")
 ttt_include("cl_help__populate_legacy")
-ttt_include("cl_help__populate_hud_administration")
+ttt_include("cl_help__populate_administration")
+ttt_include("cl_help__populate_equipment")
+ttt_include("cl_help__populate_shops")
 
 -- DEFINE SIZE
 HELPSCRN.pad = 5

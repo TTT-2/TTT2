@@ -85,23 +85,23 @@ TTTFiles = {
 	vgui__cl_simpleicon = {file = "vgui/cl_simpleicon.lua", on = "client"},
 	vgui__cl_simpleroleicon = {file = "vgui/cl_simpleroleicon.lua", on = "client"},
 
-	-- derma client files
-	derma__cl_skin = {file = "derma/cl_skin.lua", on = "client"},
-	derma__vgui__dframe = {file = "derma/vgui/dframe_ttt2.lua", on = "client"},
-	derma__vgui__dmenubutton = {file = "derma/vgui/dmenubutton_ttt2.lua", on = "client"},
-	derma__vgui__dsubmenubutton = {file = "derma/vgui/dsubmenubutton_ttt2.lua", on = "client"},
-	derma__vgui__dnavpanel = {file = "derma/vgui/dnavpanel_ttt2.lua", on = "client"},
-	derma__vgui__dcontentpanel = {file = "derma/vgui/dcontentpanel_ttt2.lua", on = "client"},
-	derma__vgui__dbuttonpanel = {file = "derma/vgui/dbuttonpanel_ttt2.lua", on = "client"},
-	derma__vgui__dcategoryheader = {file = "derma/vgui/dcategoryheader_ttt2.lua", on = "client"},
-	derma__vgui__dcategorycollapse = {file = "derma/vgui/dcategorycollapse_ttt2.lua", on = "client"},
-	derma__vgui__dform = {file = "derma/vgui/dform_ttt2.lua", on = "client"},
-	derma__vgui__dbutton = {file = "derma/vgui/dbutton_ttt2.lua", on = "client"},
-	derma__vgui__dbinder = {file = "derma/vgui/dbinder_ttt2.lua", on = "client"},
-	derma__vgui__dlabel = {file = "derma/vgui/dlabel_ttt2.lua", on = "client"},
-	derma__vgui__dcombobox = {file = "derma/vgui/dcombobox_ttt2.lua", on = "client"},
-	derma__vgui__dcheckboxlabel = {file = "derma/vgui/dcheckboxlabel_ttt2.lua", on = "client"},
-	derma__vgui__dnumslider = {file = "derma/vgui/dnumslider_ttt2.lua", on = "client"},
+	-- cl_vskin client files
+	cl_vskin__default_skin = {file = "cl_vskin/default_skin.lua", on = "client"},
+	cl_vskin__vgui__dframe = {file = "cl_vskin/vgui/dframe_ttt2.lua", on = "client"},
+	cl_vskin__vgui__dmenubutton = {file = "cl_vskin/vgui/dmenubutton_ttt2.lua", on = "client"},
+	cl_vskin__vgui__dsubmenubutton = {file = "cl_vskin/vgui/dsubmenubutton_ttt2.lua", on = "client"},
+	cl_vskin__vgui__dnavpanel = {file = "cl_vskin/vgui/dnavpanel_ttt2.lua", on = "client"},
+	cl_vskin__vgui__dcontentpanel = {file = "cl_vskin/vgui/dcontentpanel_ttt2.lua", on = "client"},
+	cl_vskin__vgui__dbuttonpanel = {file = "cl_vskin/vgui/dbuttonpanel_ttt2.lua", on = "client"},
+	cl_vskin__vgui__dcategoryheader = {file = "cl_vskin/vgui/dcategoryheader_ttt2.lua", on = "client"},
+	cl_vskin__vgui__dcategorycollapse = {file = "cl_vskin/vgui/dcategorycollapse_ttt2.lua", on = "client"},
+	cl_vskin__vgui__dform = {file = "cl_vskin/vgui/dform_ttt2.lua", on = "client"},
+	cl_vskin__vgui__dbutton = {file = "cl_vskin/vgui/dbutton_ttt2.lua", on = "client"},
+	cl_vskin__vgui__dbinder = {file = "cl_vskin/vgui/dbinder_ttt2.lua", on = "client"},
+	cl_vskin__vgui__dlabel = {file = "cl_vskin/vgui/dlabel_ttt2.lua", on = "client"},
+	cl_vskin__vgui__dcombobox = {file = "cl_vskin/vgui/dcombobox_ttt2.lua", on = "client"},
+	cl_vskin__vgui__dcheckboxlabel = {file = "cl_vskin/vgui/dcheckboxlabel_ttt2.lua", on = "client"},
+	cl_vskin__vgui__dnumslider = {file = "cl_vskin/vgui/dnumslider_ttt2.lua", on = "client"},
 
 	-- cl_help client files
 	cl_help__populate = {file = "cl_help/populate.lua", on = "client"},
@@ -113,7 +113,9 @@ TTTFiles = {
 	cl_help__populate_guide = {file = "cl_help/populate_guide.lua", on = "client"},
 	cl_help__populate_language = {file = "cl_help/populate_language.lua", on = "client"},
 	cl_help__populate_legacy = {file = "cl_help/populate_legacy.lua", on = "client"},
-	cl_help__populate_hud_administration = {file = "cl_help/populate_hud_administration.lua", on = "client"},
+	cl_help__populate_administration = {file = "cl_help/populate_administration.lua", on = "client"},
+	cl_help__populate_equipment = {file = "cl_help/populate_equipment.lua", on = "client"},
+	cl_help__populate_shops = {file = "cl_help/populate_shops.lua", on = "client"},
 }
 
 if SERVER then
