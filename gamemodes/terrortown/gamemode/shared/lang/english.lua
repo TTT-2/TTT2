@@ -1273,6 +1273,7 @@ L.submenu_gameplay_general_title = "General"
 L.submenu_gameplay_avoidroles_title = "Avoid Role Selection"
 
 L.label_menu_menu = "MENU"
+L.label_menu_admin_spacer = "Admin Area (not shownn to normal users)"
 
 L.button_menu_back = "back"
 L.button_bind_default = "Default"

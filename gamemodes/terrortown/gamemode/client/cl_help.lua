@@ -20,15 +20,16 @@ HELPSCRN.nameMenuOpen = HELPSCRN.nameMenuOpen or nil
 HELPSCRN.parent = HELPSCRN.parent or nil
 HELPSCRN.menuData = HELPSCRN.menuData or nil
 
-ttt_include("cl_help_populate")
-ttt_include("cl_help_populate_addons")
-ttt_include("cl_help_populate_appearance")
-ttt_include("cl_help_populate_bindings")
-ttt_include("cl_help_populate_changelog")
-ttt_include("cl_help_populate_gameplay")
-ttt_include("cl_help_populate_guide")
-ttt_include("cl_help_populate_language")
-ttt_include("cl_help_populate_legacy")
+ttt_include("cl_help__populate")
+ttt_include("cl_help__populate_addons")
+ttt_include("cl_help__populate_appearance")
+ttt_include("cl_help__populate_bindings")
+ttt_include("cl_help__populate_changelog")
+ttt_include("cl_help__populate_gameplay")
+ttt_include("cl_help__populate_guide")
+ttt_include("cl_help__populate_language")
+ttt_include("cl_help__populate_legacy")
+ttt_include("cl_help__populate_hud_administration")
 
 -- DEFINE SIZE
 HELPSCRN.pad = 5
@@ -44,6 +45,22 @@ local widthNavContent, heightNavContent = 299, 620
 local widthContent, heightContent = 800, 700
 local heightButtonPanel = 80
 local widthNavButton, heightNavButton = 299, 50
+
+local function AddMenuButtons(menuTbl, parent)
+	for i = 1, #menuTbl do
+		local data = menuTbl[i]
+
+		local settingsButton = parent:Add("DMenuButtonTTT2")
+		settingsButton:SetSize(widthMainButton, heightMainButton)
+		settingsButton:SetTitle(data.title or data.id)
+		settingsButton:SetDescription(data.description)
+		settingsButton:SetImage(data.iconMat)
+
+		settingsButton.DoClick = function(slf)
+			HELPSCRN:ShowSubMenu(data)
+		end
+	end
+end
 
 ---
 -- Opens the help screen
@@ -81,25 +98,21 @@ function HELPSCRN:ShowMainMenu()
 
 	hook.Run("TTT2ModifyMainMenu", helpData)
 
-	for i = 1, #menuTbl do
-		local data = menuTbl[i]
+	local menuesNormal = helpData:GetNormalMenues()
+	local menuesAdmin = helpData:GetAdminMenues()
 
-		-- do not show if it is admin only and the player is no admin
-		if data.adminOnly and not LocalPlayer():IsAdmin() then continue end
+	AddMenuButtons(menuesNormal, dsettings)
 
-		-- do not show if the shouldShow function returnes false
-		if isfunction(data.shouldShowFn) and not data.shouldShowFn() then continue end
+	-- only show admin section if player is admin and
+	-- there are menues to be shown
+	if #menuesAdmin == 0 then return end
 
-		local settingsButton = dsettings:Add("DMenuButtonTTT2")
-		settingsButton:SetSize(widthMainButton, heightMainButton)
-		settingsButton:SetTitle(data.title or data.id)
-		settingsButton:SetDescription(data.description)
-		settingsButton:SetImage(data.iconMat)
+	local labelSpacer = dsettings:Add("DLabelTTT2")
+	labelSpacer.OwnLine = true
+	labelSpacer:SetText("label_menu_admin_spacer")
+	labelSpacer:SetSize(w, 35)
 
-		settingsButton.DoClick = function(slf)
-			self:ShowSubMenu(data)
-		end
-	end
+	AddMenuButtons(menuesAdmin, dsettings)
 end
 
 function HELPSCRN:GetOpenMenu()

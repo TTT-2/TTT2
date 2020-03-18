@@ -104,15 +104,16 @@ TTTFiles = {
 	derma__vgui__dnumslider = {file = "derma/vgui/dnumslider_ttt2.lua", on = "client"},
 
 	-- cl_help client files
-	cl_help_populate = {file = "cl_help/populate.lua", on = "client"},
-	cl_help_populate_addons = {file = "cl_help/populate_addons.lua", on = "client"},
-	cl_help_populate_appearance = {file = "cl_help/populate_appearance.lua", on = "client"},
-	cl_help_populate_bindings = {file = "cl_help/populate_bindings.lua", on = "client"},
-	cl_help_populate_changelog = {file = "cl_help/populate_changelog.lua", on = "client"},
-	cl_help_populate_gameplay = {file = "cl_help/populate_gameplay.lua", on = "client"},
-	cl_help_populate_guide = {file = "cl_help/populate_guide.lua", on = "client"},
-	cl_help_populate_language = {file = "cl_help/populate_language.lua", on = "client"},
-	cl_help_populate_legacy = {file = "cl_help/populate_legacy.lua", on = "client"},
+	cl_help__populate = {file = "cl_help/populate.lua", on = "client"},
+	cl_help__populate_addons = {file = "cl_help/populate_addons.lua", on = "client"},
+	cl_help__populate_appearance = {file = "cl_help/populate_appearance.lua", on = "client"},
+	cl_help__populate_bindings = {file = "cl_help/populate_bindings.lua", on = "client"},
+	cl_help__populate_changelog = {file = "cl_help/populate_changelog.lua", on = "client"},
+	cl_help__populate_gameplay = {file = "cl_help/populate_gameplay.lua", on = "client"},
+	cl_help__populate_guide = {file = "cl_help/populate_guide.lua", on = "client"},
+	cl_help__populate_language = {file = "cl_help/populate_language.lua", on = "client"},
+	cl_help__populate_legacy = {file = "cl_help/populate_legacy.lua", on = "client"},
+	cl_help__populate_hud_administration = {file = "cl_help/populate_hud_administration.lua", on = "client"},
 }
 
 if SERVER then
