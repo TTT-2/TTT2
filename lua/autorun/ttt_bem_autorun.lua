@@ -1,3 +1,4 @@
+if engine.ActiveGamemode()!="terrortown"then return end--block if TTT is not running
 -- create serverside ConVars
 local allowChange = CreateConVar("ttt_bem_allow_change", 1, SERVER and {FCVAR_ARCHIVE, FCVAR_REPLICATED} or FCVAR_REPLICATED, "Allow clients to change the look of the Traitor/Detective menu")
 CreateConVar("ttt_bem_sv_cols", 4, SERVER and {FCVAR_ARCHIVE, FCVAR_REPLICATED} or FCVAR_REPLICATED, "Sets the number of columns in the Traitor/Detective menu's item list (serverside)")
