@@ -1249,7 +1249,7 @@ L.menu_appearance_description = "Tweak the appearance and performance of the UI"
 L.menu_gameplay_description = "Avoid roles and tweak some features"
 L.menu_addons_description = "Configure local addons to your liking"
 L.menu_legacy_description = "A panel with converted tabs from original TTT, they should be ported over to the new system"
-L.menu_administration_description = "Administration"
+L.menu_administration_description = "Restrict the use of HUDs or set a HUD as forced for every player"
 
 L.submenu_guide_gameplay_title = "Gameplay"
 L.submenu_guide_roles_title = "Roles"
@@ -1272,8 +1272,10 @@ L.submenu_appearance_miscellaneous_title = "Misellaneous"
 L.submenu_gameplay_general_title = "General"
 L.submenu_gameplay_avoidroles_title = "Avoid Role Selection"
 
+L.submenu_administration_hud_title = "HUD Settings"
+
 L.label_menu_menu = "MENU"
-L.label_menu_admin_spacer = "Admin Area (not shownn to normal users)"
+L.label_menu_admin_spacer = "Admin Area (not shown to normal users)"
 
 L.button_menu_back = "back"
 L.button_bind_default = "Default"
@@ -1285,6 +1287,9 @@ L.help_hud_game_reload = "The HUD is not available right now. The game has to be
 L.help_hud_special_settings = "These are specific settings of this HUD."
 L.help_vskin_info = "VSkin (vgui skin) is the skin applied to all menu elements like the current one. Skins can be easily created with a simple lua script and can change colors and some size parameters."
 L.help_targetid_info = "TargetID is the information rendered when focusing an entity. A fixed color can be set in the general settings panel."
+L.help_hud_default_desc = "Set the default HUD for all players. Players that have not yet selected a HUD will receive this HUD as their default. This won't change the HUD of players that have already selected their HUD."
+L.help_hud_forced_desc = "Force a HUD for all players. This disables the HUD selection feature for everyone."
+L.help_hud_enabled_desc = "Enable/Disable HUDs to restrict the selection of these HUDs."
 
 
 
