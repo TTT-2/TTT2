@@ -53,15 +53,15 @@ if CLIENT then
 		BaseClass.PerformLayout(self)
 	end
 
-	function HUDELEMENT:DrawMarker(x, y, size, color)	
+	function HUDELEMENT:DrawMarker(x, y, size, color)
 		local thickness = 2 * self.scale
 		local margin = 3 * self.scale
 		local marker_x = x - margin - thickness
 		local marker_y = y - margin - thickness
 		local marker_size = size + margin * 2 + thickness * 2
-		
+
 		surface.SetDrawColor(color)
-		for i=0, thickness - 1 do
+		for i = 0, thickness - 1 do
 			surface.DrawOutlinedRect( marker_x + i, marker_y + i, marker_size - i * 2, marker_size - i * 2 )
 		end
 	end
@@ -86,13 +86,13 @@ if CLIENT then
 		local x, y = pos.x, pos.y
 		local w, h = size.w, size.h
 		local scanner = client:GetWeapon("weapon_ttt_wtester")
-		
+
 		--fake scanner for HUD editing
 		if HUDEditor.IsEditing then
 			scanner = {MAX_ITEM = 4, ItemSamples = {true}, ScanSuccess = 0, NewSample = 0, ScanTime = 0, ActiveSample = 3}
 		end
 
-		local chargeAmount =  HUDEditor.IsEditing and 1 or scanner:GetCharge() / scanner.MAX_CHARGE
+		--local chargeAmount =  HUDEditor.IsEditing and 1 or scanner:GetCharge() / scanner.MAX_CHARGE
 
 		local slotCount = scanner.MAX_ITEM
 		local newWidth = self.pad + slotCount * (self.pad + self.iconSize)
@@ -101,7 +101,7 @@ if CLIENT then
 			w = newWidth
 			x = newX
 		end
-	
+
 		-- draw bg and shadow
 		self:DrawBg(x, y, w, h, self.basecolor)
 
@@ -112,7 +112,7 @@ if CLIENT then
 
 		for i = 1, scanner.MAX_ITEM do
 			local identifier = string.char(64 + i)
-			
+
 			--draw background
 			surface.SetDrawColor(50, 50, 50, 255)
 			surface.DrawRect(tmp_x, tmp_y, icon_size, icon_size)

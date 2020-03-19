@@ -88,7 +88,7 @@ end
 
 function SWEP:Initialize()
 	--debug stuff
-	
+
 	plys = player.GetAll()
 	for i = 1, #plys do
 		local ply = plys[i]
@@ -96,9 +96,9 @@ function SWEP:Initialize()
 			self.ItemSamples[i] = ply
 		else
 			self.ItemSamples[i] = true
-		end	
+		end
 	end
-	
+
 	self:SetCharge(self.MAX_CHARGE)
 
 	if CLIENT then
@@ -162,11 +162,11 @@ function SWEP:Reload()
 	self:RemoveItemSample(self.ActiveSample)
 end
 
-function SWEP:Report(successful, msg, params, oldFound)	
+function SWEP:Report(successful, msg, params, oldFound)
 	if msg then
 		LANG.Msg(self:GetOwner(), msg, params, MSG_MSTACK_ROLE)
 	end
-	
+
 	net.Start("TTT2ScanFeedback")
 	net.WriteBool(successful)
 	net.WriteBool(oldFound or false)
@@ -223,9 +223,9 @@ end
 
 local function firstFreeIndex(tbl, max, best)
 	if not tbl[best] then
-		return best 
+		return best
 	end
-	
+
 	for i = 1, max do
 		if not tbl[i] then
 			return i
@@ -269,7 +269,6 @@ function SWEP:AddItemSample(ent)
 
 	local owner = self:GetOwner()
 
-	local limitExceeded = false
 	for i = #ent.fingerprints, 1 do
 		local ply = ent.fingerprints[i]
 
@@ -390,39 +389,19 @@ if SERVER then
 	end
 end
 
--- Helper to get at a player's scanner, if he has one
-local function GetTester(ply)
-	if not IsValid(ply) then return end
-
-	local tester = ply:GetActiveWeapon()
-
-	if IsValid(tester) and tester:GetClass() == "weapon_ttt_wtester" then
-		return tester
-	end
-end
-
-
 if CLIENT then
-	local T = LANG.GetTranslation
-	local PT = LANG.GetParamTranslation
-	local TT = LANG.TryTranslation
-	local mathfloor = math.floor
-
 	-- target ID function
 	hook.Add("TTTRenderEntityInfo", "TTT2DNAScannerInfo", function(tData)
 		local client = LocalPlayer()
 		local ent = tData:GetEntity()
-		
+
 		if not IsValid(client:GetActiveWeapon()) or client:GetActiveWeapon():GetClass() ~= "weapon_ttt_wtester" or tData:GetEntityDistance() > 400 or not IsValid(ent) then return end
 
-		local weapon = client:GetActiveWeapon()
-		local distance = tData:GetEntityDistance()
-		
 		-- add an empty line if there's already data in the description area
 		if tData:GetAmountDescriptionLines() > 0 then
 			tData:AddDescriptionLine()
 		end
-		
+
 		if ent:IsWeapon() or ent.CanHavePrints or ent:GetNWBool("HasPrints", false)
 		or ent:GetClass() == "prop_ragdoll" and CORPSE.GetPlayerNick(ent, false)
 		then
@@ -453,12 +432,12 @@ if CLIENT then
 
 	local function ScanFeedback()
 		if not LocalPlayer():HasWeapon("weapon_ttt_wtester") then return end
-		
+
 		local scanner = LocalPlayer():GetWeapon("weapon_ttt_wtester")
 
 		local successful = net.ReadBool()
 		local oldFound = net.ReadBool()
-		
+
 		if successful or oldFound then
 			scanner.ActiveSample = net.ReadUInt(8)
 			scanner.NewSample = scanner.ActiveSample
@@ -478,17 +457,15 @@ if CLIENT then
 		end
 	end
 	net.Receive("TTT2ScanFeedback", ScanFeedback)
-	
+
 	local function DrawTexturedRectRotatedPoint( x, y, w, h, rot, x0, y0 )
-	
 		local c = math.cos( math.rad( rot ) )
 		local s = math.sin( math.rad( rot ) )
-		
+
 		local newx = y0 * s - x0 * c
 		local newy = y0 * c + x0 * s
-		
+
 		surface.DrawTexturedRectRotated( x + newx, y + newy, w, h, rot )
-		
 	end
 
 	function SWEP:FillScannerScreen()
@@ -496,9 +473,9 @@ if CLIENT then
 		render.PushRenderTarget( self.scannerScreenTex )
 		render.Clear(220, 220, 220, 255, true, true)
 		cam.Start2D()
-		
+
 		local showFeedback = CurTime() > self.ScanTime + 0.5
-		
+
 		if showFeedback then
 			if RADAR.samples_count > 0  then
 				local targetPos = RADAR.samples[1].pos
@@ -515,7 +492,7 @@ if CLIENT then
 
 				surface.SetDrawColor( 50, 50, 50, 255 )
 				surface.SetMaterial( dna_screen_circle )
-				surface.DrawTexturedRect( 116, 116, 276, 276 )	
+				surface.DrawTexturedRect( 116, 116, 276, 276)
 			else
 				draw.AdvancedText( "Ready", "DNAScannerDistanceFont", 256, 256, Color(50, 50, 50), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER , false, 3)
 			end
@@ -529,7 +506,7 @@ if CLIENT then
 			else
 				surface.SetDrawColor( 50, 50, 50, 255 )
 				surface.SetMaterial( dna_screen_fail )
-				surface.DrawTexturedRect( 192, 192, 128, 128 )	
+				surface.DrawTexturedRect( 192, 192, 128, 128)
 			end
 		end
 
@@ -555,7 +532,7 @@ else -- SERVER
 
 	hook.Add("Tick", "TTT2DNAScannerThink", function()
 		if CLIENT then return end
-		
+
 		plys = player.GetAll()
 
 		for i = 1, #plys do
