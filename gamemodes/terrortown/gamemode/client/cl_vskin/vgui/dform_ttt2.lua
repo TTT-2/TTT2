@@ -86,35 +86,6 @@ function PANEL:TextEntry(strLabel, strConVar)
 	return right, left
 end
 
-function PANEL:ComboBox(strLabel, strConVar)
-	local left = vgui.Create("DLabelTTT2", self)
-
-	left:SetText(strLabel)
-	left:SetDark(true)
-
-	local right = vgui.Create("DComboBoxTTT2", self)
-
-	right:SetConVar(strConVar)
-	right:SetTall(32)
-	right:Dock(TOP)
-
-	function right:OnSelect(index, value, data)
-		if not self.m_strConVar then return end
-
-		RunConsoleCommand(self.m_strConVar, tostring(data or value))
-	end
-
-	left.Paint = function(slf, w, h)
-		derma.SkinHook("Paint", "FormLabelTTT2", slf, w, h)
-
-		return true
-	end
-
-	self:AddItem(left, right)
-
-	return right, left
-end
-
 function PANEL:NumberWang(strLabel, strConVar, numMin, numMax, numDecimals)
 	local left = vgui.Create("DLabelTTT2", self)
 
@@ -135,127 +106,6 @@ function PANEL:NumberWang(strLabel, strConVar, numMin, numMax, numDecimals)
 	self:AddItem(left, right)
 
 	return right, left
-end
-
-function PANEL:NumSlider(strLabel, strConVar, numMin, numMax, numDecimals)
-	local left = vgui.Create("DNumSlider", self)
-
-	left:SetText(strLabel)
-	left:SetMinMax(numMin, numMax)
-
-	if numDecimals ~= nil then
-		left:SetDecimals(numDecimals)
-	end
-
-	left:SetConVar(strConVar)
-	left:SizeToContents()
-
-	left.TextArea.Paint = function(slf, w, h)
-		derma.SkinHook("Paint", "SliderTextAreaTTT2", slf, w, h)
-
-		return true
-	end
-
-	left.Label.Paint = function(slf, w, h)
-		derma.SkinHook("Paint", "FormLabelTTT2", slf, w, h)
-
-		return true
-	end
-
-	left.SetDisabled = function(slf, bDisabled)
-		slf.m_bDisabled = bDisabled
-
-		if bDisabled then
-			slf:SetAlpha(50)
-			slf:SetMouseInputEnabled(false)
-		else
-			slf:SetAlpha(255)
-			slf:SetMouseInputEnabled(true)
-		end
-	end
-
-	left.TextArea:SetFont("DermaTTT2Text")
-	left.Label:SetFont("DermaTTT2Text")
-
-	self:AddItem(left, nil)
-
-	return left
-end
-
-function PANEL:ColorMixer(strLabel, defaultColor, showAlphaBar, showPalette)
-	local left = vgui.Create("DLabelTTT2", self)
-
-	left:SetText(strLabel)
-	left:SetDark(true)
-
-	local right = vgui.Create("DColorMixer", self)
-
-	right:SetColor(defaultColor or COLOR_WHITE)
-	right:SetAlphaBar(showAlphaBar or false)
-	right:SetPalette(showPalette or false)
-	right:SetTall(200)
-	right:DockMargin(10, 10, 10, 10)
-
-	right.PerformLayout = function(slf, w, h)
-		local parentW = slf:GetParent():GetSize()
-		local _, _, parentPadRight = slf:GetParent():GetDockPadding()
-		local posX = slf:GetPos()
-
-		slf:SetWide(parentW - parentPadRight - posX)
-	end
-
-	self:AddItem(left, right)
-
-	return right, left
-end
-
-function PANEL:CheckBox(strLabel, strConVar)
-	local left = vgui.Create("DCheckBoxLabelTTT2", self)
-
-	left:SetText(strLabel)
-	left:SetConVar(strConVar)
-
-	left:SetTall(32)
-
-	self:AddItem(left, nil)
-
-	return left
-end
-
-function PANEL:Help(strHelp)
-	local left = vgui.Create("DLabelTTT2", self)
-
-	left:SetText(strHelp)
-	left:SetContentAlignment(7)
-	left:SetAutoStretchVertical(true)
-
-	left.paddingX = 10
-	left.paddingY = 5
-
-	left.Paint = function(slf, w, h)
-		derma.SkinHook("Paint", "HelpLabelTTT2", slf, w, h)
-
-		return true
-	end
-
-	left.PerformLayout = function(slf, w, h)
-		local textTranslated = LANG.TryTranslation(slf:GetText())
-
-		local textWrapped = draw.GetWrappedText(
-			textTranslated,
-			w - 2 * slf.paddingX,
-			slf:GetFont()
-		)
-		local _, heightText = draw.GetTextSize(textTranslated, slf:GetFont())
-
-		slf:SetSize(w, heightText * #textWrapped + 2 * slf.paddingY)
-	end
-
-	self:AddItem(left, nil)
-
-	left:InvalidateLayout(true)
-
-	return left
 end
 
 function PANEL:ControlHelp(strHelp)
@@ -453,6 +303,11 @@ function PANEL:MakeComboBox(data)
 	return right, left
 end
 
+---
+-- Adds a helpbox to the form
+-- @param table data The data for the helpbox
+-- @return @{Panel} The created helpbox
+-- @realm client
 function PANEL:MakeHelp(data)
 	local left = vgui.Create("DLabelTTT2", self)
 
@@ -488,6 +343,72 @@ function PANEL:MakeHelp(data)
 	left:InvalidateLayout(true)
 
 	return left
+end
+
+-- Adds a colormixer to the form
+-- @param table data The data for the colormixer
+-- @return @{Panel}, @{Panel} The created colormixer, The created label
+-- @realm client
+function PANEL:MakeColorMixer(data)
+	local left = vgui.Create("DLabelTTT2", self)
+	local right = vgui.Create("DPanel", self)
+
+	left:SetTall(data.height or 240)
+	right:SetTall(data.height or 240)
+
+	right:Dock(TOP)
+	right:DockPadding(10, 10, 10, 10)
+
+	left:SetText(data.label)
+
+
+
+	local colorMixer = vgui.Create("DColorMixer", right)
+
+	colorMixer:SetColor(data.initial or COLOR_WHITE)
+	colorMixer:SetAlphaBar(data.showAlphaBar or false)
+	colorMixer:SetPalette(data.showPalette or false)
+	colorMixer:Dock(FILL)
+
+	colorMixer.ValueChanged = function(slf, color)
+		if isfunction(data.onChange) then
+			data.onChange(slf, color)
+		end
+	end
+
+	left.Paint = function(slf, w, h)
+		derma.SkinHook("Paint", "FormLabelTTT2", slf, w, h)
+
+		return true
+	end
+
+	right.Paint = function(slf, w, h)
+		derma.SkinHook("Paint", "FormBoxTTT2", slf, w, h)
+
+		return true
+	end
+
+	right.SetEnabled = function(slf, enabled)
+		slf.m_bDisabled = not enabled
+
+		if enabled then
+			slf:SetMouseInputEnabled(true)
+		else
+			slf:SetMouseInputEnabled(false)
+		end
+
+		-- update colormixer as well
+		colorMixer:SetDisabled(not enabled)
+	end
+
+	self:AddItem(left, right)
+
+	if IsValid(data.master) and isfunction(data.master.AddSlave) then
+		data.master:AddSlave(left)
+		data.master:AddSlave(right)
+	end
+
+	return right, left
 end
 
 derma.DefineControl("DFormTTT2", "", PANEL, "DCollapsibleCategoryTTT2")

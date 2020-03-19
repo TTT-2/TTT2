@@ -469,8 +469,8 @@ function SKIN:PaintCategoryHeaderTTT2(panel, w, h)
 end
 
 local function DrawButton(w, h, panel, sizeBorder, colorLine, colorBox, colorText)
-	draw.RoundedBox(5, 0, 0, w, h, colorBox)
-	draw.Box(0, h - 2 * sizeBorder, w, sizeBorder, colorLine)
+	draw.Box(0, 0, w, h, colorBox)
+	draw.Box(0, h - sizeBorder, w, sizeBorder, colorLine)
 
 	draw.SimpleText(
 		string.upper(TryT(panel:GetText())),
@@ -496,6 +496,7 @@ function SKIN:PaintButtonTTT2(panel, w, h)
 	local colorAccentDarkDisabled = util.GetChangedColor(util.GetDefaultColor(VSKIN.GetBackgroundColor()), 125)
 
 	local sizeBorder = VSKIN.GetBorderSize()
+	local sizeCornerRadius = VSKIN.GetCornerRadius()
 
 	if not panel:IsEnabled() then
 		local colorText = util.GetDefaultColor(colorAccentDisabled)
@@ -562,6 +563,23 @@ function SKIN:PaintFormLabelTTT2(panel, w, h)
 	)
 end
 
+function SKIN:PaintFormBoxTTT2(panel, w, h)
+	local colorBackground = VSKIN.GetBackgroundColor()
+
+	local colorBoxBack = util.GetChangedColor(colorBackground, 150)
+	local colorBox = util.GetChangedColor(colorBackground, 15)
+
+	if not panel:IsEnabled() then
+		colorBoxBack = ColorAlpha(colorBoxBack, alphaDisabled)
+		colorBox = ColorAlpha(colorBox, alphaDisabled)
+	end
+
+	local sizeCornerRadius = VSKIN.GetCornerRadius()
+
+	draw.RoundedBoxEx(sizeCornerRadius, 0, 0, w, h, colorBoxBack, false, true, false, true)
+	draw.RoundedBox(sizeCornerRadius, 1, 1, w - 2, h - 2, colorBox)
+end
+
 function SKIN:PaintMenuLabelTTT2(panel, w, h)
 	local colorBackground = VSKIN.GetBackgroundColor()
 
@@ -617,17 +635,17 @@ end
 function SKIN:PaintNumSliderTTT2(panel, w, h)
 	local colorBackground = VSKIN.GetBackgroundColor()
 
-	local colorOutline = util.GetChangedColor(colorBackground, 150)
+	local colorBoxBack = util.GetChangedColor(colorBackground, 150)
 	local colorBox = util.GetChangedColor(colorBackground, 15)
 
 	if not panel:IsEnabled() then
-		colorOutline = ColorAlpha(colorOutline, alphaDisabled)
+		colorBoxBack = ColorAlpha(colorBoxBack, alphaDisabled)
 		colorBox = ColorAlpha(colorBox, alphaDisabled)
 	end
 
 	local sizeCornerRadius = VSKIN.GetCornerRadius()
 
-	draw.Box(0, 0, w, h, colorOutline)
+	draw.Box(0, 0, w, h, colorBoxBack)
 	draw.RoundedBox(sizeCornerRadius, 1, 1, w - 2, h - 2, colorBox)
 end
 

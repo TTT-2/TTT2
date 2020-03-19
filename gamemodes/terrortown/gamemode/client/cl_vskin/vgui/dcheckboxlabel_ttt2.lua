@@ -64,6 +64,8 @@ end
 
 function PANEL:AddSlave(slave)
 	self.slaves[#self.slaves + 1] = slave
+
+	slave:SetEnabled(self.Button:GetChecked())
 end
 
 function PANEL:PerformLayout()

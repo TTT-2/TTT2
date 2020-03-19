@@ -7,7 +7,7 @@ local function PopulateGeneralPanel(parent)
 		label = "help_color_desc"
 	})
 
-	form:MakeCheckBox({
+	local enbColor = form:MakeCheckBox({
 		label = "set_global_color_enable",
 		initial = GLAPP.ShouldUseGlobalFocusColor(),
 		onChange = function(_, value)
@@ -15,11 +15,14 @@ local function PopulateGeneralPanel(parent)
 		end
 	})
 
-	local cm = form:ColorMixer("set_global_focus_color", GLAPP.GetFocusColor(), false, false)
-
-	cm.ValueChanged = function(self, color)
-		GLAPP.SetFocusColor(color)
-	end
+	form:MakeColorMixer({
+		label = "set_global_focus_color",
+		initial = GLAPP.GetFocusColor(),
+		onChange = function(_, color)
+			GLAPP.SetFocusColor(color)
+		end,
+		master = enbColor
+	})
 
 	form:MakeHelp({
 		label = "help_scale_factor"
@@ -46,35 +49,40 @@ local function PopulateHUDSwitcherPanelSettings(parent, currentHUD)
 
 	for key, data in pairs(currentHUD:GetSavingKeys() or {}) do
 		if data.typ == "color" then
-			local cm = parent:ColorMixer(data.desc or key, currentHUD[key] or COLOR_WHITE, true, true)
+			parent:MakeColorMixer({
+				label = data.desc or key,
+				initial = currentHUD[key],
+				onChange = function(_, color)
+					currentHUD[key] = color
 
-			function cm:ValueChanged(col)
-				currentHUD[key] = col
+					if isfunction(data.OnChange) then
+						data.OnChange(currentHUD, color)
+					end
+				end,
+				showAlphaBar = true,
+				showPalette = true
+			})
 
-				if isfunction(data.OnChange) then
-					data.OnChange(currentHUD, col)
-				end
-			end
 
 		elseif data.typ == "number" then
-			local ns = parent:NumSlider(data.desc or key, nil, 0.1, 4.0, 1)
+			parent:MakeSlider({
+				label = data.desc or key,
+				min = 0.1,
+				max = 4,
+				decimal = 1,
+				initial = math.Round(currentHUD[key] or 1, 1),
+				onValueChanged = function(_, value)
+					value = math.Round(value, 1)
 
-			if currentHUD[key] then
-				ns:SetDefaultValue(currentHUD[key])
-				ns:SetValue(math.Round(currentHUD[key], 1))
-			end
+					if value ~= math.Round(currentHUD[key], 1) then
+						if isfunction(data.OnChange) then
+							data.OnChange(currentHUD, value)
+						end
 
-			function ns:OnValueChanged(val)
-				val = math.Round(val, 1)
-
-				if val ~= math.Round(currentHUD[key], 1) then
-					if isfunction(data.OnChange) then
-						data.OnChange(currentHUD, val)
+						currentHUD[key] = value
 					end
-
-					currentHUD[key] = val
 				end
-			end
+			})
 		end
 	end
 end
