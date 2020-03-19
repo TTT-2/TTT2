@@ -1,4 +1,4 @@
-local materialIcon = Material("vgui/ttt/derma/helpscreen/appearance")
+local materialIcon = Material("vgui/ttt/vskin/helpscreen/appearance")
 
 local function PopulateGeneralPanel(parent)
 	local form = CreateForm(parent, "set_title_color")
@@ -7,12 +7,16 @@ local function PopulateGeneralPanel(parent)
 		label = "help_color_desc"
 	})
 
+	-- store the reference to the checkbox in a variable
+	-- because the other settings are enabled based on
+	-- the state of this checkbox
 	local enbColor = form:MakeCheckBox({
 		label = "set_global_color_enable",
 		initial = GLAPP.ShouldUseGlobalFocusColor(),
 		onChange = function(_, value)
 			GLAPP.SetUseGlobalFocusColor(value)
-		end
+		end,
+		default = false
 	})
 
 	form:MakeColorMixer({
@@ -34,9 +38,10 @@ local function PopulateGeneralPanel(parent)
 		max = 3,
 		decimal = 1,
 		initial = GLAPP.GetGlobalScale(),
-		onValueChanged = function(_, value)
+		onChange = function(_, value)
 			GLAPP.SetGlobalScale(value)
-		end
+		end,
+		default = GLAPP.GetDefaultGlobalScale()
 	})
 end
 
@@ -71,7 +76,7 @@ local function PopulateHUDSwitcherPanelSettings(parent, currentHUD)
 				max = 4,
 				decimal = 1,
 				initial = math.Round(currentHUD[key] or 1, 1),
-				onValueChanged = function(_, value)
+				onChange = function(_, value)
 					value = math.Round(value, 1)
 
 					if value ~= math.Round(currentHUD[key], 1) then
@@ -119,7 +124,8 @@ local function PopulateHUDSwitcherPanel(parent)
 		selectName = currentHUDName,
 		onSelect = function(_, _, value)
 			HUDManager.SetHUD(value)
-		end
+		end,
+		default = HUDManager.GetModelValue("defaultHUD") or "None"
 	})
 
 	PopulateHUDSwitcherPanelSettings(CreateForm(parent, "set_title_hud_customize"), currentHUD)
@@ -151,7 +157,8 @@ local function PopulateVSkinPanel(parent)
 		selectName = VSKIN.GetVSkinName(),
 		onSelect = function(_, _, value)
 			VSKIN.SelectVSkin(value)
-		end
+		end,
+		default = VSKIN.GetDefaultVSkinName()
 	})
 
 	form:MakeCheckBox({
@@ -159,7 +166,8 @@ local function PopulateVSkinPanel(parent)
 		initial = VSKIN.ShouldBlurBackground(),
 		onChange = function(_, value)
 			VSKIN.SetBlurBackground(value)
-		end
+		end,
+		default = true
 	})
 end
 
@@ -307,7 +315,7 @@ local function PopulateDamagePanel(parent)
 
 	form:MakeSlider({
 		label = "f1_dmgindicator_maxdamage",
-		convar = "ttt_dmgindicator_duration",
+		convar = "ttt_dmgindicator_maxdamage",
 		min = 0,
 		max = 100,
 		decimal = 1,

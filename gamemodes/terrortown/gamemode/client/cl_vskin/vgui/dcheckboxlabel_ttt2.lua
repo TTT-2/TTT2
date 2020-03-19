@@ -63,6 +63,8 @@ function PANEL:Toggle()
 end
 
 function PANEL:AddSlave(slave)
+	if not IsValid(slave) then return end
+
 	self.slaves[#self.slaves + 1] = slave
 
 	slave:SetEnabled(self.Button:GetChecked())

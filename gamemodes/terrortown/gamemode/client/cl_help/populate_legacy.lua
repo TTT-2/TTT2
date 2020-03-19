@@ -1,4 +1,4 @@
-local materialIcon = Material("vgui/ttt/derma/helpscreen/legacy")
+local materialIcon = Material("vgui/ttt/vskin/helpscreen/legacy")
 
 -- get all registered legacy tabs
 local function GetLegacyTabs()

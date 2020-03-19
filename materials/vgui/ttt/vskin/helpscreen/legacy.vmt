@@ -1,6 +1,6 @@
 "UnlitGeneric"
 {
-	"$basetexture" "vgui/ttt/derma/icon_close"
+	"$basetexture" "vgui/ttt/vskin/helpscreen/legacy"
 	"$nocull" 1
 	"$nodecal" 1
 	"$nolod" 1

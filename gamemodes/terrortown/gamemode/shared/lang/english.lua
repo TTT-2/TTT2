@@ -1283,8 +1283,8 @@ L.label_menu_menu = "MENU"
 L.label_menu_admin_spacer = "Admin Area (not shown to normal users)"
 
 L.button_menu_back = "back"
-L.button_bind_default = "Default"
-L.button_bind_disable = "Clear"
+L.button_default = "Default"
+L.button_disable = "Clear"
 
 L.help_color_desc = "If this setting is enabled, a global color can be chosen that will be used for the targetID outline and the crosshair."
 L.help_scale_factor = "This scale factor influences all UI elements (HUD, vgui and targetID). It is automatically updated if the screen resolution is changed. Changing this value will reset the HUD!"

@@ -1,4 +1,4 @@
-local materialIcon = Material("vgui/ttt/derma/helpscreen/bindings")
+local materialIcon = Material("vgui/ttt/vskin/helpscreen/bindings")
 
 local function AddBindingCategory(category, parent)
 	local form = vgui.Create("DFormTTT2", parent)

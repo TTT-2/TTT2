@@ -1,4 +1,4 @@
-local materialIcon = Material("vgui/ttt/derma/helpscreen/guide")
+local materialIcon = Material("vgui/ttt/vskin/helpscreen/guide")
 
 local function PopulateHUDPanel(parent)
 	local form = CreateForm(parent, "set_hud")

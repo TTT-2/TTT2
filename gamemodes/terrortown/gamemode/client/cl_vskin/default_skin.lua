@@ -1,7 +1,8 @@
-local materialClose = Material("vgui/ttt/derma/icon_close")
-local materialBack = Material("vgui/ttt/derma/icon_back")
-local materialCollapseOpened = Material("vgui/ttt/derma/icon_collapse_opened")
-local materialCollapseClosed = Material("vgui/ttt/derma/icon_collapse_closed")
+local materialClose = Material("vgui/ttt/vskin/icon_close")
+local materialBack = Material("vgui/ttt/vskin/icon_back")
+local materialCollapseOpened = Material("vgui/ttt/vskin/icon_collapse_opened")
+local materialCollapseClosed = Material("vgui/ttt/vskin/icon_collapse_closed")
+local materialReset = Material("vgui/ttt/vskin/icon_reset")
 
 local SKIN = {}
 SKIN.Name = "ttt2_default"
@@ -34,10 +35,6 @@ function SKIN:PaintFrameTTT2(panel, w, h)
 	local sizeShadow = VSKIN.GetShadowSize()
 	local sizeHeader = VSKIN.GetHeaderHeight()
 	local sizeBorder = VSKIN.GetBorderSize()
-
-	--if not panel:HasHierarchicalFocus() then
-	--	colorBackground = util.ColorLighten(colorBackground, 25)
-	--end
 
 	-- DRAW SHADOW (disable clipping)
 	if panel.m_bPaintShadow then
@@ -371,26 +368,26 @@ function SKIN:PaintCheckBox(panel, w, h)
 
 	local colorAccent = VSKIN.GetAccentColor()
 	local colorAccentHover = ColorAlpha(util.GetHoverColor(colorAccent), 200)
+	local colorCenter = util.GetChangedColor(colorBackground, 150)
 
 	if not panel:IsEnabled() then
 		colorBox = ColorAlpha(colorBox, alphaDisabled)
 		colorAccent = ColorAlpha(colorAccent, alphaDisabled)
 		colorAccentHover = ColorAlpha(colorAccentHover, alphaDisabled)
+		colorCenter = ColorAlpha(colorCenter, alphaDisabled)
 	end
 
 	if panel:GetChecked() then
 		if not panel:IsEnabled() then
-			self.tex.CheckboxD_Checked( 0, 0, w, h )
+			DrawCheckBox(w, h, w - h, panel, colorBox, colorAccent)
 		elseif panel.Hovered then
 			DrawCheckBox(w, h, w - h, panel, colorBox, colorAccentHover)
 		else
 			DrawCheckBox(w, h, w - h, panel, colorBox, colorAccent)
 		end
 	else
-		local colorCenter = util.GetChangedColor(colorBackground, 150)
-
 		if not panel:IsEnabled() then
-			self.tex.CheckboxD( 0, 0, w, h )
+			DrawCheckBox(w, h, 0, panel, colorBox, colorCenter)
 		elseif panel.Hovered then
 			DrawCheckBox(w, h, 0, panel, colorBox, colorAccentHover)
 		else
@@ -412,7 +409,7 @@ function SKIN:PaintCheckBoxLabel(panel, w, h)
 		colorText = ColorAlpha(colorText, alphaDisabled)
 	end
 
-	draw.RoundedBox(sizeCornerRadius, 0, 0, w, h, colorBox)
+	draw.RoundedBoxEx(sizeCornerRadius, 0, 0, w, h, colorBox, true, false, true, false)
 
 	draw.SimpleText(
 		TryT(panel:GetText()),
@@ -496,7 +493,6 @@ function SKIN:PaintButtonTTT2(panel, w, h)
 	local colorAccentDarkDisabled = util.GetChangedColor(util.GetDefaultColor(VSKIN.GetBackgroundColor()), 125)
 
 	local sizeBorder = VSKIN.GetBorderSize()
-	local sizeCornerRadius = VSKIN.GetCornerRadius()
 
 	if not panel:IsEnabled() then
 		local colorText = util.GetDefaultColor(colorAccentDisabled)
@@ -519,6 +515,42 @@ function SKIN:PaintButtonTTT2(panel, w, h)
 	local colorText = util.GetDefaultColor(colorAccent)
 
 	return DrawButton(w, h, panel, sizeBorder, colorAccentDark, colorAccent, colorText)
+end
+
+local function DrawFormButton(w, h, panel, sizeCornerRadius, colorBoxBack, colorBox, colorText, shift)
+	local pad = 6
+
+	draw.RoundedBoxEx(sizeCornerRadius, 0, 0, w, h, colorBoxBack, false, true, false, true)
+	draw.RoundedBox(sizeCornerRadius, 1, 1, w - 2, h - 2, colorBox)
+
+	draw.FilteredShadowedTexture(pad, pad + shift, w - 2 * pad, h - 2 * pad, materialReset, colorText.a, colorText)
+end
+
+function SKIN:PaintFormButtonResetTTT2(panel, w, h)
+	local colorBackground = VSKIN.GetBackgroundColor()
+
+	local colorBoxBack = util.GetChangedColor(colorBackground, 150)
+	local colorBox = VSKIN.GetAccentColor()
+	local colorText = ColorAlpha(util.GetDefaultColor(colorBox), 150)
+
+	local sizeCornerRadius = VSKIN.GetCornerRadius()
+	local shift = 0
+
+	if not panel:IsEnabled() then
+		colorBoxBack = ColorAlpha(colorBoxBack, alphaDisabled)
+		colorBox = ColorAlpha(colorBox, alphaDisabled)
+		colorText = ColorAlpha(colorText, alphaDisabled)
+	elseif panel.noDefault then
+		colorBox = ColorAlpha(colorBox, alphaDisabled)
+		colorText = ColorAlpha(colorText, alphaDisabled)
+	elseif panel.Depressed or panel:IsSelected() or panel:GetToggle() then
+		colorBox = util.GetActiveColor(colorBox)
+		shift = 1
+	elseif panel.Hovered then
+		colorBox = util.GetHoverColor(colorBox)
+	end
+
+	return DrawFormButton(w, h, panel, sizeCornerRadius, colorBoxBack, colorBox, colorText, shift)
 end
 
 function SKIN:PaintLabelTTT2(panel, w, h)
@@ -660,9 +692,7 @@ function SKIN:PaintSliderTextAreaTTT2(panel, w, h)
 		colorText = ColorAlpha(colorText, alphaDisabled)
 	end
 
-	local sizeCornerRadius = VSKIN.GetCornerRadius()
-
-	draw.RoundedBoxEx(sizeCornerRadius, 0, 0, w, h, colorBox, false, true, false, true)
+	draw.Box(0, 0, w, h, colorBox)
 
 	draw.SimpleText(
 		panel:GetText(),
@@ -708,27 +738,27 @@ function SKIN:PaintComboBoxTTT2(panel, w, h)
 		colorText = ColorAlpha(colorText, alphaDisabled)
 		colorOutline = ColorAlpha(colorOutline, alphaDisabled)
 
-		draw.RoundedBoxEx(sizeCornerRadius, 0, 0, w, h, colorOutline, false, true, false, true)
+		draw.Box(0, 0, w, h, colorOutline)
 		DrawComboBox(w, h, panel, sizeCornerRadius, colorBoxActive, colorText)
 
 		return
 	end
 
 	if panel.Depressed or panel:IsMenuOpen() then
-		draw.RoundedBoxEx(sizeCornerRadius, 0, 0, w, h, colorOutline, false, true, false, true)
+		draw.Box(0, 0, w, h, colorOutline)
 		DrawComboBox(w, h, panel, sizeCornerRadius, colorBoxActive, colorText)
 
 		return
 	end
 
 	if panel.Hovered then
-		draw.RoundedBoxEx(sizeCornerRadius, 0, 0, w, h, colorOutline, false, true, false, true)
+		draw.Box(0, 0, w, h, colorOutline)
 		DrawComboBox(w, h, panel, sizeCornerRadius, colorBoxHover, colorText)
 
 		return
 	end
 
-	draw.RoundedBoxEx(sizeCornerRadius, 0, 0, w, h, colorOutline, false, true, false, true)
+	draw.Box(0, 0, w, h, colorOutline)
 	DrawComboBox(w, h, panel, sizeCornerRadius, colorBox, colorText)
 end
 

@@ -65,11 +65,19 @@ function VSKIN.GetVSkinList()
 end
 
 ---
--- Returns the name of the currently selected skin
--- @return string The name of the skin
+-- Returns the name of the currently selected vskin
+-- @return string The name of the vskin
 -- @realm client
 function VSKIN.GetVSkinName()
 	return VSKIN.selected
+end
+
+---
+-- Returns the name of the default vskin
+-- @return string The name of the vskin
+-- @realm client
+function VSKIN.GetDefaultVSkinName()
+	return cv_selectedVSkin:GetDefault()
 end
 
 ---

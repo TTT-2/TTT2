@@ -1,4 +1,4 @@
-local materialIcon = Material("vgui/ttt/derma/helpscreen/language")
+local materialIcon = Material("vgui/ttt/vskin/helpscreen/language")
 
 local function PopulateLanguagePanel(parent)
 	local form = CreateForm(parent, "set_title_lang")

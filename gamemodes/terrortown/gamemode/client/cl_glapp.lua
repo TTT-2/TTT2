@@ -69,6 +69,14 @@ function GLAPP.GetGlobalScale()
 end
 
 ---
+-- Returns the default global scale based on the current
+-- screen resolution
+-- @return number The scale as a floating point value
+function GLAPP.GetDefaultGlobalScale()
+	return math.Round(ScrW() / 1920, 1)
+end
+
+---
 -- Registers a callback function that is called once the scale
 -- is changed
 function GLAPP.RegisterScaleChangeCallback(fn)

@@ -1,4 +1,4 @@
-local materialIcon = Material("vgui/ttt/derma/helpscreen/gameplay")
+local materialIcon = Material("vgui/ttt/vskin/helpscreen/gameplay")
 
 local function PopulateGeneralPanel(parent)
 	local form = CreateForm(parent, "set_title_play")

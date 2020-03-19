@@ -1,4 +1,4 @@
-local materialIcon = Material("vgui/ttt/derma/helpscreen/changelog")
+local materialIcon = Material("vgui/ttt/vskin/helpscreen/changelog")
 
 local htmlStart = [[
 	<head>

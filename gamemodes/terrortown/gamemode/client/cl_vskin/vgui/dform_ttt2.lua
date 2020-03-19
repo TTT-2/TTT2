@@ -33,41 +33,36 @@ function PANEL:Clear()
 	self.Items = {}
 end
 
-function PANEL:AddItem(left, right, drawBackground)
+function PANEL:AddItem(left, right, reset)
 	self:InvalidateLayout()
 
-	local Panel = vgui.Create("DSizeToContents", self)
+	local panel = vgui.Create("DSizeToContents", self)
 
-	Panel:SetSizeX(false)
-	Panel:Dock(TOP)
-	Panel:DockPadding(10, 10, 10, 0)
-	Panel:InvalidateLayout()
+	panel:SetSizeX(false)
+	panel:Dock(TOP)
+	panel:DockPadding(10, 10, 10, 0)
+	panel:InvalidateLayout()
+
+	if IsValid(reset) then
+		reset:SetParent(panel)
+		reset:Dock(RIGHT)
+	end
 
 	if IsValid(right) then
-		left:SetParent(Panel)
+		left:SetParent(panel)
 		left:Dock(LEFT)
 		left:InvalidateLayout(true)
-		left:SetSize(312, 20)
+		left:SetSize(350, 20)
 
-		right:SetParent(Panel)
-		right:SetPos(312, 0)
+		right:SetParent(panel)
+		right:SetPos(350, 0)
 		right:InvalidateLayout(true)
 	elseif IsValid(left) then
-		left:SetParent(Panel)
+		left:SetParent(panel)
 		left:Dock(TOP)
 	end
 
-	if drawBackground then
-		Panel:DockMargin(10, 10, 10, 10)
-
-		Panel.Paint = function(slf, w, h)
-			derma.SkinHook("Paint", "FormLabelTTT2", slf, w - 13, h)
-
-			return true
-		end
-	end
-
-	self.Items[#self.Items + 1] = Panel
+	self.Items[#self.Items + 1] = panel
 end
 
 function PANEL:TextEntry(strLabel, strConVar)
@@ -109,13 +104,13 @@ function PANEL:NumberWang(strLabel, strConVar, numMin, numMax, numDecimals)
 end
 
 function PANEL:ControlHelp(strHelp)
-	local Panel = vgui.Create("DSizeToContents", self)
+	local panel = vgui.Create("DSizeToContents", self)
 
-	Panel:SetSizeX(false)
-	Panel:Dock(TOP)
-	Panel:InvalidateLayout()
+	panel:SetSizeX(false)
+	panel:Dock(TOP)
+	panel:InvalidateLayout()
 
-	local left = vgui.Create("DLabelTTT2", Panel)
+	local left = vgui.Create("DLabelTTT2", panel)
 
 	left:SetDark(true)
 	left:SetWrap(true)
@@ -127,7 +122,7 @@ function PANEL:ControlHelp(strHelp)
 	left:Dock(TOP)
 	left:SetTextColor(self:GetSkin().Colours.Tree.Hover)
 
-	self.Items[#self.Items + 1] = Panel
+	self.Items[#self.Items + 1] = panel
 
 	return left
 end
@@ -184,6 +179,21 @@ end
 
 -- FUNCTIONS TO POPULATE THE FORM
 
+local function MakeReset(parent)
+	local reset = vgui.Create("DButtonTTT2", parent)
+
+	reset:SetText("button_default")
+	reset:SetSize(32, 32)
+
+	reset.Paint = function(slf, w, h)
+		derma.SkinHook("Paint", "FormButtonResetTTT2", slf, w, h)
+
+		return true
+	end
+
+	return reset
+end
+
 ---
 -- Adds a checkbox to the form
 -- @param table data The data for the checkbox
@@ -205,10 +215,26 @@ function PANEL:MakeCheckBox(data)
 		end
 	end
 
-	self:AddItem(left, nil)
+	local reset = MakeReset(self)
+
+	if ConVarExists(data.convar or "") or data.default ~= nil then
+		reset.DoClick = function(slf)
+			local default = data.default
+			if default == nil then
+				default = tobool(GetConVar(data.convar):GetDefault())
+			end
+
+			left:SetValue(default)
+		end
+	else
+		reset.noDefault = true
+	end
+
+	self:AddItem(left, nil, reset)
 
 	if IsValid(data.master) and isfunction(data.master.AddSlave) then
 		data.master:AddSlave(left)
+		data.master:AddSlave(reset)
 	end
 
 	return left
@@ -220,30 +246,59 @@ end
 -- @return @{Panel} The created slider
 -- @realm client
 function PANEL:MakeSlider(data)
-	local left = vgui.Create("DNumSliderTTT2", self)
+	local left = vgui.Create("DLabelTTT2", self)
 
 	left:SetText(data.label)
-	left:SetMinMax(data.min, data.max)
 
-	if data.decimal ~= nil then
-		left:SetDecimals(data.decimal)
+	left.Paint = function(slf, w, h)
+		derma.SkinHook("Paint", "FormLabelTTT2", slf, w, h)
+
+		return true
 	end
 
-	left:SetConVar(data.convar)
-	left:SizeToContents()
+	local right = vgui.Create("DNumSliderTTT2", self)
 
-	left:SetValue(data.initial)
+	right:SetMinMax(data.min, data.max)
 
-	left.OnValueChanged = function(slf, value)
-		if isfunction(data.onValueChanged) then
-			data.onValueChanged(slf, value)
+	if data.decimal ~= nil then
+		right:SetDecimals(data.decimal)
+	end
+
+	right:SetConVar(data.convar)
+	right:SizeToContents()
+
+	right:SetValue(data.initial)
+
+	right.OnValueChanged = function(slf, value)
+		if isfunction(data.onChange) then
+			data.onChange(slf, value)
 		end
 	end
 
-	self:AddItem(left, nil)
+	right:SetTall(32)
+	right:Dock(TOP)
+
+	local reset = MakeReset(self)
+
+	if ConVarExists(data.convar or "") or data.default ~= nil then
+		reset.DoClick = function(slf)
+			local default = data.default
+			if default == nil then
+				default = tonumber(GetConVar(data.convar):GetDefault())
+			end
+
+			right:SetValue(default)
+		end
+	else
+		reset.noDefault = true
+	end
+
+	self:AddItem(left, right, reset)
 
 	if IsValid(data.master) and isfunction(data.master.AddSlave) then
 		data.master:AddSlave(left)
+		data.master:AddSlave(right)
+		data.master:AddSlave(reset)
 	end
 
 	return left
@@ -258,6 +313,12 @@ function PANEL:MakeComboBox(data)
 	local left = vgui.Create("DLabelTTT2", self)
 
 	left:SetText(data.label)
+
+	left.Paint = function(slf, w, h)
+		derma.SkinHook("Paint", "FormLabelTTT2", slf, w, h)
+
+		return true
+	end
 
 	local right = vgui.Create("DComboBoxTTT2", self)
 
@@ -287,17 +348,27 @@ function PANEL:MakeComboBox(data)
 	right:SetTall(32)
 	right:Dock(TOP)
 
-	left.Paint = function(slf, w, h)
-		derma.SkinHook("Paint", "FormLabelTTT2", slf, w, h)
+	local reset = MakeReset(self)
 
-		return true
+	if ConVarExists(data.convar or "") or data.default ~= nil then
+		reset.DoClick = function(slf)
+			local default = data.default
+			if default == nil then
+				default = GetConVar(data.convar):GetDefault()
+			end
+
+			right:ChooseOptionName(default)
+		end
+	else
+		reset.noDefault = true
 	end
 
-	self:AddItem(left, right)
+	self:AddItem(left, right, reset)
 
 	if IsValid(data.master) and isfunction(data.master.AddSlave) then
 		data.master:AddSlave(left)
 		data.master:AddSlave(right)
+		data.master:AddSlave(reset)
 	end
 
 	return right, left
