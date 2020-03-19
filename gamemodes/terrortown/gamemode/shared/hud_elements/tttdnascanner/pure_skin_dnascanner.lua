@@ -5,32 +5,35 @@ DEFINE_BASECLASS(base)
 HUDELEMENT.Base = base
 
 if CLIENT then
-	local pad = 14
+	local dna = Material("vgui/ttt/dnascanner/DNA_HUD.png")
 
-	local drowning_color = Color(36, 154, 198)
+	local pad = 14
+	local iconSize = 64
 
 	local const_defaults = {
 		basepos = {x = 0, y = 0},
-		size = {w = 321, h = 100},
-		minsize = {w = 75, h = 100}
+		size = {w = 326, h = 92},
+		minsize = {w = 326, h = 92}
 	}
 
 	function HUDELEMENT:Initialize()
 		self.scale = 1
 		self.pad = pad
+		self.iconSize = iconSize
 		self.basecolor = self:GetHUDBasecolor()
+		self.slotCount = 4
 
 		BaseClass.Initialize(self)
 	end
 
 	-- parameter overwrites
 	function HUDELEMENT:IsResizable()
-		return true, false
+		return false, false
 	end
 	-- parameter overwrites end
 
 	function HUDELEMENT:GetDefaults()
-		const_defaults["basepos"] = {x = math.Round(ScrW() * 0.5 - self.size.w * 0.5), y = ScrH() - self.pad - self.size.h}
+		const_defaults["basepos"] = {x = math.Round(ScrW() * 0.5 - self.size.w * 0.5), y = ScrH() - self.size.h - 70}
 
 		return const_defaults
 	end
@@ -45,12 +48,14 @@ if CLIENT then
 		self.scale = self:GetHUDScale()
 		self.basecolor = self:GetHUDBasecolor()
 		self.pad = pad * self.scale
+		self.iconSize = iconSize * self.scale
 
 		BaseClass.PerformLayout(self)
 	end
 
-	function HUDELEMENT:DrawMarker(x, y, size, thickness, color)	
-		local margin = 3
+	function HUDELEMENT:DrawMarker(x, y, size, color)	
+		local thickness = 2 * self.scale
+		local margin = 3 * self.scale
 		local marker_x = x - margin - thickness
 		local marker_y = y - margin - thickness
 		local marker_size = size + margin * 2 + thickness * 2
@@ -61,6 +66,19 @@ if CLIENT then
 		end
 	end
 
+	function HUDELEMENT:GetAlpha(selectTime)
+		local time_left = CurTime() - selectTime
+
+		if time_left < 2 then
+			local num = 0.5 * math.pi + (-2.0 * time_left + 7) * math.pi
+
+			factor = 0.5 * (math.sin(num) + 1)
+			return 20 + 235 * ( 1 - factor)
+		end
+		return 255
+	end
+
+
 	function HUDELEMENT:Draw()
 		local client = LocalPlayer()
 		local pos = self:GetPos()
@@ -68,37 +86,62 @@ if CLIENT then
 		local x, y = pos.x, pos.y
 		local w, h = size.w, size.h
 		local scanner = client:GetWeapon("weapon_ttt_wtester")
+		
+		--fake scanner for HUD editing
+		if HUDEditor.IsEditing then
+			scanner = {MAX_ITEM = 4, ItemSamples = {true}, ScanSuccess = 0, NewSample = 0, ScanTime = 0, ActiveSample = 3}
+		end
+
 		local chargeAmount =  HUDEditor.IsEditing and 1 or scanner:GetCharge() / scanner.MAX_CHARGE
 
+		local slotCount = scanner.MAX_ITEM
+		local newWidth = self.pad + slotCount * (self.pad + self.iconSize)
+		if newWidth ~= size.w then
+			local newX = pos.x + size.w * 0.5 - newWidth * 0.5
+			w = newWidth
+			x = newX
+		end
+	
 		-- draw bg and shadow
 		self:DrawBg(x, y, w, h, self.basecolor)
 
 		local tmp_x = x + self.pad
 		local tmp_y = y + self.pad
 		local icon_size = 64 * self.scale
+		local label_offset = 8 * self.scale
 
-		if not HUDEditor.IsEditing then
-			-- self:DrawBar(x + self.pad, y + self.pad, w - self.pad * 2, h - self.pad * 2, drowning_color, chargeAmount, 1)
-			for i = 1, scanner.MAX_ITEM do
-				local identifier = string.char(64 + i)
-				
-				if not scanner.ItemSamples[i] then
-					surface.SetDrawColor(50, 50, 50, 255)
-				else
-					surface.SetDrawColor(self.basecolor)
+		for i = 1, scanner.MAX_ITEM do
+			local identifier = string.char(64 + i)
+			
+			--draw background
+			surface.SetDrawColor(50, 50, 50, 255)
+			surface.DrawRect(tmp_x, tmp_y, icon_size, icon_size)
+
+			if scanner.ItemSamples[i] then
+				local alpha = 255
+				if scanner.ScanSuccess > 0 and scanner.NewSample == i then
+					alpha = self:GetAlpha(scanner.ScanTime)
 				end
+
+				surface.SetDrawColor(40, 120, 40, alpha)
 				surface.DrawRect(tmp_x, tmp_y, icon_size, icon_size)
 
-				draw.AdvancedText(identifier, "PureSkinRole", tmp_x + icon_size * 0.5, tmp_y + icon_size * 0.5, COLOR_BLACK, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, true, self.scale)
-
-				self:DrawLines(tmp_x, tmp_y, icon_size, icon_size, 255)
-
-				if scanner.ActiveSample == i then
-					self:DrawMarker(tmp_x, tmp_y, icon_size, 2, COLOR_WHITE)
-				end
-
-				tmp_x = tmp_x + self.pad + icon_size
+				draw.FilteredTexture(tmp_x + 6, tmp_y + 6, icon_size - 6, icon_size - 6, dna, 100, COLOR_BLACK)
+				draw.FilteredTexture(tmp_x + 2, tmp_y + 2, icon_size - 6, icon_size - 6, dna, 190, COLOR_WHITE)
+				draw.FilteredTexture(tmp_x + 4, tmp_y + 4, icon_size - 6, icon_size - 6, dna, 190, COLOR_BLACK)
+			else
+				draw.FilteredTexture(tmp_x + 3, tmp_y + 3, icon_size - 6, icon_size - 6, dna, 150, COLOR_BLACK)
 			end
+
+			if scanner.ActiveSample == i then
+				self:DrawMarker(tmp_x, tmp_y, icon_size, COLOR_WHITE)
+			end
+
+			draw.AdvancedText(identifier, "PureSkinMSTACKMsg", tmp_x + label_offset, tmp_y + label_offset, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, true, self.scale)
+
+			self:DrawLines(tmp_x, tmp_y, icon_size, icon_size, 255)
+
+			tmp_x = tmp_x + self.pad + icon_size
 		end
 
 		-- draw lines around the element

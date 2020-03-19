@@ -55,8 +55,9 @@ SWEP.ItemSamples = {}
 SWEP.ScanSuccess = 0
 SWEP.ScanTime = CurTime()
 SWEP.ActiveSample = 1
+SWEP.NewSample = 1
 
-SWEP.MAX_ITEM = 4
+SWEP.MAX_ITEM = 6
 
 SWEP.CHARGE_DELAY = 0.1
 SWEP.CHARGE_RATE = 300
@@ -88,15 +89,15 @@ end
 function SWEP:Initialize()
 	--debug stuff
 	
-	-- plys = player.GetAll()
-	-- for i = 1, #plys do
-	-- 	local ply = plys[i]
-	-- 	if SERVER then
-	-- 		self.ItemSamples[i] = ply
-	-- 	else
-	-- 		self.ItemSamples[i] = true
-	-- 	end	
-	-- end
+	plys = player.GetAll()
+	for i = 1, #plys do
+		local ply = plys[i]
+		if SERVER then
+			self.ItemSamples[i] = ply
+		else
+			self.ItemSamples[i] = true
+		end	
+	end
 	
 	self:SetCharge(self.MAX_CHARGE)
 
@@ -460,6 +461,7 @@ if CLIENT then
 		
 		if successful or oldFound then
 			scanner.ActiveSample = net.ReadUInt(8)
+			scanner.NewSample = scanner.ActiveSample
 		end
 		scanner.ScanTime = CurTime()
 
