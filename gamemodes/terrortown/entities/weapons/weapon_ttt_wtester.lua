@@ -67,11 +67,11 @@ SWEP.RadarPos = nil
 local beep_success = Sound("buttons/blip2.wav")
 local beep_match = Sound("buttons/blip1.wav")
 local beep_miss = Sound("player/suit_denydevice.wav")
-local dna_icon = Material("vgui/ttt/dnascanner/DNA_HUD.png")
-local dna_screen_success = Material("models/ttt2_dna_scanner/Check.png")
-local dna_screen_fail = Material("models/ttt2_dna_scanner/Fail.png")
-local dna_screen_arrow = Material("models/ttt2_dna_scanner/Arrow.png")
-local dna_screen_circle = Material("models/ttt2_dna_scanner/Circle.png")
+local dna_icon = Material("vgui/ttt/dnascanner/dna_hud.png")
+local dna_screen_success = Material("models/ttt2_dna_scanner/screen/check")
+local dna_screen_fail = Material("models/ttt2_dna_scanner/screen/fail")
+local dna_screen_arrow = Material("models/ttt2_dna_scanner/screen/arrow")
+local dna_screen_circle = Material("models/ttt2_dna_scanner/screen/circle")
 
 if SERVER then
 	util.AddNetworkString("TTT2ScannerFeedback")
@@ -240,9 +240,8 @@ function SWEP:AddPlayerSample(corpse, killer)
 	local owner = self:GetOwner()
 
 	if table.HasValue(self.ItemSamples, killer) then
-		local foundIndex =  table.KeyFromValue(self.ItemSamples, killer)
+		self.ActiveSample = table.KeyFromValue(self.ItemSamples, killer)
 		self:Report(false, "dna_duplicate", true)
-		self.ActiveSample = foundIndex
 	else
 		local index = firstFreeIndex(self.ItemSamples, self.MAX_ITEM, self.ActiveSample)
 		self.ActiveSample = index
@@ -355,7 +354,6 @@ if SERVER then
 	end
 else
 	local TryT = LANG.TryTranslation
-	local ParT = LANG.GetParamTranslation
 
 	local function DrawTexturedRectRotatedPoint( x, y, w, h, rot, x0, y0 )
 		local c = math.cos( math.rad( rot ) )
@@ -377,7 +375,7 @@ else
 		local target = self.ItemSamples[self.ActiveSample]
 
 		if showFeedback then
-			if IsValid(target) and IsValid(self:GetOwner()) and IsValid(self.RadarPos) then
+			if IsValid(target) and IsValid(self:GetOwner()) and isvector(self.RadarPos) then
 				local targetPos = self.RadarPos
 				local scannerPos = self.Owner:GetPos()
 				local vectorToPos = targetPos - scannerPos
