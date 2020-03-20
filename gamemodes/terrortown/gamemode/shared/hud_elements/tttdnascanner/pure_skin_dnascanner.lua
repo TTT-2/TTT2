@@ -92,8 +92,6 @@ if CLIENT then
 			scanner = {MAX_ITEM = 4, ItemSamples = {true}, ScanSuccess = 0, NewSample = 0, ScanTime = 0, ActiveSample = 3}
 		end
 
-		--local chargeAmount =  HUDEditor.IsEditing and 1 or scanner:GetCharge() / scanner.MAX_CHARGE
-
 		local slotCount = scanner.MAX_ITEM
 		local newWidth = self.pad + slotCount * (self.pad + self.iconSize)
 		if newWidth ~= size.w then
@@ -126,9 +124,7 @@ if CLIENT then
 				surface.SetDrawColor(40, 120, 40, alpha)
 				surface.DrawRect(tmp_x, tmp_y, icon_size, icon_size)
 
-				draw.FilteredTexture(tmp_x + 6, tmp_y + 6, icon_size - 6, icon_size - 6, dna, 100, COLOR_BLACK)
-				draw.FilteredTexture(tmp_x + 2, tmp_y + 2, icon_size - 6, icon_size - 6, dna, 190, COLOR_WHITE)
-				draw.FilteredTexture(tmp_x + 4, tmp_y + 4, icon_size - 6, icon_size - 6, dna, 190, COLOR_BLACK)
+				draw.FilteredShadowedTexture(tmp_x + 3, tmp_y + 3, icon_size - 6, icon_size - 6, dna, 190, COLOR_WHITE)
 			else
 				draw.FilteredTexture(tmp_x + 3, tmp_y + 3, icon_size - 6, icon_size - 6, dna, 150, COLOR_BLACK)
 			end
