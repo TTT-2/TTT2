@@ -267,14 +267,12 @@ function SWEP:AddItemSample(ent)
 	for i = #ent.fingerprints, 1 do
 		local ply = ent.fingerprints[i]
 
-		if ply == 1 then
-			--skip your own prints
-		elseif table.HasValue(self.ItemSamples, ply) then
+		if ply ~= self:GetOwner() and table.HasValue(self.ItemSamples, ply) then
 			self.ActiveSample  = table.KeyFromValue(self.ItemSamples, ply)
 
 			self:Report(false, "dna_duplicate", true)
 			return
-		else
+		elseif ply ~= self:GetOwner() then
 			local index = firstFreeIndex(self.ItemSamples, self.MAX_ITEM, self.ActiveSample)
 			self.ActiveSample = index
 			self.ItemSamples[index] = ply
@@ -355,9 +353,10 @@ if SERVER then
 			end
 		end
 	end
-end
+else
+	local TryT = LANG.TryTranslation
+	local ParT = LANG.GetParamTranslation
 
-if CLIENT then
 	local function DrawTexturedRectRotatedPoint( x, y, w, h, rot, x0, y0 )
 		local c = math.cos( math.rad( rot ) )
 		local s = math.sin( math.rad( rot ) )
@@ -395,7 +394,7 @@ if CLIENT then
 				surface.SetMaterial( dna_screen_circle )
 				surface.DrawTexturedRect( 116, 116, 276, 276)
 			else
-				draw.AdvancedText( "No DNA", "DNAScannerDistanceFont", 256, 256, Color(50, 50, 50), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER , false, 3)
+				draw.AdvancedText(TryT("dna_screen_ready"), "DNAScannerDistanceFont", 256, 256, Color(50, 50, 50), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER , false, 3)
 			end
 		else
 			if self.ScanSuccess == 1 then
@@ -403,7 +402,7 @@ if CLIENT then
 				surface.SetMaterial( dna_screen_success )
 				surface.DrawTexturedRect( 192, 192, 128, 128 )
 			elseif self.ScanSuccess == 2 then
-				draw.AdvancedText( "Match", "DNAScannerDistanceFont", 256, 256, Color(50, 50, 50), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER , false, 3)
+				draw.AdvancedText(TryT("dna_screen_match"), "DNAScannerDistanceFont", 256, 256, Color(50, 50, 50), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER , false, 3)
 			else
 				surface.SetDrawColor( 50, 50, 50, 255 )
 				surface.SetMaterial( dna_screen_fail )
@@ -461,9 +460,9 @@ if CLIENT then
 		if ent:IsWeapon() or ent.CanHavePrints or ent:GetNWBool("HasPrints", false)
 		or ent:GetClass() == "prop_ragdoll" and CORPSE.GetPlayerNick(ent, false)
 		then
-			tData:AddDescriptionLine("Scan possible", COLOR_GREEN, {dna_icon})
+			tData:AddDescriptionLine(TryT("dna_tid_possible"), COLOR_GREEN, {dna_icon})
 		else
-			tData:AddDescriptionLine("No scan possible", COLOR_RED, {dna_icon})
+			tData:AddDescriptionLine(TryT("dna_tid_impossible"), COLOR_RED, {dna_icon})
 		end
 	end)
 
