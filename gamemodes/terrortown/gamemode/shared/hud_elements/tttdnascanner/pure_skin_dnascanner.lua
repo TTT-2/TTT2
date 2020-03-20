@@ -89,10 +89,10 @@ if CLIENT then
 
 		--fake scanner for HUD editing
 		if HUDEditor.IsEditing then
-			scanner = {MAX_ITEM = 4, ItemSamples = {true}, ScanSuccess = 0, NewSample = 0, ScanTime = 0, ActiveSample = 3}
+			scanner = {ItemSamples = {true}, ScanSuccess = 0, NewSample = 0, ScanTime = 0, ActiveSample = 3}
 		end
 
-		local slotCount = scanner.MAX_ITEM
+		local slotCount = GetGlobalBool("ttt2_dna_scanner_slots")
 		local newWidth = self.pad + slotCount * (self.pad + self.iconSize)
 		if newWidth ~= size.w then
 			local newX = pos.x + size.w * 0.5 - newWidth * 0.5
@@ -108,7 +108,7 @@ if CLIENT then
 		local icon_size = 64 * self.scale
 		local label_offset = 8 * self.scale
 
-		for i = 1, scanner.MAX_ITEM do
+		for i = 1, GetGlobalBool("ttt2_dna_scanner_slots") do
 			local identifier = string.char(64 + i)
 
 			--draw background
