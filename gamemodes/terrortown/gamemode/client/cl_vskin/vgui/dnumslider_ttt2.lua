@@ -42,6 +42,13 @@ function PANEL:Init()
 		self.Slider:OnMousePressed(mcode)
 	end
 
+	-- make slider know a bit bigger
+	self.Slider.Knob.PerformLayout = function(slf)
+		local _, pH = self:GetSize()
+
+		slf:SetSize(8, pH - 10)
+	end
+
 	Derma_Hook(self.Slider, "Paint", "Paint", "NumSliderTTT2")
 
 	self:SetTall(32)

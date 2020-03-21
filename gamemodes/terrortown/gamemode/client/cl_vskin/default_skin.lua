@@ -664,6 +664,31 @@ function SKIN:PaintHelpLabelTTT2(panel, w, h)
 	end
 end
 
+function SKIN:PaintSliderKnob(panel, w, h)
+	--local colorAccent = VSKIN.GetAccentColor()
+	--local colorAccentHover = util.GetHoverColor(colorAccent)
+	--local colorAccentActive = util.GetAccentColor(colorAccent)
+	local colorAccent = Color(200, 100, 50)
+	local colorAccentHover = Color(220, 120, 70)
+	local colorAccentActive = Color(240, 140, 90)
+
+	if not panel:IsEnabled() then
+		colorAccent = ColorAlpha(colorAccent, alphaDisabled)
+		colorAccentHover = ColorAlpha(colorAccentHover, alphaDisabled)
+		colorAccentActive = ColorAlpha(colorAccentActive, alphaDisabled)
+	end
+
+	if panel.Depressed then
+		return draw.RoundedBox(math.floor(w * 0.5), 0, 0, w, h, colorAccentActive)
+	end
+
+	if panel.Hovered then
+		return draw.RoundedBox(math.floor(w * 0.5), 0, 0, w, h, colorAccentHover)
+	end
+
+	return draw.RoundedBox(math.floor(w * 0.5), 0, 0, w, h, colorAccent)
+end
+
 function SKIN:PaintNumSliderTTT2(panel, w, h)
 	local colorBackground = VSKIN.GetBackgroundColor()
 
