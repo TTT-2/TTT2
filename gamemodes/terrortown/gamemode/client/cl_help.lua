@@ -136,11 +136,14 @@ end
 
 function HELPSCRN:SetupContentArea(parent, menuData)
 	self.parent = parent
+	self.lastMenuData = self.menuData
 	self.menuData = menuData
 end
 
 function HELPSCRN:BuildContentArea()
 	if not IsValid(self.parent) then return end
+
+	if hook.Run("TTT2OnSubmenuClear", self.parent, self.nameMenuOpen, self.lastMenuData, self.menuData) == false then return end
 
 	self.parent:Clear()
 
@@ -190,7 +193,7 @@ function HELPSCRN:ShowSubMenu(data)
 	end)
 
 	-- MARK AS SUBMENU
-	self.nameMenuOpen = "sub"
+	self.nameMenuOpen = data.id
 
 	-- BUILD GENERAL BOX STRUCTURE
 	local navArea = vgui.Create("DNavPanelTTT2", frame)
@@ -276,7 +279,7 @@ function HELPSCRN:ShowSubMenu(data)
 
 	-- REGISTER REBUILD CALLABCK
 	VHDL.RegisterCallback("rebuild", function(menu)
-		if HELPSCRN.nameMenuOpen ~= "sub" then return end
+		if HELPSCRN.nameMenuOpen == "main" then return end
 
 		HELPSCRN:BuildContentArea()
 	end)
@@ -305,3 +308,16 @@ local function ShowTTTHelp(ply, cmd, args)
 	HELPSCRN:ShowMainMenu()
 end
 concommand.Add("ttt_helpscreen", ShowTTTHelp)
+
+---
+-- A hook that is called once the content area of the helpscreen
+-- is cleared, clearing is stopped if false is retunrned
+-- @param Panel parent The parent panel
+-- @param string nameMenuOpen The name of the opened submenu
+-- @param table lastMenuData The menu data of the menu that will be closed
+-- @param table menuData The menu data of the menu that will be opened
+-- @hook
+-- @realm client
+function GM:TTT2OnSubmenuClear(parent, nameMenuOpen, lastMenuData, menuData)
+
+end
