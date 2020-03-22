@@ -14,7 +14,7 @@ function PANEL:UpdateText()
 	local str = input.GetKeyName(self:GetSelectedNumber())
 
 	if not str then
-		str = "NONE"
+		str = "button_none"
 	end
 
 	str = language.GetPhrase(str)
@@ -23,7 +23,7 @@ function PANEL:UpdateText()
 end
 
 function PANEL:DoClick()
-	self:SetText("PRESS A KEY")
+	self:SetText("button_press_key")
 
 	input.StartKeyTrapping()
 
@@ -31,7 +31,7 @@ function PANEL:DoClick()
 end
 
 function PANEL:DoRightClick()
-	self:SetText("NONE")
+	self:SetText("button_none")
 	self:SetValue(0)
 end
 

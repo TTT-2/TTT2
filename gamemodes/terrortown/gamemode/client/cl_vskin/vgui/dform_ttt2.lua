@@ -3,9 +3,12 @@ local PANEL = {}
 
 DEFINE_BASECLASS("DCollapsibleCategoryTTT2")
 
-AccessorFunc(PANEL, "m_bSizeToContents",	"AutoSize", FORCE_BOOL)
-AccessorFunc(PANEL, "m_iSpacing",			"Spacing")
-AccessorFunc(PANEL, "m_Padding",			"Padding")
+AccessorFunc(PANEL, "m_bSizeToContents", "AutoSize", FORCE_BOOL)
+AccessorFunc(PANEL, "m_iSpacing", "Spacing")
+AccessorFunc(PANEL, "m_Padding", "Padding")
+
+local materialReset = Material("vgui/ttt/vskin/icon_reset")
+local materialDisable = Material("vgui/ttt/vskin/icon_disable")
 
 function PANEL:Init()
 	self.Items = {}
@@ -186,10 +189,12 @@ local function MakeReset(parent)
 	reset:SetSize(32, 32)
 
 	reset.Paint = function(slf, w, h)
-		derma.SkinHook("Paint", "FormButtonResetTTT2", slf, w, h)
+		derma.SkinHook("Paint", "FormButtonIconTTT2", slf, w, h)
 
 		return true
 	end
+
+	reset.material = materialReset
 
 	return reset
 end
@@ -339,8 +344,8 @@ function PANEL:MakeComboBox(data)
 			RunConsoleCommand(slf.m_strConVar, tostring(rawdata or value))
 		end
 
-		if isfunction(data.onSelect) then
-			data.onSelect(slf, index, value, rawdata)
+		if isfunction(data.onChange) then
+			data.onChange(slf, index, value, rawdata)
 		end
 	end
 
@@ -358,6 +363,59 @@ function PANEL:MakeComboBox(data)
 			end
 
 			right:ChooseOptionName(default)
+		end
+	else
+		reset.noDefault = true
+	end
+
+	self:AddItem(left, right, reset)
+
+	if IsValid(data.master) and isfunction(data.master.AddSlave) then
+		data.master:AddSlave(left)
+		data.master:AddSlave(right)
+		data.master:AddSlave(reset)
+	end
+
+	return right, left
+end
+
+function PANEL:MakeBinder(data)
+	local left = vgui.Create("DLabelTTT2", self)
+
+	left:SetText(data.label)
+
+	left.Paint = function(slf, w, h)
+		derma.SkinHook("Paint", "FormLabelTTT2", slf, w, h)
+
+		return true
+	end
+
+	local right = vgui.Create("DBinderPanelTTT2", self)
+
+	right.binder:SetValue(data.select)
+
+	right.binder.OnChange = function(slf, keyNum)
+		if isfunction(data.onChange) then
+			data.onChange(slf, keyNum)
+		end
+	end
+
+	right.disable.DoClick = function(slf)
+		if isfunction(data.onDisable) then
+			data.onDisable(slf, right.binder)
+		end
+	end
+
+	right.disable.material = materialDisable
+
+	right:SetTall(32)
+	right:Dock(TOP)
+
+	local reset = MakeReset(self)
+
+	if data.default ~= nil then
+		reset.DoClick = function(slf)
+			right.binder:SetValue(data.default)
 		end
 	else
 		reset.noDefault = true

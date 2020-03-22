@@ -2,7 +2,6 @@ local materialClose = Material("vgui/ttt/vskin/icon_close")
 local materialBack = Material("vgui/ttt/vskin/icon_back")
 local materialCollapseOpened = Material("vgui/ttt/vskin/icon_collapse_opened")
 local materialCollapseClosed = Material("vgui/ttt/vskin/icon_collapse_closed")
-local materialReset = Material("vgui/ttt/vskin/icon_reset")
 
 local SKIN = {}
 SKIN.Name = "ttt2_default"
@@ -75,7 +74,7 @@ function SKIN:PaintButtonPanelTTT2(panel, w, h)
 end
 
 function SKIN:PaintContentPanelTTT2(panel, w, h)
-	local colorBackground = ColorAlpha(util.GetDefaultColor(VSKIN.GetBackgroundColor()), 20)
+	local colorBackground = util.GetChangedColor(VSKIN.GetBackgroundColor(), 30)
 
 	draw.Box(0, 0, w, h, colorBackground)
 end
@@ -162,13 +161,15 @@ end
 function SKIN:PaintVScrollBar(panel, w, h)
 	local colorScrollbarTrack = VSKIN.GetScrollbarTrackColor()
 
-	return draw.RoundedBox(6, 0, 0, w, h, colorScrollbarTrack)
+	local sizeCornerRadius = VSKIN.GetCornerRadius()
+
+	return draw.RoundedBox(sizeCornerRadius, 0, 0, w, h, colorScrollbarTrack)
 end
 
 function SKIN:PaintScrollBarGrip(panel, w, h)
 	local colorScrollbar = VSKIN.GetScrollbarColor()
-	local colorScrollbarHover = util.GetHoverColor(colorScrollbar)
-	local colorScrollbarActive = util.GetActiveColor(colorScrollbar)
+	local colorScrollbarHover = util.GetChangedColor(colorScrollbar, 10)
+	local colorScrollbarActive = util.GetChangedColor(colorScrollbar, 15)
 
 	local sizeCornerRadius = VSKIN.GetCornerRadius()
 
@@ -465,15 +466,15 @@ function SKIN:PaintCategoryHeaderTTT2(panel, w, h)
 	)
 end
 
-local function DrawButton(w, h, panel, sizeBorder, colorLine, colorBox, colorText)
+local function DrawButton(w, h, panel, sizeBorder, colorLine, colorBox, colorText, shift)
 	draw.Box(0, 0, w, h, colorBox)
 	draw.Box(0, h - sizeBorder, w, sizeBorder, colorLine)
 
-	draw.SimpleText(
+	draw.ShadowedText(
 		string.upper(TryT(panel:GetText())),
 		panel:GetFont(),
 		0.5 * w,
-		0.5 * (h - sizeBorder),
+		0.5 * (h - sizeBorder) + shift,
 		colorText,
 		TEXT_ALIGN_CENTER,
 		TEXT_ALIGN_CENTER
@@ -497,24 +498,24 @@ function SKIN:PaintButtonTTT2(panel, w, h)
 	if not panel:IsEnabled() then
 		local colorText = util.GetDefaultColor(colorAccentDisabled)
 
-		return DrawButton(w, h, panel, sizeBorder, colorAccentDarkDisabled, colorAccentDisabled, colorText)
+		return DrawButton(w, h, panel, sizeBorder, colorAccentDarkDisabled, colorAccentDisabled, colorText, 0)
 	end
 
 	if panel.Depressed or panel:IsSelected() or panel:GetToggle() then
 		local colorText = util.GetDefaultColor(colorAccent)
 
-		return DrawButton(w, h, panel, sizeBorder, colorAccentDarkActive, colorAccentActive, colorText)
+		return DrawButton(w, h, panel, sizeBorder, colorAccentDarkActive, colorAccentActive, colorText, 1)
 	end
 
 	if panel.Hovered then
 		local colorText = util.GetDefaultColor(colorAccent)
 
-		return DrawButton(w, h, panel, sizeBorder, colorAccentDarkHover, colorAccentHover, colorText)
+		return DrawButton(w, h, panel, sizeBorder, colorAccentDarkHover, colorAccentHover, colorText, 0)
 	end
 
 	local colorText = util.GetDefaultColor(colorAccent)
 
-	return DrawButton(w, h, panel, sizeBorder, colorAccentDark, colorAccent, colorText)
+	return DrawButton(w, h, panel, sizeBorder, colorAccentDark, colorAccent, colorText, 0)
 end
 
 local function DrawFormButton(w, h, panel, sizeCornerRadius, colorBoxBack, colorBox, colorText, shift)
@@ -523,10 +524,10 @@ local function DrawFormButton(w, h, panel, sizeCornerRadius, colorBoxBack, color
 	draw.RoundedBoxEx(sizeCornerRadius, 0, 0, w, h, colorBoxBack, false, true, false, true)
 	draw.RoundedBox(sizeCornerRadius, 1, 1, w - 2, h - 2, colorBox)
 
-	draw.FilteredShadowedTexture(pad, pad + shift, w - 2 * pad, h - 2 * pad, materialReset, colorText.a, colorText)
+	draw.FilteredShadowedTexture(pad, pad + shift, w - 2 * pad, h - 2 * pad, panel.material, colorText.a, colorText)
 end
 
-function SKIN:PaintFormButtonResetTTT2(panel, w, h)
+function SKIN:PaintFormButtonIconTTT2(panel, w, h)
 	local colorBackground = VSKIN.GetBackgroundColor()
 
 	local colorBoxBack = util.GetChangedColor(colorBackground, 150)
@@ -551,6 +552,45 @@ function SKIN:PaintFormButtonResetTTT2(panel, w, h)
 	end
 
 	return DrawFormButton(w, h, panel, sizeCornerRadius, colorBoxBack, colorBox, colorText, shift)
+end
+
+local function DrawFormButtonText(w, h, panel, sizeCornerRadius, colorBoxBack, colorBox, colorText, shift)
+	draw.RoundedBoxEx(sizeCornerRadius, 0, 0, w, h, colorBoxBack, false, true, false, true)
+	draw.RoundedBox(sizeCornerRadius, 1, 1, w - 2, h - 2, colorBox)
+
+	draw.ShadowedText(
+		string.upper(TryT(panel:GetText())),
+		panel:GetFont(),
+		0.5 * w,
+		0.5 * h + shift,
+		colorText,
+		TEXT_ALIGN_CENTER,
+		TEXT_ALIGN_CENTER
+	)
+end
+
+function SKIN:PaintBinderButtonTTT2(panel, w, h)
+	local colorBackground = VSKIN.GetBackgroundColor()
+
+	local colorBoxBack = util.GetChangedColor(colorBackground, 150)
+	local colorBox = VSKIN.GetAccentColor()
+	local colorText = ColorAlpha(util.GetDefaultColor(colorBox), 150)
+
+	local sizeCornerRadius = VSKIN.GetCornerRadius()
+	local shift = 0
+
+	if not panel:IsEnabled() then
+		colorBoxBack = ColorAlpha(colorBoxBack, alphaDisabled)
+		colorBox = ColorAlpha(colorBox, alphaDisabled)
+		colorText = ColorAlpha(colorText, alphaDisabled)
+	elseif panel.Depressed or panel:IsSelected() or panel:GetToggle() then
+		colorBox = util.GetActiveColor(colorBox)
+		shift = 1
+	elseif panel.Hovered then
+		colorBox = util.GetHoverColor(colorBox)
+	end
+
+	return DrawFormButtonText(w, h, panel, sizeCornerRadius, colorBoxBack, colorBox, colorText, shift)
 end
 
 function SKIN:PaintLabelTTT2(panel, w, h)
@@ -735,6 +775,18 @@ function SKIN:PaintSliderTextAreaTTT2(panel, w, h)
 		TEXT_ALIGN_CENTER,
 		TEXT_ALIGN_CENTER
 	)
+end
+
+function SKIN:PaintBinderPanelTTT2(panel, w, h)
+	local colorBackground = VSKIN.GetBackgroundColor()
+
+	local colorBoxBack = util.GetChangedColor(colorBackground, 150)
+
+	if not panel:IsEnabled() then
+		colorBoxBack = ColorAlpha(colorBoxBack, alphaDisabled)
+	end
+
+	draw.Box(0, 0, w, h, colorBoxBack)
 end
 
 --[[---------------------------------------------------------

@@ -57,6 +57,7 @@ ttt_include("cl_vskin__vgui__dlabel")
 ttt_include("cl_vskin__vgui__dcombobox")
 ttt_include("cl_vskin__vgui__dcheckboxlabel")
 ttt_include("cl_vskin__vgui__dnumslider")
+ttt_include("cl_vskin__vgui__dbinderpanel")
 
 ttt_include("cl_network_sync")
 ttt_include("cl_karma")

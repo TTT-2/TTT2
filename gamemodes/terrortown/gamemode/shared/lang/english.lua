@@ -1285,6 +1285,8 @@ L.label_menu_admin_spacer = "Admin Area (not shown to normal users)"
 L.button_menu_back = "back"
 L.button_default = "Default"
 L.button_disable = "Clear"
+L.button_none = "None"
+L.button_press_key = "Press a key"
 
 L.help_color_desc = "If this setting is enabled, a global color can be chosen that will be used for the targetID outline and the crosshair."
 L.help_scale_factor = "This scale factor influences all UI elements (HUD, vgui and targetID). It is automatically updated if the screen resolution is changed. Changing this value will reset the HUD!"
@@ -1295,6 +1297,7 @@ L.help_targetid_info = "TargetID is the information rendered when focusing an en
 L.help_hud_default_desc = "Set the default HUD for all players. Players that have not yet selected a HUD will receive this HUD as their default. This won't change the HUD of players that have already selected their HUD."
 L.help_hud_forced_desc = "Force a HUD for all players. This disables the HUD selection feature for everyone."
 L.help_hud_enabled_desc = "Enable/Disable HUDs to restrict the selection of these HUDs."
+L.help_damage_indicator_desc = "The damage indicator is the overlay shown when the player is damaged. To add a new theme, place a png in 'materials/vgui/ttt/damageindicator/themes/'."
 
 
 

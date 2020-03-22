@@ -102,6 +102,7 @@ TTTFiles = {
 	cl_vskin__vgui__dcombobox = {file = "cl_vskin/vgui/dcombobox_ttt2.lua", on = "client"},
 	cl_vskin__vgui__dcheckboxlabel = {file = "cl_vskin/vgui/dcheckboxlabel_ttt2.lua", on = "client"},
 	cl_vskin__vgui__dnumslider = {file = "cl_vskin/vgui/dnumslider_ttt2.lua", on = "client"},
+	cl_vskin__vgui__dbinderpanel = {file = "cl_vskin/vgui/dbinderpanel_ttt2.lua", on = "client"},
 
 	-- cl_help client files
 	cl_help__populate = {file = "cl_help/populate.lua", on = "client"},

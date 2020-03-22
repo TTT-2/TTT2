@@ -122,7 +122,7 @@ local function PopulateHUDSwitcherPanel(parent)
 		label = "select_hud",
 		choices = validHUDs,
 		selectName = currentHUDName,
-		onSelect = function(_, _, value)
+		onChange = function(_, _, value)
 			HUDManager.SetHUD(value)
 		end,
 		default = HUDManager.GetModelValue("defaultHUD") or "None"
@@ -155,7 +155,7 @@ local function PopulateVSkinPanel(parent)
 		label = "select_vskin",
 		choices = VSKIN.GetVSkinList(),
 		selectName = VSKIN.GetVSkinName(),
-		onSelect = function(_, _, value)
+		onChange = function(_, _, value)
 			VSKIN.SelectVSkin(value)
 		end,
 		default = VSKIN.GetDefaultVSkinName()
@@ -288,6 +288,10 @@ end
 
 local function PopulateDamagePanel(parent)
 	local form = CreateForm(parent, "f1_dmgindicator_title")
+
+	form:MakeHelp({
+		label = "help_damage_indicator_desc"
+	})
 
 	-- store the reference to the checkbox in a variable
 	-- because the other settings are enabled based on

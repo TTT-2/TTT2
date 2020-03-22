@@ -1,86 +1,50 @@
 local materialIcon = Material("vgui/ttt/vskin/helpscreen/bindings")
 
 local function AddBindingCategory(category, parent)
-	local form = vgui.Create("DFormTTT2", parent)
+	local client = LocalPlayer()
 
-	form:SetName(category)
+	local form = CreateForm(parent, category)
 
 	local bindings = bind.GetSettingsBindings()
 
 	for i = 1, #bindings do
 		local binding = bindings[i]
 
-		if binding.category == category then
-			local dPGrid = vgui.Create("DGrid")
-			dPGrid:SetCols(1)
-			dPGrid:SetColWide(1000)
-			dPGrid:SetRowHeight(45)
+		if binding.category ~= category then continue end
 
-			form:AddItem(dPGrid)
+		local currentBinding = bind.Find(binding.name)
 
-			local dPanel = vgui.Create("DPanel")
-			dPanel:SetSize(1000, 1000)
-			dPGrid:AddItem(dPanel)
+		form:MakeBinder({
+			label = binding.label,
+			select = currentBinding,
+			default = binding.defaultKey,
+			onDisable = function(slf, binder)
+				bind.Remove(currentBinding, binding.name, true)
 
-			-- Keybind Label
-			local dPlabel = vgui.Create("DLabelTTT2", dPanel)
-			dPlabel:SetText(binding.label .. ":")
-			dPlabel:SetTextColor(COLOR_BLACK)
-			dPlabel:SetContentAlignment(4)
-			dPlabel:SetSize(150, 35)
+				binder:SetValue(bind.Find(binding.name))
+			end,
+			onChange = function(slf, keyNum)
+				if currentBinding == keyNum then return end
 
-			-- Keybind Button
-			local dPBinder = vgui.Create("DBinderTTT2", dPanel)
-			dPBinder:SetSize(150, 35)
-			dPBinder:SetPos(165, 0)
+				bind.Remove(currentBinding, binding.name, true)
 
-			local curBinding = bind.Find(binding.name)
-			dPBinder:SetValue(curBinding)
-			dPBinder:SetTooltip("f1_bind_description")
-
-			-- DEFAULT Button
-			local dPBindDefaultButton = vgui.Create("DButtonTTT2", dPanel)
-			dPBindDefaultButton:SetText("button_bind_default")
-			dPBindDefaultButton:SetSize(75, 35)
-			dPBindDefaultButton:SetPos(350, 0)
-			dPBindDefaultButton:SetTooltip("f1_bind_reset_default_description")
-
-			if binding.defaultKey ~= nil then
-				dPBindDefaultButton.DoClick = function()
-					bind.Set(binding.defaultKey, binding.name, true)
-					dPBinder:SetValue(bind.Find(binding.name))
-				end
-			else
-				dPBindDefaultButton:SetDisabled(true)
-			end
-
-			-- DISABLE Button
-			local dPBindDisableButton = vgui.Create("DButtonTTT2", dPanel)
-			dPBindDisableButton:SetText("button_bind_disable")
-			dPBindDisableButton:SetSize(75, 35)
-			dPBindDisableButton:SetPos(440, 0)
-			dPBindDisableButton:SetTooltip("f1_bind_disable_description")
-			dPBindDisableButton.DoClick = function()
-				bind.Remove(curBinding, binding.name, true)
-				dPBinder:SetValue(bind.Find(binding.name))
-			end
-
-			-- onchange function
-			function dPBinder:OnChange(num)
-				bind.Remove(curBinding, binding.name, true)
-
-				if num ~= 0 then
-					bind.Add(num, binding.name, true)
+				if keyNum ~= 0 then
+					bind.Add(keyNum, binding.name, true)
 				end
 
-				LocalPlayer():ChatPrint(GetPTranslation("ttt2_bindings_new", {name = binding.name, key = input.GetKeyName(num) or "NONE"}))
+				local key = keyNum ~= 0 and string.upper(input.GetKeyName(keyNum)) or LANG.GetTranslation("button_none")
 
-				curBinding = num
+				client:ChatPrint(
+					LANG.GetParamTranslation("ttt2_bindings_new", {
+						name = binding.name,
+						key = key
+					})
+				)
+
+				currentBinding = keyNum
 			end
-		end
+		})
 	end
-
-	form:Dock(TOP)
 end
 
 ---

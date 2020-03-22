@@ -125,6 +125,7 @@ if SERVER then
 	resource.AddFile("materials/vgui/ttt/vskin/icon_collapse_closed.vmt")
 	resource.AddFile("materials/vgui/ttt/vskin/icon_collapse_opened.vmt")
 	resource.AddFile("materials/vgui/ttt/vskin/icon_reset.vmt")
+	resource.AddFile("materials/vgui/ttt/vskin/icon_disable.vmt")
 	resource.AddFile("materials/vgui/ttt/vskin/helpscreen/addons.vmt")
 	resource.AddFile("materials/vgui/ttt/vskin/helpscreen/appearance.vmt")
 	resource.AddFile("materials/vgui/ttt/vskin/helpscreen/bindings.vmt")

@@ -6,7 +6,7 @@ local function PopulateLanguagePanel(parent)
 	local dlang = form:MakeComboBox({
 		label = "set_lang",
 		convar = "ttt_language",
-		onSelect = function(slf, index, value, rawdata)
+		onChange = function(slf, index, value, rawdata)
 			VHDL.UpdateVSkinSetting("language")
 		end
 	})
