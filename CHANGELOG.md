@@ -4,6 +4,11 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+### Fixed
+
+- Fixed Polish translation
+- Fixed convar saving by removing terrortown settings
+
 ## v0.6.3b (2020-03-05)
 
 ### New
