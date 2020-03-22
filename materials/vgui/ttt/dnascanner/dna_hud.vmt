@@ -1,7 +1,6 @@
 "UnlitGeneric"
 {
-	"asx$123basetexture" "vgui/ttt/dnascanner/dna_hud"
-	"$basetexture" "models/ttt2_dna_scanner/screen/circle"
+	"$basetexture" "vgui/ttt/dnascanner/dna_hud"
 	"$nocull" 1
 	"$nodecal" 1
 	"$nolod" 1

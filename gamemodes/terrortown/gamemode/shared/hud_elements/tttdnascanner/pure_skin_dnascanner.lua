@@ -5,7 +5,7 @@ DEFINE_BASECLASS(base)
 HUDELEMENT.Base = base
 
 if CLIENT then
-	local dna = Material("vgui/ttt/dnascanner/dna_hud.png")
+	local dna = Material("vgui/ttt/dnascanner/dna_hud")
 
 	local pad = 14
 	local iconSize = 64
