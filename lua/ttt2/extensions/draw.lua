@@ -89,23 +89,6 @@ function draw.OutlinedCircle(x, y, r, color)
 end
 
 ---
--- A function to draws a circle
--- @param number x The center x position to start the circle
--- @param number y The center y position to start the circle
--- @param number r The radius of the circle
--- @param [default=COLOR_WHITE] Color color The color of the circle
--- @2D
--- @realm client
-function draw.Circle(x, y, r, color)
-	draw.NoTexture()
-	surface.SetDrawColor(color or COLOR_WHITE)
-
-	for i = 1, 90 do
-		surface.DrawTexturedRectRotated(x, y, r, r, i)
-	end
-end
-
----
 -- A function to draw an outlined box with a shadow
 -- @param number startX The x position to start the line
 -- @param number startY The y position to start the line

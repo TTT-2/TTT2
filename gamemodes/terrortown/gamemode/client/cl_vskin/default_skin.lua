@@ -665,17 +665,14 @@ function SKIN:PaintHelpLabelTTT2(panel, w, h)
 end
 
 function SKIN:PaintSliderKnob(panel, w, h)
-	--local colorAccent = VSKIN.GetAccentColor()
-	--local colorAccentHover = util.GetHoverColor(colorAccent)
-	--local colorAccentActive = util.GetAccentColor(colorAccent)
-	local colorAccent = Color(200, 100, 50)
-	local colorAccentHover = Color(220, 120, 70)
-	local colorAccentActive = Color(240, 140, 90)
+	local colorAccent = VSKIN.GetAccentColor()
+	local colorAccentHover = util.GetHoverColor(colorAccent)
+	local colorAccentActive = util.GetActiveColor(colorAccent)
 
 	if not panel:IsEnabled() then
 		colorAccent = ColorAlpha(colorAccent, alphaDisabled)
-		colorAccentHover = ColorAlpha(colorAccentHover, alphaDisabled)
-		colorAccentActive = ColorAlpha(colorAccentActive, alphaDisabled)
+		colorAccentHover = colorAccent
+		colorAccentActive = colorAccent
 	end
 
 	if panel.Depressed then
@@ -690,20 +687,30 @@ function SKIN:PaintSliderKnob(panel, w, h)
 end
 
 function SKIN:PaintNumSliderTTT2(panel, w, h)
+	local pad = 5
+
 	local colorBackground = VSKIN.GetBackgroundColor()
+	local colorAccent = VSKIN.GetAccentColor()
 
 	local colorBoxBack = util.GetChangedColor(colorBackground, 150)
 	local colorBox = util.GetChangedColor(colorBackground, 15)
+	local colorSlider = util.GetChangedColor(colorBackground, 75)
 
 	if not panel:IsEnabled() then
+		colorAccent = ColorAlpha(colorAccent, alphaDisabled)
 		colorBoxBack = ColorAlpha(colorBoxBack, alphaDisabled)
 		colorBox = ColorAlpha(colorBox, alphaDisabled)
+		colorSlider = ColorAlpha(colorSlider, alphaDisabled)
 	end
 
 	local sizeCornerRadius = VSKIN.GetCornerRadius()
 
 	draw.Box(0, 0, w, h, colorBoxBack)
 	draw.RoundedBox(sizeCornerRadius, 1, 1, w - 2, h - 2, colorBox)
+
+	-- draw selection line
+	draw.Box(5, 0.5 * h - 1, w - 2 * pad, 2, colorSlider)
+	draw.Box(5, 0.5 * h - 1, (w - pad) * panel:GetFraction() - pad, 2, colorAccent)
 end
 
 function SKIN:PaintSliderTextAreaTTT2(panel, w, h)

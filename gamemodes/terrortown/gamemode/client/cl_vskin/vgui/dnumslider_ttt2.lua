@@ -29,6 +29,10 @@ function PANEL:Init()
 		return self:TranslateSliderValues(x, y)
 	end
 
+	self.Slider.GetFraction = function(slf)
+		return self:GetFraction()
+	end
+
 	self.Slider:SetTrapInside(true)
 	self.Slider:Dock(FILL)
 	self.Slider:SetHeight(16)
