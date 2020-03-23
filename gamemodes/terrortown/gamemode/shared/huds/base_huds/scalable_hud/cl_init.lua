@@ -34,7 +34,7 @@ function HUD:GetSavingKeys()
 		savingKeys = BaseClass.GetSavingKeys(self)
 		savingKeys.basecolor = {
 			typ = "color",
-			desc = LANG.GetTranslation("f1_settings_hudswitcher_desc_basecolor"),
+			desc = "label_hud_basecolor",
 			OnChange = function(slf, col)
 				slf:PerformLayout()
 				slf:SaveData()

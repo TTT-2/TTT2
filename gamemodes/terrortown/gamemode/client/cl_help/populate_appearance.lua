@@ -1,7 +1,7 @@
 local materialIcon = Material("vgui/ttt/vskin/helpscreen/appearance")
 
 local function PopulateGeneralPanel(parent)
-	local form = CreateForm(parent, "set_title_color")
+	local form = CreateForm(parent, "header_global_color")
 
 	form:MakeHelp({
 		label = "help_color_desc"
@@ -11,7 +11,7 @@ local function PopulateGeneralPanel(parent)
 	-- because the other settings are enabled based on
 	-- the state of this checkbox
 	local enbColor = form:MakeCheckBox({
-		label = "set_global_color_enable",
+		label = "label_global_color_enable",
 		initial = GLAPP.ShouldUseGlobalFocusColor(),
 		onChange = function(_, value)
 			GLAPP.SetUseGlobalFocusColor(value)
@@ -20,7 +20,7 @@ local function PopulateGeneralPanel(parent)
 	})
 
 	form:MakeColorMixer({
-		label = "set_global_focus_color",
+		label = "label_global_color",
 		initial = GLAPP.GetFocusColor(),
 		onChange = function(_, color)
 			GLAPP.SetFocusColor(color)
@@ -33,7 +33,7 @@ local function PopulateGeneralPanel(parent)
 	})
 
 	form:MakeSlider({
-		label = "set_scale_factor",
+		label = "label_global_scale_factor",
 		min = 0.1,
 		max = 3,
 		decimal = 1,
@@ -93,7 +93,7 @@ local function PopulateHUDSwitcherPanelSettings(parent, currentHUD)
 end
 
 local function PopulateHUDSwitcherPanel(parent)
-	local form = CreateForm(parent, "set_title_hud_select")
+	local form = CreateForm(parent, "header_hud_select")
 
 	local currentHUDName = HUDManager.GetHUD()
 	local currentHUD = huds.GetStored(currentHUDName)
@@ -119,7 +119,7 @@ local function PopulateHUDSwitcherPanel(parent)
 	end
 
 	form:MakeComboBox({
-		label = "select_hud",
+		label = "label_hud_select",
 		choices = validHUDs,
 		selectName = currentHUDName,
 		onChange = function(_, _, value)
@@ -128,7 +128,7 @@ local function PopulateHUDSwitcherPanel(parent)
 		default = HUDManager.GetModelValue("defaultHUD") or "None"
 	})
 
-	PopulateHUDSwitcherPanelSettings(CreateForm(parent, "set_title_hud_customize"), currentHUD)
+	PopulateHUDSwitcherPanelSettings(CreateForm(parent, "header_hud_customize"), currentHUD)
 
 	-- REGISTER UNHIDE FUNCTION TO STOP HUD EDITOR
 	VHDL.RegisterCallback("unhide", function(menu)
@@ -145,14 +145,14 @@ hook.Add("TTT2HUDUpdated", "UpdateHUDSwitcherData", function(name)
 end)
 
 local function PopulateVSkinPanel(parent)
-	local form = CreateForm(parent, "set_title_vskin")
+	local form = CreateForm(parent, "header_vskin_select")
 
 	form:MakeHelp({
 		label = "help_vskin_info"
 	})
 
 	form:MakeComboBox({
-		label = "select_vskin",
+		label = "label_vskin_select",
 		choices = VSKIN.GetVSkinList(),
 		selectName = VSKIN.GetVSkinName(),
 		onChange = function(_, _, value)
@@ -162,7 +162,7 @@ local function PopulateVSkinPanel(parent)
 	})
 
 	form:MakeCheckBox({
-		label = "set_blur_enable",
+		label = "label_blur_enable",
 		initial = VSKIN.ShouldBlurBackground(),
 		onChange = function(_, value)
 			VSKIN.SetBlurBackground(value)
@@ -172,26 +172,84 @@ local function PopulateVSkinPanel(parent)
 end
 
 local function PopulateTargetIDPanel(parent)
-	local form = CreateForm(parent, "set_title_targetid")
+	local form = CreateForm(parent, "header_targetid")
 
 	form:MakeHelp({
 		label = "help_targetid_info"
 	})
 
 	form:MakeCheckBox({
-		label = "set_minimal_id",
+		label = "label_minimal_targetid",
 		convar = "ttt_minimal_targetid"
 	})
 end
 
+local function PopulateShopPanel(parent)
+	local form = CreateForm(parent, "header_shop_settings")
+
+	form:MakeHelp({
+		label = "help_shop_key_desc"
+	})
+
+	form:MakeCheckBox({
+		label = "label_shop_always_show",
+		convar = "ttt_bem_always_show_shop"
+	})
+
+	if GetConVar("ttt_bem_allow_change"):GetBool() then
+		local form2 = CreateForm(parent, "header_shop_layout")
+
+		form2:MakeSlider({
+			label = "label_shop_num_col",
+			convar = "ttt_bem_cols",
+			min = 1,
+			max = 20,
+			decimal = 0
+		})
+
+		form2:MakeSlider({
+			label = "label_shop_num_row",
+			convar = "ttt_bem_rows",
+			min = 1,
+			max = 20,
+			decimal = 0
+		})
+
+		form2:MakeSlider({
+			label = "label_shop_item_size",
+			convar = "ttt_bem_size",
+			min = 32,
+			max = 128,
+			decimal = 0
+		})
+	end
+
+	local form3 = CreateForm(parent, "header_shop_marker")
+
+	form3:MakeCheckBox({
+		label = "label_shop_show_slot",
+		convar = "ttt_bem_marker_slot"
+	})
+
+	form3:MakeCheckBox({
+		label = "label_shop_show_custom",
+		convar = "ttt_bem_marker_custom"
+	})
+
+	form3:MakeCheckBox({
+		label = "label_shop_show_fav",
+		convar = "ttt_bem_marker_fav"
+	})
+end
+
 local function PopulateCrosshairPanel(parent)
-	local form = CreateForm(parent, "set_title_cross")
+	local form = CreateForm(parent, "header_crosshair_settings")
 
 	-- store the reference to the checkbox in a variable
 	-- because the other settings are enabled based on
 	-- the state of this checkbox
 	local crossEnb = form:MakeCheckBox({
-		label = "set_cross_enable",
+		label = "label_crosshair_enable",
 		convar = "ttt_enable_crosshair"
 	})
 
@@ -199,13 +257,13 @@ local function PopulateCrosshairPanel(parent)
 	-- because the other settings are enabled based on
 	-- the state of this checkbox
 	local crossGapEnb = form:MakeCheckBox({
-		label = "set_cross_gap_enable",
+		label = "label_crosshair_gap_enable",
 		convar = "ttt_crosshair_gap_enable",
 		master = crossEnb
 	})
 
 	form:MakeSlider({
-		label = "set_cross_gap",
+		label = "label_crosshair_gap",
 		convar = "ttt_crosshair_gap",
 		min = 0,
 		max = 30,
@@ -217,7 +275,7 @@ local function PopulateCrosshairPanel(parent)
 	})
 
 	form:MakeSlider({
-		label = "set_cross_opacity",
+		label = "label_crosshair_opacity",
 		convar = "ttt_crosshair_opacity",
 		min = 0,
 		max = 1,
@@ -226,7 +284,7 @@ local function PopulateCrosshairPanel(parent)
 	})
 
 	form:MakeSlider({
-		label = "set_ironsight_cross_opacity",
+		label = "label_crosshair_ironsight_opacity",
 		convar = "ttt_ironsights_crosshair_opacity",
 		min = 0,
 		max = 1,
@@ -235,7 +293,7 @@ local function PopulateCrosshairPanel(parent)
 	})
 
 	form:MakeSlider({
-		label = "set_cross_size",
+		label = "label_crosshair_size",
 		convar = "ttt_crosshair_size",
 		min = 0.1,
 		max = 3,
@@ -244,7 +302,7 @@ local function PopulateCrosshairPanel(parent)
 	})
 
 	form:MakeSlider({
-		label = "set_cross_thickness",
+		label = "label_crosshair_thickness",
 		convar = "ttt_crosshair_thickness",
 		min = 1,
 		max = 10,
@@ -253,7 +311,7 @@ local function PopulateCrosshairPanel(parent)
 	})
 
 	form:MakeSlider({
-		label = "set_cross_outlinethickness",
+		label = "label_crosshair_thickness_outline",
 		convar = "ttt_crosshair_outlinethickness",
 		min = 0,
 		max = 5,
@@ -262,32 +320,32 @@ local function PopulateCrosshairPanel(parent)
 	})
 
 	form:MakeCheckBox({
-		label = "set_cross_static_enable",
+		label = "label_crosshair_static_enable",
 		convar = "ttt_crosshair_static",
 		master = crossEnb
 	})
 
 	form:MakeCheckBox({
-		label = "set_cross_dot_enable",
+		label = "label_crosshair_dot_enable",
 		convar = "ttt_crosshair_dot",
 		master = crossEnb
 	})
 
 	form:MakeCheckBox({
-		label = "set_cross_weaponscale_enable",
+		label = "label_crosshair_scale_enable",
 		convar = "ttt_crosshair_weaponscale",
 		master = crossEnb
 	})
 
 	form:MakeCheckBox({
-		label = "set_lowsights",
+		label = "label_crosshair_ironsight_low_enabled",
 		convar = "ttt_ironsights_lowered",
 		master = crossEnb
 	})
 end
 
 local function PopulateDamagePanel(parent)
-	local form = CreateForm(parent, "f1_dmgindicator_title")
+	local form = CreateForm(parent, "header_damage_indicator")
 
 	form:MakeHelp({
 		label = "help_damage_indicator_desc"
@@ -297,19 +355,19 @@ local function PopulateDamagePanel(parent)
 	-- because the other settings are enabled based on
 	-- the state of this checkbox
 	local dmgEnb = form:MakeCheckBox({
-		label = "f1_dmgindicator_enable",
+		label = "label_damage_indicator_enable",
 		convar = "ttt_dmgindicator_enable"
 	})
 
 	form:MakeComboBox({
-		label = "f1_dmgindicator_mode",
+		label = "label_damage_indicator_mode",
 		convar = "ttt_dmgindicator_mode",
 		choices = DMGINDICATOR.GetThemeNames(),
 		master = dmgEnb
 	})
 
 	form:MakeSlider({
-		label = "f1_dmgindicator_duration",
+		label = "label_damage_indicator_duration",
 		convar = "ttt_dmgindicator_duration",
 		min = 0,
 		max = 30,
@@ -318,7 +376,7 @@ local function PopulateDamagePanel(parent)
 	})
 
 	form:MakeSlider({
-		label = "f1_dmgindicator_maxdamage",
+		label = "label_damage_indicator_maxdamage",
 		convar = "ttt_dmgindicator_maxdamage",
 		min = 0,
 		max = 100,
@@ -327,7 +385,7 @@ local function PopulateDamagePanel(parent)
 	})
 
 	form:MakeSlider({
-		label = "f1_dmgindicator_maxalpha",
+		label = "label_damage_indicator_maxalpha",
 		convar = "ttt_dmgindicator_maxalpha",
 		min = 0,
 		max = 255,
@@ -337,39 +395,34 @@ local function PopulateDamagePanel(parent)
 end
 
 local function PopulatePerformancePanel(parent)
-	local form = CreateForm(parent, "set_title_gui")
+	local form = CreateForm(parent, "header_performance_settings")
 
 	form:MakeCheckBox({
-		label = "set_tips",
-		convar = "ttt_tips_enable"
-	})
-
-	form:MakeCheckBox({
-		label = "entity_draw_halo",
+		label = "label_performance_halo_enable",
 		convar = "ttt_entity_draw_halo"
 	})
 
 	form:MakeCheckBox({
-		label = "disable_spectatorsoutline",
-		convar = "ttt2_disable_spectatorsoutline"
+		label = "label_performance_spec_outline_enable",
+		convar = "ttt2_enable_spectatorsoutline"
 	})
 
 	form:MakeCheckBox({
-		label = "disable_overheadicons",
-		convar = "ttt2_disable_overheadicons"
+		label = "label_performance_ohicon_enable",
+		convar = "ttt2_enable_overheadicons"
 	})
 end
 
 local function PopulateInterfacePanel(parent)
-	local form = CreateForm(parent, "set_title_gui")
+	local form = CreateForm(parent, "header_interface_settings")
 
 	form:MakeCheckBox({
-		label = "set_tips",
+		label = "label_interface_tips_enable",
 		convar = "ttt_tips_enable"
 	})
 
 	form:MakeSlider({
-		label = "set_startpopup",
+		label = "label_interface_popup",
 		convar = "ttt_startpopup_duration",
 		min = 0,
 		max = 60,
@@ -377,17 +430,17 @@ local function PopulateInterfacePanel(parent)
 	})
 
 	form:MakeCheckBox({
-		label = "set_fastsw_menu",
+		label = "label_interface_fastsw_menu",
 		convar = "ttt_weaponswitcher_displayfast"
 	})
 
 	form:MakeCheckBox({
-		label = "set_wswitch",
-		convar = "ttt_weaponswitcher_stay"
+		label = "label_inferface_wswitch_hide_enable",
+		convar = "ttt_weaponswitcher_hide"
 	})
 
 	form:MakeCheckBox({
-		label = "set_cues",
+		label = "label_inferface_scues_enable",
 		convar = "ttt_cl_soundcues"
 	})
 end
@@ -464,6 +517,11 @@ HELPSCRN.subPopulate["ttt2_appearance"] = function(helpData, id)
 
 	targetData:SetTitle("submenu_appearance_targetid_title")
 	targetData:PopulatePanel(PopulateTargetIDPanel)
+
+	local shopData = helpData:PopulateSubMenu(id .. "_shop")
+
+	shopData:SetTitle("submenu_appearance_shop_title")
+	shopData:PopulatePanel(PopulateShopPanel)
 
 	-- crosshair
 	local crosshairData = helpData:PopulateSubMenu(id .. "_crosshair")

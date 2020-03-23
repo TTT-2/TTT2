@@ -250,56 +250,6 @@ L.sb_tag_avoid = "VERMEIDEN"
 L.sb_tag_kill = "TÖTEN"
 L.sb_tag_miss = "VERMISST"
 
--- Help and settings menu (F1)
-
-L.help_title = "Hilfe und Einstellungen"
-
--- Tabs
-L.help_tut = "Anleitung"
-L.help_tut_tip = "Wie TTT funktioniert, in 6 Schritten"
-
-L.help_settings = "Einstellungen"
-L.help_settings_tip = "Spielerseitige Einstellungen"
-
--- Settings
-L.set_title_gui = "Anzeigeeinstellungen"
-
-L.set_tips = "Zeige Tipps zum Spiel während des Zuschauens am unteren Bildschirmrand"
-
-L.set_startpopup = "Dauer des Popups mit Infos am Anfang einer Runde"
-L.set_startpopup_tip = "Wenn eine Runde startet, öffnet sich ein kleines Pop-up am unteren Ende des Bildschirms für ein paar Sekunden. Ändere die Dauer dafür hier."
-
-L.set_cross_opacity = "Transparenz des Fadenkreuzes"
-L.set_cross_disable = "Deaktiviere das Fadenkreuz komplett"
-L.set_minimal_id = "Minimale Ziel ID unter dem Fadenkreuz (kein Karmatext, Hinweise, etc.)"
-L.set_healthlabel = "Zeige den Status der Gesundheit auf der Gesundheitsanzeige"
-L.set_lowsights = "Senke Waffe beim Zielen durch Kimme und Korn"
-L.set_lowsights_tip = "Aktiviere, dass die Waffe beim Zielen mit Kimme und Korn gesenkt wird. Dies erleichtert das Anvisieren eines Gegners, aber sieht unrealistischer aus."
-L.set_fastsw = "Schneller Waffenwechsel"
-L.set_fastsw_tip = "Ermögliche es durch die Waffen zu wechseln, ohne das Waffenwechselmenü zu öffnen. Aktiviere das Menü, damit das Waffenwechselmenü angezeigt wird."
-L.set_fastsw_menu = "Aktiviert das Waffenwechselmenü, selbst wenn der schnelle Waffenwechsel aktiv ist."
-L.set_fastswmenu_tip = "Wenn der schnelle Waffenwechsel aktiv ist, wird das Waffenwechselmenü angezeigt."
-L.set_wswitch = "Verhindere das automatische Schließen des Waffenwechselmenüs."
-L.set_wswitch_tip = "Normalerweise schließt das Waffenwechselmenü automatisch nach ein paar Sekunden, nachdem du zuletzt gescrollt hast. Aktiviere dies, damit es geöffnet bleibt."
-L.set_cues = "Spiele einen Ton ab, wenn eine Runde beginnt oder endet"
-L.entity_draw_halo = "Zeichne eine Linie um einige Entities, die man anschaut"
-
-
-L.set_title_play = "Spieleinstellungen"
-
-L.set_specmode = "Nur-Zuschauer-Modus (bleibe immer Zuschauer)"
-L.set_specmode_tip = "Der Nur-Zuschauer-Modus verhindert, dass du bei einer neuen Runde wieder einsteigst. Stattdessen bleibst du Zuschauer."
-L.set_mute = "Stelle lebende Spieler stumm, wenn du tot bist"
-L.set_mute_tip = "Aktiviere dies, um lebende Spieler stumm zu stellen, während du tot bist oder zuschaust."
-
-
-L.set_title_lang = "Spracheinstellungen"
-
--- It may be best to leave this next one english, so english players can always
--- find the language setting even if it's set to a language they don't know.
-L.set_lang = "Select language:"
-
-
 -- Weapons and equipment, HUD and messages
 
 -- Equipment actions, like buying and dropping
@@ -1100,17 +1050,9 @@ L.aw_tod2_text = "starb direkt am Anfang der Runde."
 -- New and modified pieces of text are placed below this point, marked with the
 -- version in which they were added, to make updating translations easier.
 
-
--- v23
-L.set_avoid = "Nicht als {role} ausgewählt werden."
-L.set_avoid_tip = "Aktiviere diese Funktion, damit du nicht als {role} ausgewählt wirst, soweit dies möglich ist."
-
 -- v24
 L.drop_no_ammo = "Du hast zu wenig Munition im Magazin, um eine Munitionskiste fallenzulassen."
 L.drop_ammo_prevented = "Etwas hindert dich daran deine Munition fallenzulassen."
-
--- v31
-L.set_cross_size = "Fadenkreuz Größe"
 
 -- 5-25-15
 L.hat_retrieve = "Du hast den Hut eines Detektivs aufgehoben."
@@ -1141,20 +1083,6 @@ L.binoc_progress = "Durchsuchungsfortschritt: {progress}%"
 
 L.idle_popup_title = "Idle"
 
--- 6-22-17 (Crosshair)
-L.set_title_cross = "Fadenkreuz Einstellungen"
-
-L.set_cross_color_enable = "Aktiviere benutzerdefinierte Fadenkreuz-Farben"
-L.set_cross_color = "Benutzerdefinierte Fadenkreuz-Farben"
-L.set_cross_gap_enable = "Aktiviere benutzerdefinierte Fadenkreuz-Lücke"
-L.set_cross_gap = "Benutzerdefinierte Fadenkreuz-Lücke"
-L.set_cross_static_enable = "Aktiviere statisches Fadenkreuz"
-L.set_ironsight_cross_opacity = "Durchlässigkeit des Fadenkreuz-Visiers"
-L.set_cross_weaponscale_enable = "Aktiviere die Skalierung des Fadenkreuzes"
-L.set_cross_thickness = "Fadenkreuz-Dicke"
-L.set_cross_outlinethickness = "Dicke der Umrandung des Fadenkreuzes"
-L.set_cross_dot_enable = "Aktiviere Fadenkreuz-Punkt"
-
 -- ttt2
 L.create_own_shop = "Erstelle einen eigenen Shop"
 L.shop_link = "Verlinke mit"
@@ -1174,9 +1102,6 @@ L.shop_settings_desc = "Ändere die Werte, um den Random-Shop anzupassen. Vergis
 
 L.ttt2_bindings_new = "Neue Tastenbelegung für {name}: {key}"
 
-L.hud_default = "Standard HUD"
-L.hud_force = "Erzwungenes HUD"
-L.hud_restricted = "Beschränkte HUDs"
 L.hud_default_failed = "Es ist fehlgeschlagen {hudname} als Standard HUD zu setzen. Bist du Admin und existiert dieses HUD überhaupt?"
 L.hud_forced_failed = "Es ist fehlgeschlagen {hudname} zu erzwingen. Bist du Admin und existiert dieses HUD überhaupt?"
 L.hud_restricted_failed = "Es ist fehlgeschlagen {hudname} zu beschränken. Bist du Admin?"
@@ -1184,25 +1109,6 @@ L.hud_restricted_failed = "Es ist fehlgeschlagen {hudname} zu beschränken. Bist
 L.shop_role_select = "Wähle eine Rolle"
 L.shop_role_selected = "Der {roles} Shop wurde gewählt!"
 L.shop_search = "Suche"
-
-L.button_save = "Sichern"
-
-L.disable_spectatorsoutline = "Deaktiviere Zuschauerumrandungen"
-L.disable_spectatorsoutline_tip = "Deaktiviert die Umrandungen um ein Objekt, in dem sich ein Zuschauer befindet (+Performance)"
-
-L.disable_overheadicons = "Deaktiviere Rollenicons"
-L.disable_overheadicons_tip = "Deaktiviert die Rollenicons über den Köpfen der Spieler (+Performance)"
-
--- 2020-01-04
-L.doubletap_sprint_anykey = "Setze Double-Tap Sprinten fort, bis du stehen bleibst"
-L.doubletap_sprint_anykey_tip = "So lange du dich weiterhin bewegst, wird das Sprinten fortgesetzt"
-
-L.disable_doubletap_sprint = "Deaktiviere Double-Tap Sprinten"
-L.disable_doubletap_sprint_tip = "Deaktiviert das Auslösen des Sprinten durch Double-Tap einer Bewegungstaste"
-
--- 2020-02-03
-L.hold_aim = "Halten zum Anvisieren"
-L.hold_aim_tip = "Solange du die Sekundärfeuertaste hältst, bleibst du anvisiert (Standard: Rechte Maustaste)"
 
 -- 2020-02-09
 L.name_door = "Tür"
@@ -1220,52 +1126,149 @@ L.door_open_touch_and_use = "Laufe gegen die Tür oder drücke [{usekey}] um Tü
 L.hud_health = "Leben"
 
 -- 2020-03-09
-L.f1_settings_changes_title = "Änderungen"
-L.f1_settings_hudswitcher_title = "HUD Wechsler"
-L.f1_settings_bindings_title = "Tastenbelegungen"
-L.f1_settings_interface_title = "Interface"
-L.f1_settings_gameplay_title = "Gameplay"
-L.f1_settings_crosshair_title = "Fadenkreuz"
-L.f1_settings_dmgindicator_title = "Schadensanzeige"
-L.f1_settings_language_title = "Sprache"
-L.f1_settings_administration_title = "Administration"
-L.f1_settings_shop_title = "Ausrüstungs-Shop"
+L.help_title = "Hilfe und Einstellungen"
+L.menu_name = "MENÜ"
 
-L.f1_settings_shop_desc_shopopen = "Soll der Shop geöffnet/geschlossen werden anstelle der Punkteverteilung während der Vorbereitungs-/Endzeit?"
-L.f1_settings_shop_title_layout = "Layout der Elementliste"
-L.f1_settings_shop_desc_num_columns = "Anzahl der Spalten"
-L.f1_settings_shop_desc_num_rows = "Anzahl der Zeilen"
-L.f1_settings_shop_desc_item_size = "Icon Größe"
-L.f1_settings_shop_title_marker = "Element Symbol Einstellungen"
-L.f1_settings_shop_desc_show_slot = "Zeige Slot Symbol"
-L.f1_settings_shop_desc_show_custom = "Zeige Symbol für benutzerdefiniertes Element"
-L.f1_settings_shop_desc_show_favourite = "Zeige Symbol für favorisiertes Element"
+L.menu_changelog_title = "Änderungsverlauf"
+L.menu_guide_title = "TTT2 Guide"
+L.menu_bindings_title = "Tastenbelegungen"
+L.menu_language_title = "Sprache"
+L.menu_appearance_title = "Aussehen"
+L.menu_gameplay_title = "Gameplay"
+L.menu_addons_title = "Erweiterungen"
+L.menu_legacy_title = "Alte Erweiterungen"
+L.menu_administration_title = "Administration"
+L.menu_equipment_title = "Bearbeite Ausrüstung"
+L.menu_shops_title = "Bearbeite Shops"
 
-L.f1_shop_restricted = "Persönliche Einstellungen für den Ausrüstungsshop sind auf diesem Server nicht erlaubt. Wende dich an deinen Admin für Details."
+L.menu_changelog_description = "Eine Liste von Fixes und Verbesserungen in den vergangenen Versionen"
+L.menu_guide_description = "Hilft dir mit TTT2 zurecht zu kommen und erklärt einiges über Gamplay, Rollen und anderes"
+L.menu_bindings_description = "Belege Tasten von TTT2 und seinen Erweiterungen nach deinem Geschmack"
+L.menu_language_description = "Stelle die Sprache des Spiels ein"
+L.menu_appearance_description = "Verändere die Erscheinung und Performancer der UI"
+L.menu_gameplay_description = "Vermeide Rollen und verändere ein paar andere Funktionen"
+L.menu_addons_description = "Stelle lokale Addons nach deinem Geschmack ein"
+L.menu_legacy_description = "Einstellungen von alten TTT Erweiterungen, die zum neuen System kovertiert werden sollten"
+L.menu_administration_description = "Allgemeine Einstellungen für HUDs, Ausrüstung und Shops"
+L.menu_equipment_description = "Stelle Credits, Limitierungen, Verfügbarkein und anderes ein"
+L.menu_shops_description = "Füge hinzu oder entferne Shops zu Rollen und definiere die Ausrüstung in diesen"
 
-L.f1_settings_hudswitcher_desc_basecolor = "Hauptfarbe"
-L.f1_settings_hudswitcher_desc_hud_scale = "HUD Skalierung (setzt Positionierung zurück)"
-L.f1_settings_hudswitcher_button_close = "Schließen"
-L.f1_settings_hudswitcher_desc_reset = "Setze HUD Einstellungen zurück"
-L.f1_settings_hudswitcher_button_reset = "Zurücksetzen"
-L.f1_settings_hudswitcher_desc_layout_editor = "Ändere Elementposition\nund -größe"
-L.f1_settings_hudswitcher_button_layout_editor = "Layout Editor"
-L.f1_settings_hudswitcher_desc_hud_not_supported = "! DIESES HUD UNTERSTÜTZT NICHT DEN HUD EDITOR !"
+L.submenu_guide_gameplay_title = "Gameplay"
+L.submenu_guide_roles_title = "Rollen"
+L.submenu_guide_equipment_title = "Ausrüstung"
 
-L.f1_bind_reset_default = "Standard"
-L.f1_bind_disable_bind = "Deaktivieren"
-L.f1_bind_description = "Klicke und drücke einen Knopf, um ihn zu setzen."
-L.f1_bind_reset_default_description = "Auf Standardwert zurücksetzen."
-L.f1_bind_disable_description = "Deaktiviere diese Bindung."
+L.submenu_bindings_bindings_title = "Tastenbelegungen"
 
-L.f1_bind_weaponswitch = "Waffe wechseln"
-L.f1_bind_sprint = "Sprinten"
-L.f1_bind_voice = "Globaler Sprachchat"
-L.f1_bind_voice_team = "Team-Sprachchat"
+L.submenu_language_language_title = "Sprache"
 
-L.f1_dmgindicator_title = "Schadensanzeige Einstellungen"
-L.f1_dmgindicator_enable = "Aktivieren"
-L.f1_dmgindicator_mode = "Schadensanzeige-Thema"
-L.f1_dmgindicator_duration = "Sekunden, die die Schadensanzeige sichtbar ist"
-L.f1_dmgindicator_maxdamage = "Erlittener Schaden für maximale Sichtbarkeit"
-L.f1_dmgindicator_maxalpha = "Maximaler Transparenzwert"
+L.submenu_appearance_general_title = "Allgemein"
+L.submenu_appearance_hudswitcher_title = "HUD Wechsler"
+L.submenu_appearance_vskin_title = "VSkin"
+L.submenu_appearance_targetid_title = "TargetID"
+L.submenu_appearance_shop_title = "Shop Einstellungen"
+L.submenu_appearance_crosshair_title = "Fadenkreuz"
+L.submenu_appearance_dmgindicator_title = "Schadensanzeige"
+L.submenu_appearance_performance_title = "Performance"
+L.submenu_appearance_interface_title = "Interface"
+L.submenu_appearance_miscellaneous_title = "Verschiedenes"
+
+L.submenu_gameplay_general_title = "Allgemein"
+L.submenu_gameplay_avoidroles_title = "Vermeide Rollen"
+
+L.submenu_administration_hud_title = "HUD Einstellungen"
+L.submenu_administration_random_shop = "Zufälliger Shop"
+
+L.help_color_desc = "Wenn diese Einstellung aktiviert ist, kann eine globale Farbe ausgesucht werden, die für targetID Umrandung und das Fadenkreuz verwendet wird."
+L.help_scale_factor = "Dieser Skalierungsfaktor beinflusst alle UI Elmente (HUD, VGUI, targetID). Er wird automatisch aktualisiert, wenn die Auflösung sich ändert. Das Ändern dieses Wertes setzt das HUD zurück!"
+L.help_hud_game_reload = "Das HUD ist zur Zeit nicht verfügbar. Das Spiel muss neu geladen werden."
+L.help_hud_special_settings = "Dies sind die HUD spezifischen Einstellungen."
+L.help_vskin_info = "VSkin (vgui skin) ist der Skin für alle Menü ELemente wie dieses hier. Skins können mit einem einfachen Luaskript erstellt werden und beeinflussen die Farben, sowie einige Größenparameter."
+L.help_targetid_info = "TargetID sind die Informationen, die in der Mitte des Bildschirmes angezeigt werden, wenn man eine Eintity anschaut. Eine feste Farbe kann in den allgemeinen Einstellungen eingestellt werden."
+L.help_hud_default_desc = "Setze das Standard HUD für alle Spieler. Spieler, die bisher noch kein HUD selber ausgesucht haben, werden dieses standardmäßig erhalten. Dies beeinflusst nicht die EInstellungen von Spielern, die bereits ein HUD gesetzt haben."
+L.help_hud_forced_desc = "Erzwinge ein HUD für alle Spieler. Dies deaktiviert die HUD Auswahl für alle Spieler."
+L.help_hud_enabled_desc = "Aktiviere/Deaktiviere HUDs um ihre Auswahl zu limitieren."
+L.help_damage_indicator_desc = "Die Schadensanzeige ist der Bildschirmeffekte, den man sieht, wenn man Schaden erhält. Um ein neues Thema hinzuzufügen muss ein PNG in 'materials/vgui/ttt/damageindicator/themes/' platziert werden."
+L.help_shop_key_desc = "Soll der Shop geöffnet/geschlossen werden anstelle der Punkteverteilung während der Vorbereitungs-/Endzeit?"
+
+L.label_menu_menu = "MENU"
+L.label_menu_admin_spacer = "Admin Bereich (nicht sichbar für normale Benutzer)"
+L.label_language_set = "Sprache auswählen"
+L.label_global_color_enable = "Aktiviere globale Farbe"
+L.label_global_color = "Globale Farbe"
+L.label_global_scale_factor = "Globaler Skalierungsfaktor"
+L.label_hud_select = "Wähle HUD"
+L.label_vskin_select = "Wähle VSkin"
+L.label_blur_enable = "Aktiviere VSkin Hintergrundunschärfe"
+L.label_minimal_targetid = "Minimale Ziel ID unter dem Fadenkreuz (kein Karmatext, Hinweise, etc.)"
+L.label_shop_always_show = "Zeige immer den Shop"
+L.label_shop_num_col = "Anzahl der Spalten"
+L.label_shop_num_row = "Anzahl der Zeilen"
+L.label_shop_item_size = "Icon Größe"
+L.label_shop_show_slot = "Zeige Slot Symbol"
+L.label_shop_show_custom = "Zeige Symbol für benutzerdefiniertes Element"
+L.label_shop_show_fav = "Zeige Symbol für favorisiertes Element"
+L.label_crosshair_enable = "Aktiviere Fadenkreuz"
+L.label_crosshair_gap_enable = "Aktiviere benutzerdefinierte Fadenkreuz-Lücke"
+L.label_crosshair_gap = "Benutzerdefinierte Fadenkreuz-Lücke"
+L.label_crosshair_opacity = "Transparenz des Fadenkreuzes"
+L.label_crosshair_ironsight_opacity = "Durchlässigkeit des Fadenkreuz-Visiers"
+L.label_crosshair_size = "Fadenkreuz Größe"
+L.label_crosshair_thickness = "Fadenkreuz Dicke"
+L.label_crosshair_thickness_outline = "Dicke der Umrandung des Fadenkreuzes"
+L.label_crosshair_static_enable = "Aktiviere statisches Fadenkreuz"
+L.label_crosshair_dot_enable = "Aktiviere Fadenkreuz-Punkt"
+L.label_crosshair_scale_enable = "Aktiviere die Skalierung des Fadenkreuzes"
+L.label_crosshair_ironsight_low_enabled = "Senke Waffe beim Zielen durch Kimme und Korn"
+L.label_damage_indicator_enable = "Aktiviere Schadensanzeige"
+L.label_damage_indicator_mode = "Schadensanzeigen Thema"
+L.label_damage_indicator_duration = "Sekunden, die die Schadensanzeige sichtbar ist"
+L.label_damage_indicator_maxdamage = "Erlittener Schaden für maximale Sichtbarkeit"
+L.label_damage_indicator_maxalpha = "Maximaler Transparenzwert"
+L.label_performance_halo_enable = "Zeichne eine Linie um einige Entities, die man anschaut"
+L.label_performance_spec_outline_enable = "Aktiviere Zuschauermrandungen"
+L.label_performance_ohicon_enable = "Aktiviere überkopf Rollenicons"
+L.label_interface_tips_enable = "Zeige Tipps zum Spiel während des Zuschauens am unteren Bildschirmrand"
+L.label_interface_popup = "Dauer des Popups mit Infos am Anfang einer Runde"
+L.label_interface_fastsw_menu = "Aktiviert das Waffenwechselmenü, selbst wenn der schnelle Waffenwechsel aktiv ist"
+L.label_inferface_wswitch_hide_enable = "Aktiviere das automatische Schließen des Waffenwechselmenüs"
+L.label_inferface_scues_enable = "Spiele einen Ton ab, wenn eine Runde beginnt oder endet"
+L.label_gameplay_specmode = "Nur-Zuschauer-Modus (bleibe immer Zuschauer)"
+L.label_gameplay_fastsw = "Schneller Waffenwechsel"
+L.label_gameplay_hold_aim = "Aktiviere Halten zum Anvisieren"
+L.label_gameplay_mute = "Stelle lebende Spieler stumm, wenn du tot bist"
+L.label_gameplay_dtsprint_enable = "Deaktiviere Double-Tap Sprinten"
+L.label_gameplay_dtsprint_anykey = "Setze Double-Tap Sprinten fort, bis du stehen bleibst"
+L.label_hud_default = "Standard HUD"
+L.label_hud_force = "Erzwungenes HUD"
+
+L.label_bind_weaponswitch = "Waffe aufheben"
+L.label_bind_sprint = "Sprinten"
+L.label_bind_voice = "Globaler Sprachchat"
+L.label_bind_voice_team = "Team Sprachchat"
+
+L.label_hud_basecolor = "Grundfarbe"
+
+L.header_bindings_ttt2 = "TTT2 Tastenbelegungen"
+L.header_bindings_other = "Andere Tastenbelegungen"
+L.header_language = "Spracheinstellungen"
+L.header_global_color = "Wähle globale Farbe"
+L.header_hud_select = "Wähle ein HUD"
+L.header_hud_customize = "Passe das HUD an"
+L.header_vskin_select = "Wähle und passe den VSkin an"
+L.header_targetid = "TargetID Einstellungen"
+L.header_shop_settings = "Ausrüstungs Shop Einstellungen"
+L.header_shop_layout = "Layout der Elementliste"
+L.header_shop_marker = "Element Symbol Einstellungen"
+L.header_crosshair_settings = "Fadenkreuz Einstellungen"
+L.header_damage_indicator = "Schadensanzeigen Einstellungen"
+L.header_performance_settings = "Performance Einstellungen"
+L.header_interface_settings = "Anzeigeeinstellungen"
+L.header_gameplay_settings = "Spieleinstellungen"
+L.header_roleselection = "Aktierung Rollenzuweisung"
+L.header_hud_administration = "Wähle standard und erzwungene HUDs"
+L.header_hud_enabled = "De-/Aktiviere HUDs"
+
+L.button_menu_back = "zurück"
+L.button_none = "Nichts"
+L.button_press_key = "Drücke eine Taste"
+L.button_save = "Speichern"

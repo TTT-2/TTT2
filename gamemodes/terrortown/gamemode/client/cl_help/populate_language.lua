@@ -1,10 +1,10 @@
 local materialIcon = Material("vgui/ttt/vskin/helpscreen/language")
 
 local function PopulateLanguagePanel(parent)
-	local form = CreateForm(parent, "set_title_lang")
+	local form = CreateForm(parent, "header_language")
 
 	local dlang = form:MakeComboBox({
-		label = "set_lang",
+		label = "label_language_set",
 		convar = "ttt_language",
 		onChange = function(slf, index, value, rawdata)
 			VHDL.UpdateVSkinSetting("language")
@@ -27,8 +27,8 @@ end
 HELPSCRN.populate["ttt2_language"] = function(helpData, id)
 	local languageData = helpData:RegisterSubMenu(id)
 
-	languageData:SetTitle("menu_anguage_title")
-	languageData:SetDescription("menu_anguage_description")
+	languageData:SetTitle("menu_language_title")
+	languageData:SetDescription("menu_language_description")
 	languageData:SetIcon(materialIcon)
 end
 

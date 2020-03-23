@@ -14,7 +14,10 @@ local Registry = {}
 local FirstPressed = {}
 local WasPressed = {}
 local SettingsBindings = {}
-local SettingsBindingsCategories = { "TTT2 Bindings", "Other Bindings" }
+local SettingsBindingsCategories = {
+	"header_bindings_ttt2",
+	"header_bindings_other"
+}
 
 --
 --
@@ -221,7 +224,7 @@ end
 -- @param number[optchain] defaultKey
 function bind.AddSettingsBinding(name, label, category, defaultKey)
 	if not category then
-		category = "Other Bindings"
+		category = "header_bindings_other"
 	end
 
 	if not table.HasValue(SettingsBindingsCategories, category) then

@@ -72,7 +72,7 @@ HELPSCRN.subPopulate["ttt2_bindings"] = function(helpData, id)
 
 	bindingsData:SetTitle("submenu_bindings_bindings_title")
 	bindingsData:PopulatePanel(function(parent)
-		AddBindingCategory("TTT2 Bindings", parent)
+		AddBindingCategory("header_bindings_ttt2", parent)
 
 		local categories = bind.GetSettingsBindingsCategories()
 
@@ -84,6 +84,6 @@ HELPSCRN.subPopulate["ttt2_bindings"] = function(helpData, id)
 			end
 		end
 
-		AddBindingCategory("Other Bindings", parent)
+		AddBindingCategory("header_bindings_other", parent)
 	end)
 end

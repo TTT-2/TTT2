@@ -1,7 +1,7 @@
 local materialIcon = Material("vgui/ttt/vskin/helpscreen/guide")
 
 local function PopulateHUDPanel(parent)
-	local form = CreateForm(parent, "set_hud")
+	local form = CreateForm(parent, "header_hud_administration")
 
 	local restrictedHUDs = HUDManager.GetModelValue("restrictedHUDs")
 	local hudList = huds.GetList()
@@ -18,7 +18,7 @@ local function PopulateHUDPanel(parent)
 	})
 
 	form:MakeComboBox({
-		label = "hud_default",
+		label = "label_hud_default",
 		choices = validHUDsDefault,
 		selectName = HUDManager.GetModelValue("defaultHUD") or "None",
 		onSelect = function(_, _, value)
@@ -33,7 +33,7 @@ local function PopulateHUDPanel(parent)
 	})
 
 	form:MakeComboBox({
-		label = "hud_force",
+		label = "label_hud_force",
 		choices = validHUDsRestriction,
 		selectName = HUDManager.GetModelValue("forcedHUD") or "None",
 		onSelect = function(_, _, value)
@@ -43,7 +43,7 @@ local function PopulateHUDPanel(parent)
 		end
 	})
 
-	local form2 = CreateForm(parent, "set_hud_enabled")
+	local form2 = CreateForm(parent, "header_hud_enabled")
 
 	form2:MakeHelp({
 		label = "help_hud_enabled_desc"

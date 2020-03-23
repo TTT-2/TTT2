@@ -252,56 +252,6 @@ L.sb_tag_avoid = "AVOID"
 L.sb_tag_kill = "KILL"
 L.sb_tag_miss = "MISSING"
 
--- Help and settings menu (F1)
-
-L.help_title = "Help and Settings"
-
--- Tabs
-L.help_tut = "Tutorial"
-L.help_tut_tip = "How TTT works, in 6 steps"
-
-L.help_settings = "Settings"
-L.help_settings_tip = "Client-side settings"
-
--- Settings
-L.set_title_gui = "Interface settings"
-
-L.set_tips = "Show gameplay tips at the bottom of the screen while spectating"
-
-L.set_startpopup = "Start of round info popup duration"
-L.set_startpopup_tip = "When the round starts, a small popup appears at the bottom of your screen for a few seconds. Change the time it displays for here."
-
-L.set_cross_opacity = "Crosshair opacity"
-L.set_cross_disable = "Disable crosshair completely"
-L.set_minimal_id = "Minimalist Target ID under crosshair (no karma text, hints, etc)"
-L.set_healthlabel = "Show health status label on health bar"
-L.set_lowsights = "Lower weapon when using ironsights"
-L.set_lowsights_tip = "Enable to position the weapon model lower on the screen while using ironsights. This will make it easier to see your target, but it will look less realistic."
-L.set_fastsw = "Fast weapon switch"
-L.set_fastsw_tip = "Enable to cycle through weapons without having to click again to use weapon. Enable show menu to show switcher menu."
-L.set_fastsw_menu = "Enable menu with fast weapon switch"
-L.set_fastswmenu_tip = "When fast weapons switch is enabled, the menu switcher menu will popup."
-L.set_wswitch = "Disable weapon switch menu auto-closing"
-L.set_wswitch_tip = "By default the weapon switcher automatically closes a few seconds after you last scroll. Enable this to make it stay up."
-L.set_cues = "Play sound cue when a round begins or ends"
-L.entity_draw_halo = "Draw an outline around some entities while looking at them"
-
-
-L.set_title_play = "Gameplay settings"
-
-L.set_specmode = "Spectate-only mode (always stay spectator)"
-L.set_specmode_tip = "Spectate-only mode will prevent you from respawning when a new round starts, instead you stay Spectator."
-L.set_mute = "Mute living players when dead"
-L.set_mute_tip = "Enable to mute living players while you are dead/spectator."
-
-
-L.set_title_lang = "Language settings"
-
--- It may be best to leave this next one english, so english players can always
--- find the language setting even if it's set to a language they don't know.
-L.set_lang = "Select language:"
-
-
 -- Weapons and equipment, HUD and messages
 
 -- Equipment actions, like buying and dropping
@@ -1111,17 +1061,9 @@ L.aw_tod2_text = "died right after the start of the round."
 -- New and modified pieces of text are placed below this point, marked with the
 -- version in which they were added, to make updating translations easier.
 
-
--- v23
-L.set_avoid = "Avoid being selected as {role}."
-L.set_avoid_tip = "Enable this to ask the server not to select you as {role} if possible."
-
 -- v24
 L.drop_no_ammo = "Insufficient ammo in your weapon's clip to drop as an ammo box."
 L.drop_ammo_prevented = "Something prevents you from dropping your ammo."
-
--- v31
-L.set_cross_size = "Crosshair size"
 
 -- 5-25-15
 L.hat_retrieve = "You picked up a Detective's hat."
@@ -1150,20 +1092,6 @@ L.binoc_progress = "Search progress: {progress}%"
 
 L.idle_popup_title = "Idle"
 
--- 6-22-17 (Crosshair)
-L.set_title_cross = "Crosshair settings"
-
-L.set_cross_color_enable = "Enable custom crosshair color"
-L.set_cross_color = "Custom crosshair color:"
-L.set_cross_gap_enable = "Enable custom crosshair gap"
-L.set_cross_gap = "Custom crosshair gap"
-L.set_cross_static_enable = "Enable static crosshair"
-L.set_ironsight_cross_opacity = "Ironsight crosshair opacity"
-L.set_cross_weaponscale_enable = "Enable different crosshair scales for different weapons"
-L.set_cross_thickness = "Crosshair thickness"
-L.set_cross_outlinethickness = "Crosshair outline thickness"
-L.set_cross_dot_enable = "Enable crosshair dot"
-
 -- ttt2
 L.create_own_shop = "Create own shop"
 L.shop_link = "Link with"
@@ -1183,9 +1111,6 @@ L.shop_settings_desc = "Change the values to adapt Random Shop ConVars. Don't fo
 
 L.ttt2_bindings_new = "New bound key for {name}: {key}"
 
-L.hud_default = "Default HUD"
-L.hud_force = "Forced HUD"
-L.hud_restricted = "Restricted HUDs"
 L.hud_default_failed = "Failed to set the HUD {hudname} as new default. You don't have permission to do that, or this HUD doesn't exist."
 L.hud_forced_failed = "Failed to force the HUD {hudname}. You don't have permission to do that, or this HUD doesn't exist."
 L.hud_restricted_failed = "Failed to restrict the HUD {hudname}. You don't have permission to do that."
@@ -1193,25 +1118,6 @@ L.hud_restricted_failed = "Failed to restrict the HUD {hudname}. You don't have 
 L.shop_role_select = "Select a role"
 L.shop_role_selected = "{roles}'s shop was selected!"
 L.shop_search = "Search"
-
-L.button_save = "Save"
-
-L.disable_spectatorsoutline = "Disable controlled objects' outlines"
-L.disable_spectatorsoutline_tip = "Disables the outlines around objects controlled by spectators (+Performance)"
-
-L.disable_overheadicons = "Disable role icons"
-L.disable_overheadicons_tip = "Disables the role icons over the players' heads (+Performance)"
-
--- 2020-01-04
-L.doubletap_sprint_anykey = "Continue double tap sprinting until you stop moving"
-L.doubletap_sprint_anykey_tip = "You will keep sprinting as long as you keep moving"
-
-L.disable_doubletap_sprint = "Disable double tap sprinting"
-L.disable_doubletap_sprint_tip = "Double tapping a movement key will no longer cause you to sprint"
-
--- 2020-02-03
-L.hold_aim = "Hold to aim"
-L.hold_aim_tip = "You will keep using the ironsights as long as you keep holding secondary attack (default: right mouse button)"
 
 -- 2020-02-09
 L.name_door = "Door"
@@ -1229,12 +1135,13 @@ L.door_open_touch_and_use = "Walk into door or press [{usekey}] to open."
 L.hud_health = "Health"
 
 -- 2020-03-09
+L.help_title = "Help and Settings"
 L.menu_name = "MENU"
 
 L.menu_changelog_title = "Changelog"
 L.menu_guide_title = "TTT2 Guide"
 L.menu_bindings_title = "Key Bindings"
-L.menu_anguage_title = "Language"
+L.menu_language_title = "Language"
 L.menu_appearance_title = "Appearance"
 L.menu_gameplay_title = "Gameplay"
 L.menu_addons_title = "Addons"
@@ -1246,7 +1153,7 @@ L.menu_shops_title = "Edit Shops"
 L.menu_changelog_description = "A list of changes and fixes in recent versions"
 L.menu_guide_description = "Helps you to get started with TTT2 and explains some things about gameplay, roles and other stuff"
 L.menu_bindings_description = "Bind specific features of TTT2 and its addons to your own liking"
-L.menu_anguage_description = "Select the language of the game"
+L.menu_language_description = "Select the language of the game"
 L.menu_appearance_description = "Tweak the appearance and performance of the UI"
 L.menu_gameplay_description = "Avoid roles and tweak some features"
 L.menu_addons_description = "Configure local addons to your liking"
@@ -1267,6 +1174,7 @@ L.submenu_appearance_general_title = "General"
 L.submenu_appearance_hudswitcher_title = "HUD Switcher"
 L.submenu_appearance_vskin_title = "VSkin"
 L.submenu_appearance_targetid_title = "TargetID"
+L.submenu_appearance_shop_title = "Shop Settings"
 L.submenu_appearance_crosshair_title = "Crosshair"
 L.submenu_appearance_dmgindicator_title = "Damage Indicator"
 L.submenu_appearance_performance_title = "Performance"
@@ -1279,15 +1187,6 @@ L.submenu_gameplay_avoidroles_title = "Avoid Role Selection"
 L.submenu_administration_hud_title = "HUD Settings"
 L.submenu_administration_random_shop = "Random Shop"
 
-L.label_menu_menu = "MENU"
-L.label_menu_admin_spacer = "Admin Area (not shown to normal users)"
-
-L.button_menu_back = "back"
-L.button_default = "Default"
-L.button_disable = "Clear"
-L.button_none = "None"
-L.button_press_key = "Press a key"
-
 L.help_color_desc = "If this setting is enabled, a global color can be chosen that will be used for the targetID outline and the crosshair."
 L.help_scale_factor = "This scale factor influences all UI elements (HUD, vgui and targetID). It is automatically updated if the screen resolution is changed. Changing this value will reset the HUD!"
 L.help_hud_game_reload = "The HUD is not available right now. The game has to be reloaded."
@@ -1298,44 +1197,87 @@ L.help_hud_default_desc = "Set the default HUD for all players. Players that hav
 L.help_hud_forced_desc = "Force a HUD for all players. This disables the HUD selection feature for everyone."
 L.help_hud_enabled_desc = "Enable/Disable HUDs to restrict the selection of these HUDs."
 L.help_damage_indicator_desc = "The damage indicator is the overlay shown when the player is damaged. To add a new theme, place a png in 'materials/vgui/ttt/damageindicator/themes/'."
+L.help_shop_key_desc = "Open the shop by pressing the shop key instead of the score menu during preparing / at the end of a round?"
 
+L.label_menu_menu = "MENU"
+L.label_menu_admin_spacer = "Admin Area (not shown to normal users)"
+L.label_language_set = "Select language"
+L.label_global_color_enable = "Enable global color"
+L.label_global_color = "Global color"
+L.label_global_scale_factor = "Global scale factor"
+L.label_hud_select = "Select HUD"
+L.label_vskin_select = "Select VSkin"
+L.label_blur_enable = "Enable VSkin background blur"
+L.label_minimal_targetid = "Minimalist Target ID under crosshair (no karma text, hints, etc.)"
+L.label_shop_always_show = "Always show the shop"
+L.label_shop_num_col = "Number of columns"
+L.label_shop_num_row = "Number of rows"
+L.label_shop_item_size = "Icon size"
+L.label_shop_show_slot = "Show slot marker"
+L.label_shop_show_custom = "Show custom item marker"
+L.label_shop_show_fav = "Show favourite item marker"
+L.label_crosshair_enable = "Enable Crosshair"
+L.label_crosshair_gap_enable = "Enable custom crosshair gap"
+L.label_crosshair_gap = "Custom crosshair gap"
+L.label_crosshair_opacity = "Crosshair opacity"
+L.label_crosshair_ironsight_opacity = "Ironsight crosshair opacity"
+L.label_crosshair_size = "Crosshair size"
+L.label_crosshair_thickness = "Crosshair thickness"
+L.label_crosshair_thickness_outline = "Crosshair outline thickness"
+L.label_crosshair_static_enable = "Enable static crosshair"
+L.label_crosshair_dot_enable = "Enable crosshair dot"
+L.label_crosshair_scale_enable = "Enable weapon dependant weapon scale"
+L.label_crosshair_ironsight_low_enabled = "Lower weapon when using ironsights"
+L.label_damage_indicator_enable = "Enable damage indicator"
+L.label_damage_indicator_mode = "Select damage indicator theme"
+L.label_damage_indicator_duration = "Seconds the damage indicator is visible after a hit"
+L.label_damage_indicator_maxdamage = "Damage needed for the maximum opacity"
+L.label_damage_indicator_maxalpha = "Damage Indicators maximum opacity"
+L.label_performance_halo_enable = "Draw an outline around some entities while looking at them"
+L.label_performance_spec_outline_enable = "Enable controlled objects' outlines"
+L.label_performance_ohicon_enable = "Enable overhead role icons"
+L.label_interface_tips_enable = "Show gameplay tips at the bottom of the screen while spectating"
+L.label_interface_popup = "Start of round info popup duration"
+L.label_interface_fastsw_menu = "Enable menu with fast weapon switch"
+L.label_inferface_wswitch_hide_enable = "Enable weapon switch menu auto-closing"
+L.label_inferface_scues_enable = "Play sound cue when a round begins or ends"
+L.label_gameplay_specmode = "Spectate-only mode (always stay spectator)"
+L.label_gameplay_fastsw = "Fast weapon switch"
+L.label_gameplay_hold_aim = "Enable hold to aim"
+L.label_gameplay_mute = "Mute living players when dead"
+L.label_gameplay_dtsprint_enable = "Enable double tap sprinting"
+L.label_gameplay_dtsprint_anykey = "Continue double tap sprinting until you stop moving"
+L.label_hud_default = "Default HUD"
+L.label_hud_force = "Forced HUD"
 
+L.label_bind_weaponswitch = "Pickup Weapon"
+L.label_bind_sprint = "Sprint"
+L.label_bind_voice = "Global Voice Chat"
+L.label_bind_voice_team = "Team Voice Chat"
 
+L.label_hud_basecolor = "Base Color"
 
-L.f1_settings_shop_desc_shopopen = "Open the shop by pressing the shop key instead of the score menu during preparing / at the end of a round?"
-L.f1_settings_shop_title_layout = "Item List Layout"
-L.f1_settings_shop_desc_num_columns = "Number of columns"
-L.f1_settings_shop_desc_num_rows = "Number of rows"
-L.f1_settings_shop_desc_item_size = "Icon size"
-L.f1_settings_shop_title_marker = "Item Marker Settings"
-L.f1_settings_shop_desc_show_slot = "Show slot marker"
-L.f1_settings_shop_desc_show_custom = "Show custom item marker"
-L.f1_settings_shop_desc_show_favourite = "Show favourite item marker"
+L.header_bindings_ttt2 = "TTT2 Bindings"
+L.header_bindings_other = "Other Bindings"
+L.header_language = "Language Settings"
+L.header_global_color = "Select Global Color"
+L.header_hud_select = "Select a HUD"
+L.header_hud_customize = "Customize the HUD"
+L.header_vskin_select = "Select and Customize the VSkin"
+L.header_targetid = "TargetID Settings"
+L.header_shop_settings = "Equipment Shop Settings"
+L.header_shop_layout = "Item List Layout"
+L.header_shop_marker = "Item Marker Settings"
+L.header_crosshair_settings = "Crosshair Settings"
+L.header_damage_indicator = "Damage Indicator Settings"
+L.header_performance_settings = "Performance Settings"
+L.header_interface_settings = "Interface Settings"
+L.header_gameplay_settings = "Gameplay Settings"
+L.header_roleselection = "Enable Role Assignment"
+L.header_hud_administration = "Select Default and Forced HUDs"
+L.header_hud_enabled = "Enable/Disable HUDs"
 
-L.f1_shop_restricted = "Individual changes to the equipment shop layout are not allowed on this server. Please contact a server admin for details."
-
-L.f1_settings_hudswitcher_desc_basecolor = "Base Color"
-L.f1_settings_hudswitcher_desc_hud_scale = "HUD Scale (resets saved changes)"
-L.f1_settings_hudswitcher_button_close = "Close"
-L.f1_settings_hudswitcher_desc_reset = "Reset HUD's data"
-L.f1_settings_hudswitcher_button_reset = "Reset"
-L.f1_settings_hudswitcher_desc_layout_editor = "Change element's\nposition and size"
-L.f1_settings_hudswitcher_button_layout_editor = "Layout Editor"
-L.f1_settings_hudswitcher_desc_hud_not_supported = "! THIS HUD DOES NOT SUPPORT THE HUD EDITOR !"
-
-
-L.f1_bind_description = "Click and press a button to bind a key."
-L.f1_bind_reset_default_description = "Reset to default key."
-L.f1_bind_disable_description = "Clear this bind's key."
-
-L.f1_bind_weaponswitch = "Switch Weapon"
-L.f1_bind_sprint = "Sprint"
-L.f1_bind_voice = "Global Voice Chat"
-L.f1_bind_voice_team = "Team Voice Chat"
-
-L.f1_dmgindicator_title = "Damage Indicator settings"
-L.f1_dmgindicator_enable = "Enable"
-L.f1_dmgindicator_mode = "Select Damage Indicator theme"
-L.f1_dmgindicator_duration = "Seconds the damage indicator is visible after a hit"
-L.f1_dmgindicator_maxdamage = "Damage needed for the maximum opacity"
-L.f1_dmgindicator_maxalpha = "Damage Indicators maximum opacity"
+L.button_menu_back = "back"
+L.button_none = "None"
+L.button_press_key = "Press a key"
+L.button_save = "Save"

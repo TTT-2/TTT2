@@ -1,41 +1,41 @@
 local materialIcon = Material("vgui/ttt/vskin/helpscreen/gameplay")
 
 local function PopulateGeneralPanel(parent)
-	local form = CreateForm(parent, "set_title_play")
+	local form = CreateForm(parent, "header_gameplay_settings")
 
 	form:MakeCheckBox({
-		label = "set_specmode",
+		label = "label_gameplay_specmode",
 		convar = "ttt_spectator_mode"
 	})
 
 	form:MakeCheckBox({
-		label = "set_fastsw",
+		label = "label_gameplay_fastsw",
 		convar = "ttt_weaponswitcher_fast"
 	})
 
 	form:MakeCheckBox({
-		label = "hold_aim",
+		label = "label_gameplay_hold_aim",
 		convar = "ttt2_hold_aim"
 	})
 
 	form:MakeCheckBox({
-		label = "set_mute",
+		label = "label_gameplay_mute",
 		convar = "ttt_mute_team_check"
 	})
 
 	form:MakeCheckBox({
-		label = "doubletap_sprint_anykey",
-		convar = "ttt2_doubletap_sprint_anykey"
+		label = "label_gameplay_dtsprint_enable",
+		convar = "ttt2_enable_doubletap_sprint"
 	})
 
 	form:MakeCheckBox({
-		label = "disable_doubletap_sprint",
-		convar = "ttt2_disable_doubletap_sprint"
+		label = "label_gameplay_dtsprint_anykey",
+		convar = "ttt2_doubletap_sprint_anykey"
 	})
 end
 
 local function PopulateRolesPanel(parent)
-	local form = CreateForm(parent, "set_title_avoid_roles")
+	local form = CreateForm(parent, "header_roleselection")
 
 	local roles = roles.GetList()
 
