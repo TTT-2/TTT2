@@ -1,4 +1,4 @@
-local materialIcon = Material("vgui/ttt/vskin/helpscreen/guide")
+local materialIcon = Material("vgui/ttt/vskin/helpscreen/equipment")
 
 ---
 -- Function to populate main menu

@@ -134,4 +134,7 @@ if SERVER then
 	resource.AddFile("materials/vgui/ttt/vskin/helpscreen/guide.vmt")
 	resource.AddFile("materials/vgui/ttt/vskin/helpscreen/language.vmt")
 	resource.AddFile("materials/vgui/ttt/vskin/helpscreen/legacy.vmt")
+	resource.AddFile("materials/vgui/ttt/vskin/helpscreen/equipment.vmt")
+	resource.AddFile("materials/vgui/ttt/vskin/helpscreen/shops.vmt")
+	resource.AddFile("materials/vgui/ttt/vskin/helpscreen/administration.vmt")
 end
