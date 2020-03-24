@@ -15,34 +15,37 @@ local hook = hook
 
 local disable_spectatorsoutline = CreateClientConVar("ttt2_disable_spectatorsoutline", "0", true, true)
 local disable_overheadicons = CreateClientConVar("ttt2_disable_overheadicons", "0", true, true)
+local minimalist = CreateClientConVar("ttt_minimal_targetid", "0", FCVAR_ARCHIVE)
+local cv_draw_halo = CreateClientConVar("ttt_entity_draw_halo", "1", true, false)
 
-surface.CreateFont("TargetID_Key", {font = "Trebuchet24", size = 26, weight = 900})
-surface.CreateFont("TargetID_Title", {font = "Trebuchet24", size = 20, weight = 900})
-surface.CreateFont("TargetID_Subtitle", {font = "Trebuchet24", size = 17, weight = 300})
-surface.CreateFont("TargetID_Description", {font = "Trebuchet24", size = 15, weight = 300})
+surface.CreateAdvancedFont("TargetID_Key", {font = "Trebuchet24", size = 26, weight = 900})
+surface.CreateAdvancedFont("TargetID_Title", {font = "Trebuchet24", size = 20, weight = 900})
+surface.CreateAdvancedFont("TargetID_Subtitle", {font = "Trebuchet24", size = 17, weight = 300})
+surface.CreateAdvancedFont("TargetID_Description", {font = "Trebuchet24", size = 15, weight = 300})
 
 -- keep this font for compatibility reasons
 surface.CreateFont("TargetIDSmall2", {font = "TargetID", size = 16, weight = 1000})
 
-local minimalist = CreateClientConVar("ttt_minimal_targetid", "0", FCVAR_ARCHIVE)
-local cv_draw_halo = CreateClientConVar("ttt_entity_draw_halo", "1", true, false)
 local MAX_TRACE_LENGTH = math.sqrt(3) * 32768
-local color_blacktrans = Color(0, 0, 0, 180)
+
+-- cache colors
+local colorBlacktrans = Color(0, 0, 0, 180)
+local colorKeyBack = Color(0, 0, 0, 150)
 
 -- cached materials for overhead icons and outlines
-local propspec_outline = Material("models/props_combine/portalball001_sheet")
-local base = Material("vgui/ttt/dynamic/sprite_base")
-local base_overlay = Material("vgui/ttt/dynamic/sprite_base_overlay")
+local materialPropspecOutline = Material("models/props_combine/portalball001_sheet")
+local materialBase = Material("vgui/ttt/dynamic/sprite_base")
+local materialBaseOverlay = Material("vgui/ttt/dynamic/sprite_materialBaseOverlay")
 
 -- materials for targetid
-local ring_tex = Material("effects/select_ring")
-local icon_role_not_known = Material("vgui/ttt/tid/tid_big_role_not_known")
-local icon_corpse = Material("vgui/ttt/tid/tid_big_corpse")
-local icon_tbutton = Material("vgui/ttt/tid/tid_big_tbutton_pointer")
-local icon_tid_credits = Material("vgui/ttt/tid/tid_credits")
-local icon_tid_detective = Material("vgui/ttt/tid/tid_detective")
-local icon_tid_locked = Material("vgui/ttt/tid/tid_locked")
-local icon_tid_auto_close = Material("vgui/ttt/tid/tid_auto_close")
+local materialRing = Material("effects/select_ring")
+local materialRoleUnknown = Material("vgui/ttt/tid/tid_big_role_not_known")
+local materialCorpse = Material("vgui/ttt/tid/tid_big_corpse")
+local materialTButton = Material("vgui/ttt/tid/tid_big_tbutton_pointer")
+local materialCredits = Material("vgui/ttt/tid/tid_credits")
+local materialDetective = Material("vgui/ttt/tid/tid_detective")
+local materialLocked = Material("vgui/ttt/tid/tid_locked")
+local materialAutoClose = Material("vgui/ttt/tid/tid_auto_close")
 
 ---
 -- Returns the localized ClassHint table
@@ -97,16 +100,16 @@ function DrawOverheadRoleIcon(ply, ricon, rcolor)
 	render.PushFilterMin(TEXFILTER.LINEAR)
 
 	-- draw color
-	render.SetMaterial(base)
+	render.SetMaterial(materialBase)
 	render.DrawQuadEasy(pos, dir, 10, 10, rcolor, 180)
 
 	-- draw border overlay
-	render.SetMaterial(base_overlay)
+	render.SetMaterial(materialBaseOverlay)
 	render.DrawQuadEasy(pos, dir, 10, 10, COLOR_WHITE, 180)
 
 	-- draw shadow
 	render.SetMaterial(ricon)
-	render.DrawQuadEasy(Vector(pos.x, pos.y, pos.z + 0.2), dir, 8, 8, color_blacktrans, 180)
+	render.DrawQuadEasy(Vector(pos.x, pos.y, pos.z + 0.2), dir, 8, 8, colorBlacktrans, 180)
 
 	-- draw icon
 	render.SetMaterial(ricon)
@@ -141,7 +144,7 @@ function GM:PostDrawTranslucentRenderables(bDrawingDepth, bDrawingSkybox)
 			local tgt = ply:GetObserverTarget()
 
 			if IsValid(tgt) and tgt:GetNWEntity("spec_owner", nil) == ply then
-				render.MaterialOverride(propspec_outline)
+				render.MaterialOverride(materialPropspecOutline)
 				render.SuppressEngineLighting(true)
 				render.SetColorModulation(1, 0.5, 0)
 
@@ -341,8 +344,7 @@ function GM:HUDDrawTargetID()
 	local key_string_y = key_box_y + math.Round(0.5 * key_box_h) - 1
 
 	if params.displayInfo.key then
-		surface.SetDrawColor(0, 0, 0, 150)
-		surface.DrawRect(key_box_x, key_box_y, key_box_w, key_box_h)
+		draw.Box(key_box_x, key_box_y, key_box_w, key_box_h, colorKeyBack)
 
 		draw.OutlinedShadowedBox(key_box_x, key_box_y, key_box_w, key_box_h, 1, COLOR_WHITE)
 		draw.ShadowedText(key_string, "TargetID_Key", key_string_x, key_string_y, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
@@ -479,7 +481,7 @@ function HUDDrawTargetIDDoors(tData)
 		tData:AddDescriptionLine(
 			TryT("door_locked"),
 			COLOR_ORANGE,
-			{icon_tid_locked}
+			{materialLocked}
 		)
 	end
 
@@ -487,7 +489,7 @@ function HUDDrawTargetIDDoors(tData)
 		tData:AddDescriptionLine(
 			TryT("door_auto_closes"),
 			COLOR_SLATEGRAY,
-			{icon_tid_auto_close}
+			{materialAutoClose}
 		)
 	end
 end
@@ -513,7 +515,7 @@ function HUDDrawTargetIDTButtons(tData)
 	-- set the subtitle and icon depending on the currently used mode
 	if TBHUD.focus_but.admin and not TBHUD.focus_but.access then
 		tData:AddIcon(
-			icon_tbutton,
+			materialTButton,
 			COLOR_LGRAY
 		)
 
@@ -712,7 +714,7 @@ function HUDDrawTargetIDPlayers(tData)
 	if target_role then
 		local icon_size = 64
 
-		draw.FilteredTexture(math.Round(0.5 * (ScrW() - icon_size)), math.Round(0.5 * (ScrH() - icon_size)), icon_size, icon_size, ring_tex, 200, target_role.color)
+		draw.FilteredTexture(math.Round(0.5 * (ScrW() - icon_size)), math.Round(0.5 * (ScrH() - icon_size)), icon_size, icon_size, materialRing, 200, target_role.color)
 	end
 
 	-- enable targetID rendering
@@ -733,7 +735,7 @@ function HUDDrawTargetIDPlayers(tData)
 
 	-- add icon to the element
 	tData:AddIcon(
-		target_role and target_role.iconMaterial or icon_role_not_known,
+		target_role and target_role.iconMaterial or materialRoleUnknown,
 		target_role and ent:GetRoleColor() or COLOR_SLATEGRAY
 	)
 
@@ -803,7 +805,7 @@ function HUDDrawTargetIDRagdolls(tData)
 
 	-- add icon to the element
 	tData:AddIcon(
-		role_found and roles.GetByIndex(ent.search_result.role).iconMaterial or icon_corpse,
+		role_found and roles.GetByIndex(ent.search_result.role).iconMaterial or materialCorpse,
 		COLOR_YELLOW
 	)
 
@@ -822,7 +824,7 @@ function HUDDrawTargetIDRagdolls(tData)
 		tData:AddDescriptionLine(
 			TryT("corpse_searched_by_detective"),
 			DETECTIVE.ltcolor,
-			{icon_tid_detective}
+			{materialDetective}
 		)
 	end
 
@@ -831,7 +833,7 @@ function HUDDrawTargetIDRagdolls(tData)
 		tData:AddDescriptionLine(
 			TryT("target_credits"),
 			COLOR_YELLOW,
-			{icon_tid_credits}
+			{materialCredits}
 		)
 	end
 end

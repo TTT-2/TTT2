@@ -1,4 +1,5 @@
 ---
+-- draw extension functions
 -- @author Mineotopia
 
 local render = render
@@ -17,7 +18,7 @@ local shadowColorWhite = Color(0, 0, 0, 75)
 -- @param number w The width of the rectangle
 -- @param number h The height of the rectangle
 -- @param [default=1] number t The thickness of the line
--- @param [default=COLOR_WHITE] Color color The color of the line
+-- @param [default=Color(255,255,255,255)] Color color The color of the line
 -- @2D
 -- @realm client
 function draw.OutlinedBox(x, y, w, h, t, color)
@@ -38,20 +39,81 @@ local drawOutlinedBox = draw.OutlinedBox
 -- @param number y The y position of the rectangle
 -- @param number w The width of the rectangle
 -- @param number h The height of the rectangle
--- @param [default=1] number t The thickness of the line
--- @param [default=COLOR_WHITE] Color color The color of the line
+-- @param [default=1]number t The thickness of the line
+-- @param [default=Color(255,255,255,255)]Color color The color of the line
+-- @param [default=1.0]number scale A scaling factor that is used for the shadows
 -- @2D
 -- @realm client
-function draw.OutlinedShadowedBox(x, y, w, h, t, color)
+function draw.OutlinedShadowedBox(x, y, w, h, t, color, scale)
 	color = color or COLOR_WHITE
+	scale = scale or 1
+
+	local shift1 = mathRound(scale)
+	local shift2 = mathRound(scale * 2)
 
 	local tmpCol = color.r + color.g + color.b > 200 and tableCopy(shadowColorDark) or tableCopy(shadowColorWhite)
 	tmpCol.a = mathRound(tmpCol.a * (color.a / 255))
 
-	drawOutlinedBox(x + 2, y + 2, w, h, t, tmpCol)
-	drawOutlinedBox(x + 1, y + 1, w, h, t, tmpCol)
-	drawOutlinedBox(x + 1, y + 1, w, h, t, tmpCol)
+	drawOutlinedBox(x + shift2, y + shift2, w, h, t, tmpCol)
+	drawOutlinedBox(x + shift1, y + shift1, w, h, t, tmpCol)
+	drawOutlinedBox(x + shift1, y + shift1, w, h, t, tmpCol)
 	drawOutlinedBox(x, y, w, h, t, color)
+end
+
+---
+-- A function to draws a simple box without a radius
+-- @param number x The x position to start the box
+-- @param number y The y position to start the box
+-- @param number w The width of the box
+-- @param number h The height of the box
+-- @param [default=Color(255,255,255,255)]Color color The color of the box
+-- @2D
+-- @realm client
+function draw.Box(x, y, w, h, color)
+	surface.SetDrawColor(color or COLOR_WHITE)
+	surface.DrawRect(x, y, w, h)
+end
+
+local drawBox = draw.Box
+
+---
+-- A function to draws a simple shadowed box without a radius
+-- @param number x The x position to start the box
+-- @param number y The y position to start the box
+-- @param number w The width of the box
+-- @param number h The height of the box
+-- @param [default=Color(255,255,255,255)]Color color The color of the box
+-- @param [default=1.0]number scale A scaling factor that is used for the shadows
+-- @2D
+-- @realm client
+function draw.ShadowedBox(x, y, w, h, color, scale)
+	color = color or COLOR_WHITE
+	scale = scale or 1
+
+	local shift1 = mathRound(scale)
+	local shift2 = mathRound(scale * 2)
+
+	local tmpCol = color.r + color.g + color.b > 200 and tableCopy(shadowColorDark) or tableCopy(shadowColorWhite)
+	tmpCol.a = mathRound(tmpCol.a * (color.a / 255))
+
+	drawBox(x + shift2, y + shift2, w, h, tmpCol)
+	drawBox(x + shift1, y + shift1, w, h, tmpCol)
+	drawBox(x + shift1, y + shift1, w, h, tmpCol)
+	drawBox(x, y, w, h, t, color)
+end
+
+---
+-- A function to draws a circle outline
+-- @param number x The center x position to start the circle
+-- @param number y The center y position to start the circle
+-- @param number r The radius of the circle
+-- @param [default=Color(255,255,255,255)]Color color The color of the circle
+-- @2D
+-- @realm client
+function draw.OutlinedCircle(x, y, r, color)
+	color = color or COLOR_WHITE
+
+	surface.DrawCircle(x, y, r, color.r, color.g, color.b, color.a)
 end
 
 ---
@@ -60,7 +122,7 @@ end
 -- @param number startY The y position to start the line
 -- @param number endX The x position to end the line
 -- @param number endY The y position to end the line
--- @param [default=COLOR_WHITE] Color color The color of the line
+-- @param [default=Color(255,255,255,255)]Color color The color of the line
 -- @2D
 -- @realm client
 function draw.Line(startX, startY, endX, endY, color)
@@ -76,7 +138,7 @@ local drawLine = draw.Line
 -- @param number startY The y position to start the line
 -- @param number endX The x position to end the line
 -- @param number endY The y position to end the line
--- @param [default=COLOR_WHITE] Color color The color of the line
+-- @param [default=Color(255,255,255,255)]Color color The color of the line
 -- @2D
 -- @realm client
 function draw.ShadowedLine(startX, startY, endX, endY, color)
@@ -98,8 +160,8 @@ end
 -- @param number w width
 -- @param number h height
 -- @param Material material
--- @param [default=255] number alpha
--- @param [default=COLOR_WHITE] Color col the alpha value will be ignored
+-- @param [default=255]number alpha
+-- @param [default=Color(255,255,255,255)]Color col the alpha value will be ignored
 -- @2D
 -- @realm client
 function draw.FilteredTexture(x, y, w, h, material, alpha, color)
@@ -127,9 +189,9 @@ local drawFilteredTexture = draw.FilteredTexture
 -- @param number w width
 -- @param number h height
 -- @param Material material
--- @param [default=255] number alpha
--- @param [default=COLOR_WHITE] Color col the alpha value will be ignored
--- @param [default=1.0] number scale A scaling factor that is used for the shadows
+-- @param [default=255]number alpha
+-- @param [default=Color(255,255,255,255)]Color col the alpha value will be ignored
+-- @param [default=1.0]number scale A scaling factor that is used for the shadows
 -- @2D
 -- @realm client
 function draw.FilteredShadowedTexture(x, y, w, h, material, alpha, color, scale)
