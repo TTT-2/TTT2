@@ -61,6 +61,7 @@ if CLIENT then
 		local marker_size = size + margin * 2 + thickness * 2
 
 		surface.SetDrawColor(color)
+
 		for i = 0, thickness - 1 do
 			surface.DrawOutlinedRect( marker_x + i, marker_y + i, marker_size - i * 2, marker_size - i * 2 )
 		end
@@ -71,10 +72,11 @@ if CLIENT then
 
 		if time_left < 2 then
 			local num = 0.5 * math.pi + (-2.0 * time_left + 7) * math.pi
+			local factor = 0.5 * (math.sin(num) + 1)
 
-			factor = 0.5 * (math.sin(num) + 1)
 			return 20 + 235 * ( 1 - factor)
 		end
+
 		return 255
 	end
 
@@ -94,6 +96,7 @@ if CLIENT then
 
 		local slotCount = GetGlobalBool("ttt2_dna_scanner_slots")
 		local newWidth = self.pad + slotCount * (self.pad + self.iconSize)
+
 		if newWidth ~= size.w then
 			local newX = pos.x + size.w * 0.5 - newWidth * 0.5
 			w = newWidth
@@ -117,6 +120,7 @@ if CLIENT then
 
 			if scanner.ItemSamples[i] then
 				local alpha = 255
+
 				if scanner.ScanSuccess > 0 and scanner.NewSample == i then
 					alpha = self:GetAlpha(scanner.ScanTime)
 				end

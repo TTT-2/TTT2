@@ -41,7 +41,7 @@ else
 	end)
 
 	cvars.AddChangeCallback(dna_mode:GetName(), function(name, old, new)
-		SetGlobalBool(dna_mode:GetName(), tonumber(new) == 1)
+		SetGlobalBool(dna_mode:GetName(), tobool(new))
 	end, dna_mode:GetName())
 
 	cvars.AddChangeCallback(dna_slots:GetName(), function(name, old, new)
@@ -100,7 +100,7 @@ local dna_screen_circle = Material("models/ttt2_dna_scanner/screen/circle")
 function SWEP:Initialize()
 
 	--debug stuff
-	plys = player.GetAll()
+	local plys = player.GetAll()
 	for i = 1, #plys do
 		local ply = plys[i]
 		if SERVER then
@@ -120,8 +120,8 @@ function SWEP:Initialize()
 		self.scannerScreenMat = CreateMaterial( "scanner_screen_mat", "UnlitGeneric", {
 					["$basetexture"] = self.scannerScreenTex,
 					["$basetexturetransform"] = "center .5 .5 scale 1 1 rotate 180 translate 0 0"} )
-
 		self.scannerScreenMat:SetTexture( "$basetexture", self.scannerScreenTex )
+
 		self:SetSubMaterial(0, "!scanner_screen_mat")
 
 		surface.CreateAdvancedFont("DNAScannerDistanceFont", {font = "Trebuchet24", size = 32, weight = 1200})
@@ -161,6 +161,7 @@ end
 
 function SWEP:SecondaryAttack()
 	if not IsFirstTimePredicted() then return end
+
 	self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
 
 	self.ActiveSample = (self.ActiveSample % GetGlobalBool("ttt2_dna_scanner_slots")) + 1
@@ -178,22 +179,25 @@ end
 
 function SWEP:Report(successful, msg, oldFound)
 	if msg then
-		LANG.Msg(self:GetOwner(), msg, params, MSG_MSTACK_ROLE)
+		LANG.Msg(self:GetOwner(), msg, nil, MSG_MSTACK_ROLE)
 	end
 
 	net.Start("TTT2ScannerFeedback")
 	net.WriteBool(successful)
 	net.WriteBool(oldFound or false)
+
 	if successful or oldFound then
 		net.WriteUInt(self.ActiveSample, 8)
 		net.WriteEntity(self.CachedTargets[self.ActiveSample])
 	end
+
 	net.Send(self:GetOwner())
 end
 
 function SWEP:GatherDNA(ent)
 	if not IsValid(ent) or ent:IsPlayer() then
 		self:Report(false)
+
 		return
 	end
 
@@ -253,6 +257,7 @@ end
 function SWEP:AddPlayerSample(corpse, killer)
 	if table.Count(self.ItemSamples) >= GetGlobalBool("ttt2_dna_scanner_slots") then
 		self:Report(false, "dna_limit")
+
 		return
 	end
 
@@ -263,6 +268,7 @@ function SWEP:AddPlayerSample(corpse, killer)
 		self:Report(false, "dna_duplicate", true)
 	else
 		local index = firstFreeIndex(self.ItemSamples, GetGlobalBool("ttt2_dna_scanner_slots"), self.ActiveSample)
+
 		self.ActiveSample = index
 		self.ItemSamples[index] = killer
 		self.CachedTargets[index] = self:GetScanTarget(killer)
@@ -270,6 +276,7 @@ function SWEP:AddPlayerSample(corpse, killer)
 		DamageLog("SAMPLE:\t " .. owner:Nick() .. " retrieved DNA of " .. (IsValid(killer) and killer:Nick() or "<disconnected>") .. " from corpse of " .. (IsValid(corpse) and CORPSE.GetPlayerNick(corpse) or "<invalid>"))
 
 		hook.Call("TTTFoundDNA", GAMEMODE, owner, killer, corpse)
+
 		self:Report(true, "dna_killer")
 	end
 end
@@ -285,13 +292,17 @@ function SWEP:AddItemSample(ent)
 	for i = #ent.fingerprints, 1 do
 		local ply = ent.fingerprints[i]
 
-		if ply ~= self:GetOwner() and table.HasValue(self.ItemSamples, ply) then
+		if ply == self:GetOwner() then continue end
+
+		if table.HasValue(self.ItemSamples, ply) then
 			self.ActiveSample  = table.KeyFromValue(self.ItemSamples, ply)
 
 			self:Report(false, "dna_duplicate", true)
+
 			return
-		elseif ply ~= self:GetOwner() then
+		else
 			local index = firstFreeIndex(self.ItemSamples, GetGlobalBool("ttt2_dna_scanner_slots"), self.ActiveSample)
+
 			self.ActiveSample = index
 			self.ItemSamples[index] = ply
 			self.CachedTargets[index] = self:GetScanTarget(ply)
@@ -299,7 +310,9 @@ function SWEP:AddItemSample(ent)
 			DamageLog("SAMPLE:\t " .. owner:Nick() .. " retrieved DNA of " .. (IsValid(p) and p:Nick() or "<disconnected>") .. " from " .. ent:GetClass())
 
 			hook.Run("TTTFoundDNA", owner, p, ent)
+
 			self:Report(true, "dna_object")
+
 			return
 		end
 	end
@@ -316,6 +329,7 @@ function SWEP:RemoveSample()
 
 	if CLIENT then
 		self:RadarScan()
+
 		return
 	else
 		self.CachedTargets[idx] = nil
@@ -323,19 +337,23 @@ function SWEP:RemoveSample()
 end
 
 function SWEP:PassiveThink()
-	if SERVER and IsValid(self:GetOwner()) then
+	if not IsValid(self:GetOwner()) then return end
+
+	if SERVER then
 		self:UpdateTargets()
+
 		return
 	end
 
-	if (GetGlobalBool("ttt2_dna_radar") and self.LastRadar + GetGlobalFloat("ttt2_dna_radar_cooldown") < CurTime()) and IsValid(self:GetOwner()) then
+	if (GetGlobalBool("ttt2_dna_radar") and self.LastRadar + GetGlobalFloat("ttt2_dna_radar_cooldown") < CurTime()) then
 		local target = self.ItemSamples[self.ActiveSample]
+
 		if not IsValid(target) then return end
 
 		self.RadarPos = target:LocalToWorld(target:OBBCenter())
+		self.LastRadar = CurTime()
 
 		self:RadarScan()
-		self.LastRadar = CurTime()
 	end
 end
 
@@ -359,15 +377,18 @@ if SERVER then
 	function SWEP:UpdateTargets()
 		for i = 1, GetGlobalBool("ttt2_dna_scanner_slots") do
 			local ply = self.ItemSamples[i]
-			if IsValid(ply) then
-				local target = self:GetScanTarget(ply)
-				if target ~= self.CachedTargets[i] then
-					self.CachedTargets[i] = target
-					net.Start("TTT2ScannerUpdate")
-					net.WriteUInt(i, 8)
-					net.WriteEntity(target)
-					net.Send(self:GetOwner())
-				end
+
+			if not IsValid(ply) then continue end
+
+			local target = self:GetScanTarget(ply)
+
+			if target ~= self.CachedTargets[i] then
+				self.CachedTargets[i] = target
+
+				net.Start("TTT2ScannerUpdate")
+				net.WriteUInt(i, 8)
+				net.WriteEntity(target)
+				net.Send(self:GetOwner())
 			end
 		end
 	end
@@ -385,13 +406,14 @@ else
 	end
 
 	function SWEP:FillScannerScreen()
+		local showFeedback = CurTime() > self.ScanTime + 0.5
+		local target = self.ItemSamples[self.ActiveSample]
+
 		-- Draw to the render target
 		render.PushRenderTarget( self.scannerScreenTex )
 		render.Clear(220, 220, 220, 255, true, true)
-		cam.Start2D()
 
-		local showFeedback = CurTime() > self.ScanTime + 0.5
-		local target = self.ItemSamples[self.ActiveSample]
+		cam.Start2D()
 
 		if showFeedback then
 			if IsValid(target) and IsValid(self:GetOwner()) then
@@ -400,8 +422,8 @@ else
 				local vectorToPos = targetPos - scannerPos
 				local angleToPos = vectorToPos:Angle()
 				local arrowRotation = angleToPos.yaw - EyeAngles().yaw
-
 				local distance = math.max(LocalPlayer():GetPos():Distance(targetPos) - 47, 0)
+
 				surface.SetDrawColor( 236, 174, 23, 255 )
 				surface.SetMaterial( dna_screen_arrow )
 				DrawTexturedRectRotatedPoint( 256, 256, 190, 190, arrowRotation, 0, -170 )
@@ -428,6 +450,7 @@ else
 		end
 
 		cam.End2D()
+
 		render.PopRenderTarget()
 	end
 
@@ -457,7 +480,6 @@ else
 		end
 
 		self.RadarPos = target:LocalToWorld(target:OBBCenter())
-
 		RADAR.samples = {{pos = self.RadarPos}}
 		RADAR.samples_count = 1
 	end
@@ -475,7 +497,7 @@ else
 		end
 
 		if ent:IsWeapon() or ent.CanHavePrints or ent:GetNWBool("HasPrints", false)
-		or ent:GetClass() == "prop_ragdoll" and CORPSE.GetPlayerNick(ent, false)
+			or ent:GetClass() == "prop_ragdoll" and CORPSE.GetPlayerNick(ent, false)
 		then
 			tData:AddDescriptionLine(TryT("dna_tid_possible"), COLOR_GREEN, {dna_icon})
 		else
@@ -498,6 +520,7 @@ else
 
 			scanner:RadarScan()
 		end
+
 		scanner.ScanTime = CurTime()
 
 		if successful then
@@ -517,19 +540,20 @@ else
 		if not LocalPlayer():HasWeapon("weapon_ttt_wtester") then return end
 
 		local scanner = LocalPlayer():GetWeapon("weapon_ttt_wtester")
-
 		local idx  = net.ReadUInt(8)
+
 		scanner.ItemSamples[idx] = net.ReadEntity()
 	end
 	net.Receive("TTT2ScannerUpdate", ScannerUpdate)
 end
 
 hook.Add("Tick", "TTT2DNAScannerThink", function()
-	plys = player.GetAll()
+	local plys = player.GetAll()
 
 	for i = 1, #plys do
 		-- Run DNA Scanner think also when it is not deployed
 		local ply = plys[i]
+
 		if IsValid(ply) and ply:HasWeapon("weapon_ttt_wtester") then
 			ply:GetWeapon("weapon_ttt_wtester"):PassiveThink()
 		end
