@@ -65,9 +65,8 @@ if SERVER then
 		ply.isSprinting = bool
 	end)
 else
-	-- The helptext can't be changed once the convar was created, so we go with english, since it is probably the most common lang
-	local doubletap_sprint_anykey = CreateClientConVar("ttt2_doubletap_sprint_anykey", 0, true, false, 0, 1)
-	local enable_doubletap_sprint = CreateClientConVar("ttt2_enable_doubletap_sprint", "1", true, false, 0, 1)
+	local enable_doubletap_sprint = CreateConVar("ttt2_enable_doubletap_sprint", "1", {FCVAR_ARCHIVE})
+	local doubletap_sprint_anykey = CreateConVar("ttt2_doubletap_sprint_anykey", "1", {FCVAR_ARCHIVE})
 	local lastPress = 0
 	local lastPressedMoveKey = nil
 
