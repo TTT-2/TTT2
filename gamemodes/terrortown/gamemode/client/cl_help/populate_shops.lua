@@ -28,9 +28,4 @@ HELPSCRN.subPopulate["ttt2_shops"] = function(helpData, id)
 	-- between modes. Depending on the mode, a second form
 	-- is added to configure the shop based on the mode
 	-- see: HUD Switcher
-
-	--local hudData = helpData:PopulateSubMenu(id .. "_hud")
-
-	--hudData:SetTitle("submenu_administration_hud_title")
-	--hudData:PopulatePanel(PopulateHUDPanel)
 end

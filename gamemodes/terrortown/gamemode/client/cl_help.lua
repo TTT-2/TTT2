@@ -90,12 +90,12 @@ function HELPSCRN:ShowMainMenu()
 	end
 
 	-- INIT MAIN MENU SPECIFIC STUFF
-	frame:SetPadding(5, 5, 5, 5)
+	frame:SetPadding(self.pad, self.pad, self.pad, self.pad)
 
 	-- MARK AS MAIN MENU
 	self.nameMenuOpen = "main"
 
-	-- MAKE MAIN FRAME SCROLEABLE
+	-- MAKE MAIN FRAME SCROLLABLE
 	local scrollPanel = vgui.Create("DScrollPanel", frame)
 	scrollPanel:Dock(FILL)
 
@@ -130,16 +130,28 @@ function HELPSCRN:ShowMainMenu()
 	AddMenuButtons(menuesAdmin, dsettings)
 end
 
+---
+-- Returns the name of the currently open menu
+-- @return string The name of the open menu
+-- @realm client
 function HELPSCRN:GetOpenMenu()
 	return self.nameMenuOpen and self.menuData.id
 end
 
+---
+-- Sets up the data for the content area without actually adding building the area
+-- @param Panel parent The parent panel
+-- @param table menuData The menu content table
+-- @realm client
 function HELPSCRN:SetupContentArea(parent, menuData)
 	self.parent = parent
 	self.lastMenuData = self.menuData
 	self.menuData = menuData
 end
 
+---
+-- Builds the content area, the data has to be set previously
+-- @realm client
 function HELPSCRN:BuildContentArea()
 	if not IsValid(self.parent) then return end
 
@@ -175,6 +187,10 @@ function HELPSCRN:BuildContentArea()
 	end
 end
 
+---
+-- Opens the help sub screen
+-- @param table data The data of the submenu
+-- @realm client
 function HELPSCRN:ShowSubMenu(data)
 	-- IF MENU ELEMENT DOES NOT ALREADY EXIST, CREATE IT
 	local frame
@@ -220,7 +236,7 @@ function HELPSCRN:ShowSubMenu(data)
 	navAreaContent:SetPos(0, heightNavHeader)
 	navAreaContent:SetSize(widthNavContent, heightNavContent)
 
-	-- MAKE NAV AREA SCROLEABLE
+	-- MAKE NAV AREA SCROLLABLE
 	local navAreaScroll = vgui.Create("DScrollPanel", navAreaContent)
 	navAreaScroll:SetVerticalScrollbarEnabled(true)
 	navAreaScroll:Dock(FILL)
@@ -277,7 +293,7 @@ function HELPSCRN:ShowSubMenu(data)
 		lastActive = navAreaScrollGrid:GetChild(0)
 	end
 
-	-- REGISTER REBUILD CALLABCK
+	-- REGISTER REBUILD CALLBACK
 	VHDL.RegisterCallback("rebuild", function(menu)
 		if HELPSCRN.nameMenuOpen == "main" then return end
 
@@ -311,7 +327,7 @@ concommand.Add("ttt_helpscreen", ShowTTTHelp)
 
 ---
 -- A hook that is called once the content area of the helpscreen
--- is cleared, clearing is stopped if false is retunrned
+-- is cleared, clearing is stopped if false is returned
 -- @param Panel parent The parent panel
 -- @param string nameMenuOpen The name of the opened submenu
 -- @param table lastMenuData The menu data of the menu that will be closed

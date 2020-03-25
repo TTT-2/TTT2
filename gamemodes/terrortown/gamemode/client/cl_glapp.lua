@@ -130,7 +130,7 @@ end
 -- @param Color The color to validate
 -- @return Color The validated color
 -- @realm client
-function GLAPP.ValidateFocusColor(clr)
+function GLAPP.ChooseFocusColor(clr)
 	if GLAPP.ShouldUseGlobalFocusColor() then
 		return GLAPP.GetFocusColor()
 	else

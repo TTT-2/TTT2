@@ -76,6 +76,9 @@ HELPSCRN.subPopulate["ttt2_bindings"] = function(helpData, id)
 
 		local categories = bind.GetSettingsBindingsCategories()
 
+		-- CATEGORIES:
+		-- 1: TTT2 Bindings
+		-- 2: Other Bindings
 		for i = 1, #categories do
 			local category = categories[i]
 

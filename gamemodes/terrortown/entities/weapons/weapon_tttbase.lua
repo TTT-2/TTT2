@@ -209,7 +209,7 @@ if CLIENT then
 		-- set up crosshair color
 		local color = client.GetSubRoleData and client:GetRoleColor() or COLOR_WHITE
 
-		color = GLAPP.ValidateFocusColor(color)
+		color = GLAPP.ChooseFocusColor(color)
 
 		surface.SetDrawColor(
 			color.r,

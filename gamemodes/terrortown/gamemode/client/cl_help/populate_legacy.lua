@@ -10,6 +10,7 @@ local materialIcon = Material("vgui/ttt/vskin/helpscreen/legacy")
 --    error by opening a submenu tab twice.
 -- Feel free to improve if you got a better idea.
 local elemStore
+
 local function RegisterLegacyTabCache()
 	elemStore = vgui.Create("DPropertySheet")
 	elemStore:SetVisible(false)
@@ -34,11 +35,13 @@ local function RegisterLegacyTabCache()
 		return sheet
 	end
 
-	-- moves children to tab cache to prevent deleting of
-	-- children
+	elemStore.ResetItems = function(slf)
+		slf.Items = {}
+	end
+
+	-- moves children to tab cache to prevent deleting of children
 	hook.Add("TTT2OnSubmenuClear", "TTT2HandleLegacyClear", function(parent, nameMenuOpen, lastMenuData, menuData)
-		if nameMenuOpen ~= "ttt2_legacy" then return end
-		if not elemStore then return end
+		if nameMenuOpen ~= "ttt2_legacy" or not elemStore then return end
 
 		local children = parent:GetChildren()
 
@@ -55,11 +58,11 @@ local function GetLegacyTabs()
 	end
 
 	elemStore:Clear()
-	elemStore.Items = {}
+	elemStore:ResetItems()
 
 	hook.Run("TTTSettingsTabs", elemStore)
 
-	return elemStore.Items
+	return elemStore:GetItems()
 end
 
 -- check if there are any legacy menues by probing the hook

@@ -25,9 +25,4 @@ end
 HELPSCRN.subPopulate["ttt2_equipment"] = function(helpData, id)
 	-- IDEA: submenu is populated with equipment, each thing gets their
 	-- own menu page
-
-	--local hudData = helpData:PopulateSubMenu(id .. "_hud")
-
-	--hudData:SetTitle("submenu_administration_hud_title")
-	--hudData:PopulatePanel(PopulateHUDPanel)
 end

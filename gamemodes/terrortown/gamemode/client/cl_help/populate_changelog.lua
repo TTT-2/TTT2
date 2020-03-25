@@ -68,10 +68,6 @@ HELPSCRN.subPopulate["ttt2_changelog"] = function(helpData, id)
 			html:SetSize(500, 500)
 			html:Dock(FILL)
 			html:SetHTML(htmlStart .. header .. change.text .. htmlEnd)
-			--html:DockMargin(10, 10, 10, 10)
-
-			--parent.htmlSheet = html
 		end)
 	end
 end
-

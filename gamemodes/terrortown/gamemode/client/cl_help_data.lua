@@ -34,7 +34,7 @@ function HELP_DATA:RegisterSubMenu(id)
 end
 
 ---
--- Checks if a menu with the given id is already registered
+-- Checks if a menu with the given ID is already registered
 -- @param string id The unique menu identifier
 -- @return boolean Returns if the identifier is already used
 -- @realm client
@@ -50,7 +50,7 @@ end
 
 ---
 -- Returns a list of all registered menues that are not admin only and
--- the should show function does not return false
+-- whose should show function does not return false
 -- @return table A table of all menues
 -- @internal
 -- @realm client
@@ -74,7 +74,7 @@ end
 
 ---
 -- Returns a list of all registered menues that are admin only as
--- long as the local player is an admin himself and the should show
+-- long as the local player is an admin himself and whose should show
 -- function does not return false
 -- @return table A table of all menues
 -- @internal
@@ -185,7 +185,7 @@ function SUB_HELP_DATA:PopulateSubMenu(id)
 end
 
 ---
--- Checks if a submenu with the given id is already registered
+-- Checks if a submenu with the given ID is already registered
 -- @param string id The unique submenu identifier
 -- @return boolean Returns if the identifier is already used
 -- @realm client

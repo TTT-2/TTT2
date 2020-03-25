@@ -23,14 +23,15 @@ local function PopulateGeneralPanel(parent)
 		convar = "ttt_mute_team_check"
 	})
 
-	form:MakeCheckBox({
+	local enbSprint = form:MakeCheckBox({
 		label = "label_gameplay_dtsprint_enable",
 		convar = "ttt2_enable_doubletap_sprint"
 	})
 
 	form:MakeCheckBox({
 		label = "label_gameplay_dtsprint_anykey",
-		convar = "ttt2_doubletap_sprint_anykey"
+		convar = "ttt2_doubletap_sprint_anykey",
+		master = enbSprint
 	})
 end
 
