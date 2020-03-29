@@ -513,9 +513,17 @@ require("marks")
 require("outline")
 
 include("includes/modules/pon.lua")
+
+-- include extensions
 include("ttt2/extensions/net.lua")
 include("ttt2/extensions/string.lua")
 include("ttt2/extensions/table.lua")
+include("ttt2/extensions/surface.lua")
+include("ttt2/extensions/draw.lua")
+
+-- include libraries
+include("ttt2/libraries/fonts.lua")
+include("ttt2/libraries/drawsc.lua")
 
 -- include ttt required files
 ttt_include("sh_util")

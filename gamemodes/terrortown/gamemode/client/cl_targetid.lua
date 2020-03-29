@@ -299,8 +299,8 @@ function GM:HUDDrawTargetID()
 			desc = {}
 		},
 		refPosition = {
-			x = math.Round(0.5 * ScrW(), 0),
-			y = math.Round(0.5 * ScrH(), 0) + 42
+			x = math.Round(0.5 * ScrW() / GLAPP.GetGlobalScale(), 0),
+			y = math.Round(0.5 * ScrH() / GLAPP.GetGlobalScale(), 0) + 42
 		}
 	}
 
@@ -344,10 +344,10 @@ function GM:HUDDrawTargetID()
 	local key_string_y = key_box_y + math.Round(0.5 * key_box_h) - 1
 
 	if params.displayInfo.key then
-		draw.Box(key_box_x, key_box_y, key_box_w, key_box_h, colorKeyBack)
+		drawsc.Box(key_box_x, key_box_y, key_box_w, key_box_h, colorKeyBack)
 
-		draw.OutlinedShadowedBox(key_box_x, key_box_y, key_box_w, key_box_h, 1, COLOR_WHITE)
-		draw.ShadowedText(key_string, "TargetID_Key", key_string_x, key_string_y, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		drawsc.OutlinedShadowedBox(key_box_x, key_box_y, key_box_w, key_box_h, 1, COLOR_WHITE)
+		drawsc.AdvancedShadowedText(key_string, "TargetID_Key", key_string_x, key_string_y, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 
 	-- draw icon
@@ -362,7 +362,7 @@ function GM:HUDDrawTargetID()
 			local icon = params.displayInfo.icon[i]
 			local color = icon.color or COLOR_WHITE
 
-			draw.FilteredShadowedTexture(icon_x, icon_y, key_box_h, key_box_h, icon.material, color.a, color)
+			drawsc.FilteredShadowedTexture(icon_x, icon_y, key_box_h, key_box_h, icon.material, color.a, color)
 			icon_y = icon_y + key_box_h
 		end
 	end
@@ -376,12 +376,12 @@ function GM:HUDDrawTargetID()
 	local title_string_y = key_box_y + title_string_h - 4
 
 	for i = 1, #params.displayInfo.title.icons do
-		draw.FilteredShadowedTexture(title_string_x, title_string_y - 16, 14, 14, params.displayInfo.title.icons[i], params.displayInfo.title.color.a, params.displayInfo.title.color)
+		drawsc.FilteredShadowedTexture(title_string_x, title_string_y - 16, 14, 14, params.displayInfo.title.icons[i], params.displayInfo.title.color.a, params.displayInfo.title.color)
 
 		title_string_x = title_string_x + 18
 	end
 
-	draw.ShadowedText(title_string, "TargetID_Title", title_string_x, title_string_y, params.displayInfo.title.color, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+	drawsc.AdvancedShadowedText(title_string, "TargetID_Title", title_string_x, title_string_y, params.displayInfo.title.color, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 
 	-- draw subtitle
 	local subtitle_string = params.displayInfo.subtitle.text or ""
@@ -390,12 +390,12 @@ function GM:HUDDrawTargetID()
 	local subtitle_string_y = key_box_y + key_box_h + 2
 
 	for i = 1, #params.displayInfo.subtitle.icons do
-		draw.FilteredShadowedTexture(subtitle_string_x, subtitle_string_y - 14, 12, 12, params.displayInfo.subtitle.icons[i], params.displayInfo.subtitle.color.a, params.displayInfo.subtitle.color)
+		drawsc.FilteredShadowedTexture(subtitle_string_x, subtitle_string_y - 14, 12, 12, params.displayInfo.subtitle.icons[i], params.displayInfo.subtitle.color.a, params.displayInfo.subtitle.color)
 
 		subtitle_string_x = subtitle_string_x + 16
 	end
 
-	draw.ShadowedText(subtitle_string, "TargetID_Subtitle", subtitle_string_x, subtitle_string_y, params.displayInfo.subtitle.color, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+	drawsc.AdvancedShadowedText(subtitle_string, "TargetID_Subtitle", subtitle_string_x, subtitle_string_y, params.displayInfo.subtitle.color, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 
 	-- in minimalist mode, no descriptions should be shown
 	local desc_line_amount, desc_line_h = 0, 0
@@ -416,12 +416,12 @@ function GM:HUDDrawTargetID()
 			local desc_string_x_loop = desc_string_x
 
 			for j = 1, #icons do
-				draw.FilteredShadowedTexture(desc_string_x_loop, desc_string_y - 13, 11, 11, icons[j], color.a, color)
+				drawsc.FilteredShadowedTexture(desc_string_x_loop, desc_string_y - 13, 11, 11, icons[j], color.a, color)
 
 				desc_string_x_loop = desc_string_x_loop + 14
 			end
 
-			draw.ShadowedText(text, "TargetID_Description", desc_string_x_loop, desc_string_y, color, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+			drawsc.AdvancedShadowedText(text, "TargetID_Description", desc_string_x_loop, desc_string_y, color, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 			desc_string_y = desc_string_y + desc_line_h
 		end
 	end
@@ -435,7 +435,8 @@ function GM:HUDDrawTargetID()
 
 	local spacer_line_l = (spacer_line_icon_l > spacer_line_text_l) and spacer_line_icon_l or spacer_line_text_l
 
-	draw.ShadowedLine(spacer_line_x, spacer_line_y, spacer_line_x, spacer_line_y + spacer_line_l, COLOR_WHITE)
+	--draw.ShadowedLine(spacer_line_x, spacer_line_y, spacer_line_x, spacer_line_y + spacer_line_l, COLOR_WHITE)
+	drawsc.ShadowedBox(spacer_line_x, spacer_line_y, 1, spacer_line_l, Z)
 end
 
 ---
