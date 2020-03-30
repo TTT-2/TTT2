@@ -1,5 +1,6 @@
 ---
 -- font library functions
+-- adds support for advanced fonts (fonts with mipmapping)
 -- @author Mineotopia, LeBroomer
 
 AddCSLuaFile()
@@ -17,9 +18,9 @@ fonts.fonts = {}
 fonts.scales = {1, 1.5, 2, 2.5}
 
 ---
---
+-- Gets the scale modifer based on a given scale
 -- @param number scale The font scale
--- @return
+-- @return number The font scale
 -- @internal
 -- @realm client
 function fonts.GetScaleModifier(scale)

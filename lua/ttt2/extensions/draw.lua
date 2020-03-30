@@ -28,11 +28,11 @@ end
 
 ---
 -- A function to draw an outlined box with a definable width
--- @param number x The x position of the rectangle
--- @param number y The y position of the rectangle
--- @param number w The width of the rectangle
--- @param number h The height of the rectangle
--- @param [default=1] number t The thickness of the line
+-- @param number x The x position of the otlined box
+-- @param number y The y position of the otlined box
+-- @param number w The width of the otlined box
+-- @param number h The height of the otlined box
+-- @param [default=1] number t The thickness of the outline
 -- @param [default=Color(255,255,255,255)] Color color The color of the line
 -- @2D
 -- @realm client
@@ -75,7 +75,7 @@ function draw.OutlinedShadowedBox(x, y, w, h, t, color, scale)
 end
 
 ---
--- A function to draws a simple box without a radius
+-- A function to draws a simple box without a corner radius
 -- @param number x The x position to start the box
 -- @param number y The y position to start the box
 -- @param number w The width of the box
@@ -91,7 +91,7 @@ end
 local drawBox = draw.Box
 
 ---
--- A function to draws a simple shadowed box without a radius
+-- A function to draws a simple shadowed box without a corner radius
 -- @param number x The x position to start the box
 -- @param number y The y position to start the box
 -- @param number w The width of the box
@@ -198,12 +198,12 @@ end
 
 ---
 -- Draws a filtered textured rectangle / image / icon
--- @param number x
--- @param number y
--- @param number w width
--- @param number h height
--- @param Material material
--- @param [default=255]number alpha
+-- @param number x The horizontal position
+-- @param number y The vertical position
+-- @param number w width The width
+-- @param number h height The height
+-- @param Material material The material
+-- @param [default=255]number alpha The opacity of the material
 -- @param [default=Color(255,255,255,255)]Color col the alpha value will be ignored
 -- @2D
 -- @realm client
@@ -227,12 +227,12 @@ local drawFilteredTexture = draw.FilteredTexture
 
 ---
 -- Draws a filtered textured rectangle / image / icon with shadow
--- @param number x
--- @param number y
--- @param number w width
--- @param number h height
--- @param Material material
--- @param [default=255]number alpha
+-- @param number x The horizontal position
+-- @param number y The vertical position
+-- @param number w width The width
+-- @param number h height The height
+-- @param Material material The material
+-- @param [default=255]number alpha The opacity of the material
 -- @param [default=Color(255,255,255,255)]Color col the alpha value will be ignored
 -- @param [default=1.0]number scale A scaling factor that is used for the shadows
 -- @2D
@@ -269,7 +269,6 @@ end
 -- <a href="https://wiki.garrysmod.com/page/Enums/TEXT_ALIGN">TEXT_ALIGN_Enums</a>.
 -- @param number scale The scale (float number)
 -- @ref https://wiki.garrysmod.com/page/draw/SimpleText
--- @module draw
 -- @realm client
 function draw.ShadowedText(text, font, x, y, color, xalign, yalign, scale)
 	scale = scale or 1.0
@@ -290,19 +289,18 @@ local drawShadowedText = draw.ShadowedText
 ---
 -- Draws an advanced text (scalable)
 -- @note You should use @{surface.CreateAdvancedFont} before trying to access the font
--- @2D
 -- @param string text The text to be drawn
 -- @param [default="DefaultBold"] string font The font. See @{surface.CreateAdvancedFont} to create your own. The original font should be always created, see @{surface.CreateFont}.
--- @param number x The X Coordinate
--- @param number y The Y Coordinate
+-- @param number x The x coordinate
+-- @param number y The y coordinate
 -- @param Color color The color of the text. Uses the Color structure.
--- @param number xalign The alignment of the X coordinate using
+-- @param number xalign The alignment of the x coordinate using
 -- <a href="https://wiki.garrysmod.com/page/Enums/TEXT_ALIGN">TEXT_ALIGN_Enums</a>.
--- @param number yalign The alignment of the Y coordinate using
+-- @param number yalign The alignment of the y coordinate using
 -- <a href="https://wiki.garrysmod.com/page/Enums/TEXT_ALIGN">TEXT_ALIGN_Enums</a>.
 -- @param boolean shadow whether there should be a shadow of the text
--- @param number scale scale (float number)
--- @module draw
+-- @param number scale The scale (float number)
+-- @2D
 -- @realm client
 function draw.AdvancedText(text, font, x, y, color, xalign, yalign, shadow, scale)
 	local scaleModifier = 1.0
@@ -351,11 +349,11 @@ end
 
 ---
 -- Returns a list of lines to wrap the text matching the given width
--- @param string text
--- @param number width
--- @param string font
--- @param number scale
--- @return table
+-- @param string text The text that should be wrapped
+-- @param number width The maximal width that the text is allowed to have
+-- @param [default="DefaultBold"]string font The font that should be used here
+-- @param number scale The UI scale factor
+-- @return table A table with the broken up lines
 -- @realm client
 function draw.GetWrappedText(text, width, font, scale)
 	-- Oh joy, I get to write my own wrapping function. Thanks Lua!
