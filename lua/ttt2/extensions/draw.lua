@@ -28,10 +28,10 @@ end
 
 ---
 -- A function to draw an outlined box with a definable width
--- @param number x The x position of the otlined box
--- @param number y The y position of the otlined box
--- @param number w The width of the otlined box
--- @param number h The height of the otlined box
+-- @param number x The x position of the outlined box
+-- @param number y The y position of the outlined box
+-- @param number w The width of the outlined box
+-- @param number h The height of the outlined box
 -- @param [default=1] number t The thickness of the outline
 -- @param [default=Color(255,255,255,255)] Color color The color of the line
 -- @2D
