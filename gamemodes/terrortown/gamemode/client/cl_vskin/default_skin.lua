@@ -25,15 +25,15 @@ surface.CreateAdvancedFont("DermaTTT2TextLarge", {font = "Trebuchet24", size = 1
 	Frame
 -----------------------------------------------------------]]
 function SKIN:PaintFrameTTT2(panel, w, h)
-	local colorBackground = VSKIN.GetBackgroundColor()
-	local colorAccent = VSKIN.GetAccentColor()
-	local colorAccentDark = VSKIN.GetDarkAccentColor()
-	local colorShadow = VSKIN.GetShadowColor()
-	local colorTitleText = VSKIN.GetTitleTextColor()
+	local colorBackground = vskin.GetBackgroundColor()
+	local colorAccent = vskin.GetAccentColor()
+	local colorAccentDark = vskin.GetDarkAccentColor()
+	local colorShadow = vskin.GetShadowColor()
+	local colorTitleText = vskin.GetTitleTextColor()
 
-	local sizeShadow = VSKIN.GetShadowSize()
-	local sizeHeader = VSKIN.GetHeaderHeight()
-	local sizeBorder = VSKIN.GetBorderSize()
+	local sizeShadow = vskin.GetShadowSize()
+	local sizeHeader = vskin.GetHeaderHeight()
+	local sizeBorder = vskin.GetBorderSize()
 
 	-- DRAW SHADOW (disable clipping)
 	if panel.m_bPaintShadow then
@@ -60,21 +60,21 @@ function SKIN:PaintPanel(panel, w, h)
 end
 
 function SKIN:PaintNavPanelTTT2(panel, w, h)
-	local colorBackground = VSKIN.GetBackgroundColor()
+	local colorBackground = vskin.GetBackgroundColor()
 	local colorLine = ColorAlpha(util.GetDefaultColor(colorBackground), 200)
 
 	draw.Box(w - 1, 0, 1, h, colorLine)
 end
 
 function SKIN:PaintButtonPanelTTT2(panel, w, h)
-	local colorBackground = VSKIN.GetBackgroundColor()
+	local colorBackground = vskin.GetBackgroundColor()
 	local colorLine = ColorAlpha(util.GetDefaultColor(colorBackground), 200)
 
 	draw.Box(0, 0, w, 1, colorLine)
 end
 
 function SKIN:PaintContentPanelTTT2(panel, w, h)
-	local colorBackground = util.GetChangedColor(VSKIN.GetBackgroundColor(), 30)
+	local colorBackground = util.GetChangedColor(vskin.GetBackgroundColor(), 30)
 
 	draw.Box(0, 0, w, h, colorBackground)
 end
@@ -92,7 +92,7 @@ end
 function SKIN:PaintWindowCloseButton(panel, w, h)
 	if not panel.m_bBackground then return end
 
-	local colorAccent = VSKIN.GetAccentColor()
+	local colorAccent = vskin.GetAccentColor()
 	local colorAccentHover = util.GetHoverColor(colorAccent)
 	local colorAccentActive = util.GetActiveColor(colorAccent)
 
@@ -134,7 +134,7 @@ end
 function SKIN:PaintWindowBackButton(panel, w, h)
 	if not panel.m_bBackground then return end
 
-	local colorAccent = VSKIN.GetAccentColor()
+	local colorAccent = vskin.GetAccentColor()
 	local colorAccentHover = util.GetHoverColor(colorAccent)
 	local colorAccentActive = util.GetActiveColor(colorAccent)
 
@@ -159,19 +159,19 @@ end
 	ScrollBar
 -----------------------------------------------------------]]
 function SKIN:PaintVScrollBar(panel, w, h)
-	local colorScrollbarTrack = VSKIN.GetScrollbarTrackColor()
+	local colorScrollbarTrack = vskin.GetScrollbarTrackColor()
 
-	local sizeCornerRadius = VSKIN.GetCornerRadius()
+	local sizeCornerRadius = vskin.GetCornerRadius()
 
 	return draw.RoundedBox(sizeCornerRadius, 0, 0, w, h, colorScrollbarTrack)
 end
 
 function SKIN:PaintScrollBarGrip(panel, w, h)
-	local colorScrollbar = VSKIN.GetScrollbarColor()
+	local colorScrollbar = vskin.GetScrollbarColor()
 	local colorScrollbarHover = util.GetChangedColor(colorScrollbar, 10)
 	local colorScrollbarActive = util.GetChangedColor(colorScrollbar, 15)
 
-	local sizeCornerRadius = VSKIN.GetCornerRadius()
+	local sizeCornerRadius = vskin.GetCornerRadius()
 
 	if not panel:IsEnabled() then
 		return self.tex.Scroller.ButtonV_Disabled( 0, 0, w, h )
@@ -191,11 +191,11 @@ end
 function SKIN:PaintButtonDown(panel, w, h)
 	if not panel.m_bBackground then return end
 
-	local colorAccent = VSKIN.GetAccentColor()
+	local colorAccent = vskin.GetAccentColor()
 	local colorAccentHover = util.GetHoverColor(colorAccent)
 	local colorAccentActive = util.GetActiveColor(colorAccent)
 
-	local sizeCornerRadius = VSKIN.GetCornerRadius()
+	local sizeCornerRadius = vskin.GetCornerRadius()
 
 	if not panel:IsEnabled() then
 		return self.tex.Scroller.DownButton_Dead( 0, 0, w, h )
@@ -215,11 +215,11 @@ end
 function SKIN:PaintButtonUp(panel, w, h)
 	if not panel.m_bBackground then return end
 
-	local colorAccent = VSKIN.GetAccentColor()
+	local colorAccent = vskin.GetAccentColor()
 	local colorAccentHover = util.GetHoverColor(colorAccent)
 	local colorAccentActive = util.GetActiveColor(colorAccent)
 
-	local sizeCornerRadius = VSKIN.GetCornerRadius()
+	local sizeCornerRadius = vskin.GetCornerRadius()
 
 	if not panel:IsEnabled() then
 		return self.tex.Scroller.DownButton_Dead( 0, 0, w, h )
@@ -273,7 +273,7 @@ end
 function SKIN:PaintMenuButtonTTT2(panel, w, h)
 	if not panel.m_bBackground then return end
 
-	local colorBackground = VSKIN.GetBackgroundColor()
+	local colorBackground = vskin.GetBackgroundColor()
 
 	local colorDefault = util.GetDefaultColor(colorBackground)
 
@@ -317,13 +317,13 @@ end
 function SKIN:PaintSubMenuButtonTTT2(panel, w, h)
 	if not panel.m_bBackground then return end
 
-	local colorElemBackground = VSKIN.GetBackgroundColor()
+	local colorElemBackground = vskin.GetBackgroundColor()
 
 	local colorText = util.GetChangedColor(util.GetDefaultColor(colorElemBackground), 75)
 	local colorTextHover = util.GetHoverColor(colorText)
 	local colorTextActive = util.GetActiveColor(colorText)
 
-	local colorAccent = VSKIN.GetAccentColor()
+	local colorAccent = vskin.GetAccentColor()
 	local colorAccentHover = util.GetHoverColor(colorAccent)
 	local colorAccentActive = util.GetActiveColor(colorAccent)
 
@@ -336,7 +336,7 @@ function SKIN:PaintSubMenuButtonTTT2(panel, w, h)
 		colorBackground = colorElemBackground
 	end
 
-	local sizeBorder = VSKIN.GetBorderSize()
+	local sizeBorder = vskin.GetBorderSize()
 
 
 	if not panel:IsEnabled() then
@@ -363,11 +363,11 @@ local function DrawCheckBox(w, h, offset, panel, colorBox, colorCenter)
 end
 
 function SKIN:PaintCheckBox(panel, w, h)
-	local colorBackground = VSKIN.GetBackgroundColor()
+	local colorBackground = vskin.GetBackgroundColor()
 
 	local colorBox = util.GetChangedColor(colorBackground, 15)
 
-	local colorAccent = VSKIN.GetAccentColor()
+	local colorAccent = vskin.GetAccentColor()
 	local colorAccentHover = ColorAlpha(util.GetHoverColor(colorAccent), 200)
 	local colorCenter = util.GetChangedColor(colorBackground, 150)
 
@@ -398,12 +398,12 @@ function SKIN:PaintCheckBox(panel, w, h)
 end
 
 function SKIN:PaintCheckBoxLabel(panel, w, h)
-	local colorBackground = VSKIN.GetBackgroundColor()
+	local colorBackground = vskin.GetBackgroundColor()
 
 	local colorBox = util.GetChangedColor(colorBackground, 150)
 	local colorText = util.GetDefaultColor(colorBox)
 
-	local sizeCornerRadius = VSKIN.GetCornerRadius()
+	local sizeCornerRadius = vskin.GetCornerRadius()
 
 	if not panel:IsEnabled() then
 		colorBox = ColorAlpha(colorBox, alphaDisabled)
@@ -427,10 +427,10 @@ end
 	CollapsibleCategory
 -----------------------------------------------------------]]
 function SKIN:PaintCollapsibleCategoryTTT2(panel, w, h)
-	local colorBackground = VSKIN.GetBackgroundColor()
-	local colorAccent = VSKIN.GetAccentColor()
+	local colorBackground = vskin.GetBackgroundColor()
+	local colorAccent = vskin.GetAccentColor()
 
-	local sizeBorder = VSKIN.GetBorderSize()
+	local sizeBorder = vskin.GetBorderSize()
 
 	draw.Box(0, 0, w, h, colorBackground)
 	draw.Box(0, h - sizeBorder, w, sizeBorder, colorAccent)
@@ -440,7 +440,7 @@ function SKIN:PaintCategoryHeaderTTT2(panel, w, h)
 	local paddingX = 10
 	local paddingY = 10
 
-	local colorBackground = VSKIN.GetBackgroundColor()
+	local colorBackground = vskin.GetBackgroundColor()
 
 	local colorLine = util.GetChangedColor(colorBackground, 50)
 
@@ -482,18 +482,18 @@ local function DrawButton(w, h, panel, sizeBorder, colorLine, colorBox, colorTex
 end
 
 function SKIN:PaintButtonTTT2(panel, w, h)
-	local colorAccent = VSKIN.GetAccentColor()
+	local colorAccent = vskin.GetAccentColor()
 	local colorAccentHover = util.GetHoverColor(colorAccent)
 	local colorAccentActive = util.GetActiveColor(colorAccent)
 
-	local colorAccentDark = VSKIN.GetDarkAccentColor()
+	local colorAccentDark = vskin.GetDarkAccentColor()
 	local colorAccentDarkHover = util.GetHoverColor(colorAccentDark)
 	local colorAccentDarkActive = util.GetActiveColor(colorAccentDark)
 
-	local colorAccentDisabled = util.GetChangedColor(util.GetDefaultColor(VSKIN.GetBackgroundColor()), 175)
-	local colorAccentDarkDisabled = util.GetChangedColor(util.GetDefaultColor(VSKIN.GetBackgroundColor()), 125)
+	local colorAccentDisabled = util.GetChangedColor(util.GetDefaultColor(vskin.GetBackgroundColor()), 175)
+	local colorAccentDarkDisabled = util.GetChangedColor(util.GetDefaultColor(vskin.GetBackgroundColor()), 125)
 
-	local sizeBorder = VSKIN.GetBorderSize()
+	local sizeBorder = vskin.GetBorderSize()
 
 	if not panel:IsEnabled() then
 		local colorText = util.GetDefaultColor(colorAccentDisabled)
@@ -528,13 +528,13 @@ local function DrawFormButton(w, h, panel, sizeCornerRadius, colorBoxBack, color
 end
 
 function SKIN:PaintFormButtonIconTTT2(panel, w, h)
-	local colorBackground = VSKIN.GetBackgroundColor()
+	local colorBackground = vskin.GetBackgroundColor()
 
 	local colorBoxBack = util.GetChangedColor(colorBackground, 150)
-	local colorBox = VSKIN.GetAccentColor()
+	local colorBox = vskin.GetAccentColor()
 	local colorText = ColorAlpha(util.GetDefaultColor(colorBox), 150)
 
-	local sizeCornerRadius = VSKIN.GetCornerRadius()
+	local sizeCornerRadius = vskin.GetCornerRadius()
 	local shift = 0
 
 	if not panel:IsEnabled() then
@@ -570,13 +570,13 @@ local function DrawFormButtonText(w, h, panel, sizeCornerRadius, colorBoxBack, c
 end
 
 function SKIN:PaintBinderButtonTTT2(panel, w, h)
-	local colorBackground = VSKIN.GetBackgroundColor()
+	local colorBackground = vskin.GetBackgroundColor()
 
 	local colorBoxBack = util.GetChangedColor(colorBackground, 150)
-	local colorBox = VSKIN.GetAccentColor()
+	local colorBox = vskin.GetAccentColor()
 	local colorText = ColorAlpha(util.GetDefaultColor(colorBox), 150)
 
-	local sizeCornerRadius = VSKIN.GetCornerRadius()
+	local sizeCornerRadius = vskin.GetCornerRadius()
 	local shift = 0
 
 	if not panel:IsEnabled() then
@@ -594,7 +594,7 @@ function SKIN:PaintBinderButtonTTT2(panel, w, h)
 end
 
 function SKIN:PaintLabelTTT2(panel, w, h)
-	local colorBackground = VSKIN.GetBackgroundColor()
+	local colorBackground = vskin.GetBackgroundColor()
 
 	local colorText = util.GetChangedColor(util.GetDefaultColor(colorBackground), 40)
 
@@ -610,7 +610,7 @@ function SKIN:PaintLabelTTT2(panel, w, h)
 end
 
 function SKIN:PaintFormLabelTTT2(panel, w, h)
-	local colorBackground = VSKIN.GetBackgroundColor()
+	local colorBackground = vskin.GetBackgroundColor()
 
 	local colorBox = util.GetChangedColor(colorBackground, 150)
 	local colorText = util.GetDefaultColor(colorBox)
@@ -620,7 +620,7 @@ function SKIN:PaintFormLabelTTT2(panel, w, h)
 		colorText = ColorAlpha(colorText, alphaDisabled)
 	end
 
-	local sizeCornerRadius = VSKIN.GetCornerRadius()
+	local sizeCornerRadius = vskin.GetCornerRadius()
 
 	draw.RoundedBoxEx(sizeCornerRadius, 0, 0, w, h, colorBox, true, false, true, false)
 
@@ -636,7 +636,7 @@ function SKIN:PaintFormLabelTTT2(panel, w, h)
 end
 
 function SKIN:PaintFormBoxTTT2(panel, w, h)
-	local colorBackground = VSKIN.GetBackgroundColor()
+	local colorBackground = vskin.GetBackgroundColor()
 
 	local colorBoxBack = util.GetChangedColor(colorBackground, 150)
 	local colorBox = util.GetChangedColor(colorBackground, 15)
@@ -646,14 +646,14 @@ function SKIN:PaintFormBoxTTT2(panel, w, h)
 		colorBox = ColorAlpha(colorBox, alphaDisabled)
 	end
 
-	local sizeCornerRadius = VSKIN.GetCornerRadius()
+	local sizeCornerRadius = vskin.GetCornerRadius()
 
 	draw.RoundedBoxEx(sizeCornerRadius, 0, 0, w, h, colorBoxBack, false, true, false, true)
 	draw.RoundedBox(sizeCornerRadius, 1, 1, w - 2, h - 2, colorBox)
 end
 
 function SKIN:PaintMenuLabelTTT2(panel, w, h)
-	local colorBackground = VSKIN.GetBackgroundColor()
+	local colorBackground = vskin.GetBackgroundColor()
 
 	local colorText = util.GetChangedColor(util.GetDefaultColor(colorBackground), 150)
 
@@ -669,7 +669,7 @@ function SKIN:PaintMenuLabelTTT2(panel, w, h)
 end
 
 function SKIN:PaintHelpLabelTTT2(panel, w, h)
-	local colorBackground = VSKIN.GetBackgroundColor()
+	local colorBackground = vskin.GetBackgroundColor()
 
 	local colorBox = util.GetChangedColor(colorBackground, 20)
 	local colorBar = util.GetChangedColor(colorBackground, 80)
@@ -705,7 +705,7 @@ function SKIN:PaintHelpLabelTTT2(panel, w, h)
 end
 
 function SKIN:PaintSliderKnob(panel, w, h)
-	local colorAccent = VSKIN.GetAccentColor()
+	local colorAccent = vskin.GetAccentColor()
 	local colorAccentHover = util.GetHoverColor(colorAccent)
 	local colorAccentActive = util.GetActiveColor(colorAccent)
 
@@ -729,8 +729,8 @@ end
 function SKIN:PaintNumSliderTTT2(panel, w, h)
 	local pad = 5
 
-	local colorBackground = VSKIN.GetBackgroundColor()
-	local colorAccent = VSKIN.GetAccentColor()
+	local colorBackground = vskin.GetBackgroundColor()
+	local colorAccent = vskin.GetAccentColor()
 
 	local colorBoxBack = util.GetChangedColor(colorBackground, 150)
 	local colorBox = util.GetChangedColor(colorBackground, 15)
@@ -743,7 +743,7 @@ function SKIN:PaintNumSliderTTT2(panel, w, h)
 		colorSlider = ColorAlpha(colorSlider, alphaDisabled)
 	end
 
-	local sizeCornerRadius = VSKIN.GetCornerRadius()
+	local sizeCornerRadius = vskin.GetCornerRadius()
 
 	draw.Box(0, 0, w, h, colorBoxBack)
 	draw.RoundedBox(sizeCornerRadius, 1, 1, w - 2, h - 2, colorBox)
@@ -754,7 +754,7 @@ function SKIN:PaintNumSliderTTT2(panel, w, h)
 end
 
 function SKIN:PaintSliderTextAreaTTT2(panel, w, h)
-	local colorBackground = VSKIN.GetBackgroundColor()
+	local colorBackground = vskin.GetBackgroundColor()
 
 	local colorBox = util.GetChangedColor(colorBackground, 150)
 	local colorText = util.GetDefaultColor(colorBox)
@@ -778,7 +778,7 @@ function SKIN:PaintSliderTextAreaTTT2(panel, w, h)
 end
 
 function SKIN:PaintBinderPanelTTT2(panel, w, h)
-	local colorBackground = VSKIN.GetBackgroundColor()
+	local colorBackground = vskin.GetBackgroundColor()
 
 	local colorBoxBack = util.GetChangedColor(colorBackground, 150)
 
@@ -806,7 +806,7 @@ local function DrawComboBox(w, h, panel, sizeCornerRadius, colorBox, colorText)
 end
 
 function SKIN:PaintComboBoxTTT2(panel, w, h)
-	local colorBackground = VSKIN.GetBackgroundColor()
+	local colorBackground = vskin.GetBackgroundColor()
 
 	local colorOutline = util.GetChangedColor(colorBackground, 150)
 	local colorBox = util.GetChangedColor(colorBackground, 15)
@@ -815,7 +815,7 @@ function SKIN:PaintComboBoxTTT2(panel, w, h)
 
 	local colorText = util.GetChangedColor(util.GetDefaultColor(colorBox), 50)
 
-	local sizeCornerRadius = VSKIN.GetCornerRadius()
+	local sizeCornerRadius = vskin.GetCornerRadius()
 
 	if not panel:IsEnabled() then
 		colorBoxActive = ColorAlpha(colorBoxActive, alphaDisabled)

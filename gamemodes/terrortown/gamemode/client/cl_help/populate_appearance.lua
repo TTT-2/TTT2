@@ -12,18 +12,18 @@ local function PopulateGeneralPanel(parent)
 	-- the state of this checkbox
 	local enbColor = form:MakeCheckBox({
 		label = "label_global_color_enable",
-		initial = GLAPP.ShouldUseGlobalFocusColor(),
+		initial = appearance.ShouldUseGlobalFocusColor(),
 		onChange = function(_, value)
-			GLAPP.SetUseGlobalFocusColor(value)
+			appearance.SetUseGlobalFocusColor(value)
 		end,
 		default = false
 	})
 
 	form:MakeColorMixer({
 		label = "label_global_color",
-		initial = GLAPP.GetFocusColor(),
+		initial = appearance.GetFocusColor(),
 		onChange = function(_, color)
-			GLAPP.SetFocusColor(color)
+			appearance.SetFocusColor(color)
 		end,
 		master = enbColor
 	})
@@ -37,11 +37,11 @@ local function PopulateGeneralPanel(parent)
 		min = 0.1,
 		max = 3,
 		decimal = 1,
-		initial = GLAPP.GetGlobalScale(),
+		initial = appearance.GetGlobalScale(),
 		onChange = function(_, value)
-			GLAPP.SetGlobalScale(value)
+			appearance.SetGlobalScale(value)
 		end,
-		default = GLAPP.GetDefaultGlobalScale()
+		default = appearance.GetDefaultGlobalScale()
 	})
 end
 
@@ -131,7 +131,7 @@ local function PopulateHUDSwitcherPanel(parent)
 	PopulateHUDSwitcherPanelSettings(CreateForm(parent, "header_hud_customize"), currentHUD)
 
 	-- REGISTER UNHIDE FUNCTION TO STOP HUD EDITOR
-	VHDL.RegisterCallback("unhide", function(menu)
+	vguihandler.RegisterCallback("unhide", function(menu)
 		HUDEditor.StopEditHUD()
 	end)
 end
@@ -141,7 +141,7 @@ hook.Add("TTT2HUDUpdated", "UpdateHUDSwitcherData", function(name)
 
 	-- rebuild the content area so that data is refreshed
 	-- based on the newly selected HUD
-	VHDL.Rebuild()
+	vguihandler.Rebuild()
 end)
 
 local function PopulateVSkinPanel(parent)
@@ -153,19 +153,19 @@ local function PopulateVSkinPanel(parent)
 
 	form:MakeComboBox({
 		label = "label_vskin_select",
-		choices = VSKIN.GetVSkinList(),
-		selectName = VSKIN.GetVSkinName(),
+		choices = vskin.GetVSkinList(),
+		selectName = vskin.GetVSkinName(),
 		onChange = function(_, _, value)
-			VSKIN.SelectVSkin(value)
+			vskin.SelectVSkin(value)
 		end,
-		default = VSKIN.GetDefaultVSkinName()
+		default = vskin.GetDefaultVSkinName()
 	})
 
 	form:MakeCheckBox({
 		label = "label_blur_enable",
-		initial = VSKIN.ShouldBlurBackground(),
+		initial = vskin.ShouldBlurBackground(),
 		onChange = function(_, value)
-			VSKIN.SetBlurBackground(value)
+			vskin.SetBlurBackground(value)
 		end,
 		default = true
 	})
@@ -502,11 +502,11 @@ HELPSCRN.subPopulate["ttt2_appearance"] = function(helpData, id)
 
 			HUDEditor.EditHUD(currentHUDName)
 
-			VHDL.HideFrame()
+			vguihandler.HideFrame()
 		end
 	end)
 
-	-- VSKIN
+	-- vskin
 	local vskinData = helpData:PopulateSubMenu(id .. "_vskin")
 
 	vskinData:SetTitle("submenu_appearance_vskin_title")

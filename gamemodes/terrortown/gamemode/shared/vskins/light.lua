@@ -1,4 +1,4 @@
-VSKIN.RegisterVSkin("light_ttt2", {
+vskin.RegisterVSkin("light_ttt2", {
 	colors = {
 		background = Color(255, 255, 255, 255),
 		accent = Color(47, 137, 221, 255),

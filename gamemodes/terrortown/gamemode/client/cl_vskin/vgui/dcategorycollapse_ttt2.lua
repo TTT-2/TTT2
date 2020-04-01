@@ -13,7 +13,7 @@ AccessorFunc(PANEL, "m_pList", "List")
 function PANEL:Init()
 	self.Header = vgui.Create("DCategoryHeaderTTT2", self)
 	self.Header:Dock(TOP)
-	self.Header:SetSize(20, VSKIN.GetCollapsableHeight())
+	self.Header:SetSize(20, vskin.GetCollapsableHeight())
 
 	self:SetSize(16, 16)
 	self:SetExpanded(true)
@@ -164,12 +164,12 @@ function PANEL:PerformLayout()
 			self.OldHeight = self.Contents:GetTall()
 		end
 
-		self:SetTall(self.Header:GetTall() + VSKIN:GetBorderSize() + 2)
+		self:SetTall(self.Header:GetTall() + vskin:GetBorderSize() + 2)
 	end
 
 	-- Make sure the color of header text is set
 	self.Header:ApplySchemeSettings()
-	self.Header:SetSize(20, VSKIN.GetCollapsableHeight())
+	self.Header:SetSize(20, vskin.GetCollapsableHeight())
 
 	self:UpdateAltLines()
 end

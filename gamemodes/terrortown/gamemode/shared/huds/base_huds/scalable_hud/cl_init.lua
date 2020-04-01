@@ -55,7 +55,7 @@ function HUD:LoadData()
 	BaseClass.LoadData(self)
 
 	local elems = self:GetElements()
-	local scale = GLAPP.GetGlobalScale()
+	local scale = appearance.GetGlobalScale()
 
 	for i = 1, #elems do
 		local elemName = elems[i]
@@ -108,5 +108,5 @@ function HUD:Reset()
 
 	BaseClass.Reset(self)
 
-	self:ApplyScale(GLAPP.GetGlobalScale())
+	self:ApplyScale(appearance.GetGlobalScale())
 end

@@ -29,7 +29,7 @@ local function CreateEditOptions(x, y)
 
 	local editClose = menu:AddOption(LANG.GetTranslation("f1_settings_hudswitcher_button_close"))
 	editClose.OnMousePressed = function(slf, keyCode)
-		VHDL.UnhideFrame()
+		vguihandler.UnhideFrame()
 
 		menu:Remove()
 	end

@@ -10,7 +10,6 @@ TTTFiles = {
 	cl_equip = {file = "cl_equip.lua", on = "client"},
 	cl_eventpopup = {file = "cl_eventpopup.lua", on = "client"},
 	cl_fonts = {file = "cl_fonts.lua", on = "client"},
-	cl_glapp = {file = "cl_glapp.lua", on = "client"},
 	cl_help_data = {file = "cl_help_data.lua", on = "client"},
 	cl_help = {file = "cl_help.lua", on = "client"},
 	cl_hud_editor = {file = "cl_hud_editor.lua", on = "client"},
@@ -38,9 +37,7 @@ TTTFiles = {
 	cl_tradio = {file = "cl_tradio.lua", on = "client"},
 	cl_tips = {file = "cl_tips.lua", on = "client"},
 	cl_transfer = {file = "cl_transfer.lua", on = "client"},
-	cl_vhdl = {file = "cl_vhdl.lua", on = "client"},
 	cl_voice = {file = "cl_voice.lua", on = "client"},
-	cl_vskin = {file = "cl_vskin.lua", on = "client"},
 	cl_weapon_pickup = {file = "cl_weapon_pickup.lua", on = "client"},
 	cl_wepswitch = {file = "cl_wepswitch.lua", on = "client"},
 

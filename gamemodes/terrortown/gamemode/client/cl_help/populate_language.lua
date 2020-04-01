@@ -7,7 +7,7 @@ local function PopulateLanguagePanel(parent)
 		label = "label_language_set",
 		convar = "ttt_language",
 		onChange = function(slf, index, value, rawdata)
-			VHDL.UpdateVSkinSetting("language")
+			vguihandler.UpdateVSkinSetting("language")
 		end
 	})
 

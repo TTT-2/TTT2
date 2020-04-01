@@ -200,8 +200,8 @@ function GM:Initialize()
 	LANG.SetupFiles("lang/", true)
 
 	-- load skin files
-	VSKIN.SetupFiles("terrortown/gamemode/shared/vskins/")
-	VSKIN.SetupFiles("vskins/")
+	vskin.SetupFiles("terrortown/gamemode/shared/vskins/")
+	vskin.SetupFiles("vskins/")
 
 	ShopEditor.SetupShopEditorCVars()
 	ShopEditor.CreateShopDBs()

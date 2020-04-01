@@ -97,7 +97,7 @@ function PANEL:SetPadding(left, top, right, bottom)
 end
 
 function PANEL:UpdatePadding()
-	self:DockPadding(self.padding.left, VSKIN.GetHeaderHeight() + VSKIN.GetBorderSize() + self.padding.top, self.padding.right, self.padding.bottom)
+	self:DockPadding(self.padding.left, vskin.GetHeaderHeight() + vskin.GetBorderSize() + self.padding.top, self.padding.right, self.padding.bottom)
 end
 
 function PANEL:ShowCloseButton(bShow)
@@ -188,13 +188,13 @@ function PANEL:Think()
 
 	local screenX, screenY = self:LocalToScreen(0, 0)
 
-	if self.Hovered and self.m_bSizable and mousex > (screenX + self:GetWide() - 20) and mousey > (screenY + self:GetTall() - VSKIN.GetHeaderHeight()) then
+	if self.Hovered and self.m_bSizable and mousex > (screenX + self:GetWide() - 20) and mousey > (screenY + self:GetTall() - vskin.GetHeaderHeight()) then
 		self:SetCursor("sizenwse")
 
 		return
 	end
 
-	if self.Hovered and self:GetDraggable() and mousey < (screenY + VSKIN.GetHeaderHeight()) then
+	if self.Hovered and self:GetDraggable() and mousey < (screenY + vskin.GetHeaderHeight()) then
 		self:SetCursor("sizeall")
 
 		return
@@ -221,7 +221,7 @@ end
 function PANEL:OnMousePressed()
 	local screenX, screenY = self:LocalToScreen(0, 0)
 
-	if self.m_bSizable and gui.MouseX() > (screenX + self:GetWide() - 20) and gui.MouseY() > (screenY + self:GetTall() - VSKIN.GetHeaderHeight()) then
+	if self.m_bSizable and gui.MouseX() > (screenX + self:GetWide() - 20) and gui.MouseY() > (screenY + self:GetTall() - vskin.GetHeaderHeight()) then
 		self.Sizing = {
 			gui.MouseX() - self:GetWide(),
 			gui.MouseY() - self:GetTall()
@@ -232,7 +232,7 @@ function PANEL:OnMousePressed()
 		return
 	end
 
-	if self:GetDraggable() and gui.MouseY() < (screenY + VSKIN.GetHeaderHeight()) then
+	if self:GetDraggable() and gui.MouseY() < (screenY + vskin.GetHeaderHeight()) then
 		self.Dragging = {
 			gui.MouseX() - self.x,
 			gui.MouseY() - self.y
@@ -251,7 +251,7 @@ function PANEL:OnMouseReleased()
 end
 
 function PANEL:PerformLayout()
-	local size = VSKIN.GetHeaderHeight()
+	local size = vskin.GetHeaderHeight()
 
 	self.btnClose:SetPos(self:GetWide() - size, 0)
 	self.btnClose:SetSize(size, size)

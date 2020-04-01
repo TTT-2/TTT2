@@ -2,7 +2,7 @@
 -- A handler of the skin colors
 -- @author Mineotopia
 
-VSKIN = VSKIN or {}
+vskin = vskin or {}
 
 ---
 -- Sets up the skins by scanning through the given directory; has to be
@@ -10,7 +10,7 @@ VSKIN = VSKIN or {}
 -- @param string skin_path The path to search in
 -- @internal
 -- @realm shared
-function VSKIN.SetupFiles(skin_path)
+function vskin.SetupFiles(skin_path)
 	local file_paths = {}
 
 	local files = file.Find(skin_path .. "*.lua", "LUA")

@@ -102,9 +102,9 @@ end
 -- @hook
 -- @ream client
 function GM:TTT2ChangedResolution(oldScrW, oldScrH, scrW, scrH)
-	-- resolution has changed, update resolution in GLAPP
+	-- resolution has changed, update resolution in appearance
 	-- to handle dynamic resolution changes
-	GLAPP.UpdateResolution(scrW, scrH)
+	appearance.UpdateResolution(scrW, scrH)
 end
 
 -- Hide the standard HUD stuff

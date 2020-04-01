@@ -83,10 +83,10 @@ end
 function HELPSCRN:ShowMainMenu()
 	-- IF MENU ELEMENT DOES NOT ALREADY EXIST, CREATE IT
 	local frame
-	if self.nameMenuOpen and VHDL.IsOpen() then
-		frame = VHDL.ClearFrame(w, h, "help_title")
+	if self.nameMenuOpen and vguihandler.IsOpen() then
+		frame = vguihandler.ClearFrame(w, h, "help_title")
 	else
-		frame = VHDL.GenerateFrame(w, h, "help_title", true)
+		frame = vguihandler.GenerateFrame(w, h, "help_title", true)
 	end
 
 	-- INIT MAIN MENU SPECIFIC STUFF
@@ -194,10 +194,10 @@ end
 function HELPSCRN:ShowSubMenu(data)
 	-- IF MENU ELEMENT DOES NOT ALREADY EXIST, CREATE IT
 	local frame
-	if self.nameMenuOpen and VHDL.IsOpen() then
-		frame = VHDL.ClearFrame(w, h, data.title or data.id)
+	if self.nameMenuOpen and vguihandler.IsOpen() then
+		frame = vguihandler.ClearFrame(w, h, data.title or data.id)
 	else
-		frame = VHDL.GenerateFrame(w, h, data.title or data.id, true)
+		frame = vguihandler.GenerateFrame(w, h, data.title or data.id, true)
 	end
 
 	-- INIT SUB MENU SPECIFIC STUFF
@@ -213,7 +213,7 @@ function HELPSCRN:ShowSubMenu(data)
 
 	-- BUILD GENERAL BOX STRUCTURE
 	local navArea = vgui.Create("DNavPanelTTT2", frame)
-	navArea:SetSize(widthNav, heightNav - VSKIN.GetHeaderHeight() - VSKIN.GetBorderSize())
+	navArea:SetSize(widthNav, heightNav - vskin.GetHeaderHeight() - vskin.GetBorderSize())
 	navArea:SetPos(0, 0)
 	navArea:Dock(LEFT)
 
@@ -247,7 +247,7 @@ function HELPSCRN:ShowSubMenu(data)
 	navAreaScrollGrid:SetSpaceY(HELPSCRN.pad)
 
 	local contentArea = vgui.Create("DContentPanelTTT2", frame)
-	contentArea:SetSize(widthContent, heightContent - VSKIN.GetHeaderHeight() - VSKIN.GetBorderSize())
+	contentArea:SetSize(widthContent, heightContent - vskin.GetHeaderHeight() - vskin.GetBorderSize())
 	contentArea:SetPos(widthNav, 0)
 	contentArea:DockPadding(HELPSCRN.pad, HELPSCRN.pad, HELPSCRN.pad, HELPSCRN.pad)
 	contentArea:Dock(TOP)
@@ -294,7 +294,7 @@ function HELPSCRN:ShowSubMenu(data)
 	end
 
 	-- REGISTER REBUILD CALLBACK
-	VHDL.RegisterCallback("rebuild", function(menu)
+	vguihandler.RegisterCallback("rebuild", function(menu)
 		if HELPSCRN.nameMenuOpen == "main" then return end
 
 		HELPSCRN:BuildContentArea()
@@ -303,21 +303,21 @@ end
 
 local function ShowTTTHelp(ply, cmd, args)
 	-- F1 PRESSED: CLOSE MAIN MENU IF MENU IS ALREADY OPENED
-	if HELPSCRN.nameMenuOpen == "main" and VHDL.IsOpen() then
-		VHDL.CloseFrame()
+	if HELPSCRN.nameMenuOpen == "main" and vguihandler.IsOpen() then
+		vguihandler.CloseFrame()
 
 		return
 	end
 
 	-- F1 PRESSED AND MENU IS HIDDEN: UNHIDE
-	if HELPSCRN.nameMenuOpen and VHDL.IsHidden() then
-		VHDL.UnhideFrame()
+	if HELPSCRN.nameMenuOpen and vguihandler.IsHidden() then
+		vguihandler.UnhideFrame()
 
 		return
 	end
 
 	-- DO NOTHING IF OTHER MENU IS OPEN
-	if not HELPSCRN.nameMenuOpen and VHDL.IsOpen() then return end
+	if not HELPSCRN.nameMenuOpen and vguihandler.IsOpen() then return end
 
 	-- F1 PRESSED: CLOSE SUB MENU IF MENU IS ALREADY OPENED
 	-- AND OPEN MAIN MENU IN GENERAL

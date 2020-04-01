@@ -70,7 +70,7 @@ HUDManager.OnUpdateAttribute("restrictedHUDs", function()
 
 	-- rebuild the content area so that data is refreshed
 	-- based on the newly restricted HUDs
-	VHDL.Rebuild()
+	vguihandler.Rebuild()
 end)
 
 local function PopulateRandomShopPanel(parent)

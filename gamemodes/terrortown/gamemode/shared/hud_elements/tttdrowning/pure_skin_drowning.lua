@@ -41,7 +41,7 @@ if CLIENT then
 	end
 
 	function HUDELEMENT:PerformLayout()
-		local scale = GLAPP.GetGlobalScale()
+		local scale = appearance.GetGlobalScale()
 
 		self.basecolor = self:GetHUDBasecolor()
 		self.pad = pad * scale

@@ -223,8 +223,8 @@ function GM:SetupMove(ply, mv, cmd)
 
 	-- check if a resolution change happened while
 	-- the gamemode was inactive
-	oldScrW = GLAPP.GetLastWidth()
-	oldScrH = GLAPP.GetLastHeight()
+	oldScrW = appearance.GetLastWidth()
+	oldScrH = appearance.GetLastHeight()
 	scrW = ScrW()
 	scrH = ScrH()
 

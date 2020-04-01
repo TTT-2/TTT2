@@ -20,7 +20,7 @@ if CLIENT then
 	-- @realm client
 	-- @deprecated
 	function HUDELEMENT:GetHUDScale()
-		return GLAPP.GetGlobalScale()
+		return appearance.GetGlobalScale()
 	end
 
 	---
