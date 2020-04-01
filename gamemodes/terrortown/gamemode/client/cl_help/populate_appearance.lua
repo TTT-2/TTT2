@@ -72,14 +72,33 @@ local function PopulateHUDSwitcherPanelSettings(parent, currentHUD)
 		elseif data.typ == "number" then
 			parent:MakeSlider({
 				label = data.desc or key,
-				min = 0.1,
-				max = 4,
-				decimal = 1,
+				min = data.min or 0.1,
+				max = data.max or 4,
+				decimal = data.decimal or 1,
 				initial = math.Round(currentHUD[key] or 1, 1),
+				default = data.default,
 				onChange = function(_, value)
 					value = math.Round(value, 1)
 
 					if value ~= math.Round(currentHUD[key], 1) then
+						if isfunction(data.OnChange) then
+							data.OnChange(currentHUD, value)
+						end
+
+						currentHUD[key] = value
+					end
+				end
+			})
+
+		elseif data.typ == "boolean" then
+			parent:MakeCheckBox({
+				label = data.desc or key,
+				initial = math.Round(currentHUD[key] or 1, 1),
+				default = data.default,
+				onChange = function(_, value)
+					value = value or false
+
+					if value ~= currentHUD[key] then
 						if isfunction(data.OnChange) then
 							data.OnChange(currentHUD, value)
 						end
