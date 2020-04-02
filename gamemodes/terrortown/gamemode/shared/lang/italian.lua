@@ -4,7 +4,7 @@
 -- Stinghe in italiano
 -- Italian language strings
 
-local L = LANG.CreateLanguage("Italian")
+local L = LANG.CreateLanguage("Italiano")
 
 -- Testo generale usato in varie posizioni
 -- General text used in various places
