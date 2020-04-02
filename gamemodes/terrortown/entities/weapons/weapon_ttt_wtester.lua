@@ -92,6 +92,7 @@ local beep_success = Sound("buttons/blip2.wav")
 local beep_match = Sound("buttons/blip1.wav")
 local beep_miss = Sound("player/suit_denydevice.wav")
 local dna_icon = Material("vgui/ttt/dnascanner/dna_hud")
+local dna_screen_background = Material("models/ttt2_dna_scanner/screen/background")
 local dna_screen_success = Material("models/ttt2_dna_scanner/screen/check")
 local dna_screen_fail = Material("models/ttt2_dna_scanner/screen/fail")
 local dna_screen_arrow = Material("models/ttt2_dna_scanner/screen/arrow")
@@ -394,6 +395,9 @@ if SERVER then
 	end
 else
 	local TryT = LANG.TryTranslation
+	local screen_bgcolor = Color(220, 220, 220, 255)
+	--local screen_fontcolor = Color(50, 50, 50, 255)
+	local screen_fontcolor = Color(144, 210, 235, 255)
 
 	local function DrawTexturedRectRotatedPoint( x, y, w, h, rot, x0, y0 )
 		local c = math.cos( math.rad( rot ) )
@@ -411,9 +415,17 @@ else
 
 		-- Draw to the render target
 		render.PushRenderTarget( self.scannerScreenTex )
-		render.Clear(220, 220, 220, 255, true, true)
+		render.Clear(screen_bgcolor.r, screen_bgcolor.g, screen_bgcolor.b, screen_bgcolor.a, true, true)
 
 		cam.Start2D()
+
+		--draw background
+		draw.FilteredTexture(0, 0, 512, 512, dna_screen_background, 255, COLOR_WHITE)
+
+		--draw current slot
+		local identifier = string.char(64 + self.ActiveSample)
+
+		draw.AdvancedText(identifier, "DNAScannerDistanceFont", 65, 64, screen_fontcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER , false, 1.75)
 
 		if showFeedback then
 			if IsValid(target) and IsValid(self:GetOwner()) then
@@ -424,28 +436,23 @@ else
 				local arrowRotation = angleToPos.yaw - EyeAngles().yaw
 				local distance = math.max(LocalPlayer():GetPos():Distance(targetPos) - 47, 0)
 
-				surface.SetDrawColor( 236, 174, 23, 255 )
+				surface.SetDrawColor( 96, 255, 96 , 255)
 				surface.SetMaterial( dna_screen_arrow )
-				DrawTexturedRectRotatedPoint( 256, 256, 190, 190, arrowRotation, 0, -170 )
-				draw.AdvancedText( math.Round(distance), "DNAScannerDistanceFont", 256, 256, Color(50, 50, 50), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER , false, 3)
+				DrawTexturedRectRotatedPoint( 256, 256, 120, 120, arrowRotation, 0, -130 )
 
-				surface.SetDrawColor( 50, 50, 50, 255 )
-				surface.SetMaterial( dna_screen_circle )
-				surface.DrawTexturedRect( 116, 116, 276, 276)
+				draw.AdvancedText(math.Round(distance), "DNAScannerDistanceFont", 256, 256, screen_fontcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER , false, 2.25)
+
+				draw.FilteredTexture(146, 146, 220, 220, dna_screen_circle, 255, screen_fontcolor)
 			else
-				draw.AdvancedText(TryT("dna_screen_ready"), "DNAScannerDistanceFont", 256, 256, Color(50, 50, 50), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER , false, 3)
+				draw.AdvancedText(TryT("dna_screen_ready"), "DNAScannerDistanceFont", 256, 256, screen_fontcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER , false, 2.5)
 			end
 		else
 			if self.ScanSuccess == 1 then
-				surface.SetDrawColor( 50, 50, 50, 255 )
-				surface.SetMaterial( dna_screen_success )
-				surface.DrawTexturedRect( 192, 192, 128, 128 )
+				draw.FilteredTexture(192, 192, 128, 128, dna_screen_success, 255, screen_fontcolor)
 			elseif self.ScanSuccess == 2 then
-				draw.AdvancedText(TryT("dna_screen_match"), "DNAScannerDistanceFont", 256, 256, Color(50, 50, 50), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER , false, 3)
+				draw.AdvancedText(TryT("dna_screen_match"), "DNAScannerDistanceFont", 256, 256, screen_fontcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER , false, 2.5)
 			else
-				surface.SetDrawColor( 50, 50, 50, 255 )
-				surface.SetMaterial( dna_screen_fail )
-				surface.DrawTexturedRect( 192, 192, 128, 128)
+				draw.FilteredTexture(192, 192, 128, 128, dna_screen_fail, 255, screen_fontcolor)
 			end
 		end
 
