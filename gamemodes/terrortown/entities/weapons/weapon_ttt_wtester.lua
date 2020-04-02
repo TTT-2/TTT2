@@ -99,19 +99,6 @@ local dna_screen_arrow = Material("models/ttt2_dna_scanner/screen/arrow")
 local dna_screen_circle = Material("models/ttt2_dna_scanner/screen/circle")
 
 function SWEP:Initialize()
-
-	--debug stuff
-	local plys = player.GetAll()
-	for i = 1, #plys do
-		local ply = plys[i]
-		if SERVER then
-			self.ItemSamples[i] = ply
-			self.CachedTargets[i] = self:GetScanTarget(ply)
-		else
-			self.ItemSamples[i] = ply
-		end
-	end
-
 	if CLIENT then
 		self:AddHUDHelp("dna_help_primary", "dna_help_secondary", true)
 
