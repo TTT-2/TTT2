@@ -8,9 +8,9 @@ local L = LANG.CreateLanguage("Italian")
 
 -- Testo generale usato in varie posizioni
 -- General text used in various places
-L.traditore = "Traditore"
+L.traitor = "Traditore"
 L.detective = "Detective"
-L.innocente = "Innocente"
+L.innocent = "Innocente"
 L.last_words = "Ultime parole"
 
 L.terrorists = "Terroristi"
@@ -30,16 +30,8 @@ L.ttt2_desc_detective = "Sei un Innocente! Aiuta gli Innocenti a sopravvivere o 
 -- Messaggi per lo stato del round
 -- Round status messages
 L.round_minplayers = "Non ci sono abbastanza giocatore per cominciare un nuovo round..."
-if num == 1 then
-	L.round_voting = "Voto in corso, prolungando il round di {num} secondo..."
-else
-	L.round_voting = "Voto in corso, prolungando il round di {num} secondi..."
-end
-if num == 1 then
-	L.round_begintime = "Un nuovo round inizia tra {num} secondo. Preparatevi."
-else
-	L.round_begintime = "Un nuovo round inizia tra {num} secondi. Preparatevi."
-end
+L.round_voting = "Voto in corso, prolungando il round di {num} secondi..."
+L.round_begintime = "Un nuovo round inizia tra {num} secondo/i. Preparatevi."
 L.round_selected = "I traditori sono stati scelti."
 L.round_started = "Il round è iniziato!"
 L.round_restart = "È stato forzato il riavvio del round da un admin."
@@ -51,29 +43,17 @@ L.win_time = "Il tempo è finito. I Traditori hanno perso."
 L.win_traitors = "I Traditori hanno vinto!"
 L.win_innocents = "Gli Innocenti hanno vinto!"
 L.win_bees = "Pareggio!"
-if num == 1 then
-	L.win_showreport = "Guardiamo al report per {num} secondo."
-else
-	L.win_showreport = "Guardiamo al report per {num} secondi."
-end
+L.win_showreport = "Guardiamo il report per {num} secondi."
 
 L.limit_round = "Raggiunto il limite del tempo del round. {mapname} caricherà presto."
 L.limit_time = "Il tempo è finito. {mapname} caricherà presto."
-if time == 1 then
-	L.limit_left = "{num} round o {time} minuto rimanente prima che la mappa cambi in {mapname}."
-else
-	L.limit_left = "{num} round o {time} minuti rimanenti prima che la mappa cambi in {mapname}."
-end
+L.limit_left = "{num} round o {time} minuti rimanenti prima che la mappa cambi in {mapname}."
 
 -- Ricompense crediti
 -- Credit awards
 L.credit_all = "Al tuo team sono stati dati {num} crediti per la vostra performance."
 
-if num == 1 then
-	L.credit_kill = "Hai ricevuto {num} credito per aver ucciso un {role}."
-else
-	L.credit_kill = "Hai ricevuto {num} crediti per aver ucciso un {role}."
-end
+L.credit_kill = "Hai ricevuto {num} credito/i per aver ucciso un {role}."
 
 -- Karma
 L.karma_dmg_full = "Il tuo Karma è {amount}, quindi questo round fai il massimo del danno!"
@@ -96,11 +76,7 @@ L.body_call = "{player} ha chiamato un detective al corpo di {victim}!"
 L.body_call_error = "Devi confermare la morte di questo giocatore prima di chiamare un Detective!"
 
 L.body_burning = "Ahia! Questo corpo va a fuoco!"
-if num == 1 then
-	L.body_credits = "Hai trovato {num} credito sul corpo!"
-else
-	L.body_credits = "Hai trovato {num} crediti sul corpo!"
-end
+L.body_credits = "Hai trovato {num} credito/i sul corpo!"
 
 --- Menù e finestre
 -- Menus and windows
@@ -118,11 +94,7 @@ L.equip_title = "Equipaggiamento"
 L.equip_tabtitle = "Ordina Equipaggiamento"
 
 L.equip_status = "Stato ordinamento"
-if num == 1 then
-	L.equip_cost = "Hai {num} credito."
-else
-	L.equip_cost = "Hai {num} crediti."
-end
+L.equip_cost = "Hai {num} credito/i."
 L.equip_help_cost = "Ogni oggetto dell'equipaggiamento che acquisti costa 1 credito."
 
 L.equip_help_carry = "Puoi solo acquistare oggetti per i quali hai spazio."
@@ -555,11 +527,7 @@ L.dna_decayed = "Campione di DNA dell'assassino si è deteriorato."
 L.dna_killer = "Preso un campione di DNA dell'assassino dal cadavere!"
 L.dna_no_killer = "Il DNA non può essere preso (assassino disconnesso?)."
 L.dna_armed = "La bomba è innescata! Disinnescala prima!"
-if num == 1 then
-	L.dna_object = "Preso {num} nuovo campione di DNA dall'oggetto."
-else
-	L.dna_object = "Presi {num} nuovi campioni di DNA dall'oggetto."
-end
+L.dna_object = "Preso {num} nuovo campione di DNA dall'oggetto."
 L.dna_gone = "DNA non rilevato nella zona."
 
 L.dna_desc = [[
@@ -937,11 +905,7 @@ L.ev_c4_plant = "{player} ha piazzato un C4"
 L.ev_c4_boom = "Il C4 piazzato da {player} è esploso"
 L.ev_c4_disarm1 = "{player} ha disinnescato il C4 piazzato da {owner}"
 L.ev_c4_disarm2 = "{player} non è riuscito a disarmare il C4 piazzato da {owner}"
-if num == 1 then
-	L.ev_credit = "{finder} ha trovato {num} credito sul cadavere di {player}"
-else
-	L.ev_credit = "{finder} ha trovato {num} crediti sul cadavere di {player}"
-end
+L.ev_credit = "{finder} ha trovato {num} credito/i sul cadavere di {player}"
 
 L.ev_start = "Il round è cominciato"
 L.ev_win_traitors = "Gli ignobili traditori hanno vinto il round!"
