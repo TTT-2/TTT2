@@ -125,6 +125,7 @@ if SERVER then
 	resource.AddFile("materials/models/ttt2_dna_scanner/camera.vmt")
 	resource.AddFile("materials/models/ttt2_dna_scanner/screen.vmt")
 	resource.AddFile("materials/models/ttt2_dna_scanner/screen/arrow.vmt")
+	resource.AddFile("materials/models/ttt2_dna_scanner/screen/background.vmt")
 	resource.AddFile("materials/models/ttt2_dna_scanner/screen/check.vmt")
 	resource.AddFile("materials/models/ttt2_dna_scanner/screen/circle.vmt")
 	resource.AddFile("materials/models/ttt2_dna_scanner/screen/fail.vmt")
