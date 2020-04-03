@@ -33,8 +33,9 @@ L.round_traitors_one  = "Zdrajco, pracujesz sam"
 L.round_traitors_more = "Zdrajco, to są twoi sojusznicy: {names}"
 
 L.win_time         = "Czas minął. Zdrajcy przegrali."
-L.win_traitor      = "Zdrajcy wygrali!"
-L.win_innocent     = "Zdrajcy zostali pokonani!"
+L.win_traitors     = "Zdrajcy wygrali!"
+L.win_innocents    = "Zdrajcy zostali pokonani!"
+L.win_bees         = "Wygrały pszczoły! (To oznacza remis)"
 L.win_showreport   = "Spójrzmy na raport rundy na {num} sekund."
 
 L.limit_round      = "Limit rund osiągnięty. {mapname} wkrótce się załaduje."
@@ -55,9 +56,9 @@ L.body_found       = "{finder} znalazł ciało {victim}. {role}"
 L.body_found_team = "{finder} znalazł ciało {victim}. {role} ({team})"
 
 -- The {role} in body_found will be replaced by one of the following:
-L.body_found_t     = "On był zdrajcą!"
-L.body_found_d     = "On był detektywem."
-L.body_found_i     = "On był niewinny."
+L.body_found_traitor      = "On był zdrajcą!"
+L.body_found_det    = "On był detektywem."
+L.body_found_inno    = "On był niewinny."
 
 L.body_confirm     = "{finder} potwierdził śmierć {victim}."
 

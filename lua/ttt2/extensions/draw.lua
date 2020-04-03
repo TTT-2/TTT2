@@ -1,3 +1,5 @@
+if engine.ActiveGamemode() ~= "terrortown" then return end
+
 ---
 -- draw extension functions
 -- @author Mineotopia
