@@ -650,6 +650,21 @@ function CreateChanges()
 		</ul>
 	]], os.time({year = 2020, month = 03, day = 5}))
 
+	AddChange("TTT2 Base - v0.6.4b", [[
+		<h2>New:</h2>
+		<ul>
+			<li>Added an Italian translation (Thanks @PinoMartirio)</li>
+		</ul>
+		<br>
+		<h2>Fixed:</h2>
+		<ul>
+			<li>Fixed a rare bug where the player had the default GMod sprint on top of the TTT2 sprint</li>
+			<li>Fixed some convars that did not save in ulx by removing them all from the gamemode file</li>
+			<li>Fixed a bug that happened when TTT2 is installed but not the active gamemode</li>
+			<li>Fixed a few Polish language strings</li>
+		</ul>
+	]], os.time({year = 2020, month = 04, day = 3}))
+
 	-- run hook for other addons to add their changelog as well
 	hook.Run("TTT2AddChange", changes, currentVersion)
 end
