@@ -13,7 +13,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## v0.6.3b (2020-03-05)
 
-### New
+### Added
 
 - Added a Polish translation (Thanks @Wukerr)
 - Added fallback icons for equipment
@@ -37,7 +37,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## v0.6.b (2020-02-16)
 
-### New
+### Added
 
 - Added new weapon switch system
   - Players can now manually pick up focused weapons
@@ -65,7 +65,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added a new language file system for addons, language files have to be in `lua/lang/<the_language>/<addon>.lua`
 - New network data system including network data tables to better manage state updates on different clients
 
-### Improved
+### Changed
 
 - Microoptimization to improve code performance
 - Improved the icon rendering for the pure_skin HUD
@@ -99,7 +99,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## v0.5.7b (2019-10-07)
 
-### New
+### Added
 
 - New loadout Give/Remove functions to cleanup role code and fix item race conditions
   - Roles now always get their equipment on time
@@ -113,7 +113,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Armor depletes over time
 - Allowed items to be bought multiple times, if .limited is set to false
 
-### Improved
+### Changed
 
 - Dynamic loading of role icons
 - Improved performance slightly
@@ -143,14 +143,14 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## v0.5.6b (2019-09-03)
 
-### New
+### Added
 
 - Marks module
 - New sprint and stamina hooks for add-ons
 - Added a documentation of TTT2
 - Added GetColumns function for the scoreboard
 
-### Improved
+### Changed
 
 - Restrict HUD element movement when element is not rendered
 - Sidebar icons now turn black if the hudcolor is too bright
@@ -181,7 +181,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## v0.5.5b (2019-07-07)
 
-### New
+### Added
 
 - Added convars to hide scoreboard badges
 - A small text that explains the spectator mode
@@ -189,7 +189,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Weapon pickup notifications support now pure_skin
 - New shadowed text rendering with font mipmapping
 
-### Improved
+### Changed
 
 - Refactored the code to move all language strings into the language files
 
@@ -202,14 +202,14 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## v0.5.4b (2019-06-18)
 
-### New
+### Added
 
 - Added a noTeam indicator to the HUD
 - intriduced a new drowned death symbol
 - `ttt2_crowbar_shove_delay` is now used to set the crowbar attack delay
 - introduced a status system alongside the perk system
 
-### Improved
+### Changed
 
 - Included LeBroomer in the TTT2 logo
 
@@ -221,14 +221,14 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## v0.5.3b (2019-05-09)
 
-### New
+### Added
 
 - Added a **Reroll System** for the **Random Shop**
 - Rerolls can be done in the Traitor Shop similar to the credit transferring
 - Various parameters in the **ShopEditor** are possible (reroll, cost, reroll per buy)
 - Added the reroll possibility for the **Team Random Shop** (very funny)
 
-### Improved
+### Changed
 
 - Added a separate slot for class items
 - Added help text to the **"Not Alive"-Shop**
@@ -240,7 +240,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## v0.5.2b (2019-04-32)
 
-### New
+### Added
 
 - Added spectator indicator in the Miniscoreboard
 - Added icons with higher resolution (native 512x512)
@@ -248,7 +248,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added HUD documentation
 - Added some more hooks to modify TTT2 externally
 
-### Improved
+### Changed
 
 - Improved the project structure / **Code refactoring**
 - Improved HUD sidebar of items / perks
@@ -276,7 +276,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## v0.5.1b (2019-03-05)
 
-### Improved
+### Changed
 
 - Improved the binding library and extended the functions
 
@@ -294,7 +294,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## v0.5.0b (2019-03-03)
 
-### New
+### Added
 
 - Added new **HUD** system
   - Added **HUDSwitcher** (`F1 → Settings → HUDSwitcher`)
@@ -350,165 +350,3 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed shop item information not readable when the panel is too small -> added a scrollbar
 - Fixed shop item being displayed as unbuyable when the items price is set to 0 credits
 - Other small bugfixes
-
-## v0.4.0b
-
-- ShopEditor
-  - added `.notBuyable` param to hide item in the shops
-  - added `.globalLimited` and `.teamLimited` params to limit equipment
-
-- added **new shop** (by tkindanight)
-  - you can toggle the shop everytime (your role doesn't matter)
-  - the shop will update in real time
-
-- added new icons
-- added warming up for **randomness** to make things happen... yea... random
-- added auto-converter for old items
-
-- decreased speed modification lags
-- improved performance
-- implemented **new item system!** TTT2 now supports more than 16 passive items!
-- huge amount of fixes
-
-## v0.3.9b
-
-- reimplemented all these nice unaccepted PullRequest for TTT on GitHub:
-
-  - **Custom Crosshairs** (`F1 → Settings`): [gmod-PR](https://github.com/Facepunch/garrysmod/pull/1376/) by nubpro
-  - Performance improvements with the help of [gmod-PR](https://github.com/Facepunch/garrysmod/pull/1287) by markusmarkusz and Alf21
-
-- added possibility to use **random shops!** (`ShopEditor → Options`)
-- balanced karma system (Roles that are aware of their teammates can't earn karma anymore. This will lower teamkilling)
-
-## v0.3.8.3b
-
-- ammoboxes will store the correct amount of ammo now
-- connected **radio commands** with **scoreboard #tagging** [ref](https://github.com/Exho1/TTT-ScoreboardTagging/blob/master/lua/client/ttt_scoreboardradiocmd.lua)
-
-## v0.3.8.2b
-
-- added **russian translation** (by Satton2)
-- added `.minPlayers` indicator for the shop
-
-- replaced `.globalLimited` param with `.limited` param to toggle whether an item is just one time per round buyable for each player
-
-## v0.3.8.1b
-
-- fixed credit issue in ShopEditor (all Data will load and save correct now)
-- fixed item credits and minPlayers issue
-- fixed radar, disguiser and armor issue in ItemEditor
-- fixed shop syncing issue with ShopEditor
-
-- small performance improvements
-- cleaned up some useless functions
-- removed `ALL_WEAPONS` table (SWEP will cache the initialized data now in it's own table / entity data)
-- some function renaming
-
-## v0.3.8b
-
-- added new TTT2 Logo
-- added ShopEditor missing icons (by Mineotopia)
-
-- **reworked weaponshop → ShopEditor**
-- changed file based shopsystem into sql
-
-## v0.3.7.4b
-
-- fixed playermodel reset bug (+ compatibility with PointShop 1)
-- fixed external HUD support
-- fixed credits bug
-- fixed detective hat bug
-- fixed selection and jester selection bug
-
-## v0.3.7.3b
-
-- reworked the **selection system** (balancing and bugfixes)
-
-- fixed playermodel issue
-- fixed toggling role issue
-- fixed loadout doubling issue
-
-## v0.3.7.2b
-
-- reworked the **credit system** (Thanks to Nick!)
-- added possibility to override the init.lua and cl_init.lua file in TTT2
-
-- fixed server errors in combination with TTT Totem (now, TTT2 will just not work)
-- fixed ragdoll collision server crash (issue is still in the normal TTT)
-
-## v0.3.7.1b
-
-- added possibility to disable roundend if a player is reviving
-- added own Item Info functions
-- added debugging function
-- added TEAM param `.alone`
-- added possibility to set the cost (credits) for any equipment
-- added `Player:RemoveEquipmentItem(id)` and `Player:RemoveItem(id)` / `Player:RemoveBought(id)`
-- added possibility to change velocity with hook `TTT2ModifyRagdollVelocity`
-
-- improved external icon addon support
-- improved binding system
-
-- fixed loadout bug
-- fixed loadout item reset bug
-- fixed respawn loadout issue
-- fixed bug that items were removed on changing the role
-- fixed search icon display issue
-- fixed model reset bug on changing role
-- fixed `Player:GiveItem(...)` bug used on round start
-- fixed dete glasses bug
-- fixed rare corpse bug
-- fixed Disguiser
-- Some more small fixes
-
-## v0.3.7b
-
-- added hook `TTT2ToggleRole`
-- added `GetActiveRoles()`
-
-- fixed TTT spec label issue
-
-- renamed hook `TTT_UseCustomPlayerModels` into `TTTUseCustomPlayerModels`
-- removed `Player:SetSubRole()` and `Player:SetBaseRole()`
-
-## v0.3.6b
-
-- new **networking system**
-
-- added **gs_crazyphysics detector**
-- added RoleVote support
-- added new multilayed icons (+ multilayer system)
-- added credits
-- added changes window
-- added **detection for registered incompatible add-ons**
-- added autoslay support
-
-- karma system improvement
-- huge amount of bugfixes
-
-## v0.3.5.8b
-
-- **selection system update**
-
-- added different ConVars
-- added possibility to force a role in the next roleselection
-
-- bugfixes
-
-## v0.3.5.7b
-
-- **code optimization**
-
-- added different CVars
-
-- fixed loadout and model issue on changing the role
-- bugfixes
-
-- removed `PLAYER:UpdateRole()` function and hook `TTT2RoleTypeSet`
-
-## v0.3.5.6b
-
-- **many fixes**
-- enabled picking up grenades in prep time
-- roundend scoreboard fix
-- disabled useless prints that have spammed the console
