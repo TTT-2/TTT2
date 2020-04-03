@@ -1161,8 +1161,8 @@ local function ActualWeaponPickup(ply, wep, kind, shouldAutoSelect)
 	-- initial teleport the weapon to the player pos
 	SetWeaponPos(ply, wep, kind)
 
-	wep.name_timer_pos = kind .. "_WeaponPickupRandomPos_" .. ply:SteamID64()
-	wep.name_timer_cancel = kind .. "_WeaponPickupCancel_" .. ply:SteamID64()
+	wep.name_timer_pos = kind .. "_WeaponPickupRandomPos_" .. (ply:SteamID64() or "singleplayerID")
+	wep.name_timer_cancel = kind .. "_WeaponPickupCancel_" .. (ply:SteamID64() or "singleplayerID")
 
 	-- update the weapon pos
 	timer.Create(wep.name_timer_pos, 0.2, 1, function()
@@ -1259,7 +1259,7 @@ function plymeta:PickupWeapon(wep, dropBlockingWeapon, shouldAutoSelect)
 	-- prevent race conditions
 	self.wpickup_waitequip[kind] = true
 
-	timer.Create(kind .. "_WeaponPickup_" .. self:SteamID64(), 0, 1, function()
+	timer.Create(kind .. "_WeaponPickup_" .. (self:SteamID64() or "singleplayerID"), 0, 1, function()
 		ActualWeaponPickup(self, wep, kind, shouldAutoSelect)
 	end)
 
