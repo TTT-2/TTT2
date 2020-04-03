@@ -238,7 +238,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Fixed critical crash issue (ty to @nick)
 
-## [v0.5.2b](https://github.com/TTT-2/TTT2/tree/v0.5.2b) (2019-04-32)
+## v0.5.2b (2019-04-32)
 
 ### Added
 
