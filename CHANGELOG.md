@@ -4,6 +4,12 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+## [v0.6.4b](https://github.com/TTT-2/TTT2/tree/v0.6.4b) (2020-04-03)
+
+### Added
+
+- Added Italian translation (thanks @PinoMartirio)
+
 ### Fixed
 
 - Fixed TTT2 files running when the gamemode is not `terrortown`
