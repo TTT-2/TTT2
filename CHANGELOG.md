@@ -11,7 +11,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed Polish translation
 - Fixed convar saving by removing terrortown settings
 
-## v0.6.3b (2020-03-05)
+## [v0.6.3b](https://github.com/TTT-2/TTT2/tree/v0.6.3b) (2020-03-05)
 
 ### Added
 
@@ -23,19 +23,19 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fix `body_found` for bots
 - Fix NWVarSyncing when using `TTT2NET:Set()`
 
-## v0.6.2b (2020-03-01)
+## [v0.6.2b](https://github.com/TTT-2/TTT2/tree/v0.6.2b) (2020-03-01)
 
 ### Fixed
 
 - Increased the maximum number of roles that can be used. (Fixes weird role issues with many roles installed)
 
-## v0.6.1b (2020-02-17)
+## [v0.6.1b](https://github.com/TTT-2/TTT2/tree/v0.6.1b) (2020-02-17)
 
 ### Fixed
 
 - Fixed a bug with the spawn wave interval
 
-## v0.6.b (2020-02-16)
+## [v0.6b](https://github.com/TTT-2/TTT2/tree/v0.6b) (2020-02-16)
 
 ### Added
 
@@ -97,7 +97,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fix voice still sending after death
 - Fix persisting the reset of a bind
 
-## v0.5.7b (2019-10-07)
+## [v0.5.7b](https://github.com/TTT-2/TTT2/tree/0.5.7b) (2019-10-07)
 
 ### Added
 
@@ -133,7 +133,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Reset radar timer on item remove, fixes problems with role changes
 - Fixed an exploitable vulnerability
 
-## v0.5.6b-h1 (2019-09-06)
+## [v0.5.6b-h1](https://github.com/TTT-2/TTT2/tree/0.5.6b-h1) (2019-09-06)
 
 ### Fixed
 
@@ -141,7 +141,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - ShopEditor bugs and added a response for non-admins
 - Glitching head icons
 
-## v0.5.6b (2019-09-03)
+## [v0.5.6b](https://github.com/TTT-2/TTT2/tree/0.5.6b) (2019-09-03)
 
 ### Added
 
@@ -179,7 +179,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed an error in the shadow rendering of a font
 - Small bugfixes
 
-## v0.5.5b (2019-07-07)
+## [v0.5.5b](https://github.com/TTT-2/TTT2/tree/0.5.5b) (2019-07-07)
 
 ### Added
 
@@ -200,7 +200,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed the outline border of the sidebar beeing wrong
 - Fixed problem with the element restriction
 
-## v0.5.4b (2019-06-18)
+## [v0.5.4b](https://github.com/TTT-2/TTT2/tree/v0.5.4b) (2019-06-18)
 
 ### Added
 
@@ -219,7 +219,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed the team indicator when in spectator mode
 - Credits now can be transfered to everyone, this fixes a bug with the spy
 
-## v0.5.3b (2019-05-09)
+## [v0.5.3b](https://github.com/TTT-2/TTT2/tree/0.5.3b) (2019-05-09)
 
 ### Added
 
@@ -238,7 +238,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Fixed critical crash issue (ty to @nick)
 
-## v0.5.2b (2019-04-32)
+## [v0.5.2b](https://github.com/TTT-2/TTT2/tree/v0.5.2b) (2019-04-32)
 
 ### Added
 
@@ -274,7 +274,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed spectator bug with Roundtime and Haste Mode
 - Fixed many small HUD bugs
 
-## v0.5.1b (2019-03-05)
+## [v0.5.1b](https://github.com/TTT-2/TTT2/tree/v0.5.1b) (2019-03-05)
 
 ### Changed
 
@@ -292,7 +292,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed render order
 - Fixed "player has no SteamID64" bug
 
-## v0.5.0b (2019-03-03)
+## [v0.5b](https://github.com/TTT-2/TTT2/tree/v0.5b) (2019-03-03)
 
 ### Added
 
