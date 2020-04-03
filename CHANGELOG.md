@@ -6,6 +6,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Fixed
 
+- Fixed TTT2 files running when the gamemode is not `terrortown`
+- Fixed double sprinting issues
 - Fixed Polish translation
 - Fixed convar saving by removing terrortown settings
 
