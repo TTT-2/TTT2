@@ -102,8 +102,6 @@ L.equip_spec_desc = "Description"
 
 L.equip_confirm = "Buy equipment"
 
-L.equip_not_alive = "You can view all available items by selecting a role on the right. Don't forget to mark your favorites!"
-
 -- Disguiser tab in equipment menu
 L.disg_name = "Disguiser"
 L.disg_menutitle = "Disguise control"
@@ -133,13 +131,6 @@ L.xfer_no_recip = "Recipient not valid, credit transfer aborted."
 L.xfer_no_credits = "Insufficient credits for transfer."
 L.xfer_success = "Credit transfer to {player} completed."
 L.xfer_received = "{player} has given you {num} credit."
-
--- Reroll tab in equipment menu
-L.reroll_name = "Reroll"
-L.reroll_menutitle = "Reroll Items"
-L.reroll_no_credits = "You need {amount} credits to reroll!"
-L.reroll_button = "Reroll"
-L.reroll_help = "Use {amount} credits to get new items in your shop!"
 
 -- Radio tab in equipment menu
 L.radio_name = "Radio"
@@ -176,9 +167,6 @@ L.quick_suspect = "{player} acts suspicious."
 L.quick_traitor = "{player} is a Traitor!"
 L.quick_inno = "{player} is innocent."
 L.quick_check = "Anyone still alive?"
-
-L.radio_pickup_wrong_team = "You can't pick up the radio from another team."
-L.radio_short_desc = "Weapon sounds are music to me"
 
 -- {player} in the quickchat text normally becomes a player nickname, but can
 -- also be one of the below.  Keep these lowercase.
@@ -261,7 +249,6 @@ L.buy_received = "You have received your special equipment."
 
 L.drop_no_room = "You have no room here to drop your weapon!"
 L.pickup_fail = "You cannot pick up this"
-L.pickup_no_room = "You have no space in your inventory for this weapon kind"
 L.pickup_pending = "You already picked up a weapon, wait until you receive it"
 
 L.disg_turned_on = "Disguise enabled!"
@@ -329,7 +316,6 @@ L.vis_name = "Visualizer"
 L.vis_hint = "Press {usekey} to pick up (Detectives only)."
 
 L.vis_help_pri = "{primaryfire} drops the activated device."
-L.vis_short_desc = "Visualizes a crime scene if the victim died by a gunshot wound"
 
 L.vis_desc = [[
 Crime scene visualization device.
@@ -374,11 +360,6 @@ sound.]]
 
 -- Health station
 L.hstation_name = "Health Station"
-L.hstation_subtitle = "Press [{usekey}] to receive health."
-L.hstation_charge = "Remaining charge of health station: {charge}"
-L.hstation_empty = "There is no more charge left in this health station"
-L.hstation_maxhealth = "Your health is full"
-L.hstation_short_desc = "The heath station slowly recharges over time"
 
 L.hstation_broken = "Your Health Station has been destroyed!"
 L.hstation_help = "{primaryfire} places the Health Station."
@@ -568,47 +549,17 @@ L.karma_min = "Liability"
 -- TargetID misc
 L.corpse = "Corpse"
 L.corpse_hint = "Press [{usekey}] to search. [{walkkey} + {usekey}] to search covertly."
-L.corpse_too_far_away = "The corpse is too far away."
-L.corpse_binoculars = "Press [{key}] to search corpse with binoculars."
-L.corpse_searched_by_detective = "This corpse was searched by a detective"
 
 L.target_disg = "disguised"
 L.target_unid = "Unidentified body"
 
 L.target_credits = "Search to receive unspent credits"
 
-L.target_c4 = "Press [{usekey}] to open C4 menu"
-L.target_c4_armed = "Press [{usekey}] to disarm C4"
-L.target_c4_armed_defuser = "Press [{usekey}] to use defuser"
-L.target_c4_not_disarmable = "You can't disarm C4 of a living teammate"
-L.c4_short_desc = "Something very explosive"
-
-L.target_pickup = "Press [{usekey}] to pick up"
-L.target_slot_info = "Slot: {slot}"
-L.target_pickup_weapon = "Press [{usekey}] to pickup weapon"
-L.target_switch_weapon = "Press [{usekey}] to swap with your current weapon"
-L.target_pickup_weapon_hidden = ", press [{usekey} + {walkkey}] for hidden pickup"
-L.target_switch_weapon_hidden = ", press [{usekey} + {walkkey}] for hidden switch"
-L.target_switch_weapon_nospace = "There is no inventory slot available for this weapon"
-L.target_switch_drop_weapon_info = "Dropping {name} from slot {slot}"
-L.target_switch_drop_weapon_info_noslot = "There is no droppable weapon in slot {slot}"
-
 -- HUD buttons with hand icons that only some roles can see and use
 L.tbut_single = "Single use"
 L.tbut_reuse = "Reusable"
 L.tbut_retime = "Reusable after {num} sec"
 L.tbut_help = "Press [{usekey}] to activate"
-L.tbut_help_admin = "Edit traitor button settings"
-L.tbut_role_toggle = "[{walkkey} + {usekey}] to toggle this button for {role}"
-L.tbut_role_config = "Role: {current}"
-L.tbut_team_toggle = "[SHIFT + {walkkey} + {usekey}] to toggle this button for team {team}"
-L.tbut_team_config = "Team: {current}"
-L.tbut_current_config = "Current config:"
-L.tbut_intended_config = "Intended config by map creator:"
-L.tbut_admin_mode_only = "Only visible to you because you're an admin and '{cv}' is set to '1'"
-L.tbut_allow = "Allow"
-L.tbut_prohib = "Prohibit"
-L.tbut_default = "Default"
 
 -- Equipment info lines (on the left above the health/ammo panel)
 L.disg_hud = "Disguised. Your name is hidden."
@@ -619,16 +570,12 @@ L.mute_living = "Living players muted"
 L.mute_specs = "Spectators muted"
 L.mute_all = "All muted"
 L.mute_off = "None muted"
-L.mute_team = "{team} muted."
 
 -- Spectators and prop possession
 L.punch_title = "PUNCH-O-METER"
 L.punch_help = "Move keys or jump: punch object. Crouch: leave object."
 L.punch_bonus = "Your bad score lowered your punch-o-meter limit by {num}"
 L.punch_malus = "Your good score increased your punch-o-meter limit by {num}!"
-
-L.spec_help = "Click to spectate players, or press {usekey} on a physics object to possess it."
-L.spec_help2 = "To leave the spectator mode, open the menu by pressing {helpkey}, go to 'gameplay' and toggle the spectator mode."
 
 -- Info popups shown when the round starts
 
@@ -1063,7 +1010,6 @@ L.aw_tod2_text = "died right after the start of the round."
 
 -- v24
 L.drop_no_ammo = "Insufficient ammo in your weapon's clip to drop as an ammo box."
-L.drop_ammo_prevented = "Something prevents you from dropping your ammo."
 
 -- 5-25-15
 L.hat_retrieve = "You picked up a Detective's hat."
@@ -1088,16 +1034,29 @@ L.dna_hud_item = "ITEM"
 
 L.binoc_zoom_level = "Zoom Level"
 L.binoc_body = "BODY DETECTED"
-L.binoc_progress = "Search progress: {progress}%"
 
 L.idle_popup_title = "Idle"
 
--- ttt2
+--------------------------------
+-- TTT2 LANGUAGE
+
+-- 2019-01-31
 L.create_own_shop = "Create own shop"
 L.shop_link = "Link with"
 L.shop_disabled = "Disable shop"
 L.shop_default = "Use default shop"
 
+-- 2019-05-05
+L.reroll_name = "Reroll"
+L.reroll_menutitle = "Reroll Items"
+L.reroll_no_credits = "You need {amount} credits to reroll!"
+L.reroll_button = "Reroll"
+L.reroll_help = "Use {amount} credits to get new items in your shop!"
+
+-- 2019-05-06
+L.equip_not_alive = "You can view all available items by selecting a role on the right. Don't forget to mark your favorites!"
+
+-- 2019-06-27
 L.shop_editor_title = "Shop Editor"
 L.shop_edit_items_weapong = "Edit Items / Weapons"
 L.shop_edit = "Edit Shops"
@@ -1119,6 +1078,61 @@ L.shop_role_select = "Select a role"
 L.shop_role_selected = "{roles}'s shop was selected!"
 L.shop_search = "Search"
 
+L.spec_help = "Click to spectate players, or press {usekey} on a physics object to possess it."
+L.spec_help2 = "To leave the spectator mode, open the menu by pressing {helpkey}, go to 'gameplay' and toggle the spectator mode."
+
+-- 2019-10-19
+L.drop_ammo_prevented = "Something prevents you from dropping your ammo."
+
+-- 2019-10-28
+L.target_c4 = "Press [{usekey}] to open C4 menu"
+L.target_c4_armed = "Press [{usekey}] to disarm C4"
+L.target_c4_armed_defuser = "Press [{usekey}] to use defuser"
+L.target_c4_not_disarmable = "You can't disarm C4 of a living teammate"
+L.c4_short_desc = "Something very explosive"
+
+L.target_pickup = "Press [{usekey}] to pick up"
+L.target_slot_info = "Slot: {slot}"
+L.target_pickup_weapon = "Press [{usekey}] to pickup weapon"
+L.target_switch_weapon = "Press [{usekey}] to swap with your current weapon"
+L.target_pickup_weapon_hidden = ", press [{usekey} + {walkkey}] for hidden pickup"
+L.target_switch_weapon_hidden = ", press [{usekey} + {walkkey}] for hidden switch"
+L.target_switch_weapon_nospace = "There is no inventory slot available for this weapon"
+L.target_switch_drop_weapon_info = "Dropping {name} from slot {slot}"
+L.target_switch_drop_weapon_info_noslot = "There is no droppable weapon in slot {slot}"
+
+L.corpse_searched_by_detective = "This corpse was searched by a detective"
+L.corpse_too_far_away = "The corpse is too far away."
+
+L.radio_pickup_wrong_team = "You can't pick up the radio from another team."
+L.radio_short_desc = "Weapon sounds are music to me"
+
+L.hstation_subtitle = "Press [{usekey}] to receive health."
+L.hstation_charge = "Remaining charge of health station: {charge}"
+L.hstation_empty = "There is no more charge left in this health station"
+L.hstation_maxhealth = "Your health is full"
+L.hstation_short_desc = "The heath station slowly recharges over time"
+
+-- 2019-11-03
+L.vis_short_desc = "Visualizes a crime scene if the victim died by a gunshot wound"
+L.corpse_binoculars = "Press [{key}] to search corpse with binoculars."
+L.binoc_progress = "Search progress: {progress}%"
+
+L.pickup_no_room = "You have no space in your inventory for this weapon kind"
+
+-- 2020-01-07
+L.tbut_help_admin = "Edit traitor button settings"
+L.tbut_role_toggle = "[{walkkey} + {usekey}] to toggle this button for {role}"
+L.tbut_role_config = "Role: {current}"
+L.tbut_team_toggle = "[SHIFT + {walkkey} + {usekey}] to toggle this button for team {team}"
+L.tbut_team_config = "Team: {current}"
+L.tbut_current_config = "Current config:"
+L.tbut_intended_config = "Intended config by map creator:"
+L.tbut_admin_mode_only = "Only visible to you because you're an admin and '{cv}' is set to '1'"
+L.tbut_allow = "Allow"
+L.tbut_prohib = "Prohibit"
+L.tbut_default = "Default"
+
 -- 2020-02-09
 L.name_door = "Door"
 L.door_open = "Press [{usekey}] to open door."
@@ -1127,6 +1141,7 @@ L.door_locked = "This door is locked"
 
 -- 2020-02-11
 L.automoved_to_spec = "(AUTOMATED MESSAGE) I have been moved to the Spectator team because I was idle/AFK."
+L.mute_team = "{team} muted."
 
 -- 2020-02-16
 L.door_auto_closes = "This door closes automatically"

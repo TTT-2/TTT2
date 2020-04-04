@@ -102,8 +102,6 @@ L.equip_spec_desc = "Beschreibung"
 
 L.equip_confirm = "Ausrüstung kaufen"
 
-L.equip_not_alive = "Du kannst alle verfügbaren Items sehen, wenn du eine Rolle auf der rechten Seite auswählst. Denk dran, du kannst zu jeder Zeit Favoriten hinzufügen!"
-
 -- Disguiser tab in equipment menu
 L.disg_name = "Tarnung"
 L.disg_menutitle = "Tarnung-Einstellungen"
@@ -133,13 +131,6 @@ L.xfer_no_recip = "Der Empfänger ist ungültig, Credit-Transfer abgebrochen."
 L.xfer_no_credits = "Ungenügend Credits für einen Transfer."
 L.xfer_success = "Credit-Transfer an {player} abgeschlossen."
 L.xfer_received = "{player} gab dir {num} Credit(s)."
-
--- Reroll tab in equipment menu
-L.reroll_name = "Reroll"
-L.reroll_menutitle = "Items neu ausrollen"
-L.reroll_no_credits = "Du brauchst {amount} Credits zum neu ausrollen!"
-L.reroll_button = "Reroll"
-L.reroll_help = "Bekomme neu zufällige Items für {amount} Credits!"
 
 -- Radio tab in equipment menu
 L.radio_name = "Radio"
@@ -176,9 +167,6 @@ L.quick_suspect = "{player} verhält sich verdächtig."
 L.quick_traitor = "{player} ist ein Verräter!"
 L.quick_inno = "{player} ist unschuldig."
 L.quick_check = "Lebt noch irgendjemand?"
-
-L.radio_pickup_wrong_team = "Du kannst nicht das Radio eines anderen Teams aufheben."
-L.radio_short_desc = "Waffengeräusche sind Musik für mich"
 
 -- {player} in the quickchat text normally becomes a player nickname, but can
 -- also be one of the below.  Keep these lowercase.
@@ -259,7 +247,6 @@ L.buy_received = "Du hast deine Spezialausrüstung erhalten."
 
 L.drop_no_room = "Du hast hier keinen Platz, um deine Waffe fallen zu lassen!"
 L.pickup_fail = "Du kannst das nicht aufheben"
-L.pickup_no_room = "Du hast keinen Platz für diese Waffe in deinem Inventar"
 L.pickup_pending = "Du hebst bereits eine Waffe auf, warte bis du sie erhältst"
 
 L.disg_turned_on = "Tarnung aktiviert!"
@@ -325,7 +312,6 @@ L.vis_name = "Visualisierer"
 L.vis_hint = "Drücke {usekey} zum Aufheben (nur Detektive)."
 
 L.vis_help_pri = "{primaryfire} lässt das aktivierte Gerät fallen."
-L.vis_short_desc = "Visualisiert den Tatort, wenn das Opfer an einer Schusswunde starb"
 
 L.vis_desc = [[
 Tatort-Visualisierungs-Gerät.
@@ -369,11 +355,6 @@ bestimmtes Geräusch.]]
 
 -- Health station
 L.hstation_name = "Gesundheitsstation"
-L.hstation_subtitle = "Drücke [{usekey}] um Leben zu regenerieren."
-L.hstation_charge = "Verbleibende Ladung der Gesundheitsstation: {charge}"
-L.hstation_empty = "Es ist keine Ladung mehr in der Gesundheitsstation enthalten"
-L.hstation_maxhealth = "Du hast bereits dein maximales Leben erreicht"
-L.hstation_short_desc = "Die Gesundheitsstation lädt sich langsam über die Zeit wieder auf"
 
 L.hstation_broken = "Deine Gesundheitsstation wurde zerstört!"
 L.hstation_help = "{primaryfire} platziert die Gesundheitsstation."
@@ -560,47 +541,17 @@ L.karma_min = "Verantwortungslos"
 -- TargetID misc
 L.corpse = "Leiche"
 L.corpse_hint = "Drücke [{usekey}] zum Durchsuchen. [{walkkey} + {usekey}] um verdeckt zu untersuchen."
-L.corpse_too_far_away = "Leiche zu weit weg zum Untersuchen."
-L.corpse_binoculars = "Drücke [{key}] um Leiche mit Fernglas zu untersuchen."
-L.corpse_searched_by_detective = "Diese Leiche wurde von einem Detektiv untersucht"
 
 L.target_disg = "Getarnt"
 L.target_unid = "Unidentifizierter Körper"
 
 L.target_credits = "Durchsuche, um ungenutzte Credits zu erhalten."
 
-L.target_c4 = "Drücke [{usekey}] um C4 Menü zu öffnen"
-L.target_c4_armed = "Drücke [{usekey}] um C4 zu entschärfen"
-L.target_c4_armed_defuser = "Drücke [{usekey}] um Entschärfer zu verwenden"
-L.target_c4_not_disarmable = "Du kannst kein C4 eines lebenden Teamkollegen entschärfen"
-L.c4_short_desc = "Etwas sehr explosives"
-
-L.target_pickup = "Drücke [{usekey}] um aufzuheben"
-L.target_slot_info = "Inventarplatz: {slot}"
-L.target_pickup_weapon = "Drücke [{usekey}] um Waffe aufzuheben"
-L.target_switch_weapon = "Drücke [{usekey}] um mit aktueller Waffe zu tauschen"
-L.target_pickup_weapon_hidden = ", drücke [{usekey} + {walkkey}] für verstecktes Aufheben"
-L.target_switch_weapon_hidden = ", drücke [{usekey} + {walkkey}] für verstecktes Tauschen"
-L.target_switch_weapon_nospace = "Es ist kein Invetarplatz frei für diese Waffe"
-L.target_switch_drop_weapon_info = "Lasse {name} aus Inventarplatz {slot} fallen"
-L.target_switch_drop_weapon_info_noslot = "In Inventatplatz {slot} ist keine wegwerfbare Waffe"
-
 -- HUD buttons with hand icons that only some roles can see and use
 L.tbut_single = "Einmaliger Gebrauch"
 L.tbut_reuse = "Wiederverwendbar"
 L.tbut_retime = "Wiederverwendbar nach {num} Sekunden"
 L.tbut_help = "Drücke [{usekey}] zum Aktivieren"
-L.tbut_help_admin = "Bearbeite Knopfeinstellungen"
-L.tbut_role_toggle = "[{walkkey} + {usekey}] zum Umschalten dieses Knopfes für {role}"
-L.tbut_role_config = "Rolle: {current}"
-L.tbut_team_toggle = "[SHIFT + {walkkey} + {usekey}] zum Umschalten dieses Knopfes für Team {team}"
-L.tbut_team_config = "Team: {current}"
-L.tbut_current_config = "Aktuelle Einstellung:"
-L.tbut_intended_config = "Voreinstellung des Maperstellers:"
-L.tbut_admin_mode_only = "Nur sichtbar für dich, da du ein Admin bist und '{cv}' auf '1' gesetzt ist"
-L.tbut_allow = "Erlaubt"
-L.tbut_prohib = "Verboten"
-L.tbut_default = "Standard"
 
 -- Equipment info lines (on the left above the health/ammo panel)
 L.disg_hud = "Getarnt. Dein Name ist ausgeblendet."
@@ -611,16 +562,12 @@ L.mute_living = "Lebende stumm gestellt"
 L.mute_specs = "Zuschauer stumm gestellt"
 L.mute_all = "Jeden stumm gestellt"
 L.mute_off = "Niemanden stumm gestellt"
-L.mute_team = "{team} stummgestellt."
 
 -- Spectators and prop possession
 L.punch_title = "PUNCH-O-METER"
 L.punch_help = "Die Bewegungstasten oder Springen: Objekt bewegen. Ducken: Objekt verlassen."
 L.punch_bonus = "Deine schlechte Punktzahl hat dein Punch-O-Meter Limit um {num} verringert."
 L.punch_malus = "Deine gute Punktzahl hat dein Punch-O-Meter Limit um {num} erhöht!"
-
-L.spec_help = "Klicke, um Spielern zu zuschauen, oder drücke {usekey} auf ein physikalisches Objekt, um die Kontrolle zu erhalten."
-L.spec_help2 = "Zum Verlassen des Zuschauer-Modus öffne das Menü mit {helpkey}, navigiere in 'Gameplay' und schalte den Zuschauermodus um."
 
 -- Info popups shown when the round starts
 
@@ -1052,7 +999,6 @@ L.aw_tod2_text = "starb direkt am Anfang der Runde."
 
 -- v24
 L.drop_no_ammo = "Du hast zu wenig Munition im Magazin, um eine Munitionskiste fallenzulassen."
-L.drop_ammo_prevented = "Etwas hindert dich daran deine Munition fallenzulassen."
 
 -- 5-25-15
 L.hat_retrieve = "Du hast den Hut eines Detektivs aufgehoben."
@@ -1079,16 +1025,29 @@ L.dna_hud_body = "BODY"
 L.dna_hud_item = "ITEM"
 
 L.binoc_body = "BODY DETECTED"
-L.binoc_progress = "Durchsuchungsfortschritt: {progress}%"
 
 L.idle_popup_title = "Idle"
 
--- ttt2
+--------------------------------
+-- TTT2 LANGUAGE
+
+-- 2019-01-31
 L.create_own_shop = "Erstelle einen eigenen Shop"
 L.shop_link = "Verlinke mit"
 L.shop_disabled = "Shop deaktivieren"
 L.shop_default = "Standart-Shop verwenden"
 
+-- 2019-05-05
+L.reroll_name = "Reroll"
+L.reroll_menutitle = "Items neu ausrollen"
+L.reroll_no_credits = "Du brauchst {amount} Credits zum neu ausrollen!"
+L.reroll_button = "Reroll"
+L.reroll_help = "Bekomme neu zufällige Items für {amount} Credits!"
+
+--2019-05-06
+L.equip_not_alive = "Du kannst alle verfügbaren Items sehen, wenn du eine Rolle auf der rechten Seite auswählst. Denk dran, du kannst zu jeder Zeit Favoriten hinzufügen!"
+
+-- 2019-06-27
 L.shop_editor_title = "Shop Editor"
 L.shop_edit_items_weapong = "Bearbeite Gegenstände / Waffen"
 L.shop_edit = "Bearbeite Shops"
@@ -1110,6 +1069,61 @@ L.shop_role_select = "Wähle eine Rolle"
 L.shop_role_selected = "Der {roles} Shop wurde gewählt!"
 L.shop_search = "Suche"
 
+L.spec_help = "Klicke, um Spielern zu zuschauen, oder drücke {usekey} auf ein physikalisches Objekt, um die Kontrolle zu erhalten."
+L.spec_help2 = "Zum Verlassen des Zuschauer-Modus öffne das Menü mit {helpkey}, navigiere in 'Gameplay' und schalte den Zuschauermodus um."
+
+-- 2019-10-10
+L.drop_ammo_prevented = "Etwas hindert dich daran deine Munition fallenzulassen."
+
+-- 2019-10-28
+L.target_c4 = "Drücke [{usekey}] um C4 Menü zu öffnen"
+L.target_c4_armed = "Drücke [{usekey}] um C4 zu entschärfen"
+L.target_c4_armed_defuser = "Drücke [{usekey}] um Entschärfer zu verwenden"
+L.target_c4_not_disarmable = "Du kannst kein C4 eines lebenden Teamkollegen entschärfen"
+L.c4_short_desc = "Etwas sehr explosives"
+
+L.target_pickup = "Drücke [{usekey}] um aufzuheben"
+L.target_slot_info = "Inventarplatz: {slot}"
+L.target_pickup_weapon = "Drücke [{usekey}] um Waffe aufzuheben"
+L.target_switch_weapon = "Drücke [{usekey}] um mit aktueller Waffe zu tauschen"
+L.target_pickup_weapon_hidden = ", drücke [{usekey} + {walkkey}] für verstecktes Aufheben"
+L.target_switch_weapon_hidden = ", drücke [{usekey} + {walkkey}] für verstecktes Tauschen"
+L.target_switch_weapon_nospace = "Es ist kein Invetarplatz frei für diese Waffe"
+L.target_switch_drop_weapon_info = "Lasse {name} aus Inventarplatz {slot} fallen"
+L.target_switch_drop_weapon_info_noslot = "In Inventatplatz {slot} ist keine wegwerfbare Waffe"
+
+L.corpse_searched_by_detective = "Diese Leiche wurde von einem Detektiv untersucht"
+L.corpse_too_far_away = "Leiche zu weit weg zum Untersuchen."
+
+L.radio_pickup_wrong_team = "Du kannst nicht das Radio eines anderen Teams aufheben."
+L.radio_short_desc = "Waffengeräusche sind Musik für mich"
+
+L.hstation_subtitle = "Drücke [{usekey}] um Leben zu regenerieren."
+L.hstation_charge = "Verbleibende Ladung der Gesundheitsstation: {charge}"
+L.hstation_empty = "Es ist keine Ladung mehr in der Gesundheitsstation enthalten"
+L.hstation_maxhealth = "Du hast bereits dein maximales Leben erreicht"
+L.hstation_short_desc = "Die Gesundheitsstation lädt sich langsam über die Zeit wieder auf"
+
+-- 2019-11-03
+L.vis_short_desc = "Visualisiert den Tatort, wenn das Opfer an einer Schusswunde starb"
+L.corpse_binoculars = "Drücke [{key}] um Leiche mit Fernglas zu untersuchen."
+L.binoc_progress = "Durchsuchungsfortschritt: {progress}%"
+
+L.pickup_no_room = "Du hast keinen Platz für diese Waffe in deinem Inventar"
+
+--2020-01-07
+L.tbut_help_admin = "Bearbeite Knopfeinstellungen"
+L.tbut_role_toggle = "[{walkkey} + {usekey}] zum Umschalten dieses Knopfes für {role}"
+L.tbut_role_config = "Rolle: {current}"
+L.tbut_team_toggle = "[SHIFT + {walkkey} + {usekey}] zum Umschalten dieses Knopfes für Team {team}"
+L.tbut_team_config = "Team: {current}"
+L.tbut_current_config = "Aktuelle Einstellung:"
+L.tbut_intended_config = "Voreinstellung des Maperstellers:"
+L.tbut_admin_mode_only = "Nur sichtbar für dich, da du ein Admin bist und '{cv}' auf '1' gesetzt ist"
+L.tbut_allow = "Erlaubt"
+L.tbut_prohib = "Verboten"
+L.tbut_default = "Standard"
+
 -- 2020-02-09
 L.name_door = "Tür"
 L.door_open = "Drücke [{usekey}] um Tür zu öffnen."
@@ -1118,6 +1132,7 @@ L.door_locked = "Diese Tür ist verschlossen"
 
 -- 2020-02-11
 L.automoved_to_spec = "(AUTOMATISCHE NACHRICHT) Ich wurde in das Zuschauerteam geschoben, da ich untätig/AFK war."
+L.mute_team = "{team} stummgestellt."
 
 -- 2020-02-16
 L.door_auto_closes = "Diese Tür schließt automatisch"

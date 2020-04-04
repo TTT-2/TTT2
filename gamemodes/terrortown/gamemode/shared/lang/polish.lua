@@ -102,8 +102,6 @@ L.equip_spec_desc  = "Opis"
 
 L.equip_confirm    = "Kup wyposażenie"
 
-L.equip_not_alive = "Możesz teraz zobaczyć zawartość sklepu, nie zapomnij dodać ulubionych!"
-
 -- Disguiser tab in equipment menu
 L.disg_name      = "Przebranie"
 L.disg_menutitle = "Obsługa przebrania"
@@ -133,14 +131,6 @@ L.xfer_no_recip   = "Odbiorca nie jest prawidłowy, transfer kredytów został p
 L.xfer_no_credits = "Niewystarczająca ilość kreytów do transferu."
 L.xfer_success    = "Transfer kredytów do {player} zakończony."
 L.xfer_received   = "{player} dał ci {num} kredyt(ów)."
-
-
--- Reroll tab in equipment menu
-L.reroll_name = "Reroll"
-L.reroll_menutitle = "Reroll Items"
-L.reroll_no_credits = "You need {amount} credits to reroll!"
-L.reroll_button = "Reroll"
-L.reroll_help = "Use {amount} credits to get new items in your shop!"
 
 -- Radio tab in equipment menu
 L.radio_name      = "Radio"
@@ -177,9 +167,6 @@ L.quick_suspect = "{player} jest podejrzany."
 L.quick_traitor = "{player} jest zdrajcą!"
 L.quick_inno    = "{player} jest niewinny."
 L.quick_check   = "Ktoś jeszcze żyje?"
-
-L.radio_pickup_wrong_team = "Nie możesz mieć radio innego teamu."
-L.radio_short_desc = "Wystrzały broni są dla mnie muzyką"
 
 -- {player} in the quickchat text normally becomes a player nickname, but can
 -- also be one of the below.  Keep these lowercase.
@@ -262,7 +249,6 @@ L.buy_received = "You have received your special equipment."
 
 L.drop_no_room = "You have no room here to drop your weapon!"
 L.pickup_fail = "You cannot pick up this"
-L.pickup_no_room = "You have no space in your inventory for this weapon kind"
 L.pickup_pending = "You already picked up a weapon, wait until you receive it"
 
 L.disg_turned_on = "Disguise enabled!"
@@ -375,11 +361,6 @@ dźwięk.]]
 
 -- Health station
 L.hstation_name   = "Stacja Lecząca"
-L.hstation_subtitle = "Naciśnij [{usekey}] aby otrzymać życie."
-L.hstation_charge = "Pozostały ładunek: {charge}"
-L.hstation_empty = "Brak ładunku"
-L.hstation_maxhealth = "Życie pełne"
-L.hstation_short_desc = "Powoli odnawia swój ładunek"
 
 L.hstation_broken = "Twoja stacja lecząca została zniszczona!"
 L.hstation_help   = "{primaryfire} kładzie stacje."
@@ -563,50 +544,21 @@ L.karma_high   = "Szorski"
 L.karma_med    = "Brutalny"
 L.karma_low    = "Niebezpieczny"
 L.karma_min    = "Szaleniec"
+
 -- TargetID misc
 L.corpse       = "Zwłoki"
-L.corpse_hint  = "Kliknij {usekey} by zbadać. {walkkey} + {usekey}, aby je zbadać po cichu."
-L.corpse_too_far_away = "Ciało jest za daleko."
-L.corpse_binoculars = "Press [{key}] to search corpse with binoculars."
-L.corpse_searched_by_detective = "Te ciało przeszukał detektyw"
+L.corpse_hint  = "Kliknij [{usekey}] by zbadać. [{walkkey} + {usekey}], aby je zbadać po cichu."
 
-L.target_disg  = " (PRZEBRANY)"
-L.target_unid  = "Niezidentyfikowane ciało"
+L.target_disg = "przebrany"
+L.target_unid = "Niezidentyfikowane ciało"
 
 L.target_credits = "Przeszukaj, aby otrzymywać niewykorzystane kredyty"
-
-L.target_c4 = "Naciśnij [{usekey}] aby otworzyć menu C4"
-L.target_c4_armed = "Naciśnij [{usekey}] aby rozborić C4"
-L.target_c4_armed_defuser = "Naciśnij [{usekey}] aby rozborić przyżądem"
-L.target_c4_not_disarmable = "Nie możesz rozbroić bomby żywego gracza"
-L.c4_short_desc = "Coś bardzo wybuchowego"
-
-L.target_pickup = "Naciśnij [{usekey}] aby podnieść"
-L.target_slot_info = "Slot: {slot}"
-L.target_pickup_weapon = "Naciśnij [{usekey}] aby ponieść broń"
-L.target_switch_weapon = "Naciśnij [{usekey}] aby zamienić broń"
-L.target_pickup_weapon_hidden = ", Naciśnij [{usekey} + {walkkey}] dla ukrytego podniesienia"
-L.target_switch_weapon_hidden = ", Naciśnij [{usekey} + {walkkey}] dla ukrytej zamiany"
-L.target_switch_weapon_nospace = "Brak slotu!"
-L.target_switch_drop_weapon_info = "Upuszczanie {name} ze slotu {slot}"
-L.target_switch_drop_weapon_info_noslot = "Broni z tego slotu {slot} nie można wywalić"
 
 -- HUD buttons with hand icons that only some roles can see and use
 L.tbut_single = "Jednorazowe"
 L.tbut_reuse = "Wielorazowe"
 L.tbut_retime = "Użyj ponownie po {num} sek"
 L.tbut_help = "Naciśnij [{usekey}] aby użyć"
-L.tbut_help_admin = "Edytuj ustawienia guzika treitora"
-L.tbut_role_toggle = "[{walkkey} + {usekey}] aby włączyć ten przycisk dla roli {role}"
-L.tbut_role_config = "Rola: {current}"
-L.tbut_team_toggle = "[SHIFT + {walkkey} + {usekey}] aby włączyć ten guzik dla teamu {team}"
-L.tbut_team_config = "Team: {current}"
-L.tbut_current_config = "Obecne ustawienia:"
-L.tbut_intended_config = "Domyślny config twórcy mapy:"
-L.tbut_admin_mode_only = "Only visible to you because you're an admin and '{cv}' is set to '1'"
-L.tbut_allow = "Pozwól"
-L.tbut_prohib = "Zabroń"
-L.tbut_default = "Domyślne"
 
 -- Equipment info lines (on the left above the health/ammo panel)
 L.disg_hud     = "Przebrałeś się. Twoje imię jest ukryte."
@@ -617,16 +569,12 @@ L.mute_living = "Living players muted"
 L.mute_specs = "Spectators muted"
 L.mute_all = "All muted"
 L.mute_off = "None muted"
-L.mute_team = "{team} muted."
 
 -- Spectators and prop possession
 L.punch_title  = "PUNCH-O-METER"
 L.punch_help   = "Klawisze ruchu lub skok: uderz obiekt. Skradanie: opuść obiekt."
 L.punch_bonus  = "Twój słaby wynik pomniejszył twój limit punch-o-metera o {num}"
 L.punch_malus  = "Twój dobry wynik powiększył twój limit punch-o-metera o {num}!"
-
-L.spec_help    = "Kliknij by obserować gracza, lub kliknij {usekey} na obiekt fizyczny, by go posiąść."
-L.spec_help2 = "Aby opuścić tryb widza, naciśnij guzik {helpkey}, idź do 'rozgrywa' i zmień tryb obserwatora."
 
 -- Info popups shown when the round starts
 
@@ -1032,16 +980,29 @@ L.dna_hud_item = "ITEM"
 
 L.binoc_zoom_level = "Powiększenie"
 L.binoc_body = "WYKRYTO CIAŁO"
-L.binoc_progress = "Wyszukiwanie: {progress}%"
 
 L.idle_popup_title = "Idle"
 
--- ttt2
+--------------------------------
+-- TTT2 LANGUAGE
+
+-- 2019-01-31
 L.create_own_shop = "Stwórz własny sklep"
 L.shop_link = "Połącz z..."
 L.shop_disabled = "Wyłącz sklep"
 L.shop_default = "Użyj domyślnego sklepu"
 
+-- 2019-05-05
+--L.reroll_name = "Reroll"
+--L.reroll_menutitle = "Reroll Items"
+--L.reroll_no_credits = "You need {amount} credits to reroll!"
+--L.reroll_button = "Reroll"
+--L.reroll_help = "Use {amount} credits to get new items in your shop!"
+
+-- 2019-05-06
+L.equip_not_alive = "Możesz teraz zobaczyć zawartość sklepu, nie zapomnij dodać ulubionych!"
+
+-- 2019-06-27
 L.shop_editor_title = "Edytor sklepu"
 L.shop_edit_items_weapong = "Edytuj Itemy/ Bronie"
 L.shop_edit = "Edytuj sklepy"
@@ -1055,13 +1016,68 @@ L.shop_settings_desc = "Adaptacja Randomowego Sklepu."
 
 L.ttt2_bindings_new = "Nowy klawisz dla {name}: {key}"
 
-L.hud_default_failed = "Failed to set the HUD {hudname} as new default. You don't have permission to do that, or this HUD doesn't exist."
-L.hud_forced_failed = "Failed to force the HUD {hudname}. You don't have permission to do that, or this HUD doesn't exist."
-L.hud_restricted_failed = "Failed to restrict the HUD {hudname}. You don't have permission to do that."
+--L.hud_default_failed = "Failed to set the HUD {hudname} as new default. You don't have permission to do that, or this HUD doesn't exist."
+--L.hud_forced_failed = "Failed to force the HUD {hudname}. You don't have permission to do that, or this HUD doesn't exist."
+--L.hud_restricted_failed = "Failed to restrict the HUD {hudname}. You don't have permission to do that."
 
 L.shop_role_select = "Wybierz rolę"
 L.shop_role_selected = "{roles} wybrano do sklepu!"
 L.shop_search = "Szukaj"
+
+L.spec_help = "Kliknij by obserować gracza, lub kliknij {usekey} na obiekt fizyczny, by go posiąść."
+L.spec_help2 = "Aby opuścić tryb widza, naciśnij guzik {helpkey}, idź do 'rozgrywa' i zmień tryb obserwatora."
+
+-- 2019-10-19
+--L.drop_ammo_prevented = "Something prevents you from dropping your ammo."
+
+-- 2019-10-28
+L.target_c4 = "Naciśnij [{usekey}] aby otworzyć menu C4"
+L.target_c4_armed = "Naciśnij [{usekey}] aby rozborić C4"
+L.target_c4_armed_defuser = "Naciśnij [{usekey}] aby rozborić przyżądem"
+L.target_c4_not_disarmable = "Nie możesz rozbroić bomby żywego gracza"
+L.c4_short_desc = "Coś bardzo wybuchowego"
+
+L.target_pickup = "Naciśnij [{usekey}] aby podnieść"
+L.target_slot_info = "Slot: {slot}"
+L.target_pickup_weapon = "Naciśnij [{usekey}] aby ponieść broń"
+L.target_switch_weapon = "Naciśnij [{usekey}] aby zamienić broń"
+L.target_pickup_weapon_hidden = ", Naciśnij [{usekey} + {walkkey}] dla ukrytego podniesienia"
+L.target_switch_weapon_hidden = ", Naciśnij [{usekey} + {walkkey}] dla ukrytej zamiany"
+L.target_switch_weapon_nospace = "Brak slotu!"
+L.target_switch_drop_weapon_info = "Upuszczanie {name} ze slotu {slot}"
+L.target_switch_drop_weapon_info_noslot = "Broni z tego slotu {slot} nie można wywalić"
+
+L.corpse_searched_by_detective = "Te ciało przeszukał detektyw"
+L.corpse_too_far_away = "Ciało jest za daleko."
+
+L.radio_pickup_wrong_team = "Nie możesz mieć radio innego teamu."
+L.radio_short_desc = "Wystrzały broni są dla mnie muzyką"
+
+L.hstation_subtitle = "Naciśnij [{usekey}] aby otrzymać życie."
+L.hstation_charge = "Pozostały ładunek: {charge}"
+L.hstation_empty = "Brak ładunku"
+L.hstation_maxhealth = "Życie pełne"
+L.hstation_short_desc = "Powoli odnawia swój ładunek"
+
+-- 2019-11-03
+--L.vis_short_desc = "Visualizes a crime scene if the victim died by a gunshot wound"
+L.corpse_binoculars = "Press [{key}] to search corpse with binoculars."
+L.binoc_progress = "Wyszukiwanie: {progress}%"
+
+--L.pickup_no_room = "You have no space in your inventory for this weapon kind"
+
+-- 2020-01-07
+L.tbut_help_admin = "Edytuj ustawienia guzika treitora"
+L.tbut_role_toggle = "[{walkkey} + {usekey}] aby włączyć ten przycisk dla roli {role}"
+L.tbut_role_config = "Rola: {current}"
+L.tbut_team_toggle = "[SHIFT + {walkkey} + {usekey}] aby włączyć ten guzik dla teamu {team}"
+L.tbut_team_config = "Team: {current}"
+L.tbut_current_config = "Obecne ustawienia:"
+L.tbut_intended_config = "Domyślny config twórcy mapy:"
+L.tbut_admin_mode_only = "Only visible to you because you're an admin and '{cv}' is set to '1'"
+L.tbut_allow = "Pozwól"
+L.tbut_prohib = "Zabroń"
+L.tbut_default = "Domyślne"
 
 -- 2020-02-09
 L.name_door = "Drzwi"
@@ -1071,6 +1087,7 @@ L.door_locked = "Drzwi są zamknięte"
 
 -- 2020-02-11
 L.automoved_to_spec = "(SERWER) Zostałeś przeniesiony do teamu obserwujących za brak aktywności!"
+L.mute_team = "{team} muted."
 
 -- 2020-02-16
 L.door_auto_closes = "Te drzwi zamykają się same"
@@ -1190,7 +1207,7 @@ L.label_gameplay_fastsw = "Szybkie przełącznie broni"
 L.label_gameplay_hold_aim = "Trzymaj aby celować"
 L.label_gameplay_mute = "Wycisz żyjących graczy, gdy zginiesz"
 --L.label_gameplay_dtsprint_enable = "Enable double tap sprinting"
-L.label_gameplay_dtsprint_anykey = "Continue double tap sprinting until you stop moving"
+--L.label_gameplay_dtsprint_anykey = "Continue double tap sprinting until you stop moving"
 L.label_hud_default = "Zwykły HUD"
 L.label_hud_force = "Wymuszony HUD"
 
