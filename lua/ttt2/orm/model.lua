@@ -8,9 +8,9 @@ local ormodel = {}
 -- Creates a model with the given name and datastructure which (for now) includes an autoincrementing primarykey.
 -- @param tableName String The name of the model and hence the tablename in the database.
 -- @param dataStructure table The datastructure of the model. An array containing a table for each column/datavalue, with the identifier and the type of the data.
--- e.g. {{colname = "name", coltype = "TEXT"}, {colname = "percent", coltype = "REAL"}, {colname = "count", coltype = "INTEGER"}}
--- @shared
--- @return model table The created model.
+-- @usage model = makeORModel("myOwnTable", {{colname = "name", coltype = "TEXT"}, {colname = "percent", coltype = "REAL"}, {colname = "count", coltype = "INTEGER"}})
+-- @realm shared
+-- @return table The created model.
 function makeORModel(tableName, dataStructure)
     local model = table.Copy(ormodel)
 
@@ -69,7 +69,7 @@ end
 
 ---
 -- Creates a new object of the model.
--- @return object table The created object.
+-- @return table The created object.
 function ormodel:new()
     local object = {}
 
@@ -83,23 +83,23 @@ end
 
 ---
 -- Retrieves all saved objects of the model from the database.
--- @return objects table Returns an array of all found objects. 
+-- @return table Returns an array of all found objects.
 function ormodel:all()
     return sql.Query("SELECT * FROM " .. self._tableName)
 end
 
 ---
 -- Retrieves a specific object by their primarykey from the database.
--- @return object table Returns the table of the found object.
+-- @return table Returns the table of the found object.
 function ormodel:find(primaryValue)
     return sql.QueryRow("SELECT * FROM " .. self._tableName .. " WHERE ID=" .. primaryValue)
 end
 
 ---
 -- Deletes the given object from the database storage.
--- @return success boolean Returns if the deletion was successful.
 -- @note This function will be defined when the model is made.
 -- @see `makeORModel()`
+-- @return boolean Returns if the deletion was successful.
 function ormodel:delete()
 end
 
