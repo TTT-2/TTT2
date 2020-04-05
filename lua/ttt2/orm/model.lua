@@ -6,8 +6,8 @@ local ormodel = {}
 
 ---
 -- Creates a model with the given name and datastructure which (for now) includes an autoincrementing primarykey.
--- @param tableName String The name of the model and hence the tablename in the database.
--- @param dataStructure table The datastructure of the model. An array containing a table for each column/datavalue, with the identifier and the type of the data.
+-- @param string tableName The name of the model and hence the tablename in the database.
+-- @param table dataStructure The datastructure of the model. An array containing a table for each column/datavalue, with the identifier and the type of the data.
 -- @usage model = makeORModel("myOwnTable", {{colname = "name", coltype = "TEXT"}, {colname = "percent", coltype = "REAL"}, {colname = "count", coltype = "INTEGER"}})
 -- @realm shared
 -- @return table The created model.
@@ -90,6 +90,7 @@ end
 
 ---
 -- Retrieves a specific object by their primarykey from the database.
+-- @param number|string primaryValue The value of the primarykey to search for.
 -- @return table Returns the table of the found object.
 function ormodel:find(primaryValue)
     return sql.QueryRow("SELECT * FROM " .. self._tableName .. " WHERE ID=" .. primaryValue)
