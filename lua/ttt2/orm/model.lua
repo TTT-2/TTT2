@@ -14,16 +14,18 @@ local ormodel = {}
 function makeORModel(tableName, dataStructure)
     local model = table.Copy(ormodel)
 
+    sanTableName = sql.SQLStr(tableName)
+
     model._tableName = tableName
     --model._datastructure = datastructure
     --model._primaryKey = primaryKey
 
     if not sql.TableExists(tableName) then
-        local query = "CREATE TABLE `" .. tableName .. "` ( `ID` INTEGER PRIMARY KEY AUTOINCREMENT"
+        local query = "CREATE TABLE " .. sanTableName .. " (id INTEGER PRIMARY KEY AUTOINCREMENT"
 
         -- populate columns with dataStructure
         for _, v in ipairs(dataStructure) do
-            query = query .. ", `" .. v.colname .. "` " .. v.coltype
+            query = query .. ", " .. sql.SQLStr(v.colname) .. " " .. sql.SQLStr(v.coltype)
         end
 
         query = query .. ")"
@@ -35,7 +37,7 @@ function makeORModel(tableName, dataStructure)
     model.save = function(self)
 
         if not self._id then
-            local query = "INSERT INTO `" .. tableName .. "` VALUES (NULL"
+            local query = "INSERT INTO " .. sanTableName .. " VALUES (NULL"
 
             for _, v in ipairs(dataStructure) do
                 query = query .. ", " .. (sql.SQLStr(self[v.colname] or "NULL"))
@@ -46,20 +48,19 @@ function makeORModel(tableName, dataStructure)
             sql.Query(query)
             self._id = sql.QueryValue("SELECT last_insert_rowid()")
         else
-            local query = "UPDATE `" .. tableName .. "` SET ID=ID"
+            local query = "UPDATE " .. sanTableName .. " SET id=id"
 
             for k, v in ipairs(dataStructure) do
                 query = query .. ", " .. v.colname .. "=" .. (sql.SQLStr(self[v.colname] or "NULL"))
             end
 
-            query = query .. " WHERE ID=" .. self._id
+            query = query .. " WHERE id=" .. sql.SQLStr(self._id)
             sql.Query(query)
         end
     end
 
     model.delete = function(self)
-        --self._id = sql.SQLStr(self._id, true)
-        return sql.Query("DELETE FROM `" .. tableName .. "` WHERE ID=" .. self._id)
+        return sql.Query("DELETE FROM " .. sanTableName .. " WHERE id=" .. sql.SQLStr(self._id))
     end
 
     baseclass.Set(tableName, model)
@@ -85,7 +86,7 @@ end
 -- Retrieves all saved objects of the model from the database.
 -- @return table Returns an array of all found objects.
 function ormodel:all()
-    return sql.Query("SELECT * FROM " .. self._tableName)
+    return sql.Query("SELECT * FROM " .. sql.SQLStr(self._tableName))
 end
 
 ---
@@ -93,7 +94,7 @@ end
 -- @param number|string primaryValue The value of the primarykey to search for.
 -- @return table Returns the table of the found object.
 function ormodel:find(primaryValue)
-    return sql.QueryRow("SELECT * FROM " .. self._tableName .. " WHERE ID=" .. primaryValue)
+    return sql.QueryRow("SELECT * FROM " .. sql.SQLStr(self._tableName) .. " WHERE id=" .. sql.SQLStr(primaryValue))
 end
 
 ---
@@ -113,7 +114,7 @@ end
 
 -- testing / example usage
 hook.Add("TTTBeginRound", "ormtest", function()
-    local mymodel = makeORModel("a_better_test", {{colname = "testing", coltype = "TEXT"}, {colname = "percent", coltype = "REAL"}, {colname = "jup", coltype = "INTEGER"}})
+    local mymodel = makeORModel("a_`better_test", {{colname = "testing", coltype = "TEXT"}, {colname = "percent", coltype = "REAL"}, {colname = "jup", coltype = "INTEGER"}})
 
     local myobject = mymodel:new()
 
@@ -125,7 +126,7 @@ hook.Add("TTTBeginRound", "ormtest", function()
 
     PrintTable(mymodel:find(myobject._id))
 
-    myobject.testing = "you should read this"
+    myobject.testing = "you should` read this"
     myobject.percent = 6.78
     myobject.jop = 4444
 
