@@ -1223,4 +1223,3 @@ L.button_press_key = "Naciśnij klawisz"
 L.button_save = "Zapisz"
 L.button_reset = "Reset"
 L.button_close = "Zamknij"
- 
