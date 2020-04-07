@@ -40,10 +40,8 @@ L.round_traitors_one = "Traditore, sei rimasto da solo."
 L.round_traitors_more = "Traditore, questi sono i tuoi alleati: {names}"
 
 L.win_time = "Il tempo è finito. I Traditori hanno perso."
-
 L.win_traitors = "Traditori vincono!"
 L.win_innocents = "Innocenti vincono!"
-
 L.win_bees = "Pareggio!"
 L.win_showreport = "Guardiamo il report per {num} secondi."
 
@@ -117,8 +115,6 @@ L.equip_spec_desc = "Descrizione"
 
 L.equip_confirm = "Compra oggetto"
 
-L.equip_not_alive = "Puoi vedere tutti gli oggetti disponibili selezionando un ruolo sulla destra. Non ti dimenticare di segnare i toui preferiti!"
-
 -- Finestra Travestimento nel menù equipaggiamento
 -- Disguiser tab in equipment menu
 L.disg_name = "Travestimento"
@@ -151,14 +147,6 @@ L.xfer_no_recip = "Bersaglio non valido, trasferimento dei crediti annullato."
 L.xfer_no_credits = "Crediti insufficienti per il trasferimento."
 L.xfer_success = "Trasferimento crediti a {player} completato."
 L.xfer_received = "{player} ti ha dato {num} crediti."
-
--- Finestra Rimescola nel menù equipaggiamento
--- Reroll tab in equipment menu
-L.reroll_name = "Rimescola"
-L.reroll_menutitle = "Rimescola oggetti"
-L.reroll_no_credits = "Non hai crediti per rimescolare!"
-L.reroll_button = "Rimescola"
-L.reroll_help = "Usa {amount} crediti per prendere nuovi oggetti nello shop!"
 
 -- Finestra Radio nel menù equipaggiamento
 -- Radio tab in equipment menu
@@ -275,60 +263,6 @@ L.sb_tag_susp = "SOSPETTO"
 L.sb_tag_avoid = "EVITA"
 L.sb_tag_kill = "UCCIDI"
 L.sb_tag_miss = "PERSO"
-
--- Menù aiuto e impostazioni
--- Help and settings menu (F1)
-
-L.help_title = "Aiuto e Impostazioni"
-
--- Finestre
--- Tabs
-L.help_tut = "Tutorial"
-L.help_tut_tip = "Come funziona TTT, in 6 passi"
-
-L.help_settings = "Impostazioni"
-L.help_settings_tip = "Impostazioni lato client"
-
--- Impostazioni
--- Settings
-L.set_title_gui = "Impostazioni interfaccia"
-
-L.set_tips = "Mostra consigli in basso mentre sei uno spettatore"
-
-L.set_startpopup = "Durata delle informazioni all'inizio del round"
-L.set_startpopup_tip = "Quando il round comincia, un piccolo avviso appare in fondo al tuo schermo per alcuni secondi. Cambia il tempo per il quale si vede."
-
-L.set_cross_opacity = "Opacità del mirino"
-L.set_cross_disable = "Disabilita completamente il mirino"
-L.set_minimal_id = "ID bersaglio minimale sotto il mirino (niente karma, consigli, ecc.)"
-L.set_healthlabel = "Mostra lo stato della vita sulla barra degli HP"
-L.set_lowsights = "Abbassa arma quando usi il mirino di ferro"
-L.set_lowsights_tip = "Abilita la funzionalità di abbassare il modello dell'arma sullo schermo mentre usi il mirino di ferro. Ti renderà più facile vedere il tuo bersaglio, ma sembrerà meno realistico."
-L.set_fastsw = "Cambio armi veloce"
-L.set_fastsw_tip = "Abilita di cambiare le armi senza cliccare per usare l'arma. Abilita il menù per vederlo mentre cambi."
-L.set_fastsw_menu = "Abilita il menu con il cambio veloce di armi"
-L.set_fastswmenu_tip = "Quando il cambio veloce di armi è abilitato, il menù di cambio apparirà."
-L.set_wswitch = "Disabilita la chiusura automatica del menù delle armi"
-L.set_wswitch_tip = "Per default il menù si chiude automaticamente dopo alcuni secondi dopo l'ultimo scroll. Abilita per farlo restare aperto."
-L.set_cues = "Senti un avviso appena inizia o finisce il round"
-
-
-L.set_title_play = "Impostazioni gameplay"
-
-L.set_specmode = "Modalità solo spettatore (rimani sempre in spettatori)"
-L.set_specmode_tip = "La modalità solo spettatore impedirà che tu respawni quando un round comincia, rimanendo invece spettatore."
-L.set_mute = "Muta tutti i giocatori vivi quando muori"
-L.set_mute_tip = "Muta tutti i giocatori ancora in vita mentre sei morto o spettatore."
-
-
-L.set_title_lang = "Impostazioni lingua"
-
--- Potrebbe essere meglio lasciarlo in inglese, così i giocatori inglese possono sempre
--- trovare l'impostazione della lingua anche se è una lingua che non conoscono.
--- It may be best to leave this next one english, so english players can always
--- find the language setting even if it's set to a language they don't know.
-L.set_lang = "Language selection:"
-
 
 -- Armi ed equipaggiamento, HUD e messaggi
 -- Weapons and equipment, HUD and messages
@@ -639,32 +573,9 @@ L.karma_min = "Irresponsabile"
 -- TargetID misc
 L.corpse = "Cadavere"
 L.corpse_hint = "Premi {usekey} per identificare. {walkkey} + {usekey} per identificare segretamente."
-L.corpse_too_far_away = "Il cadavere è troppo lontano."
-L.corpse_binoculars = "Premi [{key}] per identificare il corpo con il binocolo."
-L.corpse_searched_by_detective = "This corpse was searched by a detective"
 
-L.target_disg = "(TRAVESTITO)"
+L.target_disg = "travestito"
 L.target_unid = "Corpo non identificato"
-
-
-L.target_c4 = "Premi [{usekey}] per aprire il menù del C4"
-L.target_c4_armed = "Premi [{usekey}] per disinnescare il C4"
-L.target_c4_armed_defuser = "Premi [{usekey}] per usare il disinnescatore"
-L.target_c4_not_disarmable = "Non puoi disinnescare il C4 di un compagno in vita"
-L.c4_short_desc = "Qualcosa molto esplosivo"
-
-L.target_traitor = "TRADITORE"
-L.target_detective = "DETECTIVE"
-
-L.target_pickup = "Premi [{usekey}] per raccogliere"
-L.target_slot_info = "Slot: {slot}"
-L.target_pickup_weapon = "Premi [{usekey}] per prendere l'arma"
-L.target_switch_weapon = "Premi [{usekey}] per scambiare con la tua arma corrente"
-L.target_pickup_weapon_hidden = ", premi [{usekey} + {walkkey}] per prenderla silenziosamente"
-L.target_switch_weapon_hidden = ", premi [{usekey} + {walkkey}] per scambiarla silenziosamente"
-L.target_switch_weapon_nospace = "Non hai uno slot nell'inventario adatto a quest'arma"
-L.target_switch_drop_weapon_info = "Dropping {name} from slot {slot}"
-L.target_switch_drop_weapon_info_noslot = "There is no droppable weapon in slot {slot}"
 
 L.target_credits = "Identifica per ricevere i crediti non spesi"
 
@@ -674,18 +585,6 @@ L.tbut_single = "Uso singolo"
 L.tbut_reuse = "Riutilizzabile"
 L.tbut_retime = "Riutilizzabile dopo {num} secondi"
 L.tbut_help = "Premi {key} per attivare"
-
-L.tbut_help_admin = "Modifica le impostazioni per i bottoni dei traditori"
-L.tbut_role_toggle = "[{walkkey} + {usekey}] to toggle this button for {role}"
-L.tbut_role_config = "Ruolo: {current}"
-L.tbut_team_toggle = "[SHIFT + {walkkey} + {usekey}] per rimuovere questo bottone per il team {team}"
-L.tbut_team_config = "Team: {current}"
-L.tbut_current_config = "Configurazione corrente:"
-L.tbut_intended_config = "Configurazione voluta dal creatore della mappa:"
-L.tbut_admin_mode_only = "Visibile solo perché sei admin e '{cv}' è impostato a '1'"
-L.tbut_allow = "Permetti"
-L.tbut_prohib = "Proibisci"
-L.tbut_default = "Default"
 
 -- Stringhe di informazione sull'equipaggiamento (sulla sinistra sopra il pannello di vita/munizioni)
 -- Equipment info lines (on the left above the health/ammo panel)
@@ -705,9 +604,6 @@ L.punch_title = "PUNCH-O-METER"
 L.punch_help = "Tasti per il movimento o salto: lancia oggetto. Abbassati: lascia oggetto."
 L.punch_bonus = "Il tuo punteggio basso ha diminuito il livello del punch-o-meter di {num}"
 L.punch_malus = "Il tuo punteggio alto ha aumentato il livello del punch-o-meter di {num}!"
-
-L.spec_help = "Clicca per guardare i giocatori, o premi {usekey} su un oggetto per possederlo."
-L.spec_help2 = "Per lasciare la modalità spettatore devi aprire il menù premendo {helpkey}, vai a 'gameplay' e rimuovi la modalità spettatore."
 
 -- Informazioni che si vedono quando comincia il round
 -- Info popups shown when the round starts
@@ -971,7 +867,6 @@ L.aw_fst3_title = "Primo Errore"
 L.aw_fst3_text = "è stato il primo ad uccidere. Peccato che fosse un compagno innocente."
 
 L.aw_fst4_title = "Primo Colpo"
-
 L.aw_fst4_text = "ha fatto la prima uccisione colpendo un traditore."
 
 L.aw_all1_title = "Più Letale tra Compagni"
@@ -1151,17 +1046,8 @@ L.aw_tod2_text = "morto proprio all'inizio del round."
 -- New and modified pieces of text are placed below this point, marked with the
 -- version in which they were added, to make updating translations easier.
 
-
--- v23
-L.set_avoid = "Evita di essere selezionato come {role}."
-L.set_avoid_tip = "Abilita questa opzione per chiedere al server di non selezionarti come {role} se possibile."
-
 -- v24
 L.drop_no_ammo = "Munizioni insufficienti nel tuo caricatore per lasciare un pacchetto di munizioni."
-
--- v31
-L.set_cross_brightness = "Luminosità mirino"
-L.set_cross_size = "Grandezza mirino"
 
 -- 5-25-15
 L.hat_retrieve = "Hai raccolto il cappello di un Detective."
@@ -1192,27 +1078,26 @@ L.binoc_body = "CORPO TROVATO"
 
 L.idle_popup_title = "Inattivo"
 
--- 6-22-17 (Mirino)
--- 6-22-17 (Crosshair)
-L.set_title_cross = "Impostazioni mirino"
+--------------------------------
+-- TTT2 LANGUAGE
 
-L.set_cross_color_enable = "Abilita colori personalizzati del mirino"
-L.set_cross_color = "Colore personalizzato mirino"
-L.set_cross_gap_enable = "Abilita gap del mirino personalizzato"
-L.set_cross_gap = "Gap mirino personalizzato"
-L.set_cross_static_enable = "Abilita mirino statico"
-L.set_ironsight_cross_opacity = "Opacità mirino di ferro"
-L.set_cross_weaponscale_enable = "Abilita scalatura del mirino dell'arma"
-L.set_cross_thickness = "Spessore mirino"
-L.set_cross_outlinethickness = "Spessore contorno del mirino"
-L.set_cross_dot_enable = "Abilita punto del mirino"
-
--- ttt2
+-- 2019-01-31
 L.create_own_shop = "Crea shop proprio"
 L.shop_link = "Collega con"
 L.shop_disabled = "Disabilita shop"
 L.shop_default = "Usa shop di default"
 
+-- 2019-05-05
+L.reroll_name = "Rimescola"
+L.reroll_menutitle = "Rimescola oggetti"
+L.reroll_no_credits = "Non hai crediti per rimescolare!"
+L.reroll_button = "Rimescola"
+L.reroll_help = "Usa {amount} crediti per prendere nuovi oggetti nello shop!"
+
+-- 2019-05-05
+L.equip_not_alive = "Puoi vedere tutti gli oggetti disponibili selezionando un ruolo sulla destra. Non ti dimenticare di segnare i toui preferiti!"
+
+-- 2019-06-27
 L.shop_editor_title = "Editor Shop"
 L.shop_edit_items_weapong = "Modifica Oggetti / Armi"
 L.shop_edit = "Modifica Shop"
@@ -1224,47 +1109,8 @@ L.shop_create_shop = "Crea Shop personalizzato"
 L.shop_selected = "Selezionato: {role}"
 L.shop_settings_desc = "Cambia i valori per adattare le ConVars del Random Shop ConVars. Non dimenticarti di salvare dopo!"
 
-L.f1_settings_changes_title = "Cambiamenti"
-L.f1_settings_hudswitcher_title = "Selettore HUD"
-L.f1_settings_bindings_title = "Associazioni tasti"
-L.f1_settings_interface_title = "Interfaccia"
-L.f1_settings_gameplay_title = "Gameplay"
-L.f1_settings_crosshair_title = "Mirino"
-L.f1_settings_language_title = "Lingua"
-L.f1_settings_administration_title = "Amministrazione"
-L.f1_settings_shop_title = "Shop equipaggiamento"
-
-L.f1_settings_shop_desc_shopopen = "Lo shop dovrebbe essere aperto/chiuso invece del menù dei punteggi in preparazione e alla fine del round?"
-L.f1_settings_shop_title_layout = "Layout Lista di Oggetti"
-L.f1_settings_shop_desc_num_columns = "Numero di colonne"
-L.f1_settings_shop_desc_num_rows = "Numero di righe"
-L.f1_settings_shop_desc_item_size = "Grandezza icona"
-L.f1_settings_shop_title_marker = "Impostazioni Indicatore Arma"
-L.f1_settings_shop_desc_show_slot = "Mostra indicatore dello slot"
-L.f1_settings_shop_desc_show_custom = "Mostra indicatore dell'oggetto personalizzato"
-L.f1_settings_shop_desc_show_favourite = "Mostra indicatore oggetto preferito"
-
-L.f1_shop_restricted = "Modifiche individuali layout dello shop dell'equipaggiamento non sono permesse su questo server. Per favore contatta l'admin del server per i dettagli."
-
-L.f1_settings_hudswitcher_desc_basecolor = "Colore base"
-L.f1_settings_hudswitcher_desc_hud_scale = "Scala HUD (reimposta posizioni)"
-L.f1_settings_hudswitcher_button_close = "Chiudi"
-L.f1_settings_hudswitcher_desc_reset = "Reimposta data dell'HUD"
-L.f1_settings_hudswitcher_button_reset = "Reset"
-L.f1_settings_hudswitcher_desc_layout_editor = "Cambia la posizione\ndell'elemento e la grandezza"
-L.f1_settings_hudswitcher_button_layout_editor = "Layout Editor"
-L.f1_settings_hudswitcher_desc_hud_not_supported = "! QUESTO HUD NON SUPPORTA L'HUD EDITOR !"
-
-L.f1_bind_reset_default = "Default"
-L.f1_bind_disable_bind = "Disabilita"
-L.f1_bind_description = "Clicca e premi un tasto per assegnarlo."
-L.f1_bind_reset_default_description = "Reimposta al valore di default."
-L.f1_bind_disable_description = "Disabilita questo assegnamento."
-
 L.ttt2_bindings_new = "Nuovo tasto assegnato per {name}: {key}"
-L.hud_default = "HUD di Default"
-L.hud_force = "Forza HUD"
-L.hud_restricted = "Limita HUD"
+
 L.hud_default_failed = "Fallito nell'impostare l'HUD {hudname} come nuovo default. Sei un admin ed esiste questo HUD?"
 L.hud_forced_failed = "Fallito nell'impostare l'HUD {hudname}. Sei un admin ed esiste questo HUD?"
 L.hud_restricted_failed = "Fallito nell'impostare l'HUD {hudname}. Sei un admin?"
@@ -1273,24 +1119,60 @@ L.shop_role_select = "Seleziona un ruolo"
 L.shop_role_selected = "Lo shop del {roles} è stato selezionato!"
 L.shop_search = "Cerca"
 
-L.button_save = "Salva"
+L.spec_help = "Clicca per guardare i giocatori, o premi {usekey} su un oggetto per possederlo."
+L.spec_help2 = "Per lasciare la modalità spettatore devi aprire il menù premendo {helpkey}, vai a 'gameplay' e rimuovi la modalità spettatore."
 
-L.disable_spectatorsoutline = "Disabilita il contorno degli oggetti controllati"
-L.disable_spectatorsoutline_tip = "Disabilita i contorni intorno agli oggetti controllati dagli spettatori (+Performance)"
+-- 2019-10-19
+L.drop_ammo_prevented = "Qualcosa ti impedisce di lasciare queste munizioni."
 
-L.disable_overheadicons = "Disabilita icone ruoli"
-L.disable_overheadicons_tip = "Disabilita le icone dei ruoli sopra le teste dei giocatori (+Performance)"
+-- 2019-10-28
+L.target_c4 = "Premi [{usekey}] per aprire il menù del C4"
+L.target_c4_armed = "Premi [{usekey}] per disinnescare il C4"
+L.target_c4_armed_defuser = "Premi [{usekey}] per usare il disinnescatore"
+L.target_c4_not_disarmable = "Non puoi disinnescare il C4 di un compagno in vita"
+L.c4_short_desc = "Qualcosa molto esplosivo"
 
--- 2020-01-04
-L.doubletap_sprint_anykey = "Continua a correre premendo due volte finché non ti fermi"
-L.doubletap_sprint_anykey_tip = "Continuerai a correre finché ti muoverai"
+L.target_pickup = "Premi [{usekey}] per raccogliere"
+L.target_slot_info = "Slot: {slot}"
+L.target_pickup_weapon = "Premi [{usekey}] per prendere l'arma"
+L.target_switch_weapon = "Premi [{usekey}] per scambiare con la tua arma corrente"
+L.target_pickup_weapon_hidden = ", premi [{usekey} + {walkkey}] per prenderla silenziosamente"
+L.target_switch_weapon_hidden = ", premi [{usekey} + {walkkey}] per scambiarla silenziosamente"
+L.target_switch_weapon_nospace = "Non hai uno slot nell'inventario adatto a quest'arma"
+L.target_switch_drop_weapon_info = "Lasciando l'arma {name} nello slot {slot}"
+L.target_switch_drop_weapon_info_noslot = "Non c'è un'arma che puoi lasciare nello slot {slot}"
 
-L.disable_doubletap_sprint = "Disabilita la corsa premendo due volte"
-L.disable_doubletap_sprint_tip = "Premere due volte un tasto di movimento non ti farà più correre"
+L.corpse_searched_by_detective = "Questo cadavere è stato identificato da un detective"
+L.corpse_too_far_away = "Il cadavere è troppo lontano."
 
--- 2020-02-03
-L.hold_aim = "Tieni premuto per mirare"
-L.hold_aim_tip = "Continuerai ad usare il mirino di ferro fino a che terrai premuto il tasto del fuoco secondario (default: tasto destro del mouse)"
+L.radio_pickup_wrong_team = "Non puoi prendere la radio di un'altra squadra."
+L.radio_short_desc = "I suoni delle armi sono come musica per me"
+
+L.hstation_subtitle = "Premi [{usekey}] per ricevere vita."
+L.hstation_charge = "Carica rimasta nella Stazione di Cura: {charge}"
+L.hstation_empty = "Non c'è più carica nella Stazione di Cura"
+L.hstation_maxhealth = "I tuoi HP sono al massimo"
+L.hstation_short_desc = "La Stazione di Cura si ricarica lentamente con il tempo"
+
+-- 2019-11-03
+L.vis_short_desc = "Visualizza un scena del crimine se la vittima è morta per un colpo di arma da fuoco"
+L.corpse_binoculars = "Premi [{key}] per identificare i cadaveri con il binocolo."
+L.binoc_progress = "Progresso ricerca: {progress}%"
+
+L.pickup_no_room = "Non hai spazio nell'inventario per questo tipo di arma"
+
+-- 2020-01-07
+L.tbut_help_admin = "Modifica le impostazioni per i bottoni dei traditori"
+L.tbut_role_toggle = "[{walkkey} + {usekey}] to toggle this button for {role}"
+L.tbut_role_config = "Ruolo: {current}"
+L.tbut_team_toggle = "[SHIFT + {walkkey} + {usekey}] per rimuovere questo bottone per il team {team}"
+L.tbut_team_config = "Team: {current}"
+L.tbut_current_config = "Configurazione corrente:"
+L.tbut_intended_config = "Configurazione voluta dal creatore della mappa:"
+L.tbut_admin_mode_only = "Visibile solo perché sei admin e '{cv}' è impostato a '1'"
+L.tbut_allow = "Permetti"
+L.tbut_prohib = "Proibisci"
+L.tbut_default = "Default"
 
 -- 2020-02-09
 L.name_door = "Porta"
@@ -1300,10 +1182,160 @@ L.door_locked = "La porta è chiusa!"
 
 -- 2020-02-11
 L.automoved_to_spec = "(MESSAGGIO AUTOMATICO) Sono stato spostato negli Spettatori perché ero inattivo/AFK."
+L.mute_team = "{team} mutato."
 
 -- 2020-02-16
 L.door_auto_closes = "Questa porta si chiude automaticamente"
 L.door_open_touch = "Cammina addosso ad una porta per aprirla."
 L.door_open_touch_and_use = "Cammina addosso ad una porta o premi [{usekey}] per aprire."
-
 L.hud_health = "Vita"
+
+-- 2020-03-09
+L.help_title = "Aiuto e Impostazioni"
+L.menu_name = "MENÙ"
+
+L.menu_changelog_title = "Cambiamenti"
+L.menu_guide_title = "Guida TTT2"
+L.menu_bindings_title = "Assegnazione Tasti"
+L.menu_language_title = "Lingua"
+L.menu_appearance_title = "Aspetto"
+L.menu_gameplay_title = "Gameplay"
+L.menu_addons_title = "Addon"
+L.menu_legacy_title = "Addon legacy"
+L.menu_administration_title = "Amministrazione"
+L.menu_equipment_title = "Modifica Equipaggiamento"
+L.menu_shops_title = "Modifica Shop"
+
+L.menu_changelog_description = "Una lista di cambiamenti e correzioni nelle ultime versioni"
+L.menu_guide_description = "Ti aiuta a cominciare con TTT2 e ti spiega delle cose su gameplay, ruoli and altre cose"
+L.menu_bindings_description = "Assegna specifiche funzioni di TTT2 e le sue addon a tuo piacimento"
+L.menu_language_description = "Seleziona la lingua del gioco"
+L.menu_appearance_description = "Modifica l'aspetto e la performane dell'interfaccia"
+L.menu_gameplay_description = "Evita dei ruoli e modifica alcune funzioni"
+L.menu_addons_description = "Configura le addon locali a tuo piacimento"
+L.menu_legacy_description = "Un pannello con le finestre convertite dal TTT originale, dovrebbero essere portate al nuovo sistema"
+L.menu_administration_description = "Impostazioni generli per gli HUD, shop ecc."
+L.menu_equipment_description = "Imposta crediti, limitazioni, disponibilità e altre cose"
+L.menu_shops_description = "Aggiungi/Rimuovi gli shop ai ruoli e definisci l'equipaggiamento all'interno"
+
+L.submenu_guide_gameplay_title = "Gameplay"
+L.submenu_guide_roles_title = "Ruoli"
+L.submenu_guide_equipment_title = "Equipaggiamento"
+
+L.submenu_bindings_bindings_title = "Assegnazione tasti"
+
+L.submenu_language_language_title = "Lingua"
+
+L.submenu_appearance_general_title = "Generale"
+L.submenu_appearance_hudswitcher_title = "Selettore HUD"
+L.submenu_appearance_vskin_title = "VSkin"
+L.submenu_appearance_targetid_title = "TargetID"
+L.submenu_appearance_shop_title = "Impostazioni Shop"
+L.submenu_appearance_crosshair_title = "Mirino"
+L.submenu_appearance_dmgindicator_title = "Indicatore del Danno"
+L.submenu_appearance_performance_title = "Performance"
+L.submenu_appearance_interface_title = "Interfaccia"
+L.submenu_appearance_miscellaneous_title = "Varie"
+
+L.submenu_gameplay_general_title = "Generale"
+L.submenu_gameplay_avoidroles_title = "Evita Selezione Ruoli"
+
+L.submenu_administration_hud_title = "Impostazioni HUD"
+L.submenu_administration_random_shop = "Shop Casuale"
+
+L.help_color_desc = "Se questa impostazione è abilitata, un colore globale può essere scelto e quello verrà usato per il contorno del targetID e il mirino."
+L.help_scale_factor = "Questo numero influenza tutti gli elementi dell'interfaccia (HUD, vgui e targetID). Viene automaticamente aggiornato se viene modificata la risoluzione. Cambiare questo valore reimposterà l'HUD!"
+L.help_hud_game_reload = "L'HUD non è disponibile ora. Il gioco deve essere riavviato."
+L.help_hud_special_settings = "Queste impostazioni sono specifiche per l'HUD."
+L.help_vskin_info = "VSkin (vgui skin) è la skin applicata a tutti gli elementi del menù come quello corrente. Le skin possono essere create facilmente con un semplice script lua e possono cambiare colori e altri parametri per la grandezza."
+L.help_targetid_info = "TargetID è l'informazione visualizzata quando miri un'entità. Un colore fisso può essere impostato nelle impostazioni generali."
+L.help_hud_default_desc = "Imposta l'HUD di default per tutti i giocatori. I giocatori che non selezionano un HUD avranno questo come default. Questo non cambierà l'HUD dei giocatori che l'hanno selezionato."
+L.help_hud_forced_desc = "Forza un HUD per gli altri giocatori. Questo disabilita la selezione degli HUD selection per tutti."
+L.help_hud_enabled_desc = "Abilita/Disabilita gli HUD per limitarne la selezione."
+L.help_damage_indicator_desc = "L'indicatore di danno è quello che appare quando un giocatore viene danneggiato. Per aggiungere un nuovo tema, metti un png in 'materials/vgui/ttt/damageindicator/themes/'."
+L.help_shop_key_desc = "Lo shop dovrebbe essere aperto/chiuso invece del menù dei punteggi in preparazione e alla fine del round?"
+
+L.label_menu_menu = "MENÙ"
+L.label_menu_admin_spacer = "Area Admin (non mostrato agli utenti normali)"
+L.label_language_set = "Select lingua"
+L.label_global_color_enable = "Abilita colore globale"
+L.label_global_color = "Colore globale"
+L.label_global_scale_factor = "Fattore di scala globale"
+L.label_hud_select = "Seleziona HUD"
+L.label_vskin_select = "Seleziona VSkin"
+L.label_blur_enable = "Abilita blur di sfondo VSkin"
+L.label_minimal_targetid = "ID bersaglio minimale sotto il mirino (niente karma, consigli, ecc.)"
+L.label_shop_always_show = "Mostra sempre lo shop"
+L.label_shop_num_col = "Numero di colonne"
+L.label_shop_num_row = "Numero di righe"
+L.label_shop_item_size = "Grandezza icona"
+L.label_shop_show_slot = "Mostra indicatore dello slot"
+L.label_shop_show_custom = "Mostra indicatore dell'oggetto personalizzato"
+L.label_shop_show_fav = "Mostra indicatore oggetto preferito"
+L.label_crosshair_enable = "Abilita Crosshair"
+L.label_crosshair_gap_enable = "Abilita gap del mirino personalizzato"
+L.label_crosshair_gap = "Gap mirino personalizzato"
+L.label_crosshair_opacity = "Opacità mirino di ferro"
+L.label_crosshair_ironsight_opacity = "Widoczność celownika z przycelowania"
+L.label_crosshair_size = "Grandezza mirino"
+L.label_crosshair_thickness = "Spessore mirino"
+L.label_crosshair_thickness_outline = "Spessore contorno del mirino"
+L.label_crosshair_static_enable = "Abilita mirino statico"
+L.label_crosshair_dot_enable = "Abilita punto del mirino"
+L.label_crosshair_scale_enable = "Abilita scalatura del mirino dell'arma"
+L.label_crosshair_ironsight_low_enabled = "Abbassa arma quando usi il mirino di ferro"
+L.label_damage_indicator_enable = "Abilita indicatore del danno"
+L.label_damage_indicator_mode = "Seleziona tema dell'indicatore del danno"
+L.label_damage_indicator_duration = "Secondi per cui l'indicatore di danno è visible dopo un colpo"
+L.label_damage_indicator_maxdamage = "Danno necessario per il massimo dell'opacità"
+L.label_damage_indicator_maxalpha = "Massima opacità dell'Indicatore del Danno"
+L.label_performance_halo_enable = "Disegna un contorno intorno ad alcune entità quando le guardi"
+L.label_performance_spec_outline_enable = "Abilita il contorno agli oggetti controllati"
+L.label_performance_ohicon_enable = "Abilita icone dei ruoli sopra la testa"
+L.label_interface_tips_enable = "Mostra consigli in basso mentre sei uno spettatore"
+L.label_interface_popup = "Durata delle informazioni all'inizio del round"
+L.label_interface_fastsw_menu = "Abilita il menu con il cambio veloce di armi"
+L.label_inferface_wswitch_hide_enable = "Abilita la chiusura automatica del menù di switch rapido"
+L.label_inferface_scues_enable = "Senti un avviso appena inizia o finisce il round"
+L.label_gameplay_specmode = "Modalità solo spettatore (rimani sempre in spettatori)"
+L.label_gameplay_fastsw = "Cambio armi veloce"
+L.label_gameplay_hold_aim = "Tieni premuto per mirare"
+L.label_gameplay_mute = "Muta tutti i giocatori vivi quando muori"
+L.label_gameplay_dtsprint_enable = "Abilita la corsa con il doppio tap"
+L.label_gameplay_dtsprint_anykey = "Continua la corsa finché non smette di muoverti"
+L.label_hud_default = "HUD di Default"
+L.label_hud_force = "Forza HUD"
+
+L.label_bind_weaponswitch = "Prendi Arma"
+L.label_bind_sprint = "Corsa"
+L.label_bind_voice = "Chat Vocale Globale"
+L.label_bind_voice_team = "Chat Vocale di Squadra"
+
+L.label_hud_basecolor = "Colore base"
+
+L.header_bindings_ttt2 = "Assegnazione dei tasti di TTT2"
+L.header_bindings_other = "Altre Assegnazioni dei tasti"
+L.header_language = "Impostazioni della Lingua"
+L.header_global_color = "Seleziona Colore Globale"
+L.header_hud_select = "Seleziona un HUD"
+L.header_hud_customize = "Personalizza l'HUD"
+L.header_vskin_select = "Seleziona e Personalizza la VSkin"
+L.header_targetid = "Impostazioni TargetID"
+L.header_shop_settings = "Impostazioni Equipaggiamento Shop"
+L.header_shop_layout = "Layout Lista di Oggetti"
+L.header_shop_marker = "Impostazioni Indicatore Arma"
+L.header_crosshair_settings = "Impostazioni Mirino"
+L.header_damage_indicator = "Impostazioni Indicatori del Danno"
+L.header_performance_settings = "Impostazioni Performance"
+L.header_interface_settings = "Impostazioni Interfaccia"
+L.header_gameplay_settings = "Impostazioni del Gameplay"
+L.header_roleselection = "Abilita Assegnamento Ruoli"
+L.header_hud_administration = "Seleziona HUD di Default e Forzati"
+L.header_hud_enabled = "Abilita/Disabilita HUD"
+
+L.button_menu_back = "indietro"
+L.button_none = "Nessuno"
+L.button_press_key = "Premi un tasto"
+L.button_save = "Salva"
+L.button_reset = "Reimposta"
+L.button_close = "Chiudi"
