@@ -40,8 +40,8 @@ L.round_traitors_one = "Traditore, sei rimasto da solo."
 L.round_traitors_more = "Traditore, questi sono i tuoi alleati: {names}"
 
 L.win_time = "Il tempo è finito. I Traditori hanno perso."
-L.win_traitors = "I Traditori hanno vinto!"
-L.win_innocents = "Gli Innocenti hanno vinto!"
+L.win_traitors = "Traditori vincono!"
+L.win_innocents = "Innocenti vincono!"
 L.win_bees = "Pareggio!"
 L.win_showreport = "Guardiamo il report per {num} secondi."
 
@@ -637,12 +637,31 @@ L.karma_min = "Irresponsabile"
 -- TargetID misc
 L.corpse = "Cadavere"
 L.corpse_hint = "Premi {usekey} per identificare. {walkkey} + {usekey} per identificare segretamente."
+L.corpse_too_far_away = "Il cadavere è troppo lontano."
+L.corpse_binoculars = "Premi [{key}] per identificare il corpo con il binocolo."
+L.corpse_searched_by_detective = "This corpse was searched by a detective"
 
 L.target_disg = "(TRAVESTITO)"
 L.target_unid = "Corpo non identificato"
 
+L.target_c4 = "Premi [{usekey}] per aprire il menù del C4"
+L.target_c4_armed = "Premi [{usekey}] per disinnescare il C4"
+L.target_c4_armed_defuser = "Premi [{usekey}] per usare il disinnescatore"
+L.target_c4_not_disarmable = "Non puoi disinnescare il C4 di un compagno in vita"
+L.c4_short_desc = "Qualcosa molto esplosivo"
+
 L.target_traitor = "TRADITORE"
 L.target_detective = "DETECTIVE"
+
+L.target_pickup = "Premi [{usekey}] per raccogliere"
+L.target_slot_info = "Slot: {slot}"
+L.target_pickup_weapon = "Premi [{usekey}] per prendere l'arma"
+L.target_switch_weapon = "Premi [{usekey}] per scambiare con la tua arma corrente"
+L.target_pickup_weapon_hidden = ", premi [{usekey} + {walkkey}] per prenderla silenziosamente"
+L.target_switch_weapon_hidden = ", premi [{usekey} + {walkkey}] per scambiarla silenziosamente"
+L.target_switch_weapon_nospace = "Non hai uno slot nell'inventario adatto a quest'arma"
+L.target_switch_drop_weapon_info = "Dropping {name} from slot {slot}"
+L.target_switch_drop_weapon_info_noslot = "There is no droppable weapon in slot {slot}"
 
 L.target_credits = "Identifica per ricevere i crediti non spesi"
 
@@ -652,6 +671,17 @@ L.tbut_single = "Uso singolo"
 L.tbut_reuse = "Riutilizzabile"
 L.tbut_retime = "Riutilizzabile dopo {num} secondi"
 L.tbut_help = "Premi {key} per attivare"
+L.tbut_help_admin = "Modifica le impostazioni per i bottoni dei traditori"
+L.tbut_role_toggle = "[{walkkey} + {usekey}] to toggle this button for {role}"
+L.tbut_role_config = "Ruolo: {current}"
+L.tbut_team_toggle = "[SHIFT + {walkkey} + {usekey}] per rimuovere questo bottone per il team {team}"
+L.tbut_team_config = "Team: {current}"
+L.tbut_current_config = "Configurazione corrente:"
+L.tbut_intended_config = "Configurazione voluta dal creatore della mappa:"
+L.tbut_admin_mode_only = "Visibile solo perché sei admin e '{cv}' è impostato a '1'"
+L.tbut_allow = "Permetti"
+L.tbut_prohib = "Proibisci"
+L.tbut_default = "Default"
 
 -- Stringhe di informazione sull'equipaggiamento (sulla sinistra sopra il pannello di vita/munizioni)
 -- Equipment info lines (on the left above the health/ammo panel)
@@ -937,7 +967,7 @@ L.aw_fst3_title = "Primo Errore"
 L.aw_fst3_text = "è stato il primo ad uccidere. Peccato che fosse un compagno innocente."
 
 L.aw_fst4_title = "Primo Colpo"
-L.aw_fst4_text = "ha ucciso fatto la prima uccisione colpendo un traditore."
+L.aw_fst4_text = "ha fatto la prima uccisione colpendo un traditore."
 
 L.aw_all1_title = "Più Letale tra Compagni"
 L.aw_all1_text = "è stato responsabile di ogni uccisione fatta dagli innocenti."
