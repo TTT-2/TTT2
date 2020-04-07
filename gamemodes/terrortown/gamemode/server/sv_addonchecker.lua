@@ -87,7 +87,9 @@ Addonchecker.buggyAddons = {
 
 	["1092556189"] = "", -- Town of Terror by Jenssons
 
-	["1215502383"] = "" -- Custom Roles by Noxx
+	["1215502383"] = "", -- Custom Roles by Noxx
+
+	["1382102057"] = "" -- Thanos's Infinity Gauntlet SWEP and Model
 }
 
 -- Addons that have newer version in the WS, that will work better with TTT2.

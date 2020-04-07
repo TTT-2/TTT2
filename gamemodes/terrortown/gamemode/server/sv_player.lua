@@ -32,9 +32,6 @@ util.AddNetworkString("ttt2_damage_received")
 function GM:PlayerInitialSpawn(ply)
 	ply:InitialSpawn()
 
-	-- Disable Gmod sprint, by setting it to the same speed as walk
-	ply:SetRunSpeed(ply:GetWalkSpeed())
-
 	local rstate = GetRoundState() or ROUND_WAIT
 
 	-- We should update the traitor list, if we are not about to send it
