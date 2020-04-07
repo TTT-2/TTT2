@@ -40,8 +40,10 @@ L.round_traitors_one = "Traditore, sei rimasto da solo."
 L.round_traitors_more = "Traditore, questi sono i tuoi alleati: {names}"
 
 L.win_time = "Il tempo è finito. I Traditori hanno perso."
+
 L.win_traitors = "Traditori vincono!"
 L.win_innocents = "Innocenti vincono!"
+
 L.win_bees = "Pareggio!"
 L.win_showreport = "Guardiamo il report per {num} secondi."
 
@@ -644,6 +646,7 @@ L.corpse_searched_by_detective = "This corpse was searched by a detective"
 L.target_disg = "(TRAVESTITO)"
 L.target_unid = "Corpo non identificato"
 
+
 L.target_c4 = "Premi [{usekey}] per aprire il menù del C4"
 L.target_c4_armed = "Premi [{usekey}] per disinnescare il C4"
 L.target_c4_armed_defuser = "Premi [{usekey}] per usare il disinnescatore"
@@ -671,6 +674,7 @@ L.tbut_single = "Uso singolo"
 L.tbut_reuse = "Riutilizzabile"
 L.tbut_retime = "Riutilizzabile dopo {num} secondi"
 L.tbut_help = "Premi {key} per attivare"
+
 L.tbut_help_admin = "Modifica le impostazioni per i bottoni dei traditori"
 L.tbut_role_toggle = "[{walkkey} + {usekey}] to toggle this button for {role}"
 L.tbut_role_config = "Ruolo: {current}"
@@ -967,6 +971,7 @@ L.aw_fst3_title = "Primo Errore"
 L.aw_fst3_text = "è stato il primo ad uccidere. Peccato che fosse un compagno innocente."
 
 L.aw_fst4_title = "Primo Colpo"
+
 L.aw_fst4_text = "ha fatto la prima uccisione colpendo un traditore."
 
 L.aw_all1_title = "Più Letale tra Compagni"
@@ -1300,4 +1305,5 @@ L.automoved_to_spec = "(MESSAGGIO AUTOMATICO) Sono stato spostato negli Spettato
 L.door_auto_closes = "Questa porta si chiude automaticamente"
 L.door_open_touch = "Cammina addosso ad una porta per aprirla."
 L.door_open_touch_and_use = "Cammina addosso ad una porta o premi [{usekey}] per aprire."
+
 L.hud_health = "Vita"
