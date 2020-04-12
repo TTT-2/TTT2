@@ -182,7 +182,7 @@ function ormodel:find(primaryValue)
 
     if string.find(self._primaryKey, ",") then return end
 
-    if not primaryKey then
+    if not self._primaryKey then
         return sql.QueryRow("SELECT * FROM " .. sql.SQLStr(self._tableName) .. " WHERE id=" .. sql.SQLStr(primaryValue))
     else
         return sql.QueryRow("SELECT * FROM " .. sql.SQLStr(self._tableName) .. " WHERE " .. sql.SQLStr(self._primaryKey) .. "=" .. sql.SQLStr(primaryValue))
