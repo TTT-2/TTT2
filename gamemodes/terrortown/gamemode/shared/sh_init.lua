@@ -529,6 +529,7 @@ include("ttt2/extensions/table.lua")
 include("ttt2/libraries/door.lua")
 include("ttt2/libraries/thermalvision.lua")
 
+include("ttt2/extensions/sql.lua")
 include("ttt2/orm/model.lua")
 
 -- include ttt required files
