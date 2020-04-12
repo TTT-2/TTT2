@@ -43,6 +43,7 @@ local icon_tid_credits = Material("vgui/ttt/tid/tid_credits")
 local icon_tid_detective = Material("vgui/ttt/tid/tid_detective")
 local icon_tid_locked = Material("vgui/ttt/tid/tid_locked")
 local icon_tid_auto_close = Material("vgui/ttt/tid/tid_auto_close")
+local materialDoor = Material("vgui/ttt/tid/tid_big_door")
 
 ---
 -- Returns the localized ClassHint table
@@ -467,13 +468,17 @@ function HUDDrawTargetIDDoors(tData)
 
 	if ent:UseOpensDoor() and not ent:TouchOpensDoor() then
 		tData:SetSubtitle(ent:IsDoorOpen() and ParT("door_close", key_params) or ParT("door_open", key_params))
+		tData:SetKey(input.GetKeyCode(key_params.usekey))
 	elseif not ent:UseOpensDoor() and ent:TouchOpensDoor() then
 		tData:SetSubtitle(TryT("door_open_touch"))
+		tData:AddIcon(
+			materialDoor,
+			COLOR_LGRAY
+		)
 	else
 		tData:SetSubtitle(ParT("door_open_touch_and_use", key_params))
+		tData:SetKey(input.GetKeyCode(key_params.usekey))
 	end
-
-	tData:SetKey(input.GetKeyCode(key_params.usekey))
 
 	if ent:IsDoorLocked() then
 		tData:AddDescriptionLine(
@@ -481,9 +486,7 @@ function HUDDrawTargetIDDoors(tData)
 			COLOR_ORANGE,
 			{icon_tid_locked}
 		)
-	end
-
-	if ent:DoorAutoCloses() then
+	elseif ent:DoorAutoCloses() then
 		tData:AddDescriptionLine(
 			TryT("door_auto_closes"),
 			COLOR_SLATEGRAY,
