@@ -2,65 +2,149 @@
 -- Object Relational Model
 -- @author Histalek
 
+local baseclass = baseclass
+local ipairs = ipairs
+local sql = sql
+local table = table
+local string = string
+
 local ormodel = {}
 
 ---
 -- Creates a model with the given name and datastructure which (for now) includes an autoincrementing primarykey.
 -- @param string tableName The name of the model and hence the tablename in the database.
 -- @param table dataStructure The datastructure of the model. An array containing a table for each column/datavalue, with the identifier and the type of the data.
--- @usage model = makeORModel("myOwnTable", {{colname = "name", coltype = "TEXT"}, {colname = "percent", coltype = "REAL"}, {colname = "count", coltype = "INTEGER"}})
+-- @param string primaryKey The primarykey of the database table. If not explicitly set it will generate an autoincrementing INTEGER primary key. Should match one or multiple `colname` from the dataStructure seperated by `,`.
+-- @usage model = makeORModel("myOwnTable", {{colname = "name", coltype = "TEXT"}, {colname = "percent", coltype = "REAL"}, {colname = "count", coltype = "INTEGER"}}, "name, count")
 -- @realm shared
 -- @return table The created model.
-function makeORModel(tableName, dataStructure)
+function makeORModel(tableName, dataStructure, primaryKey)
+    assert(sql.IsValidTablename(tableName), tableName .. " is not a valid Tablename (no whitespaces allowed)")
+
     local model = table.Copy(ormodel)
 
     sanTableName = sql.SQLStr(tableName)
 
     model._tableName = tableName
     --model._datastructure = datastructure
-    --model._primaryKey = primaryKey
+    model._primaryKey = primaryKey
 
     if not sql.TableExists(tableName) then
-        local query = "CREATE TABLE " .. sanTableName .. " (id INTEGER PRIMARY KEY AUTOINCREMENT"
+        local query = "CREATE TABLE " .. sanTableName .. " ("
+        local columndata
 
         -- populate columns with dataStructure
         for _, v in ipairs(dataStructure) do
-            query = query .. ", " .. sql.SQLStr(v.colname) .. " " .. sql.SQLStr(v.coltype)
+            if not columndata then
+                columndata = sql.SQLStr(v.colname) .. " " .. sql.validateSqlType(v.coltype)
+            else
+                columndata = columndata .. ", " .. sql.SQLStr(v.colname) .. " " .. sql.validateSqlType(v.coltype)
+            end
         end
 
-        query = query .. ")"
+        if primaryKey then
+            columndata = columndata .. ", PRIMARY KEY (" .. primaryKey .. ")"
+        else
+            columndata = columndata .. ", " .. "id INTEGER PRIMARY KEY AUTOINCREMENT"
+        end
+
+        query = query .. columndata .. ")"
+
+        if primaryKey then
+            query = query .. "WITHOUT ROWID;"
+        end
 
         sql.Query(query)
     end
 
     -- this might be completely dumb
     model.save = function(self)
+        sql.Begin()
 
-        if not self._id then
-            local query = "INSERT INTO " .. sanTableName .. " VALUES (NULL"
+        local updateQuery = "UPDATE " .. sanTableName .. " SET "
+        local columndata
 
-            for _, v in ipairs(dataStructure) do
-                query = query .. ", " .. (sql.SQLStr(self[v.colname] or "NULL"))
+        -------START UPDATE QUERY ----------------
+        for _, v in ipairs(dataStructure) do
+            if not columndata then
+                columndata = v.colname .. "=" .. (sql.SQLStr(self[v.colname] or "NULL"))
+            else
+                columndata = columndata .. ", " .. v.colname .. "=" .. (sql.SQLStr(self[v.colname] or "NULL"))
             end
-
-            query = query .. ")"
-
-            sql.Query(query)
-            self._id = sql.QueryValue("SELECT last_insert_rowid()")
-        else
-            local query = "UPDATE " .. sanTableName .. " SET id=id"
-
-            for k, v in ipairs(dataStructure) do
-                query = query .. ", " .. v.colname .. "=" .. (sql.SQLStr(self[v.colname] or "NULL"))
-            end
-
-            query = query .. " WHERE id=" .. sql.SQLStr(self._id)
-            sql.Query(query)
         end
+
+        updateQuery = updateQuery .. columndata
+
+        if not primaryKey then
+            updateQuery = updateQuery .. " WHERE id=" .. sql.SQLStr(self._id)
+        elseif not string.find(primaryKey, ",") then
+            updateQuery = updateQuery .. " WHERE " .. primaryKey .. sql.SQLStr(self[primaryKey])
+        else
+            local keys = string.Explode(",", primaryKey)
+            local where
+
+            for _, v in ipairs(keys) do
+                if not where then
+                    where = sql.SQLStr(v) .. "=" .. self[v]
+                else
+                    where = where .. " AND " .. sql.SQLStr(v) .. "=" .. self[string.Trim(v)]
+                end
+            end
+        end
+
+        sql.Query(updateQuery)
+        -------END UPDATE QUERY ----------------
+
+        -------START INSERT QUERY ----------------
+        local insertQuery = "INSERT OR IGNORE INTO " .. sanTableName .. " ("
+        local columns
+        local columnvalues
+
+        for _, v in ipairs(dataStructure) do
+            if not columns then
+                columns = sql.SQLStr(v.colname)
+            else
+                columns = columns .. ", " .. sql.SQLStr(v.colname)
+            end
+
+            if not columnvalues then
+                columnvalues = (sql.SQLStr(self[v.colname] or "NULL"))
+            else
+                columnvalues = columnvalues .. ", " .. (sql.SQLStr(self[v.colname] or "NULL"))
+            end
+        end
+
+        insertQuery = insertQuery .. columns .. ") VALUES (" .. columnvalues .. ")"
+
+        sql.Query(insertQuery)
+        -------END INSERT QUERY ----------------
+
+        if not self._id and not primaryKey then
+            self._id = sql.QueryValue("SELECT last_insert_rowid()")
+        end
+
+        sql.Commit()
     end
 
     model.delete = function(self)
-        return sql.Query("DELETE FROM " .. sanTableName .. " WHERE id=" .. sql.SQLStr(self._id))
+        if not primaryKey then
+            return sql.Query("DELETE FROM " .. sanTableName .. " WHERE id=" .. sql.SQLStr(self._id))
+        elseif not string.find(primaryKey, ",") then
+            return sql.Query("DELETE FROM " .. sanTableName .. " WHERE " .. sql.SQLStr(primaryKey) .. "=" .. sql.SQLStr(self[primaryKey]))
+        else
+            local keys = string.Explode(",", primaryKey)
+            local where
+
+            for _, v in ipairs(keys) do
+                if not where then
+                    where = sql.SQLStr(v) .. "=" .. self[v]
+                else
+                    where = where .. " AND " .. sql.SQLStr(v) .. "=" .. self[string.Trim(v)]
+                end
+            end
+
+            sql.Query("DELETE FROM " .. sanTableName .. " WHERE " .. where)
+        end
     end
 
     baseclass.Set(tableName, model)
@@ -92,16 +176,23 @@ end
 ---
 -- Retrieves a specific object by their primarykey from the database.
 -- @param number|string primaryValue The value of the primarykey to search for.
+-- @note Only works for models with one primarykey.
 -- @return table Returns the table of the found object.
 function ormodel:find(primaryValue)
-    return sql.QueryRow("SELECT * FROM " .. sql.SQLStr(self._tableName) .. " WHERE id=" .. sql.SQLStr(primaryValue))
+
+    if string.find(self._primaryKey, ",") then return end
+
+    if not primaryKey then
+        return sql.QueryRow("SELECT * FROM " .. sql.SQLStr(self._tableName) .. " WHERE id=" .. sql.SQLStr(primaryValue))
+    else
+        return sql.QueryRow("SELECT * FROM " .. sql.SQLStr(self._tableName) .. " WHERE " .. sql.SQLStr(self._primaryKey) .. "=" .. sql.SQLStr(primaryValue))
+    end
 end
 
 ---
 -- Deletes the given object from the database storage.
 -- @note This function will be defined when the model is made.
 -- @see `makeORModel()`
--- @return boolean Returns if the deletion was successful.
 function ormodel:delete()
 end
 
@@ -114,8 +205,7 @@ end
 
 -- testing / example usage
 hook.Add("TTTBeginRound", "ormtest", function()
-    local mymodel = makeORModel("a_`better_test", {{colname = "testing", coltype = "TEXT"}, {colname = "percent", coltype = "REAL"}, {colname = "jup", coltype = "INTEGER"}})
-
+    local mymodel = makeORModel("a_new`_test", {{colname = "testing", coltype = "TEXT"}, {colname = "percent", coltype = "REAL"}, {colname = "jup", coltype = "INTEGER"}})
     local myobject = mymodel:new()
 
     myobject.testing = "hello world! x2"
@@ -134,9 +224,22 @@ hook.Add("TTTBeginRound", "ormtest", function()
 
     PrintTable(mymodel:find(myobject._id))
     PrintTable(mymodel:all())
-    print(myobject:delete())
 
-    if not IsValid(mymodel:find(myobject._id)) then return end
+    myobject:delete()
+    if not IsValid(mymodel:find(myobject._id)) then
+        print("Successfully deleted myobject from database")
+    end
 
-    PrintTable(mymodel:find(myobject._id))
+    local myothermodel = makeORModel("something_stupid", {{colname = "name", coltype = "TEXT"}, {colname = "percent", coltype = "REAL"}, {colname = "number", coltype = "INTEGER"}}, "name, percent")
+    local myotherobject = myothermodel:new()
+
+    myotherobject.name = "jackal"
+    myotherobject.percent = 0.13
+    myotherobject.number = 6
+
+    myotherobject:save()
+
+    myotherobject:delete()
+
+    PrintTable(myothermodel:all())
 end)
