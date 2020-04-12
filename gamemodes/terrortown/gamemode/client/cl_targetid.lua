@@ -793,7 +793,7 @@ function HUDDrawTargetIDRagdolls(tData)
 	-- add title and subtitle to the focused ent
 	tData:SetTitle(
 		corpse_found and CORPSE.GetPlayerNick(ent, "A Terrorist") or TryT("target_unid"),
-		COLOR_YELLOW
+		role_found and COLOR_WHITE or COLOR_YELLOW
 	)
 
 	if tData:GetEntityDistance() <= 100 then
@@ -807,7 +807,7 @@ function HUDDrawTargetIDRagdolls(tData)
 	-- add icon to the element
 	tData:AddIcon(
 		role_found and roles.GetByIndex(ent.search_result.role).iconMaterial or icon_corpse,
-		COLOR_YELLOW
+		role_found and COLOR_LGRAY or COLOR_YELLOW
 	)
 
 	-- add hints to the corpse
