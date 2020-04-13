@@ -178,7 +178,7 @@ end
 -- @return table Returns the table of the found object.
 function ormodel:find(primaryValue)
 
-    if string.find(self._primaryKey, ",") then return end
+    if IsValid(self._primaryKey) and string.find(self._primaryKey, ",") then return end
 
     if not self._primaryKey then
         return sql.QueryRow("SELECT * FROM " .. sql.SQLIdent(self._tableName) .. " WHERE id=" .. sql.SQLStr(primaryValue))
