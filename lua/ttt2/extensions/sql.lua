@@ -11,14 +11,6 @@ function sql.IsValidType(str)
 end
 
 ---
--- Checks if the given string is a valid sqlite tablename.
--- @param string str The string to check.
--- @return boolean Returns true if the string is valid. Returns false otherwise.
-function sql.IsValidTablename(str)
-    return not string.find(str, " ")
-end
-
----
 -- Checks if the given string is a valid constraint.
 -- @param string str The string to check.
 -- @return boolean Returns true if the string is a valid constraint.
@@ -35,4 +27,10 @@ function sql.validateSqlType(str)
     return str
 end
 
-
+---
+-- Escapes a string for use as an identifier (tablename, columnname) for sqlite.
+-- @param string str The string to escape.
+-- @return string Returns the escaped string.
+function sql.SQLIdent(str)
+    return "\"" .. str:gsub( "\"", "\"\"" ) .. "\""
+end
