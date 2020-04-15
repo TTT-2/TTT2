@@ -79,32 +79,32 @@ end
 function plymeta:SetRole(subrole, team, forceHooks)
 	local oldRole = self:GetBaseRole()
 	local oldSubrole = self:GetSubRole()
-	local ord = self:GetSubRoleData()
+	local oldRoleData = self:GetSubRoleData()
 	local oldTeam = self:GetTeam()
 
-	local rd = roles.GetByIndex(subrole)
+	local roleData = roles.GetByIndex(subrole)
 
-	self.role = rd.baserole or subrole
+	self.role = roleData.baserole or subrole
 	self.subrole = subrole
 
-	self:UpdateTeam(team or rd.defaultTeam or TEAM_NONE)
+	self:UpdateTeam(team or roleData.defaultTeam or TEAM_NONE)
 
 	local newBaseRole = self:GetBaseRole()
 	local newTeam = self:GetTeam()
 
 	if oldSubrole ~= subrole then
-		local ar = GetActiveRolesCount(rd) + 1
-		local oar = GetActiveRolesCount(ord) - 1
+		local activeRolesCount = GetActiveRolesCount(roleData) + 1
+		local oldActiveRolesCount = GetActiveRolesCount(oldRoleData) - 1
 
-		SetActiveRolesCount(rd, ar)
-		SetActiveRolesCount(ord, oar)
+		SetActiveRolesCount(roleData, activeRolesCount)
+		SetActiveRolesCount(oldRoleData, oldActiveRolesCount)
 
-		if ar > 0 then
-			hook.Run("TTT2ToggleRole", rd, true)
+		if activeRolesCount > 0 then
+			hook.Run("TTT2ToggleRole", roleData, true)
 		end
 
-		if oar <= 0 then
-			hook.Run("TTT2ToggleRole", ord, false)
+		if oldActiveRolesCount <= 0 then
+			hook.Run("TTT2ToggleRole", oldRoleData, false)
 		end
 	end
 
@@ -122,10 +122,10 @@ function plymeta:SetRole(subrole, team, forceHooks)
 
 	-- ye olde hooks
 	if subrole ~= oldSubrole or forceHooks then
-		self:SetRoleColor(rd.color)
-		self:SetRoleDkColor(rd.dkcolor)
-		self:SetRoleLtColor(rd.ltcolor)
-		self:SetRoleBgColor(rd.bgcolor)
+		self:SetRoleColor(roleData.color)
+		self:SetRoleDkColor(roleData.dkcolor)
+		self:SetRoleLtColor(roleData.ltcolor)
+		self:SetRoleBgColor(roleData.bgcolor)
 
 		if SERVER then
 			hook.Call("PlayerLoadout", GAMEMODE, self)
@@ -143,8 +143,8 @@ function plymeta:SetRole(subrole, team, forceHooks)
 	end
 
 	if SERVER then
-		ord:RemoveRoleLoadout(self, true)
-		rd:GiveRoleLoadout(self, true)
+		oldRoleData:RemoveRoleLoadout(self, true)
+		roleData:GiveRoleLoadout(self, true)
 	end
 end
 
