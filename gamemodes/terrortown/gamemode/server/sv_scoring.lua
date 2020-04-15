@@ -129,9 +129,9 @@ end
 function SCORE:HandleSpawn(ply)
 	if ply:Team() == TEAM_TERROR then
 		self:AddEvent({
-			id = EVENT_SPAWN, 
-			ni = ply:Nick(), 
-			sid = ply:SteamID(), 
+			id = EVENT_SPAWN,
+			ni = ply:Nick(),
+			sid = ply:SteamID(),
 			sid64 = ply:SteamID64()
 		})
 	end
@@ -169,8 +169,8 @@ function SCORE:HandleSelection()
 	end
 
 	self:AddEvent({
-		id = EVENT_SELECTED, 
-		rt = tmp, 
+		id = EVENT_SELECTED,
+		rt = tmp,
 		tms = teams
 	})
 end
@@ -182,12 +182,12 @@ end
 -- @realm server
 function SCORE:HandleBodyFound(finder, found)
 	self:AddEvent({
-		id = EVENT_BODYFOUND, 
-		ni = finder:Nick(), 
-		sid = finder:SteamID(), 
-		sid64 = finder:SteamID64(), 
-		r = finder:GetBaseRole(), 
-		t = finder:GetTeam(), 
+		id = EVENT_BODYFOUND,
+		ni = finder:Nick(),
+		sid = finder:SteamID(),
+		sid64 = finder:SteamID64(),
+		r = finder:GetBaseRole(),
+		t = finder:GetTeam(),
 		b = found:Nick()
 	})
 end
@@ -206,12 +206,12 @@ function SCORE:HandleC4Explosion(planter, arm_time, exp_time)
 	end
 
 	self:AddEvent({
-		id = EVENT_C4PLANT, 
+		id = EVENT_C4PLANT,
 		ni = nick
 	}, arm_time)
 
 	self:AddEvent({
-		id = EVENT_C4EXPLODE, 
+		id = EVENT_C4EXPLODE,
 		ni = nick
 	}, exp_time)
 end
@@ -246,11 +246,11 @@ end
 -- @realm server
 function SCORE:HandleCreditFound(finder, found_nick, credits)
 	self:AddEvent({
-		id = EVENT_CREDITFOUND, 
-		ni = finder:Nick(), 
-		sid = finder:SteamID(), 
-		sid64 = finder:SteamID64(), 
-		b = found_nick, 
+		id = EVENT_CREDITFOUND,
+		ni = finder:Nick(),
+		sid = finder:SteamID(),
+		sid64 = finder:SteamID64(),
+		b = found_nick,
 		cr = credits
 	})
 end
@@ -305,7 +305,7 @@ end
 -- @realm server
 function SCORE:RoundStateChange(newstate)
 	self:AddEvent({
-		id = EVENT_GAME, 
+		id = EVENT_GAME,
 		state = newstate
 	})
 end
@@ -316,7 +316,7 @@ end
 -- @realm server
 function SCORE:RoundComplete(wintype)
 	self:AddEvent({
-		id = EVENT_FINISH, 
+		id = EVENT_FINISH,
 		win = wintype
 	})
 end

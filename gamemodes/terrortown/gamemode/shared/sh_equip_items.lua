@@ -878,7 +878,7 @@ local function CleanUpDefaultCanBuyIndices()
 		local wep = sweps[i]
 
 		wep.CanBuy = wep.CanBuy or {}
-		
+
 		ValueToKey(wep.CanBuy)
 	end
 end

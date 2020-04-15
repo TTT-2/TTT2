@@ -12,11 +12,12 @@ local IsValid = IsValid
 local table = table
 local timer = timer
 local hook = hook
-local CreateConVar = CreateConVar
 
 local IsEquipment = WEPS.IsEquipment
 
 local cv_auto_pickup = CreateConVar("ttt_weapon_autopickup", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY})
+local cv_ttt_detective_hats = CreateConVar("ttt_detective_hats", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local crowbar_delay = CreateConVar("ttt2_crowbar_shove_delay", "1.0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- Returns whether or not a @{Player} is allowed to pick up a @{Weapon}
@@ -352,8 +353,6 @@ local function CanWearHat(ply)
 
 	return table.HasValue(Hattables, path[3])
 end
-
-local cv_ttt_detective_hats = CreateConVar("ttt_detective_hats", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 -- Just hats right now
 local function GiveLoadoutSpecial(ply)
@@ -730,8 +729,6 @@ function WEPS.IsInstalled(cls)
 end
 
 --manipulate shove attack for all crowbar alikes
-local crowbar_delay = CreateConVar("ttt2_crowbar_shove_delay", "1.0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
 local function ChangeShoveDelay()
 	local weps = weapons.GetList()
 
@@ -749,7 +746,6 @@ cvars.AddChangeCallback(crowbar_delay:GetName(), function(name, old, new)
 	ChangeShoveDelay()
 end, "TTT2CrowbarShoveDelay")
 
--- TODO remove this
 hook.Add("TTT2Initialize", "TTT2ChangeMeleesSecondaryDelay", function()
 	ChangeShoveDelay()
 end)

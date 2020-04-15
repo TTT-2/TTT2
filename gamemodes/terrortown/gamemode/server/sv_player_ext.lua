@@ -270,7 +270,7 @@ function plymeta:ResetEquipment()
 
 	for i = 1, #equipItems do
 		local item = items.GetStored(equipItems[i])
-		
+
 		if item and isfunction(item.Reset) then
 			item:Reset(self)
 		end

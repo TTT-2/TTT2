@@ -18,10 +18,8 @@ function MuteForRestart(state)
 end
 
 -- Communication control
-local cv_ttt_limit_spectator_voice = CreateConVar("ttt_limit_spectator_voice", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
 local sv_voiceenable = GetConVar("sv_voiceenable")
-
+local cv_ttt_limit_spectator_voice = CreateConVar("ttt_limit_spectator_voice", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 local loc_voice = CreateConVar("ttt_locational_voice", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 hook.Add("TTT2SyncGlobals", "AddVoiceGlobals", function()
@@ -46,17 +44,17 @@ local function PlayerCanHearTeam(listener, speaker, speakerTeam)
 	local speakerSubRoleData = speaker:GetSubRoleData()
 
 	-- Speaker checks
-	if speakerTeam == TEAM_NONE or speakerSubRoleData.unknownTeam or speakerSubRoleData.disabledTeamVoice then 
-		return false, false 
+	if speakerTeam == TEAM_NONE or speakerSubRoleData.unknownTeam or speakerSubRoleData.disabledTeamVoice then
+		return false, false
 	end
 
 	-- Listener checks
 	if listener:GetSubRoleData().disabledTeamVoiceRecv or not listener:IsActive() or not listener:IsInTeam(speaker) then
 		return false, false
 	end
-	
+
 	if TEAMS[speakerTeam].alone then
-		return false, false 
+		return false, false
 	end
 
 	return true, loc_voice:GetBool()
@@ -65,7 +63,7 @@ end
 local function PlayerIsMuted(listener, speaker)
 	-- Enforced silence and specific mute
 	if mute_all or listener:IsSpec() and listener.mute_team == speaker:Team() or listener.mute_team == MUTE_ALL then
-		return true 
+		return true
 	end
 end
 
@@ -84,7 +82,7 @@ end
 -- @ref https://wiki.garrysmod.com/page/GM/PlayerCanHearPlayersVoice
 -- @local
 function GM:PlayerCanHearPlayersVoice(listener, speaker)
-	if speaker.blockVoice then 
+	if speaker.blockVoice then
 		return false, false
 	end
 
@@ -103,7 +101,7 @@ function GM:PlayerCanHearPlayersVoice(listener, speaker)
 	local res1, res2 = hook.Run("TTT2PostPlayerCanHearPlayersVoice", listener, speaker)
 
 	if res1 ~= nil then
-		return res1, res2 or false 
+		return res1, res2 or false
 	end
 
 	if speaker:IsSpec() then
