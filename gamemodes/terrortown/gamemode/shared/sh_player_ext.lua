@@ -724,18 +724,26 @@ end
 -- @see https://wiki.garrysmod.com/page/Structures/Trace
 -- @realm shared
 function plymeta:GetEyeTrace(mask)
-	if self.LastPlayerTraceMask == mask and self.LastPlayerTrace == CurTime() then
-		return self.PlayerTrace
+	mask = mask or MASK_SOLID
+
+	if CLIENT then
+		local framenum = FrameNumber()
+
+		if self.LastPlayerTrace == framenum and self.LastPlayerTraceMask == mask then
+			return self.PlayerTrace
+		end
+
+		self.LastPlayerTrace = framenum
+		self.LastPlayerTraceMask = mask
 	end
 
 	local tr = util.GetPlayerTrace(self)
 	tr.mask = mask
 
-	self.PlayerTrace = util.TraceLine(tr)
-	self.LastPlayerTrace = CurTime()
-	self.LastPlayerTraceMask = mask
+	tr = util.TraceLine(tr)
+	self.PlayerTrace = tr
 
-	return self.PlayerTrace
+	return tr
 end
 
 ---
