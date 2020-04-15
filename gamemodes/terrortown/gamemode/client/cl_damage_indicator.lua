@@ -19,7 +19,7 @@ local maxDamageAmount = 0.0
 local materialStringBase = "vgui/ttt/dmgindicator/themes/"
 local pathBase = "materials/" .. materialStringBase
 
-local function collectDmgIndicatorTextures()
+local function CollectDmgIndicatorTextures()
 	local materials = file.Find(pathBase .. "*.png", "GAME")
 
 	for i = 1, #materials do
@@ -29,7 +29,7 @@ local function collectDmgIndicatorTextures()
 		DMGINDICATOR.themes[materialName] = Material(materialStringBase .. material)
 	end
 end
-collectDmgIndicatorTextures()
+CollectDmgIndicatorTextures()
 
 net.Receive("ttt2_damage_received", function()
 	local damageReceived = net.ReadFloat()

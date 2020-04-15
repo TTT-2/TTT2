@@ -118,7 +118,7 @@ function GM:HUDPaint()
 		hook.Call("HUDDrawTargetID", GAMEMODE)
 	end
 
-	if hook.Call("HUDShouldDraw", GAMEMODE, "TTTHUDManager") then
+	if hook.Call("HUDShouldDraw", GAMEMODE, "TTT2HUDManager") then
 		HUDManager.DrawHUD()
 	end
 

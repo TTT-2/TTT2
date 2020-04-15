@@ -235,9 +235,7 @@ local function PerformMarkerLayout(s)
 end
 
 local function CreateEquipmentList(t)
-	if not t then
-		t = {}
-	end
+	t = t or {}
 
 	setmetatable(t, {
 		__index = {
@@ -249,6 +247,15 @@ local function CreateEquipmentList(t)
 
 	if t.search == LANG.GetTranslation("shop_search") .. "..." or t.search == "" then
 		t.search = nil
+	end
+
+	-- icon size = 64 x 64
+	if IsValid(dlist) then
+		dlist:Clear()
+	else
+		TraitorMenuPopup()
+
+		return
 	end
 
 	local ply = LocalPlayer()
@@ -264,15 +271,6 @@ local function CreateEquipmentList(t)
 	-- make sure that the players old role is not used anymore
 	if t.notalive then
 		currole = t.role or ROLE_INNOCENT
-	end
-
-	-- icon size = 64 x 64
-	if IsValid(dlist) then
-		dlist:Clear()
-	else
-		TraitorMenuPopup() -- TODO Check
-
-		return
 	end
 
 	-- Determine if we already have equipment
