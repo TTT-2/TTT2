@@ -413,7 +413,7 @@ function plymeta:ResetRoundFlags()
 	timer.Remove("give_equipment" .. self:UniqueID())
 
 	-- corpse
-	self:SetNWBool("body_found", false)
+	self:TTT2NETSetBool("body_found", false)
 
 	self.kills = {}
 	self.dying_wep = nil
@@ -982,16 +982,16 @@ end
 -- @realm server
 function plymeta:ConfirmPlayer(announceRole)
 	if self:GetNWFloat("t_first_found", -1) < 0 then
-		self:SetNWFloat("t_first_found", CurTime())
+		self:TTT2NETSetFloat("t_first_found", CurTime())
 	end
 
-	self:SetNWFloat("t_last_found", CurTime())
+	self:TTT2NETSetFloat("t_last_found", CurTime())
 
 	if announceRole then
-		self:SetNWBool("role_found", true)
+		self:TTT2NETSetBool("role_found", true)
 	end
 
-	self:SetNWBool("body_found", true)
+	self:TTT2NETSetBool("body_found", true)
 end
 
 ---
@@ -999,10 +999,9 @@ end
 -- @realm server
 function plymeta:ResetConfirmPlayer()
 	-- body_found is reset on the player reset
-	self:SetNWBool("role_found", false)
-
-	self:SetNWFloat("t_first_found", -1)
-	self:SetNWFloat("t_last_found", -1)
+	self:TTT2NETSetBool("role_found", false)
+	self:TTT2NETSetFloat("t_first_found", -1)
+	self:TTT2NETSetFloat("t_last_found", -1)
 end
 
 ---
@@ -1092,7 +1091,7 @@ function plymeta:SafeDropWeapon(wep, keep_selection)
 end
 
 ---
--- Returns wether or not a player can pick up a weapon
+-- Returns whether or not a player can pick up a weapon
 -- @param Weapon wep The weapon object
 -- @returns boolean
 -- @realm server
@@ -1109,7 +1108,7 @@ function plymeta:CanPickupWeapon(wep)
 end
 
 ---
--- Returns wether or not a player can pick up a weapon
+-- Returns whether or not a player can pick up a weapon
 -- @param string wepCls The weapon object classname
 -- @returns boolean
 -- @realm server
@@ -1164,8 +1163,8 @@ local function ActualWeaponPickup(ply, wep, kind, shouldAutoSelect)
 	-- initial teleport the weapon to the player pos
 	SetWeaponPos(ply, wep, kind)
 
-	wep.name_timer_pos = kind .. "_WeaponPickupRandomPos_" .. ply:SteamID64()
-	wep.name_timer_cancel = kind .. "_WeaponPickupCancel_" .. ply:SteamID64()
+	wep.name_timer_pos = kind .. "_WeaponPickupRandomPos_" .. (ply:SteamID64() or "singleplayerID")
+	wep.name_timer_cancel = kind .. "_WeaponPickupCancel_" .. (ply:SteamID64() or "singleplayerID")
 
 	-- update the weapon pos
 	timer.Create(wep.name_timer_pos, 0.2, 1, function()
@@ -1262,7 +1261,7 @@ function plymeta:PickupWeapon(wep, dropBlockingWeapon, shouldAutoSelect)
 	-- prevent race conditions
 	self.wpickup_waitequip[kind] = true
 
-	timer.Create(kind .. "_WeaponPickup_" .. self:SteamID64(), 0, 1, function()
+	timer.Create(kind .. "_WeaponPickup_" .. (self:SteamID64() or "singleplayerID"), 0, 1, function()
 		ActualWeaponPickup(self, wep, kind, shouldAutoSelect)
 	end)
 
@@ -1308,6 +1307,9 @@ local function SetPlayerReady(_, ply)
 	if not IsValid(ply) then return end
 
 	ply.isReady = true
+
+	-- Send full state update to client
+	TTT2NET:SendFullStateUpdate(ply)
 
 	hook.Run("TTT2PlayerReady", ply)
 end

@@ -99,7 +99,7 @@ end
 -- @return boolean whether the request was sent to server
 -- @realm client
 function TBHUD:ToggleFocused(teamMode)
-	local buttonChecks = self.focus_but and IsValid(self.focus_but.ent) and self.focus_but.admin and self.focus_stick >= CurTime() and GetConVar("ttt2_tbutton_admin_show"):GetBool()
+	local buttonChecks = self.focus_but and IsValid(self.focus_but.ent) and self.focus_but.admin and self.focus_stick >= CurTime() and GetGlobalBool("ttt2_tbutton_admin_show", false)
 
 	if buttonChecks then
 		net.Start("TTT2ToggleTButton")
@@ -150,7 +150,7 @@ function TBHUD:Draw(client)
 	local pos, scrpos, d
 	local focus_but
 	local focus_d, focus_scrpos_x, focus_scrpos_y = 0, midscreen_x, midscreen_y
-	local showToAdmins = GetConVar("ttt2_tbutton_admin_show"):GetBool()
+	local showToAdmins = GetGlobalBool("ttt2_tbutton_admin_show", false)
 
 	-- draw icon on HUD for every button within range
 	for _, val in pairs(self.buttons) do
@@ -205,7 +205,7 @@ function TBHUD:Draw(client)
 		if not focus_but or not IsValid(focus_but.ent) then continue end
 
 		self.focus_but = focus_but
-		self.focus_stick = CurTime() + 0.01
+		self.focus_stick = CurTime() + 0.1
 
 		scrpos = focus_but.ent:GetPos():ToScreen()
 		scrPosXMid, scrPosYMid = scrpos.x - mid, scrpos.y - mid

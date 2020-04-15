@@ -661,6 +661,7 @@ L.mute_living = "Lebende stumm gestellt"
 L.mute_specs = "Zuschauer stumm gestellt"
 L.mute_all = "Jeden stumm gestellt"
 L.mute_off = "Niemanden stumm gestellt"
+L.mute_team = "{team} stummgestellt."
 
 -- Spectators and prop possession
 L.punch_title = "PUNCH-O-METER"
@@ -1249,3 +1250,22 @@ L.doubletap_sprint_anykey_tip = "So lange du dich weiterhin bewegst, wird das Sp
 
 L.disable_doubletap_sprint = "Deaktiviere Double-Tap Sprinten"
 L.disable_doubletap_sprint_tip = "Deaktiviert das Auslösen des Sprinten durch Double-Tap einer Bewegungstaste"
+
+-- 2020-02-03
+L.hold_aim = "Halten zum Anvisieren"
+L.hold_aim_tip = "Solange du die Sekundärfeuertaste hältst, bleibst du anvisiert (Standard: Rechte Maustaste)"
+
+-- 2020-02-09
+L.name_door = "Tür"
+L.door_open = "Drücke [{usekey}] um Tür zu öffnen."
+L.door_close = "Drücke [{usekey}] um Tür zu schließen."
+L.door_locked = "Diese Tür ist verschlossen"
+
+-- 2020-02-11
+L.automoved_to_spec = "(AUTOMATISCHE NACHRICHT) Ich wurde in das Zuschauerteam geschoben, da ich untätig/AFK war."
+
+-- 2020-02-16
+L.door_auto_closes = "Diese Tür schließt automatisch"
+L.door_open_touch = "Laufe gegen die Tür um sie zu öffnen."
+L.door_open_touch_and_use = "Laufe gegen die Tür oder drücke [{usekey}] um Tür zu öffnen."
+L.hud_health = "Leben"

@@ -829,7 +829,7 @@ end
 -- @return boolean
 -- @realm shared
 function plymeta:OnceFound()
-	return self:GetNWFloat("t_first_found", -1) >= 0
+	return self:TTT2NETGetFloat("t_first_found", -1) >= 0
 end
 
 ---
@@ -837,7 +837,7 @@ end
 -- @return boolean
 -- @realm shared
 function plymeta:RoleKnown()
-	return self:GetNWBool("role_found", false)
+	return self:TTT2NETGetBool("role_found", false)
 end
 
 ---
@@ -845,7 +845,7 @@ end
 -- @return boolean
 -- @realm shared
 function plymeta:Revived()
-	return not self:GetNWBool("body_found", false) and self:OnceFound()
+	return not self:TTT2NETGetBool("body_found", false) and self:OnceFound()
 end
 
 ---
@@ -853,7 +853,7 @@ end
 -- @return boolean
 -- @realm shared
 function plymeta:GetFirstFound()
-	return math.Round(self:GetNWFloat("t_first_found", -1))
+	return math.Round(self:TTT2NETGetFloat("t_first_found", -1))
 end
 
 ---
@@ -861,16 +861,26 @@ end
 -- @return boolean
 -- @realm shared
 function plymeta:GetLastFound()
-	return math.Round(self:GetNWFloat("t_last_found", -1))
+	return math.Round(self:TTT2NETGetFloat("t_last_found", -1))
 end
 
 ---
--- Returns wether the player is ready. A player is ready when he is able to look
+-- Returns whether the player is ready. A player is ready when he is able to look
 -- around and move (first call of @{GM:SetupMove})
 -- @return boolean
 -- @realm shared
 function plymeta:IsReady()
 	return self.isReady or false
+end
+
+---
+-- This hook is called once the player is ready on client and server. This means that
+-- the client is able to handle data from the server
+-- @param Player ply The @{Player} that is now ready
+-- @hook
+-- @realm shared
+function GM:TTT2PlayerReady(ply)
+
 end
 
 ---

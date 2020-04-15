@@ -22,7 +22,7 @@ function CreateRerollMenu(parent)
 
 	local cost = GetGlobalInt("ttt2_random_shop_reroll_cost")
 
-	if client:GetCredits() <= 0 then
+	if client:GetCredits() < cost then
 		dform:Help(GetParamTranslation("reroll_no_credits", {amount = cost}))
 
 		return dform

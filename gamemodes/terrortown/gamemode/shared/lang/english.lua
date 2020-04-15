@@ -137,7 +137,7 @@ L.xfer_received = "{player} has given you {num} credit."
 -- Reroll tab in equipment menu
 L.reroll_name = "Reroll"
 L.reroll_menutitle = "Reroll Items"
-L.reroll_no_credits = "You need no credits to reroll!"
+L.reroll_no_credits = "You need {amount} credits to reroll!"
 L.reroll_button = "Reroll"
 L.reroll_help = "Use {amount} credits to get new items in your shop!"
 
@@ -669,6 +669,7 @@ L.mute_living = "Living players muted"
 L.mute_specs = "Spectators muted"
 L.mute_all = "All muted"
 L.mute_off = "None muted"
+L.mute_team = "{team} muted."
 
 -- Spectators and prop possession
 L.punch_title = "PUNCH-O-METER"
@@ -1258,3 +1259,22 @@ L.doubletap_sprint_anykey_tip = "You will keep sprinting as long as you keep mov
 
 L.disable_doubletap_sprint = "Disable double tap sprinting"
 L.disable_doubletap_sprint_tip = "Double tapping a movement key will no longer cause you to sprint"
+
+-- 2020-02-03
+L.hold_aim = "Hold to aim"
+L.hold_aim_tip = "You will keep using the ironsights as long as you keep holding secondary attack (default: right mouse button)"
+
+-- 2020-02-09
+L.name_door = "Door"
+L.door_open = "Press [{usekey}] to open door."
+L.door_close = "Press [{usekey}] to close door."
+L.door_locked = "This door is locked"
+
+-- 2020-02-11
+L.automoved_to_spec = "(AUTOMATED MESSAGE) I have been moved to the Spectator team because I was idle/AFK."
+
+-- 2020-02-16
+L.door_auto_closes = "This door closes automatically"
+L.door_open_touch = "Walk into door to open."
+L.door_open_touch_and_use = "Walk into door or press [{usekey}] to open."
+L.hud_health = "Health"

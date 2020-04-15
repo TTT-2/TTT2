@@ -19,6 +19,7 @@ TTTFiles = {
 	cl_keys = {file = "cl_keys.lua", on = "client"},
 	cl_main = {file = "cl_main.lua", on = "client"},
 	cl_msgstack = {file = "cl_msgstack.lua", on = "client"},
+	cl_network_sync = {file = "cl_network_sync.lua", on = "client"},
 	cl_player_ext = {file = "cl_player_ext.lua", on = "client"},
 	cl_popups = {file = "cl_popups.lua", on = "client"},
 	cl_radio = {file = "cl_radio.lua", on = "client"},
@@ -29,6 +30,7 @@ TTTFiles = {
 	cl_search = {file = "cl_search.lua", on = "client"},
 	cl_shopeditor = {file = "cl_shopeditor.lua", on = "client"},
 	cl_status = {file = "cl_status.lua", on = "client"},
+	cl_target_data = {file = "cl_target_data.lua", on = "client"},
 	cl_targetid = {file = "cl_targetid.lua", on = "client"},
 	cl_tbuttons = {file = "cl_tbuttons.lua", on = "client"},
 	cl_tradio = {file = "cl_tradio.lua", on = "client"},
@@ -42,6 +44,7 @@ TTTFiles = {
 	sh_armor = {file = "sh_armor.lua", on = "shared"},
 	sh_corpse = {file = "sh_corpse.lua", on = "shared"},
 	sh_decal = {file = "sh_decal.lua", on = "shared"},
+	sh_door = {file = "sh_door.lua", on = "shared"},
 	sh_equip_items = {file = "sh_equip_items.lua", on = "shared"},
 	sh_hud_manager = {file = "sh_hud_manager.lua", on = "shared"},
 	sh_hud_module = {file = "sh_hud_module.lua", on = "shared"},
@@ -51,6 +54,7 @@ TTTFiles = {
 	sh_item_module = {file = "sh_item_module.lua", on = "shared"},
 	sh_lang = {file = "sh_lang.lua", on = "shared"},
 	sh_main = {file = "sh_main.lua", on = "shared"},
+	sh_network_sync = {file = "sh_network_sync.lua", on = "shared"},
 	sh_player_ext = {file = "sh_player_ext.lua", on = "shared"},
 	sh_role_module = {file = "sh_role_module.lua", on = "shared"},
 	sh_scoring = {file = "sh_scoring.lua", on = "shared"},
@@ -58,6 +62,7 @@ TTTFiles = {
 	sh_sql = {file = "sh_sql.lua", on = "shared"},
 	sh_sprint = {file = "sh_sprint.lua", on = "shared"},
 	sh_util = {file = "sh_util.lua", on = "shared"},
+	sh_voice = {file = "sh_voice.lua", on = "shared"},
 	sh_weaponry = {file = "sh_weaponry.lua", on = "shared"},
 
 	-- vgui client files
@@ -93,6 +98,7 @@ if SERVER then
 		sv_loadingscreen = {file = "sv_loadingscreen.lua", on = "server"},
 		sv_main = {file = "sv_main.lua", on = "server"},
 		sv_networking = {file = "sv_networking.lua", on = "server"},
+		sv_network_sync = {file = "sv_network_sync.lua", on = "server"},
 		sv_player_ext = {file = "sv_player_ext.lua", on = "server"},
 		sv_player = {file = "sv_player.lua", on = "server"},
 		sv_propspec = {file = "sv_propspec.lua", on = "server"},
@@ -122,7 +128,7 @@ function ttt_include(filename)
 	local fd = TTTFiles[filename]
 
 	if not fd then
-		error("[TTT2][ERROR] Tried to include a not existant file" .. filename)
+		error("[TTT2][ERROR] Tried to include missing file " .. filename)
 	end
 
 	local file = fd.file

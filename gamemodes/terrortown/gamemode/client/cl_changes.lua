@@ -572,6 +572,7 @@ function CreateChanges()
 				<li>Looking at entities shows now more detailed ans structured info</li>
 				<li>Integrated into the new weapon switch system</li>
 				<li>Supports all TTT entities by default</li>
+				<li>Supports doors</li>
 				<li>Added a new hook to add targetID support to custom entities: <i>TTTRenderEntityInfo</i></li>
 			</ul>
 			<li>Added the outline module for better performance</li>
@@ -585,6 +586,10 @@ function CreateChanges()
 			<li>Allow any key double tap sprint</li>
 			<li>Regenerate sprint stamina after a delay if exhausted</li>
 			<li>Moved voice bindings to the TTT2 binding system (F1 menu)</li>
+			<li>Added new voice and text chat hooks to prevent the usage in certain situations</li>
+			<li>Added new client only convar (F1->Gameplay->Hold to aim) to change to a "hold rightclick to aim" mode</li>
+			<li>Added a new language file system for addons, language files have to be in <i>lua/lang/<the_language>/<addon>.lua</i></li>
+			<li>New network data system including network data tables to better manage state updates on different clients</li>
 		</ul>
 		<br>
 		<h2>Improved:</h2>
@@ -602,6 +607,9 @@ function CreateChanges()
 				<li>Uses the new targetID</li>
 			</ul>
 			<li>Improved damage indicator overlay with customizability in the F1 settings</li>
+			<li>Improved hud help font</li>
+			<li>Added a new flag to items to hide them from the bodysearch panel</li>
+			<li>Moved missing hardcoded texts to language files</li>
 		</ul>
 		<br>
 		<h2>Fixed:</h2>
@@ -609,15 +617,59 @@ function CreateChanges()
 			<li>Fixed a bug with baserole initialization</li>
 			<li>Small other bugfixes</li>
 			<li>added legacy supported for limited items</li>
-			<li>fixed C4 defuse for non-traitor roles</li>
-			<li>fixed radio, works now for all roles</li>
-			<li>restricted huds are hidden in HUD Switcher</li>
-			<li>fixed ragdoll skins (hairstyles, outfits, ...)</li>
+			<li>Fixed C4 defuse for non-traitor roles</li>
+			<li>Fixed radio, works now for all roles</li>
+			<li>Restricted huds are hidden in HUD Switcher</li>
+			<li>Fixed ragdoll skins (hairstyles, outfits, ...)</li>
 			<li>Prevent give_equipment timer to block the shop in the next round</li>
 			<li>Fix sprint consuming stamina when there is no move input</li>
 			<li>Fix confirmation of players with no team</li>
+			<li>Fix voice still sending after death</li>
 		</ul>
-	]], os.time({year = 2020, month = 02, day = 01}))
+	]], os.time({year = 2020, month = 02, day = 16}))
+
+	AddChange("TTT2 Base - v0.6.1b", [[
+		<h2>Fixed:</h2>
+		<ul>
+			<li>Fixed a bug with the spawn wave interval</li>
+		</ul>
+	]], os.time({year = 2020, month = 02, day = 17}))
+
+	AddChange("TTT2 Base - v0.6.2b", [[
+		<h2>Fixed:</h2>
+		<ul>
+			<li>Increased the maximum number of roles that can be used. (Fixes weird role issues with many roles installed)</li>
+		</ul>
+	]], os.time({year = 2020, month = 03, day = 1}))
+
+	AddChange("TTT2 Base - v0.6.3b", [[
+		<h2>New:</h2>
+		<ul>
+			<li>Added a Polish translation (Thanks @Wukerr)</li>
+			<li>Added fallback icons for equipment</li>
+		</ul>
+		<br>
+		<h2>Fixed:</h2>
+		<ul>
+			<li>Fix <i>body_found</i> for bots</li>
+			<li>Fix NWVarSyncing when using <i>TTT2NET:Set()</i></li>
+		</ul>
+	]], os.time({year = 2020, month = 03, day = 5}))
+
+	AddChange("TTT2 Base - v0.6.4b", [[
+		<h2>New:</h2>
+		<ul>
+			<li>Added an Italian translation (Thanks @PinoMartirio)</li>
+		</ul>
+		<br>
+		<h2>Fixed:</h2>
+		<ul>
+			<li>Fixed a rare bug where the player had the default GMod sprint on top of the TTT2 sprint</li>
+			<li>Fixed some convars that did not save in ulx by removing them all from the gamemode file</li>
+			<li>Fixed a bug that happened when TTT2 is installed but not the active gamemode</li>
+			<li>Fixed a few Polish language strings</li>
+		</ul>
+	]], os.time({year = 2020, month = 04, day = 3}))
 
 	-- run hook for other addons to add their changelog as well
 	hook.Run("TTT2AddChange", changes, currentVersion)

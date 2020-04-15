@@ -94,14 +94,13 @@ local function AddBindingCategory(category, parent)
 
 			-- onchange function
 			function dPBinder:OnChange(num)
-				if num == 0 then
-					bind.Remove(curBinding, binding.name)
-				else
-					bind.Remove(curBinding, binding.name)
-					bind.Add(num, binding.name, true)
+				bind.Remove(curBinding, binding.name, true)
 
-					LocalPlayer():ChatPrint(GetPTranslation("ttt2_bindings_new", {name = binding.name, key = input.GetKeyName(num)}))
+				if num ~= 0 then
+					bind.Add(num, binding.name, true)
 				end
+
+				LocalPlayer():ChatPrint(GetPTranslation("ttt2_bindings_new", {name = binding.name, key = input.GetKeyName(num) or "NONE"}))
 
 				curBinding = num
 			end
@@ -587,6 +586,9 @@ function HELPSCRN:CreateGameplaySettings(parent)
 
 	cb = form:CheckBox(GetTranslation("set_fastsw"), "ttt_weaponswitcher_fast")
 	cb:SetTooltip(GetTranslation("set_fastsw_tip"))
+
+	cb = form:CheckBox(GetTranslation("hold_aim"), "ttt2_hold_aim")
+	cb:SetTooltip(GetTranslation("hold_aim_tip"))
 
 	cb = form:CheckBox(GetTranslation("doubletap_sprint_anykey"), "ttt2_doubletap_sprint_anykey")
 	cb:SetTooltip(GetTranslation("doubletap_sprint_anykey_tip"))

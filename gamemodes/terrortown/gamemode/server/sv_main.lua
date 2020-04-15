@@ -6,7 +6,11 @@ ttt_include("sh_init")
 ttt_include("sh_sprint")
 ttt_include("sh_main")
 ttt_include("sh_shopeditor")
+ttt_include("sh_network_sync")
+ttt_include("sh_door")
+ttt_include("sh_voice")
 
+ttt_include("sv_network_sync")
 ttt_include("sv_shopeditor")
 ttt_include("sv_karma")
 ttt_include("sv_entity")
@@ -77,8 +81,8 @@ CreateConVar("ttt_credits_alonebonus", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 CreateConVar("ttt_use_weapon_spawn_scripts", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 CreateConVar("ttt_weapon_spawn_count", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
-local round_limit = CreateConVar("ttt_round_limit", "6", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
-local time_limit = CreateConVar("ttt_time_limit_minutes", "75", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
+local round_limit = CreateConVar("ttt_round_limit", "6", SERVER and {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED} or FCVAR_REPLICATED)
+local time_limit = CreateConVar("ttt_time_limit_minutes", "75", SERVER and {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED} or FCVAR_REPLICATED)
 
 local idle_enabled = CreateConVar("ttt_idle", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 local idle_time = CreateConVar("ttt_idle_limit", "180", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
@@ -173,6 +177,7 @@ util.AddNetworkString("TTT2RequestTButtonConfig")
 util.AddNetworkString("TTT2OrderEquipment")
 util.AddNetworkString("TTT2RoleGlobalVoice")
 util.AddNetworkString("TTT2MuteTeam")
+util.AddNetworkString("TTT2UpdateHoldAimConvar")
 
 CHANGED_EQUIPMENT = {}
 
@@ -189,6 +194,9 @@ function GM:Initialize()
 	hook.Run("TTT2Initialize")
 
 	hook.Run("TTT2FinishedLoading")
+
+	-- check for language files to mark them as downloadable for clients
+	LANG.SetupFiles("lang/", true)
 
 	ShopEditor.SetupShopEditorCVars()
 	ShopEditor.CreateShopDBs()
@@ -737,6 +745,9 @@ end
 -- @local
 function GM:PostCleanupMap()
 	ents.TTT.FixParentedPostCleanup()
+
+	-- init door entities
+	door.SetUp()
 end
 
 ---
@@ -1035,10 +1046,8 @@ function SpawnWillingPlayers(dead_only)
 			-- fill the available spawnpoints with players that need
 			-- spawning
 
-			local spawnCount = #to_spawn
-
-			while c < num_spawns and spawnCount > 0 do
-				for k = 1, spawnCount do
+			while c < num_spawns and #to_spawn > 0 do
+				for k = 1, #to_spawn do
 					local ply = to_spawn[k]
 
 					if IsValid(ply) and ply:SpawnForRound() then

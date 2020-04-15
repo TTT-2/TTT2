@@ -11,8 +11,6 @@ local surface = surface
 local CreateConVar = CreateConVar
 local hook = hook
 
-local cv_ttt_spectator_mode
-
 -- Define GM12 fonts for compatibility
 surface.CreateFont("DefaultBold", {font = "Tahoma", size = 13, weight = 1000})
 surface.CreateFont("TabLarge", {font = "Tahoma", size = 13, weight = 700, shadow = true, antialias = false})
@@ -22,6 +20,7 @@ ttt_include("cl_fonts")
 
 ttt_include("sh_init")
 
+ttt_include("sh_network_sync")
 ttt_include("sh_sprint")
 ttt_include("sh_main")
 ttt_include("sh_shopeditor")
@@ -30,6 +29,8 @@ ttt_include("sh_corpse")
 ttt_include("sh_player_ext")
 ttt_include("sh_weaponry")
 ttt_include("sh_inventory")
+ttt_include("sh_door")
+ttt_include("sh_voice")
 
 ttt_include("vgui__cl_coloredbox")
 ttt_include("vgui__cl_droleimage")
@@ -39,11 +40,13 @@ ttt_include("vgui__cl_simpleclickicon")
 ttt_include("vgui__cl_progressbar")
 ttt_include("vgui__cl_scrolllabel")
 
+ttt_include("cl_network_sync")
 ttt_include("cl_karma")
 ttt_include("cl_tradio")
 ttt_include("cl_transfer")
 ttt_include("cl_reroll")
 ttt_include("cl_targetid")
+ttt_include("cl_target_data")
 ttt_include("cl_search")
 ttt_include("cl_tbuttons")
 ttt_include("cl_scoreboard")
@@ -72,6 +75,9 @@ ttt_include("cl_damage_indicator")
 ttt_include("sh_armor")
 ttt_include("cl_weapon_pickup")
 
+-- all files are loaded
+local TryT = LANG.TryTranslation
+
 ---
 -- Called after the gamemode loads and starts.
 -- @hook
@@ -84,7 +90,9 @@ function GM:Initialize()
 	hook.Run("TTT2Initialize")
 
 	GAMEMODE.round_state = ROUND_WAIT
-	cv_ttt_spectator_mode = GetConVar("ttt_spectator_mode")
+
+	-- load addon language files
+	LANG.SetupFiles("lang/", true)
 
 	LANG.Init()
 
@@ -165,7 +173,7 @@ function GM:InitPostEntity()
 	net.SendToServer()
 
 	net.Start("TTT_Spectate")
-	net.WriteBool(cv_ttt_spectator_mode:GetBool())
+	net.WriteBool(GetConVar("ttt_spectator_mode"):GetBool())
 	net.SendToServer()
 
 	if not game.SinglePlayer() then
@@ -230,7 +238,7 @@ local function RoundStateChange(o, n)
 		GAMEMODE:CleanUpMap()
 
 		-- show warning to spec mode players
-		if cv_ttt_spectator_mode:GetBool() and IsValid(LocalPlayer()) then
+		if GetConVar("ttt_spectator_mode"):GetBool() and IsValid(LocalPlayer()) then
 			LANG.Msg("spec_mode_warning", nil, MSG_CHAT_WARN)
 		end
 
@@ -630,7 +638,7 @@ function CheckIdle()
 			idle.pos = client:GetPos()
 			idle.t = CurTime()
 		elseif CurTime() > idle.t + idle_limit then
-			RunConsoleCommand("say", "(AUTOMATED MESSAGE) I have been moved to the Spectator team because I was idle/AFK.")
+			RunConsoleCommand("say", TryT("automoved_to_spec"))
 
 			timer.Simple(0, function() -- move client into the spectator team in the next frame
 				RunConsoleCommand("ttt_spectator_mode", 1)

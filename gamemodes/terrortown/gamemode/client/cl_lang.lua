@@ -23,6 +23,8 @@ LANG.ServerLanguage = "english"
 local cached_default = {}
 local cached_active = {}
 
+local warn_color = Color(255, 70, 45)
+
 ---
 -- Creates a new language
 -- @param string lang_name the new language name
@@ -63,7 +65,7 @@ end
 -- @return string the inserted string_name parameter
 -- @realm client
 function LANG.AddToLanguage(lang_name, string_name, string_text)
-	lang_name = lang_name and string.lower(lang_name)
+	lang_name = lang_name and string.lower(lang_name) or nil
 
 	if not LANG.IsLanguage(lang_name) then
 		ErrorNoHalt(Format("Failed to add '%s' to language '%s': language does not exist.\n", tostring(string_name), tostring(lang_name)))
@@ -119,11 +121,14 @@ local interp = string.Interp
 -- @{LANG.GetTranslation}.
 -- @param string name string key identifier for the translated @{string}
 -- @param table params
--- @return nil|string
+-- @return nil|string The translated string
 -- @realm client
 -- @see LANG.GetPTranslation
 function LANG.GetParamTranslation(name, params)
-	return interp(cached_active[name], params)
+	-- remove the second return variable by caching it
+	local trans = interp(cached_active[name], params)
+
+	return trans
 end
 
 ---
@@ -161,12 +166,35 @@ function LANG.GetUnsafeLanguageTable()
 end
 
 ---
--- Returns a translated @{string} text (if possible) directly from the language table
--- @param string name string key identifier for the translated @{string}
--- @return nil|string
+-- Returns the reference to a language table if it exists
+-- @param string name string key identifier for the language
+-- @return nil|table
 -- @realm client
-function LANG.GetUnsafeNamed(name)
-	return LANG.Strings[name]
+function LANG.GetUnsafeNamed(lang_name)
+	lang_name = lang_name and string.lower(lang_name) or nil
+
+	if not LANG.IsLanguage(lang_name) then
+		ErrorNoHalt(Format("Failed to get '%s': language does not exist.\n", tostring(lang_name)))
+
+		return
+	end
+
+	return LANG.Strings[lang_name]
+end
+
+---
+-- Returns the reference to a language table if it exists, creates a new language if it did not exist
+-- @param string name string key identifier for the language
+-- @return nil|table
+-- @realm client
+function LANG.GetLanguageTableReference(lang_name)
+	lang_name = lang_name and string.lower(lang_name) or nil
+
+	if not LANG.IsLanguage(lang_name) then
+		LANG.CreateLanguage(lang_name)
+	end
+
+	return LANG.Strings[lang_name]
 end
 
 ---
@@ -210,7 +238,7 @@ end
 -- @param string lang_name the new language name
 -- @realm client
 function LANG.SetActiveLanguage(lang_name)
-	lang_name = lang_name and string.lower(lang_name)
+	lang_name = lang_name and string.lower(lang_name) or nil
 
 	if LANG.IsLanguage(lang_name) then
 		local old_name = LANG.ActiveLanguage
@@ -273,7 +301,7 @@ end
 function LANG.IsLanguage(lang_name)
 	if not lang_name then return end
 
-	return LANG.Strings[string.lower(lang_name)]
+	return LANG.Strings[string.lower(lang_name)] ~= nil
 end
 
 local function LanguageChanged(cv, old, new)
@@ -317,7 +345,7 @@ LANG.Styles = {
 	end,
 
 	[MSG_MSTACK_WARN] = function(text)
-		MSTACK:AddColoredBgMessage(text, COLOR_RED)
+		MSTACK:AddColoredBgMessage(text, warn_color)
 
 		print("[TTT2] Warn:	" .. text)
 	end,
@@ -333,7 +361,7 @@ LANG.Styles = {
 	end,
 
 	[MSG_CHAT_WARN] = function(text)
-		chat.AddText(COLOR_RED, text)
+		chat.AddText(warn_color, text)
 	end,
 
 	[MSG_CHAT_PLAIN] = chat.AddText

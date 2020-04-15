@@ -3,9 +3,9 @@
 
 GM.Name = "TTT2 (Advanced Update)"
 GM.Author = "Bad King Urgrain, Alf21, tkindanight, Mineotopia, LeBroomer"
-GM.Email = ""
+GM.Email = "ttt2@neoxult.de"
 GM.Website = "ttt.badking.net, ttt2.informaskill.de"
-GM.Version = "0.5.8b"
+GM.Version = "0.6.4b"
 GM.Customized = true
 
 TTT2 = true -- identifier for TTT2. Just use "if TTT2 then ... end"
@@ -78,7 +78,7 @@ TEAM_TRAITOR = "traitors"
 TEAM_NOCHANGE = "nochange"
 
 -- max networking bits to send roles numbers
-ROLE_BITS = 5
+ROLE_BITS = 8
 
 -- override default settings of ttt to make it compatible with other addons
 -- Player roles
@@ -498,12 +498,24 @@ COLOR_DGREEN = Color(0, 100, 0, 255)
 COLOR_RED = Color(255, 0, 0, 255)
 COLOR_YELLOW = Color(200, 200, 0, 255)
 COLOR_LGRAY = Color(200, 200, 200, 255)
+COLOR_LLGRAY = Color(210, 210, 210, 255)
 COLOR_SLATEGRAY = Color(110, 120, 125, 255)
 COLOR_BLUE = Color(0, 0, 255, 255)
 COLOR_NAVY = Color(0, 0, 100, 255)
 COLOR_PINK = Color(255, 0, 255, 255)
 COLOR_ORANGE = Color(250, 100, 0, 255)
 COLOR_OLIVE = Color(100, 100, 0, 255)
+
+-- load non-wrapped modules directly
+require("marks")
+
+-- TODO load modules that are currently not included in gmod but waiting for merge
+require("outline")
+
+include("includes/modules/pon.lua")
+include("ttt2/extensions/net.lua")
+include("ttt2/extensions/string.lua")
+include("ttt2/extensions/table.lua")
 
 -- include ttt required files
 ttt_include("sh_util")
@@ -516,12 +528,6 @@ ttt_include("sh_hud_manager")
 ttt_include("sh_equip_items")
 ttt_include("sh_role_module")
 ttt_include("sh_item_module")
-
--- load non-wrapped modules directly
-require("marks")
-
--- TODO load modules that are currently not included in gmod but waiting for merge
-require("outline")
 
 ---
 -- Returns the equipment's file name

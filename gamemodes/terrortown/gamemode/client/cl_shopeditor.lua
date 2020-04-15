@@ -123,7 +123,7 @@ function ShopEditor.CreateItemList(frame, w, h, itms, onClick, updateListItems)
 		local ic
 
 		-- Create icon panel
-		if item.material and item.material ~= "vgui/ttt/icon_id" then
+		if item.ttt2_cached_material then
 			if not ShopEditor.ItemIsWeapon(item) then
 				ic = vgui.Create("SimpleClickIcon", dlist)
 			else
@@ -144,10 +144,10 @@ function ShopEditor.CreateItemList(frame, w, h, itms, onClick, updateListItems)
 			end
 
 			ic:SetIconSize(64)
-			ic:SetIcon(item.material)
-		elseif item.model and item.model ~= "models/weapons/w_bugbait.mdl" then
+			ic:SetMaterial(item.ttt2_cached_material)
+		elseif item.ttt2_cached_model then
 			ic = vgui.Create("SpawnIcon", dlist)
-			ic:SetModel(item.model)
+			ic:SetModel(item.ttt2_cached_model)
 		end
 
 		if ic then

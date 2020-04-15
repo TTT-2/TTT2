@@ -91,7 +91,7 @@ function SWEP:SecondaryAttack()
 	self.dt.start_time = 0
 end
 
-function SWEP:SetZoom(level)
+function SWEP:SetZoomLevel(level)
 	if CLIENT then return end
 
 	local owner = self:GetOwner()
@@ -109,11 +109,11 @@ function SWEP:CycleZoom()
 		self.dt.zoom = 1
 	end
 
-	self:SetZoom(self.dt.zoom)
+	self:SetZoomLevel(self.dt.zoom)
 end
 
 function SWEP:PreDrop()
-	self:SetZoom(1)
+	self:SetZoomLevel(1)
 
 	self.dt.processing = false
 
@@ -121,7 +121,7 @@ function SWEP:PreDrop()
 end
 
 function SWEP:Holster()
-	self:SetZoom(1)
+	self:SetZoomLevel(1)
 
 	self.dt.processing = false
 
@@ -133,7 +133,7 @@ function SWEP:Deploy()
 		self:GetOwner():DrawViewModel(false)
 	end
 
-	self:SetZoom(1)
+	self:SetZoomLevel(1)
 
 	return true
 end
@@ -222,8 +222,9 @@ if CLIENT then
 		return -1
 	end
 
-	hook.Add("TTTRenderEntityInfo", "HUDDrawTargetIDBinocular", function(data, params)
+	hook.Add("TTTRenderEntityInfo", "HUDDrawTargetIDBinocular", function(tData)
 		local client = LocalPlayer()
+		local ent = tData:GetEntity()
 
 		if not IsValid(client) or not client:IsTerror() or not client:Alive() then return end
 
@@ -231,17 +232,17 @@ if CLIENT then
 
 		if not IsValid(c_wep) then return end
 
-		if data.ent:GetClass() ~= "prop_ragdoll" or c_wep:GetClass() ~= "weapon_ttt_binoculars" then return end
+		if not IsValid(ent) or ent:GetClass() ~= "prop_ragdoll" or c_wep:GetClass() ~= "weapon_ttt_binoculars" then return end
 
 		-- draw progress
 		if not c_wep.dt.processing then return end
 
 		local progress = mathRound(mathClamp((CurTime() - c_wep.dt.start_time) / c_wep.ProcessingDelay * 100, 0, 100))
 
-		params.displayInfo.desc[#params.displayInfo.desc + 1] = {
-			text = GetPT("binoc_progress", {progress = progress}),
-			color = hud_color
-		}
+		tData:AddDescriptionLine(
+			GetPT("binoc_progress", {progress = progress}),
+			hud_color
+		)
 	end)
 
 	function SWEP:DrawHUD()

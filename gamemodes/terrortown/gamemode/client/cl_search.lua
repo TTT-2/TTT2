@@ -303,7 +303,14 @@ function PreprocSearch(raw)
 				end
 			end
 
-			search["eq_" .. item.id] = {img = item.corpseIcon or item.material, text = text, p = highest + 1}
+			-- add item to body search if flag is set
+			if item.populateSearch then
+				search["eq_" .. item.id] = {
+					img = item.corpseIcon or item.material,
+					text = text,
+					p = highest + 1
+				}
+			end
 		end
 	end
 
@@ -445,7 +452,7 @@ local function ShowSearchScreen(search_raw)
 		RunConsoleCommand("ttt_confirm_death", search_raw.eidx, id, search_raw.lrng)
 	end
 
-	dconfirm:SetDisabled(client:IsSpec() or search_raw.owner and IsValid(search_raw.owner) and search_raw.owner:GetNWBool("body_found", false))
+	dconfirm:SetDisabled(client:IsSpec() or search_raw.owner and IsValid(search_raw.owner) and search_raw.owner:TTT2NETGetBool("body_found", false))
 
 	local dcall = vgui.Create("DButton", dcont)
 	dcall:SetPos(m * 2 + bw_large, by)

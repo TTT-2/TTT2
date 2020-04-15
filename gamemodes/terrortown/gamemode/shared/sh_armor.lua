@@ -24,7 +24,7 @@ function plymeta:GetMaxArmor()
 end
 
 ---
--- Returns wether the armor is reinforced
+-- Returns whether the armor is reinforced
 -- @return boolean is armor reinforced
 -- @realm shared
 function plymeta:ArmorIsReinforced()
