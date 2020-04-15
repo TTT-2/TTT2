@@ -8,7 +8,6 @@
 local table = table
 local pairs = pairs
 local math = math
-local ipairs = ipairs
 local util = util
 
 -- so much text here I'm using shorter names than usual
@@ -128,9 +127,9 @@ function AWARDS.ExplodedSelf(events, scores, players, traitors)
 	for _, e in pairs(events) do
 		if e.id == EVENT_KILL and is_dmg(e.dmg.t, DMG_BLAST) and e.att.sid64 == e.vic.sid64 then
 			return {
-				title = T("aw_exp2_title"), 
-				text = T("aw_exp2_text"), 
-				nick = e.vic.ni, 
+				title = T("aw_exp2_title"),
+				text = T("aw_exp2_text"),
+				nick = e.vic.ni,
 				priority = math.random(4)
 			}
 		end
@@ -192,45 +191,51 @@ function AWARDS.AllKills(events, scores, players, traitors)
 	local killedTraitors, killedNoTraitors
 
 	for id, s in pairs(scores) do
-		for _, ev in ipairs(s.ev) do
-			if ev.v == TEAM_TRAITOR then
+		for i = 1, #s.ev do
+			if s.ev[i].v == TEAM_TRAITOR then
 				if not killedTraitors then
 					killedTraitors = id
 				elseif killedTraitors ~= id then
-					killedTraitors = -1
+					killedTraitors = nil
+
+					break
 				end
 			else
 				if not killedNoTraitors then
 					killedNoTraitors = id
 				elseif killedNoTraitors ~= id then
-					killedNoTraitors = -1
+					killedNoTraitors = nil
+
+					break
 				end
 			end
 		end
 	end
 
-	if killedTraitors and killedTraitors ~= -1 and not table.HasValue(traitors, killedTraitors) then
+	if killedTraitors and not table.HasValue(traitors, killedTraitors) then
 		local killer = players[killedTraitors]
-		if not killer then return end
 
-		return {
-			nick = killer, 
-			title = T("aw_all1_title"), 
-			text = T("aw_all1_text"), 
-			priority = math.random(0, table.Count(players))
-		}
+		if killer then
+			return {
+				nick = killer,
+				title = T("aw_all1_title"),
+				text = T("aw_all1_text"),
+				priority = math.random(table.Count(players))
+			}
+		end
 	end
 
-	if killedNoTraitors and killedNoTraitors ~= -1 and table.HasValue(traitors, killedNoTraitors) then
+	if killedNoTraitors and table.HasValue(traitors, killedNoTraitors) then
 		local killer = players[killedNoTraitors]
-		if not killer then return end
 
-		return {
-			nick = killer, 
-			title = T("aw_all2_title"), 
-			text = T("aw_all2_text"), 
-			priority = math.random(0, table.Count(players))
-		}
+		if killer then
+			return {
+				nick = killer,
+				title = T("aw_all2_title"),
+				text = T("aw_all2_text"),
+				priority = math.random(table.Count(players))
+			}
+		end
 	end
 end
 AllKills = AWARDS.AllKills -- just for compatibility
@@ -246,16 +251,16 @@ function AWARDS.FallDeath(events, scores, players, traitors)
 		if e.id == EVENT_KILL and is_dmg(e.dmg.t, DMG_FALL) then
 			if e.att.ni ~= "" then
 				return {
-					title = T("aw_fal1_title"), 
-					nick = e.att.ni, 
-					text = T("aw_fal1_text"), 
+					title = T("aw_fal1_title"),
+					nick = e.att.ni,
+					text = T("aw_fal1_text"),
 					priority = math.random(7, 15)
 				}
 			else
 				return {
-					title = T("aw_fal2_title"), 
-					nick = e.vic.ni, 
-					text = T("aw_fal2_text"), 
+					title = T("aw_fal2_title"),
+					nick = e.vic.ni,
+					text = T("aw_fal2_text"),
 					priority = math.random(5)
 				}
 			end
@@ -274,9 +279,9 @@ function AWARDS.FallKill(events, scores, players, traitors)
 	for _, e in pairs(events) do
 		if e.id == EVENT_KILL and is_dmg(e.dmg.t, DMG_CRUSH) and is_dmg(e.dmg.t, DMG_PHYSGUN) and e.att.ni ~= "" then
 			return {
-				title = T("aw_fal3_title"), 
-				nick = e.att.ni, 
-				text = T("aw_fal3_text"), 
+				title = T("aw_fal3_title"),
+				nick = e.att.ni,
+				text = T("aw_fal3_text"),
 				priority = math.random(10, 15)
 			}
 		end
@@ -353,7 +358,7 @@ function AWARDS.UsedAmmoMost(events, ammotype)
 	if not m_id then return end
 
 	return {
-		sid64 = m_id, 
+		sid64 = m_id,
 		kills = m_num
 	}
 end
@@ -375,7 +380,7 @@ function AWARDS.CrowbarUser(events, scores, players, traitors)
 	if not nick then return end
 
 	local award = {
-		nick = nick, 
+		nick = nick,
 		priority = most.kills + math.random(0, 4)
 	}
 
@@ -412,10 +417,10 @@ function AWARDS.PistolUser(events, scores, players, traitors)
 	if not nick then return end
 
 	local award = {
-		nick = nick, 
+		nick = nick,
 		priority = most.kills
 	}
-	
+
 	local kills = most.kills
 
 	if kills > 1 and kills < 4 then
@@ -449,7 +454,7 @@ function AWARDS.ShotgunUser(events, scores, players, traitors)
 	if not nick then return end
 
 	local award = {
-		nick = nick, 
+		nick = nick,
 		priority = most.kills
 	}
 
@@ -486,7 +491,7 @@ function AWARDS.RifleUser(events, scores, players, traitors)
 	if not nick then return end
 
 	local award = {
-		nick = nick, 
+		nick = nick,
 		priority = most.kills
 	}
 
@@ -523,7 +528,7 @@ function AWARDS.RDeagleUser(events, scores, players, traitors)
 	if not nick then return end
 
 	local award = {
-		nick = nick, 
+		nick = nick,
 		priority = most.kills
 	}
 
@@ -785,7 +790,9 @@ function AWARDS.TeamKiller(events, scores, players, traitors)
 
 	-- find biggest tker
 	for id, s in pairs(scores) do
-		for _, ev in ipairs(s.ev) do
+		for i = 1, #s.ev do
+			local ev = s.ev[i]
+
 			tktbl[id] = tktbl[id] or {}
 
 			if ev.t == TEAM_NONE or ev.t ~= ev.v or TEAMS[ev.t].alone then
@@ -815,7 +822,7 @@ function AWARDS.TeamKiller(events, scores, players, traitors)
 
 	if not nick then return end
 
-	local was_traitor = table.HasValue(traitors, tker) -- TODO use key-value table
+	local was_traitor = table.HasValue(traitors, tker)
 	local award = {
 		nick = nick,
 		priority = tka

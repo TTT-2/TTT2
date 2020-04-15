@@ -48,7 +48,7 @@ function GM:HUDPaintBackground()
 	if damageAmount > 0 then
 		local theme = DMGINDICATOR.themes[DMGINDICATOR.cv.mode:GetString()] or DMGINDICATOR.themes["Default"]
 		local remainingTimeFactor = math.max(0, indicatorDuration - (CurTime() - lastDamage)) / indicatorDuration
-		
+
 		damageAmount = maxDamageAmount * remainingTimeFactor
 
 		surface.SetDrawColor(255, 255, 255, DMGINDICATOR.cv.maxalpha:GetInt() * damageAmount)

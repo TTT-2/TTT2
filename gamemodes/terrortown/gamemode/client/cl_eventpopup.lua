@@ -3,7 +3,7 @@
 -- @author Mineotopia
 -- @desc A event popup system that works alongside the MSTACK system to display important messages
 
-EPOP = EPOP or {}
+EPOP = {}
 
 ---
 -- Adds a popup message to the @{EPOP}

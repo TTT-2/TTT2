@@ -1,6 +1,5 @@
 ---
 -- @section changes
--- TODO fetch changes dynamically from external http request
 
 -- some micro-optimizations (localizing globals)
 local os = os

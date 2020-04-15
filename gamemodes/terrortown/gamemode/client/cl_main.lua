@@ -632,7 +632,7 @@ function CheckIdle()
 		elseif CurTime() > idle.t + idle_limit then
 			RunConsoleCommand("say", "(AUTOMATED MESSAGE) I have been moved to the Spectator team because I was idle/AFK.")
 
-			timer.Simple(0.3, function() -- TODO 0.3s reliable?
+			timer.Simple(0, function() -- move client into the spectator team in the next frame
 				RunConsoleCommand("ttt_spectator_mode", 1)
 
 				net.Start("TTT_Spectate")

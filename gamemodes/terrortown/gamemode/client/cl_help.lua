@@ -89,7 +89,7 @@ local function AddBindingCategory(category, parent)
 				bind.Remove(curBinding, binding.name, true)
 				dPBinder:SetValue(bind.Find(binding.name))
 			end
-			
+
 			dPGridExtra:AddItem(dPBindDisableButton)
 
 			-- onchange function
@@ -742,7 +742,7 @@ end)
 net.Receive("TTT2DefaultHUDResponse", function()
 	local accepted = net.ReadBool()
 	local hudname = net.ReadString()
-	
+
 	local client = LocalPlayer()
 	if not IsValid(client) then return end
 

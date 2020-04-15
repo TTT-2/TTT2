@@ -74,8 +74,8 @@ Event(EVENT_GAME, {
 Event(EVENT_CREDITFOUND, {
 	text = function(e)
 		return PT("ev_credit", {
-			finder = e.ni, 
-			num = e.cr, 
+			finder = e.ni,
+			num = e.cr,
 			player = e.b
 		})
 	end,
@@ -88,7 +88,7 @@ Event(EVENT_CREDITFOUND, {
 Event(EVENT_BODYFOUND, {
 	text = function(e)
 		return PT("ev_body", {
-			finder = e.ni, 
+			finder = e.ni,
 			victim = e.b
 		})
 	end,

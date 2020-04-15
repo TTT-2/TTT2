@@ -38,11 +38,11 @@ function ShopEditor.GetEquipmentForRoleAll()
 	-- start with all the non-weapon goodies
 	local tbl = {}
 
-	local eject = { -- TODO change into key-value table
-		"weapon_fists",
-		"weapon_ttt_unarmed",
-		"weapon_zm_carry",
-		"bobs_blacklisted"
+	local eject = {
+		weapon_fists = true,
+		weapon_ttt_unarmed = true,
+		weapon_zm_carry = true,
+		bobs_blacklisted = true
 	}
 
 	hook.Run("TTT2ModifyShopEditorIgnoreEquip", eject) -- possibility to modify from externally
@@ -57,7 +57,7 @@ function ShopEditor.GetEquipmentForRoleAll()
 		if name
 		and not v.Doublicated
 		and not string.match(name, "base")
-		and not table.HasValue(eject, name)
+		and not eject[name]
 		then
 			if v.id then
 				tbl[#tbl + 1] = v
@@ -79,7 +79,7 @@ function ShopEditor.GetEquipmentForRoleAll()
 		and not v.Doublicated
 		and not string.match(name, "base")
 		and not string.match(name, "event")
-		and not table.HasValue(eject, name)
+		and not eject[name]
 		then
 			if v.id then
 				tbl[#tbl + 1] = v
@@ -778,14 +778,14 @@ net.Receive("shopFallbackReset", shopFallbackReset)
 -- @internal
 function ShopEditor.ShopFallbackRefresh()
 	local wshop = LocalPlayer().shopeditor
-	if not wshop or not wshop.GetItems then return end
 
-	if not wshop.selectedRole then return end
+	if not wshop or not wshop.GetItems or not wshop.selectedRole then return end
 
 	for _, v in pairs(wshop:GetItems()) do
 		if not v.item then continue end
 
 		local equip = not items.IsItem(v.item.id) and weapons.GetStored(v.item.id) or items.GetStored(v.item.id)
+
 		if not equip then continue end
 
 		equip.CanBuy = equip.CanBuy or {}
