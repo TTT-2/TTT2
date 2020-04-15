@@ -79,7 +79,9 @@ end
 function plymeta:SetRole(subrole, team, forceHooks)
 	local oldRole = self:GetBaseRole()
 	local oldSubrole = self:GetSubRole()
+	local ord = self:GetSubRoleData()
 	local oldTeam = self:GetTeam()
+
 	local rd = roles.GetByIndex(subrole)
 
 	self.role = rd.baserole or subrole
@@ -87,12 +89,10 @@ function plymeta:SetRole(subrole, team, forceHooks)
 
 	self:UpdateTeam(team or rd.defaultTeam or TEAM_NONE)
 
-	local newRole = self:GetBaseRole()
-	local newSubrole = self:GetSubRole()
+	local newBaseRole = self:GetBaseRole()
 	local newTeam = self:GetTeam()
 
-	if oldSubrole ~= newSubrole then
-		local ord = roles.GetByIndex(oldSubrole)
+	if oldSubrole ~= subrole then
 		local ar = GetActiveRolesCount(rd) + 1
 		local oar = GetActiveRolesCount(ord) - 1
 
@@ -108,12 +108,12 @@ function plymeta:SetRole(subrole, team, forceHooks)
 		end
 	end
 
-	if oldRole ~= newRole or forceHooks then
-		hook.Run("TTT2UpdateBaserole", self, oldRole, newRole)
+	if oldRole ~= newBaseRole or forceHooks then
+		hook.Run("TTT2UpdateBaserole", self, oldRole, newBaseRole)
 	end
 
-	if oldSubrole ~= newSubrole or forceHooks then
-		hook.Run("TTT2UpdateSubrole", self, oldSubrole, newSubrole)
+	if oldSubrole ~= subrole or forceHooks then
+		hook.Run("TTT2UpdateSubrole", self, oldSubrole, subrole)
 	end
 
 	if oldTeam ~= newTeam or forceHooks then
@@ -121,7 +121,7 @@ function plymeta:SetRole(subrole, team, forceHooks)
 	end
 
 	-- ye olde hooks
-	if newSubrole ~= oldSubrole or forceHooks then
+	if subrole ~= oldSubrole or forceHooks then
 		self:SetRoleColor(rd.color)
 		self:SetRoleDkColor(rd.dkcolor)
 		self:SetRoleLtColor(rd.ltcolor)
@@ -143,8 +143,8 @@ function plymeta:SetRole(subrole, team, forceHooks)
 	end
 
 	if SERVER then
-		roles.GetByIndex(oldSubrole):RemoveRoleLoadout(self, true)
-		roles.GetByIndex(newSubrole):GiveRoleLoadout(self, true)
+		ord:RemoveRoleLoadout(self, true)
+		rd:GiveRoleLoadout(self, true)
 	end
 end
 
