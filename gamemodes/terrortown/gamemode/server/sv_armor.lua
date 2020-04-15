@@ -20,6 +20,7 @@ ARMOR.cv.armor_damage_block_pct = CreateConVar("ttt_armor_damage_block_pct", 0.2
 ARMOR.cv.armor_damage_health_pct = CreateConVar("ttt_armor_damage_health_pct", 0.7, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 ARMOR.cv.armor_classic = CreateConVar("ttt_armor_classic", 0, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 ARMOR.cv.item_armor_value = CreateConVar("ttt_item_armor_value", 30, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+ARMOR.cv.item_armor_block_headshots = CreateConVar("ttt_item_armor_block_headshots", 0, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 hook.Add("TTT2SyncGlobals", "AddArmorGlobals", function()
 	SetGlobalBool(ARMOR.cv.armor_classic:GetName(), ARMOR.cv.armor_classic:GetBool())
@@ -161,6 +162,10 @@ function ARMOR:HandlePlayerTakeDamage(ply, infl, att, amount, dmginfo)
 
 	-- normal damage handling when no armor is available
 	if armor == 0 then return end
+
+	-- handle if headshots should be ignored by the armor
+	if ply:LastHitGroup() == HITGROUP_HEAD and not self.cv.item_armor_block_headshots:GetBool()
+	then return end
 
 	-- handle different damage type factors, only these four damage types are valid
 	if not dmginfo:IsDamageType(DMG_BULLET) and not dmginfo:IsDamageType(DMG_CLUB)
