@@ -164,8 +164,7 @@ function ARMOR:HandlePlayerTakeDamage(ply, infl, att, amount, dmginfo)
 	if armor == 0 then return end
 
 	-- handle if headshots should be ignored by the armor
-	if ply:LastHitGroup() == HITGROUP_HEAD and not self.cv.item_armor_block_headshots:GetBool()
-	then return end
+	if ply:LastHitGroup() == HITGROUP_HEAD and not self.cv.item_armor_block_headshots:GetBool() then return end
 
 	-- handle different damage type factors, only these four damage types are valid
 	if not dmginfo:IsDamageType(DMG_BULLET) and not dmginfo:IsDamageType(DMG_CLUB)
