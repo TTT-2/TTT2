@@ -262,7 +262,7 @@ L.sb_tag_friend = "AMICO"
 L.sb_tag_susp = "SOSPETTO"
 L.sb_tag_avoid = "EVITA"
 L.sb_tag_kill = "UCCIDI"
-L.sb_tag_miss = "PERSO"
+L.sb_tag_miss = "DISPERSO"
 
 -- Armi ed equipaggiamento, HUD e messaggi
 -- Weapons and equipment, HUD and messages
