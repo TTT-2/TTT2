@@ -192,6 +192,11 @@ function GM:Tick()
 			elseif SERVER then
 				ply:StartDrowning(false)
 			end
+
+			-- Run DNA Scanner think also when it is not deployed
+			if ply:HasWeapon("weapon_ttt_wtester") then
+				ply:GetWeapon("weapon_ttt_wtester"):PassiveThink()
+			end
 		elseif SERVER and tm == TEAM_SPEC then
 			if ply.propspec then
 				PROPSPEC.Recharge(ply)
