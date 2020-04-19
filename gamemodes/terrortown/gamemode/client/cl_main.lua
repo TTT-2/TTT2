@@ -196,7 +196,9 @@ function GM:InitPostEntity()
 		draw.CacheAvatar(plys[i]:SteamID64(), "medium") -- caching
 	end
 
-	timer.Create("cache_ents", 1, 0, self.DoCacheEnts)
+	timer.Create("cache_ents", 1, 0, function()
+		self:DoCacheEnts()
+	end)
 
 	RunConsoleCommand("_ttt_request_serverlang")
 	RunConsoleCommand("_ttt_request_rolelist")
