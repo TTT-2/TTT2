@@ -433,7 +433,9 @@ function GM:ClearClientState()
 
 	gui.EnableScreenClicker(false)
 end
-net.Receive("TTT_ClearClientState", GM.ClearClientState)
+net.Receive("TTT_ClearClientState", function()
+	GAMEMODE:ClearClientState()
+end)
 
 local color_trans = Color(0, 0, 0, 0)
 
