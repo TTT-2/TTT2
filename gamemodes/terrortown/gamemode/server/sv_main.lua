@@ -205,7 +205,7 @@ function GM:Initialize()
 	RunConsoleCommand("mp_friendlyfire", "1")
 
 	-- Default crowbar unlocking settings, may be overridden by config entity
-	GAMEMODE.crowbar_unlocks = {
+	self.crowbar_unlocks = {
 		[OPEN_DOOR] = true,
 		[OPEN_ROT] = true,
 		[OPEN_BUT] = true,
@@ -213,24 +213,25 @@ function GM:Initialize()
 	}
 
 	-- More map config ent defaults
-	GAMEMODE.force_plymodel = ""
-	GAMEMODE.propspec_allow_named = true
+	self.force_plymodel = ""
+	self.propspec_allow_named = true
 
-	GAMEMODE.MapWin = WIN_NONE
-	GAMEMODE.AwardedCredits = false
-	GAMEMODE.AwardedCreditsDead = 0
+	self.MapWin = WIN_NONE
+	self.AwardedCredits = false
+	self.AwardedCreditsDead = 0
 
-	GAMEMODE.round_state = ROUND_WAIT
-	GAMEMODE.FirstRound = true
-	GAMEMODE.RoundStartTime = 0
+	self.round_state = ROUND_WAIT
+	self.FirstRound = true
+	self.RoundStartTime = 0
+	self.roundCount = 0
 
-	GAMEMODE.DamageLog = {}
-	GAMEMODE.LastRole = {}
-	GAMEMODE.playermodel = GetRandomPlayerModel()
-	GAMEMODE.playercolor = COLOR_WHITE
+	self.DamageLog = {}
+	self.LastRole = {}
+	self.playermodel = GetRandomPlayerModel()
+	self.playercolor = COLOR_WHITE
 
 	-- Delay reading of cvars until config has definitely loaded
-	GAMEMODE.cvar_init = false
+	self.cvar_init = false
 
 	SetGlobalFloat("ttt_round_end", -1)
 	SetGlobalFloat("ttt_haste_end", -1)
@@ -265,7 +266,7 @@ function GM:InitCvars()
 	-- Initialize game state that is synced with client
 	SetGlobalInt("ttt_rounds_left", round_limit:GetInt())
 
-	GAMEMODE:SyncGlobals()
+	self:SyncGlobals()
 
 	KARMA.InitState()
 
@@ -295,7 +296,7 @@ end
 -- @ref https://wiki.garrysmod.com/page/GM/InitPostEntity
 -- @local
 function GM:InitPostEntity()
-	GAMEMODE:InitCvars()
+	self:InitCvars()
 
 	MsgN("[TTT2][INFO] Client post-init...")
 
@@ -886,6 +887,8 @@ function PrepareRound()
 
 	CleanUp()
 
+	GAMEMODE.roundCount = GAMEMODE.roundCount + 1
+
 	GAMEMODE.MapWin = WIN_NONE
 	GAMEMODE.AwardedCredits = false
 	GAMEMODE.AwardedCreditsDead = 0
@@ -1311,10 +1314,10 @@ function GM:TTTCheckForWin()
 		return WIN_NONE
 	end
 
-	if GAMEMODE.MapWin ~= WIN_NONE then -- a role wins
-		local mw = GAMEMODE.MapWin
+	if self.MapWin ~= WIN_NONE then -- a role wins
+		local mw = self.MapWin
 
-		GAMEMODE.MapWin = WIN_NONE
+		self.MapWin = WIN_NONE
 
 		return mw
 	end
