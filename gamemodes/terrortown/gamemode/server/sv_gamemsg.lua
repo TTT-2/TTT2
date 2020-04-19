@@ -453,7 +453,6 @@ concommand.Add("_deathrec", deathrec)
 -- @param Player msg_target
 -- @return[default=nil] boolean
 -- @hook
--- @register
 -- @realm server
 function GM:TTTPlayerRadioCommand(ply, msg_name, msg_target)
 
