@@ -174,11 +174,7 @@ function RADIO:SendCommand(slotidx)
 	local c = self.Commands[slotidx]
 	if not c then return end
 
-	if not hook.Run("TTT2ClientRadioCommand", c.cmd) then
-		RunConsoleCommand("ttt_radio", c.cmd)
-
-		tagPlayer(self:GetTarget(), c.cmd)
-	end
+	RunConsoleCommand("ttt_radio", c.cmd)
 
 	self:ShowRadioCommands(false)
 end
