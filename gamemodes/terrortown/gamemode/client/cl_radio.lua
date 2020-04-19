@@ -277,7 +277,7 @@ local function RadioCommand(ply, cmd, arg)
 	end
 
 	if hook.Run("TTT2ClientRadioCommand", cmd) then
-		print("ttt_radio, execution prevented by an hook")
+		print("ttt_radio, execution prevented by a hook")
 
 		return
 	end
