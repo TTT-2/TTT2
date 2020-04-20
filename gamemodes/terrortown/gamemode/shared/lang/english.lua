@@ -1278,3 +1278,13 @@ L.door_auto_closes = "This door closes automatically"
 L.door_open_touch = "Walk into door to open."
 L.door_open_touch_and_use = "Walk into door or press [{usekey}] to open."
 L.hud_health = "Health"
+
+-- 2020-04-20
+L.item_speedrun = "Speedrun"
+L.item_speedrun_desc = [[Makes you 50% faster!]]
+L.item_no_explosion_damage = "No Explosion Damage"
+L.item_no_explosion_damage_desc = [[Makes you immune to explosion damage.]]
+L.item_no_fall_damage = "No Fall Damage"
+L.item_no_fall_damage_desc = [[Makes you immune to fall damage.]]
+L.item_no_fire_damage = "No Fire Damage"
+L.item_no_fire_damage_desc = [[Makes you immune to fire damage.]]

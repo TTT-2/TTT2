@@ -1,18 +1,16 @@
 if SERVER then
 	AddCSLuaFile()
-
-	resource.AddFile("materials/vgui/ttt/icon_speedrun.vmt")
-	resource.AddFile("materials/vgui/ttt/perks/hud_speedrun.png")
 end
 
-ITEM.hud = Material("vgui/ttt/perks/hud_speedrun.png")
 ITEM.EquipMenuData = {
 	type = "item_passive",
-	name = "Speedrun",
-	desc = "You are 50% faster!"
+	name = "item_speedrun",
+	desc = "item_speedrun_desc"
 }
-ITEM.material = "vgui/ttt/icon_speedrun"
 ITEM.CanBuy = {ROLE_TRAITOR, ROLE_DETECTIVE}
+
+ITEM.hud = Material("vgui/ttt/perks/hud_speedrun.png")
+ITEM.material = "vgui/ttt/icon_speedrun"
 
 hook.Add("TTTPlayerSpeedModifier", "SpeedrunModifySpeed", function(ply, _, _, refTbl)
 	if not IsValid(ply) or not ply:HasEquipmentItem("item_ttt_speedrun") then return end

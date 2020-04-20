@@ -1,19 +1,17 @@
 if SERVER then
 	AddCSLuaFile()
-
-	resource.AddFile("materials/vgui/ttt/icon_noexplosiondmg.vmt")
-	resource.AddFile("materials/vgui/ttt/perks/hud_noexplosiondmg.png")
 end
 
-ITEM.hud = Material("vgui/ttt/perks/hud_noexplosiondmg.png")
 ITEM.EquipMenuData = {
 	type = "item_passive",
-	name = "NoExplosionDamage",
-	desc = "You don't get explosiondamage anymore!"
+	name = "item_no_explosion_damage",
+	desc = "item_no_explosion_damage_desc"
 }
-ITEM.material = "vgui/ttt/icon_noexplosiondmg"
-ITEM.credits = 2
 ITEM.CanBuy = {ROLE_TRAITOR, ROLE_DETECTIVE}
+
+ITEM.hud = Material("vgui/ttt/perks/hud_noexplosiondmg.png")
+ITEM.material = "vgui/ttt/icon_noexplosiondmg"
+
 
 if SERVER then
 	hook.Add("EntityTakeDamage", "TTT2NoExplosionDmg", function(target, dmginfo)

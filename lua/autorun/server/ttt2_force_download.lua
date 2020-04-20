@@ -79,7 +79,7 @@ resource.AddFile("materials/vgui/ttt/ttt2_hand_outline.vmt") -- ttt2 traitor but
 resource.AddFile("materials/vgui/ttt/indirect_confirmed.vmt")
 resource.AddFile("materials/vgui/ttt/revived.vmt")
 
--- ITEMs
+-- items
 resource.AddFile("materials/vgui/ttt/icon_armor.vmt") -- armor
 resource.AddFile("materials/vgui/ttt/missing_equip_icon.vmt")
 resource.AddFile("materials/vgui/ttt/perks/hud_disguiser.png") -- disguiser
@@ -89,6 +89,16 @@ resource.AddFile("materials/vgui/ttt/perks/hud_armor.png") -- armor HUD
 resource.AddFile("materials/vgui/ttt/perks/hud_armor_reinforced.png") -- armor reinforced HUD
 resource.AddFile("materials/vgui/ttt/hud_armor.vmt") -- playerinfo armor
 resource.AddFile("materials/vgui/ttt/hud_armor_reinforced.vmt") -- playerinfo armor reinforced
+
+-- essential items
+resource.AddFile("materials/vgui/ttt/icon_speedrun.vmt")
+resource.AddFile("materials/vgui/ttt/perks/hud_speedrun.png")
+resource.AddFile("materials/vgui/ttt/icon_nofiredmg.vmt")
+resource.AddFile("materials/vgui/ttt/perks/hud_nofiredmg.png")
+resource.AddFile("materials/vgui/ttt/icon_nofalldmg.vmt")
+resource.AddFile("materials/vgui/ttt/perks/hud_nofalldmg.png")
+resource.AddFile("materials/vgui/ttt/icon_noexplosiondmg.vmt")
+resource.AddFile("materials/vgui/ttt/perks/hud_noexplosiondmg.png")
 
 -- pickup symbols
 resource.AddFile("materials/vgui/ttt/pickup/icon_heavy.png")
