@@ -99,9 +99,9 @@ end
 function HUDManager.LoadData()
 	MsgN("[TTT2][HUDManager] Loading data from database...")
 
-	TTT2NET:SetGlobal({"hud_manager", "forcedHUD"}, {type="string"}, DB_GetStringValue("forcedHUD"))
-	TTT2NET:SetGlobal({"hud_manager", "defaultHUD"}, {type="string"}, DB_GetStringValue("defaultHUD") or "pure_skin")
-	TTT2NET:SetGlobal({"hud_manager", "restrictedHUDs"}, {type="table"}, DB_GetStringTable(HUD_MANAGER_SQL_RESTRICTEDHUDS_TABLE) or {})
+	TTT2NET:SetGlobal({"hud_manager", "forcedHUD"}, {type = "string"}, DB_GetStringValue("forcedHUD"))
+	TTT2NET:SetGlobal({"hud_manager", "defaultHUD"}, {type = "string"}, DB_GetStringValue("defaultHUD") or "pure_skin")
+	TTT2NET:SetGlobal({"hud_manager", "restrictedHUDs"}, {type = "table"}, DB_GetStringTable(HUD_MANAGER_SQL_RESTRICTEDHUDS_TABLE) or {})
 end
 
 -- load values from the database when this file is executed
@@ -168,13 +168,13 @@ net.Receive("TTT2DefaultHUDRequest", function(_, ply)
 
 	if ply:IsAdmin() then
 		if HUDToSet == "" then -- Reset the forcedHUD value, to allow users to have a different HUD
-			TTT2NET:SetGlobal({"hud_manager", "defaultHUD"}, {type="string"}, "pure_skin")
+			TTT2NET:SetGlobal({"hud_manager", "defaultHUD"}, {type = "string"}, "pure_skin")
 
 			acceptedRequest = true
 		else
 			local hudtbl = huds.GetStored(HUDToSet)
 			if hudtbl ~= nil then
-				TTT2NET:SetGlobal({"hud_manager", "defaultHUD"}, {type="string"}, HUDToSet)
+				TTT2NET:SetGlobal({"hud_manager", "defaultHUD"}, {type = "string"}, HUDToSet)
 
 				acceptedRequest = true
 			end
@@ -196,13 +196,13 @@ net.Receive("TTT2ForceHUDRequest", function(_, ply)
 
 	if ply:IsAdmin() then
 		if HUDToForce == "" then -- Reset the forcedHUD value, to allow users to have a different HUD
-			TTT2NET:SetGlobal({"hud_manager", "forcedHUD"}, {type="string"}, nil)
+			TTT2NET:SetGlobal({"hud_manager", "forcedHUD"}, {type = "string"}, nil)
 
 			acceptedRequest = true
 		else
 			local hudtbl = huds.GetStored(HUDToForce)
 			if hudtbl ~= nil then
-				TTT2NET:SetGlobal({"hud_manager", "forcedHUD"}, {type="string"}, HUDToForce)
+				TTT2NET:SetGlobal({"hud_manager", "forcedHUD"}, {type = "string"}, HUDToForce)
 
 				acceptedRequest = true
 			end
@@ -234,7 +234,7 @@ net.Receive("TTT2RestrictHUDRequest", function(_, ply)
 				table.RemoveByValue(restrictedHUDs, HUDToRestrict)
 			end
 
-			TTT2NET:SetGlobal({"hud_manager", "restrictedHUDs"}, {type="table"}, table.Copy(restrictedHUDs))
+			TTT2NET:SetGlobal({"hud_manager", "restrictedHUDs"}, {type = "table"}, table.Copy(restrictedHUDs))
 
 			HUDManager.StoreData()
 
