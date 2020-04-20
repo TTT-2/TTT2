@@ -1271,3 +1271,13 @@ L.door_auto_closes = "Questa porta si chiude automaticamente"
 L.door_open_touch = "Cammina addosso ad una porta per aprirla."
 L.door_open_touch_and_use = "Cammina addosso ad una porta o premi [{usekey}] per aprire."
 L.hud_health = "Vita"
+
+-- 2020-04-20
+--L.item_speedrun = "Speedrun"
+--L.item_speedrun_desc = [[Makes you 50% faster!]]
+--L.item_no_explosion_damage = "No Explosion Damage"
+--L.item_no_explosion_damage_desc = [[Makes you immune to explosion damage.]]
+--L.item_no_fall_damage = "No Fall Damage"
+--L.item_no_fall_damage_desc = [[Makes you immune to fall damage.]]
+--L.item_no_fire_damage = "No Fire Damage"
+--L.item_no_fire_damage_desc = [[Makes you immune to fire damage.]]
