@@ -18,7 +18,7 @@ if SERVER then
 		if not IsValid(target) or not target:IsPlayer() or not dmginfo:IsExplosionDamage() then return end
 
 		if target:Alive() and target:IsTerror() and target:HasEquipmentItem("item_ttt_noexplosiondmg") then
-			dmginfo:ScaleDamage(0) -- no dmg
+			dmginfo:ScaleDamage(0)
 		end
 	end)
 end
