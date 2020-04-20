@@ -899,7 +899,7 @@ end
 -- @param table avoidRoles list of @{ROLE}s that should be avoided
 -- @realm server
 function plymeta:SelectRandomRole(avoidRoles)
-	local selectableRoles = GetSelectableRoles()
+	local selectableRoles = roleselection.GetSelectableRoles()
 	local availableRoles = {}
 	local roleCount = {}
 	local plys = player.GetAll()

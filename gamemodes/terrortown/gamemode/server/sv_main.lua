@@ -1115,9 +1115,7 @@ function BeginRound()
 
 	-- Select traitors & co. This is where things really start so we can't abort
 	-- anymore.
-	SELECTABLEROLES = nil
-
-	SelectRoles()
+	roleselection.SelectRoles()
 
 	LANG.Msg("round_selected")
 

@@ -1,3 +1,8 @@
+---
+-- role selection module
+-- @module roleselection
+roleselection = {}
+
 -- Localize stuff we use often. It's like Lua go-faster stripes.
 local math = math
 local table = table
@@ -8,22 +13,21 @@ local ConVarExists = ConVarExists
 local CreateConVar = CreateConVar
 local hook = hook
 
-local strTmp = ""
-
-PLYFORCEDROLES = {}
-PLYFINALROLES = {}
-SELECTABLEROLES = nil
+roleselection.forcedRoles = {}
+roleselection.finalRoles = {}
+roleselection.selectableRoles = nil
 
 -- innos min pct
-local cv_ttt_min_inno_pct = CreateConVar("ttt_min_inno_pct", "0.47", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Minimum multiplicator for each player to calculate the minimum amount of innocents")
-local cv_ttt_max_roles = CreateConVar("ttt_max_roles", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different roles")
-local cv_ttt_max_roles_pct =  CreateConVar("ttt_max_roles_pct", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different roles based on player amount. ttt_max_roles needs to be 0")
-local cv_ttt_max_baseroles = CreateConVar("ttt_max_baseroles", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different baseroles")
-local cv_ttt_max_baseroles_pct = CreateConVar("ttt_max_baseroles_pct", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different baseroles based on player amount. ttt_max_baseroles needs to be 0")
+roleselection.cv = {}
+roleselection.cv.ttt_min_inno_pct = CreateConVar("ttt_min_inno_pct", "0.47", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Minimum multiplicator for each player to calculate the minimum amount of innocents")
+roleselection.cv.ttt_max_roles = CreateConVar("ttt_max_roles", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different roles")
+roleselection.cv.ttt_max_roles_pct =  CreateConVar("ttt_max_roles_pct", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different roles based on player amount. ttt_max_roles needs to be 0")
+roleselection.cv.ttt_max_baseroles = CreateConVar("ttt_max_baseroles", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different baseroles")
+roleselection.cv.ttt_max_baseroles_pct = CreateConVar("ttt_max_baseroles_pct", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different baseroles based on player amount. ttt_max_baseroles needs to be 0")
 
 local function GetEachRoleCount(ply_count, role_type)
 	if role_type == INNOCENT.name then
-		return math.floor(ply_count * cv_ttt_min_inno_pct:GetFloat()) or 0
+		return math.floor(ply_count * roleselection.cv.ttt_min_inno_pct:GetFloat()) or 0
 	end
 
 	if ply_count < GetConVar("ttt_" .. role_type .. "_min_players"):GetInt() then
@@ -34,7 +38,7 @@ local function GetEachRoleCount(ply_count, role_type)
 	local role_count = math.floor(ply_count * GetConVar("ttt_" .. role_type .. "_pct"):GetFloat())
 	local maxm = 1
 
-	strTmp = "ttt_" .. role_type .. "_max"
+	local strTmp = "ttt_" .. role_type .. "_max"
 
 	if ConVarExists(strTmp) then
 		maxm = GetConVar(strTmp):GetInt()
@@ -57,7 +61,7 @@ end
 -- @param number subrole subrole id of a @{ROLE}'s index
 -- @return number amount
 -- @realm server
-function GetPreSelectedRole(subrole)
+function roleselection.GetPreSelectedRole(subrole)
 	local tmp = 0
 
 	if GetRoundState() == ROUND_ACTIVE then
@@ -70,8 +74,8 @@ function GetPreSelectedRole(subrole)
 
 			tmp = tmp + 1
 		end
-	elseif PLYFINALROLES then
-		for ply, sr in pairs(PLYFINALROLES) do
+	elseif roleselection.finalRoles then
+		for ply, sr in pairs(roleselection.finalRoles) do
 			if sr == subrole then
 				tmp = tmp + 1
 			end
@@ -85,7 +89,7 @@ local function AddAvailableRoles(roleData, tbl, iTbl, forced, max_plys)
 	local b = true
 
 	if not forced then
-		strTmp = "ttt_" .. roleData.name .. "_random"
+		local strTmp = "ttt_" .. roleData.name .. "_random"
 
 		local r = ConVarExists(strTmp) and GetConVar(strTmp):GetInt() or 0
 
@@ -97,7 +101,7 @@ local function AddAvailableRoles(roleData, tbl, iTbl, forced, max_plys)
 	end
 
 	if b then
-		local tmp2 = GetEachRoleCount(max_plys, roleData.name) - GetPreSelectedRole(roleData.index)
+		local tmp2 = GetEachRoleCount(max_plys, roleData.name) - roleselection.GetPreSelectedRole(roleData.index)
 		if tmp2 > 0 then
 			tbl[roleData] = tmp2
 			iTbl[#iTbl + 1] = roleData
@@ -112,7 +116,7 @@ end
 -- @param number max_plys amount of maximum @{Player}s
 -- @return table a list of all selectable @{ROLE}s
 -- @realm server
-function GetSelectableRoles(plys, max_plys)
+function roleselection.GetSelectableRoles(plys, max_plys)
 	if not plys then
 		local tmp = {}
 		local allPlys = player.GetAll()
@@ -133,19 +137,19 @@ function GetSelectableRoles(plys, max_plys)
 
 	if max_plys < 2 then return end
 
-	if SELECTABLEROLES then
-		return SELECTABLEROLES
+	if roleselection.selectableRoles then
+		return roleselection.selectableRoles
 	end
 
 	local selectableRoles = {
-		[INNOCENT] = GetEachRoleCount(max_plys, INNOCENT.name) - GetPreSelectedRole(ROLE_INNOCENT),
-		[TRAITOR] = GetEachRoleCount(max_plys, TRAITOR.name) - GetPreSelectedRole(ROLE_TRAITOR)
+		[INNOCENT] = GetEachRoleCount(max_plys, INNOCENT.name) - roleselection.GetPreSelectedRole(ROLE_INNOCENT),
+		[TRAITOR] = GetEachRoleCount(max_plys, TRAITOR.name) - roleselection.GetPreSelectedRole(ROLE_TRAITOR)
 	}
 
 	local newRolesEnabled = GetConVar("ttt_newroles_enabled"):GetBool()
 	local forcedRolesTbl = {}
 
-	for id, subrole in pairs(PLYFORCEDROLES) do
+	for id, subrole in pairs(roleselection.forcedRoles) do
 		forcedRolesTbl[subrole] = true
 	end
 
@@ -189,18 +193,18 @@ function GetSelectableRoles(plys, max_plys)
 	local baseroles_count = 2
 
 	-- yea it begins
-	local max_roles = cv_ttt_max_roles:GetInt()
+	local max_roles = roleselection.cv.ttt_max_roles:GetInt()
 	if max_roles == 0 then
-		max_roles = math.floor(cv_ttt_max_roles_pct:GetFloat() * max_plys)
+		max_roles = math.floor(roleselection.cv.ttt_max_roles_pct:GetFloat() * max_plys)
 		if max_roles == 0 then
 			max_roles = nil
 		end
 	end
 
 	-- damn, not again
-	local max_baseroles = cv_ttt_max_baseroles:GetInt()
+	local max_baseroles = roleselection.cv.ttt_max_baseroles:GetInt()
 	if max_baseroles == 0 then
-		max_baseroles = math.floor(cv_ttt_max_baseroles_pct:GetFloat() * max_plys)
+		max_baseroles = math.floor(roleselection.cv.ttt_max_baseroles_pct:GetFloat() * max_plys)
 		if max_baseroles == 0 then
 			max_baseroles = nil
 		end
@@ -238,7 +242,7 @@ function GetSelectableRoles(plys, max_plys)
 		end
 	end
 
-	SELECTABLEROLES = selectableRoles
+	roleselection.selectableRoles = selectableRoles
 
 	return selectableRoles
 end
@@ -256,7 +260,7 @@ local function SetRoleTypes(choices, prev_roles, roleCount, availableRoles, defa
 			local v = availableRoles[vpick]
 			local type_count = roleCount[v.index]
 
-			strTmp = "ttt_" .. v.name .. "_karma_min"
+			local strTmp = "ttt_" .. v.name .. "_karma_min"
 
 			local min_karmas = ConVarExists(strTmp) and GetConVar(strTmp):GetInt() or 0
 
@@ -267,7 +271,7 @@ local function SetRoleTypes(choices, prev_roles, roleCount, availableRoles, defa
 				and not pply:GetAvoidRole(v.index)
 				or math.random(3) == 2
 			) then
-				PLYFINALROLES[pply] = PLYFINALROLES[pply] or v.index
+				roleselection.finalRoles[pply] = roleselection.finalRoles[pply] or v.index
 
 				table.remove(choices, pick)
 
@@ -288,7 +292,7 @@ local function SetRoleTypes(choices, prev_roles, roleCount, availableRoles, defa
 		for i = 1, #choices do
 			local ply = choices[i]
 
-			PLYFINALROLES[ply] = PLYFINALROLES[ply] or defaultRole
+			roleselection.finalRoles[ply] = roleselection.finalRoles[ply] or defaultRole
 		end
 	end
 end
@@ -296,11 +300,11 @@ end
 local function SelectForcedRoles(max_plys, roleCount, allSelectableRoles, choices)
 	local transformed = {}
 
-	for id, subrole in pairs(PLYFORCEDROLES) do
+	for id, subrole in pairs(roleselection.forcedRoles) do
 		local ply = player.GetByUniqueID(id)
 
 		if not IsValid(ply) then
-			PLYFORCEDROLES[id] = nil
+			roleselection.forcedRoles[id] = nil
 		else
 			transformed[subrole] = transformed[subrole] or {}
 			transformed[subrole][#transformed[subrole] + 1] = ply
@@ -323,8 +327,8 @@ local function SelectForcedRoles(max_plys, roleCount, allSelectableRoles, choice
 
 				table.remove(transformed[subrole], pick)
 
-				PLYFORCEDROLES[ply:UniqueID()] = nil
-				PLYFINALROLES[ply] = PLYFINALROLES[ply] or subrole
+				roleselection.forcedRoles[ply:UniqueID()] = nil
+				roleselection.finalRoles[ply] = roleselection.finalRoles[ply] or subrole
 				c = c + 1
 
 				for k = 1, #choices do
@@ -338,14 +342,14 @@ local function SelectForcedRoles(max_plys, roleCount, allSelectableRoles, choice
 		end
 	end
 
-	for id, subrole in pairs(PLYFORCEDROLES) do
+	for id, subrole in pairs(roleselection.forcedRoles) do
 		local ply = player.GetByUniqueID(id)
 		local rd = roles.GetByIndex(subrole)
 
 		hook.Run("TTT2ReceivedForcedRole", ply, rd, false)
 	end
 
-	PLYFORCEDROLES = {}
+	roleselection.forcedRoles = {}
 end
 
 local function UpgradeRoles(plys, prev_roles, roleCount, selectableRoles, roleData)
@@ -374,7 +378,7 @@ local function SelectBaseRole(choices, prev_roles, roleCount, roleData)
 		-- the player we consider
 		local pply = choices[pick]
 
-		strTmp = "ttt_" .. roleData.name .. "_karma_min"
+		local strTmp = "ttt_" .. roleData.name .. "_karma_min"
 
 		local min_karmas = ConVarExists(strTmp) and GetConVar(strTmp):GetInt() or 0
 
@@ -406,7 +410,9 @@ end
 -- @param table plys list of @{Player}s
 -- @param number max_plys amount of maximum @{Player}s
 -- @realm server
-function SelectRoles(plys, max_plys)
+function roleselection.SelectRoles(plys, max_plys)
+	roleselection.selectableRoles = nil
+
 	local choices = {}
 	local prev_roles = {}
 	local tmp = {}
@@ -439,7 +445,7 @@ function SelectRoles(plys, max_plys)
 	if max_plys < 2 then return end
 
 	local roleCount = {}
-	local selectableRoles = GetSelectableRoles(plys, max_plys) -- update SELECTABLEROLES table
+	local selectableRoles = roleselection.GetSelectableRoles(plys, max_plys) -- update roleselection.selectableRoles table
 
 	hook.Run("TTT2ModifySelectableRoles", selectableRoles)
 
@@ -499,12 +505,12 @@ function SelectRoles(plys, max_plys)
 	for i = 1, #plys do
 		local ply = plys[i]
 
-		PLYFINALROLES[ply] = PLYFINALROLES[ply] or ROLE_INNOCENT
+		roleselection.finalRoles[ply] = roleselection.finalRoles[ply] or ROLE_INNOCENT
 
-		if PLYFINALROLES[ply] ~= ROLE_INNOCENT then continue end
+		if roleselection.finalRoles[ply] ~= ROLE_INNOCENT then continue end
 
 		innos[#innos + 1] = ply
-		PLYFINALROLES[ply] = nil -- reset it to update it in UpgradeRoles
+		roleselection.finalRoles[ply] = nil -- reset it to update it in UpgradeRoles
 	end
 
 	UpgradeRoles(innos, prev_roles, roleCount, selectableRoles, INNOCENT)
@@ -513,7 +519,7 @@ function SelectRoles(plys, max_plys)
 
 	for i = 1, #plys do
 		local ply = plys[i]
-		local subrole = PLYFINALROLES[ply] or ROLE_INNOCENT
+		local subrole = roleselection.finalRoles[ply] or ROLE_INNOCENT
 
 		ply:SetRole(subrole, nil, true)
 
@@ -526,7 +532,7 @@ function SelectRoles(plys, max_plys)
 		plys[i]:SetDefaultCredits()
 	end
 
-	PLYFINALROLES = {}
+	roleselection.finalRoles = {}
 
 	SendFullStateUpdate()
 end
