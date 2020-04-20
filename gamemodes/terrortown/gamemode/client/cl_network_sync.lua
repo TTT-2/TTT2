@@ -300,7 +300,7 @@ function TTT2NET:NetReadData(metadata)
 	elseif metadata.type == "float" then
 		return net.ReadFloat()
 	elseif metadata.type == "table" then
-		return net.ReadTable()
+		return pon.decode(net.ReadString())
 	else
 		return net.ReadString()
 	end

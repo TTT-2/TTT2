@@ -90,7 +90,7 @@ end
 -- The meta data is used to describe the type of the table entry (the data).
 --
 -- A valid metadata table should provide at least the type field, which is a string with one of the
--- following values: ["string", "int", "bool", "float"]. For the "int" type there is also the "unsigned"
+-- following values: ["string", "int", "bool", "float", "table"]. For the "int" type there is also the "unsigned"
 -- field, which can be set to true. There is also the "bits" field, which can be used to synchronize data more efficiently
 -- as this will only impact the transport/synchronization of the data and describe how many bits are needed to sync this number.
 -- This can also be used to remove an entry, by passing nil as the metadata.
@@ -724,6 +724,7 @@ end
 -- This is used to write a value to the current network message,
 -- based on the given metadata.
 -- @note Nil values are preserved and can be "sent".
+-- @note When using the type "table", the table will be converted to a string with the "pon" library and you have to beware of the maximum net message size, so you are limited in the maximum table size, that can be sent.
 --
 -- @param table metadata The metadata for the given value
 -- @param any|nil val The value to send, can also be nil
@@ -747,7 +748,7 @@ function TTT2NET:NetWriteData(metadata, val)
 	elseif metadata.type == "float" then
 		net.WriteFloat(val)
 	elseif metadata.type == "table" then
-		net.WriteTable(val)
+		net.WriteString(pon.encode(val))
 	else
 		net.WriteString(val)
 	end
