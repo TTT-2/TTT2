@@ -15,27 +15,17 @@ ITEM.material = "vgui/ttt/icon_nofalldmg"
 ITEM.CanBuy = {ROLE_TRAITOR, ROLE_DETECTIVE}
 
 if SERVER then
-	hook.Add("ScalePlayerDamage", "TTTNoFallDmg", function(ply, _, dmginfo)
-        if ply:IsActive() and ply:HasEquipmentItem("item_ttt_nofalldmg") then
-            if dmginfo:IsFallDamage() then
-				dmginfo:ScaleDamage(0) -- no dmg
-			end
-        end
-    end)
+	hook.Add("EntityTakeDamage", "TTT2NoFallDmg", function(target, dmginfo)
+		if not IsValid(target) or not target:IsPlayer() or not dmginfo:IsFallDamage() then return end
 
-    hook.Add("EntityTakeDamage", "TTTNoFallDmg", function(target, dmginfo)
-        if not target or not IsValid(target) or not target:IsPlayer() then return end
-    
-        if target:IsActive() and target:HasEquipmentItem("item_ttt_nofalldmg") then
-            if dmginfo:IsFallDamage() then -- check its fall dmg.
-                dmginfo:ScaleDamage(0) -- no dmg
-            end
-        end
-    end)
+		if target:Alive() and target:IsTerror() and target:HasEquipmentItem("item_ttt_nofalldmg") then
+			dmginfo:ScaleDamage(0) -- no dmg
+		end
+	end)
 
-    hook.Add("OnPlayerHitGround", "TTTNoFallDmg", function(ply)
-        if ply:IsActive() and ply:HasEquipmentItem("item_ttt_nofalldmg") then
+	hook.Add("OnPlayerHitGround", "TTT2NoFallDmg", function(ply)
+		if ply:Alive() and ply:IsTerror() and ply:HasEquipmentItem("item_ttt_nofalldmg") then
 			return false
-        end
+		end
 	end)
 end

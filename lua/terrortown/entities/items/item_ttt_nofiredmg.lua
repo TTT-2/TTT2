@@ -15,16 +15,10 @@ ITEM.material = "vgui/ttt/icon_nofiredmg"
 ITEM.CanBuy = {ROLE_TRAITOR, ROLE_DETECTIVE}
 
 if SERVER then
-	hook.Add("ScalePlayerDamage", "TTTNoFireDmg", function(ply, _, dmginfo)
-		if ply:IsActive() and ply:HasEquipmentItem("item_ttt_nofiredmg") and dmginfo:IsDamageType(DMG_BURN) then
-			dmginfo:ScaleDamage(0) -- no dmg
-		end
-	end)
+	hook.Add("EntityTakeDamage", "TTT2NoFireDmg", function(target, dmginfo)
+		if not IsValid(target) or not target:IsPlayer() or not dmginfo:IsDamageType(DMG_BURN) then return end
 
-	hook.Add("EntityTakeDamage", "TTTNoFireDmg", function(target, dmginfo)
-		if not target or not IsValid(target) or not target:IsPlayer() then return end
-
-		if target:IsActive() and target:HasEquipmentItem("item_ttt_nofiredmg") and dmginfo:IsDamageType(DMG_BURN) then -- check its fire dmg.
+		if target:Alive() and target:IsTerror() and target:HasEquipmentItem("item_ttt_nofiredmg") then
 			dmginfo:ScaleDamage(0) -- no dmg
 		end
 	end)
