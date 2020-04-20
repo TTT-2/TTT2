@@ -34,15 +34,11 @@ local function GetEachRoleCount(ply_count, role_type)
 		return 0
 	end
 
+	local maxCVar = GetConVar("ttt_" .. role_type .. "_max")
+	local maxm = maxCVar and maxCVar:GetInt() or 1
+
 	-- get number of role members: pct of players rounded down
 	local role_count = math.floor(ply_count * GetConVar("ttt_" .. role_type .. "_pct"):GetFloat())
-	local maxm = 1
-
-	local strTmp = "ttt_" .. role_type .. "_max"
-
-	if ConVarExists(strTmp) then
-		maxm = GetConVar(strTmp):GetInt()
-	end
 
 	if maxm > 1 then
 		-- make sure there is at least 1 of the role
@@ -86,22 +82,17 @@ function roleselection.GetPreSelectedRole(subrole)
 end
 
 local function AddAvailableRoles(roleData, tbl, iTbl, forced, max_plys)
-	local b = true
+	local bool = true
 
 	if not forced then
-		local strTmp = "ttt_" .. roleData.name .. "_random"
+		local randomCVar = GetConVar("ttt_" .. roleData.name .. "_random")
 
-		local r = ConVarExists(strTmp) and GetConVar(strTmp):GetInt() or 0
-
-		if r <= 0 then
-			b = false
-		elseif r < 100 then
-			b = math.random(100) <= r
-		end
+		bool = math.random(100) <= (randomCVar and randomCVar:GetInt() or 0)
 	end
 
-	if b then
+	if bool then
 		local tmp2 = GetEachRoleCount(max_plys, roleData.name) - roleselection.GetPreSelectedRole(roleData.index)
+
 		if tmp2 > 0 then
 			tbl[roleData] = tmp2
 			iTbl[#iTbl + 1] = roleData
@@ -178,10 +169,7 @@ function roleselection.GetSelectableRoles(plys, max_plys)
 				end
 
 				-- continue if baserole is not available
-				local base_count = tmpTbl[rd]
-				if not base_count or base_count < 1 then
-					continue
-				end
+				if not tmpTbl[rd] or tmpTbl[rd] < 1 then continue end
 			end
 
 			-- now check for subrole availability
@@ -210,7 +198,9 @@ function roleselection.GetSelectableRoles(plys, max_plys)
 		end
 	end
 
-	for i = 1, #iTmpTbl do
+	local amount = #iTmpTbl
+
+	for i = 1, amount do
 		if max_roles and roles_count >= max_roles then break end
 
 		local rnd = math.random(#iTmpTbl)
@@ -255,35 +245,35 @@ local function SetRoleTypes(choices, prev_roles, roleCount, availableRoles, defa
 		local pick = math.random(choices_i)
 		local pply = choices[pick]
 
-		if IsValid(pply) then
-			local vpick = math.random(availableRoles_i)
-			local v = availableRoles[vpick]
-			local type_count = roleCount[v.index]
+		if not IsValid(pply) then continue end -- TODO we have to remove this ply, otherwise this gonna be an endless loop
 
-			local strTmp = "ttt_" .. v.name .. "_karma_min"
+		local vpick = math.random(availableRoles_i)
+		local v = availableRoles[vpick]
+		local type_count = roleCount[v.index]
 
-			local min_karmas = ConVarExists(strTmp) and GetConVar(strTmp):GetInt() or 0
+		local strTmp = "ttt_" .. v.name .. "_karma_min"
 
-			-- if player was last round innocent, he will be another role (if he has enough karma)
-			if choices_i <= type_count or (
-				pply:GetBaseKarma() > min_karmas
-				and table.HasValue(prev_roles[ROLE_INNOCENT], pply)
-				and not pply:GetAvoidRole(v.index)
-				or math.random(3) == 2
-			) then
-				roleselection.finalRoles[pply] = roleselection.finalRoles[pply] or v.index
+		local min_karmas = ConVarExists(strTmp) and GetConVar(strTmp):GetInt() or 0
 
-				table.remove(choices, pick)
+		-- if player was last round innocent, he will be another role (if he has enough karma)
+		if choices_i <= type_count or (
+			pply:GetBaseKarma() > min_karmas
+			and table.HasValue(prev_roles[ROLE_INNOCENT], pply)
+			and not pply:GetAvoidRole(v.index)
+			or math.random(3) == 2
+		) then
+			roleselection.finalRoles[pply] = roleselection.finalRoles[pply] or v.index
 
-				choices_i = choices_i - 1
-				type_count = type_count - 1
-				roleCount[v.index] = type_count
+			table.remove(choices, pick)
 
-				if type_count <= 0 then
-					table.remove(availableRoles, vpick)
+			choices_i = choices_i - 1
+			type_count = type_count - 1
+			roleCount[v.index] = type_count
 
-					availableRoles_i = availableRoles_i - 1
-				end
+			if type_count <= 0 then
+				table.remove(availableRoles, vpick)
+
+				availableRoles_i = availableRoles_i - 1
 			end
 		end
 	end
@@ -314,31 +304,31 @@ local function SelectForcedRoles(max_plys, roleCount, allSelectableRoles, choice
 	for subrole, ps in pairs(transformed) do
 		local rd = roles.GetByIndex(subrole)
 
-		if table.HasValue(allSelectableRoles, rd) then
-			local role_count = roleCount[subrole]
-			local c = 0
-			local a = #ps
+		if not table.HasValue(allSelectableRoles, rd) then continue end
 
-			for i = 1, a do
-				local pick = math.random(#ps)
-				local ply = ps[pick]
+		local role_count = roleCount[subrole]
+		local c = 0
+		local a = #ps
 
-				if c >= role_count then break end
+		for i = 1, a do
+			local pick = math.random(#ps)
+			local ply = ps[pick]
 
-				table.remove(transformed[subrole], pick)
+			if c >= role_count then break end
 
-				roleselection.forcedRoles[ply:UniqueID()] = nil
-				roleselection.finalRoles[ply] = roleselection.finalRoles[ply] or subrole
-				c = c + 1
+			table.remove(transformed[subrole], pick)
 
-				for k = 1, #choices do
-					if choices[k] ~= ply then continue end
+			roleselection.forcedRoles[ply:UniqueID()] = nil
+			roleselection.finalRoles[ply] = roleselection.finalRoles[ply] or subrole
+			c = c + 1
 
-					table.remove(choices, k)
-				end
+			for k = 1, #choices do
+				if choices[k] ~= ply then continue end
 
-				hook.Run("TTT2ReceivedForcedRole", ply, rd, true)
+				table.remove(choices, k)
 			end
+
+			hook.Run("TTT2ReceivedForcedRole", ply, rd, true)
 		end
 	end
 
@@ -371,16 +361,15 @@ local function SelectBaseRole(choices, prev_roles, roleCount, roleData)
 	local rs = 0
 	local ls = {}
 
+	local minKarmaCVar = GetConVar("ttt_" .. roleData.name .. "_karma_min")
+	local min_karmas = minKarmaCVar and minKarmaCVar:GetInt() or 0
+
 	while rs < roleCount[roleData.index] and #choices > 0 do
 		-- select random index in choices table
 		local pick = math.random(#choices)
 
 		-- the player we consider
 		local pply = choices[pick]
-
-		local strTmp = "ttt_" .. roleData.name .. "_karma_min"
-
-		local min_karmas = ConVarExists(strTmp) and GetConVar(strTmp):GetInt() or 0
 
 		-- give this guy the role if he was not this role last time, or if he makes
 		-- a roll
