@@ -746,6 +746,8 @@ function TTT2NET:NetWriteData(metadata, val)
 		net.WriteBool(val)
 	elseif metadata.type == "float" then
 		net.WriteFloat(val)
+	elseif metadata.type == "table" then
+		net.WriteTable(val)
 	else
 		net.WriteString(val)
 	end
@@ -763,6 +765,7 @@ end
 -- @note You cannot use the unsigned, as NWVars do not have a function for unsigned integers.
 -- @note When a client sets the NWVar locally, this will not be reflected in the data table!
 -- @note This will always sync the default value for the path, and ignore any overrides for specific clients, as NWVars cannot be set for each client.
+-- @note The metadata type "table" is not supported, and should not be used with this function.
 --
 -- @param any|table path The path to sync the nwvar with
 -- @param table|nil meta The metadata

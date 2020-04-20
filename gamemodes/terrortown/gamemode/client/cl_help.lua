@@ -633,7 +633,7 @@ function HELPSCRN:CreateAdministrationForm(parent)
 	defaultHUDlabel:Dock(TOP)
 
 	local defaultHUDCb = vgui.Create("DComboBox", parent)
-	defaultHUDCb:SetValue(HUDManager.GetModelValue("defaultHUD") or "None")
+	defaultHUDCb:SetValue(TTT2NET:GetGlobal({"hud_manager", "defaultHUD"}) or "None")
 
 	defaultHUDCb.OnSelect = function(_, _, value)
 		net.Start("TTT2DefaultHUDRequest")
@@ -652,7 +652,7 @@ function HELPSCRN:CreateAdministrationForm(parent)
 	forceHUDlabel:Dock(TOP)
 
 	local forceHUDCb = vgui.Create("DComboBox", parent)
-	forceHUDCb:SetValue(HUDManager.GetModelValue("forcedHUD") or "None")
+	forceHUDCb:SetValue(TTT2NET:GetGlobal({"hud_manager", "forcedHUD"}) or "None")
 
 	forceHUDCb.OnSelect = function(_, _, value)
 		net.Start("TTT2ForceHUDRequest")
@@ -678,7 +678,7 @@ function HELPSCRN:CreateAdministrationForm(parent)
 	admin_dlv_rhuds:AddColumn("HUD")
 	admin_dlv_rhuds:AddColumn("Restricted")
 
-	local restrictedHUDs = HUDManager.GetModelValue("restrictedHUDs")
+	local restrictedHUDs = TTT2NET:GetGlobal({"hud_manager", "restrictedHUDs"})
 	local allHUDs = huds.GetList()
 
 	for _, v in ipairs(allHUDs) do
@@ -695,16 +695,15 @@ function HELPSCRN:CreateAdministrationForm(parent)
 	end
 end
 
-HUDManager.OnUpdateAttribute("restrictedHUDs", function()
+TTT2NET:OnUpdateGlobal({"hud_manager", "restrictedHUDs"}, function(_, value)
 	if not admin_dlv_rhuds or not IsValid(admin_dlv_rhuds) then return end
 
 	admin_dlv_rhuds:Clear()
 
-	local r = HUDManager.GetModelValue("restrictedHUDs")
 	local a = huds.GetList()
 
 	for _, v in ipairs(a) do
-		admin_dlv_rhuds:AddLine(v.id, table.HasValue(r, v.id) and "true" or "false")
+		admin_dlv_rhuds:AddLine(v.id, table.HasValue(value, v.id) and "true" or "false")
 	end
 end)
 
