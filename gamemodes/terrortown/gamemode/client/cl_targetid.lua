@@ -44,6 +44,7 @@ local icon_tid_detective = Material("vgui/ttt/tid/tid_detective")
 local icon_tid_locked = Material("vgui/ttt/tid/tid_locked")
 local icon_tid_auto_close = Material("vgui/ttt/tid/tid_auto_close")
 local materialDoor = Material("vgui/ttt/tid/tid_big_door")
+local icon_tid_dna = Material("vgui/ttt/dnascanner/dna_hud")
 
 ---
 -- Returns the localized ClassHint table
@@ -310,6 +311,7 @@ function GM:HUDDrawTargetID()
 	HUDDrawTargetIDPlayers(tData)
 	HUDDrawTargetIDRagdolls(tData)
 	HUDDrawTargetIDDoors(tData)
+	HUDDrawTargetIDDNAScanner(tData)
 
 	-- now run a hook that can be used by addon devs that changes the appearance
 	-- of the targetid
@@ -450,6 +452,28 @@ local key_params = {
 	usekey = Key("+use", "USE"),
 	walkkey = Key("+walk", "WALK")
 }
+
+-- handle looking with DNA Scanner
+function HUDDrawTargetIDDNAScanner(tData)
+	local client = LocalPlayer()
+	local ent = tData:GetEntity()
+
+	if not IsValid(client:GetActiveWeapon()) or client:GetActiveWeapon():GetClass() ~= "weapon_ttt_wtester"
+		or tData:GetEntityDistance() > 400 or not IsValid(ent) then return end
+
+	-- add an empty line if there's already data in the description area
+	if tData:GetAmountDescriptionLines() > 0 then
+		tData:AddDescriptionLine()
+	end
+
+	if ent:IsWeapon() or ent.CanHavePrints or ent:GetNWBool("HasPrints", false)
+		or ent:GetClass() == "prop_ragdoll" and CORPSE.GetPlayerNick(ent, false)
+	then
+		tData:AddDescriptionLine(TryT("dna_tid_possible"), COLOR_GREEN, {icon_tid_dna})
+	else
+		tData:AddDescriptionLine(TryT("dna_tid_impossible"), COLOR_RED, {icon_tid_dna})
+	end
+end
 
 -- handle looking at doors
 function HUDDrawTargetIDDoors(tData)

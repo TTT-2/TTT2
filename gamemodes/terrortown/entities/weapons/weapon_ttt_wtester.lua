@@ -7,13 +7,15 @@ local table = table
 
 DEFINE_BASECLASS "weapon_tttbase"
 
-SWEP.HoldType = "normal"
+SWEP.HoldType = "pistol"
 
 if CLIENT then
 	SWEP.PrintName = "dna_name"
 	SWEP.Slot = 8
 
-	SWEP.ViewModelFOV = 10
+	SWEP.ViewModelFOV = 54
+	SWEP.ViewModelFlip = false
+	SWEP.UseHands = true
 	SWEP.DrawCrosshair = false
 
 	SWEP.EquipMenuData = {
@@ -22,24 +24,51 @@ if CLIENT then
 	}
 
 	SWEP.Icon = "vgui/ttt/icon_wtester"
+else
+	--network messages
+	util.AddNetworkString("TTT2ScannerFeedback")
+	util.AddNetworkString("TTT2ScannerUpdate")
+
+	-- ConVar syncing
+	local dna_mode = CreateConVar("ttt2_dna_radar", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+	local dna_slots = CreateConVar("ttt2_dna_scanner_slots", "4", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+	local dna_radar_cd = CreateConVar("ttt2_dna_radar_cooldown", "5.0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+	hook.Add("TTT2SyncGlobals", "TTT2SyncDNAScannerGlobals", function()
+		SetGlobalBool(dna_mode:GetName(), dna_mode:GetBool())
+		SetGlobalInt(dna_slots:GetName(), dna_slots:GetInt())
+		SetGlobalFloat(dna_radar_cd:GetName(), dna_radar_cd:GetFloat())
+	end)
+
+	cvars.AddChangeCallback(dna_mode:GetName(), function(name, old, new)
+		SetGlobalBool(dna_mode:GetName(), tobool(new))
+	end, dna_mode:GetName())
+
+	cvars.AddChangeCallback(dna_slots:GetName(), function(name, old, new)
+		SetGlobalInt(dna_slots:GetName(), tonumber(new))
+	end, dna_slots:GetName())
+
+	cvars.AddChangeCallback(dna_radar_cd:GetName(), function(name, old, new)
+		SetGlobalFloat(dna_radar_cd:GetName(), tonumber(new))
+	end, dna_radar_cd:GetName())
 end
 
 SWEP.Base = "weapon_tttbase"
 
-SWEP.ViewModel = "models/weapons/v_crowbar.mdl"
-SWEP.WorldModel = "models/props_lab/huladoll.mdl"
+SWEP.ViewModel = "models/weapons/v_ttt2_dna_scanner.mdl"
+SWEP.WorldModel = "models/weapons/w_ttt2_dna_scanner.mdl"
 
 SWEP.Primary.ClipSize = -1
 SWEP.Primary.DefaultClip = -1
 SWEP.Primary.Automatic = false
-SWEP.Primary.Delay = 1
+SWEP.Primary.Delay = 0.5
 SWEP.Primary.Ammo = "none"
 
 SWEP.Secondary.ClipSize = -1
 SWEP.Secondary.DefaultClip = -1
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = "none"
-SWEP.Secondary.Delay = 2
+SWEP.Secondary.Delay = 0
 
 SWEP.Kind = WEAPON_ROLE
 SWEP.CanBuy = nil -- no longer a buyable thing
@@ -47,60 +76,51 @@ SWEP.WeaponID = AMMO_WTESTER
 SWEP.InLoadoutFor = {ROLE_DETECTIVE}
 SWEP.AutoSpawnable = false
 SWEP.NoSights = true
+
 SWEP.Range = 175
+
 SWEP.ItemSamples = {}
-SWEP.NowRepeating = nil
+SWEP.CachedTargets = {}
+SWEP.ScanSuccess = 0
+SWEP.ScanTime = CurTime()
+SWEP.ActiveSample = 1
+SWEP.NewSample = 1
+SWEP.LastRadar = CurTime()
+SWEP.RadarPos = nil
 
-local MAX_ITEM = 30
-SWEP.MaxItemSamples = MAX_ITEM
-
-local CHARGE_DELAY = 0.1
-local CHARGE_RATE = 3
-local MAX_CHARGE = 1250
-
-local SAMPLE_PLAYER = 1
-local SAMPLE_ITEM   = 2
-
-local cv_thickness
-
-AccessorFuncDT(SWEP, "charge", "Charge")
-AccessorFuncDT(SWEP, "last_scanned", "LastScanned")
-
-if CLIENT then
-	CreateClientConVar("ttt_dna_scan_repeat", 1, true, true)
-else
-	function SWEP:GetRepeating()
-		local ply = self:GetOwner()
-
-		return IsValid(ply) and ply:GetInfoNum("ttt_dna_scan_repeat", 1) == 1
-	end
-end
-
-SWEP.NextCharge = 0
-
-function SWEP:SetupDataTables()
-	self:DTVar("Int", 0, "charge")
-	self:DTVar("Int", 1, "last_scanned")
-
-	return self.BaseClass.SetupDataTables(self)
-end
+local beep_success = Sound("buttons/blip2.wav")
+local beep_match = Sound("buttons/blip1.wav")
+local beep_miss = Sound("player/suit_denydevice.wav")
+local dna_screen_background = Material("models/ttt2_dna_scanner/screen/background")
+local dna_screen_success = Material("models/ttt2_dna_scanner/screen/check")
+local dna_screen_fail = Material("models/ttt2_dna_scanner/screen/fail")
+local dna_screen_arrow = Material("models/ttt2_dna_scanner/screen/arrow")
+local dna_screen_circle = Material("models/ttt2_dna_scanner/screen/circle")
 
 function SWEP:Initialize()
-	self:SetCharge(MAX_CHARGE)
-	self:SetLastScanned(-1)
-
 	if CLIENT then
 		self:AddHUDHelp("dna_help_primary", "dna_help_secondary", true)
-		cv_thickness = GetConVar("ttt_crosshair_thickness")
+
+		-- Create render target
+		self.scannerScreenTex = GetRenderTarget( "scanner_screen_tex", 512, 512 )
+
+		self.scannerScreenMat = CreateMaterial( "scanner_screen_mat", "UnlitGeneric", {
+					["$basetexture"] = self.scannerScreenTex,
+					["$basetexturetransform"] = "center .5 .5 scale 1 1 rotate 180 translate 0 0"} )
+		self.scannerScreenMat:SetTexture( "$basetexture", self.scannerScreenTex )
+
+		self:SetSubMaterial(0, "!scanner_screen_mat")
+
+		surface.CreateAdvancedFont("DNAScannerDistanceFont", {font = "Trebuchet24", size = 32, weight = 1200})
 	end
 
 	return self.BaseClass.Initialize(self)
 end
 
-local beep_miss = Sound("player/suit_denydevice.wav")
-
 function SWEP:PrimaryAttack()
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
+
+	self:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
 
 	local owner = self:GetOwner()
 
@@ -121,26 +141,59 @@ function SWEP:PrimaryAttack()
 
 	owner:LagCompensation(false)
 
+	if SERVER then
+		self:GatherDNA(ent)
+	end
+end
+
+function SWEP:SecondaryAttack()
+	if not IsFirstTimePredicted() then return end
+
+	self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
+
+	self.ActiveSample = (self.ActiveSample % GetGlobalBool("ttt2_dna_scanner_slots")) + 1
+
+	if CLIENT then
+		self:RadarScan()
+	end
+end
+
+function SWEP:Reload()
+	if not IsFirstTimePredicted() then return end
+
+	self:RemoveSample()
+end
+
+function SWEP:Report(successful, msg, oldFound)
+	if msg then
+		LANG.Msg(self:GetOwner(), msg, nil, MSG_MSTACK_ROLE)
+	end
+
+	net.Start("TTT2ScannerFeedback")
+	net.WriteBool(successful)
+	net.WriteBool(oldFound or false)
+
+	if successful or oldFound then
+		net.WriteUInt(self.ActiveSample, 8)
+		net.WriteEntity(self.CachedTargets[self.ActiveSample])
+	end
+
+	net.Send(self:GetOwner())
+end
+
+function SWEP:GatherDNA(ent)
 	if not IsValid(ent) or ent:IsPlayer() then
-		if CLIENT then
-			owner:EmitSound(beep_miss)
-		end
+		self:Report(false)
 
 		return
 	end
 
-	if CLIENT then return end
-
 	if ent:GetClass() == "prop_ragdoll" and ent.killer_sample then
-		if CORPSE.GetFound(ent, false) then
-			self:GatherRagdollSample(ent)
-		else
-			self:Report("dna_identify")
-		end
+		self:GatherRagdollSample(ent)
 	elseif ent.fingerprints and #ent.fingerprints > 0 then
 		self:GatherObjectSample(ent)
 	else
-		self:Report("dna_notfound")
+		self:Report(false, "dna_notfound")
 	end
 end
 
@@ -154,710 +207,315 @@ function SWEP:GatherRagdollSample(ent)
 
 	if IsValid(ply) then
 		if sample.t < CurTime() then
-			self:Report("dna_decayed")
+			self:Report(false, "dna_decayed")
 
 			return
 		end
 
-		local added = self:AddPlayerSample(ent, ply)
-
-		if not added then
-			self:Report("dna_limit")
-		else
-			self:Report("dna_killer")
-
-			if self:GetRepeating() and self:GetCharge() == MAX_CHARGE then
-				self:PerformScan(#self.ItemSamples)
-			end
-		end
+		self:AddPlayerSample(ent, ply)
 	elseif not ply then
 		-- not valid but not nil -> disconnected?
-		self:Report("dna_no_killer")
+		self:Report(false, "dna_no_killer")
 	else
-		self:Report("dna_notfound")
+		self:Report(false, "dna_notfound")
 	end
 end
 
 function SWEP:GatherObjectSample(ent)
 	if ent:GetClass() == "ttt_c4" and ent:GetArmed() then
-		self:Report("dna_armed")
+		self:Report(false, "dna_armed")
 	else
-		local collected, _, _ = self:AddItemSample(ent)
+		self:AddItemSample(ent)
+	end
+end
 
-		if collected == -1 then
-			self:Report("dna_limit")
-		else
-			self:Report("dna_object", {num = collected})
+local function firstFreeIndex(tbl, max, best)
+	if not tbl[best] then
+		return best
+	end
+
+	for i = 1, max do
+		if not tbl[i] then
+			return i
 		end
 	end
 end
 
-function SWEP:Report(msg, params)
-	LANG.Msg(self:GetOwner(), msg, params, MSG_MSTACK_ROLE)
-end
-
 function SWEP:AddPlayerSample(corpse, killer)
-	if #self.ItemSamples >= self.MaxItemSamples then
-		return false
+	if table.Count(self.ItemSamples) >= GetGlobalBool("ttt2_dna_scanner_slots") then
+		self:Report(false, "dna_limit")
+
+		return
 	end
 
 	local owner = self:GetOwner()
 
-	local prnt = {
-		source = corpse,
-		ply = killer,
-		type = SAMPLE_PLAYER,
-		cls = killer:GetClass()
-	}
+	if table.HasValue(self.ItemSamples, killer) then
+		self.ActiveSample = table.KeyFromValue(self.ItemSamples, killer)
+		self:Report(false, "dna_duplicate", true)
+	else
+		local index = firstFreeIndex(self.ItemSamples, GetGlobalBool("ttt2_dna_scanner_slots"), self.ActiveSample)
 
-	if not table.HasTable(self.ItemSamples, prnt) then
-		self.ItemSamples[#self.ItemSamples + 1] = prnt
+		self.ActiveSample = index
+		self.ItemSamples[index] = killer
+		self.CachedTargets[index] = self:GetScanTarget(killer)
 
 		DamageLog("SAMPLE:\t " .. owner:Nick() .. " retrieved DNA of " .. (IsValid(killer) and killer:Nick() or "<disconnected>") .. " from corpse of " .. (IsValid(corpse) and CORPSE.GetPlayerNick(corpse) or "<invalid>"))
 
 		hook.Call("TTTFoundDNA", GAMEMODE, owner, killer, corpse)
-	end
 
-	return true
+		self:Report(true, "dna_killer")
+	end
 end
 
 function SWEP:AddItemSample(ent)
-	if #self.ItemSamples >= self.MaxItemSamples then
-		return -1
+	if table.Count(self.ItemSamples) >= GetGlobalBool("ttt2_dna_scanner_slots") then
+		self:Report(false, "dna_limit")
+		return
 	end
-
-	table.Shuffle(ent.fingerprints)
-
-	local new = 0
-	local old = 0
-	local own = 0
 
 	local owner = self:GetOwner()
 
-	for i = 1, #ent.fingerprints do
-		local p = ent.fingerprints[i]
+	for i = #ent.fingerprints, 1 do
+		local ply = ent.fingerprints[i]
 
-		local prnt = {
-			source = ent,
-			ply = p,
-			type = SAMPLE_ITEM,
-			cls = ent:GetClass()
-		}
+		if ply == self:GetOwner() then continue end
 
-		if p == owner then
-			own = own + 1
-		elseif table.HasTable(self.ItemSamples, prnt) then
-			old = old + 1
+		if table.HasValue(self.ItemSamples, ply) then
+			self.ActiveSample  = table.KeyFromValue(self.ItemSamples, ply)
+
+			self:Report(false, "dna_duplicate", true)
+
+			return
 		else
-			self.ItemSamples[#self.ItemSamples + 1] = prnt
+			local index = firstFreeIndex(self.ItemSamples, GetGlobalBool("ttt2_dna_scanner_slots"), self.ActiveSample)
+
+			self.ActiveSample = index
+			self.ItemSamples[index] = ply
+			self.CachedTargets[index] = self:GetScanTarget(ply)
 
 			DamageLog("SAMPLE:\t " .. owner:Nick() .. " retrieved DNA of " .. (IsValid(p) and p:Nick() or "<disconnected>") .. " from " .. ent:GetClass())
 
-			new = new + 1
-
 			hook.Run("TTTFoundDNA", owner, p, ent)
+
+			self:Report(true, "dna_object")
+
+			return
 		end
 	end
 
-	return new, old, own
+	self:Report(false, "dna_notfound")
 end
 
-function SWEP:RemoveItemSample(idx)
+function SWEP:RemoveSample()
+	local idx = self.ActiveSample
+
 	if not self.ItemSamples[idx] then return end
 
-	if self:GetLastScanned() == idx then
-		self:ClearScanState()
+	self.ItemSamples[idx] = nil
+
+	if CLIENT then
+		self:RadarScan()
+
+		return
+	else
+		self.CachedTargets[idx] = nil
 	end
-
-	table.remove(self.ItemSamples, idx)
-
-	self:SendPrints(false)
 end
 
-function SWEP:SecondaryAttack()
-	self:SetNextSecondaryFire(CurTime() + 0.05)
+function SWEP:PassiveThink()
+	if not IsValid(self:GetOwner()) then return end
 
-	if CLIENT then return end
+	if SERVER then
+		self:UpdateTargets()
 
-	self:SendPrints(true)
-end
-
-if SERVER then
-	-- Sending this all in one umsg limits the max number of samples. 17 player
-	-- samples and 20 item samples (with 20 matches) has been verified as
-	-- working in the old DNA sampler.
-	function SWEP:SendPrints(should_open)
-		local owner = self:GetOwner()
-		local ItemSamples = self.ItemSamples
-		local num_ItemSamples = #ItemSamples
-
-		net.Start("TTT_ShowPrints", owner)
-		net.WriteBit(should_open)
-		net.WriteUInt(num_ItemSamples, 8)
-
-		for i = 1, num_ItemSamples do
-			net.WriteString(ItemSamples[i].cls)
-		end
-
-		net.Send(owner)
+		return
 	end
 
-	function SWEP:SendScan(pos)
-		local owner = self:GetOwner()
-		local clear = not pos or not IsValid(owner)
-
-		net.Start("TTT_ScanResult", owner)
-		net.WriteBit(clear)
-
-		if not clear then
-			net.WriteVector(pos)
-		end
-
-		net.Send(owner)
-	end
-
-	function SWEP:ClearScanState()
-		self.NowRepeating = nil
-
-		self:SetLastScanned(-1)
-		self:SendScan(nil)
-	end
-
-	local function GetScanTarget(sample)
-		if not sample then return end
-
-		local target = sample.ply
+	if GetGlobalBool("ttt2_dna_radar") and self.LastRadar + GetGlobalFloat("ttt2_dna_radar_cooldown") < CurTime() then
+		local target = self.ItemSamples[self.ActiveSample]
 
 		if not IsValid(target) then return end
 
+		self.RadarPos = target:LocalToWorld(target:OBBCenter())
+		self.LastRadar = CurTime()
+
+		self:RadarScan()
+	end
+end
+
+if SERVER then
+	function SWEP:GetScanTarget(ply)
+		if not IsValid(ply) then return end
+
 		-- decoys always take priority, even after death
-		if IsValid(target.decoy) then
-			target = target.decoy
-		elseif not target:IsTerror() then
+		if IsValid(ply.decoy) then
+			ply = ply.decoy
+		elseif not ply:IsTerror() then
 			-- fall back to ragdoll, as long as it's not destroyed
-			target = target.server_ragdoll
+			ply = ply.server_ragdoll
 
-			if not IsValid(target) then return end
+			if not IsValid(ply) then return end
 		end
 
-		return target
+		return ply
 	end
 
-	function SWEP:PerformScan(idx, repeated)
-		if self:GetCharge() < MAX_CHARGE then return end
+	function SWEP:UpdateTargets()
+		for i = 1, GetGlobalBool("ttt2_dna_scanner_slots") do
+			local ply = self.ItemSamples[i]
 
-		local owner = self:GetOwner()
-		local sample = self.ItemSamples[idx]
+			if not IsValid(ply) then continue end
 
-		if not sample or not IsValid(owner) then
-			if repeated then
-				self:ClearScanState()
+			local target = self:GetScanTarget(ply)
+
+			if target ~= self.CachedTargets[i] then
+				self.CachedTargets[i] = target
+
+				net.Start("TTT2ScannerUpdate")
+				net.WriteUInt(i, 8)
+				net.WriteEntity(target)
+				net.Send(self:GetOwner())
 			end
-
-			return
 		end
+	end
+else
+	local TryT = LANG.TryTranslation
+	local screen_bgcolor = Color(220, 220, 220, 255)
+	local screen_fontcolor = Color(144, 210, 235, 255)
 
-		local target = GetScanTarget(sample)
+	local function DrawTexturedRectRotatedPoint( x, y, w, h, rot, x0, y0 )
+		local c = math.cos( math.rad( rot ) )
+		local s = math.sin( math.rad( rot ) )
 
-		if not IsValid(target) then
-			self:Report("dna_gone")
-			self:SetCharge(self:GetCharge() - 50)
+		local newx = y0 * s - x0 * c
+		local newy = y0 * c + x0 * s
 
-			if repeated then
-				self:ClearScanState()
-			end
-
-			return
-		end
-
-		local pos = target:LocalToWorld(target:OBBCenter())
-
-		self:SendScan(pos)
-		self:SetLastScanned(idx)
-
-		self.NowRepeating = self:GetRepeating()
-
-		local dist = math.ceil(owner:GetPos():Distance(pos))
-
-		self:SetCharge(math.max(0, self:GetCharge() - math.max(50, dist * 0.5)))
+		surface.DrawTexturedRectRotated( x + newx, y + newy, w, h, rot )
 	end
 
-	function SWEP:Think()
-		if self:GetCharge() < MAX_CHARGE and self.NextCharge < CurTime() then
-			self:SetCharge(math.min(MAX_CHARGE, self:GetCharge() + CHARGE_RATE))
+	function SWEP:FillScannerScreen()
+		local showFeedback = CurTime() > self.ScanTime + 0.5
+		local target = self.ItemSamples[self.ActiveSample]
 
-			self.NextCharge = CurTime() + CHARGE_DELAY
-		elseif self.NowRepeating and IsValid(self:GetOwner()) then
-			-- owner changed his mind since running last scan?
-			if self:GetRepeating() then
-				self:PerformScan(self:GetLastScanned(), true)
+		-- Draw to the render target
+		render.PushRenderTarget( self.scannerScreenTex )
+		render.Clear(screen_bgcolor.r, screen_bgcolor.g, screen_bgcolor.b, screen_bgcolor.a, true, true)
+
+		cam.Start2D()
+
+		--draw background
+		draw.FilteredTexture(0, 0, 512, 512, dna_screen_background, 255, COLOR_WHITE)
+
+		--draw current slot
+		local identifier = string.char(64 + self.ActiveSample)
+
+		draw.AdvancedText(identifier, "DNAScannerDistanceFont", 65, 64, screen_fontcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER , false, 1.75)
+
+		if showFeedback then
+			if IsValid(target) and IsValid(self:GetOwner()) then
+				local targetPos = GetGlobalBool("ttt2_dna_radar") and self.RadarPos or target:LocalToWorld(target:OBBCenter())
+				local scannerPos = self.Owner:GetPos()
+				local vectorToPos = targetPos - scannerPos
+				local angleToPos = vectorToPos:Angle()
+				local arrowRotation = angleToPos.yaw - EyeAngles().yaw
+				local distance = math.max(LocalPlayer():GetPos():Distance(targetPos) - 47, 0)
+
+				surface.SetDrawColor( 96, 255, 96 , 255)
+				surface.SetMaterial( dna_screen_arrow )
+				DrawTexturedRectRotatedPoint( 256, 256, 120, 120, arrowRotation, 0, -130 )
+
+				draw.AdvancedText(math.Round(distance), "DNAScannerDistanceFont", 256, 256, screen_fontcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER , false, 2.25)
+
+				draw.FilteredTexture(146, 146, 220, 220, dna_screen_circle, 255, screen_fontcolor)
 			else
-				self.NowRepeating = self:GetRepeating()
-			end
-		end
-
-		return true
-	end
-end
-
--- Helper to get at a player's scanner, if he has one
-local function GetTester(ply)
-	if not IsValid(ply) then return end
-
-	local tester = ply:GetActiveWeapon()
-
-	if IsValid(tester) and tester:GetClass() == "weapon_ttt_wtester" then
-		return tester
-	end
-end
-
-
-if CLIENT then
-	local T = LANG.GetTranslation
-	local PT = LANG.GetParamTranslation
-	local TT = LANG.TryTranslation
-	local mathfloor = math.floor
-
-	function SWEP:DrawHUD()
-		self:DrawHelp()
-
-		local owner = self:GetOwner()
-		local spos = owner:GetShootPos()
-		local sdest = spos + owner:GetAimVector() * self.Range
-
-		local tr = util.TraceLine({
-			start = spos,
-			endpos = sdest,
-			filter = owner,
-			mask = MASK_SHOT
-		})
-
-		local ent = tr.Entity
-
-		local length = 20
-		local gap = 6
-		local thickness = mathfloor(cv_thickness and cv_thickness:GetFloat() or 1)
-		local offset = thickness * 0.5
-
-		local can_sample = false
-
-		if IsValid(ent) then
-			-- weapon or dropped equipment OR knife in corpse, or a ragdoll
-			if ent:IsWeapon() or ent.CanHavePrints or ent:GetNWBool("HasPrints", false)
-			or ent:GetClass() == "prop_ragdoll" and CORPSE.GetPlayerNick(ent, false) and CORPSE.GetFound(ent, false)
-			then
-				surface.SetDrawColor(0, 255, 0, 255)
-				gap = 0
-				can_sample = true
-			else
-				surface.SetDrawColor(255, 0, 0, 200)
-				gap = 0
+				draw.AdvancedText(TryT("dna_screen_ready"), "DNAScannerDistanceFont", 256, 256, screen_fontcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER , false, 2.5)
 			end
 		else
-			surface.SetDrawColor(255, 255, 255, 200)
-		end
-
-		local x = ScrW() * 0.5
-		local y = ScrH() * 0.5
-
-		surface.DrawRect(x - length, y - offset, length - gap, thickness)
-		surface.DrawRect(x + gap, y - offset, length - gap, thickness)
-		surface.DrawRect(x - offset, y - length, thickness, length - gap)
-		surface.DrawRect(x - offset, y + gap, thickness, length - gap)
-
-		if ent and can_sample then
-			surface.SetFont("DefaultFixedDropShadow")
-			surface.SetTextColor(0, 255, 0, 255)
-
-			surface.SetTextPos(x + length * 2, y - length * 2)
-			surface.DrawText(T("dna_hud_type") .. ": " .. (ent:GetClass() == "prop_ragdoll" and T("dna_hud_body") or T("dna_hud_item")))
-
-			surface.SetTextPos(x + length * 2, y - length * 2 + 15)
-			surface.DrawText("ID:   #" .. ent:EntIndex())
-		end
-	end
-
-	local basedir = "vgui/ttt/icon_"
-
-	local function GetDisplayData(cls)
-		local wep = util.WeaponForClass(cls)
-
-		local img = basedir .. "nades"
-		local name = "something"
-
-		if cls == "player" then
-			img  = basedir .. "corpse"
-			name = "corpse"
-		elseif wep then
-			img  = wep.Icon      or img
-			name = wep.PrintName or name
-		end
-
-		return img, name
-	end
-
-	local last_panel_selected = 1
-
-	local function ShowPrintsPopup(item_prints, tester)
-		local m = 10
-		local bw, bh = 100, 25
-
-		local dpanel = vgui.Create("DFrame")
-		local w, h = 400, 250
-		dpanel:SetSize(w, h)
-
-		dpanel:AlignRight(5)
-		dpanel:AlignBottom(5)
-
-		dpanel:SetTitle(T("dna_menu_title"))
-		dpanel:SetVisible(true)
-		dpanel:ShowCloseButton(true)
-		dpanel:SetMouseInputEnabled(true)
-
-		local wrap = vgui.Create("DPanel", dpanel)
-		wrap:StretchToParent(m * 0.5, m + 15, m * 0.5, m + bh)
-		wrap:SetPaintBackground(false)
-
-		-- item sample listing
-		local ilist = vgui.Create("DPanelSelect", wrap)
-		ilist:StretchToParent(0,0,0,0)
-		ilist:EnableHorizontal(true)
-		ilist:SetSpacing(1)
-		ilist:SetPadding(1)
-
-		ilist.OnActivePanelChanged = function(s, old, new)
-			last_panel_selected = new and new.key or 1
-		end
-
-		ilist.OnScan = function(s, scanned_pnl)
-			for k, pnl in pairs(s:GetItems()) do
-				pnl:SetIconColor(COLOR_LGRAY)
-			end
-
-			scanned_pnl:SetIconColor(COLOR_WHITE)
-		end
-
-		if ilist.VBar then
-			ilist.VBar:Remove()
-			ilist.VBar = nil
-		end
-
-		local iscroll = vgui.Create("DHorizontalScroller", ilist)
-
-		iscroll:SetPos(3,1)
-		iscroll:SetSize(363, 66)
-		iscroll:SetOverlap(1)
-
-		iscroll.LoadFrom = function(s, tbl, layout)
-			ilist:Clear(true)
-			ilist.SelectedPanel = nil
-
-			-- Scroller has no Clear()
-			for k, pnl in pairs(s.Panels) do
-				if IsValid(pnl) then
-					pnl:Remove()
-				end
-			end
-
-			s.Panels = {}
-
-			local last_scan = tester and tester:GetLastScanned() or -1
-
-			for i = 1, #tbl do
-				local ic = vgui.Create("SimpleIcon", ilist)
-
-				ic:SetIconSize(64)
-
-				local img, name = GetDisplayData(v)
-
-				ic:SetIcon(img)
-
-				local tip = PT("dna_menu_sample", {source = TT(name) or "???"})
-
-				ic:SetTooltip(tip)
-
-				ic.key = i
-				ic.val = tbl[i]
-
-				if layout then
-					ic:PerformLayout()
-				end
-
-				ilist:AddPanel(ic)
-				s:AddPanel(ic)
-
-				if i == last_panel_selected then
-					ilist:SelectPanel(ic)
-				end
-
-				if last_scan > 0 then
-					ic:SetIconColor(last_scan == i and COLOR_WHITE or COLOR_LGRAY)
-				end
-			end
-
-			iscroll:InvalidateLayout()
-		end
-
-		iscroll:LoadFrom(item_prints)
-
-		local delwrap = vgui.Create("DPanel", wrap)
-		delwrap:SetPos(m, 70)
-		delwrap:SetSize(370, bh)
-		delwrap:SetPaintBackground(false)
-
-		local delitem = vgui.Create("DButton", delwrap)
-		delitem:SetPos(0,0)
-		delitem:SetSize(bw, bh)
-		delitem:SetText(T("dna_menu_remove"))
-
-		delitem.DoClick = function()
-			if not IsValid(ilist) or not IsValid(ilist.SelectedPanel) then return end
-
-			RunConsoleCommand("ttt_wtester_remove", ilist.SelectedPanel.key)
-		end
-
-		delitem.Think = function(s)
-			if IsValid(ilist) and IsValid(ilist.SelectedPanel) then
-				s:SetEnabled(true)
+			if self.ScanSuccess == 1 then
+				draw.FilteredTexture(192, 192, 128, 128, dna_screen_success, 255, screen_fontcolor)
+			elseif self.ScanSuccess == 2 then
+				draw.AdvancedText(TryT("dna_screen_match"), "DNAScannerDistanceFont", 256, 256, screen_fontcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER , false, 2.5)
 			else
-				s:SetEnabled(false)
+				draw.FilteredTexture(192, 192, 128, 128, dna_screen_fail, 255, screen_fontcolor)
 			end
 		end
 
-		local delhlp = vgui.Create("DLabel", delwrap)
-		delhlp:SetPos(bw + m, 0)
-		delhlp:SetText(T("dna_menu_help1"))
-		delhlp:SizeToContents()
+		cam.End2D()
 
-		-- hammer out layouts
-		wrap:PerformLayout()
-
-		-- scroller needs to sort itself out so it displays all icons it should
-		iscroll:PerformLayout()
-
-		local mwrap = vgui.Create("DPanel", wrap)
-		mwrap:SetPaintBackground(false)
-		mwrap:SetPos(m,100)
-		mwrap:SetSize(370, 90)
-
-		local bar = vgui.Create("TTTProgressBar", mwrap)
-		bar:SetSize(370, 35)
-		bar:SetPos(0, 0)
-		bar:CenterHorizontal()
-		bar:SetMin(0)
-		bar:SetMax(MAX_CHARGE)
-		bar:SetValue(tester and math.min(MAX_CHARGE, tester:GetCharge()))
-		bar:SetColor(COLOR_GREEN)
-		bar:LabelAsPercentage()
-
-		local state = vgui.Create("DLabel", bar)
-		state:SetSize(0, 35)
-		state:SetPos(10, 6)
-		state:SetFont("Trebuchet22")
-		state:SetText(T("dna_menu_ready"))
-		state:SetTextColor(COLOR_WHITE)
-		state:SizeToContents()
-
-		local scan = vgui.Create("DButton", mwrap)
-		scan:SetText(T("dna_menu_scan"))
-		scan:SetSize(bw, bh)
-		scan:SetPos(0, 40)
-		scan:SetEnabled(false)
-
-		scan.DoClick = function(s)
-			if not IsValid(ilist) then return end
-
-			local i = ilist.SelectedPanel
-
-			if not IsValid(i) then return end
-
-			RunConsoleCommand("ttt_wtester_scan", i.key)
-			ilist:OnScan(i)
-		end
-
-		local dcheck = vgui.Create("DCheckBoxLabel", mwrap)
-		dcheck:SetPos(0, 70)
-		dcheck:SetText(T("dna_menu_repeat"))
-		dcheck:SetIndent(7)
-		dcheck:SizeToContents()
-		dcheck:SetConVar("ttt_dna_scan_repeat")
-
-		local scanhlp = vgui.Create("DLabel", mwrap)
-		scanhlp:SetPos(bw + m, 40)
-		scanhlp:SetText(T("dna_menu_help2"))
-		scanhlp:SizeToContents()
-
-		-- CLOSE
-		local dbut = vgui.Create("DButton", dpanel)
-		dbut:SetSize(bw, bh)
-		dbut:SetPos(m, h - bh - m * 0.667)
-		dbut:CenterHorizontal()
-		dbut:SetText(T("close"))
-		dbut.DoClick = function() dpanel:Close() end
-
-		dpanel:MakePopup()
-		dpanel:SetKeyboardInputEnabled(false)
-
-		-- Expose updating fns
-		dpanel.UpdatePrints = function(s, its)
-			if IsValid(iscroll) then
-				iscroll:LoadFrom(its)
-			end
-		end
-
-		dpanel.Think = function(s)
-			if not IsValid(bar) or not IsValid(scan) or not tester then return end
-
-			local charge = tester:GetCharge()
-
-			bar:SetValue(math.min(MAX_CHARGE, charge))
-
-			if charge < MAX_CHARGE then
-				bar:SetColor(COLOR_RED)
-
-				state:SetText(T("dna_menu_charge"))
-				state:SizeToContents()
-
-				scan:SetEnabled(false)
-			else
-				bar:SetColor(COLOR_GREEN)
-
-				if IsValid(ilist) and IsValid(ilist.SelectedPanel) then
-					scan:SetEnabled(true)
-
-					state:SetText(T("dna_menu_ready"))
-					state:SizeToContents()
-				else
-					state:SetText(T("dna_menu_select"))
-					state:SizeToContents()
-					scan:SetEnabled(false)
-				end
-			end
-		end
-
-		return dpanel
+		render.PopRenderTarget()
 	end
 
-	local printspanel = nil
-
-	local function RecvPrints()
-		local should_open = net.ReadBit() == 1
-		local num = net.ReadUInt(8)
-		local item_prints = {}
-
-		for i = 1, num do
-			item_prints[i] = net.ReadString()
-		end
-
-		if should_open then
-			if IsValid(printspanel) then
-				printspanel:Remove()
-			end
-
-			printspanel = ShowPrintsPopup(item_prints, GetTester(LocalPlayer()))
-		else
-			if not IsValid(printspanel) then return end
-
-			printspanel:UpdatePrints(item_prints)
-		end
-	end
-	net.Receive("TTT_ShowPrints", RecvPrints)
-
-	local beep_success = Sound("buttons/blip2.wav")
-
-	local function RecvScan()
-		local clear = net.ReadBit() == 1
-
-		if clear then
-			RADAR.samples = {}
-			RADAR.samples_count = 0
-
-			return
-		end
-
-		local target_pos = net.ReadVector()
-
-		if not target_pos then return end
-
-		RADAR.samples = {{pos = target_pos}}
-		RADAR.samples_count = 1
-
-		surface.PlaySound(beep_success)
-	end
-	net.Receive("TTT_ScanResult", RecvScan)
-
-	function SWEP:ClosePrintsPanel()
-		if not IsValid(printspanel) then return end
-
-		printspanel:Close()
+	function SWEP:PreDrawViewModel()
+		self:FillScannerScreen()
+		self.Owner:GetViewModel():SetSubMaterial(0, "!scanner_screen_mat")
 	end
 
-else -- SERVER
-	local function ScanPrint(ply, cmd, args)
-		local tester = GetTester(ply)
-
-		if not IsValid(tester) then return end
-		if #args ~= 1 then return end
-
-		local i = tonumber(args[1])
-
-		if not i then return end
-
-		tester:PerformScan(i)
-	end
-	concommand.Add("ttt_wtester_scan", ScanPrint)
-
-	local function RemoveSample(ply, cmd, args)
-		local tester = GetTester(ply)
-
-		if #args ~= 1 then return end
-
-		local idx = tonumber(args[1])
-
-		if not idx or not IsValid(tester) then return end
-
-		tester:RemoveItemSample(idx)
-	end
-	concommand.Add("ttt_wtester_remove", RemoveSample)
-end
-
-function SWEP:OnRemove()
-	if SERVER then return end
-
-	self:ClosePrintsPanel()
-end
-
-function SWEP:OnDrop()
-
-end
-
-function SWEP:PreDrop()
-	local owner = self:GetOwner()
-
-	if not IsValid(owner) then return end
-
-	owner.scanner_weapon = nil
-end
-
-function SWEP:Reload()
-	return false
-end
-
-function SWEP:Deploy()
-	local owner = self:GetOwner()
-
-	if SERVER and IsValid(owner) then
-		owner:DrawViewModel(false)
-		owner.scanner_weapon = self
+	function SWEP:PostDrawViewModel()
+		self.Owner:GetViewModel():SetSubMaterial(0, nil)
 	end
 
-	return true
-end
-
-if CLIENT then
 	function SWEP:DrawWorldModel()
-		if IsValid(self:GetOwner()) then return end
-
+		self:FillScannerScreen()
 		self:DrawModel()
 	end
+
+	function SWEP:RadarScan()
+		local target = self.ItemSamples[self.ActiveSample]
+
+		if not IsValid(target) or not GetGlobalBool("ttt2_dna_radar") then
+			RADAR.samples = {}
+			RADAR.samples_count = 0
+			self.RadarPos = nil
+
+			return
+		end
+
+		self.RadarPos = target:LocalToWorld(target:OBBCenter())
+		RADAR.samples = {{pos = self.RadarPos}}
+		RADAR.samples_count = 1
+	end
+
+	local function ScannerFeedback()
+		if not LocalPlayer():HasWeapon("weapon_ttt_wtester") then return end
+
+		local scanner = LocalPlayer():GetWeapon("weapon_ttt_wtester")
+
+		local successful = net.ReadBool()
+		local oldFound = net.ReadBool()
+
+		if successful or oldFound then
+			scanner.ActiveSample = net.ReadUInt(8)
+			scanner.ItemSamples[scanner.ActiveSample] = net.ReadEntity()
+			scanner.NewSample = scanner.ActiveSample
+
+			scanner:RadarScan()
+		end
+
+		scanner.ScanTime = CurTime()
+
+		if successful then
+			scanner:EmitSound(beep_success)
+			scanner.ScanSuccess = 1
+		elseif oldFound then
+			scanner:EmitSound(beep_match)
+			scanner.ScanSuccess = 2
+		else
+			scanner:EmitSound(beep_miss)
+			scanner.ScanSuccess = 0
+		end
+	end
+	net.Receive("TTT2ScannerFeedback", ScannerFeedback)
+
+	local function ScannerUpdate()
+		local client = LocalPlayer()
+
+		if not client:HasWeapon("weapon_ttt_wtester") then return end
+
+		local scanner = client:GetWeapon("weapon_ttt_wtester")
+		local idx  = net.ReadUInt(8)
+
+		scanner.ItemSamples[idx] = net.ReadEntity()
+	end
+	net.Receive("TTT2ScannerUpdate", ScannerUpdate)
 end

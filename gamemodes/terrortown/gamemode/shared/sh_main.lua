@@ -194,8 +194,8 @@ function GM:Tick()
 			end
 
 			-- Run DNA Scanner think also when it is not deployed
-			if SERVER and IsValid(ply.scanner_weapon) and wep ~= ply.scanner_weapon then
-				ply.scanner_weapon:Think()
+			if ply:HasWeapon("weapon_ttt_wtester") then
+				ply:GetWeapon("weapon_ttt_wtester"):PassiveThink()
 			end
 		elseif SERVER and tm == TEAM_SPEC then
 			if ply.propspec then
