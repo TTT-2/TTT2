@@ -4,6 +4,13 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+### Changed
+
+- Reworked the old DNA Scanner 
+  - New world- and viewmodel with an interactive screen
+  - Removed the overcomplicated UI menu (simple handling with default keys instead)
+  - The new default scanner behavior shows the direction and distance to the target
+
 ## [v0.6.4b](https://github.com/TTT-2/TTT2/tree/v0.6.4b) (2020-04-03)
 
 ### Added
