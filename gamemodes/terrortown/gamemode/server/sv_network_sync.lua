@@ -178,6 +178,9 @@ end
 -- When the additional client parameter is set, the data will be saved as an override for that specific client/entity.
 -- This will also take care of syncing the value to all registered NWVars, if the path leads to a player specific key.
 --
+-- @note This will only update / synchronize the new value, if the value is not the same as the old one!
+-- @note For data of the type "table", you will have to create a new table object (eg. with table.copy) to tell the system that this is different and has to be synced. Also changing the table, will not automatically resynchronize it with the clients, you have to also use this function again to "set" it.
+--
 -- @param any|table path The path to set the data for
 -- @param table|nil meta The metadata for the path (or empty to use an existing metadata entry)
 -- @param any value The value to save
