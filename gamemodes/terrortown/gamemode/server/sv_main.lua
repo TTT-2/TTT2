@@ -11,6 +11,7 @@ ttt_include("sh_door")
 ttt_include("sh_voice")
 
 ttt_include("sv_network_sync")
+ttt_include("sv_hud_manager")
 ttt_include("sv_shopeditor")
 ttt_include("sv_karma")
 ttt_include("sv_entity")

@@ -41,6 +41,8 @@ ttt_include("vgui__cl_progressbar")
 ttt_include("vgui__cl_scrolllabel")
 
 ttt_include("cl_network_sync")
+ttt_include("cl_hud_editor")
+ttt_include("cl_hud_manager")
 ttt_include("cl_karma")
 ttt_include("cl_tradio")
 ttt_include("cl_transfer")
