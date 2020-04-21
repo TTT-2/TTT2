@@ -14,6 +14,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Remove GetWeapons and HasWeapon overrides (see https://github.com/Facepunch/garrysmod/pull/1648)
 - Improved role module to also use `isAbstract` instead of a base role class name
 - Migrated the HUDManager settings to the new network sync system
+- The TTT2NET library can now also synchronize small to medium sized tables (adds the metadata type "table")
 
 ### Fixed
 
