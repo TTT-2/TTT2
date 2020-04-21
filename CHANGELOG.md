@@ -4,6 +4,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+### Changed
+
+- Migrated the HUDManager settings to the new network sync system
+
 ## [v0.6.4b](https://github.com/TTT-2/TTT2/tree/v0.6.4b) (2020-04-03)
 
 ### Added
