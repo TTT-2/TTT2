@@ -1,8 +1,11 @@
+local cv_crowbar_unlocks
+local cv_crowbar_pushforce
+
 if SERVER then
 	AddCSLuaFile()
 
-	CreateConVar("ttt_crowbar_unlocks", "1", FCVAR_ARCHIVE)
-	CreateConVar("ttt_crowbar_pushforce", "395", FCVAR_NOTIFY)
+	cv_crowbar_unlocks = CreateConVar("ttt_crowbar_unlocks", "1", FCVAR_ARCHIVE)
+	cv_crowbar_pushforce = CreateConVar("ttt_crowbar_pushforce", "395", FCVAR_NOTIFY)
 end
 
 SWEP.HoldType = "melee"
@@ -56,8 +59,6 @@ SWEP.AllowDelete = false -- never removed for weapon reduction
 SWEP.AllowDrop = false
 
 local sound_single = Sound("Weapon_Crowbar.Single")
-local cv_crowbar_unlocks
-local cv_crowbar_pushforce
 
 -- only open things that have a name (and are therefore likely to be meant to
 -- open) and are the right class. Opening behaviour also differs per class, so
@@ -71,35 +72,17 @@ local pmnc_tbl = {
 }
 
 local function OpenableEnt(ent)
-	local cls = ent:GetClass()
-
-	if ent:GetName() == "" then
-		return OPEN_NO
-	end
-
-	local tmp = pmnc_tbl[cls]
-
-	if tmp ~= nil then
-		return tmp
-	end
-
-	return OPEN_NO
+	return pmnc_tbl[ent:GetClass()] or OPEN_NO
 end
 
 local function CrowbarCanUnlock(t)
 	return not GAMEMODE.crowbar_unlocks or GAMEMODE.crowbar_unlocks[t]
 end
 
-function SWEP:Initialize()
-	if SERVER then
-		cv_crowbar_unlocks = GetConVar("ttt_crowbar_unlocks")
-		cv_crowbar_pushforce = GetConVar("ttt_crowbar_pushforce")
-	end
-
-	return self.BaseClass.Initialize(self)
-end
-
--- will open door AND return what it did
+---
+-- Will open door AND return what it did
+-- @param Entity hitEnt
+-- @return number Entity types a crowbar might open
 function SWEP:OpenEnt(hitEnt)
 	-- Get ready for some prototype-quality code, all ye who read this
 	if SERVER and cv_crowbar_unlocks:GetBool() then
@@ -111,7 +94,7 @@ function SWEP:OpenEnt(hitEnt)
 				hitEnt:Fire("Unlock", nil, 0)
 			end
 
-			if unlock or hitEnt:HasSpawnFlags(256) then
+			if unlock or hitEnt:HasSpawnFlags(SF_NPC_LONG_RANGE) then -- Long Visibility/Shoot
 				if openable == OPEN_ROT then
 					hitEnt:Fire("OpenAwayFrom", self:GetOwner(), 0)
 				end
@@ -147,7 +130,7 @@ function SWEP:PrimaryAttack()
 	local owner = self:GetOwner()
 	if not IsValid(owner) then return end
 
-	if owner.LagCompensation then -- for some reason not always true
+	if isfunction(owner.LagCompensation) then -- for some reason not always true
 		owner:LagCompensation(true)
 	end
 

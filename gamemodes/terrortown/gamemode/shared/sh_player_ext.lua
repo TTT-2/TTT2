@@ -79,41 +79,41 @@ end
 function plymeta:SetRole(subrole, team, forceHooks)
 	local oldRole = self:GetBaseRole()
 	local oldSubrole = self:GetSubRole()
+	local oldRoleData = self:GetSubRoleData()
 	local oldTeam = self:GetTeam()
-	local rd = roles.GetByIndex(subrole)
 
-	self.role = rd.baserole or subrole
+	local roleData = roles.GetByIndex(subrole)
+
+	self.role = roleData.baserole or subrole
 	self.subrole = subrole
 
-	self:UpdateTeam(team or rd.defaultTeam or TEAM_NONE)
+	self:UpdateTeam(team or roleData.defaultTeam or TEAM_NONE)
 
-	local newRole = self:GetBaseRole()
-	local newSubrole = self:GetSubRole()
+	local newBaseRole = self:GetBaseRole()
 	local newTeam = self:GetTeam()
 
-	if oldSubrole ~= newSubrole then
-		local ord = roles.GetByIndex(oldSubrole)
-		local ar = GetActiveRolesCount(rd) + 1
-		local oar = GetActiveRolesCount(ord) - 1
+	if oldSubrole ~= subrole then
+		local activeRolesCount = GetActiveRolesCount(roleData) + 1
+		local oldActiveRolesCount = GetActiveRolesCount(oldRoleData) - 1
 
-		SetActiveRolesCount(rd, ar)
-		SetActiveRolesCount(ord, oar)
+		SetActiveRolesCount(roleData, activeRolesCount)
+		SetActiveRolesCount(oldRoleData, oldActiveRolesCount)
 
-		if ar > 0 then
-			hook.Run("TTT2ToggleRole", rd, true)
+		if activeRolesCount > 0 then
+			hook.Run("TTT2ToggleRole", roleData, true)
 		end
 
-		if oar <= 0 then
-			hook.Run("TTT2ToggleRole", ord, false)
+		if oldActiveRolesCount <= 0 then
+			hook.Run("TTT2ToggleRole", oldRoleData, false)
 		end
 	end
 
-	if oldRole ~= newRole or forceHooks then
-		hook.Run("TTT2UpdateBaserole", self, oldRole, newRole)
+	if oldRole ~= newBaseRole or forceHooks then
+		hook.Run("TTT2UpdateBaserole", self, oldRole, newBaseRole)
 	end
 
-	if oldSubrole ~= newSubrole or forceHooks then
-		hook.Run("TTT2UpdateSubrole", self, oldSubrole, newSubrole)
+	if oldSubrole ~= subrole or forceHooks then
+		hook.Run("TTT2UpdateSubrole", self, oldSubrole, subrole)
 	end
 
 	if oldTeam ~= newTeam or forceHooks then
@@ -121,11 +121,11 @@ function plymeta:SetRole(subrole, team, forceHooks)
 	end
 
 	-- ye olde hooks
-	if newSubrole ~= oldSubrole or forceHooks then
-		self:SetRoleColor(rd.color)
-		self:SetRoleDkColor(rd.dkcolor)
-		self:SetRoleLtColor(rd.ltcolor)
-		self:SetRoleBgColor(rd.bgcolor)
+	if subrole ~= oldSubrole or forceHooks then
+		self:SetRoleColor(roleData.color)
+		self:SetRoleDkColor(roleData.dkcolor)
+		self:SetRoleLtColor(roleData.ltcolor)
+		self:SetRoleBgColor(roleData.bgcolor)
 
 		if SERVER then
 			hook.Call("PlayerLoadout", GAMEMODE, self)
@@ -143,8 +143,8 @@ function plymeta:SetRole(subrole, team, forceHooks)
 	end
 
 	if SERVER then
-		roles.GetByIndex(oldSubrole):RemoveRoleLoadout(self, true)
-		roles.GetByIndex(newSubrole):GiveRoleLoadout(self, true)
+		oldRoleData:RemoveRoleLoadout(self, true)
+		roleData:GiveRoleLoadout(self, true)
 	end
 end
 
@@ -724,18 +724,26 @@ end
 -- @see https://wiki.garrysmod.com/page/Structures/Trace
 -- @realm shared
 function plymeta:GetEyeTrace(mask)
-	if self.LastPlayerTraceMask == mask and self.LastPlayerTrace == CurTime() then
-		return self.PlayerTrace
+	mask = mask or MASK_SOLID
+
+	if CLIENT then
+		local framenum = FrameNumber()
+
+		if self.LastPlayerTrace == framenum and self.LastPlayerTraceMask == mask then
+			return self.PlayerTrace
+		end
+
+		self.LastPlayerTrace = framenum
+		self.LastPlayerTraceMask = mask
 	end
 
 	local tr = util.GetPlayerTrace(self)
 	tr.mask = mask
 
-	self.PlayerTrace = util.TraceLine(tr)
-	self.LastPlayerTrace = CurTime()
-	self.LastPlayerTraceMask = mask
+	tr = util.TraceLine(tr)
+	self.PlayerTrace = tr
 
-	return self.PlayerTrace
+	return tr
 end
 
 ---
