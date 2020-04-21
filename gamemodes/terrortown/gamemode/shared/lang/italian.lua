@@ -461,10 +461,16 @@ L.dna_notfound = "Nessun campione di DNA trovato sul bersaglio."
 L.dna_limit = "Limite di deposito raggiunge. Rimuovi vecchi campioni per aggiungerne altri."
 L.dna_decayed = "Campione di DNA dell'assassino si è deteriorato."
 L.dna_killer = "Preso un campione di DNA dell'assassino dal cadavere!"
+L.dna_duplicate = "Trovato! Avevi già questo DNA nel tuo scanner."
 L.dna_no_killer = "Il DNA non può essere preso (assassino disconnesso?)."
 L.dna_armed = "La bomba è innescata! Disinnescala prima!"
+L.dna_object = "Prendi un campione dell'ultimo possessore dell'oggetto."
 L.dna_object = "Preso {num} nuovo campione di DNA dall'oggetto."
 L.dna_gone = "DNA non rilevato nella zona."
+L.dna_tid_possible = "Scan possibile"
+L.dna_tid_impossible = "Nessuno scan possibile"
+L.dna_screen_ready = "Nessun DNA"
+L.dna_screen_match = "Abbina"
 
 L.dna_desc = [[
 Prendi campioni di DNA dagli oggetti
@@ -472,23 +478,8 @@ e usali per trovare il proprietario del DNA.
 Usalo su giocatori appena uccisi per prendere il DNA dell'assassino
 e trovarli.]]
 
-L.dna_menu_title = "Controlli DNA scanner"
-L.dna_menu_sample = "Campione di DNA trovato su {source}"
-L.dna_menu_remove = "Rimuovi selezionato"
-L.dna_menu_help1 = "Questi sono i campioni di DNA che hai raccolto."
-L.dna_menu_help2 = [[
-Quando carico, puoi scansionare la posizione del
-giocatore a cui appartine il campione di DNA.
-Trovare bersagli distanti usa più energia.]]
-
-L.dna_menu_scan = "Fai scansione"
-L.dna_menu_repeat = "Ripeti automaticamente"
-L.dna_menu_ready = "PRONTO"
-L.dna_menu_charge = "CARICAMENTO"
-L.dna_menu_select = "SELEZIONA CAMPIONE"
-
 L.dna_help_primary = "{primaryfire} per prendere un campione di DNA"
-L.dna_help_secondary = "{secondaryfire} per i controlli dello scanner open"
+L.dna_help_secondary = "{secondaryfire} per cambiare lo slot del DNA e Ricarica per cancellare un campione"
 
 -- Magneto stick
 L.magnet_name = "Magneto-stick"
