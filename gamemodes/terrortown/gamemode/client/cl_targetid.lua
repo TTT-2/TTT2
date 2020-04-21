@@ -808,6 +808,7 @@ function HUDDrawTargetIDRagdolls(tData)
 	local corpse_found = CORPSE.GetFound(ent, false) or not DetectiveMode()
 	local role_found = corpse_found and ent.search_result and ent.search_result.role
 	local binoculars_useable = IsValid(c_wep) and c_wep:GetClass() == "weapon_ttt_binoculars" or false
+	local role = roles.GetByIndex(role_found and ent.search_result.role or 1)
 
 	-- enable targetID rendering
 	tData:EnableText()
@@ -830,8 +831,8 @@ function HUDDrawTargetIDRagdolls(tData)
 
 	-- add icon to the element
 	tData:AddIcon(
-		role_found and roles.GetByIndex(ent.search_result.role).iconMaterial or icon_corpse,
-		role_found and COLOR_LGRAY or COLOR_YELLOW
+		role_found and role.iconMaterial or icon_corpse,
+		role_found and role.color or COLOR_YELLOW
 	)
 
 	-- add hints to the corpse
