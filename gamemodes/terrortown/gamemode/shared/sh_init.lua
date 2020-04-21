@@ -49,7 +49,7 @@ SPECIAL_EQUIPMENT = {
 	"weapon_ttt_teleport",
 	"item_ttt_armor",
 	"item_ttt_radar",
-	"item_ttt_nodrowndmg",
+	"item_ttt_nodrowningdmg",
 	"item_ttt_noenergydmg",
 	"item_ttt_noexplosiondmg",
 	"item_ttt_nofalldmg",
