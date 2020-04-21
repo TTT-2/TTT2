@@ -299,6 +299,8 @@ function TTT2NET:NetReadData(metadata)
 		return net.ReadBool()
 	elseif metadata.type == "float" then
 		return net.ReadFloat()
+	elseif metadata.type == "table" then
+		return pon.decode(net.ReadString())
 	else
 		return net.ReadString()
 	end
