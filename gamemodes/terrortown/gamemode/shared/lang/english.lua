@@ -507,15 +507,19 @@ Uses standard SMG ammo.]]
 
 -- DNA scanner
 L.dna_name = "DNA scanner"
-L.dna_identify = "Corpse must be identified to retrieve killer's DNA."
 L.dna_notfound = "No DNA sample found on target."
 L.dna_limit = "Storage limit reached. Remove old samples to add new ones."
 L.dna_decayed = "DNA sample of the killer has decayed."
 L.dna_killer = "Collected a sample of the killer's DNA from the corpse!"
+L.dna_duplicate = "Match! You already have this DNA sample in your scanner."
 L.dna_no_killer = "The DNA could not be retrieved (killer disconnected?)."
 L.dna_armed = "This bomb is live! Disarm it first!"
-L.dna_object = "Collected {num} new DNA sample(s) from the object."
+L.dna_object = "Collected a sample of the last owner from the object."
 L.dna_gone = "DNA not detected in area."
+L.dna_tid_possible = "Scan possible"
+L.dna_tid_impossible = "No scan possible"
+L.dna_screen_ready = "No DNA"
+L.dna_screen_match = "Match"
 
 L.dna_desc = [[
 Collect DNA samples from things
@@ -524,23 +528,8 @@ and use them to find the DNA's owner.
 Use on fresh corpses to get the killer's DNA
 and track them down.]]
 
-L.dna_menu_title = "DNA scanning controls"
-L.dna_menu_sample = "DNA sample found on {source}"
-L.dna_menu_remove = "Remove selected"
-L.dna_menu_help1 = "These are DNA samples you have collected."
-L.dna_menu_help2 = [[
-When charged, you can scan for the location of
-the player the selected DNA sample belongs to.
-Finding distant targets drains more energy.]]
-
-L.dna_menu_scan = "Scan"
-L.dna_menu_repeat = "Auto-repeat"
-L.dna_menu_ready = "READY"
-L.dna_menu_charge = "CHARGING"
-L.dna_menu_select = "SELECT SAMPLE"
-
 L.dna_help_primary = "{primaryfire} to collect a DNA sample"
-L.dna_help_secondary = "{secondaryfire} to open scan controls"
+L.dna_help_secondary = "{secondaryfire} to switch the DNA slot and Reload to delete a sample"
 
 -- Magneto stick
 L.magnet_name = "Magneto-stick"
