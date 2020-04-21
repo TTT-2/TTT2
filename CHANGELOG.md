@@ -23,6 +23,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Added a Polish translation (Thanks @Wukerr)
 - Added fallback icons for equipment
+- Added a new variable that counts the played rounds per map: `GAMEMODE.roundCount`
 
 ### Fixed
 
