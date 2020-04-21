@@ -4,6 +4,23 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+### Added
+
+- Added a new ConVar to allow armor to also block headshots ( `ttt_item_armor_block_headshots`, default value: 0). Thanks @TheNickSkater
+
+### Changed
+
+- Added Infinity Gauntlet SEWP to buggy addons list (interferes with the sprinting system)
+- Remove GetWeapons and HasWeapon overrides (see https://github.com/Facepunch/garrysmod/pull/1648)
+- Improved role module to also use `isAbstract` instead of a base role class name
+
+### Fixed
+
+- Fixed round info (the top panel) being displayed in other HUDs
+- Fix GetEyeTrace override (see https://github.com/Facepunch/garrysmod/pull/1647)
+- Fixed an error with the pickup system in singleplayer
+- Fixed propsurfing with the magneto stick
+
 ## [v0.6.4b](https://github.com/TTT-2/TTT2/tree/v0.6.4b) (2020-04-03)
 
 ### Added
