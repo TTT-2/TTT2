@@ -27,7 +27,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fix GetEyeTrace override (see https://github.com/Facepunch/garrysmod/pull/1647)
 - Fixed an error with the pickup system in singleplayer
 - Fixed propsurfing with the magneto stick
-- Fixed heathstation TargetID text
+- Fixed healthstation TargetID text
 - Fixed keyinfo for doors where no key can be used
 
 ## [v0.6.4b](https://github.com/TTT-2/TTT2/tree/v0.6.4b) (2020-04-03)
