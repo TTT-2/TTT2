@@ -60,6 +60,8 @@ ttt_include("cl_vskin__vgui__dnumslider")
 ttt_include("cl_vskin__vgui__dbinderpanel")
 
 ttt_include("cl_network_sync")
+ttt_include("cl_hud_editor")
+ttt_include("cl_hud_manager")
 ttt_include("cl_karma")
 ttt_include("cl_tradio")
 ttt_include("cl_transfer")

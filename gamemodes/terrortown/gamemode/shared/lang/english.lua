@@ -438,15 +438,19 @@ Uses standard SMG ammo.]]
 
 -- DNA scanner
 L.dna_name = "DNA scanner"
-L.dna_identify = "Corpse must be identified to retrieve killer's DNA."
 L.dna_notfound = "No DNA sample found on target."
 L.dna_limit = "Storage limit reached. Remove old samples to add new ones."
 L.dna_decayed = "DNA sample of the killer has decayed."
 L.dna_killer = "Collected a sample of the killer's DNA from the corpse!"
+L.dna_duplicate = "Match! You already have this DNA sample in your scanner."
 L.dna_no_killer = "The DNA could not be retrieved (killer disconnected?)."
 L.dna_armed = "This bomb is live! Disarm it first!"
-L.dna_object = "Collected {num} new DNA sample(s) from the object."
+L.dna_object = "Collected a sample of the last owner from the object."
 L.dna_gone = "DNA not detected in area."
+L.dna_tid_possible = "Scan possible"
+L.dna_tid_impossible = "No scan possible"
+L.dna_screen_ready = "No DNA"
+L.dna_screen_match = "Match"
 
 L.dna_desc = [[
 Collect DNA samples from things
@@ -455,23 +459,8 @@ and use them to find the DNA's owner.
 Use on fresh corpses to get the killer's DNA
 and track them down.]]
 
-L.dna_menu_title = "DNA scanning controls"
-L.dna_menu_sample = "DNA sample found on {source}"
-L.dna_menu_remove = "Remove selected"
-L.dna_menu_help1 = "These are DNA samples you have collected."
-L.dna_menu_help2 = [[
-When charged, you can scan for the location of
-the player the selected DNA sample belongs to.
-Finding distant targets drains more energy.]]
-
-L.dna_menu_scan = "Scan"
-L.dna_menu_repeat = "Auto-repeat"
-L.dna_menu_ready = "READY"
-L.dna_menu_charge = "CHARGING"
-L.dna_menu_select = "SELECT SAMPLE"
-
 L.dna_help_primary = "{primaryfire} to collect a DNA sample"
-L.dna_help_secondary = "{secondaryfire} to open scan controls"
+L.dna_help_secondary = "{secondaryfire} to switch the DNA slot and Reload to delete a sample"
 
 -- Magneto stick
 L.magnet_name = "Magneto-stick"
@@ -1298,3 +1287,21 @@ L.button_press_key = "Press a key"
 L.button_save = "Save"
 L.button_reset = "Reset"
 L.button_close = "Close"
+
+-- 2020-04-20
+L.item_speedrun = "Speedrun"
+L.item_speedrun_desc = [[Makes you 50% faster!]]
+L.item_no_explosion_damage = "No Explosion Damage"
+L.item_no_explosion_damage_desc = [[Makes you immune to explosion damage.]]
+L.item_no_fall_damage = "No Fall Damage"
+L.item_no_fall_damage_desc = [[Makes you immune to fall damage.]]
+L.item_no_fire_damage = "No Fire Damage"
+L.item_no_fire_damage_desc = [[Makes you immune to fire damage.]]
+L.item_no_hazard_damage = "No Hazard Damage"
+L.item_no_hazard_damage_desc = [[Makes you immune to hazard damage such as posion, radiation and acid.]]
+L.item_no_energy_damage = "No Energy Damage"
+L.item_no_energy_damage_desc = [[Makes you immune to energy damage such as lasers, plasma and lightning.]]
+L.item_no_prop_damage = "No Prop Damage"
+L.item_no_prop_damage_desc = [[Makes you immune to prop damage.]]
+L.item_no_drown_damage = "No Drowning Damage"
+L.item_no_drown_damage_desc = [[Makes you immune to drowning damage.]]

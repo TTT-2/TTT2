@@ -1,0 +1,10 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "models\ttt2_dna_scanner\camera"
+	"$bumpmap" "models\ttt2_dna_scanner\camera_n"
+	"$phong"     "1"
+	"$halflambert"	1
+ 	"$phongexponenttexture" "models\ttt2_dna_scanner\camera_r"
+ 	"$phongboost"   "1"
+ 	"$phongfresnelranges"   "[.3 .5 1]"
+}

@@ -7,12 +7,12 @@ util.AddNetworkString("TTT2DefaultHUDRequest")
 util.AddNetworkString("TTT2DefaultHUDResponse")
 util.AddNetworkString("TTT2ForceHUDRequest")
 util.AddNetworkString("TTT2RestrictHUDRequest")
-util.AddNetworkString("TTT2RequestHUDManagerFullStateUpdate")
-util.AddNetworkString("TTT2UpdateHUDManagerStringAttribute")
-util.AddNetworkString("TTT2UpdateHUDManagerRestrictedHUDsAttribute")
+util.AddNetworkString("TTT2RestrictHUDResponse")
 
 local HUD_MANAGER_SQL_TABLE = "ttt2_hudmanager_model_data"
 local HUD_MANAGER_SQL_RESTRICTEDHUDS_TABLE = "ttt2_hudmanager_model_data_restrictedhuds"
+
+HUDManager = {}
 
 --
 -- DB HELPER FUNCTIONS
@@ -64,44 +64,6 @@ local function DB_GetStringTable(db_table)
 end
 
 --
--- SYNCING HELPER FUNCTIONS
---
-
-local function syncModelStringAttribute(key, ply)
-	net.Start("TTT2UpdateHUDManagerStringAttribute")
-	net.WriteString(key)
-	net.WriteString(HUDManager.GetModelValue(key) or "NULL")
-
-	if ply then
-		net.Send(ply)
-	else
-		net.Broadcast()
-	end
-end
-
-local function syncModelRestrictedHUDsAttribute(ply)
-	net.Start("TTT2UpdateHUDManagerRestrictedHUDsAttribute")
-
-	local value = HUDManager.GetModelValue("restrictedHUDs")
-
-	if istable(value) then
-		net.WriteUInt(#value, 16)
-
-		for i = 1, #value do
-			net.WriteString(value[i])
-		end
-	else
-		net.WriteUInt(0, 16)
-	end
-
-	if ply then
-		net.Send(ply)
-	else
-		net.Broadcast()
-	end
-end
-
---
 -- STORE/LOAD FUNCTIONS
 --
 
@@ -113,15 +75,15 @@ function HUDManager.StoreData()
 	MsgN("[TTT2][HUDManager] Storing data in database...")
 
 	if DB_EnsureTableExists(HUD_MANAGER_SQL_TABLE, "key TEXT PRIMARY KEY, value TEXT") then
-		sql.Query("INSERT OR REPLACE INTO " .. HUD_MANAGER_SQL_TABLE .. " VALUES('forcedHUD', " .. sql.SQLStr(HUDManager.GetModelValue("forcedHUD")) .. ")")
-		sql.Query("INSERT OR REPLACE INTO " .. HUD_MANAGER_SQL_TABLE .. " VALUES('defaultHUD', " .. sql.SQLStr(HUDManager.GetModelValue("defaultHUD")) .. ")")
+		sql.Query("INSERT OR REPLACE INTO " .. HUD_MANAGER_SQL_TABLE .. " VALUES('forcedHUD', " .. sql.SQLStr(TTT2NET:GetGlobal("forcedHUD")) .. ")")
+		sql.Query("INSERT OR REPLACE INTO " .. HUD_MANAGER_SQL_TABLE .. " VALUES('defaultHUD', " .. sql.SQLStr(TTT2NET:GetGlobal("defaultHUD")) .. ")")
 	end
 
 	-- delete the table to recreate it again, to remove all values that might have been removed from the table
 	sql.Query("DROP TABLE " .. HUD_MANAGER_SQL_RESTRICTEDHUDS_TABLE)
 
 	if DB_EnsureTableExists(HUD_MANAGER_SQL_RESTRICTEDHUDS_TABLE, "name TEXT PRIMARY KEY") then
-		local restrictedHuds = HUDManager.GetModelValue("restrictedHUDs")
+		local restrictedHuds = TTT2NET:GetGlobal({"hud_manager", "restrictedHUDs"})
 
 		for i = 1, #restrictedHuds do
 			sql.Query("INSERT INTO " .. HUD_MANAGER_SQL_RESTRICTEDHUDS_TABLE .. " VALUES(" .. sql.SQLStr(restrictedHuds[i]) .. ")")
@@ -136,54 +98,26 @@ end
 function HUDManager.LoadData()
 	MsgN("[TTT2][HUDManager] Loading data from database...")
 
-	if sql.TableExists(HUD_MANAGER_SQL_TABLE) then
-		HUDManager.SetModelValue("forcedHUD", DB_GetStringValue("forcedHUD"))
-		HUDManager.SetModelValue("defaultHUD", DB_GetStringValue("defaultHUD"))
-	end
-
-	if sql.TableExists(HUD_MANAGER_SQL_RESTRICTEDHUDS_TABLE) then
-		HUDManager.SetModelValue("restrictedHUDs", DB_GetStringTable(HUD_MANAGER_SQL_RESTRICTEDHUDS_TABLE) or {})
-	end
+	TTT2NET:SetGlobal({"hud_manager", "forcedHUD"}, {type = "string"}, DB_GetStringValue("forcedHUD"))
+	TTT2NET:SetGlobal({"hud_manager", "defaultHUD"}, {type = "string"}, DB_GetStringValue("defaultHUD") or "pure_skin")
+	TTT2NET:SetGlobal({"hud_manager", "restrictedHUDs"}, {type = "table"}, DB_GetStringTable(HUD_MANAGER_SQL_RESTRICTEDHUDS_TABLE) or {})
 end
 
 -- load values from the database when this file is executed
 HUDManager.LoadData()
 
--- Register update handlers to sync any changes to the client / store them in the database
-HUDManager.OnUpdateAnyAttribute(HUDManager.StoreData)
-
-HUDManager.OnUpdateAttribute("forcedHUD", function(newval, oldval)
-	syncModelStringAttribute("forcedHUD")
-end)
-
-HUDManager.OnUpdateAttribute("defaultHUD", function(newval, oldval)
-	syncModelStringAttribute("defaultHUD")
-end)
-
-HUDManager.OnUpdateAttribute("restrictedHUDs", function(newval, oldval)
-	syncModelRestrictedHUDsAttribute()
-end)
-
 --
 -- HUDManager commands / requests from clients
 --
-
-net.Receive("TTT2RequestHUDManagerFullStateUpdate", function(_, ply)
-	MsgN("[TTT2][HUDManager] Player " .. ply:Nick() .. " requested full state update...")
-
-	syncModelStringAttribute("forcedHUD", ply)
-	syncModelStringAttribute("defaultHUD", ply)
-	syncModelRestrictedHUDsAttribute(ply)
-end)
 
 -- User wants to change / use a HUD
 net.Receive("TTT2RequestHUD", function(_, ply)
 	local hudname = net.ReadString() -- new requested HUD
 	local oldHUD = net.ReadString() -- current HUD as fallback
-	local forced = HUDManager.GetModelValue("forcedHUD")
+	local forced = TTT2NET:GetGlobal({"hud_manager", "forcedHUD"})
 
 	if not forced then
-		local restrictions = HUDManager.GetModelValue("restrictedHUDs") or {}
+		local restrictions = TTT2NET:GetGlobal({"hud_manager", "restrictedHUDs"}) or {}
 		local restricted = false
 
 		for i = 1, #restrictions do
@@ -210,7 +144,7 @@ net.Receive("TTT2RequestHUD", function(_, ply)
 
 		-- still restricted? Then take the default
 		if restricted then
-			hudname = HUDManager.GetModelValue("defaultHUD")
+			hudname = TTT2NET:GetGlobal({"hud_manager", "defaultHUD"})
 		end
 	end
 
@@ -218,7 +152,7 @@ net.Receive("TTT2RequestHUD", function(_, ply)
 	local hudToSendTbl = huds.GetStored(hudToSend)
 
 	if not hudToSendTbl or hudToSendTbl.isAbstract then
-		hudToSend = HUDManager.GetModelValue("defaultHUD") or "pure_skin"
+		hudToSend = TTT2NET:GetGlobal({"hud_manager", "defaultHUD"}) or "pure_skin"
 	end
 
 	net.Start("TTT2ReceiveHUD")
@@ -233,17 +167,19 @@ net.Receive("TTT2DefaultHUDRequest", function(_, ply)
 
 	if ply:IsAdmin() then
 		if HUDToSet == "" then -- Reset the forcedHUD value, to allow users to have a different HUD
-			HUDManager.SetModelValue("defaultHUD", "pure_skin")
+			TTT2NET:SetGlobal({"hud_manager", "defaultHUD"}, {type = "string"}, "pure_skin")
 
 			acceptedRequest = true
 		else
 			local hudtbl = huds.GetStored(HUDToSet)
 			if hudtbl ~= nil then
-				HUDManager.SetModelValue("defaultHUD", HUDToSet)
+				TTT2NET:SetGlobal({"hud_manager", "defaultHUD"}, {type = "string"}, HUDToSet)
 
 				acceptedRequest = true
 			end
 		end
+
+		HUDManager.StoreData()
 	end
 
 	if acceptedRequest then
@@ -258,17 +194,19 @@ net.Receive("TTT2ForceHUDRequest", function(_, ply)
 
 	if ply:IsAdmin() then
 		if HUDToForce == "" then -- Reset the forcedHUD value, to allow users to have a different HUD
-			HUDManager.SetModelValue("forcedHUD", nil)
+			TTT2NET:SetGlobal({"hud_manager", "forcedHUD"}, {type = "string"}, nil)
 
 			acceptedRequest = true
 		else
 			local hudtbl = huds.GetStored(HUDToForce)
 			if hudtbl ~= nil then
-				HUDManager.SetModelValue("forcedHUD", HUDToForce)
+				TTT2NET:SetGlobal({"hud_manager", "forcedHUD"}, {type = "string"}, HUDToForce)
 
 				acceptedRequest = true
 			end
 		end
+
+		HUDManager.StoreData()
 	end
 
 	if acceptedRequest then
@@ -285,7 +223,7 @@ net.Receive("TTT2RestrictHUDRequest", function(_, ply)
 	if ply:IsAdmin() then
 		local hudtbl = huds.GetStored(HUDToRestrict)
 		if hudtbl ~= nil then
-			local restrictedHUDs = HUDManager.GetModelValue("restrictedHUDs") or {}
+			local restrictedHUDs = TTT2NET:GetGlobal({"hud_manager", "restrictedHUDs"}) or {}
 
 			if shouldBeRestricted and not table.HasValue(restrictedHUDs, HUDToRestrict) then
 				restrictedHUDs[#restrictedHUDs + 1] = HUDToRestrict
@@ -293,7 +231,9 @@ net.Receive("TTT2RestrictHUDRequest", function(_, ply)
 				table.RemoveByValue(restrictedHUDs, HUDToRestrict)
 			end
 
-			HUDManager.SetModelValue("restrictedHUDs", restrictedHUDs)
+			TTT2NET:SetGlobal({"hud_manager", "restrictedHUDs"}, {type = "table"}, table.Copy(restrictedHUDs))
+
+			HUDManager.StoreData()
 
 			acceptedRequest = true
 		end

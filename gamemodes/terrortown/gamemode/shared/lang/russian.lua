@@ -1278,3 +1278,23 @@ L.header_gameplay_settings = "Настройки игры"
 L.button_save = "Сохранить"
 --L.button_reset = "Reset"
 --L.button_close = "Close"
+L.disable_overheadicons = "Выключить иконки ролей."
+L.disable_overheadicons_tip = "Выключает иконки ролей над головами игроков (прибавка к производительности)."
+
+-- 2020-04-20
+--L.item_speedrun = "Speedrun"
+--L.item_speedrun_desc = [[Makes you 50% faster!]]
+--L.item_no_explosion_damage = "No Explosion Damage"
+--L.item_no_explosion_damage_desc = [[Makes you immune to explosion damage.]]
+--L.item_no_fall_damage = "No Fall Damage"
+--L.item_no_fall_damage_desc = [[Makes you immune to fall damage.]]
+--L.item_no_fire_damage = "No Fire Damage"
+--L.item_no_fire_damage_desc = [[Makes you immune to fire damage.]]
+--L.item_no_hazard_damage = "No Hazard Damage"
+--L.item_no_hazard_damage_desc = [[Makes you immune to hazard damage such as posion, radiation and acid.]]
+--L.item_no_energy_damage = "No Energy Damage"
+--L.item_no_energy_damage_desc = [[Makes you immune to energy damage such as lasers, plasma and lightning.]]
+--L.item_no_prop_damage = "No Prop Damage"
+--L.item_no_prop_damage_desc = [[Makes you immune to prop damage.]]
+--L.item_no_drown_damage = "No Drowning Damage"
+--L.item_no_drown_damage_desc = [[Makes you immune to drowning damage.]]

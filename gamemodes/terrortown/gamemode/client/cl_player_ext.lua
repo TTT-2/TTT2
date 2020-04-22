@@ -1,4 +1,3 @@
-local local_ply = LocalPlayer
 local net = net
 
 local plymeta = FindMetaTable("Player")
@@ -6,39 +5,6 @@ if not plymeta then
 	Error("FAILED TO FIND PLAYER TABLE")
 
 	return
-end
-
-local gmod_GetWeapons = plymeta.GetWeapons
-
----
--- Returns if @{Player} has a specific @{Weapon}
--- @param string cls @{Weapon}'s class name
--- @return boolean
--- @realm shared
-function plymeta:HasWeapon(cls) -- Server has this, but isn't shared for some reason
-	local weps = self:GetWeapons()
-
-	for i = 1, #weps do
-		local wep = weps[i]
-
-		if not IsValid(wep) or wep:GetClass() ~= cls then continue end
-
-		return true
-	end
-
-	return false
-end
-
----
--- Returns all @{Weapon}s a @{Player} is owning
--- @return table
--- @realm shared
-function plymeta:GetWeapons() -- Server has this, but isn't shared for some reason
-	if self ~= local_ply() then
-		return {}
-	else
-		return gmod_GetWeapons(self)
-	end
 end
 
 ---

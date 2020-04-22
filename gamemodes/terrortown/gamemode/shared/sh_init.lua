@@ -48,7 +48,15 @@ SPECIAL_EQUIPMENT = {
 	"weapon_ttt_cse",
 	"weapon_ttt_teleport",
 	"item_ttt_armor",
-	"item_ttt_radar"
+	"item_ttt_radar",
+	"item_ttt_nodrowningdmg",
+	"item_ttt_noenergydmg",
+	"item_ttt_noexplosiondmg",
+	"item_ttt_nofalldmg",
+	"item_ttt_nofiredmg",
+	"item_ttt_nohazarddmg",
+	"item_ttt_nopropdmg",
+	"item_ttt_speedrun"
 }
 
 TRAITOR_EQUIPMENT = {
@@ -529,7 +537,6 @@ ttt_include("sh_lang")
 ttt_include("sh_sql")
 ttt_include("sh_hud_module")
 ttt_include("sh_hudelement_module")
-ttt_include("sh_hud_manager")
 ttt_include("sh_equip_items")
 ttt_include("sh_role_module")
 ttt_include("sh_item_module")
