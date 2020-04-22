@@ -263,13 +263,11 @@ L.item_armor      = "Kamizelka kuloodporna"
 L.item_armor_desc = [[
 Redukuje obrażenia od pocisków 
 o 30%, kiedy zostaniesz trafiony
-
 Podstawowe wyposażenie detektywa.]]
 
 L.item_radar      = "Radar"
 L.item_radar_desc = [[
 Wyszukuje oznak życia, skanując.
-
 Zaczyna automatycznie skanować tylko jak
 go kupisz. Skonfiguruj to w zakładce radaru
 w tym menu.]]
@@ -278,7 +276,6 @@ L.item_disg       = "Przebranie"
 L.item_disg_desc  = [[
 Ukrywa twój status, gdy jest włączone. Także
 unika, bycia ostanią osobą widzaną przez ofiare.
-
 Przełącz w zakładce Przebrania w tym menu
 lub kliknij Enter na Numpadzie.]]
 
@@ -320,7 +317,6 @@ L.vis_help_pri    = "{primaryfire} upuszcza aktywowane urządzenie."
 
 L.vis_desc        = [[
 Wizualizator chwili zabójstwa.
-
 Analizuje ciało by pokazać jak
 jak ofiara zostałą zabita, ale tylko jak
 zgineła od strzałów z broni.]]
@@ -346,7 +342,6 @@ L.defuser_help    = "{primaryfire} rozbraja zaznaczone C4."
 
 L.defuser_desc    = [[
 Natychmiastowo robraja ładunek C4.
-
 Brak limitu użyć. C4 będzie łatwiej 
 zauważyć, jeśli go nosisz.]]
 
@@ -355,7 +350,6 @@ L.flare_name      = "Pistolet sygnałowy"
 L.flare_desc      = [[
 Pozwala spalić zwłoki, żeby nikt ich
 nigdy nie odnalazł. Ograniczona amunicja.
-
 Palenie zwłok wydaje charakterystyczny
 dźwięk.]]
 
@@ -385,7 +379,6 @@ alternatywnego.]]
 -- Poltergeist
 L.polter_desc     = [[
 Miota przedmiotami jak szatan.
-
 Rani ludzi, których trafi.]]
 
 -- Radio
@@ -394,7 +387,6 @@ L.radio_help_pri  = "{primaryfire} kładzie radio."
 
 L.radio_desc      = [[
 Odtwarza dźwięki lub odgłosy.
-
 Postaw gdzieś radio, i potem
 puszczaj dźwięki używając specjalnej zakładki
 w tym menu.]]
@@ -405,7 +397,6 @@ L.sipistol_name   = "Pistolet z tłumikiem"
 L.sipistol_desc   = [[
 Cichy pistolet, używa normalnego ammo
 do pistoletu.
-
 Ofiara nie będzie krzyczeć, gdy zginie.]]
 
 -- Newton launcher
@@ -413,7 +404,6 @@ L.newton_name     = "Wyrzutnia Newtona"
 
 L.newton_desc     = [[
 Zpychaj ludzi z bezpiecznego dystansu.
-
 Nieskończona amunicja, ale wolno strzela.]]
 
 -- Binoculars
@@ -421,7 +411,6 @@ L.binoc_name      = "Lornetka"
 L.binoc_desc      = [[
 Przybliżaj na ciała i identyfikuj je
 z dalekiego dystansu.
-
 Nielimitowana liczba użyć, ale 
 identyfikacja trwa pare sekund.]]
 
@@ -432,7 +421,6 @@ L.binoc_help_sec  = "{secondaryfire} zmienia poziom przybliżenia."
 L.ump_desc        = [[
 Eksperymentalne SMG dezorientujące
 cel.
-
 Używa standardowego ammo do SMG.]]
 
 -- DNA scanner
@@ -450,7 +438,6 @@ L.dna_gone        = "DNA nie zostało znalezione na tym terenie."
 L.dna_desc        = [[
 Zbiera próbki DNA z różnych rzeczy
 i używa ich do znalezienia właściela tego DNA.
-
 Użyj na świeżych zwłokach, by znaleźć 
 DNA zabójcy i śledzić go.]]
 
@@ -503,7 +490,6 @@ L.tele_help_sec   = "{secondaryfire} zaznacza aktualną lokalizacje."
 
 L.tele_desc       = [[
 Teleportuje do wcześniej zaznaczonego miejsca.
-
 Teleportowanie emituje dźwięk, i
 liczba użyć jest ograniczona.]]
 
@@ -582,34 +568,27 @@ L.punch_malus  = "Twój dobry wynik powiększył twój limit punch-o-metera o {n
 -- quotes. That's a Lua thing. Every line break (enter) will show up in-game.
 L.info_popup_innocent = [[Jesteś niewinnym terrorystą! Ale zdrajcy są do okoła...
 Komu możesz ufać, a kto cię nafaszruje ołowiem?
-
 Uważaj na siebie i wspópracuj ze swoimi komratami, by wyjść z tego cało!]]
 
 L.info_popup_detective = [[Jesteś Detektywem! Centrala terrorystów dała ci specjalne wyposażenie do znaleznienia zdrajców.
 Użyj ich, by pomóc przetrwać niewinnym, ale bądź uważny:
 Zdrajcy będą chcieli zabić cię jako pierwszego!
-
 Kliknij {menukey}, aby otrzymać swoje wyposażenie!]]
 
 L.info_popup_traitor_alone = [[Jesteś ZDRAJCĄ! Nie masz żadnych kolegów zdrajców.
-
 Zabij innych i wygraj!
-
 Kliknij {menukey}, aby otrzymać swoje specjalne wyposażenie!]]
 
 L.info_popup_traitor = [[Jesteś ZDRAJCĄ! Wspópracuj ze swoimi kolegami zdrajcami i zabij innych.
 Ale musisz uważać, albo twoja zdrada może sostać odkryta...
-
 To są twoi kamraci:
 {traitorlist}
-
 Kliknij {menukey}, aby otrzymać swoje specjalne wyposażenie!]]
 
 -- Various other text
 L.name_kick = "Gracz został automatycznie wyrzucony, za zmienienie nazwy podczas gry."
 
 L.idle_popup = [[Byłeś bezczynny przez {num} sekund i w rezultacie zostałeś przeniesony do trybu obserwatora . Kiedy jesteś w tym trybie, nie będziesz się pojawiał w nowych rundach.
-
 Możesz to zmienić tryb obserwatora w każdej chwili klikając {helpkey} i odznaczając tą opcje w zakładce ustawień. Możesz również to zrobić teraz.]]
 
 L.idle_popup_close = "Nic nie rób"
@@ -993,11 +972,11 @@ L.shop_disabled = "Wyłącz sklep"
 L.shop_default = "Użyj domyślnego sklepu"
 
 -- 2019-05-05
---L.reroll_name = "Reroll"
---L.reroll_menutitle = "Reroll Items"
---L.reroll_no_credits = "You need {amount} credits to reroll!"
---L.reroll_button = "Reroll"
---L.reroll_help = "Use {amount} credits to get new items in your shop!"
+L.reroll_name = "Losuj"
+L.reroll_menutitle = "Losuj przedmioty"
+L.reroll_no_credits = "Potrzebujesz {amount} kredytów żeby losować!"
+L.reroll_button = "Losuj"
+L.reroll_help = "Użyj {amount} kredytów aby wylosować przedmiot!"
 
 -- 2019-05-06
 L.equip_not_alive = "Możesz teraz zobaczyć zawartość sklepu, nie zapomnij dodać ulubionych!"
@@ -1016,9 +995,9 @@ L.shop_settings_desc = "Adaptacja Randomowego Sklepu."
 
 L.ttt2_bindings_new = "Nowy klawisz dla {name}: {key}"
 
---L.hud_default_failed = "Failed to set the HUD {hudname} as new default. You don't have permission to do that, or this HUD doesn't exist."
---L.hud_forced_failed = "Failed to force the HUD {hudname}. You don't have permission to do that, or this HUD doesn't exist."
---L.hud_restricted_failed = "Failed to restrict the HUD {hudname}. You don't have permission to do that."
+L.hud_default_failed = "Nie udało się ustawić {hudname} jako domoślne. Nie masz permisji, albo HUD nie istnieje."
+L.hud_forced_failed = "Nie udało się wymusić HUD {hudname}. Nie masz permisji, albo HUD nie istnieje."
+L.hud_restricted_failed = "Nie udało się nadać restrykcji HUDa {hudname}. Nie masz permisji."
 
 L.shop_role_select = "Wybierz rolę"
 L.shop_role_selected = "{roles} wybrano do sklepu!"
@@ -1028,7 +1007,7 @@ L.spec_help = "Kliknij by obserować gracza, lub kliknij {usekey} na obiekt fizy
 L.spec_help2 = "Aby opuścić tryb widza, naciśnij guzik {helpkey}, idź do 'rozgrywa' i zmień tryb obserwatora."
 
 -- 2019-10-19
---L.drop_ammo_prevented = "Something prevents you from dropping your ammo."
+L.drop_ammo_prevented = "Coś Cię powstrzymuje przed wyrzuceniem amunicji."
 
 -- 2019-10-28
 L.target_c4 = "Naciśnij [{usekey}] aby otworzyć menu C4"
@@ -1060,11 +1039,11 @@ L.hstation_maxhealth = "Życie pełne"
 L.hstation_short_desc = "Powoli odnawia swój ładunek"
 
 -- 2019-11-03
---L.vis_short_desc = "Visualizes a crime scene if the victim died by a gunshot wound"
-L.corpse_binoculars = "Press [{key}] to search corpse with binoculars."
+L.vis_short_desc = "Wskazuje co się działo podczas zabójstwa"
+L.corpse_binoculars = "Naciśnij [{key}] aby przeszukać ciało lornetką."
 L.binoc_progress = "Wyszukiwanie: {progress}%"
 
---L.pickup_no_room = "You have no space in your inventory for this weapon kind"
+L.pickup_no_room = "Nie masz już miejsca na ten przedmiot!"
 
 -- 2020-01-07
 L.tbut_help_admin = "Edytuj ustawienia guzika treitora"
@@ -1074,7 +1053,7 @@ L.tbut_team_toggle = "[SHIFT + {walkkey} + {usekey}] aby włączyć ten guzik dl
 L.tbut_team_config = "Team: {current}"
 L.tbut_current_config = "Obecne ustawienia:"
 L.tbut_intended_config = "Domyślny config twórcy mapy:"
-L.tbut_admin_mode_only = "Only visible to you because you're an admin and '{cv}' is set to '1'"
+L.tbut_admin_mode_only = "Widoczne tylko gdy jesteś adminem lub '{cv}' jest ustawione na '1'"
 L.tbut_allow = "Pozwól"
 L.tbut_prohib = "Zabroń"
 L.tbut_default = "Domyślne"
@@ -1087,7 +1066,7 @@ L.door_locked = "Drzwi są zamknięte"
 
 -- 2020-02-11
 L.automoved_to_spec = "(SERWER) Zostałeś przeniesiony do teamu obserwujących za brak aktywności!"
-L.mute_team = "{team} muted."
+L.mute_team = "{team} zmutowani."
 
 -- 2020-02-16
 L.door_auto_closes = "Te drzwi zamykają się same"
@@ -1097,87 +1076,87 @@ L.hud_health = "Zdrowie"
 
 -- 2020-03-09
 L.help_title = "Pomoc i ustawienia"
---L.menu_name = "MENU"
+L.menu_name = "MENU"
 
---L.menu_changelog_title = "Changelog"
---L.menu_guide_title = "TTT2 Guide"
---L.menu_bindings_title = "Key Bindings"
---L.menu_language_title = "Language"
---L.menu_appearance_title = "Appearance"
---L.menu_gameplay_title = "Gameplay"
---L.menu_addons_title = "Addons"
---L.menu_legacy_title = "Legacy Addons"
---L.menu_administration_title = "Administration"
---L.menu_equipment_title = "Edit Equipment"
---L.menu_shops_title = "Edit Shops"
+L.menu_changelog_title = "Zmiany"
+L.menu_guide_title = "TTT2 Poradnik"
+L.menu_bindings_title = "Bindy"
+L.menu_language_title = "Język"
+L.menu_appearance_title = "Wygląd"
+L.menu_gameplay_title = "Rozgrywka"
+L.menu_addons_title = "Addony"
+L.menu_legacy_title = "Addony(Legacy)"
+L.menu_administration_title = "Administrowanie"
+L.menu_equipment_title = "Edytuj Zaopatrzenie"
+L.menu_shops_title = "Edytuj Sklepy"
 
---L.menu_changelog_description = "A list of changes and fixes in recent versions"
---L.menu_guide_description = "Helps you to get started with TTT2 and explains some things about gameplay, roles and other stuff"
---L.menu_bindings_description = "Bind specific features of TTT2 and its addons to your own liking"
---L.menu_language_description = "Select the language of the game"
---L.menu_appearance_description = "Tweak the appearance and performance of the UI"
---L.menu_gameplay_description = "Avoid roles and tweak some features"
---L.menu_addons_description = "Configure local addons to your liking"
---L.menu_legacy_description = "A panel with converted tabs from original TTT, they should be ported over to the new system"
---L.menu_administration_description = "General settings for HUDs, shops etc"
---L.menu_equipment_description = "Set credits, limitations, avilability and other stuff"
---L.menu_shops_description = "Add/Remove shops to roles and define the equipment in it"
+L.menu_changelog_description = "Lista zmian w ostatnich wersjach"
+L.menu_guide_description = "Pomaga zapoznać się z TTT i pomóc Ci je zrozumieć"
+L.menu_bindings_description = "Ustaw swoje własne bindy dotyczące rozgrywki"
+L.menu_language_description = "Wybierz język gry"
+L.menu_appearance_description = "Popraw wygląd i wydajność UI"
+L.menu_gameplay_description = "Unikaj ról, bądź widzem itp"
+L.menu_addons_description = "Konfiguracja addonów"
+L.menu_legacy_description = "Panle z przekonwertowanymi addonami TTT, powinny być przeportowane do nowego systemu"
+L.menu_administration_description = "Ustawienia generalne HUDu, sklepów itd."
+L.menu_equipment_description = "Ustaw kredyty, limity, dostępność i pozostałe rzeczy"
+L.menu_shops_description = "Dodaj/Usuwaj sklepy i przedmioty w nich"
 
---L.submenu_guide_gameplay_title = "Gameplay"
---L.submenu_guide_roles_title = "Roles"
---L.submenu_guide_equipment_title = "Equipment"
+L.submenu_guide_gameplay_title = "Rozgrywka"
+L.submenu_guide_roles_title = "Role"
+L.submenu_guide_equipment_title = "Przedmioty"
 
---L.submenu_bindings_bindings_title = "Bindings"
+L.submenu_bindings_bindings_title = "Bindy"
 
---L.submenu_language_language_title = "Language"
+L.submenu_language_language_title = "Język"
 
---L.submenu_appearance_general_title = "General"
---L.submenu_appearance_hudswitcher_title = "HUD Switcher"
---L.submenu_appearance_vskin_title = "VSkin"
---L.submenu_appearance_targetid_title = "TargetID"
---L.submenu_appearance_shop_title = "Shop Settings"
---L.submenu_appearance_crosshair_title = "Crosshair"
---L.submenu_appearance_dmgindicator_title = "Damage Indicator"
---L.submenu_appearance_performance_title = "Performance"
---L.submenu_appearance_interface_title = "Interface"
---L.submenu_appearance_miscellaneous_title = "Misellaneous"
+L.submenu_appearance_general_title = "Główne"
+L.submenu_appearance_hudswitcher_title = "Przełącznik HUDa"
+L.submenu_appearance_vskin_title = "VSkin"
+L.submenu_appearance_targetid_title = "TargetID"
+L.submenu_appearance_shop_title = "Ustawienia sklepu"
+L.submenu_appearance_crosshair_title = "Celownik"
+L.submenu_appearance_dmgindicator_title = "Pow. o obrażeniach"
+L.submenu_appearance_performance_title = "Wydajność"
+L.submenu_appearance_interface_title = "Interfejs"
+L.submenu_appearance_miscellaneous_title = "Różne"
 
---L.submenu_gameplay_general_title = "General"
---L.submenu_gameplay_avoidroles_title = "Avoid Role Selection"
+L.submenu_gameplay_general_title = "Główne"
+L.submenu_gameplay_avoidroles_title = "Unikaj ról"
 
---L.submenu_administration_hud_title = "HUD Settings"
---L.submenu_administration_random_shop = "Random Shop"
+L.submenu_administration_hud_title = "Ustawienia HUDa"
+L.submenu_administration_random_shop = "Losowy Sklep"
 
---L.help_color_desc = "If this setting is enabled, a global color can be chosen that will be used for the targetID outline and the crosshair."
---L.help_scale_factor = "This scale factor influences all UI elements (HUD, vgui and targetID). It is automatically updated if the screen resolution is changed. Changing this value will reset the HUD!"
---L.help_hud_game_reload = "The HUD is not available right now. The game has to be reloaded."
---L.help_hud_special_settings = "These are specific settings of this HUD."
---L.help_vskin_info = "VSkin (vgui skin) is the skin applied to all menu elements like the current one. Skins can be easily created with a simple lua script and can change colors and some size parameters."
---L.help_targetid_info = "TargetID is the information rendered when focusing an entity. A fixed color can be set in the general settings panel."
---L.help_hud_default_desc = "Set the default HUD for all players. Players that have not yet selected a HUD will receive this HUD as their default. This won't change the HUD of players that have already selected their HUD."
---L.help_hud_forced_desc = "Force a HUD for all players. This disables the HUD selection feature for everyone."
---L.help_hud_enabled_desc = "Enable/Disable HUDs to restrict the selection of these HUDs."
---L.help_damage_indicator_desc = "The damage indicator is the overlay shown when the player is damaged. To add a new theme, place a png in 'materials/vgui/ttt/damageindicator/themes/'."
+L.help_color_desc = "Jeśli włączone, kolor globalny ustawiany dla obrysu (targetID) i koloru celownika."
+L.help_scale_factor = "Skaluje wszystkie elemnty UI (HUD, vgui i targetID). Dostosowuje się automatycznie do rozdzielczości. Zmiana tej wartości zresetuje HUD!"
+L.help_hud_game_reload = "Ten HUD jest obecnie niedostępny. Gramu musi być przeładowana"
+L.help_hud_special_settings = "Szczegółowe ustawienia tego HUDa."
+L.help_vskin_info = "VSkin (skórka vgui) to skórka używana w każdym menu. Skórki można łatwo robić poprzez lua i kolory."
+L.help_targetid_info = "TargetID jest dla zaawansowanych. Naprawiony kolor można dodać w ustawieniach."
+L.help_hud_default_desc = "Ustawia domyślny HUD dla każdego gracza. Gracze którzy nie wybrali żadnego HUDa będą mieć ten. Nie zmieni HUDa graczy którzy już go zmienili."
+L.help_hud_forced_desc = "Wymusza HUD dla każdego gracza. Wylącza możliwość wyboru HUDu."
+L.help_hud_enabled_desc = "Włącz/wyłącz restrykcję HUDów."
+L.help_damage_indicator_desc = "Powiadomiena o obrażeniach pojawiąją się dookoła ekranu. Aby zmienić wygląd zajrzyj do 'materials/vgui/ttt/damageindicator/themes/'."
 L.help_shop_key_desc = "Otworzyć sklep zamiast ekranu końca rundy guzikiem podczas końca/początku rundy?"
 
---L.label_menu_menu = "MENU"
---L.label_menu_admin_spacer = "Admin Area (not shown to normal users)"
---L.label_language_set = "Select language"
---L.label_global_color_enable = "Enable global color"
---L.label_global_color = "Global color"
---L.label_global_scale_factor = "Global scale factor"
---L.label_hud_select = "Select HUD"
---L.label_vskin_select = "Select VSkin"
---L.label_blur_enable = "Enable VSkin background blur"
+L.label_menu_menu = "MENU"
+L.label_menu_admin_spacer = "Strefa Admina"
+L.label_language_set = "Wybierz Język"
+L.label_global_color_enable = "Włącz kolor globalny"
+L.label_global_color = "Globalny Kolor"
+L.label_global_scale_factor = "Globalna Skala"
+L.label_hud_select = "Wybierz HUDa"
+L.label_vskin_select = "Wybierz VSkin"
+L.label_blur_enable = "Włącz blur dla tła VSkina "
 L.label_minimal_targetid = "Minimalistyczny status celu pod celownikiem (bez karmy, porad, itp)"
---L.label_shop_always_show = "Always show the shop"
+L.label_shop_always_show = "Zawsze pokazuj sklep"
 L.label_shop_num_col = "Liczba kolumn"
 L.label_shop_num_row = "Liczba rzędów"
 L.label_shop_item_size = "Liczba rzędów"
 L.label_shop_show_slot = "Pokaż sloty"
 L.label_shop_show_custom = "Pokaż customowe intemy"
 L.label_shop_show_fav = "Pokaż ulubione itemy"
---L.label_crosshair_enable = "Enable Crosshair"
+L.label_crosshair_enable = "Włącz celownik"
 L.label_crosshair_gap_enable = "Umożliw odstęp"
 L.label_crosshair_gap = "Odstęp celownika"
 L.label_crosshair_opacity = "Ukrycie celownika podczas korzystania z celowniku mechanicznego"
@@ -1189,25 +1168,25 @@ L.label_crosshair_static_enable = "Umożliw statyczny celownik "
 L.label_crosshair_dot_enable = "Umożliw kropkę celownika"
 L.label_crosshair_scale_enable = "Umożliw różne wielkości"
 L.label_crosshair_ironsight_low_enabled = "Obniż broń podczas użycia celowniku mechanicznego"
---L.label_damage_indicator_enable = "Enable damage indicator"
+L.label_damage_indicator_enable = "Enable damage indicator"
 L.label_damage_indicator_mode = "Wybierz motyw"
 L.label_damage_indicator_duration = "Liczba sekund widoczności"
 L.label_damage_indicator_maxdamage = "Obrażenia do maksymalnej widoczności"
 L.label_damage_indicator_maxalpha = "Obrażenia do minimalnej widoczności"
 L.label_performance_halo_enable = "Dodaj otoczkę na przedmioty patrząc na nie"
---L.label_performance_spec_outline_enable = "Enable controlled objects' outlines"
---L.label_performance_ohicon_enable = "Enable overhead role icons"
+L.label_performance_spec_outline_enable = "Włącz obwódkę przedmiotów"
+L.label_performance_ohicon_enable = "Włącz ikony ról na głową"
 L.label_interface_tips_enable = "Pokaż wskazówki dotyczące rozgrywki u dołu ekranu, podczas trybu obserwatora"
 L.label_interface_popup = "Czas okienka inforamcji na pocztątku rundy"
 L.label_interface_fastsw_menu = "Włącz menu z szybkim przełączniem broni"
---L.label_inferface_wswitch_hide_enable = "Enable weapon switch menu auto-closing"
+L.label_inferface_wswitch_hide_enable = "Włącz chowanie się menu zmiany broni"
 L.label_inferface_scues_enable = "Zagraj dźwięk, kiedy runda się rozpoczyna lub kończy"
 L.label_gameplay_specmode = "Tryb obserwatora (zawsze bądź obserwatorem)"
 L.label_gameplay_fastsw = "Szybkie przełącznie broni"
 L.label_gameplay_hold_aim = "Trzymaj aby celować"
 L.label_gameplay_mute = "Wycisz żyjących graczy, gdy zginiesz"
---L.label_gameplay_dtsprint_enable = "Enable double tap sprinting"
---L.label_gameplay_dtsprint_anykey = "Continue double tap sprinting until you stop moving"
+L.label_gameplay_dtsprint_enable = "Włącz 2x przód, aby sprintować"
+L.label_gameplay_dtsprint_anykey = "Sprintuj dopóki Ci się nie szkończy wytrzymałość"
 L.label_hud_default = "Zwykły HUD"
 L.label_hud_force = "Wymuszony HUD"
 
@@ -1218,32 +1197,32 @@ L.label_bind_voice_team = "Teamowy Czat"
 
 L.label_hud_basecolor = "Kolor bazowy"
 
---L.header_bindings_ttt2 = "TTT2 Bindings"
---L.header_bindings_other = "Other Bindings"
+L.header_bindings_ttt2 = "Bindy TTT2"
+L.header_bindings_other = "Inne bindy"
 L.header_language = "Ustawienia języka"
---L.header_global_color = "Select Global Color"
---L.header_hud_select = "Select a HUD"
---L.header_hud_customize = "Customize the HUD"
---L.header_vskin_select = "Select and Customize the VSkin"
---L.header_targetid = "TargetID Settings"
---L.header_shop_settings = "Equipment Shop Settings"
+L.header_global_color = "Wybierz kolor globalny"
+L.header_hud_select = "Wybierz HUD"
+L.header_hud_customize = "Personalizuj HUD"
+L.header_vskin_select = "Wybierz i zmień VSkin"
+L.header_targetid = "Ustawienia TargetID"
+L.header_shop_settings = "Menu przdmiotów sklepu"
 L.header_shop_layout = "Układ listy"
 L.header_shop_marker = "Ustawienia tworzenie przedmiotów"
 L.header_crosshair_settings = "Ustawienia celownika"
 L.header_damage_indicator = "Ustawienia powiadomień obrażeń"
---L.header_performance_settings = "Performance Settings"
+L.header_performance_settings = "Ustawienia Wydajności"
 L.header_interface_settings = "Ustawienia interfejsu"
 L.header_gameplay_settings = "Ustawienia rozgrywki"
---L.header_roleselection = "Enable Role Assignment"
---L.header_hud_administration = "Select Default and Forced HUDs"
---L.header_hud_enabled = "Enable/Disable HUDs"
+L.header_roleselection = "Włącz przypisywanie ról"
+L.header_hud_administration = "Wybierz Domyślne i wymuś HUDy"
+L.header_hud_enabled = "Włącz/Wyłącz HUDy"
 
---L.button_menu_back = "back"
---L.button_none = "None"
---L.button_press_key = "Press a key"
+L.button_menu_back = "Wróć"
+L.button_none = "Brak"
+L.button_press_key = "Naciśnij klawisz"
 L.button_save = "Zapisz"
---L.button_reset = "Reset"
---L.button_close = "Close"
+L.button_reset = "Reset"
+L.button_close = "Zamknij"
 
 -- 2020-04-20
 --L.item_speedrun = "Speedrun"
