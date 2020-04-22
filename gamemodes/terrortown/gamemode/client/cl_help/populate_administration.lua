@@ -3,7 +3,7 @@ local materialIcon = Material("vgui/ttt/vskin/helpscreen/administration")
 local function PopulateHUDPanel(parent)
 	local form = CreateForm(parent, "header_hud_administration")
 
-	local restrictedHUDs = HUDManager.GetModelValue("restrictedHUDs")
+	local restrictedHUDs = TTT2NET:GetGlobal({"hud_manager", "restrictedHUDs"})
 	local hudList = huds.GetList()
 	local validHUDsDefault = {}
 	local validHUDsRestriction = {[1] = "None"}
@@ -20,7 +20,8 @@ local function PopulateHUDPanel(parent)
 	form:MakeComboBox({
 		label = "label_hud_default",
 		choices = validHUDsDefault,
-		selectName = HUDManager.GetModelValue("defaultHUD") or "None",
+		selectName = TTT2NET:GetGlobal({"hud_manager", "defaultHUD"}) or "None",
+		default = "None",
 		onSelect = function(_, _, value)
 			net.Start("TTT2DefaultHUDRequest")
 			net.WriteString(value == "None" and "" or value)
@@ -35,7 +36,8 @@ local function PopulateHUDPanel(parent)
 	form:MakeComboBox({
 		label = "label_hud_force",
 		choices = validHUDsRestriction,
-		selectName = HUDManager.GetModelValue("forcedHUD") or "None",
+		selectName = TTT2NET:GetGlobal({"hud_manager", "forcedHUD"}) or "None",
+		default = "None",
 		onSelect = function(_, _, value)
 			net.Start("TTT2ForceHUDRequest")
 			net.WriteString(value == "None" and "" or value)
@@ -55,6 +57,7 @@ local function PopulateHUDPanel(parent)
 		form2:MakeCheckBox({
 			label = hud.id,
 			initial = not table.HasValue(restrictedHUDs, hud.id),
+			default = true,
 			onChange = function(_, value)
 				net.Start("TTT2RestrictHUDRequest")
 				net.WriteString(hud.id)
@@ -65,7 +68,7 @@ local function PopulateHUDPanel(parent)
 	end
 end
 
-HUDManager.OnUpdateAttribute("restrictedHUDs", function()
+TTT2NET:OnUpdateGlobal({"hud_manager", "restrictedHUDs"}, function()
 	if HELPSCRN:GetOpenMenu() ~= "ttt2_administration_hud" then return end
 
 	-- rebuild the content area so that data is refreshed

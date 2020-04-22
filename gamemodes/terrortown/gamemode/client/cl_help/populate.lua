@@ -29,7 +29,6 @@ function InternalModifyMainMenu(helpData)
 
 	for i = 1, #mainMenuAdminOrder do
 		local id = mainMenuAdminOrder[i]
-
 		HELPSCRN.populate[id](helpData, id)
 	end
 end
