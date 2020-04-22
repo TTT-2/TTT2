@@ -1,7 +1,9 @@
 ---
--- @module ROLE
 -- @author Alf21
 -- @author saibotk
+-- @module ROLE
+
+ROLE.isAbstract = true
 
 ---
 -- This function is called before initializing a @{ROLE}, but after all

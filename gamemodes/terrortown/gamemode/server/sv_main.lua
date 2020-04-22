@@ -9,8 +9,10 @@ ttt_include("sh_shopeditor")
 ttt_include("sh_network_sync")
 ttt_include("sh_door")
 ttt_include("sh_voice")
+ttt_include("sh_vskin")
 
 ttt_include("sv_network_sync")
+ttt_include("sv_hud_manager")
 ttt_include("sv_shopeditor")
 ttt_include("sv_karma")
 ttt_include("sv_entity")
@@ -156,7 +158,6 @@ util.AddNetworkString("TTT_ConfirmUseTButton")
 util.AddNetworkString("TTT_C4Config")
 util.AddNetworkString("TTT_C4DisarmResult")
 util.AddNetworkString("TTT_C4Warn")
-util.AddNetworkString("TTT_ShowPrints")
 util.AddNetworkString("TTT_ScanResult")
 util.AddNetworkString("TTT_FlareScorch")
 util.AddNetworkString("TTT_Radar")
@@ -197,6 +198,10 @@ function GM:Initialize()
 
 	-- check for language files to mark them as downloadable for clients
 	LANG.SetupFiles("lang/", true)
+
+	-- load skin files
+	vskin.SetupFiles("terrortown/gamemode/shared/vskins/")
+	vskin.SetupFiles("vskins/")
 
 	ShopEditor.SetupShopEditorCVars()
 	ShopEditor.CreateShopDBs()

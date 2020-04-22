@@ -1,77 +1,10 @@
 ---
 -- @module HUDManager
 
-ttt_include("vgui__cl_hudswitcher")
-
-local current_hud_cvar = CreateClientConVar("ttt2_current_hud", HUDManager.GetModelValue("defaultHUD") or "pure_skin", true, true)
+local current_hud_cvar = CreateClientConVar("ttt2_current_hud", TTT2NET:GetGlobal({"hud_manager", "defaultHUD"}) or "pure_skin", true, true)
 local current_hud_table = nil
 
-net.Receive("TTT2UpdateHUDManagerStringAttribute", function()
-	local key = net.ReadString()
-	local value = net.ReadString()
-
-	if value == "NULL" then
-		value = nil
-	end
-
-	HUDManager.SetModelValue(key, value)
-end)
-
-net.Receive("TTT2UpdateHUDManagerRestrictedHUDsAttribute", function()
-	local len = net.ReadUInt(16)
-
-	if len == 0 then
-		HUDManager.SetModelValue("restrictedHUDs", {})
-	else
-		local tab = {}
-
-		for i = 1, len do
-			tab[i] = net.ReadString()
-		end
-
-		HUDManager.SetModelValue("restrictedHUDs", tab)
-	end
-end)
-
----
--- (Re)opens the HUDSwitcher
--- @realm client
-function HUDManager.ShowHUDSwitcher()
-	local client = LocalPlayer()
-
-	if IsValid(client.hudswitcher) then
-		client.hudswitcher.forceClosing = true
-
-		client.hudswitcher:Remove()
-	end
-
-	client.hudswitcher = vgui.Create("HUDSwitcher")
-
-	if client.hudswitcherSettingsF1 then
-		client.settingsFrame = client.hudswitcher
-	end
-
-	client.hudswitcher:MakePopup()
-end
-
----
--- Hides the HUDSwitcher
--- @realm client
-function HUDManager.HideHUDSwitcher()
-	local client = LocalPlayer()
-
-	if IsValid(client.hudswitcher) then
-		-- this will differentiate between user closed and closed by this method,
-		-- so that this method is called when the user closed the frame by clicking on the X button
-		client.hudswitcher.forceClosing = true
-
-		client.hudswitcher:Remove()
-	end
-
-	if not client.settingsFrameForceClose and not HUDEditor.IsEditing then
-		HELPSCRN:Show()
-	end
-end
+HUDManager = {}
 
 ---
 -- Draws the current selected HUD
@@ -101,10 +34,7 @@ function GM:HUDPaint()
 	local changed = false
 
 	if client.oldScrW and client.oldScrW ~= scrW and client.oldScrH and client.oldScrH ~= scrH then
-		local hud = huds.GetStored(HUDManager.GetHUD())
-		if hud then
-			hud:Reset()
-		end
+		hook.Run("TTT2ChangedResolution", client.oldScrW, client.oldScrH, scrW, scrH)
 
 		changed = true
 	end
@@ -133,6 +63,23 @@ function GM:HUDPaint()
 	if hook.Call("HUDShouldDraw", GAMEMODE, "TTTVoice") then
 		VOICE.Draw(client)
 	end
+end
+
+---
+-- A hook that is called once the resolution is changed.
+-- Additionally it is called directly after @{GM:TTT2PlayerReady}
+-- if the resolution was changed without the gamemode
+-- being loaded
+-- @param number oldScrW The old screen width
+-- @param number oldScrH The old screen height
+-- @param number scrW The new screen width
+-- @param number scrH The new screen height
+-- @hook
+-- @ream client
+function GM:TTT2ChangedResolution(oldScrW, oldScrH, scrW, scrH)
+	-- resolution has changed, update resolution in appearance
+	-- to handle dynamic resolution changes
+	appearance.UpdateResolution(scrW, scrH)
 end
 
 -- Hide the standard HUD stuff
@@ -175,7 +122,9 @@ local function UpdateHUD(name)
 	HUDEditor.StopEditHUD()
 
 	-- save the old HUDs values
-	if current_hud_table then current_hud_table:SaveData() end
+	if current_hud_table then
+		current_hud_table:SaveData()
+	end
 
 	current_hud_cvar:SetString(name)
 
@@ -198,7 +147,7 @@ function HUDManager.GetHUD()
 	local hudvar = current_hud_cvar:GetString()
 
 	if not huds.GetStored(hudvar) then
-		hudvar = HUDManager.GetModelValue("defaultHUD") or "pure_skin"
+		hudvar = TTT2NET:GetGlobal({"hud_manager", "defaultHUD"}) or "pure_skin"
 	end
 
 	return hudvar
@@ -206,8 +155,9 @@ end
 
 ---
 -- Sets the @{HUD} (if possible)
--- @note This will fail if the @{HUD} is not available or restricted by the server
--- @param string name
+-- @note This will fail if the @{HUD} is not available or is
+-- restricted by the server
+-- @param string name The name of the HUD
 -- @realm client
 function HUDManager.SetHUD(name)
 	local currentHUD = HUDManager.GetHUD()
@@ -216,6 +166,17 @@ function HUDManager.SetHUD(name)
 	net.WriteString(name or currentHUD)
 	net.WriteString(currentHUD)
 	net.SendToServer()
+end
+
+---
+-- Resets the current HUD if possible
+-- @realm client
+function HUDManager.ResetHUD()
+	local hud = huds.GetStored(HUDManager.GetHUD())
+
+	if not hud then return end
+
+	hud:Reset()
 end
 
 ---
@@ -231,17 +192,6 @@ function HUDManager.LoadAllHUDS()
 		hud:LoadData()
 	end
 end
-
----
--- Requests an update from the server
--- @realm client
-function HUDManager.RequestFullStateUpdate()
-	MsgN("[TTT2][HUDManager] Requesting a full state update...")
-
-	net.Start("TTT2RequestHUDManagerFullStateUpdate")
-	net.SendToServer()
-end
-hook.Add("TTTInitPostEntity", "RequestHUDManagerStateUpdate", HUDManager.RequestFullStateUpdate)
 
 -- if forced or requested, modified by server restrictions
 net.Receive("TTT2ReceiveHUD", function()

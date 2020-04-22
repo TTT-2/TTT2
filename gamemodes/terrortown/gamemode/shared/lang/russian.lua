@@ -102,8 +102,6 @@ L.equip_spec_desc = "Описание"
 
 L.equip_confirm = "Купить"
 
-L.equip_not_alive = "Вы можете просмотреть все доступные предметы, выбрав роль справа. Не забудьте отметить избранные!"
-
 -- Disguiser tab in equipment menu
 L.disg_name = "Маскировка"
 L.disg_menutitle = "Управление Маскировкой"
@@ -133,13 +131,6 @@ L.xfer_no_recip = "Передача кредита отменена: получ�
 L.xfer_no_credits = "Недостаточно кредитов для передачи."
 L.xfer_success = "Передача кредитов игроку {player} завершена."
 L.xfer_received = "{player} передаёт вам {num} кредит."
-
--- Reroll tab in equipment menu
-L.reroll_name = "Перемешка"
-L.reroll_menutitle = "Перемешка снаряжения"
-L.reroll_no_credits = "You need no credits to reroll!" -- will be translated after issue resolving
-L.reroll_button = "Перемешать"
-L.reroll_help = "Use {amount} credits to get new items in your shop!" -- will be translated after issue resolving
 
 -- Radio tab in equipment menu
 L.radio_name = "Радио"
@@ -176,9 +167,6 @@ L.quick_suspect = "{player} ведёт себя подозрительно."
 L.quick_traitor = "{player} предатель!"
 L.quick_inno = "{player} невиновный."
 L.quick_check = "Есть кто живой?"
-
-L.radio_pickup_wrong_team = "Вы не можете подобрать Радио другой команды."
-L.radio_short_desc = "Звуки выстрелов для меня словно музыка"
 
 -- {player} in the quickchat text normally becomes a player nickname, but can
 -- also be one of the below.  Keep these lowercase.
@@ -252,56 +240,6 @@ L.sb_tag_avoid = "ИЗБЕГАТЬ"
 L.sb_tag_kill = "УБИТЬ"
 L.sb_tag_miss = "ПРОПАЛ"
 
--- Help and settings menu (F1)
-
-L.help_title = "Руководство и настройки"
-
--- Tabs
-L.help_tut = "Руководство"
-L.help_tut_tip = "Как играть в ТТТ в шести шагах"
-
-L.help_settings = "Настройки"
-L.help_settings_tip = "Клиентские настройки"
-
--- Settings
-L.set_title_gui = "Настройки интерфейса"
-
-L.set_tips = "Показывать советы внизу экрана во время наблюдения."
-
-L.set_startpopup = "Длительность всплывающего окна в начале раунда"
-L.set_startpopup_tip = "Когда начинается раунд, небольшое всплывающее окно появляется внизу экрана на несколько секунд. Здесь можно изменить длительность его отображения."
-
-L.set_cross_opacity = "Непрозрачность прицела"
-L.set_cross_disable = "Выключить прицел."
-L.set_minimal_id = "Минималистичная информация о цели под прицелом (без текста о карме, подсказок и т.д.)."
-L.set_healthlabel = "Показывать состояние здоровья на полоске здоровья."
-L.set_lowsights = "Опускать оружие при прицеливании."
-L.set_lowsights_tip = "Если вы включите эту функцию, модель оружия будет опускаться при прицеливании. Вам будет легче видеть свою цель, но будет выглядеть менее реалистично."
-L.set_fastsw = "Быстрая смена оружия."
-L.set_fastsw_tip = "Включите, чтобы переключаться между оружием без подтверждающего нажатия для его переключения."
-L.set_fastsw_menu = "Включить меню переключения оружия с быстрой сменой оружия."
-L.set_fastswmenu_tip = "Когда включена быстрая смена оружия, меню переключения будет появляться."
-L.set_wswitch = "Выключить автозакрытие меню переключения оружия."
-L.set_wswitch_tip = "По умолчанию меню переключения автоматически закрывается через несколько секунд после последней прокрутки. Если вы включите эту функцию, оно не будет закрываться."
-L.set_cues = "Проигрывать звуки начала и конца раунда."
-L.entity_draw_halo = "Отображать контуры вокруг некоторых энтити при наведении прицела."
-
-
-L.set_title_play = "Настройки игры"
-
-L.set_specmode = "Режим наблюдения (всегда быть наблюдателем)."
-L.set_specmode_tip = "Режим наблюдения не даст вам возродиться в начале раунда, вместо этого вы будете наблюдателем."
-L.set_mute = "Заглушать живых игроков после смерти."
-L.set_mute_tip = "Эта функция будет заглушать живых игроков, когда вы мертвы/наблюдатель."
-
-
-L.set_title_lang = "Настройки языка"
-
--- It may be best to leave this next one english, so english players can always
--- find the language setting even if it's set to a language they don't know.
-L.set_lang = "Выберите язык:"
-
-
 -- Weapons and equipment, HUD and messages
 
 -- Equipment actions, like buying and dropping
@@ -310,7 +248,6 @@ L.buy_pending = "У вас уже есть заказ, дождитесь его
 L.buy_received = "Вы получили ваше особое снаряжение."
 
 L.drop_no_room = "Здесь нет места, чтобы выбросить оружие!"
-L.pickup_no_room = "Нет места для ношения предмета этого типа."
 
 L.disg_turned_on = "Маскировка включена!"
 L.disg_turned_off = "Маскировка выключена."
@@ -376,7 +313,6 @@ L.vis_name = "Визуализатор"
 L.vis_hint = "Нажмите {usekey}, чтобы подобрать. (только для детективов)"
 
 L.vis_help_pri = "{primaryfire}: бросить активированное устройство."
-L.vis_short_desc = "Визуализирует сцену преступления, если жертва умерла от огнестрельного ранения."
 
 L.vis_desc = [[
 Устройство, визуализирующее сцену преступления.
@@ -418,11 +354,6 @@ L.flare_desc = [[
 
 -- Health station
 L.hstation_name = "Лечебная станция"
-L.hstation_subtitle = "[{usekey}]: восстановить здоровье."
-L.hstation_charge = "Осталось заряда: {charge}."
-L.hstation_empty = "В Лечебной станции кончился заряд здоровья."
-L.hstation_maxhealth = "Вы полностью здоровы."
-L.hstation_short_desc = "Постепенно восстанавливает заряд со временем."
 
 L.hstation_broken = "Ваша Лечебная станция уничтожена!"
 L.hstation_help = "{primaryfire}: разместить Лечебную станцию."
@@ -604,34 +535,12 @@ L.karma_min = "Безответственный"
 
 -- TargetID misc
 L.corpse = "Тело"
-L.corpse_hint = "{usekey}: осмотреть тело. {walkkey} + {usekey}: скрытно осмотреть тело."
-L.corpse_too_far_away = "Тело слишком далеко."
-L.corpse_binoculars = "[{key}]: осмотреть тело через Бинокль."
-L.corpse_searched_by_detective = "Это тело осмотрено детективом."
+L.corpse_hint = "[{usekey}]: осмотреть тело. [{walkkey} + {usekey}]: скрытно осмотреть тело."
 
 L.target_disg = "под маскировкой"
 L.target_unid = "Неопознанное тело"
 
-L.target_traitor = "ПРЕДАТЕЛЬ"
-L.target_detective = "ДЕТЕКТИВ"
-
 L.target_credits = "Осмотрите тело, чтобы получить неиспользованные кредиты."
-
-L.target_c4 = "[{usekey}]: открыть меню C4."
-L.target_c4_armed = "[{usekey}]: обезвредить C4."
-L.target_c4_armed_defuser = "[{usekey}]: использовать Набор сапёра."
-L.target_c4_not_disarmable = "Нельзя обезвредить C4 живого напарника."
-L.c4_short_desc = "Кое-что крайне взрывоопасное."
-
-L.target_pickup = "[{usekey}]: подобрать."
-L.target_slot_info = "Слот: {slot}"
-L.target_pickup_weapon = "[{usekey}]: подобрать оружие."
-L.target_switch_weapon = "[{usekey}]: заменить текущее оружие на это."
-L.target_pickup_weapon_hidden = " [{usekey} + {walkkey}]: подобрать незаметно."
-L.target_switch_weapon_hidden = " [{usekey} + {walkkey}]: заменить незаметно."
-L.target_switch_weapon_nospace = "Нет свободного слота для этого оружия."
-L.target_switch_drop_weapon_info = "Из слота {slot} будет выброшен (-а) {name}."
-L.target_switch_drop_weapon_info_noslot = "В слоте {slot} нет выбрасываемого оружия."
 
 -- Traitor buttons (HUD buttons with hand icons that only traitors can see)
 L.tbut_single = "Одноразовое использование."
@@ -654,9 +563,6 @@ L.punch_title = "ТОЛКОМЕТР"
 L.punch_help = "Клавиши управления или прыжок: толкнуть предмет. Клавиша приседания: покинуть предмет."
 L.punch_bonus = "Ваш плохой счёт понизил предел толкометра на {num}."
 L.punch_malus = "Ваш хороший счёт повысил предел толкометра на {num}!"
-
-L.spec_help = "Щёлкните мышью, чтобы наблюдать за игроками, или нажмите {usekey}, чтобы вселиться в предмет, на который вы смотрите."
-L.spec_help2 = "Чтобы покинуть режим наблюдения, откройте меню, нажав {helpkey}, перейдите в раздел «Игра» и уберите галочку с режима наблюдения."
 
 -- Info popups shown when the round starts
 
@@ -1082,18 +988,8 @@ L.aw_tod2_text = "умер сразу после начала раунда."
 -- New and modified pieces of text are placed below this point, marked with the
 -- version in which they were added, to make updating translations easier.
 
-
--- v23
-L.set_avoid = "Избегать выбора роли {role}."
-L.set_avoid_tip = "Включите, чтобы сервер не давал вам роль {role} , когда это возможно."
-
 -- v24
 L.drop_no_ammo = "Недостаточно патронов в обойме для их выброса в виде коробки с патронами."
-L.drop_ammo_prevented = "Что-то не даёт вам выбросить боеприпасы."
-
--- v31
-L.set_cross_brightness = "Яркость прицела"
-L.set_cross_size = "Размер прицела"
 
 -- 5-25-15
 L.hat_retrieve = "Вы подобрали шляпу детектива."
@@ -1118,30 +1014,29 @@ L.dna_hud_item = "ПРЕДМЕТ"
 
 L.binoc_zoom_level = "Уровень приближения"
 L.binoc_body = "ОБНАРУЖЕНО ТЕЛО"
-L.binoc_progress = "Прогресс осмотра: {progress}%"
 
 L.idle_popup_title = "Бездействие"
 
--- 6-22-17 (Crosshair)
-L.set_title_cross = "Настройки прицела"
+--------------------------------
+-- TTT2 LANGUAGE
 
-L.set_cross_color_enable = "Включить пользовательский цвет прицела."
-L.set_cross_color = "Пользовательский цвет прицела:"
-L.set_cross_gap_enable = "Включить пользовательский зазор прицела."
-L.set_cross_gap = "Пользовательский зазор"
-L.set_cross_static_enable = "Включить статичный прицел."
-L.set_ironsight_cross_opacity = "Непрозрачность прицела при прицеливании"
-L.set_cross_weaponscale_enable = "Включить разные размеры прицела для разного оружия."
-L.set_cross_thickness = "Толщина прицела"
-L.set_cross_outlinethickness = "Толщина обводки прицела"
-L.set_cross_dot_enable = "Включить точку прицела."
-
--- ttt2
+-- 2019-01-31
 L.create_own_shop = "Создать собственный магазин"
 L.shop_link = "Связать с"
 L.shop_disabled = "Выключить магазин"
 L.shop_default = "Использовать стандартный магазин"
 
+-- 2019-05-05
+L.reroll_name = "Перемешка"
+L.reroll_menutitle = "Перемешка снаряжения"
+--L.reroll_no_credits = "You need {amount} credits to reroll!"
+L.reroll_button = "Перемешать"
+--L.reroll_help = "Use {amount} credits to get new items in your shop!"
+
+-- 2019-05-06
+L.equip_not_alive = "Вы можете просмотреть все доступные предметы, выбрав роль справа. Не забудьте отметить избранные!"
+
+-- 2019-06-27
 L.shop_editor_title = "Редактор магазина"
 L.shop_edit_items_weapong = "Изменить предметы/оружия"
 L.shop_edit = "Изменить магазины"
@@ -1153,51 +1048,8 @@ L.shop_create_shop = "Создать собственный магазин"
 L.shop_selected = "Выбран {role}"
 L.shop_settings_desc = "Измените эти значения для настройки переменных случайного магазина. Не забудьте сохранить изменения!"
 
-L.f1_settings_changes_title = "Изменения"
-L.f1_settings_hudswitcher_title = "Смена интерфейса"
-L.f1_settings_bindings_title = "Назначение клавиш"
-L.f1_settings_interface_title = "Интерфейс"
-L.f1_settings_gameplay_title = "Игра"
-L.f1_settings_crosshair_title = "Прицел"
-L.f1_settings_dmgindicator_title = "Индикатор повреждения"
-L.f1_settings_language_title = "Язык"
-L.f1_settings_administration_title = "Администрирование"
-L.f1_settings_shop_title = "Магазин снаряжения"
-
-L.f1_settings_shop_desc_shopopen = "Открывать магазин нажатием клавиши магазина вместо результатов раунда в его конце/во время подготовки?"
-L.f1_settings_shop_title_layout = "Макет списка предметов"
-L.f1_settings_shop_desc_num_columns = "Количество столбцов"
-L.f1_settings_shop_desc_num_rows = "Количество строк"
-L.f1_settings_shop_desc_item_size = "Размер иконок"
-L.f1_settings_shop_title_marker = "Настройки меток предметов"
-L.f1_settings_shop_desc_show_slot = "Отображать метку слота."
-L.f1_settings_shop_desc_show_custom = "Отображать метку предмета сервера."
-L.f1_settings_shop_desc_show_favourite = "Отображать метку избранного предмета."
-
-L.f1_shop_restricted = "Индивидуальные изменения макета магазина запрещены на этом сервере. Свяжитесь с администратором сервера, чтобы узнать больше."
-
-L.f1_settings_hudswitcher_desc_basecolor = "Основной цвет"
-L.f1_settings_hudswitcher_desc_hud_scale = "Размер интерфейса (сбрасывает сохранённые настройки)"
-L.f1_settings_hudswitcher_button_close = "Закрыть"
-L.f1_settings_hudswitcher_desc_reset = "Сбросить данные интерфейса"
-L.f1_settings_hudswitcher_button_reset = "Сбросить"
-L.f1_settings_hudswitcher_desc_layout_editor = "Изменение положения\nи размера элементов"
-L.f1_settings_hudswitcher_button_layout_editor = "Редактор макета"
-L.f1_settings_hudswitcher_desc_hud_not_supported = "! ЭТОТ ИНТЕРФЕЙС НЕ ПОДДЕРЖИВАЕТ РЕДАКТОР ИНТЕРФЕЙСОВ !"
-
-L.f1_bind_reset_default = "Сбросить"
-L.f1_bind_disable_bind = "Очистить"
-L.f1_bind_description = "Нажмите сюда, а затем нажмите на желаемую клавишу."
-L.f1_bind_reset_default_description = "Восстановить клавишу по умолчанию."
-L.f1_bind_disable_description = "Удалить назначенную клавишу."
-
-L.f1_bind_weaponswitch = "Смена оружия"
-L.f1_bind_sprint = "Бег"
-
 L.ttt2_bindings_new = "Назначена новая клавиша для {name}: {key}"
-L.hud_default = "Интерфейс по умолчанию"
-L.hud_force = "Принудительно назначаемый интерфейс"
-L.hud_restricted = "Запрещённые интерфейсы"
+
 L.hud_default_failed = "Не удалось назначить {hudname} как интерфейс по умолчанию. У вас нет разрешения на это действие или интерфейс не существует."
 L.hud_forced_failed = "Не удалось назначить принудительный интерфейс {hudname}. У вас нет разрешения на это действие или интерфейс не существует."
 L.hud_restricted_failed = "Не удалось запретить интерфейс {hudname}. У вас нет разрешения на это действие."
@@ -1206,10 +1058,243 @@ L.shop_role_select = "Выберите роль"
 L.shop_role_selected = "Выбран магазин роли {roles}!"
 L.shop_search = "Поиск"
 
+L.spec_help = "Щёлкните мышью, чтобы наблюдать за игроками, или нажмите {usekey}, чтобы вселиться в предмет, на который вы смотрите."
+L.spec_help2 = "Чтобы покинуть режим наблюдения, откройте меню, нажав {helpkey}, перейдите в раздел «Игра» и уберите галочку с режима наблюдения."
+
+-- 2019-10-19
+L.drop_ammo_prevented = "Что-то не даёт вам выбросить боеприпасы."
+
+-- 2019-10-28
+L.target_c4 = "[{usekey}]: открыть меню C4."
+L.target_c4_armed = "[{usekey}]: обезвредить C4."
+L.target_c4_armed_defuser = "[{usekey}]: использовать Набор сапёра."
+L.target_c4_not_disarmable = "Нельзя обезвредить C4 живого напарника."
+L.c4_short_desc = "Кое-что крайне взрывоопасное."
+
+L.target_pickup = "[{usekey}]: подобрать."
+L.target_slot_info = "Слот: {slot}"
+L.target_pickup_weapon = "[{usekey}]: подобрать оружие."
+L.target_switch_weapon = "[{usekey}]: заменить текущее оружие на это."
+L.target_pickup_weapon_hidden = " [{usekey} + {walkkey}]: подобрать незаметно."
+L.target_switch_weapon_hidden = " [{usekey} + {walkkey}]: заменить незаметно."
+L.target_switch_weapon_nospace = "Нет свободного слота для этого оружия."
+L.target_switch_drop_weapon_info = "Из слота {slot} будет выброшен (-а) {name}."
+L.target_switch_drop_weapon_info_noslot = "В слоте {slot} нет выбрасываемого оружия."
+
+L.corpse_searched_by_detective = "Это тело осмотрено детективом."
+L.corpse_too_far_away = "Тело слишком далеко."
+
+L.radio_pickup_wrong_team = "Вы не можете подобрать Радио другой команды."
+L.radio_short_desc = "Звуки выстрелов для меня словно музыка"
+
+L.hstation_subtitle = "[{usekey}]: восстановить здоровье."
+L.hstation_charge = "Осталось заряда: {charge}."
+L.hstation_empty = "В Лечебной станции кончился заряд здоровья."
+L.hstation_maxhealth = "Вы полностью здоровы."
+L.hstation_short_desc = "Постепенно восстанавливает заряд со временем."
+
+-- 2019-11-03
+L.vis_short_desc = "Визуализирует сцену преступления, если жертва умерла от огнестрельного ранения."
+L.corpse_binoculars = "[{key}]: осмотреть тело через Бинокль."
+L.binoc_progress = "Прогресс осмотра: {progress}%"
+
+L.pickup_no_room = "Нет места для ношения предмета этого типа."
+
+-- 2020-01-07
+--L.tbut_help_admin = "Edit traitor button settings"
+--L.tbut_role_toggle = "[{walkkey} + {usekey}] to toggle this button for {role}"
+--L.tbut_role_config = "Role: {current}"
+--L.tbut_team_toggle = "[SHIFT + {walkkey} + {usekey}] to toggle this button for team {team}"
+--L.tbut_team_config = "Team: {current}"
+--L.tbut_current_config = "Current config:"
+--L.tbut_intended_config = "Intended config by map creator:"
+--L.tbut_admin_mode_only = "Only visible to you because you're an admin and '{cv}' is set to '1'"
+--L.tbut_allow = "Allow"
+--L.tbut_prohib = "Prohibit"
+--L.tbut_default = "Default"
+
+-- 2020-02-09
+--L.name_door = "Door"
+--L.door_open = "Press [{usekey}] to open door."
+--L.door_close = "Press [{usekey}] to close door."
+--L.door_locked = "This door is locked"
+
+-- 2020-02-11
+--L.automoved_to_spec = "(AUTOMATED MESSAGE) I have been moved to the Spectator team because I was idle/AFK."
+--L.mute_team = "{team} muted."
+
+-- 2020-02-16
+--L.door_auto_closes = "This door closes automatically"
+--L.door_open_touch = "Walk into door to open."
+--L.door_open_touch_and_use = "Walk into door or press [{usekey}] to open."
+--L.hud_health = "Health"
+
+-- 2020-03-09
+L.help_title = "Руководство и настройки"
+--L.menu_name = "MENU"
+
+--L.menu_changelog_title = "Changelog"
+--L.menu_guide_title = "TTT2 Guide"
+--L.menu_bindings_title = "Key Bindings"
+--L.menu_language_title = "Language"
+--L.menu_appearance_title = "Appearance"
+--L.menu_gameplay_title = "Gameplay"
+--L.menu_addons_title = "Addons"
+--L.menu_legacy_title = "Legacy Addons"
+--L.menu_administration_title = "Administration"
+--L.menu_equipment_title = "Edit Equipment"
+--L.menu_shops_title = "Edit Shops"
+
+--L.menu_changelog_description = "A list of changes and fixes in recent versions"
+--L.menu_guide_description = "Helps you to get started with TTT2 and explains some things about gameplay, roles and other stuff"
+--L.menu_bindings_description = "Bind specific features of TTT2 and its addons to your own liking"
+--L.menu_language_description = "Select the language of the game"
+--L.menu_appearance_description = "Tweak the appearance and performance of the UI"
+--L.menu_gameplay_description = "Avoid roles and tweak some features"
+--L.menu_addons_description = "Configure local addons to your liking"
+--L.menu_legacy_description = "A panel with converted tabs from original TTT, they should be ported over to the new system"
+--L.menu_administration_description = "General settings for HUDs, shops etc"
+--L.menu_equipment_description = "Set credits, limitations, avilability and other stuff"
+--L.menu_shops_description = "Add/Remove shops to roles and define the equipment in it"
+
+--L.submenu_guide_gameplay_title = "Gameplay"
+--L.submenu_guide_roles_title = "Roles"
+--L.submenu_guide_equipment_title = "Equipment"
+
+--L.submenu_bindings_bindings_title = "Bindings"
+
+--L.submenu_language_language_title = "Language"
+
+--L.submenu_appearance_general_title = "General"
+--L.submenu_appearance_hudswitcher_title = "HUD Switcher"
+--L.submenu_appearance_vskin_title = "VSkin"
+--L.submenu_appearance_targetid_title = "TargetID"
+--L.submenu_appearance_shop_title = "Shop Settings"
+--L.submenu_appearance_crosshair_title = "Crosshair"
+--L.submenu_appearance_dmgindicator_title = "Damage Indicator"
+--L.submenu_appearance_performance_title = "Performance"
+--L.submenu_appearance_interface_title = "Interface"
+--L.submenu_appearance_miscellaneous_title = "Misellaneous"
+
+--L.submenu_gameplay_general_title = "General"
+--L.submenu_gameplay_avoidroles_title = "Avoid Role Selection"
+
+--L.submenu_administration_hud_title = "HUD Settings"
+--L.submenu_administration_random_shop = "Random Shop"
+
+--L.help_color_desc = "If this setting is enabled, a global color can be chosen that will be used for the targetID outline and the crosshair."
+--L.help_scale_factor = "This scale factor influences all UI elements (HUD, vgui and targetID). It is automatically updated if the screen resolution is changed. Changing this value will reset the HUD!"
+--L.help_hud_game_reload = "The HUD is not available right now. The game has to be reloaded."
+--L.help_hud_special_settings = "These are specific settings of this HUD."
+--L.help_vskin_info = "VSkin (vgui skin) is the skin applied to all menu elements like the current one. Skins can be easily created with a simple lua script and can change colors and some size parameters."
+--L.help_targetid_info = "TargetID is the information rendered when focusing an entity. A fixed color can be set in the general settings panel."
+--L.help_hud_default_desc = "Set the default HUD for all players. Players that have not yet selected a HUD will receive this HUD as their default. This won't change the HUD of players that have already selected their HUD."
+--L.help_hud_forced_desc = "Force a HUD for all players. This disables the HUD selection feature for everyone."
+--L.help_hud_enabled_desc = "Enable/Disable HUDs to restrict the selection of these HUDs."
+--L.help_damage_indicator_desc = "The damage indicator is the overlay shown when the player is damaged. To add a new theme, place a png in 'materials/vgui/ttt/damageindicator/themes/'."
+L.help_shop_key_desc = "Открывать магазин нажатием клавиши магазина вместо результатов раунда в его конце/во время подготовки?"
+
+--L.label_menu_menu = "MENU"
+--L.label_menu_admin_spacer = "Admin Area (not shown to normal users)"
+L.label_language_set = "Выберите язык"
+--L.label_global_color_enable = "Enable global color"
+--L.label_global_color = "Global color"
+--L.label_global_scale_factor = "Global scale factor"
+--L.label_hud_select = "Select HUD"
+--L.label_vskin_select = "Select VSkin"
+--L.label_blur_enable = "Enable VSkin background blur"
+L.label_minimal_targetid = "Минималистичная информация о цели под прицелом (без текста о карме, подсказок и т.д.)."
+--L.label_shop_always_show = "Always show the shop"
+L.label_shop_num_col = "Количество столбцов"
+L.label_shop_num_row = "Количество строк"
+L.label_shop_item_size = "Размер иконок"
+L.label_shop_show_slot = "Отображать метку слота"
+L.label_shop_show_custom = "Отображать метку предмета сервера"
+L.label_shop_show_fav = "Отображать метку избранного предмета"
+--L.label_crosshair_enable = "Enable Crosshair"
+L.label_crosshair_gap_enable = "Включить пользовательский зазор прицела."
+L.label_crosshair_gap = "Пользовательский зазор"
+L.label_crosshair_opacity = "Непрозрачность прицела"
+L.label_crosshair_ironsight_opacity = "Непрозрачность прицела при прицеливании"
+L.label_crosshair_size = "Размер прицела"
+L.label_crosshair_thickness = "Толщина прицела"
+L.label_crosshair_thickness_outline = "Толщина обводки прицела"
+L.label_crosshair_static_enable = "Включить статичный прицел."
+L.label_crosshair_dot_enable = "Включить точку прицела."
+L.label_crosshair_scale_enable = "Включить разные размеры прицела для разного оружия."
+L.label_crosshair_ironsight_low_enabled = "Опускать оружие при прицеливании."
+--L.label_damage_indicator_enable = "Enable damage indicator"
+--L.label_damage_indicator_mode = "Select damage indicator theme"
+--L.label_damage_indicator_duration = "Seconds the damage indicator is visible after a hit"
+--L.label_damage_indicator_maxdamage = "Damage needed for the maximum opacity"
+--L.label_damage_indicator_maxalpha = "Damage Indicators maximum opacity"
+L.label_performance_halo_enable = "Отображать контуры вокруг некоторых энтити при наведении прицела."
+--L.label_performance_spec_outline_enable = "Enable controlled objects' outlines"
+--L.label_performance_ohicon_enable = "Enable overhead role icons"
+L.label_interface_tips_enable = "Показывать советы внизу экрана во время наблюдения."
+L.label_interface_popup = "Длительность всплывающего окна в начале раунда"
+L.label_interface_fastsw_menu = "Включить меню переключения оружия с быстрой сменой оружия."
+--L.label_inferface_wswitch_hide_enable = "Enable weapon switch menu auto-closing"
+L.label_inferface_scues_enable = "Проигрывать звуки начала и конца раунда."
+L.label_gameplay_specmode = "Режим наблюдения (всегда быть наблюдателем)."
+L.label_gameplay_fastsw = "Быстрая смена оружия."
+--L.label_gameplay_hold_aim = "Enable hold to aim"
+L.label_gameplay_mute = "Заглушать живых игроков после смерти."
+--L.label_gameplay_dtsprint_enable = "Enable double tap sprinting"
+--L.label_gameplay_dtsprint_anykey = "Continue double tap sprinting until you stop moving"
+L.label_hud_default = "Интерфейс по умолчанию"
+L.label_hud_force = "Принудительно назначаемый интерфейс"
+
+L.label_bind_weaponswitch = "Смена оружия"
+L.label_bind_sprint = "Бег"
+--L.label_bind_voice = "Global Voice Chat"
+--L.label_bind_voice_team = "Team Voice Chat"
+
+L.label_hud_basecolor = "Основной цвет"
+
+--L.header_bindings_ttt2 = "TTT2 Bindings"
+--L.header_bindings_other = "Other Bindings"
+L.header_language = "Настройки языка"
+--L.header_global_color = "Select Global Color"
+--L.header_hud_select = "Select a HUD"
+--L.header_hud_customize = "Customize the HUD"
+--L.header_vskin_select = "Select and Customize the VSkin"
+--L.header_targetid = "TargetID Settings"
+--L.header_shop_settings = "Equipment Shop Settings"
+L.header_shop_layout = "Макет списка предметов"
+L.header_shop_marker = "Настройки меток предметов"
+L.header_crosshair_settings = "Настройки прицела"
+--L.header_damage_indicator = "Damage Indicator Settings"
+--L.header_performance_settings = "Performance Settings"
+L.header_interface_settings = "Настройки интерфейса"
+L.header_gameplay_settings = "Настройки игры"
+--L.header_roleselection = "Enable Role Assignment"
+--L.header_hud_administration = "Select Default and Forced HUDs"
+--L.header_hud_enabled = "Enable/Disable HUDs"
+
+--L.button_menu_back = "back"
+--L.button_none = "None"
+--L.button_press_key = "Press a key"
 L.button_save = "Сохранить"
-
-L.disable_spectatorsoutline = "Выключить контуры контролируемых объектов."
-L.disable_spectatorsoutline_tip = "Выключает контуры объектов, в которые вселились наблюдатели (прибавка к производительности)."
-
+--L.button_reset = "Reset"
+--L.button_close = "Close"
 L.disable_overheadicons = "Выключить иконки ролей."
 L.disable_overheadicons_tip = "Выключает иконки ролей над головами игроков (прибавка к производительности)."
+
+-- 2020-04-20
+--L.item_speedrun = "Speedrun"
+--L.item_speedrun_desc = [[Makes you 50% faster!]]
+--L.item_no_explosion_damage = "No Explosion Damage"
+--L.item_no_explosion_damage_desc = [[Makes you immune to explosion damage.]]
+--L.item_no_fall_damage = "No Fall Damage"
+--L.item_no_fall_damage_desc = [[Makes you immune to fall damage.]]
+--L.item_no_fire_damage = "No Fire Damage"
+--L.item_no_fire_damage_desc = [[Makes you immune to fire damage.]]
+--L.item_no_hazard_damage = "No Hazard Damage"
+--L.item_no_hazard_damage_desc = [[Makes you immune to hazard damage such as posion, radiation and acid.]]
+--L.item_no_energy_damage = "No Energy Damage"
+--L.item_no_energy_damage_desc = [[Makes you immune to energy damage such as lasers, plasma and lightning.]]
+--L.item_no_prop_damage = "No Prop Damage"
+--L.item_no_prop_damage_desc = [[Makes you immune to prop damage.]]
+--L.item_no_drown_damage = "No Drowning Damage"
+--L.item_no_drown_damage_desc = [[Makes you immune to drowning damage.]]

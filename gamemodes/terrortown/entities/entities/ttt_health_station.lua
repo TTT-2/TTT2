@@ -198,7 +198,7 @@ else
 			(hstation_charge > 0) and DETECTIVE.ltcolor or COLOR_ORANGE
 		)
 
-		if client:Health() >= client:GetMaxHealth() then return end
+		if client:Health() < client:GetMaxHealth() then return end
 
 		tData:AddDescriptionLine(
 			TryT("hstation_maxhealth"),
