@@ -65,15 +65,14 @@ if SERVER then
 		ply.isSprinting = bool
 	end)
 else
-	-- The helptext can't be changed once the convar was created, so we go with english, since it is probably the most common lang
-	local doubletap_sprint_anykey = CreateClientConVar("ttt2_doubletap_sprint_anykey", 0, true, false, LANG.GetTranslationFromLanguage("doubletap_sprint_anykey", "english"), 0, 1)
-	local disable_doubletap_sprint = CreateClientConVar("ttt2_disable_doubletap_sprint", "0", true, false, LANG.GetTranslationFromLanguage("disable_doubletap_sprint", "english"), 0, 1)
+	local enable_doubletap_sprint = CreateConVar("ttt2_enable_doubletap_sprint", "1", {FCVAR_ARCHIVE})
+	local doubletap_sprint_anykey = CreateConVar("ttt2_doubletap_sprint_anykey", "1", {FCVAR_ARCHIVE})
 	local lastPress = 0
 	local lastPressedMoveKey = nil
 
 	function UpdateInputSprint(ply, key, pressed)
 		if pressed then
-			if ply.isSprinting or disable_doubletap_sprint:GetBool() or ply.preventSprint then return end
+			if ply.isSprinting or not enable_doubletap_sprint:GetBool() or ply.preventSprint then return end
 
 			local time = CurTime()
 
@@ -103,7 +102,7 @@ else
 	end,
 	function()
 		PlayerSprint(false)
-	end, "TTT2 Bindings", "f1_bind_sprint", KEY_LSHIFT)
+	end, "header_bindings_ttt2", "label_bind_sprint", KEY_LSHIFT)
 end
 
 function UpdateSprint()

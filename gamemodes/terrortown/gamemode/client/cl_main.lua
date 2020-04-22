@@ -31,6 +31,7 @@ ttt_include("sh_weaponry")
 ttt_include("sh_inventory")
 ttt_include("sh_door")
 ttt_include("sh_voice")
+ttt_include("sh_vskin")
 
 ttt_include("vgui__cl_coloredbox")
 ttt_include("vgui__cl_droleimage")
@@ -40,7 +41,27 @@ ttt_include("vgui__cl_simpleclickicon")
 ttt_include("vgui__cl_progressbar")
 ttt_include("vgui__cl_scrolllabel")
 
+ttt_include("cl_vskin__default_skin")
+ttt_include("cl_vskin__vgui__dframe")
+ttt_include("cl_vskin__vgui__dmenubutton")
+ttt_include("cl_vskin__vgui__dsubmenubutton")
+ttt_include("cl_vskin__vgui__dnavpanel")
+ttt_include("cl_vskin__vgui__dcontentpanel")
+ttt_include("cl_vskin__vgui__dbuttonpanel")
+ttt_include("cl_vskin__vgui__dcategoryheader")
+ttt_include("cl_vskin__vgui__dcategorycollapse")
+ttt_include("cl_vskin__vgui__dform")
+ttt_include("cl_vskin__vgui__dbutton")
+ttt_include("cl_vskin__vgui__dbinder")
+ttt_include("cl_vskin__vgui__dlabel")
+ttt_include("cl_vskin__vgui__dcombobox")
+ttt_include("cl_vskin__vgui__dcheckboxlabel")
+ttt_include("cl_vskin__vgui__dnumslider")
+ttt_include("cl_vskin__vgui__dbinderpanel")
+
 ttt_include("cl_network_sync")
+ttt_include("cl_hud_editor")
+ttt_include("cl_hud_manager")
 ttt_include("cl_karma")
 ttt_include("cl_tradio")
 ttt_include("cl_transfer")
@@ -51,6 +72,8 @@ ttt_include("cl_search")
 ttt_include("cl_tbuttons")
 ttt_include("cl_scoreboard")
 ttt_include("cl_tips")
+ttt_include("cl_help_data")
+ttt_include("cl_help__populate")
 ttt_include("cl_help")
 ttt_include("cl_msgstack")
 ttt_include("cl_eventpopup")
@@ -94,6 +117,15 @@ function GM:Initialize()
 	-- load addon language files
 	LANG.SetupFiles("lang/", true)
 
+	-- load skin files
+	vskin.SetupFiles("terrortown/gamemode/shared/vskins/")
+	vskin.SetupFiles("vskins/")
+
+	vskin.SelectVSkin()
+
+	-- initialize scale callbacks
+	appearance.RegisterScaleChangeCallback(HUDManager.ResetHUD)
+
 	LANG.Init()
 
 	self.BaseClass:Initialize()
@@ -113,7 +145,7 @@ end
 -- <a href="https://en.wikipedia.org/wiki/Potentially_visible_set">PVS</a>,
 -- the client will receive it as NULL entity.
 -- @hook
--- @realm server
+-- @realm shared
 -- @ref https://wiki.garrysmod.com/page/GM/InitPostEntity
 -- @local
 function GM:InitPostEntity()
@@ -199,6 +231,16 @@ function GM:InitPostEntity()
 
 	RunConsoleCommand("_ttt_request_serverlang")
 	RunConsoleCommand("_ttt_request_rolelist")
+end
+
+---
+-- Called when gamemode has been reloaded by auto refresh.
+-- @hook
+-- @realm shared
+-- @ref https://wiki.facepunch.com/gmod/GM:OnReloaded
+function GM:OnReloaded()
+	-- rebuild menues on game reload
+	vguihandler.Rebuild()
 end
 
 ---

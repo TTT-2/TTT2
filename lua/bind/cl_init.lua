@@ -14,7 +14,10 @@ local Registry = {}
 local FirstPressed = {}
 local WasPressed = {}
 local SettingsBindings = {}
-local SettingsBindingsCategories = { "TTT2 Bindings", "Other Bindings" }
+local SettingsBindingsCategories = {
+	"header_bindings_ttt2",
+	"header_bindings_other"
+}
 
 --
 --
@@ -82,7 +85,7 @@ end
 -- @internal
 local function TTT2BindCheckThink()
 	-- Make sure the user is currently not typing anything, to prevent unwanted execution of a binding.
-	if vgui.GetKeyboardFocus() ~= nil or LocalPlayer():IsTyping() or gui.IsConsoleVisible() or HELPSCRN.IsOpen() then return end
+	if vgui.GetKeyboardFocus() ~= nil or LocalPlayer():IsTyping() or gui.IsConsoleVisible() or vguihandler.IsOpen() then return end
 
 	for btn, tbl in pairs(Bindings) do
 		local cache = input.IsButtonDown(btn)
@@ -221,7 +224,7 @@ end
 -- @param number[optchain] defaultKey
 function bind.AddSettingsBinding(name, label, category, defaultKey)
 	if not category then
-		category = "Other Bindings"
+		category = "header_bindings_other"
 	end
 
 	if not table.HasValue(SettingsBindingsCategories, category) then

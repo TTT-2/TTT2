@@ -38,4 +38,4 @@ net.Receive("ttt2_switch_weapon_update_cache", function()
 end)
 
 -- register a binding for the weapon switch, the default should be the use key
-bind.Register("ttt2_weaponswitch", AttemptWeaponSwitch, nil, "TTT2 Bindings", "f1_bind_weaponswitch", input.GetKeyCode(input.LookupBinding("+use") or KEY_E))
+bind.Register("ttt2_weaponswitch", AttemptWeaponSwitch, nil, "header_bindings_ttt2", "label_bind_weaponswitch", input.GetKeyCode(input.LookupBinding("+use") or KEY_E))

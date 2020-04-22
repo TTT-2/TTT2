@@ -13,8 +13,8 @@ local table = table
 local IsValid = IsValid
 local hook = hook
 
-local disable_spectatorsoutline = CreateClientConVar("ttt2_disable_spectatorsoutline", "0", true, true)
-local disable_overheadicons = CreateClientConVar("ttt2_disable_overheadicons", "0", true, true)
+local enable_spectatorsoutline = CreateClientConVar("ttt2_enable_spectatorsoutline", "1", true, true)
+local enable_overheadicons = CreateClientConVar("ttt2_enable_overheadicons", "1", true, true)
 
 surface.CreateFont("TargetID_Key", {font = "Trebuchet24", size = 26, weight = 900})
 surface.CreateFont("TargetID_Title", {font = "Trebuchet24", size = 20, weight = 900})
@@ -43,6 +43,8 @@ local icon_tid_credits = Material("vgui/ttt/tid/tid_credits")
 local icon_tid_detective = Material("vgui/ttt/tid/tid_detective")
 local icon_tid_locked = Material("vgui/ttt/tid/tid_locked")
 local icon_tid_auto_close = Material("vgui/ttt/tid/tid_auto_close")
+local materialDoor = Material("vgui/ttt/tid/tid_big_door")
+local icon_tid_dna = Material("vgui/ttt/dnascanner/dna_hud")
 
 ---
 -- Returns the localized ClassHint table
@@ -133,7 +135,7 @@ function GM:PostDrawTranslucentRenderables(bDrawingDepth, bDrawingSkybox)
 	local client = LocalPlayer()
 	local plys = GetPlayers()
 
-	if client:Team() == TEAM_SPEC and not disable_spectatorsoutline:GetBool() then
+	if client:Team() == TEAM_SPEC and enable_spectatorsoutline:GetBool() then
 		cam.Start3D(EyePos(), EyeAngles())
 
 		for i = 1, #plys do
@@ -158,7 +160,7 @@ function GM:PostDrawTranslucentRenderables(bDrawingDepth, bDrawingSkybox)
 	end
 
 	-- OVERHEAD ICONS
-	if disable_overheadicons:GetBool() or not client:IsSpecial() then return end
+	if not enable_overheadicons:GetBool() or not client:IsSpecial() then return end
 
 	for i = 1, #plys do
 		local ply = plys[i]
@@ -309,6 +311,7 @@ function GM:HUDDrawTargetID()
 	HUDDrawTargetIDPlayers(tData)
 	HUDDrawTargetIDRagdolls(tData)
 	HUDDrawTargetIDDoors(tData)
+	HUDDrawTargetIDDNAScanner(tData)
 
 	-- now run a hook that can be used by addon devs that changes the appearance
 	-- of the targetid
@@ -316,7 +319,11 @@ function GM:HUDDrawTargetID()
 
 	-- draws an outline around the entity if defined
 	if params.drawOutline and cv_draw_halo:GetBool() then
-		outline.Add(data.ent, params.outlineColor, OUTLINE_MODE_VISIBLE)
+		outline.Add(
+			data.ent,
+			appearance.ChooseFocusColor(params.outlineColor),
+			OUTLINE_MODE_VISIBLE
+		)
 	end
 
 	if not params.drawInfo then return end
@@ -450,6 +457,28 @@ local key_params = {
 	walkkey = Key("+walk", "WALK")
 }
 
+-- handle looking with DNA Scanner
+function HUDDrawTargetIDDNAScanner(tData)
+	local client = LocalPlayer()
+	local ent = tData:GetEntity()
+
+	if not IsValid(client:GetActiveWeapon()) or client:GetActiveWeapon():GetClass() ~= "weapon_ttt_wtester"
+		or tData:GetEntityDistance() > 400 or not IsValid(ent) then return end
+
+	-- add an empty line if there's already data in the description area
+	if tData:GetAmountDescriptionLines() > 0 then
+		tData:AddDescriptionLine()
+	end
+
+	if ent:IsWeapon() or ent.CanHavePrints or ent:GetNWBool("HasPrints", false)
+		or ent:GetClass() == "prop_ragdoll" and CORPSE.GetPlayerNick(ent, false)
+	then
+		tData:AddDescriptionLine(TryT("dna_tid_possible"), COLOR_GREEN, {icon_tid_dna})
+	else
+		tData:AddDescriptionLine(TryT("dna_tid_impossible"), COLOR_RED, {icon_tid_dna})
+	end
+end
+
 -- handle looking at doors
 function HUDDrawTargetIDDoors(tData)
 	local client = LocalPlayer()
@@ -467,13 +496,17 @@ function HUDDrawTargetIDDoors(tData)
 
 	if ent:UseOpensDoor() and not ent:TouchOpensDoor() then
 		tData:SetSubtitle(ent:IsDoorOpen() and ParT("door_close", key_params) or ParT("door_open", key_params))
+		tData:SetKey(input.GetKeyCode(key_params.usekey))
 	elseif not ent:UseOpensDoor() and ent:TouchOpensDoor() then
 		tData:SetSubtitle(TryT("door_open_touch"))
+		tData:AddIcon(
+			materialDoor,
+			COLOR_LGRAY
+		)
 	else
 		tData:SetSubtitle(ParT("door_open_touch_and_use", key_params))
+		tData:SetKey(input.GetKeyCode(key_params.usekey))
 	end
-
-	tData:SetKey(input.GetKeyCode(key_params.usekey))
 
 	if ent:IsDoorLocked() then
 		tData:AddDescriptionLine(
@@ -481,9 +514,7 @@ function HUDDrawTargetIDDoors(tData)
 			COLOR_ORANGE,
 			{icon_tid_locked}
 		)
-	end
-
-	if ent:DoorAutoCloses() then
+	elseif ent:DoorAutoCloses() then
 		tData:AddDescriptionLine(
 			TryT("door_auto_closes"),
 			COLOR_SLATEGRAY,
@@ -781,6 +812,7 @@ function HUDDrawTargetIDRagdolls(tData)
 	local corpse_found = CORPSE.GetFound(ent, false) or not DetectiveMode()
 	local role_found = corpse_found and ent.search_result and ent.search_result.role
 	local binoculars_useable = IsValid(c_wep) and c_wep:GetClass() == "weapon_ttt_binoculars" or false
+	local role = roles.GetByIndex(role_found and ent.search_result.role or 1)
 
 	-- enable targetID rendering
 	tData:EnableText()
@@ -790,7 +822,7 @@ function HUDDrawTargetIDRagdolls(tData)
 	-- add title and subtitle to the focused ent
 	tData:SetTitle(
 		corpse_found and CORPSE.GetPlayerNick(ent, "A Terrorist") or TryT("target_unid"),
-		COLOR_YELLOW
+		role_found and COLOR_WHITE or COLOR_YELLOW
 	)
 
 	if tData:GetEntityDistance() <= 100 then
@@ -803,8 +835,8 @@ function HUDDrawTargetIDRagdolls(tData)
 
 	-- add icon to the element
 	tData:AddIcon(
-		role_found and roles.GetByIndex(ent.search_result.role).iconMaterial or icon_corpse,
-		COLOR_YELLOW
+		role_found and role.iconMaterial or icon_corpse,
+		role_found and role.color or COLOR_YELLOW
 	)
 
 	-- add hints to the corpse

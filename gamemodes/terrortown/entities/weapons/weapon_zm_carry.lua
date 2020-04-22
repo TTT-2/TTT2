@@ -4,6 +4,17 @@ end
 
 DEFINE_BASECLASS "weapon_tttbase"
 
+local player = player
+local IsValid = IsValid
+local CurTime = CurTime
+
+-- not customizable via convars as some objects rely on not being carryable for
+-- gameplay purposes
+CARRY_WEIGHT_LIMIT = 45
+
+local PIN_RAG_RANGE = 90
+local color_cached = Color(50, 250, 50, 240)
+
 SWEP.HoldType = "pistol"
 
 if CLIENT then
@@ -75,44 +86,34 @@ if SERVER then
 		SetGlobalInt(wep_range:GetName(), wep_range:GetInt())
 	end)
 
-	cvars.AddChangeCallback(allow_rag:GetName(), function(name, old, new)
-		SetGlobalBool(allow_rag:GetName(), tonumber(new) == 1)
+	cvars.AddChangeCallback(allow_rag:GetName(), function(name, _, new)
+		SetGlobalBool(name, tonumber(new) == 1)
 	end, allow_rag:GetName())
 
-	cvars.AddChangeCallback(prop_force:GetName(), function(name, old, new)
-		SetGlobalInt(prop_force:GetName(), tonumber(new))
+	cvars.AddChangeCallback(prop_force:GetName(), function(name, _, new)
+		SetGlobalInt(name, tonumber(new))
 	end, prop_force:GetName())
 
-	cvars.AddChangeCallback(no_throw:GetName(), function(name, old, new)
-		SetGlobalBool(no_throw:GetName(), tonumber(new) == 1)
+	cvars.AddChangeCallback(no_throw:GetName(), function(name, _, new)
+		SetGlobalBool(name, tonumber(new) == 1)
 	end, no_throw:GetName())
 
-	cvars.AddChangeCallback(pin_rag:GetName(), function(name, old, new)
-		SetGlobalBool(pin_rag:GetName(), tonumber(new) == 1)
+	cvars.AddChangeCallback(pin_rag:GetName(), function(name, _, new)
+		SetGlobalBool(name, tonumber(new) == 1)
 	end, pin_rag:GetName())
 
-	cvars.AddChangeCallback(pin_rag_inno:GetName(), function(name, old, new)
-		SetGlobalBool(pin_rag_inno:GetName(), tonumber(new) == 1)
+	cvars.AddChangeCallback(pin_rag_inno:GetName(), function(name, _, new)
+		SetGlobalBool(name, tonumber(new) == 1)
 	end, pin_rag_inno:GetName())
 
-	cvars.AddChangeCallback(allow_wep:GetName(), function(name, old, new)
-		SetGlobalBool(allow_wep:GetName(), tonumber(new) == 1)
+	cvars.AddChangeCallback(allow_wep:GetName(), function(name, _, new)
+		SetGlobalBool(name, tonumber(new) == 1)
 	end, allow_wep:GetName())
 
-	cvars.AddChangeCallback(wep_range:GetName(), function(name, old, new)
-		SetGlobalInt(wep_range:GetName(), tonumber(new))
+	cvars.AddChangeCallback(wep_range:GetName(), function(name, _, new)
+		SetGlobalInt(name, tonumber(new))
 	end, wep_range:GetName())
 end
-
--- not customizable via convars as some objects rely on not being carryable for
--- gameplay purposes
-CARRY_WEIGHT_LIMIT = 45
-
-local PIN_RAG_RANGE = 90
-
-local player = player
-local IsValid = IsValid
-local CurTime = CurTime
 
 local function SetSubPhysMotionEnabled(ent, enable)
 	if not IsValid(ent) then return end
@@ -255,7 +256,7 @@ if SERVER then
 
 		local owner = self:GetOwner()
 
-		self.CarryHack:SetPos(owner:EyePos() + owner:GetAimVector() * 100)
+		self.CarryHack:SetPos(owner:EyePos() + owner:GetAimVector() * 70)
 		self.CarryHack:SetAngles(owner:GetAngles())
 
 		self.EntHolding:PhysWake()
@@ -309,13 +310,13 @@ function SWEP:AllowPickup(target)
 	local ply = self:GetOwner()
 
 	return IsValid(phys) and IsValid(ply)
-	and not phys:HasGameFlag(FVPHYSICS_NO_PLAYER_PICKUP)
-	and phys:GetMass() < CARRY_WEIGHT_LIMIT
-	and not PlayerStandsOn(target)
-	and target.CanPickup ~= false
-	and (target:GetClass() ~= "prop_ragdoll" or GetGlobalBool("ttt_ragdoll_carrying"))
-	and (not target:IsWeapon() or GetGlobalBool("ttt_weapon_carrying"))
-	and not hook.Run("TTT2PlayerPreventPickupEnt", ply, target)
+		and not phys:HasGameFlag(FVPHYSICS_NO_PLAYER_PICKUP)
+		and phys:GetMass() < CARRY_WEIGHT_LIMIT
+		and not PlayerStandsOn(target)
+		and target.CanPickup ~= false
+		and (target:GetClass() ~= "prop_ragdoll" or GetGlobalBool("ttt_ragdoll_carrying"))
+		and (not target:IsWeapon() or GetGlobalBool("ttt_weapon_carrying"))
+		and not hook.Run("TTT2PlayerPreventPickupEnt", ply, target)
 end
 
 function SWEP:DoAttack(pickup)
@@ -345,7 +346,6 @@ function SWEP:DoAttack(pickup)
 	local trEnt = trace.Entity
 
 	if IsValid(trEnt) then
-		local ent = trEnt
 		local phys = trEnt:GetPhysicsObject()
 
 		if not IsValid(phys) or not phys:IsMoveable() or phys:HasGameFlag(FVPHYSICS_PLAYER_HELD) then return end
@@ -354,13 +354,13 @@ function SWEP:DoAttack(pickup)
 		if CLIENT then return end
 
 		if pickup then
-			if (ply:EyePos() - trace.HitPos):Length() < self:GetRange(ent) then
-				if self:AllowPickup(ent) then
+			if (ply:EyePos() - trace.HitPos):Length() < self:GetRange(trEnt) then
+				if self:AllowPickup(trEnt) then
 					self:Pickup()
 					self:SendWeaponAnim(ACT_VM_HITCENTER)
 
 					-- make the refire slower to avoid immediately dropping
-					local delay = (ent:GetClass() == "prop_ragdoll") and 0.8 or 0.5
+					local delay = (trEnt:GetClass() == "prop_ragdoll") and 0.8 or 0.5
 
 					self:SetNextSecondaryFire(CurTime() + delay)
 
@@ -369,12 +369,11 @@ function SWEP:DoAttack(pickup)
 					local is_ragdoll = trEnt:GetClass() == "prop_ragdoll"
 
 					-- pull heavy stuff
-					local ent2 = trEnt
-					local phys2 = ent2:GetPhysicsObject()
+					local phys2 = trEnt:GetPhysicsObject()
 					local pdir = trace.Normal * -1
 
 					if is_ragdoll then
-						phys2 = ent2:GetPhysicsObjectNum(trace.PhysicsBone)
+						phys2 = trEnt:GetPhysicsObjectNum(trace.PhysicsBone)
 						-- increase refire to make rags easier to drag
 						--self.Weapon:SetNextSecondaryFire(CurTime() + 0.04)
 					end
@@ -401,8 +400,6 @@ function SWEP:DoAttack(pickup)
 		end
 	end
 end
-
-local color_cached = Color(50, 250, 50, 240)
 
 -- Perform a pickup
 function SWEP:Pickup()

@@ -34,19 +34,9 @@ function HUD:GetSavingKeys()
 		savingKeys = BaseClass.GetSavingKeys(self)
 		savingKeys.basecolor = {
 			typ = "color",
-			desc = LANG.GetTranslation("f1_settings_hudswitcher_desc_basecolor"),
+			desc = "label_hud_basecolor",
 			OnChange = function(slf, col)
 				slf:PerformLayout()
-				slf:SaveData()
-			end
-		}
-		savingKeys.scale = {
-			typ = "number",
-			desc = LANG.GetTranslation("f1_settings_hudswitcher_desc_hud_scale"),
-			OnChange = function(slf, val)
-				slf.scale = val
-
-				slf:Reset()
 				slf:SaveData()
 			end
 		}
@@ -65,6 +55,7 @@ function HUD:LoadData()
 	BaseClass.LoadData(self)
 
 	local elems = self:GetElements()
+	local scale = appearance.GetGlobalScale()
 
 	for i = 1, #elems do
 		local elemName = elems[i]
@@ -74,7 +65,7 @@ function HUD:LoadData()
 
 		local min_size = elem:GetDefaults().minsize
 
-		elem:SetMinSize(min_size.w * self.scale, min_size.h * self.scale)
+		elem:SetMinSize(min_size.w * scale, min_size.h * scale)
 		elem:PerformLayout()
 	end
 end
@@ -117,5 +108,5 @@ function HUD:Reset()
 
 	BaseClass.Reset(self)
 
-	self:ApplyScale(self.scale)
+	self:ApplyScale(appearance.GetGlobalScale())
 end

@@ -90,7 +90,7 @@ end
 -- The meta data is used to describe the type of the table entry (the data).
 --
 -- A valid metadata table should provide at least the type field, which is a string with one of the
--- following values: ["string", "int", "bool", "float"]. For the "int" type there is also the "unsigned"
+-- following values: ["string", "int", "bool", "float", "table"]. For the "int" type there is also the "unsigned"
 -- field, which can be set to true. There is also the "bits" field, which can be used to synchronize data more efficiently
 -- as this will only impact the transport/synchronization of the data and describe how many bits are needed to sync this number.
 -- This can also be used to remove an entry, by passing nil as the metadata.
@@ -177,6 +177,9 @@ end
 -- This will automatically synchronize the new data to the clients.
 -- When the additional client parameter is set, the data will be saved as an override for that specific client/entity.
 -- This will also take care of syncing the value to all registered NWVars, if the path leads to a player specific key.
+--
+-- @note This will only update / synchronize the new value, if the value is not the same as the old one!
+-- @note For data of the type "table", you will have to create a new table object (eg. with table.copy) to tell the system that this is different and has to be synced. Also changing the table, will not automatically resynchronize it with the clients, you have to also use this function again to "set" it.
 --
 -- @param any|table path The path to set the data for
 -- @param table|nil meta The metadata for the path (or empty to use an existing metadata entry)
@@ -724,6 +727,7 @@ end
 -- This is used to write a value to the current network message,
 -- based on the given metadata.
 -- @note Nil values are preserved and can be "sent".
+-- @note When using the type "table", the table will be converted to a string with the "pon" library and you have to beware of the maximum net message size, so you are limited in the maximum table size, that can be sent.
 --
 -- @param table metadata The metadata for the given value
 -- @param any|nil val The value to send, can also be nil
@@ -746,6 +750,8 @@ function TTT2NET:NetWriteData(metadata, val)
 		net.WriteBool(val)
 	elseif metadata.type == "float" then
 		net.WriteFloat(val)
+	elseif metadata.type == "table" then
+		net.WriteString(pon.encode(val))
 	else
 		net.WriteString(val)
 	end
@@ -763,6 +769,7 @@ end
 -- @note You cannot use the unsigned, as NWVars do not have a function for unsigned integers.
 -- @note When a client sets the NWVar locally, this will not be reflected in the data table!
 -- @note This will always sync the default value for the path, and ignore any overrides for specific clients, as NWVars cannot be set for each client.
+-- @note The metadata type "table" is not supported, and should not be used with this function.
 --
 -- @param any|table path The path to sync the nwvar with
 -- @param table|nil meta The metadata
