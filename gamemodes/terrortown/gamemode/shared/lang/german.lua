@@ -1258,3 +1258,21 @@ L.door_auto_closes = "Diese Tür schließt automatisch"
 L.door_open_touch = "Laufe gegen die Tür um sie zu öffnen."
 L.door_open_touch_and_use = "Laufe gegen die Tür oder drücke [{usekey}] um Tür zu öffnen."
 L.hud_health = "Leben"
+
+-- 2020-04-20
+L.item_speedrun = "Schnelllauf"
+L.item_speedrun_desc = [[Macht dich 50% schneller!]]
+L.item_no_explosion_damage = "Kein Explosionsschaden"
+L.item_no_explosion_damage_desc = [[Macht dich immun für Explosionsschaden.]]
+L.item_no_fall_damage = "Kein Fallschaden"
+L.item_no_fall_damage_desc = [[Macht dich immun für Fallschaden.]]
+L.item_no_fire_damage = "Kein Feuerschaden"
+L.item_no_fire_damage_desc = [[Macht dich immun für Deuerschaden.]]
+L.item_no_hazard_damage = "Kein Gefahrgutschaden"
+L.item_no_hazard_damage_desc = [[Macht dich immunn für Gefahrgutschaden, wie Gift, Strahlung und Säure.]]
+L.item_no_energy_damage = "Kein Energieschaden"
+L.item_no_energy_damage_desc = [[Macht dich immun für Energieschaden, wie Laser, Plasma und Blitze.]]
+L.item_no_prop_damage = "Kein Objektschaden"
+L.item_no_prop_damage_desc = [[Macht dich immun fpr Objektschaden.]]
+L.item_no_drown_damage = "Kein Ertrinkungsschaden"
+L.item_no_drown_damage_desc = [[Macht dich immun für Ertrinkungsschaden.]]

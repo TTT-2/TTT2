@@ -6,6 +6,8 @@ local hook = hook
 local team = team
 local UpdateSprint = UpdateSprint
 
+local MAX_DROWN_TIME = 8
+
 ---
 -- Initializes TTT2
 -- @hook
@@ -167,10 +169,15 @@ function GM:Tick()
 					ply:Extinguish()
 				end
 
-				local drowningTime = ply.drowningTime or 8
+				local drowningTime = ply.drowningTime or MAX_DROWN_TIME
 
 				if ply.drowning then
-					ply.drowningProgress = math.max(0, (ply.drowning - CurTime()) * (1 / drowningTime))
+					if ply:HasEquipmentItem("item_ttt_nodrowningdmg") then
+						ply.drowningProgress = MAX_DROWN_TIME
+						ply.drowning = CurTime() + MAX_DROWN_TIME
+					else
+						ply.drowningProgress = math.max(0, (ply.drowning - CurTime()) * (1 / drowningTime))
+					end
 
 					if SERVER and ply.drowning < CurTime() then
 						local dmginfo = DamageInfo()

@@ -48,7 +48,15 @@ SPECIAL_EQUIPMENT = {
 	"weapon_ttt_cse",
 	"weapon_ttt_teleport",
 	"item_ttt_armor",
-	"item_ttt_radar"
+	"item_ttt_radar",
+	"item_ttt_nodrowningdmg",
+	"item_ttt_noenergydmg",
+	"item_ttt_noexplosiondmg",
+	"item_ttt_nofalldmg",
+	"item_ttt_nofiredmg",
+	"item_ttt_nohazarddmg",
+	"item_ttt_nopropdmg",
+	"item_ttt_speedrun"
 }
 
 TRAITOR_EQUIPMENT = {
