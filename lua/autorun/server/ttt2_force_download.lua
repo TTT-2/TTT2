@@ -112,7 +112,8 @@ resource.AddFile("materials/vgui/ttt/dmgindicator/themes/vanilla.png")
 -- target ID icons
 resource.AddFile("materials/vgui/ttt/tid/tid_big_role_not_known.vmt")
 resource.AddFile("materials/vgui/ttt/tid/tid_big_corpse.vmt")
-resource.AddFile("materials/vgui/ttt/tidd/tid_big_tbutton_pointer.vmt")
+resource.AddFile("materials/vgui/ttt/tid/tid_big_tbutton_pointer.vmt")
+resource.AddFile("materials/vgui/ttt/tid/tid_big_door.vmt")
 
 -- target ID inline icons
 resource.AddFile("materials/vgui/ttt/tid/tid_credits.vmt")

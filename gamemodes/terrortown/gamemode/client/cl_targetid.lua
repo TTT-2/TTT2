@@ -43,6 +43,7 @@ local icon_tid_credits = Material("vgui/ttt/tid/tid_credits")
 local icon_tid_detective = Material("vgui/ttt/tid/tid_detective")
 local icon_tid_locked = Material("vgui/ttt/tid/tid_locked")
 local icon_tid_auto_close = Material("vgui/ttt/tid/tid_auto_close")
+local materialDoor = Material("vgui/ttt/tid/tid_big_door")
 local icon_tid_dna = Material("vgui/ttt/dnascanner/dna_hud")
 
 ---
@@ -491,13 +492,17 @@ function HUDDrawTargetIDDoors(tData)
 
 	if ent:UseOpensDoor() and not ent:TouchOpensDoor() then
 		tData:SetSubtitle(ent:IsDoorOpen() and ParT("door_close", key_params) or ParT("door_open", key_params))
+		tData:SetKey(input.GetKeyCode(key_params.usekey))
 	elseif not ent:UseOpensDoor() and ent:TouchOpensDoor() then
 		tData:SetSubtitle(TryT("door_open_touch"))
+		tData:AddIcon(
+			materialDoor,
+			COLOR_LGRAY
+		)
 	else
 		tData:SetSubtitle(ParT("door_open_touch_and_use", key_params))
+		tData:SetKey(input.GetKeyCode(key_params.usekey))
 	end
-
-	tData:SetKey(input.GetKeyCode(key_params.usekey))
 
 	if ent:IsDoorLocked() then
 		tData:AddDescriptionLine(
@@ -505,9 +510,7 @@ function HUDDrawTargetIDDoors(tData)
 			COLOR_ORANGE,
 			{icon_tid_locked}
 		)
-	end
-
-	if ent:DoorAutoCloses() then
+	elseif ent:DoorAutoCloses() then
 		tData:AddDescriptionLine(
 			TryT("door_auto_closes"),
 			COLOR_SLATEGRAY,
@@ -805,6 +808,7 @@ function HUDDrawTargetIDRagdolls(tData)
 	local corpse_found = CORPSE.GetFound(ent, false) or not DetectiveMode()
 	local role_found = corpse_found and ent.search_result and ent.search_result.role
 	local binoculars_useable = IsValid(c_wep) and c_wep:GetClass() == "weapon_ttt_binoculars" or false
+	local role = roles.GetByIndex(role_found and ent.search_result.role or 1)
 
 	-- enable targetID rendering
 	tData:EnableText()
@@ -814,7 +818,7 @@ function HUDDrawTargetIDRagdolls(tData)
 	-- add title and subtitle to the focused ent
 	tData:SetTitle(
 		corpse_found and CORPSE.GetPlayerNick(ent, "A Terrorist") or TryT("target_unid"),
-		COLOR_YELLOW
+		role_found and COLOR_WHITE or COLOR_YELLOW
 	)
 
 	if tData:GetEntityDistance() <= 100 then
@@ -827,8 +831,8 @@ function HUDDrawTargetIDRagdolls(tData)
 
 	-- add icon to the element
 	tData:AddIcon(
-		role_found and roles.GetByIndex(ent.search_result.role).iconMaterial or icon_corpse,
-		COLOR_YELLOW
+		role_found and role.iconMaterial or icon_corpse,
+		role_found and role.color or COLOR_YELLOW
 	)
 
 	-- add hints to the corpse
