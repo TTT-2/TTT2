@@ -143,36 +143,38 @@ local function SortFunc(rowa, rowb)
 		return false
 	end
 
-	if not IsValid(plyb) then
-		return true
+	if IsValid(plyb) then
+		local sort_mode = cv_ttt_scoreboard_sorting:GetString()
+		local sort_func = _G.sboard_sort[sort_mode]
+
+		local comp
+
+		if isfunction(sort_func) then
+			comp = sort_func(plya, plyb)
+		end
+
+		if comp == nil then
+			comp = 0
+		end
+
+		local ret
+
+		if comp ~= 0 then
+			ret = comp > 0
+		else
+			ret = strlower(plya:Nick()) > strlower(plyb:Nick())
+		end
+
+		if cv_ttt_scoreboard_ascending:GetBool() then
+			ret = not ret
+		end
+
+		if not ret then
+			return false
+		end
 	end
 
-	local sort_mode = cv_ttt_scoreboard_sorting:GetString()
-	local sort_func = _G.sboard_sort[sort_mode]
-
-	local comp
-
-	if isfunction(sort_func) then
-		comp = sort_func(plya, plyb)
-	end
-
-	if comp == nil then
-		comp = 0
-	end
-
-	local ret
-
-	if comp ~= 0 then
-		ret = comp > 0
-	else
-		ret = strlower(plya:GetName()) > strlower(plyb:GetName())
-	end
-
-	if cv_ttt_scoreboard_ascending:GetBool() then
-		ret = not ret
-	end
-
-	return ret
+	return true
 end
 
 function PANEL:UpdateSortCache()
