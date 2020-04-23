@@ -1,11 +1,5 @@
 local materialIcon = Material("vgui/ttt/vskin/helpscreen/shops")
 
----
--- Function to populate main menu
--- @param table helpData The main menu data object
--- @param string id The unique id of this menu element
--- @internal
--- @realm client
 HELPSCRN.populate["ttt2_shops"] = function(helpData, id)
 	local shopData = helpData:RegisterSubMenu(id)
 
@@ -16,12 +10,6 @@ HELPSCRN.populate["ttt2_shops"] = function(helpData, id)
 	shopData:AdminOnly(true)
 end
 
----
--- Function to populate sub menu
--- @param table helpData The sub menu data object
--- @param string id The unique id of this menu element
--- @internal
--- @realm client
 HELPSCRN.subPopulate["ttt2_shops"] = function(helpData, id)
 	-- IDEA: SubMenues: Roles
 	-- each role has a form with a dropdown menu to select

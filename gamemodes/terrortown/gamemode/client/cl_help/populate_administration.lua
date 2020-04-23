@@ -80,12 +80,6 @@ local function PopulateRandomShopPanel(parent)
 
 end
 
----
--- Function to populate main menu
--- @param table helpData The main menu data object
--- @param string id The unique id of this menu element
--- @internal
--- @realm client
 HELPSCRN.populate["ttt2_administration"] = function(helpData, id)
 	local administrationData = helpData:RegisterSubMenu(id)
 
@@ -96,12 +90,6 @@ HELPSCRN.populate["ttt2_administration"] = function(helpData, id)
 	administrationData:AdminOnly(true)
 end
 
----
--- Function to populate sub menu
--- @param table helpData The sub menu data object
--- @param string id The unique id of this menu element
--- @internal
--- @realm client
 HELPSCRN.subPopulate["ttt2_administration"] = function(helpData, id)
 	local hudData = helpData:PopulateSubMenu(id .. "_hud")
 

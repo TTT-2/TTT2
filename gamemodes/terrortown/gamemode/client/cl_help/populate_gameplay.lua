@@ -56,12 +56,6 @@ local function PopulateRolesPanel(parent)
 	form:Dock(TOP)
 end
 
----
--- Function to populate main menu
--- @param table helpData The main menu data object
--- @param string id The unique id of this menu element
--- @internal
--- @realm client
 HELPSCRN.populate["ttt2_gameplay"] = function(helpData, id)
 	local bindingsData = helpData:RegisterSubMenu(id)
 
@@ -70,12 +64,6 @@ HELPSCRN.populate["ttt2_gameplay"] = function(helpData, id)
 	bindingsData:SetIcon(materialIcon)
 end
 
----
--- Function to populate sub menu
--- @param table helpData The sub menu data object
--- @param string id The unique id of this menu element
--- @internal
--- @realm client
 HELPSCRN.subPopulate["ttt2_gameplay"] = function(helpData, id)
 	local generalData = helpData:PopulateSubMenu(id .. "_general")
 
