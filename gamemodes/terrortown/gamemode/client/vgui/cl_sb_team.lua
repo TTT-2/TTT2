@@ -150,25 +150,39 @@ local function SortFunc(rowa, rowb)
 	local sort_mode = cv_ttt_scoreboard_sorting:GetString()
 	local sort_func = _G.sboard_sort[sort_mode]
 
-	local comp = 0
+	local comp
 
 	if isfunction(sort_func) then
-		comp = sort_func(plya, plyb) or comp
+		comp = sort_func(plya, plyb)
 	end
 
-	local ret = comp ~= 0 and comp > 0 or strlower(plya:GetName()) > strlower(plyb:GetName())
+	if comp == nil then
+		comp = 0
+	end
 
-	return cv_ttt_scoreboard_ascending:GetBool() and not ret or ret
+	local ret
+
+	if comp ~= 0 then
+		ret = comp > 0
+	else
+		ret = strlower(plya:GetName()) > strlower(plyb:GetName())
+	end
+
+	if cv_ttt_scoreboard_ascending:GetBool() then
+		ret = not ret
+	end
+
+	return ret
 end
 
 function PANEL:UpdateSortCache()
 	self.rows_sorted = {}
 
-	if table.Count(self.rows) < 1 then return end
-
 	for _, row in pairs(self.rows) do
 		self.rows_sorted[#self.rows_sorted + 1] = row
 	end
+
+	if #self.rows_sorted < 2 then return end
 
 	table.sort(self.rows_sorted, SortFunc)
 end
