@@ -63,7 +63,7 @@ function draw.OutlinedShadowedBox(x, y, w, h, t, color)
 end
 
 ---
--- A function to draws a simple box without a radius
+-- A function to draw a simple box without a radius
 -- @param number x The x position to start the box
 -- @param number y The y position to start the box
 -- @param number w The width of the box
@@ -77,7 +77,7 @@ function draw.Box(x, y, w, h, color)
 end
 
 ---
--- A function to draws a circle outline
+-- A function to draw a circle outline
 -- @param number x The center x position to start the circle
 -- @param number y The center y position to start the circle
 -- @param number r The radius of the circle

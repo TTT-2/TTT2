@@ -256,8 +256,7 @@ function util.GetDefaultColor(color)
 end
 
 ---
--- Returns a changed which is just a lightened or darkened color based
--- on the sourcecolor
+-- Returns the darkened or lightened color by the specified value
 -- @param Color color The original color
 -- @param number value The amount to change
 -- @return Color The color based on the original color

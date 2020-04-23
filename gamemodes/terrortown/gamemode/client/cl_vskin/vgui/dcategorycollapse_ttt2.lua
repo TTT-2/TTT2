@@ -1,5 +1,3 @@
-
-
 local PANEL = {}
 
 AccessorFunc(PANEL, "m_bSizeExpanded", "Expanded", FORCE_BOOL)

@@ -113,7 +113,7 @@ function appearance.GetFocusColor()
 end
 
 ---
--- Sets if the global focus color or the dyanmic color should
+-- Sets if the global focus color or the dyanamic color should
 -- be used
 -- @param boolean state The new use state
 -- @realm client
@@ -130,7 +130,7 @@ function appearance.ShouldUseGlobalFocusColor()
 end
 
 ---
--- Helper function that returnes the correct color based on the
+-- Helper function that returns the correct color based on the
 -- current global color settings
 -- @param Color The color to validate
 -- @return Color The validated color
