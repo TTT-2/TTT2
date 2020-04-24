@@ -34,17 +34,8 @@ function EPOP:AddMessage(title, subtitle, displayTime, iconTable, blocking)
 
 	local queueSize = #self.messageQueue
 
-	print(queueSize > 0)
-	if self.messageQueue[queueSize] then
-		print(self.messageQueue[queueSize].blocking)
-	else
-		print("no previous entry")
-	end
-
 	-- delete previous message if it is nonblocking
 	if queueSize > 0 and not self.messageQueue[queueSize].blocking then
-		print("removing blocking message")
-
 		table.remove(self.messageQueue, queueSize)
 
 		queueSize = queueSize - 1
@@ -83,6 +74,8 @@ function EPOP:ActivateMessage()
 	timer.Create(TIMER_IDENTIFIER, elem.displayTime, 1, function()
 		EPOP:RemoveMessageByIndex(1)
 	end)
+
+	print("[TTT2] " .. elem.title.text .. " // " .. elem.subtitle.text or "")
 end
 
 ---
@@ -102,6 +95,10 @@ function EPOP:GetMessage()
 	return self.messageQueue[1] or table.Copy(defaultMessage)
 end
 
+---
+-- Removes a message from the stack by a numeric index
+-- @param number index The nimeric index
+-- @realm client
 function EPOP:RemoveMessageByIndex(index)
 	table.remove(self.messageQueue, index)
 
