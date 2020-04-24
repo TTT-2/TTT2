@@ -5,6 +5,17 @@
 
 local TIMER_IDENTIFIER = "epop_removal_timer"
 
+local defaultMessage = {
+	title = {
+		text = "A Test Popup, now with a multiline title, how NICE."
+	},
+	text = {
+		text = "Well, hello there! This is a fancy popup with some special information. The text can be also multiline, how fancy! Ugh, I could add so much more text if I'd had any ideas..."
+	},
+	iconTable = {},
+	time = CurTime() + 5
+}
+
 EPOP = EPOP or {}
 
 EPOP.messageQueue = EPOP.messageQueue or {}
@@ -57,6 +68,10 @@ function EPOP:AddMessage(title, subtitle, displayTime, iconTable, blocking)
 	return id
 end
 
+---
+-- Activates a new message by setting up all internal values
+-- @internal
+-- @realm client
 function EPOP:ActivateMessage()
 	if #self.messageQueue == 0 then return end
 
@@ -78,8 +93,13 @@ function EPOP:ShouldRender()
 	return #self.messageQueue > 0
 end
 
+---
+-- Returns the neweset message in the queue that should be rendered right now.
+-- If there is no message in the queue, a template message is returned.
+-- @return table The message table
+-- @realm client
 function EPOP:GetMessage()
-	return self.messageQueue[1]
+	return self.messageQueue[1] or defaultMessage
 end
 
 function EPOP:RemoveMessageByIndex(index)
@@ -123,6 +143,9 @@ function EPOP:RemoveMessage(id)
 	return false
 end
 
+---
+-- Clears the whole message queue
+-- @realm client
 function EPOP:Clear()
 	self.messageQueue = {}
 
