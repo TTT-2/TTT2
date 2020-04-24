@@ -40,9 +40,7 @@ if CLIENT then
 	end
 
 	function HUDELEMENT:ShouldDraw()
-		local client = LocalPlayer()
-
-		return HUDEditor.IsEditing or client:Alive() and EPOP:ShouldRender()
+		return HUDEditor.IsEditing or EPOP:ShouldRender()
 	end
 
 	function HUDELEMENT:PerformLayout()
@@ -67,10 +65,10 @@ if CLIENT then
 		local pad2 = 2 * self.pad
 
 		-- wrap title if needed
-		item.title_wrapped, width_title, height_title = draw.GetWrappedText(item.title.text, size.w - pad2, titlefont, self.scale)
+		item.wrappedTitle, width_title, height_title = draw.GetWrappedText(item.title.text, size.w - pad2, titlefont, self.scale)
 
 		-- wrap text if needed
-		item.text_wrapped, width_text, height_text = draw.GetWrappedText(item.text.text, size.w - pad2, textfont, self.scale)
+		item.wrappedSubtitle, width_text, height_text = draw.GetWrappedText(item.subtitle.text, size.w - pad2, textfont, self.scale)
 
 		item.size = {}
 		item.size.w = ((width_title > width_text) and width_title or width_text) + pad2
@@ -81,8 +79,8 @@ if CLIENT then
 		item.pos.x = pos.x + math.Round(0.5 * (size.w - item.size.w))
 		item.pos.center_x = pos.x + math.Round(0.5 * size.w)
 
-		local wrappedItems = #item.title_wrapped
-		local wrappedTexts = #item.text_wrapped
+		local wrappedItems = #item.wrappedTitle
+		local wrappedTexts = #item.wrappedSubtitle
 
 		-- precalculate text positions
 		local height_title_line = height_title / wrappedItems
@@ -101,7 +99,7 @@ if CLIENT then
 		end
 
 		-- add item positions
-		local icon_amt = #item.icon_tbl
+		local icon_amt = #item.iconTable
 		local icon_start_x = item.pos.center_x - math.Round(0.5 * (icon_amt * self.icon_size + math.max(0, icon_amt - 1) * self.pad))
 
 		item.pos.icon_y = item.pos.y + item.size.h + self.pad
@@ -117,7 +115,7 @@ if CLIENT then
 
 	function HUDELEMENT:Draw()
 		local size = self:GetSize()
-		local msg = EPOP.msg
+		local msg = EPOP:GetMessage()
 
 		-- fallback for hud-editor
 		if not msg then
@@ -128,7 +126,7 @@ if CLIENT then
 				text = {
 					text = "Well, hello there! This is a fancy popup with some special information. The text can be also multiline, how fancy! Ugh, I could add so much more text if I'd had any ideas..."
 				},
-				icon_tbl = {},
+				iconTable = {},
 				time = CurTime() + 5
 			}
 		end
@@ -143,23 +141,23 @@ if CLIENT then
 		local timediff = HUDEditor.IsEditing and 5 or (msg.time - CurTime())
 		local opacity = (timediff > fadetime) and 255 or math.Round(255 * timediff / fadetime)
 
-		local ctmp_title = msg.title.color or COLOR_WHITE
-		local ctmp_text = msg.text.color or COLOR_WHITE
+		local colorTitle = msg.title.color or COLOR_WHITE
+		local colorSubtitle = msg.subtitle.color or COLOR_WHITE
 
 		-- draw content
-		local wrappedTitles = msg.title_wrapped
+		local wrappedTitles = msg.wrappedTitle
 
 		for i = 1, #wrappedTitles do
-			draw.AdvancedText(wrappedTitles[i], titlefont, msg.pos.center_x, msg.pos.title_y[i], Color(ctmp_title.r, ctmp_title.g, ctmp_title.b, opacity), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, true, self.scale)
+			draw.AdvancedText(wrappedTitles[i], titlefont, msg.pos.center_x, msg.pos.title_y[i], Color(colorTitle.r, colorTitle.g, colorTitle.b, opacity), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, true, self.scale)
 		end
 
-		local wrappedTexts = msg.text_wrapped
+		local wrappedTexts = msg.wrappedSubtitle
 
 		for i = 1, #wrappedTexts do
-			draw.AdvancedText(wrappedTexts[i], textfont, msg.pos.center_x, msg.pos.text_y[i], Color(ctmp_text.r, ctmp_text.g, ctmp_text.b, opacity), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, true, self.scale)
+			draw.AdvancedText(wrappedTexts[i], textfont, msg.pos.center_x, msg.pos.text_y[i], Color(colorSubtitle.r, colorSubtitle.g, colorSubtitle.b, opacity), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, true, self.scale)
 		end
 
-		local wrappedIcons = msg.icon_tbl
+		local wrappedIcons = msg.iconTable
 
 		for i = 1, #wrappedIcons do
 			draw.FilteredTexture(msg.pos.icon_x[i], msg.pos.icon_y, self.icon_size, self.icon_size, wrappedIcons[i], opacity)

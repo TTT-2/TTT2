@@ -1,53 +1,130 @@
 ---
 -- @class EPOP
 -- @author Mineotopia
--- @desc A event popup system that works alongside the MSTACK system to display important messages
+-- @desc An event popup system that works alongside the MSTACK system to display important messages
 
-EPOP = {}
+local TIMER_IDENTIFIER = "epop_removal_timer"
+
+EPOP = EPOP or {}
+
+EPOP.messageQueue = EPOP.messageQueue or {}
 
 ---
 -- Adds a popup message to the @{EPOP}
 -- @param string|table title The title of the popup that will be displayed in large letters (can be a table with `text` and `color` attribute)
--- @param string|table text An optional description that will be displayed below the title (can be a table with `text` and `color` attribute)
--- @param number disp_time The render duration of the popup
--- @param table icon_tbl An optional set of icon materials that will be rendered below the popup
+-- @param [opt]string|table subtitle An optional description that will be displayed below the title (can be a table with `text` and `color` attribute)
+-- @param [default=4]number displayTime The render duration of the popup
+-- @param [opt]table iconTable An optional set of icon materials that will be rendered below the popup
+-- @param [default=true]boolean blocking If this is false, this message gets instantly replaced if a new message is added
+-- @return string Returns a unique id generated for this message
 -- @realm client
-function EPOP:AddMessage(title, text, disp_time, icon_tbl)
-	self.msg = {
-		title = {},
-		text = {}
+function EPOP:AddMessage(title, subtitle, displayTime, iconTable, blocking)
+	local id = "epop_unique_id_" .. tostring(CurTime() * 10000)
+
+	local queueSize = #self.messageQueue
+
+	print(queueSize > 0)
+	if self.messageQueue[queueSize] then
+		print(self.messageQueue[queueSize].blocking)
+	else
+		print("no previous entry")
+	end
+
+	-- delete previous message if it is nonblocking
+	if queueSize > 0 and not self.messageQueue[queueSize].blocking then
+		print("removing blocking message")
+
+		table.remove(self.messageQueue, queueSize)
+
+		queueSize = queueSize - 1
+	end
+
+	-- add the new message to the queue
+	self.messageQueue[queueSize + 1] = {
+		id = id,
+		title = isstring(title) and {text = title} or title,
+		subtitle = isstring(subtitle) and {text = subtitle} or subtitle,
+		displayTime = displayTime or 4,
+		iconTable = iconTable or {},
+		blocking = blocking == nil and false or blocking
 	}
 
-	if isstring(title) then
-		self.msg.title.text = title
-	else
-		self.msg.title = title
+	-- the new element is the first one in the list and should be therefore activated
+	if queueSize == 0 then
+		self:ActivateMessage()
 	end
 
-	if isstring(text) then
-		self.msg.text.text = text
-	else
-		self.msg.text = text
-	end
+	return id
+end
 
-	self.msg.icon_tbl = icon_tbl or {}
-	self.msg.time = CurTime() + (disp_time or 4)
+function EPOP:ActivateMessage()
+	if #self.messageQueue == 0 then return end
+
+	local elem = self.messageQueue[1]
+
+	elem.time = CurTime() + elem.displayTime
+
+	-- register a timer to remove the message
+	timer.Create(TIMER_IDENTIFIER, elem.displayTime, 1, function()
+		EPOP:RemoveMessageByIndex(1)
+	end)
 end
 
 ---
 -- A shortcut function to check if an @{EPOP} should be rendered
+-- @return boolean Returns if the message shoould be rendered
 -- @realm client
 function EPOP:ShouldRender()
-	if not self.msg or CurTime() > self.msg.time then
-		return false
-	end
+	return #self.messageQueue > 0
+end
 
-	return true
+function EPOP:GetMessage()
+	return self.messageQueue[1]
+end
+
+function EPOP:RemoveMessageByIndex(index)
+	table.remove(self.messageQueue, index)
+
+	timer.Remove(TIMER_IDENTIFIER)
+
+	-- if the removed message was the first in the queue, the next one should be activated
+	if index == 1 then
+		EPOP:ActivateMessage()
+	end
 end
 
 ---
--- Instantly removed the currently displayed @{EPOP}
+-- Instantly removed the currently displayed or a specified @{EPOP} message
+-- @param [opt]string id The unique id of a message that sould be deleted. If omitted, the
+-- first message in the queue gets deleted
+-- @return boolean Returns true if a message got deleted
 -- @realm client
-function EPOP:RemoveMessage()
-	self.msg = nil
+function EPOP:RemoveMessage(id)
+	if #self.messageQueue == 0 then
+		return false
+	end
+
+	if id then
+		for i = 1, #self.messageQueue do
+			local elem = self.messageQueue[i]
+
+			if elem.id ~= id then continue end
+
+			self:RemoveMessageByIndex(i)
+
+			return true
+		end
+	else
+		self:RemoveMessageByIndex(1)
+
+		return true
+	end
+
+	return false
+end
+
+function EPOP:Clear()
+	self.messageQueue = {}
+
+	timer.Remove(TIMER_IDENTIFIER)
 end
