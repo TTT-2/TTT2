@@ -21,6 +21,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Removed the overcomplicated UI menu (simple handling with default keys instead)
   - The new default scanner behavior shows the direction and distance to the target
 - Changed TargetID colors for confirmed bodies
+- Reworked the event popup
+  - texts can now be blocking or non blocking
+  - there's now a popup queue
+  - popups are now also shown to dead players as well
 
 ### Fixed
 
