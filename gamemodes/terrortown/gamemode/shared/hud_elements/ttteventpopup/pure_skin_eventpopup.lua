@@ -117,20 +117,6 @@ if CLIENT then
 		local size = self:GetSize()
 		local msg = EPOP:GetMessage()
 
-		-- fallback for hud-editor
-		if not msg then
-			msg = {
-				title = {
-					text = "A Test Popup, now with a multiline title, how NICE."
-				},
-				text = {
-					text = "Well, hello there! This is a fancy popup with some special information. The text can be also multiline, how fancy! Ugh, I could add so much more text if I'd had any ideas..."
-				},
-				iconTable = {},
-				time = CurTime() + 5
-			}
-		end
-
 		-- prepare item, caches the data of the element to improve performance
 		if not msg.ready then
 			self:PrepareItem(msg)

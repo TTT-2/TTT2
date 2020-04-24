@@ -9,7 +9,7 @@ local defaultMessage = {
 	title = {
 		text = "A Test Popup, now with a multiline title, how NICE."
 	},
-	text = {
+	subtitle = {
 		text = "Well, hello there! This is a fancy popup with some special information. The text can be also multiline, how fancy! Ugh, I could add so much more text if I'd had any ideas..."
 	},
 	iconTable = {},
@@ -99,7 +99,7 @@ end
 -- @return table The message table
 -- @realm client
 function EPOP:GetMessage()
-	return self.messageQueue[1] or defaultMessage
+	return self.messageQueue[1] or table.Copy(defaultMessage)
 end
 
 function EPOP:RemoveMessageByIndex(index)
