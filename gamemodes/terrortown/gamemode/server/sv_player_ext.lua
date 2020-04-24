@@ -899,20 +899,22 @@ end
 -- @param table avoidRoles list of @{ROLE}s that should be avoided
 -- @realm server
 function plymeta:SelectRandomRole(avoidRoles)
-	local selectableRoles = roleselection.GetSelectableRoles()
+	local availablePlayers = roleselection.GetSelectablePlayers(player.GetAll())
+	local allAvailableRoles = roleselection.GetAllSelectableRolesList(#availablePlayers)
+	local selectableRoles = roleselection.GetSelectableRoles(#availablePlayers, allAvailableRoles)
+
 	local availableRoles = {}
 	local roleCount = {}
-	local plys = player.GetAll()
 
-	for i = 1, #plys do
-		local rd = plys[i]:GetSubRoleData()
+	for i = 1, #availablePlayers do
+		local rd = availablePlayers[i]:GetSubRoleData()
 
 		roleCount[rd] = (roleCount[rd] or 0) + 1
 	end
 
-	for v, c in pairs(selectableRoles) do
-		if (not avoidRoles or not avoidRoles[v]) and (not roleCount[v] or roleCount[v] > c) then
-			availableRoles[#availableRoles + 1] = v.index
+	for roleData, roleAmount in pairs(selectableRoles) do
+		if (not avoidRoles or not avoidRoles[roleData]) and (not roleCount[roleData] or roleCount[roleData] < roleAmount) then
+			availableRoles[#availableRoles + 1] = roleData.index
 		end
 	end
 
