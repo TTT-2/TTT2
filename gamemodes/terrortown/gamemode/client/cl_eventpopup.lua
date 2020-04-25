@@ -16,6 +16,8 @@ local defaultMessage = {
 	time = CurTime() + 5
 }
 
+local counter = 0
+
 EPOP = EPOP or {}
 
 EPOP.messageQueue = EPOP.messageQueue or {}
@@ -30,7 +32,9 @@ EPOP.messageQueue = EPOP.messageQueue or {}
 -- @return string Returns a unique id generated for this message
 -- @realm client
 function EPOP:AddMessage(title, subtitle, displayTime, iconTable, blocking)
-	local id = "epop_unique_id_" .. tostring(CurTime() * 10000)
+	local id = "epop_unique_id_" .. tostring(counter)
+
+	counter = counter + 1
 
 	local queueSize = #self.messageQueue
 
