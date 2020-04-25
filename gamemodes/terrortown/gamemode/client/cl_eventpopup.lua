@@ -72,7 +72,7 @@ function EPOP:ActivateMessage()
 
 	-- register a timer to remove the message
 	timer.Create(TIMER_IDENTIFIER, elem.displayTime, 1, function()
-		EPOP:RemoveMessageByIndex(1)
+		EPOP:RemoveMessage(elem.id)
 	end)
 
 	print("[TTT2] " .. elem.title.text .. " // " .. elem.subtitle.text or "")
