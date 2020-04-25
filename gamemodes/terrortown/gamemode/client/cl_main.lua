@@ -91,7 +91,8 @@ function GM:Initialize()
 
 	hook.Run("TTT2Initialize")
 
-	GAMEMODE.round_state = ROUND_WAIT
+	self.round_state = ROUND_WAIT
+	self.roundCount = 0
 
 	-- load addon language files
 	LANG.SetupFiles("lang/", true)
@@ -187,7 +188,7 @@ function GM:InitPostEntity()
 	-- make sure player class extensions are loaded up, and then do some
 	-- initialization on them
 	if IsValid(client) and client.GetTraitor then
-		GAMEMODE:ClearClientState()
+		self:ClearClientState()
 	end
 
 	-- cache players avatar
@@ -197,7 +198,9 @@ function GM:InitPostEntity()
 		draw.CacheAvatar(plys[i]:SteamID64(), "medium") -- caching
 	end
 
-	timer.Create("cache_ents", 1, 0, GAMEMODE.DoCacheEnts)
+	timer.Create("cache_ents", 1, 0, function()
+		self:DoCacheEnts()
+	end)
 
 	RunConsoleCommand("_ttt_request_serverlang")
 	RunConsoleCommand("_ttt_request_rolelist")
@@ -246,6 +249,8 @@ local function RoundStateChange(o, n)
 
 		-- reset cached server language in case it has changed
 		RunConsoleCommand("_ttt_request_serverlang")
+
+		GAMEMODE.roundCount = GAMEMODE.roundCount + 1
 
 		-- clear decals in cache from previous round
 		util.ClearDecals()
@@ -392,7 +397,7 @@ net.Receive("TTT_RoundState", ReceiveRoundState)
 -- @hook
 -- @realm client
 function GM:ClearClientState()
-	GAMEMODE:HUDClear()
+	self:HUDClear()
 
 	local client = LocalPlayer()
 	if not client.SetRole then return end -- code not loaded yet
@@ -428,11 +433,13 @@ function GM:ClearClientState()
 
 	RunConsoleCommand("ttt_mute_team_check", "0")
 
-	if not GAMEMODE.ForcedMouse then return end
+	if not self.ForcedMouse then return end
 
 	gui.EnableScreenClicker(false)
 end
-net.Receive("TTT_ClearClientState", GM.ClearClientState)
+net.Receive("TTT_ClearClientState", function()
+	GAMEMODE:ClearClientState()
+end)
 
 local color_trans = Color(0, 0, 0, 0)
 
