@@ -25,6 +25,6 @@ if SERVER then
 	-- @return number selectable amount of this role
 	-- @realm server
 	function ROLE:GetRoleCount(ply_count)
-		return math.floor(ply_count * ttt_min_inno_pct:GetFloat()) or 0
+		return math.floor(ply_count * ttt_min_inno_pct:GetFloat())
 	end
 end
