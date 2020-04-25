@@ -276,7 +276,7 @@ local function SetSubRoles(plys, prevRoles, availableRoles, selectableRoles)
 
 			tmpSelectableRoles[roleData] = roleCount -- update the available roles
 
-			if roleCount <= 0 then
+			if roleCount < 1 then
 				table.remove(availableRoles, rolePick)
 
 				availableRolesAmount = availableRolesAmount - 1
@@ -422,7 +422,7 @@ function roleselection.SelectRoles(plys, maxPlys)
 	local selectedForcedPlys = SelectForcedRoles(plys, selectableRoles) -- this updates roleselection.finalRoles table and returns a key based list of selected players
 
 	-- We need to remove already selected players
-	local tmpPlys = {}
+	local tmpPlys = {} -- modified player table
 
 	for i = 1, #plys do
 		local ply = plys[i]
@@ -432,10 +432,8 @@ function roleselection.SelectRoles(plys, maxPlys)
 		end
 	end
 
-	plys = tmpPlys
-
 	-- if there are still available players
-	if #plys > 0 then
+	if #tmpPlys > 0 then
 		-- first select traitors, then innos, then the other roles
 		local list = {
 			[1] = TRAITOR,
@@ -451,7 +449,7 @@ function roleselection.SelectRoles(plys, maxPlys)
 
 		for i = 1, #list do
 			local roleData = list[i]
-			local baseRolePlys = SelectBaseRolePlayers(plys, prevRoles, roleData, selectableRoles[roleData])
+			local baseRolePlys = SelectBaseRolePlayers(tmpPlys, prevRoles, roleData, selectableRoles[roleData])
 
 			-- upgrade innos and players without any role later
 			if roleData ~= INNOCENT then
@@ -462,8 +460,8 @@ function roleselection.SelectRoles(plys, maxPlys)
 		-- last but not least, upgrade the innos and players without any role to special/normal innos
 		local innos = {}
 
-		for i = 1, #plys do
-			local ply = plys[i]
+		for i = 1, #tmpPlys do
+			local ply = tmpPlys[i]
 
 			roleselection.finalRoles[ply] = roleselection.finalRoles[ply] or ROLE_INNOCENT
 
@@ -473,23 +471,23 @@ function roleselection.SelectRoles(plys, maxPlys)
 		end
 
 		UpgradeRoles(innos, prevRoles, INNOCENT, selectableRoles)
+	end
 
-		GAMEMODE.LastRole = {}
+	GAMEMODE.LastRole = {}
 
-		for i = 1, #plys do
-			local ply = plys[i]
-			local subrole = roleselection.finalRoles[ply] or ROLE_INNOCENT
+	for i = 1, #plys do
+		local ply = plys[i]
+		local subrole = roleselection.finalRoles[ply] or ROLE_INNOCENT
 
-			ply:SetRole(subrole, nil, true)
+		ply:SetRole(subrole, nil, true)
 
-			-- store a steamid -> role map
-			GAMEMODE.LastRole[ply:SteamID64()] = subrole
-		end
+		-- store a steamid -> role map
+		GAMEMODE.LastRole[ply:SteamID64()] = subrole
+	end
 
-		-- just set the credits after all roles were selected (to fix alone traitor bug)
-		for i = 1, #plys do
-			plys[i]:SetDefaultCredits()
-		end
+	-- just set the credits after all roles were selected (to fix alone traitor bug)
+	for i = 1, #plys do
+		plys[i]:SetDefaultCredits()
 	end
 
 	roleselection.finalRoles = {}
