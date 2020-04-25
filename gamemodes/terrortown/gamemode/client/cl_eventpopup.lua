@@ -32,7 +32,7 @@ EPOP.messageQueue = EPOP.messageQueue or {}
 -- @return string Returns a unique id generated for this message
 -- @realm client
 function EPOP:AddMessage(title, subtitle, displayTime, iconTable, blocking)
-	local id = "epop_unique_id_" .. tostring(counter)
+	local id = "epop_unique_id_" .. counter
 
 	counter = counter + 1
 
