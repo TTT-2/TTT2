@@ -3,8 +3,6 @@
 -- @author Mineotopia
 -- @desc An event popup system that works alongside the MSTACK system to display important messages
 
-local TIMER_IDENTIFIER = "epop_removal_timer"
-
 local defaultMessage = {
 	title = {
 		text = "A Test Popup, now with a multiline title, how NICE."
@@ -21,6 +19,21 @@ local counter = 0
 EPOP = EPOP or {}
 
 EPOP.messageQueue = EPOP.messageQueue or {}
+
+---
+-- Updates the message queue
+-- @note Called every @{GM:Tick}
+-- @realm client
+-- @internal
+function EPOP:Tick()
+	if #self.messageQueue == 0 then return end
+
+	local elem = self.messageQueue[1]
+
+	if CurTime() >= elem.time then
+		EPOP:RemoveMessage(elem.id)
+	end
+end
 
 ---
 -- Adds a popup message to the @{EPOP}
@@ -74,11 +87,6 @@ function EPOP:ActivateMessage()
 
 	elem.time = CurTime() + elem.displayTime
 
-	-- register a timer to remove the message
-	timer.Create(TIMER_IDENTIFIER, elem.displayTime, 1, function()
-		EPOP:RemoveMessage(elem.id)
-	end)
-
 	print("[TTT2] " .. elem.title.text .. " // " .. elem.subtitle.text or "")
 end
 
@@ -105,8 +113,6 @@ end
 -- @realm client
 function EPOP:RemoveMessageByIndex(index)
 	table.remove(self.messageQueue, index)
-
-	timer.Remove(TIMER_IDENTIFIER)
 
 	-- if the removed message was the first in the queue, the next one should be activated
 	if index == 1 then
@@ -149,6 +155,4 @@ end
 -- @realm client
 function EPOP:Clear()
 	self.messageQueue = {}
-
-	timer.Remove(TIMER_IDENTIFIER)
 end

@@ -228,5 +228,6 @@ function GM:Tick()
 		end
 
 		VOICE.Tick()
+		EPOP:Tick()
 	end
 end
