@@ -133,6 +133,8 @@ function GM:PlayerSpawn(ply)
 
 	SCORE:HandleSpawn(ply)
 
+	SPEED:InitPlayerSpeedMultiplier()
+
 	-- a function to handle the rolespecific stuff that should be done on
 	-- rolechange and respawn (while a round is active)
 	if ply:IsActive() then

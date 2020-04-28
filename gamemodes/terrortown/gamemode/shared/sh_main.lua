@@ -85,6 +85,8 @@ function GM:Move(ply, mv)
 		mul = mul * ply.sprintMultiplier * sprintMultiplierModifier[1]
 	end
 
+	mul = mul * ply:GetSpeedMultiplier()
+
 	mv:SetMaxClientSpeed(mv:GetMaxClientSpeed() * mul)
 	mv:SetMaxSpeed(mv:GetMaxSpeed() * mul)
 end
