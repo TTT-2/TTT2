@@ -55,7 +55,7 @@ function EPOP:RemoveMessage()
 end
 
 net.Receive("ttt2_eventpopup", function()
-	local title, subtitle
+	local title, subtitle = {}, {}
 
 	if net.ReadBool() then
 		title.text = TryT(net.ReadString())

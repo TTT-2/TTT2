@@ -14,9 +14,9 @@ EPOP = EPOP or {}
 function EPOP:AddMessage(plys, title, subtitle, displayTime, blocking)
 	net.Start("ttt2_eventpopup")
 
-	if isstring(title) then
+	if title or isstring(title) then
 		net.WriteBool(false)
-		net.WriteString(title)
+		net.WriteString(title or "")
 	elseif not IsValid(title.color) then
 		net.WriteBool(false)
 		net.WriteString(title.text or "")
@@ -26,9 +26,9 @@ function EPOP:AddMessage(plys, title, subtitle, displayTime, blocking)
 		net.WriteColor(title.color or COLOR_WHITE)
 	end
 
-	if isstring(subtitle) then
+	if not subtitle or isstring(subtitle) then
 		net.WriteBool(false)
-		net.WriteString(subtitle)
+		net.WriteString(subtitle or "")
 	elseif not IsValid(subtitle.color) then
 		net.WriteBool(false)
 		net.WriteString(subtitle.text or "")
