@@ -19,7 +19,7 @@ if SERVER then
 	end
 
 	---
-	-- Sets the speed multiplier to a fixed value
+	-- Sets the speed multiplier to an absolute value
 	-- @param number value The new value
 	-- @realm server
 	function plymeta:SetSpeedMultiplier(value)
@@ -27,7 +27,7 @@ if SERVER then
 	end
 
 	---
-	-- Increases the speed modifier by the given multiplier (the old value is multiplied with the new value)
+	-- Multiplies the @{Player}s current speed modifier with the given value
 	-- @param number value The multiplier
 	-- @realm server
 	function plymeta:GiveSpeedMultiplier(value)
@@ -35,7 +35,7 @@ if SERVER then
 	end
 
 	---
-	-- Decreases the speed modifier by the given multiplier (the old value is devided by the new value)
+	-- Devides the @{Player}s current speed modifier with the given value
 	-- @param number value The multiplier
 	-- @realm server
 	function plymeta:RemoveSpeedMultiplier(value)
@@ -45,7 +45,8 @@ end
 
 if CLIENT then
 	---
-	-- Initializes the speed system once the game is ready in @{GM:Initialize}
+	-- Initializes the speed system once the game is ready.
+	-- It is called in @{GM:Initialize}.
 	-- @realm client
 	function SPEED:Initialize()
 		STATUS:RegisterStatus("ttt_walkspeed_status_good", {
