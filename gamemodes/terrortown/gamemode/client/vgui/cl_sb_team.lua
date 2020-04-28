@@ -131,50 +131,62 @@ function PANEL:HasRows()
 	return self.rowcount > 0
 end
 
+local function FallbackSort(rowa, rowb)
+	return tostring(rowa) < tostring(rowb)
+end
+
 local function SortFunc(rowa, rowb)
-	if not IsValid(rowa) or not IsValid(rowb) then
-		return false
+	if not IsValid(rowa) then
+		if IsValid(rowb) then
+			return false
+		end
+		return FallbackSort(rowa, rowb)
+	end
+
+	if not IsValid(rowb) then
+		return true
 	end
 
 	local plya = rowa:GetPlayer()
 	local plyb = rowb:GetPlayer()
 
 	if not IsValid(plya) then
-		return false
-	end
-
-	if IsValid(plyb) then
-		local sort_mode = cv_ttt_scoreboard_sorting:GetString()
-		local sort_func = _G.sboard_sort[sort_mode]
-
-		local comp
-
-		if isfunction(sort_func) then
-			comp = sort_func(plya, plyb)
-		end
-
-		if comp == nil then
-			comp = 0
-		end
-
-		local ret
-
-		if comp ~= 0 then
-			ret = comp > 0
-		else
-			ret = strlower(plya:Nick()) > strlower(plyb:Nick())
-		end
-
-		if cv_ttt_scoreboard_ascending:GetBool() then
-			ret = not ret
-		end
-
-		if not ret then
+		if IsValid(plyb) then
 			return false
 		end
+		return FallbackSort(rowa, rowb)
 	end
 
-	return true
+	if not IsValid(plyb) then
+		return true
+	end
+
+	local sort_mode = cv_ttt_scoreboard_sorting:GetString()
+	local sort_func = _G.sboard_sort[sort_mode]
+
+	local comp
+
+	if isfunction(sort_func) then
+		comp = sort_func(plya, plyb)
+	end
+
+	if comp == nil then
+		comp = 0
+	end
+
+	if comp ~= 0 then
+		if cv_ttt_scoreboard_ascending:GetBool() then
+			return comp < 0
+		else
+			return comp > 0
+		end
+	else
+		if cv_ttt_scoreboard_ascending:GetBool() then
+			return strlower(plya:Nick()) < strlower(plyb:Nick())
+		else
+			return strlower(plya:Nick()) > strlower(plyb:Nick())
+		end
+	end
 end
 
 function PANEL:UpdateSortCache()
