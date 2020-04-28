@@ -895,6 +895,14 @@ function plymeta:Revive(delay, fn, check, needcorpse, force, onFail)
 end
 
 ---
+-- Returns if a player is currently in a revival process started by @{Player:Revive}
+-- @return boolean The revival status
+-- @realm server
+function plymeta:IsReviving()
+	return self.reviving or false
+end
+
+---
 -- Selects a random available @{ROLE} for a @{Player}
 -- @param table avoidRoles list of @{ROLE}s that should be avoided
 -- @realm server
