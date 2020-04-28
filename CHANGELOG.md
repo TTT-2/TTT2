@@ -8,6 +8,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Added a new ConVar to allow armor to also block headshots (`ttt_item_armor_block_headshots`, default value: 0). Thanks @TheNickSkater
 - Added essential items: 8 different types of items that are often used in other addons. You can remove them from the shop if you don't like them.
+- Added server proxy for `EPOP:AddMessage()`
+- Added `PrintMessage` overwrites so this function now uses TTT2 systems
 
 ### Changed
 
@@ -40,8 +42,6 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Added
 
 - Added Italian translation (thanks @PinoMartirio)
-- Added server proxy for `EPOP:AddMessage()`
-- Added `PrintMessage` overwrites so this function now uses TTT2 systems
 
 ### Fixed
 
