@@ -9,7 +9,6 @@ EPOP = EPOP or {}
 -- @param [opt]string|table subtitle An optional description that will be displayed below the title (can be a table with `text` and `color` attribute)
 -- @param [default=4]number displayTime The render duration of the popup
 -- @param [default=true]boolean blocking If this is false, this message gets instantly replaced if a new message is added
--- @return string Returns a unique id generated for this message
 -- @realm server
 function EPOP:AddMessage(plys, title, subtitle, displayTime, blocking)
 	net.Start("ttt2_eventpopup")

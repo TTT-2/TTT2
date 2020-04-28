@@ -31,7 +31,7 @@ function EPOP:Think()
 
 	local elem = self.messageQueue[1]
 
-	if CurTime() >= elem.time then
+	if elem.time and CurTime() >= elem.time then
 		EPOP:RemoveMessage(elem.id)
 	end
 end
@@ -62,8 +62,8 @@ function EPOP:AddMessage(title, subtitle, displayTime, iconTable, blocking)
 	-- add the new message to the queue
 	self.messageQueue[queueSize + 1] = {
 		id = id,
-		title = isstring(title) and {text = title} or title,
-		subtitle = isstring(subtitle) and {text = subtitle} or subtitle,
+		title = (not title or isstring(title)) and {text = title or ""} or title,
+		subtitle = (not subtitle or isstring(subtitle)) and {text = subtitle or ""} or subtitle,
 		displayTime = displayTime or 4,
 		iconTable = iconTable or {},
 		blocking = blocking == nil and false or blocking
@@ -88,7 +88,7 @@ function EPOP:ActivateMessage()
 
 	elem.time = CurTime() + elem.displayTime
 
-	print("[TTT2] " .. elem.title.text .. " // " .. elem.subtitle.text or "")
+	print("[TTT2] " .. elem.title.text .. " // " .. elem.subtitle.text)
 end
 
 ---
