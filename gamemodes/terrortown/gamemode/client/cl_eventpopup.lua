@@ -100,11 +100,18 @@ end
 
 ---
 -- Returns the neweset message in the queue that should be rendered right now.
--- If there is no message in the queue, a template message is returned.
 -- @return table The message table
 -- @realm client
 function EPOP:GetMessage()
-	return self.messageQueue[1] or table.Copy(defaultMessage)
+	return self.messageQueue[1]
+end
+
+---
+-- Returns the default message.
+-- @return table The message table
+-- @realm client
+function EPOP:GetDefaultMessage()
+	return table.Copy(defaultMessage)
 end
 
 ---

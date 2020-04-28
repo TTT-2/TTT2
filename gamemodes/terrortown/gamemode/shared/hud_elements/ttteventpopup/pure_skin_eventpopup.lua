@@ -115,7 +115,7 @@ if CLIENT then
 
 	function HUDELEMENT:Draw()
 		local size = self:GetSize()
-		local msg = EPOP:GetMessage()
+		local msg = HUDEditor.IsEditing and EPOP:GetDefaultMessage() or EPOP:GetMessage()
 
 		-- prepare item, caches the data of the element to improve performance
 		if not msg.ready then
