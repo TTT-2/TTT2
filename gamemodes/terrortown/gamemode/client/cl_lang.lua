@@ -365,7 +365,9 @@ LANG.Styles = {
 		chat.AddText(warn_color, text)
 	end,
 
-	[MSG_CHAT_PLAIN] = chat.AddText
+	[MSG_CHAT_PLAIN] = chat.AddText,
+
+	[MSG_CONSOLE] = print
 }
 
 LANG.StylesOld = {

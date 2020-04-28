@@ -3,6 +3,8 @@
 -- @author Mineotopia
 -- @desc A event popup system that works alongside the MSTACK system to display important messages
 
+local TryT = LANG.TryTranslation
+
 EPOP = {}
 
 ---
@@ -51,3 +53,23 @@ end
 function EPOP:RemoveMessage()
 	self.msg = nil
 end
+
+net.Receive("ttt2_eventpopup", function()
+	local title, subtitle
+
+	if net.ReadBool() then
+		title.text = TryT(net.ReadString())
+		title.color = net.ReadColor()
+	else
+		title.text = TryT(net.ReadString())
+	end
+
+	if net.ReadBool() then
+		subtitle.text = TryT(net.ReadString())
+		subtitle.color = net.ReadColor()
+	else
+		subtitle.text = TryT(net.ReadString())
+	end
+
+	EPOP:AddMessage(title, subtitle, net.ReadUInt(16), nil, net.ReadBool())
+end)
