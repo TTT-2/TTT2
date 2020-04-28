@@ -317,8 +317,29 @@ local function PlaySoundCue()
 	surface.PlaySound(cues[math.random(#cues)])
 end
 
-GM.TTTBeginRound = PlaySoundCue
-GM.TTTEndRound = PlaySoundCue
+---
+-- A hook that is called when the preparation phase starts
+-- @hook
+-- @realm client
+function GM:TTTPrepareRound()
+	EPOP:Clear()
+end
+
+---
+-- A hook that is called when the round begins
+-- @hook
+-- @realm client
+function GM:TTTBeginRound()
+	PlaySoundCue()
+end
+
+---
+-- A hook that is called when the round ends
+-- @hook
+-- @realm client
+function GM:TTTEndRound()
+	PlaySoundCue()
+end
 
 -- usermessages
 
