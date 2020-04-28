@@ -40,6 +40,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Added
 
 - Added Italian translation (thanks @PinoMartirio)
+- Added server proxy for `EPOP:AddMessage()`
+- Added `PrintMessage` overwrites so this function now uses TTT2 systems
 
 ### Fixed
 
