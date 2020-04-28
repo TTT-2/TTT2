@@ -22,10 +22,10 @@ EPOP.messageQueue = EPOP.messageQueue or {}
 
 ---
 -- Updates the message queue
--- @note Called every @{GM:Tick}
+-- @note Called every @{GM:Think}
 -- @realm client
 -- @internal
-function EPOP:Tick()
+function EPOP:Think()
 	if #self.messageQueue == 0 then return end
 
 	local elem = self.messageQueue[1]

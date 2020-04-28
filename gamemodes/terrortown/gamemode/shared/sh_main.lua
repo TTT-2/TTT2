@@ -143,6 +143,10 @@ end
 -- @realm shared
 function GM:Think()
 	UpdateSprint()
+
+	if CLIENT then
+		EPOP:Think()
+	end
 end
 
 -- Drowning and such
@@ -228,6 +232,5 @@ function GM:Tick()
 		end
 
 		VOICE.Tick()
-		EPOP:Tick()
 	end
 end
