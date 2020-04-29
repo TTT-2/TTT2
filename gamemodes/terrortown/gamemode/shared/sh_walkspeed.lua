@@ -4,8 +4,8 @@ SPEED = SPEED or {}
 
 if SERVER then
 	---
-	-- Sets the initial @{Player} speed multiplier, called in @{GM:TTTBeginRound} after (dumb) players
-	-- are respawned.
+	-- Sets the initial @{Player} speed multiplier.
+	-- Called in @{GM:TTTBeginRound} after (dumb) players are respawned.
 	-- @realm server
 	-- @internal
 	function SPEED:InitPlayerSpeedMultiplier()
