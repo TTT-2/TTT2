@@ -56,8 +56,8 @@ end
 
 ---
 -- The Move hook is called for you to manipulate the player's MoveData.
--- You shouldn't adjust the player's position in any way in the move hook. This is because due
--- to prediction errors, the netcode might run the move hook multiple times as packets arrive late.
+-- You shouldn't adjust the player's position in any way in the move hook. This is due to
+-- prediction errors, the netcode might run the move hook multiple times as packets arrive late.
 -- Therefore you should only adjust the movedata construct in this hook.
 -- @param Player ply The player
 -- @param CMoveData moveData Movement information
