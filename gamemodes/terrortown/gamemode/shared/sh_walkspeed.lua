@@ -29,7 +29,7 @@ if SERVER then
 	-- @param boolean isSlowed Is true if the player uses iron sights
 	-- @param CMoveData moveData The move data
 	-- @param table speedMultiplierModifier The speed modifier table. Modify the first table entry to change the player speed
-	-- @return [depricated]number The depricated way of changing the player speed
+	-- @return [deprecated]number The deprecated way of changing the player speed
 	-- @hook
 	-- @realm server
 	function GM:TTTPlayerSpeedModifier(ply, isSlowed, moveData, speedMultiplierModifier)
@@ -93,7 +93,7 @@ end
 
 ---
 -- Returns the current player speed modifier
--- @retrun number The speed modifier
+-- @return number The speed modifier
 -- @realm shared
 function plymeta:GetSpeedMultiplier()
 	return self:TTT2NETGetFloat("player_speed_multiplier", 1.0)
