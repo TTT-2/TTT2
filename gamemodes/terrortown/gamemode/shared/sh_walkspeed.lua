@@ -75,6 +75,8 @@ if CLIENT then
 		})
 
 		TTT2NET:OnUpdateOnPlayer("player_speed_multiplier", LocalPlayer(), function(oldval, newval)
+			newval = math.Round(newval, 1)
+
 			if newval == 1.0 then
 				STATUS:RemoveStatus("ttt_walkspeed_status_good")
 				STATUS:RemoveStatus("ttt_walkspeed_status_bad")
