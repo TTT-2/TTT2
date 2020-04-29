@@ -3,19 +3,37 @@ local plymeta = assert(FindMetaTable("Player"), "FAILED TO FIND ENTITY TABLE")
 SPEED = SPEED or {}
 
 if SERVER then
-	---
-	-- Sets the initial @{Player} speed multiplier.
-	-- Called in @{GM:TTTBeginRound} after (dumb) players are respawned.
-	-- @realm server
-	-- @internal
-	function SPEED:InitPlayerSpeedMultiplier()
-		local plys = player.GetAll()
+	function SPEED:HandleSpeedCalculation(ply, moveData)
+		if not ply:IsTerror() then return end
 
-		for i = 1, #plys do
-			local ply = plys[i]
+		local baseMultiplier = 1
+		local isSlowed = false
 
-			ply:SetSpeedMultiplier(1.0)
+		-- Slow down ironsighters
+		local wep = ply:GetActiveWeapon()
+
+		if IsValid(wep) and wep.GetIronsights and wep:GetIronsights() then
+			baseMultiplier = 120 / 220
+			isSlowed = true
 		end
+
+		local speedMultiplierModifier = {1}
+		local returnMultiplier = hook.Run("TTTPlayerSpeedModifier", ply, isSlowed, moveData, speedMultiplierModifier) or 1
+
+		ply:SetSpeedMultiplier(baseMultiplier * returnMultiplier * speedMultiplierModifier[1])
+	end
+
+	---
+	-- A hook to modify the player speed, it is automatically networked
+	-- @param Player ply The player whose speed should be modified
+	-- @param boolean isSlowed Is true if the player uses iron sights
+	-- @param CMoveData moveData The move data
+	-- @param table speedMultiplierModifier The speed modifier table. Modify the first table entry to change the player speed
+	-- @return [depricated]number The depricated way of changing the player speed
+	-- @hook
+	-- @realm server
+	function GM:TTTPlayerSpeedModifier(ply, isSlowed, moveData, speedMultiplierModifier)
+
 	end
 
 	---
@@ -23,23 +41,10 @@ if SERVER then
 	-- @param number value The new value
 	-- @realm server
 	function plymeta:SetSpeedMultiplier(value)
+		if self.lastSpeedMultiplier and self.lastSpeedMultiplier == value then return end
+
 		self:TTT2NETSetFloat("player_speed_multiplier", value)
-	end
-
-	---
-	-- Multiplies the @{Player}s current speed modifier with the given value
-	-- @param number value The multiplier
-	-- @realm server
-	function plymeta:GiveSpeedMultiplier(value)
-		self:TTT2NETSetFloat("player_speed_multiplier", self:TTT2NETGetFloat("player_speed_multiplier", 1.0) * value)
-	end
-
-	---
-	-- Devides the @{Player}s current speed modifier with the given value
-	-- @param number value The multiplier
-	-- @realm server
-	function plymeta:RemoveSpeedMultiplier(value)
-		self:TTT2NETSetFloat("player_speed_multiplier", self:TTT2NETGetFloat("player_speed_multiplier", 1.0) / value)
+		self.lastSpeedMultiplier = value
 	end
 end
 

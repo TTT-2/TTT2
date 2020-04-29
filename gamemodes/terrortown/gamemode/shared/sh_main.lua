@@ -55,27 +55,20 @@ function GM:PlayerFootstep(ply, pos, foot, sound, volume, rf)
 end
 
 ---
--- Predicted move speed changes
+-- The Move hook is called for you to manipulate the player's MoveData.
+-- You shouldn't adjust the player's position in any way in the move hook. This is because due
+-- to prediction errors, the netcode might run the move hook multiple times as packets arrive late.
+-- Therefore you should only adjust the movedata construct in this hook.
+-- @param Player ply The player
+-- @param CMoveData moveData Movement information
 -- @hook
 -- @realm shared
-function GM:Move(ply, mv)
-	if not ply:IsTerror() then return end
-
-	local basemul = 1
-	local slowed = false
-
-	-- Slow down ironsighters
-	local wep = ply:GetActiveWeapon()
-
-	if IsValid(wep) and wep.GetIronsights and wep:GetIronsights() then
-		basemul = 120 / 220
-		slowed = true
+function GM:Move(ply, moveData)
+	if SERVER then
+		SPEED:HandleSpeedCalculation(ply, moveData)
 	end
 
-	local noLag = {1}
-
-	local mul = hook.Call("TTTPlayerSpeedModifier", GAMEMODE, ply, slowed, mv, noLag) or 1
-	mul = basemul * mul * noLag[1]
+	local mul = ply:GetSpeedMultiplier()
 
 	if ply.sprintMultiplier and (ply.sprintProgress or 0) > 0 then
 		local sprintMultiplierModifier = {1}
@@ -85,10 +78,8 @@ function GM:Move(ply, mv)
 		mul = mul * ply.sprintMultiplier * sprintMultiplierModifier[1]
 	end
 
-	mul = mul * ply:GetSpeedMultiplier()
-
-	mv:SetMaxClientSpeed(mv:GetMaxClientSpeed() * mul)
-	mv:SetMaxSpeed(mv:GetMaxSpeed() * mul)
+	moveData:SetMaxClientSpeed(moveData:GetMaxClientSpeed() * mul)
+	moveData:SetMaxSpeed(moveData:GetMaxSpeed() * mul)
 end
 
 local ttt_playercolors = {
