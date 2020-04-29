@@ -24,7 +24,7 @@ if SERVER then
 	end
 
 	---
-	-- A hook to modify the player speed, it is automatically networked
+	-- A hook to modify the player speed, it is automatically networked.
 	-- @param Player ply The player whose speed should be modified
 	-- @param boolean isSlowed Is true if the player uses iron sights
 	-- @param CMoveData moveData The move data
