@@ -103,7 +103,6 @@ function GM:Initialize()
 	self.BaseClass:Initialize()
 
 	ARMOR:Initialize()
-	SPEED:Initialize()
 
 	hook.Run("TTT2FinishedLoading")
 

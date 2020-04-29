@@ -46,7 +46,7 @@ end
 if CLIENT then
 	---
 	-- Initializes the speed system once the game is ready.
-	-- It is called in @{GM:Initialize}.
+	-- It is called in @{GM:TTT2PlayerReady}.
 	-- @realm client
 	function SPEED:Initialize()
 		STATUS:RegisterStatus("ttt_walkspeed_status_good", {
@@ -69,9 +69,7 @@ if CLIENT then
 			end
 		})
 
-		TTT2NET:OnUpdate("players", function(oldval, newval, reversePath)
-			if reversePath[2] ~= "player_speed_multiplier" then return end
-
+		TTT2NET:OnUpdateOnPlayer("player_speed_multiplier", LocalPlayer(), function(oldval, newval)
 			if newval == 1.0 then
 				STATUS:RemoveStatus("ttt_walkspeed_status_good")
 				STATUS:RemoveStatus("ttt_walkspeed_status_bad")
