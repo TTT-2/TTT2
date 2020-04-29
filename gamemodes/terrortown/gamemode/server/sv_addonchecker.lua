@@ -18,6 +18,9 @@ function Addonchecker:Check()
 	local c = 0
 	local addns = engine.GetAddons()
 
+	print("=============================================================\n")
+	print("TTT2 ADDON CHECKER\n")
+
 	for i = 1, #addns do
 		local addon = addns[i]
 		local key = tostring(addon.wsid)
@@ -46,6 +49,9 @@ function Addonchecker:Check()
 			ErrorNoHalt((c == 1 and "\n\n" or "") .. "[TTT2][ERROR] Outdated Add-On detected: " .. addon.title .. " (WS-ID: '" .. addon.wsid .. "').\nYour version does work with TTT2, but there's an addon which uses some of the new features of TTT2." .. outdated_addon .. "\n\n")
 		end
 	end
+
+	print("This is the end of the addon checker output.")
+	print("=============================================================\n")
 end
 
 -- Addons that do not work (well) with TTT2 and can lead to errors.
@@ -89,7 +95,13 @@ Addonchecker.buggyAddons = {
 
 	["1215502383"] = "", -- Custom Roles by Noxx
 
-	["1382102057"] = "" -- Thanos's Infinity Gauntlet SWEP and Model
+	["1382102057"] = "", -- Thanos's Infinity Gauntlet SWEP and Model
+
+	["886346394"] = "", -- Identity Swapper by Lesh
+	["844284735"] = "", -- Identity Swapper by Saty
+
+	["606792331"] = "", -- Advanced disguiser by Gamefreak
+	["610632051"] = "" -- Advanced disguiser by Killberty
 }
 
 -- Addons that have newer version in the WS, that will work better with TTT2.
