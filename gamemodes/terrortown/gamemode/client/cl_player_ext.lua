@@ -208,6 +208,10 @@ net.Receive("TTT2SetRevivalReason", function()
 	end
 end)
 
+net.Receive("TTT2RevivalStopped", function()
+	LocalPlayer():EmitSound("buttons/button8.wav")
+end)
+
 function plymeta:HasRevivalReason()
 	return (self.revivalReason and self.revivalReason.name and self.revivalReason.name ~= "") or false
 end

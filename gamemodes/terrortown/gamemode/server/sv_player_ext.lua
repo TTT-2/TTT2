@@ -22,6 +22,7 @@ util.AddNetworkString("StartDrowning")
 util.AddNetworkString("TTT2TargetPlayer")
 util.AddNetworkString("TTT2SetPlayerReady")
 util.AddNetworkString("TTT2SetRevivalReason")
+util.AddNetworkString("TTT2RevivalStopped")
 
 ---
 -- Sets whether a @{Player} is spectating the own ragdoll
@@ -871,6 +872,9 @@ local function OnReviveFailed(ply, failMessage)
 	else
 		LANG.Msg(ply, failMessage, nil, MSG_MSTACK_WARN)
 	end
+
+	net.Start("TTT2RevivalStopped")
+	net.Send(ply)
 end
 
 ---
@@ -904,6 +908,8 @@ function plymeta:Revive(delay, OnRevive, DoCheck, needsCorpse, blockRound, OnFai
 		ply:SetReviving(false)
 		ply:SetBlockingRevival(false)
 		ply:SetRevivalReason(nil)
+
+		ply.OnReviveFailedCallback = nil
 
 		if not isfunction(DoCheck) or DoCheck(ply) then
 			local corpse = FindCorpse(ply)
