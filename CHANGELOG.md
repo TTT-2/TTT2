@@ -8,6 +8,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Added a new ConVar to allow armor to also block headshots (`ttt_item_armor_block_headshots`, default value: 0). Thanks @TheNickSkater
 - Added essential items: 8 different types of items that are often used in other addons. You can remove them from the shop if you don't like them.
+- Added a new HUD element to show information about an ongoing revival to the player that is revived
 
 ### Changed
 
@@ -21,6 +22,9 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Removed the overcomplicated UI menu (simple handling with default keys instead)
   - The new default scanner behavior shows the direction and distance to the target
 - Changed TargetID colors for confirmed bodies
+- Improved the `plymeta:Revive()` function
+  - Added a revive position argument
+  - revive makes now sure the position is valid and the player is not stuck in the wall
 
 ### Fixed
 
