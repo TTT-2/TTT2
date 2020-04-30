@@ -1231,3 +1231,10 @@ L.disable_overheadicons_tip = "Выключает иконки ролей над
 --L.item_no_prop_damage_desc = [[Makes you immune to prop damage.]]
 --L.item_no_drown_damage = "No Drowning Damage"
 --L.item_no_drown_damage_desc = [[Makes you immune to drowning damage.]]
+
+-- 2020-04-30
+--L.message_revival_canceled = "Revival canceled."
+--L.message_revival_failed = "Revival failed."
+--L.message_revival_failed_missing_body = "You have not been revived because your corpse no longer exists."
+--L.hud_revival_title = "Time left until revival:"
+--L.hud_revival_time = "{time}s"

@@ -909,7 +909,7 @@ function plymeta:Revive(delay, OnRevive, DoCheck, needsCorpse, blockRound, OnFai
 			local corpse = FindCorpse(ply)
 
 			if needsCorpse and (not IsValid(corpse) or corpse:IsOnFire()) then
-				OnReviveFailed(ply, OnFail, "You have not been revived because your body no longer exists.")
+				OnReviveFailed(ply, OnFail, "message_revival_failed_missing_body")
 
 				timer.Remove(name)
 
@@ -947,7 +947,7 @@ function plymeta:Revive(delay, OnRevive, DoCheck, needsCorpse, blockRound, OnFai
 				OnRevive(ply)
 			end
 		else
-			OnReviveFailed(ply, "Revive failed...")
+			OnReviveFailed(ply, "message_revival_failed")
 		end
 	end)
 end
@@ -959,7 +959,7 @@ function plymeta:CancelRevival(failMessage)
 
 	timer.Remove("TTT2RevivePlayer" .. self:EntIndex())
 
-	OnReviveFailed(self, failMessage or "player_revival_canceled")
+	OnReviveFailed(self, failMessage or "message_revival_canceled")
 end
 
 function plymeta:SetRevivalReason(name, params)

@@ -102,13 +102,44 @@ if CLIENT then
 		-- draw bg and shadow
 		self:DrawBg(x, y, w, h, self.basecolor)
 
-		draw.AdvancedText("reviving_progress", "PureSkinBar", x + self.pad, posHeaderY, util.GetDefaultColor(self.basecolor), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, true, self.scale)
-		draw.AdvancedText(timeLeft, "PureSkinBar", x + w - self.pad, posHeaderY, util.GetDefaultColor(self.basecolor), TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, true, self.scale)
+		draw.AdvancedText(
+			TryT(hud_revival_title),
+			"PureSkinBar",
+			x + self.pad,
+			posHeaderY,
+			util.GetDefaultColor(self.basecolor),
+			TEXT_ALIGN_LEFT,
+			TEXT_ALIGN_CENTER,
+			true,
+			self.scale
+		)
+
+		draw.AdvancedText(
+			ParT(hud_revival_time, {time = timeLeft}),
+			"PureSkinBar",
+			x + w - self.pad,
+			posHeaderY,
+			util.GetDefaultColor(self.basecolor),
+			TEXT_ALIGN_RIGHT,
+			TEXT_ALIGN_CENTER,
+			true,
+			self.scale
+		)
 
 		self:DrawBar(x + self.pad, posBarY, w - self.pad * 2, boxHeight, colorRevivingBar, progress, 1)
 
 		for i = 1, #revivalReasonLines do
-			draw.AdvancedText(revivalReasonLines[i], "PureSkinBar", x + self.pad, posReasonY + (i - 1) * lineHeight, util.GetDefaultColor(self.basecolor), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, true, self.scale)
+			draw.AdvancedText(
+				revivalReasonLines[i],
+				"PureSkinBar",
+				x + self.pad,
+				posReasonY + (i - 1) * lineHeight,
+				util.GetDefaultColor(self.basecolor),
+				TEXT_ALIGN_LEFT,
+				TEXT_ALIGN_TOP,
+				true,
+				self.scale
+			)
 		end
 
 		-- draw lines around the element
