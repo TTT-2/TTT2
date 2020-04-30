@@ -8,6 +8,8 @@ if CLIENT then
 	local ParT = LANG.GetParamTranslation
 	local TryT = LANG.TryTranslation
 
+	local materialBlockingRevival = Material("vgui/ttt/hud_blocking_revival")
+
 	local pad = 14
 
 	local colorRevivingBar = Color(36, 154, 198)
@@ -66,8 +68,10 @@ if CLIENT then
 
 		local posHeaderY = y + self.pad
 		local posBarY = posHeaderY + 20 * self.scale
-		local boxHeight = 26 * self.scale
-		local posReasonY = posBarY + boxHeight + self.pad
+		local barHeight = 26 * self.scale
+		local iconPad = 5 * self.scale
+		local iconSize = barHeight - 2 * iconPad
+		local posReasonY = posBarY + barHeight + self.pad
 
 		local revivalReasonLines = {}
 		local lineHeight = 0
@@ -103,7 +107,7 @@ if CLIENT then
 		self:DrawBg(x, y, w, h, self.basecolor)
 
 		draw.AdvancedText(
-			TryT(hud_revival_title),
+			TryT("hud_revival_title"),
 			"PureSkinBar",
 			x + self.pad,
 			posHeaderY,
@@ -115,7 +119,7 @@ if CLIENT then
 		)
 
 		draw.AdvancedText(
-			ParT(hud_revival_time, {time = timeLeft}),
+			ParT("hud_revival_time", {time = timeLeft}),
 			"PureSkinBar",
 			x + w - self.pad,
 			posHeaderY,
@@ -126,7 +130,20 @@ if CLIENT then
 			self.scale
 		)
 
-		self:DrawBar(x + self.pad, posBarY, w - self.pad * 2, boxHeight, colorRevivingBar, progress, 1)
+		self:DrawBar(x + self.pad, posBarY, w - self.pad * 2, barHeight, colorRevivingBar, progress, 1)
+
+		if client:IsBlockingRevival() then
+			draw.FilteredShadowedTexture(
+				x + w - self.pad - iconSize - 4 * iconPad,
+				posBarY + iconPad,
+				iconSize,
+				iconSize,
+				materialBlockingRevival,
+				255,
+				COLOR_WHITE,
+				self.scale
+			)
+		end
 
 		for i = 1, #revivalReasonLines do
 			draw.AdvancedText(
