@@ -881,7 +881,7 @@ end
 -- Revives a @{Player}
 -- @param [default=3]number delay The delay of the revive
 -- @param [opt]function OnRevive The @{function} that should be run if the @{Player} revives
--- @param [opt]function DoCheck An additional DoChecking @{function}
+-- @param [opt]function DoCheck An additional checking @{function}
 -- @param [default=false]boolean needsCorpse Whether the dead @{Player} @{CORPSE} is needed
 -- @param [default=false]boolean blockRound Stops the round from ending if this is set to true until the player is alive again
 -- @param [opt]function OnFail This @{function} is called if the revive fails
@@ -1189,7 +1189,7 @@ function plymeta:Give(weaponClassName, bNoAmmo)
 end
 
 ---
--- Called to drop a weapon in a safe manner (e.g. preparing and space-DoCheck)
+-- Called to drop a weapon in a safe manner (e.g. preparing and space-check)
 -- @param Weapon wep
 -- @realm server
 function plymeta:SafeDropWeapon(wep, keep_selection)
@@ -1335,7 +1335,7 @@ function plymeta:PickupWeapon(wep, dropBlockingWeapon, shouldAutoSelect)
 	-- set in the runtime, we have to use the GM:PlayerCanPickupWeapon hook in a
 	-- slightly hacky way
 
-	-- first we have to DoCheck if the player can pick up the weapon at all by running the
+	-- first we have to check if the player can pick up the weapon at all by running the
 	-- hook manually. This has to be done since the normal pickup is handled internally
 	-- and is therefore not accessable for us
 	wep.wp__WeaponSwitchFlag = dropBlockingWeapon
