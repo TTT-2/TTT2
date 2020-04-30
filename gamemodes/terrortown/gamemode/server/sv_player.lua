@@ -929,9 +929,11 @@ end
 -- @param Player|Entity attacker @{Player} or @{Entity} that killed the victim
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/PlayerDeath
+-- @ref https://wiki.facepunch.com/gmod/GM:PlayerDeath
 -- @local
 function GM:PlayerDeath(victim, infl, attacker)
+	victim:SetDeathPosition(victim:GetPos())
+
 	-- stop bleeding
 	util.StopBleeding(victim)
 
@@ -974,6 +976,17 @@ function GM:PlayerDeath(victim, infl, attacker)
 
 		hook.Run("TTT2PostPlayerDeath", victim, infl, attacker)
 	end)
+end
+
+---
+-- Called when the @{Player} is killed by @{Player:KillSilent}.
+-- The player is already considered dead when this hook is called.
+-- @param Player victim The player who was killed
+-- @hook
+-- @ref https://wiki.facepunch.com/gmod/GM:PlayerSilentDeath
+-- @realm server
+function GM:PlayerSilentDeath(victim)
+	victim:SetDeathPosition(victim:GetPos())
 end
 
 ---

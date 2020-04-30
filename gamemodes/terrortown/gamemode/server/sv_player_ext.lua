@@ -7,6 +7,9 @@ local table = table
 local pairs = pairs
 local IsValid = IsValid
 local hook = hook
+local Vector = Vector
+local mathSin = math.sin
+local mathCos = math.cos
 
 local plymeta = FindMetaTable("Player")
 if not plymeta then
@@ -18,6 +21,7 @@ end
 util.AddNetworkString("StartDrowning")
 util.AddNetworkString("TTT2TargetPlayer")
 util.AddNetworkString("TTT2SetPlayerReady")
+util.AddNetworkString("TTT2SetRevivalReason")
 
 ---
 -- Sets whether a @{Player} is spectating the own ragdoll
@@ -597,7 +601,7 @@ function plymeta:ResetViewRoll()
 end
 
 ---
--- Checks whether a @{Player} is able to spawn
+-- DoChecks whether a @{Player} is able to spawn
 -- @return boolean
 -- @realm server
 function plymeta:ShouldSpawn()
@@ -821,61 +825,117 @@ local function FindCorpsePosition(corpse)
 	return false
 end
 
+local spawnPositions = {}
+for i = 0, 360, 22.5 do
+	spawnPositions[#spawnPositions + 1] = Vector(mathCos(i), mathSin(i), 0)
+end
+spawnPositions[#spawnPositions + 1] = Vector(0, 0, 1)
+
+local function MakeSpawnPositionSafe(unsafePos)
+	local sizePlayer = Vector(32, 32, 72)
+	local startPos = unsafePos + Vector(0, 0, 0.5 * sizePlayer.z)
+
+	for i = 1, #spawnPositions do
+		local v = spawnPositions[i]
+		local pos = startPos + v * sizePlayer * 1.5
+
+		-- Make sure there is enough space around the player
+		local traceWalls = util.TraceHull({
+			start = pos,
+			endpos = pos,
+			mins = -0.5 * sizePlayer,
+			maxs = 0.5 * sizePlayer
+		})
+
+		if traceWalls.Hit then continue end
+
+		-- make sure the new position is on the ground
+		local traceGround = util.TraceLine({
+			start = pos,
+			endpos = pos - Vector(0, 0, sizePlayer.z),
+		})
+
+		if not traceGround.HitWorld then continue end
+
+		return pos - Vector(0, 0, 0.5 * sizePlayer.z)
+	end
+
+	return unsafePos
+end
+
+local function OnReviveFailed(ply, failMessage)
+	if isfunction(ply.OnReviveFailedCallback) then
+		ply.OnReviveFailedCallback(ply, failMessage)
+
+		ply.OnReviveFailedCallback = nil
+	else
+		LANG.Msg(ply, failMessage, nil, MSG_MSTACK_WARN)
+	end
+end
+
 ---
 -- Revives a @{Player}
--- @param number delay the delay of the revive
--- @param function fn the @{function} that should be run if the @{Player} revives
--- @param function check an additional checking @{function}
--- @param boolean needcorpse whether the dead @{Player} CORPSE is needed
--- @param boolean force if the @{Player} revive is already forced. Useful if you have multiple reviving equipments
--- @param function onFail this @{function} is called if the revive fails
+-- @param [default=3]number delay The delay of the revive
+-- @param [opt]function OnRevive The @{function} that should be run if the @{Player} revives
+-- @param [opt]function DoCheck An additional DoChecking @{function}
+-- @param [default=false]boolean needsCorpse Whether the dead @{Player} @{CORPSE} is needed
+-- @param [default=false]boolean blockRound Stops the round from ending if this is set to true until the player is alive again
+-- @param [opt]function OnFail This @{function} is called if the revive fails
+-- @param [opt]Vector spawnPos The position where the player should be spawned, accounts for minor obstacles
 -- @realm server
-function plymeta:Revive(delay, fn, check, needcorpse, force, onFail)
+function plymeta:Revive(delay, OnRevive, DoCheck, needsCorpse, blockRound, OnFail, spawnPos)
 	local ply = self
 	local name = "TTT2RevivePlayer" .. ply:EntIndex()
 
-	if timer.Exists(name) or ply.reviving then return end
+	if timer.Exists(name) or ply:IsReviving() then return end
 
-	if force then
-		ply.forceRevive = true
-	end
+	delay = delay or 3
 
-	ply.reviving = true
+	ply:SetReviving(true)
+	ply:SetBlockingRevival(blockRound)
+	ply:SetRevivalStartTime(CurTime())
+	ply:SetRevivalTime(delay)
+
+	ply.OnReviveFailedCallback = OnFail
 
 	timer.Create(name, delay, 1, function()
 		if not IsValid(ply) then return end
 
-		ply.forceRevive = nil
-		ply.reviving = nil
+		ply:SetReviving(false)
+		ply:SetBlockingRevival(false)
+		ply:SetRevivalReason(nil)
 
-		if not isfunction(check) or check(ply) then
+		if not isfunction(DoCheck) or DoCheck(ply) then
 			local corpse = FindCorpse(ply)
 
-			if needcorpse and (not IsValid(corpse) or corpse:IsOnFire()) then
-				ply:ChatPrint("You have not been revived because your body no longer exists.")
+			if needsCorpse and (not IsValid(corpse) or corpse:IsOnFire()) then
+				OnReviveFailed(ply, OnFail, "You have not been revived because your body no longer exists.")
 
-				timer.Remove(name) -- TODO needed?
+				timer.Remove(name)
 
 				return
 			end
 
 			ply:SpawnForRound(true)
 
-			if IsValid(corpse) then
-				local spawnPos = FindCorpsePosition(corpse)
-				if spawnPos then
-					ply:SetPos(spawnPos)
-					ply:SetEyeAngles(Angle(0, corpse:GetAngles().y, 0))
-				end
+			if not spawnPos and IsValid(corpse) then
+				spawnPos = FindCorpsePosition(corpse)
 			end
 
-			hook.Call("PlayerLoadout", GAMEMODE, ply)
+			spawnPos = spawnPos or ply:GetDeathPosition()
 
+			spawnPos = MakeSpawnPositionSafe(spawnPos)
+
+			ply:SetPos(spawnPos)
+			ply:SetEyeAngles(Angle(0, corpse:GetAngles().y, 0))
 			ply:SetMaxHealth(100)
+
+			hook.Run("PlayerLoadout", ply)
 
 			local credits = CORPSE.GetCredits(corpse, 0)
 
 			ply:SetCredits(credits)
+			ply:SelectWeapon("weapon_zm_improvised")
 
 			if IsValid(corpse) then
 				corpse:Remove()
@@ -883,23 +943,69 @@ function plymeta:Revive(delay, fn, check, needcorpse, force, onFail)
 
 			DamageLog("TTT2Revive: " .. ply:Nick() .. " has been respawned.")
 
-			if isfunction(fn) then
-				fn(ply)
+			if isfunction(OnRevive) then
+				OnRevive(ply)
 			end
-		elseif isfunction(onFail) then
-			ply:ChatPrint("Revive failed...")
-
-			onFail(ply)
+		else
+			OnReviveFailed(ply, "Revive failed...")
 		end
 	end)
 end
 
----
--- Returns if a player is currently in a revival process started by @{Player:Revive}
--- @return boolean The revival status
--- @realm server
-function plymeta:IsReviving()
-	return self.reviving or false
+function plymeta:CancelRevival(failMessage)
+	self:SetReviving(false)
+	self:SetBlockingRevival(false)
+	self:SetRevivalReason(nil)
+
+	timer.Remove("TTT2RevivePlayer" .. self:EntIndex())
+
+	OnReviveFailed(self, failMessage or "player_revival_canceled")
+end
+
+function plymeta:SetRevivalReason(name, params)
+	net.Start("TTT2SetRevivalReason")
+
+	if name then
+		net.WriteBool(false)
+		net.WriteString(name)
+
+		local paramsAmount = params and table.Count(params) or 0
+
+		net.WriteUInt(paramsAmount, 8)
+
+		if paramsAmount > 0 then
+			for k, v in pairs(params) do
+				net.WriteString(k)
+				net.WriteString(tostring(v))
+			end
+		end
+	else
+		net.WriteBool(true)
+	end
+
+	net.Send(self)
+end
+
+function plymeta:SetReviving(isReviving)
+	self:TTT2NETSetBool("player_is_reviving", isReviving or false)
+end
+
+function plymeta:SetBlockingRevival(isBlockingRevival)
+	self:TTT2NETSetBool("player_is_blocking_revival", isBlockingRevival or false)
+end
+
+function plymeta:SetRevivalStartTime(startTime)
+	self:TTT2NETSetFloat("player_revival_start_time", startTime or CurTime())
+end
+
+function plymeta:SetRevivalTime(time)
+	self:TTT2NETSetFloat("player_revival_time", time or 0.0)
+end
+
+function plymeta:SetDeathPosition(pos)
+	self:TTT2NETSetFloat("player_death_pos_x", pos.x or 0.0)
+	self:TTT2NETSetFloat("player_death_pos_y", pos.y or 0.0)
+	self:TTT2NETSetFloat("player_death_pos_z", pos.z or 0.0)
 end
 
 ---
@@ -1077,7 +1183,7 @@ function plymeta:Give(weaponClassName, bNoAmmo)
 end
 
 ---
--- Called to drop a weapon in a safe manner (e.g. preparing and space-check)
+-- Called to drop a weapon in a safe manner (e.g. preparing and space-DoCheck)
 -- @param Weapon wep
 -- @realm server
 function plymeta:SafeDropWeapon(wep, keep_selection)
@@ -1223,7 +1329,7 @@ function plymeta:PickupWeapon(wep, dropBlockingWeapon, shouldAutoSelect)
 	-- set in the runtime, we have to use the GM:PlayerCanPickupWeapon hook in a
 	-- slightly hacky way
 
-	-- first we have to check if the player can pick up the weapon at all by running the
+	-- first we have to DoCheck if the player can pick up the weapon at all by running the
 	-- hook manually. This has to be done since the normal pickup is handled internally
 	-- and is therefore not accessable for us
 	wep.wp__WeaponSwitchFlag = dropBlockingWeapon

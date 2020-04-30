@@ -953,3 +953,35 @@ hook.Add("TTTEndRound", "TTTEndRound4TTT2TargetPlayer", function()
 		plys[i].targetPlayer = nil
 	end
 end)
+
+---
+-- Returns if a player is currently in a revival process started by @{Player:Revive}
+-- @return boolean The revival status
+-- @realm server
+function plymeta:IsReviving()
+	return self:TTT2NETGetBool("player_is_reviving", false)
+end
+
+---
+-- Returns if the ongoing revival is blocking or not
+-- @return boolean The blocking status
+-- @realm server
+function plymeta:IsBlockingRevival()
+	return self:TTT2NETGetBool("player_is_blocking_revival", false)
+end
+
+function plymeta:GetRevivalStartTime()
+	return self:TTT2NETGetFloat("player_revival_start_time", CurTime())
+end
+
+function plymeta:GetRevivalTime()
+	return self:TTT2NETGetFloat("player_revival_time", 1.0)
+end
+
+function plymeta:GetDeathPosition()
+	return Vector(
+		self:TTT2NETGetFloat("player_death_pos_x", 0.0),
+		self:TTT2NETGetFloat("player_death_pos_y", 0.0),
+		self:TTT2NETGetFloat("player_death_pos_z", 0.0)
+	)
+end

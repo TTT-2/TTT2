@@ -187,3 +187,31 @@ function GM:SetupMove(ply, mv, cmd)
 
 	hook.Run("TTT2PlayerReady", ply)
 end
+
+net.Receive("TTT2SetRevivalReason", function()
+	local client = LocalPlayer()
+	local isReset = net.ReadBool()
+
+	client.revivalReason = {}
+
+	if isReset then return end
+
+	client.revivalReason.name = net.ReadString()
+	client.revivalReason.params = {}
+
+	local paramsAmount = net.ReadUInt(8)
+
+	if paramsAmount == 0 then return end
+
+	for i = 1, paramsAmount do
+		client.revivalReason.params[net.ReadString()] = net.ReadString()
+	end
+end)
+
+function plymeta:HasRevivalReason()
+	return (self.revivalReason and self.revivalReason.name and self.revivalReason.name ~= "") or false
+end
+
+function plymeta:GetRevivalReason()
+	return self.revivalReason or {}
+end

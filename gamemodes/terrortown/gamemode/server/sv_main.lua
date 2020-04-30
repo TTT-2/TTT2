@@ -1329,7 +1329,7 @@ function GM:TTTCheckForWin()
 		local v = plys[i]
 		local tm = v:GetTeam()
 
-		if (v:IsTerror() or v.forceRevive) and not v:GetSubRoleData().preventWin and tm ~= TEAM_NONE then
+		if (v:IsTerror() or v:IsBlockingRevival()) and not v:GetSubRoleData().preventWin and tm ~= TEAM_NONE then
 			alive[#alive + 1] = tm
 		end
 	end
