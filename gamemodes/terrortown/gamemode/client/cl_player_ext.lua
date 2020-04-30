@@ -192,30 +192,41 @@ net.Receive("TTT2SetRevivalReason", function()
 	local client = LocalPlayer()
 	local isReset = net.ReadBool()
 
-	client.revivalReason = {}
+	local name, params
 
-	if isReset then return end
+	if not isReset then
+		name = net.ReadString()
 
-	client.revivalReason.name = net.ReadString()
-	client.revivalReason.params = {}
+		local paramsAmount = net.ReadUInt(8)
 
-	local paramsAmount = net.ReadUInt(8)
+		if paramsAmount > 0 then
+			params = {}
 
-	if paramsAmount == 0 then return end
-
-	for i = 1, paramsAmount do
-		client.revivalReason.params[net.ReadString()] = net.ReadString()
+			for i = 1, paramsAmount do
+				client.revivalReason.params[net.ReadString()] = net.ReadString()
+			end
+		end
 	end
+
+	client:SetRevivalReason(name, params)
 end)
 
 net.Receive("TTT2RevivalStopped", function()
 	LocalPlayer():EmitSound("buttons/button8.wav")
 end)
 
+---
+-- Returns if a player has a revival reason set.
+-- @return [default=false]boolean Returns if a player has a revival reason
+-- @realm client
 function plymeta:HasRevivalReason()
 	return (self.revivalReason and self.revivalReason.name and self.revivalReason.name ~= "") or false
 end
 
+---
+-- Returns the current revival reason.
+-- @return [default={}]table The revival reason table
+-- @realm client
 function plymeta:GetRevivalReason()
 	return self.revivalReason or {}
 end

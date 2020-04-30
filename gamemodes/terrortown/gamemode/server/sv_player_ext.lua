@@ -958,6 +958,10 @@ function plymeta:Revive(delay, OnRevive, DoCheck, needsCorpse, blockRound, OnFai
 	end)
 end
 
+---
+-- Cancel the ongoing revival process.
+-- @param [default="message_revival_canceled"]string failMessage The fail message that should be displayed for the client
+-- @realm server
 function plymeta:CancelRevival(failMessage)
 	self:SetReviving(false)
 	self:SetBlockingRevival(false)
@@ -968,46 +972,42 @@ function plymeta:CancelRevival(failMessage)
 	OnReviveFailed(self, failMessage or "message_revival_canceled")
 end
 
-function plymeta:SetRevivalReason(name, params)
-	net.Start("TTT2SetRevivalReason")
-
-	if name then
-		net.WriteBool(false)
-		net.WriteString(name)
-
-		local paramsAmount = params and table.Count(params) or 0
-
-		net.WriteUInt(paramsAmount, 8)
-
-		if paramsAmount > 0 then
-			for k, v in pairs(params) do
-				net.WriteString(k)
-				net.WriteString(tostring(v))
-			end
-		end
-	else
-		net.WriteBool(true)
-	end
-
-	net.Send(self)
-end
-
+---
+-- Sets the revival state.
+-- @param [default=false]boolean isReviving The reviving state
+-- @realm server
 function plymeta:SetReviving(isReviving)
 	self:TTT2NETSetBool("player_is_reviving", isReviving or false)
 end
 
+---
+-- Sets the blocking revival state
+-- @param [default=false]boolean isBlockingRevival The blocking revival state
+-- @realm server
 function plymeta:SetBlockingRevival(isBlockingRevival)
 	self:TTT2NETSetBool("player_is_blocking_revival", isBlockingRevival or false)
 end
 
+---
+-- Sets the revival start time
+-- @param [default=@{CurTime()}]number startTime The revival start time
+-- @realm server
 function plymeta:SetRevivalStartTime(startTime)
 	self:TTT2NETSetFloat("player_revival_start_time", startTime or CurTime())
 end
 
+---
+-- Sets the revival time
+-- @param [default=0.0]number time The revival time
+-- @realm server
 function plymeta:SetRevivalTime(time)
 	self:TTT2NETSetFloat("player_revival_time", time or 0.0)
 end
 
+---
+-- Sets the death position
+-- @param Vector pos The death position
+-- @realm server
 function plymeta:SetDeathPosition(pos)
 	self:TTT2NETSetFloat("player_death_pos_x", pos.x or 0.0)
 	self:TTT2NETSetFloat("player_death_pos_y", pos.y or 0.0)

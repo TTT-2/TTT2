@@ -957,7 +957,7 @@ end)
 ---
 -- Returns if a player is currently in a revival process started by @{Player:Revive}
 -- @return boolean The revival status
--- @realm server
+-- @realm shared
 function plymeta:IsReviving()
 	return self:TTT2NETGetBool("player_is_reviving", false)
 end
@@ -965,23 +965,71 @@ end
 ---
 -- Returns if the ongoing revival is blocking or not
 -- @return boolean The blocking status
--- @realm server
+-- @realm shared
 function plymeta:IsBlockingRevival()
 	return self:TTT2NETGetBool("player_is_blocking_revival", false)
 end
 
+---
+-- Returns the time when the ongoing revival started.
+-- @return [default=@{CurTime()}]number The time when the revival started in seconds
+-- @realm shared
 function plymeta:GetRevivalStartTime()
 	return self:TTT2NETGetFloat("player_revival_start_time", CurTime())
 end
 
+---
+-- Returns the time for the ongoing revival.
+-- @return [default=1.0]number The time for the revival in seconds
+-- @realm shared
 function plymeta:GetRevivalTime()
 	return self:TTT2NETGetFloat("player_revival_time", 1.0)
 end
 
+---
+-- Returns the death position of the player.
+-- @return [default=Vector(0.0, 0.0, 0.0)]Vector The death position
+-- @realm shared
 function plymeta:GetDeathPosition()
 	return Vector(
 		self:TTT2NETGetFloat("player_death_pos_x", 0.0),
 		self:TTT2NETGetFloat("player_death_pos_y", 0.0),
 		self:TTT2NETGetFloat("player_death_pos_z", 0.0)
 	)
+end
+
+---
+-- Sets a revival reason that is displayed in the revival HUD element.
+-- It supports language identifier for translated strings.
+-- @param [default=nil]string name The text or the language identifer, nil to reset
+-- @param [opt]table params The params table used for @{LANG.GetParamTranslation}
+-- @realm shared
+function plymeta:SetRevivalReason(name, params)
+	if SERVER then
+		net.Start("TTT2SetRevivalReason")
+
+		if name then
+			net.WriteBool(false)
+			net.WriteString(name)
+
+			local paramsAmount = params and table.Count(params) or 0
+
+			net.WriteUInt(paramsAmount, 8)
+
+			if paramsAmount > 0 then
+				for k, v in pairs(params) do
+					net.WriteString(k)
+					net.WriteString(tostring(v))
+				end
+			end
+		else
+			net.WriteBool(true)
+		end
+
+		net.Send(self)
+	else
+		self.revivalReason = {}
+		self.revivalReason.name = name
+		self.revivalReason.params = params
+	end
 end
