@@ -602,7 +602,7 @@ function plymeta:ResetViewRoll()
 end
 
 ---
--- DoChecks whether a @{Player} is able to spawn
+-- Checks whether a @{Player} is able to spawn
 -- @return boolean
 -- @realm server
 function plymeta:ShouldSpawn()
