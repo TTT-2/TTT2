@@ -7,6 +7,7 @@ HUDELEMENT.Base = base
 if CLIENT then
 	local ParT = LANG.GetParamTranslation
 	local TryT = LANG.TryTranslation
+	local tableIsEmpty = table.IsEmpty
 
 	local materialBlockingRevival = Material("vgui/ttt/hud_blocking_revival")
 
@@ -80,7 +81,7 @@ if CLIENT then
 			local rawRevivalReason = client:GetRevivalReason()
 
 			local translatedText
-			if rawRevivalReason.params then
+			if not tableIsEmpty(rawRevivalReason.params) then
 				translatedText = ParT(rawRevivalReason.name, rawRevivalReason.params)
 			else
 				translatedText = TryT(rawRevivalReason.name)
