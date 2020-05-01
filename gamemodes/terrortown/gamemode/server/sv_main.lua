@@ -9,7 +9,7 @@ ttt_include("sh_shopeditor")
 ttt_include("sh_network_sync")
 ttt_include("sh_door")
 ttt_include("sh_voice")
-ttt_include("sh_walkspeed")
+ttt_include("sh_speed")
 
 ttt_include("sv_network_sync")
 ttt_include("sv_hud_manager")

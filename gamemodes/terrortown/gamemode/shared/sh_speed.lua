@@ -54,7 +54,7 @@ if CLIENT then
 	-- It is called in @{GM:TTT2PlayerReady}.
 	-- @realm client
 	function SPEED:Initialize()
-		STATUS:RegisterStatus("ttt_walkspeed_status_good", {
+		STATUS:RegisterStatus("ttt_speed_status_good", {
 			hud = {
 				Material("vgui/ttt/perks/hud_speedrun.png")
 			},
@@ -64,7 +64,7 @@ if CLIENT then
 			end
 		})
 
-		STATUS:RegisterStatus("ttt_walkspeed_status_bad", {
+		STATUS:RegisterStatus("ttt_speed_status_bad", {
 			hud = {
 				Material("vgui/ttt/perks/hud_speedrun.png")
 			},
@@ -78,14 +78,14 @@ if CLIENT then
 			newval = math.Round(newval, 1)
 
 			if newval == 1.0 then
-				STATUS:RemoveStatus("ttt_walkspeed_status_good")
-				STATUS:RemoveStatus("ttt_walkspeed_status_bad")
+				STATUS:RemoveStatus("ttt_speed_status_good")
+				STATUS:RemoveStatus("ttt_speed_status_bad")
 			elseif newval > 1.0 and (not oldval or oldval <= 1.0) then
-				STATUS:RemoveStatus("ttt_walkspeed_status_bad")
-				STATUS:AddStatus("ttt_walkspeed_status_good")
+				STATUS:RemoveStatus("ttt_speed_status_bad")
+				STATUS:AddStatus("ttt_speed_status_good")
 			elseif newval < 1.0 and (not oldval or oldval >= 1.0) then
-				STATUS:RemoveStatus("ttt_walkspeed_status_good")
-				STATUS:AddStatus("ttt_walkspeed_status_bad")
+				STATUS:RemoveStatus("ttt_speed_status_good")
+				STATUS:AddStatus("ttt_speed_status_bad")
 			end
 		end)
 	end
