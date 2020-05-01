@@ -516,6 +516,7 @@ COLOR_OLIVE = Color(100, 100, 0, 255)
 
 -- load non-wrapped modules directly
 require("marks")
+require("thermalvision")
 
 -- TODO load modules that are currently not included in gmod but waiting for merge
 require("outline")
