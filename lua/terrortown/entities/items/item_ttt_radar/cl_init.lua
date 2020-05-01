@@ -211,7 +211,7 @@ function RADAR:Draw(client)
 			if tgt.color then
 				surface.SetDrawColor(tgt.color.r, tgt.color.g, tgt.color.b, alpha)
 				surface.SetTextColor(tgt.color.r, tgt.color.g, tgt.color.b, alpha)
-			elseif c then
+			elseif tgt.hasSubrole and c then
 				surface.SetDrawColor(c.r, c.g, c.b, alpha)
 				surface.SetTextColor(c.r, c.g, c.b, alpha)
 			else
@@ -262,14 +262,19 @@ local function ReceiveRadarScan()
 			net.ReadInt(32)
 		)
 
-		local subrole = net.ReadInt(2 * ROLE_BITS)
+		local hasSubrole = net.ReadBool()
+		local subrole
+
+		if hasSubrole then
+			subrole = net.ReadUInt(ROLE_BITS)
+		end
 
 		local color
 		if net.ReadBool() then
 			color = net.ReadColor()
 		end
 
-		RADAR.targets[#RADAR.targets + 1] = {pos = pos, subrole = subrole, color = color}
+		RADAR.targets[#RADAR.targets + 1] = {pos = pos, subrole = subrole, hasSubrole = hasSubrole, color = color}
 	end
 
 	RADAR.enable = true

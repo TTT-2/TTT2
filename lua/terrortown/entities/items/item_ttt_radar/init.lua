@@ -71,7 +71,12 @@ local function TriggerRadarScan(ply)
 		net.WriteInt(tgt.pos.y, 32)
 		net.WriteInt(tgt.pos.z, 32)
 
-		net.WriteInt(tgt.subrole, 2 * ROLE_BITS)
+		if tgt.subrole == -1 then
+			net.WriteBool(false)
+		else
+			net.WriteBool(true)
+			net.WriteUInt(tgt.subrole, ROLE_BITS)
+		end
 
 		if tgt.color then
 			net.WriteBool(true)
