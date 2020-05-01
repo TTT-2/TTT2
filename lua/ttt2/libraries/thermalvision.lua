@@ -28,27 +28,27 @@ else
 	local overlayColorWithoutBG = Color(0, 0, 0, 235)
 
 	local colorModifyBG = {
-		[ "$pp_colour_addr" ] = 0,
-		[ "$pp_colour_addg" ] = 0.0,
-		[ "$pp_colour_addb" ] = 0.8,
-		[ "$pp_colour_brightness" ] = 0.1,
-		[ "$pp_colour_contrast" ] = 0.15,
-		[ "$pp_colour_colour" ] = 0.0,
-		[ "$pp_colour_mulr" ] = 0,
-		[ "$pp_colour_mulg" ] = 0,
-		[ "$pp_colour_mulb" ] = 1
+		["$pp_colour_addr"] = 0,
+		["$pp_colour_addg"] = 0.0,
+		["$pp_colour_addb"] = 0.8,
+		["$pp_colour_brightness"] = 0.1,
+		["$pp_colour_contrast"] = 0.15,
+		["$pp_colour_colour"] = 0.0,
+		["$pp_colour_mulr"] = 0,
+		["$pp_colour_mulg"] = 0,
+		["$pp_colour_mulb"] = 1
 	}
 
 	local colorModifyEnts = {
-		[ "$pp_colour_addr" ] = 0.4,
-		[ "$pp_colour_addg" ] = 0.2,
-		[ "$pp_colour_addb" ] = 0.0,
-		[ "$pp_colour_brightness" ] = 1.0,
-		[ "$pp_colour_contrast" ] = 0.35,
-		[ "$pp_colour_colour" ] = 30,
-		[ "$pp_colour_mulr" ] = 0,
-		[ "$pp_colour_mulg" ] = 0,
-		[ "$pp_colour_mulb" ] = 0
+		["$pp_colour_addr"] = 0.4,
+		["$pp_colour_addg"] = 0.2,
+		["$pp_colour_addb"] = 0.0,
+		["$pp_colour_brightness"] = 1.0,
+		["$pp_colour_contrast"] = 0.35,
+		["$pp_colour_colour"] = 30,
+		["$pp_colour_mulr"] = 0,
+		["$pp_colour_mulg"] = 0,
+		["$pp_colour_mulb"] = 0
 	}
 	---
 	-- Hook that renders the entities with the thermalvision
@@ -70,7 +70,7 @@ else
 
 			--omit depth test but block writing to depth buffer
 			render.SuppressEngineLighting(true)
-			render.OverrideDepthEnable( true, false )
+			render.OverrideDepthEnable(true, false)
 			cam.Start3D()
 			cam.IgnoreZ(true)
 				for _, entry in ipairs(thermalvisionList) do
@@ -82,7 +82,7 @@ else
 					ent:DrawModel()
 				end
 			cam.End3D()
-			render.OverrideDepthEnable( false, false )
+			render.OverrideDepthEnable(false, false)
 			render.SuppressEngineLighting(false)
 
 			--screenspace effect on stenciled areas to highlight entities
@@ -91,7 +91,7 @@ else
 			render.SetStencilPassOperation(STENCIL_KEEP)
 			render.SetStencilFailOperation(STENCIL_KEEP)
 
-			DrawColorModify( colorModifyEnts )
+			DrawColorModify(colorModifyEnts)
 
 			--weaken the effect behind walls
 			cam.Start2D()
@@ -108,7 +108,7 @@ else
 			render.SetStencilPassOperation(STENCIL_KEEP)
 			render.SetStencilFailOperation(STENCIL_KEEP)
 
-			DrawColorModify( colorModifyBG )
+			DrawColorModify(colorModifyBG)
 		end
 
 		--second render pass: draw all parts of entities which are visible (z test succceeds)
@@ -148,7 +148,7 @@ else
 			render.SetStencilPassOperation(STENCIL_KEEP)
 			render.SetStencilFailOperation(STENCIL_KEEP)
 
-			DrawColorModify( colorModifyEnts )
+			DrawColorModify(colorModifyEnts)
 		end
 
 		render.SetStencilEnable(false)
