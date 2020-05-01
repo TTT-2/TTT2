@@ -2,6 +2,9 @@
 -- player extension
 -- @author Mineotopia
 
+---
+-- Resets the spawn position of all players.
+-- @realm server
 function player.ResetSpawnPosition()
 	local plys = player.GetAll()
 
@@ -10,6 +13,9 @@ function player.ResetSpawnPosition()
 	end
 end
 
+---
+-- Resets the death position of all players.
+-- @realm server
 function player.ResetDeathPosition()
 	local plys = player.GetAll()
 
@@ -18,6 +24,9 @@ function player.ResetDeathPosition()
 	end
 end
 
+---
+-- Resets the 'diedInRound' flag of all players.
+-- @realm server
 function player.ResetDiedInRound()
 	local plys = player.GetAll()
 
@@ -28,6 +37,9 @@ function player.ResetDiedInRound()
 	end
 end
 
+---
+-- Resets the 'activeInRound' flag of all players.
+-- @realm server
 function player.ResetActiveInRound()
 	local plys = player.GetAll()
 
@@ -38,6 +50,9 @@ function player.ResetActiveInRound()
 	end
 end
 
+---
+-- Initializes the 'activeInRound' flag of all players.
+-- @realm server
 function player.InitActiveInRound()
 	local plys = player.GetAll()
 
