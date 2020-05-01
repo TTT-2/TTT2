@@ -133,6 +133,7 @@ function GM:PlayerSpawn(ply)
 	SCORE:HandleSpawn(ply)
 
 	ply:SetSpawnPosition(ply:GetPos())
+	ply:SetDeathPosition(Vector(0, 0, 0))
 
 	-- a function to handle the rolespecific stuff that should be done on
 	-- rolechange and respawn (while a round is active)
@@ -781,6 +782,7 @@ end
 -- @local
 function GM:PlayerDeath(victim, infl, attacker)
 	victim:SetDeathPosition(victim:GetPos())
+	victim:SetDiedInRound(true)
 
 	-- stop bleeding
 	util.StopBleeding(victim)
@@ -835,6 +837,7 @@ end
 -- @realm server
 function GM:PlayerSilentDeath(victim)
 	victim:SetDeathPosition(victim:GetPos())
+	victim:SetDiedInRound(true)
 end
 
 ---

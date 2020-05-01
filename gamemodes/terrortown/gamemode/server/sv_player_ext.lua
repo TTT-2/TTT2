@@ -958,6 +958,26 @@ function plymeta:SetSpawnPosition(pos)
 end
 
 ---
+-- Sets the if a player was active (TEAM_TERROR) in a round.
+-- @param boolean state The state
+-- @realm server
+function plymeta:SetActiveInRound(state)
+	if state and (GetRoundState() ~= ROUND_ACTIVE or not self:IsTerror()) then return end
+
+	self:TTT2NETSetBool("player_was_active_in_round", state or false)
+end
+
+---
+-- Sets the if a player died in a round.
+-- @param boolean state The state
+-- @realm server
+function plymeta:SetDiedInRound(state)
+	if state and (GetRoundState() ~= ROUND_ACTIVE or not self:IsTerror()) then return end
+
+	self:TTT2NETSetBool("player_has_died_in_round", state or false)
+end
+
+---
 -- Selects a random available @{ROLE} for a @{Player}
 -- @param table avoidRoles list of @{ROLE}s that should be avoided
 -- @realm server

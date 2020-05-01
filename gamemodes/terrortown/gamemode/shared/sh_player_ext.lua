@@ -850,8 +850,8 @@ end
 -- Returns whether a @{Player} was revived after beeing confirmed this round
 -- @return boolean
 -- @realm shared
-function plymeta:Revived()
-	return not self:TTT2NETGetBool("body_found", false) and self:OnceFound()
+function plymeta:WasRevivedAndConfirmed()
+	return self:WasRevivedInRound() and self:OnceFound() and self:RoleKnown()
 end
 
 ---
@@ -1008,6 +1008,31 @@ function plymeta:GetSpawnPosition()
 		self:TTT2NETGetFloat("player_spawn_pos_y", 0.0),
 		self:TTT2NETGetFloat("player_spawn_pos_z", 0.0)
 	)
+end
+
+---
+-- Checks if a player was active during this round. A player was active if they received
+-- a role. This state is reset once the next round begins (@{GM:TTTBeginRound}).
+-- @return boolean Returns if the player was active
+-- @realm shared
+function plymeta:WasActiveInRound()
+	return self:TTT2NETGetBool("player_was_active_in_round", false)
+end
+
+---
+-- Checks if a player died while the round was active.
+-- @return boolean Returns if the player died in the round
+-- @realm shared
+function plymeta:HasDiedInRound()
+	return self:TTT2NETGetBool("player_has_died_in_round", false)
+end
+
+---
+-- Checks if a player was revived in the round.
+-- @return boolean Returns if the player was revived
+-- @realm shared
+function plymeta:WasRevivedInRound()
+	return self:HasDiedInRound() and self:IsTerror()
 end
 
 ---

@@ -956,6 +956,9 @@ function PrepareRound()
 		plys[i]:SetTargetPlayer(nil)
 	end
 
+	player.ResetActiveInRound()
+	player.ResetDiedInRound()
+
 	-- Tell hooks and map we started prep
 	hook.Call("TTTPrepareRound", GAMEMODE)
 
@@ -1168,6 +1171,11 @@ function BeginRound()
 	GAMEMODE:UpdatePlayerLoadouts() -- needs to happen when round_active
 
 	ARMOR:InitPlayerArmor()
+
+	-- after the roles are selected, players should receive a "was ative in round"
+	-- state if they received a role
+	player.InitActiveInRound()
+	player.ResetDiedInRound()
 
 	hook.Call("TTTBeginRound", GAMEMODE)
 
