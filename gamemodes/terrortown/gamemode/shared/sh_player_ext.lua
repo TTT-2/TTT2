@@ -959,7 +959,7 @@ end)
 -- @return boolean The revival status
 -- @realm shared
 function plymeta:IsReviving()
-	return self:TTT2NETGetBool("player_is_reviving", false) and not self:IsAlive()
+	return self:TTT2NETGetBool("player_is_reviving", false) and not self:Alive()
 end
 
 ---
