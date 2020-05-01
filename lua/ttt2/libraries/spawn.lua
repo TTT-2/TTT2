@@ -27,14 +27,26 @@ local spawnTypes = {
 	"info_player_teamspawn"
 }
 
+
+
 spawn = spawn or {}
 
 spawn.cachedSpawnEntities = spawn.cachedSpawnEntities or {}
 
-function spawn.IsSpawnPointSafe(pos, force)
+---
+-- Checks if a given spawn point is safe. Safe means that a player can spawn without
+-- being stuck. Entities which are passable are ignored by the check.
+-- @param Vector pos The respawn position
+-- @param [default=false]boolean force Should the respawn be forced? This means killing other players that block this position
+-- @param [opt]table|Entity filder A table of entities or an entity that should be ignored by this check
+-- @return bollean Teturns if the spawn point is safe
+-- @realm server
+function spawn.IsSpawnPointSafe(pos, force, filter)
 	if not util.IsInWorld(pos) then
 		return false
 	end
+
+	filter = istable(filter) and filter or {filter}
 
 	local posCenter = pos + Vector(0, 0, 0.5 * sizePlayer.z)
 
@@ -43,10 +55,22 @@ function spawn.IsSpawnPointSafe(pos, force)
 		start = posCenter,
 		endpos = posCenter,
 		mins = -0.5 * sizePlayer,
-		maxs = 0.5 * sizePlayer
+		maxs = 0.5 * sizePlayer,
+		filter = function(ent)
+			if not IsValid(ent) or ent:IsPlayer() then
+				return false
+			end
+
+			if ent:HasPassableCollisionGrup() then
+				return false
+			end
+
+			return true
+		end,
+		mask = MASK_SOLID
 	})
 
-	if traceWalls.HitWorld then
+	if traceWalls.Hit then
 		return false
 	end
 
@@ -58,7 +82,7 @@ function spawn.IsSpawnPointSafe(pos, force)
 		mask = MASK_SOLID
 	})
 
-	if not traceGround.HitWorld then
+	if not traceGround.Hit then
 		return false
 	end
 
@@ -74,6 +98,8 @@ function spawn.IsSpawnPointSafe(pos, force)
 			or not blockingEntity:IsTerror() or not blockingEntity:Alive()
 		then continue end
 
+		if table.HasValue(filter, blockingEntity) then continue end
+
 		if force then
 			blockingEntity:Kill()
 		else
@@ -84,6 +110,11 @@ function spawn.IsSpawnPointSafe(pos, force)
 	return true
 end
 
+---
+-- Returns a selection of points around a given point.
+-- @param Vector pos The given position
+-- @return table A table of position vectors
+-- @realm server
 function spawn.GetSpawnPointsAroundSpawn(pos)
 	if not pos then return {} end
 
@@ -98,7 +129,10 @@ end
 
 ---
 -- Tries to make spawn position valid by scanning surrounding area for
--- valid positions
+-- valid positions.
+-- @param Vector unsafePos The unsafe spawn position
+-- @return Vector|nil Returns the safe spawn position, nil if none was found
+-- @realm server
 function spawn.MakeSpawnPointSafe(unsafePos)
 	local spawnPoints = spawn.GetSpawnPointsAroundSpawn(unsafePos)
 
@@ -112,10 +146,10 @@ function spawn.MakeSpawnPointSafe(unsafePos)
 end
 
 ---
--- Returns a list of all spawnable @{Entity}
+-- Returns a list of all spawn entities
 -- @param boolean shouldShuffle whether the table should be shuffled
 -- @param boolean forceAll used unless absolutely necessary (includes info_player_start spawns)
--- @return table
+-- @return table Returns a table of unsafe spawn entities
 -- @realm server
 function spawn.GetPlayerSpawnEntities(shouldShuffle, forceAll)
 	local tbl = {}
@@ -151,6 +185,10 @@ function spawn.GetPlayerSpawnEntities(shouldShuffle, forceAll)
 	return tbl
 end
 
+---
+-- Gets a table of spawnpoints on the map.
+-- @return table Returns a table of spawnpoints as @{Vector}s
+-- @realm server
 function spawn.GetPlayerSpawnPointTable()
 	local spawnEnts = spawn.GetPlayerSpawnEntities(true, false)
 	local spawnPoints = {}
@@ -162,6 +200,12 @@ function spawn.GetPlayerSpawnPointTable()
 	return spawnPoints
 end
 
+---
+-- Gets a safe random player spawn entity. If no free and safe spawnpoint is found, it tries
+-- to create its own by searching around existing ones.
+-- @param Player ply The player that should receive their spawn point
+-- @return Entity A safe spawn entity
+-- @realm server
 function spawn.GetRandomPlayerSpawnEntity(ply)
 	-- One might think that we have to regenerate our spawnpoint
 	-- cache. Otherwise, any riggedSpawnPoints spawn entities would not get reused, and
@@ -229,6 +273,9 @@ function spawn.GetRandomPlayerSpawnEntity(ply)
 	return pickedSpawnEntity
 end
 
+---
+-- Removes all map spawn entities, shouldn't be used except you know what you're doing.
+-- @realm server
 function spawn.RemovePlayerSpawnEntities()
 	local spawnableEnts = spawn.GetPlayerSpawnEntities(false, true)
 

@@ -811,8 +811,9 @@ end
 -- @param [default=false]boolean blockRound Stops the round from ending if this is set to true until the player is alive again
 -- @param [opt]function OnFail This @{function} is called if the revive fails
 -- @param [opt]Vector spawnPos The position where the player should be spawned, accounts for minor obstacles
+-- @param [opt]Angle spawnEyeAngle The eye angles of the revived players
 -- @realm server
-function plymeta:Revive(delay, OnRevive, DoCheck, needsCorpse, blockRound, OnFail, spawnPos)
+function plymeta:Revive(delay, OnRevive, DoCheck, needsCorpse, blockRound, OnFail, spawnPos, spawnEyeAngle)
 	local ply = self
 	local name = "TTT2RevivePlayer" .. ply:EntIndex()
 
@@ -851,13 +852,21 @@ function plymeta:Revive(delay, OnRevive, DoCheck, needsCorpse, blockRound, OnFai
 
 			if not spawnPos and IsValid(corpse) then
 				spawnPos = corpse:GetPos()
+				spawnEyeAngle = Angle(0, corpse:GetAngles().y, 0)
 			end
 
 			spawnPos = spawnPos or ply:GetDeathPosition()
 			spawnPos = spawn.MakeSpawnPointSafe(spawnPos)
 
+			if not spawnPos then
+				local spawnEntity = spawn.GetRandomPlayerSpawnEntity(ply)
+
+				spawnPos = spawnEntity:GetPos()
+				spawnEyeAngle = spawnEntity:EyeAngles()
+			end
+
 			ply:SetPos(spawnPos)
-			ply:SetEyeAngles(Angle(0, corpse:GetAngles().y, 0))
+			ply:SetEyeAngles(spawnEyeAngle or Angle(0, 0, 0))
 			ply:SetMaxHealth(100)
 
 			hook.Run("PlayerLoadout", ply)
