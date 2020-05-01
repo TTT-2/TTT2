@@ -4,7 +4,6 @@
 -- @desc Player spawning/dying
 
 local math = math
-local table = table
 local player = player
 local net = net
 local IsValid = IsValid
@@ -27,7 +26,7 @@ util.AddNetworkString("ttt2_damage_received")
 -- @param Player ply The @{Player} who spawned.
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/PlayerInitialSpawn
+-- @ref https://wiki.facepunch.com/gmod/GM:PlayerInitialSpawn
 -- @local
 function GM:PlayerInitialSpawn(ply)
 	ply:InitialSpawn()
@@ -68,7 +67,7 @@ end
 -- @param string steamid Player SteamID
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/NetworkIDValidated
+-- @ref https://wiki.facepunch.com/gmod/GM:NetworkIDValidated
 -- @local
 function GM:NetworkIDValidated(name, steamid)
 	-- edge case where player authed after initspawn
@@ -90,7 +89,7 @@ end
 -- @param Player ply The @{Player} who spawned
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/PlayerSpawn
+-- @ref https://wiki.facepunch.com/gmod/GM:PlayerSpawn
 -- @local
 function GM:PlayerSpawn(ply)
 	-- stop bleeding
@@ -133,6 +132,8 @@ function GM:PlayerSpawn(ply)
 
 	SCORE:HandleSpawn(ply)
 
+	ply:SetSpawnPosition(ply:GetPos())
+
 	-- a function to handle the rolespecific stuff that should be done on
 	-- rolechange and respawn (while a round is active)
 	if ply:IsActive() then
@@ -148,7 +149,7 @@ end
 -- @param Entity ent The hands to set model of
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/PlayerSetHandsModel
+-- @ref https://wiki.facepunch.com/gmod/GM:PlayerSetHandsModel
 -- @local
 function GM:PlayerSetHandsModel(ply, ent)
 	local simplemodel = player_manager.TranslateToPlayerModelName(ply:GetModel())
@@ -164,123 +165,31 @@ end
 ---
 -- Check if a @{Player} can spawn at a certain spawnpoint.
 -- @param Player ply The @{Player} who is spawned
--- @param Entity spwn The spawnpoint entity (on the map)
+-- @param Entity spawnEntity The spawnpoint entity (on the map)
 -- @param boolean force If this is true, it'll kill any players blocking the spawnpoint
 -- @param boolean rigged ?
 -- @return boolean Return true to indicate that the spawnpoint is suitable (Allow for the @{Player} to spawn here), false to prevent spawning
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/IsSpawnpointSuitable
+-- @ref https://wiki.facepunch.com/gmod/GM:IsSpawnpointSuitable
 -- @local
-function GM:IsSpawnpointSuitable(ply, spwn, force, rigged)
+function GM:IsSpawnpointSuitable(ply, spawnEntity, force, rigged)
 	if not IsValid(ply) or not ply:IsTerror() then
 		return true
 	end
 
-	if not rigged and (not IsValid(spwn) or not spwn:IsInWorld()) then
-		return false
-	end
-
-	-- spwn is normally an ent, but we sometimes use a vector for jury rigged
-	-- positions
-	local pos = rigged and spwn or spwn:GetPos()
-
-	if not util.IsInWorld(pos) then
-		return false
-	end
-
-	local blocking = ents.FindInBox(pos + Vector(-16, - 16, 0), pos + Vector(16, 16, 64))
-
-	for i = 1, #blocking do
-		local pl = blocking[i]
-
-		if not IsValid(pl) or not pl:IsPlayer() or not pl:IsTerror() or not pl:Alive() then continue end
-
-		if force then
-			pl:Kill()
-		else
-			return false
-		end
-	end
-
-	return true
+	return spawn.IsSpawnPointSafe(spawnEntity:GetPos(), force)
 end
-
-local SpawnTypes = {
-	"info_player_deathmatch",
-	"info_player_combine",
-	"info_player_rebel",
-	"info_player_counterterrorist",
-	"info_player_terrorist",
-	"info_player_axis",
-	"info_player_allies",
-	"gmod_player_start",
-	"info_player_teamspawn"
-}
 
 ---
 -- Returns a list of all spawnable @{Entity}
 -- @param boolean shuffle whether the table should be shuffled
 -- @param boolean force_all used unless absolutely necessary (includes info_player_start spawns)
 -- @return table
+-- @deprecated Use @{spawn.GetPlayerSpawnEntities} instead
 -- @realm server
-function GetSpawnEnts(shuffled, force_all)
-	local tbl = {}
-
-	for i = 1, #SpawnTypes do
-		local classname = SpawnTypes[i]
-		local entsTbl = ents.FindByClass(classname)
-
-		for k = 1, #entsTbl do
-			if entsTbl[k].BeingRemoved then continue end
-
-			tbl[#tbl + 1] = entsTbl[k]
-		end
-	end
-
-	-- Don't use info_player_start unless absolutely necessary, because eg. TF2
-	-- uses it for observer starts that are in places where players cannot really
-	-- spawn well. At all.
-	if force_all or #tbl == 0 then
-		local startTbl = ents.FindByClass("info_player_start")
-
-		for k = 1, #startTbl do
-			if startTbl[k].BeingRemoved then continue end
-
-			tbl[#tbl + 1] = startTbl[k]
-		end
-	end
-
-	if shuffled then
-		table.Shuffle(tbl)
-	end
-
-	return tbl
-end
-
----
--- Generate points next to and above the spawn that we can test for suitability
-local function PointsAroundSpawn(spwn)
-	if not IsValid(spwn) then return {} end
-
-	local pos = spwn:GetPos()
-
-	local w = 36 -- bit roomier than player hull
-	--local h = 72
-
-	-- all rigged positions
-	-- could be done without typing them out, but would take about as much time
-	return {
-		pos + Vector(w, 0, 0),
-		pos + Vector(0, w, 0),
-		pos + Vector(w, w, 0),
-		pos + Vector(-w, 0, 0),
-		pos + Vector(0, - w, 0),
-		pos + Vector(-w, - w, 0),
-		pos + Vector(-w, w, 0),
-		pos + Vector(w, - w, 0)
-		--pos + Vector(0,	0,	h) -- just in case we're outside
-	}
+function GetSpawnEnts(shouldShuffle, forceAll)
+	return spawn.GetPlayerSpawnEntities(shouldShuffle, forceAll)
 end
 
 ---
@@ -289,71 +198,10 @@ end
 -- @return Entity The spawnpoint entity to spawn the @{Player} at
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/PlayerSelectSpawn
+-- @ref https://wiki.facepunch.com/gmod/GM:PlayerSelectSpawn
 -- @local
 function GM:PlayerSelectSpawn(ply)
-	if not self.SpawnPoints or #self.SpawnPoints == 0 or not IsTableOfEntitiesValid(self.SpawnPoints) then
-		self.SpawnPoints = GetSpawnEnts(true, false)
-
-		-- One might think that we have to regenerate our spawnpoint
-		-- cache. Otherwise, any rigged spawn entities would not get reused, and
-		-- MORE new entities would be made instead. In reality, the map cleanup at
-		-- round start will remove our rigged spawns, and we'll have to create new
-		-- ones anyway.
-	end
-
-	if #self.SpawnPoints == 0 then
-		Error("No spawn entity found!\n")
-
-		return
-	end
-
-	-- Just always shuffle, it's not that costly and should help spawn
-	-- randomness.
-	table.Shuffle(self.SpawnPoints)
-
-	-- Optimistic attempt: assume there are sufficient spawns for all and one is
-	-- free
-	for i = 1, #self.SpawnPoints do
-		if not self:IsSpawnpointSuitable(ply, self.SpawnPoints[i], false) then continue end
-
-		return self.SpawnPoints[i]
-	end
-
-	-- That did not work, so now look around spawns
-	local picked = nil
-
-	for i = 1, #self.SpawnPoints do
-		picked = self.SpawnPoints[i] -- just to have something if all else fails
-
-		-- See if we can jury rig a spawn near this one
-		local rigged = PointsAroundSpawn(picked)
-
-		for k = 1, #rigged do
-			if not self:IsSpawnpointSuitable(ply, rigged[k], false, true) then continue end
-
-			local rig_spwn = ents.Create("info_player_terrorist")
-			if not IsValid(rig_spwn) then continue end
-
-			rig_spwn:SetPos(rigged[k])
-			rig_spwn:Spawn()
-
-			ErrorNoHalt("TTT2 WARNING: Map has too few spawn points, using a rigged spawn for " .. tostring(ply) .. "\n")
-
-			self.HaveRiggedSpawn = true
-
-			return rig_spwn
-		end
-	end
-
-	-- Last attempt, force one
-	for i = 1, #self.SpawnPoints do
-		if not self:IsSpawnpointSuitable(ply, self.SpawnPoints[i], true) then continue end
-
-		return self.SpawnPoints[i]
-	end
-
-	return picked
+	return spawn.GetRandomPlayerSpawnEntity(ply)
 end
 
 ---
@@ -364,7 +212,7 @@ end
 -- @param Player ply The @{Player} being chosen
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/PlayerSetModel
+-- @ref https://wiki.facepunch.com/gmod/GM:PlayerSetModel
 -- @local
 function GM:PlayerSetModel(ply)
 	if not IsValid(ply) then return end
@@ -402,7 +250,7 @@ end
 -- @return boolean True if they can suicide.
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/CanPlayerSuicide
+-- @ref https://wiki.facepunch.com/gmod/GM:CanPlayerSuicide
 -- @local
 function GM:CanPlayerSuicide(ply)
 	return ply:IsTerror()
@@ -417,7 +265,7 @@ end
 -- @return boolean Can toggle the flashlight or not
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/PlayerSwitchFlashlight
+-- @ref https://wiki.facepunch.com/gmod/GM:PlayerSwitchFlashlight
 -- @local
 function GM:PlayerSwitchFlashlight(ply, on)
 	if not IsValid(ply) then
@@ -443,7 +291,7 @@ end
 -- @return boolean Return false to allow spraying, return true to prevent spraying.
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/PlayerSpray
+-- @ref https://wiki.facepunch.com/gmod/GM:PlayerSpray
 -- @local
 function GM:PlayerSpray(ply)
 	if not IsValid(ply) or not ply:IsTerror() then
@@ -462,7 +310,7 @@ end
 -- Do not return true if using a hook, otherwise other mods may not get a chance to block a @{Player}'s use.
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/PlayerUse
+-- @ref https://wiki.facepunch.com/gmod/GM:PlayerUse
 -- @local
 function GM:PlayerUse(ply, ent)
 	return ply:IsTerror()
@@ -478,7 +326,7 @@ end
 -- @param number key The key that the @{Player} pressed using <a href="https://wiki.garrysmod.com/page/Enums/IN">IN_Enums</a>.
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/KeyPress
+-- @ref https://wiki.facepunch.com/gmod/GM:KeyPress
 -- @local
 function GM:KeyPress(ply, key)
 	if not IsValid(ply) then return end
@@ -567,7 +415,7 @@ end
 -- @param number key The key that the @{Player} pressed using <a href="https://wiki.garrysmod.com/page/Enums/IN">IN_Enums</a>.
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/KeyRelease
+-- @ref https://wiki.facepunch.com/gmod/GM:KeyRelease
 -- @local
 function GM:KeyRelease(ply, key)
 	if key ~= IN_USE or not IsValid(ply) or not ply:IsTerror() then return end
@@ -633,7 +481,7 @@ concommand.Add("ttt_spec_use", SpecUseKey)
 -- @param Player ply
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/PlayerDisconnected
+-- @ref https://wiki.facepunch.com/gmod/GM:PlayerDisconnected
 -- @local
 function GM:PlayerDisconnected(ply)
 	if IsValid(ply) then
@@ -804,7 +652,7 @@ end
 -- @param CTakeDamageInfo dmginfo
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/DoPlayerDeath
+-- @ref https://wiki.facepunch.com/gmod/GM:DoPlayerDeath
 -- @local
 function GM:DoPlayerDeath(ply, attacker, dmginfo)
 	if ply:IsSpec() then return end
@@ -995,7 +843,7 @@ end
 -- @note Used here to kill the hl2 beep
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/PlayerDeathSound
+-- @ref https://wiki.facepunch.com/gmod/GM:PlayerDeathSound
 -- @local
 function GM:PlayerDeathSound()
 	return true
@@ -1008,7 +856,7 @@ end
 -- @param Player ply
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/PostPlayerDeath
+-- @ref https://wiki.facepunch.com/gmod/GM:PostPlayerDeath
 -- @local
 function GM:PostPlayerDeath(ply)
 	-- endless respawn player if he dies in preparing time
@@ -1060,10 +908,10 @@ function GM:SpectatorThink(ply)
 				local spec_spawns_count = #spec_spawns
 
 				if spec_spawns_count > 0 then
-					local spawn = spec_spawns[math.random(spec_spawns_count)]
+					local spawnPoint = spec_spawns[math.random(spec_spawns_count)]
 
-					ply:SetPos(spawn:GetPos())
-					ply:SetEyeAngles(spawn:GetAngles())
+					ply:SetPos(spawnPoint:GetPos())
+					ply:SetEyeAngles(spawnPoint:GetAngles())
 				end
 			end
 		elseif m == OBS_MODE_IN_EYE and clicked and elapsed > to_switch or elapsed > to_chase then
@@ -1119,7 +967,7 @@ GM.PlayerDeathThink = GM.SpectatorThink
 -- @return boolean Override engine handling
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/PlayerTraceAttack
+-- @ref https://wiki.facepunch.com/gmod/GM:PlayerTraceAttack
 -- @local
 function GM:PlayerTraceAttack(ply, dmginfo, dir, trace)
 	if IsValid(ply.hat) and trace.HitGroup == HITGROUP_HEAD then
@@ -1137,7 +985,7 @@ end
 -- @param CTakeDamageInfo dmginfo Damage info from explsion
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/OnDamagedByExplosion
+-- @ref https://wiki.facepunch.com/gmod/GM:OnDamagedByExplosion
 -- @local
 function GM:OnDamagedByExplosion(ply, dmginfo)
 
@@ -1155,7 +1003,7 @@ end
 -- It is possible to return true only on client ( This will work only in multiplayer ) to stop the effects but still take damage.
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/ScalePlayerDamage
+-- @ref https://wiki.facepunch.com/gmod/GM:ScalePlayerDamage
 -- @local
 function GM:ScalePlayerDamage(ply, hitgroup, dmginfo)
 	if ply:IsPlayer() and dmginfo:GetAttacker():IsPlayer() and GetRoundState() == 2 then
@@ -1204,7 +1052,7 @@ end
 -- @return[default=0] number
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/GetFallDamage
+-- @ref https://wiki.facepunch.com/gmod/GM:GetFallDamage
 -- @local
 function GM:GetFallDamage(ply, speed)
 	return 0
@@ -1227,7 +1075,7 @@ local fallsounds_count = #fallsounds
 -- @return boolean Return true to suppress default action
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/OnPlayerHitGround
+-- @ref https://wiki.facepunch.com/gmod/GM:OnPlayerHitGround
 -- @local
 function GM:OnPlayerHitGround(ply, in_water, on_floater, speed)
 	if in_water or speed < 450 or not IsValid(ply) then return end
@@ -1317,7 +1165,7 @@ end
 -- @note e.g. no damage during prep, etc
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/EntityTakeDamage
+-- @ref https://wiki.facepunch.com/gmod/GM:EntityTakeDamage
 -- @local
 function GM:EntityTakeDamage(ent, dmginfo)
 	if not IsValid(ent) then return end
@@ -1361,7 +1209,7 @@ end
 -- @param CTakeDamageInfo dmginfo Damage info
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/EntityTakeDamage
+-- @ref https://wiki.facepunch.com/gmod/GM:EntityTakeDamage
 function GM:PlayerTakeDamage(ent, infl, att, amount, dmginfo)
 	-- Change damage attribution if necessary
 	if infl or att then
@@ -1525,7 +1373,7 @@ end
 -- @param Entity inflictor Death inflictor. The @{Entity} that did the killing. Not necessarily a @{Weapon}.
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/OnNPCKilled
+-- @ref https://wiki.facepunch.com/gmod/GM:OnNPCKilled
 -- @local
 function GM:OnNPCKilled(npc, attacker, inflictor)
 
@@ -1536,7 +1384,7 @@ end
 -- @param Player ply @{Player} who executed the command
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/ShowHelp
+-- @ref https://wiki.facepunch.com/gmod/GM:ShowHelp
 -- @local
 function GM:ShowHelp(ply)
 	if not IsValid(ply) then return end
@@ -1552,7 +1400,7 @@ end
 -- @param number teamid Team to put the @{Player} into if the checks succeeded
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/PlayerRequestTeam
+-- @ref https://wiki.facepunch.com/gmod/GM:PlayerRequestTeam
 -- @local
 function GM:PlayerRequestTeam(ply, teamid)
 
@@ -1568,7 +1416,7 @@ end
 -- @param number role
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/PlayerEnteredVehicle
+-- @ref https://wiki.facepunch.com/gmod/GM:PlayerEnteredVehicle
 -- @local
 function GM:PlayerEnteredVehicle(ply, vehicle, role)
 	if not IsValid(vehicle) then return end
@@ -1583,7 +1431,7 @@ end
 -- @param Vehicle vehicle Vehicle the @{Player} left.
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/PlayerLeaveVehicle
+-- @ref https://wiki.facepunch.com/gmod/GM:PlayerLeaveVehicle
 -- @local
 function GM:PlayerLeaveVehicle(ply, vehicle)
 	if not IsValid(vehicle) then return end
@@ -1600,7 +1448,7 @@ end
 -- @return[default=false] boolean Allow the @{Player} to pick up the @{Entity} or not.
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/AllowPlayerPickup
+-- @ref https://wiki.facepunch.com/gmod/GM:AllowPlayerPickup
 -- @local
 function GM:AllowPlayerPickup(ply, ent)
 	return false
@@ -1615,7 +1463,7 @@ end
 -- @return[default=false] boolean Return false to disallow player taunting
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/PlayerShouldTaunt
+-- @ref https://wiki.facepunch.com/gmod/GM:PlayerShouldTaunt
 -- @local
 function GM:PlayerShouldTaunt(ply, act)
 	return false

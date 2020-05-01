@@ -185,7 +185,7 @@ CHANGED_EQUIPMENT = {}
 -- Called after the gamemode loads and starts.
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/Initialize
+-- @ref https://wiki.facepunch.com/gmod/GM:Initialize
 -- @local
 function GM:Initialize()
 	MsgN("Trouble In Terrorist Town 2 gamemode initializing...")
@@ -278,7 +278,7 @@ end
 -- @return string The text to be shown in the server browser as the gamemode
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/GetGameDescription
+-- @ref https://wiki.facepunch.com/gmod/GM:GetGameDescription
 -- @local
 function GM:GetGameDescription()
 	return self.Name
@@ -293,7 +293,7 @@ end
 -- the client will receive it as NULL entity.
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/InitPostEntity
+-- @ref https://wiki.facepunch.com/gmod/GM:InitPostEntity
 -- @local
 function GM:InitPostEntity()
 	self:InitCvars()
@@ -399,7 +399,7 @@ end
 -- Called after the gamemode has loaded
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/PostGamemodeLoaded
+-- @ref https://wiki.facepunch.com/gmod/GM:PostGamemodeLoaded
 -- @local
 function GM:PostGamemodeLoaded()
 
@@ -732,7 +732,7 @@ end
 -- Called right before the map cleans up (usually because @{game.CleanUpMap} was called)
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/PreCleanupMap
+-- @ref https://wiki.facepunch.com/gmod/GM:PreCleanupMap
 -- @local
 function GM:PreCleanupMap()
 	ents.TTT.FixParentedPreCleanup()
@@ -742,7 +742,7 @@ end
 -- Called right after the map has cleaned up (usually because game.CleanUpMap was called)
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/PostCleanupMap
+-- @ref https://wiki.facepunch.com/gmod/GM:PostCleanupMap
 -- @local
 function GM:PostCleanupMap()
 	ents.TTT.FixParentedPostCleanup()
@@ -1033,7 +1033,7 @@ function SpawnWillingPlayers(dead_only)
 		end
 	else
 		-- wave method
-		local num_spawns = #GetSpawnEnts()
+		local num_spawns = #spawn.GetPlayerSpawnEntities()
 		local to_spawn = {}
 
 		for _, ply in RandomPairs(plys) do

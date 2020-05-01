@@ -550,18 +550,6 @@ local function RemoveWeaponEntities()
 	ents.TTT.RemoveRagdolls(false)
 end
 
-local function RemoveSpawnEntities()
-	local spawnableEnts = GetSpawnEnts(false, true)
-
-	for i = 1, #spawnableEnts do
-		local ent = spawnableEnts[i]
-
-		ent.BeingRemoved = true -- they're not gone til next tick
-
-		ent:Remove()
-	end
-end
-
 local function CreateImportedEnt(clz, pos, ang, kv)
 	if not clz or not pos or not ang or not kv then
 		return false
@@ -708,7 +696,7 @@ function ents.TTT.ProcessImportScript(map)
 	if tobool(settings.replacespawns) then
 		MsgN("Removing existing player spawns")
 
-		RemoveSpawnEntities()
+		spawn.RemoveSpawnEntities()
 	end
 
 	MsgN("Removing existing weapons/ammo")

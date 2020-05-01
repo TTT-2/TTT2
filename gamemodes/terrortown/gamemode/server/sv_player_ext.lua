@@ -7,9 +7,6 @@ local table = table
 local pairs = pairs
 local IsValid = IsValid
 local hook = hook
-local Vector = Vector
-local mathSin = math.sin
-local mathCos = math.cos
 
 local plymeta = FindMetaTable("Player")
 if not plymeta then
@@ -792,78 +789,6 @@ local function FindCorpse(ply)
 	end
 end
 
-local poss = {}
-
--- Populate Around Player
-for i = 0, 360, 22.5 do
-	poss[#poss + 1] = Vector(math.cos(i), math.sin(i), 0)
-end
-
-poss[#poss + 1] = Vector(0, 0, 1) -- Populate Above Player
-
-local function FindCorpsePosition(corpse)
-	local size = Vector(32, 32, 72)
-	local startPos = corpse:GetPos() + Vector(0, 0, size.z * 0.5)
-	local len = #poss
-
-	for i = 1, len do
-		local v = poss[i]
-		local pos = startPos + v * size * 1.5
-
-		local tr = {}
-		tr.start = pos
-		tr.endpos = pos
-		tr.mins = size * -0.5
-		tr.maxs = size * 0.5
-
-		local trace = util.TraceHull(tr)
-
-		if not trace.Hit then
-			return pos - Vector(0, 0, size.z * 0.5)
-		end
-	end
-
-	return false
-end
-
-local spawnPositions = {}
-for i = 0, 360, 22.5 do
-	spawnPositions[#spawnPositions + 1] = Vector(mathCos(i), mathSin(i), 0)
-end
-spawnPositions[#spawnPositions + 1] = Vector(0, 0, 1)
-
-local function MakeSpawnPositionSafe(unsafePos)
-	local sizePlayer = Vector(32, 32, 72)
-	local startPos = unsafePos + Vector(0, 0, 0.5 * sizePlayer.z)
-
-	for i = 1, #spawnPositions do
-		local v = spawnPositions[i]
-		local pos = startPos + v * sizePlayer * 1.5
-
-		-- Make sure there is enough space around the player
-		local traceWalls = util.TraceHull({
-			start = pos,
-			endpos = pos,
-			mins = -0.5 * sizePlayer,
-			maxs = 0.5 * sizePlayer
-		})
-
-		if traceWalls.Hit then continue end
-
-		-- make sure the new position is on the ground
-		local traceGround = util.TraceLine({
-			start = pos,
-			endpos = pos - Vector(0, 0, sizePlayer.z),
-		})
-
-		if not traceGround.HitWorld then continue end
-
-		return pos - Vector(0, 0, 0.5 * sizePlayer.z)
-	end
-
-	return unsafePos
-end
-
 local function OnReviveFailed(ply, failMessage)
 	if isfunction(ply.OnReviveFailedCallback) then
 		ply.OnReviveFailedCallback(ply, failMessage)
@@ -925,12 +850,11 @@ function plymeta:Revive(delay, OnRevive, DoCheck, needsCorpse, blockRound, OnFai
 			ply:SpawnForRound(true)
 
 			if not spawnPos and IsValid(corpse) then
-				spawnPos = FindCorpsePosition(corpse)
+				spawnPos = corpse:GetPos()
 			end
 
 			spawnPos = spawnPos or ply:GetDeathPosition()
-
-			spawnPos = MakeSpawnPositionSafe(spawnPos)
+			spawnPos = spawn.MakeSpawnPointSafe(spawnPos)
 
 			ply:SetPos(spawnPos)
 			ply:SetEyeAngles(Angle(0, corpse:GetAngles().y, 0))
@@ -1012,6 +936,16 @@ function plymeta:SetDeathPosition(pos)
 	self:TTT2NETSetFloat("player_death_pos_x", pos.x or 0.0)
 	self:TTT2NETSetFloat("player_death_pos_y", pos.y or 0.0)
 	self:TTT2NETSetFloat("player_death_pos_z", pos.z or 0.0)
+end
+
+---
+-- Sets the spawn position
+-- @param Vector pos The spawn position
+-- @realm server
+function plymeta:SetSpawnPosition(pos)
+	self:TTT2NETSetFloat("player_spawn_pos_x", pos.x or 0.0)
+	self:TTT2NETSetFloat("player_spawn_pos_y", pos.y or 0.0)
+	self:TTT2NETSetFloat("player_spawn_pos_z", pos.z or 0.0)
 end
 
 ---

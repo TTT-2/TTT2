@@ -999,6 +999,18 @@ function plymeta:GetDeathPosition()
 end
 
 ---
+-- Returns the spawn position of the player.
+-- @return [default=Vector(0.0, 0.0, 0.0)]Vector The spawn position
+-- @realm shared
+function plymeta:GetSpawnPosition()
+	return Vector(
+		self:TTT2NETGetFloat("player_spawn_pos_x", 0.0),
+		self:TTT2NETGetFloat("player_spawn_pos_y", 0.0),
+		self:TTT2NETGetFloat("player_spawn_pos_z", 0.0)
+	)
+end
+
+---
 -- Sets a revival reason that is displayed in the revival HUD element.
 -- It supports language identifier for translated strings.
 -- @param [default=nil]string name The text or the language identifer, nil to reset

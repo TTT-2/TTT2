@@ -102,7 +102,7 @@ local propspec_force = CreateConVar("ttt_spec_prop_force", "110", {FCVAR_NOTIFY,
 -- @param number key The key that the @{Player} pressed using <a href="https://wiki.garrysmod.com/page/Enums/IN">IN_Enums</a>.
 -- @return boolean
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/KeyPress
+-- @ref https://wiki.facepunch.com/gmod/GM:KeyPress
 function PROPSPEC.Key(ply, key)
 	local ent = ply.propspec.ent
 	local validEnt = IsValid(ent)

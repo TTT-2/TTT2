@@ -173,7 +173,7 @@ net.Receive("TTT2TargetPlayer", TargetPlayer)
 -- @param CUserCmd cmd The command data
 -- @hook
 -- @realm client
--- @ref https://wiki.garrysmod.com/page/GM/SetupMove
+-- @ref https://wiki.facepunch.com/gmod/GM:SetupMove
 -- @local
 function GM:SetupMove(ply, mv, cmd)
 	if not IsValid(ply) then return end
