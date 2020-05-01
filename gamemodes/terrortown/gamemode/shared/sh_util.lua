@@ -8,7 +8,6 @@ local math = math
 local string = string
 local table = table
 local pairs = pairs
-local ipairs = ipairs
 local IsValid = IsValid
 local weapons = weapons
 local GetPlayers = player.GetAll

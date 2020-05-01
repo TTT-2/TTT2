@@ -4,6 +4,9 @@
 
 AddCSLuaFile()
 
+local pairs = pairs
+local ipairs = ipairs
+
 ---
 -- Get the value from a table with a path that is given as a table of indexes.
 -- The method will try to traverse the dataTable and return the value or
