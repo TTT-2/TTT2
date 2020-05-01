@@ -516,7 +516,6 @@ COLOR_OLIVE = Color(100, 100, 0, 255)
 
 -- load non-wrapped modules directly
 require("marks")
-require("thermalvision")
 
 -- TODO load modules that are currently not included in gmod but waiting for merge
 require("outline")
@@ -525,6 +524,7 @@ include("includes/modules/pon.lua")
 include("ttt2/extensions/net.lua")
 include("ttt2/extensions/string.lua")
 include("ttt2/extensions/table.lua")
+include("ttt2/libraries/thermalvision.lua")
 
 -- include ttt required files
 ttt_include("sh_util")

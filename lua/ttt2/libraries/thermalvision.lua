@@ -1,5 +1,5 @@
 ---
--- This is the <code>thermalvision</code> module.
+-- This is the <code>thermalvision</code> library.
 -- It offers the possibility of rendering entities giving them the typical thermal vision look
 -- @author LeBroomer
 
@@ -11,11 +11,11 @@ local surface = surface
 local hook = hook
 local ipairs = ipairs
 
-module("thermalvision", package.seeall)
-
 if SERVER then
 	AddCSLuaFile()
 else
+	thermalvision = {}
+
 	THERMALVISION_MODE_BOTH = 0
 	THERMALVISION_MODE_NOTVISIBLE = 1
 	THERMALVISION_MODE_VISIBLE = 2
@@ -177,7 +177,7 @@ else
 	---
 	-- Clearing the cached @{Entity} list
 	-- @realm client
-	function Clear()
+	function thermalvision.Clear()
 		thermalvisionList = {}
 
 		RemoveThermalvisionHook()
@@ -207,7 +207,7 @@ else
 	-- Removes entities from the @{Entity} list
 	-- @param table ents list of entities that should get removed
 	-- @realm client
-	function Remove(ents)
+	function thermalvision.Remove(ents)
 		RemoveInternal(ents)
 
 		if table.IsEmpty(thermalvisionList) and not bgColoring then
@@ -220,7 +220,7 @@ else
 	-- @param table ents list of @{Entity} that should be added
 	-- @param[default=THERMALVISION_MODE_BOTH] enum mode when should the entity be rendererd
 	-- @realm client
-	function Add(ents, mode)
+	function thermalvision.Add(ents, mode)
 		if #ents == 0 then return end
 
 		mode = mode or THERMALVISION_MODE_BOTH
@@ -237,7 +237,7 @@ else
 	-- Enables/disables rendering the background in the thermalvision typical blue tone
 	-- @param bool enabled whether or not the background should get colored
 	-- @realm client
-	function SetBackgroundColoring(enabled)
+	function thermalvision.SetBackgroundColoring(enabled)
 		bgColoring = enabled
 	end
 
@@ -246,11 +246,11 @@ else
 	-- @param table ents list of @{Entity} that should be set
 	-- @param enum mode when should the entity be rendererd
 	-- @realm client
-	function Set(ents, mode)
+	function thermalvision.Set(ents, mode)
 		if #ents == 0 then return end
 
 		-- check if an entity is already inserted and remove it
-		Remove(ents)
+		RemoveInternal(ents)
 
 		for _, ent in ipairs(ents) do
 			thermalvisionList[#thermalvisionList + 1] = {ent = ent, mode = mode}
