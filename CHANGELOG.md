@@ -9,6 +9,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added a new ConVar to allow armor to also block headshots (`ttt_item_armor_block_headshots`, default value: 0). Thanks @TheNickSkater
 - Added essential items: 8 different types of items that are often used in other addons. You can remove them from the shop if you don't like them.
 - Added a new HUD element to show information about an ongoing revival to the player that is revived
+- Added a load of functions to the `spawn` scope that can be used by addons
 
 ### Changed
 
@@ -25,6 +26,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Improved the `plymeta:Revive()` function
   - Added a revive position argument
   - revive makes now sure the position is valid and the player is not stuck in the wall
+- Improved the player spawn handling
 
 ### Fixed
 
@@ -34,6 +36,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed propsurfing with the magneto stick
 - Fixed healthstation TargetID text
 - Fixed keyinfo for doors where no key can be used
+- Spawn points that have no solid ground beneath will be ignored
 
 ## [v0.6.4b](https://github.com/TTT-2/TTT2/tree/v0.6.4b) (2020-04-03)
 
