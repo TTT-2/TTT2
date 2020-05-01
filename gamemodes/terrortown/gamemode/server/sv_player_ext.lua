@@ -789,6 +789,7 @@ local function FindCorpse(ply)
 	end
 end
 
+-- Handles all stuff needed if the revival failed
 local function OnReviveFailed(ply, failMessage)
 	if isfunction(ply.OnReviveFailedCallback) then
 		ply.OnReviveFailedCallback(ply, failMessage)
@@ -817,7 +818,7 @@ function plymeta:Revive(delay, OnRevive, DoCheck, needsCorpse, blockRound, OnFai
 	local ply = self
 	local name = "TTT2RevivePlayer" .. ply:EntIndex()
 
-	if timer.Exists(name) or ply:IsReviving() then return end
+	if ply:IsReviving() then return end
 
 	delay = delay or 3
 
@@ -842,8 +843,6 @@ function plymeta:Revive(delay, OnRevive, DoCheck, needsCorpse, blockRound, OnFai
 
 			if needsCorpse and (not IsValid(corpse) or corpse:IsOnFire()) then
 				OnReviveFailed(ply, OnFail, "message_revival_failed_missing_body")
-
-				timer.Remove(name)
 
 				return
 			end

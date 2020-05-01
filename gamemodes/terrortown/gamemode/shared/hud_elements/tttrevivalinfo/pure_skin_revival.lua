@@ -11,13 +11,14 @@ if CLIENT then
 	local materialBlockingRevival = Material("vgui/ttt/hud_blocking_revival")
 
 	local pad = 14
+	local defaultHeight = 74
 
 	local colorRevivingBar = Color(36, 154, 198)
 
 	local const_defaults = {
 		basepos = {x = 0, y = 0},
-		size = {w = 321, h = 74},
-		minsize = {w = 250, h = 74}
+		size = {w = 321, h = defaultHeight},
+		minsize = {w = 250, h = defaultHeight}
 	}
 
 	function HUDELEMENT:Initialize()
@@ -42,7 +43,7 @@ if CLIENT then
 	function HUDELEMENT:ShouldDraw()
 		local client = LocalPlayer()
 
-		return HUDEditor.IsEditing or (not client:Alive() and client:IsReviving())
+		return HUDEditor.IsEditing or client:IsReviving()
 	end
 
 	function HUDELEMENT:PerformLayout()
@@ -51,6 +52,7 @@ if CLIENT then
 		self.scale = scale
 		self.basecolor = self:GetHUDBasecolor()
 		self.pad = pad * scale
+		self.defaultHeight = defaultHeight * scale
 
 		BaseClass.PerformLayout(self)
 	end
@@ -61,7 +63,6 @@ if CLIENT then
 		local size = self:GetSize()
 		local x, y = pos.x, pos.y
 		local w, h = size.w, size.h
-		local defaults = self:GetDefaults()
 
 		local timeLeft = HUDEditor.IsEditing and 1 or math.ceil(math.max(0, client:GetRevivalTime() - (CurTime() - client:GetRevivalStartTime())))
 		local progress = HUDEditor.IsEditing and 1 or ((CurTime() - client:GetRevivalStartTime()) / client:GetRevivalTime())
@@ -96,9 +97,9 @@ if CLIENT then
 			revivalReasonLines = lines
 			lineHeight = textHeight / #revivalReasonLines
 
-			h = defaults.size.h + textHeight + self.pad
+			h = self.defaultHeight + textHeight + self.pad
 		else
-			h = defaults.size.h
+			h = self.defaultHeight
 		end
 
 		self:SetSize(w, h)
