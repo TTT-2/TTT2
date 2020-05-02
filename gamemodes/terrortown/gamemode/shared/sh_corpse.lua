@@ -72,3 +72,12 @@ function CORPSE.GetPlayer(rag)
 
 	return rag:GetDTEntity(dti.ENT_PLAYER)
 end
+
+---
+-- Checks if a tagdoll is a valid ragdoll because they could be a matress as well.
+-- @param Entity rag The ragdoll
+-- @return boolean Returns if the ragdoll is valid
+-- @realm shared
+function CORPSE.IsValidBody(rag)
+	return IsValid(rag) and CORPSE.GetPlayerNick(rag, false) ~= false
+end
