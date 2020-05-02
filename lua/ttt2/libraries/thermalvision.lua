@@ -243,7 +243,7 @@ else
 	end
 
 	---
-	-- Sets entities of the @{Entity} list to a specified mode
+	-- Sets entities of the @{Entity} list to the specified mode
 	-- @param table ents list of @{Entity} that should be set
 	-- @param enum mode when should the entity be rendererd
 	-- @realm client
