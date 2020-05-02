@@ -449,6 +449,9 @@ local color_trans = Color(0, 0, 0, 0)
 -- @hook
 -- @realm client
 function GM:CleanUpMap()
+	--remove thermal vision
+	thermalvision.Clear()
+
 	-- Ragdolls sometimes stay around on clients. Deleting them can create issues
 	-- so all we can do is try to hide them.
 	local ragdolls = ents.FindByClass("prop_ragdoll")
