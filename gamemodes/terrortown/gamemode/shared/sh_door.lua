@@ -115,6 +115,11 @@ function door.SetUp()
 		ent:SetNWBool("ttt2_door_player_use", PlayerCanUseDoor(ent))
 		ent:SetNWBool("ttt2_door_player_touch", PlayerCanTouchDoor(ent))
 		ent:SetNWBool("ttt2_door_auto_close", DoorAutoCloses(ent))
+
+		outputs.RegisterMapEntityOutput(ent, "OnOpen", "TTT2OnDoorOpen")
+		outputs.RegisterMapEntityOutput(ent, "OnClose", "TTT2OnDoorClose")
+		outputs.RegisterMapEntityOutput(ent, "OnFullyOpen", "TTT2OnDoorFullyOpen")
+		outputs.RegisterMapEntityOutput(ent, "OnFullyClosed", "TTT2OnDoorFullyClosed")
 	end
 
 	door_list.doors = doors
@@ -189,33 +194,55 @@ if SERVER then
 
 				ent:SetNWBool("ttt2_door_locked", ent:GetInternalVariable("m_bLocked") or false)
 			end)
-		elseif name == "Use" then
-			-- do not change state if door is locked
-			if ent:IsDoorLocked() then return end
-
-			-- do not change state if door autocloses and is currently transitioning
-			if ent:DoorIsTransitioning() and door.GetValid().special[ent:GetClass()] then return end
-
-			-- upon triggering the state change of the door, the state does not change
-			-- instanly but after the animation finished. Therefore we calculate an assumned
-			-- value on the fly and check the real state a few seconds later
-
-			ent:SetNWBool("ttt2_door_open", not ent:GetNWBool("ttt2_door_open", false))
-
-			-- Check if the assumed state was correct
-			-- This is a bit tricky here: doors have an animation time, therefore we have
-			-- to recheck a triggered time to make sure their state is correct
-			timer.Create("ttt2_recheck_door_use_" .. ent:EntIndex(), 0.25, 50, function()
-				-- only recheck door if it is valid, not locked and not transitioning
-				if not IsValid(ent) or ent:IsDoorLocked() or ent:DoorIsTransitioning() then return end
-
-				-- update door state
-				ent:SetNWBool("ttt2_door_open", IsDoorOpen(ent) or false)
-
-				-- remove timer since transition is now stopped
-				timer.Remove("ttt2_recheck_door_use_" .. ent:EntIndex())
-			end)
 		end
+	end
+
+	---
+	-- This hook is called after the door started opening.
+	-- @param Entity activator The activator entity, it seems to be the door entity for most doors
+	-- @param Entity doorEntity The door entity
+	-- @hook
+	-- @realm server
+	function GM:TTT2OnDoorOpen(activator, doorEntity)
+		if not doorEntity:IsDoor() then return end
+
+		doorEntity:SetNWBool("ttt2_door_open", true)
+	end
+
+	---
+	-- This hook is called after the door finished opening and is fully opened.
+	-- @param Entity activator The activator entity, it seems to be the door entity for most doors
+	-- @param Entity doorEntity The door entity
+	-- @hook
+	-- @realm server
+	function GM:TTT2OnDoorFullyOpen(activator, doorEntity)
+		if not doorEntity:IsDoor() then return end
+
+		doorEntity:SetNWBool("ttt2_door_open", true)
+	end
+
+	---
+	-- This hook is called after the door started closing.
+	-- @param Entity activator The activator entity, it seems to be the door entity for most doors
+	-- @param Entity doorEntity The door entity
+	-- @hook
+	-- @realm server
+	function GM:TTT2OnDoorClose(activator, doorEntity)
+		if not doorEntity:IsDoor() then return end
+
+		doorEntity:SetNWBool("ttt2_door_open", false)
+	end
+
+	---
+	-- This hook is called after the door finished closing and is fully closed.
+	-- @param Entity activator The activator entity, it seems to be the door entity for most doors
+	-- @param Entity doorEntity The door entity
+	-- @hook
+	-- @realm server
+	function GM:TTT2OnDoorFullyClosed(activator, doorEntity)
+		if not doorEntity:IsDoor() then return end
+
+		doorEntity:SetNWBool("ttt2_door_open", false)
 	end
 end
 
