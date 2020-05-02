@@ -895,6 +895,8 @@ end
 -- @param [default="message_revival_canceled"]string failMessage The fail message that should be displayed for the client
 -- @realm server
 function plymeta:CancelRevival(failMessage)
+	if not self:IsReviving() then return end
+
 	self:SetReviving(false)
 	self:SetBlockingRevival(false)
 	self:SetRevivalReason(nil)
