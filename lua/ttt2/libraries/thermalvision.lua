@@ -9,7 +9,6 @@ local IsValid = IsValid
 local cam = cam
 local surface = surface
 local hook = hook
-local ipairs = ipairs
 
 if SERVER then
 	AddCSLuaFile()
@@ -73,7 +72,8 @@ else
 			render.OverrideDepthEnable(true, false)
 			cam.Start3D()
 			cam.IgnoreZ(true)
-				for _, entry in ipairs(thermalvisionList) do
+				for i = 1, #thermalvisionList do
+					local entry = thermalvisionList[i]
 					local ent = entry.ent
 					local mode = entry.mode
 
@@ -123,7 +123,8 @@ else
 
 			--render all entities but keep depth testing
 			render.SuppressEngineLighting(true)
-			for _, entry in ipairs(thermalvisionList) do
+			for i = 1, #thermalvisionList do
+				local entry = thermalvisionList[i]
 				local ent = entry.ent
 				local mode = entry.mode
 
@@ -190,11 +191,11 @@ else
 		local thermalvisionListSize = #thermalvisionList
 		if thermalvisionListSize == 0 or #ents == 0 then return end
 
-		for _, ent in ipairs(ents) do
-			for index, entry in ipairs(thermalvisionList) do
-				if entry.ent == ent then
+		for i = 1, #ents do
+			for j = 1, #thermalvisionList do
+				if thermalvisionList[j].ent == ents[i] then
 					--for now only setting it to nil
-					thermalvisionList[index] = nil
+					thermalvisionList[j] = nil
 				end
 			end
 		end
@@ -225,8 +226,8 @@ else
 
 		mode = mode or THERMALVISION_MODE_BOTH
 
-		for _, ent in ipairs(ents) do
-			thermalvisionList[#thermalvisionList + 1] = {ent = ent, mode = mode}
+		for i = 1, #ents do
+			thermalvisionList[#thermalvisionList + 1] = {ent = ents[i], mode = mode}
 		end
 
 		-- add the hook if there is something to render
@@ -252,8 +253,8 @@ else
 		-- check if an entity is already inserted and remove it
 		RemoveInternal(ents)
 
-		for _, ent in ipairs(ents) do
-			thermalvisionList[#thermalvisionList + 1] = {ent = ent, mode = mode}
+		for i = 1, #ents do
+			thermalvisionList[#thermalvisionList + 1] = {ent = ents[i], mode = mode}
 		end
 
 		-- add the hook if there is something to render
