@@ -8,6 +8,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Added a new ConVar to allow armor to also block headshots (`ttt_item_armor_block_headshots`, default value: 0). Thanks @TheNickSkater
 - Added essential items: 8 different types of items that are often used in other addons. You can remove them from the shop if you don't like them.
+- Added a few door related hooks and convenience functions
+- Added outputs library to register map entity outputs easier
 
 ### Changed
 
@@ -30,6 +32,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed propsurfing with the magneto stick
 - Fixed healthstation TargetID text
 - Fixed keyinfo for doors where no key can be used
+- FIxed map lock/unlock trigger of doors not updating targetID
 
 ## [v0.6.4b](https://github.com/TTT-2/TTT2/tree/v0.6.4b) (2020-04-03)
 
