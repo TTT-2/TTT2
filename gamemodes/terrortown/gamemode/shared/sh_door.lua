@@ -172,7 +172,7 @@ if SERVER then
 	function GM:AcceptInput(ent, name, activator, caller, data)
 		if not IsValid(ent) or not ent:IsDoor() then return end
 
-		if name == "lock" then
+		if name == "Lock" then
 			-- we expect the door to be locked now, but we check the real state after a short
 			-- amount of time to be sure
 			ent:SetNWBool("ttt2_door_locked", true)
@@ -183,7 +183,7 @@ if SERVER then
 
 				ent:SetNWBool("ttt2_door_locked", ent:GetInternalVariable("m_bLocked") or false)
 			end)
-		elseif name == "unlock" then
+		elseif name == "Unlock" then
 			-- we expect the door to be unlocked now, but we check the real state after a short
 			-- amount of time to be sure
 			ent:SetNWBool("ttt2_door_locked", false)
@@ -345,17 +345,48 @@ end
 
 if SERVER then
 	---
-	-- Locks/unlocks an entity if it is a door
-	-- @param boolean door_state Should the door be locked
+	-- Locks a door.
 	-- @realm server
-	function entmeta:LockDoor(door_state)
+	function entmeta:LockDoor(doorState)
 		if not self:IsDoor() then return end
 
-		if state then
-			self:Fire("lock", "", 0)
-		else
-			self:Fire("unlock", "", 0)
-		end
+		self:Fire("Lock", "", 0)
+	end
+
+	---
+	-- Unlocks a door.
+	-- @realm server
+	function entmeta:UnlockDoor()
+		if not self:IsDoor() then return end
+
+		self:Fire("Unlock", "", 0)
+	end
+
+	---
+	-- Opens the door.
+	-- @realm server
+	function entmeta:OpenDoor()
+		if not self:IsDoor() then return end
+
+		self:Fire("Open", "", 0)
+	end
+
+	---
+	-- Closes a door.
+	-- @realm server
+	function entmeta:CloseDoor()
+		if not self:IsDoor() then return end
+
+		self:Fire("Close", "", 0)
+	end
+
+	---
+	-- Toggles a door between open and closed.
+	-- @realm server
+	function entmeta:ToggleDoor()
+		if not self:IsDoor() then return end
+
+		self:Fire("Toggle", "", 0)
 	end
 
 	---
