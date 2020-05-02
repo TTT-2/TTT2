@@ -172,7 +172,13 @@ if SERVER then
 	function GM:AcceptInput(ent, name, activator, caller, data)
 		if not IsValid(ent) or not ent:IsDoor() then return end
 
-		if name == "Lock" then
+		if string.lower(name) == "lock" then
+			local shouldCancel = hook.Run("TTT2OnDoorLocked", ent, activator)
+
+			if shouldCancel then
+				return true
+			end
+
 			-- we expect the door to be locked now, but we check the real state after a short
 			-- amount of time to be sure
 			ent:SetNWBool("ttt2_door_locked", true)
@@ -183,7 +189,13 @@ if SERVER then
 
 				ent:SetNWBool("ttt2_door_locked", ent:GetInternalVariable("m_bLocked") or false)
 			end)
-		elseif name == "Unlock" then
+		elseif string.lower(name) == "unlock" then
+			local shouldCancel = hook.Run("TTT2OnDoorUnLocked", ent, activator)
+
+			if shouldCancel then
+				return true
+			end
+
 			-- we expect the door to be unlocked now, but we check the real state after a short
 			-- amount of time to be sure
 			ent:SetNWBool("ttt2_door_locked", false)
@@ -199,11 +211,11 @@ if SERVER then
 
 	---
 	-- This hook is called after the door started opening.
-	-- @param Entity activator The activator entity, it seems to be the door entity for most doors
 	-- @param Entity doorEntity The door entity
+	-- @param Entity activator The activator entity, it seems to be the door entity for most doors
 	-- @hook
 	-- @realm server
-	function GM:TTT2OnDoorOpen(activator, doorEntity)
+	function GM:TTT2OnDoorOpen(doorEntity, activator)
 		if not doorEntity:IsDoor() then return end
 
 		doorEntity:SetNWBool("ttt2_door_open", true)
@@ -211,11 +223,11 @@ if SERVER then
 
 	---
 	-- This hook is called after the door finished opening and is fully opened.
-	-- @param Entity activator The activator entity, it seems to be the door entity for most doors
 	-- @param Entity doorEntity The door entity
+	-- @param Entity activator The activator entity, it seems to be the door entity for most doors
 	-- @hook
 	-- @realm server
-	function GM:TTT2OnDoorFullyOpen(activator, doorEntity)
+	function GM:TTT2OnDoorFullyOpen(doorEntity, activator)
 		if not doorEntity:IsDoor() then return end
 
 		doorEntity:SetNWBool("ttt2_door_open", true)
@@ -223,11 +235,11 @@ if SERVER then
 
 	---
 	-- This hook is called after the door started closing.
-	-- @param Entity activator The activator entity, it seems to be the door entity for most doors
 	-- @param Entity doorEntity The door entity
+	-- @param Entity activator The activator entity, it seems to be the door entity for most doors
 	-- @hook
 	-- @realm server
-	function GM:TTT2OnDoorClose(activator, doorEntity)
+	function GM:TTT2OnDoorClose(doorEntity, activator)
 		if not doorEntity:IsDoor() then return end
 
 		doorEntity:SetNWBool("ttt2_door_open", false)
@@ -235,14 +247,36 @@ if SERVER then
 
 	---
 	-- This hook is called after the door finished closing and is fully closed.
-	-- @param Entity activator The activator entity, it seems to be the door entity for most doors
 	-- @param Entity doorEntity The door entity
+	-- @param Entity activator The activator entity, it seems to be the door entity for most doors
 	-- @hook
 	-- @realm server
-	function GM:TTT2OnDoorFullyClosed(activator, doorEntity)
+	function GM:TTT2OnDoorFullyClosed(doorEntity, activator)
 		if not doorEntity:IsDoor() then return end
 
 		doorEntity:SetNWBool("ttt2_door_open", false)
+	end
+
+	---
+	-- This hook when the door is about to be locked. You can cancel the event.
+	-- @param Entity doorEntity The door entity
+	-- @param Entity activator The activator entity
+	-- @return boolean Return true to cance the door lock
+	-- @hook
+	-- @realm server
+	function GM:TTT2OnDoorLocked(doorEntity, activator)
+
+	end
+
+	---
+	-- This hook when the door is about to be unlocked. You can cancel the event.
+	-- @param Entity doorEntity The door entity
+	-- @param Entity activator The activator entity
+	-- @return boolean Return true to cance the door unlock
+	-- @hook
+	-- @realm server
+	function GM:TTT2OnDoorUnlocked(doorEntity, activator)
+
 	end
 end
 

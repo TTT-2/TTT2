@@ -46,13 +46,14 @@ function outputs.RegisterHook(hookName)
 	hook.Add(hookName .. "_Internal", hookName .. "_name", function()
 		local activator, caller = ACTIVATOR, CALLER
 
-		hook.Run(hookName, activator, caller)
+		hook.Run(hookName, caller, activator)
 	end)
 end
 
 ---
 -- Registers a map entity output trigger hook. Keep in mind, this function
--- has to be called after every map cleanup. 
+-- has to be called after every map cleanup. It is recommended to use this
+-- function inside the @{GM:TTT2PostCleanupMap} hook.
 -- @param Entity The map entity
 -- @param string outputName The name of the entity output
 -- @param string hookName The desired name of the registered hook
