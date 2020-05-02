@@ -20,6 +20,11 @@ function outputs.SetUp()
 	outputs.mapLuaRun:Spawn()
 end
 
+---
+-- Cleans up the outputs library hooks prior to the map cleanup.
+-- Has to called in @{GM:PreCleanupMap}.
+-- @internal
+-- @realm server
 function outputs.CleanUp()
 	for hookName in pairs(outputs.hooks) do
 		hook.Remove(hookName .. "_Internal", hookName .. "_name")
@@ -28,6 +33,11 @@ function outputs.CleanUp()
 	outputs.hooks = {}
 end
 
+---
+-- Registers a new hook in the outputs library if it isn't already registered.
+-- @param string hookName The desired name of the registered hook
+-- @internal
+-- @realm server
 function outputs.RegisterHook(hookName)
 	if outputs.hooks[hookName] then return end
 
