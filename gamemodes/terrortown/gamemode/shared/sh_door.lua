@@ -381,7 +381,7 @@ if SERVER then
 	---
 	-- Locks a door.
 	-- @realm server
-	function entmeta:LockDoor(doorState)
+	function entmeta:LockDoor()
 		if not self:IsDoor() then return end
 
 		self:Fire("Lock", "", 0)
