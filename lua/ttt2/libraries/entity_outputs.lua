@@ -4,7 +4,6 @@
 -- @author Mineotopia
 
 entityOutputs = entityOutputs or {}
-
 entityOutputs.hooks = entityOutputs.hooks or {}
 
 ---

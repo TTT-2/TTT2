@@ -1,7 +1,7 @@
 ---
 -- Trouble in Terrorist Town 2
 
-include("ttt2/libraries/outputs.lua")
+include("ttt2/libraries/entity_outputs.lua")
 
 ttt_include("sh_init")
 
