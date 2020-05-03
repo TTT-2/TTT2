@@ -51,15 +51,15 @@ function entityOutputs.RegisterHook(hookName)
 end
 
 ---
--- Registers a map entity output trigger hook. Keep in mind, this function
--- has to be called after every map cleanup. It is recommended to use this
--- function inside the @{GM:TTT2PostCleanupMap} hook.
--- The created hook has the params: caller, activator
+-- Registers a map entity output trigger hook.
+-- Keep in mind, this function has to be called after every map cleanup.
+-- It is recommended to use this function inside the @{GM:TTT2PostCleanupMap} hook.
+-- @note The created hook has the params: caller, activator.
 -- @param Entity The map entity
 -- @param string outputName The name of the entity output
 -- @param string hookName The desired name of the registered hook
 -- @param [default=0]number delay The delay between the fired output and the hook call
--- @param [default=-1]number repititions The amount of repititions until the output is removed, -1 for infinite
+-- @param [default=-1]number repetitions The amount of repetitions until the output is removed, -1 for infinite
 -- @ref https://developer.valvesoftware.com/wiki/Lua_run
 -- @ref https://wiki.facepunch.com/gmod/Entity:Fire
 -- @realm server
