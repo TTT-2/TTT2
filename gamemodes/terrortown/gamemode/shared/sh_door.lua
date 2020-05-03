@@ -116,10 +116,10 @@ function door.SetUp()
 		ent:SetNWBool("ttt2_door_player_touch", PlayerCanTouchDoor(ent))
 		ent:SetNWBool("ttt2_door_auto_close", DoorAutoCloses(ent))
 
-		outputs.RegisterMapEntityOutput(ent, "OnOpen", "TTT2DoorOpens")
-		outputs.RegisterMapEntityOutput(ent, "OnClose", "TTT2DoorCloses")
-		outputs.RegisterMapEntityOutput(ent, "OnFullyOpen", "TTT2DoorFullyOpen")
-		outputs.RegisterMapEntityOutput(ent, "OnFullyClosed", "TTT2DoorFullyClosed")
+		entityOutputs.RegisterMapEntityOutput(ent, "OnOpen", "TTT2DoorOpens")
+		entityOutputs.RegisterMapEntityOutput(ent, "OnClose", "TTT2DoorCloses")
+		entityOutputs.RegisterMapEntityOutput(ent, "OnFullyOpen", "TTT2DoorFullyOpen")
+		entityOutputs.RegisterMapEntityOutput(ent, "OnFullyClosed", "TTT2DoorFullyClosed")
 	end
 
 	door_list.doors = doors

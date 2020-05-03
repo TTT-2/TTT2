@@ -3,45 +3,45 @@
 -- output triggers to lua hooks.
 -- @author Mineotopia
 
-outputs = outputs or {}
+entityOutputs = entityOutputs or {}
 
-outputs.hooks = outputs.hooks or {}
+entityOutputs.hooks = entityOutputs.hooks or {}
 
 ---
--- Sets up the outputs library by creating a lua_run map entitiy
+-- Sets up the entityOutputs library by creating a lua_run map entitiy
 -- to add hook to these entities. Has to be run in @{GM:PostCleanupMap}.
 -- @internal
 -- @realm server
-function outputs.SetUp()
-	if IsValid(outputs.mapLuaRun) then return end
+function entityOutputs.SetUp()
+	if IsValid(entityOutputs.mapLuaRun) then return end
 
-	outputs.mapLuaRun = ents.Create("lua_run")
-	outputs.mapLuaRun:SetName("triggerhook")
-	outputs.mapLuaRun:Spawn()
+	entityOutputs.mapLuaRun = ents.Create("lua_run")
+	entityOutputs.mapLuaRun:SetName("triggerhook")
+	entityOutputs.mapLuaRun:Spawn()
 end
 
 ---
--- Cleans up the outputs library hooks prior to the map cleanup.
+-- Cleans up the entityOutputs library hooks prior to the map cleanup.
 -- Has to called in @{GM:PreCleanupMap}.
 -- @internal
 -- @realm server
-function outputs.CleanUp()
-	for hookName in pairs(outputs.hooks) do
+function entityOutputs.CleanUp()
+	for hookName in pairs(entityOutputs.hooks) do
 		hook.Remove(hookName .. "_Internal", hookName .. "_name")
 	end
 
-	outputs.hooks = {}
+	entityOutputs.hooks = {}
 end
 
 ---
--- Registers a new hook in the outputs library if it isn't already registered.
+-- Registers a new hook in the entityOutputs library if it isn't already registered.
 -- @param string hookName The desired name of the registered hook
 -- @internal
 -- @realm server
-function outputs.RegisterHook(hookName)
-	if outputs.hooks[hookName] then return end
+function entityOutputs.RegisterHook(hookName)
+	if entityOutputs.hooks[hookName] then return end
 
-	outputs.hooks[hookName] = true
+	entityOutputs.hooks[hookName] = true
 
 	hook.Add(hookName .. "_Internal", hookName .. "_name", function()
 		local activator, caller = ACTIVATOR, CALLER
@@ -63,7 +63,7 @@ end
 -- @ref https://developer.valvesoftware.com/wiki/Lua_run
 -- @ref https://wiki.facepunch.com/gmod/Entity:Fire
 -- @realm server
-function outputs.RegisterMapEntityOutput(ent, outputName, hookName, delay, repititions)
+function entityOutputs.RegisterMapEntityOutput(ent, outputName, hookName, delay, repititions)
 	if not IsValid(ent) then return end
 
 	delay = delay or 0
@@ -71,5 +71,5 @@ function outputs.RegisterMapEntityOutput(ent, outputName, hookName, delay, repit
 
 	ent:Fire("AddOutput", outputName .. " triggerhook:RunPassedCode:hook.Run('" .. hookName .. "_Internal'):" .. delay .. ":" .. repititions)
 
-	outputs.RegisterHook(hookName)
+	entityOutputs.RegisterHook(hookName)
 end
