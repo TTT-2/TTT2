@@ -1276,3 +1276,6 @@ L.item_no_prop_damage = "Kein Objektschaden"
 L.item_no_prop_damage_desc = [[Macht dich immun fpr Objektschaden.]]
 L.item_no_drown_damage = "Kein Ertrinkungsschaden"
 L.item_no_drown_damage_desc = [[Macht dich immun für Ertrinkungsschaden.]]
+
+-- 2020-05-03
+L.door_destructible = "Tür ist zerstörbar ({health}HP)"

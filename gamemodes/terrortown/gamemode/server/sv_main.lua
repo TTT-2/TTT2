@@ -739,7 +739,7 @@ end
 function GM:PreCleanupMap()
 	ents.TTT.FixParentedPreCleanup()
 
-	outputs.CleanUp()
+	entityOutputs.CleanUp()
 end
 
 ---
@@ -751,12 +751,10 @@ end
 function GM:PostCleanupMap()
 	ents.TTT.FixParentedPostCleanup()
 
-	outputs.SetUp()
+	entityOutputs.SetUp()
+	door.SetUp()
 
 	hook.Run("TTT2PostCleanupMap")
-
-	-- init door entities
-	door.SetUp()
 end
 
 ---

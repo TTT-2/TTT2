@@ -1309,6 +1309,9 @@ end
 function GM:EntityTakeDamage(ent, dmginfo)
 	if not IsValid(ent) then return end
 
+	door.HandleDamage(ent, dmginfo)
+	door.HandlePropDamage(ent, dmginfo)
+
 	local att = dmginfo:GetAttacker()
 
 	if not hook.Run("AllowPVP") then

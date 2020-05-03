@@ -14,6 +14,22 @@ local valid_doors = {
 	}
 }
 
+local function RemoveSpawnFlag(ent, flag)
+	if CLIENT then return end
+
+	if not ent:HasSpawnFlags(flag) then return end
+
+	ent:SetKeyValue("spawnflags", ent:GetSpawnFlags() - flag)
+end
+
+local function AddSpawnFlag(ent, flag)
+	if CLIENT then return end
+
+	if ent:HasSpawnFlags(flag) then return end
+
+	ent:SetKeyValue("spawnflags", ent:GetSpawnFlags() + flag)
+end
+
 -- Returns if a door is open
 local function IsDoorOpen(ent)
 	if CLIENT then return end
@@ -73,11 +89,118 @@ local function DoorAutoCloses(ent)
 		-- 8192: door closes on use
 		return not ent:HasSpawnFlags(8192)
 	elseif door.IsValidSpecial(cls) then
-		-- 1024: touch opens
+		-- 32: door is in toggle mode
 		return not ent:HasSpawnFlags(32)
 	end
 
 	return false
+end
+
+local function DoorIsDestructible(ent)
+	if CLIENT then return end
+
+	local cls = ent:GetClass()
+
+	if door.IsValidNormal(cls) then
+		-- 524288 : Start Breakable
+		return ent:HasSpawnFlags(524288)
+	elseif door.IsValidSpecial(cls) then
+		return false
+	end
+
+	return false
+end
+
+local function SetPlayerCanUseDoor(ent, state)
+	if CLIENT then return end
+
+	local cls = ent:GetClass()
+
+	if door.IsValidNormal(cls) then
+		-- 32768: ignore player +use
+		if state then
+			RemoveSpawnFlag(ent, 32768)
+		else
+			AddSpawnFlag(ent, 32768)
+		end
+	elseif door.IsValidSpecial(cls) then
+		-- 256: use opens
+		if state then
+			AddSpawnFlag(ent, 256)
+		else
+			RemoveSpawnFlag(ent, 256)
+		end
+	end
+end
+
+local function SetPlayerCanTouchDoor(ent, state)
+	if CLIENT then return end
+
+	local cls = ent:GetClass()
+
+	if door.IsValidSpecial(cls) then
+		-- 1024: touch opens
+		if state then
+			AddSpawnFlag(ent, 1024)
+		else
+			RemoveSpawnFlag(ent, 1024)
+		end
+	end
+end
+
+local function SetDoorAutoCloses(ent, state)
+	if CLIENT then return end
+
+	local cls = ent:GetClass()
+
+	if door.IsValidNormal(cls) then
+		-- 8192: door closes on use
+		if state then
+			RemoveSpawnFlag(ent, 8192)
+			ent:SetKeyValue("returndelay", 3)
+		else
+			AddSpawnFlag(ent, 8192)
+		end
+	elseif door.IsValidSpecial(cls) then
+		-- 32: door is in toggle mode
+		if state then
+			RemoveSpawnFlag(ent, 32)
+		else
+			AddSpawnFlag(ent, 32)
+		end
+	end
+end
+
+local function HandleDoorDestruction(ent)
+	if CLIENT then return end
+
+	ent:EmitSound("physics/wood/wood_crate_break3.wav")
+
+	local effectdata = EffectData()
+	effectdata:SetOrigin(ent:GetPos() + ent:OBBCenter())
+	effectdata:SetMagnitude(5)
+	effectdata:SetScale(2)
+	effectdata:SetRadius(5)
+
+	util.Effect("Sparks", effectdata)
+end
+
+local function HandleDoorPairs(ent)
+	local master = ent:GetInternalVariable("m_hMaster")
+	local owner = ent:GetInternalVariable("m_hOwnerEntity")
+
+	local pair
+
+	if IsValid(master) then
+		pair = master
+	elseif IsValid(owner) then
+		pair = owner
+	else
+		return
+	end
+
+	ent.otherPairDoor = pair
+	pair.otherPairDoor = ent
 end
 
 --- DOORS MODULE STUFF ---
@@ -115,11 +238,14 @@ function door.SetUp()
 		ent:SetNWBool("ttt2_door_player_use", PlayerCanUseDoor(ent))
 		ent:SetNWBool("ttt2_door_player_touch", PlayerCanTouchDoor(ent))
 		ent:SetNWBool("ttt2_door_auto_close", DoorAutoCloses(ent))
+		ent:SetNWBool("ttt2_door_is_destructable", DoorIsDestructible(ent))
 
 		entityOutputs.RegisterMapEntityOutput(ent, "OnOpen", "TTT2DoorOpens")
 		entityOutputs.RegisterMapEntityOutput(ent, "OnClose", "TTT2DoorCloses")
 		entityOutputs.RegisterMapEntityOutput(ent, "OnFullyOpen", "TTT2DoorFullyOpen")
 		entityOutputs.RegisterMapEntityOutput(ent, "OnFullyClosed", "TTT2DoorFullyClosed")
+
+		HandleDoorPairs(ent)
 	end
 
 	door_list.doors = doors
@@ -158,6 +284,32 @@ function door.GetAll()
 end
 
 if SERVER then
+	local function HandleUseCancel(ent)
+		ent:EmitSound("doors/door_locked2.wav")
+	end
+
+	function door.HandleDamage(ent, dmginfo)
+		if not ent:DoorIsDestructible() then return end
+
+		ent:SetHealth(ent:Health() - dmginfo:GetDamage())
+
+		if ent:Health() > 0 then return end
+
+		ent:SafeDestroyDoor(dmginfo:GetAttacker():GetForward() * 15000)
+	end
+
+	function door.HandlePropDamage(ent, dmginfo)
+		if not ent.isDoorProp then return end
+
+		ent:SetHealth(ent:Health() - dmginfo:GetDamage())
+
+		if ent:Health() > 0 then return end
+
+		HandleDoorDestruction(ent)
+
+		ent:Remove()
+	end
+
 	---
 	-- Called when a map I/O event occurs.
 	-- @param Entity ent Entity that receives the input
@@ -201,16 +353,14 @@ if SERVER then
 			caller = IsValid(caller) and caller or ply
 		end
 
-		print(ent)
-		print(name)
-		print(activator)
-		print(caller)
-		print(data)
-		print("------")
+		-- always play sound if door is locked
+		if name == "use" and door.IsValidSpecial(ent:GetClass()) and ent:IsDoorLocked() then
+			HandleUseCancel(ent)
+		end
 
 		-- handle the entity input types
 		if name == "lock" then
-			local shouldCancel = hook.Run("TTT2OnDoorLock", ent, activator, caller)
+			local shouldCancel = hook.Run("TTT2BlockDoorLock", ent, activator, caller)
 
 			if shouldCancel then
 				return true
@@ -227,7 +377,7 @@ if SERVER then
 				ent:SetNWBool("ttt2_door_locked", ent:GetInternalVariable("m_bLocked") or false)
 			end)
 		elseif name == "unlock" then
-			local shouldCancel = hook.Run("TTT2OnDoorUnlock", ent, activator, caller)
+			local shouldCancel = hook.Run("TTT2BlockDoorUnlock", ent, activator, caller)
 
 			if shouldCancel then
 				return true
@@ -244,16 +394,25 @@ if SERVER then
 				ent:SetNWBool("ttt2_door_locked", ent:GetInternalVariable("m_bLocked") or false)
 			end)
 		elseif name == "use" and ent:IsDoorOpen() then
-			local shouldCancel = hook.Run("TTT2OnDoorClose", ent, activator, caller)
+			-- do not stack closing time if door closes automatically
+			if ent:DoorAutoCloses() then
+				return true
+			end
+
+			local shouldCancel = hook.Run("TTT2BlockDoorClose", ent, activator, caller)
 
 			if shouldCancel then
+				HandleUseCancel(ent)
+
 				return true
 			end
 
 		elseif name == "use" and not ent:IsDoorOpen() then
-			local shouldCancel = hook.Run("TTT2OnDoorOpen", ent, activator, caller)
+			local shouldCancel = hook.Run("TTT2BlockDoorOpen", ent, activator, caller)
 
 			if shouldCancel then
+				HandleUseCancel(ent)
+
 				return true
 			end
 		end
@@ -315,7 +474,7 @@ if SERVER then
 	-- @return boolean Return true to cancel the door lock
 	-- @hook
 	-- @realm server
-	function GM:TTT2OnDoorLock(doorEntity, activator, caller)
+	function GM:TTT2BlockDoorLock(doorEntity, activator, caller)
 
 	end
 
@@ -327,7 +486,7 @@ if SERVER then
 	-- @return boolean Return true to cancel the door unlock
 	-- @hook
 	-- @realm server
-	function GM:TTT2OnDoorUnlock(doorEntity, activator, caller)
+	function GM:TTT2BlockDoorUnlock(doorEntity, activator, caller)
 
 	end
 
@@ -336,10 +495,10 @@ if SERVER then
 	-- @param Entity doorEntity The door entity
 	-- @param Entity activator The activator entity
 	-- @param Entity caller The caller entity
-	-- @return boolean Return true to cance the door opening
+	-- @return boolean Return true to cancel the door opening
 	-- @hook
 	-- @realm server
-	function GM:TTT2OnDoorOpen(doorEntity, activator, caller)
+	function GM:TTT2BlockDoorOpen(doorEntity, activator, caller)
 
 	end
 
@@ -348,10 +507,10 @@ if SERVER then
 	-- @param Entity doorEntity The door entity
 	-- @param Entity activator The activator entity
 	-- @param Entity caller The caller entity
-	-- @return boolean Return true to cance the door closing
+	-- @return boolean Return true to cancel the door closing
 	-- @hook
 	-- @realm server
-	function GM:TTT2OnDoorClose(doorEntity, activator, caller)
+	function GM:TTT2BlockDoorClose(doorEntity, activator, caller)
 
 	end
 end
@@ -443,6 +602,12 @@ function entmeta:DoorAutoCloses()
 	return self:GetNWBool("ttt2_door_auto_close", false)
 end
 
+function entmeta:DoorIsDestructible()
+	if not self:IsDoor() then return end
+
+	return self:GetNWBool("ttt2_door_is_destructable", false)
+end
+
 ---
 -- Returns if a door is open
 -- @return boolean The door state; true: open, false: close, nil: no valid door
@@ -478,6 +643,10 @@ if SERVER then
 		if not self:IsDoor() then return end
 
 		self:Fire("Lock", GetDataString(ply, data), delay or 0)
+
+		if IsValid(self.otherPairDoor) then
+			self.otherPairDoor:Fire("Lock", GetDataString(ply, data), delay or 0)
+		end
 	end
 
 	---
@@ -491,6 +660,10 @@ if SERVER then
 		if not self:IsDoor() then return end
 
 		self:Fire("Unlock", GetDataString(ply, data), delay or 0)
+
+		if IsValid(self.otherPairDoor) then
+			self.otherPairDoor:Fire("Unlock", GetDataString(ply, data), delay or 0)
+		end
 	end
 
 	---
@@ -504,6 +677,10 @@ if SERVER then
 		if not self:IsDoor() then return end
 
 		self:Fire("Open", GetDataString(ply, data), delay or 0)
+
+		if IsValid(self.otherPairDoor) then
+			self.otherPairDoor:Fire("Open", GetDataString(ply, data), delay or 0)
+		end
 	end
 
 	---
@@ -517,6 +694,10 @@ if SERVER then
 		if not self:IsDoor() then return end
 
 		self:Fire("Close", GetDataString(ply, data), delay or 0)
+
+		if IsValid(self.otherPairDoor) then
+			self.otherPairDoor:Fire("Close", GetDataString(ply, data), delay or 0)
+		end
 	end
 
 	---
@@ -530,6 +711,98 @@ if SERVER then
 		if not self:IsDoor() then return end
 
 		self:Fire("Toggle", GetDataString(ply, data), delay or 0)
+
+		if IsValid(self.otherPairDoor) then
+			self.otherPairDoor:Fire("Toggle", GetDataString(ply, data), delay or 0)
+		end
+	end
+
+	function entmeta:SetDoorCanTouchOpen(state)
+		SetPlayerCanTouchDoor(self, state)
+
+		self:SetNWBool("ttt2_door_player_touch", PlayerCanTouchDoor(self))
+
+		if IsValid(self.otherPairDoor) then
+			self.otherPairDoor:SetNWBool("ttt2_door_player_touch", PlayerCanTouchDoor(self.otherPairDoor))
+		end
+	end
+
+	function entmeta:SetDoorCanUseOpen(state)
+		SetPlayerCanUseDoor(self, state)
+
+		self:SetNWBool("ttt2_door_player_use", PlayerCanUseDoor(self))
+
+		if IsValid(self.otherPairDoor) then
+			self.otherPairDoor:SetNWBool("ttt2_door_player_use", PlayerCanUseDoor(self.otherPairDoor))
+		end
+	end
+
+	function entmeta:SetDoorAutoCloses(state)
+		SetDoorAutoCloses(self, state)
+
+		self:SetNWBool("ttt2_door_auto_close", DoorAutoCloses(self))
+
+		if IsValid(self.otherPairDoor) then
+			self.otherPairDoor:SetNWBool("ttt2_door_auto_close", DoorAutoCloses(self.otherPairDoor))
+		end
+	end
+
+	function entmeta:MakeDoorDestructable(state)
+		if not self:PlayerCanOpenDoor() or not door.IsValidNormal(self:GetClass()) then return end
+
+		self:SetNWBool("ttt2_door_is_destructable", state)
+
+		if self:Health() == 0 then
+			self:SetHealth(20)
+		end
+
+		if IsValid(self.otherPairDoor) then
+			self.otherPairDoor:SetNWBool("ttt2_door_is_destructable", state)
+
+			if self.otherPairDoor:Health() == 0 then
+				self.otherPairDoor:SetHealth(20)
+			end
+		end
+	end
+
+	function entmeta:SafeDestroyDoor(pushForce)
+		if not self:PlayerCanOpenDoor() or not door.IsValidNormal(self:GetClass()) then return end
+
+		-- if door is destroyed, spawn a prop in the world
+		local doorProp = ents.Create("prop_physics")
+		doorProp:SetCollisionGroup(COLLISION_GROUP_NONE)
+		doorProp:SetMoveType(MOVETYPE_VPHYSICS)
+		doorProp:SetSolid(SOLID_BBOX)
+		doorProp:SetPos(self:GetPos() + Vector(0, 0, 2))
+		doorProp:SetAngles(self:GetAngles())
+		doorProp:SetModel(self:GetModel())
+		doorProp:SetSkin(self:GetSkin())
+
+		HandleDoorDestruction(self)
+
+		-- before the entity is killed, we have to trigger a door opening
+		self:OpenDoor()
+
+		-- we have to kill the entity here instead of removing it because this way we
+		-- have no problems with area portals (invisible rooms after door is destroyed)
+		self:Fire("Kill", "", 0)
+
+		doorProp:Spawn()
+		doorProp:SetHealth(50)
+
+		doorProp.isDoorProp = true
+
+		doorProp:GetPhysicsObject():ApplyForceCenter(pushForce or Vector(0, 0, 0))
+
+		local otherPairDoor = self.otherPairDoor
+		self.otherPairDoor = nil
+
+		if IsValid(otherPairDoor) then
+			otherPairDoor.otherPairDoor = nil
+			otherPairDoor:SafeDestroyDoor(pushForce)
+		end
+
+		return doorProp
 	end
 
 	---
