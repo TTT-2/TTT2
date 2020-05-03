@@ -312,7 +312,7 @@ if SERVER then
 	-- @param Entity doorEntity The door entity
 	-- @param Entity activator The activator entity
 	-- @param Entity caller The caller entity
-	-- @return boolean Return true to cance the door lock
+	-- @return boolean Return true to cancel the door lock
 	-- @hook
 	-- @realm server
 	function GM:TTT2OnDoorLock(doorEntity, activator, caller)
