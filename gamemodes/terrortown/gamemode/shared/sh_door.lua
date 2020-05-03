@@ -288,6 +288,13 @@ if SERVER then
 		ent:EmitSound("doors/door_locked2.wav")
 	end
 
+	---
+	-- Handles the damage of doors that are still in the wall.
+	-- Called in @{GM:EntityTakeDamage}.
+	-- @param Entity ent The entity that is damages
+	-- @param CTakeDamageInfo dmginfo The damage info object
+	-- @internal
+	-- @realm server
 	function door.HandleDamage(ent, dmginfo)
 		if not ent:DoorIsDestructible() then return end
 
@@ -298,6 +305,13 @@ if SERVER then
 		ent:SafeDestroyDoor(dmginfo:GetAttacker():GetForward() * 15000)
 	end
 
+	---
+	-- Handles the damage of doors that are lying as props on the groudn.
+	-- Called in @{GM:EntityTakeDamage}.
+	-- @param Entity ent The entity that is damages
+	-- @param CTakeDamageInfo dmginfo The damage info object
+	-- @internal
+	-- @realm server
 	function door.HandlePropDamage(ent, dmginfo)
 		if not ent.isDoorProp then return end
 
@@ -527,7 +541,7 @@ end
 local entmeta = assert(FindMetaTable("Entity"), "FAILED TO FIND ENTITY TABLE")
 
 ---
--- Returns whether this entity is a door or not
+-- Returns whether this entity is a door or not.
 -- @return boolean Returns true if it is a valid door
 -- @realm shared
 function entmeta:IsDoor()
@@ -542,7 +556,7 @@ function entmeta:IsDoor()
 end
 
 ---
--- Returns the lock state of a door
+-- Returns the lock state of a door.
 -- @return boolean The door state; true: locked, false: unlocked, nil: no valid door
 -- @realm shared
 function entmeta:IsDoorLocked()
@@ -552,7 +566,7 @@ function entmeta:IsDoorLocked()
 end
 
 ---
--- Returns if a door is forceclosed, if it forceclosed it will close no matter what
+-- Returns if a door is forceclosed, if it forceclosed it will close no matter what.
 -- @return boolean The door state; true: forceclosed, false: not forceclosed, nil: no valid door
 -- @realm shared
 function entmeta:IsDoorForceclosed()
@@ -562,7 +576,7 @@ function entmeta:IsDoorForceclosed()
 end
 
 ---
--- Returns if this door can be opened with the use key, traitor room doors or doors
+-- Returns if this door can be opened with the use key, traitor room doors or doors.
 -- opened with a button press can't be opened with the use key for example
 -- @return boolean If the door can be opened with the use key
 -- @realm shared
@@ -573,7 +587,7 @@ function entmeta:UseOpensDoor()
 end
 
 ---
--- Returns if this door can be opened by close proximity of a player
+-- Returns if this door can be opened by close proximity of a player.
 -- @return boolean If the door can be opened with proximity
 -- @realm shared
 function entmeta:TouchOpensDoor()
@@ -583,7 +597,7 @@ function entmeta:TouchOpensDoor()
 end
 
 ---
--- Returns if this door can be opened by a player
+-- Returns if this door can be opened by a player.
 -- @return boolean If the door can be opened
 -- @realm shared
 function entmeta:PlayerCanOpenDoor()
@@ -593,7 +607,7 @@ function entmeta:PlayerCanOpenDoor()
 end
 
 ---
--- Returns if this door closes automatically after a certain time
+-- Returns if this door closes automatically after a certain time.
 -- @return boolean If the door closes automatically
 -- @realm shared
 function entmeta:DoorAutoCloses()
@@ -602,6 +616,10 @@ function entmeta:DoorAutoCloses()
 	return self:GetNWBool("ttt2_door_auto_close", false)
 end
 
+---
+-- Retuens if a door is destructible.
+-- @return boolean If a door is destructible
+-- @realm shared
 function entmeta:DoorIsDestructible()
 	if not self:IsDoor() then return end
 
@@ -609,7 +627,7 @@ function entmeta:DoorIsDestructible()
 end
 
 ---
--- Returns if a door is open
+-- Returns if a door is open.
 -- @return boolean The door state; true: open, false: close, nil: no valid door
 -- @realm shared
 function entmeta:IsDoorOpen()
@@ -619,6 +637,7 @@ function entmeta:IsDoorOpen()
 end
 
 if SERVER then
+	-- builds a data string based on a player and the previous data string
 	local function GetDataString(ply, data)
 		local dataTable = {}
 
@@ -638,14 +657,16 @@ if SERVER then
 	-- @param [opt]Player ply The player that will be passed through as the activator
 	-- @param [opt]string data Optional data that can be passed through
 	-- @param [default=0]number delay The delay until the event is fired
+	-- @param [default=false]boolean surpressPair Should the call of the other door (if in a pair) be omitted?
 	-- @realm server
-	function entmeta:LockDoor(ply, data, delay)
+	function entmeta:LockDoor(ply, data, delay, surpressPair)
 		if not self:IsDoor() then return end
 
 		self:Fire("Lock", GetDataString(ply, data), delay or 0)
 
-		if IsValid(self.otherPairDoor) then
-			self.otherPairDoor:Fire("Lock", GetDataString(ply, data), delay or 0)
+		-- if the door is grouped as a pair, call the other one as well
+		if not surpressPair and IsValid(self.otherPairDoor) then
+			self.otherPairDoor:LockDoor(ply, data, delay, true)
 		end
 	end
 
@@ -655,14 +676,16 @@ if SERVER then
 	-- @param [opt]Player ply The player that will be passed through as the activator
 	-- @param [opt]string data Optional data that can be passed through
 	-- @param [default=0]number delay The delay until the event is fired
+	-- @param [default=false]boolean surpressPair Should the call of the other door (if in a pair) be omitted?
 	-- @realm server
-	function entmeta:UnlockDoor(ply, data, delay)
+	function entmeta:UnlockDoor(ply, data, delay, surpressPair)
 		if not self:IsDoor() then return end
 
 		self:Fire("Unlock", GetDataString(ply, data), delay or 0)
 
-		if IsValid(self.otherPairDoor) then
-			self.otherPairDoor:Fire("Unlock", GetDataString(ply, data), delay or 0)
+		-- if the door is grouped as a pair, call the other one as well
+		if not surpressPair and IsValid(self.otherPairDoor) then
+			self.otherPairDoor:UnlockDoor(ply, data, delay, true)
 		end
 	end
 
@@ -672,14 +695,16 @@ if SERVER then
 	-- @param [opt]Player ply The player that will be passed through as the activator
 	-- @param [opt]string data Optional data that can be passed through
 	-- @param [default=0]number delay The delay until the event is fired
+	-- @param [default=false]boolean surpressPair Should the call of the other door (if in a pair) be omitted?
 	-- @realm server
-	function entmeta:OpenDoor(ply, data, delay)
+	function entmeta:OpenDoor(ply, data, delay, surpressPair)
 		if not self:IsDoor() then return end
 
 		self:Fire("Open", GetDataString(ply, data), delay or 0)
 
-		if IsValid(self.otherPairDoor) then
-			self.otherPairDoor:Fire("Open", GetDataString(ply, data), delay or 0)
+		-- if the door is grouped as a pair, call the other one as well
+		if not surpressPair and IsValid(self.otherPairDoor) then
+			self.otherPairDoor:OpenDoor(ply, data, delay, true)
 		end
 	end
 
@@ -689,14 +714,16 @@ if SERVER then
 	-- @param [opt]Player ply The player that will be passed through as the activator
 	-- @param [opt]string data Optional data that can be passed through
 	-- @param [default=0]number delay The delay until the event is fired
+	-- @param [default=false]boolean surpressPair Should the call of the other door (if in a pair) be omitted?
 	-- @realm server
-	function entmeta:CloseDoor(ply, data, delay)
+	function entmeta:CloseDoor(ply, data, delay, surpressPair)
 		if not self:IsDoor() then return end
 
 		self:Fire("Close", GetDataString(ply, data), delay or 0)
 
-		if IsValid(self.otherPairDoor) then
-			self.otherPairDoor:Fire("Close", GetDataString(ply, data), delay or 0)
+		-- if the door is grouped as a pair, call the other one as well
+		if not surpressPair and IsValid(self.otherPairDoor) then
+			self.otherPairDoor:CloseDoor(ply, data, delay, true)
 		end
 	end
 
@@ -706,48 +733,73 @@ if SERVER then
 	-- @param [opt]Player ply The player that will be passed through as the activator
 	-- @param [opt]string data Optional data that can be passed through
 	-- @param [default=0]number delay The delay until the event is fired
+	-- @param [default=false]boolean surpressPair Should the call of the other door (if in a pair) be omitted?
 	-- @realm server
-	function entmeta:ToggleDoor(ply, data, delay)
+	function entmeta:ToggleDoor(ply, data, delay, surpressPair)
 		if not self:IsDoor() then return end
 
 		self:Fire("Toggle", GetDataString(ply, data), delay or 0)
 
-		if IsValid(self.otherPairDoor) then
-			self.otherPairDoor:Fire("Toggle", GetDataString(ply, data), delay or 0)
+		-- if the door is grouped as a pair, call the other one as well
+		if not surpressPair and IsValid(self.otherPairDoor) then
+			self.otherPairDoor:ToggleDoor(ply, data, delay, true)
 		end
 	end
 
-	function entmeta:SetDoorCanTouchOpen(state)
+	---
+	-- Sets the state if a door can be opened on touch.
+	-- @param boolean state The new state
+	-- @param [default=false]boolean surpressPair Should the call of the other door (if in a pair) be omitted?
+	-- @realm server
+	function entmeta:SetDoorCanTouchOpen(state, surpressPair)
 		SetPlayerCanTouchDoor(self, state)
 
 		self:SetNWBool("ttt2_door_player_touch", PlayerCanTouchDoor(self))
 
-		if IsValid(self.otherPairDoor) then
-			self.otherPairDoor:SetNWBool("ttt2_door_player_touch", PlayerCanTouchDoor(self.otherPairDoor))
+		-- if the door is grouped as a pair, call the other one as well
+		if not surpressPair and IsValid(self.otherPairDoor) then
+			self.otherPairDoor:SetDoorCanTouchOpen(state, true)
 		end
 	end
 
-	function entmeta:SetDoorCanUseOpen(state)
+	---
+	-- Sets the state if a door can be opened on use.
+	-- @param boolean state The new state
+	-- @param [default=false]boolean surpressPair Should the call of the other door (if in a pair) be omitted?
+	-- @realm server
+	function entmeta:SetDoorCanUseOpen(state, surpressPair)
 		SetPlayerCanUseDoor(self, state)
 
 		self:SetNWBool("ttt2_door_player_use", PlayerCanUseDoor(self))
 
-		if IsValid(self.otherPairDoor) then
-			self.otherPairDoor:SetNWBool("ttt2_door_player_use", PlayerCanUseDoor(self.otherPairDoor))
+		-- if the door is grouped as a pair, call the other one as well
+		if not surpressPair and IsValid(self.otherPairDoor) then
+			self.otherPairDoor:SetDoorCanUseOpen(state, true)
 		end
 	end
 
-	function entmeta:SetDoorAutoCloses(state)
+	---
+	-- Sets the state if a door closes automatically.
+	-- @param boolean state The new state
+	-- @param [default=false]boolean surpressPair Should the call of the other door (if in a pair) be omitted?
+	-- @realm server
+	function entmeta:SetDoorAutoCloses(state, surpressPair)
 		SetDoorAutoCloses(self, state)
 
 		self:SetNWBool("ttt2_door_auto_close", DoorAutoCloses(self))
 
-		if IsValid(self.otherPairDoor) then
-			self.otherPairDoor:SetNWBool("ttt2_door_auto_close", DoorAutoCloses(self.otherPairDoor))
+		-- if the door is grouped as a pair, call the other one as well
+		if not surpressPair and IsValid(self.otherPairDoor) then
+			self.otherPairDoor:SetDoorAutoCloses(state, true)
 		end
 	end
 
-	function entmeta:MakeDoorDestructable(state)
+	---
+	-- Sets the state if a dooris destructible.
+	-- @param boolean state The new state
+	-- @param [default=false]boolean surpressPair Should the call of the other door (if in a pair) be omitted?
+	-- @realm server
+	function entmeta:MakeDoorDestructable(state, surpressPair)
 		if not self:PlayerCanOpenDoor() or not door.IsValidNormal(self:GetClass()) then return end
 
 		self:SetNWBool("ttt2_door_is_destructable", state)
@@ -756,16 +808,22 @@ if SERVER then
 			self:SetHealth(20)
 		end
 
-		if IsValid(self.otherPairDoor) then
-			self.otherPairDoor:SetNWBool("ttt2_door_is_destructable", state)
-
-			if self.otherPairDoor:Health() == 0 then
-				self.otherPairDoor:SetHealth(20)
-			end
+		-- if the door is grouped as a pair, call the other one as well
+		if not surpressPair and IsValid(self.otherPairDoor) then
+			self.otherPairDoor:MakeDoorDestructable(state, true)
 		end
 	end
 
-	function entmeta:SafeDestroyDoor(pushForce)
+	---
+	-- Destroys a door in a safe manner. This means the door will be removed and spawned a
+	-- prop. Furthermore it makes sure that the door will not leave a unrendered room behind
+	-- (problems with area portals). If it is a double door, both doors will be destroyed by
+	-- default.
+	-- @param [default=Vector(0, 0, 0)]Vector pushForce The push force for the door
+	-- @param [default=false]boolean surpressPair Should the call of the other door (if in a pair) be omitted?
+	-- @return Entity Returns the entity of the created prop
+	-- @realm server
+	function entmeta:SafeDestroyDoor(pushForce, surpressPair)
 		if not self:PlayerCanOpenDoor() or not door.IsValidNormal(self:GetClass()) then return end
 
 		-- if door is destroyed, spawn a prop in the world
@@ -794,12 +852,9 @@ if SERVER then
 
 		doorProp:GetPhysicsObject():ApplyForceCenter(pushForce or Vector(0, 0, 0))
 
-		local otherPairDoor = self.otherPairDoor
-		self.otherPairDoor = nil
-
-		if IsValid(otherPairDoor) then
-			otherPairDoor.otherPairDoor = nil
-			otherPairDoor:SafeDestroyDoor(pushForce)
+		-- if the door is grouped as a pair, call the other one as well
+		if not surpressPair and IsValid(self.otherPairDoor) then
+			self.otherPairDoor:SafeDestroyDoor(pushForce, true)
 		end
 
 		return doorProp
