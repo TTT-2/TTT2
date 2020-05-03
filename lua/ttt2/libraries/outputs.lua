@@ -22,7 +22,7 @@ end
 
 ---
 -- Cleans up the entityOutputs library hooks prior to the map cleanup.
--- Has to called in @{GM:PreCleanupMap}.
+-- Has to be called in @{GM:PreCleanupMap}.
 -- @internal
 -- @realm server
 function entityOutputs.CleanUp()
