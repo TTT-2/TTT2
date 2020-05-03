@@ -116,10 +116,10 @@ function door.SetUp()
 		ent:SetNWBool("ttt2_door_player_touch", PlayerCanTouchDoor(ent))
 		ent:SetNWBool("ttt2_door_auto_close", DoorAutoCloses(ent))
 
-		outputs.RegisterMapEntityOutput(ent, "OnOpen", "TTT2OnDoorOpen")
-		outputs.RegisterMapEntityOutput(ent, "OnClose", "TTT2OnDoorClose")
-		outputs.RegisterMapEntityOutput(ent, "OnFullyOpen", "TTT2OnDoorFullyOpen")
-		outputs.RegisterMapEntityOutput(ent, "OnFullyClosed", "TTT2OnDoorFullyClosed")
+		outputs.RegisterMapEntityOutput(ent, "OnOpen", "TTT2DoorOpens")
+		outputs.RegisterMapEntityOutput(ent, "OnClose", "TTT2DoorCloses")
+		outputs.RegisterMapEntityOutput(ent, "OnFullyOpen", "TTT2DoorFullyOpen")
+		outputs.RegisterMapEntityOutput(ent, "OnFullyClosed", "TTT2DoorFullyClosed")
 	end
 
 	door_list.doors = doors
@@ -172,8 +172,45 @@ if SERVER then
 	function GM:AcceptInput(ent, name, activator, caller, data)
 		if not IsValid(ent) or not ent:IsDoor() then return end
 
-		if string.lower(name) == "lock" then
-			local shouldCancel = hook.Run("TTT2OnDoorLocked", ent, activator)
+		name = string.lower(name)
+
+		-- if there is a SID64 in the data string, it should be extracted
+		local sid
+
+		if data and data ~= "" then
+			local dataTable = string.Explode("||", data)
+			local dataTableCleared = {}
+
+			for i = 1, #dataTable do
+				local dataLine = dataTable[i]
+
+				if string.sub(dataLine, 1, 4) == "sid=" then
+					sid = string.sub(dataLine, 5)
+				else
+					dataTableCleared[#dataTableCleared + 1] = dataLine
+				end
+			end
+
+			data = string.Implode("||", dataTableCleared)
+		end
+
+		local ply = player.GetBySteamID64(sid)
+
+		if IsValid(ply) then
+			activator = IsValid(activator) and activator or ply
+			caller = IsValid(caller) and caller or ply
+		end
+
+		print(ent)
+		print(name)
+		print(activator)
+		print(caller)
+		print(data)
+		print("------")
+
+		-- handle the entity input types
+		if name == "lock" then
+			local shouldCancel = hook.Run("TTT2OnDoorLock", ent, activator, caller)
 
 			if shouldCancel then
 				return true
@@ -189,8 +226,8 @@ if SERVER then
 
 				ent:SetNWBool("ttt2_door_locked", ent:GetInternalVariable("m_bLocked") or false)
 			end)
-		elseif string.lower(name) == "unlock" then
-			local shouldCancel = hook.Run("TTT2OnDoorUnLocked", ent, activator)
+		elseif name == "unlock" then
+			local shouldCancel = hook.Run("TTT2OnDoorUnlock", ent, activator, caller)
 
 			if shouldCancel then
 				return true
@@ -206,6 +243,19 @@ if SERVER then
 
 				ent:SetNWBool("ttt2_door_locked", ent:GetInternalVariable("m_bLocked") or false)
 			end)
+		elseif name == "use" and ent:IsDoorOpen() then
+			local shouldCancel = hook.Run("TTT2OnDoorClose", ent, activator, caller)
+
+			if shouldCancel then
+				return true
+			end
+
+		elseif name == "use" and not ent:IsDoorOpen() then
+			local shouldCancel = hook.Run("TTT2OnDoorOpen", ent, activator, caller)
+
+			if shouldCancel then
+				return true
+			end
 		end
 	end
 
@@ -215,7 +265,7 @@ if SERVER then
 	-- @param Entity activator The activator entity, it seems to be the door entity for most doors
 	-- @hook
 	-- @realm server
-	function GM:TTT2OnDoorOpen(doorEntity, activator)
+	function GM:TTT2DoorOpens(doorEntity, activator)
 		if not doorEntity:IsDoor() then return end
 
 		doorEntity:SetNWBool("ttt2_door_open", true)
@@ -227,7 +277,7 @@ if SERVER then
 	-- @param Entity activator The activator entity, it seems to be the door entity for most doors
 	-- @hook
 	-- @realm server
-	function GM:TTT2OnDoorFullyOpen(doorEntity, activator)
+	function GM:TTT2DoorFullyOpen(doorEntity, activator)
 		if not doorEntity:IsDoor() then return end
 
 		doorEntity:SetNWBool("ttt2_door_open", true)
@@ -239,7 +289,7 @@ if SERVER then
 	-- @param Entity activator The activator entity, it seems to be the door entity for most doors
 	-- @hook
 	-- @realm server
-	function GM:TTT2OnDoorClose(doorEntity, activator)
+	function GM:TTT2DoorCloses(doorEntity, activator)
 		if not doorEntity:IsDoor() then return end
 
 		doorEntity:SetNWBool("ttt2_door_open", false)
@@ -251,31 +301,57 @@ if SERVER then
 	-- @param Entity activator The activator entity, it seems to be the door entity for most doors
 	-- @hook
 	-- @realm server
-	function GM:TTT2OnDoorFullyClosed(doorEntity, activator)
+	function GM:TTT2DoorFullyClosed(doorEntity, activator)
 		if not doorEntity:IsDoor() then return end
 
 		doorEntity:SetNWBool("ttt2_door_open", false)
 	end
 
 	---
-	-- This hook when the door is about to be locked. You can cancel the event.
+	-- This hook is called when the door is about to be locked. You can cancel the event.
 	-- @param Entity doorEntity The door entity
 	-- @param Entity activator The activator entity
+	-- @param Entity caller The caller entity
 	-- @return boolean Return true to cance the door lock
 	-- @hook
 	-- @realm server
-	function GM:TTT2OnDoorLocked(doorEntity, activator)
+	function GM:TTT2OnDoorLock(doorEntity, activator, caller)
 
 	end
 
 	---
-	-- This hook when the door is about to be unlocked. You can cancel the event.
+	-- This hook is called when the door is about to be unlocked. You can cancel the event.
 	-- @param Entity doorEntity The door entity
 	-- @param Entity activator The activator entity
+	-- @param Entity caller The caller entity
 	-- @return boolean Return true to cance the door unlock
 	-- @hook
 	-- @realm server
-	function GM:TTT2OnDoorUnlocked(doorEntity, activator)
+	function GM:TTT2OnDoorUnlock(doorEntity, activator, caller)
+
+	end
+
+	---
+	-- This hook is called when the door is about to be opened. You can cancel the event.
+	-- @param Entity doorEntity The door entity
+	-- @param Entity activator The activator entity
+	-- @param Entity caller The caller entity
+	-- @return boolean Return true to cance the door opening
+	-- @hook
+	-- @realm server
+	function GM:TTT2OnDoorOpen(doorEntity, activator, caller)
+
+	end
+
+	---
+	-- This hook is called when the door is about to be closed. You can cancel the event.
+	-- @param Entity doorEntity The door entity
+	-- @param Entity activator The activator entity
+	-- @param Entity caller The caller entity
+	-- @return boolean Return true to cance the door closing
+	-- @hook
+	-- @realm server
+	function GM:TTT2OnDoorClose(doorEntity, activator, caller)
 
 	end
 end
@@ -378,49 +454,82 @@ function entmeta:IsDoorOpen()
 end
 
 if SERVER then
+	local function GetDataString(ply, data)
+		local dataTable = {}
+
+		if IsValid(ply) then
+			dataTable[#dataTable + 1] = "sid=" .. ply:SteamID64()
+		end
+
+		if data and data ~= "" then
+			dataTable[#dataTable + 1] = data
+		end
+
+		return string.Implode("||", dataTable)
+	end
+
 	---
 	-- Locks a door.
+	-- @param [opt]Player ply The player that will be passed through as the activator
+	-- @param [opt]string data Optional data that can be passed through
+	-- @param [default=0]number delay The delay until the event is fired
 	-- @realm server
-	function entmeta:LockDoor()
+	function entmeta:LockDoor(ply, data, delay)
 		if not self:IsDoor() then return end
 
-		self:Fire("Lock", "", 0)
+		self:Fire("Lock", GetDataString(ply, data), delay or 0)
 	end
 
 	---
 	-- Unlocks a door.
+	-- Locks a door.
+	-- @param [opt]Player ply The player that will be passed through as the activator
+	-- @param [opt]string data Optional data that can be passed through
+	-- @param [default=0]number delay The delay until the event is fired
 	-- @realm server
-	function entmeta:UnlockDoor()
+	function entmeta:UnlockDoor(ply, data, delay)
 		if not self:IsDoor() then return end
 
-		self:Fire("Unlock", "", 0)
+		self:Fire("Unlock", GetDataString(ply, data), delay or 0)
 	end
 
 	---
 	-- Opens the door.
+	-- Locks a door.
+	-- @param [opt]Player ply The player that will be passed through as the activator
+	-- @param [opt]string data Optional data that can be passed through
+	-- @param [default=0]number delay The delay until the event is fired
 	-- @realm server
-	function entmeta:OpenDoor()
+	function entmeta:OpenDoor(ply, data, delay)
 		if not self:IsDoor() then return end
 
-		self:Fire("Open", "", 0)
+		self:Fire("Open", GetDataString(ply, data), delay or 0)
 	end
 
 	---
 	-- Closes a door.
+	-- Locks a door.
+	-- @param [opt]Player ply The player that will be passed through as the activator
+	-- @param [opt]string data Optional data that can be passed through
+	-- @param [default=0]number delay The delay until the event is fired
 	-- @realm server
-	function entmeta:CloseDoor()
+	function entmeta:CloseDoor(ply, data, delay)
 		if not self:IsDoor() then return end
 
-		self:Fire("Close", "", 0)
+		self:Fire("Close", GetDataString(ply, data), delay or 0)
 	end
 
 	---
 	-- Toggles a door between open and closed.
+	-- Locks a door.
+	-- @param [opt]Player ply The player that will be passed through as the activator
+	-- @param [opt]string data Optional data that can be passed through
+	-- @param [default=0]number delay The delay until the event is fired
 	-- @realm server
-	function entmeta:ToggleDoor()
+	function entmeta:ToggleDoor(ply, data, delay)
 		if not self:IsDoor() then return end
 
-		self:Fire("Toggle", "", 0)
+		self:Fire("Toggle", GetDataString(ply, data), delay or 0)
 	end
 
 	---
