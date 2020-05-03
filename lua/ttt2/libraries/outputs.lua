@@ -1,5 +1,5 @@
 ---
--- @desc A small library that handles all basics to register map entity
+-- @desc A small library that enables registering map entity
 -- output triggers to lua hooks.
 -- @author Mineotopia
 
