@@ -672,7 +672,6 @@ if SERVER then
 
 	---
 	-- Unlocks a door.
-	-- Locks a door.
 	-- @param [opt]Player ply The player that will be passed through as the activator
 	-- @param [opt]string data Optional data that can be passed through
 	-- @param [default=0]number delay The delay until the event is fired
@@ -691,7 +690,6 @@ if SERVER then
 
 	---
 	-- Opens the door.
-	-- Locks a door.
 	-- @param [opt]Player ply The player that will be passed through as the activator
 	-- @param [opt]string data Optional data that can be passed through
 	-- @param [default=0]number delay The delay until the event is fired
@@ -710,7 +708,6 @@ if SERVER then
 
 	---
 	-- Closes a door.
-	-- Locks a door.
 	-- @param [opt]Player ply The player that will be passed through as the activator
 	-- @param [opt]string data Optional data that can be passed through
 	-- @param [default=0]number delay The delay until the event is fired
@@ -729,7 +726,6 @@ if SERVER then
 
 	---
 	-- Toggles a door between open and closed.
-	-- Locks a door.
 	-- @param [opt]Player ply The player that will be passed through as the activator
 	-- @param [opt]string data Optional data that can be passed through
 	-- @param [default=0]number delay The delay until the event is fired
