@@ -5,22 +5,22 @@
 ---
 -- Resets the spawn position of all players.
 -- @realm server
-function player.ResetSpawnPosition()
+function player.ReSetLastSpawnPosition()
 	local plys = player.GetAll()
 
 	for i = 1, #plys do
-		plys[i]:SetSpawnPosition(Vector(0, 0, 0))
+		plys[i]:SetLastSpawnPosition(Vector(0, 0, 0))
 	end
 end
 
 ---
 -- Resets the death position of all players.
 -- @realm server
-function player.ResetDeathPosition()
+function player.ReSetLastDeathPosition()
 	local plys = player.GetAll()
 
 	for i = 1, #plys do
-		plys[i]:SetDeathPosition(Vector(0, 0, 0))
+		plys[i]:SetLastDeathPosition(Vector(0, 0, 0))
 	end
 end
 

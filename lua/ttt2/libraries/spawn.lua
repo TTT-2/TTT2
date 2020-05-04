@@ -38,8 +38,8 @@ spawn.cachedSpawnEntities = spawn.cachedSpawnEntities or {}
 -- being stuck. Entities which are passable are ignored by the check.
 -- @param Vector pos The respawn position
 -- @param [default=false]boolean force Should the respawn be forced? This means killing other players that block this position
--- @param [opt]table|Entity filder A table of entities or an entity that should be ignored by this check
--- @return bollean Teturns if the spawn point is safe
+-- @param [opt]table|Entity filter A table of entities or an entity that should be ignored by this check
+-- @return boolean Returns if the spawn point is safe
 -- @realm server
 function spawn.IsSpawnPointSafe(pos, force, filter)
 	if not util.IsInWorld(pos) then
@@ -255,7 +255,7 @@ function spawn.GetRandomPlayerSpawnEntity(ply)
 			ErrorNoHalt("TTT2 WARNING: Map has too few spawn points, using a riggedSpawnPoints spawn for " .. tostring(ply) .. "\n")
 
 			-- this is an old TTT flag that I will keep for compatibilities sake
-			GAMEMODE.HaveriggedSpawnPointsSpawn = true
+			GAMEMODE.HaveRiggedSpawn = true
 
 			return riggedSpawnEntity
 		end

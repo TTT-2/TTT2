@@ -1,6 +1,9 @@
 ---
 -- Trouble in Terrorist Town 2
 
+include("ttt2/extensions/player.lua")
+include("ttt2/libraries/spawn.lua")
+
 ttt_include("sh_init")
 
 ttt_include("sh_sprint")

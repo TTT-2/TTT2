@@ -525,11 +525,6 @@ include("ttt2/extensions/net.lua")
 include("ttt2/extensions/string.lua")
 include("ttt2/extensions/table.lua")
 
-if SERVER then
-	include("ttt2/extensions/player.lua")
-	include("ttt2/libraries/spawn.lua")
-end
-
 -- include ttt required files
 ttt_include("sh_util")
 ttt_include("sh_decal")

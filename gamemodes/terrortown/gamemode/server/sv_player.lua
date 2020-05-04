@@ -132,8 +132,8 @@ function GM:PlayerSpawn(ply)
 
 	SCORE:HandleSpawn(ply)
 
-	ply:SetSpawnPosition(ply:GetPos())
-	ply:SetDeathPosition(Vector(0, 0, 0))
+	ply:SetLastSpawnPosition(ply:GetPos())
+	ply:SetLastDeathPosition(Vector(0, 0, 0))
 
 	-- a function to handle the rolespecific stuff that should be done on
 	-- rolechange and respawn (while a round is active)
@@ -168,13 +168,12 @@ end
 -- @param Player ply The @{Player} who is spawned
 -- @param Entity spawnEntity The spawnpoint entity (on the map)
 -- @param boolean force If this is true, it'll kill any players blocking the spawnpoint
--- @param boolean rigged ?
 -- @return boolean Return true to indicate that the spawnpoint is suitable (Allow for the @{Player} to spawn here), false to prevent spawning
 -- @hook
 -- @realm server
 -- @ref https://wiki.facepunch.com/gmod/GM:IsSpawnpointSuitable
 -- @local
-function GM:IsSpawnpointSuitable(ply, spawnEntity, force, rigged)
+function GM:IsSpawnpointSuitable(ply, spawnEntity, force)
 	if not IsValid(ply) or not ply:IsTerror() then
 		return true
 	end
@@ -781,7 +780,7 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:PlayerDeath
 -- @local
 function GM:PlayerDeath(victim, infl, attacker)
-	victim:SetDeathPosition(victim:GetPos())
+	victim:SetLastDeathPosition(victim:GetPos())
 	victim:SetDiedInRound(true)
 
 	-- stop bleeding
@@ -836,7 +835,7 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:PlayerSilentDeath
 -- @realm server
 function GM:PlayerSilentDeath(victim)
-	victim:SetDeathPosition(victim:GetPos())
+	victim:SetLastDeathPosition(victim:GetPos())
 	victim:SetDiedInRound(true)
 end
 
