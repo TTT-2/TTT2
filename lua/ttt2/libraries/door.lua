@@ -322,7 +322,11 @@ if SERVER then
 
 		if ent:Health() > 0 then return end
 
-		ent:SafeDestroyDoor(dmginfo:GetAttacker():GetForward() * 500 * damage)
+		-- capping the force factor is sufficient because
+		-- the forward vector is normalizes
+		local forceFactor = math.min(50000, 500 * damage)
+
+		ent:SafeDestroyDoor(forceFactor * dmginfo:GetAttacker():GetForward())
 	end
 
 	---
