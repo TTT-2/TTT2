@@ -315,12 +315,14 @@ if SERVER then
 	function door.HandleDamage(ent, dmginfo)
 		if not ent:DoorIsDestructible() then return end
 
-		ent:SetHealth(ent:Health() - dmginfo:GetDamage())
+		local damage = math.max(0, dmginfo:GetDamage())
+
+		ent:SetHealth(ent:Health() - damage)
 		ent:SetNWInt("fast_sync_health", ent:Health())
 
 		if ent:Health() > 0 then return end
 
-		ent:SafeDestroyDoor(dmginfo:GetAttacker():GetForward() * 15000)
+		ent:SafeDestroyDoor(dmginfo:GetAttacker():GetForward() * 500 * damage)
 	end
 
 	---
