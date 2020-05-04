@@ -95,11 +95,6 @@ function door.SetUp()
 
 		HandleDoorPairs(ent)
 
-		print(cvDestructableDoor:GetBool())
-		print(cvDestructableDoorLocked:GetBool())
-		print(ent:IsDoorLocked())
-		print("-------------------------")
-
 		if cvDestructableDoor:GetBool() and not (cvDestructableDoorLocked:GetBool() and ent:IsDoorLocked()) then
 			ent:MakeDoorDestructable(true)
 		end
@@ -321,6 +316,7 @@ if SERVER then
 		if not ent:DoorIsDestructible() then return end
 
 		ent:SetHealth(ent:Health() - dmginfo:GetDamage())
+		ent:SetNWInt("fast_sync_health", ent:Health())
 
 		if ent:Health() > 0 then return end
 

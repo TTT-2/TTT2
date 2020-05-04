@@ -514,6 +514,7 @@ COLOR_PINK = Color(255, 0, 255, 255)
 COLOR_ORANGE = Color(250, 100, 0, 255)
 COLOR_OLIVE = Color(100, 100, 0, 255)
 COLOR_BROWN = Color(70, 45, 10)
+COLOR_LBROWN = Color(135, 105, 70)
 
 -- load non-wrapped modules directly
 require("marks")

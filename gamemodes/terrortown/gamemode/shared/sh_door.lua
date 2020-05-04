@@ -120,6 +120,14 @@ function entmeta:IsDoorOpen()
 	return self:GetNWBool("ttt2_door_open", false)
 end
 
+---
+-- Returns the fast synced health of the door entity. This is useful for UI applications.
+-- @return number The synced health
+-- @realm shared
+function entmeta:GetFastSyncedHealth()
+	return math.max(0, self:GetNWInt("fast_sync_health", 100))
+end
+
 if SERVER then
 	---
 	-- Locks a door.
