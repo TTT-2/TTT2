@@ -80,6 +80,20 @@ ttt_include("cl_weapon_pickup")
 -- all files are loaded
 local TryT = LANG.TryTranslation
 
+-- optional sound cues on round start and end
+local ttt_cl_soundcues = CreateConVar("ttt_cl_soundcues", "0", FCVAR_ARCHIVE)
+
+local cues = {
+	Sound("ttt/thump01e.mp3"),
+	Sound("ttt/thump02e.mp3")
+}
+
+local function PlaySoundCue()
+	if not ttt_cl_soundcues:GetBool() then return end
+
+	surface.PlaySound(cues[math.random(#cues)])
+end
+
 ---
 -- Called after the gamemode loads and starts.
 -- @hook
@@ -221,20 +235,6 @@ end
 function GM:HUDClear()
 	RADAR:Clear()
 	TBHUD:Clear()
-end
-
--- optional sound cues on round start and end
-local ttt_cl_soundcues = CreateConVar("ttt_cl_soundcues", "0", FCVAR_ARCHIVE)
-
-local cues = {
-	Sound("ttt/thump01e.mp3"),
-	Sound("ttt/thump02e.mp3")
-}
-
-local function PlaySoundCue()
-	if not ttt_cl_soundcues:GetBool() then return end
-
-	surface.PlaySound(cues[math.random(#cues)])
 end
 
 ---
