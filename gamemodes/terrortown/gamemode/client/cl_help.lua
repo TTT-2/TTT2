@@ -84,10 +84,12 @@ local function AddBindingCategory(category, parent)
 			dPBindDisableButton:SetText(GetTranslation("f1_bind_disable_bind"))
 			dPBindDisableButton:SetSize(55, 25)
 			dPBindDisableButton:SetTooltip(GetTranslation("f1_bind_disable_description"))
+
 			dPBindDisableButton.DoClick = function()
 				bind.Remove(curBinding, binding.name, true)
 				dPBinder:SetValue(bind.Find(binding.name))
 			end
+
 			dPGridExtra:AddItem(dPBindDisableButton)
 
 			-- onchange function
@@ -566,8 +568,11 @@ function HELPSCRN:CreateGameplaySettings(parent)
 	form:SetName(GetTranslation("set_title_play"))
 
 	local cb
+	local rlsList = roles.GetList()
 
-	for _, v in ipairs(roles.GetList()) do
+	for i = 1, #rlsList do
+		local v = rlsList[i]
+
 		if ConVarExists("ttt_avoid_" .. v.name) then
 			local rolename = GetTranslation(v.name)
 
@@ -710,10 +715,12 @@ end)
 net.Receive("TTT2RestrictHUDResponse", function()
 	local accepted = net.ReadBool()
 	local hudname = net.ReadString()
-	local ply = LocalPlayer()
+
+	local client = LocalPlayer()
+	if not IsValid(client) then return end
 
 	if not accepted then
-		ply:ChatPrint("[TTT2][HUDManager] " .. GetPTranslation("hud_restricted_failed", {hudname = hudname}))
+		client:ChatPrint("[TTT2][HUDManager] " .. GetPTranslation("hud_restricted_failed", {hudname = hudname}))
 
 		return
 	end
@@ -722,10 +729,12 @@ end)
 net.Receive("TTT2ForceHUDResponse", function()
 	local accepted = net.ReadBool()
 	local hudname = net.ReadString()
-	local ply = LocalPlayer()
+
+	local client = LocalPlayer()
+	if not IsValid(client) then return end
 
 	if not accepted then
-		ply:ChatPrint("[TTT2][HUDManager] " .. GetPTranslation("hud_forced_failed", {hudname = hudname}))
+		client:ChatPrint("[TTT2][HUDManager] " .. GetPTranslation("hud_forced_failed", {hudname = hudname}))
 
 		return
 	end
@@ -734,15 +743,16 @@ end)
 net.Receive("TTT2DefaultHUDResponse", function()
 	local accepted = net.ReadBool()
 	local hudname = net.ReadString()
-	local ply = LocalPlayer()
+
+	local client = LocalPlayer()
+	if not IsValid(client) then return end
 
 	if not accepted then
-		ply:ChatPrint("[TTT2][HUDManager] " .. GetPTranslation("hud_default_failed", {hudname = hudname}))
+		client:ChatPrint("[TTT2][HUDManager] " .. GetPTranslation("hud_default_failed", {hudname = hudname}))
 
 		return
 	end
 end)
-
 
 -- Tutorial
 
@@ -808,8 +818,8 @@ function HELPSCRN:CreateTutorial(parent)
 	bnext.DoClick = function()
 		if tut.current < tutorial_pages then
 			tut.current = tut.current + 1
-			tut:SetImage(Format(imgpath, tut.current))
 
+			tut:SetImage(Format(imgpath, tut.current))
 			bar:SetValue(tut.current)
 		end
 	end
@@ -817,8 +827,8 @@ function HELPSCRN:CreateTutorial(parent)
 	bprev.DoClick = function()
 		if tut.current > 1 then
 			tut.current = tut.current - 1
-			tut:SetImage(Format(imgpath, tut.current))
 
+			tut:SetImage(Format(imgpath, tut.current))
 			bar:SetValue(tut.current)
 		end
 	end

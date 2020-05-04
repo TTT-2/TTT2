@@ -44,15 +44,19 @@ function TBHUD:CacheEnts()
 			local ent = btns[i]
 			local access, overrideRole, overrideTeam, roleIntend, teamIntend = ent:PlayerRoleCanUse(ply)
 
-			if admin or access then
-				self.buttons[ent:EntIndex()] = {
-					["ent"] = ent, ["access"] = access,
-					["overrideRole"] = overrideRole, ["overrideTeam"] = overrideTeam,
-					["roleIntend"] = roleIntend, ["teamIntend"] = teamIntend,
-					["admin"] = admin, ["roleColor"] = ply:GetRoleColor(),
-					["teamColor"] = TEAMS and TEAMS[team] and TEAMS[team].color or COLOR_BLACK
-				}
-			end
+			if not admin and not access then continue end
+
+			self.buttons[ent:EntIndex()] = {
+				["ent"] = ent,
+				["access"] = access,
+				["overrideRole"] = overrideRole,
+				["overrideTeam"] = overrideTeam,
+				["roleIntend"] = roleIntend,
+				["teamIntend"] = teamIntend,
+				["admin"] = admin,
+				["roleColor"] = ply:GetRoleColor(),
+				["teamColor"] = TEAMS and TEAMS[team] and TEAMS[team].color or COLOR_BLACK
+			}
 		end
 	end
 

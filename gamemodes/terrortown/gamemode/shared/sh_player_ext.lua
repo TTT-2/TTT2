@@ -285,7 +285,9 @@ end
 -- @return boolean
 -- @realm shared
 function plymeta:IsInTeam(ply)
-	return self:GetTeam() ~= TEAM_NONE and not TEAMS[self:GetTeam()].alone and self:GetTeam() == ply:GetTeam()
+	return self:GetTeam() ~= TEAM_NONE
+		and not TEAMS[self:GetTeam()].alone
+		and self:GetTeam() == ply:GetTeam()
 end
 
 -- Role access
@@ -876,7 +878,7 @@ end
 -- @return boolean
 -- @realm shared
 function plymeta:IsReady()
-	return self.is_ready or false
+	return self.isReady or false
 end
 
 ---
