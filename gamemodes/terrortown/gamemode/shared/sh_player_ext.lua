@@ -886,9 +886,7 @@ end
 -- @hook
 -- @realm shared
 function GM:TTT2PlayerReady(ply)
-	if CLIENT then
-		SPEED:Initialize()
-	end
+
 end
 
 ---
