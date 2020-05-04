@@ -595,9 +595,9 @@ function CLSCORE:ClearPanel()
 		local pnl = self.Panel
 
 		timer.Simple(0, function()
-			if IsValid(pnl) then
-				pnl:Remove()
-			end
+			if not IsValid(pnl) then return end
+
+			pnl:Remove()
 		end)
 	end
 end
@@ -750,6 +750,8 @@ end
 net.Receive("TTT_ReportStream", ReceiveReportStream)
 
 local function SaveLog(ply, cmd, args)
+	if not CLSCORE then return end
+
 	CLSCORE:SaveLog()
 end
 concommand.Add("ttt_save_events", SaveLog)

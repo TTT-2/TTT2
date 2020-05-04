@@ -43,14 +43,14 @@ end
 
 local function GetClickedElement(x, y)
 	local hud = huds.GetStored(HUDManager.GetHUD())
-	if hud then
-		local elems = hud:GetElements()
+	if not hud then return end
 
-		for i = 1, #elems do
-			local elObj = hudelements.GetStored(elems[i])
-			if elObj and elObj:IsInPos(x, y) then
-				return elObj
-			end
+	local elems = hud:GetElements()
+
+	for i = 1, #elems do
+		local elObj = hudelements.GetStored(elems[i])
+		if elObj and elObj:IsInPos(x, y) then
+			return elObj
 		end
 	end
 end

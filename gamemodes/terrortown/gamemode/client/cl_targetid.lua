@@ -364,6 +364,7 @@ function GM:HUDDrawTargetID()
 			local color = icon.color or COLOR_WHITE
 
 			draw.FilteredShadowedTexture(icon_x, icon_y, key_box_h, key_box_h, icon.material, color.a, color)
+
 			icon_y = icon_y + key_box_h
 		end
 	end

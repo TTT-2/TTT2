@@ -323,12 +323,14 @@ GM.TTTEndRound = PlaySoundCue
 
 local function ReceiveRole()
 	local client = LocalPlayer()
+	if not IsValid(client) then return end
+
 	local subrole = net.ReadUInt(ROLE_BITS)
 	local team = net.ReadString()
 
 	-- after a mapswitch, server might have sent us this before we are even done
 	-- loading our code
-	if not client.SetRole then return end
+	if not isfunction(client.SetRole) then return end
 
 	client:SetRole(subrole, team)
 
@@ -647,7 +649,7 @@ function CheckIdle()
 		elseif CurTime() > idle.t + idle_limit then
 			RunConsoleCommand("say", TryT("automoved_to_spec"))
 
-			timer.Simple(0.3, function()
+			timer.Simple(0, function() -- move client into the spectator team in the next frame
 				RunConsoleCommand("ttt_spectator_mode", 1)
 
 				net.Start("TTT_Spectate")
