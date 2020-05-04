@@ -7,6 +7,9 @@ if SERVER then
 	AddCSLuaFile()
 end
 
+local cvDestructableDoor = CreateConVar("ttt2_destructible_doors_enable", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local cvDestructableDoorLocked = CreateConVar("ttt2_destructible_doors_locked_indestructible", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
 door = door or {}
 
 local door_list = {
@@ -91,6 +94,15 @@ function door.SetUp()
 		entityOutputs.RegisterMapEntityOutput(ent, "OnFullyClosed", "TTT2DoorFullyClosed")
 
 		HandleDoorPairs(ent)
+
+		print(cvDestructableDoor:GetBool())
+		print(cvDestructableDoorLocked:GetBool())
+		print(ent:IsDoorLocked())
+		print("-------------------------")
+
+		if cvDestructableDoor:GetBool() and not (cvDestructableDoorLocked:GetBool() and ent:IsDoorLocked()) then
+			ent:MakeDoorDestructable(true)
+		end
 	end
 
 	door_list.doors = doors
@@ -329,9 +341,26 @@ if SERVER then
 
 		if ent:Health() > 0 then return end
 
-		HandleDoorDestruction(ent)
+		door.HandleDestruction(ent)
 
 		ent:Remove()
+	end
+
+	---
+	-- Handles the door desctruction particles of a given door.
+	-- @param Entity ent The entity that is destroxed
+	-- @internal
+	-- @realm server
+	function door.HandleDestruction(ent)
+		ent:EmitSound("physics/wood/wood_crate_break3.wav")
+
+		local effectdata = EffectData()
+		effectdata:SetOrigin(ent:GetPos() + ent:OBBCenter())
+		effectdata:SetMagnitude(5)
+		effectdata:SetScale(2)
+		effectdata:SetRadius(5)
+
+		util.Effect("Sparks", effectdata)
 	end
 end
 

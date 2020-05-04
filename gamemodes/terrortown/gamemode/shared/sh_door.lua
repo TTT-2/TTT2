@@ -6,18 +6,8 @@
 
 local entmeta = assert(FindMetaTable("Entity"), "FAILED TO FIND ENTITY TABLE")
 
--- handles the door desctruction particles
-local function HandleDoorDestruction(ent)
-	ent:EmitSound("physics/wood/wood_crate_break3.wav")
-
-	local effectdata = EffectData()
-	effectdata:SetOrigin(ent:GetPos() + ent:OBBCenter())
-	effectdata:SetMagnitude(5)
-	effectdata:SetScale(2)
-	effectdata:SetRadius(5)
-
-	util.Effect("Sparks", effectdata)
-end
+local cvDoorHealth = CreateConVar("ttt2_destructible_doors_health", "100", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local cvDoorPropHealth = CreateConVar("ttt2_destructible_doors_prop_health", "50", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 -- builds a data string based on a player and the previous data string
 local function GetDataString(ply, data)
@@ -280,7 +270,7 @@ if SERVER then
 		self:SetNWBool("ttt2_door_is_destructable", state)
 
 		if self:Health() == 0 then
-			self:SetHealth(20)
+			self:SetHealth(cvDoorHealth:GetInt())
 		end
 
 		-- if the door is grouped as a pair, call the other one as well
@@ -311,7 +301,10 @@ if SERVER then
 		doorProp:SetModel(self:GetModel())
 		doorProp:SetSkin(self:GetSkin())
 
-		HandleDoorDestruction(self)
+		door.HandleDestruction(self)
+
+		-- disable the door move sound for the destruction
+		self:SetKeyValue("soundmoveoverride", "")
 
 		-- before the entity is killed, we have to trigger a door opening
 		self:OpenDoor()
@@ -321,7 +314,7 @@ if SERVER then
 		self:Fire("Kill", "", 0)
 
 		doorProp:Spawn()
-		doorProp:SetHealth(50)
+		doorProp:SetHealth(cvDoorPropHealth:GetInt())
 
 		doorProp.isDoorProp = true
 
