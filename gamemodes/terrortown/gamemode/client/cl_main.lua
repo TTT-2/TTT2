@@ -81,6 +81,20 @@ ttt_include("cl_weapon_pickup")
 -- all files are loaded
 local TryT = LANG.TryTranslation
 
+-- optional sound cues on round start and end
+local ttt_cl_soundcues = CreateConVar("ttt_cl_soundcues", "0", FCVAR_ARCHIVE)
+
+local cues = {
+	Sound("ttt/thump01e.mp3"),
+	Sound("ttt/thump02e.mp3")
+}
+
+local function PlaySoundCue()
+	if not ttt_cl_soundcues:GetBool() then return end
+
+	surface.PlaySound(cues[math.random(#cues)])
+end
+
 ---
 -- Called after the gamemode loads and starts.
 -- @hook
@@ -243,6 +257,8 @@ local function RoundStateChange(o, n)
 		GAMEMODE:ClearClientState()
 		GAMEMODE:CleanUpMap()
 
+		EPOP:Clear()
+
 		-- show warning to spec mode players
 		if GetConVar("ttt_spectator_mode"):GetBool() and IsValid(LocalPlayer()) then
 			LANG.Msg("spec_mode_warning", nil, MSG_CHAT_WARN)
@@ -270,8 +286,12 @@ local function RoundStateChange(o, n)
 		util.ClearDecals()
 
 		GAMEMODE.StartingPlayers = #util.GetAlivePlayers()
+
+		PlaySoundCue()
 	elseif n == ROUND_POST then
 		RunConsoleCommand("ttt_cl_traitorpopup_close")
+
+		PlaySoundCue()
 	end
 
 	-- stricter checks when we're talking about hooks, because this function may
@@ -303,42 +323,27 @@ local function ttt_print_playercount()
 end
 concommand.Add("ttt_print_playercount", ttt_print_playercount)
 
--- optional sound cues on round start and end
-local ttt_cl_soundcues = CreateConVar("ttt_cl_soundcues", "0", FCVAR_ARCHIVE)
-
-local cues = {
-	Sound("ttt/thump01e.mp3"),
-	Sound("ttt/thump02e.mp3")
-}
-
-local function PlaySoundCue()
-	if not ttt_cl_soundcues:GetBool() then return end
-
-	surface.PlaySound(cues[math.random(#cues)])
-end
-
 ---
--- A hook that is called when the preparation phase starts
+-- A hook that is called when the preparation phase starts.
 -- @hook
 -- @realm client
 function GM:TTTPrepareRound()
-	EPOP:Clear()
+
 end
 
 ---
--- A hook that is called when the round begins
+-- A hook that is called when the round begins.
 -- @hook
 -- @realm client
 function GM:TTTBeginRound()
-	PlaySoundCue()
+
 end
 
----
--- A hook that is called when the round ends
+-- A hook that is called when the round ends.
 -- @hook
 -- @realm client
 function GM:TTTEndRound()
-	PlaySoundCue()
+
 end
 
 -- usermessages
