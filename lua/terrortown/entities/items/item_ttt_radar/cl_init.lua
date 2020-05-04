@@ -90,7 +90,7 @@ end
 -- @internal
 -- @realm client
 function ITEM:DrawInfo()
-	return math.ceil(math.max(0, LocalPlayer():TTT2NETGetUInt("radar_time", 30) - (CurTime() - RADAR.startTime)))
+	return math.ceil(math.max(0, (LocalPlayer().radarTime or 30) - (CurTime() - RADAR.startTime)))
 end
 
 local function DrawTarget(tgt, size, offset, no_shrink)
@@ -183,7 +183,7 @@ function RADAR:Draw(client)
 
 	surface.SetTexture(indicator)
 
-	local radarTime = client:TTT2NETGetUInt("radar_time", 30)
+	local radarTime = client.radarTime or 30
 	local remaining = math.max(0, radarTime - (CurTime() - RADAR.startTime))
 	local alpha_base = 50 + 180 * (remaining / radarTime)
 	local mpos = Vector(ScrW() * 0.5, ScrH() * 0.5, 0)
@@ -282,6 +282,11 @@ local function ReceiveRadarScan()
 end
 net.Receive("TTT_Radar", ReceiveRadarScan)
 
+local function ReceiveRadarTime()
+	LocalPlayer().radarTime = net.ReadUInt(8)
+end
+net.Receive("TTT2RadarUpdateTime", ReceiveRadarTime)
+
 ---
 -- Creates the settings menu
 -- @internal
@@ -318,7 +323,7 @@ function RADAR.CreateMenu(parent, frame)
 	dform:AddItem(dscan)
 
 	local dlabel = vgui.Create("DLabel", dform)
-	dlabel:SetText(GetPTranslation("radar_help", {num = LocalPlayer():TTT2NETGetUInt("radar_time", 30)}))
+	dlabel:SetText(GetPTranslation("radar_help", {num = LocalPlayer().radarTime or 30}))
 	dlabel:SetWrap(true)
 	dlabel:SetTall(50)
 

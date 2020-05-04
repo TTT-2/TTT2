@@ -8,8 +8,19 @@ local IsValid = IsValid
 local hook = hook
 
 util.AddNetworkString("TTT2RadarUpdateAutoScan")
+util.AddNetworkString("TTT2RadarUpdateTime")
 
 RADAR = RADAR or {}
+
+local function UpdateTimeOnPlayer(ply)
+	if ply.lastRadarTime == ply.radarTime then return end
+
+	ply.lastRadarTime = ply.radarTime
+
+	net.Start("TTT2RadarUpdateTime")
+	net.WriteUInt(ply.radarTime, 8)
+	net.Send(ply)
+end
 
 local function TriggerRadarScan(ply)
 	if not IsValid(ply) or not ply:IsTerror() then return end
@@ -26,8 +37,10 @@ local function TriggerRadarScan(ply)
 		return
 	end
 
-	ply:TTT2NETSetUInt("radar_time", ply.radarTime, 8)
+	-- update radar time after the previous scan was finished
+	UpdateTimeOnPlayer(ply)
 
+	-- remove 0.1 seconds to account for rounding errors
 	ply.radar_charge = CurTime() + ply.radarTime - 0.1
 
 	local targets, customradar
@@ -57,7 +70,7 @@ local function TriggerRadarScan(ply)
 			pos.y = math.Round(pos.y)
 			pos.z = math.Round(pos.z)
 
-			targets[#targets + 1] = RADAR.CreateNewTarget(ply, pos, ent)
+			targets[#targets + 1] = RADAR.CreateTargetTable(ply, pos, ent)
 		end
 	end
 
@@ -120,7 +133,7 @@ end
 -- @param [opt]Entity ent The entity that is used for this radar point
 -- @param [opt]Color color A color for this radar point, this overwrites the normal color
 -- @realm server
-function RADAR.CreateNewTarget(ply, pos, ent, color)
+function RADAR.CreateTargetTable(ply, pos, ent, color)
 	local subrole = GetDataForRadar(ply, ent)
 
 	return {
@@ -142,7 +155,7 @@ local function SetupRadarScan(ply)
 end
 
 ---
--- Sets the radar time interval
+-- Sets the radar time interval, lets the current scan run out before it is changed.
 -- @param Player ply The player whose radar interval should be changed
 -- @param [default=ROLE.radarTime or 30]time The radar time interval
 -- @realm server
