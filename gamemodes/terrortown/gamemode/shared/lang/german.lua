@@ -499,15 +499,19 @@ Nutzt normale SMG Munition.]]
 
 -- DNA scanner
 L.dna_name = "DNA-Scanner"
-L.dna_identify = "Die Leiche muss identifiziert sein, um die DNA des Mörders zu erhalten."
 L.dna_notfound = "Keine Spuren von DNA am Ziel gefunden."
 L.dna_limit = "Speicherlimit erreicht. Entferne alte Spuren, um neue hinzuzufügen."
 L.dna_decayed = "Die DNA-Spur des Mörders ist verfallen."
 L.dna_killer = "Es wurde eine DNA-Spur des Mörders von der Leiche aufgesammelt!"
+L.dna_duplicate = "Treffer! Die DNA befindet sich bereits in deinem Scanner!"
 L.dna_no_killer = "Die DNA konnte nicht erlangt werden (Mörder vom Server gegangen?)."
 L.dna_armed = "Die Bombe ist scharf! Entschärfe sie zuerst!"
-L.dna_object = "{num} neue DNA-Spuren von diesem Objekt aufgesammelt."
+L.dna_object = "Es wurde eine DNA-Spur vom letzten Besitzer des Objektes gefunden."
 L.dna_gone = "DNA nicht in diesem Bereich gefunden."
+L.dna_tid_possible = "Scan möglich"
+L.dna_tid_impossible = "Scan unmöglich"
+L.dna_screen_ready = "Keine DNA"
+L.dna_screen_match = "Treffer"
 
 L.dna_desc = [[
 Sammelt DNA-Spuren von Objekten auf
@@ -516,23 +520,8 @@ und wird genutzt, um den Besitzer dieser ausfindig zu machen.
 Kann an frischen Leichen verwendet werden, um die DNA
 des Mörders zu erhalten und um ihn aufzuspüren.]]
 
-L.dna_menu_title = "DNA-Scan-Einstellungen"
-L.dna_menu_sample = "DNA-Spuren an {source} gefunden"
-L.dna_menu_remove = "Ausgewählte entfernen"
-L.dna_menu_help1 = "Dies sind die DNA-Spuren, die du gesammelt hast."
-L.dna_menu_help2 = [[
-Wenn geladen, kannst du den Ort desjenigen ausfindig machen,
-zu dem die DNA-Probe gehört.
-Je weiter das Ziel entfernt ist, desto mehr Energie wird gebraucht.]]
-
-L.dna_menu_scan = "Scannen"
-L.dna_menu_repeat = "Auto-Wiederholen"
-L.dna_menu_ready = "BEREIT"
-L.dna_menu_charge = "AUFLADEN"
-L.dna_menu_select = "PROBE WÄHLEN"
-
 L.dna_help_primary = "{primaryfire} um eine DNA-Probe zu entnehmen"
-L.dna_help_secondary = "{secondaryfire} um die Scaneinstellungen zu öffnen"
+L.dna_help_secondary = "{secondaryfire} um den Slot zu wechseln, Nachladen zum Löschen einer Probe"
 
 -- Magneto stick
 L.magnet_name = "Magneto-Stick"
@@ -1269,3 +1258,21 @@ L.door_auto_closes = "Diese Tür schließt automatisch"
 L.door_open_touch = "Laufe gegen die Tür um sie zu öffnen."
 L.door_open_touch_and_use = "Laufe gegen die Tür oder drücke [{usekey}] um Tür zu öffnen."
 L.hud_health = "Leben"
+
+-- 2020-04-20
+L.item_speedrun = "Schnelllauf"
+L.item_speedrun_desc = [[Macht dich 50% schneller!]]
+L.item_no_explosion_damage = "Kein Explosionsschaden"
+L.item_no_explosion_damage_desc = [[Macht dich immun für Explosionsschaden.]]
+L.item_no_fall_damage = "Kein Fallschaden"
+L.item_no_fall_damage_desc = [[Macht dich immun für Fallschaden.]]
+L.item_no_fire_damage = "Kein Feuerschaden"
+L.item_no_fire_damage_desc = [[Macht dich immun für Deuerschaden.]]
+L.item_no_hazard_damage = "Kein Gefahrgutschaden"
+L.item_no_hazard_damage_desc = [[Macht dich immunn für Gefahrgutschaden, wie Gift, Strahlung und Säure.]]
+L.item_no_energy_damage = "Kein Energieschaden"
+L.item_no_energy_damage_desc = [[Macht dich immun für Energieschaden, wie Laser, Plasma und Blitze.]]
+L.item_no_prop_damage = "Kein Objektschaden"
+L.item_no_prop_damage_desc = [[Macht dich immun fpr Objektschaden.]]
+L.item_no_drown_damage = "Kein Ertrinkungsschaden"
+L.item_no_drown_damage_desc = [[Macht dich immun für Ertrinkungsschaden.]]

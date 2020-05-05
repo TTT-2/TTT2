@@ -41,6 +41,8 @@ ttt_include("vgui__cl_progressbar")
 ttt_include("vgui__cl_scrolllabel")
 
 ttt_include("cl_network_sync")
+ttt_include("cl_hud_editor")
+ttt_include("cl_hud_manager")
 ttt_include("cl_karma")
 ttt_include("cl_tradio")
 ttt_include("cl_transfer")
@@ -78,6 +80,20 @@ ttt_include("cl_weapon_pickup")
 -- all files are loaded
 local TryT = LANG.TryTranslation
 
+-- optional sound cues on round start and end
+local ttt_cl_soundcues = CreateConVar("ttt_cl_soundcues", "0", FCVAR_ARCHIVE)
+
+local cues = {
+	Sound("ttt/thump01e.mp3"),
+	Sound("ttt/thump02e.mp3")
+}
+
+local function PlaySoundCue()
+	if not ttt_cl_soundcues:GetBool() then return end
+
+	surface.PlaySound(cues[math.random(#cues)])
+end
+
 ---
 -- Called after the gamemode loads and starts.
 -- @hook
@@ -89,7 +105,8 @@ function GM:Initialize()
 
 	hook.Run("TTT2Initialize")
 
-	GAMEMODE.round_state = ROUND_WAIT
+	self.round_state = ROUND_WAIT
+	self.roundCount = 0
 
 	-- load addon language files
 	LANG.SetupFiles("lang/", true)
@@ -185,7 +202,7 @@ function GM:InitPostEntity()
 	-- make sure player class extensions are loaded up, and then do some
 	-- initialization on them
 	if IsValid(client) and client.GetTraitor then
-		GAMEMODE:ClearClientState()
+		self:ClearClientState()
 	end
 
 	-- cache players avatar
@@ -195,7 +212,9 @@ function GM:InitPostEntity()
 		draw.CacheAvatar(plys[i]:SteamID64(), "medium") -- caching
 	end
 
-	timer.Create("cache_ents", 1, 0, GAMEMODE.DoCacheEnts)
+	timer.Create("cache_ents", 1, 0, function()
+		self:DoCacheEnts()
+	end)
 
 	RunConsoleCommand("_ttt_request_serverlang")
 	RunConsoleCommand("_ttt_request_rolelist")
@@ -237,6 +256,8 @@ local function RoundStateChange(o, n)
 		GAMEMODE:ClearClientState()
 		GAMEMODE:CleanUpMap()
 
+		EPOP:Clear()
+
 		-- show warning to spec mode players
 		if GetConVar("ttt_spectator_mode"):GetBool() and IsValid(LocalPlayer()) then
 			LANG.Msg("spec_mode_warning", nil, MSG_CHAT_WARN)
@@ -244,6 +265,8 @@ local function RoundStateChange(o, n)
 
 		-- reset cached server language in case it has changed
 		RunConsoleCommand("_ttt_request_serverlang")
+
+		GAMEMODE.roundCount = GAMEMODE.roundCount + 1
 
 		-- clear decals in cache from previous round
 		util.ClearDecals()
@@ -262,8 +285,12 @@ local function RoundStateChange(o, n)
 		util.ClearDecals()
 
 		GAMEMODE.StartingPlayers = #util.GetAlivePlayers()
+
+		PlaySoundCue()
 	elseif n == ROUND_POST then
 		RunConsoleCommand("ttt_cl_traitorpopup_close")
+
+		PlaySoundCue()
 	end
 
 	-- stricter checks when we're talking about hooks, because this function may
@@ -295,33 +322,42 @@ local function ttt_print_playercount()
 end
 concommand.Add("ttt_print_playercount", ttt_print_playercount)
 
--- optional sound cues on round start and end
-local ttt_cl_soundcues = CreateConVar("ttt_cl_soundcues", "0", FCVAR_ARCHIVE)
+---
+-- A hook that is called when the preparation phase starts.
+-- @hook
+-- @realm client
+function GM:TTTPrepareRound()
 
-local cues = {
-	Sound("ttt/thump01e.mp3"),
-	Sound("ttt/thump02e.mp3")
-}
-
-local function PlaySoundCue()
-	if not ttt_cl_soundcues:GetBool() then return end
-
-	surface.PlaySound(cues[math.random(#cues)])
 end
 
-GM.TTTBeginRound = PlaySoundCue
-GM.TTTEndRound = PlaySoundCue
+---
+-- A hook that is called when the round begins.
+-- @hook
+-- @realm client
+function GM:TTTBeginRound()
+
+end
+
+---
+-- A hook that is called when the round ends.
+-- @hook
+-- @realm client
+function GM:TTTEndRound()
+
+end
 
 -- usermessages
 
 local function ReceiveRole()
 	local client = LocalPlayer()
+	if not IsValid(client) then return end
+
 	local subrole = net.ReadUInt(ROLE_BITS)
 	local team = net.ReadString()
 
 	-- after a mapswitch, server might have sent us this before we are even done
 	-- loading our code
-	if not client.SetRole then return end
+	if not isfunction(client.SetRole) then return end
 
 	client:SetRole(subrole, team)
 
@@ -390,7 +426,7 @@ net.Receive("TTT_RoundState", ReceiveRoundState)
 -- @hook
 -- @realm client
 function GM:ClearClientState()
-	GAMEMODE:HUDClear()
+	self:HUDClear()
 
 	local client = LocalPlayer()
 	if not client.SetRole then return end -- code not loaded yet
@@ -426,11 +462,13 @@ function GM:ClearClientState()
 
 	RunConsoleCommand("ttt_mute_team_check", "0")
 
-	if not GAMEMODE.ForcedMouse then return end
+	if not self.ForcedMouse then return end
 
 	gui.EnableScreenClicker(false)
 end
-net.Receive("TTT_ClearClientState", GM.ClearClientState)
+net.Receive("TTT_ClearClientState", function()
+	GAMEMODE:ClearClientState()
+end)
 
 local color_trans = Color(0, 0, 0, 0)
 
@@ -638,7 +676,7 @@ function CheckIdle()
 		elseif CurTime() > idle.t + idle_limit then
 			RunConsoleCommand("say", TryT("automoved_to_spec"))
 
-			timer.Simple(0.3, function()
+			timer.Simple(0, function() -- move client into the spectator team in the next frame
 				RunConsoleCommand("ttt_spectator_mode", 1)
 
 				net.Start("TTT_Spectate")

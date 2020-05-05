@@ -1,0 +1,5 @@
+"UnlitGeneric"
+{
+	"$basetexture" "models\ttt2_dna_scanner\screen"
+	"$basetexturetransform" "center .5 .5 scale 1 1 rotate 180 translate 0 0"
+}

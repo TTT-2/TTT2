@@ -6,6 +6,8 @@ local hook = hook
 local team = team
 local UpdateSprint = UpdateSprint
 
+local MAX_DROWN_TIME = 8
+
 ---
 -- Initializes TTT2
 -- @hook
@@ -141,6 +143,10 @@ end
 -- @realm shared
 function GM:Think()
 	UpdateSprint()
+
+	if CLIENT then
+		EPOP:Think()
+	end
 end
 
 -- Drowning and such
@@ -167,10 +173,15 @@ function GM:Tick()
 					ply:Extinguish()
 				end
 
-				local drowningTime = ply.drowningTime or 8
+				local drowningTime = ply.drowningTime or MAX_DROWN_TIME
 
 				if ply.drowning then
-					ply.drowningProgress = math.max(0, (ply.drowning - CurTime()) * (1 / drowningTime))
+					if ply:HasEquipmentItem("item_ttt_nodrowningdmg") then
+						ply.drowningProgress = MAX_DROWN_TIME
+						ply.drowning = CurTime() + MAX_DROWN_TIME
+					else
+						ply.drowningProgress = math.max(0, (ply.drowning - CurTime()) * (1 / drowningTime))
+					end
 
 					if SERVER and ply.drowning < CurTime() then
 						local dmginfo = DamageInfo()
@@ -194,8 +205,8 @@ function GM:Tick()
 			end
 
 			-- Run DNA Scanner think also when it is not deployed
-			if SERVER and IsValid(ply.scanner_weapon) and wep ~= ply.scanner_weapon then
-				ply.scanner_weapon:Think()
+			if ply:HasWeapon("weapon_ttt_wtester") then
+				ply:GetWeapon("weapon_ttt_wtester"):PassiveThink()
 			end
 		elseif SERVER and tm == TEAM_SPEC then
 			if ply.propspec then

@@ -125,3 +125,7 @@ This is an open-source beta addon. You can report issues on GitHub and contribut
 The idea of TTT2 was born in early 2018 by Alf21. He was annoyed of all these different role mods (such as [TTT Totem](https://steamcommunity.com/sharedfiles/filedetails/?id=828347015) and [Town Of Terror](https://steamcommunity.com/sharedfiles/filedetails/?id=1092556189)) that wouldn’t work together. So he created a new role system and called it TTT2. Mineotopia was the first one to join his team. He is by himself a very active player and server admin and liked the concept. There was only one big problem: The icons were the definition of ugly. He offered to help with graphics and over time he became an active member of TTT2.  
   
 The next big step was a project with two german youtubers, Dhalucard and PietSmiet. We created an exclusive addon for TTT2, called TTT Heroes. At this point, Tobse joined the team and the development rate increased. The idea of a completely revamped user interface was born!
+
+## Credits
+
+Credits by https://sketchfab.com/rubiez for creating the DNA Scanner model. It was ported to source engine and animated. The original can be found here: https://sketchfab.com/3d-models/flir-e5-c5c37e8cd607424fbdb06c7ae2924924. It is licensed under the CC BY 4.0 license (https://creativecommons.org/licenses/by/4.0/).
