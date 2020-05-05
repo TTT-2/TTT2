@@ -111,7 +111,7 @@ function spawn.IsSpawnPointSafe(pos, force, filter)
 end
 
 ---
--- Returns a selection of points around a given point.
+-- Returns a selection of points around the given position.
 -- @param Vector pos The given position
 -- @return table A table of position vectors
 -- @realm server
