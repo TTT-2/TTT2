@@ -1175,8 +1175,7 @@ function BeginRound()
 
 	ARMOR:InitPlayerArmor()
 
-	-- after the roles are selected, players should receive a "was ative in round"
-	-- state if they received a role
+	-- a player should be considered "was active in round" if they received a role
 	player.InitActiveInRound()
 	player.ResetDiedInRound()
 
