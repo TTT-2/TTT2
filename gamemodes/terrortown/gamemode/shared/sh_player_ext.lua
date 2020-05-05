@@ -955,14 +955,6 @@ hook.Add("TTTEndRound", "TTTEndRound4TTT2TargetPlayer", function()
 end)
 
 ---
--- Returns if a player is currently in a revival process started by @{Player:Revive}
--- @return boolean The revival status
--- @realm shared
-function plymeta:IsReviving()
-	return self:TTT2NETGetBool("player_is_reviving", false) and not self:Alive()
-end
-
----
 -- Returns if the ongoing revival is blocking or not
 -- @return boolean The blocking status
 -- @realm shared
@@ -984,30 +976,6 @@ end
 -- @realm shared
 function plymeta:GetRevivalTime()
 	return self:TTT2NETGetFloat("player_revival_time", 1.0)
-end
-
----
--- Returns the death position of the player.
--- @return [default=Vector(0.0, 0.0, 0.0)]Vector The death position
--- @realm shared
-function plymeta:GetDeathPosition()
-	return Vector(
-		self:TTT2NETGetFloat("player_death_pos_x", 0.0),
-		self:TTT2NETGetFloat("player_death_pos_y", 0.0),
-		self:TTT2NETGetFloat("player_death_pos_z", 0.0)
-	)
-end
-
----
--- Returns the spawn position of the player.
--- @return [default=Vector(0.0, 0.0, 0.0)]Vector The spawn position
--- @realm shared
-function plymeta:GetSpawnPosition()
-	return Vector(
-		self:TTT2NETGetFloat("player_spawn_pos_x", 0.0),
-		self:TTT2NETGetFloat("player_spawn_pos_y", 0.0),
-		self:TTT2NETGetFloat("player_spawn_pos_z", 0.0)
-	)
 end
 
 ---

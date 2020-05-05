@@ -943,9 +943,7 @@ end
 -- @param Vector pos The death position
 -- @realm server
 function plymeta:SetLastDeathPosition(pos)
-	self:TTT2NETSetFloat("player_death_pos_x", pos.x or 0.0)
-	self:TTT2NETSetFloat("player_death_pos_y", pos.y or 0.0)
-	self:TTT2NETSetFloat("player_death_pos_z", pos.z or 0.0)
+	self.lastDeathPosition = pos
 end
 
 ---
@@ -953,9 +951,23 @@ end
 -- @param Vector pos The spawn position
 -- @realm server
 function plymeta:SetLastSpawnPosition(pos)
-	self:TTT2NETSetFloat("player_spawn_pos_x", pos.x or 0.0)
-	self:TTT2NETSetFloat("player_spawn_pos_y", pos.y or 0.0)
-	self:TTT2NETSetFloat("player_spawn_pos_z", pos.z or 0.0)
+	self.lastSpawnPosition = pos
+end
+
+---
+-- Returns the last death position of the player.
+-- @return Vector The last death position
+-- @realm server
+function plymeta:GetDeathPosition()
+	return self.lastDeathPosition
+end
+
+---
+-- Returns the last spawn position of the player.
+-- @return Vector The last spawn position
+-- @realm server
+function plymeta:GetSpawnPosition()
+	return self.lastSpawnPosition
 end
 
 ---

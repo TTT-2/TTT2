@@ -211,6 +211,7 @@ net.Receive("TTT2SetRevivalReason", function()
 	client:SetRevivalReason(name, params)
 end)
 
+-- plays an error sound only on the local player, not for all players
 net.Receive("TTT2RevivalStopped", function()
 	LocalPlayer():EmitSound("buttons/button8.wav")
 end)

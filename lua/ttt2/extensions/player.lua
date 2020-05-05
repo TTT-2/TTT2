@@ -9,7 +9,7 @@ function player.ReSetLastSpawnPosition()
 	local plys = player.GetAll()
 
 	for i = 1, #plys do
-		plys[i]:SetLastSpawnPosition(Vector(0, 0, 0))
+		plys[i]:SetLastSpawnPosition(nil)
 	end
 end
 
@@ -20,7 +20,7 @@ function player.ReSetLastDeathPosition()
 	local plys = player.GetAll()
 
 	for i = 1, #plys do
-		plys[i]:SetLastDeathPosition(Vector(0, 0, 0))
+		plys[i]:SetLastDeathPosition(nil)
 	end
 end
 
