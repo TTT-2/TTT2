@@ -9,6 +9,7 @@ end
 
 local cvDestructableDoor = CreateConVar("ttt2_destructible_doors_enable", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 local cvDestructableDoorLocked = CreateConVar("ttt2_destructible_doors_locked_indestructible", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local cvDestructableDoorForced = CreateConVar("ttt2_destructible_doors_force_pairs", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 door = door or {}
 
@@ -26,6 +27,18 @@ local valid_doors = {
 	}
 }
 
+local function FindPair(ent)
+	local entsTable = ents.FindInSphere(ent:GetPos(), 94)
+
+	for i = 1, #entsTable do
+		local foundEnt = entsTable[i]
+
+		if foundEnt == ent or foundEnt:GetClass() ~= ent:GetClass() then continue end
+
+		return foundEnt
+	end
+end
+
 local function HandleDoorPairs(ent)
 	local master = ent:GetInternalVariable("m_hMaster")
 	local owner = ent:GetInternalVariable("m_hOwnerEntity")
@@ -36,9 +49,11 @@ local function HandleDoorPairs(ent)
 		pair = master
 	elseif IsValid(owner) then
 		pair = owner
-	else
-		return
+	elseif cvDestructableDoorForced:GetBool() then
+		pair = FindPair(ent)
 	end
+
+	if not IsValid(pair) then return end
 
 	ent.otherPairDoor = pair
 	pair.otherPairDoor = ent

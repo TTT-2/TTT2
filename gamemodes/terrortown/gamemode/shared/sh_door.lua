@@ -268,7 +268,7 @@ if SERVER then
 	end
 
 	---
-	-- Sets the state if a dooris destructible.
+	-- Sets the state if a door is destructible.
 	-- @param boolean state The new state
 	-- @param [default=false]boolean surpressPair Should the call of the other door (if in a pair) be omitted?
 	-- @realm server
