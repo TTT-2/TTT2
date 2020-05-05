@@ -178,7 +178,7 @@ function GM:IsSpawnpointSuitable(ply, spawnEntity, force)
 		return true
 	end
 
-	return spawn.IsSpawnPointSafe(spawnEntity:GetPos(), force)
+	return spawn.IsSpawnPointSafe(ply, spawnEntity:GetPos(), force)
 end
 
 ---

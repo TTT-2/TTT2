@@ -955,7 +955,15 @@ hook.Add("TTTEndRound", "TTTEndRound4TTT2TargetPlayer", function()
 end)
 
 ---
--- Returns if the ongoing revival is blocking or not
+-- Returns if the player is reviving.
+-- @return boolean The blocking status
+-- @realm shared
+function plymeta:IsReviving()
+	return self:TTT2NETGetBool("player_is_reviving", false)
+end
+
+---
+-- Returns if the ongoing revival is blocking or not.
 -- @return boolean The blocking status
 -- @realm shared
 function plymeta:IsBlockingRevival()

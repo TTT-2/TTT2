@@ -855,7 +855,7 @@ function plymeta:Revive(delay, OnRevive, DoCheck, needsCorpse, blockRound, OnFai
 			end
 
 			spawnPos = spawnPos or ply:GetDeathPosition()
-			spawnPos = spawn.MakeSpawnPointSafe(spawnPos)
+			spawnPos = spawn.MakeSpawnPointSafe(self, spawnPos)
 
 			if not spawnPos then
 				local spawnEntity = spawn.GetRandomPlayerSpawnEntity(ply)
@@ -906,10 +906,11 @@ function plymeta:CancelRevival(failMessage)
 	OnReviveFailed(self, failMessage or "message_revival_canceled")
 end
 
+
 ---
 -- Sets the revival state.
 -- @param [default=false]boolean isReviving The reviving state
--- @realm server
+-- @realm shared
 function plymeta:SetReviving(isReviving)
 	self:TTT2NETSetBool("player_is_reviving", isReviving or false)
 end

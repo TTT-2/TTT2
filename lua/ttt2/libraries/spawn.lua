@@ -13,8 +13,6 @@ for i = 0, 360, 22.5 do
 	spawnPointVariations[#spawnPointVariations + 1] = Vector(mathCos(i), mathSin(i), 0)
 end
 
-local sizePlayer = Vector(32, 32, 72)
-
 local spawnTypes = {
 	"info_player_deathmatch",
 	"info_player_combine",
@@ -27,21 +25,29 @@ local spawnTypes = {
 	"info_player_teamspawn"
 }
 
+-- returns the player size as a vector
+local function GetPlayerSize(ply)
+	local bottom, top = ply:GetHull()
 
+	return -1 * bottom + top
+end
 
 spawn = spawn or {}
-
 spawn.cachedSpawnEntities = spawn.cachedSpawnEntities or {}
 
 ---
 -- Checks if a given spawn point is safe. Safe means that a player can spawn without
 -- being stuck. Entities which are passable are ignored by the check.
+-- @param Player ply The player entity that should spawn, this parameter is needed
+-- to make sure there is enough space for this specific playermodel.
 -- @param Vector pos The respawn position
 -- @param [default=false]boolean force Should the respawn be forced? This means killing other players that block this position
 -- @param [opt]table|Entity filter A table of entities or an entity that should be ignored by this check
 -- @return boolean Returns if the spawn point is safe
 -- @realm server
-function spawn.IsSpawnPointSafe(pos, force, filter)
+function spawn.IsSpawnPointSafe(ply, pos, force, filter)
+	local sizePlayer = GetPlayerSize(ply)
+
 	if not util.IsInWorld(pos) then
 		return false
 	end
@@ -112,10 +118,14 @@ end
 
 ---
 -- Returns a selection of points around the given position.
+-- @param Player ply The player entity that should spawn, this parameter is needed
+-- to make sure there is enough space for this specific playermodel.
 -- @param Vector pos The given position
 -- @return table A table of position vectors
 -- @realm server
-function spawn.GetSpawnPointsAroundSpawn(pos)
+function spawn.GetSpawnPointsAroundSpawn(ply, pos)
+	local sizePlayer = GetPlayerSize(ply)
+
 	if not pos then return {} end
 
 	local positions = {}
@@ -130,16 +140,18 @@ end
 ---
 -- Tries to make spawn position valid by scanning surrounding area for
 -- valid positions.
+-- @param Player ply The player entity that should spawn, this parameter is needed
+-- to make sure there is enough space for this specific playermodel.
 -- @param Vector unsafePos The unsafe spawn position
 -- @return Vector|nil Returns the safe spawn position, nil if none was found
 -- @realm server
-function spawn.MakeSpawnPointSafe(unsafePos)
-	local spawnPoints = spawn.GetSpawnPointsAroundSpawn(unsafePos)
+function spawn.MakeSpawnPointSafe(ply, unsafePos)
+	local spawnPoints = spawn.GetSpawnPointsAroundSpawn(ply, unsafePos)
 
 	for i = 1, #spawnPoints do
 		local spawnPoint = spawnPoints[i]
 
-		if not spawn.IsSpawnPointSafe(spawnPoint, false) then continue end
+		if not spawn.IsSpawnPointSafe(ply, spawnPoint, false) then continue end
 
 		return spawnPoint
 	end
@@ -233,7 +245,7 @@ function spawn.GetRandomPlayerSpawnEntity(ply)
 			return spawnEntity
 		end
 
-		if not spawn.IsSpawnPointSafe(spawnEntity:GetPos(), false) then continue end
+		if not spawn.IsSpawnPointSafe(ply, spawnEntity:GetPos(), false) then continue end
 
 		return spawnEntity
 	end
@@ -244,7 +256,7 @@ function spawn.GetRandomPlayerSpawnEntity(ply)
 	for i = 1, #spawn.cachedSpawnEntities do
 		pickedSpawnEntity = spawn.cachedSpawnEntities[i]
 
-		local riggedSpawnPoint = spawn.MakeSpawnPointSafe(pickedSpawnEntity:GetPos())
+		local riggedSpawnPoint = spawn.MakeSpawnPointSafe(ply, pickedSpawnEntity:GetPos())
 
 		if riggedSpawnPoint then
 			local riggedSpawnEntity = ents.Create("info_player_terrorist")
@@ -265,7 +277,7 @@ function spawn.GetRandomPlayerSpawnEntity(ply)
 	for i = 1, #spawn.cachedSpawnEntities do
 		local spawnEntity = spawn.cachedSpawnEntities[i]
 
-		if not spawn.IsSpawnPointSafe(spawnEntity:GetPos(), true) then continue end
+		if not spawn.IsSpawnPointSafe(ply, spawnEntity:GetPos(), true) then continue end
 
 		return spawnEntity
 	end
