@@ -274,7 +274,8 @@ function spawn.GetRandomPlayerSpawnEntity(ply)
 end
 
 ---
--- Removes all map spawn entities, shouldn't be used except you know what you're doing.
+-- Removes all map spawn entities.
+-- @warning Do not use this unless you know exactly what you are doing.
 -- @realm server
 function spawn.RemovePlayerSpawnEntities()
 	local spawnableEnts = spawn.GetPlayerSpawnEntities(false, true)
