@@ -48,18 +48,13 @@ function ROLE:GetAvailableRoleCount(ply_count)
 	end
 
 	local maxCVar = GetConVar("ttt_" .. self.name .. "_max")
-	local maxm = maxCVar and maxCVar:GetInt() or 1
+	local maxAmount = maxCVar and maxCVar:GetInt() or 1
 
-	local role_count = 1 -- there need to be max and min 1 player of this role
+	if maxAmount <= 1 then return 1 end
 
-	if maxm > 1 then
+	-- get number of role members: pct of players rounded down
+	local role_count = math.floor(ply_count * GetConVar("ttt_" .. self.name .. "_pct"):GetFloat())
 
-		-- get number of role members: pct of players rounded down
-		role_count = math.floor(ply_count * GetConVar("ttt_" .. self.name .. "_pct"):GetFloat())
-
-		-- make sure there is at least 1 of the role
-		role_count = math.Clamp(role_count, 1, maxm)
-	end
-
-	return role_count
+	-- make sure there is at least 1 of the role
+	return math.Clamp(role_count, 1, maxAmount)
 end

@@ -1,6 +1,3 @@
--- TODO
--- What if every innocent is transformed into another role?
-
 ---
 -- role selection module
 -- @module roleselection
@@ -19,7 +16,7 @@ roleselection.forcedRoles = {}
 roleselection.finalRoles = {}
 roleselection.selectableRoles = nil
 
--- innos min pct
+-- Convars
 roleselection.cv = {}
 roleselection.cv.ttt_max_roles = CreateConVar("ttt_max_roles", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different roles")
 roleselection.cv.ttt_max_roles_pct =  CreateConVar("ttt_max_roles_pct", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different roles based on player amount. ttt_max_roles needs to be 0")
@@ -27,11 +24,12 @@ roleselection.cv.ttt_max_baseroles = CreateConVar("ttt_max_baseroles", "0", {FCV
 roleselection.cv.ttt_max_baseroles_pct = CreateConVar("ttt_max_baseroles_pct", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different baseroles based on player amount. ttt_max_baseroles needs to be 0")
 
 ---
--- Returns the amount of pre selected @{ROLE}s
+-- Returns the current amount of selected/already selected @{ROLE}s.
+--
 -- @param number subrole subrole id of a @{ROLE}'s index
 -- @return number amount
 -- @realm server
-function roleselection.GetPreSelectedRole(subrole)
+function roleselection.GetCurrentRoleAmount(subrole)
 	local tmp = 0
 
 	if GetRoundState() == ROUND_ACTIVE then
@@ -55,6 +53,16 @@ function roleselection.GetPreSelectedRole(subrole)
 	return tmp
 end
 
+---
+-- Returns the amount of players, that can still receive this role.
+-- This considers the random convar and the maximum amount of players with this role.
+--
+-- @param table roleData The actual ROLE table.
+-- @param boolean forced Should the random pct be ignored?
+-- @param number maxPlys The number of players, that this value should be calculated for.
+-- @return number The amount of players, that can still be selected for this role.
+-- @realm server
+-- @internal
 local function GetAvailableRoleAmount(roleData, forced, maxPlys)
 	local bool = true
 
@@ -65,7 +73,7 @@ local function GetAvailableRoleAmount(roleData, forced, maxPlys)
 	end
 
 	if bool then
-		return roleData:GetAvailableRoleCount(maxPlys) - roleselection.GetPreSelectedRole(roleData.index)
+		return roleData:GetAvailableRoleCount(maxPlys) - roleselection.GetCurrentRoleAmount(roleData.index)
 	end
 
 	return 0
@@ -73,6 +81,7 @@ end
 
 ---
 -- Returns a list of all selectable players
+--
 -- @param table plys list of @{Player}s that should be filtered.
 -- @return table list of filtered players
 -- @realm server
@@ -93,6 +102,7 @@ end
 
 ---
 -- Returns all selectable @{ROLE}s based on the amount of @{Player}s
+--
 -- @param number maxPlys amount of maximum @{Player}s (filtered!)
 -- @return table a list of all selectable @{ROLE}s
 -- @realm server
@@ -156,6 +166,7 @@ end
 ---
 -- Returns a list of selectable @{ROLE}s (already filtered by amount of maximum available roles) based on the amount of @{Player}s
 -- @note This @{function} automatically saves the selectable @{ROLE}s after processing. If `roleselection.selectableRoles` is NOT `nil`, it will be returned WITHOUT processing
+--
 -- @param number maxPlys amount of maximum @{Player}s (filtered!). Insert `nil` if it should get calculated
 -- @param table rolesAmountList list of @{ROLE}s as key and selectable amount of these roles as value
 -- @return table a list of filtered selectable @{ROLE}s
@@ -243,7 +254,13 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 end
 
 ---
--- if possible, give plys the available roles
+-- If possible, give plys the available roles.
+--
+-- @param table plys The players that should receive roles.
+-- @param table availableRoles The list of roles, that are available.
+-- @param table selectableRoles The list of filtered selectable @{ROLE}s
+-- @realm server
+-- @internal
 local function SetSubRoles(plys, availableRoles, selectableRoles)
 	local plysAmount = #plys
 	local availableRolesAmount = #availableRoles
@@ -284,6 +301,14 @@ local function SetSubRoles(plys, availableRoles, selectableRoles)
 	end
 end
 
+---
+-- Ensure, that players receive their forced role (eg. received by ULX etc).
+--
+-- @param table plys The players that should receive roles.
+-- @param table selectableRoles The list of filtered selectable @{ROLE}s
+-- @return table List of players, that received a forced role.
+-- @realm server
+-- @internal
 local function SelectForcedRoles(plys, selectableRoles)
 	local transformed = {}
 	local selectedPlys = {}
@@ -337,6 +362,15 @@ local function SelectForcedRoles(plys, selectableRoles)
 	return selectedPlys
 end
 
+---
+-- Upgrade a baserole to possible subroles.
+-- @note The subrole replaces a previously selected baserole.
+--
+-- @param table plys The players that should receive roles.
+-- @param table roleData The @{ROLE} object of the considered role.
+-- @param table selectableRoles The list of filtered selectable @{ROLE}s
+-- @realm server
+-- @internal
 local function UpgradeRoles(plys, roleData, selectableRoles)
 	local availableRoles = {}
 
@@ -351,7 +385,15 @@ local function UpgradeRoles(plys, roleData, selectableRoles)
 end
 
 ---
--- This function modifies the given `plys` var
+-- Select players for a given role.
+-- @note This function modifies the given `plys` var.
+--
+-- @param table plys The players that can receive roles.
+-- @param table roleData The @{ROLE} object of the considered role.
+-- @param number roleAmount The amount of players that are allowed to receive this role.
+-- @return table List of players, that received the role.
+-- @realm server
+-- @internal
 local function SelectBaseRolePlayers(plys, roleData, roleAmount)
 	local curRoles = 0
 	local plysList = {}
@@ -388,10 +430,14 @@ end
 ---
 -- Select selectable @{ROLE}s for a given list of @{Player}s
 -- @note This automatically synces with every connected @{Player}
+--
 -- @param ?table plys list of @{Player}s. `nil` to calculate automatically
 -- @param ?number maxPlys amount of maximum @{Player}s. `nil` to calculate automatically
 -- @realm server
 function roleselection.SelectRoles(plys, maxPlys)
+	-- ensure a decent amount of randomness
+	math.randomseed(os.time())
+
 	roleselection.selectableRoles = nil -- reset to enable recalculation
 
 	GAMEMODE.LastRole = GAMEMODE.LastRole or {}

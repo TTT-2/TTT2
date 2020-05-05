@@ -25,6 +25,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - texts can now be blocking or non blocking
   - there's now a popup queue
   - popups are now also shown to dead players as well
+- Refactored the role selection code to reside in its own module and cleaned up the code
 
 ### Fixed
 
@@ -34,6 +35,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed propsurfing with the magneto stick
 - Fixed healthstation TargetID text
 - Fixed keyinfo for doors where no key can be used
+- Fixed role selection issues with subroles not properly replacing their baserole etc.
 
 ## [v0.6.4b](https://github.com/TTT-2/TTT2/tree/v0.6.4b) (2020-04-03)
 
