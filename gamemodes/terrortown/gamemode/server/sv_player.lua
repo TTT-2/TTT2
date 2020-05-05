@@ -55,7 +55,7 @@ function GM:PlayerInitialSpawn(ply)
 
 	-- Sync NWVars
 	-- Needs to be done here, to include bots (also this wont send any net messages to the initialized player)
-	TTT2NET:SyncWithNWVar("body_found", { type = "bool" }, ply, "body_found")
+	TTT2NET.SyncWithNWVar("body_found", { type = "bool" }, ply, "body_found")
 
 	-- maybe show credits
 	net.Start("TTT2DevChanges")
@@ -654,7 +654,7 @@ function GM:PlayerDisconnected(ply)
 		KARMA.Remember(ply)
 	end
 
-	TTT2NET:ResetClient(ply)
+	TTT2NET.ResetClient(ply)
 end
 
 ---

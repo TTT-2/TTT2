@@ -3,7 +3,7 @@
 
 ttt_include("vgui__cl_hudswitcher")
 
-local current_hud_cvar = CreateClientConVar("ttt2_current_hud", TTT2NET:GetGlobal({"hud_manager", "defaultHUD"}) or "pure_skin", true, true)
+local current_hud_cvar = CreateClientConVar("ttt2_current_hud", TTT2NET.GetGlobal({"hud_manager", "defaultHUD"}) or "pure_skin", true, true)
 local current_hud_table = nil
 
 HUDManager = {}
@@ -173,7 +173,7 @@ function HUDManager.GetHUD()
 	local hudvar = current_hud_cvar:GetString()
 
 	if not huds.GetStored(hudvar) then
-		hudvar = TTT2NET:GetGlobal({"hud_manager", "defaultHUD"}) or "pure_skin"
+		hudvar = TTT2NET.GetGlobal({"hud_manager", "defaultHUD"}) or "pure_skin"
 	end
 
 	return hudvar

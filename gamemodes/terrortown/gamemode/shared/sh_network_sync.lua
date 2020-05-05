@@ -24,7 +24,7 @@ local plymeta = assert(FindMetaTable("Player"), "[TTT2NET] FAILED TO FIND PLAYER
 -- @param any|nil fallback The fallback value to return instead of nil
 -- @return bool|any|nil The value at the path or fallback if the value is nil
 function plymeta:TTT2NETGetBool(path, fallback)
-	return TTT2NET:GetOnPlayer(path, self) == true or fallback
+	return TTT2NET.GetOnPlayer(path, self) == true or fallback
 end
 
 ---
@@ -34,7 +34,7 @@ end
 -- @param number fallback The fallback value to return instead of nil
 -- @return number The value at the path or fallback if the value is nil
 function plymeta:TTT2NETGetInt(path, fallback)
-	return tonumber(TTT2NET:GetOnPlayer(path, self) or fallback)
+	return tonumber(TTT2NET.GetOnPlayer(path, self) or fallback)
 end
 
 ---
@@ -44,7 +44,7 @@ end
 -- @param number fallback The fallback value to return instead of nil
 -- @return number The value at the path or fallback if the value is nil
 function plymeta:TTT2NETGetUInt(path, fallback)
-	return tonumber(TTT2NET:GetOnPlayer(path, self) or fallback)
+	return tonumber(TTT2NET.GetOnPlayer(path, self) or fallback)
 end
 
 ---
@@ -54,7 +54,7 @@ end
 -- @param number fallback The fallback value to return instead of nil
 -- @return number The value at the path or fallback if the value is nil
 function plymeta:TTT2NETGetFloat(path, fallback)
-	return tonumber(TTT2NET:GetOnPlayer(path, self) or fallback)
+	return tonumber(TTT2NET.GetOnPlayer(path, self) or fallback)
 end
 
 ---
@@ -64,5 +64,5 @@ end
 -- @param string fallback The fallback value to return instead of nil
 -- @return string The value at the path or fallback if the value is nil
 function plymeta:TTT2NETGetString(path, fallback)
-	return tostring(TTT2NET:GetOnPlayer(path, self) or fallback)
+	return tostring(TTT2NET.GetOnPlayer(path, self) or fallback)
 end
