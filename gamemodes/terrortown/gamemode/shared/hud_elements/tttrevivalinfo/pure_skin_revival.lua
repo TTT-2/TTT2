@@ -64,8 +64,8 @@ if CLIENT then
 		local x, y = pos.x, pos.y
 		local w, h = size.w, size.h
 
-		local timeLeft = HUDEditor.IsEditing and 1 or math.ceil(math.max(0, client:GetRevivalTime() - (CurTime() - client:GetRevivalStartTime())))
-		local progress = HUDEditor.IsEditing and 1 or ((CurTime() - client:GetRevivalStartTime()) / client:GetRevivalTime())
+		local timeLeft = HUDEditor.IsEditing and 1 or math.ceil(math.max(0, client:GetRevivalDuration() - (CurTime() - client:GetRevivalStartTime())))
+		local progress = HUDEditor.IsEditing and 1 or ((CurTime() - client:GetRevivalStartTime()) / client:GetRevivalDuration())
 
 		local posHeaderY = y + self.pad
 		local posBarY = posHeaderY + 20 * self.scale

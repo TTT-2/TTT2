@@ -974,8 +974,8 @@ end
 -- Returns the time for the ongoing revival.
 -- @return [default=1.0]number The time for the revival in seconds
 -- @realm shared
-function plymeta:GetRevivalTime()
-	return self:TTT2NETGetFloat("player_revival_time", 1.0)
+function plymeta:GetRevivalDuration()
+	return self:TTT2NETGetFloat("player_revival_duration", 1.0)
 end
 
 ---

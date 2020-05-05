@@ -189,7 +189,13 @@ end
 -- @deprecated Use @{spawn.GetPlayerSpawnEntities} instead
 -- @realm server
 function GetSpawnEnts(shouldShuffle, forceAll)
-	return spawn.GetPlayerSpawnEntities(shouldShuffle, forceAll)
+	local spawnEntities = spawn.GetPlayerSpawnEntities(forceAll)
+
+	if shouldShuffle then
+		table.Shuffle(spawnEntities)
+	end
+
+	return spawnEntities
 end
 
 ---

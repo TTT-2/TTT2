@@ -825,7 +825,7 @@ function plymeta:Revive(delay, OnRevive, DoCheck, needsCorpse, blockRound, OnFai
 	ply:SetReviving(true)
 	ply:SetBlockingRevival(blockRound)
 	ply:SetRevivalStartTime(CurTime())
-	ply:SetRevivalTime(delay)
+	ply:SetRevivalDuration(delay)
 
 	ply.OnReviveFailedCallback = OnFail
 
@@ -915,7 +915,7 @@ function plymeta:SetReviving(isReviving)
 end
 
 ---
--- Sets the blocking revival state
+-- Sets the blocking revival state.
 -- @param [default=false]boolean isBlockingRevival The blocking revival state
 -- @realm server
 function plymeta:SetBlockingRevival(isBlockingRevival)
@@ -923,7 +923,7 @@ function plymeta:SetBlockingRevival(isBlockingRevival)
 end
 
 ---
--- Sets the revival start time
+-- Sets the revival start time.
 -- @param [default=@{CurTime()}]number startTime The revival start time
 -- @realm server
 function plymeta:SetRevivalStartTime(startTime)
@@ -931,15 +931,15 @@ function plymeta:SetRevivalStartTime(startTime)
 end
 
 ---
--- Sets the revival time
+-- Sets the revival duration.
 -- @param [default=0.0]number time The revival time
 -- @realm server
-function plymeta:SetRevivalTime(time)
-	self:TTT2NETSetFloat("player_revival_time", time or 0.0)
+function plymeta:SetRevivalDuration(time)
+	self:TTT2NETSetFloat("player_revival_duration", time or 0.0)
 end
 
 ---
--- Sets the death position
+-- Sets the last death position.
 -- @param Vector pos The death position
 -- @realm server
 function plymeta:SetLastDeathPosition(pos)
@@ -947,7 +947,7 @@ function plymeta:SetLastDeathPosition(pos)
 end
 
 ---
--- Sets the spawn position
+-- Sets the last spawn position.
 -- @param Vector pos The spawn position
 -- @realm server
 function plymeta:SetLastSpawnPosition(pos)

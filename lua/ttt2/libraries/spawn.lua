@@ -146,12 +146,15 @@ function spawn.MakeSpawnPointSafe(unsafePos)
 end
 
 ---
--- Returns a list of all spawn entities
--- @param boolean shouldShuffle whether the table should be shuffled
--- @param boolean forceAll used unless absolutely necessary (includes info_player_start spawns)
+-- Returns a list of all spawn entities found on the map that are valid to spawn players.
+-- @warning Don't use 'info_player_start' unless absolutely necessary, because eg. TF2 uses
+-- it for observer starts that are in places where players cannot really spawn well.
+-- Therefore by default 'info_player_start' is not included in the search. However if 'forceAll'
+-- is set to true or no other map spawn was found, these spawn entities will be included.
+-- @param boolean forceAll Shouldn't used unless absolutely necessary because it includes 'info_player_start' spawns
 -- @return table Returns a table of unsafe spawn entities
 -- @realm server
-function spawn.GetPlayerSpawnEntities(shouldShuffle, forceAll)
+function spawn.GetPlayerSpawnEntities(forceAll)
 	local tbl = {}
 
 	for i = 1, #spawnTypes do
@@ -178,19 +181,16 @@ function spawn.GetPlayerSpawnEntities(shouldShuffle, forceAll)
 		end
 	end
 
-	if shouldShuffle then
-		table.Shuffle(tbl)
-	end
-
 	return tbl
 end
 
 ---
 -- Gets a table of spawnpoints on the map.
+-- @note These spawn points are not shuffled.
 -- @return table Returns a table of spawnpoints as @{Vector}s
 -- @realm server
 function spawn.GetPlayerSpawnPointTable()
-	local spawnEnts = spawn.GetPlayerSpawnEntities(true, false)
+	local spawnEnts = spawn.GetPlayerSpawnEntities(false)
 	local spawnPoints = {}
 
 	for i = 1, #spawnEnts do
@@ -213,7 +213,7 @@ function spawn.GetRandomPlayerSpawnEntity(ply)
 	-- round start will remove our riggedSpawnPoints spawns, and we'll have to create new
 	-- ones anyway.
 	if #spawn.cachedSpawnEntities == 0 or not IsTableOfEntitiesValid(spawn.cachedSpawnEntities) then
-		spawn.cachedSpawnEntities = spawn.GetPlayerSpawnEntities(true, false)
+		spawn.cachedSpawnEntities = spawn.GetPlayerSpawnEntities(false)
 	end
 
 	if #spawn.cachedSpawnEntities == 0 then
@@ -278,7 +278,7 @@ end
 -- @warning Do not use this unless you know exactly what you are doing.
 -- @realm server
 function spawn.RemovePlayerSpawnEntities()
-	local spawnableEnts = spawn.GetPlayerSpawnEntities(false, true)
+	local spawnableEnts = spawn.GetPlayerSpawnEntities(true)
 
 	for i = 1, #spawnableEnts do
 		local ent = spawnableEnts[i]
