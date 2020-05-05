@@ -436,6 +436,9 @@ function roleselection.SelectRoles(plys, maxPlys)
 
 		for i = 1, #list do
 			local roleData = list[i]
+
+			if roleData.baserole then continue end
+
 			local baseRolePlys = SelectBaseRolePlayers(tmpPlys, roleData, selectableRoles[roleData])
 
 			-- upgrade innos and players without any role later
