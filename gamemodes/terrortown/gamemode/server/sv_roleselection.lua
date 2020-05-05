@@ -65,7 +65,7 @@ local function GetAvailableRoleAmount(roleData, forced, maxPlys)
 	end
 
 	if bool then
-		return roleData:GetRoleCount(maxPlys) - roleselection.GetPreSelectedRole(roleData.index)
+		return roleData:GetAvailableRoleCount(maxPlys) - roleselection.GetPreSelectedRole(roleData.index)
 	end
 
 	return 0

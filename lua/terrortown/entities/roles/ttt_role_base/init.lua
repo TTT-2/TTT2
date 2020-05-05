@@ -1,6 +1,28 @@
 ---
 -- @module ROLE
 -- @author Alf21
+-- @author saibotk
+-- @author Minetopia
+
+---
+-- Function that is overwritten by the role and is called on rolechange and respawn.
+-- It is used to give the rolespecific loadout.
+-- @param PLAYER ply
+-- @param boolean isRoleChange This is true for a rolechange, but not for a respawn
+-- @realm server
+function ROLE:GiveRoleLoadout(ply, isRoleChange)
+
+end
+
+---
+-- Function that is overwritten by the role and is called on rolechange and death.
+-- It is used to remove the rolespecific loadout.
+-- @param PLAYER ply
+-- @param boolean isRoleChange This is true for a rolechange, but not for death
+-- @realm server
+function ROLE:RemoveRoleLoadout(ply, isRoleChange)
+
+end
 
 ---
 -- Checks whether a role is able to get selected (and maybe assigned to a @{Player}) if the round starts
@@ -9,10 +31,10 @@
 -- @realm server
 function ROLE:IsSelectable(avoidHook)
 	return self == INNOCENT or self == TRAITOR
-	or (GetConVar("ttt_newroles_enabled"):GetBool() or self == DETECTIVE)
-	and not self.notSelectable
-	and GetConVar("ttt_" .. self.name .. "_enabled"):GetBool()
-	and (avoidHook or not hook.Run("TTT2RoleNotSelectable", self))
+		or (GetConVar("ttt_newroles_enabled"):GetBool() or self == DETECTIVE)
+		and not self.notSelectable
+		and GetConVar("ttt_" .. self.name .. "_enabled"):GetBool()
+		and (avoidHook or not hook.Run("TTT2RoleNotSelectable", self))
 end
 
 ---
@@ -20,7 +42,7 @@ end
 -- @param number ply_count amount of available players
 -- @return number selectable amount of this role
 -- @realm server
-function ROLE:GetRoleCount(ply_count)
+function ROLE:GetAvailableRoleCount(ply_count)
 	if ply_count < GetConVar("ttt_" .. self.name .. "_min_players"):GetInt() then
 		return 0
 	end

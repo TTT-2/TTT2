@@ -24,7 +24,7 @@ if SERVER then
 	-- @param number ply_count amount of available players
 	-- @return number selectable amount of this role
 	-- @realm server
-	function ROLE:GetRoleCount(ply_count)
+	function ROLE:GetAvailableRoleCount(ply_count)
 		return math.floor(ply_count * ttt_min_inno_pct:GetFloat())
 	end
 end
