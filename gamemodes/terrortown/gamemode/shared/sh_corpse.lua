@@ -74,7 +74,8 @@ function CORPSE.GetPlayer(rag)
 end
 
 ---
--- Checks if a tagdoll is a valid ragdoll because they could be a matress as well.
+-- Checks if a ragdoll belongs to a player.
+-- Because ragdolls can also be used for props (e.g. a mattress).
 -- @param Entity rag The ragdoll
 -- @return boolean Returns if the ragdoll is valid
 -- @realm shared
