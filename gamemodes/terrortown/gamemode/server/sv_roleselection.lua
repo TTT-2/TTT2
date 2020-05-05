@@ -124,22 +124,22 @@ function roleselection.GetAllSelectableRolesList(maxPlys)
 		-- INNOCENT and TRAITOR are all the time selectable
 		if roleData == INNOCENT or roleData == TRAITOR or not roleData:IsSelectable() then continue end
 
-		-- if this is a subrole (a role that have a baserole is a subrole), check if the base role is available first
+		-- if this is a subrole (a role that has a baserole is a subrole), check if the base role is available first
 		if roleData.baserole and roleData.baserole ~= ROLE_INNOCENT and roleData.baserole ~= ROLE_TRAITOR then
-			local rd = roles.GetByIndex(roleData.baserole)
+			local baseRoleData = roles.GetByIndex(roleData.baserole)
 
-			if not checked[roleData.baserole] then
-				checked[roleData.baserole] = true
+			if not checked[baseRoleData.index] then
+				checked[baseRoleData.index] = true
 
-				local rolesCount = GetAvailableRoleAmount(roleData, forcedRolesTbl[roleData.baserole], maxPlys)
+				local rolesCount = GetAvailableRoleAmount(baseRoleData, forcedRolesTbl[baseRoleData.index], maxPlys)
 
 				if rolesCount > 0 then
-					rolesCountTbl[roleData] = rolesCount
+					rolesCountTbl[baseRoleData] = rolesCount
 				end
 			end
 
 			-- continue if baserole is not available
-			if not rolesCountTbl[rd] then continue end
+			if not rolesCountTbl[baseRoleData] then continue end
 		end
 
 		-- now check for subrole availability
