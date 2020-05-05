@@ -244,7 +244,7 @@ end
 
 ---
 -- if possible, give plys the available roles
-local function SetSubRoles(plys, prevRoles, availableRoles, selectableRoles)
+local function SetSubRoles(plys, availableRoles, selectableRoles)
 	local plysAmount = #plys
 	local availableRolesAmount = #availableRoles
 	local tmpSelectableRoles = table.Copy(selectableRoles)
@@ -263,7 +263,6 @@ local function SetSubRoles(plys, prevRoles, availableRoles, selectableRoles)
 		-- give this player the role if
 		if plysAmount <= roleCount -- or there aren't enough players anymore to have a greater role variety
 			or ply:GetBaseKarma() > minKarma -- or the player has enough karma
-				and table.HasValue(prevRoles[ROLE_INNOCENT], ply) -- and the player was innocent before
 				and not ply:GetAvoidRole(roleData.index) -- and the player doesn't avoid this role
 			or math.random(3) == 2 -- or if the randomness decides
 		then
@@ -338,7 +337,7 @@ local function SelectForcedRoles(plys, selectableRoles)
 	return selectedPlys
 end
 
-local function UpgradeRoles(plys, prevRoles, roleData, selectableRoles)
+local function UpgradeRoles(plys, roleData, selectableRoles)
 	local availableRoles = {}
 
 	-- now upgrade this role if there are other subroles
@@ -348,12 +347,12 @@ local function UpgradeRoles(plys, prevRoles, roleData, selectableRoles)
 		end
 	end
 
-	SetSubRoles(plys, prevRoles, availableRoles, selectableRoles)
+	SetSubRoles(plys, availableRoles, selectableRoles)
 end
 
 ---
 -- This function modifies the given `plys` var
-local function SelectBaseRolePlayers(plys, prevRoles, roleData, roleAmount)
+local function SelectBaseRolePlayers(plys, roleData, roleAmount)
 	local curRoles = 0
 	local plysList = {}
 
@@ -371,7 +370,6 @@ local function SelectBaseRolePlayers(plys, prevRoles, roleData, roleAmount)
 		if roleData == INNOCENT -- this role is an innocent role
 			or #plys <= roleAmount -- or there aren't enough players anymore to have a greater role variety
 			or ply:GetBaseKarma() > min_karmas -- or the player has enough karma
-				and table.HasValue(prevRoles[ROLE_INNOCENT], ply) -- and the player was innocent before
 				and not ply:GetAvoidRole(roleData.index) -- and the player doesn't avoid this role
 			or math.random(3) == 2 -- or if the randomness decides
 		then
@@ -396,20 +394,9 @@ end
 function roleselection.SelectRoles(plys, maxPlys)
 	roleselection.selectableRoles = nil -- reset to enable recalculation
 
-	local prevRoles = {}
-
 	GAMEMODE.LastRole = GAMEMODE.LastRole or {}
 
 	plys = roleselection.GetSelectablePlayers(plys or player.GetAll())
-
-	-- save previous roles
-	for i = 1, #plys do
-		local v = plys[i]
-		local r = GAMEMODE.LastRole[v:SteamID64()] or v:GetSubRole()
-
-		prevRoles[r] = prevRoles[r] or {}
-		prevRoles[r][#prevRoles[r] + 1] = v
-	end
 
 	maxPlys = maxPlys or #plys
 
@@ -449,11 +436,11 @@ function roleselection.SelectRoles(plys, maxPlys)
 
 		for i = 1, #list do
 			local roleData = list[i]
-			local baseRolePlys = SelectBaseRolePlayers(tmpPlys, prevRoles, roleData, selectableRoles[roleData])
+			local baseRolePlys = SelectBaseRolePlayers(tmpPlys, roleData, selectableRoles[roleData])
 
 			-- upgrade innos and players without any role later
 			if roleData ~= INNOCENT then
-				UpgradeRoles(baseRolePlys, prevRoles, roleData, selectableRoles)
+				UpgradeRoles(baseRolePlys, roleData, selectableRoles)
 			end
 		end
 
@@ -470,7 +457,7 @@ function roleselection.SelectRoles(plys, maxPlys)
 			innos[#innos + 1] = ply
 		end
 
-		UpgradeRoles(innos, prevRoles, INNOCENT, selectableRoles)
+		UpgradeRoles(innos, INNOCENT, selectableRoles)
 	end
 
 	GAMEMODE.LastRole = {}
