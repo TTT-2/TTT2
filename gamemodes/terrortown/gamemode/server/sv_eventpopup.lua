@@ -33,7 +33,7 @@ function EPOP:AddMessage(plys, title, subtitle, displayTime, blocking)
 		net.WriteString(subtitle.text or "")
 	else
 		net.WriteBool(true)
-		net.WriteString(titsubtitlele.text or "")
+		net.WriteString(subtitle.text or "")
 		net.WriteColor(subtitle.color or COLOR_WHITE)
 	end
 
