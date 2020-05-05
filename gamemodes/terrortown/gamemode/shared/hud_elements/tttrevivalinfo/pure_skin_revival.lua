@@ -23,6 +23,7 @@ if CLIENT then
 
 	function HUDELEMENT:Initialize()
 		self.pad = pad
+		self.defaultHeight = defaultHeight
 		self.basecolor = self:GetHUDBasecolor()
 
 		BaseClass.Initialize(self)
