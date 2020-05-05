@@ -5,6 +5,17 @@
 -- also moving `HUD_PRINTCENTER` to the EPOP system.
 -- @author Mineotopia
 
+local plymeta = assert(FindMetaTable("Player"), "FAILED TO FIND PLAYER TABLE")
+
+---
+-- Displays a message either in their chat, console, or center of the screen.
+-- @param number type The type of the message that should be displayed on then screen of the player (see <a href="https://wiki.facepunch.com/gmod/Enums/HUD">Enums/HUD</a>)
+-- @param string message Message to be displayed on the screen on the player
+-- @realm shared
+function plymeta:PrintMessage(type, message)
+	PrintMessage(type, message, self)
+end
+
 if SERVER then
 	---
 	-- Displays a message in the chat, console, or center of screen of every player / the defined players.
@@ -20,17 +31,6 @@ if SERVER then
 		elseif type == HUD_PRINTCENTER then
 			EPOP:AddMessage(plys, message, nil, 6, true)
 		end
-	end
-
-	local plymeta = assert(FindMetaTable("Player"), "FAILED TO FIND PLAYER TABLE")
-
-	---
-	-- Displays a message either in their chat, console, or center of the screen.
-	-- @param number type Which type of message should be sent to the players (see <a href="https://wiki.facepunch.com/gmod/Enums/HUD">Enums/HUD</a>)
-	-- @param string message Message to be sent to the players
-	-- @realm server
-	function plymeta:PrintMessage(type, message)
-		PrintMessage(type, message, self)
 	end
 end
 
@@ -48,16 +48,5 @@ if CLIENT then
 		elseif type == HUD_PRINTCENTER then
 			EPOP:AddMessage(message, nil, 6, nil, true)
 		end
-	end
-
-	local plymeta = assert(FindMetaTable("Player"), "FAILED TO FIND PLAYER TABLE")
-
-	---
-	-- Displays a message either in their chat, console, or center of the screen.
-	-- @param number type Which type of message should be sent to the players (see <a href="https://wiki.facepunch.com/gmod/Enums/HUD">Enums/HUD</a>)
-	-- @param string message Message to be sent to the players
-	-- @realm client
-	function plymeta:PrintMessage(type, message)
-		PrintMessage(type, message)
 	end
 end
