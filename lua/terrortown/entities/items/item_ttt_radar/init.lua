@@ -145,9 +145,9 @@ end
 
 local function SetupRadarScan(ply)
 	timer.Create("radarTimeout_" .. ply:SteamID64(), ply.radarTime, 1, function()
-		if not IsValid(ply) or not ply:HasEquipmentItem("item_ttt_radar") then return end
-
-		if ply.radarDoesNotRepeat then return end
+		if not IsValid(ply) or not ply:HasEquipmentItem("item_ttt_radar")
+			or ply.radarDoesNotRepeat
+		then return end
 
 		TriggerRadarScan(ply)
 		SetupRadarScan(ply)
