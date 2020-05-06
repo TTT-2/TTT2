@@ -179,7 +179,7 @@ function PANEL:Init()
 
 	local sheets = {}
 	local hudLists = huds.GetList()
-	local restrictedHUDs = TTT2NET.GetGlobal({"hud_manager", "restrictedHUDs"})
+	local restrictedHUDs = ttt2net.GetGlobal({"hud_manager", "restrictedHUDs"})
 	local colorHUDBoxEnabled = Color(155, 155, 155, 255)
 	local colorHUDBoxDisabled = Color(255, 0, 0)
 

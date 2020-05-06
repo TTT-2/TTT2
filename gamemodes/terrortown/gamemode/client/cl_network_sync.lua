@@ -3,7 +3,7 @@
 -- The system is intended for syncing data from the server to the client only.
 -- So a client will only be able to read / get data and will receive updates from the server.
 --
--- @module TTT2NET
+-- @module ttt2net
 -- @author saibotk
 
 -- The meta data table to store information about the type of the data
@@ -19,7 +19,7 @@ local data_listeners = {}
 --
 -- @param any|table path The path to get the value from (this is the absolute path from the root so "global"/"players" etc is not yet included)
 -- @return any The value at the given path or nil if the path does not exist, the value is actually nil or there is no metadata entry for the path
-function TTT2NET.Get(path)
+function ttt2net.Get(path)
 	local tmpPath
 
 	-- Convert path with single key to table
@@ -36,13 +36,13 @@ function TTT2NET.Get(path)
 end
 
 ---
--- The same as {@TTT2NET.Get} but this will take care of prepending the key
+-- The same as {@ttt2net.Get} but this will take care of prepending the key
 -- to access the global values. Global values are generally accessible synced values,
 -- that the server sends to its clients.
 --
 -- @param any|table path The path to get the value from (no need to prepend a "global" as this will be done already)
 -- @return any The value at the given path or nil if the path does not exist, the value is actually nil or there is no metadata entry for the path
-function TTT2NET.GetGlobal(path)
+function ttt2net.GetGlobal(path)
 	local tmpPath
 
 	-- Convert path with single key to table
@@ -55,18 +55,18 @@ function TTT2NET.GetGlobal(path)
 	-- Add the prefix for the correct table
 	table.insert(tmpPath, 1, "global")
 
-	return TTT2NET.Get(tmpPath)
+	return ttt2net.Get(tmpPath)
 end
 
 ---
--- The same as {@TTT2NET.Get} but this will take care of prepending the key to access the player specific values.
+-- The same as {@ttt2net.Get} but this will take care of prepending the key to access the player specific values.
 -- Player specific values are synced values on player entities (can be thought of as data per player that this client knows of),
 -- that the server sends to its clients.
 --
 -- @param any|table path The path to get the value from (no need to prepend a "players" etc. as this will be done already)
 -- @param Entity The player from which we want to get the data
 -- @return any The value at the given path or nil if the path does not exist, the value is actually nil or there is no metadata entry for the path
-function TTT2NET.GetOnPlayer(path, ply)
+function ttt2net.GetOnPlayer(path, ply)
 	local tmpPath
 
 	-- Convert path with single key to table
@@ -80,12 +80,12 @@ function TTT2NET.GetOnPlayer(path, ply)
 	table.insert(tmpPath, 1, "players")
 	table.insert(tmpPath, 2, ply:EntIndex())
 
-	return TTT2NET.Get(tmpPath, client)
+	return ttt2net.Get(tmpPath, client)
 end
 
 ---
--- Prints out all TTT2NET related tables, for debugging purposes.
-function TTT2NET.Debug()
+-- Prints out all ttt2net related tables, for debugging purposes.
+function ttt2net.Debug()
 	print("[TTT2NET] Debug:")
 	print("Registered listeners:")
 	PrintTable(data_listeners)
@@ -114,10 +114,10 @@ local function CallCallbacksOnTree(oldData, curPath)
 		if nextNode.type then
 			-- The node is a leaf node -> is a node with meta data
 			local oldval = table.GetWithPath(oldData, nextPath)
-			local newval = TTT2NET.Get(nextPath)
+			local newval = ttt2net.Get(nextPath)
 
 			-- Call the listeners for this change
-			TTT2NET.CallOnUpdate(nextPath, oldval, newval)
+			ttt2net.CallOnUpdate(nextPath, oldval, newval)
 		else
 			-- Descend a level deeper
 			CallCallbacksOnTree(oldData, nextPath)
@@ -144,7 +144,7 @@ local function ReceiveFullStateUpdate(result)
 	-- Call all callback functions for all paths
 	CallCallbacksOnTree(oldData, oldMetaData)
 end
-net.ReceiveStream(TTT2NET.NET_STREAM_FULL_STATE_UPDATE, ReceiveFullStateUpdate)
+net.ReceiveStream(ttt2net.NET_STREAM_FULL_STATE_UPDATE, ReceiveFullStateUpdate)
 
 ---
 -- This is the callback that is executed when a meta data update message was received from the server.
@@ -153,8 +153,8 @@ net.ReceiveStream(TTT2NET.NET_STREAM_FULL_STATE_UPDATE, ReceiveFullStateUpdate)
 --
 -- @internal
 local function ReceiveMetaDataUpdate()
-	local path = TTT2NET.NetReadPath()
-	local metadata = TTT2NET.NetReadMetaData()
+	local path = ttt2net.NetReadPath()
+	local metadata = ttt2net.NetReadMetaData()
 
 	-- Set the new metadata
 	table.SetWithPath(data_store_metadata, path, metadata)
@@ -166,9 +166,9 @@ local function ReceiveMetaDataUpdate()
 	table.SetWithPath(data_store, path, nil)
 
 	-- Call callbacks that registered on data updates
-	TTT2NET.CallOnUpdate(path, oldval, nil)
+	ttt2net.CallOnUpdate(path, oldval, nil)
 end
-net.Receive(TTT2NET.NETMSG_META_UPDATE, ReceiveMetaDataUpdate)
+net.Receive(ttt2net.NETMSG_META_UPDATE, ReceiveMetaDataUpdate)
 
 ---
 -- This is the callback that is executed when a data update message was received from the server.
@@ -177,24 +177,24 @@ net.Receive(TTT2NET.NETMSG_META_UPDATE, ReceiveMetaDataUpdate)
 --
 -- @internal
 local function ReceiveDataUpdate()
-	local path = TTT2NET.NetReadPath()
+	local path = ttt2net.NetReadPath()
 
 	-- Get the metadata for the path, this will also error if there is no metadata entry for the path
 	local metadata = table.GetWithPath(data_store_metadata, path)
 
 	-- Read the new value based on the metadata entry
-	local newval = TTT2NET.NetReadData(metadata)
+	local newval = ttt2net.NetReadData(metadata)
 
 	-- Save the old value as we need to tell the update listeners about it
-	local oldval = TTT2NET.Get(path)
+	local oldval = ttt2net.Get(path)
 
 	-- Save the new data
 	table.SetWithPath(data_store, path, newval)
 
 	-- Call the update listeners
-	TTT2NET.CallOnUpdate(path, oldval, newval)
+	ttt2net.CallOnUpdate(path, oldval, newval)
 end
-net.Receive(TTT2NET.NETMSG_DATA_UPDATE, ReceiveDataUpdate)
+net.Receive(ttt2net.NETMSG_DATA_UPDATE, ReceiveDataUpdate)
 
 ---
 -- This will call all registered listeners for a specific path.
@@ -203,7 +203,7 @@ net.Receive(TTT2NET.NETMSG_DATA_UPDATE, ReceiveDataUpdate)
 -- @param any|table path The path that this update was executed on
 -- @param any oldval The old value, before the update
 -- @param any newval The new value, after the update
-function TTT2NET.CallOnUpdate(path, oldval, newval)
+function ttt2net.CallOnUpdate(path, oldval, newval)
 	-- Skip if the value did not change
 	if oldval == newval then return end
 
@@ -244,8 +244,8 @@ end
 
 ---
 -- Request a full state update from the server.
-function TTT2NET.RequestFullStateUpdate()
-	net.Start(TTT2NET.NETMSG_REQUEST_FULL_STATE_UPDATE)
+function ttt2net.RequestFullStateUpdate()
+	net.Start(ttt2net.NETMSG_REQUEST_FULL_STATE_UPDATE)
 	net.SendToServer()
 end
 
@@ -253,7 +253,7 @@ end
 -- Reads a path table from the current network message.
 --
 -- @return table The path table
-function TTT2NET.NetReadPath()
+function ttt2net.NetReadPath()
 	local result = net.ReadString()
 
 	return pon.decode(result)
@@ -263,7 +263,7 @@ end
 -- Reads a meta data table from the current network message.
 --
 -- @return table The metadata table
-function TTT2NET.NetReadMetaData()
+function ttt2net.NetReadMetaData()
 	-- If the null flag is set, then return null
 	if net.ReadBool() then return end
 
@@ -285,7 +285,7 @@ end
 --
 -- @param table metadata The meta data table for the data that is expected
 -- @return any The data that was read
-function TTT2NET.NetReadData(metadata)
+function ttt2net.NetReadData(metadata)
 	-- If the null flag is set, then return null
 	if net.ReadBool() then return end
 
@@ -312,7 +312,7 @@ end
 --
 -- @param the path to watch for changes
 -- @param function func
-function TTT2NET.OnUpdate(path, func)
+function ttt2net.OnUpdate(path, func)
 	assert(isfunction(func), "[TTT2NET] OnUpdate called with an invalid function.")
 
 	local tmpPath
@@ -345,7 +345,7 @@ end
 --
 -- @param any|table path The path to register the callback on
 -- @param function func The callback function that should be executed
-function TTT2NET.OnUpdateGlobal(path, func)
+function ttt2net.OnUpdateGlobal(path, func)
 	local tmpPath
 
 	-- Convert path with single key to table
@@ -358,7 +358,7 @@ function TTT2NET.OnUpdateGlobal(path, func)
 	-- Add the prefix for the correct table
 	table.insert(tmpPath, 1, "global")
 
-	TTT2NET.OnUpdate(tmpPath, func)
+	ttt2net.OnUpdate(tmpPath, func)
 end
 
 ---
@@ -367,7 +367,7 @@ end
 -- @param any|table path The path to register the callback on
 -- @param Entity ply The player that this data entry is from
 -- @param function func The callback function that should be executed
-function TTT2NET.OnUpdateOnPlayer(path, ply, func)
+function ttt2net.OnUpdateOnPlayer(path, ply, func)
 	local tmpPath
 
 	-- Convert path with single key to table
@@ -381,5 +381,5 @@ function TTT2NET.OnUpdateOnPlayer(path, ply, func)
 	table.insert(tmpPath, 1, "players")
 	table.insert(tmpPath, 2, ply:EntIndex())
 
-	TTT2NET.OnUpdate(tmpPath, func)
+	ttt2net.OnUpdate(tmpPath, func)
 end
