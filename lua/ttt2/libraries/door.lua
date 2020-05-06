@@ -7,6 +7,23 @@ if SERVER then
 	AddCSLuaFile()
 end
 
+PROP_DOOR_STARTS_OPEN = 1
+PROP_DOOR_STARTS_LOCKED = 2048
+PROP_DOOR_SILENT_GENERAL = 4096
+PROP_DOOR_USE_CLOSES = 8192
+PROP_DOOR_SILENT_TO_NPC = 16384
+PROP_DOOR_IGNORE_PLAYER_USE = 32768
+PROP_DOOR_START_BREAKABLE = 524288
+
+FUNC_DOOR_NON_SOLID_TO_PLAYER = 4
+FUNC_DOOR_NON_SOLID_GENERAL = 8
+FUNC_DOOR_MODE_TOGGLE = 32
+FUNC_DOOR_PLAYER_USE_OPENS = 256
+FUNC_DOOR_IGNORE_NPC = 512
+FUNC_DOOR_TOUCH_OPENS = 1024
+FUNC_DOOR_STARTS_LOCKED = 2048
+FUNC_DOOR_SILENT_GENERAL = 4096
+
 local cvDestructableDoor = CreateConVar("ttt2_destructible_doors_enable", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 local cvDestructableDoorLocked = CreateConVar("ttt2_destructible_doors_locked_indestructible", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 local cvDestructableDoorForced = CreateConVar("ttt2_destructible_doors_force_pairs", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
@@ -179,11 +196,9 @@ if SERVER then
 		local cls = ent:GetClass()
 
 		if door.IsValidNormal(cls) then
-			-- 32768: ignore player +use
-			return not ent:HasSpawnFlags(32768)
+			return not ent:HasSpawnFlags(PROP_DOOR_IGNORE_PLAYER_USE)
 		elseif door.IsValidSpecial(cls) then
-			-- 256: use opens
-			return ent:HasSpawnFlags(256)
+			return ent:HasSpawnFlags(FUNC_DOOR_PLAYER_USE_OPENS)
 		end
 
 		return false
@@ -202,8 +217,7 @@ if SERVER then
 			-- this door type has no touch mode
 			return false
 		elseif door.IsValidSpecial(cls) then
-			-- 1024: touch opens
-			return ent:HasSpawnFlags(1024)
+			return ent:HasSpawnFlags(FUNC_DOOR_TOUCH_OPENS)
 		end
 
 		return false
@@ -219,11 +233,9 @@ if SERVER then
 		local cls = ent:GetClass()
 
 		if door.IsValidNormal(cls) then
-			-- 8192: door closes on use
-			return not ent:HasSpawnFlags(8192)
+			return not ent:HasSpawnFlags(PROP_DOOR_USE_CLOSES)
 		elseif door.IsValidSpecial(cls) then
-			-- 32: door is in toggle mode
-			return not ent:HasSpawnFlags(32)
+			return not ent:HasSpawnFlags(FUNC_DOOR_MODE_TOGGLE)
 		end
 
 		return false
@@ -239,8 +251,7 @@ if SERVER then
 		local cls = ent:GetClass()
 
 		if door.IsValidNormal(cls) then
-			-- 524288 : Start Breakable
-			return ent:HasSpawnFlags(524288)
+			return ent:HasSpawnFlags(PROP_DOOR_START_BREAKABLE)
 		elseif door.IsValidSpecial(cls) then
 			return false
 		end
@@ -258,18 +269,17 @@ if SERVER then
 		local cls = ent:GetClass()
 
 		if door.IsValidNormal(cls) then
-			-- 32768: ignore player +use
 			if state then
-				RemoveSpawnFlag(ent, 32768)
+				RemoveSpawnFlag(ent, PROP_DOOR_IGNORE_PLAYER_USE)
 			else
-				AddSpawnFlag(ent, 32768)
+				AddSpawnFlag(ent, PROP_DOOR_IGNORE_PLAYER_USE)
 			end
 		elseif door.IsValidSpecial(cls) then
 			-- 256: use opens
 			if state then
-				AddSpawnFlag(ent, 256)
+				AddSpawnFlag(ent, FUNC_DOOR_PLAYER_USE_OPENS)
 			else
-				RemoveSpawnFlag(ent, 256)
+				RemoveSpawnFlag(ent, FUNC_DOOR_PLAYER_USE_OPENS)
 			end
 		end
 	end
@@ -286,9 +296,9 @@ if SERVER then
 		if door.IsValidSpecial(cls) then
 			-- 1024: touch opens
 			if state then
-				AddSpawnFlag(ent, 1024)
+				AddSpawnFlag(ent, FUNC_DOOR_TOUCH_OPENS)
 			else
-				RemoveSpawnFlag(ent, 1024)
+				RemoveSpawnFlag(ent, FUNC_DOOR_TOUCH_OPENS)
 			end
 		end
 	end
@@ -305,17 +315,16 @@ if SERVER then
 		if door.IsValidNormal(cls) then
 			-- 8192: door closes on use
 			if state then
-				RemoveSpawnFlag(ent, 8192)
+				RemoveSpawnFlag(ent, PROP_DOOR_USE_CLOSES)
 				ent:SetKeyValue("returndelay", 3)
 			else
-				AddSpawnFlag(ent, 8192)
+				AddSpawnFlag(ent, PROP_DOOR_USE_CLOSES)
 			end
 		elseif door.IsValidSpecial(cls) then
-			-- 32: door is in toggle mode
 			if state then
-				RemoveSpawnFlag(ent, 32)
+				RemoveSpawnFlag(ent, FUNC_DOOR_MODE_TOGGLE)
 			else
-				AddSpawnFlag(ent, 32)
+				AddSpawnFlag(ent, FUNC_DOOR_MODE_TOGGLE)
 			end
 		end
 	end
