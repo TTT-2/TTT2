@@ -125,8 +125,11 @@ function door.SetUp()
 		entityOutputs.RegisterMapEntityOutput(ent, "OnFullyOpen", "TTT2DoorFullyOpen")
 		entityOutputs.RegisterMapEntityOutput(ent, "OnFullyClosed", "TTT2DoorFullyClosed")
 
+		-- handles door pairs, this means double doors will be handles as one
+		-- door by the door module to prevent weird problems
 		HandleDoorPairs(ent)
 
+		-- makes doors destructible if enabled by convar
 		if cvDestructableDoor:GetBool() and not (cvDestructableDoorLocked:GetBool() and ent:IsDoorLocked()) then
 			ent:MakeDoorDestructable(true)
 		end
