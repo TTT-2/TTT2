@@ -16,22 +16,22 @@ local cvDestructableDoorForced = CreateConVar("ttt2_destructible_doors_force_pai
 -- @ref https://developer.valvesoftware.com/wiki/func_door
 -- @ref https://developer.valvesoftware.com/wiki/func_door_rotating
 
-PROP_DOOR_STARTS_OPEN = 1
-PROP_DOOR_STARTS_LOCKED = 2048
-PROP_DOOR_SILENT_GENERAL = 4096
-PROP_DOOR_USE_CLOSES = 8192
-PROP_DOOR_SILENT_TO_NPC = 16384
-PROP_DOOR_IGNORE_PLAYER_USE = 32768
-PROP_DOOR_START_BREAKABLE = 524288
+SF_PROP_DOOR_STARTS_OPEN = 1
+SF_PROP_DOOR_STARTS_LOCKED = 2048
+SF_PROP_DOOR_SILENT_GENERAL = 4096
+SF_PROP_DOOR_USE_CLOSES = 8192
+SF_PROP_DOOR_SILENT_TO_NPC = 16384
+SF_PROP_DOOR_IGNORE_PLAYER_USE = 32768
+SF_PROP_DOOR_START_BREAKABLE = 524288
 
-FUNC_DOOR_NON_SOLID_TO_PLAYER = 4
-FUNC_DOOR_NON_SOLID_GENERAL = 8
-FUNC_DOOR_MODE_TOGGLE = 32
-FUNC_DOOR_PLAYER_USE_OPENS = 256
-FUNC_DOOR_IGNORE_NPC = 512
-FUNC_DOOR_TOUCH_OPENS = 1024
-FUNC_DOOR_STARTS_LOCKED = 2048
-FUNC_DOOR_SILENT_GENERAL = 4096
+SF_FUNC_DOOR_NON_SOLID_TO_PLAYER = 4
+SF_FUNC_DOOR_NON_SOLID_GENERAL = 8
+SF_FUNC_DOOR_MODE_TOGGLE = 32
+SF_FUNC_DOOR_PLAYER_USE_OPENS = 256
+SF_FUNC_DOOR_IGNORE_NPC = 512
+SF_FUNC_DOOR_TOUCH_OPENS = 1024
+SF_FUNC_DOOR_STARTS_LOCKED = 2048
+SF_FUNC_DOOR_SILENT_GENERAL = 4096
 
 door = door or {}
 
@@ -204,9 +204,9 @@ if SERVER then
 		local cls = ent:GetClass()
 
 		if door.IsValidNormal(cls) then
-			return not ent:HasSpawnFlags(PROP_DOOR_IGNORE_PLAYER_USE)
+			return not ent:HasSpawnFlags(SF_PROP_DOOR_IGNORE_PLAYER_USE)
 		elseif door.IsValidSpecial(cls) then
-			return ent:HasSpawnFlags(FUNC_DOOR_PLAYER_USE_OPENS)
+			return ent:HasSpawnFlags(SF_FUNC_DOOR_PLAYER_USE_OPENS)
 		end
 
 		return false
@@ -225,7 +225,7 @@ if SERVER then
 			-- this door type has no touch mode
 			return false
 		elseif door.IsValidSpecial(cls) then
-			return ent:HasSpawnFlags(FUNC_DOOR_TOUCH_OPENS)
+			return ent:HasSpawnFlags(SF_FUNC_DOOR_TOUCH_OPENS)
 		end
 
 		return false
@@ -241,9 +241,9 @@ if SERVER then
 		local cls = ent:GetClass()
 
 		if door.IsValidNormal(cls) then
-			return not ent:HasSpawnFlags(PROP_DOOR_USE_CLOSES)
+			return not ent:HasSpawnFlags(SF_PROP_DOOR_USE_CLOSES)
 		elseif door.IsValidSpecial(cls) then
-			return not ent:HasSpawnFlags(FUNC_DOOR_MODE_TOGGLE)
+			return not ent:HasSpawnFlags(SF_FUNC_DOOR_MODE_TOGGLE)
 		end
 
 		return false
@@ -259,7 +259,7 @@ if SERVER then
 		local cls = ent:GetClass()
 
 		if door.IsValidNormal(cls) then
-			return ent:HasSpawnFlags(PROP_DOOR_START_BREAKABLE)
+			return ent:HasSpawnFlags(SF_PROP_DOOR_START_BREAKABLE)
 		elseif door.IsValidSpecial(cls) then
 			return false
 		end
@@ -278,16 +278,16 @@ if SERVER then
 
 		if door.IsValidNormal(cls) then
 			if state then
-				RemoveSpawnFlag(ent, PROP_DOOR_IGNORE_PLAYER_USE)
+				RemoveSpawnFlag(ent, SF_PROP_DOOR_IGNORE_PLAYER_USE)
 			else
-				AddSpawnFlag(ent, PROP_DOOR_IGNORE_PLAYER_USE)
+				AddSpawnFlag(ent, SF_PROP_DOOR_IGNORE_PLAYER_USE)
 			end
 		elseif door.IsValidSpecial(cls) then
 			-- 256: use opens
 			if state then
-				AddSpawnFlag(ent, FUNC_DOOR_PLAYER_USE_OPENS)
+				AddSpawnFlag(ent, SF_FUNC_DOOR_PLAYER_USE_OPENS)
 			else
-				RemoveSpawnFlag(ent, FUNC_DOOR_PLAYER_USE_OPENS)
+				RemoveSpawnFlag(ent, SF_FUNC_DOOR_PLAYER_USE_OPENS)
 			end
 		end
 	end
@@ -304,9 +304,9 @@ if SERVER then
 		if door.IsValidSpecial(cls) then
 			-- 1024: touch opens
 			if state then
-				AddSpawnFlag(ent, FUNC_DOOR_TOUCH_OPENS)
+				AddSpawnFlag(ent, SF_FUNC_DOOR_TOUCH_OPENS)
 			else
-				RemoveSpawnFlag(ent, FUNC_DOOR_TOUCH_OPENS)
+				RemoveSpawnFlag(ent, SF_FUNC_DOOR_TOUCH_OPENS)
 			end
 		end
 	end
@@ -323,16 +323,16 @@ if SERVER then
 		if door.IsValidNormal(cls) then
 			-- 8192: door closes on use
 			if state then
-				RemoveSpawnFlag(ent, PROP_DOOR_USE_CLOSES)
+				RemoveSpawnFlag(ent, SF_PROP_DOOR_USE_CLOSES)
 				ent:SetKeyValue("returndelay", 3)
 			else
-				AddSpawnFlag(ent, PROP_DOOR_USE_CLOSES)
+				AddSpawnFlag(ent, SF_PROP_DOOR_USE_CLOSES)
 			end
 		elseif door.IsValidSpecial(cls) then
 			if state then
-				RemoveSpawnFlag(ent, FUNC_DOOR_MODE_TOGGLE)
+				RemoveSpawnFlag(ent, SF_FUNC_DOOR_MODE_TOGGLE)
 			else
-				AddSpawnFlag(ent, FUNC_DOOR_MODE_TOGGLE)
+				AddSpawnFlag(ent, SF_FUNC_DOOR_MODE_TOGGLE)
 			end
 		end
 	end
