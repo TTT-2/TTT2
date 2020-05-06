@@ -13,6 +13,7 @@ local pairs = pairs
 local timer = timer
 local IsValid = IsValid
 local hook = hook
+local surface = surface
 
 -- voicechat stuff
 VOICE = {}

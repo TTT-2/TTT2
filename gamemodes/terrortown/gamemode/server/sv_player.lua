@@ -1150,6 +1150,7 @@ function GM:ScalePlayerDamage(ply, hitgroup, dmginfo)
 	end
 
 	ply.was_headshot = false
+
 	-- actual damage scaling
 	if hitgroup == HITGROUP_HEAD then
 		-- headshot if it was dealt by a bullet

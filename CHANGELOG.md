@@ -24,6 +24,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - The new default scanner behavior shows the direction and distance to the target
 - Changed TargetID colors for confirmed bodies
 - Moved radar handling from client to server
+- Reworked the event popup
+  - texts can now be blocking or non blocking
+  - there's now a popup queue
+  - popups are now also shown to dead players as well
 
 ### Fixed
 

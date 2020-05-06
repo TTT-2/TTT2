@@ -18,6 +18,9 @@ local vgui = vgui
 
 local PANEL = {}
 
+local cv_ttt_scoreboard_sorting
+local cv_ttt_scoreboard_ascending
+
 function PANEL:Init()
 	self.name = "Unnamed"
 	self.color = COLOR_WHITE
@@ -25,6 +28,9 @@ function PANEL:Init()
 	self.rowcount = 0
 	self.rows_sorted = {}
 	self.group = "spec"
+
+	cv_ttt_scoreboard_sorting = GetConVar("ttt_scoreboard_sorting")
+	cv_ttt_scoreboard_ascending = GetConVar("ttt_scoreboard_ascending")
 end
 
 ---
@@ -64,7 +70,9 @@ function PANEL:Paint()
 	-- Alternating row background
 	local y = 24
 
-	for i, row in ipairs(self.rows_sorted) do
+	for i = 1, #self.rows_sorted do
+		local row = self.rows_sorted[i]
+
 		if i % 2 ~= 0 then
 			surface.SetDrawColor(75, 75, 75, 100)
 			surface.DrawRect(0, y, self:GetWide(), row:GetTall())
@@ -99,18 +107,18 @@ end
 ---
 -- @param Player ply
 function PANEL:AddPlayerRow(ply)
-	if ScoreGroup(ply) == self.group and not self.rows[ply] then
-		hook.Run("TTT2ScoreboardAddPlayerRow", ply)
+	if ScoreGroup(ply) ~= self.group or self.rows[ply] then return end
 
-		local row = vgui.Create("TTTScorePlayerRow", self)
-		row:SetPlayer(ply)
+	hook.Run("TTT2ScoreboardAddPlayerRow", ply)
 
-		self.rows[ply] = row
-		self.rowcount = table.Count(self.rows)
+	local row = vgui.Create("TTTScorePlayerRow", self)
+	row:SetPlayer(ply)
 
-		-- must force layout immediately or it takes its sweet time to do so
-		self:PerformLayout()
-	end
+	self.rows[ply] = row
+	self.rowcount = table.Count(self.rows)
+
+	-- must force layout immediately or it takes its sweet time to do so
+	self:PerformLayout()
 end
 
 ---
@@ -123,51 +131,74 @@ function PANEL:HasRows()
 	return self.rowcount > 0
 end
 
+local function FallbackSort(rowa, rowb)
+	return tostring(rowa) < tostring(rowb)
+end
+
+local function SortFunc(rowa, rowb)
+	if not IsValid(rowa) then
+		if IsValid(rowb) then
+			return false
+		end
+		return FallbackSort(rowa, rowb)
+	end
+
+	if not IsValid(rowb) then
+		return true
+	end
+
+	local plya = rowa:GetPlayer()
+	local plyb = rowb:GetPlayer()
+
+	if not IsValid(plya) then
+		if IsValid(plyb) then
+			return false
+		end
+		return FallbackSort(rowa, rowb)
+	end
+
+	if not IsValid(plyb) then
+		return true
+	end
+
+	local sort_mode = cv_ttt_scoreboard_sorting:GetString()
+	local sort_func = _G.sboard_sort[sort_mode]
+
+	local comp
+
+	if isfunction(sort_func) then
+		comp = sort_func(plya, plyb)
+	end
+
+	if comp == nil then
+		comp = 0
+	end
+
+	if comp ~= 0 then
+		if cv_ttt_scoreboard_ascending:GetBool() then
+			return comp < 0
+		else
+			return comp > 0
+		end
+	else
+		if cv_ttt_scoreboard_ascending:GetBool() then
+			return strlower(plya:Nick()) < strlower(plyb:Nick())
+		else
+			return strlower(plya:Nick()) > strlower(plyb:Nick())
+		end
+	end
+end
+
 function PANEL:UpdateSortCache()
 	self.rows_sorted = {}
 
 	for _, row in pairs(self.rows) do
-		table.insert(self.rows_sorted, row)
+		self.rows_sorted[#self.rows_sorted + 1] = row
 	end
 
-	local cv_ttt_scoreboard_sorting = GetConVar("ttt_scoreboard_sorting")
-	local cv_ttt_scoreboard_ascending = GetConVar("ttt_scoreboard_ascending")
+	if #self.rows_sorted < 2 then return end
 
-	table.sort(self.rows_sorted, function(rowa, rowb)
-		local plya = rowa:GetPlayer()
-		local plyb = rowb:GetPlayer()
-
-		if not IsValid(plya) then
-			return false
-		end
-
-		if not IsValid(plyb) then
-			return true
-		end
-
-		local sort_mode = cv_ttt_scoreboard_sorting:GetString()
-		local sort_func = sboard_sort[sort_mode]
-
-		local comp = 0
-
-		if isfunction(sort_func) then
-			comp = sort_func(plya, plyb)
-		end
-
-		local ret = true
-
-		if comp ~= 0 then
-			ret = comp > 0
-		else
-			ret = strlower(plya:GetName()) > strlower(plyb:GetName())
-		end
-
-		if cv_ttt_scoreboard_ascending:GetBool() then
-			ret = not ret
-		end
-
-		return ret
-	end)
+	table.sort(self.rows_sorted, SortFunc)
 end
 
 function PANEL:UpdatePlayerData()
@@ -179,13 +210,16 @@ function PANEL:UpdatePlayerData()
 			v:UpdatePlayerData()
 		else
 			-- can't remove now, will break pairs
-			table.insert(to_remove, k)
+			to_remove[#to_remove + 1] = k
 		end
 	end
 
-	if #to_remove == 0 then return end
+	local remCount = #to_remove
 
-	for _, ply in ipairs(to_remove) do
+	if remCount == 0 then return end
+
+	for i = 1, remCount do
+		local ply = to_remove[i]
 		local pnl = self.rows[ply]
 
 		if IsValid(pnl) then
@@ -215,7 +249,9 @@ function PANEL:PerformLayout()
 
 	local y = 24
 
-	for _, v in ipairs(self.rows_sorted) do
+	for i = 1, #self.rows_sorted do
+		local v = self.rows_sorted[i]
+
 		v:SetPos(0, y)
 		v:SetSize(self:GetWide(), v:GetTall())
 
