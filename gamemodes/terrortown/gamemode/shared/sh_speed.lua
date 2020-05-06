@@ -2,55 +2,59 @@ local plymeta = assert(FindMetaTable("Player"), "FAILED TO FIND ENTITY TABLE")
 
 SPEED = SPEED or {}
 
-if SERVER then
-	util.AddNetworkString("TTT2UpdateSpeedModifier")
+---
+-- Handles the speed calculation based on the @{GM:TTTPlayerSpeedModifier} hook
+-- @param Player ply The player whose speed should be changed
+-- @param CMoveData moveData The move data
+-- @internal
+-- @realm shared
+function SPEED:HandleSpeedCalculation(ply, moveData)
+	if not ply:IsTerror() then return end
 
-	function SPEED:HandleSpeedCalculation(ply, moveData)
-		if not ply:IsTerror() then return end
+	local baseMultiplier = 1
+	local isSlowed = false
 
-		local baseMultiplier = 1
-		local isSlowed = false
+	-- Slow down ironsighters
+	local wep = ply:GetActiveWeapon()
 
-		-- Slow down ironsighters
-		local wep = ply:GetActiveWeapon()
-
-		if IsValid(wep) and wep.GetIronsights and wep:GetIronsights() then
-			baseMultiplier = 120 / 220
-			isSlowed = true
-		end
-
-		local speedMultiplierModifier = {1}
-		local returnMultiplier = hook.Run("TTTPlayerSpeedModifier", ply, isSlowed, moveData, speedMultiplierModifier) or 1
-
-		ply:SetSpeedMultiplier(baseMultiplier * returnMultiplier * speedMultiplierModifier[1])
+	if IsValid(wep) and wep.GetIronsights and wep:GetIronsights() then
+		baseMultiplier = 120 / 220
+		isSlowed = true
 	end
 
-	---
-	-- A hook to modify the player speed, it is automatically networked.
-	-- @param Player ply The player whose speed should be modified
-	-- @param boolean isSlowed Is true if the player uses iron sights
-	-- @param CMoveData moveData The move data
-	-- @param table speedMultiplierModifier The speed modifier table. Modify the first table entry to change the player speed
-	-- @return[deprecated] number The deprecated way of changing the player speed
-	-- @hook
-	-- @realm server
-	function GM:TTTPlayerSpeedModifier(ply, isSlowed, moveData, speedMultiplierModifier)
+	local speedMultiplierModifier = {1}
+	local returnMultiplier = hook.Run("TTTPlayerSpeedModifier", ply, isSlowed, moveData, speedMultiplierModifier) or 1
 
+	local oldval = ply.speedModifier
+	ply.speedModifier = baseMultiplier * returnMultiplier * speedMultiplierModifier[1]
+
+	if SERVER then return end
+
+	local newval = math.Round(ply.speedModifier, 1)
+
+	if newval == 1.0 then
+		STATUS:RemoveStatus("ttt_speed_status_good")
+		STATUS:RemoveStatus("ttt_speed_status_bad")
+	elseif newval > 1.0 and oldval <= 1.0 then
+		STATUS:RemoveStatus("ttt_speed_status_bad")
+		STATUS:AddStatus("ttt_speed_status_good")
+	elseif newval < 1.0 and oldval >= 1.0 then
+		STATUS:RemoveStatus("ttt_speed_status_good")
+		STATUS:AddStatus("ttt_speed_status_bad")
 	end
+end
 
-	---
-	-- Sets the speed multiplier to an absolute value
-	-- @param number value The new value
-	-- @realm server
-	function plymeta:SetSpeedMultiplier(value)
-		if self:GetSpeedMultiplier() == value then return end
+---
+-- A hook to modify the player speed, it is automatically networked.
+-- @param Player ply The player whose speed should be modified
+-- @param boolean isSlowed Is true if the player uses iron sights
+-- @param CMoveData moveData The move data
+-- @param table speedMultiplierModifier The speed modifier table. Modify the first table entry to change the player speed
+-- @return[deprecated] number The deprecated way of changing the player speed
+-- @hook
+-- @realm shared
+function GM:TTTPlayerSpeedModifier(ply, isSlowed, moveData, speedMultiplierModifier)
 
-		self.speedModifier = math.max(0, value)
-
-		net.Start("TTT2UpdateSpeedModifier")
-		net.WriteFloat(self.speedModifier)
-		net.Send(self)
-	end
 end
 
 if CLIENT then
@@ -79,28 +83,6 @@ if CLIENT then
 			end
 		})
 	end
-
-	net.Receive("TTT2UpdateSpeedModifier", function()
-		local client = LocalPlayer()
-
-		local oldval = client:GetSpeedMultiplier()
-		local newval = net.ReadFloat()
-
-		client.speedModifier = newval
-
-		newval = math.Round(newval, 1)
-
-		if newval == 1.0 then
-			STATUS:RemoveStatus("ttt_speed_status_good")
-			STATUS:RemoveStatus("ttt_speed_status_bad")
-		elseif newval > 1.0 and oldval <= 1.0 then
-			STATUS:RemoveStatus("ttt_speed_status_bad")
-			STATUS:AddStatus("ttt_speed_status_good")
-		elseif newval < 1.0 and oldval >= 1.0 then
-			STATUS:RemoveStatus("ttt_speed_status_good")
-			STATUS:AddStatus("ttt_speed_status_bad")
-		end
-	end)
 end
 
 ---

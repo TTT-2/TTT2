@@ -64,9 +64,7 @@ end
 -- @hook
 -- @realm shared
 function GM:Move(ply, moveData)
-	if SERVER then
-		SPEED:HandleSpeedCalculation(ply, moveData)
-	end
+	SPEED:HandleSpeedCalculation(ply, moveData)
 
 	local mul = ply:GetSpeedMultiplier()
 
