@@ -20,6 +20,10 @@ util.AddNetworkString("TTT2TargetPlayer")
 util.AddNetworkString("TTT2SetPlayerReady")
 util.AddNetworkString("TTT2SetRevivalReason")
 util.AddNetworkString("TTT2RevivalStopped")
+util.AddNetworkString("TTT2RevivalUpdate_IsReviving")
+util.AddNetworkString("TTT2RevivalUpdate_IsBlockingRevival")
+util.AddNetworkString("TTT2RevivalUpdate_RevivalStartTime")
+util.AddNetworkString("TTT2RevivalUpdate_RevivalDuration")
 
 ---
 -- Sets whether a @{Player} is spectating the own ragdoll
@@ -910,38 +914,59 @@ end
 ---
 -- Sets the revival state.
 -- @param [default=false]boolean isReviving The reviving state
--- @realm shared
+-- @internal
+-- @realm server
 function plymeta:SetReviving(isReviving)
-	self:TTT2NETSetBool("player_is_reviving", isReviving or false)
+	self.isReviving = isReviving or false
+
+	net.Start("TTT2RevivalUpdate_IsReviving")
+	net.WriteBool(self.isReviving)
+	net.Send(self)
 end
 
 ---
 -- Sets the blocking revival state.
 -- @param [default=false]boolean isBlockingRevival The blocking revival state
+-- @internal
 -- @realm server
 function plymeta:SetBlockingRevival(isBlockingRevival)
-	self:TTT2NETSetBool("player_is_blocking_revival", isBlockingRevival or false)
+	self.isBlockingRevival = isBlockingRevival or false
+
+	net.Start("TTT2RevivalUpdate_IsBlockingRevival")
+	net.WriteBool(self.isBlockingRevival)
+	net.Send(self)
 end
 
 ---
 -- Sets the revival start time.
 -- @param [default=@{CurTime()}]number startTime The revival start time
+-- @internal
 -- @realm server
 function plymeta:SetRevivalStartTime(startTime)
-	self:TTT2NETSetFloat("player_revival_start_time", startTime or CurTime())
+	self.revivalStartTime = startTime or CurTime()
+
+	net.Start("TTT2RevivalUpdate_RevivalStartTime")
+	net.WriteFloat(self.revivalStartTime)
+	net.Send(self)
 end
 
 ---
 -- Sets the revival duration.
--- @param [default=0.0]number time The revival time
+-- @param [default=0.0]number duration The revival time
+-- @internal
 -- @realm server
-function plymeta:SetRevivalDuration(time)
-	self:TTT2NETSetFloat("player_revival_duration", time or 0.0)
+function plymeta:SetRevivalDuration(duration)
+	self.revivalDurarion = duration or 0.0
+
+	net.Start("TTT2RevivalUpdate_RevivalDuration")
+	net.WriteFloat(self.revivalDurarion)
+	net.Send(self)
 end
 
 ---
 -- Sets the last death position.
 -- @param Vector pos The death position
+-- @internal
 -- @realm server
 function plymeta:SetLastDeathPosition(pos)
 	self.lastDeathPosition = pos
@@ -950,6 +975,7 @@ end
 ---
 -- Sets the last spawn position.
 -- @param Vector pos The spawn position
+-- @internal
 -- @realm server
 function plymeta:SetLastSpawnPosition(pos)
 	self.lastSpawnPosition = pos
@@ -974,6 +1000,7 @@ end
 ---
 -- Sets the if a player was active (TEAM_TERROR) in a round.
 -- @param boolean state The state
+-- @internal
 -- @realm server
 function plymeta:SetActiveInRound(state)
 	if state and (GetRoundState() ~= ROUND_ACTIVE or not self:IsTerror()) then return end
@@ -984,6 +1011,7 @@ end
 ---
 -- Sets the if a player died in a round.
 -- @param boolean state The state
+-- @internal
 -- @realm server
 function plymeta:SetDiedInRound(state)
 	if state and (GetRoundState() ~= ROUND_ACTIVE or not self:IsTerror()) then return end

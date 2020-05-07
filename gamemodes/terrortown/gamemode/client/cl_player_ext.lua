@@ -216,6 +216,22 @@ net.Receive("TTT2RevivalStopped", function()
 	LocalPlayer():EmitSound("buttons/button8.wav")
 end)
 
+net.Receive("TTT2RevivalUpdate_IsReviving", function()
+	LocalPlayer().isReviving = net.ReadBool()
+end)
+
+net.Receive("TTT2RevivalUpdate_IsBlockingRevival", function()
+	LocalPlayer().isBlockingRevival = net.ReadBool()
+end)
+
+net.Receive("TTT2RevivalUpdate_RevivalStartTime", function()
+	LocalPlayer().revivalStartTime = net.ReadFloat()
+end)
+
+net.Receive("TTT2RevivalUpdate_RevivalDuration", function()
+	LocalPlayer().revivalDurarion = net.ReadFloat()
+end)
+
 ---
 -- Returns if a player has a revival reason set.
 -- @return [default=false]boolean Returns if a player has a revival reason

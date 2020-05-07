@@ -959,7 +959,7 @@ end)
 -- @return boolean The blocking status
 -- @realm shared
 function plymeta:IsReviving()
-	return self:TTT2NETGetBool("player_is_reviving", false)
+	return self.isReviving or false
 end
 
 ---
@@ -967,7 +967,7 @@ end
 -- @return boolean The blocking status
 -- @realm shared
 function plymeta:IsBlockingRevival()
-	return self:TTT2NETGetBool("player_is_blocking_revival", false)
+	return self.isBlockingRevival or false
 end
 
 ---
@@ -975,7 +975,7 @@ end
 -- @return [default=@{CurTime()}]number The time when the revival started in seconds
 -- @realm shared
 function plymeta:GetRevivalStartTime()
-	return self:TTT2NETGetFloat("player_revival_start_time", CurTime())
+	return self.revivalStartTime or CurTime()
 end
 
 ---
@@ -983,7 +983,7 @@ end
 -- @return [default=1.0]number The time for the revival in seconds
 -- @realm shared
 function plymeta:GetRevivalDuration()
-	return self:TTT2NETGetFloat("player_revival_duration", 1.0)
+	return self.revivalDurarion or 0.0
 end
 
 ---
