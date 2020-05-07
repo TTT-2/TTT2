@@ -133,7 +133,7 @@ function GM:PlayerSpawn(ply)
 	SCORE:HandleSpawn(ply)
 
 	ply:SetLastSpawnPosition(ply:GetPos())
-	ply:SetLastDeathPosition(Vector(0, 0, 0))
+	ply:SetLastDeathPosition(nil)
 
 	-- a function to handle the rolespecific stuff that should be done on
 	-- rolechange and respawn (while a round is active)
