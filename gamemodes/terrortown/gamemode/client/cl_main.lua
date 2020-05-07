@@ -137,16 +137,6 @@ function GM:PostCleanupMap()
 end
 
 ---
--- Called right after the map has been cleaned up (usually because game.CleanUpMap was called).
--- This hook is called after the @{outputs} library is set up and map entity outputs can be
--- registered.
--- @hook
--- @realm client
-function GM:TTT2PostCleanupMap()
-
-end
-
----
 -- This hook is used to initialize @{ITEM}s, @{Weapon}s and the shops.
 -- Called after all the entities are initialized.
 -- @note At this point the client only knows about the entities that are within the spawnpoints' PVS.

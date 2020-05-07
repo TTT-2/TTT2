@@ -759,16 +759,6 @@ function GM:PostCleanupMap()
 end
 
 ---
--- Called right after the map has been cleaned up (usually because game.CleanUpMap was called).
--- This hook is called after the @{outputs} library is set up and map entity outputs can be
--- registered.
--- @hook
--- @realm server
-function GM:TTT2PostCleanupMap()
-
-end
-
----
 -- Called if CheckForMapSwitch has determined that a map change should happen
 -- @note Can be used for custom map voting system. Just hook this and return true to override.
 -- @param string nextmap next map that would be loaded according to the file that is set by the mapcyclefile convar

@@ -225,3 +225,13 @@ function GM:Tick()
 		VOICE.Tick()
 	end
 end
+
+---
+-- Called right after the map has been cleaned up (usually because game.CleanUpMap was called).
+-- This hook is called after the @{outputs} library is set up and map entity outputs can be
+-- registered.
+-- @hook
+-- @realm shared
+function GM:TTT2PostCleanupMap()
+
+end
