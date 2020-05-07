@@ -409,6 +409,21 @@ function GM:PostGamemodeLoaded()
 end
 
 ---
+-- Called when a map I/O event occurs.
+-- @param Entity ent Entity that receives the input
+-- @param string input The input name. Is not guaranteed to be a valid input on the entity.
+-- @param Entity activator Activator of the input
+-- @param Entity caller Caller of the input
+-- @param any data Data provided with the input
+-- @return boolean Return true to prevent this input from being processed.
+-- @ref https://wiki.facepunch.com/gmod/GM:AcceptInput
+-- @hook
+-- @realm server
+function GM:AcceptInput(ent, name, activator, caller, data)
+	return door.AcceptInput(ent, name, activator, caller, data)
+end
+
+---
 -- This hook is used to sync the global networked vars.
 -- @note ConVar replication is broken in GMod, so we do this.
 -- I don't like it any more than you do, dear reader.

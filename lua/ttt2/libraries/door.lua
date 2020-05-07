@@ -398,22 +398,18 @@ if SERVER then
 
 		util.Effect("Sparks", effectdata)
 	end
-end
 
--- HOOKS AND STUFF
-if SERVER then
 	---
-	-- Called when a map I/O event occurs.
+	-- Called in @{GM:AcceptInput} when a map I/O event occurs.
 	-- @param Entity ent Entity that receives the input
 	-- @param string input The input name. Is not guaranteed to be a valid input on the entity.
 	-- @param Entity activator Activator of the input
 	-- @param Entity caller Caller of the input
 	-- @param any data Data provided with the input
 	-- @return boolean Return true to prevent this input from being processed.
-	-- @ref https://wiki.facepunch.com/gmod/GM:AcceptInput
-	-- @hook
+	-- @internal
 	-- @realm server
-	function GM:AcceptInput(ent, name, activator, caller, data)
+	function door.AcceptInput(ent, name, activator, caller, data)
 		if not IsValid(ent) or not ent:IsDoor() then return end
 
 		name = string.lower(name)
@@ -509,7 +505,10 @@ if SERVER then
 			end
 		end
 	end
+end
 
+-- HOOKS AND STUFF
+if SERVER then
 	---
 	-- This hook is called after the door started opening.
 	-- @param Entity doorEntity The door entity
