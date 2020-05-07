@@ -8,6 +8,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Added a new ConVar to allow armor to also block headshots (`ttt_item_armor_block_headshots`, default value: 0). Thanks @TheNickSkater
 - Added essential items: 8 different types of items that are often used in other addons. You can remove them from the shop if you don't like them.
+- Added a few door related hooks and convenience functions
+- Added entityOutputs library to register map entity outputs easier
 - Added speed handling system based on the `TTTPlayerSpeedModifier` hook
 - Added a convenience function for the creation of radar points: `RADAR.CreateTargetTable(ply, pos, ent, color)`
 - Added the possibility to change the radar time by either setting `ROLE.radarTime` or calling `RADAR.SetRadarTime(ply, time)`
@@ -39,6 +41,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed propsurfing with the magneto stick
 - Fixed healthstation TargetID text
 - Fixed keyinfo for doors where no key can be used
+- Fixed map lock/unlock trigger of doors not updating targetID
 - Fixed roles having sometimes the wrong radar color
 
 ## [v0.6.4b](https://github.com/TTT-2/TTT2/tree/v0.6.4b) (2020-04-03)
