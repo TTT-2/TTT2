@@ -1,7 +1,6 @@
 ---
 -- Trouble in Terrorist Town 2
 
-include("ttt2/extensions/player.lua")
 include("ttt2/libraries/spawn.lua")
 
 ttt_include("sh_init")
@@ -956,11 +955,12 @@ function PrepareRound()
 	local plys = player.GetAll()
 
 	for i = 1, #plys do
-		plys[i]:SetTargetPlayer(nil)
-	end
+		local ply = plys[i]
 
-	player.ResetActiveInRound()
-	player.ResetDiedInRound()
+		ply:SetTargetPlayer(nil)
+		ply:SetDiedInRound(false)
+		ply:SetActiveInRound(false)
+	end
 
 	-- Tell hooks and map we started prep
 	hook.Call("TTTPrepareRound", GAMEMODE)
@@ -1175,9 +1175,16 @@ function BeginRound()
 
 	ARMOR:InitPlayerArmor()
 
-	-- a player should be considered "was active in round" if they received a role
-	player.InitActiveInRound()
-	player.ResetDiedInRound()
+	local plys = player.GetAll()
+
+	for i = 1, #plys do
+		local ply = plys[i]
+
+		ply:SetDiedInRound(false)
+
+		-- a player should be considered "was active in round" if they received a role
+		ply:SetActiveInRound(ply:Alive() and ply:IsTerror())
+	end
 
 	hook.Call("TTTBeginRound", GAMEMODE)
 
