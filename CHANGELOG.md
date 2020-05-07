@@ -10,6 +10,9 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added essential items: 8 different types of items that are often used in other addons. You can remove them from the shop if you don't like them.
 - Added server proxy for `EPOP:AddMessage()`
 - Added `PrintMessage` overwrites so this function now uses TTT2 systems
+- Added speed handling system based on the `TTTPlayerSpeedModifier` hook
+- Added a convenience function for the creation of radar points: `RADAR.CreateTargetTable(ply, pos, ent, color)`
+- Added the possibility to change the radar time by either setting `ROLE.radarTime` or calling `RADAR.SetRadarTime(ply, time)`
 
 ### Changed
 
@@ -17,12 +20,14 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Remove GetWeapons and HasWeapon overrides (see https://github.com/Facepunch/garrysmod/pull/1648)
 - Improved role module to also use `isAbstract` instead of a base role class name
 - Migrated the HUDManager settings to the new network sync system
-- The TTT2NET library can now also synchronize small to medium sized tables (adds the metadata type "table")
+- Renamed `TTT2NET` to `ttt2net` and removed unnecessary self references
+- The `ttt2net` library can now also synchronize small to medium sized tables (adds the metadata type "table")
 - Reworked the old DNA Scanner 
   - New world- and viewmodel with an interactive screen
   - Removed the overcomplicated UI menu (simple handling with default keys instead)
   - The new default scanner behavior shows the direction and distance to the target
 - Changed TargetID colors for confirmed bodies
+- Moved radar handling from client to server
 - Reworked the event popup
   - texts can now be blocking or non blocking
   - there's now a popup queue
@@ -36,6 +41,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed propsurfing with the magneto stick
 - Fixed healthstation TargetID text
 - Fixed keyinfo for doors where no key can be used
+- Fixed roles having sometimes the wrong radar color
 
 ## [v0.6.4b](https://github.com/TTT-2/TTT2/tree/v0.6.4b) (2020-04-03)
 
