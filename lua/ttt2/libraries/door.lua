@@ -153,6 +153,7 @@ end
 
 ---
 -- Returns if a passed door class is a valid normal door (prop_door_rotating)
+-- @param string cls The class name of the door entity
 -- @return boolean True if it is a valid normal door
 -- @realm shared
 function door.IsValidNormal(cls)
@@ -161,6 +162,7 @@ end
 
 ---
 -- Returns if a passed door class is a valid special door (func_door, func_door_rotating)
+-- @param string cls The class name of the door entity
 -- @return boolean True if it is a valid special door
 -- @realm shared
 function door.IsValidSpecial(cls)
@@ -340,7 +342,7 @@ if SERVER then
 	---
 	-- Handles the damage of doors that are still in the wall.
 	-- Called in @{GM:EntityTakeDamage}.
-	-- @param Entity ent The entity that is damages
+	-- @param Entity ent The entity that is damaged
 	-- @param CTakeDamageInfo dmginfo The damage info object
 	-- @internal
 	-- @realm server
@@ -355,14 +357,14 @@ if SERVER then
 		if ent:Health() > 0 then return end
 
 		-- capping the force factor is sufficient because
-		-- the forward vector is normalizes
+		-- the forward vector is normalized
 		local forceFactor = math.min(50000, 500 * damage)
 
 		ent:SafeDestroyDoor(forceFactor * dmginfo:GetAttacker():GetForward())
 	end
 
 	---
-	-- Handles the damage of doors that are lying as props on the groudn.
+	-- Handles the damage of doors that are lying as props on the ground.
 	-- Called in @{GM:EntityTakeDamage}.
 	-- @param Entity ent The entity that is damages
 	-- @param CTakeDamageInfo dmginfo The damage info object
