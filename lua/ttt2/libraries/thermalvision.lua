@@ -194,17 +194,20 @@ else
 
 		if thermalvisionListSize == 0 or entsSize == 0 then return end
 
-		for i = 1, entsSize do
-			for j = 1, thermalvisionListSize do
-				if thermalvisionList[j].ent == ents[i] then
+		for i = 1, thermalvisionListSize do
+			for j = 1, entsSize do
+				if thermalvisionList[i].ent == ents[j] then
 					--for now only setting it to nil 
-					thermalvisionList[j] = nil
+					thermalvisionList[i] = nil
+					break
 				end
 			end
 		end
 
 		--cleanup table by 
 		table.RemoveEmptyEntries(thermalvisionList, thermalvisionListSize)
+
+		thermalvisionList = {}
 	end
 
 	---
@@ -212,6 +215,8 @@ else
 	-- @param table ents list of entities that should get removed
 	-- @realm client
 	function thermalvision.Remove(ents)
+		ents = istable(ents) and ents or {ents}
+
 		RemoveInternal(ents)
 
 		if table.IsEmpty(thermalvisionList) and not bgColoring then
@@ -225,6 +230,8 @@ else
 	-- @param[default=THERMALVISION_MODE_BOTH] enum mode when should the entity be rendererd
 	-- @realm client
 	function thermalvision.Add(ents, mode)
+		ents = istable(ents) and ents or {ents}
+
 		local thermalvisionListSize = #thermalvisionList
 		local entsSize = #ents
 
@@ -254,6 +261,8 @@ else
 	-- @param enum mode when should the entity be rendererd
 	-- @realm client
 	function thermalvision.Set(ents, mode)
+		ents = istable(ents) and ents or {ents}
+
 		local thermalvisionListSize = #thermalvisionList
 		local entsSize = #ents
 
