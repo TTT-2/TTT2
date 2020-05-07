@@ -68,6 +68,7 @@ end
 -- @param tableSize number the number of entries in dataTable
 function table.RemoveEmptyEntries(dataTable, tableSize)
 	local j = 1
+
 	for i = 1, tableSize do
 		if dataTable[i] ~= nil then
 			if i ~= j then
@@ -75,9 +76,8 @@ function table.RemoveEmptyEntries(dataTable, tableSize)
 				dataTable[j] = dataTable[i]
 				dataTable[i] = nil
 			end
+
 	 		j = j + 1
-		else
-			dataTable[i] = nil
 		end
 	end
 end

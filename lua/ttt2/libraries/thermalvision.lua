@@ -70,18 +70,19 @@ else
 			--omit depth test but block writing to depth buffer
 			render.SuppressEngineLighting(true)
 			render.OverrideDepthEnable(true, false)
+
 			cam.Start3D()
 			cam.IgnoreZ(true)
 				for i = 1, #thermalvisionList do
 					local entry = thermalvisionList[i]
 					local ent = entry.ent
-					local mode = entry.mode
 
-					if not IsValid(ent) or mode == THERMALVISION_MODE_VISIBLE then continue end
+					if not IsValid(ent) or entry.mode == THERMALVISION_MODE_VISIBLE then continue end
 
 					ent:DrawModel()
 				end
 			cam.End3D()
+
 			render.OverrideDepthEnable(false, false)
 			render.SuppressEngineLighting(false)
 
@@ -95,8 +96,7 @@ else
 
 			--weaken the effect behind walls
 			cam.Start2D()
-				local overlayColor = bgColoring and overlayColorWithBG or overlayColorWithoutBG
-				surface.SetDrawColor(overlayColor)
+				surface.SetDrawColor(bgColoring and overlayColorWithBG or overlayColorWithoutBG)
 				surface.DrawRect(0, 0, ScrW(), ScrH())
 			cam.End2D()
 		end
@@ -123,15 +123,15 @@ else
 
 			--render all entities but keep depth testing
 			render.SuppressEngineLighting(true)
+
 			for i = 1, #thermalvisionList do
 				local entry = thermalvisionList[i]
 				local ent = entry.ent
-				local mode = entry.mode
 
 				if not IsValid(ent) then continue end
 
 				--overwrite with the original model and prevent effect appliance afterwards if the effect should be only applied for non visible things
-				if mode == THERMALVISION_MODE_NOTVISIBLE then
+				if entry.mode == THERMALVISION_MODE_NOTVISIBLE then
 					render.SetStencilWriteMask(0)
 					render.SuppressEngineLighting(false)
 				end
@@ -141,6 +141,7 @@ else
 				render.SetStencilWriteMask(255)
 				render.SuppressEngineLighting(true)
 			end
+
 			render.SuppressEngineLighting(false)
 
 			--screenspace effect on stenciled areas again
@@ -189,12 +190,14 @@ else
 	-- @realm client
 	local function RemoveInternal(ents)
 		local thermalvisionListSize = #thermalvisionList
-		if thermalvisionListSize == 0 or #ents == 0 then return end
+		local entsSize = #ents
 
-		for i = 1, #ents do
-			for j = 1, #thermalvisionList do
+		if thermalvisionListSize == 0 or entsSize == 0 then return end
+
+		for i = 1, entsSize do
+			for j = 1, thermalvisionListSize do
 				if thermalvisionList[j].ent == ents[i] then
-					--for now only setting it to nil
+					--for now only setting it to nil 
 					thermalvisionList[j] = nil
 				end
 			end
@@ -222,12 +225,15 @@ else
 	-- @param[default=THERMALVISION_MODE_BOTH] enum mode when should the entity be rendererd
 	-- @realm client
 	function thermalvision.Add(ents, mode)
-		if #ents == 0 then return end
+		local thermalvisionListSize = #thermalvisionList
+		local entsSize = #ents
+
+		if entsSize == 0 then return end
 
 		mode = mode or THERMALVISION_MODE_BOTH
 
-		for i = 1, #ents do
-			thermalvisionList[#thermalvisionList + 1] = {ent = ents[i], mode = mode}
+		for i = 1, entsSize do
+			thermalvisionList[thermalvisionListSize + i] = {ent = ents[i], mode = mode}
 		end
 
 		-- add the hook if there is something to render
@@ -248,13 +254,16 @@ else
 	-- @param enum mode when should the entity be rendererd
 	-- @realm client
 	function thermalvision.Set(ents, mode)
-		if #ents == 0 then return end
+		local thermalvisionListSize = #thermalvisionList
+		local entsSize = #ents
+
+		if entsSize == 0 then return end
 
 		-- check if an entity is already inserted and remove it
 		RemoveInternal(ents)
 
-		for i = 1, #ents do
-			thermalvisionList[#thermalvisionList + 1] = {ent = ents[i], mode = mode}
+		for i = 1, entsSize do
+			thermalvisionList[thermalvisionListSize + i] = {ent = ents[i], mode = mode}
 		end
 
 		-- add the hook if there is something to render
