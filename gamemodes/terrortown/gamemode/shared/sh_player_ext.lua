@@ -1010,39 +1010,3 @@ end
 function plymeta:WasRevivedInRound()
 	return self:HasDiedInRound() and self:IsTerror()
 end
-
----
--- Sets a revival reason that is displayed in the revival HUD element.
--- It supports language identifier for translated strings.
--- @param [default=nil]string name The text or the language identifer, nil to reset
--- @param [opt]table params The params table used for @{LANG.GetParamTranslation}
--- @realm shared
-function plymeta:SetRevivalReason(name, params)
-	if SERVER then
-		net.Start("TTT2SetRevivalReason")
-
-		if name then
-			net.WriteBool(false)
-			net.WriteString(name)
-
-			local paramsAmount = params and table.Count(params) or 0
-
-			net.WriteUInt(paramsAmount, 8)
-
-			if paramsAmount > 0 then
-				for k, v in pairs(params) do
-					net.WriteString(k)
-					net.WriteString(tostring(v))
-				end
-			end
-		else
-			net.WriteBool(true)
-		end
-
-		net.Send(self)
-	else
-		self.revivalReason = {}
-		self.revivalReason.name = name
-		self.revivalReason.params = params
-	end
-end

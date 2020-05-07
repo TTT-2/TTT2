@@ -188,6 +188,18 @@ function GM:SetupMove(ply, mv, cmd)
 	hook.Run("TTT2PlayerReady", ply)
 end
 
+---
+-- Sets a revival reason that is displayed in the revival HUD element.
+-- It supports a language identifier for translated strings.
+-- @param [default=nil]string name The text or the language identifer, nil to reset
+-- @param [opt]table params The params table used for @{LANG.GetParamTranslation}
+-- @realm client
+function plymeta:SetRevivalReason(name, params)
+	self.revivalReason = {}
+	self.revivalReason.name = name
+	self.revivalReason.params = params
+end
+
 net.Receive("TTT2SetRevivalReason", function()
 	local client = LocalPlayer()
 	local isReset = net.ReadBool()

@@ -964,6 +964,37 @@ function plymeta:SetRevivalDuration(duration)
 end
 
 ---
+-- Sends a revival reason that is displayed in the clients revival HUD element.
+-- It supports a language identifier for translated strings.
+-- @param [default=nil]string name The text or the language identifer, nil to reset
+-- @param [opt]table params The params table used for @{LANG.GetParamTranslation}
+-- @realm server
+function plymeta:SendRevivalReason(name, params)
+	net.Start("TTT2SetRevivalReason")
+
+	if name then
+		net.WriteBool(false)
+		net.WriteString(name)
+
+		local paramsAmount = params and table.Count(params) or 0
+
+		net.WriteUInt(paramsAmount, 8)
+
+		if paramsAmount > 0 then
+			for k, v in pairs(params) do
+				net.WriteString(k)
+				net.WriteString(tostring(v))
+			end
+		end
+	else
+		net.WriteBool(true)
+	end
+
+	net.Send(self)
+end
+
+
+---
 -- Sets the last death position.
 -- @param Vector pos The death position
 -- @internal
