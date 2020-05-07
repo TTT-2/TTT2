@@ -1289,3 +1289,6 @@ L.hud_health = "Vita"
 --L.item_no_prop_damage_desc = [[Makes you immune to prop damage.]]
 --L.item_no_drown_damage = "No Drowning Damage"
 --L.item_no_drown_damage_desc = [[Makes you immune to drowning damage.]]
+
+-- 2020-05-03
+--L.door_destructible = "Door is destructible ({health}HP)"
