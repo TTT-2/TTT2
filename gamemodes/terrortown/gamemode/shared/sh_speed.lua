@@ -45,7 +45,8 @@ function SPEED:HandleSpeedCalculation(ply, moveData)
 end
 
 ---
--- A hook to modify the player speed, it is automatically networked.
+-- A hook to modify the player speed.
+-- @note This hook is predicted and should be therefore added on both server and client.
 -- @param Player ply The player whose speed should be modified
 -- @param boolean isSlowed Is true if the player uses iron sights
 -- @param CMoveData moveData The move data
