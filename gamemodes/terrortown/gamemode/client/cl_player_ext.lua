@@ -20,7 +20,7 @@ function plymeta:AnimApplyGesture(act, weight)
 end
 
 local function MakeSimpleRunner(act)
-	return function (ply, w)
+	return function(ply, w)
 		-- just let this gesture play itself and get out of its way
 		if w == 0 then
 			ply:AnimApplyGesture(act, 1)
@@ -36,7 +36,7 @@ end
 local act_runner = {
 	-- ear grab needs weight control
 	-- sadly it's currently the only one
-	[ACT_GMOD_IN_CHAT] = function (ply, w)
+	[ACT_GMOD_IN_CHAT] = function(ply, w)
 		local dest = ply:IsSpeaking() and 1 or 0
 
 		w = math.Approach(w, dest, FrameTime() * 10)
@@ -84,7 +84,6 @@ function plymeta:AnimPerformGesture(act, custom_runner)
 	if not cv_ttt_show_gestures or cv_ttt_show_gestures:GetInt() == 0 then return end
 
 	local runner = custom_runner or act_runner[act]
-
 	if not runner then
 		return false
 	end
@@ -176,11 +175,9 @@ net.Receive("TTT2TargetPlayer", TargetPlayer)
 -- @ref https://wiki.facepunch.com/gmod/GM:SetupMove
 -- @local
 function GM:SetupMove(ply, mv, cmd)
-	if not IsValid(ply) then return end
+	if not IsValid(ply) or ply:IsReady() then return end
 
-	if ply:IsReady() then return end
-
-	ply.is_ready = true
+	ply.isReady = true
 
 	net.Start("TTT2SetPlayerReady")
 	net.SendToServer()

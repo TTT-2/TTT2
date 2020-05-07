@@ -114,18 +114,17 @@ end
 function PICKUP.RemoveOutdatedValues()
 	local cachedPickups = PICKUP.items
 	local itemCount = #cachedPickups
-
 	local j = 1
 
 	for i = 1, itemCount do
 		if not cachedPickups[i].remove then
-	    if i ~= j then
+			if i ~= j then
 				-- Keep i's value, move it to j's pos.
 				cachedPickups[j] = cachedPickups[i]
 				cachedPickups[i] = nil
-	    end
+			end
 
-	    j = j + 1
+			j = j + 1
 		else
 			cachedPickups[i] = nil
 		end

@@ -276,6 +276,7 @@ function plymeta:ResetEquipment()
 
 	for i = 1, #equipItems do
 		local item = items.GetStored(equipItems[i])
+
 		if item and isfunction(item.Reset) then
 			item:Reset(self)
 		end
@@ -414,6 +415,7 @@ function plymeta:ResetRoundFlags()
 	self.bomb_wire = nil
 	self.radar_charge = 0
 	self.decoy = nil
+
 	timer.Remove("give_equipment" .. self:UniqueID())
 
 	-- corpse
@@ -1460,10 +1462,10 @@ end
 local function SetPlayerReady(_, ply)
 	if not IsValid(ply) then return end
 
-	ply.is_ready = true
+	ply.isReady = true
 
 	-- Send full state update to client
-	TTT2NET:SendFullStateUpdate(ply)
+	ttt2net.SendFullStateUpdate(ply)
 
 	hook.Run("TTT2PlayerReady", ply)
 end

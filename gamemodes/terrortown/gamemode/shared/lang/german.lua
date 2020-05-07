@@ -1283,3 +1283,6 @@ L.message_revival_failed = "Wiederbelebung fehlgeschlagen."
 L.message_revival_failed_missing_body = "Du wurdest nicht wiederbelebt, da deine Leiche nicht mehr existiert."
 L.hud_revival_title = "Zeit bis zur Wiederbelebung:"
 L.hud_revival_time = "{time}s"
+
+-- 2020-05-03
+L.door_destructible = "Tür ist zerstörbar ({health}HP)"

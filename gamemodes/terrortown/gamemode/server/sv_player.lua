@@ -54,7 +54,7 @@ function GM:PlayerInitialSpawn(ply)
 
 	-- Sync NWVars
 	-- Needs to be done here, to include bots (also this wont send any net messages to the initialized player)
-	TTT2NET:SyncWithNWVar("body_found", { type = "bool" }, ply, "body_found")
+	ttt2net.SyncWithNWVar("body_found", { type = "bool" }, ply, "body_found")
 
 	-- maybe show credits
 	net.Start("TTT2DevChanges")
@@ -508,7 +508,7 @@ function GM:PlayerDisconnected(ply)
 		KARMA.Remember(ply)
 	end
 
-	TTT2NET:ResetClient(ply)
+	ttt2net.ResetClient(ply)
 end
 
 ---
@@ -1019,6 +1019,7 @@ function GM:ScalePlayerDamage(ply, hitgroup, dmginfo)
 	end
 
 	ply.was_headshot = false
+
 	-- actual damage scaling
 	if hitgroup == HITGROUP_HEAD then
 		-- headshot if it was dealt by a bullet
@@ -1177,6 +1178,9 @@ end
 -- @local
 function GM:EntityTakeDamage(ent, dmginfo)
 	if not IsValid(ent) then return end
+
+	door.HandleDamage(ent, dmginfo)
+	door.HandlePropDamage(ent, dmginfo)
 
 	local att = dmginfo:GetAttacker()
 

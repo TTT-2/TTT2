@@ -10,6 +10,11 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added essential items: 8 different types of items that are often used in other addons. You can remove them from the shop if you don't like them.
 - Added a new HUD element to show information about an ongoing revival to the player that is revived
 - Added a load of functions to the `spawn` scope that can be used by addons
+- Added a few door related hooks and convenience functions
+- Added entityOutputs library to register map entity outputs easier
+- Added speed handling system based on the `TTTPlayerSpeedModifier` hook
+- Added a convenience function for the creation of radar points: `RADAR.CreateTargetTable(ply, pos, ent, color)`
+- Added the possibility to change the radar time by either setting `ROLE.radarTime` or calling `RADAR.SetRadarTime(ply, time)`
 
 ### Changed
 
@@ -17,7 +22,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Remove GetWeapons and HasWeapon overrides (see https://github.com/Facepunch/garrysmod/pull/1648)
 - Improved role module to also use `isAbstract` instead of a base role class name
 - Migrated the HUDManager settings to the new network sync system
-- The TTT2NET library can now also synchronize small to medium sized tables (adds the metadata type "table")
+- Renamed `TTT2NET` to `ttt2net` and removed unnecessary self references
+- The `ttt2net` library can now also synchronize small to medium sized tables (adds the metadata type "table")
 - Reworked the old DNA Scanner 
   - New world- and viewmodel with an interactive screen
   - Removed the overcomplicated UI menu (simple handling with default keys instead)
@@ -27,6 +33,11 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Added a revive position argument
   - revive makes now sure the position is valid and the player is not stuck in the wall
 - Improved the player spawn handling
+- Moved radar handling from client to server
+- Reworked the event popup
+  - texts can now be blocking or non blocking
+  - there's now a popup queue
+  - popups are now also shown to dead players as well
 
 ### Fixed
 
@@ -37,6 +48,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed healthstation TargetID text
 - Fixed keyinfo for doors where no key can be used
 - Spawn points that have no solid ground beneath will be ignored
+- Fixed map lock/unlock trigger of doors not updating targetID
+- Fixed roles having sometimes the wrong radar color
 
 ## [v0.6.4b](https://github.com/TTT-2/TTT2/tree/v0.6.4b) (2020-04-03)
 

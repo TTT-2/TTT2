@@ -3,7 +3,7 @@
 
 ttt_include("vgui__cl_hudswitcher")
 
-local current_hud_cvar = CreateClientConVar("ttt2_current_hud", TTT2NET:GetGlobal({"hud_manager", "defaultHUD"}) or "pure_skin", true, true)
+local current_hud_cvar = CreateClientConVar("ttt2_current_hud", ttt2net.GetGlobal({"hud_manager", "defaultHUD"}) or "pure_skin", true, true)
 local current_hud_table = nil
 
 HUDManager = {}
@@ -93,7 +93,9 @@ function GM:HUDPaint()
 		hook.Call("HUDDrawTargetID", GAMEMODE)
 	end
 
-	HUDManager.DrawHUD()
+	if hook.Call("HUDShouldDraw", GAMEMODE, "TTT2HUD") then
+		HUDManager.DrawHUD()
+	end
 
 	if not client:Alive() or client:Team() == TEAM_SPEC then return end
 
@@ -140,7 +142,6 @@ end
 
 local function UpdateHUD(name)
 	local hudEl = huds.GetStored(name)
-
 	if not hudEl then
 		MsgN("Error: HUD with name " .. name .. " was not found!")
 
@@ -158,7 +159,6 @@ local function UpdateHUD(name)
 
 	-- Initialize elements
 	hudEl:Initialize()
-
 	hudEl:LoadData()
 
 	-- call all listeners
@@ -173,7 +173,7 @@ function HUDManager.GetHUD()
 	local hudvar = current_hud_cvar:GetString()
 
 	if not huds.GetStored(hudvar) then
-		hudvar = TTT2NET:GetGlobal({"hud_manager", "defaultHUD"}) or "pure_skin"
+		hudvar = ttt2net.GetGlobal({"hud_manager", "defaultHUD"}) or "pure_skin"
 	end
 
 	return hudvar

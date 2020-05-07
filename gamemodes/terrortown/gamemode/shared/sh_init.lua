@@ -513,6 +513,8 @@ COLOR_NAVY = Color(0, 0, 100, 255)
 COLOR_PINK = Color(255, 0, 255, 255)
 COLOR_ORANGE = Color(250, 100, 0, 255)
 COLOR_OLIVE = Color(100, 100, 0, 255)
+COLOR_BROWN = Color(70, 45, 10)
+COLOR_LBROWN = Color(135, 105, 70)
 
 -- load non-wrapped modules directly
 require("marks")
@@ -524,6 +526,7 @@ include("includes/modules/pon.lua")
 include("ttt2/extensions/net.lua")
 include("ttt2/extensions/string.lua")
 include("ttt2/extensions/table.lua")
+include("ttt2/libraries/door.lua")
 
 -- include ttt required files
 ttt_include("sh_util")

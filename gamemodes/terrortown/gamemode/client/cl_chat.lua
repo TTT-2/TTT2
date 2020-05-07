@@ -36,7 +36,6 @@ net.Receive("TTT_LastWordsMsg", LastWordsRecv)
 
 local function TTT_RoleChat()
 	local sender = net.ReadEntity()
-
 	if not IsValid(sender) then return end
 
 	local text = net.ReadString()
@@ -150,7 +149,6 @@ function ChatInterrupt()
 	local id = net.ReadUInt(32)
 
 	local last_seen = IsValid(client.last_id) and client.last_id:EntIndex() or 0
-
 	local last_words = "."
 
 	if last_chat == "" then

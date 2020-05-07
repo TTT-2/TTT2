@@ -18,10 +18,8 @@ function MuteForRestart(state)
 end
 
 -- Communication control
-local cv_ttt_limit_spectator_voice = CreateConVar("ttt_limit_spectator_voice", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
 local sv_voiceenable = GetConVar("sv_voiceenable")
-
+local cv_ttt_limit_spectator_voice = CreateConVar("ttt_limit_spectator_voice", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 local loc_voice = CreateConVar("ttt_locational_voice", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 hook.Add("TTT2SyncGlobals", "AddVoiceGlobals", function()
@@ -35,6 +33,7 @@ end)
 
 local function PlayerCanHearSpectator(listener, speaker, roundState)
 	local isSpec = listener:IsSpec()
+
 	-- limited if specific convar is on, or we're in detective mode
 	local limit = DetectiveMode() or cv_ttt_limit_spectator_voice:GetBool()
 
@@ -45,17 +44,27 @@ local function PlayerCanHearTeam(listener, speaker, speakerTeam)
 	local speakerSubRoleData = speaker:GetSubRoleData()
 
 	-- Speaker checks
-	if speakerTeam == TEAM_NONE or speakerSubRoleData.unknownTeam or speakerSubRoleData.disabledTeamVoice then return false, false end
+	if speakerTeam == TEAM_NONE or speakerSubRoleData.unknownTeam or speakerSubRoleData.disabledTeamVoice then
+		return false, false
+	end
+
 	-- Listener checks
-	if listener:GetSubRoleData().disabledTeamVoiceRecv or not listener:IsActive() or not listener:IsInTeam(speaker) then return false, false end
-	if TEAMS[speakerTeam].alone then return false, false end
+	if listener:GetSubRoleData().disabledTeamVoiceRecv or not listener:IsActive() or not listener:IsInTeam(speaker) then
+		return false, false
+	end
+
+	if TEAMS[speakerTeam].alone then
+		return false, false
+	end
 
 	return true, loc_voice:GetBool()
 end
 
 local function PlayerIsMuted(listener, speaker)
 	-- Enforced silence and specific mute
-	if mute_all or listener:IsSpec() and listener.mute_team == speaker:Team() or listener.mute_team == MUTE_ALL then return true end
+	if mute_all or listener:IsSpec() and listener.mute_team == speaker:Team() or listener.mute_team == MUTE_ALL then
+		return true
+	end
 end
 
 local function PlayerCanHearGlobal(roundState)
@@ -75,7 +84,9 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:PlayerCanHearPlayersVoice
 -- @local
 function GM:PlayerCanHearPlayersVoice(listener, speaker)
-	if speaker.blockVoice then return false, false end
+	if speaker.blockVoice then
+		return false, false
+	end
 
 	if not IsValid(speaker) or not IsValid(listener) or listener == speaker then
 		return false, false

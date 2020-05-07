@@ -140,6 +140,7 @@ resource.AddFile("materials/vgui/ttt/tid/tid_credits.vmt")
 resource.AddFile("materials/vgui/ttt/tid/tid_detective.vmt")
 resource.AddFile("materials/vgui/ttt/tid/tid_locked.vmt")
 resource.AddFile("materials/vgui/ttt/tid/tid_auto_close.vmt")
+resource.AddFile("materials/vgui/ttt/tid/tid_destructible.vmt")
 
 -- dna scanner icons, mats and models
 resource.AddFile("models/weapons/v_ttt2_dna_scanner.mdl")
