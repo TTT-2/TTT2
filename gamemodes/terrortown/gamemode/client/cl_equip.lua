@@ -114,8 +114,10 @@ local function PreqLabels(parent, x, y)
 		else
 			if ItemIsWeapon(sel) then
 				local cv_maxCount = GetConVar(ORDERED_SLOT_TABLE[MakeKindValid(sel.Kind)])
+
 				local maxCount = cv_maxCount and cv_maxCount:GetInt() or 0
 				maxCount = maxCount < 0 and "∞" or maxCount
+
 				return true, " " .. #client:GetWeaponsOnSlot(MakeKindValid(sel.Kind)) .. " / " .. maxCount, GetTranslation("equip_carry")
 			else
 				return true, "✔", GetTranslation("equip_carry")
@@ -233,14 +235,27 @@ local function PerformMarkerLayout(s)
 end
 
 local function CreateEquipmentList(t)
-	if not t then
-		t = {}
-	end
+	t = t or {}
 
-	setmetatable(t, {__index = {search = nil, role = nil, notalive = false}})
+	setmetatable(t, {
+		__index = {
+			search = nil,
+			role = nil,
+			notalive = false
+		}
+	})
 
 	if t.search == LANG.GetTranslation("shop_search") .. "..." or t.search == "" then
 		t.search = nil
+	end
+
+	-- icon size = 64 x 64
+	if IsValid(dlist) then
+		dlist:Clear()
+	else
+		TraitorMenuPopup()
+
+		return
 	end
 
 	local ply = LocalPlayer()
@@ -256,15 +271,6 @@ local function CreateEquipmentList(t)
 	-- make sure that the players old role is not used anymore
 	if t.notalive then
 		currole = t.role or ROLE_INNOCENT
-	end
-
-	-- icon size = 64 x 64
-	if IsValid(dlist) then
-		dlist:Clear()
-	else
-		TraitorMenuPopup() --TODO Check
-
-		return
 	end
 
 	-- Determine if we already have equipment

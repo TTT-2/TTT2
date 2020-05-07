@@ -2,15 +2,15 @@
 -- This file contains all shared networking functions, to sync and manage the information between server and clients
 -- @author saibotk
 
-TTT2NET = {}
+ttt2net = {}
 
 -- Network message name constants
-TTT2NET.NETMSG_META_UPDATE = "TTT2_NET_META_UPDATE"
-TTT2NET.NETMSG_DATA_UPDATE = "TTT2_NET_DATA_UPDATE"
-TTT2NET.NETMSG_REQUEST_FULL_STATE_UPDATE = "TTT2_NET_REQUEST_FULL_STATE_UPDATE"
+ttt2net.NETMSG_META_UPDATE = "TTT2_NET_META_UPDATE"
+ttt2net.NETMSG_DATA_UPDATE = "TTT2_NET_DATA_UPDATE"
+ttt2net.NETMSG_REQUEST_FULL_STATE_UPDATE = "TTT2_NET_REQUEST_FULL_STATE_UPDATE"
 
 -- Network stream message name constants
-TTT2NET.NET_STREAM_FULL_STATE_UPDATE = "TTT2_NET_STREAM_FULL_STATE_UPDATE"
+ttt2net.NET_STREAM_FULL_STATE_UPDATE = "TTT2_NET_STREAM_FULL_STATE_UPDATE"
 
 ---
 -- Player extensions
@@ -24,7 +24,7 @@ local plymeta = assert(FindMetaTable("Player"), "[TTT2NET] FAILED TO FIND PLAYER
 -- @param any|nil fallback The fallback value to return instead of nil
 -- @return bool|any|nil The value at the path or fallback if the value is nil
 function plymeta:TTT2NETGetBool(path, fallback)
-	return TTT2NET:GetOnPlayer(path, self) == true or fallback
+	return ttt2net.GetOnPlayer(path, self) == true or fallback
 end
 
 ---
@@ -34,7 +34,7 @@ end
 -- @param number fallback The fallback value to return instead of nil
 -- @return number The value at the path or fallback if the value is nil
 function plymeta:TTT2NETGetInt(path, fallback)
-	return tonumber(TTT2NET:GetOnPlayer(path, self) or fallback)
+	return tonumber(ttt2net.GetOnPlayer(path, self) or fallback)
 end
 
 ---
@@ -44,7 +44,7 @@ end
 -- @param number fallback The fallback value to return instead of nil
 -- @return number The value at the path or fallback if the value is nil
 function plymeta:TTT2NETGetUInt(path, fallback)
-	return tonumber(TTT2NET:GetOnPlayer(path, self) or fallback)
+	return tonumber(ttt2net.GetOnPlayer(path, self) or fallback)
 end
 
 ---
@@ -54,7 +54,7 @@ end
 -- @param number fallback The fallback value to return instead of nil
 -- @return number The value at the path or fallback if the value is nil
 function plymeta:TTT2NETGetFloat(path, fallback)
-	return tonumber(TTT2NET:GetOnPlayer(path, self) or fallback)
+	return tonumber(ttt2net.GetOnPlayer(path, self) or fallback)
 end
 
 ---
@@ -64,5 +64,5 @@ end
 -- @param string fallback The fallback value to return instead of nil
 -- @return string The value at the path or fallback if the value is nil
 function plymeta:TTT2NETGetString(path, fallback)
-	return tostring(TTT2NET:GetOnPlayer(path, self) or fallback)
+	return tostring(ttt2net.GetOnPlayer(path, self) or fallback)
 end

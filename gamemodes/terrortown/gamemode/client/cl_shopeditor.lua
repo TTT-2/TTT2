@@ -39,10 +39,10 @@ function ShopEditor.GetEquipmentForRoleAll()
 	local tbl = {}
 
 	local eject = {
-		"weapon_fists",
-		"weapon_ttt_unarmed",
-		"weapon_zm_carry",
-		"bobs_blacklisted"
+		weapon_fists = true,
+		weapon_ttt_unarmed = true,
+		weapon_zm_carry = true,
+		bobs_blacklisted = true
 	}
 
 	hook.Run("TTT2ModifyShopEditorIgnoreEquip", eject) -- possibility to modify from externally
@@ -57,7 +57,7 @@ function ShopEditor.GetEquipmentForRoleAll()
 		if name
 		and not v.Doublicated
 		and not string.match(name, "base")
-		and not table.HasValue(eject, name)
+		and not eject[name]
 		then
 			if v.id then
 				tbl[#tbl + 1] = v
@@ -79,7 +79,7 @@ function ShopEditor.GetEquipmentForRoleAll()
 		and not v.Doublicated
 		and not string.match(name, "base")
 		and not string.match(name, "event")
-		and not table.HasValue(eject, name)
+		and not eject[name]
 		then
 			if v.id then
 				tbl[#tbl + 1] = v
@@ -449,41 +449,41 @@ function ShopEditor.CreateOwnShopEditor(roleData, onCreate)
 
 	ShopEditor.CreateItemList(frame, w, h, itms, function(slf)
 		local eq = not items.IsItem(slf.item) and weapons.GetStored(slf.item.id) or items.GetStored(slf.item.id)
-		if eq then
-			eq.CanBuy = eq.CanBuy or {}
+		if not eq then return end
 
-			if eq.CanBuy[roleData.index] then
-				eq.CanBuy[roleData.index] = nil
+		eq.CanBuy = eq.CanBuy or {}
 
-				-- remove
-				net.Start("shop")
-				net.WriteBool(false)
-				net.WriteUInt(roleData.index, ROLE_BITS)
-				net.WriteString(eq.id)
-				net.SendToServer()
-			else
-				eq.CanBuy[roleData.index] = roleData.index
+		if eq.CanBuy[roleData.index] then
+			eq.CanBuy[roleData.index] = nil
 
-				-- add
-				net.Start("shop")
-				net.WriteBool(true)
-				net.WriteUInt(roleData.index, ROLE_BITS)
-				net.WriteString(eq.id)
-				net.SendToServer()
-			end
+			-- remove
+			net.Start("shop")
+			net.WriteBool(false)
+			net.WriteUInt(roleData.index, ROLE_BITS)
+			net.WriteString(eq.id)
+			net.SendToServer()
+		else
+			eq.CanBuy[roleData.index] = roleData.index
+
+			-- add
+			net.Start("shop")
+			net.WriteBool(true)
+			net.WriteUInt(roleData.index, ROLE_BITS)
+			net.WriteString(eq.id)
+			net.SendToServer()
 		end
 	end,
 	function(slf)
 		for _, v in pairs(slf:GetItems()) do
 			local eq = not items.IsItem(v.item) and weapons.GetStored(v.item.id) or items.GetStored(v.item.id)
-			if eq then
-				eq.CanBuy = eq.CanBuy or {}
+			if not eq then continue end
 
-				if eq.CanBuy[roleData.index] then
-					v:Toggle(true)
-				else
-					v:Toggle(false)
-				end
+			eq.CanBuy = eq.CanBuy or {}
+
+			if eq.CanBuy[roleData.index] then
+				v:Toggle(true)
+			else
+				v:Toggle(false)
 			end
 		end
 	end)
@@ -779,22 +779,21 @@ net.Receive("shopFallbackReset", shopFallbackReset)
 function ShopEditor.ShopFallbackRefresh()
 	local wshop = LocalPlayer().shopeditor
 
-	if wshop and wshop.GetItems then
-		if not wshop.selectedRole then return end
+	if not wshop or not wshop.GetItems or not wshop.selectedRole then return end
 
-		for _, v in pairs(wshop:GetItems()) do
-			if v.item then
-				local equip = not items.IsItem(v.item.id) and weapons.GetStored(v.item.id) or items.GetStored(v.item.id)
-				if equip then
-					equip.CanBuy = equip.CanBuy or {}
+	for _, v in pairs(wshop:GetItems()) do
+		if not v.item then continue end
 
-					if equip.CanBuy[wshop.selectedRole] then
-						v:Toggle(true)
-					else
-						v:Toggle(false)
-					end
-				end
-			end
+		local equip = not items.IsItem(v.item.id) and weapons.GetStored(v.item.id) or items.GetStored(v.item.id)
+
+		if not equip then continue end
+
+		equip.CanBuy = equip.CanBuy or {}
+
+		if equip.CanBuy[wshop.selectedRole] then
+			v:Toggle(true)
+		else
+			v:Toggle(false)
 		end
 	end
 end

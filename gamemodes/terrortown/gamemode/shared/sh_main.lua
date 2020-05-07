@@ -134,6 +134,10 @@ end
 -- @realm shared
 function GM:Think()
 	UpdateSprint()
+
+	if CLIENT then
+		EPOP:Think()
+	end
 end
 
 -- Drowning and such

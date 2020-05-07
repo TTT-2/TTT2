@@ -46,7 +46,7 @@ if CLIENT then
 		hudelements.RegisterChildRelation(self.id, "pure_skin_roundinfo", false)
 
 		-- resort miniscoreboard if body_found is changed
-		TTT2NET:OnUpdate("players", function(oldval, newval, reversePath)
+		ttt2net.OnUpdate("players", function(oldval, newval, reversePath)
 			-- check if path of changed value is one of our releavant paths
 			if not refreshPaths[reversePath[2]] then return end
 

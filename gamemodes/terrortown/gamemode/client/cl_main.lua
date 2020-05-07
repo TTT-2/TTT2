@@ -81,6 +81,20 @@ ttt_include("cl_weapon_pickup")
 -- all files are loaded
 local TryT = LANG.TryTranslation
 
+-- optional sound cues on round start and end
+local ttt_cl_soundcues = CreateConVar("ttt_cl_soundcues", "0", FCVAR_ARCHIVE)
+
+local cues = {
+	Sound("ttt/thump01e.mp3"),
+	Sound("ttt/thump02e.mp3")
+}
+
+local function PlaySoundCue()
+	if not ttt_cl_soundcues:GetBool() then return end
+
+	surface.PlaySound(cues[math.random(#cues)])
+end
+
 ---
 -- Called after the gamemode loads and starts.
 -- @hook
@@ -244,6 +258,8 @@ local function RoundStateChange(o, n)
 		GAMEMODE:ClearClientState()
 		GAMEMODE:CleanUpMap()
 
+		EPOP:Clear()
+
 		-- show warning to spec mode players
 		if GetConVar("ttt_spectator_mode"):GetBool() and IsValid(LocalPlayer()) then
 			LANG.Msg("spec_mode_warning", nil, MSG_CHAT_WARN)
@@ -271,8 +287,12 @@ local function RoundStateChange(o, n)
 		util.ClearDecals()
 
 		GAMEMODE.StartingPlayers = #util.GetAlivePlayers()
+
+		PlaySoundCue()
 	elseif n == ROUND_POST then
 		RunConsoleCommand("ttt_cl_traitorpopup_close")
+
+		PlaySoundCue()
 	end
 
 	-- stricter checks when we're talking about hooks, because this function may
@@ -304,33 +324,42 @@ local function ttt_print_playercount()
 end
 concommand.Add("ttt_print_playercount", ttt_print_playercount)
 
--- optional sound cues on round start and end
-local ttt_cl_soundcues = CreateConVar("ttt_cl_soundcues", "0", FCVAR_ARCHIVE)
+---
+-- A hook that is called when the preparation phase starts.
+-- @hook
+-- @realm client
+function GM:TTTPrepareRound()
 
-local cues = {
-	Sound("ttt/thump01e.mp3"),
-	Sound("ttt/thump02e.mp3")
-}
-
-local function PlaySoundCue()
-	if not ttt_cl_soundcues:GetBool() then return end
-
-	surface.PlaySound(cues[math.random(#cues)])
 end
 
-GM.TTTBeginRound = PlaySoundCue
-GM.TTTEndRound = PlaySoundCue
+---
+-- A hook that is called when the round begins.
+-- @hook
+-- @realm client
+function GM:TTTBeginRound()
+
+end
+
+---
+-- A hook that is called when the round ends.
+-- @hook
+-- @realm client
+function GM:TTTEndRound()
+
+end
 
 -- usermessages
 
 local function ReceiveRole()
 	local client = LocalPlayer()
+	if not IsValid(client) then return end
+
 	local subrole = net.ReadUInt(ROLE_BITS)
 	local team = net.ReadString()
 
 	-- after a mapswitch, server might have sent us this before we are even done
 	-- loading our code
-	if not client.SetRole then return end
+	if not isfunction(client.SetRole) then return end
 
 	client:SetRole(subrole, team)
 
@@ -649,7 +678,7 @@ function CheckIdle()
 		elseif CurTime() > idle.t + idle_limit then
 			RunConsoleCommand("say", TryT("automoved_to_spec"))
 
-			timer.Simple(0.3, function()
+			timer.Simple(0, function() -- move client into the spectator team in the next frame
 				RunConsoleCommand("ttt_spectator_mode", 1)
 
 				net.Start("TTT_Spectate")
