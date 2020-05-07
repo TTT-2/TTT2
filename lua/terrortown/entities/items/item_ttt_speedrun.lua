@@ -9,11 +9,10 @@ ITEM.EquipMenuData = {
 }
 ITEM.CanBuy = {ROLE_TRAITOR, ROLE_DETECTIVE}
 
-ITEM.hud = Material("vgui/ttt/perks/hud_speedrun.png")
 ITEM.material = "vgui/ttt/icon_speedrun"
 
-hook.Add("TTTPlayerSpeedModifier", "SpeedrunModifySpeed", function(ply, _, _, refTbl)
+hook.Add("TTTPlayerSpeedModifier", "TTT2SpeedRun", function(ply, _, _, speedMultiplierModifier)
 	if not IsValid(ply) or not ply:HasEquipmentItem("item_ttt_speedrun") then return end
 
-	refTbl[1] = refTbl[1] * 1.5 * (ply.speedrun_mul or 1)
+	speedMultiplierModifier[1] = speedMultiplierModifier[1] * 1.5
 end)
