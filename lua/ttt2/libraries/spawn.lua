@@ -29,7 +29,7 @@ local spawnTypes = {
 local function GetPlayerSize(ply)
 	local bottom, top = ply:GetHull()
 
-	return -1 * bottom + top
+	return top - bottom
 end
 
 spawn = spawn or {}
