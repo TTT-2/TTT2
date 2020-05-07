@@ -126,6 +126,18 @@ function GM:Initialize()
 end
 
 ---
+-- Called right after the map has cleaned up (usually because game.CleanUpMap was called)
+-- @hook
+-- @realm client
+-- @ref https://wiki.facepunch.com/gmod/GM:PostCleanupMap
+-- @local
+function GM:PostCleanupMap()
+	door.SetUp()
+
+	hook.Run("TTT2PostCleanupMap")
+end
+
+---
 -- This hook is used to initialize @{ITEM}s, @{Weapon}s and the shops.
 -- Called after all the entities are initialized.
 -- @note At this point the client only knows about the entities that are within the spawnpoints' PVS.
