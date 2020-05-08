@@ -905,7 +905,7 @@ function plymeta:CancelRevival(failMessage)
 
 	self:SetReviving(false)
 	self:SetBlockingRevival(false)
-	self:SetRevivalReason(nil)
+	self:SendRevivalReason(nil)
 
 	timer.Remove("TTT2RevivePlayer" .. self:EntIndex())
 
