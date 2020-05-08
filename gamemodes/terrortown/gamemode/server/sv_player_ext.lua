@@ -840,7 +840,7 @@ function plymeta:Revive(delay, OnRevive, DoCheck, needsCorpse, blockRound, OnFai
 
 		ply:SetReviving(false)
 		ply:SetBlockingRevival(false)
-		ply:SetRevivalReason(nil)
+		ply:SendRevivalReason(nil)
 
 		ply.OnReviveFailedCallback = nil
 
