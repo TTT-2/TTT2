@@ -1319,7 +1319,7 @@ local function SetPlayerReady(_, ply)
 	ply.isReady = true
 
 	-- Send full state update to client
-	TTT2NET:SendFullStateUpdate(ply)
+	ttt2net.SendFullStateUpdate(ply)
 
 	hook.Run("TTT2PlayerReady", ply)
 end

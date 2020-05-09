@@ -31,6 +31,7 @@ ttt_include("sh_weaponry")
 ttt_include("sh_inventory")
 ttt_include("sh_door")
 ttt_include("sh_voice")
+ttt_include("sh_speed")
 
 ttt_include("vgui__cl_coloredbox")
 ttt_include("vgui__cl_droleimage")
@@ -116,10 +117,23 @@ function GM:Initialize()
 	self.BaseClass:Initialize()
 
 	ARMOR:Initialize()
+	SPEED:Initialize()
 
 	hook.Run("TTT2FinishedLoading")
 
 	hook.Run("PostInitialize")
+end
+
+---
+-- Called right after the map has cleaned up (usually because game.CleanUpMap was called)
+-- @hook
+-- @realm client
+-- @ref https://wiki.facepunch.com/gmod/GM:PostCleanupMap
+-- @local
+function GM:PostCleanupMap()
+	door.SetUp()
+
+	hook.Run("TTT2PostCleanupMap")
 end
 
 ---
