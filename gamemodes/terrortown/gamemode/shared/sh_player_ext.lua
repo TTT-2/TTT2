@@ -981,7 +981,7 @@ function plymeta:GetRevivalStartTime()
 end
 
 ---
--- Returns the time for the ongoing revival.
+-- Returns the duration for the ongoing revival.
 -- @return [default=1.0]number The time for the revival in seconds
 -- @realm shared
 function plymeta:GetRevivalDuration()
