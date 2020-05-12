@@ -6,8 +6,8 @@
 
 local entmeta = assert(FindMetaTable("Entity"), "FAILED TO FIND ENTITY TABLE")
 
-local cvDoorHealth = CreateConVar("ttt2_destructible_doors_health", "100", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-local cvDoorPropHealth = CreateConVar("ttt2_destructible_doors_prop_health", "50", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local cvDoorHealth = CreateConVar("ttt2_doors_health", "100", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local cvDoorPropHealth = CreateConVar("ttt2_doors_prop_health", "50", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 -- builds a data string based on a player and the previous data string
 local function GetDataString(ply, data)
