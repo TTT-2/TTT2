@@ -7,9 +7,9 @@ if SERVER then
 	AddCSLuaFile()
 end
 
-local cvDestructableDoor = CreateConVar("ttt2_destructible_doors_enable", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-local cvDestructableDoorLocked = CreateConVar("ttt2_destructible_doors_locked_indestructible", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-local cvDestructableDoorForced = CreateConVar("ttt2_destructible_doors_force_pairs", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local cvDestructableDoorForced = CreateConVar("ttt2_doors_force_pairs", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local cvDestructableDoor = CreateConVar("ttt2_doors_destructible", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local cvDestructableDoorLocked = CreateConVar("ttt2_doors_locked_indestructible", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 -- DOOR SPAWNFLAG ENUMS
 -- @ref https://developer.valvesoftware.com/wiki/prop_door_rotating
