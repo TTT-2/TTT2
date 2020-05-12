@@ -480,6 +480,9 @@ function roleselection.SelectRoles(plys, maxPlys)
 			list[#list + 1] = roleData
 		end
 
+		-- Check all base roles, and assign players where possible.
+		-- After that, this will also try to upgrade the selected players, to any applicable subrole, that might replace the baserole.
+		-- But this will not upgrade Innocent subroles, as Innocents and players without any role are upgraded in the end.
 		for i = 1, #list do
 			local roleData = list[i]
 
