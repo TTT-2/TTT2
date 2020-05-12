@@ -55,7 +55,11 @@ local function FindPair(ent)
 	for i = 1, #entsTable do
 		local foundEnt = entsTable[i]
 
+		-- a door can't be a pair with itself
 		if foundEnt == ent or foundEnt:GetClass() ~= ent:GetClass() then continue end
+
+		-- both doors are probably no pair if they have the same rotation
+		if ent:GetInternalVariable("m_angRotationClosed") == foundEnt:GetInternalVariable("m_angRotationClosed") then continue end
 
 		return foundEnt
 	end
@@ -65,7 +69,7 @@ local function HandleDoorPairs(ent)
 	local master = ent:GetInternalVariable("m_hMaster")
 	local owner = ent:GetInternalVariable("m_hOwnerEntity")
 
-	local pair
+	local pair, rigged
 
 	if IsValid(master) then
 		pair = master
@@ -73,12 +77,19 @@ local function HandleDoorPairs(ent)
 		pair = owner
 	elseif cvDestructableDoorForced:GetBool() then
 		pair = FindPair(ent)
+		rigged = true
 	end
 
 	if not IsValid(pair) then return end
 
 	ent.otherPairDoor = pair
 	pair.otherPairDoor = ent
+
+	-- add flag if door combo was rigged
+	if rigged then
+		ent.otherPairRigged = true
+		pair.otherPairRigged = true
+	end
 end
 
 local function HandleUseCancel(ent)
@@ -344,9 +355,10 @@ if SERVER then
 	-- Called in @{GM:EntityTakeDamage}.
 	-- @param Entity ent The entity that is damaged
 	-- @param CTakeDamageInfo dmginfo The damage info object
+	-- @param [default=false]boolean surpressPair Should the call of the other door (if in a pair) be omitted?
 	-- @internal
 	-- @realm server
-	function door.HandleDamage(ent, dmginfo)
+	function door.HandleDamage(ent, dmginfo, surpressPair)
 		if not ent:DoorIsDestructible() then return end
 
 		local damage = math.max(0, dmginfo:GetDamage())
@@ -354,13 +366,18 @@ if SERVER then
 		ent:SetHealth(ent:Health() - damage)
 		ent:SetNWInt("fast_sync_health", ent:Health())
 
+		-- if the door is grouped as a pair, call the other one as well
+		if not surpressPair and IsValid(ent.otherPairDoor) then
+			door.HandleDamage(ent.otherPairDoor, dmginfo, true)
+		end
+
 		if ent:Health() > 0 then return end
 
 		-- capping the force factor is sufficient because
 		-- the forward vector is normalized
 		local forceFactor = math.min(50000, 500 * damage)
 
-		ent:SafeDestroyDoor(forceFactor * dmginfo:GetAttacker():GetForward())
+		ent:SafeDestroyDoor(forceFactor * dmginfo:GetAttacker():GetForward(), true)
 	end
 
 	---
@@ -495,6 +512,10 @@ if SERVER then
 				return true
 			end
 
+			if IsValid(ent.otherPairDoor) and ent.otherPairRigged then
+				ent.otherPairDoor:CloseDoor(activator, nil, 0.2, true)
+			end
+
 		elseif name == "use" and not ent:IsDoorOpen() then
 			local shouldCancel = hook.Run("TTT2BlockDoorOpen", ent, activator, caller)
 
@@ -502,6 +523,10 @@ if SERVER then
 				HandleUseCancel(ent)
 
 				return true
+			end
+
+			if IsValid(ent.otherPairDoor) and ent.otherPairRigged then
+				ent.otherPairDoor:OpenDoor(activator, nil, 0.2, true)
 			end
 		end
 	end
