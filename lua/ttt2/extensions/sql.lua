@@ -3,6 +3,23 @@
 -- @author Histalek
 
 ---
+-- Checks if the specified column exists in the specified table.
+-- @param string tableName The name of the table to search.
+-- @param string columnName The name of the column to check.
+-- @return boolean Returns true if the column exists in the table.
+function sql.ColumnExists(tableName, columnName)
+    return sql.Query("SELECT COUNT(*) FROM pragma_table_info(" .. sql.SQLStr(tableName) .. ") WHERE name=" .. sql.SQLStr(columnName)) == 1
+end
+
+---
+-- Escapes a string for use as an identifier (tablename, columnname) for sqlite.
+-- @param string str The string to escape.
+-- @return string Returns the escaped string.
+function sql.SQLIdent(str)
+    return "\"" .. str:gsub( "\"", "\"\"" ) .. "\""
+end
+
+---
 -- Checks if the given string is one of the following: INTEGER, TEXT, REAL, BLOB, NUMERIC.
 -- @param string str The string to check.
 -- @return boolean Returns true if the string is valid. Returns false otherwise.
@@ -25,12 +42,4 @@ end
 function sql.validateSqlType(str)
     assert(sql.IsValidType(str), str .. " is not a valid database type. (INTEGER, TEXT, REAL, BLOB or NUMERIC expected)")
     return str
-end
-
----
--- Escapes a string for use as an identifier (tablename, columnname) for sqlite.
--- @param string str The string to escape.
--- @return string Returns the escaped string.
-function sql.SQLIdent(str)
-    return "\"" .. str:gsub( "\"", "\"\"" ) .. "\""
 end
