@@ -33,6 +33,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - texts can now be blocking or non blocking
   - there's now a popup queue
   - popups are now also shown to dead players as well
+- Refactored the role selection code to reside in its own module and cleaned up the code
 
 ### Fixed
 
@@ -42,6 +43,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed propsurfing with the magneto stick
 - Fixed healthstation TargetID text
 - Fixed keyinfo for doors where no key can be used
+- Fixed role selection issues with subroles not properly replacing their baserole etc.
 - Fixed map lock/unlock trigger of doors not updating targetID
 - Fixed roles having sometimes the wrong radar color
 
