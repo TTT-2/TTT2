@@ -524,13 +524,13 @@ require("outline")
 
 include("includes/modules/pon.lua")
 include("ttt2/extensions/net.lua")
+include("ttt2/extensions/sql.lua")
 include("ttt2/extensions/string.lua")
 include("ttt2/extensions/table.lua")
 include("ttt2/libraries/door.lua")
+include("ttt2/libraries/ormodel.lua")
 include("ttt2/libraries/thermalvision.lua")
 
-include("ttt2/extensions/sql.lua")
-include("ttt2/orm/model.lua")
 
 -- include ttt required files
 ttt_include("sh_util")
