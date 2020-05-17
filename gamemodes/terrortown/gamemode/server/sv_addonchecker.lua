@@ -100,6 +100,8 @@ Addonchecker.buggyAddons = {
 	["886346394"] = "", -- Identity Swapper by Lesh
 	["844284735"] = "", -- Identity Swapper by Saty
 
+	["1757151213"] = "", -- Random Shop by Lupus
+
 	["606792331"] = "", -- Advanced disguiser by Gamefreak
 	["610632051"] = "" -- Advanced disguiser by Killberty
 }
