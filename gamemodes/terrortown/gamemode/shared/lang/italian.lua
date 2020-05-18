@@ -1274,22 +1274,22 @@ L.door_open_touch_and_use = "Cammina addosso ad una porta o premi [{usekey}] per
 L.hud_health = "Vita"
 
 -- 2020-04-20
---L.item_speedrun = "Speedrun"
---L.item_speedrun_desc = [[Ti fa andare il 50% più veloce!]]
---L.item_no_explosion_damage = "Nessun danno da esplosione"
---L.item_no_explosion_damage_desc = [[Ti rende immune al danno da esplosione.]]
---L.item_no_fall_damage = "Nessun danno da caduta"
---L.item_no_fall_damage_desc = [[Ti rende immune al danno da caduta.]]
---L.item_no_fire_damage = "Nessun danno da fuoco"
---L.item_no_fire_damage_desc = [[Ti rende immune al danno da fuoco.]]
---L.item_no_hazard_damage = "Nessun danno da pericoli"
---L.item_no_hazard_damage_desc = [[Ti rende immune al danno da pericolo come veleno, radiazione e acido.]]
---L.item_no_energy_damage = "Nessun danno da elettricità"
---L.item_no_energy_damage_desc = [[Ti rende immune al danno da elettricità come laser, plasma e fulmine.]]
---L.item_no_prop_damage = "Nessun danno dai prop"
---L.item_no_prop_damage_desc = [[Ti rende immune al danno dai prop.]]
---L.item_no_drown_damage = "Nessun danno da affogamento"
---L.item_no_drown_damage_desc = [[Ti rende immune al danno da affogamento.]]
+L.item_speedrun = "Speedrun"
+L.item_speedrun_desc = [[Ti fa andare il 50% più veloce!]]
+L.item_no_explosion_damage = "Nessun danno da esplosione"
+L.item_no_explosion_damage_desc = [[Ti rende immune al danno da esplosione.]]
+L.item_no_fall_damage = "Nessun danno da caduta"
+L.item_no_fall_damage_desc = [[Ti rende immune al danno da caduta.]]
+L.item_no_fire_damage = "Nessun danno da fuoco"
+L.item_no_fire_damage_desc = [[Ti rende immune al danno da fuoco.]]
+L.item_no_hazard_damage = "Nessun danno da pericoli"
+L.item_no_hazard_damage_desc = [[Ti rende immune al danno da pericolo come veleno, radiazione e acido.]]
+L.item_no_energy_damage = "Nessun danno da elettricità"
+L.item_no_energy_damage_desc = [[Ti rende immune al danno da elettricità come laser, plasma e fulmine.]]
+L.item_no_prop_damage = "Nessun danno dai prop"
+L.item_no_prop_damage_desc = [[Ti rende immune al danno dai prop.]]
+L.item_no_drown_damage = "Nessun danno da affogamento"
+L.item_no_drown_damage_desc = [[Ti rende immune al danno da affogamento.]]
 
 -- 2020-05-03
---L.door_destructible = "La porta è distruttibile ({health}HP)"
+L.door_destructible = "La porta è distruttibile ({health}HP)"
