@@ -168,18 +168,20 @@ end
 net.Receive("ttt2_eventpopup", function()
 	local title, subtitle = {}, {}
 
-	if net.ReadBool() then
-		title.text = TryT(net.ReadString())
+	local titleHasColor = net.ReadBool()
+
+	title.text = TryT(net.ReadString())
+
+	if titleHasColor then
 		title.color = net.ReadColor()
-	else
-		title.text = TryT(net.ReadString())
 	end
 
-	if net.ReadBool() then
-		subtitle.text = TryT(net.ReadString())
+	local subtitleHasColor = net.ReadBool()
+
+	subtitle.text = TryT(net.ReadString())
+
+	if subtitleHasColor then
 		subtitle.color = net.ReadColor()
-	else
-		subtitle.text = TryT(net.ReadString())
 	end
 
 	EPOP:AddMessage(title, subtitle, net.ReadUInt(16), nil, net.ReadBool())
