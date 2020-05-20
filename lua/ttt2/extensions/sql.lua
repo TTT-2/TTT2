@@ -20,6 +20,13 @@ function sql.SQLIdent(str)
 end
 
 ---
+-- Undoes all queries of the last transaction started by `sql.Begin()`.
+-- This is equivalent to `sql.Query("Rollback;")`.
+function sql.Rollback()
+    sql.Query("Rollback;")
+end
+
+---
 -- Checks if the given string is one of the following: INTEGER, TEXT, REAL, BLOB, NUMERIC.
 -- @param string str The string to check.
 -- @return boolean Returns true if the string is valid. Returns false otherwise.
