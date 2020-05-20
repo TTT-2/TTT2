@@ -41,8 +41,8 @@ spawn.cachedSpawnEntities = spawn.cachedSpawnEntities or {}
 -- @param Player ply The player entity that should spawn, this parameter is needed
 -- to make sure there is enough space for this specific playermodel.
 -- @param Vector pos The respawn position
--- @param [default=false]boolean force Should the respawn be forced? This means killing other players that block this position
--- @param [opt]table|Entity filter A table of entities or an entity that should be ignored by this check
+-- @param[default=false] boolean force Should the respawn be forced? This means killing other players that block this position
+-- @param[opt] nil|table|Entity filter A table of entities or an entity that should be ignored by this check
 -- @return boolean Returns if the spawn point is safe
 -- @realm server
 function spawn.IsSpawnPointSafe(ply, pos, force, filter)

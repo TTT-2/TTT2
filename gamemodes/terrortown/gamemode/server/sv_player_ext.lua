@@ -811,14 +811,14 @@ end
 
 ---
 -- Revives a @{Player}
--- @param [default=3]number delay The delay of the revive
--- @param [opt]function OnRevive The @{function} that should be run if the @{Player} revives
--- @param [opt]function DoCheck An additional checking @{function}
--- @param [default=false]boolean needsCorpse Whether the dead @{Player} @{CORPSE} is needed
--- @param [default=false]boolean blockRound Stops the round from ending if this is set to true until the player is alive again
--- @param [opt]function OnFail This @{function} is called if the revive fails
--- @param [opt]Vector spawnPos The position where the player should be spawned, accounts for minor obstacles
--- @param [opt]Angle spawnEyeAngle The eye angles of the revived players
+-- @param[default=3] number delay The delay of the revive
+-- @param[opt] function OnRevive The @{function} that should be run if the @{Player} revives
+-- @param[opt] function DoCheck An additional checking @{function}
+-- @param[default=false] boolean needsCorpse Whether the dead @{Player} @{CORPSE} is needed
+-- @param[default=false] boolean blockRound Stops the round from ending if this is set to true until the player is alive again
+-- @param[opt] function OnFail This @{function} is called if the revive fails
+-- @param[opt] Vector spawnPos The position where the player should be spawned, accounts for minor obstacles
+-- @param[opt] Angle spawnEyeAngle The eye angles of the revived players
 -- @realm server
 function plymeta:Revive(delay, OnRevive, DoCheck, needsCorpse, blockRound, OnFail, spawnPos, spawnEyeAngle)
 	local ply = self
@@ -898,7 +898,7 @@ end
 
 ---
 -- Cancel the ongoing revival process.
--- @param [default="message_revival_canceled"]string failMessage The fail message that should be displayed for the client
+-- @param[default="message_revival_canceled"] string failMessage The fail message that should be displayed for the client
 -- @realm server
 function plymeta:CancelRevival(failMessage)
 	if not self:IsReviving() then return end
@@ -915,7 +915,7 @@ end
 
 ---
 -- Sets the revival state.
--- @param [default=false]boolean isReviving The reviving state
+-- @param[default=false] boolean isReviving The reviving state
 -- @internal
 -- @realm server
 function plymeta:SetReviving(isReviving)
@@ -928,7 +928,7 @@ end
 
 ---
 -- Sets the blocking revival state.
--- @param [default=false]boolean isBlockingRevival The blocking revival state
+-- @param[default=false] boolean isBlockingRevival The blocking revival state
 -- @internal
 -- @realm server
 function plymeta:SetBlockingRevival(isBlockingRevival)
@@ -941,7 +941,7 @@ end
 
 ---
 -- Sets the revival start time.
--- @param [default=@{CurTime()}]number startTime The revival start time
+-- @param[default=@{CurTime()}] number startTime The revival start time
 -- @internal
 -- @realm server
 function plymeta:SetRevivalStartTime(startTime)
@@ -954,7 +954,7 @@ end
 
 ---
 -- Sets the revival duration.
--- @param [default=0.0]number duration The revival time
+-- @param[default=0.0] number duration The revival time
 -- @internal
 -- @realm server
 function plymeta:SetRevivalDuration(duration)
@@ -968,8 +968,8 @@ end
 ---
 -- Sends a revival reason that is displayed in the clients revival HUD element.
 -- It supports a language identifier for translated strings.
--- @param [default=nil]string name The text or the language identifer, nil to reset
--- @param [opt]table params The params table used for @{LANG.GetParamTranslation}
+-- @param[default=nil] string name The text or the language identifer, nil to reset
+-- @param[opt] table params The params table used for @{LANG.GetParamTranslation}
 -- @realm server
 function plymeta:SendRevivalReason(name, params)
 	net.Start("TTT2SetRevivalReason")
@@ -1337,7 +1337,7 @@ end
 -- This function simplifies the weapon pickup process for a player by
 -- handling all the needed calls.
 -- @param Weapon wep The weapon object
--- @param [default=false] boolean dropBlockingWeapon Should the currently selecten weapon be dropped
+-- @param[default=false] boolean dropBlockingWeapon Should the currently selecten weapon be dropped
 -- @param boolean shouldAutoSelect Should this weapon be autoselected after equip, if not set this value is set by player keypress
 -- @returns Weapon if successful, nil if not
 -- @realm server
@@ -1428,7 +1428,7 @@ end
 -- This function simplifies the weapon class giving process for a player by
 -- handling all the needed calls.
 -- @param string wepCls The weapon class
--- @param [default=false] boolean dropBlockingWeapon Should the currently selecten weapon be dropped
+-- @param[default=false] boolean dropBlockingWeapon Should the currently selecten weapon be dropped
 -- @param boolean shouldAutoSelect Should this weapon be autoselected after equip, if not set this value is set by player keypress
 -- @returns Weapon if successful, nil if not
 -- @realm server

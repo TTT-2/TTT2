@@ -130,8 +130,8 @@ end
 -- Creates a new radar point
 -- @param Player ply The player that will see this radar point
 -- @param Vector pos The position of the radar point
--- @param [opt]Entity ent The entity that is used for this radar point
--- @param [opt]Color color A color for this radar point, this overwrites the normal color
+-- @param[opt] Entity ent The entity that is used for this radar point
+-- @param[opt] Color color A color for this radar point, this overwrites the normal color
 -- @realm server
 function RADAR.CreateTargetTable(ply, pos, ent, color)
 	local subrole = GetDataForRadar(ply, ent)
@@ -157,7 +157,7 @@ end
 ---
 -- Sets the radar time interval, lets the current scan run out before it is changed.
 -- @param Player ply The player whose radar interval should be changed
--- @param [default=ROLE.radarTime or 30]time The radar time interval
+-- @param[default=ROLE.radarTime or 30] number time The radar time interval
 -- @realm server
 function RADAR.SetRadarTime(ply, time)
 	if not IsValid(ply) then return end

@@ -57,8 +57,8 @@ end
 -- @param Entity The map entity
 -- @param string outputName The name of the entity output
 -- @param string hookName The desired name of the registered hook
--- @param [default=0]number delay The delay between the fired output and the hook call
--- @param [default=-1]number repetitions The amount of repetitions until the output is removed, -1 for infinite
+-- @param[default=0] number delay The delay between the fired output and the hook call
+-- @param[default=-1] number repetitions The amount of repetitions until the output is removed, -1 for infinite
 -- @ref https://developer.valvesoftware.com/wiki/Lua_run
 -- @ref https://wiki.facepunch.com/gmod/Entity:Fire
 -- @realm server

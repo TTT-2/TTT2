@@ -38,7 +38,7 @@ end
 ---
 -- Enables/Disables the outline around a focused entity, can't be enabled if set
 -- to false from another call
--- @param [default=true] boolean enb_outline A boolean defining the outline state
+-- @param[default=true] boolean enb_outline A boolean defining the outline state
 -- @realm client
 function TARGET_DATA:EnableOutline(enb_outline)
 	-- only set if not already set to false
@@ -51,7 +51,7 @@ end
 ---
 -- Enables/Disables the targetID text and icons, can't be enabled if set
 -- to false from another call
--- @param [default=true] boolean enb_text A boolean defining the text state
+-- @param[default=true] boolean enb_text A boolean defining the text state
 -- @realm client
 function TARGET_DATA:EnableText(enb_text)
 	-- only set if not already set to false
@@ -63,7 +63,7 @@ end
 
 ---
 -- Sets the outline color of a focused entity
--- @param [default=Color(255, 255, 255, 255)] Color The outline color
+-- @param[default=Color(255, 255, 255, 255)] Color The outline color
 -- @realm client
 function TARGET_DATA:SetOutlineColor(color)
 	self.params.outlineColor = IsColor(color) and color or COLOR_WHITE
@@ -111,7 +111,7 @@ end
 ---
 -- Adds a icon to the icon list on the left side of the targetID element.
 -- @param Material material The material of the icon that should be rendered
--- @param [default=Color(255, 255, 255, 255)] Color color The color of the icon
+-- @param[default=Color(255, 255, 255, 255)] Color color The color of the icon
 -- @return number The amount of icons that are currently in the table
 -- @realm client
 function TARGET_DATA:AddIcon(material, color)
@@ -127,9 +127,9 @@ end
 
 ---
 -- Sets the title of the specific targetID element
--- @param [default=""] string text The text that should be displayed
--- @param [default=Color(255, 255, 255, 255)] Color color The color of the line
--- @param [default=nil] table inline_icons A table of materials that should be rendered in front of the text
+-- @param[default=""] string text The text that should be displayed
+-- @param[default=Color(255, 255, 255, 255)] Color color The color of the line
+-- @param[default=nil] table inline_icons A table of materials that should be rendered in front of the text
 -- @realm client
 function TARGET_DATA:SetTitle(text, color, inline_icons)
 	self.params.displayInfo.title = {
@@ -141,9 +141,9 @@ end
 
 ---
 -- Sets the subtitle of the specific targetID element
--- @param [default=""] string text The text that should be displayed
--- @param [default=Color(210, 210, 210, 255)] Color color The color of the line
--- @param [default=nil] table inline_icons A table of materials that should be rendered in front of the text
+-- @param[default=""] string text The text that should be displayed
+-- @param[default=Color(210, 210, 210, 255)] Color color The color of the line
+-- @param[default=nil] table inline_icons A table of materials that should be rendered in front of the text
 -- @realm client
 function TARGET_DATA:SetSubtitle(text, color, inline_icons)
 	self.params.displayInfo.subtitle = {
@@ -155,9 +155,9 @@ end
 
 ---
 -- Adds a line of text to the description area of the targetID element
--- @param [default=""] string text The text that should be displayed
--- @param [default=Color(255, 255, 255, 255)] Color color The color of the line
--- @param [default=nil] table inline_icons A table of materials that should be rendered in front of the text
+-- @param[default=""] string text The text that should be displayed
+-- @param[default=Color(255, 255, 255, 255)] Color color The color of the line
+-- @param[default=nil] table inline_icons A table of materials that should be rendered in front of the text
 -- @return number The amount of description lines that are currently in the table
 -- @realm client
 function TARGET_DATA:AddDescriptionLine(text, color, inline_icons)
