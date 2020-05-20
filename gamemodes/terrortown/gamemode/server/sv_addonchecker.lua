@@ -100,6 +100,8 @@ Addonchecker.buggyAddons = {
 	["886346394"] = "", -- Identity Swapper by Lesh
 	["844284735"] = "", -- Identity Swapper by Saty
 
+	["1757151213"] = "", -- Random Shop by Lupus
+
 	["606792331"] = "", -- Advanced disguiser by Gamefreak
 	["610632051"] = "" -- Advanced disguiser by Killberty
 }
@@ -131,16 +133,16 @@ Addonchecker.outdatedAddons = {
 
 	["652046425"] = "1640512667", -- Juggernaut Suit by Zaratusa
 
-	["652046425"] = "1470823315", -- Beartrap by Milkwater
-	["652046425"] = "407751746", -- Beartrap by Nerdhive
+	["1470823315"] = "1470823315", -- Beartrap by Milkwater
+	["407751746"] = "407751746", -- Beartrap by Nerdhive
 
-	["273623128"] = "842302491", -- Juggernaut by Hoff
-	["1387914296"] = "842302491", -- Juggernaut by Schmitler
-	["1371596971"] = "842302491", -- Juggernaut by Amenius
-	["860794236"] = "842302491", -- Juggernaut by Menzek
-	["1198504029"] = "842302491", -- Juggernaut by RedocPlays
-	["911658617"] = "842302491", -- Juggernaut by Luchix
-	["869353740"] = "842302491", -- Juggernaut by Railroad Engineer 111
+	["273623128"] = "842302491", -- zombie perk bottles by Hoff
+	["1387914296"] = "842302491", -- zombie perk bottles by Schmitler
+	["1371596971"] = "842302491", -- zombie perk bottles by Amenius
+	["860794236"] = "842302491", -- zombie perk bottles by Menzek
+	["1198504029"] = "842302491", -- zombie perk bottles by RedocPlays
+	["911658617"] = "842302491", -- zombie perk bottles by Luchix
+	["869353740"] = "842302491", -- zombie perk bottles by Railroad Engineer 111
 
 	["310403937"] = "1662844145", -- Prop Disguiser by Exho
 	["843092697"] = "1662844145", -- Prop Disguiser by Soren
@@ -152,6 +154,14 @@ Addonchecker.outdatedAddons = {
 	["254779132"] = "810154456", -- Dead Ringer by Porter
 	["1315377462"] = "810154456", -- Dead Ringer by MuratYilderimTM
 	["240281783"] = "810154456", -- Dead Ringer by Niandra
+
+	["284419411"] = "1896918348", -- Minifier by Lykrast
+	["1338887971"] = "1896918348", -- Minifier by Evan
+	["1551396306"] = "1896918348", -- Minifier by FaBe2
+	["1354031183"] = "1896918348", -- Minifier by SnowSoulAnget
+	["1670942051"] = "1896918348", -- Minifier by Not Jesus
+	["1376141849"] = "1896918348", -- Minifier by ---
+	["1599819393"] = "1896918348", -- Minifier by Coe
 
 	["863963592"] = "1815518231" -- Super Soda by ---
 }

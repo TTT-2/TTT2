@@ -167,7 +167,7 @@ net.Receive("TTT2TargetPlayer", TargetPlayer)
 ---
 -- SetupMove is called before the engine process movements. This allows us
 -- to override the players movement.
--- @param Player ply The @{Player} attempting to pick up the @{Weapon}
+-- @param Player ply The @{Player} that sets up its movement
 -- @param CMoveData mv The move data to override/use
 -- @param CUserCmd cmd The command data
 -- @hook

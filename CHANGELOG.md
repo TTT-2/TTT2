@@ -10,6 +10,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added essential items: 8 different types of items that are often used in other addons. You can remove them from the shop if you don't like them.
 - Added a new HUD element to show information about an ongoing revival to the player that is revived
 - Added a load of functions to the `spawn` scope that can be used by addons
+- Added a thermal vision module, which can be used by addons to render entities with a thermal vision effect
 - Added a few door related hooks and convenience functions
 - Added entityOutputs library to register map entity outputs easier
 - Added speed handling system based on the `TTTPlayerSpeedModifier` hook
@@ -38,6 +39,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - texts can now be blocking or non blocking
   - there's now a popup queue
   - popups are now also shown to dead players as well
+- Refactored the role selection code to reside in its own module and cleaned up the code
 
 ### Fixed
 
@@ -48,6 +50,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed healthstation TargetID text
 - Fixed keyinfo for doors where no key can be used
 - Spawn points that have no solid ground beneath will be ignored
+- Fixed role selection issues with subroles not properly replacing their baserole etc.
 - Fixed map lock/unlock trigger of doors not updating targetID
 - Fixed roles having sometimes the wrong radar color
 

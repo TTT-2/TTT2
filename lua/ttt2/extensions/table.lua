@@ -174,3 +174,26 @@ function table.AddMissing(target, source, iterable)
 		end
 	end
 end
+
+---
+-- Removes all empty table entries, making the table sequential again. 
+-- Use this function to more efficiently removing multiple indices from a sequential table by combining it
+-- with a function setting all entries to be removed to nil. Do NOT use table.Remove() or table.RemoveByValue()
+--
+-- @param dataTable table the table to traverse and set the value in.
+-- @param tableSize number the number of entries in dataTable
+function table.RemoveEmptyEntries(dataTable, tableSize)
+	local j = 1
+
+	for i = 1, tableSize do
+		if dataTable[i] ~= nil then
+			if i ~= j then
+				-- Keep i's value, move it to j's pos.
+				dataTable[j] = dataTable[i]
+				dataTable[i] = nil
+			end
+
+	 		j = j + 1
+		end
+	end
+end

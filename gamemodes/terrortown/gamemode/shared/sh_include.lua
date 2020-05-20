@@ -102,6 +102,7 @@ if SERVER then
 		sv_player_ext = {file = "sv_player_ext.lua", on = "server"},
 		sv_player = {file = "sv_player.lua", on = "server"},
 		sv_propspec = {file = "sv_propspec.lua", on = "server"},
+		sv_roleselection = {file = "sv_roleselection.lua", on = "server"},
 		sv_scoring = {file = "sv_scoring.lua", on = "server"},
 		sv_shop = {file = "sv_shop.lua", on = "server"},
 		sv_shopeditor = {file = "sv_shopeditor.lua", on = "server"},
