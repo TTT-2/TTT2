@@ -974,7 +974,7 @@ end
 
 ---
 -- Returns the time when the ongoing revival started.
--- @return [default=@{CurTime()}]number The time when the revival started in seconds
+-- @return[default=@{CurTime()}] number The time when the revival started in seconds
 -- @realm shared
 function plymeta:GetRevivalStartTime()
 	return self.revivalStartTime or CurTime()
@@ -982,7 +982,7 @@ end
 
 ---
 -- Returns the duration for the ongoing revival.
--- @return [default=1.0]number The time for the revival in seconds
+-- @return[default=1.0] number The time for the revival in seconds
 -- @realm shared
 function plymeta:GetRevivalDuration()
 	return self.revivalDurarion or 0.0

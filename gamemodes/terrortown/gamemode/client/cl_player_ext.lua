@@ -243,7 +243,7 @@ end)
 
 ---
 -- Returns if a player has a revival reason set.
--- @return [default=false]boolean Returns if a player has a revival reason
+-- @return[default=false] boolean Returns if a player has a revival reason
 -- @realm client
 function plymeta:HasRevivalReason()
 	return (self.revivalReason and self.revivalReason.name and self.revivalReason.name ~= "") or false
@@ -251,7 +251,7 @@ end
 
 ---
 -- Returns the current revival reason.
--- @return [default={}]table The revival reason table
+-- @return[default={}] table The revival reason table
 -- @realm client
 function plymeta:GetRevivalReason()
 	return self.revivalReason or {}
