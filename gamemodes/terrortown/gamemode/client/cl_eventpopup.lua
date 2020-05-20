@@ -39,10 +39,10 @@ end
 ---
 -- Adds a popup message to the @{EPOP}
 -- @param string|table title The title of the popup that will be displayed in large letters (can be a table with `text` and `color` attribute)
--- @param [opt]string|table subtitle An optional description that will be displayed below the title (can be a table with `text` and `color` attribute)
--- @param [default=4]number displayTime The render duration of the popup
--- @param [opt]table iconTable An optional set of icon materials that will be rendered below the popup
--- @param [default=true]boolean blocking If this is false, this message gets instantly replaced if a new message is added
+-- @param[opt] string|table subtitle An optional description that will be displayed below the title (can be a table with `text` and `color` attribute)
+-- @param[default=4] number displayTime The render duration of the popup
+-- @param[opt] table iconTable An optional set of icon materials that will be rendered below the popup
+-- @param[default=true] boolean blocking If this is false, this message gets instantly replaced if a new message is added
 -- @return string Returns a unique id generated for this message
 -- @realm client
 function EPOP:AddMessage(title, subtitle, displayTime, iconTable, blocking)
@@ -130,7 +130,7 @@ end
 
 ---
 -- Instantly removed the currently displayed or a specified @{EPOP} message
--- @param [opt]string id The unique id of a message that sould be deleted. If omitted, the
+-- @param[opt] string id The unique id of a message that sould be deleted. If omitted, the
 -- first message in the queue gets deleted
 -- @return boolean Returns true if a message got deleted
 -- @realm client
