@@ -412,7 +412,9 @@ end
 -- @realm server
 -- @ref https://wiki.facepunch.com/gmod/GM:PlayerLoadout
 -- @local
-function GM:PlayerLoadout(ply)
+function GM:PlayerLoadout(ply, isRespawn)
+	print("loadout: " .. tostring(isRespawn))
+
 	if not IsValid(ply) or ply:IsSpec() then return end
 
 	CleanupInventoryAndNotifyClient(ply)
@@ -493,7 +495,7 @@ function GM:UpdatePlayerLoadouts()
 	local plys = player.GetAll()
 
 	for i = 1, #plys do
-		hook.Call("PlayerLoadout", GAMEMODE, plys[i])
+		hook.Run("PlayerLoadout", plys[i], false)
 	end
 end
 

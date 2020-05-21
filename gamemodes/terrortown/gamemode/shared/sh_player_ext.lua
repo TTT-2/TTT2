@@ -128,7 +128,7 @@ function plymeta:SetRole(subrole, team, forceHooks)
 		self:SetRoleBgColor(roleData.bgcolor)
 
 		if SERVER then
-			hook.Call("PlayerLoadout", GAMEMODE, self)
+			hook.Run("PlayerLoadout", self, false)
 
 			if GetConVar("ttt_enforce_playermodel"):GetBool() then
 				-- update subroleModel

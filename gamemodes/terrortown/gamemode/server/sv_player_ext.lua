@@ -852,6 +852,9 @@ function plymeta:Revive(delay, OnRevive, DoCheck, needsCorpse, blockRound, OnFai
 				return
 			end
 
+			self:SetMaxHealth(100)
+			self:SetHealth(100)
+
 			self:SpawnForRound(true)
 
 			if not spawnPos and IsValid(corpse) then
@@ -871,13 +874,10 @@ function plymeta:Revive(delay, OnRevive, DoCheck, needsCorpse, blockRound, OnFai
 
 			self:SetPos(spawnPos)
 			self:SetEyeAngles(spawnEyeAngle or Angle(0, 0, 0))
-			self:SetMaxHealth(100)
 
-			hook.Run("PlayerLoadout", self)
+			hook.Run("PlayerLoadout", self, true)
 
-			local credits = CORPSE.GetCredits(corpse, 0)
-
-			pselfly:SetCredits(credits)
+			self:SetCredits(CORPSE.GetCredits(corpse, 0))
 			self:SelectWeapon("weapon_zm_improvised")
 
 			if IsValid(corpse) then

@@ -124,8 +124,8 @@ function GM:PlayerSpawn(ply)
 	ply:UnSpectate()
 
 	-- ye olde hooks
-	hook.Call("PlayerLoadout", GAMEMODE, ply)
-	hook.Call("PlayerSetModel", GAMEMODE, ply)
+	hook.Run("PlayerLoadout", ply, false)
+	hook.Run("PlayerSetModel", ply)
 	hook.Run("TTTPlayerSetColor", ply)
 
 	ply:SetupHands()
@@ -875,7 +875,7 @@ function GM:PostPlayerDeath(ply)
 
 		ply:SpawnForRound(true)
 
-		hook.Call("PlayerLoadout", GAMEMODE, ply)
+		hook.Run("PlayerLoadout", ply, false)
 	end)
 end
 
