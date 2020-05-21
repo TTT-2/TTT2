@@ -6,88 +6,85 @@ local baseclass = baseclass
 local ipairs = ipairs
 local sql = sql
 local table = table
+local istable = istable
 local string = string
 
 local ormodel = {}
 
 ---
--- Creates a model with the given name and datastructure which (for now) includes an autoincrementing primarykey.
+-- Creates a model with the given name and datastructure.
 -- @param string tableName The name of the model and hence the tablename in the database.
 -- @param table dataStructure The datastructure of the model. An array containing a table for each column/datavalue, with the identifier and the type of the data.
--- @param string primaryKey The primarykey of the database table. If not explicitly set it will generate an autoincrementing INTEGER primary key. Should match one or multiple `colname` from the dataStructure seperated by `,`.
--- @usage model = makeORModel("myOwnTable", {{colname = "name", coltype = "TEXT"}, {colname = "percent", coltype = "REAL"}, {colname = "count", coltype = "INTEGER"}}, "name, count")
+-- @param[default="_rowid_"] string|table primaryKey The primarykey of the database table. Should match one or multiple `colname` from the dataStructure.
+-- @usage model = makeORModel("myOwnTable", {{colname = "name", coltype = "TEXT"}, {colname = "percent", coltype = "REAL"}, {colname = "count", coltype = "INTEGER"}}, {"name", "count"})
 -- @realm shared
 -- @return table The created model.
 function makeORModel(tableName, dataStructure, primaryKey)
     local model = table.Copy(ormodel)
-
     local sanTableName = sql.SQLIdent(tableName)
 
+    primaryKey = primaryKey or "_rowid_"
+
     model._tableName = tableName
-    --model._datastructure = datastructure
     model._primaryKey = primaryKey
 
     if not sql.TableExists(tableName) then
         local query = "CREATE TABLE " .. sanTableName .. " ("
-        local columndata
+        local columndata = ""
 
         -- populate columns with dataStructure
         for _, v in ipairs(dataStructure) do
-            if not columndata then
-                columndata = sql.SQLIdent(v.colname) .. " " .. sql.validateSqlType(v.coltype)
-            else
-                columndata = columndata .. ", " .. sql.SQLIdent(v.colname) .. " " .. sql.validateSqlType(v.coltype)
-            end
+            columndata = columndata .. sql.SQLIdent(v.colname) .. " " .. sql.validateSqlType(v.coltype) .. ", "
         end
 
-        if primaryKey then
-            columndata = columndata .. ", PRIMARY KEY (" .. primaryKey .. ")" -- TODO escape primaryKey
-        else
-            columndata = columndata .. ", " .. "id INTEGER PRIMARY KEY AUTOINCREMENT"
+        -- delete ", " from the last concatenation
+        columndata = string.sub(columndata, 1, -3)
+
+        if primaryKey ~= "_rowid_" then
+            columndata = columndata .. ", PRIMARY KEY (" .. sql.SQLIdent(primaryKey) .. ")"
         end
 
         query = query .. columndata .. ")"
 
-        if primaryKey then
-            query = query .. "WITHOUT ROWID;"
-        end
-
         sql.Query(query)
     end
 
-    -- this might be completely dumb
-    model.save = function(self)
+    model:Init()
+
+    baseclass.Set(tableName, model)
+
+    return model
+end
+
+function ormodel:Init()
+
+    local sanTableName = sql.SQLIdent(self._tableName)
+    local primaryKey = self._primaryKey
+
+    self.save = function(this)
         sql.Begin()
 
         local updateQuery = "UPDATE " .. sanTableName .. " SET "
-        local columndata
+        local columndata = ""
 
         -------START UPDATE QUERY ----------------
         for _, v in ipairs(dataStructure) do
-            if not columndata then
-                columndata = sql.SQLIdent(v.colname) .. "=" .. (sql.SQLStr(self[v.colname] or "NULL"))
-            else
-                columndata = columndata .. ", " .. sql.SQLIdent(v.colname) .. "=" .. (sql.SQLStr(self[v.colname] or "NULL"))
-            end
+            columndata = columndata .. sql.SQLIdent(v.colname) .. "=" .. (sql.SQLStr(this[v.colname] or "NULL")) .. ", "
         end
 
-        updateQuery = updateQuery .. columndata
+        updateQuery = updateQuery .. string.sub(columndata, 1, -3)
 
-        if not primaryKey then
-            updateQuery = updateQuery .. " WHERE id=" .. sql.SQLStr(self._id)
-        elseif not string.find(primaryKey, ",") then
-            updateQuery = updateQuery .. " WHERE " .. sql.SQLIdent(primaryKey) .. sql.SQLStr(self[primaryKey])
+        if not istable(primaryKey) then
+            updateQuery = updateQuery .. " WHERE " .. sql.SQLIdent(primaryKey) .. sql.SQLStr(this[primaryKey])
         else
-            local keys = string.Explode(",", primaryKey)
-            local where
+            local where = ""
 
-            for _, v in ipairs(keys) do
-                if not where then
-                    where = sql.SQLIdent(v) .. "=" .. sql.SQLStr(self[v])
-                else
-                    where = where .. " AND " .. sql.SQLIdent(v) .. "=" .. sql.SQLStr(self[string.Trim(v)])
-                end
+            for _, v in ipairs(primaryKey) do
+                where = where .. sql.SQLIdent(v) .. "=" .. sql.SQLStr(this[v]) .. " AND "
             end
+
+            -- delete " AND " of the last concatenation
+            where = string.sub(where, 1, -6)
         end
 
         sql.Query(updateQuery)
@@ -95,59 +92,39 @@ function makeORModel(tableName, dataStructure, primaryKey)
 
         -------START INSERT QUERY ----------------
         local insertQuery = "INSERT OR IGNORE INTO " .. sanTableName .. " ("
-        local columns
-        local columnvalues
+        local columns = ""
+        local columnvalues = ""
 
         for _, v in ipairs(dataStructure) do
-            if not columns then
-                columns = sql.SQLIdent(v.colname)
-            else
-                columns = columns .. ", " .. sql.SQLIdent(v.colname)
-            end
-
-            if not columnvalues then
-                columnvalues = (sql.SQLStr(self[v.colname] or "NULL"))
-            else
-                columnvalues = columnvalues .. ", " .. (sql.SQLStr(self[v.colname] or "NULL"))
-            end
+            columns = columns .. sql.SQLIdent(v.colname) .. ", "
+            columnvalues = columnvalues .. (sql.SQLStr(this[v.colname] or "NULL")) .. ", "
         end
 
-        insertQuery = insertQuery .. columns .. ") VALUES (" .. columnvalues .. ")"
+        insertQuery = insertQuery .. string.sub(columns, 1, -3) .. ") VALUES (" .. string.sub(columnvalues, 1, -3) .. ")"
 
         sql.Query(insertQuery)
         -------END INSERT QUERY ----------------
 
-        if not self._id and not primaryKey then
-            self._id = sql.QueryValue("SELECT last_insert_rowid()")
+        if not this._rowid_ and primaryKey == "_rowid_" then
+            this._rowid_ = sql.QueryValue("SELECT last_insert_rowid()")
         end
 
         sql.Commit()
     end
 
-    model.delete = function(self)
-        if not primaryKey then
-            return sql.Query("DELETE FROM " .. sanTableName .. " WHERE id=" .. sql.SQLStr(self._id))
-        elseif not string.find(primaryKey, ",") then
-            return sql.Query("DELETE FROM " .. sanTableName .. " WHERE " .. sql.SQLIdent(primaryKey) .. "=" .. sql.SQLStr(self[primaryKey]))
+    self.delete = function(this)
+        if not istable(primaryKey) then
+            return sql.Query("DELETE FROM " .. sanTableName .. " WHERE " .. sql.SQLIdent(primaryKey) .. "=" .. sql.SQLStr(this[primaryKey]))
         else
-            local keys = string.Explode(",", primaryKey)
-            local where
+            local where = ""
 
-            for _, v in ipairs(keys) do
-                if not where then
-                    where = sql.SQLIdent(v) .. "=" .. self[v]
-                else
-                    where = where .. " AND " .. sql.SQLIdent(v) .. "=" .. self[string.Trim(v)]
-                end
+            for _, v in ipairs(primaryKey) do
+                where = where .. sql.SQLIdent(v) .. "=" .. this[v] .. " AND "
             end
 
-            sql.Query("DELETE FROM " .. sanTableName .. " WHERE " .. where)
+            return sql.Query("DELETE FROM " .. sanTableName .. " WHERE " .. string.sub(where, 1, -6))
         end
     end
-
-    baseclass.Set(tableName, model)
-
-    return model
 end
 
 ---
@@ -178,13 +155,9 @@ end
 -- @return table Returns the table of the found object.
 function ormodel:find(primaryValue)
 
-    if IsValid(self._primaryKey) and string.find(self._primaryKey, ",") then return end
+    if istable(self._primaryKey) then return end
 
-    if not self._primaryKey then
-        return sql.QueryRow("SELECT * FROM " .. sql.SQLIdent(self._tableName) .. " WHERE id=" .. sql.SQLStr(primaryValue))
-    else
-        return sql.QueryRow("SELECT * FROM " .. sql.SQLIdent(self._tableName) .. " WHERE " .. sql.SQLIdent(self._primaryKey) .. "=" .. sql.SQLStr(primaryValue))
-    end
+    return sql.QueryRow("SELECT * FROM " .. sql.SQLIdent(self._tableName) .. " WHERE " .. sql.SQLIdent(self._primaryKey) .. "=" .. sql.SQLStr(primaryValue))
 end
 
 ---
@@ -228,7 +201,7 @@ hook.Add("TTTBeginRound", "ormtest", function()
         print("Successfully deleted myobject from database")
     end
 
-    local myothermodel = makeORModel("something_stupid", {{colname = "name", coltype = "TEXT"}, {colname = "percent", coltype = "REAL"}, {colname = "number", coltype = "INTEGER"}}, "name, percent")
+    local myothermodel = makeORModel("something_stupid", {{colname = "name", coltype = "TEXT"}, {colname = "percent", coltype = "REAL"}, {colname = "number", coltype = "INTEGER"}}, {"name", "percent"})
     local myotherobject = myothermodel:new()
 
     myotherobject.name = "jackal"
