@@ -44,6 +44,7 @@ function HUD:Initialize()
 	self:ForceElement("pure_skin_punchometer")
 	self:ForceElement("pure_skin_target")
 	self:ForceElement("pure_skin_pickup")
+	self:ForceElement("pure_skin_revival")
 	self:ForceElement("pure_skin_teamindicator")
 
 	BaseClass.Initialize(self)
