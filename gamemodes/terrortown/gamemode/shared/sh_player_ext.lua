@@ -998,11 +998,19 @@ function plymeta:WasActiveInRound()
 end
 
 ---
+-- Returns the times a player has died in an active round.
+-- @return number The amoutn of deaths in the active round
+-- @realm shared
+function plymeta:GetDeathsInRound()
+	return self:TTT2NETGetUInt("player_round_deaths", 0)
+end
+
+---
 -- Checks if a player died while the round was active.
 -- @return boolean Returns if the player died in the round
 -- @realm shared
 function plymeta:HasDiedInRound()
-	return self:TTT2NETGetBool("player_has_died_in_round", false)
+	return self:GetDeathsInRound() > 0
 end
 
 ---

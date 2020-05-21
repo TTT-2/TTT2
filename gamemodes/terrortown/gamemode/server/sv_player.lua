@@ -787,7 +787,7 @@ end
 -- @local
 function GM:PlayerDeath(victim, infl, attacker)
 	victim:SetLastDeathPosition(victim:GetPos())
-	victim:SetDiedInRound(true)
+	victim:IncreaseRoundDeathCounter()
 
 	-- stop bleeding
 	util.StopBleeding(victim)
@@ -842,7 +842,7 @@ end
 -- @realm server
 function GM:PlayerSilentDeath(victim)
 	victim:SetLastDeathPosition(victim:GetPos())
-	victim:SetDiedInRound(true)
+	victim:IncreaseRoundDeathCounter()
 end
 
 ---

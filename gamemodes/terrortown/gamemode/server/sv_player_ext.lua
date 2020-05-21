@@ -821,77 +821,76 @@ end
 -- @param[opt] Angle spawnEyeAngle The eye angles of the revived players
 -- @realm server
 function plymeta:Revive(delay, OnRevive, DoCheck, needsCorpse, blockRound, OnFail, spawnPos, spawnEyeAngle)
-	local ply = self
-	local name = "TTT2RevivePlayer" .. ply:EntIndex()
+	if self:IsReviving() then return end
 
-	if ply:IsReviving() then return end
+	local name = "TTT2RevivePlayer" .. self:EntIndex()
 
 	delay = delay or 3
 
-	ply:SetReviving(true)
-	ply:SetBlockingRevival(blockRound)
-	ply:SetRevivalStartTime(CurTime())
-	ply:SetRevivalDuration(delay)
+	self:SetReviving(true)
+	self:SetBlockingRevival(blockRound)
+	self:SetRevivalStartTime(CurTime())
+	self:SetRevivalDuration(delay)
 
-	ply.OnReviveFailedCallback = OnFail
+	self.OnReviveFailedCallback = OnFail
 
 	timer.Create(name, delay, 1, function()
-		if not IsValid(ply) then return end
+		if not IsValid(self) then return end
 
-		ply:SetReviving(false)
-		ply:SetBlockingRevival(false)
-		ply:SendRevivalReason(nil)
+		self:SetReviving(false)
+		self:SetBlockingRevival(false)
+		self:SendRevivalReason(nil)
 
-		ply.OnReviveFailedCallback = nil
+		self.OnReviveFailedCallback = nil
 
-		if not isfunction(DoCheck) or DoCheck(ply) then
-			local corpse = FindCorpse(ply)
+		if not isfunction(DoCheck) or DoCheck(self) then
+			local corpse = FindCorpse(self)
 
 			if needsCorpse and (not IsValid(corpse) or corpse:IsOnFire()) then
-				OnReviveFailed(ply, OnFail, "message_revival_failed_missing_body")
+				OnReviveFailed(self, OnFail, "message_revival_failed_missing_body")
 
 				return
 			end
 
-			ply:SpawnForRound(true)
+			self:SpawnForRound(true)
 
 			if not spawnPos and IsValid(corpse) then
 				spawnPos = corpse:GetPos()
 				spawnEyeAngle = Angle(0, corpse:GetAngles().y, 0)
 			end
 
-			spawnPos = spawnPos or ply:GetDeathPosition()
+			spawnPos = spawnPos or self:GetDeathPosition()
 			spawnPos = spawn.MakeSpawnPointSafe(self, spawnPos)
 
 			if not spawnPos then
-				local spawnEntity = spawn.GetRandomPlayerSpawnEntity(ply)
+				local spawnEntity = spawn.GetRandomPlayerSpawnEntity(self)
 
 				spawnPos = spawnEntity:GetPos()
 				spawnEyeAngle = spawnEntity:EyeAngles()
 			end
 
-			ply:SetPos(spawnPos)
-			ply:SetEyeAngles(spawnEyeAngle or Angle(0, 0, 0))
-			ply:SetMaxHealth(100)
+			self:SetPos(spawnPos)
+			self:SetEyeAngles(spawnEyeAngle or Angle(0, 0, 0))
+			self:SetMaxHealth(100)
 
-			hook.Run("PlayerLoadout", ply)
+			hook.Run("PlayerLoadout", self)
 
 			local credits = CORPSE.GetCredits(corpse, 0)
 
-			ply:SetCredits(credits)
-			ply:SelectWeapon("weapon_zm_improvised")
+			pselfly:SetCredits(credits)
+			self:SelectWeapon("weapon_zm_improvised")
 
 			if IsValid(corpse) then
 				corpse:Remove()
 			end
 
-			DamageLog("TTT2Revive: " .. ply:Nick() .. " has been respawned.")
+			DamageLog("TTT2Revive: " .. self:Nick() .. " has been respawned.")
 
 			if isfunction(OnRevive) then
-				OnRevive(ply)
+				OnRevive(self)
 			end
 		else
-			OnReviveFailed(ply, "message_revival_failed")
+			OnReviveFailed(self, "message_revival_failed")
 		end
 	end)
 end
@@ -1040,12 +1039,19 @@ function plymeta:SetActiveInRound(state)
 end
 
 ---
--- Sets the if a player died in a round.
--- @param boolean state The state
+-- Increases the player death counter.
 -- @internal
 -- @realm server
-function plymeta:SetDiedInRound(state)
-	self:TTT2NETSetBool("player_has_died_in_round", state or false)
+function plymeta:IncreaseRoundDeathCounter()
+	self:TTT2NETSetUInt("player_round_deaths", self:GetDeathsInRound() + 1, 8)
+end
+
+---
+-- Resets the player death counter.
+-- @internal
+-- @realm server
+function plymeta:ResetRoundDeathCounter()
+	self:TTT2NETSetUInt("player_round_deaths", 0, 8)
 end
 
 ---

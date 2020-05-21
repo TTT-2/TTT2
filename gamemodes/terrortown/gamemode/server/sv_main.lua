@@ -967,7 +967,7 @@ function PrepareRound()
 		local ply = plys[i]
 
 		ply:SetTargetPlayer(nil)
-		ply:SetDiedInRound(false)
+		ply:ResetRoundDeathCounter()
 		ply:SetActiveInRound(false)
 	end
 
@@ -1187,7 +1187,7 @@ function BeginRound()
 	for i = 1, #plys do
 		local ply = plys[i]
 
-		ply:SetDiedInRound(false)
+		ply:ResetRoundDeathCounter()
 
 		-- a player should be considered "was active in round" if they received a role
 		ply:SetActiveInRound(ply:Alive() and ply:IsTerror())
