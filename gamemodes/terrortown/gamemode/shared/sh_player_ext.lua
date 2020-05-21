@@ -853,7 +853,7 @@ end
 -- @return boolean
 -- @realm shared
 function plymeta:WasRevivedAndConfirmed()
-	return self:WasRevivedInRound() and self:OnceFound() and self:RoleKnown()
+	return self:WasRevivedInRound() and self:IsTerror() and self:OnceFound() and self:RoleKnown()
 end
 
 ---
@@ -1010,5 +1010,5 @@ end
 -- @return boolean Returns if the player was revived
 -- @realm shared
 function plymeta:WasRevivedInRound()
-	return self:HasDiedInRound() and self:IsTerror()
+	return self:HasDiedInRound()
 end

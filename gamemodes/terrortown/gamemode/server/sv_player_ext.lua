@@ -1036,8 +1036,6 @@ end
 -- @internal
 -- @realm server
 function plymeta:SetActiveInRound(state)
-	if state and (GetRoundState() ~= ROUND_ACTIVE or not self:IsTerror()) then return end
-
 	self:TTT2NETSetBool("player_was_active_in_round", state or false)
 end
 
@@ -1047,8 +1045,6 @@ end
 -- @internal
 -- @realm server
 function plymeta:SetDiedInRound(state)
-	if state and (GetRoundState() ~= ROUND_ACTIVE or not self:IsTerror()) then return end
-
 	self:TTT2NETSetBool("player_has_died_in_round", state or false)
 end
 

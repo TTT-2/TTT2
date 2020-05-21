@@ -9,6 +9,7 @@ local mathCos = math.cos
 local entsFindByClass = ents.FindByClass
 
 local spawnPointVariations = {Vector(0, 0, 0)}
+
 for i = 0, 360, 22.5 do
 	spawnPointVariations[#spawnPointVariations + 1] = Vector(mathCos(i), mathSin(i), 0)
 end
@@ -128,10 +129,11 @@ function spawn.GetSpawnPointsAroundSpawn(ply, pos)
 
 	if not pos then return {} end
 
+	local boundsPlayer = Vector(sizePlayer.x, sizePlayer.y, 0) * 1.5
 	local positions = {}
 
 	for i = 1, #spawnPointVariations do
-		positions[#positions + 1] = pos + spawnPointVariations[i] * Vector(sizePlayer.x, sizePlayer.y, 0) * 1.5
+		positions[i] = pos + spawnPointVariations[i] * boundsPlayer
 	end
 
 	return positions
@@ -167,33 +169,37 @@ end
 -- @return table Returns a table of unsafe spawn entities
 -- @realm server
 function spawn.GetPlayerSpawnEntities(forceAll)
-	local tbl = {}
+	local processedSpawnEntities = {}
 
 	for i = 1, #spawnTypes do
 		local classname = spawnTypes[i]
-		local entsTbl = entsFindByClass(classname)
+		local spawnEntityTable = entsFindByClass(classname)
 
-		for k = 1, #entsTbl do
-			if entsTbl[k].markAsRemoved then continue end
+		for k = 1, #spawnEntityTable do
+			local spawnEntityTableEntry = spawnEntityTable[k]
 
-			tbl[#tbl + 1] = entsTbl[k]
+			if spawnEntityTableEntry.markAsRemoved then continue end
+
+			processedSpawnEntities[#processedSpawnEntities + 1] = spawnEntityTableEntry
 		end
 	end
 
 	-- Don't use info_player_start unless absolutely necessary, because eg. TF2
 	-- uses it for observer starts that are in places where players cannot really
 	-- spawn well. At all.
-	if forceAll or #tbl == 0 then
-		local startTbl = entsFindByClass("info_player_start")
+	if forceAll or #processedSpawnEntities == 0 then
+		local startEntityTable = entsFindByClass("info_player_start")
 
-		for k = 1, #startTbl do
-			if startTbl[k].markAsRemoved then continue end
+		for k = 1, #startEntityTable do
+			local startEntityTableEntry = startEntityTable[k]
 
-			tbl[#tbl + 1] = startTbl[k]
+			if startEntityTableEntry.markAsRemoved then continue end
+
+			processedSpawnEntities[#processedSpawnEntities + 1] = startEntityTableEntry
 		end
 	end
 
-	return tbl
+	return processedSpawnEntities
 end
 
 ---
@@ -237,13 +243,13 @@ function spawn.GetRandomPlayerSpawnEntity(ply)
 	-- the table should be shuffled for each spawn point calculation to improve randomness
 	table.Shuffle(spawn.cachedSpawnEntities)
 
+	if not IsValid(ply) or not ply:IsTerror() then
+		return spawn.cachedSpawnEntities[1]
+	end
+
 	-- Optimistic attempt: assume there are sufficient spawns for all and one is free
 	for i = 1, #spawn.cachedSpawnEntities do
 		local spawnEntity = spawn.cachedSpawnEntities[i]
-
-		if not IsValid(ply) or not ply:IsTerror() then
-			return spawnEntity
-		end
 
 		if not spawn.IsSpawnPointSafe(ply, spawnEntity:GetPos(), false) then continue end
 
@@ -258,19 +264,19 @@ function spawn.GetRandomPlayerSpawnEntity(ply)
 
 		local riggedSpawnPoint = spawn.MakeSpawnPointSafe(ply, pickedSpawnEntity:GetPos())
 
-		if riggedSpawnPoint then
-			local riggedSpawnEntity = ents.Create("info_player_terrorist")
+		if riggedSpawnPoint then continue end
 
-			riggedSpawnEntity:SetPos(riggedSpawnPoint)
-			riggedSpawnEntity:Spawn()
+		local riggedSpawnEntity = ents.Create("info_player_terrorist")
 
-			ErrorNoHalt("TTT2 WARNING: Map has too few spawn points, using a riggedSpawnPoints spawn for " .. tostring(ply) .. "\n")
+		riggedSpawnEntity:SetPos(riggedSpawnPoint)
+		riggedSpawnEntity:Spawn()
 
-			-- this is an old TTT flag that I will keep for compatibilities sake
-			GAMEMODE.HaveRiggedSpawn = true
+		ErrorNoHalt("TTT2 WARNING: Map has too few spawn points, using a riggedSpawnPoints spawn for " .. tostring(ply) .. "\n")
 
-			return riggedSpawnEntity
-		end
+		-- this is an old TTT flag that I will keep for compatibilities sake
+		GAMEMODE.HaveRiggedSpawn = true
+
+		return riggedSpawnEntity
 	end
 
 	-- Last attempt, force one

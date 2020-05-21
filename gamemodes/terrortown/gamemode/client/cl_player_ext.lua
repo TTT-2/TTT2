@@ -212,7 +212,7 @@ net.Receive("TTT2SetRevivalReason", function()
 			params = {}
 
 			for i = 1, paramsAmount do
-				client.revivalReason.params[net.ReadString()] = net.ReadString()
+				params[net.ReadString()] = net.ReadString()
 			end
 		end
 	end

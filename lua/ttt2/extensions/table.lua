@@ -159,7 +159,7 @@ end
 -- This @{function} adds missing values into a table
 -- @param table target
 -- @param table source
--- @param boolean iterable
+-- @param[opt] nil|boolean iterable
 -- @realm shared
 function table.AddMissing(target, source, iterable)
 	if #source == 0 then return end
@@ -168,10 +168,10 @@ function table.AddMissing(target, source, iterable)
 	local index = #target + 1
 
 	for _, v in fn(source) do
-		if not table.HasValue(target, v) then
-			target[index] = v
-			index = index + 1
-		end
+		if table.HasValue(target, v) then continue end
+
+		target[index] = v
+		index = index + 1
 	end
 end
 
@@ -186,14 +186,14 @@ function table.RemoveEmptyEntries(dataTable, tableSize)
 	local j = 1
 
 	for i = 1, tableSize do
-		if dataTable[i] ~= nil then
-			if i ~= j then
-				-- Keep i's value, move it to j's pos.
-				dataTable[j] = dataTable[i]
-				dataTable[i] = nil
-			end
+		if not dataTable[i] then continue end
 
-	 		j = j + 1
+		if i ~= j then
+			-- Keep i's value, move it to j's pos.
+			dataTable[j] = dataTable[i]
+			dataTable[i] = nil
 		end
+
+		j = j + 1
 	end
 end
