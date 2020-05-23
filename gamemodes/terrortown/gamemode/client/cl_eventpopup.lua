@@ -62,8 +62,8 @@ function EPOP:AddMessage(title, subtitle, displayTime, iconTable, blocking)
 	-- add the new message to the queue
 	self.messageQueue[queueSize + 1] = {
 		id = id,
-		title = (not title or isstring(title)) and {text = title or ""} or title,
-		subtitle = (not subtitle or isstring(subtitle)) and {text = subtitle or ""} or subtitle,
+		title = istable(title) and title or {text = title or ""},
+		subtitle = istable(subtitle) and subtitle or {text = subtitle or ""},
 		displayTime = displayTime or 4,
 		iconTable = iconTable or {},
 		blocking = blocking == nil and false or blocking
@@ -166,22 +166,26 @@ function EPOP:Clear()
 end
 
 net.Receive("ttt2_eventpopup", function()
-	local title, subtitle = {}, {}
+	local title, subtitle
 
-	local titleHasColor = net.ReadBool()
+	if net.ReadBool() then
+		title = {}
 
-	title.text = TryT(net.ReadString())
+		title.text = TryT(net.ReadString())
 
-	if titleHasColor then
-		title.color = net.ReadColor()
+		if net.ReadBool() then
+			title.color = net.ReadColor()
+		end
 	end
 
-	local subtitleHasColor = net.ReadBool()
+	if net.ReadBool() then
+		subtitle = {}
 
-	subtitle.text = TryT(net.ReadString())
+		subtitle.text = TryT(net.ReadString())
 
-	if subtitleHasColor then
-		subtitle.color = net.ReadColor()
+		if net.ReadBool() then
+			subtitle.color = net.ReadColor()
+		end
 	end
 
 	EPOP:AddMessage(title, subtitle, net.ReadUInt(16), nil, net.ReadBool())

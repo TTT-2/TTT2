@@ -11,30 +11,40 @@ EPOP = EPOP or {}
 -- @param[default=true] boolean blocking If this is false, this message gets instantly replaced if a new message is added
 -- @realm server
 function EPOP:AddMessage(plys, title, subtitle, displayTime, blocking)
+	if not title and not subtitle then return end
+
 	net.Start("ttt2_eventpopup")
 
-	if not title or isstring(title) then
-		net.WriteBool(false)
-		net.WriteString(title or "")
-	elseif not IsColor(title.color) then
-		net.WriteBool(false)
-		net.WriteString(title.text or "")
-	else
+	if title then
+		title = istable(title) and title or {text = title}
+
 		net.WriteBool(true)
-		net.WriteString(title.text or "")
-		net.WriteColor(title.color)
+		net.WriteString(title.text)
+
+		if IsColor(title.color) then
+			net.WriteBool(true)
+			net.WriteColor(title.color)
+		else
+			net.WriteBool(false)
+		end
+	else
+		net.WriteBool(false)
 	end
 
-	if not subtitle or isstring(subtitle) then
-		net.WriteBool(false)
-		net.WriteString(subtitle or "")
-	elseif not IsColor(subtitle.color) then
-		net.WriteBool(false)
-		net.WriteString(subtitle.text or "")
-	else
+	if subtitle then
+		subtitle = istable(subtitle) and subtitle or {text = subtitle}
+
 		net.WriteBool(true)
-		net.WriteString(subtitle.text or "")
-		net.WriteColor(subtitle.color)
+		net.WriteString(subtitle.text)
+
+		if IsColor(subtitle.color) then
+			net.WriteBool(true)
+			net.WriteColor(subtitle.color)
+		else
+			net.WriteBool(false)
+		end
+	else
+		net.WriteBool(false)
 	end
 
 	net.WriteUInt(displayTime or 4, 16)
