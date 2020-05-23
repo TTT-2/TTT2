@@ -413,8 +413,6 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:PlayerLoadout
 -- @local
 function GM:PlayerLoadout(ply, isRespawn)
-	print("loadout: " .. tostring(isRespawn))
-
 	if not IsValid(ply) or ply:IsSpec() then return end
 
 	CleanupInventoryAndNotifyClient(ply)

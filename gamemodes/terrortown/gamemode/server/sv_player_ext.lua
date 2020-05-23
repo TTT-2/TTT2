@@ -918,7 +918,11 @@ end
 -- @internal
 -- @realm server
 function plymeta:SetReviving(isReviving)
-	self.isReviving = isReviving or false
+	isReviving = isReviving or false
+
+	if self.isReviving == isReviving then return end
+
+	self.isReviving = isReviving
 
 	net.Start("TTT2RevivalUpdate_IsReviving")
 	net.WriteBool(self.isReviving)
@@ -931,7 +935,11 @@ end
 -- @internal
 -- @realm server
 function plymeta:SetBlockingRevival(isBlockingRevival)
-	self.isBlockingRevival = isBlockingRevival or false
+	isBlockingRevival = isBlockingRevival or false
+
+	if self.isBlockingRevival == isBlockingRevival then return end
+
+	self.isBlockingRevival = isBlockingRevival
 
 	net.Start("TTT2RevivalUpdate_IsBlockingRevival")
 	net.WriteBool(self.isBlockingRevival)
@@ -944,7 +952,11 @@ end
 -- @internal
 -- @realm server
 function plymeta:SetRevivalStartTime(startTime)
-	self.revivalStartTime = startTime or CurTime()
+	startTime = startTime or CurTime()
+
+	if self.revivalStartTime == startTime then return end
+
+	self.revivalStartTime = startTime
 
 	net.Start("TTT2RevivalUpdate_RevivalStartTime")
 	net.WriteFloat(self.revivalStartTime)
@@ -957,7 +969,11 @@ end
 -- @internal
 -- @realm server
 function plymeta:SetRevivalDuration(duration)
-	self.revivalDurarion = duration or 0.0
+	duration = duration or 0.0
+
+	if self.revivalDurarion == duration then return end
+
+	self.revivalDurarion = duration
 
 	net.Start("TTT2RevivalUpdate_RevivalDuration")
 	net.WriteFloat(self.revivalDurarion)
