@@ -27,7 +27,7 @@ local crowbar_delay = CreateConVar("ttt2_crowbar_shove_delay", "1.0", {FCVAR_NOT
 -- @return boolean Allowed pick up or not
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/PlayerCanPickupWeapon
+-- @ref https://wiki.facepunch.com/gmod/GM:PlayerCanPickupWeapon
 -- @local
 function GM:PlayerCanPickupWeapon(ply, wep)
 	if not IsValid(wep) or not IsValid(ply) then return end
@@ -410,9 +410,9 @@ end
 -- @note Note that this is called both when a @{Player} spawns and when a round starts
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/PlayerLoadout
+-- @ref https://wiki.facepunch.com/gmod/GM:PlayerLoadout
 -- @local
-function GM:PlayerLoadout(ply)
+function GM:PlayerLoadout(ply, isRespawn)
 	if not IsValid(ply) or ply:IsSpec() then return end
 
 	CleanupInventoryAndNotifyClient(ply)
@@ -488,12 +488,12 @@ end
 -- @note this internally calls @{GM:PlayerLoadout} for every @{Player}
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/PlayerLoadout
+-- @ref https://wiki.facepunch.com/gmod/GM:PlayerLoadout
 function GM:UpdatePlayerLoadouts()
 	local plys = player.GetAll()
 
 	for i = 1, #plys do
-		hook.Call("PlayerLoadout", GAMEMODE, plys[i])
+		hook.Run("PlayerLoadout", plys[i], false)
 	end
 end
 
@@ -612,7 +612,7 @@ concommand.Add("ttt_dropammo", DropActiveAmmo)
 -- @param Player ply The @{Player} that is picking up the @{Weapon}
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/WeaponEquip
+-- @ref https://wiki.facepunch.com/gmod/GM:WeaponEquip
 -- @local
 function GM:WeaponEquip(wep, ply)
 	if not IsValid(ply) or not IsValid(wep) then return end
@@ -660,7 +660,7 @@ end
 -- @param Weapon wep The @{Weapon} that was dropped
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/PlayerDroppedWeapon
+-- @ref https://wiki.facepunch.com/gmod/GM:PlayerDroppedWeapon
 -- @local
 function GM:PlayerDroppedWeapon(ply, wep)
 	if not IsValid(wep) or not IsValid(ply) or not wep.Kind then return end
@@ -686,7 +686,7 @@ end
 -- @param Entity ent @{Entity} being removed
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/EntityRemoved
+-- @ref https://wiki.facepunch.com/gmod/GM:EntityRemoved
 -- @local
 function GM:EntityRemoved(ent)
 	if IsValid(ent) and IsValid(ent:GetOwner()) and ent:IsWeapon() and ent.Kind then

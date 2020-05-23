@@ -2,6 +2,10 @@
 -- @module Entity
 -- @ref https://wiki.garrysmod.com/page/Category:Entity
 
+local safeCollisionGroups = {
+	[COLLISION_GROUP_WEAPON] = true
+}
+
 local meta = FindMetaTable("Entity")
 if not meta then return end
 
@@ -32,4 +36,12 @@ function meta:IsExplosive()
 	local kv = self:GetKeyValues()["ExplodeDamage"]
 
 	return self:Health() > 0 and kv and kv > 0
+end
+
+---
+-- Checks if the given entity can be passed by players.
+-- @return boolean Returns if the entity is passable
+-- @realm server
+function meta:HasPassableCollisionGrup()
+	return safeCollisionGroups[self:GetCollisionGroup()]
 end

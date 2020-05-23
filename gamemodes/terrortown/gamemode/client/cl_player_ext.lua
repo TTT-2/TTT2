@@ -172,7 +172,7 @@ net.Receive("TTT2TargetPlayer", TargetPlayer)
 -- @param CUserCmd cmd The command data
 -- @hook
 -- @realm client
--- @ref https://wiki.garrysmod.com/page/GM/SetupMove
+-- @ref https://wiki.facepunch.com/gmod/GM:SetupMove
 -- @local
 function GM:SetupMove(ply, mv, cmd)
 	if not IsValid(ply) or ply:IsReady() then return end
@@ -183,4 +183,76 @@ function GM:SetupMove(ply, mv, cmd)
 	net.SendToServer()
 
 	hook.Run("TTT2PlayerReady", ply)
+end
+
+---
+-- Sets a revival reason that is displayed in the revival HUD element.
+-- It supports a language identifier for translated strings.
+-- @param[default=nil] string name The text or the language identifer, nil to reset
+-- @param[opt] table params The params table used for @{LANG.GetParamTranslation}
+-- @realm client
+function plymeta:SetRevivalReason(name, params)
+	self.revivalReason = {}
+	self.revivalReason.name = name
+	self.revivalReason.params = params
+end
+
+net.Receive("TTT2SetRevivalReason", function()
+	local client = LocalPlayer()
+	local isReset = net.ReadBool()
+
+	local name, params
+
+	if not isReset then
+		name = net.ReadString()
+
+		local paramsAmount = net.ReadUInt(8)
+
+		if paramsAmount > 0 then
+			params = {}
+
+			for i = 1, paramsAmount do
+				params[net.ReadString()] = net.ReadString()
+			end
+		end
+	end
+
+	client:SetRevivalReason(name, params)
+end)
+
+-- plays an error sound only on the local player, not for all players
+net.Receive("TTT2RevivalStopped", function()
+	LocalPlayer():EmitSound("buttons/button8.wav")
+end)
+
+net.Receive("TTT2RevivalUpdate_IsReviving", function()
+	LocalPlayer().isReviving = net.ReadBool()
+end)
+
+net.Receive("TTT2RevivalUpdate_IsBlockingRevival", function()
+	LocalPlayer().isBlockingRevival = net.ReadBool()
+end)
+
+net.Receive("TTT2RevivalUpdate_RevivalStartTime", function()
+	LocalPlayer().revivalStartTime = net.ReadFloat()
+end)
+
+net.Receive("TTT2RevivalUpdate_RevivalDuration", function()
+	LocalPlayer().revivalDurarion = net.ReadFloat()
+end)
+
+---
+-- Returns if a player has a revival reason set.
+-- @return[default=false] boolean Returns if a player has a revival reason
+-- @realm client
+function plymeta:HasRevivalReason()
+	return (self.revivalReason and self.revivalReason.name and self.revivalReason.name ~= "") or false
+end
+
+---
+-- Returns the current revival reason.
+-- @return[default={}] table The revival reason table
+-- @realm client
+function plymeta:GetRevivalReason()
+	return self.revivalReason or {}
 end

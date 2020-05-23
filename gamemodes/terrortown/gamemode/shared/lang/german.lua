@@ -1277,5 +1277,12 @@ L.item_no_prop_damage_desc = [[Macht dich immun fpr Objektschaden.]]
 L.item_no_drown_damage = "Kein Ertrinkungsschaden"
 L.item_no_drown_damage_desc = [[Macht dich immun für Ertrinkungsschaden.]]
 
+-- 2020-04-30
+L.message_revival_canceled = "Wiederbelebung abgebrochen."
+L.message_revival_failed = "Wiederbelebung fehlgeschlagen."
+L.message_revival_failed_missing_body = "Du wurdest nicht wiederbelebt, da deine Leiche nicht mehr existiert."
+L.hud_revival_title = "Zeit bis zur Wiederbelebung:"
+L.hud_revival_time = "{time}s"
+
 -- 2020-05-03
 L.door_destructible = "Tür ist zerstörbar ({health}HP)"

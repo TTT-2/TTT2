@@ -90,6 +90,8 @@ resource.AddFile("materials/vgui/ttt/perks/hud_armor_reinforced.png") -- armor r
 resource.AddFile("materials/vgui/ttt/hud_armor.vmt") -- playerinfo armor
 resource.AddFile("materials/vgui/ttt/hud_armor_reinforced.vmt") -- playerinfo armor reinforced
 
+resource.AddFile("materials/vgui/ttt/hud_blocking_revival.vmt")
+
 -- essential items
 resource.AddFile("materials/vgui/ttt/icon_speedrun.vmt")
 resource.AddFile("materials/vgui/ttt/perks/hud_speedrun.png")

@@ -18,6 +18,12 @@ end
 util.AddNetworkString("StartDrowning")
 util.AddNetworkString("TTT2TargetPlayer")
 util.AddNetworkString("TTT2SetPlayerReady")
+util.AddNetworkString("TTT2SetRevivalReason")
+util.AddNetworkString("TTT2RevivalStopped")
+util.AddNetworkString("TTT2RevivalUpdate_IsReviving")
+util.AddNetworkString("TTT2RevivalUpdate_IsBlockingRevival")
+util.AddNetworkString("TTT2RevivalUpdate_RevivalStartTime")
+util.AddNetworkString("TTT2RevivalUpdate_RevivalDuration")
 
 ---
 -- Sets whether a @{Player} is spectating the own ragdoll
@@ -789,119 +795,279 @@ local function FindCorpse(ply)
 	end
 end
 
-local poss = {}
+-- Handles all stuff needed if the revival failed
+local function OnReviveFailed(ply, failMessage)
+	if isfunction(ply.OnReviveFailedCallback) then
+		ply.OnReviveFailedCallback(ply, failMessage)
 
--- Populate Around Player
-for i = 0, 360, 22.5 do
-	poss[#poss + 1] = Vector(math.cos(i), math.sin(i), 0)
-end
-
-poss[#poss + 1] = Vector(0, 0, 1) -- Populate Above Player
-
-local function FindCorpsePosition(corpse)
-	local size = Vector(32, 32, 72)
-	local startPos = corpse:GetPos() + Vector(0, 0, size.z * 0.5)
-	local len = #poss
-
-	for i = 1, len do
-		local v = poss[i]
-		local pos = startPos + v * size * 1.5
-
-		local tr = {}
-		tr.start = pos
-		tr.endpos = pos
-		tr.mins = size * -0.5
-		tr.maxs = size * 0.5
-
-		local trace = util.TraceHull(tr)
-
-		if not trace.Hit then
-			return pos - Vector(0, 0, size.z * 0.5)
-		end
+		ply.OnReviveFailedCallback = nil
+	else
+		LANG.Msg(ply, failMessage, nil, MSG_MSTACK_WARN)
 	end
 
-	return false
+	net.Start("TTT2RevivalStopped")
+	net.Send(ply)
 end
 
 ---
 -- Revives a @{Player}
--- @param number delay the delay of the revive
--- @param function fn the @{function} that should be run if the @{Player} revives
--- @param function check an additional checking @{function}
--- @param boolean needcorpse whether the dead @{Player} CORPSE is needed
--- @param boolean force if the @{Player} revive is already forced. Useful if you have multiple reviving equipments
--- @param function onFail this @{function} is called if the revive fails
+-- @param[default=3] number delay The delay of the revive
+-- @param[opt] function OnRevive The @{function} that should be run if the @{Player} revives
+-- @param[opt] function DoCheck An additional checking @{function}
+-- @param[default=false] boolean needsCorpse Whether the dead @{Player} @{CORPSE} is needed
+-- @param[default=false] boolean blockRound Stops the round from ending if this is set to true until the player is alive again
+-- @param[opt] function OnFail This @{function} is called if the revive fails
+-- @param[opt] Vector spawnPos The position where the player should be spawned, accounts for minor obstacles
+-- @param[opt] Angle spawnEyeAngle The eye angles of the revived players
 -- @realm server
-function plymeta:Revive(delay, fn, check, needcorpse, force, onFail)
-	local ply = self
-	local name = "TTT2RevivePlayer" .. ply:EntIndex()
+function plymeta:Revive(delay, OnRevive, DoCheck, needsCorpse, blockRound, OnFail, spawnPos, spawnEyeAngle)
+	if self:IsReviving() then return end
 
-	if timer.Exists(name) or ply.reviving then return end
+	local name = "TTT2RevivePlayer" .. self:EntIndex()
 
-	if force then
-		ply.forceRevive = true
-	end
+	delay = delay or 3
 
-	ply.reviving = true
+	self:SetReviving(true)
+	self:SetBlockingRevival(blockRound)
+	self:SetRevivalStartTime(CurTime())
+	self:SetRevivalDuration(delay)
+
+	self.OnReviveFailedCallback = OnFail
 
 	timer.Create(name, delay, 1, function()
-		if not IsValid(ply) then return end
+		if not IsValid(self) then return end
 
-		ply.forceRevive = nil
-		ply.reviving = nil
+		self:SetReviving(false)
+		self:SetBlockingRevival(false)
+		self:SendRevivalReason(nil)
 
-		if not isfunction(check) or check(ply) then
-			local corpse = FindCorpse(ply)
+		self.OnReviveFailedCallback = nil
 
-			if needcorpse and (not IsValid(corpse) or corpse:IsOnFire()) then
-				ply:ChatPrint("You have not been revived because your body no longer exists.")
+		if not isfunction(DoCheck) or DoCheck(self) then
+			local corpse = FindCorpse(self)
 
-				timer.Remove(name) -- TODO needed?
+			if needsCorpse and (not IsValid(corpse) or corpse:IsOnFire()) then
+				OnReviveFailed(self, OnFail, "message_revival_failed_missing_body")
 
 				return
 			end
 
-			ply:SpawnForRound(true)
+			self:SetMaxHealth(100)
+			self:SetHealth(100)
 
-			if IsValid(corpse) then
-				local spawnPos = FindCorpsePosition(corpse)
-				if spawnPos then
-					ply:SetPos(spawnPos)
-					ply:SetEyeAngles(Angle(0, corpse:GetAngles().y, 0))
-				end
+			self:SpawnForRound(true)
+
+			if not spawnPos and IsValid(corpse) then
+				spawnPos = corpse:GetPos()
+				spawnEyeAngle = Angle(0, corpse:GetAngles().y, 0)
 			end
 
-			hook.Call("PlayerLoadout", GAMEMODE, ply)
+			spawnPos = spawnPos or self:GetDeathPosition()
+			spawnPos = spawn.MakeSpawnPointSafe(self, spawnPos)
 
-			ply:SetMaxHealth(100)
+			if not spawnPos then
+				local spawnEntity = spawn.GetRandomPlayerSpawnEntity(self)
 
-			local credits = CORPSE.GetCredits(corpse, 0)
+				spawnPos = spawnEntity:GetPos()
+				spawnEyeAngle = spawnEntity:EyeAngles()
+			end
 
-			ply:SetCredits(credits)
+			self:SetPos(spawnPos)
+			self:SetEyeAngles(spawnEyeAngle or Angle(0, 0, 0))
+
+			hook.Run("PlayerLoadout", self, true)
+
+			self:SetCredits(CORPSE.GetCredits(corpse, 0))
+			self:SelectWeapon("weapon_zm_improvised")
 
 			if IsValid(corpse) then
 				corpse:Remove()
 			end
 
-			DamageLog("TTT2Revive: " .. ply:Nick() .. " has been respawned.")
+			DamageLog("TTT2Revive: " .. self:Nick() .. " has been respawned.")
 
-			if isfunction(fn) then
-				fn(ply)
+			if isfunction(OnRevive) then
+				OnRevive(self)
 			end
-		elseif isfunction(onFail) then
-			ply:ChatPrint("Revive failed...")
-
-			onFail(ply)
+		else
+			OnReviveFailed(self, "message_revival_failed")
 		end
 	end)
 end
 
 ---
--- Returns if a player is currently in a revival process started by @{Player:Revive}
--- @return boolean The revival status
+-- Cancel the ongoing revival process.
+-- @param[default="message_revival_canceled"] string failMessage The fail message that should be displayed for the client
 -- @realm server
-function plymeta:IsReviving()
-	return self.reviving or false
+function plymeta:CancelRevival(failMessage)
+	if not self:IsReviving() then return end
+
+	self:SetReviving(false)
+	self:SetBlockingRevival(false)
+	self:SendRevivalReason(nil)
+
+	timer.Remove("TTT2RevivePlayer" .. self:EntIndex())
+
+	OnReviveFailed(self, failMessage or "message_revival_canceled")
+end
+
+
+---
+-- Sets the revival state.
+-- @param[default=false] boolean isReviving The reviving state
+-- @internal
+-- @realm server
+function plymeta:SetReviving(isReviving)
+	isReviving = isReviving or false
+
+	if self.isReviving == isReviving then return end
+
+	self.isReviving = isReviving
+
+	net.Start("TTT2RevivalUpdate_IsReviving")
+	net.WriteBool(self.isReviving)
+	net.Send(self)
+end
+
+---
+-- Sets the blocking revival state.
+-- @param[default=false] boolean isBlockingRevival The blocking revival state
+-- @internal
+-- @realm server
+function plymeta:SetBlockingRevival(isBlockingRevival)
+	isBlockingRevival = isBlockingRevival or false
+
+	if self.isBlockingRevival == isBlockingRevival then return end
+
+	self.isBlockingRevival = isBlockingRevival
+
+	net.Start("TTT2RevivalUpdate_IsBlockingRevival")
+	net.WriteBool(self.isBlockingRevival)
+	net.Send(self)
+end
+
+---
+-- Sets the revival start time.
+-- @param[default=@{CurTime()}] number startTime The revival start time
+-- @internal
+-- @realm server
+function plymeta:SetRevivalStartTime(startTime)
+	startTime = startTime or CurTime()
+
+	if self.revivalStartTime == startTime then return end
+
+	self.revivalStartTime = startTime
+
+	net.Start("TTT2RevivalUpdate_RevivalStartTime")
+	net.WriteFloat(self.revivalStartTime)
+	net.Send(self)
+end
+
+---
+-- Sets the revival duration.
+-- @param[default=0.0] number duration The revival time
+-- @internal
+-- @realm server
+function plymeta:SetRevivalDuration(duration)
+	duration = duration or 0.0
+
+	if self.revivalDurarion == duration then return end
+
+	self.revivalDurarion = duration
+
+	net.Start("TTT2RevivalUpdate_RevivalDuration")
+	net.WriteFloat(self.revivalDurarion)
+	net.Send(self)
+end
+
+---
+-- Sends a revival reason that is displayed in the clients revival HUD element.
+-- It supports a language identifier for translated strings.
+-- @param[default=nil] string name The text or the language identifer, nil to reset
+-- @param[opt] table params The params table used for @{LANG.GetParamTranslation}
+-- @realm server
+function plymeta:SendRevivalReason(name, params)
+	net.Start("TTT2SetRevivalReason")
+
+	if name then
+		net.WriteBool(false)
+		net.WriteString(name)
+
+		local paramsAmount = params and table.Count(params) or 0
+
+		net.WriteUInt(paramsAmount, 8)
+
+		if paramsAmount > 0 then
+			for k, v in pairs(params) do
+				net.WriteString(k)
+				net.WriteString(tostring(v))
+			end
+		end
+	else
+		net.WriteBool(true)
+	end
+
+	net.Send(self)
+end
+
+
+---
+-- Sets the last death position.
+-- @param Vector pos The death position
+-- @internal
+-- @realm server
+function plymeta:SetLastDeathPosition(pos)
+	self.lastDeathPosition = pos
+end
+
+---
+-- Sets the last spawn position.
+-- @param Vector pos The spawn position
+-- @internal
+-- @realm server
+function plymeta:SetLastSpawnPosition(pos)
+	self.lastSpawnPosition = pos
+end
+
+---
+-- Returns the last death position of the player.
+-- @return Vector The last death position
+-- @realm server
+function plymeta:GetDeathPosition()
+	return self.lastDeathPosition
+end
+
+---
+-- Returns the last spawn position of the player.
+-- @return Vector The last spawn position
+-- @realm server
+function plymeta:GetSpawnPosition()
+	return self.lastSpawnPosition
+end
+
+---
+-- Sets the if a player was active (TEAM_TERROR) in a round.
+-- @param boolean state The state
+-- @internal
+-- @realm server
+function plymeta:SetActiveInRound(state)
+	self:TTT2NETSetBool("player_was_active_in_round", state or false)
+end
+
+---
+-- Increases the player death counter.
+-- @internal
+-- @realm server
+function plymeta:IncreaseRoundDeathCounter()
+	self:TTT2NETSetUInt("player_round_deaths", self:GetDeathsInRound() + 1, 8)
+end
+
+---
+-- Resets the player death counter.
+-- @internal
+-- @realm server
+function plymeta:ResetRoundDeathCounter()
+	self:TTT2NETSetUInt("player_round_deaths", 0, 8)
 end
 
 ---
@@ -1191,7 +1357,7 @@ end
 -- This function simplifies the weapon pickup process for a player by
 -- handling all the needed calls.
 -- @param Weapon wep The weapon object
--- @param [default=false] boolean dropBlockingWeapon Should the currently selecten weapon be dropped
+-- @param[default=false] boolean dropBlockingWeapon Should the currently selecten weapon be dropped
 -- @param boolean shouldAutoSelect Should this weapon be autoselected after equip, if not set this value is set by player keypress
 -- @returns Weapon if successful, nil if not
 -- @realm server
@@ -1282,7 +1448,7 @@ end
 -- This function simplifies the weapon class giving process for a player by
 -- handling all the needed calls.
 -- @param string wepCls The weapon class
--- @param [default=false] boolean dropBlockingWeapon Should the currently selecten weapon be dropped
+-- @param[default=false] boolean dropBlockingWeapon Should the currently selecten weapon be dropped
 -- @param boolean shouldAutoSelect Should this weapon be autoselected after equip, if not set this value is set by player keypress
 -- @returns Weapon if successful, nil if not
 -- @realm server

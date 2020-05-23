@@ -102,7 +102,7 @@ local drawShadowedText = draw.ShadowedText
 -- @note You should use @{surface.CreateAdvancedFont} before trying to access the font
 -- @2D
 -- @param string text The text to be drawn
--- @param [default="DefaultBold"] string font The font. See @{surface.CreateAdvancedFont} to create your own. The original font should be always created, see @{surface.CreateFont}.
+-- @param[default="DefaultBold"] string font The font. See @{surface.CreateAdvancedFont} to create your own. The original font should be always created, see @{surface.CreateFont}.
 -- @param number x The X Coordinate
 -- @param number y The Y Coordinate
 -- @param Color color The color of the text. Uses the Color structure.
@@ -234,7 +234,7 @@ end
 
 -- Returns the size of a inserted string
 -- @param string text The text that the length should be calculated
--- @param [default="DefaultBold"] string font The font ID
+-- @param[default="DefaultBold"] string font The font ID
 -- @warning This function changes the font to the passed font
 -- @return number, number w, h The size of the given text
 -- @2D

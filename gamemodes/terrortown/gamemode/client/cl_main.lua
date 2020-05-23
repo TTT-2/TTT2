@@ -99,7 +99,7 @@ end
 -- Called after the gamemode loads and starts.
 -- @hook
 -- @realm client
--- @ref https://wiki.garrysmod.com/page/GM/Initialize
+-- @ref https://wiki.facepunch.com/gmod/GM:Initialize
 -- @local
 function GM:Initialize()
 	MsgN("TTT2 Client initializing...")
@@ -145,7 +145,7 @@ end
 -- the client will receive it as NULL entity.
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/InitPostEntity
+-- @ref https://wiki.facepunch.com/gmod/GM:InitPostEntity
 -- @local
 function GM:InitPostEntity()
 	MsgN("TTT Client post-init...")
@@ -556,7 +556,7 @@ net.Receive("TTT_PlayerDied", PlayerDeath)
 -- @return[default=false] boolean True to draw the @{Player}, false to hide
 -- @hook
 -- @realm client
--- @ref https://wiki.garrysmod.com/page/GM/ShouldDrawLocalPlayer
+-- @ref https://wiki.facepunch.com/gmod/GM:ShouldDrawLocalPlayer
 -- @local
 function GM:ShouldDrawLocalPlayer(ply)
 	return false
@@ -577,7 +577,7 @@ local view = {origin = vector_origin, angles = angle_zero, fov = 0}
 -- structure
 -- @hook
 -- @realm client
--- @ref https://wiki.garrysmod.com/page/GM/CalcView
+-- @ref https://wiki.facepunch.com/gmod/GM:CalcView
 -- @local
 function GM:CalcView(ply, origin, angles, fov, znear, zfar)
 	view.origin = origin
@@ -621,7 +621,7 @@ end
 -- @param string victimTeam Team of the victim
 -- @hook
 -- @realm client
--- @ref https://wiki.garrysmod.com/page/GM/AddDeathNotice
+-- @ref https://wiki.facepunch.com/gmod/GM:AddDeathNotice
 -- @local
 function GM:AddDeathNotice(attacker, attackerTeam, inflictor, victim, victimTeam)
 
@@ -633,7 +633,7 @@ end
 -- @param number y Y position to draw death notices as a ratio
 -- @hook
 -- @realm client
--- @ref https://wiki.garrysmod.com/page/GM/DrawDeathNotice
+-- @ref https://wiki.facepunch.com/gmod/GM:DrawDeathNotice
 -- @local
 function GM:DrawDeathNotice(x, y)
 
@@ -718,7 +718,7 @@ end
 -- @param Entity ent The @{Entity}
 -- @hook
 -- @realm client
--- @ref https://wiki.garrysmod.com/page/GM/OnEntityCreated
+-- @ref https://wiki.facepunch.com/gmod/GM:OnEntityCreated
 -- @local
 function GM:OnEntityCreated(ent)
 	-- Make ragdolls look like the player that has died

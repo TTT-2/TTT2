@@ -605,6 +605,15 @@ function CORPSE.Create(ply, attacker, dmginfo)
 	return rag -- we'll be speccing this
 end
 
+---
+-- Checks if the ragdoll of a player was headshot.
+-- @param Entity rag The ragdoll
+-- @return boolean Returns if the player was headshot
+-- @realm server
+function CORPSE.WasHeadshot(rag)
+	return IsValid(rag) and rag.was_headshot
+end
+
 hook.Add("ShouldCollide", "TTT2RagdollCollide", function(ent1, ent2)
 	if rag_collide:GetBool() then return end
 

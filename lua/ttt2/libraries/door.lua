@@ -355,7 +355,7 @@ if SERVER then
 	-- Called in @{GM:EntityTakeDamage}.
 	-- @param Entity ent The entity that is damaged
 	-- @param CTakeDamageInfo dmginfo The damage info object
-	-- @param [default=false]boolean surpressPair Should the call of the other door (if in a pair) be omitted?
+	-- @param[default=false] boolean surpressPair Should the call of the other door (if in a pair) be omitted?
 	-- @internal
 	-- @realm server
 	function door.HandleDamage(ent, dmginfo, surpressPair)

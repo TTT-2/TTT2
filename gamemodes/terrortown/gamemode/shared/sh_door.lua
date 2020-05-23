@@ -131,10 +131,10 @@ end
 if SERVER then
 	---
 	-- Locks a door.
-	-- @param [opt]Player ply The player that will be passed through as the activator
-	-- @param [opt]string data Optional data that can be passed through
-	-- @param [default=0]number delay The delay until the event is fired
-	-- @param [default=false]boolean surpressPair Should the call of the other door (if in a pair) be omitted?
+	-- @param[opt] Player ply The player that will be passed through as the activator
+	-- @param[opt] string data Optional data that can be passed through
+	-- @param[default=0] number delay The delay until the event is fired
+	-- @param[default=false] boolean surpressPair Should the call of the other door (if in a pair) be omitted?
 	-- @realm server
 	function entmeta:LockDoor(ply, data, delay, surpressPair)
 		if not self:IsDoor() then return end
@@ -149,10 +149,10 @@ if SERVER then
 
 	---
 	-- Unlocks a door.
-	-- @param [opt]Player ply The player that will be passed through as the activator
-	-- @param [opt]string data Optional data that can be passed through
-	-- @param [default=0]number delay The delay until the event is fired
-	-- @param [default=false]boolean surpressPair Should the call of the other door (if in a pair) be omitted?
+	-- @param[opt] Player ply The player that will be passed through as the activator
+	-- @param[opt] string data Optional data that can be passed through
+	-- @param[default=0] number delay The delay until the event is fired
+	-- @param[default=false] boolean surpressPair Should the call of the other door (if in a pair) be omitted?
 	-- @realm server
 	function entmeta:UnlockDoor(ply, data, delay, surpressPair)
 		if not self:IsDoor() then return end
@@ -167,10 +167,10 @@ if SERVER then
 
 	---
 	-- Opens the door.
-	-- @param [opt]Player ply The player that will be passed through as the activator
-	-- @param [opt]string data Optional data that can be passed through
-	-- @param [default=0]number delay The delay until the event is fired
-	-- @param [default=false]boolean surpressPair Should the call of the other door (if in a pair) be omitted?
+	-- @param[opt] Player ply The player that will be passed through as the activator
+	-- @param[opt] string data Optional data that can be passed through
+	-- @param[default=0] number delay The delay until the event is fired
+	-- @param[default=false] boolean surpressPair Should the call of the other door (if in a pair) be omitted?
 	-- @realm server
 	function entmeta:OpenDoor(ply, data, delay, surpressPair)
 		if not self:IsDoor() then return end
@@ -185,10 +185,10 @@ if SERVER then
 
 	---
 	-- Closes a door.
-	-- @param [opt]Player ply The player that will be passed through as the activator
-	-- @param [opt]string data Optional data that can be passed through
-	-- @param [default=0]number delay The delay until the event is fired
-	-- @param [default=false]boolean surpressPair Should the call of the other door (if in a pair) be omitted?
+	-- @param[opt] Player ply The player that will be passed through as the activator
+	-- @param[opt] string data Optional data that can be passed through
+	-- @param[default=0] number delay The delay until the event is fired
+	-- @param[default=false] boolean surpressPair Should the call of the other door (if in a pair) be omitted?
 	-- @realm server
 	function entmeta:CloseDoor(ply, data, delay, surpressPair)
 		if not self:IsDoor() then return end
@@ -203,10 +203,10 @@ if SERVER then
 
 	---
 	-- Toggles a door between open and closed.
-	-- @param [opt]Player ply The player that will be passed through as the activator
-	-- @param [opt]string data Optional data that can be passed through
-	-- @param [default=0]number delay The delay until the event is fired
-	-- @param [default=false]boolean surpressPair Should the call of the other door (if in a pair) be omitted?
+	-- @param[opt] Player ply The player that will be passed through as the activator
+	-- @param[opt] string data Optional data that can be passed through
+	-- @param[default=0] number delay The delay until the event is fired
+	-- @param[default=false] boolean surpressPair Should the call of the other door (if in a pair) be omitted?
 	-- @realm server
 	function entmeta:ToggleDoor(ply, data, delay, surpressPair)
 		if not self:IsDoor() then return end
@@ -222,7 +222,7 @@ if SERVER then
 	---
 	-- Sets the state if a door can be opened on touch.
 	-- @param boolean state The new state
-	-- @param [default=false]boolean surpressPair Should the call of the other door (if in a pair) be omitted?
+	-- @param[default=false] boolean surpressPair Should the call of the other door (if in a pair) be omitted?
 	-- @realm server
 	function entmeta:SetDoorCanTouchOpen(state, surpressPair)
 		door.SetPlayerCanTouch(self, state)
@@ -238,7 +238,7 @@ if SERVER then
 	---
 	-- Sets the state if a door can be opened on use.
 	-- @param boolean state The new state
-	-- @param [default=false]boolean surpressPair Should the call of the other door (if in a pair) be omitted?
+	-- @param[default=false] boolean surpressPair Should the call of the other door (if in a pair) be omitted?
 	-- @realm server
 	function entmeta:SetDoorCanUseOpen(state, surpressPair)
 		door.SetPlayerCanUse(self, state)
@@ -254,7 +254,7 @@ if SERVER then
 	---
 	-- Sets the state if a door closes automatically.
 	-- @param boolean state The new state
-	-- @param [default=false]boolean surpressPair Should the call of the other door (if in a pair) be omitted?
+	-- @param[default=false] boolean surpressPair Should the call of the other door (if in a pair) be omitted?
 	-- @realm server
 	function entmeta:SetDoorAutoCloses(state, surpressPair)
 		door.SetAutoClose(self, state)
@@ -270,7 +270,7 @@ if SERVER then
 	---
 	-- Sets the state if a door is destructible.
 	-- @param boolean state The new state
-	-- @param [default=false]boolean surpressPair Should the call of the other door (if in a pair) be omitted?
+	-- @param[default=false] boolean surpressPair Should the call of the other door (if in a pair) be omitted?
 	-- @realm server
 	function entmeta:MakeDoorDestructable(state, surpressPair)
 		if not self:PlayerCanOpenDoor() or not door.IsValidNormal(self:GetClass()) then return end
@@ -292,8 +292,8 @@ if SERVER then
 	-- prop. Furthermore it makes sure that the door will not leave a unrendered room behind
 	-- (problems with area portals). If it is a double door, both doors will be destroyed by
 	-- default.
-	-- @param [default=Vector(0, 0, 0)]Vector pushForce The push force for the door
-	-- @param [default=false]boolean surpressPair Should the call of the other door (if in a pair) be omitted?
+	-- @param[default=Vector(0, 0, 0)] Vector pushForce The push force for the door
+	-- @param[default=false] boolean surpressPair Should the call of the other door (if in a pair) be omitted?
 	-- @return Entity Returns the entity of the created prop
 	-- @realm server
 	function entmeta:SafeDestroyDoor(pushForce, surpressPair)

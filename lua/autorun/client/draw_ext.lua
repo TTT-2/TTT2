@@ -18,8 +18,8 @@ local shadowColorWhite = Color(0, 0, 0, 75)
 -- @param number y The y position of the rectangle
 -- @param number w The width of the rectangle
 -- @param number h The height of the rectangle
--- @param [default=1] number t The thickness of the line
--- @param [default=COLOR_WHITE] Color color The color of the line
+-- @param[default=1] number t The thickness of the line
+-- @param[default=COLOR_WHITE] Color color The color of the line
 -- @2D
 -- @realm client
 function draw.OutlinedBox(x, y, w, h, t, color)
@@ -40,8 +40,8 @@ local drawOutlinedBox = draw.OutlinedBox
 -- @param number y The y position of the rectangle
 -- @param number w The width of the rectangle
 -- @param number h The height of the rectangle
--- @param [default=1] number t The thickness of the line
--- @param [default=COLOR_WHITE] Color color The color of the line
+-- @param[default=1] number t The thickness of the line
+-- @param[default=COLOR_WHITE] Color color The color of the line
 -- @2D
 -- @realm client
 function draw.OutlinedShadowedBox(x, y, w, h, t, color)
@@ -62,7 +62,7 @@ end
 -- @param number startY The y position to start the line
 -- @param number endX The x position to end the line
 -- @param number endY The y position to end the line
--- @param [default=COLOR_WHITE] Color color The color of the line
+-- @param[default=COLOR_WHITE] Color color The color of the line
 -- @2D
 -- @realm client
 function draw.Line(startX, startY, endX, endY, color)
@@ -78,7 +78,7 @@ local drawLine = draw.Line
 -- @param number startY The y position to start the line
 -- @param number endX The x position to end the line
 -- @param number endY The y position to end the line
--- @param [default=COLOR_WHITE] Color color The color of the line
+-- @param[default=COLOR_WHITE] Color color The color of the line
 -- @2D
 -- @realm client
 function draw.ShadowedLine(startX, startY, endX, endY, color)
@@ -100,8 +100,8 @@ end
 -- @param number w width
 -- @param number h height
 -- @param Material material
--- @param [default=255] number alpha
--- @param [default=COLOR_WHITE] Color col the alpha value will be ignored
+-- @param[default=255] number alpha
+-- @param[default=COLOR_WHITE] Color col the alpha value will be ignored
 -- @2D
 -- @realm client
 function draw.FilteredTexture(x, y, w, h, material, alpha, color)
@@ -129,9 +129,9 @@ local drawFilteredTexture = draw.FilteredTexture
 -- @param number w width
 -- @param number h height
 -- @param Material material
--- @param [default=255] number alpha
--- @param [default=COLOR_WHITE] Color col the alpha value will be ignored
--- @param [default=1.0] number scale A scaling factor that is used for the shadows
+-- @param[default=255] number alpha
+-- @param[default=COLOR_WHITE] Color col the alpha value will be ignored
+-- @param[default=1.0] number scale A scaling factor that is used for the shadows
 -- @2D
 -- @realm client
 function draw.FilteredShadowedTexture(x, y, w, h, material, alpha, color, scale)

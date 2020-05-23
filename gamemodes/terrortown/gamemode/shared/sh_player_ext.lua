@@ -128,7 +128,7 @@ function plymeta:SetRole(subrole, team, forceHooks)
 		self:SetRoleBgColor(roleData.bgcolor)
 
 		if SERVER then
-			hook.Call("PlayerLoadout", GAMEMODE, self)
+			hook.Run("PlayerLoadout", self, false)
 
 			if GetConVar("ttt_enforce_playermodel"):GetBool() then
 				-- update subroleModel
@@ -849,11 +849,11 @@ function plymeta:RoleKnown()
 end
 
 ---
--- Returns whether a @{Player} was revived after beeing confirmed this round
+-- Returns whether a @{Player} was revived after being confirmed this round
 -- @return boolean
 -- @realm shared
-function plymeta:Revived()
-	return not self:TTT2NETGetBool("body_found", false) and self:OnceFound()
+function plymeta:WasRevivedAndConfirmed()
+	return self:WasRevivedInRound() and self:OnceFound() and self:RoleKnown()
 end
 
 ---
@@ -955,3 +955,68 @@ hook.Add("TTTEndRound", "TTTEndRound4TTT2TargetPlayer", function()
 		plys[i].targetPlayer = nil
 	end
 end)
+
+---
+-- Returns if the player is reviving.
+-- @return boolean The blocking status
+-- @realm shared
+function plymeta:IsReviving()
+	return self.isReviving or false
+end
+
+---
+-- Returns if the ongoing revival is blocking or not.
+-- @return boolean The blocking status
+-- @realm shared
+function plymeta:IsBlockingRevival()
+	return self.isBlockingRevival or false
+end
+
+---
+-- Returns the time when the ongoing revival started.
+-- @return[default=@{CurTime()}] number The time when the revival started in seconds
+-- @realm shared
+function plymeta:GetRevivalStartTime()
+	return self.revivalStartTime or CurTime()
+end
+
+---
+-- Returns the duration for the ongoing revival.
+-- @return[default=1.0] number The time for the revival in seconds
+-- @realm shared
+function plymeta:GetRevivalDuration()
+	return self.revivalDurarion or 0.0
+end
+
+---
+-- Checks if a player was active during this round. A player was active if they received
+-- a role. This state is reset once the next round begins (@{GM:TTTBeginRound}).
+-- @return boolean Returns if the player was active
+-- @realm shared
+function plymeta:WasActiveInRound()
+	return self:TTT2NETGetBool("player_was_active_in_round", false)
+end
+
+---
+-- Returns the times a player has died in an active round.
+-- @return number The amoutn of deaths in the active round
+-- @realm shared
+function plymeta:GetDeathsInRound()
+	return self:TTT2NETGetUInt("player_round_deaths", 0)
+end
+
+---
+-- Checks if a player died while the round was active.
+-- @return boolean Returns if the player died in the round
+-- @realm shared
+function plymeta:HasDiedInRound()
+	return self:GetDeathsInRound() > 0
+end
+
+---
+-- Checks if a player was revived in the round.
+-- @return boolean Returns if the player was revived
+-- @realm shared
+function plymeta:WasRevivedInRound()
+	return self:HasDiedInRound()
+end

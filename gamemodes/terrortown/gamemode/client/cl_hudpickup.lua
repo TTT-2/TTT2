@@ -35,7 +35,7 @@ end
 -- @param Weapon wep The picked up @{Weapon}
 -- @hook
 -- @realm client
--- @ref https://wiki.garrysmod.com/page/GM/HUDWeaponPickedUp
+-- @ref https://wiki.facepunch.com/gmod/GM:HUDWeaponPickedUp
 -- @local
 function GM:HUDWeaponPickedUp(wep)
 	if not IsValid(wep) then return end
@@ -57,7 +57,7 @@ end
 -- @param string itemName Name of the picked up item
 -- @hook
 -- @realm client
--- @ref https://wiki.garrysmod.com/page/GM/HUDItemPickedUp
+-- @ref https://wiki.facepunch.com/gmod/GM:HUDItemPickedUp
 -- @local
 function GM:HUDItemPickedUp(itemName)
 	local client = LocalPlayer()
@@ -75,7 +75,7 @@ end
 -- @param number amount Amount of the item (ammo) picked up
 -- @hook
 -- @realm client
--- @ref https://wiki.garrysmod.com/page/GM/HUDAmmoPickedUp
+-- @ref https://wiki.facepunch.com/gmod/GM:HUDAmmoPickedUp
 -- @local
 function GM:HUDAmmoPickedUp(itemName, amount)
 	local client = LocalPlayer()
