@@ -960,7 +960,7 @@ net.Receive("TTT_BoughtItem", ReceiveBoughtItem)
 -- See also @{GM:OnContextMenuClose}.
 -- @hook
 -- @realm client
--- @ref https://wiki.garrysmod.com/page/GM/OnContextMenuOpen
+-- @ref https://wiki.facepunch.com/gmod/GM:OnContextMenuOpen
 -- @local
 function GM:OnContextMenuOpen()
 	local rs = GetRoundState()

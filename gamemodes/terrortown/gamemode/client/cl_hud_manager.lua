@@ -65,7 +65,7 @@ end
 -- @2D
 -- @hook
 -- @realm client
--- @ref https://wiki.garrysmod.com/page/GM/HUDPaint
+-- @ref https://wiki.facepunch.com/gmod/GM:HUDPaint
 -- @local
 function GM:HUDPaint()
 	local client = LocalPlayer()
@@ -130,7 +130,7 @@ local gmodhud = {
 -- @return boolean Return false to prevent the given element from being drawn on the client's screen.
 -- @hook
 -- @realm client
--- @ref https://wiki.garrysmod.com/page/GM/HUDShouldDraw
+-- @ref https://wiki.facepunch.com/gmod/GM:HUDShouldDraw
 -- @local
 function GM:HUDShouldDraw(name)
 	if gmodhud[name] then

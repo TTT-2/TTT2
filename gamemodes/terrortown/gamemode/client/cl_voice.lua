@@ -118,7 +118,7 @@ local PlayerVoicePanels = {}
 -- @param Player ply @{Player} who started using voice chat
 -- @hook
 -- @realm client
--- @ref https://wiki.garrysmod.com/page/GM/PlayerStartVoice
+-- @ref https://wiki.facepunch.com/gmod/GM:PlayerStartVoice
 -- @local
 function GM:PlayerStartVoice(ply)
 	if not IsValid(ply) then return end
@@ -254,7 +254,7 @@ timer.Create("VoiceClean", 10, 0, VoiceClean)
 -- @param boolean no_reset whether the stored voice state shouldn't reset
 -- @hook
 -- @realm client
--- @ref https://wiki.garrysmod.com/page/GM/PlayerEndVoice
+-- @ref https://wiki.facepunch.com/gmod/GM:PlayerEndVoice
 function GM:PlayerEndVoice(ply, no_reset)
 	if IsValid(PlayerVoicePanels[ply]) then
 		PlayerVoicePanels[ply]:Remove()

@@ -10,6 +10,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added essential items: 8 different types of items that are often used in other addons. You can remove them from the shop if you don't like them.
 - Added server proxy for `EPOP:AddMessage()`
 - Added `PrintMessage` overwrites so this function now uses TTT2 systems
+- Added a new HUD element to show information about an ongoing revival to the player that is revived
+- Added a load of functions to the `spawn` scope that can be used by addons
 - Added a thermal vision module, which can be used by addons to render entities with a thermal vision effect
 - Added a few door related hooks and convenience functions
 - Added entityOutputs library to register map entity outputs easier
@@ -30,6 +32,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Removed the overcomplicated UI menu (simple handling with default keys instead)
   - The new default scanner behavior shows the direction and distance to the target
 - Changed TargetID colors for confirmed bodies
+- Improved the `plymeta:Revive()` function
+  - Added a revive position argument
+  - revive makes now sure the position is valid and the player is not stuck in the wall
+- Improved the player spawn handling
 - Moved radar handling from client to server
 - Reworked the event popup
   - texts can now be blocking or non blocking
@@ -45,6 +51,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed propsurfing with the magneto stick
 - Fixed healthstation TargetID text
 - Fixed keyinfo for doors where no key can be used
+- Spawn points that have no solid ground beneath will be ignored
 - Fixed role selection issues with subroles not properly replacing their baserole etc.
 - Fixed map lock/unlock trigger of doors not updating targetID
 - Fixed roles having sometimes the wrong radar color

@@ -72,3 +72,13 @@ function CORPSE.GetPlayer(rag)
 
 	return rag:GetDTEntity(dti.ENT_PLAYER)
 end
+
+---
+-- Checks if a ragdoll belongs to a player.
+-- Because ragdolls can also be used for props (e.g. a mattress).
+-- @param Entity rag The ragdoll
+-- @return boolean Returns if the ragdoll is valid
+-- @realm shared
+function CORPSE.IsValidBody(rag)
+	return IsValid(rag) and CORPSE.GetPlayerNick(rag, false) ~= false
+end

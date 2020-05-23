@@ -81,7 +81,7 @@ end
 -- @return boolean 3D sound. If set to true, will fade out the sound the further away listener is from the talker, the voice will also be in stereo, and not mono
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/PlayerCanHearPlayersVoice
+-- @ref https://wiki.facepunch.com/gmod/GM:PlayerCanHearPlayersVoice
 -- @local
 function GM:PlayerCanHearPlayersVoice(listener, speaker)
 	if speaker.blockVoice then

@@ -130,7 +130,7 @@ end
 -- @param boolean bDrawingSkybox Whether the current call is drawing skybox
 -- @hook
 -- @realm client
--- @ref https://wiki.garrysmod.com/page/GM/PostDrawTranslucentRenderables
+-- @ref https://wiki.facepunch.com/gmod/GM:PostDrawTranslucentRenderables
 -- @local
 function GM:PostDrawTranslucentRenderables(bDrawingDepth, bDrawingSkybox)
 	local client = LocalPlayer()
@@ -225,7 +225,7 @@ end
 -- Called from @{GM:HUDPaint} to draw @{Player} info when you hover over a @{Player} with your crosshair or mouse.
 -- @hook
 -- @realm client
--- @ref https://wiki.garrysmod.com/page/GM/HUDDrawTargetID
+-- @ref https://wiki.facepunch.com/gmod/GM:HUDDrawTargetID
 -- @local
 function GM:HUDDrawTargetID()
 	local client = LocalPlayer()
