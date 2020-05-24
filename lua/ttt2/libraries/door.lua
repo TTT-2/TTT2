@@ -5,6 +5,8 @@
 
 if SERVER then
 	AddCSLuaFile()
+
+	util.AddNetworkString("TTT2SyncDoorEntities")
 end
 
 local cvDestructableDoorForced = CreateConVar("ttt2_doors_force_pairs", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
@@ -108,50 +110,77 @@ local function AddSpawnFlag(ent, flag)
 	ent:SetKeyValue("spawnflags", ent:GetSpawnFlags() + flag)
 end
 
----
--- Setting up all doors found on a map, this is done on every map reset (on prepare round)
--- @internal
--- @realm shared
-function door.SetUp()
-	local all_ents = ents.GetAll()
-	local doors = {}
+if SERVER then
+	---
+	-- Setting up all doors found on a map, this is done on every map reset (on prepare round)
+	-- @internal
+	-- @realm server
+	function door.SetUp()
+		local all_ents = ents.GetAll()
+		local doors = {}
 
-	-- search for new doors
-	for i = 1, #all_ents do
-		local ent = all_ents[i]
+		-- search for new doors
+		for i = 1, #all_ents do
+			local ent = all_ents[i]
 
-		if not ent:IsDoor() then continue end
+			if not ent:IsDoor() then continue end
 
-		doors[#doors + 1] = ent
+			doors[#doors + 1] = ent
 
-		-- set up synced states if on server
-		if CLIENT then continue end
+			ent:SetNWBool("ttt2_door_locked", ent:GetInternalVariable("m_bLocked") or false)
+			ent:SetNWBool("ttt2_door_forceclosed", ent:GetInternalVariable("forceclosed") or false)
+			ent:SetNWBool("ttt2_door_open", door.IsOpen(ent) or false)
 
-		ent:SetNWBool("ttt2_door_locked", ent:GetInternalVariable("m_bLocked") or false)
-		ent:SetNWBool("ttt2_door_forceclosed", ent:GetInternalVariable("forceclosed") or false)
-		ent:SetNWBool("ttt2_door_open", door.IsOpen(ent) or false)
+			ent:SetNWBool("ttt2_door_player_use", door.PlayerCanUse(ent))
+			ent:SetNWBool("ttt2_door_player_touch", door.PlayerCanTouch(ent))
+			ent:SetNWBool("ttt2_door_auto_close", door.AutoCloses(ent))
+			ent:SetNWBool("ttt2_door_is_destructable", door.IsDestructible(ent))
 
-		ent:SetNWBool("ttt2_door_player_use", door.PlayerCanUse(ent))
-		ent:SetNWBool("ttt2_door_player_touch", door.PlayerCanTouch(ent))
-		ent:SetNWBool("ttt2_door_auto_close", door.AutoCloses(ent))
-		ent:SetNWBool("ttt2_door_is_destructable", door.IsDestructible(ent))
+			entityOutputs.RegisterMapEntityOutput(ent, "OnOpen", "TTT2DoorOpens")
+			entityOutputs.RegisterMapEntityOutput(ent, "OnClose", "TTT2DoorCloses")
+			entityOutputs.RegisterMapEntityOutput(ent, "OnFullyOpen", "TTT2DoorFullyOpen")
+			entityOutputs.RegisterMapEntityOutput(ent, "OnFullyClosed", "TTT2DoorFullyClosed")
 
-		entityOutputs.RegisterMapEntityOutput(ent, "OnOpen", "TTT2DoorOpens")
-		entityOutputs.RegisterMapEntityOutput(ent, "OnClose", "TTT2DoorCloses")
-		entityOutputs.RegisterMapEntityOutput(ent, "OnFullyOpen", "TTT2DoorFullyOpen")
-		entityOutputs.RegisterMapEntityOutput(ent, "OnFullyClosed", "TTT2DoorFullyClosed")
+			-- handles door pairs, this means double doors will be handles as one
+			-- door by the door module to prevent weird problems
+			HandleDoorPairs(ent)
 
-		-- handles door pairs, this means double doors will be handles as one
-		-- door by the door module to prevent weird problems
-		HandleDoorPairs(ent)
-
-		-- makes doors destructible if enabled by convar
-		if cvDestructableDoor:GetBool() and not (cvDestructableDoorLocked:GetBool() and ent:IsDoorLocked()) then
-			ent:MakeDoorDestructable(true)
+			-- makes doors destructible if enabled by convar
+			if cvDestructableDoor:GetBool() and not (cvDestructableDoorLocked:GetBool() and ent:IsDoorLocked()) then
+				ent:MakeDoorDestructable(true)
+			end
 		end
-	end
 
-	door_list.doors = doors
+		door_list.doors = doors
+
+		hook.Run("TTT2PostDoorSetup", doors)
+
+		net.Start("TTT2SyncDoorEntities")
+		net.WriteUInt(#doors, 16)
+
+		-- sync door list with clients
+		for i = 1, #doors do
+			net.WriteEntity(doors[i])
+		end
+
+		net.Broadcast()
+	end
+end
+
+if CLIENT then
+	net.Receive("TTT2SyncDoorEntities", function()
+		local amount = net.ReadUInt(16)
+
+		local doors = {}
+
+		for i = 1, amount do
+			doors[i] = net.ReadEntity()
+		end
+
+		door_list.doors = doors
+
+		hook.Run("TTT2PostDoorSetup", doors)
+	end)
 end
 
 ---

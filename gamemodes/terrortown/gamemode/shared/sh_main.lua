@@ -235,3 +235,12 @@ end
 function GM:TTT2PostCleanupMap()
 
 end
+
+---
+-- Called right after all doors are initialized on the map.
+-- @param table doorsTable A table with the newly registered door entities
+-- @hook
+-- @realm shared
+function GMTTT2PostDoorSetup(doorsTable)
+
+end

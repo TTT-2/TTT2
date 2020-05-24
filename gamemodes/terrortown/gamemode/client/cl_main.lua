@@ -131,8 +131,6 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:PostCleanupMap
 -- @local
 function GM:PostCleanupMap()
-	door.SetUp()
-
 	hook.Run("TTT2PostCleanupMap")
 end
 

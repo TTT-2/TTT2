@@ -757,9 +757,9 @@ function GM:PostCleanupMap()
 	ents.TTT.FixParentedPostCleanup()
 
 	entityOutputs.SetUp()
-	door.SetUp()
-
 	hook.Run("TTT2PostCleanupMap")
+
+	door.SetUp()
 end
 
 ---
