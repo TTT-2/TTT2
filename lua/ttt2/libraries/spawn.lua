@@ -264,7 +264,7 @@ function spawn.GetRandomPlayerSpawnEntity(ply)
 
 		local riggedSpawnPoint = spawn.MakeSpawnPointSafe(ply, pickedSpawnEntity:GetPos())
 
-		if riggedSpawnPoint then continue end
+		if not riggedSpawnPoint then continue end
 
 		local riggedSpawnEntity = ents.Create("info_player_terrorist")
 
