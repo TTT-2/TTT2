@@ -696,7 +696,7 @@ function ents.TTT.ProcessImportScript(map)
 	if tobool(settings.replacespawns) then
 		MsgN("Removing existing player spawns")
 
-		spawn.RemoveSpawnEntities()
+		spawn.RemovePlayerSpawnEntities()
 	end
 
 	MsgN("Removing existing weapons/ammo")

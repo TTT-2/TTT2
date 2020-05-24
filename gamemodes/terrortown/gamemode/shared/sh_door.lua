@@ -279,6 +279,8 @@ if SERVER then
 
 		if self:Health() == 0 then
 			self:SetHealth(cvDoorHealth:GetInt())
+
+			self:SetNWInt("fast_sync_health", self:Health())
 		end
 
 		-- if the door is grouped as a pair, call the other one as well
