@@ -8,6 +8,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Added a new ConVar to allow armor to also block headshots (`ttt_item_armor_block_headshots`, default value: 0). Thanks @TheNickSkater
 - Added essential items: 8 different types of items that are often used in other addons. You can remove them from the shop if you don't like them.
+- Added server proxy for `EPOP:AddMessage()`
+- Added `PrintMessage` overwrites so this function now uses TTT2 systems
 - Added a new HUD element to show information about an ongoing revival to the player that is revived
 - Added a load of functions to the `spawn` scope that can be used by addons
 - Added a thermal vision module, which can be used by addons to render entities with a thermal vision effect

@@ -3,6 +3,8 @@
 -- @author Mineotopia
 -- @desc An event popup system that works alongside the MSTACK system to display important messages
 
+local TryT = LANG.TryTranslation
+
 local defaultMessage = {
 	title = {
 		text = "A Test Popup, now with a multiline title, how NICE."
@@ -17,7 +19,6 @@ local defaultMessage = {
 local counter = 0
 
 EPOP = EPOP or {}
-
 EPOP.messageQueue = EPOP.messageQueue or {}
 
 ---
@@ -30,7 +31,7 @@ function EPOP:Think()
 
 	local elem = self.messageQueue[1]
 
-	if CurTime() >= elem.time then
+	if elem.time and CurTime() >= elem.time then
 		EPOP:RemoveMessage(elem.id)
 	end
 end
@@ -61,8 +62,8 @@ function EPOP:AddMessage(title, subtitle, displayTime, iconTable, blocking)
 	-- add the new message to the queue
 	self.messageQueue[queueSize + 1] = {
 		id = id,
-		title = isstring(title) and {text = title} or title,
-		subtitle = isstring(subtitle) and {text = subtitle} or subtitle,
+		title = istable(title) and title or {text = title or ""},
+		subtitle = istable(subtitle) and subtitle or {text = subtitle or ""},
 		displayTime = displayTime or 4,
 		iconTable = iconTable or {},
 		blocking = blocking == nil and false or blocking
@@ -87,7 +88,7 @@ function EPOP:ActivateMessage()
 
 	elem.time = CurTime() + elem.displayTime
 
-	print("[TTT2] " .. elem.title.text .. " // " .. elem.subtitle.text or "")
+	print("[TTT2] " .. elem.title.text .. " // " .. elem.subtitle.text)
 end
 
 ---
@@ -163,3 +164,29 @@ end
 function EPOP:Clear()
 	self.messageQueue = {}
 end
+
+net.Receive("ttt2_eventpopup", function()
+	local title, subtitle
+
+	if net.ReadBool() then
+		title = {}
+
+		title.text = TryT(net.ReadString())
+
+		if net.ReadBool() then
+			title.color = net.ReadColor()
+		end
+	end
+
+	if net.ReadBool() then
+		subtitle = {}
+
+		subtitle.text = TryT(net.ReadString())
+
+		if net.ReadBool() then
+			subtitle.color = net.ReadColor()
+		end
+	end
+
+	EPOP:AddMessage(title, subtitle, net.ReadUInt(16), nil, net.ReadBool())
+end)

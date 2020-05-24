@@ -31,6 +31,7 @@ ttt_include("sh_weaponry")
 ttt_include("sh_inventory")
 ttt_include("sh_door")
 ttt_include("sh_voice")
+ttt_include("sh_printmessage_override")
 ttt_include("sh_speed")
 
 ttt_include("vgui__cl_coloredbox")
@@ -350,7 +351,6 @@ function GM:TTTBeginRound()
 
 end
 
----
 -- A hook that is called when the round ends.
 -- @hook
 -- @realm client
