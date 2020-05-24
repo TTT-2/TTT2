@@ -64,7 +64,7 @@ function spawn.IsSpawnPointSafe(ply, pos, force, filter)
 		mins = -0.5 * sizePlayer,
 		maxs = 0.5 * sizePlayer,
 		filter = function(ent)
-			if not IsValid(ent) or ent:IsPlayer() then
+			if not IsValid(ent) or table.HasValue(filter, ent) then
 				return false
 			end
 
