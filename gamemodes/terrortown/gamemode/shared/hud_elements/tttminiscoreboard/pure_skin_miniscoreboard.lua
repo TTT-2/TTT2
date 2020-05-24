@@ -69,7 +69,7 @@ if CLIENT then
 		self.basecolor = self:GetHUDBasecolor()
 
 		plysList = util.GetFilteredPlayers(function (ply)
-			return ply:IsTerror() or ply:IsDeadTerror()
+			return ply:WasActiveInRound()
 		end)
 
 		self.curPlayerCount = #plysList
@@ -137,7 +137,7 @@ if CLIENT then
 		-- just update every 0.1 seconds; TODO maybe add a client ConVar
 		if self.lastUpdate + 0.1 < CurTime() then
 			local plys = util.GetFilteredPlayers(function(ply)
-				return ply:IsTerror() or ply:IsDeadTerror()
+				return ply:WasActiveInRound()
 			end)
 
 			if #plys ~= self.curPlayerCount then
@@ -149,6 +149,8 @@ if CLIENT then
 				-- sort playerlist: confirmed players should be in the first position
 				table.sort(plysList, SortMiniscoreboardFunc)
 			end
+
+			self.lastUpdate = CurTime()
 		end
 
 		-- draw bg and shadow
@@ -186,7 +188,5 @@ if CLIENT then
 		if not self:InheritParentBorder() then
 			self:DrawLines(self.pos.x, self.pos.y, self.size.w, self.size.h, self.basecolor.a)
 		end
-
-		self.lastUpdate = CurTime()
 	end
 end
