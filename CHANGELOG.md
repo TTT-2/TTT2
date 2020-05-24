@@ -27,7 +27,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Migrated the HUDManager settings to the new network sync system
 - Renamed `TTT2NET` to `ttt2net` and removed unnecessary self references
 - The `ttt2net` library can now also synchronize small to medium sized tables (adds the metadata type "table")
-- Reworked the old DNA Scanner 
+- Reworked the old DNA Scanner
   - New world- and viewmodel with an interactive screen
   - Removed the overcomplicated UI menu (simple handling with default keys instead)
   - The new default scanner behavior shows the direction and distance to the target
@@ -55,6 +55,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed role selection issues with subroles not properly replacing their baserole etc.
 - Fixed map lock/unlock trigger of doors not updating targetID
 - Fixed roles having sometimes the wrong radar color
+- Fixed miniscoreboard update issue and players not getting shown when entering force-spec mode
 
 ## [v0.6.4b](https://github.com/TTT-2/TTT2/tree/v0.6.4b) (2020-04-03)
 
