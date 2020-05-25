@@ -241,6 +241,6 @@ end
 -- @param table doorsTable A table with the newly registered door entities
 -- @hook
 -- @realm shared
-function GMTTT2PostDoorSetup(doorsTable)
+function GM:TTT2PostDoorSetup(doorsTable)
 
 end

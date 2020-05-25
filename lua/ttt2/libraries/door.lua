@@ -155,11 +155,13 @@ if SERVER then
 
 		hook.Run("TTT2PostDoorSetup", doors)
 
+		local amountDoors = #doors
+
 		net.Start("TTT2SyncDoorEntities")
-		net.WriteUInt(#doors, 16)
+		net.WriteUInt(amountDoors, 16)
 
 		-- sync door list with clients
-		for i = 1, #doors do
+		for i = 1, amountDoors do
 			net.WriteEntity(doors[i])
 		end
 
