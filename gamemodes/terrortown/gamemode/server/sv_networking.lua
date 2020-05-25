@@ -217,11 +217,11 @@ function SendFullStateUpdate()
 			local rd = v:GetSubRoleData()
 
 			if not roleData.unknownTeam and v:HasTeam(team)
-			or v:TTT2NETGetBool("body_found")
-			or team == TEAM_TRAITOR and rd.visibleForTraitors
-			or roleData.networkRoles and table.HasValue(roleData.networkRoles, rd)
-			or v:GetBaseRole() == ROLE_DETECTIVE
-			or ply == v
+				or v:TTT2NETGetBool("body_found")
+				or table.HasValue(rd.visibleForTeam, ply:GetTeam())
+				or roleData.networkRoles and table.HasValue(roleData.networkRoles, rd)
+				or v:GetBaseRole() == ROLE_DETECTIVE
+				or ply == v
 			then
 				tmp[v] = {v:GetSubRole() or ROLE_INNOCENT, v:GetTeam() or TEAM_INNOCENT}
 			else
@@ -308,11 +308,11 @@ local function ttt_request_rolelist(ply)
 			local rd = v:GetSubRoleData()
 
 			if not ply:GetSubRoleData().unknownTeam and v:HasTeam(team)
-			or v:TTT2NETGetBool("body_found")
-			or team == TEAM_TRAITOR and rd.visibleForTraitors
-			or roleData.networkRoles and table.HasValue(roleData.networkRoles, rd)
-			or v:GetBaseRole() == ROLE_DETECTIVE
-			or ply == v
+				or v:TTT2NETGetBool("body_found")
+				or table.HasValue(rd.visibleForTeam, ply:GetTeam())
+				or roleData.networkRoles and table.HasValue(roleData.networkRoles, rd)
+				or v:GetBaseRole() == ROLE_DETECTIVE
+				or ply == v
 			then
 				tmp[v] = {v:GetSubRole(), v:GetTeam()}
 			else

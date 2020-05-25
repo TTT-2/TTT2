@@ -7,11 +7,10 @@ function ROLE:PreInitialize()
 
 	self.abbr = "traitor"
 
+	self.builtin = true
+
 	self.defaultTeam = TEAM_TRAITOR
 	self.defaultEquipment = TRAITOR_EQUIPMENT
-
-	self.visibleForTraitors = true -- just for a better performance
-	self.builtin = true
 	self.surviveBonus = 0.5
 	self.scoreKillsMultiplier = 5
 	self.scoreTeamKillsMultiplier = -16

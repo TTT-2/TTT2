@@ -119,7 +119,7 @@ local function GetDataForRadar(ply, ent)
 		if tmpRole then
 			subrole = tmpRole
 		else
-			subrole = (ent:IsInTeam(ply) or ent:GetSubRoleData().visibleForTraitors) and ent:GetSubRole() or ROLE_INNOCENT
+			subrole = (ent:IsInTeam(ply) or table.HasValue(ent:GetSubRoleData().visibleForTeam, ply:GetTeam())) and ent:GetSubRole() or ROLE_INNOCENT
 		end
 	end
 
