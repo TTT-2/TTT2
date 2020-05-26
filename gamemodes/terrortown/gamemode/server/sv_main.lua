@@ -971,6 +971,9 @@ function PrepareRound()
 		ply:SetTargetPlayer(nil)
 		ply:ResetRoundDeathCounter()
 		ply:SetActiveInRound(false)
+
+		ply:CancelRevival(nil, true)
+		ply:SendRevivalReason(nil)
 	end
 
 	-- Tell hooks and map we started prep

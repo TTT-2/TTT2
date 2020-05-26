@@ -122,14 +122,15 @@ end
 -- @param Player ply The player entity that should spawn, this parameter is needed
 -- to make sure there is enough space for this specific playermodel.
 -- @param Vector pos The given position
+-- @param[default=1] number radiusMultiplier The radius multiplayer to calculate the new positions
 -- @return table A table of position vectors
 -- @realm server
-function spawn.GetSpawnPointsAroundSpawn(ply, pos)
+function spawn.GetSpawnPointsAroundSpawn(ply, pos, radiusMultiplier)
 	local sizePlayer = GetPlayerSize(ply)
 
 	if not pos then return {} end
 
-	local boundsPlayer = Vector(sizePlayer.x, sizePlayer.y, 0) * 1.5
+	local boundsPlayer = Vector(sizePlayer.x, sizePlayer.y, 0) * 1.5 * (radiusMultiplier or 1)
 	local positions = {}
 
 	for i = 1, #spawnPointVariations do
@@ -145,10 +146,11 @@ end
 -- @param Player ply The player entity that should spawn, this parameter is needed
 -- to make sure there is enough space for this specific playermodel.
 -- @param Vector unsafePos The unsafe spawn position
+-- @param[default=1] number radiusMultiplier The radius multiplayer to calculate the new positions
 -- @return Vector|nil Returns the safe spawn position, nil if none was found
 -- @realm server
-function spawn.MakeSpawnPointSafe(ply, unsafePos)
-	local spawnPoints = spawn.GetSpawnPointsAroundSpawn(ply, unsafePos)
+function spawn.MakeSpawnPointSafe(ply, unsafePos, radiusMultiplier)
+	local spawnPoints = spawn.GetSpawnPointsAroundSpawn(ply, unsafePos, radiusMultiplier)
 
 	for i = 1, #spawnPoints do
 		local spawnPoint = spawnPoints[i]

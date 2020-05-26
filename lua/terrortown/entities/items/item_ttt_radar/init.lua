@@ -91,6 +91,8 @@ local function TriggerRadarScan(ply)
 			net.WriteUInt(tgt.subrole, ROLE_BITS)
 		end
 
+		net.WriteString(tgt.team)
+
 		if tgt.color then
 			net.WriteBool(true)
 			net.WriteColor(tgt.color)
@@ -104,7 +106,7 @@ end
 concommand.Add("ttt_radar_scan", TriggerRadarScan)
 
 local function GetDataForRadar(ply, ent)
-	local subrole = -1
+	local subrole, team = -1, "none"
 
 	if not IsValid(ent) then
 		subrole = -1
@@ -121,9 +123,17 @@ local function GetDataForRadar(ply, ent)
 		else
 			subrole = (ent:IsInTeam(ply) or table.HasValue(ent:GetSubRoleData().visibleForTeam, ply:GetTeam())) and ent:GetSubRole() or ROLE_INNOCENT
 		end
+
+		local tmpTeam = hook.Run("TTT2ModifyRadarTeam", ply, ent)
+
+		if tmpTeam then
+			team = tmpTeam
+		else
+			team = (ent:IsInTeam(ply) or table.HasValue(ent:GetSubRoleData().visibleForTeam, ply:GetTeam())) and ent:GetTeam() or TEAM_INNOCENT
+		end
 	end
 
-	return subrole
+	return subrole, team
 end
 
 ---
@@ -134,11 +144,12 @@ end
 -- @param[opt] Color color A color for this radar point, this overwrites the normal color
 -- @realm server
 function RADAR.CreateTargetTable(ply, pos, ent, color)
-	local subrole = GetDataForRadar(ply, ent)
+	local subrole, team = GetDataForRadar(ply, ent)
 
 	return {
 		pos = pos,
 		subrole = subrole,
+		team = team,
 		color = color
 	}
 end

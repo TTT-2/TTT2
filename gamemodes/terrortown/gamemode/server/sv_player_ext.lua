@@ -899,7 +899,7 @@ end
 -- Cancel the ongoing revival process.
 -- @param[default="message_revival_canceled"] string failMessage The fail message that should be displayed for the client
 -- @realm server
-function plymeta:CancelRevival(failMessage)
+function plymeta:CancelRevival(failMessage, silent)
 	if not self:IsReviving() then return end
 
 	self:SetReviving(false)
@@ -907,6 +907,8 @@ function plymeta:CancelRevival(failMessage)
 	self:SendRevivalReason(nil)
 
 	timer.Remove("TTT2RevivePlayer" .. self:EntIndex())
+
+	if silent then return end
 
 	OnReviveFailed(self, failMessage or "message_revival_canceled")
 end

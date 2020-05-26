@@ -206,7 +206,7 @@ function RADAR:Draw(client)
 			subrole = tgt.subrole or ROLE_INNOCENT
 
 			local roleData = roles.GetByIndex(subrole)
-			local c = roleData.radarColor or TEAMS[roleData.defaultTeam].color
+			local c = roleData.radarColor or TEAMS[tgt.team].color
 
 			if tgt.color then
 				surface.SetDrawColor(tgt.color.r, tgt.color.g, tgt.color.b, alpha)
@@ -269,12 +269,14 @@ local function ReceiveRadarScan()
 			subrole = net.ReadUInt(ROLE_BITS)
 		end
 
+		local team = net.ReadString()
+
 		local color
 		if net.ReadBool() then
 			color = net.ReadColor()
 		end
 
-		RADAR.targets[#RADAR.targets + 1] = {pos = pos, subrole = subrole, hasSubrole = hasSubrole, color = color}
+		RADAR.targets[#RADAR.targets + 1] = {pos = pos, subrole = subrole, team = team, hasSubrole = hasSubrole, color = color}
 	end
 
 	RADAR.enable = true

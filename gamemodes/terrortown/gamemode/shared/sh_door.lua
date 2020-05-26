@@ -299,7 +299,7 @@ if SERVER then
 	-- @return Entity Returns the entity of the created prop
 	-- @realm server
 	function entmeta:SafeDestroyDoor(pushForce, surpressPair)
-		if not self:PlayerCanOpenDoor() or not door.IsValidNormal(self:GetClass()) then return end
+		if self.isDestroyed or not self:PlayerCanOpenDoor() or not door.IsValidNormal(self:GetClass()) then return end
 
 		-- if door is destroyed, spawn a prop in the world
 		local doorProp = ents.Create("prop_physics")
@@ -322,6 +322,12 @@ if SERVER then
 		-- we have to kill the entity here instead of removing it because this way we
 		-- have no problems with area portals (invisible rooms after door is destroyed)
 		self:Fire("Kill", "", 0)
+
+		-- set flag that this door is destroyed to prevent multiple prop spawns in case
+		-- this function is called multiple times for the same door in the same tick
+		self.isDestroyed = true
+
+		DamageLog("TTT2Doors: The door with the index " .. self:EntIndex() .. " has been destroyed.")
 
 		doorProp:Spawn()
 		doorProp:SetHealth(cvDoorPropHealth:GetInt())
