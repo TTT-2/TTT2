@@ -124,7 +124,7 @@ local function GetDataForRadar(ply, ent)
 
 		team = hook.Run("TTT2ModifyRadarTeam", ply, ent)
 
-		if not tean then
+		if not team then
 			team = (ent:IsInTeam(ply) or table.HasValue(ent:GetSubRoleData().visibleForTeam, ply:GetTeam())) and ent:GetTeam() or TEAM_INNOCENT
 		end
 	end
