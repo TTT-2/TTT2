@@ -91,7 +91,7 @@ local function TriggerRadarScan(ply)
 			net.WriteUInt(tgt.subrole, ROLE_BITS)
 		end
 
-		net.WriteString(tgt.team)
+		net.WriteString(tgt.team or "none")
 
 		if tgt.color then
 			net.WriteBool(true)
@@ -116,19 +116,15 @@ local function GetDataForRadar(ply, ent)
 			subrole = ROLE_INNOCENT
 		end
 	else
-		local tmpRole = hook.Run("TTT2ModifyRadarRole", ply, ent)
+		subrole = hook.Run("TTT2ModifyRadarRole", ply, ent)
 
-		if tmpRole then
-			subrole = tmpRole
-		else
+		if not subrole then
 			subrole = (ent:IsInTeam(ply) or table.HasValue(ent:GetSubRoleData().visibleForTeam, ply:GetTeam())) and ent:GetSubRole() or ROLE_INNOCENT
 		end
 
-		local tmpTeam = hook.Run("TTT2ModifyRadarTeam", ply, ent)
+		team = hook.Run("TTT2ModifyRadarTeam", ply, ent)
 
-		if tmpTeam then
-			team = tmpTeam
-		else
+		if not tean then
 			team = (ent:IsInTeam(ply) or table.HasValue(ent:GetSubRoleData().visibleForTeam, ply:GetTeam())) and ent:GetTeam() or TEAM_INNOCENT
 		end
 	end
