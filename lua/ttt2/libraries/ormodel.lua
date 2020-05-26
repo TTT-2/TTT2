@@ -6,7 +6,6 @@ local baseclass = baseclass
 local ipairs = ipairs
 local sql = sql
 local table = table
-local istable = istable
 local string = string
 
 local ormodel = {}
@@ -15,7 +14,7 @@ local ormodel = {}
 -- Creates a model with the given name and datastructure.
 -- @param string tableName The name of the model and hence the tablename in the database.
 -- @param table dataStructure The datastructure of the model. An array containing a table for each column/datavalue, with the identifier and the type of the data.
--- @param[default="_rowid_"] string|table primaryKey The primarykey of the database table. Should match one or multiple `colname` from the dataStructure.
+-- @param[default="_rowid"] table primaryKey The primarykey of the database table. Should match one or multiple `colname` from the dataStructure.
 -- @usage model = makeORModel("myOwnTable", {{colname = "name", coltype = "TEXT"}, {colname = "percent", coltype = "REAL"}, {colname = "count", coltype = "INTEGER"}}, {"name", "count"})
 -- @realm shared
 -- @return table The created model.
@@ -23,30 +22,32 @@ function makeORModel(tableName, dataStructure, primaryKey)
     local model = table.Copy(ormodel)
     local sanTableName = sql.SQLIdent(tableName)
 
-    primaryKey = primaryKey or "_rowid_"
+    primaryKey = primaryKey or {"_rowid"}
 
     model._tableName = tableName
     model._primaryKey = primaryKey
+    model._dataStructure = dataStructure
 
     if not sql.TableExists(tableName) then
         local query = "CREATE TABLE " .. sanTableName .. " ("
-        local columndata = ""
 
         -- populate columns with dataStructure
         for _, v in ipairs(dataStructure) do
-            columndata = columndata .. sql.SQLIdent(v.colname) .. " " .. sql.validateSqlType(v.coltype) .. ", "
+            query = query .. sql.SQLIdent(v.colname) .. " " .. sql.validateSqlType(v.coltype) .. ", "
         end
 
         -- delete ", " from the last concatenation
-        columndata = string.sub(columndata, 1, -3)
+        query = string.sub(query, 1, -3)
 
-        if primaryKey ~= "_rowid_" then
-            columndata = columndata .. ", PRIMARY KEY (" .. sql.SQLIdent(primaryKey) .. ")"
+        if primaryKey[1] ~= "_rowid" then
+            query = query .. ", PRIMARY KEY ("
+            for _, v in ipairs(primaryKey) do
+                query = query .. sql.SQLIdent(v) .. ", "
+            end
+            query = string.sub(query, 1, -3) .. ")"
         end
 
-        query = query .. columndata .. ")"
-
-        sql.Query(query)
+        sql.Query(query .. ")")
     end
 
     model:Init()
@@ -59,71 +60,45 @@ end
 function ormodel:Init()
 
     local sanTableName = sql.SQLIdent(self._tableName)
-    local primaryKey = self._primaryKey
+    local dataStructure = self._dataStructure
 
     self.save = function(this)
-        sql.Begin()
 
-        local updateQuery = "UPDATE " .. sanTableName .. " SET "
-        local columndata = ""
+        if IsValid(this._rowid) then
 
-        -------START UPDATE QUERY ----------------
-        for _, v in ipairs(dataStructure) do
-            columndata = columndata .. sql.SQLIdent(v.colname) .. "=" .. (sql.SQLStr(this[v.colname] or "NULL")) .. ", "
-        end
+            local updateQuery = "UPDATE " .. sanTableName .. " SET "
 
-        updateQuery = updateQuery .. string.sub(columndata, 1, -3)
-
-        if not istable(primaryKey) then
-            updateQuery = updateQuery .. " WHERE " .. sql.SQLIdent(primaryKey) .. sql.SQLStr(this[primaryKey])
-        else
-            local where = ""
-
-            for _, v in ipairs(primaryKey) do
-                where = where .. sql.SQLIdent(v) .. "=" .. sql.SQLStr(this[v]) .. " AND "
+            for _, v in ipairs(dataStructure) do
+                updateQuery = updateQuery .. sql.SQLIdent(v.colname) .. "=" .. (sql.SQLStr(this[v.colname] or "NULL")) .. ", "
             end
 
-            -- delete " AND " of the last concatenation
-            where = string.sub(where, 1, -6)
+            updateQuery = string.sub(updateQuery, 1, -3) .. " WHERE _rowid_=" .. this._rowid
+
+            sql.Query(updateQuery)
+
+        else
+            local insertQuery = "INSERT INTO " .. sanTableName .. " ("
+            local columns = ""
+            local columnvalues = ""
+
+            for _, v in ipairs(dataStructure) do
+                columns = columns .. sql.SQLIdent(v.colname) .. ", "
+                columnvalues = columnvalues .. (sql.SQLStr(this[v.colname] or "NULL")) .. ", "
+            end
+
+            insertQuery = insertQuery .. string.sub(columns, 1, -3) .. ") VALUES (" .. string.sub(columnvalues, 1, -3) .. ")"
+
+            sql.Query(insertQuery)
+
+            this._rowid = sql.QueryValue("SELECT last_insert_rowid()")
         end
-
-        sql.Query(updateQuery)
-        -------END UPDATE QUERY ----------------
-
-        -------START INSERT QUERY ----------------
-        local insertQuery = "INSERT OR IGNORE INTO " .. sanTableName .. " ("
-        local columns = ""
-        local columnvalues = ""
-
-        for _, v in ipairs(dataStructure) do
-            columns = columns .. sql.SQLIdent(v.colname) .. ", "
-            columnvalues = columnvalues .. (sql.SQLStr(this[v.colname] or "NULL")) .. ", "
-        end
-
-        insertQuery = insertQuery .. string.sub(columns, 1, -3) .. ") VALUES (" .. string.sub(columnvalues, 1, -3) .. ")"
-
-        sql.Query(insertQuery)
-        -------END INSERT QUERY ----------------
-
-        if not this._rowid_ and primaryKey == "_rowid_" then
-            this._rowid_ = sql.QueryValue("SELECT last_insert_rowid()")
-        end
-
-        sql.Commit()
     end
 
     self.delete = function(this)
-        if not istable(primaryKey) then
-            return sql.Query("DELETE FROM " .. sanTableName .. " WHERE " .. sql.SQLIdent(primaryKey) .. "=" .. sql.SQLStr(this[primaryKey]))
-        else
-            local where = ""
 
-            for _, v in ipairs(primaryKey) do
-                where = where .. sql.SQLIdent(v) .. "=" .. this[v] .. " AND "
-            end
+        if not IsValid(this._rowid) then return end
 
-            return sql.Query("DELETE FROM " .. sanTableName .. " WHERE " .. string.sub(where, 1, -6))
-        end
+        return sql.Query("DELETE FROM " .. sanTableName .. " WHERE _rowid_=" .. this._rowid)
     end
 end
 
@@ -150,14 +125,17 @@ end
 
 ---
 -- Retrieves a specific object by their primarykey from the database.
--- @param number|string primaryValue The value of the primarykey to search for.
--- @note Only works for models with one primarykey.
+-- @param table primaryValue The value(s) of the primarykey(s) to search for.
+-- @note In the case of multiple primarykeys you have to specify the corresponding values in the same order.
 -- @return table Returns the table of the found object.
 function ormodel:find(primaryValue)
+    local where = ""
 
-    if istable(self._primaryKey) then return end
+    for i, v in ipairs(primaryValue) do
+        where = where .. sql.SQLIdent(self._primaryKey[i]) .. "=" .. sql.SQLStr(v) .. " AND "
+    end
 
-    return sql.QueryRow("SELECT * FROM " .. sql.SQLIdent(self._tableName) .. " WHERE " .. sql.SQLIdent(self._primaryKey) .. "=" .. sql.SQLStr(primaryValue))
+    return sql.QueryRow("SELECT * FROM " .. sql.SQLIdent(self._tableName) .. " WHERE " .. string.sub(where, 1, -6))
 end
 
 ---
@@ -185,7 +163,7 @@ hook.Add("TTTBeginRound", "ormtest", function()
 
     myobject:save()
 
-    PrintTable(mymodel:find(myobject._id))
+    PrintTable(mymodel:find({myobject._rowid}))
 
     myobject.testing = "you should` read this"
     myobject.percent = 6.78
@@ -193,11 +171,11 @@ hook.Add("TTTBeginRound", "ormtest", function()
 
     myobject:save()
 
-    PrintTable(mymodel:find(myobject._id))
+    PrintTable(mymodel:find({myobject._rowid}))
     PrintTable(mymodel:all())
 
     myobject:delete()
-    if not IsValid(mymodel:find(myobject._id)) then
+    if not IsValid(mymodel:find({myobject._rowid})) then
         print("Successfully deleted myobject from database")
     end
 
