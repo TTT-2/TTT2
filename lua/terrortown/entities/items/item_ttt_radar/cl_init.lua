@@ -206,12 +206,12 @@ function RADAR:Draw(client)
 			subrole = tgt.subrole or ROLE_INNOCENT
 
 			local roleData = roles.GetByIndex(subrole)
-			local c = roleData.radarColor or TEAMS[tgt.team].color
+			local c = roleData.radarColor or (TEAMS[tgt.team] and TEAMS[tgt.team].color or nil)
 
 			if tgt.color then
 				surface.SetDrawColor(tgt.color.r, tgt.color.g, tgt.color.b, alpha)
 				surface.SetTextColor(tgt.color.r, tgt.color.g, tgt.color.b, alpha)
-			elseif tgt.hasSubrole and c then
+			elseif IsColor(c) then
 				surface.SetDrawColor(c.r, c.g, c.b, alpha)
 				surface.SetTextColor(c.r, c.g, c.b, alpha)
 			else
