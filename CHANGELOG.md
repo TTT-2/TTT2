@@ -42,6 +42,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - there's now a popup queue
   - popups are now also shown to dead players as well
 - Refactored the role selection code to reside in its own module and cleaned up the code
+- Refactored some internal functions in CLSCORE to prevent errors (thanks @Kefta)
 
 ### Fixed
 
@@ -56,6 +57,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed map lock/unlock trigger of doors not updating targetID
 - Fixed roles having sometimes the wrong radar color
 - Fixed miniscoreboard update issue and players not getting shown when entering force-spec mode
+- Fixed the CLSCORE window being too small for large winning team titles (will now adjust on demand)
 
 ## [v0.6.4b](https://github.com/TTT-2/TTT2/tree/v0.6.4b) (2020-04-03)
 
