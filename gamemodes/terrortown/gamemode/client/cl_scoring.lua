@@ -45,6 +45,8 @@ surface.CreateFont("WinHuge", {
 	extended = true
 })
 
+local titleBackgroundColor = Color(50, 50, 50, 255)
+
 -- so much text here I'm using shorter names than usual
 local T = LANG.GetTranslation
 local PT = LANG.GetParamTranslation
@@ -509,6 +511,7 @@ end
 function CLSCORE:BuildTitle(wintype)
 	-- wintype can be both a WIN_ var or the team name directly, so we need to convert it to a teamname
 	local winnerTeam = TEAM_INNOCENT
+
 	if wintype == WIN_TIMELIMIT or wintype == WIN_INNOCENT then
 		winnerTeam = TEAM_INNOCENT
 	elseif wintype == WIN_TRAITOR then
@@ -520,7 +523,7 @@ function CLSCORE:BuildTitle(wintype)
 			Text = "hilite_win_bees",
 			BoxColor = TEAMS[TEAM_INNOCENT].color,
 			TextColor = COLOR_WHITE,
-			BackgroundColor = Color(50, 50, 50, 255)
+			BackgroundColor = titleBackgroundColor
 		}
 	elseif isstring(wintype) then
 		winnerTeam = wintype
@@ -530,7 +533,7 @@ function CLSCORE:BuildTitle(wintype)
 		Text = "hilite_win_" .. winnerTeam,
 		BoxColor = TEAMS[winnerTeam].color,
 		TextColor = COLOR_WHITE,
-		BackgroundColor = Color(50, 50, 50, 255)
+		BackgroundColor = titleBackgroundColor
 	}
 end
 
@@ -563,8 +566,6 @@ function CLSCORE:ShowPanel()
 	-- size the panel based on the win text w/ 88px horizontal padding and 44px veritcal padding
 	surface.SetFont("WinHuge")
 	local w, h = surface.GetTextSize(T(title.Text))
-
-	MsgN("Calculated width of text = " .. w)
 
 	-- w + padding (100) + DPropertySheet padding (8) + winlbl padding (30) + offset margin (margin * 2) + size margin (margin)
 	w, h = math.max(700, w + 138 + margin * 3), 500
@@ -729,8 +730,8 @@ function CLSCORE:Init(events)
 	local tms = nil
 	local scores = {}
 	local nicks = {}
-
 	local game, selected, spawn = false, false, false
+
 	for i = 1, #events do
 		local e = events[i]
 
