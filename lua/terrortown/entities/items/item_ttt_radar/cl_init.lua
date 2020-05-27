@@ -17,6 +17,8 @@ local sample_scan = surface.GetTextureID("vgui/ttt/sample_scan")
 local det_beacon = surface.GetTextureID("vgui/ttt/det_beacon")
 local near_cursor_dist = 180
 
+local colorFallback = Color(150, 150, 150)
+
 RADAR = RADAR or {}
 RADAR.targets = {}
 RADAR.enable = false
@@ -206,17 +208,14 @@ function RADAR:Draw(client)
 			subrole = tgt.subrole or ROLE_INNOCENT
 
 			local roleData = roles.GetByIndex(subrole)
-			local c = roleData.radarColor or (TEAMS[tgt.team] and TEAMS[tgt.team].color or nil)
+			local c = roleData.radarColor or (TEAMS[tgt.team] and TEAMS[tgt.team].color or colorFallback)
 
 			if tgt.color then
 				surface.SetDrawColor(tgt.color.r, tgt.color.g, tgt.color.b, alpha)
 				surface.SetTextColor(tgt.color.r, tgt.color.g, tgt.color.b, alpha)
-			elseif IsColor(c) then
+			else
 				surface.SetDrawColor(c.r, c.g, c.b, alpha)
 				surface.SetTextColor(c.r, c.g, c.b, alpha)
-			else
-				surface.SetDrawColor(150, 150, 150, alpha)
-				surface.SetTextColor(150, 150, 150, alpha)
 			end
 
 			DrawTarget(tgt, 24, 0)
