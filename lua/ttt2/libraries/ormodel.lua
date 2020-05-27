@@ -14,7 +14,7 @@ local ormodel = {}
 -- Creates a model with the given name and datastructure.
 -- @param string tableName The name of the model and hence the tablename in the database.
 -- @param table dataStructure The datastructure of the model. An array containing a table for each column/datavalue, with the identifier and the type of the data.
--- @param[default="_rowid"] table primaryKey The primarykey of the database table. Should match one or multiple `colname` from the dataStructure.
+-- @param[default="_rowid_"] table primaryKey The primarykey of the database table. Should match one or multiple `colname` from the dataStructure.
 -- @usage model = makeORModel("myOwnTable", {{colname = "name", coltype = "TEXT"}, {colname = "percent", coltype = "REAL"}, {colname = "count", coltype = "INTEGER"}}, {"name", "count"})
 -- @realm shared
 -- @return table The created model.
@@ -22,7 +22,7 @@ function makeORModel(tableName, dataStructure, primaryKey)
     local model = table.Copy(ormodel)
     local sanTableName = sql.SQLIdent(tableName)
 
-    primaryKey = primaryKey or {"_rowid"}
+    primaryKey = primaryKey or {"_rowid_"}
 
     model._tableName = tableName
     model._primaryKey = primaryKey
@@ -39,7 +39,7 @@ function makeORModel(tableName, dataStructure, primaryKey)
         -- delete ", " from the last concatenation
         query = string.sub(query, 1, -3)
 
-        if primaryKey[1] ~= "_rowid" then
+        if primaryKey ~= {"_rowid_"} then
             query = query .. ", PRIMARY KEY ("
             for _, v in ipairs(primaryKey) do
                 query = query .. sql.SQLIdent(v) .. ", "
@@ -64,7 +64,7 @@ function ormodel:Init()
 
     self.save = function(this)
 
-        if IsValid(this._rowid) then
+        if this._rowid_ then
 
             local updateQuery = "UPDATE " .. sanTableName .. " SET "
 
@@ -72,7 +72,7 @@ function ormodel:Init()
                 updateQuery = updateQuery .. sql.SQLIdent(v.colname) .. "=" .. (sql.SQLStr(this[v.colname] or "NULL")) .. ", "
             end
 
-            updateQuery = string.sub(updateQuery, 1, -3) .. " WHERE _rowid_=" .. sql.SQLStr(this._rowid)
+            updateQuery = string.sub(updateQuery, 1, -3) .. " WHERE _rowid_=" .. sql.SQLStr(this._rowid_)
 
             sql.Query(updateQuery)
 
@@ -90,15 +90,15 @@ function ormodel:Init()
 
             sql.Query(insertQuery)
 
-            this._rowid = sql.QueryValue("SELECT last_insert_rowid()")
+            this._rowid_ = sql.QueryValue("SELECT last_insert_rowid()")
         end
     end
 
     self.delete = function(this)
 
-        if not IsValid(this._rowid) then return end
+        if not this._rowid_ then return end
 
-        return sql.Query("DELETE FROM " .. sanTableName .. " WHERE _rowid_=" .. sql.SQLStr(this._rowid))
+        return sql.Query("DELETE FROM " .. sanTableName .. " WHERE _rowid_=" .. sql.SQLStr(this._rowid_))
     end
 end
 
@@ -134,8 +134,9 @@ function ormodel:find(primaryValue)
     for i, v in ipairs(primaryValue) do
         where = where .. sql.SQLIdent(self._primaryKey[i]) .. "=" .. sql.SQLStr(v) .. " AND "
     end
+    where = string.sub(where, 1, -6)
 
-    return sql.QueryRow("SELECT * FROM " .. sql.SQLIdent(self._tableName) .. " WHERE " .. string.sub(where, 1, -6))
+    return sql.QueryRow("SELECT * FROM " .. sql.SQLIdent(self._tableName) .. " WHERE " .. where)
 end
 
 ---
@@ -163,7 +164,7 @@ hook.Add("TTTBeginRound", "ormtest", function()
 
     myobject:save()
 
-    PrintTable(mymodel:find({myobject._rowid}))
+    PrintTable(mymodel:find({myobject._rowid_}))
 
     myobject.testing = "you should` read this"
     myobject.percent = 6.78
@@ -171,11 +172,11 @@ hook.Add("TTTBeginRound", "ormtest", function()
 
     myobject:save()
 
-    PrintTable(mymodel:find({myobject._rowid}))
+    PrintTable(mymodel:find({myobject._rowid_}))
     PrintTable(mymodel:all())
 
     myobject:delete()
-    if not IsValid(mymodel:find({myobject._rowid})) then
+    if not IsValid(mymodel:find({myobject._rowid_})) then
         print("Successfully deleted myobject from database")
     end
 
