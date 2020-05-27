@@ -25,8 +25,25 @@ CLSCORE.Players = {}
 CLSCORE.EventDisplay = {}
 CLSCORE.StartTime = 0
 CLSCORE.Panel = nil
+CLSCORE.ScorePanelColor = Color(150, 50, 50)
+CLSCORE.ScorePanelNames = {
+	"",
+	"col_player",
+	"col_role",
+	"col_kills1",
+	"col_kills2",
+	"col_points",
+	"col_team",
+	"col_total"
+}
 
-surface.CreateFont("WinHuge", {font = "Trebuchet24", size = 72, weight = 1000, shadow = true})
+surface.CreateFont("WinHuge", {
+	font = "Trebuchet24",
+	size = 72,
+	weight = 1000,
+	shadow = true,
+	extended = true
+})
 
 -- so much text here I'm using shorter names than usual
 local T = LANG.GetTranslation
@@ -95,19 +112,19 @@ function CLSCORE.DeclareEventDisplay(event_id, event_fns)
 	-- basic input vetting, can't check returned value types because the
 	-- functions may be impure
 	if not tonumber(event_id) then
-		Error("Event ??? display: invalid event id\n")
+		error("Event ??? display: invalid event id")
 	end
 
 	if not event_fns or not istable(event_fns) then
-		Error(Format("Event %d display: no display functions found.\n", event_id))
+		error(string.format("Event %d display: no display functions found.", event_id))
 	end
 
 	if not event_fns.text then
-		Error(Format("Event %d display: no text display function found.\n", event_id))
+		error(string.format("Event %d display: no text display function found.", event_id))
 	end
 
 	if not event_fns.icon then
-		Error(Format("Event %d display: no icon and tooltip display function found.\n", event_id))
+		error(string.format("Event %d display: no icon and tooltip display function found.", event_id))
 	end
 
 	CLSCORE.EventDisplay[event_id] = event_fns
@@ -119,7 +136,10 @@ end
 -- @realm client
 -- @internal
 function CLSCORE:FillDList(dlst)
-	for _, e in pairs(self.Events) do
+	local events = self.Events
+
+	for i = 1, #events do
+		local e = events[i]
 		local etxt = self:TextForEvent(e)
 		local eicon, ttip = self:IconForEvent(e)
 		local etime = self:TimeForEvent(e)
@@ -187,9 +207,13 @@ function CLSCORE:BuildScorePanel(dpanel)
 	dlist:SetSortable(true)
 	dlist:SetMultiSelect(false)
 
-	local colnames = {"", "col_player", "col_roles", "col_teams", "col_kills1", "col_kills2", "col_points", "col_team", "col_total"}
+	local scorenames = self.ScorePanelNames
 
-	for _, name in pairs(colnames) do
+	for i = 1, #scorenames do
+		local name = scorenames[i]
+
+		if not isstring(name) then continue end
+
 		if name == "" then
 			-- skull icon column
 			local c = dlist:AddColumn("")
@@ -284,7 +308,7 @@ function CLSCORE:BuildScorePanel(dpanel)
 
 			if s.deaths > 0 then
 				surv = vgui.Create("ColoredBox", dlist)
-				surv:SetColor(Color(150, 50, 50))
+				surv:SetColor(self.ScorePanelColor)
 				surv:SetBorder(false)
 				surv:SetSize(18, 18)
 
@@ -310,7 +334,7 @@ function CLSCORE:BuildScorePanel(dpanel)
 			-- because images can't be sorted, so instead hack in a dummy value
 			local surv_col = l.Columns[1]
 			if surv_col then
-				surv_col.Value = type(surv_col.Value) == "Panel" and "1" or "0"
+				surv_col.Value = TypeID(surv_col.Value) == TYPE_PANEL and "1" or "0"
 			end
 		end
 	end
@@ -371,46 +395,22 @@ end
 ---
 -- double check that we have no nils
 local function ValidAward(a)
-	return a and a.nick and a.text and a.title and a.priority
+	return istable(a) and isstring(a.nick) and isstring(a.text) and isstring(a.title) and isnumber(a.priority)
 end
 
 ---
 -- Creates the highlights @{Panel}
+--
 -- @param Panel dpanel
+-- @param table title
+-- @param number starttime
+-- @param number endtime
 -- @realm client
 -- @internal
-function CLSCORE:BuildHilitePanel(dpanel)
+function CLSCORE:BuildHilitePanel(dpanel, title, starttime, endtime)
 	local w, h = dpanel:GetSize()
-	local title = {c = TEAMS[TEAM_INNOCENT].color or INNOCENT.color, txt = "hilite_win_" .. TEAM_INNOCENT}
-	local endtime = self.StartTime
 
-	for i = #self.Events, 1, -1 do
-		local e = self.Events[i]
-
-		if e.id == EVENT_FINISH then
-			endtime = e.t
-
-			local wintype = e.win
-
-			-- when win is due to timeout, innocents win
-			if wintype == WIN_TIMELIMIT then
-				wintype = WIN_INNOCENT
-			end
-
-			if wintype ~= WIN_NONE then
-				if wintype == WIN_TRAITOR then
-					wintype = TEAM_TRAITOR
-				elseif wintype == WIN_INNOCENT then
-					wintype = TEAM_INNOCENT
-				end
-
-				title = {c = TEAMS[wintype].color or c, txt = "hilite_win_" .. wintype}
-			end
-
-			break
-		end
-	end
-
+	-- List of traitors
 	local tr = {}
 
 	for k, v in pairs(self.Tms) do
@@ -419,19 +419,18 @@ function CLSCORE:BuildHilitePanel(dpanel)
 		end
 	end
 
-	local roundtime = endtime - self.StartTime
 	local numply = table.Count(self.Players)
 	local numtr = table.Count(tr)
 
 	local bg = vgui.Create("ColoredBox", dpanel)
-	bg:SetColor(Color(50, 50, 50, 255))
+	bg:SetColor(title.BackgroundColor)
 	bg:SetSize(w, h)
 	bg:SetPos(0, 0)
 
 	local winlbl = vgui.Create("DLabel", dpanel)
 	winlbl:SetFont("WinHuge")
-	winlbl:SetText(T(title.txt))
-	winlbl:SetTextColor(COLOR_WHITE)
+	winlbl:SetText(T(title.Text))
+	winlbl:SetTextColor(title.TextColor)
 	winlbl:SizeToContents()
 
 	local xwin = (w - winlbl:GetWide()) * 0.5
@@ -440,7 +439,7 @@ function CLSCORE:BuildHilitePanel(dpanel)
 	winlbl:SetPos(xwin, ywin)
 
 	bg.PaintOver = function()
-		draw.RoundedBox(8, xwin - 15, ywin - 5, winlbl:GetWide() + 30, winlbl:GetTall() + 10, title.c)
+		draw.RoundedBox(8, xwin - 15, ywin - 5, winlbl:GetWide() + 30, winlbl:GetTall() + 10, title.BoxColor)
 	end
 
 	local ysubwin = ywin + winlbl:GetTall()
@@ -452,7 +451,7 @@ function CLSCORE:BuildHilitePanel(dpanel)
 	partlbl:SetPos(xwin, ysubwin + 8)
 
 	local timelbl = vgui.Create("DLabel", dpanel)
-	timelbl:SetText(PT("hilite_duration", {time = util.SimpleTime(roundtime, "%02i:%02i")}))
+	timelbl:SetText(PT("hilite_duration", {time = util.SimpleTime(endtime - starttime, "%02i:%02i")}))
 	timelbl:SizeToContents()
 	timelbl:SetPos(xwin + winlbl:GetWide() - timelbl:GetWide(), ysubwin + 8)
 
@@ -470,7 +469,7 @@ function CLSCORE:BuildHilitePanel(dpanel)
 	-- Before we pick awards, seed the rng in a way that is the same on all
 	-- clients. We can do this using the round start time. To make it a bit more
 	-- random, involve the round's duration too.
-	math.randomseed(self.StartTime + endtime)
+	math.randomseed(starttime + endtime)
 	math.random(); math.random(); math.random() -- warming up
 
 	-- Attempt to generate every award, then sort the succeeded ones based on
@@ -501,14 +500,76 @@ function CLSCORE:BuildHilitePanel(dpanel)
 end
 
 ---
+-- Converts the wintype into a title object to be used with @{CLSCORE:BuildHilitePanel}.
+--
+-- @internal
+-- @realm client
+-- @param string|number wintype
+-- @return table The title object table
+function CLSCORE:BuildTitle(wintype)
+	-- wintype can be both a WIN_ var or the team name directly, so we need to convert it to a teamname
+	local winnerTeam = TEAM_INNOCENT
+	if wintype == WIN_TIMELIMIT or wintype == WIN_INNOCENT then
+		winnerTeam = TEAM_INNOCENT
+	elseif wintype == WIN_TRAITOR then
+		winnerTeam = TEAM_TRAITOR
+	elseif wintype == WIN_NONE then
+		-- Special case, that should not be reachable, as WIN_NONE usually prevents a round from ending
+		-- If it should, we will show a tie.
+		return {
+			Text = "hilite_win_bees",
+			BoxColor = TEAMS[TEAM_INNOCENT].color,
+			TextColor = COLOR_WHITE,
+			BackgroundColor = Color(50, 50, 50, 255)
+		}
+	elseif isstring(wintype) then
+		winnerTeam = wintype
+	end
+
+	return {
+		Text = "hilite_win_" .. winnerTeam,
+		BoxColor = TEAMS[winnerTeam].color,
+		TextColor = COLOR_WHITE,
+		BackgroundColor = Color(50, 50, 50, 255)
+	}
+end
+
+---
 -- Displays the score @{Panel} for the local @{Player}
 -- @realm client
 function CLSCORE:ShowPanel()
+	if IsValid(self.Panel) then
+		self:ClearPanel()
+	end
+
+	local wintype
 	local margin = 15
 	local dpanel = vgui.Create("DFrame")
-	local w, h = 700, 500
+	local starttime = self.StartTime
+	local endtime = starttime
+	local events = self.Events
 
-	dpanel:SetSize(700, 500)
+	for i = #events, 1, -1 do
+		local e = events[i]
+		if e.id == EVENT_FINISH then
+			endtime = e.t
+			wintype = e.win
+			break
+		end
+	end
+
+	local title = self:BuildTitle(wintype)
+
+	-- size the panel based on the win text w/ 88px horizontal padding and 44px veritcal padding
+	surface.SetFont("WinHuge")
+	local w, h = surface.GetTextSize(T(title.Text))
+
+	MsgN("Calculated width of text = " .. w)
+
+	-- w + padding (100) + DPropertySheet padding (8) + winlbl padding (30) + offset margin (margin * 2) + size margin (margin)
+	w, h = math.max(700, w + 138 + margin * 3), 500
+
+	dpanel:SetSize(w, h)
 	dpanel:Center()
 	dpanel:SetTitle(T("report_title"))
 	dpanel:SetVisible(true)
@@ -551,7 +612,7 @@ function CLSCORE:ShowPanel()
 	dtabhilite:SetPaintBackground(false)
 	dtabhilite:StretchToParent(padding, padding, padding, padding)
 
-	self:BuildHilitePanel(dtabhilite)
+	self:BuildHilitePanel(dtabhilite, title, starttime, endtime)
 
 	dtabsheet:AddSheet(T("report_tab_hilite"), dtabhilite, "icon16/star.png", false, false, T("report_tab_hilite_tip"))
 
@@ -584,22 +645,22 @@ end
 -- @realm client
 -- @internal
 function CLSCORE:ClearPanel()
-	if self.Panel then
-		-- move the mouse off any tooltips and then remove the panel next tick
+	if not IsValid(self.Panel) then return end
 
-		-- we need this hack as opposed to just calling Remove because gmod does
-		-- not offer a means of killing the tooltip, and doesn't clean it up
-		-- properly on Remove
-		input.SetCursorPos(ScrW() * 0.5, ScrH() * 0.5)
+	-- move the mouse off any tooltips and then remove the panel next tick
 
-		local pnl = self.Panel
+	-- we need this hack as opposed to just calling Remove because gmod does
+	-- not offer a means of killing the tooltip, and doesn't clean it up
+	-- properly on Remove
+	input.SetCursorPos(ScrW() * 0.5, ScrH() * 0.5)
 
-		timer.Simple(0, function()
-			if not IsValid(pnl) then return end
+	local pnl = self.Panel
 
-			pnl:Remove()
-		end)
-	end
+	timer.Simple(0, function()
+		if not IsValid(pnl) then return end
+
+		pnl:Remove()
+	end)
 end
 
 ---
@@ -608,7 +669,9 @@ end
 -- @realm client
 -- @internal
 function CLSCORE:SaveLog()
-	if self.Events and #self.Events <= 0 then
+	local events = self.Events
+
+	if events == nil or #events == 0 then
 		chat.AddText(COLOR_WHITE, T("report_save_error"))
 
 		return
@@ -625,7 +688,8 @@ function CLSCORE:SaveLog()
 
 	log = log .. string.format("%s | %-25s | %s\n", " TIME", "TYPE", "WHAT HAPPENED") .. string.rep("-", 50) .. "\n"
 
-	for _, e in pairs(self.Events) do
+	for i = 1, #events do
+		local e = events[i]
 		local etxt = self:TextForEvent(e)
 		local etime = self:TimeForEvent(e)
 		local _, etype = self:IconForEvent(e)
@@ -661,27 +725,34 @@ end
 -- @internal
 function CLSCORE:Init(events)
 	-- Get start time and traitors
-	local starttime
-	local tms
-
-	for _, e in pairs(events) do
-		if e.id == EVENT_GAME and e.state == ROUND_ACTIVE then
-			starttime = e.t
-		elseif e.id == EVENT_SELECTED then
-			tms = e.tms
-		end
-
-		if starttime and tms then break end
-	end
-
-	-- Get scores and players
+	local starttime = 0
+	local tms = nil
 	local scores = {}
 	local nicks = {}
 
-	for _, e in pairs(events) do
-		if e.id == EVENT_SPAWN and e.sid64 ~= nil then
+	local game, selected, spawn = false, false, false
+	for i = 1, #events do
+		local e = events[i]
+
+		if e.id == EVENT_GAME and e.state == ROUND_ACTIVE then
+			starttime = e.t
+
+			if selected and spawn then break end
+
+			game = true
+		elseif e.id == EVENT_SELECTED then
+			tms = e.tms
+
+			if game and spawn then break end
+
+			selected = true
+		elseif e.id == EVENT_SPAWN and e.sid64 ~= nil then
 			scores[e.sid64] = ScoreInit()
 			nicks[e.sid64] = e.ni
+
+			if game and selected then break end
+
+			spawn = true
 		end
 	end
 
