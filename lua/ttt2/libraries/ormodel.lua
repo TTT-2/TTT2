@@ -72,7 +72,7 @@ function ormodel:Init()
                 updateQuery = updateQuery .. sql.SQLIdent(v.colname) .. "=" .. (sql.SQLStr(this[v.colname] or "NULL")) .. ", "
             end
 
-            updateQuery = string.sub(updateQuery, 1, -3) .. " WHERE _rowid_=" .. this._rowid
+            updateQuery = string.sub(updateQuery, 1, -3) .. " WHERE _rowid_=" .. sql.SQLStr(this._rowid)
 
             sql.Query(updateQuery)
 
@@ -98,7 +98,7 @@ function ormodel:Init()
 
         if not IsValid(this._rowid) then return end
 
-        return sql.Query("DELETE FROM " .. sanTableName .. " WHERE _rowid_=" .. this._rowid)
+        return sql.Query("DELETE FROM " .. sanTableName .. " WHERE _rowid_=" .. sql.SQLStr(this._rowid))
     end
 end
 
