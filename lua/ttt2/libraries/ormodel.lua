@@ -15,10 +15,10 @@ local ormodel = {}
 -- @param string tableName The name of the model and hence the tablename in the database.
 -- @param table dataStructure The datastructure of the model. An array containing a table for each column/datavalue, with the identifier and the type of the data.
 -- @param[default="_rowid_"] table primaryKey The primarykey of the database table. Should match one or multiple `colname` from the dataStructure.
--- @usage model = makeORModel("myOwnTable", {{colname = "name", coltype = "TEXT"}, {colname = "percent", coltype = "REAL"}, {colname = "count", coltype = "INTEGER"}}, {"name", "count"})
+-- @usage model = MakeOrmodel("myOwnTable", {{colname = "name", coltype = "TEXT"}, {colname = "percent", coltype = "REAL"}, {colname = "count", coltype = "INTEGER"}}, {"name", "count"})
 -- @realm shared
 -- @return table The created model.
-function makeORModel(tableName, dataStructure, primaryKey)
+function MakeOrmodel(tableName, dataStructure, primaryKey)
     local model = table.Copy(ormodel)
     local sanTableName = sql.SQLIdent(tableName)
 
@@ -62,7 +62,7 @@ function ormodel:Init()
     local sanTableName = sql.SQLIdent(self._tableName)
     local dataStructure = self._dataStructure
 
-    self.save = function(this)
+    self.Save = function(this)
 
         if this._rowid_ then
 
@@ -94,7 +94,7 @@ function ormodel:Init()
         end
     end
 
-    self.delete = function(this)
+    self.Delete = function(this)
 
         if not this._rowid_ then return end
 
@@ -105,13 +105,13 @@ end
 ---
 -- Creates a new object of the model.
 -- @return table The created object.
-function ormodel:new()
+function ormodel:New()
     local object = {}
 
     object.BaseClass = baseclass.Get(self._tableName)
 
-    object.save = object.BaseClass.save
-    object.delete = object.BaseClass.delete
+    object.Save = object.BaseClass.Save
+    object.Delete = object.BaseClass.Delete
 
     return object
 end
@@ -119,7 +119,7 @@ end
 ---
 -- Retrieves all saved objects of the model from the database.
 -- @return table Returns an array of all found objects.
-function ormodel:all()
+function ormodel:All()
     return sql.Query("SELECT * FROM " .. sql.SQLIdent(self._tableName))
 end
 
@@ -128,7 +128,7 @@ end
 -- @param table primaryValue The value(s) of the primarykey(s) to search for.
 -- @note In the case of multiple primarykeys you have to specify the corresponding values in the same order.
 -- @return table Returns the table of the found object.
-function ormodel:find(primaryValue)
+function ormodel:Find(primaryValue)
     local where = ""
 
     for i, v in ipairs(primaryValue) do
@@ -143,53 +143,53 @@ end
 -- Deletes the given object from the database storage.
 -- @note This function will be defined when the model is made.
 -- @see `makeORModel()`
-function ormodel:delete()
+function ormodel:Delete()
 end
 
 ---
 -- Saves the data of the given object to the database storage.
 -- @note This function will be defined when the model is made.
 -- @see `makeORModel()`
-function ormodel:save()
+function ormodel:Save()
 end
 
 -- testing / example usage
 hook.Add("TTTBeginRound", "ormtest", function()
-    local mymodel = makeORModel("a_new`_test", {{colname = "testing", coltype = "TEXT"}, {colname = "percent", coltype = "REAL"}, {colname = "jup", coltype = "INTEGER"}})
-    local myobject = mymodel:new()
+    local mymodel = MakeOrmodel("a_new`_test", {{colname = "testing", coltype = "TEXT"}, {colname = "percent", coltype = "REAL"}, {colname = "jup", coltype = "INTEGER"}})
+    local myobject = mymodel:New()
 
     myobject.testing = "hello world! x2"
     myobject.percent = 1.5464532
     myobject.jop = 345
 
-    myobject:save()
+    myobject:Save()
 
-    PrintTable(mymodel:find({myobject._rowid_}))
+    PrintTable(mymodel:Find({myobject._rowid_}))
 
     myobject.testing = "you should` read this"
     myobject.percent = 6.78
     myobject.jop = 4444
 
-    myobject:save()
+    myobject:Save()
 
-    PrintTable(mymodel:find({myobject._rowid_}))
-    PrintTable(mymodel:all())
+    PrintTable(mymodel:Find({myobject._rowid_}))
+    PrintTable(mymodel:All())
 
-    myobject:delete()
-    if not IsValid(mymodel:find({myobject._rowid_})) then
+    myobject:Delete()
+    if not IsValid(mymodel:Find({myobject._rowid_})) then
         print("Successfully deleted myobject from database")
     end
 
-    local myothermodel = makeORModel("something_stupid", {{colname = "name", coltype = "TEXT"}, {colname = "percent", coltype = "REAL"}, {colname = "number", coltype = "INTEGER"}}, {"name", "percent"})
-    local myotherobject = myothermodel:new()
+    local myothermodel = MakeOrmodel("something_stupid", {{colname = "name", coltype = "TEXT"}, {colname = "percent", coltype = "REAL"}, {colname = "number", coltype = "INTEGER"}}, {"name", "percent"})
+    local myotherobject = myothermodel:New()
 
     myotherobject.name = "jackal"
     myotherobject.percent = 0.13
     myotherobject.number = 6
 
-    myotherobject:save()
+    myotherobject:Save()
 
-    myotherobject:delete()
+    myotherobject:Delete()
 
-    PrintTable(myothermodel:all())
+    PrintTable(myothermodel:All())
 end)
