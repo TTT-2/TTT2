@@ -54,7 +54,7 @@ local valid_doors = {
 local function GetClosedAngle(ent)
 	local data = ent:GetInternalVariable("m_angRotationClosed")
 
-	if not data then return end
+	if not data or #data < 3 then return end
 
 	return Angle(data[1], data[2], data[3])
 end
@@ -72,11 +72,11 @@ local function FindPair(ent)
 		local ang1 = GetClosedAngle(ent)
 		local ang2 = GetClosedAngle(foundEnt)
 
-		if not isangle(ang1) or not isangle(ang2) then continue end
+		if not ang1 or not ang2 then continue end
 
 		ang1:Normalize()
 
-		ang2:Add(Angle(0, 180, 0))
+		ang2.y = ang2.y + 180
 		ang2:Normalize()
 
 		if ang1 ~= ang2 then continue end
