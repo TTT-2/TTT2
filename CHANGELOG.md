@@ -18,6 +18,9 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added speed handling system based on the `TTTPlayerSpeedModifier` hook
 - Added a convenience function for the creation of radar points: `RADAR.CreateTargetTable(ply, pos, ent, color)`
 - Added the possibility to change the radar time by either setting `ROLE.radarTime` or calling `RADAR.SetRadarTime(ply, time)`
+- Added two new convars to change the confirmation behaviour
+   - `ttt2_confirm_detective_only (default: 0)` - Everybody can search the corpse, but only detectives can confirm them
+   - `ttt2_inspect_detective_only (default: 0)` - Only detectives can search and confirm corpses
 
 ### Changed
 
