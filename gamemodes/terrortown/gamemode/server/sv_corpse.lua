@@ -16,6 +16,12 @@ local ConVarExists = ConVarExists
 local CreateConVar = CreateConVar
 local hook = hook
 
+-- If detective mode, announce when someone's body is found
+local cvBodyfound = CreateConVar("ttt_announce_body_found", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local cvRagCollide = CreateConVar("ttt_ragdoll_collide", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local cvDeteOnlyConfirm = CreateConVar("ttt2_confirm_detective_only", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local cvDeteOnlyInspect = CreateConVar("ttt2_inspect_detective_only", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
 ttt_include("sh_corpse")
 
 util.AddNetworkString("TTT2SendConfirmMsg")
@@ -62,11 +68,6 @@ function CORPSE.SetCredits(rag, credits)
 	rag:SetDTInt(dti.INT_CREDITS, credits)
 end
 
--- ragdoll creation and search
-
--- If detective mode, announce when someone's body is found
-local bodyfound = CreateConVar("ttt_announce_body_found", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
 ---
 -- Checks whether a @{Player} is able to identify a CORPSE
 -- @note return true to allow corpse identification, false to disallow
@@ -81,6 +82,20 @@ function GM:TTTCanIdentifyCorpse(ply, corpse)
 	return true
 end
 
+local function CanConfirmPlayer(deadply, ply, rag)
+	if hook.Run("TTT2ConfirmPlayer", deadply, ply, rag) == false then
+		return false
+	end
+
+	if cvDeteOnlyConfirm:GetBool() and ply:GetBaseRole() ~= ROLE_DETECTIVE then
+		LANG.Msg(ply, "confirm_detective_only", nil, MSG_MSTACK_WARN)
+
+		return false
+	end
+
+	return true
+end
+
 local function IdentifyBody(ply, rag)
 	if not ply:IsTerror() or not ply:Alive() then return end
 
@@ -89,6 +104,12 @@ local function IdentifyBody(ply, rag)
 		CORPSE.SetFound(rag, true)
 
 		return
+	end
+
+	if cvDeteOnlyInspect:GetBool() and ply:GetBaseRole() ~= ROLE_DETECTIVE then
+		LANG.Msg(ply, "inspect_detective_only", nil, MSG_MSTACK_WARN)
+
+		return false
 	end
 
 	if not hook.Run("TTTCanIdentifyCorpse", ply, rag) then return end
@@ -100,15 +121,16 @@ local function IdentifyBody(ply, rag)
 	-- Register find
 	if notConfirmed then -- will return either false or a valid ply
 		local deadply = player.GetBySteamID64(rag.sid64)
-		if deadply and not deadply:Alive() and hook.Run("TTT2ConfirmPlayer", deadply, ply, rag) ~= false then
-			deadply:ConfirmPlayer(true)
 
-			SendPlayerToEveryone(deadply) -- confirm player for everyone
+		if not deadply or deadply:Alive() or not CanConfirmPlayer(deadply, ply, rag) then return end
 
-			SCORE:HandleBodyFound(ply, deadply)
-		end
+		deadply:ConfirmPlayer(true)
 
-		hook.Call("TTTBodyFound", GAMEMODE, ply, deadply, rag)
+		SendPlayerToEveryone(deadply) -- confirm player for everyone
+
+		SCORE:HandleBodyFound(ply, deadply)
+
+		hook.Run("TTTBodyFound", ply, deadply, rag)
 
 		if hook.Run("TTT2SetCorpseFound", deadply, ply, rag) ~= false then
 			CORPSE.SetFound(rag, true)
@@ -140,7 +162,7 @@ local function IdentifyBody(ply, rag)
 	end
 
 	-- Announce body
-	if bodyfound:GetBool() and notConfirmed then
+	if cvBodyfound:GetBool() and notConfirmed then
 		local subrole = rag.was_role
 		local team = rag.was_team
 		local rd = roles.GetByIndex(subrole)
@@ -269,6 +291,12 @@ end
 -- @realm server
 function CORPSE.ShowSearch(ply, rag, covert, long_range)
 	if not IsValid(ply) or not IsValid(rag) then return end
+
+	if cvDeteOnlyInspect:GetBool() and ply:GetBaseRole() ~= ROLE_DETECTIVE then
+		LANG.Msg(ply, "inspect_detective_only", nil, MSG_MSTACK_WARN)
+
+		return false
+	end
 
 	if rag:IsOnFire() then
 		LANG.Msg(ply, "body_burning", nil, MSG_CHAT_WARN)
@@ -498,8 +526,6 @@ local function GetSceneData(victim, attacker, dmginfo)
 	return scene
 end
 
-local rag_collide = CreateConVar("ttt_ragdoll_collide", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
 realdamageinfo = 0
 
 ---
@@ -615,7 +641,7 @@ function CORPSE.WasHeadshot(rag)
 end
 
 hook.Add("ShouldCollide", "TTT2RagdollCollide", function(ent1, ent2)
-	if rag_collide:GetBool() then return end
+	if cvRagCollide:GetBool() then return end
 
 	if IsValid(ent1) and IsValid(ent2)
 	and ent1:IsRagdoll() and ent2:IsRagdoll()
