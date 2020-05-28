@@ -838,7 +838,11 @@ function HUDDrawTargetIDRagdolls(tData)
 
 	if tData:GetEntityDistance() <= 100 then
 		if GetConVar("ttt2_inspect_detective_only"):GetBool() and client:GetBaseRole() ~= ROLE_DETECTIVE then
-			tData:SetSubtitle(TryT("corpse_hint_no_inspect"))
+			if client:IsActive() and client:IsShopper() and CORPSE.GetCredits(ent, 0) > 0 then
+				tData:SetSubtitle(ParT("corpse_hint_no_inspect_credits", key_params))
+			else
+				tData:SetSubtitle(TryT("corpse_hint_no_inspect"))
+			end
 		elseif GetConVar("ttt2_confirm_detective_only"):GetBool() and client:GetBaseRole() ~= ROLE_DETECTIVE then
 			tData:SetSubtitle(ParT("corpse_hint_inspect_only", key_params))
 		else

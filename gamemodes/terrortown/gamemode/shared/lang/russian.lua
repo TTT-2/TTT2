@@ -1247,3 +1247,4 @@ L.disable_overheadicons_tip = "Выключает иконки ролей над
 --L.inspect_detective_only = "Only detectives can inspect bodies"
 --L.corpse_hint_no_inspect = "Only detectives can search this body."
 --L.corpse_hint_inspect_only = "Press [{usekey}] to serch. Only detectives can confirm the body."
+--L.corpse_hint_inspect_only_credits = "Press [{usekey}] to receive credits. Only detectives can search this body."
