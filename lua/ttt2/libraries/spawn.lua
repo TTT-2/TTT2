@@ -55,7 +55,9 @@ function spawn.IsSpawnPointSafe(ply, pos, force, filter)
 
 	filter = istable(filter) and filter or {filter}
 
-	local posCenter = pos + Vector(0, 0, 0.5 * sizePlayer.z)
+	-- the center pos is slightly shifted to the top to prevent ground
+	-- collisions in the walltrace
+	local posCenter = pos + Vector(0, 0, 0.525 * sizePlayer.z)
 
 	-- Make sure there is enough space around the player
 	local traceWalls = util.TraceHull({
