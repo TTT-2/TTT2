@@ -54,7 +54,7 @@ local valid_doors = {
 local function GetClosedAngle(ent)
 	local data = ent:GetInternalVariable("m_angRotationClosed")
 
-	if not data or #data < 3 then return end
+	if not data then return end
 
 	return Angle(data[1], data[2], data[3])
 end
