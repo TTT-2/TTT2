@@ -1295,3 +1295,9 @@ L.hud_revival_time = "{time}s"
 
 -- 2020-05-03
 L.door_destructible = "Door is destructible ({health}HP)"
+
+--2020-05-28
+L.confirm_detective_only = "Only detectives can confirm bodies"
+L.inspect_detective_only = "Only detectives can inspect bodies"
+L.corpse_hint_no_inspect = "Only detectives can search this body."
+L.corpse_hint_inspect_only = "Press [{usekey}] to serch. Only detectives can confirm the body."

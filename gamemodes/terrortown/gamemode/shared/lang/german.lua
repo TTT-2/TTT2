@@ -1286,3 +1286,9 @@ L.hud_revival_time = "{time}s"
 
 -- 2020-05-03
 L.door_destructible = "Tür ist zerstörbar ({health}HP)"
+
+--2020-05-28
+L.confirm_detective_only = "Nur Detektive können Leichen bestätigen"
+L.inspect_detective_only = "Nur Detektive können Leichen untersuchen"
+L.corpse_hint_no_inspect = "Nur ein Detektiv kann diesen Körper untersuchen."
+L.corpse_hint_inspect_only = "Drücke [{usekey}] zum Durchsuchen. Nur Detektive können diesen Körper bestätigen."

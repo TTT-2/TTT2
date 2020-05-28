@@ -22,6 +22,19 @@ local cvRagCollide = CreateConVar("ttt_ragdoll_collide", "0", {FCVAR_NOTIFY, FCV
 local cvDeteOnlyConfirm = CreateConVar("ttt2_confirm_detective_only", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 local cvDeteOnlyInspect = CreateConVar("ttt2_inspect_detective_only", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
+hook.Add("TTT2SyncGlobals", "TTT2SyncCorpseGlobals", function()
+	SetGlobalBool(cvDeteOnlyConfirm:GetName(), cvDeteOnlyConfirm:GetBool())
+	SetGlobalBool(cvDeteOnlyInspect:GetName(), cvDeteOnlyInspect:GetBool())
+end)
+
+cvars.AddChangeCallback(cvDeteOnlyConfirm:GetName(), function(name, old, new)
+	SetGlobalBool(cvDeteOnlyConfirm:GetName(), tobool(new))
+end, cvDeteOnlyConfirm:GetName())
+
+cvars.AddChangeCallback(cvDeteOnlyInspect:GetName(), function(name, old, new)
+	SetGlobalBool(cvDeteOnlyInspect:GetName(), tobool(new))
+end, cvDeteOnlyInspect:GetName())
+
 ttt_include("sh_corpse")
 
 util.AddNetworkString("TTT2SendConfirmMsg")
