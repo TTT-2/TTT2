@@ -220,7 +220,7 @@ local function ttt_confirm_death(ply, cmd, args)
 
 	local eidx = tonumber(args[1])
 	local id = tonumber(args[2])
-	local long_range = (args[3] and tonumber(args[3]) == 1) and true or false
+	local isLongRange = (args[3] and tonumber(args[3]) == 1) and true or false
 
 	if not eidx or not id then return end
 
@@ -234,7 +234,7 @@ local function ttt_confirm_death(ply, cmd, args)
 
 	local rag = Entity(eidx)
 
-	if IsValid(rag) and (rag:GetPos():Distance(ply:GetPos()) < 128 or long_range) and not CORPSE.GetFound(rag, false) then
+	if IsValid(rag) and (rag:GetPos():Distance(ply:GetPos()) < 128 or isLongRange) and not CORPSE.GetFound(rag, false) then
 		IdentifyBody(ply, rag)
 	end
 end
@@ -286,13 +286,32 @@ end
 -- @param Player ply
 -- @param Entity corpse
 -- @param boolean is_covert
--- @param boolean is_long_range
+-- @param boolean isLongRange
 -- @return[default=true] boolean
 -- @hook
 -- @register
 -- @realm server
-function GM:TTTCanSearchCorpse(ply, corpse, is_covert, is_long_range)
+function GM:TTTCanSearchCorpse(ply, corpse, is_covert, isLongRange)
 	return true
+end
+
+local function GiveFoundCredits(ply, rag, isLongRange)
+	local corpseNick = CORPSE.GetPlayerNick(rag)
+	local credits = CORPSE.GetCredits(rag, 0)
+
+	if not ply:IsActiveShopper() or ply:GetSubRoleData().preventFindCredits
+		or credits == 0 or isLongRange
+	then return end
+
+	LANG.Msg(ply, "body_credits", {num = credits})
+
+	ply:AddCredits(credits)
+
+	CORPSE.SetCredits(rag, 0)
+
+	ServerLog(ply:Nick() .. " took " .. credits .. " credits from the body of " .. corpseNick .. "\n")
+
+	SCORE:HandleCreditFound(ply, corpseNick, credits)
 end
 
 ---
@@ -300,13 +319,15 @@ end
 -- @param Player ply
 -- @param Entity rag
 -- @param boolean covert
--- @param boolean long_range
+-- @param boolean isLongRange
 -- @realm server
-function CORPSE.ShowSearch(ply, rag, covert, long_range)
+function CORPSE.ShowSearch(ply, rag, covert, isLongRange)
 	if not IsValid(ply) or not IsValid(rag) then return end
 
 	if cvDeteOnlyInspect:GetBool() and ply:GetBaseRole() ~= ROLE_DETECTIVE then
 		LANG.Msg(ply, "inspect_detective_only", nil, MSG_MSTACK_WARN)
+
+		GiveFoundCredits(ply, rag, isLongRange)
 
 		return false
 	end
@@ -317,7 +338,7 @@ function CORPSE.ShowSearch(ply, rag, covert, long_range)
 		return
 	end
 
-	if not hook.Run("TTTCanSearchCorpse", ply, rag, covert, long_range) then return end
+	if not hook.Run("TTTCanSearchCorpse", ply, rag, covert, isLongRange) then return end
 
 	-- init a heap of data we'll be sending
 	local nick = CORPSE.GetPlayerNick(rag)
@@ -342,19 +363,7 @@ function CORPSE.ShowSearch(ply, rag, covert, long_range)
 		IdentifyBody(ply, rag)
 	end
 
-	local credits = CORPSE.GetCredits(rag, 0)
-
-	if ply:IsActiveShopper() and not ply:GetSubRoleData().preventFindCredits and credits > 0 and not long_range then
-		LANG.Msg(ply, "body_credits", {num = credits})
-
-		ply:AddCredits(credits)
-
-		CORPSE.SetCredits(rag, 0)
-
-		ServerLog(ply:Nick() .. " took " .. credits .. " credits from the body of " .. nick .. "\n")
-
-		SCORE:HandleCreditFound(ply, nick, credits)
-	end
+	GiveFoundCredits(ply, rag, isLongRange)
 
 	-- time of death relative to current time (saves bits)
 	if dtime ~= 0 then
@@ -427,7 +436,7 @@ function CORPSE.ShowSearch(ply, rag, covert, long_range)
 	net.WriteUInt(ply:EntIndex(), 8)
 	net.WriteString(words)
 
-	net.WriteBit(long_range)
+	net.WriteBit(isLongRange)
 
 	-- 133 + string data + #kill_entids * 8 + team + 1
 	-- 200 + ?
