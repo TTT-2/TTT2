@@ -853,7 +853,7 @@ end
 -- @return boolean
 -- @realm shared
 function plymeta:WasRevivedAndConfirmed()
-	return self:WasRevivedInRound() and self:OnceFound() and self:RoleKnown()
+	return not self:TTT2NETGetBool("body_found", false) and self:OnceFound()
 end
 
 ---
