@@ -272,13 +272,13 @@ end
 -- @note removed last param is_traitor -> accessable with corpse.was_team
 -- @param Player ply
 -- @param Entity corpse
--- @param boolean is_covert
+-- @param boolean isCovert
 -- @param boolean isLongRange
 -- @return[default=true] boolean
 -- @hook
 -- @register
 -- @realm server
-function GM:TTTCanSearchCorpse(ply, corpse, is_covert, isLongRange)
+function GM:TTTCanSearchCorpse(ply, corpse, isCovert, isLongRange)
 	return true
 end
 
@@ -302,13 +302,13 @@ local function GiveFoundCredits(ply, rag, isLongRange)
 end
 
 ---
--- Send a usermessage to client containing search results
--- @param Player ply
--- @param Entity rag
--- @param boolean covert
--- @param boolean isLongRange
+-- Send a usermessage to client containing search results.
+-- @param Player ply The player that is inspection the ragdoll
+-- @param Entity rag The ragdoll that is inspected
+-- @param boolean isCovert Is the search hidden
+-- @param boolean isLongRange Is the search performed from a long range
 -- @realm server
-function CORPSE.ShowSearch(ply, rag, covert, isLongRange)
+function CORPSE.ShowSearch(ply, rag, isCovert, isLongRange)
 	if not IsValid(ply) or not IsValid(rag) then return end
 
 	if cvDeteOnlyInspect:GetBool() and ply:GetBaseRole() ~= ROLE_DETECTIVE then
@@ -316,7 +316,7 @@ function CORPSE.ShowSearch(ply, rag, covert, isLongRange)
 
 		GiveFoundCredits(ply, rag, isLongRange)
 
-		return false
+		return
 	end
 
 	if rag:IsOnFire() then
@@ -325,7 +325,7 @@ function CORPSE.ShowSearch(ply, rag, covert, isLongRange)
 		return
 	end
 
-	if not hook.Run("TTTCanSearchCorpse", ply, rag, covert, isLongRange) then return end
+	if not hook.Run("TTTCanSearchCorpse", ply, rag, isCovert, isLongRange) then return end
 
 	-- init a heap of data we'll be sending
 	local nick = CORPSE.GetPlayerNick(rag)
@@ -346,7 +346,7 @@ function CORPSE.ShowSearch(ply, rag, covert, isLongRange)
 	-- basic sanity check
 	if not nick or not eq or not subrole or not team then return end
 
-	if GetConVar("ttt_identify_body_woconfirm"):GetBool() and DetectiveMode() and not covert then
+	if GetConVar("ttt_identify_body_woconfirm"):GetBool() and DetectiveMode() and not isCovert then
 		IdentifyBody(ply, rag)
 	end
 
@@ -429,10 +429,10 @@ function CORPSE.ShowSearch(ply, rag, covert, isLongRange)
 	-- 200 + ?
 
 	-- workaround to make sure only detective searches are added to the scoreboard
-	net.WriteBool(ply:IsActiveRole(ROLE_DETECTIVE) and not covert)
+	net.WriteBool(ply:IsActiveRole(ROLE_DETECTIVE) and not isCovert)
 
 	-- If searched publicly, send to all, else just the finder
-	if not covert then
+	if not isCovert then
 		net.Broadcast()
 	else
 		net.Send(ply)
