@@ -16,6 +16,12 @@ local ConVarExists = ConVarExists
 local CreateConVar = CreateConVar
 local hook = hook
 
+-- If detective mode, announce when someone's body is found
+local cvBodyfound = CreateConVar("ttt_announce_body_found", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local cvRagCollide = CreateConVar("ttt_ragdoll_collide", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local cvDeteOnlyConfirm = CreateConVar("ttt2_confirm_detective_only", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
+local cvDeteOnlyInspect = CreateConVar("ttt2_inspect_detective_only", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
+
 ttt_include("sh_corpse")
 
 util.AddNetworkString("TTT2SendConfirmMsg")
@@ -62,11 +68,6 @@ function CORPSE.SetCredits(rag, credits)
 	rag:SetDTInt(dti.INT_CREDITS, credits)
 end
 
--- ragdoll creation and search
-
--- If detective mode, announce when someone's body is found
-local bodyfound = CreateConVar("ttt_announce_body_found", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
 ---
 -- Checks whether a @{Player} is able to identify a CORPSE
 -- @note return true to allow corpse identification, false to disallow
@@ -81,6 +82,20 @@ function GM:TTTCanIdentifyCorpse(ply, corpse)
 	return true
 end
 
+local function CanConfirmPlayer(deadply, ply, rag)
+	if cvDeteOnlyConfirm:GetBool() and ply:GetBaseRole() ~= ROLE_DETECTIVE then
+		LANG.Msg(ply, "confirm_detective_only", nil, MSG_MSTACK_WARN)
+
+		return false
+	end
+
+	if hook.Run("TTT2ConfirmPlayer", deadply, ply, rag) == false then
+		return false
+	end
+
+	return true
+end
+
 local function IdentifyBody(ply, rag)
 	if not ply:IsTerror() or not ply:Alive() then return end
 
@@ -89,6 +104,12 @@ local function IdentifyBody(ply, rag)
 		CORPSE.SetFound(rag, true)
 
 		return
+	end
+
+	if cvDeteOnlyInspect:GetBool() and ply:GetBaseRole() ~= ROLE_DETECTIVE then
+		LANG.Msg(ply, "inspect_detective_only", nil, MSG_MSTACK_WARN)
+
+		return false
 	end
 
 	if not hook.Run("TTTCanIdentifyCorpse", ply, rag) then return end
@@ -100,15 +121,16 @@ local function IdentifyBody(ply, rag)
 	-- Register find
 	if notConfirmed then -- will return either false or a valid ply
 		local deadply = player.GetBySteamID64(rag.sid64)
-		if deadply and not deadply:Alive() and hook.Run("TTT2ConfirmPlayer", deadply, ply, rag) ~= false then
-			deadply:ConfirmPlayer(true)
 
-			SendPlayerToEveryone(deadply) -- confirm player for everyone
+		if not deadply or deadply:Alive() or not CanConfirmPlayer(deadply, ply, rag) then return end
 
-			SCORE:HandleBodyFound(ply, deadply)
-		end
+		deadply:ConfirmPlayer(true)
 
-		hook.Call("TTTBodyFound", GAMEMODE, ply, deadply, rag)
+		SendPlayerToEveryone(deadply) -- confirm player for everyone
+
+		SCORE:HandleBodyFound(ply, deadply)
+
+		hook.Run("TTTBodyFound", ply, deadply, rag)
 
 		if hook.Run("TTT2SetCorpseFound", deadply, ply, rag) ~= false then
 			CORPSE.SetFound(rag, true)
@@ -140,7 +162,7 @@ local function IdentifyBody(ply, rag)
 	end
 
 	-- Announce body
-	if bodyfound:GetBool() and notConfirmed then
+	if cvBodyfound:GetBool() and notConfirmed then
 		local subrole = rag.was_role
 		local team = rag.was_team
 		local rd = roles.GetByIndex(subrole)
@@ -185,7 +207,7 @@ local function ttt_confirm_death(ply, cmd, args)
 
 	local eidx = tonumber(args[1])
 	local id = tonumber(args[2])
-	local long_range = (args[3] and tonumber(args[3]) == 1) and true or false
+	local isLongRange = (args[3] and tonumber(args[3]) == 1) and true or false
 
 	if not eidx or not id then return end
 
@@ -199,7 +221,7 @@ local function ttt_confirm_death(ply, cmd, args)
 
 	local rag = Entity(eidx)
 
-	if IsValid(rag) and (rag:GetPos():Distance(ply:GetPos()) < 128 or long_range) and not CORPSE.GetFound(rag, false) then
+	if IsValid(rag) and (rag:GetPos():Distance(ply:GetPos()) < 128 or isLongRange) and not CORPSE.GetFound(rag, false) then
 		IdentifyBody(ply, rag)
 	end
 end
@@ -250,25 +272,52 @@ end
 -- @note removed last param is_traitor -> accessable with corpse.was_team
 -- @param Player ply
 -- @param Entity corpse
--- @param boolean is_covert
--- @param boolean is_long_range
+-- @param boolean isCovert
+-- @param boolean isLongRange
 -- @return[default=true] boolean
 -- @hook
 -- @register
 -- @realm server
-function GM:TTTCanSearchCorpse(ply, corpse, is_covert, is_long_range)
+function GM:TTTCanSearchCorpse(ply, corpse, isCovert, isLongRange)
 	return true
 end
 
+local function GiveFoundCredits(ply, rag, isLongRange)
+	local corpseNick = CORPSE.GetPlayerNick(rag)
+	local credits = CORPSE.GetCredits(rag, 0)
+
+	if not ply:IsActiveShopper() or ply:GetSubRoleData().preventFindCredits
+		or credits == 0 or isLongRange
+	then return end
+
+	LANG.Msg(ply, "body_credits", {num = credits})
+
+	ply:AddCredits(credits)
+
+	CORPSE.SetCredits(rag, 0)
+
+	ServerLog(ply:Nick() .. " took " .. credits .. " credits from the body of " .. corpseNick .. "\n")
+
+	SCORE:HandleCreditFound(ply, corpseNick, credits)
+end
+
 ---
--- Send a usermessage to client containing search results
--- @param Player ply
--- @param Entity rag
--- @param boolean covert
--- @param boolean long_range
+-- Send a usermessage to client containing search results.
+-- @param Player ply The player that is inspection the ragdoll
+-- @param Entity rag The ragdoll that is inspected
+-- @param boolean isCovert Is the search hidden
+-- @param boolean isLongRange Is the search performed from a long range
 -- @realm server
-function CORPSE.ShowSearch(ply, rag, covert, long_range)
+function CORPSE.ShowSearch(ply, rag, isCovert, isLongRange)
 	if not IsValid(ply) or not IsValid(rag) then return end
+
+	if cvDeteOnlyInspect:GetBool() and ply:GetBaseRole() ~= ROLE_DETECTIVE then
+		LANG.Msg(ply, "inspect_detective_only", nil, MSG_MSTACK_WARN)
+
+		GiveFoundCredits(ply, rag, isLongRange)
+
+		return
+	end
 
 	if rag:IsOnFire() then
 		LANG.Msg(ply, "body_burning", nil, MSG_CHAT_WARN)
@@ -276,7 +325,7 @@ function CORPSE.ShowSearch(ply, rag, covert, long_range)
 		return
 	end
 
-	if not hook.Run("TTTCanSearchCorpse", ply, rag, covert, long_range) then return end
+	if not hook.Run("TTTCanSearchCorpse", ply, rag, isCovert, isLongRange) then return end
 
 	-- init a heap of data we'll be sending
 	local nick = CORPSE.GetPlayerNick(rag)
@@ -297,23 +346,11 @@ function CORPSE.ShowSearch(ply, rag, covert, long_range)
 	-- basic sanity check
 	if not nick or not eq or not subrole or not team then return end
 
-	if GetConVar("ttt_identify_body_woconfirm"):GetBool() and DetectiveMode() and not covert then
+	if GetConVar("ttt_identify_body_woconfirm"):GetBool() and DetectiveMode() and not isCovert then
 		IdentifyBody(ply, rag)
 	end
 
-	local credits = CORPSE.GetCredits(rag, 0)
-
-	if ply:IsActiveShopper() and not ply:GetSubRoleData().preventFindCredits and credits > 0 and not long_range then
-		LANG.Msg(ply, "body_credits", {num = credits})
-
-		ply:AddCredits(credits)
-
-		CORPSE.SetCredits(rag, 0)
-
-		ServerLog(ply:Nick() .. " took " .. credits .. " credits from the body of " .. nick .. "\n")
-
-		SCORE:HandleCreditFound(ply, nick, credits)
-	end
+	GiveFoundCredits(ply, rag, isLongRange)
 
 	-- time of death relative to current time (saves bits)
 	if dtime ~= 0 then
@@ -386,16 +423,16 @@ function CORPSE.ShowSearch(ply, rag, covert, long_range)
 	net.WriteUInt(ply:EntIndex(), 8)
 	net.WriteString(words)
 
-	net.WriteBit(long_range)
+	net.WriteBit(isLongRange)
 
 	-- 133 + string data + #kill_entids * 8 + team + 1
 	-- 200 + ?
 
 	-- workaround to make sure only detective searches are added to the scoreboard
-	net.WriteBool(ply:IsActiveRole(ROLE_DETECTIVE) and not covert)
+	net.WriteBool(ply:IsActiveRole(ROLE_DETECTIVE) and not isCovert)
 
 	-- If searched publicly, send to all, else just the finder
-	if not covert then
+	if not isCovert then
 		net.Broadcast()
 	else
 		net.Send(ply)
@@ -497,8 +534,6 @@ local function GetSceneData(victim, attacker, dmginfo)
 
 	return scene
 end
-
-local rag_collide = CreateConVar("ttt_ragdoll_collide", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 realdamageinfo = 0
 
@@ -615,7 +650,7 @@ function CORPSE.WasHeadshot(rag)
 end
 
 hook.Add("ShouldCollide", "TTT2RagdollCollide", function(ent1, ent2)
-	if rag_collide:GetBool() then return end
+	if cvRagCollide:GetBool() then return end
 
 	if IsValid(ent1) and IsValid(ent2)
 	and ent1:IsRagdoll() and ent2:IsRagdoll()

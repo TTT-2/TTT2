@@ -1300,3 +1300,10 @@ L.item_no_drown_damage_desc = [[Ti rende immune al danno da affogamento.]]
 
 -- 2020-05-03
 L.door_destructible = "La porta è distruttibile ({health}HP)"
+
+--2020-05-28
+--L.confirm_detective_only = "Only detectives can confirm bodies"
+--L.inspect_detective_only = "Only detectives can inspect bodies"
+--L.corpse_hint_no_inspect = "Only detectives can search this body."
+--L.corpse_hint_inspect_only = "Press [{usekey}] to serch. Only detectives can confirm the body."
+--L.corpse_hint_inspect_only_credits = "Press [{usekey}] to receive credits. Only detectives can search this body."
