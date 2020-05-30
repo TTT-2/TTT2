@@ -2,8 +2,6 @@
 -- @module SCORE
 -- @desc Customized scoring
 
-local math = math
-local string = string
 local table = table
 local pairs = pairs
 local IsValid = IsValid
@@ -12,57 +10,47 @@ local hook = hook
 SCORE = SCORE or {}
 SCORE.Events = SCORE.Events or {}
 
--- One might wonder why all the key names in the event tables are so annoyingly
--- short. Well, the serialisation module in gmod (glon) does not do any
--- compression. At all. This means the difference between all events having a
--- "time_added" key versus a "t" key is very significant for the amount of data
--- we need to send. It's a pain, but I'm not going to code my own compression,
--- so doing it manually is the only way.
-
--- One decent way to reduce data sent turned out to be rounding the time floats.
--- We don't actually need to know about 10000ths of seconds after all.
-
 ---
 -- Adds an event to the synced event table
 -- @param table entry
 -- @param boolean t_override the time override
 -- @realm server
 function SCORE:AddEvent(entry, t_override)
-	entry["t"] = math.Round(t_override or CurTime(), 2)
+	entry.t = t_override or CurTime()
 
 	self.Events[#self.Events + 1] = entry
 end
 
 local function CopyDmg(dmg)
 	local wep = util.WeaponFromDamage(dmg)
-
-	-- t = type, a = amount, g = gun, h = headshot
-	local d = {}
-
-	-- util.TableToJSON doesn't handle large integers properly
-	d.t = tostring(dmg:GetDamageType())
-	d.a = dmg:GetDamage()
-	d.h = false
+	local g, n
 
 	if wep then
 		local id = WepToEnum(wep)
 		if id then
-			d.g = id
+			g = id
 		else
 			-- we can convert each standard TTT weapon name to a preset ID, but
 			-- that's not workable with custom SWEPs from people, so we'll just
 			-- have to pay the byte tax there
-			d.g = wep:GetClass()
+			g = wep:GetClass()
 		end
 	else
 		local infl = dmg:GetInflictor()
 
 		if IsValid(infl) and infl.ScoreName then
-			d.n = infl.ScoreName
+			n = infl.ScoreName
 		end
 	end
 
-	return d
+	-- t = type, a = amount, g = gun, h = headshot, n = name
+	return {
+		t = dmg:GetDamageType(),
+		a = dmg:GetDamage(),
+		h = false,
+		g = g,
+		n = n
+	}
 end
 
 ---
@@ -268,7 +256,7 @@ function SCORE:ApplyEventLogScores(wintype)
 		ply = plys[i]
 
 		if ply:SteamID64() == nil then
-			print("[TTT2] ERROR: Player has no steamID64")
+			print("[TTT2] ERROR: Player has no SteamID64")
 		else
 			scores[ply:SteamID64()] = {}
 		end
@@ -288,7 +276,9 @@ function SCORE:ApplyEventLogScores(wintype)
 	end
 
 	-- count deaths
-	for _, e in pairs(self.Events) do
+	local events = self.Events
+	for i = 1, #events do
+		local e = events[i]
 		if e.id == EVENT_KILL then
 			local victim = player.GetBySteamID64(e.vic.sid64)
 
@@ -328,64 +318,9 @@ function SCORE:Reset()
 	self.Events = {}
 end
 
-local function _sortfunc(a, b)
-	if not b or not a then
-		return false
-	end
-
-	return a.t and b.t and a.t < b.t
-end
-
-local function SortEvents(events)
-	-- sort events on time
-	table.sort(events, _sortfunc)
-
-	return events
-end
-
-local function EncodeForStream(events)
-	events = SortEvents(events)
-
-	-- may want to filter out data later
-	-- just serialize for now
-
-	local result = util.TableToJSON(events)
-	if not result then
-		ErrorNoHalt("Round report event encoding failed!\n")
-
-		return false
-	else
-		return result
-	end
-end
-
 ---
 -- Steams the events list to all available @{Player}s
 -- @realm server
 function SCORE:StreamToClients()
-	local s = EncodeForStream(self.Events)
-	if not s then return end -- error occurred
-
-	-- divide into happy lil bits.
-	-- this was necessary with user messages, now it's
-	-- a just-in-case thing if a round somehow manages to be > 64K
-	local cut = {}
-	local max = 65500
-
-	while #s ~= 0 do
-		local bit = string.sub(s, 1, max - 1)
-
-		cut[#cut + 1] = bit
-
-		s = string.sub(s, max, -1)
-	end
-
-	local parts = #cut
-
-	for k = 1, parts do
-		net.Start("TTT_ReportStream")
-		net.WriteBit(k ~= parts) -- continuation bit, 1 if there's more coming
-		net.WriteString(cut[k])
-		net.Broadcast()
-	end
+	net.SendStream("TTT2_EventReport", self.Events)
 end

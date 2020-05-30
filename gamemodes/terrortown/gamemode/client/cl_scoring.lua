@@ -788,38 +788,15 @@ function CLSCORE:Toggle()
 	end
 end
 
-local buff = ""
-
-local function ReceiveReportStream(len)
-	local cont = net.ReadBit() == 1
-
-	buff = buff .. net.ReadString()
-
-	if cont then
-		return
+local function ReceiveReportStream(events)
+	if istable(events) then
+		table.SortByMember(events, "t", true)
+		CLSCORE:ReportEvents(events)
 	else
-		-- do stuff with buffer contents
-
-		local json_events = buff -- util.Decompress(buff)
-
-		if not json_events then
-			ErrorNoHalt("Round report decompression failed!\n")
-		else
-			-- convert the json string back to a table
-			local events = util.JSONToTable(json_events)
-
-			if istable(events) then
-				CLSCORE:ReportEvents(events)
-			else
-				ErrorNoHalt("Round report event decoding failed!\n")
-			end
-		end
-
-		-- flush
-		buff = ""
+		ErrorNoHalt("Round report event decoding failed!\n")
 	end
 end
-net.Receive("TTT_ReportStream", ReceiveReportStream)
+net.ReceiveStream("TTT2_EventReport", ReceiveReportStream)
 
 local function SaveLog(ply, cmd, args)
 	if not CLSCORE then return end
