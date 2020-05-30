@@ -21,6 +21,7 @@ ARMOR.cv.armor_damage_health_pct = CreateConVar("ttt_armor_damage_health_pct", 0
 ARMOR.cv.armor_classic = CreateConVar("ttt_armor_classic", 0, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 ARMOR.cv.item_armor_value = CreateConVar("ttt_item_armor_value", 30, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 ARMOR.cv.item_armor_block_headshots = CreateConVar("ttt_item_armor_block_headshots", 0, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+ARMOR.cv.item_armor_block_blastdmg = CreateConVar("ttt_item_armor_block_blastdmg", 0, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 hook.Add("TTT2SyncGlobals", "AddArmorGlobals", function()
 	SetGlobalBool(ARMOR.cv.armor_classic:GetName(), ARMOR.cv.armor_classic:GetBool())
@@ -165,12 +166,15 @@ function ARMOR:HandlePlayerTakeDamage(ply, infl, att, amount, dmginfo)
 
 	-- handle if headshots should be ignored by the armor
 	if ply:LastHitGroup() == HITGROUP_HEAD and not self.cv.item_armor_block_headshots:GetBool() then return end
-
+	
 	-- handle different damage type factors, only these four damage types are valid
 	if not dmginfo:IsDamageType(DMG_BULLET) and not dmginfo:IsDamageType(DMG_CLUB)
 		and not dmginfo:IsDamageType(DMG_BURN) and not dmginfo:IsDamageType(DMG_BLAST)
 	then return end
 
+	-- handle if blast damage should be ignored by the armor
+	if dmginfo:IsDamageType(DMG_BLAST) and not self.cv.item_armor_block_blastdmg:GetBool() then return end
+	
 	-- fallback for players who prefer the vanilla armor
 	if self.cv.armor_classic:GetBool() then
 		-- classic armor only shields from bullet/crowbar damage
