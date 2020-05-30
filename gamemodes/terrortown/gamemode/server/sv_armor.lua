@@ -171,7 +171,7 @@ function ARMOR:HandlePlayerTakeDamage(ply, infl, att, amount, dmginfo)
 	if not dmginfo:IsDamageType(DMG_BULLET) and not dmginfo:IsDamageType(DMG_CLUB)
 		and not dmginfo:IsDamageType(DMG_BURN) and not dmginfo:IsDamageType(DMG_BLAST)
 	then return end
-
+	
 	-- handle if blast damage should be ignored by the armor
 	if dmginfo:IsDamageType(DMG_BLAST) and not self.cv.item_armor_block_blastdmg:GetBool() then return end
 	
