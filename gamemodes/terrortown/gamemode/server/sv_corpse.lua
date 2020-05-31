@@ -20,6 +20,9 @@ local hook = hook
 local cvBodyfound = CreateConVar("ttt_announce_body_found", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 local cvRagCollide = CreateConVar("ttt_ragdoll_collide", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
+local cvDeteOnlyConfirm = GetConVar("ttt2_confirm_detective_only")
+local cvDeteOnlyInspect = GetConVar("ttt2_inspect_detective_only")
+
 ttt_include("sh_corpse")
 
 util.AddNetworkString("TTT2SendConfirmMsg")
@@ -90,7 +93,7 @@ local function IdentifyBody(ply, rag)
 		return
 	end
 
-	if GetConVar("ttt2_inspect_detective_only"):GetBool() and ply:GetBaseRole() ~= ROLE_DETECTIVE then
+	if cvDeteOnlyInspect:GetBool() and ply:GetBaseRole() ~= ROLE_DETECTIVE then
 		LANG.Msg(ply, "inspect_detective_only", nil, MSG_MSTACK_WARN)
 
 		return false
@@ -106,7 +109,7 @@ local function IdentifyBody(ply, rag)
 	if notConfirmed then -- will return either false or a valid ply
 		local deadply = player.GetBySteamID64(rag.sid64)
 
-		if GetConVar("ttt2_confirm_detective_only"):GetBool() and ply:GetBaseRole() ~= ROLE_DETECTIVE then
+		if cvDeteOnlyConfirm:GetBool() and ply:GetBaseRole() ~= ROLE_DETECTIVE then
 			LANG.Msg(ply, "confirm_detective_only", nil, MSG_MSTACK_WARN)
 
 			return
@@ -301,7 +304,7 @@ end
 function CORPSE.ShowSearch(ply, rag, isCovert, isLongRange)
 	if not IsValid(ply) or not IsValid(rag) then return end
 
-	if GetConVar("ttt2_inspect_detective_only"):GetBool() and ply:GetBaseRole() ~= ROLE_DETECTIVE then
+	if cvDeteOnlyInspect:GetBool() and ply:GetBaseRole() ~= ROLE_DETECTIVE then
 		LANG.Msg(ply, "inspect_detective_only", nil, MSG_MSTACK_WARN)
 
 		GiveFoundCredits(ply, rag, isLongRange)

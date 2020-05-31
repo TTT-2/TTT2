@@ -16,6 +16,9 @@ local hook = hook
 local disable_spectatorsoutline = CreateClientConVar("ttt2_disable_spectatorsoutline", "0", true, true)
 local disable_overheadicons = CreateClientConVar("ttt2_disable_overheadicons", "0", true, true)
 
+local cvDeteOnlyConfirm = GetConVar("ttt2_confirm_detective_only")
+local cvDeteOnlyInspect = GetConVar("ttt2_inspect_detective_only")
+
 surface.CreateFont("TargetID_Key", {font = "Trebuchet24", size = 26, weight = 900})
 surface.CreateFont("TargetID_Title", {font = "Trebuchet24", size = 20, weight = 900})
 surface.CreateFont("TargetID_Subtitle", {font = "Trebuchet24", size = 17, weight = 300})
@@ -837,13 +840,13 @@ function HUDDrawTargetIDRagdolls(tData)
 	)
 
 	if tData:GetEntityDistance() <= 100 then
-		if GetConVar("ttt2_inspect_detective_only"):GetBool() and client:GetBaseRole() ~= ROLE_DETECTIVE then
+		if cvDeteOnlyInspect:GetBool() and client:GetBaseRole() ~= ROLE_DETECTIVE then
 			if client:IsActive() and client:IsShopper() and CORPSE.GetCredits(ent, 0) > 0 then
 				tData:SetSubtitle(ParT("corpse_hint_inspect_only_credits", key_params))
 			else
 				tData:SetSubtitle(TryT("corpse_hint_no_inspect"))
 			end
-		elseif GetConVar("ttt2_confirm_detective_only"):GetBool() and client:GetBaseRole() ~= ROLE_DETECTIVE then
+		elseif cvDeteOnlyConfirm:GetBool() and client:GetBaseRole() ~= ROLE_DETECTIVE then
 			tData:SetSubtitle(ParT("corpse_hint_inspect_only", key_params))
 		else
 			tData:SetSubtitle(ParT("corpse_hint", key_params))
