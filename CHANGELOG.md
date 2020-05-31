@@ -48,6 +48,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - popups are now also shown to dead players as well
 - Refactored the role selection code to reside in its own module and cleaned up the code
 - Refactored some internal functions in CLSCORE to prevent errors (thanks @Kefta)
+- Moved CLSCORE event report syncing to the new net.SendStream / net.ReceiveStream functions
 
 ### Fixed
 
