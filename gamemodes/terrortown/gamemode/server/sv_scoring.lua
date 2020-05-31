@@ -277,6 +277,7 @@ function SCORE:ApplyEventLogScores(wintype)
 
 	-- count deaths
 	local events = self.Events
+
 	for i = 1, #events do
 		local e = events[i]
 		if e.id == EVENT_KILL then
