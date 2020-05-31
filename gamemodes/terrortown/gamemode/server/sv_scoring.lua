@@ -280,6 +280,7 @@ function SCORE:ApplyEventLogScores(wintype)
 
 	for i = 1, #events do
 		local e = events[i]
+
 		if e.id == EVENT_KILL then
 			local victim = player.GetBySteamID64(e.vic.sid64)
 
