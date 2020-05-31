@@ -6,7 +6,9 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Added
 
-- Added a new ConVar to allow armor to also block headshots (`ttt_item_armor_block_headshots`, default value: 0). Thanks @TheNickSkater
+- Added new convars to change the behavior of the armor
+	- `ttt_item_armor_block_headshots (default: 0)` - Block headshots. Thanks @TheNickSkater
+	- `ttt_item_armor_block_blastdmg (default: 0)` - Block blast damage. Thanks @Pustekuchen98
 - Added essential items: 8 different types of items that are often used in other addons. You can remove them from the shop if you don't like them.
 - Added server proxy for `EPOP:AddMessage()`
 - Added `PrintMessage` overwrites so this function now uses TTT2 systems
@@ -19,8 +21,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added a convenience function for the creation of radar points: `RADAR.CreateTargetTable(ply, pos, ent, color)`
 - Added the possibility to change the radar time by either setting `ROLE.radarTime` or calling `RADAR.SetRadarTime(ply, time)`
 - Added two new convars to change the confirmation behaviour
-   - `ttt2_confirm_detective_only (default: 0)` - Everybody can search the corpse, but only detectives can confirm them
-   - `ttt2_inspect_detective_only (default: 0)` - Only detectives can search and confirm corpses
+  - `ttt2_confirm_detective_only (default: 0)` - Everybody can search the corpse, but only detectives can confirm them
+  - `ttt2_inspect_detective_only (default: 0)` - Only detectives can search and confirm corpses
 
 ### Changed
 
