@@ -19,8 +19,9 @@ local hook = hook
 -- If detective mode, announce when someone's body is found
 local cvBodyfound = CreateConVar("ttt_announce_body_found", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 local cvRagCollide = CreateConVar("ttt_ragdoll_collide", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-local cvDeteOnlyConfirm = CreateConVar("ttt2_confirm_detective_only", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
-local cvDeteOnlyInspect = CreateConVar("ttt2_inspect_detective_only", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
+
+local cvDeteOnlyConfirm = GetConVar("ttt2_confirm_detective_only")
+local cvDeteOnlyInspect = GetConVar("ttt2_inspect_detective_only")
 
 ttt_include("sh_corpse")
 

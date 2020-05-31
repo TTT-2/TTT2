@@ -20,6 +20,8 @@ ttt_include("cl_fonts")
 
 ttt_include("sh_init")
 
+ttt_include("sh_replicated_cvar")
+
 ttt_include("sh_network_sync")
 ttt_include("sh_sprint")
 ttt_include("sh_main")

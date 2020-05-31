@@ -6,6 +6,8 @@ include("ttt2/libraries/entity_outputs.lua")
 
 ttt_include("sh_init")
 
+ttt_include("sh_replicated_cvar")
+
 ttt_include("sh_sprint")
 ttt_include("sh_main")
 ttt_include("sh_shopeditor")
