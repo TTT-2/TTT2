@@ -320,7 +320,7 @@ function SCORE:Reset()
 end
 
 ---
--- Steams the events list to all available @{Player}s
+-- Streams the events list to all available @{Player}s
 -- @realm server
 function SCORE:StreamToClients()
 	net.SendStream("TTT2_EventReport", self.Events)
