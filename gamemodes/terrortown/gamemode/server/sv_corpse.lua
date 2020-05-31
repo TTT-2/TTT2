@@ -82,20 +82,6 @@ function GM:TTTCanIdentifyCorpse(ply, corpse)
 	return true
 end
 
-local function CanConfirmPlayer(deadply, ply, rag)
-	if cvDeteOnlyConfirm:GetBool() and ply:GetBaseRole() ~= ROLE_DETECTIVE then
-		LANG.Msg(ply, "confirm_detective_only", nil, MSG_MSTACK_WARN)
-
-		return false
-	end
-
-	if hook.Run("TTT2ConfirmPlayer", deadply, ply, rag) == false then
-		return false
-	end
-
-	return true
-end
-
 local function IdentifyBody(ply, rag)
 	if not ply:IsTerror() or not ply:Alive() then return end
 
@@ -122,13 +108,19 @@ local function IdentifyBody(ply, rag)
 	if notConfirmed then -- will return either false or a valid ply
 		local deadply = player.GetBySteamID64(rag.sid64)
 
-		if not deadply or deadply:Alive() or not CanConfirmPlayer(deadply, ply, rag) then return end
+		if cvDeteOnlyConfirm:GetBool() and ply:GetBaseRole() ~= ROLE_DETECTIVE then
+			LANG.Msg(ply, "confirm_detective_only", nil, MSG_MSTACK_WARN)
 
-		deadply:ConfirmPlayer(true)
+			return
+		end
 
-		SendPlayerToEveryone(deadply) -- confirm player for everyone
+		if deadply and not deadply:Alive() and hook.Run("TTT2ConfirmPlayer", deadply, ply, rag) ~= false then
+			deadply:ConfirmPlayer(true)
 
-		SCORE:HandleBodyFound(ply, deadply)
+			SendPlayerToEveryone(deadply)
+
+			SCORE:HandleBodyFound(ply, deadply)
+		end
 
 		hook.Run("TTTBodyFound", ply, deadply, rag)
 
