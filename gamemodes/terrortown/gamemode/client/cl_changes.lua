@@ -654,7 +654,7 @@ function CreateChanges()
 			<li>Fix <i>body_found</i> for bots</li>
 			<li>Fix NWVarSyncing when using <i>TTT2NET:Set()</i></li>
 		</ul>
-	]], os.time({year = 2020, month = 03, day = 5}))
+	]], os.time({year = 2020, month = 03, day = 05}))
 
 	AddChange("TTT2 Base - v0.6.4b", [[
 		<h2>New:</h2>
@@ -669,7 +669,54 @@ function CreateChanges()
 			<li>Fixed a bug that happened when TTT2 is installed but not the active gamemode</li>
 			<li>Fixed a few Polish language strings</li>
 		</ul>
-	]], os.time({year = 2020, month = 04, day = 3}))
+	]], os.time({year = 2020, month = 04, day = 03}))
+
+	AddChange("TTT2 Base - v0.7.0b", [[
+		<h2>New:</h2>
+		<ul>
+			<li>Added two new convars to change the behavior of the armor</li>
+			<li>Added two new convars to change the confirmation behaviour</li>
+			<li>Added essential items: 8 different types of items that are often used in other addons. You can remove them from the shop if you don't like them.</li>
+			<li>Added a new HUD element to show information about an ongoing revival to the player that is revived</li>
+			<li>Added the possibility to change the radar time</li>
+			<li>Added a few new modules that are used by TTT2 and can be used by different addons</li>
+		</ul>
+		<br>
+		<h2>Improved:</h2>
+		<ul>
+			<li>Updated addon checker list</li>
+			<li>Migrated the HUDManager settings to the new network sync system</li>
+			<li>Reworked the old DNA Scanner and replaced it with an improved version</li>
+				<ul>
+					<li>New world- and viewmodel with an interactive screen</li>
+					<li>Removed the overcomplicated UI menu (simple handling with default keys instead)</li>
+					<li>The new default scanner behavior shows the direction and distance to the target</li>
+				</ul>
+			<li>Changed TargetID colors for confirmed bodies</li>
+			<li>Improved the player revival system</li>
+				<ul>
+					<li>Revive makes now sure the position is valid and the player is not stuck in the wall</li>
+					<li>All revival related messages are now localized</li>
+					<li>Integration with the newly added revival HUD element</li>
+				</ul>
+			<li>Improved the player spawn handling, no more invalid spawn points where a player will be stuck or spawn in the air and fall to their death</li>
+			<li>Refactored the role selection code to reside in its own module and cleaned up the code</li>
+			<li>Improved the round end screen to support longer round end texts</li>
+		</ul>
+		<br>
+		<h2>Fixed:</h2>
+		<ul>
+			<li>Fixed round info (the top panel with the miniscoreboard) being displayed in other HUDs</li>
+			<li>Fixed an error with the pickup system in singleplayer</li>
+			<li>Fixed propsurfing with the magneto stick</li>
+			<li>Fixed healthstation TargetID text</li>
+			<li>Fixed keyinfo for doors where no key can be used</li>
+			<li>Fixed role selection issues with subroles not properly replacing their baserole etc</li>
+			<li>Fixed map lock/unlock trigger of doors not updating targetID</li>
+			<li>Fixed roles having sometimes the wrong radar color</li>
+			<li>Fixed miniscoreboard update issue and players not getting shown when entering force-spec mode</li>
+		</ul>
+	]], os.time({year = 2020, month = 06, day = 01}))
 
 	-- run hook for other addons to add their changelog as well
 	hook.Run("TTT2AddChange", changes, currentVersion)
