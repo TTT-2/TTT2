@@ -460,18 +460,19 @@ function roleselection.SelectRoles(plys, maxPlys)
 	local selectedForcedPlys = SelectForcedRoles(plys, selectableRoles) -- this updates roleselection.finalRoles table and returns a key based list of selected players
 
 	-- We need to remove already selected players
-	local tmpPlys = {} -- modified player table
+	local plysFirstPass, plysSecondPass = {}, {} -- modified player table
 
 	for i = 1, #plys do
 		local ply = plys[i]
 
 		if not selectedForcedPlys[ply] then
-			tmpPlys[#tmpPlys + 1] = ply
+			plysFirstPass[#plysFirstPass + 1] = ply
+			plysSecondPass[#plysSecondPass + 1] = ply
 		end
 	end
 
 	-- if there are still available players
-	if #tmpPlys > 0 then
+	if #plysFirstPass > 0 then
 		-- first select traitors, then innos, then the other roles
 		local list = {
 			[1] = TRAITOR,
@@ -493,7 +494,7 @@ function roleselection.SelectRoles(plys, maxPlys)
 
 			if roleData.baserole or not selectableRoles[roleData] then continue end
 
-			local baseRolePlys = SelectBaseRolePlayers(tmpPlys, roleData, selectableRoles[roleData])
+			local baseRolePlys = SelectBaseRolePlayers(plysFirstPass, roleData, selectableRoles[roleData])
 
 			-- upgrade innos and players without any role later
 			if roleData ~= INNOCENT then
@@ -503,9 +504,8 @@ function roleselection.SelectRoles(plys, maxPlys)
 
 		-- last but not least, upgrade the innos and players without any role to special/normal innos
 		local innos = {}
-
-		for i = 1, #tmpPlys do
-			local ply = tmpPlys[i]
+		for i = 1, #plysSecondPass do
+			local ply = plysSecondPass[i]
 
 			roleselection.finalRoles[ply] = roleselection.finalRoles[ply] or ROLE_INNOCENT
 
