@@ -194,9 +194,6 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 		end
 	end
 
-	local curRoles = 2 -- amount of roles, start with 2 because INNOCENT and TRAITOR are all the time available
-	local curBaseroles = 2 -- amount of base roles, ...
-
 	-- we have to create a enumerable table to get random results easily
 	local availableBaseRolesTbl = {}
 	local availableSubRolesTbl = {}
@@ -204,6 +201,9 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 	local availableSubRolesAmount = 0
 
 	for roleData in pairs(rolesAmountList) do
+		-- exclude innocents and traitors, as they are already included, see below def. of selectableRoles.
+		if roleData == INNOCENT or roleData == TRAITOR then continue end
+
 		if roleData.baserole then
 			availableSubRolesAmount = availableSubRolesAmount + 1
 
@@ -215,7 +215,12 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 		end
 	end
 
-	local selectableRoles = {}
+	local selectableRoles = {
+		[TRAITOR] = rolesAmountList[TRAITOR],
+		[INNOCENT] = rolesAmountList[INNOCENT]
+	}
+	local curRoles = 2 -- amount of roles, start with 2 because INNOCENT and TRAITOR are all the time available
+	local curBaseroles = 2 -- amount of base roles, ...
 
 	-- first of all, we need to select the baseroles. Otherwise, we would select subroles that never gonna be choosen because if the missing baserole
 	for i = 1, availableBaseRolesAmount do
@@ -486,7 +491,7 @@ function roleselection.SelectRoles(plys, maxPlys)
 		for i = 1, #list do
 			local roleData = list[i]
 
-			if roleData.baserole then continue end
+			if roleData.baserole or not selectableRoles[roleData] then continue end
 
 			local baseRolePlys = SelectBaseRolePlayers(tmpPlys, roleData, selectableRoles[roleData])
 
