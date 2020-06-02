@@ -718,6 +718,13 @@ function CreateChanges()
 		</ul>
 	]], os.time({year = 2020, month = 06, day = 01}))
 
+	AddChange("TTT2 Base - v0.7.1b", [[
+		<h2>Fixed:</h2>
+		<ul>
+			<li>Fixed max roles / max base roles interaction with the roleselection. Also does not crash with values != 0 anymore.</li>
+		</ul>
+	]], os.time({year = 2020, month = 06, day = 02}))
+
 	-- run hook for other addons to add their changelog as well
 	hook.Run("TTT2AddChange", changes, currentVersion)
 end
