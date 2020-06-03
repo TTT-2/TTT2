@@ -238,16 +238,17 @@ function GM:HUDDrawTargetID()
 	end
 
 	local startpos = client:EyePos()
-
-	local changedStartpos = hook.Run("TTTModifyTargetTracestart", startpos)
-
-	if isvector(changedStartpos) then
-		startpos = changedStartpos
-	end
-
 	local endpos = client:GetAimVector()
+
 	endpos:Mul(MAX_TRACE_LENGTH)
 	endpos:Add(startpos)
+
+	local changedStartpos, changedEndpos = hook.Run("TTTModifyTargetTracedata", startpos, endpos)
+
+	if isvector(changedStartpos) and isvector(changedEndpos) then
+		startpos = changedStartpos
+		endpos = changedEndpos
+	end
 
 	local ent, distance
 
@@ -479,10 +480,11 @@ end
 ---
 -- Change the starting position for the trace that looks for entites.
 -- @param Vector startpos The current startpos of the trace to find an entity
--- @return Vector The new startpos for the trace
+-- @param Vector endpos The current endpos of the trace to find an entity
+-- @return Vector, Vector The new startpos for the trace, the new endpos for the trace
 -- @hook
 -- @realm client
-function GM:TTTModifyTargetTracestart(startpos)
+function GM:TTTModifyTargetTracedata(startpos, endpos)
 
 end
 
