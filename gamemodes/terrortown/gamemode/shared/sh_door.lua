@@ -294,12 +294,15 @@ if SERVER then
 	-- prop. Furthermore it makes sure that the door will not leave a unrendered room behind
 	-- (problems with area portals). If it is a double door, both doors will be destroyed by
 	-- default.
+	-- @param Player ply The player that wants to destroy the door
 	-- @param[default=Vector(0, 0, 0)] Vector pushForce The push force for the door
 	-- @param[default=false] boolean surpressPair Should the call of the other door (if in a pair) be omitted?
 	-- @return Entity Returns the entity of the created prop
 	-- @realm server
-	function entmeta:SafeDestroyDoor(pushForce, surpressPair)
+	function entmeta:SafeDestroyDoor(ply, pushForce, surpressPair)
 		if self.isDestroyed or not self:PlayerCanOpenDoor() or not door.IsValidNormal(self:GetClass()) then return end
+
+		if hook.Run("TTT2BlockDoorDestruction", self, ply) then return end
 
 		-- if door is destroyed, spawn a prop in the world
 		local doorProp = ents.Create("prop_physics")
@@ -327,7 +330,11 @@ if SERVER then
 		-- this function is called multiple times for the same door in the same tick
 		self.isDestroyed = true
 
-		DamageLog("TTT2Doors: The door with the index " .. self:EntIndex() .. " has been destroyed.")
+		if IsValid(ply) and ply:IsPlayer() then
+			DamageLog("TTT2Doors: The door with the index " .. self:EntIndex() .. " has been destroyed by " .. ply:Nick() .. ".")
+		else
+			DamageLog("TTT2Doors: The door with the index " .. self:EntIndex() .. " has been destroyed.")
+		end
 
 		doorProp:Spawn()
 		doorProp:SetHealth(cvDoorPropHealth:GetInt())
@@ -338,8 +345,10 @@ if SERVER then
 
 		-- if the door is grouped as a pair, call the other one as well
 		if not surpressPair and IsValid(self.otherPairDoor) then
-			self.otherPairDoor:SafeDestroyDoor(pushForce, true)
+			self.otherPairDoor:SafeDestroyDoor(ply, pushForce, true)
 		end
+
+		hook.Run("TTT2DoorDestroyed", doorProp, ply)
 
 		return doorProp
 	end

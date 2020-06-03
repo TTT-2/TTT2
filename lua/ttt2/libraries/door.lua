@@ -411,22 +411,23 @@ if SERVER then
 		if not ent:DoorIsDestructible() then return end
 
 		local damage = math.max(0, dmginfo:GetDamage())
-
-		ent:SetHealth(ent:Health() - damage)
-		ent:SetNWInt("fast_sync_health", ent:Health())
+		local health = ent:Health() - damage
 
 		-- if the door is grouped as a pair, call the other one as well
 		if not surpressPair and IsValid(ent.otherPairDoor) then
 			door.HandleDamage(ent.otherPairDoor, dmginfo, true)
 		end
 
-		if ent:Health() > 0 then return end
+		if health <= 0 then
+			-- capping the force factor is sufficient because
+			-- the forward vector is normalized
+			local forceFactor = math.min(50000, 500 * damage)
 
-		-- capping the force factor is sufficient because
-		-- the forward vector is normalized
-		local forceFactor = math.min(50000, 500 * damage)
+			if not ent:SafeDestroyDoor(dmginfo:GetAttacker(), forceFactor * dmginfo:GetAttacker():GetForward(), true) then return end
+		end
 
-		ent:SafeDestroyDoor(forceFactor * dmginfo:GetAttacker():GetForward(), true)
+		ent:SetHealth(health)
+		ent:SetNWInt("fast_sync_health", health)
 	end
 
 	---
@@ -632,6 +633,16 @@ if SERVER then
 	end
 
 	---
+	-- This hook is called after the door is destroyed and the door prop is spawned.
+	-- @param Entity doorPropEntity The door prop entity that is created
+	-- @param Entity activator The activator entity
+	-- @hook
+	-- @realm server
+	function GM:TTT2DoorDestroyed(doorPropEntity, activator)
+
+	end
+
+	---
 	-- This hook is called when the door is about to be locked. You can cancel the event.
 	-- @param Entity doorEntity The door entity
 	-- @param Entity activator The activator entity
@@ -676,6 +687,17 @@ if SERVER then
 	-- @hook
 	-- @realm server
 	function GM:TTT2BlockDoorClose(doorEntity, activator, caller)
+
+	end
+
+	---
+	-- This hook is called when the door is about to be destroyed. You can cancel the event.
+	-- @param Entity doorEntity The door entity
+	-- @param Entity activator The activator entity
+	-- @return boolean Return true to cancel the door destruction
+	-- @hook
+	-- @realm server
+	function GM:TTT2BlockDoorDestruction(doorEntity, activator)
 
 	end
 end
