@@ -109,7 +109,8 @@ concommand.Add("ttt_radar_scan", TriggerRadarScan)
 -- This hook can be used to modify the radar dots of players.
 -- @param Player ply The player that receives the radar information
 -- @param Player target The Player whose info should be changed
--- @return number, string The modified role, the modified team
+-- @return number The modified role
+-- @return string The modified team
 -- @hook
 -- @realm server
 function GM:TTT2ModifyRadarRole(ply, target)
