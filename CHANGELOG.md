@@ -4,6 +4,16 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+### Added
+
+- Added Hooks to interact with door distruction
+  - `GM:TTT2BlockDoorDestruction(doorEntity, activator)`: Hook to block the door destruction.
+  - `GM:TTT2DoorDestroyed(doorPropEntity, activator)`: Hook that is called after the door is destroyed.
+
+### Changed
+
+### Fixed
+
 ## [v0.7.1b](https://github.com/TTT-2/TTT2/tree/v0.7.1b) (2020-06-02)
 
 ### Fixed
