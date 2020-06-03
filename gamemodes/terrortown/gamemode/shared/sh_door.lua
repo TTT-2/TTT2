@@ -329,6 +329,8 @@ if SERVER then
 		end
 
 		timer.Simple(0, function()
+			if not IsValid(self) or not IsValid(doorProp) then return end
+
 			-- we have to kill the entity here instead of removing it because this way we
 			-- have no problems with area portals (invisible rooms after door is destroyed)
 			self:Fire("Kill", "", 0)
