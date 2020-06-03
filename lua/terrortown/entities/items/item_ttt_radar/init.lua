@@ -105,6 +105,17 @@ local function TriggerRadarScan(ply)
 end
 concommand.Add("ttt_radar_scan", TriggerRadarScan)
 
+---
+-- This hook can be used to modify the radar dots of players.
+-- @param Player ply The player that receives the radar information
+-- @param Player target The Player whose info should be changed
+-- @return number, string The modified role, the modified team
+-- @hook
+-- @realm server
+function GM:TTT2ModifyRadarRole(ply, target)
+
+end
+
 local function GetDataForRadar(ply, ent)
 	local subrole, team = -1, "none"
 
@@ -116,13 +127,11 @@ local function GetDataForRadar(ply, ent)
 			subrole = ROLE_INNOCENT
 		end
 	else
-		subrole = hook.Run("TTT2ModifyRadarRole", ply, ent)
+		subrole, team = hook.Run("TTT2ModifyRadarRole", ply, ent)
 
 		if not subrole then
 			subrole = (ent:IsInTeam(ply) or table.HasValue(ent:GetSubRoleData().visibleForTeam, ply:GetTeam())) and ent:GetSubRole() or ROLE_INNOCENT
 		end
-
-		team = hook.Run("TTT2ModifyRadarTeam", ply, ent)
 
 		if not team then
 			team = (ent:IsInTeam(ply) or table.HasValue(ent:GetSubRoleData().visibleForTeam, ply:GetTeam())) and ent:GetTeam() or TEAM_INNOCENT
