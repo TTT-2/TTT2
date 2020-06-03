@@ -4,6 +4,14 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+### Added
+
+### Changed
+
+### Fixed
+
+- Fixed and improved the radar role/team modification hook
+
 ## [v0.7.1b](https://github.com/TTT-2/TTT2/tree/v0.7.1b) (2020-06-02)
 
 ### Fixed
