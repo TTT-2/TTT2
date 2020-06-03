@@ -465,10 +465,12 @@ function roleselection.SelectRoles(plys, maxPlys)
 	for i = 1, #plys do
 		local ply = plys[i]
 
-		if not selectedForcedPlys[ply] then
-			plysFirstPass[#plysFirstPass + 1] = ply
-			plysSecondPass[#plysSecondPass + 1] = ply
-		end
+		if selectedForcedPlys[ply] then continue end
+
+		local pos = #plysFirstPass + 1
+
+		plysFirstPass[pos] = ply
+		plysSecondPass[pos] = ply
 	end
 
 	-- if there are still available players
