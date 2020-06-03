@@ -4,6 +4,16 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+### Added
+
+- Added Hooks to the targetID system to modify the displayed data
+  - `GM:TTTModifyTargetedEntity(ent, distance)`: Modify the entity that is targeted. This is useful for addons like an "Identity Disguiser".
+  - `GM:TTTModifyTargetTracestart(startpos, endpos)`: Modify the start and enpos for a trace. This is useful for addons like the "Supersheep".
+
+### Changed
+
+### Fixed
+
 ## [v0.7.1b](https://github.com/TTT-2/TTT2/tree/v0.7.1b) (2020-06-02)
 
 ### Fixed
