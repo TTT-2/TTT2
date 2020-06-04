@@ -17,7 +17,7 @@ Please follow the respective guidelines below to support a good experience for e
 
 ## Issues
 
-- Before opening an issue please read the [FAQ](https://github.com/TTT-2/TTT2/wiki/faq) and search for [existing issues](https://github.com/TTT-2/TTT2/issues?q=is%3Aissue) first.
+- Before opening an issue please read the [FAQ](https://docs.ttt2.neoxult.de/troubleshooting) and search for [existing issues](https://github.com/TTT-2/TTT2/issues?q=is%3Aissue) first.
 - For **bug reports** be sure to fill out the provided template.
 - For **feature requests** be as descriptive as possible.
   - if you want to suggest a role or an addon please visit our [addon ideas repository](https://github.com/TTT-2/addon-ideas/issues) and open an issue there.
