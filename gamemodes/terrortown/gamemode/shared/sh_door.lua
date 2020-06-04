@@ -322,33 +322,37 @@ if SERVER then
 		-- before the entity is killed, we have to trigger a door opening
 		self:OpenDoor()
 
-		-- we have to kill the entity here instead of removing it because this way we
-		-- have no problems with area portals (invisible rooms after door is destroyed)
-		self:Fire("Kill", "", 0)
-
 		-- set flag that this door is destroyed to prevent multiple prop spawns in case
 		-- this function is called multiple times for the same door in the same tick
 		self.isDestroyed = true
-
-		if IsValid(ply) and ply:IsPlayer() then
-			DamageLog("TTT2Doors: The door with the index " .. self:EntIndex() .. " has been destroyed by " .. ply:Nick() .. ".")
-		else
-			DamageLog("TTT2Doors: The door with the index " .. self:EntIndex() .. " has been destroyed.")
-		end
-
-		doorProp:Spawn()
-		doorProp:SetHealth(cvDoorPropHealth:GetInt())
-
-		doorProp.isDoorProp = true
-
-		doorProp:GetPhysicsObject():ApplyForceCenter(pushForce or Vector(0, 0, 0))
 
 		-- if the door is grouped as a pair, call the other one as well
 		if not surpressPair and IsValid(self.otherPairDoor) then
 			self.otherPairDoor:SafeDestroyDoor(ply, pushForce, true)
 		end
 
-		hook.Run("TTT2DoorDestroyed", doorProp, ply)
+		timer.Simple(0, function()
+			if not IsValid(self) or not IsValid(doorProp) then return end
+
+			-- we have to kill the entity here instead of removing it because this way we
+			-- have no problems with area portals (invisible rooms after door is destroyed)
+			self:Fire("Kill", "", 0)
+
+			if IsValid(ply) and ply:IsPlayer() then
+				DamageLog("TTT2Doors: The door with the index " .. self:EntIndex() .. " has been destroyed by " .. ply:Nick() .. ".")
+			else
+				DamageLog("TTT2Doors: The door with the index " .. self:EntIndex() .. " has been destroyed.")
+			end
+
+			doorProp:Spawn()
+			doorProp:SetHealth(cvDoorPropHealth:GetInt())
+
+			doorProp.isDoorProp = true
+
+			doorProp:GetPhysicsObject():ApplyForceCenter(pushForce or Vector(0, 0, 0))
+        
+			hook.Run("TTT2DoorDestroyed", doorProp, ply)
+		end)
 
 		return doorProp
 	end
