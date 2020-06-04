@@ -1246,4 +1246,4 @@ L.disable_overheadicons_tip = "Выключает иконки ролей над
 --L.corpse_hint_inspect_only_credits = "Press [{usekey}] to receive credits. Only detectives can search this body."
 
 -- 2020-06-04
-L.label_bind_disguiser = "Toggle disguiser"
+--L.label_bind_disguiser = "Toggle disguiser"
