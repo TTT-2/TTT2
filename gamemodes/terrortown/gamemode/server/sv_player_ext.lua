@@ -841,8 +841,6 @@ function plymeta:Revive(delay, OnRevive, DoCheck, needsCorpse, blockRound, OnFai
 		self:SetBlockingRevival(false)
 		self:SendRevivalReason(nil)
 
-		self.OnReviveFailedCallback = nil
-
 		if not isfunction(DoCheck) or DoCheck(self) then
 			local corpse = FindCorpse(self)
 
@@ -892,6 +890,8 @@ function plymeta:Revive(delay, OnRevive, DoCheck, needsCorpse, blockRound, OnFai
 		else
 			OnReviveFailed(self, "message_revival_failed")
 		end
+
+		self.OnReviveFailedCallback = nil
 	end)
 end
 
