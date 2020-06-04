@@ -12,6 +12,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Changed
 
+- Moved the disguiser icon to the status system to be only displayed when the player is actually disguised
+
 ### Fixed
 
 - Fixed inno subrole upgrading if many roles are installed
