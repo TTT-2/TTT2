@@ -419,11 +419,11 @@ if SERVER then
 		end
 
 		if health <= 0 then
-			-- capping the force factor is sufficient because
-			-- the forward vector is normalized
+			-- capping the force factor is sufficient because the forward vector is normalized
 			local forceFactor = math.min(50000, 500 * damage)
+			local attacker = dmginfo:GetAttacker()
 
-			if not ent:SafeDestroyDoor(dmginfo:GetAttacker(), forceFactor * dmginfo:GetAttacker():GetForward(), true) then return end
+			if not ent:SafeDestroyDoor(attacker, forceFactor * attacker:GetForward(), true) then return end
 		end
 
 		ent:SetHealth(health)
