@@ -350,7 +350,7 @@ if SERVER then
 			doorProp.isDoorProp = true
 
 			doorProp:GetPhysicsObject():ApplyForceCenter(pushForce or Vector(0, 0, 0))
-        
+
 			hook.Run("TTT2DoorDestroyed", doorProp, ply)
 		end)
 
