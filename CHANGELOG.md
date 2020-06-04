@@ -6,11 +6,17 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Added
 
+- Added Hooks to interact with door destruction
+  - `GM:TTT2BlockDoorDestruction(doorEntity, activator)`: Hook to block the door destruction.
+  - `GM:TTT2DoorDestroyed(doorPropEntity, activator)`: Hook that is called after the door is destroyed.
+
 ### Changed
 
 ### Fixed
 
 - Fixed inno subrole upgrading if many roles are installed
+- Fixed and improved the radar role/team modification hook
+- Fixed area portals on servers for destroyed doors
 
 ## [v0.7.1b](https://github.com/TTT-2/TTT2/tree/v0.7.1b) (2020-06-02)
 
