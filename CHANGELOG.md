@@ -14,6 +14,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Fixed
 
+- Fixed inno subrole upgrading if many roles are installed
 - Fixed and improved the radar role/team modification hook
 - Fixed area portals on servers for destroyed doors
 
