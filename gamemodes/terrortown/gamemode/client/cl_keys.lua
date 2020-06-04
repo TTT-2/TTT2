@@ -183,11 +183,5 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:PlayerButtonUp
 -- @local
 function GM:PlayerButtonUp(ply, btn)
-	if not IsFirstTimePredicted() then return end
 
-	-- Would be nice to clean up this whole "all key handling in massive
-	-- functions" thing. oh well
-	if btn == KEY_PAD_ENTER then
-		WEPS.DisguiseToggle(ply)
-	end
 end

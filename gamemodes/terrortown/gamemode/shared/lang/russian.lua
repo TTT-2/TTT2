@@ -609,7 +609,7 @@ L.corpse_too_far_away = "Тело слишком далеко."
 L.corpse_binoculars = "[{key}]: осмотреть тело через Бинокль."
 L.corpse_searched_by_detective = "Это тело осмотрено детективом."
 
-L.target_disg = "под маскировкой"
+L.target_disg = "(под маскировкой)"
 L.target_unid = "Неопознанное тело"
 
 L.target_traitor = "ПРЕДАТЕЛЬ"
@@ -638,10 +638,6 @@ L.tbut_single = "Одноразовое использование."
 L.tbut_reuse = "Многоразовое использование."
 L.tbut_retime = "Можно использовать повторно через {num} сек."
 L.tbut_help = "Нажмите [{usekey}], чтобы активировать."
-
--- Equipment info lines (on the left above the health/ammo panel)
-L.disg_hud = "Вы замаскированы. Информация о вас скрыта."
-L.radar_hud = "Радар перезарядиться через {time}"
 
 -- Spectator muting of living/dead
 L.mute_living = "Заглушены: живые"
@@ -1242,9 +1238,12 @@ L.disable_overheadicons_tip = "Выключает иконки ролей над
 -- 2020-05-03
 --L.door_destructible = "Door is destructible ({health}HP)"
 
---2020-05-28
+-- 2020-05-28
 --L.confirm_detective_only = "Only detectives can confirm bodies"
 --L.inspect_detective_only = "Only detectives can inspect bodies"
 --L.corpse_hint_no_inspect = "Only detectives can search this body."
 --L.corpse_hint_inspect_only = "Press [{usekey}] to serch. Only detectives can confirm the body."
 --L.corpse_hint_inspect_only_credits = "Press [{usekey}] to receive credits. Only detectives can search this body."
+
+-- 2020-06-04
+L.label_bind_disguiser = "Toggle disguiser"

@@ -49,6 +49,7 @@ local icon_tid_auto_close = Material("vgui/ttt/tid/tid_auto_close")
 local materialDoor = Material("vgui/ttt/tid/tid_big_door")
 local materialDestructible = Material("vgui/ttt/tid/tid_destructible")
 local icon_tid_dna = Material("vgui/ttt/dnascanner/dna_hud")
+local materialDisguised = Material("vgui/ttt/perks/hud_disguiser.png")
 
 ---
 -- Returns the localized ClassHint table
@@ -767,8 +768,9 @@ function HUDDrawTargetIDPlayers(tData)
 	local h_string, h_color = util.HealthToString(ent:Health(), ent:GetMaxHealth())
 
 	tData:SetTitle(
-		ent:Nick() .. " " .. (disguised and string.upper(TryT("target_disg")) or ""),
-		disguised and COLOR_RED or nil
+		ent:Nick() .. " " .. (disguised and TryT("target_disg") or ""),
+		disguised and COLOR_ORANGE or nil,
+		disguised and {materialDisguised}
 	)
 
 	tData:SetSubtitle(
