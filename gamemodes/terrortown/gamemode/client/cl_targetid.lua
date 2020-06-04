@@ -271,18 +271,18 @@ function GM:HUDDrawTargetID()
 		distance = trace.StartPos:Distance(trace.HitPos)
 	end
 
-	ent = hook.Run("TTTModifyTargetedEntity", ent, distance) or ent
-
-	-- make sure it is a valid entity
-	if not IsValid(ent) or ent.NoTarget then return end
-
 	-- if a vehicle, we identify the driver instead
-	if IsValid(ent:GetNWEntity("ttt_driver", nil)) then
+	if IsValid(ent) and IsValid(ent:GetNWEntity("ttt_driver", nil)) then
 		ent = ent:GetNWEntity("ttt_driver", nil)
 	end
 
 	-- only add onscreen infos when the entity isn't the local player
 	if ent == client then return end
+
+	ent = hook.Run("TTTModifyTargetedEntity", ent, distance) or ent
+
+	-- make sure it is a valid entity
+	if not IsValid(ent) or ent.NoTarget then return end
 
 	-- combine data into a table to read them inside a hook
 	local data = {
