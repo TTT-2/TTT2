@@ -1,8 +1,25 @@
-First of all, thanks for your interest in this project. 
+# Contributing Guidelines
 
-I'm happy to see new contributors improving this project and fullfilling all wishes of the TTT playerbase.
-Just submit your changes as a pull request or open a new issue to request features or report bugs.
+First of all, thank you for your interest in this project.
 
-Please try to keep your code clean. If possible, use Atom in combination with the atom-beautifier package. After that, modify the Lua Beautifier to make it compatible with Glua. Just replace the named file in the Gist description with the new one: https://gist.github.com/Alf21/e86601521f67fcbb88ddc34bfa778727
+Please follow the respective guidelines below to support a good experience for everyone envolved.
+
+## Pull Requests
+
+- Name the pull request according to the following schema `<Section>: <Title>`. 
+  - e.g. `TargetID: Added hooks for modification`
+- Make sure you provide clean code:
+  - no linting errors
+  - no debug prints
+  - no outcommented code
+- Provide an appropriate entry to the `Unreleased` section of our [changelog file](CHANGELOG.md).
+- A descriptive introduction to the changes made is highly encouraged.
+
+## Issues
+
+- Before opening an issue please read the [FAQ](https://github.com/TTT-2/TTT2/wiki/faq) and search for [existing issues](https://github.com/TTT-2/TTT2/issues?q=is%3Aissue) first.
+- For **bug reports** be sure to fill out the provided template.
+- For **feature requests** be as descriptive as possible.
+  - if you want to suggest a role or an addon please visit our [addon ideas repository](https://github.com/TTT-2/addon-ideas/issues) and open an issue there.
 
 If you want to discuss this and other addons just [join our discord server](https://discord.gg/9njYXGY).
