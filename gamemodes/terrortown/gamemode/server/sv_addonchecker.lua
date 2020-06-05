@@ -13,7 +13,6 @@ addonChecker.curatedList = {
 		alternative = "1367128301",
 		reason = "Does not work with our role system.",
 		type = ADDON_INCOMPATIBLE
-
 	},
 	["167547072"] = { -- Killer Notifier by StarFox
 		alternative = "1367128301",
