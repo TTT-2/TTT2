@@ -65,12 +65,9 @@ addonChecker.curatedList = {
 		type = ADDON_INCOMPATIBLE
 	},
 	["305101059"] = { -- ID Bomb by MolagA
-		alternative = "",
-		reason = "",
 		type = ADDON_INCOMPATIBLE
 	},
 	["663328966"] = { -- damagelogs by Hundreth
-		alternative = "",
 		reason = "Breaks the TTT2 gamemode, alternative available here: https://github.com/Alf21/tttdamagelogs",
 		type = ADDON_INCOMPATIBLE
 	},
@@ -125,82 +122,65 @@ addonChecker.curatedList = {
 		type = ADDON_INCOMPATIBLE
 	},
 	["644532564"] = { -- TTT Totem Content by Gamefreak
-		alternative = "",
-		reason = "",
 		type = ADDON_INCOMPATIBLE
 	},
 	["1092556189"] = { -- Town of Terror by Jenssons
-		alternative = "",
 		reason = "Inferior role selection system that breaks TTT2.",
 		type = ADDON_INCOMPATIBLE
 	},
 	["1215502383"] = { -- Custom Roles by Noxx
-		alternative = "",
 		reason = "Inferior role selection system that breaks TTT2.",
 		type = ADDON_INCOMPATIBLE
 	},
 	["886346394"] = { -- Identity Swapper by Lesh
-		alternative = "",
 		reason = "Overwrites the targetID gamemode function and therefore removes the TTT2 targetID.",
 		type = ADDON_INCOMPATIBLE
 	},
 	["844284735"] = { -- Identity Swapper by Saty
-		alternative = "",
 		reason = "Overwrites the targetID gamemode function and therefore removes the TTT2 targetID.",
 		type = ADDON_INCOMPATIBLE
 	},
 	["1382102057"] = { -- Thanos's Infinity Gauntlet SWEP and Model
-		alternative = "",
 		reason = "Sets everybodies sprintspeed quite high.",
 		type = ADDON_INCOMPATIBLE
 	},
 	["1757151213"] = { -- Random Shop by Lupus
-		alternative = "",
 		reason = "Random shop is already included in TTT2.",
 		type = ADDON_INCOMPATIBLE
 	},
 	["481440358"] = { -- Drowning Indicator by Moe
-		alternative = "",
 		reason = "A drowning indicator is already included in TTT2.",
 		type = ADDON_INCOMPATIBLE
 	},
 	["933056549"] = { -- Sprint by Fresh Garry
-		alternative = "",
 		reason = "A sprinting system is already included in TTT2.",
 		type = ADDON_INCOMPATIBLE
 	},
 	["1729301513"] = { -- Sprint by Lesh
-		alternative = "",
 		reason = "A sprinting system is already included in TTT2.",
 		type = ADDON_INCOMPATIBLE
 	},
 	["367945571"] = { -- Advanced Body Search by Mr Trung
-		alternative = "",
 		reason = "This addon breaks the whole body confirmation system.",
 		type = ADDON_INCOMPATIBLE
 	},
 	["878772496"] = { -- BEM by Long Long Longson
-		alternative = "",
 		reason = "A reworked shop is already part of TTT2.",
 		type = ADDON_INCOMPATIBLE
 	},
 	["1107420703"] = { -- BEM by Fresh Garry
-		alternative = "",
 		reason = "A reworked shop is already part of TTT2.",
 		type = ADDON_INCOMPATIBLE
 	},
 	["290961117"] = { -- Destructible Doors by Exho
-		alternative = "",
 		reason = "Breakable doors are already a part of TTT2 that can be enabled with a convar. This addon has also problems with area portals in some doors.",
 		type = ADDON_INCOMPATIBLE
 	},
 	["606792331"] = { -- Advanced disguiser by Gamefreak
-		alternative = "",
 		reason = "Does not work with TTT2 targetID.",
 		type = ADDON_INCOMPATIBLE
 	},
 	["610632051"] = { -- Advanced disguiser by Killberty
-		alternative = "",
 		reason = "Does not work with TTT2 targetID.",
 		type = ADDON_INCOMPATIBLE
 	},
@@ -311,82 +291,66 @@ addonChecker.curatedList = {
 	},
 	["273623128"] = { -- zombie perk bottles by Hoff
 		alternative = "842302491",
-		reason = "",
 		type = ADDON_OUTDATED
 	},
 	["1387914296"] = { -- zombie perk bottles by Schmitler
 		alternative = "842302491",
-		reason = "",
 		type = ADDON_OUTDATED
 	},
 	["1371596971"] = { -- zombie perk bottles by Amenius
 		alternative = "842302491",
-		reason = "",
 		type = ADDON_OUTDATED
 	},
 	["860794236"] = { -- zombie perk bottles by Menzek
 		alternative = "842302491",
-		reason = "",
 		type = ADDON_OUTDATED
 	},
 	["1198504029"] = { -- zombie perk bottles by RedocPlays
 		alternative = "842302491",
-		reason = "",
 		type = ADDON_OUTDATED
 	},
 	["911658617"] = { -- zombie perk bottles by Luchix
 		alternative = "842302491",
-		reason = "",
 		type = ADDON_OUTDATED
 	},
 	["869353740"] = { -- zombie perk bottles by Railroad Engineer 111
 		alternative = "842302491",
-		reason = "",
 		type = ADDON_OUTDATED
 	},
 	["310403937"] = { -- Prop Disguiser by Exho
 		alternative = "1662844145",
-		reason = "",
 		type = ADDON_OUTDATED
 	},
 	["843092697"] = { -- Prop Disguiser by Soren
 		alternative = "1662844145",
-		reason = "",
 		type = ADDON_OUTDATED
 	},
 	["937535488"] = { -- Prop Disguiser by St Addi
 		alternative = "1662844145",
-		reason = "",
 		type = ADDON_OUTDATED
 	},
 	["1168304202"] = { -- Prop Disguiser by Izellix
 		alternative = "1662844145",
-		reason = "",
 		type = ADDON_OUTDATED
 	},
 	["1361103159"] = { -- Prop Disguiser by Derp altamas
 		alternative = "1662844145",
-		reason = "",
 		type = ADDON_OUTDATED
 	},
 	["1301826793"] = { -- Prop Disguiser by Akechi
 		alternative = "1662844145",
-		reason = "",
 		type = ADDON_OUTDATED
 	},
 	["254779132"] = { -- Dead Ringer by Porter
 		alternative = "810154456",
-		reason = "",
 		type = ADDON_OUTDATED
 	},
 	["1315377462"] = { -- Dead Ringer by MuratYilderimTM
 		alternative = "810154456",
-		reason = "",
 		type = ADDON_OUTDATED
 	},
 	["240281783"] = { -- Dead Ringer by Niandra
 		alternative = "810154456",
-		reason = "",
 		type = ADDON_OUTDATED
 	},
 	["284419411"] = { -- Minifier by Lykrast
@@ -541,13 +505,13 @@ function addonChecker.Check()
 
 		ErrorNoHalt(((detectedAddon.type == ADDON_OUTDATED) and "Outdated add-on detected: " or "Incompatible add-on detected: ") .. addon.title .. "\n")
 
-		if detectedAddon.reason ~= "" then
+		if detectedAddon.reason then
 			ErrorNoHalt("Reason: " .. detectedAddon.reason .. "\n")
 		end
 
 		ErrorNoHalt("--> Detected add-on: https://steamcommunity.com/sharedfiles/filedetails/?id=" .. addon.wsid .. "\n")
 
-		if detectedAddon.alternative ~= "" then
+		if detectedAddon.alternative then
 			ErrorNoHalt("--> Alternative add-on: https://steamcommunity.com/sharedfiles/filedetails/?id=" .. detectedAddon.alternative .. "\n")
 		end
 
