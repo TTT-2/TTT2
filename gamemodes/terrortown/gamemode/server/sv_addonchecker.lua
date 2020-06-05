@@ -1,6 +1,7 @@
 ---
 -- addonChecker to detect known incompatabilities.
 -- @author saibotk
+-- @author Mineotopia
 
 ADDON_INCOMPATIBLE = 0
 ADDON_OUTDATED = 1
@@ -526,7 +527,6 @@ addonChecker.curatedList = {
 -- incompatible / outdated addons and about a working alternative, if one exists.
 -- @realm server
 function addonChecker.Check()
-	local c = 0
 	local addonTable = engine.GetAddons()
 
 	print("")
