@@ -243,14 +243,7 @@ function GM:HUDDrawTargetID()
 	endpos:Mul(MAX_TRACE_LENGTH)
 	endpos:Add(startpos)
 
-	local changedStartpos, changedEndpos = hook.Run("TTTModifyTargetTracedata", startpos, endpos)
-
-	if isvector(changedStartpos) and isvector(changedEndpos) then
-		startpos = changedStartpos
-		endpos = changedEndpos
-	end
-
-	local ent, distance
+	local ent, unchangedEnt, distance
 
 	-- if the user is looking at a traitor button, it should always be handled with priority
 	if TBHUD.focus_but and IsValid(TBHUD.focus_but.ent) and (TBHUD.focus_but.access or TBHUD.focus_but.admin) and TBHUD.focus_stick >= CurTime() then
@@ -279,7 +272,12 @@ function GM:HUDDrawTargetID()
 	-- only add onscreen infos when the entity isn't the local player
 	if ent == client then return end
 
-	ent = hook.Run("TTTModifyTargetedEntity", ent, distance) or ent
+	local changedEnt = hook.Run("TTTModifyTargetedEntity", ent, distance)
+
+	if IsValid(changedEnt) then
+		unchangedEnt = ent
+		ent = changedEnt
+	end
 
 	-- make sure it is a valid entity
 	if not IsValid(ent) or ent.NoTarget then return end
@@ -287,6 +285,7 @@ function GM:HUDDrawTargetID()
 	-- combine data into a table to read them inside a hook
 	local data = {
 		ent = ent,
+		unchangedEnt = unchangedEnt,
 		distance = distance
 	}
 

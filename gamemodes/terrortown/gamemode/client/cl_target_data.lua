@@ -28,6 +28,14 @@ function TARGET_DATA:GetEntity()
 end
 
 ---
+-- Returns the entity before it was modified by @{GM:TTTModifyTargetedEntity}.
+-- @return nil|Entity The focused entity, nil if it wasn't modified
+-- @realm client
+function TARGET_DATA:GetUnchangedEntity()
+	return self.data.unchangedEnt
+end
+
+---
 -- Returns the distance to the focused entity
 -- @return number The distance to the focused entity
 -- @realm client
