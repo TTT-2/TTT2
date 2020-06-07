@@ -1291,4 +1291,4 @@ L.corpse_hint_inspect_only = "Drücke [{usekey}] zum Durchsuchen. Nur Detektive 
 L.corpse_hint_inspect_only_credits = "Drücke [{usekey}] zum Erhalten der Credits. Nur ein Detektiv kann diesen Körper untersuchen."
 
 -- 2020-06-04
-L.label_bind_disguiser = "Schalte Tarnung"
+L.label_bind_disguiser = "Tarnung umschalten"
