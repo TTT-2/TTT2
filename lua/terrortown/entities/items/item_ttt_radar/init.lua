@@ -183,6 +183,22 @@ function RADAR.SetRadarTime(ply, time)
 end
 
 ---
+-- Forces a new radar scan, even when the radar is still charging. It is recommended to
+-- call this function after @{RADAR.SetRadarTime} to enforce an immediate change.
+-- @param Player ply The player whose radar should be executed
+-- @realm server
+function RADAR.ForceScan(ply)
+	if not IsValid(ply) then return end
+
+	RADAR.Deinit(ply)
+
+	ply.radar_charge = CurTime()
+
+	TriggerRadarScan(ply)
+	SetupRadarScan(ply)
+end
+
+---
 -- Inits the radar.
 -- Called when the radar is added to the player.
 -- @param Player ply The player who owens the radar
