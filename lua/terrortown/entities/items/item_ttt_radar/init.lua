@@ -211,3 +211,29 @@ net.Receive("TTT2RadarUpdateAutoScan", function(_, ply)
 
 	ply.radarDoesNotRepeat = not net.ReadBool()
 end)
+
+local plymeta = assert(FindMetaTable("Player"), "FAILED TO FIND PLAYER TABLE")
+
+---
+-- Sets the radar time interval, lets the current scan run out before it is changed.
+-- @param[default=ROLE.radarTime or 30] number time The radar time interval
+-- @realm server
+function plymeta:SetRadarTime(time)
+	self.radarTime = time or self:GetSubRoleData().radarTime or cv_radarTime:GetInt()
+end
+
+---
+-- Forces a new radar scan, even when the radar is still charging. It is recommended to
+-- call this function after @{RADAR.SetRadarTime} to enforce an immediate change.
+-- @realm server
+function plymeta:ForceRadarScan()
+	if not self:HasEquipmentItem("item_ttt_radar") then return end
+
+	RADAR.Deinit(self)
+
+	-- reset the radar charge end time to now to allow a new scan
+	self.radar_charge = CurTime()
+
+	RADAR.TriggerRadarScan(self)
+	RADAR.SetupRadarScan(self)
+end
