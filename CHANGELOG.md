@@ -15,6 +15,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Changed
 
 - Reworked the addonchecker and added a command to execute the checker at a later point
+- Updated Italian translation (Thanks @ThePlatinumGhost)
 
 ### Fixed
 
