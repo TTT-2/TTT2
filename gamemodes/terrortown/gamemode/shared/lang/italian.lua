@@ -1295,7 +1295,7 @@ L.item_no_drown_damage_desc = [[Ti rende immune al danno da affogamento.]]
 L.message_revival_canceled = "Rianimazione cancellata."
 L.message_revival_failed = "Rianimazione fallita."
 L.message_revival_failed_missing_body = "Non sei stato rianimato perchè il tuo corpo non esiste più."
-L.hud_revival_title = "Tempo rimasto fino alla rianimazione:"
+L.hud_revival_title = "Tempo rimasto:"
 L.hud_revival_time = "{time} secondi"
 
 -- 2020-05-03
