@@ -25,7 +25,7 @@ util.AddNetworkString("TTT2RevivalUpdate_IsBlockingRevival")
 util.AddNetworkString("TTT2RevivalUpdate_RevivalStartTime")
 util.AddNetworkString("TTT2RevivalUpdate_RevivalDuration")
 
-local cv_radarTime = GetConVar("ttt2_radar_time")
+local cv_radarTime = GetConVar("ttt2_radar_charge_time")
 
 ---
 -- Sets whether a @{Player} is spectating the own ragdoll

@@ -9,11 +9,13 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added Hooks to interact with door destruction
   - `GM:TTT2BlockDoorDestruction(doorEntity, activator)`: Hook to block the door destruction.
   - `GM:TTT2DoorDestroyed(doorPropEntity, activator)`: Hook that is called after the door is destroyed.
-- Added a new function to force a new radar scan: `RADAR.ForceScan(ply)`
+- Added a new function to force a new radar scan: `ply:ForceRadarScan()`
+- Added a new convar to change the default radar time for players without custom radar times: `ttt2_radar_charge_time`
 
 ### Changed
 
 - Reworked the addonchecker and added a command to execute the checker at a later point
+- renamed `RADAR.SetRadarTime(ply, time)` to `ply:SetRadarTime(time)`
 
 ### Fixed
 
