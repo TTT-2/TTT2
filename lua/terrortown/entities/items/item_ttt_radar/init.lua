@@ -108,7 +108,7 @@ function RADAR.TriggerRadarScan(ply)
 
 	net.Send(ply)
 end
-concommand.Add("ttt_radar_scan", TriggerRadarScan)
+concommand.Add("ttt_radar_scan", RADAR.TriggerRadarScan)
 
 ---
 -- This hook can be used to modify the radar dots of players.
