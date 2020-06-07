@@ -9,6 +9,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added Hooks to interact with door destruction
   - `GM:TTT2BlockDoorDestruction(doorEntity, activator)`: Hook to block the door destruction.
   - `GM:TTT2DoorDestroyed(doorPropEntity, activator)`: Hook that is called after the door is destroyed.
+- Added a new function to force a new radar scan: `RADAR.ForceScan(ply)`
 
 ### Changed
 
