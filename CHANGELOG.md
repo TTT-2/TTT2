@@ -13,12 +13,14 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Changed
 
 - Moved the disguiser icon to the status system to be only displayed when the player is actually disguised
+- Reworked the addonchecker and added a command to execute the checker at a later point
 
 ### Fixed
 
 - Fixed inno subrole upgrading if many roles are installed
 - Fixed and improved the radar role/team modification hook
 - Fixed area portals on servers for destroyed doors
+- Fixed revive fail function reference reset
 
 ## [v0.7.1b](https://github.com/TTT-2/TTT2/tree/v0.7.1b) (2020-06-02)
 
