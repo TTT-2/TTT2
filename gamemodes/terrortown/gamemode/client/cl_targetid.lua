@@ -274,7 +274,7 @@ function GM:HUDDrawTargetID()
 
 	local changedEnt = hook.Run("TTTModifyTargetedEntity", ent, distance)
 
-	if IsValid(changedEnt) then
+	if changedEnt then
 		unchangedEnt = ent
 		ent = changedEnt
 	end
