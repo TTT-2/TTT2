@@ -25,6 +25,8 @@ util.AddNetworkString("TTT2RevivalUpdate_IsBlockingRevival")
 util.AddNetworkString("TTT2RevivalUpdate_RevivalStartTime")
 util.AddNetworkString("TTT2RevivalUpdate_RevivalDuration")
 
+local cv_radarTime = GetConVar("ttt2_radar_time")
+
 ---
 -- Sets whether a @{Player} is spectating the own ragdoll
 -- @param boolean s
@@ -1493,3 +1495,27 @@ local function SetPlayerReady(_, ply)
 	hook.Run("TTT2PlayerReady", ply)
 end
 net.Receive("TTT2SetPlayerReady", SetPlayerReady)
+
+---
+-- Sets the radar time interval, lets the current scan run out before it is changed.
+-- @param[default=ROLE.radarTime or 30] number time The radar time interval
+-- @realm server
+function plymeta:SetRadarTime(time)
+	self.radarTime = time or self:GetSubRoleData().radarTime or cv_radarTime:GetInt()
+end
+
+---
+-- Forces a new radar scan, even when the radar is still charging. It is recommended to
+-- call this function after @{RADAR.SetRadarTime} to enforce an immediate change.
+-- @realm server
+function plymeta:ForceRadarScan()
+	if not self:HasEquipmentItem("item_ttt_radar") then return end
+
+	RADAR.Deinit(self)
+
+	-- reset the radar charge end time to now to allow a new scan
+	self.radar_charge = CurTime()
+
+	RADAR.TriggerRadarScan(self)
+	RADAR.SetupRadarScan(self)
+end

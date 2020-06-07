@@ -22,7 +22,12 @@ local function UpdateTimeOnPlayer(ply)
 	net.Send(ply)
 end
 
-local function TriggerRadarScan(ply)
+---
+-- Triggers a new radar scan. Fails if the radar is still charging.
+-- @param Player ply The player whose radar is affected
+-- @internal
+-- @realm server
+function RADAR.TriggerRadarScan(ply)
 	if not IsValid(ply) or not ply:IsTerror() then return end
 
 	if not ply:HasEquipmentItem("item_ttt_radar") then
@@ -160,42 +165,20 @@ function RADAR.CreateTargetTable(ply, pos, ent, color)
 	}
 end
 
-local function SetupRadarScan(ply)
+---
+-- Sets up the timer for a new radar scan.
+-- @param Player ply The player whose radar is affected
+-- @internal
+-- @realm server
+function RADAR.SetupRadarScan(ply)
 	timer.Create("radarTimeout_" .. ply:SteamID64(), ply.radarTime, 1, function()
 		if not IsValid(ply) or not ply:HasEquipmentItem("item_ttt_radar")
 			or ply.radarDoesNotRepeat
 		then return end
 
-		TriggerRadarScan(ply)
-		SetupRadarScan(ply)
+		RADAR.TriggerRadarScan(ply)
+		RADAR.SetupRadarScan(ply)
 	end)
-end
-
----
--- Sets the radar time interval, lets the current scan run out before it is changed.
--- @param Player ply The player whose radar interval should be changed
--- @param[default=ROLE.radarTime or 30] number time The radar time interval
--- @realm server
-function RADAR.SetRadarTime(ply, time)
-	if not IsValid(ply) then return end
-
-	ply.radarTime = time or ply:GetSubRoleData().radarTime or 30
-end
-
----
--- Forces a new radar scan, even when the radar is still charging. It is recommended to
--- call this function after @{RADAR.SetRadarTime} to enforce an immediate change.
--- @param Player ply The player whose radar should be executed
--- @realm server
-function RADAR.ForceScan(ply)
-	if not IsValid(ply) then return end
-
-	RADAR.Deinit(ply)
-
-	ply.radar_charge = CurTime()
-
-	TriggerRadarScan(ply)
-	SetupRadarScan(ply)
 end
 
 ---
@@ -206,10 +189,10 @@ end
 function RADAR.Init(ply)
 	if not IsValid(ply) then return end
 
-	RADAR.SetRadarTime(ply)
+	ply:SetRadarTime()
 
-	TriggerRadarScan(ply)
-	SetupRadarScan(ply)
+	RADAR.TriggerRadarScan(ply)
+	RADAR.SetupRadarScan(ply)
 end
 
 ---
