@@ -387,7 +387,7 @@ function GM:InitPostEntity()
 	WEPS.ForcePrecache()
 
 	timer.Simple(0, function()
-		Addonchecker:Check()
+		addonChecker.Check()
 	end)
 end
 
