@@ -8,7 +8,6 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Added Hooks to the targetID system to modify the displayed data
   - `GM:TTTModifyTargetedEntity(ent, distance)`: Modify the entity that is targeted. This is useful for addons like an "Identity Disguiser".
-  - `GM:TTTModifyTargetTracestart(startpos, endpos)`: Modify the start and enpos for a trace. This is useful for addons like the "Supersheep".
 - Added Hooks to interact with door destruction
   - `GM:TTT2BlockDoorDestruction(doorEntity, activator)`: Hook to block the door destruction.
   - `GM:TTT2DoorDestroyed(doorPropEntity, activator)`: Hook that is called after the door is destroyed.
