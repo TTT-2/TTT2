@@ -10,6 +10,8 @@ local hook = hook
 util.AddNetworkString("TTT2RadarUpdateAutoScan")
 util.AddNetworkString("TTT2RadarUpdateTime")
 
+local cv_radarTime = GetConVar("ttt2_radar_charge_time")
+
 RADAR = RADAR or {}
 
 local function UpdateTimeOnPlayer(ply)
