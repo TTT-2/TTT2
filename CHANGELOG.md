@@ -12,6 +12,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Changed
 
+- Reworked the addonchecker and added a command to execute the checker at a later point
+
 ### Fixed
 
 - Fixed inno subrole upgrading if many roles are installed
