@@ -8,7 +8,15 @@
 -- @param string columnName The name of the column to check.
 -- @return boolean Returns true if the column exists in the table.
 function sql.ColumnExists(tableName, columnName)
-    return sql.Query("SELECT COUNT(*) FROM pragma_table_info(" .. sql.SQLStr(tableName) .. ") WHERE name=" .. sql.SQLStr(columnName)) == 1
+    return sql.Query("SELECT COUNT(*) FROM pragma_table_info(" .. sql.SQLIdent(tableName) .. ") WHERE name=" .. sql.SQLStr(columnName)) == 1
+end
+
+---
+-- Returns the Primarykey columns of the specified table in order of their index.
+-- @param string tableName The name of the table to search.
+-- @return table|nil Returns a table of the Primarykey columns.
+function sql.GetPrimaryKey(tableName)
+    return sql.Query("SELECT name FROM pragma_table_info(" .. sql.SQLIdent(tableName) .. ") WHERE pk!=0 ORDER BY pk")
 end
 
 ---
