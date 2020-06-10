@@ -20,6 +20,14 @@ function sql.GetPrimaryKey(tableName)
 end
 
 ---
+-- Returns the column names of the specified table.
+-- @param string tableName The name of the table to search.
+-- @return table|nil Returns a table of the column names.
+function sql.GetTableColumns(tableName)
+    return sql.Query("SELECT name FROM pragma_table_info(" .. sql.SQLIdent(tableName) .. ")")
+end
+
+---
 -- Escapes a string for use as an identifier (tablename, columnname) for sqlite.
 -- @param string str The string to escape.
 -- @return string Returns the escaped string.
