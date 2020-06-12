@@ -611,7 +611,7 @@ L.corpse_too_far_away = "The corpse is too far away."
 L.corpse_binoculars = "Press [{key}] to search corpse with binoculars."
 L.corpse_searched_by_detective = "This corpse was searched by a detective"
 
-L.target_disg = "disguised"
+L.target_disg = "(disguised)"
 L.target_unid = "Unidentified body"
 
 L.target_credits = "Search to receive unspent credits"
@@ -648,10 +648,6 @@ L.tbut_admin_mode_only = "Only visible to you because you're an admin and '{cv}'
 L.tbut_allow = "Allow"
 L.tbut_prohib = "Prohibit"
 L.tbut_default = "Default"
-
--- Equipment info lines (on the left above the health/ammo panel)
-L.disg_hud = "Disguised. Your name is hidden."
-L.radar_hud = "Radar ready for next scan in: {time}"
 
 -- Spectator muting of living/dead
 L.mute_living = "Living players muted"
@@ -1296,9 +1292,12 @@ L.hud_revival_time = "{time}s"
 -- 2020-05-03
 L.door_destructible = "Door is destructible ({health}HP)"
 
---2020-05-28
+-- 2020-05-28
 L.confirm_detective_only = "Only detectives can confirm bodies"
 L.inspect_detective_only = "Only detectives can inspect bodies"
 L.corpse_hint_no_inspect = "Only detectives can search this body."
 L.corpse_hint_inspect_only = "Press [{usekey}] to search. Only detectives can confirm the body."
 L.corpse_hint_inspect_only_credits = "Press [{usekey}] to receive credits. Only detectives can search this body."
+
+-- 2020-06-04
+L.label_bind_disguiser = "Toggle disguiser"
