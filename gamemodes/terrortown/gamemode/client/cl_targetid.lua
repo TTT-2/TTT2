@@ -239,12 +239,12 @@ function GM:HUDDrawTargetID()
 	end
 
 	local startpos = client:EyePos()
-
 	local endpos = client:GetAimVector()
+
 	endpos:Mul(MAX_TRACE_LENGTH)
 	endpos:Add(startpos)
 
-	local ent, distance
+	local ent, unchangedEnt, distance
 
 	-- if the user is looking at a traitor button, it should always be handled with priority
 	if TBHUD.focus_but and IsValid(TBHUD.focus_but.ent) and (TBHUD.focus_but.access or TBHUD.focus_but.admin) and TBHUD.focus_stick >= CurTime() then
@@ -265,20 +265,28 @@ function GM:HUDDrawTargetID()
 		distance = trace.StartPos:Distance(trace.HitPos)
 	end
 
-	-- make sure it is a valid entity
-	if not IsValid(ent) or ent.NoTarget then return end
-
 	-- if a vehicle, we identify the driver instead
-	if IsValid(ent:GetNWEntity("ttt_driver", nil)) then
+	if IsValid(ent) and IsValid(ent:GetNWEntity("ttt_driver", nil)) then
 		ent = ent:GetNWEntity("ttt_driver", nil)
 	end
 
 	-- only add onscreen infos when the entity isn't the local player
 	if ent == client then return end
 
+	local changedEnt = hook.Run("TTTModifyTargetedEntity", ent, distance)
+
+	if changedEnt then
+		unchangedEnt = ent
+		ent = changedEnt
+	end
+
+	-- make sure it is a valid entity
+	if not IsValid(ent) or ent.NoTarget then return end
+
 	-- combine data into a table to read them inside a hook
 	local data = {
 		ent = ent,
+		unchangedEnt = unchangedEnt,
 		distance = distance
 	}
 
@@ -446,11 +454,33 @@ function GM:HUDDrawTargetID()
 end
 
 ---
--- Add targetID info to a focused entity
+-- Add targetID info to a focused entity.
 -- @param @{TARGET_DATA} tData The @{TARGET_DATA} data object which contains all information
 -- @hook
 -- @realm client
 function GM:TTTRenderEntityInfo(tData)
+
+end
+
+---
+-- Change the focused entity used for targetID.
+-- @param Entity ent The focuces entity that should be changed
+-- @param number distance The distance to the focused entity
+-- @return Entity The new entity to replace the real one
+-- @hook
+-- @realm client
+function GM:TTTModifyTargetedEntity(ent, distance)
+
+end
+
+---
+-- Change the starting position for the trace that looks for entites.
+-- @param Vector startpos The current startpos of the trace to find an entity
+-- @param Vector endpos The current endpos of the trace to find an entity
+-- @return Vector, Vector The new startpos for the trace, the new endpos for the trace
+-- @hook
+-- @realm client
+function GM:TTTModifyTargetTracedata(startpos, endpos)
 
 end
 
