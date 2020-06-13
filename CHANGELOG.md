@@ -15,7 +15,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Changed
 
 - Reworked the addonchecker and added a command to execute the checker at a later point
-- renamed `RADAR.SetRadarTime(ply, time)` to `ply:SetRadarTime(time)`
+- Renamed `RADAR.SetRadarTime(ply, time)` to `ply:SetRadarTime(time)`
 
 ### Fixed
 
