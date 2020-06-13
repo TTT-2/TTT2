@@ -195,7 +195,7 @@ end
 function RADAR.Init(ply)
 	if not IsValid(ply) then return end
 
-	ply:SetRadarTime()
+	ply:ResetRadarTime()
 
 	RADAR.TriggerRadarScan(ply)
 	RADAR.SetupRadarScan(ply)
@@ -222,15 +222,23 @@ local plymeta = assert(FindMetaTable("Player"), "FAILED TO FIND PLAYER TABLE")
 
 ---
 -- Sets the radar time interval, lets the current scan run out before it is changed.
--- @param[default=ROLE.radarTime or 30] number time The radar time interval
+-- @param number time The radar time interval
 -- @realm server
 function plymeta:SetRadarTime(time)
-	self.radarTime = time or self:GetSubRoleData().radarTime or cv_radarCharge:GetInt()
+	self.radarTime = time
+end
+
+---
+-- Sets the radar time interval to the role or convar default, lets the current scan run out before it is changed.
+-- @param number time The radar time interval
+-- @realm server
+function plymeta:ResetRadarTime()
+	self.radarTime = self:GetSubRoleData().radarTime or cv_radarCharge:GetInt()
 end
 
 ---
 -- Forces a new radar scan, even when the radar is still charging. It is recommended to
--- call this function after @{RADAR.SetRadarTime} to enforce an immediate change.
+-- call this function after @{plymeta:SetRadarTime} to enforce an immediate change.
 -- @realm server
 function plymeta:ForceRadarScan()
 	if not self:HasEquipmentItem("item_ttt_radar") then return end
