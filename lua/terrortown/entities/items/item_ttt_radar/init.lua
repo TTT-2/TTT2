@@ -7,10 +7,16 @@ local table = table
 local IsValid = IsValid
 local hook = hook
 
+local cv_radarCharge
+
 util.AddNetworkString("TTT2RadarUpdateAutoScan")
 util.AddNetworkString("TTT2RadarUpdateTime")
 
 RADAR = RADAR or {}
+
+function ITEM:Initialize()
+	cv_radarCharge = GetConVar("ttt2_radar_charge_time")
+end
 
 local function UpdateTimeOnPlayer(ply)
 	if ply.lastRadarTime == ply.radarTime then return end
@@ -219,7 +225,7 @@ local plymeta = assert(FindMetaTable("Player"), "FAILED TO FIND PLAYER TABLE")
 -- @param[default=ROLE.radarTime or 30] number time The radar time interval
 -- @realm server
 function plymeta:SetRadarTime(time)
-	self.radarTime = time or self:GetSubRoleData().radarTime or GetConVar("ttt2_radar_charge_time"):GetInt()
+	self.radarTime = time or self:GetSubRoleData().radarTime or cv_radarCharge:GetInt()
 end
 
 ---

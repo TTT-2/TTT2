@@ -342,6 +342,8 @@ function GM:InitPostEntity()
 		CreateEquipment(itm) -- init items
 
 		itm.CanBuy = {} -- reset normal items equipment
+
+		itm:Initialize()
 	end
 
 	for i = 1, #sweps do
