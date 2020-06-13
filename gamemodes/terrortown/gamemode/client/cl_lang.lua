@@ -474,11 +474,6 @@ local styledmessages = {
 		"tele_marked"
 	},
 
-	chat_plain = { -- TODO move to disguiser
-		"disg_turned_on",
-		"disg_turned_off"
-	},
-
 	chat_warn = { -- TODO move to teleporter
 		"tele_no_ground",
 		"tele_no_crouch",

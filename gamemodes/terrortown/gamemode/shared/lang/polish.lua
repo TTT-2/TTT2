@@ -619,7 +619,7 @@ L.corpse_too_far_away = "Ciało jest za daleko."
 L.corpse_binoculars = "Press [{key}] to search corpse with binoculars."
 L.corpse_searched_by_detective = "Te ciało przeszukał detektyw"
 
-L.target_disg  = " (PRZEBRANY)"
+L.target_disg  = "(przebrany)"
 L.target_unid  = "Niezidentyfikowane ciało"
 
 L.target_credits = "Przeszukaj, aby otrzymywać niewykorzystane kredyty"
@@ -656,10 +656,6 @@ L.tbut_admin_mode_only = "Only visible to you because you're an admin and '{cv}'
 L.tbut_allow = "Pozwól"
 L.tbut_prohib = "Zabroń"
 L.tbut_default = "Domyślne"
-
--- Equipment info lines (on the left above the health/ammo panel)
-L.disg_hud     = "Przebrałeś się. Twoje imię jest ukryte."
-L.radar_hud    = "Radar będzie gotowy do nowego skanu: {time}"
 
 -- Spectator muting of living/dead
 L.mute_living = "Living players muted"
@@ -1250,9 +1246,12 @@ L.hud_health = "Zdrowie"
 -- 2020-05-03
 --L.door_destructible = "Door is destructible ({health}HP)"
 
---2020-05-28
+-- 2020-05-28
 --L.confirm_detective_only = "Only detectives can confirm bodies"
 --L.inspect_detective_only = "Only detectives can inspect bodies"
 --L.corpse_hint_no_inspect = "Only detectives can search this body."
 --L.corpse_hint_inspect_only = "Press [{usekey}] to serch. Only detectives can confirm the body."
 --L.corpse_hint_inspect_only_credits = "Press [{usekey}] to receive credits. Only detectives can search this body."
+
+-- 2020-06-04
+--L.label_bind_disguiser = "Toggle disguiser"

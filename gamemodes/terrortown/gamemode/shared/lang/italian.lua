@@ -46,9 +46,9 @@ L.win_innocents = "Gli Innocenti hanno vinto!"
 L.win_bees = "Pareggio!"
 L.win_showreport = "Guardiamo il report per {num} secondi."
 
-L.limit_round = "Raggiunto il limite del tempo del round. {mapname} caricherà presto."
-L.limit_time = "Il tempo è finito. {mapname} caricherà presto."
-L.limit_left = "{num} round o {time} minuti rimanenti prima che la mappa cambi in {mapname}."
+L.limit_round = "Raggiunto il limite del tempo del round. la prossima mappa caricherà presto."
+L.limit_time = "Il tempo è finito. la prossima mappa caricherà presto."
+L.limit_left = "{num} round o {time} minuti rimanenti prima che la mappa cambi."
 
 -- Ricompense crediti
 -- Credit awards
@@ -639,7 +639,7 @@ L.karma_min = "Irresponsabile"
 L.corpse = "Cadavere"
 L.corpse_hint = "Premi {usekey} per identificare. {walkkey} + {usekey} per identificare segretamente."
 
-L.target_disg = "(TRAVESTITO)"
+L.target_disg = "(travestito)"
 L.target_unid = "Corpo non identificato"
 
 L.target_traitor = "TRADITORE"
@@ -653,11 +653,6 @@ L.tbut_single = "Uso singolo"
 L.tbut_reuse = "Riutilizzabile"
 L.tbut_retime = "Riutilizzabile dopo {num} secondi"
 L.tbut_help = "Premi {key} per attivare"
-
--- Stringhe di informazione sull'equipaggiamento (sulla sinistra sopra il pannello di vita/munizioni)
--- Equipment info lines (on the left above the health/ammo panel)
-L.disg_hud = "Travestito. Il tuo nome è nascosto."
-L.radar_hud = "Radar pronto per il prossima scansione tra: {time}"
 
 -- Spettatori che mutano vivi/morti
 -- Spectator muting of living/dead
@@ -1292,18 +1287,21 @@ L.item_no_drown_damage = "Nessun danno da affogamento"
 L.item_no_drown_damage_desc = [[Ti rende immune al danno da affogamento.]]
 
 -- 2020-04-30
---L.message_revival_canceled = "Revival canceled."
---L.message_revival_failed = "Revival failed."
---L.message_revival_failed_missing_body = "You have not been revived because your corpse no longer exists."
---L.hud_revival_title = "Time left until revival:"
---L.hud_revival_time = "{time}s"
+L.message_revival_canceled = "Rianimazione cancellata."
+L.message_revival_failed = "Rianimazione fallita."
+L.message_revival_failed_missing_body = "Non sei stato rianimato perchè il tuo corpo non esiste più."
+L.hud_revival_title = "Tempo rimasto:"
+L.hud_revival_time = "{time} secondi"
 
 -- 2020-05-03
 L.door_destructible = "La porta è distruttibile ({health}HP)"
 
---2020-05-28
---L.confirm_detective_only = "Only detectives can confirm bodies"
---L.inspect_detective_only = "Only detectives can inspect bodies"
---L.corpse_hint_no_inspect = "Only detectives can search this body."
---L.corpse_hint_inspect_only = "Press [{usekey}] to serch. Only detectives can confirm the body."
---L.corpse_hint_inspect_only_credits = "Press [{usekey}] to receive credits. Only detectives can search this body."
+-- 2020-05-28
+L.confirm_detective_only = "Solo i detective possono confermare i corpi"
+L.inspect_detective_only = "Solo i detective possono ispezionare i corpi"
+L.corpse_hint_no_inspect = "Solo i detective possono ispezionare questo corpo."
+L.corpse_hint_inspect_only = "Premi [{usekey}] per ispezionare. Solo i detective possono confermare questo corpo."
+L.corpse_hint_inspect_only_credits = "Premi [{usekey}] per ricevere i crediti. Solo i detective possono ispezionare questo corpo."
+
+-- 2020-06-04
+--L.label_bind_disguiser = "Toggle disguiser"
