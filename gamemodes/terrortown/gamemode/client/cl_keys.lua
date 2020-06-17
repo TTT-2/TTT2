@@ -172,22 +172,3 @@ function GM:KeyRelease(ply, key)
 		UpdateInputSprint(ply, key, false)
 	end
 end
-
----
--- Called when a player releases a button.
--- @param Player ply @{Player} who released the button
--- @param number btn The button, see
--- <a href="https://wiki.garrysmod.com/page/Enums/BUTTON_CODE">BUTTON_CODE_Enums</a>
--- @hook
--- @realm client
--- @ref https://wiki.facepunch.com/gmod/GM:PlayerButtonUp
--- @local
-function GM:PlayerButtonUp(ply, btn)
-	if not IsFirstTimePredicted() then return end
-
-	-- Would be nice to clean up this whole "all key handling in massive
-	-- functions" thing. oh well
-	if btn == KEY_PAD_ENTER then
-		WEPS.DisguiseToggle(ply)
-	end
-end
