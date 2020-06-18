@@ -17,6 +17,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Moved the disguiser icon to the status system to be only displayed when the player is actually disguised
 - Reworked the addonchecker and added a command to execute the checker at a later point
 - Updated Italian translation (Thanks @ThePlatinumGhost)
+- Moved legacy item initialization to the `items` module (`items.MigrateLegacyItems()`)
 
 ### Fixed
 

@@ -153,6 +153,9 @@ function GM:InitPostEntity()
 
 	hook.Run("TTTInitPostEntity")
 
+	items.MigrateLegacyItems()
+	items.OnLoaded()
+
 	HUDManager.LoadAllHUDS()
 	HUDManager.SetHUD()
 
