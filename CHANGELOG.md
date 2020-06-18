@@ -18,6 +18,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Reworked the addonchecker and added a command to execute the checker at a later point
 - Updated Italian translation (Thanks @ThePlatinumGhost)
 - Removed Is[ROLE] functions of all roles except default TTT ones
+- Moved legacy item initialization to the `items` module (`items.MigrateLegacyItems()`)
 
 ### Fixed
 
