@@ -639,7 +639,7 @@ L.karma_min = "Irresponsabile"
 L.corpse = "Cadavere"
 L.corpse_hint = "Premi {usekey} per identificare. {walkkey} + {usekey} per identificare segretamente."
 
-L.target_disg = "(TRAVESTITO)"
+L.target_disg = "(travestito)"
 L.target_unid = "Corpo non identificato"
 
 L.target_traitor = "TRADITORE"
@@ -653,11 +653,6 @@ L.tbut_single = "Uso singolo"
 L.tbut_reuse = "Riutilizzabile"
 L.tbut_retime = "Riutilizzabile dopo {num} secondi"
 L.tbut_help = "Premi {key} per attivare"
-
--- Stringhe di informazione sull'equipaggiamento (sulla sinistra sopra il pannello di vita/munizioni)
--- Equipment info lines (on the left above the health/ammo panel)
-L.disg_hud = "Travestito. Il tuo nome è nascosto."
-L.radar_hud = "Radar pronto per il prossima scansione tra: {time}"
 
 -- Spettatori che mutano vivi/morti
 -- Spectator muting of living/dead
@@ -1301,9 +1296,12 @@ L.hud_revival_time = "{time} secondi"
 -- 2020-05-03
 L.door_destructible = "La porta è distruttibile ({health}HP)"
 
---2020-05-28
+-- 2020-05-28
 L.confirm_detective_only = "Solo i detective possono confermare i corpi"
 L.inspect_detective_only = "Solo i detective possono ispezionare i corpi"
 L.corpse_hint_no_inspect = "Solo i detective possono ispezionare questo corpo."
 L.corpse_hint_inspect_only = "Premi [{usekey}] per ispezionare. Solo i detective possono confermare questo corpo."
 L.corpse_hint_inspect_only_credits = "Premi [{usekey}] per ricevere i crediti. Solo i detective possono ispezionare questo corpo."
+
+-- 2020-06-04
+--L.label_bind_disguiser = "Toggle disguiser"

@@ -603,7 +603,7 @@ L.corpse_too_far_away = "Leiche zu weit weg zum Untersuchen."
 L.corpse_binoculars = "Drücke [{key}] um Leiche mit Fernglas zu untersuchen."
 L.corpse_searched_by_detective = "Diese Leiche wurde von einem Detektiv untersucht"
 
-L.target_disg = "Getarnt"
+L.target_disg = "(Getarnt)"
 L.target_unid = "Unidentifizierter Körper"
 
 L.target_credits = "Durchsuche, um ungenutzte Credits zu erhalten."
@@ -640,10 +640,6 @@ L.tbut_admin_mode_only = "Nur sichtbar für dich, da du ein Admin bist und '{cv}
 L.tbut_allow = "Erlaubt"
 L.tbut_prohib = "Verboten"
 L.tbut_default = "Standard"
-
--- Equipment info lines (on the left above the health/ammo panel)
-L.disg_hud = "Getarnt. Dein Name ist ausgeblendet."
-L.radar_hud = "Radar bereit für nächsten Scan in: {time}"
 
 -- Spectator muting of living/dead
 L.mute_living = "Lebende stumm gestellt"
@@ -1287,9 +1283,12 @@ L.hud_revival_time = "{time}s"
 -- 2020-05-03
 L.door_destructible = "Tür ist zerstörbar ({health}HP)"
 
---2020-05-28
+-- 2020-05-28
 L.confirm_detective_only = "Nur Detektive können Leichen bestätigen"
 L.inspect_detective_only = "Nur Detektive können Leichen untersuchen"
 L.corpse_hint_no_inspect = "Nur ein Detektiv kann diesen Körper untersuchen."
 L.corpse_hint_inspect_only = "Drücke [{usekey}] zum Durchsuchen. Nur Detektive können diesen Körper bestätigen."
 L.corpse_hint_inspect_only_credits = "Drücke [{usekey}] zum Erhalten der Credits. Nur ein Detektiv kann diesen Körper untersuchen."
+
+-- 2020-06-04
+L.label_bind_disguiser = "Tarnung umschalten"
