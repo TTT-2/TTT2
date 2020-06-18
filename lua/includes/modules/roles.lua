@@ -69,17 +69,6 @@ local function SetupGlobals(roleData)
 	_G["ROLE_" .. upStr] = roleData.index
 	_G[upStr] = roleData
 	_G["SHOP_FALLBACK_" .. upStr] = roleData.name
-
-	local plymeta = FindMetaTable("Player")
-	if not plymeta then return end
-
-	-- e.g. IsJackal() will match each subrole of the jackal as well as the jackal as the baserole
-	plymeta["Is" .. roleData.name:gsub("^%l", string.upper)] = function(slf)
-		local br = slf:GetBaseRole()
-		local sr = slf:GetSubRole()
-
-		return roleData.baserole and sr == roleData.index or not roleData.baserole and br == roleData.index
-	end
 end
 
 ---
