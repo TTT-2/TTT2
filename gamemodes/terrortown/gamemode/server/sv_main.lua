@@ -298,6 +298,9 @@ function GM:InitPostEntity()
 
 	hook.Run("TTTInitPostEntity")
 
+	items.MigrateLegacyItems()
+	items.OnLoaded()
+
 	InitDefaultEquipment()
 
 	local itms = items.GetList()

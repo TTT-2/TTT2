@@ -199,8 +199,10 @@ end
 
 net.Receive("TTT2SetRevivalReason", function()
 	local client = LocalPlayer()
-	local isReset = net.ReadBool()
 
+	if not IsValid(client) then return end
+
+	local isReset = net.ReadBool()
 	local name, params
 
 	if not isReset then
