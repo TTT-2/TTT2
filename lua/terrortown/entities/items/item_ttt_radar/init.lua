@@ -7,10 +7,16 @@ local table = table
 local IsValid = IsValid
 local hook = hook
 
+local cv_radarCharge
+
 util.AddNetworkString("TTT2RadarUpdateAutoScan")
 util.AddNetworkString("TTT2RadarUpdateTime")
 
 RADAR = RADAR or {}
+
+function ITEM:Initialize()
+	cv_radarCharge = GetConVar("ttt2_radar_charge_time")
+end
 
 local function UpdateTimeOnPlayer(ply)
 	if ply.lastRadarTime == ply.radarTime then return end
@@ -22,7 +28,12 @@ local function UpdateTimeOnPlayer(ply)
 	net.Send(ply)
 end
 
-local function TriggerRadarScan(ply)
+---
+-- Triggers a new radar scan. Fails if the radar is still charging.
+-- @param Player ply The player whose radar is affected
+-- @internal
+-- @realm server
+function RADAR.TriggerRadarScan(ply)
 	if not IsValid(ply) or not ply:IsTerror() then return end
 
 	if not ply:HasEquipmentItem("item_ttt_radar") then
@@ -103,7 +114,7 @@ local function TriggerRadarScan(ply)
 
 	net.Send(ply)
 end
-concommand.Add("ttt_radar_scan", TriggerRadarScan)
+concommand.Add("ttt_radar_scan", RADAR.TriggerRadarScan)
 
 ---
 -- This hook can be used to modify the radar dots of players.
@@ -160,26 +171,20 @@ function RADAR.CreateTargetTable(ply, pos, ent, color)
 	}
 end
 
-local function SetupRadarScan(ply)
+---
+-- Sets up the timer for a new radar scan.
+-- @param Player ply The player whose radar is affected
+-- @internal
+-- @realm server
+function RADAR.SetupRadarScan(ply)
 	timer.Create("radarTimeout_" .. ply:SteamID64(), ply.radarTime, 1, function()
 		if not IsValid(ply) or not ply:HasEquipmentItem("item_ttt_radar")
 			or ply.radarDoesNotRepeat
 		then return end
 
-		TriggerRadarScan(ply)
-		SetupRadarScan(ply)
+		RADAR.TriggerRadarScan(ply)
+		RADAR.SetupRadarScan(ply)
 	end)
-end
-
----
--- Sets the radar time interval, lets the current scan run out before it is changed.
--- @param Player ply The player whose radar interval should be changed
--- @param[default=ROLE.radarTime or 30] number time The radar time interval
--- @realm server
-function RADAR.SetRadarTime(ply, time)
-	if not IsValid(ply) then return end
-
-	ply.radarTime = time or ply:GetSubRoleData().radarTime or 30
 end
 
 ---
@@ -190,10 +195,10 @@ end
 function RADAR.Init(ply)
 	if not IsValid(ply) then return end
 
-	RADAR.SetRadarTime(ply)
+	ply:ResetRadarTime()
 
-	TriggerRadarScan(ply)
-	SetupRadarScan(ply)
+	RADAR.TriggerRadarScan(ply)
+	RADAR.SetupRadarScan(ply)
 end
 
 ---
@@ -212,3 +217,37 @@ net.Receive("TTT2RadarUpdateAutoScan", function(_, ply)
 
 	ply.radarDoesNotRepeat = not net.ReadBool()
 end)
+
+local plymeta = assert(FindMetaTable("Player"), "FAILED TO FIND PLAYER TABLE")
+
+---
+-- Sets the radar time interval, lets the current scan run out before it is changed.
+-- @param number time The radar time interval
+-- @realm server
+function plymeta:SetRadarTime(time)
+	self.radarTime = time
+end
+
+---
+-- Sets the radar time interval to the role or convar default, lets the current scan run out before it is changed.
+-- @param number time The radar time interval
+-- @realm server
+function plymeta:ResetRadarTime()
+	self.radarTime = self:GetSubRoleData().radarTime or cv_radarCharge:GetInt()
+end
+
+---
+-- Forces a new radar scan, even when the radar is still charging. It is recommended to
+-- call this function after @{plymeta:SetRadarTime} to enforce an immediate change.
+-- @realm server
+function plymeta:ForceRadarScan()
+	if not self:HasEquipmentItem("item_ttt_radar") then return end
+
+	RADAR.Deinit(self)
+
+	-- reset the radar charge end time to now to allow a new scan
+	self.radar_charge = CurTime()
+
+	RADAR.TriggerRadarScan(self)
+	RADAR.SetupRadarScan(self)
+end

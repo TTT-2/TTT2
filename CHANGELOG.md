@@ -11,11 +11,14 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added Hooks to interact with door destruction
   - `GM:TTT2BlockDoorDestruction(doorEntity, activator)`: Hook to block the door destruction.
   - `GM:TTT2DoorDestroyed(doorPropEntity, activator)`: Hook that is called after the door is destroyed.
+- Added a new function to force a new radar scan: `ply:ForceRadarScan()`
+- Added a new convar to change the default radar time for players without custom radar times: `ttt2_radar_charge_time`
 
 ### Changed
 
 - Moved the disguiser icon to the status system to be only displayed when the player is actually disguised
 - Reworked the addonchecker and added a command to execute the checker at a later point
+- Renamed `RADAR.SetRadarTime(ply, time)` to `ply:SetRadarTime(time)`
 - Updated Italian translation (Thanks @ThePlatinumGhost)
 - Removed Is[ROLE] functions of all roles except default TTT ones
 - Moved legacy item initialization to the `items` module (`items.MigrateLegacyItems()`)

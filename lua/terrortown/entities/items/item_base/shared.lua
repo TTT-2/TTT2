@@ -92,6 +92,13 @@ function ITEM:Bought(ply)
 end
 
 ---
+-- Called when the @{ITEM} is created.
+-- @realm shared
+function ITEM:Initialize()
+
+end
+
+---
 -- useable, but do not modify this!
 -- @return boolean whether this @{ITEM} is an equipment
 -- @realm shared
