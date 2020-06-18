@@ -26,6 +26,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed area portals on servers for destroyed doors
 - Fixed revive fail function reference reset
 - Removed the DNA Scanner hudelement for spectators
+- Fixed a rare clientside error that happens if a player connects in the moment the preparing time just started
 
 ## [v0.7.1b](https://github.com/TTT-2/TTT2/tree/v0.7.1b) (2020-06-02)
 
