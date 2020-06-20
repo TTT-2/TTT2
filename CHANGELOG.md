@@ -22,6 +22,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Updated Italian translation (Thanks @ThePlatinumGhost)
 - Removed Is[ROLE] functions of all roles except default TTT ones
 - Moved legacy item initialization to the `items` module (`items.MigrateLegacyItems()`)
+- ttt_end_round now resets when the map changes
 
 ### Fixed
 
