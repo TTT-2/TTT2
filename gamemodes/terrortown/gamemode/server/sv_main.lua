@@ -1261,6 +1261,7 @@ function CheckForMapSwitch()
 
 	if rounds_left <= 0 or time_left <= 0 then
 		timer.Stop("end2prep")
+		SetRoundEnd(CurTime())
 
 		hook.Run("TTT2LoadNextMap", nextmap, rounds_left, time_left)
 	else
