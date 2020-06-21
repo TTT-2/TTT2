@@ -414,6 +414,7 @@ else
 
 		if showFeedback then
 			local owner = self:GetOwner()
+
 			if IsValid(target) and IsValid(owner) then
 				local targetPos = GetGlobalBool("ttt2_dna_radar") and self.RadarPos or target:LocalToWorld(target:OBBCenter())
 				local scannerPos = owner:GetPos()
