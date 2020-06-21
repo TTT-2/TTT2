@@ -34,6 +34,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Removed the DNA Scanner hudelement for spectators
 - Fixed a rare clientside error that happens if a player connects in the moment the preparing time just started
 - Fixed the image in the confirmation notification whenever a bot's corpse gets identified
+- Fixed bad role selection due to RNG reseeding
 
 ## [v0.7.1b](https://github.com/TTT-2/TTT2/tree/v0.7.1b) (2020-06-02)
 

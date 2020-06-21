@@ -440,9 +440,6 @@ end
 -- @param ?number maxPlys amount of maximum @{Player}s. `nil` to calculate automatically
 -- @realm server
 function roleselection.SelectRoles(plys, maxPlys)
-	-- ensure a decent amount of randomness
-	math.randomseed(os.time())
-
 	roleselection.selectableRoles = nil -- reset to enable recalculation
 
 	GAMEMODE.LastRole = GAMEMODE.LastRole or {}
