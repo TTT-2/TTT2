@@ -634,14 +634,6 @@ DefaultEquipment = {
 BUYTABLE = BUYTABLE or {}
 TEAMBUYTABLE = TEAMBUYTABLE or {}
 
-hook.Add("TTTPrepareRound", "TTT2SharedPrepareRound", function()
-	BUYTABLE = {}
-	TEAMBUYTABLE = {}
-
-	math.randomseed(os.time())
-	math.random(); math.random(); math.random() -- warming up
-end)
-
 ---
 -- Checks whether an equipment is buyable
 -- @param table tbl equipment table

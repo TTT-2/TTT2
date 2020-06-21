@@ -227,6 +227,30 @@ function GM:Tick()
 end
 
 ---
+-- A hook that is called when the preparation phase starts.
+-- @hook
+-- @realm shared
+function GM:TTTPrepareRound()
+	BUYTABLE = {}
+	TEAMBUYTABLE = {}
+end
+
+---
+-- A hook that is called when the round begins.
+-- @hook
+-- @realm shared
+function GM:TTTBeginRound()
+
+end
+
+-- A hook that is called when the round ends.
+-- @hook
+-- @realm shared
+function GM:TTTEndRound()
+
+end
+
+---
 -- Called right after the map has been cleaned up (usually because game.CleanUpMap was called).
 -- This hook is called after the @{outputs} library is set up and map entity outputs can be
 -- registered.
