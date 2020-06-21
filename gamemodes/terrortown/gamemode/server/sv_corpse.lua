@@ -171,7 +171,7 @@ local function IdentifyBody(ply, rag)
 			net.WriteString("body_found")
 		end
 
-		net.WriteString(rag.sid64 or "")
+		net.WriteString(rag.sid == "BOT" and "" or rag.sid64)
 
 		-- color
 		net.WriteUInt(clr.r, 8)
