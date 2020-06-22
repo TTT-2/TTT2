@@ -528,8 +528,9 @@ and use them to find the DNA's owner.
 Use on fresh corpses to get the killer's DNA
 and track them down.]]
 
-L.dna_help_primary = "{primaryfire} to collect a DNA sample"
-L.dna_help_secondary = "{secondaryfire} to switch the DNA slot and Reload to delete a sample"
+L.dna_help_primary = "Collect a DNA sample"
+L.dna_help_secondary = "Switch the DNA slot"
+L.dna_help_reload = "Delete a sample"
 
 -- Magneto stick
 L.magnet_name = "Magneto-stick"

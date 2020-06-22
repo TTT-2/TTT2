@@ -17,7 +17,8 @@ end
 
 if CLIENT then
 	-- hud help font
-	surface.CreateFont("weapon_hud_help", {font = "Trebuchet24", size = 14, weight = 600})
+	surface.CreateFont("weapon_hud_help", {font = "Trebuchet24", size = 17, weight = 600})
+	surface.CreateFont("weapon_hud_help_key", {font = "Trebuchet24", size = 13, weight = 1200})
 end
 
 --   TTT SPECIAL EQUIPMENT FIELDS
@@ -174,6 +175,9 @@ if CLIENT then
 	local crosshair_outlinethickness = CreateClientConVar("ttt_crosshair_outlinethickness", "0", true)
 	local enable_dot_crosshair = CreateClientConVar("ttt_crosshair_dot", "0", true)
 
+	local icon_help_primary = Material("vgui/ttt/hud_armor")
+	local icon_help_secondary = Material("vgui/ttt/hud_armor")
+
 	---
 	-- @see https://wiki.facepunch.com/gmod/WEAPON:DrawHUD
 	-- @realm client
@@ -239,14 +243,46 @@ if CLIENT then
 
 	local GetPTranslation = LANG.GetParamTranslation
 
+	function SWEP:DrawKeyBox(x, y, key)
+		local pad = 3
+		local pad2 = pad * 2
+
+		x = x - pad + 1
+		y = y - pad2 * 0.5 + 1
+
+		local key_box_w, key_box_h = draw.GetTextSize(key, "weapon_hud_help_key")
+
+		key_box_w = key_box_w + 3 * pad
+		key_box_h = key_box_h + pad2
+		local key_box_x = x - key_box_w + 1.5 * pad -- -2 because of border width
+		local key_box_y = y - key_box_h + 0.5 * pad2
+
+		surface.SetDrawColor(0, 0, 0, 150)
+		surface.DrawRect(key_box_x, key_box_y, key_box_w, key_box_h)
+		draw.ShadowedText(key, "weapon_hud_help_key", x, y, COLOR_WHITE, TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM)
+		draw.OutlinedShadowedBox(key_box_x, key_box_y, key_box_w, key_box_h, 1, COLOR_WHITE)
+	end
+
 	---
 	-- Draws a line on the screen
 	-- @param number y y coordinate of the line
 	-- @param string text text for the line
 	-- @param Material|string|nil icon_or_key icon or description for the concerning key
 	-- @realm client 
-	function SWEP:DrawHelpLine(y, text, icon_or_key)
-		draw.ShadowedText(text, "weapon_hud_help", ScrW() * 0.5, y, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+	function SWEP:DrawHelpLine(x, y, text, icon_or_key)
+		local icon_size = 14
+		local valid_icon = true
+
+		if isstring(icon_or_key) then
+			self:DrawKeyBox(x, y, icon_or_key)
+		elseif icon_or_key then
+			draw.FilteredShadowedTexture(x - icon_size, y - 15, icon_size, icon_size, icon_or_key, 255, COLOR_WHITE)
+		else
+			valid_icon = false
+		end
+		draw.ShadowedText(text, "weapon_hud_help", x + 20, y, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+
+		return valid_icon
 	end
 
 	---
@@ -255,23 +291,36 @@ if CLIENT then
 	function SWEP:DrawHelp()
 		local data = self.HUDHelp
 		local additional_lines = data.additional_lines
-		local y = ScrH() - 40
+		local x = ScrW() * 0.5 - data.max_length * 0.5
+		local y_start = ScrH() - 25
+		local y = y_start
+		local delta_y = 25
+		local valid_icon = false
 
 		for i = #additional_lines, 1, -1 do
 			local line = additional_lines[i]
 
-			self:DrawHelpLine(y, line.text, line.icon)
-			y = y - 20
+			local drawn_icon = self:DrawHelpLine(x, y, line.text, line.icon)
+			valid_icon = valid_icon or drawn_icon
+			y = y - delta_y
 		end
 
 		if data.secondary then
-			self:DrawHelpLine(y, data.secondary, secondary_icon)
-			y = y - 20
+			local drawn_icon = self:DrawHelpLine(x, y, data.secondary, icon_help_secondary)
+			valid_icon = valid_icon or drawn_icon
+			y = y - delta_y
 		end
 
 		if data.primary then
-			self:DrawHelpLine(y, data.primary, primary_icon)
-			y = y - 20
+			local drawn_icon = self:DrawHelpLine(x, y, data.primary, icon_help_primary)
+			valid_icon = valid_icon or drawn_icon
+			y = y - delta_y
+		end
+
+		if valid_icon then
+			local line_x = x + 10
+
+			draw.ShadowedLine(line_x, y_start + 2, line_x, y + 8, COLOR_WHITE)
 		end
 	end
 
@@ -320,16 +369,20 @@ if CLIENT then
 	function SWEP:AddTTT2HUDHelp(primary, secondary)
 		self.HUDHelp = {}
 		self.HUDHelp.additional_lines = {}
-		self.HUDHelp.amount = 0
+		self.HUDHelp.max_length = 0
 
 		if primary then
+			local width = draw.GetTextSize(primary, "weapon_hud_help")
+
 			self.HUDHelp.primary = primary
-			self.HUDHelp.amount = self.HUDHelp.amount + 1
+			self.HUDHelp.max_length = math.max(self.HUDHelp.max_length, width)
 		end
 
 		if secondary then
+			local width = draw.GetTextSize(secondary, "weapon_hud_help")
+
 			self.HUDHelp.secondary = secondary
-			self.HUDHelp.amount = self.HUDHelp.amount + 1
+			self.HUDHelp.max_length = math.max(self.HUDHelp.max_length, width)
 		end
 	end
 
@@ -344,9 +397,10 @@ if CLIENT then
 			return
 		end
 
-		self.HUDHelp.additional_lines[#self.HUDHelp.additional_lines + 1] = {text = text, icon = icon_or_key}
+		local width = draw.GetTextSize(text, "weapon_hud_help")
 
-		self.HUDHelp.amount = self.HUDHelp.amount + 1
+		self.HUDHelp.additional_lines[#self.HUDHelp.additional_lines + 1] = {text = text, icon = icon_or_key}
+		self.HUDHelp.max_length = math.max(self.HUDHelp.max_length, width)
 	end
 end
 

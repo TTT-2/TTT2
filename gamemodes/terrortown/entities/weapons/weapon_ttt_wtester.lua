@@ -99,7 +99,8 @@ local dna_screen_circle = Material("models/ttt2_dna_scanner/screen/circle")
 
 function SWEP:Initialize()
 	if CLIENT then
-		self:AddHUDHelp("dna_help_primary", "dna_help_secondary", true)
+		self:AddTTT2HUDHelp(LANG.TryTranslation("dna_help_primary"), LANG.TryTranslation("dna_help_secondary"))
+		self:AddHUDHelpLine(LANG.TryTranslation("dna_help_reload"), Key("+reload", "R"))
 
 		-- Create render target
 		self.scannerScreenTex = GetRenderTarget( "scanner_screen_tex", 512, 512 )
