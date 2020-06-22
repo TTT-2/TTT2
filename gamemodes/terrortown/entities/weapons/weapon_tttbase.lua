@@ -239,23 +239,39 @@ if CLIENT then
 
 	local GetPTranslation = LANG.GetParamTranslation
 
+	---
+	-- Draws a line on the screen
+	-- @param number y y coordinate of the line
+	-- @param string text text for the line
+	-- @param Material|string|nil icon_or_key icon or description for the concerning key
+	-- @realm client 
+	function SWEP:DrawHelpLine(y, text, icon_or_key)
+		draw.ShadowedText(text, "weapon_hud_help", ScrW() * 0.5, y, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+	end
+
+	---
+	-- Draws the help text to the bottom of the screen
+	-- @realm client
 	function SWEP:DrawHelp()
 		local data = self.HUDHelp
-		local translate = data.translatable
-		local primary = data.primary
-		local secondary = data.secondary
+		local additional_lines = data.additional_lines
+		local y = ScrH() - 40
 
-		if translate then
-			primary = primary and GetPTranslation(primary, data.translate_params)
-			secondary = secondary and GetPTranslation(secondary, data.translate_params)
+		for i = #additional_lines, 1, -1 do
+			local line = additional_lines[i]
+
+			self:DrawHelpLine(y, line.text, line.icon)
+			y = y - 20
 		end
 
-		draw.ShadowedText(secondary or primary, "weapon_hud_help", ScrW() * 0.5, ScrH() - 40, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+		if data.secondary then
+			self:DrawHelpLine(y, data.secondary, secondary_icon)
+			y = y - 20
+		end
 
-		-- if no secondary exists, primary is drawn at the bottom and no top line
-		-- is drawn
-		if secondary then
-			draw.ShadowedText(primary, "weapon_hud_help", ScrW() * 0.5, ScrH() - 60, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+		if data.primary then
+			self:DrawHelpLine(y, data.primary, primary_icon)
+			y = y - 20
 		end
 	end
 
@@ -266,15 +282,71 @@ if CLIENT then
 		usekey = Key("+use", "USE")
 	}
 
+	---
+	-- Adds a help text for the weapon to the HUD.
+	-- TTT legacy function.
+	-- @param string primary_text first line of the help text
+	-- @param string secondary_text second line of the help text
+	-- @param bool translate should the text get translated
+	-- @param table extra_params parameters for @{Lang.GetParamTranslation}
+	-- @realm client
 	function SWEP:AddHUDHelp(primary_text, secondary_text, translate, extra_params)
-		extra_params = extra_params or {}
+		local primary = primary_text
+		local secondary = secondary_text
 
-		self.HUDHelp = {
-			primary = primary_text,
-			secondary = secondary_text,
-			translatable = translate,
+		if translate then
+			extra_params = extra_params or {}
 			translate_params = table.Merge(extra_params, default_key_params)
-		}
+			primary = primary and GetPTranslation(primary, translate_params)
+			secondary = secondary and GetPTranslation(secondary, translate_params)
+		end
+
+		self:AddTTT2HUDHelp()
+
+		if primary then
+			self:AddHUDHelpLine(primary)
+		end
+
+		if secondary then
+			self:AddHUDHelpLine(secondary)
+		end
+	end
+
+	---
+	-- Adds a help text for the weapon to the HUD.
+	-- @param string primary_text description for primaryfire
+	-- @param string secondary_text description for secondaryfire
+	-- @realm client
+	function SWEP:AddTTT2HUDHelp(primary, secondary)
+		self.HUDHelp = {}
+		self.HUDHelp.additional_lines = {}
+		self.HUDHelp.amount = 0
+
+		if primary then
+			self.HUDHelp.primary = primary
+			self.HUDHelp.amount = self.HUDHelp.amount + 1
+		end
+
+		if secondary then
+			self.HUDHelp.secondary = secondary
+			self.HUDHelp.amount = self.HUDHelp.amount + 1
+		end
+	end
+
+	---
+	-- Adds an additional line to the help text.
+	-- @{SWEP:AddTTT2HUDHelp} needs to be called first
+	-- @param string text text to be displayed on the line
+	-- @param Material|string|nil icon_or_key icon or description for the concerning key
+	-- @realm client
+	function SWEP:AddHUDHelpLine(text, icon_or_key)
+		if not self.HUDHelp then
+			return
+		end
+
+		self.HUDHelp.additional_lines[#self.HUDHelp.additional_lines + 1] = {text = text, icon = icon_or_key}
+
+		self.HUDHelp.amount = self.HUDHelp.amount + 1
 	end
 end
 
