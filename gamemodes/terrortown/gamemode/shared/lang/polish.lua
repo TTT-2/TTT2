@@ -379,7 +379,7 @@ L.c4_status_disarmed = "ROZBROJONA"
 L.vis_name        = "Wizualizer"
 L.vis_hint        = "Kliknij {usekey} by podnieść (tylko Detektywi)."
 
-L.vis_help_pri    = "{primaryfire} upuszcza aktywowane urządzenie."
+--L.vis_help_pri = "Drop the activated device."
 
 L.vis_desc        = [[
 Wizualizator chwili zabójstwa.
@@ -393,7 +393,7 @@ L.decoy_name      = "Wabik"
 L.decoy_no_room   = "Nie możesz wziąć tego wabika."
 L.decoy_broken    = "Twój wabik został zniszczony!"
 
-L.decoy_help_pri  = "{primaryfire} kładzie wabik."
+--L.decoy_help_pri = "Plant the Decoy."
 L.decoy_short_desc = "Pokazuje oszukaną pozycję na radarze"
 L.decoy_pickup_wrong_team = "You can't pick it up as it belongs to a different team"
 
@@ -493,8 +493,8 @@ z dalekiego dystansu.
 Nielimitowana liczba użyć, ale 
 identyfikacja trwa pare sekund.]]
 
-L.binoc_help_pri  = "{primaryfire} identyfikuje ciało."
-L.binoc_help_sec  = "{secondaryfire} zmienia poziom przybliżenia."
+--L.binoc_help_pri = "Identify a body."
+--L.binoc_help_sec = "Change zoom level."
 
 -- UMP
 L.ump_desc        = [[
@@ -537,8 +537,9 @@ L.dna_menu_ready  = "GOTOWY"
 L.dna_menu_charge = "ŁADOWANIE"
 L.dna_menu_select = "WYBIERZ PRÓBKĘ"
 
-L.dna_help_primary   = "{primaryfire}, by pobrać próbkę DNA"
-L.dna_help_secondary = "{secondaryfire} by otworzyć ustawienia skanowania"
+--L.dna_help_primary = "Collect a DNA sample"
+--L.dna_help_secondary = "Switch the DNA slot"
+--L.dna_help_reload = "Delete a sample"
 
 -- Magneto stick
 L.magnet_name     = "Kijek magnetyczny"

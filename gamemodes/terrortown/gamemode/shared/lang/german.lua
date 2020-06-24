@@ -374,7 +374,7 @@ L.c4_status_disarmed = "ENTSCHÄRFT"
 L.vis_name = "Visualisierer"
 L.vis_hint = "Drücke {usekey} zum Aufheben (nur Detektive)."
 
-L.vis_help_pri = "{primaryfire} lässt das aktivierte Gerät fallen."
+L.vis_help_pri = "Lass das aktivierte Gerät fallen."
 L.vis_short_desc = "Visualisiert den Tatort, wenn das Opfer an einer Schusswunde starb"
 
 L.vis_desc = [[
@@ -389,7 +389,7 @@ L.decoy_name = "Attrappe"
 L.decoy_no_room = "Du kannst diese Attrappe nicht tragen."
 L.decoy_broken = "Deine Attrappe wurde zerstört!"
 
-L.decoy_help_pri = "{primaryfire} platziert die Attrappe."
+L.decoy_help_pri = "Platziere die Attrappe."
 L.decoy_short_desc = "Diese Attrappe erzeugt ein gefälschtes Radar-Signal sichtbar für andere Teams"
 L.decoy_pickup_wrong_team = "Du kannst sie nicht aufnehmen, da sie einem anderen Team gehört"
 
@@ -488,8 +488,8 @@ großen Entfernung zu identifizieren.
 Unbegrenzt nutzbar, aber das Identifizieren dauert
 einige Sekunden.]]
 
-L.binoc_help_pri = "{primaryfire} identifiziert einen Körper."
-L.binoc_help_sec = "{secondaryfire} ändert Zoom-Level."
+L.binoc_help_pri = "Identifiziere einen Körper."
+L.binoc_help_sec = "Ändere Zoom-Level."
 
 -- UMP
 L.ump_desc = [[
@@ -520,8 +520,9 @@ und wird genutzt, um den Besitzer dieser ausfindig zu machen.
 Kann an frischen Leichen verwendet werden, um die DNA
 des Mörders zu erhalten und um ihn aufzuspüren.]]
 
-L.dna_help_primary = "{primaryfire} um eine DNA-Probe zu entnehmen"
-L.dna_help_secondary = "{secondaryfire} um den Slot zu wechseln, Nachladen zum Löschen einer Probe"
+L.dna_help_primary = "Entnehme eine DNA-Probe"
+L.dna_help_secondary = "Wechsel den DNA Slot"
+L.dna_help_reload = "Lösche eine Probe"
 
 -- Magneto stick
 L.magnet_name = "Magneto-Stick"

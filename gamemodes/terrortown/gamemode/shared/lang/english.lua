@@ -378,7 +378,7 @@ L.c4_status_disarmed = "DISARMED"
 L.vis_name = "Visualizer"
 L.vis_hint = "Press {usekey} to pick up (Detectives only)."
 
-L.vis_help_pri = "{primaryfire} drops the activated device."
+L.vis_help_pri = "Drop the activated device."
 L.vis_short_desc = "Visualizes a crime scene if the victim died by a gunshot wound"
 
 L.vis_desc = [[
@@ -393,7 +393,7 @@ L.decoy_name = "Decoy"
 L.decoy_no_room = "You cannot carry this decoy."
 L.decoy_broken = "Your Decoy has been destroyed!"
 
-L.decoy_help_pri = "{primaryfire} plants the Decoy."
+L.decoy_help_pri = "Plant the Decoy."
 L.decoy_short_desc = "This decoy shows a fake radar sign visible for other teams"
 L.decoy_pickup_wrong_team = "You can't pick it up as it belongs to a different team"
 
@@ -495,8 +495,8 @@ from a long distance away.
 Unlimited uses, but identification
 takes a few seconds.]]
 
-L.binoc_help_pri = "{primaryfire} identifies a body."
-L.binoc_help_sec = "{secondaryfire} changes zoom level."
+L.binoc_help_pri = "Identify a body."
+L.binoc_help_sec = "Change zoom level."
 
 -- UMP
 L.ump_desc = [[
