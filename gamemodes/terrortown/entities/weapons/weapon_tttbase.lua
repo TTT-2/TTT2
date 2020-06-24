@@ -314,8 +314,8 @@ if CLIENT then
 
 	-- mousebuttons are enough for most weapons
 	local default_key_params = {
-		primaryfire = Key("+attack", "LEFT MOUSE"),
-		secondaryfire = Key("+attack2", "RIGHT MOUSE"),
+		primaryfire = Key("+attack", "MOUSE1"),
+		secondaryfire = Key("+attack2", "MOUSE2"),
 		usekey = Key("+use", "USE")
 	}
 
@@ -338,14 +338,18 @@ if CLIENT then
 			secondary = secondary and GetPTranslation(secondary, translate_params)
 		end
 
+		--find mouse keys in the texts to add respective icons
+		primary_key = primary and string.find(primary, "MOUSE1") and Key("+attack", "MOUSE1") or nil
+		secondary_key = secondary and string.find(secondary, "MOUSE2") and Key("+attack2", "MOUSE2") or nil
+
 		self:AddTTT2HUDHelp()
 
 		if primary then
-			self:AddHUDHelpLine(primary)
+			self:AddHUDHelpLine(primary, primary_key)
 		end
 
 		if secondary then
-			self:AddHUDHelpLine(secondary)
+			self:AddHUDHelpLine(secondary, secondary_key)
 		end
 	end
 
