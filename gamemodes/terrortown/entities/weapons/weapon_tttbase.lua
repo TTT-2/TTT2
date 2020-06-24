@@ -254,7 +254,7 @@ if CLIENT then
 
 		key_box_w = key_box_w + 3 * pad
 		key_box_h = key_box_h + pad2
-		local key_box_x = x - key_box_w + 1.5 * pad -- -2 because of border width
+		local key_box_x = x - key_box_w + 1.5 * pad
 		local key_box_y = y - key_box_h + 0.5 * pad2
 
 		surface.SetDrawColor(0, 0, 0, 150)
@@ -301,18 +301,6 @@ if CLIENT then
 			local line = additional_lines[i]
 
 			local drawn_icon = self:DrawHelpLine(x, y, line.text, line.icon)
-			valid_icon = valid_icon or drawn_icon
-			y = y - delta_y
-		end
-
-		if data.secondary then
-			local drawn_icon = self:DrawHelpLine(x, y, data.secondary, icon_help_secondary)
-			valid_icon = valid_icon or drawn_icon
-			y = y - delta_y
-		end
-
-		if data.primary then
-			local drawn_icon = self:DrawHelpLine(x, y, data.primary, icon_help_primary)
 			valid_icon = valid_icon or drawn_icon
 			y = y - delta_y
 		end
@@ -372,17 +360,11 @@ if CLIENT then
 		self.HUDHelp.max_length = 0
 
 		if primary then
-			local width = draw.GetTextSize(primary, "weapon_hud_help")
-
-			self.HUDHelp.primary = primary
-			self.HUDHelp.max_length = math.max(self.HUDHelp.max_length, width)
+			self:AddHUDHelpLine(primary, Key("+attack", "MOUSE1"))
 		end
 
 		if secondary then
-			local width = draw.GetTextSize(secondary, "weapon_hud_help")
-
-			self.HUDHelp.secondary = secondary
-			self.HUDHelp.max_length = math.max(self.HUDHelp.max_length, width)
+			self:AddHUDHelpLine(secondary, Key("+attack2", "MOUSE2"))
 		end
 	end
 
@@ -396,6 +378,10 @@ if CLIENT then
 		if not self.HUDHelp then
 			return
 		end
+
+		--replace MOUSE1/MOUSE2 strings with respective icons
+		icon_or_key = isstring(icon_or_key) and icon_or_key == "MOUSE1" and icon_help_primary or icon_or_key
+		icon_or_key = isstring(icon_or_key) and icon_or_key == "MOUSE2" and icon_help_secondary or icon_or_key
 
 		local width = draw.GetTextSize(text, "weapon_hud_help")
 
