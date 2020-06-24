@@ -281,6 +281,7 @@ if CLIENT then
 		else
 			valid_icon = false
 		end
+
 		draw.ShadowedText(text, "weapon_hud_help", x + 20, y, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 
 		return valid_icon
@@ -300,8 +301,8 @@ if CLIENT then
 
 		for i = #additional_lines, 1, -1 do
 			local line = additional_lines[i]
-
 			local drawn_icon = self:DrawHelpLine(x, y, line.text, line.icon)
+
 			valid_icon = valid_icon or drawn_icon
 			y = y - delta_y
 		end
