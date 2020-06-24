@@ -23,6 +23,9 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Removed Is[ROLE] functions of all roles except default TTT ones
 - Moved legacy item initialization to the `items` module (`items.MigrateLegacyItems()`)
 - ttt_end_round now resets when the map changes
+- Reworked the SWEP HUD help (legacy function SWEP:AddHUDHelp is still supported)
+  - allows any number of lines now
+  - visualization of the respective key
 
 ### Fixed
 
