@@ -322,10 +322,10 @@ if CLIENT then
 	---
 	-- Adds a help text for the weapon to the HUD.
 	-- TTT legacy function.
-	-- @param string primary_text first line of the help text
-	-- @param string secondary_text second line of the help text
-	-- @param bool translate should the text get translated
-	-- @param table extra_params parameters for @{Lang.GetParamTranslation}
+	-- @param string|nil primary_text first line of the help text
+	-- @param string|nil secondary_text second line of the help text
+	-- @param[default=false] bool translate should the text get translated
+	-- @param[opt] table extra_params parameters for @{Lang.GetParamTranslation}
 	-- @realm client
 	function SWEP:AddHUDHelp(primary_text, secondary_text, translate, extra_params)
 		local primary = primary_text
@@ -355,8 +355,8 @@ if CLIENT then
 
 	---
 	-- Adds a help text for the weapon to the HUD.
-	-- @param string primary_text description for primaryfire
-	-- @param string secondary_text description for secondaryfire
+	-- @param string|nil primary_text description for primaryfire
+	-- @param string|nil secondary_text description for secondaryfire
 	-- @realm client
 	function SWEP:AddTTT2HUDHelp(primary, secondary)
 		self.HUDHelp = {}
