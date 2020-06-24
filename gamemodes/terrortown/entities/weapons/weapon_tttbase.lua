@@ -254,6 +254,7 @@ if CLIENT then
 
 		key_box_w = key_box_w + 3 * pad
 		key_box_h = key_box_h + pad2
+
 		local key_box_x = x - key_box_w + 1.5 * pad
 		local key_box_y = y - key_box_h + 0.5 * pad2
 
