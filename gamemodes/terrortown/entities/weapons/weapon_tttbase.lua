@@ -175,8 +175,8 @@ if CLIENT then
 	local crosshair_outlinethickness = CreateClientConVar("ttt_crosshair_outlinethickness", "0", true)
 	local enable_dot_crosshair = CreateClientConVar("ttt_crosshair_dot", "0", true)
 
-	local icon_help_primary = Material("vgui/ttt/hud_armor")
-	local icon_help_secondary = Material("vgui/ttt/hud_armor")
+	local icon_help_primary = Material("vgui/ttt/hudhelp/lmb")
+	local icon_help_secondary = Material("vgui/ttt/hudhelp/rmb")
 
 	---
 	-- @see https://wiki.facepunch.com/gmod/WEAPON:DrawHUD
@@ -270,13 +270,13 @@ if CLIENT then
 	-- @param Material|string|nil icon_or_key icon or description for the concerning key
 	-- @realm client 
 	function SWEP:DrawHelpLine(x, y, text, icon_or_key)
-		local icon_size = 14
+		local icon_size = 18
 		local valid_icon = true
 
 		if isstring(icon_or_key) then
 			self:DrawKeyBox(x, y, icon_or_key)
 		elseif icon_or_key then
-			draw.FilteredShadowedTexture(x - icon_size, y - 15, icon_size, icon_size, icon_or_key, 255, COLOR_WHITE)
+			draw.FilteredShadowedTexture(x - icon_size + 2, y - 17, icon_size, icon_size, icon_or_key, 255, COLOR_WHITE)
 		else
 			valid_icon = false
 		end
