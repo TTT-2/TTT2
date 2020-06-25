@@ -342,29 +342,6 @@ local function ttt_print_playercount()
 end
 concommand.Add("ttt_print_playercount", ttt_print_playercount)
 
----
--- A hook that is called when the preparation phase starts.
--- @hook
--- @realm client
-function GM:TTTPrepareRound()
-
-end
-
----
--- A hook that is called when the round begins.
--- @hook
--- @realm client
-function GM:TTTBeginRound()
-
-end
-
--- A hook that is called when the round ends.
--- @hook
--- @realm client
-function GM:TTTEndRound()
-
-end
-
 -- usermessages
 
 local function ReceiveRole()
