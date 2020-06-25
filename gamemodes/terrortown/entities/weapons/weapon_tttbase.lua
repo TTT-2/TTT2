@@ -381,17 +381,15 @@ if CLIENT then
 	-- @param Material|string|nil icon_or_key icon or description for the concerning key
 	-- @realm client
 	function SWEP:AddHUDHelpLine(text, icon_or_key)
-		if not self.HUDHelp then
-			return
-		end
+		if not self.HUDHelp then return end
 
 		--replace MOUSE1/MOUSE2 strings with respective icons
 		if isstring(icon_or_key) then
-				if icon_or_key == "MOUSE1" then
-						icon_or_key = icon_help_primary
-				elseif icon_or_key == "MOUSE2" then
-						icon_or_key = icon_help_secondary
-				end
+			if icon_or_key == "MOUSE1" then
+				icon_or_key = icon_help_primary
+			elseif icon_or_key == "MOUSE2" then
+				icon_or_key = icon_help_secondary
+			end
 		end
 		icon_or_key = isstring(icon_or_key) and icon_or_key == "MOUSE2" and icon_help_secondary or icon_or_key
 
