@@ -8,15 +8,29 @@
 -- @param string columnName The name of the column to check.
 -- @return boolean Returns true if the column exists in the table.
 function sql.ColumnExists(tableName, columnName)
-    return sql.Query("SELECT COUNT(*) FROM pragma_table_info(" .. sql.SQLIdent(tableName) .. ") WHERE name=" .. sql.SQLStr(columnName)) == 1
+	local result = sql.Query("PRAGMA table_info(" .. sql.SQLIdent(tableName) .. ")")
+	for i = 1, #result do
+		if result[i].name == columnName then
+			return true
+		end
+	end
+	return false
 end
 
 ---
--- Returns the Primarykey columns of the specified table in order of their index.
+-- Returns the primarykey column names of the specified table in order of their index.
 -- @param string tableName The name of the table to search.
--- @return table|nil Returns a table of the Primarykey columns.
+-- @return table|nil Returns a table of the primarykey columns.
 function sql.GetPrimaryKey(tableName)
-    return sql.Query("SELECT name FROM pragma_table_info(" .. sql.SQLIdent(tableName) .. ") WHERE pk!=0 ORDER BY pk")
+	local result = sql.Query("PRAGMA table_info(" .. sql.SQLIdent(tableName) .. ")")
+	local primaryKeys = {}
+	for i = 1, #result do
+		local pk = tonumber(result[i].pk)
+		if pk ~= 0 then
+			primaryKeys[pk] = result[i].name
+		end
+	end
+	return primaryKeys
 end
 
 ---
@@ -24,7 +38,12 @@ end
 -- @param string tableName The name of the table to search.
 -- @return table|nil Returns a table of the column names.
 function sql.GetTableColumns(tableName)
-    return sql.Query("SELECT name FROM pragma_table_info(" .. sql.SQLIdent(tableName) .. ")")
+	local result = sql.Query("PRAGMA table_info(" .. sql.SQLIdent(tableName) .. ")")
+	local columnNames = {}
+	for i = 1, #result do
+		columnNames[i] = result[i].name
+	end
+	return columnNames
 end
 
 ---
@@ -32,12 +51,12 @@ end
 -- @param string str The string to escape.
 -- @return string Returns the escaped string.
 function sql.SQLIdent(str)
-    return "\"" .. str:gsub( "\"", "\"\"" ) .. "\""
+	return "\"" .. str:gsub( "\"", "\"\"" ) .. "\""
 end
 
 ---
 -- Undoes all queries of the last transaction started by `sql.Begin()`.
 -- This is equivalent to `sql.Query("Rollback;")`.
 function sql.Rollback()
-    sql.Query("Rollback;")
+	sql.Query("Rollback;")
 end
