@@ -386,7 +386,13 @@ if CLIENT then
 		end
 
 		--replace MOUSE1/MOUSE2 strings with respective icons
-		icon_or_key = isstring(icon_or_key) and icon_or_key == "MOUSE1" and icon_help_primary or icon_or_key
+		if isstring(icon_or_key) then
+				if icon_or_key == "MOUSE1" then
+						icon_or_key = icon_help_primary
+				elseif icon_or_key == "MOUSE2" then
+						icon_or_key = icon_help_secondary
+				end
+		end
 		icon_or_key = isstring(icon_or_key) and icon_or_key == "MOUSE2" and icon_help_secondary or icon_or_key
 
 		local width = draw.GetTextSize(text, "weapon_hud_help")
