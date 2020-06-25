@@ -2,6 +2,10 @@
 -- sql extensions
 -- @author Histalek
 
+if SERVER then
+	AddCSLuaFile()
+end
+
 ---
 -- Checks if the specified column exists in the specified table.
 -- @param string tableName The name of the table to search.
@@ -9,11 +13,13 @@
 -- @return boolean Returns true if the column exists in the table.
 function sql.ColumnExists(tableName, columnName)
 	local result = sql.Query("PRAGMA table_info(" .. sql.SQLIdent(tableName) .. ")")
+
 	for i = 1, #result do
 		if result[i].name == columnName then
 			return true
 		end
 	end
+
 	return false
 end
 
@@ -24,12 +30,14 @@ end
 function sql.GetPrimaryKey(tableName)
 	local result = sql.Query("PRAGMA table_info(" .. sql.SQLIdent(tableName) .. ")")
 	local primaryKeys = {}
+
 	for i = 1, #result do
 		local pk = tonumber(result[i].pk)
 		if pk ~= 0 then
 			primaryKeys[pk] = result[i].name
 		end
 	end
+
 	return primaryKeys
 end
 
@@ -40,9 +48,11 @@ end
 function sql.GetTableColumns(tableName)
 	local result = sql.Query("PRAGMA table_info(" .. sql.SQLIdent(tableName) .. ")")
 	local columnNames = {}
+
 	for i = 1, #result do
 		columnNames[i] = result[i].name
 	end
+
 	return columnNames
 end
 

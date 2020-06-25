@@ -2,6 +2,10 @@
 -- Object Relational Model
 -- @author Histalek
 
+if SERVER then
+	AddCSLuaFile()
+end
+
 --local baseclass = baseclass
 local sql = sql
 
@@ -10,7 +14,6 @@ orm = orm or {}
 local ormodel = {}
 
 local function SetupModelFunctions(tableName, primaryKey, dataStructure)
-
 	local model = {}
 	local sanTableName = sql.SQLIdent(tableName)
 
@@ -99,12 +102,12 @@ local function SetupModelFunctions(tableName, primaryKey, dataStructure)
 		local where
 
 		for i = 1, #primaryKey do
-				if not where then
-					where = sql.SQLIdent(primaryKey[1]) .. "=" .. sql.SQLStr(self[primaryKey[1]])
-				else
-					where = where .. " AND " .. sql.SQLIdent(primaryKey[i]) .. "=" .. sql.SQLStr(self[primaryKey[i]])
-				end
+			if not where then
+				where = sql.SQLIdent(primaryKey[1]) .. "=" .. sql.SQLStr(self[primaryKey[1]])
+			else
+				where = where .. " AND " .. sql.SQLIdent(primaryKey[i]) .. "=" .. sql.SQLStr(self[primaryKey[i]])
 			end
+		end
 
 		return sql.Query("DELETE FROM " .. sanTableName .. " WHERE " .. where)
 	end
@@ -119,7 +122,6 @@ end
 -- @realm shared
 -- @return table The model of the database table.
 function orm.Make(tableName, force)
-
 	if IsValid(orm[tableName]) and not force then return orm[tableName] end
 
 	if not sql.TableExists(tableName) then return end
