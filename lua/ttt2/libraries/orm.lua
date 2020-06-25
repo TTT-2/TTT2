@@ -89,7 +89,7 @@ end
 -- Retrieves a specific object by their primarykey from the database.
 -- @param int|string|table primaryValue The value(s) of the primarykey to search for.
 -- @note In the case of multiple columns in the primarykey you have to specify the corresponding values in the same order.
--- @return table Returns the table of the found object. Returns `false` if the number of supplied primaryvalues does not match the number of elements in the primarykey. Returns `nil` if no object is found.
+-- @return table|boolean|nil Returns the table of the found object. Returns `false` if the number of supplied primaryvalues does not match the number of elements in the primarykey. Returns `nil` if no object is found.
 function ormodel:Find(primaryValue)
 	local where = {}
 
