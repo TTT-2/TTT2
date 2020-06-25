@@ -534,7 +534,7 @@ include("ttt2/libraries/vguihandler.lua")
 include("ttt2/libraries/vskin.lua")
 include("ttt2/libraries/fileloader.lua")
 include("ttt2/libraries/door.lua")
-include("ttt2/libraries/ormodel.lua")
+include("ttt2/libraries/orm.lua")
 include("ttt2/libraries/thermalvision.lua")
 
 
