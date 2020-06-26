@@ -945,6 +945,8 @@ function plymeta:SetModel(mdlName)
 		net.WriteString(mdl)
 		net.WriteEntity(self)
 		net.Broadcast()
+
+		self:SetupHands()
 	end
 end
 

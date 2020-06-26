@@ -39,6 +39,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed the image in the confirmation notification whenever a bot's corpse gets identified
 - Fixed bad role selection due to RNG reseeding
 - Fixed missing role column translation
+- Fixed viewmodel not showing correct hands on model change
 
 ## [v0.7.1b](https://github.com/TTT-2/TTT2/tree/v0.7.1b) (2020-06-02)
 
