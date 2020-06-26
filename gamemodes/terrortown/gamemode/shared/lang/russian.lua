@@ -1252,3 +1252,5 @@ L.disable_overheadicons_tip = "Выключает иконки ролей над
 --L.vis_help_pri = "Drop the activated device."
 
 --L.decoy_help_pri = "Plant the Decoy."
+
+--L.set_cross_lines_enable = "Enable crosshair lines"
