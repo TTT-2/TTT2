@@ -506,6 +506,7 @@ function HELPSCRN:CreateCrosshairSettings(parent)
 	form:CheckBox(GetTranslation("set_minimal_id"), "ttt_minimal_targetid")
 	form:CheckBox(GetTranslation("set_cross_static_enable"), "ttt_crosshair_static")
 	form:CheckBox(GetTranslation("set_cross_dot_enable"), "ttt_crosshair_dot")
+	form:CheckBox(GetTranslation("set_cross_lines_enable"), "ttt_crosshair_lines")
 	form:CheckBox(GetTranslation("set_cross_weaponscale_enable"), "ttt_crosshair_weaponscale")
 
 	cb = form:CheckBox(GetTranslation("set_lowsights"), "ttt_ironsights_lowered")

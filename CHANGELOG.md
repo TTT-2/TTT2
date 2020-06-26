@@ -13,6 +13,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - `GM:TTT2DoorDestroyed(doorPropEntity, activator)`: Hook that is called after the door is destroyed.
 - Added a new function to force a new radar scan: `ply:ForceRadarScan()`
 - Added a new convar to change the default radar time for players without custom radar times: `ttt2_radar_charge_time`
+- Added a new client ConVar `ttt_crosshair_lines` to add the possibility to disable the crosshair lines
 
 ### Changed
 

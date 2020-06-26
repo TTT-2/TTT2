@@ -1305,3 +1305,5 @@ L.binoc_help_sec = "Change zoom level."
 L.vis_help_pri = "Drop the activated device."
 
 L.decoy_help_pri = "Plant the Decoy."
+
+L.set_cross_lines_enable = "Enable crosshair lines"

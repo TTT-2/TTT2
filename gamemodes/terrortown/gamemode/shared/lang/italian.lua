@@ -1308,3 +1308,5 @@ L.corpse_hint_inspect_only_credits = "Premi [{usekey}] per ricevere i crediti. S
 --L.vis_help_pri = "Drop the activated device."
 
 --L.decoy_help_pri = "Plant the Decoy."
+
+--L.set_cross_lines_enable = "Enable crosshair lines"

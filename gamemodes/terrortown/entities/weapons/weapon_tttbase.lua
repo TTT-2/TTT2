@@ -177,6 +177,7 @@ if CLIENT then
 	local crosshair_thickness = CreateClientConVar("ttt_crosshair_thickness", "1", true)
 	local crosshair_outlinethickness = CreateClientConVar("ttt_crosshair_outlinethickness", "0", true)
 	local enable_dot_crosshair = CreateClientConVar("ttt_crosshair_dot", "0", true)
+	local enable_crosshair_lines = CreateClientConVar("ttt_crosshair_lines", "1", true)
 
 	local icon_help_primary = Material("vgui/ttt/hudhelp/lmb")
 	local icon_help_secondary = Material("vgui/ttt/hudhelp/rmb")
@@ -238,10 +239,13 @@ if CLIENT then
 			surface.DrawRect(x - thickness * 0.5, y - thickness * 0.5, thickness, thickness)
 		end
 
-		surface.DrawRect(x - length, y - offset, length - gap, thickness)
-		surface.DrawRect(x + gap, y - offset, length - gap, thickness)
-		surface.DrawRect(x - offset, y - length, thickness, length - gap)
-		surface.DrawRect(x - offset, y + gap, thickness, length - gap)
+		-- draw crosshair lines
+		if enable_crosshair_lines:GetBool() then
+			surface.DrawRect(x - length, y - offset, length - gap, thickness)
+			surface.DrawRect(x + gap, y - offset, length - gap, thickness)
+			surface.DrawRect(x - offset, y - length, thickness, length - gap)
+			surface.DrawRect(x - offset, y + gap, thickness, length - gap)
+		end
 	end
 
 	function SWEP:DrawKeyBox(x, y, key)

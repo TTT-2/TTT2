@@ -1296,3 +1296,5 @@ L.binoc_help_sec = "Ändere Zoom-Level."
 L.vis_help_pri = "Lass das aktivierte Gerät fallen."
 
 L.decoy_help_pri = "Platziere die Attrappe."
+
+L.set_cross_lines_enable = "Aktiviere Fadenkreuz-Linien"
