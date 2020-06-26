@@ -202,7 +202,7 @@ if CLIENT then
 	end
 
 	function SWEP:Initialize()
-		self:AddHUDHelp("binoc_help_pri", "binoc_help_sec", true)
+		self:AddTTT2HUDHelp("binoc_help_pri", "binoc_help_sec")
 		cv_thickness = GetConVar("ttt_crosshair_thickness")
 
 		return self.BaseClass.Initialize(self)

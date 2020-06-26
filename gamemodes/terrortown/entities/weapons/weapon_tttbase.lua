@@ -17,7 +17,8 @@ end
 
 if CLIENT then
 	-- hud help font
-	surface.CreateFont("weapon_hud_help", {font = "Trebuchet24", size = 14, weight = 600})
+	surface.CreateFont("weapon_hud_help", {font = "Trebuchet24", size = 17, weight = 600})
+	surface.CreateFont("weapon_hud_help_key", {font = "Trebuchet24", size = 13, weight = 1200})
 end
 
 --   TTT SPECIAL EQUIPMENT FIELDS
@@ -155,6 +156,9 @@ local ttt2_hold_aim = CLIENT and CreateClientConVar("ttt2_hold_aim", 0, true, fa
 
 -- crosshair
 if CLIENT then
+	local GetPTranslation = LANG.GetParamTranslation
+	local TryT = LANG.TryTranslation
+
 	local sights_opacity = CreateClientConVar("ttt_ironsights_crosshair_opacity", "0.8", true)
 	local crosshair_brightness = CreateClientConVar("ttt_crosshair_brightness", "1.0", true)
 	local crosshair_size = CreateClientConVar("ttt_crosshair_size", "1.0", true)
@@ -173,6 +177,9 @@ if CLIENT then
 	local crosshair_thickness = CreateClientConVar("ttt_crosshair_thickness", "1", true)
 	local crosshair_outlinethickness = CreateClientConVar("ttt_crosshair_outlinethickness", "0", true)
 	local enable_dot_crosshair = CreateClientConVar("ttt_crosshair_dot", "0", true)
+
+	local icon_help_primary = Material("vgui/ttt/hudhelp/lmb")
+	local icon_help_secondary = Material("vgui/ttt/hudhelp/rmb")
 
 	---
 	-- @see https://wiki.facepunch.com/gmod/WEAPON:DrawHUD
@@ -237,44 +244,159 @@ if CLIENT then
 		surface.DrawRect(x - offset, y + gap, thickness, length - gap)
 	end
 
-	local GetPTranslation = LANG.GetParamTranslation
+	function SWEP:DrawKeyBox(x, y, key)
+		local pad = 3
+		local pad2 = pad * 2
 
-	function SWEP:DrawHelp()
-		local data = self.HUDHelp
-		local translate = data.translatable
-		local primary = data.primary
-		local secondary = data.secondary
+		x = x - pad + 1
+		y = y - pad2 * 0.5 + 1
 
-		if translate then
-			primary = primary and GetPTranslation(primary, data.translate_params)
-			secondary = secondary and GetPTranslation(secondary, data.translate_params)
+		local key_box_w, key_box_h = draw.GetTextSize(key, "weapon_hud_help_key")
+
+		key_box_w = key_box_w + 3 * pad
+		key_box_h = key_box_h + pad2
+
+		local key_box_x = x - key_box_w + 1.5 * pad
+		local key_box_y = y - key_box_h + 0.5 * pad2
+
+		surface.SetDrawColor(0, 0, 0, 150)
+		surface.DrawRect(key_box_x, key_box_y, key_box_w, key_box_h)
+		draw.ShadowedText(key, "weapon_hud_help_key", x, y, COLOR_WHITE, TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM)
+		draw.OutlinedShadowedBox(key_box_x, key_box_y, key_box_w, key_box_h, 1, COLOR_WHITE)
+	end
+
+	---
+	-- Draws a line on the screen
+	-- @param number y y coordinate of the line
+	-- @param string text text for the line
+	-- @param Material|string|nil icon_or_key icon or description for the concerning key
+	-- @realm client 
+	function SWEP:DrawHelpLine(x, y, text, icon_or_key)
+		local icon_size = 18
+		local valid_icon = true
+
+		if isstring(icon_or_key) then
+			self:DrawKeyBox(x, y, icon_or_key)
+		elseif icon_or_key then
+			draw.FilteredShadowedTexture(x - icon_size + 2, y - 17, icon_size, icon_size, icon_or_key, 255, COLOR_WHITE)
+		else
+			valid_icon = false
 		end
 
-		draw.ShadowedText(secondary or primary, "weapon_hud_help", ScrW() * 0.5, ScrH() - 40, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+		draw.ShadowedText(TryT(text), "weapon_hud_help", x + 20, y, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 
-		-- if no secondary exists, primary is drawn at the bottom and no top line
-		-- is drawn
-		if secondary then
-			draw.ShadowedText(primary, "weapon_hud_help", ScrW() * 0.5, ScrH() - 60, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+		return valid_icon
+	end
+
+	---
+	-- Draws the help text to the bottom of the screen
+	-- @realm client
+	function SWEP:DrawHelp()
+		local data = self.HUDHelp
+		local additional_lines = data.additional_lines
+		local x = ScrW() * 0.5 - data.max_length * 0.5
+		local y_start = ScrH() - 25
+		local y = y_start
+		local delta_y = 25
+		local valid_icon = false
+
+		for i = #additional_lines, 1, -1 do
+			local line = additional_lines[i]
+			local drawn_icon = self:DrawHelpLine(x, y, line.text, line.icon)
+
+			valid_icon = valid_icon or drawn_icon
+			y = y - delta_y
+		end
+
+		if valid_icon then
+			local line_x = x + 10
+
+			draw.ShadowedLine(line_x, y_start + 2, line_x, y + 8, COLOR_WHITE)
 		end
 	end
 
 	-- mousebuttons are enough for most weapons
 	local default_key_params = {
-		primaryfire = Key("+attack", "LEFT MOUSE"),
-		secondaryfire = Key("+attack2", "RIGHT MOUSE"),
+		primaryfire = Key("+attack", "MOUSE1"),
+		secondaryfire = Key("+attack2", "MOUSE2"),
 		usekey = Key("+use", "USE")
 	}
 
+	---
+	-- Adds a help text for the weapon to the HUD.
+	-- TTT legacy function.
+	-- @param string|nil primary_text first line of the help text
+	-- @param string|nil secondary_text second line of the help text
+	-- @param[default=false] bool translate should the text get translated
+	-- @param[opt] table extra_params parameters for @{Lang.GetParamTranslation}
+	-- @realm client
 	function SWEP:AddHUDHelp(primary_text, secondary_text, translate, extra_params)
-		extra_params = extra_params or {}
+		local primary = primary_text
+		local secondary = secondary_text
 
-		self.HUDHelp = {
-			primary = primary_text,
-			secondary = secondary_text,
-			translatable = translate,
+		if translate then
+			extra_params = extra_params or {}
 			translate_params = table.Merge(extra_params, default_key_params)
-		}
+			primary = primary and GetPTranslation(primary, translate_params)
+			secondary = secondary and GetPTranslation(secondary, translate_params)
+		end
+
+		--find mouse keys in the texts to add respective icons
+		primary_key = primary and string.find(primary, "MOUSE1") and Key("+attack", "MOUSE1") or nil
+		secondary_key = secondary and string.find(secondary, "MOUSE2") and Key("+attack2", "MOUSE2") or nil
+
+		self:AddTTT2HUDHelp()
+
+		if primary then
+			self:AddHUDHelpLine(primary, primary_key)
+		end
+
+		if secondary then
+			self:AddHUDHelpLine(secondary, secondary_key)
+		end
+	end
+
+	---
+	-- Adds a help text for the weapon to the HUD.
+	-- @param string|nil primary_text description for primaryfire
+	-- @param string|nil secondary_text description for secondaryfire
+	-- @realm client
+	function SWEP:AddTTT2HUDHelp(primary, secondary)
+		self.HUDHelp = {}
+		self.HUDHelp.additional_lines = {}
+		self.HUDHelp.max_length = 0
+
+		if primary then
+			self:AddHUDHelpLine(primary, Key("+attack", "MOUSE1"))
+		end
+
+		if secondary then
+			self:AddHUDHelpLine(secondary, Key("+attack2", "MOUSE2"))
+		end
+	end
+
+	---
+	-- Adds an additional line to the help text.
+	-- @{SWEP:AddTTT2HUDHelp} needs to be called first
+	-- @param string text text to be displayed on the line
+	-- @param Material|string|nil icon_or_key icon or description for the concerning key
+	-- @realm client
+	function SWEP:AddHUDHelpLine(text, icon_or_key)
+		if not self.HUDHelp then return end
+
+		--replace MOUSE1/MOUSE2 strings with respective icons
+		if isstring(icon_or_key) then
+			if icon_or_key == "MOUSE1" then
+				icon_or_key = icon_help_primary
+			elseif icon_or_key == "MOUSE2" then
+				icon_or_key = icon_help_secondary
+			end
+		end
+
+		local width = draw.GetTextSize(text, "weapon_hud_help")
+
+		self.HUDHelp.additional_lines[#self.HUDHelp.additional_lines + 1] = {text = text, icon = icon_or_key}
+		self.HUDHelp.max_length = math.max(self.HUDHelp.max_length, width)
 	end
 end
 

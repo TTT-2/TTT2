@@ -187,7 +187,7 @@ if CLIENT then
 	end
 
 	function SWEP:Initialize()
-		self:AddHUDHelp("decoy_help_pri", nil, true)
+		self:AddTTT2HUDHelp("decoy_help_pri")
 
 		return self.BaseClass.Initialize(self)
 	end

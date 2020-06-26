@@ -404,8 +404,6 @@ L.c4_status_disarmed = "DISINNESCATA"
 L.vis_name = "Visualizzatore"
 L.vis_hint = "Premi {usekey} per raccoglierlo (solo Detective)."
 
-L.vis_help_pri = "{primaryfire} fa cadere il dispositivo attivo."
-
 L.vis_desc = [[
 Dispositivo per visualizzare una scena del crimine.
 Analizza un cadavere per mostrare come
@@ -417,8 +415,6 @@ la vittima è stata uccisa, ma solo se
 L.decoy_name = "Esca"
 L.decoy_no_room = "Non puoi portare questa Esca."
 L.decoy_broken = "la tua Esca è stata distrutta!"
-
-L.decoy_help_pri = "{primaryfire} piazza l'Esca."
 
 L.decoy_desc = [[
 Mostra un segnale falso sul radar dei Detective,
@@ -510,9 +506,6 @@ da molto distante.
 Usi illimitati, ma l'identificazione
 necessita di alcuni secondi.]]
 
-L.binoc_help_pri = "{primaryfire} identifica una corpo."
-L.binoc_help_sec = "{secondaryfire} cambia il livello di zoom."
-
 -- UMP
 L.ump_desc = [[
 SMG sperimentale che disorienta i
@@ -551,9 +544,6 @@ L.dna_menu_repeat = "Ripeti automaticamente"
 L.dna_menu_ready = "PRONTO"
 L.dna_menu_charge = "CARICAMENTO"
 L.dna_menu_select = "SELEZIONA CAMPIONE"
-
-L.dna_help_primary = "{primaryfire} per prendere un campione di DNA"
-L.dna_help_secondary = "{secondaryfire} per i controlli dello scanner open"
 
 -- Magneto stick
 L.magnet_name = "Magneto-stick"
@@ -1305,3 +1295,16 @@ L.corpse_hint_inspect_only_credits = "Premi [{usekey}] per ricevere i crediti. S
 
 -- 2020-06-04
 --L.label_bind_disguiser = "Toggle disguiser"
+
+-- 2020-06-24
+
+--L.dna_help_primary = "Collect a DNA sample"
+--L.dna_help_secondary = "Switch the DNA slot"
+--L.dna_help_reload = "Delete a sample"
+
+--L.binoc_help_pri = "Identify a body."
+--L.binoc_help_sec = "Change zoom level."
+
+--L.vis_help_pri = "Drop the activated device."
+
+--L.decoy_help_pri = "Plant the Decoy."

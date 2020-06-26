@@ -375,7 +375,6 @@ L.c4_status_disarmed = "ОБЕЗВРЕ-\nЖЕНА"
 L.vis_name = "Визуализатор"
 L.vis_hint = "Нажмите {usekey}, чтобы подобрать. (только для детективов)"
 
-L.vis_help_pri = "{primaryfire}: бросить активированное устройство."
 L.vis_short_desc = "Визуализирует сцену преступления, если жертва умерла от огнестрельного ранения."
 
 L.vis_desc = [[
@@ -388,7 +387,6 @@ L.decoy_name = "Приманка"
 L.decoy_no_room = "Вы не можете подобрать эту Приманку."
 L.decoy_broken = "Ваша Приманка уничтожена!"
 
-L.decoy_help_pri = "{primaryfire}: установить Приманку."
 L.decoy_short_desc = "Эта Приманка создаёт фальшивую метку на радарах других команд."
 L.decoy_pickup_wrong_team = "Вы не можете подобрать Приманку, принадлежащую другой команде."
 
@@ -485,9 +483,6 @@ L.binoc_desc = [[
 Неограниченное использование, но осмотр тела
 занимает некоторое время.]]
 
-L.binoc_help_pri = "{primaryfire}: осмотреть тело."
-L.binoc_help_sec = "{secondaryfire}: изменить уровень приближения."
-
 -- UMP
 L.ump_desc = [[
 Экспериментальный пистолет-пулемёт,
@@ -526,9 +521,6 @@ L.dna_menu_repeat = "Автоповтор"
 L.dna_menu_ready = "ГОТОВ"
 L.dna_menu_charge = "ЗАРЯДКА"
 L.dna_menu_select = "ВЫБЕРИТЕ ОБРАЗЕЦ"
-
-L.dna_help_primary = "{primaryfire}: собрать образец ДНК."
-L.dna_help_secondary = "{secondaryfire}: открыть меню управления."
 
 -- Magneto stick
 L.magnet_name = "Магнитопалка"
@@ -1247,3 +1239,16 @@ L.disable_overheadicons_tip = "Выключает иконки ролей над
 
 -- 2020-06-04
 --L.label_bind_disguiser = "Toggle disguiser"
+
+-- 2020-06-24
+
+--L.dna_help_primary = "Collect a DNA sample"
+--L.dna_help_secondary = "Switch the DNA slot"
+--L.dna_help_reload = "Delete a sample"
+
+--L.binoc_help_pri = "Identify a body."
+--L.binoc_help_sec = "Change zoom level."
+
+--L.vis_help_pri = "Drop the activated device."
+
+--L.decoy_help_pri = "Plant the Decoy."

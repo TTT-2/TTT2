@@ -130,14 +130,14 @@ function SWEP:DropDevice()
 end
 
 if CLIENT then
+	local TryT = LANG.TryTranslation
+	local ParT = LANG.GetParamTranslation
+
 	function SWEP:Initialize()
-		self:AddHUDHelp("vis_help_pri", nil, true)
+		self:AddTTT2HUDHelp("vis_help_pri")
 
 		return self.BaseClass.Initialize(self)
 	end
-
-	local TryT = LANG.TryTranslation
-	local ParT = LANG.GetParamTranslation
 
 	hook.Add("TTTRenderEntityInfo", "HUDDrawTargetIDVisualizer", function(tData)
 		local client = LocalPlayer()
