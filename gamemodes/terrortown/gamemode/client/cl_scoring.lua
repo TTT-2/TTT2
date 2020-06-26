@@ -29,7 +29,7 @@ CLSCORE.ScorePanelColor = Color(150, 50, 50)
 CLSCORE.ScorePanelNames = {
 	"",
 	"col_player",
-	"col_role",
+	"col_roles",
 	"col_kills1",
 	"col_kills2",
 	"col_points",
