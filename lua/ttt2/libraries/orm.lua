@@ -6,7 +6,6 @@ if SERVER then
 	AddCSLuaFile()
 end
 
---local baseclass = baseclass
 local sql = sql
 
 orm = orm or {}
@@ -20,6 +19,7 @@ local ormodel = {}
 -- @realm shared
 -- @return table The model of the database table.
 function orm.Make(tableName, force)
+
 	if IsValid(orm[tableName]) and not force then return orm[tableName] end
 
 	if not sql.TableExists(tableName) then return end
@@ -39,6 +39,7 @@ function orm.Make(tableName, force)
 	-- DO NOT setup delete/save functions if no primarykey is found.
 	-- In those cases the 'rowid' column would function as the primarykey, but as the rowid could change anytime (https://www.sqlite.org/rowidtable.html) data could be deleted unintentionally.
 	-- Most likely rowids wont change in gmod as there is no vacuum operation but just to be safe we will not allow to use such tables. ref: https://wiki.facepunch.com/gmod/sql
+
 	if not primaryKey then return model end
 
 	model.Delete = ormodel.Delete
@@ -75,9 +76,10 @@ end
 -- Deletes the given object from the database storage.
 function ormodel:Delete()
 	local where = {}
+	local primaryKey = self._primaryKey
 
-	for i = 1, #self._primaryKey do
-		where[i] = sql.SQLIdent(self._primaryKey[i]) .. "=" .. sql.SQLStr(self[self._primaryKey[i]])
+	for i = 1, #primaryKey do
+		where[i] = sql.SQLIdent(primaryKey[i]) .. "=" .. sql.SQLStr(self[primaryKey[i]])
 	end
 
 	where = table.concat(where, " AND ")
@@ -87,21 +89,23 @@ end
 
 ---
 -- Retrieves a specific object by their primarykey from the database.
--- @param int|string|table primaryValue The value(s) of the primarykey to search for.
+-- @param number|string|table primaryValue The value(s) of the primarykey to search for.
 -- @note In the case of multiple columns in the primarykey you have to specify the corresponding values in the same order.
 -- @return table|boolean|nil Returns the table of the found object. Returns `false` if the number of supplied primaryvalues does not match the number of elements in the primarykey. Returns `nil` if no object is found.
 function ormodel:Find(primaryValue)
 	local where = {}
+	local primaryKey = self._primaryKey
 
-	if not istable(primaryValue) and #self._primaryKey == 1 then
-		where = sql.SQLIdent(self._primaryKey[1]) .. "=" .. sql.SQLStr(primaryValue)
-	elseif istable(primaryValue) and #primaryValue == #self._primaryKey then
-		for i = 1, #self._primaryKey do
-			where[i] = sql.SQLIdent(self._primaryKey[i]) .. "=" .. sql.SQLStr(primaryValue[i])
+	if not istable(primaryValue) and #primaryKey == 1 then
+		where = sql.SQLIdent(primaryKey[1]) .. "=" .. sql.SQLStr(primaryValue)
+	elseif istable(primaryValue) and #primaryValue == #primaryKey then
+		for i = 1, #primaryKey do
+			where[i] = sql.SQLIdent(primaryKey[i]) .. "=" .. sql.SQLStr(primaryValue[i])
 		end
 		where = table.concat(where, " AND ")
 	else
 		print("[ORM] Number of primaryvalues does not match number of primarykeys!")
+
 		return false
 	end
 
@@ -117,15 +121,13 @@ end
 function ormodel:New(data)
 	local object = data or {}
 
-	--object.BaseClass = baseclass.Get(self._tableName)
-
-	object.Save = self.Save --object.BaseClass.Save
-	object.Delete = self.Delete --object.BaseClass.Delete
-	object._tableName = self._tableName --object.BaseClass._tableName
-	object._dataStructure = self._dataStructure --object.BaseClass._dataStructure
-	object._primaryKey = self._primaryKey --object.BaseClass._primaryKey
-	object._primaryKeyList = self._primaryKeyList --object.BaseClass._primaryKeyList
-	object._columnList = self._columnList --object.BaseClass._columnList
+	object.Save = self.Save
+	object.Delete = self.Delete
+	object._tableName = self._tableName
+	object._dataStructure = self._dataStructure
+	object._primaryKey = self._primaryKey
+	object._primaryKeyList = self._primaryKeyList
+	object._columnList = self._columnList
 
 	return object
 end

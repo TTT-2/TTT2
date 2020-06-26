@@ -61,7 +61,7 @@ end
 -- @param string str The string to escape.
 -- @return string Returns the escaped string.
 function sql.SQLIdent(str)
-	return "\"" .. str:gsub( "\"", "\"\"" ) .. "\""
+	return "\"" .. str:gsub("\"", "\"\"") .. "\""
 end
 
 ---
