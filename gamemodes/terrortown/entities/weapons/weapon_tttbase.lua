@@ -391,7 +391,6 @@ if CLIENT then
 				icon_or_key = icon_help_secondary
 			end
 		end
-		icon_or_key = isstring(icon_or_key) and icon_or_key == "MOUSE2" and icon_help_secondary or icon_or_key
 
 		local width = draw.GetTextSize(text, "weapon_hud_help")
 
