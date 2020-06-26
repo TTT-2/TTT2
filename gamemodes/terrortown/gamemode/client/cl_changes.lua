@@ -731,15 +731,6 @@ function CreateChanges()
 			<li>Added Hooks to the targetID system to modify the displayed data</li>
 			<li>Added Hooks to interact with door destruction</li>
 			<li>Added a new function to force a new radar scan</li>
-		</ul>
-	]], os.time({year = 2020, month = 06, day = 02}))
-
-	AddChange("TTT2 Base - v0.7.2b", [[
-		<h2>New:</h2>
-		<ul>
-			<li>Added Hooks to the targetID system to modify the displayed data</li>
-			<li>Added Hooks to interact with door destruction</li>
-			<li>Added a new function to force a new radar scan</li>
 			<li>Added a new convar to change the default radar time for players without custom radar times: <i>ttt2_radar_charge_time</i></li>
 			<li>Added a new client ConVar <i>ttt_crosshair_lines</i> to add the possibility to disable the crosshair lines</li>
 		</ul>
