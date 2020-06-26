@@ -156,6 +156,9 @@ local ttt2_hold_aim = CLIENT and CreateClientConVar("ttt2_hold_aim", 0, true, fa
 
 -- crosshair
 if CLIENT then
+	local GetPTranslation = LANG.GetParamTranslation
+	local TryT = LANG.TryTranslation
+
 	local sights_opacity = CreateClientConVar("ttt_ironsights_crosshair_opacity", "0.8", true)
 	local crosshair_brightness = CreateClientConVar("ttt_crosshair_brightness", "1.0", true)
 	local crosshair_size = CreateClientConVar("ttt_crosshair_size", "1.0", true)
@@ -241,8 +244,6 @@ if CLIENT then
 		surface.DrawRect(x - offset, y + gap, thickness, length - gap)
 	end
 
-	local GetPTranslation = LANG.GetParamTranslation
-
 	function SWEP:DrawKeyBox(x, y, key)
 		local pad = 3
 		local pad2 = pad * 2
@@ -282,7 +283,7 @@ if CLIENT then
 			valid_icon = false
 		end
 
-		draw.ShadowedText(text, "weapon_hud_help", x + 20, y, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+		draw.ShadowedText(TryT(text), "weapon_hud_help", x + 20, y, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 
 		return valid_icon
 	end

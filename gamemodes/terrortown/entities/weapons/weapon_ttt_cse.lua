@@ -134,7 +134,7 @@ if CLIENT then
 	local ParT = LANG.GetParamTranslation
 
 	function SWEP:Initialize()
-		self:AddTTT2HUDHelp(TryT("vis_help_pri"))
+		self:AddTTT2HUDHelp("vis_help_pri")
 
 		return self.BaseClass.Initialize(self)
 	end
