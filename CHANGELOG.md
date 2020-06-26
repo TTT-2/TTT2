@@ -26,6 +26,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Reworked the SWEP HUD help (legacy function SWEP:AddHUDHelp is still supported)
   - allows any number of lines now
   - visualization of the respective key
+- Players who disconnect now leave a corpse
 
 ### Fixed
 

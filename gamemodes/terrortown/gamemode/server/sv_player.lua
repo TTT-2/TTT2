@@ -491,6 +491,11 @@ concommand.Add("ttt_spec_use", SpecUseKey)
 -- @local
 function GM:PlayerDisconnected(ply)
 	if IsValid(ply) then
+		-- Kill the player when necessary
+		if ply:IsTerror() and ply:Alive() then
+			ply:Kill()
+		end
+
 		-- Prevent the disconnected player from being in the resends
 		ply:SetRole(ROLE_NONE)
 
