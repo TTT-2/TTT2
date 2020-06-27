@@ -1233,6 +1233,38 @@ hook.Add("TTTEndRound", "TTT2ResetRoleState_End", function()
 end)
 
 ---
+-- Set whether the next pickup of a weapon should be forced (e.g. to be able to give a weapon per {Player:Give})
+-- @param nil|boolean forcePickup
+-- @realm server
+function plymeta:SetForcePickupWeapon(forcePickup)
+	self.forcedPickup = forcePickup
+end
+
+---
+-- Returns whether the next pickup of a weapon should be forced (e.g. to be able to give a weapon per {Player:Give})
+-- @return boolean
+-- @realm server
+function plymeta:IsForcedPickupWeapon()
+	return self.forcedPickup or false
+end
+
+local plymeta_old_Give = plymeta.Give
+
+-- The give function is cached to extend it later on.
+-- The extension is needed to set a flag prior to picking up weapons.
+-- This flag is used to distinguish between weapons picked up by walking
+-- over them and weapons picked up by ply:Give()
+function plymeta:Give(weaponClassName, bNoAmmo)
+	self:SetForcePickupWeapon(true)
+
+	local wep = plymeta_old_Give(self, weaponClassName, bNoAmmo or false)
+
+	self:SetForcePickupWeapon(false)
+
+	return wep
+end
+
+---
 -- Called to drop a weapon in a safe manner (e.g. preparing and space-check)
 -- @param Weapon wep
 -- @realm server
@@ -1255,10 +1287,17 @@ end
 ---
 -- Returns whether or not a player can pick up a weapon
 -- @param Weapon wep The weapon object
+-- @param nil|boolean forcePickup is there a forced pickup to ignore the cv_auto_pickup cvar?
 -- @returns boolean
 -- @realm server
-function plymeta:CanPickupWeapon(wep)
-	return hook.Run("PlayerCanPickupWeapon", self, wep)
+function plymeta:CanPickupWeapon(wep, forcePickup)
+	self:SetForcePickupWeapon(forcePickup)
+
+	local ret = hook.Run("PlayerCanPickupWeapon", self, wep)
+
+	self:SetForcePickupWeapon(false)
+
+	return ret
 end
 
 ---
@@ -1272,20 +1311,19 @@ function plymeta:CanPickupWeaponClass(wepCls)
 	return self:CanPickupWeapon(wep)
 end
 
-local oldPickupWeapon = plymeta.PickupWeapon
-function plymeta:PickupWeapon(wep, dropBlockingWeapon)
-	self:PickupWeapon(wep, dropBlockingWeapon, nil)
-end
+local plymeta_old_PickupWeapon = plymeta.PickupWeapon
 
 ---
 -- This function simplifies the weapon pickup process for a player by
 -- handling all the needed calls.
 -- @param Weapon wep The weapon object
+-- @param nil|boolean ammoOnly If set to true, the player will only attempt to pick up the ammo from the weapon. The weapon will not be picked up even if the player doesn't have a weapon of this type, and the weapon will be removed if the player picks up any ammo from it
+-- @param nil|boolean forcePickup Should the pickup been forced (ignores the cv_auto_pickup cvar)
 -- @param[default=false] nil|boolean dropBlockingWeapon Should the currently selecten weapon be dropped
 -- @param nil|boolean shouldAutoSelect Should this weapon be autoselected after equip, if not set this value is set by player keypress
 -- @returns Weapon if successful, nil if not
 -- @realm server
-function plymeta:PickupWeapon(wep, dropBlockingWeapon, shouldAutoSelect)
+function plymeta:PickupWeapon(wep, ammoOnly, forcePickup, dropBlockingWeapon, shouldAutoSelect)
 	if not IsValid(wep) then
 		ErrorNoHalt(tostring(self) .. " tried to pickup an invalid weapon " .. tostring(wep) .. "\n")
 		LANG.Msg(self, "pickup_fail")
@@ -1293,7 +1331,7 @@ function plymeta:PickupWeapon(wep, dropBlockingWeapon, shouldAutoSelect)
 		return
 	end
 
-	if not self:CanPickupWeapon(wep) then
+	if not self:CanPickupWeapon(wep, forcePickup or true) then
 		LANG.Msg(self, "pickup_no_room")
 
 		return
@@ -1305,7 +1343,7 @@ function plymeta:PickupWeapon(wep, dropBlockingWeapon, shouldAutoSelect)
 	end
 
 	-- if parameter is set the currently blocking weapon should be dropped
-	if dropBlockingWeapon then
+	if dropBlockingWeapon ~= false then
 		local dropWeapon, isActiveWeapon, switchMode = GetBlockingWeapon(self, wep)
 
 		if switchMode == SWITCHMODE_FULLINV then
@@ -1328,7 +1366,7 @@ function plymeta:PickupWeapon(wep, dropBlockingWeapon, shouldAutoSelect)
 		end
 	end
 
-	if not oldPickupWeapon(self, wep) then return end
+	if not plymeta_old_PickupWeapon(self, wep, ammoOnly or false) then return end
 
 	return wep
 end

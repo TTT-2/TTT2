@@ -52,7 +52,7 @@ function GM:PlayerCanPickupWeapon(ply, wep)
 	end
 
 	-- if the auto pickup convar is set to false, no weapons should be picked up automatically
-	if not cv_auto_pickup:GetBool() then
+	if not cv_auto_pickup:GetBool() and not ply:IsForcedPickupWeapon() then
 		return false
 	end
 
