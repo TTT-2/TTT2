@@ -32,12 +32,6 @@ local crowbar_delay = CreateConVar("ttt2_crowbar_shove_delay", "1.0", {FCVAR_NOT
 function GM:PlayerCanPickupWeapon(ply, wep)
 	if not IsValid(wep) or not IsValid(ply) then return end
 
-	-- Flags should be reset no matter what happens afterwards --> cache them here
-	local cflag_giveItem, cflag_weaponSwitch = ply.wp__GiveItemFunctionFlag, wep.wp__WeaponSwitchFlag
-
-	ply.wp__GiveItemFunctionFlag = false
-	wep.wp__WeaponSwitchFlag = false
-
 	-- spectators are not allowed to pickup weapons
 	if ply:IsSpec() then
 		return false
@@ -46,43 +40,14 @@ function GM:PlayerCanPickupWeapon(ply, wep)
 	-- prevent picking up weapons of the same class a player already has (for ammo if auto-pickup is enabled)
 	-- exception: this hook is called to check if a player can pick up weapon while dropping
 	-- the current weapon
-	if ply:HasWeapon(WEPS.GetClass(wep)) and not cflag_weaponSwitch then
+	if ply:HasWeapon(WEPS.GetClass(wep)) then
 		return false
 	end
 
 	-- block pickup when there is no slot free
 	-- exception: this hook is called to check if a player can pick up weapon while dropping
 	-- the current weapon
-	if not InventorySlotFree(ply, wep.Kind) and not cflag_weaponSwitch then
-		return false
-	end
-
-	-- if weapon is given by ply:Give function, it should always be inserted into the player inventory
-	if cflag_giveItem then
-		return true
-	end
-
-	-- if triggered by weapon switch the weapon should be inserted into the player inventory
-	-- this should only happen when the following two flags are set accordingly
-	if wep.wpickup_player and wep.wpickup_player == ply
-	and ply.wpickup_weapon and ply.wpickup_weapon == wep
-	then
-		-- these flags shouldn't be reset on first call of this hook since GMOD might do stupid things
-		-- while attempting to pickup a weapon
-		-- therefore these flags keep their value until the weapon is picked up or the player attempts
-		-- another pickup and are cleared in ResetWeapon()
-		return true
-	end
-
-	-- do not automatically pick up a weapon if the player already has the pickup
-	-- weapon flag set
-	if ply.wpickup_weapon then
-		return false
-	end
-
-	-- stop other players from automatically picking up a weapon when a player already set
-	-- the pickup flag
-	if wep.wpickup_player then
+	if not InventorySlotFree(ply, wep.Kind) then
 		return false
 	end
 
@@ -642,9 +607,6 @@ function GM:WeaponEquip(wep, ply)
 		-- the client. Therefore the client has to be notified to updated its cache
 		net.Start("ttt2_switch_weapon_update_cache")
 		net.Send(ply)
-
-		-- since the weapon pickup changes some weapon data, it has to be reset here
-		ResetWeapon(wep)
 	end
 
 	-- handle all this stuff in the next frame since the owner is not yet valid
