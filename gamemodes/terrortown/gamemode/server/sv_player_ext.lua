@@ -1368,6 +1368,10 @@ function plymeta:PickupWeapon(wep, ammoOnly, forcePickup, dropBlockingWeapon, sh
 
 	if not plymeta_old_PickupWeapon(self, wep, ammoOnly or false) then return end
 
+	if shouldAutoSelect then
+		self:SelectWeapon(wep:GetClass())
+	end
+
 	return wep
 end
 
