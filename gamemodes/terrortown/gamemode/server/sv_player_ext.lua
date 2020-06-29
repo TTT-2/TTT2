@@ -1223,8 +1223,8 @@ hook.Add("TTTBeginRound", "TTT2ResetRoleState_Begin", function()
 	end
 end)
 
--- additionally reset confirm state on round end to prevent short blinking of confirmed roles on round start
-hook.Add("TTTEndRound", "TTT2ResetRoleState_End", function()
+-- additionally reset confirm state on round prepare to prevent short blinking of confirmed roles on round start
+hook.Add("TTTPrepareRound", "TTT2ResetRoleState_End", function()
 	local plys = player.GetAll()
 
 	for i = 1, #plys do
