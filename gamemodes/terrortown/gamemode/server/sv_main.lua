@@ -1428,7 +1428,7 @@ concommand.Add("ttt_roundrestart", ttt_roundrestart)
 -- @param Player ply
 -- @realm server
 function ShowVersion(ply)
-	local text = Format("This is [TTT2] Trouble in Terrorist Town 2 (Advanced Update) - by Alf21 (v%s)\n", GAMEMODE.Version)
+	local text = Format("This is [TTT2] Trouble in Terrorist Town 2 (Advanced Update) - by the TTT2 Dev Team (v%s)\n", GAMEMODE.Version)
 
 	if IsValid(ply) then
 		ply:PrintMessage(HUD_PRINTNOTIFY, text)
