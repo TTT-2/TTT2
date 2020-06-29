@@ -4,6 +4,9 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+### Changed
+- Roles are now only getting synced to clients if the Role is known, not just the body being confirmed
+
 ## [v0.7.2b](https://github.com/TTT-2/TTT2/tree/v0.7.2b) (2020-06-26)
 
 ### Added
@@ -30,7 +33,6 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - allows any number of lines now
   - visualization of the respective key
 - Players who disconnect now leave a corpse
-- Roles are now only getting synced to clients if the Role is known, not just the body being confirmed
 
 ### Fixed
 
