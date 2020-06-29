@@ -28,6 +28,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - allows any number of lines now
   - visualization of the respective key
 - Players who disconnect now leave a corpse
+- Roles are now only getting synced to clients if the Role is known, not just the body being confirmed
 
 ### Fixed
 
