@@ -725,6 +725,42 @@ function CreateChanges()
 		</ul>
 	]], os.time({year = 2020, month = 06, day = 02}))
 
+	AddChange("TTT2 Base - v0.7.2b", [[
+		<h2>New:</h2>
+		<ul>
+			<li>Added Hooks to the targetID system to modify the displayed data</li>
+			<li>Added Hooks to interact with door destruction</li>
+			<li>Added a new function to force a new radar scan</li>
+			<li>Added a new convar to change the default radar time for players without custom radar times: <i>ttt2_radar_charge_time</i></li>
+			<li>Added a new client ConVar <i>ttt_crosshair_lines</i> to add the possibility to disable the crosshair lines</li>
+		</ul>
+		<br>
+		<h2>Improved:</h2>
+		<ul>
+			<li>Moved the disguiser icon to the status system to be only displayed when the player is actually disguised</li>
+			<li>Reworked the addonchecker and added a command to execute the checker at a later point</li>
+			<li>Updated Italian translation (Thanks @ThePlatinumGhost)</li>
+			<li>Removed Is[ROLE] functions of all roles except default TTT ones</li>
+			<li>ttt_end_round now resets when the map changes</li>
+			<li>Reworked the SWEP HUD help (legacy function SWEP:AddHUDHelp is still supported)</li>
+			<li>Players who disconnect now leave a corpse</li>
+		</ul>
+		<br>
+		<h2>Fixed:</h2>
+		<ul>
+			<li>Fixed shadow texture of the "Pure Skin HUD" for low texture quality settings</li>
+			<li>Fixed inno subrole upgrading if many roles are installed</li>
+			<li>Fixed and improved the radar role/team modification hook</li>
+			<li>Fixed area portals on servers for destroyed doors</li>
+			<li>Fixed revive fail function reference reset</li>
+			<li>Removed the DNA Scanner hudelement for spectators</li>
+			<li>Fixed the image in the confirmation notification whenever a bot's corpse gets identified</li>
+			<li>Fixed bad role selection due to RNG reseeding</li>
+			<li>Fixed missing role column translation</li>
+			<li>Fixed viewmodel not showing correct hands on model change</li>
+		</ul>
+	]], os.time({year = 2020, month = 06, day = 26}))
+
 	-- run hook for other addons to add their changelog as well
 	hook.Run("TTT2AddChange", changes, currentVersion)
 end
