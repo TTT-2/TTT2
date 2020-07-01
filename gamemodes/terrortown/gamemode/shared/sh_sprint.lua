@@ -119,6 +119,7 @@ function UpdateSprint()
 
 	for i = 1, #plys do
 		local ply = plys[i]
+
 		if not ply:OnGround() then continue end
 
 		local wantsToMove = ply:KeyDown(IN_FORWARD) or ply:KeyDown(IN_BACK) or ply:KeyDown(IN_MOVERIGHT) or ply:KeyDown(IN_MOVELEFT)
