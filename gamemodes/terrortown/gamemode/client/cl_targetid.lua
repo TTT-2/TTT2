@@ -165,7 +165,7 @@ function GM:PostDrawTranslucentRenderables(bDrawingDepth, bDrawingSkybox)
 	end
 
 	-- OVERHEAD ICONS
-	if disable_overheadicons:GetBool() or not client:IsSpecial() then return end
+	if disable_overheadicons:GetBool() then return end
 
 	for i = 1, #plys do
 		local ply = plys[i]
