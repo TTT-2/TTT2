@@ -42,6 +42,30 @@ function sql.GetPrimaryKey(tableName)
 end
 
 ---
+-- Returns the foreignkeys of the specified table.
+-- @param string tableName The name of the table to search.
+-- @return table|nil Returns a table of the foreignkey columns.
+function sql.GetForeignKeys(tableName)
+	local result = sql.Query("PRAGMA foreign_key_list(" .. sql.SQLIdent(tableName) .. ")")
+	local foreignKeys = {}
+
+	if not result then return end
+
+	for i = 1, #result do
+		local ressultRow = result[i]
+		local id = tonumber(ressultRow.id)
+		local seq = tonumber(ressultRow.seq)
+		local foreignKeysRow = foreignKeys[id][seq]
+
+		foreignKeysRow.table = ressultRow.table
+		foreignKeysRow.from = ressultRow.from
+		foreignKeysRow.to = ressultRow.to
+	end
+
+	return foreignKeys
+end
+
+---
 -- Returns the column names of the specified table.
 -- @param string tableName The name of the table to search.
 -- @return table|nil Returns a table of the column names.
