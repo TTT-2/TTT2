@@ -14,6 +14,7 @@ Please follow the respective guidelines below to support a good experience for e
   - no outcommented code
 - Provide an appropriate entry to the `Unreleased` section of our [changelog file](CHANGELOG.md).
 - A descriptive introduction to the changes made is highly encouraged.
+- If you implement requested changes **do not** resolve the conversation yourself, re-request their review instead
 
 ## Issues
 
