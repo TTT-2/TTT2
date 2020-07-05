@@ -10,7 +10,7 @@ If you are missing the following information your issue will be closed!
 - "Your version of TTT2"
 - "Describe the bug"
 
-Also please make sure to read the [FAQ](https://github.com/TTT-2/TTT2/wiki/faq) first!
+Also please make sure to read the [FAQ](https://docs.ttt2.neoxult.de/troubleshooting) and [existing issues](https://github.com/TTT-2/TTT2/issues?q=is%3Aissue) first!
 
 ## Your version of TTT2 (mandatory)
 
