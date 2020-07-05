@@ -102,6 +102,7 @@ function ormodel:Find(primaryValue)
 		for i = 1, #primaryKey do
 			where[i] = sql.SQLIdent(primaryKey[i]) .. "=" .. sql.SQLStr(primaryValue[i])
 		end
+
 		where = table.concat(where, " AND ")
 	else
 		print("[ORM] Number of primaryvalues does not match number of primarykeys!")
