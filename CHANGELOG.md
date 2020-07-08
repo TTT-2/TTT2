@@ -8,6 +8,9 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Roles are now only getting synced to clients if the role is known, not just the body being confirmed
 - Airborne players can no longer replenish stamina
 
+### Fixed
+- Radar now shows bombs again, that do not have the team property set
+
 ## [v0.7.2b](https://github.com/TTT-2/TTT2/tree/v0.7.2b) (2020-06-26)
 
 ### Added
