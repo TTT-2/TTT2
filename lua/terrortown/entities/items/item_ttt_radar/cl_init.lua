@@ -152,7 +152,7 @@ function RADAR:Draw(client)
 		surface.SetDrawColor(255, 255, 255, 200)
 
 		for _, bomb in pairs(self.bombs) do
-			if bomb.team == client:GetTeam() then
+			if bomb.team ~= nil and bomb.team == client:GetTeam() then
 				DrawTarget(bomb, 24, 0, true)
 			end
 		end
