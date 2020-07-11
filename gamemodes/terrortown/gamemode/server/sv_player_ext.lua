@@ -1368,9 +1368,7 @@ function plymeta:PickupWeapon(wep, ammoOnly, forcePickup, dropBlockingWeapon, sh
 
 	if not plymeta_old_PickupWeapon(self, wep, ammoOnly or false) then return end
 
-	if shouldAutoSelect then
-		self:SelectWeapon(wep:GetClass())
-	end
+	wep.wpickup_autoSelect = shouldAutoSelect
 
 	return wep
 end
@@ -1402,8 +1400,10 @@ function plymeta:PickupWeaponClass(wepCls, dropBlockingWeapon, shouldAutoSelect)
 
 		pWep = self:Give(wepCls)
 
-		-- set flag to new weapon that is used to autoselect it later on
-		pWep.wpickup_autoSelect = shouldAutoSelect or isActiveWeapon
+		if IsValid(pWep) then
+			-- set flag to new weapon that is used to autoselect it later on
+			pWep.wpickup_autoSelect = shouldAutoSelect or isActiveWeapon
+		end
 	end
 
 	return pWep
