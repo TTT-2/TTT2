@@ -76,8 +76,8 @@ function HUDManager.StoreData()
 	MsgN("[TTT2][HUDManager] Storing data in database...")
 
 	if DB_EnsureTableExists(HUD_MANAGER_SQL_TABLE, "key TEXT PRIMARY KEY, value TEXT") then
-		sql.Query("INSERT OR REPLACE INTO " .. HUD_MANAGER_SQL_TABLE .. " VALUES('forcedHUD', " .. sql.SQLStr(ttt2net.GetGlobal("forcedHUD")) .. ")")
-		sql.Query("INSERT OR REPLACE INTO " .. HUD_MANAGER_SQL_TABLE .. " VALUES('defaultHUD', " .. sql.SQLStr(ttt2net.GetGlobal("defaultHUD")) .. ")")
+		sql.Query("INSERT OR REPLACE INTO " .. HUD_MANAGER_SQL_TABLE .. " VALUES('forcedHUD', " .. sql.SQLStr(ttt2net.GetGlobal({"hud_manager", "forcedHUD"})) .. ")")
+		sql.Query("INSERT OR REPLACE INTO " .. HUD_MANAGER_SQL_TABLE .. " VALUES('defaultHUD', " .. sql.SQLStr(ttt2net.GetGlobal({"hud_manager", "defaultHUD"})) .. ")")
 	end
 
 	-- delete the table to recreate it again, to remove all values that might have been removed from the table
@@ -181,6 +181,7 @@ net.Receive("TTT2DefaultHUDRequest", function(_, ply)
 		end
 
 		HUDManager.StoreData()
+		HUDManager.LoadData()
 	end
 
 	net.Start("TTT2DefaultHUDResponse")
