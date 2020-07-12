@@ -7,6 +7,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Changed
 - Roles are now only getting synced to clients if the role is known, not just the body being confirmed
 - Airborne players can no longer replenish stamina
+- Removed Golden Deagle V1/V2 and the Juggernaut Suit that were made by Zaratusa from the buggy addons list (now fully compatible with TTT2 and custom roles)
 
 ### Fixed
 - Fix HUDManager not saving forcedHUD and defaultHUD values
