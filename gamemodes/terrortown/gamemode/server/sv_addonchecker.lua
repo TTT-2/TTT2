@@ -76,16 +76,6 @@ addonChecker.curatedList = {
 		reason = "Breaks the TTT2 gamemode.",
 		type = ADDON_INCOMPATIBLE
 	},
-	["253737047"] = { -- Golden Deagle by Zaratusa
-		alternative = "1398388611",
-		reason = "Does not work with our role system.",
-		type = ADDON_INCOMPATIBLE
-	},
-	["637848943"] = { -- Golden Deagle by Zaratusa
-		alternative = "1398388611",
-		reason = "Does not work with our role system.",
-		type = ADDON_INCOMPATIBLE
-	},
 	["1376434172"] = { -- Golden Deagle by DaniX_Chile
 		alternative = "1398388611",
 		reason = "Does not work with our role system.",
@@ -271,11 +261,6 @@ addonChecker.curatedList = {
 	},
 	["899206223"] = { -- Martyrdom by Koksgesicht
 		alternative = "1630269736",
-		reason = "Does not use the TTT2 sidebar system.",
-		type = ADDON_OUTDATED
-	},
-	["652046425"] = { -- Juggernaut Suit by Zaratusa
-		alternative = "1640512667",
 		reason = "Does not use the TTT2 sidebar system.",
 		type = ADDON_OUTDATED
 	},
