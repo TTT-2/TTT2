@@ -9,6 +9,9 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Airborne players can no longer replenish stamina
 - The weapon pickup system has been improved to increase stability and remove edge cases in temporary weapon teleportation
 
+### Fixed
+- Fix HUDManager not saving forcedHUD and defaultHUD values
+
 ## [v0.7.2b](https://github.com/TTT-2/TTT2/tree/v0.7.2b) (2020-06-26)
 
 ### Added
