@@ -167,10 +167,12 @@ addonChecker.curatedList = {
 		type = ADDON_INCOMPATIBLE
 	},
 	["606792331"] = { -- Advanced disguiser by Gamefreak
+		alternative = "2144375749",
 		reason = "Does not work with TTT2 targetID.",
 		type = ADDON_INCOMPATIBLE
 	},
 	["610632051"] = { -- Advanced disguiser by Killberty
+		alternative = "2144375749",
 		reason = "Does not work with TTT2 targetID.",
 		type = ADDON_INCOMPATIBLE
 	},
@@ -261,6 +263,21 @@ addonChecker.curatedList = {
 	},
 	["899206223"] = { -- Martyrdom by Koksgesicht
 		alternative = "1630269736",
+		reason = "Does not use the TTT2 sidebar system.",
+		type = ADDON_OUTDATED
+	},
+	["652046425"] = { -- Juggernaut Suit by Zaratusa
+		alternative = "2157829981",
+		reason = "Does not use the TTT2 sidebar system.",
+		type = ADDON_OUTDATED
+	},
+	["650523807"] = { -- Lucky Horseshoe by Zaratusa
+		alternative = "2157888469",
+		reason = "Does not use the TTT2 sidebar system.",
+		type = ADDON_OUTDATED
+	},
+	["650523765"] = { -- Hermes Boots by Zaratusa
+		alternative = "2157850255",
 		reason = "Does not use the TTT2 sidebar system.",
 		type = ADDON_OUTDATED
 	},
