@@ -10,6 +10,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Detective overhead icon is now shown to innocents
 
 ### Fixed
+- Fixed death handling spawning multiple corpses when killed multiple times in the same frame
+- Radar now shows bombs again, that do not have the team property set
 - Fix HUDManager not saving forcedHUD and defaultHUD values
 
 ## [v0.7.2b](https://github.com/TTT-2/TTT2/tree/v0.7.2b) (2020-06-26)
