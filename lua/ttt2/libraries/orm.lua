@@ -25,7 +25,6 @@ function orm.Make(tableName, force)
 	if not sql.TableExists(tableName) then return end
 
 	local model = {}
-	--baseclass.Set(tableName, model)
 	local primaryKey = sql.GetPrimaryKey(tableName)
 	local dataStructure = sql.GetTableColumns(tableName)
 
