@@ -4,6 +4,9 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+### Added
+- Added Spanish version for base addon  
+
 ### Changed
 - Roles are now only getting synced to clients if the role is known, not just the body being confirmed
 - Airborne players can no longer replenish stamina
