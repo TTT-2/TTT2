@@ -12,8 +12,8 @@ local stringRight = string.Right
 fileloader = fileloader or {}
 
 ---
--- Sets up the language by scanning through the given directory; has to be run on both
--- server and client!
+-- Sets up files by scanning through directories and including them into the runtime.
+-- @note Has to be run on both server and client for client and shared files.
 -- @param string path The path to search in
 -- @param[default=false] boolean deepsearch If true, subfolders are scanned
 -- @param[default=SHARED] number realm The realm where the file should be included
