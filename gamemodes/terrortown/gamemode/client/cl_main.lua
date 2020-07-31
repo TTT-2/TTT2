@@ -113,7 +113,14 @@ function GM:Initialize()
 	self.roundCount = 0
 
 	-- load addon language files
-	LANG.SetupFiles("lang/", true)
+	fileloader.LoadFolder("lang/", true, CLIENT, function(path)
+		ErrorNoHalt("[DEPRECATION WARNING]: Loaded language file from 'lang/', this folder is deprecated. Please switch to `terrortown/lang/`")
+		MsgN("Added TTT2 language file: ", path)
+	end)
+
+	fileloader.LoadFolder("terrortown/lang/", true, CLIENT, function(path)
+		MsgN("Added TTT2 language file: ", path)
+	end)
 
 	LANG.Init()
 

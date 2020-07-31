@@ -10,6 +10,9 @@ GM.Customized = true
 
 TTT2 = true -- identifier for TTT2. Just use "if TTT2 then ... end"
 
+-- extend CLIENT and SERVER flags
+SHARED = 2
+
 -- Round status consts
 ROUND_WAIT = 1
 ROUND_PREP = 2
@@ -526,6 +529,7 @@ include("includes/modules/pon.lua")
 include("ttt2/extensions/net.lua")
 include("ttt2/extensions/string.lua")
 include("ttt2/extensions/table.lua")
+include("ttt2/libraries/fileloader.lua")
 include("ttt2/libraries/door.lua")
 include("ttt2/libraries/thermalvision.lua")
 
