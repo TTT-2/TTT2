@@ -23,8 +23,6 @@ function fileloader.LoadFolder(path, deepsearch, realm, callback)
 	deepsearch = deepsearch or false
 	realm = realm or SHARED
 
-	print("test")
-
 	local file_paths = {}
 
 	if deepsearch then
@@ -52,9 +50,6 @@ function fileloader.LoadFolder(path, deepsearch, realm, callback)
 		end
 	end
 
-	print("file paths:")
-	PrintTable(file_paths)
-
 	for i = 1, #file_paths do
 		local file_path = file_paths[i]
 
@@ -62,7 +57,7 @@ function fileloader.LoadFolder(path, deepsearch, realm, callback)
 		if stringRight(file_path, 3) ~= "lua" then continue end
 
 		if SERVER and realm ~= SERVER then
-			AddCSLuaFile(file_path)	
+			AddCSLuaFile(file_path)
 		elseif SERVER and realm ~= CLIENT then
 			include(file_path)
 		elseif CLIENT and realm ~= SERVER then

@@ -175,6 +175,18 @@ util.AddNetworkString("TTT2RoleGlobalVoice")
 util.AddNetworkString("TTT2MuteTeam")
 util.AddNetworkString("TTT2UpdateHoldAimConvar")
 
+fileloader.LoadFolder("terrortown/autorun/client/", false, CLIENT, function(path)
+	MsgN("Marked TTT2 client autorun file for distribution: ", path)
+end)
+
+fileloader.LoadFolder("terrortown/autorun/shared/", false, SHARED, function(path)
+	MsgN("Marked TTT2 shared autorun file for distribution: ", path)
+end)
+
+fileloader.LoadFolder("terrortown/autorun/server/", false, SERVER, function(path)
+	MsgN("Added TTT2 server autorun file: ", path)
+end)
+
 CHANGED_EQUIPMENT = {}
 
 ---
@@ -193,7 +205,7 @@ function GM:Initialize()
 
 	-- check for language files to mark them as downloadable for clients
 	fileloader.LoadFolder("lang/", true, CLIENT, function(path)
-		ErrorNoHalt("[DEPRECATION WARNING]: Loaded language file from 'lang/', this folder is deprecated. Please switch to `terrortown/lang/`")
+		ErrorNoHalt("[DEPRECATION WARNING]: Loaded language file from 'lang/', this folder is deprecated. Please switch to `terrortown/lang/`\n")
 		MsgN("Added TTT2 language file: ", path)
 	end)
 
