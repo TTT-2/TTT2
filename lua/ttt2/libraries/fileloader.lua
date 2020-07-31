@@ -56,8 +56,11 @@ function fileloader.LoadFolder(path, deepsearch, realm, callback)
 		-- filter out directories and temp files (like .lua~)
 		if stringRight(file_path, 3) ~= "lua" then continue end
 
-		if SERVER and realm ~= SERVER then
+		if SERVER and realm == CLIENT then
 			AddCSLuaFile(file_path)
+		elseif SERVER and realm == SHARED then
+			AddCSLuaFile(file_path)
+			include(file_path)
 		elseif SERVER and realm ~= CLIENT then
 			include(file_path)
 		elseif CLIENT and realm ~= SERVER then
