@@ -17,7 +17,7 @@ fileloader = fileloader or {}
 -- @param string path The path to search in
 -- @param[default=false] boolean deepsearch If true, subfolders are scanned
 -- @param[default=SHARED] number realm The realm where the file should be included
--- @param[opt] funcion callback A function that is called after the file is included
+-- @param[opt] function callback A function that is called after the file is included
 -- @realm shared
 function fileloader.LoadFolder(path, deepsearch, realm, callback)
 	deepsearch = deepsearch or false
