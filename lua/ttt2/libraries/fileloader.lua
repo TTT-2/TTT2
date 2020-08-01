@@ -15,7 +15,7 @@ fileloader = fileloader or {}
 -- Sets up files by scanning through directories and including them into the runtime.
 -- @note Has to be run on both server and client for client and shared files.
 -- @param string path The absolute path to search in, has to end with `/`
--- @param[default=false] boolean deepsearch If true, subfolders are scanned
+-- @param[default=false] boolean deepsearch If true, files are searched one level down inside all available subfolders
 -- @param[default=SHARED] number realm The realm where the file should be included
 -- @param[opt] function callback A function that is called after the file is included
 -- @realm shared
