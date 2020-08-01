@@ -8,7 +8,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Added a new custom file loader that loads lua files from `lua/terrortown/autorun/`
   - it basically works the same as the native file loader
-  - there are three subfolder: `client`, `server` and `shared`
+  - there are three subfolders: `client`, `server` and `shared`
   - the files inside this folder are loaded after all TTT2 gamemode files and library extensions are loaded
 
 ### Changed
