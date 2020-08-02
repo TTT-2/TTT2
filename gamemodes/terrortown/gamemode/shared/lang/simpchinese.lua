@@ -1,4 +1,4 @@
----- Simplified Chinese language strings adapted from TTT's Trad. Chinese
+---- Simplified Chinese language strings
 
 local L = LANG.CreateLanguage("简体中文")
 
@@ -9,7 +9,7 @@ L.innocent   = "无辜者"
 L.last_words = "遗言"
 
 L.terrorists = "恐怖分子"
-L.spectators = "旁观者"
+L.spectators = "观察者"
 
 --- Round status messages
 L.round_minplayers = "没有足够的玩家来开始新的回合…"
@@ -51,8 +51,8 @@ L.body_found_i     = "他是一位无辜者。"
 
 L.body_confirm     = "{finder} 确认了 {victim} 的死亡。"
 
-L.body_call        = "{player} 呼唤探长前来检查 {victim} 的尸体！"
-L.body_call_error  = "你必须先确定该玩家的死，才能呼叫探长！"
+L.body_call        = "{player} 请求探长前来检查 {victim} 的尸体！"
+L.body_call_error  = "你必须先确定该玩家的死才能呼叫探长！"
 
 L.body_burning     = "好烫！这个尸体着火了！"
 L.body_credits     = "你在尸体上找到 {num} 积分！"
@@ -79,10 +79,10 @@ L.equip_carry_own  = "你已拥有这件装备。"
 L.equip_carry_slot = "已拥有武器栏第 {slot} 项的武器。"
 
 L.equip_help_stock = "每回合你只能购买一件相同的物品。"
-L.equip_stock_deny = "这件物品不会再有库存。"
-L.equip_stock_ok   = "这件物品已有库存。"
+L.equip_stock_deny = "这件物品卖空了。"
+L.equip_stock_ok   = "这件物品有库存。"
 
-L.equip_custom     = "自订物品新增于伺服器中。"
+L.equip_custom     = "服务器的自定义物品。"
 
 L.equip_spec_name  = "名字"
 L.equip_spec_type  = "类型"
@@ -177,32 +177,32 @@ L.search_role_t = "这个人是叛徒！"
 L.search_role_d = "这个人是探长。"
 L.search_role_i = "这个人是无辜的恐怖分子。"
 
-L.search_words  = "某些事物让你了解到此人的遗言： {lastwords}"
-L.search_armor  = "他穿戴非标准装甲。"
+L.search_words  = "直觉告诉你这个人的遗言： {lastwords}"
+L.search_armor  = "他穿着非标准装甲。"
 L.search_disg   = "他持有一个能隐匿身份的设备"
-L.search_radar  = "他持有像是雷达的物品。已经无法使用了。"
-L.search_c4     = "你在他口袋中找到了一本笔记。记载着线路 {num} 是解除炸弹须剪除的一条。"
+L.search_radar  = "他持有像是雷达的物品，已经无法使用了。"
+L.search_c4     = "你在他口袋中找到了一本笔记。记载着第 {num} 根线才能解除炸弹。"
 
-L.search_dmg_crush  = "他多处骨折。看起来是某种重物的衝击撞死了他。"
+L.search_dmg_crush  = "他多处骨折。看起来是某种重物的冲击撞死了他。"
 L.search_dmg_bullet = "他很明显是被射杀身亡的。"
 L.search_dmg_fall   = "他是坠落身亡的。"
 L.search_dmg_boom   = "他的伤口以及烧焦的衣物，应是爆炸导致其死亡。"
 L.search_dmg_club   = "他的身体有许多擦伤打击痕迹，明显是被殴打致死的。"
 L.search_dmg_drown  = "他身上的蛛丝马迹显示是溺死的。"
 L.search_dmg_stab   = "他是被刺击与挥砍后，迅速失血致死的。"
-L.search_dmg_burn   = "闻起来有烧焦的恐怖分子在附近.."
+L.search_dmg_burn   = "闻起来像烧焦的恐怖分子.."
 L.search_dmg_tele   = "看起来他的DNA以超光速粒子之形式散乱在附近。"
 L.search_dmg_car    = "他穿越马路时被一个粗心的驾驶碾死了。"
 L.search_dmg_other  = "你无法找到这恐怖份子的具体死因。"
 
-L.search_weapon = "这显示死者是被 {weapon} 所杀。"
-L.search_head   = "最严重的伤口在头部。完全没机会叫喊。"
+L.search_weapon = "死者是被 {weapon} 所杀。"
+L.search_head   = "最后一击打在头上。完全没机会叫喊。"
 L.search_time   = "他大约死于你进行搜索的 {time} 前。"
 L.search_dna    = "用DNA扫描器检索凶手的DNA标本，DNA样本大约在 {time} 前开始衰退。"
 
 L.search_kills1 = "你找到一个名单，记载着他发现的死者： {player}"
 L.search_kills2 = "你找到了一个名单，记载着他杀的这些人:"
-L.search_eyes   = "透过你的探查技能，你确信他临死前见到的最后一个人： {player} 。是凶手，还是巧合？"
+L.search_eyes   = "透过你的探查技能，你确信他临死前见到的最后一个人是 {player} 。凶手，还是巧合？"
 
 
 -- Scoreboard
@@ -212,18 +212,18 @@ L.sb_mapchange  = "地图将于 {num} 个回合或是 {time} 后更换"
 L.sb_mia        = "下落不明"
 L.sb_confirmed  = "确认死亡"
 
-L.sb_ping       = "Ping"
+L.sb_ping       = "延迟"
 L.sb_deaths     = "死亡数"
 L.sb_score      = "分数"
 L.sb_karma      = "人品"
 
 L.sb_info_help  = "搜索此玩家的尸体，可以获取一些线索。"
 
-L.sb_tag_friend = "可信任者"
-L.sb_tag_susp   = "有嫌疑者"
-L.sb_tag_avoid  = "应迴避者"
-L.sb_tag_kill   = "已死者"
-L.sb_tag_miss   = "失踪者"
+L.sb_tag_friend = "可信"
+L.sb_tag_susp   = "可疑"
+L.sb_tag_avoid  = "躲避"
+L.sb_tag_kill   = "死亡"
+L.sb_tag_miss   = "失踪"
 
 --- Help and settings menu (F1)
 
@@ -231,18 +231,18 @@ L.help_title = "帮助与设定"
 
 -- Tabs
 L.help_tut     = "游戏教学"
-L.help_tut_tip = "游玩TTT的六步心法"
+L.help_tut_tip = "游玩TTT的六步教程"
 
 L.help_settings = "设定"
 L.help_settings_tip = "客户端设定"
 
 -- Settings
-L.set_title_gui = "介面设置"
+L.set_title_gui = "界面设置"
 
 L.set_tips      = "旁观时，在屏幕下方显示游戏提示"
 
 L.set_startpopup = "开局提示延迟"
-L.set_startpopup_tip = "当回合开始时，小提示将显示在屏幕下方一段时间，此参数可更改信息的停留时间"
+L.set_startpopup_tip = "当回合开始时，提示将在屏幕下方显示一段时间，此参数可更改信息的停留时间"
 
 L.set_cross_opacity = "准心透明度"
 L.set_cross_disable = "关闭准心"
@@ -256,15 +256,15 @@ L.set_fastsw_menu     = "启用快速切换武器选单"
 L.set_fastswmenu_tip  = "当启用快速武器切换功能，会出现弹出式切换选单。"
 L.set_wswitch       = "关闭武器切换自动关闭"
 L.set_wswitch_tip   = "默认设定下使用滑鼠滚轮切换武器时，停留数秒后会选择当前武器并关闭。这个选项开启后不会自动关闭。"
-L.set_cues          = "在回合开始或结束时发出指示声音"
+L.set_cues          = "在回合开始或结束时发出提示音"
 
 
 L.set_title_play    = "游戏设定"
 
-L.set_specmode      = "旁观者模式（始终作为观察者）"
-L.set_specmode_tip  = "在你离开本模式前，新回合开始时你仍会以旁观者加入游戏。"
+L.set_specmode      = "观察者模式（始终作为观察者）"
+L.set_specmode_tip  = "在你离开本模式前，新回合开始时你仍会以观察者加入游戏。"
 L.set_mute          = "死亡后不再听到活人的语音（仅作用于你）"
-L.set_mute_tip      = "当你是死者／旁观者时，将听不见活人的语音。"
+L.set_mute_tip      = "当你是死者／观察者时，将听不见活人的语音。"
 
 
 L.set_title_lang    = "语言设定"
@@ -293,22 +293,24 @@ L.item_weapon     = "武器"
 
 L.item_armor      = "护甲"
 L.item_armor_desc = [[
-拥有它，
-你将减少30%的射击伤害。
-探长的预设装备。]]
+抵抗收到子弹伤害的30%。
+
+探长的自带装备。]]
 
 L.item_radar      = "雷达"
 L.item_radar_desc = [[
-允许你扫描生命讯号。
-一旦持有，它将自动扫描。
-需要启用时，可在选单设定它]]
+允许你扫描存活着的玩家。
+
+一旦持有，雷达会开始自动扫描。
+使用该页面的雷达菜单来设置。]]
 
 L.item_disg       = "伪装"
 L.item_disg_desc  = [[
 启用时，你的ID将被隐藏；也可避免探长在
 尸体上找到死者生前见到的最后一个人。
-需要启用时：在选单里标记伪装选项，或是按下
-相关数字键。]]
+
+需要启用时，使用本页面的伪装菜单
+或按下小键盘回车键。]]
 
 -- C4
 L.c4_hint         = "按下 {usekey} 来安放或拆除C4。"
@@ -376,9 +378,10 @@ L.defuser_desc    = [[
 -- Flare gun
 L.flare_name      = "信号枪"
 L.flare_desc      = [[
-可用来烧毁尸体，使它们永远不会被发现。该武器有
-有弹药限制。
-燃烧尸体时，会发出十分明显的声音。]]
+可用来烧毁尸体，使它们永远不会被发现。
+该武器有有弹药限制。
+
+燃烧尸体会发出十分明显的声音。]]
 
 -- Health station
 L.hstation_name   = "医疗站"
@@ -387,10 +390,11 @@ L.hstation_broken = "你的医疗站已被摧毁！"
 L.hstation_help   = " {primaryfire} 安放了一个医疗站。"
 
 L.hstation_desc   = [[
-设置后，允许人们前来治疗。
-恢复速度相当缓慢。
-所有人都可以使用，且医疗站本身也会受损。
-不仅如此，它亦可以检验每位使用者的DNA样本。]]
+安放后，允许人们用其治疗自己。
+
+充能速度相当缓慢。
+所有人都可以使用，而且医疗站可以受到伤害。
+每位使用者会留下可采集的DNA样本。]]
 
 -- Knife
 L.knife_name      = "刀子"
@@ -398,31 +402,33 @@ L.knife_thrown    = "飞刀"
 
 L.knife_desc      = [[
 可以迅速、无声的杀死受伤的目标，但只能使用一次。
+
 按下右键即可使用飞刀。]]
 
 -- Poltergeist
 L.polter_desc     = [[
 放置震动器在物体上，
-使它们粗暴地四处乱跑、乱跳。
-能量爆炸，
-会使接近的人受到伤害。]]
+使它们危险地四处飞动。
+
+能量爆炸会使附近的人受到伤害。]]
 
 -- Radio
 L.radio_broken    = "你的收音机已被摧毁！"
 L.radio_help_pri  = " {primaryfire} 安放了收音机。"
 
 L.radio_desc      = [[
-播放音乐使人们分心、误导。
-将收音机置于某处，
-在选单使用收音机并播放音乐。]]
+播放音效来误导或欺骗玩家。
+
+将收音机安放下来，
+然后用该页面的收音机菜单播放。]]
 
 
 -- Silenced pistol
 L.sipistol_name   = "消音手枪"
 
 L.sipistol_desc   = [[
-噪音极小的手枪。
-使用一般的手枪弹药。
+噪音极小的手枪。使用普通手枪弹药。
+
 被害者被射杀时不会喊叫。]]
 
 
@@ -430,24 +436,26 @@ L.sipistol_desc   = [[
 L.newton_name     = "牛顿发射器"
 
 L.newton_desc     = [[
-推击一个人，以换取安全距离。
+在安全的距离推他人。
+
 弹药无限，但射击间隔较长。]]
 
 
 -- Binoculars
 L.binoc_name      = "双筒望远镜"
 L.binoc_desc      = [[
-拉近镜头，可远距离观察并确认尸体。
-不限使用次数，但确认尸体时会更花时间。]]
+可以放大并远距离确认尸体。
+
+不限使用次数，但确认尸体需要一些时间。]]
 
 L.binoc_help_pri  = " {primaryfire} 确认尸体。"
-L.binoc_help_sec  = " {secondaryfire} 改变望远镜的放大倍率。"
+L.binoc_help_sec  = " {secondaryfire} 改变放大倍率。"
 
 
 -- UMP
 L.ump_desc        = [[
-实验型冲锋枪，容易失去控制。
-使用标准冲锋枪弹药。]]
+实验型冲锋枪，能阻扰目标视角。
+使用普通冲锋枪弹药。]]
 
 
 -- DNA scanner
@@ -473,8 +481,8 @@ L.dna_menu_sample = "这是 {source} 的DNA样本"
 L.dna_menu_remove = "移除所选样本"
 L.dna_menu_help1  = "这些是你采集的DNA样本"
 L.dna_menu_help2  = [[
-充电完毕后，你可以选取之DNA样本，扫描其主人之准确位置。
-找寻远距离的目标将消耗更多能量。]]
+充电完毕后，你可以选取之DNA样本，扫描其主人的准确位置。
+远距离目标将消耗更多能量。]]
 
 
 L.dna_menu_scan   = "扫描"
@@ -582,7 +590,7 @@ L.radar_hud    = "雷达将在 {time} 后进行下一次扫描。"
 
 -- Spectator muting of living/dead
 L.mute_living  = "将生存的玩家设定静音"
-L.mute_specs   = "将旁观者设定静音"
+L.mute_specs   = "将观察者设定静音"
 L.mute_all     = "全部静音"
 L.mute_off     = "取消静音"
 
@@ -600,25 +608,25 @@ L.spec_help    = "点击以观察玩家，或按下 {usekey} 来控制并持有�
 -- quotes. That's a Lua thing. Every line break (enter) will show up in-game.
 L.info_popup_innocent = [[
 你是位无辜的恐怖分子！但你的周围存在着叛徒...
-你能相信谁？谁又会乘你不备杀害你？
-注意背后并与同伴合作，努力生存下来！]]
+你能相信谁？谁又想把你打成柿子？
+看好你的背后并与同伴合作，争取活下来！]]
 
 L.info_popup_detective = [[
 你是位探长！恐怖分子总部给予你许多特殊资源以揪出叛徒。
-用它们来确保无辜者的生命，但请小心：叛徒会优先杀害你！
-按下 {menukey} 取得装备！]]
+用它们来确保无辜者的生命，不过要当心：叛徒会优先杀害你！
+按 {menukey} 获得装备！]]
 
 
-L.info_popup_traitor_alone = [[你是位叛徒！这回合中你没有同伴！
+L.info_popup_traitor_alone = [[你是位叛徒！这回合中你没有同伴。
 杀死所有其他玩家，以获得胜利！
-按下 {menukey} 取得装备！]]
+按 {menukey} 取得装备！]]
 
 L.info_popup_traitor = [[
 你是位叛徒！和其他叛徒合作杀害其他所有人，以获得胜利。
 但请小心，你的身份可能会暴露...
 这些是你的同伴们:
 {traitorlist} 
-按下{menukey}取得装备！]]
+按 {menukey} 取得装备！]]
 
 --- Various other text
 L.name_kick = "一名玩家因于此回合中改变了名字而被自动踢出游戏。"
