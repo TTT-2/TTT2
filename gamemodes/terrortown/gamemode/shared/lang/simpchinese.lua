@@ -1018,12 +1018,13 @@ L.aw_tod2_text  = "在这回合刚开始不久即被杀害。"
 --- version in which they were added, to make updating translations easier.
 
 
---- v23
-L.set_avoid_det     = "拒绝被选为探长"
-L.set_avoid_det_tip = "开启这个选项让服务器尽量不要把你选成侦探。这不代表你有更高机率被选为叛徒。"
+-- v23
+L.set_avoid = "避免被选为 {role}。"
+L.set_avoid_tip = "开启这个选项让服务器尽量不要把你选成 {role}。"
 
---- v24
+-- v24
 L.drop_no_ammo = "你弹夹内的子弹不足以丢弃成弹药盒。"
+L.drop_ammo_prevented = "你未能丢弃弹药盒。"
 
 --- v31
 L.set_cross_brightness = "准心亮度"
@@ -1031,3 +1032,208 @@ L.set_cross_size = "准心尺寸"
 
 --- 5-25-15
 L.hat_retrieve = "你捡起了一顶探长的帽子。"
+
+L.sb_sortby = "排序方法:"
+
+-- 2018-07-24
+L.equip_tooltip_main = "装备菜单"
+L.equip_tooltip_radar = "雷达控制"
+L.equip_tooltip_disguise = "伪装器控制"
+L.equip_tooltip_radio = "收音机控制"
+L.equip_tooltip_xfer = "转移积分"
+L.equip_tooltip_reroll = "重选装备"
+
+L.confgrenade_name = "眩晕弹"
+L.polter_name = "促狭鬼"
+L.stungun_name = "实验型 UMP"
+
+L.knife_instant = "必杀"
+
+L.dna_hud_type = "类型"
+L.dna_hud_body = "尸体"
+L.dna_hud_item = "物品"
+
+L.binoc_zoom_level = "放大"
+L.binoc_body = "发现尸体"
+L.binoc_progress = "检索尸体: {progress}%"
+
+L.idle_popup_title = "挂机"
+
+-- 6-22-17 (Crosshair)
+L.set_title_cross = "十字准心设置"
+
+L.set_cross_color_enable = "启用自定义准心颜色"
+L.set_cross_color = "自定义准心颜色:"
+L.set_cross_gap_enable = "启用自定义准心大小"
+L.set_cross_gap = "自定义准心大小"
+L.set_cross_static_enable = "启用固定准心"
+L.set_ironsight_cross_opacity = "准心透明度"
+L.set_cross_weaponscale_enable = "启用武器特有准心大小"
+L.set_cross_thickness = "准心厚度"
+L.set_cross_outlinethickness = "准心外框厚度"
+L.set_cross_dot_enable = "启用准心中点"
+
+-- ttt2
+L.create_own_shop = "新建商店"
+L.shop_link = "连接"
+L.shop_disabled = "禁用商店"
+L.shop_default = "使用默认商店"
+
+L.shop_editor_title = "商店编辑器"
+L.shop_edit_items_weapong = "修改武器/道具"
+L.shop_edit = "修改商店"
+L.shop_settings = "设置"
+L.shop_select_role = "选择身份"
+L.shop_edit_items = "修改道具"
+L.shop_edit_shop = "修改商店"
+L.shop_create_shop = "新建自定义商店"
+L.shop_selected = "选中 {role}"
+L.shop_settings_desc = "改变数值来适应随机商店参数。不要忘记保存！"
+
+L.f1_settings_changes_title = "改动"
+L.f1_settings_hudswitcher_title = "界面更换"
+L.f1_settings_bindings_title = "键位绑定"
+L.f1_settings_interface_title = "界面"
+L.f1_settings_gameplay_title = "游戏性"
+L.f1_settings_crosshair_title = "十字准星"
+L.f1_settings_dmgindicator_title = "伤害显示"
+L.f1_settings_language_title = "语言"
+L.f1_settings_administration_title = "管理员"
+L.f1_settings_shop_title = "装备商店"
+
+L.f1_settings_shop_desc_shopopen = "在回合开始/结束时按商店键打开商店而不是分数板？"
+L.f1_settings_shop_title_layout = "物品列表设置"
+L.f1_settings_shop_desc_num_columns = "列数"
+L.f1_settings_shop_desc_num_rows = "行数"
+L.f1_settings_shop_desc_item_size = "按钮大小"
+L.f1_settings_shop_title_marker = "物品标记设置"
+L.f1_settings_shop_desc_show_slot = "显示槽位标记"
+L.f1_settings_shop_desc_show_custom = "显示自定义标记"
+L.f1_settings_shop_desc_show_favourite = "显示喜爱标记"
+
+L.f1_shop_restricted = "该服务器不允许单自改动商店列表。请详询服务器管理员。"
+
+L.f1_settings_hudswitcher_desc_basecolor = "基础颜色"
+L.f1_settings_hudswitcher_desc_hud_scale = "界面大小 (会重置现有设置)"
+L.f1_settings_hudswitcher_button_close = "关闭"
+L.f1_settings_hudswitcher_desc_reset = "重置现有设置"
+L.f1_settings_hudswitcher_button_reset = "重置"
+L.f1_settings_hudswitcher_desc_layout_editor = "改变元素\n位置和大小"
+L.f1_settings_hudswitcher_button_layout_editor = "界面修改"
+L.f1_settings_hudswitcher_desc_hud_not_supported = "! 此界面不支持自定义 !"
+
+L.f1_bind_reset_default = "默认"
+L.f1_bind_disable_bind = "清除"
+L.f1_bind_description = "点击后按任意键绑定。"
+L.f1_bind_reset_default_description = "重置为默认键。"
+L.f1_bind_disable_description = "清除这个绑定的键位。"
+L.ttt2_bindings_new = "{name} 的新按键：{key}"
+
+L.f1_bind_weaponswitch = "切换武器"
+L.f1_bind_sprint = "冲刺"
+L.f1_bind_voice = "全局语音"
+L.f1_bind_voice_team = "团队语音"
+
+L.f1_dmgindicator_title = "伤害显示设定"
+L.f1_dmgindicator_enable = "启用"
+L.f1_dmgindicator_mode = "选择伤害显示风格"
+L.f1_dmgindicator_duration = "击中后指示器显示时间"
+L.f1_dmgindicator_maxdamage = "最大透明度伤害"
+L.f1_dmgindicator_maxalpha = "指示器最大伤害"
+
+L.hud_default = "默认界面"
+L.hud_force = "强制界面"
+L.hud_restricted = "受限界面"
+L.hud_default_failed = "未能将界面 {hudname} 设为默认。你没有权限，或这个界面不存在。"
+L.hud_forced_failed = "未能将界面 {hudname} 设为强制。你没有权限，或这个界面不存在。"
+L.hud_restricted_failed = "未能将界面 {hudname} 设为限制。你没有权限，或这个界面不存在。"
+
+L.shop_role_select = "选择身份"
+L.shop_role_selected = "选中了 {roles} 的商店！"
+L.shop_search = "搜索"
+
+L.button_save = "保存"
+
+L.disable_spectatorsoutline = "禁用被控制物品的高亮"
+L.disable_spectatorsoutline_tip = "禁用观察着控制着的物品上的高亮(+性能)"
+
+L.disable_overheadicons = "禁用身份图标"
+L.disable_overheadicons_tip = "禁用玩家头上的身份图标 (+性能)"
+
+-- 2020-01-04
+L.doubletap_sprint_anykey = "冲刺直到停止移动"
+L.doubletap_sprint_anykey_tip = "双击开始冲刺后，直到停止移动才会停止冲刺"
+
+L.disable_doubletap_sprint = "禁用双击冲刺"
+L.disable_doubletap_sprint_tip = "双击移动键后不再会开始冲刺（可使用默认冲刺键）"
+
+-- 2020-02-03
+L.hold_aim = "持续瞄准"
+L.hold_aim_tip = "按住瞄准键时进行瞄准而松开时停止 (默认：右键)"
+
+-- 2020-02-09
+L.name_door = "门"
+L.door_open = "按 [{usekey}] 开门"
+L.door_close = "按 [{usekey}] 关门"
+L.door_locked = "此门被锁上了"
+
+-- 2020-02-11
+L.automoved_to_spec = "(自动消息) 我因为挂机而被移到了观察者。"
+
+-- 2020-02-16
+L.door_auto_closes = "此门会自动关闭"
+L.door_open_touch = "此门接触后会自动开启"
+L.door_open_touch_and_use = "接触门或按 [{usekey}] 开门."
+L.hud_health = "生命"
+
+-- 2020-04-20
+L.item_speedrun = "疾跑如风"
+L.item_speedrun_desc = [[让你的移动速度提高 50%！]]
+L.item_no_explosion_damage = "防爆部队"
+L.item_no_explosion_damage_desc = [[让你免疫爆炸伤害。]]
+L.item_no_fall_damage = "金刚不败腿"
+L.item_no_fall_damage_desc = [[让你免疫摔落伤害。]]
+L.item_no_fire_damage = "消防员"
+L.item_no_fire_damage_desc = [[让你免疫火焰伤害。]]
+L.item_no_hazard_damage = "防化部队"
+L.item_no_hazard_damage_desc = [[让你免疫硫酸，辐射和毒气伤害。]]
+L.item_no_energy_damage = "电男"
+L.item_no_energy_damage_desc = [[让你免疫激光，电浆和电磁伤害。]]
+L.item_no_prop_damage = "头铁"
+L.item_no_prop_damage_desc = [[让你免疫物品伤害。]]
+L.item_no_drown_damage = "潜水员"
+L.item_no_drown_damage_desc = [[让你免疫溺水伤害。]]
+
+-- 2020-04-30
+L.message_revival_canceled = "复活取消。"
+L.message_revival_failed = "复活失败。"
+L.message_revival_failed_missing_body = "因为你的尸体不存在，复活失败了。"
+L.hud_revival_title = "复活剩余时间："
+L.hud_revival_time = "{time}秒"
+
+-- 2020-05-03
+L.door_destructible = "此门不可摧毁 ({health}生命)"
+
+-- 2020-05-28
+L.confirm_detective_only = "只有侦探能确认死亡"
+L.inspect_detective_only = "只有侦探能检查尸体"
+L.corpse_hint_no_inspect = "只有侦探能检查这个尸体4."
+L.corpse_hint_inspect_only = "按 [{usekey}] 搜索。只有侦探能确认死亡。"
+L.corpse_hint_inspect_only_credits = "按 [{usekey}] 获取积分。只有侦探能确认死亡。"
+
+-- 2020-06-04
+L.label_bind_disguiser = "切换伪装器"
+
+-- 2020-06-24
+L.dna_help_primary = "收集DNA样本"
+L.dna_help_secondary = "切换当前DNA"
+L.dna_help_reload = "删除当前样本"
+
+L.binoc_help_pri = "确认尸体"
+L.binoc_help_sec = "切换放大倍率"
+
+L.vis_help_pri = "丢弃当前设备。"
+
+L.decoy_help_pri = "安放诱饵。"
+
+L.set_cross_lines_enable = "启用十字准心线条"
