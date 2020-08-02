@@ -544,19 +544,19 @@ L.overtime     = "延长时间"
 L.hastemode    = "急速模式"
 
 -- TargetID health status
-L.hp_healthy   = "健康的"
-L.hp_hurt      = "轻伤的"
-L.hp_wounded   = "轻重伤的"
-L.hp_badwnd    = "重伤的"
-L.hp_death     = "近乎死亡"
+L.hp_healthy   = "健康"
+L.hp_hurt      = "轻伤"
+L.hp_wounded   = "受伤"
+L.hp_badwnd    = "重伤"
+L.hp_death     = "濒死"
 
 
 -- TargetID karma status
-L.karma_max    = "名声好"
-L.karma_high   = "有点粗鲁"
-L.karma_med    = "扣扳机爱好者"
+L.karma_max    = "良好"
+L.karma_high   = "粗鲁"
+L.karma_med    = "不可靠"
 L.karma_low    = "危险人物"
-L.karma_min    = "负人命债累累"
+L.karma_min    = "滥杀者"
 
 -- TargetID misc
 L.corpse       = "尸体"
@@ -630,7 +630,7 @@ L.idle_popup = [[你挂机了 {num} 秒，所以被转往观察者模式。
 L.idle_popup_close = "什么也不做"
 L.idle_popup_off   = "立刻关闭观察者模式"
 
-L.idle_warning = "警告：你已挂机一段时间，将转往观察者模式。活着就要动！"
+L.idle_warning = "警告：你已挂机一段时间，如果接下来没有动作将进入观察者模式。"
 
 L.spec_mode_warning = "你位于观察者模式所以不会在回合开始时重生。若要关闭此模式，按下F1并取消勾选\"观察者模式\"即可。"
 
@@ -679,7 +679,7 @@ L.tip17 = "是否遇过无辜者群聚在一起而难以下手？请试试用收
 
 L.tip18 = "叛徒可以在选单使用已放置的收音机，依序点击想播放的声音，就会按顺序排列播放。"
 
-L.tip19 = "探长若有多馀积分，可将拆弹器交给一位可信任的无辜者，将危险的C4交给他们，自己全神贯注地调查与处决叛徒。"
+L.tip19 = "探长若有多余积分，可将拆弹器交给一位可信任的无辜者，将危险的C4交给他们，自己全神贯注地调查与处决叛徒。"
 
 L.tip20 = "探长的望远镜可让你远距离搜索并确认尸体，坏消息是叛徒总是会用诱饵欺骗你。当然，使用望远镜的探长全身都是破绽。"
 
@@ -703,25 +703,25 @@ L.tip29 = "若伺服器有安装其他语言，你可以在任何时间开启F1�
 
 L.tip30 = "若要使用语音或无线电，可以按下 {zoomkey} 使用。"
 
-L.tip31 = "作为观察者，按下 {duckkey} 能使视角固定，可在游戏内移动游标，也可以点击提示栏里的按钮。此外，再次按下 {duckkey} 会解除之，恢复预设视角控制。"
+L.tip31 = "作为观察者，按下 {duckkey} 能固定视角并在游戏内移动光标，可以点击提示栏里的按钮。此外，再次按下 {duckkey} 会解除并恢复默认视角控制。"
 
 L.tip32 = "使用撬棍时，按下右键可推开其他玩家。"
 
 L.tip33 = "使用武器瞄准器射击将些微提升你的精准度，并降低后座力。蹲下则不会。"
 
-L.tip34 = "烟雾弹于室内相当有效，尤其是在拥挤的房间中製造混乱。"
+L.tip34 = "烟雾弹于室内相当有效，尤其是在拥挤的房间中制造混乱。"
 
 L.tip35 = "叛徒，请记住你能搬运尸体并将它们藏起来，避开无辜者与探长的耳目。"
 
-L.tip36 = "按下 {helpkey} 可以观看教学，其中包含了重要的游戏关键。"
+L.tip36 = "按下 {helpkey} 可以观看教学，其中包含了重要的游戏信息。"
 
 L.tip37 = "在计分板上，点击活人玩家的名字，可以选择一个标记（如令人怀疑的或友好的）记录这位玩家。此标志会在你的准心指向该玩家时显示。"
 
-L.tip38 = "许多需放置的装备（如C4或收音机），可以使用右键将其置于牆上。"
+L.tip38 = "许多需放置的装备（如C4或收音机）可以使用右键放在墙上。"
 
 L.tip39 = "拆除C4时失误导致的爆炸，比起直接引爆时来得小。"
 
-L.tip40 = "若时间上显示\"急速模式\"，此回合的时间会很短，但每位玩家的死亡都将延长时间（就像TF2的佔领点模式）。延长时间将迫使叛徒加紧脚步。"
+L.tip40 = "若时间上显示\"急速模式\"，此回合的时间会很短，但每位玩家的死亡都将延长时间（就像TF2的占点模式）。延长时间将迫使叛徒加紧脚步。"
 
 
 --- Round report
@@ -729,16 +729,16 @@ L.tip40 = "若时间上显示\"急速模式\"，此回合的时间会很短，�
 L.report_title = "回合报告"
 
 -- Tabs
-L.report_tab_hilite = "重头戏"
-L.report_tab_hilite_tip = "回合重头戏"
+L.report_tab_hilite = "亮点"
+L.report_tab_hilite_tip = "回合亮点"
 L.report_tab_events = "事件"
-L.report_tab_events_tip = "发生在此回合的指标性事件"
+L.report_tab_events_tip = "发生在此回合的亮点事件"
 L.report_tab_scores = "分数"
-L.report_tab_scores_tip = "本回合单一玩家获得的点数"
+L.report_tab_scores_tip = "本回合单个玩家获得的点数"
 
 -- Event log saving
-L.report_save     = "储存 Log.txt"
-L.report_save_tip = "将事件记录并储存在txt档内"
+L.report_save     = "保存 Log.txt"
+L.report_save_tip = "将事件记录并保存在txt档内"
 L.report_save_error  = "没有可供储存的事件记录"
 L.report_save_result = "事件记录已存在："
 
@@ -759,7 +759,7 @@ L.col_role   = "角色"
 L.col_kills1 = "无辜者杀敌数"
 L.col_kills2 = "叛徒杀敌数"
 L.col_points = "点数"
-L.col_team   = "团队红利"
+L.col_team   = "团队奖励"
 L.col_total  = "总分"
 
 -- Name of a trap that killed us that has not been named by the mapper
@@ -851,7 +851,7 @@ L.aw_all1_text  = "得为所有人的死负责的无辜者。"
 L.aw_all2_title = "孤独之狼"
 L.aw_all2_text  = "得为所有人的死负责的叛徒。"
 
-L.aw_nkt1_title = "老大！我抓到一个！"
+L.aw_nkt1_title = "老大！我干掉一个！"
 L.aw_nkt1_text  = "在一名无辜者落单时策划一场谋杀，漂亮！"
 
 L.aw_nkt2_title = "一石二鸟"
@@ -864,15 +864,15 @@ L.aw_nkt4_title = "穿梭在批着羊皮的狼之间的狼"
 L.aw_nkt4_text  = "将无辜者们作为晚餐吃了。共吃了 {num} 人。"
 
 L.aw_nkt5_title = "反恐特工"
-L.aw_nkt5_text  = "每一杀都能拿到报酬，现在他已经买得起豪华游艇了！"
+L.aw_nkt5_text  = "按人头收钱。现在已经买得起游艇了。"
 
-L.aw_nki1_title = "背叛死亡吧！"
-L.aw_nki1_text  = "找出叛徒，将子弹送到他脑袋，简单吧！"
+L.aw_nki1_title = "背叛这个看看！"
+L.aw_nki1_text  = "找出一个叛徒，然后杀死一个叛徒。简单吧？"
 
 L.aw_nki2_title = "申请进入正义连队"
 L.aw_nki2_text  = "成功将两名叛徒送下地狱。"
 
-L.aw_nki3_title = "叛徒梦到过叛徒羊吗？"
+L.aw_nki3_title = "恐怖分子会梦到叛徒羊吗？"
 L.aw_nki3_text  = "让三名叛徒得到平静。"
 
 L.aw_nki4_title = "复仇者联盟"
@@ -909,46 +909,46 @@ L.aw_pst2_title = "小口径屠杀"
 L.aw_pst2_text  = "用手枪杀了 {num} 人的小队。我们推测他枪管里头有个微型霰弹枪。"
 
 L.aw_sgn1_title = "简单模式"
-L.aw_sgn1_text  = "用霰弹枪近距离杀了 {num} 名玩家。"
+L.aw_sgn1_text  = "用霰弹枪近距离杀了 {num} 名玩家。切。"
 
-L.aw_sgn2_title = "一千个小子弹"
+L.aw_sgn2_title = "一千颗小弹丸"
 L.aw_sgn2_text  = "不喜欢自己的霰弹，打算送人。但已有 {num} 名受赠人无法享受礼物了。"
 
 L.aw_rfl1_title = "瞄准，射击！"
-L.aw_rfl1_text  = "稳定的手上，那把狙击枪夺去了 {num} 名玩家的生命。"
+L.aw_rfl1_text  = "用一把好枪和一个沉稳的手终结了 {num} 名玩家的生命。"
 
-L.aw_rfl2_title = "我在这就看到你的头了啦！"
-L.aw_rfl2_text  = "十分瞭解他的狙击枪，其他 {num} 名玩家随即也瞭解了他的狙击枪。"
+L.aw_rfl2_title = "你的脑袋冒出来了！"
+L.aw_rfl2_text  = "十分了解他的狙击枪，其他 {num} 名玩家随即也了解了他的狙击枪。"
 
 L.aw_dgl1_title = "这简直像是小型狙击枪"
-L.aw_dgl1_text  = "\"沙鹰在手，天下我有！\"，用沙漠之鹰杀了 {num} 名玩家。"
+L.aw_dgl1_text  = "用沙漠之鹰娴熟地杀了 {num} 名玩家。"
 
 L.aw_dgl2_title = "老鹰大师"
 L.aw_dgl2_text  = "用他手中的沙漠之鹰杀了 {num} 名玩家。"
 
-L.aw_mac1_title = "祈祷，然后趴倒"
+L.aw_mac1_title = "按下扳机，然后祈祷"
 L.aw_mac1_text  = "用MAC10冲锋枪杀了 {num} 名玩家，但别提他需要多少发子弹。"
 
-L.aw_mac2_title = "大麦克的起司"
-L.aw_mac2_text  = "想知道他持有两把冲锋枪会发生什么事？那大概是 {num} 个人头再翻倍？"
+L.aw_mac2_title = "单枪老太婆"
+L.aw_mac2_text  = "好奇如果他能有两把冲锋枪会发生什么事。大概是 {num} 个人头再翻倍？"
 
-L.aw_sip1_title = "黑人给我闭嘴！"
-L.aw_sip1_text  = "用消声手枪射杀了 {num} 人。"
+L.aw_sip1_title = "嘘！"
+L.aw_sip1_text  = "用消音手枪射杀了 {num} 人。"
 
-L.aw_sip2_title = "艾吉欧•奥狄托利"
-L.aw_sip2_text  = "杀死 {num} 个人，但没有任何人会听到它们的死前呢喃。见识刺客大师的风骨吧！"
+L.aw_sip2_title = "光头杀手"
+L.aw_sip2_text  = "用消音手枪无声地杀死了 {num} 个人。不愧是专业的。"
 
-L.aw_knf1_title = "刀子懂你"
+L.aw_knf1_title = "很刀兴见到你"
 L.aw_knf1_text  = "隔着网线捅死了一个人。"
 
 L.aw_knf2_title = "管制刀具"
-L.aw_knf2_text  = "不是叛徒，但仍然用刀子杀了一些人。"
+L.aw_knf2_text  = "不是叛徒，却找到刀子并用它杀了人。"
 
 L.aw_knf3_title = "开膛手杰克"
 L.aw_knf3_text  = "在地上捡到 {num} 把匕首，并使用它们。"
 
-L.aw_knf4_title = "我是赤尸藏人"
-L.aw_knf4_text  = "通过刀子杀死了 {num} 个人。我只是个医生。"
+L.aw_knf4_title = "女仆长的执著"
+L.aw_knf4_text  = "用刀子杀死了 {num} 个人。这些刀子都是裙底下找出来的吗？"
 
 L.aw_flg1_title = "玩火少年"
 L.aw_flg1_text  = "用燃烧弹导致 {num} 人死亡。"
@@ -977,43 +977,43 @@ L.aw_tkl2_text  = "认为自己抓到了两次叛徒，但两次都错了！"
 L.aw_tkl3_title = "小心人品！"
 L.aw_tkl3_text  = "杀死两个同伴已不能满足他，三个才是他的最终目标！"
 
-L.aw_tkl4_title = "专业卖同队！"
-L.aw_tkl4_text  = "杀了所有同伴，我的天啊！砰砰砰──"
+L.aw_tkl4_title = "专业卖队友！"
+L.aw_tkl4_text  = "杀了所有同伴！快踢了他！"
 
-L.aw_tkl5_title = "最佳主角"
-L.aw_tkl5_text  = "扮演的是疯子，真的，因为他杀了大多数的同伴。"
+L.aw_tkl5_title = "角色扮演"
+L.aw_tkl5_text  = "在扮演一个疯子，所以把自己大部分的同伴杀死了。"
 
-L.aw_tkl6_title = "莫非阁下是...低能儿？"
+L.aw_tkl6_title = "痛击队友"
 L.aw_tkl6_text  = "弄不清他属于哪一队，并杀死了半数以上的队友。"
 
 L.aw_tkl7_title = "园丁"
 L.aw_tkl7_text  = "好好保护着自己的草坪，并杀死了四分之一以上的队友。"
 
-L.aw_brn1_title = "像小汝做菜一般"
-L.aw_brn1_text  = "使用燃烧弹点燃数个玩家，将他们炸得很脆！"
+L.aw_brn1_title = "炭烤恐怖分子"
+L.aw_brn1_text  = "使用燃烧弹点燃数个玩家，把他们烤熟了！"
 
 L.aw_brn2_title = "火化官"
 L.aw_brn2_text  = "将每一具被他杀死的受害者尸体燃烧乾淨。"
 
-L.aw_brn3_title = "好想喷火！"
-L.aw_brn3_text  = "\"烧死你们！\"，但地图上已没有燃烧弹了！因为都被他用完了。"
+L.aw_brn3_title = "纵火狂"
+L.aw_brn3_text  = "十分喜欢火焰，以至于用掉了地图上每一颗燃烧弹。也许应该去看一下医生。"
 
 L.aw_fnd1_title = "验尸官"
 L.aw_fnd1_text  = "在地上发现 {num} 具尸体。"
 
-L.aw_fnd2_title = "想全部看到！"
-L.aw_fnd2_text  = "在地上发现了 {num} 具尸体，做为收藏。"
+L.aw_fnd2_title = "尸体收藏家"
+L.aw_fnd2_text  = "在地上发现了 {num} 具尸体，大概是要搞收藏。"
 
 L.aw_fnd3_title = "死亡的气味"
-L.aw_fnd3_text  = "在这回合被尸体绊到了 {num} 次。"
+L.aw_fnd3_text  = "在这回合偶遇尸体共 {num} 次。"
 
-L.aw_crd1_title = "环保官"
-L.aw_crd1_text  = "在同伴尸体上找到了 {num} 点剩馀的购买点。"
+L.aw_crd1_title = "回收利用"
+L.aw_crd1_text  = "在同伴尸体上找到了 {num} 点积分。"
 
-L.aw_tod1_title = "没到手的胜利"
+L.aw_tod1_title = "痛失胜利"
 L.aw_tod1_text  = "在他的团队即将获得胜利的前几秒死去。"
 
-L.aw_tod2_title = "人家不依啦！"
+L.aw_tod2_title = "垃圾游戏！"
 L.aw_tod2_text  = "在这回合刚开始不久即被杀害。"
 
 
