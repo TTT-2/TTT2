@@ -91,9 +91,9 @@ L.equip_spec_desc  = "描述"
 L.equip_confirm    = "购买装备"
 
 -- Disguiser tab in equipment menu
-L.disg_name      = "伪装物"
-L.disg_menutitle = "伪装控制器"
-L.disg_not_owned = "你无法持有伪装物！"
+L.disg_name      = "伪装器"
+L.disg_menutitle = "伪装器控制"
+L.disg_not_owned = "你没有伪装器！"
 L.disg_enable    = "执行伪装"
 
 L.disg_help1     = "伪装开启后，别人瞄准你时将不会看见你的名字，生命以及人品。除此之外，你也能躲避探长的雷达。"
@@ -101,24 +101,24 @@ L.disg_help2     = "可直接在主选单外，使用数字键来切换伪装。
 
 -- Radar tab in equipment menu
 L.radar_name      = "雷达"
-L.radar_menutitle = "雷达控制器"
-L.radar_not_owned = "你未持有雷达！"
+L.radar_menutitle = "雷达控制"
+L.radar_not_owned = "你没有雷达！"
 L.radar_scan      = "执行扫描"
 L.radar_auto      = "自动重复扫描"
 L.radar_help      = "扫描结果将显示 {num} 秒，接着雷达充电后你便可以再次使用。"
-L.radar_charging  = "你的雷达尚在充电中！"
+L.radar_charging  = "你的雷达还在充电中！"
 
 -- Transfer tab in equipment menu
-L.xfer_name       = "传送器"
-L.xfer_menutitle  = "传送馀额"
-L.xfer_no_credits = "你没有传送馀额了"
-L.xfer_send       = "发送传送馀额"
-L.xfer_help       = "你只能转移传送馀额给 {role} 玩家。"
+L.xfer_name       = "转移"
+L.xfer_menutitle  = "转移积分"
+L.xfer_no_credits = "你没有积分了"
+L.xfer_send       = "发送积分"
+L.xfer_help       = "你只能发送积分给 {role} 玩家。"
 
-L.xfer_no_recip   = "接收者无效，传送馀额转移失败。"
-L.xfer_no_credits = "传送馀额不足，无法转移"
-L.xfer_success    = "传送点数成功转移给 {player} ！"
-L.xfer_received   = " {player} 给予你 {num} 点传送馀额。"
+L.xfer_no_recip   = "接收者无效，发送失败。"
+L.xfer_no_credits = "积分不足，无法转移"
+L.xfer_success    = "成功向 {player} 发送积分！"
+L.xfer_received   = "{player} 给予你 {num} 积分。"
 
 -- Radio tab in equipment menu
 L.radio_name      = "收音机"
@@ -645,31 +645,31 @@ L.tips_panel_tip   = "提示："
 
 L.tip1 = "叛徒不用确认其死亡即可悄悄检查尸体，只需对着尸体按着 {walkkey} 键后再按 {usekey} 键即可。"
 
-L.tip2 = "将C4爆炸时间设置更长，可增加引线数量，使拆弹者失败之可能性大幅上升，且能让C4的哔哔声更轻柔、更缓慢。"
+L.tip2 = "将C4爆炸时间设置更长，可增加引线数量，使拆弹者失败可的能性大幅上升，且能让C4的哔哔声更轻更慢。"
 
 L.tip3 = "探长能在尸体查出谁是\"死者最后看见的人\"。若是遭到背后攻击，最后看见的将不会是凶手。"
 
 L.tip4 = "被你的尸体被发现并确认之前，没人知道你已经死亡。"
 
-L.tip5 = "叛徒杀死探长时，会立即得到一点积分。"
+L.tip5 = "叛徒杀死探长时会立即得到一点积分。"
 
-L.tip6 = "一名叛徒死后，所以探长将得到一点积分作为奖励。"
+L.tip6 = "一名叛徒死后，探长将得到一点积分作为奖励。"
 
-L.tip7 = "叛徒杀害无辜者，有了绝好进展时，所有叛徒将获得一点积分作为奖励。"
+L.tip7 = "叛徒杀害一定数量的无辜者后，全体都会获得一点积分作为奖励。"
 
-L.tip8 = "叛徒和探长能从伙伴尸体上，取得未被消耗积分。"
+L.tip8 = "叛徒和探长能从同伴尸体上取得未被消耗的积分。"
 
 L.tip9 = "促狭鬼将使物体变得极其危险。促狭鬼调整过的物体将产生爆炸能量伤害接近它的人。"
 
 L.tip10 = "叛徒与探长应保持注意屏幕右上方的红色信息，这对你无比重要。"
 
-L.tip11 = "若叛徒与探长能和同伴配合得好，将拥有额外积分。请将它用在对的地方！"
+L.tip11 = "叛徒或探长和同伴配合得好时会获得额外积分。请善用这些积分！"
 
 L.tip12 = "探长的DNA扫描器可使用在武器或道具上，找到曾使用它的玩家的位置。用在尸体或C4上效果将更好！"
 
 L.tip13 = "太靠近你杀害的人的话，DNA将残留在尸体上，探长的DNA扫描器会以此找到你的正确位置。切记，杀了人最好将尸体藏好！"
 
-L.tip14 = "杀人时离被害者越远，残留在尸体上的DNA就会越快衰变！"
+L.tip14 = "杀人时离被害者越远，残留在尸体上的DNA就会越快消失！"
 
 L.tip15 = "你是叛徒而且想进行狙击？试试伪装吧！若你狙杀失手，逃到安全的地方，取消伪装，就没人知道是你开的枪了！"
 
@@ -709,7 +709,7 @@ L.tip32 = "使用撬棍时，按下右键可推开其他玩家。"
 
 L.tip33 = "使用武器瞄准器射击将些微提升你的精准度，并降低后座力。蹲下则不会。"
 
-L.tip34 = "烟雾弹于室内相当有效，尤其是在拥挤的房间中制造混乱。"
+L.tip34 = "烟雾弹在室内相当有效，尤其是在拥挤的房间中制造混乱。"
 
 L.tip35 = "叛徒，请记住你能搬运尸体并将它们藏起来，避开无辜者与探长的耳目。"
 
@@ -739,7 +739,7 @@ L.report_tab_scores_tip = "本回合单个玩家获得的点数"
 -- Event log saving
 L.report_save     = "保存 Log.txt"
 L.report_save_tip = "将事件记录并保存在txt档内"
-L.report_save_error  = "没有可供储存的事件记录"
+L.report_save_error  = "没有可供保存的事件记录"
 L.report_save_result = "事件记录已存在："
 
 -- Big title window
@@ -770,12 +770,12 @@ L.ev_blowup      = "{victim} 被自己炸飞"
 L.ev_blowup_trap = "{victim} 被 {trap} 炸飞"
 
 L.ev_tele_self   = "{victim} 被自己给传送杀了"
-L.ev_sui         = "{victim} 不可取的自杀了！"
+L.ev_sui         = "{victim} 受不了然后自杀了！"
 L.ev_sui_using   = "{victim} 用 {tool} 杀了自己"
 
-L.ev_fall        = "{victim} 坠落而死"
-L.ev_fall_pushed = "{victim} 因为 {attacker} 推下，坠落而死"
-L.ev_fall_pushed_using = "{victim} 被 {attacker} 用 {trap} 推下，坠落而死"
+L.ev_fall        = "{victim} 摔死了"
+L.ev_fall_pushed = "{victim} 因为 {attacker} 而摔死了"
+L.ev_fall_pushed_using = "{victim} 被 {attacker} 用 {trap} 推下摔死"
 
 L.ev_shot        = "{victim} 被 {attacker} 射杀"
 L.ev_shot_using  = "{victim} 被 {attacker} 用 {weapon} 射杀"
@@ -821,7 +821,7 @@ L.ev_win_time    = "叛徒因为超过时间而输了这回合！"
 
 --- Awards/highlights
 
-L.aw_sui1_title = "自杀邪教的教主"
+L.aw_sui1_title = "自杀邪教教主"
 L.aw_sui1_text  = "率先向其他自杀者展示如何自杀。"
 
 L.aw_sui2_title = "孤独沮丧者"
@@ -1023,10 +1023,10 @@ L.aw_tod2_text  = "在这回合刚开始不久即被杀害。"
 
 --- v23
 L.set_avoid_det     = "拒绝被选为探长"
-L.set_avoid_det_tip = "开启这个选项告诉伺服器\"不要把人家选成探长嘛！\"。这不代表你有更高机率被选为叛徒。"
+L.set_avoid_det_tip = "开启这个选项让服务器尽量不要把你选成侦探。这不代表你有更高机率被选为叛徒。"
 
 --- v24
-L.drop_no_ammo = "当武器快没子弹的时候，点击后将他丢掉并变成弹药包。"
+L.drop_no_ammo = "你弹夹内子弹不够丢弃成弹药盒。"
 
 --- v31
 L.set_cross_brightness = "准心亮度"
