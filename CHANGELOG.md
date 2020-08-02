@@ -4,6 +4,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+### Added
+
+- Added Chinese Simplified translation (by @TheOnly8Z)
+
 ### Changed
 - Roles are now only getting synced to clients if the role is known, not just the body being confirmed
 - Airborne players can no longer replenish stamina
