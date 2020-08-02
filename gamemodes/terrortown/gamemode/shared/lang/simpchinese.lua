@@ -294,13 +294,11 @@ L.item_weapon     = "武器"
 L.item_armor      = "护甲"
 L.item_armor_desc = [[
 抵抗收到子弹伤害的30%。
-
 探长的自带装备。]]
 
 L.item_radar      = "雷达"
 L.item_radar_desc = [[
 允许你扫描存活着的玩家。
-
 一旦持有，雷达会开始自动扫描。
 使用该页面的雷达菜单来设置。]]
 
@@ -308,7 +306,6 @@ L.item_disg       = "伪装"
 L.item_disg_desc  = [[
 启用时，你的ID将被隐藏；也可避免探长在
 尸体上找到死者生前见到的最后一个人。
-
 需要启用时，使用本页面的伪装菜单
 或按下小键盘回车键。]]
 
@@ -350,8 +347,8 @@ L.vis_help_pri    = " {primaryfire} 扔出已启动的仪器。"
 
 L.vis_desc        = [[
 可让犯罪现场显像化的仪器。
-分析尸体，显像出死者被杀害时的情况，
-但仅限于死者遭到射杀时。]]
+分析尸体，显出死者被杀害时的情况，
+但仅限于死者被枪杀时。]]
 
 -- Decoy
 L.decoy_name      = "雷达诱饵"
@@ -380,7 +377,6 @@ L.flare_name      = "信号枪"
 L.flare_desc      = [[
 可用来烧毁尸体，使它们永远不会被发现。
 该武器有有弹药限制。
-
 燃烧尸体会发出十分明显的声音。]]
 
 -- Health station
@@ -391,7 +387,6 @@ L.hstation_help   = " {primaryfire} 安放了一个医疗站。"
 
 L.hstation_desc   = [[
 安放后，允许人们用其治疗自己。
-
 充能速度相当缓慢。
 所有人都可以使用，而且医疗站可以受到伤害。
 每位使用者会留下可采集的DNA样本。]]
@@ -402,14 +397,12 @@ L.knife_thrown    = "飞刀"
 
 L.knife_desc      = [[
 可以迅速、无声的杀死受伤的目标，但只能使用一次。
-
 按下右键即可使用飞刀。]]
 
 -- Poltergeist
 L.polter_desc     = [[
 放置震动器在物体上，
 使它们危险地四处飞动。
-
 能量爆炸会使附近的人受到伤害。]]
 
 -- Radio
@@ -418,7 +411,6 @@ L.radio_help_pri  = " {primaryfire} 安放了收音机。"
 
 L.radio_desc      = [[
 播放音效来误导或欺骗玩家。
-
 将收音机安放下来，
 然后用该页面的收音机菜单播放。]]
 
@@ -428,7 +420,6 @@ L.sipistol_name   = "消音手枪"
 
 L.sipistol_desc   = [[
 噪音极小的手枪。使用普通手枪弹药。
-
 被害者被射杀时不会喊叫。]]
 
 
@@ -437,7 +428,6 @@ L.newton_name     = "牛顿发射器"
 
 L.newton_desc     = [[
 在安全的距离推他人。
-
 弹药无限，但射击间隔较长。]]
 
 
@@ -445,7 +435,6 @@ L.newton_desc     = [[
 L.binoc_name      = "双筒望远镜"
 L.binoc_desc      = [[
 可以放大并远距离确认尸体。
-
 不限使用次数，但确认尸体需要一些时间。]]
 
 L.binoc_help_pri  = " {primaryfire} 确认尸体。"
@@ -707,7 +696,7 @@ L.tip27 = "探长调查尸体后的结果将公布在计分板，供所有玩家
 
 L.tip28 = "观察者可以按下 {mutekey} 循环调整对其他观察者或游戏中的玩家静音。"
 
-L.tip29 = "若伺服器有安装其他语言，你可以在任何时间开启F1选单，启用不同语言。"
+L.tip29 = "若服务器有安装其他语言，你可以在任何时间开启F1选单，启用不同语言。"
 
 L.tip30 = "若要使用语音或无线电，可以按下 {zoomkey} 使用。"
 
@@ -836,7 +825,7 @@ L.aw_sui2_title = "孤独沮丧者"
 L.aw_sui2_text  = "就他一人自杀，无比哀戚。"
 
 L.aw_exp1_title = "炸弹研究的第一把交椅"
-L.aw_exp1_text  = "决心研究C4， {num} 名受试者证明了他的学说。"
+L.aw_exp1_text  = "决心研究C4。{num} 名受试者证明了他的理论。"
 
 L.aw_exp2_title = "田野研究"
 L.aw_exp2_text  = "测试自己的抗暴性，显然完全不够高。"
@@ -853,11 +842,11 @@ L.aw_fst3_text  = "第一杀便将无辜者同伴误认为叛徒，真是乌龙�
 L.aw_fst4_title = "吹响号角"
 L.aw_fst4_text  = "杀害一名叛徒，为无辜者阵营吹响了号角。"
 
-L.aw_all1_title = "致命的平等"
-L.aw_all1_text  = "得为所有人的死负责的无辜者。"
+L.aw_all1_title = "鹤立鸡群"
+L.aw_all1_text  = "对无辜者团队的每一个击杀负责。"
 
-L.aw_all2_title = "孤独之狼"
-L.aw_all2_text  = "得为所有人的死负责的叛徒。"
+L.aw_all2_title = "孤狼"
+L.aw_all2_text  = "对叛徒团队的每一个击杀负责。"
 
 L.aw_nkt1_title = "老大！我干掉一个！"
 L.aw_nkt1_text  = "在一名无辜者落单时策划一场谋杀，漂亮！"
@@ -872,22 +861,22 @@ L.aw_nkt4_title = "穿梭在批着羊皮的狼之间的狼"
 L.aw_nkt4_text  = "将无辜者们作为晚餐吃了。共吃了 {num} 人。"
 
 L.aw_nkt5_title = "反恐特工"
-L.aw_nkt5_text  = "按人头收钱。现在已经买得起游艇了。"
+L.aw_nkt5_text  = "按恐怖分子人头收钱。现在已经买得起豪华游艇了。"
 
-L.aw_nki1_title = "背叛这个看看！"
-L.aw_nki1_text  = "找出一个叛徒，然后杀死一个叛徒。简单吧？"
+L.aw_nki1_title = "背叛这个试试！"
+L.aw_nki1_text  = "找出了一个叛徒，然后杀死了一个叛徒。简单吧？"
 
 L.aw_nki2_title = "申请进入正义连队"
-L.aw_nki2_text  = "成功将两名叛徒送下地狱。"
+L.aw_nki2_text  = "将两名叛徒送下地狱。"
 
 L.aw_nki3_title = "恐怖分子会梦到叛徒羊吗？"
-L.aw_nki3_text  = "让三名叛徒得到平静。"
+L.aw_nki3_text  = "让三名叛徒安息。"
 
-L.aw_nki4_title = "复仇者联盟"
-L.aw_nki4_text  = "每一杀都能拿到报酬。你已经够格加入复仇者联盟了！"
+L.aw_nki4_title = "人事部门"
+L.aw_nki4_text  = "按叛徒人头收钱。现在已经买得起第五个游泳池了。"
 
 L.aw_fal1_title = "不，庞德先生，我希望你跳下去"
-L.aw_fal1_text  = "将某人推下足以致死的高度。"
+L.aw_fal1_text  = "将一个人推下致死的高度。"
 
 L.aw_fal2_title = "地板人"
 L.aw_fal2_text  = "让自己的身体从极端无尽的高度上落地。"
@@ -899,10 +888,10 @@ L.aw_hed1_title = "高效能"
 L.aw_hed1_text  = "发现爆头的乐趣，并击杀了 {num} 名敌人。"
 
 L.aw_hed2_title = "神经内科"
-L.aw_hed2_text  = "近距离将 {num} 名玩家的脑袋取出，完成脑神经研究。"
+L.aw_hed2_text  = "近距离将 {num} 名玩家的脑袋取出，完成自己的脑神经研究。"
 
-L.aw_hed3_title = "是游戏使我这么做的"
-L.aw_hed3_text  = "运用杀人模拟训练的技巧，爆了 {num} 颗头。"
+L.aw_hed3_title = "从游戏里学来的"
+L.aw_hed3_text  = "好好应用了暴力游戏的经验，爆了 {num} 颗头。"
 
 L.aw_cbr1_title = "物理学圣剑"
 L.aw_cbr1_text  = "应用了物理学原理，向 {num} 证明了自己的毕业论文。"
@@ -920,9 +909,9 @@ L.aw_sgn1_title = "简单模式"
 L.aw_sgn1_text  = "用霰弹枪近距离杀了 {num} 名玩家。切。"
 
 L.aw_sgn2_title = "一千颗小弹丸"
-L.aw_sgn2_text  = "不喜欢自己的霰弹，打算送人。但已有 {num} 名受赠人无法享受礼物了。"
+L.aw_sgn2_text  = "不喜欢自己的霰弹，打算送人。已经有 {num} 名受赠人接受了这个礼物。"
 
-L.aw_rfl1_title = "瞄准，射击！"
+L.aw_rfl1_title = "把准心对准目标扣下扳机……"
 L.aw_rfl1_text  = "用一把好枪和一个沉稳的手终结了 {num} 名玩家的生命。"
 
 L.aw_rfl2_title = "你的脑袋冒出来了！"
@@ -953,22 +942,22 @@ L.aw_knf2_title = "管制刀具"
 L.aw_knf2_text  = "不是叛徒，却找到刀子并用它杀了人。"
 
 L.aw_knf3_title = "开膛手杰克"
-L.aw_knf3_text  = "在地上捡到 {num} 把匕首，并使用它们。"
+L.aw_knf3_text  = "在地上捡到 {num} 把匕首，并好好利用了它们。"
 
 L.aw_knf4_title = "女仆长的执著"
 L.aw_knf4_text  = "用刀子杀死了 {num} 个人。这些刀子都是裙底下找出来的吗？"
 
-L.aw_flg1_title = "玩火少年"
-L.aw_flg1_text  = "用燃烧弹导致 {num} 人死亡。"
+L.aw_flg1_title = "买根烟吗？"
+L.aw_flg1_text  = "用燃烧弹点燃了 {num} 人的香烟。"
 
-L.aw_flg2_title = "汽油加上番仔火"
+L.aw_flg2_title = "火上浇油"
 L.aw_flg2_text  = "使 {num} 名玩家葬身于火海。"
 
-L.aw_hug1_title = "子弹多喔！"
-L.aw_hug1_text  = "用M249机枪将子弹送到 {num} 名玩家身上。"
+L.aw_hug1_title = "子弹龙头"
+L.aw_hug1_text  = "和自己的M249很合得来，不知道怎么打中了 {num} 名玩家。"
 
-L.aw_hug2_title = "耐心大叔"
-L.aw_hug2_text  = "从未放下M249机枪的扳机，他杀戮了 {num} 名玩家。"
+L.aw_hug2_title = "耐心机枪手"
+L.aw_hug2_text  = "从未抛弃心爱的M249，最终用其杀戮了 {num} 名玩家。"
 
 L.aw_msx1_title = "啪啪啪"
 L.aw_msx1_text  = "用M16步枪射杀了 {num} 名玩家。"
@@ -976,10 +965,10 @@ L.aw_msx1_text  = "用M16步枪射杀了 {num} 名玩家。"
 L.aw_msx2_title = "中距离疯子"
 L.aw_msx2_text  = "了解如何用他手中的M16，射杀了敌人。共有 {num} 名不幸的亡魂。"
 
-L.aw_tkl1_title = "拍谢"
+L.aw_tkl1_title = "抱歉"
 L.aw_tkl1_text  = "瞄准自己的队友，并不小心扣下扳机。"
 
-L.aw_tkl2_title = "拍谢拍谢"
+L.aw_tkl2_title = "抱歉抱歉"
 L.aw_tkl2_text  = "认为自己抓到了两次叛徒，但两次都错了！"
 
 L.aw_tkl3_title = "小心人品！"
@@ -1034,7 +1023,7 @@ L.set_avoid_det     = "拒绝被选为探长"
 L.set_avoid_det_tip = "开启这个选项让服务器尽量不要把你选成侦探。这不代表你有更高机率被选为叛徒。"
 
 --- v24
-L.drop_no_ammo = "你弹夹内子弹不够丢弃成弹药盒。"
+L.drop_no_ammo = "你弹夹内的子弹不足以丢弃成弹药盒。"
 
 --- v31
 L.set_cross_brightness = "准心亮度"
