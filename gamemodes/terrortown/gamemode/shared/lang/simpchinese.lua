@@ -69,7 +69,7 @@ L.prev = "上一个"
 L.equip_title     = "装备"
 L.equip_tabtitle  = "购买装备"
 
-L.equip_status    = "购买选单"
+L.equip_status    = "购买菜单"
 L.equip_cost      = "你的积分剩下 {num} 点。"
 L.equip_help_cost = "每一件装备都需要花费 1 点积分。"
 
@@ -141,10 +141,10 @@ L.radio_button_steps   = "脚步声"
 
 
 -- Intro screen shown after joining
-L.intro_help     = "若你是游戏初学者，可按下F1查看游戏教学！"
+L.intro_help     = "若你是TTT新手，可按下F1查看游戏教学！"
 
 -- Radiocommands/quickchat
-L.quick_title   = "快速聊天按键"
+L.quick_title   = "快速聊天"
 
 L.quick_yes     = "是。"
 L.quick_no      = "不是。"
@@ -177,7 +177,7 @@ L.search_role_t = "这个人是叛徒！"
 L.search_role_d = "这个人是探长。"
 L.search_role_i = "这个人是无辜的恐怖分子。"
 
-L.search_words  = "直觉告诉你这个人的遗言： {lastwords}"
+L.search_words  = "直觉告诉你这个人的遗言是： {lastwords}"
 L.search_armor  = "他穿着非标准装甲。"
 L.search_disg   = "他持有一个能隐匿身份的设备"
 L.search_radar  = "他持有像是雷达的物品，已经无法使用了。"
@@ -206,7 +206,7 @@ L.search_eyes   = "透过你的探查技能，你确信他临死前见到的最�
 
 
 -- Scoreboard
-L.sb_playing    = "你正在玩的伺服是.."
+L.sb_playing    = "你正在玩的服务器是.."
 L.sb_mapchange  = "地图将于 {num} 个回合或是 {time} 后更换"
 
 L.sb_mia        = "下落不明"
@@ -248,10 +248,10 @@ L.set_cross_opacity = "准心透明度"
 L.set_cross_disable = "关闭准心"
 L.set_minimal_id    = "只在准心下显示所对准目标的ID（如人品，提示等）"
 L.set_healthlabel   = "在生命条旁显示健康状态（如受伤，接近死亡等）"
-L.set_lowsights     = "开启瞄准器时隐蔽武器"
-L.set_lowsights_tip = "开启瞄准器时隐蔽武器模组，这会让你更容易看见目标。"
+L.set_lowsights     = "瞄准时隐藏武器"
+L.set_lowsights_tip = "瞄准时隐藏武器模型，这会让你更容易看见目标。"
 L.set_fastsw        = "快速切换武器"
-L.set_fastsw_tip    = "允许你直接用滑鼠滚轮切换武器（注：将不开启武器选单，直接取出）。"
+L.set_fastsw_tip    = "使用滚轮快速切换武器（注：将不开启武器选单，直接取出）。"
 L.set_fastsw_menu     = "启用快速切换武器选单"
 L.set_fastswmenu_tip  = "当启用快速武器切换功能，会出现弹出式切换选单。"
 L.set_wswitch       = "关闭武器切换自动关闭"
@@ -263,8 +263,8 @@ L.set_title_play    = "游戏设定"
 
 L.set_specmode      = "观察者模式（始终作为观察者）"
 L.set_specmode_tip  = "在你离开本模式前，新回合开始时你仍会以观察者加入游戏。"
-L.set_mute          = "死亡后不再听到活人的语音（仅作用于你）"
-L.set_mute_tip      = "当你是死者／观察者时，将听不见活人的语音。"
+L.set_mute          = "死后静音活人（仅作用于你）"
+L.set_mute_tip      = "当你是死者/观察者时，将听不见活人的语音。"
 
 
 L.set_title_lang    = "语言设定"
@@ -287,8 +287,8 @@ L.disg_turned_on  = "伪装开启！"
 L.disg_turned_off = "伪装关闭。"
 
 -- Equipment item descriptions
-L.item_passive    = "被动效果型物品"
-L.item_active     = "主动操作型物品"
+L.item_passive    = "被动道具"
+L.item_active     = "主动道具"
 L.item_weapon     = "武器"
 
 L.item_armor      = "护甲"
@@ -322,7 +322,7 @@ L.c4_desc         = "C4爆炸！"
 L.c4_arm          = "安放C4。"
 L.c4_arm_timer    = "计时器"
 L.c4_arm_seconds  = "引爆秒数："
-L.c4_arm_attempts = "拆除C4时，六条引线中有 {num} 条会立即引发爆炸。"
+L.c4_arm_attempts = "拆除C4时，6条引线中有 {num} 条会立即引发爆炸。"
 
 L.c4_remove_title    = "移除"
 L.c4_remove_pickup   = "捡起C4"
@@ -485,13 +485,13 @@ L.dna_help_secondary = " {secondaryfire} 来启动扫描控制器"
 
 -- Magneto stick
 L.magnet_name     = "电磁棍"
-L.magnet_help     = " {primaryfire} 用于尸体以将之吸附。"
+L.magnet_help     = " {primaryfire} 将其定在墙上。"
 
 -- Grenades and misc
 L.grenade_smoke   = "烟雾弹"
 L.grenade_fire    = "燃烧弹"
 
-L.unarmed_name    = "收起武器"
+L.unarmed_name    = "无武装"
 L.crowbar_name    = "撬棍"
 L.pistol_name     = "手枪"
 L.rifle_name      = "狙击枪"
@@ -502,12 +502,12 @@ L.tele_name       = "传送安放"
 L.tele_failed     = "传送失败"
 L.tele_marked     = "传送地点已标记"
 
-L.tele_no_ground  = "你必须站在地面上来才能进行传送！"
+L.tele_no_ground  = "你必须站在地面才能传送！"
 L.tele_no_crouch  = "蹲着的时候不能传送！"
-L.tele_no_mark    = "请先标记传送地点，才能进行传送。"
+L.tele_no_mark    = "标记传送地点后才能传送。"
 
-L.tele_no_mark_ground = "你必须站在地面上才能标记传送地点！"
-L.tele_no_mark_crouch = "你必须站起来才能标记传送点！"
+L.tele_no_mark_ground = "站在地面上才能标记传送地点！"
+L.tele_no_mark_crouch = "站起来才能标记传送点！"
 
 L.tele_help_pri   = " {primaryfire} 传送到已标记的传送地点。"
 L.tele_help_sec   = " {scondaryfire} 标记传送地点。"
@@ -533,11 +533,11 @@ L.ammo_gravity    = "促狭鬼弹药"
 -- Round status
 L.round_wait   = "等待中"
 L.round_prep   = "准备中"
-L.round_active = "游戏进行中"
+L.round_active = "进行中"
 L.round_post   = "回合结束"
 
 -- Health, ammo and time area
-L.overtime     = "延长时间"
+L.overtime     = "加时"
 L.hastemode    = "急速模式"
 
 -- TargetID health status
@@ -552,7 +552,7 @@ L.hp_death     = "濒死"
 L.karma_max    = "良好"
 L.karma_high   = "粗鲁"
 L.karma_med    = "不可靠"
-L.karma_low    = "危险人物"
+L.karma_low    = "危险"
 L.karma_min    = "滥杀者"
 
 -- TargetID misc
@@ -568,18 +568,18 @@ L.target_detective = "探长"
 L.target_credits = "搜索尸体以获取未被消耗积分"
 
 -- Traitor buttons (HUD buttons with hand icons that only traitors can see)
-L.tbut_single  = "单独使用"
+L.tbut_single  = "一次性"
 L.tbut_reuse   = "重复使用"
-L.tbut_retime  = "在 {num} 秒后重复使用"
-L.tbut_help    = "按下 {key} 键启动"
+L.tbut_retime  = "{num} 秒可后再次使用"
+L.tbut_help    = "按下 {key} 键使用"
 
 -- Equipment info lines (on the left above the health/ammo panel)
 L.disg_hud     = "开始伪装，你的名字已隐藏。"
 L.radar_hud    = "雷达将在 {time} 后进行下一次扫描。"
 
 -- Spectator muting of living/dead
-L.mute_living  = "将生存的玩家设定静音"
-L.mute_specs   = "将观察者设定静音"
+L.mute_living  = "静音存活玩家"
+L.mute_specs   = "静音观察者"
 L.mute_all     = "全部静音"
 L.mute_off     = "取消静音"
 
@@ -597,7 +597,7 @@ L.spec_help    = "点击以观察玩家，或按下 {usekey} 来控制并持有�
 -- quotes. That's a Lua thing. Every line break (enter) will show up in-game.
 L.info_popup_innocent = [[
 你是位无辜的恐怖分子！但你的周围存在着叛徒...
-你能相信谁？谁又想把你打成柿子？
+你能相信谁？谁又想背地里害死你？
 看好你的背后并与同伴合作，争取活下来！]]
 
 L.info_popup_detective = [[
@@ -740,11 +740,11 @@ L.report_save_error  = "没有可供保存的事件记录"
 L.report_save_result = "事件记录已存在："
 
 -- Big title window
-L.hilite_win_traitors = "叛徒获得胜利"
-L.hilite_win_innocent = "无辜者获得胜利"
+L.hilite_win_traitors = "叛徒胜利"
+L.hilite_win_innocent = "无辜者胜利"
 
-L.hilite_players1 = " {numplayers} 名玩家加入游戏， {numtraitors} 名玩家是叛徒"
-L.hilite_players2 = " {numplayers} 名玩家加入游戏，其中一人是叛徒"
+L.hilite_players1 = " {numplayers} 名玩家参与游戏，其中 {numtraitors} 人是叛徒"
+L.hilite_players2 = " {numplayers} 名玩家参与游戏，其中一人是叛徒"
 
 L.hilite_duration = "回合持续了 {time}"
 
@@ -827,8 +827,8 @@ L.aw_sui2_text  = "就他一人自杀，无比哀戚。"
 L.aw_exp1_title = "炸弹研究的第一把交椅"
 L.aw_exp1_text  = "决心研究C4。{num} 名受试者证明了他的理论。"
 
-L.aw_exp2_title = "田野研究"
-L.aw_exp2_text  = "测试自己的抗暴性，显然完全不够高。"
+L.aw_exp2_title = "就地研究"
+L.aw_exp2_text  = "测试自己的抗爆炸能力，显然完全不够高。"
 
 L.aw_fst1_title = "第一滴血"
 L.aw_fst1_text  = "将第一位无辜者的生命送到叛徒手上。"
@@ -872,7 +872,7 @@ L.aw_nki2_text  = "将两名叛徒送下地狱。"
 L.aw_nki3_title = "恐怖分子会梦到叛徒羊吗？"
 L.aw_nki3_text  = "让三名叛徒安息。"
 
-L.aw_nki4_title = "人事部门"
+L.aw_nki4_title = "内部事件部门"
 L.aw_nki4_text  = "按叛徒人头收钱。现在已经买得起第五个游泳池了。"
 
 L.aw_fal1_title = "不，庞德先生，我希望你跳下去"
