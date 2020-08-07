@@ -5,7 +5,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ## Unreleased
 
 ### Added
-- Added Spanish version for base addon  
+- Added Spanish version for base addon   (by @Tekiad and @DennisWolfgang)
+- Added Chinese Simplified translation (by @TheOnly8Z)
 
 ### Changed
 - Roles are now only getting synced to clients if the role is known, not just the body being confirmed
