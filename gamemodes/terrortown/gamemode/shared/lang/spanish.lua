@@ -1,6 +1,6 @@
 -- Spanish language strings
 
-local L = LANG.CreateLanguage("Español")
+L = LANG.GetLanguageTableReference("Español")
 
 -- General text used in various places
 L.traitor = "Traidor"
@@ -29,8 +29,8 @@ L.round_selected = "Los traidores han sido seleccionados."
 L.round_started = "¡La ronda ha comenzado!"
 L.round_restart = "La ronda fue reiniciada por el Staff."
 
-L.round_traitors_one = "Traidor, estás solo."
-L.round_traitors_more = "Traidor, estos son tus camaradas: {names}"
+L.round_traitors_one = "Eres el traidor, estás solo."
+L.round_traitors_more = "Eres el traidor. Estos son tus camaradas: {names}"
 
 L.win_time = "Te has quedado sin tiempo. Los traidores pierden."
 L.win_traitors = "¡Los traidores han ganado!"
@@ -80,7 +80,7 @@ L.prev = "Atrás"
 L.equip_title = "Equipamiento"
 L.equip_tabtitle = "Ordenar equipamiento"
 
-L.equip_status = "Estatus de la orden"
+L.equip_status = "Estado de la compra"
 L.equip_cost = "Tienes {num} créditos restantes."
 L.equip_help_cost = "Cada pieza de equipamiento que compras cuesta cierta cantidad de créditos."
 
@@ -980,7 +980,7 @@ L.aw_sgn1_title = "Cartuchos de venta libre"
 L.aw_sgn1_text = "activó su escopeta contra {num} objetivos. No eran balas de goma."
 
 L.aw_sgn2_title = "Lluvia de Perdigones"
-L.aw_sgn2_text = "le disgustaba la lluvia así que le dio su estilo propio. {num} personas fueron "mojadas" por esta."
+L.aw_sgn2_text = "le disgustaba la lluvia así que le dio su estilo propio. {num} personas fueron 'mojadas' por esta."
 
 L.aw_rfl1_title = "Apunta y dispara"
 L.aw_rfl1_text = "demostró que para matar {num} personas sólo es necesario un rifle y una buena mano."
@@ -1254,7 +1254,7 @@ L.automoved_to_spec = "(MENSAJE AUTOMÁTICO) Fuiste movido al modo espectador po
 L.door_auto_closes = "Esta puerta se cierra automáticamente."
 L.door_open_touch = "Camina hacia esta puerta para abrirla."
 L.door_open_touch_and_use = "Camina hacia esta puerta o presiona [{usekey}] para abrirla."
-L.hud_health = "Vida"
+L.hud_health = "Salud"
 
 -- 2020-04-20
 L.item_speedrun = "Caminata ligera"
@@ -1296,14 +1296,14 @@ L.label_bind_disguiser = "Activar Disfraz"
 
 -- 2020-06-24
 L.dna_help_primary = "Recoger una muestra de ADN"
-L.dna_help_secondary = "Cambiar espacio (slot) para el ADN"
+L.dna_help_secondary = "Cambiar muestra de ADN"
 L.dna_help_reload = "Borrar la muestra"
 
-L.binoc_help_pri = "Identifica a un cuerpo."
+L.binoc_help_pri = "Identifica el cuerpo."
 L.binoc_help_sec = "Cambiar nivel de zoom."
 
-L.vis_help_pri = "Deja el dispositivo activo."
+L.vis_help_pri = "Soltar el dispositivo activo."
 
-L.decoy_help_pri = "Planta el señuelo."
+L.decoy_help_pri = "Colocar el señuelo."
 
 L.set_cross_lines_enable = "Activar líneas de la mira"
