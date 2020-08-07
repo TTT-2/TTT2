@@ -1288,27 +1288,31 @@ end
 -- Returns whether or not a player can pick up a weapon
 -- @param Weapon wep The weapon object
 -- @param nil|boolean forcePickup is there a forced pickup to ignore the cv_auto_pickup cvar?
--- @returns boolean
+-- @param nil|boolean dropBlockingWeapon should the weapon stored in the same slot be dropped
+-- @returns boolean return of the PlayerCanPickupWeapon hook
+-- @return number errorCode that appeared. For the error, give a look into the specific hook
 -- @realm server
-function plymeta:CanPickupWeapon(wep, forcePickup)
+function plymeta:CanPickupWeapon(wep, forcePickup, dropBlockingWeapon)
 	self:SetForcePickupWeapon(forcePickup)
 
-	local ret = hook.Run("PlayerCanPickupWeapon", self, wep)
+	local ret, errCode = hook.Run("PlayerCanPickupWeapon", self, wep, dropBlockingWeapon)
 
 	self:SetForcePickupWeapon(false)
 
-	return ret
+	return ret, errCode
 end
 
 ---
 -- Returns whether or not a player can pick up a weapon
 -- @param string wepCls The weapon object classname
+-- @param nil|boolean forcePickup is there a forced pickup to ignore the cv_auto_pickup cvar?
+-- @param nil|boolean dropBlockingWeapon should the weapon stored in the same slot be dropped
 -- @returns boolean
 -- @realm server
-function plymeta:CanPickupWeaponClass(wepCls)
+function plymeta:CanPickupWeaponClass(wepCls, forcePickup, dropBlockingWeapon)
 	local wep = ents.Create(wepCls)
 
-	return self:CanPickupWeapon(wep)
+	return self:CanPickupWeapon(wep, forcePickup, dropBlockingWeapon)
 end
 
 local plymeta_old_PickupWeapon = plymeta.PickupWeapon
@@ -1331,8 +1335,16 @@ function plymeta:PickupWeapon(wep, ammoOnly, forcePickup, dropBlockingWeapon, sh
 		return
 	end
 
-	if not self:CanPickupWeapon(wep, forcePickup or true) then
-		LANG.Msg(self, "pickup_no_room")
+	local ret, errCode = self:CanPickupWeapon(wep, forcePickup or true, dropBlockingWeapon)
+
+	if not ret then
+		if errCode == 1 then
+			LANG.Msg(self, "pickup_error_spec")
+		elseif errCode == 2 then
+			LANG.Msg(self, "pickup_error_owns")
+		elseif errCode == 3 then
+			LANG.Msg(self, "pickup_error_noslot")
+		end
 
 		return
 	end

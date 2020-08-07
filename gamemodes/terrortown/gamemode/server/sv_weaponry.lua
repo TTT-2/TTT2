@@ -24,41 +24,48 @@ local crowbar_delay = CreateConVar("ttt2_crowbar_shove_delay", "1.0", {FCVAR_NOT
 -- @note Prevent @{Player}s from picking up multiple @{Weapon}s of the same type etc
 -- @param Player ply The @{Player} attempting to pick up the @{Weapon}
 -- @param Weapon wep The @{Weapon} entity in question
+-- @param nil|number dropBlockingWeapon should the weapon stored in the same slot be dropped
 -- @return boolean Allowed pick up or not
+-- @return number errorCode
+-- 1 - Player is spectator
+-- 2 - Player already has the same weapon
+-- 3 - Player has no free slot available
+-- 4 - Player disabled autopickup and it's not a forced weapon pickup
+-- 5 - The weapon is a dropped equipment item and the Player didn't forced a pickup
 -- @hook
 -- @realm server
 -- @ref https://wiki.facepunch.com/gmod/GM:PlayerCanPickupWeapon
 -- @local
-function GM:PlayerCanPickupWeapon(ply, wep)
+function GM:PlayerCanPickupWeapon(ply, wep, dropBlockingWeapon)
 	if not IsValid(wep) or not IsValid(ply) then return end
 
 	-- spectators are not allowed to pickup weapons
 	if ply:IsSpec() then
-		return false
+		return false, 1
 	end
 
 	-- prevent picking up weapons of the same class a player already has (for ammo if auto-pickup is enabled)
 	-- exception: this hook is called to check if a player can pick up weapon while dropping
 	-- the current weapon
 	if ply:HasWeapon(WEPS.GetClass(wep)) then
-		return false
+		return false, 2
 	end
 
 	-- block pickup when there is no slot free
 	-- exception: this hook is called to check if a player can pick up weapon while dropping
 	-- the current weapon
-	if not InventorySlotFree(ply, wep.Kind) then
-		return false
+	if not dropBlockingWeapon and not InventorySlotFree(ply, wep.Kind) then
+		return false, 3
 	end
 
 	-- if the auto pickup convar is set to false, no weapons should be picked up automatically
 	if not cv_auto_pickup:GetBool() and not ply:IsForcedPickupWeapon() then
-		return false
+		return false, 4
 	end
 
 	-- if it is a dropped equipment item, it shouldn't be picked up automatically
-	if IsEquipment(wep) and wep.IsDropped then
-		return false
+	if IsEquipment(wep) and wep.IsDropped and not ply:IsForcedPickupWeapon() then
+		return false, 5
 	end
 
 	-- Who knows what happens here?!
