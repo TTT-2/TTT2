@@ -797,39 +797,38 @@ function GM:PlayerDeath(victim, infl, attacker)
 	-- tell no one
 	self:PlayerSilentDeath(victim)
 
-	timer.Simple(0, function()
-		if not IsValid(victim) then return end
+	-- abort the weapon pickup when a player dies
+	ResetWeapon(victim.wpickup_weapon)
 
-		-- a function to handle the rolespecific stuff that should be done on
-		-- rolechange and respawn (while a round is active)
-		if victim:IsActive() then
-			victim:GetSubRoleData():RemoveRoleLoadout(victim, false)
-		end
+	-- a function to handle the rolespecific stuff that should be done on
+	-- rolechange and respawn (while a round is active)
+	if victim:IsActive() then
+		victim:GetSubRoleData():RemoveRoleLoadout(victim, false)
+	end
 
-		victim:SetTeam(TEAM_SPEC)
-		victim:Freeze(false)
-		victim:SetRagdollSpec(true)
-		victim:Spectate(OBS_MODE_IN_EYE)
+	victim:SetTeam(TEAM_SPEC)
+	victim:Freeze(false)
+	victim:SetRagdollSpec(true)
+	victim:Spectate(OBS_MODE_IN_EYE)
 
-		local rag_ent = victim.server_ragdoll or victim:GetRagdollEntity()
+	local rag_ent = victim.server_ragdoll or victim:GetRagdollEntity()
 
-		victim:SpectateEntity(rag_ent)
-		victim:Flashlight(false)
-		victim:Extinguish()
+	victim:SpectateEntity(rag_ent)
+	victim:Flashlight(false)
+	victim:Extinguish()
 
-		net.Start("TTT_PlayerDied")
-		net.Send(victim)
+	net.Start("TTT_PlayerDied")
+	net.Send(victim)
 
-		if HasteMode() and GetRoundState() == ROUND_ACTIVE and not hook.Run("TTT2ShouldSkipHaste", victim, attacker) then
-			IncRoundEnd(GetConVar("ttt_haste_minutes_per_death"):GetFloat() * 60)
-		end
+	if HasteMode() and GetRoundState() == ROUND_ACTIVE and not hook.Run("TTT2ShouldSkipHaste", victim, attacker) then
+		IncRoundEnd(GetConVar("ttt_haste_minutes_per_death"):GetFloat() * 60)
+	end
 
-		if IsValid(attacker) and attacker:IsPlayer() and attacker ~= victim and attacker:IsActive() then
-			victim.killerSpec = attacker
-		end
+	if IsValid(attacker) and attacker:IsPlayer() and attacker ~= victim and attacker:IsActive() then
+		victim.killerSpec = attacker
+	end
 
-		hook.Run("TTT2PostPlayerDeath", victim, infl, attacker)
-	end)
+	hook.Run("TTT2PostPlayerDeath", victim, infl, attacker)
 end
 
 ---

@@ -4,13 +4,21 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+### Added
+
+- Added Chinese Simplified translation (by @TheOnly8Z)
+
 ### Changed
 - Roles are now only getting synced to clients if the role is known, not just the body being confirmed
 - Airborne players can no longer replenish stamina
 - The weapon pickup system has been improved to increase stability and remove edge cases in temporary weapon teleportation
+- Detective overhead icon is now shown to innocents
 
 ### Fixed
+- Fixed death handling spawning multiple corpses when killed multiple times in the same frame
+- Radar now shows bombs again, that do not have the team property set
 - Fix HUDManager not saving forcedHUD and defaultHUD values
+- Fixed wrong parameter default in `EPOP:AddMessage` documentation
 
 ## [v0.7.2b](https://github.com/TTT-2/TTT2/tree/v0.7.2b) (2020-06-26)
 
