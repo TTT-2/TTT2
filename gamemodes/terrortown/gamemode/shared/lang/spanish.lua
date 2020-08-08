@@ -1275,10 +1275,10 @@ L.item_no_drown_damage = "Negar daño por ahogo"
 L.item_no_drown_damage_desc = [[Te hace inmune al daño por agotamiento del oxígeno.]]
 
 -- 2020-04-30
-L.message_revival_canceled = "Renacimiento cancelado."
-L.message_revival_failed = "Renacimiento fallido."
+L.message_revival_canceled = "Reanimación cancelada."
+L.message_revival_failed = "Reanimación fallida."
 L.message_revival_failed_missing_body = "No has sido revivido porque tu cuerpo ya no existe."
-L.hud_revival_title = "Tiempo restante antes de renacer:"
+L.hud_revival_title = "Tiempo faltante para ser reanimado:"
 L.hud_revival_time = "{time}s"
 
 -- 2020-05-03
@@ -1292,14 +1292,14 @@ L.corpse_hint_inspect_only = "Presiona [{usekey}] para inspeccionar. Sólo los d
 L.corpse_hint_inspect_only_credits = "Presiona [{usekey}] para recibir los créditos. Sólo los detectives pueden inspeccionar este cuerpo."
 
 -- 2020-06-04
-L.label_bind_disguiser = "Activar Disfraz"
+L.label_bind_disguiser = "Disfraz"
 
 -- 2020-06-24
-L.dna_help_primary = "Recoger una muestra de ADN"
+L.dna_help_primary = "Tomar muestra de ADN"
 L.dna_help_secondary = "Cambiar muestra de ADN"
-L.dna_help_reload = "Borrar la muestra"
+L.dna_help_reload = "Borrar muestra"
 
-L.binoc_help_pri = "Identifica el cuerpo."
+L.binoc_help_pri = "Identificar el cuerpo."
 L.binoc_help_sec = "Cambiar nivel de zoom."
 
 L.vis_help_pri = "Soltar el dispositivo activo."
