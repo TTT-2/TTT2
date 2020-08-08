@@ -29,10 +29,8 @@ local math = math
 local mats = {}
 local fetched_avatar_urls = {}
 
-local function FetchAsset(url, fallback)
-	if not url then
-		return fallback or _error
-	end
+local function FetchAsset(url)
+	if not url then return end
 
 	if mats[url] then
 		return mats[url]
@@ -46,29 +44,24 @@ local function FetchAsset(url, fallback)
 		return mats[url]
 	end
 
-	mats[url] = fallback or _error
-
 	fetch(url, function(data)
 		write("downloaded_assets/" .. crcUrl .. ".png", data)
 
 		mats[url] = Material("data/downloaded_assets/" .. crcUrl .. ".png")
 	end)
-
-	return mats[url]
 end
 
-local function FetchAvatarAsset(id64, size, fallback)
+local function FetchAvatarAsset(id64, size)
 	if not id64 then
 		return _bot_avatar
 	end
 
 	size = size == "medium" and "_medium" or size == "large" and "_full" or ""
-	fallback = fallback or _default_avatar
 
 	local key = id64 .. size
 
 	if fetched_avatar_urls[key] then
-		return FetchAsset(fetched_avatar_urls[key], fallback)
+		return FetchAsset(fetched_avatar_urls[key])
 	end
 
 	fetch("http://steamcommunity.com/profiles/" .. id64 .. "/?xml=1", function(body)
@@ -79,8 +72,6 @@ local function FetchAvatarAsset(id64, size, fallback)
 		fetched_avatar_urls[key] = link:Replace(".jpg", size .. ".jpg")
 		FetchAsset(fetched_avatar_urls[key])
 	end)
-
-	return FetchAsset(fetched_avatar_urls[key], fallback)
 end
 
 ---
@@ -90,6 +81,33 @@ end
 -- @param string size the avatar's size, this can be <code>small</code>, <code>medium</code> or <code>large</code>
 function draw.CacheAvatar(id64, size)
 	FetchAvatarAsset(id64, size)
+end
+
+---
+-- Draws an Image
+-- @param string url the url to the WebImage
+-- @param number x
+-- @param number y
+-- @param number width
+-- @param number height
+-- @param Color color
+-- @param Angle angle
+-- @param boolean cornerorigin if it is set to <code>true</code>, the WebImage will be centered based on the x- and y-coordinate
+local function DrawImage(material, x, y, width, height, color, angle, cornerorigin)
+	color = color or white
+
+	surface.SetDrawColor(color.r, color.g, color.b, color.a)
+	surface.SetMaterial(material)
+
+	if not angle then
+		surface.DrawTexturedRect(x, y, width, height)
+	else
+		if not cornerorigin then
+			surface.DrawTexturedRectRotated(x, y, width, height, angle)
+		else
+			surface.DrawTexturedRectRotated(x + width * 0.5, y + height * 0.5, width, height, angle)
+		end
+	end
 end
 
 ---
@@ -103,20 +121,7 @@ end
 -- @param Angle angle
 -- @param boolean cornerorigin if it is set to <code>true</code>, the WebImage will be centered based on the x- and y-coordinate
 function draw.WebImage(url, x, y, width, height, color, angle, cornerorigin)
-	color = color or white
-
-	surface.SetDrawColor(color.r, color.g, color.b, color.a)
-	surface.SetMaterial(FetchAsset(url))
-
-	if not angle then
-		surface.DrawTexturedRect(x, y, width, height)
-	else
-		if not cornerorigin then
-			surface.DrawTexturedRectRotated(x, y, width, height, angle)
-		else
-			surface.DrawTexturedRectRotated(x + width * 0.5, y + height * 0.5, width, height, angle)
-		end
-	end
+	DrawImage(surface.SetMaterial(FetchAsset(url) or _error), x, y, width, height, color, angle, cornerorigin)
 end
 
 ---
@@ -152,20 +157,7 @@ end
 -- @param Angle angle
 -- @param boolean cornerorigin if it is set to <code>true</code>, the WebImage will be centered based on the x- and y-coordinate
 function draw.SteamAvatar(id64, size, x, y, width, height, color, angle, cornerorigin)
-	color = color or white
-
-	surface.SetDrawColor(color.r, color.g, color.b, color.a)
-	surface.SetMaterial(FetchAvatarAsset(id64, size))
-
-	if not angle then
-		surface.DrawTexturedRect(x, y, width, height)
-	else
-		if not cornerorigin then
-			surface.DrawTexturedRectRotated(x, y, width, height, angle)
-		else
-			surface.DrawTexturedRectRotated(x + width * 0.5, y + height * 0.5, width, height, angle)
-		end
-	end
+	DrawImage(surface.SetMaterial(FetchAvatarAsset(id64, size) or _default_avatar), x, y, width, height, color, angle, cornerorigin)
 end
 
 ---
@@ -175,5 +167,5 @@ end
 -- @param string size the avatar's size, this can be <code>small</code>, <code>medium</code> or <code>large</code>
 -- @return Material
 function draw.GetAvatarMaterial(id64, size, fallback)
-	return FetchAvatarAsset(id64, size, fallback)
+	return FetchAvatarAsset(id64, size) or fallback or _default_avatar
 end
