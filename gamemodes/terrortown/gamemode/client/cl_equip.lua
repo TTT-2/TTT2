@@ -73,8 +73,9 @@ end
 --
 
 local function PreqLabels(parent, x, y)
-	local tbl = {}
 	local client = LocalPlayer()
+
+	local tbl = {}
 	tbl.credits = vgui.Create("DLabel", parent)
 	--tbl.credits:SetTooltip(GetTranslation("equip_help_cost"))
 	tbl.credits:SetPos(x, y)
@@ -301,6 +302,8 @@ local function CreateEquipmentList(t)
 
 	if #itms == 0 and not t.notalive then
 		ply:ChatPrint("[TTT2][SHOP] You need to run 'shopeditor' as admin in the developer console to create a shop for this role. Link it with another shop or click on the icons to add weapons and items to the shop.")
+
+		return
 	end
 
 	-- temp table for sorting
@@ -378,35 +381,48 @@ local function CreateEquipmentList(t)
 				ic:SetModel(item.ttt2_cached_model)
 			else
 				print("Equipment item does not have model or material specified: " .. tostring(item) .. "\n")
+
+				continue
 			end
 
-			if ic then
-				ic.item = item
+			ic.item = item
 
-				local tip = equipName .. " (" .. SafeTranslate(item.type) .. ")"
+			ic:SetTooltip(equipName .. " (" .. SafeTranslate(item.type) .. ")")
 
-				ic:SetTooltip(tip)
+			-- If we cannot order this item, darken it
+			if not t.role and ((
+					-- already owned
+					table.HasValue(owned_ids, item.id)
+					or items.IsItem(item.id) and item.limited and ply:HasEquipmentItem(item.id)
+					-- already carrying a weapon for this slot
+					or ItemIsWeapon(item) and not CanCarryWeapon(item)
+					or not EquipmentIsBuyable(item, ply)
+					-- already bought the item before
+					or item.limited and ply:HasBought(item.id)
+				) or (item.credits or 1) > credits
+			) then
+				ic.disabled = true
+			end
 
-				-- If we cannot order this item, darken it
-				if not t.role and ((
-						-- already owned
-						table.HasValue(owned_ids, item.id)
-						or items.IsItem(item.id) and item.limited and ply:HasEquipmentItem(item.id)
-						-- already carrying a weapon for this slot
-						or ItemIsWeapon(item) and not CanCarryWeapon(item)
-						or not EquipmentIsBuyable(item, ply)
-						-- already bought the item before
-						or item.limited and ply:HasBought(item.id)
-					) or (item.credits or 1) > credits
-				) then
-					ic:SetIconColor(color_darkened)
-				end
+			if ic.disabled then
+				ic:SetIconColor(color_darkened)
+			end
 
-				if ic.favorite then
-					paneltablefav[k] = ic
-				else
-					paneltable[k] = ic
-				end
+			if ic.favorite then
+				paneltablefav[k] = ic
+			else
+				paneltable[k] = ic
+			end
+
+			-- icon doubleclick to buy
+			ic.PressedLeftMouse = function(self, doubleClick)
+				if not doubleClick or self.disabled then return end
+
+				net.Start("TTT2OrderEquipment")
+				net.WriteString(self.item.id)
+				net.SendToServer()
+
+				eqframe:Close()
 			end
 		end
 	end
@@ -415,11 +431,18 @@ local function CreateEquipmentList(t)
 	for _, panel in pairs(paneltablefav) do
 		dlist:AddPanel(panel)
 	end
+
 	-- non favorites second
 	for _, panel in pairs(paneltable) do
 		dlist:AddPanel(panel)
 	end
 end
+
+local currentEquipmentCoroutine = coroutine.create(function(tbl)
+	while true do
+		tbl = coroutine.yield(CreateEquipmentList(tbl))
+	end
+end)
 
 --
 -- Create/Show Shop frame
@@ -549,7 +572,7 @@ function TraitorMenuPopup()
 	dlist:EnableVerticalScrollbar(true)
 	dlist:EnableHorizontal(true)
 
-	CreateEquipmentList({notalive = notalive})
+	coroutine.resume(currentEquipmentCoroutine, {notalive = notalive})
 
 	local bw, bh = 100, 25 -- button size
 	local dsph = 30 -- search panel height
@@ -640,7 +663,8 @@ function TraitorMenuPopup()
 			print(LANG.GetParamTranslation("shop_role_selected", {role = value}))
 
 			dnotaliveHelp:SetText("")
-			CreateEquipmentList({role = RolenameToRole(value), search = dsearch:GetValue(), notalive = notalive})
+
+			coroutine.resume(currentEquipmentCoroutine, {role = RolenameToRole(value), search = dsearch:GetValue(), notalive = notalive})
 		end
 
 		dinfobg:MoveBelow(depanel, m)
@@ -663,7 +687,7 @@ function TraitorMenuPopup()
 			crole = RolenameToRole(drolesel:GetValue())
 		end
 
-		CreateEquipmentList({search = text, role = crole, notalive = notalive})
+		coroutine.resume(currentEquipmentCoroutine, {search = text, role = crole, notalive = notalive})
 	end
 
 	-- item info pane
@@ -817,7 +841,7 @@ function TraitorMenuPopup()
 		end
 
 		-- Reload item list
-		CreateEquipmentList({role = role, search = curSearch, notalive = notalive})
+		coroutine.resume(currentEquipmentCoroutine, {role = role, search = curSearch, notalive = notalive})
 	end
 
 	dframe:MakePopup()
