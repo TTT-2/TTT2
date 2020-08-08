@@ -673,11 +673,13 @@ local function TTT2ConfirmMsg()
 		tbl.team = LANG.GetTranslation(net.ReadString())
 	end
 
-	local img = Material("vgui/ttt/icon_corpse")
-
-	if sid64 ~= "" then
-		img = draw.GetAvatarMaterial(sid64, "medium", img)
+	-- checking for bots
+	if sid64 == "" then
+		sid64 = nil
 	end
+
+	local img = Material("vgui/ttt/icon_corpse")
+	img = draw.GetAvatarMaterial(sid64, "medium", img)
 
 	hook.Run("TTT2ConfirmedBody", tbl.finder, tbl.victim)
 
