@@ -22,6 +22,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fix HUDManager not saving forcedHUD and defaultHUD values
 - Fixed wrong parameter default in `EPOP:AddMessage` documentation
 - Fixed shop switching language issue
+- Fixed shop refresh activated even not buyable equipments
+- Fixed wrong shop view displayed as forced spectator
 
 ## [v0.7.2b](https://github.com/TTT-2/TTT2/tree/v0.7.2b) (2020-06-26)
 

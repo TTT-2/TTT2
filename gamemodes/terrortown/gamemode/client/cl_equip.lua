@@ -390,7 +390,7 @@ local function CreateEquipmentList(t)
 			ic:SetTooltip(equipName .. " (" .. SafeTranslate(item.type) .. ")")
 
 			-- If we cannot order this item, darken it
-			if not t.role and ((
+			if not t.notalive and ((
 					-- already owned
 					table.HasValue(owned_ids, item.id)
 					or items.IsItem(item.id) and item.limited and ply:HasEquipmentItem(item.id)
@@ -401,10 +401,6 @@ local function CreateEquipmentList(t)
 					or item.limited and ply:HasBought(item.id)
 				) or (item.credits or 1) > credits
 			) then
-				ic.disabled = true
-			end
-
-			if ic.disabled then
 				ic:SetIconColor(color_darkened)
 			end
 
@@ -416,7 +412,7 @@ local function CreateEquipmentList(t)
 
 			-- icon doubleclick to buy
 			ic.PressedLeftMouse = function(self, doubleClick)
-				if not doubleClick or self.disabled then return end
+				if not doubleClick or self.item.disabledBuy then return end
 
 				net.Start("TTT2OrderEquipment")
 				net.WriteString(self.item.id)
@@ -475,7 +471,7 @@ function TraitorMenuPopup()
 	local notalive = false
 	local fallback = GetGlobalString("ttt_" .. rd.abbr .. "_shop_fallback")
 
-	if ply:IsActive() and fallback == SHOP_DISABLED then return end
+	if ply:Alive() and ply:IsActive() and fallback == SHOP_DISABLED then return end
 
 	-- calculate dimensions
 	local numCols, numRows, itemSize
@@ -512,8 +508,8 @@ function TraitorMenuPopup()
 		return
 	end
 
-	-- if the player is not active let the him choose his shop
-	if not ply:IsActive() then
+	-- if the player is not alive / the round is not active let him choose his shop
+	if not ply:Alive() or not ply:IsActive() then
 		notalive = true
 	end
 
@@ -763,20 +759,18 @@ function TraitorMenuPopup()
 
 	-- couple panelselect with info
 	dlist.OnActivePanelChanged = function(_, _, new)
-		if not IsValid(new) then return end
+		if not IsValid(new) or not new.item then return end
 
-		if new.item then
-			for k, v in pairs(new.item) do
-				if dfields[k] then
-					if k == "name" and new.item.PrintName then
-						dfields[k]:SetText(GetEquipmentTranslation(new.item.name, new.item.PrintName))
-					else
-						dfields[k]:SetText(SafeTranslate(v))
-					end
-
-					dfields[k]:SetAutoStretchVertical(true)
-					dfields[k]:SetWrap(true)
+		for k, v in pairs(new.item) do
+			if dfields[k] then
+				if k == "name" and new.item.PrintName then
+					dfields[k]:SetText(GetEquipmentTranslation(new.item.name, new.item.PrintName))
+				else
+					dfields[k]:SetText(SafeTranslate(v))
 				end
+
+				dfields[k]:SetAutoStretchVertical(true)
+				dfields[k]:SetWrap(true)
 			end
 		end
 
@@ -786,6 +780,9 @@ function TraitorMenuPopup()
 		dfields.desc:SetTall(70)
 
 		can_order = update_preqs(new.item)
+
+		-- Easy accessable var for double-click buying
+		new.item.disabledBuy = not can_order
 
 		dconfirm:SetDisabled(not can_order)
 	end
@@ -814,6 +811,8 @@ function TraitorMenuPopup()
 		if not IsValid(new) or not IsValid(dlist.SelectedPanel) or new:GetPanel() ~= dequip then return end
 
 		can_order = update_preqs(dlist.SelectedPanel.item)
+
+		dlist.SelectedPanel.item.disabledBuy = not can_order
 
 		dconfirm:SetDisabled(not can_order)
 	end
