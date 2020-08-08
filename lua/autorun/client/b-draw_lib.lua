@@ -29,7 +29,7 @@ local math = math
 local mats = {}
 local fetched_avatar_urls = {}
 
-local function fetch_asset(url, fallback)
+local function FetchAsset(url, fallback)
 	if not url then
 		return fallback or _error
 	end
@@ -57,9 +57,10 @@ local function fetch_asset(url, fallback)
 	return mats[url]
 end
 
-local function fetch_avatar_asset(id64, size, fallback)
-	if id64 then print(id64) else print("nil") end
-	if not id64 then return _bot_avatar end
+local function FetchAvatarAsset(id64, size, fallback)
+	if not id64 then
+		return _bot_avatar
+	end
 
 	size = size == "medium" and "_medium" or size == "large" and "_full" or ""
 	fallback = fallback or _default_avatar
@@ -67,7 +68,7 @@ local function fetch_avatar_asset(id64, size, fallback)
 	local key = id64 .. size
 
 	if fetched_avatar_urls[key] then
-		return fetch_asset(fetched_avatar_urls[key], fallback)
+		return FetchAsset(fetched_avatar_urls[key], fallback)
 	end
 
 	fetch("http://steamcommunity.com/profiles/" .. id64 .. "/?xml=1", function(body)
@@ -76,10 +77,10 @@ local function fetch_avatar_asset(id64, size, fallback)
 		if not link then return end
 
 		fetched_avatar_urls[key] = link:Replace(".jpg", size .. ".jpg")
-		fetch_asset(fetched_avatar_urls[key])
+		FetchAsset(fetched_avatar_urls[key])
 	end)
 
-	return fetch_asset(fetched_avatar_urls[key], fallback)
+	return FetchAsset(fetched_avatar_urls[key], fallback)
 end
 
 ---
@@ -88,7 +89,7 @@ end
 -- @param string id64 the steamid64
 -- @param string size the avatar's size, this can be <code>small</code>, <code>medium</code> or <code>large</code>
 function draw.CacheAvatar(id64, size)
-	fetch_avatar_asset(id64, size)
+	FetchAvatarAsset(id64, size)
 end
 
 ---
@@ -105,7 +106,7 @@ function draw.WebImage(url, x, y, width, height, color, angle, cornerorigin)
 	color = color or white
 
 	surface.SetDrawColor(color.r, color.g, color.b, color.a)
-	surface.SetMaterial(fetch_asset(url))
+	surface.SetMaterial(FetchAsset(url))
 
 	if not angle then
 		surface.DrawTexturedRect(x, y, width, height)
@@ -154,7 +155,7 @@ function draw.SteamAvatar(id64, size, x, y, width, height, color, angle, cornero
 	color = color or white
 
 	surface.SetDrawColor(color.r, color.g, color.b, color.a)
-	surface.SetMaterial(fetch_avatar_asset(id64, size))
+	surface.SetMaterial(FetchAvatarAsset(id64, size))
 
 	if not angle then
 		surface.DrawTexturedRect(x, y, width, height)
@@ -174,5 +175,5 @@ end
 -- @param string size the avatar's size, this can be <code>small</code>, <code>medium</code> or <code>large</code>
 -- @return Material
 function draw.GetAvatarMaterial(id64, size, fallback)
-	return fetch_avatar_asset(id64, size, fallback)
+	return FetchAvatarAsset(id64, size, fallback)
 end
