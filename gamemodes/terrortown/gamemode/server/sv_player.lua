@@ -797,9 +797,6 @@ function GM:PlayerDeath(victim, infl, attacker)
 	-- tell no one
 	self:PlayerSilentDeath(victim)
 
-	-- abort the weapon pickup when a player dies
-	ResetWeapon(victim.wpickup_weapon)
-
 	-- a function to handle the rolespecific stuff that should be done on
 	-- rolechange and respawn (while a round is active)
 	if victim:IsActive() then
