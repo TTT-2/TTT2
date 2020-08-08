@@ -379,7 +379,9 @@ function GM:KeyPress(ply, key)
 
 		local target = ply:GetObserverTarget()
 
-		if IsValid(target) and target:IsPlayer() then
+		-- Only set the spectator's position to the player they are spectating if they are in chase or eye mode.
+		-- They can use the reload key if they want to return to the person they're spectating
+		if IsValid(target) and target:IsPlayer() and ply:GetObserverMode() ~= OBS_MODE_ROAMING then
 			pos = target:EyePos()
 			ang = target:EyeAngles()
 		end
