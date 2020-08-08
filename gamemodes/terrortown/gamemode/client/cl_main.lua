@@ -732,6 +732,7 @@ net.Receive("TTT2PlayerAuthedShared", function(len)
 	local name = net.ReadString()
 
 	-- checking for bots
+	-- TODO turn this into a global function somewhere
 	if steamid64 == "" then
 		steamid64 = nil
 	end
