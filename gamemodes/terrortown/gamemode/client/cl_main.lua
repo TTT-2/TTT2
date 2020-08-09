@@ -244,7 +244,9 @@ function GM:InitPostEntity()
 	local plys = player.GetAll()
 
 	for i = 1, #plys do
+		draw.CacheAvatar(plys[i]:SteamID64(), "small") -- caching
 		draw.CacheAvatar(plys[i]:SteamID64(), "medium") -- caching
+		draw.CacheAvatar(plys[i]:SteamID64(), "large") -- caching
 	end
 
 	timer.Create("cache_ents", 1, 0, function()
@@ -744,17 +746,15 @@ net.Receive("TTT2PlayerAuthedShared", function(len)
 	local steamid64 = net.ReadString()
 	local name = net.ReadString()
 
-	hook.Run("TTT2PlayerAuthed", steamid64, name)
-end)
-
-hook.Add("TTT2PlayerAuthed", "TTT2CacheAvatar", function(steamid64, name)
-	local ply = player.GetBySteamID64(steamid64)
-
-	if not IsValid(ply) or ply:IsBot() then
+	-- checking for bots
+	if steamid64 == "" then
 		steamid64 = nil
 	end
 
-	draw.CacheAvatar(steamid64, "medium") -- caching
+	-- cache avatars
+	draw.CacheAvatar(steamid64, "small")
+	draw.CacheAvatar(steamid64, "medium")
+	draw.CacheAvatar(steamid64, "large")
 
-	hook.Run("TTT2PlayerAuthedCacheReady", steamid64, name)
+	hook.Run("TTT2PlayerAuthed", steamid64, name)
 end)

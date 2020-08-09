@@ -1422,7 +1422,7 @@ end
 
 hook.Add("PlayerAuthed", "TTT2PlayerAuthedSharedHook", function(ply, steamid, uniqueid)
 	net.Start("TTT2PlayerAuthedShared")
-	net.WriteString(util.SteamIDTo64(steamid))
+	net.WriteString(not ply:IsBot() and util.SteamIDTo64(steamid) or "")
 	net.WriteString((ply and ply:Nick()) or "UNKNOWN")
 	net.Broadcast()
 end)

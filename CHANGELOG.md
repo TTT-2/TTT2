@@ -12,6 +12,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - the files inside this folder are loaded after all TTT2 gamemode files and library extensions are loaded
 - Added Spanish version for base addon   (by @Tekiad and @DennisWolfgang)
 - Added Chinese Simplified translation (by @TheOnly8Z)
+- Added a default avatar for players and an avatar for bots
 
 ### Changed
 
@@ -20,6 +21,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Detective overhead icon is now shown to innocents
 - moved language files from `lua/lang/` to `lua/terrortown/lang`
 - Stopped teleporting players to players they're not spectating if they press the "duck"-Key while roaming
+- Removed TTT2PlayerAuthedCacheReady hook
+- Internal changes to the b-draw library for fetching avatars
 
 ### Fixed
 
