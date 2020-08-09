@@ -19,6 +19,7 @@ local showCustomVar = CreateClientConVar("ttt_bem_marker_custom", 1, true, false
 local showFavoriteVar = CreateClientConVar("ttt_bem_marker_fav", 1, true, false, "Should favorite items get a marker?")
 local showSlotVar = CreateClientConVar("ttt_bem_marker_slot", 1, true, false, "Should items get a slot-marker?")
 local alwaysShowShopVar = CreateClientConVar("ttt_bem_always_show_shop", 1, true, false, "Should the shop be opened/closed instead of the score menu during preparing / at the end of a round?")
+local enableDoubleClickBuy = CreateClientConVar("ttt_bem_enable_doubleclick_buy", 1, true, false, "Sets if you will be able to double click on an Item to buy it.")
 
 -- get serverside ConVars
 local allowChangeVar = GetConVar("ttt_bem_allow_change")
@@ -412,7 +413,7 @@ local function CreateEquipmentList(t)
 
 			-- icon doubleclick to buy
 			ic.PressedLeftMouse = function(self, doubleClick)
-				if not doubleClick or self.item.disabledBuy then return end
+				if not doubleClick or self.item.disabledBuy or not enableDoubleClickBuy:GetBool() then return end
 
 				net.Start("TTT2OrderEquipment")
 				net.WriteString(self.item.id)

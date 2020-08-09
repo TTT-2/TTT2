@@ -1162,6 +1162,7 @@ L.f1_settings_administration_title = "Administration"
 L.f1_settings_shop_title = "Ausrüstungs-Shop"
 
 L.f1_settings_shop_desc_shopopen = "Soll der Shop geöffnet/geschlossen werden anstelle der Punkteverteilung während der Vorbereitungs-/Endzeit?"
+L.f1_settings_shop_desc_double_click = "Kaufe ein Item im Shop, indem du es doppelt anklickst."
 L.f1_settings_shop_title_layout = "Layout der Elementliste"
 L.f1_settings_shop_desc_num_columns = "Anzahl der Spalten"
 L.f1_settings_shop_desc_num_rows = "Anzahl der Zeilen"

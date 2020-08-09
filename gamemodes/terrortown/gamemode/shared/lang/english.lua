@@ -1171,6 +1171,7 @@ L.f1_settings_administration_title = "Administration"
 L.f1_settings_shop_title = "Equipment Shop"
 
 L.f1_settings_shop_desc_shopopen = "Open the shop by pressing the shop key instead of the score menu during preparing / at the end of a round?"
+L.f1_settings_shop_desc_double_click = "Enable to buy an item in the shop by double clicking on it."
 L.f1_settings_shop_title_layout = "Item List Layout"
 L.f1_settings_shop_desc_num_columns = "Number of columns"
 L.f1_settings_shop_desc_num_rows = "Number of rows"
