@@ -43,9 +43,9 @@ L.limit_time = "Tiempo límite alcanzado. El siguiente mapa cargará pronto."
 L.limit_left = "{num} ronda(s) o {time} minutos restantes para que el mapa cambie."
 
 -- Credit awards
-L.credit_all = "Tu equipo fue recompensado con {num} créditos por tu desempeño."
+L.credit_all = "Tu equipo fue recompensado con {num} créditos por su desempeño."
 
-L.credit_kill = "Has recibido {num} créditos por matar un {role}."
+L.credit_kill = "Has recibido {num} crédito(s) por matar un {role}."
 
 -- Karma
 L.karma_dmg_full = "¡Tu karma es {amount}, por lo que harás todo el daño esta ronda!"
@@ -82,7 +82,7 @@ L.equip_tabtitle = "Menú de compra"
 
 L.equip_status = "Estado de la compra"
 L.equip_cost = "Tienes {num} crédito(s) restantes."
-L.equip_help_cost = "Cada pieza de equipamiento que compras cuesta cierta cantidad de créditos."
+L.equip_help_cost = "Cada pieza de equipamiento que compres cuesta cierta cantidad de créditos."
 
 L.equip_help_carry = "Sólo puedes comprar cosas para las que haya espacio en tu inventario."
 L.equip_carry = "Puedes equiparte este objeto."
@@ -132,13 +132,13 @@ L.xfer_help = "Sólo puedes enviar créditos a tu compañero {role}."
 L.xfer_no_recip = "Receptor no válido, transferencia cancelada."
 L.xfer_no_credits = "Créditos insuficientes."
 L.xfer_success = "Transferencia de créditos a {player} completada."
-L.xfer_received = "{player} te ha dado {num} créditos."
+L.xfer_received = "{player} te ha dado {num} crédito(s)."
 
 -- Reroll tab in equipment menu
 L.reroll_name = "Nueva tirada"
 L.reroll_menutitle = "Volver a tirar items (Reroll)"
 L.reroll_no_credits = "¡Necesitas {amount} créditos para volver a tirar!"
-L.reroll_button = "Nueva tirada"
+L.reroll_button = "Nueva tirada (Reroll)"
 L.reroll_help = "Usa {amount} crédito(s) para obtener nuevos items en la tienda."
 
 -- Radio tab in equipment menu
@@ -305,11 +305,11 @@ L.set_lang = "Elegir idioma (Select language):"
 -- Weapons and equipment, HUD and messages
 
 -- Equipment actions, like buying and dropping
-L.buy_no_stock = "Este arma no tiene stock: ya la has comprado en esta ronda."
-L.buy_pending = "tienes una orden de compra pendiente, espera a recibirla."
+L.buy_no_stock = "Esta arma ya no tiene stock: ya la has comprado en esta ronda."
+L.buy_pending = "Tienes una orden de compra pendiente, espera a recibirla."
 L.buy_received = "Has recibido tu equipamiento especial."
 
-L.drop_no_room = "¡No tienes espacio para tirar tu arma!"
+L.drop_no_room = "¡No tienes espacio para arrojar tu arma!"
 L.pickup_fail = "No puedes agarrar esto"
 L.pickup_no_room = "No tienes espacio en tu inventario para este tipo de arma"
 L.pickup_pending = "Ya has recogido un arma, espera a recibirla"
@@ -517,7 +517,7 @@ L.dna_screen_ready = "Sin ADN"
 L.dna_screen_match = "Duplicado"
 
 L.dna_desc = [[
-Recoge muestras de ADN de las cosas 
+Toma muestras de ADN a las cosas 
 y úsalas para encontrar el dueño del ADN.
 
 Úsalo en cuerpos frescos para encontrar el ADN del asesino
@@ -539,7 +539,7 @@ L.shotgun_name = "Escopeta"
 
 -- Teleporter
 L.tele_name = "Teletransportador"
-L.tele_failed = "Teletransporte abortado."
+L.tele_failed = "Teletransporte fallido."
 L.tele_marked = "Destino marcado."
 
 L.tele_no_ground = "¡No puedes teleportarte si no estás en una superficie sólida!"
@@ -608,7 +608,7 @@ L.target_unid = "Cuerpo sin identificar"
 
 L.target_credits = "Inspecciona para recibir los créditos no usados"
 
-L.target_c4 = "Prulsa [{usekey}] para abrir el menú de C4"
+L.target_c4 = "Pulsa [{usekey}] para abrir el menú de C4"
 L.target_c4_armed = "Pulsa [{usekey}] para desactivar el C4"
 L.target_c4_armed_defuser = "Pulsa [{usekey}] para usar el kit de desactivación"
 L.target_c4_not_disarmable = "No puedes desactivar el C4 de un compañero vivo"
@@ -1076,7 +1076,7 @@ L.aw_fnd3_title = "Olor a Muerte"
 L.aw_fnd3_text = "no puedo parar de encontrar cadáveres, {num} veces durante esta ronda."
 
 L.aw_crd1_title = "Reciclaje"
-L.aw_crd1_text = "recuperó {num} créditos sin gastar de otros jugadores."
+L.aw_crd1_text = "recuperó {num} crédito(s) sin gastar de otros jugadores."
 
 L.aw_tod1_title = "Pérdida culposa"
 L.aw_tod1_text = "murió pocos segundos después de que su equipo ganara la ronda."
@@ -1095,7 +1095,7 @@ L.set_avoid_tip = "Activa esto para evitar ser {role} si es posible."
 
 -- v24
 L.drop_no_ammo = "Munición insuficiente en tu cargador como para soltarla en una caja."
-L.drop_ammo_prevented = "Algo previene que puedas tirar tu munición."
+L.drop_ammo_prevented = "Algo previene que puedas arrojar tu munición."
 
 -- v31
 L.set_cross_brightness = "Brillo de la mira"
@@ -1109,7 +1109,7 @@ L.equip_tooltip_main = "Menú de Equipamiento"
 L.equip_tooltip_radar = "Control del Radar"
 L.equip_tooltip_disguise = "Control del Disfraz"
 L.equip_tooltip_radio = "Controla de la Radio"
-L.equip_tooltip_xfer = "Transferir créditos"
+L.equip_tooltip_xfer = "Transferir Créditos"
 L.equip_tooltip_reroll = "Volver a tirar objetos"
 
 L.confgrenade_name = "Discombobulator"
@@ -1150,7 +1150,7 @@ L.shop_default = "Usar tienda predeterminada"
 
 L.shop_editor_title = "Editor de la Tienda"
 L.shop_edit_items_weapong = "Editar objetos / armas"
-L.shop_edit = "Editar Tiendas"
+L.shop_edit = "Editar Tienda"
 L.shop_settings = "Configuración"
 L.shop_select_role = "Seleccionar Rol"
 L.shop_edit_items = "Editar Objetos"
