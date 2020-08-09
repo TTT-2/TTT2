@@ -1149,7 +1149,7 @@ L.hud_forced_failed = "未能将界面 {hudname} 设为强制。你没有权限�
 L.hud_restricted_failed = "未能将界面 {hudname} 设为限制。你没有权限，或这个界面不存在。"
 
 L.shop_role_select = "选择身份"
-L.shop_role_selected = "选中了 {roles} 的商店！"
+L.shop_role_selected = "选中了 {role} 的商店！"
 L.shop_search = "搜索"
 
 L.button_save = "保存"
