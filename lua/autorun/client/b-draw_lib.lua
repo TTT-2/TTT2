@@ -23,14 +23,14 @@ local white = Color(255, 255, 255)
 local surface = surface
 local crc = util.CRC
 local _error = Material("error")
+local _bot_avatar = Material("vgui/ttt/b-draw/icon_avatar_bot.vmt")
+local _default_avatar = Material("vgui/ttt/b-draw/icon_avatar_default.vmt")
 local math = math
 local mats = {}
-local fetchedavatars = {}
+local fetched_avatar_urls = {}
 
-local function fetch_asset(url, fallback)
-	if not url then
-		return _error
-	end
+local function FetchAsset(url)
+	if not url then return end
 
 	if mats[url] then
 		return mats[url]
@@ -44,59 +44,74 @@ local function fetch_asset(url, fallback)
 		return mats[url]
 	end
 
-	mats[url] = fallback or _error
-
 	fetch(url, function(data)
 		write("downloaded_assets/" .. crcUrl .. ".png", data)
 
 		mats[url] = Material("data/downloaded_assets/" .. crcUrl .. ".png")
 	end)
-
-	return mats[url]
 end
 
-local function fetchAvatarAsset(id64, size, onFetched)
-	id64 = id64 or "BOT"
-	size = size == "medium" and "medium" or size == "small" and "" or size == "large" and "full" or ""
-
-	if fetchedavatars[id64 .. " " .. size] then
-		return fetchedavatars[id64 .. " " .. size]
+local function FetchAvatarAsset(id64, size)
+	if not id64 then
+		return _bot_avatar
 	end
 
-	fetchedavatars[id64 .. " " .. size] = id64 == "BOT" and "http://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/09/09962d76e5bd5b91a94ee76b07518ac6e240057a_full.jpg" or "http://i.imgur.com/uaYpdq7.png"
+	size = size == "medium" and "_medium" or size == "large" and "_full" or ""
 
-	if id64 == "BOT" then
-		if isfunction(onFetched) then
-			onFetched(fetchedavatars[id64 .. " " .. size])
-		end
+	local key = id64 .. size
 
-		return
+	if fetched_avatar_urls[key] then
+		return FetchAsset(fetched_avatar_urls[key])
 	end
 
 	fetch("http://steamcommunity.com/profiles/" .. id64 .. "/?xml=1", function(body)
-		local link = body:match("https://steamcdn%-a%.akamaihd%.net/steamcommunity/public/images/avatars/.-%.jpg") -- fix this with new https and gmod regex
+		local link = body:match("<avatarIcon><%!%[CDATA%[(.*)%]%]><%/avatarIcon>")
+
 		if not link then return end
 
-		fetchedavatars[id64 .. " " .. size] = link:Replace(".jpg", (size ~= "" and "_" .. size or "") .. ".jpg")
-
-		if isfunction(onFetched) then
-			onFetched(fetchedavatars[id64 .. " " .. size])
-		end
+		fetched_avatar_urls[key] = link:Replace(".jpg", size .. ".jpg")
+		FetchAsset(fetched_avatar_urls[key])
 	end)
 end
 
 ---
--- Cache an avatar for later use
+-- fetches the avatar material for a steamid64
+-- when an avatar is found it will be cached
 -- @param string id64 the steamid64
--- @param number size the avatar's size, this can be <code>medium</code>, <code>small</code> and <code>large</code>
+-- @param string size the avatar's size, this can be <code>small</code>, <code>medium</code> or <code>large</code>
 function draw.CacheAvatar(id64, size)
-	fetch_asset(fetchAvatarAsset(id64, size, function(url)
-		fetch_asset(url)
-	end))
+	FetchAvatarAsset(id64, size)
 end
 
 ---
--- Draws an WebImage
+-- Draws an Image
+-- @param string url the url to the WebImage
+-- @param number x
+-- @param number y
+-- @param number width
+-- @param number height
+-- @param Color color
+-- @param Angle angle
+-- @param boolean cornerorigin if it is set to <code>true</code>, the WebImage will be centered based on the x- and y-coordinate
+local function DrawImage(material, x, y, width, height, color, angle, cornerorigin)
+	color = color or white
+
+	surface.SetDrawColor(color.r, color.g, color.b, color.a)
+	surface.SetMaterial(material)
+
+	if not angle then
+		surface.DrawTexturedRect(x, y, width, height)
+	else
+		if not cornerorigin then
+			surface.DrawTexturedRectRotated(x, y, width, height, angle)
+		else
+			surface.DrawTexturedRectRotated(x + width * 0.5, y + height * 0.5, width, height, angle)
+		end
+	end
+end
+
+---
+-- Draws a WebImage
 -- @param string url the url to the WebImage
 -- @param number x
 -- @param number y
@@ -106,20 +121,7 @@ end
 -- @param Angle angle
 -- @param boolean cornerorigin if it is set to <code>true</code>, the WebImage will be centered based on the x- and y-coordinate
 function draw.WebImage(url, x, y, width, height, color, angle, cornerorigin)
-	color = color or white
-
-	surface.SetDrawColor(color.r, color.g, color.b, color.a)
-	surface.SetMaterial(fetch_asset(url))
-
-	if not angle then
-		surface.DrawTexturedRect(x, y, width, height)
-	else
-		if not cornerorigin then
-			surface.DrawTexturedRectRotated(x, y, width, height, angle)
-		else
-			surface.DrawTexturedRectRotated(x + width / 2, y + height / 2, width, height, angle)
-		end
-	end
+	DrawImage(surface.SetMaterial(FetchAsset(url) or _error), x, y, width, height, color, angle, cornerorigin)
 end
 
 ---
@@ -145,24 +147,25 @@ end
 ---
 -- Draws a SteamAvatar while caching it before
 -- @param string id64 the steamid64
--- @param number size
+-- @param string size the avatar's size, this can be <code>small</code>, <code>medium</code> or <code>large</code>
+-- @param string url the url to the WebImage
 -- @param number x
 -- @param number y
 -- @param number width
 -- @param number height
 -- @param Color color
--- @param Angle ang
--- @param boolean corner
-function draw.SteamAvatar(id64, size, x, y, width, height, color, ang, corner)
-	draw.WebImage(fetchAvatarAsset(id64, size), x, y, width, height, color, ang, corner)
+-- @param Angle angle
+-- @param boolean cornerorigin if it is set to <code>true</code>, the WebImage will be centered based on the x- and y-coordinate
+function draw.SteamAvatar(id64, size, x, y, width, height, color, angle, cornerorigin)
+	DrawImage(surface.SetMaterial(FetchAvatarAsset(id64, size) or _default_avatar), x, y, width, height, color, angle, cornerorigin)
 end
 
 ---
--- Returns the cached avatar material for a steamid64
+-- fetches and returns the avatar material for a steamid64
+-- when an avatar is found it will be cached
 -- @param string id64 the steamid64
--- @param number size
--- @param Material fallback material if downloading failed or the resource is missing
+-- @param string size the avatar's size, this can be <code>small</code>, <code>medium</code> or <code>large</code>
 -- @return Material
-function draw.GetAvatarMaterial(id64, size, fallback)
-	return fetch_asset(fetchAvatarAsset(id64, size), fallback)
+function draw.GetAvatarMaterial(id64, size)
+	return FetchAvatarAsset(id64, size) or _default_avatar
 end
