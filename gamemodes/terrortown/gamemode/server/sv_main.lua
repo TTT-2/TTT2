@@ -205,7 +205,7 @@ function GM:Initialize()
 
 	-- check for language files to mark them as downloadable for clients
 	fileloader.LoadFolder("lang/", true, CLIENT, function(path)
-		ErrorNoHalt("[DEPRECATION WARNING]: Loaded language file from 'lang/', this folder is deprecated. Please switch to `terrortown/lang/`\n")
+		MsgN("[DEPRECATION WARNING]: Loaded language file from 'lang/', this folder is deprecated. Please switch to 'terrortown/lang/'")
 		MsgN("Added TTT2 language file: ", path)
 	end)
 
