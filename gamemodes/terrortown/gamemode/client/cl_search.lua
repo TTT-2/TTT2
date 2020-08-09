@@ -674,7 +674,6 @@ local function TTT2ConfirmMsg()
 	end
 
 	-- checking for bots
-	-- TODO turn this into a global function somewhere
 	if sid64 == "" then
 		sid64 = nil
 	end
