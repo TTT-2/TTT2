@@ -81,6 +81,14 @@ ttt_include("cl_damage_indicator")
 ttt_include("sh_armor")
 ttt_include("cl_weapon_pickup")
 
+fileloader.LoadFolder("terrortown/autorun/client/", false, CLIENT_FILE, function(path)
+	MsgN("Added TTT2 client autorun file: ", path)
+end)
+
+fileloader.LoadFolder("terrortown/autorun/shared/", false, SHARED_FILE, function(path)
+	MsgN("Added TTT2 shared autorun file: ", path)
+end)
+
 -- all files are loaded
 local TryT = LANG.TryTranslation
 
@@ -113,7 +121,14 @@ function GM:Initialize()
 	self.roundCount = 0
 
 	-- load addon language files
-	LANG.SetupFiles("lang/", true)
+	fileloader.LoadFolder("lang/", true, CLIENT_FILE, function(path)
+		MsgN("[DEPRECATION WARNING]: Loaded language file from 'lang/', this folder is deprecated. Please switch to 'terrortown/lang/'")
+		MsgN("Added TTT2 language file: ", path)
+	end)
+
+	fileloader.LoadFolder("terrortown/lang/", true, CLIENT_FILE, function(path)
+		MsgN("Added TTT2 language file: ", path)
+	end)
 
 	LANG.Init()
 
@@ -229,7 +244,9 @@ function GM:InitPostEntity()
 	local plys = player.GetAll()
 
 	for i = 1, #plys do
+		draw.CacheAvatar(plys[i]:SteamID64(), "small") -- caching
 		draw.CacheAvatar(plys[i]:SteamID64(), "medium") -- caching
+		draw.CacheAvatar(plys[i]:SteamID64(), "large") -- caching
 	end
 
 	timer.Create("cache_ents", 1, 0, function()
@@ -729,17 +746,15 @@ net.Receive("TTT2PlayerAuthedShared", function(len)
 	local steamid64 = net.ReadString()
 	local name = net.ReadString()
 
-	hook.Run("TTT2PlayerAuthed", steamid64, name)
-end)
-
-hook.Add("TTT2PlayerAuthed", "TTT2CacheAvatar", function(steamid64, name)
-	local ply = player.GetBySteamID64(steamid64)
-
-	if not IsValid(ply) or ply:IsBot() then
+	-- checking for bots
+	if steamid64 == "" then
 		steamid64 = nil
 	end
 
-	draw.CacheAvatar(steamid64, "medium") -- caching
+	-- cache avatars
+	draw.CacheAvatar(steamid64, "small")
+	draw.CacheAvatar(steamid64, "medium")
+	draw.CacheAvatar(steamid64, "large")
 
-	hook.Run("TTT2PlayerAuthedCacheReady", steamid64, name)
+	hook.Run("TTT2PlayerAuthed", steamid64, name)
 end)
