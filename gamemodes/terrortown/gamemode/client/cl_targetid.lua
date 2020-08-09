@@ -173,7 +173,7 @@ function GM:PostDrawTranslucentRenderables(bDrawingDepth, bDrawingSkybox)
 
 		if ply:IsActive()
 		and ply:IsSpecial()
-		and (not client:IsActive() or ply:IsInTeam(client))
+		and (not client:IsActive() or ply:IsInTeam(client) or ply:IsDetective())
 		and not rd.avoidTeamIcons
 		then
 			DrawOverheadRoleIcon(ply, rd.iconMaterial, ply:GetRoleColor())
