@@ -153,3 +153,7 @@ resource.AddFile("materials/models/ttt2_dna_scanner/screen/check.vmt")
 resource.AddFile("materials/models/ttt2_dna_scanner/screen/circle.vmt")
 resource.AddFile("materials/models/ttt2_dna_scanner/screen/fail.vmt")
 resource.AddFile("materials/vgui/ttt/dnascanner/dna_hud.vmt")
+
+-- b-draw icons
+resource.AddFile("materials/vgui/ttt/b-draw/icon_avatar_bot.vmt")
+resource.AddFile("materials/vgui/ttt/b-draw/icon_avatar_default.vmt")
