@@ -111,7 +111,7 @@ L.disg_not_owned = "¡No estás llevando un disfraz!"
 L.disg_enable = "Activar disfraz"
 
 L.disg_help1 = "Cuando tu disfraz esté activo, tu nombre, vida y karma no se mostrarán cuando alguien te mire. Además, estarás oculto del radar del detective."
-L.disg_help2 = "Presiona el Enter del Numpad para activar el disfraz sin el menú. También puedes configurar una tecla bajo el comando 'ttt_toggle_disguise' usando la consola."
+L.disg_help2 = "Pulsa la telca Enter del Numpad para activar el disfraz sin tener que usar de menú. También puedes configurar una tecla bajo el comando 'ttt_toggle_disguise' usando la consola."
 
 -- Radar tab in equipment menu
 L.radar_name = "Radar"
@@ -422,7 +422,7 @@ sonido distintivo.]]
 
 -- Health station
 L.hstation_name = "Estación de Curación"
-L.hstation_subtitle = "Presiona [{usekey}] para recibir curación."
+L.hstation_subtitle = "Mantén presionado [{usekey}] para recibir curación."
 L.hstation_charge = "Carga restante de la estación: {charge}"
 L.hstation_empty = "No hay más carga en la estación"
 L.hstation_maxhealth = "Ya estás curado completamente"
@@ -755,7 +755,7 @@ L.tip22 = "La estación de curación toma una muestra de ADN de todo aquel que l
 
 L.tip23 = "A diferencia de las armas y el C4, la radio de traidores no deja marcas de ADN. No te preocupes si la encuentran y la rompen."
 
-L.tip24 = "Presiona {helpkey} para ver el tutorial o cambiar configuraciones. Por ejemplo, puedes desactivar estos consejos."
+L.tip24 = "Pulsa {helpkey} para ver el tutorial o cambiar configuraciones. Por ejemplo, puedes desactivar estos consejos."
 
 L.tip25 = "Cuando un detective inspecciona un cuerpo, los resultados son visibles por cualquier persona en la tabla de puntuaciones haciendo click en la persona muerta."
 
@@ -1288,8 +1288,8 @@ L.door_destructible = "La puerta es desctructible (VIDA {health})"
 L.confirm_detective_only = "Sólo los detectives pueden confirmar cadáveres"
 L.inspect_detective_only = "Sólo los detectives pueden inspeccionar cuerpos"
 L.corpse_hint_no_inspect = "Sólo los detectives pueden inspeccionar este cuerpo."
-L.corpse_hint_inspect_only = "Presiona [{usekey}] para inspeccionar. Sólo los detectives pueden inspeccionar cuerpos."
-L.corpse_hint_inspect_only_credits = "Presiona [{usekey}] para recibir los créditos. Sólo los detectives pueden inspeccionar este cuerpo."
+L.corpse_hint_inspect_only = "Pulsa [{usekey}] para inspeccionar. Sólo los detectives pueden inspeccionar cuerpos."
+L.corpse_hint_inspect_only_credits = "Pulsa [{usekey}] para recibir los créditos. Sólo los detectives pueden inspeccionar este cuerpo."
 
 -- 2020-06-04
 L.label_bind_disguiser = "Disfraz"
