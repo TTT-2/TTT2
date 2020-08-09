@@ -1237,3 +1237,8 @@ L.vis_help_pri = "丢弃当前设备。"
 L.decoy_help_pri = "安放诱饵。"
 
 L.set_cross_lines_enable = "启用十字准心线条"
+
+-- 2020-08-07
+--L.pickup_error_spec = "You cannot pickup this as a spectator."
+--L.pickup_error_owns = "You cannot pickup this because you already own the same weapon."
+--L.pickup_error_noslot = "You cannot pickup this because you have no free slot available."

@@ -1307,3 +1307,8 @@ L.vis_help_pri = "Soltar el dispositivo activo."
 L.decoy_help_pri = "Colocar el señuelo."
 
 L.set_cross_lines_enable = "Activar líneas de la mira"
+
+-- 2020-08-07
+--L.pickup_error_spec = "You cannot pickup this as a spectator."
+--L.pickup_error_owns = "You cannot pickup this because you already own the same weapon."
+--L.pickup_error_noslot = "You cannot pickup this because you have no free slot available."
