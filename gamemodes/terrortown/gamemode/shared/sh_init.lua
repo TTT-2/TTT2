@@ -10,9 +10,6 @@ GM.Customized = true
 
 TTT2 = true -- identifier for TTT2. Just use "if TTT2 then ... end"
 
--- extend CLIENT and SERVER flags
-SHARED = 2
-
 -- Round status consts
 ROUND_WAIT = 1
 ROUND_PREP = 2

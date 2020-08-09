@@ -6,6 +6,10 @@ if SERVER then
 	AddCSLuaFile()
 end
 
+CLIENT_FILE = 0
+SERVER_FILE = 1
+SHARED_FILE = 2
+
 local fileFind = file.Find
 local stringRight = string.Right
 
@@ -16,12 +20,12 @@ fileloader = fileloader or {}
 -- @note Has to be run on both server and client for client and shared files.
 -- @param string path The absolute path to search in, has to end with `/`
 -- @param[default=false] boolean deepsearch If true, files are searched one level down inside all available subfolders
--- @param[default=SHARED] number realm The realm where the file should be included
+-- @param[default=SHARED_FILE] number realm The realm where the file should be included
 -- @param[opt] function callback A function that is called after the file is included
 -- @realm shared
 function fileloader.LoadFolder(path, deepsearch, realm, callback)
 	deepsearch = deepsearch or false
-	realm = realm or SHARED
+	realm = realm or SHARED_FILE
 
 	local file_paths = {}
 
@@ -56,14 +60,14 @@ function fileloader.LoadFolder(path, deepsearch, realm, callback)
 		-- filter out directories and temp files (like .lua~)
 		if stringRight(file_path, 3) ~= "lua" then continue end
 
-		if SERVER and realm == CLIENT then
+		if SERVER and realm == CLIENT_FILE then
 			AddCSLuaFile(file_path)
-		elseif SERVER and realm == SHARED then
+		elseif SERVER and realm == SHARED_FILE then
 			AddCSLuaFile(file_path)
 			include(file_path)
-		elseif SERVER and realm ~= CLIENT then
+		elseif SERVER and realm ~= CLIENT_FILE then
 			include(file_path)
-		elseif CLIENT and realm ~= SERVER then
+		elseif CLIENT and realm ~= SERVER_FILE then
 			include(file_path)
 		else
 			continue

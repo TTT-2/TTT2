@@ -81,11 +81,11 @@ ttt_include("cl_damage_indicator")
 ttt_include("sh_armor")
 ttt_include("cl_weapon_pickup")
 
-fileloader.LoadFolder("terrortown/autorun/client/", false, CLIENT, function(path)
+fileloader.LoadFolder("terrortown/autorun/client/", false, CLIENT_FILE, function(path)
 	MsgN("Added TTT2 client autorun file: ", path)
 end)
 
-fileloader.LoadFolder("terrortown/autorun/shared/", false, SHARED, function(path)
+fileloader.LoadFolder("terrortown/autorun/shared/", false, SHARED_FILE, function(path)
 	MsgN("Added TTT2 shared autorun file: ", path)
 end)
 
@@ -121,12 +121,12 @@ function GM:Initialize()
 	self.roundCount = 0
 
 	-- load addon language files
-	fileloader.LoadFolder("lang/", true, CLIENT, function(path)
+	fileloader.LoadFolder("lang/", true, CLIENT_FILE, function(path)
 		MsgN("[DEPRECATION WARNING]: Loaded language file from 'lang/', this folder is deprecated. Please switch to 'terrortown/lang/'")
 		MsgN("Added TTT2 language file: ", path)
 	end)
 
-	fileloader.LoadFolder("terrortown/lang/", true, CLIENT, function(path)
+	fileloader.LoadFolder("terrortown/lang/", true, CLIENT_FILE, function(path)
 		MsgN("Added TTT2 language file: ", path)
 	end)
 
