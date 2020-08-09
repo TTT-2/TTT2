@@ -26,58 +26,12 @@ util.IncludeClientFile("terrortown/gamemode/client/cl_lang.lua")
 local net = net
 local table = table
 local pairs = pairs
-local file = file
 local string = string
 
----
--- Sets up the language by scanning through the given directory; has to be run on both
--- server and client!
--- @param string lang_path The path to search in
--- @param boolean deepsearch If true, subfolders are scanned
--- @internal
--- @realm shared
-function LANG.SetupFiles(lang_path, deepsearch)
-	local file_paths = {}
-
-	if deepsearch then
-		local _, sub_folders = file.Find(lang_path .. "*", "LUA")
-
-		if not sub_folders then return end
-
-		for k = 1, #sub_folders do
-			local subname = sub_folders[k]
-			local files = file.Find(lang_path .. subname .. "/*.lua", "LUA")
-
-			if not files then continue end
-
-			for i = 1, #files do
-				file_paths[#file_paths + 1] = lang_path .. subname .. "/" .. files[i]
-			end
-		end
-	else
-		local files = file.Find(lang_path .. "*.lua", "LUA")
-
-		if not files then return end
-
-		for i = 1, #files do
-			file_paths[#file_paths + 1] = lang_path .. files[i]
-		end
-	end
-
-	for i = 1, #file_paths do
-		local path = file_paths[i]
-
-		-- filter out directories and temp files (like .lua~)
-		if string.Right(path, 3) == "lua" then
-			util.IncludeClientFile(path)
-
-			MsgN("Included TTT language file: " .. path)
-		end
-	end
-end
-
 -- load default TTT2 language files or mark them as downloadable on the server
-LANG.SetupFiles((GM.FolderName or "terrortown") .. "/gamemode/shared/lang/", false)
+fileloader.LoadFolder((GM.FolderName or "terrortown") .. "/gamemode/shared/lang/", false, CLIENT_FILE, function(path)
+	MsgN("Added TTT2 gamemode language file: ", path)
+end)
 
 if SERVER then
 	local count = table.Count
