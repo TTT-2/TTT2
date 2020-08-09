@@ -1219,7 +1219,7 @@ L.hud_forced_failed = "Failed to force the HUD {hudname}. You don't have permiss
 L.hud_restricted_failed = "Failed to restrict the HUD {hudname}. You don't have permission to do that."
 
 L.shop_role_select = "Select a role"
-L.shop_role_selected = "{roles}'s shop was selected!"
+L.shop_role_selected = "{role}'s shop was selected!"
 L.shop_search = "Search"
 
 L.button_save = "Save"

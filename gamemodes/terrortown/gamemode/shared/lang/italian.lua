@@ -1221,7 +1221,7 @@ L.hud_forced_failed = "Fallito nell'impostare l'HUD {hudname}. Sei un admin ed e
 L.hud_restricted_failed = "Fallito nell'impostare l'HUD {hudname}. Sei un admin?"
 
 L.shop_role_select = "Seleziona un ruolo"
-L.shop_role_selected = "Lo shop del {roles} è stato selezionato!"
+L.shop_role_selected = "Lo shop del {role} è stato selezionato!"
 L.shop_search = "Cerca"
 
 L.button_save = "Salva"

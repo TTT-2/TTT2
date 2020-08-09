@@ -12,6 +12,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - the files inside this folder are loaded after all TTT2 gamemode files and library extensions are loaded
 - Added Spanish version for base addon   (by @Tekiad and @DennisWolfgang)
 - Added Chinese Simplified translation (by @TheOnly8Z)
+- Added double-click buying
 - Added a default avatar for players and an avatar for bots
 
 ### Changed
@@ -22,6 +23,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Detective overhead icon is now shown to innocents and traitors
 - moved language files from `lua/lang/` to `lua/terrortown/lang`
 - Stopped teleporting players to players they're not spectating if they press the "duck"-Key while roaming
+- Moved shop's equipment list generation into a coroutine
 - Removed TTT2PlayerAuthedCacheReady hook
 - Internal changes to the b-draw library for fetching avatars
 
@@ -31,6 +33,9 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Radar now shows bombs again, that do not have the team property set
 - Fix HUDManager not saving forcedHUD and defaultHUD values
 - Fixed wrong parameter default in `EPOP:AddMessage` documentation
+- Fixed shop switching language issue
+- Fixed shop refresh activated even not buyable equipments
+- Fixed wrong shop view displayed as forced spectator
 
 ## [v0.7.2b](https://github.com/TTT-2/TTT2/tree/v0.7.2b) (2020-06-26)
 

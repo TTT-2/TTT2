@@ -1191,7 +1191,7 @@ L.hud_forced_failed = "Не удалось назначить принудите
 L.hud_restricted_failed = "Не удалось запретить интерфейс {hudname}. У вас нет разрешения на это действие."
 
 L.shop_role_select = "Выберите роль"
-L.shop_role_selected = "Выбран магазин роли {roles}!"
+L.shop_role_selected = "Выбран магазин роли {role}!"
 L.shop_search = "Поиск"
 
 L.button_save = "Сохранить"

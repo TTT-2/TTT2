@@ -6,6 +6,8 @@
 -- This panel does not deal with models and such
 
 local matHover = Material("vgui/spawnmenu/hover")
+local doubleClickTime = 0.5
+
 local PANEL = {}
 
 local math = math
@@ -30,6 +32,8 @@ function PANEL:Init()
 	self.Icon:SetMouseInputEnabled(false)
 	self.Icon:SetKeyboardInputEnabled(false)
 
+	self.lastLeftClick = 0
+
 	self.animPress = Derma_Anim("Press", self, self.PressedAnim)
 
 	self:SetIconSize(64)
@@ -40,12 +44,21 @@ end
 function PANEL:OnMousePressed(mcode)
 	if mcode == MOUSE_LEFT then
 		self:DoClick()
+		self:PressedLeftMouse(SysTime() <= self.lastLeftClick + doubleClickTime)
+
+		self.lastLeftClick = SysTime()
 
 		self.animPress:Start(0.1)
 	end
 end
 
 function PANEL:OnMouseReleased()
+
+end
+
+---
+-- @param boolean doubleClick doubleClick happened in 0.8s
+function PANEL:PressedLeftMouse(doubleClick)
 
 end
 
