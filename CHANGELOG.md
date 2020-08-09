@@ -13,6 +13,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Airborne players can no longer replenish stamina
 - The weapon pickup system has been improved to increase stability and remove edge cases in temporary weapon teleportation
 - Detective overhead icon is now shown to innocents
+- Stopped teleporting players to players they're not spectating if they press the "duck"-Key while roaming
 
 ### Fixed
 - Fixed death handling spawning multiple corpses when killed multiple times in the same frame
