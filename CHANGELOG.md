@@ -15,13 +15,13 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Detective overhead icon is now shown to innocents
 - Stopped teleporting players to players they're not spectating if they press the "duck"-Key while roaming
 - Removed TTT2PlayerAuthedCacheReady hook
+- Internal changes to the b-draw library for fetching avatars
 
 ### Fixed
 - Fixed death handling spawning multiple corpses when killed multiple times in the same frame
 - Radar now shows bombs again, that do not have the team property set
 - Fix HUDManager not saving forcedHUD and defaultHUD values
 - Fixed wrong parameter default in `EPOP:AddMessage` documentation
-- Fixed avatar fetching to support changes steam made
 
 ## [v0.7.2b](https://github.com/TTT-2/TTT2/tree/v0.7.2b) (2020-06-26)
 

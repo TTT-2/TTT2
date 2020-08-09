@@ -166,6 +166,6 @@ end
 -- @param string id64 the steamid64
 -- @param string size the avatar's size, this can be <code>small</code>, <code>medium</code> or <code>large</code>
 -- @return Material
-function draw.GetAvatarMaterial(id64, size, fallback)
-	return FetchAvatarAsset(id64, size) or fallback or _default_avatar
+function draw.GetAvatarMaterial(id64, size)
+	return FetchAvatarAsset(id64, size) or _default_avatar
 end

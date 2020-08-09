@@ -678,8 +678,7 @@ local function TTT2ConfirmMsg()
 		sid64 = nil
 	end
 
-	local img = Material("vgui/ttt/icon_corpse")
-	img = draw.GetAvatarMaterial(sid64, "medium") or img
+	local img = draw.GetAvatarMaterial(sid64, "medium")
 
 	hook.Run("TTT2ConfirmedBody", tbl.finder, tbl.victim)
 
