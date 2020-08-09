@@ -4,6 +4,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+## [v0.7.3b](https://github.com/TTT-2/TTT2/tree/v0.7.3b) (2020-08-09)
+
 ### Added
 
 - Added a new custom file loader that loads lua files from `lua/terrortown/autorun/`
