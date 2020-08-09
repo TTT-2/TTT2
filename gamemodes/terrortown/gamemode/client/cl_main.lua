@@ -737,13 +737,10 @@ net.Receive("TTT2PlayerAuthedShared", function(len)
 		steamid64 = nil
 	end
 
-	hook.Run("TTT2PlayerAuthed", steamid64, name)
-end)
-
-hook.Add("TTT2PlayerAuthed", "TTT2CacheAvatar", function(steamid64, name)
+	-- cache avatars
 	draw.CacheAvatar(steamid64, "small")
 	draw.CacheAvatar(steamid64, "medium")
 	draw.CacheAvatar(steamid64, "large")
 
-	hook.Run("TTT2PlayerAuthedCacheReady", steamid64, name)
+	hook.Run("TTT2PlayerAuthed", steamid64, name)
 end)
