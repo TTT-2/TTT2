@@ -7,6 +7,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Added
 
 - Added Chinese Simplified translation (by @TheOnly8Z)
+- Added a default avatar for players and an avatar for bots
 
 ### Changed
 - Roles are now only getting synced to clients if the role is known, not just the body being confirmed
@@ -19,6 +20,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Radar now shows bombs again, that do not have the team property set
 - Fix HUDManager not saving forcedHUD and defaultHUD values
 - Fixed wrong parameter default in `EPOP:AddMessage` documentation
+- Fixed avatar fetching to support changes steam made
 
 ## [v0.7.2b](https://github.com/TTT-2/TTT2/tree/v0.7.2b) (2020-06-26)
 
