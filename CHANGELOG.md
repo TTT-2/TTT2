@@ -10,6 +10,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - it basically works the same as the native file loader
   - there are three subfolders: `client`, `server` and `shared`
   - the files inside this folder are loaded after all TTT2 gamemode files and library extensions are loaded
+- Added Chinese Simplified translation (by @TheOnly8Z)
 
 ### Changed
 
@@ -17,6 +18,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Airborne players can no longer replenish stamina
 - Detective overhead icon is now shown to innocents
 - moved language files from `lua/lang/` to `lua/terrortown/lang`
+- Stopped teleporting players to players they're not spectating if they press the "duck"-Key while roaming
 
 ### Fixed
 
