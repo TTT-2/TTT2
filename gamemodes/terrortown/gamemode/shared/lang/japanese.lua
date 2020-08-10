@@ -33,8 +33,8 @@ L.round_traitors_one  = "Traitorさん, あなたは一人です."
 L.round_traitors_more = "Traitor達、力を合わせて彼らを皆殺しにしましょう."
 
 L.win_time         = "時間切れです. Traitorは負けました."
-L.win_traitor      = "Traitorが勝ちました!"
-L.win_innocent     = "Traitorは倒されました!"
+L.win_traitors      = "Traitorが勝ちました!"
+L.win_innocents     = "Traitorは倒されました!"
 L.win_bees = "蜂が勝ちました! (つまり引き分け)"
 L.win_showreport   = "さあ{num}秒の間ラウンドレポートを見てみましょう."
 
@@ -1160,7 +1160,7 @@ L.f1_bind_disable_bind = "クリア"
 L.f1_bind_description = "クリックして設定したいキーを入力."
 L.f1_bind_reset_default_description = "デフォルトのキーに戻す."
 L.f1_bind_disable_description = "この設定されていたキーをクリアしました."
-L.ttt2_bindings_new = "{name}が新しくキー設定されました:{key}"
+L.ttt2_bindings_new = " {name} が新しくキー設定されました: {key} "
 
 L.f1_bind_weaponswitch = "武器を切り替える"
 L.f1_bind_sprint = "走る"
@@ -1174,13 +1174,13 @@ L.f1_dmgindicator_duration = "ヒット後に表示される秒数ダメージ�
 L.f1_dmgindicator_maxdamage = "必要なダメージの最大不透明度"
 L.f1_dmgindicator_maxalpha = "ダメージインジケーターの最大不透明度"
 
-L.ttt2_bindings_new = "{name}を新しくキー設定しました: {key}"
+L.ttt2_bindings_new = " {name} を新しくキー設定しました: {key}"
 L.hud_default = "デフォルトHUD"
 L.hud_force = "オリジナルHUD"
 L.hud_restricted = "リストリクテッドHUD"
-L.hud_default_failed = "{hudname} を新しいデフォルトとして設定できませんでした.これを行う権限がないか、このHUDが存在しません."
-L.hud_forced_failed = "{hudname}を固定できませんでした.これを行う権限がないか、この HUD が存在しません."
-L.hud_restricted_failed = "{hudname}を制限できませんでした.あなたはそれを行う許可を持っていません."
+L.hud_default_failed = " {hudname} を新しいデフォルトとして設定できませんでした.これを行う権限がないか、このHUDが存在しません."
+L.hud_forced_failed = " {hudname} を固定できませんでした.これを行う権限がないか、この HUD が存在しません."
+L.hud_restricted_failed = " {hudname} を制限できませんでした.あなたはそれを行う許可を持っていません."
 
 L.shop_role_select = "役職を選択"
 L.shop_role_selected = "{roles}のショップが選ばれました!"
@@ -1207,8 +1207,8 @@ L.hold_aim_tip = "セカンダリーアクションを続ける限りアイア�
 
 -- 2020-02-09
 L.name_door = "Door"
-L.door_open = "[{usekey}]でドアを開ける."
-L.door_close = "[{usekey}] でドアを閉める."
+L.door_open = " [{usekey}] でドアを開ける."
+L.door_close = " [{usekey}] でドアを閉める."
 L.door_locked = "このドアはかぎが掛かっています"
 
 -- 2020-02-11
@@ -1217,7 +1217,7 @@ L.automoved_to_spec = "(AUTOMATED MESSAGE) しばらくAFK状態だったため�
 -- 2020-02-16
 L.door_auto_closes = "このドアは自動で閉まります."
 L.door_open_touch = "歩くだけでドアが開きます."
-L.door_open_touch_and_use = "歩く、または[{usekey}]でドアが開きます."
+L.door_open_touch_and_use = "歩く、または [{usekey}] でドアが開きます."
 L.hud_health = "体力"
 
 -- 2020-04-20
@@ -1243,7 +1243,7 @@ L.message_revival_canceled = "蘇生が中断されました."
 L.message_revival_failed = "蘇生に失敗しました."
 L.message_revival_failed_missing_body = "長い時間死体にとどまらなかったので、蘇生できませんでした."
 L.hud_revival_title = "蘇生完了まで:"
-L.hud_revival_time = "{time}秒"
+L.hud_revival_time = "{time} 秒"
 
 -- 2020-05-03
 L.door_destructible = "ドアが破損しています ({health}HP)"
