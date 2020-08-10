@@ -2,10 +2,10 @@
 -- This file contains all shared vars, tables and functions
 
 GM.Name = "TTT2 (Advanced Update)"
-GM.Author = "Bad King Urgrain, Alf21, tkindanight, Mineotopia, LeBroomer"
+GM.Author = "Bad King Urgrain, Alf21, saibotk, Mineotopia, LeBroomer"
 GM.Email = "ttt2@neoxult.de"
 GM.Website = "ttt.badking.net, ttt2.informaskill.de"
-GM.Version = "0.7.2b"
+GM.Version = "0.7.3b"
 GM.Customized = true
 
 TTT2 = true -- identifier for TTT2. Just use "if TTT2 then ... end"
@@ -526,6 +526,7 @@ include("includes/modules/pon.lua")
 include("ttt2/extensions/net.lua")
 include("ttt2/extensions/string.lua")
 include("ttt2/extensions/table.lua")
+include("ttt2/libraries/fileloader.lua")
 include("ttt2/libraries/door.lua")
 include("ttt2/libraries/thermalvision.lua")
 
