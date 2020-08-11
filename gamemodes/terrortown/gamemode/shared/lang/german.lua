@@ -1298,3 +1298,6 @@ L.vis_help_pri = "Lass das aktivierte Gerät fallen."
 L.decoy_help_pri = "Platziere die Attrappe."
 
 L.set_cross_lines_enable = "Aktiviere Fadenkreuz-Linien"
+
+-- 2020-08-11
+L.f1_settings_shop_desc_double_click = "Kaufe ein Item im Shop, indem du es doppelt anklickst."

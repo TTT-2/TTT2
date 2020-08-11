@@ -4,6 +4,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+### Added
+
+- Added ConVar to toggle double-click buying
+
 ### Fixed
 
 - Fixed foregoing fetch fix
