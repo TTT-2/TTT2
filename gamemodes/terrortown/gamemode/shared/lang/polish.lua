@@ -324,7 +324,7 @@ L.item_weapon     = "Broń"
 
 L.item_armor      = "Kamizelka kuloodporna"
 L.item_armor_desc = [[
-Redukuje obrażenia od pocisków 
+Redukuje obrażenia od pocisków
 o 30%, kiedy zostaniesz trafiony
 
 Podstawowe wyposażenie detektywa.]]
@@ -397,7 +397,7 @@ L.decoy_pickup_wrong_team = "You can't pick it up as it belongs to a different t
 L.decoy_desc      = [[
 Pokazuje fałszywy znacznik na radarze Detektywów,
 i sprawia, że DNA skaner pokazuje Detektywowi
-lokalizacje wabika, jeżeli zeskanuje 
+lokalizacje wabika, jeżeli zeskanuje
 twoje DNA.]]
 
 -- Defuser
@@ -407,7 +407,7 @@ L.defuser_help    = "{primaryfire} rozbraja zaznaczone C4."
 L.defuser_desc    = [[
 Natychmiastowo robraja ładunek C4.
 
-Brak limitu użyć. C4 będzie łatwiej 
+Brak limitu użyć. C4 będzie łatwiej
 zauważyć, jeśli go nosisz.]]
 
 -- Flare gun
@@ -487,7 +487,7 @@ L.binoc_desc      = [[
 Przybliżaj na ciała i identyfikuj je
 z dalekiego dystansu.
 
-Nielimitowana liczba użyć, ale 
+Nielimitowana liczba użyć, ale
 identyfikacja trwa pare sekund.]]
 
 -- UMP
@@ -513,7 +513,7 @@ L.dna_desc        = [[
 Zbiera próbki DNA z różnych rzeczy
 i używa ich do znalezienia właściela tego DNA.
 
-Użyj na świeżych zwłokach, by znaleźć 
+Użyj na świeżych zwłokach, by znaleźć
 DNA zabójcy i śledzić go.]]
 
 L.dna_menu_title  = "Ustawienia skanowania DNA"
@@ -1261,3 +1261,6 @@ L.hud_health = "Zdrowie"
 --L.decoy_help_pri = "Plant the Decoy."
 
 --L.set_cross_lines_enable = "Enable crosshair lines"
+
+-- 2020-08-11
+--L.f1_settings_shop_desc_double_click = "Enable to buy an item in the shop by double clicking on it."
