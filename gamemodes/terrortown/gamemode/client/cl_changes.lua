@@ -4,16 +4,13 @@
 -- some micro-optimizations (localizing globals)
 local os = os
 local hook = hook
-local IsValid = IsValid
 local vgui = vgui
-local draw = draw
 local table = table
 
 -- internal
 local changesVersion = CreateClientConVar("changes_version", "v0.0.0.0")
-local btnPanelColor = Color(22, 42, 57)
 
-local changesPanel, changes, currentVersion
+local changes, currentVersion
 
 ---
 -- Adds a change into the changes list
@@ -802,30 +799,6 @@ function CreateChanges()
 
 	-- run hook for other addons to add their changelog as well
 	hook.Run("TTT2AddChange", changes, currentVersion)
-end
-
----
--- Creates the HTML panel
--- @param PANEL panel
--- @param table change
--- @realm client
--- @internal
-local function MakePanel(panel, change)
-	local header = "<h1>" .. change.version .. " Update"
-
-	if change.date > 0 then
-		header = header .. " <i> - (date: " .. os.date("%Y/%m/%d", change.date) .. ")</i>"
-	end
-
-	header = header .. "</h1>"
-
-	local html = vgui.Create("DHTML", panel)
-
-	html:SetHTML(htmlStart .. header .. change.text .. htmlEnd)
-	html:Dock(FILL)
-	html:DockMargin(10, 10, 10, 10)
-
-	panel.htmlSheet = html
 end
 
 function GetSortedChanges()
