@@ -26,6 +26,7 @@ jobs:
       run: |
         wget -c https://github.com/FPtje/GLuaFixer/releases/download/${GLUALINT_VERSION}/glualint-${GLUALINT_VERSION}-linux.zip -O glualint.zip
         unzip -u glualint.zip
+        ls -la
 
     - name: Check code with glualint
-      run: ./glualint
+      run: ./glualint 
