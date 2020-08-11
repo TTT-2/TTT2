@@ -4,7 +4,6 @@
 -- some micro-optimizations (localizing globals)
 local os = os
 local hook = hook
-local vgui = vgui
 local table = table
 
 -- internal
@@ -27,31 +26,6 @@ function AddChange(version, text, date)
 
 	currentVersion = version
 end
-
-local htmlStart = [[
-	<head>
-		<style>
-			body {
-				font-family: Verdana, Trebuchet;
-				background-color: rgb(22, 42, 57);
-				color: white;
-				font-weight: 100;
-			}
-			body * {
-				font-size: 13pt;
-			}
-			h1 {
-				font-size: 16pt;
-				text-decoration: underline;
-			}
-		</style>
-	</head>
-	<body>
-]]
-
-local htmlEnd = [[
-	</body>
-]]
 
 ---
 -- Creates the changes list
