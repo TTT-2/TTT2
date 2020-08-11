@@ -11,9 +11,9 @@ L.last_words = "Letzte Worte"
 L.terrorists = "Terroristen"
 L.spectators = "Zuschauer"
 
-L.noteam = "Kein TEAM"
-L.innocents = "TEAM Unschuldige"
-L.traitors = "TEAM Verräter"
+L.noteam = "Kein Team"
+L.innocents = "Team Unschuldige"
+L.traitors = "Team Verräter"
 
 -- role description
 L.ttt2_desc_none = "Du besitzt keine Rolle!"
@@ -44,7 +44,6 @@ L.limit_left = "{num} Runde(n) oder {time} Minute(n) verbleibend bis die Map gew
 
 -- Credit awards
 L.credit_all = "Deinem Team wurde(n) {num} Ausrüstungs-Credit(s) für eure Leistung gegeben."
-
 L.credit_kill = "Dir wurde(n) {num} Credit(s) gegeben, da du einen {role} getötet hast."
 
 -- Karma
@@ -59,7 +58,6 @@ L.body_found_team = "{finder} fand den Körper von {victim}. {role} ({team})"
 L.body_found_traitor = "Er war ein Verräter!"
 L.body_found_det = "Er war ein Detektiv."
 L.body_found_inno = "Er war unschuldig."
-
 
 L.body_confirm = "{finder} bestätigte den Tod von {victim}."
 
@@ -81,6 +79,7 @@ L.prev = "Zurück"
 L.equip_title = "Ausrüstung"
 L.equip_tabtitle = "Ausrüstung bestellen"
 
+L.equip_status = "Bestellstatus"
 L.equip_cost = "Du hast {num} Credit(s) übrig."
 L.equip_help_cost = "Jedes Ausrüstungsteil, das du kaufst, kostet 1 Credit."
 
@@ -151,7 +150,6 @@ L.radio_button_c4 = "C4-Piepen"
 L.radio_button_burn = "Brennen"
 L.radio_button_steps = "Schritte"
 
-
 -- Intro screen shown after joining
 L.intro_help = "Wenn du zum ersten Mal spielst, dann drücke F1 für Instruktionen!"
 
@@ -174,7 +172,6 @@ L.quick_nobody = "niemand(en)"
 L.quick_disg = "jemand(en) in Tarnung"
 L.quick_corpse = "ein(en) unidentifizierten/r Körper"
 L.quick_corpse_id = "{player}'s Leiche"
-
 
 -- Body search window
 L.search_title = "Ergebnisse der Leichenuntersuchung"
@@ -210,13 +207,11 @@ L.search_dmg_other = "Du kannst keinen spezifischen Grund für den Tod dieser Pe
 L.search_weapon = "Es scheint, als wurde ein(e) {weapon} benutzt, um sie zu töten."
 L.search_head = "Die tödliche Wunde war ein Kopfschuss. Keine Zeit, um zu schreien."
 L.search_time = "Sie wurde etwa {time} getötet, bevor du die Untersuchung begonnen hast."
-L.search_timefake = "Sie wurde etwa 00:15 getötet, bevor du die Untersuchung begonnen hast."
 L.search_dna = "Erlange eine Probe der DNA des Mörders mit dem DNA-Scanner. Die DNA-Probe wird in etwa {time} verfallen."
 
 L.search_kills1 = "Du fandest eine Liste an Tötungen, die den Tod von {player} beweist."
 L.search_kills2 = "Du fandest eine Liste an Tötungen mit diesen Namen:"
 L.search_eyes = "Mit deinen Detektiv-Fähigkeiten identifizierst du die letzte Person, die sie sah: {player}. Der Mörder oder ein Zufall?"
-
 
 -- Scoreboard
 L.sb_playing = "Du spielst auf..."
@@ -238,16 +233,12 @@ L.sb_tag_avoid = "VERMEIDEN"
 L.sb_tag_kill = "TÖTEN"
 L.sb_tag_miss = "VERMISST"
 
--- Weapons and equipment, HUD and messages
-
 -- Equipment actions, like buying and dropping
 L.buy_no_stock = "Diese Waffe ist nicht mehr vorrätig: Du hast sie bereits gekauft."
 L.buy_pending = "Du hast bereits eine Bestellung aufgegeben, warte bis du sie erhältst."
 L.buy_received = "Du hast deine Spezialausrüstung erhalten."
 
 L.drop_no_room = "Du hast hier keinen Platz, um deine Waffe fallen zu lassen!"
-L.pickup_fail = "Du kannst das nicht aufheben"
-L.pickup_pending = "Du hebst bereits eine Waffe auf, warte bis du sie erhältst"
 
 L.disg_turned_on = "Tarnung aktiviert!"
 L.disg_turned_off = "Tarnung deaktiviert!"
@@ -266,16 +257,14 @@ Du kannst es mehrfach kaufen. Beim Erreichen eines gewissen Rüstungswert wird d
 L.item_radar = "Radar"
 L.item_radar_desc = [[
 Dies erlaubt dir nach Lebenszeichen zu scannen.
-Es startet automatisch beim Kauf.
-Stelle es im Reiter "Radar" dieses Menüs ein.]]
+
+Es startet automatisch beim Kauf. Stelle es im Reiter "Radar" dieses Menüs ein.]]
 
 L.item_disg = "Tarnung"
 L.item_disg_desc = [[
-Versteckt deine ID. Vermeidet außerdem, dass du die
-letzte vom Opfer gesehene Person bist.
+Versteckt deine ID. Vermeidet außerdem, dass du die letzte vom Opfer gesehene Person bist.
 
-Schalte es im Reiter "Tarnung" ein oder aus
-oder drücke Enter auf dem Numpad.]]
+Schalte es im Reiter "Tarnung" ein oder aus oder drücke Enter auf dem Numpad.]]
 
 -- C4
 L.c4_hint = "Drücke {usekey} zum scharf stellen oder entschärfen."
@@ -300,7 +289,6 @@ L.c4_remove_destroy2 = "Bestätigen: Vernichten"
 L.c4_disarm = "C4 entschärfen"
 L.c4_disarm_cut = "Klicke zum Durchschneiden von Kabel {num}"
 
-L.c4_disarm_t = "Durchschneide ein Kabel zum Entschärfen der Bombe. Wenn du Verräter bist, ist jedes Kabel sicher. Unschuldige haben es da nicht so einfach!"
 L.c4_disarm_owned = "Durchschneide ein Kabel zum Entschärfen der Bombe. Es ist deine Bombe, also wird jedes Kabel sie sicher entschärfen."
 L.c4_disarm_other = "Durchschneide das richtige Kabel, um die Bombe zu entschärfen. Sie explodiert, wenn du das falsche triffst!"
 
@@ -316,9 +304,7 @@ L.vis_help_pri = "{primaryfire} lässt das aktivierte Gerät fallen."
 L.vis_desc = [[
 Tatort-Visualisierungs-Gerät.
 
-Analysiere eine Leiche, um zu sehen,
-wie die Person umgebracht wurde, funktioniert
-nur bei Tod durch Beschuss.]]
+Analysiere eine Leiche, um zu sehen, wie die Person umgebracht wurde, funktioniert nur bei Tod durch Beschuss.]]
 
 -- Decoy
 L.decoy_name = "Attrappe"
@@ -329,28 +315,24 @@ L.decoy_short_desc = "Diese Attrappe erzeugt ein gefälschtes Radar-Signal sicht
 L.decoy_pickup_wrong_team = "Du kannst sie nicht aufnehmen, da sie einem anderen Team gehört"
 
 L.decoy_desc = [[
-Zeigt Detektiven ein gefälschtes Radar-Signal
-und bewirkt, dass der DNA-Scanner den
-Ort der Attrappe zeigt, wenn sie nach deiner
-DNA suchen.]]
+Zeigt Detektiven ein gefälschtes Radar-Signal und bewirkt, dass der DNA-Scanner den Ort der Attrappe zeigt, wenn sie nach deiner DNA suchen.]]
 
 -- Defuser
 L.defuser_name = "Entschärfer"
 L.defuser_help = "{primaryfire} entschärft anvisiertes C4."
+
 L.defuser_desc = [[
 Entschärft sofort eine C4-Bombe.
 
-Unbegrenzt nutzbar. C4 wird leichter zu entdecken
-sein, wenn du das bei dir trägst.]]
+Unbegrenzt nutzbar. C4 wird leichter zu entdecken sein, wenn du das bei dir trägst.]]
 
 -- Flare gun
 L.flare_name = "Leuchtkanone"
+
 L.flare_desc = [[
-Kann benutzt werden, um Leichen zu verbrennen,
-damit sie nie gefunden werden können.
-Begrenzte Munition.
-Das Verbrennen einer Leiche macht ein ganz
-bestimmtes Geräusch.]]
+Kann benutzt werden, um Leichen zu verbrennen, damit sie nie gefunden werden können. Begrenzte Munition.
+
+Das Verbrennen einer Leiche macht ein ganz bestimmtes Geräusch.]]
 
 -- Health station
 L.hstation_name = "Gesundheitsstation"
@@ -359,25 +341,22 @@ L.hstation_broken = "Deine Gesundheitsstation wurde zerstört!"
 L.hstation_help = "{primaryfire} platziert die Gesundheitsstation."
 
 L.hstation_desc = [[
-Ermöglicht bei Platzierung, dass sich jeder Spieler
-an ihr heilen kann. Langsame Wiederaufladung,
-kann beschädigt werden.
-Am Gerät sind DNA-Spuren ihrer Benutzer zu finden.]]
+Ermöglicht bei Platzierung, dass sich jeder Spieler an ihr heilen kann.
+
+Langsame Wiederaufladung, kann beschädigt werden. Am Gerät sind DNA-Spuren ihrer Benutzer zu finden.]]
 
 -- Knife
 L.knife_name = "Messer"
 L.knife_thrown = "Geworfenes Messer"
 
 L.knife_desc = [[
-Tötet verletzte Ziele sofort und leise,
-kann aber nur einmal genutzt werden.
+Tötet verletzte Ziele sofort und leise, kann aber nur einmal genutzt werden.
 
 Kann mit alternativer Feuertaste geworfen werden.]]
 
 -- Poltergeist
 L.polter_desc = [[
-Platziert Beschleuniger an Objekte um sie wild
-herumwirbeln zu lassen.
+Platziert Beschleuniger an Objekte um sie wild herumwirbeln zu lassen.
 
 Die Energiespitzen schädigen nahestehende Spieler.]]
 
@@ -388,15 +367,13 @@ L.radio_help_pri = "{primaryfire} platziert das Radio."
 L.radio_desc = [[
 Spielt Geräusche zur Ablenkung ab.
 
-Platziere das Radio irgendwo und spiele
-Geräusche im Reiter "Radio" dieses Menüs ab.]]
+Platziere das Radio irgendwo und spiele Geräusche im Reiter "Radio" dieses Menüs ab.]]
 
 -- Silenced pistol
 L.sipistol_name = "Schallgedämpfte Pistole"
 
 L.sipistol_desc = [[
-Handfeuerwaffe mit geringer Lautstärke,
-nutzt normale Pistolenmunition.
+Handfeuerwaffe mit geringer Lautstärke, nutzt normale Pistolenmunition.
 
 Opfer schreien nicht, wenn sie damit getötet werden.]]
 
@@ -412,11 +389,9 @@ Unbegrenzt Munition, aber langsame Schussfolge.]]
 L.binoc_name = "Fernglas"
 
 L.binoc_desc = [[
-Zoome an eine Leiche heran um sie aus einer
-großen Entfernung zu identifizieren.
+Zoome an eine Leiche heran um sie aus einer großen Entfernung zu identifizieren.
 
-Unbegrenzt nutzbar, aber das Identifizieren dauert
-einige Sekunden.]]
+Unbegrenzt nutzbar, aber das Identifizieren dauert einige Sekunden.]]
 
 -- UMP
 L.ump_desc = [[
@@ -435,17 +410,11 @@ L.dna_no_killer = "Die DNA konnte nicht erlangt werden (Mörder vom Server gegan
 L.dna_armed = "Die Bombe ist scharf! Entschärfe sie zuerst!"
 L.dna_object = "Es wurde eine DNA-Spur vom letzten Besitzer des Objektes gefunden."
 L.dna_gone = "DNA nicht in diesem Bereich gefunden."
-L.dna_tid_possible = "Scan möglich"
-L.dna_tid_impossible = "Scan unmöglich"
-L.dna_screen_ready = "Keine DNA"
-L.dna_screen_match = "Treffer"
 
 L.dna_desc = [[
-Sammelt DNA-Spuren von Objekten auf
-und wird genutzt, um den Besitzer dieser ausfindig zu machen.
+Sammelt DNA-Spuren von Objekten auf und wird genutzt, um den Besitzer dieser ausfindig zu machen.
 
-Kann an frischen Leichen verwendet werden, um die DNA
-des Mörders zu erhalten und um ihn aufzuspüren.]]
+Kann an frischen Leichen verwendet werden, um die DNA des Mörders zu erhalten und um ihn aufzuspüren.]]
 
 -- Magneto stick
 L.magnet_name = "Magneto-Stick"
@@ -479,8 +448,7 @@ L.tele_help_sec = "{secondaryfire} markiert momentane Position."
 L.tele_desc = [[
 Teleportiert dich zu einer zuvor markierten Stelle.
 
-Das Teleportieren macht Geräusche und die Anzahl der
-Benutzungen ist begrenzt.]]
+Das Teleportieren macht Geräusche und die Anzahl der Benutzungen ist begrenzt.]]
 
 -- Ammo names, shown when picked up
 L.ammo_pistol = "9mm Munition"
@@ -491,9 +459,6 @@ L.ammo_357 = "Gewehr Munition"
 L.ammo_alyxgun = "Deagle Munition"
 L.ammo_ar2altfire = "Leucht Munition"
 L.ammo_gravity = "Poltergeist Munition"
-
-
--- HUD interface text
 
 -- Round status
 L.round_wait = "Warte..."
@@ -511,7 +476,6 @@ L.hp_hurt = "Verletzt"
 L.hp_wounded = "Verwundet"
 L.hp_badwnd = "Schwer Verwundet"
 L.hp_death = "Dem Tode nah"
-
 
 -- TargetID karma status
 L.karma_max = "Verlässlich"
@@ -548,24 +512,28 @@ L.punch_bonus = "Deine schlechte Punktzahl hat dein Punch-O-Meter Limit um {num}
 L.punch_malus = "Deine gute Punktzahl hat dein Punch-O-Meter Limit um {num} erhöht!"
 
 -- Info popups shown when the round starts
+L.info_popup_innocent = [[
+Du bist ein unschuldiger Terrorist! Aber es gibt Verräter...
+Wem kannst du trauen, und wem füllst du den Körper mit Blei?
 
--- These are spread over multiple lines, hence the square brackets instead of
--- quotes. That's a Lua thing. Every line break (enter) will show up in-game.
-L.info_popup_innocent = [[Du bist ein unschuldiger Terrorist!
-Aber es gibt Verräter… Wem kannst du trauen, und wem füllst du den Körper mit Blei?
 Gib Acht und arbeite mit anderen zusammen, um zu überleben!]]
 
-L.info_popup_detective = [[Du bist ein Detektiv! Das Terroristen Hauptquartier hat dir spezielle Ressourcen gegeben, um die Verräter zu finden.
-Benutze sie, um den Unschuldigen zu helfen, aber sei auf der Hut: Die Verräter werden zusehen dich als erstes zu töten!
+L.info_popup_detective = [[
+Du bist ein Detektiv! Das Terroristen Hauptquartier hat dir spezielle Ressourcen gegeben, um die Verräter zu finden.
+Benutze sie, um den Unschuldigen zu helfen, aber sei auf der Hut:
+Die Verräter werden zusehen dich als erstes zu töten!
 
 Drücke {menukey} für neue Ausrüstung!]]
 
-L.info_popup_traitor_alone = [[Du bist ein VERRÄTER! Du hast keine weiteren Verräter diese Runde.
+L.info_popup_traitor_alone = [[
+Du bist ein VERRÄTER! Du hast keine weiteren Verräter diese Runde.
+
 Töte ALLE anderen, um zu gewinnen!
 
 Drücke {menukey} um den Verräter Shop zu öffnen!]]
 
-L.info_popup_traitor = [[Du bist VERRÄTER! Arbeite mit deinen Verräter Kollegen, um alle anderen Terroristen zu töten.
+L.info_popup_traitor = [[
+Du bist VERRÄTER! Arbeite mit deinen Verräter Kollegen, um alle anderen Terroristen zu töten.
 Aber sei vorsichtig, damit dein Verrat nicht aufgedeckt wird...
 
 Das sind deine Kollegen:
@@ -576,7 +544,8 @@ Drücke {menukey} um den Verräter Shop zu öffnen!]]
 -- Various other text
 L.name_kick = "Ein Spieler wurde automatisch gekickt, weil er seinen Namen während einer laufenden Runde geändert hat."
 
-L.idle_popup = [[Du warst untätig für {num} Sekunden und wurdest deshalb in den Zuschauer-Modus gesetzt. Während du in diesem Modus bist, kannst du nicht an einer neuen Runde teilnehmen.
+L.idle_popup = [[
+Du warst untätig für {num} Sekunden und wurdest deshalb in den Zuschauer-Modus gesetzt. Während du in diesem Modus bist, kannst du nicht an einer neuen Runde teilnehmen.
 
 Du kannst den Nur-Zuschauer-Modus ausschalten, indem du {helpkey} drückst und den Haken im Einstellungsreiter rausmachst. Du kannst es aber auch jetzt sofort ausschalten.]]
 
@@ -587,15 +556,11 @@ L.idle_warning = "Warnung: Du scheinst AFK zu sein und wirst zum Zuschauer, auß
 
 L.spec_mode_warning = "Du bist im Zuschauermodus und wirst nicht spielen, wenn eine Runde beginnt. Um diesen Modus zu verlassen, drücke F1, gehe in die Einstellungen und nimm den Haken bei ‘Nur-Zuschauer-Modus’ raus."
 
-
--- Tips, shown at bottom of screen to spectators
-
 -- Tips panel
 L.tips_panel_title = "Tipps"
 L.tips_panel_tip = "Tipp:"
 
 -- Tip texts
-
 L.tip1 = "Verräter können eine Leiche durch Halten von {walkkey} und Drücken von {usekey} verdeckt untersuchen, ohne ihren Tod zu bestätigen."
 
 L.tip2 = "Das Scharfmachen einer C4 Bombe mit längerem Zünder erhöht die Anzahl an Kabeln, die zu einer sofortigen Detonation führen, wenn ein Unschuldiger versucht es zu entschärfen. Außerdem piepst sie leiser und seltener."
@@ -676,9 +641,7 @@ L.tip39 = "C4, das beim Entschärfen ungewollt gezündet wird, hat eine geringer
 
 L.tip40 = "Wenn 'HAST MODUS' über der Rundenzeit zu lesen ist, dauert die Runde zunächst nur wenige Minuten länger, wird jedoch mit jedem Tod weiter und weiter verlängert. Dieser Modus übt Druck auf die Verräter aus und sorgt dafür, dass sie sich nicht alle Zeit der Welt nehmen können."
 
-
 -- Round report
-
 L.report_title = "Rundenbericht"
 
 -- Tabs
@@ -696,9 +659,9 @@ L.report_save_error = "Keine Ereignis-Log Daten vorhanden."
 L.report_save_result = "Der Ereignis-Log wurde gespeichert:"
 
 -- Big title window
-L.hilite_win_traitors = "VERRATEN!"
-L.hilite_win_bees = "DRAW!"
-L.hilite_win_innocents = "ÜBERLEBT!"
+L.hilite_win_traitors = "DIE VERRÄTER GEWINNEN!"
+L.hilite_win_bees = "UNENTSCHIEDEN!"
+L.hilite_win_innocents = "DIE UNSCHULDIGEN GEWINNEN!"
 
 L.hilite_players1 = "{numplayers} Spieler nahmen teil, davon waren {numtraitors} Verräter."
 L.hilite_players2 = "{numplayers} Spieler nahmen teil, einer war ein Verräter."
@@ -775,7 +738,6 @@ L.ev_win_innocents = "Die liebenswerten unschuldigen Terroristen haben die Runde
 L.ev_win_time = "Den Verrätern ist die Zeit ausgegangen und sie verloren!"
 
 -- Awards/highlights
-
 L.aw_sui1_title = "Leiter des Selbstmord-Kultes"
 L.aw_sui1_text = "zeigte den anderen Selbstmördern, wie sie es zu tun haben, indem er der erste war."
 
@@ -971,17 +933,16 @@ L.aw_tod1_text = "starb nur wenige Sekunden bevor sein Team die Runde gewann."
 L.aw_tod2_title = "Ich hasse dieses Spiel"
 L.aw_tod2_text = "starb direkt am Anfang der Runde."
 
-
 -- New and modified pieces of text are placed below this point, marked with the
 -- version in which they were added, to make updating translations easier.
 
 -- v24
 L.drop_no_ammo = "Du hast zu wenig Munition im Magazin, um eine Munitionskiste fallenzulassen."
 
--- 5-25-15
+-- 2015-05-25
 L.hat_retrieve = "Du hast den Hut eines Detektivs aufgehoben."
 
--- 3-9-2017
+-- 2017-09-03
 L.sb_sortby = "Sortiere nach:"
 
 -- 2018-07-24
@@ -998,16 +959,10 @@ L.stungun_name = "UMP Prototype"
 
 L.knife_instant = "INSTANT KILL"
 
-L.dna_hud_type = "TYPE"
-L.dna_hud_body = "BODY"
-L.dna_hud_item = "ITEM"
+L.binoc_zoom_level = "Zoom Stufe"
+L.binoc_body = "LEICHE GEFUNDEN"
 
-L.binoc_body = "BODY DETECTED"
-
-L.idle_popup_title = "Idle"
-
---------------------------------
--- TTT2 LANGUAGE
+L.idle_popup_title = "Untätig"
 
 -- 2019-01-31
 L.create_own_shop = "Erstelle einen eigenen Shop"
@@ -1088,6 +1043,8 @@ L.corpse_binoculars = "Drücke [{key}] um Leiche mit Fernglas zu untersuchen."
 L.binoc_progress = "Durchsuchungsfortschritt: {progress}%"
 
 L.pickup_no_room = "Du hast keinen Platz für diese Waffe in deinem Inventar"
+L.pickup_fail = "Du kannst diese Waffe nicht aufheben"
+L.pickup_pending = "Du hebst bereits eine Waffe auf, warte bis du sie erhältst"
 
 --2020-01-07
 L.tbut_help_admin = "Bearbeite Knopfeinstellungen"
@@ -1285,6 +1242,12 @@ L.item_no_prop_damage = "Kein Objektschaden"
 L.item_no_prop_damage_desc = [[Macht dich immun fpr Objektschaden.]]
 L.item_no_drown_damage = "Kein Ertrinkungsschaden"
 L.item_no_drown_damage_desc = [[Macht dich immun für Ertrinkungsschaden.]]
+
+-- 2020-04-21
+L.dna_tid_possible = "Scan möglich"
+L.dna_tid_impossible = "Scan unmöglich"
+L.dna_screen_ready = "Keine DNA"
+L.dna_screen_match = "Treffer"
 
 -- 2020-04-30
 L.message_revival_canceled = "Wiederbelebung abgebrochen."

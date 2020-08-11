@@ -3,17 +3,17 @@
 local L = LANG.CreateLanguage("Polski")
 
 -- General text used in various places
-L.traitor    = "Zdrajca"
-L.detective  = "Detektyw"
-L.innocent   = "Niewinny"
+L.traitor = "Zdrajca"
+L.detective = "Detektyw"
+L.innocent = "Niewinny"
 L.last_words = "Ostatnie słowa"
 
 L.terrorists = "Terroryści"
 L.spectators = "Obserwatorzy"
 
-L.noteam = "BRAK TEAMU"
-L.innocents = "TEAM Niewinni"
-L.traitors = "TEAM Zdrajcy"
+L.noteam = "Brak Teamu"
+L.innocents = "Team Niewinni"
+L.traitors = "Team Zdrajcy"
 
 -- role description
 L.ttt2_desc_none = "Obecnie nie masz roli!"
@@ -23,50 +23,49 @@ L.ttt2_desc_detective = "Jesteś detektywem, pomóż niewinnym przetrwać i poko
 
 -- Round status messages
 L.round_minplayers = "Nie wystarczająca ilość graczy do rozpoczęcia nowej rundy"
-L.round_voting     = "Głosowanie w toku, opóźnia nową rundę o {num} sekund..."
-L.round_begintime  = "Nowa runda zacznie się za {num} sekund. Przygotuj się."
-L.round_selected   = "Zdrajcy zostali wybrani."
-L.round_started    = "Runda rozpoczeła się!"
-L.round_restart    = "Admin postanowił zrestartować rundę."
+L.round_voting = "Głosowanie w toku, opóźnia nową rundę o {num} sekund..."
+L.round_begintime = "Nowa runda zacznie się za {num} sekund. Przygotuj się."
+L.round_selected = "Zdrajcy zostali wybrani."
+L.round_started = "Runda rozpoczeła się!"
+L.round_restart = "Admin postanowił zrestartować rundę."
 
-L.round_traitors_one  = "Zdrajco, pracujesz sam"
+L.round_traitors_one = "Zdrajco, pracujesz sam"
 L.round_traitors_more = "Zdrajco, to są twoi sojusznicy: {names}"
 
-L.win_time         = "Czas minął. Zdrajcy przegrali."
-L.win_traitors     = "Zdrajcy wygrali!"
-L.win_innocents    = "Zdrajcy zostali pokonani!"
-L.win_bees         = "Wygrały pszczoły! (To oznacza remis)"
-L.win_showreport   = "Spójrzmy na raport rundy na {num} sekund."
+L.win_time = "Czas minął. Zdrajcy przegrali."
+L.win_traitors = "Zdrajcy wygrali!"
+L.win_innocents = "Zdrajcy zostali pokonani!"
+L.win_bees = "Wygrały pszczoły! (To oznacza remis)"
+L.win_showreport = "Spójrzmy na raport rundy na {num} sekund."
 
-L.limit_round      = "Limit rund osiągnięty. {mapname} wkrótce się załaduje."
-L.limit_time       = "Limit czasowy osiągnięty. {mapname} wkrótce się załaduje."
-L.limit_left       = "{num} rund(a), albo {time} minut, do zmiany mapy na {mapname}."
+L.limit_round = "Limit rund osiągnięty. {mapname} wkrótce się załaduje."
+L.limit_time = "Limit czasowy osiągnięty. {mapname} wkrótce się załaduje."
+L.limit_left = "{num} rund(a), albo {time} minut, do zmiany mapy na {mapname}."
 
 -- Credit awards
 L.credit_all = "Twój team został nagrodzony {num} kredytami na zakupy."
-
-L.credit_kill      = "Zdobyłeś {num} kredyt(ów) za zabicie {role}."
+L.credit_kill = "Zdobyłeś {num} kredyt(ów) za zabicie {role}."
 
 -- Karma
-L.karma_dmg_full   = "Twoja karma to {amount}, dlatego w tej rundzie zadajesz pełne obrażenia!"
-L.karma_dmg_other  = "Twoja karma to {amount}. Dlatego twoje obrażenia zostaną zredukowane o {num}%"
+L.karma_dmg_full = "Twoja karma to {amount}, dlatego w tej rundzie zadajesz pełne obrażenia!"
+L.karma_dmg_other = "Twoja karma to {amount}. Dlatego twoje obrażenia zostaną zredukowane o {num}%"
 
 -- Body identification messages
-L.body_found       = "{finder} znalazł ciało {victim}. {role}"
+L.body_found = "{finder} znalazł ciało {victim}. {role}"
 L.body_found_team = "{finder} znalazł ciało {victim}. {role} ({team})"
 
 -- The {role} in body_found will be replaced by one of the following:
-L.body_found_traitor      = "On był zdrajcą!"
-L.body_found_det    = "On był detektywem."
-L.body_found_inno    = "On był niewinny."
+L.body_found_traitor = "On był zdrajcą!"
+L.body_found_det = "On był detektywem."
+L.body_found_inno = "On był niewinny."
 
-L.body_confirm     = "{finder} potwierdził śmierć {victim}."
+L.body_confirm = "{finder} potwierdził śmierć {victim}."
 
-L.body_call        = "{player} zawołał detektywa do ciała {victim}!"
-L.body_call_error  = "Musisz potwierdić zgon tego gracza, zanim zawołasz detektywa!"
+L.body_call = "{player} zawołał detektywa do ciała {victim}!"
+L.body_call_error = "Musisz potwierdić zgon tego gracza, zanim zawołasz detektywa!"
 
-L.body_burning     = "O nie! Te zwłoki się palą!"
-L.body_credits     = "Znalazłeś {num} kredyt(ów) na ciele!"
+L.body_burning = "O nie! Te zwłoki się palą!"
+L.body_credits = "Znalazłeś {num} kredyt(ów) na ciele!"
 
 --- Menus and windows
 L.close = "Zamknij"
@@ -76,422 +75,380 @@ L.cancel = "Anuluj"
 L.next = "Następny"
 L.prev = "Poprzedni"
 
-
 -- Equipment buying menu
-L.equip_title     = "Wyposażenie"
-L.equip_tabtitle  = "Zamów wyposażenie"
+L.equip_title = "Wyposażenie"
+L.equip_tabtitle = "Zamów wyposażenie"
 
-L.equip_status    = "Status zamówienia"
-L.equip_cost      = "Został(o) ci {num} kredyt(ów)."
+L.equip_status = "Status zamówienia"
+L.equip_cost = "Został(o) ci {num} kredyt(ów)."
 L.equip_help_cost = "Każdy element sprzęty kosztuje 1 kredyt."
 
 L.equip_help_carry = "Możesz kupować jedynie przedmioty na, które masz miejsce."
-L.equip_carry      = "Możesz wziąć ten przedmiot."
-L.equip_carry_own  = "Aktualnie posiadasz ten przedmiot."
+L.equip_carry = "Możesz wziąć ten przedmiot."
+L.equip_carry_own = "Aktualnie posiadasz ten przedmiot."
 L.equip_carry_slot = "Posiadasz już inny przedmiot na slocie {slot}."
+--L.equip_carry_minplayers = "There are not enough players on the server to enable this weapon."
 
 L.equip_help_stock = "Istnieją przedmioty, które możesz kupić tylko raz na rundę."
 L.equip_stock_deny = "Ten przedmiot nie jest już dłużej dostępny."
-L.equip_stock_ok   = "Ten przedmiot jest dostępny."
+L.equip_stock_ok = "Ten przedmiot jest dostępny."
 
-L.equip_custom     = "Przedmiot dodany przez serwer."
+L.equip_custom = "Przedmiot dodany przez serwer."
 
-L.equip_spec_name  = "Nazwa"
-L.equip_spec_type  = "Typ"
-L.equip_spec_desc  = "Opis"
+L.equip_spec_name = "Nazwa"
+L.equip_spec_type = "Typ"
+L.equip_spec_desc = "Opis"
 
-L.equip_confirm    = "Kup wyposażenie"
+L.equip_confirm = "Kup wyposażenie"
 
 -- Disguiser tab in equipment menu
-L.disg_name      = "Przebranie"
+L.disg_name = "Przebranie"
 L.disg_menutitle = "Obsługa przebrania"
 L.disg_not_owned = "Nie masz przebrania!"
-L.disg_enable    = "Włącz przebranie"
+L.disg_enable = "Włącz przebranie"
 
-L.disg_help1     = "Kiedy twoje przebranie jest aktywne, twoje imie, zdrowie i karma nie będzie widoczna, gdy ktoś na ciebie spojrzy. Ponadto, będziesz niewidzoczny dla radaru Detektywa."
-L.disg_help2     = "Kliknij Enter na Numpadzie, by przełączać przebranie bez używania menu. Możesz też ustawić inny przycisk do 'ttt_toggle_disguise' używając konsoli."
+L.disg_help1 = "Kiedy twoje przebranie jest aktywne, twoje imie, zdrowie i karma nie będzie widoczna, gdy ktoś na ciebie spojrzy. Ponadto, będziesz niewidzoczny dla radaru Detektywa."
+L.disg_help2 = "Kliknij Enter na Numpadzie, by przełączać przebranie bez używania menu. Możesz też ustawić inny przycisk do 'ttt_toggle_disguise' używając konsoli."
 
 -- Radar tab in equipment menu
-L.radar_name      = "Radar"
+L.radar_name = "Radar"
 L.radar_menutitle = "Obsługa radaru"
 L.radar_not_owned = "Nie masz radaru!"
-L.radar_scan      = "Wykonaj skanowanie"
-L.radar_auto      = "Auto-powtarzaj skanowanie"
-L.radar_help      = "Wyniki skanowania pokazują się na {num} sekund, po którym radar zostanie przeładowany i będzie mógł być ponownie użyty."
-L.radar_charging  = "Twój radar nadal się ładuje!"
+L.radar_scan = "Wykonaj skanowanie"
+L.radar_auto = "Auto-powtarzaj skanowanie"
+L.radar_help = "Wyniki skanowania pokazują się na {num} sekund, po którym radar zostanie przeładowany i będzie mógł być ponownie użyty."
+L.radar_charging = "Twój radar nadal się ładuje!"
 
 -- Transfer tab in equipment menu
-L.xfer_name       = "Transfer"
-L.xfer_menutitle  = "Transferuj kredyty"
+L.xfer_name = "Transfer"
+L.xfer_menutitle = "Transferuj kredyty"
 L.xfer_no_credits = "Nie masz żądnych kredytów do dania!"
-L.xfer_send       = "Wyślij kredyty"
-L.xfer_help       = "Możesz tylko wysłać kredyty do graczy w roli {role}."
+L.xfer_send = "Wyślij kredyty"
+L.xfer_help = "Możesz tylko wysłać kredyty do graczy w roli {role}."
 
-L.xfer_no_recip   = "Odbiorca nie jest prawidłowy, transfer kredytów został przerwany."
+L.xfer_no_recip = "Odbiorca nie jest prawidłowy, transfer kredytów został przerwany."
 L.xfer_no_credits = "Niewystarczająca ilość kreytów do transferu."
-L.xfer_success    = "Transfer kredytów do {player} zakończony."
-L.xfer_received   = "{player} dał ci {num} kredyt(ów)."
+L.xfer_success = "Transfer kredytów do {player} zakończony."
+L.xfer_received = "{player} dał ci {num} kredyt(ów)."
 
 -- Radio tab in equipment menu
-L.radio_name      = "Radio"
-L.radio_help      = "Klkinij przycisk, by twoje radio zaczeło grać."
+L.radio_name = "Radio"
+L.radio_help = "Klkinij przycisk, by twoje radio zaczeło grać."
 L.radio_notplaced = "Musisz postawić radio, by móc puścić jakieś dźwięki."
 
 -- Radio soundboard buttons
-L.radio_button_scream  = "Krzyk"
-L.radio_button_expl    = "Eksplozja"
-L.radio_button_pistol  = "Strzały z pistoletu"
-L.radio_button_m16     = "Strzały z M16"
-L.radio_button_deagle  = "Strzały z Deagle'a"
-L.radio_button_mac10   = "Strzały z MAC10"
+L.radio_button_scream = "Krzyk"
+L.radio_button_expl = "Eksplozja"
+L.radio_button_pistol = "Strzały z pistoletu"
+L.radio_button_m16 = "Strzały z M16"
+L.radio_button_deagle = "Strzały z Deagle'a"
+L.radio_button_mac10 = "Strzały z MAC10"
 L.radio_button_shotgun = "Strzałty z shotguna"
-L.radio_button_rifle   = "Strzały z Rifle'a"
-L.radio_button_huge    = "Wystrzały z H.U.G.E"
-L.radio_button_c4      = "Pikanie C4"
-L.radio_button_burn    = "Palenie się"
-L.radio_button_steps   = "Kroki"
-
+L.radio_button_rifle = "Strzały z Rifle'a"
+L.radio_button_huge = "Wystrzały z H.U.G.E"
+L.radio_button_c4 = "Pikanie C4"
+L.radio_button_burn = "Palenie się"
+L.radio_button_steps = "Kroki"
 
 -- Intro screen shown after joining
-L.intro_help     = "Jeśli jesteś nowy w grze, kliknij F1 dla instrukcji!"
+L.intro_help = "Jeśli jesteś nowy w grze, kliknij F1 dla instrukcji!"
 
 -- Radiocommands/quickchat
-L.quick_title   = "Szybkie odpowiedzi"
+L.quick_title = "Szybkie odpowiedzi"
 
-L.quick_yes     = "Tak."
-L.quick_no      = "Nie."
-L.quick_help    = "Pomocy!"
-L.quick_imwith  = "Jestem z {player}."
-L.quick_see     = "Widzę {player}."
+L.quick_yes = "Tak."
+L.quick_no = "Nie."
+L.quick_help = "Pomocy!"
+L.quick_imwith = "Jestem z {player}."
+L.quick_see = "Widzę {player}."
 L.quick_suspect = "{player} jest podejrzany."
 L.quick_traitor = "{player} jest zdrajcą!"
-L.quick_inno    = "{player} jest niewinny."
-L.quick_check   = "Ktoś jeszcze żyje?"
+L.quick_inno = "{player} jest niewinny."
+L.quick_check = "Ktoś jeszcze żyje?"
 
 -- {player} in the quickchat text normally becomes a player nickname, but can
--- also be one of the below.  Keep these lowercase.
-L.quick_nobody    = "nikt"
-L.quick_disg      = "ktoś w przebraniu"
-L.quick_corpse    = "niezidentyfikowane zwłoki"
+-- also be one of the below. Keep these lowercase.
+L.quick_nobody = "nikt"
+L.quick_disg = "ktoś w przebraniu"
+L.quick_corpse = "niezidentyfikowane zwłoki"
 L.quick_corpse_id = "ciało gracza {player}"
 
-
 --- Body search window
-L.search_title  = "Rezultaty przeszukania ciała"
-L.search_info   = "Informacje"
+L.search_title = "Rezultaty przeszukania ciała"
+L.search_info = "Informacje"
 L.search_confirm = "Potwierdź śmierć"
-L.search_call   = "Zawołaj detektywa"
+L.search_call = "Zawołaj detektywa"
 
 -- Descriptions of pieces of information found
-L.search_nick   = "To jest ciało gracza {player}."
+L.search_nick = "To jest ciało gracza {player}."
 
-L.search_role_t = "Ta osoba była zdrajcą!"
-L.search_role_d = "Ta osoba była detektywem."
-L.search_role_i = "Ta osoba była niewinnym terrorystą."
+L.search_role_traitor = "Ta osoba była zdrajcą!"
+L.search_role_det = "Ta osoba była detektywem."
+L.search_role_inno = "Ta osoba była niewinnym terrorystą."
 
-L.search_words  = "Coś ci mówi, że jego ostanie słowa to: '{lastwords}'"
-L.search_armor  = "On nosił niestandardową kamizelkę kuloodporną."
-L.search_disg   = "Trzymał urządzenie, które mogło ukryć jego tożsamość."
-L.search_radar  = "Miał jakiegoś rodzaju radar. Już nie działa."
-L.search_c4     = "W kieszeni znalazłeś notkę. Stwierdza, że przecięcie przewodu {num} bezpiecznie rozbroi bombę."
+L.search_words = "Coś ci mówi, że jego ostanie słowa to: '{lastwords}'"
+L.search_armor = "On nosił niestandardową kamizelkę kuloodporną."
+L.search_disg = "Trzymał urządzenie, które mogło ukryć jego tożsamość."
+L.search_radar = "Miał jakiegoś rodzaju radar. Już nie działa."
+L.search_c4 = "W kieszeni znalazłeś notkę. Stwierdza, że przecięcie przewodu {num} bezpiecznie rozbroi bombę."
 
-L.search_dmg_crush  = "Wiele z jego kości jest połamanych. To pokazuje, że zabił go jakiś duży obiekt."
+L.search_dmg_crush = "Wiele z jego kości jest połamanych. To pokazuje, że zabił go jakiś duży obiekt."
 L.search_dmg_bullet = "Jest oczywiste, że został zastrzelony na śmierć."
-L.search_dmg_fall   = "Spadł i połamał sobie kark."
-L.search_dmg_boom   = "Stan jego ubrania pokazują, że wybuch zakończył jego żywot."
-L.search_dmg_club   = "Ciało jest posiniaczone i poobijane. Najwyraźniej został zatłuczony na śmierć."
-L.search_dmg_drown  = "Ciało wykazuje, że delikwent utonął."
-L.search_dmg_stab   = "Został dźgnięty nożem, zanim szybko się wykrwawił."
-L.search_dmg_burn   = "Pachnie jak pieczony terrorysta..."
-L.search_dmg_tele   = "Jego DNA zostało uszkodzone przez fale tachionu."
-L.search_dmg_car    = "Gdy ten terrorysta przechodził przez drogę, został przejechany przez lekkomyślnego kierowce."
-L.search_dmg_other  = "Nie możesz znaleźć konkretnej przyczyny śmierci tego terrorysty."
+L.search_dmg_fall = "Spadł i połamał sobie kark."
+L.search_dmg_boom = "Stan jego ubrania pokazują, że wybuch zakończył jego żywot."
+L.search_dmg_club = "Ciało jest posiniaczone i poobijane. Najwyraźniej został zatłuczony na śmierć."
+L.search_dmg_drown = "Ciało wykazuje, że delikwent utonął."
+L.search_dmg_stab = "Został dźgnięty nożem, zanim szybko się wykrwawił."
+L.search_dmg_burn = "Pachnie jak pieczony terrorysta..."
+L.search_dmg_tele = "Jego DNA zostało uszkodzone przez fale tachionu."
+L.search_dmg_car = "Gdy ten terrorysta przechodził przez drogę, został przejechany przez lekkomyślnego kierowce."
+L.search_dmg_other = "Nie możesz znaleźć konkretnej przyczyny śmierci tego terrorysty."
 
 L.search_weapon = "Wygląda na to, że {weapon} posłużyła do tego zabójstwa."
-L.search_head   = "Rana śmiertelna była strzałem w głowę. Nie miał czasu, aby krzyczeć."
-L.search_time   = "Zmarł w przybliżeniu {time}, zanim go przeszukałeś."
-L.search_timefake = "Umarli 00:25 przed ich przeszukaniem."
-L.search_dna    = "Pobierz próbkę DNA zabójcy za pomocą skanera DNA. Próbka DNA przeterminuje się za {time}."
+L.search_head = "Rana śmiertelna była strzałem w głowę. Nie miał czasu, aby krzyczeć."
+L.search_time = "Zmarł w przybliżeniu {time}, zanim go przeszukałeś."
+L.search_dna = "Pobierz próbkę DNA zabójcy za pomocą skanera DNA. Próbka DNA przeterminuje się za {time}."
 
 L.search_kills1 = "Znalazłeś listę zabójstw, co potwierdza śmierć {player}."
 L.search_kills2 = "Znalazłeś listę zabójstw z tymi imionami:"
-L.search_eyes   = "Używając umiejętności detektywa, zidentyfikowałeś ostatnią osobę, która go widziała: {player}. Morderca, czy zbieg okoliczności?"
-
+L.search_eyes = "Używając umiejętności detektywa, zidentyfikowałeś ostatnią osobę, która go widziała: {player}. Morderca, czy zbieg okoliczności?"
 
 -- Scoreboard
-L.sb_playing    = "Grasz na..."
-L.sb_mapchange  = "Mapa zmieni się za {num} rund(ę) lub za {time}"
+L.sb_playing = "Grasz na..."
+L.sb_mapchange = "Mapa zmieni się za {num} rund(ę) lub za {time}"
 
-L.sb_sortby = "Sortuj:"
+L.sb_mia = "Zaginiony w akcji"
+L.sb_confirmed = "Potwierdzony zgon"
 
-L.sb_mia        = "Zaginiony w akcji"
-L.sb_confirmed  = "Potwierdzony zgon"
+L.sb_ping = "Ping"
+L.sb_deaths = "Śmierci"
+L.sb_score = "Wynik"
+L.sb_karma = "Karma"
 
-L.sb_ping       = "Ping"
-L.sb_deaths     = "Śmierci"
-L.sb_score      = "Wynik"
-L.sb_karma      = "Karma"
-
-L.sb_info_help  = "Przejrzyj zwłoki tego gracza, a znajdziesz tutaj wyniki jego przeszukania."
+L.sb_info_help = "Przejrzyj zwłoki tego gracza, a znajdziesz tutaj wyniki jego przeszukania."
 
 L.sb_tag_friend = "PRZYJACIEL"
-L.sb_tag_susp   = "PODEJRZANY"
-L.sb_tag_avoid  = "UNIKAĆ"
-L.sb_tag_kill   = "ZABIĆ"
-L.sb_tag_miss   = "ZAGINIONY"
-
--- Weapons and equipment, HUD and messages
+L.sb_tag_susp = "PODEJRZANY"
+L.sb_tag_avoid = "UNIKAĆ"
+L.sb_tag_kill = "ZABIĆ"
+L.sb_tag_miss = "ZAGINIONY"
 
 -- Equipment actions, like buying and dropping
-L.buy_no_stock = "This weapon is out of stock: you already bought it this round."
-L.buy_pending = "You already have an order pending, wait until you receive it."
-L.buy_received = "You have received your special equipment."
+--L.buy_no_stock = "This weapon is out of stock: you already bought it this round."
+--L.buy_pending = "You already have an order pending, wait until you receive it."
+--L.buy_received = "You have received your special equipment."
 
-L.drop_no_room = "You have no room here to drop your weapon!"
-L.pickup_fail = "You cannot pick up this"
-L.pickup_pending = "You already picked up a weapon, wait until you receive it"
+--L.drop_no_room = "You have no room here to drop your weapon!"
 
-L.disg_turned_on = "Disguise enabled!"
-L.disg_turned_off = "Disguise disabled."
+--L.disg_turned_on = "Disguise enabled!"
+--L.disg_turned_off = "Disguise disabled."
 
 -- Equipment item descriptions
-L.item_passive    = "Pasywne"
-L.item_active     = "Aktywne"
-L.item_weapon     = "Broń"
+L.item_passive = "Pasywne"
+L.item_active = "Aktywne"
+L.item_weapon = "Broń"
 
-L.item_armor      = "Kamizelka kuloodporna"
-L.item_armor_desc = [[
-Redukuje obrażenia od pocisków 
-o 30%, kiedy zostaniesz trafiony
-Podstawowe wyposażenie detektywa.]]
+L.item_armor = "Kamizelka kuloodporna"
+--L.item_armor_desc = [[
+--Reduces bullet, fire and explosion damage. Depletes over time.
 
-L.item_radar      = "Radar"
+--It can be purchased multiple times. After reaching a specific armor value, the armor becomes stronger.]]
+
+L.item_radar = "Radar"
 L.item_radar_desc = [[
 Wyszukuje oznak życia, skanując.
-Zaczyna automatycznie skanować tylko jak
-go kupisz. Skonfiguruj to w zakładce radaru
-w tym menu.]]
 
-L.item_disg       = "Przebranie"
-L.item_disg_desc  = [[
-Ukrywa twój status, gdy jest włączone. Także
-unika, bycia ostanią osobą widzaną przez ofiare.
-Przełącz w zakładce Przebrania w tym menu
-lub kliknij Enter na Numpadzie.]]
+Zaczyna automatycznie skanować tylko jak go kupisz. Skonfiguruj to w zakładce radaru w tym menu.]]
+
+L.item_disg = "Przebranie"
+L.item_disg_desc = [[
+Ukrywa twój status, gdy jest włączone. Także unika, bycia ostanią osobą widzaną przez ofiare.
+
+Przełącz w zakładce Przebrania w tym menu lub kliknij Enter na Numpadzie.]]
 
 -- C4
-L.c4_hint         = "Kliknij {usekey}, by uzbroić lub rozbroić."
-L.c4_no_disarm    = "Nie możesz rozbroić C4 innego zdrajcy, dopóki on żyje."
-L.c4_disarm_warn  = "C4, które uzbroiłeś, zostało rozbrojone."
-L.c4_armed        = "Pomyślnie uzbroiłeś bombę."
-L.c4_disarmed     = "Pomyślnie rozbroiłeś bombę."
-L.c4_no_room      = "Nie możesz wziąć tego C4."
+L.c4_hint = "Kliknij {usekey}, by uzbroić lub rozbroić."
+L.c4_no_disarm = "Nie możesz rozbroić C4 innego zdrajcy, dopóki on żyje."
+L.c4_disarm_warn = "C4, które uzbroiłeś, zostało rozbrojone."
+L.c4_armed = "Pomyślnie uzbroiłeś bombę."
+L.c4_disarmed = "Pomyślnie rozbroiłeś bombę."
+L.c4_no_room = "Nie możesz wziąć tego C4."
 
-L.c4_desc         = "Potężny, wybuchowy, czasowy."
+L.c4_desc = "Potężny, wybuchowy, czasowy."
 
-L.c4_arm          = "Uzbrój C4"
-L.c4_arm_timer    = "Timer"
-L.c4_arm_seconds  = "Sekund do detonacji:"
+L.c4_arm = "Uzbrój C4"
+L.c4_arm_timer = "Timer"
+L.c4_arm_seconds = "Sekund do detonacji:"
 L.c4_arm_attempts = "Przy próbie rozbrojenia, {num} z 6 przewodów spowoduje natychmiastowy wybuch podczas cięcia."
 
-L.c4_remove_title    = "Usuwanie"
-L.c4_remove_pickup   = "Weź C4"
+L.c4_remove_title = "Usuwanie"
+L.c4_remove_pickup = "Weź C4"
 L.c4_remove_destroy1 = "Zniszcz C4"
 L.c4_remove_destroy2 = "Potwierdź: zniszcz"
 
-L.c4_disarm       = "Rozbrój C4"
-L.c4_disarm_cut   = "Kliknij, by przeciąć kabel {num}"
+L.c4_disarm = "Rozbrój C4"
+L.c4_disarm_cut = "Kliknij, by przeciąć kabel {num}"
 
-L.c4_disarm_t     = "Przetnij kabel, by rozbroić bombe. Kiedy jesteś zdrajcą, każdy kabel jest bezpieczny. Niewinni nie mają tak łatwo!"
 L.c4_disarm_owned = "Przetnij kabel, by rozbroić bombe. To twoja bomba, więc każdy kabel ją rozbraja"
 L.c4_disarm_other = "Przetnij odpowiedni kabel, by rozbroić bombe. Jak się pomylisz, to ona wybuchnie!"
 
-L.c4_status_armed    = "UZBROJONA"
+L.c4_status_armed = "UZBROJONA"
 L.c4_status_disarmed = "ROZBROJONA"
 
 -- Visualizer
-L.vis_name        = "Wizualizer"
-L.vis_hint        = "Kliknij {usekey} by podnieść (tylko Detektywi)."
+L.vis_name = "Wizualizer"
+L.vis_hint = "Kliknij {usekey} by podnieść (tylko Detektywi)."
 
-L.vis_help_pri    = "{primaryfire} upuszcza aktywowane urządzenie."
+L.vis_help_pri = "{primaryfire} upuszcza aktywowane urządzenie."
 
-L.vis_desc        = [[
+L.vis_desc = [[
 Wizualizator chwili zabójstwa.
-Analizuje ciało by pokazać jak
-jak ofiara zostałą zabita, ale tylko jak
-zgineła od strzałów z broni.]]
+
+Analizuje ciało by pokazać jak jak ofiara zostałą zabita, ale tylko jak zgineła od strzałów z broni.]]
 
 -- Decoy
-L.decoy_name      = "Wabik"
-L.decoy_no_room   = "Nie możesz wziąć tego wabika."
-L.decoy_broken    = "Twój wabik został zniszczony!"
+L.decoy_name = "Wabik"
+L.decoy_no_room = "Nie możesz wziąć tego wabika."
+L.decoy_broken = "Twój wabik został zniszczony!"
 
-L.decoy_help_pri  = "{primaryfire} kładzie wabik."
 L.decoy_short_desc = "Pokazuje oszukaną pozycję na radarze"
 L.decoy_pickup_wrong_team = "You can't pick it up as it belongs to a different team"
 
-L.decoy_desc      = [[
-Pokazuje fałszywy znacznik na radarze Detektywów,
-i sprawia, że DNA skaner pokazuje Detektywowi
-lokalizacje wabika, jeżeli zeskanuje 
-twoje DNA.]]
+L.decoy_desc = [[
+Pokazuje fałszywy znacznik na radarze Detektywów, i sprawia, że DNA skaner pokazuje Detektywowi lokalizacje wabika, jeżeli zeskanuje twoje DNA.]]
 
 -- Defuser
-L.defuser_name    = "Rozbrajacz"
-L.defuser_help    = "{primaryfire} rozbraja zaznaczone C4."
+L.defuser_name = "Rozbrajacz"
+L.defuser_help = "{primaryfire} rozbraja zaznaczone C4."
 
-L.defuser_desc    = [[
+L.defuser_desc = [[
 Natychmiastowo robraja ładunek C4.
-Brak limitu użyć. C4 będzie łatwiej 
-zauważyć, jeśli go nosisz.]]
+
+Brak limitu użyć. C4 będzie łatwiej zauważyć, jeśli go nosisz.]]
 
 -- Flare gun
-L.flare_name      = "Pistolet sygnałowy"
-L.flare_desc      = [[
-Pozwala spalić zwłoki, żeby nikt ich
-nigdy nie odnalazł. Ograniczona amunicja.
-Palenie zwłok wydaje charakterystyczny
-dźwięk.]]
+L.flare_name = "Pistolet sygnałowy"
+
+L.flare_desc = [[
+Pozwala spalić zwłoki, żeby nikt ich nigdy nie odnalazł. Ograniczona amunicja.
+
+Palenie zwłok wydaje charakterystyczny dźwięk.]]
 
 -- Health station
-L.hstation_name   = "Stacja Lecząca"
+L.hstation_name = "Stacja Lecząca"
 
 L.hstation_broken = "Twoja stacja lecząca została zniszczona!"
-L.hstation_help   = "{primaryfire} kładzie stacje."
+L.hstation_help = "{primaryfire} kładzie stacje."
 
-L.hstation_desc   = [[
-Pozwala ludzią się leczyć, gdy jest
-położone.
-Powolne ładowanie. Każdy może użyć i
-może być uszkodzone. Może posłużyć
-do sprawdzenia DNA  jej użytkowników.]]
+L.hstation_desc = [[
+Pozwala ludzią się leczyć, gdy jest położone.
+
+Powolne ładowanie. Każdy może użyć i może być uszkodzone. Może posłużyć do sprawdzenia DNA jej użytkowników.]]
 
 -- Knife
-L.knife_name      = "Nóż"
-L.knife_thrown    = "Nóż do rzucania"
+L.knife_name = "Nóż"
+L.knife_thrown = "Nóż do rzucania"
 
-L.knife_desc      = [[
-Zabija ranne cele natychmiastowo i
-po cichu, ale ma tylko jedno użycie.
-Może być rzucone za pomocą strzału
-alternatywnego.]]
+L.knife_desc = [[
+Zabija ranne cele natychmiastowo i po cichu, ale ma tylko jedno użycie.
+
+Może być rzucone za pomocą strzału alternatywnego.]]
 
 -- Poltergeist
-L.polter_desc     = [[
+L.polter_desc = [[
 Miota przedmiotami jak szatan.
+
 Rani ludzi, których trafi.]]
 
 -- Radio
-L.radio_broken    = "Twoje radio zostało zniszczone!"
-L.radio_help_pri  = "{primaryfire} kładzie radio."
+L.radio_broken = "Twoje radio zostało zniszczone!"
+L.radio_help_pri = "{primaryfire} kładzie radio."
 
-L.radio_desc      = [[
+L.radio_desc = [[
 Odtwarza dźwięki lub odgłosy.
-Postaw gdzieś radio, i potem
-puszczaj dźwięki używając specjalnej zakładki
-w tym menu.]]
+
+Postaw gdzieś radio, i potem puszczaj dźwięki używając specjalnej zakładki w tym menu.]]
 
 -- Silenced pistol
-L.sipistol_name   = "Pistolet z tłumikiem"
+L.sipistol_name = "Pistolet z tłumikiem"
 
-L.sipistol_desc   = [[
-Cichy pistolet, używa normalnego ammo
-do pistoletu.
+L.sipistol_desc = [[
+Cichy pistolet, używa normalnego ammo do pistoletu.
+
 Ofiara nie będzie krzyczeć, gdy zginie.]]
 
 -- Newton launcher
-L.newton_name     = "Wyrzutnia Newtona"
+L.newton_name = "Wyrzutnia Newtona"
 
-L.newton_desc     = [[
+L.newton_desc = [[
 Zpychaj ludzi z bezpiecznego dystansu.
+
 Nieskończona amunicja, ale wolno strzela.]]
 
 -- Binoculars
-L.binoc_name      = "Lornetka"
-L.binoc_desc      = [[
-Przybliżaj na ciała i identyfikuj je
-z dalekiego dystansu.
-Nielimitowana liczba użyć, ale 
-identyfikacja trwa pare sekund.]]
+L.binoc_name = "Lornetka"
 
-L.binoc_help_pri  = "{primaryfire} identyfikuje ciało."
-L.binoc_help_sec  = "{secondaryfire} zmienia poziom przybliżenia."
+L.binoc_desc = [[
+Przybliżaj na ciała i identyfikuj je z dalekiego dystansu.
+
+Nielimitowana liczba użyć, ale identyfikacja trwa pare sekund.]]
 
 -- UMP
-L.ump_desc        = [[
-Eksperymentalne SMG dezorientujące
-cel.
+L.ump_desc = [[
+Eksperymentalne SMG dezorientujące cel.
+
 Używa standardowego ammo do SMG.]]
 
 -- DNA scanner
-L.dna_name        = "DNA skaner"
-L.dna_identify    = "Zwłoki muszą być zidentyfikowane, by sprawdzić DNA sprawcy."
-L.dna_notfound    = "Nie znaleziono próbki DNA na cel."
-L.dna_limit       = "Osiągnięto limit pamięci. Usuń stare próbki, aby dodać nowe."
-L.dna_decayed     = "Próbka DNA zabójcy uległa rozkładowi."
-L.dna_killer      = "Zebrano próbkę DNA zabójcy z trupa!"
-L.dna_no_killer   = "Nie można było pobrać DNA (zabójca się rozłączył?)."
-L.dna_armed       = "Ta bomba jest uzbrojona! Rozbrój ją najpierw!"
-L.dna_object      = "Zebrano {num} nową próbkę DNA z obiektu."
-L.dna_gone        = "DNA nie zostało znalezione na tym terenie."
+L.dna_name = "DNA skaner"
+L.dna_identify = "Zwłoki muszą być zidentyfikowane, by sprawdzić DNA sprawcy."
+L.dna_notfound = "Nie znaleziono próbki DNA na cel."
+L.dna_limit = "Osiągnięto limit pamięci. Usuń stare próbki, aby dodać nowe."
+L.dna_decayed = "Próbka DNA zabójcy uległa rozkładowi."
+L.dna_killer = "Zebrano próbkę DNA zabójcy z trupa!"
+L.dna_no_killer = "Nie można było pobrać DNA (zabójca się rozłączył?)."
+L.dna_armed = "Ta bomba jest uzbrojona! Rozbrój ją najpierw!"
+L.dna_object = "Zebrano {num} nową próbkę DNA z obiektu."
+L.dna_gone = "DNA nie zostało znalezione na tym terenie."
 
-L.dna_desc        = [[
-Zbiera próbki DNA z różnych rzeczy
-i używa ich do znalezienia właściela tego DNA.
-Użyj na świeżych zwłokach, by znaleźć 
-DNA zabójcy i śledzić go.]]
+L.dna_desc = [[
+Zbiera próbki DNA z różnych rzeczy i używa ich do znalezienia właściela tego DNA.
 
-L.dna_menu_title  = "Ustawienia skanowania DNA"
-L.dna_menu_sample = "Próbka DNA znaleziona na {source}"
-L.dna_menu_remove = "Usuń zaznaczony"
-L.dna_menu_help1  = "To są próbki DNA, króre zabrałeś."
-L.dna_menu_help2  = [[
-Kiedy naładowany, możesz skanować dla lokalizacji
-gracza, do którego należy wybrana próbka DNA.
-Znalezienie odległych celów powoduje większe złużycie energii.]]
-
-L.dna_menu_scan   = "Skanuj"
-L.dna_menu_repeat = "Auto-powtarzanie"
-L.dna_menu_ready  = "GOTOWY"
-L.dna_menu_charge = "ŁADOWANIE"
-L.dna_menu_select = "WYBIERZ PRÓBKĘ"
-
-L.dna_help_primary   = "{primaryfire}, by pobrać próbkę DNA"
-L.dna_help_secondary = "{secondaryfire} by otworzyć ustawienia skanowania"
+Użyj na świeżych zwłokach, by znaleźć DNA zabójcy i śledzić go.]]
 
 -- Magneto stick
-L.magnet_name     = "Kijek magnetyczny"
-L.magnet_help     = "{primaryfire}, aby przymocować ciało do powierzchni."
+L.magnet_name = "Kijek magnetyczny"
+L.magnet_help = "{primaryfire}, aby przymocować ciało do powierzchni."
 
 -- Grenades and misc
-L.grenade_smoke   = "Granat dymny"
-L.grenade_fire    = "Wybuchowy granat"
+L.grenade_smoke = "Granat dymny"
+L.grenade_fire = "Wybuchowy granat"
 
-L.unarmed_name    = "Bez broni"
-L.crowbar_name    = "Łom"
-L.pistol_name     = "Pistolet"
-L.rifle_name      = "Rifle"
-L.shotgun_name    = "Shotgun"
+L.unarmed_name = "Bez broni"
+L.crowbar_name = "Łom"
+L.pistol_name = "Pistolet"
+L.rifle_name = "Rifle"
+L.shotgun_name = "Shotgun"
 
 -- Teleporter
-L.tele_name       = "Teleporter"
-L.tele_failed     = "Teleportacja nieudana."
-L.tele_marked     = "Zaznaczona lokalizacja teleportacji."
+L.tele_name = "Teleporter"
+L.tele_failed = "Teleportacja nieudana."
+L.tele_marked = "Zaznaczona lokalizacja teleportacji."
 
-L.tele_no_ground  = "Nie można teleportować gracza, zanim nie stanie na twardym gruncie!"
-L.tele_no_crouch  = "Nie można teleportować, podczas skradania!"
-L.tele_no_mark    = "Brak zaznaczonej lokalizacji.Zaznacz miejsce przeznaczenia przed teleportacją."
+L.tele_no_ground = "Nie można teleportować gracza, zanim nie stanie na twardym gruncie!"
+L.tele_no_crouch = "Nie można teleportować, podczas skradania!"
+L.tele_no_mark = "Brak zaznaczonej lokalizacji.Zaznacz miejsce przeznaczenia przed teleportacją."
 
 L.tele_no_mark_ground = "Nie można zaznaczyć lokalizacji, gdy nie jest się na stałym gruncie!"
 L.tele_no_mark_crouch = "Nie można zaznaczyć lokalizacji podczas skradania!"
 
-L.tele_help_pri   = "{primaryfire} teleportuje do zaznaczonej lokalizacji."
-L.tele_help_sec   = "{secondaryfire} zaznacza aktualną lokalizacje."
+L.tele_help_pri = "{primaryfire} teleportuje do zaznaczonej lokalizacji."
+L.tele_help_sec = "{secondaryfire} zaznacza aktualną lokalizacje."
 
-L.tele_desc       = [[
+L.tele_desc = [[
 Teleportuje do wcześniej zaznaczonego miejsca.
-Teleportowanie emituje dźwięk, i
-liczba użyć jest ograniczona.]]
+
+Teleportowanie emituje dźwięk, i liczba użyć jest ograniczona.]]
 
 -- Ammo names, shown when picked up
 L.ammo_pistol = "9mm ammo"
@@ -503,37 +460,33 @@ L.ammo_alyxgun = "Deagle ammo"
 L.ammo_ar2altfire = "Flare ammo"
 L.ammo_gravity = "Poltergeist ammo"
 
-
--- HUD interface text
-
 -- Round status
-L.round_wait   = "Oczekiwanie"
-L.round_prep   = "Przygotowanie"
+L.round_wait = "Oczekiwanie"
+L.round_prep = "Przygotowanie"
 L.round_active = "W trakcie"
-L.round_post   = "Koniec rundy"
+L.round_post = "Koniec rundy"
 
 -- Health, ammo and time area
-L.overtime     = "DOGRYWKA"
-L.hastemode    = "TRYB SZYBKI"
+L.overtime = "DOGRYWKA"
+L.hastemode = "TRYB SZYBKI"
 
 -- TargetID health status
-L.hp_healthy   = "Zdrowy"
-L.hp_hurt      = "Poturbowany"
-L.hp_wounded   = "Ranny"
-L.hp_badwnd    = "Bardzo ranny"
-L.hp_death     = "Bliski śmierci"
-
+L.hp_healthy = "Zdrowy"
+L.hp_hurt = "Poturbowany"
+L.hp_wounded = "Ranny"
+L.hp_badwnd = "Bardzo ranny"
+L.hp_death = "Bliski śmierci"
 
 -- TargetID karma status
-L.karma_max    = "Renomowany"
-L.karma_high   = "Szorski"
-L.karma_med    = "Brutalny"
-L.karma_low    = "Niebezpieczny"
-L.karma_min    = "Szaleniec"
+L.karma_max = "Renomowany"
+L.karma_high = "Szorski"
+L.karma_med = "Brutalny"
+L.karma_low = "Niebezpieczny"
+L.karma_min = "Szaleniec"
 
 -- TargetID misc
-L.corpse       = "Zwłoki"
-L.corpse_hint  = "Kliknij [{usekey}] by zbadać. [{walkkey} + {usekey}], aby je zbadać po cichu."
+L.corpse = "Zwłoki"
+L.corpse_hint = "Kliknij [{usekey}] by zbadać. [{walkkey} + {usekey}], aby je zbadać po cichu."
 
 L.target_disg = "przebrany"
 L.target_unid = "Niezidentyfikowane ciało"
@@ -546,10 +499,6 @@ L.tbut_reuse = "Wielorazowe"
 L.tbut_retime = "Użyj ponownie po {num} sek"
 L.tbut_help = "Naciśnij [{usekey}] aby użyć"
 
--- Equipment info lines (on the left above the health/ammo panel)
-L.disg_hud     = "Przebrałeś się. Twoje imię jest ukryte."
-L.radar_hud    = "Radar będzie gotowy do nowego skanu: {time}"
-
 -- Spectator muting of living/dead
 L.mute_living = "Living players muted"
 L.mute_specs = "Spectators muted"
@@ -557,56 +506,61 @@ L.mute_all = "All muted"
 L.mute_off = "None muted"
 
 -- Spectators and prop possession
-L.punch_title  = "PUNCH-O-METER"
-L.punch_help   = "Klawisze ruchu lub skok: uderz obiekt. Skradanie: opuść obiekt."
-L.punch_bonus  = "Twój słaby wynik pomniejszył twój limit punch-o-metera o {num}"
-L.punch_malus  = "Twój dobry wynik powiększył twój limit punch-o-metera o {num}!"
+L.punch_title = "PUNCH-O-METER"
+L.punch_help = "Klawisze ruchu lub skok: uderz obiekt. Skradanie: opuść obiekt."
+L.punch_bonus = "Twój słaby wynik pomniejszył twój limit punch-o-metera o {num}"
+L.punch_malus = "Twój dobry wynik powiększył twój limit punch-o-metera o {num}!"
 
 -- Info popups shown when the round starts
-
--- These are spread over multiple lines, hence the square brackets instead of
--- quotes. That's a Lua thing. Every line break (enter) will show up in-game.
-L.info_popup_innocent = [[Jesteś niewinnym terrorystą! Ale zdrajcy są do okoła...
+L.info_popup_innocent = [[
+Jesteś niewinnym terrorystą! Ale zdrajcy są do okoła...
 Komu możesz ufać, a kto cię nafaszruje ołowiem?
+
 Uważaj na siebie i wspópracuj ze swoimi komratami, by wyjść z tego cało!]]
 
-L.info_popup_detective = [[Jesteś Detektywem! Centrala terrorystów dała ci specjalne wyposażenie do znaleznienia zdrajców.
+L.info_popup_detective = [[
+Jesteś Detektywem! Centrala terrorystów dała ci specjalne wyposażenie do znaleznienia zdrajców.
 Użyj ich, by pomóc przetrwać niewinnym, ale bądź uważny:
 Zdrajcy będą chcieli zabić cię jako pierwszego!
+
 Kliknij {menukey}, aby otrzymać swoje wyposażenie!]]
 
-L.info_popup_traitor_alone = [[Jesteś ZDRAJCĄ! Nie masz żadnych kolegów zdrajców.
+L.info_popup_traitor_alone = [[
+Jesteś ZDRAJCĄ! Nie masz żadnych kolegów zdrajców.
+
 Zabij innych i wygraj!
+
 Kliknij {menukey}, aby otrzymać swoje specjalne wyposażenie!]]
 
-L.info_popup_traitor = [[Jesteś ZDRAJCĄ! Wspópracuj ze swoimi kolegami zdrajcami i zabij innych.
+L.info_popup_traitor = [[
+Jesteś ZDRAJCĄ! Wspópracuj ze swoimi kolegami zdrajcami i zabij innych.
 Ale musisz uważać, albo twoja zdrada może sostać odkryta...
+
 To są twoi kamraci:
 {traitorlist}
+
 Kliknij {menukey}, aby otrzymać swoje specjalne wyposażenie!]]
 
 -- Various other text
 L.name_kick = "Gracz został automatycznie wyrzucony, za zmienienie nazwy podczas gry."
 
-L.idle_popup = [[Byłeś bezczynny przez {num} sekund i w rezultacie zostałeś przeniesony do trybu obserwatora . Kiedy jesteś w tym trybie, nie będziesz się pojawiał w nowych rundach.
+L.idle_popup = [[
+Byłeś bezczynny przez {num} sekund i w rezultacie zostałeś przeniesony do trybu obserwatora . Kiedy jesteś w tym trybie, nie będziesz się pojawiał w nowych rundach.
+
 Możesz to zmienić tryb obserwatora w każdej chwili klikając {helpkey} i odznaczając tą opcje w zakładce ustawień. Możesz również to zrobić teraz.]]
 
 L.idle_popup_close = "Nic nie rób"
-L.idle_popup_off   = "Wyłącz tryb obserwatora teraz"
+L.idle_popup_off = "Wyłącz tryb obserwatora teraz"
 
 L.idle_warning = "Uwaga: wydajesz się być bezczynny/AFK, zostaniesz przeniesony do trybu obserwatora, jeśli nie przejawisz jakiejś aktywności!"
 
 L.spec_mode_warning = "Jesteś w trybie obserwatora, dlatego nie będziesz się respawnować w następnytch rundach. By wyłączyć ten tryb, kliknij F1, idź do ustawień i odkliknij 'tryb obserwatora'."
 
-
---- Tips, shown at bottom of screen to spectators
-
 -- Tips panel
 L.tips_panel_title = "Porady"
-L.tips_panel_tip   = "Porada:"
+L.tips_panel_tip = "Porada:"
 
 -- Tip texts
-
 L.tip1 = "Zdrajcy mogą przeszukiwać ciała po cichu, bez potwierdzania zgonu przez {walkkey} i kliknięcie {usekey} na ciało."
 
 L.tip2 = "Uzbrojenie C4 z dłuższym czasem na timerze zwiększy liczbę nieporawnych kabli, które spowodują wybuch, gdy będzie bombę rozbrajać ktoś niewinnny. Będzie też bipać ciszej i rzadziej."
@@ -687,10 +641,7 @@ L.tip39 = "Tłumaczenie TTT2 ogarnął Wuker."
 
 L.tip40 = "Jeśli jest napisane 'TRYB SZYBKI' ponad czasem rundy, runda z początku potrwa tylko kilka minut, ale z każdą śmiercią czas będzię się zwiększał (jak przejmowanie punktów w TF2). Ten tryb wywiera presję na zdrajców, aby szybciej się uwijali."
 
-
-
 --- Round report
-
 L.report_title = "Raport rundy"
 
 -- Tabs
@@ -702,9 +653,9 @@ L.report_tab_scores = "Punkty"
 L.report_tab_scores_tip = "Punkty zdobyte przez każdego zawodnika w tej rundzie"
 
 -- Event log saving
-L.report_save     = "Zapisz Log.txt"
+L.report_save = "Zapisz Log.txt"
 L.report_save_tip = "Zapisuje log wydarzeń do pliku .txt"
-L.report_save_error  = "Brak danych logu, aby zapisać."
+L.report_save_error = "Brak danych logu, aby zapisać."
 L.report_save_result = "Log wydarzeń został zapisany:"
 
 -- Big title window
@@ -717,218 +668,270 @@ L.hilite_players2 = "{numplayers} graczy brało udział, jeden z nich był zdraj
 
 L.hilite_duration = "Runda trwała {time}"
 
-
 -- Columns
-L.col_time   = "Czas"
-L.col_event  = "Wydażenie"
+L.col_time = "Czas"
+L.col_event = "Wydażenie"
 L.col_player = "Gracz"
 L.col_roles = "Role"
 L.col_teams = "Teamy"
 L.col_kills1 = "Zabójstwa niewinnych"
 L.col_kills2 = "Zabójstwa zdrajców"
 L.col_points = "Punkty"
-L.col_team   = "Drużynowy bonus"
-L.col_total  = "Punktów ogółem"
+L.col_team = "Drużynowy bonus"
+L.col_total = "Punktów ogółem"
 
 -- Name of a trap that killed us that has not been named by the mapper
-L.something      = "coś"
+L.something = "coś"
 
 -- Kill events
+--L.ev_blowup = "{victim} blew themselves up"
+--L.ev_blowup_trap = "{victim} was blown up by {trap}"
+
+--L.ev_tele_self = "{victim} telefragged themselves"
+--L.ev_sui = "{victim} couldn't take it and killed themselves"
+--L.ev_sui_using = "{victim} killed themselves using {tool}"
+
+--L.ev_fall = "{victim} fell to their death"
+--L.ev_fall_pushed = "{victim} fell to their death after {attacker} pushed them"
+--L.ev_fall_pushed_using = "{victim} fell to their death after {attacker} used {trap} to push them"
+
+--L.ev_shot = "{victim} was shot by {attacker}"
+--L.ev_shot_using = "{victim} was shot by {attacker} using a {weapon}"
+
+--L.ev_drown = "{victim} was drowned by {attacker}"
+--L.ev_drown_using = "{victim} was drowned by {trap} triggered by {attacker}"
+
+--L.ev_boom = "{victim} was exploded by {attacker}"
+--L.ev_boom_using = "{victim} was blown up by {attacker} using {trap}"
+
+--L.ev_burn = "{victim} was fried by {attacker}"
+--L.ev_burn_using = "{victim} was burned by {trap} due to {attacker}"
+
+--L.ev_club = "{victim} was beaten up by {attacker}"
+--L.ev_club_using = "{victim} was pummeled to death by {attacker} using {trap}"
+
+--L.ev_slash = "{victim} was stabbed by {attacker}"
+--L.ev_slash_using = "{victim} was cut up by {attacker} using {trap}"
+
+--L.ev_tele = "{victim} was telefragged by {attacker}"
+--L.ev_tele_using = "{victim} was atomized by {trap} set by {attacker}"
+
+--L.ev_goomba = "{victim} was crushed by the massive bulk of {attacker}"
+
+--L.ev_crush = "{victim} was crushed by {attacker}"
+--L.ev_crush_using = "{victim} was crushed by {trap} of {attacker}"
+
+--L.ev_other = "{victim} was killed by {attacker}"
+--L.ev_other_using = "{victim} was killed by {attacker} using {trap}"
+
+-- Other events
+--L.ev_body = "{finder} found the corpse of {victim}"
+--L.ev_c4_plant = "{player} planted C4"
+--L.ev_c4_boom = "The C4 planted by {player} exploded"
+--L.ev_c4_disarm1 = "{player} disarmed C4 planted by {owner}"
+--L.ev_c4_disarm2 = "{player} failed to disarm C4 planted by {owner}"
+--L.ev_credit = "{finder} found {num} credit(s) on the corpse of {player}"
+
+--L.ev_start = "The round started"
+--L.ev_win_traitors = "The dastardly traitors won the round!"
+--L.ev_win_innocents = "The lovable innocent terrorists won the round!"
+--L.ev_win_time = "The traitors ran out of time and lost!"
+
+-- Awards/highlights
 L.aw_sui1_title = "Lider Kultu SamobÓjstwa"
-L.aw_sui1_text  = "pokazał innym samobójcom, jak to zrobić zabijąc się jako pierwszy."
+L.aw_sui1_text = "pokazał innym samobójcom, jak to zrobić zabijąc się jako pierwszy."
 
 L.aw_sui2_title = "Samotny i zdesperowany"
-L.aw_sui2_text  = "był jedynym, który zabił samego siebie."
+L.aw_sui2_text = "był jedynym, który zabił samego siebie."
 
 L.aw_exp1_title = "Badania MateriaŁÓw Wybuchowych"
-L.aw_exp1_text  = "został wyróżniony za badania nad eksplozjami. Pomogło mu [num} obiektów."
+L.aw_exp1_text = "został wyróżniony za badania nad eksplozjami. Pomogło mu [num} obiektów."
 
 L.aw_exp2_title = "Badania Terenowe"
-L.aw_exp2_text  = "sprawdził swoją odporność na wybuchy. Nie była wystarczająco wysoka."
+L.aw_exp2_text = "sprawdził swoją odporność na wybuchy. Nie była wystarczająco wysoka."
 
 L.aw_fst1_title = "Pierwsza Krew"
-L.aw_fst1_text  = "wykonał pierwsze zabójstwo z rąk zdrajców."
+L.aw_fst1_text = "wykonał pierwsze zabójstwo z rąk zdrajców."
 
 L.aw_fst2_title = "Pierwsze Krwawe GŁupie ZabÓjstwo"
-L.aw_fst2_text  = "zyskał pierwsze zabójstwo przez strzelanie do kolegów zdrajców. Dobra robota."
+L.aw_fst2_text = "zyskał pierwsze zabójstwo przez strzelanie do kolegów zdrajców. Dobra robota."
 
 L.aw_fst3_title = "Pierwsza Gafa"
-L.aw_fst3_text  = "zabił jako pierwszy. Szkoda, że ofiarą był niewinny kolega."
+L.aw_fst3_text = "zabił jako pierwszy. Szkoda, że ofiarą był niewinny kolega."
 
 L.aw_fst4_title = "Pierwszy Cios"
-L.aw_fst4_text  = "zadał pierwszy cios ze strony niewinnych terrorystów poprzez zabicie pierwszego zdrajcy."
+L.aw_fst4_text = "zadał pierwszy cios ze strony niewinnych terrorystów poprzez zabicie pierwszego zdrajcy."
 
 L.aw_all1_title = "NajgroŹniejszy WŚrÓd RÓwnych"
-L.aw_all1_text  = "był odpowiedzilany za każde zabójstwo popełnione przez niewinnych w tej rundzie."
+L.aw_all1_text = "był odpowiedzilany za każde zabójstwo popełnione przez niewinnych w tej rundzie."
 
 L.aw_all2_title = "Samotny Wilk"
-L.aw_all2_text  = "był odpowiedzilany za każde zabójstwo popełnione przez zdrajców."
+L.aw_all2_text = "był odpowiedzilany za każde zabójstwo popełnione przez zdrajców."
 
 L.aw_nkt1_title = "I Got One, Boss!"
-L.aw_nkt1_text  = "zabił jednego niewinnego. Słodko!"
+L.aw_nkt1_text = "zabił jednego niewinnego. Słodko!"
 
 L.aw_nkt2_title = "Pocisk Na Dwa"
-L.aw_nkt2_text  = "pokazał, że pierwszy nie był szczęśliwy, zabijając innym."
+L.aw_nkt2_text = "pokazał, że pierwszy nie był szczęśliwy, zabijając innym."
 
 L.aw_nkt3_title = "Seryjny Zdrajca"
-L.aw_nkt3_text  = "zakończył dzisiaj trzy niewinne życia."
+L.aw_nkt3_text = "zakończył dzisiaj trzy niewinne życia."
 
 L.aw_nkt4_title = "Wilk WŚRÓd Owczych WilkÓw"
-L.aw_nkt4_text  = "je niewinnych terrosrystów na śniadanie. Kolacja składająca się z {num} dań."
+L.aw_nkt4_text = "je niewinnych terrosrystów na śniadanie. Kolacja składająca się z {num} dań."
 
 L.aw_nkt5_title = "Antyterrorsta"
-L.aw_nkt5_text  = "otrzymywał wynagrodzenie za każdą śmierć. Może sobie kupić kolejny jacht."
+L.aw_nkt5_text = "otrzymywał wynagrodzenie za każdą śmierć. Może sobie kupić kolejny jacht."
 
 L.aw_nki1_title = "ZdradŹ To"
-L.aw_nki1_text  = "znalazł zdrajcę. Zabił zdrajcę. Łatwe."
+L.aw_nki1_text = "znalazł zdrajcę. Zabił zdrajcę. Łatwe."
 
 L.aw_nki2_title = "Liga Sprawiedliwych"
-L.aw_nki2_text  = "eskortował dwóch zdrajców do nieba."
+L.aw_nki2_text = "eskortował dwóch zdrajców do nieba."
 
 L.aw_nki3_title = "Czy Zdrajcy ŚniĄ O Zdradzieckich Owcach?"
-L.aw_nki3_text  = "dał trzem zdrajcom odpocząć. Na zawsze."
+L.aw_nki3_text = "dał trzem zdrajcom odpocząć. Na zawsze."
 
 L.aw_nki4_title = "Hitman do wynajĘcia"
-L.aw_nki4_text  = "otrzymywał wynagrodzenie za każdego zabitego. Teraz zamawia swój piąty basen."
+L.aw_nki4_text = "otrzymywał wynagrodzenie za każdego zabitego. Teraz zamawia swój piąty basen."
 
 L.aw_fal1_title = "Nie, Panie Bond, OczekujĘ, Że Spadniesz"
-L.aw_fal1_text  = "zrzucił kogoś z dużej wysokości."
+L.aw_fal1_text = "zrzucił kogoś z dużej wysokości."
 
 L.aw_fal2_title = "ZapodŁogowany"
-L.aw_fal2_text  = "pozwolił ciału uderzyć w podłogę z impetem po pięknym locie."
+L.aw_fal2_text = "pozwolił ciału uderzyć w podłogę z impetem po pięknym locie."
 
 L.aw_fal3_title = "Ludzki Meteoryt"
-L.aw_fal3_text  = "zmiażdżył kogoś spadająć na niego z dużej wysokości."
+L.aw_fal3_text = "zmiażdżył kogoś spadająć na niego z dużej wysokości."
 
 L.aw_hed1_title = "EfektywnoŚĆ"
-L.aw_hed1_text  = "odkrył radość ze strzelania w głowy i trafił ich {num}."
+L.aw_hed1_text = "odkrył radość ze strzelania w głowy i trafił ich {num}."
 
 L.aw_hed2_title = "Neurologia"
-L.aw_hed2_text  = "usunął mózgi z {num} głów dla bliższych oględzin."
+L.aw_hed2_text = "usunął mózgi z {num} głów dla bliższych oględzin."
 
 L.aw_hed3_title = "Gry Mnie Do Tego ZmusiŁy"
-L.aw_hed3_text  = "wykorzystał swoje szkolenie na symulatorach morderstwa i strzelił headshottów {num} wrogom."
+L.aw_hed3_text = "wykorzystał swoje szkolenie na symulatorach morderstwa i strzelił headshottów {num} wrogom."
 
 L.aw_cbr1_title = "BrzdĘk BrzdĘk BrzdĘk"
-L.aw_cbr1_text  = "potrafi nieźle przywalić łomem, dowiedziało się o tym {num} ofiar."
+L.aw_cbr1_text = "potrafi nieźle przywalić łomem, dowiedziało się o tym {num} ofiar."
 
 L.aw_cbr2_title = "Freeman"
-L.aw_cbr2_text  = "pogrzebał w mózgach nie mniej niż {num} ludziom."
+L.aw_cbr2_text = "pogrzebał w mózgach nie mniej niż {num} ludziom."
 
 L.aw_pst1_title = "TrwaŁy MaŁy Pistolecik"
-L.aw_pst1_text  = "uzyskał {num} zabójstw używając pistoletu. Następnie poszedł kogoś zatulić na śmierć."
+L.aw_pst1_text = "uzyskał {num} zabójstw używając pistoletu. Następnie poszedł kogoś zatulić na śmierć."
 
 L.aw_pst2_title = "UbÓj MaŁego Kalibru"
-L.aw_pst2_text  = "zabił małą armię {num} osób z pistoletu. Prawdopodobnie zamocował małą strzelbę w lufie."
+L.aw_pst2_text = "zabił małą armię {num} osób z pistoletu. Prawdopodobnie zamocował małą strzelbę w lufie."
 
 L.aw_sgn1_title = "Easy Mode"
-L.aw_sgn1_text  = "posyła śrut tam gdzie boli, mordując {num} celi."
+L.aw_sgn1_text = "posyła śrut tam gdzie boli, mordując {num} celi."
 
 L.aw_sgn2_title = "TysiĄc MaŁych PociskÓw"
-L.aw_sgn2_text  = "nie lubi swojego śrutu, więc dał go innym. {num} odbiorców nie żyje, by się tym cieszyć."
+L.aw_sgn2_text = "nie lubi swojego śrutu, więc dał go innym. {num} odbiorców nie żyje, by się tym cieszyć."
 
 L.aw_rfl1_title = "Wyceluj i Kliknij"
-L.aw_rfl1_text  = "pokazuje, że wszystko czego potrzebuje do {num} zabójst jest snajperka i pewna ręka."
+L.aw_rfl1_text = "pokazuje, że wszystko czego potrzebuje do {num} zabójst jest snajperka i pewna ręka."
 
 L.aw_rfl2_title = "WidzĘ StĄd TwojĄ GłowĘ"
-L.aw_rfl2_text  = "zna swoją broń. Teraz {num} ludzi też ją zna."
+L.aw_rfl2_text = "zna swoją broń. Teraz {num} ludzi też ją zna."
 
 L.aw_dgl1_title = "To Jak MaŁa Snajperka!"
-L.aw_dgl1_text  = "dostał w swoje ręce Desert Eagle i zabił {num} ludzi."
+L.aw_dgl1_text = "dostał w swoje ręce Desert Eagle i zabił {num} ludzi."
 
 L.aw_dgl2_title = "Mistrz Desert Eagle"
-L.aw_dgl2_text  = "zniszczył {num} ludzi z deaglem."
+L.aw_dgl2_text = "zniszczył {num} ludzi z deaglem."
 
 L.aw_mac1_title = "MÓdl Się I Zabijaj"
-L.aw_mac1_text  = "zabił {num} ludzi z MAC10, ale nie pytaj ile amunicji zużył."
+L.aw_mac1_text = "zabił {num} ludzi z MAC10, ale nie pytaj ile amunicji zużył."
 
 L.aw_mac2_title = "MAC Z Serem"
-L.aw_mac2_text  = "wyobraź sobie co by się stało gdyby używał dwóch MAC10. {num} razy dwa?"
+L.aw_mac2_text = "wyobraź sobie co by się stało gdyby używał dwóch MAC10. {num} razy dwa?"
 
 L.aw_sip1_title = "BĄdŹ Cicho"
-L.aw_sip1_text  = "zabił {num} ludzi pistoletem z tłumikiem."
+L.aw_sip1_text = "zabił {num} ludzi pistoletem z tłumikiem."
 
 L.aw_sip2_title = "SkrytobÓjca"
-L.aw_sip2_text  = "zabił {num} ludzi, którzy nawet nie słyszeli swojej śmierci."
+L.aw_sip2_text = "zabił {num} ludzi, którzy nawet nie słyszeli swojej śmierci."
 
 L.aw_knf1_title = "NÓŻ Cię Nie Ominie"
-L.aw_knf1_text  = "zabił kogoś z nożem przez internet."
+L.aw_knf1_text = "zabił kogoś z nożem przez internet."
 
 L.aw_knf2_title = "SkĄd To WziĄŁeś?"
-L.aw_knf2_text  = "nie był zdrajcą, ale i tak zabił kogoś nożem."
+L.aw_knf2_text = "nie był zdrajcą, ale i tak zabił kogoś nożem."
 
 L.aw_knf3_title = "Po Prostu CzŁowiek Z NoŻami"
-L.aw_knf3_text  = "znalazł {num} noży leżących do okoła i zrobił z nich użytek."
+L.aw_knf3_text = "znalazł {num} noży leżących do okoła i zrobił z nich użytek."
 
 L.aw_knf4_title = "CzŁowiek Przecinak"
-L.aw_knf4_text  = "zabił {num} ludzi nożem. Nie pytaj jak."
+L.aw_knf4_text = "zabił {num} ludzi nożem. Nie pytaj jak."
 
 L.aw_flg1_title = "Na Ratunek"
-L.aw_flg1_text  = "użył flar do sygnalizacji {num} śmierci."
+L.aw_flg1_text = "użył flar do sygnalizacji {num} śmierci."
 
 L.aw_flg2_title = "Flara = PoŻar"
-L.aw_flg2_text  = "nauczył {num} ludzi o niebezpieczeństwie noszenia łątwopalnych ubrań."
+L.aw_flg2_text = "nauczył {num} ludzi o niebezpieczeństwie noszenia łątwopalnych ubrań."
 
 L.aw_hug1_title = "RATTATTATTATTA"
-L.aw_hug1_text  = "użył swojego H.U.G.E, by zabić {num} ludzi."
+L.aw_hug1_text = "użył swojego H.U.G.E, by zabić {num} ludzi."
 
 L.aw_hug2_title = "Cierpliwy Strzelec"
-L.aw_hug2_text  = "po prostu strzelał i zobaczył, że przyniosło mu to rezultat {num} zabójstw."
+L.aw_hug2_text = "po prostu strzelał i zobaczył, że przyniosło mu to rezultat {num} zabójstw."
 
 L.aw_msx1_title = "Pyk Pyk Pyk"
-L.aw_msx1_text  = "wystrzelał {num} ludzi z M16."
+L.aw_msx1_text = "wystrzelał {num} ludzi z M16."
 
 L.aw_msx2_title = "Średnio ZasiĘgowe SzaleŃstwo"
-L.aw_msx2_text  = "wie jak ściągać ludzi z M16, osiągając {num} zabóstw."
+L.aw_msx2_text = "wie jak ściągać ludzi z M16, osiągając {num} zabóstw."
 
 L.aw_tkl1_title = "Ups"
-L.aw_tkl1_text  = "osunął mu się palec, gdy celował w kolegę."
+L.aw_tkl1_text = "osunął mu się palec, gdy celował w kolegę."
 
 L.aw_tkl2_title = "PodwÓjne Ups"
-L.aw_tkl2_text  = "myślał, że był zdrajcą dwa razy, ale pomylił się dwa razy."
+L.aw_tkl2_text = "myślał, że był zdrajcą dwa razy, ale pomylił się dwa razy."
 
 L.aw_tkl3_title = "Co To Karma?"
-L.aw_tkl3_text  = "nie mógł poprzestać na dwóch ofiarach. Trzy to szczęśliwa liczba."
+L.aw_tkl3_text = "nie mógł poprzestać na dwóch ofiarach. Trzy to szczęśliwa liczba."
 
 L.aw_tkl4_title = "Teamkiller"
-L.aw_tkl4_text  = "wymordował całą swoją drużynę. OMGBANBANBAN."
+L.aw_tkl4_text = "wymordował całą swoją drużynę. OMGBANBANBAN."
 
 L.aw_tkl5_title = "Roleplayer"
-L.aw_tkl5_text  = "grał rolę szaleńca. Dlatego zabił większość swojej drużyny."
+L.aw_tkl5_text = "grał rolę szaleńca. Dlatego zabił większość swojej drużyny."
 
 L.aw_tkl6_title = "Debil"
-L.aw_tkl6_text  = "nie potrafił zrozumieć, z którą stroną był, i zabił ponad połowę swoich towarzyszy."
+L.aw_tkl6_text = "nie potrafił zrozumieć, z którą stroną był, i zabił ponad połowę swoich towarzyszy."
 
 L.aw_tkl7_title = "WieŚniak"
-L.aw_tkl7_text  = "skutecznie bronił sowjej ziemii zabijąc ćwierć drużyny."
+L.aw_tkl7_text = "skutecznie bronił sowjej ziemii zabijąc ćwierć drużyny."
 
 L.aw_brn1_title = "Takie Jak Babcia RobiŁa"
-L.aw_brn1_text  = "przypiekł na chrupiąco pare ludzi."
+L.aw_brn1_text = "przypiekł na chrupiąco pare ludzi."
 
 L.aw_brn2_title = "Piromanta"
-L.aw_brn2_text  = "śmiał się głośno po spaleniu jednej ze swoich ofiar."
+L.aw_brn2_text = "śmiał się głośno po spaleniu jednej ze swoich ofiar."
 
 L.aw_brn3_title = "Pyrrysowy Palacz"
-L.aw_brn3_text  = "spalił je wszyskie, ale teraz brak mu granatów! Jak on sobie poradzi!?"
+L.aw_brn3_text = "spalił je wszyskie, ale teraz brak mu granatów! Jak on sobie poradzi!?"
 
 L.aw_fnd1_title = "Koroner"
-L.aw_fnd1_text  = "znalazł {num} ciał leżących wokół."
+L.aw_fnd1_text = "znalazł {num} ciał leżących wokół."
 
 L.aw_fnd2_title = "ZŁap Je Wszystkie"
-L.aw_fnd2_text  = "znalazł {num} ciał do jego kolekcji."
+L.aw_fnd2_text = "znalazł {num} ciał do jego kolekcji."
 
 L.aw_fnd3_title = "Zapach Śmierci"
-L.aw_fnd3_text  = "co chwilę znajduje przypadkowe zwłoki. Znalazł ich {num} w tej rundzie."
+L.aw_fnd3_text = "co chwilę znajduje przypadkowe zwłoki. Znalazł ich {num} w tej rundzie."
 
 L.aw_crd1_title = "Mistrz Recyklingu"
-L.aw_crd1_text  = "znalazł {num} kredytów przy trupach."
+L.aw_crd1_text = "znalazł {num} kredytów przy trupach."
 
 L.aw_tod1_title = "Pyrrusowe ZwyciĘstwo"
-L.aw_tod1_text  = "zginął chwile przed wygraną jego drużyny."
+L.aw_tod1_text = "zginął chwile przed wygraną jego drużyny."
 
 L.aw_tod2_title = "NienawidzĘ Tej Gry"
-L.aw_tod2_text  = "umarł zaraz po rozpoczęciu rundy."
-
+L.aw_tod2_text = "umarł zaraz po rozpoczęciu rundy."
 
 -- New and modified pieces of text are placed below this point, marked with the
 -- version in which they were added, to make updating translations easier.
@@ -936,8 +939,11 @@ L.aw_tod2_text  = "umarł zaraz po rozpoczęciu rundy."
 --- v24
 L.drop_no_ammo = "Niewystarczająca ilość amunicji w magazynku twojej broni do upuszczenia pudełka amunicji."
 
---- 5-25-15
+--- 2015-05-25
 L.hat_retrieve = "Podniosłeś czapkę detektywa."
+
+-- 2017-09-03
+L.sb_sortby = "Sortuj:"
 
 -- 2018-07-24
 L.equip_tooltip_main = "Menu Ekwipunktu"
@@ -953,17 +959,10 @@ L.stungun_name = "UMP Proto"
 
 L.knife_instant = "ZGON NA MIEJSCU"
 
-L.dna_hud_type = "TYP"
-L.dna_hud_body = "CIAŁO"
-L.dna_hud_item = "ITEM"
-
 L.binoc_zoom_level = "Powiększenie"
 L.binoc_body = "WYKRYTO CIAŁO"
 
 L.idle_popup_title = "Idle"
-
---------------------------------
--- TTT2 LANGUAGE
 
 -- 2019-01-31
 L.create_own_shop = "Stwórz własny sklep"
@@ -1044,6 +1043,8 @@ L.corpse_binoculars = "Naciśnij [{key}] aby przeszukać ciało lornetką."
 L.binoc_progress = "Wyszukiwanie: {progress}%"
 
 L.pickup_no_room = "Nie masz już miejsca na ten przedmiot!"
+--L.pickup_fail = "You cannot pick up this weapon"
+--L.pickup_pending = "You already picked up a weapon, wait until you receive it"
 
 -- 2020-01-07
 L.tbut_help_admin = "Edytuj ustawienia guzika treitora"
@@ -1242,6 +1243,12 @@ L.button_close = "Zamknij"
 --L.item_no_drown_damage = "No Drowning Damage"
 --L.item_no_drown_damage_desc = [[Makes you immune to drowning damage.]]
 
+-- 2020-04-21
+--L.dna_tid_possible = "Scan possible"
+--L.dna_tid_impossible = "No scan possible"
+--L.dna_screen_ready = "No DNA"
+--L.dna_screen_match = "Match"
+
 -- 2020-04-30
 --L.message_revival_canceled = "Revival canceled."
 --L.message_revival_failed = "Revival failed."
@@ -1263,7 +1270,6 @@ L.button_close = "Zamknij"
 --L.label_bind_disguiser = "Toggle disguiser"
 
 -- 2020-06-24
-
 --L.dna_help_primary = "Collect a DNA sample"
 --L.dna_help_secondary = "Switch the DNA slot"
 --L.dna_help_reload = "Delete a sample"

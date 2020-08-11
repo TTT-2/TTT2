@@ -11,9 +11,9 @@ L.last_words = "Last Words"
 L.terrorists = "Terrorists"
 L.spectators = "Spectators"
 
-L.noteam = "NO TEAM"
-L.innocents = "TEAM Innocents"
-L.traitors = "TEAM Traitors"
+L.noteam = "No Team"
+L.innocents = "Team Innocents"
+L.traitors = "Team Traitors"
 
 -- role description
 L.ttt2_desc_none = "Currently you don't have a role!"
@@ -44,7 +44,6 @@ L.limit_left = "{num} round(s) or {time} minutes remaining before the map change
 
 -- Credit awards
 L.credit_all = "Your team have been awarded {num} equipment credit(s) for your performance."
-
 L.credit_kill = "You have received {num} credit(s) for killing a {role}."
 
 -- Karma
@@ -151,7 +150,6 @@ L.radio_button_c4 = "C4 beeping"
 L.radio_button_burn = "Burning"
 L.radio_button_steps = "Footsteps"
 
-
 -- Intro screen shown after joining
 L.intro_help = "If you're new to the game, press F1 for instructions!"
 
@@ -174,7 +172,6 @@ L.quick_nobody = "nobody"
 L.quick_disg = "someone in disguise"
 L.quick_corpse = "an unidentified body"
 L.quick_corpse_id = "{player}'s corpse"
-
 
 -- Body search window
 L.search_title = "Body Search Results"
@@ -210,19 +207,15 @@ L.search_dmg_other = "You cannot find a specific cause of this terrorist's death
 L.search_weapon = "It appears a {weapon} was used to kill them."
 L.search_head = "The fatal wound was a headshot. No time to scream."
 L.search_time = "They died roughly {time} before you conducted the search."
-L.search_timefake = "They died roughly 00:15 before you conducted the search."
 L.search_dna = "Retrieve a sample of the killer's DNA with a DNA Scanner. The DNA sample will decay roughly {time} from now."
 
 L.search_kills1 = "You found a list of kills that confirms the death of {player}."
 L.search_kills2 = "You found a list of kills with these names:"
 L.search_eyes = "Using your detective skills, you identified the last person they saw: {player}. The killer, or a coincidence?"
 
-
 -- Scoreboard
 L.sb_playing = "You are playing on..."
 L.sb_mapchange = "Map changes in {num} rounds or in {time}"
-
-L.sb_sortby = "Sort By:"
 
 L.sb_mia = "Missing In Action"
 L.sb_confirmed = "Confirmed Dead"
@@ -240,16 +233,12 @@ L.sb_tag_avoid = "AVOID"
 L.sb_tag_kill = "KILL"
 L.sb_tag_miss = "MISSING"
 
--- Weapons and equipment, HUD and messages
-
 -- Equipment actions, like buying and dropping
 L.buy_no_stock = "This weapon is out of stock: you already bought it this round."
 L.buy_pending = "You already have an order pending, wait until you receive it."
 L.buy_received = "You have received your special equipment."
 
 L.drop_no_room = "You have no room here to drop your weapon!"
-L.pickup_fail = "You cannot pick up this"
-L.pickup_pending = "You already picked up a weapon, wait until you receive it"
 
 L.disg_turned_on = "Disguise enabled!"
 L.disg_turned_off = "Disguise disabled."
@@ -269,17 +258,13 @@ L.item_radar = "Radar"
 L.item_radar_desc = [[
 Allows you to scan for life signs.
 
-Starts automatic scans as soon as you
-buy it. Configure it in Radar tab of this
-menu.]]
+Starts automatic scans as soon as you buy it. Configure it in Radar tab of this menu.]]
 
 L.item_disg = "Disguiser"
 L.item_disg_desc = [[
-Hides your ID info while on. Also avoids
-being the person last seen by a victim.
+Hides your ID info while on. Also avoids being the person last seen by a victim.
 
-Toggle in the Disguise tab of this menu
-or press Numpad Enter.]]
+Toggle in the Disguise tab of this menu or press Numpad Enter.]]
 
 -- C4
 L.c4_hint = "Press {usekey} to arm or disarm."
@@ -304,7 +289,6 @@ L.c4_remove_destroy2 = "Confirm: destroy"
 L.c4_disarm = "Disarm C4"
 L.c4_disarm_cut = "Click to cut wire {num}"
 
-L.c4_disarm_t = "Cut a wire to disarm the bomb. As you are Traitor, every wire is safe. Innocents don't have it so easy!"
 L.c4_disarm_owned = "Cut a wire to disarm the bomb. It's your bomb, so every wire will disarm it."
 L.c4_disarm_other = "Cut a safe wire to disarm the bomb. It will explode if you get it wrong!"
 
@@ -320,9 +304,7 @@ L.vis_help_pri = "{primaryfire} drops the activated device."
 L.vis_desc = [[
 Crime scene visualization device.
 
-Analyzes a corpse to show how
-the victim was killed, but only if
-they died of gunshot wounds.]]
+Analyzes a corpse to show how the victim was killed, but only if they died of gunshot wounds.]]
 
 -- Decoy
 L.decoy_name = "Decoy"
@@ -333,10 +315,7 @@ L.decoy_short_desc = "This decoy shows a fake radar sign visible for other teams
 L.decoy_pickup_wrong_team = "You can't pick it up as it belongs to a different team"
 
 L.decoy_desc = [[
-Shows a fake radar sign to other teams,
-and makes the DNA scanner show the
-location of the Decoy if someone scans
-for your DNA.]]
+Shows a fake radar sign to other teams, and makes the DNA scanner show the location of the Decoy if someone scans for your DNA.]]
 
 -- Defuser
 L.defuser_name = "Defuser"
@@ -345,17 +324,15 @@ L.defuser_help = "{primaryfire} defuses targeted C4."
 L.defuser_desc = [[
 Instantly defuse a C4 explosive.
 
-Unlimited uses. C4 will be easier to
-notice if you carry this.]]
+Unlimited uses. C4 will be easier to notice if you carry this.]]
 
 -- Flare gun
 L.flare_name = "Flare gun"
-L.flare_desc = [[
-Can be used to burn corpses so that
-they are never found. Limited ammo.
 
-Burning a corpse makes a distinct
-sound.]]
+L.flare_desc = [[
+Can be used to burn corpses so that they are never found. Limited ammo.
+
+Burning a corpse makes a distinct sound.]]
 
 -- Health station
 L.hstation_name = "Health Station"
@@ -366,27 +343,22 @@ L.hstation_help = "{primaryfire} places the Health Station."
 L.hstation_desc = [[
 Allows people to heal when placed.
 
-Slow recharge. Anyone can use it, and
-it can be damaged. Can be checked for
-DNA samples of its users.]]
+Slow recharge. Anyone can use it, and it can be damaged. Can be checked for DNA samples of its users.]]
 
 -- Knife
 L.knife_name = "Knife"
 L.knife_thrown = "Thrown knife"
 
 L.knife_desc = [[
-Kills wounded targets instantly and
-silently, but only has a single use.
+Kills wounded targets instantly and silently, but only has a single use.
 
 Can be thrown using alternate fire.]]
 
 -- Poltergeist
 L.polter_desc = [[
-Plants thumpers on objects to shove
-them around violently.
+Plants thumpers on objects to shove them around violently.
 
-The energy bursts damage people in
-close proximity.]]
+The energy bursts damage people in close proximity.]]
 
 -- Radio
 L.radio_broken = "Your Radio has been destroyed!"
@@ -395,16 +367,13 @@ L.radio_help_pri = "{primaryfire} places the Radio."
 L.radio_desc = [[
 Plays sounds to distract or deceive.
 
-Place the radio somewhere, and then
-play sounds on it using the Radio tab
-in this menu.]]
+Place the radio somewhere, and then play sounds on it using the Radio tab in this menu.]]
 
 -- Silenced pistol
 L.sipistol_name = "Silenced Pistol"
 
 L.sipistol_desc = [[
-Low-noise handgun, uses normal pistol
-ammo.
+Low-noise handgun, uses normal pistol ammo.
 
 Victims will not scream when killed.]]
 
@@ -418,17 +387,15 @@ Infinite ammo, but slow to fire.]]
 
 -- Binoculars
 L.binoc_name = "Binoculars"
-L.binoc_desc = [[
-Zoom in on corpses and identify them
-from a long distance away.
 
-Unlimited uses, but identification
-takes a few seconds.]]
+L.binoc_desc = [[
+Zoom in on corpses and identify them from a long distance away.
+
+Unlimited uses, but identification takes a few seconds.]]
 
 -- UMP
 L.ump_desc = [[
-Experimental SMG that disorients
-targets.
+Experimental SMG that disorients targets.
 
 Uses standard SMG ammo.]]
 
@@ -443,17 +410,11 @@ L.dna_no_killer = "The DNA could not be retrieved (killer disconnected?)."
 L.dna_armed = "This bomb is live! Disarm it first!"
 L.dna_object = "Collected a sample of the last owner from the object."
 L.dna_gone = "DNA not detected in area."
-L.dna_tid_possible = "Scan possible"
-L.dna_tid_impossible = "No scan possible"
-L.dna_screen_ready = "No DNA"
-L.dna_screen_match = "Match"
 
 L.dna_desc = [[
-Collect DNA samples from things
-and use them to find the DNA's owner.
+Collect DNA samples from things and use them to find the DNA's owner.
 
-Use on fresh corpses to get the killer's DNA
-and track them down.]]
+Use on fresh corpses to get the killer's DNA and track them down.]]
 
 -- Magneto stick
 L.magnet_name = "Magneto-stick"
@@ -487,8 +448,7 @@ L.tele_help_sec = "{secondaryfire} marks current location."
 L.tele_desc = [[
 Teleport to a previously marked spot.
 
-Teleporting makes noise, and the
-number of uses is limited.]]
+Teleporting makes noise, and the number of uses is limited.]]
 
 -- Ammo names, shown when picked up
 L.ammo_pistol = "9mm ammo"
@@ -499,9 +459,6 @@ L.ammo_357 = "Rifle ammo"
 L.ammo_alyxgun = "Deagle ammo"
 L.ammo_ar2altfire = "Flare ammo"
 L.ammo_gravity = "Poltergeist ammo"
-
-
--- HUD interface text
 
 -- Round status
 L.round_wait = "Waiting"
@@ -519,7 +476,6 @@ L.hp_hurt = "Hurt"
 L.hp_wounded = "Wounded"
 L.hp_badwnd = "Badly Wounded"
 L.hp_death = "Near Death"
-
 
 -- TargetID karma status
 L.karma_max = "Reputable"
@@ -556,27 +512,28 @@ L.punch_bonus = "Your bad score lowered your punch-o-meter limit by {num}"
 L.punch_malus = "Your good score increased your punch-o-meter limit by {num}!"
 
 -- Info popups shown when the round starts
-
--- These are spread over multiple lines, hence the square brackets instead of
--- quotes. That's a Lua thing. Every line break (enter) will show up in-game.
-L.info_popup_innocent = [[You are an innocent Terrorist! But there are traitors around...
+L.info_popup_innocent = [[
+You are an innocent Terrorist! But there are traitors around...
 Who can you trust, and who is out to fill you with bullets?
 
 Watch your back and work with your comrades to get out of this alive!]]
 
-L.info_popup_detective = [[You are a Detective! Terrorist HQ has given you special resources to find the traitors.
+L.info_popup_detective = [[
+You are a Detective! Terrorist HQ has given you special resources to find the traitors.
 Use them to help the innocent survive, but be careful:
 the traitors will be looking to take you down first!
 
 Press {menukey} to receive your equipment!]]
 
-L.info_popup_traitor_alone = [[You are a TRAITOR! You have no fellow traitors this round.
+L.info_popup_traitor_alone = [[
+You are a TRAITOR! You have no fellow traitors this round.
 
 Kill all others to win!
 
 Press {menukey} to receive your special equipment!]]
 
-L.info_popup_traitor = [[You are a TRAITOR! Work with fellow traitors to kill all others.
+L.info_popup_traitor = [[
+You are a TRAITOR! Work with fellow traitors to kill all others.
 But take care, or your treason may be discovered...
 
 These are your comrades:
@@ -587,7 +544,8 @@ Press {menukey} to receive your special equipment!]]
 -- Various other text
 L.name_kick = "A player was automatically kicked for changing their name during a round."
 
-L.idle_popup = [[You were idle for {num} seconds and were moved into Spectator-only mode as a result. While you are in this mode, you will not spawn when a new round starts.
+L.idle_popup = [[
+You were idle for {num} seconds and were moved into Spectator-only mode as a result. While you are in this mode, you will not spawn when a new round starts.
 
 You can toggle Spectator-only mode at any time by pressing {helpkey} and unchecking the box in the Settings tab. You can also choose to disable it right now.]]
 
@@ -598,15 +556,11 @@ L.idle_warning = "Warning: you appear to be idle/AFK, and will be made to specta
 
 L.spec_mode_warning = "You are in Spectator Mode and will not spawn when a round starts. To disable this mode, press F1, go to Settings and uncheck 'Spectate-only mode'."
 
-
--- Tips, shown at bottom of screen to spectators
-
 -- Tips panel
 L.tips_panel_title = "Tips"
 L.tips_panel_tip = "Tip:"
 
 -- Tip texts
-
 L.tip1 = "Traitors can search a corpse silently, without confirming the death, by holding {walkkey} and pressing {usekey} on the corpse."
 
 L.tip2 = "Arming a C4 explosive with a longer timer will increase the number of wires that cause it to explode instantly when an innocent attempts to disarm it. It will also beep softer and less often."
@@ -687,9 +641,7 @@ L.tip39 = "C4 that explodes due to a mistake in disarming it has a smaller explo
 
 L.tip40 = "If it says 'HASTE MODE' above the round timer, the round will at first be only a few minutes long, but with every death the available time increases (like capturing a point in TF2). This mode puts the pressure on the traitors to keep things moving."
 
-
 -- Round report
-
 L.report_title = "Round report"
 
 -- Tabs
@@ -786,7 +738,6 @@ L.ev_win_innocents = "The lovable innocent terrorists won the round!"
 L.ev_win_time = "The traitors ran out of time and lost!"
 
 -- Awards/highlights
-
 L.aw_sui1_title = "Suicide Cult Leader"
 L.aw_sui1_text = "showed the other suiciders how to do it by being the first to go."
 
@@ -982,15 +933,17 @@ L.aw_tod1_text = "died only seconds before their team won the round."
 L.aw_tod2_title = "I Hate This Game"
 L.aw_tod2_text = "died right after the start of the round."
 
-
 -- New and modified pieces of text are placed below this point, marked with the
 -- version in which they were added, to make updating translations easier.
 
 -- v24
 L.drop_no_ammo = "Insufficient ammo in your weapon's clip to drop as an ammo box."
 
--- 5-25-15
+-- 2015-05-25
 L.hat_retrieve = "You picked up a Detective's hat."
+
+-- 2017-09-03
+L.sb_sortby = "Sort By:"
 
 -- 2018-07-24
 L.equip_tooltip_main = "Equipment menu"
@@ -1006,17 +959,10 @@ L.stungun_name = "UMP Prototype"
 
 L.knife_instant = "INSTANT KILL"
 
-L.dna_hud_type = "TYPE"
-L.dna_hud_body = "BODY"
-L.dna_hud_item = "ITEM"
-
 L.binoc_zoom_level = "Zoom Level"
 L.binoc_body = "BODY DETECTED"
 
 L.idle_popup_title = "Idle"
-
---------------------------------
--- TTT2 LANGUAGE
 
 -- 2019-01-31
 L.create_own_shop = "Create own shop"
@@ -1097,6 +1043,8 @@ L.corpse_binoculars = "Press [{key}] to search corpse with binoculars."
 L.binoc_progress = "Search progress: {progress}%"
 
 L.pickup_no_room = "You have no space in your inventory for this weapon kind"
+L.pickup_fail = "You cannot pick up this weapon"
+L.pickup_pending = "You already picked up a weapon, wait until you receive it"
 
 -- 2020-01-07
 L.tbut_help_admin = "Edit traitor button settings"
@@ -1294,6 +1242,12 @@ L.item_no_prop_damage = "No Prop Damage"
 L.item_no_prop_damage_desc = [[Makes you immune to prop damage.]]
 L.item_no_drown_damage = "No Drowning Damage"
 L.item_no_drown_damage_desc = [[Makes you immune to drowning damage.]]
+
+-- 2020-04-21
+L.dna_tid_possible = "Scan possible"
+L.dna_tid_impossible = "No scan possible"
+L.dna_screen_ready = "No DNA"
+L.dna_screen_match = "Match"
 
 -- 2020-04-30
 L.message_revival_canceled = "Revival canceled."

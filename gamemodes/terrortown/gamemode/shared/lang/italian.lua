@@ -1,12 +1,7 @@
--- Translated by Alessandro Levante (AL24)
--- Tradotto da Alessandro Levante (AL24)
-
--- Stinghe in italiano
--- Italian language strings
+-- Italian language strings (by AL24)
 
 local L = LANG.CreateLanguage("Italiano")
 
--- Testo generale usato in varie posizioni
 -- General text used in various places
 L.traitor = "Traditore"
 L.detective = "Detective"
@@ -16,18 +11,16 @@ L.last_words = "Ultime parole"
 L.terrorists = "Terroristi"
 L.spectators = "Spettatori"
 
-L.noteam = "NO TEAM"
-L.innocenti = "TEAM Innocenti"
-L.traditori = "TEAM Traditori"
+L.noteam = "No Team"
+L.innocents = "Team Innocenti"
+L.traitors = "Team Traditori"
 
--- descrizione ruoli
 -- role description
 L.ttt2_desc_none = "Al momento non hai un ruolo!"
 L.ttt2_desc_innocent = "Il tuo obiettivi è sopravvivere ai Traditori!"
 L.ttt2_desc_traitor = "Uccidi ogni altro ruolo con l'aiuto dello shop ([C])!"
 L.ttt2_desc_detective = "Sei un Innocente! Aiuta gli Innocenti a sopravvivere o a trovare i Traditori!"
 
--- Messaggi per lo stato del round
 -- Round status messages
 L.round_minplayers = "Non ci sono abbastanza giocatore per cominciare un nuovo round..."
 L.round_voting = "Voto in corso, prolungando il round di {num} secondi..."
@@ -49,22 +42,18 @@ L.limit_round = "Raggiunto il limite del tempo del round. la prossima mappa cari
 L.limit_time = "Il tempo è finito. la prossima mappa caricherà presto."
 L.limit_left = "{num} round o {time} minuti rimanenti prima che la mappa cambi."
 
--- Ricompense crediti
 -- Credit awards
 L.credit_all = "Al tuo team sono stati dati {num} crediti per la vostra performance."
-
 L.credit_kill = "Hai ricevuto {num} credito/i per aver ucciso un {role}."
 
 -- Karma
 L.karma_dmg_full = "Il tuo Karma è {amount}, quindi questo round fai il massimo del danno!"
 L.karma_dmg_other = "Il tuo Karma è {amount}. Come risultato il danno è diminuito del {num}%"
 
--- Messaggi per l'identificazione dei messaggi
 -- Body identification messages
 L.body_found = "{finder} ha trovato il corpo di {victim}. {role}"
 L.body_found_team = "{finder} ha trovato il corpo di {victim}. {role} ({team})"
 
--- Il {role} in body_found sarà sostituito con una di queste stringhe:
 -- The {role} in body_found will be replaced by one of the following:
 L.body_found_traitor = "Era un Traditore!"
 L.body_found_det = "Era un Detective."
@@ -78,17 +67,14 @@ L.body_call_error = "Devi confermare la morte di questo giocatore prima di chiam
 L.body_burning = "Ahia! Questo corpo va a fuoco!"
 L.body_credits = "Hai trovato {num} credito/i sul corpo!"
 
---- Menù e finestre
 -- Menus and windows
 L.close = "Chiudi"
 L.cancel = "Cancella"
 
--- Per i tasti della navigazione
 -- For navigation buttons
 L.next = "Prossimo"
 L.prev = "Precedente"
 
--- Menù equipaggiamento
 -- Equipment buying menu
 L.equip_title = "Equipaggiamento"
 L.equip_tabtitle = "Ordina Equipaggiamento"
@@ -115,7 +101,6 @@ L.equip_spec_desc = "Descrizione"
 
 L.equip_confirm = "Compra oggetto"
 
--- Finestra Travestimento nel menù equipaggiamento
 -- Disguiser tab in equipment menu
 L.disg_name = "Travestimento"
 L.disg_menutitle = "Controllo travestimento"
@@ -125,7 +110,6 @@ L.disg_enable = "Attiva travestimento"
 L.disg_help1 = "Quando il tuo travestimento è attivo, il tuo nome, la tua vita e il tuo karma non si vedono quando qualcuno ti guarda. In più, sarai nascosto al radar del Detective."
 L.disg_help2 = "Premi Numpad Enter per togliere il travestimento senza aprire il menù. Puoi anche metter un tasto diverso in 'ttt_toggle_disguise' usando la console."
 
--- Finestra Radar nel menù equipaggiamento
 -- Radar tab in equipment menu
 L.radar_name = "Radar"
 L.radar_menutitle = "Controllo del Radar"
@@ -135,7 +119,6 @@ L.radar_auto = "Scansione automatica"
 L.radar_help = "I risultati della scansione si vedono per {num} secondi, dopo di quello il radar dovrà essere ricaricato e potrà essere usato nuovamente."
 L.radar_charging = "Il tuo Radar si sta ancora caricando!"
 
--- Finestra Trasferimento nel menù equipaggiamento
 -- Transfer tab in equipment menu
 L.xfer_name = "Trasferimento"
 L.xfer_menutitle = "Trasferisci crediti"
@@ -148,13 +131,11 @@ L.xfer_no_credits = "Crediti insufficienti per il trasferimento."
 L.xfer_success = "Trasferimento crediti a {player} completato."
 L.xfer_received = "{player} ti ha dato {num} crediti."
 
--- Finestra Radio nel menù equipaggiamento
 -- Radio tab in equipment menu
 L.radio_name = "Radio"
 L.radio_help = "Clicca un bottone per far fare alla Radio quel suono."
 L.radio_notplaced = "Devi piazzare la Radio prima di far partire un suono."
 
--- Bottoni per suoni della Radio
 -- Radio soundboard buttons
 L.radio_button_scream = "Urlo"
 L.radio_button_expl = "Esplosione"
@@ -169,12 +150,9 @@ L.radio_button_c4 = "Rumore del C4"
 L.radio_button_burn = "Fuoco"
 L.radio_button_steps = "Passi"
 
-
--- Schermata di introduzione mostrata dopo essere entrato
 -- Intro screen shown after joining
 L.intro_help = "Se sei nuovo al gioco, premi F1 per istruzioni!"
 
--- Chat rapida
 -- Radiocommands/quickchat
 L.quick_title = "Tasti veloci della chat"
 
@@ -188,8 +166,6 @@ L.quick_traitor = "{player} è un Traditore!"
 L.quick_inno = "{player} è innocente."
 L.quick_check = "Qualcuno è ancora vivo?"
 
--- {player} nella chat veloce solitamente diventa il nickname di un giocatore
--- ma potrebbe diventare anche uno di quello qui sotto. Mantenerli in minuscolo.
 -- {player} in the quickchat text normally becomes a player nickname, but can
 -- also be one of the below.  Keep these lowercase.
 L.quick_nobody = "nessuno"
@@ -197,15 +173,12 @@ L.quick_disg = "qualcuno con travestimento"
 L.quick_corpse = "un corpo non identificato"
 L.quick_corpse_id = " il corpo di {player}"
 
-
--- Finestra identificazione
 -- Body search window
 L.search_title = "Risultati ricerca"
 L.search_info = "Informazione"
 L.search_confirm = "Conferma morte"
 L.search_call = "Chiama Detective"
 
--- Descrizione delle informazioni trovate
 -- Descriptions of pieces of information found
 L.search_nick = "Questo è il corpo di {player}."
 
@@ -234,19 +207,15 @@ L.search_dmg_other = "Non puoi trovare una causa di morte specifica per la morte
 L.search_weapon = "Sembra che sia stato usato un {weapon} per ucciderlo."
 L.search_head = "La ferita fatale è stata un colpo in testa. Non c'era il tempo di urlare."
 L.search_time = "È morto all'incirca {time} prima che facessi la ricerca."
-L.search_timefake = "È morto all'incirca 00:15 prima che facessi la ricerca."
 L.search_dna = "Prendi un campione di DNA con il DNA Scanner. Il campione di DNA scadrà {time} da ora."
 
 L.search_kills1 = "Hai trovato una lista di uccisioni che conferma la morte di {player}."
 L.search_kills2 = "Hai trovato una lista di uccisioni con questi nomi:"
-L.search_eyes = "Usando le tue abilità da detective, hai identificato che l'ultima persona che  ha visto è: {player}. L'assassino, o una coincidenza?"
-
+L.search_eyes = "Usando le tue abilità da detective, hai identificato che l'ultima persona che ha visto è: {player}. L'assassino, o una coincidenza?"
 
 -- Scoreboard
 L.sb_playing = "Stai giocando su..."
 L.sb_mapchange = "La mappa cambierà tra {num} round o tra {time}"
-
-L.sb_sortby = "Ordina per:"
 
 L.sb_mia = "Disperso"
 L.sb_confirmed = "Morti confermati"
@@ -264,10 +233,6 @@ L.sb_tag_avoid = "EVITA"
 L.sb_tag_kill = "UCCIDI"
 L.sb_tag_miss = "DISPERSO"
 
--- Armi ed equipaggiamento, HUD e messaggi
--- Weapons and equipment, HUD and messages
-
--- Azioni equipaggiamento, come acquistare o lasciare
 -- Equipment actions, like buying and dropping
 L.buy_no_stock = "Quest'arma non puoi più acquistarla: lo hai già fatto questo round."
 L.buy_pending = "Hai già un ordine in attesa, aspetta di riceverlo."
@@ -278,7 +243,6 @@ L.drop_no_room = "Non c'è spazio qui per lasciare la tua arma!"
 L.disg_turned_on = "Travestimento attivato!"
 L.disg_turned_off = "Travestimento disattivato."
 
--- Descrizione oggetti dell'equipaggiamento
 -- Equipment item descriptions
 L.item_passive = "Oggetti con effetto passivo"
 L.item_active = "Oggetti con effetto passivo"
@@ -286,23 +250,21 @@ L.item_weapon = "Armi"
 
 L.item_armor = "Armatura"
 L.item_armor_desc = [[
-Riduce il danno dei proiettili del 30% quando
-vieni colpito.
-Equipaggiamento di default per i Detective.]]
+Riduce il danno dei proiettili, fuoco e il danno esplosivo. Si consuma nel tempo.
+
+Può essere comprata multiple volte. Dopo aver superato uno specifico valore, l'armatura diventa più forte.]]
 
 L.item_radar = "Radar"
 L.item_radar_desc = [[
 Ti permette di fare una scansione dei segni vitali.
-Comincia una ricerca automatica appena
-lo compri. Configuralo nella finestra Radar di questo
-menù.]]
+
+Comincia una ricerca automatica appena lo compri. Configuralo nella finestra Radar di questo menù.]]
 
 L.item_disg = "Travestimento"
 L.item_disg_desc = [[
-Nasconde le tue informazioni quando attivo. Evita anche
-di essere l'ultima persona vista da una vittima.
-Disabilitalo nella finestra Travestimento di questo menù
-o premi Numpad Enter.]]
+Nasconde le tue informazioni quando attivo. Evita anche di essere l'ultima persona vista da una vittima.
+
+Disabilitalo nella finestra Travestimento di questo menù o premi Numpad Enter.]]
 
 -- C4
 L.c4_hint = "Premi {usekey} per innescare o disinnescare."
@@ -327,14 +289,12 @@ L.c4_remove_destroy2 = "Conferma: distruggi"
 L.c4_disarm = "Disinnesca C4"
 L.c4_disarm_cut = "Clicca per tagliare il filo {num}"
 
-L.c4_disarm_t = "Taglia un filo per disinnescare la bomba. Come Traditore, ogni filo va bene. Per gli Innocenti non è così facile!"
 L.c4_disarm_owned = "Taglia un filo per disinnescare la bomba. È la tua bomba, quindi ogni filo la disinnescherà."
 L.c4_disarm_other = "Taglia un filo sicuro per disinnescare la bomba. Esploderà se tagli quello sbagliato!"
 
 L.c4_status_armed = "INNESCATA"
 L.c4_status_disarmed = "DISINNESCATA"
 
--- Visualizzatore
 -- Visualizer
 L.vis_name = "Visualizzatore"
 L.vis_hint = "Premi {usekey} per raccoglierlo (solo Detective)."
@@ -343,72 +303,62 @@ L.vis_help_pri = "{primaryfire} fa cadere il dispositivo attivo."
 
 L.vis_desc = [[
 Dispositivo per visualizzare una scena del crimine.
-Analizza un cadavere per mostrare come
-la vittima è stata uccisa, ma solo se
-è morta per colpi di arma da fuoco.]]
 
--- Esca
+Analizza un cadavere per mostrare come la vittima è stata uccisa, ma solo se è morta per colpi di arma da fuoco.]]
+
 -- Decoy
 L.decoy_name = "Esca"
 L.decoy_no_room = "Non puoi portare questa Esca."
 L.decoy_broken = "la tua Esca è stata distrutta!"
 
-L.decoy_help_pri = "{primaryfire} piazza l'Esca."
+--L.decoy_short_desc = "This decoy shows a fake radar sign visible for other teams"
+--L.decoy_pickup_wrong_team = "You can't pick it up as it belongs to a different team"
 
 L.decoy_desc = [[
-Mostra un segnale falso sul radar dei Detective,
-e mostra sui loro DNA scanner la posizione
-dell'Esca se scannerizzano
-il tuo DNA.]]
+Mostra un segnale falso sul radar dei Detective, e mostra sui loro DNA scanner la posizione dell'Esca se scannerizzano il tuo DNA.]]
 
--- Disinnescatore
 -- Defuser
 L.defuser_name = "Disinnescatore"
 L.defuser_help = "{primaryfire} disinnesca C4 selezionato."
 
 L.defuser_desc = [[
 Disinnesca istantaneamente un C4.
-Usi illimitati. Il C4 sarà più facile
-notarlo se porti quest'oggetto con te.]]
 
--- Pistola lanciarazzi
+Usi illimitati. Il C4 sarà più facile notarlo se porti quest'oggetto con te.]]
+
 -- Flare gun
 L.flare_name = "Pistola lanciarazzi"
-L.flare_desc = [[
-Può essere usata per bruciare corpi così che
-non vengano mai trovati. Munizioni limitate.
-Bruciare un cadavere fa un suono
-distinto.]]
 
--- Stazione di Cura
+L.flare_desc = [[
+Può essere usata per bruciare corpi così che non vengano mai trovati. Munizioni limitate.
+
+Bruciare un cadavere fa un suono distinto.]]
+
 -- Health station
 L.hstation_name = "Stazione di Cura"
-L.hstation_hint = "Premi {usekey} per ricevere HP. Carica: {num}."
+
 L.hstation_broken = "La tua Stazione di Cura è stata distrutta!"
 L.hstation_help = "{primaryfire} piazza la Stazione di Cura."
 
 L.hstation_desc = [[
 Permette ai giocatori di curarsi una volta piazzata.
-Ricarica lenta. Chiunque può usarla, e
-può essere danneggiata. Può essere analizzata per prendere
-i campioni di DNA di chi l'ha usata.]]
 
--- Coltello
+Ricarica lenta. Chiunque può usarla, e può essere danneggiata. Può essere analizzata per prendere i campioni di DNA di chi l'ha usata.]]
+
 -- Knife
 L.knife_name = "Coltello"
 L.knife_thrown = "Coltello lanciato"
 
 L.knife_desc = [[
-Uccidi bersagli feriti istantaneamente e
-silenziosamente, ma ha un solo utilizzo.
+Uccidi bersagli feriti istantaneamente e silenziosamente, ma ha un solo utilizzo.
+
 Può essere tirato con il tasto del fuoco alternativo.]]
 
 -- Poltergeist
 L.polter_desc = [[
-Pianta dei razzi su degli oggetti per lanciarli
-per lanciarli violentemente.
-Le scariche di energia danneggiano i giocatori
-nelle vicinanze.]]
+Pianta dei razzi su degli oggetti per lanciarli per lanciarli violentemente.
+
+Le scariche di energia danneggiano i giocatori nelle vicinanze.]]
 
 -- Radio
 L.radio_broken = "La tua Radio è stata distrutta!"
@@ -416,17 +366,15 @@ L.radio_help_pri = "{primaryfire} piazza una Radio."
 
 L.radio_desc = [[
 Fa dei suoni per distrarre o ingannare.
-Piazza la radio da qualche parte, poi
-fai partire dei suoni dalla finestra Radio
-in questo menù.]]
 
--- Pistola silenziata
+Piazza la radio da qualche parte, poi fai partire dei suoni dalla finestra Radio in questo menù.]]
+
 -- Silenced pistol
 L.sipistol_name = "Pistola silenziata"
 
 L.sipistol_desc = [[
-Pistola silenziata, usa i proiettili della
-pistola.
+Pistola silenziata, usa i proiettili della pistola.
+
 Le vittime non urleranno quando uccise.]]
 
 -- Newton launcher
@@ -434,24 +382,21 @@ L.newton_name = "Newton launcher"
 
 L.newton_desc = [[
 Spinge i giocatori fad una distanza di sicurezza.
+
 Munizioni infinite, ma spara lentamente.]]
 
--- Binocolo
 -- Binoculars
 L.binoc_name = "Binocolo"
-L.binoc_desc = [[
-Zooma sui cadaveri e li identifica
-da molto distante.
-Usi illimitati, ma l'identificazione
-necessita di alcuni secondi.]]
 
-L.binoc_help_pri = "{primaryfire} identifica una corpo."
-L.binoc_help_sec = "{secondaryfire} cambia il livello di zoom."
+L.binoc_desc = [[
+Zooma sui cadaveri e li identifica da molto distante.
+
+Usi illimitati, ma l'identificazione necessita di alcuni secondi.]]
 
 -- UMP
 L.ump_desc = [[
-SMG sperimentale che disorienta i
-bersagli.
+SMG sperimentale che disorienta i bersagli.
+
 Usa munizioni SMG standard.]]
 
 -- DNA scanner
@@ -467,31 +412,14 @@ L.dna_object = "Preso {num} nuovo campione di DNA dall'oggetto."
 L.dna_gone = "DNA non rilevato nella zona."
 
 L.dna_desc = [[
-Prendi campioni di DNA dagli oggetti
-e usali per trovare il proprietario del DNA.
-Usalo su giocatori appena uccisi per prendere il DNA dell'assassino
-e trovarli.]]
+Prendi campioni di DNA dagli oggetti e usali per trovare il proprietario del DNA.
 
-L.dna_menu_title = "Controlli DNA scanner"
-L.dna_menu_sample = "Campione di DNA trovato su {source}"
-L.dna_menu_remove = "Rimuovi selezionato"
-L.dna_menu_help1 = "Questi sono i campioni di DNA che hai raccolto."
-L.dna_menu_help2 = [[
-Quando carico, puoi scansionare la posizione del
-giocatore a cui appartine il campione di DNA.
-Trovare bersagli distanti usa più energia.]]
-
-L.dna_menu_scan = "Fai scansione"
-L.dna_menu_repeat = "Ripeti automaticamente"
-L.dna_menu_ready = "PRONTO"
-L.dna_menu_charge = "CARICAMENTO"
-L.dna_menu_select = "SELEZIONA CAMPIONE"
+Usalo su giocatori appena uccisi per prendere il DNA dell'assassino e trovarli.]]
 
 -- Magneto stick
 L.magnet_name = "Magneto-stick"
 L.magnet_help = "{primaryfire} per attaccare i corpi alle superfici."
 
--- Granate e altro
 -- Grenades and misc
 L.grenade_smoke = "Granata fumogena"
 L.grenade_fire = "Granata incendiaria"
@@ -502,7 +430,6 @@ L.pistol_name = "Pistola"
 L.rifle_name = "Fucile da cecchino"
 L.shotgun_name = "Fucile a pompa"
 
--- Teletrasporto
 -- Teleporter
 L.tele_name = "Teletrasporto"
 L.tele_failed = "Teletrasporto fallito."
@@ -520,10 +447,9 @@ L.tele_help_sec = "{secondaryfire} segnala questa posizione."
 
 L.tele_desc = [[
 Teletrasportati ad una posizione precedentemente segnalata.
-Teletrasportarti fa rumore, e il
-numero di utilizzi è limitato.]]
 
--- Nomi delle munizioni, mostrati quando raccolte
+Teletrasportarti fa rumore, e il numero di utilizzi è limitato.]]
+
 -- Ammo names, shown when picked up
 L.ammo_pistol = "Munizioni 9mm"
 
@@ -534,23 +460,16 @@ L.ammo_alyxgun = "Munizioni Deagle"
 L.ammo_ar2altfire = "Munizioni Pistola Lanciarazzi"
 L.ammo_gravity = "Munizioni Poltergeist"
 
-
--- Testo interfaccia HUD
--- HUD interface text
-
--- Stato round
 -- Round status
 L.round_wait = "In attesa"
 L.round_prep = "Preparazione"
 L.round_active = "In corso"
 L.round_post = "Round finito"
 
--- Vita, munizioni e area temporale
 -- Health, ammo and time area
 L.overtime = "SUPPLEMENTARI"
 L.hastemode = "SUPPLEMENTARI"
 
--- Stato della vita del bersaglio mirato
 -- TargetID health status
 L.hp_healthy = "In salute"
 L.hp_hurt = "Colpito"
@@ -558,7 +477,6 @@ L.hp_wounded = "Ferito"
 L.hp_badwnd = "Ferito gravemente"
 L.hp_death = "Quasi morto"
 
---Stato del karma del bersaglio mirato
 -- TargetID karma status
 L.karma_max = "Affidabile"
 L.karma_high = "Poco affidabile"
@@ -566,7 +484,6 @@ L.karma_med = "Grilletto facile"
 L.karma_low = "Pericoloso"
 L.karma_min = "Irresponsabile"
 
--- Altro sul bersaglio mirato
 -- TargetID misc
 L.corpse = "Cadavere"
 L.corpse_hint = "Premi {usekey} per identificare. {walkkey} + {usekey} per identificare segretamente."
@@ -576,58 +493,60 @@ L.target_unid = "Corpo non identificato"
 
 L.target_credits = "Identifica per ricevere i crediti non spesi"
 
--- Bottoni per traditori (bottoni sull'HUD con l'icona della mano che solo i traditori possono vedere)
 -- Traitor buttons (HUD buttons with hand icons that only traditori can see)
 L.tbut_single = "Uso singolo"
 L.tbut_reuse = "Riutilizzabile"
 L.tbut_retime = "Riutilizzabile dopo {num} secondi"
 L.tbut_help = "Premi {key} per attivare"
 
--- Spettatori che mutano vivi/morti
 -- Spectator muting of living/dead
 L.mute_living = "Giocatori in vita mutati"
 L.mute_specs = "Spettatori mutati"
 L.mute_all = "Tutti mutati"
 L.mute_off = "Nessuno mutato"
 
--- Spettatori e prendere possesso di un oggetto
 -- Spectators and prop possession
 L.punch_title = "PUNCH-O-METER"
 L.punch_help = "Tasti per il movimento o salto: lancia oggetto. Abbassati: lascia oggetto."
 L.punch_bonus = "Il tuo punteggio basso ha diminuito il livello del punch-o-meter di {num}"
 L.punch_malus = "Il tuo punteggio alto ha aumentato il livello del punch-o-meter di {num}!"
 
--- Informazioni che si vedono quando comincia il round
 -- Info popups shown when the round starts
-
--- Questi si trovano su più linee, e usano le parentesi quadre invece che
--- le virgolette. È una cosa di Lua. Ogni invio si vedrà in gioco.
--- These are spread over multiple lines, hence the square brackets instead of
--- quotes. That's a Lua thing. Every line break (enter) will show up in-game.
-L.info_popup_innocent = [[Sei un innocente! Ma ci sono dei traditori...
+L.info_popup_innocent = [[
+Sei un innocente! Ma ci sono dei traditori...
 Ma di chi ti puoi fidare, e chi invece è li per ucciderti?
+
 Guardati le spalle e collabora con i tuoi compagni per uscirne vivo!]]
 
-L.info_popup_detective = [[Sei un Detective! La sede dei terroristi ti ha dato delle risorse speciali per trovare i traditori.
+L.info_popup_detective = [[
+Sei un Detective! La sede dei terroristi ti ha dato delle risorse speciali per trovare i traditori.
 Usale per aiutare gli innocenti a sopravvivere, ma fai attenzione:
 i traditori cercheranno di ucciderti per primo!
+
 Premi {menukey} per ricevere il tuo equipaggiamento!]]
 
-L.info_popup_traitor_alone = [[Sei un TRADITORE! Non hai compagni traditori questo round.
+L.info_popup_traitor_alone = [[
+Sei un TRADITORE! Non hai compagni traditori questo round.
+
 Uccidi tutti gli per vincere!
+
 Premi {menukey} per ricevere il tuo equipaggiamento!]]
 
-L.info_popup_traitor = [[Sei un TRADITORE! Collabora con i compagni traditori per uccidere gli altri.
+L.info_popup_traitor = [[
+Sei un TRADITORE! Collabora con i compagni traditori per uccidere gli altri.
 Ma fai attenzione, o il tuo tradimento potrebbe essere scoperto...
+
 Questi sono i tuoi compagni:
 {traitorlist}
+
 Premi {menukey} per ricevere il tuo equipaggiamento!]]
 
--- Altro testo vario
 -- Various other text
 L.name_kick = "Un giocatore è stato espulso per aver cambiato il suo nome durante round."
 
-L.idle_popup = [[Sei stato inattivo per {num} secondi e sei stato spostato nella modalità solo Spettatori. Mentre sei in questa modalità, non spawnerai all'inizio del round.
+L.idle_popup = [[
+Sei stato inattivo per {num} secondi e sei stato spostato nella modalità solo Spettatori. Mentre sei in questa modalità, non spawnerai all'inizio del round.
+
 Puoi rimuovere la modalità solo Spettatori in ogni momento premendo {helpkey} e deselezionando la casella nella finestra Impostazioni. Puoi anche scegliere di disabilitarla ora.]]
 
 L.idle_popup_close = "Non fare niente"
@@ -637,18 +556,11 @@ L.idle_warning = "Attenzione: sembri essere inattivo/AFK, e verrai spostato negl
 
 L.spec_mode_warning = "Sei in modalità Spettatore e non spawnerai all'inizio del round. Per disabilitare questa modalità, premi F1, vai nelle Impostazioni e togli la spunta a 'modalità solo Spettatori'."
 
-
--- Consigli, mostrati in basso agli spettatori
--- Tips, shown at bottom of screen to spectators
-
--- Pannello consigli
 -- Tips panel
 L.tips_panel_title = "Consigli"
 L.tips_panel_tip = "Consiglio:"
 
--- Stringhe consigli
 -- Tip texts
-
 L.tip1 = "Traditori possono identificare un corpo silenziosamente, senza confermare la morte, tenendo premuto {walkkey} e premendo {usekey} sul cadavere."
 
 L.tip2 = "Innescare un C4 con più tempo aumenterà il numero di cavi che la fanno esplodere istantaneamente quando un innocente prova a disinnescarla. Fara suoni meno forti e più di rado."
@@ -729,12 +641,9 @@ L.tip39 = "Il C4 che esplode per errore durante le operazione di disinnescamento
 
 L.tip40 = "Se dice 'SUPPLEMENTARI' sopra il tempo del round, il round all'inizio durerà solo qualche minuto, ma con ogni uccisione il tempo a disposizione aumenterà (come catturare un punto su TF2). Questa modalità mette pressione ai traditori, così che facciano in fretta."
 
-
 -- Round report
-
 L.report_title = "Report del Round"
 
--- Finestre
 -- Tabs
 L.report_tab_hilite = "Momenti chiave"
 L.report_tab_hilite_tip = "Momenti chiave del round"
@@ -743,14 +652,12 @@ L.report_tab_events_tip = "Log degli eventi accaduti in questo round"
 L.report_tab_scores = "Punteggi"
 L.report_tab_scores_tip = "Punteggi fatti da ogni giocatore in questo round"
 
--- Salvataggio log degli eventi
 -- Event log saving
 L.report_save = "Salva il Log .txt"
 L.report_save_tip = "Salva il Log degli eventi in un file di testo"
 L.report_save_error = "Nessun Log degli eventi da salvare."
 L.report_save_result = "Il Log degli eventi è stato salvato in:"
 
--- Schermata con titolo grande
 -- Big title window
 L.hilite_win_traitors = "I TRADITORI HANNO VINTO"
 L.hilite_win_bees = "PAREGGIO"
@@ -761,7 +668,6 @@ L.hilite_players2 = "{numplayers} hanno partecipato, uno di loro era un traditor
 
 L.hilite_duration = "Il round è durato {time}"
 
--- Colonne
 -- Columns
 L.col_time = "Tempo"
 L.col_event = "Evento"
@@ -774,11 +680,9 @@ L.col_points = "Punti"
 L.col_team = "Bonus team"
 L.col_total = "Punti totali"
 
--- Il nome di una trappola che ci ha uccisi a cui il mapper non ha dato un nome
 -- Name of a trap that killed us that has not been named by the mapper
 L.something = "qualcosa"
 
--- Eventi uccisioni
 -- Kill events
 L.ev_blowup = "{victim} si è fatto esplodere"
 L.ev_blowup_trap = "{victim} è stato fatto esplodere da {trap}"
@@ -820,7 +724,6 @@ L.ev_crush_using = "{victim} è stato schiacciato dalla trappola {trap} attivata
 L.ev_other = "{victim} è stata ucciso da {attacker}"
 L.ev_other_using = "{victim} è stata ucciso da {attacker} con la trappola {trap}"
 
--- Altri eventi
 -- Other events
 L.ev_body = "{finder} ha trovato il cadavere di {victim}"
 L.ev_c4_plant = "{player} ha piazzato un C4"
@@ -834,9 +737,7 @@ L.ev_win_traitors = "Gli ignobili traditori hanno vinto il round!"
 L.ev_win_innocents = "Gli amabili innocenti hanno vinto il round!"
 L.ev_win_time = "I traditori hanno finito il tempo e hanno perso!"
 
--- Premi/momenti chiave
 -- Awards/highlights
-
 L.aw_sui1_title = "Capo del Culto dei Suicidi"
 L.aw_sui1_text = "ha mostrato a tutti gli altri suicidi come farlo facendolo per primo."
 
@@ -1032,19 +933,16 @@ L.aw_tod1_text = "morto solo pochi secondi prima che la sua squadra vincesse."
 L.aw_tod2_title = "Odio Questo Gioco"
 L.aw_tod2_text = "morto proprio all'inizio del round."
 
-
--- Stringhe nuove e modificate sono inserite qui sotto, segnati con la versione
--- nella quale sono state inserite, per rendere più facile aggiornare le traduzioni
 -- New and modified pieces of text are placed below this point, marked with the
 -- version in which they were added, to make updating translations easier.
 
 -- v24
 L.drop_no_ammo = "Munizioni insufficienti nel tuo caricatore per lasciare un pacchetto di munizioni."
 
--- 5-25-15
+-- 2015-05-25
 L.hat_retrieve = "Hai raccolto il cappello di un Detective."
 
--- 3-9-2017
+-- 2017-09-03
 L.sb_sortby = "Ordina per:"
 
 -- 2018-07-24
@@ -1061,17 +959,10 @@ L.stungun_name = "Prototipo UMP"
 
 L.knife_instant = "UCCISIONE ISTANTANEA"
 
-L.dna_hud_type = "TIPO"
-L.dna_hud_body = "CORPO"
-L.dna_hud_item = "OGGETTO"
-
 L.binoc_zoom_level = "LIVELLO"
 L.binoc_body = "CORPO TROVATO"
 
 L.idle_popup_title = "Inattivo"
-
---------------------------------
--- TTT2 LANGUAGE
 
 -- 2019-01-31
 L.create_own_shop = "Crea shop proprio"
@@ -1152,6 +1043,8 @@ L.corpse_binoculars = "Premi [{key}] per identificare i cadaveri con il binocolo
 L.binoc_progress = "Progresso ricerca: {progress}%"
 
 L.pickup_no_room = "Non hai spazio nell'inventario per questo tipo di arma"
+--L.pickup_fail = "You cannot pick up this weapon"
+--L.pickup_pending = "You already picked up a weapon, wait until you receive it"
 
 -- 2020-01-07
 L.tbut_help_admin = "Modifica le impostazioni per i bottoni dei traditori"
@@ -1349,3 +1242,43 @@ L.button_close = "Chiudi"
 --L.item_no_prop_damage_desc = [[Makes you immune to prop damage.]]
 --L.item_no_drown_damage = "No Drowning Damage"
 --L.item_no_drown_damage_desc = [[Makes you immune to drowning damage.]]
+
+-- 2020-04-21
+--L.dna_tid_possible = "Scan possible"
+--L.dna_tid_impossible = "No scan possible"
+--L.dna_screen_ready = "No DNA"
+--L.dna_screen_match = "Match"
+
+-- 2020-04-30
+--L.message_revival_canceled = "Revival canceled."
+--L.message_revival_failed = "Revival failed."
+--L.message_revival_failed_missing_body = "You have not been revived because your corpse no longer exists."
+--L.hud_revival_title = "Time left until revival:"
+--L.hud_revival_time = "{time}s"
+
+-- 2020-05-03
+--L.door_destructible = "Door is destructible ({health}HP)"
+
+-- 2020-05-28
+--L.confirm_detective_only = "Only detectives can confirm bodies"
+--L.inspect_detective_only = "Only detectives can inspect bodies"
+--L.corpse_hint_no_inspect = "Only detectives can search this body."
+--L.corpse_hint_inspect_only = "Press [{usekey}] to search. Only detectives can confirm the body."
+--L.corpse_hint_inspect_only_credits = "Press [{usekey}] to receive credits. Only detectives can search this body."
+
+-- 2020-06-04
+--L.label_bind_disguiser = "Toggle disguiser"
+
+-- 2020-06-24
+--L.dna_help_primary = "Collect a DNA sample"
+--L.dna_help_secondary = "Switch the DNA slot"
+--L.dna_help_reload = "Delete a sample"
+
+--L.binoc_help_pri = "Identify a body."
+--L.binoc_help_sec = "Change zoom level."
+
+--L.vis_help_pri = "Drop the activated device."
+
+--L.decoy_help_pri = "Plant the Decoy."
+
+--L.set_cross_lines_enable = "Enable crosshair lines"
