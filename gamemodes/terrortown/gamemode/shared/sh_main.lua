@@ -55,27 +55,18 @@ function GM:PlayerFootstep(ply, pos, foot, sound, volume, rf)
 end
 
 ---
--- Predicted move speed changes
+-- The Move hook is called for you to manipulate the player's MoveData.
+-- You shouldn't adjust the player's position in any way in the move hook. This is due to
+-- prediction errors, the netcode might run the move hook multiple times as packets arrive late.
+-- Therefore you should only adjust the movedata construct in this hook.
+-- @param Player ply The player
+-- @param CMoveData moveData Movement information
 -- @hook
 -- @realm shared
-function GM:Move(ply, mv)
-	if not ply:IsTerror() then return end
+function GM:Move(ply, moveData)
+	SPEED:HandleSpeedCalculation(ply, moveData)
 
-	local basemul = 1
-	local slowed = false
-
-	-- Slow down ironsighters
-	local wep = ply:GetActiveWeapon()
-
-	if IsValid(wep) and wep.GetIronsights and wep:GetIronsights() then
-		basemul = 120 / 220
-		slowed = true
-	end
-
-	local noLag = {1}
-
-	local mul = hook.Call("TTTPlayerSpeedModifier", GAMEMODE, ply, slowed, mv, noLag) or 1
-	mul = basemul * mul * noLag[1]
+	local mul = ply:GetSpeedMultiplier()
 
 	if ply.sprintMultiplier and (ply.sprintProgress or 0) > 0 then
 		local sprintMultiplierModifier = {1}
@@ -85,8 +76,8 @@ function GM:Move(ply, mv)
 		mul = mul * ply.sprintMultiplier * sprintMultiplierModifier[1]
 	end
 
-	mv:SetMaxClientSpeed(mv:GetMaxClientSpeed() * mul)
-	mv:SetMaxSpeed(mv:GetMaxSpeed() * mul)
+	moveData:SetMaxClientSpeed(moveData:GetMaxClientSpeed() * mul)
+	moveData:SetMaxSpeed(moveData:GetMaxSpeed() * mul)
 end
 
 local ttt_playercolors = {
@@ -143,6 +134,10 @@ end
 -- @realm shared
 function GM:Think()
 	UpdateSprint()
+
+	if CLIENT then
+		EPOP:Think()
+	end
 end
 
 -- Drowning and such
@@ -229,4 +224,47 @@ function GM:Tick()
 
 		VOICE.Tick()
 	end
+end
+
+---
+-- A hook that is called when the preparation phase starts.
+-- @hook
+-- @realm shared
+function GM:TTTPrepareRound()
+	BUYTABLE = {}
+	TEAMBUYTABLE = {}
+end
+
+---
+-- A hook that is called when the round begins.
+-- @hook
+-- @realm shared
+function GM:TTTBeginRound()
+
+end
+
+-- A hook that is called when the round ends.
+-- @hook
+-- @realm shared
+function GM:TTTEndRound()
+
+end
+
+---
+-- Called right after the map has been cleaned up (usually because game.CleanUpMap was called).
+-- This hook is called after the @{outputs} library is set up and map entity outputs can be
+-- registered.
+-- @hook
+-- @realm shared
+function GM:TTT2PostCleanupMap()
+
+end
+
+---
+-- Called right after all doors are initialized on the map.
+-- @param table doorsTable A table with the newly registered door entities
+-- @hook
+-- @realm shared
+function GM:TTT2PostDoorSetup(doorsTable)
+
 end

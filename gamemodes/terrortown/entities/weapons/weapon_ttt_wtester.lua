@@ -99,7 +99,8 @@ local dna_screen_circle = Material("models/ttt2_dna_scanner/screen/circle")
 
 function SWEP:Initialize()
 	if CLIENT then
-		self:AddHUDHelp("dna_help_primary", "dna_help_secondary", true)
+		self:AddTTT2HUDHelp("dna_help_primary", "dna_help_secondary")
+		self:AddHUDHelpLine("dna_help_reload", Key("+reload", "R"))
 
 		-- Create render target
 		self.scannerScreenTex = GetRenderTarget( "scanner_screen_tex", 512, 512 )
@@ -413,9 +414,11 @@ else
 		draw.AdvancedText(identifier, "DNAScannerDistanceFont", 65, 64, screen_fontcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER , false, 1.75)
 
 		if showFeedback then
-			if IsValid(target) and IsValid(self:GetOwner()) then
+			local owner = self:GetOwner()
+
+			if IsValid(target) and IsValid(owner) then
 				local targetPos = GetGlobalBool("ttt2_dna_radar") and self.RadarPos or target:LocalToWorld(target:OBBCenter())
-				local scannerPos = self.Owner:GetPos()
+				local scannerPos = owner:GetPos()
 				local vectorToPos = targetPos - scannerPos
 				local angleToPos = vectorToPos:Angle()
 				local arrowRotation = angleToPos.yaw - EyeAngles().yaw
@@ -448,11 +451,11 @@ else
 
 	function SWEP:PreDrawViewModel()
 		self:FillScannerScreen()
-		self.Owner:GetViewModel():SetSubMaterial(0, "!scanner_screen_mat")
+		self:GetOwner():GetViewModel():SetSubMaterial(0, "!scanner_screen_mat")
 	end
 
 	function SWEP:PostDrawViewModel()
-		self.Owner:GetViewModel():SetSubMaterial(0, nil)
+		self:GetOwner():GetViewModel():SetSubMaterial(0, nil)
 	end
 
 	function SWEP:DrawWorldModel()

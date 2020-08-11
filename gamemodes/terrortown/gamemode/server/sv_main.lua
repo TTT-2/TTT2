@@ -1,7 +1,12 @@
 ---
 -- Trouble in Terrorist Town 2
 
+include("ttt2/libraries/spawn.lua")
+include("ttt2/libraries/entity_outputs.lua")
+
 ttt_include("sh_init")
+
+ttt_include("sh_cvar_handler")
 
 ttt_include("sh_sprint")
 ttt_include("sh_main")
@@ -10,6 +15,8 @@ ttt_include("sh_network_sync")
 ttt_include("sh_door")
 ttt_include("sh_voice")
 ttt_include("sh_vskin")
+ttt_include("sh_printmessage_override")
+ttt_include("sh_speed")
 
 ttt_include("sv_network_sync")
 ttt_include("sv_hud_manager")
@@ -32,6 +39,7 @@ ttt_include("sv_scoring")
 ttt_include("sv_corpse")
 ttt_include("sv_status")
 ttt_include("sv_loadingscreen")
+ttt_include("sv_eventpopup")
 
 ttt_include("sv_armor")
 ttt_include("sh_armor")
@@ -43,6 +51,7 @@ ttt_include("sv_player")
 
 ttt_include("sv_weapon_pickup")
 ttt_include("sv_addonchecker")
+ttt_include("sv_roleselection")
 
 -- Localize stuff we use often. It's like Lua go-faster stripes.
 local math = math
@@ -53,11 +62,8 @@ local pairs = pairs
 local timer = timer
 local util = util
 local IsValid = IsValid
-local ConVarExists = ConVarExists
 local CreateConVar = CreateConVar
 local hook = hook
-
-local strTmp = ""
 
 local roundtime = CreateConVar("ttt_roundtime_minutes", "10", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 local preptime = CreateConVar("ttt_preptime_seconds", "30", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
@@ -114,20 +120,10 @@ local confirm_team = CreateConVar("ttt2_confirm_team", "0", {FCVAR_NOTIFY, FCVAR
 -- confirm players in kill list
 CreateConVar("ttt2_confirm_killlist", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
--- innos min pct
-local cv_ttt_min_inno_pct = CreateConVar("ttt_min_inno_pct", "0.47", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Minimum multiplicator for each player to calculate the minimum amount of innocents")
-local cv_ttt_max_roles = CreateConVar("ttt_max_roles", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different roles")
-local cv_ttt_max_roles_pct =  CreateConVar("ttt_max_roles_pct", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different roles based on player amount. ttt_max_roles needs to be 0")
-local cv_ttt_max_baseroles = CreateConVar("ttt_max_baseroles", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different baseroles")
-local cv_ttt_max_baseroles_pct = CreateConVar("ttt_max_baseroles_pct", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different baseroles based on player amount. ttt_max_baseroles needs to be 0")
 CreateConVar("ttt_enforce_playermodel", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Whether or not to enforce terrorist playermodels. Set to 0 for compatibility with Enhanced Playermodel Selector")
 
 -- debuggery
 local ttt_dbgwin = CreateConVar("ttt_debug_preventwin", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
-PLYFORCEDROLES = {}
-PLYFINALROLES = {}
-SELECTABLEROLES = nil
 
 -- Pool some network names.
 util.AddNetworkString("TTT_RoundState")
@@ -180,13 +176,25 @@ util.AddNetworkString("TTT2RoleGlobalVoice")
 util.AddNetworkString("TTT2MuteTeam")
 util.AddNetworkString("TTT2UpdateHoldAimConvar")
 
+fileloader.LoadFolder("terrortown/autorun/client/", false, CLIENT_FILE, function(path)
+	MsgN("Marked TTT2 client autorun file for distribution: ", path)
+end)
+
+fileloader.LoadFolder("terrortown/autorun/shared/", false, SHARED_FILE, function(path)
+	MsgN("Marked and added TTT2 shared autorun file for distribution: ", path)
+end)
+
+fileloader.LoadFolder("terrortown/autorun/server/", false, SERVER_FILE, function(path)
+	MsgN("Added TTT2 server autorun file: ", path)
+end)
+
 CHANGED_EQUIPMENT = {}
 
 ---
 -- Called after the gamemode loads and starts.
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/Initialize
+-- @ref https://wiki.facepunch.com/gmod/GM:Initialize
 -- @local
 function GM:Initialize()
 	MsgN("Trouble In Terrorist Town 2 gamemode initializing...")
@@ -197,7 +205,14 @@ function GM:Initialize()
 	hook.Run("TTT2FinishedLoading")
 
 	-- check for language files to mark them as downloadable for clients
-	LANG.SetupFiles("lang/", true)
+	fileloader.LoadFolder("lang/", true, CLIENT_FILE, function(path)
+		MsgN("[DEPRECATION WARNING]: Loaded language file from 'lang/', this folder is deprecated. Please switch to 'terrortown/lang/'")
+		MsgN("Added TTT2 language file: ", path)
+	end)
+
+	fileloader.LoadFolder("terrortown/lang/", true, CLIENT_FILE, function(path)
+		MsgN("Added TTT2 language file: ", path)
+	end)
 
 	-- load skin files
 	vskin.SetupFiles("terrortown/gamemode/shared/vskins/")
@@ -210,7 +225,7 @@ function GM:Initialize()
 	RunConsoleCommand("mp_friendlyfire", "1")
 
 	-- Default crowbar unlocking settings, may be overridden by config entity
-	GAMEMODE.crowbar_unlocks = {
+	self.crowbar_unlocks = {
 		[OPEN_DOOR] = true,
 		[OPEN_ROT] = true,
 		[OPEN_BUT] = true,
@@ -218,24 +233,25 @@ function GM:Initialize()
 	}
 
 	-- More map config ent defaults
-	GAMEMODE.force_plymodel = ""
-	GAMEMODE.propspec_allow_named = true
+	self.force_plymodel = ""
+	self.propspec_allow_named = true
 
-	GAMEMODE.MapWin = WIN_NONE
-	GAMEMODE.AwardedCredits = false
-	GAMEMODE.AwardedCreditsDead = 0
+	self.MapWin = WIN_NONE
+	self.AwardedCredits = false
+	self.AwardedCreditsDead = 0
 
-	GAMEMODE.round_state = ROUND_WAIT
-	GAMEMODE.FirstRound = true
-	GAMEMODE.RoundStartTime = 0
+	self.round_state = ROUND_WAIT
+	self.FirstRound = true
+	self.RoundStartTime = 0
+	self.roundCount = 0
 
-	GAMEMODE.DamageLog = {}
-	GAMEMODE.LastRole = {}
-	GAMEMODE.playermodel = GetRandomPlayerModel()
-	GAMEMODE.playercolor = COLOR_WHITE
+	self.DamageLog = {}
+	self.LastRole = {}
+	self.playermodel = GetRandomPlayerModel()
+	self.playercolor = COLOR_WHITE
 
 	-- Delay reading of cvars until config has definitely loaded
-	GAMEMODE.cvar_init = false
+	self.cvar_init = false
 
 	SetGlobalFloat("ttt_round_end", -1)
 	SetGlobalFloat("ttt_haste_end", -1)
@@ -270,7 +286,7 @@ function GM:InitCvars()
 	-- Initialize game state that is synced with client
 	SetGlobalInt("ttt_rounds_left", round_limit:GetInt())
 
-	GAMEMODE:SyncGlobals()
+	self:SyncGlobals()
 
 	KARMA.InitState()
 
@@ -282,7 +298,7 @@ end
 -- @return string The text to be shown in the server browser as the gamemode
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/GetGameDescription
+-- @ref https://wiki.facepunch.com/gmod/GM:GetGameDescription
 -- @local
 function GM:GetGameDescription()
 	return self.Name
@@ -297,14 +313,17 @@ end
 -- the client will receive it as NULL entity.
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/InitPostEntity
+-- @ref https://wiki.facepunch.com/gmod/GM:InitPostEntity
 -- @local
 function GM:InitPostEntity()
-	GAMEMODE:InitCvars()
+	self:InitCvars()
 
 	MsgN("[TTT2][INFO] Client post-init...")
 
 	hook.Run("TTTInitPostEntity")
+
+	items.MigrateLegacyItems()
+	items.OnLoaded()
 
 	InitDefaultEquipment()
 
@@ -350,6 +369,8 @@ function GM:InitPostEntity()
 		CreateEquipment(itm) -- init items
 
 		itm.CanBuy = {} -- reset normal items equipment
+
+		itm:Initialize()
 	end
 
 	for i = 1, #sweps do
@@ -395,7 +416,7 @@ function GM:InitPostEntity()
 	WEPS.ForcePrecache()
 
 	timer.Simple(0, function()
-		Addonchecker:Check()
+		addonChecker.Check()
 	end)
 end
 
@@ -403,10 +424,25 @@ end
 -- Called after the gamemode has loaded
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/PostGamemodeLoaded
+-- @ref https://wiki.facepunch.com/gmod/GM:PostGamemodeLoaded
 -- @local
 function GM:PostGamemodeLoaded()
 
+end
+
+---
+-- Called when a map I/O event occurs.
+-- @param Entity ent Entity that receives the input
+-- @param string input The input name. Is not guaranteed to be a valid input on the entity.
+-- @param Entity activator Activator of the input
+-- @param Entity caller Caller of the input
+-- @param any data Data provided with the input
+-- @return boolean Return true to prevent this input from being processed.
+-- @ref https://wiki.facepunch.com/gmod/GM:AcceptInput
+-- @hook
+-- @realm server
+function GM:AcceptInput(ent, name, activator, caller, data)
+	return door.AcceptInput(ent, name, activator, caller, data)
 end
 
 ---
@@ -736,22 +772,26 @@ end
 -- Called right before the map cleans up (usually because @{game.CleanUpMap} was called)
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/PreCleanupMap
+-- @ref https://wiki.facepunch.com/gmod/GM:PreCleanupMap
 -- @local
 function GM:PreCleanupMap()
 	ents.TTT.FixParentedPreCleanup()
+
+	entityOutputs.CleanUp()
 end
 
 ---
 -- Called right after the map has cleaned up (usually because game.CleanUpMap was called)
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/PostCleanupMap
+-- @ref https://wiki.facepunch.com/gmod/GM:PostCleanupMap
 -- @local
 function GM:PostCleanupMap()
 	ents.TTT.FixParentedPostCleanup()
 
-	-- init door entities
+	entityOutputs.SetUp()
+	hook.Run("TTT2PostCleanupMap")
+
 	door.SetUp()
 end
 
@@ -891,6 +931,8 @@ function PrepareRound()
 
 	CleanUp()
 
+	GAMEMODE.roundCount = GAMEMODE.roundCount + 1
+
 	GAMEMODE.MapWin = WIN_NONE
 	GAMEMODE.AwardedCredits = false
 	GAMEMODE.AwardedCreditsDead = 0
@@ -955,7 +997,14 @@ function PrepareRound()
 	local plys = player.GetAll()
 
 	for i = 1, #plys do
-		plys[i]:SetTargetPlayer(nil)
+		local ply = plys[i]
+
+		ply:SetTargetPlayer(nil)
+		ply:ResetRoundDeathCounter()
+		ply:SetActiveInRound(false)
+
+		ply:CancelRevival(nil, true)
+		ply:SendRevivalReason(nil)
 	end
 
 	-- Tell hooks and map we started prep
@@ -1035,7 +1084,7 @@ function SpawnWillingPlayers(dead_only)
 		end
 	else
 		-- wave method
-		local num_spawns = #GetSpawnEnts()
+		local num_spawns = #spawn.GetPlayerSpawnEntities()
 		local to_spawn = {}
 
 		for _, ply in RandomPairs(plys) do
@@ -1132,9 +1181,7 @@ function BeginRound()
 
 	-- Select traitors & co. This is where things really start so we can't abort
 	-- anymore.
-	SELECTABLEROLES = nil
-
-	SelectRoles()
+	roleselection.SelectRoles()
 
 	LANG.Msg("round_selected")
 
@@ -1170,6 +1217,17 @@ function BeginRound()
 	GAMEMODE:UpdatePlayerLoadouts() -- needs to happen when round_active
 
 	ARMOR:InitPlayerArmor()
+
+	local plys = player.GetAll()
+
+	for i = 1, #plys do
+		local ply = plys[i]
+
+		ply:ResetRoundDeathCounter()
+
+		-- a player should be considered "was active in round" if they received a role
+		ply:SetActiveInRound(ply:Alive() and ply:IsTerror())
+	end
 
 	hook.Call("TTTBeginRound", GAMEMODE)
 
@@ -1227,6 +1285,7 @@ function CheckForMapSwitch()
 
 	if rounds_left <= 0 or time_left <= 0 then
 		timer.Stop("end2prep")
+		SetRoundEnd(CurTime())
 
 		hook.Run("TTT2LoadNextMap", nextmap, rounds_left, time_left)
 	else
@@ -1316,10 +1375,10 @@ function GM:TTTCheckForWin()
 		return WIN_NONE
 	end
 
-	if GAMEMODE.MapWin ~= WIN_NONE then -- a role wins
-		local mw = GAMEMODE.MapWin
+	if self.MapWin ~= WIN_NONE then -- a role wins
+		local mw = self.MapWin
 
-		GAMEMODE.MapWin = WIN_NONE
+		self.MapWin = WIN_NONE
 
 		return mw
 	end
@@ -1331,7 +1390,7 @@ function GM:TTTCheckForWin()
 		local v = plys[i]
 		local tm = v:GetTeam()
 
-		if (v:IsTerror() or v.forceRevive) and not v:GetSubRoleData().preventWin and tm ~= TEAM_NONE then
+		if (v:IsTerror() or v:IsBlockingRevival()) and not v:GetSubRoleData().preventWin and tm ~= TEAM_NONE then
 			alive[#alive + 1] = tm
 		end
 	end
@@ -1366,519 +1425,9 @@ function GM:TTTCheckForWin()
 	end
 end
 
-local function GetEachRoleCount(ply_count, role_type)
-	if role_type == INNOCENT.name then
-		return math.floor(ply_count * cv_ttt_min_inno_pct:GetFloat()) or 0
-	end
-
-	if ply_count < GetConVar("ttt_" .. role_type .. "_min_players"):GetInt() then
-		return 0
-	end
-
-	-- get number of role members: pct of players rounded down
-	local role_count = math.floor(ply_count * GetConVar("ttt_" .. role_type .. "_pct"):GetFloat())
-	local maxm = 1
-
-	strTmp = "ttt_" .. role_type .. "_max"
-
-	if ConVarExists(strTmp) then
-		maxm = GetConVar(strTmp):GetInt()
-	end
-
-	if maxm > 1 then
-		-- make sure there is at least 1 of the role
-		role_count = math.Clamp(role_count, 1, maxm)
-	else
-		-- there need to be max and min 1 player of this role
-		--role_count = math.Clamp(role_count, 1, 1)
-		role_count = 1
-	end
-
-	return role_count
-end
-
----
--- Returns the amount of pre selected @{ROLE}s
--- @param number subrole subrole id of a @{ROLE}'s index
--- @return number amount
--- @realm server
-function GetPreSelectedRole(subrole)
-	local tmp = 0
-
-	if GetRoundState() == ROUND_ACTIVE then
-		local plys = player.GetAll()
-
-		for i = 1, #plys do
-			local ply = plys[i]
-
-			if not IsValid(ply) or ply:GetForceSpec() or ply:GetSubRole() ~= subrole then continue end
-
-			tmp = tmp + 1
-		end
-	elseif PLYFINALROLES then
-		for ply, sr in pairs(PLYFINALROLES) do
-			if sr == subrole then
-				tmp = tmp + 1
-			end
-		end
-	end
-
-	return tmp
-end
-
-local function AddAvailableRoles(roleData, tbl, iTbl, forced, max_plys)
-	local b = true
-
-	if not forced then
-		strTmp = "ttt_" .. roleData.name .. "_random"
-
-		local r = ConVarExists(strTmp) and GetConVar(strTmp):GetInt() or 0
-
-		if r <= 0 then
-			b = false
-		elseif r < 100 then
-			b = math.random(100) <= r
-		end
-	end
-
-	if b then
-		local tmp2 = GetEachRoleCount(max_plys, roleData.name) - GetPreSelectedRole(roleData.index)
-		if tmp2 > 0 then
-			tbl[roleData] = tmp2
-			iTbl[#iTbl + 1] = roleData
-		end
-	end
-end
-
----
--- Returns all selectable @{ROLE}s based on the amount of @{Player}s
--- @note This @{function} automatically saves the selectable @{ROLE}s for the current round
--- @param table plys list of @{Player}s
--- @param number max_plys amount of maximum @{Player}s
--- @return table a list of all selectable @{ROLE}s
--- @realm server
-function GetSelectableRoles(plys, max_plys)
-	if not plys then
-		local tmp = {}
-		local allPlys = player.GetAll()
-
-		for i = 1, #allPlys do
-			local v = allPlys[i]
-
-			-- everyone on the spec team is in specmode
-			if IsValid(v) and not v:GetForceSpec() and (not plys or table.HasValue(plys, v)) and not hook.Run("TTT2DisableRoleSelection", v) then
-				tmp[#tmp + 1] = v
-			end
-		end
-
-		plys = tmp
-	end
-
-	max_plys = max_plys or #plys
-
-	if max_plys < 2 then return end
-
-	if SELECTABLEROLES then
-		return SELECTABLEROLES
-	end
-
-	local selectableRoles = {
-		[INNOCENT] = GetEachRoleCount(max_plys, INNOCENT.name) - GetPreSelectedRole(ROLE_INNOCENT),
-		[TRAITOR] = GetEachRoleCount(max_plys, TRAITOR.name) - GetPreSelectedRole(ROLE_TRAITOR)
-	}
-
-	local newRolesEnabled = GetConVar("ttt_newroles_enabled"):GetBool()
-	local forcedRolesTbl = {}
-
-	for id, subrole in pairs(PLYFORCEDROLES) do
-		forcedRolesTbl[subrole] = true
-	end
-
-	local tmpTbl = {}
-	local iTmpTbl = {}
-	local checked = {}
-	local rlsList = roles.GetList()
-
-	for i = 1, #rlsList do
-		local v = rlsList[i]
-
-		if checked[v.index] then continue end
-
-		checked[v.index] = true
-
-		if v ~= INNOCENT and v ~= TRAITOR and (newRolesEnabled or v == DETECTIVE) and v:IsSelectable() then
-
-			-- at first, check for baserole availibility
-			if v.baserole and v.baserole ~= ROLE_INNOCENT and v.baserole ~= ROLE_TRAITOR then
-				local rd = roles.GetByIndex(v.baserole)
-
-				if not checked[v.baserole] then
-					checked[v.baserole] = true
-
-					AddAvailableRoles(v, tmpTbl, iTmpTbl, forcedRolesTbl[v.baserole], max_plys)
-				end
-
-				-- continue if baserole is not available
-				local base_count = tmpTbl[rd]
-				if not base_count or base_count < 1 then
-					continue
-				end
-			end
-
-			-- now check for subrole availability
-			AddAvailableRoles(v, tmpTbl, iTmpTbl, forcedRolesTbl[v.index], max_plys)
-		end
-	end
-
-	local roles_count = 2
-	local baseroles_count = 2
-
-	-- yea it begins
-	local max_roles = cv_ttt_max_roles:GetInt()
-	if max_roles == 0 then
-		max_roles = math.floor(cv_ttt_max_roles_pct:GetFloat() * max_plys)
-		if max_roles == 0 then
-			max_roles = nil
-		end
-	end
-
-	-- damn, not again
-	local max_baseroles = cv_ttt_max_baseroles:GetInt()
-	if max_baseroles == 0 then
-		max_baseroles = math.floor(cv_ttt_max_baseroles_pct:GetFloat() * max_plys)
-		if max_baseroles == 0 then
-			max_baseroles = nil
-		end
-	end
-
-	for i = 1, #iTmpTbl do
-		if max_roles and roles_count >= max_roles then break end
-
-		local rnd = math.random(#iTmpTbl)
-		local v = iTmpTbl[rnd]
-
-		table.remove(iTmpTbl, rnd)
-
-		if v.baserole then
-			local br = roles.GetByIndex(v.baserole)
-
-			if not selectableRoles[br] then
-				if max_baseroles and baseroles_count >= max_baseroles then continue end
-
-				selectableRoles[br] = tmpTbl[br]
-				roles_count = roles_count + 1
-				baseroles_count = baseroles_count + 1
-
-				if max_roles and roles_count >= max_roles then break end
-			end
-		end
-
-		if not selectableRoles[v] then
-			selectableRoles[v] = tmpTbl[v]
-			roles_count = roles_count + 1
-
-			if not v.baserole then
-				baseroles_count = baseroles_count + 1
-			end
-		end
-	end
-
-	SELECTABLEROLES = selectableRoles
-
-	return selectableRoles
-end
-
-local function SetRoleTypes(choices, prev_roles, roleCount, availableRoles, defaultRole)
-	local choices_i = #choices
-	local availableRoles_i = #availableRoles
-
-	while choices_i > 0 and availableRoles_i > 0 do
-		local pick = math.random(choices_i)
-		local pply = choices[pick]
-
-		if IsValid(pply) then
-			local vpick = math.random(availableRoles_i)
-			local v = availableRoles[vpick]
-			local type_count = roleCount[v.index]
-
-			strTmp = "ttt_" .. v.name .. "_karma_min"
-
-			local min_karmas = ConVarExists(strTmp) and GetConVar(strTmp):GetInt() or 0
-
-			-- if player was last round innocent, he will be another role (if he has enough karma)
-			if choices_i <= type_count or (
-				pply:GetBaseKarma() > min_karmas
-				and table.HasValue(prev_roles[ROLE_INNOCENT], pply)
-				and not pply:GetAvoidRole(v.index)
-				or math.random(3) == 2
-			) then
-				PLYFINALROLES[pply] = PLYFINALROLES[pply] or v.index
-
-				table.remove(choices, pick)
-
-				choices_i = choices_i - 1
-				type_count = type_count - 1
-				roleCount[v.index] = type_count
-
-				if type_count <= 0 then
-					table.remove(availableRoles, vpick)
-
-					availableRoles_i = availableRoles_i - 1
-				end
-			end
-		end
-	end
-
-	if defaultRole then
-		for i = 1, #choices do
-			local ply = choices[i]
-
-			PLYFINALROLES[ply] = PLYFINALROLES[ply] or defaultRole
-		end
-	end
-end
-
-local function SelectForcedRoles(max_plys, roleCount, allSelectableRoles, choices)
-	local transformed = {}
-
-	for id, subrole in pairs(PLYFORCEDROLES) do
-		local ply = player.GetByUniqueID(id)
-
-		if not IsValid(ply) then
-			PLYFORCEDROLES[id] = nil
-		else
-			transformed[subrole] = transformed[subrole] or {}
-			transformed[subrole][#transformed[subrole] + 1] = ply
-		end
-	end
-
-	for subrole, ps in pairs(transformed) do
-		local rd = roles.GetByIndex(subrole)
-
-		if table.HasValue(allSelectableRoles, rd) then
-			local role_count = roleCount[subrole]
-			local c = 0
-			local a = #ps
-
-			for i = 1, a do
-				local pick = math.random(#ps)
-				local ply = ps[pick]
-
-				if c >= role_count then break end
-
-				table.remove(transformed[subrole], pick)
-
-				PLYFORCEDROLES[ply:UniqueID()] = nil
-				PLYFINALROLES[ply] = PLYFINALROLES[ply] or subrole
-				c = c + 1
-
-				for k = 1, #choices do
-					if choices[k] ~= ply then continue end
-
-					table.remove(choices, k)
-				end
-
-				hook.Run("TTT2ReceivedForcedRole", ply, rd, true)
-			end
-		end
-	end
-
-	for id, subrole in pairs(PLYFORCEDROLES) do
-		local ply = player.GetByUniqueID(id)
-		local rd = roles.GetByIndex(subrole)
-
-		hook.Run("TTT2ReceivedForcedRole", ply, rd, false)
-	end
-
-	PLYFORCEDROLES = {}
-end
-
-local function UpgradeRoles(plys, prev_roles, roleCount, selectableRoles, roleData)
-	if roleData == INNOCENT or roleData == TRAITOR or roleData == DETECTIVE or GetConVar("ttt_newroles_enabled"):GetBool() then
-		local availableRoles = {}
-
-		-- now upgrade this role if there are other subroles
-		for v in pairs(selectableRoles) do
-			if v.baserole == roleData.index then
-				availableRoles[#availableRoles + 1] = v
-			end
-		end
-
-		SetRoleTypes(plys, prev_roles, roleCount, availableRoles, roleData.index)
-	end
-end
-
-local function SelectBaseRole(choices, prev_roles, roleCount, roleData)
-	local rs = 0
-	local ls = {}
-
-	while rs < roleCount[roleData.index] and #choices > 0 do
-		-- select random index in choices table
-		local pick = math.random(#choices)
-
-		-- the player we consider
-		local pply = choices[pick]
-
-		strTmp = "ttt_" .. roleData.name .. "_karma_min"
-
-		local min_karmas = ConVarExists(strTmp) and GetConVar(strTmp):GetInt() or 0
-
-		-- give this guy the role if he was not this role last time, or if he makes
-		-- a roll
-		if IsValid(pply) and (
-			roleData == INNOCENT or (
-				#choices <= roleCount[roleData.index] or (
-					pply:GetBaseKarma() > min_karmas
-					and table.HasValue(prev_roles[ROLE_INNOCENT], pply)
-					and not pply:GetAvoidRole(roleData.index)
-					or math.random(3) == 2
-				)
-			)
-		) then
-			table.remove(choices, pick)
-
-			ls[#ls + 1] = pply
-			rs = rs + 1
-		end
-	end
-
-	return ls
-end
-
----
--- Select selectable @{ROLE}s for a given list of @{Player}s
--- @note This automatically synces with every connected @{Player}
--- @param table plys list of @{Player}s
--- @param number max_plys amount of maximum @{Player}s
--- @realm server
-function SelectRoles(plys, max_plys)
-	local choices = {}
-	local prev_roles = {}
-	local tmp = {}
-
-	GAMEMODE.LastRole = GAMEMODE.LastRole or {}
-
-	local allPlys = player.GetAll()
-
-	for i = 1, #allPlys do
-		local v = allPlys[i]
-
-		-- everyone on the spec team is in specmode
-		if not v:GetForceSpec() and (not plys or table.HasValue(plys, v)) and not hook.Run("TTT2DisableRoleSelection", v) then
-			if not plys then
-				tmp[#tmp + 1] = v
-			end
-
-			-- save previous role and sign up as possible traitor/detective
-			local r = GAMEMODE.LastRole[v:SteamID64()] or v:GetSubRole() or ROLE_INNOCENT
-
-			prev_roles[r] = prev_roles[r] or {}
-			prev_roles[r][#prev_roles[r] + 1] = v
-			choices[#choices + 1] = v
-		end
-	end
-
-	plys = plys or tmp
-	max_plys = max_plys or #plys
-
-	if max_plys < 2 then return end
-
-	local roleCount = {}
-	local selectableRoles = GetSelectableRoles(plys, max_plys) -- update SELECTABLEROLES table
-
-	hook.Run("TTT2ModifySelectableRoles", selectableRoles)
-
-	local rlsList = roles.GetList()
-
-	for i = 1, #rlsList do
-		local v = rlsList[i]
-
-		roleCount[v.index] = selectableRoles[v] or 0
-	end
-
-	SelectForcedRoles(max_plys, roleCount, selectableRoles, choices)
-
-	-- first select traitors, then innos, then the other roles
-	local list = {
-		[1] = TRAITOR,
-		[2] = INNOCENT
-	}
-
-	local tmpTbl = {}
-
-	-- get selectable baseroles (except traitor and innocent)
-	for i = 1, #rlsList do
-		local v = rlsList[i]
-
-		if v == TRAITOR or v == INNOCENT or table.HasValue(tmpTbl, v) or not selectableRoles[v] or v.baserole then continue end
-
-		tmpTbl[#tmpTbl + 1] = v
-	end
-
-	-- randomize order of custom roles, but keep traitor as first and innocent as second
-	for i = 1, #tmpTbl do
-		local rnd = math.random(#tmpTbl)
-
-		list[#list + 1] = tmpTbl[rnd]
-
-		table.remove(tmpTbl, rnd)
-	end
-
-	for i = 1, #list do
-		local roleData = list[i]
-
-		if #choices == 0 then break end
-
-		-- if roleData == INNOCENT then just remove the random ply from choices
-		local ls = SelectBaseRole(choices, prev_roles, roleCount, roleData)
-
-		-- upgrade innos and players without any role later
-		if roleData ~= INNOCENT then
-			UpgradeRoles(ls, prev_roles, roleCount, selectableRoles, roleData)
-		end
-	end
-
-	-- last but not least, upgrade the innos and players without any role to special/normal innos
-	local innos = {}
-
-	for i = 1, #plys do
-		local ply = plys[i]
-
-		PLYFINALROLES[ply] = PLYFINALROLES[ply] or ROLE_INNOCENT
-
-		if PLYFINALROLES[ply] ~= ROLE_INNOCENT then continue end
-
-		innos[#innos + 1] = ply
-		PLYFINALROLES[ply] = nil -- reset it to update it in UpgradeRoles
-	end
-
-	UpgradeRoles(innos, prev_roles, roleCount, selectableRoles, INNOCENT)
-
-	GAMEMODE.LastRole = {}
-
-	for i = 1, #plys do
-		local ply = plys[i]
-		local subrole = PLYFINALROLES[ply] or ROLE_INNOCENT
-
-		ply:SetRole(subrole, nil, true)
-
-		-- store a steamid -> role map
-		GAMEMODE.LastRole[ply:SteamID64()] = subrole
-	end
-
-	-- just set the credits after all roles were selected (to fix alone traitor bug)
-	for i = 1, #plys do
-		plys[i]:SetDefaultCredits()
-	end
-
-	PLYFINALROLES = {}
-
-	SendFullStateUpdate()
-end
-
 hook.Add("PlayerAuthed", "TTT2PlayerAuthedSharedHook", function(ply, steamid, uniqueid)
 	net.Start("TTT2PlayerAuthedShared")
-	net.WriteString(util.SteamIDTo64(steamid))
+	net.WriteString(not ply:IsBot() and util.SteamIDTo64(steamid) or "")
 	net.WriteString((ply and ply:Nick()) or "UNKNOWN")
 	net.Broadcast()
 end)
@@ -1903,7 +1452,7 @@ concommand.Add("ttt_roundrestart", ttt_roundrestart)
 -- @param Player ply
 -- @realm server
 function ShowVersion(ply)
-	local text = Format("This is [TTT2] Trouble in Terrorist Town 2 (Advanced Update) - by Alf21 (v%s)\n", GAMEMODE.Version)
+	local text = Format("This is [TTT2] Trouble in Terrorist Town 2 (Advanced Update) - by the TTT2 Dev Team (v%s)\n", GAMEMODE.Version)
 
 	if IsValid(ply) then
 		ply:PrintMessage(HUD_PRINTNOTIFY, text)

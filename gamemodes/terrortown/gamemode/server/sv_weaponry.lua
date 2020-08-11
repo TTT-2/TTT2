@@ -12,11 +12,12 @@ local IsValid = IsValid
 local table = table
 local timer = timer
 local hook = hook
-local CreateConVar = CreateConVar
 
 local IsEquipment = WEPS.IsEquipment
 
 local cv_auto_pickup = CreateConVar("ttt_weapon_autopickup", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY})
+local cv_ttt_detective_hats = CreateConVar("ttt_detective_hats", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local crowbar_delay = CreateConVar("ttt2_crowbar_shove_delay", "1.0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- Returns whether or not a @{Player} is allowed to pick up a @{Weapon}
@@ -26,7 +27,7 @@ local cv_auto_pickup = CreateConVar("ttt_weapon_autopickup", "1", {FCVAR_ARCHIVE
 -- @return boolean Allowed pick up or not
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/PlayerCanPickupWeapon
+-- @ref https://wiki.facepunch.com/gmod/GM:PlayerCanPickupWeapon
 -- @local
 function GM:PlayerCanPickupWeapon(ply, wep)
 	if not IsValid(wep) or not IsValid(ply) then return end
@@ -353,8 +354,6 @@ local function CanWearHat(ply)
 	return table.HasValue(Hattables, path[3])
 end
 
-local cv_ttt_detective_hats = CreateConVar("ttt_detective_hats", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
 -- Just hats right now
 local function GiveLoadoutSpecial(ply)
 	if not ply:IsActive() or ply:GetBaseRole() ~= ROLE_DETECTIVE or not cv_ttt_detective_hats:GetBool() or not CanWearHat(ply) then
@@ -411,9 +410,9 @@ end
 -- @note Note that this is called both when a @{Player} spawns and when a round starts
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/PlayerLoadout
+-- @ref https://wiki.facepunch.com/gmod/GM:PlayerLoadout
 -- @local
-function GM:PlayerLoadout(ply)
+function GM:PlayerLoadout(ply, isRespawn)
 	if not IsValid(ply) or ply:IsSpec() then return end
 
 	CleanupInventoryAndNotifyClient(ply)
@@ -489,12 +488,12 @@ end
 -- @note this internally calls @{GM:PlayerLoadout} for every @{Player}
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/PlayerLoadout
+-- @ref https://wiki.facepunch.com/gmod/GM:PlayerLoadout
 function GM:UpdatePlayerLoadouts()
 	local plys = player.GetAll()
 
 	for i = 1, #plys do
-		hook.Call("PlayerLoadout", GAMEMODE, plys[i])
+		hook.Run("PlayerLoadout", plys[i], false)
 	end
 end
 
@@ -613,16 +612,16 @@ concommand.Add("ttt_dropammo", DropActiveAmmo)
 -- @param Player ply The @{Player} that is picking up the @{Weapon}
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/WeaponEquip
+-- @ref https://wiki.facepunch.com/gmod/GM:WeaponEquip
 -- @local
 function GM:WeaponEquip(wep, ply)
 	if not IsValid(ply) or not IsValid(wep) then return end
 
 	if not wep.Kind then
-		-- only remove if they lack critical stuff
-		wep:Remove()
+		wep:Remove() -- only remove if they lack critical stuff
 
 		ErrorNoHalt("Equipped weapon " .. wep:GetClass() .. " is not compatible with TTT\n")
+
 		return
 	end
 
@@ -661,7 +660,7 @@ end
 -- @param Weapon wep The @{Weapon} that was dropped
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/PlayerDroppedWeapon
+-- @ref https://wiki.facepunch.com/gmod/GM:PlayerDroppedWeapon
 -- @local
 function GM:PlayerDroppedWeapon(ply, wep)
 	if not IsValid(wep) or not IsValid(ply) or not wep.Kind then return end
@@ -687,7 +686,7 @@ end
 -- @param Entity ent @{Entity} being removed
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/EntityRemoved
+-- @ref https://wiki.facepunch.com/gmod/GM:EntityRemoved
 -- @local
 function GM:EntityRemoved(ent)
 	if IsValid(ent) and IsValid(ent:GetOwner()) and ent:IsWeapon() and ent.Kind then
@@ -730,8 +729,6 @@ function WEPS.IsInstalled(cls)
 end
 
 --manipulate shove attack for all crowbar alikes
-local crowbar_delay = CreateConVar("ttt2_crowbar_shove_delay", "1.0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
 local function ChangeShoveDelay()
 	local weps = weapons.GetList()
 
@@ -749,7 +746,6 @@ cvars.AddChangeCallback(crowbar_delay:GetName(), function(name, old, new)
 	ChangeShoveDelay()
 end, "TTT2CrowbarShoveDelay")
 
--- TODO remove this
 hook.Add("TTT2Initialize", "TTT2ChangeMeleesSecondaryDelay", function()
 	ChangeShoveDelay()
 end)

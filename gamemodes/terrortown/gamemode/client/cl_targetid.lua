@@ -16,6 +16,9 @@ local hook = hook
 local enable_spectatorsoutline = CreateClientConVar("ttt2_enable_spectatorsoutline", "1", true, true)
 local enable_overheadicons = CreateClientConVar("ttt2_enable_overheadicons", "1", true, true)
 
+local cvDeteOnlyConfirm = GetConVar("ttt2_confirm_detective_only")
+local cvDeteOnlyInspect = GetConVar("ttt2_inspect_detective_only")
+
 surface.CreateFont("TargetID_Key", {font = "Trebuchet24", size = 26, weight = 900})
 surface.CreateFont("TargetID_Title", {font = "Trebuchet24", size = 20, weight = 900})
 surface.CreateFont("TargetID_Subtitle", {font = "Trebuchet24", size = 17, weight = 300})
@@ -44,7 +47,9 @@ local icon_tid_detective = Material("vgui/ttt/tid/tid_detective")
 local icon_tid_locked = Material("vgui/ttt/tid/tid_locked")
 local icon_tid_auto_close = Material("vgui/ttt/tid/tid_auto_close")
 local materialDoor = Material("vgui/ttt/tid/tid_big_door")
+local materialDestructible = Material("vgui/ttt/tid/tid_destructible")
 local icon_tid_dna = Material("vgui/ttt/dnascanner/dna_hud")
+local materialDisguised = Material("vgui/ttt/perks/hud_disguiser.png")
 
 ---
 -- Returns the localized ClassHint table
@@ -129,7 +134,7 @@ end
 -- @param boolean bDrawingSkybox Whether the current call is drawing skybox
 -- @hook
 -- @realm client
--- @ref https://wiki.garrysmod.com/page/GM/PostDrawTranslucentRenderables
+-- @ref https://wiki.facepunch.com/gmod/GM:PostDrawTranslucentRenderables
 -- @local
 function GM:PostDrawTranslucentRenderables(bDrawingDepth, bDrawingSkybox)
 	local client = LocalPlayer()
@@ -160,7 +165,7 @@ function GM:PostDrawTranslucentRenderables(bDrawingDepth, bDrawingSkybox)
 	end
 
 	-- OVERHEAD ICONS
-	if not enable_overheadicons:GetBool() or not client:IsSpecial() then return end
+	if not enable_overheadicons:GetBool() then return end
 
 	for i = 1, #plys do
 		local ply = plys[i]
@@ -168,7 +173,7 @@ function GM:PostDrawTranslucentRenderables(bDrawingDepth, bDrawingSkybox)
 
 		if ply:IsActive()
 		and ply:IsSpecial()
-		and (not client:IsActive() or ply:IsInTeam(client))
+		and (not client:IsActive() or ply:IsInTeam(client) or ply:IsDetective())
 		and not rd.avoidTeamIcons
 		then
 			DrawOverheadRoleIcon(ply, rd.iconMaterial, ply:GetRoleColor())
@@ -224,7 +229,7 @@ end
 -- Called from @{GM:HUDPaint} to draw @{Player} info when you hover over a @{Player} with your crosshair or mouse.
 -- @hook
 -- @realm client
--- @ref https://wiki.garrysmod.com/page/GM/HUDDrawTargetID
+-- @ref https://wiki.facepunch.com/gmod/GM:HUDDrawTargetID
 -- @local
 function GM:HUDDrawTargetID()
 	local client = LocalPlayer()
@@ -234,12 +239,12 @@ function GM:HUDDrawTargetID()
 	end
 
 	local startpos = client:EyePos()
-
 	local endpos = client:GetAimVector()
+
 	endpos:Mul(MAX_TRACE_LENGTH)
 	endpos:Add(startpos)
 
-	local ent, distance
+	local ent, unchangedEnt, distance
 
 	-- if the user is looking at a traitor button, it should always be handled with priority
 	if TBHUD.focus_but and IsValid(TBHUD.focus_but.ent) and (TBHUD.focus_but.access or TBHUD.focus_but.admin) and TBHUD.focus_stick >= CurTime() then
@@ -260,20 +265,28 @@ function GM:HUDDrawTargetID()
 		distance = trace.StartPos:Distance(trace.HitPos)
 	end
 
-	-- make sure it is a valid entity
-	if not IsValid(ent) or ent.NoTarget then return end
-
 	-- if a vehicle, we identify the driver instead
-	if IsValid(ent:GetNWEntity("ttt_driver", nil)) then
+	if IsValid(ent) and IsValid(ent:GetNWEntity("ttt_driver", nil)) then
 		ent = ent:GetNWEntity("ttt_driver", nil)
 	end
 
 	-- only add onscreen infos when the entity isn't the local player
 	if ent == client then return end
 
+	local changedEnt = hook.Run("TTTModifyTargetedEntity", ent, distance)
+
+	if changedEnt then
+		unchangedEnt = ent
+		ent = changedEnt
+	end
+
+	-- make sure it is a valid entity
+	if not IsValid(ent) or ent.NoTarget then return end
+
 	-- combine data into a table to read them inside a hook
 	local data = {
 		ent = ent,
+		unchangedEnt = unchangedEnt,
 		distance = distance
 	}
 
@@ -368,6 +381,7 @@ function GM:HUDDrawTargetID()
 			local color = icon.color or COLOR_WHITE
 
 			draw.FilteredShadowedTexture(icon_x, icon_y, key_box_h, key_box_h, icon.material, color.a, color)
+
 			icon_y = icon_y + key_box_h
 		end
 	end
@@ -444,11 +458,33 @@ function GM:HUDDrawTargetID()
 end
 
 ---
--- Add targetID info to a focused entity
+-- Add targetID info to a focused entity.
 -- @param @{TARGET_DATA} tData The @{TARGET_DATA} data object which contains all information
 -- @hook
 -- @realm client
 function GM:TTTRenderEntityInfo(tData)
+
+end
+
+---
+-- Change the focused entity used for targetID.
+-- @param Entity ent The focuces entity that should be changed
+-- @param number distance The distance to the focused entity
+-- @return Entity The new entity to replace the real one
+-- @hook
+-- @realm client
+function GM:TTTModifyTargetedEntity(ent, distance)
+
+end
+
+---
+-- Change the starting position for the trace that looks for entites.
+-- @param Vector startpos The current startpos of the trace to find an entity
+-- @param Vector endpos The current endpos of the trace to find an entity
+-- @return Vector, Vector The new startpos for the trace, the new endpos for the trace
+-- @hook
+-- @realm client
+function GM:TTTModifyTargetTracedata(startpos, endpos)
 
 end
 
@@ -495,7 +531,12 @@ function HUDDrawTargetIDDoors(tData)
 	tData:SetTitle(TryT("name_door"))
 
 	if ent:UseOpensDoor() and not ent:TouchOpensDoor() then
-		tData:SetSubtitle(ent:IsDoorOpen() and ParT("door_close", key_params) or ParT("door_open", key_params))
+		if ent:DoorAutoCloses() then
+			tData:SetSubtitle(ParT("door_open", key_params))
+		else
+			tData:SetSubtitle(ent:IsDoorOpen() and ParT("door_close", key_params) or ParT("door_open", key_params))
+		end
+
 		tData:SetKey(input.GetKeyCode(key_params.usekey))
 	elseif not ent:UseOpensDoor() and ent:TouchOpensDoor() then
 		tData:SetSubtitle(TryT("door_open_touch"))
@@ -519,6 +560,14 @@ function HUDDrawTargetIDDoors(tData)
 			TryT("door_auto_closes"),
 			COLOR_SLATEGRAY,
 			{icon_tid_auto_close}
+		)
+	end
+
+	if ent:DoorIsDestructible() then
+		tData:AddDescriptionLine(
+			ParT("door_destructible", {health = ent:GetFastSyncedHealth()}),
+			COLOR_LBROWN,
+			{materialDestructible}
 		)
 	end
 end
@@ -753,8 +802,9 @@ function HUDDrawTargetIDPlayers(tData)
 	local h_string, h_color = util.HealthToString(ent:Health(), ent:GetMaxHealth())
 
 	tData:SetTitle(
-		ent:Nick() .. " " .. (disguised and string.upper(TryT("target_disg")) or ""),
-		disguised and COLOR_RED or nil
+		ent:Nick() .. " " .. (disguised and TryT("target_disg") or ""),
+		disguised and COLOR_ORANGE or nil,
+		disguised and {materialDisguised}
 	)
 
 	tData:SetSubtitle(
@@ -826,7 +876,17 @@ function HUDDrawTargetIDRagdolls(tData)
 	)
 
 	if tData:GetEntityDistance() <= 100 then
-		tData:SetSubtitle(ParT("corpse_hint", key_params))
+		if cvDeteOnlyInspect:GetBool() and client:GetBaseRole() ~= ROLE_DETECTIVE then
+			if client:IsActive() and client:IsShopper() and CORPSE.GetCredits(ent, 0) > 0 then
+				tData:SetSubtitle(ParT("corpse_hint_inspect_only_credits", key_params))
+			else
+				tData:SetSubtitle(TryT("corpse_hint_no_inspect"))
+			end
+		elseif cvDeteOnlyConfirm:GetBool() and client:GetBaseRole() ~= ROLE_DETECTIVE then
+			tData:SetSubtitle(ParT("corpse_hint_inspect_only", key_params))
+		else
+			tData:SetSubtitle(ParT("corpse_hint", key_params))
+		end
 	elseif binoculars_useable then
 		tData:SetSubtitle(ParT("corpse_binoculars", {key = Key("+attack", "ATTACK")}))
 	else

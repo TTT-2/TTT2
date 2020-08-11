@@ -18,7 +18,7 @@ end
 -- Called when a @{Player} presses the "+menu" bind on their keyboard, which is bound to Q by default.
 -- @hook
 -- @realm client
--- @ref https://wiki.garrysmod.com/page/GM/OnSpawnMenuOpen
+-- @ref https://wiki.facepunch.com/gmod/GM:OnSpawnMenuOpen
 -- @local
 function GM:OnSpawnMenuOpen()
 	SendWeaponDrop()
@@ -35,7 +35,7 @@ end
 -- @return boolean Return true to prevent the bind
 -- @hook
 -- @realm client
--- @ref https://wiki.garrysmod.com/page/GM/PlayerBindPress
+-- @ref https://wiki.facepunch.com/gmod/GM:PlayerBindPress
 -- @local
 function GM:PlayerBindPress(ply, bindName, pressed)
 	if not IsValid(ply) then return end
@@ -145,7 +145,7 @@ end
 -- for the same key event in multiplayer.
 -- @hook
 -- @realm client
--- @ref https://wiki.garrysmod.com/page/GM/KeyPress
+-- @ref https://wiki.facepunch.com/gmod/GM:KeyPress
 -- @local
 function GM:KeyPress(ply, key)
 	if not IsFirstTimePredicted() or not IsValid(ply) or ply ~= LocalPlayer() then return end
@@ -163,31 +163,12 @@ end
 -- @predicted
 -- @hook
 -- @realm client
--- @ref https://wiki.garrysmod.com/page/GM/KeyRelease
+-- @ref https://wiki.facepunch.com/gmod/GM:KeyRelease
 -- @local
 function GM:KeyRelease(ply, key)
 	if not IsFirstTimePredicted() or not IsValid(ply) or ply ~= LocalPlayer() then return end
 
 	if key == IN_FORWARD or key == IN_BACK or key == IN_MOVERIGHT or key == IN_MOVELEFT then
 		UpdateInputSprint(ply, key, false)
-	end
-end
-
----
--- Called when a player releases a button.
--- @param Player ply @{Player} who released the button
--- @param number btn The button, see
--- <a href="https://wiki.garrysmod.com/page/Enums/BUTTON_CODE">BUTTON_CODE_Enums</a>
--- @hook
--- @realm client
--- @ref https://wiki.garrysmod.com/page/GM/PlayerButtonUp
--- @local
-function GM:PlayerButtonUp(ply, btn)
-	if not IsFirstTimePredicted() then return end
-
-	-- Would be nice to clean up this whole "all key handling in massive
-	-- functions" thing. oh well
-	if btn == KEY_PAD_ENTER then
-		WEPS.DisguiseToggle(ply)
 	end
 end

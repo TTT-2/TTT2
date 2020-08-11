@@ -324,7 +324,6 @@ L.decoy_name = "Приманка"
 L.decoy_no_room = "Вы не можете подобрать эту Приманку."
 L.decoy_broken = "Ваша Приманка уничтожена!"
 
-L.decoy_help_pri = "{primaryfire}: установить Приманку."
 L.decoy_short_desc = "Эта Приманка создаёт фальшивую метку на радарах других команд."
 L.decoy_pickup_wrong_team = "Вы не можете подобрать Приманку, принадлежащую другой команде."
 
@@ -416,9 +415,6 @@ L.binoc_desc = [[
 Неограниченное использование, но осмотр тела
 занимает некоторое время.]]
 
-L.binoc_help_pri = "{primaryfire}: осмотреть тело."
-L.binoc_help_sec = "{secondaryfire}: изменить уровень приближения."
-
 -- UMP
 L.ump_desc = [[
 Экспериментальный пистолет-пулемёт,
@@ -457,9 +453,6 @@ L.dna_menu_repeat = "Автоповтор"
 L.dna_menu_ready = "ГОТОВ"
 L.dna_menu_charge = "ЗАРЯДКА"
 L.dna_menu_select = "ВЫБЕРИТЕ ОБРАЗЕЦ"
-
-L.dna_help_primary = "{primaryfire}: собрать образец ДНК."
-L.dna_help_secondary = "{secondaryfire}: открыть меню управления."
 
 -- Magneto stick
 L.magnet_name = "Магнитопалка"
@@ -537,7 +530,7 @@ L.karma_min = "Безответственный"
 L.corpse = "Тело"
 L.corpse_hint = "[{usekey}]: осмотреть тело. [{walkkey} + {usekey}]: скрытно осмотреть тело."
 
-L.target_disg = "под маскировкой"
+L.target_disg = "(под маскировкой)"
 L.target_unid = "Неопознанное тело"
 
 L.target_credits = "Осмотрите тело, чтобы получить неиспользованные кредиты."
@@ -547,10 +540,6 @@ L.tbut_single = "Одноразовое использование."
 L.tbut_reuse = "Многоразовое использование."
 L.tbut_retime = "Можно использовать повторно через {num} сек."
 L.tbut_help = "Нажмите [{usekey}], чтобы активировать."
-
--- Equipment info lines (on the left above the health/ammo panel)
-L.disg_hud = "Вы замаскированы. Информация о вас скрыта."
-L.radar_hud = "Радар перезарядиться через {time}"
 
 -- Spectator muting of living/dead
 L.mute_living = "Заглушены: живые"
@@ -1055,7 +1044,7 @@ L.hud_forced_failed = "Не удалось назначить принудите
 L.hud_restricted_failed = "Не удалось запретить интерфейс {hudname}. У вас нет разрешения на это действие."
 
 L.shop_role_select = "Выберите роль"
-L.shop_role_selected = "Выбран магазин роли {roles}!"
+L.shop_role_selected = "Выбран магазин роли {role}!"
 L.shop_search = "Поиск"
 
 L.spec_help = "Щёлкните мышью, чтобы наблюдать за игроками, или нажмите {usekey}, чтобы вселиться в предмет, на который вы смотрите."
@@ -1298,3 +1287,38 @@ L.disable_overheadicons_tip = "Выключает иконки ролей над
 --L.item_no_prop_damage_desc = [[Makes you immune to prop damage.]]
 --L.item_no_drown_damage = "No Drowning Damage"
 --L.item_no_drown_damage_desc = [[Makes you immune to drowning damage.]]
+
+-- 2020-04-30
+--L.message_revival_canceled = "Revival canceled."
+--L.message_revival_failed = "Revival failed."
+--L.message_revival_failed_missing_body = "You have not been revived because your corpse no longer exists."
+--L.hud_revival_title = "Time left until revival:"
+--L.hud_revival_time = "{time}s"
+
+-- 2020-05-03
+--L.door_destructible = "Door is destructible ({health}HP)"
+
+-- 2020-05-28
+--L.confirm_detective_only = "Only detectives can confirm bodies"
+--L.inspect_detective_only = "Only detectives can inspect bodies"
+--L.corpse_hint_no_inspect = "Only detectives can search this body."
+--L.corpse_hint_inspect_only = "Press [{usekey}] to serch. Only detectives can confirm the body."
+--L.corpse_hint_inspect_only_credits = "Press [{usekey}] to receive credits. Only detectives can search this body."
+
+-- 2020-06-04
+--L.label_bind_disguiser = "Toggle disguiser"
+
+-- 2020-06-24
+
+--L.dna_help_primary = "Collect a DNA sample"
+--L.dna_help_secondary = "Switch the DNA slot"
+--L.dna_help_reload = "Delete a sample"
+
+--L.binoc_help_pri = "Identify a body."
+--L.binoc_help_sec = "Change zoom level."
+
+--L.vis_help_pri = "Drop the activated device."
+
+--L.decoy_help_pri = "Plant the Decoy."
+
+--L.set_cross_lines_enable = "Enable crosshair lines"

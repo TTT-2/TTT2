@@ -4,10 +4,107 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+## [v0.7.3b](https://github.com/TTT-2/TTT2/tree/v0.7.3b) (2020-08-09)
+
 ### Added
 
-- Added a new ConVar to allow armor to also block headshots (`ttt_item_armor_block_headshots`, default value: 0). Thanks @TheNickSkater
+- Added a new custom file loader that loads lua files from `lua/terrortown/autorun/`
+  - it basically works the same as the native file loader
+  - there are three subfolders: `client`, `server` and `shared`
+  - the files inside this folder are loaded after all TTT2 gamemode files and library extensions are loaded
+- Added Spanish version for base addon   (by @Tekiad and @DennisWolfgang)
+- Added Chinese Simplified translation (by @TheOnly8Z)
+- Added double-click buying
+- Added a default avatar for players and an avatar for bots
+
+### Changed
+
+- Roles are now only getting synced to clients if the role is known, not just the body being confirmed
+- Airborne players can no longer replenish stamina
+- Detective overhead icon is now shown to innocents and traitors
+- moved language files from `lua/lang/` to `lua/terrortown/lang`
+- Stopped teleporting players to players they're not spectating if they press the "duck"-Key while roaming
+- Moved shop's equipment list generation into a coroutine
+- Removed TTT2PlayerAuthedCacheReady hook
+- Internal changes to the b-draw library for fetching avatars
+
+### Fixed
+
+- Fixed death handling spawning multiple corpses when killed multiple times in the same frame
+- Radar now shows bombs again, that do not have the team property set
+- Fix HUDManager not saving forcedHUD and defaultHUD values
+- Fixed wrong parameter default in `EPOP:AddMessage` documentation
+- Fixed shop switching language issue
+- Fixed shop refresh activated even not buyable equipments
+- Fixed wrong shop view displayed as forced spectator
+
+## [v0.7.2b](https://github.com/TTT-2/TTT2/tree/v0.7.2b) (2020-06-26)
+
+### Added
+
+- Added Hooks to the targetID system to modify the displayed data
+  - `GM:TTTModifyTargetedEntity(ent, distance)`: Modify the entity that is targeted. This is useful for addons like an "Identity Disguiser".
+- Added Hooks to interact with door destruction
+  - `GM:TTT2BlockDoorDestruction(doorEntity, activator)`: Hook to block the door destruction.
+  - `GM:TTT2DoorDestroyed(doorPropEntity, activator)`: Hook that is called after the door is destroyed.
+- Added a new function to force a new radar scan: `ply:ForceRadarScan()`
+- Added a new convar to change the default radar time for players without custom radar times: `ttt2_radar_charge_time`
+- Added a new client ConVar `ttt_crosshair_lines` to add the possibility to disable the crosshair lines
+
+### Changed
+
+- Moved the disguiser icon to the status system to be only displayed when the player is actually disguised
+- Reworked the addonchecker and added a command to execute the checker at a later point
+- Renamed `RADAR.SetRadarTime(ply, time)` to `ply:SetRadarTime(time)`
+- Updated Italian translation (Thanks @ThePlatinumGhost)
+- Removed Is[ROLE] functions of all roles except default TTT ones
+- Moved legacy item initialization to the `items` module (`items.MigrateLegacyItems()`)
+- ttt_end_round now resets when the map changes
+- Reworked the SWEP HUD help (legacy function SWEP:AddHUDHelp is still supported)
+  - allows any number of lines now
+  - visualization of the respective key
+- Players who disconnect now leave a corpse
+
+### Fixed
+
+- Fixed shadow texture of the "Pure Skin HUD" for low texture quality settings
+- Fixed inno subrole upgrading if many roles are installed
+- Fixed and improved the radar role/team modification hook
+- Fixed area portals on servers for destroyed doors
+- Fixed revive fail function reference reset
+- Removed the DNA Scanner hudelement for spectators
+- Fixed a rare clientside error that happens if a player connects in the moment the preparing time just started
+- Fixed the image in the confirmation notification whenever a bot's corpse gets identified
+- Fixed bad role selection due to RNG reseeding
+- Fixed missing role column translation
+- Fixed viewmodel not showing correct hands on model change
+
+## [v0.7.1b](https://github.com/TTT-2/TTT2/tree/v0.7.1b) (2020-06-02)
+
+### Fixed
+- Fixed max roles / max base roles interaction with the roleselection. Also does not crash with values != 0 anymore.
+
+## [v0.7.0b](https://github.com/TTT-2/TTT2/tree/v0.7.0b) (2020-06-01)
+
+### Added
+
+- Added new convars to change the behavior of the armor
+	- `ttt_item_armor_block_headshots (default: 0)` - Block headshots. Thanks @TheNickSkater
+	- `ttt_item_armor_block_blastdmg (default: 0)` - Block blast damage. Thanks @Pustekuchen98
 - Added essential items: 8 different types of items that are often used in other addons. You can remove them from the shop if you don't like them.
+- Added server proxy for `EPOP:AddMessage()`
+- Added `PrintMessage` overwrites so this function now uses TTT2 systems
+- Added a new HUD element to show information about an ongoing revival to the player that is revived
+- Added a load of functions to the `spawn` scope that can be used by addons
+- Added a thermal vision module, which can be used by addons to render entities with a thermal vision effect
+- Added a few door related hooks and convenience functions
+- Added entityOutputs library to register map entity outputs easier
+- Added speed handling system based on the `TTTPlayerSpeedModifier` hook
+- Added a convenience function for the creation of radar points: `RADAR.CreateTargetTable(ply, pos, ent, color)`
+- Added the possibility to change the radar time by either setting `ROLE.radarTime` or calling `RADAR.SetRadarTime(ply, time)`
+- Added two new convars to change the confirmation behaviour
+  - `ttt2_confirm_detective_only (default: 0)` - Everybody can search the corpse, but only detectives can confirm them
+  - `ttt2_inspect_detective_only (default: 0)` - Only detectives can search and confirm corpses
 
 ### Changed
 
@@ -15,12 +112,25 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Remove GetWeapons and HasWeapon overrides (see https://github.com/Facepunch/garrysmod/pull/1648)
 - Improved role module to also use `isAbstract` instead of a base role class name
 - Migrated the HUDManager settings to the new network sync system
-- The TTT2NET library can now also synchronize small to medium sized tables (adds the metadata type "table")
-- Reworked the old DNA Scanner 
+- Renamed `TTT2NET` to `ttt2net` and removed unnecessary self references
+- The `ttt2net` library can now also synchronize small to medium sized tables (adds the metadata type "table")
+- Reworked the old DNA Scanner
   - New world- and viewmodel with an interactive screen
   - Removed the overcomplicated UI menu (simple handling with default keys instead)
   - The new default scanner behavior shows the direction and distance to the target
 - Changed TargetID colors for confirmed bodies
+- Improved the `plymeta:Revive()` function
+  - Added a revive position argument
+  - revive makes now sure the position is valid and the player is not stuck in the wall
+- Improved the player spawn handling
+- Moved radar handling from client to server
+- Reworked the event popup
+  - texts can now be blocking or non blocking
+  - there's now a popup queue
+  - popups are now also shown to dead players as well
+- Refactored the role selection code to reside in its own module and cleaned up the code
+- Refactored some internal functions in CLSCORE to prevent errors (thanks @Kefta)
+- Moved CLSCORE event report syncing to the new net.SendStream / net.ReceiveStream functions
 
 ### Fixed
 
@@ -30,6 +140,12 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed propsurfing with the magneto stick
 - Fixed healthstation TargetID text
 - Fixed keyinfo for doors where no key can be used
+- Spawn points that have no solid ground beneath will be ignored
+- Fixed role selection issues with subroles not properly replacing their baserole etc.
+- Fixed map lock/unlock trigger of doors not updating targetID
+- Fixed roles having sometimes the wrong radar color
+- Fixed miniscoreboard update issue and players not getting shown when entering force-spec mode
+- Fixed the CLSCORE window being too small for large winning team titles (will now adjust on demand)
 
 ## [v0.6.4b](https://github.com/TTT-2/TTT2/tree/v0.6.4b) (2020-04-03)
 
@@ -50,6 +166,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Added a Polish translation (Thanks @Wukerr)
 - Added fallback icons for equipment
+- Added a new variable that counts the played rounds per map: `GAMEMODE.roundCount`
 
 ### Fixed
 

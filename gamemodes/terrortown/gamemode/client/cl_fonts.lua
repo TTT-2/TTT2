@@ -26,12 +26,12 @@ local function getScaleModifier(scale)
 	local FONTScales = FONTS.Scales
 
 	for i = 1, #FONTScales do
-	  if scaleFactor < FONTScales[i] then
+		if scaleFactor < FONTScales[i] then
 			return i - 1 > 0 and FONTScales[i - 1] or FONTScales[i]
-	  end
+		end
 	end
 
-	--fallback (return the last scale)
+	-- fallback (return the last scale)
 	return FONTScales[#FONTScales]
 end
 
@@ -102,7 +102,7 @@ local drawShadowedText = draw.ShadowedText
 -- @note You should use @{surface.CreateAdvancedFont} before trying to access the font
 -- @2D
 -- @param string text The text to be drawn
--- @param [default="DefaultBold"] string font The font. See @{surface.CreateAdvancedFont} to create your own. The original font should be always created, see @{surface.CreateFont}.
+-- @param[default="DefaultBold"] string font The font. See @{surface.CreateAdvancedFont} to create your own. The original font should be always created, see @{surface.CreateFont}.
 -- @param number x The X Coordinate
 -- @param number y The Y Coordinate
 -- @param Color color The color of the text. Uses the Color structure.
@@ -119,9 +119,9 @@ function draw.AdvancedText(text, font, x, y, color, xalign, yalign, shadow, scal
 	local t_font = FONTS.fonts[font]
 
 	if t_font then
-	  scaleModifier = getScaleModifier(scale)
-	  font = t_font[scaleModifier]
-	  scale = scale / scaleModifier
+		scaleModifier = getScaleModifier(scale)
+		font = t_font[scaleModifier]
+		scale = scale / scaleModifier
 	end
 
 	local scaled = isvector(scale) or scale ~= 1.0
@@ -146,7 +146,7 @@ function draw.AdvancedText(text, font, x, y, color, xalign, yalign, shadow, scal
 	end
 
 	if shadow then
-	  drawShadowedText(text, font, x, y, color, xalign, yalign, scaleModifier)
+		drawShadowedText(text, font, x, y, color, xalign, yalign, scaleModifier)
 	else
 		drawSimpleText(text, font, x, y, color, xalign, yalign)
 	end
@@ -234,7 +234,7 @@ end
 
 -- Returns the size of a inserted string
 -- @param string text The text that the length should be calculated
--- @param [default="DefaultBold"] string font The font ID
+-- @param[default="DefaultBold"] string font The font ID
 -- @warning This function changes the font to the passed font
 -- @return number, number w, h The size of the given text
 -- @2D

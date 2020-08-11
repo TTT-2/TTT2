@@ -29,7 +29,7 @@ end
 -- Called when player presses the scoreboard button (TAB by default).
 -- @hook
 -- @realm client
--- @ref https://wiki.garrysmod.com/page/GM/ScoreboardShow
+-- @ref https://wiki.facepunch.com/gmod/GM:ScoreboardShow
 -- @local
 function GM:ScoreboardShow()
 	self.ShowScoreboard = true
@@ -49,7 +49,7 @@ end
 -- Called when player released the scoreboard button (TAB by default).
 -- @hook
 -- @realm client
--- @ref https://wiki.garrysmod.com/page/GM/ScoreboardHide
+-- @ref https://wiki.facepunch.com/gmod/GM:ScoreboardHide
 -- @local
 function GM:ScoreboardHide()
 	self.ShowScoreboard = false

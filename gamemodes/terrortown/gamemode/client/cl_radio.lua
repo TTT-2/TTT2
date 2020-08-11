@@ -176,8 +176,6 @@ function RADIO:SendCommand(slotidx)
 
 	RunConsoleCommand("ttt_radio", c.cmd)
 
-	tagPlayer(self:GetTarget(), c.cmd)
-
 	self:ShowRadioCommands(false)
 end
 
@@ -191,7 +189,6 @@ function RADIO:GetTargetType()
 	if not IsValid(client) then return end
 
 	local trace = client:GetEyeTrace(MASK_SHOT)
-
 	if not trace or not trace.Hit or not IsValid(trace.Entity) then return end
 
 	local ent = trace.Entity
@@ -273,7 +270,19 @@ end
 -- Radio commands are a console cmd instead of directly sent from RADIO, because
 -- this way players can bind keys to them
 local function RadioCommand(ply, cmd, arg)
-	if not IsValid(ply) or #arg ~= 1 then
+	if not IsValid(ply) then
+		print("ttt_radio failed, invalid player")
+
+		return
+	end
+
+	if hook.Run("TTT2ClientRadioCommand", cmd) then
+		print("ttt_radio, execution prevented by a hook")
+
+		return
+	end
+
+	if #arg ~= 1 then
 		print("ttt_radio failed, too many arguments?")
 
 		return
@@ -394,4 +403,15 @@ function GM:PlayerSentRadioCommand(ply, name, target)
 	if not act then return end
 
 	ply:AnimPerformGesture(act)
+end
+
+---
+-- Override or hook in plugin for spam prevention and whatnot. Return true
+-- to block a command.
+-- @param string cmd
+-- @return[default=nil] boolean
+-- @hook
+-- @realm client
+function GM:TTT2ClientRadioCommand(cmd)
+
 end

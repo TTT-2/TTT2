@@ -33,15 +33,16 @@ if CLIENT then
 	-- parameter overwrites end
 
 	function HUDELEMENT:GetDefaults()
-		const_defaults["basepos"] = {x = math.Round(ScrW() * 0.5 - self.size.w * 0.5), y = ScrH() - self.size.h - 70}
+		const_defaults["basepos"] = {x = math.Round(ScrW() * 0.5 - self.size.w * 0.5), y = ScrH() - self.size.h - 105}
 
 		return const_defaults
 	end
 
 	function HUDELEMENT:ShouldDraw()
 		local client = LocalPlayer()
+		local scanner = client:GetWeapon("weapon_ttt_wtester")
 
-		return HUDEditor.IsEditing or IsValid(client:GetActiveWeapon()) and client:GetActiveWeapon():GetClass() == "weapon_ttt_wtester"
+		return HUDEditor.IsEditing or IsValid(scanner) and client:GetActiveWeapon() == scanner and client:Alive()
 	end
 
 	function HUDELEMENT:PerformLayout()
@@ -90,7 +91,7 @@ if CLIENT then
 		local scanner = client:GetWeapon("weapon_ttt_wtester")
 
 		--fake scanner for HUD editing
-		if HUDEditor.IsEditing then
+		if not IsValid(scanner) then
 			scanner = {ItemSamples = {true}, ScanSuccess = 0, NewSample = 0, ScanTime = 0, ActiveSample = 3}
 		end
 

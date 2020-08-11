@@ -36,7 +36,6 @@ net.Receive("TTT_LastWordsMsg", LastWordsRecv)
 
 local function TTT_RoleChat()
 	local sender = net.ReadEntity()
-
 	if not IsValid(sender) then return end
 
 	local text = net.ReadString()
@@ -73,7 +72,7 @@ net.Receive("TTT_RoleChat", TTT_RoleChat)
 -- @return boolean Return true to suppress the chat message
 -- @hook
 -- @realm client
--- @ref https://wiki.garrysmod.com/page/GM/ChatText
+-- @ref https://wiki.facepunch.com/gmod/GM:ChatText
 -- @local
 function GM:ChatText(idx, name, text, type)
 	if type == "joinleave" and string.find(text, "Changed name during a round") then
@@ -102,7 +101,7 @@ end
 -- @return boolean Should the message be suppressed?
 -- @hook
 -- @realm client
--- @ref https://wiki.garrysmod.com/page/GM/OnPlayerChat
+-- @ref https://wiki.facepunch.com/gmod/GM:OnPlayerChat
 -- @local
 function GM:OnPlayerChat(ply, text, teamChat, isDead)
 	if not IsValid(ply) then
@@ -135,7 +134,7 @@ local last_chat = ""
 -- @param string text The new contents of the input box
 -- @hook
 -- @realm client
--- @ref https://wiki.garrysmod.com/page/GM/ChatTextChanged
+-- @ref https://wiki.facepunch.com/gmod/GM:ChatTextChanged
 -- @local
 function GM:ChatTextChanged(text)
 	last_chat = text
@@ -150,7 +149,6 @@ function ChatInterrupt()
 	local id = net.ReadUInt(32)
 
 	local last_seen = IsValid(client.last_id) and client.last_id:EntIndex() or 0
-
 	local last_words = "."
 
 	if last_chat == "" then

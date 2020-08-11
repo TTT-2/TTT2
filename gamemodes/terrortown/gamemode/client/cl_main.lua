@@ -20,6 +20,8 @@ ttt_include("cl_fonts")
 
 ttt_include("sh_init")
 
+ttt_include("sh_cvar_handler")
+
 ttt_include("sh_network_sync")
 ttt_include("sh_sprint")
 ttt_include("sh_main")
@@ -32,6 +34,8 @@ ttt_include("sh_inventory")
 ttt_include("sh_door")
 ttt_include("sh_voice")
 ttt_include("sh_vskin")
+ttt_include("sh_printmessage_override")
+ttt_include("sh_speed")
 
 ttt_include("vgui__cl_coloredbox")
 ttt_include("vgui__cl_droleimage")
@@ -98,24 +102,54 @@ ttt_include("cl_damage_indicator")
 ttt_include("sh_armor")
 ttt_include("cl_weapon_pickup")
 
+fileloader.LoadFolder("terrortown/autorun/client/", false, CLIENT_FILE, function(path)
+	MsgN("Added TTT2 client autorun file: ", path)
+end)
+
+fileloader.LoadFolder("terrortown/autorun/shared/", false, SHARED_FILE, function(path)
+	MsgN("Added TTT2 shared autorun file: ", path)
+end)
+
 -- all files are loaded
 local TryT = LANG.TryTranslation
+
+-- optional sound cues on round start and end
+local ttt_cl_soundcues = CreateConVar("ttt_cl_soundcues", "0", FCVAR_ARCHIVE)
+
+local cues = {
+	Sound("ttt/thump01e.mp3"),
+	Sound("ttt/thump02e.mp3")
+}
+
+local function PlaySoundCue()
+	if not ttt_cl_soundcues:GetBool() then return end
+
+	surface.PlaySound(cues[math.random(#cues)])
+end
 
 ---
 -- Called after the gamemode loads and starts.
 -- @hook
 -- @realm client
--- @ref https://wiki.garrysmod.com/page/GM/Initialize
+-- @ref https://wiki.facepunch.com/gmod/GM:Initialize
 -- @local
 function GM:Initialize()
 	MsgN("TTT2 Client initializing...")
 
 	hook.Run("TTT2Initialize")
 
-	GAMEMODE.round_state = ROUND_WAIT
+	self.round_state = ROUND_WAIT
+	self.roundCount = 0
 
 	-- load addon language files
-	LANG.SetupFiles("lang/", true)
+	fileloader.LoadFolder("lang/", true, CLIENT_FILE, function(path)
+		MsgN("[DEPRECATION WARNING]: Loaded language file from 'lang/', this folder is deprecated. Please switch to 'terrortown/lang/'")
+		MsgN("Added TTT2 language file: ", path)
+	end)
+
+	fileloader.LoadFolder("terrortown/lang/", true, CLIENT_FILE, function(path)
+		MsgN("Added TTT2 language file: ", path)
+	end)
 
 	-- load skin files
 	vskin.SetupFiles("terrortown/gamemode/shared/vskins/")
@@ -131,10 +165,21 @@ function GM:Initialize()
 	self.BaseClass:Initialize()
 
 	ARMOR:Initialize()
+	SPEED:Initialize()
 
 	hook.Run("TTT2FinishedLoading")
 
 	hook.Run("PostInitialize")
+end
+
+---
+-- Called right after the map has cleaned up (usually because game.CleanUpMap was called)
+-- @hook
+-- @realm client
+-- @ref https://wiki.facepunch.com/gmod/GM:PostCleanupMap
+-- @local
+function GM:PostCleanupMap()
+	hook.Run("TTT2PostCleanupMap")
 end
 
 ---
@@ -145,13 +190,16 @@ end
 -- <a href="https://en.wikipedia.org/wiki/Potentially_visible_set">PVS</a>,
 -- the client will receive it as NULL entity.
 -- @hook
--- @realm shared
--- @ref https://wiki.garrysmod.com/page/GM/InitPostEntity
+-- @realm client
+-- @ref https://wiki.facepunch.com/gmod/GM:InitPostEntity
 -- @local
 function GM:InitPostEntity()
 	MsgN("TTT Client post-init...")
 
 	hook.Run("TTTInitPostEntity")
+
+	items.MigrateLegacyItems()
+	items.OnLoaded()
 
 	HUDManager.LoadAllHUDS()
 	HUDManager.SetHUD()
@@ -168,6 +216,8 @@ function GM:InitPostEntity()
 		CreateEquipment(itm) -- init items
 
 		itm.CanBuy = {} -- reset normal items equipment
+
+		itm:Initialize()
 	end
 
 	local sweps = weapons.GetList()
@@ -217,17 +267,21 @@ function GM:InitPostEntity()
 	-- make sure player class extensions are loaded up, and then do some
 	-- initialization on them
 	if IsValid(client) and client.GetTraitor then
-		GAMEMODE:ClearClientState()
+		self:ClearClientState()
 	end
 
 	-- cache players avatar
 	local plys = player.GetAll()
 
 	for i = 1, #plys do
+		draw.CacheAvatar(plys[i]:SteamID64(), "small") -- caching
 		draw.CacheAvatar(plys[i]:SteamID64(), "medium") -- caching
+		draw.CacheAvatar(plys[i]:SteamID64(), "large") -- caching
 	end
 
-	timer.Create("cache_ents", 1, 0, GAMEMODE.DoCacheEnts)
+	timer.Create("cache_ents", 1, 0, function()
+		self:DoCacheEnts()
+	end)
 
 	RunConsoleCommand("_ttt_request_serverlang")
 	RunConsoleCommand("_ttt_request_rolelist")
@@ -279,6 +333,8 @@ local function RoundStateChange(o, n)
 		GAMEMODE:ClearClientState()
 		GAMEMODE:CleanUpMap()
 
+		EPOP:Clear()
+
 		-- show warning to spec mode players
 		if GetConVar("ttt_spectator_mode"):GetBool() and IsValid(LocalPlayer()) then
 			LANG.Msg("spec_mode_warning", nil, MSG_CHAT_WARN)
@@ -286,6 +342,8 @@ local function RoundStateChange(o, n)
 
 		-- reset cached server language in case it has changed
 		RunConsoleCommand("_ttt_request_serverlang")
+
+		GAMEMODE.roundCount = GAMEMODE.roundCount + 1
 
 		-- clear decals in cache from previous round
 		util.ClearDecals()
@@ -304,8 +362,12 @@ local function RoundStateChange(o, n)
 		util.ClearDecals()
 
 		GAMEMODE.StartingPlayers = #util.GetAlivePlayers()
+
+		PlaySoundCue()
 	elseif n == ROUND_POST then
 		RunConsoleCommand("ttt_cl_traitorpopup_close")
+
+		PlaySoundCue()
 	end
 
 	-- stricter checks when we're talking about hooks, because this function may
@@ -337,33 +399,18 @@ local function ttt_print_playercount()
 end
 concommand.Add("ttt_print_playercount", ttt_print_playercount)
 
--- optional sound cues on round start and end
-local ttt_cl_soundcues = CreateConVar("ttt_cl_soundcues", "0", FCVAR_ARCHIVE)
-
-local cues = {
-	Sound("ttt/thump01e.mp3"),
-	Sound("ttt/thump02e.mp3")
-}
-
-local function PlaySoundCue()
-	if not ttt_cl_soundcues:GetBool() then return end
-
-	surface.PlaySound(cues[math.random(#cues)])
-end
-
-GM.TTTBeginRound = PlaySoundCue
-GM.TTTEndRound = PlaySoundCue
-
 -- usermessages
 
 local function ReceiveRole()
 	local client = LocalPlayer()
+	if not IsValid(client) then return end
+
 	local subrole = net.ReadUInt(ROLE_BITS)
 	local team = net.ReadString()
 
 	-- after a mapswitch, server might have sent us this before we are even done
 	-- loading our code
-	if not client.SetRole then return end
+	if not isfunction(client.SetRole) then return end
 
 	client:SetRole(subrole, team)
 
@@ -432,7 +479,7 @@ net.Receive("TTT_RoundState", ReceiveRoundState)
 -- @hook
 -- @realm client
 function GM:ClearClientState()
-	GAMEMODE:HUDClear()
+	self:HUDClear()
 
 	local client = LocalPlayer()
 	if not client.SetRole then return end -- code not loaded yet
@@ -468,11 +515,13 @@ function GM:ClearClientState()
 
 	RunConsoleCommand("ttt_mute_team_check", "0")
 
-	if not GAMEMODE.ForcedMouse then return end
+	if not self.ForcedMouse then return end
 
 	gui.EnableScreenClicker(false)
 end
-net.Receive("TTT_ClearClientState", GM.ClearClientState)
+net.Receive("TTT_ClearClientState", function()
+	GAMEMODE:ClearClientState()
+end)
 
 local color_trans = Color(0, 0, 0, 0)
 
@@ -482,6 +531,9 @@ local color_trans = Color(0, 0, 0, 0)
 -- @hook
 -- @realm client
 function GM:CleanUpMap()
+	--remove thermal vision
+	thermalvision.Clear()
+
 	-- Ragdolls sometimes stay around on clients. Deleting them can create issues
 	-- so all we can do is try to hide them.
 	local ragdolls = ents.FindByClass("prop_ragdoll")
@@ -543,7 +595,7 @@ net.Receive("TTT_PlayerDied", PlayerDeath)
 -- @return[default=false] boolean True to draw the @{Player}, false to hide
 -- @hook
 -- @realm client
--- @ref https://wiki.garrysmod.com/page/GM/ShouldDrawLocalPlayer
+-- @ref https://wiki.facepunch.com/gmod/GM:ShouldDrawLocalPlayer
 -- @local
 function GM:ShouldDrawLocalPlayer(ply)
 	return false
@@ -564,7 +616,7 @@ local view = {origin = vector_origin, angles = angle_zero, fov = 0}
 -- structure
 -- @hook
 -- @realm client
--- @ref https://wiki.garrysmod.com/page/GM/CalcView
+-- @ref https://wiki.facepunch.com/gmod/GM:CalcView
 -- @local
 function GM:CalcView(ply, origin, angles, fov, znear, zfar)
 	view.origin = origin
@@ -608,7 +660,7 @@ end
 -- @param string victimTeam Team of the victim
 -- @hook
 -- @realm client
--- @ref https://wiki.garrysmod.com/page/GM/AddDeathNotice
+-- @ref https://wiki.facepunch.com/gmod/GM:AddDeathNotice
 -- @local
 function GM:AddDeathNotice(attacker, attackerTeam, inflictor, victim, victimTeam)
 
@@ -620,7 +672,7 @@ end
 -- @param number y Y position to draw death notices as a ratio
 -- @hook
 -- @realm client
--- @ref https://wiki.garrysmod.com/page/GM/DrawDeathNotice
+-- @ref https://wiki.facepunch.com/gmod/GM:DrawDeathNotice
 -- @local
 function GM:DrawDeathNotice(x, y)
 
@@ -680,7 +732,7 @@ function CheckIdle()
 		elseif CurTime() > idle.t + idle_limit then
 			RunConsoleCommand("say", TryT("automoved_to_spec"))
 
-			timer.Simple(0.3, function()
+			timer.Simple(0, function() -- move client into the spectator team in the next frame
 				RunConsoleCommand("ttt_spectator_mode", 1)
 
 				net.Start("TTT_Spectate")
@@ -705,7 +757,7 @@ end
 -- @param Entity ent The @{Entity}
 -- @hook
 -- @realm client
--- @ref https://wiki.garrysmod.com/page/GM/OnEntityCreated
+-- @ref https://wiki.facepunch.com/gmod/GM:OnEntityCreated
 -- @local
 function GM:OnEntityCreated(ent)
 	-- Make ragdolls look like the player that has died
@@ -734,17 +786,15 @@ net.Receive("TTT2PlayerAuthedShared", function(len)
 	local steamid64 = net.ReadString()
 	local name = net.ReadString()
 
-	hook.Run("TTT2PlayerAuthed", steamid64, name)
-end)
-
-hook.Add("TTT2PlayerAuthed", "TTT2CacheAvatar", function(steamid64, name)
-	local ply = player.GetBySteamID64(steamid64)
-
-	if not IsValid(ply) or ply:IsBot() then
+	-- checking for bots
+	if steamid64 == "" then
 		steamid64 = nil
 	end
 
-	draw.CacheAvatar(steamid64, "medium") -- caching
+	-- cache avatars
+	draw.CacheAvatar(steamid64, "small")
+	draw.CacheAvatar(steamid64, "medium")
+	draw.CacheAvatar(steamid64, "large")
 
-	hook.Run("TTT2PlayerAuthedCacheReady", steamid64, name)
+	hook.Run("TTT2PlayerAuthed", steamid64, name)
 end)

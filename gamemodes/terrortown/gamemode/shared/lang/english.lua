@@ -329,7 +329,6 @@ L.decoy_name = "Decoy"
 L.decoy_no_room = "You cannot carry this decoy."
 L.decoy_broken = "Your Decoy has been destroyed!"
 
-L.decoy_help_pri = "{primaryfire} plants the Decoy."
 L.decoy_short_desc = "This decoy shows a fake radar sign visible for other teams"
 L.decoy_pickup_wrong_team = "You can't pick it up as it belongs to a different team"
 
@@ -426,9 +425,6 @@ from a long distance away.
 Unlimited uses, but identification
 takes a few seconds.]]
 
-L.binoc_help_pri = "{primaryfire} identifies a body."
-L.binoc_help_sec = "{secondaryfire} changes zoom level."
-
 -- UMP
 L.ump_desc = [[
 Experimental SMG that disorients
@@ -458,9 +454,6 @@ and use them to find the DNA's owner.
 
 Use on fresh corpses to get the killer's DNA
 and track them down.]]
-
-L.dna_help_primary = "{primaryfire} to collect a DNA sample"
-L.dna_help_secondary = "{secondaryfire} to switch the DNA slot and Reload to delete a sample"
 
 -- Magneto stick
 L.magnet_name = "Magneto-stick"
@@ -539,7 +532,7 @@ L.karma_min = "Liability"
 L.corpse = "Corpse"
 L.corpse_hint = "Press [{usekey}] to search. [{walkkey} + {usekey}] to search covertly."
 
-L.target_disg = "disguised"
+L.target_disg = "(disguised)"
 L.target_unid = "Unidentified body"
 
 L.target_credits = "Search to receive unspent credits"
@@ -549,10 +542,6 @@ L.tbut_single = "Single use"
 L.tbut_reuse = "Reusable"
 L.tbut_retime = "Reusable after {num} sec"
 L.tbut_help = "Press [{usekey}] to activate"
-
--- Equipment info lines (on the left above the health/ammo panel)
-L.disg_hud = "Disguised. Your name is hidden."
-L.radar_hud = "Radar ready for next scan in: {time}"
 
 -- Spectator muting of living/dead
 L.mute_living = "Living players muted"
@@ -1064,7 +1053,7 @@ L.hud_forced_failed = "Failed to force the HUD {hudname}. You don't have permiss
 L.hud_restricted_failed = "Failed to restrict the HUD {hudname}. You don't have permission to do that."
 
 L.shop_role_select = "Select a role"
-L.shop_role_selected = "{roles}'s shop was selected!"
+L.shop_role_selected = "{role}'s shop was selected!"
 L.shop_search = "Search"
 
 L.spec_help = "Click to spectate players, or press {usekey} on a physics object to possess it."
@@ -1305,3 +1294,37 @@ L.item_no_prop_damage = "No Prop Damage"
 L.item_no_prop_damage_desc = [[Makes you immune to prop damage.]]
 L.item_no_drown_damage = "No Drowning Damage"
 L.item_no_drown_damage_desc = [[Makes you immune to drowning damage.]]
+
+-- 2020-04-30
+L.message_revival_canceled = "Revival canceled."
+L.message_revival_failed = "Revival failed."
+L.message_revival_failed_missing_body = "You have not been revived because your corpse no longer exists."
+L.hud_revival_title = "Time left until revival:"
+L.hud_revival_time = "{time}s"
+
+-- 2020-05-03
+L.door_destructible = "Door is destructible ({health}HP)"
+
+-- 2020-05-28
+L.confirm_detective_only = "Only detectives can confirm bodies"
+L.inspect_detective_only = "Only detectives can inspect bodies"
+L.corpse_hint_no_inspect = "Only detectives can search this body."
+L.corpse_hint_inspect_only = "Press [{usekey}] to search. Only detectives can confirm the body."
+L.corpse_hint_inspect_only_credits = "Press [{usekey}] to receive credits. Only detectives can search this body."
+
+-- 2020-06-04
+L.label_bind_disguiser = "Toggle disguiser"
+
+-- 2020-06-24
+L.dna_help_primary = "Collect a DNA sample"
+L.dna_help_secondary = "Switch the DNA slot"
+L.dna_help_reload = "Delete a sample"
+
+L.binoc_help_pri = "Identify a body."
+L.binoc_help_sec = "Change zoom level."
+
+L.vis_help_pri = "Drop the activated device."
+
+L.decoy_help_pri = "Plant the Decoy."
+
+L.set_cross_lines_enable = "Enable crosshair lines"

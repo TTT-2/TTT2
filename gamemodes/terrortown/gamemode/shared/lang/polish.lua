@@ -1241,3 +1241,38 @@ L.button_close = "Zamknij"
 --L.item_no_prop_damage_desc = [[Makes you immune to prop damage.]]
 --L.item_no_drown_damage = "No Drowning Damage"
 --L.item_no_drown_damage_desc = [[Makes you immune to drowning damage.]]
+
+-- 2020-04-30
+--L.message_revival_canceled = "Revival canceled."
+--L.message_revival_failed = "Revival failed."
+--L.message_revival_failed_missing_body = "You have not been revived because your corpse no longer exists."
+--L.hud_revival_title = "Time left until revival:"
+--L.hud_revival_time = "{time}s"
+
+-- 2020-05-03
+--L.door_destructible = "Door is destructible ({health}HP)"
+
+-- 2020-05-28
+--L.confirm_detective_only = "Only detectives can confirm bodies"
+--L.inspect_detective_only = "Only detectives can inspect bodies"
+--L.corpse_hint_no_inspect = "Only detectives can search this body."
+--L.corpse_hint_inspect_only = "Press [{usekey}] to serch. Only detectives can confirm the body."
+--L.corpse_hint_inspect_only_credits = "Press [{usekey}] to receive credits. Only detectives can search this body."
+
+-- 2020-06-04
+--L.label_bind_disguiser = "Toggle disguiser"
+
+-- 2020-06-24
+
+--L.dna_help_primary = "Collect a DNA sample"
+--L.dna_help_secondary = "Switch the DNA slot"
+--L.dna_help_reload = "Delete a sample"
+
+--L.binoc_help_pri = "Identify a body."
+--L.binoc_help_sec = "Change zoom level."
+
+--L.vis_help_pri = "Drop the activated device."
+
+--L.decoy_help_pri = "Plant the Decoy."
+
+--L.set_cross_lines_enable = "Enable crosshair lines"

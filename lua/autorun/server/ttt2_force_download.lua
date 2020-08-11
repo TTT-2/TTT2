@@ -90,6 +90,8 @@ resource.AddFile("materials/vgui/ttt/perks/hud_armor_reinforced.png") -- armor r
 resource.AddFile("materials/vgui/ttt/hud_armor.vmt") -- playerinfo armor
 resource.AddFile("materials/vgui/ttt/hud_armor_reinforced.vmt") -- playerinfo armor reinforced
 
+resource.AddFile("materials/vgui/ttt/hud_blocking_revival.vmt")
+
 -- essential items
 resource.AddFile("materials/vgui/ttt/icon_speedrun.vmt")
 resource.AddFile("materials/vgui/ttt/perks/hud_speedrun.png")
@@ -138,6 +140,7 @@ resource.AddFile("materials/vgui/ttt/tid/tid_credits.vmt")
 resource.AddFile("materials/vgui/ttt/tid/tid_detective.vmt")
 resource.AddFile("materials/vgui/ttt/tid/tid_locked.vmt")
 resource.AddFile("materials/vgui/ttt/tid/tid_auto_close.vmt")
+resource.AddFile("materials/vgui/ttt/tid/tid_destructible.vmt")
 
 -- derma skin graphics
 resource.AddFile("materials/vgui/ttt/vskin/icon_close.vmt")
@@ -169,3 +172,7 @@ resource.AddFile("materials/models/ttt2_dna_scanner/screen/check.vmt")
 resource.AddFile("materials/models/ttt2_dna_scanner/screen/circle.vmt")
 resource.AddFile("materials/models/ttt2_dna_scanner/screen/fail.vmt")
 resource.AddFile("materials/vgui/ttt/dnascanner/dna_hud.vmt")
+
+-- b-draw icons
+resource.AddFile("materials/vgui/ttt/b-draw/icon_avatar_bot.vmt")
+resource.AddFile("materials/vgui/ttt/b-draw/icon_avatar_default.vmt")

@@ -1,7 +1,8 @@
 ---
 -- @module HUDManager
 
-local current_hud_cvar = CreateClientConVar("ttt2_current_hud", TTT2NET:GetGlobal({"hud_manager", "defaultHUD"}) or "pure_skin", true, true)
+local current_hud_cvar = CreateClientConVar("ttt2_current_hud", ttt2net.GetGlobal({"hud_manager", "defaultHUD"}) or "pure_skin", true, true)
+
 local current_hud_table = nil
 
 HUDManager = {}
@@ -23,7 +24,7 @@ end
 -- @2D
 -- @hook
 -- @realm client
--- @ref https://wiki.garrysmod.com/page/GM/HUDPaint
+-- @ref https://wiki.facepunch.com/gmod/GM:HUDPaint
 -- @local
 function GM:HUDPaint()
 	local client = LocalPlayer()
@@ -48,7 +49,9 @@ function GM:HUDPaint()
 		hook.Call("HUDDrawTargetID", GAMEMODE)
 	end
 
-	HUDManager.DrawHUD()
+	if hook.Call("HUDShouldDraw", GAMEMODE, "TTT2HUD") then
+		HUDManager.DrawHUD()
+	end
 
 	if not client:Alive() or client:Team() == TEAM_SPEC then return end
 
@@ -100,7 +103,7 @@ local gmodhud = {
 -- @return boolean Return false to prevent the given element from being drawn on the client's screen.
 -- @hook
 -- @realm client
--- @ref https://wiki.garrysmod.com/page/GM/HUDShouldDraw
+-- @ref https://wiki.facepunch.com/gmod/GM:HUDShouldDraw
 -- @local
 function GM:HUDShouldDraw(name)
 	if gmodhud[name] then
@@ -112,7 +115,6 @@ end
 
 local function UpdateHUD(name)
 	local hudEl = huds.GetStored(name)
-
 	if not hudEl then
 		MsgN("Error: HUD with name " .. name .. " was not found!")
 
@@ -132,7 +134,6 @@ local function UpdateHUD(name)
 
 	-- Initialize elements
 	hudEl:Initialize()
-
 	hudEl:LoadData()
 
 	-- call all listeners
@@ -147,7 +148,7 @@ function HUDManager.GetHUD()
 	local hudvar = current_hud_cvar:GetString()
 
 	if not huds.GetStored(hudvar) then
-		hudvar = TTT2NET:GetGlobal({"hud_manager", "defaultHUD"}) or "pure_skin"
+		hudvar = ttt2net.GetGlobal({"hud_manager", "defaultHUD"}) or "pure_skin"
 	end
 
 	return hudvar

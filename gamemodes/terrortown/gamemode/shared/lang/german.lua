@@ -325,7 +325,6 @@ L.decoy_name = "Attrappe"
 L.decoy_no_room = "Du kannst diese Attrappe nicht tragen."
 L.decoy_broken = "Deine Attrappe wurde zerstört!"
 
-L.decoy_help_pri = "{primaryfire} platziert die Attrappe."
 L.decoy_short_desc = "Diese Attrappe erzeugt ein gefälschtes Radar-Signal sichtbar für andere Teams"
 L.decoy_pickup_wrong_team = "Du kannst sie nicht aufnehmen, da sie einem anderen Team gehört"
 
@@ -419,9 +418,6 @@ großen Entfernung zu identifizieren.
 Unbegrenzt nutzbar, aber das Identifizieren dauert
 einige Sekunden.]]
 
-L.binoc_help_pri = "{primaryfire} identifiziert einen Körper."
-L.binoc_help_sec = "{secondaryfire} ändert Zoom-Level."
-
 -- UMP
 L.ump_desc = [[
 Experimentelles SMG, das Ziele desorientiert.
@@ -450,9 +446,6 @@ und wird genutzt, um den Besitzer dieser ausfindig zu machen.
 
 Kann an frischen Leichen verwendet werden, um die DNA
 des Mörders zu erhalten und um ihn aufzuspüren.]]
-
-L.dna_help_primary = "{primaryfire} um eine DNA-Probe zu entnehmen"
-L.dna_help_secondary = "{secondaryfire} um den Slot zu wechseln, Nachladen zum Löschen einer Probe"
 
 -- Magneto stick
 L.magnet_name = "Magneto-Stick"
@@ -531,7 +524,7 @@ L.karma_min = "Verantwortungslos"
 L.corpse = "Leiche"
 L.corpse_hint = "Drücke [{usekey}] zum Durchsuchen. [{walkkey} + {usekey}] um verdeckt zu untersuchen."
 
-L.target_disg = "Getarnt"
+L.target_disg = "(Getarnt)"
 L.target_unid = "Unidentifizierter Körper"
 
 L.target_credits = "Durchsuche, um ungenutzte Credits zu erhalten."
@@ -541,10 +534,6 @@ L.tbut_single = "Einmaliger Gebrauch"
 L.tbut_reuse = "Wiederverwendbar"
 L.tbut_retime = "Wiederverwendbar nach {num} Sekunden"
 L.tbut_help = "Drücke [{usekey}] zum Aktivieren"
-
--- Equipment info lines (on the left above the health/ammo panel)
-L.disg_hud = "Getarnt. Dein Name ist ausgeblendet."
-L.radar_hud = "Radar bereit für nächsten Scan in: {time}"
 
 -- Spectator muting of living/dead
 L.mute_living = "Lebende stumm gestellt"
@@ -1055,7 +1044,7 @@ L.hud_forced_failed = "Es ist fehlgeschlagen {hudname} zu erzwingen. Bist du Adm
 L.hud_restricted_failed = "Es ist fehlgeschlagen {hudname} zu beschränken. Bist du Admin?"
 
 L.shop_role_select = "Wähle eine Rolle"
-L.shop_role_selected = "Der {roles} Shop wurde gewählt!"
+L.shop_role_selected = "Der {role} Shop wurde gewählt!"
 L.shop_search = "Suche"
 
 L.spec_help = "Klicke, um Spielern zu zuschauen, oder drücke {usekey} auf ein physikalisches Objekt, um die Kontrolle zu erhalten."
@@ -1296,3 +1285,37 @@ L.item_no_prop_damage = "Kein Objektschaden"
 L.item_no_prop_damage_desc = [[Macht dich immun fpr Objektschaden.]]
 L.item_no_drown_damage = "Kein Ertrinkungsschaden"
 L.item_no_drown_damage_desc = [[Macht dich immun für Ertrinkungsschaden.]]
+
+-- 2020-04-30
+L.message_revival_canceled = "Wiederbelebung abgebrochen."
+L.message_revival_failed = "Wiederbelebung fehlgeschlagen."
+L.message_revival_failed_missing_body = "Du wurdest nicht wiederbelebt, da deine Leiche nicht mehr existiert."
+L.hud_revival_title = "Zeit bis zur Wiederbelebung:"
+L.hud_revival_time = "{time}s"
+
+-- 2020-05-03
+L.door_destructible = "Tür ist zerstörbar ({health}HP)"
+
+-- 2020-05-28
+L.confirm_detective_only = "Nur Detektive können Leichen bestätigen"
+L.inspect_detective_only = "Nur Detektive können Leichen untersuchen"
+L.corpse_hint_no_inspect = "Nur ein Detektiv kann diesen Körper untersuchen."
+L.corpse_hint_inspect_only = "Drücke [{usekey}] zum Durchsuchen. Nur Detektive können diesen Körper bestätigen."
+L.corpse_hint_inspect_only_credits = "Drücke [{usekey}] zum Erhalten der Credits. Nur ein Detektiv kann diesen Körper untersuchen."
+
+-- 2020-06-04
+L.label_bind_disguiser = "Tarnung umschalten"
+
+-- 2020-06-24
+L.dna_help_primary = "Entnehme eine DNA-Probe"
+L.dna_help_secondary = "Wechsel den DNA Slot"
+L.dna_help_reload = "Lösche eine Probe"
+
+L.binoc_help_pri = "Identifiziere einen Körper."
+L.binoc_help_sec = "Ändere Zoom-Level."
+
+L.vis_help_pri = "Lass das aktivierte Gerät fallen."
+
+L.decoy_help_pri = "Platziere die Attrappe."
+
+L.set_cross_lines_enable = "Aktiviere Fadenkreuz-Linien"

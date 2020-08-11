@@ -56,6 +56,8 @@ TTTFiles = {
 	sh_main = {file = "sh_main.lua", on = "shared"},
 	sh_network_sync = {file = "sh_network_sync.lua", on = "shared"},
 	sh_player_ext = {file = "sh_player_ext.lua", on = "shared"},
+	sh_printmessage_override = {file = "sh_printmessage_override.lua", on = "shared"},
+	sh_cvar_handler = {file = "sh_cvar_handler.lua", on = "shared"},
 	sh_role_module = {file = "sh_role_module.lua", on = "shared"},
 	sh_scoring = {file = "sh_scoring.lua", on = "shared"},
 	sh_shopeditor = {file = "sh_shopeditor.lua", on = "shared"},
@@ -64,6 +66,7 @@ TTTFiles = {
 	sh_util = {file = "sh_util.lua", on = "shared"},
 	sh_voice = {file = "sh_voice.lua", on = "shared"},
 	sh_vskin = {file = "sh_vskin.lua", on = "shared"},
+	sh_speed = {file = "sh_speed.lua", on = "shared"},
 	sh_weaponry = {file = "sh_weaponry.lua", on = "shared"},
 
 	-- vgui client files
@@ -123,6 +126,7 @@ if SERVER then
 		sv_corpse = {file = "sv_corpse.lua", on = "server"},
 		sv_ent_replace = {file = "sv_ent_replace.lua", on = "server"},
 		sv_entity = {file = "sv_entity.lua", on = "server"},
+		sv_eventpopup = {file = "sv_eventpopup.lua", on = "server"},
 		sv_gamemsg = {file = "sv_gamemsg.lua", on = "server"},
 		sv_hud_manager = {file = "sv_hud_manager.lua", on = "server"},
 		sv_inventory = {file = "sv_inventory.lua", on = "server"},
@@ -134,6 +138,7 @@ if SERVER then
 		sv_player_ext = {file = "sv_player_ext.lua", on = "server"},
 		sv_player = {file = "sv_player.lua", on = "server"},
 		sv_propspec = {file = "sv_propspec.lua", on = "server"},
+		sv_roleselection = {file = "sv_roleselection.lua", on = "server"},
 		sv_scoring = {file = "sv_scoring.lua", on = "server"},
 		sv_shop = {file = "sv_shop.lua", on = "server"},
 		sv_shopeditor = {file = "sv_shopeditor.lua", on = "server"},

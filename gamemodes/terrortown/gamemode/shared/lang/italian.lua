@@ -40,14 +40,14 @@ L.round_traitors_one = "Traditore, sei rimasto da solo."
 L.round_traitors_more = "Traditore, questi sono i tuoi alleati: {names}"
 
 L.win_time = "Il tempo è finito. I Traditori hanno perso."
-L.win_traitors = "Traditori vincono!"
-L.win_innocents = "Innocenti vincono!"
+L.win_traitors = "I Traditori hanno vinto!"
+L.win_innocents = "Gli Innocenti hanno vinto!"
 L.win_bees = "Pareggio!"
 L.win_showreport = "Guardiamo il report per {num} secondi."
 
-L.limit_round = "Raggiunto il limite del tempo del round. {mapname} caricherà presto."
-L.limit_time = "Il tempo è finito. {mapname} caricherà presto."
-L.limit_left = "{num} round o {time} minuti rimanenti prima che la mappa cambi in {mapname}."
+L.limit_round = "Raggiunto il limite del tempo del round. la prossima mappa caricherà presto."
+L.limit_time = "Il tempo è finito. la prossima mappa caricherà presto."
+L.limit_left = "{num} round o {time} minuti rimanenti prima che la mappa cambi."
 
 -- Ricompense crediti
 -- Credit awards
@@ -461,16 +461,10 @@ L.dna_notfound = "Nessun campione di DNA trovato sul bersaglio."
 L.dna_limit = "Limite di deposito raggiunge. Rimuovi vecchi campioni per aggiungerne altri."
 L.dna_decayed = "Campione di DNA dell'assassino si è deteriorato."
 L.dna_killer = "Preso un campione di DNA dell'assassino dal cadavere!"
-L.dna_duplicate = "Trovato! Avevi già questo DNA nel tuo scanner."
 L.dna_no_killer = "Il DNA non può essere preso (assassino disconnesso?)."
 L.dna_armed = "La bomba è innescata! Disinnescala prima!"
-L.dna_object = "Prendi un campione dell'ultimo possessore dell'oggetto."
 L.dna_object = "Preso {num} nuovo campione di DNA dall'oggetto."
 L.dna_gone = "DNA non rilevato nella zona."
-L.dna_tid_possible = "Scan possibile"
-L.dna_tid_impossible = "Nessuno scan possibile"
-L.dna_screen_ready = "Nessun DNA"
-L.dna_screen_match = "Abbina"
 
 L.dna_desc = [[
 Prendi campioni di DNA dagli oggetti
@@ -478,8 +472,20 @@ e usali per trovare il proprietario del DNA.
 Usalo su giocatori appena uccisi per prendere il DNA dell'assassino
 e trovarli.]]
 
-L.dna_help_primary = "{primaryfire} per prendere un campione di DNA"
-L.dna_help_secondary = "{secondaryfire} per cambiare lo slot del DNA e Ricarica per cancellare un campione"
+L.dna_menu_title = "Controlli DNA scanner"
+L.dna_menu_sample = "Campione di DNA trovato su {source}"
+L.dna_menu_remove = "Rimuovi selezionato"
+L.dna_menu_help1 = "Questi sono i campioni di DNA che hai raccolto."
+L.dna_menu_help2 = [[
+Quando carico, puoi scansionare la posizione del
+giocatore a cui appartine il campione di DNA.
+Trovare bersagli distanti usa più energia.]]
+
+L.dna_menu_scan = "Fai scansione"
+L.dna_menu_repeat = "Ripeti automaticamente"
+L.dna_menu_ready = "PRONTO"
+L.dna_menu_charge = "CARICAMENTO"
+L.dna_menu_select = "SELEZIONA CAMPIONE"
 
 -- Magneto stick
 L.magnet_name = "Magneto-stick"
@@ -576,11 +582,6 @@ L.tbut_single = "Uso singolo"
 L.tbut_reuse = "Riutilizzabile"
 L.tbut_retime = "Riutilizzabile dopo {num} secondi"
 L.tbut_help = "Premi {key} per attivare"
-
--- Stringhe di informazione sull'equipaggiamento (sulla sinistra sopra il pannello di vita/munizioni)
--- Equipment info lines (on the left above the health/ammo panel)
-L.disg_hud = "Travestito. Il tuo nome è nascosto."
-L.radar_hud = "Radar pronto per il prossima scansione tra: {time}"
 
 -- Spettatori che mutano vivi/morti
 -- Spectator muting of living/dead
@@ -858,7 +859,7 @@ L.aw_fst3_title = "Primo Errore"
 L.aw_fst3_text = "è stato il primo ad uccidere. Peccato che fosse un compagno innocente."
 
 L.aw_fst4_title = "Primo Colpo"
-L.aw_fst4_text = "ha fatto la prima uccisione colpendo un traditore."
+L.aw_fst4_text = "ha ucciso fatto la prima uccisione colpendo un traditore."
 
 L.aw_all1_title = "Più Letale tra Compagni"
 L.aw_all1_text = "è stato responsabile di ogni uccisione fatta dagli innocenti."
