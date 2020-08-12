@@ -118,6 +118,7 @@ local function PopulateHUDSwitcherPanel(parent)
 	local currentHUD = huds.GetStored(currentHUDName)
 	local hudList = huds.GetList()
 	local restrictedHUDs = ttt2net.GetGlobal({"hud_manager", "restrictedHUDs"})
+	local forcedHUD = ttt2net.GetGlobal({"hud_manager", "forcedHUD"})
 	local validHUDs = {}
 
 	if not currentHUD.GetSavingKeys then
@@ -128,13 +129,17 @@ local function PopulateHUDSwitcherPanel(parent)
 		return
 	end
 
-	for i = 1, #hudList do
-		local hud = hudList[i]
+	if forcedHUD then
+		validHUDs[1] = forcedHUD
+	else
+		for i = 1, #hudList do
+			local hud = hudList[i]
 
-		-- do not add HUD to the selection list if restricted
-		if table.HasValue(restrictedHUDs, hud.id) then continue end
+			-- do not add HUD to the selection list if restricted
+			if table.HasValue(restrictedHUDs, hud.id) then continue end
 
-		validHUDs[#validHUDs + 1] = hud.id
+			validHUDs[#validHUDs + 1] = hud.id
+		end
 	end
 
 	form:MakeComboBox({
