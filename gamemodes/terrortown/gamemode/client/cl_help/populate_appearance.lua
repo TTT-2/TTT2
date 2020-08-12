@@ -351,6 +351,12 @@ local function PopulateCrosshairPanel(parent)
 	})
 
 	form:MakeCheckBox({
+		label = "label_crosshair_lines_enable",
+		convar = "ttt_crosshair_lines",
+		master = crossEnb
+	})
+
+	form:MakeCheckBox({
 		label = "label_crosshair_scale_enable",
 		convar = "ttt_crosshair_weaponscale",
 		master = crossEnb

@@ -35,7 +35,7 @@ local function AddBindingCategory(category, parent)
 				local key = keyNum ~= 0 and string.upper(input.GetKeyName(keyNum)) or LANG.GetTranslation("button_none")
 
 				client:ChatPrint(
-					LANG.GetParamTranslation("ttt2_bindings_new", {
+					LANG.GetParamTranslation("bindings_new", {
 						name = binding.name,
 						key = key
 					})

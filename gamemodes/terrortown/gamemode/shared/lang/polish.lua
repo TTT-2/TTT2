@@ -15,12 +15,6 @@ L.noteam = "Brak Teamu"
 L.innocents = "Team Niewinni"
 L.traitors = "Team Zdrajcy"
 
--- role description
-L.ttt2_desc_none = "Obecnie nie masz roli!"
-L.ttt2_desc_innocent = "Twoim celem jest przerwanie!"
-L.ttt2_desc_traitor = "Zabij każdego kto nie jest zdrajcą z pomocą sklepu ([C])!"
-L.ttt2_desc_detective = "Jesteś detektywem, pomóż niewinnym przetrwać i pokonaj zdrajców!"
-
 -- Round status messages
 L.round_minplayers = "Nie wystarczająca ilość graczy do rozpoczęcia nowej rundy"
 L.round_voting = "Głosowanie w toku, opóźnia nową rundę o {num} sekund..."
@@ -992,7 +986,7 @@ L.shop_create_shop = "Stwórz specjalny sklep"
 L.shop_selected = "Wybrano {role}"
 L.shop_settings_desc = "Adaptacja Randomowego Sklepu."
 
-L.ttt2_bindings_new = "Nowy klawisz dla {name}: {key}"
+L.bindings_new = "Nowy klawisz dla {name}: {key}"
 
 L.hud_default_failed = "Nie udało się ustawić {hudname} jako domoślne. Nie masz permisji, albo HUD nie istnieje."
 L.hud_forced_failed = "Nie udało się wymusić HUD {hudname}. Nie masz permisji, albo HUD nie istnieje."
@@ -1151,6 +1145,7 @@ L.label_vskin_select = "Wybierz VSkin"
 L.label_blur_enable = "Włącz blur dla tła VSkina "
 L.label_minimal_targetid = "Minimalistyczny status celu pod celownikiem (bez karmy, porad, itp)"
 L.label_shop_always_show = "Zawsze pokazuj sklep"
+--L.label_shop_double_click_buy = "Enable to buy an item in the shop by double clicking on it"
 L.label_shop_num_col = "Liczba kolumn"
 L.label_shop_num_row = "Liczba rzędów"
 L.label_shop_item_size = "Liczba rzędów"
@@ -1167,6 +1162,7 @@ L.label_crosshair_thickness = "Grubość celownika"
 L.label_crosshair_thickness_outline = "Grubość otoczki celownika"
 L.label_crosshair_static_enable = "Umożliw statyczny celownik "
 L.label_crosshair_dot_enable = "Umożliw kropkę celownika"
+--L.label_crosshair_lines_enable = "Enable crosshair lines"
 L.label_crosshair_scale_enable = "Umożliw różne wielkości"
 L.label_crosshair_ironsight_low_enabled = "Obniż broń podczas użycia celowniku mechanicznego"
 L.label_damage_indicator_enable = "Enable damage indicator"
@@ -1280,8 +1276,3 @@ L.button_close = "Zamknij"
 --L.vis_help_pri = "Drop the activated device."
 
 --L.decoy_help_pri = "Plant the Decoy."
-
---L.set_cross_lines_enable = "Enable crosshair lines"
-
--- 2020-08-11
---L.f1_settings_shop_desc_double_click = "Enable to buy an item in the shop by double clicking on it."

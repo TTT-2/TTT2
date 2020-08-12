@@ -15,12 +15,6 @@ L.noteam = "No Team"
 L.innocents = "Team Innocenti"
 L.traitors = "Team Traditori"
 
--- role description
-L.ttt2_desc_none = "Al momento non hai un ruolo!"
-L.ttt2_desc_innocent = "Il tuo obiettivi è sopravvivere ai Traditori!"
-L.ttt2_desc_traitor = "Uccidi ogni altro ruolo con l'aiuto dello shop ([C])!"
-L.ttt2_desc_detective = "Sei un Innocente! Aiuta gli Innocenti a sopravvivere o a trovare i Traditori!"
-
 -- Round status messages
 L.round_minplayers = "Non ci sono abbastanza giocatore per cominciare un nuovo round..."
 L.round_voting = "Voto in corso, prolungando il round di {num} secondi..."
@@ -992,7 +986,7 @@ L.shop_create_shop = "Crea Shop personalizzato"
 L.shop_selected = "Selezionato: {role}"
 L.shop_settings_desc = "Cambia i valori per adattare le ConVars del Random Shop ConVars. Non dimenticarti di salvare dopo!"
 
-L.ttt2_bindings_new = "Nuovo tasto assegnato per {name}: {key}"
+L.bindings_new = "Nuovo tasto assegnato per {name}: {key}"
 
 L.hud_default_failed = "Fallito nell'impostare l'HUD {hudname} come nuovo default. Sei un admin ed esiste questo HUD?"
 L.hud_forced_failed = "Fallito nell'impostare l'HUD {hudname}. Sei un admin ed esiste questo HUD?"
@@ -1151,6 +1145,7 @@ L.label_vskin_select = "Seleziona VSkin"
 L.label_blur_enable = "Abilita blur di sfondo VSkin"
 L.label_minimal_targetid = "ID bersaglio minimale sotto il mirino (niente karma, consigli, ecc.)"
 L.label_shop_always_show = "Mostra sempre lo shop"
+--L.label_shop_double_click_buy = "Enable to buy an item in the shop by double clicking on it"
 L.label_shop_num_col = "Numero di colonne"
 L.label_shop_num_row = "Numero di righe"
 L.label_shop_item_size = "Grandezza icona"
@@ -1167,6 +1162,7 @@ L.label_crosshair_thickness = "Spessore mirino"
 L.label_crosshair_thickness_outline = "Spessore contorno del mirino"
 L.label_crosshair_static_enable = "Abilita mirino statico"
 L.label_crosshair_dot_enable = "Abilita punto del mirino"
+--L.label_crosshair_lines_enable = "Enable crosshair lines"
 L.label_crosshair_scale_enable = "Abilita scalatura del mirino dell'arma"
 L.label_crosshair_ironsight_low_enabled = "Abbassa arma quando usi il mirino di ferro"
 L.label_damage_indicator_enable = "Abilita indicatore del danno"
@@ -1280,8 +1276,3 @@ L.button_close = "Chiudi"
 --L.vis_help_pri = "Drop the activated device."
 
 --L.decoy_help_pri = "Plant the Decoy."
-
---L.set_cross_lines_enable = "Enable crosshair lines"
-
--- 2020-08-11
---L.f1_settings_shop_desc_double_click = "Enable to buy an item in the shop by double clicking on it."

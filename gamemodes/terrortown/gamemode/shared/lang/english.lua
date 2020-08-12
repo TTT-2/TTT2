@@ -15,12 +15,6 @@ L.noteam = "No Team"
 L.innocents = "Team Innocents"
 L.traitors = "Team Traitors"
 
--- role description
-L.ttt2_desc_none = "Currently you don't have a role!"
-L.ttt2_desc_innocent = "Your goal is to survive the Traitors!"
-L.ttt2_desc_traitor = "Kill every other role with the help of the Traitorshop ([C])!"
-L.ttt2_desc_detective = "You are a Detective! Help the Innocents to survive or to find the Traitors!"
-
 -- Round status messages
 L.round_minplayers = "Not enough players to start a new round..."
 L.round_voting = "Vote in progress, delaying new round by {num} seconds..."
@@ -992,7 +986,7 @@ L.shop_create_shop = "Create Custom Shop"
 L.shop_selected = "Selected {role}"
 L.shop_settings_desc = "Change the values to adapt Random Shop ConVars. Don't forget to save your changes!"
 
-L.ttt2_bindings_new = "New bound key for {name}: {key}"
+L.bindings_new = "New bound key for {name}: {key}"
 
 L.hud_default_failed = "Failed to set the HUD {hudname} as new default. You don't have permission to do that, or this HUD doesn't exist."
 L.hud_forced_failed = "Failed to force the HUD {hudname}. You don't have permission to do that, or this HUD doesn't exist."
@@ -1151,6 +1145,7 @@ L.label_vskin_select = "Select VSkin"
 L.label_blur_enable = "Enable VSkin background blur"
 L.label_minimal_targetid = "Minimalist Target ID under crosshair (no karma text, hints, etc.)"
 L.label_shop_always_show = "Always show the shop"
+L.label_shop_double_click_buy = "Enable to buy an item in the shop by double clicking on it"
 L.label_shop_num_col = "Number of columns"
 L.label_shop_num_row = "Number of rows"
 L.label_shop_item_size = "Icon size"
@@ -1167,6 +1162,7 @@ L.label_crosshair_thickness = "Crosshair thickness"
 L.label_crosshair_thickness_outline = "Crosshair outline thickness"
 L.label_crosshair_static_enable = "Enable static crosshair"
 L.label_crosshair_dot_enable = "Enable crosshair dot"
+L.label_crosshair_lines_enable = "Enable crosshair lines"
 L.label_crosshair_scale_enable = "Enable weapon dependant weapon scale"
 L.label_crosshair_ironsight_low_enabled = "Lower weapon when using ironsights"
 L.label_damage_indicator_enable = "Enable damage indicator"
@@ -1280,8 +1276,3 @@ L.binoc_help_sec = "Change zoom level."
 L.vis_help_pri = "Drop the activated device."
 
 L.decoy_help_pri = "Plant the Decoy."
-
-L.set_cross_lines_enable = "Enable crosshair lines"
-
--- 2020-08-11
-L.f1_settings_shop_desc_double_click = "Enable to buy an item in the shop by double clicking on it."

@@ -33,6 +33,11 @@ local function PopulateGeneralPanel(parent)
 		convar = "ttt2_doubletap_sprint_anykey",
 		master = enbSprint
 	})
+
+	form:MakeCheckBox({
+		label = "label_shop_double_click_buy",
+		convar = "ttt_bem_enable_doubleclick_buy"
+	})
 end
 
 local function PopulateRolesPanel(parent)

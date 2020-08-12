@@ -15,12 +15,6 @@ L.noteam = "Нет команды"
 L.innocents = "Команда невиновых"
 L.traitors = "Команда предателей"
 
--- role description
-L.ttt2_desc_none = "В данный момент у тебя нет роли!"
-L.ttt2_desc_innocent = "Ваша задача не умереть от предателей!"
-L.ttt2_desc_traitor = "Убейте всех, кто имеет другую роль, при помощи меню снаряжения ([C])!"
-L.ttt2_desc_detective = "Вы детектив! Помогите невиновным выжить или найти предателей!"
-
 -- Round status messages
 L.round_minplayers = "Недостаточно игроков для начала раунда..."
 L.round_voting = "Идёт голосование, начало раунда отложено на {num} сек..."
@@ -992,7 +986,7 @@ L.shop_create_shop = "Создать собственный магазин"
 L.shop_selected = "Выбран {role}"
 L.shop_settings_desc = "Измените эти значения для настройки переменных случайного магазина. Не забудьте сохранить изменения!"
 
-L.ttt2_bindings_new = "Назначена новая клавиша для {name}: {key}"
+L.bindings_new = "Назначена новая клавиша для {name}: {key}"
 
 L.hud_default_failed = "Не удалось назначить {hudname} как интерфейс по умолчанию. У вас нет разрешения на это действие или интерфейс не существует."
 L.hud_forced_failed = "Не удалось назначить принудительный интерфейс {hudname}. У вас нет разрешения на это действие или интерфейс не существует."
@@ -1151,6 +1145,7 @@ L.label_language_set = "Выберите язык"
 --L.label_blur_enable = "Enable VSkin background blur"
 L.label_minimal_targetid = "Минималистичная информация о цели под прицелом (без текста о карме, подсказок и т.д.)."
 --L.label_shop_always_show = "Always show the shop"
+--L.label_shop_double_click_buy = "Enable to buy an item in the shop by double clicking on it"
 L.label_shop_num_col = "Количество столбцов"
 L.label_shop_num_row = "Количество строк"
 L.label_shop_item_size = "Размер иконок"
@@ -1167,6 +1162,7 @@ L.label_crosshair_thickness = "Толщина прицела"
 L.label_crosshair_thickness_outline = "Толщина обводки прицела"
 L.label_crosshair_static_enable = "Включить статичный прицел."
 L.label_crosshair_dot_enable = "Включить точку прицела."
+--L.label_crosshair_lines_enable = "Enable crosshair lines"
 L.label_crosshair_scale_enable = "Включить разные размеры прицела для разного оружия."
 L.label_crosshair_ironsight_low_enabled = "Опускать оружие при прицеливании."
 --L.label_damage_indicator_enable = "Enable damage indicator"
@@ -1280,8 +1276,3 @@ L.button_save = "Сохранить"
 --L.vis_help_pri = "Drop the activated device."
 
 --L.decoy_help_pri = "Plant the Decoy."
-
---L.set_cross_lines_enable = "Enable crosshair lines"
-
--- 2020-08-11
---L.f1_settings_shop_desc_double_click = "Enable to buy an item in the shop by double clicking on it."

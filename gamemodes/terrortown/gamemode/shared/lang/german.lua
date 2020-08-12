@@ -15,12 +15,6 @@ L.noteam = "Kein Team"
 L.innocents = "Team Unschuldige"
 L.traitors = "Team Verräter"
 
--- role description
-L.ttt2_desc_none = "Du besitzt keine Rolle!"
-L.ttt2_desc_innocent = "Dein Ziel ist es zu überleben bzw. alle Verräter zu töten!"
-L.ttt2_desc_traitor = "Töte jede andere Rolle mithilfe des Traitor-Shops ([C])!"
-L.ttt2_desc_detective = "Du bist ein Unschuldiger! Hilf den anderen Unschuldigen zu überleben oder die Verräter zu finden!"
-
 -- Round status messages
 L.round_minplayers = "Zu wenig Spieler, um eine neue Runde zu beginnen..."
 L.round_voting = "Es läuft eine Umfrage, verzögere neue Runde um {num} Sekunde(n)..."
@@ -992,7 +986,7 @@ L.shop_create_shop = "Erstelle eigenen Shop"
 L.shop_selected = "{role} ausgewählt"
 L.shop_settings_desc = "Ändere die Werte, um den Random-Shop anzupassen. Vergiss nicht am Ende zu speichern!"
 
-L.ttt2_bindings_new = "Neue Tastenbelegung für {name}: {key}"
+L.bindings_new = "Neue Tastenbelegung für {name}: {key}"
 
 L.hud_default_failed = "Es ist fehlgeschlagen {hudname} als Standard HUD zu setzen. Bist du Admin und existiert dieses HUD überhaupt?"
 L.hud_forced_failed = "Es ist fehlgeschlagen {hudname} zu erzwingen. Bist du Admin und existiert dieses HUD überhaupt?"
@@ -1151,6 +1145,7 @@ L.label_vskin_select = "Wähle VSkin"
 L.label_blur_enable = "Aktiviere VSkin Hintergrundunschärfe"
 L.label_minimal_targetid = "Minimale Ziel ID unter dem Fadenkreuz (kein Karmatext, Hinweise, etc.)"
 L.label_shop_always_show = "Zeige immer den Shop"
+L.label_shop_double_click_buy = "Kaufe ein Item im Shop, indem du es doppelt anklickst"
 L.label_shop_num_col = "Anzahl der Spalten"
 L.label_shop_num_row = "Anzahl der Zeilen"
 L.label_shop_item_size = "Icon Größe"
@@ -1167,6 +1162,7 @@ L.label_crosshair_thickness = "Fadenkreuz Dicke"
 L.label_crosshair_thickness_outline = "Dicke der Umrandung des Fadenkreuzes"
 L.label_crosshair_static_enable = "Aktiviere statisches Fadenkreuz"
 L.label_crosshair_dot_enable = "Aktiviere Fadenkreuz-Punkt"
+L.label_crosshair_lines_enable = "Aktiviere Fadenkreuz-Linien"
 L.label_crosshair_scale_enable = "Aktiviere die Skalierung des Fadenkreuzes"
 L.label_crosshair_ironsight_low_enabled = "Senke Waffe beim Zielen durch Kimme und Korn"
 L.label_damage_indicator_enable = "Aktiviere Schadensanzeige"
@@ -1280,8 +1276,3 @@ L.binoc_help_sec = "Ändere Zoom-Level."
 L.vis_help_pri = "Lass das aktivierte Gerät fallen."
 
 L.decoy_help_pri = "Platziere die Attrappe."
-
-L.set_cross_lines_enable = "Aktiviere Fadenkreuz-Linien"
-
--- 2020-08-11
-L.f1_settings_shop_desc_double_click = "Kaufe ein Item im Shop, indem du es doppelt anklickst."
