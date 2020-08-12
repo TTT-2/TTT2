@@ -251,7 +251,6 @@ L.item_weapon = "Broń"
 L.item_armor = "Kamizelka kuloodporna"
 --L.item_armor_desc = [[
 --Reduces bullet, fire and explosion damage. Depletes over time.
-
 --It can be purchased multiple times. After reaching a specific armor value, the armor becomes stronger.]]
 
 L.item_radar = "Radar"
@@ -1282,3 +1281,6 @@ L.button_close = "Zamknij"
 --L.decoy_help_pri = "Plant the Decoy."
 
 --L.set_cross_lines_enable = "Enable crosshair lines"
+
+-- 2020-08-11
+--L.f1_settings_shop_desc_double_click = "Enable to buy an item in the shop by double clicking on it."

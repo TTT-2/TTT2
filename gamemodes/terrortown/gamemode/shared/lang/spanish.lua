@@ -536,7 +536,7 @@ L.info_popup_traitor = [[
 ¡Eres un traidor! Colabora con tus camaradas asesinando a todos los demás.
 Ten cuidado, tu traición puede ser descubierta...
 
-Estos son tus compañeros: 
+Estos son tus compañeros:
 {traitorlist}
 
 ¡Pulsa {menukey} para recibir tu equipamiento especial!]]
@@ -1282,3 +1282,6 @@ L.vis_help_pri = "Soltar el dispositivo activo."
 L.decoy_help_pri = "Colocar el señuelo."
 
 L.set_cross_lines_enable = "Activar líneas de la mira"
+
+-- 2020-08-11
+--L.f1_settings_shop_desc_double_click = "Enable to buy an item in the shop by double clicking on it."

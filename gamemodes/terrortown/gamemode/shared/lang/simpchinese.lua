@@ -1282,3 +1282,6 @@ L.vis_help_pri = "丢弃当前设备。"
 L.decoy_help_pri = "安放诱饵。"
 
 L.set_cross_lines_enable = "启用十字准心线条"
+
+-- 2020-08-11
+--L.f1_settings_shop_desc_double_click = "Enable to buy an item in the shop by double clicking on it."
