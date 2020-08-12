@@ -18,12 +18,12 @@ local function AddBindingCategory(category, parent)
 			label = binding.label,
 			select = currentBinding,
 			default = binding.defaultKey,
-			onDisable = function(slf, binder)
+			OnDisable = function(slf, binder)
 				bind.Remove(currentBinding, binding.name, true)
 
 				binder:SetValue(bind.Find(binding.name))
 			end,
-			onChange = function(slf, keyNum)
+			OnChange = function(slf, keyNum)
 				if currentBinding == keyNum then return end
 
 				bind.Remove(currentBinding, binding.name, true)

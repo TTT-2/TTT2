@@ -215,8 +215,8 @@ function PANEL:MakeCheckBox(data)
 	left:SetValue(data.initial)
 
 	left.OnChange = function(slf, value)
-		if isfunction(data.onChange) then
-			data.onChange(slf, value)
+		if isfunction(data.OnChange) then
+			data.OnChange(slf, value)
 		end
 	end
 
@@ -275,8 +275,8 @@ function PANEL:MakeSlider(data)
 	right:SetValue(data.initial)
 
 	right.OnValueChanged = function(slf, value)
-		if isfunction(data.onChange) then
-			data.onChange(slf, value)
+		if isfunction(data.OnChange) then
+			data.OnChange(slf, value)
 		end
 	end
 
@@ -344,8 +344,8 @@ function PANEL:MakeComboBox(data)
 			RunConsoleCommand(slf.m_strConVar, tostring(rawdata or value))
 		end
 
-		if isfunction(data.onChange) then
-			data.onChange(slf, index, value, rawdata)
+		if isfunction(data.OnChange) then
+			data.OnChange(slf, index, value, rawdata)
 		end
 	end
 
@@ -395,14 +395,14 @@ function PANEL:MakeBinder(data)
 	right.binder:SetValue(data.select)
 
 	right.binder.OnChange = function(slf, keyNum)
-		if isfunction(data.onChange) then
-			data.onChange(slf, keyNum)
+		if isfunction(data.OnChange) then
+			data.OnChange(slf, keyNum)
 		end
 	end
 
 	right.disable.DoClick = function(slf)
-		if isfunction(data.onDisable) then
-			data.onDisable(slf, right.binder)
+		if isfunction(data.OnDisable) then
+			data.OnDisable(slf, right.binder)
 		end
 	end
 
@@ -500,8 +500,8 @@ function PANEL:MakeColorMixer(data)
 	colorMixer:Dock(FILL)
 
 	colorMixer.ValueChanged = function(slf, color)
-		if isfunction(data.onChange) then
-			data.onChange(slf, color)
+		if isfunction(data.OnChange) then
+			data.OnChange(slf, color)
 		end
 	end
 

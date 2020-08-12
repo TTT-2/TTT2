@@ -6,7 +6,7 @@ local function PopulateLanguagePanel(parent)
 	local dlang = form:MakeComboBox({
 		label = "label_language_set",
 		convar = "ttt_language",
-		onChange = function(slf, index, value, rawdata)
+		OnChange = function(slf, index, value, rawdata)
 			vguihandler.UpdateVSkinSetting("language")
 		end
 	})

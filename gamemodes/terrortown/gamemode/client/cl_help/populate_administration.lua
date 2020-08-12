@@ -22,7 +22,10 @@ local function PopulateHUDPanel(parent)
 		choices = validHUDsDefault,
 		selectName = ttt2net.GetGlobal({"hud_manager", "defaultHUD"}) or "None",
 		default = "None",
-		onSelect = function(_, _, value)
+		OnChange = function(_, _, value)
+			print("default HUD")
+			print(value)
+
 			net.Start("TTT2DefaultHUDRequest")
 			net.WriteString(value == "None" and "" or value)
 			net.SendToServer()
@@ -38,7 +41,10 @@ local function PopulateHUDPanel(parent)
 		choices = validHUDsRestriction,
 		selectName = ttt2net.GetGlobal({"hud_manager", "forcedHUD"}) or "None",
 		default = "None",
-		onSelect = function(_, _, value)
+		OnChange = function(_, _, value)
+			print("force HUD")
+			print(value)
+
 			net.Start("TTT2ForceHUDRequest")
 			net.WriteString(value == "None" and "" or value)
 			net.SendToServer()
@@ -58,7 +64,7 @@ local function PopulateHUDPanel(parent)
 			label = hud.id,
 			initial = not table.HasValue(restrictedHUDs, hud.id),
 			default = true,
-			onChange = function(_, value)
+			OnChange = function(_, value)
 				net.Start("TTT2RestrictHUDRequest")
 				net.WriteString(hud.id)
 				net.WriteBool(not value)

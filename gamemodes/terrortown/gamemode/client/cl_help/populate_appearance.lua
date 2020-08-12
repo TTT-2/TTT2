@@ -13,7 +13,7 @@ local function PopulateGeneralPanel(parent)
 	local enbColor = form:MakeCheckBox({
 		label = "label_global_color_enable",
 		initial = appearance.ShouldUseGlobalFocusColor(),
-		onChange = function(_, value)
+		OnChange = function(_, value)
 			appearance.SetUseGlobalFocusColor(value)
 		end,
 		default = false
@@ -22,7 +22,7 @@ local function PopulateGeneralPanel(parent)
 	form:MakeColorMixer({
 		label = "label_global_color",
 		initial = appearance.GetFocusColor(),
-		onChange = function(_, color)
+		OnChange = function(_, color)
 			appearance.SetFocusColor(color)
 		end,
 		master = enbColor
@@ -38,7 +38,7 @@ local function PopulateGeneralPanel(parent)
 		max = 3,
 		decimal = 1,
 		initial = appearance.GetGlobalScale(),
-		onChange = function(_, value)
+		OnChange = function(_, value)
 			appearance.SetGlobalScale(value)
 		end,
 		default = appearance.GetDefaultGlobalScale()
@@ -57,7 +57,7 @@ local function PopulateHUDSwitcherPanelSettings(parent, currentHUD)
 			parent:MakeColorMixer({
 				label = data.desc or key,
 				initial = currentHUD[key],
-				onChange = function(_, color)
+				OnChange = function(_, color)
 					currentHUD[key] = color
 
 					if isfunction(data.OnChange) then
@@ -77,7 +77,7 @@ local function PopulateHUDSwitcherPanelSettings(parent, currentHUD)
 				decimal = data.decimal or 1,
 				initial = math.Round(currentHUD[key] or 1, 1),
 				default = data.default,
-				onChange = function(_, value)
+				OnChange = function(_, value)
 					value = math.Round(value, 1)
 
 					if value ~= math.Round(currentHUD[key], 1) then
@@ -95,7 +95,7 @@ local function PopulateHUDSwitcherPanelSettings(parent, currentHUD)
 				label = data.desc or key,
 				initial = math.Round(currentHUD[key] or 1, 1),
 				default = data.default,
-				onChange = function(_, value)
+				OnChange = function(_, value)
 					value = value or false
 
 					if value ~= currentHUD[key] then
@@ -141,7 +141,7 @@ local function PopulateHUDSwitcherPanel(parent)
 		label = "label_hud_select",
 		choices = validHUDs,
 		selectName = currentHUDName,
-		onChange = function(_, _, value)
+		OnChange = function(_, _, value)
 			HUDManager.SetHUD(value)
 		end,
 		default = ttt2net.GetGlobal({"hud_manager", "defaultHUD"})
@@ -174,7 +174,7 @@ local function PopulateVSkinPanel(parent)
 		label = "label_vskin_select",
 		choices = vskin.GetVSkinList(),
 		selectName = vskin.GetVSkinName(),
-		onChange = function(_, _, value)
+		OnChange = function(_, _, value)
 			vskin.SelectVSkin(value)
 		end,
 		default = vskin.GetDefaultVSkinName()
@@ -183,7 +183,7 @@ local function PopulateVSkinPanel(parent)
 	form:MakeCheckBox({
 		label = "label_blur_enable",
 		initial = vskin.ShouldBlurBackground(),
-		onChange = function(_, value)
+		OnChange = function(_, value)
 			vskin.SetBlurBackground(value)
 		end,
 		default = true
