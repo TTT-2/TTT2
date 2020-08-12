@@ -20,6 +20,7 @@ local ipairs = ipairs
 local IsValid = IsValid
 local surface = surface
 local vgui = vgui
+
 local color_trans = Color(0, 0, 0, 0)
 
 local ttt2_indicator_dev = "vgui/ttt/ttt2_indicator_dev"
