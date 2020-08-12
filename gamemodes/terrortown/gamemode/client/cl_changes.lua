@@ -793,7 +793,7 @@ end
 net.Receive("TTT2DevChanges", function(len)
 	if changesVersion:GetString() == GAMEMODE.Version then return end
 
-	ShowChanges()
+	--ShowChanges()
 
 	RunConsoleCommand("changes_version", GAMEMODE.Version)
 end)

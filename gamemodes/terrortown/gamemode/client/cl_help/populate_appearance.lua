@@ -117,7 +117,7 @@ local function PopulateHUDSwitcherPanel(parent)
 	local currentHUDName = HUDManager.GetHUD()
 	local currentHUD = huds.GetStored(currentHUDName)
 	local hudList = huds.GetList()
-	local restrictedHUDs = HUDManager.GetModelValue("restrictedHUDs")
+	local restrictedHUDs = ttt2net.GetGlobal({"hud_manager", "restrictedHUDs"})
 	local validHUDs = {}
 
 	if not currentHUD.GetSavingKeys then
@@ -144,7 +144,7 @@ local function PopulateHUDSwitcherPanel(parent)
 		onChange = function(_, _, value)
 			HUDManager.SetHUD(value)
 		end,
-		default = HUDManager.GetModelValue("defaultHUD") or "None"
+		default = ttt2net.GetGlobal({"hud_manager", "defaultHUD"})
 	})
 
 	PopulateHUDSwitcherPanelSettings(CreateForm(parent, "header_hud_customize"), currentHUD)

@@ -251,6 +251,7 @@ L.item_weapon = "Broń"
 L.item_armor = "Kamizelka kuloodporna"
 --L.item_armor_desc = [[
 --Reduces bullet, fire and explosion damage. Depletes over time.
+
 --It can be purchased multiple times. After reaching a specific armor value, the armor becomes stronger.]]
 
 L.item_radar = "Radar"
