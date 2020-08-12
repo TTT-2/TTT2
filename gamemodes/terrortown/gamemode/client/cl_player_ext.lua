@@ -188,11 +188,9 @@ function GM:SetupMove(ply, mv, cmd)
 	-- the gamemode was inactive
 	oldScrW = appearance.GetLastWidth()
 	oldScrH = appearance.GetLastHeight()
-	scrW = ScrW()
-	scrH = ScrH()
 
-	if oldScrH ~= scrH or oldScrW ~= scrW then
-		hook.Run("TTT2ChangedResolution", oldScrW, oldScrH, scrW, scrH)
+	if oldScrH ~= ScrH() or oldScrW ~= ScrW() then
+		hook.Run("OnScreenSizeChanged", oldScrW, oldScrH)
 	end
 end
 

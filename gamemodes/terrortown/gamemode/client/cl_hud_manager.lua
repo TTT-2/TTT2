@@ -29,22 +29,6 @@ end
 function GM:HUDPaint()
 	local client = LocalPlayer()
 
-	-- Perform Layout
-	local scrW = ScrW()
-	local scrH = ScrH()
-	local changed = false
-
-	if client.oldScrW and client.oldScrW ~= scrW and client.oldScrH and client.oldScrH ~= scrH then
-		hook.Run("TTT2ChangedResolution", client.oldScrW, client.oldScrH, scrW, scrH)
-
-		changed = true
-	end
-
-	if changed or not client.oldScrW or not client.oldScrH then
-		client.oldScrW = scrW
-		client.oldScrH = scrH
-	end
-
 	if hook.Call("HUDShouldDraw", GAMEMODE, "TTTTargetID") then
 		hook.Call("HUDDrawTargetID", GAMEMODE)
 	end
@@ -69,20 +53,19 @@ function GM:HUDPaint()
 end
 
 ---
--- A hook that is called once the resolution is changed.
--- Additionally it is called directly after @{GM:TTT2PlayerReady}
--- if the resolution was changed without the gamemode
--- being loaded
+-- Called when the player's screen resolution of the game changes.
+-- ScrW and ScrH will return the new values when this hook is called.
+-- This hook is also called if the resolution was changed while not
+-- ingame after @{GM:TTT2PlayerReady} is called.
 -- @param number oldScrW The old screen width
 -- @param number oldScrH The old screen height
--- @param number scrW The new screen width
--- @param number scrH The new screen height
 -- @hook
+-- @ref https://wiki.facepunch.com/gmod/GM:OnScreenSizeChanged
 -- @ream client
-function GM:TTT2ChangedResolution(oldScrW, oldScrH, scrW, scrH)
+function GM:OnScreenSizeChanged(oldScrW, oldScrH)
 	-- resolution has changed, update resolution in appearance
 	-- to handle dynamic resolution changes
-	appearance.UpdateResolution(scrW, scrH)
+	appearance.UpdateResolution(ScrW(), ScrH())
 end
 
 -- Hide the standard HUD stuff
