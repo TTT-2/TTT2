@@ -31,6 +31,17 @@ function PANEL:Init()
 	self:SetPaintBackgroundEnabled(false)
 	self:SetPaintBorderEnabled(false)
 
+	self:SetVisible(true)
+	self:SetDraggable(true)
+	self:ShowCloseButton(true)
+	self:ShowBackButton(false)
+	self:SetDeleteOnClose(true)
+	self:SetBackgroundBlur(vskin.ShouldBlurBackground())
+	self:SetSkin("ttt2_default")
+
+	self:MakePopup()
+	self:SetKeyboardInputEnabled(false)
+
 	self.m_fCreateTime = SysTime()
 
 	self.title = {
@@ -39,6 +50,131 @@ function PANEL:Init()
 	}
 
 	self:SetPadding(5, 5, 5, 5)
+
+	self.panelData = {
+		hidden = false,
+		deleteOnClose = true,
+		callbacks = {}
+	}
+end
+
+---
+-- Function to hide a frame without deleting the panel data.
+-- @realm client
+function PANEL:HideFrame()
+	if self:IsFrameHidden() then return end
+
+	if isfunction(self.OnHide) then
+		local shouldCancel = self:OnHide() == false
+
+		if shouldCancel then return end
+	end
+
+	self.panelData.hidden = true
+	self.panelData.deleteOnClose = self:GetDeleteOnClose()
+
+	self:SetDeleteOnClose(false)
+	self:Close()
+end
+
+---
+-- Function to unhide a previously hidden frame.
+-- @realm client
+function PANEL:UnhideFrame()
+	if not self:IsFrameHidden() then return end
+
+	if isfunction(self.OnUnhide) then
+		local shouldCancel = self:OnUnhide() == false
+
+		if shouldCancel then return end
+	end
+
+	self.panelData.hidden = false
+
+	self:SetDeleteOnClose(self.panelData.deleteOnClose)
+	self:SetVisible(true)
+end
+
+---
+-- Returns if a frame is hidden.
+-- @return boolean Returns if this frame is hidden
+-- @realm client
+function PANEL:IsFrameHidden()
+	return self.panelData.hidden
+end
+
+---
+-- Clears the contents of this frame.
+-- @note If a new size is given, the position of the frame is reset
+-- @param[opt] number w The new width
+-- @param[opt] number h The new height
+-- @param[opt] string title The new title
+-- @realm client
+function PANEL:ClearFrame(w, h, title)
+	if isfunction(self.OnClear) then
+		local shouldCancel = self:OnClear() == false
+
+		if shouldCancel then return end
+	end
+
+	local oldW, oldH = self:GetSize()
+	local oldTitle = self:GetTitle()
+
+	self:Clear()
+	self:InitButtons()
+	self:ShowBackButton(false)
+
+	if w ~= oldW or h ~= oldH then
+		self:SetSize(w or oldW, h or oldH)
+		self:Center()
+	end
+
+	if title ~= oldTitle then
+		self:SetTitle(title or oldTitle)
+	end
+end
+
+---
+-- Closes the frame.
+-- @realm client
+function PANEL:CloseFrame()
+	self:SetDeleteOnClose(true)
+	self:Close()
+end
+
+---
+-- Function that is called when the frame is hidden, return false to cancel event.
+-- @return boolean Return false to cancel this event
+-- @hook
+-- @realm client
+function PANEL:OnHide()
+
+end
+
+---
+-- Function that is called when the frame is unhidden, return false to cancel event.
+-- @return boolean Return false to cancel this event
+-- @hook
+-- @realm client
+function PANEL:OnUnhide()
+
+end
+
+---
+-- Function that is called when the frame is rebuild
+-- @hook
+-- @realm client
+function PANEL:OnRebuild()
+
+end
+
+---
+-- Function that is called when the frame is cleared, return false to cancel event.
+-- @return boolean Return false to cancel this event
+-- @hook
+-- @realm client
+function PANEL:OnClear()
+
 end
 
 function PANEL:InitButtons()

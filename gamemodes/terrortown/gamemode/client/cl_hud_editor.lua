@@ -29,7 +29,7 @@ local function CreateEditOptions(x, y)
 
 	local editClose = menu:AddOption(LANG.GetTranslation("button_close"))
 	editClose.OnMousePressed = function(slf, keyCode)
-		vguihandler.UnhideFrame()
+		HELPSCRN.mainframe:UnhideFrame()
 
 		menu:Remove()
 	end

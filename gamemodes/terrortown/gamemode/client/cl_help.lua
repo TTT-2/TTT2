@@ -32,6 +32,7 @@ HELPSCRN.subPopulate = HELPSCRN.subPopulate or {}
 HELPSCRN.nameMenuOpen = HELPSCRN.nameMenuOpen or nil
 HELPSCRN.parent = HELPSCRN.parent or nil
 HELPSCRN.menuData = HELPSCRN.menuData or nil
+HELPSCRN.mainframe = HELPSCRN.mainframe or nil
 
 ttt_include("cl_help__populate")
 ttt_include("cl_help__populate_addons")
@@ -81,13 +82,16 @@ end
 -- Opens the help screen
 -- @realm client
 function HELPSCRN:ShowMainMenu()
+	local frame = self.mainframe
+
 	-- IF MENU ELEMENT DOES NOT ALREADY EXIST, CREATE IT
-	local frame
-	if self.nameMenuOpen and vguihandler.IsOpen() then
-		frame = vguihandler.ClearFrame(w, h, "help_title")
+	if IsValid(frame) and not frame:IsFrameHidden() then
+		frame:ClearFrame(nil, nil, "help_title")
 	else
 		frame = vguihandler.GenerateFrame(w, h, "help_title", true)
 	end
+
+	self.mainframe = frame
 
 	-- INIT MAIN MENU SPECIFIC STUFF
 	frame:SetPadding(self.pad, self.pad, self.pad, self.pad)
@@ -102,8 +106,8 @@ function HELPSCRN:ShowMainMenu()
 	-- SPLIT FRAME INTO A GRID LAYOUT
 	local dsettings = vgui.Create("DIconLayout", scrollPanel)
 	dsettings:Dock(FILL)
-	dsettings:SetSpaceX(HELPSCRN.pad)
-	dsettings:SetSpaceY(HELPSCRN.pad)
+	dsettings:SetSpaceX(self.pad)
+	dsettings:SetSpaceY(self.pad)
 
 	-- GENERATE MENU CONTENT
 	local menuTbl = {}
@@ -192,12 +196,13 @@ end
 -- @param table data The data of the submenu
 -- @realm client
 function HELPSCRN:ShowSubMenu(data)
+	local frame = self.mainframe
+
 	-- IF MENU ELEMENT DOES NOT ALREADY EXIST, CREATE IT
-	local frame
-	if self.nameMenuOpen and vguihandler.IsOpen() then
-		frame = vguihandler.ClearFrame(w, h, data.title or data.id)
+	if IsValid(frame) and not frame:IsFrameHidden() then
+		frame:ClearFrame(nil, nil, data.title or data.id)
 	else
-		frame = vguihandler.GenerateFrame(w, h, data.title or data.id, true)
+		frame = vguihandler.GenerateFrame(w, h, data.title or data.id)
 	end
 
 	-- INIT SUB MENU SPECIFIC STUFF
@@ -244,12 +249,12 @@ function HELPSCRN:ShowSubMenu(data)
 	-- SPLIT NAV AREA INTO A GRID LAYOUT
 	local navAreaScrollGrid = vgui.Create("DIconLayout", navAreaScroll)
 	navAreaScrollGrid:Dock(FILL)
-	navAreaScrollGrid:SetSpaceY(HELPSCRN.pad)
+	navAreaScrollGrid:SetSpaceY(self.pad)
 
 	local contentArea = vgui.Create("DContentPanelTTT2", frame)
 	contentArea:SetSize(widthContent, heightContent - vskin.GetHeaderHeight() - vskin.GetBorderSize())
 	contentArea:SetPos(widthNav, 0)
-	contentArea:DockPadding(HELPSCRN.pad, HELPSCRN.pad, HELPSCRN.pad, HELPSCRN.pad)
+	contentArea:DockPadding(self.pad, self.pad, self.pad, self.pad)
 	contentArea:Dock(TOP)
 
 	-- GENERATE MENU CONTENT
@@ -294,30 +299,33 @@ function HELPSCRN:ShowSubMenu(data)
 	end
 
 	-- REGISTER REBUILD CALLBACK
-	vguihandler.RegisterCallback("rebuild", function(menu)
+	frame.OnRebuild = function(slf)
 		if HELPSCRN.nameMenuOpen == "main" then return end
 
 		HELPSCRN:BuildContentArea()
-	end)
+	end
 end
 
 local function ShowTTTHelp(ply, cmd, args)
 	-- F1 PRESSED: CLOSE MAIN MENU IF MENU IS ALREADY OPENED
-	if HELPSCRN.nameMenuOpen == "main" and vguihandler.IsOpen() then
-		vguihandler.CloseFrame()
+	if HELPSCRN.nameMenuOpen == "main" and IsValid(HELPSCRN.mainframe) and not HELPSCRN.mainframe:IsFrameHidden() then
+		HELPSCRN.mainframe:CloseFrame()
+
+		print("closing")
 
 		return
 	end
 
 	-- F1 PRESSED AND MENU IS HIDDEN: UNHIDE
-	if HELPSCRN.nameMenuOpen and vguihandler.IsHidden() then
-		vguihandler.UnhideFrame()
+	if HELPSCRN.nameMenuOpen and IsValid(HELPSCRN.mainframe) and HELPSCRN.mainframe:IsFrameHidden() then
+		HELPSCRN.mainframe:UnhideFrame()
+
+		print("unhiding")
 
 		return
 	end
 
-	-- DO NOTHING IF OTHER MENU IS OPEN
-	if not HELPSCRN.nameMenuOpen and vguihandler.IsOpen() then return end
+	print("normal")
 
 	-- F1 PRESSED: CLOSE SUB MENU IF MENU IS ALREADY OPENED
 	-- AND OPEN MAIN MENU IN GENERAL
