@@ -65,7 +65,6 @@ TTTFiles = {
 	sh_sprint = {file = "sh_sprint.lua", on = "shared"},
 	sh_util = {file = "sh_util.lua", on = "shared"},
 	sh_voice = {file = "sh_voice.lua", on = "shared"},
-	sh_vskin = {file = "sh_vskin.lua", on = "shared"},
 	sh_speed = {file = "sh_speed.lua", on = "shared"},
 	sh_weaponry = {file = "sh_weaponry.lua", on = "shared"},
 

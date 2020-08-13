@@ -33,7 +33,6 @@ ttt_include("sh_weaponry")
 ttt_include("sh_inventory")
 ttt_include("sh_door")
 ttt_include("sh_voice")
-ttt_include("sh_vskin")
 ttt_include("sh_printmessage_override")
 ttt_include("sh_speed")
 
@@ -151,9 +150,14 @@ function GM:Initialize()
 		MsgN("Added TTT2 language file: ", path)
 	end)
 
-	-- load skin files
-	vskin.SetupFiles("terrortown/gamemode/shared/vskins/")
-	vskin.SetupFiles("vskins/")
+	-- load vskin files
+	fileloader.LoadFolder("terrortown/gamemode/shared/vskins/", false, CLIENT_FILE, function(path)
+		MsgN("Added TTT2 vskin file: ", path)
+	end)
+
+	fileloader.LoadFolder("terrortown/lang/", false, CLIENT_FILE, function(path)
+		MsgN("Added TTT2 vskin file: ", path)
+	end)
 
 	vskin.SelectVSkin()
 
