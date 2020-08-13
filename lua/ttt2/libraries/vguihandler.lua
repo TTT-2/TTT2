@@ -9,12 +9,10 @@ if SERVER then return end
 
 local table = table
 
-local function InternalUpdateVSkinSetting(name, panel)
-	if name == "blur" then
-		panel:SetBackgroundBlur(vskin.ShouldBlurBackground())
+local colorBackground = Color(10, 10, 10, 200)
 
-		panel:InvalidateLayout()
-	elseif name == "skin" then
+local function InternalUpdateVSkinSetting(name, panel)
+	if name == "skin" then
 		panel:InvalidateLayout()
 	elseif name == "language" then
 		panel:InvalidateLayout()
@@ -152,4 +150,14 @@ function vguihandler.IsOpen()
 	end
 
 	return false
+end
+
+function vguihandler.DrawBackground()
+	if not vguihandler.IsOpen() or not vskin.ShouldBlurBackground() then return end
+
+	local width = ScrW()
+	local height = ScrH()
+
+	draw.BlurredBox(0, 0, width, height, 1)
+	draw.Box(0, 0, width, height, colorBackground)
 end

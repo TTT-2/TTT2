@@ -91,8 +91,6 @@ end
 -- @realm client
 function vskin.SetBlurBackground(state)
 	cv_blurVSkin:SetBool(state == nil and true or state)
-
-	vguihandler.UpdateVSkinSetting("blur")
 end
 
 ---

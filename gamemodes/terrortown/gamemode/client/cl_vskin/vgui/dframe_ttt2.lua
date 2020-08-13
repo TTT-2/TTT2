@@ -36,7 +36,7 @@ function PANEL:Init()
 	self:ShowCloseButton(true)
 	self:ShowBackButton(false)
 	self:SetDeleteOnClose(true)
-	self:SetBackgroundBlur(vskin.ShouldBlurBackground())
+	self:SetBackgroundBlur(false)
 	self:SetSkin("ttt2_default")
 
 	self:MakePopup()

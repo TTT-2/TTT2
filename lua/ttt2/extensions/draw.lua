@@ -1,5 +1,3 @@
-if engine.ActiveGamemode() ~= "terrortown" then return end
-
 ---
 -- draw extension functions
 -- @author Mineotopia
@@ -17,6 +15,8 @@ local mathRound = math.Round
 
 local shadowColorDark = Color(0, 0, 0, 220)
 local shadowColorWhite = Color(0, 0, 0, 75)
+
+local materialBlurScreen = Material("pp/blurscreen")
 
 ---
 -- A function to draw an outlined box with a definable width
@@ -129,10 +129,10 @@ end
 
 ---
 -- Draws a filtered textured rectangle / image / icon
--- @param number x
--- @param number y
--- @param number w width
--- @param number h height
+-- @param number x The vertical position
+-- @param number y The horizontal position
+-- @param number w width The width in reference to the vertical position
+-- @param number h height The height in reference to the horizontal position
 -- @param Material material
 -- @param[default=255] number alpha
 -- @param[default=COLOR_WHITE] Color col the alpha value will be ignored
@@ -158,10 +158,10 @@ local drawFilteredTexture = draw.FilteredTexture
 
 ---
 -- Draws a filtered textured rectangle / image / icon with shadow
--- @param number x
--- @param number y
--- @param number w width
--- @param number h height
+-- @param number x The vertical position
+-- @param number y The horizontal position
+-- @param number w width The width in reference to the vertical position
+-- @param number h height The height in reference to the horizontal position
 -- @param Material material
 -- @param[default=255] number alpha
 -- @param[default=COLOR_WHITE] Color col the alpha value will be ignored
@@ -182,4 +182,29 @@ function draw.FilteredShadowedTexture(x, y, w, h, material, alpha, color, scale)
 	drawFilteredTexture(x + shift_tex_2, y + shift_tex_2, w, h, material, tmpCol.a, tmpCol)
 	drawFilteredTexture(x + shift_tex_1, y + shift_tex_1, w, h, material, tmpCol.a, tmpCol)
 	drawFilteredTexture(x, y, w, h, material, alpha, color)
+end
+
+---
+-- Draws a box that uses the rendered screenspace as a blurred background.
+-- @param number x The vertical position
+-- @param number y The horizontal position
+-- @param number w width The width in reference to the vertical position
+-- @param number h height The height in reference to the horizontal position
+-- @param[default=1] number fraction The blur fraction. The higher, the blurrier
+-- @2D
+-- @realm client
+function draw.BlurredBox(x, y, w, h, fraction)
+	fraction = fraction or 1
+
+	surface.SetMaterial(materialBlurScreen)
+	surface.SetDrawColor(255, 255, 255, 255)
+
+	for i = 0.33, 1, 0.33 do
+		materialBlurScreen:SetFloat("$blur", fraction * i * 5)
+		materialBlurScreen:Recompute()
+
+		render.UpdateScreenEffectTexture()
+
+		surface.DrawTexturedRect(x, y, ScrW(), ScrH())
+	end
 end

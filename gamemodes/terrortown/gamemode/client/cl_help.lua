@@ -311,8 +311,6 @@ local function ShowTTTHelp(ply, cmd, args)
 	if HELPSCRN.nameMenuOpen == "main" and IsValid(HELPSCRN.mainframe) and not HELPSCRN.mainframe:IsFrameHidden() then
 		HELPSCRN.mainframe:CloseFrame()
 
-		print("closing")
-
 		return
 	end
 
@@ -320,12 +318,8 @@ local function ShowTTTHelp(ply, cmd, args)
 	if HELPSCRN.nameMenuOpen and IsValid(HELPSCRN.mainframe) and HELPSCRN.mainframe:IsFrameHidden() then
 		HELPSCRN.mainframe:UnhideFrame()
 
-		print("unhiding")
-
 		return
 	end
-
-	print("normal")
 
 	-- F1 PRESSED: CLOSE SUB MENU IF MENU IS ALREADY OPENED
 	-- AND OPEN MAIN MENU IN GENERAL

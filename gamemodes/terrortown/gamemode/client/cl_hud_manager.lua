@@ -53,6 +53,17 @@ function GM:HUDPaint()
 end
 
 ---
+-- Called after @{GM:PreDrawHUD}, @{GM:HUDPaintBackground} and @{GM:HUDPaint} but before @{GM:DrawOverlay}.
+-- @2D
+-- @hook
+-- @realm client
+-- @ref https://wiki.facepunch.com/gmod/GM:PostDrawHUD
+-- @local
+function GM:PostDrawHUD()
+	vguihandler.DrawBackground()
+end
+
+---
 -- Called when the player's screen resolution of the game changes.
 -- ScrW and ScrH will return the new values when this hook is called.
 -- This hook is also called if the resolution was changed while not
