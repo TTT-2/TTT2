@@ -1094,7 +1094,7 @@ L.hud_health = "生命"
 --L.menu_addons_description = "Configure local addons to your liking"
 --L.menu_legacy_description = "A panel with converted tabs from original TTT, they should be ported over to the new system"
 --L.menu_administration_description = "General settings for HUDs, shops etc"
---L.menu_equipment_description = "Set credits, limitations, avilability and other stuff"
+--L.menu_equipment_description = "Set credits, limitations, availability and other stuff"
 --L.menu_shops_description = "Add/Remove shops to roles and define the equipment in it"
 
 --L.submenu_guide_gameplay_title = "Gameplay"
