@@ -1,4 +1,5 @@
 ---
+-- @desc A collection of objects that are passed in the menu populate hooks.
 -- @author Mineotopia
 
 HELP_DATA = {}
@@ -8,7 +9,7 @@ local HELP_DATA_OBJECT = {}
 ---
 -- Binds data table to the @{HELP_DATA} object
 -- @param table data The data table with all submenues
--- @return @{HELP_DATA} The object to be used in the hook
+-- @return @{HELP_DATA} The object to be used in the hook to populate the menu
 -- @internal
 -- @realm client
 function HELP_DATA:BindData(menuTbl)
@@ -54,7 +55,7 @@ end
 -- @return table A table of all menues
 -- @internal
 -- @realm client
-function HELP_DATA:GetNormalMenues()
+function HELP_DATA:GetVisibleNormalMenues()
 	local menuTbl = {}
 
 	for i = 1, #self.menuTbl do
@@ -79,7 +80,7 @@ end
 -- @return table A table of all menues
 -- @internal
 -- @realm client
-function HELP_DATA:GetAdminMenues()
+function HELP_DATA:GetVisibleAdminMenues()
 	local client = LocalPlayer()
 	local menuTbl = {}
 

@@ -4,7 +4,7 @@
 
 AddCSLuaFile()
 
--- the rest of the draw library is client only
+-- the rest of the vguihandler library is client only
 if SERVER then return end
 
 local table = table
@@ -120,7 +120,7 @@ function vguihandler.UpdateVSkinSetting(name)
 end
 
 ---
--- Rebuilds the whole menu without a specific changed settings
+-- Rebuilds the whole menu without a specific changed setting.
 -- @realm client
 function vguihandler.Rebuild()
 	local frames = vguihandler.frames
@@ -152,6 +152,11 @@ function vguihandler.IsOpen()
 	return false
 end
 
+---
+-- Draws the background behind the opened vgui menues. It is called in
+-- @{GM:PostDrawHUD}.
+-- @internal
+-- @realm client
 function vguihandler.DrawBackground()
 	if not vguihandler.IsOpen() or not vskin.ShouldBlurBackground() then return end
 

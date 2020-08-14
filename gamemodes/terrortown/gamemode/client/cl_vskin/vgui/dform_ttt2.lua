@@ -68,114 +68,6 @@ function PANEL:AddItem(left, right, reset)
 	self.Items[#self.Items + 1] = panel
 end
 
-function PANEL:TextEntry(strLabel, strConVar)
-	local left = vgui.Create("DLabelTTT2", self)
-
-	left:SetText(strLabel)
-	left:SetDark(true)
-
-	local right = vgui.Create("DTextEntry", self)
-
-	right:SetConVar(strConVar)
-	right:Dock(TOP)
-
-	self:AddItem(left, right)
-
-	return right, left
-end
-
-function PANEL:NumberWang(strLabel, strConVar, numMin, numMax, numDecimals)
-	local left = vgui.Create("DLabelTTT2", self)
-
-	left:SetText(strLabel)
-	left:SetDark(true)
-
-	local right = vgui.Create("DNumberWang", self)
-
-	right:SetMinMax(numMin, numMax)
-
-	if numDecimals ~= nil then
-		right:SetDecimals(numDecimals)
-	end
-
-	right:SetConVar(strConVar)
-	right:SizeToContents()
-
-	self:AddItem(left, right)
-
-	return right, left
-end
-
-function PANEL:ControlHelp(strHelp)
-	local panel = vgui.Create("DSizeToContents", self)
-
-	panel:SetSizeX(false)
-	panel:Dock(TOP)
-	panel:InvalidateLayout()
-
-	local left = vgui.Create("DLabelTTT2", panel)
-
-	left:SetDark(true)
-	left:SetWrap(true)
-	left:SetTextInset(0, 0)
-	left:SetText(strHelp)
-	left:SetContentAlignment(5)
-	left:SetAutoStretchVertical(true)
-	left:DockMargin(32, 0, 32, 8)
-	left:Dock(TOP)
-	left:SetTextColor(self:GetSkin().Colours.Tree.Hover)
-
-	self.Items[#self.Items + 1] = panel
-
-	return left
-end
-
---[[---------------------------------------------------------
-	Note: If you're running a console command like "maxplayers 10" you
-	need to add the "10" to the arguments, like so
-	Button("LabelName", "maxplayers", "10")
------------------------------------------------------------]]
-function PANEL:Button(strName, strConCommand, ...)
-	local left = vgui.Create("DButton", self)
-
-	if strConCommand then
-		left:SetConsoleCommand(strConCommand, ...)
-	end
-
-	left:SetText(strName)
-	self:AddItem(left, nil)
-
-	return left
-end
-
-function PANEL:PanelSelect()
-	local left = vgui.Create("DPanelSelect", self)
-
-	self:AddItem(left, nil)
-
-	return left
-end
-
-function PANEL:ListBox(strLabel)
-	local left
-
-	if strLabel then
-		left = vgui.Create("DLabelTTT2", self)
-
-		left:SetText(strLabel)
-		left:SetDark(true)
-
-		self:AddItem(left)
-	end
-
-	local right = vgui.Create("DListBox", self)
-	right.Stretch = true
-
-	self:AddItem(right)
-
-	return right, left
-end
-
 function PANEL:Rebuild()
 
 end
@@ -489,8 +381,6 @@ function PANEL:MakeColorMixer(data)
 	right:DockPadding(10, 10, 10, 10)
 
 	left:SetText(data.label)
-
-
 
 	local colorMixer = vgui.Create("DColorMixer", right)
 

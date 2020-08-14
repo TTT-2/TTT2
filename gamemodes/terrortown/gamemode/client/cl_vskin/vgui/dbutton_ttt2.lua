@@ -5,9 +5,6 @@ AccessorFunc(PANEL, "m_bBorder", "DrawBorder", FORCE_BOOL)
 function PANEL:Init()
 	self:SetContentAlignment(5)
 
-	--self:SetDrawBorder(true)
-	--self:SetPaintBackground(true)
-
 	self:SetTall(22)
 	self:SetMouseInputEnabled(true)
 	self:SetKeyboardInputEnabled(true)
@@ -49,13 +46,5 @@ function PANEL:SizeToContents()
 
 	self:SetSize(w + 8, h + 4)
 end
-
---function PANEL:GenerateExample(ClassName, PropertySheet, Width, Height)
---	local ctrl = vgui.Create(ClassName)
---	ctrl:SetText("Example Button")
---	ctrl:SetWide(200)
-
---	PropertySheet:AddSheet(ClassName, ctrl, nil, true, true)
---end
 
 derma.DefineControl("DButtonTTT2", "A standard Button", PANEL, "DLabelTTT2")

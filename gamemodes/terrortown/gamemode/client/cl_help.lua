@@ -117,8 +117,8 @@ function HELPSCRN:ShowMainMenu()
 
 	hook.Run("TTT2ModifyMainMenu", helpData)
 
-	local menuesNormal = helpData:GetNormalMenues()
-	local menuesAdmin = helpData:GetAdminMenues()
+	local menuesNormal = helpData:GetVisibleNormalMenues()
+	local menuesAdmin = helpData:GetVisibleAdminMenues()
 
 	AddMenuButtons(menuesNormal, dsettings)
 
@@ -136,14 +136,14 @@ end
 
 ---
 -- Returns the name of the currently open menu
--- @return string The name of the open menu
+-- @return string The id of the opened menu
 -- @realm client
 function HELPSCRN:GetOpenMenu()
 	return self.nameMenuOpen and self.menuData.id
 end
 
 ---
--- Sets up the data for the content area without actually adding building the area
+-- Sets up the data for the content area without actually building the area
 -- @param Panel parent The parent panel
 -- @param table menuData The menu content table
 -- @realm client
@@ -329,7 +329,7 @@ concommand.Add("ttt_helpscreen", ShowTTTHelp)
 
 ---
 -- A hook that is called once the content area of the helpscreen
--- is cleared, clearing is stopped if false is returned
+-- is about to be cleared, clearing is stopped if false is returned.
 -- @param Panel parent The parent panel
 -- @param string nameMenuOpen The name of the opened submenu
 -- @param table lastMenuData The menu data of the menu that will be closed

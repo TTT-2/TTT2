@@ -1,10 +1,10 @@
 ---
--- A handler of the skin colors
+-- A handler for the skin colors
 -- @author Mineotopia
 
 AddCSLuaFile()
 
--- the rest of the draw library is client only
+-- the rest of the vskin library is client only
 if SERVER then return end
 
 local cv_selectedVSkin = CreateConVar("ttt2_selected_vskin", "dark_ttt2", {FCVAR_ARCHIVE})

@@ -4,7 +4,7 @@
 
 AddCSLuaFile()
 
--- the rest of the draw library is client only
+-- the rest of the appearce library is client only
 if SERVER then return end
 
 local cv_last_width = CreateConVar("ttt2_resolution_last_width", 1920, {FCVAR_ARCHIVE})
