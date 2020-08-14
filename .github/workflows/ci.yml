@@ -1,0 +1,31 @@
+name: CI
+
+env:
+  GLUALINT_VERSION: 1.16.2
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  lint:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Download & extract glualint
+      run: |
+        wget -c https://github.com/FPtje/GLuaFixer/releases/download/${GLUALINT_VERSION}/glualint-${GLUALINT_VERSION}-linux.zip -O glualint.zip
+        unzip -u glualint.zip
+        rm glualint.zip
+
+    - name: Check code with glualint
+      run: ./glualint .
