@@ -7,6 +7,18 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Added
 
 - Added ConVar to toggle double-click buying
+- Added a new vgui system
+  - the F1 menu is completely overhauled
+  - introduced new development interfaces to easily create menues and settings for addons
+- Introduced a global scale factor
+  - based on a 1080p resolution and automatically adjusted to the current screen resolution (i.e. a 4k display has a default scale factor of 2)
+  - used by the HUD
+- Added automatical scale factor change on resolution change that works even if the resolution was changed while TTT2 wasn't loaded
+
+### Changed
+
+- Cleaned up language files, they are now identical on a line by line comparison
+- Inverted some convars to have a uniform "Enable feature X", not a mixture of enable and disable
 
 ### Fixed
 
@@ -20,7 +32,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - it basically works the same as the native file loader
   - there are three subfolders: `client`, `server` and `shared`
   - the files inside this folder are loaded after all TTT2 gamemode files and library extensions are loaded
-- Added Spanish version for base addon   (by @Tekiad and @DennisWolfgang)
+- Added Spanish version for base addon (by @Tekiad and @DennisWolfgang)
 - Added Chinese Simplified translation (by @TheOnly8Z)
 - Added double-click buying
 - Added a default avatar for players and an avatar for bots
