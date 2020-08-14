@@ -124,7 +124,7 @@ function PANEL:ClearFrame(w, h, title)
 	self:InitButtons()
 	self:ShowBackButton(false)
 
-	if w ~= oldW or h ~= oldH then
+	if (w and w ~= oldW) or (h and h ~= oldH) then
 		self:SetSize(w or oldW, h or oldH)
 		self:Center()
 	end

@@ -239,7 +239,7 @@ function HELPSCRN:ShowSubMenu(data)
 
 	local navAreaContent = vgui.Create("DPanel", navArea)
 	navAreaContent:SetPos(0, heightNavHeader)
-	navAreaContent:SetSize(widthNavContent, heightNavContent)
+	navAreaContent:SetSize(widthNavContent, heightNavContent - vskin.GetHeaderHeight() - vskin.GetBorderSize())
 
 	-- MAKE NAV AREA SCROLLABLE
 	local navAreaScroll = vgui.Create("DScrollPanel", navAreaContent)
