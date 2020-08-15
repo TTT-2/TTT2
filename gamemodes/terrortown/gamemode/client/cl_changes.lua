@@ -761,6 +761,45 @@ function CreateChanges()
 		</ul>
 	]], os.time({year = 2020, month = 06, day = 26}))
 
+	AddChange("TTT2 Base - v0.7.3b", [[
+		<h2>New:</h2>
+		<ul>
+			<li>Added a new custom file loader that loads lua files from <i>lua/terrortown/autorun/</i></li>
+			<ul>
+				<li>it basically works the same as the native file loader</li>
+				<li>there are three subfolders: <i>client</i>, <i>server</i> and <i>shared</i></li>
+				<li>the files inside this folder are loaded after all TTT2 gamemode files and library extensions are loaded</li>
+			</ul>
+			<li>Added Spanish version for base addon   (by @Tekiad and @DennisWolfgang)</li>
+			<li>Added Chinese Simplified translation (by @TheOnly8Z)</li>
+			<li>Added double-click buying</li>
+			<li>Added a default avatar for players and an avatar for bots</li>
+		</ul>
+		<br>
+		<h2>Improved:</h2>
+		<ul>
+			<li>Roles are now only getting synced to clients if the role is known, not just the body being confirmed</li>
+			<li>Airborne players can no longer replenish stamina</li>
+			<li>Detective overhead icon is now shown to innocents and traitors</li>
+			<li>moved language files from <i>lua/lang/</i> to <i>lua/terrortown/lang</i></li>
+			<li>Stopped teleporting players to players they're not spectating if they press the "duck"-Key while roaming</li>
+			<li>Moved shop's equipment list generation into a coroutine</li>
+			<li>Removed TTT2PlayerAuthedCacheReady hook</li>
+			<li>Internal changes to the b-draw library for fetching avatars</li>
+		</ul>
+		<br>
+		<h2>Fixed:</h2>
+		<ul>
+			<li>Fixed death handling spawning multiple corpses when killed multiple times in the same frame</li>
+			<li>Radar now shows bombs again, that do not have the team property set</li>
+			<li>Fix HUDManager not saving forcedHUD and defaultHUD values</li>
+			<li>Fixed wrong parameter default in <i>EPOP:AddMessage</i> documentation</li>
+			<li>Fixed shop switching language issue</li>
+			<li>Fixed shop refresh activated even not buyable equipments</li>
+			<li>Fixed wrong shop view displayed as forced spectator</li>
+		</ul>
+	]], os.time({year = 2020, month = 08, day = 09}))
+
 	-- run hook for other addons to add their changelog as well
 	hook.Run("TTT2AddChange", changes, currentVersion)
 end

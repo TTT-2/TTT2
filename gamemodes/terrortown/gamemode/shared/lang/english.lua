@@ -1308,7 +1308,9 @@ L.decoy_help_pri = "Plant the Decoy."
 
 L.set_cross_lines_enable = "Enable crosshair lines"
 
--- 2020-08-07
 L.pickup_error_spec = "You cannot pickup this as a spectator."
 L.pickup_error_owns = "You cannot pickup this because you already own the same weapon."
 L.pickup_error_noslot = "You cannot pickup this because you have no free slot available."
+
+-- 2020-08-11
+L.f1_settings_shop_desc_double_click = "Enable to buy an item in the shop by double clicking on it."
