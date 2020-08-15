@@ -333,15 +333,15 @@ L.item_radar_desc = [[
 Permite detectar señales de vida.
 
 Empieza por si solo luego de ser comprado.
-Configúrelo en la pestaña del 
+Configúrelo en la pestaña del
 radar.]]
 
 L.item_disg = "Disfraz"
 L.item_disg_desc = [[
-Esconde tu ID mientras está en uso. Además evade 
+Esconde tu ID mientras está en uso. Además evade
 ser la última persona vista por un muerto.
 
-Actívalo en la pestaña disfraz de este menú 
+Actívalo en la pestaña disfraz de este menú
 o presiona el numpad Enter.]]
 
 -- C4
@@ -383,8 +383,8 @@ L.vis_short_desc = "Visualiza la escena del crimen si la víctima murió por una
 L.vis_desc = [[
 Dispositivo para visualizar crímenes.
 
-Analiza el cuerpo para saber cómo 
-la víctima fue aseinada, únicamente 
+Analiza el cuerpo para saber cómo
+la víctima fue aseinada, únicamente
 si murió por heridas de bala.]]
 
 -- Decoy
@@ -397,8 +397,8 @@ L.decoy_pickup_wrong_team = "No puedes recogerlo porque pertenece a otro equipo"
 
 L.decoy_desc = [[
 Muestra una señal falsa en el radar,
-y hace que el escáner ADN muestre una falsa 
-localización del señuelo si alguien escanea 
+y hace que el escáner ADN muestre una falsa
+localización del señuelo si alguien escanea
 tu ADN.]]
 
 -- Defuser
@@ -408,16 +408,16 @@ L.defuser_help = "{primaryfire} desactiva el C4."
 L.defuser_desc = [[
 Desactiva instantáneamente un C4.
 
-Usos ilimitados. El C4 será más fácil 
+Usos ilimitados. El C4 será más fácil
 de ver si llevas esto.]]
 
 -- Flare gun
 L.flare_name = "Pistola de Bengalas"
 L.flare_desc = [[
-Puede ser usada para quemar cadáveres 
+Puede ser usada para quemar cadáveres
 para nunca ser encontrados. Munición limitada.
 
-Quemar un cuerpo hace un 
+Quemar un cuerpo hace un
 sonido distintivo.]]
 
 -- Health station
@@ -434,8 +434,8 @@ L.hstation_help = "{primaryfire} coloca la Estación de Curación."
 L.hstation_desc = [[
 Permite que las personas se curen.
 
-Recarga lenta. Cualquiera puede usarlo y 
-puede ser dañada. Puede chequearse por el ADN 
+Recarga lenta. Cualquiera puede usarlo y
+puede ser dañada. Puede chequearse por el ADN
 de las personas que lo usen.]]
 
 -- Knife
@@ -443,17 +443,17 @@ L.knife_name = "Cuchillo"
 L.knife_thrown = "Cuchillo arrojadizo"
 
 L.knife_desc = [[
-Mata a los objetivos heridos instantáneamente y 
+Mata a los objetivos heridos instantáneamente y
 de manera silenciosa, pero tiene un solo uso.
 
 Puede ser arrojado con el disparo alternativo (Click2).]]
 
 -- Poltergeist
 L.polter_desc = [[
-Planta proyectiles en entidades para sacarlas 
+Planta proyectiles en entidades para sacarlas
 volando violentamente.
 
-El daño de energía daña a las personas en 
+El daño de energía daña a las personas en
 corta distancia.]]
 
 -- Radio
@@ -461,17 +461,17 @@ L.radio_broken = "¡Tu radio fue destruida!"
 L.radio_help_pri = "{primaryfire} coloca la Radio."
 
 L.radio_desc = [[
-Reproduce sonidos para distraer o confundir. 
+Reproduce sonidos para distraer o confundir.
 
-Coloca la radio y luego 
-reproduce sonidos en la pestaña de Radio 
+Coloca la radio y luego
+reproduce sonidos en la pestaña de Radio
 en este menú.]]
 
 -- Silenced pistol
 L.sipistol_name = "Pistola Silenciada"
 
 L.sipistol_desc = [[
-Pistola de bajo sonido, usa munición de pistola 
+Pistola de bajo sonido, usa munición de pistola
 común.
 
 Las víctimas asesinadas con este arma no gritarán al morir.]]
@@ -487,15 +487,15 @@ Munición infita pero disparo lento.]]
 -- Binoculars
 L.binoc_name = "Binoculares"
 L.binoc_desc = [[
-Apunta a los cadáveres e identifícalos 
+Apunta a los cadáveres e identifícalos
 desde una distancia lejana.
 
-Usos ilimitados pero la identificación 
+Usos ilimitados pero la identificación
 toma unos segundos.]]
 
 -- UMP
 L.ump_desc = [[
-SMG Experimental que desorienta 
+SMG Experimental que desorienta
 a tus objetivos.
 
 Usa la munición estándar de las SMGs.]]
@@ -517,7 +517,7 @@ L.dna_screen_ready = "Sin ADN"
 L.dna_screen_match = "Duplicado"
 
 L.dna_desc = [[
-Toma muestras de ADN a las cosas 
+Toma muestras de ADN a las cosas
 y úsalas para encontrar el dueño del ADN.
 
 Úsalo en cuerpos frescos para encontrar el ADN del asesino
@@ -555,7 +555,7 @@ L.tele_help_sec = "{secondaryfire} marca la ubicación actual."
 L.tele_desc = [[
 Lo teletransporta a una ubicación marcada previamente.
 
-Teletransportarse hace ruido y el 
+Teletransportarse hace ruido y el
 número de usos es limitado.]]
 
 -- Ammo names, shown when picked up
@@ -681,7 +681,7 @@ L.info_popup_traitor_alone = [[¡Eres un traidor! No tendrás camaradas esta ron
 L.info_popup_traitor = [[¡Eres un traidor! Colabora con tus camaradas asesinando a todos los demás.
 Ten cuidado, tu traición puede ser descubierta...
 
-Estos son tus compañeros: 
+Estos son tus compañeros:
 {traitorlist}
 
 ¡Pulsa {menukey} para recibir tu equipamiento especial!]]
@@ -1307,3 +1307,6 @@ L.vis_help_pri = "Soltar el dispositivo activo."
 L.decoy_help_pri = "Colocar el señuelo."
 
 L.set_cross_lines_enable = "Activar líneas de la mira"
+
+-- 2020-08-11
+--L.f1_settings_shop_desc_double_click = "Enable to buy an item in the shop by double clicking on it."

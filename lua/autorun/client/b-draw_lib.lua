@@ -65,7 +65,7 @@ local function FetchAvatarAsset(id64, size)
 	end
 
 	fetch("http://steamcommunity.com/profiles/" .. id64 .. "/?xml=1", function(body)
-		local link = body:match("<avatarIcon><%!%[CDATA%[(.*)%]%]><%/avatarIcon>")
+		local link = body:match("<avatarIcon><%!%[CDATA%[(.-)%]%]><%/avatarIcon>")
 
 		if not link then return end
 
