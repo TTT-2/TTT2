@@ -1265,19 +1265,32 @@ function plymeta:Give(weaponClassName, bNoAmmo)
 end
 
 ---
--- Called to drop a weapon in a safe manner (e.g. preparing and space-check)
--- @param Weapon wep
+-- Checks if the weapon can be dropped in a safely manner.
+-- @param Weapon wep The weapon that should be dropped
+-- @return boolean Returns if this weapon can be dropped
 -- @realm server
-function plymeta:SafeDropWeapon(wep, keep_selection)
-	if not IsValid(wep) or not wep.AllowDrop then return end
+function plymeta:CanSafeDropWeapon(wep)
+	if not IsValid(wep) or not wep.AllowDrop then
+		return false
+	end
 
 	local tr = util.QuickTrace(self:GetShootPos(), self:GetAimVector() * 32, self)
 
-	if tr.HitWorld then
-		LANG.Msg(self, "drop_no_room", nil, MSG_CHAT_WARN)
+	if tr.Hit then
+		LANG.Msg(self, "drop_no_room", nil, MSG_MSTACK_WARN)
 
-		return
+		return false
 	end
+
+	return true
+end
+
+---
+-- Called to drop a weapon in a safe manner (e.g. preparing and space-check).
+-- @param Weapon wep The weapon that should be dropped
+-- @realm server
+function plymeta:SafeDropWeapon(wep, keep_selection)
+	if not self:CanSafeDropWeapon(wep) then return end
 
 	self:AnimPerformGesture(ACT_GMOD_GESTURE_ITEM_PLACE)
 
@@ -1315,8 +1328,6 @@ function plymeta:CanPickupWeaponClass(wepCls, forcePickup, dropBlockingWeapon)
 	return self:CanPickupWeapon(wep, forcePickup, dropBlockingWeapon)
 end
 
-local plymeta_old_PickupWeapon = plymeta.PickupWeapon
-
 ---
 -- This function simplifies the weapon pickup process for a player by
 -- handling all the needed calls.
@@ -1327,13 +1338,18 @@ local plymeta_old_PickupWeapon = plymeta.PickupWeapon
 -- @param nil|boolean shouldAutoSelect Should this weapon be autoselected after equip, if not set this value is set by player keypress
 -- @returns Weapon if successful, nil if not
 -- @realm server
-function plymeta:PickupWeapon(wep, ammoOnly, forcePickup, dropBlockingWeapon, shouldAutoSelect)
+function plymeta:SafePickupWeapon(wep, ammoOnly, forcePickup, dropBlockingWeapon, shouldAutoSelect)
 	if not IsValid(wep) then
 		ErrorNoHalt(tostring(self) .. " tried to pickup an invalid weapon " .. tostring(wep) .. "\n")
+
 		LANG.Msg(self, "pickup_fail")
 
 		return
 	end
+
+	-- block weapon switch if slot is occupied and there is no room to
+	-- drop the weapon safely
+	if not InventorySlotFree(self, wep.Kind) and not self:CanSafeDropWeapon(wep) then return end
 
 	local ret, errCode = self:CanPickupWeapon(wep, forcePickup or true, dropBlockingWeapon)
 
@@ -1378,7 +1394,7 @@ function plymeta:PickupWeapon(wep, ammoOnly, forcePickup, dropBlockingWeapon, sh
 		end
 	end
 
-	if not plymeta_old_PickupWeapon(self, wep, ammoOnly or false) then return end
+	if not self:PickupWeapon(wep, ammoOnly or false) then return end
 
 	wep.wpickup_autoSelect = shouldAutoSelect
 
@@ -1393,7 +1409,7 @@ end
 -- @param boolean shouldAutoSelect Should this weapon be autoselected after equip, if not set this value is set by player keypress
 -- @returns Weapon if successful, nil if not
 -- @realm server
-function plymeta:PickupWeaponClass(wepCls, dropBlockingWeapon, shouldAutoSelect)
+function plymeta:SafePickupWeaponClass(wepCls, dropBlockingWeapon, shouldAutoSelect)
 	-- if the variable is not set, set it fitting to the keypress
 	if shouldAutoSelect == nil then
 		shouldAutoSelect = not self:KeyDown(IN_WALK) and not self:KeyDownLast(IN_WALK)

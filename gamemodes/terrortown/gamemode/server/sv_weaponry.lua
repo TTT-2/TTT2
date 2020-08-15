@@ -47,7 +47,7 @@ function GM:PlayerCanPickupWeapon(ply, wep, dropBlockingWeapon)
 	-- prevent picking up weapons of the same class a player already has (for ammo if auto-pickup is enabled)
 	-- exception: this hook is called to check if a player can pick up weapon while dropping
 	-- the current weapon
-	if ply:HasWeapon(WEPS.GetClass(wep)) then
+	if not dropBlockingWeapon and ply:HasWeapon(WEPS.GetClass(wep)) then
 		return false, 2
 	end
 
