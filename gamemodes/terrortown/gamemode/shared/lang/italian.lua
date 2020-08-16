@@ -1219,6 +1219,7 @@ L.button_press_key = "Premi un tasto"
 L.button_save = "Salva"
 L.button_reset = "Reimposta"
 L.button_close = "Chiudi"
+--L.button_hud_editor = "HUD Editor"
 
 -- 2020-04-20
 --L.item_speedrun = "Speedrun"

@@ -1219,6 +1219,7 @@ L.header_gameplay_settings = "Настройки игры"
 L.button_save = "Сохранить"
 --L.button_reset = "Reset"
 --L.button_close = "Close"
+--L.button_hud_editor = "HUD Editor"
 
 -- 2020-04-20
 --L.item_speedrun = "Speedrun"

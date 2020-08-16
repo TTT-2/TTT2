@@ -12,6 +12,7 @@ local utilGetDefaultColor = util.GetDefaultColor
 local utilGetChangedColor = util.GetChangedColor
 local utilGetHoverColor = util.GetHoverColor
 local utilGetActiveColor = util.GetActiveColor
+local utilColorDarken = util.ColorDarken
 
 local vskinGetBackgroundColor = vskin.GetBackgroundColor
 local vskinGetAccentColor = vskin.GetAccentColor
@@ -519,30 +520,30 @@ function SKIN:PaintButtonTTT2(panel, w, h)
 	local colorAccentDarkHover = utilGetHoverColor(colorAccentDark)
 	local colorAccentDarkActive = utilGetActiveColor(colorAccentDark)
 
-	local colorAccentDisabled = utilGetChangedColor(utilGetDefaultColor(vskinGetBackgroundColor()), 175)
-	local colorAccentDarkDisabled = utilGetChangedColor(utilGetDefaultColor(vskinGetBackgroundColor()), 125)
+	local colorAccentDisabled = utilGetChangedColor(utilGetDefaultColor(vskinGetBackgroundColor()), 150)
+	local colorAccentDarkDisabled = utilColorDarken(colorAccentDisabled, 50)
 
 	local sizeBorder = vskinGetBorderSize()
 
 	if not panel:IsEnabled() then
-		local colorText = utilGetDefaultColor(colorAccentDisabled)
+		local colorText = ColorAlpha(utilGetDefaultColor(colorAccentDisabled), 220)
 
 		return DrawButton(w, h, panel, sizeBorder, colorAccentDarkDisabled, colorAccentDisabled, colorText, 0)
 	end
 
 	if panel.Depressed or panel:IsSelected() or panel:GetToggle() then
-		local colorText = utilGetDefaultColor(colorAccent)
+		local colorText = ColorAlpha(utilGetDefaultColor(colorAccent), 220)
 
 		return DrawButton(w, h, panel, sizeBorder, colorAccentDarkActive, colorAccentActive, colorText, 1)
 	end
 
 	if panel.Hovered then
-		local colorText = utilGetDefaultColor(colorAccent)
+		local colorText = ColorAlpha(utilGetDefaultColor(colorAccent), 220)
 
 		return DrawButton(w, h, panel, sizeBorder, colorAccentDarkHover, colorAccentHover, colorText, 0)
 	end
 
-	local colorText = utilGetDefaultColor(colorAccent)
+	local colorText = ColorAlpha(utilGetDefaultColor(colorAccent), 220)
 
 	return DrawButton(w, h, panel, sizeBorder, colorAccentDark, colorAccent, colorText, 0)
 end

@@ -496,32 +496,35 @@ HELPSCRN.subPopulate["ttt2_appearance"] = function(helpData, id)
 	hudData:SetTitle("submenu_appearance_hudswitcher_title")
 	hudData:PopulatePanel(PopulateHUDSwitcherPanel)
 	hudData:PopulateButtonPanel(function(parent)
+		local currentHUDName = HUDManager.GetHUD()
+		local currentHUD = huds.GetStored(currentHUDName)
+
 		local buttonReset = vgui.Create("DButtonTTT2", parent)
-		buttonReset:SetText("Reset")
+
+		buttonReset:SetText("button_reset")
 		buttonReset:SetSize(100, 45)
 		buttonReset:SetPos(475, 20)
 		buttonReset.DoClick = function(btn)
-			local currentHUD = huds.GetStored(HUDManager.GetHUD())
-
 			if not currentHUD then return end
 
 			currentHUD:Reset()
 			currentHUD:SaveData()
 		end
+		buttonReset:SetEnabled(not currentHUD.disableHUDEditor)
 
 		local buttonEditor = vgui.Create("DButtonTTT2", parent)
-		buttonEditor:SetText("HUD Editor")
+
+		buttonEditor:SetText("button_hud_editor")
 		buttonEditor:SetSize(175, 45)
 		buttonEditor:SetPos(600, 20)
 		buttonEditor.DoClick = function(btn)
-			local currentHUDName = HUDManager.GetHUD()
-
 			if not currentHUDName then return end
 
 			HUDEditor.EditHUD(currentHUDName)
 
 			HELPSCRN.mainframe:HideFrame()
 		end
+		buttonEditor:SetEnabled(not currentHUD.disableHUDEditor)
 	end)
 
 	-- vskin

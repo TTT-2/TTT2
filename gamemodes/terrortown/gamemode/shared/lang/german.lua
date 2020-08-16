@@ -1219,6 +1219,7 @@ L.button_press_key = "Drücke eine Taste"
 L.button_save = "Speichern"
 L.button_reset = "Zurücksetzen"
 L.button_close = "Schließen"
+L.button_hud_editor = "HUD Editor"
 
 -- 2020-04-20
 L.item_speedrun = "Schnelllauf"
