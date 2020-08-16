@@ -50,7 +50,7 @@ function vskin.SelectVSkin(skinName)
 	vskin.selected = skinName
 	cv_selectedVSkin:SetString(skinName)
 
-	vguihandler.UpdateVSkinSetting("skin")
+	vguihandler.UpdateVSkinSetting()
 
 	return true
 end

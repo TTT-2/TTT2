@@ -11,16 +11,6 @@ local table = table
 
 local colorBackground = Color(10, 10, 10, 200)
 
-local function InternalUpdateVSkinSetting(name, panel)
-	if name == "skin" then
-		panel:InvalidateLayout()
-	elseif name == "language" then
-		panel:InvalidateLayout()
-	elseif name == "general_rebuild" then
-		panel:InvalidateLayout()
-	end
-end
-
 vguihandler = vguihandler or {
 	frames = {},
 	callback = {
@@ -111,11 +101,11 @@ end
 -- @param string name The name of the changed setting
 -- @internal
 -- @realm client
-function vguihandler.UpdateVSkinSetting(name)
+function vguihandler.UpdateVSkinSetting()
 	local frames = vguihandler.frames
 
 	for i = 1, #frames do
-		InternalUpdateVSkinSetting(name, frames[i])
+		frames[i]:InvalidateLayout()
 	end
 end
 
@@ -133,7 +123,7 @@ function vguihandler.Rebuild()
 		end
 	end
 
-	vguihandler.UpdateVSkinSetting("general_rebuild")
+	vguihandler.UpdateVSkinSetting()
 end
 
 ---
