@@ -8,7 +8,6 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Added ConVar to toggle double-click buying
 - Added a new vgui system
-  - the F1 menu is completely overhauled
   - introduced new development interfaces to easily create menues and settings for addons
 - Introduced a global scale factor
   - based on a 1080p resolution and automatically adjusted to the current screen resolution (i.e. a 4k display has a default scale factor of 2)
@@ -17,8 +16,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Changed
 
+- the F1 menu is completely overhauled
 - Cleaned up language files, they are now identical on a line by line comparison
 - Inverted some convars to have a uniform "Enable feature X", not a mixture of enable and disable
+- Added Japanese translation (by @Westoon)
 
 ### Fixed
 
