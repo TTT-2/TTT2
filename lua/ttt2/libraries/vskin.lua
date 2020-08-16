@@ -14,10 +14,8 @@ vskin = vskin or {}
 
 vskin.skins = vskin.skins or {}
 
-vskin.selected = vskin.selected or ""
-
 ---
--- Register a new vskin
+-- Register a new vskin.
 -- @param string name The unique name of your vskin
 -- @param table skin The skin table
 -- @realm client
@@ -32,22 +30,15 @@ function vskin.RegisterVSkin(name, skin)
 end
 
 ---
--- Select a registered vskin
--- @param string name The unique name of the vskin, if nil the convar value is read
+-- Select a registered vskin.
+-- @param string name The unique name of the vskin,
 -- @return boolean Returns true if skin was selected
 -- @realm client
 function vskin.SelectVSkin(skinName)
-	if not skinName then
-		vskin.selected = cv_selectedVSkin:GetString()
-
-		return true
-	end
-
 	if not vskin.skins[skinName] then
 		return false
 	end
 
-	vskin.selected = skinName
 	cv_selectedVSkin:SetString(skinName)
 
 	vguihandler.UpdateVSkinSetting()
@@ -56,7 +47,7 @@ function vskin.SelectVSkin(skinName)
 end
 
 ---
--- Returns a table of the names of all registered vskins
+-- Returns a table of the names of all registered vskins.
 -- @return table The list of all names
 -- @realm client
 function vskin.GetVSkinList()
@@ -70,15 +61,15 @@ function vskin.GetVSkinList()
 end
 
 ---
--- Returns the name of the currently selected vskin
+-- Returns the name of the currently selected vskin.
 -- @return string The name of the vskin
 -- @realm client
 function vskin.GetVSkinName()
-	return vskin.selected
+	return cv_selectedVSkin:GetString()
 end
 
 ---
--- Returns the name of the default vskin
+-- Returns the name of the default vskin.
 -- @return string The name of the vskin
 -- @realm client
 function vskin.GetDefaultVSkinName()
@@ -86,7 +77,7 @@ function vskin.GetDefaultVSkinName()
 end
 
 ---
--- Sets the background blur state
+-- Sets the background blur state.
 -- @param [default=true] boolean state
 -- @realm client
 function vskin.SetBlurBackground(state)
@@ -94,7 +85,7 @@ function vskin.SetBlurBackground(state)
 end
 
 ---
--- Returns if the background of vskin elements should
+-- Returns if the background of vskin elements should.
 -- be blurred or not
 -- @realm client
 function vskin.ShouldBlurBackground()
@@ -102,145 +93,145 @@ function vskin.ShouldBlurBackground()
 end
 
 ---
--- Returns the background color of the currently selected vskin
+-- Returns the background color of the currently selected vskin.
 -- @return [default=Color(255, 255, 255, 255)] Color The background color
 -- @realm client
 function vskin.GetBackgroundColor()
-	if not vskin.skins[vskin.selected] then
+	if not vskin.skins[vskin.GetVSkinName()] then
 		return COLOR_WHITE
 	end
 
-	return vskin.skins[vskin.selected].colors.background
+	return vskin.skins[vskin.GetVSkinName()].colors.background
 end
 
 ---
--- Returns the accent color of the currently selected vskin
+-- Returns the accent color of the currently selected vskin.
 -- @return [default=Color(255, 255, 255, 255)] Color The accent color
 -- @realm client
 function vskin.GetAccentColor()
-	if not vskin.skins[vskin.selected] then
+	if not vskin.skins[vskin.GetVSkinName()] then
 		return COLOR_WHITE
 	end
 
-	return vskin.skins[vskin.selected].colors.accent
+	return vskin.skins[vskin.GetVSkinName()].colors.accent
 end
 
 ---
--- Returns the dark accent color of the currently selected vskin
+-- Returns the dark accent color of the currently selected vskin.
 -- @return [default=Color(255, 255, 255, 255)] Color The dark accent color
 -- @realm client
 function vskin.GetDarkAccentColor()
-	if not vskin.skins[vskin.selected] then
+	if not vskin.skins[vskin.GetVSkinName()] then
 		return COLOR_WHITE
 	end
 
-	return vskin.skins[vskin.selected].colors.accent_dark
+	return vskin.skins[vskin.GetVSkinName()].colors.accent_dark
 end
 
 ---
--- Returns the scrollbar color of the currently selected vskin
+-- Returns the scrollbar color of the currently selected vskin.
 -- @return [default=Color(255, 255, 255, 255)] Color The scrollbar color
 -- @realm client
 function vskin.GetScrollbarColor()
-	if not vskin.skins[vskin.selected] then
+	if not vskin.skins[vskin.GetVSkinName()] then
 		return COLOR_WHITE
 	end
 
-	return vskin.skins[vskin.selected].colors.scroll
+	return vskin.skins[vskin.GetVSkinName()].colors.scroll
 end
 
 ---
--- Returns the scrollbar track color of the currently selected vskin
+-- Returns the scrollbar track color of the currently selected vskin.
 -- @return [default=Color(255, 255, 255, 255)] Color The scrollbar track color
 -- @realm client
 function vskin.GetScrollbarTrackColor()
-	if not vskin.skins[vskin.selected] then
+	if not vskin.skins[vskin.GetVSkinName()] then
 		return COLOR_WHITE
 	end
 
-	return vskin.skins[vskin.selected].colors.scroll_track
+	return vskin.skins[vskin.GetVSkinName()].colors.scroll_track
 end
 
 ---
--- Returns the shadow color of the currently selected vskin
+-- Returns the shadow color of the currently selected vskin.
 -- @return [default=Color(255, 255, 255, 255)] Color The shadow color
 -- @realm client
 function vskin.GetShadowColor()
-	if not vskin.skins[vskin.selected] then
+	if not vskin.skins[vskin.GetVSkinName()] then
 		return COLOR_WHITE
 	end
 
-	return vskin.skins[vskin.selected].colors.shadow
+	return vskin.skins[vskin.GetVSkinName()].colors.shadow
 end
 
 ---
--- Returns the title text color of the currently selected vskin
+-- Returns the title text color of the currently selected vskin.
 -- @return [default=Color(255, 255, 255, 255)] Color The title text color
 -- @realm client
 function vskin.GetTitleTextColor()
-	if not vskin.skins[vskin.selected] then
+	if not vskin.skins[vskin.GetVSkinName()] then
 		return COLOR_WHITE
 	end
 
-	return vskin.skins[vskin.selected].colors.title_text
+	return vskin.skins[vskin.GetVSkinName()].colors.title_text
 end
 
 ---
--- Returns the shadow size of the currently selected vskin
+-- Returns the shadow size of the currently selected vskin.
 -- @return [default=5] number The shadow size
 -- @realm client
 function vskin.GetShadowSize()
-	if not vskin.skins[vskin.selected] then
+	if not vskin.skins[vskin.GetVSkinName()] then
 		return 5
 	end
 
-	return vskin.skins[vskin.selected].params.shadow_size
+	return vskin.skins[vskin.GetVSkinName()].params.shadow_size
 end
 
 ---
--- Returns the header height of the currently selected vskin
+-- Returns the header height of the currently selected vskin.
 -- @return [default=45] number The header height
 -- @realm client
 function vskin.GetHeaderHeight()
-	if not vskin.skins[vskin.selected] then
+	if not vskin.skins[vskin.GetVSkinName()] then
 		return 45
 	end
 
-	return vskin.skins[vskin.selected].params.header_height
+	return vskin.skins[vskin.GetVSkinName()].params.header_height
 end
 
 ---
--- Returns the collapsable height of the currently selected vskin
+-- Returns the collapsable height of the currently selected vskin.
 -- @return [default=45] number The collapsable height
 -- @realm client
 function vskin.GetCollapsableHeight()
-	if not vskin.skins[vskin.selected] then
+	if not vskin.skins[vskin.GetVSkinName()] then
 		return 30
 	end
 
-	return vskin.skins[vskin.selected].params.collapsable_height
+	return vskin.skins[vskin.GetVSkinName()].params.collapsable_height
 end
 
 ---
--- Returns the border size of the currently selected vskin
+-- Returns the border size of the currently selected vskin.
 -- @return [default=3] number The border size
 -- @realm client
 function vskin.GetBorderSize()
-	if not vskin.skins[vskin.selected] then
+	if not vskin.skins[vskin.GetVSkinName()] then
 		return 3
 	end
 
-	return vskin.skins[vskin.selected].params.border_size
+	return vskin.skins[vskin.GetVSkinName()].params.border_size
 end
 
 ---
--- Returns the corner radius of the currently selected vskin
+-- Returns the corner radius of the currently selected vskin.
 -- @return [default=6] number The corner radius
 -- @realm client
 function vskin.GetCornerRadius()
-	if not vskin.skins[vskin.selected] then
+	if not vskin.skins[vskin.GetVSkinName()] then
 		return 6
 	end
 
-	return vskin.skins[vskin.selected].params.corner_radius
+	return vskin.skins[vskin.GetVSkinName()].params.corner_radius
 end

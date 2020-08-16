@@ -159,8 +159,6 @@ function GM:Initialize()
 		MsgN("Added TTT2 vskin file: ", path)
 	end)
 
-	vskin.SelectVSkin()
-
 	-- initialize scale callbacks
 	appearance.RegisterScaleChangeCallback(HUDManager.ResetHUD)
 
