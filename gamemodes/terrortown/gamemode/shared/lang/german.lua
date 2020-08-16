@@ -1303,3 +1303,6 @@ L.set_cross_lines_enable = "Aktiviere Fadenkreuz-Linien"
 L.pickup_error_spec = "Du kannst eine Waffe als Zuschauer nicht aufheben."
 L.pickup_error_owns = "Du kannst diese Waffe nicht aufheben, weil du die gleiche Waffe bereits trägst."
 L.pickup_error_noslot = "Du verfügst über keinen freien Slot, um diese Waffe aufzuheben."
+
+-- 2020-08-11
+L.f1_settings_shop_desc_double_click = "Kaufe ein Item im Shop, indem du es doppelt anklickst."
