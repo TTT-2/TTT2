@@ -59,12 +59,12 @@ function GM:PlayerCanPickupWeapon(ply, wep, dropBlockingWeapon)
 	end
 
 	-- if the auto pickup convar is set to false, no weapons should be picked up automatically
-	if not cv_auto_pickup:GetBool() and not ply:IsForcedPickupWeapon() then
+	if not cv_auto_pickup:GetBool() and not ply.forcedPickup then
 		return false, 4
 	end
 
 	-- if it is a dropped equipment item, it shouldn't be picked up automatically
-	if IsEquipment(wep) and wep.IsDropped and not ply:IsForcedPickupWeapon() then
+	if IsEquipment(wep) and wep.IsDropped and not ply.forcedPickup then
 		return false, 5
 	end
 

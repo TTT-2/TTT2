@@ -1232,22 +1232,6 @@ hook.Add("TTTPrepareRound", "TTT2ResetRoleState_End", function()
 	end
 end)
 
----
--- Set whether the next pickup of a weapon should be forced (e.g. to be able to give a weapon per {Player:Give})
--- @param nil|boolean forcePickup
--- @realm server
-function plymeta:SetForcePickupWeapon(forcePickup)
-	self.forcedPickup = forcePickup
-end
-
----
--- Returns whether the next pickup of a weapon should be forced (e.g. to be able to give a weapon per {Player:Give})
--- @return boolean
--- @realm server
-function plymeta:IsForcedPickupWeapon()
-	return self.forcedPickup or false
-end
-
 local plymeta_old_Give = plymeta.Give
 
 -- The give function is cached to extend it later on.
@@ -1255,11 +1239,11 @@ local plymeta_old_Give = plymeta.Give
 -- This flag is used to distinguish between weapons picked up by walking
 -- over them and weapons picked up by ply:Give()
 function plymeta:Give(weaponClassName, bNoAmmo)
-	self:SetForcePickupWeapon(true)
+	self.forcedPickup = true
 
 	local wep = plymeta_old_Give(self, weaponClassName, bNoAmmo or false)
 
-	self:SetForcePickupWeapon(false)
+	self.forcedPickup = false
 
 	return wep
 end
@@ -1306,11 +1290,11 @@ end
 -- @return number errorCode that appeared. For the error, give a look into the specific hook
 -- @realm server
 function plymeta:CanPickupWeapon(wep, forcePickup, dropBlockingWeapon)
-	self:SetForcePickupWeapon(forcePickup)
+	self.forcedPickup = forcePickup
 
 	local ret, errCode = hook.Run("PlayerCanPickupWeapon", self, wep, dropBlockingWeapon)
 
-	self:SetForcePickupWeapon(false)
+	self.forcedPickup = false
 
 	return ret, errCode
 end
