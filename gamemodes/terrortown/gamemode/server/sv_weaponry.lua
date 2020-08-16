@@ -474,18 +474,19 @@ end
 
 ---
 -- Called whenever a @{Player} drops a @{Weapon}, e.g. on death
--- @param Player ply
--- @param Weapon wep
--- @param boolean death_drop
+-- @param Player ply The player whose weapon is about to be dropped
+-- @param Weapon wep The weapon that is about to be dropped
+-- @param boolean deathDrop Set to true if this is a drop on death
+-- @param boolean keepSelection If set to true the current selection is kept if not dropped
 -- @realm server
 -- @module WEPS
-function WEPS.DropNotifiedWeapon(ply, wep, death_drop, keep_selection)
+function WEPS.DropNotifiedWeapon(ply, wep, deathDrop, keepSelection)
 	if not IsValid(ply) or not IsValid(wep) then return end
 
 	-- Hack to tell the weapon it's about to be dropped and should do what it
 	-- must right now
 	if wep.PreDrop then
-		wep:PreDrop(death_drop)
+		wep:PreDrop(deathDrop)
 	end
 
 	-- PreDrop might destroy weapon
@@ -501,7 +502,7 @@ function WEPS.DropNotifiedWeapon(ply, wep, death_drop, keep_selection)
 
 	-- After dropping a weapon, always switch to holstered, so that traitors
 	-- will never accidentally pull out a traitor weapon
-	if not keep_selection then
+	if not keepSelection then
 		ply:SelectWeapon("weapon_ttt_unarmed")
 	end
 end

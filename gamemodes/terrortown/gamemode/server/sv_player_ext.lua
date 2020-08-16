@@ -1272,13 +1272,14 @@ end
 ---
 -- Called to drop a weapon in a safe manner (e.g. preparing and space-check).
 -- @param Weapon wep The weapon that should be dropped
+-- @param boolean keepSelection If set to true the current selection is kept if not dropped
 -- @realm server
-function plymeta:SafeDropWeapon(wep, keep_selection)
+function plymeta:SafeDropWeapon(wep, keepSelection)
 	if not self:CanSafeDropWeapon(wep) then return end
 
 	self:AnimPerformGesture(ACT_GMOD_GESTURE_ITEM_PLACE)
 
-	WEPS.DropNotifiedWeapon(self, wep, false, keep_selection)
+	WEPS.DropNotifiedWeapon(self, wep, false, keepSelection)
 end
 
 ---
