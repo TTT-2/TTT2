@@ -1272,3 +1272,5 @@ L.decoy_help_pri = "Decoyを設置する."
 
 L.set_cross_lines_enable = "クロスヘアラインを有効"
 
+-- 2020-08-11
+L.f1_settings_shop_desc_double_click = "ダブルクリックでショップのアイテムを購入できることを有効にする."
