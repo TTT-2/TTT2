@@ -7,6 +7,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Added
 
 - Added ConVar to toggle double-click buying
+- Added Japanese translation (by @Westoon)
 
 ### Fixed
 
