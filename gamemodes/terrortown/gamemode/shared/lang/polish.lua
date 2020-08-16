@@ -1071,7 +1071,6 @@ L.hud_health = "Zdrowie"
 
 -- 2020-03-09
 L.help_title = "Pomoc i ustawienia"
-L.menu_name = "MENU"
 
 L.menu_changelog_title = "Zmiany"
 L.menu_guide_title = "TTT2 Poradnik"

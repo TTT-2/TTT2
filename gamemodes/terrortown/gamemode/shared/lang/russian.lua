@@ -1071,7 +1071,6 @@ L.pickup_no_room = "Нет места для ношения предмета э�
 
 -- 2020-03-09
 L.help_title = "Руководство и настройки"
---L.menu_name = "MENU"
 
 --L.menu_changelog_title = "Changelog"
 --L.menu_guide_title = "TTT2 Guide"

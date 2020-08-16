@@ -56,8 +56,8 @@ local widthMainButton = math.Round((w - 2 * HELPSCRN.pad * (cols + 1)) / cols)
 local heightMainButton = 120
 
 local widthNav, heightNav = 300, 700
-local widthNavHeader, heightNavHeader = 299, 80
-local widthNavContent, heightNavContent = 299, 620
+local heightNavHeader = 15
+local widthNavContent, heightNavContent = 299, 685
 local widthContent, heightContent = 800, 700
 local heightButtonPanel = 80
 local widthNavButton, heightNavButton = 299, 50
@@ -221,21 +221,6 @@ function HELPSCRN:ShowSubMenu(data)
 	navArea:SetSize(widthNav, heightNav - vskin.GetHeaderHeight() - vskin.GetBorderSize())
 	navArea:SetPos(0, 0)
 	navArea:Dock(LEFT)
-
-	local navAreaHeader = vgui.Create("DPanel", navArea)
-	navAreaHeader:SetPos(0, 0)
-	navAreaHeader:SetSize(widthNavHeader, heightNavHeader)
-
-	local navAreaHeaderText = vgui.Create("DLabelTTT2", navAreaHeader)
-	navAreaHeaderText:SetText("menu_name")
-	navAreaHeaderText:DockMargin(15, 0, 0, 5)
-	navAreaHeaderText:Dock(BOTTOM)
-	navAreaHeaderText:SetFont("DermaTTT2TextLarge")
-	navAreaHeaderText.Paint = function(slf, width, height)
-		derma.SkinHook("Paint", "MenuLabelTTT2", slf, width, height)
-
-		return true
-	end
 
 	local navAreaContent = vgui.Create("DPanel", navArea)
 	navAreaContent:SetPos(0, heightNavHeader)
