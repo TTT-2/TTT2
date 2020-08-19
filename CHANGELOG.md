@@ -13,6 +13,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Fixed foregoing fetch fix
 - Fixed HUD savingKeys variable not being unique across all HUDs
+- Fixed drawing web images, seamless web images and avatar images
 
 ## [v0.7.3b](https://github.com/TTT-2/TTT2/tree/v0.7.3b) (2020-08-09)
 
