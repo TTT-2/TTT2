@@ -121,7 +121,7 @@ end
 -- @param Angle angle
 -- @param boolean cornerorigin if it is set to <code>true</code>, the WebImage will be centered based on the x- and y-coordinate
 function draw.WebImage(url, x, y, width, height, color, angle, cornerorigin)
-	DrawImage(surface.SetMaterial(FetchAsset(url) or _error), x, y, width, height, color, angle, cornerorigin)
+	DrawImage(FetchAsset(url) or _error, x, y, width, height, color, angle, cornerorigin)
 end
 
 ---
@@ -157,7 +157,7 @@ end
 -- @param Angle angle
 -- @param boolean cornerorigin if it is set to <code>true</code>, the WebImage will be centered based on the x- and y-coordinate
 function draw.SteamAvatar(id64, size, x, y, width, height, color, angle, cornerorigin)
-	DrawImage(surface.SetMaterial(FetchAvatarAsset(id64, size) or _default_avatar), x, y, width, height, color, angle, cornerorigin)
+	DrawImage(FetchAvatarAsset(id64, size) or _default_avatar, x, y, width, height, color, angle, cornerorigin)
 end
 
 ---
