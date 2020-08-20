@@ -1232,146 +1232,120 @@ hook.Add("TTTPrepareRound", "TTT2ResetRoleState_End", function()
 	end
 end)
 
+local plymeta_old_Give = plymeta.Give
+
 -- The give function is cached to extend it later on.
 -- The extension is needed to set a flag prior to picking up weapons.
 -- This flag is used to distinguish between weapons picked up by walking
 -- over them and weapons picked up by ply:Give()
-local plymeta_old_give = plymeta.Give
 function plymeta:Give(weaponClassName, bNoAmmo)
-	self.wp__GiveItemFunctionFlag = true
+	self.forcedPickup = true
 
-	local wep = plymeta_old_give(self, weaponClassName, bNoAmmo or false)
+	local wep = plymeta_old_Give(self, weaponClassName, bNoAmmo or false)
 
-	-- the flag has to be reset on the outside of the hook since returning
-	-- false somewhere prevents GM:PlayerCanPickupWeapon from being executed
-	self.wp__GiveItemFunctionFlag = nil
+	self.forcedPickup = false
 
 	return wep
 end
 
 ---
--- Called to drop a weapon in a safe manner (e.g. preparing and space-check)
--- @param Weapon wep
+-- Checks if the weapon can be dropped in a safely manner.
+-- @param Weapon wep The weapon that should be dropped
+-- @return boolean Returns if this weapon can be dropped
 -- @realm server
-function plymeta:SafeDropWeapon(wep, keep_selection)
-	if not IsValid(wep) or not wep.AllowDrop then return end
+function plymeta:CanSafeDropWeapon(wep)
+	if not IsValid(wep) or not wep.AllowDrop then
+		return false
+	end
 
 	local tr = util.QuickTrace(self:GetShootPos(), self:GetAimVector() * 32, self)
 
-	if tr.HitWorld then
-		LANG.Msg(self, "drop_no_room", nil, MSG_CHAT_WARN)
+	if tr.Hit then
+		LANG.Msg(self, "drop_no_room", nil, MSG_MSTACK_WARN)
 
-		return
+		return false
 	end
+
+	return true
+end
+
+---
+-- Called to drop a weapon in a safe manner (e.g. preparing and space-check).
+-- @param Weapon wep The weapon that should be dropped
+-- @param boolean keepSelection If set to true the current selection is kept if not dropped
+-- @realm server
+function plymeta:SafeDropWeapon(wep, keepSelection)
+	if not self:CanSafeDropWeapon(wep) then return end
 
 	self:AnimPerformGesture(ACT_GMOD_GESTURE_ITEM_PLACE)
 
-	WEPS.DropNotifiedWeapon(self, wep, false, keep_selection)
+	WEPS.DropNotifiedWeapon(self, wep, false, keepSelection)
 end
 
 ---
 -- Returns whether or not a player can pick up a weapon
 -- @param Weapon wep The weapon object
--- @returns boolean
+-- @param nil|boolean forcePickup is there a forced pickup to ignore the cv_auto_pickup cvar?
+-- @param nil|boolean dropBlockingWeapon should the weapon stored in the same slot be dropped
+-- @returns boolean return of the PlayerCanPickupWeapon hook
+-- @return number errorCode that appeared. For the error, give a look into the specific hook
 -- @realm server
-function plymeta:CanPickupWeapon(wep)
-	self.wp__GiveItemFunctionFlag = true
+function plymeta:CanPickupWeapon(wep, forcePickup, dropBlockingWeapon)
+	self.forcedPickup = forcePickup
 
-	local can_pickup = hook.Run("PlayerCanPickupWeapon", self, wep)
+	local ret, errCode = hook.Run("PlayerCanPickupWeapon", self, wep, dropBlockingWeapon)
 
-	-- the flag has to be reset on the outside of the hook since returning
-	-- false somewhere prevents GM:PlayerCanPickupWeapon from being executed
-	self.wp__GiveItemFunctionFlag = nil
+	self.forcedPickup = false
 
-	return can_pickup
+	return ret, errCode
 end
 
 ---
 -- Returns whether or not a player can pick up a weapon
 -- @param string wepCls The weapon object classname
+-- @param nil|boolean forcePickup is there a forced pickup to ignore the cv_auto_pickup cvar?
+-- @param nil|boolean dropBlockingWeapon should the weapon stored in the same slot be dropped
 -- @returns boolean
 -- @realm server
-function plymeta:CanPickupWeaponClass(wepCls)
+function plymeta:CanPickupWeaponClass(wepCls, forcePickup, dropBlockingWeapon)
 	local wep = ents.Create(wepCls)
 
-	return self:CanPickupWeapon(wep)
-end
-
--- Since we all love GMOD we do some really funny things here. Sometimes the weapon is in
--- a position where a player is unable to pick it up, even if there is nothing that hinders
--- it from being picked up. Therefore we randomise the position a bit.
-local function SetWeaponPos(ply, wep, kind)
-	if not IsValid(ply) or not IsValid(wep) or not kind or not ply.wpickup_waitequip[kind] then return end
-
-	-- if a pickup is possible, the weapon gets a flag set and is teleported to the feet
-	-- of the player
-	-- IMPORTANT: If the weapon gets teleported into other entities, it gets stuck. Therefore
-	-- the weapon is teleported to half player height
-	local pWepPos = ply:EyePos()
-	pWepPos.z = pWepPos.z - 20 -- -20 to move it outside the viewing area
-
-	-- randomise position
-	pWepPos.x = pWepPos.x + math.random(-10, 10)
-	pWepPos.y = pWepPos.y + math.random(-10, 10)
-	pWepPos.z = pWepPos.z + math.random(-10, 10)
-
-	wep:SetPos(pWepPos)
-end
-
-local function ActualWeaponPickup(ply, wep, kind, shouldAutoSelect)
-	if not IsValid(ply) or not IsValid(wep) or not kind or not ply.wpickup_waitequip[kind] then return end
-
-	-- this flag is set to the player to make sure he only picks up this weapon
-	ply.wpickup_weapon = wep
-
-	-- the flag is set to the weapon to stop other players from auto-picking up this weapon
-	wep.wpickup_player = ply
-
-	-- destroy physics to let weapon float in the air
-	wep:PhysicsDestroy()
-
-	-- set collision group to IN_VEHICLE to be nonexistent, bullets can pass through it
-	wep:SetCollisionGroup(COLLISION_GROUP_IN_VEHICLE)
-
-	-- make weapon invisible to prevent stuck weapon in player sight
-	wep:SetNoDraw(true)
-
-	-- set autoselect flag
-	wep.wpickup_autoSelect = shouldAutoSelect
-
-	-- initial teleport the weapon to the player pos
-	SetWeaponPos(ply, wep, kind)
-
-	wep.name_timer_pos = kind .. "_WeaponPickupRandomPos_" .. (ply:SteamID64() or "singleplayerID")
-	wep.name_timer_cancel = kind .. "_WeaponPickupCancel_" .. (ply:SteamID64() or "singleplayerID")
-
-	-- update the weapon pos
-	timer.Create(wep.name_timer_pos, 0.2, 1, function()
-		SetWeaponPos(ply, wep, kind)
-	end)
-
-	-- after 1.5 seconds, the pickup should be canceled
-	timer.Create(wep.name_timer_cancel, 1.5, 1, function()
-		ResetWeapon(wep)
-	end)
+	return self:CanPickupWeapon(wep, forcePickup, dropBlockingWeapon)
 end
 
 ---
 -- This function simplifies the weapon pickup process for a player by
 -- handling all the needed calls.
 -- @param Weapon wep The weapon object
--- @param[default=false] boolean dropBlockingWeapon Should the currently selecten weapon be dropped
--- @param boolean shouldAutoSelect Should this weapon be autoselected after equip, if not set this value is set by player keypress
+-- @param nil|boolean ammoOnly If set to true, the player will only attempt to pick up the ammo from the weapon. The weapon will not be picked up even if the player doesn't have a weapon of this type, and the weapon will be removed if the player picks up any ammo from it
+-- @param nil|boolean forcePickup Should the pickup been forced (ignores the cv_auto_pickup cvar)
+-- @param[default=false] nil|boolean dropBlockingWeapon Should the currently selecten weapon be dropped
+-- @param nil|boolean shouldAutoSelect Should this weapon be autoselected after equip, if not set this value is set by player keypress
 -- @returns Weapon if successful, nil if not
 -- @realm server
-function plymeta:PickupWeapon(wep, dropBlockingWeapon, shouldAutoSelect)
-	local kind = wep.Kind
-	self.wpickup_waitequip = self.wpickup_waitequip or {}
+function plymeta:SafePickupWeapon(wep, ammoOnly, forcePickup, dropBlockingWeapon, shouldAutoSelect)
+	if not IsValid(wep) then
+		ErrorNoHalt(tostring(self) .. " tried to pickup an invalid weapon " .. tostring(wep) .. "\n")
 
-	-- If the player has picked up a weapon, but not yet received it, ignore this request
-	-- to prevent GMod from making the weapon unusable and behaving weird
-	if self.wpickup_waitequip[kind] then
-		LANG.Msg(self, "pickup_pending")
+		LANG.Msg(self, "pickup_fail")
+
+		return
+	end
+
+	-- block weapon switch if slot is occupied and there is no room to
+	-- drop the weapon safely
+	if not InventorySlotFree(self, wep.Kind) and not self:CanSafeDropWeapon(wep) then return end
+
+	local ret, errCode = self:CanPickupWeapon(wep, forcePickup or true, dropBlockingWeapon)
+
+	if not ret then
+		if errCode == 1 then
+			LANG.Msg(self, "pickup_error_spec")
+		elseif errCode == 2 then
+			LANG.Msg(self, "pickup_error_owns")
+		elseif errCode == 3 then
+			LANG.Msg(self, "pickup_error_noslot")
+		end
 
 		return
 	end
@@ -1381,40 +1355,8 @@ function plymeta:PickupWeapon(wep, dropBlockingWeapon, shouldAutoSelect)
 		shouldAutoSelect = not self:KeyDown(IN_WALK) and not self:KeyDownLast(IN_WALK)
 	end
 
-	if not IsValid(wep) then
-		ErrorNoHalt(tostring(self) .. " tried to pickup an invalid weapon " .. tostring(wep) .. "\n")
-		LANG.Msg(self, "pickup_fail")
-
-		return
-	end
-
-	-- if this weapon is already flagged by a different player, the pickup shouldn't happen
-	if wep.wpickup_player then return end
-
-	-- Now comes the tricky part: Since Gmod doesn't allow us to pick up weapons by
-	-- calling a simple function while also keeping all the weapon specific params
-	-- set in the runtime, we have to use the GM:PlayerCanPickupWeapon hook in a
-	-- slightly hacky way
-
-	-- first we have to check if the player can pick up the weapon at all by running the
-	-- hook manually. This has to be done since the normal pickup is handled internally
-	-- and is therefore not accessable for us
-	wep.wp__WeaponSwitchFlag = dropBlockingWeapon
-
-	local canPickupWeapon = self:CanPickupWeapon(wep)
-
-	-- the flag has to be reset on the outside of the hook since returning
-	-- false somewhere prevents GM:PlayerCanPickupWeapon from being executed
-	wep.wp__WeaponSwitchFlag = nil
-
-	if not canPickupWeapon then
-		LANG.Msg(self, "pickup_no_room")
-
-		return
-	end
-
 	-- if parameter is set the currently blocking weapon should be dropped
-	if dropBlockingWeapon then
+	if dropBlockingWeapon ~= false then
 		local dropWeapon, isActiveWeapon, switchMode = GetBlockingWeapon(self, wep)
 
 		if switchMode == SWITCHMODE_FULLINV then
@@ -1437,12 +1379,9 @@ function plymeta:PickupWeapon(wep, dropBlockingWeapon, shouldAutoSelect)
 		end
 	end
 
-	-- prevent race conditions
-	self.wpickup_waitequip[kind] = true
+	if not self:PickupWeapon(wep, ammoOnly or false) then return end
 
-	timer.Create(kind .. "_WeaponPickup_" .. (self:SteamID64() or "singleplayerID"), 0, 1, function()
-		ActualWeaponPickup(self, wep, kind, shouldAutoSelect)
-	end)
+	wep.wpickup_autoSelect = shouldAutoSelect
 
 	return wep
 end
@@ -1455,7 +1394,7 @@ end
 -- @param boolean shouldAutoSelect Should this weapon be autoselected after equip, if not set this value is set by player keypress
 -- @returns Weapon if successful, nil if not
 -- @realm server
-function plymeta:PickupWeaponClass(wepCls, dropBlockingWeapon, shouldAutoSelect)
+function plymeta:SafePickupWeaponClass(wepCls, dropBlockingWeapon, shouldAutoSelect)
 	-- if the variable is not set, set it fitting to the keypress
 	if shouldAutoSelect == nil then
 		shouldAutoSelect = not self:KeyDown(IN_WALK) and not self:KeyDownLast(IN_WALK)
@@ -1474,8 +1413,10 @@ function plymeta:PickupWeaponClass(wepCls, dropBlockingWeapon, shouldAutoSelect)
 
 		pWep = self:Give(wepCls)
 
-		-- set flag to new weapon that is used to autoselect it later on
-		pWep.wpickup_autoSelect = shouldAutoSelect or isActiveWeapon
+		if IsValid(pWep) then
+			-- set flag to new weapon that is used to autoselect it later on
+			pWep.wpickup_autoSelect = shouldAutoSelect or isActiveWeapon
+		end
 	end
 
 	return pWep
