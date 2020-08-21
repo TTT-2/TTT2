@@ -1276,3 +1276,8 @@ L.binoc_help_sec = "Ändere Zoom-Level."
 L.vis_help_pri = "Lass das aktivierte Gerät fallen."
 
 L.decoy_help_pri = "Platziere die Attrappe."
+
+-- 2020-08-07
+L.pickup_error_spec = "Du kannst eine Waffe als Zuschauer nicht aufheben."
+L.pickup_error_owns = "Du kannst diese Waffe nicht aufheben, weil du die gleiche Waffe bereits trägst."
+L.pickup_error_noslot = "Du verfügst über keinen freien Slot, um diese Waffe aufzuheben."

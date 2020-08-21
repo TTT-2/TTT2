@@ -1276,3 +1276,8 @@ L.binoc_help_sec = "切换放大倍率"
 L.vis_help_pri = "丢弃当前设备。"
 
 L.decoy_help_pri = "安放诱饵。"
+
+-- 2020-08-07
+--L.pickup_error_spec = "You cannot pick this up as a spectator."
+--L.pickup_error_owns = "You cannot pick this up because you already have this weapon."
+--L.pickup_error_noslot = "You cannot pick this up because you have no free slot available."
