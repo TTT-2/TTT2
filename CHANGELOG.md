@@ -12,6 +12,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Changed
 
 - The weapon pickup system has been improved to increase stability and remove edge cases in temporary weapon teleportation
+- Updated Spanish translation (by @DennisWolfgang)
 
 ### Fixed
 
