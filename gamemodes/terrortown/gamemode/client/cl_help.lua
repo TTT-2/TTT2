@@ -192,7 +192,7 @@ function HELPSCRN:BuildContentArea()
 
 	self.parent:Clear()
 
-	local widtheight2, height2 = self.parent:GetSize()
+	local width2, height2 = self.parent:GetSize()
 	local _, paddingTop, _, paddingBottom = self.parent:GetDockPadding()
 
 	-- CALCULATE SIZE BASED ON EXISTENCE OF BUTTON PANEL
@@ -203,7 +203,7 @@ function HELPSCRN:BuildContentArea()
 	-- ADD CONTENT BOX AND CONTENT
 	local contentAreaScroll = vgui.Create("DScrollPanel", self.parent)
 	contentAreaScroll:SetVerticalScrollbarEnabled(true)
-	contentAreaScroll:SetSize(widtheight2, height2 - paddingTop - paddingBottom)
+	contentAreaScroll:SetSize(width2, height2 - paddingTop - paddingBottom)
 	contentAreaScroll:Dock(TOP)
 
 	if isfunction(self.menuData.populateFn) then
@@ -213,7 +213,7 @@ function HELPSCRN:BuildContentArea()
 	-- ADD BUTTON BOX AND BUTTONS
 	if isfunction(self.menuData.populateButtonFn) then
 		local buttonArea = vgui.Create("DButtonPanelTTT2", self.parent)
-		buttonArea:SetSize(widtheight2, heightButtonPanel)
+		buttonArea:SetSize(width2, heightButtonPanel)
 		buttonArea:Dock(BOTTOM)
 
 		self.menuData.populateButtonFn(buttonArea)
