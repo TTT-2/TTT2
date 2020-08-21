@@ -272,22 +272,20 @@ end
 -- Returns a hovercolor which is just a lightened or darkened color based
 -- on the sourcecolor
 -- @param Color color The original color
--- @param [default=20] number value The amount to change
 -- @return Color The color based on the original color
 -- @realm shared
-function util.GetHoverColor(color, value)
-	return util.GetChangedColor(color, value or 20)
+function util.GetHoverColor(color)
+	return util.GetChangedColor(color, 20)
 end
 
 ---
 -- Returns a activecolor which is just a lightened or darkened color based
 -- on the sourcecolor
 -- @param Color color The original color
--- @param [default=40] number value The amount to change
 -- @return Color The color based on the original color
 -- @realm shared
-function util.GetActiveColor(color, value)
-	return util.GetChangedColor(color, value or 40)
+function util.GetActiveColor(color)
+	return util.GetChangedColor(color, 40)
 end
 
 local function DoBleed(ent)

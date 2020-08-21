@@ -80,11 +80,11 @@ end
 ---
 -- Function to unhide a previously hidden frame.
 -- @realm client
-function PANEL:UnhideFrame()
+function PANEL:ShowFrame()
 	if not self:IsFrameHidden() then return end
 
 	if isfunction(self.OnUnhide) then
-		local shouldCancel = self:OnUnhide() == false
+		local shouldCancel = self:OnShow() == false
 
 		if shouldCancel then return end
 	end
@@ -156,7 +156,7 @@ end
 -- @return boolean Return false to cancel this event
 -- @hook
 -- @realm client
-function PANEL:OnUnhide()
+function PANEL:OnShow()
 
 end
 
@@ -169,7 +169,7 @@ function PANEL:OnRebuild()
 end
 
 ---
--- Function that is called when the frame is cleared, return false to cancel event.
+-- Function that is called when the frame is about to be cleared, return false to cancel event.
 -- @return boolean Return false to cancel this event
 -- @hook
 -- @realm client

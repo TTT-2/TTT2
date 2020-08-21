@@ -41,7 +41,7 @@ function vskin.SelectVSkin(skinName)
 
 	cv_selectedVSkin:SetString(skinName)
 
-	vguihandler.UpdateVSkinSetting()
+	vguihandler.InvalidateVSkin()
 
 	return true
 end
@@ -97,11 +97,13 @@ end
 -- @return [default=Color(255, 255, 255, 255)] Color The background color
 -- @realm client
 function vskin.GetBackgroundColor()
-	if not vskin.skins[vskin.GetVSkinName()] then
+	local vskinObject = vskin.skins[vskin.GetVSkinName()]
+
+	if not vskinObject then
 		return COLOR_WHITE
 	end
 
-	return vskin.skins[vskin.GetVSkinName()].colors.background
+	return vskinObject.colors.background
 end
 
 ---
@@ -109,11 +111,13 @@ end
 -- @return [default=Color(255, 255, 255, 255)] Color The accent color
 -- @realm client
 function vskin.GetAccentColor()
-	if not vskin.skins[vskin.GetVSkinName()] then
+	local vskinObject = vskin.skins[vskin.GetVSkinName()]
+
+	if not vskinObject then
 		return COLOR_WHITE
 	end
 
-	return vskin.skins[vskin.GetVSkinName()].colors.accent
+	return vskinObject.colors.accent
 end
 
 ---
@@ -121,11 +125,13 @@ end
 -- @return [default=Color(255, 255, 255, 255)] Color The dark accent color
 -- @realm client
 function vskin.GetDarkAccentColor()
-	if not vskin.skins[vskin.GetVSkinName()] then
+	local vskinObject = vskin.skins[vskin.GetVSkinName()]
+
+	if not vskinObject then
 		return COLOR_WHITE
 	end
 
-	return vskin.skins[vskin.GetVSkinName()].colors.accent_dark
+	return vskinObject.colors.accent_dark
 end
 
 ---
@@ -133,11 +139,13 @@ end
 -- @return [default=Color(255, 255, 255, 255)] Color The scrollbar color
 -- @realm client
 function vskin.GetScrollbarColor()
-	if not vskin.skins[vskin.GetVSkinName()] then
+	local vskinObject = vskin.skins[vskin.GetVSkinName()]
+
+	if not vskinObject then
 		return COLOR_WHITE
 	end
 
-	return vskin.skins[vskin.GetVSkinName()].colors.scroll
+	return vskinObject.colors.scroll
 end
 
 ---
@@ -145,11 +153,13 @@ end
 -- @return [default=Color(255, 255, 255, 255)] Color The scrollbar track color
 -- @realm client
 function vskin.GetScrollbarTrackColor()
-	if not vskin.skins[vskin.GetVSkinName()] then
+	local vskinObject = vskin.skins[vskin.GetVSkinName()]
+
+	if not vskinObject then
 		return COLOR_WHITE
 	end
 
-	return vskin.skins[vskin.GetVSkinName()].colors.scroll_track
+	return vskinObject.colors.scroll_track
 end
 
 ---
@@ -157,11 +167,13 @@ end
 -- @return [default=Color(255, 255, 255, 255)] Color The shadow color
 -- @realm client
 function vskin.GetShadowColor()
-	if not vskin.skins[vskin.GetVSkinName()] then
+	local vskinObject = vskin.skins[vskin.GetVSkinName()]
+
+	if not vskinObject then
 		return COLOR_WHITE
 	end
 
-	return vskin.skins[vskin.GetVSkinName()].colors.shadow
+	return vskinObject.colors.shadow
 end
 
 ---
@@ -169,11 +181,13 @@ end
 -- @return [default=Color(255, 255, 255, 255)] Color The title text color
 -- @realm client
 function vskin.GetTitleTextColor()
-	if not vskin.skins[vskin.GetVSkinName()] then
+	local vskinObject = vskin.skins[vskin.GetVSkinName()]
+
+	if not vskinObject then
 		return COLOR_WHITE
 	end
 
-	return vskin.skins[vskin.GetVSkinName()].colors.title_text
+	return vskinObject.colors.title_text
 end
 
 ---
@@ -181,11 +195,13 @@ end
 -- @return [default=5] number The shadow size
 -- @realm client
 function vskin.GetShadowSize()
-	if not vskin.skins[vskin.GetVSkinName()] then
+	local vskinObject = vskin.skins[vskin.GetVSkinName()]
+
+	if not vskinObject then
 		return 5
 	end
 
-	return vskin.skins[vskin.GetVSkinName()].params.shadow_size
+	return vskinObject.params.shadow_size
 end
 
 ---
@@ -193,11 +209,13 @@ end
 -- @return [default=45] number The header height
 -- @realm client
 function vskin.GetHeaderHeight()
-	if not vskin.skins[vskin.GetVSkinName()] then
+	local vskinObject = vskin.skins[vskin.GetVSkinName()]
+
+	if not vskinObject then
 		return 45
 	end
 
-	return vskin.skins[vskin.GetVSkinName()].params.header_height
+	return vskinObject.params.header_height
 end
 
 ---
@@ -205,11 +223,13 @@ end
 -- @return [default=45] number The collapsable height
 -- @realm client
 function vskin.GetCollapsableHeight()
-	if not vskin.skins[vskin.GetVSkinName()] then
+	local vskinObject = vskin.skins[vskin.GetVSkinName()]
+
+	if not vskinObject then
 		return 30
 	end
 
-	return vskin.skins[vskin.GetVSkinName()].params.collapsable_height
+	return vskinObject.params.collapsable_height
 end
 
 ---
@@ -217,11 +237,13 @@ end
 -- @return [default=3] number The border size
 -- @realm client
 function vskin.GetBorderSize()
-	if not vskin.skins[vskin.GetVSkinName()] then
+	local vskinObject = vskin.skins[vskin.GetVSkinName()]
+
+	if not vskinObject then
 		return 3
 	end
 
-	return vskin.skins[vskin.GetVSkinName()].params.border_size
+	return vskinObject.params.border_size
 end
 
 ---
@@ -229,9 +251,11 @@ end
 -- @return [default=6] number The corner radius
 -- @realm client
 function vskin.GetCornerRadius()
-	if not vskin.skins[vskin.GetVSkinName()] then
+	local vskinObject = vskin.skins[vskin.GetVSkinName()]
+
+	if not vskinObject then
 		return 6
 	end
 
-	return vskin.skins[vskin.GetVSkinName()].params.corner_radius
+	return vskinObject.params.corner_radius
 end

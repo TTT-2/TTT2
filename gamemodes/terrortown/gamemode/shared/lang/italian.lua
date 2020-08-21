@@ -1193,6 +1193,8 @@ L.label_bind_voice_team = "Chat Vocale di Squadra"
 
 L.label_hud_basecolor = "Colore base"
 
+--L.label_menu_not_populated = "This submenu does not contain any content."
+
 L.header_bindings_ttt2 = "Assegnazione dei tasti di TTT2"
 L.header_bindings_other = "Altre Assegnazioni dei tasti"
 L.header_language = "Impostazioni della Lingua"

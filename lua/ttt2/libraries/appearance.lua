@@ -85,6 +85,8 @@ end
 -- Registers a callback function that is called once the scale
 -- is changed
 function appearance.RegisterScaleChangeCallback(fn)
+	if not isfunction(fn) or table.HasValue(appearance.callbacks, fn) then return end
+
 	appearance.callbacks[#appearance.callbacks + 1] = fn
 end
 
@@ -132,10 +134,10 @@ end
 ---
 -- Helper function that returns the correct color based on the
 -- current global color settings
--- @param Color The color to validate
--- @return Color The validated color
+-- @param Color The color that is used as a fallback
+-- @return Color The chosen color
 -- @realm client
-function appearance.ChooseFocusColor(clr)
+function appearance.GetFocusColor(clr)
 	if appearance.ShouldUseGlobalFocusColor() then
 		return appearance.GetFocusColor()
 	else

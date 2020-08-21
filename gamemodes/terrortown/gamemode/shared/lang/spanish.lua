@@ -1193,6 +1193,8 @@ L.label_crosshair_lines_enable = "Habilitar líneas de la mira"
 
 --L.label_hud_basecolor = "Base Color"
 
+--L.label_menu_not_populated = "This submenu does not contain any content."
+
 --L.header_bindings_ttt2 = "TTT2 Bindings"
 --L.header_bindings_other = "Other Bindings"
 --L.header_language = "Language Settings"

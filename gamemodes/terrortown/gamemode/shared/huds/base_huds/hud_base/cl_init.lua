@@ -64,7 +64,7 @@ end
 -- @param string elementType
 -- @return boolean
 -- @realm client
-function HUD:ShouldShow(elementType)
+function HUD:RegisterShouldShowCallback(elementType)
 	local elem = self:GetElementByType(elementType)
 	if elem then
 		if elem.togglable and not GetGlobalBool("ttt2_elem_toggled_" .. elem.id, false) then
@@ -284,7 +284,7 @@ end
 -- @param table elem
 -- @realm client
 function HUD:DrawElemAndChildren(elem)
-	if not elem.initialized or not elem.type or not hook.Call("HUDShouldDraw", GAMEMODE, elem.type) or not self:ShouldShow(elem.type) or not elem:ShouldDraw() then return end
+	if not elem.initialized or not elem.type or not hook.Call("HUDShouldDraw", GAMEMODE, elem.type) or not self:RegisterShouldShowCallback(elem.type) or not elem:ShouldDraw() then return end
 
 	local children = elem:GetChildren()
 

@@ -217,7 +217,7 @@ if CLIENT then
 		-- set up crosshair color
 		local color = client.GetSubRoleData and client:GetRoleColor() or INNOCENT.color
 
-		color = appearance.ChooseFocusColor(color)
+		color = appearance.GetFocusColor(color)
 
 		surface.SetDrawColor(
 			color.r,

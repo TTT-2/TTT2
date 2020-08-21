@@ -4,7 +4,6 @@ AccessorFunc(PANEL, "m_bSizeExpanded", "Expanded", FORCE_BOOL)
 AccessorFunc(PANEL, "m_iContentHeight", "StartHeight")
 AccessorFunc(PANEL, "m_fAnimTime", "AnimTime")
 AccessorFunc(PANEL, "m_bDrawBackground", "PaintBackground", FORCE_BOOL)
-AccessorFunc(PANEL, "m_bDrawBackground", "DrawBackground", FORCE_BOOL) -- deprecated
 AccessorFunc(PANEL, "m_iPadding", "Padding")
 AccessorFunc(PANEL, "m_pList", "List")
 
@@ -57,7 +56,7 @@ function PANEL:UnselectAll()
 	local children = self:GetChildren()
 
 	for k, v in pairs(children) do
-		if (v.SetSelected) then
+		if v.SetSelected then
 			v:SetSelected(false)
 		end
 	end

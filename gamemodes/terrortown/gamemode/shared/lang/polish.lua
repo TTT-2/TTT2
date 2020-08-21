@@ -1193,6 +1193,8 @@ L.label_bind_voice_team = "Teamowy Czat"
 
 L.label_hud_basecolor = "Kolor bazowy"
 
+--L.label_menu_not_populated = "This submenu does not contain any content."
+
 L.header_bindings_ttt2 = "Bindy TTT2"
 L.header_bindings_other = "Inne bindy"
 L.header_language = "Ustawienia języka"

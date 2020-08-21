@@ -19,13 +19,17 @@ vguihandler = vguihandler or {
 	}
 }
 
--- Call this function to create a new frame.
+-- Call this function to create a new frame. Using this instead of setting the
+-- frame up manually has the benefit that all basic settings are already set.
+-- Additionally the frame is added to a managed list that is used to handle
+-- hiding, closing and tracking menues.
 -- @param number w The width of the panel
 -- @param number h The height of the panel
 -- @param string title The title of the panel
 -- @return @{Panel} The created/cleared DFrameTTT2 object
 function vguihandler.GenerateFrame(w, h, title)
 	local frame = vgui.Create("DFrameTTT2")
+
 	frame:SetSize(w, h)
 	frame:Center()
 	frame:SetTitle(title)
@@ -76,7 +80,7 @@ function vguihandler.UnhideFrames(frames)
 
 		if not IsValid(frame) or not frame:IsFrameHidden() then continue end
 
-		frame:UnhideFrame()
+		frame:ShowFrame()
 	end
 end
 
@@ -91,7 +95,7 @@ function vguihandler.UnhideAllFrames()
 
 		if not frame:IsFrameHidden() then continue end
 
-		frame:UnhideFrame()
+		frame:ShowFrame()
 	end
 end
 
@@ -101,7 +105,7 @@ end
 -- @param string name The name of the changed setting
 -- @internal
 -- @realm client
-function vguihandler.UpdateVSkinSetting()
+function vguihandler.InvalidateVSkin()
 	local frames = vguihandler.frames
 
 	for i = 1, #frames do
@@ -123,7 +127,7 @@ function vguihandler.Rebuild()
 		end
 	end
 
-	vguihandler.UpdateVSkinSetting()
+	vguihandler.InvalidateVSkin()
 end
 
 ---

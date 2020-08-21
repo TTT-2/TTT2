@@ -1193,6 +1193,8 @@ L.label_bind_voice_team = "Team Sprachchat"
 
 L.label_hud_basecolor = "Grundfarbe"
 
+L.label_menu_not_populated = "Dieses Untermenü enthält keinen Inhalt."
+
 L.header_bindings_ttt2 = "TTT2 Tastenbelegungen"
 L.header_bindings_other = "Andere Tastenbelegungen"
 L.header_language = "Spracheinstellungen"

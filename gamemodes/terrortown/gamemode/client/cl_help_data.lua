@@ -2,17 +2,17 @@
 -- @desc A collection of objects that are passed in the menu populate hooks.
 -- @author Mineotopia
 
-HELP_DATA = {}
+menuHelpData = {}
 
-local HELP_DATA_OBJECT = {}
+local menuHelpDataObject = {}
 
 ---
--- Binds data table to the @{HELP_DATA} object
+-- Binds data table to the @{menuHelpData} object
 -- @param table data The data table with all submenues
--- @return @{HELP_DATA} The object to be used in the hook to populate the menu
+-- @return @{menuHelpData} The object to be used in the hook to populate the menu
 -- @internal
 -- @realm client
-function HELP_DATA:BindData(menuTbl)
+function menuHelpData:BindData(menuTbl)
 	self.menuTbl = menuTbl or {}
 
 	return self
@@ -23,12 +23,12 @@ end
 -- @param string id The unique ID of the submenu
 -- @return table A reference to the new table
 -- @realm client
-function HELP_DATA:RegisterSubMenu(id)
+function menuHelpData:RegisterSubMenu(id)
 	if self:Exists(id) then return end
 
 	local pos = #self.menuTbl + 1
 
-	self.menuTbl[pos] = table.Copy(HELP_DATA_OBJECT)
+	self.menuTbl[pos] = table.Copy(menuHelpDataObject)
 	self.menuTbl[pos].id = id
 
 	return self.menuTbl[pos]
@@ -39,7 +39,7 @@ end
 -- @param string id The unique menu identifier
 -- @return boolean Returns if the identifier is already used
 -- @realm client
-function HELP_DATA:Exists(id)
+function menuHelpData:Exists(id)
 	for i = 1, #self.menuTbl do
 		if self.menuTbl[i].id == id then
 			return true
@@ -55,7 +55,7 @@ end
 -- @return table A table of all menues
 -- @internal
 -- @realm client
-function HELP_DATA:GetVisibleNormalMenues()
+function menuHelpData:GetVisibleNormalMenues()
 	local menuTbl = {}
 
 	for i = 1, #self.menuTbl do
@@ -80,7 +80,7 @@ end
 -- @return table A table of all menues
 -- @internal
 -- @realm client
-function HELP_DATA:GetVisibleAdminMenues()
+function menuHelpData:GetVisibleAdminMenues()
 	local client = LocalPlayer()
 	local menuTbl = {}
 
@@ -106,7 +106,7 @@ end
 -- Sets the title of a menu element
 -- @param string title The name, can be a language identifier
 -- @realm client
-function HELP_DATA_OBJECT:SetTitle(title)
+function menuHelpDataObject:SetTitle(title)
 	self.title = title
 end
 
@@ -114,7 +114,7 @@ end
 -- Sets the description of a menu element
 -- @param string description The description, can be a language identifier
 -- @realm client
-function HELP_DATA_OBJECT:SetDescription(description)
+function menuHelpDataObject:SetDescription(description)
 	self.description = description
 end
 
@@ -122,7 +122,7 @@ end
 -- Sets the icon material of a menu element
 -- @param Material iconMat The material of the icon
 -- @realm client
-function HELP_DATA_OBJECT:SetIcon(iconMat)
+function menuHelpDataObject:SetIcon(iconMat)
 	self.iconMat = iconMat
 end
 
@@ -130,7 +130,7 @@ end
 -- Sets the admin only state of a menu element
 -- @param [default=true] boolean adminOnly Set true to show this menu only to admins
 -- @realm client
-function HELP_DATA_OBJECT:AdminOnly(adminOnly)
+function menuHelpDataObject:AdminOnly(adminOnly)
 	self.adminOnly = adminOnly == nil and true or adminOnly
 end
 
@@ -139,7 +139,7 @@ end
 -- later point if a menu should be shown
 -- @param function fn The callback function
 -- @realm client
-function HELP_DATA_OBJECT:ShouldShow(fn)
+function menuHelpDataObject:RegisterShouldShowCallback(fn)
 	self.shouldShowFn = fn
 end
 
@@ -148,22 +148,22 @@ end
 -- is clicked
 -- @param function fn The callback function
 -- @realm client
-function HELP_DATA_OBJECT:OnClick(fn)
+function menuHelpDataObject:RegisterOnClickCallback(fn)
 	self.onClickFn = fn
 end
 
 
-SUB_HELP_DATA = {}
+subMenuHelpData = {}
 
-local SUB_HELP_DATA_OBJECT = {}
+local subMenuHelpDataObject = {}
 
 ---
--- Binds data table to the @{SUB_HELP_DATA} object
+-- Binds data table to the @{subMenuHelpData} object
 -- @param table data The data table with all navigation points
--- @return @{SUB_HELP_DATA} The object to be used in the hook
+-- @return @{subMenuHelpData} The object to be used in the hook
 -- @internal
 -- @realm client
-function SUB_HELP_DATA:BindData(menuTbl)
+function subMenuHelpData:BindData(menuTbl)
 	self.menuTbl = menuTbl or {}
 
 	return self
@@ -174,12 +174,12 @@ end
 -- @param string id The unique ID of the navigation point
 -- @return table A reference to the new table
 -- @realm client
-function SUB_HELP_DATA:PopulateSubMenu(id)
+function subMenuHelpData:PopulateSubMenu(id)
 	if self:Exists(id) then return end
 
 	local pos = #self.menuTbl + 1
 
-	self.menuTbl[pos] = table.Copy(SUB_HELP_DATA_OBJECT)
+	self.menuTbl[pos] = table.Copy(subMenuHelpDataObject)
 	self.menuTbl[pos].id = id
 
 	return self.menuTbl[pos]
@@ -190,7 +190,7 @@ end
 -- @param string id The unique submenu identifier
 -- @return boolean Returns if the identifier is already used
 -- @realm client
-function SUB_HELP_DATA:Exists(id)
+function subMenuHelpData:Exists(id)
 	for i = 1, #self.menuTbl do
 		if self.menuTbl[i].id == id then
 			return true
@@ -204,7 +204,7 @@ end
 -- Sets the title of a submenu element
 -- @param string title The name, can be a language identifier
 -- @realm client
-function SUB_HELP_DATA_OBJECT:SetTitle(title)
+function subMenuHelpDataObject:SetTitle(title)
 	self.title = title
 end
 
@@ -212,7 +212,7 @@ end
 -- Sets the admin only state of a submenu element
 -- @param [default=true] boolean adminOnly Set true to show this menu only to admins
 -- @realm client
-function SUB_HELP_DATA_OBJECT:AdminOnly(adminOnly)
+function subMenuHelpDataObject:AdminOnly(adminOnly)
 	self.adminOnly = adminOnly == nil and true or adminOnly
 end
 
@@ -221,7 +221,7 @@ end
 -- the main panel of a submenu
 -- @param function fn The callback function
 -- @realm client
-function SUB_HELP_DATA_OBJECT:PopulatePanel(fn)
+function subMenuHelpDataObject:PopulatePanel(fn)
 	self.populateFn = fn
 end
 
@@ -231,7 +231,7 @@ end
 -- this callback function is set
 -- @param function fn The callback function
 -- @realm client
-function SUB_HELP_DATA_OBJECT:PopulateButtonPanel(fn)
+function subMenuHelpDataObject:PopulateButtonPanel(fn)
 	self.populateButtonFn = fn
 end
 
@@ -240,7 +240,7 @@ end
 -- later point if a submenu should be shown
 -- @param function fn The callback function
 -- @realm client
-function SUB_HELP_DATA_OBJECT:ShouldShow(fn)
+function subMenuHelpDataObject:RegisterShouldShowCallback(fn)
 	self.shouldShowFn = fn
 end
 
@@ -249,6 +249,6 @@ end
 -- is clicked
 -- @param function fn The callback function
 -- @realm client
-function SUB_HELP_DATA_OBJECT:OnClick(fn)
+function subMenuHelpDataObject:RegisterOnClickCallback(fn)
 	self.onClickFn = fn
 end

@@ -67,20 +67,18 @@ HELPSCRN = HELPSCRN or {}
 
 HELPSCRN.populate = HELPSCRN.populate or {}
 HELPSCRN.subPopulate = HELPSCRN.subPopulate or {}
-HELPSCRN.nameMenuOpen = HELPSCRN.nameMenuOpen or nil
+HELPSCRN.currentMenuId = HELPSCRN.currentMenuId or nil
 HELPSCRN.parent = HELPSCRN.parent or nil
 HELPSCRN.menuData = HELPSCRN.menuData or nil
-HELPSCRN.mainframe = HELPSCRN.mainframe or nil
+HELPSCRN.mainFrame = HELPSCRN.mainFrame or nil
 
 HELPSCRN.pad = 5
 
-fileloader.LoadFolder("terrortown/gamemode/client/cl_help/", false, CLIENT_FILE)
-
 -- define sizes
-local w, h = 1100, 700
+local width, height = 1100, 700
 local cols = 3
-local widthMainButton = math.Round((w - 2 * HELPSCRN.pad * (cols + 1)) / cols)
-local heightMainButton = 120
+local widthMainMenuButton = math.Round((width - 2 * HELPSCRN.pad * (cols + 1)) / cols)
+local heightMainMenuButton = 120
 
 local widthNav, heightNav = 300, 700
 local heightNavHeader = 15
@@ -94,7 +92,7 @@ local function AddMenuButtons(menuTbl, parent)
 		local data = menuTbl[i]
 
 		local settingsButton = parent:Add("DMenuButtonTTT2")
-		settingsButton:SetSize(widthMainButton, heightMainButton)
+		settingsButton:SetSize(widthMainMenuButton, heightMainMenuButton)
 		settingsButton:SetTitle(data.title or data.id)
 		settingsButton:SetDescription(data.description)
 		settingsButton:SetImage(data.iconMat)
@@ -105,26 +103,30 @@ local function AddMenuButtons(menuTbl, parent)
 	end
 end
 
+local MAIN_MENU = "main"
+
+fileloader.LoadFolder("terrortown/gamemode/client/cl_help/", false, CLIENT_FILE)
+
 ---
 -- Opens the help screen
 -- @realm client
 function HELPSCRN:ShowMainMenu()
-	local frame = self.mainframe
+	local frame = self.mainFrame
 
 	-- IF MENU ELEMENT DOES NOT ALREADY EXIST, CREATE IT
 	if IsValid(frame) and not frame:IsFrameHidden() then
 		frame:ClearFrame(nil, nil, "help_title")
 	else
-		frame = vguihandler.GenerateFrame(w, h, "help_title", true)
+		frame = vguihandler.GenerateFrame(width, height, "help_title", true)
 	end
 
-	self.mainframe = frame
+	self.mainFrame = frame
 
 	-- INIT MAIN MENU SPECIFIC STUFF
 	frame:SetPadding(self.pad, self.pad, self.pad, self.pad)
 
 	-- MARK AS MAIN MENU
-	self.nameMenuOpen = "main"
+	self.currentMenuId = MAIN_MENU
 
 	-- MAKE MAIN FRAME SCROLLABLE
 	local scrollPanel = vgui.Create("DScrollPanel", frame)
@@ -138,7 +140,7 @@ function HELPSCRN:ShowMainMenu()
 
 	-- GENERATE MENU CONTENT
 	local menuTbl = {}
-	local helpData = HELP_DATA:BindData(menuTbl)
+	local helpData = menuHelpData:BindData(menuTbl)
 
 	InternalModifyMainMenu(helpData)
 
@@ -166,7 +168,7 @@ end
 -- @return string The id of the opened menu
 -- @realm client
 function HELPSCRN:GetOpenMenu()
-	return self.nameMenuOpen and self.menuData.id
+	return self.currentMenuId and self.menuData.id
 end
 
 ---
@@ -186,22 +188,22 @@ end
 function HELPSCRN:BuildContentArea()
 	if not IsValid(self.parent) then return end
 
-	if hook.Run("TTT2OnSubmenuClear", self.parent, self.nameMenuOpen, self.lastMenuData, self.menuData) == false then return end
+	if hook.Run("TTT2OnSubmenuClear", self.parent, self.currentMenuId, self.lastMenuData, self.menuData) == false then return end
 
 	self.parent:Clear()
 
-	local w2, h2 = self.parent:GetSize()
-	local _, p1, _, p2 = self.parent:GetDockPadding()
+	local widtheight2, height2 = self.parent:GetSize()
+	local _, paddingTop, _, paddingBottom = self.parent:GetDockPadding()
 
 	-- CALCULATE SIZE BASED ON EXISTENCE OF BUTTON PANEL
 	if isfunction(self.menuData.populateButtonFn) then
-		h2 = h2 - heightButtonPanel
+		height2 = height2 - heightButtonPanel
 	end
 
 	-- ADD CONTENT BOX AND CONTENT
 	local contentAreaScroll = vgui.Create("DScrollPanel", self.parent)
 	contentAreaScroll:SetVerticalScrollbarEnabled(true)
-	contentAreaScroll:SetSize(w2, h2 - p1 - p2)
+	contentAreaScroll:SetSize(widtheight2, height2 - paddingTop - paddingBottom)
 	contentAreaScroll:Dock(TOP)
 
 	if isfunction(self.menuData.populateFn) then
@@ -211,7 +213,7 @@ function HELPSCRN:BuildContentArea()
 	-- ADD BUTTON BOX AND BUTTONS
 	if isfunction(self.menuData.populateButtonFn) then
 		local buttonArea = vgui.Create("DButtonPanelTTT2", self.parent)
-		buttonArea:SetSize(w2, heightButtonPanel)
+		buttonArea:SetSize(widtheight2, heightButtonPanel)
 		buttonArea:Dock(BOTTOM)
 
 		self.menuData.populateButtonFn(buttonArea)
@@ -223,13 +225,13 @@ end
 -- @param table data The data of the submenu
 -- @realm client
 function HELPSCRN:ShowSubMenu(data)
-	local frame = self.mainframe
+	local frame = self.mainFrame
 
 	-- IF MENU ELEMENT DOES NOT ALREADY EXIST, CREATE IT
 	if IsValid(frame) and not frame:IsFrameHidden() then
 		frame:ClearFrame(nil, nil, data.title or data.id)
 	else
-		frame = vguihandler.GenerateFrame(w, h, data.title or data.id)
+		frame = vguihandler.GenerateFrame(width, height, data.title or data.id)
 	end
 
 	-- INIT SUB MENU SPECIFIC STUFF
@@ -241,7 +243,7 @@ function HELPSCRN:ShowSubMenu(data)
 	end)
 
 	-- MARK AS SUBMENU
-	self.nameMenuOpen = data.id
+	self.currentMenuId = data.id
 
 	-- BUILD GENERAL BOX STRUCTURE
 	local navArea = vgui.Create("DNavPanelTTT2", frame)
@@ -271,7 +273,7 @@ function HELPSCRN:ShowSubMenu(data)
 
 	-- GENERATE MENU CONTENT
 	local menuTbl = {}
-	local helpData = SUB_HELP_DATA:BindData(menuTbl)
+	local helpData = subMenuHelpData:BindData(menuTbl)
 
 	InternalModifySubMenu(helpData, data.id)
 
@@ -279,6 +281,14 @@ function HELPSCRN:ShowSubMenu(data)
 
 	-- cache reference to last active button
 	local lastActive
+
+	if #menuTbl == 0 then
+		local labelNoContent = vgui.Create("DLabelTTT2", contentArea)
+		labelNoContent:SetText("label_menu_not_populated")
+		labelNoContent:SetSize(widthContent - 40, 50)
+		labelNoContent:SetFont("DermaTTT2Title")
+		labelNoContent:SetPos(20, 0)
+	end
 
 	for i = 1, #menuTbl do
 		local subData = menuTbl[i]
@@ -312,7 +322,8 @@ function HELPSCRN:ShowSubMenu(data)
 
 	-- REGISTER REBUILD CALLBACK
 	frame.OnRebuild = function(slf)
-		if HELPSCRN.nameMenuOpen == "main" then return end
+		-- do not rebuild if the main menu is open, only if submenu is open
+		if HELPSCRN.currentMenuId == MAIN_MENU then return end
 
 		HELPSCRN:BuildContentArea()
 	end
@@ -320,15 +331,15 @@ end
 
 local function ShowTTTHelp(ply, cmd, args)
 	-- F1 PRESSED: CLOSE MAIN MENU IF MENU IS ALREADY OPENED
-	if HELPSCRN.nameMenuOpen == "main" and IsValid(HELPSCRN.mainframe) and not HELPSCRN.mainframe:IsFrameHidden() then
-		HELPSCRN.mainframe:CloseFrame()
+	if HELPSCRN.currentMenuId == MAIN_MENU and IsValid(HELPSCRN.mainFrame) and not HELPSCRN.mainFrame:IsFrameHidden() then
+		HELPSCRN.mainFrame:CloseFrame()
 
 		return
 	end
 
 	-- F1 PRESSED AND MENU IS HIDDEN: UNHIDE
-	if HELPSCRN.nameMenuOpen and IsValid(HELPSCRN.mainframe) and HELPSCRN.mainframe:IsFrameHidden() then
-		HELPSCRN.mainframe:UnhideFrame()
+	if HELPSCRN.currentMenuId and IsValid(HELPSCRN.mainFrame) and HELPSCRN.mainFrame:IsFrameHidden() then
+		HELPSCRN.mainFrame:ShowFrame()
 
 		return
 	end
@@ -343,11 +354,11 @@ concommand.Add("ttt_helpscreen", ShowTTTHelp)
 -- A hook that is called once the content area of the helpscreen
 -- is about to be cleared, clearing is stopped if false is returned.
 -- @param Panel parent The parent panel
--- @param string nameMenuOpen The name of the opened submenu
+-- @param string currentMenuId The name of the opened submenu
 -- @param table lastMenuData The menu data of the menu that will be closed
 -- @param table menuData The menu data of the menu that will be opened
 -- @hook
 -- @realm client
-function GM:TTT2OnSubmenuClear(parent, nameMenuOpen, lastMenuData, menuData)
+function GM:TTT2OnSubmenuClear(parent, currentMenuId, lastMenuData, menuData)
 
 end

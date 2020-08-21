@@ -283,8 +283,8 @@ local function DrawMenuButton(w, h, panel, colorOutline, colorIcon, colorText, c
 	)
 
 	local desc_wrapped = drawGetWrappedText(TryT(panel:GetDescription()), w - h - 2 * paddingText, panel:GetDescriptionFont())
-
 	local line_pos = 35
+
 	for i = 1, #desc_wrapped do
 		drawSimpleText(
 			desc_wrapped[i],

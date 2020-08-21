@@ -220,7 +220,7 @@ function GM:Initialize()
 		MsgN("Added TTT2 vskin file: ", path)
 	end)
 
-	fileloader.LoadFolder("terrortown/lang/", false, CLIENT_FILE, function(path)
+	fileloader.LoadFolder("terrortown/vskin/", false, CLIENT_FILE, function(path)
 		MsgN("Added TTT2 vskin file: ", path)
 	end)
 

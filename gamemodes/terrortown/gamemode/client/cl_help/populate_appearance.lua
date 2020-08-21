@@ -539,6 +539,7 @@ HELPSCRN.subPopulate["ttt2_appearance"] = function(helpData, id)
 	targetData:SetTitle("submenu_appearance_targetid_title")
 	targetData:PopulatePanel(PopulateTargetIDPanel)
 
+	-- equipment shop
 	local shopData = helpData:PopulateSubMenu(id .. "_shop")
 
 	shopData:SetTitle("submenu_appearance_shop_title")

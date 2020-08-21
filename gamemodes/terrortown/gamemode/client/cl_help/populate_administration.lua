@@ -23,9 +23,6 @@ local function PopulateHUDPanel(parent)
 		selectName = ttt2net.GetGlobal({"hud_manager", "defaultHUD"}) or "None",
 		default = "None",
 		OnChange = function(_, _, value)
-			print("default HUD")
-			print(value)
-
 			net.Start("TTT2DefaultHUDRequest")
 			net.WriteString(value == "None" and "" or value)
 			net.SendToServer()
@@ -42,9 +39,6 @@ local function PopulateHUDPanel(parent)
 		selectName = ttt2net.GetGlobal({"hud_manager", "forcedHUD"}) or "None",
 		default = "None",
 		OnChange = function(_, _, value)
-			print("force HUD")
-			print(value)
-
 			net.Start("TTT2ForceHUDRequest")
 			net.WriteString(value == "None" and "" or value)
 			net.SendToServer()
