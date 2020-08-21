@@ -11,7 +11,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Changed
 
-- Updated Spanish translation (@DennisWolfgang)
+- Updated Spanish translation (by @DennisWolfgang)
 
 ### Fixed
 
