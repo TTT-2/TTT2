@@ -9,6 +9,7 @@ local ipairs = ipairs
 bind = {}
 
 local BIND_TABLE_NAME = "ttt2_bindings"
+local BIND_FLAG_TABLE_NAME = "ttt2_bindings_initialized"
 local Bindings = {}
 local Registry = {}
 local FirstPressed = {}
@@ -30,6 +31,22 @@ local function DBCreateBindsTable()
 
 		if result == false then
 			print("[TTT2][BIND][ERROR] Could not create the database table...")
+
+			return false
+		end
+	end
+
+	return true
+end
+
+---
+-- @internal
+local function DBCreateDefaultBindsFlagTable()
+	if not sql.TableExists(BIND_FLAG_TABLE_NAME) then
+		local result = sql.Query("CREATE TABLE " .. BIND_FLAG_TABLE_NAME .. " (guid TEXT, name TEXT)")
+
+		if result == false then
+			print("[TTT2][BIND][ERROR] Could not create the flag database table...")
 
 			return false
 		end
@@ -64,6 +81,30 @@ end
 
 ---
 -- @internal
+local function DBSetDefaultAppliedFlag(name)
+	if DBCreateDefaultBindsFlagTable() then
+		local result = sql.Query("INSERT INTO " .. BIND_FLAG_TABLE_NAME .. " VALUES('" .. LocalPlayer():SteamID64() .. "', " .. sql.SQLStr(name) .. ")")
+
+		if result == false then
+			print("[TTT2][BIND][ERROR] Wasn't able to save binding flag to database...")
+		end
+	end
+end
+
+---
+-- @internal
+local function WasDefaultApplied(name)
+	if DBCreateDefaultBindsFlagTable() then
+		local result = sql.Query("SELECT * FROM " .. BIND_FLAG_TABLE_NAME .. " WHERE guid = '" .. LocalPlayer():SteamID64() .. "' AND name = " .. sql.SQLStr(name))
+
+		return istable(result)
+	end
+
+	return false
+end
+
+---
+-- @internal
 local function TTT2LoadBindings()
 
 	if DBCreateBindsTable() then
@@ -82,6 +123,16 @@ local function TTT2LoadBindings()
 
 			print("[TTT2][BIND] Loaded bindings...")
 		end
+	end
+
+	for name in pairs(Registry) do
+		local item = Registry[name]
+
+		if item.defaultKey and not WasDefaultApplied(name) and bind.Find(name) == KEY_NONE then
+			bind.Set(item.defaultKey, name, true)
+			DBSetDefaultAppliedFlag(name)
+		end
+
 	end
 end
 
@@ -269,15 +320,12 @@ function bind.Register(name, onPressedFunc, onReleasedFunc, dontShowOrCategory, 
 
 	Registry[name] = {
 		onPressed  = onPressedFunc,
-		onReleased = onReleasedFunc
+		onReleased = onReleasedFunc,
+		defaultKey = defaultKey
 	}
 
 	if dontShowOrCategory ~= true then
 		bind.AddSettingsBinding(name, settingsLabel or name, dontShowOrCategory, defaultKey)
-	end
-
-	if defaultKey then
-		bind.Set(defaultKey, name, false)
 	end
 end
 
