@@ -239,13 +239,13 @@ function bind.AddSettingsBinding(name, label, category, defaultKey)
 			tbl.label = label -- update
 			tbl.category = category
 			tbl.defaultKey = defaultKey
+
 			return -- don't insert again
 		end
 	end
 
 	SettingsBindings[#SettingsBindings + 1] = {name = name, label = label, category = category, defaultKey = defaultKey}
 end
-
 
 ---
 -- Register a function to run when the button for a specific binding is pressed. This will also add the binding to the
@@ -279,7 +279,6 @@ function bind.Register(name, onPressedFunc, onReleasedFunc, dontShowOrCategory, 
 	end
 end
 
-
 ---
 -- Add a binding to run a command when the button is pressed. This function is not used to register a new binding shown in
 -- the UI, but to bind a specific key to a command
@@ -307,7 +306,7 @@ end
 function bind.Set(btn, name, persistent)
 	if not name or name == "" or not isnumber(btn) then return end
 
-	bind.RemoveAll(name)
+	bind.RemoveAll(name, persistent)
 	bind.Add(btn, name, persistent)
 end
 
@@ -317,7 +316,6 @@ end
 function bind.GetSettingsBindings()
 	return SettingsBindings
 end
-
 
 ---
 -- Returns the SettingsBindingsCategories table.
