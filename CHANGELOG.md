@@ -11,6 +11,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Changed
 
+- The weapon pickup system has been improved to increase stability and remove edge cases in temporary weapon teleportation
 - Updated Spanish translation (by @DennisWolfgang)
 
 ### Fixed
@@ -36,7 +37,6 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Roles are now only getting synced to clients if the role is known, not just the body being confirmed
 - Airborne players can no longer replenish stamina
-- The weapon pickup system has been improved to increase stability and remove edge cases in temporary weapon teleportation
 - Detective overhead icon is now shown to innocents and traitors
 - moved language files from `lua/lang/` to `lua/terrortown/lang`
 - Stopped teleporting players to players they're not spectating if they press the "duck"-Key while roaming
