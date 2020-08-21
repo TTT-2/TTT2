@@ -235,11 +235,6 @@ function bind.AddSettingsBinding(name, label, category, defaultKey)
 		SettingsBindingsCategories[#SettingsBindingsCategories + 1] = category
 	end
 
-	--set DefaultKey if needed
-	if defaultKey then
-		bind.Set(defaultKey, name, false)
-	end
-
 	-- check if it already exists
 	for _, tbl in ipairs(SettingsBindings) do
 		if tbl.name == name then
