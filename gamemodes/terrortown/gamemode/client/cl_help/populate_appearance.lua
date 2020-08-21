@@ -155,7 +155,7 @@ local function PopulateHUDSwitcherPanel(parent)
 	PopulateHUDSwitcherPanelSettings(CreateForm(parent, "header_hud_customize"), currentHUD)
 
 	-- REGISTER UNHIDE FUNCTION TO STOP HUD EDITOR
-	HELPSCRN.mainframe.OnUnhide = function(slf)
+	HELPSCRN.mainFrame.OnUnhide = function(slf)
 		HUDEditor.StopEditHUD()
 	end
 end
@@ -522,7 +522,7 @@ HELPSCRN.subPopulate["ttt2_appearance"] = function(helpData, id)
 
 			HUDEditor.EditHUD(currentHUDName)
 
-			HELPSCRN.mainframe:HideFrame()
+			HELPSCRN.mainFrame:HideFrame()
 		end
 		buttonEditor:SetEnabled(not currentHUD.disableHUDEditor)
 	end)

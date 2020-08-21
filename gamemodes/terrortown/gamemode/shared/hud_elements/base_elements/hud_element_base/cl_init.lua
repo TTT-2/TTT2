@@ -376,7 +376,7 @@ function HUDELEMENT:GetBorderParams()
 
 			local hud = huds.GetStored(HUDManager.GetHUD())
 
-			if elem and elem:InheritParentBorder() and hud:RegisterShouldShowCallback(elem.type) and elem:ShouldDraw() then
+			if elem and elem:InheritParentBorder() and hud:ShouldShow(elem.type) and elem:ShouldDraw() then
 				local c_pos = elem:GetPos()
 				local c_size = elem:GetSize()
 
