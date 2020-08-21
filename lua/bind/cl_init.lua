@@ -8,7 +8,7 @@ local ipairs = ipairs
 
 bind = {}
 
-local tablename = "ttt2_bindings"
+local BIND_TABLE_NAME = "ttt2_bindings"
 local Bindings = {}
 local Registry = {}
 local FirstPressed = {}
@@ -24,10 +24,13 @@ local SettingsBindingsCategories = { "TTT2 Bindings", "Other Bindings" }
 
 ---
 -- @internal
-local function DBCreateTable()
-	if not sql.TableExists(tablename) then
-		local result = sql.Query("CREATE TABLE " .. tablename .. " (guid TEXT, name TEXT, button TEXT)")
+local function DBCreateBindsTable()
+	if not sql.TableExists(BIND_TABLE_NAME) then
+		local result = sql.Query("CREATE TABLE " .. BIND_TABLE_NAME .. " (guid TEXT, name TEXT, button TEXT)")
+
 		if result == false then
+			print("[TTT2][BIND][ERROR] Could not create the database table...")
+
 			return false
 		end
 	end
@@ -38,8 +41,9 @@ end
 ---
 -- @internal
 local function SaveBinding(name, button)
-	if DBCreateTable() then
-		local result = sql.Query("INSERT INTO " .. tablename .. " VALUES('" .. LocalPlayer():SteamID64() .. "', " .. sql.SQLStr(name) .. ", " .. sql.SQLStr(button) .. ")")
+	if DBCreateBindsTable() then
+		local result = sql.Query("INSERT INTO " .. BIND_TABLE_NAME .. " VALUES('" .. LocalPlayer():SteamID64() .. "', " .. sql.SQLStr(name) .. ", " .. sql.SQLStr(button) .. ")")
+
 		if result == false then
 			print("[TTT2][BIND][ERROR] Wasn't able to save binding to database...")
 		end
@@ -49,8 +53,9 @@ end
 ---
 -- @internal
 local function DBRemoveBinding(name, button)
-	if DBCreateTable() then
-		local result = sql.Query("DELETE FROM " .. tablename .. " WHERE guid = '" .. LocalPlayer():SteamID64() .. "' AND name = " .. sql.SQLStr(name) .. " AND button = " .. sql.SQLStr(button) )
+	if DBCreateBindsTable() then
+		local result = sql.Query("DELETE FROM " .. BIND_TABLE_NAME .. " WHERE guid = '" .. LocalPlayer():SteamID64() .. "' AND name = " .. sql.SQLStr(name) .. " AND button = " .. sql.SQLStr(button) )
+
 		if result == false then
 			print("[TTT2][BIND][ERROR] Wasn't able to remove binding from database...")
 		end
@@ -60,8 +65,10 @@ end
 ---
 -- @internal
 local function TTT2LoadBindings()
-	if DBCreateTable() then
-		local result = sql.Query("SELECT * FROM " .. tablename .. " WHERE guid = '" .. LocalPlayer():SteamID64() .. "'")
+
+	if DBCreateBindsTable() then
+		local result = sql.Query("SELECT * FROM " .. BIND_TABLE_NAME .. " WHERE guid = '" .. LocalPlayer():SteamID64() .. "'")
+
 		if istable(result) then
 			for _, tbl in ipairs(result) do
 				local tmp = tbl.button
