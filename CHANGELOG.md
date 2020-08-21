@@ -9,6 +9,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added ConVar to toggle double-click buying
 - Added Japanese translation (by @Westoon)
 
+### Changed
+
+- Updated Spanish translation (@DennisWolfgang)
+
 ### Fixed
 
 - Fixed foregoing fetch fix
