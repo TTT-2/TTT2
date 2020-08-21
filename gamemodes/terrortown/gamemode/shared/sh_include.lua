@@ -101,20 +101,6 @@ TTTFiles = {
 	cl_vskin__vgui__dcheckboxlabel = {file = "cl_vskin/vgui/dcheckboxlabel_ttt2.lua", on = "client"},
 	cl_vskin__vgui__dnumslider = {file = "cl_vskin/vgui/dnumslider_ttt2.lua", on = "client"},
 	cl_vskin__vgui__dbinderpanel = {file = "cl_vskin/vgui/dbinderpanel_ttt2.lua", on = "client"},
-
-	-- cl_help client files
-	cl_help__populate = {file = "cl_help/populate.lua", on = "client"},
-	cl_help__populate_addons = {file = "cl_help/populate_addons.lua", on = "client"},
-	cl_help__populate_appearance = {file = "cl_help/populate_appearance.lua", on = "client"},
-	cl_help__populate_bindings = {file = "cl_help/populate_bindings.lua", on = "client"},
-	cl_help__populate_changelog = {file = "cl_help/populate_changelog.lua", on = "client"},
-	cl_help__populate_gameplay = {file = "cl_help/populate_gameplay.lua", on = "client"},
-	cl_help__populate_guide = {file = "cl_help/populate_guide.lua", on = "client"},
-	cl_help__populate_language = {file = "cl_help/populate_language.lua", on = "client"},
-	cl_help__populate_legacy = {file = "cl_help/populate_legacy.lua", on = "client"},
-	cl_help__populate_administration = {file = "cl_help/populate_administration.lua", on = "client"},
-	cl_help__populate_equipment = {file = "cl_help/populate_equipment.lua", on = "client"},
-	cl_help__populate_shops = {file = "cl_help/populate_shops.lua", on = "client"},
 }
 
 if SERVER then

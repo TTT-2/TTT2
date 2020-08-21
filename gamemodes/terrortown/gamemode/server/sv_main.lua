@@ -175,6 +175,8 @@ util.AddNetworkString("TTT2RoleGlobalVoice")
 util.AddNetworkString("TTT2MuteTeam")
 util.AddNetworkString("TTT2UpdateHoldAimConvar")
 
+fileloader.LoadFolder("terrortown/gamemode/client/cl_help/", false, CLIENT_FILE)
+
 fileloader.LoadFolder("terrortown/autorun/client/", false, CLIENT_FILE, function(path)
 	MsgN("Marked TTT2 client autorun file for distribution: ", path)
 end)

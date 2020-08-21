@@ -24,6 +24,44 @@ local function MuteTeamCallback(cv, old, new)
 end
 cvars.AddChangeCallback("ttt_mute_team_check", MuteTeamCallback)
 
+local mainMenuOrder = {
+	"ttt2_changelog",
+	"ttt2_guide",
+	"ttt2_bindings",
+	"ttt2_language",
+	"ttt2_appearance",
+	"ttt2_gameplay",
+	"ttt2_addons",
+	"ttt2_legacy"
+}
+
+local mainMenuAdminOrder = {
+	"ttt2_administration",
+	"ttt2_equipment",
+	"ttt2_shops"
+}
+
+-- Populate the main menu
+local function InternalModifyMainMenu(helpData)
+	for i = 1, #mainMenuOrder do
+		local id = mainMenuOrder[i]
+
+		HELPSCRN.populate[id](helpData, id)
+	end
+
+	for i = 1, #mainMenuAdminOrder do
+		local id = mainMenuAdminOrder[i]
+		HELPSCRN.populate[id](helpData, id)
+	end
+end
+
+-- Populate the sub menues
+local function InternalModifySubMenu(helpData, menuId)
+	if not HELPSCRN.subPopulate[menuId] then return end
+
+	HELPSCRN.subPopulate[menuId](helpData, menuId)
+end
+
 -- SET UP HELPSCRN AND INCLUDE ADDITIONAL FILES
 HELPSCRN = HELPSCRN or {}
 
@@ -34,22 +72,11 @@ HELPSCRN.parent = HELPSCRN.parent or nil
 HELPSCRN.menuData = HELPSCRN.menuData or nil
 HELPSCRN.mainframe = HELPSCRN.mainframe or nil
 
-ttt_include("cl_help__populate")
-ttt_include("cl_help__populate_addons")
-ttt_include("cl_help__populate_appearance")
-ttt_include("cl_help__populate_bindings")
-ttt_include("cl_help__populate_changelog")
-ttt_include("cl_help__populate_gameplay")
-ttt_include("cl_help__populate_guide")
-ttt_include("cl_help__populate_language")
-ttt_include("cl_help__populate_legacy")
-ttt_include("cl_help__populate_administration")
-ttt_include("cl_help__populate_equipment")
-ttt_include("cl_help__populate_shops")
-
--- DEFINE SIZE
 HELPSCRN.pad = 5
 
+fileloader.LoadFolder("terrortown/gamemode/client/cl_help/", false, CLIENT_FILE)
+
+-- define sizes
 local w, h = 1100, 700
 local cols = 3
 local widthMainButton = math.Round((w - 2 * HELPSCRN.pad * (cols + 1)) / cols)
