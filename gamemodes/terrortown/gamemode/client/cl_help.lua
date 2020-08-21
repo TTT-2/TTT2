@@ -162,7 +162,7 @@ function HELPSCRN:ShowMainMenu()
 end
 
 ---
--- Returns the name of the currently open menu
+-- Returns the name of the currently opened menu
 -- @return string The id of the opened menu
 -- @realm client
 function HELPSCRN:GetOpenMenu()
