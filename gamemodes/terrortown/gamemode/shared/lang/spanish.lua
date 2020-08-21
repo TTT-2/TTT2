@@ -52,7 +52,7 @@ L.karma_dmg_full = "¡Tu karma es {amount}, por lo que harás todo el daño esta
 L.karma_dmg_other = "¡Tu karma es {amount}. Como resultado, tu daño se ve reducido en {num}%"
 
 -- Body identification messages
-L.body_found = "{finder} encontró el cuerpo de {victim}. Era {role}"
+L.body_found = "{finder} encontró el cuerpo de {victim}. {role}"
 L.body_found_team = "{finder} encontró el cuerpo de {victim}. {role} ({team})"
 
 -- The {role} in body_found will be replaced by one of the following:
@@ -213,7 +213,7 @@ L.search_dmg_fall = "Cayó directo hacia su muerte."
 L.search_dmg_boom = "Sus heridas y la ropa chamuscada indican que una explosión acabó con la vida de esta persona."
 L.search_dmg_club = "El cuerpo está golpeado y amorotonado. Fue apalizado hasta la muerte."
 L.search_dmg_drown = "El cuerpo muestra signos de axfisia. Ha muerto ahogado"
-L.search_dmg_stab = "Fue apuñalado y cortado antes de desangrarse rápidamente hasta morir."
+L.search_dmg_stab = "Fue apuñalado y cortado para después desangrarse rápidamente hasta morir."
 L.search_dmg_burn = "Aquí huele a terrorista quemado..."
 L.search_dmg_tele = "¡Parece que su ADN fue alterado por partículas de taquión!"
 L.search_dmg_car = "Cuando este terrorista quiso crusar la calle, fue atropellado por un conductor descuidado."
@@ -1309,7 +1309,7 @@ L.vis_help_pri = "Soltar el dispositivo activo."
 
 L.decoy_help_pri = "Colocar el señuelo."
 
-L.set_cross_lines_enable = "Activar líneas de la mira"
+L.set_cross_lines_enable = "Habilitar líneas de la mira"
 
 -- 2020-08-07
 --L.pickup_error_spec = "No puedes recoger esto como espectador."
@@ -1317,4 +1317,4 @@ L.set_cross_lines_enable = "Activar líneas de la mira"
 --L.pickup_error_noslot = "No puedes recoger esto porque no tienes un espacio disponible en el inventario."
 
 -- 2020-08-11
---L.f1_settings_shop_desc_double_click = "Habilitar la compra de items en la tienda haciendo doble clic sobre ellos."
+--L.f1_settings_shop_desc_double_click = "Habilitar la compra de items de la tienda haciendo doble clic sobre ellos."
