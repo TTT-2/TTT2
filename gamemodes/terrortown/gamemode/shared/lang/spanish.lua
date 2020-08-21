@@ -53,12 +53,12 @@ L.karma_dmg_other = "¡Tu karma es {amount}. Como resultado, tu daño se ve redu
 
 -- Body identification messages
 L.body_found = "{finder} encontró el cuerpo de {victim}. Era {role}"
-L.body_found_team = "{finder} encontró el cuerpo de {victim}. Era {role} ({team})"
+L.body_found_team = "{finder} encontró el cuerpo de {victim}. {role} ({team})"
 
 -- The {role} in body_found will be replaced by one of the following:
-L.body_found_traitor = "un Traidor"
-L.body_found_det = "un Detective."
-L.body_found_inno = "un Inocente."
+L.body_found_traitor = "¡Era un Traidor!"
+L.body_found_det = "Era un Detective."
+L.body_found_inno = "Era un Inocente."
 
 L.body_confirm = "{finder} confirmó la muerte de {victim}."
 
