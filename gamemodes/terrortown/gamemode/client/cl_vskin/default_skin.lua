@@ -315,7 +315,7 @@ function SKIN:PaintMenuButtonTTT2(panel, w, h)
 	local colorIconHover = utilGetChangedColor(colorDefault, 160)
 
 	if not panel:IsEnabled() then
-		return self.tex.Button_Dead( 0, 0, w, h)
+		return self.tex.Button_Dead(0, 0, w, h)
 	end
 
 	if panel.Depressed or panel:IsSelected() or panel:GetToggle() then
