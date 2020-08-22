@@ -125,11 +125,17 @@ local function TTT2LoadBindings()
 		end
 	end
 
+	-- Try assigning the default key bind once if none is defined
 	for name in pairs(Registry) do
 		local item = Registry[name]
 
-		if item.defaultKey and not WasDefaultApplied(name) and bind.Find(name) == KEY_NONE then
-			bind.Set(item.defaultKey, name, true)
+		if item.defaultKey and not WasDefaultApplied(name) then
+			if bind.Find(name) == KEY_NONE then
+				bind.Set(item.defaultKey, name, true)
+			end
+
+			-- We tried to assign the default, but a bind was already present, so do not retry
+			-- and always set the applied flag.
 			DBSetDefaultAppliedFlag(name)
 		end
 
