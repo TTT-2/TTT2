@@ -168,6 +168,10 @@ function GM:Initialize()
 	ARMOR:Initialize()
 	SPEED:Initialize()
 
+	local skinName = vskin.GetVSkinName()
+
+	vskin.UpdatedVSkin(skinName, skinName)
+
 	hook.Run("TTT2FinishedLoading")
 
 	hook.Run("PostInitialize")
@@ -296,6 +300,10 @@ end
 function GM:OnReloaded()
 	-- rebuild menues on game reload
 	vguihandler.Rebuild()
+
+	local skinName = vskin.GetVSkinName()
+
+	vskin.UpdatedVSkin(skinName, skinName)
 end
 
 ---

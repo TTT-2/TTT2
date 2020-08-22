@@ -35,7 +35,11 @@ end
 -- @return boolean Returns true if skin was selected
 -- @realm client
 function vskin.SelectVSkin(skinName)
-	if not vskin.skins[skinName] then
+	local oldSkinName = vskin.GetVSkinName()
+
+	if not skinName or not vskin.skins[skinName]
+		or skinName == oldSkinName
+	then
 		return false
 	end
 
@@ -43,7 +47,17 @@ function vskin.SelectVSkin(skinName)
 
 	vguihandler.InvalidateVSkin()
 
+	vskin.UpdatedVSkin(oldSkinName, skinName)
+
 	return true
+end
+
+function vskin.UpdatedVSkin(oldSkinName, skinName)
+	-- run SKIN function to update color table
+	derma.GetSkinTable()["ttt2_default"]:UpdatedVSkin()
+
+	-- run hook for other addons to use
+	hook.Run("TTT2UpdatedVSkin", oldSkinName, skinName)
 end
 
 ---
@@ -258,4 +272,14 @@ function vskin.GetCornerRadius()
 	end
 
 	return vskinObject.params.corner_radius
+end
+
+---
+-- A hook that is called when the vskin is changed.
+-- @param string oldSkinName The name of the previous selected vskin
+-- @param string skinName The name of the newly selected vskin
+-- @hook
+-- @realm client
+function GM:TTT2UpdatedVSkin(oldSkinName, skinName)
+
 end
