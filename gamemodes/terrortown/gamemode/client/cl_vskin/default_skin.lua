@@ -19,7 +19,6 @@ local vskinGetAccentColor = vskin.GetAccentColor
 local vskinGetDarkAccentColor = vskin.GetDarkAccentColor
 local vskinGetShadowColor = vskin.GetShadowColor
 local vskinGetTitleTextColor = vskin.GetTitleTextColor
-local vskinGetScrollbarTrackColor = vskin.GetScrollbarTrackColor
 local vskinGetScrollbarColor = vskin.GetScrollbarColor
 local vskinGetShadowSize = vskin.GetShadowSize
 local vskinGetHeaderHeight = vskin.GetHeaderHeight
@@ -75,10 +74,8 @@ function SKIN:UpdatedVSkin()
 		helpBar = utilGetChangedColor(vskinGetBackgroundColor(), 80),
 		helpText = utilGetChangedColor(utilGetDefaultColor(utilGetChangedColor(vskinGetBackgroundColor(), 20)), 40),
 		settingsText = utilGetDefaultColor(utilGetChangedColor(vskinGetBackgroundColor(), 150)),
-		scrollTrack = vskinGetScrollbarTrackColor(),
 		scrollBar = vskinGetScrollbarColor(),
-		scrollBarHover = utilGetChangedColor(vskinGetScrollbarColor(), 10),
-		scrollBarActive = utilGetChangedColor(vskinGetScrollbarColor(), 15)
+		scrollBarActive = utilColorDarken(vskinGetScrollbarColor(), 5)
 	}
 
 	sizes = {
@@ -195,10 +192,6 @@ end
 --[[---------------------------------------------------------
 	ScrollBar
 -----------------------------------------------------------]]
-function SKIN:PaintVScrollBar(panel, w, h)
-	return drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colors.scrollTrack)
-end
-
 function SKIN:PaintScrollBarGrip(panel, w, h)
 	if not panel:IsEnabled() then
 		return self.tex.Scroller.ButtonV_Disabled( 0, 0, w, h )
@@ -209,10 +202,10 @@ function SKIN:PaintScrollBarGrip(panel, w, h)
 	end
 
 	if panel.Hovered then
-		return drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colors.scrollBarHover)
+		return drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colors.scrollBar)
 	end
 
-	return drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colors.scrollBar)
+	return drawRoundedBox(sizes.cornerRadius, 4, 0, w - 8, h, colors.scrollBar)
 end
 
 function SKIN:PaintButtonDown(panel, w, h)

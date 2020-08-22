@@ -9,8 +9,6 @@ if SERVER then return end
 
 local table = table
 
-local colorBackground = Color(10, 10, 10, 200)
-
 vguihandler = vguihandler or {
 	frames = {},
 	callback = {
@@ -152,11 +150,18 @@ end
 -- @internal
 -- @realm client
 function vguihandler.DrawBackground()
-	if not vguihandler.IsOpen() or not vskin.ShouldBlurBackground() then return end
+	if not vguihandler.IsOpen() then return end
 
 	local width = ScrW()
 	local height = ScrH()
 
-	draw.BlurredBox(0, 0, width, height, 1)
-	draw.Box(0, 0, width, height, colorBackground)
+	if vskin.ShouldBlurBackground() then
+		draw.BlurredBox(0, 0, width, height, 1)
+	end
+
+	if vskin.ShouldColorBackground() then
+		-- for some reason the color has to be bigger than the screen to
+		-- fill the entire screenspace
+		draw.Box(-1, -1, width + 2, height + 2, vskin.GetScreenColor())
+	end
 end

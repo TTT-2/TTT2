@@ -193,6 +193,15 @@ local function PopulateVSkinPanel(parent)
 		end,
 		default = true
 	})
+
+	form:MakeCheckBox({
+		label = "label_color_enable",
+		initial = vskin.ShouldColorBackground(),
+		OnChange = function(_, value)
+			vskin.SetColorBackground(value)
+		end,
+		default = true
+	})
 end
 
 local function PopulateTargetIDPanel(parent)

@@ -129,7 +129,7 @@ function HELPSCRN:ShowMainMenu()
 	self.currentMenuId = MAIN_MENU
 
 	-- MAKE MAIN FRAME SCROLLABLE
-	local scrollPanel = vgui.Create("DScrollPanel", frame)
+	local scrollPanel = vgui.Create("DScrollPanelTTT2", frame)
 	scrollPanel:Dock(FILL)
 
 	-- SPLIT FRAME INTO A GRID LAYOUT
@@ -201,7 +201,7 @@ function HELPSCRN:BuildContentArea()
 	end
 
 	-- ADD CONTENT BOX AND CONTENT
-	local contentAreaScroll = vgui.Create("DScrollPanel", self.parent)
+	local contentAreaScroll = vgui.Create("DScrollPanelTTT2", self.parent)
 	contentAreaScroll:SetVerticalScrollbarEnabled(true)
 	contentAreaScroll:SetSize(width2, height2 - paddingTop - paddingBottom)
 	contentAreaScroll:Dock(TOP)
@@ -256,7 +256,7 @@ function HELPSCRN:ShowSubMenu(data)
 	navAreaContent:SetSize(widthNavContent, heightNavContent - vskin.GetHeaderHeight() - vskin.GetBorderSize())
 
 	-- MAKE NAV AREA SCROLLABLE
-	local navAreaScroll = vgui.Create("DScrollPanel", navAreaContent)
+	local navAreaScroll = vgui.Create("DScrollPanelTTT2", navAreaContent)
 	navAreaScroll:SetVerticalScrollbarEnabled(true)
 	navAreaScroll:Dock(FILL)
 

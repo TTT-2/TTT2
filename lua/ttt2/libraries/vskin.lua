@@ -9,6 +9,7 @@ if SERVER then return end
 
 local cv_selectedVSkin = CreateConVar("ttt2_selected_vskin", "dark_ttt2", {FCVAR_ARCHIVE})
 local cv_blurVSkin = CreateConVar("ttt2_vskin_blur", 1, {FCVAR_ARCHIVE})
+local cv_colorVSkin = CreateConVar("ttt2_vskin_color", 1, {FCVAR_ARCHIVE})
 
 vskin = vskin or {}
 
@@ -99,11 +100,29 @@ function vskin.SetBlurBackground(state)
 end
 
 ---
--- Returns if the background of vskin elements should.
+-- Returns if the background of vskin elements should
 -- be blurred or not
+-- @return boolean Should the background be blurred
 -- @realm client
 function vskin.ShouldBlurBackground()
 	return cv_blurVSkin:GetBool()
+end
+
+---
+-- Sets the background color state.
+-- @param [default=true] boolean state
+-- @realm client
+function vskin.SetColorBackground(state)
+	cv_colorVSkin:SetBool(state == nil and true or state)
+end
+
+---
+-- Returns if the background of vskin elements should
+-- be colored or not
+-- @return boolean Should the background be colored
+-- @realm client
+function vskin.ShouldColorBackground()
+	return cv_colorVSkin:GetBool()
 end
 
 ---
@@ -163,17 +182,17 @@ function vskin.GetScrollbarColor()
 end
 
 ---
--- Returns the scrollbar track color of the currently selected vskin.
--- @return [default=Color(255, 255, 255, 255)] Color The scrollbar track color
+-- Returns the screen color of the currently selected vskin.
+-- @return [default=Color(255, 255, 255, 255)] Color The scrollbar color
 -- @realm client
-function vskin.GetScrollbarTrackColor()
+function vskin.GetScreenColor()
 	local vskinObject = vskin.skins[vskin.GetVSkinName()]
 
 	if not vskinObject then
 		return COLOR_WHITE
 	end
 
-	return vskinObject.colors.scroll_track
+	return vskinObject.colors.screen
 end
 
 ---
