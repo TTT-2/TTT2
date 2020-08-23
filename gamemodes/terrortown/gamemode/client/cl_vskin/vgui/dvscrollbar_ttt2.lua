@@ -143,6 +143,7 @@ function PANEL:OnMouseReleased()
 	self:MouseCapture(false)
 
 	self.btnGrip.Depressed = false
+	self.btnGrip.Hovered = false
 end
 
 function PANEL:OnCursorMoved()
