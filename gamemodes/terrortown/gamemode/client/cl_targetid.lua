@@ -334,7 +334,7 @@ function GM:HUDDrawTargetID()
 	if params.drawOutline and cv_draw_halo:GetBool() then
 		outline.Add(
 			data.ent,
-			appearance.GetFocusColor(params.outlineColor),
+			appearance.SelectFocusColor(params.outlineColor),
 			OUTLINE_MODE_VISIBLE
 		)
 	end

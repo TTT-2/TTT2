@@ -137,10 +137,10 @@ end
 -- @param Color The color that is used as a fallback
 -- @return Color The chosen color
 -- @realm client
-function appearance.GetFocusColor(clr)
+function appearance.SelectFocusColor(clr)
 	if appearance.ShouldUseGlobalFocusColor() then
 		return appearance.GetFocusColor()
-	else
-		return clr
 	end
+
+	return clr
 end
