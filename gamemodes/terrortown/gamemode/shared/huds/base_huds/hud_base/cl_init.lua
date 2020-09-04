@@ -13,7 +13,7 @@ HUD.disabledTypes = {}
 -- Has to be a GMOD Material!
 HUD.previewImage = Material("vgui/ttt/score_logo_2")
 
-local savingKeys = {}
+HUD.savingKeys = {}
 
 ---
 -- This function will return a table containing all keys that will be stored by
@@ -21,7 +21,7 @@ local savingKeys = {}
 -- @return table
 -- @realm client
 function HUD:GetSavingKeys()
-	return savingKeys
+	return self.savingKeys
 end
 
 ---

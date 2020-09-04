@@ -4,6 +4,23 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
+### Added
+
+- Added ConVar to toggle double-click buying
+- Added Japanese translation (by @Westoon)
+
+### Changed
+
+- The weapon pickup system has been improved to increase stability and remove edge cases in temporary weapon teleportation
+- Updated Spanish translation (by @DennisWolfgang)
+
+### Fixed
+
+- Fixed foregoing fetch fix
+- Fixed HUD savingKeys variable not being unique across all HUDs
+- Fixed drawing web images, seamless web images and avatar images
+- Fixed correctly saving setting a bind to NONE, while a default is defined
+
 ## [v0.7.3b](https://github.com/TTT-2/TTT2/tree/v0.7.3b) (2020-08-09)
 
 ### Added

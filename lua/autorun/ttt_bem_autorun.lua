@@ -19,6 +19,7 @@ if CLIENT then
 			dgeneral:SetName("General")
 
 			dgeneral:CheckBox(LANG.GetTranslation("f1_settings_shop_desc_shopopen"), "ttt_bem_always_show_shop")
+			dgeneral:CheckBox(LANG.GetTranslation("f1_settings_shop_desc_double_click"), "ttt_bem_enable_doubleclick_buy")
 
 			dgeneral:Dock(TOP)
 

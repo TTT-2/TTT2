@@ -614,7 +614,7 @@ L.info_popup_traitor = [[
 你是位叛徒！和其他叛徒合作杀害其他所有人，以获得胜利。
 但请小心，你的身份可能会暴露...
 这些是你的同伴们:
-{traitorlist} 
+{traitorlist}
 按 {menukey} 取得装备！]]
 
 --- Various other text
@@ -1237,3 +1237,11 @@ L.vis_help_pri = "丢弃当前设备。"
 L.decoy_help_pri = "安放诱饵。"
 
 L.set_cross_lines_enable = "启用十字准心线条"
+
+-- 2020-08-07
+--L.pickup_error_spec = "You cannot pick this up as a spectator."
+--L.pickup_error_owns = "You cannot pick this up because you already have this weapon."
+--L.pickup_error_noslot = "You cannot pick this up because you have no free slot available."
+
+-- 2020-08-11
+--L.f1_settings_shop_desc_double_click = "Enable to buy an item in the shop by double clicking on it."
