@@ -709,11 +709,16 @@ function HUDDrawTargetIDWeapons(tData)
 
 	tData:SetTitle(TryT(weapon_name) .. " [" .. ParT("target_slot_info", {slot = kind_pickup_wep}) .. "]")
 
+	local key_params_wep = {
+		usekey = string.upper(input.GetKeyName(bind.Find("ttt2_weaponswitch"))),
+		walkkey = Key("+walk", "WALK")
+	}
+
 	-- set subtitle depending on the switchmode
 	if switchMode == SWITCHMODE_PICKUP then
-		tData:SetSubtitle(ParT("target_pickup_weapon", key_params) .. (not isActiveWeapon and ParT("target_pickup_weapon_hidden", key_params) or ""))
+		tData:SetSubtitle(ParT("target_pickup_weapon", key_params_wep) .. (not isActiveWeapon and ParT("target_pickup_weapon_hidden", key_params_wep) or ""))
 	elseif switchMode == SWITCHMODE_SWITCH then
-		tData:SetSubtitle(ParT("target_switch_weapon", key_params) .. (not isActiveWeapon and ParT("target_switch_weapon_hidden", key_params) or ""))
+		tData:SetSubtitle(ParT("target_switch_weapon", key_params_wep) .. (not isActiveWeapon and ParT("target_switch_weapon_hidden", key_params_wep) or ""))
 	elseif switchMode == SWITCHMODE_FULLINV then
 		tData:SetSubtitle(TryT("target_switch_weapon_nospace"))
 	end
