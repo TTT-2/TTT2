@@ -196,6 +196,11 @@ function PANEL:Init()
 	self.nick = vgui.Create("DLabel", self)
 	self.nick:SetMouseInputEnabled(false)
 
+	self.team2 = vgui.Create("DImage", self)
+	self.team2:SetSize(iconSizes, iconSizes)
+	self.team2:SetMouseInputEnabled(false)
+	self.team2:SetKeepAspect(true)
+
 	self.team = vgui.Create("DImage", self)
 	self.team:SetSize(iconSizes, iconSizes)
 	self.team:SetMouseInputEnabled(true)
@@ -389,17 +394,25 @@ function PANEL:UpdatePlayerData()
 	if tm then
 		local tmData = TEAMS[tm]
 		if tm == TEAM_NONE or not tmData or tmData.alone then
+			self.team2:SetImage(material_no_team)
 			self.team:SetImage(material_no_team)
-			self.team:SetImageColor(COLOR_WHITE)
 		else
-			self.team:SetImage(tmData.iconMaterial:GetName())
-			self.team:SetImageColor(COLOR_WHITE)
+			local teamImageName = tmData.iconMaterial:GetName()
+
+			self.team2:SetImage(teamImageName)
+			self.team:SetImage(teamImageName)
 		end
+
+		self.team2:SetImageColor(COLOR_BLACK)
+		self.team:SetImageColor(COLOR_WHITE)
 
 		self.team:SetTooltip(LANG.GetTranslation(tm))
 	end
 
-	self.team:SetVisible(not ply:IsRole(ROLE_INNOCENT) or ply:RoleKnown())
+	local showTeam = not ply:IsRole(ROLE_INNOCENT) or ply:RoleKnown()
+
+	self.team2:SetVisible(showTeam)
+	self.team:SetVisible(showTeam)
 
 	local steamid64 = ply:SteamID64()
 	if steamid64 then
@@ -590,6 +603,7 @@ function PANEL:PerformLayout()
 	self.nick:SizeToContents()
 	self.nick:SetPos(tx, ty)
 
+	self.team2:SetPos(tx - iconSizes - 4, (SB_ROW_HEIGHT - iconSizes) * 0.5 + 1)
 	self.team:SetPos(tx - iconSizes - 5, (SB_ROW_HEIGHT - iconSizes) * 0.5)
 
 	self:LayoutColumns()
