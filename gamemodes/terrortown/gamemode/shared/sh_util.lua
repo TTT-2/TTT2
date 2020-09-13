@@ -7,10 +7,13 @@ if not util then return end
 local math = math
 local string = string
 local table = table
-local pairs = pairs
 local IsValid = IsValid
 local weapons = weapons
+local scripted_ents = scripted_ents
 local GetPlayers = player.GetAll
+local isfunction = isfunction
+local HSVToColor = HSVToColor
+local VectorRand = VectorRand
 
 ---
 -- Attempts to get the weapon used from a DamageInfo instance needed because the
@@ -20,7 +23,7 @@ local GetPlayers = player.GetAll
 -- @realm shared
 function util.WeaponFromDamage(dmg)
 	local inf = dmg:GetInflictor()
-	local wep
+	local wep = nil
 
 	if IsValid(inf) then
 		if inf:IsWeapon() or inf.Projectile then
@@ -95,9 +98,18 @@ end
 -- @return table
 -- @realm shared
 function util.GetAlivePlayers()
-	return util.GetFilteredPlayers(function(ply)
-		return ply:Alive() and ply:IsTerror()
-	end)
+	local plys = GetPlayers()
+	local tmp = {}
+
+	for i = 1, #plys do
+		local ply = plys[i]
+
+		if ply:Alive() and ply:IsTerror() then
+			tmp[#tmp + 1] = ply
+		end
+	end
+
+	return tmp
 end
 
 ---
@@ -107,27 +119,44 @@ end
 -- @realm shared
 function util.GetNextAlivePlayer(ply)
 	local alive = util.GetAlivePlayers()
-
 	if #alive < 1 then return end
 
-	local prev = nil
-	local choice = nil
-
 	if IsValid(ply) then
-		for _, p in pairs(alive) do
+		local prev = nil
+
+		for i = 1, #alive do
 			if prev == ply then
-				choice = p
+				return alive[i]
 			end
 
-			prev = p
+			prev = alive[i]
 		end
 	end
 
-	if not IsValid(choice) then
-		choice = alive[1]
-	end
+	return alive[1]
+end
 
-	return choice
+---
+-- Returns a random entry of the given @{table}
+-- @param table tbl the @{table} that contains the data
+-- @param nil|function filterFn the @{function} that has to return true on the given entry
+-- @return any the entry that returned true on the given @{function}
+-- @note The given @{table} has to be iterable.
+-- @note The returned entry will get removed from the given @{table}. If you wanna keep the original table untouched, create a copy for this function.
+-- @realm shared
+function table.GetRandomEntry(tbl, filterFn)
+	local entry = nil
+	local isInvalidFilterFn = not isfunction(filterFn)
+
+	repeat
+		if #tbl <= 0 then return end
+
+		local rnd = math.random(#tbl)
+		entry = tbl[rnd]
+		table.remove(tbl, rnd)
+	until isInvalidFilterFn or filterFn(entry)
+
+	return entry
 end
 
 ---
