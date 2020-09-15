@@ -258,20 +258,17 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 			end
 
 			-- if there is no selectable role left in the current layer
-			if #cleanedLayerTbl <= 0 then
+			if #cleanedLayerTbl < 1 then
 				table.remove(layeredBaseRolesTbl, i) -- remove the current layer
 
 				-- redo the current loop with the same index
 				i = i - 1
 
 				continue
-			else -- if the current layer just has one available role, we directly picking it without doing any random stuff, but JUST if the given role is selectable
+			else
 				roleData = cleanedLayerTbl[math.random(#cleanedLayerTbl)]
 			end
-		end
-
-		-- if no roleData was selected (no layer left or no layer defined)
-		if roleData == nil then
+		else -- if no roleData was selected (no layer left or no layer defined)
 			local rnd = math.random(#availableBaseRolesTbl)
 			roleData = availableBaseRolesTbl[rnd]
 
