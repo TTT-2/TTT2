@@ -222,14 +222,61 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 	local curRoles = 2 -- amount of roles, start with 2 because INNOCENT and TRAITOR are all the time available
 	local curBaseroles = 2 -- amount of base roles, ...
 
+	local layeredBaseRolesTbl = {} -- layered roles list, the order defines the pick order. Just one role per layer is picked. Before a role is picked, the given layer is cleared (checked if the given roles are still selectable). Insert a table as a "or" list
+
+	hook.Run("TTT2ModifyLayeredBaseRoles", layeredBaseRolesTbl, availableBaseRolesTbl)
+
 	-- first of all, we need to select the baseroles. Otherwise, we would select subroles that never gonna be choosen because if the missing baserole
 	for i = 1, availableBaseRolesAmount do
-		if maxRoles and maxRoles <= curRoles or maxBaseroles and maxBaseroles <= curBaseroles then break end -- if the limit is reached, stop selection
+		if maxRoles and maxRoles <= curRoles or maxBaseroles and maxBaseroles <= curBaseroles or #availableBaseRolesTbl < 1 then break end -- if the limit is reached or no available roles left (could happen if removing available roles that weren't already selected in layered "or"-tables), stop selection
 
-		local rnd = math.random(#availableBaseRolesTbl)
-		local roleData = availableBaseRolesTbl[rnd]
+		-- the selected role
+		local roleData = nil
 
-		table.remove(availableBaseRolesTbl, rnd) -- selected roleData shouldn't get selected multiple times
+		-- if there are still defined layer
+		if #layeredBaseRolesTbl >= i then
+			local tblOrRole = layeredBaseRolesTbl[i]
+			local currentIndexedTbl = istable(tblOrRole) and tblOrRole or {tblOrRole} -- for simplification, make this a list all the time. Used in the indexed layer cleanup
+			local cleanedLayerTbl = {} -- clean the currently indexed layer (so that it just includes selectable roles), because we working with predefined layers that probably includes roles that aren't selectable with the current amount of players, etc.
+
+			-- the cleanup
+			for cLayer = 1, #currentIndexedTbl do
+				local layerEntry = currentIndexedTbl[cLayer]
+
+				for cBase = 1, #availableBaseRolesTbl do
+					local baseEntry = availableBaseRolesTbl[cBase]
+
+					if baseEntry.index == layerEntry.index then -- the role is still available / selectable
+						cleanedLayerTbl[#cleanedLayerTbl + 1] = layerEntry
+
+						-- remove the role from the available roles table. This also means, that even if a layered "or"-table is given and not every role in there was already selected, every role in the layered "or"-table will become unavailable
+						table.remove(availableBaseRolesTbl, cBase)
+
+						break
+					end
+				end
+			end
+
+			-- if there is no selectable role left in the current layer
+			if #cleanedLayerTbl <= 0 then
+				table.remove(layeredBaseRolesTbl, i) -- remove the current layer
+
+				-- redo the current loop with the same index
+				i = i - 1
+
+				continue
+			else -- if the current layer just has one available role, we directly picking it without doing any random stuff, but JUST if the given role is selectable
+				roleData = cleanedLayerTbl[math.random(#cleanedLayerTbl)]
+			end
+		end
+
+		-- if no roleData was selected (no layer left or no layer defined)
+		if roleData == nil then
+			local rnd = math.random(#availableBaseRolesTbl)
+			roleData = availableBaseRolesTbl[rnd]
+
+			table.remove(availableBaseRolesTbl, rnd) -- selected roleData shouldn't get selected multiple times
+		end
 
 		selectableRoles[roleData] = rolesAmountList[roleData]
 
@@ -237,9 +284,16 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 		curBaseroles = curBaseroles + 1
 	end
 
+	--local layeredSubRolesTbl = {} -- layered roles list, the order defines the pick order. Just one role per layer is picked. Before a role is picked, the given layer is cleared (checked if the given roles are still selectable). Insert a table as a "or" list
+
+	--hook.Run("TTT2ModifyLayeredSubRoles", layeredSubRolesTbl, availableSubRolesTbl)
+
+	-- TODO just select subroles with an available baserole!
+	-- TODO layer subroles as well
+
 	-- now we need to select the subroles
 	for i = 1, availableSubRolesAmount do
-		if maxRoles and maxRoles <= curRoles then break end -- if the limit is reached, stop selection
+		if maxRoles and maxRoles <= curRoles or #availableSubRolesTbl < 1 then break end -- if the limit is reached or no available roles left (could happen if removing available roles that weren't already selected in layered "or"-tables), stop selection
 
 		local rnd = math.random(#availableSubRolesTbl)
 		local roleData = availableSubRolesTbl[rnd]
