@@ -215,27 +215,41 @@ derma.DefineControl("DDraggableRolesLayerReceiver", "", PANEL, "DDraggableRolesL
 PANEL = {}
 
 function PANEL:Init()
-	DDraggableRolesLayerBase.Init(self)
+	DHorizontalScroller.Init(self)
 
 	self.cachedTbl = {}
+
+	local parentPnl = self
+	local canvas = self:GetCanvas()
+
+	canvas:SetDropPos("6")
+	canvas:SetPaintBackground(true)
+	canvas:SetBackgroundColor(Color(100, 100, 100))
+
+	function canvas:PerformLayout()
+		local children = parentPnl:GetDnDs()
+
+		for i = 1, #children do
+			children[i]:SetPos(5 + (i - 1) * 50, 5)
+		end
+	end
+
+	self:MakeDroppable("layerPanel")
+	self:SetShowDropTargets(true)
 end
 
-function PANEL:PerformLayout(width, height)
-	local children = self:GetChildren()
-
-	for i = 1, #children do
-		children[i]:SetPos(5 + (i - 1) * 50, 5)
-	end
+function PANEL:GetDnDs()
+	return self:GetCanvas():GetChildren()
 end
 
 function PANEL:SetReceiver(receiverPnl)
 	self.receiverPnl = receiverPnl
 end
 
-function PANEL:OnModified()
+function PANEL:OnDragModified()
 	if not IsValid(self.receiverPnl) then return end
 
-	local children = self:GetChildren()
+	local children = self:GetDnDs()
 
 	for i = 1, #children do
 		local child = children[i]
@@ -266,10 +280,60 @@ function PANEL:OnModified()
 			self.cachedTbl[child.Name] = true
 		end
 	end
+
+	self:InvalidateLayout()
+end
+
+function PANEL:PerformLayout(width, height)
+	local canvas = self.pnlCanvas
+	local w, h = self:GetSize()
+
+	canvas:SetTall(h)
+
+	local x = 0
+
+	local children = self:GetDnDs()
+	local childrenCount = #children
+
+	for i = 1, childrenCount do
+		local v = children[i]
+
+		if not IsValid(v) or not v:IsVisible() then continue end
+
+		v:SetPos(x, 0)
+		v:SetTall(h - 10)
+
+		if isfunction(v.ApplySchemeSettings) then
+			v:ApplySchemeSettings()
+		end
+
+		x = x + v:GetWide() - self.m_iOverlap
+	end
+
+	canvas:SetWide(math.max(x + self.m_iOverlap + 10, w))
+
+	if w < canvas:GetWide() then
+		self.OffsetX = math.Clamp(self.OffsetX, 0, canvas:GetWide() - self:GetWide())
+	else
+		self.OffsetX = 0
+	end
+
+	canvas.x = self.OffsetX * -1
+
+	self.btnLeft:SetSize(15, 15)
+	self.btnLeft:AlignLeft(4)
+	self.btnLeft:AlignBottom(5)
+
+	self.btnRight:SetSize(15, 15)
+	self.btnRight:AlignRight(4)
+	self.btnRight:AlignBottom(5)
+
+	self.btnLeft:SetVisible(canvas.x < 0)
+	self.btnRight:SetVisible(canvas.x + canvas:GetWide() > self:GetWide())
 end
 
 
-derma.DefineControl("DDraggableRolesLayerSender", "", PANEL, "DDraggableRolesLayerBase")
+derma.DefineControl("DDraggableRolesLayerSender", "", PANEL, "DHorizontalScroller")
 
 
 concommand.Add("testDND", function()
@@ -289,18 +353,18 @@ concommand.Add("testDND", function()
 
 	local draggableRolesBase = vgui.Create("DDraggableRolesLayerSender", frame)
 	draggableRolesBase:Dock(TOP)
-	draggableRolesBase:SetDropPos("6")
-	draggableRolesBase:SetPaintBackground(true)
-	draggableRolesBase:SetBackgroundColor(Color(100, 100, 100))
+	draggableRolesBase:SetTall(32)
 	draggableRolesBase:SetReceiver(dragbase)
 
 	for i = 0, 5 do
-		local butt = draggableRolesBase:Add("DButton")
+		local butt = vgui.Create("DButton", draggableRolesBase)
 		butt:SetWidth(50)
 		butt:Droppable("layerPanel")
 		butt:SetText("Hey" .. i)
 
 		butt.Name = "Hey" .. i
+
+		draggableRolesBase:AddPanel(butt)
 	end
 
 	dragbase:SetSender(draggableRolesBase)
