@@ -92,6 +92,12 @@ derma.DefineControl("DDraggableRolesLayerBase", "", PANEL, "DDragBase")
 
 PANEL = {}
 
+function PANEL:Init()
+	DDraggableRolesLayerBase.Init(self)
+
+	self.layerList = {}
+end
+
 function PANEL:OnDropped(droppedPnl, pos, closestPnl)
 	local dropLayer, dropDepth = self:GetCurrentLayerDepth(droppedPnl.Name)
 
@@ -113,9 +119,26 @@ function PANEL:OnDropped(droppedPnl, pos, closestPnl)
 
 		table.insert(self.layerList, pos == 8 and newLayer or newLayer + 1, {droppedPnl.Name}) -- insert dropped panel into a new layer
 	end
+
+	if not IsValid(self.senderPnl) then return end
+
+	self.senderPnl.cachedTbl[droppedPnl.Name] = nil -- remove from sender's cached list
 end
 
-PANEL.layerList = {}
+function PANEL:OnModified()
+	-- needed if the first element is dropped from sender's cached list
+	local children = self:GetChildren()
+
+	if #children == 1 and #self:GetLayers() == 0 then
+		local droppedPnl = children[1]
+
+		self.layerList[1] = {droppedPnl.Name} -- insert dropped panel into a new layer
+
+		if not IsValid(self.senderPnl) then return end
+
+		self.senderPnl.cachedTbl[droppedPnl.Name] = nil -- remove from sender's cached list
+	end
+end
 
 function PANEL:SetLayers(tbl)
 	self.layerList = tbl
@@ -186,18 +209,16 @@ function PANEL:GetSender()
 	return self.senderPnl
 end
 
-function PANEL:OnModified()
-	if not IsValid(self.senderPnl) then return end
-
-	if #self.senderPnl:GetChildren() < 1 then
-		self.senderPnl.cachedTbl = {} -- force a reset
-	end
-end
-
 
 derma.DefineControl("DDraggableRolesLayerReceiver", "", PANEL, "DDraggableRolesLayerBase")
 
 PANEL = {}
+
+function PANEL:Init()
+	DDraggableRolesLayerBase.Init(self)
+
+	self.cachedTbl = {}
+end
 
 function PANEL:PerformLayout(width, height)
 	local children = self:GetChildren()
@@ -211,8 +232,6 @@ function PANEL:SetReceiver(receiverPnl)
 	self.receiverPnl = receiverPnl
 end
 
-PANEL.cachedTbl = {}
-
 function PANEL:OnModified()
 	if not IsValid(self.receiverPnl) then return end
 
@@ -224,6 +243,8 @@ function PANEL:OnModified()
 		if not self.cachedTbl[child.Name] then -- missing in the cache, so added
 			-- remove from layer
 			local dropLayer, dropDepth = self.receiverPnl:GetCurrentLayerDepth(child.Name)
+			if dropLayer == nil then continue end -- not contained in layer
+
 			local layerList = self.receiverPnl:GetLayers()
 
 			table.remove(layerList[dropLayer], dropDepth) -- remove dropped panel from old position
@@ -272,6 +293,15 @@ concommand.Add("testDND", function()
 	draggableRolesBase:SetPaintBackground(true)
 	draggableRolesBase:SetBackgroundColor(Color(100, 100, 100))
 	draggableRolesBase:SetReceiver(dragbase)
+
+	for i = 0, 5 do
+		local butt = draggableRolesBase:Add("DButton")
+		butt:SetWidth(50)
+		butt:Droppable("layerPanel")
+		butt:SetText("Hey" .. i)
+
+		butt.Name = "Hey" .. i
+	end
 
 	dragbase:SetSender(draggableRolesBase)
 
