@@ -99,7 +99,7 @@ function PANEL:Init()
 end
 
 function PANEL:OnDropped(droppedPnl, pos, closestPnl)
-	local dropLayer, dropDepth = self:GetCurrentLayerDepth(droppedPnl.Name)
+	local dropLayer, dropDepth = self:GetCurrentLayerDepth(droppedPnl.roleData)
 
 	if dropLayer then
 		table.remove(self.layerList[dropLayer], dropDepth) -- remove dropped panel from old position
@@ -111,18 +111,18 @@ function PANEL:OnDropped(droppedPnl, pos, closestPnl)
 	end
 
 	if pos == 6 then -- right
-		local newLayer, newDepth = self:GetCurrentLayerDepth(closestPnl.Name)
+		local newLayer, newDepth = self:GetCurrentLayerDepth(closestPnl.roleData)
 
-		table.insert(self.layerList[newLayer], newDepth + 1, droppedPnl.Name) -- insert dropped panel into the existing layer
+		table.insert(self.layerList[newLayer], newDepth + 1, droppedPnl.roleData) -- insert dropped panel into the existing layer
 	elseif pos == 8 or pos == 2 then -- top or bottom
-		local newLayer = self:GetCurrentLayerDepth(closestPnl.Name)
+		local newLayer = self:GetCurrentLayerDepth(closestPnl.roleData)
 
-		table.insert(self.layerList, pos == 8 and newLayer or newLayer + 1, {droppedPnl.Name}) -- insert dropped panel into a new layer
+		table.insert(self.layerList, pos == 8 and newLayer or newLayer + 1, {droppedPnl.roleData}) -- insert dropped panel into a new layer
 	end
 
 	if not IsValid(self.senderPnl) then return end
 
-	self.senderPnl.cachedTbl[droppedPnl.Name] = nil -- remove from sender's cached list
+	self.senderPnl.cachedTbl[droppedPnl.roleData] = nil -- remove from sender's cached list
 end
 
 function PANEL:OnModified()
@@ -132,11 +132,11 @@ function PANEL:OnModified()
 	if #children == 1 and #self:GetLayers() == 0 then
 		local droppedPnl = children[1]
 
-		self.layerList[1] = {droppedPnl.Name} -- insert dropped panel into a new layer
+		self.layerList[1] = {droppedPnl.roleData} -- insert dropped panel into a new layer
 
 		if not IsValid(self.senderPnl) then return end
 
-		self.senderPnl.cachedTbl[droppedPnl.Name] = nil -- remove from sender's cached list
+		self.senderPnl.cachedTbl[droppedPnl.roleData] = nil -- remove from sender's cached list
 	end
 end
 
@@ -165,13 +165,13 @@ function PANEL:PerformLayout(width, height)
 
 	for i = 1, #children do
 		local v = children[i]
-		local layer, depth = self:GetCurrentLayerDepth(v.Name)
+		local layer, depth = self:GetCurrentLayerDepth(v.roleData)
 
-		v:SetPos(5 + depth * 50, 5 + layer * 22)
+		v:SetPos(5 + (depth - 1) * 74, 5 + (layer - 1) * 74)
 	end
 end
 
-function PANEL:AddRole(layer, identifier)
+function PANEL:AddRole(layer, roleData)
 	local layers = self:GetLayers()
 	local currentLayer = layers[layer]
 
@@ -182,13 +182,20 @@ function PANEL:AddRole(layer, identifier)
 
 	currentLayer[#currentLayer + 1] = identifier
 
-	-- create the button
-	local butt = self:Add("DButton")
-	butt:SetWidth(50)
-	butt:Droppable("layerPanel")
-	butt:SetText(identifier)
+	-- create the role icon
+	local ic = self:Add("DRoleImage")
+	ic:SetSize(64, 64)
+	ic:SetImage("vgui/ttt/dynamic/icon_base")
+	ic:SetImageColor(roleData.color)
 
-	butt.Name = identifier
+	ic:SetImage2("vgui/ttt/dynamic/icon_base_base")
+	ic:SetImageOverlay("vgui/ttt/dynamic/icon_base_base_overlay")
+
+	ic.roleData = roleData
+
+	ic:SetRoleIconImage(roleData.icon)
+	ic:SetTooltip(LANG.TryTranslation(roleData.name))
+	ic:Droppable("layerPanel")
 end
 
 function PANEL:InitRoles(layeredRoles)
@@ -230,7 +237,7 @@ function PANEL:Init()
 		local children = parentPnl:GetDnDs()
 
 		for i = 1, #children do
-			children[i]:SetPos(5 + (i - 1) * 50, 5)
+			children[i]:SetPos(5 + (i - 1) * 74, 5)
 		end
 	end
 
@@ -254,9 +261,9 @@ function PANEL:OnDragModified()
 	for i = 1, #children do
 		local child = children[i]
 
-		if not self.cachedTbl[child.Name] then -- missing in the cache, so added
+		if not self.cachedTbl[child.roleData] then -- missing in the cache, so added
 			-- remove from layer
-			local dropLayer, dropDepth = self.receiverPnl:GetCurrentLayerDepth(child.Name)
+			local dropLayer, dropDepth = self.receiverPnl:GetCurrentLayerDepth(child.roleData)
 			if dropLayer == nil then continue end -- not contained in layer
 
 			local layerList = self.receiverPnl:GetLayers()
@@ -270,14 +277,17 @@ function PANEL:OnDragModified()
 		end
 	end
 
+	-- update receiver
+	self.receiverPnl:InvalidateLayout()
+
 	-- update cache
 	self.cachedTbl = {}
 
 	for i = 1, #children do
 		local child = children[i]
 
-		if not self.cachedTbl[child.Name] then -- add
-			self.cachedTbl[child.Name] = true
+		if not self.cachedTbl[child.roleData] then -- add
+			self.cachedTbl[child.roleData] = true
 		end
 	end
 
@@ -342,29 +352,33 @@ concommand.Add("testDND", function()
 
 	local dragbase = vgui.Create("DDraggableRolesLayerReceiver", frame)
 	dragbase:Dock(FILL)
-	dragbase:InitRoles({
-		[1] = {"KeyKey", "NoNo"},
-		[2] = {"......"},
-		[3] = {"YoYo"},
-		[4] = {"YesYes"},
-		[5] = {"NahNah"},
-		[6] = {"HmmHmm"}
-	})
+	--dragbase:InitRoles()
 
 	local draggableRolesBase = vgui.Create("DDraggableRolesLayerSender", frame)
 	draggableRolesBase:Dock(TOP)
-	draggableRolesBase:SetTall(32)
+	draggableRolesBase:SetTall(76)
 	draggableRolesBase:SetReceiver(dragbase)
 
-	for i = 0, 5 do
-		local butt = vgui.Create("DButton", draggableRolesBase)
-		butt:SetWidth(50)
-		butt:Droppable("layerPanel")
-		butt:SetText("Hey" .. i)
+	local roleList = roles.GetList()
 
-		butt.Name = "Hey" .. i
+	for i = 1, #roleList do
+		local roleData = roleList[i]
 
-		draggableRolesBase:AddPanel(butt)
+		local ic = vgui.Create("DRoleImage", draggableRolesBase)
+		ic:SetSize(64, 64)
+		ic:SetImage("vgui/ttt/dynamic/icon_base")
+		ic:SetImageColor(roleData.color)
+
+		ic:SetImage2("vgui/ttt/dynamic/icon_base_base")
+		ic:SetImageOverlay("vgui/ttt/dynamic/icon_base_base_overlay")
+
+		ic.roleData = roleData
+
+		ic:SetRoleIconImage(roleData.icon)
+		ic:SetTooltip(LANG.TryTranslation(roleData.name))
+		ic:Droppable("layerPanel")
+
+		draggableRolesBase:AddPanel(ic)
 	end
 
 	dragbase:SetSender(draggableRolesBase)
