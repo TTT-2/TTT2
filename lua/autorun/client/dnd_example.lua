@@ -27,7 +27,7 @@ function PANEL:DropAction_Normal(drops, bDoDrop, command, x, y)
 
 	self:UpdateDropTarget(drop, closest)
 
-	if table.HasValue(drops, closest) or not bDoDrop and not self:GetUseLiveDrag() then return end
+	if table.HasValue(drops, closest) or not bDoDrop and not self:GetUseLiveDrag() or #drops < 1 then return end
 
 	-- This keeps the drop order the same,
 	-- whether we add it before an object or after
@@ -66,36 +66,68 @@ function PANEL:DropAction_Normal(drops, bDoDrop, command, x, y)
 			v:MoveToAfter(closest)
 		end
 
-		if isfunction(closest.OnDropped) then
-			closest:OnDropped(v, drop)
-		end
+		self:OnDropped(v, drop, closest)
 	end
 
 	self:OnModified()
 end
 
-function PANEL:PerformLayout(width, height)
-	for k, v in ipairs(self:GetChildren()) do
-		local layer, depth = DNDGetCurrentLayerDepth(v.Name)
+function PANEL:OnDropped(droppedPnl, pos, closestPnl)
 
-		v:SetPos(5 + depth * 50, 5 + layer * 22)
+end
+
+function PANEL:Init()
+	self:SetPaintBackgroundEnabled(false)
+	self:SetPaintBorderEnabled(false)
+	self:SetMouseInputEnabled(true)
+	self:SetPaintBackground(false)
+	self:SetReadOnly(false)
+
+	self:SetDropPos("826")
+	self:MakeDroppable("layerPanel")
+end
+
+
+derma.DefineControl("DDraggableRolesLayerBase", "", PANEL, "DDragBase")
+
+PANEL = {}
+
+function PANEL:OnDropped(droppedPnl, pos, closestPnl)
+	local dropLayer, dropDepth = self:GetCurrentLayerDepth(droppedPnl.Name)
+
+	if dropLayer then
+		table.remove(self.layerList[dropLayer], dropDepth) -- remove dropped panel from old position
+
+		-- clear old layer if empty
+		if #self.layerList[dropLayer] < 1 then
+			table.remove(self.layerList, dropLayer)
+		end
+	end
+
+	if pos == 6 then -- right
+		local newLayer, newDepth = self:GetCurrentLayerDepth(closestPnl.Name)
+
+		table.insert(self.layerList[newLayer], newDepth + 1, droppedPnl.Name) -- insert dropped panel into the existing layer
+	elseif pos == 8 or pos == 2 then -- top or bottom
+		local newLayer = self:GetCurrentLayerDepth(closestPnl.Name)
+
+		table.insert(self.layerList, pos == 8 and newLayer or newLayer + 1, {droppedPnl.Name}) -- insert dropped panel into a new layer
 	end
 end
 
-derma.DefineControl("DDragBase2", "", PANEL, "DDragBase")
+PANEL.layerList = {}
 
-local layerList = {
-	[1] = {"KeyKey", "NoNo"},
-	[2] = {"......"},
-	[3] = {"YoYo"},
-	[4] = {"YesYes"},
-	[5] = {"NahNah"},
-	[6] = {"HmmHmm"}
-}
+function PANEL:SetLayers(tbl)
+	self.layerList = tbl
+end
 
-function DNDGetCurrentLayerDepth(name)
-	for layer = 1, #layerList do
-		local currentLayerTbl = layerList[layer]
+function PANEL:GetLayers()
+	return self.layerList
+end
+
+function PANEL:GetCurrentLayerDepth(name)
+	for layer = 1, #self.layerList do
+		local currentLayerTbl = self.layerList[layer]
 
 		for depth = 1, #currentLayerTbl do
 			if currentLayerTbl[depth] == name then
@@ -103,62 +135,146 @@ function DNDGetCurrentLayerDepth(name)
 			end
 		end
 	end
-
-	return #layerList + 1, 1
 end
+
+function PANEL:PerformLayout(width, height)
+	local children = self:GetChildren()
+
+	for i = 1, #children do
+		local v = children[i]
+		local layer, depth = self:GetCurrentLayerDepth(v.Name)
+
+		v:SetPos(5 + depth * 50, 5 + layer * 22)
+	end
+end
+
+function PANEL:AddRole(layer, identifier)
+	local layers = self:GetLayers()
+	local currentLayer = layers[layer]
+
+	if currentLayer == nil then
+		currentLayer = {}
+		layers[layer] = currentLayer
+	end
+
+	currentLayer[#currentLayer + 1] = identifier
+
+	-- create the button
+	local butt = self:Add("DButton")
+	butt:SetWidth(50)
+	butt:Droppable("layerPanel")
+	butt:SetText(identifier)
+
+	butt.Name = identifier
+end
+
+function PANEL:InitRoles(layeredRoles)
+	for layer = 1, #layeredRoles do
+		local currentLayerTbl = layeredRoles[layer]
+
+		for i = 1, #currentLayerTbl do
+			self:AddRole(layer, currentLayerTbl[i])
+		end
+	end
+end
+
+function PANEL:SetSender(senderPnl)
+	self.senderPnl = senderPnl
+end
+
+function PANEL:GetSender()
+	return self.senderPnl
+end
+
+function PANEL:OnModified()
+	if not IsValid(self.senderPnl) then return end
+
+	if #self.senderPnl:GetChildren() < 1 then
+		self.senderPnl.cachedTbl = {} -- force a reset
+	end
+end
+
+
+derma.DefineControl("DDraggableRolesLayerReceiver", "", PANEL, "DDraggableRolesLayerBase")
+
+PANEL = {}
+
+function PANEL:PerformLayout(width, height)
+	local children = self:GetChildren()
+
+	for i = 1, #children do
+		children[i]:SetPos(5 + (i - 1) * 50, 5)
+	end
+end
+
+function PANEL:SetReceiver(receiverPnl)
+	self.receiverPnl = receiverPnl
+end
+
+PANEL.cachedTbl = {}
+
+function PANEL:OnModified()
+	if not IsValid(self.receiverPnl) then return end
+
+	local children = self:GetChildren()
+
+	for i = 1, #children do
+		local child = children[i]
+
+		if not self.cachedTbl[child.Name] then -- missing in the cache, so added
+			-- remove from layer
+			local dropLayer, dropDepth = self.receiverPnl:GetCurrentLayerDepth(child.Name)
+			local layerList = self.receiverPnl:GetLayers()
+
+			table.remove(layerList[dropLayer], dropDepth) -- remove dropped panel from old position
+
+			-- clear old layer if empty
+			if #layerList[dropLayer] < 1 then
+				table.remove(layerList, dropLayer)
+			end
+		end
+	end
+
+	-- update cache
+	self.cachedTbl = {}
+
+	for i = 1, #children do
+		local child = children[i]
+
+		if not self.cachedTbl[child.Name] then -- add
+			self.cachedTbl[child.Name] = true
+		end
+	end
+end
+
+
+derma.DefineControl("DDraggableRolesLayerSender", "", PANEL, "DDraggableRolesLayerBase")
+
 
 concommand.Add("testDND", function()
 	local frame = vgui.Create("DFrame")
 	frame:SetSize(500, 500)
+
+	local dragbase = vgui.Create("DDraggableRolesLayerReceiver", frame)
+	dragbase:Dock(FILL)
+	dragbase:InitRoles({
+		[1] = {"KeyKey", "NoNo"},
+		[2] = {"......"},
+		[3] = {"YoYo"},
+		[4] = {"YesYes"},
+		[5] = {"NahNah"},
+		[6] = {"HmmHmm"}
+	})
+
+	local draggableRolesBase = vgui.Create("DDraggableRolesLayerSender", frame)
+	draggableRolesBase:Dock(TOP)
+	draggableRolesBase:SetDropPos("6")
+	draggableRolesBase:SetPaintBackground(true)
+	draggableRolesBase:SetBackgroundColor(Color(100, 100, 100))
+	draggableRolesBase:SetReceiver(dragbase)
+
+	dragbase:SetSender(draggableRolesBase)
+
 	frame:Center()
 	frame:MakePopup()
-
-	local dragbase = vgui.Create("DDragBase2", frame)
-	dragbase:Dock(FILL)
-	dragbase:MakeDroppable("test")
-	dragbase:SetDropPos("826")
-
-	function dragbase:OnModified()
-		self:InvalidateLayout()
-	end
-
-	for layer = 1, #layerList do
-		local currentLayerTbl = layerList[layer]
-
-		for i = 1, #currentLayerTbl do
-			local butt = dragbase:Add("DButton")
-			butt:SetPos(25, (i - 1) * 25)
-			butt:SetWidth(50)
-			butt:Droppable("test")
-
-			butt.Name = currentLayerTbl[i]
-			butt.Layer = layer
-			butt.Depth = i
-
-			butt:SetText(butt.Name)
-
-			function butt:OnDropped(droppedPnl, pos)
-				local dropLayer, dropDepth = DNDGetCurrentLayerDepth(droppedPnl.Name)
-
-				table.remove(layerList[dropLayer], dropDepth) -- remove dropped panel from old position
-
-				-- clear old layer if empty
-				if #layerList[dropLayer] < 1 then
-					table.remove(layerList, dropLayer)
-				end
-
-				if pos == 6 then -- right
-					local newLayer, newDepth = DNDGetCurrentLayerDepth(self.Name)
-
-					table.insert(layerList[newLayer], newDepth + 1, droppedPnl.Name) -- insert dropped panel into the existing layer
-				elseif pos == 8 or pos == 2 then -- top or bottom
-					local newLayer = DNDGetCurrentLayerDepth(self.Name)
-
-					table.insert(layerList, pos == 8 and newLayer or newLayer + 1, {droppedPnl.Name}) -- insert dropped panel into a new layer
-				end
-			end
-
-			butt.id = i - 1
-		end
-	end
 end)
