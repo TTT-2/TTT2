@@ -15,6 +15,7 @@ local hook = hook
 roleselection.forcedRoles = {}
 roleselection.finalRoles = {}
 roleselection.selectableRoles = nil
+roleselection.baseroleLayers = {} -- TODO needs to be loaded from database (and saved) on start of the gamemode
 
 -- Convars
 roleselection.cv = {}
@@ -222,7 +223,7 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 	local curRoles = 2 -- amount of roles, start with 2 because INNOCENT and TRAITOR are all the time available
 	local curBaseroles = 2 -- amount of base roles, ...
 
-	local layeredBaseRolesTbl = {} -- layered roles list, the order defines the pick order. Just one role per layer is picked. Before a role is picked, the given layer is cleared (checked if the given roles are still selectable). Insert a table as a "or" list
+	local layeredBaseRolesTbl = table.Copy(roleselection.baseroleLayers) -- layered roles list, the order defines the pick order. Just one role per layer is picked. Before a role is picked, the given layer is cleared (checked if the given roles are still selectable). Insert a table as a "or" list
 
 	hook.Run("TTT2ModifyLayeredBaseRoles", layeredBaseRolesTbl, availableBaseRolesTbl)
 
@@ -296,6 +297,7 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 	availableSubRolesTbl = tmp
 	availableSubRolesAmount = cTmp
 
+	-- TODO needs to get reworked, a layer of mixed subroles doesn't makes sense. Instead, a layer for baserole-connected (indexed) subroles would be the way to go
 	local layeredSubRolesTbl = {} -- layered roles list, the order defines the pick order. Just one role per layer is picked. Before a role is picked, the given layer is cleared (checked if the given roles are still selectable). Insert a table as a "or" list
 
 	hook.Run("TTT2ModifyLayeredSubRoles", layeredSubRolesTbl, availableSubRolesTbl)

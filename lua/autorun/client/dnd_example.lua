@@ -167,43 +167,35 @@ function PANEL:PerformLayout(width, height)
 		local v = children[i]
 		local layer, depth = self:GetCurrentLayerDepth(v.roleData)
 
-		v:SetPos(5 + (depth - 1) * 74, 5 + (layer - 1) * 74)
+		v:SetPos(5 + (depth - 1) * 69, 5 + (layer - 1) * 69)
 	end
-end
-
-function PANEL:AddRole(layer, roleData)
-	local layers = self:GetLayers()
-	local currentLayer = layers[layer]
-
-	if currentLayer == nil then
-		currentLayer = {}
-		layers[layer] = currentLayer
-	end
-
-	currentLayer[#currentLayer + 1] = identifier
-
-	-- create the role icon
-	local ic = self:Add("DRoleImage")
-	ic:SetSize(64, 64)
-	ic:SetImage("vgui/ttt/dynamic/icon_base")
-	ic:SetImageColor(roleData.color)
-
-	ic:SetImage2("vgui/ttt/dynamic/icon_base_base")
-	ic:SetImageOverlay("vgui/ttt/dynamic/icon_base_base_overlay")
-
-	ic.roleData = roleData
-
-	ic:SetRoleIconImage(roleData.icon)
-	ic:SetTooltip(LANG.TryTranslation(roleData.name))
-	ic:Droppable("layerPanel")
 end
 
 function PANEL:InitRoles(layeredRoles)
+	self:SetLayers(layeredRoles)
+
 	for layer = 1, #layeredRoles do
 		local currentLayerTbl = layeredRoles[layer]
 
 		for i = 1, #currentLayerTbl do
-			self:AddRole(layer, currentLayerTbl[i])
+			local roleData = currentLayerTbl[i]
+
+			-- create the role icon
+			local ic = vgui.Create("DRoleImage", self)
+			ic:SetSize(64, 64)
+			ic:SetImage("vgui/ttt/dynamic/icon_base")
+			ic:SetImageColor(roleData.color)
+
+			ic:SetImage2("vgui/ttt/dynamic/icon_base_base")
+			ic:SetImageOverlay("vgui/ttt/dynamic/icon_base_base_overlay")
+
+			ic.roleData = roleData
+
+			ic:SetRoleIconImage(roleData.icon)
+			ic:SetTooltip(LANG.TryTranslation(roleData.name))
+			ic:Droppable("layerPanel")
+
+			self:Add(ic)
 		end
 	end
 end
@@ -225,24 +217,23 @@ function PANEL:Init()
 	DHorizontalScroller.Init(self)
 
 	self.cachedTbl = {}
+	self.m_padding = 0
 
-	local parentPnl = self
 	local canvas = self:GetCanvas()
-
 	canvas:SetDropPos("6")
 	canvas:SetPaintBackground(true)
 	canvas:SetBackgroundColor(Color(100, 100, 100))
 
-	function canvas:PerformLayout()
-		local children = parentPnl:GetDnDs()
-
-		for i = 1, #children do
-			children[i]:SetPos(5 + (i - 1) * 74, 5)
-		end
-	end
-
 	self:MakeDroppable("layerPanel")
 	self:SetShowDropTargets(true)
+end
+
+function PANEL:GetPadding()
+	return self.m_padding
+end
+
+function PANEL:SetPadding(padding)
+	self.m_padding = padding
 end
 
 function PANEL:GetDnDs()
@@ -300,7 +291,7 @@ function PANEL:PerformLayout(width, height)
 
 	canvas:SetTall(h)
 
-	local x = 0
+	local x = self.m_padding
 
 	local children = self:GetDnDs()
 	local childrenCount = #children
@@ -310,17 +301,17 @@ function PANEL:PerformLayout(width, height)
 
 		if not IsValid(v) or not v:IsVisible() then continue end
 
-		v:SetPos(x, 0)
-		v:SetTall(h - 10)
+		v:SetPos(x, self.m_padding)
+		v:SetTall(h - self.m_padding * 2)
 
 		if isfunction(v.ApplySchemeSettings) then
 			v:ApplySchemeSettings()
 		end
 
-		x = x + v:GetWide() - self.m_iOverlap
+		x = x + v:GetWide() - self.m_iOverlap + self.m_padding
 	end
 
-	canvas:SetWide(math.max(x + self.m_iOverlap + 10, w))
+	canvas:SetWide(math.max(x + self.m_iOverlap, w))
 
 	if w < canvas:GetWide() then
 		self.OffsetX = math.Clamp(self.OffsetX, 0, canvas:GetWide() - self:GetWide())
@@ -342,27 +333,60 @@ function PANEL:PerformLayout(width, height)
 	self.btnRight:SetVisible(canvas.x + canvas:GetWide() > self:GetWide())
 end
 
-
+-- TODO .Panels in DHorizontalScroller seems to be useless
 derma.DefineControl("DDraggableRolesLayerSender", "", PANEL, "DHorizontalScroller")
 
 
+-- TODO fetch roleselection.baseroleLayers from server and update them when finished
+local testDNDLayers = {}
+
+-- currently, just baserole layering is supported. For subroles, there have to be a dropdown (for baseroles) that toggles a list of available related subroles (for layering)
 concommand.Add("testDND", function()
+	local layers = testDNDLayers --roleselection.baseroleLayers
+	local leftRoles = {}
+	local roleList = roles.GetList()
+
+	for cRoles = 1, #roleList do
+		local roleData = roleList[cRoles]
+
+		if roleData.notSelectable or not roleData:IsBaseRole() or roleData == TRAITOR or roleData == INNOCENT then continue end -- don't insert unselectable roles or subroles
+
+		local found = false
+
+		for cLayer = 1, #layers do
+			local currentLayer = layers[cLayer]
+
+			for cEntry = 1, #currentLayer do
+				if currentLayer[cEntry].index == roleData.index then
+					found = true
+
+					break
+				end
+			end
+
+			if found then break end
+		end
+
+		if found then continue end
+
+		leftRoles[#leftRoles + 1] = roleData
+	end
+
 	local frame = vgui.Create("DFrame")
 	frame:SetSize(500, 500)
 
 	local dragbase = vgui.Create("DDraggableRolesLayerReceiver", frame)
 	dragbase:Dock(FILL)
-	--dragbase:InitRoles()
+	dragbase:InitRoles(layers)
 
 	local draggableRolesBase = vgui.Create("DDraggableRolesLayerSender", frame)
 	draggableRolesBase:Dock(TOP)
-	draggableRolesBase:SetTall(76)
+	draggableRolesBase:SetTall(74) -- iconsSize (64) + 2 * padding (5)
+	draggableRolesBase:SetPadding(5)
 	draggableRolesBase:SetReceiver(dragbase)
 
-	local roleList = roles.GetList()
-
-	for i = 1, #roleList do
-		local roleData = roleList[i]
+	for i = 1, #leftRoles do
+		local roleData = leftRoles[i]
 
 		local ic = vgui.Create("DRoleImage", draggableRolesBase)
 		ic:SetSize(64, 64)
