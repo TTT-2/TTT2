@@ -20,6 +20,7 @@ local function CreateEditOptions(x, y)
 	local editReset = menu:AddOption(LANG.GetTranslation("button_reset"))
 	editReset.OnMousePressed = function(slf, keyCode)
 		local hud = huds.GetStored(HUDManager.GetHUD())
+
 		if hud then
 			hud:Reset()
 		end
@@ -29,6 +30,8 @@ local function CreateEditOptions(x, y)
 
 	local editClose = menu:AddOption(LANG.GetTranslation("button_close"))
 	editClose.OnMousePressed = function(slf, keyCode)
+		if not HELPSCRN.mainFrame then return end
+
 		HELPSCRN.mainFrame:ShowFrame()
 
 		menu:Remove()

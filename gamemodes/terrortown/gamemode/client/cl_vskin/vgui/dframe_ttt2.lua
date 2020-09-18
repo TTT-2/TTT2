@@ -83,7 +83,7 @@ end
 function PANEL:ShowFrame()
 	if not self:IsFrameHidden() then return end
 
-	if isfunction(self.OnUnhide) then
+	if isfunction(self.OnShow) then
 		local shouldCancel = self:OnShow() == false
 
 		if shouldCancel then return end

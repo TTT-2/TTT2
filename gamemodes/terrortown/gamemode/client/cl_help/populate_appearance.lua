@@ -45,6 +45,59 @@ local function PopulateGeneralPanel(parent)
 	})
 end
 
+local hudSwicherSettings = {
+	["color"] = function(parent, currentHUD, key, data)
+		parent:MakeColorMixer({
+			label = data.desc or key,
+			initial = currentHUD[key],
+			showAlphaBar = true,
+			showPalette = true,
+			OnChange = function(_, color)
+				currentHUD[key] = color
+
+				if isfunction(data.OnChange) then
+					data.OnChange(currentHUD, color)
+				end
+			end
+		})
+	end,
+
+	["number"] = function(parent, currentHUD, key, data)
+		parent:MakeSlider({
+			label = data.desc or key,
+			min = data.min or 0.1,
+			max = data.max or 4,
+			decimal = data.decimal or 1,
+			initial = math.Round(currentHUD[key] or 1, 1),
+			default = data.default,
+			OnChange = function(_, value)
+				value = math.Round(value, 1)
+				currentHUD[key] = value
+
+				if isfunction(data.OnChange) then
+					data.OnChange(currentHUD, value)
+				end
+			end
+		})
+	end,
+
+	["boolean"] = function(parent, currentHUD, key, data)
+		parent:MakeCheckBox({
+			label = data.desc or key,
+			initial = math.Round(currentHUD[key] or 1, 1),
+			default = data.default,
+			OnChange = function(_, value)
+				value = value or false
+				currentHUD[key] = value
+
+				if isfunction(data.OnChange) then
+					data.OnChange(currentHUD, value)
+				end
+			end
+		})
+	end
+}
+
 local function PopulateHUDSwitcherPanelSettings(parent, currentHUD)
 	parent:Clear()
 
@@ -53,61 +106,7 @@ local function PopulateHUDSwitcherPanelSettings(parent, currentHUD)
 	})
 
 	for key, data in pairs(currentHUD:GetSavingKeys() or {}) do
-		if data.typ == "color" then
-			parent:MakeColorMixer({
-				label = data.desc or key,
-				initial = currentHUD[key],
-				OnChange = function(_, color)
-					currentHUD[key] = color
-
-					if isfunction(data.OnChange) then
-						data.OnChange(currentHUD, color)
-					end
-				end,
-				showAlphaBar = true,
-				showPalette = true
-			})
-
-
-		elseif data.typ == "number" then
-			parent:MakeSlider({
-				label = data.desc or key,
-				min = data.min or 0.1,
-				max = data.max or 4,
-				decimal = data.decimal or 1,
-				initial = math.Round(currentHUD[key] or 1, 1),
-				default = data.default,
-				OnChange = function(_, value)
-					value = math.Round(value, 1)
-
-					if value ~= math.Round(currentHUD[key], 1) then
-						if isfunction(data.OnChange) then
-							data.OnChange(currentHUD, value)
-						end
-
-						currentHUD[key] = value
-					end
-				end
-			})
-
-		elseif data.typ == "boolean" then
-			parent:MakeCheckBox({
-				label = data.desc or key,
-				initial = math.Round(currentHUD[key] or 1, 1),
-				default = data.default,
-				OnChange = function(_, value)
-					value = value or false
-
-					if value ~= currentHUD[key] then
-						if isfunction(data.OnChange) then
-							data.OnChange(currentHUD, value)
-						end
-
-						currentHUD[key] = value
-					end
-				end
-			})
-		end
+		hudSwicherSettings[data.typ](parent, currentHUD, key, data)
 	end
 end
 
@@ -155,7 +154,9 @@ local function PopulateHUDSwitcherPanel(parent)
 	PopulateHUDSwitcherPanelSettings(CreateForm(parent, "header_hud_customize"), currentHUD)
 
 	-- REGISTER UNHIDE FUNCTION TO STOP HUD EDITOR
-	HELPSCRN.mainFrame.OnUnhide = function(slf)
+	HELPSCRN.mainFrame.OnShow = function(slf)
+		if HELPSCRN:GetOpenMenu() ~= "ttt2_appearance_hud_switcher" then return end
+
 		HUDEditor.StopEditHUD()
 	end
 end
