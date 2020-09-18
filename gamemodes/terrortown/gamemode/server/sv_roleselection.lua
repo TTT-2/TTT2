@@ -15,8 +15,8 @@ local hook = hook
 roleselection.forcedRoles = {}
 roleselection.finalRoles = {}
 roleselection.selectableRoles = nil
-roleselection.baseroleLayers = {} -- TODO needs to be loaded from database on start of the gamemode (and saved)
-roleselection.subroleLayers = {} -- TODO needs to be loaded from database on start of the gamemode (and saved)
+roleselection.baseroleLayers = {}
+roleselection.subroleLayers = {}
 
 -- Convars
 roleselection.cv = {}
@@ -102,8 +102,6 @@ function roleselection.LoadLayers()
 	end
 
 	roleselection.subroleLayers = validTbl
-
-	-- TODO remove invalid data from database, but SQL.Delete is missing
 end
 
 function roleselection.SaveLayers()

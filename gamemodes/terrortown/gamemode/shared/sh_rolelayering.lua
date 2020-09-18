@@ -255,6 +255,8 @@ function PANEL:OnModified()
 		if not IsValid(self.senderPnl) then return end
 
 		self.senderPnl.cachedTbl[droppedPnl.subrole] = nil -- remove from sender's cached list
+
+		maxLayers = 1
 	end
 
 	self:UpdateLayerLabels(maxLayers)
@@ -295,7 +297,7 @@ function PANEL:PerformLayout(width, height)
 		v:SetPos(self:GetLeftMargin() + 5 + (depth - 1) * 69, 5 + (layer - 1) * 69)
 	end
 
-	for i = 1, maxLayers do
+	for i = 1, #self.layerLabels do
 		self.layerLabels[i]:SetPos(5, 5 + (i - 1) * 69 + 20)
 	end
 
@@ -486,7 +488,7 @@ function PANEL:PerformLayout(width, height)
 	self.m_pLayerLabel:SetPos(5, 25)
 end
 
--- TODO .Panels in DHorizontalScroller seems to be useless
+-- .Panels in DHorizontalScroller seems to be useless
 derma.DefineControl("DDraggableRolesLayerSender", "", PANEL, "DHorizontalScroller")
 
 
@@ -503,7 +505,7 @@ local function GetLayerableBaserolesWithSubroles()
 		-- if the role was created with the intention of never getting selected without any special fulfilled condition, it should be excluded from the layering.
 		-- here, we don't care about server settings like whether all special roles were deactivated or similar things. Unselectable roles (because of server-related settings)
 		-- are automatically excluded in the selection process
-		-- TODO But we could gray the roles that aren't selectable because of server settings, to simplify the layering process
+		-- But we could gray the roles that aren't selectable because of server settings, to simplify the layering process?
 		if roleData.notSelectable then continue end
 
 		if not roleData:IsBaseRole() then
@@ -656,8 +658,7 @@ local function CreateLayer(roleIndex, layers)
 	frame:MakePopup()
 end
 
--- currently, just baserole layering is supported. For subroles, there have to be a dropdown (for baseroles) that toggles a list of available related subroles (for layering)
-concommand.Add("testDND", function()
+concommand.Add("ttt2_edit_rolelayering", function()
 	if not LocalPlayer():IsAdmin() then return end
 
 	net.Start("TTT2SyncRolesLayer")

@@ -8,11 +8,14 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Added ConVar to toggle double-click buying
 - Added Japanese translation (by @Westoon)
+- Added Drag&Drop role layering VGUI, accessable with the console command `ttt2_edit_rolelayering`. Keep in mind that `ttt_[roleName]_random` and similar conditions are still taking place in the calculations. 
+  So if you wanna have a real "50/50" selection in a two-entry-sized "OR"-table layer, then you have to set the related `ttt_[roleName]_random` ConVars to 100%.
 
 ### Changed
 
 - The weapon pickup system has been improved to increase stability and remove edge cases in temporary weapon teleportation
 - Updated Spanish translation (by @DennisWolfgang)
+- Fixed subrole selection (issues happened with max_roles enabled, etc.). Subroles are now directly connected with their related baseroles
 
 ### Fixed
 
