@@ -412,14 +412,66 @@ end
 derma.DefineControl("DDraggableRolesLayerSender", "", PANEL, "DHorizontalScroller")
 
 
+local function GetLayerableBaserolesWithSubroles()
+	local availableBaseRolesTbl = {}
+	local availableSubRolesTbl = {}
+	local availableBaseRolesAmount = 0
+
+	local roleList = roles.GetList()
+
+	for i = 1, #roleList do
+		local roleData = roleList[i]
+
+		-- if the role was created with the intention of never getting selected without any special fulfilled condition, it should be excluded from the layering.
+		-- here, we don't care about server settings like whether all special roles were deactivated or similar things. Unselectable roles (because of server-related settings)
+		-- are automatically excluded in the selection process
+		-- TODO But we could gray the roles that aren't selectable because of server settings, to simplify the layering process
+		if roleData.notSelectable then continue end
+
+		if not roleData:IsBaseRole() then
+			local baseroleData = roles.GetByIndex(roleData:GetBaseRole())
+
+			availableSubRolesTbl[baseroleData] = availableSubRolesTbl[baseroleData] or {}
+			availableSubRolesTbl[baseroleData][#availableSubRolesTbl[baseroleData] + 1] = roleData
+		else
+			availableBaseRolesAmount = availableBaseRolesAmount + 1
+
+			availableBaseRolesTbl[availableBaseRolesAmount] = roleData
+		end
+	end
+
+	-- now get the subroles if there are more than 1 subrole of a related baserole
+	for cBase = 1, availableBaseRolesAmount do
+		local baseroleData = availableBaseRolesTbl[cBase]
+		local currentSubrolesTbl = availableSubRolesTbl[baseroleData]
+
+		if currentSubrolesTbl == nil or #currentSubrolesTbl < 2 then -- related subroles table
+			availableSubRolesTbl[baseroleData] = nil -- reset if not enough related subroles so a layer wouldn't make any sense
+		end
+	end
+
+	-- all selectable baseroles, all selectable subroles with related baseroles
+	return availableBaseRolesTbl, availableSubRolesTbl
+end
+
 local function CreateLayer(roleIndex, layers)
 	local leftRoles = {}
-	local roleList = roles.GetList()
+	local baseroleList, subroleList = GetLayerableBaserolesWithSubroles()
+	local currentRoleData = roles.GetByIndex(roleIndex)
+	local roleList
+
+	if roleIndex == ROLE_ANY then
+		roleList = baseroleList
+	else
+		roleList = subroleList[currentRoleData]
+	end
+
+	if #roleList < 2 then return end -- a layer wouldn't make any sense if there are less than 2 available entries / related roles
 
 	for cRoles = 1, #roleList do
 		local roleData = roleList[cRoles]
 
-		if roleData.notSelectable or not roleData:IsBaseRole() or roleData == TRAITOR or roleData == INNOCENT then continue end -- don't insert unselectable roles or subroles
+		if roleData == TRAITOR or roleData == INNOCENT then continue end -- don't insert roles that are getting automatically / statically selected
 
 		local found = false
 
@@ -442,9 +494,35 @@ local function CreateLayer(roleIndex, layers)
 		leftRoles[#leftRoles + 1] = roleData
 	end
 
+	local title = (roleIndex == ROLE_ANY and "Baserole" or LANG.TryTranslation(currentRoleData.name)) .. " layers"
+
 	local frame = vgui.Create("DFrame")
 	frame:SetSize(500, 500)
-	frame:SetTitle((roleIndex == ROLE_ANY and "Baserole" or LANG.TryTranslation(roles.GetByIndex(roleIndex).name)) .. " layers")
+	frame:SetTitle(title)
+
+	local comboBox = vgui.Create("DComboBox", frame)
+	comboBox:Dock(TOP)
+	comboBox:SetValue(title)
+
+	if roleIndex ~= ROLE_ANY then
+		comboBox:AddChoice("Baserole layers", ROLE_ANY)
+	end
+
+	for baserolesKey in pairs(subroleList) do
+		if baserolesKey.index == roleIndex then continue end
+
+		comboBox:AddChoice(LANG.TryTranslation(baserolesKey.name) .. " layers", baserolesKey.index)
+	end
+
+	-- ugly, but working for now. Close the frame and request a new list. A realtime refresh would be cooler
+	function comboBox:OnSelect(index, value, data)
+		frame:Close()
+
+		net.Start("TTT2SyncRolesLayer")
+		net.WriteBit(0) -- Request data = 0, Send data = 1
+		net.WriteUInt(data, ROLE_BITS) -- ROLE_ANY = 3 is reserved and here used to indicate as a baserole request. If a valid baserole is given, the subrole list is requested. For further information, see @{roles.GenerateNewRoleID()} @{function}
+		net.SendToServer()
+	end
 
 	local dragbase = vgui.Create("DDraggableRolesLayerReceiver", frame)
 	dragbase:Dock(FILL)
