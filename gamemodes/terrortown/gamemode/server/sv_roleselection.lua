@@ -15,7 +15,8 @@ local hook = hook
 roleselection.forcedRoles = {}
 roleselection.finalRoles = {}
 roleselection.selectableRoles = nil
-roleselection.baseroleLayers = {} -- TODO needs to be loaded from database (and saved) on start of the gamemode
+roleselection.baseroleLayers = {} -- TODO needs to be loaded from database on start of the gamemode (and saved)
+roleselection.subroleLayers = {} -- TODO needs to be loaded from database on start of the gamemode (and saved)
 
 -- Convars
 roleselection.cv = {}
@@ -286,7 +287,7 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 		curBaseroles = curBaseroles + 1
 	end
 
-	local layeredSubRolesTbl = {} -- layered roles list, the order defines the pick order. Just one role per layer is picked. Before a role is picked, the given layer is cleared (checked if the given roles are still selectable). Insert a table as a "or" list
+	local layeredSubRolesTbl = table.Copy(roleselection.subroleLayers) -- layered roles list, the order defines the pick order. Just one role per layer is picked. Before a role is picked, the given layer is cleared (checked if the given roles are still selectable). Insert a table as a "or" list
 
 	hook.Run("TTT2ModifyLayeredSubRoles", layeredSubRolesTbl, availableSubRolesTbl)
 

@@ -1,3 +1,78 @@
+local function SendLayersData(layerTbl)
+	local layerTblSize = #layerTbl
+
+	net.WriteUInt(layerTblSize, ROLE_BITS) -- can't be greater than the maximum amount of roles
+
+	for i = 1, layerTblSize do
+		local currentLayer = layerTbl[i]
+		local layerDepth = #currentLayer
+
+		net.WriteUInt(layerDepth, ROLE_BITS) -- can't be greater than the maximum amount of roles
+
+		for cDepth = 1, layerDepth do
+			net.WriteUInt(currentLayer[cDepth].index, ROLE_BITS) -- the role's index
+		end
+	end
+end
+
+local function ReadLayersData()
+	local layerTbl = {}
+	local layerTblSize = net.ReadUInt(ROLE_BITS)
+
+	for i = 1, layerTblSize do
+		local currentLayer = {}
+		local layerDepth = net.ReadUInt(ROLE_BITS)
+
+		for cDepth = 1, layerDepth do
+			currentLayer[cDepth] = roles.GetByIndex(net.ReadUInt(ROLE_BITS))
+		end
+
+		layerTbl[i] = currentLayer
+	end
+
+	return layerTbl
+end
+
+if SERVER then
+	-- networkmessages for layer syncing
+	util.AddNetworkString("TTT2SyncRolesLayer")
+
+	net.Receive("TTT2SyncRolesLayer", function(_, ply)
+		if not IsValid(ply) or not ply:IsAdmin() then return end
+
+		local send = net.ReadBit() == 0
+		local requestedRoleTbl = net.ReadUInt(ROLE_BITS) -- read the table the client requested
+
+		if send then -- send data to the client
+			local layerTbl
+
+			-- ROLE_ANY = 3 is reserved and here used to indicate as a baserole request. If a valid baserole is given, the subrole list is requested. For further information, see @{roles.GenerateNewRoleID()} @{function}
+			if requestedRoleTbl == ROLE_ANY then
+				layerTbl = roleselection.baseroleLayers
+			else
+				layerTbl = roleselection.subroleLayers[roles.GetByIndex(requestedRoleTbl)]
+			end
+
+			net.Start("TTT2SyncRolesLayer")
+
+			net.WriteUInt(requestedRoleTbl, ROLE_BITS)
+
+			SendLayersData(layerTbl or {})
+
+			net.Send(ply)
+		else -- receive data from the client
+			-- ROLE_ANY = 3 is reserved and here used to indicate as a baserole request. If a valid baserole is given, the subrole list is requested. For further information, see @{roles.GenerateNewRoleID()} @{function}
+			if requestedRoleTbl == ROLE_ANY then
+				roleselection.baseroleLayers = ReadLayersData()
+			else
+				roleselection.subroleLayers[roles.GetByIndex(requestedRoleTbl)] = ReadLayersData()
+			end
+		end
+	end)
+
+	return
+end
+
 local PANEL = {}
 
 function PANEL:DropAction_Normal(drops, bDoDrop, command, x, y)
@@ -337,12 +412,7 @@ end
 derma.DefineControl("DDraggableRolesLayerSender", "", PANEL, "DHorizontalScroller")
 
 
--- TODO fetch roleselection.baseroleLayers from server and update them when finished
-local testDNDLayers = {}
-
--- currently, just baserole layering is supported. For subroles, there have to be a dropdown (for baseroles) that toggles a list of available related subroles (for layering)
-concommand.Add("testDND", function()
-	local layers = testDNDLayers --roleselection.baseroleLayers
+local function CreateLayer(roleIndex, layers)
 	local leftRoles = {}
 	local roleList = roles.GetList()
 
@@ -374,6 +444,7 @@ concommand.Add("testDND", function()
 
 	local frame = vgui.Create("DFrame")
 	frame:SetSize(500, 500)
+	frame:SetTitle((roleIndex == ROLE_ANY and "Baserole" or LANG.TryTranslation(roles.GetByIndex(roleIndex).name)) .. " layers")
 
 	local dragbase = vgui.Create("DDraggableRolesLayerReceiver", frame)
 	dragbase:Dock(FILL)
@@ -407,6 +478,39 @@ concommand.Add("testDND", function()
 
 	dragbase:SetSender(draggableRolesBase)
 
+	-- Send data to the server on close
+	function frame:OnClose()
+		net.Start("TTT2SyncRolesLayer")
+		net.WriteBit(1) -- Send data
+
+		net.WriteUInt(roleIndex, ROLE_BITS)
+
+		SendLayersData(layers)
+
+		net.SendToServer()
+	end
+
 	frame:Center()
 	frame:MakePopup()
+end
+
+-- currently, just baserole layering is supported. For subroles, there have to be a dropdown (for baseroles) that toggles a list of available related subroles (for layering)
+concommand.Add("testDND", function()
+	if not LocalPlayer():IsAdmin() then return end
+
+	net.Start("TTT2SyncRolesLayer")
+	net.WriteBit(0) -- Request data = 0, Send data = 1
+	net.WriteUInt(ROLE_ANY, ROLE_BITS) -- ROLE_ANY = 3 is reserved and here used to indicate as a baserole request. If a valid baserole is given, the subrole list is requested. For further information, see @{roles.GenerateNewRoleID()} @{function}
+	net.SendToServer()
+end)
+
+-- received layered table
+net.Receive("TTT2SyncRolesLayer", function()
+	local roleIndex = net.ReadUInt(ROLE_BITS)
+
+	-- get the role-index value-based table and directly convert it into a role-data value-based table
+	local layerTbl = ReadLayersData()
+
+	-- create the layering DnD-VGUI
+	CreateLayer(roleIndex, layerTbl)
 end)
