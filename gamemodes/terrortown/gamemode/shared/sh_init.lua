@@ -663,20 +663,9 @@ function EquipmentIsBuyable(tbl, ply)
 	end
 
 	if tbl.minPlayers and tbl.minPlayers > 1 then
-		local choices = {}
-		local plys = player.GetAll()
-
-		for i = 1, #plys do
-			local v = plys[i]
-
-			-- everyone on the forcespec team is in specmode
-			if not IsValid(v) or v:GetForceSpec() then continue end
-
-			choices[#choices + 1] = v
-		end
-
-		if #choices < tbl.minPlayers then
-			return false, " " .. #choices .. " / " .. tbl.minPlayers, "Minimum amount of active players needed."
+		local activePlayers = GetGlobalInt("ttt2_active_players", 0)
+		if activePlayers < tbl.minPlayers then
+			return false, " " .. activePlayers .. " / " .. tbl.minPlayers, "Minimum amount of active players needed."
 		end
 	end
 

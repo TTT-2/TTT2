@@ -1215,14 +1215,22 @@ function BeginRound()
 
 	local plys = player.GetAll()
 
+	local activeCount = 0
+
 	for i = 1, #plys do
 		local ply = plys[i]
 
 		ply:ResetRoundDeathCounter()
 
+		local isActive = ply:Alive() and ply:IsTerror()
+
 		-- a player should be considered "was active in round" if they received a role
-		ply:SetActiveInRound(ply:Alive() and ply:IsTerror())
+		ply:SetActiveInRound(isActive)
+
+		activeCount = isActive and activeCount+1 or activeCount
 	end
+
+	SetGlobalInt("ttt2_active_players", activeCount)
 
 	hook.Call("TTTBeginRound", GAMEMODE)
 

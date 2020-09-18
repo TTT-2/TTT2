@@ -8,11 +8,13 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Added ConVar to toggle double-click buying
 - Added Japanese translation (by @Westoon)
+- Added new Global Integer "ttt2_active_players"
 
 ### Changed
 
 - The weapon pickup system has been improved to increase stability and remove edge cases in temporary weapon teleportation
 - Updated Spanish translation (by @DennisWolfgang)
+- Changed so .minPlayers now only considers the active count of players a round had at start
 
 ### Fixed
 
