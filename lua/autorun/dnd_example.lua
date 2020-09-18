@@ -77,6 +77,38 @@ end
 
 local PANEL = {}
 
+function PANEL:Init()
+	DDragBase.Init(self)
+
+	self:SetDropPos("2468")
+	self:MakeDroppable("layerPanel")
+
+	self.m_leftMargin = 0
+end
+
+function PANEL:GetLeftMargin()
+	return self.m_leftMargin
+end
+
+function PANEL:SetLeftMargin(leftMargin)
+	self.m_leftMargin = leftMargin
+end
+
+function PANEL:GetDnDs()
+	local dnds = {}
+	local children = self:GetChildren()
+
+	for i = 1, #children do
+		local child = children[i]
+
+		if child.subrole then
+			dnds[#dnds + 1] = child
+		end
+	end
+
+	return dnds
+end
+
 function PANEL:DropAction_Normal(drops, bDoDrop, command, x, y)
 	local closest = self:GetClosestChild(x, y)
 
@@ -153,17 +185,6 @@ function PANEL:OnDropped(droppedPnl, pos, closestPnl)
 
 end
 
-function PANEL:Init()
-	self:SetPaintBackgroundEnabled(false)
-	self:SetPaintBorderEnabled(false)
-	self:SetMouseInputEnabled(true)
-	self:SetPaintBackground(false)
-	self:SetReadOnly(false)
-
-	self:SetDropPos("826")
-	self:MakeDroppable("layerPanel")
-end
-
 
 derma.DefineControl("DDraggableRolesLayerBase", "", PANEL, "DDragBase")
 
@@ -173,6 +194,24 @@ function PANEL:Init()
 	DDraggableRolesLayerBase.Init(self)
 
 	self.layerList = {}
+	self.layerLabels = {}
+end
+
+function PANEL:UpdateLayerLabels(maxLayers)
+	for i = 1, maxLayers do
+		if self.layerLabels[i] then continue end
+
+		self.layerLabels[i] = vgui.Create("DLabel", self)
+		self.layerLabels[i]:SetText("Layer " .. i)
+	end
+
+	if #self.layerLabels <= maxLayers then return end
+
+	for i = maxLayers + 1, #self.layerLabels do
+		self.layerLabels[i]:Remove()
+
+		self.layerLabels[i] = nil
+	end
 end
 
 function PANEL:OnDropped(droppedPnl, pos, closestPnl)
@@ -187,10 +226,10 @@ function PANEL:OnDropped(droppedPnl, pos, closestPnl)
 		end
 	end
 
-	if pos == 6 then -- right
+	if pos == 6 or pos == 4 then -- right or left
 		local newLayer, newDepth = self:GetCurrentLayerDepth(closestPnl.subrole)
 
-		table.insert(self.layerList[newLayer], newDepth + 1, droppedPnl.subrole) -- insert dropped panel into the existing layer
+		table.insert(self.layerList[newLayer], pos == 4 and newDepth or newDepth + 1, droppedPnl.subrole) -- insert dropped panel into the existing layer
 	elseif pos == 8 or pos == 2 then -- top or bottom
 		local newLayer = self:GetCurrentLayerDepth(closestPnl.subrole)
 
@@ -204,9 +243,10 @@ end
 
 function PANEL:OnModified()
 	-- needed if the first element is dropped from sender's cached list
-	local children = self:GetChildren()
+	local children = self:GetDnDs()
+	local maxLayers	= #self:GetLayers()
 
-	if #children == 1 and #self:GetLayers() == 0 then
+	if #children == 1 and maxLayers == 0 then
 		local droppedPnl = children[1]
 
 		self.layerList[1] = {droppedPnl.subrole} -- insert dropped panel into a new layer
@@ -215,6 +255,8 @@ function PANEL:OnModified()
 
 		self.senderPnl.cachedTbl[droppedPnl.subrole] = nil -- remove from sender's cached list
 	end
+
+	self:UpdateLayerLabels(maxLayers)
 end
 
 function PANEL:SetLayers(tbl)
@@ -238,20 +280,31 @@ function PANEL:GetCurrentLayerDepth(subrole)
 end
 
 function PANEL:PerformLayout(width, height)
-	local children = self:GetChildren()
+	local children = self:GetDnDs()
+	local maxLayers = 0
 
 	for i = 1, #children do
 		local v = children[i]
 		local layer, depth = self:GetCurrentLayerDepth(v.subrole)
 
-		v:SetPos(5 + (depth - 1) * 69, 5 + (layer - 1) * 69)
+		if maxLayers < layer then
+			maxLayers = layer
+		end
+
+		v:SetPos(self:GetLeftMargin() + 5 + (depth - 1) * 69, 5 + (layer - 1) * 69)
+	end
+
+	for i = 1, maxLayers do
+		self.layerLabels[i]:SetPos(5, 5 + (i - 1) * 69 + 20)
 	end
 end
 
 function PANEL:InitRoles(layeredRoles)
 	self:SetLayers(layeredRoles)
 
-	for layer = 1, #layeredRoles do
+	local maxLayers = #layeredRoles
+
+	for layer = 1, maxLayers do
 		local currentLayerTbl = layeredRoles[layer]
 
 		for i = 1, #currentLayerTbl do
@@ -276,6 +329,8 @@ function PANEL:InitRoles(layeredRoles)
 			self:Add(ic)
 		end
 	end
+
+	self:UpdateLayerLabels(maxLayers)
 end
 
 function PANEL:SetSender(senderPnl)
@@ -296,11 +351,15 @@ function PANEL:Init()
 
 	self.cachedTbl = {}
 	self.m_padding = 0
+	self.m_leftMargin = 0
 
 	local canvas = self:GetCanvas()
-	canvas:SetDropPos("6")
+	canvas:SetDropPos("46")
 	canvas:SetPaintBackground(true)
 	canvas:SetBackgroundColor(Color(100, 100, 100))
+
+	self.layerLabel = vgui.Create("DLabel", self)
+	self.layerLabel:SetText("Not layered")
 
 	self:MakeDroppable("layerPanel")
 	self:SetShowDropTargets(true)
@@ -312,6 +371,14 @@ end
 
 function PANEL:SetPadding(padding)
 	self.m_padding = padding
+end
+
+function PANEL:GetLeftMargin()
+	return self.m_leftMargin
+end
+
+function PANEL:SetLeftMargin(leftMargin)
+	self.m_leftMargin = leftMargin
 end
 
 function PANEL:GetDnDs()
@@ -347,6 +414,7 @@ function PANEL:OnDragModified()
 	end
 
 	-- update receiver
+	self.receiverPnl:OnModified()
 	self.receiverPnl:InvalidateLayout()
 
 	-- update cache
@@ -369,7 +437,7 @@ function PANEL:PerformLayout(width, height)
 
 	canvas:SetTall(h)
 
-	local x = self.m_padding
+	local x = self:GetLeftMargin() + self.m_padding
 
 	local children = self:GetDnDs()
 	local childrenCount = #children
@@ -409,6 +477,8 @@ function PANEL:PerformLayout(width, height)
 
 	self.btnLeft:SetVisible(canvas.x < 0)
 	self.btnRight:SetVisible(canvas.x + canvas:GetWide() > self:GetWide())
+
+	self.layerLabel:SetPos(5, 25)
 end
 
 -- TODO .Panels in DHorizontalScroller seems to be useless
@@ -499,7 +569,7 @@ local function CreateLayer(roleIndex, layers)
 	local title = (roleIndex == ROLE_ANY and "Baserole" or LANG.TryTranslation(roles.GetByIndex(roleIndex).name)) .. " layers"
 
 	local frame = vgui.Create("DFrame")
-	frame:SetSize(500, 500)
+	frame:SetSize(ScrW() - 50, ScrH() - 50)
 	frame:SetTitle(title)
 
 	local comboBox = vgui.Create("DComboBox", frame)
@@ -527,10 +597,12 @@ local function CreateLayer(roleIndex, layers)
 	end
 
 	local dragbase = vgui.Create("DDraggableRolesLayerReceiver", frame)
+	dragbase:SetLeftMargin(100)
 	dragbase:Dock(FILL)
 	dragbase:InitRoles(layers)
 
 	local draggableRolesBase = vgui.Create("DDraggableRolesLayerSender", frame)
+	draggableRolesBase:SetLeftMargin(100)
 	draggableRolesBase:Dock(TOP)
 	draggableRolesBase:SetTall(74) -- iconsSize (64) + 2 * padding (5)
 	draggableRolesBase:SetPadding(5)
