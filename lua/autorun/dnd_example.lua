@@ -83,15 +83,15 @@ function PANEL:Init()
 	self:SetDropPos("2468")
 	self:MakeDroppable("layerPanel")
 
-	self.m_leftMargin = 0
+	self.m_iLeftMargin = 0
 end
 
 function PANEL:GetLeftMargin()
-	return self.m_leftMargin
+	return self.m_iLeftMargin
 end
 
 function PANEL:SetLeftMargin(leftMargin)
-	self.m_leftMargin = leftMargin
+	self.m_iLeftMargin = leftMargin
 end
 
 function PANEL:GetDnDs()
@@ -203,6 +203,7 @@ function PANEL:UpdateLayerLabels(maxLayers)
 
 		self.layerLabels[i] = vgui.Create("DLabel", self)
 		self.layerLabels[i]:SetText("Layer " .. i)
+		self.layerLabels[i]:SetFont("DermaDefaultBold")
 	end
 
 	if #self.layerLabels <= maxLayers then return end
@@ -297,6 +298,8 @@ function PANEL:PerformLayout(width, height)
 	for i = 1, maxLayers do
 		self.layerLabels[i]:SetPos(5, 5 + (i - 1) * 69 + 20)
 	end
+
+	self:SetTall(10 + maxLayers * 69)
 end
 
 function PANEL:InitRoles(layeredRoles)
@@ -350,35 +353,37 @@ function PANEL:Init()
 	DHorizontalScroller.Init(self)
 
 	self.cachedTbl = {}
-	self.m_padding = 0
-	self.m_leftMargin = 0
+	self.m_iPadding = 0
+	self.m_iLeftMargin = 0
 
 	local canvas = self:GetCanvas()
 	canvas:SetDropPos("46")
 	canvas:SetPaintBackground(true)
 	canvas:SetBackgroundColor(Color(100, 100, 100))
 
-	self.layerLabel = vgui.Create("DLabel", self)
-	self.layerLabel:SetText("Not layered")
+	self.m_pLayerLabel = vgui.Create("DLabel", self)
+	self.m_pLayerLabel:SetText("Not\nlayered")
+	self.m_pLayerLabel:SetFont("DermaDefaultBold")
+	self.m_pLayerLabel:SetTall(28)
 
 	self:MakeDroppable("layerPanel")
 	self:SetShowDropTargets(true)
 end
 
 function PANEL:GetPadding()
-	return self.m_padding
+	return self.m_iPadding
 end
 
 function PANEL:SetPadding(padding)
-	self.m_padding = padding
+	self.m_iPadding = padding
 end
 
 function PANEL:GetLeftMargin()
-	return self.m_leftMargin
+	return self.m_iLeftMargin
 end
 
 function PANEL:SetLeftMargin(leftMargin)
-	self.m_leftMargin = leftMargin
+	self.m_iLeftMargin = leftMargin
 end
 
 function PANEL:GetDnDs()
@@ -437,7 +442,7 @@ function PANEL:PerformLayout(width, height)
 
 	canvas:SetTall(h)
 
-	local x = self:GetLeftMargin() + self.m_padding
+	local x = self:GetLeftMargin() + self.m_iPadding
 
 	local children = self:GetDnDs()
 	local childrenCount = #children
@@ -447,14 +452,14 @@ function PANEL:PerformLayout(width, height)
 
 		if not IsValid(v) or not v:IsVisible() then continue end
 
-		v:SetPos(x, self.m_padding)
-		v:SetTall(h - self.m_padding * 2)
+		v:SetPos(x, self.m_iPadding)
+		v:SetTall(h - self.m_iPadding * 2)
 
 		if isfunction(v.ApplySchemeSettings) then
 			v:ApplySchemeSettings()
 		end
 
-		x = x + v:GetWide() - self.m_iOverlap + self.m_padding
+		x = x + v:GetWide() - self.m_iOverlap + self.m_iPadding
 	end
 
 	canvas:SetWide(math.max(x + self.m_iOverlap, w))
@@ -478,7 +483,7 @@ function PANEL:PerformLayout(width, height)
 	self.btnLeft:SetVisible(canvas.x < 0)
 	self.btnRight:SetVisible(canvas.x + canvas:GetWide() > self:GetWide())
 
-	self.layerLabel:SetPos(5, 25)
+	self.m_pLayerLabel:SetPos(5, 25)
 end
 
 -- TODO .Panels in DHorizontalScroller seems to be useless
@@ -596,17 +601,21 @@ local function CreateLayer(roleIndex, layers)
 		net.SendToServer()
 	end
 
-	local dragbase = vgui.Create("DDraggableRolesLayerReceiver", frame)
-	dragbase:SetLeftMargin(100)
-	dragbase:Dock(FILL)
-	dragbase:InitRoles(layers)
+	local dragbaseScrollPanel = vgui.Create("DScrollPanel", frame)
+	dragbaseScrollPanel:Dock(FILL)
+
+	-- modify the canvas
+	local canvas = dragbaseScrollPanel:Add("DDraggableRolesLayerReceiver")
+	canvas:SetLeftMargin(100)
+	canvas:Dock(TOP)
+	canvas:InitRoles(layers)
 
 	local draggableRolesBase = vgui.Create("DDraggableRolesLayerSender", frame)
 	draggableRolesBase:SetLeftMargin(100)
 	draggableRolesBase:Dock(TOP)
 	draggableRolesBase:SetTall(74) -- iconsSize (64) + 2 * padding (5)
 	draggableRolesBase:SetPadding(5)
-	draggableRolesBase:SetReceiver(dragbase)
+	draggableRolesBase:SetReceiver(canvas)
 
 	for i = 1, #leftRoles do
 		local subrole = leftRoles[i]
@@ -629,7 +638,7 @@ local function CreateLayer(roleIndex, layers)
 		draggableRolesBase:AddPanel(ic)
 	end
 
-	dragbase:SetSender(draggableRolesBase)
+	canvas:SetSender(draggableRolesBase)
 
 	-- Send data to the server on close
 	function frame:OnClose()
