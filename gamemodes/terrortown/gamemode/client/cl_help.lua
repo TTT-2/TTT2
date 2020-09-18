@@ -70,7 +70,7 @@ HELPSCRN.subPopulate = HELPSCRN.subPopulate or {}
 HELPSCRN.currentMenuId = HELPSCRN.currentMenuId or nil
 HELPSCRN.parent = HELPSCRN.parent or nil
 HELPSCRN.menuData = HELPSCRN.menuData or nil
-HELPSCRN.mainFrame = HELPSCRN.mainFrame or nil
+HELPSCRN.menuFrame = HELPSCRN.menuFrame or nil
 
 HELPSCRN.pad = 5
 
@@ -111,7 +111,7 @@ fileloader.LoadFolder("terrortown/gamemode/client/cl_help/", false, CLIENT_FILE)
 -- Opens the help screen
 -- @realm client
 function HELPSCRN:ShowMainMenu()
-	local frame = self.mainFrame
+	local frame = self.menuFrame
 
 	-- IF MENU ELEMENT DOES NOT ALREADY EXIST, CREATE IT
 	if IsValid(frame) and not frame:IsFrameHidden() then
@@ -120,7 +120,7 @@ function HELPSCRN:ShowMainMenu()
 		frame = vguihandler.GenerateFrame(width, height, "help_title", true)
 	end
 
-	self.mainFrame = frame
+	self.menuFrame = frame
 
 	-- INIT MAIN MENU SPECIFIC STUFF
 	frame:SetPadding(self.pad, self.pad, self.pad, self.pad)
@@ -225,7 +225,7 @@ end
 -- @param table data The data of the submenu
 -- @realm client
 function HELPSCRN:ShowSubMenu(data)
-	local frame = self.mainFrame
+	local frame = self.menuFrame
 
 	-- IF MENU ELEMENT DOES NOT ALREADY EXIST, CREATE IT
 	if IsValid(frame) and not frame:IsFrameHidden() then
@@ -331,15 +331,15 @@ end
 
 local function ShowTTTHelp(ply, cmd, args)
 	-- F1 PRESSED: CLOSE MAIN MENU IF MENU IS ALREADY OPENED
-	if HELPSCRN.currentMenuId == MAIN_MENU and IsValid(HELPSCRN.mainFrame) and not HELPSCRN.mainFrame:IsFrameHidden() then
-		HELPSCRN.mainFrame:CloseFrame()
+	if HELPSCRN.currentMenuId == MAIN_MENU and IsValid(HELPSCRN.menuFrame) and not HELPSCRN.menuFrame:IsFrameHidden() then
+		HELPSCRN.menuFrame:CloseFrame()
 
 		return
 	end
 
 	-- F1 PRESSED AND MENU IS HIDDEN: UNHIDE
-	if HELPSCRN.currentMenuId and IsValid(HELPSCRN.mainFrame) and HELPSCRN.mainFrame:IsFrameHidden() then
-		HELPSCRN.mainFrame:ShowFrame()
+	if HELPSCRN.currentMenuId and IsValid(HELPSCRN.menuFrame) and HELPSCRN.menuFrame:IsFrameHidden() then
+		HELPSCRN.menuFrame:ShowFrame()
 
 		return
 	end
