@@ -67,6 +67,8 @@ if SERVER then
 			else
 				roleselection.subroleLayers[requestedRoleTbl] = ReadLayersData()
 			end
+
+			roleselection.SaveLayers()
 		end
 	end)
 

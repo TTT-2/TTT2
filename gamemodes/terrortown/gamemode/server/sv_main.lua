@@ -213,6 +213,8 @@ function GM:Initialize()
 		MsgN("Added TTT2 language file: ", path)
 	end)
 
+	roleselection.LoadLayers()
+
 	ShopEditor.SetupShopEditorCVars()
 	ShopEditor.CreateShopDBs()
 

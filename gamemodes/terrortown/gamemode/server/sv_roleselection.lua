@@ -25,6 +25,126 @@ roleselection.cv.ttt_max_roles_pct =  CreateConVar("ttt_max_roles_pct", "0", {FC
 roleselection.cv.ttt_max_baseroles = CreateConVar("ttt_max_baseroles", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different baseroles")
 roleselection.cv.ttt_max_baseroles_pct = CreateConVar("ttt_max_baseroles_pct", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different baseroles based on player amount. ttt_max_baseroles needs to be 0")
 
+-- saving and loading
+roleselection.sqltable = "ttt2_roleselection"
+roleselection.savingKeys = {
+	layer = {typ = "number", bits = ROLE_BITS, default = 0},
+	depth = {typ = "number", bits = ROLE_BITS, default = 0}
+}
+
+function roleselection.LoadLayers()
+	if not SQL.CreateSqlTable(roleselection.sqltable, roleselection.savingKeys) then return end
+
+	local roleList = roles.GetList()
+
+	for i = 1, #roleList do
+		local roleData = roleList[i]
+		local dataTable = {
+			["layer"] = 0,
+			["depth"] = 0
+		}
+
+		local loaded, changed = SQL.Load(roleselection.sqltable, roleData.name, dataTable, roleselection.savingKeys)
+
+		if not loaded then
+			SQL.Init(roleselection.sqltable, roleData.name, dataTable, roleselection.savingKeys)
+		elseif changed then
+			if dataTable.layer == 0 or dataTable.depth == 0 then continue end -- if (0, 0), exclude from layering
+
+			if roleData:IsBaseRole() then
+				roleselection.baseroleLayers[dataTable.layer] = roleselection.baseroleLayers[dataTable.layer] or {}
+				roleselection.baseroleLayers[dataTable.layer][dataTable.depth] = roleData.index
+			else
+				local baserole = roleData:GetBaseRole()
+
+				roleselection.subroleLayers[baserole] = roleselection.subroleLayers[baserole] or {}
+				roleselection.subroleLayers[baserole][dataTable.layer] = roleselection.subroleLayers[baserole][dataTable.layer] or {}
+				roleselection.subroleLayers[baserole][dataTable.layer][dataTable.depth] = roleData.index
+			end
+		end
+	end
+
+	-- validate layers, could be invalid if there are already uninstalled roles
+	local layerCount = 0
+	local depthCount = 0
+	local validTbl = {}
+
+	-- baseroles
+	for _, currentLayerTbl in pairs(roleselection.baseroleLayers) do -- layer
+		layerCount = layerCount + 1
+		depthCount = 0
+		validTbl[layerCount] = {}
+
+		for _, entry in pairs(currentLayerTbl) do -- depth
+			depthCount = depthCount + 1
+			validTbl[layerCount][depthCount] = entry
+		end
+	end
+
+	roleselection.baseroleLayers = validTbl
+
+	validTbl = {}
+	-- subroles
+	for baserole, layerTbl in pairs(roleselection.subroleLayers) do -- baserole connection
+		validTbl[baserole] = {}
+		layerCount = 0
+
+		for _, currentLayerTbl in pairs(layerTbl) do -- layer
+			layerCount = layerCount + 1
+			depthCount = 0
+			validTbl[baserole][layerCount] = {}
+
+			for _, entry in pairs(currentLayerTbl) do -- depth
+				depthCount = depthCount + 1
+				validTbl[baserole][layerCount][depthCount] = entry
+			end
+		end
+	end
+
+	roleselection.subroleLayers = validTbl
+
+	-- TODO remove invalid data from database, but SQL.Delete is missing
+end
+
+function roleselection.SaveLayers()
+	local dataTable = {}
+
+	-- baseroles
+	for cLayer = 1, #roleselection.baseroleLayers do
+		local currentLayerTbl = roleselection.baseroleLayers[cLayer]
+
+		for cDepth = 1, #currentLayerTbl do
+			dataTable[currentLayerTbl[cDepth]] = { -- role index
+				["layer"] = cLayer,
+				["depth"] = cDepth
+			}
+		end
+	end
+
+	-- subroles
+	for baserole, layerTbl in pairs(roleselection.subroleLayers) do
+		for cLayer = 1, #layerTbl do
+			local currentLayerTbl = layerTbl[cLayer]
+
+			for cDepth = 1, #currentLayerTbl do
+				dataTable[currentLayerTbl[cDepth]] = { -- role index
+					["layer"] = cLayer,
+					["depth"] = cDepth
+				}
+			end
+		end
+	end
+
+	-- if not in layer, set (0, 0) as default values
+	local roleList = roles.GetList()
+
+	for i = 1, #roleList do
+		local roleData = roleList[i]
+
+		SQL.Save(roleselection.sqltable, roleData.name, dataTable[roleData.index] or {}, roleselection.savingKeys)
+	end
+end
+
 ---
 -- Returns the current amount of selected/already selected @{ROLE}s.
 --
