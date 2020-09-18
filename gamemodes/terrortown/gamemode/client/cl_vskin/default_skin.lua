@@ -638,8 +638,8 @@ function SKIN:PaintHelpLabelTTT2(panel, w, h)
 	)
 
 	local _, heightText = drawGetTextSize(textTranslated, panel:GetFont())
-
 	local posY = panel.paddingY
+
 	for i = 1, #textWrapped do
 		drawSimpleText(
 			textWrapped[i],
