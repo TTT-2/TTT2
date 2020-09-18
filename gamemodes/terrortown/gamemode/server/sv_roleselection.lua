@@ -118,8 +118,8 @@ function roleselection.GetAllSelectableRolesList(maxPlys)
 	end
 
 	local rolesCountTbl = {
-		[INNOCENT] = GetAvailableRoleAmount(INNOCENT, true, maxPlys),
-		[TRAITOR] = GetAvailableRoleAmount(TRAITOR, true, maxPlys)
+		[ROLE_INNOCENT] = GetAvailableRoleAmount(INNOCENT, true, maxPlys),
+		[ROLE_TRAITOR] = GetAvailableRoleAmount(TRAITOR, true, maxPlys)
 	}
 
 	local checked = {}
@@ -146,19 +146,19 @@ function roleselection.GetAllSelectableRolesList(maxPlys)
 				local rolesCount = GetAvailableRoleAmount(baseRoleData, forcedRolesTbl[baseRoleData.index], maxPlys)
 
 				if rolesCount > 0 then
-					rolesCountTbl[baseRoleData] = rolesCount
+					rolesCountTbl[baseRoleData.index] = rolesCount
 				end
 			end
 
 			-- continue if baserole is not available
-			if not rolesCountTbl[baseRoleData] then continue end
+			if not rolesCountTbl[baseRoleData.index] then continue end
 		end
 
 		-- now check for subrole availability
 		local rolesCount = GetAvailableRoleAmount(roleData, forcedRolesTbl[roleData.index], maxPlys)
 
 		if rolesCount > 0 then
-			rolesCountTbl[roleData] = rolesCount
+			rolesCountTbl[roleData.index] = rolesCount
 		end
 	end
 
@@ -172,7 +172,7 @@ local function CleanupAvailableRolesLayerTbl(availableRolesTbl, currentIndexedLa
 		local layerEntry = currentIndexedLayer[cDepth]
 
 		for i = 1, #availableRolesTbl do
-			if availableRolesTbl[i].index ~= layerEntry.index then -- the role is still available / selectable
+			if availableRolesTbl[i] == layerEntry then -- the role is still available / selectable
 				cleanedLayerTbl[#cleanedLayerTbl + 1] = layerEntry
 
 				-- remove the role from the available roles table. This also means, that even if a layered "or"-table is given and not every role in there was already selected, every role in the layered "or"-table will become unavailable
@@ -222,25 +222,27 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 	local availableSubRolesTbl = {}
 	local availableBaseRolesAmount = 0
 
-	for roleData in pairs(rolesAmountList) do
+	for subrole in pairs(rolesAmountList) do
+		local roleData = roles.GetByIndex(subrole)
+
 		-- exclude innocents and traitors, as they are already included, see below def. of selectableRoles.
-		if roleData == INNOCENT or roleData == TRAITOR then continue end
+		if subrole == ROLE_INNOCENT or subrole == ROLE_TRAITOR then continue end
 
 		if not roleData:IsBaseRole() then
-			local baseroleData = roles.GetByIndex(roleData:GetBaseRole())
+			local baserole = roleData:GetBaseRole()
 
-			availableSubRolesTbl[baseroleData] = availableSubRolesTbl[baseroleData] or {}
-			availableSubRolesTbl[baseroleData][#availableSubRolesTbl[baseroleData] + 1] = roleData
+			availableSubRolesTbl[baserole] = availableSubRolesTbl[baserole] or {}
+			availableSubRolesTbl[baserole][#availableSubRolesTbl[baserole] + 1] = subrole
 		else
 			availableBaseRolesAmount = availableBaseRolesAmount + 1
 
-			availableBaseRolesTbl[availableBaseRolesAmount] = roleData
+			availableBaseRolesTbl[availableBaseRolesAmount] = subrole
 		end
 	end
 
 	local selectableRoles = {
-		[TRAITOR] = rolesAmountList[TRAITOR],
-		[INNOCENT] = rolesAmountList[INNOCENT]
+		[ROLE_TRAITOR] = rolesAmountList[ROLE_TRAITOR],
+		[ROLE_INNOCENT] = rolesAmountList[ROLE_INNOCENT]
 	}
 	local curRoles = 2 -- amount of roles, start with 2 because INNOCENT and TRAITOR are all the time available
 	local curBaseroles = 2 -- amount of base roles, ...
@@ -249,14 +251,17 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 
 	hook.Run("TTT2ModifyLayeredBaseRoles", layeredBaseRolesTbl, availableBaseRolesTbl)
 
-	local baseroleLoopTbl = {} -- just contains available / selectable baseroles
+	local baseroleLoopTbl = { -- just contains available / selectable baseroles
+		ROLE_TRAITOR,
+		ROLE_INNOCENT
+	}
 
 	-- first of all, we need to select the baseroles. Otherwise, we would select subroles that never gonna be choosen because if the missing baserole
 	for i = 1, availableBaseRolesAmount do
 		if maxRoles and maxRoles <= curRoles or maxBaseroles and maxBaseroles <= curBaseroles or #availableBaseRolesTbl < 1 then break end -- if the limit is reached or no available roles left (could happen if removing available roles that weren't already selected in layered "or"-tables), stop selection
 
 		-- the selected role
-		local roleData = nil
+		local subrole = nil
 
 		-- if there are still defined layer
 		if #layeredBaseRolesTbl >= i then
@@ -272,16 +277,16 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 				continue
 			end
 
-			roleData = cleanedLayerTbl[math.random(#cleanedLayerTbl)]
-		else -- if no roleData was selected (no layer left or no layer defined)
+			subrole = cleanedLayerTbl[math.random(#cleanedLayerTbl)]
+		else -- if no subrole was selected (no layer left or no layer defined)
 			local rnd = math.random(#availableBaseRolesTbl)
-			roleData = availableBaseRolesTbl[rnd]
+			subrole = availableBaseRolesTbl[rnd]
 
-			table.remove(availableBaseRolesTbl, rnd) -- selected roleData shouldn't get selected multiple times
+			table.remove(availableBaseRolesTbl, rnd) -- selected subrole shouldn't get selected multiple times
 		end
 
-		selectableRoles[roleData] = rolesAmountList[roleData]
-		baseroleLoopTbl[#baseroleLoopTbl + 1] = roleData
+		selectableRoles[subrole] = rolesAmountList[subrole]
+		baseroleLoopTbl[#baseroleLoopTbl + 1] = subrole
 
 		curRoles = curRoles + 1
 		curBaseroles = curBaseroles + 1
@@ -295,9 +300,9 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 	for cBase = 1, #baseroleLoopTbl do
 		if maxRoles and maxRoles <= curRoles then break end -- if the limit is reached, stop selection
 
-		local currentBaseroleData = baseroleLoopTbl[cBase]
+		local currentBaserole = baseroleLoopTbl[cBase]
 
-		local currentSubroleTbl = availableSubRolesTbl[currentBaseroleData]
+		local currentSubroleTbl = availableSubRolesTbl[currentBaserole]
 		if not currentSubroleTbl then continue end -- no subroles connected with this baserole
 
 		local subroleTblCount = #currentSubroleTbl
@@ -306,11 +311,11 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 			if maxRoles and maxRoles <= curRoles or #currentSubroleTbl < 1 then break end -- if the limit is reached or no available roles left (could happen if removing available roles that weren't already selected in layered "or"-tables), stop selection
 
 			-- the selected role
-			local roleData = nil
-			local currentSubroleLayer = layeredSubRolesTbl[currentBaseroleData]
+			local subrole = nil
+			local currentSubroleLayer = layeredSubRolesTbl[currentBaserole]
 
 			-- if there are still defined layer
-			if #currentSubroleLayer >= i then
+			if currentSubroleLayer ~= nil and #currentSubroleLayer >= i then
 				local cleanedLayerTbl = CleanupAvailableRolesLayerTbl(currentSubroleTbl, currentSubroleLayer[i]) -- clean the currently indexed layer (so that it just includes selectable roles), because we working with predefined layers that probably includes roles that aren't selectable with the current amount of players, etc.
 
 				-- if there is no selectable role left in the current layer
@@ -323,15 +328,15 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 					continue
 				end
 
-				roleData = cleanedLayerTbl[math.random(#cleanedLayerTbl)]
-			else -- if no roleData was selected (no layer left or no layer defined)
+				subrole = cleanedLayerTbl[math.random(#cleanedLayerTbl)]
+			else -- if no subrole was selected (no layer left or no layer defined)
 				local rnd = math.random(#currentSubroleTbl)
-				roleData = currentSubroleTbl[rnd]
+				subrole = currentSubroleTbl[rnd]
 
-				table.remove(currentSubroleTbl, rnd) -- selected roleData shouldn't get selected multiple times
+				table.remove(currentSubroleTbl, rnd) -- selected subrole shouldn't get selected multiple times
 			end
 
-			selectableRoles[roleData] = rolesAmountList[roleData]
+			selectableRoles[subrole] = rolesAmountList[subrole]
 
 			curRoles = curRoles + 1
 		end
@@ -362,8 +367,9 @@ local function SetSubRoles(plys, availableRoles, selectableRoles)
 		local ply = plys[pick]
 
 		local rolePick = math.random(availableRolesAmount)
-		local roleData = availableRoles[rolePick]
-		local roleCount = tmpSelectableRoles[roleData]
+		local subrole = availableRoles[rolePick]
+		local roleData = roles.GetByIndex(subrole)
+		local roleCount = tmpSelectableRoles[subrole]
 
 		local minKarmaCVar = GetConVar("ttt_" .. roleData.name .. "_karma_min")
 		local minKarma = minKarmaCVar and minKarmaCVar:GetInt() or 0
@@ -371,17 +377,17 @@ local function SetSubRoles(plys, availableRoles, selectableRoles)
 		-- give this player the role if
 		if plysAmount <= roleCount -- or there aren't enough players anymore to have a greater role variety
 			or ply:GetBaseKarma() > minKarma -- or the player has enough karma
-				and not ply:GetAvoidRole(roleData.index) -- and the player doesn't avoid this role
+				and not ply:GetAvoidRole(subrole) -- and the player doesn't avoid this role
 			or math.random(3) == 2 -- or if the randomness decides
 		then
 			table.remove(plys, pick)
 
-			roleselection.finalRoles[ply] = roleData.index
+			roleselection.finalRoles[ply] = subrole
 
 			plysAmount = plysAmount - 1
 			roleCount = roleCount - 1
 
-			tmpSelectableRoles[roleData] = roleCount -- update the available roles
+			tmpSelectableRoles[subrole] = roleCount -- update the available roles
 
 			if roleCount < 1 then
 				table.remove(availableRoles, rolePick)
@@ -417,9 +423,7 @@ local function SelectForcedRoles(plys, selectableRoles)
 	end
 
 	for subrole, forcedPlys in pairs(transformed) do
-		local rd = roles.GetByIndex(subrole)
-
-		local roleCount = selectableRoles[rd]
+		local roleCount = selectableRoles[subrole]
 
 		-- if it's not a selectable role, continue
 		if not roleCount then continue end
@@ -442,7 +446,7 @@ local function SelectForcedRoles(plys, selectableRoles)
 			roleselection.finalRoles[ply] = subrole
 			curCount = curCount + 1
 
-			hook.Run("TTT2ReceivedForcedRole", ply, rd)
+			hook.Run("TTT2ReceivedForcedRole", ply, subrole)
 
 			selectedPlys[ply] = true
 		end
@@ -458,17 +462,17 @@ end
 -- @note The subrole replaces a previously selected baserole.
 --
 -- @param table plys The players that should receive roles.
--- @param table roleData The @{ROLE} object of the considered role.
+-- @param int subrole The @{ROLE} index of the considered role.
 -- @param table selectableRoles The list of filtered selectable @{ROLE}s
 -- @realm server
 -- @internal
-local function UpgradeRoles(plys, roleData, selectableRoles)
+local function UpgradeRoles(plys, subrole, selectableRoles)
 	local availableRoles = {}
 
 	-- now upgrade this role if there are other subroles
-	for v in pairs(selectableRoles) do
-		if v.baserole == roleData.index then
-			availableRoles[#availableRoles + 1] = v
+	for sub in pairs(selectableRoles) do
+		if roles.GetByIndex(sub).baserole == subrole then
+			availableRoles[#availableRoles + 1] = sub
 		end
 	end
 
@@ -480,16 +484,16 @@ end
 -- @note This function modifies the given `plys` var.
 --
 -- @param table plys The players that can receive roles.
--- @param table roleData The @{ROLE} object of the considered role.
+-- @param int subrole The @{ROLE} index of the considered role.
 -- @param number roleAmount The amount of players that are allowed to receive this role.
 -- @return table List of players, that received the role.
 -- @realm server
 -- @internal
-local function SelectBaseRolePlayers(plys, roleData, roleAmount)
+local function SelectBaseRolePlayers(plys, subrole, roleAmount)
 	local curRoles = 0
 	local plysList = {}
 
-	local minKarmaCVar = GetConVar("ttt_" .. roleData.name .. "_karma_min")
+	local minKarmaCVar = GetConVar("ttt_" .. roles.GetByIndex(subrole).name .. "_karma_min")
 	local min_karmas = minKarmaCVar and minKarmaCVar:GetInt() or 0
 
 	while curRoles < roleAmount and #plys > 0 do
@@ -500,10 +504,10 @@ local function SelectBaseRolePlayers(plys, roleData, roleAmount)
 		local ply = plys[pick]
 
 		-- give this player the role if
-		if roleData == INNOCENT -- this role is an innocent role
+		if subrole == ROLE_INNOCENT -- this role is an innocent role
 			or #plys <= roleAmount -- or there aren't enough players anymore to have a greater role variety
 			or ply:GetBaseKarma() > min_karmas -- or the player has enough karma
-				and not ply:GetAvoidRole(roleData.index) -- and the player doesn't avoid this role
+				and not ply:GetAvoidRole(subrole) -- and the player doesn't avoid this role
 			or math.random(3) == 2 -- or if the randomness decides
 		then
 			table.remove(plys, pick)
@@ -511,7 +515,7 @@ local function SelectBaseRolePlayers(plys, roleData, roleAmount)
 			curRoles = curRoles + 1
 			plysList[curRoles] = ply
 
-			roleselection.finalRoles[ply] = roleData.index -- give the player the final baserole (maybe he will receive his subrole later)
+			roleselection.finalRoles[ply] = subrole -- give the player the final baserole (maybe he will receive his subrole later)
 		end
 	end
 
@@ -560,30 +564,31 @@ function roleselection.SelectRoles(plys, maxPlys)
 	if #plysFirstPass > 0 then
 		-- first select traitors, then innos, then the other roles
 		local list = {
-			[1] = TRAITOR,
-			[2] = INNOCENT
+			[1] = ROLE_TRAITOR,
+			[2] = ROLE_INNOCENT
 		}
 
 		-- insert selectable roles into the list. The order doesn't matter, players are choosen randomly and the roles are already filtered and limited
-		for roleData in pairs(selectableRoles) do
-			if roleData == TRAITOR or roleData == INNOCENT then continue end
+		for subrole in pairs(selectableRoles) do
+			if subrole == ROLE_TRAITOR or subrole == ROLE_INNOCENT then continue end
 
-			list[#list + 1] = roleData
+			list[#list + 1] = subrole
 		end
 
 		-- Check all base roles, and assign players where possible.
 		-- After that, this will also try to upgrade the selected players, to any applicable subrole, that might replace the baserole.
 		-- But this will not upgrade Innocent subroles, as Innocents and players without any role are upgraded in the end.
 		for i = 1, #list do
-			local roleData = list[i]
+			local subrole = list[i]
+			local roleData = roles.GetByIndex(subrole)
 
-			if roleData.baserole or not selectableRoles[roleData] then continue end
+			if not roleData:IsBaseRole() or not selectableRoles[subrole] then continue end
 
-			local baseRolePlys = SelectBaseRolePlayers(plysFirstPass, roleData, selectableRoles[roleData])
+			local baseRolePlys = SelectBaseRolePlayers(plysFirstPass, subrole, selectableRoles[subrole])
 
 			-- upgrade innos and players without any role later
-			if roleData ~= INNOCENT then
-				UpgradeRoles(baseRolePlys, roleData, selectableRoles)
+			if subrole ~= ROLE_INNOCENT then
+				UpgradeRoles(baseRolePlys, subrole, selectableRoles)
 			end
 		end
 
@@ -599,7 +604,7 @@ function roleselection.SelectRoles(plys, maxPlys)
 			innos[#innos + 1] = ply
 		end
 
-		UpgradeRoles(innos, INNOCENT, selectableRoles)
+		UpgradeRoles(innos, ROLE_INNOCENT, selectableRoles)
 	end
 
 	GAMEMODE.LastRole = {}

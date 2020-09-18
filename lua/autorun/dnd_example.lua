@@ -10,7 +10,7 @@ local function SendLayersData(layerTbl)
 		net.WriteUInt(layerDepth, ROLE_BITS) -- can't be greater than the maximum amount of roles
 
 		for cDepth = 1, layerDepth do
-			net.WriteUInt(currentLayer[cDepth].index, ROLE_BITS) -- the role's index
+			net.WriteUInt(currentLayer[cDepth], ROLE_BITS) -- the role's index
 		end
 	end
 end
@@ -24,7 +24,7 @@ local function ReadLayersData()
 		local layerDepth = net.ReadUInt(ROLE_BITS)
 
 		for cDepth = 1, layerDepth do
-			currentLayer[cDepth] = roles.GetByIndex(net.ReadUInt(ROLE_BITS))
+			currentLayer[cDepth] = net.ReadUInt(ROLE_BITS)
 		end
 
 		layerTbl[i] = currentLayer
@@ -50,7 +50,7 @@ if SERVER then
 			if requestedRoleTbl == ROLE_ANY then
 				layerTbl = roleselection.baseroleLayers
 			else
-				layerTbl = roleselection.subroleLayers[roles.GetByIndex(requestedRoleTbl)]
+				layerTbl = roleselection.subroleLayers[requestedRoleTbl]
 			end
 
 			net.Start("TTT2SyncRolesLayer")
@@ -65,7 +65,7 @@ if SERVER then
 			if requestedRoleTbl == ROLE_ANY then
 				roleselection.baseroleLayers = ReadLayersData()
 			else
-				roleselection.subroleLayers[roles.GetByIndex(requestedRoleTbl)] = ReadLayersData()
+				roleselection.subroleLayers[requestedRoleTbl] = ReadLayersData()
 			end
 		end
 	end)
@@ -174,7 +174,7 @@ function PANEL:Init()
 end
 
 function PANEL:OnDropped(droppedPnl, pos, closestPnl)
-	local dropLayer, dropDepth = self:GetCurrentLayerDepth(droppedPnl.roleData)
+	local dropLayer, dropDepth = self:GetCurrentLayerDepth(droppedPnl.subrole)
 
 	if dropLayer then
 		table.remove(self.layerList[dropLayer], dropDepth) -- remove dropped panel from old position
@@ -186,18 +186,18 @@ function PANEL:OnDropped(droppedPnl, pos, closestPnl)
 	end
 
 	if pos == 6 then -- right
-		local newLayer, newDepth = self:GetCurrentLayerDepth(closestPnl.roleData)
+		local newLayer, newDepth = self:GetCurrentLayerDepth(closestPnl.subrole)
 
-		table.insert(self.layerList[newLayer], newDepth + 1, droppedPnl.roleData) -- insert dropped panel into the existing layer
+		table.insert(self.layerList[newLayer], newDepth + 1, droppedPnl.subrole) -- insert dropped panel into the existing layer
 	elseif pos == 8 or pos == 2 then -- top or bottom
-		local newLayer = self:GetCurrentLayerDepth(closestPnl.roleData)
+		local newLayer = self:GetCurrentLayerDepth(closestPnl.subrole)
 
-		table.insert(self.layerList, pos == 8 and newLayer or newLayer + 1, {droppedPnl.roleData}) -- insert dropped panel into a new layer
+		table.insert(self.layerList, pos == 8 and newLayer or newLayer + 1, {droppedPnl.subrole}) -- insert dropped panel into a new layer
 	end
 
 	if not IsValid(self.senderPnl) then return end
 
-	self.senderPnl.cachedTbl[droppedPnl.roleData] = nil -- remove from sender's cached list
+	self.senderPnl.cachedTbl[droppedPnl.subrole] = nil -- remove from sender's cached list
 end
 
 function PANEL:OnModified()
@@ -207,11 +207,11 @@ function PANEL:OnModified()
 	if #children == 1 and #self:GetLayers() == 0 then
 		local droppedPnl = children[1]
 
-		self.layerList[1] = {droppedPnl.roleData} -- insert dropped panel into a new layer
+		self.layerList[1] = {droppedPnl.subrole} -- insert dropped panel into a new layer
 
 		if not IsValid(self.senderPnl) then return end
 
-		self.senderPnl.cachedTbl[droppedPnl.roleData] = nil -- remove from sender's cached list
+		self.senderPnl.cachedTbl[droppedPnl.subrole] = nil -- remove from sender's cached list
 	end
 end
 
@@ -223,12 +223,12 @@ function PANEL:GetLayers()
 	return self.layerList
 end
 
-function PANEL:GetCurrentLayerDepth(name)
+function PANEL:GetCurrentLayerDepth(subrole)
 	for layer = 1, #self.layerList do
 		local currentLayerTbl = self.layerList[layer]
 
 		for depth = 1, #currentLayerTbl do
-			if currentLayerTbl[depth] == name then
+			if currentLayerTbl[depth] == subrole then
 				return layer, depth
 			end
 		end
@@ -240,7 +240,7 @@ function PANEL:PerformLayout(width, height)
 
 	for i = 1, #children do
 		local v = children[i]
-		local layer, depth = self:GetCurrentLayerDepth(v.roleData)
+		local layer, depth = self:GetCurrentLayerDepth(v.subrole)
 
 		v:SetPos(5 + (depth - 1) * 69, 5 + (layer - 1) * 69)
 	end
@@ -253,7 +253,8 @@ function PANEL:InitRoles(layeredRoles)
 		local currentLayerTbl = layeredRoles[layer]
 
 		for i = 1, #currentLayerTbl do
-			local roleData = currentLayerTbl[i]
+			local subrole = currentLayerTbl[i]
+			local roleData = roles.GetByIndex(subrole)
 
 			-- create the role icon
 			local ic = vgui.Create("DRoleImage", self)
@@ -264,7 +265,7 @@ function PANEL:InitRoles(layeredRoles)
 			ic:SetImage2("vgui/ttt/dynamic/icon_base_base")
 			ic:SetImageOverlay("vgui/ttt/dynamic/icon_base_base_overlay")
 
-			ic.roleData = roleData
+			ic.subrole = subrole
 
 			ic:SetRoleIconImage(roleData.icon)
 			ic:SetTooltip(LANG.TryTranslation(roleData.name))
@@ -327,9 +328,9 @@ function PANEL:OnDragModified()
 	for i = 1, #children do
 		local child = children[i]
 
-		if not self.cachedTbl[child.roleData] then -- missing in the cache, so added
+		if not self.cachedTbl[child.subrole] then -- missing in the cache, so added
 			-- remove from layer
-			local dropLayer, dropDepth = self.receiverPnl:GetCurrentLayerDepth(child.roleData)
+			local dropLayer, dropDepth = self.receiverPnl:GetCurrentLayerDepth(child.subrole)
 			if dropLayer == nil then continue end -- not contained in layer
 
 			local layerList = self.receiverPnl:GetLayers()
@@ -352,8 +353,8 @@ function PANEL:OnDragModified()
 	for i = 1, #children do
 		local child = children[i]
 
-		if not self.cachedTbl[child.roleData] then -- add
-			self.cachedTbl[child.roleData] = true
+		if not self.cachedTbl[child.subrole] then -- add
+			self.cachedTbl[child.subrole] = true
 		end
 	end
 
@@ -429,24 +430,24 @@ local function GetLayerableBaserolesWithSubroles()
 		if roleData.notSelectable then continue end
 
 		if not roleData:IsBaseRole() then
-			local baseroleData = roles.GetByIndex(roleData:GetBaseRole())
+			local baserole = roleData:GetBaseRole()
 
-			availableSubRolesTbl[baseroleData] = availableSubRolesTbl[baseroleData] or {}
-			availableSubRolesTbl[baseroleData][#availableSubRolesTbl[baseroleData] + 1] = roleData
+			availableSubRolesTbl[baserole] = availableSubRolesTbl[baserole] or {}
+			availableSubRolesTbl[baserole][#availableSubRolesTbl[baserole] + 1] = roleData.index
 		else
 			availableBaseRolesAmount = availableBaseRolesAmount + 1
 
-			availableBaseRolesTbl[availableBaseRolesAmount] = roleData
+			availableBaseRolesTbl[availableBaseRolesAmount] = roleData.index
 		end
 	end
 
 	-- now get the subroles if there are more than 1 subrole of a related baserole
 	for cBase = 1, availableBaseRolesAmount do
-		local baseroleData = availableBaseRolesTbl[cBase]
-		local currentSubrolesTbl = availableSubRolesTbl[baseroleData]
+		local baserole = availableBaseRolesTbl[cBase]
+		local currentSubrolesTbl = availableSubRolesTbl[baserole]
 
 		if currentSubrolesTbl == nil or #currentSubrolesTbl < 2 then -- related subroles table
-			availableSubRolesTbl[baseroleData] = nil -- reset if not enough related subroles so a layer wouldn't make any sense
+			availableSubRolesTbl[baserole] = nil -- reset if not enough related subroles so a layer wouldn't make any sense
 		end
 	end
 
@@ -457,21 +458,20 @@ end
 local function CreateLayer(roleIndex, layers)
 	local leftRoles = {}
 	local baseroleList, subroleList = GetLayerableBaserolesWithSubroles()
-	local currentRoleData = roles.GetByIndex(roleIndex)
 	local roleList
 
 	if roleIndex == ROLE_ANY then
 		roleList = baseroleList
 	else
-		roleList = subroleList[currentRoleData]
+		roleList = subroleList[roleIndex]
 	end
 
 	if #roleList < 2 then return end -- a layer wouldn't make any sense if there are less than 2 available entries / related roles
 
 	for cRoles = 1, #roleList do
-		local roleData = roleList[cRoles]
+		local subrole = roleList[cRoles]
 
-		if roleData == TRAITOR or roleData == INNOCENT then continue end -- don't insert roles that are getting automatically / statically selected
+		if subrole == ROLE_TRAITOR or subrole == ROLE_INNOCENT then continue end -- don't insert roles that are getting automatically / statically selected
 
 		local found = false
 
@@ -479,7 +479,7 @@ local function CreateLayer(roleIndex, layers)
 			local currentLayer = layers[cLayer]
 
 			for cEntry = 1, #currentLayer do
-				if currentLayer[cEntry].index == roleData.index then
+				if currentLayer[cEntry] == subrole then
 					found = true
 
 					break
@@ -491,10 +491,10 @@ local function CreateLayer(roleIndex, layers)
 
 		if found then continue end
 
-		leftRoles[#leftRoles + 1] = roleData
+		leftRoles[#leftRoles + 1] = subrole
 	end
 
-	local title = (roleIndex == ROLE_ANY and "Baserole" or LANG.TryTranslation(currentRoleData.name)) .. " layers"
+	local title = (roleIndex == ROLE_ANY and "Baserole" or LANG.TryTranslation(roles.GetByIndex(roleIndex).name)) .. " layers"
 
 	local frame = vgui.Create("DFrame")
 	frame:SetSize(500, 500)
@@ -508,10 +508,10 @@ local function CreateLayer(roleIndex, layers)
 		comboBox:AddChoice("Baserole layers", ROLE_ANY)
 	end
 
-	for baserolesKey in pairs(subroleList) do
-		if baserolesKey.index == roleIndex then continue end
+	for subrole in pairs(subroleList) do
+		if subrole == roleIndex then continue end
 
-		comboBox:AddChoice(LANG.TryTranslation(baserolesKey.name) .. " layers", baserolesKey.index)
+		comboBox:AddChoice(LANG.TryTranslation(roles.GetByIndex(subrole).name) .. " layers", subrole)
 	end
 
 	-- ugly, but working for now. Close the frame and request a new list. A realtime refresh would be cooler
@@ -535,7 +535,8 @@ local function CreateLayer(roleIndex, layers)
 	draggableRolesBase:SetReceiver(dragbase)
 
 	for i = 1, #leftRoles do
-		local roleData = leftRoles[i]
+		local subrole = leftRoles[i]
+		local roleData = roles.GetByIndex(subrole)
 
 		local ic = vgui.Create("DRoleImage", draggableRolesBase)
 		ic:SetSize(64, 64)
@@ -545,7 +546,7 @@ local function CreateLayer(roleIndex, layers)
 		ic:SetImage2("vgui/ttt/dynamic/icon_base_base")
 		ic:SetImageOverlay("vgui/ttt/dynamic/icon_base_base_overlay")
 
-		ic.roleData = roleData
+		ic.subrole = subrole
 
 		ic:SetRoleIconImage(roleData.icon)
 		ic:SetTooltip(LANG.TryTranslation(roleData.name))
