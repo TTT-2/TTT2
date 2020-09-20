@@ -636,7 +636,7 @@ L.tip39 = "C4 that explodes due to a mistake in disarming it has a smaller explo
 L.tip40 = "If it says 'HASTE MODE' above the round timer, the round will at first be only a few minutes long, but with every death the available time increases (like capturing a point in TF2). This mode puts the pressure on the traitors to keep things moving."
 
 -- Round report
-L.report_title = "Round report"
+L.report_title = "Round Report"
 
 -- Tabs
 L.report_tab_hilite = "Highlights"
@@ -653,9 +653,9 @@ L.report_save_error = "No Event Log data to save."
 L.report_save_result = "The Event Log has been saved to:"
 
 -- Big title window
-L.hilite_win_traitors = "THE TRAITORS WIN"
-L.hilite_win_bees = "THE BEES WIN"
-L.hilite_win_innocents = "THE INNOCENTS WIN"
+L.hilite_win_traitors = "TEAM TRAITOR WON"
+L.hilite_win_bees = "NOBODY WON"
+L.hilite_win_innocents = "TEAM INNOCENT WON"
 
 L.hilite_players1 = "{numplayers} players took part, {numtraitors} were traitors"
 L.hilite_players2 = "{numplayers} players took part, one of them the traitor"

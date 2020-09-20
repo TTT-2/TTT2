@@ -63,6 +63,8 @@ ttt_include("cl_vskin__vgui__dnumslider")
 ttt_include("cl_vskin__vgui__dbinderpanel")
 ttt_include("cl_vskin__vgui__dscrollpanel")
 ttt_include("cl_vskin__vgui__dvscrollbar")
+ttt_include("cl_vskin__vgui__dcoloredbox")
+ttt_include("cl_vskin__vgui__dcoloredtextbox")
 
 ttt_include("cl_network_sync")
 ttt_include("cl_hud_editor")

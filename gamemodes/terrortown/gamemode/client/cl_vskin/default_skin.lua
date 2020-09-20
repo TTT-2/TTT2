@@ -8,6 +8,8 @@ SKIN.Name = "ttt2_default"
 
 local TryT = LANG.TryTranslation
 
+local mathRound = math.Round
+
 local utilGetDefaultColor = util.GetDefaultColor
 local utilGetChangedColor = util.GetChangedColor
 local utilGetHoverColor = util.GetHoverColor
@@ -52,6 +54,8 @@ surface.CreateAdvancedFont("DermaTTT2Button", {font = "Trebuchet24", size = 14, 
 surface.CreateAdvancedFont("DermaTTT2CatHeader", {font = "Trebuchet24", size = 16, weight = 900})
 surface.CreateAdvancedFont("DermaTTT2Text", {font = "Trebuchet24", size = 16, weight = 300})
 surface.CreateAdvancedFont("DermaTTT2TextLarge", {font = "Trebuchet24", size = 18, weight = 300})
+surface.CreateAdvancedFont("DermaTTT2TextLarger", {font = "Trebuchet24", size = 20, weight = 900})
+surface.CreateAdvancedFont("DermaTTT2TextHuge", {font = "Trebuchet24", size = 72, weight = 900})
 
 function SKIN:UpdatedVSkin()
 	colors = {
@@ -312,10 +316,19 @@ local function DrawSubMenuButton(w, h, panel, sizeBorder, colorBackground, color
 	drawBox(0, 0, sizeBorder, h, colorBar)
 	drawBox(sizeBorder, 0, w - sizeBorder, h, colorBackground)
 
+	local pad = mathRound(0.3 * h)
+
+	local hasIcon = panel:HasIcon()
+	local sizeIcon = h - 2 * pad
+
+	if hasIcon then
+		drawFilteredShadowedTexture(pad + sizeBorder, pad + shift, sizeIcon, sizeIcon, panel:GetIcon(), colorText.a, colorText)
+	end
+
 	drawSimpleText(
 		TryT(panel:GetTitle()),
 		panel:GetTitleFont(),
-		sizeBorder + 20,
+		sizeBorder + pad + (hasIcon and (sizeIcon + pad) or pad),
 		0.5 * h + shift,
 		colorText,
 		TEXT_ALIGN_LEFT,
@@ -578,6 +591,18 @@ function SKIN:PaintLabelTTT2(panel, w, h)
 	)
 end
 
+function SKIN:PaintLabelRighTTT2(panel, w, h)
+	drawSimpleText(
+		TryT(panel:GetText()),
+		panel:GetFont(),
+		w,
+		0.5 * h,
+		utilGetChangedColor(colors.default, 40),
+		TEXT_ALIGN_RIGHT,
+		TEXT_ALIGN_CENTER
+	)
+end
+
 function SKIN:PaintFormLabelTTT2(panel, w, h)
 	if not panel:IsEnabled() then
 		drawRoundedBoxEx(sizes.cornerRadius, 0, 0, w, h, ColorAlpha(colors.settingsBox, alphaDisabled), true, false, true, false)
@@ -767,6 +792,108 @@ function SKIN:PaintComboBoxTTT2(panel, w, h)
 
 	drawBox(0, 0, w, h, colors.settingsBox)
 	DrawComboBox(w, h, panel, sizes.cornerRadius, colors.handle, colorText)
+end
+
+function SKIN:PaintColoredTextBoxTTT2(panel, w, h)
+	local colorBackground = panel:GetColor()
+	local colorText = utilGetDefaultColor(colorBackground)
+	local align = panel:GetTitleAlign()
+	local alpha = mathRound(colorText.a * panel:GetTitleOpacity())
+	local hasIcon = panel:HasIcon()
+	local pad = mathRound(0.1 * h)
+	local sizeIcon = h - 2 * pad
+
+	drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colorBackground)
+	drawShadowedText(
+		TryT(panel:GetTitle()),
+		panel:GetTitleFont(),
+		(align == TEXT_ALIGN_CENTER) and (0.5 * w) or (hasIcon and (sizeIcon + 4 * pad) or (2 * pad)),
+		0.5 * h,
+		ColorAlpha(colorText, alpha),
+		align,
+		TEXT_ALIGN_CENTER,
+		1
+	)
+
+	if hasIcon then
+		drawFilteredShadowedTexture(pad, pad, sizeIcon, sizeIcon, panel:GetIcon(), alpha, colorText)
+	end
+end
+
+function SKIN:PaintColoredBoxTTT2(panel, w, h)
+	drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, panel:GetColor())
+end
+
+function SKIN:PaintVerticalBorderedBoxTTT2(panel, w, h)
+	drawBox(w - 1, 0, 1, h, ColorAlpha(colors.default, 200))
+end
+
+local function DrawButtonRoundEnd(w, h, panel, radius, leftSide, colorBackground, colorForeground, colorText, shift)
+	if leftSide then
+		drawRoundedBoxEx(radius, 0, 0, w, h, colorBackground, true, false, true, false)
+		drawRoundedBox(radius, 2, 2, w - 3, h - 4, colorForeground)
+	else
+		drawRoundedBoxEx(radius, 0, 0, w, h, colorBackground, false, true, false, true)
+		drawRoundedBox(radius, 1, 2, w - 3, h - 4, colorForeground)
+	end
+
+	drawSimpleText(
+		TryT(panel:GetText()),
+		panel:GetFont(),
+		0.5 * w,
+		0.5 * h + shift,
+		colorText,
+		TEXT_ALIGN_CENTER,
+		TEXT_ALIGN_CENTER
+	)
+end
+
+function SKIN:PaintButtonRoundEndLeftTTT2(panel, w, h)
+	if panel.Depressed or panel:IsSelected() or panel:GetToggle() then
+		local colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 220)
+
+		return DrawButtonRoundEnd(w, h, panel, sizes.cornerRadius, true, colors.content, colors.accent, colorText, 1)
+	end
+
+	if panel.Hovered then
+		local colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 220)
+
+		return DrawButtonRoundEnd(w, h, panel, sizes.cornerRadius, true, colors.content, colors.accentHover, colorText, 0)
+	end
+
+	if not panel.isActive then
+		local colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 220)
+
+		return DrawButtonRoundEnd(w, h, panel, sizes.cornerRadius, true, colors.content, colors.handle, colorText, 0)
+	end
+
+	local colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 220)
+
+	return DrawButtonRoundEnd(w, h, panel, sizes.cornerRadius, true, colors.content, colors.accent, colorText, 0)
+end
+
+function SKIN:PaintButtonRoundEndRightTTT2(panel, w, h)
+	if panel.Depressed or panel:IsSelected() or panel:GetToggle() then
+		local colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 220)
+
+		return DrawButtonRoundEnd(w, h, panel, sizes.cornerRadius, false, colors.content, colors.accent, colorText, 1)
+	end
+
+	if panel.Hovered then
+		local colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 220)
+
+		return DrawButtonRoundEnd(w, h, panel, sizes.cornerRadius, false, colors.content, colors.accentHover, colorText, 0)
+	end
+
+	if not panel.isActive then
+		local colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 220)
+
+		return DrawButtonRoundEnd(w, h, panel, sizes.cornerRadius, false, colors.content, colors.handle, colorText, 0)
+	end
+
+	local colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 220)
+
+	return DrawButtonRoundEnd(w, h, panel, sizes.cornerRadius, false, colors.content, colors.accent, colorText, 0)
 end
 
 -- REGISTER DERMA SKIN

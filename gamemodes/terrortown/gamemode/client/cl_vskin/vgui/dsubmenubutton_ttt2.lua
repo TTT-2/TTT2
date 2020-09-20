@@ -19,6 +19,7 @@ function PANEL:Init()
 	self.contents = {
 		title = "",
 		title_font = "DermaTTT2SubMenuButtonTitle",
+		icon = nil,
 		selected = false
 	}
 end
@@ -41,6 +42,18 @@ end
 
 function PANEL:GetTitleFont()
 	return self.contents.title_font
+end
+
+function PANEL:SetIcon(iconMat)
+	self.contents.icon = iconMat
+end
+
+function PANEL:GetIcon()
+	return self.contents.icon
+end
+
+function PANEL:HasIcon()
+	return self.contents.icon ~= nil
 end
 
 function PANEL:SetActive(active)
