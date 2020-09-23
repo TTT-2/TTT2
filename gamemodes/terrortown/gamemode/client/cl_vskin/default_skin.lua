@@ -2,6 +2,7 @@ local materialClose = Material("vgui/ttt/vskin/icon_close")
 local materialBack = Material("vgui/ttt/vskin/icon_back")
 local materialCollapseOpened = Material("vgui/ttt/vskin/icon_collapse_opened")
 local materialCollapseClosed = Material("vgui/ttt/vskin/icon_collapse_closed")
+local materialRhombus = Material("vgui/ttt/vskin/rhombus")
 
 local SKIN = {}
 SKIN.Name = "ttt2_default"
@@ -894,6 +895,31 @@ function SKIN:PaintButtonRoundEndRightTTT2(panel, w, h)
 	local colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 220)
 
 	return DrawButtonRoundEnd(w, h, panel, sizes.cornerRadius, false, colors.content, colors.accent, colorText, 0)
+end
+
+function SKIN:PaintTooltipTTT2(panel, w, h)
+	local sizeArrow = panel.sizeArrow
+	local sizeRhombus = 2 * sizeArrow
+
+	local colorLine = ColorAlpha(colors.default, 100)
+
+	drawBox(0, sizeArrow, w, h - sizeArrow, colorLine)
+	drawFilteredTexture(sizeArrow, 0, sizeRhombus, sizeRhombus, materialRhombus, colorLine.a, colorLine)
+
+	drawBox(1, sizeArrow + 1, w - 2, h - sizeArrow - 2, colors.background)
+	drawFilteredTexture(sizeArrow, 1, sizeRhombus, sizeRhombus, materialRhombus, colors.background.a, colors.background)
+
+	if panel:HasText() then
+		drawSimpleText(
+			panel:GetText(),
+			panel:GetFont(),
+			0.5 * w,
+			0.5 * (h + sizeArrow),
+			utilGetDefaultColor(colors.background),
+			TEXT_ALIGN_CENTER,
+			TEXT_ALIGN_CENTER
+		)
+	end
 end
 
 -- REGISTER DERMA SKIN

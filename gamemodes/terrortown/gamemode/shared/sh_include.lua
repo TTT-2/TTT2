@@ -85,6 +85,7 @@ TTTFiles = {
 
 	-- cl_vskin client files
 	cl_vskin__default_skin = {file = "cl_vskin/default_skin.lua", on = "client"},
+	cl_vskin__vgui__dpanel = {file = "cl_vskin/vgui/dpanel_ttt2.lua", on = "client"},
 	cl_vskin__vgui__dframe = {file = "cl_vskin/vgui/dframe_ttt2.lua", on = "client"},
 	cl_vskin__vgui__dmenubutton = {file = "cl_vskin/vgui/dmenubutton_ttt2.lua", on = "client"},
 	cl_vskin__vgui__dsubmenubutton = {file = "cl_vskin/vgui/dsubmenubutton_ttt2.lua", on = "client"},
@@ -105,6 +106,7 @@ TTTFiles = {
 	cl_vskin__vgui__dvscrollbar = {file = "cl_vskin/vgui/dvscrollbar_ttt2.lua", on = "client"},
 	cl_vskin__vgui__dcoloredbox = {file = "cl_vskin/vgui/dcoloredbox_ttt2.lua", on = "client"},
 	cl_vskin__vgui__dcoloredtextbox = {file = "cl_vskin/vgui/dcoloredtextbox_ttt2.lua", on = "client"},
+	cl_vskin__vgui__dtooltip = {file = "cl_vskin/vgui/dtooltip_ttt2.lua", on = "client"},
 }
 
 if SERVER then

@@ -352,8 +352,8 @@ concommand.Add("rend", function()
 				plyRow:DockMargin(padding, 0, 0, 0)
 				plyRow:Dock(FILL)
 
-				local widthKarma = draw.GetTextSize(ply.addkarma, "DermaTTT2CatHeader") + 2 * padding
-				local widthScore = draw.GetTextSize(ply.addscore, "DermaTTT2CatHeader") + 2 * padding
+				local widthKarma = 50
+				local widthScore = 35
 				local widthName = widthColumn - widthKarma - widthScore - 4 * padding
 
 				local plyNameBox = plyRow:Add("DColoredTextBoxTTT2")
@@ -364,17 +364,29 @@ concommand.Add("rend", function()
 				plyNameBox:SetTitleAlign(TEXT_ALIGN_LEFT)
 				plyNameBox:SetIcon(roles.GetByIndex(ply.role).iconMaterial)
 
+				local test = vgui.Create("DColoredBoxTTT2")
+				--test:SetColor(COLOR_GREEN)
+
+				plyNameBox:SetTooltipPanel(test)
+				plyNameBox:SetTooltipFixedPosition(0, heightRow + 1)
+				plyNameBox:SetTooltipFixedSize(widthName, 150)
+				--plyNameBox:SetTooltip("Test")
+
 				local plyKarmaBox = plyRow:Add("DColoredTextBoxTTT2")
 				plyKarmaBox:SetSize(widthKarma, heightRow)
 				plyKarmaBox:SetColor(COLOR_BLUE)
 				plyKarmaBox:SetTitle(ply.addkarma)
 				plyKarmaBox:SetTitleFont("DermaTTT2CatHeader")
+				plyKarmaBox:SetTooltip("Karma")
+				plyKarmaBox:SetTooltipFixedPosition(0, heightRow + 1)
 
 				local plyPointsBox = plyRow:Add("DColoredTextBoxTTT2")
 				plyPointsBox:SetSize(widthScore, heightRow)
 				plyPointsBox:SetColor(COLOR_ORANGE)
 				plyPointsBox:SetTitle(ply.addscore)
 				plyPointsBox:SetTitleFont("DermaTTT2CatHeader")
+				plyPointsBox:SetTooltip("Score")
+				plyPointsBox:SetTooltipFixedPosition(0, heightRow + 1)
 			end
 		end
 	end
