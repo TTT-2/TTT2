@@ -14,6 +14,7 @@ local GetPlayers = player.GetAll
 local isfunction = isfunction
 local HSVToColor = HSVToColor
 local VectorRand = VectorRand
+local rand = math.random
 
 ---
 -- Attempts to get the weapon used from a DamageInfo instance needed because the
@@ -142,9 +143,9 @@ end
 -- @param nil|function filterFn the @{function} that has to return true on the given entry
 -- @return any the entry that returned true on the given @{function}
 -- @note The given @{table} has to be iterable.
--- @note The returned entry will get removed from the given @{table}. If you wanna keep the original table untouched, create a copy for this function.
+-- @warning The returned entry will get removed from the given @{table}. If you wanna keep the original table untouched, create a copy for this function.
 -- @realm shared
-function table.GetRandomEntry(tbl, filterFn)
+function table.ExtractRandomEntry(tbl, filterFn)
 	local cTbl = #tbl
 
 	-- if no filterFn is defined, get a any random entry of the given @{table}
@@ -400,8 +401,6 @@ end
 function util.passthrough(x)
 	return x
 end
-
-local rand = math.random
 
 ---
 -- Nice Fisher-Yates implementation, from Wikipedia
