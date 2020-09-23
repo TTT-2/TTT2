@@ -145,18 +145,38 @@ end
 -- @note The returned entry will get removed from the given @{table}. If you wanna keep the original table untouched, create a copy for this function.
 -- @realm shared
 function table.GetRandomEntry(tbl, filterFn)
-	local entry = nil
-	local isInvalidFilterFn = not isfunction(filterFn)
+	local cTbl = #tbl
 
-	repeat
-		if #tbl <= 0 then return end
+	-- if no filterFn is defined, get a any random entry of the given @{table}
+	if not isfunction(filterFn) then
+		local index = rand(cTbl)
+		local entry = tbl[index]
 
-		local rnd = math.random(#tbl)
-		entry = tbl[rnd]
-		table.remove(tbl, rnd)
-	until isInvalidFilterFn or filterFn(entry)
+		table.remove(tbl, index)
 
-	return entry
+		return entry
+	end
+
+	local tmpTbl = {}
+
+	-- create a temporary table used for easy and fast access after shuffling
+	for i = 1, cTbl do
+		tmpTbl[i] = i
+	end
+
+	table.Shuffle(tmpTbl)
+
+	for i = 1, cTbl do
+		local index = tmpTbl[i]
+
+		if filterFn(tbl[index]) then
+			local entry = tbl[index]
+
+			table.remove(tbl, index)
+
+			return entry
+		end
+	end
 end
 
 ---
