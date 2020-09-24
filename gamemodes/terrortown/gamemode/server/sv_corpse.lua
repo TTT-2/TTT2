@@ -261,7 +261,7 @@ concommand.Add("ttt_call_detective", ttt_call_detective)
 -- @param Player ply The player that pressed the "call detective" button
 -- @hook
 -- @realm server
-function GM:TTT2ModifyCorpseCallRadarReceipients(nofifiedPlayers, ragdoll, ply)
+function GM:TTT2ModifyCorpseCallRadarReceipients(notifiedPlayers, ragdoll, ply)
 
 end
 
