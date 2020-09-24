@@ -9,6 +9,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added ConVar to toggle double-click buying
 - Added Japanese translation (by @Westoon)
 - Added Drag&Drop role layering VGUI, accessible with the console command `ttt2_edit_rolelayering`
+- Added a team indicator in front of every name in the scoreboard (just known teams will be displayed)
 
 ### Changed
 
