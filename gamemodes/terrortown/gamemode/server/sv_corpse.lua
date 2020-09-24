@@ -237,7 +237,7 @@ local function ttt_call_detective(ply, cmd, args)
 		if CORPSE.GetFound(rag, false) then
 			local plyTable = GetRoleChatFilter(ROLE_DETECTIVE, true)
 
-			hook.Run("TTT2ModifyCorpseCallRadarReceipients", plyTable, rag, ply)
+			hook.Run("TTT2ModifyCorpseCallRadarRecipients", plyTable, rag, ply)
 
 			-- show indicator in radar to detectives
 			net.Start("TTT_CorpseCall")
@@ -261,7 +261,7 @@ concommand.Add("ttt_call_detective", ttt_call_detective)
 -- @param Player ply The player that pressed the "call detective" button
 -- @hook
 -- @realm server
-function GM:TTT2ModifyCorpseCallRadarReceipients(notifiedPlayers, ragdoll, ply)
+function GM:TTT2ModifyCorpseCallRadarRecipients(notifiedPlayers, ragdoll, ply)
 
 end
 
