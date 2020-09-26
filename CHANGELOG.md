@@ -10,6 +10,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added Japanese translation (by @Westoon)
 - Added `table.ExtractRandomEntry(tbl, filterFn)` function
 - Added a team indicator in front of every name in the scoreboard (just known teams will be displayed)
+- Added a hook `TTT2ModifyCorpseCallRadarRecipients` that is called once "call detective" is pressed
 
 ### Changed
 
