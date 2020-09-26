@@ -116,7 +116,7 @@ function SWEP:Initialize()
 			self:AddTTT2HUDHelp("dna_help_primary", "dna_help_secondary")
 			self:AddHUDHelpLine("dna_help_reload", Key("+reload", "R"))
 		else
-			ErrorNoHalt("[TTT2][ERROR] You are using an add-on that overwrites the 'weapon_tttbase.lua' file while not provide essential functions. That will lead to several incompatibilites.")
+			ErrorNoHalt("[TTT2][ERROR] You are using an add-on that overwrites the 'weapon_tttbase.lua' file while not providing essential functions. That will lead to several incompatibilites.")
 		end
 	end
 
