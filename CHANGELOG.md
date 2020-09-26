@@ -8,7 +8,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Added ConVar to toggle double-click buying
 - Added Japanese translation (by @Westoon)
-- Added `table.GetRandomEntry(tbl, filterFn)` function
+- Added `table.ExtractRandomEntry(tbl, filterFn)` function
 
 ### Changed
 
