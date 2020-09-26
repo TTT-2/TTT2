@@ -6,11 +6,13 @@ if not util then return end
 
 local math = math
 local string = string
-local table = table
-local pairs = pairs
 local IsValid = IsValid
 local weapons = weapons
+local scripted_ents = scripted_ents
 local GetPlayers = player.GetAll
+local isfunction = isfunction
+local HSVToColor = HSVToColor
+local VectorRand = VectorRand
 
 ---
 -- Attempts to get the weapon used from a DamageInfo instance needed because the
@@ -20,7 +22,7 @@ local GetPlayers = player.GetAll
 -- @realm shared
 function util.WeaponFromDamage(dmg)
 	local inf = dmg:GetInflictor()
-	local wep
+	local wep = nil
 
 	if IsValid(inf) then
 		if inf:IsWeapon() or inf.Projectile then
@@ -95,9 +97,18 @@ end
 -- @return table
 -- @realm shared
 function util.GetAlivePlayers()
-	return util.GetFilteredPlayers(function(ply)
-		return ply:Alive() and ply:IsTerror()
-	end)
+	local plys = GetPlayers()
+	local tmp = {}
+
+	for i = 1, #plys do
+		local ply = plys[i]
+
+		if ply:Alive() and ply:IsTerror() then
+			tmp[#tmp + 1] = ply
+		end
+	end
+
+	return tmp
 end
 
 ---
@@ -107,27 +118,21 @@ end
 -- @realm shared
 function util.GetNextAlivePlayer(ply)
 	local alive = util.GetAlivePlayers()
-
 	if #alive < 1 then return end
 
-	local prev = nil
-	local choice = nil
-
 	if IsValid(ply) then
-		for _, p in pairs(alive) do
+		local prev = nil
+
+		for i = 1, #alive do
 			if prev == ply then
-				choice = p
+				return alive[i]
 			end
 
-			prev = p
+			prev = alive[i]
 		end
 	end
 
-	if not IsValid(choice) then
-		choice = alive[1]
-	end
-
-	return choice
+	return alive[1]
 end
 
 ---
@@ -350,29 +355,6 @@ end
 -- @see util.noop
 function util.passthrough(x)
 	return x
-end
-
-local rand = math.random
-
----
--- Nice Fisher-Yates implementation, from Wikipedia
--- Shuffles a @{table}
--- @param table t
--- @return table the given t, but sorted
--- @realm shared
-function table.Shuffle(t)
-	local n = #t
-
-	while n > 2 do
-		-- n is now the last pertinent index
-		local k = rand(n) -- 1 <= k <= n
-
-		-- Quick swap
-		t[n], t[k] = t[k], t[n]
-		n = n - 1
-	end
-
-	return t
 end
 
 local gsub = string.gsub
