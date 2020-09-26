@@ -6,7 +6,6 @@ if not util then return end
 
 local math = math
 local string = string
-local table = table
 local IsValid = IsValid
 local weapons = weapons
 local scripted_ents = scripted_ents
@@ -14,7 +13,6 @@ local GetPlayers = player.GetAll
 local isfunction = isfunction
 local HSVToColor = HSVToColor
 local VectorRand = VectorRand
-local rand = math.random
 
 ---
 -- Attempts to get the weapon used from a DamageInfo instance needed because the
@@ -135,49 +133,6 @@ function util.GetNextAlivePlayer(ply)
 	end
 
 	return alive[1]
-end
-
----
--- Returns a random entry of the given @{table}
--- @param table tbl the @{table} that contains the data
--- @param nil|function filterFn the @{function} that has to return true on the given entry
--- @return any the entry that returned true on the given @{function}
--- @note The given @{table} has to be iterable.
--- @warning The returned entry will get removed from the given @{table}. If you wanna keep the original table untouched, create a copy for this function.
--- @realm shared
-function table.ExtractRandomEntry(tbl, filterFn)
-	local cTbl = #tbl
-
-	-- if no filterFn is defined, get a any random entry of the given @{table}
-	if not isfunction(filterFn) then
-		local index = rand(cTbl)
-		local entry = tbl[index]
-
-		table.remove(tbl, index)
-
-		return entry
-	end
-
-	local tmpTbl = {}
-
-	-- create a temporary table used for easy and fast access after shuffling
-	for i = 1, cTbl do
-		tmpTbl[i] = i
-	end
-
-	table.Shuffle(tmpTbl)
-
-	for i = 1, cTbl do
-		local index = tmpTbl[i]
-
-		if filterFn(tbl[index]) then
-			local entry = tbl[index]
-
-			table.remove(tbl, index)
-
-			return entry
-		end
-	end
 end
 
 ---
@@ -400,27 +355,6 @@ end
 -- @see util.noop
 function util.passthrough(x)
 	return x
-end
-
----
--- Nice Fisher-Yates implementation, from Wikipedia
--- Shuffles a @{table}
--- @param table t
--- @return table the given t, but sorted
--- @realm shared
-function table.Shuffle(t)
-	local n = #t
-
-	while n > 2 do
-		-- n is now the last pertinent index
-		local k = rand(n) -- 1 <= k <= n
-
-		-- Quick swap
-		t[n], t[k] = t[k], t[n]
-		n = n - 1
-	end
-
-	return t
 end
 
 local gsub = string.gsub
