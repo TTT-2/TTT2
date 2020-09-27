@@ -9,7 +9,9 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added ConVar to toggle double-click buying
 - Added Japanese translation (by @Westoon)
 - Added Drag&Drop role layering VGUI, accessible with the console command `ttt2_edit_rolelayering`
+- Added `table.ExtractRandomEntry(tbl, filterFn)` function
 - Added a team indicator in front of every name in the scoreboard (just known teams will be displayed)
+- Added a hook `TTT2ModifyCorpseCallRadarRecipients` that is called once "call detective" is pressed
 
 ### Changed
 
@@ -24,6 +26,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Fixed drawing web images, seamless web images and avatar images
 - Fixed correctly saving setting a bind to NONE, while a default is defined
 - Fixed a weapon pickup targetID bug where the +use key was displayed even though pickup has its own keybind
+- Fixed DNA scanner crash if using an old/different weapon base
 
 ## [v0.7.3b](https://github.com/TTT-2/TTT2/tree/v0.7.3b) (2020-08-09)
 

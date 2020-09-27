@@ -235,18 +235,35 @@ local function ttt_call_detective(ply, cmd, args)
 
 	if IsValid(rag) and rag:GetPos():Distance(ply:GetPos()) < 128 then
 		if CORPSE.GetFound(rag, false) then
+			local plyTable = GetRoleChatFilter(ROLE_DETECTIVE, true)
+
+			hook.Run("TTT2ModifyCorpseCallRadarRecipients", plyTable, rag, ply)
+
 			-- show indicator in radar to detectives
 			net.Start("TTT_CorpseCall")
 			net.WriteVector(rag:GetPos())
-			net.Send(GetRoleChatFilter(ROLE_DETECTIVE, true))
+			net.Send(plyTable)
 
-			LANG.Msg("body_call", {player = ply:Nick(), victim = CORPSE.GetPlayerNick(rag, "someone")}, MSG_CHAT_PLAIN)
+			LANG.MsgAll("body_call", {player = ply:Nick(), victim = CORPSE.GetPlayerNick(rag, "someone")}, MSG_CHAT_PLAIN)
 		else
 			LANG.Msg(ply, "body_call_error")
 		end
 	end
 end
 concommand.Add("ttt_call_detective", ttt_call_detective)
+
+---
+-- This hook is called after a players pressed the "call detective" button and
+-- all requirements were met. It can be used to modify the table of players that
+-- should receive the corpse radar ping.
+-- @param Player notifiedPlayers The table of players that will be notified
+-- @param Entity ragdoll The ragdoll whose coordinates are about to be sent
+-- @param Player ply The player that pressed the "call detective" button
+-- @hook
+-- @realm server
+function GM:TTT2ModifyCorpseCallRadarRecipients(notifiedPlayers, ragdoll, ply)
+
+end
 
 local function bitsRequired(num)
 	local bits, max = 0, 1
