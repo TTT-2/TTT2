@@ -25,7 +25,7 @@ function SPEED:HandleSpeedCalculation(ply, moveData)
 	local speedMultiplierModifier = {1}
 	local returnMultiplier = hook.Run("TTTPlayerSpeedModifier", ply, isSlowed, moveData, speedMultiplierModifier) or 1
 
-	local oldval = ply.speedModifier
+	local oldval = ply:GetSpeedMultiplier()
 	ply.speedModifier = baseMultiplier * returnMultiplier * speedMultiplierModifier[1]
 
 	if SERVER then return end
