@@ -4,8 +4,12 @@
 
 AddCSLuaFile()
 
+local table = table
 local pairs = pairs
 local ipairs = ipairs
+local rand = math.random
+local tremove = table.remove
+local isfunction = isfunction
 
 ---
 -- Get the value from a table with a path that is given as a table of indexes.
@@ -195,5 +199,69 @@ function table.RemoveEmptyEntries(dataTable, tableSize)
 		end
 
 		j = j + 1
+	end
+end
+
+---
+-- Nice Fisher-Yates implementation, from Wikipedia
+-- Shuffles a @{table}
+-- @param table t
+-- @return table the given t, but sorted
+-- @realm shared
+function table.Shuffle(t)
+	local n = #t
+
+	while n > 2 do
+		-- n is now the last pertinent index
+		local k = rand(n) -- 1 <= k <= n
+
+		-- Quick swap
+		t[n], t[k] = t[k], t[n]
+		n = n - 1
+	end
+
+	return t
+end
+
+---
+-- Returns a random entry of the given @{table}
+-- @param table tbl the @{table} that contains the data
+-- @param nil|function filterFn the @{function} that has to return true on the given entry
+-- @return any the entry that returned true on the given @{function}
+-- @note The given @{table} has to be iterable.
+-- @warning The returned entry will get removed from the given @{table}. If you wanna keep the original table untouched, create a copy for this function.
+-- @realm shared
+function table.ExtractRandomEntry(tbl, filterFn)
+	local cTbl = #tbl
+
+	-- if no filterFn is defined, get a any random entry of the given @{table}
+	if not isfunction(filterFn) then
+		local index = rand(cTbl)
+		local entry = tbl[index]
+
+		tremove(tbl, index)
+
+		return entry
+	end
+
+	local tmpTbl = {}
+
+	-- create a temporary table used for easy and fast access after shuffling
+	for i = 1, cTbl do
+		tmpTbl[i] = i
+	end
+
+	table.Shuffle(tmpTbl)
+
+	for i = 1, cTbl do
+		local index = tmpTbl[i]
+
+		if filterFn(tbl[index]) then
+			local entry = tbl[index]
+
+			tremove(tbl, index)
+
+			return entry
+		end
 	end
 end

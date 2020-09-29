@@ -99,20 +99,25 @@ local dna_screen_circle = Material("models/ttt2_dna_scanner/screen/circle")
 
 function SWEP:Initialize()
 	if CLIENT then
-		self:AddTTT2HUDHelp("dna_help_primary", "dna_help_secondary")
-		self:AddHUDHelpLine("dna_help_reload", Key("+reload", "R"))
-
 		-- Create render target
-		self.scannerScreenTex = GetRenderTarget( "scanner_screen_tex", 512, 512 )
+		self.scannerScreenTex = GetRenderTarget("scanner_screen_tex", 512, 512)
 
-		self.scannerScreenMat = CreateMaterial( "scanner_screen_mat", "UnlitGeneric", {
-					["$basetexture"] = self.scannerScreenTex,
-					["$basetexturetransform"] = "center .5 .5 scale 1 1 rotate 180 translate 0 0"} )
-		self.scannerScreenMat:SetTexture( "$basetexture", self.scannerScreenTex )
+		self.scannerScreenMat = CreateMaterial("scanner_screen_mat", "UnlitGeneric", {
+			["$basetexture"] = self.scannerScreenTex,
+			["$basetexturetransform"] = "center .5 .5 scale 1 1 rotate 180 translate 0 0"
+		})
+		self.scannerScreenMat:SetTexture("$basetexture", self.scannerScreenTex)
 
 		self:SetSubMaterial(0, "!scanner_screen_mat")
 
 		surface.CreateAdvancedFont("DNAScannerDistanceFont", {font = "Trebuchet24", size = 32, weight = 1200})
+
+		if isfunction(self.AddTTT2HUDHelp) then
+			self:AddTTT2HUDHelp("dna_help_primary", "dna_help_secondary")
+			self:AddHUDHelpLine("dna_help_reload", Key("+reload", "R"))
+		else
+			ErrorNoHalt("[TTT2][ERROR] You are using an add-on that overwrites the 'weapon_tttbase.lua' file while not providing essential functions. That will lead to several incompatibilites.")
+		end
 	end
 
 	return self.BaseClass.Initialize(self)
@@ -272,6 +277,7 @@ end
 function SWEP:AddItemSample(ent)
 	if table.Count(self.ItemSamples) >= GetGlobalBool("ttt2_dna_scanner_slots") then
 		self:Report(false, "dna_limit")
+
 		return
 	end
 
@@ -385,22 +391,24 @@ else
 	local screen_bgcolor = Color(220, 220, 220, 255)
 	local screen_fontcolor = Color(144, 210, 235, 255)
 
-	local function DrawTexturedRectRotatedPoint( x, y, w, h, rot, x0, y0 )
-		local c = math.cos( math.rad( rot ) )
-		local s = math.sin( math.rad( rot ) )
+	local function DrawTexturedRectRotatedPoint(x, y, w, h, rot, x0, y0)
+		local c = math.cos(math.rad(rot))
+		local s = math.sin(math.rad(rot))
 
 		local newx = y0 * s - x0 * c
 		local newy = y0 * c + x0 * s
 
-		surface.DrawTexturedRectRotated( x + newx, y + newy, w, h, rot )
+		surface.DrawTexturedRectRotated(x + newx, y + newy, w, h, rot)
 	end
 
 	function SWEP:FillScannerScreen()
+		if self.scannerScreenTex == nil then return end
+
 		local showFeedback = CurTime() > self.ScanTime + 0.5
 		local target = self.ItemSamples[self.ActiveSample]
 
 		-- Draw to the render target
-		render.PushRenderTarget( self.scannerScreenTex )
+		render.PushRenderTarget(self.scannerScreenTex)
 		render.Clear(screen_bgcolor.r, screen_bgcolor.g, screen_bgcolor.b, screen_bgcolor.a, true, true)
 
 		cam.Start2D()
@@ -424,9 +432,9 @@ else
 				local arrowRotation = angleToPos.yaw - EyeAngles().yaw
 				local distance = math.max(LocalPlayer():GetPos():Distance(targetPos) - 47, 0)
 
-				surface.SetDrawColor( 96, 255, 96 , 255)
-				surface.SetMaterial( dna_screen_arrow )
-				DrawTexturedRectRotatedPoint( 256, 256, 120, 120, arrowRotation, 0, -130 )
+				surface.SetDrawColor(96, 255, 96 , 255)
+				surface.SetMaterial(dna_screen_arrow)
+				DrawTexturedRectRotatedPoint(256, 256, 120, 120, arrowRotation, 0, -130)
 
 				draw.AdvancedText(math.Round(distance), "DNAScannerDistanceFont", 256, 256, screen_fontcolor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER , false, 2.25)
 
