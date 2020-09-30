@@ -311,10 +311,11 @@ end
 --
 -- @param table plys The players that should receive roles.
 -- @param table selectableRoles The list of filtered selectable @{ROLE}s
+-- @param table selectedForcedRoles The list of forced selectable @{ROLE}s
 -- @return table List of players, that received a forced role.
 -- @realm server
 -- @internal
-local function SelectForcedRoles(plys, selectableRoles)
+local function SelectForcedRoles(plys, selectableRoles, selectedForcedRoles)
 	local transformed = {}
 	local selectedPlys = {}
 
@@ -360,6 +361,9 @@ local function SelectForcedRoles(plys, selectableRoles)
 
 			selectedPlys[ply] = true
 		end
+
+		selectedForcedRoles[rd] = curCount
+
 	end
 
 	roleselection.forcedRoles = {}
@@ -452,9 +456,10 @@ function roleselection.SelectRoles(plys, maxPlys)
 
 	local allAvailableRoles = roleselection.GetAllSelectableRolesList(maxPlys)
 	local selectableRoles = roleselection.GetSelectableRolesList(maxPlys, allAvailableRoles) -- update roleselection.selectableRoles table
+	local selectedForcedRoles = table.Copy(selectableRoles)
 
 	-- Select forced roles at first
-	local selectedForcedPlys = SelectForcedRoles(plys, selectableRoles) -- this updates roleselection.finalRoles table and returns a key based list of selected players
+	local selectedForcedPlys = SelectForcedRoles(plys, selectableRoles, selectedForcedRoles) -- this updates roleselection.finalRoles table and returns a key based list of selected players
 
 	-- We need to remove already selected players
 	local plysFirstPass, plysSecondPass = {}, {} -- modified player table
@@ -493,7 +498,8 @@ function roleselection.SelectRoles(plys, maxPlys)
 
 			if roleData.baserole or not selectableRoles[roleData] then continue end
 
-			local baseRolePlys = SelectBaseRolePlayers(plysFirstPass, roleData, selectableRoles[roleData])
+			local amount = selectableRoles[roleData] - selectedForcedRoles[roleData]
+			local baseRolePlys = SelectBaseRolePlayers(plysFirstPass, roleData, amount)
 
 			-- upgrade innos and players without any role later
 			if roleData ~= INNOCENT then
