@@ -72,7 +72,7 @@ HELPSCRN.parent = HELPSCRN.parent or nil
 HELPSCRN.menuData = HELPSCRN.menuData or nil
 HELPSCRN.menuFrame = HELPSCRN.menuFrame or nil
 
-HELPSCRN.paddingding = 5
+HELPSCRN.padding = 5
 
 -- define sizes
 local width, height = 1100, 700
