@@ -365,12 +365,10 @@ concommand.Add("rend", function()
 				plyNameBox:SetIcon(roles.GetByIndex(ply.role).iconMaterial)
 
 				local test = vgui.Create("DColoredBoxTTT2")
-				--test:SetColor(COLOR_GREEN)
 
 				plyNameBox:SetTooltipPanel(test)
 				plyNameBox:SetTooltipFixedPosition(0, heightRow + 1)
 				plyNameBox:SetTooltipFixedSize(widthName, 150)
-				--plyNameBox:SetTooltip("Test")
 
 				local plyKarmaBox = plyRow:Add("DColoredTextBoxTTT2")
 				plyKarmaBox:SetSize(widthKarma, heightRow)
