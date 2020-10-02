@@ -75,6 +75,9 @@ function CLSCORE:CreatePanel()
 	local frame = vguihandler.GenerateFrame(sizes.width, sizes.height, "report_title", true)
 
 	frame:SetPadding(0, 0, 0, 0)
+	frame:CloseButtonClickOverride(function()
+		self:HidePanel()
+	end)
 
 	-- LEFT HAND MENU STRIP
 	local menuBox = vgui.Create("DPanelTTT2", frame)
