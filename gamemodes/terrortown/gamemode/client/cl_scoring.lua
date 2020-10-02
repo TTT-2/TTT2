@@ -16,15 +16,15 @@ local sizes = {
 }
 
 local function PopulateInfoPanel(parent)
-
+	print("INFO")
 end
 
 local function PopulateEventsPanel(parent)
-
+	print("EVENTS")
 end
 
 local function PopulateScoresPanel(parent)
-
+	print("SCORES")
 end
 
 local function InternalModifyRoundendMenu(panelData)
@@ -50,9 +50,14 @@ end
 CLSCORE = {}
 
 function CLSCORE:CalculateSizes()
-	sizes.heightContent = sizes.height - 2 * sizes.padding
+	sizes.heightMainArea = sizes.height - 2 * sizes.padding
 	sizes.widthMenu = 50 + vskin.GetBorderSize()
-	sizes.widthContent = sizes.width - sizes.widthMenu - 2 * sizes.padding
+	sizes.widthMainArea = sizes.width - sizes.widthMenu - 2 * sizes.padding
+	sizes.heightButton = 45
+	sizes.widthButton = 175
+	sizes.heightBottomButtonPanel = sizes.heightButton + sizes.padding + 1
+	sizes.heightContent = sizes.heightMainArea - sizes.heightBottomButtonPanel
+	sizes.heightMenuButton = 50
 end
 
 function CLSCORE:CreatePanel()
@@ -67,15 +72,13 @@ function CLSCORE:CreatePanel()
 	-- RUN HOOK TO ADD DATA TO MENU
 	hook.Run("TTT2ModifyRoundEndMenu", panelData)
 
-	PrintTable(panelData)
-
 	local frame = vguihandler.GenerateFrame(sizes.width, sizes.height, "report_title", true)
 
 	frame:SetPadding(0, 0, 0, 0)
 
 	-- LEFT HAND MENU STRIP
-	local menuBox = vgui.Create("DPanel", frame)
-	menuBox:SetSize(sizes.widthMenu, sizes.heightContent)
+	local menuBox = vgui.Create("DPanelTTT2", frame)
+	menuBox:SetSize(sizes.widthMenu, sizes.heightMainArea)
 	menuBox:DockMargin(0, sizes.padding, 0, sizes.padding)
 	menuBox:Dock(LEFT)
 	menuBox.Paint = function(slf, w, h)
@@ -88,11 +91,68 @@ function CLSCORE:CreatePanel()
 	menuBoxGrid:Dock(FILL)
 	menuBoxGrid:SetSpaceY(sizes.padding)
 
-	-- RIGHT HAND CONTENT AREA
-	local contentBox = vgui.Create("DPanel", frame)
-	contentBox:SetSize(sizes.widthContent, sizes.heightContent)
-	contentBox:DockMargin(sizes.padding, sizes.padding, sizes.padding, sizes.padding)
-	contentBox:Dock(RIGHT)
+	-- RIGHT HAND MAIN AREA
+	local mainBox = vgui.Create("DPanelTTT2", frame)
+	mainBox:SetSize(sizes.widthMainArea, sizes.heightMainArea)
+	mainBox:DockMargin(sizes.padding, sizes.padding, sizes.padding, sizes.padding)
+	mainBox:Dock(RIGHT)
+
+	local contentBox = vgui.Create("DPanelTTT2", mainBox)
+	contentBox:SetSize(sizes.widthMainArea, sizes.heightContent)
+	contentBox:Dock(TOP)
+
+	local buttonArea = vgui.Create("DButtonPanelTTT2", mainBox)
+	buttonArea:SetSize(sizes.widthMainArea, sizes.heightBottomButtonPanel)
+	buttonArea:Dock(BOTTOM)
+
+	local buttonSave = vgui.Create("DButtonTTT2", buttonArea)
+	buttonSave:SetText("report_save")
+	buttonSave:SetSize(sizes.widthButton, sizes.heightButton)
+	buttonSave:SetPos(0, sizes.padding + 1)
+	buttonSave.DoClick = function(btn)
+		self:SaveLog()
+	end
+
+	local buttonClose = vgui.Create("DButtonTTT2", buttonArea)
+	buttonClose:SetText("close")
+	buttonClose:SetSize(sizes.widthButton, sizes.heightButton)
+	buttonClose:SetPos(sizes.widthMainArea - 175, sizes.padding + 1)
+	buttonClose.DoClick = function(btn)
+		self:HidePanel()
+	end
+
+	-- POPULATE SIDEBAR PANEL
+	local lastActive
+
+	for i = 1, #menuTbl do
+		local data = menuTbl[i]
+
+		local menuButton = menuBoxGrid:Add("DSubMenuButtonTTT2")
+		menuButton:SetSize(sizes.widthMenu - 1, sizes.heightMenuButton)
+		menuButton:SetIcon(data.iconMat)
+		menuButton:SetTooltip(data.title)
+		menuButton.DoClick = function(slf)
+			contentBox:Clear()
+
+			if isfunction(data.populateFn) then
+				data.populateFn(contentBox)
+			end
+
+			slf:SetActive(true)
+			lastActive:SetActive(false)
+			lastActive = slf
+		end
+
+		if i == 1 then
+			menuButton:SetActive(true)
+			lastActive = menuButton
+		end
+	end
+
+	-- load initial menu
+	if isfunction(menuTbl[1].populateFn) then
+		menuTbl[1].populateFn(contentBox)
+	end
 
 	return frame
 end

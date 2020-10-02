@@ -57,7 +57,7 @@ function PANEL:HasIcon()
 end
 
 function PANEL:SetActive(active)
-	self.contents.active = active == nil and true or false
+	self.contents.active = active == nil and true or active
 end
 
 function PANEL:IsActive()
