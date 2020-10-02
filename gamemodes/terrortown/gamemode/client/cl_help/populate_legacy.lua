@@ -109,7 +109,7 @@ HELPSCRN.subPopulate["ttt2_legacy"] = function(helpData, id)
 			panel:SetParent(parent)
 			panel:SetSize(
 				psizeX - ppadLeft - ppadRight,
-				psizeY - 2 * HELPSCRN.pad
+				psizeY - 2 * HELPSCRN.padding
 			)
 			panel:Dock(FILL)
 		end)

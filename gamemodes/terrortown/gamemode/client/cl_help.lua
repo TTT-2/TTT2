@@ -72,12 +72,12 @@ HELPSCRN.parent = HELPSCRN.parent or nil
 HELPSCRN.menuData = HELPSCRN.menuData or nil
 HELPSCRN.menuFrame = HELPSCRN.menuFrame or nil
 
-HELPSCRN.pad = 5
+HELPSCRN.paddingding = 5
 
 -- define sizes
 local width, height = 1100, 700
 local cols = 3
-local widthMainMenuButton = math.Round((width - 2 * HELPSCRN.pad * (cols + 1)) / cols)
+local widthMainMenuButton = math.Round((width - 2 * HELPSCRN.paddingding * (cols + 1)) / cols)
 local heightMainMenuButton = 120
 
 local widthNav, heightNav = 300, 700
@@ -124,7 +124,7 @@ function HELPSCRN:ShowMainMenu()
 	self.menuFrame = frame
 
 	-- INIT MAIN MENU SPECIFIC STUFF
-	frame:SetPadding(self.pad, self.pad, self.pad, self.pad)
+	frame:SetPadding(self.padding, self.padding, self.padding, self.padding)
 
 	-- MARK AS MAIN MENU
 	self.currentMenuId = MAIN_MENU
@@ -136,8 +136,8 @@ function HELPSCRN:ShowMainMenu()
 	-- SPLIT FRAME INTO A GRID LAYOUT
 	local dsettings = vgui.Create("DIconLayout", scrollPanel)
 	dsettings:Dock(FILL)
-	dsettings:SetSpaceX(self.pad)
-	dsettings:SetSpaceY(self.pad)
+	dsettings:SetSpaceX(self.padding)
+	dsettings:SetSpaceY(self.padding)
 
 	-- GENERATE MENU CONTENT
 	local menuTbl = {}
@@ -264,12 +264,12 @@ function HELPSCRN:ShowSubMenu(data)
 	-- SPLIT NAV AREA INTO A GRID LAYOUT
 	local navAreaScrollGrid = vgui.Create("DIconLayout", navAreaScroll)
 	navAreaScrollGrid:Dock(FILL)
-	navAreaScrollGrid:SetSpaceY(self.pad)
+	navAreaScrollGrid:SetSpaceY(self.padding)
 
 	local contentArea = vgui.Create("DContentPanelTTT2", frame)
 	contentArea:SetSize(widthContent, heightContent - vskin.GetHeaderHeight() - vskin.GetBorderSize())
 	contentArea:SetPos(widthNav, 0)
-	contentArea:DockPadding(self.pad, self.pad, self.pad, self.pad)
+	contentArea:DockPadding(self.padding, self.padding, self.padding, self.padding)
 	contentArea:Dock(TOP)
 
 	-- GENERATE MENU CONTENT
