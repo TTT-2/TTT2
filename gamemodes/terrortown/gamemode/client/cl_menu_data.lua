@@ -252,3 +252,76 @@ end
 function HELP_SUB_MENU_DATA_OBJECT:RegisterOnClickCallback(fn)
 	self.onClickFn = fn
 end
+
+
+ROUNDEND_MENU_DATA = {}
+
+local ROUNDEND_MENU_DATA_OBJECT = {}
+
+---
+-- Binds data table to the @{ROUNDEND_MENU_DATA} object
+-- @param table data The data table with all submenues
+-- @return @{ROUNDEND_MENU_DATA} The object to be used in the hook to populate the menu
+-- @internal
+-- @realm client
+function ROUNDEND_MENU_DATA:BindData(menuTbl)
+	self.menuTbl = menuTbl or {}
+
+	return self
+end
+
+---
+-- Creates a new submenu in the main menu
+-- @param string id The unique ID of the submenu
+-- @return table A reference to the new table
+-- @realm client
+function ROUNDEND_MENU_DATA:RegisterSubMenu(id)
+	if self:Exists(id) then return end
+
+	local pos = #self.menuTbl + 1
+
+	self.menuTbl[pos] = table.Copy(ROUNDEND_MENU_DATA_OBJECT)
+	self.menuTbl[pos].id = id
+
+	return self.menuTbl[pos]
+end
+
+---
+-- Checks if a menu with the given ID is already registered
+-- @param string id The unique menu identifier
+-- @return boolean Returns if the identifier is already used
+-- @realm client
+function ROUNDEND_MENU_DATA:Exists(id)
+	for i = 1, #self.menuTbl do
+		if self.menuTbl[i].id == id then
+			return true
+		end
+	end
+
+	return false
+end
+
+---
+-- Sets the title of a submenu element
+-- @param string title The name, can be a language identifier
+-- @realm client
+function ROUNDEND_MENU_DATA_OBJECT:SetTitle(title)
+	self.title = title
+end
+
+---
+-- Sets the icon material of a menu element
+-- @param Material iconMat The material of the icon
+-- @realm client
+function ROUNDEND_MENU_DATA_OBJECT:SetIcon(iconMat)
+	self.iconMat = iconMat
+end
+
+---
+-- Callback function that is used to call code to populate
+-- the main panel of a submenu
+-- @param function fn The callback function
+-- @realm client
+function ROUNDEND_MENU_DATA_OBJECT:PopulatePanel(fn)
+	self.populateFn = fn
+end

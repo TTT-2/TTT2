@@ -5,11 +5,47 @@
 
 local vskin = vskin
 
+local materialInfo = Material("vgui/ttt/vskin/roundend/info")
+local materialEvents = Material("vgui/ttt/vskin/roundend/events")
+local materialScores = Material("vgui/ttt/vskin/roundend/scores")
+
 local sizes = {
 	width = 1200,
 	height = 700,
 	padding = 10
 }
+
+local function PopulateInfoPanel(parent)
+
+end
+
+local function PopulateEventsPanel(parent)
+
+end
+
+local function PopulateScoresPanel(parent)
+
+end
+
+local function InternalModifyRoundendMenu(panelData)
+	local infoPanel = panelData:RegisterSubMenu("roundend_info")
+
+	infoPanel:SetTitle("title")
+	infoPanel:SetIcon(materialInfo)
+	infoPanel:PopulatePanel(PopulateInfoPanel)
+
+	local eventsPanel = panelData:RegisterSubMenu("roundend_events")
+
+	eventsPanel:SetTitle("title")
+	eventsPanel:SetIcon(materialEvents)
+	eventsPanel:PopulatePanel(PopulateEventsPanel)
+
+	local scoresPanel = panelData:RegisterSubMenu("roundend_scores")
+
+	scoresPanel:SetTitle("title")
+	scoresPanel:SetIcon(materialScores)
+	scoresPanel:PopulatePanel(PopulateScoresPanel)
+end
 
 CLSCORE = {}
 
@@ -22,10 +58,22 @@ end
 function CLSCORE:CreatePanel()
 	self:CalculateSizes()
 
+	-- GENERATE MENU CONTENT
+	local menuTbl = {}
+	local panelData = ROUNDEND_MENU_DATA:BindData(menuTbl)
+
+	InternalModifyRoundendMenu(panelData)
+
+	-- RUN HOOK TO ADD DATA TO MENU
+	hook.Run("TTT2ModifyRoundEndMenu", panelData)
+
+	PrintTable(panelData)
+
 	local frame = vguihandler.GenerateFrame(sizes.width, sizes.height, "report_title", true)
 
 	frame:SetPadding(0, 0, 0, 0)
 
+	-- LEFT HAND MENU STRIP
 	local menuBox = vgui.Create("DPanel", frame)
 	menuBox:SetSize(sizes.widthMenu, sizes.heightContent)
 	menuBox:DockMargin(0, sizes.padding, 0, sizes.padding)
@@ -36,10 +84,15 @@ function CLSCORE:CreatePanel()
 		return false
 	end
 
-	-- SPLIT NAV AREA INTO A GRID LAYOUT
 	local menuBoxGrid = vgui.Create("DIconLayout", menuBox)
 	menuBoxGrid:Dock(FILL)
-	menuBoxGrid:SetSpaceY(padding)
+	menuBoxGrid:SetSpaceY(sizes.padding)
+
+	-- RIGHT HAND CONTENT AREA
+	local contentBox = vgui.Create("DPanel", frame)
+	contentBox:SetSize(sizes.widthContent, sizes.heightContent)
+	contentBox:DockMargin(sizes.padding, sizes.padding, sizes.padding, sizes.padding)
+	contentBox:Dock(RIGHT)
 
 	return frame
 end
@@ -122,6 +175,13 @@ function CLSCORE:Toggle()
 	else
 		self:HidePanel()
 	end
+end
+
+---
+-- Used to modify the roundend screen menu by adding custom submenues to it.
+-- @param ROUNDEND_MENU_DATA panelData The already existing panel data
+function GM:TTT2ModifyRoundEndMenu(panelData)
+
 end
 
 
