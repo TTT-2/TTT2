@@ -17,8 +17,18 @@ local cv_global_color_g = CreateConVar("ttt2_global_color_g", "160", {FCVAR_ARCH
 local cv_global_color_b = CreateConVar("ttt2_global_color_b", "160", {FCVAR_ARCHIVE})
 local cv_global_color_a = CreateConVar("ttt2_global_color_a", "160", {FCVAR_ARCHIVE})
 
+local function SetCachedColor()
+	appearance.focusColor = Color(
+		cv_global_color_r:GetInt(),
+		cv_global_color_g:GetInt(),
+		cv_global_color_b:GetInt(),
+		cv_global_color_a:GetInt()
+	)
+end
+
 appearance = appearance or {}
 appearance.callbacks = {}
+appearance.focusColor = nil
 
 ---
 -- This function should be called when the resolution is updated. It
@@ -106,13 +116,25 @@ end
 -- @return Color The current focus color
 -- @realm client
 function appearance.GetFocusColor()
-	return Color(
-		cv_global_color_r:GetInt(),
-		cv_global_color_g:GetInt(),
-		cv_global_color_b:GetInt(),
-		cv_global_color_a:GetInt()
-	)
+	if not IsColor(appearance.focusColor) then
+		SetCachedColor()
+	end
+
+	return appearance.focusColor
 end
+
+cvars.AddChangeCallback(cv_global_color_r:GetName(), function(cv, old, new)
+	SetCachedColor()
+end)
+cvars.AddChangeCallback(cv_global_color_g:GetName(), function(cv, old, new)
+	SetCachedColor()
+end)
+cvars.AddChangeCallback(cv_global_color_b:GetName(), function(cv, old, new)
+	SetCachedColor()
+end)
+cvars.AddChangeCallback(cv_global_color_a:GetName(), function(cv, old, new)
+	SetCachedColor()
+end)
 
 ---
 -- Sets if the global focus color or the dyanamic color should
