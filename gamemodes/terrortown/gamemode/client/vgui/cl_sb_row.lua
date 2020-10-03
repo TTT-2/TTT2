@@ -276,7 +276,7 @@ end
 function GM:TTTScoreboardRowColorForPlayer(ply)
 	local col = color_trans
 
-	if IsValid(ply) and ply.GetRoleColor and ply:GetRoleColor() and ply:GetSubRole() and ply:GetSubRole() ~= ROLE_INNOCENT then
+	if IsValid(ply) and ply.GetRoleColor and ply:GetRoleColor() and ply:GetSubRole() and ply:GetSubRole() ~= ROLE_NONE then
 		col = table.Copy(ply:GetRoleColor())
 		col.a = 255 -- old value: 30
 	end
@@ -409,7 +409,7 @@ function PANEL:UpdatePlayerData()
 		self.team:SetTooltip(LANG.GetTranslation(tm))
 	end
 
-	local showTeam = not ply:IsRole(ROLE_INNOCENT) or ply:RoleKnown()
+	local showTeam = ply:HasRole()
 
 	self.team2:SetVisible(showTeam)
 	self.team:SetVisible(showTeam)

@@ -267,12 +267,12 @@ end
 
 ---
 -- Generates a new subrole id.
--- starts with <code>1</code> to prevent incompatibilities with <code>ROLE_ANY</code> => new roles will start at the id: <code>7</code>
+-- starts with <code>1</code> to prevent incompatibilities with <code>ROLE_NONE</code> => new roles will start at the id: <code>7</code>
 -- <ul>
 -- <li><code>0</code> = <code>ROLE_INNOCENT</code></li>
 -- <li><code>1</code> = <code>ROLE_TRAITOR</code></li>
 -- <li><code>2</code> = <code>ROLE_DETECTIVE</code></li>
--- <li><code>3</code> = <code>ROLE_ANY</code></li>
+-- <li><code>3</code> = <code>ROLE_NONE</code></li>
 -- <li><code>4</code>, <code>5</code>, <code>6</code> = <code>nop</code></li>
 -- </ul>
 -- @return number new generated subrole id
@@ -284,7 +284,7 @@ end
 ---
 -- Get the role table by the role id
 -- @param number index subrole id
--- @return table returns the role table. This will return the <code>INNOCENT</code> role table as fallback.
+-- @return table returns the role table. This will return the <code>NONE</code> role table as fallback.
 -- @realm shared
 function GetByIndex(index)
 	for _, v in pairs(RoleList) do
@@ -293,22 +293,22 @@ function GetByIndex(index)
 		end
 	end
 
-	return INNOCENT
+	return NONE
 end
 
 ---
 -- Get the role table by the role name
 -- @param string name role name
--- @return table returns the role table. This will return the <code>INNOCENT</code> role table as fallback.
+-- @return table returns the role table. This will return the <code>NONE</code> role table as fallback.
 -- @realm shared
 function GetByName(name)
-	return GetStored(name) or INNOCENT
+	return GetStored(name) or NONE
 end
 
 ---
 -- Get the role table by the role abbreviation
 -- @param string abbr role abbreviation
--- @return table returns the role table. This will return the <code>INNOCENT</code> role table as fallback.
+-- @return table returns the role table. This will return the <code>NONE</code> role table as fallback.
 -- @realm shared
 function GetByAbbr(abbr)
 	for _, v in pairs(RoleList) do
@@ -317,7 +317,7 @@ function GetByAbbr(abbr)
 		end
 	end
 
-	return INNOCENT
+	return NONE
 end
 
 ---
@@ -360,12 +360,12 @@ function GetShopRoles()
 	local i = 0
 
 	for _, v in pairs(RoleList) do
-		if not v.isAbstract and v ~= INNOCENT then
-			local shopFallback = GetGlobalString("ttt_" .. v.abbr .. "_shop_fallback")
-			if shopFallback ~= SHOP_DISABLED then
-				i = i + 1
-				shopRoles[i] = v
-			end
+		if v.isAbstract or v == NONE or v == INNOCENT then continue end
+
+		local shopFallback = GetGlobalString("ttt_" .. v.abbr .. "_shop_fallback")
+		if shopFallback ~= SHOP_DISABLED then
+			i = i + 1
+			shopRoles[i] = v
 		end
 	end
 
@@ -377,28 +377,28 @@ end
 ---
 -- Get the default role table of a specific role team
 -- @param string team role team name
--- @return table returns the role table. This will return the <code>INNOCENT</code> role table as fallback.
+-- @return table returns the role table. This will return the <code>NONE</code> role table as fallback.
 -- @realm shared
 function GetDefaultTeamRole(team)
-	if team == TEAM_NONE then return end
+	if team == TEAM_NONE then
+		return NONE
+	end
 
 	for _, v in pairs(RoleList) do
-		if not v.isAbstract and not v.baserole and v.defaultTeam ~= TEAM_NONE and v.defaultTeam == team then
+		if not v.isAbstract and v:IsBaseRole() and v.defaultTeam == team then
 			return v
 		end
 	end
 
-	return INNOCENT
+	return NONE
 end
 
 ---
 -- Get the default role tables of a specific role team
 -- @param string team role team name
--- @return table returns the role tables. This will return the <code>INNOCENT</code> role table as well as its subrole tables as fallback.
+-- @return table returns the role tables. This will return the <code>NONE</code> role table as well as its subrole tables as fallback.
 -- @realm shared
 function GetDefaultTeamRoles(team)
-	if team == TEAM_NONE then return end
-
 	return GetDefaultTeamRole(team):GetSubRoles()
 end
 
@@ -414,7 +414,7 @@ function GetTeamMembers(team)
 	local plys = player.GetAll()
 
 	for i = 1, #plys do
-		if plys[i]:HasTeam(team) then
+		if plys[i]:GetTeam() == team then
 			tmp[#tmp + 1] = plys[i]
 		end
 	end

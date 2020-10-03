@@ -9,7 +9,7 @@ AddCSLuaFile()
 -- This will split a given string in parts, with a maximum size of the given splitSize.
 --
 -- @param string str The string to operate on.
--- @param int splitSize This is the size, after which the string is split.
+-- @param number splitSize This is the size, after which the string is split.
 -- @return table The table that contains the strings.
 -- @realm shared
 function string.SplitAtSize(str, splitSize)

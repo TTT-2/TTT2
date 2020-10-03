@@ -35,7 +35,7 @@ L.round_traitors_more = "Traitor, these are your allies: {names}"
 L.win_time = "Time has run out. The Traitors lose."
 L.win_traitors = "The Traitors have won!"
 L.win_innocents = "The Innos have won!"
-L.win_bees = "The Bees has won! (Its a draw)"
+L.win_nones = "No-one won!"
 L.win_showreport = "Let's look at the round report for {num} seconds."
 
 L.limit_round = "Round limit reached. The next map will load soon."
@@ -810,7 +810,7 @@ L.report_save_result = "The Event Log has been saved to:"
 
 -- Big title window
 L.hilite_win_traitors = "THE TRAITORS WIN"
-L.hilite_win_bees = "THE BEES WIN"
+L.hilite_win_none = "NOONE WIN"
 L.hilite_win_innocents = "THE INNOCENTS WIN"
 
 L.hilite_players1 = "{numplayers} players took part, {numtraitors} were traitors"

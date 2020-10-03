@@ -35,7 +35,7 @@ L.round_traitors_more = "Предатель, вот твои товарищи: {
 L.win_time = "Время вышло. Предатели проиграли."
 L.win_traitors = "Предатели победили!"
 L.win_innocents = "Невиновные победили!"
-L.win_bees = "Пчёлы победили! (Ничья)"
+L.win_nones = "Пчёлы победили! (Ничья)"
 L.win_showreport = "Давайте посмотрим на результаты раунда в течение {num} сек."
 
 L.limit_round = "Достигнут лимит раундов. {mapname} скоро загрузится."
@@ -792,7 +792,7 @@ L.report_save_result = "Журнал событий сохранён в:"
 
 -- Big title window
 L.hilite_win_traitors = "Победа предателей"
-L.hilite_win_bees = "Победа пчёл"
+L.hilite_win_none = "Победа пчёл"
 L.hilite_win_innocents = "Победа невиновных"
 
 L.hilite_players1 = "Игроков: {numplayers}. {numtraitors} из них были предателями."

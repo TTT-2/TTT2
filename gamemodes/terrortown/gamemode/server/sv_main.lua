@@ -818,7 +818,7 @@ local function CleanUp()
 		local v = plys[i]
 
 		v:StripWeapons()
-		v:SetRole(ROLE_INNOCENT) -- will reset team automatically
+		v:SetRole(ROLE_NONE) -- will reset team automatically
 	end
 
 	-- a different kind of cleanup
@@ -1022,7 +1022,7 @@ function TellTraitorsAboutTraitors()
 	for i = 1, #plys do
 		local v = plys[i]
 
-		if not v:HasTeam(TEAM_TRAITOR) then continue end
+		if v:GetTeam() ~= TEAM_TRAITOR then continue end
 
 		traitornicks[#traitornicks + 1] = v:Nick()
 	end
@@ -1030,7 +1030,7 @@ function TellTraitorsAboutTraitors()
 	for i = 1, #plys do
 		local v = plys[i]
 
-		if not v:HasTeam(TEAM_TRAITOR) then continue end
+		if v:GetTeam() ~= TEAM_TRAITOR then continue end
 
 		local tmp = table.Copy(traitornicks)
 
@@ -1243,8 +1243,8 @@ function PrintResultMessage(result)
 
 		return
 	elseif result == WIN_NONE then
-		LANG.Msg("win_bees")
-		ServerLog("Result: The Bees win (Its a Draw).\n")
+		LANG.Msg("win_nones")
+		ServerLog("Result: No-one wins.\n")
 
 		return
 	else
@@ -1257,7 +1257,7 @@ function PrintResultMessage(result)
 		end
 
 		LANG.Msg("win_" .. result) -- TODO translation
-		ServerLog("Result: " .. result .. " win.\n") -- TODO translation
+		ServerLog("Result: " .. result .. " wins.\n") -- TODO translation
 
 		return
 	end
@@ -1415,7 +1415,7 @@ function GM:TTTCheckForWin()
 	elseif b == 1 then -- just 1 team is alive
 		return alive[1]
 	else -- rare case: nobody is alive, e.g. because of an explosion
-		--return WIN_NONE -- bees_win
+		--return WIN_NONE -- none_win
 		return WIN_TRAITOR
 	end
 end

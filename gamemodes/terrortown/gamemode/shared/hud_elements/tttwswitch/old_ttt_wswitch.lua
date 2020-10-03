@@ -70,7 +70,7 @@ if CLIENT then
 		local bh = b * 0.5
 
 		local ply = LocalPlayer()
-		local c = (col == col_active and ply:GetRoleColor() or ply:GetRoleDkColor()) or (col == col_active and INNOCENT.color or INNOCENT.dkcolor)
+		local c = (col == col_active and ply:GetRoleColor() or ply:GetRoleDkColor()) or (col == col_active and NONE.color or NONE.dkcolor)
 
 		-- Draw the colour tip
 		surface.SetTexture(self.barcorner)

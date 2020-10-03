@@ -498,6 +498,7 @@ function GM:PlayerDisconnected(ply)
 			ply:Kill()
 		end
 
+		-- TODO ?
 		-- Prevent the disconnected player from being in the resends
 		ply:SetRole(ROLE_NONE)
 	end
@@ -592,7 +593,7 @@ local function CheckCreditAward(victim, attacker)
 	end
 
 	-- TRAITOR AWARD
-	if (attacker:HasTeam(TEAM_TRAITOR) or rd.traitorCreditAward) and not victim:IsInTeam(attacker) and (not GAMEMODE.AwardedCredits or GetConVar("ttt_credits_award_repeat"):GetBool()) then
+	if (attacker:GetTeam() == TEAM_TRAITOR or rd.traitorCreditAward) and not victim:IsInTeam(attacker) and (not GAMEMODE.AwardedCredits or GetConVar("ttt_credits_award_repeat"):GetBool()) then
 		local terror_alive = 0
 		local terror_dead = 0
 		local terror_total = 0
@@ -747,7 +748,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
 
 		-- if traitor team kills another team
 		if attacker:IsActive() and attacker:IsShopper() and not attacker:IsInTeam(ply) then
-			if attacker:HasTeam(TEAM_TRAITOR) then
+			if attacker:GetTeam() == TEAM_TRAITOR then
 				reward = math.ceil(ConVarExists("ttt_credits_" .. rd.name .. "kill") and GetConVar("ttt_credits_" .. rd.name .. "kill"):GetInt() or 0)
 			else
 				local vrd = ply:GetSubRoleData()

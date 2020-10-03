@@ -152,7 +152,7 @@ if CLIENT then
 		draw.RoundedBox(8, x, y, width, height, self.bg_colors.background_main)
 
 		-- main border, role based
-		local col = INNOCENT.color
+		local col = NONE.color
 
 		if GAMEMODE.round_state ~= ROUND_ACTIVE then
 			col = self.bg_colors.noround

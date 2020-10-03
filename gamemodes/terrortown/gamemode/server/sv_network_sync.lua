@@ -844,11 +844,11 @@ function plymeta:TTT2NETSetBool(path, value)
 end
 
 ---
--- Sets an int value at the given path on the player.
+-- Sets a number value at the given path on the player.
 --
 -- @param any|table path The path to set the value for
--- @param int|nil value The value to set
--- @param int|nil bits The bits that this int needs to be stored (optional, otherwise a default of 32 is used)
+-- @param number|nil value The value to set
+-- @param number|nil bits The bits that this number needs to be stored (optional, otherwise a default of 32 is used)
 function plymeta:TTT2NETSetInt(path, value, bits)
 	ttt2net.SetOnPlayer(path, {
 		type = "int",
@@ -857,11 +857,11 @@ function plymeta:TTT2NETSetInt(path, value, bits)
 end
 
 ---
--- Sets an unsigned int value at the given path on the player.
+-- Sets an unsigned number value at the given path on the player.
 --
 -- @param any|table path The path to set the value for
--- @param uint|nil value The value to set
--- @param int|nil bits The bits that this int needs to be stored (optional, otherwise a default of 32 is used)
+-- @param number|nil value The unsigned number value to set
+-- @param number|nil bits The bits that this number needs to be stored (optional, otherwise a default of 32 is used)
 function plymeta:TTT2NETSetUInt(path, value, bits)
 	ttt2net.SetOnPlayer(path, {
 		type = "int",

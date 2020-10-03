@@ -49,7 +49,7 @@ end
 -- @return[default=0] number
 -- @realm shared
 function plymeta:GetSubRole()
-	return self.subrole or ROLE_INNOCENT
+	return self.subrole or ROLE_NONE
 end
 
 ---
@@ -57,7 +57,7 @@ end
 -- @return[default=0] number
 -- @realm shared
 function plymeta:GetBaseRole()
-	return self.role or ROLE_INNOCENT
+	return self.role or ROLE_NONE
 end
 
 ---
@@ -66,7 +66,7 @@ end
 -- @realm shared
 -- @see plymeta.GetBaseRole
 function plymeta:GetRole()
-	return self.role or ROLE_INNOCENT
+	return self.role or ROLE_NONE
 end
 
 ---
@@ -154,7 +154,7 @@ end
 -- @realm shared
 function plymeta:GetRoleColor()
 	if not self.roleColor then
-		self.roleColor = INNOCENT.color
+		self.roleColor = NONE.color
 	end
 
 	return self.roleColor
@@ -246,9 +246,25 @@ end
 ---
 -- Returns the current @{ROLE}'s team
 -- @return[default=TEAM_NONE] string
+-- @note If the real role has the flag `alone`, TEAM_NONE will be returned.
+-- Use @{Player:GetRealTeam()} instead if this behavior is not intended.
 -- @realm shared
 function plymeta:GetTeam()
-	return self.roleteam or TEAM_NONE
+	local tm = self.roleteam
+
+	if tm ~= nil and not TEAMS[tm].alone then
+		return tm
+	end
+
+	return TEAM_NONE
+end
+
+---
+-- Returns the real @{ROLE}'s team
+-- @return ?string
+-- @realm shared
+function plymeta:GetRealTeam()
+	return self.roleteam
 end
 
 ---
@@ -271,12 +287,13 @@ function plymeta:UpdateTeam(team)
 end
 
 ---
--- Checks whether a @{Player} has a certain team
--- @param string name a @{ROLE}' team name
+-- Checks whether a @{Player} has a team
 -- @return boolean
 -- @realm shared
-function plymeta:HasTeam(team)
-	return not team and self.roleteam ~= TEAM_NONE or team and self:GetTeam() == team
+function plymeta:HasTeam()
+	local tm = self:GetTeam()
+
+	return tm ~= TEAM_NONE and not TEAMS[tm].alone
 end
 
 ---
@@ -285,9 +302,7 @@ end
 -- @return boolean
 -- @realm shared
 function plymeta:IsInTeam(ply)
-	return self:GetTeam() ~= TEAM_NONE
-		and not TEAMS[self:GetTeam()].alone
-		and self:GetTeam() == ply:GetTeam()
+	return self:HasTeam() and self:GetTeam() == ply:GetTeam()
 end
 
 -- Role access
@@ -323,7 +338,7 @@ end
 
 ---
 -- Returns a @{Player} current SubRole @{ROLE}
--- @return[default=INNOCENT] ROLE
+-- @return[default=NONE] ROLE
 -- @realm shared
 function plymeta:GetSubRoleData()
 	local rlsList = roles.GetList()
@@ -335,12 +350,12 @@ function plymeta:GetSubRoleData()
 		return rlsList[i]
 	end
 
-	return INNOCENT
+	return NONE
 end
 
 ---
 -- Returns a @{Player} current BaseRole (@{ROLE})
--- @return[default=INNOCENT] ROLE
+-- @return[default=NONE] ROLE
 -- @realm shared
 function plymeta:GetBaseRoleData()
 	local rlsList = roles.GetList()
@@ -352,7 +367,7 @@ function plymeta:GetBaseRoleData()
 		return rlsList[i]
 	end
 
-	return INNOCENT
+	return NONE
 end
 
 ---
@@ -413,6 +428,14 @@ function plymeta:IsRole(subrole)
 	local sr = self:GetSubRole()
 
 	return subrole == sr or subrole == br
+end
+
+---
+-- Checks whether a @{Player} has a valid @{ROLE}
+-- @return boolean
+-- @realm shared
+function plymeta:HasRole()
+	return self:GetSubRole() ~= ROLE_NONE
 end
 
 ---
@@ -830,46 +853,6 @@ function plymeta:SetSubRoleModel(mdl)
 		net.WriteEntity(self)
 		net.Broadcast()
 	end
-end
-
----
--- Returns the @{Player} corpse state (found?)
--- @return boolean
--- @realm shared
-function plymeta:OnceFound()
-	return self:TTT2NETGetFloat("t_first_found", -1) >= 0
-end
-
----
--- Returns whether a @{ROLE} was found
--- @return boolean
--- @realm shared
-function plymeta:RoleKnown()
-	return self:TTT2NETGetBool("role_found", false)
-end
-
----
--- Returns whether a @{Player} was revived after being confirmed this round
--- @return boolean
--- @realm shared
-function plymeta:WasRevivedAndConfirmed()
-	return not self:TTT2NETGetBool("body_found", false) and self:OnceFound()
-end
-
----
--- Returns whether a @{Player} was the first that was found this round
--- @return boolean
--- @realm shared
-function plymeta:GetFirstFound()
-	return math.Round(self:TTT2NETGetFloat("t_first_found", -1))
-end
-
----
--- Returns whether a @{Player} was the last that was found this round
--- @return boolean
--- @realm shared
-function plymeta:GetLastFound()
-	return math.Round(self:TTT2NETGetFloat("t_last_found", -1))
 end
 
 ---

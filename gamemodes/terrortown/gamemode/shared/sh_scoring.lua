@@ -16,7 +16,7 @@ function ScoreInit()
 		lt = "", -- last team
 		lr = "", -- last role
 		ev = { -- on doing a kill event with different data
-			--r = ROLE_INNOCENT, -- subrole at the moment of the event
+			--r = ROLE_NONE, -- subrole at the moment of the event
 			--t = "", -- team at the moment of the event
 			--v = "" -- victims team at the moment of the event
 		},
@@ -32,7 +32,7 @@ end
 -- @realm shared
 function ScoreEventInit()
 	local _tbl = {
-		r = ROLE_INNOCENT, -- subrole at the moment of the event
+		r = ROLE_NONE, -- subrole at the moment of the event
 		t = "", -- team at the moment of the event
 		v = "" -- victims team at the moment of the event
 	}

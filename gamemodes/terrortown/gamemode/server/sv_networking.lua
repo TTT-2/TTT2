@@ -47,7 +47,7 @@ function SendRoleListMessage(subrole, team, sids, ply_or_rf)
 
 					if p:GetSubRoleData().disableSync
 					and rs == ROUND_ACTIVE
-					and not p:RoleKnown()
+					-- and not p:RoleKnown() -- TODO this has to be reworked
 					and not hook.Run("TTT2OverrideDisabledSync", ply, p)
 					then continue end
 
@@ -157,7 +157,7 @@ function SendTeamList(team, ply_or_rf, pred)
 	for i = 1, #plys do
 		local v = plys[i]
 
-		if v:HasTeam(team) and (not pred or (pred and pred(v))) then
+		if v:GetTeam() == team and (not pred or (pred and pred(v))) then
 			local subrole = v:GetSubRole()
 
 			team_ids[subrole] = team_ids[subrole] or {} -- create table if it does not exists
@@ -179,7 +179,7 @@ function SendConfirmedTeam(team, ply_or_rf)
 	if team == TEAM_NONE or TEAMS[team].alone then return end
 
 	local _func = function(p)
-		return p:RoleKnown()
+		-- return p:RoleKnown() -- TODO rework
 	end
 
 	SendTeamList(team, ply_or_rf, _func)
@@ -216,16 +216,16 @@ function SendFullStateUpdate()
 			local v = players[k]
 			local rd = v:GetSubRoleData()
 
-			if not roleData.unknownTeam and v:HasTeam(team)
-				or v:RoleKnown()
+			if not roleData.unknownTeam and v:GetTeam() == team
+				-- or v:RoleKnown() -- TODO rework
 				or table.HasValue(rd.visibleForTeam, ply:GetTeam())
 				or roleData.networkRoles and table.HasValue(roleData.networkRoles, rd)
 				or v:GetBaseRole() == ROLE_DETECTIVE
 				or ply == v
 			then
-				tmp[v] = {v:GetSubRole() or ROLE_INNOCENT, v:GetTeam() or TEAM_INNOCENT}
+				tmp[v] = {v:GetSubRole() or ROLE_NONE, v:GetTeam() or TEAM_NONE}
 			else
-				tmp[v] = {ROLE_INNOCENT, TEAM_INNOCENT}
+				tmp[v] = {ROLE_NONE, TEAM_NONE}
 			end
 		end
 
@@ -279,7 +279,7 @@ function SendRoleReset(ply_or_rf)
 		for k = 1, plyCount do
 			local p = players[k]
 
-			TTT2NETTABLE[ply][p] = {ROLE_INNOCENT, TEAM_INNOCENT}
+			TTT2NETTABLE[ply][p] = {ROLE_NONE, TEAM_NONE}
 		end
 	end
 
@@ -307,8 +307,8 @@ local function ttt_request_rolelist(ply)
 			local v = plys[i]
 			local rd = v:GetSubRoleData()
 
-			if not ply:GetSubRoleData().unknownTeam and v:HasTeam(team)
-				or v:RoleKnown()
+			if not ply:GetSubRoleData().unknownTeam and v:GetTeam() == team
+				-- or v:RoleKnown() -- TODO rework
 				or table.HasValue(rd.visibleForTeam, ply:GetTeam())
 				or roleData.networkRoles and table.HasValue(roleData.networkRoles, rd)
 				or v:GetBaseRole() == ROLE_DETECTIVE
@@ -316,7 +316,7 @@ local function ttt_request_rolelist(ply)
 			then
 				tmp[v] = {v:GetSubRole(), v:GetTeam()}
 			else
-				tmp[v] = {ROLE_INNOCENT, TEAM_INNOCENT}
+				tmp[v] = {ROLE_NONE, TEAM_NONE}
 			end
 		end
 

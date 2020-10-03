@@ -383,7 +383,7 @@ local function ReceiveRoleReset()
 	local plys = player.GetAll()
 
 	for i = 1, #plys do
-		plys[i]:SetRole(ROLE_INNOCENT, TEAM_INNOCENT)
+		plys[i]:SetRole(ROLE_NONE, TEAM_NONE)
 	end
 end
 net.Receive("TTT_RoleReset", ReceiveRoleReset)
@@ -444,7 +444,7 @@ function GM:ClearClientState()
 	local client = LocalPlayer()
 	if not client.SetRole then return end -- code not loaded yet
 
-	client:SetRole(ROLE_INNOCENT)
+	client:SetRole(ROLE_NONE)
 
 	client.equipmentItems = {}
 	client.equipment_credits = 0
@@ -466,7 +466,7 @@ function GM:ClearClientState()
 
 		pl.sb_tag = nil
 
-		pl:SetRole(ROLE_INNOCENT)
+		pl:SetRole(ROLE_NONE)
 
 		pl.search_result = nil
 	end

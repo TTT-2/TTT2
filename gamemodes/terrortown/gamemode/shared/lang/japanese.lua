@@ -35,7 +35,7 @@ L.round_traitors_more = "Traitor達、力を合わせて彼らを皆殺しにし
 L.win_time         = "時間切れです. Traitorは負けました."
 L.win_traitors      = "Traitorが勝ちました!"
 L.win_innocents     = "Traitorは倒されました!"
-L.win_bees = "蜂が勝ちました! (つまり引き分け)"
+L.win_nones = "蜂が勝ちました! (つまり引き分け)"
 L.win_showreport   = "さあ{num}秒の間ラウンドレポートを見てみましょう."
 
 L.limit_round      = "ラウンドリミットに達しました. {mapname}がすぐにロードされるでしょう."
@@ -313,13 +313,13 @@ L.item_radar      = "Radar(レーダー)"
 L.item_radar_desc = [[
 生命反応のスキャンを可能にします.
 
-購入するとすぐに自動でスキャンを開始します. 
+購入するとすぐに自動でスキャンを開始します.
 設定はこのメニューのRadarタブでします.]]
 
 
 L.item_disg       = "Disguiser(変装装置)"
 L.item_disg_desc  = [[
-使用中はあなたのID情報を隠します. 
+使用中はあなたのID情報を隠します.
 さらに獲物が最期に目撃した人物になるのも避けます.
 
 このメニューのDisguiseタブ内か
@@ -438,7 +438,7 @@ L.radio_help_pri  = "{primaryfire}でRadioを置く."
 L.radio_desc      = [[
 注意を逸らしたり欺くために音を再生します.
 
-適当な場所にRadioを置いてから, 
+適当な場所にRadioを置いてから,
 このメニュー内のRadioタブで使用して
 音を再生します.]]
 

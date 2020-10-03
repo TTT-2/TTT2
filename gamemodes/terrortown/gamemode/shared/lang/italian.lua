@@ -43,7 +43,7 @@ L.round_traitors_more = "Traditore, questi sono i tuoi alleati: {names}"
 L.win_time = "Il tempo è finito. I Traditori hanno perso."
 L.win_traitors = "I Traditori hanno vinto!"
 L.win_innocents = "Gli Innocenti hanno vinto!"
-L.win_bees = "Pareggio!"
+L.win_nones = "Pareggio!"
 L.win_showreport = "Guardiamo il report per {num} secondi."
 
 L.limit_round = "Raggiunto il limite del tempo del round. la prossima mappa caricherà presto."
@@ -817,7 +817,7 @@ L.report_save_result = "Il Log degli eventi è stato salvato in:"
 -- Schermata con titolo grande
 -- Big title window
 L.hilite_win_traitors = "TRADITORI VINCONO"
-L.hilite_win_bees = "PAREGGIO"
+L.hilite_win_none = "PAREGGIO"
 L.hilite_win_innocents = "INNOCENTI VINCONO"
 
 L.hilite_players1 = "{numplayers} hanno partecipato, {numtraitors} erano traditori"

@@ -23,6 +23,7 @@ if CLIENT then
 	local plysList = plysList or {}
 
 	local function SortMiniscoreboardFunc(a, b)
+	--[[ -- TODO
 		if not a:OnceFound() then
 			return false
 		end
@@ -31,6 +32,7 @@ if CLIENT then
 		if b:OnceFound() and a:GetFirstFound() >= b:GetFirstFound() then
 			return false
 		end
+	]]
 
 		return true
 	end
@@ -120,8 +122,9 @@ if CLIENT then
 	local function GetMSBColorForPlayer(ply)
 		local color = color_blacktrans -- not yet confirmed
 
+		--[[ -- TODO
 		if ply:OnceFound() then
-			if ply:RoleKnown() then
+			if ply:HasRole() then
 				local roleColor = ply:GetRoleColor()
 
 				color = Color(roleColor.r, roleColor.g, roleColor.b, 155) -- role known
@@ -129,6 +132,7 @@ if CLIENT then
 				color = color_indirconfirm -- indirect confirmed
 			end
 		end
+		]]
 
 		return hook.Run("TTT2ModifyMiniscoreboardColor", ply, color) or color
 	end
@@ -174,11 +178,13 @@ if CLIENT then
 			surface.SetDrawColor(clr(ply_color))
 			surface.DrawRect(tmp_x, tmp_y, self.ply_ind_size, self.ply_ind_size)
 
+			--[[ -- TODO
 			if ply:WasRevivedAndConfirmed() then
 				draw.FilteredTexture(tmp_x + 3, tmp_y + 3, self.ply_ind_size - 6, self.ply_ind_size - 6, self.icon_revived, 180, COLOR_BLACK)
 			elseif ply:OnceFound() and not ply:RoleKnown() then -- draw marker on indirect confirmed bodies
 				draw.FilteredTexture(tmp_x + 3, tmp_y + 3, self.ply_ind_size - 6, self.ply_ind_size - 6, self.icon_in_conf, 120, COLOR_BLACK)
 			end
+			]]
 
 			-- draw lines around the element
 			self:DrawLines(tmp_x, tmp_y, self.ply_ind_size, self.ply_ind_size, ply_color.a)

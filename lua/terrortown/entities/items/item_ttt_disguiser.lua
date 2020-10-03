@@ -79,7 +79,7 @@ end
 
 if SERVER then
 	local function SetDisguise(ply, cmd, args)
-		if not IsValid(ply) or not ply:IsActive() and ply:HasTeam(TEAM_TRAITOR) then return end
+		if not IsValid(ply) or not ply:IsActive() and ply:GetTeam() == TEAM_TRAITOR then return end -- TODO ?
 
 		if not ply:HasEquipmentItem("item_ttt_disguiser") then return end
 

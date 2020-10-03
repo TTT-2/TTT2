@@ -35,7 +35,7 @@ L.round_traitors_more = "Eres el Traidor. Estos son tus aliados: {names}"
 L.win_time = "Te has quedado sin tiempo. Los traidores pierden."
 L.win_traitors = "¡Los Traidores han ganado!"
 L.win_innocents = "¡Los Inocentes han ganado!"
-L.win_bees = "¡Las Abejas han ganado! (Empate)"
+L.win_nones = "¡Las Abejas han ganado! (Empate)"
 L.win_showreport = "Veamos el reporte de la ronda por {num} segundos."
 
 L.limit_round = "Límite de rondas alcanzado. El siguiente mapa se cargará pronto."
@@ -337,8 +337,8 @@ Configúrelo en la pestaña del radar.]]
 
 L.item_disg = "Disfraz"
 L.item_disg_desc = [[
-Esconde tu ID mientras está en uso. 
-Además evita ser la última persona 
+Esconde tu ID mientras está en uso.
+Además evita ser la última persona
 vista por una víctima.
 
 Actívalo en la pestaña disfraz de este menú
@@ -555,7 +555,7 @@ L.tele_help_pri = "{primaryfire} teleportarte a la ubicación marcada."
 L.tele_help_sec = "{secondaryfire} marca la ubicación actual."
 
 L.tele_desc = [[
-Lo teletransporta a una 
+Lo teletransporta a una
 ubicación marcada previamente.
 
 Teletransportarse hace ruido y el
@@ -813,7 +813,7 @@ L.report_save_result = "El registro de eventos fue guardado en:"
 
 -- Big title window
 L.hilite_win_traitors = "LOS TRAIDORES GANAN"
-L.hilite_win_bees = "LAS ABEJAS GANAN"
+L.hilite_win_none = "LAS ABEJAS GANAN"
 L.hilite_win_innocents = "LOS INOCENTES GANAN"
 
 L.hilite_players1 = "{numplayers} tomaron parte, {numtraitors} eran traidores"

@@ -49,7 +49,7 @@ end
 -- @return[default=false] boolean
 -- @realm shared
 function ROLE:IsShoppingRole()
-	if self.subrole == ROLE_INNOCENT then
+	if self.subrole == ROLE_INNOCENT or self.subrole == ROLE_NONE then
 		return false
 	end
 

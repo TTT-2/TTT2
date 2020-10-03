@@ -49,7 +49,7 @@ function ENT:Initialize()
 end
 
 function ENT:UseOverride(activator)
-	if IsValid(activator) and activator:IsPlayer() and activator:GetTeam() == self:GetOwner():GetTeam() then
+	if IsValid(activator) and activator:IsPlayer() and activator:IsInTeam(self:GetOwner()) then
 		local prints = self.fingerprints or {}
 
 		-- picks up weapon, switches if possible and needed, returns weapon if successful

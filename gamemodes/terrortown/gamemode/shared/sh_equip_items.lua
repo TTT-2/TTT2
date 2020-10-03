@@ -153,7 +153,7 @@ function GetShopFallback(subrole, tbl)
 	if fb then
 		fb = fb.index
 	else
-		fb = ROLE_INNOCENT
+		fb = ROLE_NONE
 	end
 
 	if not fb or shopFallback == SHOP_UNSET or shopFallback == SHOP_DISABLED then
@@ -197,7 +197,7 @@ function GetShopFallbackTable(subrole)
 
 	subrole, fallback = GetShopFallback(subrole)
 
-	if fallback == ROLE_INNOCENT then -- fallback is SHOP_UNSET
+	if fallback == ROLE_NONE then -- fallback is SHOP_UNSET
 		rd = roles.GetByIndex(subrole)
 
 		if rd.fallbackTable then

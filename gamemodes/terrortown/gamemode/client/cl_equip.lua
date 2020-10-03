@@ -272,7 +272,7 @@ local function CreateEquipmentList(t)
 
 	-- make sure that the players old role is not used anymore
 	if t.notalive then
-		currole = t.role or ROLE_INNOCENT
+		currole = t.role or ROLE_NONE
 	end
 
 	-- Determine if we already have equipment

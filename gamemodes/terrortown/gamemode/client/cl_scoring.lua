@@ -510,7 +510,7 @@ end
 -- @return table The title object table
 function CLSCORE:BuildTitle(wintype)
 	-- wintype can be both a WIN_ var or the team name directly, so we need to convert it to a teamname
-	local winnerTeam = TEAM_INNOCENT
+	local winnerTeam = TEAM_NONE
 
 	if wintype == WIN_TIMELIMIT or wintype == WIN_INNOCENT then
 		winnerTeam = TEAM_INNOCENT
@@ -520,8 +520,8 @@ function CLSCORE:BuildTitle(wintype)
 		-- Special case, that should not be reachable, as WIN_NONE usually prevents a round from ending
 		-- If it should, we will show a tie.
 		return {
-			Text = "hilite_win_bees",
-			BoxColor = TEAMS[TEAM_INNOCENT].color,
+			Text = "hilite_win_none",
+			BoxColor = TEAMS[TEAM_NONE].color,
 			TextColor = COLOR_WHITE,
 			BackgroundColor = titleBackgroundColor
 		}
