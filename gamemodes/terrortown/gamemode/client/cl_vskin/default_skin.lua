@@ -62,7 +62,7 @@ function SKIN:UpdatedVSkin()
 		accentText = utilGetDefaultColor(vskinGetAccentColor()),
 		accentDark = vskinGetDarkAccentColor(),
 		accentDarkHover = utilGetHoverColor(vskinGetDarkAccentColor()),
-		accentDarkactive = utilGetActiveColor(vskinGetDarkAccentColor()),
+		accentDarkActive = utilGetActiveColor(vskinGetDarkAccentColor()),
 		sliderInactive = utilGetChangedColor(vskinGetBackgroundColor(), 75),
 		shadow = vskinGetShadowColor(),
 		titleText = vskinGetTitleTextColor(),
@@ -86,9 +86,6 @@ function SKIN:UpdatedVSkin()
 	}
 end
 
---[[---------------------------------------------------------
-	Frame
------------------------------------------------------------]]
 function SKIN:PaintFrameTTT2(panel, w, h)
 	if panel:GetPaintShadow() then
 		DisableClipping(true)
@@ -106,9 +103,6 @@ function SKIN:PaintFrameTTT2(panel, w, h)
 	drawShadowedText(TryT(panel:GetTitle()), panel:GetTitleFont(), 0.5 * w, 0.5 * sizes.header, colors.titleText, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1)
 end
 
---[[---------------------------------------------------------
-	Panel
------------------------------------------------------------]]
 function SKIN:PaintPanel(panel, w, h)
 
 end
@@ -125,37 +119,48 @@ function SKIN:PaintContentPanelTTT2(panel, w, h)
 	drawBox(0, 0, w, h, colors.content)
 end
 
---[[---------------------------------------------------------
-	Button
------------------------------------------------------------]]
-local function DrawClose(w, h, colorBackground, colorText, shift)
+function SKIN:PaintWindowCloseButton(panel, w, h)
+	if not panel.m_bBackground then return end
+
+	local colorBackground = colors.accent
+	local colorText = ColorAlpha(colors.accentText, 150)
+	local shift = 0
 	local padding = 15
+
+	if not panel:IsEnabled() then
+		colorText = ColorAlpha(colors.accentText, 70)
+	elseif panel.Depressed or panel:IsSelected() then
+		colorBackground = colors.accentActive
+		colorText = ColorAlpha(colors.accentText, 200)
+		shift = 1
+	elseif panel.Hovered then
+		colorBackground = colors.accentHover
+		colorText = colors.accentText
+	end
 
 	drawBox(0, 0, w, h, colorBackground)
 	drawFilteredShadowedTexture(padding, padding + shift, w - 2 * padding, h - 2 * padding, materialClose, colorText.a, colorText)
 end
 
-function SKIN:PaintWindowCloseButton(panel, w, h)
+function SKIN:PaintWindowBackButton(panel, w, h)
 	if not panel.m_bBackground then return end
 
-	if not panel:IsEnabled() then
-		return DrawClose(w, h, colors.accent, ColorAlpha(colors.accentText, 70), 0)
-	end
-
-	if panel.Depressed or panel:IsSelected() then
-		return DrawClose(w, h, colors.accentActive, ColorAlpha(colors.accentText, 200), 1)
-	end
-
-	if panel.Hovered then
-		return DrawClose(w, h, colors.accentHover, colors.accentText, 0)
-	end
-
-	return DrawClose(w, h, colors.accent, ColorAlpha(colors.accentText, 150), 0)
-end
-
-local function DrawBack(w, h, panel, colorBackground, colorText, shift)
+	local colorBackground = colors.accent
+	local colorText = ColorAlpha(colors.accentText, 150)
+	local shift = 0
 	local padding_w = 10
 	local padding_h = 15
+
+	if not panel:IsEnabled() then
+		colorText = ColorAlpha(colors.accentText, 70)
+	elseif panel.Depressed or panel:IsSelected() then
+		colorBackground = colors.accentActive
+		colorText = ColorAlpha(colors.accentText, 200)
+		shift = 1
+	elseif panel.Hovered then
+		colorBackground = colors.accentHover
+		colorText = colors.accentText
+	end
 
 	drawBox(0, 0, w, h, colorBackground)
 	drawFilteredShadowedTexture(padding_w, padding_h + shift, h - 2 * padding_h, h - 2 * padding_h, materialBack, colorText.a, colorText)
@@ -171,82 +176,46 @@ local function DrawBack(w, h, panel, colorBackground, colorText, shift)
 	)
 end
 
-function SKIN:PaintWindowBackButton(panel, w, h)
-	if not panel.m_bBackground then return end
-
-	if not panel:IsEnabled() then
-		return DrawBack(w, h, panel, colors.accent, ColorAlpha(colors.accentText, 70), 0)
-	end
-
-	if panel.Depressed or panel:IsSelected() then
-		return DrawBack(w, h, panel, colors.accentActive, ColorAlpha(colors.accentText, 200), 1)
-	end
-
-	if panel.Hovered then
-		return DrawBack(w, h, panel, colors.accentHover, colors.accentText, 0)
-	end
-
-	return DrawBack(w, h, panel, colors.accent, ColorAlpha(colors.accentText, 150), 0)
-end
-
---[[---------------------------------------------------------
-	ScrollBar
------------------------------------------------------------]]
 function SKIN:PaintScrollBarGrip(panel, w, h)
-	if not panel:IsEnabled() then
-		return self.tex.Scroller.ButtonV_Disabled( 0, 0, w, h )
-	end
+	local colorScrollbar = colors.scrollBar
+	local posX = 4
+	local sizeX = w - 8
 
 	if panel.Depressed then
-		return drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colors.scrollBarActive)
+		colorScrollbar = colors.scrollBarActive
+		posX = 0
+		sizeX = w
+	elseif panel.Hovered then
+		posX = 0
+		sizeX = w
 	end
 
-	if panel.Hovered then
-		return drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colors.scrollBar)
-	end
-
-	return drawRoundedBox(sizes.cornerRadius, 4, 0, w - 8, h, colors.scrollBar)
+	drawRoundedBox(sizes.cornerRadius, posX, 0, sizeX, h, colorScrollbar)
 end
 
-function SKIN:PaintButtonDown(panel, w, h)
+function SKIN:PaintMenuButtonTTT2(panel, w, h)
 	if not panel.m_bBackground then return end
 
-	if not panel:IsEnabled() then
-		return self.tex.Scroller.DownButton_Dead( 0, 0, w, h )
-	end
-
-	if panel.Depressed or panel:IsSelected() then
-		return drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colors.accentActive)
-	end
-
-	if panel.Hovered then
-		return drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colors.accentHover)
-	end
-
-	return drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colors.accent)
-end
-
-function SKIN:PaintButtonUp(panel, w, h)
-	if not panel.m_bBackground then return end
-
-	if not panel:IsEnabled() then
-		return self.tex.Scroller.DownButton_Dead( 0, 0, w, h )
-	end
-
-	if panel.Depressed or panel:IsSelected() then
-		return drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colors.accentActive)
-	end
-
-	if panel.Hovered then
-		return drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colors.accentHover)
-	end
-
-	return drawRoundedBox(sizes.cornerRadius, 0, 0, w, h, colors.accent)
-end
-
-local function DrawMenuButton(w, h, panel, colorOutline, colorIcon, colorText, colorDescription, shift)
+	local colorOutline = utilGetChangedColor(colors.default, 170)
+	local colorDescription = utilGetChangedColor(colors.default, 145)
+	local colorText = utilGetChangedColor(colors.default, 65)
+	local colorIcon = utilGetChangedColor(colors.default, 170)
+	local shift = 0
 	local paddingText = 10
 	local paddingIcon = 25
+
+	if panel.Depressed or panel:IsSelected() or panel:GetToggle() then
+		colorOutline = utilGetChangedColor(colors.default, 135)
+		colorDescription = utilGetChangedColor(colors.default, 135)
+		colorIcon = utilGetChangedColor(colors.default, 160)
+		colorText = utilGetChangedColor(colors.default, 50)
+		shift = 1
+	elseif panel.Hovered then
+		colorOutline = utilGetChangedColor(colors.default, 135)
+		colorDescription = utilGetChangedColor(colors.default, 135)
+		colorIcon = utilGetChangedColor(colors.default, 160)
+		colorText = utilGetChangedColor(colors.default, 50)
+	end
 
 	drawOutlinedBox(0, 0, w, h, 1, colorOutline)
 	drawFilteredTexture(paddingIcon, paddingIcon + shift, h - 2 * paddingIcon, h - 2 * paddingIcon, panel:GetImage(), colorIcon.a, colorIcon)
@@ -278,44 +247,36 @@ local function DrawMenuButton(w, h, panel, colorOutline, colorIcon, colorText, c
 	end
 end
 
-function SKIN:PaintMenuButtonTTT2(panel, w, h)
+function SKIN:PaintSubMenuButtonTTT2(panel, w, h)
 	if not panel.m_bBackground then return end
 
-	if not panel:IsEnabled() then
-		return self.tex.Button_Dead(0, 0, w, h)
-	end
+	local colorBackground = colors.background
+	local colorBar = colors.background
+	local colorText = utilGetChangedColor(colors.default, 75)
+	local shift = 0
 
 	if panel.Depressed or panel:IsSelected() or panel:GetToggle() then
-		local colorDescription = utilGetChangedColor(colors.default, 135)
-		local colorIcon = utilGetChangedColor(colors.default, 160)
-		local colorText = utilGetChangedColor(colors.default, 50)
-
-		return DrawMenuButton(w, h, panel, colorDescription, colorIcon, colorText, colorDescription, 1)
+		colorBackground = utilGetActiveColor(ColorAlpha(colors.accent, 50))
+		colorBar = colors.accentActive
+		colorText = utilGetActiveColor(utilGetChangedColor(colors.default, 25))
+		shift = 1
+	elseif panel.Hovered then
+		colorBackground = utilGetHoverColor(ColorAlpha(colors.accent, 50))
+		colorBar = colors.accentHover
+		colorText = utilGetHoverColor(utilGetChangedColor(colors.default, 75))
+	elseif panel:IsActive() then
+		colorBackground = utilGetHoverColor(ColorAlpha(colors.accent, 50))
+		colorBar = colors.accentHover
+		colorText = utilGetHoverColor(utilGetChangedColor(colors.default, 75))
 	end
 
-	if panel.Hovered then
-		local colorDescription = utilGetChangedColor(colors.default, 135)
-		local colorIcon = utilGetChangedColor(colors.default, 160)
-		local colorText = utilGetChangedColor(colors.default, 50)
-
-		return DrawMenuButton(w, h, panel, colorDescription, colorIcon, colorText, colorDescription, 0)
-	end
-
-	local colorDescription = utilGetChangedColor(colors.default, 145)
-	local colorText = utilGetChangedColor(colors.default, 65)
-	local colorIcon = utilGetChangedColor(colors.default, 170)
-
-	return DrawMenuButton(w, h, panel, colorIcon, colorIcon, colorText, colorDescription, 0)
-end
-
-local function DrawSubMenuButton(w, h, panel, sizeBorder, colorBackground, colorBar, colorText, shift)
-	drawBox(0, 0, sizeBorder, h, colorBar)
-	drawBox(sizeBorder, 0, w - sizeBorder, h, colorBackground)
+	drawBox(0, 0, sizes.border, h, colorBar)
+	drawBox(sizes.border, 0, w - sizes.border, h, colorBackground)
 
 	drawSimpleText(
 		TryT(panel:GetTitle()),
 		panel:GetTitleFont(),
-		sizeBorder + 20,
+		sizes.border + 20,
 		0.5 * h + shift,
 		colorText,
 		TEXT_ALIGN_LEFT,
@@ -323,109 +284,75 @@ local function DrawSubMenuButton(w, h, panel, sizeBorder, colorBackground, color
 	)
 end
 
-function SKIN:PaintSubMenuButtonTTT2(panel, w, h)
-	if not panel.m_bBackground then return end
+function SKIN:PaintCheckBox(panel, w, h)
+	local colorBox, colorCenter, offset
 
-	if not panel:IsEnabled() then
-		return self.tex.Button_Dead( 0, 0, w, h)
+	if panel:GetChecked() then
+		if not panel:IsEnabled() then
+			colorBox = ColorAlpha(colors.handle, alphaDisabled)
+			colorCenter = ColorAlpha(colors.handle, alphaDisabled)
+			offset = w - h
+		elseif panel.Hovered then
+			colorBox = colors.handle
+			colorCenter = colors.accentHover
+			offset = w - h
+		else
+			colorBox = colors.handle
+			colorCenter = colors.accent
+			offset = w - h
+		end
+	else
+		if not panel:IsEnabled() then
+			colorBox = ColorAlpha(colors.handle, alphaDisabled)
+			colorCenter = ColorAlpha(colors.settingsBox, alphaDisabled)
+			offset = 0
+		elseif panel.Hovered then
+			colorBox = colors.handle
+			colorCenter = colors.accentHover
+			offset = 0
+		else
+			colorBox = colors.handle
+			colorCenter = colors.settingsBox
+			offset = 0
+		end
 	end
 
-	if panel.Depressed or panel:IsSelected() or panel:GetToggle() then
-		local colorBackground = utilGetActiveColor(ColorAlpha(colors.accent, 50))
-		local colorText = utilGetActiveColor(utilGetChangedColor(colors.default, 25))
-
-		return DrawSubMenuButton(w, h, panel, sizes.border, colorBackground, colors.accentActive, colorText, 1)
-	end
-
-	if panel.Hovered then
-		local colorBackground = utilGetHoverColor(ColorAlpha(colors.accent, 50))
-		local colorText = utilGetHoverColor(utilGetChangedColor(colors.default, 75))
-
-		return DrawSubMenuButton(w, h, panel, sizes.border, colorBackground, colors.accentHover, colorText, 0)
-	end
-
-	if panel:IsActive() then
-		local colorBackground = utilGetHoverColor(ColorAlpha(colors.accent, 50))
-		local colorText = utilGetHoverColor(utilGetChangedColor(colors.default, 75))
-
-		return DrawSubMenuButton(w, h, panel, sizes.border, colorBackground, colors.accentHover, colorText, 0)
-	end
-
-	local colorText = utilGetChangedColor(colors.default, 75)
-
-	return DrawSubMenuButton(w, h, panel, sizes.border, colors.background, colors.background, colorText, 0)
-end
-
---[[---------------------------------------------------------
-	CheckBox
------------------------------------------------------------]]
-local function DrawCheckBox(w, h, offset, panel, colorBox, colorCenter)
 	drawRoundedBox(4, 0, 0, w, h, colorBox)
 	drawRoundedBox(4, offset + 3, 3, h - 6, h - 6, colorCenter)
 end
 
-function SKIN:PaintCheckBox(panel, w, h)
-	if panel:GetChecked() then
-		if not panel:IsEnabled() then
-			DrawCheckBox(w, h, w - h, panel, ColorAlpha(colors.handle, alphaDisabled), ColorAlpha(colors.handle, alphaDisabled))
-		elseif panel.Hovered then
-			DrawCheckBox(w, h, w - h, panel, colors.handle, colors.accentHover)
-		else
-			DrawCheckBox(w, h, w - h, panel, colors.handle, colors.accent)
-		end
-	else
-		if not panel:IsEnabled() then
-			DrawCheckBox(w, h, 0, panel, ColorAlpha(colors.handle, alphaDisabled), ColorAlpha(colors.settingsBox, alphaDisabled))
-		elseif panel.Hovered then
-			DrawCheckBox(w, h, 0, panel, colors.handle, colors.accentHover)
-		else
-			DrawCheckBox(w, h, 0, panel, colors.handle, colors.settingsBox)
-		end
-	end
-end
-
 function SKIN:PaintCheckBoxLabel(panel, w, h)
-	if panel:IsEnabled() then
-		drawRoundedBoxEx(sizes.cornerRadius, 0, 0, w, h, colors.settingsBox, true, false, true, false)
+	local colorBox = colors.settingsBox
+	local colorText = colors.settingsText
 
-		drawSimpleText(
-			TryT(panel:GetText()),
-			panel:GetFont(),
-			panel:GetTextPosition(),
-			0.5 * h,
-			colors.settingsText,
-			TEXT_ALIGN_LEFT,
-			TEXT_ALIGN_CENTER
-		)
-	else
-		drawRoundedBoxEx(sizes.cornerRadius, 0, 0, w, h, ColorAlpha(colors.settingsBox, alphaDisabled), true, false, true, false)
-
-		drawSimpleText(
-			TryT(panel:GetText()),
-			panel:GetFont(),
-			panel:GetTextPosition(),
-			0.5 * h,
-			ColorAlpha(colors.settingsText, alphaDisabled),
-			TEXT_ALIGN_LEFT,
-			TEXT_ALIGN_CENTER
-		)
+	if not panel:IsEnabled() then
+		colorBox = ColorAlpha(colors.settingsBox, alphaDisabled)
+		colorText = ColorAlpha(colors.settingsText, alphaDisabled)
 	end
+
+	drawRoundedBoxEx(sizes.cornerRadius, 0, 0, w, h, colorBox, true, false, true, false)
+
+	drawSimpleText(
+		TryT(panel:GetText()),
+		panel:GetFont(),
+		panel:GetTextPosition(),
+		0.5 * h,
+		colorText,
+		TEXT_ALIGN_LEFT,
+		TEXT_ALIGN_CENTER
+	)
 end
 
---[[---------------------------------------------------------
-	CollapsibleCategory
------------------------------------------------------------]]
 function SKIN:PaintCollapsibleCategoryTTT2(panel, w, h)
 	drawBox(0, 0, w, h, colors.background)
 	drawBox(0, h - sizes.border, w, sizes.border, colors.accent)
 end
 
 function SKIN:PaintCategoryHeaderTTT2(panel, w, h)
-	local paddingX = 10
-	local paddingY = 10
-
 	local colorLine = utilGetChangedColor(colors.background, 50)
 	local colorText = utilGetChangedColor(colors.default, 50)
+	local paddingX = 10
+	local paddingY = 10
 
 	drawBox(0, 0, w, h, colors.background)
 
@@ -448,90 +375,100 @@ function SKIN:PaintCategoryHeaderTTT2(panel, w, h)
 	)
 end
 
-local function DrawButton(w, h, panel, sizeBorder, colorLine, colorBox, colorText, shift)
+function SKIN:PaintButtonTTT2(panel, w, h)
+	local colorLine = colors.accentDark
+	local colorBox = colors.accent
+	local colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 220)
+	local shift = 0
+
+	if not panel:IsEnabled() then
+		colorLine = utilColorDarken(colorAccentDisabled, 50)
+		colorBox = utilGetChangedColor(colors.default, 150)
+		colorText = ColorAlpha(utilGetDefaultColor(colorAccentDisabled), 220)
+	elseif panel.Depressed or panel:IsSelected() or panel:GetToggle() then
+		colorLine = colors.accentDarkActive
+		colorBox = colors.accentActive
+		colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 220)
+		shift = 1
+	elseif panel.Hovered then
+		colorLine = colors.accentDarkHover
+		colorBox = colors.accentHover
+		colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 220)
+	end
+
 	drawBox(0, 0, w, h, colorBox)
-	drawBox(0, h - sizeBorder, w, sizeBorder, colorLine)
+	drawBox(0, h - sizes.border, w, sizes.border, colorLine)
 
 	drawShadowedText(
 		string.upper(TryT(panel:GetText())),
 		panel:GetFont(),
 		0.5 * w,
-		0.5 * (h - sizeBorder) + shift,
+		0.5 * (h - sizes.border) + shift,
 		colorText,
 		TEXT_ALIGN_CENTER,
 		TEXT_ALIGN_CENTER
 	)
 end
 
-function SKIN:PaintButtonTTT2(panel, w, h)
-	if not panel:IsEnabled() then
-		local colorAccentDisabled = utilGetChangedColor(colors.default, 150)
-		local colorAccentDarkDisabled = utilColorDarken(colorAccentDisabled, 50)
-
-		local colorText = ColorAlpha(utilGetDefaultColor(colorAccentDisabled), 220)
-
-		return DrawButton(w, h, panel, sizes.border, colorAccentDarkDisabled, colorAccentDisabled, colorText, 0)
-	end
-
-	if panel.Depressed or panel:IsSelected() or panel:GetToggle() then
-		local colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 220)
-
-		return DrawButton(w, h, panel, sizes.border, colors.accentDarkactive, colors.accentActive, colorText, 1)
-	end
-
-	if panel.Hovered then
-		local colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 220)
-
-		return DrawButton(w, h, panel, sizes.border, colors.accentDarkHover, colors.accentHover, colorText, 0)
-	end
-
-	local colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 220)
-
-	return DrawButton(w, h, panel, sizes.border, colors.accentDark, colors.accent, colorText, 0)
-end
-
-local function DrawFormButton(w, h, panel, sizeCornerRadius, colorBoxBack, colorBox, colorText, shift)
+function SKIN:PaintFormButtonIconTTT2(panel, w, h)
+	local colorBoxBack = colors.settingsBox
+	local colorBox = colors.accent
+	local colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 150)
+	local shift = 0
 	local pad = 6
 
-	drawRoundedBoxEx(sizeCornerRadius, 0, 0, w, h, colorBoxBack, false, true, false, true)
-	drawRoundedBox(sizeCornerRadius, 1, 1, w - 2, h - 2, colorBox)
+	if not panel:IsEnabled() then
+		colorBoxBack = ColorAlpha(colors.settingsBox, alphaDisabled)
+		colorBox = ColorAlpha(colors.accent, alphaDisabled)
+		colorText = ColorAlpha(utilGetDefaultColor(colors.accent), alphaDisabled)
+	elseif panel.noDefault then
+		colorBoxBack = colors.settingsBox
+		colorBox = ColorAlpha(colors.accent, alphaDisabled)
+		colorText = ColorAlpha(utilGetDefaultColor(colors.accent), alphaDisabled)
+	elseif panel.Depressed or panel:IsSelected() or panel:GetToggle() then
+		colorBoxBack = colors.settingsBox
+		colorBox = colors.accentActive
+		colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 150)
+		shift = 1
+	elseif panel.Hovered then
+		colorBoxBack = colors.settingsBox
+		colorBox = colors.accentHover
+		colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 150)
+	end
+
+	drawRoundedBoxEx(sizes.cornerRadius, 0, 0, w, h, colorBoxBack, false, true, false, true)
+	drawRoundedBox(sizes.cornerRadius, 1, 1, w - 2, h - 2, colorBox)
 
 	drawFilteredShadowedTexture(pad, pad + shift, w - 2 * pad, h - 2 * pad, panel.material, colorText.a, colorText)
 end
 
-function SKIN:PaintFormButtonIconTTT2(panel, w, h)
+function SKIN:PaintBinderButtonTTT2(panel, w, h)
+	local colorBoxBack = colors.settingsBox
+	local colorBox = colors.accent
+	local colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 150)
+	local shift = 0
+
 	if not panel:IsEnabled() then
-		local colorText = ColorAlpha(utilGetDefaultColor(colors.accent), alphaDisabled)
-
-		return DrawFormButton(w, h, panel, sizes.cornerRadius, ColorAlpha(colors.settingsBox, alphaDisabled), ColorAlpha(colors.accent, alphaDisabled), colorText, 0)
-	end
-
-	if panel.noDefault then
-		local colorText = ColorAlpha(utilGetDefaultColor(colors.accent), alphaDisabled)
-
-		return DrawFormButton(w, h, panel, sizes.cornerRadius, colors.settingsBox, ColorAlpha(colors.accent, alphaDisabled), colorText, 0)
+		colorBoxBack = ColorAlpha(colors.settingsBox, alphaDisabled)
+		colorBox = ColorAlpha(colors.accent, alphaDisabled)
+		colorText = ColorAlpha(colors.settingsText, alphaDisabled)
 	end
 
 	if panel.Depressed or panel:IsSelected() or panel:GetToggle() then
-		local colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 150)
-
-		return DrawFormButton(w, h, panel, sizes.cornerRadius, colors.settingsBox, colors.accentActive, colorText, 1)
+		colorBoxBack = colors.settingsBox
+		colorBox = colors.accentActive
+		colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 150)
+		shift = 1
 	end
 
 	if panel.Hovered then
-		local colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 150)
-
-		return DrawFormButton(w, h, panel, sizes.cornerRadius, colors.settingsBox, colors.accentHover, colorText, 0)
+		colorBoxBack = colors.settingsBox
+		colorBox = colors.accentActive
+		colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 150)
 	end
 
-	local colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 150)
-
-	return DrawFormButton(w, h, panel, sizes.cornerRadius, colors.settingsBox, colors.accent, colorText, 0)
-end
-
-local function DrawFormButtonText(w, h, panel, sizeCornerRadius, colorBoxBack, colorBox, colorText, shift)
-	drawRoundedBoxEx(sizeCornerRadius, 0, 0, w, h, colorBoxBack, false, true, false, true)
-	drawRoundedBox(sizeCornerRadius, 1, 1, w - 2, h - 2, colorBox)
+	drawRoundedBoxEx(sizes.cornerRadius, 0, 0, w, h, colorBoxBack, false, true, false, true)
+	drawRoundedBox(sizes.cornerRadius, 1, 1, w - 2, h - 2, colorBox)
 
 	drawShadowedText(
 		string.upper(TryT(panel:GetText())),
@@ -542,28 +479,6 @@ local function DrawFormButtonText(w, h, panel, sizeCornerRadius, colorBoxBack, c
 		TEXT_ALIGN_CENTER,
 		TEXT_ALIGN_CENTER
 	)
-end
-
-function SKIN:PaintBinderButtonTTT2(panel, w, h)
-	if not panel:IsEnabled() then
-		return DrawFormButtonText(w, h, panel, sizes.cornerRadius, ColorAlpha(colors.settingsBox, alphaDisabled), ColorAlpha(colors.accent, alphaDisabled), ColorAlpha(colors.settingsText, alphaDisabled), 0)
-	end
-
-	if panel.Depressed or panel:IsSelected() or panel:GetToggle() then
-		local colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 150)
-
-		return DrawFormButtonText(w, h, panel, sizes.cornerRadius, colors.settingsBox, colors.accentActive, colorText, 1)
-	end
-
-	if panel.Hovered then
-		local colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 150)
-
-		return DrawFormButtonText(w, h, panel, sizes.cornerRadius, colors.settingsBox, colors.accentActive, colorText, 0)
-	end
-
-	local colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 150)
-
-	return DrawFormButtonText(w, h, panel, sizes.cornerRadius, colors.settingsBox, colors.accent, colorText, 0)
 end
 
 function SKIN:PaintLabelTTT2(panel, w, h)
@@ -579,39 +494,37 @@ function SKIN:PaintLabelTTT2(panel, w, h)
 end
 
 function SKIN:PaintFormLabelTTT2(panel, w, h)
+	local colorText = colors.settingsText
+	local colorBox = colors.settingsBox
+
 	if not panel:IsEnabled() then
-		drawRoundedBoxEx(sizes.cornerRadius, 0, 0, w, h, ColorAlpha(colors.settingsBox, alphaDisabled), true, false, true, false)
-		drawSimpleText(
-			TryT(panel:GetText()),
-			panel:GetFont(),
-			10,
-			0.5 * h,
-			ColorAlpha(colors.settingsText, alphaDisabled),
-			TEXT_ALIGN_LEFT,
-			TEXT_ALIGN_CENTER
-		)
-	else
-		drawRoundedBoxEx(sizes.cornerRadius, 0, 0, w, h, colors.settingsBox, true, false, true, false)
-		drawSimpleText(
-			TryT(panel:GetText()),
-			panel:GetFont(),
-			10,
-			0.5 * h,
-			colors.settingsText,
-			TEXT_ALIGN_LEFT,
-			TEXT_ALIGN_CENTER
-		)
+		colorText = ColorAlpha(colors.settingsText, alphaDisabled)
+		colorBox = ColorAlpha(colors.settingsBox, alphaDisabled)
 	end
+
+	drawRoundedBoxEx(sizes.cornerRadius, 0, 0, w, h, colorBox, true, false, true, false)
+		drawSimpleText(
+			TryT(panel:GetText()),
+			panel:GetFont(),
+			10,
+			0.5 * h,
+			colorText,
+			TEXT_ALIGN_LEFT,
+			TEXT_ALIGN_CENTER
+		)
 end
 
 function SKIN:PaintFormBoxTTT2(panel, w, h)
+	local colorBox = colors.settingsBox
+	local colorHandle = colors.handle
+
 	if not panel:IsEnabled() then
-		drawRoundedBoxEx(sizes.cornerRadius, 0, 0, w, h, ColorAlpha(colors.settingsBox, alphaDisabled), false, true, false, true)
-		drawRoundedBox(sizes.cornerRadius, 1, 1, w - 2, h - 2, ColorAlpha(colors.handle, alphaDisabled))
-	else
-		drawRoundedBoxEx(sizes.cornerRadius, 0, 0, w, h, colors.settingsBox, false, true, false, true)
-		drawRoundedBox(sizes.cornerRadius, 1, 1, w - 2, h - 2, colors.handle)
+		colorBox = ColorAlpha(colors.settingsBox, alphaDisabled)
+		colorHandle = ColorAlpha(colors.handle, alphaDisabled)
 	end
+
+	drawRoundedBoxEx(sizes.cornerRadius, 0, 0, w, h, colorBox, false, true, false, true)
+	drawRoundedBox(sizes.cornerRadius, 1, 1, w - 2, h - 2, colorHandle)
 end
 
 function SKIN:PaintMenuLabelTTT2(panel, w, h)
@@ -656,80 +569,97 @@ function SKIN:PaintHelpLabelTTT2(panel, w, h)
 end
 
 function SKIN:PaintSliderKnob(panel, w, h)
+	local colorBox = colors.accent
+
 	if not panel:IsEnabled() then
-		return drawRoundedBox(math.floor(w * 0.5), 0, 0, w, h, ColorAlpha(colors.accent, alphaDisabled))
+		colorBox = ColorAlpha(colors.accent, alphaDisabled)
 	end
 
 	if panel.Depressed then
-		return drawRoundedBox(math.floor(w * 0.5), 0, 0, w, h, colors.accentActive)
+		colorBox = colors.accentActive
 	end
 
 	if panel.Hovered then
-		return drawRoundedBox(math.floor(w * 0.5), 0, 0, w, h, colors.accentHover)
+		colorBox = colors.accentHover
 	end
 
-	return drawRoundedBox(math.floor(w * 0.5), 0, 0, w, h, colors.accent)
+	drawRoundedBox(math.floor(w * 0.5), 0, 0, w, h, colorBox)
 end
 
 function SKIN:PaintNumSliderTTT2(panel, w, h)
+	local colorBox = colors.settingsBox
+	local colorHandle = colors.handle
+	local colorLineActive = colors.accent
+	local colorLinePassive = colors.sliderInactive
 	local pad = 5
 
 	if not panel:IsEnabled() then
-		drawBox(0, 0, w, h, ColorAlpha(colors.settingsBox, alphaDisabled))
-		drawRoundedBox(sizes.cornerRadius, 1, 1, w - 2, h - 2, ColorAlpha(colors.handle, alphaDisabled))
-
-		-- draw selection line
-		drawBox(5, 0.5 * h - 1, w - 2 * pad, 2, ColorAlpha(colors.sliderInactive, alphaDisabled))
-		drawBox(5, 0.5 * h - 1, (w - pad) * panel:GetFraction() - pad, 2, ColorAlpha(colors.accent, alphaDisabled))
-	else
-		drawBox(0, 0, w, h, colors.settingsBox)
-		drawRoundedBox(sizes.cornerRadius, 1, 1, w - 2, h - 2, colors.handle)
-
-		-- draw selection line
-		drawBox(5, 0.5 * h - 1, w - 2 * pad, 2, colors.sliderInactive)
-		drawBox(5, 0.5 * h - 1, (w - pad) * panel:GetFraction() - pad, 2, colors.accent)
+		colorBox = ColorAlpha(colors.settingsBox, alphaDisabled)
+		colorHandle = ColorAlpha(colors.handle, alphaDisabled)
+		colorLineActive = ColorAlpha(colors.accent, alphaDisabled)
+		colorLinePassive = ColorAlpha(colors.sliderInactive, alphaDisabled)
 	end
+
+	drawBox(0, 0, w, h, colorBox)
+	drawRoundedBox(sizes.cornerRadius, 1, 1, w - 2, h - 2, colorHandle)
+
+	-- draw selection line
+	drawBox(5, 0.5 * h - 1, w - 2 * pad, 2, colorLinePassive)
+	drawBox(5, 0.5 * h - 1, (w - pad) * panel:GetFraction() - pad, 2, colorLineActive)
 end
 
 function SKIN:PaintSliderTextAreaTTT2(panel, w, h)
+	local colorBox = colors.settingsBox
+	local colorText = colors.settingsText
+
 	if not panel:IsEnabled() then
-		drawBox(0, 0, w, h, ColorAlpha(colors.settingsBox, alphaDisabled))
-		drawSimpleText(
-			panel:GetText(),
-			panel:GetFont(),
-			0.5 * w,
-			0.5 * h,
-			ColorAlpha(colors.settingsText, alphaDisabled),
-			TEXT_ALIGN_CENTER,
-			TEXT_ALIGN_CENTER
-		)
-	else
-		drawBox(0, 0, w, h, colors.settingsBox)
-		drawSimpleText(
-			panel:GetText(),
-			panel:GetFont(),
-			0.5 * w,
-			0.5 * h,
-			colors.settingsText,
-			TEXT_ALIGN_CENTER,
-			TEXT_ALIGN_CENTER
-		)
+		colorBox = ColorAlpha(colors.settingsBox, alphaDisabled)
+		colorText = ColorAlpha(colors.settingsText, alphaDisabled)
 	end
+
+	drawBox(0, 0, w, h, colorBox)
+	drawSimpleText(
+		panel:GetText(),
+		panel:GetFont(),
+		0.5 * w,
+		0.5 * h,
+		colorText,
+		TEXT_ALIGN_CENTER,
+		TEXT_ALIGN_CENTER
+	)
 end
 
 function SKIN:PaintBinderPanelTTT2(panel, w, h)
+	local colorBox = colors.settingsBox
+
 	if not panel:IsEnabled() then
-		drawBox(0, 0, w, h, ColorAlpha(colors.settingsBox, alphaDisabled))
-	else
-		drawBox(0, 0, w, h, colors.settingsBox)
+		colorBox = ColorAlpha(colors.settingsBox, alphaDisabled)
 	end
+
+	drawBox(0, 0, w, h, colorBox)
 end
 
---[[---------------------------------------------------------
-	ComboBox
------------------------------------------------------------]]
-local function DrawComboBox(w, h, panel, sizeCornerRadius, colorBox, colorText)
-	drawRoundedBox(sizeCornerRadius, 1, 1, w - 2, h - 2, colorBox)
+function SKIN:PaintComboBoxTTT2(panel, w, h)
+	local colorBox = colors.settingsBox
+	local colorHandle = colors.handle
+	local colorText = utilGetChangedColor(utilGetDefaultColor(colors.handle), 50)
+
+	if not panel:IsEnabled() then
+		colorBox = ColorAlpha(colors.settingsBox, alphaDisabled)
+		colorHandle = ColorAlpha(utilGetActiveColor(colors.handle), alphaDisabled)
+		colorText = ColorAlpha(colorText, alphaDisabled)
+	end
+
+	if panel.Depressed or panel:IsMenuOpen() then
+		colorHandle = utilGetHoverColor(colors.handle)
+	end
+
+	if panel.Hovered then
+		colorHandle = utilGetActiveColor(colors.handle)
+	end
+
+	drawBox(0, 0, w, h, colorBox)
+	drawRoundedBox(sizes.cornerRadius, 1, 1, w - 2, h - 2, colorHandle)
 	drawSimpleText(
 		TryT(panel:GetText()),
 		panel:GetFont(),
@@ -739,34 +669,6 @@ local function DrawComboBox(w, h, panel, sizeCornerRadius, colorBox, colorText)
 		TEXT_ALIGN_LEFT,
 		TEXT_ALIGN_CENTER
 	)
-end
-
-function SKIN:PaintComboBoxTTT2(panel, w, h)
-	local colorText = utilGetChangedColor(utilGetDefaultColor(colors.handle), 50)
-
-	if not panel:IsEnabled() then
-		drawBox(0, 0, w, h, ColorAlpha(colors.settingsBox, alphaDisabled))
-		DrawComboBox(w, h, panel, sizes.cornerRadius, ColorAlpha(utilGetActiveColor(colors.handle), alphaDisabled), ColorAlpha(colorText, alphaDisabled))
-
-		return
-	end
-
-	if panel.Depressed or panel:IsMenuOpen() then
-		drawBox(0, 0, w, h, colors.settingsBox)
-		DrawComboBox(w, h, panel, sizes.cornerRadius, utilGetHoverColor(colors.handle), colorText)
-
-		return
-	end
-
-	if panel.Hovered then
-		drawBox(0, 0, w, h, colors.settingsBox)
-		DrawComboBox(w, h, panel, sizes.cornerRadius, utilGetHoverColor(colors.handle), colorText)
-
-		return
-	end
-
-	drawBox(0, 0, w, h, colors.settingsBox)
-	DrawComboBox(w, h, panel, sizes.cornerRadius, colors.handle, colorText)
 end
 
 -- REGISTER DERMA SKIN

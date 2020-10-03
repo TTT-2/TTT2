@@ -77,7 +77,7 @@ HELPSCRN.padding = 5
 -- define sizes
 local width, height = 1100, 700
 local cols = 3
-local widthMainMenuButton = math.Round((width - 2 * HELPSCRN.paddingding * (cols + 1)) / cols)
+local widthMainMenuButton = math.Round((width - 2 * HELPSCRN.padding * (cols + 1)) / cols)
 local heightMainMenuButton = 120
 
 local widthNav, heightNav = 300, 700
