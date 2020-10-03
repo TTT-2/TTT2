@@ -10,7 +10,7 @@ local function PopulateHUDPanel(parent)
 
 	for i = 1, #hudList do
 		validHUDsDefault[i] = hudList[i].id
-		validHUDsRestriction[#validHUDsRestriction + 1] = hudList[i].id
+		validHUDsRestriction[i + 1] = hudList[i].id
 	end
 
 	form:MakeHelp({
