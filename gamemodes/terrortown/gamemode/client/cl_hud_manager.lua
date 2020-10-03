@@ -172,6 +172,7 @@ function HUDManager.ResetHUD()
 	if not hud then return end
 
 	hud:Reset()
+	hud:SaveData()
 end
 
 ---
