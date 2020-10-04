@@ -425,7 +425,7 @@ L.hstation_name   = "Health Station(回復ステーション)"
 L.hstation_subtitle = "[{usekey}]で回復する."
 L.hstation_charge = "Health Stationの残りエネルギー: {charge}"
 L.hstation_empty = "Health Stationにはもうエネルギーが残っておりません."
-L.hstation_maxhealth = "体力は満タンですよ.
+L.hstation_maxhealth = "体力は満タンですよ."
 L.hstation_short_desc = "Health Stationは時間経過とともにゆっくりとチャージします."
 
 L.hstation_broken = "あなたのHealth Stationは破壊されました!"
