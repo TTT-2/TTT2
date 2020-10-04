@@ -800,6 +800,34 @@ function CreateChanges()
 		</ul>
 	]], os.time({year = 2020, month = 08, day = 09}))
 
+	AddChange("TTT2 Base - v0.7.4b", [[
+		<h2>New:</h2>
+		<ul>
+			<li>Added ConVar to toggle double-click buying</li>
+			<li>Added Japanese translation (by @Westoon)</li>
+			<li>Added <i>table.ExtractRandomEntry(tbl, filterFn)</i> function</li>
+			<li>Added a team indicator in front of every name in the scoreboard (just known teams will be displayed)</li>
+			<li>Added a hook <i>TTT2ModifyCorpseCallRadarRecipients</i> that is called once "call detective" is pressed</li>
+		</ul>
+		<br>
+		<h2>Improved:</h2>
+		<ul>
+			<li>The weapon pickup system has been improved to increase stability and remove edge cases in temporary weapon teleportation</li>
+			<li>Updated Spanish translation (by @DennisWolfgang)</li>
+		</ul>
+		<br>
+		<h2>Fixed:</h2>
+		<ul>
+			<li>Fixed foregoing avatar fetch fix</li>
+			<li>Fixed HUD savingKeys variable not being unique across all HUDs</li>
+			<li>Fixed drawing web images, seamless web images and avatar images</li>
+			<li>Fixed correctly saving setting a bind to NONE, while a default is defined</li>
+			<li>Fixed a weapon pickup targetID bug where the +use key was displayed even though pickup has its own keybind</li>
+			<li>Fixed DNA scanner crash if using an old/different weapon base</li>
+			<li>Fixed rare initialization bug in the speed calculation when joining as a spectator</li>
+		</ul>
+	]], os.time({year = 2020, month = 09, day = 28}))
+
 	-- run hook for other addons to add their changelog as well
 	hook.Run("TTT2AddChange", changes, currentVersion)
 end
