@@ -40,13 +40,23 @@ function roleselection.LoadLayers()
 	for i = 1, #roleList do
 		local roleData = roleList[i]
 		local dataTable = {
-			["layer"] = 0,
-			["depth"] = 0
+			layer = 0,
+			depth = 0
 		}
 
 		local loaded, changed = SQL.Load(roleselection.sqltable, roleData.name, dataTable, roleselection.savingKeys)
 
 		if not loaded then
+			-- automatically put the Detective into the first layer if the layering system is initialized the first time
+			-- for that role (and there isn't any already existing layer) to keep the default TTT behavior
+			if roleData.index == ROLE_DETECTIVE and roleselection.baseroleLayers[1] == nil then
+				dataTable.layer = 1
+				dataTable.depth = 1
+
+				roleselection.baseroleLayers[1] = {}
+				roleselection.baseroleLayers[1][1] = roleData.index
+			end
+
 			SQL.Init(roleselection.sqltable, roleData.name, dataTable, roleselection.savingKeys)
 		elseif changed then
 			if dataTable.layer == 0 or dataTable.depth == 0 then continue end -- if (0, 0), exclude from layering
