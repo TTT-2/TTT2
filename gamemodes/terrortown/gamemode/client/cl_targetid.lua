@@ -313,8 +313,8 @@ function GM:HUDDrawTargetID()
 			desc = {}
 		},
 		refPosition = {
-			x = math.Round(0.5 * ScrW() / GLAPP.GetGlobalScale(), 0),
-			y = math.Round(0.5 * ScrH() / GLAPP.GetGlobalScale(), 0) + 42
+			x = math.Round(0.5 * ScrW() / appearance.GetGlobalScale(), 0),
+			y = math.Round(0.5 * ScrH() / appearance.GetGlobalScale(), 0) + 42
 		}
 	}
 
