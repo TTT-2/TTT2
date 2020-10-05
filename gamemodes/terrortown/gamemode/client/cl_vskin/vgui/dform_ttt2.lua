@@ -447,7 +447,7 @@ derma.DefineControl("DFormTTT2", "", PANEL, "DCollapsibleCategoryTTT2")
 -- @param string name The name of the collapsable form,
 -- can be a language identifier
 -- @realm client
-function CreateForm(parent, name)
+function CreateTTT2Form(parent, name)
 	local form = vgui.Create("DFormTTT2", parent)
 
 	form:SetName(name)
