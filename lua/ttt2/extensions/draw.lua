@@ -18,6 +18,14 @@ local shadowColorWhite = Color(0, 0, 0, 75)
 
 local materialBlurScreen = Material("pp/blurscreen")
 
+local function GetShadowColor(color)
+	local tmpCol = color.r + color.g + color.b > 200 and tableCopy(colorShadowDark) or tableCopy(colorShadowBright)
+
+	tmpCol.a = mathRound(tmpCol.a * (color.a / 255))
+
+	return tmpCol
+end
+
 ---
 -- A function to draw an outlined box with a definable width
 -- @param number x The x position of the rectangle
