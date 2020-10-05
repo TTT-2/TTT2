@@ -22,13 +22,13 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Added
 
 - Added ConVar to toggle double-click buying
-
-### Changed
-
 - Added Japanese translation (by @Westoon)
 - Added `table.ExtractRandomEntry(tbl, filterFn)` function
 - Added a team indicator in front of every name in the scoreboard (just known teams will be displayed)
 - Added a hook `TTT2ModifyCorpseCallRadarRecipients` that is called once "call detective" is pressed
+
+### Changed
+
 - The weapon pickup system has been improved to increase stability and remove edge cases in temporary weapon teleportation
 - Updated Spanish translation (by @DennisWolfgang)
 
