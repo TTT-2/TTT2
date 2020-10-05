@@ -194,7 +194,7 @@ function HELPSCRN:BuildContentArea()
 
 	if not IsValid(parent) then return end
 
-	if hook.Run("TTT2OnSubMenuClear", self.parent, self.currentMenuId, self.lastMenuData, self.menuData) == false then return end
+	if hook.Run("TTT2OnSubMenuClear", parent, self.currentMenuId, self.lastMenuData, self.menuData) == false then return end
 
 	parent:Clear()
 
