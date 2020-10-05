@@ -13,11 +13,10 @@ local table = table
 local IsValid = IsValid
 local hook = hook
 
-local minimalist = CreateClientConVar("ttt_minimal_targetid", "0", FCVAR_ARCHIVE)
-local cv_draw_halo = CreateClientConVar("ttt_entity_draw_halo", "1", true, false)
-local enable_spectatorsoutline = CreateClientConVar("ttt2_enable_spectatorsoutline", "1", true, true)
-local enable_overheadicons = CreateClientConVar("ttt2_enable_overheadicons", "1", true, true)
-
+local cvMinimalisticTid = CreateClientConVar("ttt_minimal_targetid", "0", FCVAR_ARCHIVE)
+local cvDrawHalo = CreateClientConVar("ttt_entity_draw_halo", "1", true, false)
+local cvEnableSpectatorsoutline = CreateClientConVar("ttt2_cvEnableSpectatorsoutline", "1", true, true)
+local cvEnableOverheadicons = CreateClientConVar("ttt2_cvEnableOverheadicons", "1", true, true)
 local cvDeteOnlyConfirm = GetConVar("ttt2_confirm_detective_only")
 local cvDeteOnlyInspect = GetConVar("ttt2_inspect_detective_only")
 
@@ -143,7 +142,7 @@ function GM:PostDrawTranslucentRenderables(bDrawingDepth, bDrawingSkybox)
 	local client = LocalPlayer()
 	local plys = GetPlayers()
 
-	if client:Team() == TEAM_SPEC and enable_spectatorsoutline:GetBool() then
+	if client:Team() == TEAM_SPEC and cvEnableSpectatorsoutline:GetBool() then
 		cam.Start3D(EyePos(), EyeAngles())
 
 		for i = 1, #plys do
@@ -168,7 +167,7 @@ function GM:PostDrawTranslucentRenderables(bDrawingDepth, bDrawingSkybox)
 	end
 
 	-- OVERHEAD ICONS
-	if not enable_overheadicons:GetBool() then return end
+	if not cvEnableOverheadicons:GetBool() then return end
 
 	for i = 1, #plys do
 		local ply = plys[i]
@@ -334,7 +333,7 @@ function GM:HUDDrawTargetID()
 	hook.Run("TTTRenderEntityInfo", tData)
 
 	-- draws an outline around the entity if defined
-	if params.drawOutline and cv_draw_halo:GetBool() then
+	if params.drawOutline and cvDrawHalo:GetBool() then
 		outline.Add(
 			data.ent,
 			appearance.SelectFocusColor(params.outlineColor),
@@ -418,10 +417,10 @@ function GM:HUDDrawTargetID()
 
 	drawsc.AdvancedShadowedText(subtitle_string, "TargetID_Subtitle", subtitle_string_x, subtitle_string_y, params.displayInfo.subtitle.color, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 
-	-- in minimalist mode, no descriptions should be shown
+	-- in cvMinimalisticTid mode, no descriptions should be shown
 	local desc_line_amount, desc_line_h = 0, 0
 
-	if not minimalist:GetBool() then
+	if not cvMinimalisticTid:GetBool() then
 		-- draw description text
 		local desc_lines = params.displayInfo.desc
 
@@ -902,7 +901,7 @@ function HUDDrawTargetIDRagdolls(tData)
 
 	-- add icon to the element
 	tData:AddIcon(
-		role_found and role.iconMaterial or icon_corpse,
+		role_found and role.iconMaterial or materialCorpse,
 		role_found and role.color or COLOR_YELLOW
 	)
 
