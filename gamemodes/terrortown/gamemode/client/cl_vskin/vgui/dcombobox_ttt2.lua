@@ -54,14 +54,7 @@ end
 
 function PANEL:GetOptionTextByData(data)
 	for id, dat in pairs(self.data) do
-		if dat ~= data then continue end
-
-		return self:GetOptionText(id)
-	end
-
-	-- Try interpreting it as a number
-	for id, dat in pairs(self.data) do
-		if dat ~= tonumber(data) then continue end
+		if dat ~= data and dat ~= tonumber(data) then continue end
 
 		return self:GetOptionText(id)
 	end
