@@ -170,10 +170,13 @@ end
 HELPSCRN.Show = HELPSCRN.ShowMainMenu
 
 ---
--- Returns the name of the currently opened menu
--- @return string The id of the opened menu
+-- Returns the name of the currently opened menu, returns nil if no menu is opened
+-- @return string The id of the opened menu or nil
 -- @realm client
 function HELPSCRN:GetOpenMenu()
+	-- `self.menuData.id` is not reset on close of the menu, therefore it has to be
+	-- checked if a menu is open at all. This is done by checking if `self.currentMenuId ~= nil`
+	-- since this variable is set to `nil` once the menu is closed
 	return self.currentMenuId and self.menuData.id
 end
 
