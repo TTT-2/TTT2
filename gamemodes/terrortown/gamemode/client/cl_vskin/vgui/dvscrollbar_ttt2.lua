@@ -82,12 +82,12 @@ function PANEL:SetScroll(scrll)
 
 	self:InvalidateLayout()
 
-	local func = self:GetParent().OnVScroll
+	local parent = self:GetParent()
 
-	if func then
-		func(self:GetParent(), self:GetOffset())
+	if isfunction(parent.OnVScroll) then
+		parent:OnVScroll(self:GetOffset())
 	else
-		self:GetParent():InvalidateLayout()
+		parent:InvalidateLayout()
 	end
 end
 
@@ -151,11 +151,7 @@ function PANEL:OnCursorMoved()
 
 	local _, y = self:ScreenToLocal(0, gui.MouseY())
 
-	y = y - self.holdPos
-
-	local trackSize = self:GetTall() - self.btnGrip:GetTall()
-
-	y = y / trackSize
+	y = (y - self.holdPos) / (self:GetTall() - self.btnGrip:GetTall()))
 
 	self:SetScroll(y * self.canvasSize)
 end
@@ -176,13 +172,9 @@ end
 function PANEL:PerformLayout()
 	local wide = self:GetWide()
 
-	local scroll = self:GetScroll() / self.canvasSize
+	local track = self:GetTall() - barSize + 1
+	local scroll = self:GetScroll() / self.canvasSize * track
 	local barSize = math.max(self:BarScale() * self:GetTall(), 10)
-	local track = self:GetTall() - barSize
-
-	track = track + 1
-
-	scroll = scroll * track
 
 	self.btnGrip:SetPos(0, scroll)
 	self.btnGrip:SetSize(wide, barSize)

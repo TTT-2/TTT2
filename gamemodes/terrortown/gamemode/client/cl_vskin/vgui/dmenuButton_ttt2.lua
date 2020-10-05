@@ -1,4 +1,3 @@
-
 local PANEL = {}
 
 AccessorFunc(PANEL, "m_bBorder", "DrawBorder", FORCE_BOOL)

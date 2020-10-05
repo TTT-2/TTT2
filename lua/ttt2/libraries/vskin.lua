@@ -68,7 +68,7 @@ end
 function vskin.GetVSkinList()
 	local names = {}
 
-	for name, _ in pairs(vskin.skins) do
+	for name in pairs(vskin.skins) do
 		names[#names + 1] = name
 	end
 

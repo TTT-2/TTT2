@@ -13,6 +13,7 @@ local function PopulateLanguagePanel(parent)
 
 	-- since these are no simple strings, the choices have to be added manually
 	dlang:AddChoice("Server default", "auto")
+
 	for _, lang in pairs(LANG.GetLanguages()) do
 		dlang:AddChoice(string.Capitalize(lang), lang)
 	end

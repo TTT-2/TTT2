@@ -1,4 +1,3 @@
-
 local PANEL = {}
 
 DEFINE_BASECLASS("DCollapsibleCategoryTTT2")
@@ -11,7 +10,7 @@ local materialReset = Material("vgui/ttt/vskin/icon_reset")
 local materialDisable = Material("vgui/ttt/vskin/icon_disable")
 
 function PANEL:Init()
-	self.Items = {}
+	self.items = {}
 
 	self:SetSpacing(4)
 	self:SetPadding(10)
@@ -27,13 +26,15 @@ function PANEL:SetName(name)
 end
 
 function PANEL:Clear()
-	for k, v in pairs(self.Items) do
-		if IsValid(v) then
-			v:Remove()
-		end
+	for i = 1, #self.items do
+		local item = self.items[i]
+
+		if not IsValid(item) then continue end
+
+		item:Remove()
 	end
 
-	self.Items = {}
+	self.items = {}
 end
 
 function PANEL:AddItem(left, right, reset)
@@ -65,7 +66,7 @@ function PANEL:AddItem(left, right, reset)
 		left:Dock(TOP)
 	end
 
-	self.Items[#self.Items + 1] = panel
+	self.items[#self.items + 1] = panel
 end
 
 function PANEL:Rebuild()
@@ -271,6 +272,11 @@ function PANEL:MakeComboBox(data)
 	return right, left
 end
 
+---
+-- Adds a binder to the form
+-- @param table data The data for the binder
+-- @return @{Panel}, @{Panel} The created binder, The created label
+-- @realm client
 function PANEL:MakeBinder(data)
 	local left = vgui.Create("DLabelTTT2", self)
 

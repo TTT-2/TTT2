@@ -72,7 +72,7 @@ end
 -- @param number oldScrH The old screen height
 -- @hook
 -- @ref https://wiki.facepunch.com/gmod/GM:OnScreenSizeChanged
--- @ream client
+-- @realm client
 function GM:OnScreenSizeChanged(oldScrW, oldScrH)
 	-- resolution has changed, update resolution in appearance
 	-- to handle dynamic resolution changes

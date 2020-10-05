@@ -71,8 +71,10 @@ function appearance.SetGlobalScale(scale)
 
 	cv_scale:SetFloat(scale)
 
-	for i = 1, #appearance.callbacks do
-		appearance.callbacks[i](oldScale, scale)
+	local appearanceCallbacks = appearance.callbacks
+
+	for i = 1, #appearanceCallbacks do
+		appearanceCallbacks[i](oldScale, scale)
 	end
 end
 
@@ -85,7 +87,7 @@ end
 
 ---
 -- Returns the default global scale based on the current
--- screen resolution
+-- screen resolution in reference to a 1080p based design
 -- @return number The scale as a floating point value
 function appearance.GetDefaultGlobalScale()
 	return math.Round(ScrW() / 1920, 1)

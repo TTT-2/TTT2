@@ -55,18 +55,20 @@ end
 function PANEL:UnselectAll()
 	local children = self:GetChildren()
 
-	for k, v in pairs(children) do
-		if v.SetSelected then
-			v:SetSelected(false)
-		end
+	for i = 1, #children do
+		local child = children[i]
+
+		if not isfunction(child.SetSelected) then continue end
+
+		child:SetSelected(false)
 	end
 end
 
 function PANEL:UpdateAltLines()
 	local children = self:GetChildren()
 
-	for k, v in pairs(children) do
-		v.AltLine = k % 2 ~= 1
+	for i = 1, #children do
+		children[i].AltLine = i % 2 ~= 1
 	end
 end
 
@@ -110,18 +112,7 @@ end
 
 function PANEL:Toggle()
 	self:SetExpanded(not self:GetExpanded())
-
 	self:InvalidateLayout(true)
-	self:GetParent():InvalidateLayout()
-	self:GetParent():GetParent():InvalidateLayout()
-
-	local open = "1"
-
-	if not self:GetExpanded() then
-		open = "0"
-	end
-
-	self:SetCookie("Open", open)
 	self:OnToggle(self:GetExpanded())
 end
 
@@ -175,15 +166,6 @@ function PANEL:OnMousePressed(mcode)
 	if not self:GetParent().OnMousePressed then return end
 
 	return self:GetParent():OnMousePressed(mcode)
-end
-
-function PANEL:LoadCookies()
-	local open = self:GetCookieNumber("Open", 1) == 1
-
-	self:SetExpanded(open)
-	self:InvalidateLayout(true)
-	self:GetParent():InvalidateLayout()
-	self:GetParent():GetParent():InvalidateLayout()
 end
 
 function PANEL:GenerateExample(ClassName, PropertySheet, Width, Height)

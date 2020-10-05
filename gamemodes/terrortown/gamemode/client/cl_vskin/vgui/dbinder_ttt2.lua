@@ -27,7 +27,7 @@ function PANEL:DoClick()
 
 	input.StartKeyTrapping()
 
-	self.Trapping = true
+	self.trapping = true
 end
 
 function PANEL:DoRightClick()
@@ -43,7 +43,7 @@ function PANEL:SetSelectedNumber(iNum)
 end
 
 function PANEL:Think()
-	if input.IsKeyTrapping() and self.Trapping then
+	if input.IsKeyTrapping() and self.trapping then
 		local code = input.CheckKeyTrapping()
 
 		if code then
@@ -53,7 +53,7 @@ function PANEL:Think()
 				self:SetValue(code)
 			end
 
-			self.Trapping = false
+			self.trapping = false
 		end
 
 	end

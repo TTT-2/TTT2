@@ -1,4 +1,3 @@
-
 local PANEL = {}
 
 AccessorFunc(PANEL, "m_fDefaultValue", "DefaultValue")
@@ -43,6 +42,7 @@ function PANEL:Init()
 
 			return
 		end
+
 		self.Slider:OnMousePressed(mcode)
 	end
 

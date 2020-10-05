@@ -30,11 +30,11 @@ local function CreateEditOptions(x, y)
 
 	local editClose = menu:AddOption(LANG.GetTranslation("button_close"))
 	editClose.OnMousePressed = function(slf, keyCode)
+		menu:Remove()
+
 		if not HELPSCRN.menuFrame then return end
 
 		HELPSCRN.menuFrame:ShowFrame()
-
-		menu:Remove()
 	end
 
 	-- Open the menu

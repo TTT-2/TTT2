@@ -11,6 +11,21 @@ function PANEL:Init()
 		self:UpdateSlaves(val)
 	end
 
+	local oldSetEnabled = self.SetEnabled
+
+	self.SetEnabled = function(slf, enabled)
+		oldSetEnabled(slf, enabled)
+
+		slf.Button:SetEnabled(enabled)
+
+		-- make sure sub-slaves are updated as well
+		if not enabled then
+			slf:UpdateSlaves(false)
+		else
+			slf:UpdateSlaves(slf.Button:GetChecked())
+		end
+	end
+
 	self:SetFont("DermaTTT2Text")
 
 	-- store slaves in here to be updates on change of this value
@@ -27,19 +42,6 @@ function PANEL:Paint(w, h)
 	derma.SkinHook("Paint", "CheckBoxLabel", self, w, h)
 
 	return true
-end
-
-function PANEL:SetEnabled(enabled)
-	self:SetDisabled(not enabled)
-
-	self.Button:SetEnabled(enabled)
-
-	-- make sure sub-slaves are updated as well
-	if not enabled then
-		self:UpdateSlaves(false)
-	else
-		self:UpdateSlaves(self.Button:GetChecked())
-	end
 end
 
 function PANEL:SetConVar(cvar)

@@ -161,7 +161,7 @@ local function PopulateHUDSwitcherPanel(parent)
 	end
 end
 
-hook.Add("TTT2HUDUpdated", "UpdateHUDSwitcherData", function(name)
+hook.Add("TTT2HUDUpdated", "UpdateHUDSwitcherData", function()
 	if HELPSCRN:GetOpenMenu() ~= "ttt2_appearance_hud_switcher" then return end
 
 	-- rebuild the content area so that data is refreshed

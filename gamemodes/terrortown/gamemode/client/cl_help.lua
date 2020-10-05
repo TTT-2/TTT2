@@ -51,6 +51,7 @@ local function InternalModifyMainMenu(helpData)
 
 	for i = 1, #mainMenuAdminOrder do
 		local id = mainMenuAdminOrder[i]
+
 		HELPSCRN.populate[id](helpData, id)
 	end
 end
@@ -187,14 +188,16 @@ end
 -- Builds the content area, the data has to be set previously
 -- @realm client
 function HELPSCRN:BuildContentArea()
-	if not IsValid(self.parent) then return end
+	local parent = self.parent
 
-	if hook.Run("TTT2OnSubmenuClear", self.parent, self.currentMenuId, self.lastMenuData, self.menuData) == false then return end
+	if not IsValid(parent) then return end
 
-	self.parent:Clear()
+	if hook.Run("TTT2OnSubMenuClear", self.parent, self.currentMenuId, self.lastMenuData, self.menuData) == false then return end
 
-	local width2, height2 = self.parent:GetSize()
-	local _, paddingTop, _, paddingBottom = self.parent:GetDockPadding()
+	parent:Clear()
+
+	local width2, height2 = parent:GetSize()
+	local _, paddingTop, _, paddingBottom = parent:GetDockPadding()
 
 	-- CALCULATE SIZE BASED ON EXISTENCE OF BUTTON PANEL
 	if isfunction(self.menuData.populateButtonFn) then
@@ -202,7 +205,7 @@ function HELPSCRN:BuildContentArea()
 	end
 
 	-- ADD CONTENT BOX AND CONTENT
-	local contentAreaScroll = vgui.Create("DScrollPanelTTT2", self.parent)
+	local contentAreaScroll = vgui.Create("DScrollPanelTTT2", parent)
 	contentAreaScroll:SetVerticalScrollbarEnabled(true)
 	contentAreaScroll:SetSize(width2, height2 - paddingTop - paddingBottom)
 	contentAreaScroll:Dock(TOP)
@@ -213,7 +216,7 @@ function HELPSCRN:BuildContentArea()
 
 	-- ADD BUTTON BOX AND BUTTONS
 	if isfunction(self.menuData.populateButtonFn) then
-		local buttonArea = vgui.Create("DButtonPanelTTT2", self.parent)
+		local buttonArea = vgui.Create("DButtonPanelTTT2", parent)
 		buttonArea:SetSize(width2, heightButtonPanel)
 		buttonArea:Dock(BOTTOM)
 
@@ -289,29 +292,26 @@ function HELPSCRN:ShowSubMenu(data)
 		labelNoContent:SetSize(widthContent - 40, 50)
 		labelNoContent:SetFont("DermaTTT2Title")
 		labelNoContent:SetPos(20, 0)
-	end
+	else
+		for i = 1, #menuTbl do
+			local subData = menuTbl[i]
 
-	for i = 1, #menuTbl do
-		local subData = menuTbl[i]
+			local settingsButton = navAreaScrollGrid:Add("DSubMenuButtonTTT2")
+			settingsButton:SetSize(widthNavButton, heightNavButton)
+			settingsButton:SetTitle(subData.title or subData.id)
 
-		local settingsButton = navAreaScrollGrid:Add("DSubMenuButtonTTT2")
-		settingsButton:SetSize(widthNavButton, heightNavButton)
-		settingsButton:SetTitle(subData.title or subData.id)
+			settingsButton.DoClick = function(slf)
+				HELPSCRN:SetupContentArea(contentArea, menuTbl[i])
+				HELPSCRN:BuildContentArea()
 
-		settingsButton.DoClick = function(slf)
-			HELPSCRN:SetupContentArea(contentArea, menuTbl[i])
-			HELPSCRN:BuildContentArea()
+				-- handle the set/unset of active buttons for the draw process
+				lastActive:SetActive(false)
+				slf:SetActive()
 
-			-- handle the set/unset of active buttons for the draw process
-			lastActive:SetActive(false)
-			slf:SetActive()
-
-			lastActive = slf
+				lastActive = slf
+			end
 		end
-	end
 
-	-- autoselect first entry
-	if #menuTbl >= 1 then
 		HELPSCRN:SetupContentArea(contentArea, menuTbl[1])
 		HELPSCRN:BuildContentArea()
 
@@ -360,6 +360,6 @@ concommand.Add("ttt_helpscreen", ShowTTTHelp)
 -- @param table menuData The menu data of the menu that will be opened
 -- @hook
 -- @realm client
-function GM:TTT2OnSubmenuClear(parent, currentMenuId, lastMenuData, menuData)
+function GM:TTT2OnSubMenuClear(parent, currentMenuId, lastMenuData, menuData)
 
 end

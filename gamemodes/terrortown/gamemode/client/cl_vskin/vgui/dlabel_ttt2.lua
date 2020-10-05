@@ -1,4 +1,3 @@
-
 local PANEL = {}
 
 AccessorFunc(PANEL, "m_colText", "TextColor")
@@ -10,8 +9,6 @@ AccessorFunc(PANEL, "m_bAutoStretchVertical", "AutoStretchVertical", FORCE_BOOL)
 AccessorFunc(PANEL, "m_bIsMenuComponent", "IsMenu", FORCE_BOOL)
 
 AccessorFunc(PANEL, "m_bBackground", "PaintBackground", FORCE_BOOL)
-AccessorFunc(PANEL, "m_bBackground", "DrawBackground", FORCE_BOOL) -- deprecated, see line above
-AccessorFunc(PANEL, "m_bDisabled", "Disabled", FORCE_BOOL) -- deprecated, use SetEnabled/IsEnabled isntead
 
 AccessorFunc(PANEL, "m_bIsToggle", "IsToggle", FORCE_BOOL)
 AccessorFunc(PANEL, "m_bToggle", "Toggle", FORCE_BOOL)
@@ -23,7 +20,7 @@ AccessorFunc(PANEL, "m_bHighlight", "Highlight", FORCE_BOOL)
 function PANEL:Init()
 	self:SetIsToggle(false)
 	self:SetToggle(false)
-	self:SetDisabled(false)
+	self:SetEnabled(true)
 	self:SetMouseInputEnabled(false)
 	self:SetKeyboardInputEnabled(false)
 	self:SetDoubleClickingEnabled(true)
@@ -60,11 +57,7 @@ function PANEL:GetColor()
 end
 
 function PANEL:UpdateFGColor()
-	local col = self:GetTextStyleColor()
-
-	if self:GetTextColor() then
-		col = self:GetTextColor()
-	end
+	local col = self:GetTextColor() or self:GetTextStyleColor()
 
 	if not col then return end
 
@@ -78,17 +71,18 @@ function PANEL:Toggle()
 	self:OnToggled(self:GetToggle())
 end
 
-function PANEL:SetDisabled(bDisabled)
-	self.m_bDisabled = bDisabled
+function PANEL:SetEnabled(bEnabled)
+	self.m_bEnabled = bEnabled
+
 	self:InvalidateLayout()
 end
 
-function PANEL:SetEnabled(bEnabled)
-	self:SetDisabled(not bEnabled)
+function PANEL:IsEnabled()
+	return self.m_bEnabled
 end
 
-function PANEL:IsEnabled()
-	return not self:GetDisabled()
+function PANEL:GetDisabled()
+	return not self:IsEnabled()
 end
 
 function PANEL:UpdateColours(skin)
@@ -176,9 +170,7 @@ function PANEL:OnMouseReleased(mousecode)
 		self:InvalidateLayout(true)
 	end
 
-	--
 	-- If we were being dragged then don't do the default behaviour!
-	--
 	if self:DragMouseRelease(mousecode) then return end
 
 	if self:IsSelectable() and mousecode == MOUSE_LEFT then

@@ -1,4 +1,3 @@
-
 local PANEL = {}
 
 AccessorFunc(PANEL, "m_bIsMenuComponent", "IsMenu", FORCE_BOOL)
@@ -64,11 +63,7 @@ end
 function PANEL:HideFrame()
 	if self:IsFrameHidden() then return end
 
-	if isfunction(self.OnHide) then
-		local shouldCancel = self:OnHide() == false
-
-		if shouldCancel then return end
-	end
+	if isfunction(self.OnHide) and self:OnHide() == false then return end
 
 	self.panelData.hidden = true
 	self.panelData.deleteOnClose = self:GetDeleteOnClose()
@@ -83,11 +78,7 @@ end
 function PANEL:ShowFrame()
 	if not self:IsFrameHidden() then return end
 
-	if isfunction(self.OnShow) then
-		local shouldCancel = self:OnShow() == false
-
-		if shouldCancel then return end
-	end
+	if isfunction(self.OnShow) and self:OnShow() == false then return end
 
 	self.panelData.hidden = false
 
@@ -111,11 +102,7 @@ end
 -- @param[opt] string title The new title
 -- @realm client
 function PANEL:ClearFrame(w, h, title)
-	if isfunction(self.OnClear) then
-		local shouldCancel = self:OnClear() == false
-
-		if shouldCancel then return end
-	end
+	if isfunction(self.OnClear) and self:OnClear() == false then return end
 
 	local oldW, oldH = self:GetSize()
 	local oldTitle = self:GetTitle()
@@ -269,11 +256,7 @@ function PANEL:Center()
 end
 
 function PANEL:IsActive()
-	if self:HasFocus() then
-		return true
-	end
-
-	if vgui.FocusedHasParent(self) then
+	if self:HasFocus() or vgui.FocusedHasParent(self) then
 		return true
 	end
 
@@ -281,39 +264,39 @@ function PANEL:IsActive()
 end
 
 function PANEL:Think()
-	local mousex = math.Clamp(gui.MouseX(), 1, ScrW() - 1)
-	local mousey = math.Clamp(gui.MouseY(), 1, ScrH() - 1)
+	local scrW = ScrW()
+	local scrH = ScrH()
+	local mousex = math.Clamp(gui.MouseX(), 1, scrW - 1)
+	local mousey = math.Clamp(gui.MouseY(), 1, scrH - 1)
 
-	if self.Dragging then
-		local x = mousex - self.Dragging[1]
-		local y = mousey - self.Dragging[2]
+	if self.dragging then
+		local x = mousex - self.dragging[1]
+		local y = mousey - self.dragging[2]
 
 		-- Lock to screen bounds if screenlock is enabled
-		if (self:GetScreenLock()) then
-
-			x = math.Clamp(x, 0, ScrW() - self:GetWide())
-			y = math.Clamp(y, 0, ScrH() - self:GetTall())
-
+		if self:GetScreenLock() then
+			x = math.Clamp(x, 0, scrW - self:GetWide())
+			y = math.Clamp(y, 0, scrH - self:GetTall())
 		end
 
 		self:SetPos(x, y)
 	end
 
-	if self.Sizing then
-		local x = mousex - self.Sizing[1]
-		local y = mousey - self.Sizing[2]
+	if self.sizing then
+		local x = mousex - self.sizing[1]
+		local y = mousey - self.sizing[2]
 		local px, py = self:GetPos()
 
 		if x < self.m_iMinWidth then
 			x = self.m_iMinWidth
-		elseif x > ScrW() - px and self:GetScreenLock() then
-			x = ScrW() - px
+		elseif x > scrW - px and self:GetScreenLock() then
+			x = scrW - px
 		end
 
 		if y < self.m_iMinHeight then
 			y = self.m_iMinHeight
-		elseif y > ScrH() - py and self:GetScreenLock() then
-			y = ScrH() - py
+		elseif y > scrH - py and self:GetScreenLock() then
+			y = scrH - py
 		end
 
 		self:SetSize(x, y)
@@ -358,7 +341,7 @@ function PANEL:OnMousePressed()
 	local screenX, screenY = self:LocalToScreen(0, 0)
 
 	if self.m_bSizable and gui.MouseX() > (screenX + self:GetWide() - 20) and gui.MouseY() > (screenY + self:GetTall() - vskin.GetHeaderHeight()) then
-		self.Sizing = {
+		self.sizing = {
 			gui.MouseX() - self:GetWide(),
 			gui.MouseY() - self:GetTall()
 		}
@@ -369,20 +352,18 @@ function PANEL:OnMousePressed()
 	end
 
 	if self:GetDraggable() and gui.MouseY() < (screenY + vskin.GetHeaderHeight()) then
-		self.Dragging = {
+		self.dragging = {
 			gui.MouseX() - self.x,
 			gui.MouseY() - self.y
 		}
 
 		self:MouseCapture(true)
-
-		return
 	end
 end
 
 function PANEL:OnMouseReleased()
-	self.Dragging = nil
-	self.Sizing = nil
+	self.dragging = nil
+	self.sizing = nil
 	self:MouseCapture(false)
 end
 

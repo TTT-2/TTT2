@@ -3,8 +3,9 @@ local materialBack = Material("vgui/ttt/vskin/icon_back")
 local materialCollapseOpened = Material("vgui/ttt/vskin/icon_collapse_opened")
 local materialCollapseClosed = Material("vgui/ttt/vskin/icon_collapse_closed")
 
-local SKIN = {}
-SKIN.Name = "ttt2_default"
+local SKIN = {
+	Name = "ttt2_default"
+}
 
 local TryT = LANG.TryTranslation
 
