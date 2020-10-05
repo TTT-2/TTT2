@@ -4,11 +4,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ## Unreleased
 
-## [v0.7.4b](https://github.com/TTT-2/TTT2/tree/v0.7.4b) (2020-09-28)
-
 ### Added
 
-- Added ConVar to toggle double-click buying
 - Added a new vgui system
   - introduced new development interfaces to easily create menues and settings for addons
 - Introduced a global scale factor based on screen resolution to scale HUD elements accordingly
@@ -19,13 +16,19 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - the F1 menu is completely overhauled
 - Cleaned up language files, they are now identical on a line by line comparison
 - Inverted some convars to have a uniform "Enable feature X", not a mixture of enable and disable
+
+## [v0.7.4b](https://github.com/TTT-2/TTT2/tree/v0.7.4b) (2020-09-28)
+
+### Added
+
+- Added ConVar to toggle double-click buying
+
+### Changed
+
 - Added Japanese translation (by @Westoon)
 - Added `table.ExtractRandomEntry(tbl, filterFn)` function
 - Added a team indicator in front of every name in the scoreboard (just known teams will be displayed)
 - Added a hook `TTT2ModifyCorpseCallRadarRecipients` that is called once "call detective" is pressed
-
-### Changed
-
 - The weapon pickup system has been improved to increase stability and remove edge cases in temporary weapon teleportation
 - Updated Spanish translation (by @DennisWolfgang)
 
