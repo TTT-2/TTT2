@@ -231,6 +231,11 @@ function PANEL:ShowBackButton(bShow)
 	self.btnBack:SetVisible(bShow)
 end
 
+--- 
+-- Sets a callback function that is called when 
+-- when the back button is clicked
+-- @param function fn The callback function
+-- @realm client
 function PANEL:RegisterBackFunction(fn)
 	self.btnBack.DoClick = fn
 end
