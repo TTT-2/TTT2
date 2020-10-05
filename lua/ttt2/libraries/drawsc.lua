@@ -20,6 +20,7 @@ local drawOutlinedShadowedCircle = draw.OutlinedShadowedCircle
 local drawFilteredTexture = draw.FilteredTexture
 local drawFilteredShadowedTexture = draw.FilteredShadowedTexture
 local drawAdvancedText = draw.AdvancedText
+local drawBlurredBox = draw.BlurredBox
 
 drawsc = {}
 
@@ -201,4 +202,19 @@ function drawsc.AdvancedShadowedText(text, font, x, y, color, xalign, yalign)
 	local scale = GetGlobalScale()
 
 	drawAdvancedText(text, font, mRound(x * scale), mRound(y * scale), color, xalign, yalign, true, scale)
+end
+
+---
+-- Draws a box that uses the remaining screenspace as a blurred background.
+-- @param number x The vertical position
+-- @param number y The horizontal position
+-- @param number w width The width in reference to the vertical position
+-- @param number h height The height in reference to the horizontal position
+-- @param[default=1] number fraction The blur fraction. The higher, the blurrier
+-- @2D
+-- @realm client
+function drawsc.BlurredBox(x, y, w, h, fraction)
+	local scale = GetGlobalScale()
+
+	drawBlurredBox(mRound(x * scale), mRound(y * scale), mRound(w * scale), mRound(h * scale), fraction)
 end
