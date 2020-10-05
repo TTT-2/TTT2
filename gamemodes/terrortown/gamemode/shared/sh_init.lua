@@ -534,6 +534,11 @@ include("ttt2/extensions/draw.lua")
 -- include libraries
 include("ttt2/libraries/fonts.lua")
 include("ttt2/libraries/drawsc.lua")
+include("ttt2/extensions/draw.lua")
+
+include("ttt2/libraries/appearance.lua")
+include("ttt2/libraries/vguihandler.lua")
+include("ttt2/libraries/vskin.lua")
 include("ttt2/libraries/fileloader.lua")
 include("ttt2/libraries/door.lua")
 include("ttt2/libraries/thermalvision.lua")

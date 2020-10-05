@@ -51,10 +51,3 @@ function WEPS.DisguiseToggle(ply)
 	end
 end
 concommand.Add("ttt_toggle_disguise", WEPS.DisguiseToggle)
-
-if CLIENT then
-	bind.Register("ttt2_disguiser_toggle", function()
-		WEPS.DisguiseToggle(LocalPlayer())
-	end,
-	nil, "TTT2 Bindings", "label_bind_disguiser", KEY_PAD_ENTER)
-end

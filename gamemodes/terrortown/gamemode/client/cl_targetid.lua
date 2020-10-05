@@ -13,10 +13,11 @@ local table = table
 local IsValid = IsValid
 local hook = hook
 
-local disable_spectatorsoutline = CreateClientConVar("ttt2_disable_spectatorsoutline", "0", true, true)
-local disable_overheadicons = CreateClientConVar("ttt2_disable_overheadicons", "0", true, true)
 local minimalist = CreateClientConVar("ttt_minimal_targetid", "0", FCVAR_ARCHIVE)
 local cv_draw_halo = CreateClientConVar("ttt_entity_draw_halo", "1", true, false)
+local enable_spectatorsoutline = CreateClientConVar("ttt2_enable_spectatorsoutline", "1", true, true)
+local enable_overheadicons = CreateClientConVar("ttt2_enable_overheadicons", "1", true, true)
+
 local cvDeteOnlyConfirm = GetConVar("ttt2_confirm_detective_only")
 local cvDeteOnlyInspect = GetConVar("ttt2_inspect_detective_only")
 
@@ -142,7 +143,7 @@ function GM:PostDrawTranslucentRenderables(bDrawingDepth, bDrawingSkybox)
 	local client = LocalPlayer()
 	local plys = GetPlayers()
 
-	if client:Team() == TEAM_SPEC and not disable_spectatorsoutline:GetBool() then
+	if client:Team() == TEAM_SPEC and enable_spectatorsoutline:GetBool() then
 		cam.Start3D(EyePos(), EyeAngles())
 
 		for i = 1, #plys do
@@ -167,7 +168,7 @@ function GM:PostDrawTranslucentRenderables(bDrawingDepth, bDrawingSkybox)
 	end
 
 	-- OVERHEAD ICONS
-	if disable_overheadicons:GetBool() then return end
+	if not enable_overheadicons:GetBool() then return end
 
 	for i = 1, #plys do
 		local ply = plys[i]
@@ -334,7 +335,11 @@ function GM:HUDDrawTargetID()
 
 	-- draws an outline around the entity if defined
 	if params.drawOutline and cv_draw_halo:GetBool() then
-		outline.Add(data.ent, params.outlineColor, OUTLINE_MODE_VISIBLE)
+		outline.Add(
+			data.ent,
+			appearance.SelectFocusColor(params.outlineColor),
+			OUTLINE_MODE_VISIBLE
+		)
 	end
 
 	if not params.drawInfo then return end
