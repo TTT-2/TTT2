@@ -69,6 +69,7 @@ function PANEL:AddItem(left, right, reset)
 	self.items[#self.items + 1] = panel
 end
 
+-- overwrites the base function with an empty function
 function PANEL:Rebuild()
 
 end

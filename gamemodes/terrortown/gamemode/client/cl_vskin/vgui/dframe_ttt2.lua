@@ -250,6 +250,7 @@ function PANEL:Close()
 	self:OnClose()
 end
 
+-- overwrites the base function with an empty function
 function PANEL:OnClose()
 
 end
