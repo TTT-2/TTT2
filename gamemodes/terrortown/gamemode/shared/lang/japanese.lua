@@ -6,7 +6,7 @@ local L = LANG.CreateLanguage("日本語")
 L.traitor    = "Traitor"
 L.detective  = "Detective"
 L.innocent   = "Innocent"
-L.last_words = "最期の言葉"
+L.last_words = "遺言"
 
 L.terrorists = "テロリスト"
 L.spectators = "観戦者"
@@ -38,9 +38,9 @@ L.win_innocents     = "Traitorは倒されました!"
 L.win_bees = "蜂が勝ちました! (つまり引き分け)"
 L.win_showreport   = "さあ{num}秒の間ラウンドレポートを見てみましょう."
 
-L.limit_round      = "ラウンドリミットに達しました. {mapname}がすぐにロードされるでしょう."
-L.limit_time       = "タイムリミットに達しました. {mapname}がすぐにロードされるでしょう."
-L.limit_left       = "{mapname}にマップ変更するまで{num}ラウンドないし{time}分残っています."
+L.limit_round      = "ラウンドリミットに達しました. 次のマップにすぐにロードされるでしょう."
+L.limit_time       = "タイムリミットに達しました. 次のマップにすぐにロードされるでしょう."
+L.limit_left       = "マップ変更するまで{num}ラウンドないし{time}分残っています."
 
 --- Credit awards
 L.credit_all    = "あなたは任務遂行のために{num}クレジットを与えられました."
@@ -1089,9 +1089,9 @@ L.aw_tod2_text  = "はラウンド開始してすぐに死亡しました."
 --- version in which they were added, to make updating translations easier.
 
 
---- v23
-L.set_avoid_det     = "Detectiveに選択されることを避ける"
-L.set_avoid_det_tip = "有効にすると可能であればサーバーはあなたを探偵に選択しなくなります. あなたがTraitorなら大抵は意味がありません."
+-- v23
+L.set_avoid = "{role}になることを避ける."
+L.set_avoid_tip = "切り替えるとサーバーが{role}になることをなるべく避けてくれます."
 
 --- v24
 L.drop_no_ammo = "弾薬箱として捨てるのに十分な武器のクリップ内の弾がありません."
