@@ -32,9 +32,7 @@ local function CreateEditOptions(x, y)
 	editClose.OnMousePressed = function(slf, keyCode)
 		menu:Remove()
 
-		if not HELPSCRN.menuFrame then return end
-
-		HELPSCRN.menuFrame:ShowFrame()
+		HELPSCRN:Unhide()
 	end
 
 	-- Open the menu

@@ -339,6 +339,15 @@ function HELPSCRN:ShowSubMenu(data)
 	end
 end
 
+---
+-- Unhides the helpscreen if it was hidden.
+-- @realm client
+function HELPSCRN:Unhide()
+	if not self.menuFrame or not self.menuFrame:IsFrameHidden() then return end
+
+	self.menuFrame:ShowFrame()
+end
+
 local function ShowTTTHelp(ply, cmd, args)
 	-- F1 PRESSED: CLOSE MAIN MENU IF MENU IS ALREADY OPENED
 	if HELPSCRN.currentMenuId == MAIN_MENU and IsValid(HELPSCRN.menuFrame) and not HELPSCRN.menuFrame:IsFrameHidden() then
