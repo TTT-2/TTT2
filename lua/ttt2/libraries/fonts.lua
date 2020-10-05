@@ -18,7 +18,7 @@ fonts.fonts = {}
 fonts.scales = {1, 1.5, 2, 2.5}
 
 ---
--- Gets the scale modifer based on a given scale
+-- Gets the scale modifer based on a given scale.
 -- @param number scale The font scale
 -- @return number The font scale
 -- @internal
@@ -41,7 +41,7 @@ function fonts.GetScaleModifier(scale)
 end
 
 ---
--- Adds a font to the font list
+-- Adds a font to the font list.
 -- @param string name The name of the font
 -- @param [default=13]number baseSize The basesize of this font
 -- @param table fontData
@@ -56,7 +56,6 @@ function fonts.AddFont(name, baseSize, fontData)
 		local scale = fonts.scales[i]
 		local nameScaled = scale == 1 and name or name .. tostring(scale)
 
-		--create font
 		fontData.size = scale * baseSize
 
 		surface.CreateFont(nameScaled, fontData)
@@ -65,10 +64,19 @@ function fonts.AddFont(name, baseSize, fontData)
 	end
 end
 
+---
+-- Returns a specified font.
+-- @param string name The font name
+-- @return table A table of the font with different scales
+-- @reaöm client
 function fonts.GetFont(name)
 	return fonts.fonts[name]
 end
 
+---
+-- Returns a table of all font scales.
+-- @return table A table of all font scales
+-- @realm client
 function fonts.GetScales()
 	return fonts.scales
 end

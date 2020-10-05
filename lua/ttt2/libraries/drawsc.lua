@@ -8,13 +8,6 @@ AddCSLuaFile()
 
 if SERVER then return end
 
--- TODO REMOVE PLACEHOLDER!
-GLAPP = {}
-function GLAPP.GetGlobalScale()
-	return 2
-end
--- REMOVE END
-
 local GetGlobalScale = GLAPP.GetGlobalScale
 
 local mRound = math.Round
