@@ -2,9 +2,30 @@
 -- @desc A collection of objects that are passed in the menu populate hooks.
 -- @author Mineotopia
 
-HELP_MENU_DATA = {}
+menuDataHandler = {}
 
+local HELP_MENU_DATA = {}
 local HELP_MENU_DATA_OBJECT = {}
+local HELP_SUB_MENU_DATA = {}
+local HELP_SUB_MENU_DATA_OBJECT = {}
+
+---
+-- Registers and returns a new help menu data object
+-- @return HELP_MENU_DATA A new instance of help menu data
+-- @realm client
+-- @internal
+function menuDataHandler.CreateNewHelpMenu()
+	return table.Copy(HELP_MENU_DATA)
+end
+
+---
+-- Registers and returns a new help sub menu data object
+-- @return HELP_MENU_DATA A new instance of help sub menu data
+-- @realm client
+-- @internal
+function menuDataHandler.CreateNewHelpSubMenu()
+	return table.Copy(HELP_SUB_MENU_DATA)
+end
 
 ---
 -- Binds data table to the @{HELP_MENU_DATA} object
@@ -14,8 +35,6 @@ local HELP_MENU_DATA_OBJECT = {}
 -- @realm client
 function HELP_MENU_DATA:BindData(menuTbl)
 	self.menuTbl = menuTbl or {}
-
-	return self
 end
 
 ---
@@ -152,11 +171,6 @@ function HELP_MENU_DATA_OBJECT:RegisterOnClickCallback(fn)
 	self.onClickFn = fn
 end
 
-
-HELP_SUB_MENU_DATA = {}
-
-local HELP_SUB_MENU_DATA_OBJECT = {}
-
 ---
 -- Binds data table to the @{HELP_SUB_MENU_DATA} object
 -- @param table data The data table with all navigation points
@@ -165,8 +179,6 @@ local HELP_SUB_MENU_DATA_OBJECT = {}
 -- @realm client
 function HELP_SUB_MENU_DATA:BindData(menuTbl)
 	self.menuTbl = menuTbl or {}
-
-	return self
 end
 
 ---

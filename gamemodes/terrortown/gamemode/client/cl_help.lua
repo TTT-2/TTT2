@@ -142,7 +142,9 @@ function HELPSCRN:ShowMainMenu()
 
 	-- GENERATE MENU CONTENT
 	local menuTbl = {}
-	local helpData = HELP_MENU_DATA:BindData(menuTbl)
+	local helpData = menuDataHandler.CreateNewHelpMenu()
+
+	helpData:BindData(menuTbl)
 
 	InternalModifyMainMenu(helpData)
 
@@ -277,7 +279,9 @@ function HELPSCRN:ShowSubMenu(data)
 
 	-- GENERATE MENU CONTENT
 	local menuTbl = {}
-	local helpData = HELP_SUB_MENU_DATA:BindData(menuTbl)
+	local helpData = menuDataHandler.CreateNewHelpSubMenu()
+
+	helpData:BindData(menuTbl)
 
 	InternalModifySubMenu(helpData, data.id)
 
