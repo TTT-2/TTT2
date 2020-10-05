@@ -43,8 +43,7 @@ L.limit_time       = "タイムリミットに達しました. {mapname}がす�
 L.limit_left       = "{mapname}にマップ変更するまで{num}ラウンドないし{time}分残っています."
 
 --- Credit awards
-L.credit_det_all   = "Detectiveさん, あなたは任務遂行のために{num}クレジットを与えられました."
-L.credit_tr_all    = "Traitorさん, あなたは任務遂行のために{num}クレジットを与えられました."
+L.credit_all    = "あなたは任務遂行のために{num}クレジットを与えられました."
 
 L.credit_kill      = "あなたは{role}を始末したため{num}クレジットを受け取りました."
 
@@ -55,10 +54,12 @@ L.karma_dmg_other  = "あなたのカルマは{amount}です. 結果としてあ
 --- Body identification messages
 L.body_found       = "{finder}は{victim}の死体を見つけました. {role}"
 
+L.body_found_team = "{finder}は{victim}の死体を見つけました.{role} ({team})"
+
 -- The {role} in body_found will be replaced by one of the following:
-L.body_found_t     = "彼はTraitorでした!"
-L.body_found_d     = "彼はDetectiveでした."
-L.body_found_i     = "彼はInnocentでした."
+L.body_found_traitor     = "彼はTraitorでした!"
+L.body_found_det     = "彼はDetectiveでした."
+L.body_found_inno     = "彼はInnocentでした."
 
 L.body_confirm     = "{finder}は{victim}の死を確認しました."
 
@@ -101,6 +102,8 @@ L.equip_spec_desc  = "説明"
 
 L.equip_confirm    = "装備品購入"
 
+L.equip_not_alive = "右から役職を選択し、使用可能なアイテムをすべて閲覧できます. お気に入り登録を忘れずに!"
+
 -- Disguiser tab in equipment menu
 L.disg_name      = "Disguiser(変装装置)"
 L.disg_menutitle = "Disguiseコントロール"
@@ -131,6 +134,13 @@ L.xfer_no_credits = "渡すクレジットが不足しています."
 L.xfer_success    = "クレジットの{player}への受け渡しを完了しました."
 L.xfer_received   = "{player}はあなたに{num}クレジットを渡しました."
 
+-- Reroll tab in equipment menu
+L.reroll_name = "リロール"
+L.reroll_menutitle = "リロールアイテム"
+L.reroll_no_credits = "あなたはリロールするのに{amount}個のクレジットが必要です!"
+L.reroll_button = "リロール"
+L.reroll_help = "{amount}個のクレジットでショップから新しいアイテムを受け取りましょう!"
+
 -- Radio tab in equipment menu
 L.radio_name      = "Radio(ラジオ)"
 L.radio_help      = "音を再生するためにボタンをクリックしましょう."
@@ -157,8 +167,8 @@ L.intro_help     = "このゲームは始めてですか? F1を押すとイン�
 -- Radiocommands/quickchat
 L.quick_title   = "クイックチャットキー"
 
-L.quick_yes     = "わかった."
-L.quick_no      = "ダメだ."
+L.quick_yes     = "はい."
+L.quick_no      = "いいえ."
 L.quick_help    = "助けてくれ!"
 L.quick_imwith  = "{player}と一緒にいるぞ."
 L.quick_see     = "{player}を見ているぞ."
@@ -166,6 +176,9 @@ L.quick_suspect = "{player}が怪しい動きをしているぞ."
 L.quick_traitor = "{player}はTraitorだ!"
 L.quick_inno    = "{player}はInnocentだな."
 L.quick_check   = "まだ生きている奴はいるか?"
+
+L.radio_pickup_wrong_team = "別の陣営のラジオを拾うことはできません."
+L.radio_short_desc = "銃声は私にとっては音楽だ"
 
 -- {player} in the quickchat text normally becomes a player nickname, but can
 -- also be one of the below.  Keep these lowercase.
@@ -184,9 +197,9 @@ L.search_call   = "Detectiveを呼ぶ"
 -- Descriptions of pieces of information found
 L.search_nick   = "これは{player}の死体だ."
 
-L.search_role_t = "こいつはTraitorだった!"
-L.search_role_d = "こいつはDetectiveだった."
-L.search_role_i = "こいつはInnocentだった."
+L.search_role_traitor = "こいつはTraitorだった!"
+L.search_role_det = "こいつはDetectiveだった."
+L.search_role_inno = "こいつはInnocentだった."
 
 L.search_words  = "こいつの最期の言葉:'{lastwords}'は俺に何を教えるのか."
 L.search_armor  = "奴らは非標準のボディアーマーを着ている."
@@ -209,6 +222,7 @@ L.search_dmg_other  = "このテロリストの死因を特定できない."
 L.search_weapon = "{weapon}の扱いに慣れているようだな."
 L.search_head   = "致命的な傷はヘッドショットによるものだ. 叫ぶ間も無い."
 L.search_time   = "こいつは調査のおおよそ{time}秒前に死んだな."
+L.search_timefake = "こいつは調査の前におよそ15秒前に死んだな."
 L.search_dna    = "裏切り者のDNAサンプルをDNA scannerで回収しなくては. DNAサンプルは今からおおよそ{time}秒で腐敗するだろう."
 
 L.search_kills1 = "{player}の死を立証する殺害リストを見つけた."
@@ -219,6 +233,8 @@ L.search_eyes   = "Detectiveスキルを使用し, こいつの見た最後の�
 -- Scoreboard
 L.sb_playing    = "You are playing on..."
 L.sb_mapchange  = "マップ変更まで{num}ラウンドか{time}秒"
+
+L.sb_sortby = "Sort By:"
 
 L.sb_mia        = "行方不明"
 L.sb_confirmed  = "死亡確認"
@@ -268,6 +284,7 @@ L.set_fastswmenu_tip  = "高速武器スイッチ有効時でもスイッチメ�
 L.set_wswitch       = "武器スイッチメニューが自動で閉じるのを無効にする"
 L.set_wswitch_tip   = "デフォルトでは武器スイッチメニューはホイールスクロール後数秒で自動的に閉じます. 有効にするとメニューをそのままにします."
 L.set_cues          = "ラウンド開始時ないし終了時にサウンドキューを再生する"
+L.entity_draw_halo = "見ている時はいくつかのエンティティの周囲にアウトラインを描画する"
 
 
 L.set_title_play    = "ゲームプレイ設定"
@@ -282,7 +299,7 @@ L.set_title_lang    = "言語設定 (Language settings)"
 
 -- It may be best to leave this next one english, so english players can always
 -- find the language setting even if it's set to a language they don't know.
-L.set_lang          = "Select language:"
+L.set_lang          = "言語選択:"
 
 
 --- Weapons and equipment, HUD and messages
@@ -293,6 +310,9 @@ L.buy_pending     = "既にオーダーしています, 受け取りまでお待
 L.buy_received    = "特殊装備を受け取りました."
 
 L.drop_no_room    = "空きが無いので武器を捨ててください!"
+L.pickup_fail = "これは拾えません."
+L.pickup_no_room = "この種類の武器のインベントリに空きがありません!"
+L.pickup_pending = "あなたはすでに武器を所持しています、受け取るまでお待ちください."
 
 L.disg_turned_on  = "変装しました!"
 L.disg_turned_off = "変装をやめました."
@@ -307,7 +327,6 @@ L.item_armor_desc = [[
 銃によるダメージを30%減少させます.
 
 Detectivesは標準で装備しています.]]
-
 
 L.item_radar      = "Radar(レーダー)"
 L.item_radar_desc = [[
@@ -373,7 +392,8 @@ L.decoy_name      = "Decoy(囮)"
 L.decoy_no_room   = "あなたはこのDecoyを持つことができません."
 L.decoy_broken    = "あなたのDecoyは破壊されました!"
 
-L.decoy_help_pri  = "{primaryfire}でDecoyを設置する."
+L.decoy_short_desc = "Decoyは別陣営に偽のレーダー反応を示してくれます."
+L.decoy_pickup_wrong_team = "別陣営の物は拾えません."
 
 L.decoy_desc      = [[
 Detectiveに偽のレーダーサインを表示し,
@@ -397,11 +417,17 @@ L.flare_desc      = [[
 発見されないように死体を燃やすことができるようになります.
 弾は無限です.
 
-燃えている死体は異音を発します.]]
+燃えている死体は
+異音を発します.]]
 
 -- Health station
 L.hstation_name   = "Health Station(回復ステーション)"
-L.hstation_hint   = "{usekey}を押してヘルスを受け取る. チャージ: {num}."
+L.hstation_subtitle = "[{usekey}]で回復する."
+L.hstation_charge = "Health Stationの残りエネルギー: {charge}"
+L.hstation_empty = "Health Stationにはもうエネルギーが残っておりません."
+L.hstation_maxhealth = "体力は満タンですよ."
+L.hstation_short_desc = "Health Stationは時間経過とともにゆっくりとチャージします."
+
 L.hstation_broken = "あなたのHealth Stationは破壊されました!"
 L.hstation_help   = "{primaryfire}でHealth Stationを設置する."
 
@@ -411,7 +437,6 @@ L.hstation_desc   = [[
 リチャージは遅いです. 誰でも使用することができ,
 傷つけられることもあります. 使用者の
 DNAサンプルをチェックすることができます.]]
-
 
 -- Knife
 L.knife_name      = "Knife(ナイフ)"
@@ -465,15 +490,13 @@ L.binoc_desc      = [[
 遠く離れた距離から死体にズームインし彼らを
 確認できます.
 
-無制限で使用できますが, 確認には数秒かかります.]]
-
-
-L.binoc_help_pri  = "{primaryfire}で死体を確認する."
-L.binoc_help_sec  = "{secondaryfire}でズームレベルを変更する."
+無制限で使用できますが, 
+確認には数秒かかります.]]
 
 -- UMP
 L.ump_desc        = [[
-ターゲットを混乱させる実験的なSMGです.
+ターゲットを混乱させる
+実験的なSMGです.
 
 標準的なSMGの弾丸を使用します.]]
 
@@ -488,6 +511,10 @@ L.dna_no_killer   = "DNAは回収されることができません (殺害者は
 L.dna_armed       = "この爆弾は動いています! 早く解除してください!"
 L.dna_object      = "オブジェクトから{num}個の新しいDNAサンプルを入手しました."
 L.dna_gone        = "このエリアにDNA反応はありません."
+L.dna_tid_possible = "スキャン可能"
+L.dna_tid_impossible = "スキャン不可能"
+L.dna_screen_ready = "No DNA
+L.dna_screen_match = "Match
 
 L.dna_desc        = [[
 物からDNAサンプルを入手しそれらを使用してDNAの
@@ -495,25 +522,6 @@ L.dna_desc        = [[
 
 新鮮な死体に使用し殺害者のDNAを入手して彼らを
 追跡します.]]
-
-L.dna_menu_title  = "DNAスキャニングコントロール"
-L.dna_menu_sample = "DNAサンプルは{source}から見つけました."
-L.dna_menu_remove = "選択対象を削除"
-L.dna_menu_help1  = "これらはあなたが入手したDNAサンプルです."
-L.dna_menu_help2  = [[
-変更した際, あなたは選択したDNAサンプルの
-持ち主の場所をスキャンできます.
-距離のあるターゲットを発見するにはよりエネルギーを
-消耗します.]]
-
-L.dna_menu_scan   = "スキャン"
-L.dna_menu_repeat = "自動で繰り返す"
-L.dna_menu_ready  = "準備完了"
-L.dna_menu_charge = "チャージ中"
-L.dna_menu_select = "サンプルを選択"
-
-L.dna_help_primary   = "{primaryfire}でDNAサンプルを入手する"
-L.dna_help_secondary = "{secondaryfire}でスキャンコントロールを開く"
 
 -- Magneto stick
 L.magnet_name     = "Magneto-stick(マグネットスティック)"
@@ -590,31 +598,55 @@ L.karma_min    = "どうしようもない"
 
 -- TargetID misc
 L.corpse       = "死体"
-L.corpse_hint  = "{usekey}を押して調査する. {walkkey} + {usekey}で密かに調査する."
+L.corpse_hint  = "{usekey}を押して調査する. {walkkey} + {usekey}で密かに調べる."
+L.corpse_too_far_away = "その死体から遠すぎます."
+L.corpse_binoculars = "[{key}]でbinocularsを用いて調べる."
+L.corpse_searched_by_detective = "この死体は探偵により既に調べられています."
 
 L.target_disg  = " (変装中)"
 L.target_unid  = "誰かの死体"
 
-L.target_traitor = "仲間のTRAITOR"
-L.target_detective = "DETECTIVE"
-
 L.target_credits = "調べて未使用クレジットを入手する"
+
+L.target_c4 = "[{usekey}]でC4メニューを開く"
+L.target_c4_armed = "[{usekey}]でC4を解除する"
+L.target_c4_armed_defuser = "[{usekey}]でdefuserを使う"
+L.target_c4_not_disarmable = "生存しているチームメイトのC4を解除することはできません."
+L.c4_short_desc = "巨大な爆発を引き起こします."
+
+L.target_pickup = "[{usekey}]で拾う"
+L.target_slot_info = "スロット: {slot}"
+L.target_pickup_weapon = "[{usekey}]で武器を拾う"
+L.target_switch_weapon = "[{usekey}]で今持っている武器と交換する"
+L.target_pickup_weapon_hidden = ", [{usekey} + {walkkey}]で密かに拾う"
+L.target_switch_weapon_hidden = ", [{usekey} + {walkkey}]で密かに交換する"
+L.target_switch_weapon_nospace = "この武器を拾うためのインベントリに空きがありません."
+L.target_switch_drop_weapon_info = "{name}を{slot}から捨てる"
+L.target_switch_drop_weapon_info_noslot = "{slot}には捨てる武器はありません."
 
 -- Traitor buttons (HUD buttons with hand icons that only traitors can see)
 L.tbut_single  = "使いきり"
 L.tbut_reuse   = "再使用可能"
 L.tbut_retime  = "{num}秒後に再使用可能"
 L.tbut_help    = "{key}を押して起動"
-
--- Equipment info lines (on the left above the health/ammo panel)
-L.disg_hud     = "変装中. あなたの名前は隠されます."
-L.radar_hud    = "Radarの次のスキャンの準備ができるまで: {time}秒"
+L.tbut_help_admin = "traitor button設定変更"
+L.tbut_role_toggle = "[{walkkey} + {usekey}]で{role}に切り替える"
+L.tbut_role_config = "役職: {current}"
+L.tbut_team_toggle = "[SHIFT + {walkkey} + {usekey}]で{team}陣営に切り替える"
+L.tbut_team_config = "陣営: {current}"
+L.tbut_current_config = "一般の設定:"
+L.tbut_intended_config = "マップ制作者による意図された設定:"
+L.tbut_admin_mode_only = "あなたは管理者で'{cv}' が '1' に設定されているため、表示されるのは自分に対してのみです."
+L.tbut_allow = "許可"
+L.tbut_prohib = "禁止"
+L.tbut_default = "デフォルト"
 
 -- Spectator muting of living/dead
 L.mute_living  = "生存者をミュートしました"
 L.mute_specs   = "観戦者をミュートしました"
 L.mute_all     = "全てをミュートしました"
 L.mute_off     = "ミュートを解除しました"
+L.mute_team = "{team}をミュートしました"
 
 -- Spectators and prop possession
 L.punch_title  = "PUNCH-O-METER(パンチ・オー・メーター)"
@@ -623,6 +655,7 @@ L.punch_bonus  = "あなたの悪いスコアはpunch-o-meterのリミットを{
 L.punch_malus  = "あなたの良いスコアはpunch-o-meterのリミットを{num}上げました!"
 
 L.spec_help    = "クリックしてプレイヤーを観戦するか, {usekey}を押して物理オブジェクトに乗り移ります."
+L.spec_help2 = "観戦者モードを抜けるためには, {helpkey}でメニューを開き,'ゲーム設定'から観戦者モードを切り替えてください."
 
 --- Info popups shown when the round starts
 
@@ -777,7 +810,8 @@ L.report_save_result = "The Event Log has been saved to:"
 
 -- Big title window
 L.hilite_win_traitors = "THE TRAITORS WIN"
-L.hilite_win_innocent = "THE INNOCENT WIN"
+L.hilite_win_bees = "THE BEES WIN"
+L.hilite_win_innocents = "THE INNOCENT WIN"
 
 L.hilite_players1 = "{numplayers}人のプレイヤーが参加して, {numtraitors}人がTraitorでした"
 L.hilite_players2 = "{numplayers}人のプレイヤーが参加して, 彼らの1人がTraitorでした"
@@ -788,7 +822,8 @@ L.hilite_duration = "ラウンドは{time}秒で終わりました"
 L.col_time   = "時間"
 L.col_event  = "イベント"
 L.col_player = "プレイヤー"
-L.col_role   = "役割"
+L.col_role   = "役職"
+L.col_teams = "陣営"
 L.col_kills1 = "Innocent殺害数"
 L.col_kills2 = "Traitor殺害数"
 L.col_points = "ポイント"
@@ -848,8 +883,8 @@ L.ev_c4_disarm2  = "{player}は{owner}の設置したC4の解除に失敗しま�
 L.ev_credit      = "{finder}は{player}の死体から{num}クレジットを見つけました"
 
 L.ev_start       = "ラウンドを開始しました"
-L.ev_win_traitor = "卑劣なTraitor達はラウンドに勝利しました!"
-L.ev_win_inno    = "愛すべきInnocentのテロリスト達はラウンドに勝利しました!"
+L.ev_win_traitors = "卑劣なTraitor達はラウンドに勝利しました!"
+L.ev_win_innocents = "愛すべきInnocentのテロリスト達はラウンドに勝利しました!"
 L.ev_win_time    = "Traitor達は時間切れで敗北しました!"
 
 --- Awards/highlights
@@ -1060,6 +1095,7 @@ L.set_avoid_det_tip = "有効にすると可能であればサーバーはあな
 
 --- v24
 L.drop_no_ammo = "弾薬箱として捨てるのに十分な武器のクリップ内の弾がありません."
+L.drop_ammo_prevented = "弾薬箱を捨てるのに何かが阻んでいます."
 
 --- v31
 L.set_cross_brightness = "クロスヘアの明るさ"
