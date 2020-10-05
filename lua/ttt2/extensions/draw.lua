@@ -208,3 +208,183 @@ function draw.BlurredBox(x, y, w, h, fraction)
 		surface.DrawTexturedRect(x, y, ScrW(), ScrH())
 	end
 end
+
+---
+-- Draws a shadowed text on the screen.
+-- @2D
+-- @param string text The text to be drawn
+-- @param[default="DermaDefault"] nil|string font The font. See @{surface.CreateFont} to create your own,
+-- or see <a href="https://wiki.garrysmod.com/page/Default_Fonts">Default</a>
+-- Fonts for a list of default fonts
+-- @param number x The X Coordinate
+-- @param number y The Y Coordinate
+-- @param Color color The color of the text. Uses the Color structure.
+-- @param number xalign The alignment of the X coordinate using
+-- <a href="https://wiki.garrysmod.com/page/Enums/TEXT_ALIGN">TEXT_ALIGN_Enums</a>.
+-- @param number yalign The alignment of the Y coordinate using
+-- <a href="https://wiki.garrysmod.com/page/Enums/TEXT_ALIGN">TEXT_ALIGN_Enums</a>.
+-- @param number scale The scale (float number)
+-- @ref https://wiki.garrysmod.com/page/draw/SimpleText
+-- @realm client
+function draw.ShadowedText(text, font, x, y, color, xalign, yalign, scale)
+	scale = scale or 1.0
+
+	local tmpCol = GetShadowColor(color)
+
+	local shift1 = mathRound(scale)
+	local shift2 = mathRound(scale * 2)
+
+	drawSimpleText(text, font, x + shift2, y + shift2, tmpCol, xalign, yalign)
+	drawSimpleText(text, font, x + shift1, y + shift1, tmpCol, xalign, yalign)
+	drawSimpleText(text, font, x + shift1, y + shift1, tmpCol, xalign, yalign)
+	drawSimpleText(text, font, x, y, color, xalign, yalign)
+end
+
+local drawShadowedText = draw.ShadowedText
+
+---
+-- Draws an advanced text (scalable)
+-- @note You should use @{surface.CreateAdvancedFont} before trying to access the font
+-- @param string text The text to be drawn
+-- @param [default="DefaultBold"] string font The font. See @{surface.CreateAdvancedFont} to create your own. The original font should be always created, see @{surface.CreateFont}.
+-- @param number x The x coordinate
+-- @param number y The y coordinate
+-- @param Color color The color of the text. Uses the Color structure.
+-- @param number xalign The alignment of the x coordinate using
+-- <a href="https://wiki.garrysmod.com/page/Enums/TEXT_ALIGN">TEXT_ALIGN_Enums</a>.
+-- @param number yalign The alignment of the y coordinate using
+-- <a href="https://wiki.garrysmod.com/page/Enums/TEXT_ALIGN">TEXT_ALIGN_Enums</a>.
+-- @param boolean shadow whether there should be a shadow of the text
+-- @param number scale The scale (float number)
+-- @2D
+-- @realm client
+function draw.AdvancedText(text, font, x, y, color, xalign, yalign, shadow, scale)
+	local scaleModifier = 1.0
+	local t_font = fonts.GetFont(font)
+
+	if t_font then
+		scaleModifier = fonts.GetScaleModifier(scale)
+		font = t_font[scaleModifier]
+		scale = scale / scaleModifier
+	end
+
+	local scaled = isvector(scale) or scale ~= 1.0
+	local mat
+
+	if scaled then
+		local hw = ScrW() * 0.5
+		local hh = ScrH() * 0.5
+
+		mat = Matrix()
+		mat:Translate(Vector(x, y))
+		mat:Scale(isvector(scale) and scale or Vector(scale, scale, scale))
+		mat:Translate(-Vector(hw, hh))
+
+		render.PushFilterMag(TEXFILTER.LINEAR)
+		render.PushFilterMin(TEXFILTER.LINEAR)
+
+		cam.PushModelMatrix(mat)
+
+		x = hw
+		y = hh
+	end
+
+	if shadow then
+		drawShadowedText(text, font, x, y, color, xalign, yalign, scaleModifier)
+	else
+		drawSimpleText(text, font, x, y, color, xalign, yalign)
+	end
+
+	if scaled then
+		cam.PopModelMatrix(mat)
+
+		render.PopFilterMag()
+		render.PopFilterMin()
+	end
+end
+
+---
+-- Returns a list of lines to wrap the text matching the given width
+-- @param string text The text that should be wrapped
+-- @param number width The maximal width that the text is allowed to have
+-- @param [default="DefaultBold"]string font The font that should be used here
+-- @param number scale The UI scale factor
+-- @return table A table with the broken up lines
+-- @realm client
+function draw.GetWrappedText(text, width, font, scale)
+	-- Oh joy, I get to write my own wrapping function. Thanks Lua!
+	-- Splits a string into a table of strings that are under the given width.
+
+	scale = scale or 1.0
+	width = width / scale
+
+	if not text then
+		return {}, 0, 0
+	end
+
+	surface.SetFont(font or "DefaultBold")
+
+	-- Any wrapping required?
+	local w, h = surface.GetTextSize(text)
+
+	if w <= width then
+		return {text}, w, h -- Nope, but wrap in table for uniformity
+	end
+
+	local words = string.Explode(" ", text) -- No spaces means you're screwed
+	local lines = {""}
+
+	for i = 1, #words do
+		local wrd = words[i]
+
+		if i == 1 then
+			-- add the first word whether or not it matches the size to prevent
+			-- weird empty first lines and ' ' in front of the first line
+			lines[1] = wrd
+
+			continue
+		end
+
+		local lns = #lines
+		local added = lines[lns] .. " " .. wrd
+
+		w = surface.GetTextSize(added)
+
+		if w > width then
+			lines[lns + 1] = wrd -- New line needed
+		else
+			lines[lns] = added -- Safe to tack it on
+		end
+	end
+
+	local lns = #lines
+
+	-- get length of longest line
+	local length = 0
+
+	for i = 1, lns do
+		local line_w = surface.GetTextSize(lines[i])
+
+		if line_w > length then
+			length = line_w
+		end
+	end
+
+	-- get height of lines
+	local _, line_h = surface.GetTextSize(text)
+
+	return lines, length * scale, line_h * lns * scale
+end
+
+-- Returns the size of a inserted string
+-- @param string text The text that the length should be calculated
+-- @param [default="DefaultBold"] string font The font ID
+-- @warning This function changes the font to the passed font
+-- @return number, number w, h The size of the given text
+-- @2D
+-- @realm client
+function draw.GetTextSize(text, font)
+	surface.SetFont(font or "DefaultBold")
+
+	return surface.GetTextSize(text)
+end
