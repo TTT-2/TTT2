@@ -51,7 +51,7 @@ end
 -- Hides all registered and unhidden frames.
 -- @return table Returns a table of the frames that are now hidden
 -- @realm client
-function vguihandler.HideUnhiddenFrames()
+function vguihandler.HideFrames()
 	local frames = vguihandler.frames
 	local hiddenFrames = {}
 
@@ -72,7 +72,7 @@ end
 -- Unhides frames that are listed in a table.
 -- @param table A table of frames
 -- @realm client
-function vguihandler.UnhideFrames(frames)
+function vguihandler.ShowFrames(frames)
 	for i = 1, #frames do
 		local frame = frames[i]
 
@@ -85,7 +85,7 @@ end
 ---
 -- Unhides all frames that are currently registered and hidden.
 -- @realm client
-function vguihandler.UnhideAllFrames()
+function vguihandler.ShowAllFrames()
 	local frames = vguihandler.frames
 
 	for i = 1, #frames do
