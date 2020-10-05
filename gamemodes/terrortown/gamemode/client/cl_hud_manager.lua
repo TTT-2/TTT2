@@ -150,7 +150,7 @@ end
 
 ---
 -- Sets the @{HUD} (if possible)
--- @note This will fail if the @{HUD} is not available or is
+-- @note This will fail silently if the @{HUD} is not available or is
 -- restricted by the server
 -- @param string name The name of the HUD
 -- @realm client

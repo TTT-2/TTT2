@@ -37,7 +37,7 @@ end
 ---
 -- Checks if a menu with the given ID is already registered
 -- @param string id The unique menu identifier
--- @return boolean Returns if the identifier is already used
+-- @return boolean Return true if the identifier is already used
 -- @realm client
 function HELP_MENU_DATA:Exists(id)
 	for i = 1, #self.menuTbl do
@@ -135,8 +135,8 @@ function HELP_MENU_DATA_OBJECT:AdminOnly(adminOnly)
 end
 
 ---
--- Sets a callback function that can be used to descide at a
--- later point if a menu should be shown
+-- Sets a callback function that is called to check
+-- if a menu should be shown
 -- @param function fn The callback function
 -- @realm client
 function HELP_MENU_DATA_OBJECT:RegisterShouldShowCallback(fn)
@@ -188,7 +188,7 @@ end
 ---
 -- Checks if a submenu with the given ID is already registered
 -- @param string id The unique submenu identifier
--- @return boolean Returns if the identifier is already used
+-- @return boolean Return true if the identifier is already used
 -- @realm client
 function HELP_SUB_MENU_DATA:Exists(id)
 	for i = 1, #self.menuTbl do
@@ -227,8 +227,8 @@ end
 
 ---
 -- Callback function that is used to call code to populate
--- the button panel of a submenu, this panel is only created if
--- this callback function is set
+-- the button panel of a submenu
+-- @note The mentioned panel is only created if this callback function is set
 -- @param function fn The callback function
 -- @realm client
 function HELP_SUB_MENU_DATA_OBJECT:PopulateButtonPanel(fn)
@@ -236,8 +236,8 @@ function HELP_SUB_MENU_DATA_OBJECT:PopulateButtonPanel(fn)
 end
 
 ---
--- Sets a callback function that can be used to descide at a
--- later point if a submenu should be shown
+-- Sets a callback function that is called to check
+-- if a submenu should be shown
 -- @param function fn The callback function
 -- @realm client
 function HELP_SUB_MENU_DATA_OBJECT:RegisterShouldShowCallback(fn)

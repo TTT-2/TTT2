@@ -185,7 +185,7 @@ function draw.FilteredShadowedTexture(x, y, w, h, material, alpha, color, scale)
 end
 
 ---
--- Draws a box that uses the rendered screenspace as a blurred background.
+-- Draws a box that uses the remaining screenspace as a blurred background.
 -- @param number x The vertical position
 -- @param number y The horizontal position
 -- @param number w width The width in reference to the vertical position

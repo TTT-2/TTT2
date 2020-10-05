@@ -4,7 +4,7 @@
 
 AddCSLuaFile()
 
--- the rest of the appearce library is client only
+-- the rest of the appearance library is client only
 if SERVER then return end
 
 local cv_last_width = CreateConVar("ttt2_resolution_last_width", 1920, {FCVAR_ARCHIVE})
@@ -96,6 +96,8 @@ end
 ---
 -- Registers a callback function that is called once the scale
 -- is changed
+-- @param function fn The callback function 
+-- @realm client
 function appearance.RegisterScaleChangeCallback(fn)
 	if not isfunction(fn) or table.HasValue(appearance.callbacks, fn) then return end
 

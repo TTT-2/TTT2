@@ -53,6 +53,13 @@ function vskin.SelectVSkin(skinName)
 	return true
 end
 
+---
+-- This function is called after the skin is changed. It updates the color and
+-- sizes caching, while also calling @{GM:TTT2UpdatedVSkin}
+-- @params string oldSkinName The old skin name
+-- @params string skinName The new skin name
+-- @realm client
+-- @internal
 function vskin.UpdatedVSkin(oldSkinName, skinName)
 	-- run SKIN function to update color table
 	derma.GetSkinTable()["ttt2_default"]:UpdatedVSkin()

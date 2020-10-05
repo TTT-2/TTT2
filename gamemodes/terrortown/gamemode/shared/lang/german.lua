@@ -1213,7 +1213,6 @@ L.header_performance_settings = "Performance Einstellungen"
 L.header_interface_settings = "Anzeigeeinstellungen"
 L.header_gameplay_settings = "Spieleinstellungen"
 L.header_roleselection = "Aktierung Rollenzuweisung"
-
 L.header_hud_administration = "Wähle standard und erzwungene HUDs"
 L.header_hud_enabled = "De-/aktiviere HUDs"
 
