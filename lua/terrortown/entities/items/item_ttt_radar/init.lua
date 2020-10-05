@@ -1,39 +1,39 @@
 -- just server file
 
 local math = math
-local chargetime = 30
 
 local net = net
 local table = table
 local IsValid = IsValid
 local hook = hook
 
-local function GetSubRoleForRadar(ply, pl)
-	local subrole = -1
+local cv_radarCharge
 
-	if not pl:IsPlayer() then
-		-- Decoys appear as innocents for players from other teams
-		if pl:GetNWString("decoy_owner_team", "none") ~= ply:GetTeam() then
-			subrole = ROLE_INNOCENT
-		else
-			subrole = -1
-		end
-	else
-		local tmp = hook.Run("TTT2ModifyRadarRole", ply, pl)
+util.AddNetworkString("TTT2RadarUpdateAutoScan")
+util.AddNetworkString("TTT2RadarUpdateTime")
 
-		if tmp then
-			subrole = tmp
-		elseif not ply:HasTeam(TEAM_TRAITOR) then
-			subrole = ROLE_INNOCENT
-		else
-			subrole = (pl:IsInTeam(ply) or pl:GetSubRoleData().visibleForTraitors) and pl:GetSubRole() or ROLE_INNOCENT
-		end
-	end
+RADAR = RADAR or {}
 
-	return subrole
+function ITEM:Initialize()
+	cv_radarCharge = GetConVar("ttt2_radar_charge_time")
 end
 
-local function ttt_radar_scan(ply, cmd, args)
+local function UpdateTimeOnPlayer(ply)
+	if ply.lastRadarTime == ply.radarTime then return end
+
+	ply.lastRadarTime = ply.radarTime
+
+	net.Start("TTT2RadarUpdateTime")
+	net.WriteUInt(ply.radarTime, 8)
+	net.Send(ply)
+end
+
+---
+-- Triggers a new radar scan. Fails if the radar is still charging.
+-- @param Player ply The player whose radar is affected
+-- @internal
+-- @realm server
+function RADAR.TriggerRadarScan(ply)
 	if not IsValid(ply) or not ply:IsTerror() then return end
 
 	if not ply:HasEquipmentItem("item_ttt_radar") then
@@ -48,7 +48,11 @@ local function ttt_radar_scan(ply, cmd, args)
 		return
 	end
 
-	ply.radar_charge = CurTime() + chargetime
+	-- update radar time after the previous scan was finished
+	UpdateTimeOnPlayer(ply)
+
+	-- remove 0.1 seconds to account for rounding errors
+	ply.radar_charge = CurTime() + ply.radarTime - 0.1
 
 	local targets, customradar
 
@@ -66,36 +70,184 @@ local function ttt_radar_scan(ply, cmd, args)
 		table.Add(scan_ents, ents.FindByClass("ttt_decoy"))
 
 		for i = 1, #scan_ents do
-			local pl = scan_ents[i]
+			local ent = scan_ents[i]
 
-			if not IsValid(pl) or ply == pl or pl:IsPlayer() and (not pl:IsTerror() or pl:GetNWBool("disguised", false)) then continue end
+			if not IsValid(ent) or ply == ent or ent:IsPlayer() and (not ent:IsTerror() or ent:GetNWBool("disguised", false)) then continue end
 
-			local pos = pl:LocalToWorld(pl:OBBCenter())
+			local pos = ent:LocalToWorld(ent:OBBCenter())
 
 			-- Round off, easier to send and inaccuracy does not matter
 			pos.x = math.Round(pos.x)
 			pos.y = math.Round(pos.y)
 			pos.z = math.Round(pos.z)
 
-			local subrole = GetSubRoleForRadar(ply, pl)
-			local _tmp = {subrole = subrole, pos = pos}
-
-			targets[#targets + 1] = _tmp
+			targets[#targets + 1] = RADAR.CreateTargetTable(ply, pos, ent)
 		end
 	end
 
 	net.Start("TTT_Radar")
-	net.WriteUInt(#targets, 8)
+	net.WriteUInt(#targets, 16)
 
 	for i = 1, #targets do
 		local tgt = targets[i]
 
-		net.WriteUInt(tgt.subrole, ROLE_BITS)
 		net.WriteInt(tgt.pos.x, 32)
 		net.WriteInt(tgt.pos.y, 32)
 		net.WriteInt(tgt.pos.z, 32)
+
+		if tgt.subrole == -1 then
+			net.WriteBool(false)
+		else
+			net.WriteBool(true)
+			net.WriteUInt(tgt.subrole, ROLE_BITS)
+		end
+
+		net.WriteString(tgt.team or "none")
+
+		if tgt.color then
+			net.WriteBool(true)
+			net.WriteColor(tgt.color)
+		else
+			net.WriteBool(false)
+		end
 	end
 
 	net.Send(ply)
 end
-concommand.Add("ttt_radar_scan", ttt_radar_scan)
+concommand.Add("ttt_radar_scan", RADAR.TriggerRadarScan)
+
+---
+-- This hook can be used to modify the radar dots of players.
+-- @param Player ply The player that receives the radar information
+-- @param Player target The Player whose info should be changed
+-- @return number The modified role
+-- @return string The modified team
+-- @hook
+-- @realm server
+function GM:TTT2ModifyRadarRole(ply, target)
+
+end
+
+local function GetDataForRadar(ply, ent)
+	local subrole, team = -1, "none"
+
+	if not IsValid(ent) then
+		subrole = -1
+	elseif not ent:IsPlayer() then
+		-- Decoys appear as innocents for players from other teams
+		if ent:GetNWString("decoy_owner_team", "none") ~= ply:GetTeam() then
+			subrole = ROLE_INNOCENT
+		end
+	else
+		subrole, team = hook.Run("TTT2ModifyRadarRole", ply, ent)
+
+		if not subrole then
+			subrole = (ent:IsInTeam(ply) or table.HasValue(ent:GetSubRoleData().visibleForTeam, ply:GetTeam())) and ent:GetSubRole() or ROLE_INNOCENT
+		end
+
+		if not team then
+			team = (ent:IsInTeam(ply) or table.HasValue(ent:GetSubRoleData().visibleForTeam, ply:GetTeam())) and ent:GetTeam() or TEAM_INNOCENT
+		end
+	end
+
+	return subrole, team
+end
+
+---
+-- Creates a new radar point
+-- @param Player ply The player that will see this radar point
+-- @param Vector pos The position of the radar point
+-- @param[opt] Entity ent The entity that is used for this radar point
+-- @param[opt] Color color A color for this radar point, this overwrites the normal color
+-- @realm server
+function RADAR.CreateTargetTable(ply, pos, ent, color)
+	local subrole, team = GetDataForRadar(ply, ent)
+
+	return {
+		pos = pos,
+		subrole = subrole,
+		team = team,
+		color = color
+	}
+end
+
+---
+-- Sets up the timer for a new radar scan.
+-- @param Player ply The player whose radar is affected
+-- @internal
+-- @realm server
+function RADAR.SetupRadarScan(ply)
+	timer.Create("radarTimeout_" .. ply:SteamID64(), ply.radarTime, 1, function()
+		if not IsValid(ply) or not ply:HasEquipmentItem("item_ttt_radar")
+			or ply.radarDoesNotRepeat
+		then return end
+
+		RADAR.TriggerRadarScan(ply)
+		RADAR.SetupRadarScan(ply)
+	end)
+end
+
+---
+-- Inits the radar.
+-- Called when the radar is added to the player.
+-- @param Player ply The player who owens the radar
+-- @realm server
+function RADAR.Init(ply)
+	if not IsValid(ply) then return end
+
+	ply:ResetRadarTime()
+
+	RADAR.TriggerRadarScan(ply)
+	RADAR.SetupRadarScan(ply)
+end
+
+---
+-- Deinits the radar.
+-- Called when the radar is removed from the player.
+-- @param Player ply The player who owned the radar
+-- @realm server
+function RADAR.Deinit(ply)
+	if not IsValid(ply) then return end
+
+	timer.Remove("radarTimeout_" .. ply:SteamID64())
+end
+
+net.Receive("TTT2RadarUpdateAutoScan", function(_, ply)
+	if not IsValid(ply) then return end
+
+	ply.radarDoesNotRepeat = not net.ReadBool()
+end)
+
+local plymeta = assert(FindMetaTable("Player"), "FAILED TO FIND PLAYER TABLE")
+
+---
+-- Sets the radar time interval, lets the current scan run out before it is changed.
+-- @param number time The radar time interval
+-- @realm server
+function plymeta:SetRadarTime(time)
+	self.radarTime = time
+end
+
+---
+-- Sets the radar time interval to the role or convar default, lets the current scan run out before it is changed.
+-- @param number time The radar time interval
+-- @realm server
+function plymeta:ResetRadarTime()
+	self.radarTime = self:GetSubRoleData().radarTime or cv_radarCharge:GetInt()
+end
+
+---
+-- Forces a new radar scan, even when the radar is still charging. It is recommended to
+-- call this function after @{plymeta:SetRadarTime} to enforce an immediate change.
+-- @realm server
+function plymeta:ForceRadarScan()
+	if not self:HasEquipmentItem("item_ttt_radar") then return end
+
+	RADAR.Deinit(self)
+
+	-- reset the radar charge end time to now to allow a new scan
+	self.radar_charge = CurTime()
+
+	RADAR.TriggerRadarScan(self)
+	RADAR.SetupRadarScan(self)
+end

@@ -12,87 +12,60 @@ local IsValid = IsValid
 local table = table
 local timer = timer
 local hook = hook
-local CreateConVar = CreateConVar
 
 local IsEquipment = WEPS.IsEquipment
 
 local cv_auto_pickup = CreateConVar("ttt_weapon_autopickup", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY})
+local cv_ttt_detective_hats = CreateConVar("ttt_detective_hats", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+local crowbar_delay = CreateConVar("ttt2_crowbar_shove_delay", "1.0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
 -- Returns whether or not a @{Player} is allowed to pick up a @{Weapon}
 -- @note Prevent @{Player}s from picking up multiple @{Weapon}s of the same type etc
 -- @param Player ply The @{Player} attempting to pick up the @{Weapon}
 -- @param Weapon wep The @{Weapon} entity in question
+-- @param nil|number dropBlockingWeapon should the weapon stored in the same slot be dropped
 -- @return boolean Allowed pick up or not
+-- @return number errorCode
+-- 1 - Player is spectator
+-- 2 - Player already has the same weapon
+-- 3 - Player has no free slot available
+-- 4 - Player disabled autopickup and it's not a forced weapon pickup
+-- 5 - The weapon is a dropped equipment item and the Player didn't forced a pickup
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/PlayerCanPickupWeapon
+-- @ref https://wiki.facepunch.com/gmod/GM:PlayerCanPickupWeapon
 -- @local
-function GM:PlayerCanPickupWeapon(ply, wep)
+function GM:PlayerCanPickupWeapon(ply, wep, dropBlockingWeapon)
 	if not IsValid(wep) or not IsValid(ply) then return end
-
-	-- Flags should be reset no matter what happens afterwards --> cache them here
-	local cflag_giveItem, cflag_weaponSwitch = ply.wp__GiveItemFunctionFlag, wep.wp__WeaponSwitchFlag
-
-	ply.wp__GiveItemFunctionFlag = false
-	wep.wp__WeaponSwitchFlag = false
 
 	-- spectators are not allowed to pickup weapons
 	if ply:IsSpec() then
-		return false
+		return false, 1
 	end
 
 	-- prevent picking up weapons of the same class a player already has (for ammo if auto-pickup is enabled)
 	-- exception: this hook is called to check if a player can pick up weapon while dropping
 	-- the current weapon
-	if ply:HasWeapon(WEPS.GetClass(wep)) and not cflag_weaponSwitch then
-		return false
+	if not dropBlockingWeapon and ply:HasWeapon(WEPS.GetClass(wep)) then
+		return false, 2
 	end
 
 	-- block pickup when there is no slot free
 	-- exception: this hook is called to check if a player can pick up weapon while dropping
 	-- the current weapon
-	if not InventorySlotFree(ply, wep.Kind) and not cflag_weaponSwitch then
-		return false
-	end
-
-	-- if weapon is given by ply:Give function, it should always be inserted into the player inventory
-	if cflag_giveItem then
-		return true
-	end
-
-	-- if triggered by weapon switch the weapon should be inserted into the player inventory
-	-- this should only happen when the following two flags are set accordingly
-	if wep.wpickup_player and wep.wpickup_player == ply
-	and ply.wpickup_weapon and ply.wpickup_weapon == wep
-	then
-		-- these flags shouldn't be reset on first call of this hook since GMOD might do stupid things
-		-- while attempting to pickup a weapon
-		-- therefore these flags keep their value until the weapon is picked up or the player attempts
-		-- another pickup and are cleared in ResetWeapon()
-		return true
-	end
-
-	-- do not automatically pick up a weapon if the player already has the pickup
-	-- weapon flag set
-	if ply.wpickup_weapon then
-		return false
-	end
-
-	-- stop other players from automatically picking up a weapon when a player already set
-	-- the pickup flag
-	if wep.wpickup_player then
-		return false
+	if not dropBlockingWeapon and not InventorySlotFree(ply, wep.Kind) then
+		return false, 3
 	end
 
 	-- if the auto pickup convar is set to false, no weapons should be picked up automatically
-	if not cv_auto_pickup:GetBool() then
-		return false
+	if not cv_auto_pickup:GetBool() and not ply.forcedPickup then
+		return false, 4
 	end
 
 	-- if it is a dropped equipment item, it shouldn't be picked up automatically
-	if IsEquipment(wep) and wep.IsDropped then
-		return false
+	if IsEquipment(wep) and wep.IsDropped and not ply.forcedPickup then
+		return false, 5
 	end
 
 	-- Who knows what happens here?!
@@ -353,8 +326,6 @@ local function CanWearHat(ply)
 	return table.HasValue(Hattables, path[3])
 end
 
-local cv_ttt_detective_hats = CreateConVar("ttt_detective_hats", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
 -- Just hats right now
 local function GiveLoadoutSpecial(ply)
 	if not ply:IsActive() or ply:GetBaseRole() ~= ROLE_DETECTIVE or not cv_ttt_detective_hats:GetBool() or not CanWearHat(ply) then
@@ -411,9 +382,9 @@ end
 -- @note Note that this is called both when a @{Player} spawns and when a round starts
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/PlayerLoadout
+-- @ref https://wiki.facepunch.com/gmod/GM:PlayerLoadout
 -- @local
-function GM:PlayerLoadout(ply)
+function GM:PlayerLoadout(ply, isRespawn)
 	if not IsValid(ply) or ply:IsSpec() then return end
 
 	CleanupInventoryAndNotifyClient(ply)
@@ -489,12 +460,12 @@ end
 -- @note this internally calls @{GM:PlayerLoadout} for every @{Player}
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/PlayerLoadout
+-- @ref https://wiki.facepunch.com/gmod/GM:PlayerLoadout
 function GM:UpdatePlayerLoadouts()
 	local plys = player.GetAll()
 
 	for i = 1, #plys do
-		hook.Call("PlayerLoadout", GAMEMODE, plys[i])
+		hook.Run("PlayerLoadout", plys[i], false)
 	end
 end
 
@@ -503,18 +474,19 @@ end
 
 ---
 -- Called whenever a @{Player} drops a @{Weapon}, e.g. on death
--- @param Player ply
--- @param Weapon wep
--- @param boolean death_drop
+-- @param Player ply The player whose weapon is about to be dropped
+-- @param Weapon wep The weapon that is about to be dropped
+-- @param boolean deathDrop Set to true if this is a drop on death
+-- @param boolean keepSelection If set to true the current selection is kept if not dropped
 -- @realm server
 -- @module WEPS
-function WEPS.DropNotifiedWeapon(ply, wep, death_drop, keep_selection)
+function WEPS.DropNotifiedWeapon(ply, wep, deathDrop, keepSelection)
 	if not IsValid(ply) or not IsValid(wep) then return end
 
 	-- Hack to tell the weapon it's about to be dropped and should do what it
 	-- must right now
 	if wep.PreDrop then
-		wep:PreDrop(death_drop)
+		wep:PreDrop(deathDrop)
 	end
 
 	-- PreDrop might destroy weapon
@@ -530,7 +502,7 @@ function WEPS.DropNotifiedWeapon(ply, wep, death_drop, keep_selection)
 
 	-- After dropping a weapon, always switch to holstered, so that traitors
 	-- will never accidentally pull out a traitor weapon
-	if not keep_selection then
+	if not keepSelection then
 		ply:SelectWeapon("weapon_ttt_unarmed")
 	end
 end
@@ -613,16 +585,16 @@ concommand.Add("ttt_dropammo", DropActiveAmmo)
 -- @param Player ply The @{Player} that is picking up the @{Weapon}
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/WeaponEquip
+-- @ref https://wiki.facepunch.com/gmod/GM:WeaponEquip
 -- @local
 function GM:WeaponEquip(wep, ply)
 	if not IsValid(ply) or not IsValid(wep) then return end
 
 	if not wep.Kind then
-		-- only remove if they lack critical stuff
-		wep:Remove()
+		wep:Remove() -- only remove if they lack critical stuff
 
 		ErrorNoHalt("Equipped weapon " .. wep:GetClass() .. " is not compatible with TTT\n")
+
 		return
 	end
 
@@ -643,9 +615,6 @@ function GM:WeaponEquip(wep, ply)
 		-- the client. Therefore the client has to be notified to updated its cache
 		net.Start("ttt2_switch_weapon_update_cache")
 		net.Send(ply)
-
-		-- since the weapon pickup changes some weapon data, it has to be reset here
-		ResetWeapon(wep)
 	end
 
 	-- handle all this stuff in the next frame since the owner is not yet valid
@@ -661,7 +630,7 @@ end
 -- @param Weapon wep The @{Weapon} that was dropped
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/PlayerDroppedWeapon
+-- @ref https://wiki.facepunch.com/gmod/GM:PlayerDroppedWeapon
 -- @local
 function GM:PlayerDroppedWeapon(ply, wep)
 	if not IsValid(wep) or not IsValid(ply) or not wep.Kind then return end
@@ -687,7 +656,7 @@ end
 -- @param Entity ent @{Entity} being removed
 -- @hook
 -- @realm server
--- @ref https://wiki.garrysmod.com/page/GM/EntityRemoved
+-- @ref https://wiki.facepunch.com/gmod/GM:EntityRemoved
 -- @local
 function GM:EntityRemoved(ent)
 	if IsValid(ent) and IsValid(ent:GetOwner()) and ent:IsWeapon() and ent.Kind then
@@ -730,8 +699,6 @@ function WEPS.IsInstalled(cls)
 end
 
 --manipulate shove attack for all crowbar alikes
-local crowbar_delay = CreateConVar("ttt2_crowbar_shove_delay", "1.0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
 local function ChangeShoveDelay()
 	local weps = weapons.GetList()
 
@@ -749,7 +716,6 @@ cvars.AddChangeCallback(crowbar_delay:GetName(), function(name, old, new)
 	ChangeShoveDelay()
 end, "TTT2CrowbarShoveDelay")
 
--- TODO remove this
 hook.Add("TTT2Initialize", "TTT2ChangeMeleesSecondaryDelay", function()
 	ChangeShoveDelay()
 end)

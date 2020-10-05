@@ -84,10 +84,12 @@ local function AddBindingCategory(category, parent)
 			dPBindDisableButton:SetText(GetTranslation("f1_bind_disable_bind"))
 			dPBindDisableButton:SetSize(55, 25)
 			dPBindDisableButton:SetTooltip(GetTranslation("f1_bind_disable_description"))
+
 			dPBindDisableButton.DoClick = function()
 				bind.Remove(curBinding, binding.name, true)
 				dPBinder:SetValue(bind.Find(binding.name))
 			end
+
 			dPGridExtra:AddItem(dPBindDisableButton)
 
 			-- onchange function
@@ -504,6 +506,7 @@ function HELPSCRN:CreateCrosshairSettings(parent)
 	form:CheckBox(GetTranslation("set_minimal_id"), "ttt_minimal_targetid")
 	form:CheckBox(GetTranslation("set_cross_static_enable"), "ttt_crosshair_static")
 	form:CheckBox(GetTranslation("set_cross_dot_enable"), "ttt_crosshair_dot")
+	form:CheckBox(GetTranslation("set_cross_lines_enable"), "ttt_crosshair_lines")
 	form:CheckBox(GetTranslation("set_cross_weaponscale_enable"), "ttt_crosshair_weaponscale")
 
 	cb = form:CheckBox(GetTranslation("set_lowsights"), "ttt_ironsights_lowered")
@@ -566,8 +569,11 @@ function HELPSCRN:CreateGameplaySettings(parent)
 	form:SetName(GetTranslation("set_title_play"))
 
 	local cb
+	local rlsList = roles.GetList()
 
-	for _, v in ipairs(roles.GetList()) do
+	for i = 1, #rlsList do
+		local v = rlsList[i]
+
 		if ConVarExists("ttt_avoid_" .. v.name) then
 			local rolename = GetTranslation(v.name)
 
@@ -633,7 +639,7 @@ function HELPSCRN:CreateAdministrationForm(parent)
 	defaultHUDlabel:Dock(TOP)
 
 	local defaultHUDCb = vgui.Create("DComboBox", parent)
-	defaultHUDCb:SetValue(HUDManager.GetModelValue("defaultHUD") or "None")
+	defaultHUDCb:SetValue(ttt2net.GetGlobal({"hud_manager", "defaultHUD"}) or "None")
 
 	defaultHUDCb.OnSelect = function(_, _, value)
 		net.Start("TTT2DefaultHUDRequest")
@@ -652,7 +658,7 @@ function HELPSCRN:CreateAdministrationForm(parent)
 	forceHUDlabel:Dock(TOP)
 
 	local forceHUDCb = vgui.Create("DComboBox", parent)
-	forceHUDCb:SetValue(HUDManager.GetModelValue("forcedHUD") or "None")
+	forceHUDCb:SetValue(ttt2net.GetGlobal({"hud_manager", "forcedHUD"}) or "None")
 
 	forceHUDCb.OnSelect = function(_, _, value)
 		net.Start("TTT2ForceHUDRequest")
@@ -678,7 +684,7 @@ function HELPSCRN:CreateAdministrationForm(parent)
 	admin_dlv_rhuds:AddColumn("HUD")
 	admin_dlv_rhuds:AddColumn("Restricted")
 
-	local restrictedHUDs = HUDManager.GetModelValue("restrictedHUDs")
+	local restrictedHUDs = ttt2net.GetGlobal({"hud_manager", "restrictedHUDs"})
 	local allHUDs = huds.GetList()
 
 	for _, v in ipairs(allHUDs) do
@@ -695,26 +701,27 @@ function HELPSCRN:CreateAdministrationForm(parent)
 	end
 end
 
-HUDManager.OnUpdateAttribute("restrictedHUDs", function()
+ttt2net.OnUpdateGlobal({"hud_manager", "restrictedHUDs"}, function(_, value)
 	if not admin_dlv_rhuds or not IsValid(admin_dlv_rhuds) then return end
 
 	admin_dlv_rhuds:Clear()
 
-	local r = HUDManager.GetModelValue("restrictedHUDs")
 	local a = huds.GetList()
 
 	for _, v in ipairs(a) do
-		admin_dlv_rhuds:AddLine(v.id, table.HasValue(r, v.id) and "true" or "false")
+		admin_dlv_rhuds:AddLine(v.id, table.HasValue(value, v.id) and "true" or "false")
 	end
 end)
 
 net.Receive("TTT2RestrictHUDResponse", function()
 	local accepted = net.ReadBool()
 	local hudname = net.ReadString()
-	local ply = LocalPlayer()
+
+	local client = LocalPlayer()
+	if not IsValid(client) then return end
 
 	if not accepted then
-		ply:ChatPrint("[TTT2][HUDManager] " .. GetPTranslation("hud_restricted_failed", {hudname = hudname}))
+		client:ChatPrint("[TTT2][HUDManager] " .. GetPTranslation("hud_restricted_failed", {hudname = hudname}))
 
 		return
 	end
@@ -723,10 +730,12 @@ end)
 net.Receive("TTT2ForceHUDResponse", function()
 	local accepted = net.ReadBool()
 	local hudname = net.ReadString()
-	local ply = LocalPlayer()
+
+	local client = LocalPlayer()
+	if not IsValid(client) then return end
 
 	if not accepted then
-		ply:ChatPrint("[TTT2][HUDManager] " .. GetPTranslation("hud_forced_failed", {hudname = hudname}))
+		client:ChatPrint("[TTT2][HUDManager] " .. GetPTranslation("hud_forced_failed", {hudname = hudname}))
 
 		return
 	end
@@ -735,15 +744,16 @@ end)
 net.Receive("TTT2DefaultHUDResponse", function()
 	local accepted = net.ReadBool()
 	local hudname = net.ReadString()
-	local ply = LocalPlayer()
+
+	local client = LocalPlayer()
+	if not IsValid(client) then return end
 
 	if not accepted then
-		ply:ChatPrint("[TTT2][HUDManager] " .. GetPTranslation("hud_default_failed", {hudname = hudname}))
+		client:ChatPrint("[TTT2][HUDManager] " .. GetPTranslation("hud_default_failed", {hudname = hudname}))
 
 		return
 	end
 end)
-
 
 -- Tutorial
 
@@ -809,8 +819,8 @@ function HELPSCRN:CreateTutorial(parent)
 	bnext.DoClick = function()
 		if tut.current < tutorial_pages then
 			tut.current = tut.current + 1
-			tut:SetImage(Format(imgpath, tut.current))
 
+			tut:SetImage(Format(imgpath, tut.current))
 			bar:SetValue(tut.current)
 		end
 	end
@@ -818,8 +828,8 @@ function HELPSCRN:CreateTutorial(parent)
 	bprev.DoClick = function()
 		if tut.current > 1 then
 			tut.current = tut.current - 1
-			tut:SetImage(Format(imgpath, tut.current))
 
+			tut:SetImage(Format(imgpath, tut.current))
 			bar:SetValue(tut.current)
 		end
 	end

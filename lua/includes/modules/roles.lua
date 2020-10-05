@@ -12,8 +12,6 @@ if SERVER then
 	AddCSLuaFile()
 end
 
-local BASE_ROLE_CLASS = "ttt_role_base"
-
 local RoleList = RoleList or {}
 
 ---
@@ -71,17 +69,6 @@ local function SetupGlobals(roleData)
 	_G["ROLE_" .. upStr] = roleData.index
 	_G[upStr] = roleData
 	_G["SHOP_FALLBACK_" .. upStr] = roleData.name
-
-	local plymeta = FindMetaTable("Player")
-	if not plymeta then return end
-
-	-- e.g. IsJackal() will match each subrole of the jackal as well as the jackal as the baserole
-	plymeta["Is" .. roleData.name:gsub("^%l", string.upper)] = function(slf)
-		local br = slf:GetBaseRole()
-		local sr = slf:GetSubRole()
-
-		return roleData.baserole and sr == roleData.index or not roleData.baserole and br == roleData.index
-	end
 end
 
 ---
@@ -164,8 +151,9 @@ function Register(t, name)
 
 	t.ClassName = name
 	t.name = name
+	t.isAbstract = t.isAbstract or false
 
-	if name ~= BASE_ROLE_CLASS then
+	if not t.isAbstract then
 		-- set id
 		t.index = t.index or GenerateNewRoleID()
 
@@ -192,21 +180,21 @@ function OnLoaded()
 
 		baseclass.Set(k, v)
 
-		if k ~= BASE_ROLE_CLASS then
+		if not v.isAbstract then
 			v:PreInitialize()
 		end
 	end
 
 	-- Setup data (eg. convars for all roles)
 	for _, v in pairs(RoleList) do
-		if v.name ~= BASE_ROLE_CLASS then
+		if not v.isAbstract then
 			SetupData(v)
 		end
 	end
 
 	-- Call Initialize() on all roles
 	for _, v in pairs(RoleList) do
-		if v.name ~= BASE_ROLE_CLASS then
+		if not v.isAbstract then
 			v:Initialize()
 		end
 	end
@@ -235,7 +223,7 @@ function Get(name, retTbl)
 		end
 	end
 
-	retval.Base = retval.Base or BASE_ROLE_CLASS
+	retval.Base = retval.Base or "ttt_role_base"
 
 	-- If we're not derived from ourselves (a base role)
 	-- then derive from our 'Base' role.
@@ -269,7 +257,7 @@ function GetList()
 	local result = {}
 
 	for _, v in pairs(RoleList) do
-		if v.name ~= BASE_ROLE_CLASS then
+		if not v.isAbstract then
 			result[#result + 1] = v
 		end
 	end
@@ -300,7 +288,7 @@ end
 -- @realm shared
 function GetByIndex(index)
 	for _, v in pairs(RoleList) do
-		if v.name ~= BASE_ROLE_CLASS and v.index == index then
+		if not v.isAbstract and v.index == index then
 			return v
 		end
 	end
@@ -324,7 +312,7 @@ end
 -- @realm shared
 function GetByAbbr(abbr)
 	for _, v in pairs(RoleList) do
-		if v.name ~= BASE_ROLE_CLASS and v.abbr == abbr then
+		if not v.isAbstract and v.abbr == abbr then
 			return v
 		end
 	end
@@ -372,7 +360,7 @@ function GetShopRoles()
 	local i = 0
 
 	for _, v in pairs(RoleList) do
-		if v.name ~= BASE_ROLE_CLASS and v ~= INNOCENT then
+		if not v.isAbstract and v ~= INNOCENT then
 			local shopFallback = GetGlobalString("ttt_" .. v.abbr .. "_shop_fallback")
 			if shopFallback ~= SHOP_DISABLED then
 				i = i + 1
@@ -395,7 +383,7 @@ function GetDefaultTeamRole(team)
 	if team == TEAM_NONE then return end
 
 	for _, v in pairs(RoleList) do
-		if v.name ~= BASE_ROLE_CLASS and not v.baserole and v.defaultTeam ~= TEAM_NONE and v.defaultTeam == team then
+		if not v.isAbstract and not v.baserole and v.defaultTeam ~= TEAM_NONE and v.defaultTeam == team then
 			return v
 		end
 	end
@@ -442,7 +430,7 @@ function GetWinTeams()
 	local winTeams = {}
 
 	for _, v in pairs(RoleList) do
-		if v.name ~= BASE_ROLE_CLASS and v.defaultTeam ~= TEAM_NONE and not table.HasValue(winTeams, v.defaultTeam) and not v.preventWin then
+		if not v.isAbstract and v.defaultTeam ~= TEAM_NONE and not table.HasValue(winTeams, v.defaultTeam) and not v.preventWin then
 			winTeams[#winTeams + 1] = v.defaultTeam
 		end
 	end
@@ -458,7 +446,7 @@ function GetAvailableTeams()
 	local availableTeams = {}
 
 	for _, v in pairs(RoleList) do
-		if v.name ~= BASE_ROLE_CLASS and v.defaultTeam ~= TEAM_NONE and not table.HasValue(availableTeams, v.defaultTeam) then
+		if not v.isAbstract and v.defaultTeam ~= TEAM_NONE and not table.HasValue(availableTeams, v.defaultTeam) then
 			availableTeams[#availableTeams + 1] = v.defaultTeam
 		end
 	end
@@ -476,7 +464,7 @@ function GetSortedRoles()
 	local i = 0
 
 	for _, v in pairs(RoleList) do
-		if v.name ~= BASE_ROLE_CLASS then
+		if not v.isAbstract then
 			i = i + 1
 			rls[i] = v
 		end

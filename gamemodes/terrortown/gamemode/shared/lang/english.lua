@@ -378,7 +378,6 @@ L.c4_status_disarmed = "DISARMED"
 L.vis_name = "Visualizer"
 L.vis_hint = "Press {usekey} to pick up (Detectives only)."
 
-L.vis_help_pri = "{primaryfire} drops the activated device."
 L.vis_short_desc = "Visualizes a crime scene if the victim died by a gunshot wound"
 
 L.vis_desc = [[
@@ -393,7 +392,6 @@ L.decoy_name = "Decoy"
 L.decoy_no_room = "You cannot carry this decoy."
 L.decoy_broken = "Your Decoy has been destroyed!"
 
-L.decoy_help_pri = "{primaryfire} plants the Decoy."
 L.decoy_short_desc = "This decoy shows a fake radar sign visible for other teams"
 L.decoy_pickup_wrong_team = "You can't pick it up as it belongs to a different team"
 
@@ -495,9 +493,6 @@ from a long distance away.
 Unlimited uses, but identification
 takes a few seconds.]]
 
-L.binoc_help_pri = "{primaryfire} identifies a body."
-L.binoc_help_sec = "{secondaryfire} changes zoom level."
-
 -- UMP
 L.ump_desc = [[
 Experimental SMG that disorients
@@ -507,15 +502,19 @@ Uses standard SMG ammo.]]
 
 -- DNA scanner
 L.dna_name = "DNA scanner"
-L.dna_identify = "Corpse must be identified to retrieve killer's DNA."
 L.dna_notfound = "No DNA sample found on target."
 L.dna_limit = "Storage limit reached. Remove old samples to add new ones."
 L.dna_decayed = "DNA sample of the killer has decayed."
 L.dna_killer = "Collected a sample of the killer's DNA from the corpse!"
+L.dna_duplicate = "Match! You already have this DNA sample in your scanner."
 L.dna_no_killer = "The DNA could not be retrieved (killer disconnected?)."
 L.dna_armed = "This bomb is live! Disarm it first!"
-L.dna_object = "Collected {num} new DNA sample(s) from the object."
+L.dna_object = "Collected a sample of the last owner from the object."
 L.dna_gone = "DNA not detected in area."
+L.dna_tid_possible = "Scan possible"
+L.dna_tid_impossible = "No scan possible"
+L.dna_screen_ready = "No DNA"
+L.dna_screen_match = "Match"
 
 L.dna_desc = [[
 Collect DNA samples from things
@@ -523,24 +522,6 @@ and use them to find the DNA's owner.
 
 Use on fresh corpses to get the killer's DNA
 and track them down.]]
-
-L.dna_menu_title = "DNA scanning controls"
-L.dna_menu_sample = "DNA sample found on {source}"
-L.dna_menu_remove = "Remove selected"
-L.dna_menu_help1 = "These are DNA samples you have collected."
-L.dna_menu_help2 = [[
-When charged, you can scan for the location of
-the player the selected DNA sample belongs to.
-Finding distant targets drains more energy.]]
-
-L.dna_menu_scan = "Scan"
-L.dna_menu_repeat = "Auto-repeat"
-L.dna_menu_ready = "READY"
-L.dna_menu_charge = "CHARGING"
-L.dna_menu_select = "SELECT SAMPLE"
-
-L.dna_help_primary = "{primaryfire} to collect a DNA sample"
-L.dna_help_secondary = "{secondaryfire} to open scan controls"
 
 -- Magneto stick
 L.magnet_name = "Magneto-stick"
@@ -622,7 +603,7 @@ L.corpse_too_far_away = "The corpse is too far away."
 L.corpse_binoculars = "Press [{key}] to search corpse with binoculars."
 L.corpse_searched_by_detective = "This corpse was searched by a detective"
 
-L.target_disg = "disguised"
+L.target_disg = "(disguised)"
 L.target_unid = "Unidentified body"
 
 L.target_credits = "Search to receive unspent credits"
@@ -659,10 +640,6 @@ L.tbut_admin_mode_only = "Only visible to you because you're an admin and '{cv}'
 L.tbut_allow = "Allow"
 L.tbut_prohib = "Prohibit"
 L.tbut_default = "Default"
-
--- Equipment info lines (on the left above the health/ammo panel)
-L.disg_hud = "Disguised. Your name is hidden."
-L.radar_hud = "Radar ready for next scan in: {time}"
 
 -- Spectator muting of living/dead
 L.mute_living = "Living players muted"
@@ -1242,7 +1219,7 @@ L.hud_forced_failed = "Failed to force the HUD {hudname}. You don't have permiss
 L.hud_restricted_failed = "Failed to restrict the HUD {hudname}. You don't have permission to do that."
 
 L.shop_role_select = "Select a role"
-L.shop_role_selected = "{roles}'s shop was selected!"
+L.shop_role_selected = "{role}'s shop was selected!"
 L.shop_search = "Search"
 
 L.button_save = "Save"
@@ -1278,3 +1255,62 @@ L.door_auto_closes = "This door closes automatically"
 L.door_open_touch = "Walk into door to open."
 L.door_open_touch_and_use = "Walk into door or press [{usekey}] to open."
 L.hud_health = "Health"
+
+-- 2020-04-20
+L.item_speedrun = "Speedrun"
+L.item_speedrun_desc = [[Makes you 50% faster!]]
+L.item_no_explosion_damage = "No Explosion Damage"
+L.item_no_explosion_damage_desc = [[Makes you immune to explosion damage.]]
+L.item_no_fall_damage = "No Fall Damage"
+L.item_no_fall_damage_desc = [[Makes you immune to fall damage.]]
+L.item_no_fire_damage = "No Fire Damage"
+L.item_no_fire_damage_desc = [[Makes you immune to fire damage.]]
+L.item_no_hazard_damage = "No Hazard Damage"
+L.item_no_hazard_damage_desc = [[Makes you immune to hazard damage such as posion, radiation and acid.]]
+L.item_no_energy_damage = "No Energy Damage"
+L.item_no_energy_damage_desc = [[Makes you immune to energy damage such as lasers, plasma and lightning.]]
+L.item_no_prop_damage = "No Prop Damage"
+L.item_no_prop_damage_desc = [[Makes you immune to prop damage.]]
+L.item_no_drown_damage = "No Drowning Damage"
+L.item_no_drown_damage_desc = [[Makes you immune to drowning damage.]]
+
+-- 2020-04-30
+L.message_revival_canceled = "Revival canceled."
+L.message_revival_failed = "Revival failed."
+L.message_revival_failed_missing_body = "You have not been revived because your corpse no longer exists."
+L.hud_revival_title = "Time left until revival:"
+L.hud_revival_time = "{time}s"
+
+-- 2020-05-03
+L.door_destructible = "Door is destructible ({health}HP)"
+
+-- 2020-05-28
+L.confirm_detective_only = "Only detectives can confirm bodies"
+L.inspect_detective_only = "Only detectives can inspect bodies"
+L.corpse_hint_no_inspect = "Only detectives can search this body."
+L.corpse_hint_inspect_only = "Press [{usekey}] to search. Only detectives can confirm the body."
+L.corpse_hint_inspect_only_credits = "Press [{usekey}] to receive credits. Only detectives can search this body."
+
+-- 2020-06-04
+L.label_bind_disguiser = "Toggle disguiser"
+
+-- 2020-06-24
+L.dna_help_primary = "Collect a DNA sample"
+L.dna_help_secondary = "Switch the DNA slot"
+L.dna_help_reload = "Delete a sample"
+
+L.binoc_help_pri = "Identify a body."
+L.binoc_help_sec = "Change zoom level."
+
+L.vis_help_pri = "Drop the activated device."
+
+L.decoy_help_pri = "Plant the Decoy."
+
+L.set_cross_lines_enable = "Enable crosshair lines"
+
+L.pickup_error_spec = "You cannot pick this up as a spectator."
+L.pickup_error_owns = "You cannot pick this up because you already have this weapon."
+L.pickup_error_noslot = "You cannot pick this up because you have no free slot available."
+
+-- 2020-08-11
+L.f1_settings_shop_desc_double_click = "Enable to buy an item in the shop by double clicking on it."

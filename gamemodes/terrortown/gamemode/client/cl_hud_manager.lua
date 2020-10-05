@@ -3,35 +3,10 @@
 
 ttt_include("vgui__cl_hudswitcher")
 
-local current_hud_cvar = CreateClientConVar("ttt2_current_hud", HUDManager.GetModelValue("defaultHUD") or "pure_skin", true, true)
+local current_hud_cvar = CreateClientConVar("ttt2_current_hud", ttt2net.GetGlobal({"hud_manager", "defaultHUD"}) or "pure_skin", true, true)
 local current_hud_table = nil
 
-net.Receive("TTT2UpdateHUDManagerStringAttribute", function()
-	local key = net.ReadString()
-	local value = net.ReadString()
-
-	if value == "NULL" then
-		value = nil
-	end
-
-	HUDManager.SetModelValue(key, value)
-end)
-
-net.Receive("TTT2UpdateHUDManagerRestrictedHUDsAttribute", function()
-	local len = net.ReadUInt(16)
-
-	if len == 0 then
-		HUDManager.SetModelValue("restrictedHUDs", {})
-	else
-		local tab = {}
-
-		for i = 1, len do
-			tab[i] = net.ReadString()
-		end
-
-		HUDManager.SetModelValue("restrictedHUDs", tab)
-	end
-end)
+HUDManager = {}
 
 ---
 -- (Re)opens the HUDSwitcher
@@ -90,7 +65,7 @@ end
 -- @2D
 -- @hook
 -- @realm client
--- @ref https://wiki.garrysmod.com/page/GM/HUDPaint
+-- @ref https://wiki.facepunch.com/gmod/GM:HUDPaint
 -- @local
 function GM:HUDPaint()
 	local client = LocalPlayer()
@@ -118,7 +93,9 @@ function GM:HUDPaint()
 		hook.Call("HUDDrawTargetID", GAMEMODE)
 	end
 
-	HUDManager.DrawHUD()
+	if hook.Call("HUDShouldDraw", GAMEMODE, "TTT2HUD") then
+		HUDManager.DrawHUD()
+	end
 
 	if not client:Alive() or client:Team() == TEAM_SPEC then return end
 
@@ -153,7 +130,7 @@ local gmodhud = {
 -- @return boolean Return false to prevent the given element from being drawn on the client's screen.
 -- @hook
 -- @realm client
--- @ref https://wiki.garrysmod.com/page/GM/HUDShouldDraw
+-- @ref https://wiki.facepunch.com/gmod/GM:HUDShouldDraw
 -- @local
 function GM:HUDShouldDraw(name)
 	if gmodhud[name] then
@@ -165,7 +142,6 @@ end
 
 local function UpdateHUD(name)
 	local hudEl = huds.GetStored(name)
-
 	if not hudEl then
 		MsgN("Error: HUD with name " .. name .. " was not found!")
 
@@ -183,7 +159,6 @@ local function UpdateHUD(name)
 
 	-- Initialize elements
 	hudEl:Initialize()
-
 	hudEl:LoadData()
 
 	-- call all listeners
@@ -198,7 +173,7 @@ function HUDManager.GetHUD()
 	local hudvar = current_hud_cvar:GetString()
 
 	if not huds.GetStored(hudvar) then
-		hudvar = HUDManager.GetModelValue("defaultHUD") or "pure_skin"
+		hudvar = ttt2net.GetGlobal({"hud_manager", "defaultHUD"}) or "pure_skin"
 	end
 
 	return hudvar
@@ -231,17 +206,6 @@ function HUDManager.LoadAllHUDS()
 		hud:LoadData()
 	end
 end
-
----
--- Requests an update from the server
--- @realm client
-function HUDManager.RequestFullStateUpdate()
-	MsgN("[TTT2][HUDManager] Requesting a full state update...")
-
-	net.Start("TTT2RequestHUDManagerFullStateUpdate")
-	net.SendToServer()
-end
-hook.Add("TTTInitPostEntity", "RequestHUDManagerStateUpdate", HUDManager.RequestFullStateUpdate)
 
 -- if forced or requested, modified by server restrictions
 net.Receive("TTT2ReceiveHUD", function()

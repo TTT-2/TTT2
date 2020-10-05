@@ -1,4 +1,3 @@
-local local_ply = LocalPlayer
 local net = net
 
 local plymeta = FindMetaTable("Player")
@@ -6,39 +5,6 @@ if not plymeta then
 	Error("FAILED TO FIND PLAYER TABLE")
 
 	return
-end
-
-local gmod_GetWeapons = plymeta.GetWeapons
-
----
--- Returns if @{Player} has a specific @{Weapon}
--- @param string cls @{Weapon}'s class name
--- @return boolean
--- @realm shared
-function plymeta:HasWeapon(cls) -- Server has this, but isn't shared for some reason
-	local weps = self:GetWeapons()
-
-	for i = 1, #weps do
-		local wep = weps[i]
-
-		if not IsValid(wep) or wep:GetClass() ~= cls then continue end
-
-		return true
-	end
-
-	return false
-end
-
----
--- Returns all @{Weapon}s a @{Player} is owning
--- @return table
--- @realm shared
-function plymeta:GetWeapons() -- Server has this, but isn't shared for some reason
-	if self ~= local_ply() then
-		return {}
-	else
-		return gmod_GetWeapons(self)
-	end
 end
 
 ---
@@ -54,7 +20,7 @@ function plymeta:AnimApplyGesture(act, weight)
 end
 
 local function MakeSimpleRunner(act)
-	return function (ply, w)
+	return function(ply, w)
 		-- just let this gesture play itself and get out of its way
 		if w == 0 then
 			ply:AnimApplyGesture(act, 1)
@@ -70,7 +36,7 @@ end
 local act_runner = {
 	-- ear grab needs weight control
 	-- sadly it's currently the only one
-	[ACT_GMOD_IN_CHAT] = function (ply, w)
+	[ACT_GMOD_IN_CHAT] = function(ply, w)
 		local dest = ply:IsSpeaking() and 1 or 0
 
 		w = math.Approach(w, dest, FrameTime() * 10)
@@ -118,7 +84,6 @@ function plymeta:AnimPerformGesture(act, custom_runner)
 	if not cv_ttt_show_gestures or cv_ttt_show_gestures:GetInt() == 0 then return end
 
 	local runner = custom_runner or act_runner[act]
-
 	if not runner then
 		return false
 	end
@@ -202,22 +167,94 @@ net.Receive("TTT2TargetPlayer", TargetPlayer)
 ---
 -- SetupMove is called before the engine process movements. This allows us
 -- to override the players movement.
--- @param Player ply The @{Player} attempting to pick up the @{Weapon}
+-- @param Player ply The @{Player} that sets up its movement
 -- @param CMoveData mv The move data to override/use
 -- @param CUserCmd cmd The command data
 -- @hook
 -- @realm client
--- @ref https://wiki.garrysmod.com/page/GM/SetupMove
+-- @ref https://wiki.facepunch.com/gmod/GM:SetupMove
 -- @local
 function GM:SetupMove(ply, mv, cmd)
-	if not IsValid(ply) then return end
+	if not IsValid(ply) or ply:IsReady() then return end
 
-	if ply:IsReady() then return end
-
-	ply.is_ready = true
+	ply.isReady = true
 
 	net.Start("TTT2SetPlayerReady")
 	net.SendToServer()
 
 	hook.Run("TTT2PlayerReady", ply)
+end
+
+---
+-- Sets a revival reason that is displayed in the revival HUD element.
+-- It supports a language identifier for translated strings.
+-- @param[default=nil] string name The text or the language identifer, nil to reset
+-- @param[opt] table params The params table used for @{LANG.GetParamTranslation}
+-- @realm client
+function plymeta:SetRevivalReason(name, params)
+	self.revivalReason = {}
+	self.revivalReason.name = name
+	self.revivalReason.params = params
+end
+
+net.Receive("TTT2SetRevivalReason", function()
+	local client = LocalPlayer()
+
+	if not IsValid(client) then return end
+
+	local isReset = net.ReadBool()
+	local name, params
+
+	if not isReset then
+		name = net.ReadString()
+
+		local paramsAmount = net.ReadUInt(8)
+
+		if paramsAmount > 0 then
+			params = {}
+
+			for i = 1, paramsAmount do
+				params[net.ReadString()] = net.ReadString()
+			end
+		end
+	end
+
+	client:SetRevivalReason(name, params)
+end)
+
+-- plays an error sound only on the local player, not for all players
+net.Receive("TTT2RevivalStopped", function()
+	LocalPlayer():EmitSound("buttons/button8.wav")
+end)
+
+net.Receive("TTT2RevivalUpdate_IsReviving", function()
+	LocalPlayer().isReviving = net.ReadBool()
+end)
+
+net.Receive("TTT2RevivalUpdate_IsBlockingRevival", function()
+	LocalPlayer().isBlockingRevival = net.ReadBool()
+end)
+
+net.Receive("TTT2RevivalUpdate_RevivalStartTime", function()
+	LocalPlayer().revivalStartTime = net.ReadFloat()
+end)
+
+net.Receive("TTT2RevivalUpdate_RevivalDuration", function()
+	LocalPlayer().revivalDurarion = net.ReadFloat()
+end)
+
+---
+-- Returns if a player has a revival reason set.
+-- @return[default=false] boolean Returns if a player has a revival reason
+-- @realm client
+function plymeta:HasRevivalReason()
+	return (self.revivalReason and self.revivalReason.name and self.revivalReason.name ~= "") or false
+end
+
+---
+-- Returns the current revival reason.
+-- @return[default={}] table The revival reason table
+-- @realm client
+function plymeta:GetRevivalReason()
+	return self.revivalReason or {}
 end

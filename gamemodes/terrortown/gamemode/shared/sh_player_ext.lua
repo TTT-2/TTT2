@@ -79,41 +79,41 @@ end
 function plymeta:SetRole(subrole, team, forceHooks)
 	local oldRole = self:GetBaseRole()
 	local oldSubrole = self:GetSubRole()
+	local oldRoleData = self:GetSubRoleData()
 	local oldTeam = self:GetTeam()
-	local rd = roles.GetByIndex(subrole)
 
-	self.role = rd.baserole or subrole
+	local roleData = roles.GetByIndex(subrole)
+
+	self.role = roleData.baserole or subrole
 	self.subrole = subrole
 
-	self:UpdateTeam(team or rd.defaultTeam or TEAM_NONE)
+	self:UpdateTeam(team or roleData.defaultTeam or TEAM_NONE)
 
-	local newRole = self:GetBaseRole()
-	local newSubrole = self:GetSubRole()
+	local newBaseRole = self:GetBaseRole()
 	local newTeam = self:GetTeam()
 
-	if oldSubrole ~= newSubrole then
-		local ord = roles.GetByIndex(oldSubrole)
-		local ar = GetActiveRolesCount(rd) + 1
-		local oar = GetActiveRolesCount(ord) - 1
+	if oldSubrole ~= subrole then
+		local activeRolesCount = GetActiveRolesCount(roleData) + 1
+		local oldActiveRolesCount = GetActiveRolesCount(oldRoleData) - 1
 
-		SetActiveRolesCount(rd, ar)
-		SetActiveRolesCount(ord, oar)
+		SetActiveRolesCount(roleData, activeRolesCount)
+		SetActiveRolesCount(oldRoleData, oldActiveRolesCount)
 
-		if ar > 0 then
-			hook.Run("TTT2ToggleRole", rd, true)
+		if activeRolesCount > 0 then
+			hook.Run("TTT2ToggleRole", roleData, true)
 		end
 
-		if oar <= 0 then
-			hook.Run("TTT2ToggleRole", ord, false)
+		if oldActiveRolesCount <= 0 then
+			hook.Run("TTT2ToggleRole", oldRoleData, false)
 		end
 	end
 
-	if oldRole ~= newRole or forceHooks then
-		hook.Run("TTT2UpdateBaserole", self, oldRole, newRole)
+	if oldRole ~= newBaseRole or forceHooks then
+		hook.Run("TTT2UpdateBaserole", self, oldRole, newBaseRole)
 	end
 
-	if oldSubrole ~= newSubrole or forceHooks then
-		hook.Run("TTT2UpdateSubrole", self, oldSubrole, newSubrole)
+	if oldSubrole ~= subrole or forceHooks then
+		hook.Run("TTT2UpdateSubrole", self, oldSubrole, subrole)
 	end
 
 	if oldTeam ~= newTeam or forceHooks then
@@ -121,14 +121,14 @@ function plymeta:SetRole(subrole, team, forceHooks)
 	end
 
 	-- ye olde hooks
-	if newSubrole ~= oldSubrole or forceHooks then
-		self:SetRoleColor(rd.color)
-		self:SetRoleDkColor(rd.dkcolor)
-		self:SetRoleLtColor(rd.ltcolor)
-		self:SetRoleBgColor(rd.bgcolor)
+	if subrole ~= oldSubrole or forceHooks then
+		self:SetRoleColor(roleData.color)
+		self:SetRoleDkColor(roleData.dkcolor)
+		self:SetRoleLtColor(roleData.ltcolor)
+		self:SetRoleBgColor(roleData.bgcolor)
 
 		if SERVER then
-			hook.Call("PlayerLoadout", GAMEMODE, self)
+			hook.Run("PlayerLoadout", self, false)
 
 			if GetConVar("ttt_enforce_playermodel"):GetBool() then
 				-- update subroleModel
@@ -143,8 +143,8 @@ function plymeta:SetRole(subrole, team, forceHooks)
 	end
 
 	if SERVER then
-		roles.GetByIndex(oldSubrole):RemoveRoleLoadout(self, true)
-		roles.GetByIndex(newSubrole):GiveRoleLoadout(self, true)
+		oldRoleData:RemoveRoleLoadout(self, true)
+		roleData:GiveRoleLoadout(self, true)
 	end
 end
 
@@ -285,7 +285,9 @@ end
 -- @return boolean
 -- @realm shared
 function plymeta:IsInTeam(ply)
-	return self:GetTeam() ~= TEAM_NONE and not TEAMS[self:GetTeam()].alone and self:GetTeam() == ply:GetTeam()
+	return self:GetTeam() ~= TEAM_NONE
+		and not TEAMS[self:GetTeam()].alone
+		and self:GetTeam() == ply:GetTeam()
 end
 
 -- Role access
@@ -724,18 +726,26 @@ end
 -- @see https://wiki.garrysmod.com/page/Structures/Trace
 -- @realm shared
 function plymeta:GetEyeTrace(mask)
-	if self.LastPlayerTraceMask == mask and self.LastPlayerTrace == CurTime() then
-		return self.PlayerTrace
+	mask = mask or MASK_SOLID
+
+	if CLIENT then
+		local framenum = FrameNumber()
+
+		if self.LastPlayerTrace == framenum and self.LastPlayerTraceMask == mask then
+			return self.PlayerTrace
+		end
+
+		self.LastPlayerTrace = framenum
+		self.LastPlayerTraceMask = mask
 	end
 
 	local tr = util.GetPlayerTrace(self)
 	tr.mask = mask
 
-	self.PlayerTrace = util.TraceLine(tr)
-	self.LastPlayerTrace = CurTime()
-	self.LastPlayerTraceMask = mask
+	tr = util.TraceLine(tr)
+	self.PlayerTrace = tr
 
-	return self.PlayerTrace
+	return tr
 end
 
 ---
@@ -839,10 +849,10 @@ function plymeta:RoleKnown()
 end
 
 ---
--- Returns whether a @{Player} was revived after beeing confirmed this round
+-- Returns whether a @{Player} was revived after being confirmed this round
 -- @return boolean
 -- @realm shared
-function plymeta:Revived()
+function plymeta:WasRevivedAndConfirmed()
 	return not self:TTT2NETGetBool("body_found", false) and self:OnceFound()
 end
 
@@ -868,7 +878,7 @@ end
 -- @return boolean
 -- @realm shared
 function plymeta:IsReady()
-	return self.is_ready or false
+	return self.isReady or false
 end
 
 ---
@@ -935,6 +945,8 @@ function plymeta:SetModel(mdlName)
 		net.WriteString(mdl)
 		net.WriteEntity(self)
 		net.Broadcast()
+
+		self:SetupHands()
 	end
 end
 
@@ -945,3 +957,68 @@ hook.Add("TTTEndRound", "TTTEndRound4TTT2TargetPlayer", function()
 		plys[i].targetPlayer = nil
 	end
 end)
+
+---
+-- Returns if the player is reviving.
+-- @return boolean The blocking status
+-- @realm shared
+function plymeta:IsReviving()
+	return self.isReviving or false
+end
+
+---
+-- Returns if the ongoing revival is blocking or not.
+-- @return boolean The blocking status
+-- @realm shared
+function plymeta:IsBlockingRevival()
+	return self.isBlockingRevival or false
+end
+
+---
+-- Returns the time when the ongoing revival started.
+-- @return[default=@{CurTime()}] number The time when the revival started in seconds
+-- @realm shared
+function plymeta:GetRevivalStartTime()
+	return self.revivalStartTime or CurTime()
+end
+
+---
+-- Returns the duration for the ongoing revival.
+-- @return[default=1.0] number The time for the revival in seconds
+-- @realm shared
+function plymeta:GetRevivalDuration()
+	return self.revivalDurarion or 0.0
+end
+
+---
+-- Checks if a player was active during this round. A player was active if they received
+-- a role. This state is reset once the next round begins (@{GM:TTTBeginRound}).
+-- @return boolean Returns if the player was active
+-- @realm shared
+function plymeta:WasActiveInRound()
+	return self:TTT2NETGetBool("player_was_active_in_round", false)
+end
+
+---
+-- Returns the times a player has died in an active round.
+-- @return number The amoutn of deaths in the active round
+-- @realm shared
+function plymeta:GetDeathsInRound()
+	return self:TTT2NETGetUInt("player_round_deaths", 0)
+end
+
+---
+-- Checks if a player died while the round was active.
+-- @return boolean Returns if the player died in the round
+-- @realm shared
+function plymeta:HasDiedInRound()
+	return self:GetDeathsInRound() > 0
+end
+
+---
+-- Checks if a player was revived in the round.
+-- @return boolean Returns if the player was revived
+-- @realm shared
+function plymeta:WasRevivedInRound()
+	return self:HasDiedInRound()
+end

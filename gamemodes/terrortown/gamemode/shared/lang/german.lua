@@ -297,7 +297,7 @@ L.set_title_lang = "Spracheinstellungen"
 
 -- It may be best to leave this next one english, so english players can always
 -- find the language setting even if it's set to a language they don't know.
-L.set_lang = "Select language:"
+L.set_lang = "Sprache auswählen (Select language):"
 
 
 -- Weapons and equipment, HUD and messages
@@ -374,7 +374,6 @@ L.c4_status_disarmed = "ENTSCHÄRFT"
 L.vis_name = "Visualisierer"
 L.vis_hint = "Drücke {usekey} zum Aufheben (nur Detektive)."
 
-L.vis_help_pri = "{primaryfire} lässt das aktivierte Gerät fallen."
 L.vis_short_desc = "Visualisiert den Tatort, wenn das Opfer an einer Schusswunde starb"
 
 L.vis_desc = [[
@@ -389,7 +388,6 @@ L.decoy_name = "Attrappe"
 L.decoy_no_room = "Du kannst diese Attrappe nicht tragen."
 L.decoy_broken = "Deine Attrappe wurde zerstört!"
 
-L.decoy_help_pri = "{primaryfire} platziert die Attrappe."
 L.decoy_short_desc = "Diese Attrappe erzeugt ein gefälschtes Radar-Signal sichtbar für andere Teams"
 L.decoy_pickup_wrong_team = "Du kannst sie nicht aufnehmen, da sie einem anderen Team gehört"
 
@@ -488,9 +486,6 @@ großen Entfernung zu identifizieren.
 Unbegrenzt nutzbar, aber das Identifizieren dauert
 einige Sekunden.]]
 
-L.binoc_help_pri = "{primaryfire} identifiziert einen Körper."
-L.binoc_help_sec = "{secondaryfire} ändert Zoom-Level."
-
 -- UMP
 L.ump_desc = [[
 Experimentelles SMG, das Ziele desorientiert.
@@ -499,15 +494,19 @@ Nutzt normale SMG Munition.]]
 
 -- DNA scanner
 L.dna_name = "DNA-Scanner"
-L.dna_identify = "Die Leiche muss identifiziert sein, um die DNA des Mörders zu erhalten."
 L.dna_notfound = "Keine Spuren von DNA am Ziel gefunden."
 L.dna_limit = "Speicherlimit erreicht. Entferne alte Spuren, um neue hinzuzufügen."
 L.dna_decayed = "Die DNA-Spur des Mörders ist verfallen."
 L.dna_killer = "Es wurde eine DNA-Spur des Mörders von der Leiche aufgesammelt!"
+L.dna_duplicate = "Treffer! Die DNA befindet sich bereits in deinem Scanner!"
 L.dna_no_killer = "Die DNA konnte nicht erlangt werden (Mörder vom Server gegangen?)."
 L.dna_armed = "Die Bombe ist scharf! Entschärfe sie zuerst!"
-L.dna_object = "{num} neue DNA-Spuren von diesem Objekt aufgesammelt."
+L.dna_object = "Es wurde eine DNA-Spur vom letzten Besitzer des Objektes gefunden."
 L.dna_gone = "DNA nicht in diesem Bereich gefunden."
+L.dna_tid_possible = "Scan möglich"
+L.dna_tid_impossible = "Scan unmöglich"
+L.dna_screen_ready = "Keine DNA"
+L.dna_screen_match = "Treffer"
 
 L.dna_desc = [[
 Sammelt DNA-Spuren von Objekten auf
@@ -515,24 +514,6 @@ und wird genutzt, um den Besitzer dieser ausfindig zu machen.
 
 Kann an frischen Leichen verwendet werden, um die DNA
 des Mörders zu erhalten und um ihn aufzuspüren.]]
-
-L.dna_menu_title = "DNA-Scan-Einstellungen"
-L.dna_menu_sample = "DNA-Spuren an {source} gefunden"
-L.dna_menu_remove = "Ausgewählte entfernen"
-L.dna_menu_help1 = "Dies sind die DNA-Spuren, die du gesammelt hast."
-L.dna_menu_help2 = [[
-Wenn geladen, kannst du den Ort desjenigen ausfindig machen,
-zu dem die DNA-Probe gehört.
-Je weiter das Ziel entfernt ist, desto mehr Energie wird gebraucht.]]
-
-L.dna_menu_scan = "Scannen"
-L.dna_menu_repeat = "Auto-Wiederholen"
-L.dna_menu_ready = "BEREIT"
-L.dna_menu_charge = "AUFLADEN"
-L.dna_menu_select = "PROBE WÄHLEN"
-
-L.dna_help_primary = "{primaryfire} um eine DNA-Probe zu entnehmen"
-L.dna_help_secondary = "{secondaryfire} um die Scaneinstellungen zu öffnen"
 
 -- Magneto stick
 L.magnet_name = "Magneto-Stick"
@@ -614,7 +595,7 @@ L.corpse_too_far_away = "Leiche zu weit weg zum Untersuchen."
 L.corpse_binoculars = "Drücke [{key}] um Leiche mit Fernglas zu untersuchen."
 L.corpse_searched_by_detective = "Diese Leiche wurde von einem Detektiv untersucht"
 
-L.target_disg = "Getarnt"
+L.target_disg = "(Getarnt)"
 L.target_unid = "Unidentifizierter Körper"
 
 L.target_credits = "Durchsuche, um ungenutzte Credits zu erhalten."
@@ -651,10 +632,6 @@ L.tbut_admin_mode_only = "Nur sichtbar für dich, da du ein Admin bist und '{cv}
 L.tbut_allow = "Erlaubt"
 L.tbut_prohib = "Verboten"
 L.tbut_default = "Standard"
-
--- Equipment info lines (on the left above the health/ammo panel)
-L.disg_hud = "Getarnt. Dein Name ist ausgeblendet."
-L.radar_hud = "Radar bereit für nächsten Scan in: {time}"
 
 -- Spectator muting of living/dead
 L.mute_living = "Lebende stumm gestellt"
@@ -1233,7 +1210,7 @@ L.hud_forced_failed = "Es ist fehlgeschlagen {hudname} zu erzwingen. Bist du Adm
 L.hud_restricted_failed = "Es ist fehlgeschlagen {hudname} zu beschränken. Bist du Admin?"
 
 L.shop_role_select = "Wähle eine Rolle"
-L.shop_role_selected = "Der {roles} Shop wurde gewählt!"
+L.shop_role_selected = "Der {role} Shop wurde gewählt!"
 L.shop_search = "Suche"
 
 L.button_save = "Sichern"
@@ -1269,3 +1246,63 @@ L.door_auto_closes = "Diese Tür schließt automatisch"
 L.door_open_touch = "Laufe gegen die Tür um sie zu öffnen."
 L.door_open_touch_and_use = "Laufe gegen die Tür oder drücke [{usekey}] um Tür zu öffnen."
 L.hud_health = "Leben"
+
+-- 2020-04-20
+L.item_speedrun = "Schnelllauf"
+L.item_speedrun_desc = [[Macht dich 50% schneller!]]
+L.item_no_explosion_damage = "Kein Explosionsschaden"
+L.item_no_explosion_damage_desc = [[Macht dich immun für Explosionsschaden.]]
+L.item_no_fall_damage = "Kein Fallschaden"
+L.item_no_fall_damage_desc = [[Macht dich immun für Fallschaden.]]
+L.item_no_fire_damage = "Kein Feuerschaden"
+L.item_no_fire_damage_desc = [[Macht dich immun für Deuerschaden.]]
+L.item_no_hazard_damage = "Kein Gefahrgutschaden"
+L.item_no_hazard_damage_desc = [[Macht dich immunn für Gefahrgutschaden, wie Gift, Strahlung und Säure.]]
+L.item_no_energy_damage = "Kein Energieschaden"
+L.item_no_energy_damage_desc = [[Macht dich immun für Energieschaden, wie Laser, Plasma und Blitze.]]
+L.item_no_prop_damage = "Kein Objektschaden"
+L.item_no_prop_damage_desc = [[Macht dich immun fpr Objektschaden.]]
+L.item_no_drown_damage = "Kein Ertrinkungsschaden"
+L.item_no_drown_damage_desc = [[Macht dich immun für Ertrinkungsschaden.]]
+
+-- 2020-04-30
+L.message_revival_canceled = "Wiederbelebung abgebrochen."
+L.message_revival_failed = "Wiederbelebung fehlgeschlagen."
+L.message_revival_failed_missing_body = "Du wurdest nicht wiederbelebt, da deine Leiche nicht mehr existiert."
+L.hud_revival_title = "Zeit bis zur Wiederbelebung:"
+L.hud_revival_time = "{time}s"
+
+-- 2020-05-03
+L.door_destructible = "Tür ist zerstörbar ({health}HP)"
+
+-- 2020-05-28
+L.confirm_detective_only = "Nur Detektive können Leichen bestätigen"
+L.inspect_detective_only = "Nur Detektive können Leichen untersuchen"
+L.corpse_hint_no_inspect = "Nur ein Detektiv kann diesen Körper untersuchen."
+L.corpse_hint_inspect_only = "Drücke [{usekey}] zum Durchsuchen. Nur Detektive können diesen Körper bestätigen."
+L.corpse_hint_inspect_only_credits = "Drücke [{usekey}] zum Erhalten der Credits. Nur ein Detektiv kann diesen Körper untersuchen."
+
+-- 2020-06-04
+L.label_bind_disguiser = "Tarnung umschalten"
+
+-- 2020-06-24
+L.dna_help_primary = "Entnehme eine DNA-Probe"
+L.dna_help_secondary = "Wechsel den DNA Slot"
+L.dna_help_reload = "Lösche eine Probe"
+
+L.binoc_help_pri = "Identifiziere einen Körper."
+L.binoc_help_sec = "Ändere Zoom-Level."
+
+L.vis_help_pri = "Lass das aktivierte Gerät fallen."
+
+L.decoy_help_pri = "Platziere die Attrappe."
+
+L.set_cross_lines_enable = "Aktiviere Fadenkreuz-Linien"
+
+-- 2020-08-07
+L.pickup_error_spec = "Du kannst eine Waffe als Zuschauer nicht aufheben."
+L.pickup_error_owns = "Du kannst diese Waffe nicht aufheben, weil du die gleiche Waffe bereits trägst."
+L.pickup_error_noslot = "Du verfügst über keinen freien Slot, um diese Waffe aufzuheben."
+
+-- 2020-08-11
+L.f1_settings_shop_desc_double_click = "Kaufe ein Item im Shop, indem du es doppelt anklickst."

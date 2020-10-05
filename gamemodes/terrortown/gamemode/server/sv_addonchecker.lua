@@ -1,143 +1,528 @@
 ---
--- Addonchecker to detect known incompatabilities.
+-- addonChecker to detect known incompatabilities.
 -- @author saibotk
+-- @author Mineotopia
 
-Addonchecker = {}
+ADDON_INCOMPATIBLE = 0
+ADDON_OUTDATED = 1
+
+addonChecker = addonChecker or {}
+
+addonChecker.curatedList = {
+	["656662924"] = { -- Killer Notifier by nerzlakai96
+		alternative = "1367128301",
+		reason = "Does not work with our role system.",
+		type = ADDON_INCOMPATIBLE
+	},
+	["167547072"] = { -- Killer Notifier by StarFox
+		alternative = "1367128301",
+		reason = "Does not work with our role system.",
+		type = ADDON_INCOMPATIBLE
+	},
+	["649273679"] = { -- Role Counter by Zaratusa
+		alternative = "1367128301",
+		reason = "Does not work with our role system.",
+		type = ADDON_INCOMPATIBLE
+	},
+	["1531794562"] = { -- Killer Info by wurffl
+		alternative = "1367128301",
+		reason = "Does not work with our role system.",
+		type = ADDON_INCOMPATIBLE
+	},
+	["257624318"] = { -- Killer info by DerRene
+		alternative = "1367128301",
+		reason = "Does not work with our role system.",
+		type = ADDON_INCOMPATIBLE
+	},
+	["308966836"] = { -- Death Faker by Exho
+		alternative = "1473581448",
+		reason = "Does not work with our role system.",
+		type = ADDON_INCOMPATIBLE
+	},
+	["922007616"] = { -- Death Faker by BocciardoLight
+		alternative = "1473581448",
+		reason = "Does not work with our role system.",
+		type = ADDON_INCOMPATIBLE
+	},
+	["785423990"] = { -- Death Faker by markusmarkusz
+		alternative = "1473581448",
+		reason = "Does not work with our role system.",
+		type = ADDON_INCOMPATIBLE
+	},
+	["236217898"] = { -- Death Faker by jayjayjay1
+		alternative = "1473581448",
+		reason = "Does not work with our role system.",
+		type = ADDON_INCOMPATIBLE
+	},
+	["912181642"] = { -- Death Faker by w4rum
+		alternative = "1473581448",
+		reason = "Does not work with our role system.",
+		type = ADDON_INCOMPATIBLE
+	},
+	["127865722"] = { -- TTT ULX by Bender180
+		alternative = "1362430347",
+		reason = "All TTT2 features are missing from this version.",
+		type = ADDON_INCOMPATIBLE
+	},
+	["305101059"] = { -- ID Bomb by MolagA
+		type = ADDON_INCOMPATIBLE
+	},
+	["663328966"] = { -- damagelogs by Hundreth
+		reason = "Breaks the TTT2 gamemode, alternative available here: https://github.com/Alf21/tttdamagelogs",
+		type = ADDON_INCOMPATIBLE
+	},
+	["404599106"] = { -- SpectatorDeathmatch by P4sca1 [EGM]
+		alternative = "1997666028",
+		reason = "Breaks the TTT2 gamemode.",
+		type = ADDON_INCOMPATIBLE
+	},
+	["1376434172"] = { -- Golden Deagle by DaniX_Chile
+		alternative = "1398388611",
+		reason = "Does not work with our role system.",
+		type = ADDON_INCOMPATIBLE
+	},
+	["1434026961"] = { -- Golden Deagle by Mangonaut
+		alternative = "1398388611",
+		reason = "Does not work with our role system.",
+		type = ADDON_INCOMPATIBLE
+	},
+	["303535203"] = { -- Golden Deagle by Navusaur
+		alternative = "1398388611",
+		reason = "Does not work with our role system.",
+		type = ADDON_INCOMPATIBLE
+	},
+	["1325415810"] = { -- Golden Deagle by Faedon | Max
+		alternative = "1398388611",
+		reason = "Does not work with our role system.",
+		type = ADDON_INCOMPATIBLE
+	},
+	["648505481"] = { -- Golden Deagle by TypicalRookie
+		alternative = "1398388611",
+		reason = "Does not work with our role system.",
+		type = ADDON_INCOMPATIBLE
+	},
+	["659643589"] = { -- Golden Deagle by 中國是同性戀
+		alternative = "1398388611",
+		reason = "Does not work with our role system.",
+		type = ADDON_INCOMPATIBLE
+	},
+	["828347015"] = { -- TTT Totem by Gamefreak
+		alternative = "1566390281",
+		reason = "Has its own role selection system.",
+		type = ADDON_INCOMPATIBLE
+	},
+	["644532564"] = { -- TTT Totem Content by Gamefreak
+		type = ADDON_INCOMPATIBLE
+	},
+	["1092556189"] = { -- Town of Terror by Jenssons
+		reason = "Inferior role selection system that breaks TTT2.",
+		type = ADDON_INCOMPATIBLE
+	},
+	["1215502383"] = { -- Custom Roles by Noxx
+		reason = "Inferior role selection system that breaks TTT2.",
+		type = ADDON_INCOMPATIBLE
+	},
+	["886346394"] = { -- Identity Swapper by Lesh
+		reason = "Overwrites the targetID gamemode function and therefore removes the TTT2 targetID.",
+		type = ADDON_INCOMPATIBLE
+	},
+	["844284735"] = { -- Identity Swapper by Saty
+		reason = "Overwrites the targetID gamemode function and therefore removes the TTT2 targetID.",
+		type = ADDON_INCOMPATIBLE
+	},
+	["1382102057"] = { -- Thanos's Infinity Gauntlet SWEP and Model
+		reason = "Sets everybodies sprintspeed quite high.",
+		type = ADDON_INCOMPATIBLE
+	},
+	["1757151213"] = { -- Random Shop by Lupus
+		reason = "Random shop is already included in TTT2.",
+		type = ADDON_INCOMPATIBLE
+	},
+	["481440358"] = { -- Drowning Indicator by Moe
+		reason = "A drowning indicator is already included in TTT2.",
+		type = ADDON_INCOMPATIBLE
+	},
+	["933056549"] = { -- Sprint by Fresh Garry
+		reason = "A sprinting system is already included in TTT2.",
+		type = ADDON_INCOMPATIBLE
+	},
+	["1729301513"] = { -- Sprint by Lesh
+		reason = "A sprinting system is already included in TTT2.",
+		type = ADDON_INCOMPATIBLE
+	},
+	["367945571"] = { -- Advanced Body Search by Mr Trung
+		reason = "This addon breaks the whole body confirmation system.",
+		type = ADDON_INCOMPATIBLE
+	},
+	["878772496"] = { -- BEM by Long Long Longson
+		reason = "A reworked shop is already part of TTT2.",
+		type = ADDON_INCOMPATIBLE
+	},
+	["1107420703"] = { -- BEM by Fresh Garry
+		reason = "A reworked shop is already part of TTT2.",
+		type = ADDON_INCOMPATIBLE
+	},
+	["290961117"] = { -- Destructible Doors by Exho
+		reason = "Breakable doors are already a part of TTT2 that can be enabled with a convar. This addon has also problems with area portals in some doors.",
+		type = ADDON_INCOMPATIBLE
+	},
+	["606792331"] = { -- Advanced disguiser by Gamefreak
+		alternative = "2144375749",
+		reason = "Does not work with TTT2 targetID.",
+		type = ADDON_INCOMPATIBLE
+	},
+	["610632051"] = { -- Advanced disguiser by Killberty
+		alternative = "2144375749",
+		reason = "Does not work with TTT2 targetID.",
+		type = ADDON_INCOMPATIBLE
+	},
+	["940215686"] = { -- Clairvoyancy by Doctor Jew
+		alternative = "1637001449",
+		reason = "Does not use the TTT2 sidebar system.",
+		type = ADDON_OUTDATED
+	},
+	["654341247"] = { -- Clairvoyancy by Liberty
+		alternative = "1637001449",
+		reason = "Does not use the TTT2 sidebar system.",
+		type = ADDON_OUTDATED
+	},
+	["130051756"] = { -- Spartan Kick by uacnix
+		alternative = "1584675927",
+		reason = "Broken area portals in some doors and improved use of TTT2 systems.",
+		type = ADDON_OUTDATED
+	},
+	["122277196"] = { -- Spartan Kick by Chowder908
+		alternative = "1584675927",
+		reason = "Broken area portals in some doors and improved use of TTT2 systems.",
+		type = ADDON_OUTDATED
+	},
+	["922510848"] = { -- Spartan Kick by BocciardoLight
+		alternative = "1584675927",
+		reason = "Broken area portals in some doors and improved use of TTT2 systems.",
+		type = ADDON_OUTDATED
+	},
+	["282584080"] = { -- Spartan Kick by Porter
+		alternative = "1584675927",
+		reason = "Broken area portals in some doors and improved use of TTT2 systems.",
+		type = ADDON_OUTDATED
+	},
+	["1092632443"] = { -- Spartan Kick by Jenssons
+		alternative = "1584675927",
+		reason = "Broken area portals in some doors and improved use of TTT2 systems.",
+		type = ADDON_OUTDATED
+	},
+	["1523332573"] = { -- Thomas by Tubner
+		alternative = "2024902834",
+		reason = "Broken models, sounds and damage inflictor info.",
+		type = ADDON_OUTDATED
+	},
+	["962093923"] = { -- Thomas by ThunfischArnold
+		alternative = "2024902834",
+		reason = "Broken models, sounds and damage inflictor info.",
+		type = ADDON_OUTDATED
+	},
+	["1479128258"] = { -- Thomas by JollyJelly1001
+		alternative = "2024902834",
+		reason = "Broken models, sounds and damage inflictor info.",
+		type = ADDON_OUTDATED
+	},
+	["1390915062"] = { -- Thomas by Doc Snyder
+		alternative = "2024902834",
+		reason = "Broken models, sounds and damage inflictor info.",
+		type = ADDON_OUTDATED
+	},
+	["1171584841"] = { -- Thomas by Maxdome
+		alternative = "2024902834",
+		reason = "Broken models, sounds and damage inflictor info.",
+		type = ADDON_OUTDATED
+	},
+	["811718553"] = { -- Thomas by Mr C Funk
+		alternative = "2024902834",
+		reason = "Broken models, sounds and damage inflictor info.",
+		type = ADDON_OUTDATED
+	},
+	["922355426"] = { -- Melon Mine by Phoenixf129
+		alternative = "1629914760",
+		reason = "Doesn't really work with the TTT2 role system.",
+		type = ADDON_OUTDATED
+	},
+	["960077088"] = { -- Melon Mine by TheSoulrester
+		alternative = "1629914760",
+		reason = "Doesn't really work with the TTT2 role system.",
+		type = ADDON_OUTDATED
+	},
+	["309299668"] = { -- Martyrdom by Exho
+		alternative = "1630269736",
+		reason = "Does not use the TTT2 sidebar system.",
+		type = ADDON_OUTDATED
+	},
+	["1324649928"] = { -- Martyrdom by Doctor Jew
+		alternative = "1630269736",
+		reason = "Does not use the TTT2 sidebar system.",
+		type = ADDON_OUTDATED
+	},
+	["899206223"] = { -- Martyrdom by Koksgesicht
+		alternative = "1630269736",
+		reason = "Does not use the TTT2 sidebar system.",
+		type = ADDON_OUTDATED
+	},
+	["652046425"] = { -- Juggernaut Suit by Zaratusa
+		alternative = "2157829981",
+		reason = "Does not use the TTT2 sidebar system.",
+		type = ADDON_OUTDATED
+	},
+	["650523807"] = { -- Lucky Horseshoe by Zaratusa
+		alternative = "2157888469",
+		reason = "Does not use the TTT2 sidebar system.",
+		type = ADDON_OUTDATED
+	},
+	["650523765"] = { -- Hermes Boots by Zaratusa
+		alternative = "2157850255",
+		reason = "Does not use the TTT2 sidebar system.",
+		type = ADDON_OUTDATED
+	},
+	["1470823315"] = { -- Beartrap by Milkwater
+		alternative = "1641605106",
+		reason = "Has some problems with damage after roundend and doesn't use the TTT2 sidebar system.",
+		type = ADDON_OUTDATED
+	},
+	["407751746"] = { -- Beartrap by Nerdhive
+		alternative = "1641605106",
+		reason = "Has some problems with damage after roundend and doesn't use the TTT2 sidebar system.",
+		type = ADDON_OUTDATED
+	},
+	["273623128"] = { -- zombie perk bottles by Hoff
+		alternative = "842302491",
+		type = ADDON_OUTDATED
+	},
+	["1387914296"] = { -- zombie perk bottles by Schmitler
+		alternative = "842302491",
+		type = ADDON_OUTDATED
+	},
+	["1371596971"] = { -- zombie perk bottles by Amenius
+		alternative = "842302491",
+		type = ADDON_OUTDATED
+	},
+	["860794236"] = { -- zombie perk bottles by Menzek
+		alternative = "842302491",
+		type = ADDON_OUTDATED
+	},
+	["1198504029"] = { -- zombie perk bottles by RedocPlays
+		alternative = "842302491",
+		type = ADDON_OUTDATED
+	},
+	["911658617"] = { -- zombie perk bottles by Luchix
+		alternative = "842302491",
+		type = ADDON_OUTDATED
+	},
+	["869353740"] = { -- zombie perk bottles by Railroad Engineer 111
+		alternative = "842302491",
+		type = ADDON_OUTDATED
+	},
+	["310403937"] = { -- Prop Disguiser by Exho
+		alternative = "1662844145",
+		type = ADDON_OUTDATED
+	},
+	["843092697"] = { -- Prop Disguiser by Soren
+		alternative = "1662844145",
+		type = ADDON_OUTDATED
+	},
+	["937535488"] = { -- Prop Disguiser by St Addi
+		alternative = "1662844145",
+		type = ADDON_OUTDATED
+	},
+	["1168304202"] = { -- Prop Disguiser by Izellix
+		alternative = "1662844145",
+		type = ADDON_OUTDATED
+	},
+	["1361103159"] = { -- Prop Disguiser by Derp altamas
+		alternative = "1662844145",
+		type = ADDON_OUTDATED
+	},
+	["1301826793"] = { -- Prop Disguiser by Akechi
+		alternative = "1662844145",
+		type = ADDON_OUTDATED
+	},
+	["254779132"] = { -- Dead Ringer by Porter
+		alternative = "810154456",
+		type = ADDON_OUTDATED
+	},
+	["1315377462"] = { -- Dead Ringer by MuratYilderimTM
+		alternative = "810154456",
+		type = ADDON_OUTDATED
+	},
+	["240281783"] = { -- Dead Ringer by Niandra
+		alternative = "810154456",
+		type = ADDON_OUTDATED
+	},
+	["284419411"] = { -- Minifier by Lykrast
+		alternative = "1896918348",
+		reason = "Broken hitboxes and other problems. Also no integration in the TTT2 sidebar system.",
+		type = ADDON_OUTDATED
+	},
+	["1338887971"] = { -- Minifier by Evan
+		alternative = "1896918348",
+		reason = "Broken hitboxes and other problems. Also no integration in the TTT2 sidebar system.",
+		type = ADDON_OUTDATED
+	},
+	["1551396306"] = { -- Minifier by FaBe2
+		alternative = "1896918348",
+		reason = "Broken hitboxes and other problems. Also no integration in the TTT2 sidebar system.",
+		type = ADDON_OUTDATED
+	},
+	["1354031183"] = { -- Minifier by SnowSoulAnget
+		alternative = "1896918348",
+		reason = "Broken hitboxes and other problems. Also no integration in the TTT2 sidebar system.",
+		type = ADDON_OUTDATED
+	},
+	["1670942051"] = { -- Minifier by Not Jesus
+		alternative = "1896918348",
+		reason = "Broken hitboxes and other problems. Also no integration in the TTT2 sidebar system.",
+		type = ADDON_OUTDATED
+	},
+	["1376141849"] = { -- Minifier by ---
+		alternative = "1896918348",
+		reason = "Broken hitboxes and other problems. Also no integration in the TTT2 sidebar system.",
+		type = ADDON_OUTDATED
+	},
+	["1599819393"] = { -- Minifier by Coe
+		alternative = "1896918348",
+		reason = "Broken hitboxes and other problems. Also no integration in the TTT2 sidebar system.",
+		type = ADDON_OUTDATED
+	},
+	["863963592"] = { -- Super Soda by ---
+		alternative = "1815518231",
+		reason = "Less bottles, no integration in TTT2 systems, generally buggy.",
+		type = ADDON_OUTDATED
+	},
+	["801433502"] = { -- Defibrillator by Minty
+		alternative = "2115944312",
+		reason = "Improved integration into TTT2 systems.",
+		type = ADDON_OUTDATED
+	},
+	["162581348"] = { -- Defibrillator by Willox
+		alternative = "2115944312",
+		reason = "Improved integration into TTT2 systems.",
+		type = ADDON_OUTDATED
+	},
+	["921953443"] = { -- Defibrillator by BocciardoLight
+		alternative = "2115944312",
+		reason = "Improved integration into TTT2 systems.",
+		type = ADDON_OUTDATED
+	},
+	["785796753"] = { -- Defibrillator by Shiratori
+		alternative = "2115944312",
+		reason = "Improved integration into TTT2 systems.",
+		type = ADDON_OUTDATED
+	},
+	["299479443"] = { -- Defibrillator by PixL
+		alternative = "2115944312",
+		reason = "Improved integration into TTT2 systems.",
+		type = ADDON_OUTDATED
+	},
+	["1553970612"] = { -- Defibrillator by DasNedwork
+		alternative = "2115944312",
+		reason = "Improved integration into TTT2 systems.",
+		type = ADDON_OUTDATED
+	},
+	["821963023"] = { -- Defibrillator by DarkIce
+		alternative = "2115944312",
+		reason = "Improved integration into TTT2 systems.",
+		type = ADDON_OUTDATED
+	},
+	["1695163471"] = { -- Defibrillator by Mr. KobraX
+		alternative = "2115944312",
+		reason = "Improved integration into TTT2 systems.",
+		type = ADDON_OUTDATED
+	},
+	["1563553647"] = { -- Defibrillator by _BLU
+		alternative = "2115944312",
+		reason = "Improved integration into TTT2 systems.",
+		type = ADDON_OUTDATED
+	},
+	["1445820970"] = { -- Defibrillator by Mangonaut
+		alternative = "2115944312",
+		reason = "Improved integration into TTT2 systems.",
+		type = ADDON_OUTDATED
+	},
+	["805980529"] = { -- Defibrillator by Musiker15
+		alternative = "2115944312",
+		reason = "Improved integration into TTT2 systems.",
+		type = ADDON_OUTDATED
+	},
+	["422006754"] = { -- Defibrillator by Toxic_Terrorists
+		alternative = "2115944312",
+		reason = "Improved integration into TTT2 systems.",
+		type = ADDON_OUTDATED
+	},
+	["840688276"] = { -- Defibrillator by Saty
+		alternative = "2115944312",
+		reason = "Improved integration into TTT2 systems.",
+		type = ADDON_OUTDATED
+	},
+	["1198501844"] = { -- Defibrillator by Brannium
+		alternative = "2115944312",
+		reason = "Improved integration into TTT2 systems.",
+		type = ADDON_OUTDATED
+	},
+	["1199113632"] = { -- Defibrillator by Brannium
+		alternative = "2115944312",
+		reason = "Improved integration into TTT2 systems.",
+		type = ADDON_OUTDATED
+	},
+	["290945941"] = { -- Door Locker by Exho
+		alternative = "2115945573",
+		reason = "Improved integration into TTT2 systems and fixed area portal problems for some doors.",
+		type = ADDON_OUTDATED
+	},
+	["1132650862"] = { -- Door Locker by Saiyajin ByTayro
+		alternative = "2115945573",
+		reason = "Improved integration into TTT2 systems and fixed area portal problems for some doors.",
+		type = ADDON_OUTDATED
+	},
+	["1361100842"] = { -- Door Locker by Altamas
+		alternative = "2115945573",
+		reason = "Improved integration into TTT2 systems and fixed area portal problems for some doors.",
+		type = ADDON_OUTDATED
+	}
+}
 
 ---
--- This will iterate through all <code>Addonchecker.buggyAddons</code> and <code>Addonchecker.outdatedAddons</code>
--- to notify about known incompatible / outdated addons and about a working alternative, if one exists.
+-- This will iterate through all addons in a curated list to notify about known
+-- incompatible / outdated addons and about a working alternative, if one exists.
 -- @realm server
-function Addonchecker:Check()
-	local buggyAddons = table.Copy(self.buggyAddons)
-	local outdatedAddons = table.Copy(self.outdatedAddons)
+function addonChecker.Check()
+	local addonTable = engine.GetAddons()
 
-	hook.Run("TTT2ModifyIncompatibleAddons", buggyAddons)
-	hook.Run("TTT2ModifyOutdatedAddons", outdatedAddons)
+	print("")
+	print("TTT2 ADDON CHECKER")
+	print("=============================================================")
+	print("")
 
-	local c = 0
-	local addns = engine.GetAddons()
+	for i = 1, #addonTable do
+		local addon = addonTable[i]
+		local detectedAddon = addonChecker.curatedList[tostring(addon.wsid)]
 
-	for i = 1, #addns do
-		local addon = addns[i]
-		local key = tostring(addon.wsid)
+		if not detectedAddon then continue end
 
-		local buggy_addon = buggyAddons[key]
-		if buggy_addon then
-			c = c + 1
-			buggyAddons[key] = nil
+		ErrorNoHalt(((detectedAddon.type == ADDON_OUTDATED) and "Outdated add-on detected: " or "Incompatible add-on detected: ") .. addon.title .. "\n")
 
-			if buggy_addon ~= "" then
-				buggy_addon = "\nThere is a compatible Add-On available at: https://steamcommunity.com/sharedfiles/filedetails/?id=" .. buggy_addon
-			end
-
-			ErrorNoHalt((c == 1 and "\n\n" or "") .. "[TTT2][ERROR] Incompatible Add-On detected: " .. addon.title .. " (WS-ID: '" .. addon.wsid .. "')." .. buggy_addon .. "\n\n")
+		if detectedAddon.reason then
+			ErrorNoHalt("Reason: " .. detectedAddon.reason .. "\n")
 		end
 
-		local outdated_addon = outdatedAddons[key]
-		if outdated_addon then
-			c = c + 1
-			buggyAddons[key] = nil
+		ErrorNoHalt("--> Detected add-on: https://steamcommunity.com/sharedfiles/filedetails/?id=" .. addon.wsid .. "\n")
 
-			if outdated_addon ~= "" then
-				outdated_addon = "\nThere is an updated Add-On available at: https://steamcommunity.com/sharedfiles/filedetails/?id=" .. outdated_addon
-			end
-
-			ErrorNoHalt((c == 1 and "\n\n" or "") .. "[TTT2][ERROR] Outdated Add-On detected: " .. addon.title .. " (WS-ID: '" .. addon.wsid .. "').\nYour version does work with TTT2, but there's an addon which uses some of the new features of TTT2." .. outdated_addon .. "\n\n")
+		if detectedAddon.alternative then
+			ErrorNoHalt("--> Alternative add-on: https://steamcommunity.com/sharedfiles/filedetails/?id=" .. detectedAddon.alternative .. "\n")
 		end
+
+		print("")
 	end
+
+	print("=============================================================")
+	print("This is the end of the addon checker output.")
+	print("")
 end
 
--- Addons that do not work (well) with TTT2 and can lead to errors.
-Addonchecker.buggyAddons = {
-	["656662924"] = "1367128301", -- Killer Notifier by nerzlakai96
-	["167547072"] = "1367128301", -- Killer Notifier by StarFox
-
-	["649273679"] = "1367128301", -- Role Counter by Zaratusa
-
-	["1531794562"] = "1367128301", -- Killer Info by wurffl
-	["257624318"] = "1367128301", -- Killer info by DerRene
-
-	["308966836"] = "1473581448", -- Death Faker by Exho
-	["922007616"] = "1473581448", -- Death Faker by BocciardoLight
-	["785423990"] = "1473581448", -- Death Faker by markusmarkusz
-	["236217898"] = "1473581448", -- Death Faker by jayjayjay1
-	["912181642"] = "1473581448", -- Death Faker by w4rum
-
-	["127865722"] = "1362430347", -- TTT ULX by Bender180
-
-	["305101059"] = "", -- ID Bomb by MolagA
-
-	["663328966"] = "", -- damagelogs by Hundreth
-
-	["404599106"] = "", -- SpectatorDeathmatch by P4sca1 [EGM]
-
-	["253737047"] = "1398388611", -- Golden Deagle by Zaratusa
-	["637848943"] = "1398388611", -- Golden Deagle by Zaratusa
-	["1376434172"] = "1398388611", -- Golden Deagle by DaniX_Chile
-	["1434026961"] = "1398388611", -- Golden Deagle by Mangonaut
-	["303535203"] = "1398388611", -- Golden Deagle by Navusaur
-	["1325415810"] = "1398388611", -- Golden Deagle by Faedon | Max
-	["648505481"] = "1398388611", -- Golden Deagle by TypicalRookie
-	["659643589"] = "1398388611", -- Golden Deagle by 中國是同性戀
-
-	["828347015"] = "1566390281", -- TTT Totem
-
-	["644532564"] = "", -- TTT Totem content
-
-	["1092556189"] = "", -- Town of Terror by Jenssons
-
-	["1215502383"] = "" -- Custom Roles by Noxx
-}
-
--- Addons that have newer version in the WS, that will work better with TTT2.
-Addonchecker.outdatedAddons = {
-	["940215686"] = "1637001449", -- Clairvoyancy by Doctor Jew
-	["654341247"] = "1637001449", -- Clairvoyancy by Liberty
-
-	["130051756"] = "1584675927", -- Spartan Kick by uacnix
-	["122277196"] = "1584675927", -- Spartan Kick by Chowder908
-	["922510848"] = "1584675927", -- Spartan Kick by BocciardoLight
-	["282584080"] = "1584675927", -- Spartan Kick by Porter
-	["1092632443"] = "1584675927", -- Spartan Kick by Jenssons
-
-	["1523332573"] = "1584780982", -- Thomas by Tubner
-	["962093923"] = "1584780982", -- Thomas by ThunfischArnold
-	["1479128258"] = "1584780982", -- Thomas by JollyJelly1001
-	["1390915062"] = "1584780982", -- Thomas by Doc Snyder
-	["1171584841"] = "1584780982", -- Thomas by Maxdome
-	["811718553"] = "1584780982", -- Thomas by Mr C Funk
-
-	["922355426"] = "1629914760", -- Melon Mine by Phoenixf129
-	["960077088"] = "1629914760", -- Melon Mine by TheSoulrester
-
-	["309299668"] = "1630269736", -- Martyrdom by Exho
-	["1324649928"] = "1630269736", -- Martyrdom by Doctor Jew
-	["899206223"] = "1630269736", -- Martyrdom by Koksgesicht
-
-	["652046425"] = "1640512667", -- Juggernaut Suit by Zaratusa
-
-	["652046425"] = "1470823315", -- Beartrap by Milkwater
-	["652046425"] = "407751746", -- Beartrap by Nerdhive
-
-	["273623128"] = "842302491", -- Juggernaut by Hoff
-	["1387914296"] = "842302491", -- Juggernaut by Schmitler
-	["1371596971"] = "842302491", -- Juggernaut by Amenius
-	["860794236"] = "842302491", -- Juggernaut by Menzek
-	["1198504029"] = "842302491", -- Juggernaut by RedocPlays
-	["911658617"] = "842302491", -- Juggernaut by Luchix
-	["869353740"] = "842302491", -- Juggernaut by Railroad Engineer 111
-
-	["310403937"] = "1662844145", -- Prop Disguiser by Exho
-	["843092697"] = "1662844145", -- Prop Disguiser by Soren
-	["937535488"] = "1662844145", -- Prop Disguiser by St Addi
-	["1168304202"] = "1662844145", -- Prop Disguiser by Izellix
-	["1361103159"] = "1662844145", -- Prop Disguiser by Derp altamas
-	["1301826793"] = "1662844145", -- Prop Disguiser by Akechi
-
-	["254779132"] = "810154456", -- Dead Ringer by Porter
-	["1315377462"] = "810154456", -- Dead Ringer by MuratYilderimTM
-	["240281783"] = "810154456", -- Dead Ringer by Niandra
-
-	["863963592"] = "1815518231" -- Super Soda by ---
-}
+concommand.Add("addonchecker", addonChecker.Check)

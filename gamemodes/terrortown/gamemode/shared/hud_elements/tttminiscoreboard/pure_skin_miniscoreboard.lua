@@ -46,7 +46,7 @@ if CLIENT then
 		hudelements.RegisterChildRelation(self.id, "pure_skin_roundinfo", false)
 
 		-- resort miniscoreboard if body_found is changed
-		TTT2NET:OnUpdate("players", function(oldval, newval, reversePath)
+		ttt2net.OnUpdate("players", function(oldval, newval, reversePath)
 			-- check if path of changed value is one of our releavant paths
 			if not refreshPaths[reversePath[2]] then return end
 
@@ -69,7 +69,7 @@ if CLIENT then
 		self.basecolor = self:GetHUDBasecolor()
 
 		plysList = util.GetFilteredPlayers(function (ply)
-			return ply:IsTerror() or ply:IsDeadTerror()
+			return ply:WasActiveInRound()
 		end)
 
 		self.curPlayerCount = #plysList
@@ -137,7 +137,7 @@ if CLIENT then
 		-- just update every 0.1 seconds; TODO maybe add a client ConVar
 		if self.lastUpdate + 0.1 < CurTime() then
 			local plys = util.GetFilteredPlayers(function(ply)
-				return ply:IsTerror() or ply:IsDeadTerror()
+				return ply:WasActiveInRound()
 			end)
 
 			if #plys ~= self.curPlayerCount then
@@ -149,6 +149,8 @@ if CLIENT then
 				-- sort playerlist: confirmed players should be in the first position
 				table.sort(plysList, SortMiniscoreboardFunc)
 			end
+
+			self.lastUpdate = CurTime()
 		end
 
 		-- draw bg and shadow
@@ -172,7 +174,7 @@ if CLIENT then
 			surface.SetDrawColor(clr(ply_color))
 			surface.DrawRect(tmp_x, tmp_y, self.ply_ind_size, self.ply_ind_size)
 
-			if ply:Revived() then
+			if ply:WasRevivedAndConfirmed() then
 				draw.FilteredTexture(tmp_x + 3, tmp_y + 3, self.ply_ind_size - 6, self.ply_ind_size - 6, self.icon_revived, 180, COLOR_BLACK)
 			elseif ply:OnceFound() and not ply:RoleKnown() then -- draw marker on indirect confirmed bodies
 				draw.FilteredTexture(tmp_x + 3, tmp_y + 3, self.ply_ind_size - 6, self.ply_ind_size - 6, self.icon_in_conf, 120, COLOR_BLACK)
@@ -186,7 +188,5 @@ if CLIENT then
 		if not self:InheritParentBorder() then
 			self:DrawLines(self.pos.x, self.pos.y, self.size.w, self.size.h, self.basecolor.a)
 		end
-
-		self.lastUpdate = CurTime()
 	end
 end

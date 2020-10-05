@@ -11,10 +11,9 @@ LANG.Strings = {}
 
 local table = table
 local pairs = pairs
-local ConVarExists = ConVarExists
 local CreateConVar = CreateConVar
 
-CreateConVar("ttt_language", "auto", FCVAR_ARCHIVE)
+local ttt_language = CreateConVar("ttt_language", "auto", FCVAR_ARCHIVE)
 
 LANG.DefaultLanguage = "english"
 LANG.ActiveLanguage = LANG.DefaultLanguage
@@ -271,7 +270,7 @@ end
 -- @realm client
 -- @internal
 function LANG.Init()
-	local lang_name = (ConVarExists("ttt_language") and GetConVar("ttt_language"):GetString() or "")
+	local lang_name = ttt_language and ttt_language:GetString() or LANG.ServerLanguage
 
 	-- if we want to use the server language, we'll be switching to it as soon as
 	-- we hear from the server which one it is, for now use default
@@ -365,7 +364,9 @@ LANG.Styles = {
 		chat.AddText(warn_color, text)
 	end,
 
-	[MSG_CHAT_PLAIN] = chat.AddText
+	[MSG_CHAT_PLAIN] = chat.AddText,
+
+	[MSG_CONSOLE] = print
 }
 
 LANG.StylesOld = {
@@ -430,7 +431,6 @@ end
 -- @realm client
 function LANG.ProcessMsg(name, params, mode)
 	local raw = LANG.TryTranslation(name)
-
 	local text = raw
 
 	if params then
@@ -472,11 +472,6 @@ local styledmessages = {
 		"tele_failed",
 		"tele_no_mark",
 		"tele_marked"
-	},
-
-	chat_plain = { -- TODO move to disguiser
-		"disg_turned_on",
-		"disg_turned_off"
 	},
 
 	chat_warn = { -- TODO move to teleporter

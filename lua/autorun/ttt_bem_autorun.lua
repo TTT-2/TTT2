@@ -1,3 +1,5 @@
+if engine.ActiveGamemode() ~= "terrortown" then return end
+
 -- create serverside ConVars
 local allowChange = CreateConVar("ttt_bem_allow_change", 1, SERVER and {FCVAR_ARCHIVE, FCVAR_REPLICATED} or FCVAR_REPLICATED, "Allow clients to change the look of the Traitor/Detective menu")
 CreateConVar("ttt_bem_sv_cols", 4, SERVER and {FCVAR_ARCHIVE, FCVAR_REPLICATED} or FCVAR_REPLICATED, "Sets the number of columns in the Traitor/Detective menu's item list (serverside)")
@@ -17,6 +19,7 @@ if CLIENT then
 			dgeneral:SetName("General")
 
 			dgeneral:CheckBox(LANG.GetTranslation("f1_settings_shop_desc_shopopen"), "ttt_bem_always_show_shop")
+			dgeneral:CheckBox(LANG.GetTranslation("f1_settings_shop_desc_double_click"), "ttt_bem_enable_doubleclick_buy")
 
 			dgeneral:Dock(TOP)
 

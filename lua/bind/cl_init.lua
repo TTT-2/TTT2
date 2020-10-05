@@ -8,7 +8,8 @@ local ipairs = ipairs
 
 bind = {}
 
-local tablename = "ttt2_bindings"
+local BIND_TABLE_NAME = "ttt2_bindings"
+local BIND_FLAG_TABLE_NAME = "ttt2_bindings_initialized"
 local Bindings = {}
 local Registry = {}
 local FirstPressed = {}
@@ -24,10 +25,29 @@ local SettingsBindingsCategories = { "TTT2 Bindings", "Other Bindings" }
 
 ---
 -- @internal
-local function DBCreateTable()
-	if not sql.TableExists(tablename) then
-		local result = sql.Query("CREATE TABLE " .. tablename .. " (guid TEXT, name TEXT, button TEXT)")
+local function DBCreateBindsTable()
+	if not sql.TableExists(BIND_TABLE_NAME) then
+		local result = sql.Query("CREATE TABLE " .. BIND_TABLE_NAME .. " (guid TEXT, name TEXT, button TEXT)")
+
 		if result == false then
+			ErrorNoHalt("[TTT2][BIND][ERROR] Could not create the database table...")
+
+			return false
+		end
+	end
+
+	return true
+end
+
+---
+-- @internal
+local function DBCreateDefaultBindsFlagTable()
+	if not sql.TableExists(BIND_FLAG_TABLE_NAME) then
+		local result = sql.Query("CREATE TABLE " .. BIND_FLAG_TABLE_NAME .. " (guid TEXT, name TEXT)")
+
+		if result == false then
+			ErrorNoHalt("[TTT2][BIND][ERROR] Could not create the flag database table...")
+
 			return false
 		end
 	end
@@ -38,10 +58,11 @@ end
 ---
 -- @internal
 local function SaveBinding(name, button)
-	if DBCreateTable() then
-		local result = sql.Query("INSERT INTO " .. tablename .. " VALUES('" .. LocalPlayer():SteamID64() .. "', " .. sql.SQLStr(name) .. ", " .. sql.SQLStr(button) .. ")")
+	if DBCreateBindsTable() then
+		local result = sql.Query("INSERT INTO " .. BIND_TABLE_NAME .. " VALUES('" .. LocalPlayer():SteamID64() .. "', " .. sql.SQLStr(name) .. ", " .. sql.SQLStr(button) .. ")")
+
 		if result == false then
-			print("[TTT2][BIND][ERROR] Wasn't able to save binding to database...")
+			ErrorNoHalt("[TTT2][BIND][ERROR] Wasn't able to save binding to database...")
 		end
 	end
 end
@@ -49,19 +70,45 @@ end
 ---
 -- @internal
 local function DBRemoveBinding(name, button)
-	if DBCreateTable() then
-		local result = sql.Query("DELETE FROM " .. tablename .. " WHERE guid = '" .. LocalPlayer():SteamID64() .. "' AND name = " .. sql.SQLStr(name) .. " AND button = " .. sql.SQLStr(button) )
+	if DBCreateBindsTable() then
+		local result = sql.Query("DELETE FROM " .. BIND_TABLE_NAME .. " WHERE guid = '" .. LocalPlayer():SteamID64() .. "' AND name = " .. sql.SQLStr(name) .. " AND button = " .. sql.SQLStr(button) )
+
 		if result == false then
-			print("[TTT2][BIND][ERROR] Wasn't able to remove binding from database...")
+			ErrorNoHalt("[TTT2][BIND][ERROR] Wasn't able to remove binding from database...")
 		end
 	end
 end
 
 ---
 -- @internal
+local function DBSetDefaultAppliedFlag(name)
+	if DBCreateDefaultBindsFlagTable() then
+		local result = sql.Query("INSERT INTO " .. BIND_FLAG_TABLE_NAME .. " VALUES('" .. LocalPlayer():SteamID64() .. "', " .. sql.SQLStr(name) .. ")")
+
+		if result == false then
+			ErrorNoHalt("[TTT2][BIND][ERROR] Wasn't able to save binding flag to database...")
+		end
+	end
+end
+
+---
+-- @internal
+local function WasDefaultApplied(name)
+	if DBCreateDefaultBindsFlagTable() then
+		local result = sql.Query("SELECT * FROM " .. BIND_FLAG_TABLE_NAME .. " WHERE guid = '" .. LocalPlayer():SteamID64() .. "' AND name = " .. sql.SQLStr(name))
+
+		return istable(result)
+	end
+
+	return false
+end
+
+---
+-- @internal
 local function TTT2LoadBindings()
-	if DBCreateTable() then
-		local result = sql.Query("SELECT * FROM " .. tablename .. " WHERE guid = '" .. LocalPlayer():SteamID64() .. "'")
+	if DBCreateBindsTable() then
+		local result = sql.Query("SELECT * FROM " .. BIND_TABLE_NAME .. " WHERE guid = '" .. LocalPlayer():SteamID64() .. "'")
+
 		if istable(result) then
 			for _, tbl in ipairs(result) do
 				local tmp = tbl.button
@@ -74,6 +121,21 @@ local function TTT2LoadBindings()
 			end
 
 			print("[TTT2][BIND] Loaded bindings...")
+		end
+	end
+
+	-- Try assigning the default key bind once if none is defined
+	for name in pairs(Registry) do
+		local item = Registry[name]
+
+		if item.defaultKey and not WasDefaultApplied(name) then
+			if bind.Find(name) == KEY_NONE then
+				bind.Set(item.defaultKey, name, true)
+			end
+
+			-- We tried to assign the default, but a bind was already present, so do not retry
+			-- and always set the applied flag.
+			DBSetDefaultAppliedFlag(name)
 		end
 	end
 end
@@ -228,24 +290,19 @@ function bind.AddSettingsBinding(name, label, category, defaultKey)
 		SettingsBindingsCategories[#SettingsBindingsCategories + 1] = category
 	end
 
-	--set DefaultKey if needed
-	if defaultKey then
-		bind.Set(defaultKey, name, false)
-	end
-
 	-- check if it already exists
 	for _, tbl in ipairs(SettingsBindings) do
 		if tbl.name == name then
 			tbl.label = label -- update
 			tbl.category = category
 			tbl.defaultKey = defaultKey
+
 			return -- don't insert again
 		end
 	end
 
 	SettingsBindings[#SettingsBindings + 1] = {name = name, label = label, category = category, defaultKey = defaultKey}
 end
-
 
 ---
 -- Register a function to run when the button for a specific binding is pressed. This will also add the binding to the
@@ -267,18 +324,14 @@ function bind.Register(name, onPressedFunc, onReleasedFunc, dontShowOrCategory, 
 
 	Registry[name] = {
 		onPressed  = onPressedFunc,
-		onReleased = onReleasedFunc
+		onReleased = onReleasedFunc,
+		defaultKey = defaultKey
 	}
 
 	if dontShowOrCategory ~= true then
 		bind.AddSettingsBinding(name, settingsLabel or name, dontShowOrCategory, defaultKey)
 	end
-
-	if defaultKey then
-		bind.Set(defaultKey, name, false)
-	end
 end
-
 
 ---
 -- Add a binding to run a command when the button is pressed. This function is not used to register a new binding shown in
@@ -307,7 +360,7 @@ end
 function bind.Set(btn, name, persistent)
 	if not name or name == "" or not isnumber(btn) then return end
 
-	bind.RemoveAll(name)
+	bind.RemoveAll(name, persistent)
 	bind.Add(btn, name, persistent)
 end
 
@@ -317,7 +370,6 @@ end
 function bind.GetSettingsBindings()
 	return SettingsBindings
 end
-
 
 ---
 -- Returns the SettingsBindingsCategories table.

@@ -1,13 +1,19 @@
 ---
 -- @section changes
 
+-- some micro-optimizations (localizing globals)
+local os = os
+local hook = hook
+local IsValid = IsValid
+local vgui = vgui
+local draw = draw
+local table = table
+
+-- internal
 local changesVersion = CreateClientConVar("changes_version", "v0.0.0.0")
-
-local changesPanel
-local changes
-local currentVersion
-
 local btnPanelColor = Color(22, 42, 57)
+
+local changesPanel, changes, currentVersion
 
 ---
 -- Adds a change into the changes list
@@ -648,7 +654,179 @@ function CreateChanges()
 			<li>Fix <i>body_found</i> for bots</li>
 			<li>Fix NWVarSyncing when using <i>TTT2NET:Set()</i></li>
 		</ul>
-	]], os.time({year = 2020, month = 03, day = 5}))
+	]], os.time({year = 2020, month = 03, day = 05}))
+
+	AddChange("TTT2 Base - v0.6.4b", [[
+		<h2>New:</h2>
+		<ul>
+			<li>Added an Italian translation (Thanks @PinoMartirio)</li>
+		</ul>
+		<br>
+		<h2>Fixed:</h2>
+		<ul>
+			<li>Fixed a rare bug where the player had the default GMod sprint on top of the TTT2 sprint</li>
+			<li>Fixed some convars that did not save in ulx by removing them all from the gamemode file</li>
+			<li>Fixed a bug that happened when TTT2 is installed but not the active gamemode</li>
+			<li>Fixed a few Polish language strings</li>
+		</ul>
+	]], os.time({year = 2020, month = 04, day = 03}))
+
+	AddChange("TTT2 Base - v0.7.0b", [[
+		<h2>New:</h2>
+		<ul>
+			<li>Added two new convars to change the behavior of the armor</li>
+			<li>Added two new convars to change the confirmation behaviour</li>
+			<li>Added essential items: 8 different types of items that are often used in other addons. You can remove them from the shop if you don't like them.</li>
+			<li>Added a new HUD element to show information about an ongoing revival to the player that is revived</li>
+			<li>Added the possibility to change the radar time</li>
+			<li>Added a few new modules that are used by TTT2 and can be used by different addons</li>
+		</ul>
+		<br>
+		<h2>Improved:</h2>
+		<ul>
+			<li>Updated addon checker list</li>
+			<li>Migrated the HUDManager settings to the new network sync system</li>
+			<li>Reworked the old DNA Scanner and replaced it with an improved version</li>
+				<ul>
+					<li>New world- and viewmodel with an interactive screen</li>
+					<li>Removed the overcomplicated UI menu (simple handling with default keys instead)</li>
+					<li>The new default scanner behavior shows the direction and distance to the target</li>
+				</ul>
+			<li>Changed TargetID colors for confirmed bodies</li>
+			<li>Improved the player revival system</li>
+				<ul>
+					<li>Revive makes now sure the position is valid and the player is not stuck in the wall</li>
+					<li>All revival related messages are now localized</li>
+					<li>Integration with the newly added revival HUD element</li>
+				</ul>
+			<li>Improved the player spawn handling, no more invalid spawn points where a player will be stuck or spawn in the air and fall to their death</li>
+			<li>Refactored the role selection code to reside in its own module and cleaned up the code</li>
+			<li>Improved the round end screen to support longer round end texts</li>
+		</ul>
+		<br>
+		<h2>Fixed:</h2>
+		<ul>
+			<li>Fixed round info (the top panel with the miniscoreboard) being displayed in other HUDs</li>
+			<li>Fixed an error with the pickup system in singleplayer</li>
+			<li>Fixed propsurfing with the magneto stick</li>
+			<li>Fixed healthstation TargetID text</li>
+			<li>Fixed keyinfo for doors where no key can be used</li>
+			<li>Fixed role selection issues with subroles not properly replacing their baserole etc</li>
+			<li>Fixed map lock/unlock trigger of doors not updating targetID</li>
+			<li>Fixed roles having sometimes the wrong radar color</li>
+			<li>Fixed miniscoreboard update issue and players not getting shown when entering force-spec mode</li>
+		</ul>
+	]], os.time({year = 2020, month = 06, day = 01}))
+
+	AddChange("TTT2 Base - v0.7.1b", [[
+		<h2>Fixed:</h2>
+		<ul>
+			<li>Fixed max roles / max base roles interaction with the roleselection. Also does not crash with values != 0 anymore.</li>
+		</ul>
+	]], os.time({year = 2020, month = 06, day = 02}))
+
+	AddChange("TTT2 Base - v0.7.2b", [[
+		<h2>New:</h2>
+		<ul>
+			<li>Added Hooks to the targetID system to modify the displayed data</li>
+			<li>Added Hooks to interact with door destruction</li>
+			<li>Added a new function to force a new radar scan</li>
+			<li>Added a new convar to change the default radar time for players without custom radar times: <i>ttt2_radar_charge_time</i></li>
+			<li>Added a new client ConVar <i>ttt_crosshair_lines</i> to add the possibility to disable the crosshair lines</li>
+		</ul>
+		<br>
+		<h2>Improved:</h2>
+		<ul>
+			<li>Moved the disguiser icon to the status system to be only displayed when the player is actually disguised</li>
+			<li>Reworked the addonchecker and added a command to execute the checker at a later point</li>
+			<li>Updated Italian translation (Thanks @ThePlatinumGhost)</li>
+			<li>Removed Is[ROLE] functions of all roles except default TTT ones</li>
+			<li>ttt_end_round now resets when the map changes</li>
+			<li>Reworked the SWEP HUD help (legacy function SWEP:AddHUDHelp is still supported)</li>
+			<li>Players who disconnect now leave a corpse</li>
+		</ul>
+		<br>
+		<h2>Fixed:</h2>
+		<ul>
+			<li>Fixed shadow texture of the "Pure Skin HUD" for low texture quality settings</li>
+			<li>Fixed inno subrole upgrading if many roles are installed</li>
+			<li>Fixed and improved the radar role/team modification hook</li>
+			<li>Fixed area portals on servers for destroyed doors</li>
+			<li>Fixed revive fail function reference reset</li>
+			<li>Removed the DNA Scanner hudelement for spectators</li>
+			<li>Fixed the image in the confirmation notification whenever a bot's corpse gets identified</li>
+			<li>Fixed bad role selection due to RNG reseeding</li>
+			<li>Fixed missing role column translation</li>
+			<li>Fixed viewmodel not showing correct hands on model change</li>
+		</ul>
+	]], os.time({year = 2020, month = 06, day = 26}))
+
+	AddChange("TTT2 Base - v0.7.3b", [[
+		<h2>New:</h2>
+		<ul>
+			<li>Added a new custom file loader that loads lua files from <i>lua/terrortown/autorun/</i></li>
+			<ul>
+				<li>it basically works the same as the native file loader</li>
+				<li>there are three subfolders: <i>client</i>, <i>server</i> and <i>shared</i></li>
+				<li>the files inside this folder are loaded after all TTT2 gamemode files and library extensions are loaded</li>
+			</ul>
+			<li>Added Spanish version for base addon   (by @Tekiad and @DennisWolfgang)</li>
+			<li>Added Chinese Simplified translation (by @TheOnly8Z)</li>
+			<li>Added double-click buying</li>
+			<li>Added a default avatar for players and an avatar for bots</li>
+		</ul>
+		<br>
+		<h2>Improved:</h2>
+		<ul>
+			<li>Roles are now only getting synced to clients if the role is known, not just the body being confirmed</li>
+			<li>Airborne players can no longer replenish stamina</li>
+			<li>Detective overhead icon is now shown to innocents and traitors</li>
+			<li>moved language files from <i>lua/lang/</i> to <i>lua/terrortown/lang</i></li>
+			<li>Stopped teleporting players to players they're not spectating if they press the "duck"-Key while roaming</li>
+			<li>Moved shop's equipment list generation into a coroutine</li>
+			<li>Removed TTT2PlayerAuthedCacheReady hook</li>
+			<li>Internal changes to the b-draw library for fetching avatars</li>
+		</ul>
+		<br>
+		<h2>Fixed:</h2>
+		<ul>
+			<li>Fixed death handling spawning multiple corpses when killed multiple times in the same frame</li>
+			<li>Radar now shows bombs again, that do not have the team property set</li>
+			<li>Fix HUDManager not saving forcedHUD and defaultHUD values</li>
+			<li>Fixed wrong parameter default in <i>EPOP:AddMessage</i> documentation</li>
+			<li>Fixed shop switching language issue</li>
+			<li>Fixed shop refresh activated even not buyable equipments</li>
+			<li>Fixed wrong shop view displayed as forced spectator</li>
+		</ul>
+	]], os.time({year = 2020, month = 08, day = 09}))
+
+	AddChange("TTT2 Base - v0.7.4b", [[
+		<h2>New:</h2>
+		<ul>
+			<li>Added ConVar to toggle double-click buying</li>
+			<li>Added Japanese translation (by @Westoon)</li>
+			<li>Added <i>table.ExtractRandomEntry(tbl, filterFn)</i> function</li>
+			<li>Added a team indicator in front of every name in the scoreboard (just known teams will be displayed)</li>
+			<li>Added a hook <i>TTT2ModifyCorpseCallRadarRecipients</i> that is called once "call detective" is pressed</li>
+		</ul>
+		<br>
+		<h2>Improved:</h2>
+		<ul>
+			<li>The weapon pickup system has been improved to increase stability and remove edge cases in temporary weapon teleportation</li>
+			<li>Updated Spanish translation (by @DennisWolfgang)</li>
+		</ul>
+		<br>
+		<h2>Fixed:</h2>
+		<ul>
+			<li>Fixed foregoing avatar fetch fix</li>
+			<li>Fixed HUD savingKeys variable not being unique across all HUDs</li>
+			<li>Fixed drawing web images, seamless web images and avatar images</li>
+			<li>Fixed correctly saving setting a bind to NONE, while a default is defined</li>
+			<li>Fixed a weapon pickup targetID bug where the +use key was displayed even though pickup has its own keybind</li>
+			<li>Fixed DNA scanner crash if using an old/different weapon base</li>
+			<li>Fixed rare initialization bug in the speed calculation when joining as a spectator</li>
+		</ul>
+	]], os.time({year = 2020, month = 09, day = 28}))
 
 	-- run hook for other addons to add their changelog as well
 	hook.Run("TTT2AddChange", changes, currentVersion)
@@ -676,6 +854,14 @@ local function MakePanel(panel, change)
 	html:DockMargin(10, 10, 10, 10)
 
 	panel.htmlSheet = html
+end
+
+local function SortChanges(a, b)
+	if a.date < 0 and b.date < 0 then
+		return a.date < b.date
+	end
+
+	return a.date > b.date
 end
 
 ---
@@ -706,13 +892,7 @@ function ShowChanges()
 	sheet.Navigation:SetWidth(256)
 
 	-- sort changes list by date
-	table.sort(changes, function(a, b)
-		if a.date < 0 and b.date < 0 then
-			return a.date < b.date
-		else
-			return a.date > b.date
-		end
-	end)
+	table.sort(changes, SortChanges)
 
 	for i = 1, #changes do
 		local change = changes[i]
@@ -757,9 +937,9 @@ function ShowChanges()
 end
 
 net.Receive("TTT2DevChanges", function(len)
-	if changesVersion:GetString() ~= GAMEMODE.Version then
-		ShowChanges()
+	if changesVersion:GetString() == GAMEMODE.Version then return end
 
-		RunConsoleCommand("changes_version", GAMEMODE.Version)
-	end
+	ShowChanges()
+
+	RunConsoleCommand("changes_version", GAMEMODE.Version)
 end)

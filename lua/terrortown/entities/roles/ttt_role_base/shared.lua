@@ -1,7 +1,9 @@
 ---
--- @module ROLE
 -- @author Alf21
 -- @author saibotk
+-- @module ROLE
+
+ROLE.isAbstract = true
 
 ---
 -- This function is called before initializing a @{ROLE}, but after all
@@ -111,26 +113,4 @@ function ROLE:CanUseTraitorButton()
 	local cv = GetConVar("ttt_" .. self.name .. "_traitor_button")
 
 	return cv and cv:GetBool()
-end
-
-if SERVER then
-	---
-	-- Function that is overwritten by the role and is called on rolechange and respawn.
-	-- It is used to give the rolespecific loadout.
-	-- @param PLAYER ply
-	-- @param boolean isRoleChange This is true for a rolechange, but not for a respawn
-	-- @realm server
-	function ROLE:GiveRoleLoadout(ply, isRoleChange)
-
-	end
-
-	---
-	-- Function that is overwritten by the role and is called on rolechange and death.
-	-- It is used to remove the rolespecific loadout.
-	-- @param PLAYER ply
-	-- @param boolean isRoleChange This is true for a rolechange, but not for death
-	-- @realm server
-	function ROLE:RemoveRoleLoadout(ply, isRoleChange)
-
-	end
 end

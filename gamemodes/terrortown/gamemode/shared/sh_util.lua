@@ -6,12 +6,13 @@ if not util then return end
 
 local math = math
 local string = string
-local table = table
-local pairs = pairs
-local ipairs = ipairs
 local IsValid = IsValid
 local weapons = weapons
+local scripted_ents = scripted_ents
 local GetPlayers = player.GetAll
+local isfunction = isfunction
+local HSVToColor = HSVToColor
+local VectorRand = VectorRand
 
 ---
 -- Attempts to get the weapon used from a DamageInfo instance needed because the
@@ -21,7 +22,7 @@ local GetPlayers = player.GetAll
 -- @realm shared
 function util.WeaponFromDamage(dmg)
 	local inf = dmg:GetInflictor()
-	local wep
+	local wep = nil
 
 	if IsValid(inf) then
 		if inf:IsWeapon() or inf.Projectile then
@@ -96,9 +97,18 @@ end
 -- @return table
 -- @realm shared
 function util.GetAlivePlayers()
-	return util.GetFilteredPlayers(function(ply)
-		return ply:Alive() and ply:IsTerror()
-	end)
+	local plys = GetPlayers()
+	local tmp = {}
+
+	for i = 1, #plys do
+		local ply = plys[i]
+
+		if ply:Alive() and ply:IsTerror() then
+			tmp[#tmp + 1] = ply
+		end
+	end
+
+	return tmp
 end
 
 ---
@@ -108,27 +118,21 @@ end
 -- @realm shared
 function util.GetNextAlivePlayer(ply)
 	local alive = util.GetAlivePlayers()
-
 	if #alive < 1 then return end
 
-	local prev = nil
-	local choice = nil
-
 	if IsValid(ply) then
-		for _, p in pairs(alive) do
+		local prev = nil
+
+		for i = 1, #alive do
 			if prev == ply then
-				choice = p
+				return alive[i]
 			end
 
-			prev = p
+			prev = alive[i]
 		end
 	end
 
-	if not IsValid(choice) then
-		choice = alive[1]
-	end
-
-	return choice
+	return alive[1]
 end
 
 ---
@@ -351,142 +355,6 @@ end
 -- @see util.noop
 function util.passthrough(x)
 	return x
-end
-
-local rand = math.random
-
----
--- Nice Fisher-Yates implementation, from Wikipedia
--- Shuffles a @{table}
--- @param table t
--- @return table the given t, but sorted
--- @realm shared
-function table.Shuffle(t)
-	local n = #t
-
-	while n > 2 do
-		-- n is now the last pertinent index
-		local k = rand(n) -- 1 <= k <= n
-
-		-- Quick swap
-		t[n], t[k] = t[k], t[n]
-		n = n - 1
-	end
-
-	return t
-end
-
----
--- Checks if a table has a value.
--- @note For optimization, functions that look for a value by sorting the table should never be needed if you work on a table that you built yourself.
--- @note Override of the original <a href="https://wiki.garrysmod.com/page/table/HasValue">table.HasValue</a> check with nil check
--- @warning This function is very inefficient for large tables (O(n)) and should probably not be called in things that run each frame. Instead, consider a table structure such as example 2 below.
--- @param table tbl Table to check
--- @param any val Value to search for
--- @return boolean Returns true if the table has that value, false otherwise
--- @usage local mytable = { "123", "test" }
--- print( table.HasValue( mytable, "apple" ), table.HasValue( mytable, "test" ) )
--- > false true
--- @usage local mytable = { ["123"] = true, test = true }
--- print( mytable["apple"], mytable["test"] )
--- > nil true
--- @realm shared
-function table.HasValue(tbl, val)
-	if not tbl then return end
-
-	for _, v in pairs(tbl) do
-		if v == val then
-			return true
-		end
-	end
-
-	return false
-end
-
----
--- Value equality for tables
--- @param table a
--- @param table b
--- @return boolean
--- @realm shared
-function table.EqualValues(a, b)
-	if a == b then
-		return true
-	end
-
-	for k, v in pairs(a) do
-		if v ~= b[k] then
-			return false
-		end
-	end
-
-	return true
-end
-
----
--- Basic table.HasValue pointer checks are insufficient when checking a table of
--- tables, so this uses table.EqualValues instead.
--- @param table tbl
--- @param table needle
--- @return boolean
--- @realm shared
-function table.HasTable(tbl, needle)
-	if not tbl then return end
-
-	for _, v in pairs(tbl) do
-		if v == needle then
-			return true
-		elseif table.EqualValues(v, needle) then
-			return true
-		end
-	end
-
-	return false
-end
-
----
--- Returns copy of table with only specific keys copied
--- @param table tbl
--- @param table keys
--- @return table
--- @realm shared
-function table.CopyKeys(tbl, keys)
-	if not (tbl and keys) then return end
-
-	local out = {}
-	local val
-
-	for _, k in pairs(keys) do
-		val = tbl[k]
-
-		if istable(val) then
-			out[k] = table.Copy(val)
-		else
-			out[k] = val
-		end
-	end
-
-	return out
-end
-
----
--- This @{function} adds missing values into a table
--- @param table target
--- @param table source
--- @param boolean iterable
--- @realm shared
-function table.AddMissing(target, source, iterable)
-	if #source == 0 then return end
-
-	local fn = not iterable and pairs or ipairs
-	local index = #target + 1
-
-	for _, v in fn(source) do
-		if not table.HasValue(target, v) then
-			target[index] = v
-			index = index + 1
-		end
-	end
 end
 
 local gsub = string.gsub

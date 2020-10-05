@@ -18,6 +18,12 @@ end
 util.AddNetworkString("StartDrowning")
 util.AddNetworkString("TTT2TargetPlayer")
 util.AddNetworkString("TTT2SetPlayerReady")
+util.AddNetworkString("TTT2SetRevivalReason")
+util.AddNetworkString("TTT2RevivalStopped")
+util.AddNetworkString("TTT2RevivalUpdate_IsReviving")
+util.AddNetworkString("TTT2RevivalUpdate_IsBlockingRevival")
+util.AddNetworkString("TTT2RevivalUpdate_RevivalStartTime")
+util.AddNetworkString("TTT2RevivalUpdate_RevivalDuration")
 
 ---
 -- Sets whether a @{Player} is spectating the own ragdoll
@@ -270,6 +276,7 @@ function plymeta:ResetEquipment()
 
 	for i = 1, #equipItems do
 		local item = items.GetStored(equipItems[i])
+
 		if item and isfunction(item.Reset) then
 			item:Reset(self)
 		end
@@ -408,6 +415,7 @@ function plymeta:ResetRoundFlags()
 	self.bomb_wire = nil
 	self.radar_charge = 0
 	self.decoy = nil
+
 	timer.Remove("give_equipment" .. self:UniqueID())
 
 	-- corpse
@@ -787,111 +795,282 @@ local function FindCorpse(ply)
 	end
 end
 
-local poss = {}
+-- Handles all stuff needed if the revival failed
+local function OnReviveFailed(ply, failMessage)
+	if isfunction(ply.OnReviveFailedCallback) then
+		ply.OnReviveFailedCallback(ply, failMessage)
 
--- Populate Around Player
-for i = 0, 360, 22.5 do
-	poss[#poss + 1] = Vector(math.cos(i), math.sin(i), 0)
-end
-
-poss[#poss + 1] = Vector(0, 0, 1) -- Populate Above Player
-
-local function FindCorpsePosition(corpse)
-	local size = Vector(32, 32, 72)
-	local startPos = corpse:GetPos() + Vector(0, 0, size.z * 0.5)
-	local len = #poss
-
-	for i = 1, len do
-		local v = poss[i]
-		local pos = startPos + v * size * 1.5
-
-		local tr = {}
-		tr.start = pos
-		tr.endpos = pos
-		tr.mins = size * -0.5
-		tr.maxs = size * 0.5
-
-		local trace = util.TraceHull(tr)
-
-		if not trace.Hit then
-			return pos - Vector(0, 0, size.z * 0.5)
-		end
+		ply.OnReviveFailedCallback = nil
+	else
+		LANG.Msg(ply, failMessage, nil, MSG_MSTACK_WARN)
 	end
 
-	return false
+	net.Start("TTT2RevivalStopped")
+	net.Send(ply)
 end
 
 ---
 -- Revives a @{Player}
--- @param number delay the delay of the revive
--- @param function fn the @{function} that should be run if the @{Player} revives
--- @param function check an additional checking @{function}
--- @param boolean needcorpse whether the dead @{Player} CORPSE is needed
--- @param boolean force if the @{Player} revive is already forced. Useful if you have multiple reviving equipments
--- @param function onFail this @{function} is called if the revive fails
+-- @param[default=3] number delay The delay of the revive
+-- @param[opt] function OnRevive The @{function} that should be run if the @{Player} revives
+-- @param[opt] function DoCheck An additional checking @{function}
+-- @param[default=false] boolean needsCorpse Whether the dead @{Player} @{CORPSE} is needed
+-- @param[default=false] boolean blockRound Stops the round from ending if this is set to true until the player is alive again
+-- @param[opt] function OnFail This @{function} is called if the revive fails
+-- @param[opt] Vector spawnPos The position where the player should be spawned, accounts for minor obstacles
+-- @param[opt] Angle spawnEyeAngle The eye angles of the revived players
 -- @realm server
-function plymeta:Revive(delay, fn, check, needcorpse, force, onFail)
-	local ply = self
-	local name = "TTT2RevivePlayer" .. ply:EntIndex()
+function plymeta:Revive(delay, OnRevive, DoCheck, needsCorpse, blockRound, OnFail, spawnPos, spawnEyeAngle)
+	if self:IsReviving() then return end
 
-	if timer.Exists(name) or ply.reviving then return end
+	local name = "TTT2RevivePlayer" .. self:EntIndex()
 
-	if force then
-		ply.forceRevive = true
-	end
+	delay = delay or 3
 
-	ply.reviving = true
+	self:SetReviving(true)
+	self:SetBlockingRevival(blockRound)
+	self:SetRevivalStartTime(CurTime())
+	self:SetRevivalDuration(delay)
+
+	self.OnReviveFailedCallback = OnFail
 
 	timer.Create(name, delay, 1, function()
-		if not IsValid(ply) then return end
+		if not IsValid(self) then return end
 
-		ply.forceRevive = nil
-		ply.reviving = nil
+		self:SetReviving(false)
+		self:SetBlockingRevival(false)
+		self:SendRevivalReason(nil)
 
-		if not isfunction(check) or check(ply) then
-			local corpse = FindCorpse(ply)
+		if not isfunction(DoCheck) or DoCheck(self) then
+			local corpse = FindCorpse(self)
 
-			if needcorpse and (not IsValid(corpse) or corpse:IsOnFire()) then
-				ply:ChatPrint("You have not been revived because your body no longer exists.")
-
-				timer.Remove(name) -- TODO needed?
+			if needsCorpse and (not IsValid(corpse) or corpse:IsOnFire()) then
+				OnReviveFailed(self, "message_revival_failed_missing_body")
 
 				return
 			end
 
-			ply:SpawnForRound(true)
+			self:SetMaxHealth(100)
+			self:SetHealth(100)
 
-			if IsValid(corpse) then
-				local spawnPos = FindCorpsePosition(corpse)
-				if spawnPos then
-					ply:SetPos(spawnPos)
-					ply:SetEyeAngles(Angle(0, corpse:GetAngles().y, 0))
-				end
+			self:SpawnForRound(true)
+
+			if not spawnPos and IsValid(corpse) then
+				spawnPos = corpse:GetPos()
+				spawnEyeAngle = Angle(0, corpse:GetAngles().y, 0)
 			end
 
-			hook.Call("PlayerLoadout", GAMEMODE, ply)
+			spawnPos = spawnPos or self:GetDeathPosition()
+			spawnPos = spawn.MakeSpawnPointSafe(self, spawnPos)
 
-			ply:SetMaxHealth(100)
+			if not spawnPos then
+				local spawnEntity = spawn.GetRandomPlayerSpawnEntity(self)
 
-			local credits = CORPSE.GetCredits(corpse, 0)
+				spawnPos = spawnEntity:GetPos()
+				spawnEyeAngle = spawnEntity:EyeAngles()
+			end
 
-			ply:SetCredits(credits)
+			self:SetPos(spawnPos)
+			self:SetEyeAngles(spawnEyeAngle or Angle(0, 0, 0))
+
+			hook.Run("PlayerLoadout", self, true)
+
+			self:SetCredits(CORPSE.GetCredits(corpse, 0))
+			self:SelectWeapon("weapon_zm_improvised")
 
 			if IsValid(corpse) then
 				corpse:Remove()
 			end
 
-			DamageLog("TTT2Revive: " .. ply:Nick() .. " has been respawned.")
+			DamageLog("TTT2Revive: " .. self:Nick() .. " has been respawned.")
 
-			if isfunction(fn) then
-				fn(ply)
+			if isfunction(OnRevive) then
+				OnRevive(self)
 			end
-		elseif isfunction(onFail) then
-			ply:ChatPrint("Revive failed...")
-
-			onFail(ply)
+		else
+			OnReviveFailed(self, "message_revival_failed")
 		end
+
+		self.OnReviveFailedCallback = nil
 	end)
+end
+
+---
+-- Cancel the ongoing revival process.
+-- @param[default="message_revival_canceled"] string failMessage The fail message that should be displayed for the client
+-- @param[opt] boolean silent If silent is true, no sound and text will be displayed
+-- @realm server
+function plymeta:CancelRevival(failMessage, silent)
+	if not self:IsReviving() then return end
+
+	self:SetReviving(false)
+	self:SetBlockingRevival(false)
+	self:SendRevivalReason(nil)
+
+	timer.Remove("TTT2RevivePlayer" .. self:EntIndex())
+
+	if silent then return end
+
+	OnReviveFailed(self, failMessage or "message_revival_canceled")
+end
+
+
+---
+-- Sets the revival state.
+-- @param[default=false] boolean isReviving The reviving state
+-- @internal
+-- @realm server
+function plymeta:SetReviving(isReviving)
+	isReviving = isReviving or false
+
+	if self.isReviving == isReviving then return end
+
+	self.isReviving = isReviving
+
+	net.Start("TTT2RevivalUpdate_IsReviving")
+	net.WriteBool(self.isReviving)
+	net.Send(self)
+end
+
+---
+-- Sets the blocking revival state.
+-- @param[default=false] boolean isBlockingRevival The blocking revival state
+-- @internal
+-- @realm server
+function plymeta:SetBlockingRevival(isBlockingRevival)
+	isBlockingRevival = isBlockingRevival or false
+
+	if self.isBlockingRevival == isBlockingRevival then return end
+
+	self.isBlockingRevival = isBlockingRevival
+
+	net.Start("TTT2RevivalUpdate_IsBlockingRevival")
+	net.WriteBool(self.isBlockingRevival)
+	net.Send(self)
+end
+
+---
+-- Sets the revival start time.
+-- @param[default=@{CurTime()}] number startTime The revival start time
+-- @internal
+-- @realm server
+function plymeta:SetRevivalStartTime(startTime)
+	startTime = startTime or CurTime()
+
+	if self.revivalStartTime == startTime then return end
+
+	self.revivalStartTime = startTime
+
+	net.Start("TTT2RevivalUpdate_RevivalStartTime")
+	net.WriteFloat(self.revivalStartTime)
+	net.Send(self)
+end
+
+---
+-- Sets the revival duration.
+-- @param[default=0.0] number duration The revival time
+-- @internal
+-- @realm server
+function plymeta:SetRevivalDuration(duration)
+	duration = duration or 0.0
+
+	if self.revivalDurarion == duration then return end
+
+	self.revivalDurarion = duration
+
+	net.Start("TTT2RevivalUpdate_RevivalDuration")
+	net.WriteFloat(self.revivalDurarion)
+	net.Send(self)
+end
+
+---
+-- Sends a revival reason that is displayed in the clients revival HUD element.
+-- It supports a language identifier for translated strings.
+-- @param[default=nil] string name The text or the language identifer, nil to reset
+-- @param[opt] table params The params table used for @{LANG.GetParamTranslation}
+-- @realm server
+function plymeta:SendRevivalReason(name, params)
+	net.Start("TTT2SetRevivalReason")
+
+	if name then
+		net.WriteBool(false)
+		net.WriteString(name)
+
+		local paramsAmount = params and table.Count(params) or 0
+
+		net.WriteUInt(paramsAmount, 8)
+
+		if paramsAmount > 0 then
+			for k, v in pairs(params) do
+				net.WriteString(k)
+				net.WriteString(tostring(v))
+			end
+		end
+	else
+		net.WriteBool(true)
+	end
+
+	net.Send(self)
+end
+
+
+---
+-- Sets the last death position.
+-- @param Vector pos The death position
+-- @internal
+-- @realm server
+function plymeta:SetLastDeathPosition(pos)
+	self.lastDeathPosition = pos
+end
+
+---
+-- Sets the last spawn position.
+-- @param Vector pos The spawn position
+-- @internal
+-- @realm server
+function plymeta:SetLastSpawnPosition(pos)
+	self.lastSpawnPosition = pos
+end
+
+---
+-- Returns the last death position of the player.
+-- @return Vector The last death position
+-- @realm server
+function plymeta:GetDeathPosition()
+	return self.lastDeathPosition
+end
+
+---
+-- Returns the last spawn position of the player.
+-- @return Vector The last spawn position
+-- @realm server
+function plymeta:GetSpawnPosition()
+	return self.lastSpawnPosition
+end
+
+---
+-- Sets the if a player was active (TEAM_TERROR) in a round.
+-- @param boolean state The state
+-- @internal
+-- @realm server
+function plymeta:SetActiveInRound(state)
+	self:TTT2NETSetBool("player_was_active_in_round", state or false)
+end
+
+---
+-- Increases the player death counter.
+-- @internal
+-- @realm server
+function plymeta:IncreaseRoundDeathCounter()
+	self:TTT2NETSetUInt("player_round_deaths", self:GetDeathsInRound() + 1, 8)
+end
+
+---
+-- Resets the player death counter.
+-- @internal
+-- @realm server
+function plymeta:ResetRoundDeathCounter()
+	self:TTT2NETSetUInt("player_round_deaths", 0, 8)
 end
 
 ---
@@ -899,20 +1078,22 @@ end
 -- @param table avoidRoles list of @{ROLE}s that should be avoided
 -- @realm server
 function plymeta:SelectRandomRole(avoidRoles)
-	local selectableRoles = GetSelectableRoles()
+	local availablePlayers = roleselection.GetSelectablePlayers(player.GetAll())
+	local allAvailableRoles = roleselection.GetAllSelectableRolesList(#availablePlayers)
+	local selectableRoles = roleselection.GetSelectableRoles(#availablePlayers, allAvailableRoles)
+
 	local availableRoles = {}
 	local roleCount = {}
-	local plys = player.GetAll()
 
-	for i = 1, #plys do
-		local rd = plys[i]:GetSubRoleData()
+	for i = 1, #availablePlayers do
+		local rd = availablePlayers[i]:GetSubRoleData()
 
 		roleCount[rd] = (roleCount[rd] or 0) + 1
 	end
 
-	for v, c in pairs(selectableRoles) do
-		if (not avoidRoles or not avoidRoles[v]) and (not roleCount[v] or roleCount[v] > c) then
-			availableRoles[#availableRoles + 1] = v.index
+	for roleData, roleAmount in pairs(selectableRoles) do
+		if (not avoidRoles or not avoidRoles[roleData]) and (not roleCount[roleData] or roleCount[roleData] < roleAmount) then
+			availableRoles[#availableRoles + 1] = roleData.index
 		end
 	end
 
@@ -1042,8 +1223,8 @@ hook.Add("TTTBeginRound", "TTT2ResetRoleState_Begin", function()
 	end
 end)
 
--- additionally reset confirm state on round end to prevent short blinking of confirmed roles on round start
-hook.Add("TTTEndRound", "TTT2ResetRoleState_End", function()
+-- additionally reset confirm state on round prepare to prevent short blinking of confirmed roles on round start
+hook.Add("TTTPrepareRound", "TTT2ResetRoleState_End", function()
 	local plys = player.GetAll()
 
 	for i = 1, #plys do
@@ -1051,146 +1232,120 @@ hook.Add("TTTEndRound", "TTT2ResetRoleState_End", function()
 	end
 end)
 
+local plymeta_old_Give = plymeta.Give
+
 -- The give function is cached to extend it later on.
 -- The extension is needed to set a flag prior to picking up weapons.
 -- This flag is used to distinguish between weapons picked up by walking
 -- over them and weapons picked up by ply:Give()
-local plymeta_old_give = plymeta.Give
 function plymeta:Give(weaponClassName, bNoAmmo)
-	self.wp__GiveItemFunctionFlag = true
+	self.forcedPickup = true
 
-	local wep = plymeta_old_give(self, weaponClassName, bNoAmmo or false)
+	local wep = plymeta_old_Give(self, weaponClassName, bNoAmmo or false)
 
-	-- the flag has to be reset on the outside of the hook since returning
-	-- false somewhere prevents GM:PlayerCanPickupWeapon from being executed
-	self.wp__GiveItemFunctionFlag = nil
+	self.forcedPickup = false
 
 	return wep
 end
 
 ---
--- Called to drop a weapon in a safe manner (e.g. preparing and space-check)
--- @param Weapon wep
+-- Checks if the weapon can be dropped in a safely manner.
+-- @param Weapon wep The weapon that should be dropped
+-- @return boolean Returns if this weapon can be dropped
 -- @realm server
-function plymeta:SafeDropWeapon(wep, keep_selection)
-	if not IsValid(wep) or not wep.AllowDrop then return end
+function plymeta:CanSafeDropWeapon(wep)
+	if not IsValid(wep) or not wep.AllowDrop then
+		return false
+	end
 
 	local tr = util.QuickTrace(self:GetShootPos(), self:GetAimVector() * 32, self)
 
-	if tr.HitWorld then
-		LANG.Msg(self, "drop_no_room", nil, MSG_CHAT_WARN)
+	if tr.Hit then
+		LANG.Msg(self, "drop_no_room", nil, MSG_MSTACK_WARN)
 
-		return
+		return false
 	end
+
+	return true
+end
+
+---
+-- Called to drop a weapon in a safe manner (e.g. preparing and space-check).
+-- @param Weapon wep The weapon that should be dropped
+-- @param boolean keepSelection If set to true the current selection is kept if not dropped
+-- @realm server
+function plymeta:SafeDropWeapon(wep, keepSelection)
+	if not self:CanSafeDropWeapon(wep) then return end
 
 	self:AnimPerformGesture(ACT_GMOD_GESTURE_ITEM_PLACE)
 
-	WEPS.DropNotifiedWeapon(self, wep, false, keep_selection)
+	WEPS.DropNotifiedWeapon(self, wep, false, keepSelection)
 end
 
 ---
 -- Returns whether or not a player can pick up a weapon
 -- @param Weapon wep The weapon object
--- @returns boolean
+-- @param nil|boolean forcePickup is there a forced pickup to ignore the cv_auto_pickup cvar?
+-- @param nil|boolean dropBlockingWeapon should the weapon stored in the same slot be dropped
+-- @returns boolean return of the PlayerCanPickupWeapon hook
+-- @return number errorCode that appeared. For the error, give a look into the specific hook
 -- @realm server
-function plymeta:CanPickupWeapon(wep)
-	self.wp__GiveItemFunctionFlag = true
+function plymeta:CanPickupWeapon(wep, forcePickup, dropBlockingWeapon)
+	self.forcedPickup = forcePickup
 
-	local can_pickup = hook.Run("PlayerCanPickupWeapon", self, wep)
+	local ret, errCode = hook.Run("PlayerCanPickupWeapon", self, wep, dropBlockingWeapon)
 
-	-- the flag has to be reset on the outside of the hook since returning
-	-- false somewhere prevents GM:PlayerCanPickupWeapon from being executed
-	self.wp__GiveItemFunctionFlag = nil
+	self.forcedPickup = false
 
-	return can_pickup
+	return ret, errCode
 end
 
 ---
 -- Returns whether or not a player can pick up a weapon
 -- @param string wepCls The weapon object classname
+-- @param nil|boolean forcePickup is there a forced pickup to ignore the cv_auto_pickup cvar?
+-- @param nil|boolean dropBlockingWeapon should the weapon stored in the same slot be dropped
 -- @returns boolean
 -- @realm server
-function plymeta:CanPickupWeaponClass(wepCls)
+function plymeta:CanPickupWeaponClass(wepCls, forcePickup, dropBlockingWeapon)
 	local wep = ents.Create(wepCls)
 
-	return self:CanPickupWeapon(wep)
-end
-
--- Since we all love GMOD we do some really funny things here. Sometimes the weapon is in
--- a position where a player is unable to pick it up, even if there is nothing that hinders
--- it from being picked up. Therefore we randomise the position a bit.
-local function SetWeaponPos(ply, wep, kind)
-	if not IsValid(ply) or not IsValid(wep) or not kind or not ply.wpickup_waitequip[kind] then return end
-
-	-- if a pickup is possible, the weapon gets a flag set and is teleported to the feet
-	-- of the player
-	-- IMPORTANT: If the weapon gets teleported into other entities, it gets stuck. Therefore
-	-- the weapon is teleported to half player height
-	local pWepPos = ply:EyePos()
-	pWepPos.z = pWepPos.z - 20 -- -20 to move it outside the viewing area
-
-	-- randomise position
-	pWepPos.x = pWepPos.x + math.random(-10, 10)
-	pWepPos.y = pWepPos.y + math.random(-10, 10)
-	pWepPos.z = pWepPos.z + math.random(-10, 10)
-
-	wep:SetPos(pWepPos)
-end
-
-local function ActualWeaponPickup(ply, wep, kind, shouldAutoSelect)
-	if not IsValid(ply) or not IsValid(wep) or not kind or not ply.wpickup_waitequip[kind] then return end
-
-	-- this flag is set to the player to make sure he only picks up this weapon
-	ply.wpickup_weapon = wep
-
-	-- the flag is set to the weapon to stop other players from auto-picking up this weapon
-	wep.wpickup_player = ply
-
-	-- destroy physics to let weapon float in the air
-	wep:PhysicsDestroy()
-
-	-- set collision group to IN_VEHICLE to be nonexistent, bullets can pass through it
-	wep:SetCollisionGroup(COLLISION_GROUP_IN_VEHICLE)
-
-	-- make weapon invisible to prevent stuck weapon in player sight
-	wep:SetNoDraw(true)
-
-	-- set autoselect flag
-	wep.wpickup_autoSelect = shouldAutoSelect
-
-	-- initial teleport the weapon to the player pos
-	SetWeaponPos(ply, wep, kind)
-
-	wep.name_timer_pos = kind .. "_WeaponPickupRandomPos_" .. ply:SteamID64()
-	wep.name_timer_cancel = kind .. "_WeaponPickupCancel_" .. ply:SteamID64()
-
-	-- update the weapon pos
-	timer.Create(wep.name_timer_pos, 0.2, 1, function()
-		SetWeaponPos(ply, wep, kind)
-	end)
-
-	-- after 1.5 seconds, the pickup should be canceled
-	timer.Create(wep.name_timer_cancel, 1.5, 1, function()
-		ResetWeapon(wep)
-	end)
+	return self:CanPickupWeapon(wep, forcePickup, dropBlockingWeapon)
 end
 
 ---
 -- This function simplifies the weapon pickup process for a player by
 -- handling all the needed calls.
 -- @param Weapon wep The weapon object
--- @param [default=false] boolean dropBlockingWeapon Should the currently selecten weapon be dropped
--- @param boolean shouldAutoSelect Should this weapon be autoselected after equip, if not set this value is set by player keypress
+-- @param nil|boolean ammoOnly If set to true, the player will only attempt to pick up the ammo from the weapon. The weapon will not be picked up even if the player doesn't have a weapon of this type, and the weapon will be removed if the player picks up any ammo from it
+-- @param nil|boolean forcePickup Should the pickup been forced (ignores the cv_auto_pickup cvar)
+-- @param[default=false] nil|boolean dropBlockingWeapon Should the currently selecten weapon be dropped
+-- @param nil|boolean shouldAutoSelect Should this weapon be autoselected after equip, if not set this value is set by player keypress
 -- @returns Weapon if successful, nil if not
 -- @realm server
-function plymeta:PickupWeapon(wep, dropBlockingWeapon, shouldAutoSelect)
-	local kind = wep.Kind
-	self.wpickup_waitequip = self.wpickup_waitequip or {}
+function plymeta:SafePickupWeapon(wep, ammoOnly, forcePickup, dropBlockingWeapon, shouldAutoSelect)
+	if not IsValid(wep) then
+		ErrorNoHalt(tostring(self) .. " tried to pickup an invalid weapon " .. tostring(wep) .. "\n")
 
-	-- If the player has picked up a weapon, but not yet received it, ignore this request
-	-- to prevent GMod from making the weapon unusable and behaving weird
-	if self.wpickup_waitequip[kind] then
-		LANG.Msg(self, "pickup_pending")
+		LANG.Msg(self, "pickup_fail")
+
+		return
+	end
+
+	-- block weapon switch if slot is occupied and there is no room to
+	-- drop the weapon safely
+	if not InventorySlotFree(self, wep.Kind) and not self:CanSafeDropWeapon(wep) then return end
+
+	local ret, errCode = self:CanPickupWeapon(wep, forcePickup or true, dropBlockingWeapon)
+
+	if not ret then
+		if errCode == 1 then
+			LANG.Msg(self, "pickup_error_spec")
+		elseif errCode == 2 then
+			LANG.Msg(self, "pickup_error_owns")
+		elseif errCode == 3 then
+			LANG.Msg(self, "pickup_error_noslot")
+		end
 
 		return
 	end
@@ -1200,40 +1355,8 @@ function plymeta:PickupWeapon(wep, dropBlockingWeapon, shouldAutoSelect)
 		shouldAutoSelect = not self:KeyDown(IN_WALK) and not self:KeyDownLast(IN_WALK)
 	end
 
-	if not IsValid(wep) then
-		ErrorNoHalt(tostring(self) .. " tried to pickup an invalid weapon " .. tostring(wep) .. "\n")
-		LANG.Msg(self, "pickup_fail")
-
-		return
-	end
-
-	-- if this weapon is already flagged by a different player, the pickup shouldn't happen
-	if wep.wpickup_player then return end
-
-	-- Now comes the tricky part: Since Gmod doesn't allow us to pick up weapons by
-	-- calling a simple function while also keeping all the weapon specific params
-	-- set in the runtime, we have to use the GM:PlayerCanPickupWeapon hook in a
-	-- slightly hacky way
-
-	-- first we have to check if the player can pick up the weapon at all by running the
-	-- hook manually. This has to be done since the normal pickup is handled internally
-	-- and is therefore not accessable for us
-	wep.wp__WeaponSwitchFlag = dropBlockingWeapon
-
-	local canPickupWeapon = self:CanPickupWeapon(wep)
-
-	-- the flag has to be reset on the outside of the hook since returning
-	-- false somewhere prevents GM:PlayerCanPickupWeapon from being executed
-	wep.wp__WeaponSwitchFlag = nil
-
-	if not canPickupWeapon then
-		LANG.Msg(self, "pickup_no_room")
-
-		return
-	end
-
 	-- if parameter is set the currently blocking weapon should be dropped
-	if dropBlockingWeapon then
+	if dropBlockingWeapon ~= false then
 		local dropWeapon, isActiveWeapon, switchMode = GetBlockingWeapon(self, wep)
 
 		if switchMode == SWITCHMODE_FULLINV then
@@ -1256,12 +1379,9 @@ function plymeta:PickupWeapon(wep, dropBlockingWeapon, shouldAutoSelect)
 		end
 	end
 
-	-- prevent race conditions
-	self.wpickup_waitequip[kind] = true
+	if not self:PickupWeapon(wep, ammoOnly or false) then return end
 
-	timer.Create(kind .. "_WeaponPickup_" .. self:SteamID64(), 0, 1, function()
-		ActualWeaponPickup(self, wep, kind, shouldAutoSelect)
-	end)
+	wep.wpickup_autoSelect = shouldAutoSelect
 
 	return wep
 end
@@ -1270,11 +1390,11 @@ end
 -- This function simplifies the weapon class giving process for a player by
 -- handling all the needed calls.
 -- @param string wepCls The weapon class
--- @param [default=false] boolean dropBlockingWeapon Should the currently selecten weapon be dropped
+-- @param[default=false] boolean dropBlockingWeapon Should the currently selecten weapon be dropped
 -- @param boolean shouldAutoSelect Should this weapon be autoselected after equip, if not set this value is set by player keypress
 -- @returns Weapon if successful, nil if not
 -- @realm server
-function plymeta:PickupWeaponClass(wepCls, dropBlockingWeapon, shouldAutoSelect)
+function plymeta:SafePickupWeaponClass(wepCls, dropBlockingWeapon, shouldAutoSelect)
 	-- if the variable is not set, set it fitting to the keypress
 	if shouldAutoSelect == nil then
 		shouldAutoSelect = not self:KeyDown(IN_WALK) and not self:KeyDownLast(IN_WALK)
@@ -1293,8 +1413,10 @@ function plymeta:PickupWeaponClass(wepCls, dropBlockingWeapon, shouldAutoSelect)
 
 		pWep = self:Give(wepCls)
 
-		-- set flag to new weapon that is used to autoselect it later on
-		pWep.wpickup_autoSelect = shouldAutoSelect or isActiveWeapon
+		if IsValid(pWep) then
+			-- set flag to new weapon that is used to autoselect it later on
+			pWep.wpickup_autoSelect = shouldAutoSelect or isActiveWeapon
+		end
 	end
 
 	return pWep
@@ -1304,10 +1426,10 @@ end
 local function SetPlayerReady(_, ply)
 	if not IsValid(ply) then return end
 
-	ply.is_ready = true
+	ply.isReady = true
 
 	-- Send full state update to client
-	TTT2NET:SendFullStateUpdate(ply)
+	ttt2net.SendFullStateUpdate(ply)
 
 	hook.Run("TTT2PlayerReady", ply)
 end

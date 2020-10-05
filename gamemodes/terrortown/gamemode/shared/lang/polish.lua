@@ -324,7 +324,7 @@ L.item_weapon     = "Broń"
 
 L.item_armor      = "Kamizelka kuloodporna"
 L.item_armor_desc = [[
-Redukuje obrażenia od pocisków 
+Redukuje obrażenia od pocisków
 o 30%, kiedy zostaniesz trafiony
 
 Podstawowe wyposażenie detektywa.]]
@@ -379,8 +379,6 @@ L.c4_status_disarmed = "ROZBROJONA"
 L.vis_name        = "Wizualizer"
 L.vis_hint        = "Kliknij {usekey} by podnieść (tylko Detektywi)."
 
-L.vis_help_pri    = "{primaryfire} upuszcza aktywowane urządzenie."
-
 L.vis_desc        = [[
 Wizualizator chwili zabójstwa.
 
@@ -393,14 +391,13 @@ L.decoy_name      = "Wabik"
 L.decoy_no_room   = "Nie możesz wziąć tego wabika."
 L.decoy_broken    = "Twój wabik został zniszczony!"
 
-L.decoy_help_pri  = "{primaryfire} kładzie wabik."
 L.decoy_short_desc = "Pokazuje oszukaną pozycję na radarze"
 L.decoy_pickup_wrong_team = "You can't pick it up as it belongs to a different team"
 
 L.decoy_desc      = [[
 Pokazuje fałszywy znacznik na radarze Detektywów,
 i sprawia, że DNA skaner pokazuje Detektywowi
-lokalizacje wabika, jeżeli zeskanuje 
+lokalizacje wabika, jeżeli zeskanuje
 twoje DNA.]]
 
 -- Defuser
@@ -410,7 +407,7 @@ L.defuser_help    = "{primaryfire} rozbraja zaznaczone C4."
 L.defuser_desc    = [[
 Natychmiastowo robraja ładunek C4.
 
-Brak limitu użyć. C4 będzie łatwiej 
+Brak limitu użyć. C4 będzie łatwiej
 zauważyć, jeśli go nosisz.]]
 
 -- Flare gun
@@ -490,11 +487,8 @@ L.binoc_desc      = [[
 Przybliżaj na ciała i identyfikuj je
 z dalekiego dystansu.
 
-Nielimitowana liczba użyć, ale 
+Nielimitowana liczba użyć, ale
 identyfikacja trwa pare sekund.]]
-
-L.binoc_help_pri  = "{primaryfire} identyfikuje ciało."
-L.binoc_help_sec  = "{secondaryfire} zmienia poziom przybliżenia."
 
 -- UMP
 L.ump_desc        = [[
@@ -519,7 +513,7 @@ L.dna_desc        = [[
 Zbiera próbki DNA z różnych rzeczy
 i używa ich do znalezienia właściela tego DNA.
 
-Użyj na świeżych zwłokach, by znaleźć 
+Użyj na świeżych zwłokach, by znaleźć
 DNA zabójcy i śledzić go.]]
 
 L.dna_menu_title  = "Ustawienia skanowania DNA"
@@ -536,9 +530,6 @@ L.dna_menu_repeat = "Auto-powtarzanie"
 L.dna_menu_ready  = "GOTOWY"
 L.dna_menu_charge = "ŁADOWANIE"
 L.dna_menu_select = "WYBIERZ PRÓBKĘ"
-
-L.dna_help_primary   = "{primaryfire}, by pobrać próbkę DNA"
-L.dna_help_secondary = "{secondaryfire} by otworzyć ustawienia skanowania"
 
 -- Magneto stick
 L.magnet_name     = "Kijek magnetyczny"
@@ -619,7 +610,7 @@ L.corpse_too_far_away = "Ciało jest za daleko."
 L.corpse_binoculars = "Press [{key}] to search corpse with binoculars."
 L.corpse_searched_by_detective = "Te ciało przeszukał detektyw"
 
-L.target_disg  = " (PRZEBRANY)"
+L.target_disg  = "(przebrany)"
 L.target_unid  = "Niezidentyfikowane ciało"
 
 L.target_credits = "Przeszukaj, aby otrzymywać niewykorzystane kredyty"
@@ -656,10 +647,6 @@ L.tbut_admin_mode_only = "Only visible to you because you're an admin and '{cv}'
 L.tbut_allow = "Pozwól"
 L.tbut_prohib = "Zabroń"
 L.tbut_default = "Domyślne"
-
--- Equipment info lines (on the left above the health/ammo panel)
-L.disg_hud     = "Przebrałeś się. Twoje imię jest ukryte."
-L.radar_hud    = "Radar będzie gotowy do nowego skanu: {time}"
 
 -- Spectator muting of living/dead
 L.mute_living = "Living players muted"
@@ -1185,7 +1172,7 @@ L.hud_forced_failed = "Failed to force the HUD {hudname}. You don't have permiss
 L.hud_restricted_failed = "Failed to restrict the HUD {hudname}. You don't have permission to do that."
 
 L.shop_role_select = "Wybierz rolę"
-L.shop_role_selected = "{roles} wybrano do sklepu!"
+L.shop_role_selected = "{role} wybrano do sklepu!"
 L.shop_search = "Szukaj"
 
 L.button_save = "Zapisz"
@@ -1221,3 +1208,64 @@ L.door_auto_closes = "Te drzwi zamykają się same"
 L.door_open_touch = "Wejdź w drzwi żeby je otworzyć."
 L.door_open_touch_and_use = "Wejdź w drzwi i naciśnij [{usekey}] aby otworzyć."
 L.hud_health = "Zdrowie"
+
+-- 2020-04-20
+--L.item_speedrun = "Speedrun"
+--L.item_speedrun_desc = [[Makes you 50% faster!]]
+--L.item_no_explosion_damage = "No Explosion Damage"
+--L.item_no_explosion_damage_desc = [[Makes you immune to explosion damage.]]
+--L.item_no_fall_damage = "No Fall Damage"
+--L.item_no_fall_damage_desc = [[Makes you immune to fall damage.]]
+--L.item_no_fire_damage = "No Fire Damage"
+--L.item_no_fire_damage_desc = [[Makes you immune to fire damage.]]
+--L.item_no_hazard_damage = "No Hazard Damage"
+--L.item_no_hazard_damage_desc = [[Makes you immune to hazard damage such as posion, radiation and acid.]]
+--L.item_no_energy_damage = "No Energy Damage"
+--L.item_no_energy_damage_desc = [[Makes you immune to energy damage such as lasers, plasma and lightning.]]
+--L.item_no_prop_damage = "No Prop Damage"
+--L.item_no_prop_damage_desc = [[Makes you immune to prop damage.]]
+--L.item_no_drown_damage = "No Drowning Damage"
+--L.item_no_drown_damage_desc = [[Makes you immune to drowning damage.]]
+
+-- 2020-04-30
+--L.message_revival_canceled = "Revival canceled."
+--L.message_revival_failed = "Revival failed."
+--L.message_revival_failed_missing_body = "You have not been revived because your corpse no longer exists."
+--L.hud_revival_title = "Time left until revival:"
+--L.hud_revival_time = "{time}s"
+
+-- 2020-05-03
+--L.door_destructible = "Door is destructible ({health}HP)"
+
+-- 2020-05-28
+--L.confirm_detective_only = "Only detectives can confirm bodies"
+--L.inspect_detective_only = "Only detectives can inspect bodies"
+--L.corpse_hint_no_inspect = "Only detectives can search this body."
+--L.corpse_hint_inspect_only = "Press [{usekey}] to serch. Only detectives can confirm the body."
+--L.corpse_hint_inspect_only_credits = "Press [{usekey}] to receive credits. Only detectives can search this body."
+
+-- 2020-06-04
+--L.label_bind_disguiser = "Toggle disguiser"
+
+-- 2020-06-24
+
+--L.dna_help_primary = "Collect a DNA sample"
+--L.dna_help_secondary = "Switch the DNA slot"
+--L.dna_help_reload = "Delete a sample"
+
+--L.binoc_help_pri = "Identify a body."
+--L.binoc_help_sec = "Change zoom level."
+
+--L.vis_help_pri = "Drop the activated device."
+
+--L.decoy_help_pri = "Plant the Decoy."
+
+--L.set_cross_lines_enable = "Enable crosshair lines"
+
+-- 2020-08-07
+--L.pickup_error_spec = "You cannot pick this up as a spectator."
+--L.pickup_error_owns = "You cannot pick this up because you already have this weapon."
+--L.pickup_error_noslot = "You cannot pick this up because you have no free slot available."
+
+-- 2020-08-11
+--L.f1_settings_shop_desc_double_click = "Enable to buy an item in the shop by double clicking on it."

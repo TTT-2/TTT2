@@ -256,3 +256,59 @@ function GetRoleItem(subrole, id)
 		return item
 	end
 end
+
+---
+-- Initialize old items and converts them to the new item system.
+-- @note This should be called after all entites have been loaded eg after InitPostEntity.
+-- @realm shared
+function MigrateLegacyItems()
+	for subrole, tbl in pairs(EquipmentItems or {}) do
+		for i = 1, #tbl do
+			local v = tbl[i]
+
+			if v.avoidTTT2 then continue end
+
+			local name = v.ClassName or v.name or WEPS.GetClass(v)
+
+			if not name then continue end
+
+			local item = items.GetStored(GetEquipmentFileName(name))
+
+			if not item then
+				local ITEMDATA = table.Copy(v)
+				ITEMDATA.oldId = v.id
+				ITEMDATA.id = name
+				ITEMDATA.EquipMenuData = v.EquipMenuData or {
+					type = v.type,
+					name = v.name,
+					desc = v.desc
+				}
+				ITEMDATA.type = nil
+				ITEMDATA.desc = nil
+				ITEMDATA.name = name
+				ITEMDATA.material = v.material
+				ITEMDATA.CanBuy = { [subrole] = subrole }
+				ITEMDATA.limited = v.limited or v.LimitedStock or true
+
+				-- reset this old hud bool
+				if ITEMDATA.hud == true then
+					ITEMDATA.oldHud = true
+					ITEMDATA.hud = nil
+				end
+
+				-- set the converted indicator
+				ITEMDATA.converted = true
+
+				-- don't add icon and desc to the search panel if it's not intended
+				ITEMDATA.noCorpseSearch = ITEMDATA.noCorpseSearch or true
+
+				items.Register(ITEMDATA, GetEquipmentFileName(name))
+
+				print("[TTT2][INFO] Automatically converted legacy item: ", name, ITEMDATA.oldId)
+			else
+				item.CanBuy = item.CanBuy or {}
+				item.CanBuy[subrole] = subrole
+			end
+		end
+	end
+end

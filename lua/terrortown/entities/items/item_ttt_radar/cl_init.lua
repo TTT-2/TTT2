@@ -9,7 +9,6 @@ local GetPTranslation
 local table = table
 local net = net
 local pairs = pairs
-local timer = timer
 local IsValid = IsValid
 
 local indicator = surface.GetTextureID("effects/select_ring")
@@ -18,11 +17,12 @@ local sample_scan = surface.GetTextureID("vgui/ttt/sample_scan")
 local det_beacon = surface.GetTextureID("vgui/ttt/det_beacon")
 local near_cursor_dist = 180
 
-RADAR = {}
+local colorFallback = Color(150, 150, 150)
+
+RADAR = RADAR or {}
 RADAR.targets = {}
 RADAR.enable = false
-RADAR.duration = 30
-RADAR.endtime = 0
+RADAR.startTime = 0
 RADAR.bombs = {}
 RADAR.bombs_count = 0
 RADAR.repeating = true
@@ -36,7 +36,7 @@ RADAR.called_corpses = {}
 -- @realm client
 function RADAR:EndScan()
 	self.enable = false
-	self.endtime = CurTime()
+	self.startTime = 0
 end
 
 ---
@@ -50,20 +50,6 @@ function RADAR:Clear()
 	self.samples = {}
 	self.bombs_count = 0
 	self.samples_count = 0
-end
-
----
--- Updates the radar OR disables it
--- @internal
--- @realm client
-function RADAR:Timeout()
-	self:EndScan()
-
-	local client = LocalPlayer()
-
-	if not self.repeating or not IsValid(client) or not client:HasEquipmentItem("item_ttt_radar") then return end
-
-	RunConsoleCommand("ttt_radar_scan")
 end
 
 ---
@@ -106,7 +92,7 @@ end
 -- @internal
 -- @realm client
 function ITEM:DrawInfo()
-	return tostring(math.Round(math.max(0, RADAR.endtime - CurTime())))
+	return math.ceil(math.max(0, (LocalPlayer().radarTime or 30) - (CurTime() - RADAR.startTime)))
 end
 
 local function DrawTarget(tgt, size, offset, no_shrink)
@@ -166,14 +152,14 @@ function RADAR:Draw(client)
 		surface.SetDrawColor(255, 255, 255, 200)
 
 		for _, bomb in pairs(self.bombs) do
-			if bomb.team == client:GetTeam() then
+			if bomb.team ~= nil and bomb.team == client:GetTeam() then
 				DrawTarget(bomb, 24, 0, true)
 			end
 		end
 	end
 
 	-- Corpse calls
-	if client:IsActiveRole(ROLE_DETECTIVE) and not table.IsEmpty(self.called_corpses) then
+	if not table.IsEmpty(self.called_corpses) then
 		surface.SetTexture(det_beacon)
 		surface.SetTextColor(255, 255, 255, 240)
 		surface.SetDrawColor(255, 255, 255, 230)
@@ -199,15 +185,17 @@ function RADAR:Draw(client)
 
 	surface.SetTexture(indicator)
 
-	local remaining = math.max(0, RADAR.endtime - CurTime())
-	local alpha_base = 50 + 180 * (remaining / RADAR.duration)
+	local radarTime = client.radarTime or 30
+	local remaining = math.max(0, radarTime - (CurTime() - RADAR.startTime))
+	local alpha_base = 50 + 180 * (remaining / radarTime)
 	local mpos = Vector(ScrW() * 0.5, ScrH() * 0.5, 0)
 
 	local subrole, alpha, scrpos, md
 
-	for _, tgt in pairs(RADAR.targets) do
-		alpha = alpha_base
+	for i = 1, #RADAR.targets do
+		local tgt = RADAR.targets[i]
 
+		alpha = alpha_base
 		scrpos = tgt.pos:ToScreen()
 
 		if scrpos.visible then
@@ -220,23 +208,14 @@ function RADAR:Draw(client)
 			subrole = tgt.subrole or ROLE_INNOCENT
 
 			local roleData = roles.GetByIndex(subrole)
-			local c = roleData.radarColor
+			local c = roleData.radarColor or (TEAMS[tgt.team] and TEAMS[tgt.team].color or colorFallback)
 
-			if c then
+			if tgt.color then
+				surface.SetDrawColor(tgt.color.r, tgt.color.g, tgt.color.b, alpha)
+				surface.SetTextColor(tgt.color.r, tgt.color.g, tgt.color.b, alpha)
+			else
 				surface.SetDrawColor(c.r, c.g, c.b, alpha)
 				surface.SetTextColor(c.r, c.g, c.b, alpha)
-			elseif subrole == ROLE_DETECTIVE or roleData.baserole == ROLE_DETECTIVE then
-				surface.SetDrawColor(0, 0, 255, alpha)
-				surface.SetTextColor(0, 0, 255, alpha)
-			elseif subrole == ROLE_INNOCENT or roleData.baserole == ROLE_INNOCENT then
-				surface.SetDrawColor(0, 255, 0, alpha)
-				surface.SetTextColor(0, 255, 0, alpha)
-			elseif subrole == ROLE_TRAITOR or roleData.baserole == ROLE_TRAITOR then
-				surface.SetDrawColor(255, 0, 0, alpha)
-				surface.SetTextColor(255, 0, 0, alpha)
-			else
-				surface.SetDrawColor(150, 150, 150, alpha)
-				surface.SetTextColor(150, 150, 150, alpha)
 			end
 
 			DrawTarget(tgt, 24, 0)
@@ -271,31 +250,43 @@ end
 net.Receive("TTT_CorpseCall", TTT_CorpseCall)
 
 local function ReceiveRadarScan()
-	local num_targets = net.ReadUInt(8)
+	local num_targets = net.ReadUInt(16)
 
 	RADAR.targets = {}
 
 	for i = 1, num_targets do
-		local sr = net.ReadUInt(ROLE_BITS)
+		local pos = Vector(
+			net.ReadInt(32),
+			net.ReadInt(32),
+			net.ReadInt(32)
+		)
 
-		local pos = Vector()
-		pos.x = net.ReadInt(32)
-		pos.y = net.ReadInt(32)
-		pos.z = net.ReadInt(32)
+		local hasSubrole = net.ReadBool()
+		local subrole
 
-		RADAR.targets[#RADAR.targets + 1] = {subrole = sr, pos = pos}
+		if hasSubrole then
+			subrole = net.ReadUInt(ROLE_BITS)
+		end
+
+		local team = net.ReadString()
+
+		local color
+		if net.ReadBool() then
+			color = net.ReadColor()
+		end
+
+		RADAR.targets[#RADAR.targets + 1] = {pos = pos, subrole = subrole, team = team, hasSubrole = hasSubrole, color = color}
 	end
 
 	RADAR.enable = true
-	RADAR.endtime = CurTime() + RADAR.duration
-
-	timer.Create("radartimeout", RADAR.duration + 1, 1, function()
-		if not RADAR then return end
-
-		RADAR:Timeout()
-	end)
+	RADAR.startTime = CurTime()
 end
 net.Receive("TTT_Radar", ReceiveRadarScan)
+
+local function ReceiveRadarTime()
+	LocalPlayer().radarTime = net.ReadUInt(8)
+end
+net.Receive("TTT2RadarUpdateTime", ReceiveRadarTime)
 
 ---
 -- Creates the settings menu
@@ -325,8 +316,6 @@ function RADAR.CreateMenu(parent, frame)
 	dscan:SetText(GetTranslation("radar_scan"))
 
 	dscan.DoClick = function(s)
-		s:SetDisabled(true)
-
 		RunConsoleCommand("ttt_radar_scan")
 
 		frame:Close()
@@ -335,7 +324,7 @@ function RADAR.CreateMenu(parent, frame)
 	dform:AddItem(dscan)
 
 	local dlabel = vgui.Create("DLabel", dform)
-	dlabel:SetText(GetPTranslation("radar_help", {num = RADAR.duration}))
+	dlabel:SetText(GetPTranslation("radar_help", {num = LocalPlayer().radarTime or 30}))
 	dlabel:SetWrap(true)
 	dlabel:SetTall(50)
 
@@ -347,13 +336,17 @@ function RADAR.CreateMenu(parent, frame)
 	dcheck:SetValue(RADAR.repeating)
 
 	dcheck.OnChange = function(s, val)
+		net.Start("TTT2RadarUpdateAutoScan")
+		net.WriteBool(val)
+		net.SendToServer()
+
 		RADAR.repeating = val
 	end
 
 	dform:AddItem(dcheck)
 
 	dform.Think = function(s)
-		if RADAR.enable or not owned then
+		if RADAR.repeating or not owned then
 			dscan:SetDisabled(true)
 		else
 			dscan:SetDisabled(false)

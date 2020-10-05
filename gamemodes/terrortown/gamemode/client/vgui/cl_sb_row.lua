@@ -16,7 +16,6 @@ ttt_include("vgui__cl_sb_info")
 local GetTranslation = LANG.GetTranslation
 local math = math
 local table = table
-local ipairs = ipairs
 local IsValid = IsValid
 local surface = surface
 local vgui = vgui
@@ -29,6 +28,8 @@ local ttt2_indicator_addondev = "vgui/ttt/ttt2_indicator_addondev"
 local ttt2_indicator_admin = "vgui/ttt/ttt2_indicator_admin"
 local ttt2_indicator_streamer = "vgui/ttt/ttt2_indicator_streamer"
 local ttt2_indicator_heroes = "vgui/ttt/ttt2_indicator_heroes"
+
+local material_no_team = "vgui/ttt/dynamic/roles/icon_no_team"
 
 local dev_tbl = {
 	["76561197964193008"] = true, -- Bad King Urgrain
@@ -53,7 +54,9 @@ local vip_tbl = {
 	["76561198076404571"] = true, -- Histalek
 	["76561198042086461"] = true, -- James
 	["76561193814529882"] = true, -- Trystan
-	["76561198056317817"] = true -- Menof36go
+	["76561198114719750"] = true, -- Reispfannenfresser
+	["76561198082931319"] = true, -- Henk
+	["76561198049910438"] = true -- Zzzaaaccc13
 }
 
 local addondev_tbl = {
@@ -132,8 +135,8 @@ function PANEL:Init()
 	-- Let hooks add their custom columns
 	hook.Call("TTTScoreboardColumns", nil, self)
 
-	for _, c in ipairs(self.cols) do
-		c:SetMouseInputEnabled(false)
+	for i = 1, #self.cols do
+		self.cols[i]:SetMouseInputEnabled(false)
 	end
 
 	self.tag = vgui.Create("DLabel", self)
@@ -193,6 +196,17 @@ function PANEL:Init()
 	self.nick = vgui.Create("DLabel", self)
 	self.nick:SetMouseInputEnabled(false)
 
+	self.team2 = vgui.Create("DImage", self)
+	self.team2:SetSize(iconSizes, iconSizes)
+	self.team2:SetMouseInputEnabled(false)
+	self.team2:SetKeepAspect(true)
+
+	self.team = vgui.Create("DImage", self)
+	self.team:SetSize(iconSizes, iconSizes)
+	self.team:SetMouseInputEnabled(true)
+	self.team:SetKeepAspect(true)
+	self.team:SetTooltip("Team")
+
 	self.voice = vgui.Create("DImageButton", self)
 	self.voice:SetSize(iconSizes, iconSizes)
 
@@ -211,7 +225,7 @@ function PANEL:AddColumn(label, func, width)
 	lbl.IsHeading = false
 	lbl.Width = width or 50 -- Retain compatibility with existing code
 
-	table.insert(self.cols, lbl)
+	self.cols[#self.cols + 1] = lbl
 
 	return lbl
 end
@@ -236,9 +250,7 @@ function GM:TTTScoreboardColorForPlayer(ply)
 		local steamid64 = ply:SteamID64()
 		if steamid64 then
 			steamid64 = tostring(steamid64)
-		end
 
-		if steamid64 then
 			if dev_tbl[steamid64] and GetGlobalBool("ttt_highlight_dev", true) then
 				return namecolor.dev
 			elseif vip_tbl[steamid64] and GetGlobalBool("ttt_highlight_vip", true) then
@@ -291,7 +303,9 @@ end
 -- @param number width
 -- @param number height
 function PANEL:Paint(width, height)
-	if not IsValid(self.Player) then return end
+	if not IsValid(self.Player) then
+		return false
+	end
 
 	--	if (self.Player:GetFriendStatus() == "friend") then
 	--		color = Color(236, 181, 113, 255)
@@ -376,6 +390,30 @@ function PANEL:UpdatePlayerData()
 	self.nick:SizeToContents()
 	self.nick:SetTextColor(ColorForPlayer(ply))
 
+	local tm = ply:GetTeam() or nil
+	if tm then
+		local tmData = TEAMS[tm]
+		if tm == TEAM_NONE or not tmData or tmData.alone then
+			self.team2:SetImage(material_no_team)
+			self.team:SetImage(material_no_team)
+		else
+			local teamImageName = tmData.iconMaterial:GetName()
+
+			self.team2:SetImage(teamImageName)
+			self.team:SetImage(teamImageName)
+		end
+
+		self.team2:SetImageColor(COLOR_BLACK)
+		self.team:SetImageColor(COLOR_WHITE)
+
+		self.team:SetTooltip(LANG.GetTranslation(tm))
+	end
+
+	local showTeam = not ply:IsRole(ROLE_INNOCENT) or ply:RoleKnown()
+
+	self.team2:SetVisible(showTeam)
+	self.team:SetVisible(showTeam)
+
 	local steamid64 = ply:SteamID64()
 	if steamid64 then
 		steamid64 = tostring(steamid64)
@@ -430,7 +468,11 @@ function PANEL:UpdatePlayerData()
 end
 
 function PANEL:ApplySchemeSettings()
-	for _, v in ipairs(self.cols) do
+	local ply = self.Player
+
+	for i = 1, #self.cols do
+		local v = self.cols[i]
+
 		v:SetFont("treb_small")
 		v:SetTextColor(COLOR_WHITE)
 	end
@@ -442,9 +484,12 @@ function PANEL:ApplySchemeSettings()
 	self.nick3:SetTextColor(COLOR_BLACK)
 
 	self.nick:SetFont("treb_small")
-	self.nick:SetTextColor(ColorForPlayer(self.Player))
 
-	local ptag = self.Player and self.Player.sb_tag
+	if IsValid(ply) then
+		self.nick:SetTextColor(ColorForPlayer(ply))
+	end
+
+	local ptag = IsValid(ply) and ply.sb_tag or nil
 	self.tag:SetTextColor(ptag and ptag.color or COLOR_WHITE)
 	self.tag:SetFont("treb_small")
 
@@ -473,7 +518,9 @@ end
 function PANEL:LayoutColumns()
 	local cx = self:GetWide()
 
-	for _, v in ipairs(self.cols) do
+	for i = 1, #self.cols do
+		local v = self.cols[i]
+
 		v:SizeToContents()
 
 		cx = cx - v.Width
@@ -492,46 +539,30 @@ function PANEL:LayoutColumns()
 	local x = self.nick:GetPos()
 	local w = self.nick:GetSize()
 
-	local i = 0
+	local count = 0
 	local mgn = 10
 
 	local tx = x + w + mgn
 	local ty = (SB_ROW_HEIGHT - iconSizes) * 0.5
 
-	if self.dev:IsVisible() then
-		self.dev:SetPos(tx + (iconSizes + mgn) * i, ty)
+	local iconTbl = {
+		"dev",
+		"vip",
+		"addondev",
+		"admin",
+		"streamer",
+		"heroes"
+	}
 
-		i = i + 1
-	end
+	for i = 1, #iconTbl do
+		local entry = iconTbl[i]
+		local iconData = self[entry]
 
-	if self.vip:IsVisible() then
-		self.vip:SetPos(tx + (iconSizes + mgn) * i, ty)
+		if iconData:IsVisible() then
+			iconData:SetPos(tx + (iconSizes + mgn) * count, ty)
 
-		i = i + 1
-	end
-
-	if self.addondev:IsVisible() then
-		self.addondev:SetPos(tx + (iconSizes + mgn) * i, ty)
-
-		i = i + 1
-	end
-
-	if self.admin:IsVisible() then
-		self.admin:SetPos(tx + (iconSizes + mgn) * i, ty)
-
-		i = i + 1
-	end
-
-	if self.streamer:IsVisible() then
-		self.streamer:SetPos(tx + (iconSizes + mgn) * i, ty)
-
-		i = i + 1
-	end
-
-	if self.heroes:IsVisible() then
-		self.heroes:SetPos(tx + (iconSizes + mgn) * i, ty)
-
-		i = i + 1
+			count = count + 1
+		end
 	end
 end
 
@@ -560,16 +591,20 @@ function PANEL:PerformLayout()
 		self:SetSize(self:GetWide(), SB_ROW_HEIGHT + self.info:GetTall())
 	end
 
+	local tx = SB_ROW_HEIGHT + 10 + iconSizes
 	local ty = (SB_ROW_HEIGHT - self.nick:GetTall()) * 0.5
 
 	self.nick2:SizeToContents()
-	self.nick2:SetPos(SB_ROW_HEIGHT + 11, ty + 1)
+	self.nick2:SetPos(tx + 1, ty + 1)
 
 	self.nick3:SizeToContents()
-	self.nick3:SetPos(SB_ROW_HEIGHT + 10, ty)
+	self.nick3:SetPos(tx, ty)
 
 	self.nick:SizeToContents()
-	self.nick:SetPos(SB_ROW_HEIGHT + 10, ty)
+	self.nick:SetPos(tx, ty)
+
+	self.team2:SetPos(tx - iconSizes - 4, (SB_ROW_HEIGHT - iconSizes) * 0.5 + 1)
+	self.team:SetPos(tx - iconSizes - 5, (SB_ROW_HEIGHT - iconSizes) * 0.5)
 
 	self:LayoutColumns()
 
