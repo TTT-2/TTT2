@@ -42,7 +42,7 @@ local mainMenuAdminOrder = {
 }
 
 -- Populate the main menu
-local function InternalModifyMainMenu(helpData)
+local function InternalModifyHelpMainMenu(helpData)
 	for i = 1, #mainMenuOrder do
 		local id = mainMenuOrder[i]
 
@@ -57,7 +57,7 @@ local function InternalModifyMainMenu(helpData)
 end
 
 -- Populate the sub menues
-local function InternalModifySubMenu(helpData, menuId)
+local function InternalModifyHelpSubMenu(helpData, menuId)
 	if not HELPSCRN.subPopulate[menuId] then return end
 
 	HELPSCRN.subPopulate[menuId](helpData, menuId)
@@ -146,9 +146,9 @@ function HELPSCRN:ShowMainMenu()
 
 	helpData:BindData(menuTbl)
 
-	InternalModifyMainMenu(helpData)
+	InternalModifyHelpMainMenu(helpData)
 
-	hook.Run("TTT2ModifyMainMenu", helpData)
+	hook.Run("TTT2ModifyHelpMainMenu", helpData)
 
 	local menuesNormal = helpData:GetVisibleNormalMenues()
 	local menuesAdmin = helpData:GetVisibleAdminMenues()
@@ -166,6 +166,8 @@ function HELPSCRN:ShowMainMenu()
 
 	AddMenuButtons(menuesAdmin, dsettings)
 end
+
+HELPSCRN.Show = HELPSCRN.ShowMainMenu
 
 ---
 -- Returns the name of the currently opened menu
@@ -194,7 +196,7 @@ function HELPSCRN:BuildContentArea()
 
 	if not IsValid(parent) then return end
 
-	if hook.Run("TTT2OnSubMenuClear", parent, self.currentMenuId, self.lastMenuData, self.menuData) == false then return end
+	if hook.Run("TTT2OnHelpSubMenuClear", parent, self.currentMenuId, self.lastMenuData, self.menuData) == false then return end
 
 	parent:Clear()
 
@@ -283,9 +285,9 @@ function HELPSCRN:ShowSubMenu(data)
 
 	helpData:BindData(menuTbl)
 
-	InternalModifySubMenu(helpData, data.id)
+	InternalModifyHelpSubMenu(helpData, data.id)
 
-	hook.Run("TTT2ModifySubMenu", helpData, data.id)
+	hook.Run("TTT2ModifyHelpSubMenu", helpData, data.id)
 
 	-- cache reference to last active button
 	local lastActive
@@ -364,6 +366,25 @@ concommand.Add("ttt_helpscreen", ShowTTTHelp)
 -- @param table menuData The menu data of the menu that will be opened
 -- @hook
 -- @realm client
-function GM:TTT2OnSubMenuClear(parent, currentMenuId, lastMenuData, menuData)
+function GM:TTT2OnHelpSubMenuClear(parent, currentMenuId, lastMenuData, menuData)
+
+end
+
+---
+-- A hook that is used to popuplate and modify the contents of the main help menu.
+-- @param HELP_MENU_DATA helpData A reference to the menu data object
+-- @hook
+-- @realm client
+function GM:TTT2ModifyHelpMainMenu(helpData)
+
+end
+
+---
+-- A hook that is used to popuplate and modify the contents of the sub help menu.
+-- @param HELP_MENU_DATA helpData A reference to the sub menu data object
+-- @param string menuId The id of the currently opened menu
+-- @hook
+-- @realm client
+function GM:TTT2ModifyHelpSubMenu(helpData, menuId)
 
 end

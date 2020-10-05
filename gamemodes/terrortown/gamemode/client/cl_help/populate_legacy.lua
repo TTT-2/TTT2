@@ -40,7 +40,7 @@ local function RegisterLegacyTabCache()
 	end
 
 	-- moves children to tab cache to prevent deleting of children
-	hook.Add("TTT2OnSubMenuClear", "TTT2HandleLegacyClear", function(parent, nameMenuOpen, lastMenuData, menuData)
+	hook.Add("TTT2OnHelpSubMenuClear", "TTT2HandleLegacyClear", function(parent, nameMenuOpen, lastMenuData, menuData)
 		if nameMenuOpen ~= "ttt2_legacy" or not elemStore then return end
 
 		local children = parent:GetChildren()
