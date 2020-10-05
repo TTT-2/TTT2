@@ -248,15 +248,49 @@ end
 
 ---
 -- Returns white or black @{Color} based on the passed color value
--- @param Color bgcolor background color
+-- @param Color color background color
 -- @return Color The color based on the background color
 -- @realm shared
-function util.GetDefaultColor(bgcolor)
-	if bgcolor.r + bgcolor.g + bgcolor.b < 500 then
+function util.GetDefaultColor(color)
+	if color.r + color.g + color.b < 500 then
 		return COLOR_WHITE
 	else
 		return COLOR_BLACK
 	end
+end
+
+---
+-- Returns the darkened or lightened color by the specified value
+-- @param Color color The original color
+-- @param number value The amount to change
+-- @return Color The color based on the original color
+-- @realm shared
+function util.GetChangedColor(color, value)
+	if color.r + color.g + color.b < 383 then
+		return util.ColorLighten(color, value or 20)
+	else
+		return util.ColorDarken(color, value or 20)
+	end
+end
+
+---
+-- Returns a hovercolor which is just a lightened or darkened color based
+-- on the sourcecolor
+-- @param Color color The original color
+-- @return Color The color based on the original color
+-- @realm shared
+function util.GetHoverColor(color)
+	return util.GetChangedColor(color, 20)
+end
+
+---
+-- Returns a activecolor which is just a lightened or darkened color based
+-- on the sourcecolor
+-- @param Color color The original color
+-- @return Color The color based on the original color
+-- @realm shared
+function util.GetActiveColor(color)
+	return util.GetChangedColor(color, 40)
 end
 
 local function DoBleed(ent)

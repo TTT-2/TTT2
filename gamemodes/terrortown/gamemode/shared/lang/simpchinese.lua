@@ -1,63 +1,67 @@
----- Simplified Chinese language strings
+-- Simplified Chinese language strings
 
 local L = LANG.CreateLanguage("简体中文")
 
---- General text used in various places
-L.traitor    = "叛徒"
-L.detective  = "探长"
-L.innocent   = "无辜者"
+-- General text used in various places
+L.traitor = "叛徒"
+L.detective = "探长"
+L.innocent = "无辜者"
 L.last_words = "遗言"
 
 L.terrorists = "恐怖分子"
 L.spectators = "观察者"
 
---- Round status messages
-L.round_minplayers = "没有足够的玩家来开始新的回合…"
-L.round_voting     = "投票进行中，新的回合将推迟到 {num} 秒后开始…"
-L.round_begintime  = "新回合将在 {num} 秒后开始。请做好准备。"
-L.round_selected   = "叛徒玩家已选出"
-L.round_started    = "回合开始！"
-L.round_restart    = "游戏被管理员强制重新开始。"
+--L.noteam = "No Team"
+--L.innocents = "Team Innocents"
+--L.traitors = "Team Traitors"
 
-L.round_traitors_one  = "叛徒，你将孤身奋斗。"
+-- Round status messages
+L.round_minplayers = "没有足够的玩家来开始新的回合…"
+L.round_voting = "投票进行中，新的回合将推迟到 {num} 秒后开始…"
+L.round_begintime = "新回合将在 {num} 秒后开始。请做好准备。"
+L.round_selected = "叛徒玩家已选出"
+L.round_started = "回合开始！"
+L.round_restart = "游戏被管理员强制重新开始。"
+
+L.round_traitors_one = "叛徒，你将孤身奋斗。"
 L.round_traitors_more = "叛徒，你的队友是： {names} 。"
 
-L.win_time         = "时间用尽，叛徒失败了。"
-L.win_traitor      = "叛徒取得了胜利！"
-L.win_innocent     = "叛徒们被击败了！"
-L.win_showreport   = "来看一下 {num} 秒的回合总结吧！"
+L.win_time = "时间用尽，叛徒失败了。"
+L.win_traitor = "叛徒取得了胜利！"
+L.win_innocent = "叛徒们被击败了！"
+--L.win_bees = "The Bees has won! (Its a draw)"
+L.win_showreport = "来看一下 {num} 秒的回合总结吧！"
 
-L.limit_round      = "已达游戏回合上限，即将载入地图 {mapname}"
-L.limit_time       = "已达游戏时间上限，即将载入地图 {mapname}"
-L.limit_left       = "在载入地图 {mapname} 前，还有 {num} 回合或者 {time} 分钟的剩余时间。"
+L.limit_round = "已达游戏回合上限，即将载入地图 {mapname}"
+L.limit_time = "已达游戏时间上限，即将载入地图 {mapname}"
+L.limit_left = "在载入地图 {mapname} 前，还有 {num} 回合或者 {time} 分钟的剩余时间。"
 
---- Credit awards
-L.credit_det_all   = "探长，你的表现让你获得了 {num} 积分。"
-L.credit_tr_all    = "叛徒，你的表现让你获得了 {num} 积分。"
+-- Credit awards
+--L.credit_all = "Your team have been awarded {num} equipment credit(s) for your performance."
+L.credit_kill = "你杀死 {role} 获得了 {num} 点的积分"
 
-L.credit_kill      = "你杀死 {role} 获得了 {num} 点的积分"
+-- Karma
+L.karma_dmg_full = "你的人品为 {amount} ，因此本回合你将造成正常伤害。"
+L.karma_dmg_other = "你的人品为 {amount} ，因此本回合你造成的伤害将减少 {num} %"
 
---- Karma
-L.karma_dmg_full   = "你的人品为 {amount} ，因此本回合你将造成正常伤害。"
-L.karma_dmg_other  = "你的人品为 {amount} ，因此本回合你造成的伤害将减少 {num} %"
-
---- Body identification messages
-L.body_found       = " {finder} 发现了 {victim} 的尸体。 {role}"
+-- Body identification messages
+L.body_found = " {finder} 发现了 {victim} 的尸体。 {role}"
+--L.body_found_team = "{finder} found the body of {victim}. {role} ({team})"
 
 -- The {role} in body_found will be replaced by one of the following:
-L.body_found_t     = "他是一位叛徒！"
-L.body_found_d     = "他是一位探长。"
-L.body_found_i     = "他是一位无辜者。"
+L.body_found_traitor = "他是一位叛徒！"
+L.body_found_det = "他是一位探长。"
+L.body_found_inno = "他是一位无辜者。"
 
-L.body_confirm     = "{finder} 确认了 {victim} 的死亡。"
+L.body_confirm = "{finder} 确认了 {victim} 的死亡。"
 
-L.body_call        = "{player} 请求探长前来检查 {victim} 的尸体！"
-L.body_call_error  = "你必须先确定该玩家的死才能呼叫探长！"
+L.body_call = "{player} 请求探长前来检查 {victim} 的尸体！"
+L.body_call_error = "你必须先确定该玩家的死才能呼叫探长！"
 
-L.body_burning     = "好烫！这个尸体着火了！"
-L.body_credits     = "你在尸体上找到 {num} 积分！"
+L.body_burning = "好烫！这个尸体着火了！"
+L.body_credits = "你在尸体上找到 {num} 积分！"
 
---- Menus and windows
+-- Menus and windows
 L.close = "关闭"
 L.cancel = "取消"
 
@@ -66,580 +70,491 @@ L.next = "下一个"
 L.prev = "上一个"
 
 -- Equipment buying menu
-L.equip_title     = "装备"
-L.equip_tabtitle  = "购买装备"
+L.equip_title = "装备"
+L.equip_tabtitle = "购买装备"
 
-L.equip_status    = "购买菜单"
-L.equip_cost      = "你的积分剩下 {num} 点。"
+L.equip_status = "购买菜单"
+L.equip_cost = "你的积分剩下 {num} 点。"
 L.equip_help_cost = "每一件装备都需要花费 1 点积分。"
 
 L.equip_help_carry = "你只能在拥有空位时购买物品。"
-L.equip_carry      = "你能携带这件装备。"
-L.equip_carry_own  = "你已拥有这件装备。"
+L.equip_carry = "你能携带这件装备。"
+L.equip_carry_own = "你已拥有这件装备。"
 L.equip_carry_slot = "已拥有武器栏第 {slot} 项的武器。"
+--L.equip_carry_minplayers = "There are not enough players on the server to enable this weapon."
 
 L.equip_help_stock = "每回合你只能购买一件相同的物品。"
 L.equip_stock_deny = "这件物品卖空了。"
-L.equip_stock_ok   = "这件物品有库存。"
+L.equip_stock_ok = "这件物品有库存。"
 
-L.equip_custom     = "服务器的自定义物品。"
+L.equip_custom = "服务器的自定义物品。"
 
-L.equip_spec_name  = "名字"
-L.equip_spec_type  = "类型"
-L.equip_spec_desc  = "描述"
+L.equip_spec_name = "名字"
+L.equip_spec_type = "类型"
+L.equip_spec_desc = "描述"
 
-L.equip_confirm    = "购买装备"
+L.equip_confirm = "购买装备"
 
 -- Disguiser tab in equipment menu
-L.disg_name      = "伪装器"
+L.disg_name = "伪装器"
 L.disg_menutitle = "伪装器控制"
 L.disg_not_owned = "你没有伪装器！"
-L.disg_enable    = "执行伪装"
+L.disg_enable = "执行伪装"
 
-L.disg_help1     = "伪装开启后，别人瞄准你时将不会看见你的名字，生命以及人品。除此之外，你也能躲避探长的雷达。"
-L.disg_help2     = "可直接在主选单外，使用数字键来切换伪装。你也可以用控制台指令绑定指令 ttt_toggle_disguise。"
+L.disg_help1 = "伪装开启后，别人瞄准你时将不会看见你的名字，生命以及人品。除此之外，你也能躲避探长的雷达。"
+L.disg_help2 = "可直接在主选单外，使用数字键来切换伪装。你也可以用控制台指令绑定指令 ttt_toggle_disguise。"
 
 -- Radar tab in equipment menu
-L.radar_name      = "雷达"
+L.radar_name = "雷达"
 L.radar_menutitle = "雷达控制"
 L.radar_not_owned = "你没有雷达！"
-L.radar_scan      = "执行扫描"
-L.radar_auto      = "自动重复扫描"
-L.radar_help      = "扫描结果将显示 {num} 秒，接着雷达充电后你便可以再次使用。"
-L.radar_charging  = "你的雷达还在充电中！"
+L.radar_scan = "执行扫描"
+L.radar_auto = "自动重复扫描"
+L.radar_help = "扫描结果将显示 {num} 秒，接着雷达充电后你便可以再次使用。"
+L.radar_charging = "你的雷达还在充电中！"
 
 -- Transfer tab in equipment menu
-L.xfer_name       = "转移"
-L.xfer_menutitle  = "转移积分"
+L.xfer_name = "转移"
+L.xfer_menutitle = "转移积分"
 L.xfer_no_credits = "你没有积分了"
-L.xfer_send       = "发送积分"
-L.xfer_help       = "你只能发送积分给 {role} 玩家。"
+L.xfer_send = "发送积分"
+L.xfer_help = "你只能发送积分给 {role} 玩家。"
 
-L.xfer_no_recip   = "接收者无效，发送失败。"
+L.xfer_no_recip = "接收者无效，发送失败。"
 L.xfer_no_credits = "积分不足，无法转移"
-L.xfer_success    = "成功向 {player} 发送积分！"
-L.xfer_received   = "{player} 给予你 {num} 积分。"
+L.xfer_success = "成功向 {player} 发送积分！"
+L.xfer_received = "{player} 给予你 {num} 积分。"
 
 -- Radio tab in equipment menu
-L.radio_name      = "收音机"
-L.radio_help      = "点击按钮，让收音机播放音效。"
+L.radio_name = "收音机"
+L.radio_help = "点击按钮，让收音机播放音效。"
 L.radio_notplaced = "你必须放置收音机以播放音效。"
 
 -- Radio soundboard buttons
-L.radio_button_scream  = "尖叫"
-L.radio_button_expl    = "爆炸"
-L.radio_button_pistol  = "手枪射击"
-L.radio_button_m16     = "M16步枪射击"
-L.radio_button_deagle  = "沙漠之鹰射击"
-L.radio_button_mac10   = "MAC10冲锋枪射击"
+L.radio_button_scream = "尖叫"
+L.radio_button_expl = "爆炸"
+L.radio_button_pistol = "手枪射击"
+L.radio_button_m16 = "M16步枪射击"
+L.radio_button_deagle = "沙漠之鹰射击"
+L.radio_button_mac10 = "MAC10冲锋枪射击"
 L.radio_button_shotgun = "霰弹射击"
-L.radio_button_rifle   = "狙击步枪射击"
-L.radio_button_huge    = "M249机枪连发"
-L.radio_button_c4      = "C4哔哔声"
-L.radio_button_burn    = "燃烧"
-L.radio_button_steps   = "脚步声"
-
+L.radio_button_rifle = "狙击步枪射击"
+L.radio_button_huge = "M249机枪连发"
+L.radio_button_c4 = "C4哔哔声"
+L.radio_button_burn = "燃烧"
+L.radio_button_steps = "脚步声"
 
 -- Intro screen shown after joining
-L.intro_help     = "若你是TTT新手，可按下F1查看游戏教学！"
+L.intro_help = "若你是TTT新手，可按下F1查看游戏教学！"
 
 -- Radiocommands/quickchat
-L.quick_title   = "快速聊天"
+L.quick_title = "快速聊天"
 
-L.quick_yes     = "是。"
-L.quick_no      = "不是。"
-L.quick_help    = "救命！"
-L.quick_imwith  = "我和 {player} 在一起。"
-L.quick_see     = "我看到了 {player} 。"
+L.quick_yes = "是。"
+L.quick_no = "不是。"
+L.quick_help = "救命！"
+L.quick_imwith = "我和 {player} 在一起。"
+L.quick_see = "我看到了 {player} 。"
 L.quick_suspect = " {player} 行迹可疑。"
 L.quick_traitor = " {player} 是叛徒！"
-L.quick_inno    = " {player} 是无辜者。"
-L.quick_check   = "还有人活着吗？"
+L.quick_inno = " {player} 是无辜者。"
+L.quick_check = "还有人活着吗？"
 
 -- {player} in the quickchat text normally becomes a player nickname, but can
--- also be one of the below.  Keep these lowercase.
-L.quick_nobody    = "没有人"
-L.quick_disg      = "伪装着的人"
-L.quick_corpse    = "一具未搜索过的尸体"
+-- also be one of the below. Keep these lowercase.
+L.quick_nobody = "没有人"
+L.quick_disg = "伪装着的人"
+L.quick_corpse = "一具未搜索过的尸体"
 L.quick_corpse_id = " {player} 的尸体"
 
-
---- Body search window
-L.search_title  = "尸体搜索结果"
-L.search_info   = "信息"
+-- Body search window
+L.search_title = "尸体搜索结果"
+L.search_info = "信息"
 L.search_confirm = "确认死亡"
-L.search_call   = "呼叫探长"
+L.search_call = "呼叫探长"
 
 -- Descriptions of pieces of information found
-L.search_nick   = "这是 {player} 的尸体。"
+L.search_nick = "这是 {player} 的尸体。"
 
-L.search_role_t = "这个人是叛徒！"
-L.search_role_d = "这个人是探长。"
-L.search_role_i = "这个人是无辜的恐怖分子。"
+L.search_role_traitor = "这个人是叛徒！"
+L.search_role_det = "这个人是探长。"
+L.search_role_inno = "这个人是无辜的恐怖分子。"
 
-L.search_words  = "直觉告诉你这个人的遗言是： {lastwords}"
-L.search_armor  = "他穿着非标准装甲。"
-L.search_disg   = "他持有一个能隐匿身份的设备"
-L.search_radar  = "他持有像是雷达的物品，已经无法使用了。"
-L.search_c4     = "你在他口袋中找到了一本笔记。记载着第 {num} 根线才能解除炸弹。"
+L.search_words = "直觉告诉你这个人的遗言是： {lastwords}"
+L.search_armor = "他穿着非标准装甲。"
+L.search_disg = "他持有一个能隐匿身份的设备"
+L.search_radar = "他持有像是雷达的物品，已经无法使用了。"
+L.search_c4 = "你在他口袋中找到了一本笔记。记载着第 {num} 根线才能解除炸弹。"
 
-L.search_dmg_crush  = "他多处骨折。看起来是某种重物的冲击撞死了他。"
+L.search_dmg_crush = "他多处骨折。看起来是某种重物的冲击撞死了他。"
 L.search_dmg_bullet = "他很明显是被射杀身亡的。"
-L.search_dmg_fall   = "他是坠落身亡的。"
-L.search_dmg_boom   = "他的伤口以及烧焦的衣物，应是爆炸导致其死亡。"
-L.search_dmg_club   = "他的身体有许多擦伤打击痕迹，明显是被殴打致死的。"
-L.search_dmg_drown  = "他身上的蛛丝马迹显示是溺死的。"
-L.search_dmg_stab   = "他是被刺击与挥砍后，迅速失血致死的。"
-L.search_dmg_burn   = "闻起来像烧焦的恐怖分子.."
-L.search_dmg_tele   = "看起来他的DNA以超光速粒子之形式散乱在附近。"
-L.search_dmg_car    = "他穿越马路时被一个粗心的驾驶碾死了。"
-L.search_dmg_other  = "你无法找到这恐怖份子的具体死因。"
+L.search_dmg_fall = "他是坠落身亡的。"
+L.search_dmg_boom = "他的伤口以及烧焦的衣物，应是爆炸导致其死亡。"
+L.search_dmg_club = "他的身体有许多擦伤打击痕迹，明显是被殴打致死的。"
+L.search_dmg_drown = "他身上的蛛丝马迹显示是溺死的。"
+L.search_dmg_stab = "他是被刺击与挥砍后，迅速失血致死的。"
+L.search_dmg_burn = "闻起来像烧焦的恐怖分子.."
+L.search_dmg_tele = "看起来他的DNA以超光速粒子之形式散乱在附近。"
+L.search_dmg_car = "他穿越马路时被一个粗心的驾驶碾死了。"
+L.search_dmg_other = "你无法找到这恐怖份子的具体死因。"
 
 L.search_weapon = "死者是被 {weapon} 所杀。"
-L.search_head   = "最后一击打在头上。完全没机会叫喊。"
-L.search_time   = "他大约死于你进行搜索的 {time} 前。"
-L.search_dna    = "用DNA扫描器检索凶手的DNA标本，DNA样本大约在 {time} 前开始衰退。"
+L.search_head = "最后一击打在头上。完全没机会叫喊。"
+L.search_time = "他大约死于你进行搜索的 {time} 前。"
+L.search_dna = "用DNA扫描器检索凶手的DNA标本，DNA样本大约在 {time} 前开始衰退。"
 
 L.search_kills1 = "你找到一个名单，记载着他发现的死者： {player}"
 L.search_kills2 = "你找到了一个名单，记载着他杀的这些人:"
-L.search_eyes   = "透过你的探查技能，你确信他临死前见到的最后一个人是 {player} 。凶手，还是巧合？"
-
+L.search_eyes = "透过你的探查技能，你确信他临死前见到的最后一个人是 {player} 。凶手，还是巧合？"
 
 -- Scoreboard
-L.sb_playing    = "你正在玩的服务器是.."
-L.sb_mapchange  = "地图将于 {num} 个回合或是 {time} 后更换"
+L.sb_playing = "你正在玩的服务器是.."
+L.sb_mapchange = "地图将于 {num} 个回合或是 {time} 后更换"
 
-L.sb_mia        = "下落不明"
-L.sb_confirmed  = "确认死亡"
+L.sb_mia = "下落不明"
+L.sb_confirmed = "确认死亡"
 
-L.sb_ping       = "延迟"
-L.sb_deaths     = "死亡数"
-L.sb_score      = "分数"
-L.sb_karma      = "人品"
+L.sb_ping = "延迟"
+L.sb_deaths = "死亡数"
+L.sb_score = "分数"
+L.sb_karma = "人品"
 
-L.sb_info_help  = "搜索此玩家的尸体，可以获取一些线索。"
+L.sb_info_help = "搜索此玩家的尸体，可以获取一些线索。"
 
 L.sb_tag_friend = "可信"
-L.sb_tag_susp   = "可疑"
-L.sb_tag_avoid  = "躲避"
-L.sb_tag_kill   = "死亡"
-L.sb_tag_miss   = "失踪"
-
---- Help and settings menu (F1)
-
-L.help_title = "帮助与设定"
-
--- Tabs
-L.help_tut     = "游戏教学"
-L.help_tut_tip = "游玩TTT的六步教程"
-
-L.help_settings = "设定"
-L.help_settings_tip = "客户端设定"
-
--- Settings
-L.set_title_gui = "界面设置"
-
-L.set_tips      = "旁观时，在屏幕下方显示游戏提示"
-
-L.set_startpopup = "开局提示延迟"
-L.set_startpopup_tip = "当回合开始时，提示将在屏幕下方显示一段时间，此参数可更改信息的停留时间"
-
-L.set_cross_opacity = "准心透明度"
-L.set_cross_disable = "关闭准心"
-L.set_minimal_id    = "只在准心下显示所对准目标的ID（如人品，提示等）"
-L.set_healthlabel   = "在生命条旁显示健康状态（如受伤，接近死亡等）"
-L.set_lowsights     = "瞄准时隐藏武器"
-L.set_lowsights_tip = "瞄准时隐藏武器模型，这会让你更容易看见目标。"
-L.set_fastsw        = "快速切换武器"
-L.set_fastsw_tip    = "使用滚轮快速切换武器（注：将不开启武器选单，直接取出）。"
-L.set_fastsw_menu     = "启用快速切换武器选单"
-L.set_fastswmenu_tip  = "当启用快速武器切换功能，会出现弹出式切换选单。"
-L.set_wswitch       = "关闭武器切换自动关闭"
-L.set_wswitch_tip   = "默认设定下使用滑鼠滚轮切换武器时，停留数秒后会选择当前武器并关闭。这个选项开启后不会自动关闭。"
-L.set_cues          = "在回合开始或结束时发出提示音"
-
-
-L.set_title_play    = "游戏设定"
-
-L.set_specmode      = "观察者模式（始终作为观察者）"
-L.set_specmode_tip  = "在你离开本模式前，新回合开始时你仍会以观察者加入游戏。"
-L.set_mute          = "死后静音活人（仅作用于你）"
-L.set_mute_tip      = "当你是死者/观察者时，将听不见活人的语音。"
-
-
-L.set_title_lang    = "语言设定"
-
--- It may be best to leave this next one english, so english players can always
--- find the language setting even if it's set to a language they don't know.
-L.set_lang          = "选择语言 (Select language)："
-
-
---- Weapons and equipment, HUD and messages
+L.sb_tag_susp = "可疑"
+L.sb_tag_avoid = "躲避"
+L.sb_tag_kill = "死亡"
+L.sb_tag_miss = "失踪"
 
 -- Equipment actions, like buying and dropping
-L.buy_no_stock    = "无法购买此武器：你已拥有它了。"
-L.buy_pending     = "你已订购此物品，请等待配送。"
-L.buy_received    = "你已收到此装备。"
+L.buy_no_stock = "无法购买此武器：你已拥有它了。"
+L.buy_pending = "你已订购此物品，请等待配送。"
+L.buy_received = "你已收到此装备。"
 
-L.drop_no_room    = "你没有足够空间存放新武器！"
+L.drop_no_room = "你没有足够空间存放新武器！"
 
-L.disg_turned_on  = "伪装开启！"
+L.disg_turned_on = "伪装开启！"
 L.disg_turned_off = "伪装关闭。"
 
 -- Equipment item descriptions
-L.item_passive    = "被动道具"
-L.item_active     = "主动道具"
-L.item_weapon     = "武器"
+L.item_passive = "被动道具"
+L.item_active = "主动道具"
+L.item_weapon = "武器"
 
-L.item_armor      = "护甲"
-L.item_armor_desc = [[
-抵抗收到子弹伤害的30%。
-探长的自带装备。]]
+L.item_armor = "护甲"
+--L.item_armor_desc = [[
+--Reduces bullet, fire and explosion damage. Depletes over time.
 
-L.item_radar      = "雷达"
+--It can be purchased multiple times. After reaching a specific armor value, the armor becomes stronger.]]
+
+L.item_radar = "雷达"
 L.item_radar_desc = [[
 允许你扫描存活着的玩家。
-一旦持有，雷达会开始自动扫描。
-使用该页面的雷达菜单来设置。]]
 
-L.item_disg       = "伪装"
-L.item_disg_desc  = [[
-启用时，你的ID将被隐藏；也可避免探长在
-尸体上找到死者生前见到的最后一个人。
-需要启用时，使用本页面的伪装菜单
-或按下小键盘回车键。]]
+一旦持有，雷达会开始自动扫描。使用该页面的雷达菜单来设置。]]
+
+L.item_disg = "伪装"
+L.item_disg_desc = [[
+启用时，你的ID将被隐藏；也可避免探长在尸体上找到死者生前见到的最后一个人。
+
+需要启用时，使用本页面的伪装菜单或按下小键盘回车键。]]
 
 -- C4
-L.c4_hint         = "按下 {usekey} 来安放或拆除C4。"
-L.c4_no_disarm    = "在其他叛徒死前，你无法拆除他的C4。"
-L.c4_disarm_warn  = "你所安放的C4已被拆除。"
-L.c4_armed        = "C4安放成功。"
-L.c4_disarmed     = "你成功拆除了C4。"
-L.c4_no_room      = "你无法携带C4。"
+L.c4_hint = "按下 {usekey} 来安放或拆除C4。"
+L.c4_no_disarm = "在其他叛徒死前，你无法拆除他的C4。"
+L.c4_disarm_warn = "你所安放的C4已被拆除。"
+L.c4_armed = "C4安放成功。"
+L.c4_disarmed = "你成功拆除了C4。"
+L.c4_no_room = "你无法携带C4。"
 
-L.c4_desc         = "C4爆炸！"
+L.c4_desc = "C4爆炸！"
 
-L.c4_arm          = "安放C4。"
-L.c4_arm_timer    = "计时器"
-L.c4_arm_seconds  = "引爆秒数："
+L.c4_arm = "安放C4。"
+L.c4_arm_timer = "计时器"
+L.c4_arm_seconds = "引爆秒数："
 L.c4_arm_attempts = "拆除C4时，6条引线中有 {num} 条会立即引发爆炸。"
 
-L.c4_remove_title    = "移除"
-L.c4_remove_pickup   = "捡起C4"
+L.c4_remove_title = "移除"
+L.c4_remove_pickup = "捡起C4"
 L.c4_remove_destroy1 = "销毁C4"
 L.c4_remove_destroy2 = "确认：销毁"
 
-L.c4_disarm       = "拆除C4"
-L.c4_disarm_cut   = "点击以剪断 {num} 号引线"
+L.c4_disarm = "拆除C4"
+L.c4_disarm_cut = "点击以剪断 {num} 号引线"
 
-L.c4_disarm_t     = "剪断引线以拆除C4。你是叛徒，因此每条引线都是安全的，但其他人可就没那么容易了！"
 L.c4_disarm_owned = "剪断引线以拆除C4。你是安放此C4的人，所以任何引线都能成功拆除。"
 L.c4_disarm_other = "剪断正确的引线以拆除C4。如果你剪错的话，后果不堪设想！"
 
-L.c4_status_armed    = "安放"
+L.c4_status_armed = "安放"
 L.c4_status_disarmed = "拆除"
 
 -- Visualizer
-L.vis_name        = "显像器"
-L.vis_hint        = "按下 {usekey} 键捡起它（仅限侦探）。"
+L.vis_name = "显像器"
+L.vis_hint = "按下 {usekey} 键捡起它（仅限侦探）。"
 
-L.vis_help_pri    = " {primaryfire} 扔出已启动的仪器。"
+L.vis_help_pri = " {primaryfire} 扔出已启动的仪器。"
 
-L.vis_desc        = [[
+L.vis_desc = [[
 可让犯罪现场显像化的仪器。
-分析尸体，显出死者被杀害时的情况，
-但仅限于死者被枪杀时。]]
+
+分析尸体，显出死者被杀害时的情况，但仅限于死者被枪杀时。]]
 
 -- Decoy
-L.decoy_name      = "雷达诱饵"
-L.decoy_no_room   = "你无法携带雷达诱饵。"
-L.decoy_broken    = "你的雷达诱饵已被摧毁！"
+L.decoy_name = "雷达诱饵"
+L.decoy_no_room = "你无法携带雷达诱饵。"
+L.decoy_broken = "你的雷达诱饵已被摧毁！"
 
-L.decoy_help_pri  = " {primaryfire} 安放了雷达诱饵"
+--L.decoy_short_desc = "This decoy shows a fake radar sign visible for other teams"
+--L.decoy_pickup_wrong_team = "You can't pick it up as it belongs to a different team"
 
-
-L.decoy_desc      = [[
-显示假的雷达信号给探长，
-探长执行DNA扫描时，
-将会显示雷达诱饵的位置作为代替。]]
+L.decoy_desc = [[
+显示假的雷达信号给探长，探长执行DNA扫描时，将会显示雷达诱饵的位置作为代替。]]
 
 -- Defuser
-L.defuser_name    = "拆弹器"
-L.defuser_help    = " {primaryfire} 拆除目标炸弹。"
+L.defuser_name = "拆弹器"
+L.defuser_help = " {primaryfire} 拆除目标炸弹。"
 
-L.defuser_desc    = [[
+L.defuser_desc = [[
 迅速拆除一个C4。
-不限制使用次数。若你持有此设备，
-拆除C4时会轻松许多。]]
+
+不限制使用次数。若你持有此设备，拆除C4时会轻松许多。]]
 
 -- Flare gun
-L.flare_name      = "信号枪"
-L.flare_desc      = [[
-可用来烧毁尸体，使它们永远不会被发现。
-该武器有有弹药限制。
+L.flare_name = "信号枪"
+
+L.flare_desc = [[
+可用来烧毁尸体，使它们永远不会被发现。该武器有有弹药限制。
+
 燃烧尸体会发出十分明显的声音。]]
 
 -- Health station
-L.hstation_name   = "医疗站"
-L.hstation_hint   = "按下 {usekeu} 恢复健康。剩馀存量： {num}"
+L.hstation_name = "医疗站"
+L.hstation_hint = "按下 {usekeu} 恢复健康。剩馀存量： {num}"
 L.hstation_broken = "你的医疗站已被摧毁！"
-L.hstation_help   = " {primaryfire} 安放了一个医疗站。"
+L.hstation_help = " {primaryfire} 安放了一个医疗站。"
 
-L.hstation_desc   = [[
+L.hstation_desc = [[
 安放后，允许人们用其治疗自己。
-充能速度相当缓慢。
-所有人都可以使用，而且医疗站可以受到伤害。
-每位使用者会留下可采集的DNA样本。]]
+
+充能速度相当缓慢。所有人都可以使用，而且医疗站可以受到伤害。每位使用者会留下可采集的DNA样本。]]
 
 -- Knife
-L.knife_name      = "刀子"
-L.knife_thrown    = "飞刀"
+L.knife_name = "刀子"
+L.knife_thrown = "飞刀"
 
-L.knife_desc      = [[
+L.knife_desc = [[
 可以迅速、无声的杀死受伤的目标，但只能使用一次。
+
 按下右键即可使用飞刀。]]
 
 -- Poltergeist
-L.polter_desc     = [[
-放置震动器在物体上，
-使它们危险地四处飞动。
+L.polter_desc = [[
+放置震动器在物体上，使它们危险地四处飞动。
+
 能量爆炸会使附近的人受到伤害。]]
 
 -- Radio
-L.radio_broken    = "你的收音机已被摧毁！"
-L.radio_help_pri  = " {primaryfire} 安放了收音机。"
+L.radio_broken = "你的收音机已被摧毁！"
+L.radio_help_pri = " {primaryfire} 安放了收音机。"
 
-L.radio_desc      = [[
+L.radio_desc = [[
 播放音效来误导或欺骗玩家。
-将收音机安放下来，
-然后用该页面的收音机菜单播放。]]
 
+将收音机安放下来，然后用该页面的收音机菜单播放。]]
 
 -- Silenced pistol
-L.sipistol_name   = "消音手枪"
+L.sipistol_name = "消音手枪"
 
-L.sipistol_desc   = [[
+L.sipistol_desc = [[
 噪音极小的手枪。使用普通手枪弹药。
+
 被害者被射杀时不会喊叫。]]
 
-
 -- Newton launcher
-L.newton_name     = "牛顿发射器"
+L.newton_name = "牛顿发射器"
 
-L.newton_desc     = [[
+L.newton_desc = [[
 在安全的距离推他人。
+
 弹药无限，但射击间隔较长。]]
 
-
 -- Binoculars
-L.binoc_name      = "双筒望远镜"
-L.binoc_desc      = [[
+L.binoc_name = "双筒望远镜"
+
+L.binoc_desc = [[
 可以放大并远距离确认尸体。
+
 不限使用次数，但确认尸体需要一些时间。]]
 
-L.binoc_help_pri  = " {primaryfire} 确认尸体。"
-L.binoc_help_sec  = " {secondaryfire} 改变放大倍率。"
-
-
 -- UMP
-L.ump_desc        = [[
+L.ump_desc = [[
 实验型冲锋枪，能阻扰目标视角。
+
 使用普通冲锋枪弹药。]]
 
-
 -- DNA scanner
-L.dna_name        = "DNA扫描器"
-L.dna_identify    = "检索尸体将能确认凶手身分。"
-L.dna_notfound    = "目标上没有DNA样本。"
-L.dna_limit       = "已达最大采集额度，请先移除旧样本。"
-L.dna_decayed     = "凶手的DNA样本已经消失。"
-L.dna_killer      = "成功采集到凶手的DNA样本！"
-L.dna_no_killer   = "DNA样本无法检索（凶手已离线？）"
-L.dna_armed       = "炸弹已启动！赶紧拆除它！"
-L.dna_object      = "在目标上采集到 {num} 个新DNA样本。"
-L.dna_gone        = "区域内没侦测到可采集之DNA样本。"
+L.dna_name = "DNA扫描器"
+L.dna_identify = "检索尸体将能确认凶手身分。"
+L.dna_notfound = "目标上没有DNA样本。"
+L.dna_limit = "已达最大采集额度，请先移除旧样本。"
+L.dna_decayed = "凶手的DNA样本已经消失。"
+L.dna_killer = "成功采集到凶手的DNA样本！"
+L.dna_no_killer = "DNA样本无法检索（凶手已离线？）"
+L.dna_armed = "炸弹已启动！赶紧拆除它！"
+L.dna_object = "在目标上采集到 {num} 个新DNA样本。"
+L.dna_gone = "区域内没侦测到可采集之DNA样本。"
 
-L.dna_desc        = [[
+L.dna_desc = [[
 采集物体上的DNA样本，并用其找寻对应的主人。
+
 使用在尸体上，采集杀手的DNA并追踪他。]]
 
-
-
-L.dna_menu_title  = "DNA扫描控制器"
-L.dna_menu_sample = "这是 {source} 的DNA样本"
-L.dna_menu_remove = "移除所选样本"
-L.dna_menu_help1  = "这些是你采集的DNA样本"
-L.dna_menu_help2  = [[
-充电完毕后，你可以选取之DNA样本，扫描其主人的准确位置。
-远距离目标将消耗更多能量。]]
-
-
-L.dna_menu_scan   = "扫描"
-L.dna_menu_repeat = "自动重复"
-L.dna_menu_ready  = "准备中."
-L.dna_menu_charge = "充电中"
-L.dna_menu_select = "选择样本"
-
-L.dna_help_primary   = " {primaryfire} 来采集DNA样本"
-L.dna_help_secondary = " {secondaryfire} 来启动扫描控制器"
-
 -- Magneto stick
-L.magnet_name     = "电磁棍"
-L.magnet_help     = " {primaryfire} 将其定在墙上。"
+L.magnet_name = "电磁棍"
+L.magnet_help = " {primaryfire} 将其定在墙上。"
 
 -- Grenades and misc
-L.grenade_smoke   = "烟雾弹"
-L.grenade_fire    = "燃烧弹"
+L.grenade_smoke = "烟雾弹"
+L.grenade_fire = "燃烧弹"
 
-L.unarmed_name    = "无武装"
-L.crowbar_name    = "撬棍"
-L.pistol_name     = "手枪"
-L.rifle_name      = "狙击枪"
-L.shotgun_name    = "霰弹枪"
+L.unarmed_name = "无武装"
+L.crowbar_name = "撬棍"
+L.pistol_name = "手枪"
+L.rifle_name = "狙击枪"
+L.shotgun_name = "霰弹枪"
 
 -- Teleporter
-L.tele_name       = "传送安放"
-L.tele_failed     = "传送失败"
-L.tele_marked     = "传送地点已标记"
+L.tele_name = "传送安放"
+L.tele_failed = "传送失败"
+L.tele_marked = "传送地点已标记"
 
-L.tele_no_ground  = "你必须站在地面才能传送！"
-L.tele_no_crouch  = "蹲着的时候不能传送！"
-L.tele_no_mark    = "标记传送地点后才能传送。"
+L.tele_no_ground = "你必须站在地面才能传送！"
+L.tele_no_crouch = "蹲着的时候不能传送！"
+L.tele_no_mark = "标记传送地点后才能传送。"
 
 L.tele_no_mark_ground = "站在地面上才能标记传送地点！"
 L.tele_no_mark_crouch = "站起来才能标记传送点！"
 
-L.tele_help_pri   = " {primaryfire} 传送到已标记的传送地点。"
-L.tele_help_sec   = " {scondaryfire} 标记传送地点。"
+L.tele_help_pri = " {primaryfire} 传送到已标记的传送地点。"
+L.tele_help_sec = " {scondaryfire} 标记传送地点。"
 
-L.tele_desc       = [[
+L.tele_desc = [[
 可以传送到先前标记的地点。
-传送器会产生噪音，而且使用次数是有限的。
-]]
+
+传送器会产生噪音，而且使用次数是有限的。]]
 
 -- Ammo names, shown when picked up
-L.ammo_pistol     = "手枪弹药"
+L.ammo_pistol = "手枪弹药"
 
-L.ammo_smg1       = "冲锋枪弹药"
-L.ammo_buckshot   = "霰弹枪弹药"
-L.ammo_357        = "步枪弹药"
-L.ammo_alyxgun    = "沙漠之鹰弹药"
+L.ammo_smg1 = "冲锋枪弹药"
+L.ammo_buckshot = "霰弹枪弹药"
+L.ammo_357 = "步枪弹药"
+L.ammo_alyxgun = "沙漠之鹰弹药"
 L.ammo_ar2altfire = "信号弹药"
-L.ammo_gravity    = "促狭鬼弹药"
-
-
---- HUD interface text
+L.ammo_gravity = "促狭鬼弹药"
 
 -- Round status
-L.round_wait   = "等待中"
-L.round_prep   = "准备中"
+L.round_wait = "等待中"
+L.round_prep = "准备中"
 L.round_active = "进行中"
-L.round_post   = "回合结束"
+L.round_post = "回合结束"
 
 -- Health, ammo and time area
-L.overtime     = "加时"
-L.hastemode    = "急速模式"
+L.overtime = "加时"
+L.hastemode = "急速模式"
 
 -- TargetID health status
-L.hp_healthy   = "健康"
-L.hp_hurt      = "轻伤"
-L.hp_wounded   = "受伤"
-L.hp_badwnd    = "重伤"
-L.hp_death     = "濒死"
-
+L.hp_healthy = "健康"
+L.hp_hurt = "轻伤"
+L.hp_wounded = "受伤"
+L.hp_badwnd = "重伤"
+L.hp_death = "濒死"
 
 -- TargetID karma status
-L.karma_max    = "良好"
-L.karma_high   = "粗鲁"
-L.karma_med    = "不可靠"
-L.karma_low    = "危险"
-L.karma_min    = "滥杀者"
+L.karma_max = "良好"
+L.karma_high = "粗鲁"
+L.karma_med = "不可靠"
+L.karma_low = "危险"
+L.karma_min = "滥杀者"
 
 -- TargetID misc
-L.corpse       = "尸体"
-L.corpse_hint  = "按下 {usekey} 来搜索，用 {walkkey} + {usekey} 进行无声搜索。"
+L.corpse = "尸体"
+L.corpse_hint = "按下 {usekey} 来搜索，用 {walkkey} + {usekey} 进行无声搜索。"
 
-L.target_disg  = " （伪装状态）"
-L.target_unid  = "未确认的尸体"
-
-L.target_traitor = "叛徒同伙"
-L.target_detective = "探长"
+L.target_disg = " （伪装状态）"
+L.target_unid = "未确认的尸体"
 
 L.target_credits = "搜索尸体以获取未被消耗积分"
 
--- Traitor buttons (HUD buttons with hand icons that only traitors can see)
-L.tbut_single  = "一次性"
-L.tbut_reuse   = "重复使用"
-L.tbut_retime  = "{num} 秒可后再次使用"
-L.tbut_help    = "按下 {key} 键使用"
-
--- Equipment info lines (on the left above the health/ammo panel)
-L.disg_hud     = "开始伪装，你的名字已隐藏。"
-L.radar_hud    = "雷达将在 {time} 后进行下一次扫描。"
+-- HUD buttons with hand icons that only traitors can see
+L.tbut_single = "一次性"
+L.tbut_reuse = "重复使用"
+L.tbut_retime = "{num} 秒可后再次使用"
+L.tbut_help = "按下 {key} 键使用"
 
 -- Spectator muting of living/dead
-L.mute_living  = "静音存活玩家"
-L.mute_specs   = "静音观察者"
-L.mute_all     = "全部静音"
-L.mute_off     = "取消静音"
+L.mute_living = "静音存活玩家"
+L.mute_specs = "静音观察者"
+L.mute_all = "全部静音"
+L.mute_off = "取消静音"
 
 -- Spectators and prop possession
-L.punch_title  = "飞击量表" --"PUNCH-O-METER"
-L.punch_help   = "按下行走键或跳跃键以推撞物品；按蹲下键则离开物品控制。"
-L.punch_bonus  = "你的分数较低，飞击量表上限减少 {num}"
-L.punch_malus  = "你的分数较高，飞击量表上限增加 {num} ！"
+L.punch_title = "飞击量表" --"PUNCH-O-METER"
+L.punch_help = "按下行走键或跳跃键以推撞物品；按蹲下键则离开物品控制。"
+L.punch_bonus = "你的分数较低，飞击量表上限减少 {num}"
+L.punch_malus = "你的分数较高，飞击量表上限增加 {num} ！"
 
-L.spec_help    = "点击以观察玩家，或按下 {usekey} 来控制并持有物体。"
-
---- Info popups shown when the round starts
-
--- These are spread over multiple lines, hence the square brackets instead of
--- quotes. That's a Lua thing. Every line break (enter) will show up in-game.
+-- Info popups shown when the round starts
 L.info_popup_innocent = [[
 你是位无辜的恐怖分子！但你的周围存在着叛徒...
 你能相信谁？谁又想背地里害死你？
+
 看好你的背后并与同伴合作，争取活下来！]]
 
 L.info_popup_detective = [[
 你是位探长！恐怖分子总部给予你许多特殊资源以揪出叛徒。
-用它们来确保无辜者的生命，不过要当心：叛徒会优先杀害你！
+用它们来确保无辜者的生命，不过要当心：
+叛徒会优先杀害你！
+
 按 {menukey} 获得装备！]]
 
+L.info_popup_traitor_alone = [[
+你是位叛徒！这回合中你没有同伴。
 
-L.info_popup_traitor_alone = [[你是位叛徒！这回合中你没有同伴。
 杀死所有其他玩家，以获得胜利！
+
 按 {menukey} 取得装备！]]
 
 L.info_popup_traitor = [[
 你是位叛徒！和其他叛徒合作杀害其他所有人，以获得胜利。
 但请小心，你的身份可能会暴露...
+
 这些是你的同伴们:
 {traitorlist}
+
 按 {menukey} 取得装备！]]
 
---- Various other text
+-- Various other text
 L.name_kick = "一名玩家因于此回合中改变了名字而被自动踢出游戏。"
 
-L.idle_popup = [[你挂机了 {num} 秒，所以被转往观察者模式。
-当你位于此模式时，将不会在回合开始时重生。
+L.idle_popup = [[
+你挂机了 {num} 秒，所以被转往观察者模式。当你位于此模式时，将不会在回合开始时重生。
+
 你可在任何时间取消观察者模式，按下 {helpkey} 并在选单取消勾选\"观察者模式\"即可。当然，你也可以选择立刻关闭它。]]
 
 L.idle_popup_close = "什么也不做"
-L.idle_popup_off   = "立刻关闭观察者模式"
+L.idle_popup_off = "立刻关闭观察者模式"
 
 L.idle_warning = "警告：你已挂机一段时间，如果接下来没有动作将进入观察者模式。"
 
 L.spec_mode_warning = "你位于观察者模式所以不会在回合开始时重生。若要关闭此模式，按下F1并取消勾选\"观察者模式\"即可。"
 
-
---- Tips, shown at bottom of screen to spectators
-
 -- Tips panel
 L.tips_panel_title = "提示"
-L.tips_panel_tip   = "提示："
+L.tips_panel_tip = "提示："
 
 -- Tip texts
-
 L.tip1 = "叛徒不用确认其死亡即可悄悄检查尸体，只需对着尸体按着 {walkkey} 键后再按 {usekey} 键即可。"
 
 L.tip2 = "将C4爆炸时间设置更长，可增加引线数量，使拆弹者失败可的能性大幅上升，且能让C4的哔哔声更轻更慢。"
@@ -720,9 +635,7 @@ L.tip39 = "拆除C4时失误导致的爆炸，比起直接引爆时来得小。"
 
 L.tip40 = "若时间上显示\"急速模式\"，此回合的时间会很短，但每位玩家的死亡都将延长时间（就像TF2的占点模式）。延长时间将迫使叛徒加紧脚步。"
 
-
---- Round report
-
+-- Round report
 L.report_title = "回合报告"
 
 -- Tabs
@@ -734,13 +647,14 @@ L.report_tab_scores = "分数"
 L.report_tab_scores_tip = "本回合单个玩家获得的点数"
 
 -- Event log saving
-L.report_save     = "保存 Log.txt"
+L.report_save = "保存 Log.txt"
 L.report_save_tip = "将事件记录并保存在txt档内"
-L.report_save_error  = "没有可供保存的事件记录"
+L.report_save_error = "没有可供保存的事件记录"
 L.report_save_result = "事件记录已存在："
 
 -- Big title window
 L.hilite_win_traitors = "叛徒胜利"
+--L.hilite_win_bees = "THE BEES WIN"
 L.hilite_win_innocent = "无辜者胜利"
 
 L.hilite_players1 = " {numplayers} 名玩家参与游戏，其中 {numtraitors} 人是叛徒"
@@ -749,290 +663,280 @@ L.hilite_players2 = " {numplayers} 名玩家参与游戏，其中一人是叛徒
 L.hilite_duration = "回合持续了 {time}"
 
 -- Columns
-L.col_time   = "时间"
-L.col_event  = "事件"
+L.col_time = "时间"
+L.col_event = "事件"
 L.col_player = "玩家"
-L.col_role   = "角色"
+L.col_roles = "角色"
+--L.col_teams = "Team(s)"
 L.col_kills1 = "无辜者杀敌数"
 L.col_kills2 = "叛徒杀敌数"
 L.col_points = "点数"
-L.col_team   = "团队奖励"
-L.col_total  = "总分"
+L.col_team = "团队奖励"
+L.col_total = "总分"
 
 -- Name of a trap that killed us that has not been named by the mapper
-L.something      = "某件物品"
+L.something = "某件物品"
 
 -- Kill events
-L.ev_blowup      = "{victim} 被自己炸飞"
+L.ev_blowup = "{victim} 被自己炸飞"
 L.ev_blowup_trap = "{victim} 被 {trap} 炸飞"
 
-L.ev_tele_self   = "{victim} 被自己给传送杀了"
-L.ev_sui         = "{victim} 受不了然后自杀了！"
-L.ev_sui_using   = "{victim} 用 {tool} 杀了自己"
+L.ev_tele_self = "{victim} 被自己给传送杀了"
+L.ev_sui = "{victim} 受不了然后自杀了！"
+L.ev_sui_using = "{victim} 用 {tool} 杀了自己"
 
-L.ev_fall        = "{victim} 摔死了"
+L.ev_fall = "{victim} 摔死了"
 L.ev_fall_pushed = "{victim} 因为 {attacker} 而摔死了"
 L.ev_fall_pushed_using = "{victim} 被 {attacker} 用 {trap} 推下摔死"
 
-L.ev_shot        = "{victim} 被 {attacker} 射杀"
-L.ev_shot_using  = "{victim} 被 {attacker} 用 {weapon} 射杀"
+L.ev_shot = "{victim} 被 {attacker} 射杀"
+L.ev_shot_using = "{victim} 被 {attacker} 用 {weapon} 射杀"
 
-L.ev_drown       = "{victim} 被 {attacker} 推入水中溺死"
+L.ev_drown = "{victim} 被 {attacker} 推入水中溺死"
 L.ev_drown_using = "{victim} 被 {attacker} 用 {trap} 推入水中溺死"
 
-L.ev_boom        = "{victim} 被 {attacker} 炸死"
-L.ev_boom_using  = "{victim} 被 {attacker} 用 {trap} 炸烂"
+L.ev_boom = "{victim} 被 {attacker} 炸死"
+L.ev_boom_using = "{victim} 被 {attacker} 用 {trap} 炸烂"
 
-L.ev_burn        = "{victim} 被 {attacker} 烧死"
-L.ev_burn_using  = "{victim} 被 {attacker} 用 {trap} 烧成焦尸"
+L.ev_burn = "{victim} 被 {attacker} 烧死"
+L.ev_burn_using = "{victim} 被 {attacker} 用 {trap} 烧成焦尸"
 
-L.ev_club        = "{victim} 被 {attacker} 打死"
-L.ev_club_using  = "{victim} 被 {attacker} 用 {trap} 打成烂泥"
+L.ev_club = "{victim} 被 {attacker} 打死"
+L.ev_club_using = "{victim} 被 {attacker} 用 {trap} 打成烂泥"
 
-L.ev_slash       = "{victim} 被 {attacker} 砍死"
+L.ev_slash = "{victim} 被 {attacker} 砍死"
 L.ev_slash_using = "{victim} 被 {attacker} 用 {trap} 砍成两半"
 
-L.ev_tele        = "{victim} 被 {attacker} 传送杀"
-L.ev_tele_using  = "{victim} 被 {attacker} 用 {trap} 传送时之能量分裂成原子"
+L.ev_tele = "{victim} 被 {attacker} 传送杀"
+L.ev_tele_using = "{victim} 被 {attacker} 用 {trap} 传送时之能量分裂成原子"
 
-L.ev_goomba      = "{victim} 被 {attacker} 用巨大物体压烂"
+L.ev_goomba = "{victim} 被 {attacker} 用巨大物体压烂"
 
-L.ev_crush       = "{victim} 被 {attacker} 压烂"
+L.ev_crush = "{victim} 被 {attacker} 压烂"
 L.ev_crush_using = "{victim} 被 {attacker} 用 {trap} 压碎"
 
-L.ev_other       = "{victim} 被 {attacker} 杀死"
+L.ev_other = "{victim} 被 {attacker} 杀死"
 L.ev_other_using = "{victim} 被 {attacker} 用 {trap} 杀死"
 
 -- Other events
-L.ev_body        = "{finder} 发现了 {victim} 的尸体"
-L.ev_c4_plant    = "{player}  安装了C4"
-L.ev_c4_boom     = "{player} 安装的C4爆炸了"
-L.ev_c4_disarm1  = "{player} 拆除了 {owner} 安装的C4"
-L.ev_c4_disarm2  = "{player} 因拆除失误而引爆了 {owner} 安装的C4"
-L.ev_credit      = "{finder} 在 {player} 的尸体上找到 {num} 点积分"
+L.ev_body = "{finder} 发现了 {victim} 的尸体"
+L.ev_c4_plant = "{player} 安装了C4"
+L.ev_c4_boom = "{player} 安装的C4爆炸了"
+L.ev_c4_disarm1 = "{player} 拆除了 {owner} 安装的C4"
+L.ev_c4_disarm2 = "{player} 因拆除失误而引爆了 {owner} 安装的C4"
+L.ev_credit = "{finder} 在 {player} 的尸体上找到 {num} 点积分"
 
-L.ev_start       = "回合开始"
+L.ev_start = "回合开始"
 L.ev_win_traitor = "卑鄙的叛徒赢了这回合！"
-L.ev_win_inno    = "无辜的恐怖分子赢了这回合！"
-L.ev_win_time    = "叛徒因为超过时间而输了这回合！"
+L.ev_win_inno = "无辜的恐怖分子赢了这回合！"
+L.ev_win_time = "叛徒因为超过时间而输了这回合！"
 
---- Awards/highlights
-
+-- Awards/highlights
 L.aw_sui1_title = "自杀邪教教主"
-L.aw_sui1_text  = "率先向其他自杀者展示如何自杀。"
+L.aw_sui1_text = "率先向其他自杀者展示如何自杀。"
 
 L.aw_sui2_title = "孤独沮丧者"
-L.aw_sui2_text  = "就他一人自杀，无比哀戚。"
+L.aw_sui2_text = "就他一人自杀，无比哀戚。"
 
 L.aw_exp1_title = "炸弹研究的第一把交椅"
-L.aw_exp1_text  = "决心研究C4。{num} 名受试者证明了他的理论。"
+L.aw_exp1_text = "决心研究C4。{num} 名受试者证明了他的理论。"
 
 L.aw_exp2_title = "就地研究"
-L.aw_exp2_text  = "测试自己的抗爆炸能力，显然完全不够高。"
+L.aw_exp2_text = "测试自己的抗爆炸能力，显然完全不够高。"
 
 L.aw_fst1_title = "第一滴血"
-L.aw_fst1_text  = "将第一位无辜者的生命送到叛徒手上。"
+L.aw_fst1_text = "将第一位无辜者的生命送到叛徒手上。"
 
 L.aw_fst2_title = "愚蠢的血腥首杀"
-L.aw_fst2_text  = "击杀一名叛徒同伴而得到首杀，做得好啊！"
+L.aw_fst2_text = "击杀一名叛徒同伴而得到首杀，做得好啊！"
 
 L.aw_fst3_title = "首杀大挫折"
-L.aw_fst3_text  = "第一杀便将无辜者同伴误认为叛徒，真是乌龙。"
+L.aw_fst3_text = "第一杀便将无辜者同伴误认为叛徒，真是乌龙。"
 
 L.aw_fst4_title = "吹响号角"
-L.aw_fst4_text  = "杀害一名叛徒，为无辜者阵营吹响了号角。"
+L.aw_fst4_text = "杀害一名叛徒，为无辜者阵营吹响了号角。"
 
 L.aw_all1_title = "鹤立鸡群"
-L.aw_all1_text  = "对无辜者团队的每一个击杀负责。"
+L.aw_all1_text = "对无辜者团队的每一个击杀负责。"
 
 L.aw_all2_title = "孤狼"
-L.aw_all2_text  = "对叛徒团队的每一个击杀负责。"
+L.aw_all2_text = "对叛徒团队的每一个击杀负责。"
 
 L.aw_nkt1_title = "老大！我干掉一个！"
-L.aw_nkt1_text  = "在一名无辜者落单时策划一场谋杀，漂亮！"
+L.aw_nkt1_text = "在一名无辜者落单时策划一场谋杀，漂亮！"
 
 L.aw_nkt2_title = "一石二鸟"
-L.aw_nkt2_text  = "用另一具尸体证明上一枪不是巧合。"
+L.aw_nkt2_text = "用另一具尸体证明上一枪不是巧合。"
 
 L.aw_nkt3_title = "连续杀人魔"
-L.aw_nkt3_text  = "在今天结束了三名无辜者的生命。"
+L.aw_nkt3_text = "在今天结束了三名无辜者的生命。"
 
 L.aw_nkt4_title = "穿梭在批着羊皮的狼之间的狼"
-L.aw_nkt4_text  = "将无辜者们作为晚餐吃了。共吃了 {num} 人。"
+L.aw_nkt4_text = "将无辜者们作为晚餐吃了。共吃了 {num} 人。"
 
 L.aw_nkt5_title = "反恐特工"
-L.aw_nkt5_text  = "按恐怖分子人头收钱。现在已经买得起豪华游艇了。"
+L.aw_nkt5_text = "按恐怖分子人头收钱。现在已经买得起豪华游艇了。"
 
 L.aw_nki1_title = "背叛这个试试！"
-L.aw_nki1_text  = "找出了一个叛徒，然后杀死了一个叛徒。简单吧？"
+L.aw_nki1_text = "找出了一个叛徒，然后杀死了一个叛徒。简单吧？"
 
 L.aw_nki2_title = "申请进入正义连队"
-L.aw_nki2_text  = "将两名叛徒送下地狱。"
+L.aw_nki2_text = "将两名叛徒送下地狱。"
 
 L.aw_nki3_title = "恐怖分子会梦到叛徒羊吗？"
-L.aw_nki3_text  = "让三名叛徒安息。"
+L.aw_nki3_text = "让三名叛徒安息。"
 
 L.aw_nki4_title = "内部事件部门"
-L.aw_nki4_text  = "按叛徒人头收钱。现在已经买得起第五个游泳池了。"
+L.aw_nki4_text = "按叛徒人头收钱。现在已经买得起第五个游泳池了。"
 
 L.aw_fal1_title = "不，庞德先生，我希望你跳下去"
-L.aw_fal1_text  = "将一个人推下致死的高度。"
+L.aw_fal1_text = "将一个人推下致死的高度。"
 
 L.aw_fal2_title = "地板人"
-L.aw_fal2_text  = "让自己的身体从极端无尽的高度上落地。"
+L.aw_fal2_text = "让自己的身体从极端无尽的高度上落地。"
 
 L.aw_fal3_title = "人体流星"
-L.aw_fal3_text  = "让一名玩家从高处落下，摔成烂泥。"
+L.aw_fal3_text = "让一名玩家从高处落下，摔成烂泥。"
 
 L.aw_hed1_title = "高效能"
-L.aw_hed1_text  = "发现爆头的乐趣，并击杀了 {num} 名敌人。"
+L.aw_hed1_text = "发现爆头的乐趣，并击杀了 {num} 名敌人。"
 
 L.aw_hed2_title = "神经内科"
-L.aw_hed2_text  = "近距离将 {num} 名玩家的脑袋取出，完成自己的脑神经研究。"
+L.aw_hed2_text = "近距离将 {num} 名玩家的脑袋取出，完成自己的脑神经研究。"
 
 L.aw_hed3_title = "从游戏里学来的"
-L.aw_hed3_text  = "好好应用了暴力游戏的经验，爆了 {num} 颗头。"
+L.aw_hed3_text = "好好应用了暴力游戏的经验，爆了 {num} 颗头。"
 
 L.aw_cbr1_title = "物理学圣剑"
-L.aw_cbr1_text  = "应用了物理学原理，向 {num} 证明了自己的毕业论文。"
+L.aw_cbr1_text = "应用了物理学原理，向 {num} 证明了自己的毕业论文。"
 
 L.aw_cbr2_title = "戈登•弗里曼"
-L.aw_cbr2_text  = "离开黑山，用喜爱的撬棍杀了至少 {num} 名玩家。"
+L.aw_cbr2_text = "离开黑山，用喜爱的撬棍杀了至少 {num} 名玩家。"
 
 L.aw_pst1_title = "死亡之握"
-L.aw_pst1_text  = "用手枪杀死 {num} 名玩家前，都上前握了手。"
+L.aw_pst1_text = "用手枪杀死 {num} 名玩家前，都上前握了手。"
 
 L.aw_pst2_title = "小口径屠杀"
-L.aw_pst2_text  = "用手枪杀了 {num} 人的小队。我们推测他枪管里头有个微型霰弹枪。"
+L.aw_pst2_text = "用手枪杀了 {num} 人的小队。我们推测他枪管里头有个微型霰弹枪。"
 
 L.aw_sgn1_title = "简单模式"
-L.aw_sgn1_text  = "用霰弹枪近距离杀了 {num} 名玩家。切。"
+L.aw_sgn1_text = "用霰弹枪近距离杀了 {num} 名玩家。切。"
 
 L.aw_sgn2_title = "一千颗小弹丸"
-L.aw_sgn2_text  = "不喜欢自己的霰弹，打算送人。已经有 {num} 名受赠人接受了这个礼物。"
+L.aw_sgn2_text = "不喜欢自己的霰弹，打算送人。已经有 {num} 名受赠人接受了这个礼物。"
 
 L.aw_rfl1_title = "把准心对准目标扣下扳机……"
-L.aw_rfl1_text  = "用一把好枪和一个沉稳的手终结了 {num} 名玩家的生命。"
+L.aw_rfl1_text = "用一把好枪和一个沉稳的手终结了 {num} 名玩家的生命。"
 
 L.aw_rfl2_title = "你的脑袋冒出来了！"
-L.aw_rfl2_text  = "十分了解他的狙击枪，其他 {num} 名玩家随即也了解了他的狙击枪。"
+L.aw_rfl2_text = "十分了解他的狙击枪，其他 {num} 名玩家随即也了解了他的狙击枪。"
 
 L.aw_dgl1_title = "这简直像是小型狙击枪"
-L.aw_dgl1_text  = "用沙漠之鹰娴熟地杀了 {num} 名玩家。"
+L.aw_dgl1_text = "用沙漠之鹰娴熟地杀了 {num} 名玩家。"
 
 L.aw_dgl2_title = "老鹰大师"
-L.aw_dgl2_text  = "用他手中的沙漠之鹰杀了 {num} 名玩家。"
+L.aw_dgl2_text = "用他手中的沙漠之鹰杀了 {num} 名玩家。"
 
 L.aw_mac1_title = "按下扳机，然后祈祷"
-L.aw_mac1_text  = "用MAC10冲锋枪杀了 {num} 名玩家，但别提他需要多少发子弹。"
+L.aw_mac1_text = "用MAC10冲锋枪杀了 {num} 名玩家，但别提他需要多少发子弹。"
 
 L.aw_mac2_title = "单枪老太婆"
-L.aw_mac2_text  = "好奇如果他能有两把冲锋枪会发生什么事。大概是 {num} 个人头再翻倍？"
+L.aw_mac2_text = "好奇如果他能有两把冲锋枪会发生什么事。大概是 {num} 个人头再翻倍？"
 
 L.aw_sip1_title = "嘘！"
-L.aw_sip1_text  = "用消音手枪射杀了 {num} 人。"
+L.aw_sip1_text = "用消音手枪射杀了 {num} 人。"
 
 L.aw_sip2_title = "光头杀手"
-L.aw_sip2_text  = "用消音手枪无声地杀死了 {num} 个人。不愧是专业的。"
+L.aw_sip2_text = "用消音手枪无声地杀死了 {num} 个人。不愧是专业的。"
 
 L.aw_knf1_title = "很刀兴见到你"
-L.aw_knf1_text  = "隔着网线捅死了一个人。"
+L.aw_knf1_text = "隔着网线捅死了一个人。"
 
 L.aw_knf2_title = "管制刀具"
-L.aw_knf2_text  = "不是叛徒，却找到刀子并用它杀了人。"
+L.aw_knf2_text = "不是叛徒，却找到刀子并用它杀了人。"
 
 L.aw_knf3_title = "开膛手杰克"
-L.aw_knf3_text  = "在地上捡到 {num} 把匕首，并好好利用了它们。"
+L.aw_knf3_text = "在地上捡到 {num} 把匕首，并好好利用了它们。"
 
 L.aw_knf4_title = "女仆长的执著"
-L.aw_knf4_text  = "用刀子杀死了 {num} 个人。这些刀子都是裙底下找出来的吗？"
+L.aw_knf4_text = "用刀子杀死了 {num} 个人。这些刀子都是裙底下找出来的吗？"
 
 L.aw_flg1_title = "买根烟吗？"
-L.aw_flg1_text  = "用燃烧弹点燃了 {num} 人的香烟。"
+L.aw_flg1_text = "用燃烧弹点燃了 {num} 人的香烟。"
 
 L.aw_flg2_title = "火上浇油"
-L.aw_flg2_text  = "使 {num} 名玩家葬身于火海。"
+L.aw_flg2_text = "使 {num} 名玩家葬身于火海。"
 
 L.aw_hug1_title = "子弹龙头"
-L.aw_hug1_text  = "和自己的M249很合得来，不知道怎么打中了 {num} 名玩家。"
+L.aw_hug1_text = "和自己的M249很合得来，不知道怎么打中了 {num} 名玩家。"
 
 L.aw_hug2_title = "耐心机枪手"
-L.aw_hug2_text  = "从未抛弃心爱的M249，最终用其杀戮了 {num} 名玩家。"
+L.aw_hug2_text = "从未抛弃心爱的M249，最终用其杀戮了 {num} 名玩家。"
 
 L.aw_msx1_title = "啪啪啪"
-L.aw_msx1_text  = "用M16步枪射杀了 {num} 名玩家。"
+L.aw_msx1_text = "用M16步枪射杀了 {num} 名玩家。"
 
 L.aw_msx2_title = "中距离疯子"
-L.aw_msx2_text  = "了解如何用他手中的M16，射杀了敌人。共有 {num} 名不幸的亡魂。"
+L.aw_msx2_text = "了解如何用他手中的M16，射杀了敌人。共有 {num} 名不幸的亡魂。"
 
 L.aw_tkl1_title = "抱歉"
-L.aw_tkl1_text  = "瞄准自己的队友，并不小心扣下扳机。"
+L.aw_tkl1_text = "瞄准自己的队友，并不小心扣下扳机。"
 
 L.aw_tkl2_title = "抱歉抱歉"
-L.aw_tkl2_text  = "认为自己抓到了两次叛徒，但两次都错了！"
+L.aw_tkl2_text = "认为自己抓到了两次叛徒，但两次都错了！"
 
 L.aw_tkl3_title = "小心人品！"
-L.aw_tkl3_text  = "杀死两个同伴已不能满足他，三个才是他的最终目标！"
+L.aw_tkl3_text = "杀死两个同伴已不能满足他，三个才是他的最终目标！"
 
 L.aw_tkl4_title = "专业卖队友！"
-L.aw_tkl4_text  = "杀了所有同伴！快踢了他！"
+L.aw_tkl4_text = "杀了所有同伴！快踢了他！"
 
 L.aw_tkl5_title = "角色扮演"
-L.aw_tkl5_text  = "在扮演一个疯子，所以把自己大部分的同伴杀死了。"
+L.aw_tkl5_text = "在扮演一个疯子，所以把自己大部分的同伴杀死了。"
 
 L.aw_tkl6_title = "痛击队友"
-L.aw_tkl6_text  = "弄不清他属于哪一队，并杀死了半数以上的队友。"
+L.aw_tkl6_text = "弄不清他属于哪一队，并杀死了半数以上的队友。"
 
 L.aw_tkl7_title = "园丁"
-L.aw_tkl7_text  = "好好保护着自己的草坪，并杀死了四分之一以上的队友。"
+L.aw_tkl7_text = "好好保护着自己的草坪，并杀死了四分之一以上的队友。"
 
 L.aw_brn1_title = "炭烤恐怖分子"
-L.aw_brn1_text  = "使用燃烧弹点燃数个玩家，把他们烤熟了！"
+L.aw_brn1_text = "使用燃烧弹点燃数个玩家，把他们烤熟了！"
 
 L.aw_brn2_title = "火化官"
-L.aw_brn2_text  = "将每一具被他杀死的受害者尸体燃烧乾淨。"
+L.aw_brn2_text = "将每一具被他杀死的受害者尸体燃烧乾淨。"
 
 L.aw_brn3_title = "纵火狂"
-L.aw_brn3_text  = "十分喜欢火焰，以至于用掉了地图上每一颗燃烧弹。也许应该去看一下医生。"
+L.aw_brn3_text = "十分喜欢火焰，以至于用掉了地图上每一颗燃烧弹。也许应该去看一下医生。"
 
 L.aw_fnd1_title = "验尸官"
-L.aw_fnd1_text  = "在地上发现 {num} 具尸体。"
+L.aw_fnd1_text = "在地上发现 {num} 具尸体。"
 
 L.aw_fnd2_title = "尸体收藏家"
-L.aw_fnd2_text  = "在地上发现了 {num} 具尸体，大概是要搞收藏。"
+L.aw_fnd2_text = "在地上发现了 {num} 具尸体，大概是要搞收藏。"
 
 L.aw_fnd3_title = "死亡的气味"
-L.aw_fnd3_text  = "在这回合偶遇尸体共 {num} 次。"
+L.aw_fnd3_text = "在这回合偶遇尸体共 {num} 次。"
 
 L.aw_crd1_title = "回收利用"
-L.aw_crd1_text  = "在同伴尸体上找到了 {num} 点积分。"
+L.aw_crd1_text = "在同伴尸体上找到了 {num} 点积分。"
 
 L.aw_tod1_title = "痛失胜利"
-L.aw_tod1_text  = "在他的团队即将获得胜利的前几秒死去。"
+L.aw_tod1_text = "在他的团队即将获得胜利的前几秒死去。"
 
 L.aw_tod2_title = "垃圾游戏！"
-L.aw_tod2_text  = "在这回合刚开始不久即被杀害。"
+L.aw_tod2_text = "在这回合刚开始不久即被杀害。"
 
-
---- New and modified pieces of text are placed below this point, marked with the
---- version in which they were added, to make updating translations easier.
-
-
--- v23
-L.set_avoid = "避免被选为 {role}。"
-L.set_avoid_tip = "开启这个选项让服务器尽量不要把你选成 {role}。"
+-- New and modified pieces of text are placed below this point, marked with the
+-- version in which they were added, to make updating translations easier.
 
 -- v24
 L.drop_no_ammo = "你弹夹内的子弹不足以丢弃成弹药盒。"
-L.drop_ammo_prevented = "你未能丢弃弹药盒。"
 
---- v31
-L.set_cross_brightness = "准心亮度"
-L.set_cross_size = "准心尺寸"
-
---- 5-25-15
+-- 2015-05-25
 L.hat_retrieve = "你捡起了一顶探长的帽子。"
 
+-- 2017-09-03
 L.sb_sortby = "排序方法:"
 
 -- 2018-07-24
@@ -1049,36 +953,28 @@ L.stungun_name = "实验型 UMP"
 
 L.knife_instant = "必杀"
 
-L.dna_hud_type = "类型"
-L.dna_hud_body = "尸体"
-L.dna_hud_item = "物品"
-
 L.binoc_zoom_level = "放大"
 L.binoc_body = "发现尸体"
-L.binoc_progress = "检索尸体: {progress}%"
 
 L.idle_popup_title = "挂机"
 
--- 6-22-17 (Crosshair)
-L.set_title_cross = "十字准心设置"
-
-L.set_cross_color_enable = "启用自定义准心颜色"
-L.set_cross_color = "自定义准心颜色:"
-L.set_cross_gap_enable = "启用自定义准心大小"
-L.set_cross_gap = "自定义准心大小"
-L.set_cross_static_enable = "启用固定准心"
-L.set_ironsight_cross_opacity = "准心透明度"
-L.set_cross_weaponscale_enable = "启用武器特有准心大小"
-L.set_cross_thickness = "准心厚度"
-L.set_cross_outlinethickness = "准心外框厚度"
-L.set_cross_dot_enable = "启用准心中点"
-
--- ttt2
+-- 2019-01-31
 L.create_own_shop = "新建商店"
 L.shop_link = "连接"
 L.shop_disabled = "禁用商店"
 L.shop_default = "使用默认商店"
 
+-- 2019-05-05
+--L.reroll_name = "Reroll"
+--L.reroll_menutitle = "Reroll Items"
+--L.reroll_no_credits = "You need {amount} credits to reroll!"
+--L.reroll_button = "Reroll"
+--L.reroll_help = "Use {amount} credits to get new items in your shop!"
+
+-- 2019-05-06
+--L.equip_not_alive = "You can view all available items by selecting a role on the right. Don't forget to mark your favorites!"
+
+-- 2019-06-27
 L.shop_editor_title = "商店编辑器"
 L.shop_edit_items_weapong = "修改武器/道具"
 L.shop_edit = "修改商店"
@@ -1090,60 +986,8 @@ L.shop_create_shop = "新建自定义商店"
 L.shop_selected = "选中 {role}"
 L.shop_settings_desc = "改变数值来适应随机商店参数。不要忘记保存！"
 
-L.f1_settings_changes_title = "改动"
-L.f1_settings_hudswitcher_title = "界面更换"
-L.f1_settings_bindings_title = "键位绑定"
-L.f1_settings_interface_title = "界面"
-L.f1_settings_gameplay_title = "游戏性"
-L.f1_settings_crosshair_title = "十字准星"
-L.f1_settings_dmgindicator_title = "伤害显示"
-L.f1_settings_language_title = "语言"
-L.f1_settings_administration_title = "管理员"
-L.f1_settings_shop_title = "装备商店"
+L.bindings_new = "{name} 的新按键：{key}"
 
-L.f1_settings_shop_desc_shopopen = "在回合开始/结束时按商店键打开商店而不是分数板？"
-L.f1_settings_shop_title_layout = "物品列表设置"
-L.f1_settings_shop_desc_num_columns = "列数"
-L.f1_settings_shop_desc_num_rows = "行数"
-L.f1_settings_shop_desc_item_size = "按钮大小"
-L.f1_settings_shop_title_marker = "物品标记设置"
-L.f1_settings_shop_desc_show_slot = "显示槽位标记"
-L.f1_settings_shop_desc_show_custom = "显示自定义标记"
-L.f1_settings_shop_desc_show_favourite = "显示喜爱标记"
-
-L.f1_shop_restricted = "该服务器不允许单自改动商店列表。请详询服务器管理员。"
-
-L.f1_settings_hudswitcher_desc_basecolor = "基础颜色"
-L.f1_settings_hudswitcher_desc_hud_scale = "界面大小 (会重置现有设置)"
-L.f1_settings_hudswitcher_button_close = "关闭"
-L.f1_settings_hudswitcher_desc_reset = "重置现有设置"
-L.f1_settings_hudswitcher_button_reset = "重置"
-L.f1_settings_hudswitcher_desc_layout_editor = "改变元素\n位置和大小"
-L.f1_settings_hudswitcher_button_layout_editor = "界面修改"
-L.f1_settings_hudswitcher_desc_hud_not_supported = "! 此界面不支持自定义 !"
-
-L.f1_bind_reset_default = "默认"
-L.f1_bind_disable_bind = "清除"
-L.f1_bind_description = "点击后按任意键绑定。"
-L.f1_bind_reset_default_description = "重置为默认键。"
-L.f1_bind_disable_description = "清除这个绑定的键位。"
-L.ttt2_bindings_new = "{name} 的新按键：{key}"
-
-L.f1_bind_weaponswitch = "切换武器"
-L.f1_bind_sprint = "冲刺"
-L.f1_bind_voice = "全局语音"
-L.f1_bind_voice_team = "团队语音"
-
-L.f1_dmgindicator_title = "伤害显示设定"
-L.f1_dmgindicator_enable = "启用"
-L.f1_dmgindicator_mode = "选择伤害显示风格"
-L.f1_dmgindicator_duration = "击中后指示器显示时间"
-L.f1_dmgindicator_maxdamage = "最大透明度伤害"
-L.f1_dmgindicator_maxalpha = "指示器最大伤害"
-
-L.hud_default = "默认界面"
-L.hud_force = "强制界面"
-L.hud_restricted = "受限界面"
 L.hud_default_failed = "未能将界面 {hudname} 设为默认。你没有权限，或这个界面不存在。"
 L.hud_forced_failed = "未能将界面 {hudname} 设为强制。你没有权限，或这个界面不存在。"
 L.hud_restricted_failed = "未能将界面 {hudname} 设为限制。你没有权限，或这个界面不存在。"
@@ -1152,24 +996,62 @@ L.shop_role_select = "选择身份"
 L.shop_role_selected = "选中了 {role} 的商店！"
 L.shop_search = "搜索"
 
-L.button_save = "保存"
+--L.spec_help = "Click to spectate players, or press {usekey} on a physics object to possess it."
+--L.spec_help2 = "To leave the spectator mode, open the menu by pressing {helpkey}, go to 'gameplay' and toggle the spectator mode."
 
-L.disable_spectatorsoutline = "禁用被控制物品的高亮"
-L.disable_spectatorsoutline_tip = "禁用观察着控制着的物品上的高亮(+性能)"
+-- 2019-10-19
+--L.drop_ammo_prevented = "Something prevents you from dropping your ammo."
 
-L.disable_overheadicons = "禁用身份图标"
-L.disable_overheadicons_tip = "禁用玩家头上的身份图标 (+性能)"
+-- 2019-10-28
+--L.target_c4 = "Press [{usekey}] to open C4 menu"
+--L.target_c4_armed = "Press [{usekey}] to disarm C4"
+--L.target_c4_armed_defuser = "Press [{usekey}] to use defuser"
+--L.target_c4_not_disarmable = "You can't disarm C4 of a living teammate"
+--L.c4_short_desc = "Something very explosive"
 
--- 2020-01-04
-L.doubletap_sprint_anykey = "冲刺直到停止移动"
-L.doubletap_sprint_anykey_tip = "双击开始冲刺后，直到停止移动才会停止冲刺"
+--L.target_pickup = "Press [{usekey}] to pick up"
+--L.target_slot_info = "Slot: {slot}"
+--L.target_pickup_weapon = "Press [{usekey}] to pickup weapon"
+--L.target_switch_weapon = "Press [{usekey}] to swap with your current weapon"
+--L.target_pickup_weapon_hidden = ", press [{usekey} + {walkkey}] for hidden pickup"
+--L.target_switch_weapon_hidden = ", press [{usekey} + {walkkey}] for hidden switch"
+--L.target_switch_weapon_nospace = "There is no inventory slot available for this weapon"
+--L.target_switch_drop_weapon_info = "Dropping {name} from slot {slot}"
+--L.target_switch_drop_weapon_info_noslot = "There is no droppable weapon in slot {slot}"
 
-L.disable_doubletap_sprint = "禁用双击冲刺"
-L.disable_doubletap_sprint_tip = "双击移动键后不再会开始冲刺（可使用默认冲刺键）"
+--L.corpse_searched_by_detective = "This corpse was searched by a detective"
+--L.corpse_too_far_away = "The corpse is too far away."
 
--- 2020-02-03
-L.hold_aim = "持续瞄准"
-L.hold_aim_tip = "按住瞄准键时进行瞄准而松开时停止 (默认：右键)"
+--L.radio_pickup_wrong_team = "You can't pick up the radio from another team."
+--L.radio_short_desc = "Weapon sounds are music to me"
+
+--L.hstation_subtitle = "Press [{usekey}] to receive health."
+--L.hstation_charge = "Remaining charge of health station: {charge}"
+--L.hstation_empty = "There is no more charge left in this health station"
+--L.hstation_maxhealth = "Your health is full"
+--L.hstation_short_desc = "The heath station slowly recharges over time"
+
+-- 2019-11-03
+--L.vis_short_desc = "Visualizes a crime scene if the victim died by a gunshot wound"
+--L.corpse_binoculars = "Press [{key}] to search corpse with binoculars."
+--L.binoc_progress = "Search progress: {progress}%"
+
+--L.pickup_no_room = "You have no space in your inventory for this weapon kind"
+--L.pickup_fail = "You cannot pick up this weapon"
+--L.pickup_pending = "You already picked up a weapon, wait until you receive it"
+
+-- 2020-01-07
+--L.tbut_help_admin = "Edit traitor button settings"
+--L.tbut_role_toggle = "[{walkkey} + {usekey}] to toggle this button for {role}"
+--L.tbut_role_config = "Role: {current}"
+--L.tbut_team_toggle = "[SHIFT + {walkkey} + {usekey}] to toggle this button for team {team}"
+--L.tbut_team_config = "Team: {current}"
+--L.tbut_current_config = "Current config:"
+--L.tbut_intended_config = "Intended config by map creator:"
+--L.tbut_admin_mode_only = "Only visible to you because you're an admin and '{cv}' is set to '1'"
+--L.tbut_allow = "Allow"
+--L.tbut_prohib = "Prohibit"
+--L.tbut_default = "Default"
 
 -- 2020-02-09
 L.name_door = "门"
@@ -1179,12 +1061,168 @@ L.door_locked = "此门被锁上了"
 
 -- 2020-02-11
 L.automoved_to_spec = "(自动消息) 我因为挂机而被移到了观察者。"
+--L.mute_team = "{team} muted."
 
 -- 2020-02-16
 L.door_auto_closes = "此门会自动关闭"
 L.door_open_touch = "此门接触后会自动开启"
 L.door_open_touch_and_use = "接触门或按 [{usekey}] 开门."
 L.hud_health = "生命"
+
+-- 2020-03-09
+--L.help_title = "Help and Settings"
+
+--L.menu_changelog_title = "Changelog"
+--L.menu_guide_title = "TTT2 Guide"
+--L.menu_bindings_title = "Key Bindings"
+--L.menu_language_title = "Language"
+--L.menu_appearance_title = "Appearance"
+--L.menu_gameplay_title = "Gameplay"
+--L.menu_addons_title = "Addons"
+--L.menu_legacy_title = "Legacy Addons"
+--L.menu_administration_title = "Administration"
+--L.menu_equipment_title = "Edit Equipment"
+--L.menu_shops_title = "Edit Shops"
+
+--L.menu_changelog_description = "A list of changes and fixes in recent versions"
+--L.menu_guide_description = "Helps you to get started with TTT2 and explains some things about gameplay, roles and other stuff"
+--L.menu_bindings_description = "Bind specific features of TTT2 and its addons to your own liking"
+--L.menu_language_description = "Select the language of the game"
+--L.menu_appearance_description = "Tweak the appearance and performance of the UI"
+--L.menu_gameplay_description = "Avoid roles and tweak some features"
+--L.menu_addons_description = "Configure local addons to your liking"
+--L.menu_legacy_description = "A panel with converted tabs from original TTT, they should be ported over to the new system"
+--L.menu_administration_description = "General settings for HUDs, shops etc"
+--L.menu_equipment_description = "Set credits, limitations, availability and other stuff"
+--L.menu_shops_description = "Add/Remove shops to roles and define the equipment in it"
+
+--L.submenu_guide_gameplay_title = "Gameplay"
+--L.submenu_guide_roles_title = "Roles"
+--L.submenu_guide_equipment_title = "Equipment"
+
+--L.submenu_bindings_bindings_title = "Bindings"
+
+--L.submenu_language_language_title = "Language"
+
+--L.submenu_appearance_general_title = "General"
+--L.submenu_appearance_hudswitcher_title = "HUD Switcher"
+--L.submenu_appearance_vskin_title = "VSkin"
+--L.submenu_appearance_targetid_title = "TargetID"
+--L.submenu_appearance_shop_title = "Shop Settings"
+--L.submenu_appearance_crosshair_title = "Crosshair"
+--L.submenu_appearance_dmgindicator_title = "Damage Indicator"
+--L.submenu_appearance_performance_title = "Performance"
+--L.submenu_appearance_interface_title = "Interface"
+--L.submenu_appearance_miscellaneous_title = "Misellaneous"
+
+--L.submenu_gameplay_general_title = "General"
+--L.submenu_gameplay_avoidroles_title = "Avoid Role Selection"
+
+--L.submenu_administration_hud_title = "HUD Settings"
+--L.submenu_administration_random_shop = "Random Shop"
+
+--L.help_color_desc = "If this setting is enabled, a global color can be chosen that will be used for the targetID outline and the crosshair."
+--L.help_scale_factor = "This scale factor influences all UI elements (HUD, vgui and targetID). It is automatically updated if the screen resolution is changed. Changing this value will reset the HUD!"
+--L.help_hud_game_reload = "The HUD is not available right now. The game has to be reloaded."
+--L.help_hud_special_settings = "These are specific settings of this HUD."
+--L.help_vskin_info = "VSkin (vgui skin) is the skin applied to all menu elements like the current one. Skins can be easily created with a simple lua script and can change colors and some size parameters."
+--L.help_targetid_info = "TargetID is the information rendered when focusing an entity. A fixed color can be set in the general settings panel."
+--L.help_hud_default_desc = "Set the default HUD for all players. Players that have not yet selected a HUD will receive this HUD as their default. This won't change the HUD of players that have already selected their HUD."
+--L.help_hud_forced_desc = "Force a HUD for all players. This disables the HUD selection feature for everyone."
+--L.help_hud_enabled_desc = "Enable/Disable HUDs to restrict the selection of these HUDs."
+--L.help_damage_indicator_desc = "The damage indicator is the overlay shown when the player is damaged. To add a new theme, place a png in 'materials/vgui/ttt/damageindicator/themes/'."
+--L.help_shop_key_desc = "Open the shop by pressing the shop key instead of the score menu during preparing / at the end of a round?"
+
+--L.label_menu_menu = "MENU"
+--L.label_menu_admin_spacer = "Admin Area (not shown to normal users)"
+--L.label_language_set = "Select language"
+--L.label_global_color_enable = "Enable global color"
+--L.label_global_color = "Global color"
+--L.label_global_scale_factor = "Global scale factor"
+--L.label_hud_select = "Select HUD"
+--L.label_vskin_select = "Select VSkin"
+--L.label_blur_enable = "Enable VSkin background blur"
+--L.label_color_enable = "Enable VSkin background color"
+--L.label_minimal_targetid = "Minimalist Target ID under crosshair (no karma text, hints, etc.)"
+--L.label_shop_always_show = "Always show the shop"
+--L.label_shop_double_click_buy = "Enable to buy an item in the shop by double clicking on it"
+--L.label_shop_num_col = "Number of columns"
+--L.label_shop_num_row = "Number of rows"
+--L.label_shop_item_size = "Icon size"
+--L.label_shop_show_slot = "Show slot marker"
+--L.label_shop_show_custom = "Show custom item marker"
+--L.label_shop_show_fav = "Show favourite item marker"
+--L.label_crosshair_enable = "Enable Crosshair"
+--L.label_crosshair_gap_enable = "Enable custom crosshair gap"
+--L.label_crosshair_gap = "Custom crosshair gap"
+--L.label_crosshair_opacity = "Crosshair opacity"
+--L.label_crosshair_ironsight_opacity = "Ironsight crosshair opacity"
+--L.label_crosshair_size = "Crosshair size"
+--L.label_crosshair_thickness = "Crosshair thickness"
+--L.label_crosshair_thickness_outline = "Crosshair outline thickness"
+--L.label_crosshair_static_enable = "Enable static crosshair"
+--L.label_crosshair_dot_enable = "Enable crosshair dot"
+--L.label_crosshair_lines_enable = "Enable crosshair lines"
+--L.label_crosshair_scale_enable = "Enable weapon dependant weapon scale"
+--L.label_crosshair_ironsight_low_enabled = "Lower weapon when using ironsights"
+--L.label_damage_indicator_enable = "Enable damage indicator"
+--L.label_damage_indicator_mode = "Select damage indicator theme"
+--L.label_damage_indicator_duration = "Seconds the damage indicator is visible after a hit"
+--L.label_damage_indicator_maxdamage = "Damage needed for the maximum opacity"
+--L.label_damage_indicator_maxalpha = "Damage Indicators maximum opacity"
+--L.label_performance_halo_enable = "Draw an outline around some entities while looking at them"
+--L.label_performance_spec_outline_enable = "Enable controlled objects' outlines"
+--L.label_performance_ohicon_enable = "Enable overhead role icons"
+--L.label_interface_tips_enable = "Show gameplay tips at the bottom of the screen while spectating"
+--L.label_interface_popup = "Start of round info popup duration"
+--L.label_interface_fastsw_menu = "Enable menu with fast weapon switch"
+--L.label_inferface_wswitch_hide_enable = "Enable weapon switch menu auto-closing"
+--L.label_inferface_scues_enable = "Play sound cue when a round begins or ends"
+--L.label_gameplay_specmode = "Spectate-only mode (always stay spectator)"
+--L.label_gameplay_fastsw = "Fast weapon switch"
+--L.label_gameplay_hold_aim = "Enable hold to aim"
+--L.label_gameplay_mute = "Mute living players when dead"
+--L.label_gameplay_dtsprint_enable = "Enable double tap sprinting"
+--L.label_gameplay_dtsprint_anykey = "Continue double tap sprinting until you stop moving"
+--L.label_hud_default = "Default HUD"
+--L.label_hud_force = "Forced HUD"
+
+--L.label_bind_weaponswitch = "Pickup Weapon"
+--L.label_bind_sprint = "Sprint"
+--L.label_bind_voice = "Global Voice Chat"
+--L.label_bind_voice_team = "Team Voice Chat"
+
+--L.label_hud_basecolor = "Base Color"
+
+--L.label_menu_not_populated = "This submenu does not contain any content."
+
+--L.header_bindings_ttt2 = "TTT2 Bindings"
+--L.header_bindings_other = "Other Bindings"
+--L.header_language = "Language Settings"
+--L.header_global_color = "Select Global Color"
+--L.header_hud_select = "Select a HUD"
+--L.header_hud_customize = "Customize the HUD"
+--L.header_vskin_select = "Select and Customize the VSkin"
+--L.header_targetid = "TargetID Settings"
+--L.header_shop_settings = "Equipment Shop Settings"
+--L.header_shop_layout = "Item List Layout"
+--L.header_shop_marker = "Item Marker Settings"
+--L.header_crosshair_settings = "Crosshair Settings"
+--L.header_damage_indicator = "Damage Indicator Settings"
+--L.header_performance_settings = "Performance Settings"
+--L.header_interface_settings = "Interface Settings"
+--L.header_gameplay_settings = "Gameplay Settings"
+--L.header_roleselection = "Enable Role Assignment"
+--L.header_hud_administration = "Select Default and Forced HUDs"
+--L.header_hud_enabled = "Enable/Disable HUDs"
+
+--L.button_menu_back = "back"
+--L.button_none = "None"
+--L.button_press_key = "Press a key"
+--L.button_save = "Save"
+--L.button_reset = "Reset"
+--L.button_close = "Close"
+--L.button_hud_editor = "HUD Editor"
 
 -- 2020-04-20
 L.item_speedrun = "疾跑如风"
@@ -1203,6 +1241,12 @@ L.item_no_prop_damage = "头铁"
 L.item_no_prop_damage_desc = [[让你免疫物品伤害。]]
 L.item_no_drown_damage = "潜水员"
 L.item_no_drown_damage_desc = [[让你免疫溺水伤害。]]
+
+-- 2020-04-21
+--L.dna_tid_possible = "Scan possible"
+--L.dna_tid_impossible = "No scan possible"
+--L.dna_screen_ready = "No DNA"
+--L.dna_screen_match = "Match"
 
 -- 2020-04-30
 L.message_revival_canceled = "复活取消。"
@@ -1236,12 +1280,7 @@ L.vis_help_pri = "丢弃当前设备。"
 
 L.decoy_help_pri = "安放诱饵。"
 
-L.set_cross_lines_enable = "启用十字准心线条"
-
 -- 2020-08-07
 --L.pickup_error_spec = "You cannot pick this up as a spectator."
 --L.pickup_error_owns = "You cannot pick this up because you already have this weapon."
 --L.pickup_error_noslot = "You cannot pick this up because you have no free slot available."
-
--- 2020-08-11
---L.f1_settings_shop_desc_double_click = "Enable to buy an item in the shop by double clicking on it."
