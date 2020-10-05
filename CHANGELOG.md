@@ -11,9 +11,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added ConVar to toggle double-click buying
 - Added a new vgui system
   - introduced new development interfaces to easily create menues and settings for addons
-- Introduced a global scale factor
-  - based on a 1080p resolution and automatically adjusted to the current screen resolution (i.e. a 4k display has a default scale factor of 2)
-  - used by the HUD
+- Introduced a global scale factor based on screen resolution to scale HUD elements accordingly
 - Added automatical scale factor change on resolution change that works even if the resolution was changed while TTT2 wasn't loaded
 
 ### Changed
