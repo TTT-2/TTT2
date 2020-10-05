@@ -383,6 +383,8 @@ function SKIN:PaintButtonTTT2(panel, w, h)
 	local shift = 0
 
 	if not panel:IsEnabled() then
+		local colorAccentDisabled = utilGetChangedColor(colors.default, 150)
+
 		colorLine = utilColorDarken(colorAccentDisabled, 50)
 		colorBox = utilGetChangedColor(colors.default, 150)
 		colorText = ColorAlpha(utilGetDefaultColor(colorAccentDisabled), 220)

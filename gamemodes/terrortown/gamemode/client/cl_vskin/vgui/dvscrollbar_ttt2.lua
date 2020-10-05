@@ -151,7 +151,7 @@ function PANEL:OnCursorMoved()
 
 	local _, y = self:ScreenToLocal(0, gui.MouseY())
 
-	y = (y - self.holdPos) / (self:GetTall() - self.btnGrip:GetTall()))
+	y = (y - self.holdPos) / (self:GetTall() - self.btnGrip:GetTall())
 
 	self:SetScroll(y * self.canvasSize)
 end
@@ -172,9 +172,9 @@ end
 function PANEL:PerformLayout()
 	local wide = self:GetWide()
 
+	local barSize = math.max(self:BarScale() * self:GetTall(), 10)
 	local track = self:GetTall() - barSize + 1
 	local scroll = self:GetScroll() / self.canvasSize * track
-	local barSize = math.max(self:BarScale() * self:GetTall(), 10)
 
 	self.btnGrip:SetPos(0, scroll)
 	self.btnGrip:SetSize(wide, barSize)
