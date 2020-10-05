@@ -116,7 +116,7 @@ function HELPSCRN:ShowMainMenu()
 	local frame = self.menuFrame
 
 	-- IF MENU ELEMENT DOES NOT ALREADY EXIST, CREATE IT
-	if IsValid(frame) and not frame:IsFrameHidden() then
+	if IsValid(frame) then
 		frame:ClearFrame(nil, nil, "help_title")
 	else
 		frame = vguihandler.GenerateFrame(width, height, "help_title", true)
@@ -234,7 +234,7 @@ function HELPSCRN:ShowSubMenu(data)
 	local frame = self.menuFrame
 
 	-- IF MENU ELEMENT DOES NOT ALREADY EXIST, CREATE IT
-	if IsValid(frame) and not frame:IsFrameHidden() then
+	if IsValid(frame) then
 		frame:ClearFrame(nil, nil, data.title or data.id)
 	else
 		frame = vguihandler.GenerateFrame(width, height, data.title or data.id)
