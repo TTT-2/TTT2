@@ -1216,7 +1216,7 @@ L.header_roleselection = "Enable Role Assignment"
 L.header_hud_administration = "Select Default and Forced HUDs"
 L.header_hud_enabled = "Enable/Disable HUDs"
 
-L.button_menu_back = "back"
+L.button_menu_back = "Back"
 L.button_none = "None"
 L.button_press_key = "Press a key"
 L.button_save = "Save"

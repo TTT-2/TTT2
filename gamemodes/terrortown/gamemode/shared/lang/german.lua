@@ -1216,7 +1216,7 @@ L.header_roleselection = "Aktierung Rollenzuweisung"
 L.header_hud_administration = "Wähle Standard-HUD und Erzwungenes-HUD"
 L.header_hud_enabled = "De-/aktiviere HUDs"
 
-L.button_menu_back = "zurück"
+L.button_menu_back = "Zurück"
 L.button_none = "Nichts"
 L.button_press_key = "Drücke eine Taste"
 L.button_save = "Speichern"
