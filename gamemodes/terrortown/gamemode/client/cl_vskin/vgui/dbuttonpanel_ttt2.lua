@@ -59,6 +59,7 @@ function PANEL:OnMouseReleased(mousecode)
 	self:MouseCapture(false)
 end
 
+-- overwrites the base function with an empty function
 function PANEL:UpdateColours()
 
 end

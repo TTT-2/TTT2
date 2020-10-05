@@ -209,14 +209,17 @@ function PANEL:OnMouseReleased(mousecode)
 	self.Depressed = nil
 end
 
+-- overwrites the base function with an empty function
 function PANEL:OnReleased()
 
 end
 
+-- overwrites the base function with an empty function
 function PANEL:OnDepressed()
 
 end
 
+-- overwrites the base function with an empty function
 function PANEL:OnToggled(bool)
 
 end
@@ -225,22 +228,27 @@ function PANEL:DoClick()
 	self:Toggle()
 end
 
+-- overwrites the base function with an empty function
 function PANEL:DoRightClick()
 
 end
 
+-- overwrites the base function with an empty function
 function PANEL:DoMiddleClick()
 
 end
 
+-- overwrites the base function with an empty function
 function PANEL:DoClickInternal()
 
 end
 
+-- overwrites the base function with an empty function
 function PANEL:DoDoubleClick()
 
 end
 
+-- overwrites the base function with an empty function
 function PANEL:DoDoubleClickInternal()
 
 end

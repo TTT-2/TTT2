@@ -161,6 +161,7 @@ function PANEL:ValueChanged(val)
 	self:OnValueChanged(val)
 end
 
+-- overwrites the base function with an empty function
 function PANEL:OnValueChanged(val)
 
 end
