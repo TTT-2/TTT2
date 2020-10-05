@@ -141,7 +141,7 @@ cvars.AddChangeCallback(cv_global_color_a:GetName(), function(cv, old, new)
 end)
 
 ---
--- Sets if the global focus color or the dyanamic color should
+-- Sets if the global focus color or the dynamic color should
 -- be used
 -- @param boolean state The new use state
 -- @realm client
