@@ -11,6 +11,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Introduced a global scale factor based on screen resolution to scale HUD elements accordingly
 - Added automatical scale factor change on resolution change that works even if the resolution was changed while TTT2 wasn't loaded
 - Added `drawsc` library featuring scalable draw functions
+- Updated Simplified Chinese localization (by @TheOnly8Z)
+- Updated Italian localization (by @ThePlatynumGhost)
 
 ### Changed
 
