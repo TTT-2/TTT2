@@ -43,7 +43,7 @@ function EVENT:Trigger(victim, attacker, dmgInfo)
 		end
 	else
 		-- handle the name of the inflictor if it was caused by a trap
-		local inflictor = dmg:GetInflictor()
+		local inflictor = dmgInfo:GetInflictor()
 
 		if IsValid(inflictor) and inflictor.ScoreName then
 			event.dmg.name = inflictor.ScoreName

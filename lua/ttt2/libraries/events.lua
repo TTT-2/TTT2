@@ -2,10 +2,14 @@ if SERVER then
 	AddCSLuaFile()
 end
 
-events = events or {}
-EVENT = {}
+local tableCopy = table.Copy
 
 local eventTypes = {}
+
+events = events or {}
+events.list = events.list or {}
+
+EVENT = {}
 
 ---
 -- Copies any missing data from base table to the target table
@@ -14,10 +18,6 @@ local eventTypes = {}
 -- @return table t target table
 -- @realm shared
 local function TableInherit(tbl, base)
-	if not base then
-		return tbl
-	end
-
 	for k, v in pairs(base) do
 		if tbl[k] ~= nil then continue end
 
@@ -32,7 +32,8 @@ function events.Initialize(path)
 	local name = string.lower(string.sub(pathArray[#pathArray], 0, -5))
 
 	-- event table is set in fileloader and can now be inserted in the table
-	eventTypes[name] = TableInherit(table.Copy(EVENT), events.Get("base_class"))
+	eventTypes[name] = tableCopy(EVENT)
+	eventTypes[name].type = name
 
 	-- store a global identifier for this event
 	_G["EVENT_" .. string.upper(name)] = name
@@ -52,16 +53,13 @@ end
 function events.Trigger(name, ...)
 	if hook.Run("TTT2TriggeredEvent", name, ...) == false then return end
 
-	events.Get(name):Trigger(...)
+	local newEvent = TableInherit(tableCopy(events.Get(name)), events.Get("base_event"))
+	newEvent:Trigger(...)
+
+	events.list[#events.list + 1] = newEvent
 end
 
 -- load the events itself
-fileloader.LoadFolder("terrortown/gamemode/shared/events/base/", false, SHARED_FILE, function(path)
-	events.Initialize(path)
-
-	MsgN("Added TTT2 event file: ", path)
-end)
-
 fileloader.LoadFolder("terrortown/gamemode/shared/events/", false, SHARED_FILE, function(path)
 	events.Initialize(path)
 
