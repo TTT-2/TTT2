@@ -1,7 +1,7 @@
 ---
 -- drawsc library functions
 -- adds a secondary function that draws based on the global scale factor
--- which is based on a normal 1080p resolution
+-- which is based on a 1920x1080p resolution
 -- @author Mineotopia
 
 AddCSLuaFile()
