@@ -18,8 +18,10 @@ fonts.fonts = {}
 fonts.scales = {1, 1.5, 2, 2.5}
 
 ---
--- Gets the scale modifer based on a given scale.
--- @param number scale The font scale
+-- Gets the scale modifer based on a given scale. This function tries to find one of
+-- the given steps defined in `fonts.scales` that fits best to the given scale. If it
+-- fails to find a fitting scale, it returns the largest available.
+-- @param number|vector scale The font scale
 -- @return number The font scale
 -- @internal
 -- @realm client
@@ -68,7 +70,7 @@ end
 -- Returns a specified font.
 -- @param string name The font name
 -- @return table A table of the font with different scales
--- @reaöm client
+-- @realm client
 function fonts.GetFont(name)
 	return fonts.fonts[name]
 end

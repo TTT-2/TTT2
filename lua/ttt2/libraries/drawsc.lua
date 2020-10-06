@@ -50,7 +50,6 @@ end
 -- @param number h The height of the rectangle
 -- @param [default=1]number t The thickness of the line
 -- @param [default=Color(255,255,255,255)]Color color The color of the line
--- @param [default=1.0]number scale A scaling factor that is used for the shadows
 -- @2D
 -- @realm client
 function drawsc.OutlinedShadowedBox(x, y, w, h, t, color)
@@ -83,7 +82,6 @@ end
 -- @param number w The width of the box
 -- @param number h The height of the box
 -- @param [default=Color(255,255,255,255)]Color color The color of the box
--- @param [default=1.0]number scale A scaling factor that is used for the shadows
 -- @2D
 -- @realm client
 function drawsc.ShadowedBox(x, y, w, h, color)
@@ -114,7 +112,6 @@ end
 -- @param number y The center y position to start the circle
 -- @param number r The radius of the circle
 -- @param [default=Color(255,255,255,255)]Color color The color of the circle
--- @param [default=1.0]number scale A scaling factor that is used for the shadows
 -- @2D
 -- @realm client
 function drawsc.OutlinedShadowedCircle(x, y, r, color)
@@ -151,7 +148,6 @@ end
 -- @param Material material The material
 -- @param [default=255]number alpha The opacity of the material
 -- @param [default=Color(255,255,255,255)]Color col the alpha value will be ignored
--- @param [default=1.0]number scale A scaling factor that is used for the shadows
 -- @2D
 -- @realm client
 function drawsc.FilteredShadowedTexture(x, y, w, h, material, alpha, color)
@@ -173,7 +169,6 @@ end
 -- @param number yalign The alignment of the y coordinate using
 -- <a href="https://wiki.garrysmod.com/page/Enums/TEXT_ALIGN">TEXT_ALIGN_Enums</a>.
 -- @param boolean shadow whether there should be a shadow of the text
--- @param number scale The scale (float number)
 -- @2D
 -- @realm client
 function drawsc.AdvancedText(text, font, x, y, color, xalign, yalign)
@@ -195,7 +190,6 @@ end
 -- @param number yalign The alignment of the y coordinate using
 -- <a href="https://wiki.garrysmod.com/page/Enums/TEXT_ALIGN">TEXT_ALIGN_Enums</a>.
 -- @param boolean shadow whether there should be a shadow of the text
--- @param number scale The scale (float number)
 -- @2D
 -- @realm client
 function drawsc.AdvancedShadowedText(text, font, x, y, color, xalign, yalign)
