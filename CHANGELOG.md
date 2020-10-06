@@ -17,7 +17,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - the F1 menu is completely overhauled
 - Cleaned up language files, they are now identical on a line by line comparison
 - Inverted some convars to have a uniform "Enable feature X", not a mixture of enable and disable
-- TargetID text is no scaled with the global scale factor
+- TargetID text is now scaled with the global scale factor
 - Cleaned up draw function files
 
 ## [v0.7.4b](https://github.com/TTT-2/TTT2/tree/v0.7.4b) (2020-09-28)
