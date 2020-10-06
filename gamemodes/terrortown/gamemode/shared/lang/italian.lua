@@ -1,4 +1,4 @@
--- Italian language strings (by AL24)
+-- Italian language strings (by AL24 & THEPLATYNUMGHOST)
 
 local L = LANG.CreateLanguage("Italiano")
 
@@ -305,8 +305,8 @@ L.decoy_name = "Esca"
 L.decoy_no_room = "Non puoi portare questa Esca."
 L.decoy_broken = "la tua Esca è stata distrutta!"
 
---L.decoy_short_desc = "This decoy shows a fake radar sign visible for other teams"
---L.decoy_pickup_wrong_team = "You can't pick it up as it belongs to a different team"
+L.decoy_short_desc = "Questa esca mostra un finto segnale radar per gli altri team"
+L.decoy_pickup_wrong_team = "Non puoi prenderlo perchè appartiene a un team differente"
 
 L.decoy_desc = [[
 Mostra un segnale falso sul radar dei Detective, e mostra sui loro DNA scanner la posizione dell'Esca se scannerizzano il tuo DNA.]]
@@ -1037,8 +1037,8 @@ L.corpse_binoculars = "Premi [{key}] per identificare i cadaveri con il binocolo
 L.binoc_progress = "Progresso ricerca: {progress}%"
 
 L.pickup_no_room = "Non hai spazio nell'inventario per questo tipo di arma"
---L.pickup_fail = "You cannot pick up this weapon"
---L.pickup_pending = "You already picked up a weapon, wait until you receive it"
+L.pickup_fail = "Non puoi prendere quest'arma"
+L.pickup_pending = "Hai gia preso un arma, aspetta finche non la ricevi"
 
 -- 2020-01-07
 L.tbut_help_admin = "Modifica le impostazioni per i bottoni dei traditori"
@@ -1142,10 +1142,10 @@ L.label_global_scale_factor = "Fattore di scala globale"
 L.label_hud_select = "Seleziona HUD"
 L.label_vskin_select = "Seleziona VSkin"
 L.label_blur_enable = "Abilita blur di sfondo VSkin"
---L.label_color_enable = "Enable VSkin background color"
+L.label_color_enable = "Abilita colore di sfondo del VSkin"
 L.label_minimal_targetid = "ID bersaglio minimale sotto il mirino (niente karma, consigli, ecc.)"
 L.label_shop_always_show = "Mostra sempre lo shop"
---L.label_shop_double_click_buy = "Enable to buy an item in the shop by double clicking on it"
+L.label_shop_double_click_buy = "Enable to buy an item in the shop by double clicking on it"
 L.label_shop_num_col = "Numero di colonne"
 L.label_shop_num_row = "Numero di righe"
 L.label_shop_item_size = "Grandezza icona"
@@ -1162,7 +1162,7 @@ L.label_crosshair_thickness = "Spessore mirino"
 L.label_crosshair_thickness_outline = "Spessore contorno del mirino"
 L.label_crosshair_static_enable = "Abilita mirino statico"
 L.label_crosshair_dot_enable = "Abilita punto del mirino"
---L.label_crosshair_lines_enable = "Enable crosshair lines"
+L.label_crosshair_lines_enable = "Abilita linee del mirino"
 L.label_crosshair_scale_enable = "Abilita scalatura del mirino dell'arma"
 L.label_crosshair_ironsight_low_enabled = "Abbassa arma quando usi il mirino di ferro"
 L.label_damage_indicator_enable = "Abilita indicatore del danno"
@@ -1194,7 +1194,7 @@ L.label_bind_voice_team = "Chat Vocale di Squadra"
 
 L.label_hud_basecolor = "Colore base"
 
---L.label_menu_not_populated = "This submenu does not contain any content."
+L.label_menu_not_populated = "Questo sottomenu contiene nessun contenuto."
 
 L.header_bindings_ttt2 = "Assegnazione dei tasti di TTT2"
 L.header_bindings_other = "Altre Assegnazioni dei tasti"
@@ -1225,45 +1225,45 @@ L.button_close = "Chiudi"
 --L.button_hud_editor = "HUD Editor"
 
 -- 2020-04-20
---L.item_speedrun = "Speedrun"
---L.item_speedrun_desc = [[Makes you 50% faster!]]
---L.item_no_explosion_damage = "No Explosion Damage"
---L.item_no_explosion_damage_desc = [[Makes you immune to explosion damage.]]
---L.item_no_fall_damage = "No Fall Damage"
---L.item_no_fall_damage_desc = [[Makes you immune to fall damage.]]
---L.item_no_fire_damage = "No Fire Damage"
---L.item_no_fire_damage_desc = [[Makes you immune to fire damage.]]
---L.item_no_hazard_damage = "No Hazard Damage"
---L.item_no_hazard_damage_desc = [[Makes you immune to hazard damage such as posion, radiation and acid.]]
---L.item_no_energy_damage = "No Energy Damage"
---L.item_no_energy_damage_desc = [[Makes you immune to energy damage such as lasers, plasma and lightning.]]
---L.item_no_prop_damage = "No Prop Damage"
---L.item_no_prop_damage_desc = [[Makes you immune to prop damage.]]
---L.item_no_drown_damage = "No Drowning Damage"
---L.item_no_drown_damage_desc = [[Makes you immune to drowning damage.]]
+L.item_speedrun = "Speedrun"
+L.item_speedrun_desc = [[Ti fa il 50% più veloce!]]
+L.item_no_explosion_damage = "No danno Esplosivo"
+L.item_no_explosion_damage_desc = [[Ti rende immune al danno esplosivo.]]
+L.item_no_fall_damage = "No danno da Caduta"
+L.item_no_fall_damage_desc = [[Ti rende immune al danno da caduta.]]
+L.item_no_fire_damage = "No danno da Fuoco"
+L.item_no_fire_damage_desc = [[Ti rende immune al danno da fuoco.]]
+L.item_no_hazard_damage = "No danno da Contaminazione"
+L.item_no_hazard_damage_desc = [[Ti rende immune al danno come veleno, radiazioni e acido.]]
+L.item_no_energy_damage = "No danno Energetico"
+L.item_no_energy_damage_desc = [[Ti rende immune al danno energerico come laser, plasma e fulmini.]]
+L.item_no_prop_damage = "No danni da Prop"
+L.item_no_prop_damage_desc = [[Ti rende immune al danno dei prop.]]
+L.item_no_drown_damage = "No danni da Affogamento"
+L.item_no_drown_damage_desc = [[Ti rende immune al danno da affogamento.]]
 
 -- 2020-04-21
---L.dna_tid_possible = "Scan possible"
---L.dna_tid_impossible = "No scan possible"
---L.dna_screen_ready = "No DNA"
---L.dna_screen_match = "Match"
+L.dna_tid_possible = "Scan possibile"
+L.dna_tid_impossible = "No scan possibile"
+L.dna_screen_ready = "No DNA"
+L.dna_screen_match = "Combacia"
 
 -- 2020-04-30
---L.message_revival_canceled = "Revival canceled."
---L.message_revival_failed = "Revival failed."
---L.message_revival_failed_missing_body = "You have not been revived because your corpse no longer exists."
---L.hud_revival_title = "Time left until revival:"
---L.hud_revival_time = "{time}s"
+L.message_revival_canceled = "Rianimazione cancellata."
+L.message_revival_failed = "Rianimazione fallita."
+L.message_revival_failed_missing_body = "Non sei stato rianimato perchè il tuo corpo non esiste più."
+L.hud_revival_title = "Tempo rimasto prima della rianimazione:"
+L.hud_revival_time = "{time} secondi"
 
 -- 2020-05-03
---L.door_destructible = "Door is destructible ({health}HP)"
+L.door_destructible = "Questa porta è distruttibile ({health}HP)"
 
 -- 2020-05-28
---L.confirm_detective_only = "Only detectives can confirm bodies"
---L.inspect_detective_only = "Only detectives can inspect bodies"
---L.corpse_hint_no_inspect = "Only detectives can search this body."
---L.corpse_hint_inspect_only = "Press [{usekey}] to search. Only detectives can confirm the body."
---L.corpse_hint_inspect_only_credits = "Press [{usekey}] to receive credits. Only detectives can search this body."
+L.confirm_detective_only = "Solo i detective possono confermare i cadaveri."
+L.inspect_detective_only = "Solo i detective possono ispezionare i cadaveri."
+L.corpse_hint_no_inspect = "Solo i detective possono ispezione questo cadavere."
+L.corpse_hint_inspect_only = "Premi [{usekey}] per ispezionare. Solo i detective possono confermare questo cadavere."
+L.corpse_hint_inspect_only_credits = "Premi [{usekey}] per ricevere i crediti. Solo i detective possono ispezionare questo cadavere."
 
 -- 2020-06-04
 --L.label_bind_disguiser = "Toggle disguiser"
@@ -1278,9 +1278,11 @@ L.button_close = "Chiudi"
 
 --L.vis_help_pri = "Drop the activated device."
 
---L.decoy_help_pri = "Plant the Decoy."
+L.vis_help_pri = "Getta il dispositivo."
+
+L.decoy_help_pri = "Piazza un esca."
 
 -- 2020-08-07
---L.pickup_error_spec = "You cannot pick this up as a spectator."
---L.pickup_error_owns = "You cannot pick this up because you already have this weapon."
---L.pickup_error_noslot = "You cannot pick this up because you have no free slot available."
+L.pickup_error_spec = "Non puoi prendere questo da spettatore."
+L.pickup_error_owns = "Non puoi prendere questo perché tu hai già quest'arma."
+L.pickup_error_noslot = "Non puoi prendere questo perchè non hai nessuno slot libero."
