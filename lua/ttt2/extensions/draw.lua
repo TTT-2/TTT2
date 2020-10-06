@@ -64,8 +64,7 @@ local drawOutlinedBox = draw.OutlinedBox
 function draw.OutlinedShadowedBox(x, y, w, h, t, color)
 	color = color or COLOR_WHITE
 
-	local tmpCol = color.r + color.g + color.b > 200 and tableCopy(colorShadowDark) or tableCopy(colorShadowBright)
-	tmpCol.a = mathRound(tmpCol.a * (color.a / 255))
+	local tmpCol = GetShadowColor(color)
 
 	drawOutlinedBox(x + 2, y + 2, w, h, t, tmpCol)
 	drawOutlinedBox(x + 1, y + 1, w, h, t, tmpCol)
@@ -182,8 +181,7 @@ local drawLine = draw.Line
 function draw.ShadowedLine(startX, startY, endX, endY, color)
 	color = color or COLOR_WHITE
 
-	local tmpCol = color.r + color.g + color.b > 200 and tableCopy(colorShadowDark) or tableCopy(colorShadowBright)
-	tmpCol.a = mathRound(tmpCol.a * (color.a / 255))
+	local tmpCol = GetShadowColor(color)
 
 	drawLine(startX + 2, startY + 2, endX + 2, endY + 2, tmpCol)
 	drawLine(startX + 1, startY + 1, endX + 1, endY + 1, tmpCol)
@@ -237,8 +235,7 @@ function draw.FilteredShadowedTexture(x, y, w, h, material, alpha, color, scale)
 	color = color or COLOR_WHITE
 	scale = scale or 1
 
-	local tmpCol = color.r + color.g + color.b > 200 and tableCopy(colorShadowDark) or tableCopy(colorShadowBright)
-	tmpCol.a = mathRound(tmpCol.a * (alpha / 255))
+	local tmpCol = GetShadowColor(color)
 
 	local shift_tex_1 = mathRound(scale)
 	local shift_tex_2 = mathRound(2 * scale)
