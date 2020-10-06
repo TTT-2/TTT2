@@ -11,6 +11,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Introduced a global scale factor based on screen resolution to scale HUD elements accordingly
 - Added automatical scale factor change on resolution change that works even if the resolution was changed while TTT2 wasn't loaded
 - Updated Italian localization (by @ThePlatynumGhost)
+
 ### Changed
 
 - the F1 menu is completely overhauled
