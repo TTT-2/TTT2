@@ -710,7 +710,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
 
 	-- Score only when there is a round active.
 	if GetRoundState() == ROUND_ACTIVE then
-		SCORE:HandleKill(ply, attacker, dmginfo)
+		events.Trigger(EVENT_KILL, ply, attacker, dmginfo)
 
 		if IsValid(attacker) and attacker:IsPlayer() then
 			attacker:RecordKill(ply)
