@@ -13,42 +13,44 @@ local table = table
 local IsValid = IsValid
 local hook = hook
 
-local enable_spectatorsoutline = CreateClientConVar("ttt2_enable_spectatorsoutline", "1", true, true)
-local enable_overheadicons = CreateClientConVar("ttt2_enable_overheadicons", "1", true, true)
-
+local cvMinimalisticTid = CreateClientConVar("ttt_minimal_targetid", "0", FCVAR_ARCHIVE)
+local cvDrawHalo = CreateClientConVar("ttt_entity_draw_halo", "1", true, false)
+local cvEnableSpectatorsoutline = CreateClientConVar("ttt2_cvEnableSpectatorsoutline", "1", true, true)
+local cvEnableOverheadicons = CreateClientConVar("ttt2_cvEnableOverheadicons", "1", true, true)
 local cvDeteOnlyConfirm = GetConVar("ttt2_confirm_detective_only")
 local cvDeteOnlyInspect = GetConVar("ttt2_inspect_detective_only")
 
-surface.CreateFont("TargetID_Key", {font = "Trebuchet24", size = 26, weight = 900})
-surface.CreateFont("TargetID_Title", {font = "Trebuchet24", size = 20, weight = 900})
-surface.CreateFont("TargetID_Subtitle", {font = "Trebuchet24", size = 17, weight = 300})
-surface.CreateFont("TargetID_Description", {font = "Trebuchet24", size = 15, weight = 300})
+surface.CreateAdvancedFont("TargetID_Key", {font = "Trebuchet24", size = 26, weight = 900})
+surface.CreateAdvancedFont("TargetID_Title", {font = "Trebuchet24", size = 20, weight = 900})
+surface.CreateAdvancedFont("TargetID_Subtitle", {font = "Trebuchet24", size = 17, weight = 300})
+surface.CreateAdvancedFont("TargetID_Description", {font = "Trebuchet24", size = 15, weight = 300})
 
 -- keep this font for compatibility reasons
 surface.CreateFont("TargetIDSmall2", {font = "TargetID", size = 16, weight = 1000})
 
-local minimalist = CreateClientConVar("ttt_minimal_targetid", "0", FCVAR_ARCHIVE)
-local cv_draw_halo = CreateClientConVar("ttt_entity_draw_halo", "1", true, false)
 local MAX_TRACE_LENGTH = math.sqrt(3) * 32768
-local color_blacktrans = Color(0, 0, 0, 180)
+
+-- cache colors
+local colorBlacktrans = Color(0, 0, 0, 180)
+local colorKeyBack = Color(0, 0, 0, 150)
 
 -- cached materials for overhead icons and outlines
-local propspec_outline = Material("models/props_combine/portalball001_sheet")
-local base = Material("vgui/ttt/dynamic/sprite_base")
-local base_overlay = Material("vgui/ttt/dynamic/sprite_base_overlay")
+local materialPropspecOutline = Material("models/props_combine/portalball001_sheet")
+local materialBase = Material("vgui/ttt/dynamic/sprite_base")
+local materialBaseOverlay = Material("vgui/ttt/dynamic/sprite_materialBaseOverlay")
 
 -- materials for targetid
-local ring_tex = Material("effects/select_ring")
-local icon_role_not_known = Material("vgui/ttt/tid/tid_big_role_not_known")
-local icon_corpse = Material("vgui/ttt/tid/tid_big_corpse")
-local icon_tbutton = Material("vgui/ttt/tid/tid_big_tbutton_pointer")
-local icon_tid_credits = Material("vgui/ttt/tid/tid_credits")
-local icon_tid_detective = Material("vgui/ttt/tid/tid_detective")
-local icon_tid_locked = Material("vgui/ttt/tid/tid_locked")
-local icon_tid_auto_close = Material("vgui/ttt/tid/tid_auto_close")
+local materialRing = Material("effects/select_ring")
+local materialRoleUnknown = Material("vgui/ttt/tid/tid_big_role_not_known")
+local materialCorpse = Material("vgui/ttt/tid/tid_big_corpse")
+local materialTButton = Material("vgui/ttt/tid/tid_big_tbutton_pointer")
+local materialCredits = Material("vgui/ttt/tid/tid_credits")
+local materialDetective = Material("vgui/ttt/tid/tid_detective")
+local materialLocked = Material("vgui/ttt/tid/tid_locked")
+local materialAutoClose = Material("vgui/ttt/tid/tid_auto_close")
 local materialDoor = Material("vgui/ttt/tid/tid_big_door")
 local materialDestructible = Material("vgui/ttt/tid/tid_destructible")
-local icon_tid_dna = Material("vgui/ttt/dnascanner/dna_hud")
+local materialDNATargetID = Material("vgui/ttt/dnascanner/dna_hud")
 local materialDisguised = Material("vgui/ttt/perks/hud_disguiser.png")
 
 ---
@@ -104,16 +106,16 @@ function DrawOverheadRoleIcon(ply, ricon, rcolor)
 	render.PushFilterMin(TEXFILTER.LINEAR)
 
 	-- draw color
-	render.SetMaterial(base)
+	render.SetMaterial(materialBase)
 	render.DrawQuadEasy(pos, dir, 10, 10, rcolor, 180)
 
 	-- draw border overlay
-	render.SetMaterial(base_overlay)
+	render.SetMaterial(materialBaseOverlay)
 	render.DrawQuadEasy(pos, dir, 10, 10, COLOR_WHITE, 180)
 
 	-- draw shadow
 	render.SetMaterial(ricon)
-	render.DrawQuadEasy(Vector(pos.x, pos.y, pos.z + 0.2), dir, 8, 8, color_blacktrans, 180)
+	render.DrawQuadEasy(Vector(pos.x, pos.y, pos.z + 0.2), dir, 8, 8, colorBlacktrans, 180)
 
 	-- draw icon
 	render.SetMaterial(ricon)
@@ -140,7 +142,7 @@ function GM:PostDrawTranslucentRenderables(bDrawingDepth, bDrawingSkybox)
 	local client = LocalPlayer()
 	local plys = GetPlayers()
 
-	if client:Team() == TEAM_SPEC and enable_spectatorsoutline:GetBool() then
+	if client:Team() == TEAM_SPEC and cvEnableSpectatorsoutline:GetBool() then
 		cam.Start3D(EyePos(), EyeAngles())
 
 		for i = 1, #plys do
@@ -148,7 +150,7 @@ function GM:PostDrawTranslucentRenderables(bDrawingDepth, bDrawingSkybox)
 			local tgt = ply:GetObserverTarget()
 
 			if IsValid(tgt) and tgt:GetNWEntity("spec_owner", nil) == ply then
-				render.MaterialOverride(propspec_outline)
+				render.MaterialOverride(materialPropspecOutline)
 				render.SuppressEngineLighting(true)
 				render.SetColorModulation(1, 0.5, 0)
 
@@ -165,7 +167,7 @@ function GM:PostDrawTranslucentRenderables(bDrawingDepth, bDrawingSkybox)
 	end
 
 	-- OVERHEAD ICONS
-	if not enable_overheadicons:GetBool() then return end
+	if not cvEnableOverheadicons:GetBool() then return end
 
 	for i = 1, #plys do
 		local ply = plys[i]
@@ -311,8 +313,8 @@ function GM:HUDDrawTargetID()
 			desc = {}
 		},
 		refPosition = {
-			x = math.Round(0.5 * ScrW(), 0),
-			y = math.Round(0.5 * ScrH(), 0) + 42
+			x = math.Round(0.5 * ScrW() / appearance.GetGlobalScale(), 0),
+			y = math.Round(0.5 * ScrH() / appearance.GetGlobalScale(), 0) + 42
 		}
 	}
 
@@ -331,7 +333,7 @@ function GM:HUDDrawTargetID()
 	hook.Run("TTTRenderEntityInfo", tData)
 
 	-- draws an outline around the entity if defined
-	if params.drawOutline and cv_draw_halo:GetBool() then
+	if params.drawOutline and cvDrawHalo:GetBool() then
 		outline.Add(
 			data.ent,
 			appearance.SelectFocusColor(params.outlineColor),
@@ -361,11 +363,10 @@ function GM:HUDDrawTargetID()
 	local key_string_y = key_box_y + math.Round(0.5 * key_box_h) - 1
 
 	if params.displayInfo.key then
-		surface.SetDrawColor(0, 0, 0, 150)
-		surface.DrawRect(key_box_x, key_box_y, key_box_w, key_box_h)
+		drawsc.Box(key_box_x, key_box_y, key_box_w, key_box_h, colorKeyBack)
 
-		draw.OutlinedShadowedBox(key_box_x, key_box_y, key_box_w, key_box_h, 1, COLOR_WHITE)
-		draw.ShadowedText(key_string, "TargetID_Key", key_string_x, key_string_y, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		drawsc.OutlinedShadowedBox(key_box_x, key_box_y, key_box_w, key_box_h, 1, COLOR_WHITE)
+		drawsc.AdvancedShadowedText(key_string, "TargetID_Key", key_string_x, key_string_y, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 
 	-- draw icon
@@ -380,7 +381,7 @@ function GM:HUDDrawTargetID()
 			local icon = params.displayInfo.icon[i]
 			local color = icon.color or COLOR_WHITE
 
-			draw.FilteredShadowedTexture(icon_x, icon_y, key_box_h, key_box_h, icon.material, color.a, color)
+			drawsc.FilteredShadowedTexture(icon_x, icon_y, key_box_h, key_box_h, icon.material, color.a, color)
 
 			icon_y = icon_y + key_box_h
 		end
@@ -395,12 +396,12 @@ function GM:HUDDrawTargetID()
 	local title_string_y = key_box_y + title_string_h - 4
 
 	for i = 1, #params.displayInfo.title.icons do
-		draw.FilteredShadowedTexture(title_string_x, title_string_y - 16, 14, 14, params.displayInfo.title.icons[i], params.displayInfo.title.color.a, params.displayInfo.title.color)
+		drawsc.FilteredShadowedTexture(title_string_x, title_string_y - 16, 14, 14, params.displayInfo.title.icons[i], params.displayInfo.title.color.a, params.displayInfo.title.color)
 
 		title_string_x = title_string_x + 18
 	end
 
-	draw.ShadowedText(title_string, "TargetID_Title", title_string_x, title_string_y, params.displayInfo.title.color, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+	drawsc.AdvancedShadowedText(title_string, "TargetID_Title", title_string_x, title_string_y, params.displayInfo.title.color, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 
 	-- draw subtitle
 	local subtitle_string = params.displayInfo.subtitle.text or ""
@@ -409,17 +410,17 @@ function GM:HUDDrawTargetID()
 	local subtitle_string_y = key_box_y + key_box_h + 2
 
 	for i = 1, #params.displayInfo.subtitle.icons do
-		draw.FilteredShadowedTexture(subtitle_string_x, subtitle_string_y - 14, 12, 12, params.displayInfo.subtitle.icons[i], params.displayInfo.subtitle.color.a, params.displayInfo.subtitle.color)
+		drawsc.FilteredShadowedTexture(subtitle_string_x, subtitle_string_y - 14, 12, 12, params.displayInfo.subtitle.icons[i], params.displayInfo.subtitle.color.a, params.displayInfo.subtitle.color)
 
 		subtitle_string_x = subtitle_string_x + 16
 	end
 
-	draw.ShadowedText(subtitle_string, "TargetID_Subtitle", subtitle_string_x, subtitle_string_y, params.displayInfo.subtitle.color, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+	drawsc.AdvancedShadowedText(subtitle_string, "TargetID_Subtitle", subtitle_string_x, subtitle_string_y, params.displayInfo.subtitle.color, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 
-	-- in minimalist mode, no descriptions should be shown
+	-- in cvMinimalisticTid mode, no descriptions should be shown
 	local desc_line_amount, desc_line_h = 0, 0
 
-	if not minimalist:GetBool() then
+	if not cvMinimalisticTid:GetBool() then
 		-- draw description text
 		local desc_lines = params.displayInfo.desc
 
@@ -435,12 +436,12 @@ function GM:HUDDrawTargetID()
 			local desc_string_x_loop = desc_string_x
 
 			for j = 1, #icons do
-				draw.FilteredShadowedTexture(desc_string_x_loop, desc_string_y - 13, 11, 11, icons[j], color.a, color)
+				drawsc.FilteredShadowedTexture(desc_string_x_loop, desc_string_y - 13, 11, 11, icons[j], color.a, color)
 
 				desc_string_x_loop = desc_string_x_loop + 14
 			end
 
-			draw.ShadowedText(text, "TargetID_Description", desc_string_x_loop, desc_string_y, color, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+			drawsc.AdvancedShadowedText(text, "TargetID_Description", desc_string_x_loop, desc_string_y, color, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 			desc_string_y = desc_string_y + desc_line_h
 		end
 	end
@@ -454,7 +455,7 @@ function GM:HUDDrawTargetID()
 
 	local spacer_line_l = (spacer_line_icon_l > spacer_line_text_l) and spacer_line_icon_l or spacer_line_text_l
 
-	draw.ShadowedLine(spacer_line_x, spacer_line_y, spacer_line_x, spacer_line_y + spacer_line_l, COLOR_WHITE)
+	drawsc.ShadowedBox(spacer_line_x, spacer_line_y, 1, spacer_line_l, Z)
 end
 
 ---
@@ -509,9 +510,9 @@ function HUDDrawTargetIDDNAScanner(tData)
 	if ent:IsWeapon() or ent.CanHavePrints or ent:GetNWBool("HasPrints", false)
 		or ent:GetClass() == "prop_ragdoll" and CORPSE.GetPlayerNick(ent, false)
 	then
-		tData:AddDescriptionLine(TryT("dna_tid_possible"), COLOR_GREEN, {icon_tid_dna})
+		tData:AddDescriptionLine(TryT("dna_tid_possible"), COLOR_GREEN, {materialDNATargetID})
 	else
-		tData:AddDescriptionLine(TryT("dna_tid_impossible"), COLOR_RED, {icon_tid_dna})
+		tData:AddDescriptionLine(TryT("dna_tid_impossible"), COLOR_RED, {materialDNATargetID})
 	end
 end
 
@@ -553,13 +554,13 @@ function HUDDrawTargetIDDoors(tData)
 		tData:AddDescriptionLine(
 			TryT("door_locked"),
 			COLOR_ORANGE,
-			{icon_tid_locked}
+			{materialLocked}
 		)
 	elseif ent:DoorAutoCloses() then
 		tData:AddDescriptionLine(
 			TryT("door_auto_closes"),
 			COLOR_SLATEGRAY,
-			{icon_tid_auto_close}
+			{materialAutoClose}
 		)
 	end
 
@@ -593,7 +594,7 @@ function HUDDrawTargetIDTButtons(tData)
 	-- set the subtitle and icon depending on the currently used mode
 	if TBHUD.focus_but.admin and not TBHUD.focus_but.access then
 		tData:AddIcon(
-			icon_tbutton,
+			materialTButton,
 			COLOR_LGRAY
 		)
 
@@ -797,7 +798,7 @@ function HUDDrawTargetIDPlayers(tData)
 	if target_role then
 		local icon_size = 64
 
-		draw.FilteredTexture(math.Round(0.5 * (ScrW() - icon_size)), math.Round(0.5 * (ScrH() - icon_size)), icon_size, icon_size, ring_tex, 200, target_role.color)
+		draw.FilteredTexture(math.Round(0.5 * (ScrW() - icon_size)), math.Round(0.5 * (ScrH() - icon_size)), icon_size, icon_size, materialRing, 200, target_role.color)
 	end
 
 	-- enable targetID rendering
@@ -819,7 +820,7 @@ function HUDDrawTargetIDPlayers(tData)
 
 	-- add icon to the element
 	tData:AddIcon(
-		target_role and target_role.iconMaterial or icon_role_not_known,
+		target_role and target_role.iconMaterial or materialRoleUnknown,
 		target_role and ent:GetRoleColor() or COLOR_SLATEGRAY
 	)
 
@@ -900,7 +901,7 @@ function HUDDrawTargetIDRagdolls(tData)
 
 	-- add icon to the element
 	tData:AddIcon(
-		role_found and role.iconMaterial or icon_corpse,
+		role_found and role.iconMaterial or materialCorpse,
 		role_found and role.color or COLOR_YELLOW
 	)
 
@@ -919,7 +920,7 @@ function HUDDrawTargetIDRagdolls(tData)
 		tData:AddDescriptionLine(
 			TryT("corpse_searched_by_detective"),
 			DETECTIVE.ltcolor,
-			{icon_tid_detective}
+			{materialDetective}
 		)
 	end
 
@@ -928,7 +929,7 @@ function HUDDrawTargetIDRagdolls(tData)
 		tData:AddDescriptionLine(
 			TryT("target_credits"),
 			COLOR_YELLOW,
-			{icon_tid_credits}
+			{materialCredits}
 		)
 	end
 end
