@@ -1222,7 +1222,7 @@ L.button_press_key = "Premi un tasto"
 L.button_save = "Salva"
 L.button_reset = "Reimposta"
 L.button_close = "Chiudi"
---L.button_hud_editor = "HUD Editor"
+L.button_hud_editor = "Modifica HUD"
 
 -- 2020-04-20
 L.item_speedrun = "Speedrun"
@@ -1266,17 +1266,15 @@ L.corpse_hint_inspect_only = "Premi [{usekey}] per ispezionare. Solo i detective
 L.corpse_hint_inspect_only_credits = "Premi [{usekey}] per ricevere i crediti. Solo i detective possono ispezionare questo cadavere."
 
 -- 2020-06-04
---L.label_bind_disguiser = "Toggle disguiser"
+L.label_bind_disguiser = "Abilita travestimento"
 
 -- 2020-06-24
---L.dna_help_primary = "Collect a DNA sample"
---L.dna_help_secondary = "Switch the DNA slot"
---L.dna_help_reload = "Delete a sample"
+L.dna_help_primary = "Colleziona il campione di DNA"
+L.dna_help_secondary = "Cambia lo slot del DNA"
+L.dna_help_reload = "Cancella il campione di DNA"
 
---L.binoc_help_pri = "Identify a body."
---L.binoc_help_sec = "Change zoom level."
-
---L.vis_help_pri = "Drop the activated device."
+L.binoc_help_pri = "Identifica il corpo."
+L.binoc_help_sec = "Cambia livello di zoom."
 
 L.vis_help_pri = "Getta il dispositivo."
 
