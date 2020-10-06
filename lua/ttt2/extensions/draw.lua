@@ -30,7 +30,7 @@ local function GetShadowColor(color)
 end
 
 ---
--- A function to draw an outlined box with a definable width
+-- A function to draw an outlined box with a definable width.
 -- @param number x The x position of the rectangle
 -- @param number y The y position of the rectangle
 -- @param number w The width of the rectangle
@@ -52,7 +52,7 @@ end
 local drawOutlinedBox = draw.OutlinedBox
 
 ---
--- A function to draw an outlined box with a shadow
+-- A function to draw an outlined box with a shadow.
 -- @param number x The x position of the rectangle
 -- @param number y The y position of the rectangle
 -- @param number w The width of the rectangle
@@ -74,7 +74,7 @@ function draw.OutlinedShadowedBox(x, y, w, h, t, color)
 end
 
 ---
--- A function to draw a simple box without a radius
+-- A function to draw a simple rectilinear box.
 -- @param number x The x position to start the box
 -- @param number y The y position to start the box
 -- @param number w The width of the box
@@ -90,7 +90,7 @@ end
 local drawBox = draw.Box
 
 ---
--- A function to draws a simple shadowed box without a corner radius
+-- A function to draws a simple shadowed rectilinear box.
 -- @param number x The x position to start the box
 -- @param number y The y position to start the box
 -- @param number w The width of the box
@@ -115,7 +115,7 @@ function draw.ShadowedBox(x, y, w, h, color, scale)
 end
 
 ---
--- A function to draw a circle outline
+-- A function to draw a circle outline.
 -- @param number x The center x position to start the circle
 -- @param number y The center y position to start the circle
 -- @param number r The radius of the circle
@@ -131,7 +131,7 @@ end
 local drawOutlinedCircle = draw.OutlinedCircle
 
 ---
--- A function to draws a circle outline with a shadow
+-- A function to draws a circle outline with a shadow.
 -- @param number x The center x position to start the circle
 -- @param number y The center y position to start the circle
 -- @param number r The radius of the circle
@@ -155,7 +155,7 @@ function draw.OutlinedShadowedCircle(x, y, r, color, scale)
 end
 
 ---
--- A function to draw an outlined box with a shadow
+-- A function to draw an outlined box with a shadow.
 -- @param number startX The x position to start the line
 -- @param number startY The y position to start the line
 -- @param number endX The x position to end the line
@@ -171,7 +171,7 @@ end
 local drawLine = draw.Line
 
 ---
--- A function to draw an outlined box with a shadow
+-- A function to draw an outlined box with a shadow.
 -- @param number startX The x position to start the line
 -- @param number startY The y position to start the line
 -- @param number endX The x position to end the line
@@ -192,7 +192,7 @@ function draw.ShadowedLine(startX, startY, endX, endY, color)
 end
 
 ---
--- Draws a filtered textured rectangle / image / icon
+-- Draws a filtered textured rectangle / image / icon.
 -- @param number x The vertical position
 -- @param number y The horizontal position
 -- @param number w width The width in reference to the vertical position
@@ -221,7 +221,7 @@ end
 local drawFilteredTexture = draw.FilteredTexture
 
 ---
--- Draws a filtered textured rectangle / image / icon with shadow
+-- Draws a filtered textured rectangle / image / icon with shadow.
 -- @param number x The vertical position
 -- @param number y The horizontal position
 -- @param number w width The width in reference to the vertical position
