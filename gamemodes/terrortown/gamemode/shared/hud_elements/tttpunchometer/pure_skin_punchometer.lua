@@ -77,7 +77,7 @@ if CLIENT then
 	end
 
 	function HUDELEMENT:PerformLayout()
-		self.scale = self:GetHUDScale()
+		self.scale = appearance.GetGlobalScale()
 		self.basecolor = self:GetHUDBasecolor()
 		self.pad = pad * self.scale
 		self.margin = margin * self.scale

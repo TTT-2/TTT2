@@ -183,6 +183,15 @@ function GM:SetupMove(ply, mv, cmd)
 	net.SendToServer()
 
 	hook.Run("TTT2PlayerReady", ply)
+
+	-- check if a resolution change happened while
+	-- the gamemode was inactive
+	oldScrW = appearance.GetLastWidth()
+	oldScrH = appearance.GetLastHeight()
+
+	if oldScrH ~= ScrH() or oldScrW ~= ScrW() then
+		hook.Run("OnScreenSizeChanged", oldScrW, oldScrH)
+	end
 end
 
 ---

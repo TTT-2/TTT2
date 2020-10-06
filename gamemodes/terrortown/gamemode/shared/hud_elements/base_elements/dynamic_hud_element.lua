@@ -18,10 +18,9 @@ if CLIENT then
 	-- Returns the current @{HUD} scale (for this element)
 	-- @return[default=1.0] number
 	-- @realm client
+	-- @deprecated
 	function HUDELEMENT:GetHUDScale()
-		local hud = huds.GetStored(HUDManager.GetHUD())
-
-		return (hud and hud.scale) or 1.0
+		return appearance.GetGlobalScale()
 	end
 
 	---

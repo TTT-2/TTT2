@@ -87,10 +87,10 @@ local function VoiceTeamTryDisable()
 end
 
 -- register a binding for the general voicechat
-bind.Register("ttt2_voice", VoiceTryEnable, VoiceTryDisable, "TTT2 Bindings", "f1_bind_voice", input.GetKeyCode(input.LookupBinding("+voicerecord") or KEY_X))
+bind.Register("ttt2_voice", VoiceTryEnable, VoiceTryDisable, "header_bindings_ttt2", "label_bind_voice", input.GetKeyCode(input.LookupBinding("+voicerecord") or KEY_X))
 
 -- register a binding for the team voicechat
-bind.Register("ttt2_voice_team", VoiceTeamTryEnable, VoiceTeamTryDisable, "TTT2 Bindings", "f1_bind_voice_team", input.GetKeyCode(input.LookupBinding("+speed") or KEY_LSHIFT))
+bind.Register("ttt2_voice_team", VoiceTeamTryEnable, VoiceTeamTryDisable, "header_bindings_ttt2", "label_bind_voice_team", input.GetKeyCode(input.LookupBinding("+speed") or KEY_LSHIFT))
 
 -- 255 at 100
 -- 5 at 5000
