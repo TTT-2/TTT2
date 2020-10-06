@@ -8,7 +8,7 @@ AddCSLuaFile()
 
 if SERVER then return end
 
-local GetGlobalScale = GLAPP.GetGlobalScale
+local GetGlobalScale = appearance.GetGlobalScale
 
 local mRound = math.Round
 local drawOutlinedBox = draw.OutlinedBox

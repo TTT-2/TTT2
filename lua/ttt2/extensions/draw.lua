@@ -10,11 +10,14 @@ if SERVER then return end
 local render = render
 local surface = surface
 local draw = draw
+local drawSimpleText = draw.SimpleText
+local table = table
+local cam = cam
 local tableCopy = table.Copy
 local mathRound = math.Round
 
-local shadowColorDark = Color(0, 0, 0, 220)
-local shadowColorWhite = Color(0, 0, 0, 75)
+local colorShadowDark = Color(0, 0, 0, 220)
+local colorShadowBright = Color(0, 0, 0, 75)
 
 local materialBlurScreen = Material("pp/blurscreen")
 
@@ -61,7 +64,7 @@ local drawOutlinedBox = draw.OutlinedBox
 function draw.OutlinedShadowedBox(x, y, w, h, t, color)
 	color = color or COLOR_WHITE
 
-	local tmpCol = color.r + color.g + color.b > 200 and tableCopy(shadowColorDark) or tableCopy(shadowColorWhite)
+	local tmpCol = color.r + color.g + color.b > 200 and tableCopy(colorShadowDark) or tableCopy(colorShadowBright)
 	tmpCol.a = mathRound(tmpCol.a * (color.a / 255))
 
 	drawOutlinedBox(x + 2, y + 2, w, h, t, tmpCol)
@@ -84,6 +87,33 @@ function draw.Box(x, y, w, h, color)
 	surface.DrawRect(x, y, w, h)
 end
 
+local drawBox = draw.Box
+
+---
+-- A function to draws a simple shadowed box without a corner radius
+-- @param number x The x position to start the box
+-- @param number y The y position to start the box
+-- @param number w The width of the box
+-- @param number h The height of the box
+-- @param [default=Color(255,255,255,255)]Color color The color of the box
+-- @param [default=1.0]number scale A scaling factor that is used for the shadows
+-- @2D
+-- @realm client
+function draw.ShadowedBox(x, y, w, h, color, scale)
+	color = color or COLOR_WHITE
+	scale = scale or 1
+
+	local shift1 = mathRound(scale)
+	local shift2 = mathRound(scale * 2)
+
+	local tmpCol = GetShadowColor(color)
+
+	drawBox(x + shift2, y + shift2, w, h, tmpCol)
+	drawBox(x + shift1, y + shift1, w, h, tmpCol)
+	drawBox(x + shift1, y + shift1, w, h, tmpCol)
+	drawBox(x, y, w, h, t, color)
+end
+
 ---
 -- A function to draw a circle outline
 -- @param number x The center x position to start the circle
@@ -96,6 +126,32 @@ function draw.OutlinedCircle(x, y, r, color)
 	color = color or COLOR_WHITE
 
 	surface.DrawCircle(x, y, r, color.r, color.g, color.b, color.a)
+end
+
+local drawOutlinedCircle = draw.OutlinedCircle
+
+---
+-- A function to draws a circle outline with a shadow
+-- @param number x The center x position to start the circle
+-- @param number y The center y position to start the circle
+-- @param number r The radius of the circle
+-- @param [default=Color(255,255,255,255)]Color color The color of the circle
+-- @param [default=1.0]number scale A scaling factor that is used for the shadows
+-- @2D
+-- @realm client
+function draw.OutlinedShadowedCircle(x, y, r, color, scale)
+	color = color or COLOR_WHITE
+	scale = scale or 1
+
+	local shift1 = mathRound(scale)
+	local shift2 = mathRound(scale * 2)
+
+	local tmpCol = GetShadowColor(color)
+
+	drawOutlinedCircle(x + shift2, y + shift2, r, tmpCol)
+	drawOutlinedCircle(x + shift1, y + shift1, r, tmpCol)
+	drawOutlinedCircle(x + shift1, y + shift1, r, tmpCol)
+	drawOutlinedCircle(x, y, r, color)
 end
 
 ---
@@ -126,7 +182,7 @@ local drawLine = draw.Line
 function draw.ShadowedLine(startX, startY, endX, endY, color)
 	color = color or COLOR_WHITE
 
-	local tmpCol = color.r + color.g + color.b > 200 and tableCopy(shadowColorDark) or tableCopy(shadowColorWhite)
+	local tmpCol = color.r + color.g + color.b > 200 and tableCopy(colorShadowDark) or tableCopy(colorShadowBright)
 	tmpCol.a = mathRound(tmpCol.a * (color.a / 255))
 
 	drawLine(startX + 2, startY + 2, endX + 2, endY + 2, tmpCol)
@@ -181,7 +237,7 @@ function draw.FilteredShadowedTexture(x, y, w, h, material, alpha, color, scale)
 	color = color or COLOR_WHITE
 	scale = scale or 1
 
-	local tmpCol = color.r + color.g + color.b > 200 and tableCopy(shadowColorDark) or tableCopy(shadowColorWhite)
+	local tmpCol = color.r + color.g + color.b > 200 and tableCopy(colorShadowDark) or tableCopy(colorShadowBright)
 	tmpCol.a = mathRound(tmpCol.a * (alpha / 255))
 
 	local shift_tex_1 = mathRound(scale)
