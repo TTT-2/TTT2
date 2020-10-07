@@ -1207,7 +1207,7 @@ function BeginRound()
 	timer.Simple(1, SendFullStateUpdate)
 	timer.Simple(10, SendFullStateUpdate)
 
-	SCORE:HandleSelection() -- log traitors and detectives
+	events.Trigger(EVENT_SELECTED)
 
 	-- Give the StateUpdate messages ample time to arrive
 	timer.Simple(1.5, TellTraitorsAboutTraitors)
