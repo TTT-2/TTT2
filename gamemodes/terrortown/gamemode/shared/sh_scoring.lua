@@ -140,7 +140,7 @@ function ScoreTeamBonus(scores, wintype)
 			end
 		end
 
-		bonus[id] = (alive[team] or 0) + math.ceil(others * (roleData.surviveBonus or 0))
+		bonus[id] = (alive[team] or 0) + math.ceil(others * (roleData.scoreSurviveBonusMultiplier or 0))
 	end
 
 	-- running down the clock must never be beneficial for traitors

@@ -609,7 +609,7 @@ end
 function SetRoundState(state)
 	GAMEMODE.round_state = state
 
-	SCORE:RoundStateChange(state)
+	events.Trigger(EVENT_GAME, state)
 
 	SendRoundState(state)
 end
@@ -1345,16 +1345,10 @@ function EndRound(result)
 
 	KARMA.RoundEnd()
 
-	-- now handle potentially error prone scoring stuff
-
-	-- register an end of round event
-	SCORE:RoundComplete(result)
-
-	-- update player scores
-	SCORE:ApplyEventLogScores(result)
+	events.Trigger(EVENT_FINISHED, result)
 
 	-- send the clients the round log, players will be shown the report
-	SCORE:StreamToClients()
+	--SCORE:StreamToClients()
 
 	-- server plugins might want to start a map vote here or something
 	-- these hooks are not used by TTT internally

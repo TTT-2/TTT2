@@ -16,6 +16,13 @@ ROLE.scoreKillsMultiplier = 0
 -- the amount of score points gained by confirming a body
 ROLE.scoreBodyFoundMuliplier = 1
 
+-- the amount of score points gained by surviving a round
+ROLE.scoreSurviveBonusMultiplier = 0
+
+-- the amount of score points gained by beeing alive if the
+-- round ended with nobody winning, ususally a negative number
+ROLE.scoreTimelimitMultiplier = 0
+
 ---
 -- This function is called before initializing a @{ROLE}, but after all
 -- global variables like "ROLE_TRAITOR" have been initialized.
