@@ -42,7 +42,7 @@ end
 -- @param string id The id of the registered @{STATUS}
 -- @param number duration The duration of the @{STATUS}. If the time elapsed,
 -- the @{STATUS} will be removed automatically
--- @param[default=false] boolean showDuration Wether the dureation should be shown
+-- @param[default=false] boolean showDuration Whether the duration should be shown
 -- @param[default=1] number active_icon The numeric id of a specific status icon
 -- @realm server
 function STATUS:AddTimedStatus(ply, id, duration, showDuration, active_icon)

@@ -4,16 +4,12 @@
 -- some micro-optimizations (localizing globals)
 local os = os
 local hook = hook
-local IsValid = IsValid
-local vgui = vgui
-local draw = draw
 local table = table
 
 -- internal
 local changesVersion = CreateClientConVar("changes_version", "v0.0.0.0")
-local btnPanelColor = Color(22, 42, 57)
 
-local changesPanel, changes, currentVersion
+local changes, currentVersion
 
 ---
 -- Adds a change into the changes list
@@ -30,31 +26,6 @@ function AddChange(version, text, date)
 
 	currentVersion = version
 end
-
-local htmlStart = [[
-	<head>
-		<style>
-			body {
-				font-family: Verdana, Trebuchet;
-				background-color: rgb(22, 42, 57);
-				color: white;
-				font-weight: 100;
-			}
-			body * {
-				font-size: 13pt;
-			}
-			h1 {
-				font-size: 16pt;
-				text-decoration: underline;
-			}
-		</style>
-	</head>
-	<body>
-]]
-
-local htmlEnd = [[
-	</body>
-]]
 
 ---
 -- Creates the changes list
@@ -832,114 +803,25 @@ function CreateChanges()
 	hook.Run("TTT2AddChange", changes, currentVersion)
 end
 
----
--- Creates the HTML panel
--- @param PANEL panel
--- @param table change
--- @realm client
--- @internal
-local function MakePanel(panel, change)
-	local header = "<h1>" .. change.version .. " Update"
-
-	if change.date > 0 then
-		header = header .. " <i> - (date: " .. os.date("%Y/%m/%d", change.date) .. ")</i>"
-	end
-
-	header = header .. "</h1>"
-
-	local html = vgui.Create("DHTML", panel)
-
-	html:SetHTML(htmlStart .. header .. change.text .. htmlEnd)
-	html:Dock(FILL)
-	html:DockMargin(10, 10, 10, 10)
-
-	panel.htmlSheet = html
-end
-
-local function SortChanges(a, b)
-	if a.date < 0 and b.date < 0 then
-		return a.date < b.date
-	end
-
-	return a.date > b.date
-end
-
----
--- Displays the changes window
--- @realm client
-function ShowChanges()
-	if IsValid(changesPanel) then
-		changesPanel:Remove()
-
-		return
-	end
-
+function GetSortedChanges()
 	CreateChanges()
 
-	local frame = vgui.Create("DFrame")
-	frame:SetSize(ScrW() * 0.8, ScrH() * 0.8)
-	frame:Center()
-	frame:SetTitle("Update " .. currentVersion)
-	frame:SetVisible(true)
-	frame:SetDraggable(true)
-	frame:ShowCloseButton(true)
-	frame:SetMouseInputEnabled(true)
-	frame:SetDeleteOnClose(true)
-
-	local sheet = vgui.Create("DColumnSheet", frame)
-	sheet:Dock(FILL)
-
-	sheet.Navigation:SetWidth(256)
-
 	-- sort changes list by date
-	table.sort(changes, SortChanges)
-
-	for i = 1, #changes do
-		local change = changes[i]
-
-		local panel = vgui.Create("DPanel", sheet)
-		panel:Dock(FILL)
-
-		panel.Paint = function(slf, w, h)
-			draw.RoundedBox(4, 0, 0, w, h, btnPanelColor)
+	table.sort(changes, function(a, b)
+		if a.date < 0 and b.date < 0 then
+			return a.date < b.date
+		else
+			return a.date > b.date
 		end
+	end)
 
-		local leftBtn = sheet:AddSheet(change.version, panel).Button
-
-		local oldClick = leftBtn.DoClick
-		leftBtn.DoClick = function(slf)
-			if currentVersion == change.version then return end
-
-			oldClick(slf)
-
-			frame:SetTitle("TTT2 Update - " .. change.version)
-
-			if not panel.htmlSheet then
-				MakePanel(panel, change)
-			end
-
-			currentVersion = change.version
-		end
-
-		if change.version == currentVersion then
-			MakePanel(panel, change)
-
-			sheet:SetActiveButton(leftBtn)
-		end
-	end
-
-	frame:MakePopup()
-	frame:SetKeyboardInputEnabled(false)
-
-	changesPanel = frame
-
-	return changesPanel
+	return changes
 end
 
 net.Receive("TTT2DevChanges", function(len)
 	if changesVersion:GetString() == GAMEMODE.Version then return end
 
-	ShowChanges()
+	--ShowChanges()
 
 	RunConsoleCommand("changes_version", GAMEMODE.Version)
 end)
