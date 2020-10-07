@@ -17,7 +17,7 @@ local ormodel = {}
 -- @param string tableName The name of the table in the database to create a model for.
 -- @param[opt] boolean force If set to `true` the function will not return a cached version of the model.
 -- @realm shared
--- @return table The model of the database table.
+-- @return ormmodel The model of the database table.
 function orm.Make(tableName, force)
 
 	if IsValid(orm[tableName]) and not force then return orm[tableName] end
@@ -73,6 +73,7 @@ end
 
 ---
 -- Deletes the given object from the database storage.
+-- @return nil|false Returns false if an error occurred, nil otherwise.
 function ormodel:Delete()
 	local where = {}
 	local primaryKey = self._primaryKey
@@ -90,7 +91,7 @@ end
 -- Retrieves a specific object by their primarykey from the database.
 -- @param number|string|table primaryValue The value(s) of the primarykey to search for.
 -- @note In the case of multiple columns in the primarykey you have to specify the corresponding values in the same order.
--- @return table|boolean|nil Returns the table of the found object. Returns `false` if the number of supplied primaryvalues does not match the number of elements in the primarykey. Returns `nil` if no object is found.
+-- @return ormobject|boolean|nil Returns the table of the found object. Returns `false` if the number of supplied primaryvalues does not match the number of elements in the primarykey. Returns `nil` if no object is found.
 function ormodel:Find(primaryValue)
 	local where = {}
 	local primaryKey = self._primaryKey
@@ -116,8 +117,8 @@ end
 
 ---
 -- Creates a new object of the model.
--- @param[opt] table data preexisting data the model should be initialized with.
--- @return table The created object.
+-- @param[opt] table data Preexisting data the object should be initialized with.
+-- @return ormobject The created object.
 function ormodel:New(data)
 	local object = data or {}
 
@@ -134,6 +135,7 @@ end
 
 ---
 -- Saves the data of the given object to the database storage.
+-- @return nil|false Returns false if an error occurred, nil otherwise.
 function ormodel:Save()
 	local query = "INSERT INTO " .. sql.SQLIdent(self._tableName) .. "("
 	local valueList = {nil, nil}
