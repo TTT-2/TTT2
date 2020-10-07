@@ -659,6 +659,10 @@ function CORPSE.WasHeadshot(rag)
 	return IsValid(rag) and rag.was_headshot
 end
 
+function CORPSE.GetDeathTime(rag)
+	return rag.time or 0
+end
+
 hook.Add("ShouldCollide", "TTT2RagdollCollide", function(ent1, ent2)
 	if cvRagCollide:GetBool() then return end
 

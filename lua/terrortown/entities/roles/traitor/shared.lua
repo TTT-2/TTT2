@@ -14,6 +14,7 @@ function ROLE:PreInitialize()
 	self.surviveBonus = 0.5
 	self.scoreKillsMultiplier = 5
 	self.scoreTeamKillsMultiplier = -16
+	self.scoreBodyFoundMuliplier = 0
 	self.fallbackTable = {}
 
 	-- conVarData

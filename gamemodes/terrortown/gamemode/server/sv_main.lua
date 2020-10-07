@@ -384,7 +384,7 @@ function GM:InitPostEntity()
 
 		CreateEquipment(wep) -- init weapons
 
-		wep.CanBuy = {}	-- reset normal weapons equipment
+		wep.CanBuy = {} -- reset normal weapons equipment
 	end
 
 	-- init hudelements fns
@@ -433,8 +433,6 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:PostGamemodeLoaded
 -- @local
 function GM:PostGamemodeLoaded()
-	print("----------------------------------------------------- POST GAMEMODE LOADED")
-
 	events.OnLoaded()
 end
 

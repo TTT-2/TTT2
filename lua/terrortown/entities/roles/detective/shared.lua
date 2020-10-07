@@ -12,6 +12,7 @@ function ROLE:PreInitialize()
 
 	self.scoreKillsMultiplier = 1
 	self.scoreTeamKillsMultiplier = -8
+	self.scoreBodyFoundMuliplier = 3
 	self.fallbackTable = {}
 	self.unknownTeam = true
 

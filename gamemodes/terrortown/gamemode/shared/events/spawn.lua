@@ -7,7 +7,7 @@ function EVENT:Trigger()
 
 end
 
-function EVENT:Score()
+function EVENT:Score(event)
 
 end
 
