@@ -74,6 +74,11 @@ if CLIENT then
 			hud = Material("vgui/ttt/perks/hud_disguiser.png"),
 			type = "good"
 		})
+
+		bind.Register("ttt2_disguiser_toggle", function()
+			WEPS.DisguiseToggle(LocalPlayer())
+		end,
+		nil, "header_bindings_ttt2", "label_bind_disguiser", KEY_PAD_ENTER)
 	end)
 end
 

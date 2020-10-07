@@ -56,3 +56,11 @@ function GM:HUDPaintBackground()
 		surface.DrawTexturedRect(0, 0, ScrW(), ScrH())
 	end
 end
+
+---
+-- Returns an indexed table with the names of all themes
+-- @return table A table with names of all themes
+-- @realm client
+function DMGINDICATOR.GetThemeNames()
+	return table.GetKeys(DMGINDICATOR.themes)
+end

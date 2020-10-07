@@ -11,7 +11,6 @@ DEFINE_BASECLASS(base)
 HUDELEMENT.Base = base
 
 if CLIENT then
-	local ttt_health_label = CreateClientConVar("ttt_health_label", "0", true)
 	local hudTeamicon = CreateClientConVar("ttt2_base_hud_teamicon", "1")
 
 	local x = 0
@@ -70,12 +69,6 @@ if CLIENT then
 
 			self:PaintBar(x + margin, health_y, bar_width, bar_height, self.health_colors, health / client:GetMaxHealth())
 			self:ShadowedText(health_string, "HealthAmmo", x + bar_width, health_y, COLOR_WHITE, TEXT_ALIGN_RIGHT, TEXT_ALIGN_RIGHT)
-
-			if ttt_health_label:GetBool() then
-				local health_status = util.HealthToString(health, client:GetMaxHealth())
-
-				draw.SimpleText(L[health_status], "TabLarge", x + margin * 2, health_y + bar_height * 0.5, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-			end
 
 			-- Draw ammo
 			local ammo_y = health_y + bar_height + margin
