@@ -130,15 +130,17 @@ function GM:PlayerSpawn(ply)
 
 	ply:SetupHands()
 
-	SCORE:HandleSpawn(ply)
-
 	ply:SetLastSpawnPosition(ply:GetPos())
 	ply:SetLastDeathPosition(nil)
 
-	-- a function to handle the rolespecific stuff that should be done on
-	-- rolechange and respawn (while a round is active)
 	if ply:IsActive() then
+		-- a function to handle the rolespecific stuff that should be done on
+		-- rolechange and respawn (while a round is active)
 		roles.GetByIndex(ply:GetSubRole()):GiveRoleLoadout(ply, false)
+
+		events.Trigger(EVENT_RESPAWN, ply)
+	else
+		events.Trigger(EVENT_SPAWN, ply)
 	end
 end
 

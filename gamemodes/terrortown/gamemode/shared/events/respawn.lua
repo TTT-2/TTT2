@@ -1,6 +1,6 @@
 if CLIENT then
 	EVENT.icon = Material("")
-	EVENT.description = "desc_event_spawn"
+	EVENT.description = "desc_event_respawn"
 end
 
 function EVENT:Trigger(ply)

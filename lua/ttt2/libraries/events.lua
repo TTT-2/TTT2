@@ -72,6 +72,8 @@ function events.Trigger(name, ...)
 		events.list[#events.list + 1] = newEvent
 	end
 
+	PrintTable(newEvent)
+
 	-- run a hook with the newly added event
 	hook.Run("TTT2AddedEvent", name, newEvent)
 end

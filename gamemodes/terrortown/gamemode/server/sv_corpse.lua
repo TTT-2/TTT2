@@ -120,7 +120,7 @@ local function IdentifyBody(ply, rag)
 
 			SendPlayerToEveryone(deadply)
 
-			SCORE:HandleBodyFound(ply, deadply)
+			events.Trigger(EVENT_BODYFOUND, ply, rag)
 		end
 
 		hook.Run("TTTBodyFound", ply, deadply, rag)
