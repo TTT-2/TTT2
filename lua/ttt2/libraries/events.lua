@@ -17,14 +17,18 @@ EVENT = {}
 -- @param table base base (fallback) table
 -- @return table t target table
 -- @realm shared
-local function TableInherit(tbl, base)
+local function TableInherit(t, base)
 	for k, v in pairs(base) do
-		if tbl[k] ~= nil then continue end
-
-		tbl[k] = v
+		if t[k] == nil then
+			t[k] = v
+		elseif k ~= "BaseClass" and istable(t[k]) then
+			TableInherit(t[k], v)
+		end
 	end
 
-	return tbl
+	t.BaseClass = base
+
+	return t
 end
 
 function events.Initialize(path)
@@ -32,14 +36,23 @@ function events.Initialize(path)
 	local name = string.lower(string.sub(pathArray[#pathArray], 0, -5))
 
 	-- event table is set in fileloader and can now be inserted in the table
-	eventTypes[name] = tableCopy(EVENT)
-	eventTypes[name].type = name
+	local newEvent = tableCopy(EVENT)
+	newEvent.type = name
+	newEvent.base = newEvent.base or "base_event"
+
+	eventTypes[name] = newEvent
 
 	-- store a global identifier for this event
 	_G["EVENT_" .. string.upper(name)] = name
 
 	-- reset EVENT table
 	EVENT = {}
+end
+
+function events.OnLoaded()
+	for index, event in pairs(eventTypes) do
+		eventTypes[index] = TableInherit(event, events.Get(event.base))
+	end
 end
 
 function events.GetAll()
@@ -51,12 +64,16 @@ function events.Get(name)
 end
 
 function events.Trigger(name, ...)
-	if hook.Run("TTT2TriggeredEvent", name, ...) == false then return end
+	local newEvent = tableCopy(events.Get(name))
+	local eventData = newEvent:Trigger(...)
 
-	local newEvent = TableInherit(tableCopy(events.Get(name)), events.Get("base_event"))
-	newEvent:Trigger(...)
+	-- only add new event to managed event list, if addition was not aborted
+	if newEvent:Add(eventData) then
+		events.list[#events.list + 1] = newEvent
+	end
 
-	events.list[#events.list + 1] = newEvent
+	-- run a hook with the newly added event
+	hook.Run("TTT2AddedEvent", name, newEvent)
 end
 
 -- load the events itself
@@ -71,3 +88,27 @@ fileloader.LoadFolder("terrortown/events/", false, SHARED_FILE, function(path)
 
 	MsgN("Added TTT2 event file: ", path)
 end)
+
+---
+-- This hook is called once an event occured, the data is processed
+-- and it is about to be added. This hook can be used to modify the data
+-- or to cancel the event by returning `false`.
+-- @param string type The type of the event as in `EVENT_XXX`
+-- @param table eventData The table with the event data
+-- @return boolean Return false to cancel the addition of this event
+-- @realm server
+-- @hook
+function GM:TTT2OnTriggeredEvent(type, eventData)
+
+end
+
+---
+-- This hook is called after the event was successfully added to the
+-- eventmanager.
+-- @param string type The type of the event as in `EVENT_XXX`
+-- @param EVENT event The event that was added with all its functions
+-- @realm server
+-- @hook
+function GM:TTT2AddedEvent(type, event)
+
+end

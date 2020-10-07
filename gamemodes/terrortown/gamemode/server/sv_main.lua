@@ -433,7 +433,18 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:PostGamemodeLoaded
 -- @local
 function GM:PostGamemodeLoaded()
+	print("----------------------------------------------------- POST GAMEMODE LOADED")
 
+	events.OnLoaded()
+end
+
+---
+-- Called when gamemode has been reloaded by auto refresh.
+-- @hook
+-- @realm shared
+-- @ref https://wiki.facepunch.com/gmod/GM:OnReloaded
+function GM:OnReloaded()
+	events.OnLoaded()
 end
 
 ---

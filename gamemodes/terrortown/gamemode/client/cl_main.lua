@@ -304,7 +304,6 @@ function GM:OnReloaded()
 	vguihandler.Rebuild()
 
 	local skinName = vskin.GetVSkinName()
-
 	vskin.UpdatedVSkin(skinName, skinName)
 end
 
