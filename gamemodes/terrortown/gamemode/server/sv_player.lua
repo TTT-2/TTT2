@@ -1000,6 +1000,7 @@ end
 -- This hook allows you to change how much damage a @{Player} receives when one takes damage to a specific body part.
 -- @note This is not called for all damage a @{Player} receives ( For example fall damage or NPC melee damage ),
 -- so you should use @{GM:EntityTakeDamage} instead if you need to detect ALL damage.
+-- @note This is also called before @{GM:EntityTakeDamage} gets called.
 -- @param Player ply The @{Player} taking damage
 -- @param number hitgroup The hitgroup where the @{Player} took damage. See
 -- <a href="https://wiki.garrysmod.com/page/Enums/HITGROUP">HITGROUP_Enums</a>
