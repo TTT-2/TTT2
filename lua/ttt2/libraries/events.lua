@@ -83,12 +83,29 @@ function events.Get(name)
 end
 
 ---
+-- Returns the reference to a copy of the table of the event.
+-- @param string name The name identifer of the event
+-- @return table The reference to the copied event table
+-- @realm shared
+function events.New(name)
+	return tableCopy(events.Get(name))
+end
+
+---
 -- Checks if an event with this ID is registered in the event list.
 -- @param string name The name identifer of the event
 -- @return boolean Returns true if an event of this name exists
 -- @realm shared
 function events.Exist(name)
 	return events.Get(name) ~= nil
+end
+
+---
+-- Resets the managed event list. Usually executed after the end of the round end timer.
+-- @internal
+-- @realm shared
+function events.Reset()
+	events.list = {}
 end
 
 if SERVER then
@@ -104,7 +121,7 @@ if SERVER then
 			return
 		end
 
-		local newEvent = tableCopy(events.Get(name))
+		local newEvent = events.New(name)
 		local eventData = newEvent:Trigger(...)
 
 		-- only add new event to managed event list, if addition was not aborted
@@ -115,6 +132,62 @@ if SERVER then
 		-- run a hook with the newly added event
 		hook.Run("TTT2AddedEvent", name, newEvent)
 	end
+
+	---
+	-- Streams the whole event table to all clients, usually done after the round ended.
+	-- @internal
+	-- @realm server
+	function events.StreamToClients()
+		local eventList = events.list
+		local eventStreamData = {}
+
+		for i = 1, #eventList do
+			eventStreamData[i] = eventList[i]:GetNetworkedData()
+		end
+
+		net.SendStream("TTT2_EventReport", eventStreamData)
+	end
+
+	---
+	-- This hook is called once an event occured, the data is processed
+	-- and it is about to be added. This hook can be used to modify the data
+	-- or to cancel the event by returning `false`.
+	-- @param string type The type of the event as in `EVENT_XXX`
+	-- @param table eventData The table with the event data
+	-- @return boolean Return false to cancel the addition of this event
+	-- @realm server
+	-- @hook
+	function GM:TTT2OnTriggeredEvent(type, eventData)
+
+	end
+
+	---
+	-- This hook is called after the event was successfully added to the
+	-- eventmanager.
+	-- @param string type The type of the event as in `EVENT_XXX`
+	-- @param EVENT event The event that was added with all its functions
+	-- @realm server
+	-- @hook
+	function GM:TTT2AddedEvent(type, event)
+
+	end
+end
+
+if CLIENT then
+	net.ReceiveStream("TTT2_EventReport", function(eventStreamData)
+		events.Reset()
+
+		for i = 1, #eventStreamData do
+			local eventData = eventStreamData[i]
+
+			local newEvent = events.New(eventData.type)
+			newEvent:AddData(eventData.event)
+
+			events.list[#events.list + 1] = newEvent
+		end
+
+		PrintTable(events.list)
+	end)
 end
 
 -- load the events itself
@@ -129,27 +202,3 @@ fileloader.LoadFolder("terrortown/events/", false, SHARED_FILE, function(path)
 
 	MsgN("Added TTT2 event file: ", path)
 end)
-
----
--- This hook is called once an event occured, the data is processed
--- and it is about to be added. This hook can be used to modify the data
--- or to cancel the event by returning `false`.
--- @param string type The type of the event as in `EVENT_XXX`
--- @param table eventData The table with the event data
--- @return boolean Return false to cancel the addition of this event
--- @realm server
--- @hook
-function GM:TTT2OnTriggeredEvent(type, eventData)
-
-end
-
----
--- This hook is called after the event was successfully added to the
--- eventmanager.
--- @param string type The type of the event as in `EVENT_XXX`
--- @param EVENT event The event that was added with all its functions
--- @realm server
--- @hook
-function GM:TTT2AddedEvent(type, event)
-
-end

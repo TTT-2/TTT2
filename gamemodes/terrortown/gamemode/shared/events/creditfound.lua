@@ -3,7 +3,7 @@ if CLIENT then
 	EVENT.description = "desc_event_game_creditfound"
 end
 
-function EVENT:Trigger(ply, rag, credits)
+function EVENT:Trigger(finder, rag, credits)
 	local found = CORPSE.GetPlayer(rag)
 
 	local event = {

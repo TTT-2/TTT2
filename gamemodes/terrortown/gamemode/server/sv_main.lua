@@ -952,7 +952,7 @@ function PrepareRound()
 	GAMEMODE.AwardedCredits = false
 	GAMEMODE.AwardedCreditsDead = 0
 
-	SCORE:Reset()
+	events.Reset()
 
 	-- Update damage scaling
 	KARMA.RoundBegin()
@@ -1348,7 +1348,7 @@ function EndRound(result)
 	events.Trigger(EVENT_FINISHED, result)
 
 	-- send the clients the round log, players will be shown the report
-	--SCORE:StreamToClients()
+	events.StreamToClients()
 
 	-- server plugins might want to start a map vote here or something
 	-- these hooks are not used by TTT internally

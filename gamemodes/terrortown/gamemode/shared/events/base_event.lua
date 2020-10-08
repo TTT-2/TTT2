@@ -1,6 +1,10 @@
 EVENT.type = "base_event"
 EVENT.event = {}
 
+function EVENT:AddData(event)
+	self.event = event
+end
+
 function EVENT:Add(event)
 	-- store the event time in relation to the round start time in milliseconds
 	event.time = math.Round((CurTime() - GAMEMODE.RoundStartTime) * 1000, 0)
@@ -12,7 +16,7 @@ function EVENT:Add(event)
 		return false
 	end
 
-	self.event = event
+	self:AddData(event)
 
 	-- after the event is added, it should be passed on to the
 	-- scoring function to directly calculate the score

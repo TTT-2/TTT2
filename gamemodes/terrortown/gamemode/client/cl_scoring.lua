@@ -796,7 +796,7 @@ local function ReceiveReportStream(events)
 		ErrorNoHalt("Round report event decoding failed!\n")
 	end
 end
-net.ReceiveStream("TTT2_EventReport", ReceiveReportStream)
+--net.ReceiveStream("TTT2_EventReport", ReceiveReportStream)
 
 local function SaveLog(ply, cmd, args)
 	if not CLSCORE then return end
