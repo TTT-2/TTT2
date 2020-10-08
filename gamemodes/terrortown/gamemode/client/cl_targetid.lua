@@ -265,7 +265,7 @@ function GM:HUDDrawTargetID()
 			start = startpos,
 			endpos = endpos,
 			mask = MASK_SHOT,
-			filter = (ply~= client and {}) or client:GetObserverMode() == OBS_MODE_IN_EYE and {client, client:GetObserverTarget()} or client
+			filter = (ply ~= client and {}) or client:GetObserverMode() == OBS_MODE_IN_EYE and {client, client:GetObserverTarget()} or client
 		})
 
 		-- this is the entity the player is looking at right now
