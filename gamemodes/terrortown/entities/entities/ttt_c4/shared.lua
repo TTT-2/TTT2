@@ -387,7 +387,7 @@ function ENT:Explode(tr)
 
 		self:SetExplodeTime(0)
 
-		SCORE:HandleC4Explosion(dmgowner, self:GetArmTime(), CurTime())
+		events.Trigger(EVENT_C4EXPLODE, dmgowner)
 
 		self:Remove()
 	else
@@ -540,7 +540,7 @@ if SERVER then
 	function ENT:Disarm(ply)
 		local owner = self:GetOwner()
 
-		SCORE:HandleC4Disarm(ply, owner, true)
+		events.Trigger(EVENT_C4DISARM, owner, ply, true)
 
 		if ply ~= owner and IsValid(owner) then
 			LANG.Msg(owner, "c4_disarm_warn")
@@ -560,7 +560,7 @@ if SERVER then
 	function ENT:FailedDisarm(ply)
 		self.DisarmCausedExplosion = true
 
-		SCORE:HandleC4Disarm(ply, self:GetOwner(), false)
+		events.Trigger(EVENT_C4DISARM, self:GetOwner(), ply, false)
 
 		-- tiny moment of zen and realization before the bang
 		self:SetExplodeTime(CurTime() + 0.1)
@@ -619,6 +619,8 @@ if SERVER then
 				picked = picked + 1
 			end
 		end
+
+		events.Trigger(EVENT_C4PLANT, ply)
 
 		-- send indicator to traitors
 		self:SendWarn(true)

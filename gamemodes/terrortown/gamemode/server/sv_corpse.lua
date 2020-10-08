@@ -308,7 +308,7 @@ local function GiveFoundCredits(ply, rag, isLongRange)
 
 	ServerLog(ply:Nick() .. " took " .. credits .. " credits from the body of " .. corpseNick .. "\n")
 
-	SCORE:HandleCreditFound(ply, corpseNick, credits)
+	events.Trigger(EVENT_CREDITFOUND, ply, rag, credits)
 end
 
 ---

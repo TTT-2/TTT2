@@ -31,6 +31,11 @@ local function TableInherit(t, base)
 	return t
 end
 
+---
+-- This function is called once an event is loaded from disc.
+-- @param string path The path to the event file
+-- @internal
+-- @realm shared
 function events.Initialize(path)
 	local pathArray = string.Split(path, "/")
 	local name = string.lower(string.sub(pathArray[#pathArray], 0, -5))
@@ -49,33 +54,67 @@ function events.Initialize(path)
 	EVENT = {}
 end
 
+---
+-- Initialialized the events after everything is loaded. This included the
+-- inheritance from their base classes.
+-- @internal
+-- @realm shared
 function events.OnLoaded()
 	for index, event in pairs(eventTypes) do
 		eventTypes[index] = TableInherit(event, events.Get(event.base))
 	end
 end
 
+---
+-- Returns a table of all available events.
+-- @return table A table of all events
+-- @realm shared
 function events.GetAll()
 	return eventTypes
 end
 
+---
+-- Returns the reference to a table of the event.
+-- @param string name The name identifer of the event
+-- @return table The reference to the event table
+-- @realm shared
 function events.Get(name)
 	return eventTypes[string.lower(name)]
 end
 
-function events.Trigger(name, ...)
-	local newEvent = tableCopy(events.Get(name))
-	local eventData = newEvent:Trigger(...)
+---
+-- Checks if an event with this ID is registered in the event list.
+-- @param string name The name identifer of the event
+-- @return boolean Returns true if an event of this name exists
+-- @realm shared
+function events.Exist(name)
+	return events.Get(name) ~= nil
+end
 
-	-- only add new event to managed event list, if addition was not aborted
-	if newEvent:Add(eventData) then
-		events.list[#events.list + 1] = newEvent
+if SERVER then
+	---
+	-- Triggers an event, adds it to a managed list and starts the score calculation for this event.
+	-- @param string name The name identifer of the event
+	-- @param varag The arguments that should be passed to the event, see the @{EVENT:Trigger} function
+	-- @realm server
+	function events.Trigger(name, ...)
+		if not events.Exist(name) then
+			ErrorNoHalt("ERROR: An event with the name '" .. tostring(name) .. "' does not exist.\n")
+
+			return
+		end
+
+		local newEvent = tableCopy(events.Get(name))
+		local eventData = newEvent:Trigger(...)
+
+		-- only add new event to managed event list, if addition was not aborted
+		if newEvent:Add(eventData) then
+			events.list[#events.list + 1] = newEvent
+		end
+
+		-- run a hook with the newly added event
+		hook.Run("TTT2AddedEvent", name, newEvent)
 	end
-
-	PrintTable(newEvent)
-
-	-- run a hook with the newly added event
-	hook.Run("TTT2AddedEvent", name, newEvent)
 end
 
 -- load the events itself
