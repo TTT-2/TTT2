@@ -244,7 +244,7 @@ function GM:HUDDrawTargetID()
 
 	-- now run a hook that can be used by addon devs that changes the observing player
 	-- for the targetid
-	hook.Run("TTTModifyObservingEntity", ply)
+	hook.Run("TTT2ModifyObservingEntity", ply)
 
 	local startpos = ply:EyePos()
 	local endpos = ply:GetAimVector()
@@ -471,7 +471,7 @@ end
 -- @param Entity ent The used entity for calculating the view
 -- @hook
 -- @realm client
-function GM:TTTModifyObservingEntity(ent)
+function GM:TTT2ModifyObservingEntity(ent)
 
 end
 
