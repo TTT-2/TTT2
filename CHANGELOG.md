@@ -13,7 +13,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added `drawsc` library featuring scalable draw functions
 - Updated Simplified Chinese localization (by @TheOnly8Z)
 - Updated Italian localization (by @ThePlatynumGhost)
-- Added a hook `TTTPostEntityTakeDamage` that is called at the end of GM:EntityTakeDamage after internal damage events got handled
+- Added a hook `TTT2PostEntityTakeDamage` that is called at the end of GM:EntityTakeDamage after internal damage events got handled
 
 ### Changed
 
