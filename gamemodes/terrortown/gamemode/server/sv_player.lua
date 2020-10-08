@@ -1208,6 +1208,7 @@ function GM:EntityTakeDamage(ent, dmginfo)
 		dmginfo:SetDamage(0)
 	end
 
+	--Call a second Hook after Damage got processed, to output the real Damage that has been dealt
 	--Can you use return like this, so that hooks to "TTTPostEntityTakeDamage" could also return true or false to block the damage event afterwards
 	return hook.Run("TTTPostEntityTakeDamage", ent, dmginfo)
 end
