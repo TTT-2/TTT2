@@ -1207,6 +1207,9 @@ function GM:EntityTakeDamage(ent, dmginfo)
 
 		dmginfo:SetDamage(0)
 	end
+
+	--Can you use return like this, so that hooks to "TTTPostEntityTakeDamage" could also return true or false to block the damage event afterwards
+	return hook.Run("TTTPostEntityTakeDamage", ent, dmginfo)
 end
 
 ---
@@ -1476,4 +1479,16 @@ end
 -- @local
 function GM:PlayerShouldTaunt(ply, act)
 	return false
+end
+
+---
+-- Called by @{GM:EntityTakeDamage} after damage output was changed due to internal events. You can modify all parts of the damage info in this hook again.
+-- @param Entity ent The @{Entity} taking damage
+-- @param CTakeDamageInfo dmginfo Damage info
+-- @return boolean Return true to completely block the damage event
+-- @note e.g. no damage during prep, etc
+-- @hook
+-- @realm server
+-- @local
+function GM:TTTPostEntityTakeDamage(ent, dmginfo)
 end
