@@ -240,8 +240,14 @@ function GM:HUDDrawTargetID()
 		DrawPropSpecLabels(client)
 	end
 
-	local startpos = client:EyePos()
-	local endpos = client:GetAimVector()
+	local ply = client
+
+	-- now run a hook that can be used by addon devs that changes the observing player
+	-- for the targetid
+	hook.Run("TTTModifyObservingEntity", ply)
+
+	local startpos = ply:EyePos()
+	local endpos = ply:GetAimVector()
 
 	endpos:Mul(MAX_TRACE_LENGTH)
 	endpos:Add(startpos)
@@ -254,11 +260,12 @@ function GM:HUDDrawTargetID()
 
 		distance = startpos:Distance(ent:GetPos())
 	else
+		--change filter to be able to show a player themself
 		local trace = util.TraceLine({
 			start = startpos,
 			endpos = endpos,
 			mask = MASK_SHOT,
-			filter = client:GetObserverMode() == OBS_MODE_IN_EYE and {client, client:GetObserverTarget()} or client
+			filter = (ply~= client and {}) or client:GetObserverMode() == OBS_MODE_IN_EYE and {client, client:GetObserverTarget()} or client
 		})
 
 		-- this is the entity the player is looking at right now
@@ -273,7 +280,8 @@ function GM:HUDDrawTargetID()
 	end
 
 	-- only add onscreen infos when the entity isn't the local player
-	if ent == client then return end
+	-- maybe being able to show themself?!
+	--if ent == client then return end
 
 	local changedEnt = hook.Run("TTTModifyTargetedEntity", ent, distance)
 
@@ -456,6 +464,15 @@ function GM:HUDDrawTargetID()
 	local spacer_line_l = (spacer_line_icon_l > spacer_line_text_l) and spacer_line_icon_l or spacer_line_text_l
 
 	drawsc.ShadowedBox(spacer_line_x, spacer_line_y, 1, spacer_line_l, Z)
+end
+
+---
+-- Change the observing Entity used for targetID.
+-- @param Entity ent The used entity for calculating the view
+-- @hook
+-- @realm client
+function GM:TTTModifyObservingEntity(ent)
+
 end
 
 ---
