@@ -13,7 +13,7 @@ WSWITCH.NextSwitch = -1
 WSWITCH.WeaponCache = {}
 
 WSWITCH.cv = {}
-WSWITCH.cv.stay = CreateConVar("ttt_weaponswitcher_stay", "0", FCVAR_ARCHIVE)
+WSWITCH.cv_hide = CreateConVar("ttt_weaponswitcher_hide", "1", FCVAR_ARCHIVE)
 WSWITCH.cv.fast = CreateConVar("ttt_weaponswitcher_fast", "0", FCVAR_ARCHIVE)
 WSWITCH.cv.display = CreateConVar("ttt_weaponswitcher_displayfast", "0", FCVAR_ARCHIVE)
 
@@ -180,7 +180,7 @@ function WSWITCH:Enable()
 	end
 
 	-- cache for speed, checked every Think
-	self.Stay = self.cv.stay:GetBool()
+	self.Stay = not self.cv_hide:GetBool()
 end
 
 ---

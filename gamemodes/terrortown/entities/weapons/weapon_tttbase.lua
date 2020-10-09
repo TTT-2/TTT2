@@ -160,13 +160,8 @@ if CLIENT then
 	local TryT = LANG.TryTranslation
 
 	local sights_opacity = CreateClientConVar("ttt_ironsights_crosshair_opacity", "0.8", true)
-	local crosshair_brightness = CreateClientConVar("ttt_crosshair_brightness", "1.0", true)
 	local crosshair_size = CreateClientConVar("ttt_crosshair_size", "1.0", true)
-	local disable_crosshair = CreateClientConVar("ttt_disable_crosshair", "0", true)
-	local enable_color_crosshair = CreateClientConVar("ttt_crosshair_color_enable", "0", true)
-	local crosshair_color_r = CreateClientConVar("ttt_crosshair_color_r", "30", true)
-	local crosshair_color_g = CreateClientConVar("ttt_crosshair_color_g", "160", true)
-	local crosshair_color_b = CreateClientConVar("ttt_crosshair_color_b", "160", true)
+	local enable_crosshair = CreateClientConVar("ttt_enable_crosshair", "1", true)
 
 	local enable_gap_crosshair = CreateClientConVar("ttt_crosshair_gap_enable", "0", true)
 	local crosshair_gap = CreateClientConVar("ttt_crosshair_gap", "0", true)
@@ -192,7 +187,7 @@ if CLIENT then
 
 		local client = LocalPlayer()
 
-		if disable_crosshair:GetBool() or not IsValid(client) or client.isSprinting and not GetGlobalBool("ttt2_sprint_crosshair", false) then return end
+		if not enable_crosshair:GetBool() or not IsValid(client) or client.isSprinting and not GetGlobalBool("ttt2_sprint_crosshair", false) then return end
 
 		local sights = not self.NoSights and self:GetIronsights()
 		local x = math.floor(ScrW() * 0.5)
@@ -205,7 +200,6 @@ if CLIENT then
 		end
 
 		local alpha = sights and sights_opacity:GetFloat() or crosshair_opacity:GetFloat()
-		local bright = crosshair_brightness:GetFloat() or 1
 		local gap = enable_gap_crosshair:GetBool() and math.floor(timescale * crosshair_gap:GetFloat()) or math.floor(20 * scale * timescale * (sights and 0.8 or 1))
 		local thickness = crosshair_thickness:GetFloat()
 		local outline = math.floor(crosshair_outlinethickness:GetFloat())
@@ -220,19 +214,17 @@ if CLIENT then
 			surface.DrawRect(x - offset - outline, y + gap - outline, thickness + outline * 2, length - gap + outline * 2)
 		end
 
-		if enable_color_crosshair:GetBool() then
-			surface.SetDrawColor(crosshair_color_r:GetInt() * bright, crosshair_color_g:GetInt() * bright, crosshair_color_b:GetInt() * bright, 255 * alpha)
-		else
-			-- somehow it seems this can be called before my player metatable
-			-- additions have loaded
-			if client.GetSubRoleData then
-				local col = client:GetRoleColor()
+		-- set up crosshair color
+		local color = client.GetRoleColor and client:GetRoleColor() or INNOCENT.color
 
-				surface.SetDrawColor(col.r * bright, col.g * bright, col.b * bright, 255 * alpha)
-			else
-				surface.SetDrawColor(0, 255 * bright, 0, 255 * alpha)
-			end
-		end
+		color = appearance.SelectFocusColor(color)
+
+		surface.SetDrawColor(
+			color.r,
+			color.g,
+			color.b,
+			255 * alpha
+		)
 
 		-- draw crosshair dot
 		if enable_dot_crosshair:GetBool() then

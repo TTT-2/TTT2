@@ -4,11 +4,8 @@
 util.AddNetworkString("TTT2RequestHUD")
 util.AddNetworkString("TTT2ReceiveHUD")
 util.AddNetworkString("TTT2DefaultHUDRequest")
-util.AddNetworkString("TTT2DefaultHUDResponse")
 util.AddNetworkString("TTT2ForceHUDRequest")
-util.AddNetworkString("TTT2ForceHUDResponse")
 util.AddNetworkString("TTT2RestrictHUDRequest")
-util.AddNetworkString("TTT2RestrictHUDResponse")
 
 local HUD_MANAGER_SQL_TABLE = "ttt2_hudmanager_model_data"
 local HUD_MANAGER_SQL_RESTRICTEDHUDS_TABLE = "ttt2_hudmanager_model_data_restrictedhuds"
@@ -184,10 +181,9 @@ net.Receive("TTT2DefaultHUDRequest", function(_, ply)
 		HUDManager.LoadData()
 	end
 
-	net.Start("TTT2DefaultHUDResponse")
-	net.WriteBool(acceptedRequest)
-	net.WriteString(HUDToSet)
-	net.Send(ply)
+	if not acceptedRequest then
+		LANG.Msg(ply, "hud_default_failed", {hudname = HUDToSet}, MSG_CHAT_PLAIN)
+	end
 end)
 
 -- An admin wants to set the forceHUD value
@@ -212,10 +208,9 @@ net.Receive("TTT2ForceHUDRequest", function(_, ply)
 		HUDManager.StoreData()
 	end
 
-	net.Start("TTT2ForceHUDResponse")
-	net.WriteBool(acceptedRequest)
-	net.WriteString(HUDToForce)
-	net.Send(ply)
+	if not acceptedRequest then
+		LANG.Msg(ply, "hud_forced_failed", {hudname = HUDToForce}, MSG_CHAT_PLAIN)
+	end
 end)
 
 -- An admin wants to change the restricted status for an HUD
@@ -243,8 +238,7 @@ net.Receive("TTT2RestrictHUDRequest", function(_, ply)
 		end
 	end
 
-	net.Start("TTT2RestrictHUDResponse")
-	net.WriteBool(acceptedRequest)
-	net.WriteString(HUDToRestrict)
-	net.Send(ply)
+	if not acceptedRequest then
+		LANG.Msg(ply, "hud_restricted_failed", {hudname = HUDToRestrict}, MSG_CHAT_PLAIN)
+	end
 end)
