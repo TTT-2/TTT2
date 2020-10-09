@@ -590,7 +590,7 @@ end
 -- @note The subrole replaces a previously selected baserole.
 --
 -- @param table plys The players that should receive roles.
--- @param int subrole The @{ROLE} index of the considered role.
+-- @param number subrole The @{ROLE} index of the considered role.
 -- @param table selectableRoles The list of filtered selectable @{ROLE}s
 -- @realm server
 -- @internal
@@ -612,7 +612,7 @@ end
 -- @note This function modifies the given `plys` var.
 --
 -- @param table plys The players that can receive roles.
--- @param int subrole The @{ROLE} index of the considered role.
+-- @param number subrole The @{ROLE} index of the considered role.
 -- @param number roleAmount The amount of players that are allowed to receive this role.
 -- @return table List of players, that received the role.
 -- @realm server
