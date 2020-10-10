@@ -224,7 +224,7 @@ function GM:Initialize()
 	fileloader.LoadFolder("terrortown/vskin/", false, CLIENT_FILE, function(path)
 		MsgN("Added TTT2 vskin file: ", path)
 	end)
-  
+
 	roleselection.LoadLayers()
 
 	ShopEditor.SetupShopEditorCVars()
