@@ -11,6 +11,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Introduced a global scale factor based on screen resolution to scale HUD elements accordingly
 - Added automatical scale factor change on resolution change that works even if the resolution was changed while TTT2 wasn't loaded
 - Added `drawsc` library featuring scalable draw functions
+- Added Drag&Drop role layering VGUI, accessible with the console command `ttt2_edit_rolelayering`
 - Updated Simplified Chinese localization (by @TheOnly8Z)
 - Updated Italian localization (by @ThePlatynumGhost)
 
@@ -36,6 +37,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - The weapon pickup system has been improved to increase stability and remove edge cases in temporary weapon teleportation
 - Updated Spanish translation (by @DennisWolfgang)
+- Fixed subrole selection (issues happened with max_roles enabled, etc.). Subroles are now directly connected with their related baseroles
 
 ### Fixed
 

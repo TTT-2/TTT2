@@ -84,27 +84,31 @@ function SQL.ParseData(tbl, keys)
 	for key, data in pairs(keys) do
 		if key == "BaseClass" then continue end
 
-		if tbl[key] ~= nil then
-			local dat = tbl[key]
+		local dat = tbl[key]
 
-			if data.typ == "bool" then
-				dat = dat and 1 or 0
+		if dat == nil then
+			dat = data.default
+		end
 
-				tmp[key] = dat
-			elseif data.typ == "pos" then
-				tmp[key .. "_x"] = dat.x or 0
-				tmp[key .. "_y"] = dat.y or 0
-			elseif data.typ == "size" then
-				tmp[key .. "_w"] = dat.w or 0
-				tmp[key .. "_h"] = dat.h or 0
-			elseif data.typ == "color" then
-				tmp[key .. "_r"] = dat.r or 255
-				tmp[key .. "_g"] = dat.g or 255
-				tmp[key .. "_b"] = dat.b or 255
-				tmp[key .. "_a"] = dat.a or 255
-			else
-				tmp[key] = dat
-			end
+		if dat == nil then continue end
+
+		if data.typ == "bool" then
+			dat = dat and 1 or 0
+
+			tmp[key] = dat
+		elseif data.typ == "pos" then
+			tmp[key .. "_x"] = dat.x or 0
+			tmp[key .. "_y"] = dat.y or 0
+		elseif data.typ == "size" then
+			tmp[key .. "_w"] = dat.w or 0
+			tmp[key .. "_h"] = dat.h or 0
+		elseif data.typ == "color" then
+			tmp[key .. "_r"] = dat.r or 255
+			tmp[key .. "_g"] = dat.g or 255
+			tmp[key .. "_b"] = dat.b or 255
+			tmp[key .. "_a"] = dat.a or 255
+		else
+			tmp[key] = dat
 		end
 	end
 
@@ -288,12 +292,14 @@ function SQL.Save(tableName, name, tbl, keys)
 end
 
 ---
--- Loads a databse table and set all necessary data of the data @{table}
+-- Loads a database table and set all necessary data of the data @{table}
 -- @param string tableName name of the database table
 -- @param string name ?
 -- @param table tbl data @{table}
 -- @param table keys keys for the data @{table}
 -- @return table false is returned if there is an error, nil if the query returned no data.
+-- @return bool returns whether there is a difference between the given data `tbl` and the sqlite data, 
+-- so that's an indicator whether old data was overwritten 
 -- @realm shared
 -- @todo usage
 function SQL.Load(tableName, name, tbl, keys)
@@ -314,7 +320,7 @@ function SQL.Load(tableName, name, tbl, keys)
 		local nres = SQL.GetParsedData(key, data, res)
 		if nres == nil or nres == "NULL" or tbl[key] == nres then continue end
 
-		tbl[key] = nres -- override with saved one
+		tbl[key] = nres -- overwrite with saved one
 		changed = true
 	end
 
