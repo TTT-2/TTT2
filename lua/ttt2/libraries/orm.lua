@@ -43,6 +43,7 @@ function orm.Make(tableName, force)
 
 	model.Delete = ormodel.Delete
 	model.Save = ormodel.Save
+	model.Refresh = ormodel.Refresh
 
 	-- Prepare strings that will not change unless the model itself changes. So we don't have to create these strings everytime we use `model.Save()`.
 	local columnList = {nil, nil}
@@ -124,6 +125,7 @@ function ormodel:New(data)
 
 	object.Save = self.Save
 	object.Delete = self.Delete
+	object.Refresh = self.Refresh
 	object._tableName = self._tableName
 	object._dataStructure = self._dataStructure
 	object._primaryKey = self._primaryKey
@@ -148,6 +150,57 @@ function ormodel:Save()
 	valueList = table.concat(valueList, ",")
 
 	query = query .. self._columnList .. ") VALUES(" .. valueList .. ") ON CONFLICT(" .. self._primaryKeyList .. ") DO UPDATE SET(" .. self._columnList .. ")=(" .. valueList .. ");"
+
+	return sql.Query(query)
+end
+
+---
+-- Refreshes the object by setting all values to those saved in the database.
+-- @return boolean Returns true if refresh was successful, false otherwise.
+function ormodel:Refresh()
+	local where = {}
+	local primaryKey = self._primaryKey
+	local dataStructure = self._dataStructure
+
+	if #primaryKey == 1 then
+		where = sql.SQLIdent(primaryKey[1]) .. "=" .. sql.SQLStr(self[primaryKey[1]])
+	else
+		for i = 1, #primaryKey do
+			where[i] = sql.SQLIdent(primaryKey[i]) .. "=" .. sql.SQLStr(self[primaryKey[i]])
+		end
+
+		where = table.concat(where, " AND ")
+	end
+
+	local result = sql.QueryRow("SELECT * FROM " .. sql.SQLIdent(self._tableName) .. " WHERE " .. where)
+
+	if result then
+		for i = 1, #dataStructure do
+			self[dataStructure[i]] = result[dataStructure[i]]
+		end
+		return true
+	end
+
+	return false
+
+end
+
+---
+-- Retrieves all saved objects of the model with the given filters from the database.
+-- @param table filters An Array of filters. Each filter should contain a `column`, `op`, `value` and `concat`(if it is not the last filter).
+-- @return table Returns an array of all found objects.
+function ormodel:Where(filters)
+	local query = "SELECT * FROM " .. sql.SQLIdent(self._tableName) .. " WHERE "
+	local whereList = {}
+
+	for i = 1, #filters do
+		local curFilter = filters[i]
+		whereList[i] = sql.SQLIdent(curFilter[column]) .. (curFilter[op] or "=") .. sql.SQLStr(curFilter[value]) .. (curFilter[concat] or "")
+	end
+
+	whereList = table.concat(whereList)
+
+	query = query .. whereList
 
 	return sql.Query(query)
 end
