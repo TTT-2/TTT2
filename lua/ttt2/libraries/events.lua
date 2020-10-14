@@ -109,21 +109,23 @@ function events.Reset()
 	events.list = {}
 end
 
+function events.GetDeprecatedEventData(event)
+	if not isfunction(event.GetDeprecatedFormat) then return end
+
+	return event:GetDeprecatedFormat(event.event)
+end
+
 function events.GetDeprecatedEventList()
 	local deprecatedEvents = {}
 
 	for i = 1, #events.list do
 		local event = events.list[i]
 
-		if not isfunction(event.GetDeprecatedFormat) then continue end
-
-		if event.type == EVENT_GAME then continue end
-
-		local deprecatedEvent = event:GetDeprecatedFormat(event.event)
+		local deprecatedEventData = events.GetDeprecatedEventData(event)
 
 		if not deprecatedEvent then continue end
 
-		deprecatedEvents[#deprecatedEvents + 1] = deprecatedEvent
+		deprecatedEvents[#deprecatedEvents + 1] = deprecatedEventData
 	end
 
 	return deprecatedEvents
@@ -148,6 +150,13 @@ if SERVER then
 		-- only add new event to managed event list, if addition was not aborted
 		if newEvent:Add(eventData) then
 			events.list[#events.list + 1] = newEvent
+		end
+
+		-- add to deprecated score list
+		local deprecatedEventData = events.GetDeprecatedEventData(newEvent)
+
+		if deprecatedEventData then
+			SCORE:AddEvent(deprecatedEventData)
 		end
 
 		-- run a hook with the newly added event
