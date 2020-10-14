@@ -108,6 +108,30 @@ function events.Reset()
 	events.list = {}
 end
 
+function events.GetDeprecatedEventList()
+	local deprecatedEvents = {}
+
+	for i = 1, #events.list do
+		local event = events.list[i]
+
+		if not isfunction(event.GetDeprecatedFormat) then continue end
+
+		if event.type == EVENT_GAME then continue end
+
+		print("------------------")
+		print(event.type)
+		PrintTable(event.event)
+
+		local deprecatedEvent = event:GetDeprecatedFormat(event.event)
+
+		if not deprecatedEvent then continue end
+
+		deprecatedEvents[#deprecatedEvents + 1] = deprecatedEvent
+	end
+
+	return deprecatedEvents
+end
+
 if SERVER then
 	---
 	-- Triggers an event, adds it to a managed list and starts the score calculation for this event.
@@ -187,6 +211,12 @@ if CLIENT then
 		end
 
 		PrintTable(events.list)
+
+		-- set old deprecated event table
+		local deprecatedEvents = events.GetDeprecatedEventList()
+
+		table.SortByMember(deprecatedEvents, "time", true)
+		CLSCORE:ReportEvents(deprecatedEvents)
 	end)
 end
 

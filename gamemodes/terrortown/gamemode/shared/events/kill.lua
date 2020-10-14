@@ -81,6 +81,38 @@ function EVENT:Score(event)
 	end
 end
 
+function EVENT:GetDeprecatedFormat(event)
+	if self.event.roundState ~= ROUND_ACTIVE then return end
+
+	local attacker = event.attacker
+	local victim = event.victim
+	local dmg = event.dmg
+
+	return {
+		id = self.type,
+		t = event.time,
+		att = {
+			ni = attacker and attacker.nick or "",
+			sid64 = attacker and attacker.sid64 or -1,
+			r = attacker and attacker.role or -1,
+			t = attacker and attacker.team or ""
+		},
+		vic = {
+			ni = victim.nick,
+			sid64 = victim.sid64,
+			r = victim.role,
+			t = victim.team
+		},
+		dmg = {
+			t = dmg.type,
+			a = dmg.damage,
+			h = dmg.headshot,
+			g = dmg.weapon,
+			n = dmg.name
+		}
+	}
+end
+
 function EVENT:Serialize()
 
 end

@@ -33,6 +33,23 @@ function EVENT:Score(event)
 	finder.score = roles.GetByIndex(finder.role).scoreBodyFoundMuliplier
 end
 
+function EVENT:GetDeprecatedFormat(event)
+	if self.event.roundState ~= ROUND_ACTIVE then return end
+
+	local finder = event.finder
+	local found = event.found
+
+	return {
+		id = self.type,
+		t = event.time,
+		ni = finder.nick,
+		sid64 = finder.sid64,
+		r = finder.role,
+		tm = finder.team,
+		b = found.nick
+	}
+end
+
 function EVENT:Serialize()
 
 end

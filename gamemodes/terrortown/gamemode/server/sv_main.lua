@@ -1207,8 +1207,6 @@ function BeginRound()
 	timer.Simple(1, SendFullStateUpdate)
 	timer.Simple(10, SendFullStateUpdate)
 
-	events.Trigger(EVENT_SELECTED)
-
 	-- Give the StateUpdate messages ample time to arrive
 	timer.Simple(1.5, TellTraitorsAboutTraitors)
 	timer.Simple(2.5, ShowRoundStartPopup)
@@ -1228,6 +1226,8 @@ function BeginRound()
 	SetRoundState(ROUND_ACTIVE)
 	LANG.Msg("round_started")
 	ServerLog("Round proper has begun...\n")
+
+	events.Trigger(EVENT_SELECTED)
 
 	GAMEMODE:UpdatePlayerLoadouts() -- needs to happen when round_active
 

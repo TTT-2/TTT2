@@ -4,13 +4,16 @@ if CLIENT then
 end
 
 function EVENT:Trigger()
-	local event = {}
+	local event = {
+		plys = {}
+	}
+	local eventPlys = event.plys
 	local plys = player.GetAll()
 
 	for i = 1, #plys do
 		local ply = plys[i]
 
-		event[#event + 1] = {
+		eventPlys[i] = {
 			nick = ply:Nick(),
 			sid64 = ply:SteamID64(),
 			role = ply:GetSubRole(),
@@ -23,6 +26,34 @@ end
 
 function EVENT:Score(event)
 
+end
+
+function EVENT:GetDeprecatedFormat(event)
+	if self.event.roundState ~= ROUND_ACTIVE then return end
+
+	local roles, teams = {}, {}
+
+	for i = 1, #event.plys do
+		local ply = event.plys[i]
+
+		subrole = ply.role
+		team = ply.team
+
+		roles[subrole] = roles[subrole] or {}
+		roles[subrole][#roles[subrole] + 1] = ply.sid64
+
+		if team ~= TEAM_NONE then
+			teams[team] = teams[team] or {}
+			teams[team][#teams[team] + 1] = ply.sid64
+		end
+	end
+
+	return {
+		id = self.type,
+		t = event.time,
+		rt = roles,
+		tms = teams
+	}
 end
 
 function EVENT:Serialize()

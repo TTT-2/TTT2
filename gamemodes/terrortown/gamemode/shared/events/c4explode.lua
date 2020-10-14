@@ -18,6 +18,16 @@ function EVENT:Score(event)
 
 end
 
+function EVENT:GetDeprecatedFormat(event)
+	if self.event.roundState ~= ROUND_ACTIVE then return end
+
+	return {
+		id = self.type,
+		t = event.time,
+		ni = event.nick,
+	}
+end
+
 function EVENT:Serialize()
 
 end
