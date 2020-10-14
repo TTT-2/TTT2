@@ -1369,6 +1369,8 @@ function plymeta:SafePickupWeapon(wep, ammoOnly, forcePickup, dropBlockingWeapon
 		if dropWeapon == wep then return end
 
 		timer.Simple(0, function()
+			if not IsValid(self) or not IsValid(dropWeapon) then return end
+
 			self:SafeDropWeapon(dropWeapon, true)
 		end)
 
