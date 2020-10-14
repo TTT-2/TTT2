@@ -79,6 +79,7 @@ end
 -- @return table The reference to the event table
 -- @realm shared
 function events.Get(name)
+	print(tostring(name))
 	return eventTypes[string.lower(name)]
 end
 
@@ -97,7 +98,7 @@ end
 -- @return boolean Returns true if an event of this name exists
 -- @realm shared
 function events.Exist(name)
-	return events.Get(name) ~= nil
+	return name and events.Get(name) ~= nil
 end
 
 ---
@@ -117,10 +118,6 @@ function events.GetDeprecatedEventList()
 		if not isfunction(event.GetDeprecatedFormat) then continue end
 
 		if event.type == EVENT_GAME then continue end
-
-		print("------------------")
-		print(event.type)
-		PrintTable(event.event)
 
 		local deprecatedEvent = event:GetDeprecatedFormat(event.event)
 
@@ -209,8 +206,6 @@ if CLIENT then
 
 			events.list[#events.list + 1] = newEvent
 		end
-
-		PrintTable(events.list)
 
 		-- set old deprecated event table
 		local deprecatedEvents = events.GetDeprecatedEventList()

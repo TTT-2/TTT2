@@ -90,7 +90,7 @@ function EVENT:GetDeprecatedFormat(event)
 
 	return {
 		id = self.type,
-		t = event.time,
+		t = event.time / 1000,
 		att = {
 			ni = attacker and attacker.nick or "",
 			sid64 = attacker and attacker.sid64 or -1,

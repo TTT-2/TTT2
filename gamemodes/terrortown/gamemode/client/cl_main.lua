@@ -302,6 +302,8 @@ end
 -- @local
 function GM:PostGamemodeLoaded()
 	events.OnLoaded()
+
+	ScoringEventSetup()
 end
 
 ---
@@ -317,6 +319,8 @@ function GM:OnReloaded()
 	vskin.UpdatedVSkin(skinName, skinName)
 
 	events.OnLoaded()
+
+	ScoringEventSetup()
 end
 
 ---

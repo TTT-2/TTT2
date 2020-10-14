@@ -9,7 +9,6 @@ local string = string
 local vgui = vgui
 local pairs = pairs
 local math = math
-local net = net
 local ipairs = ipairs
 local timer = timer
 local util = util
@@ -111,12 +110,6 @@ end
 -- @realm client
 -- @module CLSCORE
 function CLSCORE.DeclareEventDisplay(event_id, event_fns)
-	-- basic input vetting, can't check returned value types because the
-	-- functions may be impure
-	if not tonumber(event_id) then
-		error("Event ??? display: invalid event id", 2)
-	end
-
 	if not event_fns or not istable(event_fns) then
 		error(string.format("Event %d display: no display functions found.", event_id), 2)
 	end
@@ -140,11 +133,22 @@ end
 function CLSCORE:FillDList(dlst)
 	local events = self.Events
 
+	print("cl scoring event table:")
+	PrintTable(events)
+	print("---------------------------------------------")
+
 	for i = 1, #events do
+		print("this event:")
+
 		local e = events[i]
+		PrintTable(e)
 		local etxt = self:TextForEvent(e)
 		local eicon, ttip = self:IconForEvent(e)
 		local etime = self:TimeForEvent(e)
+
+		print("-----------")
+		print(etxt)
+		print(eicon)
 
 		if etxt then
 			if eicon then
@@ -787,16 +791,6 @@ function CLSCORE:Toggle()
 		self.Panel:ToggleVisible()
 	end
 end
-
-local function ReceiveReportStream(events)
-	if istable(events) then
-		table.SortByMember(events, "t", true)
-		CLSCORE:ReportEvents(events)
-	else
-		ErrorNoHalt("Round report event decoding failed!\n")
-	end
-end
---net.ReceiveStream("TTT2_EventReport", ReceiveReportStream)
 
 local function SaveLog(ply, cmd, args)
 	if not CLSCORE then return end

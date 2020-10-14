@@ -23,7 +23,7 @@ function EVENT:GetDeprecatedFormat(event)
 
 	return {
 		id = self.type,
-		t = event.time,
+		t = event.time / 1000,
 		ni = event.nick,
 	}
 end

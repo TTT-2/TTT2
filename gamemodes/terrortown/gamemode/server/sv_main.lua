@@ -1315,7 +1315,8 @@ end
 function EndRound(result)
 	PrintResultMessage(result)
 
-	-- first handle round end
+	events.Trigger(EVENT_FINISH, result)
+
 	SetRoundState(ROUND_POST)
 
 	local ptime = math.max(5, posttime:GetInt())
@@ -1344,8 +1345,6 @@ function EndRound(result)
 	CheckForMapSwitch()
 
 	KARMA.RoundEnd()
-
-	events.Trigger(EVENT_FINISHED, result)
 
 	-- send the clients the round log, players will be shown the report
 	events.StreamToClients()

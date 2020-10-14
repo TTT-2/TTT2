@@ -17,18 +17,11 @@ function EVENT:Score(event)
 end
 
 function EVENT:GetDeprecatedFormat(event)
-	print("---- SELF")
-	PrintTable(self)
-	print("---- self end")
-
-	PrintTable(event)
-	PrintTable(self.event)
-
 	if self.event.roundState ~= ROUND_ACTIVE then return end
 
 	return {
 		id = self.type,
-		t = event.time,
+		t = event.time / 1000,
 		ni = event.nick,
 		sid64 = event.sid64
 	}

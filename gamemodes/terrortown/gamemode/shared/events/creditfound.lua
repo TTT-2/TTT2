@@ -34,7 +34,7 @@ function EVENT:GetDeprecatedFormat(event)
 
 	return {
 		id = self.type,
-		t = event.time,
+		t = event.time / 1000,
 		ni = event.finder.nick,
 		sid64 = event.finder.sid64,
 		b = event.found.nick,
