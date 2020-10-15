@@ -18,6 +18,10 @@ EVENT = {}
 -- @return table t target table
 -- @realm shared
 local function TableInherit(t, base)
+	if t.base == t.type then
+		return t
+	end
+
 	for k, v in pairs(base) do
 		if t[k] == nil then
 			t[k] = v
@@ -43,6 +47,7 @@ function events.Initialize(path)
 	-- event table is set in fileloader and can now be inserted in the table
 	local newEvent = tableCopy(EVENT)
 	newEvent.type = name
+
 	newEvent.base = newEvent.base or "base_event"
 
 	eventTypes[name] = newEvent
@@ -79,7 +84,6 @@ end
 -- @return table The reference to the event table
 -- @realm shared
 function events.Get(name)
-	print(tostring(name))
 	return eventTypes[string.lower(name)]
 end
 
@@ -109,14 +113,49 @@ function events.Reset()
 	events.list = {}
 end
 
-function events.SortByPlayerAndEvent(eventList)
+function events.SortByPlayerAndEvent()
+	local eventList = events.list
 	local sortedList = {}
 
 	for i = 1, #eventList do
 		local event = eventList[i]
+		local type = event.type
+		local plys64 = event:GetAffectedPlayer()
+
+		-- now that we have a list of all players affected by this event
+		-- each of those players should have this event added to their list
+		for k = 1, #plys64 do
+			local ply64 = plys64[k]
+
+			sortedList[ply64] = sortedList[ply64] or {}
+			sortedList[ply64][type] = sortedList[ply64][type] or {}
+
+			sortedList[ply64][type] = event
+		end
 	end
 
 	return sortedList
+end
+
+function events.GetTotalPlayerScores()
+	local eventList = events.list
+	local scoreList = {}
+
+	for i = 1, #eventList do
+		local event = eventList[i]
+
+		if not event:HasScore() then continue end
+
+		local plys64 = event:GetScoredPlayers()
+
+		for k = 1, #plys64 do
+			local ply64 = plys64[k]
+
+			scoreList[ply64] = (scoreList[ply64] or 0) + event:GetSummedPlayerScore(ply64)
+		end
+	end
+
+	return scoreList
 end
 
 ---
@@ -200,6 +239,18 @@ if SERVER then
 		net.SendStream("TTT2_EventReport", eventStreamData)
 	end
 
+	function events.UpdateScores()
+		local scores = events.GetTotalPlayerScores()
+
+		for sid64, score in pairs(scores) do
+			ply = player.GetBySteamID64(sid64)
+
+			if not IsValid(ply) or not ply:ShouldScore() then continue end
+
+			ply:AddFrags(score)
+		end
+	end
+
 	---
 	-- This hook is called once an event occured, the data is processed
 	-- and it is about to be added. This hook can be used to modify the data
@@ -244,6 +295,8 @@ if CLIENT then
 
 		table.SortByMember(deprecatedEvents, "time", true)
 		CLSCORE:ReportEvents(deprecatedEvents)
+
+		PrintTable(events.SortByPlayerAndEvent())
 	end)
 end
 

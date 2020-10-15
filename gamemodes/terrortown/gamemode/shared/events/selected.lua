@@ -36,8 +36,8 @@ function EVENT:GetDeprecatedFormat(event)
 	for i = 1, #event.plys do
 		local ply = event.plys[i]
 
-		subrole = ply.role
-		team = ply.team
+		local subrole = ply.role
+		local team = ply.team
 
 		roles[subrole] = roles[subrole] or {}
 		roles[subrole][#roles[subrole] + 1] = ply.sid64

@@ -39,6 +39,14 @@ function EVENT:HasPlayerScore(ply64)
 	return self.score[ply64] ~= nil
 end
 
+function EVENT:HasScore()
+	return self.score ~= {}
+end
+
+function EVENT:GetScoredPlayers()
+	return table.GetKeys(self.score)
+end
+
 function EVENT:GetSummedPlayerScore(ply64)
 	if not self:HasPlayerScore(ply64) then
 		return 0
@@ -63,7 +71,7 @@ if SERVER then
 	-- @param string vararg A variable amount of player steamID64
 	-- @realm server
 	function EVENT:AddAffectedPlayers(...)
-		table.Add(self.players, array.pack(...))
+		table.Add(self.players, {...})
 	end
 
 	---
@@ -89,7 +97,7 @@ if SERVER then
 
 		-- after the event is added, it should be passed on to the
 		-- scoring function to directly calculate the score
-		self:SetScore(self:Score(self.event))
+		self:Score(self.event)
 
 		return true
 	end

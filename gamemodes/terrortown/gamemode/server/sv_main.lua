@@ -1365,6 +1365,8 @@ function EndRound(result)
 
 	KARMA.RoundEnd()
 
+	events.UpdateScores()
+
 	-- send the clients the round log, players will be shown the report
 	events.StreamToClients()
 

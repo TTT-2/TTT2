@@ -752,7 +752,7 @@ function CLSCORE:Init(events)
 		end
 	end
 
-	scores = ScoreEventLog(events, scores)
+	--scores = ScoreEventLog(events, scores)
 
 	self.Players = nicks
 	self.Scores = scores
