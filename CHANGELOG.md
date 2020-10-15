@@ -23,6 +23,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - TargetID text is now scaled with the global scale factor
 - Cleaned up draw function files
 
+### Fixed
+
+- Fixed weapon pickup bug, where weapons would not get dropped but stayed in inventory
+
 ## [v0.7.4b](https://github.com/TTT-2/TTT2/tree/v0.7.4b) (2020-09-28)
 
 ### Added
