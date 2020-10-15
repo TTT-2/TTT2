@@ -1368,7 +1368,11 @@ function plymeta:SafePickupWeapon(wep, ammoOnly, forcePickup, dropBlockingWeapon
 		-- Very very rarely happens but definitely breaks the weapon and should be avoided at all costs
 		if dropWeapon == wep then return end
 
-		self:SafeDropWeapon(dropWeapon, true)
+		timer.Simple(0, function()
+			if not IsValid(self) or not IsValid(dropWeapon) then return end
+
+			self:SafeDropWeapon(dropWeapon, true)
+		end)
 
 		-- set flag to new weapon that is used to autoselect it later on
 		shouldAutoSelect = shouldAutoSelect or isActiveWeapon
