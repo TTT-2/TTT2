@@ -37,7 +37,7 @@ local colorKeyBack = Color(0, 0, 0, 150)
 -- cached materials for overhead icons and outlines
 local materialPropspecOutline = Material("models/props_combine/portalball001_sheet")
 local materialBase = Material("vgui/ttt/dynamic/sprite_base")
-local materialBaseOverlay = Material("vgui/ttt/dynamic/sprite_materialBaseOverlay")
+local materialBaseOverlay = Material("vgui/ttt/dynamic/sprite_base_overlay")
 
 -- materials for targetid
 local materialRing = Material("effects/select_ring")
