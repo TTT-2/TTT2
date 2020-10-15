@@ -27,8 +27,21 @@ local serverColsVar = GetConVar("ttt_bem_sv_cols")
 local serverRowsVar = GetConVar("ttt_bem_sv_rows")
 local serverSizeVar = GetConVar("ttt_bem_sv_size")
 
--- add favorites DB functions
-include("favorites_db.lua")
+-- setup database
+if not sql.TableExists("ttt_bem_fav") then
+	sql.Query("CREATE TABLE ttt_bem_fav (guid TEXT, role TEXT, weapon_id TEXT)")
+end
+
+local upQueryV1 = "CREATE TABLE ttt_equip_fav (guid TEXT, role TEXT, weapon_id TEXT, PRIMARY KEY (guid, role, weapon_id)); " ..
+					"INSERT INTO ttt_equip_fav SELECT * FROM ttt_bem_fav; " ..
+					"DROP TABLE ttt_bem_fav;"
+local downQueryV1 = "CREATE TABLE ttt_bem_fav (guid TEXT, role TEXT, weapon_id TEXT); " ..
+					"INSERT INTO ttt_bem_fav SELECT * FROM ttt_equip_fav; " ..
+					"DROP TABLE ttt_equip_fav;"
+
+migration.Add("equipment_Favorites", 1, upQueryV1, downQueryV1)
+
+local equipFavModel = orm.Make("ttt_equip_fav")
 
 local color_bad = Color(244, 67, 54, 255)
 --local color_good = Color(76, 175, 80, 255)
@@ -340,9 +353,7 @@ local function CreateEquipmentList(t)
 				-- Favorites marker icon
 				ic.favorite = false
 
-				local favorites = GetFavorites(steamid, currole)
-
-				if favorites and IsFavorite(favorites, item.id) then
+				if equipFavModel:Find({steamid, currole, item.id}) then
 					ic.favorite = true
 
 					if showFavoriteVar:GetBool() then
@@ -832,12 +843,19 @@ function TraitorMenuPopup()
 		local weapon = choice.id
 		local steamid = ply:SteamID64()
 
-		CreateFavTable()
-
 		if pnl.favorite then
-			RemoveFavorite(steamid, role, weapon)
+			local favorite = equipFavModel:Find({steamid, role, weapon})
+			favorite:Delete()
+			-- possible one-liner alternative:
+			--equipFavModel:Find({steamid, role, weapon}):Delete()
 		else
-			AddFavorite(steamid, role, weapon)
+			local favorite = equipFavModel:New()
+			favorite.guid = steamid
+			favorite.role = role
+			favorite.weapon_id = weapon
+			favorite:Save()
+			-- possible one-liner alternative:
+			--equipFavModel:New({["guid"]=steamid, ["role"]=role, ["weapon_id"]=weapon}):Save()
 		end
 
 		-- Reload item list
