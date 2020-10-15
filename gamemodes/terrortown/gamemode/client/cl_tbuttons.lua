@@ -1,6 +1,6 @@
 ---
+-- Display of and interaction with ttt_traitor_button
 -- @class TBHUD
--- @desc Display of and interaction with ttt_traitor_button
 
 local surface = surface
 local pairs = pairs

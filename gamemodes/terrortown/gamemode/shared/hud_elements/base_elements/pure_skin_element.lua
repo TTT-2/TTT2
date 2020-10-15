@@ -1,5 +1,5 @@
 ---
--- @module HUDELEMENT
+-- @class HUDELEMENT
 -- @section pure_skin_element
 
 local surface = surface

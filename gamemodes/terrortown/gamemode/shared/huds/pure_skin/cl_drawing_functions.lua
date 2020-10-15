@@ -1,6 +1,6 @@
 ---
 -- HUD base class.
--- @module HUD
+-- @class HUD
 -- @section pure_skin
 
 local surface = surface

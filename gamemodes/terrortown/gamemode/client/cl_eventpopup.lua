@@ -1,7 +1,7 @@
 ---
--- @class EPOP
+-- An event popup system that works alongside the MSTACK system to display important messages
 -- @author Mineotopia
--- @desc An event popup system that works alongside the MSTACK system to display important messages
+-- @class EPOP
 
 local TryT = LANG.TryTranslation
 

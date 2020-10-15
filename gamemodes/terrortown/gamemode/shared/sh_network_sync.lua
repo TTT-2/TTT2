@@ -22,7 +22,7 @@ local plymeta = assert(FindMetaTable("Player"), "[TTT2NET] FAILED TO FIND PLAYER
 --
 -- @param any|table path The path to return the value for
 -- @param any|nil fallback The fallback value to return instead of nil
--- @return bool|any|nil The value at the path or fallback if the value is nil
+-- @return boolean|any|nil The value at the path or fallback if the value is nil
 function plymeta:TTT2NETGetBool(path, fallback)
 	return ttt2net.GetOnPlayer(path, self) == true or fallback
 end

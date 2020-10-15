@@ -1,3 +1,5 @@
+--- @ignore
+
 local draw = draw
 local math = math
 local string = string

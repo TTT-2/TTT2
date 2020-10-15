@@ -1,6 +1,6 @@
 ---
+-- Tips panel shown to specs
 -- @module TIPS
--- @desc Tips panel shown to specs
 
 local math = math
 local table = table
@@ -24,6 +24,10 @@ PANEL.Colors = {
 	hover = COLOR_WHITE,
 	press = COLOR_RED
 }
+
+---
+-- @class PANEL
+-- @section TipsButton
 
 ---
 -- @local
@@ -65,6 +69,8 @@ local tip_params = {
 	[31] = {duckkey = Key("+duck", "DUCK")},
 	[36] = {helpkey = Key("+gm_showhelp", "F1")},
 }
+
+-- @section TTTTips
 
 PANEL = {}
 
@@ -113,11 +119,6 @@ function PANEL:Init()
 
 	self:SetTip(self.TipIndex)
 end
-
----
--- @class PANEL
--- @section TIPS
----
 
 ---
 -- Sets the current tip index
@@ -264,8 +265,8 @@ function PANEL:Paint(w, h)
 
 	if huds and HUDManager then
 		local hud = huds.GetStored(HUDManager.GetHUD())
-		if hud and isfunction(hud.popupPaint) then
-			hud.popupPaint(self, w, h)
+		if hud and isfunction(hud.PopupPaint) then
+			hud.PopupPaint(self, w, h)
 
 			return
 		end
@@ -286,8 +287,6 @@ vgui.Register("TTTTips", PANEL, "Panel")
 
 ---
 -- @module TIPS
--- @section
----
 
 -- Creation
 

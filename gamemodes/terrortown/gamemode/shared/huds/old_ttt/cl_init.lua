@@ -1,6 +1,6 @@
 ---
 -- HUD base class.
--- @module HUD
+-- @class HUD
 -- @section old_ttt
 
 local surface = surface

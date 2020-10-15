@@ -1,6 +1,6 @@
 ---
+-- We need our own weapon switcher because the hl2 one skips empty weapons
 -- @class WSWITCH
--- @desc we need our own weapon switcher because the hl2 one skips empty weapons
 
 local pairs = pairs
 local IsValid = IsValid

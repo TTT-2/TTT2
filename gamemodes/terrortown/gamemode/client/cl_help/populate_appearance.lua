@@ -402,7 +402,7 @@ local function PopulateDamagePanel(parent)
 	form:MakeComboBox({
 		label = "label_damage_indicator_mode",
 		convar = "ttt_dmgindicator_mode",
-		choices = DMGINDICATOR.GetThemeNames(),
+		choices = dmgindicator.GetThemeNames(),
 		master = dmgEnb
 	})
 

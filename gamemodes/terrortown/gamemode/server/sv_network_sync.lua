@@ -76,7 +76,7 @@ end
 --
 -- @param table meta1 first meta table
 -- @param table meta2 second meta table
--- @return bool Returns true if they are equal false if not
+-- @return boolean Returns true if they are equal false if not
 function ttt2net.NetworkMetaDataTableEqual(meta1, meta2)
 	if meta1 == nil and meta2 == nil then
 		return true
@@ -838,7 +838,7 @@ local plymeta = assert(FindMetaTable("Player"), "[TTT2NET] FAILED TO FIND PLAYER
 -- Sets a bool value at the given path on the player.
 --
 -- @param any|table path The path to set the value for
--- @param bool|nil value The value to set
+-- @param boolean|nil value The value to set
 function plymeta:TTT2NETSetBool(path, value)
 	ttt2net.SetOnPlayer(path, { type = "bool" }, value, self)
 end

@@ -1,8 +1,7 @@
 ---
--- @realm client
--- @section Scoreboard
 -- @desc VGUI panel version of the scoreboard, based on TEAM GARRY's sandbox mode
 -- scoreboard.
+-- @section Scoreboard
 
 local surface = surface
 local draw = draw
@@ -36,6 +35,7 @@ GROUP_COUNT = 4
 ---
 -- Utility function to register a score group
 -- @param string name
+-- @realm client
 function AddScoreGroup(name)
 	if _G["GROUP_" .. name] then
 		error("Group of name '" .. name .. "' already exists!")
@@ -52,6 +52,7 @@ end
 -- Returns the score group of a @{Player}
 -- @param Player ply
 -- @return number|string
+-- @realm client
 function ScoreGroup(ply)
 	if not IsValid(ply) then -- will not match any group panel
 		return -1
@@ -84,17 +85,7 @@ function ScoreGroup(ply)
 	return ply:IsTerror() and GROUP_TERROR or GROUP_SPEC
 end
 
----
--- @class PANEL
----
-
----
--- @section TTTScoreboard
----
-
 TTTScoreboard = TTTScoreboard or {}
-
-local PANEL = {}
 TTTScoreboard.Logo = surface.GetTextureID("vgui/ttt/score_logo_2")
 
 surface.CreateFont("cool_small", {
@@ -151,6 +142,7 @@ sboard_sort = {
 		-- Reverse on purpose
 		--	otherwise the default ascending order puts boring innocents first
 		comp = 0 - comp
+
 		return comp
 	end,
 	karma = function(plya, plyb)
@@ -158,7 +150,14 @@ sboard_sort = {
 	end
 }
 
--- PANEL START
+---
+-- @class PANEL
+-- @section TTTScoreboard
+
+local PANEL = {}
+
+---
+-- @ignore
 function PANEL:Init()
 	self.hostdesc = vgui.Create("DLabel", self)
 	self.hostdesc:SetText(GetTranslation("sb_playing"))
@@ -247,6 +246,7 @@ local function sort_header_handler(self_, lbl)
 	end
 end
 
+---
 -- For headings only the label parameter is relevant, second param is included for
 -- parity with sb_row
 local function column_label_work(self_, table_to_add, label, width, sort_identifier, sort_func)
@@ -295,6 +295,7 @@ end
 -- @param function sort_func
 -- @return Panel DLabel
 -- @see PANEL:AddFakeColumn
+-- @realm client
 function PANEL:AddColumn(label, _, width, sort_id, sort_func)
 	return column_label_work(self, self.cols, label, width, sort_id, sort_func)
 end
@@ -302,6 +303,7 @@ end
 ---
 -- Returns the current columns
 -- @return table
+-- @realm client
 function PANEL:GetColumns()
 	return self.cols
 end
@@ -316,6 +318,7 @@ end
 -- @param function sort_func
 -- @return Panel DLabel
 -- @see PANEL:AddColumn
+-- @realm client
 function PANEL:AddFakeColumn(label, _, width, sort_id, sort_func)
 	return column_label_work(self, self.sort_headers, label, width, sort_id, sort_func)
 end
@@ -328,6 +331,9 @@ local function _sbfunc()
 	end
 end
 
+---
+-- Starts the update timer (if not already started)
+-- @realm client
 function PANEL:StartUpdateTimer()
 	if not timer.Exists("TTTScoreboardUpdater") then
 		timer.Create("TTTScoreboardUpdater", 0.3, 0, _sbfunc)
@@ -341,6 +347,8 @@ local colors = {
 
 local y_logo_off = 89
 
+---
+-- @ignore
 function PANEL:Paint()
 	-- Logo sticks out, so always offset bg
 	draw.RoundedBox(8, 0, y_logo_off, self:GetWide(), self:GetTall() - y_logo_off, colors.bg)
@@ -354,6 +362,8 @@ function PANEL:Paint()
 	surface.DrawTexturedRect(5, 0, 256, 256)
 end
 
+---
+-- @ignore
 function PANEL:PerformLayout()
 	-- position groups and find their total size
 	local gy = 0
@@ -445,6 +455,8 @@ function PANEL:PerformLayout()
 	end
 end
 
+---
+-- @ignore
 function PANEL:ApplySchemeSettings()
 	self.hostdesc:SetFont("cool_small")
 	self.hostname:SetFont("cool_large")
@@ -517,13 +529,14 @@ end
 vgui.Register("TTTScoreboard", PANEL, "Panel")
 
 ---
--- @section TTTPlayerFrame
--- @desc PlayerFrame is defined in sandbox and is basically a little scrolling
+-- PlayerFrame is defined in sandbox and is basically a little scrolling
 -- hack. Just putting it here (slightly modified) because it's tiny.
----
+-- @section TTTPlayerFrame
 
 PANEL = {}
 
+---
+-- @ignore
 function PANEL:Init()
 	self.pnlCanvas = vgui.Create("Panel", self)
 	self.YOffset = 0
@@ -533,22 +546,30 @@ end
 
 ---
 -- @return Panel
+-- @realm client
 function PANEL:GetCanvas()
 	return self.pnlCanvas
 end
 
 ---
 -- @param number dlta
+-- @realm client
 function PANEL:OnMouseWheeled(dlta)
 	self.scroll:AddScroll(dlta * -2)
 
 	self:InvalidateLayout()
 end
 
+---
+-- Toggle scrolling
+-- @param boolean st
+-- @realm client
 function PANEL:SetScroll(st)
 	self.scroll:SetEnabled(st)
 end
 
+---
+-- @ignore
 function PANEL:PerformLayout()
 	self.pnlCanvas:SetVisible(self:IsVisible())
 

@@ -83,7 +83,7 @@ local function RoundStartPopup()
 	if huds and HUDManager then
 		local hud = huds.GetStored(HUDManager.GetHUD())
 		if hud then
-			paintFn = hud.popupPaint or paintFn
+			paintFn = hud.PopupPaint or paintFn
 		end
 	end
 

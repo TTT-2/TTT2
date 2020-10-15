@@ -1,6 +1,6 @@
 ---
+-- Game Report
 -- @class CLSCORE
--- @desc Game report
 
 ttt_include("cl_awards")
 
@@ -402,7 +402,6 @@ end
 
 ---
 -- Creates the highlights @{Panel}
---
 -- @param Panel dpanel
 -- @param table title
 -- @param number starttime
@@ -503,7 +502,6 @@ end
 
 ---
 -- Converts the wintype into a title object to be used with @{CLSCORE:BuildHilitePanel}.
---
 -- @internal
 -- @realm client
 -- @param string|number wintype

@@ -1,6 +1,5 @@
 ---
 -- @class PANEL
--- @realm client
 -- @section DRoleImage
 
 local PANEL = {}
@@ -9,105 +8,56 @@ local surface = surface
 local vgui = vgui
 
 ---
--- @function GetMaterial()
--- @return Material
---
----
--- @function SetMaterial(material)
--- @param Material material
----
+-- @accessor Material
+-- @realm client
 AccessorFunc(PANEL, "m_Material", "Material")
 
 ---
--- @function GetMaterial2()
--- @return Material
---
----
--- @function SetMaterial2(material)
--- @param Material material
----
+-- @accessor Material
+-- @realm client
 AccessorFunc(PANEL, "m_Material2", "Material2")
 
 ---
--- @function GetMaterialOverlay()
--- @return Material
---
----
--- @function SetMaterialOverlay(material)
--- @param Material material
----
+-- @accessor Material
+-- @realm client
 AccessorFunc(PANEL, "m_MaterialOverlay", "MaterialOverlay")
 
 ---
--- @function GetRoleIcon()
--- @return Material
---
----
--- @function SetRoleIcon(material)
--- @param Material material
----
+-- @accessor Material
+-- @realm client
 AccessorFunc(PANEL, "m_RoleIcon", "RoleIcon")
 
 ---
--- @function GetImageColor()
--- @return Color
---
----
--- @function SetImageColor(color)
--- @param Color color
----
+-- @accessor Color
+-- @realm client
 AccessorFunc(PANEL, "m_Color", "ImageColor")
 
 ---
--- @function GetKeepAspect()
--- @return boolean
---
----
--- @function SetKeepAspect(bool)
--- @param boolean bool
----
+-- @accessor boolean
+-- @realm client
 AccessorFunc(PANEL, "m_bKeepAspect", "KeepAspect")
 
 ---
--- @function GetMatName()
--- @return string
---
----
--- @function SetMatName(str)
--- @param string str
----
+-- @accessor string
+-- @realm client
 AccessorFunc(PANEL, "m_strMatName", "MatName")
 
 ---
--- @function GetMatName2()
--- @return string
---
----
--- @function SetMatName2(str)
--- @param string str
----
+-- @accessor string
+-- @realm client
 AccessorFunc(PANEL, "m_strMatName2", "MatName2")
 
 ---
--- @function GetMatOverName()
--- @return string
---
----
--- @function SetMatOverName(str)
--- @param string str
----
+-- @accessor string
+-- @realm client
 AccessorFunc(PANEL, "m_strMatOverName", "MatOverName")
 
 ---
--- @function GetRoleIconName()
--- @return string
---
----
--- @function SetRoleIconName(str)
--- @param string str
----
+-- @accessor string
+-- @realm client
 AccessorFunc(PANEL, "m_strRoleIconName", "RoleIconName")
 
+--- @ignore
 function PANEL:Init()
 	self:SetImageColor(Color(255, 255, 255, 255))
 	self:SetMouseInputEnabled(false)
@@ -128,6 +78,7 @@ end
 -- @param string matName2
 -- @param string roleIconName
 -- @param string matOverName
+-- @realm client
 function PANEL:SetOnViewMaterial(matName, matName2, roleIconName, matOverName)
 	self:SetMatName(matName)
 	self:SetMatName2(matName2)
@@ -140,10 +91,16 @@ function PANEL:SetOnViewMaterial(matName, matName2, roleIconName, matOverName)
 	self.RoleIconImageName = roleIconName
 end
 
+---
+-- @return boolean returns whether the current @{PANEL} is unloaded
+-- @realm client
 function PANEL:Unloaded()
 	return self.m_strMatName ~= nil
 end
 
+---
+-- Loads the @{Material}
+-- @realm client
 function PANEL:LoadMaterial()
 	if not self:Unloaded() then return end
 
@@ -155,6 +112,9 @@ function PANEL:LoadMaterial()
 	self:SetMatOverName(nil)
 end
 
+---
+-- Post loads the @{Material}
+-- @realm client
 function PANEL:DoLoadMaterial()
 	local mat = Material(self:GetMatName())
 	local mat2 = Material(self:GetMatName2())
@@ -189,6 +149,7 @@ end
 
 ---
 -- @param Material|string mat
+-- @realm client
 function PANEL:SetMaterial(mat)
 	-- Everybody makes mistakes,
 	-- that's why they put erasers on pencils.
@@ -214,6 +175,7 @@ end
 
 ---
 -- @param Material|string mat
+-- @realm client
 function PANEL:SetMaterial2(mat)
 	-- Everybody makes mistakes,
 	-- that's why they put erasers on pencils.
@@ -228,6 +190,7 @@ end
 
 ---
 -- @param Material|string mat
+-- @realm client
 function PANEL:SetMaterialOverlay(mat)
 	-- Everybody makes mistakes,
 	-- that's why they put erasers on pencils.
@@ -242,6 +205,7 @@ end
 
 ---
 -- @param Material|string mat
+-- @realm client
 function PANEL:SetRoleIcon(mat)
 	-- Everybody makes mistakes,
 	-- that's why they put erasers on pencils.
@@ -256,6 +220,7 @@ end
 
 ---
 -- @param string strImage The image name
+-- @realm client
 function PANEL:SetImage(strImage)
 	self.ImageName = strImage
 
@@ -267,6 +232,7 @@ end
 
 ---
 -- @param string strImage2 The image name
+-- @realm client
 function PANEL:SetImage2(strImage2)
 	self.ImageName2 = strImage2
 
@@ -278,6 +244,7 @@ end
 
 ---
 -- @param string strImageOverlay The image overlay name
+-- @realm client
 function PANEL:SetImageOverlay(strImageOverlay)
 	self.ImageOverlayName = strImageOverlay
 
@@ -289,6 +256,7 @@ end
 
 ---
 -- @param string strImage The role icon image name
+-- @realm client
 function PANEL:SetRoleIconImage(strImage)
 	self.RoleIconImageName = strImage
 
@@ -298,16 +266,22 @@ function PANEL:SetRoleIconImage(strImage)
 	self:FixVertexLitRoleIcon()
 end
 
+---
+-- @realm client
 function PANEL:UnloadImage2()
 	self.ImageName2 = nil
 	self.m_Material2 = nil
 end
 
+---
+-- @realm client
 function PANEL:UnloadImageOverlay()
 	self.ImageOverlayName = nil
 	self.m_MaterialOverlay = nil
 end
 
+---
+-- @realm client
 function PANEL:UnloadRoleIconImage()
 	self.RoleIconImageName = nil
 	self.m_RoleIcon = nil
@@ -315,28 +289,34 @@ end
 
 ---
 -- @return string
+-- @realm client
 function PANEL:GetImage()
 	return self.ImageName
 end
 
 ---
 -- @return string
+-- @realm client
 function PANEL:GetImage2()
 	return self.ImageName2
 end
 
 ---
 -- @return string
+-- @realm client
 function PANEL:GetImageOverlay()
 	return self.ImageOverlayName
 end
 
 ---
 -- @return string
+-- @realm client
 function PANEL:GetRoleIconImage()
 	return self.RoleIconImageName
 end
 
+---
+-- @local
 function PANEL:FixVertexLitMaterial()
 	--
 	-- If it's a vertexlitgeneric material we need to change it to be
@@ -362,6 +342,8 @@ function PANEL:FixVertexLitMaterial()
 	self:SetMaterial(mat)
 end
 
+---
+-- @local
 function PANEL:FixVertexLitMaterial2()
 	--
 	-- If it's a vertexlitgeneric material we need to change it to be
@@ -387,6 +369,8 @@ function PANEL:FixVertexLitMaterial2()
 	self:SetMaterial2(mat)
 end
 
+---
+-- @local
 function PANEL:FixVertexLitMaterialOverlay()
 	--
 	-- If it's a vertexlitgeneric material we need to change it to be
@@ -412,6 +396,8 @@ function PANEL:FixVertexLitMaterialOverlay()
 	self:SetMaterialOverlay(mat)
 end
 
+---
+-- @local
 function PANEL:FixVertexLitRoleIcon()
 	--
 	-- If it's a vertexlitgeneric material we need to change it to be
@@ -437,10 +423,14 @@ function PANEL:FixVertexLitRoleIcon()
 	self:SetRoleIcon(mat)
 end
 
+---
+-- @ignore
 function PANEL:SizeToContents()
 	self:SetSize(self.ActualWidth, self.ActualHeight)
 end
 
+---
+-- @ignore
 function PANEL:Paint()
 	self:PaintAt(0, 0, self:GetWide(), self:GetTall())
 end
@@ -451,6 +441,7 @@ end
 -- @param number dw
 -- @param number dh
 -- @return[default=true] boolean
+-- @realm client
 function PANEL:PaintAt(x, y, dw, dh)
 	dw, dh = dw or self:GetWide(), dh or self:GetTall()
 
@@ -555,6 +546,7 @@ end
 -- @param Panel propertySheet the parent element
 -- @param number width
 -- @param number height
+-- @realm client
 function PANEL:GenerateExample(className, propertySheet, width, height)
 	local ctrl = vgui.Create(className)
 	ctrl:SetImage("brick/brick_model")

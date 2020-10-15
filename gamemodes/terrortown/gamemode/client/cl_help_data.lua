@@ -1,6 +1,7 @@
 ---
--- @desc A collection of objects that are passed in the menu populate hooks.
+-- A collection of objects that are passed in the menu populate hooks.
 -- @author Mineotopia
+-- @module menuDataHandler
 
 menuDataHandler = {}
 
@@ -30,7 +31,7 @@ end
 ---
 -- Binds data table to the @{HELP_MENU_DATA} object
 -- @param table data The data table with all submenues
--- @return @{HELP_MENU_DATA} The object to be used in the hook to populate the menu
+-- @return HELP_MENU_DATA The object to be used in the hook to populate the menu
 -- @internal
 -- @realm client
 function HELP_MENU_DATA:BindData(menuTbl)

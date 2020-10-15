@@ -17,7 +17,7 @@ end
 -- Called whenever a @{Player} tries to order an @{ITEM} or @{Weapon}
 -- @param Player ply
 -- @param string id id of the @{ITEM} or @{Weapon}, old id for @{ITEM} and class for @{Weapon}
--- @param bool is_item is id an @{ITEM} or @{Weapon}
+-- @param boolean is_item is id an @{ITEM} or @{Weapon}
 -- @return[default=true] boolean return true to allow buying of an equipment item, false to disallow
 -- @hook
 -- @realm server

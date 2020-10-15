@@ -1,11 +1,11 @@
 ---
--- @module LANG
--- @desc Clientside language stuff
+-- Clientside language stuff
 -- @note Need to build custom tables of strings. Can't use language.Add as there is no
 -- way to access the translated string in Lua. Identifiers only get translated
 -- when Source/gmod print them. By using our own table and our own lookup, we
 -- have far more control. Maybe it's slower, but maybe not, we aren't scanning
 -- strings for "#identifiers" after all.
+-- @module LANG
 
 LANG.Strings = {}
 
@@ -464,7 +464,7 @@ end
 -- Styles of custom SWEP messages and such should use LANG.SetStyle in their
 -- script. The SWEP stuff here might be moved out to the SWEPS too.
 
--- TODO the remaining messages here are moved to their fitting ents as soon as 
+-- TODO the remaining messages here are moved to their fitting ents as soon as
 -- we move them all into our main repo
 
 local styledmessages = {

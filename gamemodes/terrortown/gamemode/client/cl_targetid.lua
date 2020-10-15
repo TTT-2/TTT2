@@ -80,7 +80,7 @@ end
 ---
 -- Function that handles the drawing of the overhead roleicons, it does not check whether
 -- the icon should be drawn or not, that has to be handled prior to calling this function
--- @param @{PLAYER} ply The player to receive an overhead icon
+-- @param Player ply The player to receive an overhead icon
 -- @realm client
 function DrawOverheadRoleIcon(ply, ricon, rcolor)
 	local client = LocalPlayer()
@@ -460,7 +460,7 @@ end
 
 ---
 -- Add targetID info to a focused entity.
--- @param @{TARGET_DATA} tData The @{TARGET_DATA} data object which contains all information
+-- @param TARGET_DATA tData The @{TARGET_DATA} data object which contains all information
 -- @hook
 -- @realm client
 function GM:TTTRenderEntityInfo(tData)
@@ -573,7 +573,10 @@ function HUDDrawTargetIDDoors(tData)
 	end
 end
 
+---
 -- handle looking at traitor buttons
+-- @param TARGET_DATA tData
+-- @realm client
 function HUDDrawTargetIDTButtons(tData)
 	local client = LocalPlayer()
 	local ent = tData:GetEntity()
@@ -683,7 +686,10 @@ function HUDDrawTargetIDTButtons(tData)
 	)
 end
 
+---
 -- handle looking at weapons
+-- @param TARGET_DATA tData
+-- @realm client
 function HUDDrawTargetIDWeapons(tData)
 	local client = LocalPlayer()
 	local ent = tData:GetEntity()
@@ -764,7 +770,10 @@ function HUDDrawTargetIDWeapons(tData)
 	end
 end
 
+---
 -- handle looking at players
+-- @param TARGET_DATA tData
+-- @realm client
 function HUDDrawTargetIDPlayers(tData)
 	local client = LocalPlayer()
 	local ent = tData:GetEntity()
@@ -853,7 +862,10 @@ function HUDDrawTargetIDPlayers(tData)
 	end
 end
 
+---
 -- handle looking ragdolls
+-- @param TARGET_DATA tData
+-- @realm client
 function HUDDrawTargetIDRagdolls(tData)
 	local client = LocalPlayer()
 	local ent = tData:GetEntity()

@@ -1,3 +1,5 @@
+--- @ignore
+
 local surface = surface
 local IsValid = IsValid
 local TryTranslation = LANG.TryTranslation

@@ -1,5 +1,5 @@
 ---
--- @module HUDELEMENT
+-- @class HUDELEMENT
 -- @section dynamic_hud_element
 
 local base = "hud_element_base"

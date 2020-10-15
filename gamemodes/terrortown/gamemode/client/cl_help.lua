@@ -1,6 +1,5 @@
 ---
 -- @class HELPSCRN
--- @desc Help screen
 
 local IsValid = IsValid
 local CreateConVar = CreateConVar
@@ -167,6 +166,10 @@ function HELPSCRN:ShowMainMenu()
 	AddMenuButtons(menuesAdmin, dsettings)
 end
 
+---
+-- @see HELPSCRN:ShowMainMenu()
+-- @realm client
+-- @function HELPSCRN:Show()
 HELPSCRN.Show = HELPSCRN.ShowMainMenu
 
 ---

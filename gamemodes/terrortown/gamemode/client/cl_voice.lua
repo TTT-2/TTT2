@@ -1,6 +1,6 @@
 ---
+-- Voicechat popup
 -- @module VOICE
--- @desc Voicechat popup
 
 DEFINE_BASECLASS("gamemode_base")
 
@@ -169,7 +169,7 @@ function GM:PlayerStartVoice(ply)
 	if huds and HUDManager then
 		local hud = huds.GetStored(HUDManager.GetHUD())
 		if hud then
-			paintFn = hud.voicePaint or paintFn
+			paintFn = hud.VoicePaint or paintFn
 		end
 	end
 
@@ -255,6 +255,7 @@ timer.Create("VoiceClean", 10, 0, VoiceClean)
 -- @hook
 -- @realm client
 -- @ref https://wiki.facepunch.com/gmod/GM:PlayerEndVoice
+-- @local
 function GM:PlayerEndVoice(ply, no_reset)
 	if IsValid(PlayerVoicePanels[ply]) then
 		PlayerVoicePanels[ply]:Remove()

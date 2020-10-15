@@ -1,3 +1,5 @@
+--- @ignore
+
 local base = "pure_skin_element"
 
 DEFINE_BASECLASS(base)
@@ -54,6 +56,7 @@ if CLIENT then
 		BaseClass.PerformLayout(self)
 	end
 
+	--- @ignore
 	function HUDELEMENT:DrawMarker(x, y, size, color)
 		local thickness = 2 * self.scale
 		local margin = 3 * self.scale

@@ -1,6 +1,6 @@
 ---
 -- HUD base class.
--- @module HUD
+-- @class HUD
 -- @author saibotk
 -- @author LeBroomer
 
@@ -284,6 +284,7 @@ end
 -- @param table elem
 -- @realm client
 function HUD:DrawElemAndChildren(elem)
+	--- @ignore
 	if not elem.initialized or not elem.type or not hook.Call("HUDShouldDraw", GAMEMODE, elem.type) or not self:ShouldShow(elem.type) or not elem:ShouldDraw() then return end
 
 	local children = elem:GetChildren()

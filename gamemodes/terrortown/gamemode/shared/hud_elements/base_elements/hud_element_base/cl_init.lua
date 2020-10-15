@@ -1,6 +1,6 @@
-------------
+---
 -- HUDELEMENT base class.
--- @module HUDELEMENT
+-- @class HUDELEMENT
 -- @author saibotk
 -- @author LeBroomer
 

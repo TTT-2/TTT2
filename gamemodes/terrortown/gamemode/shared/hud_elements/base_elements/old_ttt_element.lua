@@ -1,5 +1,5 @@
 ---
--- @module HUDELEMENT
+-- @class HUDELEMENT
 -- @section old_ttt_element
 
 local surface = surface

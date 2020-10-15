@@ -298,8 +298,8 @@ end
 -- @param table tbl data @{table}
 -- @param table keys keys for the data @{table}
 -- @return table false is returned if there is an error, nil if the query returned no data.
--- @return bool returns whether there is a difference between the given data `tbl` and the sqlite data, 
--- so that's an indicator whether old data was overwritten 
+-- @return boolean returns whether there is a difference between the given data `tbl` and the sqlite data,
+-- so that's an indicator whether old data was overwritten
 -- @realm shared
 -- @todo usage
 function SQL.Load(tableName, name, tbl, keys)

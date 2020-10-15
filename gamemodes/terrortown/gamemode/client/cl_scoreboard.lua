@@ -1,6 +1,6 @@
 ---
+-- A much requested darker scoreboard
 -- @section scoreboard_manager
--- @desc a much requested darker scoreboard
 
 ttt_include("vgui__cl_sb_main")
 
