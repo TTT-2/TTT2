@@ -45,10 +45,13 @@ function migration.Add(identifier, version, upQuery, downQuery)
 		return false
 	end
 
+	sql.Begin()
 	if sql.Query(upQuery) == false then
 		print("upresult: " .. sql.LastError())
+		sql.Query("Rollback;")
 		return false
 	end
+	sql.Commit()
 
 	local setExecutedQuery = "UPDATE \"migration_master\" SET \"executed_at\"=" .. sql.SQLStr(os.time())
 							.. " WHERE \"identifier\"=" .. sql.SQLStr(identifier)
