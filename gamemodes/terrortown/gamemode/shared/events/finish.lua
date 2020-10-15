@@ -5,9 +5,9 @@ end
 
 if SERVER then
 	function EVENT:Trigger(wintype)
-		return {
+		return self:Add({
 			wintype = wintype
-		}
+		})
 	end
 end
 

@@ -5,7 +5,9 @@ end
 
 if SERVER then
 	function EVENT:Trigger(owner, disarmer, successful)
-		return {
+		self:AddAffectedPlayers(owner:SteamID64(), disarmer:SteamID64())
+
+		return self:Add({
 			successful = successful,
 			owner = {
 				nick = owner:Nick(),
@@ -19,7 +21,7 @@ if SERVER then
 				role = disarmer:GetSubRole(),
 				team = disarmer:GetTeam()
 			}
-		}
+		})
 	end
 end
 

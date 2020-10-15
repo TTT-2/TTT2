@@ -5,11 +5,9 @@ end
 
 if SERVER then
 	function EVENT:Trigger(roundstate)
-		local event = {
+		return self:Add({
 			newstate = roundstate
-		}
-
-		return event
+		})
 	end
 end
 

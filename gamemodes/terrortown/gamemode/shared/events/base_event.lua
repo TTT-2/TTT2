@@ -1,6 +1,7 @@
 EVENT.type = "base_event"
 EVENT.event = {}
 EVENT.score = {}
+EVENT.players = {}
 
 ---
 -- Sets the event data table to the event.
@@ -20,10 +21,7 @@ end
 function EVENT:SetScore(ply64, score)
 	if not ply64 or not score then return end
 
-	self.score = {
-		ply64 = ply64,
-		score = score
-	}
+	self.score[ply64] = score
 end
 
 ---
@@ -37,7 +35,37 @@ function EVENT:GetDeprecatedFormat(event)
 
 end
 
+function EVENT:HasPlayerScore(ply64)
+	return self.score[ply64] ~= nil
+end
+
+function EVENT:GetSummedPlayerScore(ply64)
+	if not self:HasPlayerScore(ply64) then
+		return 0
+	end
+
+	local scoreSum = 0
+
+	for _, score in pairs(self.score[ply64]) do
+		scoreSum = scoreSum + score
+	end
+
+	return scoreSum
+end
+
+function EVENT:GetAffectedPlayer()
+	return self.players
+end
+
 if SERVER then
+	---
+	-- Sets the players that are affected by this event.
+	-- @param string vararg A variable amount of player steamID64
+	-- @realm server
+	function EVENT:AddAffectedPlayers(...)
+		table.Add(self.players, array.pack(...))
+	end
+
 	---
 	-- Adds the event data table to an event. Also adds some generic data as well.
 	-- Inside this function the hook @{GM:TTT2OnTriggeredEvent} is called to make

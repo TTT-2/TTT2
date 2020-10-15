@@ -5,12 +5,12 @@ end
 
 if SERVER then
 	function EVENT:Trigger(ply)
-		local event = {
+		self:AddAffectedPlayers(ply:SteamID64())
+
+		return self:Add({
 			nick = ply:Nick(),
 			sid64 = ply:SteamID64()
-		}
-
-		return event
+		})
 	end
 end
 

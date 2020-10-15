@@ -88,7 +88,7 @@ end
 -- @param string name The name identifer of the event
 -- @return table The reference to the copied event table
 -- @realm shared
-function events.New(name)
+function events.Create(name)
 	return tableCopy(events.Get(name))
 end
 
@@ -107,6 +107,16 @@ end
 -- @realm shared
 function events.Reset()
 	events.list = {}
+end
+
+function events.SortByPlayerAndEvent(eventList)
+	local sortedList = {}
+
+	for i = 1, #eventList do
+		local event = eventList[i]
+	end
+
+	return sortedList
 end
 
 ---
@@ -155,12 +165,13 @@ if SERVER then
 			return
 		end
 
-		local newEvent = events.New(name)
-		local eventData = newEvent:Trigger(...)
+		local newEvent = events.Create(name)
 
 		-- only add new event to managed event list, if addition was not aborted
-		if newEvent:Add(eventData) then
+		if newEvent:Trigger(...) then
 			events.list[#events.list + 1] = newEvent
+		else
+			return
 		end
 
 		-- add to deprecated score list
@@ -221,7 +232,7 @@ if CLIENT then
 		for i = 1, #eventStreamData do
 			local eventData = eventStreamData[i]
 
-			local newEvent = events.New(eventData.type)
+			local newEvent = events.Create(eventData.type)
 			newEvent:SetEvent(eventData.event)
 			newEvent:SetScore(eventData.score.ply64, eventData.score.score)
 

@@ -5,14 +5,14 @@ end
 
 if SERVER then
 	function EVENT:Trigger(planter)
-		local event = {
+		self:AddAffectedPlayers(planter:SteamID64())
+
+		return self:Add({
 			nick = planter:Nick(),
 			sid64 = planter:SteamID64(),
 			role = planter:GetSubRole(),
 			team = planter:GetTeam()
-		}
-
-		return event
+		})
 	end
 end
 

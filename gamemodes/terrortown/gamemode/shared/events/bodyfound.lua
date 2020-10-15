@@ -7,7 +7,9 @@ if SERVER then
 	function EVENT:Trigger(finder, rag)
 		local found = CORPSE.GetPlayer(rag)
 
-		local event = {
+		self:AddAffectedPlayers(finder:SteamID64(), found:SteamID64())
+
+		return self:Add({
 			finder = {
 				nick = finder:Nick(),
 				sid64 = finder:SteamID64(),
@@ -23,17 +25,15 @@ if SERVER then
 				headshot = CORPSE.WasHeadshot(rag) or false,
 				time = math.Round((CORPSE.GetDeathTime(rag) - GAMEMODE.RoundStartTime) * 1000, 0)
 			}
-		}
-
-		return event
+		})
 	end
 
 	function EVENT:Score(event)
 		local finder = event.finder
 
-		return finder.sid64, {
+		self:SetScore(finder:SteamID64(), {
 			score = roles.GetByIndex(finder.role).scoreBodyFoundMuliplier
-		}
+		})
 	end
 end
 

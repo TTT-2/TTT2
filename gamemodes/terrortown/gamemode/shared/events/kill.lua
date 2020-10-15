@@ -7,6 +7,8 @@ if SERVER then
 	function EVENT:Trigger(victim, attacker, dmgInfo)
 		if not IsValid(victim) or not victim:IsPlayer() then return end
 
+		self:AddAffectedPlayers(victim:SteamID64())
+
 		local event = {
 			victim = {
 				nick = victim:Nick(),
@@ -30,6 +32,8 @@ if SERVER then
 				role = attacker:GetSubRole(),
 				team = attacker:GetTeam()
 			}
+
+			self:AddAffectedPlayers(attacker:SteamID64())
 		end
 
 		local wep = util.WeaponFromDamage(dmgInfo)
@@ -51,7 +55,7 @@ if SERVER then
 			end
 		end
 
-		return event
+		return self:Add(event)
 	end
 
 	function EVENT:Score(event)
@@ -69,18 +73,18 @@ if SERVER then
 		local roleData = roles.GetByIndex(attacker.role)
 
 		if attacker.sid64 == victim.sid64 then
-			return victim.sid64, {
+			self:SetScore(victim.sid64, {
 				score = roleData.scoreSuicideMultiplier
-			}
+			})
 		else
 			if attacker.team ~= TEAM_NONE and attacker.team == victim.team and not TEAMS[attacker.team].alone then
-				return attacker.sid64, {
+				self:SetScore(attacker.sid64, {
 					score = roleData.scoreTeamKillsMultiplier
-				}
+				})
 			else
-				return attacker.sid64, {
+				self:SetScore(attacker.sid64, {
 					score = roleData.scoreKillsMultiplier
-				}
+				})
 			end
 		end
 	end

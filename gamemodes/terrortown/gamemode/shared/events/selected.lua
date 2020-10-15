@@ -20,9 +20,11 @@ if SERVER then
 				role = ply:GetSubRole(),
 				team = ply:GetTeam()
 			}
+
+			self:AddAffectedPlayers(ply:SteamID64())
 		end
 
-		return event
+		return self:Add(event)
 	end
 end
 

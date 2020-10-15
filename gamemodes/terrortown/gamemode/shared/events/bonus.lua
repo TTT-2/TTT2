@@ -8,13 +8,15 @@ if SERVER then
 		self.cachedAlive = alive or {}
 		self.cachedDead = dead or {}
 
-		return {
+		self:AddAffectedPlayers(ply:SteamID64())
+
+		return self:Add({
 			nick = ply:Nick(),
 			sid64 = ply:SteamID64(),
 			team = ply:GetTeam(),
 			role = ply:GetSubRole(),
 			alive = ply:Alive() and ply:IsTerror()
-		}
+		})
 	end
 
 	function EVENT:Score(event)
@@ -44,11 +46,11 @@ if SERVER then
 			otherAlivePlayers = otherAlivePlayers + amount
 		end
 
-		return event.sid64, {
+		self:SetScore(event.sid64, {
 			scoreAliveTeamMates = alive[team] or 0,
 			scoreDeadEnemies = math.ceil(otherDeadPlayers * roleData.scoreSurviveBonusMultiplier),
 			scoreTimelimit = event.wintype == WIN_TIMELIMIT and math.ceil(otherAlivePlayers * roleData.scoreTimelimitMultiplier) or 0
-		}
+		})
 	end
 end
 

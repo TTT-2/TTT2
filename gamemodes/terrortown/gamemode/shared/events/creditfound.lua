@@ -7,7 +7,9 @@ if SERVER then
 	function EVENT:Trigger(finder, rag, credits)
 		local found = CORPSE.GetPlayer(rag)
 
-		local event = {
+		self:AddAffectedPlayers(finder:SteamID64(), found:SteamID64())
+
+		return self:Add({
 			finder = {
 				nick = finder:Nick(),
 				sid64 = finder:SteamID64(),
@@ -21,9 +23,7 @@ if SERVER then
 				team = found:GetTeam(),
 				credits = credits
 			}
-		}
-
-		return event
+		})
 	end
 end
 
