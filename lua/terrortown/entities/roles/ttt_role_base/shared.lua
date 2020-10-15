@@ -5,23 +5,27 @@
 
 ROLE.isAbstract = true
 
--- the multiplier that is used to calculate the score penalty
--- that is added if this role kills a teammember
+-- The multiplier that is used to calculate the score penalty
+-- that is added if this role kills a teammember.
 ROLE.scoreTeamKillsMultiplier = 0
 
--- the multiplier that is used to calculate the gained score
--- by killing someone from a different team
+-- The multiplier that is used to calculate the gained score
+-- by killing someone from a different team.
 ROLE.scoreKillsMultiplier = 0
 
--- the amount of score points gained by confirming a body
+-- The amount of score points gained by confirming a body.
 ROLE.scoreBodyFoundMuliplier = 1
 
--- the amount of score points gained by surviving a round
+-- The amount of score points gained by surviving a round.
 ROLE.scoreSurviveBonusMultiplier = 0
 
--- the amount of score points gained by beeing alive if the
--- round ended with nobody winning, ususally a negative number
+-- The amount of score points gained by beeing alive if the
+-- round ended with nobody winning, ususally a negative number.
 ROLE.scoreTimelimitMultiplier = 0
+
+-- the amount of points gained by killing yourself. Should be a
+-- negative number for most roles.
+ROLE.scoreSuicideMultiplier = -1
 
 ---
 -- This function is called before initializing a @{ROLE}, but after all

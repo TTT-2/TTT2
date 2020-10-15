@@ -3,19 +3,17 @@ if CLIENT then
 	EVENT.description = "desc_event_c4_plant"
 end
 
-function EVENT:Trigger(planter)
-	local event = {
-		nick = planter:Nick(),
-		sid64 = planter:SteamID64(),
-		role = planter:GetSubRole(),
-		team = planter:GetTeam()
-	}
+if SERVER then
+	function EVENT:Trigger(planter)
+		local event = {
+			nick = planter:Nick(),
+			sid64 = planter:SteamID64(),
+			role = planter:GetSubRole(),
+			team = planter:GetTeam()
+		}
 
-	return event
-end
-
-function EVENT:Score(event)
-
+		return event
+	end
 end
 
 function EVENT:GetDeprecatedFormat(event)

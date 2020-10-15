@@ -3,30 +3,28 @@ if CLIENT then
 	EVENT.description = "desc_event_game_creditfound"
 end
 
-function EVENT:Trigger(finder, rag, credits)
-	local found = CORPSE.GetPlayer(rag)
+if SERVER then
+	function EVENT:Trigger(finder, rag, credits)
+		local found = CORPSE.GetPlayer(rag)
 
-	local event = {
-		finder = {
-			nick = finder:Nick(),
-			sid64 = finder:SteamID64(),
-			role = finder:GetSubRole(),
-			team = finder:GetTeam()
-		},
-		found = {
-			nick = found:Nick(),
-			sid64 = found:SteamID64(),
-			role = found:GetSubRole(),
-			team = found:GetTeam(),
-			credits = credits
+		local event = {
+			finder = {
+				nick = finder:Nick(),
+				sid64 = finder:SteamID64(),
+				role = finder:GetSubRole(),
+				team = finder:GetTeam()
+			},
+			found = {
+				nick = found:Nick(),
+				sid64 = found:SteamID64(),
+				role = found:GetSubRole(),
+				team = found:GetTeam(),
+				credits = credits
+			}
 		}
-	}
 
-	return event
-end
-
-function EVENT:Score(event)
-
+		return event
+	end
 end
 
 function EVENT:GetDeprecatedFormat(event)

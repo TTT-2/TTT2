@@ -3,29 +3,27 @@ if CLIENT then
 	EVENT.description = "desc_event_selected"
 end
 
-function EVENT:Trigger()
-	local event = {
-		plys = {}
-	}
-	local eventPlys = event.plys
-	local plys = player.GetAll()
-
-	for i = 1, #plys do
-		local ply = plys[i]
-
-		eventPlys[i] = {
-			nick = ply:Nick(),
-			sid64 = ply:SteamID64(),
-			role = ply:GetSubRole(),
-			team = ply:GetTeam()
+if SERVER then
+	function EVENT:Trigger()
+		local event = {
+			plys = {}
 		}
+		local eventPlys = event.plys
+		local plys = player.GetAll()
+
+		for i = 1, #plys do
+			local ply = plys[i]
+
+			eventPlys[i] = {
+				nick = ply:Nick(),
+				sid64 = ply:SteamID64(),
+				role = ply:GetSubRole(),
+				team = ply:GetTeam()
+			}
+		end
+
+		return event
 	end
-
-	return event
-end
-
-function EVENT:Score(event)
-
 end
 
 function EVENT:GetDeprecatedFormat(event)

@@ -3,28 +3,24 @@ if CLIENT then
 	EVENT.description = "desc_event_c4_disarm"
 end
 
-function EVENT:Trigger(owner, disarmer, successful)
-	local event = {
-		successful = successful,
-		owner = {
-			nick = owner:Nick(),
-			sid64 = owner:SteamID64(),
-			role = owner:GetSubRole(),
-			team = owner:GetTeam()
-		},
-		disarmer = {
-			nick = disarmer:Nick(),
-			sid64 = disarmer:SteamID64(),
-			role = disarmer:GetSubRole(),
-			team = disarmer:GetTeam()
+if SERVER then
+	function EVENT:Trigger(owner, disarmer, successful)
+		return {
+			successful = successful,
+			owner = {
+				nick = owner:Nick(),
+				sid64 = owner:SteamID64(),
+				role = owner:GetSubRole(),
+				team = owner:GetTeam()
+			},
+			disarmer = {
+				nick = disarmer:Nick(),
+				sid64 = disarmer:SteamID64(),
+				role = disarmer:GetSubRole(),
+				team = disarmer:GetTeam()
+			}
 		}
-	}
-
-	return event
-end
-
-function EVENT:Score(event)
-
+	end
 end
 
 function EVENT:GetDeprecatedFormat(event)

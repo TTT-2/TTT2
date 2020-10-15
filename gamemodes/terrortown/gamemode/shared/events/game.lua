@@ -3,16 +3,14 @@ if CLIENT then
 	EVENT.description = "desc_event_game_state"
 end
 
-function EVENT:Trigger(roundstate)
-	local event = {
-		newstate = roundstate
-	}
+if SERVER then
+	function EVENT:Trigger(roundstate)
+		local event = {
+			newstate = roundstate
+		}
 
-	return event
-end
-
-function EVENT:Score(event)
-
+		return event
+	end
 end
 
 function EVENT:GetDeprecatedFormat(event)

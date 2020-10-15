@@ -1315,6 +1315,25 @@ end
 function EndRound(result)
 	PrintResultMessage(result)
 
+	-- Check who is alive and who is dead on a teambased approach
+	local plys = player.GetAll()
+	local alive = {}
+	local dead = {}
+
+	for i = 1, #plys do
+		local ply = plys[i]
+		local state = (ply:Alive() and ply:IsTerror()) and alive or dead
+		local team = ply:GetTeam()
+
+		if team ~= TEAM_NONE then
+			state[team] = (state[team] or 0) + 1
+		end
+	end
+
+	for i = 1, #plys do
+		events.Trigger(EVENT_BONUS, plys[i], alive, dead)
+	end
+
 	events.Trigger(EVENT_FINISH, result)
 
 	SetRoundState(ROUND_POST)

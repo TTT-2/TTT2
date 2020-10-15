@@ -3,17 +3,15 @@ if CLIENT then
 	EVENT.description = "desc_event_respawn"
 end
 
-function EVENT:Trigger(ply)
-	local event = {
-		nick = ply:Nick(),
-		sid64 = ply:SteamID64()
-	}
+if SERVER then
+	function EVENT:Trigger(ply)
+		local event = {
+			nick = ply:Nick(),
+			sid64 = ply:SteamID64()
+		}
 
-	return event
-end
-
-function EVENT:Score(event)
-
+		return event
+	end
 end
 
 function EVENT:Serialize()

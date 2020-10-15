@@ -133,22 +133,13 @@ end
 function CLSCORE:FillDList(dlst)
 	local events = self.Events
 
-	print("cl scoring event table:")
-	PrintTable(events)
-	print("---------------------------------------------")
-
 	for i = 1, #events do
 		print("this event:")
 
 		local e = events[i]
-		PrintTable(e)
 		local etxt = self:TextForEvent(e)
 		local eicon, ttip = self:IconForEvent(e)
 		local etime = self:TimeForEvent(e)
-
-		print("-----------")
-		print(etxt)
-		print(eicon)
 
 		if etxt then
 			if eicon then

@@ -109,12 +109,23 @@ function events.Reset()
 	events.list = {}
 end
 
+---
+-- Returns the deprecated event data of a single event. Returns nil if
+-- there is no deprecated data for this event.
+-- @param EVENT event The event that should be converted
+-- @return table The deprecated event data table
+-- @realm shared
 function events.GetDeprecatedEventData(event)
 	if not isfunction(event.GetDeprecatedFormat) then return end
 
 	return event:GetDeprecatedFormat(event.event)
 end
 
+---
+-- Generates an event list in the deprecated format. Only contains
+-- events that were present in default TTT. Is sorted by time.
+-- @return table The deprecated event list
+-- @realm shared
 function events.GetDeprecatedEventList()
 	local deprecatedEvents = {}
 
@@ -211,7 +222,8 @@ if CLIENT then
 			local eventData = eventStreamData[i]
 
 			local newEvent = events.New(eventData.type)
-			newEvent:AddData(eventData.event)
+			newEvent:SetEvent(eventData.event)
+			newEvent:SetScore(eventData.score.ply64, eventData.score.score)
 
 			events.list[#events.list + 1] = newEvent
 		end
