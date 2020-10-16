@@ -40,8 +40,8 @@ function orm.Make(tableName, force)
 	-- In those cases the 'rowid' column would function as the primarykey, but as the rowid could change anytime (https://www.sqlite.org/rowidtable.html) data could be deleted unintentionally.
 	-- Most likely rowids wont change in gmod as there is no vacuum operation but just to be safe we will not allow to use such tables. ref: https://wiki.facepunch.com/gmod/sql
 
-	if not primaryKey then return
-		model
+	if not primaryKey then
+		return model
 	end
 
 	model.Delete = ORMMODEL.Delete
