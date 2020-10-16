@@ -10,7 +10,7 @@ local sql = sql
 
 orm = orm or {}
 
-local ormodel = {}
+local ORMMODEL = {}
 
 ---
 -- Returns an object relational model according to the specified databasetable. Does nothing if no databasetable with the given name exists.
@@ -19,7 +19,6 @@ local ormodel = {}
 -- @return ormmodel The model of the database table.
 -- @realm shared
 function orm.Make(tableName, force)
-
 	if IsValid(orm[tableName]) and not force then
 		return orm[tableName]
 	end
@@ -33,9 +32,9 @@ function orm.Make(tableName, force)
 	model._tableName = tableName
 	model._primaryKey = primaryKey
 	model._dataStructure = dataStructure
-	model.All = ormodel.All
-	model.Find = ormodel.Find
-	model.New = ormodel.New
+	model.All = ORMMODEL.All
+	model.Find = ORMMODEL.Find
+	model.New = ORMMODEL.New
 
 	-- DO NOT setup delete/save functions if no primarykey is found.
 	-- In those cases the 'rowid' column would function as the primarykey, but as the rowid could change anytime (https://www.sqlite.org/rowidtable.html) data could be deleted unintentionally.
@@ -45,9 +44,9 @@ function orm.Make(tableName, force)
 		model
 	end
 
-	model.Delete = ormodel.Delete
-	model.Save = ormodel.Save
-	model.Refresh = ormodel.Refresh
+	model.Delete = ORMMODEL.Delete
+	model.Save = ORMMODEL.Save
+	model.Refresh = ORMMODEL.Refresh
 
 	-- Prepare strings that will not change unless the model itself changes. So we don't have to create these strings everytime we use `model.Save()`.
 	local columnList = {nil, nil}
@@ -72,14 +71,14 @@ end
 ---
 -- Retrieves all saved objects of the model from the database.
 -- @return table Returns an array of all found objects.
-function ormodel:All()
+function ORMMODEL:All()
 	return sql.Query("SELECT * FROM " .. sql.SQLIdent(self._tableName))
 end
 
 ---
 -- Deletes the given object from the database storage.
 -- @return nil|false Returns false if an error occurred, nil otherwise.
-function ormodel:Delete()
+function ORMMODEL:Delete()
 	local where = {}
 	local primaryKey = self._primaryKey
 
@@ -97,7 +96,7 @@ end
 -- @param number|string|table primaryValue The value(s) of the primarykey to search for.
 -- @note In the case of multiple columns in the primarykey you have to specify the corresponding values in the same order.
 -- @return ormobject|boolean|nil Returns the table of the found object. Returns `false` if the number of supplied primaryvalues does not match the number of elements in the primarykey. Returns `nil` if no object is found.
-function ormodel:Find(primaryValue)
+function ORMMODEL:Find(primaryValue)
 	local where = {}
 	local primaryKey = self._primaryKey
 
@@ -126,7 +125,7 @@ end
 -- Creates a new object of the model.
 -- @param[opt] table data Preexisting data the object should be initialized with.
 -- @return ormobject The created object.
-function ormodel:New(data)
+function ORMMODEL:New(data)
 	local object = data or {}
 
 	object.Save = self.Save
@@ -144,7 +143,7 @@ end
 ---
 -- Saves the data of the given object to the database storage.
 -- @return nil|false Returns false if an error occurred, nil otherwise.
-function ormodel:Save()
+function ORMMODEL:Save()
 	local query = "INSERT INTO " .. sql.SQLIdent(self._tableName) .. "("
 	local valueList = {nil, nil}
 	local dataStructure = self._dataStructure
@@ -163,7 +162,7 @@ end
 ---
 -- Refreshes the object by setting all values to those saved in the database.
 -- @return boolean Returns true if refresh was successful, false otherwise.
-function ormodel:Refresh()
+function ORMMODEL:Refresh()
 	local where = {}
 	local primaryKey = self._primaryKey
 	local dataStructure = self._dataStructure
@@ -184,6 +183,7 @@ function ormodel:Refresh()
 		for i = 1, #dataStructure do
 			self[dataStructure[i]] = result[dataStructure[i]]
 		end
+
 		return true
 	end
 
@@ -195,7 +195,7 @@ end
 -- Retrieves all saved objects of the model with the given filters from the database.
 -- @param table filters An Array of filters. Each filter should contain a `column`, `op`, `value` and `concat`(if it is not the last filter).
 -- @return table Returns an array of all found objects.
-function ormodel:Where(filters)
+function ORMMODEL:Where(filters)
 	local query = "SELECT * FROM " .. sql.SQLIdent(self._tableName) .. " WHERE "
 	local whereList = {}
 
