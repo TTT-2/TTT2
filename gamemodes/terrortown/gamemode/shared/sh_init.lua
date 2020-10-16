@@ -240,6 +240,7 @@ if SERVER then
 
 	---
 	-- Checks whether a role is able to get selected (and maybe assigned to a @{Player}) if the round starts
+	-- @param ROLE roleData
 	-- @param boolean avoidHook should the @{hook.TTT2RoleNotSelectable} hook be ignored?
 	-- @return boolean
 	-- @realm server
@@ -650,7 +651,7 @@ TEAMBUYTABLE = TEAMBUYTABLE or {}
 ---
 -- Checks whether an equipment is buyable
 -- @param table tbl equipment table
--- @param @{Player} player
+-- @param Player player
 -- @return boolean
 -- @return string text as an icon
 -- @return string result or error

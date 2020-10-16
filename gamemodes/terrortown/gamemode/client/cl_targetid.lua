@@ -217,7 +217,7 @@ local function DrawPropSpecLabels(client)
 			scrpos = scrpos:ToScreen()
 		end
 
-		if scrpos == nil or IsOffScreen(scrpos) then continue end
+		if scrpos == nil or util.IsOffScreen(scrpos) then continue end
 
 		text = ply:Nick()
 		w = surface.GetTextSize(text)

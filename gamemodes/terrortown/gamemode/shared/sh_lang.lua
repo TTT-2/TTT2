@@ -1,6 +1,6 @@
 ---
+-- Shared language stuff
 -- @module LANG
--- @desc Shared language stuff
 
 -- tbl is first created here on both server and client
 -- could make it a module but meh
@@ -40,6 +40,7 @@ if SERVER then
 	-- Sends a message to (a) specific target(s) in their selected language
 	-- @param[opt] number|table|Player arg1 the target(s) that should receive this message
 	-- @param string arg2 the translation key name
+	-- @param any arg3
 	-- @param any arg4 params
 	-- @note Can be called as:
 	--   1) LANG.Msg(ply, name, params, mode)  -- sent to ply
@@ -61,6 +62,8 @@ if SERVER then
 	-- @param table|Player send_to the target(s) that should receive this message
 	-- @param string name the translation key name
 	-- @param any params params
+	-- @param number mode [MSG_MSTACK_ROLE, MSG_MSTACK_WARN, MSG_MSTACK_PLAIN,
+	-- MSG_CHAT_ROLE, MSG_CHAT_WARN, MSG_CHAT_PLAIN, MSG_CONSOLE]
 	-- @realm server
 	-- @internal
 	function LANG.ProcessMsg(send_to, name, params, mode)
@@ -99,6 +102,8 @@ if SERVER then
 	-- Sends a message to all players in their selected language
 	-- @param string name the translation key name
 	-- @param any params params
+	-- @param number mode [MSG_MSTACK_ROLE, MSG_MSTACK_WARN, MSG_MSTACK_PLAIN,
+	-- MSG_CHAT_ROLE, MSG_CHAT_WARN, MSG_CHAT_PLAIN, MSG_CONSOLE]
 	-- @realm server
 	-- @internal
 	function LANG.MsgAll(name, params, mode)
@@ -116,9 +121,7 @@ if SERVER then
 	end
 
 	concommand.Add("_ttt_request_serverlang", ServerLangRequest)
-end
-
-if CLIENT then
+else -- CLIENT
 	local function RecvMsg()
 		local name = net.ReadString()
 		local mode = net.ReadUInt(MSG_MODE_BITS)

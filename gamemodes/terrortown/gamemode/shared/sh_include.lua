@@ -149,6 +149,10 @@ if SERVER then
 	end
 end
 
+---
+-- Include a registered overwritable TTT2 file
+-- @param string filename The registered filename-pseudo, but not the path
+-- @realm shared
 function ttt_include(filename)
 	local fd = TTTFiles[filename]
 

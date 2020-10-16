@@ -1,7 +1,7 @@
 ---
--- section Equipment
--- @desc This table is used by the client to show items in the equipment menu, and by
+-- This table is used by the client to show items in the equipment menu, and by
 -- the server to check if a certain role is allowed to buy a certain item.local math = math
+-- @section Equipment
 
 local table = table
 local net = net
@@ -600,7 +600,7 @@ if SERVER then
 
 		SyncRandomShops({ply})
 	end)
-else
+else -- CLIENT
 	local buff = ""
 
 	local function TTT2SyncRandomShops(len)

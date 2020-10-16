@@ -1,9 +1,10 @@
 ---
--- @desc Overwrites of the default PrintMessage function.
+-- Overwrites of the default PrintMessage function.
 -- This overwrite fixes some limitations with the default system (usage of
 -- archaic <a href="https://wiki.facepunch.com/gmod/umsg">umsg</a> system) while
 -- also moving `HUD_PRINTCENTER` to the EPOP system.
 -- @author Mineotopia
+-- @section PrintMessage
 
 local plymeta = assert(FindMetaTable("Player"), "FAILED TO FIND PLAYER TABLE")
 
@@ -32,9 +33,7 @@ if SERVER then
 			EPOP:AddMessage(plys, message, nil, 6, true)
 		end
 	end
-end
-
-if CLIENT then
+else -- CLIENT
 	---
 	-- Displays a message in the chat, console, or center of screen of the local player.
 	-- @param number type Which type of message should be sent to the players (see <a href="https://wiki.facepunch.com/gmod/Enums/HUD">Enums/HUD</a>)

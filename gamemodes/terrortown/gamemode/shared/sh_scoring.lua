@@ -1,6 +1,6 @@
 ---
+-- Server and client both need this for scoring event logs
 -- @section Scoring
--- @desc Server and client both need this for scoring event logs
 
 local pairs = pairs
 local IsValid = IsValid
@@ -42,7 +42,7 @@ end
 
 ---
 -- Inserts a score event into the scores table
--- @param table score event
+-- @param table e score event
 -- @param table scores scores table
 -- @realm shared
 function ScoreEvent(e, scores)

@@ -1,6 +1,5 @@
 ---
--- @section Utils
--- @desc Random stuff
+-- @module util
 
 if not util then return end
 
@@ -136,6 +135,9 @@ function util.GetNextAlivePlayer(ply)
 end
 
 ---
+-- @module string
+
+---
 -- Uppercases the first character only
 -- @param string str
 -- @return string
@@ -145,12 +147,15 @@ function string.Capitalize(str)
 end
 
 ---
--- @function util.Capitalize(str)
--- @desc Uppercases the first character only
+-- @module util
+
+---
+-- Uppercases the first character only
 -- @param string str
 -- @return string
 -- @realm shared
 -- @see string.Capitalize
+-- @function util.Capitalize(str)
 util.Capitalize = string.Capitalize
 
 ---
@@ -327,6 +332,10 @@ function util.StartBleeding(ent, dmg, t)
 	end)
 end
 
+---
+-- Stops the bleeding effect
+-- @param Entity ent
+-- @realm shared
 function util.StopBleeding(ent)
 	timer.Remove("bleed" .. ent:EntIndex())
 end
@@ -377,6 +386,7 @@ end
 ---
 -- Just a noop @{function} that is doing NOTHING
 -- @realm shared
+-- @see util.passthrough
 function util.noop()
 
 end
@@ -504,7 +514,7 @@ if CLIENT then
 	-- @param table scrpos table with x and y attributes
 	-- @return boolean
 	-- @realm client
-	function IsOffScreen(scrpos)
+	function util.IsOffScreen(scrpos)
 		return not scrpos.visible or scrpos.x < 0 or scrpos.y < 0 or scrpos.x > ScrW() or scrpos.y > ScrH()
 	end
 
@@ -594,6 +604,8 @@ end
 -- Like @{string.FormatTime} but simpler (and working), always a string, no hour support
 -- @param number seconds
 -- @param string fmt the <a href="https://wiki.garrysmod.com/page/string/format">format</a>
+-- @return string
+-- @realm shared
 function util.SimpleTime(seconds, fmt)
 	if not seconds then
 		seconds = 0

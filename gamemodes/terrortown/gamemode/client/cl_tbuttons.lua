@@ -163,7 +163,7 @@ function TBHUD:Draw(client)
 		pos = ent:GetPos()
 		scrpos = pos:ToScreen()
 
-		if IsOffScreen(scrpos) or not ent:IsUsable() then continue end
+		if util.IsOffScreen(scrpos) or not ent:IsUsable() then continue end
 
 		local usableRange = ent:GetUsableRange()
 

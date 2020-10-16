@@ -1,8 +1,8 @@
 ---
--- @module Entity
+-- Shared extensions to entity table
 -- @author Mineotopia
 -- @ref https://wiki.facepunch.com/gmod/Entity
--- @desc shared extensions to entity table
+-- @class Entity
 
 local entmeta = assert(FindMetaTable("Entity"), "FAILED TO FIND ENTITY TABLE")
 

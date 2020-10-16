@@ -1,7 +1,7 @@
 ---
--- @module Player
+-- Shared extensions to player table
 -- @ref https://wiki.garrysmod.com/page/Category:Player
--- @desc shared extensions to player table
+-- @module Player
 
 local net = net
 local table = table
@@ -64,7 +64,7 @@ end
 -- Returns the @{ROLE} BaseRole id
 -- @return[default=0] number
 -- @realm shared
--- @see plymeta.GetBaseRole
+-- @see Player:GetBaseRole
 function plymeta:GetRole()
 	return self.role or ROLE_INNOCENT
 end
@@ -420,8 +420,8 @@ end
 -- @param number subrole subrole id of a @{ROLE}
 -- @return boolean
 -- @realm shared
--- @see plymeta:IsActive
--- @see plymeta:IsRole
+-- @see Player:IsActive
+-- @see Player:IsRole
 function plymeta:IsActiveRole(subrole)
 	return self:IsActive() and self:IsRole(subrole)
 end
@@ -430,7 +430,7 @@ end
 -- Checks whether a @{Player} is active and is an Innocent
 -- @return boolean
 -- @realm shared
--- @see plymeta:IsActiveRole
+-- @see Player:IsActiveRole
 function plymeta:IsActiveInnocent()
 	return self:IsActiveRole(ROLE_INNOCENT)
 end
@@ -439,7 +439,7 @@ end
 -- Checks whether a @{Player} is active and is a Traitor
 -- @return boolean
 -- @realm shared
--- @see plymeta:IsActiveRole
+-- @see Player:IsActiveRole
 function plymeta:IsActiveTraitor()
 	return self:IsActiveRole(ROLE_TRAITOR)
 end
@@ -448,7 +448,7 @@ end
 -- Checks whether a @{Player} is active and is a Detective
 -- @return boolean
 -- @realm shared
--- @see plymeta:IsActiveRole
+-- @see Player:IsActiveRole
 function plymeta:IsActiveDetective()
 	return self:IsActiveRole(ROLE_DETECTIVE)
 end
@@ -457,8 +457,8 @@ end
 -- Checks whether a @{Player} is active and has a special @{ROLE}
 -- @return boolean
 -- @realm shared
--- @see plymeta:IsActive
--- @see plymeta:IsSpecial
+-- @see Player:IsActive
+-- @see Player:IsSpecial
 function plymeta:IsActiveSpecial()
 	return self:IsActive() and self:IsSpecial()
 end
@@ -476,8 +476,8 @@ end
 -- Checks whether a @{Player} is active and able to shop
 -- @return boolean
 -- @realm shared
--- @see plymeta:IsActive
--- @see plymeta:IsShopper
+-- @see Player:IsActive
+-- @see Player:IsShopper
 function plymeta:IsActiveShopper()
 	return self:IsActive() and self:IsShopper()
 end
@@ -653,7 +653,7 @@ end
 -- Checks whether a @{Player} is a dead terrorist
 -- @return boolean
 -- @realm shared
--- @see plymeta:IsSpec
+-- @see Player:IsSpec
 function plymeta:IsDeadTerror()
 	return self:IsSpec() and not self:Alive()
 end
@@ -722,8 +722,9 @@ end
 -- Overrides GetEyeTrace for an optional trace mask param. Technically traces
 -- like GetEyeTraceNoCursor but who wants to type that all the time, and we
 -- never use cursor tracing anyway.
--- @param MASK[https://wiki.garrysmod.com/page/Enums/MASK] mask The trace mask. This determines what the trace should hit and what it shouldn't hit. A mask is a combination of CONTENTS_Enums - you can use these for more advanced masks.
--- @see https://wiki.garrysmod.com/page/Structures/Trace
+-- @param MASK mask The trace mask. This determines what the trace should hit and what it shouldn't hit.
+-- A mask is a combination of CONTENTS_Enums - you can use these for more advanced masks.
+-- @ref https://wiki.garrysmod.com/page/Structures/Trace
 -- @realm shared
 function plymeta:GetEyeTrace(mask)
 	mask = mask or MASK_SOLID

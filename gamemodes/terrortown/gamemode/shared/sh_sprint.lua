@@ -64,12 +64,17 @@ if SERVER then
 		ply.sprintMultiplier = bool and (1 + maxSprintMul:GetFloat()) or nil
 		ply.isSprinting = bool
 	end)
-else
+else -- CLIENT
 	local enable_doubletap_sprint = CreateConVar("ttt2_enable_doubletap_sprint", "1", {FCVAR_ARCHIVE})
 	local doubletap_sprint_anykey = CreateConVar("ttt2_doubletap_sprint_anykey", "1", {FCVAR_ARCHIVE})
 	local lastPress = 0
 	local lastPressedMoveKey = nil
 
+	---
+	-- @param Player ply
+	-- @param number key
+	-- @param boolean pressed
+	-- @realm client
 	function UpdateInputSprint(ply, key, pressed)
 		if pressed then
 			if ply.isSprinting or not enable_doubletap_sprint:GetBool() or ply.preventSprint then return end
@@ -105,6 +110,8 @@ else
 	end, "header_bindings_ttt2", "label_bind_sprint", KEY_LSHIFT)
 end
 
+---
+-- @realm shared
 function UpdateSprint()
 	local client
 

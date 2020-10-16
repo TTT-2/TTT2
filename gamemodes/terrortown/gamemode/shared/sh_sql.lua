@@ -1,7 +1,7 @@
 ---
--- @module SQL
 -- @author Alf21
 -- @author saibotk
+-- @module SQL
 
 local pairs = pairs
 local sql = sql
