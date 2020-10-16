@@ -14,6 +14,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added Drag&Drop role layering VGUI, accessible with the console command `ttt2_edit_rolelayering`
 - Updated Simplified Chinese localization (by @TheOnly8Z)
 - Updated Italian localization (by @ThePlatynumGhost)
+- Added a hook `TTT2CanTransferCredits` that is called before credits are transferred
+- Credits can now be transferred across teams and from roles whom the recipient does not know
 
 ### Changed
 
