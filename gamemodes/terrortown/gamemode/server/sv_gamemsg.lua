@@ -1,6 +1,6 @@
 ---
+-- Communicating game state to players
 -- @section GameMessage
--- @desc Communicating game state to players
 
 local net = net
 local string = string
@@ -280,7 +280,7 @@ end
 -- @param Player reader @{Player} who can receive chat
 -- @param Player sender @{Player} who sends the text message
 -- @param boolean isTeam Are they trying to use the team chat
--- @return boolean Return true if the reader should be able to see the message of the sender, false if they shouldn't
+-- @return boolean[default=true] Return true if the reader should be able to see the message of the sender, false if they shouldn't
 -- @hook
 -- @realm server
 function GM:TTT2CanSeeChat(reader, sender, isTeam)

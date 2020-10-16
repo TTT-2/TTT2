@@ -17,7 +17,7 @@ local VectorRand = VectorRand
 ---
 -- Attempts to get the weapon used from a DamageInfo instance needed because the
 -- GetAmmoType value is useless and inflictor isn't properly set (yet)
--- @param CTakeDamageInfo dmg
+-- @param DamageInfo dmg
 -- @return Weapon
 -- @realm shared
 function util.WeaponFromDamage(dmg)
@@ -305,7 +305,7 @@ end
 ---
 -- Something hurt us, start bleeding for a bit depending on the amount
 -- @param Entity ent
--- @param CTakeDamageInfo dmg
+-- @param DamageInfo dmg
 -- @param number t times
 -- @realm shared
 -- @todo improve description

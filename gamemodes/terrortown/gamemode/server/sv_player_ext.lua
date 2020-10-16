@@ -1,6 +1,7 @@
 ---
 -- @module Player
--- @desc serverside extensions to player table
+
+-- serverside extensions to player table
 
 local net = net
 local table = table
@@ -67,53 +68,22 @@ function plymeta:SetBaseKarma(k)
 end
 
 ---
--- @function plymeta:GetLiveKarma()
--- @desc The live karma starts equal to the base karma, but is updated "live" as the
+-- @accessor number The live karma starts equal to the base karma, but is updated "live" as the
 -- player damages/kills others. When another player damages/kills this one, the
 -- live karma is used to determine his karma penalty.
--- @return number
 -- @realm server
--- @see plymeta:SetLiveKarma
----
--- @function plymeta:SetLiveKarma(live_karma)
--- @desc The live karma starts equal to the base karma, but is updated "live" as the
--- player damages/kills others. When another player damages/kills this one, the
--- live karma is used to determine his karma penalty.
--- @param number live_karma
--- @realm server
--- @see plymeta:GetLiveKarma
 AccessorFunc(plymeta, "live_karma", "LiveKarma", FORCE_NUMBER)
 
 ---
--- @function plymeta:GetDamageFactor()
--- @desc The damage factor scales how much damage the player deals, so if it is .9
+-- @acccessor number The damage factor scales how much damage the player deals, so if it is .9
 -- then the player only deals 90% of his original damage.
--- @return number
 -- @realm server
--- @see plymeta:SetDamageFactor
----
--- @function plymeta:SetDamageFactor(dmg_factor)
--- @desc The damage factor scales how much damage the player deals, so if it is .9
--- then the player only deals 90% of his original damage.
--- @param number dmg_factor
--- @realm server
--- @see plymeta:GetDamageFactor
 AccessorFunc(plymeta, "dmg_factor", "DamageFactor", FORCE_NUMBER)
 
 ---
--- @function plymeta:GetCleanRound()
--- @desc If a player does not damage team members in a round, he has a "clean" round
+-- @accessor boolean If a player does not damage team members in a round, he has a "clean" round
 -- and gets a bonus for it.
--- @return boolean
 -- @realm server
--- @see plymeta:SetCleanRound
----
--- @function plymeta:SetCleanRound(clean_round)
--- @desc If a player does not damage team members in a round, he has a "clean" round
--- and gets a bonus for it.
--- @param boolean clean_round
--- @realm server
--- @see plymeta:GetCleanRound
 AccessorFunc(plymeta, "clean_round", "CleanRound", FORCE_BOOL)
 
 ---
@@ -201,7 +171,7 @@ end
 ---
 -- Gives a specific @{ITEM} (if possible)
 -- @param string cls
--- @return @{ITEM} or nil
+-- @return ITEM or nil
 -- @realm server
 -- @internal
 function plymeta:AddEquipmentItem(cls)
@@ -326,7 +296,7 @@ end
 -- if this equipment is limited
 -- @param string cls
 -- @realm server
--- @see plymeta:RemoveBought
+-- @see Player:RemoveBought
 function plymeta:AddBought(cls)
 	self.bought = self.bought or {}
 	self.bought[#self.bought + 1] = tostring(cls)
@@ -359,7 +329,7 @@ end
 -- if this equipment is limited
 -- @param string cls
 -- @realm server
--- @see plymeta:AddBought
+-- @see Player:AddBought
 function plymeta:RemoveBought(cls)
 	local key
 
@@ -499,7 +469,7 @@ end
 ---
 -- Gives an @{ITEM} to a @{Player} and returns whether it was successful
 -- @param string cls
--- @return @{ITEM} or nil
+-- @return ITEM or nil
 -- @realm server
 function plymeta:GiveEquipmentItem(cls)
 	if not cls then return end
@@ -558,7 +528,7 @@ end
 
 ---
 -- Sends the last words based on the DamageInfo
--- @param CTakeDamageInfo dmginfo
+-- @param DamageInfo dmginfo
 -- @realm server
 function plymeta:SendLastWords(dmginfo)
 	-- Use a pseudo unique id to prevent people from abusing the concmd
@@ -627,7 +597,7 @@ end
 -- @param boolean dead_only If dead_only is
 -- true, only spawns if player is dead, else just makes sure he is healed.
 -- @return boolean
--- realm shared
+-- @realm shared
 function plymeta:SpawnForRound(dead_only)
 	hook.Call("PlayerSetModel", GAMEMODE, self)
 	hook.Run("TTTPlayerSetColor", self)
@@ -1238,6 +1208,10 @@ local plymeta_old_Give = plymeta.Give
 -- The extension is needed to set a flag prior to picking up weapons.
 -- This flag is used to distinguish between weapons picked up by walking
 -- over them and weapons picked up by ply:Give()
+-- @param string weaponClassName
+-- @param boolean bNoAmmo
+-- @return Weapon
+-- @realm server
 function plymeta:Give(weaponClassName, bNoAmmo)
 	self.forcedPickup = true
 

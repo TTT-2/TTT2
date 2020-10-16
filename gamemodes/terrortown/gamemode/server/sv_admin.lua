@@ -1,5 +1,6 @@
 ---
 -- Admin commands
+-- @section AdminCommands
 
 local math = math
 local table = table

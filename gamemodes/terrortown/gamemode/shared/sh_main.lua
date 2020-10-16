@@ -11,7 +11,6 @@ local MAX_DROWN_TIME = 8
 ---
 -- Initializes TTT2
 -- @hook
--- @register
 -- @realm shared
 function GM:TTT2Initialize()
 	-- load all roles
@@ -111,7 +110,6 @@ local colormode = CreateConVar("ttt_playercolor_mode", "1", {FCVAR_NOTIFY, FCVAR
 
 ---
 -- @hook
--- @register
 -- @realm shared
 function GM:TTTPlayerColor(model)
 	local mode = colormode:GetInt()

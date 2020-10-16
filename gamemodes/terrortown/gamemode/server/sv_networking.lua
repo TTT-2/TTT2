@@ -1,6 +1,6 @@
 ---
+-- Role state communication
 -- @section networking
--- @desc Role state communication
 
 TTT2NETTABLE = {}
 

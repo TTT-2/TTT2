@@ -1,3 +1,6 @@
+---
+-- @class ARMOR
+
 local plymeta = FindMetaTable("Player")
 if not plymeta then
 	Error("FAILED TO FIND PLAYER TABLE")
@@ -42,6 +45,7 @@ cvars.AddChangeCallback(ARMOR.cv.armor_threshold_for_reinforced:GetName(), funct
 end)
 
 -- SERVERSIDE ARMOR FUNCTIONS
+
 ---
 -- Sets the @{ARMOR} to a specific value that is capped by the maximum armor value.
 -- @param number armor The new armor to be set
@@ -155,7 +159,7 @@ end
 -- @param Entity infl The inflictor
 -- @param Player|Entity att The attacker
 -- @param number amount Amount of damage
--- @param CTakeDamageInfo dmginfo Damage info
+-- @param DamageInfo dmginfo Damage info
 -- @realm server
 -- @internal
 function ARMOR:HandlePlayerTakeDamage(ply, infl, att, amount, dmginfo)

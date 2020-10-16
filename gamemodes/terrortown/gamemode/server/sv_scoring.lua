@@ -1,6 +1,6 @@
 ---
+-- Customized scoring
 -- @module SCORE
--- @desc Customized scoring
 
 local table = table
 local pairs = pairs
@@ -57,7 +57,7 @@ end
 -- Handles a kill
 -- @param Player victim
 -- @param Player|Entity attacker
--- @param CTakeDamageInfo dmginfo
+-- @param DamageInfo dmginfo
 -- @realm server
 -- @internal
 function SCORE:HandleKill(victim, attacker, dmginfo)

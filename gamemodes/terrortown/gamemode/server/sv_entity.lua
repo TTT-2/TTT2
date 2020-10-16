@@ -1,6 +1,6 @@
 ---
--- @module Entity
 -- @ref https://wiki.garrysmod.com/page/Category:Entity
+-- @class Entity
 
 local safeCollisionGroups = {
 	[COLLISION_GROUP_WEAPON] = true

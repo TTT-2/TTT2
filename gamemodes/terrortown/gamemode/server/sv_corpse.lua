@@ -1,6 +1,6 @@
 ---
+-- Corpse functions
 -- @module CORPSE
--- @desc Corpse functions
 
 -- namespaced because we have no ragdoll metatable
 CORPSE = {}
@@ -77,7 +77,6 @@ end
 -- @param Entity corpse
 -- @return[default=true] boolean
 -- @hook
--- @register
 -- @realm server
 function GM:TTTCanIdentifyCorpse(ply, corpse)
 	return true
@@ -286,7 +285,6 @@ end
 -- @param boolean isLongRange
 -- @return[default=true] boolean
 -- @hook
--- @register
 -- @realm server
 function GM:TTTCanSearchCorpse(ply, corpse, isCovert, isLongRange)
 	return true
@@ -454,7 +452,7 @@ end
 -- else returns nil
 -- @param Player victim
 -- @param Player attacker
--- @param CTakeDamageInfo dmg
+-- @param DamageInfo dmg
 -- @return table sample
 -- @realm server
 local function GetKillerSample(victim, attacker, dmg)
@@ -551,7 +549,7 @@ realdamageinfo = 0
 -- Creates client or server ragdoll depending on settings
 -- @param Player ply
 -- @param Player attacker
--- @param CTakeDamageInfo dmginfo
+-- @param DamageInfo dmginfo
 -- @return Entity the CORPSE
 -- @realm server
 function CORPSE.Create(ply, attacker, dmginfo)

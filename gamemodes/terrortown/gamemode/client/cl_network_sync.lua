@@ -17,7 +17,7 @@ local data_listeners = {}
 -- Get the current value of a specific path. This path starts at the root of the data_storage table and thus does not include the
 -- "global"/"players" key to descend into these subtrees.
 --
--- @param any|table path The path to get the value from (this is the absolute path from the root so "global"/"players" etc is not yet included)
+-- @param any path The path to get the value from (this is the absolute path from the root so "global"/"players" etc is not yet included)
 -- @return any The value at the given path or nil if the path does not exist, the value is actually nil or there is no metadata entry for the path
 function ttt2net.Get(path)
 	local tmpPath
@@ -40,7 +40,7 @@ end
 -- to access the global values. Global values are generally accessible synced values,
 -- that the server sends to its clients.
 --
--- @param any|table path The path to get the value from (no need to prepend a "global" as this will be done already)
+-- @param any path The path to get the value from (no need to prepend a "global" as this will be done already)
 -- @return any The value at the given path or nil if the path does not exist, the value is actually nil or there is no metadata entry for the path
 function ttt2net.GetGlobal(path)
 	local tmpPath
@@ -63,7 +63,7 @@ end
 -- Player specific values are synced values on player entities (can be thought of as data per player that this client knows of),
 -- that the server sends to its clients.
 --
--- @param any|table path The path to get the value from (no need to prepend a "players" etc. as this will be done already)
+-- @param any path The path to get the value from (no need to prepend a "players" etc. as this will be done already)
 -- @param Entity The player from which we want to get the data
 -- @return any The value at the given path or nil if the path does not exist, the value is actually nil or there is no metadata entry for the path
 function ttt2net.GetOnPlayer(path, ply)
@@ -200,7 +200,7 @@ net.Receive(ttt2net.NETMSG_DATA_UPDATE, ReceiveDataUpdate)
 -- This will call all registered listeners for a specific path.
 -- The function will exit if oldval and newval are the same.
 --
--- @param any|table path The path that this update was executed on
+-- @param any path The path that this update was executed on
 -- @param any oldval The old value, before the update
 -- @param any newval The new value, after the update
 function ttt2net.CallOnUpdate(path, oldval, newval)
@@ -343,7 +343,7 @@ end
 ---
 -- This will register a callback for updates to a global data entry.
 --
--- @param any|table path The path to register the callback on
+-- @param any path The path to register the callback on
 -- @param function func The callback function that should be executed
 function ttt2net.OnUpdateGlobal(path, func)
 	local tmpPath
@@ -364,7 +364,7 @@ end
 ---
 -- This will register a callback for updates to a player specific data entry.
 --
--- @param any|table path The path to register the callback on
+-- @param any path The path to register the callback on
 -- @param Entity ply The player that this data entry is from
 -- @param function func The callback function that should be executed
 function ttt2net.OnUpdateOnPlayer(path, ply, func)

@@ -664,12 +664,13 @@ function GM:EntityRemoved(ent)
 	end
 end
 
+-- @module WEPS
+
 ---
 -- Forces a @{Model} pre-cache for each @{Weapon}
 -- @note non-cheat developer commands can reveal precaching the first time equipment
 -- is bought, so trigger it at the start of a round instead
 -- @realm server
--- @module WEPS
 function WEPS.ForcePrecache()
 	local weps = weapons.GetList()
 
@@ -686,6 +687,10 @@ function WEPS.ForcePrecache()
 	end
 end
 
+---
+-- @param string cls
+-- @return boolean
+-- @realm server
 function WEPS.IsInstalled(cls)
 	local weps = weapons.GetList()
 
@@ -698,7 +703,7 @@ function WEPS.IsInstalled(cls)
 	return false
 end
 
---manipulate shove attack for all crowbar alikes
+-- manipulate shove attack for all crowbar alikes
 local function ChangeShoveDelay()
 	local weps = weapons.GetList()
 
@@ -712,10 +717,6 @@ local function ChangeShoveDelay()
 	end
 end
 
-cvars.AddChangeCallback(crowbar_delay:GetName(), function(name, old, new)
-	ChangeShoveDelay()
-end, "TTT2CrowbarShoveDelay")
+cvars.AddChangeCallback(crowbar_delay:GetName(), ChangeShoveDelay, "TTT2CrowbarShoveDelay")
 
-hook.Add("TTT2Initialize", "TTT2ChangeMeleesSecondaryDelay", function()
-	ChangeShoveDelay()
-end)
+hook.Add("TTT2Initialize", "TTT2ChangeMeleesSecondaryDelay", ChangeShoveDelay)

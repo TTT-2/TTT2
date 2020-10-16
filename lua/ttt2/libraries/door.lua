@@ -403,7 +403,7 @@ if SERVER then
 	-- Handles the damage of doors that are still in the wall.
 	-- Called in @{GM:EntityTakeDamage}.
 	-- @param Entity ent The entity that is damaged
-	-- @param CTakeDamageInfo dmginfo The damage info object
+	-- @param DamageInfo dmginfo The damage info object
 	-- @param[default=false] boolean surpressPair Should the call of the other door (if in a pair) be omitted?
 	-- @internal
 	-- @realm server
@@ -434,7 +434,7 @@ if SERVER then
 	-- Handles the damage of doors that are lying as props on the ground.
 	-- Called in @{GM:EntityTakeDamage}.
 	-- @param Entity ent The entity that is damages
-	-- @param CTakeDamageInfo dmginfo The damage info object
+	-- @param DamageInfo dmginfo The damage info object
 	-- @internal
 	-- @realm server
 	function door.HandlePropDamage(ent, dmginfo)

@@ -1,6 +1,6 @@
 ---
+-- Spectator prop meddling
 -- @module PROPSPEC
--- @desc Spectator prop meddling
 
 local string = string
 local math = math

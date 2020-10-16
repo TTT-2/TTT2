@@ -1,7 +1,7 @@
 ---
--- @section player_manager
+-- Player spawning/dying
 -- @todo rework
--- @desc Player spawning/dying
+-- @section player_manager
 
 local math = math
 local player = player
@@ -659,7 +659,7 @@ end
 -- @note @{Player:Alive} returns true when this is called
 -- @param Player ply
 -- @param Player|Entity attacker @{Player} or @{Entity} that killed the @{Player}
--- @param CTakeDamageInfo dmginfo
+-- @param DamageInfo dmginfo
 -- @hook
 -- @realm server
 -- @ref https://wiki.facepunch.com/gmod/GM:DoPlayerDeath
@@ -953,19 +953,19 @@ function GM:SpectatorThink(ply)
 end
 
 ---
--- @function GM:PlayerDeathThink(ply)
--- @desc Called whenever a @{Player} is a forced spectator, in each server @{GM:Tick}
+-- Called whenever a @{Player} is a forced spectator, in each server @{GM:Tick}
 -- @param Player ply
 -- @hook
 -- @realm server
 -- @see GM:SpectatorThink
+-- @function GM:PlayerDeathThink(ply)
 GM.PlayerDeathThink = GM.SpectatorThink
 
 ---
 -- Called when a @{Player} has been hit by a trace and damaged (such as from a bullet).
 -- Returning true overrides the damage handling and prevents @{GM:ScalePlayerDamage} from being called.
 -- @param Player ply The @{Player} that has been hit
--- @param CTakeDamageInfo dmginfo The damage info of the bullet
+-- @param DamageInfo dmginfo The damage info of the bullet
 -- @param Vector dir Normalized vector direction of the bullet's path
 -- @param table trace The trace of the bullet's path, see
 -- <a href="https://wiki.garrysmod.com/page/Structures/TraceResult">TraceResult structure</a>
@@ -987,7 +987,7 @@ end
 ---
 -- Called when a @{Player} has been hurt by an explosion. Override to disable default sound effect.
 -- @param Player ply @{Player} who has been hurt
--- @param CTakeDamageInfo dmginfo Damage info from explsion
+-- @param DamageInfo dmginfo Damage info from explsion
 -- @hook
 -- @realm server
 -- @ref https://wiki.facepunch.com/gmod/GM:OnDamagedByExplosion
@@ -1003,7 +1003,7 @@ end
 -- @param Player ply The @{Player} taking damage
 -- @param number hitgroup The hitgroup where the @{Player} took damage. See
 -- <a href="https://wiki.garrysmod.com/page/Enums/HITGROUP">HITGROUP_Enums</a>
--- @param CTakeDamageInfo dmginfo The damage info
+-- @param DamageInfo dmginfo The damage info
 -- @return boolean Return true to prevent damage that this hook is called for, stop blood particle effects and blood decals.<br />
 -- It is possible to return true only on client ( This will work only in multiplayer ) to stop the effects but still take damage.
 -- @hook
@@ -1166,7 +1166,7 @@ end
 ---
 -- Called when an entity takes damage. You can modify all parts of the damage info in this hook.
 -- @param Entity ent The @{Entity} taking damage
--- @param CTakeDamageInfo dmginfo Damage info
+-- @param DamageInfo dmginfo Damage info
 -- @return boolean Return true to completely block the damage event
 -- @note e.g. no damage during prep, etc
 -- @hook
@@ -1215,7 +1215,7 @@ end
 -- @param Entity infl the inflictor
 -- @param Player|Entity att the attacker
 -- @param number amount amount of damage
--- @param CTakeDamageInfo dmginfo Damage info
+-- @param DamageInfo dmginfo Damage info
 -- @hook
 -- @realm server
 -- @ref https://wiki.facepunch.com/gmod/GM:EntityTakeDamage

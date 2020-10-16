@@ -20,7 +20,7 @@ local plymeta = assert(FindMetaTable("Player"), "[TTT2NET] FAILED TO FIND PLAYER
 ---
 -- Returns the current bool value for a given path on the player.
 --
--- @param any|table path The path to return the value for
+-- @param any path The path to return the value for
 -- @param any|nil fallback The fallback value to return instead of nil
 -- @return boolean|any|nil The value at the path or fallback if the value is nil
 function plymeta:TTT2NETGetBool(path, fallback)
@@ -30,7 +30,7 @@ end
 ---
 -- Returns the current int value for a given path on the player.
 --
--- @param any|table path The path to return the value for
+-- @param any path The path to return the value for
 -- @param number fallback The fallback value to return instead of nil
 -- @return number The value at the path or fallback if the value is nil
 function plymeta:TTT2NETGetInt(path, fallback)
@@ -40,7 +40,7 @@ end
 ---
 -- Returns the current unsigned int value for a given path on the player.
 --
--- @param any|table path The path to return the value for
+-- @param any path The path to return the value for
 -- @param number fallback The fallback value to return instead of nil
 -- @return number The value at the path or fallback if the value is nil
 function plymeta:TTT2NETGetUInt(path, fallback)
@@ -50,7 +50,7 @@ end
 ---
 -- Returns the current float value for a given path on the player.
 --
--- @param any|table path The path to return the value for
+-- @param any path The path to return the value for
 -- @param number fallback The fallback value to return instead of nil
 -- @return number The value at the path or fallback if the value is nil
 function plymeta:TTT2NETGetFloat(path, fallback)
@@ -60,7 +60,7 @@ end
 ---
 -- Returns the current string value for a given path on the player.
 --
--- @param any|table path The path to return the value for
+-- @param any path The path to return the value for
 -- @param string fallback The fallback value to return instead of nil
 -- @return string The value at the path or fallback if the value is nil
 function plymeta:TTT2NETGetString(path, fallback)

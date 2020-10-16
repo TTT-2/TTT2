@@ -32,6 +32,9 @@ roleselection.savingKeys = {
 	depth = {typ = "number", bits = ROLE_BITS, default = 0}
 }
 
+---
+-- Loads every layer from the SQL database
+-- @realm server
 function roleselection.LoadLayers()
 	if not SQL.CreateSqlTable(roleselection.sqltable, roleselection.savingKeys) then return end
 
@@ -114,6 +117,9 @@ function roleselection.LoadLayers()
 	roleselection.subroleLayers = validTbl
 end
 
+---
+-- Saves every layer into the SQL database
+-- @realm server
 function roleselection.SaveLayers()
 	local dataTable = {}
 
@@ -654,8 +660,8 @@ end
 -- Select selectable @{ROLE}s for a given list of @{Player}s
 -- @note This automatically synces with every connected @{Player}
 --
--- @param ?table plys list of @{Player}s. `nil` to calculate automatically
--- @param ?number maxPlys amount of maximum @{Player}s. `nil` to calculate automatically
+-- @param nil|table plys list of @{Player}s. `nil` to calculate automatically
+-- @param nil|number maxPlys amount of maximum @{Player}s. `nil` to calculate automatically
 -- @realm server
 function roleselection.SelectRoles(plys, maxPlys)
 	roleselection.selectableRoles = nil -- reset to enable recalculation

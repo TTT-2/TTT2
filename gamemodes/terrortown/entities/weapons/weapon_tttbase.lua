@@ -506,7 +506,7 @@ end
 
 ---
 -- A convenience function to shoot bullets
--- @param CTakeDamageInfo dmg
+-- @param DamageInfo dmg
 -- @param number recoil
 -- @param number numbul
 -- @param number cone
@@ -566,7 +566,7 @@ end
 
 ---
 -- @param Player victim
--- @param CTakeDamageInfo dmginfo
+-- @param DamageInfo dmginfo
 -- @return number
 -- @realm shared
 function SWEP:GetHeadshotMultiplier(victim, dmginfo)
