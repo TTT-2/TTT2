@@ -16,8 +16,8 @@ local ormodel = {}
 -- Returns an object relational model according to the specified databasetable. Does nothing if no databasetable with the given name exists.
 -- @param string tableName The name of the table in the database to create a model for.
 -- @param[opt] boolean force If set to `true` the function will not return a cached version of the model.
--- @realm shared
 -- @return ormmodel The model of the database table.
+-- @realm shared
 function orm.Make(tableName, force)
 
 	if IsValid(orm[tableName]) and not force then return orm[tableName] end

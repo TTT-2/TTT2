@@ -11,6 +11,7 @@ end
 -- @param string tableName The name of the table to search.
 -- @param string columnName The name of the column to check.
 -- @return boolean Returns true if the column exists in the table.
+-- @realm shared
 function sql.ColumnExists(tableName, columnName)
 	local result = sql.Query("PRAGMA table_info(" .. sql.SQLIdent(tableName) .. ")")
 
@@ -27,6 +28,7 @@ end
 -- Returns the primarykey column names of the specified table in order of their index.
 -- @param string tableName The name of the table to search.
 -- @return table|nil Returns a table of the primarykey columns.
+-- @realm shared
 function sql.GetPrimaryKey(tableName)
 	local result = sql.Query("PRAGMA table_info(" .. sql.SQLIdent(tableName) .. ")")
 	local primaryKeys = {}
@@ -45,6 +47,7 @@ end
 -- Returns the foreignkeys of the specified table.
 -- @param string tableName The name of the table to search.
 -- @return table|nil Returns a table of the foreignkey columns.
+-- @realm shared
 function sql.GetForeignKeys(tableName)
 	local result = sql.Query("PRAGMA foreign_key_list(" .. sql.SQLIdent(tableName) .. ")")
 	local foreignKeys = {}
@@ -69,6 +72,7 @@ end
 -- Returns the column names of the specified table.
 -- @param string tableName The name of the table to search.
 -- @return table|nil Returns a table of the column names.
+-- @realm shared
 function sql.GetTableColumns(tableName)
 	local result = sql.Query("PRAGMA table_info(" .. sql.SQLIdent(tableName) .. ")")
 	local columnNames = {}
@@ -84,6 +88,7 @@ end
 -- Escapes a string for use as an identifier (tablename, columnname) for sqlite.
 -- @param string str The string to escape.
 -- @return string Returns the escaped string.
+-- @realm shared
 function sql.SQLIdent(str)
 	return "\"" .. str:gsub("\"", "\"\"") .. "\""
 end
@@ -91,6 +96,7 @@ end
 ---
 -- Undoes all queries of the last transaction started by `sql.Begin()`.
 -- This is equivalent to `sql.Query("Rollback;")`.
+-- @realm shared
 function sql.Rollback()
 	sql.Query("Rollback;")
 end
