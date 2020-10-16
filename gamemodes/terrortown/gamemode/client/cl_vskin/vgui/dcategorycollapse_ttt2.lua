@@ -1,12 +1,41 @@
+---
+-- @class PANEL
+-- @section DCollapsibleCategoryTTT2
+
 local PANEL = {}
 
+---
+-- @accessor boolean
+-- @realm client
 AccessorFunc(PANEL, "m_bSizeExpanded", "Expanded", FORCE_BOOL)
-AccessorFunc(PANEL, "m_iContentHeight", "StartHeight")
-AccessorFunc(PANEL, "m_fAnimTime", "AnimTime")
-AccessorFunc(PANEL, "m_bDrawBackground", "PaintBackground", FORCE_BOOL)
-AccessorFunc(PANEL, "m_iPadding", "Padding")
-AccessorFunc(PANEL, "m_pList", "List")
 
+---
+-- @accessor number
+-- @realm client
+AccessorFunc(PANEL, "m_iContentHeight", "StartHeight")
+
+---
+-- @accessor number
+-- @realm client
+AccessorFunc(PANEL, "m_fAnimTime", "AnimTime")
+
+---
+-- @accessor boolean
+-- @realm client
+AccessorFunc(PANEL, "m_bDrawBackground", "PaintBackground", FORCE_BOOL)
+
+---
+-- @accessor number
+-- @realm client
+AccessorFunc(PANEL, "m_iPadding", "Padding")
+
+---
+-- @accessor Panel
+-- @realm client
+AccessorFunc(PANEL, "m_pList", "List", "Panel")
+
+---
+-- @ignore
 function PANEL:Init()
 	self.Header = vgui.Create("DCategoryHeaderTTT2", self)
 	self.Header:Dock(TOP)
@@ -21,6 +50,9 @@ function PANEL:Init()
 	self:DockPadding(0, 0, 0, 0)
 end
 
+---
+-- @param string strName
+-- @realm client
 function PANEL:Add(strName)
 	local button = vgui.Create("DButton", self)
 
@@ -52,6 +84,8 @@ function PANEL:Add(strName)
 	return button
 end
 
+---
+-- @realm client
 function PANEL:UnselectAll()
 	local children = self:GetChildren()
 
@@ -64,6 +98,8 @@ function PANEL:UnselectAll()
 	end
 end
 
+---
+-- @realm client
 function PANEL:UpdateAltLines()
 	local children = self:GetChildren()
 
@@ -72,20 +108,31 @@ function PANEL:UpdateAltLines()
 	end
 end
 
+---
+-- @param string strLabel
+-- @realm client
 function PANEL:SetLabel(strLabel)
 	self.Header.text = strLabel
 end
 
+---
+-- @return string label text
+-- @realm client
 function PANEL:GetLabel()
 	return self.Header.text
 end
 
+---
+-- @ignore
 function PANEL:Paint(w, h)
 	derma.SkinHook("Paint", "CollapsibleCategoryTTT2", self, w, h)
 
 	return false
 end
 
+---
+-- @param Panel pContens
+-- @realm client
 function PANEL:SetContents(pContents)
 	self.Contents = pContents
 	self.Contents:SetParent(self)
@@ -102,6 +149,9 @@ function PANEL:SetContents(pContents)
 	self:InvalidateLayout(true)
 end
 
+---
+-- @param boolean expanded
+-- @realm client
 function PANEL:SetExpanded(expanded)
 	self.m_bSizeExpanded = tobool(expanded)
 
@@ -110,22 +160,32 @@ function PANEL:SetExpanded(expanded)
 	end
 end
 
+---
+-- @realm client
 function PANEL:Toggle()
 	self:SetExpanded(not self:GetExpanded())
 	self:InvalidateLayout(true)
 	self:OnToggle(self:GetExpanded())
 end
 
+---
+-- @param boolean expanded
+-- @realm client
 function PANEL:OnToggle(expanded)
 
 end
 
+---
+-- @param boolean b
+-- @realm client
 function PANEL:DoExpansion(b)
 	if self:GetExpanded() == b then return end
 
 	self:Toggle()
 end
 
+---
+-- @ignore
 function PANEL:PerformLayout()
 	if IsValid(self.Contents) then
 		if self:GetExpanded() then
@@ -162,12 +222,17 @@ function PANEL:PerformLayout()
 	self:UpdateAltLines()
 end
 
+---
+-- @param number mcode
+-- @realm client
 function PANEL:OnMousePressed(mcode)
 	if not self:GetParent().OnMousePressed then return end
 
 	return self:GetParent():OnMousePressed(mcode)
 end
 
+---
+-- @ignore
 function PANEL:GenerateExample(ClassName, PropertySheet, Width, Height)
 	local ctrl = vgui.Create(ClassName)
 
