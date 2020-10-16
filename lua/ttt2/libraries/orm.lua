@@ -71,6 +71,7 @@ end
 ---
 -- Retrieves all saved objects of the model from the database.
 -- @return table Returns an array of all found objects.
+-- @realm shared
 function ORMMODEL:All()
 	return sql.Query("SELECT * FROM " .. sql.SQLIdent(self._tableName))
 end
@@ -78,6 +79,7 @@ end
 ---
 -- Deletes the given object from the database storage.
 -- @return nil|false Returns false if an error occurred, nil otherwise.
+-- @realm shared
 function ORMMODEL:Delete()
 	local where = {}
 	local primaryKey = self._primaryKey
@@ -96,6 +98,7 @@ end
 -- @param number|string|table primaryValue The value(s) of the primarykey to search for.
 -- @note In the case of multiple columns in the primarykey you have to specify the corresponding values in the same order.
 -- @return ormobject|boolean|nil Returns the table of the found object. Returns `false` if the number of supplied primaryvalues does not match the number of elements in the primarykey. Returns `nil` if no object is found.
+-- @realm shared
 function ORMMODEL:Find(primaryValue)
 	local where = {}
 	local primaryKey = self._primaryKey
@@ -125,6 +128,7 @@ end
 -- Creates a new object of the model.
 -- @param[opt] table data Preexisting data the object should be initialized with.
 -- @return ormobject The created object.
+-- @realm shared
 function ORMMODEL:New(data)
 	local object = data or {}
 
@@ -143,6 +147,7 @@ end
 ---
 -- Saves the data of the given object to the database storage.
 -- @return nil|false Returns false if an error occurred, nil otherwise.
+-- @realm shared
 function ORMMODEL:Save()
 	local query = "INSERT INTO " .. sql.SQLIdent(self._tableName) .. "("
 	local valueList = {nil, nil}
@@ -162,6 +167,7 @@ end
 ---
 -- Refreshes the object by setting all values to those saved in the database.
 -- @return boolean Returns true if refresh was successful, false otherwise.
+-- @realm shared
 function ORMMODEL:Refresh()
 	local where = {}
 	local primaryKey = self._primaryKey
@@ -195,6 +201,7 @@ end
 -- Retrieves all saved objects of the model with the given filters from the database.
 -- @param table filters An Array of filters. Each filter should contain a `column`, `op`, `value` and `concat`(if it is not the last filter).
 -- @return table Returns an array of all found objects.
+-- @realm shared
 function ORMMODEL:Where(filters)
 	local query = "SELECT * FROM " .. sql.SQLIdent(self._tableName) .. " WHERE "
 	local whereList = {}
