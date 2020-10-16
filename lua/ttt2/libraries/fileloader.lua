@@ -1,6 +1,7 @@
 ---
 -- A file loading library for a custom ttt2 file loader
 -- @author Mineotopia
+-- @module fileloader
 
 if SERVER then
 	AddCSLuaFile()

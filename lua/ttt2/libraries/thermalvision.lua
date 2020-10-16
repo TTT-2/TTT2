@@ -2,6 +2,7 @@
 -- This is the <code>thermalvision</code> library.
 -- It offers the possibility of rendering entities giving them the typical thermal vision look
 -- @author LeBroomer
+-- @module thermalvision
 
 local render = render
 local table = table

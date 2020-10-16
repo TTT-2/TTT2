@@ -1,8 +1,11 @@
 ---
 -- table exentsions
 -- @author saibotk
+-- @module table
 
-AddCSLuaFile()
+if SERVER then
+	AddCSLuaFile()
+end
 
 local table = table
 local pairs = pairs
@@ -19,6 +22,7 @@ local isfunction = isfunction
 -- @param dataTable table the table to traverse and search the path in.
 -- @param path table the table with keys that will be used to traverse the tree (in order).
 -- @return any the value at the given path or nil if it does not exist
+-- @realm shared
 function table.GetWithPath(dataTable, path)
 	assert(path, "table.GetWithPath(..) missing path parameter.")
 
@@ -45,6 +49,7 @@ end
 --
 -- @param dataTable table the table to traverse and set the value in.
 -- @param path table the table with keys that will be used to traverse the tree (in order).
+-- @realm shared
 function table.SetWithPath(dataTable, path, value)
 	assert(path, "table.SetWithPath(..) missing path parameter.")
 
@@ -180,12 +185,13 @@ function table.AddMissing(target, source, iterable)
 end
 
 ---
--- Removes all empty table entries, making the table sequential again. 
+-- Removes all empty table entries, making the table sequential again.
 -- Use this function to more efficiently removing multiple indices from a sequential table by combining it
 -- with a function setting all entries to be removed to nil. Do NOT use table.Remove() or table.RemoveByValue()
 --
 -- @param dataTable table the table to traverse and set the value in.
 -- @param tableSize number the number of entries in dataTable
+-- @realm shared
 function table.RemoveEmptyEntries(dataTable, tableSize)
 	local j = 1
 

@@ -1,7 +1,10 @@
 ---
--- @desc A small library that enables registering map entity
+-- A small library that enables registering map entity
 -- output triggers to lua hooks.
 -- @author Mineotopia
+-- @module entityOutputs
+
+if CLIENT then return end -- this is a serverside-only module
 
 entityOutputs = entityOutputs or {}
 entityOutputs.hooks = entityOutputs.hooks or {}

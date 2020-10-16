@@ -1,8 +1,11 @@
 ---
 -- string extensions
 -- @author saibotk
+-- @module string
 
-AddCSLuaFile()
+if SERVER then
+	AddCSLuaFile()
+end
 
 ---
 -- Split a string into smaller strings.

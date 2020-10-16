@@ -1,7 +1,7 @@
 ---
--- @module door
+-- A bunch of functions that handle all doors found on a map
 -- @author Mineotopia
--- @desc A bunch of functions that handle all doors found on a map
+-- @module door
 
 if SERVER then
 	AddCSLuaFile()
@@ -185,9 +185,7 @@ if SERVER then
 
 		net.Broadcast()
 	end
-end
-
-if CLIENT then
+else -- CLIENT
 	net.Receive("TTT2SyncDoorEntities", function()
 		local amount = net.ReadUInt(16)
 
@@ -580,10 +578,9 @@ if SERVER then
 			end
 		end
 	end
-end
 
--- HOOKS AND STUFF
-if SERVER then
+	-- HOOKS AND STUFF
+
 	---
 	-- This hook is called after the door started opening.
 	-- @param Entity doorEntity The door entity

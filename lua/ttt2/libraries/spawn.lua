@@ -1,6 +1,9 @@
 ---
--- @desc A load of function handling player spawn
+-- A load of function handling player spawn
 -- @author Mineotopia
+-- @module spawn
+
+if CLIENT then return end -- this is a serverside-ony module
 
 local Vector = Vector
 local table = table

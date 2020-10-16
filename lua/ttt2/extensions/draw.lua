@@ -1,11 +1,13 @@
 ---
 -- draw extension functions
 -- @author Mineotopia
+-- @module draw
 
-AddCSLuaFile()
+if SERVER then
+	AddCSLuaFile()
 
--- the rest of the draw library is client only
-if SERVER then return end
+	return -- the rest of the draw library is client only
+end
 
 local render = render
 local surface = surface

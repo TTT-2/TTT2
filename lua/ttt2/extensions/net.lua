@@ -1,8 +1,14 @@
 ---
 -- net stream extension
 -- @author saibotk
+-- @module net
 
-AddCSLuaFile()
+if SERVER then
+	AddCSLuaFile()
+
+	-- Add the network string for streaming data
+	util.AddNetworkString(NETMSG_STREAM)
+end
 
 -- Stream network message name constant
 local NETMSG_STREAM = "TTT2_NET_STREAM"
@@ -13,11 +19,6 @@ net.STREAM_FRAGMENTATION_SIZE = 65400
 -- Stream cache variables
 net.stream_cache = {}
 net.stream_callbacks = {}
-
--- Add the network string for streaming data
-if SERVER then
-	util.AddNetworkString(NETMSG_STREAM)
-end
 
 ---
 -- Initiates a stream message, usually for data that can be longer than
