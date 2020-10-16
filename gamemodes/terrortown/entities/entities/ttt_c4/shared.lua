@@ -1,8 +1,7 @@
 ---
 -- @class ENT
--- @realm shared
--- @section C4
 -- @desc c4 explosive
+-- @section C4
 
 local math = math
 local hook = hook
@@ -44,53 +43,28 @@ ENT.CanUseKey = true
 ENT.Avoidable = true
 
 ---
--- @function GetThrower()
--- @return Entity
---
----
--- @function SetThrower(ent)
--- @param Entity ent
----
+-- @accessor Entity
+-- @realm shared
 AccessorFunc(ENT, "thrower", "Thrower")
 
 ---
--- @function GetRadius()
--- @return number
---
----
--- @function SetRadius(i)
--- @param number i
----
+-- @accessor number
+-- @realm shared
 AccessorFunc(ENT, "radius", "Radius", FORCE_NUMBER)
 
 ---
--- @function GetDmg()
--- @return number
---
----
--- @function SetDmg(i)
--- @param number i
----
+-- @accessor number
+-- @realm shared
 AccessorFunc(ENT, "dmg", "Dmg", FORCE_NUMBER)
 
 ---
--- @function GetArmTime()
--- @return number
---
----
--- @function SetArmTime(i)
--- @param number i
----
+-- @accessor number
+-- @realm shared
 AccessorFunc(ENT, "arm_time", "ArmTime", FORCE_NUMBER)
 
 ---
--- @function GetTimerLength()
--- @return number
---
----
--- @function SetTimerLength(i)
--- @param number i
----
+-- @accessor number
+-- @realm shared
 AccessorFunc(ENT, "timer_length", "TimerLength", FORCE_NUMBER)
 
 -- Generate accessors for DT vars. This way all consumer code can keep accessing
@@ -98,34 +72,30 @@ AccessorFunc(ENT, "timer_length", "TimerLength", FORCE_NUMBER)
 -- they are set up as DT vars.
 
 ---
--- @function GetExplodeTime()
--- @return number
---
----
--- @function SetExplodeTime(i)
--- @param number i
----
+-- @accessor number
+-- @realm shared
 AccessorFuncDT(ENT, "explode_time", "ExplodeTime")
 
 ---
--- @function GetArmed()
--- @return boolean
---
----
--- @function SetArmed(bool)
--- @param boolean bool
----
-AccessorFuncDT(ENT, "armed", "Armed")
+-- @accessor boolean
+-- @realm shared
+AccessorFuncDT(ENT, "armed", "Armed", FORCE_BOOL)
 
 ENT.Beep = 0
 ENT.DetectiveNearRadius = 300
 ENT.SafeWires = nil
 
+---
+-- Initializes the data
+-- realm shared
 function ENT:SetupDataTables()
 	self:DTVar("Int", 0, "explode_time")
 	self:DTVar("Bool", 0, "armed")
 end
 
+---
+-- Initializes the C4
+-- @realm shared
 function ENT:Initialize()
 	self:SetModel(self.Model)
 
@@ -164,6 +134,7 @@ end
 
 ---
 -- @param number length time
+-- @realm shared
 function ENT:SetDetonateTimer(length)
 	self:SetTimerLength(length)
 	self:SetExplodeTime(CurTime() + length)
@@ -171,6 +142,7 @@ end
 
 ---
 -- @param Entity activator
+-- @realm shared
 function ENT:UseOverride(activator)
 	if IsValid(activator) and activator:IsPlayer() then
 		-- Traitors not allowed to disarm other traitor's C4 until he is dead
@@ -187,9 +159,9 @@ function ENT:UseOverride(activator)
 end
 
 ---
--- @module ENT
 -- @param number t
 -- @return number
+-- @realm shared
 function ENT.SafeWiresForTime(t)
 	local m = t / 60
 
@@ -208,6 +180,7 @@ end
 
 ---
 -- @param boolean state
+-- @realm shared
 function ENT:WeldToGround(state)
 	if self.IsOnWall then return end
 
@@ -266,6 +239,7 @@ end
 -- @param Entity dmgowner
 -- @oaram Vector center
 -- @param number radius
+-- @realm shared
 function ENT:SphereDamage(dmgowner, center, radius)
 	-- It seems intuitive to use FindInSphere here, but that will find all ents
 	-- in the radius, whereas there exist only ~16 players. Hence it is more
@@ -311,6 +285,7 @@ local c4boom = Sound("c4.explode")
 
 ---
 -- @param table tr Trace Structure
+-- @realm shared
 function ENT:Explode(tr)
 	hook.Call("TTTC4Explode", nil, self)
 
@@ -406,6 +381,7 @@ end
 
 ---
 -- @return[default=false] boolean
+-- @realm shared
 function ENT:IsDetectiveNear()
 	local center = self:GetPos()
 	local r = self.DetectiveNearRadius * self.DetectiveNearRadius
@@ -433,6 +409,8 @@ end
 local beep = Sound("weapons/c4/c4_beep1.wav")
 local MAX_MOVE_RANGE = 1000000 -- sq of 1000
 
+---
+-- @realm shared
 function ENT:Think()
 	if not self:GetArmed() then return end
 
@@ -502,6 +480,7 @@ end
 ---
 -- @return boolen
 -- @see ENT:GetArmed
+-- @realm shared
 function ENT:Defusable()
 	return self:GetArmed()
 end
@@ -759,9 +738,7 @@ if SERVER then
 		end
 	end
 	concommand.Add("ttt_c4_destroy", ReceiveC4Destroy)
-end
-
-if CLIENT then
+else -- CLIENT
 	local TryT = LANG.TryTranslation
 	local GetPT = LANG.GetParamTranslation
 

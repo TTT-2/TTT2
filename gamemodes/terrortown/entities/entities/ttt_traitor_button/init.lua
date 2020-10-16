@@ -1,3 +1,6 @@
+---
+-- @class ENT
+-- @section ttt_taitor_button
 -- serverside only
 
 AddCSLuaFile("shared.lua")
@@ -149,6 +152,8 @@ ENT.RemoveOnPress = false
 
 ENT.Model = Model("models/weapons/w_bugbait.mdl")
 
+---
+-- @realm server
 function ENT:Initialize()
 	self:SetModel(self.Model)
 
@@ -183,6 +188,10 @@ function ENT:Initialize()
 	self.RawDescription = nil
 end
 
+---
+-- @param string key
+-- @param string|number value
+-- @realm server
 function ENT:KeyValue(key, value)
 	if key == "OnPressed" then
 		self:StoreOutput(key, value)
@@ -205,6 +214,10 @@ function ENT:KeyValue(key, value)
 	end
 end
 
+---
+-- @param string name
+-- @param Player activator
+-- @realm server
 function ENT:AcceptInput(name, activator)
 	if name == "Toggle" then
 		self:SetLocked(not self:GetLocked())
@@ -221,6 +234,11 @@ function ENT:AcceptInput(name, activator)
 	end
 end
 
+---
+-- @param Entity ent
+-- @param Player ply
+-- @return[default=true] boolean
+-- @realm server
 function GAMEMODE:TTTCanUseTraitorButton(ent, ply)
 	-- Can be used to prevent players from using this button.
 	-- Return a boolean and a message that can shows up if you can't use the button.
@@ -228,6 +246,11 @@ function GAMEMODE:TTTCanUseTraitorButton(ent, ply)
 	return true
 end
 
+---
+-- @param Entity ent
+-- @param Player ply
+-- @return[default=true] boolean
+-- @realm server
 function GAMEMODE:TTTCanToggleTraitorButton(ent, ply)
 	-- Can be used to prevent admins from toggling modes this button.
 	-- Return a boolean and a message that can shows up if you can't toggle the button.
@@ -235,6 +258,10 @@ function GAMEMODE:TTTCanToggleTraitorButton(ent, ply)
 	return true
 end
 
+---
+-- @param Player ply
+-- @return boolean
+-- @realm server
 function ENT:TraitorUse(ply)
 	if not IsValid(ply) then
 		return false
@@ -265,11 +292,15 @@ function ENT:TraitorUse(ply)
 	return true
 end
 
+---
 -- Fix for traitor buttons having awkward init/render behavior, in the event that a map has been optimized with area portals.
+-- @return[default=TRANSMIT_ALWAYS] number
+-- @realm server
 function ENT:UpdateTransmitState()
 	return TRANSMIT_ALWAYS
 end
 
+---
 -- keep the noombmessage (aka. concommand) for compatibility
 local function TraitorUseCmd(ply, cmd, args)
 	if #args ~= 1 or not IsValid(ply) then return end

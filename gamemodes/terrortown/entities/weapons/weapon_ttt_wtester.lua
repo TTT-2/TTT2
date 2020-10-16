@@ -1,3 +1,7 @@
+---
+-- @class SWEP
+-- @section weapon_ttt_wtester
+
 if SERVER then
 	AddCSLuaFile()
 end
@@ -97,6 +101,8 @@ local dna_screen_fail = Material("models/ttt2_dna_scanner/screen/fail")
 local dna_screen_arrow = Material("models/ttt2_dna_scanner/screen/arrow")
 local dna_screen_circle = Material("models/ttt2_dna_scanner/screen/circle")
 
+---
+-- @ignore
 function SWEP:Initialize()
 	if CLIENT then
 		-- Create render target
@@ -123,6 +129,8 @@ function SWEP:Initialize()
 	return self.BaseClass.Initialize(self)
 end
 
+---
+-- @ignore
 function SWEP:PrimaryAttack()
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 
@@ -152,6 +160,8 @@ function SWEP:PrimaryAttack()
 	end
 end
 
+---
+-- @ignore
 function SWEP:SecondaryAttack()
 	if not IsFirstTimePredicted() then return end
 
@@ -164,12 +174,19 @@ function SWEP:SecondaryAttack()
 	end
 end
 
+---
+-- @ignore
 function SWEP:Reload()
 	if not IsFirstTimePredicted() then return end
 
 	self:RemoveSample()
 end
 
+---
+-- @param boolean successful
+-- @param string msg
+-- @param boolean oldFound
+-- @realm shared
 function SWEP:Report(successful, msg, oldFound)
 	if msg then
 		LANG.Msg(self:GetOwner(), msg, nil, MSG_MSTACK_ROLE)
@@ -187,6 +204,9 @@ function SWEP:Report(successful, msg, oldFound)
 	net.Send(self:GetOwner())
 end
 
+---
+-- @param Entity ent
+-- @realm shared
 function SWEP:GatherDNA(ent)
 	if not IsValid(ent) or ent:IsPlayer() then
 		self:Report(false)
@@ -203,6 +223,9 @@ function SWEP:GatherDNA(ent)
 	end
 end
 
+---
+-- @param Entity ent
+-- @realm shared
 function SWEP:GatherRagdollSample(ent)
 	local sample = ent.killer_sample or {t = 0, killer = nil}
 	local ply = sample.killer
@@ -227,6 +250,9 @@ function SWEP:GatherRagdollSample(ent)
 	end
 end
 
+---
+-- @param Entity ent
+-- @realm shared
 function SWEP:GatherObjectSample(ent)
 	if ent:GetClass() == "ttt_c4" and ent:GetArmed() then
 		self:Report(false, "dna_armed")
@@ -247,6 +273,10 @@ local function firstFreeIndex(tbl, max, best)
 	end
 end
 
+---
+-- @param Entity corpse
+-- @param Player killer
+-- @realm shared
 function SWEP:AddPlayerSample(corpse, killer)
 	if table.Count(self.ItemSamples) >= GetGlobalBool("ttt2_dna_scanner_slots") then
 		self:Report(false, "dna_limit")
@@ -274,6 +304,9 @@ function SWEP:AddPlayerSample(corpse, killer)
 	end
 end
 
+---
+-- @param Entity ent
+-- @realm shared
 function SWEP:AddItemSample(ent)
 	if table.Count(self.ItemSamples) >= GetGlobalBool("ttt2_dna_scanner_slots") then
 		self:Report(false, "dna_limit")
@@ -314,6 +347,8 @@ function SWEP:AddItemSample(ent)
 	self:Report(false, "dna_notfound")
 end
 
+---
+-- @realm shared
 function SWEP:RemoveSample()
 	local idx = self.ActiveSample
 
@@ -330,6 +365,8 @@ function SWEP:RemoveSample()
 	end
 end
 
+---
+-- @realm shared
 function SWEP:PassiveThink()
 	if not IsValid(self:GetOwner()) then return end
 
@@ -352,6 +389,10 @@ function SWEP:PassiveThink()
 end
 
 if SERVER then
+	---
+	-- @param Player ply
+	-- @return Player
+	-- @realm server
 	function SWEP:GetScanTarget(ply)
 		if not IsValid(ply) then return end
 
@@ -368,6 +409,8 @@ if SERVER then
 		return ply
 	end
 
+	---
+	-- @realm server
 	function SWEP:UpdateTargets()
 		for i = 1, GetGlobalBool("ttt2_dna_scanner_slots") do
 			local ply = self.ItemSamples[i]
@@ -386,7 +429,7 @@ if SERVER then
 			end
 		end
 	end
-else
+else -- CLIENT
 	local TryT = LANG.TryTranslation
 	local screen_bgcolor = Color(220, 220, 220, 255)
 	local screen_fontcolor = Color(144, 210, 235, 255)
@@ -401,6 +444,8 @@ else
 		surface.DrawTexturedRectRotated(x + newx, y + newy, w, h, rot)
 	end
 
+	---
+	-- @realm client
 	function SWEP:FillScannerScreen()
 		if self.scannerScreenTex == nil then return end
 
@@ -457,20 +502,28 @@ else
 		render.PopRenderTarget()
 	end
 
+	---
+	-- @ignore
 	function SWEP:PreDrawViewModel()
 		self:FillScannerScreen()
 		self:GetOwner():GetViewModel():SetSubMaterial(0, "!scanner_screen_mat")
 	end
 
+	---
+	-- @ignore
 	function SWEP:PostDrawViewModel()
 		self:GetOwner():GetViewModel():SetSubMaterial(0, nil)
 	end
 
+	---
+	-- @ignore
 	function SWEP:DrawWorldModel()
 		self:FillScannerScreen()
 		self:DrawModel()
 	end
 
+	---
+	-- @realm client
 	function SWEP:RadarScan()
 		local target = self.ItemSamples[self.ActiveSample]
 

@@ -1,3 +1,7 @@
+---
+-- @class SWEP
+-- @section weapon_zm_carry
+
 if SERVER then
 	AddCSLuaFile()
 end
@@ -146,6 +150,8 @@ local function KillVelocity(ent)
 	end)
 end
 
+---
+-- @ignore
 function SWEP:Reset(keep_velocity)
 	if IsValid(self.CarryHack) then
 		self.CarryHack:Remove()
@@ -191,6 +197,9 @@ end
 
 SWEP.reset = SWEP.Reset
 
+---
+-- @return boolean
+-- @realm shared
 function SWEP:CheckValidity()
 	if not IsValid(self.EntHolding) or not IsValid(self.CarryHack) or not IsValid(self.Constr) then
 		-- if one of them is not valid but another is non-nil...
@@ -223,6 +232,8 @@ if SERVER then
 	local ent_diff_time = CurTime()
 	local stand_time = 0
 
+	---
+	-- @ignore
 	function SWEP:Think()
 		BaseClass.Think(self)
 
@@ -263,14 +274,24 @@ if SERVER then
 	end
 end
 
+---
+-- @ignore
 function SWEP:PrimaryAttack()
 	self:DoAttack(false)
 end
 
+---
+-- @ignore
 function SWEP:SecondaryAttack()
 	self:DoAttack(true)
 end
 
+---
+-- @param PhysObj phys
+-- @param Vector pdir
+-- @param number maxforce
+-- @param boolean is_ragdoll
+-- @realm shared
 function SWEP:MoveObject(phys, pdir, maxforce, is_ragdoll)
 	if not IsValid(phys) then return end
 
@@ -295,6 +316,9 @@ function SWEP:MoveObject(phys, pdir, maxforce, is_ragdoll)
 	phys:ApplyForceCenter(pdir)
 end
 
+---
+-- @param Entity target
+-- @realm shared
 function SWEP:GetRange(target)
 	if IsValid(target) and target:IsWeapon() and GetGlobalBool("ttt_weapon_carrying") then
 		return GetGlobalInt("ttt_weapon_carrying_range")
@@ -305,6 +329,9 @@ function SWEP:GetRange(target)
 	end
 end
 
+---
+-- @param Entity target
+-- @realm shared
 function SWEP:AllowPickup(target)
 	local phys = target:GetPhysicsObject()
 	local ply = self:GetOwner()
@@ -319,6 +346,9 @@ function SWEP:AllowPickup(target)
 		and not hook.Run("TTT2PlayerPreventPickupEnt", ply, target)
 end
 
+---
+-- @param boolean pickup
+-- @realm shared
 function SWEP:DoAttack(pickup)
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 	self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
@@ -401,7 +431,9 @@ function SWEP:DoAttack(pickup)
 	end
 end
 
+---
 -- Perform a pickup
+-- @realm shared
 function SWEP:Pickup()
 	if CLIENT or IsValid(self.EntHolding) then return end
 
@@ -476,6 +508,9 @@ end
 
 local down = Vector(0, 0, -1)
 
+---
+-- @return boolean
+-- @realm shared
 function SWEP:AllowEntityDrop()
 	local ply = self:GetOwner()
 	local ent = self.CarryHack
@@ -495,6 +530,8 @@ function SWEP:AllowEntityDrop()
 	return down:Dot(diff) <= 0.75
 end
 
+---
+-- @ignore
 function SWEP:Drop()
 	if not self:CheckValidity() or not self:AllowEntityDrop() then return end
 
@@ -543,6 +580,8 @@ local function RagdollPinnedTakeDamage(rag, dmginfo)
 	rag.is_pinned = false
 end
 
+---
+-- @realm shared
 function SWEP:PinRagdoll()
 	if not GetGlobalBool("ttt_ragdoll_pinning") or not self:GetOwner():IsTraitor() and not GetGlobalBool("ttt_ragdoll_pinning_innocents") then return end
 
@@ -596,6 +635,8 @@ function SWEP:PinRagdoll()
 	end
 end
 
+---
+-- @ignore
 function SWEP:SetupDataTables()
 	-- we've got these dt slots anyway, might as well use them instead of a
 	-- globalvar, probably cheaper
@@ -609,6 +650,8 @@ function SWEP:SetupDataTables()
 end
 
 if SERVER then
+	---
+	-- @ignore
 	function SWEP:Initialize()
 		self.dt.can_rag_pin = GetGlobalBool("ttt_ragdoll_pinning")
 		self.dt.carried_rag = nil
@@ -617,26 +660,36 @@ if SERVER then
 	end
 end
 
+---
+-- @ignore
 function SWEP:OnRemove()
 	self:Reset()
 end
 
+---
+-- @ignore
 function SWEP:Deploy()
 	self:Reset()
 
 	return true
 end
 
+---
+-- @ignore
 function SWEP:Holster()
 	self:Reset()
 
 	return true
 end
 
+---
+-- @ignore
 function SWEP:ShouldDropOnDie()
 	return false
 end
 
+---
+-- @ignore
 function SWEP:OnDrop()
 	self:Remove()
 end
@@ -647,6 +700,8 @@ if CLIENT then
 	local PT = LANG.GetParamTranslation
 	local key_params = {primaryfire = Key("+attack", "LEFT MOUSE")}
 
+	---
+	-- @ignore
 	function SWEP:DrawHUD()
 		self.BaseClass.DrawHUD(self)
 

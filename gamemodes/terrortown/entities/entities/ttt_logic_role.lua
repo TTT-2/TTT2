@@ -1,7 +1,6 @@
 ---
 -- @class ENT
--- @realm shared
--- @section LogicRole
+-- @section ttt_logic_role
 
 ENT.Type = "point"
 ENT.Base = "base_point"
@@ -15,6 +14,7 @@ ENT.Role = ROLE_ANY
 ---
 -- @param string key
 -- @param string|number value
+-- @realm shared
 function ENT:KeyValue(key, value)
 	if key == "OnPass" or key == "OnFail" then
 		-- this is our output, so handle it as such
@@ -38,6 +38,7 @@ end
 -- @param string name
 -- @param Entity|Player activator
 -- @return[default=true] boolean
+-- @realm shared
 function ENT:AcceptInput(name, activator)
 	if name == "TestActivator" then
 		if IsValid(activator) and activator:IsPlayer() then

@@ -1,7 +1,8 @@
 ---
--- Custom weapon base, used to derive from CS one, still very similar.
+-- @class SWEP
+-- @desc Custom weapon base, used to derive from CS one, still very similar.
 -- See <a href="https://wiki.garrysmod.com/page/Category:Weapon">Weapon</a>
--- @class Weapon
+-- @section weapon_tttbase
 
 local math = math
 local table = table
@@ -13,9 +14,7 @@ local CreateClientConVar = CreateClientConVar
 
 if SERVER then
 	AddCSLuaFile()
-end
-
-if CLIENT then
+else -- CLIENT
 	-- hud help font
 	surface.CreateFont("weapon_hud_help", {font = "Trebuchet24", size = 17, weight = 600})
 	surface.CreateFont("weapon_hud_help_key", {font = "Trebuchet24", size = 13, weight = 1200})
@@ -240,6 +239,11 @@ if CLIENT then
 		end
 	end
 
+	---
+	-- @param number x
+	-- @param number y
+	-- @param string key
+	-- @realm client
 	function SWEP:DrawKeyBox(x, y, key)
 		local pad = 3
 		local pad2 = pad * 2
@@ -266,7 +270,7 @@ if CLIENT then
 	-- @param number y y coordinate of the line
 	-- @param string text text for the line
 	-- @param Material|string|nil icon_or_key icon or description for the concerning key
-	-- @realm client 
+	-- @realm client
 	function SWEP:DrawHelpLine(x, y, text, icon_or_key)
 		local icon_size = 18
 		local valid_icon = true
@@ -394,6 +398,25 @@ if CLIENT then
 		self.HUDHelp.additional_lines[#self.HUDHelp.additional_lines + 1] = {text = text, icon = icon_or_key}
 		self.HUDHelp.max_length = math.max(self.HUDHelp.max_length, width)
 	end
+
+	---
+	-- This hook draws the selection icon in the weapon selection menu.
+	-- @see https://wiki.facepunch.com/gmod/WEAPON:DrawWeaponSelection
+	-- @realm client
+	function SWEP:DrawWeaponSelection()
+
+	end
+
+	---
+	-- @realm client
+	function SWEP:CalcViewModel()
+		if not CLIENT or not IsFirstTimePredicted() then return end
+
+		self.bIron = self:GetIronsights()
+		self.fIronTime = self:GetIronsightsTime()
+		self.fCurrentTime = CurTime()
+		self.fCurrentSysTime = SysTime()
+	end
 end
 
 ---
@@ -426,6 +449,7 @@ end
 
 ---
 -- @param function setnext
+-- @realm shared
 function SWEP:DryFire(setnext)
 	if CLIENT and LocalPlayer() == self:GetOwner() then
 		self:EmitSound("Weapon_Pistol.Empty")
@@ -532,6 +556,7 @@ end
 
 ---
 -- @return number
+-- @raelm shared
 function SWEP:GetPrimaryCone()
 	local cone = self.Primary.Cone or 0.2
 
@@ -553,14 +578,6 @@ end
 -- @realm shared
 function SWEP:IsEquipment()
 	return WEPS.IsEquipment(self)
-end
-
----
--- This hook draws the selection icon in the weapon selection menu.
--- @see https://wiki.facepunch.com/gmod/WEAPON:DrawWeaponSelection
--- @realm client
-function SWEP:DrawWeaponSelection()
-
 end
 
 ---
@@ -622,94 +639,137 @@ function SWEP:Ammo1()
 	return IsValid(self:GetOwner()) and self:GetOwner():GetAmmoCount(self.Primary.Ammo) or false
 end
 
----
--- The OnDrop() hook is useless for this as it happens AFTER the drop. OwnerChange
--- does not occur when a drop happens for some reason. Hence this thing.
--- @realm server
-function SWEP:PreDrop()
-	if CLIENT or not IsValid(self:GetOwner()) or self.Primary.Ammo == "none" then return end
+if SERVER then
+	---
+	-- The OnDrop() hook is useless for this as it happens AFTER the drop. OwnerChange
+	-- does not occur when a drop happens for some reason. Hence this thing.
+	-- @realm server
+	function SWEP:PreDrop()
+		if CLIENT or not IsValid(self:GetOwner()) or self.Primary.Ammo == "none" then return end
 
-	local ammo = self:Ammo1()
+		local ammo = self:Ammo1()
 
-	-- Do not drop ammo if we have another gun that uses this type
-	local weps = self:GetOwner():GetWeapons()
+		-- Do not drop ammo if we have another gun that uses this type
+		local weps = self:GetOwner():GetWeapons()
 
-	for i = 1, #weps do
-		local w = weps[i]
+		for i = 1, #weps do
+			local w = weps[i]
 
-		if not IsValid(w) or w == self or w:GetPrimaryAmmoType() ~= self:GetPrimaryAmmoType() then continue end
+			if not IsValid(w) or w == self or w:GetPrimaryAmmoType() ~= self:GetPrimaryAmmoType() then continue end
 
-		ammo = 0
+			ammo = 0
+		end
+
+		self.StoredAmmo = ammo
+
+		if ammo > 0 then
+			self:GetOwner():RemoveAmmo(ammo, self.Primary.Ammo)
+		end
 	end
 
-	self.StoredAmmo = ammo
+	---
+	-- Helper function to slow down dropped weapons
+	-- @realm server
+	function SWEP:DampenDrop()
+		-- For some reason gmod drops guns on death at a speed of 400 units, which
+		-- catapults them away from the body. Here we want people to actually be able
+		-- to find a given corpse's weapon, so we override the velocity here and call
+		-- this when dropping guns on death.
+		local phys = self:GetPhysicsObject()
 
-	if ammo > 0 then
-		self:GetOwner():RemoveAmmo(ammo, self.Primary.Ammo)
-	end
-end
-
----
--- Helper function to slow down dropped weapons
--- @realm server
-function SWEP:DampenDrop()
-	-- For some reason gmod drops guns on death at a speed of 400 units, which
-	-- catapults them away from the body. Here we want people to actually be able
-	-- to find a given corpse's weapon, so we override the velocity here and call
-	-- this when dropping guns on death.
-	local phys = self:GetPhysicsObject()
-
-	if IsValid(phys) then
-		phys:SetVelocityInstantaneous(Vector(0, 0, - 75) + phys:GetVelocity() * 0.001)
-		phys:AddAngleVelocity(phys:GetAngleVelocity() * -0.99)
-	end
-end
-
-local SF_WEAPON_START_CONSTRAINED = 1
-
----
--- Called when a player has picked the weapon up
--- Transfers the currently stored ammo to the new player and updates the fingerprints
--- @param Player newowner
--- @see https://wiki.facepunch.com/gmod/WEAPON:Equip
--- @realm server
-function SWEP:Equip(newowner)
-	if self:IsOnFire() then
-		self:Extinguish()
+		if IsValid(phys) then
+			phys:SetVelocityInstantaneous(Vector(0, 0, - 75) + phys:GetVelocity() * 0.001)
+			phys:AddAngleVelocity(phys:GetAngleVelocity() * -0.99)
+		end
 	end
 
-	self.fingerprints = self.fingerprints or {}
+	local SF_WEAPON_START_CONSTRAINED = 1
 
-	if not table.HasValue(self.fingerprints, newowner) then
-		self.fingerprints[#self.fingerprints + 1] = newowner
+	---
+	-- Called when a player has picked the weapon up
+	-- Transfers the currently stored ammo to the new player and updates the fingerprints
+	-- @param Player newowner
+	-- @see https://wiki.facepunch.com/gmod/WEAPON:Equip
+	-- @realm server
+	function SWEP:Equip(newowner)
+		if self:IsOnFire() then
+			self:Extinguish()
+		end
+
+		self.fingerprints = self.fingerprints or {}
+
+		if not table.HasValue(self.fingerprints, newowner) then
+			self.fingerprints[#self.fingerprints + 1] = newowner
+		end
+
+		if self:HasSpawnFlags(SF_WEAPON_START_CONSTRAINED) then
+			-- If this weapon started constrained, unset that spawnflag, or the
+			-- weapon will be re-constrained and float
+			local flags = self:GetSpawnFlags()
+			local newflags = bit.band(flags, bit.bnot(SF_WEAPON_START_CONSTRAINED))
+
+			self:SetKeyValue("spawnflags", newflags)
+		end
+
+		if IsValid(newowner) and self.StoredAmmo > 0 and self.Primary.Ammo ~= "none" then
+			local ammo = newowner:GetAmmoCount(self.Primary.Ammo)
+			local given = math.min(self.StoredAmmo, self.Primary.ClipMax - ammo)
+
+			newowner:GiveAmmo(given, self.Primary.Ammo)
+
+			self.StoredAmmo = 0
+		end
 	end
 
-	if self:HasSpawnFlags(SF_WEAPON_START_CONSTRAINED) then
-		-- If this weapon started constrained, unset that spawnflag, or the
-		-- weapon will be re-constrained and float
-		local flags = self:GetSpawnFlags()
-		local newflags = bit.band(flags, bit.bnot(SF_WEAPON_START_CONSTRAINED))
+	---
+	-- We were bought as special equipment, some weapons will want to do something
+	-- extra for their buyer
+	-- @param Player buyer
+	-- @realm server
+	function SWEP:WasBought(buyer)
 
-		self:SetKeyValue("spawnflags", newflags)
 	end
 
-	if IsValid(newowner) and self.StoredAmmo > 0 and self.Primary.Ammo ~= "none" then
-		local ammo = newowner:GetAmmoCount(self.Primary.Ammo)
-		local given = math.min(self.StoredAmmo, self.Primary.ClipMax - ammo)
+	---
+	-- Experimental. Enables a feature that causes a player who is using his ironsights and is killed (by a gun, and not a headshot) to fire an inaccurate dying shot.
+	-- @return boolean
+	-- @see http://www.troubleinterroristtown.com/config-and-commands/convars#TOC-Other-gameplay-settings
+	-- @realm server
+	function SWEP:DyingShot()
+		if not self:GetIronsights() then
+			return false
+		end
 
-		newowner:GiveAmmo(given, self.Primary.Ammo)
+		self:SetIronsights(false)
+		self:SetZoom(false)
 
-		self.StoredAmmo = 0
+		if self:GetNextPrimaryFire() > CurTime() then
+			return false
+		end
+
+		-- Owner should still be alive here
+		local owner = self:GetOwner()
+		if not IsValid(owner) then
+			return false
+		end
+
+		local punch = self.Primary.Recoil or 5
+
+		-- Punch view to disorient aim before firing dying shot
+		local eyeang = owner:EyeAngles()
+		eyeang.pitch = eyeang.pitch - math.Rand(-punch, punch)
+		eyeang.yaw = eyeang.yaw - math.Rand(-punch, punch)
+
+		owner:SetEyeAngles(eyeang)
+
+		MsgN(owner:Nick() .. " fired his DYING SHOT")
+
+		owner.dying_wep = self
+
+		self:PrimaryAttack(true)
+
+		return true
 	end
-end
-
----
--- We were bought as special equipment, some weapons will want to do something
--- extra for their buyer
--- @param Player buyer
--- @realm server
-function SWEP:WasBought(buyer)
-
 end
 
 ---
@@ -756,6 +816,7 @@ end
 ---
 -- Dummy functions that will be replaced when SetupDataTables runs. These are
 -- here for when that does not happen (due to e.g. stacking base classes)
+-- @realm shared
 function SWEP:SetIronsightsTime()
 
 end
@@ -811,17 +872,6 @@ function SWEP:Initialize()
 end
 
 ---
--- @realm client
-function SWEP:CalcViewModel()
-	if not CLIENT or not IsFirstTimePredicted() then return end
-
-	self.bIron = self:GetIronsights()
-	self.fIronTime = self:GetIronsightsTime()
-	self.fCurrentTime = CurTime()
-	self.fCurrentSysTime = SysTime()
-end
-
----
 -- Called when the swep thinks.
 -- @warning If you override Think in your SWEP, you should call BaseClass.Think(self) so as not to break ironsights
 -- @see https://wiki.facepunch.com/gmod/WEAPON:Think
@@ -830,115 +880,67 @@ function SWEP:Think()
 	self:CalcViewModel()
 end
 
----
--- Experimental. Enables a feature that causes a player who is using his ironsights and is killed (by a gun, and not a headshot) to fire an inaccurate dying shot.
--- @return boolean
--- @see http://www.troubleinterroristtown.com/config-and-commands/convars#TOC-Other-gameplay-settings
--- @realm server
-function SWEP:DyingShot()
-	if not self:GetIronsights() then
-		return false
-	end
-
-	self:SetIronsights(false)
-	self:SetZoom(false)
-
-	if self:GetNextPrimaryFire() > CurTime() then
-		return false
-	end
-
-	-- Owner should still be alive here
-	local owner = self:GetOwner()
-	if not IsValid(owner) then
-		return false
-	end
-
-	local punch = self.Primary.Recoil or 5
-
-	-- Punch view to disorient aim before firing dying shot
-	local eyeang = owner:EyeAngles()
-	eyeang.pitch = eyeang.pitch - math.Rand(-punch, punch)
-	eyeang.yaw = eyeang.yaw - math.Rand(-punch, punch)
-
-	owner:SetEyeAngles(eyeang)
-
-	MsgN(owner:Nick() .. " fired his DYING SHOT")
-
-	owner.dying_wep = self
-
-	self:PrimaryAttack(true)
-
-	return true
-end
-
 local ttt_lowered = CreateConVar("ttt_ironsights_lowered", "1", FCVAR_ARCHIVE)
 local host_timescale = GetConVar("host_timescale")
 local LOWER_POS = Vector(0, 0, -2)
 local IRONSIGHT_TIME = 0.25
 
----
--- This hook allows you to adjust view model position and angles.
--- @param Vector pos
--- @param Angle ang
--- @return Vector
--- @return Angle
--- @see https://wiki.facepunch.com/gmod/WEAPON:GetViewModelPosition
--- @realm client
-function SWEP:GetViewModelPosition(pos, ang)
-	if not self.IronSightsPos or self.bIron == nil then
-		return pos, ang
-	end
-
-	local bIron = self.bIron
-	local time = self.fCurrentTime + (SysTime() - self.fCurrentSysTime) * game.GetTimeScale() * host_timescale:GetFloat()
-
-	if bIron then
-		self.SwayScale = 0.3
-		self.BobScale = 0.1
-	else
-		self.SwayScale = 1.0
-		self.BobScale = 1.0
-	end
-
-	local fIronTime = self.fIronTime
-
-	if not bIron and fIronTime < time - IRONSIGHT_TIME then
-		return pos, ang
-	end
-
-	local mul = 1.0
-
-	if fIronTime > time - IRONSIGHT_TIME then
-		mul = math.Clamp((time - fIronTime) / IRONSIGHT_TIME, 0, 1)
-
-		if not bIron then
-			mul = 1 - mul
+if CLIENT then
+	---
+	-- This hook allows you to adjust view model position and angles.
+	-- @param Vector pos
+	-- @param Angle ang
+	-- @return Vector
+	-- @return Angle
+	-- @see https://wiki.facepunch.com/gmod/WEAPON:GetViewModelPosition
+	-- @realm client
+	function SWEP:GetViewModelPosition(pos, ang)
+		if not self.IronSightsPos or self.bIron == nil then
+			return pos, ang
 		end
+
+		local bIron = self.bIron
+		local time = self.fCurrentTime + (SysTime() - self.fCurrentSysTime) * game.GetTimeScale() * host_timescale:GetFloat()
+
+		if bIron then
+			self.SwayScale = 0.3
+			self.BobScale = 0.1
+		else
+			self.SwayScale = 1.0
+			self.BobScale = 1.0
+		end
+
+		local fIronTime = self.fIronTime
+
+		if not bIron and fIronTime < time - IRONSIGHT_TIME then
+			return pos, ang
+		end
+
+		local mul = 1.0
+
+		if fIronTime > time - IRONSIGHT_TIME then
+			mul = math.Clamp((time - fIronTime) / IRONSIGHT_TIME, 0, 1)
+
+			if not bIron then
+				mul = 1 - mul
+			end
+		end
+
+		local offset = self.IronSightsPos + (ttt_lowered:GetBool() and LOWER_POS or vector_origin)
+
+		if self.IronSightsAng then
+			ang = Angle(ang)
+			ang:RotateAroundAxis(ang:Right(), self.IronSightsAng.x * mul)
+			ang:RotateAroundAxis(ang:Up(), self.IronSightsAng.y * mul)
+			ang:RotateAroundAxis(ang:Forward(), self.IronSightsAng.z * mul)
+		end
+
+		pos = pos + offset.x * ang:Right() * mul
+		pos = pos + offset.y * ang:Forward() * mul
+		pos = pos + offset.z * ang:Up() * mul
+
+		return pos, ang
 	end
-
-	local offset = self.IronSightsPos + (ttt_lowered:GetBool() and LOWER_POS or vector_origin)
-
-	if self.IronSightsAng then
-		ang = Angle(ang)
-		ang:RotateAroundAxis(ang:Right(), self.IronSightsAng.x * mul)
-		ang:RotateAroundAxis(ang:Up(), self.IronSightsAng.y * mul)
-		ang:RotateAroundAxis(ang:Forward(), self.IronSightsAng.z * mul)
-	end
-
-	pos = pos + offset.x * ang:Right() * mul
-	pos = pos + offset.y * ang:Forward() * mul
-	pos = pos + offset.z * ang:Up() * mul
-
-	return pos, ang
-end
-
----
--- Tell the server about the users preference regarding holding aim or toggle aim,
--- necessary to avoid prediction issues
-local function UpdateHoldAimCV()
-	net.Start("TTT2UpdateHoldAimConvar")
-	net.WriteBool(ttt2_hold_aim:GetBool())
-	net.SendToServer()
 end
 
 hook.Add("KeyRelease", "TTT2ResetIronSights", function(ply, key)
@@ -955,15 +957,20 @@ hook.Add("KeyRelease", "TTT2ResetIronSights", function(ply, key)
 end)
 
 if CLIENT then
-	hook.Add("InitPostEntity", "TTT2InitHoldAimCV", function()
-		UpdateHoldAimCV()
-	end)
+	---
+	-- Tell the server about the users preference regarding holding aim or toggle aim,
+	-- necessary to avoid prediction issues
+	local function UpdateHoldAimCV()
+		net.Start("TTT2UpdateHoldAimConvar")
+		net.WriteBool(ttt2_hold_aim:GetBool())
+		net.SendToServer()
+	end
 
-	cvars.AddChangeCallback("ttt2_hold_aim", function(cvar, old, new)
-		UpdateHoldAimCV()
-	end)
+	hook.Add("InitPostEntity", "TTT2InitHoldAimCV", UpdateHoldAimCV)
+
+	cvars.AddChangeCallback("ttt2_hold_aim", UpdateHoldAimCV)
 else
-	net.Receive("TTT2UpdateHoldAimConvar", function(len, ply)
+	net.Receive("TTT2UpdateHoldAimConvar", function(_, ply)
 		ply.holdAim = net.ReadBool()
 	end)
 end

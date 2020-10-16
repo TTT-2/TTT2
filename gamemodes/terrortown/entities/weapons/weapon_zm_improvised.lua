@@ -1,3 +1,7 @@
+---
+-- @class SWEP
+-- @section weapon_zm_improvised
+
 local cv_crowbar_unlocks
 local cv_crowbar_pushforce
 
@@ -83,6 +87,7 @@ end
 -- Will open door AND return what it did
 -- @param Entity hitEnt
 -- @return number Entity types a crowbar might open
+-- @realm shared
 function SWEP:OpenEnt(hitEnt)
 	-- Get ready for some prototype-quality code, all ye who read this
 	if SERVER and cv_crowbar_unlocks:GetBool() then
@@ -124,6 +129,8 @@ function SWEP:OpenEnt(hitEnt)
 	end
 end
 
+---
+-- @ignore
 function SWEP:PrimaryAttack()
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 
@@ -224,6 +231,8 @@ function SWEP:PrimaryAttack()
 	end
 end
 
+---
+-- @ignore
 function SWEP:SecondaryAttack()
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 	self:SetNextSecondaryFire(CurTime() + 0.1)
@@ -264,6 +273,8 @@ function SWEP:SecondaryAttack()
 	end
 end
 
+---
+-- @ignore
 function SWEP:OnDrop()
 	self:Remove()
 end
