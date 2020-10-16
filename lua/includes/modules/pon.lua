@@ -1,3 +1,6 @@
+---
+-- @module pon
+
 --[[
 DEVELOPMENTAL VERSION;
 VERSION 1.2.2
@@ -32,7 +35,9 @@ Changes (@saibotk):
  - Removed unused variables / rename to avoid shadowing other variables
 ]]
 
-AddCSLuaFile()
+if SERVER then
+	AddCSLuaFile()
+end
 
 local pon = {}
 _G.pon = pon

@@ -1,5 +1,5 @@
 ---
--- @module ITEM
+-- @class ITEM
 
 ITEM.PrintName = "Scripted Item" -- displayed @{ITEM} name (Shown on HUD), language supported
 

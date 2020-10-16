@@ -1,6 +1,6 @@
 ---
--- Outline module
 -- @author https://github.com/ShadowBonnieRUS
+-- @module outline
 
 local render = render
 local cam = cam
@@ -12,7 +12,7 @@ module("outline", package.seeall)
 
 if SERVER then
 	AddCSLuaFile()
-else
+else -- CLIENT
 	OUTLINE_MODE_BOTH = 0
 	OUTLINE_MODE_NOTVISIBLE = 1
 	OUTLINE_MODE_VISIBLE = 2
@@ -34,6 +34,11 @@ else
 	local COLOR = 2
 	local MODE = 3
 
+	---
+	-- @param table ents List of @{Entity}
+	-- @param Color color
+	-- @param number mode [OUTLINE_MODE_BOTH, OUTLINE_MODE_NOTVISIBLE, OUTLINE_MODE_VISIBLE]
+	-- @realm client
 	function Add(ents, color, mode)
 		-- Maximum 255 reference values
 		if ListSize >= 255 then return end
@@ -56,6 +61,9 @@ else
 		List[ListSize] = t
 	end
 
+	---
+	-- @return Entity The last rendered @{Entity}
+	-- @realm client
 	function RenderedEntity()
 		return RenderEnt
 	end

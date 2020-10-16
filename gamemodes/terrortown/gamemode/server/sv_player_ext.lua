@@ -1,5 +1,5 @@
 ---
--- @module Player
+-- @class Player
 
 -- serverside extensions to player table
 

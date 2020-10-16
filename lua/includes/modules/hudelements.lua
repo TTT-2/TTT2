@@ -2,6 +2,7 @@
 -- This is the <code>hudelements</code> module
 -- @author Alf21
 -- @author saibotk
+-- @module hudelements
 
 module("hudelements", package.seeall)
 

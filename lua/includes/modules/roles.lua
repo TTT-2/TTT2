@@ -2,6 +2,7 @@
 -- This is the <code>roles</code> module.
 -- @author Alf21
 -- @author saibotk
+-- @module roles
 
 module("roles", package.seeall)
 
@@ -168,6 +169,7 @@ end
 ---
 -- All scripts have been loaded...
 -- @local
+-- @realm shared
 function OnLoaded()
 
 	--

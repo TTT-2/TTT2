@@ -1,6 +1,6 @@
 ---
--- @module RADAR
--- @desc radar rendering
+-- Radar rendering
+-- @class RADAR
 
 local surface = surface
 local math = math
@@ -77,20 +77,13 @@ function RADAR.CacheEnts()
 end
 
 ---
--- Called if the radar is equipped
--- @param Player ply
--- @hook
--- @internal
--- @realm client
+-- @ignore
 function ITEM:Equip(ply)
 	RunConsoleCommand("ttt_radar_scan")
 end
 
 ---
--- Draws a counter next to the item icon
--- @hook
--- @internal
--- @realm client
+-- @ignore
 function ITEM:DrawInfo()
 	return math.ceil(math.max(0, (LocalPlayer().radarTime or 30) - (CurTime() - RADAR.startTime)))
 end
@@ -135,6 +128,7 @@ end
 
 ---
 -- Draws the indicator on the screen
+-- @param Player client
 -- @hook
 -- @internal
 -- @realm client
@@ -290,6 +284,9 @@ net.Receive("TTT2RadarUpdateTime", ReceiveRadarTime)
 
 ---
 -- Creates the settings menu
+-- @param Panel parent
+-- @param Panel frame
+-- @return Panel the dform
 -- @internal
 -- @realm client
 function RADAR.CreateMenu(parent, frame)

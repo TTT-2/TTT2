@@ -2,6 +2,8 @@ ROLE.Base = "ttt_role_base"
 
 ROLE.index = ROLE_DETECTIVE
 
+---
+-- @ignore
 function ROLE:PreInitialize()
 	self.color = Color(31, 77, 191, 255)
 
