@@ -50,7 +50,7 @@ function CreateTransferMenu(parent)
 	for i = 1, #plys do
 		local ply = plys[i]
 
-		if ply ~= client and ply:IsActive() and (not ply:GetSubRoleData().unknownTeam or ply:IsRole(ROLE_DETECTIVE) and client:IsRole(ROLE_DETECTIVE)) and ply:IsInTeam(client) then
+		if ply ~= client and ply:IsActiveShopper() and (not ply:GetSubRoleData().unknownTeam or ply:GetBaseRole() == ROLE_DETECTIVE) then
 			dpick:AddChoice(ply:Nick(), ply:SteamID64())
 		end
 	end

@@ -213,6 +213,10 @@ local function TransferCredits(ply, cmd, args)
 
 	if credits == 0 then return end
 
+	local allow = hook.Run("TTT2CanTransferCredits", ply, target, credits)
+
+	if allow == false then return end
+
 	ply:SubtractCredits(credits)
 	target:AddCredits(credits)
 
