@@ -3,15 +3,15 @@
 -- @author saibotk
 -- @module net
 
+-- Stream network message name constant
+local NETMSG_STREAM = "TTT2_NET_STREAM"
+
 if SERVER then
 	AddCSLuaFile()
 
 	-- Add the network string for streaming data
 	util.AddNetworkString(NETMSG_STREAM)
 end
-
--- Stream network message name constant
-local NETMSG_STREAM = "TTT2_NET_STREAM"
 
 -- Size to split the network stream at (currently a bit lower than the max value, just to have some buffer)
 net.STREAM_FRAGMENTATION_SIZE = 65400

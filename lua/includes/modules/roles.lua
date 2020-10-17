@@ -118,6 +118,7 @@ local function SetupData(roleData)
 				-- @realm server
 				CreateConVar("ttt_" .. roleData.name .. "_enabled", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 			end
+		end
 	end
 
 	---
