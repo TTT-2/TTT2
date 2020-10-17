@@ -31,14 +31,14 @@ if SERVER then
 	function EVENT:Score(event)
 		local finder = event.finder
 
-		self:SetScore(finder:SteamID64(), {
+		self:SetScore(finder.sid64, {
 			score = roles.GetByIndex(finder.role).scoreBodyFoundMuliplier
 		})
 	end
 end
 
 function EVENT:GetDeprecatedFormat(event)
-	if self.event.roundState ~= ROUND_ACTIVE then return end
+	if event.roundState ~= ROUND_ACTIVE then return end
 
 	local finder = event.finder
 	local found = event.found

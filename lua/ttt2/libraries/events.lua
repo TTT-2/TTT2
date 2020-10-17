@@ -130,7 +130,7 @@ function events.SortByPlayerAndEvent()
 			sortedList[ply64] = sortedList[ply64] or {}
 			sortedList[ply64][type] = sortedList[ply64][type] or {}
 
-			sortedList[ply64][type] = event
+			sortedList[ply64][type][#sortedList[ply64][type] + 1] = event
 		end
 	end
 
@@ -159,18 +159,6 @@ function events.GetTotalPlayerScores()
 end
 
 ---
--- Returns the deprecated event data of a single event. Returns nil if
--- there is no deprecated data for this event.
--- @param EVENT event The event that should be converted
--- @return table The deprecated event data table
--- @realm shared
-function events.GetDeprecatedEventData(event)
-	if not isfunction(event.GetDeprecatedFormat) then return end
-
-	return event:GetDeprecatedFormat(event.event)
-end
-
----
 -- Generates an event list in the deprecated format. Only contains
 -- events that were present in default TTT. Is sorted by time.
 -- @return table The deprecated event list
@@ -180,10 +168,9 @@ function events.GetDeprecatedEventList()
 
 	for i = 1, #events.list do
 		local event = events.list[i]
+		local deprecatedEventData = event:GetDeprecatedFormat(event.event)
 
-		local deprecatedEventData = events.GetDeprecatedEventData(event)
-
-		if not deprecatedEvent then continue end
+		if not deprecatedEventData then continue end
 
 		deprecatedEvents[#deprecatedEvents + 1] = deprecatedEventData
 	end
@@ -214,7 +201,7 @@ if SERVER then
 		end
 
 		-- add to deprecated score list
-		local deprecatedEventData = events.GetDeprecatedEventData(newEvent)
+		local deprecatedEventData = newEvent:GetDeprecatedFormat(newEvent.event)
 
 		if deprecatedEventData then
 			SCORE:AddEvent(deprecatedEventData)
@@ -284,8 +271,9 @@ if CLIENT then
 			local eventData = eventStreamData[i]
 
 			local newEvent = events.Create(eventData.type)
-			newEvent:SetEvent(eventData.event)
-			newEvent:SetScore(eventData.score.ply64, eventData.score.score)
+			newEvent:SetEventTable(eventData.event)
+			newEvent:SetScoreTable(eventData.score)
+			newEvent:SetPlayersTable(eventData.players)
 
 			events.list[#events.list + 1] = newEvent
 		end
@@ -293,10 +281,8 @@ if CLIENT then
 		-- set old deprecated event table
 		local deprecatedEvents = events.GetDeprecatedEventList()
 
-		table.SortByMember(deprecatedEvents, "time", true)
-		CLSCORE:ReportEvents(deprecatedEvents)
-
-		PrintTable(events.SortByPlayerAndEvent())
+		table.SortByMember(deprecatedEvents, "t", true)
+		CLSCORE:ReportEvents(deprecatedEvents, events.SortByPlayerAndEvent())
 	end)
 end
 

@@ -13,7 +13,7 @@ function ROLE:PreInitialize()
 	self.defaultEquipment = TRAITOR_EQUIPMENT
 	self.scoreSurviveBonusMultiplier = 0.5
 	self.scoreTimelimitMultiplier = -0.5
-	self.scoreKillsMultiplier = 5
+	self.scoreKillsMultiplier = 2
 	self.scoreTeamKillsMultiplier = -16
 	self.scoreBodyFoundMuliplier = 0
 	self.fallbackTable = {}

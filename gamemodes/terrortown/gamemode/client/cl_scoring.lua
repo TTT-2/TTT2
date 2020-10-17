@@ -18,7 +18,7 @@ local skull_icon = Material("HUD/killicons/default")
 
 CLSCORE = {}
 CLSCORE.Events = {}
-CLSCORE.Scores = {}
+CLSCORE.EventsNew = {}
 CLSCORE.Tms = {}
 CLSCORE.Players = {}
 CLSCORE.EventDisplay = {}
@@ -134,8 +134,6 @@ function CLSCORE:FillDList(dlst)
 	local events = self.Events
 
 	for i = 1, #events do
-		print("this event:")
-
 		local e = events[i]
 		local etxt = self:TextForEvent(e)
 		local eicon, ttip = self:IconForEvent(e)
@@ -221,7 +219,6 @@ function CLSCORE:BuildScorePanel(dpanel)
 	end
 
 	-- the type of win condition triggered is relevant for team bonus
-	local wintype = WIN_NONE
 	local events = self.Events
 	local rls = {}
 	local teams = {}
@@ -231,9 +228,7 @@ function CLSCORE:BuildScorePanel(dpanel)
 	for i = #events, 1, -1 do
 		local e = events[i]
 
-		if e.id == EVENT_FINISH then
-			wintype = e.win
-		elseif e.id == EVENT_SELECTED then
+		if e.id == EVENT_SELECTED then
 			local subroles = e.rt
 			local tms = e.tms
 
@@ -267,72 +262,78 @@ function CLSCORE:BuildScorePanel(dpanel)
 		end
 	end
 
-	local scores = self.Scores
-	local nicks = self.Players
-	local bonus = ScoreTeamBonus(scores, wintype)
+	PrintTable(self.EventsNew)
 
-	for id, s in pairs(scores) do
-		if id ~= -1 then
-			local kills = 0
-			local teamkills = 0
+	for ply64, eventTypesTable in pairs(self.EventsNew) do
+		local alive = true
+		local kills = 0
+		local teamkills = 0
+		local points_own = 0
+		local points_team = 0
+		local points_total = 0
 
-			rls[id] = rls[id] or {}
-			teams[id] = teams[id] or {}
-			role[id] = role[id] or ""
-			team[id] = team[id] or ""
+		--PrintTable(eventTypesTable)
+		--print("------")
 
-			if s.ev then
-				for _, ev in ipairs(s.ev) do
-					if ev.t == TEAM_NONE or ev.t ~= ev.v or TEAMS[ev.t].alone then
+		for type, eventTable in pairs(eventTypesTable) do
+			--PrintTable(eventTable)
+			--print("-----")
+
+			for i = 1, #eventTable do
+				local event = eventTable[i]
+
+				--PrintTable(event)
+				--print("-----")
+
+				if type == EVENT_BONUS then
+					if event:HasAffectedPlayer(ply64) then
+						alive = event.event.alive
+					end
+
+					points_team = points_team + event:GetSummedPlayerScore(ply64)
+				end
+
+				if type == EVENT_KILL and event.event.attacker.sid64 == ply64 then
+					if event.event.type == KILL_NORMAL then
 						kills = kills + 1
-					else
+					elseif event.event.type == KILL_TEAM then
 						teamkills = teamkills + 1
 					end
 
-					if not rls[id][ev.r] then
-						role[id] = (role[id] ~= "" and (role[id] .. "/") or "") .. T(roles.GetByIndex(ev.r).name)
-						rls[id][ev.r] = true
-					end
-
-					if ev.t ~= TEAM_NONE and not teams[id][ev.t] then
-						team[id] = (team[id] ~= "" and (team[id] .. "/") or "") .. T(ev.t)
-						teams[id][ev.t] = true
-					end
+					points_own = points_own + event:GetSummedPlayerScore(ply64)
 				end
+
+				points_total = points_total + event:GetSummedPlayerScore(ply64)
 			end
+		end
 
-			local surv = ""
+		local surv = ""
 
-			if s.deaths > 0 then
-				surv = vgui.Create("ColoredBox", dlist)
-				surv:SetColor(self.ScorePanelColor)
-				surv:SetBorder(false)
-				surv:SetSize(18, 18)
+		if not alive then
+			surv = vgui.Create("ColoredBox", dlist)
+			surv:SetColor(self.ScorePanelColor)
+			surv:SetBorder(false)
+			surv:SetSize(18, 18)
 
-				local skull = vgui.Create("DImage", surv)
-				skull:SetMaterial(skull_icon)
-				skull:SetTooltip("Dead")
-				skull:SetKeepAspect(true)
-				skull:SetSize(18, 18)
-			end
+			local skull = vgui.Create("DImage", surv)
+			skull:SetMaterial(skull_icon)
+			skull:SetTooltip("Dead")
+			skull:SetKeepAspect(true)
+			skull:SetSize(18, 18)
+		end
 
-			local points_own = KillsToPoints(s)
-			local points_team = bonus[id]
-			local points_total = points_own + points_team
+		local l = dlist:AddLine(surv, self.Players[ply64], role[ply64], kills, teamkills, points_own, points_team, points_total)
 
-			local l = dlist:AddLine(surv, nicks[id], role[id], team[id], kills, teamkills, points_own, points_team, points_total)
+		-- center align
+		for _, col in pairs(l.Columns) do
+			col:SetContentAlignment(5)
+		end
 
-			-- center align
-			for _, col in pairs(l.Columns) do
-				col:SetContentAlignment(5)
-			end
-
-			-- when sorting on the column showing survival, we would get an error
-			-- because images can't be sorted, so instead hack in a dummy value
-			local surv_col = l.Columns[1]
-			if surv_col then
-				surv_col.Value = TypeID(surv_col.Value) == TYPE_PANEL and "1" or "0"
-			end
+		-- when sorting on the column showing survival, we would get an error
+		-- because images can't be sorted, so instead hack in a dummy value
+		local surv_col = l.Columns[1]
+		if surv_col then
+			surv_col.Value = TypeID(surv_col.Value) == TYPE_PANEL and "1" or "0"
 		end
 	end
 
@@ -390,12 +391,6 @@ function CLSCORE:AddAward(y, pw, award, dpanel)
 end
 
 ---
--- double check that we have no nils
-local function ValidAward(a)
-	return istable(a) and isstring(a.nick) and isstring(a.text) and isstring(a.title) and isnumber(a.priority)
-end
-
----
 -- Creates the highlights @{Panel}
 --
 -- @param Panel dpanel
@@ -408,16 +403,16 @@ function CLSCORE:BuildHilitePanel(dpanel, title, starttime, endtime)
 	local w, h = dpanel:GetSize()
 
 	-- List of traitors
-	local tr = {}
+	--local tr = {}
 
-	for k, v in pairs(self.Tms) do
-		if k == TEAM_TRAITOR then
-			table.Add(tr, v)
-		end
-	end
+	--for k, v in pairs(self.Tms) do
+	--	if k == TEAM_TRAITOR then
+	--		table.Add(tr, v)
+	--	end
+	--end
 
 	local numply = table.Count(self.Players)
-	local numtr = table.Count(tr)
+	local numtr = 0
 
 	local bg = vgui.Create("ColoredBox", dpanel)
 	bg:SetColor(title.BackgroundColor)
@@ -473,13 +468,13 @@ function CLSCORE:BuildHilitePanel(dpanel, title, starttime, endtime)
 	-- priority/interestingness
 	local award_choices = {}
 
-	for _, afn in pairs(AWARDS) do
-		local a = afn(self.Events, self.Scores, self.Players, tr) -- TODO: get this tr var out of scores.sid64.lt == TEAM_TRAITOR
+	--for _, afn in pairs(AWARDS) do
+	--	local a = afn(self.Events, self.EventsNew, self.Players, tr) -- TODO: get this tr var out of scores.sid64.lt == TEAM_TRAITOR
 
-		if ValidAward(a) then
-			table.insert(award_choices, a)
-		end
-	end
+	--	if ValidAward(a) then
+	--		table.insert(award_choices, a)
+	--	end
+	--end
 
 	--local num_choices = #award_choices
 	local max_awards = 5
@@ -707,7 +702,7 @@ end
 function CLSCORE:Reset()
 	self.Events = {}
 	self.Tms = {} -- team setup on round start
-	self.Scores = {}
+	self.EventsNew = {}
 	self.Players = {}
 	self.RoundStarted = 0
 
@@ -719,46 +714,29 @@ end
 -- @param table events The list of events
 -- @realm client
 -- @internal
-function CLSCORE:Init(events)
+function CLSCORE:Init(deprecatedEvents, events)
 	-- Get start time and traitors
 	local starttime = 0
 	local tms = nil
-	local scores = {}
 	local nicks = {}
-	local game, selected, spawn = false, false, false
 
-	for i = 1, #events do
-		local e = events[i]
+	for i = 1, #deprecatedEvents do
+		local e = deprecatedEvents[i]
 
 		if e.id == EVENT_GAME and e.state == ROUND_ACTIVE then
 			starttime = e.t
-
-			if selected and spawn then break end
-
-			game = true
 		elseif e.id == EVENT_SELECTED then
 			tms = e.tms
-
-			if game and spawn then break end
-
-			selected = true
 		elseif e.id == EVENT_SPAWN and e.sid64 ~= nil then
-			scores[e.sid64] = ScoreInit()
 			nicks[e.sid64] = e.ni
-
-			if game and selected then break end
-
-			spawn = true
 		end
 	end
 
-	--scores = ScoreEventLog(events, scores)
-
 	self.Players = nicks
-	self.Scores = scores
+	self.EventsNew = events
 	self.Tms = tms
 	self.StartTime = starttime
-	self.Events = events
+	self.Events = deprecatedEvents
 end
 
 ---
@@ -766,10 +744,10 @@ end
 -- and displays it to the local @{Player}
 -- @realm client
 -- @internal
-function CLSCORE:ReportEvents(events)
+function CLSCORE:ReportEvents(deprecatedEvents, events)
 	self:Reset()
 
-	self:Init(events)
+	self:Init(deprecatedEvents, events)
 	self:ShowPanel()
 end
 

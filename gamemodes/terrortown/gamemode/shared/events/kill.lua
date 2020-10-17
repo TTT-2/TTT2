@@ -34,6 +34,17 @@ if SERVER then
 			}
 
 			self:AddAffectedPlayers(attacker:SteamID64())
+
+			-- set death type
+			if event.attacker.sid64 == event.victim.sid64 then
+				event.type = KILL_SUICIDE
+			else
+				if event.attacker.team ~= TEAM_NONE and event.attacker.team == event.victim.team and not TEAMS[event.attacker.team].alone then
+					event.type = KILL_TEAM
+				else
+					event.type = KILL_NORMAL
+				end
+			end
 		end
 
 		local wep = util.WeaponFromDamage(dmgInfo)
@@ -64,6 +75,7 @@ if SERVER then
 
 		local victim = event.victim
 		local attacker = event.attacker
+		local deathType = event.type
 
 		-- if there is no killer, it wasn't a suicide or a kill, therefore
 		-- no points should be granted to anyone
@@ -72,26 +84,24 @@ if SERVER then
 		-- the score is dependent of the teams/roles
 		local roleData = roles.GetByIndex(attacker.role)
 
-		if attacker.sid64 == victim.sid64 then
+		if deathType == KILL_SUICIDE then
 			self:SetScore(victim.sid64, {
 				score = roleData.scoreSuicideMultiplier
 			})
+		elseif deathType == KILL_TEAM then
+			self:SetScore(attacker.sid64, {
+				score = roleData.scoreTeamKillsMultiplier
+			})
 		else
-			if attacker.team ~= TEAM_NONE and attacker.team == victim.team and not TEAMS[attacker.team].alone then
-				self:SetScore(attacker.sid64, {
-					score = roleData.scoreTeamKillsMultiplier
-				})
-			else
-				self:SetScore(attacker.sid64, {
-					score = roleData.scoreKillsMultiplier
-				})
-			end
+			self:SetScore(attacker.sid64, {
+				score = roleData.scoreKillsMultiplier
+			})
 		end
 	end
 end
 
 function EVENT:GetDeprecatedFormat(event)
-	if self.event.roundState ~= ROUND_ACTIVE then return end
+	if event.roundState ~= ROUND_ACTIVE then return end
 
 	local attacker = event.attacker
 	local victim = event.victim

@@ -473,6 +473,7 @@ KILL_NORMAL = 0
 KILL_SUICIDE = 1
 KILL_FALL = 2
 KILL_BURN = 3
+KILL_TEAM = 4
 
 -- Entity types a crowbar might open
 OPEN_NO = 0

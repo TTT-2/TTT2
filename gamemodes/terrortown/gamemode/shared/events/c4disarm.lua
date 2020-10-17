@@ -26,7 +26,7 @@ if SERVER then
 end
 
 function EVENT:GetDeprecatedFormat(event)
-	if self.event.roundState ~= ROUND_ACTIVE then return end
+	if event.roundState ~= ROUND_ACTIVE then return end
 
 	return {
 		id = self.type,

@@ -8,8 +8,16 @@ EVENT.players = {}
 -- @param table event The event data table that is about to be added
 -- @internal
 -- @realm shared
-function EVENT:SetEvent(event)
+function EVENT:SetEventTable(event)
 	self.event = event
+end
+
+function EVENT:SetScoreTable(score)
+	self.score = score
+end
+
+function EVENT:SetPlayersTable(players)
+	self.players = players
 end
 
 ---
@@ -65,9 +73,13 @@ function EVENT:GetAffectedPlayer()
 	return self.players
 end
 
+function EVENT:HasAffectedPlayer(ply64)
+	return table.HasValue(self.players, ply64)
+end
+
 if SERVER then
 	---
-	-- Sets the players that are affected by this event.
+	-- Adds players that are affected by this event.
 	-- @param string vararg A variable amount of player steamID64
 	-- @realm server
 	function EVENT:AddAffectedPlayers(...)
@@ -93,7 +105,7 @@ if SERVER then
 			return false
 		end
 
-		self:SetEvent(event)
+		self:SetEventTable(event)
 
 		-- after the event is added, it should be passed on to the
 		-- scoring function to directly calculate the score
@@ -112,7 +124,8 @@ if SERVER then
 		return {
 			type = self.type,
 			event = self.event,
-			score = self.score
+			score = self.score,
+			players = self.players
 		}
 	end
 
