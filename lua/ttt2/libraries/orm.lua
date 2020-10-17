@@ -189,7 +189,7 @@ end
 
 ---
 -- Deletes the given object from the database storage.
--- @return nil|false Returns false if an error occurred, nil otherwise.
+-- @return nil|boolean Returns false if an error occurred, nil otherwise.
 -- @realm shared
 function ORMOBJECT:Delete()
 	local where = {}
