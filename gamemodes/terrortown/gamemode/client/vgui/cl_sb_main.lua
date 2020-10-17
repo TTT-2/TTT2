@@ -22,8 +22,8 @@ local IsValid = IsValid
 ttt_include("vgui__cl_sb_team")
 
 -- TODO add Team!
-local cv_ttt_scoreboard_sorting = CreateClientConVar("ttt_scoreboard_sorting", "name", true, false, "name | role | karma | score | deaths | ping")
-local cv_ttt_scoreboard_ascending = CreateClientConVar("ttt_scoreboard_ascending", "1", true, false, "Should scoreboard ordering be in ascending order")
+local cv_ttt_scoreboard_sorting = CreateConVar("ttt_scoreboard_sorting", "name", FCVAR_ARCHIVE, "name | role | karma | score | deaths | ping")
+local cv_ttt_scoreboard_ascending = CreateConVar("ttt_scoreboard_ascending", "1", FCVAR_ARCHIVE, "Should scoreboard ordering be in ascending order")
 
 GROUP_TERROR = 1
 GROUP_NOTFOUND = 2

@@ -13,8 +13,8 @@ DEFINE_BASECLASS(base)
 HUDELEMENT.Base = base
 
 if CLIENT then
-	local hudWidth = CreateClientConVar("ttt2_base_hud_width", "0")
-	local hudTeamicon = CreateClientConVar("ttt2_base_hud_teamicon", "1")
+	local hudWidth = CreateConVar("ttt2_base_hud_width", "0", FCVAR_ARCHIVE)
+	local hudTeamicon = CreateConVar("ttt2_base_hud_teamicon", "1", FCVAR_ARCHIVE)
 
 	-- Color presets
 	HUDELEMENT.bg_colors = {

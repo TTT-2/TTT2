@@ -13,10 +13,11 @@ local table = table
 local IsValid = IsValid
 local hook = hook
 
-local cvMinimalisticTid = CreateClientConVar("ttt_minimal_targetid", "0", FCVAR_ARCHIVE)
-local cvDrawHalo = CreateClientConVar("ttt_entity_draw_halo", "1", true, false)
-local cvEnableSpectatorsoutline = CreateClientConVar("ttt2_cvEnableSpectatorsoutline", "1", true, true)
-local cvEnableOverheadicons = CreateClientConVar("ttt2_cvEnableOverheadicons", "1", true, true)
+local cvMinimalisticTid = CreateConVar("ttt_minimal_targetid", "0", FCVAR_ARCHIVE)
+local cvDrawHalo = CreateConVar("ttt_entity_draw_halo", "1", FCVAR_ARCHIVE)
+local cvEnableSpectatorsoutline = CreateConVar("ttt2_cvEnableSpectatorsoutline", "1", {FCVAR_ARCHIVE, FCVAR_USERINFO})
+local cvEnableOverheadicons = CreateConVar("ttt2_cvEnableOverheadicons", "1", {FCVAR_ARCHIVE, FCVAR_USERINFO})
+
 local cvDeteOnlyConfirm = GetConVar("ttt2_confirm_detective_only")
 local cvDeteOnlyInspect = GetConVar("ttt2_inspect_detective_only")
 

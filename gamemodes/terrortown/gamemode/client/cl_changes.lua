@@ -7,7 +7,7 @@ local hook = hook
 local table = table
 
 -- internal
-local changesVersion = CreateClientConVar("changes_version", "v0.0.0.0")
+local changesVersion = CreateConVar("changes_version", "v0.0.0.0", FCVAR_ARCHIVE)
 
 local changes, currentVersion
 

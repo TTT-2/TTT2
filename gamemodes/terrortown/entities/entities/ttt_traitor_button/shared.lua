@@ -4,6 +4,8 @@
 -- @section ttt_traitor_button
 
 if SERVER then
+	---
+	-- @realm server
 	local cv_tbutton = CreateConVar("ttt2_tbutton_admin_show", "0", {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "Always show the buttons to admins in range", 0, 1)
 
 	hook.Add("TTT2SyncGlobals", "AddTButtonGlobals", function()

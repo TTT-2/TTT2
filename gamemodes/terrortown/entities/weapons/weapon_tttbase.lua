@@ -10,7 +10,6 @@ local util = util
 local IsValid = IsValid
 local surface = surface
 local draw = draw
-local CreateClientConVar = CreateClientConVar
 
 if SERVER then
 	AddCSLuaFile()
@@ -150,28 +149,28 @@ SWEP.IronSightPos = Vector(0, 0, 0)
 -- The rotational offset applied when entering the ironsight
 SWEP.IronSightsAng = Vector(0, 0, 0)
 
-local sparkle = CLIENT and CreateClientConVar("ttt_crazy_sparks", "0", true) or nil
-local ttt2_hold_aim = CLIENT and CreateClientConVar("ttt2_hold_aim", 0, true, false, LANG.GetTranslationFromLanguage("hold_aim", "english"), 0, 1) or nil
+local sparkle = CLIENT and CreateConVar("ttt_crazy_sparks", "0", FCVAR_ARCHIVE) or nil
+local ttt2_hold_aim = CLIENT and CreateConVar("ttt2_hold_aim", 0, FCVAR_ARCHIVE, LANG.GetTranslationFromLanguage("hold_aim", "english"), 0, 1) or nil
 
 -- crosshair
 if CLIENT then
 	local GetPTranslation = LANG.GetParamTranslation
 	local TryT = LANG.TryTranslation
 
-	local sights_opacity = CreateClientConVar("ttt_ironsights_crosshair_opacity", "0.8", true)
-	local crosshair_size = CreateClientConVar("ttt_crosshair_size", "1.0", true)
-	local enable_crosshair = CreateClientConVar("ttt_enable_crosshair", "1", true)
+	local sights_opacity = CreateConVar("ttt_ironsights_crosshair_opacity", "0.8", FCVAR_ARCHIVE)
+	local crosshair_size = CreateConVar("ttt_crosshair_size", "1.0", FCVAR_ARCHIVE)
+	local enable_crosshair = CreateConVar("ttt_enable_crosshair", "1", FCVAR_ARCHIVE)
 
-	local enable_gap_crosshair = CreateClientConVar("ttt_crosshair_gap_enable", "0", true)
-	local crosshair_gap = CreateClientConVar("ttt_crosshair_gap", "0", true)
+	local enable_gap_crosshair = CreateConVar("ttt_crosshair_gap_enable", "0", FCVAR_ARCHIVE)
+	local crosshair_gap = CreateConVar("ttt_crosshair_gap", "0", FCVAR_ARCHIVE)
 
-	local crosshair_opacity = CreateClientConVar("ttt_crosshair_opacity", "1", true)
-	local crosshair_static = CreateClientConVar("ttt_crosshair_static", "0", true)
-	local crosshair_weaponscale = CreateClientConVar("ttt_crosshair_weaponscale", "1", true)
-	local crosshair_thickness = CreateClientConVar("ttt_crosshair_thickness", "1", true)
-	local crosshair_outlinethickness = CreateClientConVar("ttt_crosshair_outlinethickness", "0", true)
-	local enable_dot_crosshair = CreateClientConVar("ttt_crosshair_dot", "0", true)
-	local enable_crosshair_lines = CreateClientConVar("ttt_crosshair_lines", "1", true)
+	local crosshair_opacity = CreateConVar("ttt_crosshair_opacity", "1", FCVAR_ARCHIVE)
+	local crosshair_static = CreateConVar("ttt_crosshair_static", "0", FCVAR_ARCHIVE)
+	local crosshair_weaponscale = CreateConVar("ttt_crosshair_weaponscale", "1", FCVAR_ARCHIVE)
+	local crosshair_thickness = CreateConVar("ttt_crosshair_thickness", "1", FCVAR_ARCHIVE)
+	local crosshair_outlinethickness = CreateConVar("ttt_crosshair_outlinethickness", "0", FCVAR_ARCHIVE)
+	local enable_dot_crosshair = CreateConVar("ttt_crosshair_dot", "0", FCVAR_ARCHIVE)
+	local enable_crosshair_lines = CreateConVar("ttt_crosshair_lines", "1", FCVAR_ARCHIVE)
 
 	local icon_help_primary = Material("vgui/ttt/hudhelp/lmb")
 	local icon_help_secondary = Material("vgui/ttt/hudhelp/rmb")

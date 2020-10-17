@@ -12,14 +12,14 @@ local IsValid = IsValid
 local hook = hook
 
 -- create ClientConVars
-local numColsVar = CreateClientConVar("ttt_bem_cols", 5, true, false, "Sets the number of columns in the Traitor/Detective menu's item list.")
-local numRowsVar = CreateClientConVar("ttt_bem_rows", 6, true, false, "Sets the number of rows in the Traitor/Detective menu's item list.")
-local itemSizeVar = CreateClientConVar("ttt_bem_size", 64, true, false, "Sets the item size in the Traitor/Detective menu's item list.")
-local showCustomVar = CreateClientConVar("ttt_bem_marker_custom", 1, true, false, "Should custom items get a marker?")
-local showFavoriteVar = CreateClientConVar("ttt_bem_marker_fav", 1, true, false, "Should favorite items get a marker?")
-local showSlotVar = CreateClientConVar("ttt_bem_marker_slot", 1, true, false, "Should items get a slot-marker?")
-local alwaysShowShopVar = CreateClientConVar("ttt_bem_always_show_shop", 1, true, false, "Should the shop be opened/closed instead of the score menu during preparing / at the end of a round?")
-local enableDoubleClickBuy = CreateClientConVar("ttt_bem_enable_doubleclick_buy", 1, true, false, "Sets if you will be able to double click on an Item to buy it.")
+local numColsVar = CreateConVar("ttt_bem_cols", 5, FCVAR_ARCHIVE, "Sets the number of columns in the Traitor/Detective menu's item list.")
+local numRowsVar = CreateConVar("ttt_bem_rows", 6, FCVAR_ARCHIVE, "Sets the number of rows in the Traitor/Detective menu's item list.")
+local itemSizeVar = CreateConVar("ttt_bem_size", 64, FCVAR_ARCHIVE, "Sets the item size in the Traitor/Detective menu's item list.")
+local showCustomVar = CreateConVar("ttt_bem_marker_custom", 1, FCVAR_ARCHIVE, "Should custom items get a marker?")
+local showFavoriteVar = CreateConVar("ttt_bem_marker_fav", 1, FCVAR_ARCHIVE, "Should favorite items get a marker?")
+local showSlotVar = CreateConVar("ttt_bem_marker_slot", 1, FCVAR_ARCHIVE, "Should items get a slot-marker?")
+local alwaysShowShopVar = CreateConVar("ttt_bem_always_show_shop", 1, FCVAR_ARCHIVE, "Should the shop be opened/closed instead of the score menu during preparing / at the end of a round?")
+local enableDoubleClickBuy = CreateConVar("ttt_bem_enable_doubleclick_buy", 1, FCVAR_ARCHIVE, "Sets if you will be able to double click on an Item to buy it.")
 
 -- get serverside ConVars
 local allowChangeVar = GetConVar("ttt_bem_allow_change")

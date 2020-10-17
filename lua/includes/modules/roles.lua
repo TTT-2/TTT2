@@ -85,7 +85,7 @@ local function SetupData(roleData)
 	-- shared
 	if not roleData.notSelectable then
 		if conVarData.togglable then
-			CreateClientConVar("ttt_avoid_" .. roleData.name, "0", true, true)
+			CreateConVar("ttt_avoid_" .. roleData.name, "0", {FCVAR_ARCHIVE, FCVAR_USERINFO})
 		end
 
 		CreateConVar("ttt_" .. roleData.name .. "_pct", tostring(conVarData.pct or 1), {FCVAR_NOTIFY, FCVAR_ARCHIVE})

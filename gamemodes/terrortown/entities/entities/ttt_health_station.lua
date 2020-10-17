@@ -167,7 +167,9 @@ if SERVER then
 		nextcharge = CurTime() + self.RechargeFreq
 	end
 
-	local ttt_damage_own_healthstation = CreateConVar("ttt_damage_own_healthstation", "0") -- 0 as detective cannot damage their own health station
+	---
+	-- @realm server
+	local ttt_damage_own_healthstation = CreateConVar("ttt_damage_own_healthstation", "0", FCVAR_NONE, "0 as detective cannot damage their own health station")
 
 	---
 	-- traditional equipment destruction effects
