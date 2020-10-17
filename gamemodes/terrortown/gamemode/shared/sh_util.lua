@@ -358,7 +358,7 @@ end
 ---
 -- Useful default behaviour for semi-modal DFrames
 -- @param Panel pnl
--- @param KEY[https://wiki.garrysmod.com/page/Enums/BUTTON_CODE] kc key
+-- @param KEY kc key
 -- @realm shared
 -- @todo improve description
 function util.BasicKeyHandler(pnl, kc)

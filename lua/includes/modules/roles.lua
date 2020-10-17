@@ -205,7 +205,7 @@ end
 ---
 -- Get a role by name (a copy)
 -- @param string name role name
--- @param[opt] ?table retTbl this table will be modified and returned. If nil, a new table will be created.
+-- @param[opt] table retTbl this table will be modified and returned. If nil, a new table will be created.
 -- @return table returns the modified retTbl or the new role table
 -- @realm shared
 function Get(name, retTbl)
@@ -479,7 +479,7 @@ end
 
 ---
 -- Connects a SubRole with its BaseRole.
--- @notice This will also set the defaultTeam variable to the BaseRole's team.
+-- @note This will also set the defaultTeam variable to the BaseRole's team.
 -- @param ROLE roleTable the role table (of the SubRole)
 -- @param ROLE baserole the BaseRole
 -- @realm shared

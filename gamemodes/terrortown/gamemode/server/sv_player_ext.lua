@@ -1157,7 +1157,7 @@ end
 -- On the server, we just send the client a message that the player is
 -- performing a gesture. This allows the client to decide whether it should
 -- play, depending on eg. a cvar.
--- @param ACT[https://wiki.garrysmod.com/page/Enums/ACT] act The activity (ACT) or sequence that should be played
+-- @param ACT act The @{ACT} or sequence that should be played
 -- @realm server
 function plymeta:AnimPerformGesture(act)
 	if not act then return end
@@ -1261,7 +1261,7 @@ end
 -- @param Weapon wep The weapon object
 -- @param nil|boolean forcePickup is there a forced pickup to ignore the cv_auto_pickup cvar?
 -- @param nil|boolean dropBlockingWeapon should the weapon stored in the same slot be dropped
--- @returns boolean return of the PlayerCanPickupWeapon hook
+-- @return boolean return of the PlayerCanPickupWeapon hook
 -- @return number errorCode that appeared. For the error, give a look into the specific hook
 -- @realm server
 function plymeta:CanPickupWeapon(wep, forcePickup, dropBlockingWeapon)
@@ -1279,7 +1279,7 @@ end
 -- @param string wepCls The weapon object classname
 -- @param nil|boolean forcePickup is there a forced pickup to ignore the cv_auto_pickup cvar?
 -- @param nil|boolean dropBlockingWeapon should the weapon stored in the same slot be dropped
--- @returns boolean
+-- @return boolean
 -- @realm server
 function plymeta:CanPickupWeaponClass(wepCls, forcePickup, dropBlockingWeapon)
 	local wep = ents.Create(wepCls)
@@ -1295,7 +1295,7 @@ end
 -- @param nil|boolean forcePickup Should the pickup been forced (ignores the cv_auto_pickup cvar)
 -- @param[default=false] nil|boolean dropBlockingWeapon Should the currently selecten weapon be dropped
 -- @param nil|boolean shouldAutoSelect Should this weapon be autoselected after equip, if not set this value is set by player keypress
--- @returns Weapon if successful, nil if not
+-- @return Weapon if successful, nil if not
 -- @realm server
 function plymeta:SafePickupWeapon(wep, ammoOnly, forcePickup, dropBlockingWeapon, shouldAutoSelect)
 	if not IsValid(wep) then
@@ -1370,7 +1370,7 @@ end
 -- @param string wepCls The weapon class
 -- @param[default=false] boolean dropBlockingWeapon Should the currently selecten weapon be dropped
 -- @param boolean shouldAutoSelect Should this weapon be autoselected after equip, if not set this value is set by player keypress
--- @returns Weapon if successful, nil if not
+-- @return Weapon if successful, nil if not
 -- @realm server
 function plymeta:SafePickupWeaponClass(wepCls, dropBlockingWeapon, shouldAutoSelect)
 	-- if the variable is not set, set it fitting to the keypress

@@ -9,7 +9,7 @@ end
 
 ---
 -- Applies a animation gesture
--- @param ACT[https://wiki.garrysmod.com/page/Enums/ACT] act The activity (ACT) or sequence that should be played
+-- @param ACT act The @{ACT} or sequence that should be played
 -- @param number weight The weight this slot should be set to. Value must be ranging from 0 to 1.
 -- @realm client
 -- @see https://wiki.garrysmod.com/page/Player/AnimRestartGesture
@@ -76,7 +76,7 @@ local cv_ttt_show_gestures = CreateConVar("ttt_show_gestures", "1", FCVAR_ARCHIV
 ---
 -- Perform the gesture using the GestureRunner system. If custom_runner is
 -- non-nil, it will be used instead of the default runner for the act.
--- @param ACT[https://wiki.garrysmod.com/page/Enums/ACT] act The activity (ACT) or sequence that should be played
+-- @param ACT act The @{ACT} or sequence that should be played
 -- @param table custom_runner
 -- @return boolean success?
 -- @realm client

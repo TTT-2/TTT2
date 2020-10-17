@@ -52,7 +52,7 @@ end
 -- @param string sound Sound that is going to play
 -- @param number volume Volume of the footstep
 -- @param RecipientFilter rf The Recipient filter of players who can hear the footstep
--- @return boolean[default=true] Prevent default step sound
+-- @return[default=true] boolean Prevent default step sound
 -- @predicted
 -- @hook
 -- @realm shared

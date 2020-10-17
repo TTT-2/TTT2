@@ -71,7 +71,6 @@ end
 -- @param table hint
 -- @hook
 -- @realm client
--- @ref
 -- @local
 function GM:AddClassHint(cls, hint)
 	ClassHint[cls] = table.Copy(hint)

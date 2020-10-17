@@ -292,8 +292,8 @@ end
 -- Adds an entry to the SettingsBindings table, to easily present them eg. in a GUI.
 -- @param string name
 -- @param string label
--- @param string[opt] category
--- @param number[optchain] defaultKey
+-- @param[opt] string category
+-- @param[optchain] number defaultKey
 -- @realm client
 function bind.AddSettingsBinding(name, label, category, defaultKey)
 	if not category then
@@ -330,9 +330,9 @@ end
 -- @param string name
 -- @param function onPressedFunc
 -- @param function onReleasedFunc
--- @param[opt] nil|string|boolean dontShowOrCategory
--- @param string[optchain] settingsLabel
--- @param number[optchain] defaultKey
+-- @param[opt] string|boolean dontShowOrCategory
+-- @param[optchain] string settingsLabel
+-- @param[optchain] number defaultKey
 -- @realm client
 function bind.Register(name, onPressedFunc, onReleasedFunc, dontShowOrCategory, settingsLabel, defaultKey)
 	if not isfunction(onPressedFunc) and not isfunction(onReleasedFunc) then return end
