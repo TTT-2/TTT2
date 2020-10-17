@@ -199,7 +199,7 @@ end
 
 ---
 -- Retrieves all saved objects of the model with the given filters from the database.
--- @param table filters An Array of filters. Each filter should contain a `column`, `op`, `value` and `concat`(if it is not the last filter).
+-- @param table filters An array of filters. Each filter should contain a `column`, `op`, `value` and `concat`(if it is not the last filter).
 -- @return table Returns an array of all found objects.
 -- @realm shared
 function ORMMODEL:Where(filters)
