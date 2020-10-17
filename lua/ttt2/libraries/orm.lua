@@ -11,6 +11,8 @@ local sql = sql
 
 orm = orm or {}
 
+local cachedModels = cachedModels or {}
+
 local ORMMODEL = {}
 
 ---
@@ -20,8 +22,8 @@ local ORMMODEL = {}
 -- @return ormmodel The model of the database table.
 -- @realm shared
 function orm.Make(tableName, force)
-	if IsValid(orm[tableName]) and not force then
-		return orm[tableName]
+	if IsValid(cachedModels[tableName]) and not force then
+		return cachedModels[tableName]
 	end
 
 	if not sql.TableExists(tableName) then return end
@@ -64,7 +66,7 @@ function orm.Make(tableName, force)
 
 	model._columnList = table.concat(columnList, ",")
 
-	orm[tableName] = model
+	cachedModels[tableName] = model
 
 	return model
 end
@@ -77,7 +79,19 @@ end
 -- @return table Returns an array of all found objects.
 -- @realm shared
 function ORMMODEL:All()
-	return sql.Query("SELECT * FROM " .. sql.SQLIdent(self._tableName))
+	local objects = sql.Query("SELECT * FROM " .. sql.SQLIdent(self._tableName))
+
+	if not self._primaryKey then
+		return objects
+	end
+
+	for i = 1, #objects do
+		objects[i].Save = self.Save
+		objects[i].Delete = self.Delete
+		objects[i].Refresh = self.Refresh
+	end
+
+	return objects
 end
 
 ---
@@ -101,22 +115,23 @@ end
 -- Retrieves a specific object by their primarykey from the database.
 -- @param number|string|table primaryValue The value(s) of the primarykey to search for.
 -- @note In the case of multiple columns in the primarykey you have to specify the corresponding values in the same order.
--- @return ormobject|boolean|nil Returns the table of the found object. Returns `false` if the number of supplied primaryvalues does not match the number of elements in the primarykey. Returns `nil` if no object is found.
+-- @return table|boolean|nil Returns the table of the found object. Returns `false` if the number of supplied primaryvalues does not match the number of elements in the primarykey. Returns `nil` if no object is found.
 -- @realm shared
 function ORMMODEL:Find(primaryValue)
 	local where = {}
 	local primaryKey = self._primaryKey
+	local primaryKeyCount = #primaryKey
 
-	if not istable(primaryValue) and #primaryKey == 1 then
+	if not istable(primaryValue) and primaryKeyCount == 1 then
 		where = sql.SQLIdent(primaryKey[1]) .. "=" .. sql.SQLStr(primaryValue)
-	elseif istable(primaryValue) and #primaryValue == #primaryKey then
-		for i = 1, #primaryKey do
+	elseif istable(primaryValue) and #primaryValue == primaryKeyCount then
+		for i = 1, primaryKeyCount do
 			where[i] = sql.SQLIdent(primaryKey[i]) .. "=" .. sql.SQLStr(primaryValue[i])
 		end
 
 		where = table.concat(where, " AND ")
 	else
-		print("[ORM] Number of primaryvalues does not match number of primarykeys!")
+		ErrorNoHalt("[ORM] Number of primaryvalues does not match number of primarykeys!")
 
 		return false
 	end
@@ -131,7 +146,7 @@ end
 ---
 -- Creates a new object of the model.
 -- @param[opt] table data Preexisting data the object should be initialized with.
--- @return ormobject The created object.
+-- @return table The created object.
 -- @realm shared
 function ORMMODEL:New(data)
 	local object = data or {}
@@ -220,5 +235,17 @@ function ORMMODEL:Where(filters)
 
 	query = query .. whereList
 
-	return sql.Query(query)
+	local objects = sql.Query(query)
+
+	if not self._primaryKey then
+		return objects
+	end
+
+	for i = 1, #objects do
+		objects[i].Save = self.Save
+		objects[i].Delete = self.Delete
+		objects[i].Refresh = self.Refresh
+	end
+
+	return objects
 end
