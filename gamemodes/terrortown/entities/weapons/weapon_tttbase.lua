@@ -306,7 +306,7 @@ if CLIENT then
 	-- Draws a line on the screen
 	-- @param number y y coordinate of the line
 	-- @param string text text for the line
-	-- @param Material|string|nil icon_or_key icon or description for the concerning key
+	-- @param[opt] Material|string icon_or_key icon or description for the concerning key
 	-- @realm client
 	function SWEP:DrawHelpLine(x, y, text, icon_or_key)
 		local icon_size = 18
@@ -362,10 +362,10 @@ if CLIENT then
 	---
 	-- Adds a help text for the weapon to the HUD.
 	-- TTT legacy function.
-	-- @param string|nil primary_text first line of the help text
-	-- @param string|nil secondary_text second line of the help text
-	-- @param[default=false] bool translate should the text get translated
-	-- @param[opt] table extra_params parameters for @{Lang.GetParamTranslation}
+	-- @param[opt] string primary_text first line of the help text
+	-- @param[optchain] string secondary_text second line of the help text
+	-- @param[optchain][default=false] bool translate should the text get translated
+	-- @param[optchain] table extra_params parameters for @{Lang.GetParamTranslation}
 	-- @realm client
 	function SWEP:AddHUDHelp(primary_text, secondary_text, translate, extra_params)
 		local primary = primary_text
@@ -395,13 +395,14 @@ if CLIENT then
 
 	---
 	-- Adds a help text for the weapon to the HUD.
-	-- @param string|nil primary_text description for primaryfire
-	-- @param string|nil secondary_text description for secondaryfire
+	-- @param[opt] string primary_text description for primaryfire
+	-- @param[optchain] string secondary_text description for secondaryfire
 	-- @realm client
 	function SWEP:AddTTT2HUDHelp(primary, secondary)
-		self.HUDHelp = {}
-		self.HUDHelp.additional_lines = {}
-		self.HUDHelp.max_length = 0
+		self.HUDHelp = {
+			additional_lines = {},
+			max_length = 0
+		}
 
 		if primary then
 			self:AddHUDHelpLine(primary, Key("+attack", "MOUSE1"))
@@ -416,7 +417,7 @@ if CLIENT then
 	-- Adds an additional line to the help text.
 	-- @{SWEP:AddTTT2HUDHelp} needs to be called first
 	-- @param string text text to be displayed on the line
-	-- @param Material|string|nil icon_or_key icon or description for the concerning key
+	-- @param[opt] Material|string icon_or_key icon or description for the concerning key
 	-- @realm client
 	function SWEP:AddHUDHelpLine(text, icon_or_key)
 		if not self.HUDHelp then return end

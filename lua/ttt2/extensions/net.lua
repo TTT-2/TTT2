@@ -25,9 +25,9 @@ net.stream_callbacks = {}
 -- the 64kb limit of a single net message. This will split up the data and send them in
 -- smaller fragments. The data will be converted (with sPON) to an encoded string during this process.
 --
--- @param string messageId a unique message id similar to the network strings
--- @param table data the data table to send, this will be reconstructed at the client.
--- @param table|player|nil client SERVERSIDE only! Optional, use it to send a stream to a single client or a group of clients.
+-- @param string messageId A unique message id similar to the network strings
+-- @param table data The data table to send, this will be reconstructed at the client.
+-- @param[opt] table|player client SERVERSIDE only! Optional, use it to send a stream to a single client or a group of clients.
 -- @realm shared
 function net.SendStream(messageId, data, client)
 	local encodedString = pon.encode(data)
