@@ -28,7 +28,7 @@ end
 ---
 -- Returns the primarykey column names of the specified table in order of their index.
 -- @param string tableName The name of the table to search.
--- @return table|nil|false Returns a table of the primarykey columns, nil if no columns are found and false in case of an error.
+-- @return table|nil|boolean Returns a table of the primarykey columns, nil if no columns are found and false in case of an error.
 -- @realm shared
 function sql.GetPrimaryKey(tableName)
 	local result = sql.Query("PRAGMA table_info(" .. sql.SQLIdent(tableName) .. ")")
@@ -53,7 +53,7 @@ end
 ---
 -- Returns the foreignkeys of the specified table.
 -- @param string tableName The name of the table to search.
--- @return table|nil|false Returns a table of the foreignkey columns, nil if no columns are found and false in case of an error.
+-- @return table|nil|boolean Returns a table of the foreignkey columns, nil if no columns are found and false in case of an error.
 -- @realm shared
 function sql.GetForeignKeys(tableName)
 	local result = sql.Query("PRAGMA foreign_key_list(" .. sql.SQLIdent(tableName) .. ")")
@@ -81,7 +81,7 @@ end
 ---
 -- Returns the column names of the specified table.
 -- @param string tableName The name of the table to search.
--- @return table|nil|false Returns a table of the column names, nil if no columns are found and false in case of an error.
+-- @return table|nil|boolean Returns a table of the column names, nil if no columns are found and false in case of an error.
 -- @realm shared
 function sql.GetTableColumns(tableName)
 	local result = sql.Query("PRAGMA table_info(" .. sql.SQLIdent(tableName) .. ")")
