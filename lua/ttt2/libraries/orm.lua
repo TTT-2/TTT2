@@ -1,6 +1,7 @@
 ---
 -- Object Relational Model
 -- @author Histalek
+-- @module orm
 
 if SERVER then
 	AddCSLuaFile()
@@ -25,10 +26,10 @@ function orm.Make(tableName, force)
 
 	if not sql.TableExists(tableName) then return end
 
-	local model = {}
 	local primaryKey = sql.GetPrimaryKey(tableName)
 	local dataStructure = sql.GetTableColumns(tableName)
 
+	local model = {}
 	model._tableName = tableName
 	model._primaryKey = primaryKey
 	model._dataStructure = dataStructure
@@ -67,6 +68,9 @@ function orm.Make(tableName, force)
 
 	return model
 end
+
+---
+-- @class ORMMODEL
 
 ---
 -- Retrieves all saved objects of the model from the database.
@@ -208,6 +212,7 @@ function ORMMODEL:Where(filters)
 
 	for i = 1, #filters do
 		local curFilter = filters[i]
+
 		whereList[i] = sql.SQLIdent(curFilter[column]) .. (curFilter[op] or "=") .. sql.SQLStr(curFilter[value]) .. (curFilter[concat] or "")
 	end
 

@@ -1,6 +1,7 @@
 ---
 -- sql extensions
 -- @author Histalek
+-- @module sql
 
 if SERVER then
 	AddCSLuaFile()
