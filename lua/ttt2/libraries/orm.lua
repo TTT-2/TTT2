@@ -14,12 +14,13 @@ orm = orm or {}
 local cachedModels = cachedModels or {}
 
 local ORMMODEL = {}
+local ORMOBJECT = {}
 
 ---
 -- Returns an object relational model according to the specified databasetable. Does nothing if no databasetable with the given name exists.
 -- @param string tableName The name of the table in the database to create a model for.
 -- @param[opt] boolean force If set to `true` the function will not return a cached version of the model.
--- @return ormmodel The model of the database table.
+-- @return ORMMODEL The model of the database table.
 -- @realm shared
 function orm.Make(tableName, force)
 	if IsValid(cachedModels[tableName]) and not force then
@@ -33,23 +34,17 @@ function orm.Make(tableName, force)
 
 	local model = {}
 	model._tableName = tableName
-	model._primaryKey = primaryKey
 	model._dataStructure = dataStructure
 	model.All = ORMMODEL.All
-	model.Find = ORMMODEL.Find
 	model.New = ORMMODEL.New
-
-	-- DO NOT setup delete/save functions if no primarykey is found.
-	-- In those cases the 'rowid' column would function as the primarykey, but as the rowid could change anytime (https://www.sqlite.org/rowidtable.html) data could be deleted unintentionally.
-	-- Most likely rowids wont change in gmod as there is no vacuum operation but just to be safe we will not allow to use such tables. ref: https://wiki.facepunch.com/gmod/sql
+	model.Where = ORMMODEL.Where
 
 	if not primaryKey then
 		return model
 	end
 
-	model.Delete = ORMMODEL.Delete
-	model.Save = ORMMODEL.Save
-	model.Refresh = ORMMODEL.Refresh
+	model._primaryKey = primaryKey
+	model.Find = ORMMODEL.Find
 
 	-- Prepare strings that will not change unless the model itself changes. So we don't have to create these strings everytime we use `model.Save()`.
 	local columnList = {nil, nil}
@@ -95,27 +90,10 @@ function ORMMODEL:All()
 end
 
 ---
--- Deletes the given object from the database storage.
--- @return nil|false Returns false if an error occurred, nil otherwise.
--- @realm shared
-function ORMMODEL:Delete()
-	local where = {}
-	local primaryKey = self._primaryKey
-
-	for i = 1, #primaryKey do
-		where[i] = sql.SQLIdent(primaryKey[i]) .. "=" .. sql.SQLStr(self[primaryKey[i]])
-	end
-
-	where = table.concat(where, " AND ")
-
-	return sql.Query("DELETE FROM " .. sql.SQLIdent(self._tableName) .. " WHERE " .. where)
-end
-
----
 -- Retrieves a specific object by their primarykey from the database.
 -- @param number|string|table primaryValue The value(s) of the primarykey to search for.
 -- @note In the case of multiple columns in the primarykey you have to specify the corresponding values in the same order.
--- @return table|boolean|nil Returns the table of the found object. Returns `false` if the number of supplied primaryvalues does not match the number of elements in the primarykey. Returns `nil` if no object is found.
+-- @return ORMOBJECT|boolean|nil Returns the table of the found object. Returns `false` if the number of supplied primaryvalues does not match the number of elements in the primarykey. Returns `nil` if no object is found.
 -- @realm shared
 function ORMMODEL:Find(primaryValue)
 	local where = {}
@@ -146,74 +124,30 @@ end
 ---
 -- Creates a new object of the model.
 -- @param[opt] table data Preexisting data the object should be initialized with.
--- @return table The created object.
+-- @return ORMOBJECT The created object.
 -- @realm shared
 function ORMMODEL:New(data)
 	local object = data or {}
 
-	object.Save = self.Save
-	object.Delete = self.Delete
-	object.Refresh = self.Refresh
 	object._tableName = self._tableName
 	object._dataStructure = self._dataStructure
+
+	-- DO NOT setup delete/save/refresh functions if no primarykey is found.
+	-- In those cases the 'rowid' column would function as the primarykey, but as the rowid could change anytime (https://www.sqlite.org/rowidtable.html) data could be deleted unintentionally.
+	-- Most likely rowids wont change in gmod as there is no vacuum operation but just to be safe we will not allow to use such tables. ref: https://wiki.facepunch.com/gmod/sql
+
+	if not self._primaryKey then
+		return object
+	end
+
+	object.Delete = ORMOBJECT.Delete
+	object.Save = ORMOBJECT.Save
+	object.Refresh = ORMOBJECT.Refresh
 	object._primaryKey = self._primaryKey
 	object._primaryKeyList = self._primaryKeyList
 	object._columnList = self._columnList
 
 	return object
-end
-
----
--- Saves the data of the given object to the database storage.
--- @return nil|false Returns false if an error occurred, nil otherwise.
--- @realm shared
-function ORMMODEL:Save()
-	local query = "INSERT INTO " .. sql.SQLIdent(self._tableName) .. "("
-	local valueList = {nil, nil}
-	local dataStructure = self._dataStructure
-
-	for i = 1, #dataStructure do
-		valueList[i] = sql.SQLStr(self[dataStructure[i]])
-	end
-
-	valueList = table.concat(valueList, ",")
-
-	query = query .. self._columnList .. ") VALUES(" .. valueList .. ") ON CONFLICT(" .. self._primaryKeyList .. ") DO UPDATE SET(" .. self._columnList .. ")=(" .. valueList .. ");"
-
-	return sql.Query(query)
-end
-
----
--- Refreshes the object by setting all values to those saved in the database.
--- @return boolean Returns true if refresh was successful, false otherwise.
--- @realm shared
-function ORMMODEL:Refresh()
-	local where = {}
-	local primaryKey = self._primaryKey
-	local dataStructure = self._dataStructure
-
-	if #primaryKey == 1 then
-		where = sql.SQLIdent(primaryKey[1]) .. "=" .. sql.SQLStr(self[primaryKey[1]])
-	else
-		for i = 1, #primaryKey do
-			where[i] = sql.SQLIdent(primaryKey[i]) .. "=" .. sql.SQLStr(self[primaryKey[i]])
-		end
-
-		where = table.concat(where, " AND ")
-	end
-
-	local result = sql.QueryRow("SELECT * FROM " .. sql.SQLIdent(self._tableName) .. " WHERE " .. where)
-
-	if result then
-		for i = 1, #dataStructure do
-			self[dataStructure[i]] = result[dataStructure[i]]
-		end
-
-		return true
-	end
-
-	return false
-
 end
 
 ---
@@ -242,10 +176,82 @@ function ORMMODEL:Where(filters)
 	end
 
 	for i = 1, #objects do
-		objects[i].Save = self.Save
-		objects[i].Delete = self.Delete
-		objects[i].Refresh = self.Refresh
+		objects[i].Save = ORMOBJECT.Save
+		objects[i].Delete = ORMOBJECT.Delete
+		objects[i].Refresh = ORMOBJECT.Refresh
 	end
 
 	return objects
+end
+
+---
+-- @class ORMOBJECT
+
+---
+-- Deletes the given object from the database storage.
+-- @return nil|false Returns false if an error occurred, nil otherwise.
+-- @realm shared
+function ORMOBJECT:Delete()
+	local where = {}
+	local primaryKey = self._primaryKey
+
+	for i = 1, #primaryKey do
+		where[i] = sql.SQLIdent(primaryKey[i]) .. "=" .. sql.SQLStr(self[primaryKey[i]])
+	end
+
+	where = table.concat(where, " AND ")
+
+	return sql.Query("DELETE FROM " .. sql.SQLIdent(self._tableName) .. " WHERE " .. where)
+end
+
+---
+-- Saves the data of the given object to the database storage.
+-- @return boolean|nil Returns false if an error occurred, nil otherwise.
+-- @realm shared
+function ORMOBJECT:Save()
+	local query = "INSERT INTO " .. sql.SQLIdent(self._tableName) .. "("
+	local valueList = {nil, nil}
+	local dataStructure = self._dataStructure
+
+	for i = 1, #dataStructure do
+		valueList[i] = sql.SQLStr(self[dataStructure[i]])
+	end
+
+	valueList = table.concat(valueList, ",")
+
+	query = query .. self._columnList .. ") VALUES(" .. valueList .. ") ON CONFLICT(" .. self._primaryKeyList .. ") DO UPDATE SET(" .. self._columnList .. ")=(" .. valueList .. ");"
+
+	return sql.Query(query)
+end
+
+---
+-- Refreshes the object by setting all values to those saved in the database.
+-- @return boolean Returns true if refresh was successful, false otherwise.
+-- @realm shared
+function ORMOBJECT:Refresh()
+	local primaryKey = self._primaryKey
+	local dataStructure = self._dataStructure
+	local where = {}
+
+	if #primaryKey == 1 then
+		where = sql.SQLIdent(primaryKey[1]) .. "=" .. sql.SQLStr(self[primaryKey[1]])
+	else
+		for i = 1, #primaryKey do
+			where[i] = sql.SQLIdent(primaryKey[i]) .. "=" .. sql.SQLStr(self[primaryKey[i]])
+		end
+
+		where = table.concat(where, " AND ")
+	end
+
+	local result = sql.QueryRow("SELECT * FROM " .. sql.SQLIdent(self._tableName) .. " WHERE " .. where)
+
+	if result then
+		for i = 1, #dataStructure do
+			self[dataStructure[i]] = result[dataStructure[i]]
+		end
+
+		return true
+	end
+
+	return false
 end
