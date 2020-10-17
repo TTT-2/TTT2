@@ -498,6 +498,7 @@ end
 
 ---
 -- @param boolean force
+-- @realm client
 function PANEL:UpdateScoreboard(force)
 	if not force and not self:IsVisible() then return end
 

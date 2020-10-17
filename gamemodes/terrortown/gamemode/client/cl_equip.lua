@@ -695,7 +695,7 @@ function TraitorMenuPopup()
 
 	dinfobg:SetSize(diw - m, bpy - ibgy - 120) -- -90 to let the help panel have more size
 
-	function dsearch:OnValueChange(text)
+	dsearch.OnValueChange = function(slf, text)
 		if text == "" then
 			text = nil
 		end

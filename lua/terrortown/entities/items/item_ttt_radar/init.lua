@@ -241,7 +241,6 @@ end
 
 ---
 -- Sets the radar time interval to the role or convar default, lets the current scan run out before it is changed.
--- @param number time The radar time interval
 -- @realm server
 function plymeta:ResetRadarTime()
 	self.radarTime = self:GetSubRoleData().radarTime or cv_radarCharge:GetInt()

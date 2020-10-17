@@ -70,10 +70,10 @@ if CLIENT then
 
 	---
 	-- Returns @{Color} white OR black based on the bgcolor
-	-- Deprecated: Please us util.GetDefaultColor(color) instead
 	-- @param Color bgcolor background color
 	-- @realm client
-	-- @deprectated
+	-- @deprecated
+	-- @see util.GetDefaultColor
 	function HUDELEMENT:GetDefaultFontColor(bgcolor)
 		return util.GetDefaultColor(bgcolor)
 	end

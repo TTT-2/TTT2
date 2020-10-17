@@ -88,6 +88,8 @@ end
 
 ---
 -- Detectives have a blue name, in both chat and radio messages
+-- @param Player ply
+-- @param string text
 -- @realm client
 function AddDetectiveText(ply, text)
 	chat.AddText(DETECTIVE.color, ply:Nick(), COLOR_WHITE, ": " .. text)

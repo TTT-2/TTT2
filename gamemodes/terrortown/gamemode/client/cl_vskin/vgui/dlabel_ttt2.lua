@@ -315,6 +315,7 @@ end
 
 ---
 -- overwrites the base function with an empty function
+-- @param boolean bool
 -- @realm client
 function PANEL:OnToggled(bool)
 

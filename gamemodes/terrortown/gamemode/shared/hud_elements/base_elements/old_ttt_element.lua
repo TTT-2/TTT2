@@ -83,7 +83,8 @@ if CLIENT then
 	-- @param number y
 	-- @param number w
 	-- @param number h
-	-- @param table table of @{Color}. There need to be a .background and a .fill attribute
+	-- @param table colors Table of @{Color}. There need to be a .background and a .fill attribute
+	-- @param number value
 	-- @realm client
 	function HUDELEMENT:PaintBar(x, y, w, h, colors, value)
 		value = value or 1

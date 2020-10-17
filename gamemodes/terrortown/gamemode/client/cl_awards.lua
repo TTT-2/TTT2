@@ -338,9 +338,8 @@ Headshots = AWARDS.Headshots -- just for compatibility
 
 ---
 -- @param table events
--- @param table scores
--- @param table players list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
--- @param table traitors list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
+-- @param number ammotype
+-- @return table
 -- @realm client
 function AWARDS.UsedAmmoMost(events, ammotype)
 	local user = {}

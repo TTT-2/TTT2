@@ -87,7 +87,7 @@ ENT.SafeWires = nil
 
 ---
 -- Initializes the data
--- realm shared
+-- @realm shared
 function ENT:SetupDataTables()
 	self:DTVar("Int", 0, "explode_time")
 	self:DTVar("Bool", 0, "armed")
@@ -237,7 +237,7 @@ end
 
 ---
 -- @param Entity dmgowner
--- @oaram Vector center
+-- @param Vector center
 -- @param number radius
 -- @realm shared
 function ENT:SphereDamage(dmgowner, center, radius)

@@ -95,7 +95,7 @@ function PANEL:PerformLayout()
 end
 
 ---
--- @paran string strName
+-- @param string strName
 -- @param string strArgs
 -- @realm client
 function PANEL:SetConsoleCommand(strName, strArgs)

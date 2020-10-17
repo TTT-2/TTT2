@@ -92,6 +92,8 @@ end
 -- Function that handles the drawing of the overhead roleicons, it does not check whether
 -- the icon should be drawn or not, that has to be handled prior to calling this function
 -- @param Player ply The player to receive an overhead icon
+-- @param Material ricon
+-- @param Color rcolor
 -- @realm client
 function DrawOverheadRoleIcon(ply, ricon, rcolor)
 	local client = LocalPlayer()
@@ -505,7 +507,10 @@ local key_params = {
 	walkkey = Key("+walk", "WALK")
 }
 
--- handle looking with DNA Scanner
+---
+-- Handle looking with DNA Scanner
+-- @param TARGET_DATA tData
+-- @realm client
 function HUDDrawTargetIDDNAScanner(tData)
 	local client = LocalPlayer()
 	local ent = tData:GetEntity()
@@ -527,7 +532,10 @@ function HUDDrawTargetIDDNAScanner(tData)
 	end
 end
 
--- handle looking at doors
+---
+-- Handle looking at doors
+-- @param TARGET_DATA tData
+-- @realm client
 function HUDDrawTargetIDDoors(tData)
 	local client = LocalPlayer()
 	local ent = tData:GetEntity()

@@ -98,6 +98,7 @@ function PANEL:GetIcon()
 end
 
 ---
+-- @param Color c
 -- @realm client
 function PANEL:SetIconColor(c)
 	self.Icon:SetImageColor(c)

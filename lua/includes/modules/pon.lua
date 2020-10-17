@@ -201,6 +201,9 @@ do
 	do
 		local concat = table.concat
 
+		---
+		-- @param table tbl
+		-- @realm shared
 		function pon.encode(tbl)
 			local finalOutput = {}
 			cacheSize = 0
@@ -411,6 +414,9 @@ do
 	-- NIL
 	decode['?'] = function(self, index, str, cache) return index + 1, nil end
 
+	---
+	-- @param any data
+	-- @realm shared
 	function pon.decode(data)
 		local _, res = decode[sub(data, 1, 1)](decode, 2, data, {})
 

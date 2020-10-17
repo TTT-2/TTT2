@@ -45,6 +45,8 @@ function entityOutputs.RegisterHook(hookName)
 
 	entityOutputs.hooks[hookName] = true
 
+	---
+	-- @ignore
 	hook.Add(hookName .. "_Internal", hookName .. "_name", function()
 		local activator, caller = ACTIVATOR, CALLER
 
@@ -71,6 +73,8 @@ function entityOutputs.RegisterMapEntityOutput(ent, outputName, hookName, delay,
 	delay = delay or 0
 	repititions = repititions or -1
 
+	---
+	-- @ignore
 	ent:Fire("AddOutput", outputName .. " triggerhook:RunPassedCode:hook.Run('" .. hookName .. "_Internal'):" .. delay .. ":" .. repititions)
 
 	entityOutputs.RegisterHook(hookName)

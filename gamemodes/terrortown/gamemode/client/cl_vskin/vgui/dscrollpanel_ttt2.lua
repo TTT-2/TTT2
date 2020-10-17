@@ -152,6 +152,7 @@ end
 
 ---
 -- @return boolean
+-- @realm client
 function PANEL:Clear()
 	return self.pnlCanvas:Clear()
 end

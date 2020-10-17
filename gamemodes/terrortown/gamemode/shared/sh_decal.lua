@@ -195,6 +195,7 @@ end
 -- @param Vector startpos The start of the trace
 -- @param Vector endpos The end of the trace
 -- @param[opt] Entity filter If set, the decal will not be able to be placed on given entity. Warning: Must be a table on the server
+-- @param table playerlist A list of @{Player}s that should receive the decals
 -- @return string The unique id of the decal
 -- @realm shared
 function util.Decal(name, startpos, endpos, filter, playerlist)

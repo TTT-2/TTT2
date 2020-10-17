@@ -109,7 +109,6 @@ end
 -- @param number event_id
 -- @param table event_fns The event table @{function}s. Pass an empty table to keep an event from showing up.
 -- @realm client
--- @module CLSCORE
 function CLSCORE.DeclareEventDisplay(event_id, event_fns)
 	-- basic input vetting, can't check returned value types because the
 	-- functions may be impure
@@ -767,6 +766,7 @@ end
 ---
 -- Resets the old score @{Panel}, Initializes a new one
 -- and displays it to the local @{Player}
+-- @param table events
 -- @realm client
 -- @internal
 function CLSCORE:ReportEvents(events)

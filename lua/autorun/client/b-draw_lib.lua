@@ -152,7 +152,6 @@ end
 -- Draws a SteamAvatar while caching it before
 -- @param string id64 the steamid64
 -- @param string size the avatar's size, this can be <code>small</code>, <code>medium</code> or <code>large</code>
--- @param string url the url to the WebImage
 -- @param number x
 -- @param number y
 -- @param number width

@@ -212,7 +212,6 @@ end
 -- Makes a target printable
 -- @param string|Player|Entity target
 -- @return nil|string
--- @module RADIO
 -- @realm client
 function RADIO.ToPrintable(target)
 	if isstring(target) then

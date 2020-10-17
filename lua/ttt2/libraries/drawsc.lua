@@ -171,7 +171,6 @@ end
 -- <a href="https://wiki.garrysmod.com/page/Enums/TEXT_ALIGN">TEXT_ALIGN_Enums</a>.
 -- @param number yalign The alignment of the y coordinate using
 -- <a href="https://wiki.garrysmod.com/page/Enums/TEXT_ALIGN">TEXT_ALIGN_Enums</a>.
--- @param boolean shadow whether there should be a shadow of the text
 -- @2D
 -- @realm client
 function drawsc.AdvancedText(text, font, x, y, color, xalign, yalign)
@@ -192,7 +191,6 @@ end
 -- <a href="https://wiki.garrysmod.com/page/Enums/TEXT_ALIGN">TEXT_ALIGN_Enums</a>.
 -- @param number yalign The alignment of the y coordinate using
 -- <a href="https://wiki.garrysmod.com/page/Enums/TEXT_ALIGN">TEXT_ALIGN_Enums</a>.
--- @param boolean shadow whether there should be a shadow of the text
 -- @2D
 -- @realm client
 function drawsc.AdvancedShadowedText(text, font, x, y, color, xalign, yalign)

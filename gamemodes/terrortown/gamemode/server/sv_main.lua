@@ -484,6 +484,10 @@ function GM:InitPostEntity()
 		if not hudelem.togglable then continue end
 
 		local nm = "ttt2_elem_toggled_" .. hudelem.id
+
+		---
+		-- @name ttt2_elem_toggled_[HUDELEMENT_NAME]
+		-- @realm server
 		local ret = CreateConVar(nm, "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 		SetGlobalBool(nm, ret:GetBool())
@@ -1389,6 +1393,7 @@ end
 
 ---
 -- This @{function} calls @{GM:TTTEndRound} and is used to end the round
+-- @param string result The winning team / result / condition
 -- @realm server
 -- @internal
 function EndRound(result)
@@ -1463,9 +1468,7 @@ end
 -- @hook
 -- @realm server
 function GM:TTTCheckForWin()
-	ttt_dbgwin = ttt_dbgwin or CreateConVar("ttt_debug_preventwin", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
-	if ttt_dbgwin:GetBool() then
+	if not ttt_dbgwin or ttt_dbgwin:GetBool() then
 		return WIN_NONE
 	end
 

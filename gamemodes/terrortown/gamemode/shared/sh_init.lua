@@ -136,6 +136,7 @@ end
 
 ---
 -- Sorts a
+-- @param table tbl
 -- @return table
 -- @see roles.GetList
 -- @realm shared
@@ -383,6 +384,7 @@ end
 
 ---
 -- Randomizes a @{table}
+-- @param table t
 -- @realm shared
 function table.Randomize(t)
 	local out = {}

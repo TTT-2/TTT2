@@ -133,15 +133,16 @@ function LANG.GetParamTranslation(name, params)
 end
 
 ---
--- @function LANG.GetPTranslation(name, params)
--- @desc Returns the translated @{string} text (if available).<br />String
+-- Returns the translated @{string} text (if available).<br />String
 -- <a href="http://lua-users.org/wiki/StringInterpolation">interpolation</a> is allowed<br />
 -- Parameterised version, performs string interpolation. Slower than
 -- @{LANG.GetTranslation}.
 -- @param string name string key identifier for the translated @{string}
+-- @param any params
 -- @return nil|string
 -- @realm client
 -- @see LANG.GetParamTranslation
+-- @function LANG.GetPTranslation(name, params)
 LANG.GetPTranslation = LANG.GetParamTranslation
 
 ---
@@ -386,6 +387,7 @@ LANG.MsgStyle = {}
 ---
 -- Access of message styles
 -- @param string name style name
+-- @param number mode The print mode
 -- @return function style table
 -- @realm client
 function LANG.GetStyle(name, mode)
@@ -429,6 +431,7 @@ end
 -- Styles a previously translated message
 -- @param string name the requested translation identifier (key)
 -- @param table params
+-- @param number mode The print mode
 -- @realm client
 function LANG.ProcessMsg(name, params, mode)
 	local raw = LANG.TryTranslation(name)

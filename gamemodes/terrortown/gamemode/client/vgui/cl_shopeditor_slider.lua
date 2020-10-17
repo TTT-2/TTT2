@@ -30,24 +30,26 @@ function PANEL:Init()
 	end
 
 	local oldOnGetFocus = self.TextArea.OnGetFocus
-	function self.TextArea:OnGetFocus()
-		if self:GetParent():GetAutoFocus() then
-			self:GetParent():GetParent():SetKeyboardInputEnabled(true)
+
+	self.TextArea.OnGetFocus = function(slf)
+		if slf:GetParent():GetAutoFocus() then
+			slf:GetParent():GetParent():SetKeyboardInputEnabled(true)
 		end
 
 		if isfunction(oldOnGetFocus) then
-			oldOnGetFocus(self)
+			oldOnGetFocus(slf)
 		end
 	end
 
 	local oldOnLoseGocus = self.TextArea.OnLoseFocus
-	function self.TextArea:OnLoseFocus()
-		if self:GetParent():GetAutoFocus() then
-			self:GetParent():GetParent():SetKeyboardInputEnabled(false)
+
+	self.TextArea.OnLoseFocus = function(slf)
+		if slf:GetParent():GetAutoFocus() then
+			slf:GetParent():GetParent():SetKeyboardInputEnabled(false)
 		end
 
 		if isfunction(oldOnLoseGocus) then
-			oldOnLoseGocus(self)
+			oldOnLoseGocus(slf)
 		end
 	end
 

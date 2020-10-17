@@ -304,6 +304,7 @@ if CLIENT then
 
 	---
 	-- Draws a line on the screen
+	-- @param number x x coordinate of the line
 	-- @param number y y coordinate of the line
 	-- @param string text text for the line
 	-- @param[opt] Material|string icon_or_key icon or description for the concerning key
@@ -594,7 +595,7 @@ end
 
 ---
 -- @return number
--- @raelm shared
+-- @realm shared
 function SWEP:GetPrimaryCone()
 	local cone = self.Primary.Cone or 0.2
 

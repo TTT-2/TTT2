@@ -210,7 +210,7 @@ if CLIENT then
 
 	---
 	-- Returns a list of equipment that is available for a @{ROLE}
-	-- param Player ply
+	-- @param Player ply
 	-- @param number subrole id of @{ROLE}
 	-- @param[opt] boolean noModification whether the modified equipment (e.g. randomshop) table should be returned or the original one
 	-- @internal

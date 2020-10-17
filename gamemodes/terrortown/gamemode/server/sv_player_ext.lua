@@ -75,7 +75,7 @@ end
 AccessorFunc(plymeta, "live_karma", "LiveKarma", FORCE_NUMBER)
 
 ---
--- @acccessor number The damage factor scales how much damage the player deals, so if it is .9
+-- @accessor number The damage factor scales how much damage the player deals, so if it is .9
 -- then the player only deals 90% of his original damage.
 -- @realm server
 AccessorFunc(plymeta, "dmg_factor", "DamageFactor", FORCE_NUMBER)
@@ -511,6 +511,7 @@ end
 ---
 -- This is doing nothing, it's just a function to avoid incompatibility
 -- @note Please remove this call and use the TTTPlayerSpeedModifier hook in both CLIENT and SERVER states
+-- @param any slowed
 -- @deprecated
 -- @realm server
 function plymeta:SetSpeed(slowed)

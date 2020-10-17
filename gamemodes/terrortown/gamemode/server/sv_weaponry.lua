@@ -477,44 +477,6 @@ function GM:UpdatePlayerLoadouts()
 	end
 end
 
----
--- Weapon dropping
-
----
--- Called whenever a @{Player} drops a @{Weapon}, e.g. on death
--- @param Player ply The player whose weapon is about to be dropped
--- @param Weapon wep The weapon that is about to be dropped
--- @param boolean deathDrop Set to true if this is a drop on death
--- @param boolean keepSelection If set to true the current selection is kept if not dropped
--- @realm server
--- @module WEPS
-function WEPS.DropNotifiedWeapon(ply, wep, deathDrop, keepSelection)
-	if not IsValid(ply) or not IsValid(wep) then return end
-
-	-- Hack to tell the weapon it's about to be dropped and should do what it
-	-- must right now
-	if wep.PreDrop then
-		wep:PreDrop(deathDrop)
-	end
-
-	-- PreDrop might destroy weapon
-	if not IsValid(wep) then return end
-
-	-- Tag this weapon as dropped, so that if it's a special weapon we do not
-	-- auto-pickup when nearby.
-	wep.IsDropped = true
-
-	ply:DropWeapon(wep)
-
-	wep:PhysWake()
-
-	-- After dropping a weapon, always switch to holstered, so that traitors
-	-- will never accidentally pull out a traitor weapon
-	if not keepSelection then
-		ply:SelectWeapon("weapon_ttt_unarmed")
-	end
-end
-
 local function DropActiveWeapon(ply)
 	if not IsValid(ply) then return end
 
@@ -672,7 +634,42 @@ function GM:EntityRemoved(ent)
 	end
 end
 
+---
 -- @module WEPS
+
+---
+-- Called whenever a @{Player} drops a @{Weapon}, e.g. on death
+-- @param Player ply The player whose weapon is about to be dropped
+-- @param Weapon wep The weapon that is about to be dropped
+-- @param boolean deathDrop Set to true if this is a drop on death
+-- @param boolean keepSelection If set to true the current selection is kept if not dropped
+-- @realm server
+function WEPS.DropNotifiedWeapon(ply, wep, deathDrop, keepSelection)
+	if not IsValid(ply) or not IsValid(wep) then return end
+
+	-- Hack to tell the weapon it's about to be dropped and should do what it
+	-- must right now
+	if wep.PreDrop then
+		wep:PreDrop(deathDrop)
+	end
+
+	-- PreDrop might destroy weapon
+	if not IsValid(wep) then return end
+
+	-- Tag this weapon as dropped, so that if it's a special weapon we do not
+	-- auto-pickup when nearby.
+	wep.IsDropped = true
+
+	ply:DropWeapon(wep)
+
+	wep:PhysWake()
+
+	-- After dropping a weapon, always switch to holstered, so that traitors
+	-- will never accidentally pull out a traitor weapon
+	if not keepSelection then
+		ply:SelectWeapon("weapon_ttt_unarmed")
+	end
+end
 
 ---
 -- Forces a @{Model} pre-cache for each @{Weapon}

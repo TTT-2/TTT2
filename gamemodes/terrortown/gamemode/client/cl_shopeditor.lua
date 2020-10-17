@@ -182,7 +182,7 @@ end
 -- Creates the @{ITEM} Editor @{Panel}
 -- @param ITEM|Weapon item
 -- @realm client
--- @interal
+-- @internal
 function ShopEditor.EditItem(item)
 	local ply = LocalPlayer()
 
@@ -201,11 +201,11 @@ function ShopEditor.EditItem(item)
 	frame:ShowCloseButton(true)
 	frame:SetMouseInputEnabled(true)
 
-	function frame:Paint(w2, h2)
+	frame.Paint = function(slf, w2, h2)
 		draw.RoundedBox(0, 0, 0, w2, h2, itemBoxColor)
 	end
 
-	function frame:OnClose()
+	frame.OnClose = function(slf)
 		ply.shopeditor_itemframes = nil
 	end
 
@@ -311,11 +311,11 @@ function ShopEditor.CreateItemEditor()
 	frame:ShowCloseButton(true)
 	frame:SetMouseInputEnabled(true)
 
-	function frame:Paint(w2, h2)
+	frame.Paint = function(slf, w2, h2)
 		draw.RoundedBox(0, 0, 0, w2, h2, itemBoxColor)
 	end
 
-	function frame:OnClose()
+	frame.OnClose = function(slf)
 		ply.shopeditor_frame = nil
 
 		if IsValid(ply.shopeditor_itemframes) then
@@ -393,7 +393,7 @@ function ShopEditor.CreateRolesList(frame, w, h, rls, onClick, defaultRoleData)
 		dlist:AddPanel(ic)
 
 		local oldFn = ic.OnMousePressed
-		function ic:OnMousePressed(mcode)
+		ic.OnMousePressed = function(slf, mcode)
 			if mcode == MOUSE_LEFT then
 				onClick(self)
 			end
@@ -434,11 +434,11 @@ function ShopEditor.CreateOwnShopEditor(roleData, onCreate)
 	frame:ShowCloseButton(true)
 	frame:SetMouseInputEnabled(true)
 
-	function frame:Paint(w2, h2)
+	frame.Paint = function(slf, w2, h2)
 		draw.RoundedBox(0, 0, 0, w2, h2, itemBoxColor)
 	end
 
-	function frame:OnClose()
+	frame.OnClose = function(slf)
 		ply.shopeditor_frame = nil
 		ply.shopeditor = nil
 	end
@@ -529,11 +529,11 @@ function ShopEditor.CreateLinkWithRole(roleData)
 	frame:ShowCloseButton(true)
 	frame:SetMouseInputEnabled(true)
 
-	function frame:Paint(w2, h2)
+	frame.Paint = function(slf, w2, h2)
 		draw.RoundedBox(0, 0, 0, w2, h2, itemBoxColor)
 	end
 
-	function frame:OnClose()
+	frame.OnClose = function(slf)
 		ply.shopeditor_frame = nil
 		ply.shopeditor = nil
 	end
@@ -641,11 +641,11 @@ function ShopEditor.CreateShopLinker()
 	frame:ShowCloseButton(true)
 	frame:SetMouseInputEnabled(true)
 
-	function frame:Paint(w2, h2)
+	frame.Paint = function(slf, w2, h2)
 		draw.RoundedBox(0, 0, 0, w2, h2, itemBoxColor)
 	end
 
-	function frame:OnClose()
+	frame.OnClose = function(slf)
 		ply.shopeditor_frame = nil
 	end
 
@@ -828,11 +828,11 @@ function ShopEditor.ShowOptions()
 	frame:ShowCloseButton(true)
 	frame:SetMouseInputEnabled(true)
 
-	function frame:Paint(w2, h2)
+	frame.Paint = function(slf, w2, h2)
 		draw.RoundedBox(0, 0, 0, w2, h2, itemBoxColor)
 	end
 
-	function frame:OnClose()
+	frame.OnClose = function(slf)
 		ply.shopeditor_frame = nil
 	end
 
@@ -941,11 +941,11 @@ function ShopEditor.CreateShopEditor()
 	frame:ShowCloseButton(true)
 	frame:SetMouseInputEnabled(true)
 
-	function frame:Paint(w2, h2)
+	frame.Paint = function(slf, w2, h2)
 		draw.RoundedBox(0, 0, 0, w2, h2, itemBoxColor)
 	end
 
-	function frame:OnClose()
+	frame.OnClose = function(slf)
 		ply.shopeditor_frame = nil
 	end
 

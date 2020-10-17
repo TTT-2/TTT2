@@ -103,7 +103,6 @@ end
 ---
 -- Should be called when a specific vskin variable is changed
 -- so that the complete vgui element is redone
--- @param string name The name of the changed setting
 -- @internal
 -- @realm client
 function vguihandler.InvalidateVSkin()

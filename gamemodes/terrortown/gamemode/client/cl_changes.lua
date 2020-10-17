@@ -805,6 +805,8 @@ function CreateChanges()
 	hook.Run("TTT2AddChange", changes, currentVersion)
 end
 
+---
+-- @realm client
 function GetSortedChanges()
 	CreateChanges()
 

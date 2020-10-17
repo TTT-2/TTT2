@@ -19,8 +19,8 @@ local isfunction = isfunction
 -- The method will try to traverse the dataTable and return the value or
 -- it will return nil, if a key (even a subpath) is not defined.
 --
--- @param dataTable table the table to traverse and search the path in.
--- @param path table the table with keys that will be used to traverse the tree (in order).
+-- @param table dataTable the table to traverse and search the path in.
+-- @param any path the table with keys that will be used to traverse the tree (in order).
 -- @return any the value at the given path or nil if it does not exist
 -- @realm shared
 function table.GetWithPath(dataTable, path)
@@ -47,8 +47,9 @@ end
 -- This method will traverse the given dataTable and create tables along the path if
 -- necessary. It will then set the value in the traversed table.
 --
--- @param dataTable table the table to traverse and set the value in.
--- @param path table the table with keys that will be used to traverse the tree (in order).
+-- @param table dataTable the table to traverse and set the value in.
+-- @param any path the table with keys that will be used to traverse the tree (in order).
+-- @param any value
 -- @realm shared
 function table.SetWithPath(dataTable, path, value)
 	assert(path, "table.SetWithPath(..) missing path parameter.")
@@ -189,8 +190,8 @@ end
 -- Use this function to more efficiently removing multiple indices from a sequential table by combining it
 -- with a function setting all entries to be removed to nil. Do NOT use table.Remove() or table.RemoveByValue()
 --
--- @param dataTable table the table to traverse and set the value in.
--- @param tableSize number the number of entries in dataTable
+-- @param table dataTable the table to traverse and set the value in.
+-- @param number tableSize the number of entries in dataTable
 -- @realm shared
 function table.RemoveEmptyEntries(dataTable, tableSize)
 	local j = 1

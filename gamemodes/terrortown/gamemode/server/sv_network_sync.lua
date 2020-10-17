@@ -156,7 +156,8 @@ end
 -- For more information look at {@ttt2net.SetMetaData}.
 --
 -- @param any path The path this meta data is associated with (already includes the needed keywords)
--- @param[opt] table metadata The metadata table
+-- @param nil|table metadata The metadata table
+-- @param Player ply The player
 -- @realm server
 function ttt2net.SetMetaDataOnPlayer(path, metadata, ply)
 	local tmpPath
@@ -327,6 +328,7 @@ end
 -- it will do the same as {@ttt2net.RemoveOverrides}.
 --
 -- @param table path The path to clear out all overrides on.
+-- @param Player ply The player
 -- @realm server
 function ttt2net.RemoveOverridesOnPlayer(path, ply)
 	local tmpPath

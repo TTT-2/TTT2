@@ -356,32 +356,32 @@ function plymeta:GetBaseRoleData()
 end
 
 ---
--- @function plymeta:IsInnocent()
--- @desc Checks whether a @{Player} is an Innocent
+-- Checks whether a @{Player} is an Innocent
 -- @return boolean
--- @see plymeta:GetInnocent
+-- @see Player:GetInnocent
 -- @realm shared
 -- @deprecated
+-- @function plymeta:IsInnocent()
 plymeta.IsInnocent = plymeta.GetInnocent
 
 ---
--- @function plymeta:IsTraitor()
--- @desc Checks whether a @{Player} is a Traitor
+-- Checks whether a @{Player} is a Traitor
 -- @note basically traitor without special traitor roles, but includes all SubRoles.
 -- Other BaseRoles which are in the same team are excluded!
 -- @return boolean
--- @see plymeta:GetTraitor
+-- @see Player:GetTraitor
 -- @realm shared
 -- @deprecated
+-- @function plymeta:IsTraitor()
 plymeta.IsTraitor = plymeta.GetTraitor
 
 ---
--- @function plymeta:IsDetective()
--- @desc Checks whether a @{Player} is a Detective
+-- Checks whether a @{Player} is a Detective
 -- @return boolean
--- @see plymeta:GetDetective
+-- @see Player:GetDetective
 -- @realm shared
 -- @deprecated
+-- @function plymeta:IsDetective()
 plymeta.IsDetective = plymeta.GetDetective
 
 ---
@@ -892,12 +892,13 @@ function GM:TTT2PlayerReady(ply)
 
 end
 
+local oldSetModel = plymeta.SetModel or plymeta.MetaBaseClass.SetModel
+
 ---
 -- Sets the @{Player}'s @{Model}
 -- @param string mdlName
 -- @note override to fix PS/ModelSelector/... issues
 -- @realm shared
-local oldSetModel = plymeta.SetModel or plymeta.MetaBaseClass.SetModel
 function plymeta:SetModel(mdlName)
 	local mdl
 
