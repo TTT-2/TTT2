@@ -40,9 +40,9 @@ function sql.GetPrimaryKey(tableName)
 	local primaryKeys = {}
 
 	for i = 1, #result do
-		local pk = result[i].pk
+		local pk = tonumber(result[i].pk)
 
-		if tonumber(pk) ~= 0 then
+		if pk ~= 0 then
 			primaryKeys[pk] = result[i].name
 		end
 	end
