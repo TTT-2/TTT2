@@ -1,58 +1,83 @@
 ---
 -- @section Inventory
 
-local maxMeleeSlots = CreateConVar("ttt2_max_melee_slots", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of melee weapons, a player can carry (-1 = infinite)")
-local maxSecondarySlots = CreateConVar("ttt2_max_secondary_slots", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of secondary weapons, a player can carry (-1 = infinite)")
-local maxPrimarySlots = CreateConVar("ttt2_max_primary_slots", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of primary weapons, a player can carry (-1 = infinite)")
-local maxNadeSlots = CreateConVar("ttt2_max_nade_slots", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of grenades, a player can carry (-1 = infinite)")
-local maxCarrySlots = CreateConVar("ttt2_max_carry_slots", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of carry tools, a player can carry (-1 = infinite)")
-local maxUnarmedSlots = CreateConVar("ttt2_max_unarmed_slots", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of unarmed slots, a player can have (-1 = infinite)")
-local maxSpecialSlots = CreateConVar("ttt2_max_special_slots", "2", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of special weapons, a player can carry (-1 = infinite)")
-local maxExtraSlots = CreateConVar("ttt2_max_extra_slots", "-1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of extra weapons, a player can carry (-1 = infinite)")
+if SERVER then
+	---
+	-- @realm server
+	local maxMeleeSlots = CreateConVar("ttt2_max_melee_slots", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of melee weapons, a player can carry (-1 = infinite)")
 
-hook.Add("TTT2SyncGlobals", "AddInventoryGlobals", function()
-	SetGlobalInt(maxMeleeSlots:GetName(), maxMeleeSlots:GetInt())
-	SetGlobalInt(maxSecondarySlots:GetName(), maxSecondarySlots:GetInt())
-	SetGlobalInt(maxPrimarySlots:GetName(), maxPrimarySlots:GetInt())
-	SetGlobalInt(maxNadeSlots:GetName(), maxNadeSlots:GetInt())
-	SetGlobalInt(maxCarrySlots:GetName(), maxCarrySlots:GetInt())
-	SetGlobalInt(maxUnarmedSlots:GetName(), maxUnarmedSlots:GetInt())
-	SetGlobalInt(maxSpecialSlots:GetName(), maxSpecialSlots:GetInt())
-	SetGlobalInt(maxExtraSlots:GetName(), maxExtraSlots:GetInt())
-	SetGlobalInt("ttt2_max_class_slots", -1)
-end)
+	---
+	-- @realm server
+	local maxSecondarySlots = CreateConVar("ttt2_max_secondary_slots", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of secondary weapons, a player can carry (-1 = infinite)")
 
-cvars.AddChangeCallback(maxMeleeSlots:GetName(), function(name, old, new)
-	SetGlobalInt(name, tonumber(new))
-end, "TTT2MaxMeleeSlotsChange")
+	---
+	-- @realm server
+	local maxPrimarySlots = CreateConVar("ttt2_max_primary_slots", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of primary weapons, a player can carry (-1 = infinite)")
 
-cvars.AddChangeCallback(maxSecondarySlots:GetName(), function(name, old, new)
-	SetGlobalInt(name, tonumber(new))
-end, "TTT2MaxSecondarySlotsChange")
+	---
+	-- @realm server
+	local maxNadeSlots = CreateConVar("ttt2_max_nade_slots", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of grenades, a player can carry (-1 = infinite)")
 
-cvars.AddChangeCallback(maxPrimarySlots:GetName(), function(name, old, new)
-	SetGlobalInt(name, tonumber(new))
-end, "TTT2MaxPrimarySlotsChange")
+	---
+	-- @realm server
+	local maxCarrySlots = CreateConVar("ttt2_max_carry_slots", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of carry tools, a player can carry (-1 = infinite)")
 
-cvars.AddChangeCallback(maxNadeSlots:GetName(), function(name, old, new)
-	SetGlobalInt(name, tonumber(new))
-end, "TTT2MaxNadeSlotsChange")
+	---
+	-- @realm server
+	local maxUnarmedSlots = CreateConVar("ttt2_max_unarmed_slots", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of unarmed slots, a player can have (-1 = infinite)")
 
-cvars.AddChangeCallback(maxCarrySlots:GetName(), function(name, old, new)
-	SetGlobalInt(name, tonumber(new))
-end, "TTT2MaxCarrySlotsChange")
+	---
+	-- @realm server
+	local maxSpecialSlots = CreateConVar("ttt2_max_special_slots", "2", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of special weapons, a player can carry (-1 = infinite)")
 
-cvars.AddChangeCallback(maxUnarmedSlots:GetName(), function(name, old, new)
-	SetGlobalInt(name, tonumber(new))
-end, "TTT2MaxUnarmedSlotsChange")
+	---
+	-- @realm server
+	local maxExtraSlots = CreateConVar("ttt2_max_extra_slots", "-1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of extra weapons, a player can carry (-1 = infinite)")
 
-cvars.AddChangeCallback(maxSpecialSlots:GetName(), function(name, old, new)
-	SetGlobalInt(name, tonumber(new))
-end, "TTT2MaxSpecialSlotsChange")
+	hook.Add("TTT2SyncGlobals", "AddInventoryGlobals", function()
+		SetGlobalInt(maxMeleeSlots:GetName(), maxMeleeSlots:GetInt())
+		SetGlobalInt(maxSecondarySlots:GetName(), maxSecondarySlots:GetInt())
+		SetGlobalInt(maxPrimarySlots:GetName(), maxPrimarySlots:GetInt())
+		SetGlobalInt(maxNadeSlots:GetName(), maxNadeSlots:GetInt())
+		SetGlobalInt(maxCarrySlots:GetName(), maxCarrySlots:GetInt())
+		SetGlobalInt(maxUnarmedSlots:GetName(), maxUnarmedSlots:GetInt())
+		SetGlobalInt(maxSpecialSlots:GetName(), maxSpecialSlots:GetInt())
+		SetGlobalInt(maxExtraSlots:GetName(), maxExtraSlots:GetInt())
+		SetGlobalInt("ttt2_max_class_slots", -1)
+	end)
 
-cvars.AddChangeCallback(maxExtraSlots:GetName(), function(name, old, new)
-	SetGlobalInt(name, tonumber(new))
-end, "TTT2MaxExtraSlotsChange")
+	cvars.AddChangeCallback(maxMeleeSlots:GetName(), function(name, old, new)
+		SetGlobalInt(name, tonumber(new))
+	end, "TTT2MaxMeleeSlotsChange")
+
+	cvars.AddChangeCallback(maxSecondarySlots:GetName(), function(name, old, new)
+		SetGlobalInt(name, tonumber(new))
+	end, "TTT2MaxSecondarySlotsChange")
+
+	cvars.AddChangeCallback(maxPrimarySlots:GetName(), function(name, old, new)
+		SetGlobalInt(name, tonumber(new))
+	end, "TTT2MaxPrimarySlotsChange")
+
+	cvars.AddChangeCallback(maxNadeSlots:GetName(), function(name, old, new)
+		SetGlobalInt(name, tonumber(new))
+	end, "TTT2MaxNadeSlotsChange")
+
+	cvars.AddChangeCallback(maxCarrySlots:GetName(), function(name, old, new)
+		SetGlobalInt(name, tonumber(new))
+	end, "TTT2MaxCarrySlotsChange")
+
+	cvars.AddChangeCallback(maxUnarmedSlots:GetName(), function(name, old, new)
+		SetGlobalInt(name, tonumber(new))
+	end, "TTT2MaxUnarmedSlotsChange")
+
+	cvars.AddChangeCallback(maxSpecialSlots:GetName(), function(name, old, new)
+		SetGlobalInt(name, tonumber(new))
+	end, "TTT2MaxSpecialSlotsChange")
+
+	cvars.AddChangeCallback(maxExtraSlots:GetName(), function(name, old, new)
+		SetGlobalInt(name, tonumber(new))
+	end, "TTT2MaxExtraSlotsChange")
+end
 
 ORDERED_SLOT_TABLE = {
 	[WEAPON_MELEE] = "ttt2_max_melee_slots",

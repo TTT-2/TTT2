@@ -122,7 +122,9 @@ local ttt_playercolors = {
 local ttt_playercolors_all_count = #ttt_playercolors.all
 local ttt_playercolors_serious_count = #ttt_playercolors.serious
 
-local colormode = CreateConVar("ttt_playercolor_mode", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+---
+-- @realm shared
+local colormode = CreateConVar("ttt_playercolor_mode", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
 
 ---
 -- @param string model The selected (default) playermodel

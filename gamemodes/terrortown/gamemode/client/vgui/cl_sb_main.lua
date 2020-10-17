@@ -21,8 +21,13 @@ local IsValid = IsValid
 
 ttt_include("vgui__cl_sb_team")
 
--- TODO add Team!
+---
+-- @realm client
+-- @todo add Team!
 local cv_ttt_scoreboard_sorting = CreateConVar("ttt_scoreboard_sorting", "name", FCVAR_ARCHIVE, "name | role | karma | score | deaths | ping")
+
+---
+-- @realm client
 local cv_ttt_scoreboard_ascending = CreateConVar("ttt_scoreboard_ascending", "1", FCVAR_ARCHIVE, "Should scoreboard ordering be in ascending order")
 
 GROUP_TERROR = 1

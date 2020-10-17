@@ -15,16 +15,43 @@ util.AddNetworkString("ttt2_sync_armor")
 util.AddNetworkString("ttt2_sync_armor_max")
 
 -- SET UP CONVARS
-ARMOR.cv = {}
-ARMOR.cv.armor_on_spawn = CreateConVar("ttt_armor_on_spawn", 0, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-ARMOR.cv.armor_enable_reinforced = CreateConVar("ttt_armor_enable_reinforced", 1, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-ARMOR.cv.armor_threshold_for_reinforced = CreateConVar("ttt_armor_threshold_for_reinforced", 50, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-ARMOR.cv.armor_damage_block_pct = CreateConVar("ttt_armor_damage_block_pct", 0.2, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-ARMOR.cv.armor_damage_health_pct = CreateConVar("ttt_armor_damage_health_pct", 0.7, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-ARMOR.cv.armor_classic = CreateConVar("ttt_armor_classic", 0, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-ARMOR.cv.item_armor_value = CreateConVar("ttt_item_armor_value", 30, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-ARMOR.cv.item_armor_block_headshots = CreateConVar("ttt_item_armor_block_headshots", 0, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-ARMOR.cv.item_armor_block_blastdmg = CreateConVar("ttt_item_armor_block_blastdmg", 0, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+ARMOR.cv = {
+	---
+	-- @realm server
+	armor_on_spawn = CreateConVar("ttt_armor_on_spawn", 0, {FCVAR_NOTIFY, FCVAR_ARCHIVE}),
+
+	---
+	-- @realm server
+	armor_enable_reinforced = CreateConVar("ttt_armor_enable_reinforced", 1, {FCVAR_NOTIFY, FCVAR_ARCHIVE}),
+
+	---
+	-- @realm server
+	armor_threshold_for_reinforced = CreateConVar("ttt_armor_threshold_for_reinforced", 50, {FCVAR_NOTIFY, FCVAR_ARCHIVE}),
+
+	---
+	-- @realm server
+	armor_damage_block_pct = CreateConVar("ttt_armor_damage_block_pct", 0.2, {FCVAR_NOTIFY, FCVAR_ARCHIVE}),
+
+	---
+	-- @realm server
+	armor_damage_health_pct = CreateConVar("ttt_armor_damage_health_pct", 0.7, {FCVAR_NOTIFY, FCVAR_ARCHIVE}),
+
+	---
+	-- @realm server
+	armor_classic = CreateConVar("ttt_armor_classic", 0, {FCVAR_NOTIFY, FCVAR_ARCHIVE}),
+
+	---
+	-- @realm server
+	item_armor_value = CreateConVar("ttt_item_armor_value", 30, {FCVAR_NOTIFY, FCVAR_ARCHIVE}),
+
+	---
+	-- @realm server
+	item_armor_block_headshots = CreateConVar("ttt_item_armor_block_headshots", 0, {FCVAR_NOTIFY, FCVAR_ARCHIVE}),
+
+	---
+	-- @realm server
+	item_armor_block_blastdmg = CreateConVar("ttt_item_armor_block_blastdmg", 0, {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+}
 
 hook.Add("TTT2SyncGlobals", "AddArmorGlobals", function()
 	SetGlobalBool(ARMOR.cv.armor_classic:GetName(), ARMOR.cv.armor_classic:GetBool())

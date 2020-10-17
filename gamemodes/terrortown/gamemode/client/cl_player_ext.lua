@@ -71,6 +71,8 @@ for _i = 1, #gestTbl do
 	act_runner[a] = MakeSimpleRunner(a)
 end
 
+---
+-- @realm client
 local cv_ttt_show_gestures = CreateConVar("ttt_show_gestures", "1", FCVAR_ARCHIVE)
 
 ---

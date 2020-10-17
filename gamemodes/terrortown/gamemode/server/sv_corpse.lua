@@ -13,11 +13,14 @@ local timer = timer
 local util = util
 local IsValid = IsValid
 local ConVarExists = ConVarExists
-local CreateConVar = CreateConVar
 local hook = hook
 
--- If detective mode, announce when someone's body is found
-local cvBodyfound = CreateConVar("ttt_announce_body_found", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+---
+-- @realm server
+local cvBodyfound = CreateConVar("ttt_announce_body_found", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "If detective mode, announce when someone's body is found")
+
+---
+-- @realm server
 local cvRagCollide = CreateConVar("ttt_ragdoll_collide", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 local cvDeteOnlyConfirm = GetConVar("ttt2_confirm_detective_only")

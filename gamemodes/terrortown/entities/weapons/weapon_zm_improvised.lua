@@ -8,7 +8,12 @@ local cv_crowbar_pushforce
 if SERVER then
 	AddCSLuaFile()
 
+	---
+	-- @realm server
 	cv_crowbar_unlocks = CreateConVar("ttt_crowbar_unlocks", "1", FCVAR_ARCHIVE)
+
+	---
+	-- @realm server
 	cv_crowbar_pushforce = CreateConVar("ttt_crowbar_pushforce", "395", FCVAR_NOTIFY)
 end
 

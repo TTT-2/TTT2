@@ -8,7 +8,6 @@ local timer = timer
 local util = util
 local IsValid = IsValid
 local surface = surface
-local CreateConVar = CreateConVar
 local hook = hook
 
 -- Define GM12 fonts for compatibility
@@ -112,8 +111,9 @@ end)
 -- all files are loaded
 local TryT = LANG.TryTranslation
 
--- optional sound cues on round start and end
-local ttt_cl_soundcues = CreateConVar("ttt_cl_soundcues", "0", FCVAR_ARCHIVE)
+---
+-- @realm client
+local ttt_cl_soundcues = CreateConVar("ttt_cl_soundcues", "0", FCVAR_ARCHIVE, "Optional sound cues on round start and end")
 
 local cues = {
 	Sound("ttt/thump01e.mp3"),

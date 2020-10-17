@@ -13,9 +13,20 @@ local table = table
 local IsValid = IsValid
 local hook = hook
 
+---
+-- @realm client
 local cvMinimalisticTid = CreateConVar("ttt_minimal_targetid", "0", FCVAR_ARCHIVE)
+
+---
+-- @realm client
 local cvDrawHalo = CreateConVar("ttt_entity_draw_halo", "1", FCVAR_ARCHIVE)
+
+---
+-- @realm client
 local cvEnableSpectatorsoutline = CreateConVar("ttt2_cvEnableSpectatorsoutline", "1", {FCVAR_ARCHIVE, FCVAR_USERINFO})
+
+---
+-- @realm client
 local cvEnableOverheadicons = CreateConVar("ttt2_cvEnableOverheadicons", "1", {FCVAR_ARCHIVE, FCVAR_USERINFO})
 
 local cvDeteOnlyConfirm = GetConVar("ttt2_confirm_detective_only")

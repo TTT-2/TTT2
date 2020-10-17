@@ -6,7 +6,9 @@ local os = os
 local hook = hook
 local table = table
 
--- internal
+---
+-- @realm client
+-- @internal
 local changesVersion = CreateConVar("changes_version", "v0.0.0.0", FCVAR_ARCHIVE)
 
 local changes, currentVersion

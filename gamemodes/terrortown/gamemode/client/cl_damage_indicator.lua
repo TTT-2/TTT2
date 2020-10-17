@@ -1,16 +1,32 @@
 ---
 -- @module dmgindicator
 
-dmgindicator = {}
-dmgindicator.themes = {}
+dmgindicator = {
+	themes = {},
 
--- SET UP CONVARS
-dmgindicator.cv = {}
-dmgindicator.cv.enable = CreateConVar("ttt_dmgindicator_enable", "1", FCVAR_ARCHIVE)
-dmgindicator.cv.mode = CreateConVar("ttt_dmgindicator_mode", "default", FCVAR_ARCHIVE)
-dmgindicator.cv.duration = CreateConVar("ttt_dmgindicator_duration", "1.5", FCVAR_ARCHIVE)
-dmgindicator.cv.maxdamage = CreateConVar("ttt_dmgindicator_maxdamage", "50.0", FCVAR_ARCHIVE)
-dmgindicator.cv.maxalpha = CreateConVar("ttt_dmgindicator_maxalpha", "255", FCVAR_ARCHIVE)
+	-- setup convars
+	cv = {
+		---
+		-- @realm client
+		enable = CreateConVar("ttt_dmgindicator_enable", "1", FCVAR_ARCHIVE),
+
+		---
+		-- @realm client
+		mode = CreateConVar("ttt_dmgindicator_mode", "default", FCVAR_ARCHIVE),
+
+		---
+		-- @realm client
+		duration = CreateConVar("ttt_dmgindicator_duration", "1.5", FCVAR_ARCHIVE),
+
+		---
+		-- @realm client
+		maxdamage = CreateConVar("ttt_dmgindicator_maxdamage", "50.0", FCVAR_ARCHIVE),
+
+		---
+		-- @realm client
+		maxalpha = CreateConVar("ttt_dmgindicator_maxalpha", "255", FCVAR_ARCHIVE)
+	}
+}
 
 local lastDamage = CurTime()
 local damageAmount = 0.0

@@ -9,10 +9,19 @@ if SERVER then
 	util.AddNetworkString("TTT2SyncDoorEntities")
 end
 
+---
+-- @realm client
 local cvDestructableDoorForced = CreateConVar("ttt2_doors_force_pairs", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+---
+-- @realm client
 local cvDestructableDoor = CreateConVar("ttt2_doors_destructible", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+---
+-- @realm client
 local cvDestructableDoorLocked = CreateConVar("ttt2_doors_locked_indestructible", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
+---
 -- DOOR SPAWNFLAG ENUMS
 -- @ref https://developer.valvesoftware.com/wiki/prop_door_rotating
 -- @ref https://developer.valvesoftware.com/wiki/func_door

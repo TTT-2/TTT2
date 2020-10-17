@@ -13,6 +13,8 @@ DEFINE_BASECLASS(base)
 HUDELEMENT.Base = base
 
 if CLIENT then
+	---
+	-- @realm client
 	local hudTeamicon = CreateConVar("ttt2_base_hud_teamicon", "1", FCVAR_ARCHIVE)
 
 	local x = 0

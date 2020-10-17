@@ -230,6 +230,9 @@ function GetTeamMemberFilter(ply, alive_only)
 end
 
 -- Communication control
+
+---
+-- @realm server
 local cv_ttt_limit_spectator_chat = CreateConVar("ttt_limit_spectator_chat", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY})
 
 ---
@@ -370,6 +373,8 @@ function GM:PlayerSay(ply, text, teamOnly)
 	return text or ""
 end
 
+---
+-- @realm server
 local ttt_lastwords = CreateConVar("ttt_lastwords_chatprint", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 local LastWordContext = {

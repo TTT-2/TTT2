@@ -4,7 +4,6 @@
 local GetTranslation = LANG.GetTranslation
 local GetPTranslation = LANG.GetParamTranslation
 local timer = timer
-local CreateConVar = CreateConVar
 
 ---
 -- Round start
@@ -56,6 +55,8 @@ local function GetTextForPlayer(ply)
 	end
 end
 
+---
+-- @realm client
 local startshowtime = CreateConVar("ttt_startpopup_duration", "17", FCVAR_ARCHIVE)
 
 local function drawFunc(s, w, h)

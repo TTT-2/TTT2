@@ -110,6 +110,8 @@ if SERVER then
 		LANG.Msg(nil, name, params, mode)
 	end
 
+	---
+	-- @realm server
 	local cv_ttt_lang_serverdefault = CreateConVar("ttt_lang_serverdefault", "english", FCVAR_ARCHIVE)
 
 	local function ServerLangRequest(ply, cmd, args)

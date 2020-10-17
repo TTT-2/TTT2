@@ -13,7 +13,12 @@ DEFINE_BASECLASS(base)
 HUDELEMENT.Base = base
 
 if CLIENT then
+	---
+	-- @realm client
 	local hudWidth = CreateConVar("ttt2_base_hud_width", "0", FCVAR_ARCHIVE)
+
+	---
+	-- @realm client
 	local hudTeamicon = CreateConVar("ttt2_base_hud_teamicon", "1", FCVAR_ARCHIVE)
 
 	-- Color presets

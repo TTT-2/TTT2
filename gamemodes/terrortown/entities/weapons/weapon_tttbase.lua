@@ -149,27 +149,65 @@ SWEP.IronSightPos = Vector(0, 0, 0)
 -- The rotational offset applied when entering the ironsight
 SWEP.IronSightsAng = Vector(0, 0, 0)
 
-local sparkle = CLIENT and CreateConVar("ttt_crazy_sparks", "0", FCVAR_ARCHIVE) or nil
-local ttt2_hold_aim = CLIENT and CreateConVar("ttt2_hold_aim", 0, FCVAR_ARCHIVE, LANG.GetTranslationFromLanguage("hold_aim", "english"), 0, 1) or nil
+---
+-- @realm client
+local sparkle = CLIENT and CreateConVar("ttt_crazy_sparks", "0", FCVAR_ARCHIVE, "Toggles whether the `cball_bounce` Effect should get triggered on the hit position") or nil
+
+---
+-- @realm client
+local ttt2_hold_aim = CLIENT and CreateConVar("ttt2_hold_aim", 0, FCVAR_ARCHIVE, "Toogles whether you have to hold the key to aim", 0, 1) or nil
 
 -- crosshair
 if CLIENT then
 	local GetPTranslation = LANG.GetParamTranslation
 	local TryT = LANG.TryTranslation
 
+	---
+	-- @realm client
 	local sights_opacity = CreateConVar("ttt_ironsights_crosshair_opacity", "0.8", FCVAR_ARCHIVE)
+
+	---
+	-- @realm client
 	local crosshair_size = CreateConVar("ttt_crosshair_size", "1.0", FCVAR_ARCHIVE)
+
+	---
+	-- @realm client
 	local enable_crosshair = CreateConVar("ttt_enable_crosshair", "1", FCVAR_ARCHIVE)
 
+	---
+	-- @realm client
 	local enable_gap_crosshair = CreateConVar("ttt_crosshair_gap_enable", "0", FCVAR_ARCHIVE)
+
+	---
+	-- @realm client
 	local crosshair_gap = CreateConVar("ttt_crosshair_gap", "0", FCVAR_ARCHIVE)
 
+	---
+	-- @realm client
 	local crosshair_opacity = CreateConVar("ttt_crosshair_opacity", "1", FCVAR_ARCHIVE)
+
+	---
+	-- @realm client
 	local crosshair_static = CreateConVar("ttt_crosshair_static", "0", FCVAR_ARCHIVE)
+
+	---
+	-- @realm client
 	local crosshair_weaponscale = CreateConVar("ttt_crosshair_weaponscale", "1", FCVAR_ARCHIVE)
+
+	---
+	-- @realm client
 	local crosshair_thickness = CreateConVar("ttt_crosshair_thickness", "1", FCVAR_ARCHIVE)
+
+	---
+	-- @realm client
 	local crosshair_outlinethickness = CreateConVar("ttt_crosshair_outlinethickness", "0", FCVAR_ARCHIVE)
+
+	---
+	-- @realm client
 	local enable_dot_crosshair = CreateConVar("ttt_crosshair_dot", "0", FCVAR_ARCHIVE)
+
+	---
+	-- @realm client
 	local enable_crosshair_lines = CreateConVar("ttt_crosshair_lines", "1", FCVAR_ARCHIVE)
 
 	local icon_help_primary = Material("vgui/ttt/hudhelp/lmb")
@@ -879,12 +917,16 @@ function SWEP:Think()
 	self:CalcViewModel()
 end
 
-local ttt_lowered = CreateConVar("ttt_ironsights_lowered", "1", FCVAR_ARCHIVE)
-local host_timescale = GetConVar("host_timescale")
-local LOWER_POS = Vector(0, 0, -2)
-local IRONSIGHT_TIME = 0.25
-
 if CLIENT then
+	---
+	-- @realm client
+	local ttt_lowered = CreateConVar("ttt_ironsights_lowered", "1", FCVAR_ARCHIVE)
+
+	local host_timescale = GetConVar("host_timescale")
+
+	local LOWER_POS = Vector(0, 0, -2)
+	local IRONSIGHT_TIME = 0.25
+
 	---
 	-- This hook allows you to adjust view model position and angles.
 	-- @param Vector pos

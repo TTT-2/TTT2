@@ -11,8 +11,9 @@ LANG.Strings = {}
 
 local table = table
 local pairs = pairs
-local CreateConVar = CreateConVar
 
+---
+-- @realm client
 local ttt_language = CreateConVar("ttt_language", "auto", FCVAR_ARCHIVE)
 
 LANG.DefaultLanguage = "english"

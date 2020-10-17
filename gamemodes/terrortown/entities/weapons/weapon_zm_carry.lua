@@ -67,16 +67,39 @@ SWEP.PrevOwner = nil
 
 -- ConVar syncing
 if SERVER then
+
+	---
+	-- @realm server
 	local allow_rag = CreateConVar("ttt_ragdoll_carrying", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+	---
+	-- @realm server
 	local prop_force = CreateConVar("ttt_prop_carrying_force", "60000", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+	---
+	-- @realm server
 	local no_throw = CreateConVar("ttt_no_prop_throwing", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+	---
+	-- @realm server
 	local pin_rag = CreateConVar("ttt_ragdoll_pinning", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+	---
+	-- @realm server
 	local pin_rag_inno = CreateConVar("ttt_ragdoll_pinning_innocents", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
-	-- Allowing weapon pickups can allow players to cause a crash in the physics
+	---
+	-- @note Allowing weapon pickups can allow players to cause a crash in the physics
 	-- system (ie. not fixable). Tuning the range seems to make this more
 	-- difficult. Not sure why. It's that kind of crash.
+	-- @realm server
 	local allow_wep = CreateConVar("ttt_weapon_carrying", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+	---
+	-- @note Allowing weapon pickups can allow players to cause a crash in the physics
+	-- system (ie. not fixable). Tuning the range seems to make this more
+	-- difficult. Not sure why. It's that kind of crash.
+	-- @realm server
 	local wep_range = CreateConVar("ttt_weapon_carrying_range", "50", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 	hook.Add("TTT2SyncGlobals", "TTT2SyncCarryGlobals", function()

@@ -7,8 +7,9 @@ local table = table
 local pairs = pairs
 local timer = timer
 local IsValid = IsValid
-local CreateConVar = CreateConVar
 
+---
+-- @realm client
 local cv_ttt_tips_enable = CreateConVar("ttt_tips_enable", "1", FCVAR_ARCHIVE)
 
 local draw = draw

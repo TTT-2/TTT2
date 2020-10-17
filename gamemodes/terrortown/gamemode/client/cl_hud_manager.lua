@@ -1,6 +1,8 @@
 ---
 -- @module HUDManager
 
+---
+-- @realm client
 local current_hud_cvar = CreateConVar("ttt2_current_hud", ttt2net.GetGlobal({"hud_manager", "defaultHUD"}) or "pure_skin", {FCVAR_ARCHIVE, FCVAR_USERINFO})
 
 local current_hud_table = nil

@@ -9,10 +9,20 @@ local net = net
 local IsValid = IsValid
 local hook = hook
 
+---
+-- @realm server
 local ttt_bots_are_spectators = CreateConVar("ttt_bots_are_spectators", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+---
+-- @realm server
 local ttt_dyingshot = CreateConVar("ttt_dyingshot", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
+---
+-- @realm server
 CreateConVar("ttt_killer_dna_range", "550", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+---
+-- @realm server
 CreateConVar("ttt_killer_dna_basetime", "100", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 util.AddNetworkString("ttt2_damage_received")
@@ -1150,6 +1160,8 @@ function GM:OnPlayerHitGround(ply, in_water, on_floater, speed)
 	end
 end
 
+---
+-- @realm server
 local ttt_postdm = CreateConVar("ttt_postround_dm", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---

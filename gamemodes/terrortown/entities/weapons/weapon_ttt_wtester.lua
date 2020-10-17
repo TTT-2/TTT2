@@ -34,9 +34,18 @@ else
 	util.AddNetworkString("TTT2ScannerUpdate")
 
 	-- ConVar syncing
-	local dna_mode = CreateConVar("ttt2_dna_radar", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-	local dna_slots = CreateConVar("ttt2_dna_scanner_slots", "4", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-	local dna_radar_cd = CreateConVar("ttt2_dna_radar_cooldown", "5.0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+	---
+	-- @realm server
+	local dna_mode = CreateConVar("ttt2_dna_radar", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Toggles the DNA Scanner functionality")
+
+	---
+	-- @realm server
+	local dna_slots = CreateConVar("ttt2_dna_scanner_slots", "4", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Defines the maximum amount of DNA slots")
+
+	---
+	-- @realm server
+	local dna_radar_cd = CreateConVar("ttt2_dna_radar_cooldown", "5.0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Defines the cooldown in seconds")
 
 	hook.Add("TTT2SyncGlobals", "TTT2SyncDNAScannerGlobals", function()
 		SetGlobalBool(dna_mode:GetName(), dna_mode:GetBool())

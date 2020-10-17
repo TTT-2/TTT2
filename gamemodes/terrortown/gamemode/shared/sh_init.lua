@@ -112,10 +112,9 @@ TEAMS = TEAMS or {
 
 ACTIVEROLES = ACTIVEROLES or {}
 
-CreateConVar("ttt_detective_enabled", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-CreateConVar("ttt_newroles_enabled", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
-local ttt2_custom_models = CreateConVar("ttt2_custom_models", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+---
+-- @realm shared
+local ttt2_custom_models = CreateConVar("ttt2_custom_models", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
 
 SHOP_DISABLED = "DISABLED"
 SHOP_UNSET = "UNSET"

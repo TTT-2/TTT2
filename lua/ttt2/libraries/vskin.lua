@@ -9,8 +9,16 @@ if SERVER then
 	return -- the rest of the vskin library is client only
 end
 
+---
+-- @realm client
 local cv_selectedVSkin = CreateConVar("ttt2_selected_vskin", "dark_ttt2", {FCVAR_ARCHIVE})
+
+---
+-- @realm client
 local cv_blurVSkin = CreateConVar("ttt2_vskin_blur", 1, {FCVAR_ARCHIVE})
+
+---
+-- @realm client
 local cv_colorVSkin = CreateConVar("ttt2_vskin_color", 1, {FCVAR_ARCHIVE})
 
 vskin = vskin or {}

@@ -21,10 +21,25 @@ if SERVER then
 	util.AddNetworkString("TTT2SprintToggle")
 
 	-- Set ConVars
+
+	---
+	-- @realm server
 	local sprintEnabled = CreateConVar("ttt2_sprint_enabled", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "Toggle Sprint (Def: 1)")
+
+	---
+	-- @realm server
 	local maxSprintMul = CreateConVar("ttt2_sprint_max", "0.5", {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "The maximum speed modifier the player will receive (Def: 0.5)")
+
+	---
+	-- @realm server
 	local consumption = CreateConVar("ttt2_sprint_stamina_consumption", "0.6", {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "The speed of the stamina consumption (per second; Def: 0.6)")
+
+	---
+	-- @realm server
 	local stamreg = CreateConVar("ttt2_sprint_stamina_regeneration", "0.3", {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "The regeneration time of the stamina (per second; Def: 0.3)")
+
+	---
+	-- @realm server
 	local showCrosshair = CreateConVar("ttt2_sprint_crosshair", "0", {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "Should the Crosshair be visible while sprinting? (Def: 0)")
 
 	hook.Add("TTT2SyncGlobals", "AddSprintGlobals", function()
@@ -65,8 +80,14 @@ if SERVER then
 		ply.isSprinting = bool
 	end)
 else -- CLIENT
+	---
+	-- @realm client
 	local enable_doubletap_sprint = CreateConVar("ttt2_enable_doubletap_sprint", "1", {FCVAR_ARCHIVE})
+
+	---
+	-- @realm client
 	local doubletap_sprint_anykey = CreateConVar("ttt2_doubletap_sprint_anykey", "1", {FCVAR_ARCHIVE})
+
 	local lastPress = 0
 	local lastPressedMoveKey = nil
 
