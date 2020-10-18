@@ -272,18 +272,9 @@ function CLSCORE:BuildScorePanel(dpanel)
 		local points_team = 0
 		local points_total = 0
 
-		--PrintTable(eventTypesTable)
-		--print("------")
-
 		for type, eventTable in pairs(eventTypesTable) do
-			--PrintTable(eventTable)
-			--print("-----")
-
 			for i = 1, #eventTable do
 				local event = eventTable[i]
-
-				--PrintTable(event)
-				--print("-----")
 
 				if type == EVENT_BONUS then
 					if event:HasAffectedPlayer(ply64) then
