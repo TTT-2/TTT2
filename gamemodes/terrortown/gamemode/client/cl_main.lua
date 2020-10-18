@@ -108,6 +108,14 @@ fileloader.LoadFolder("terrortown/autorun/shared/", false, SHARED_FILE, function
 	MsgN("Added TTT2 shared autorun file: ", path)
 end)
 
+fileloader.LoadFolder("terrortown/migrations/client/", false, CLIENT_FILE, function(path)
+	MsgN("Added TTT2 client migration file: ", path)
+end)
+
+fileloader.LoadFolder("terrortown/migrations/shared/", false, SHARED_FILE, function(path)
+	MsgN("Added TTT2 shared migration file: ", path)
+end)
+
 -- all files are loaded
 local TryT = LANG.TryTranslation
 
