@@ -1,3 +1,10 @@
+-- @class EVENT
+
+local tableCount = table.Count
+local tableGetKeys = table.GetKeys
+local tableHasValue = table.HasValue
+local tableAdd = table.Add
+
 EVENT.type = "base_event"
 EVENT.event = {}
 EVENT.score = {}
@@ -66,7 +73,7 @@ end
 -- @return boolean Returns true if there is score added in this event
 -- @realm server
 function EVENT:HasScore()
-	return self.score ~= {}
+	return tableCount(self.score)
 end
 
 ---
@@ -74,7 +81,7 @@ end
 -- @return table A table of all the steamID64s
 -- @realm shared
 function EVENT:GetScoredPlayers()
-	return table.GetKeys(self.score)
+	return tableGetKeys(self.score)
 end
 
 ---
@@ -111,7 +118,7 @@ end
 -- @return boolean Returns true if the player was affected by this event.
 -- @realm shared
 function EVENT:HasAffectedPlayer(ply64)
-	return table.HasValue(self.players, ply64)
+	return tableHasValue(self.players, ply64)
 end
 
 if SERVER then
@@ -120,7 +127,7 @@ if SERVER then
 	-- @param string vararg A variable amount of player steamID64
 	-- @realm server
 	function EVENT:AddAffectedPlayers(...)
-		table.Add(self.players, {...})
+		tableAdd(self.players, {...})
 	end
 
 	---
@@ -170,7 +177,6 @@ if SERVER then
 	-- The main function of an event. It contains all the event handling.
 	-- This function should be overwritten but not not called.
 	-- @param vararg A variable amount of arguments passed to this event
-	-- @return table The event data that should be added to the event manager
 	-- @internal
 	-- @realm server
 	function EVENT:Trigger(...)
@@ -182,7 +188,6 @@ if SERVER then
 	-- overwritte if the event should yield a score.
 	-- This function should be overwritten but not not called.
 	-- @param table event The event data previously added
-	-- @return string, table The steamID64 of the affected player, The score table
 	-- @internal
 	-- @realm server
 	function EVENT:Score(event)

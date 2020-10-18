@@ -1,7 +1,7 @@
 ---
--- @module SCORE
--- @desc Customized scoring, this is deprecated and is only used as a
+-- Customized scoring, this is deprecated and is only used as a
 -- compatbility bridge to old addons.
+-- @module SCORE
 
 SCORE = SCORE or {}
 SCORE.Events = SCORE.Events or {}

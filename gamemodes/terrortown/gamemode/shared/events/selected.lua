@@ -1,3 +1,5 @@
+-- @ignore
+
 if CLIENT then
 	EVENT.icon = Material("")
 	EVENT.description = "desc_event_selected"
@@ -31,7 +33,7 @@ end
 function EVENT:GetDeprecatedFormat(event)
 	if event.roundState ~= ROUND_ACTIVE then return end
 
-	local roles, teams = {}, {}
+	local eventRoles, eventTeams = {}, {}
 
 	for i = 1, #event.plys do
 		local ply = event.plys[i]
@@ -39,20 +41,20 @@ function EVENT:GetDeprecatedFormat(event)
 		local subrole = ply.role
 		local team = ply.team
 
-		roles[subrole] = roles[subrole] or {}
-		roles[subrole][#roles[subrole] + 1] = ply.sid64
+		eventRoles[subrole] = eventRoles[subrole] or {}
+		eventRoles[subrole][#eventRoles[subrole] + 1] = ply.sid64
 
 		if team ~= TEAM_NONE then
-			teams[team] = teams[team] or {}
-			teams[team][#teams[team] + 1] = ply.sid64
+			eventTeams[team] = eventTeams[team] or {}
+			eventTeams[team][#eventTeams[team] + 1] = ply.sid64
 		end
 	end
 
 	return {
 		id = self.type,
 		t = event.time / 1000,
-		rt = roles,
-		tms = teams
+		rt = eventRoles,
+		tms = eventTeams
 	}
 end
 

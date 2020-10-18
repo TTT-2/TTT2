@@ -1,3 +1,5 @@
+-- @ignore
+
 if CLIENT then
 	EVENT.icon = Material("")
 	EVENT.description = "desc_event_bodyfound"
@@ -30,7 +32,7 @@ if SERVER then
 		local finder = event.finder
 
 		self:SetPlayerScore(finder.sid64, {
-			score = roles.GetByIndex(finder.role).scoreBodyFoundMuliplier
+			score = roles.GetByIndex(finder.role).score.bodyFoundMuliplier
 		})
 	end
 end

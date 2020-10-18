@@ -1,3 +1,5 @@
+-- @ignore
+
 if CLIENT then
 	EVENT.icon = Material("")
 	EVENT.description = "desc_event_finished"
@@ -73,8 +75,8 @@ function EVENT:Score(event)
 
 		self:SetPlayerScore(ply.sid64, {
 			scoreAliveTeamMates = alive[team] or 0,
-			scoreDeadEnemies = math.ceil(otherDeadPlayers * roleData.scoreSurviveBonusMultiplier),
-			scoreTimelimit = wintype == WIN_TIMELIMIT and math.ceil(otherAlivePlayers * roleData.scoreTimelimitMultiplier) or 0
+			scoreDeadEnemies = math.ceil(otherDeadPlayers * roleData.score.surviveBonusMultiplier),
+			scoreTimelimit = wintype == WIN_TIMELIMIT and math.ceil(otherAlivePlayers * roleData.score.timelimitMultiplier) or 0
 		})
 	end
 end

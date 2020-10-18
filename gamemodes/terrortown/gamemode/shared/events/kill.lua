@@ -1,3 +1,5 @@
+-- @ignore
+
 if CLIENT then
 	EVENT.icon = Material("")
 	EVENT.description = "desc_event_kill"
@@ -86,15 +88,15 @@ if SERVER then
 
 		if deathType == KILL_SUICIDE then
 			self:SetPlayerScore(victim.sid64, {
-				score = roleData.scoreSuicideMultiplier
+				score = roleData.score.suicideMultiplier
 			})
 		elseif deathType == KILL_TEAM then
 			self:SetPlayerScore(attacker.sid64, {
-				score = roleData.scoreTeamKillsMultiplier
+				score = roleData.score.teamKillsMultiplier
 			})
 		else
 			self:SetPlayerScore(attacker.sid64, {
-				score = roleData.scoreKillsMultiplier
+				score = roleData.score.killsMultiplier
 			})
 		end
 	end

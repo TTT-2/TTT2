@@ -1,3 +1,5 @@
+-- @ignore
+
 if CLIENT then
 	EVENT.icon = Material("")
 	EVENT.description = "desc_event_game_creditfound"

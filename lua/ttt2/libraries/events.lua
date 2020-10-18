@@ -1,3 +1,8 @@
+---
+-- An event and scoring handler
+-- @author Mineotopia
+-- @module events
+
 if SERVER then
 	AddCSLuaFile()
 end
@@ -47,7 +52,6 @@ function events.Initialize(path)
 	-- event table is set in fileloader and can now be inserted in the table
 	local newEvent = tableCopy(EVENT)
 	newEvent.type = name
-
 	newEvent.base = newEvent.base or "base_event"
 
 	eventTypes[name] = newEvent
