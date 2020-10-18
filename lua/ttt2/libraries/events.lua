@@ -230,11 +230,9 @@ if SERVER then
 		local newEvent = events.Create(name)
 
 		-- only add new event to managed event list, if addition was not aborted
-		if newEvent:Trigger(...) then
-			events.list[#events.list + 1] = newEvent
-		else
-			return
-		end
+		if not newEvent:Trigger(...) then return end
+
+		events.list[#events.list + 1] = newEvent
 
 		-- add to deprecated score list
 		local deprecatedEventData = newEvent:GetDeprecatedFormat(newEvent.event)
