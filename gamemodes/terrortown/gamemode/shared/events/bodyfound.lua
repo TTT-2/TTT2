@@ -5,9 +5,7 @@ end
 
 if SERVER then
 	function EVENT:Trigger(finder, rag)
-		local found = CORPSE.GetPlayer(rag)
-
-		self:AddAffectedPlayers(finder:SteamID64(), found:SteamID64())
+		self:AddAffectedPlayers(finder:SteamID64(), CORPSE.GetPlayerSID64(rag))
 
 		return self:Add({
 			finder = {
@@ -17,13 +15,13 @@ if SERVER then
 				team = finder:GetTeam()
 			},
 			found = {
-				nick = found:Nick(),
-				sid64 = found:SteamID64(),
-				role = found:GetSubRole(),
-				team = found:GetTeam(),
+				nick = CORPSE.GetPlayerNick(rag, "A Terrorist"),
+				sid64 = CORPSE.GetPlayerSID64(rag),
+				role = CORPSE.GetPlayerRole(rag),
+				team = CORPSE.GetPlayerTeam(rag),
 				credits = CORPSE.GetCredits(rag, 0),
 				headshot = CORPSE.WasHeadshot(rag) or false,
-				time = math.Round((CORPSE.GetDeathTime(rag) - GAMEMODE.RoundStartTime) * 1000, 0)
+				time = math.Round((CORPSE.GetPlayerDeathTime(rag) - GAMEMODE.RoundStartTime) * 1000, 0)
 			}
 		})
 	end

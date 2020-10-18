@@ -119,9 +119,9 @@ local function IdentifyBody(ply, rag)
 			deadply:ConfirmPlayer(true)
 
 			SendPlayerToEveryone(deadply)
-
-			events.Trigger(EVENT_BODYFOUND, ply, rag)
 		end
+
+		events.Trigger(EVENT_BODYFOUND, ply, rag)
 
 		hook.Run("TTTBodyFound", ply, deadply, rag)
 
@@ -659,8 +659,40 @@ function CORPSE.WasHeadshot(rag)
 	return IsValid(rag) and rag.was_headshot
 end
 
-function CORPSE.GetDeathTime(rag)
+---
+-- Returns the death time (@{CurTime()}) of the ragdoll's player.
+-- @param Entity rag The ragdoll
+-- @return number The death time, 0 if the ragdol is not valid
+-- realm server
+function CORPSE.GetPlayerDeathTime(rag)
 	return rag.time or 0
+end
+
+---
+-- Returns the SteamID64 of a ragdoll's player.
+-- @param Entity rag The ragdoll
+-- @return string The SteamID64, "" if the ragdol is not valid
+-- @realm server
+function CORPSE.GetPlayerSID64(rag)
+	return rag.sid64 or ""
+end
+
+---
+-- Returns the role of the ragdoll's player.
+-- @param Entity rag The ragdoll
+-- @return number The role, @{ROLE_INNOCENT} if the ragdol is not valid
+-- @realm server
+function CORPSE.GetPlayerRole(rag)
+	return rag.was_role or ROLE_INNOCENT
+end
+
+---
+-- Returns the team of the ragdoll's player.
+-- @param Entity rag The ragdoll
+-- @return string The team, @{TEAM_INNOCENT} if the ragdol is not valid
+-- @realm server
+function CORPSE.GetPlayerTeam(rag)
+	return rag.was_team or TEAM_INNOCENT
 end
 
 hook.Add("ShouldCollide", "TTT2RagdollCollide", function(ent1, ent2)
