@@ -22,6 +22,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Inverted some convars to have a uniform "Enable feature X", not a mixture of enable and disable
 - TargetID text is now scaled with the global scale factor
 - Cleaned up draw function files
+- Changed several functions' scopes
+- Added minimal docu to every datastructure
 
 ### Fixed
 
