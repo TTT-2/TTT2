@@ -9,7 +9,8 @@ local UpdateSprint = UpdateSprint
 local MAX_DROWN_TIME = 8
 
 ---
--- Initializes TTT2
+-- Called in @{GM:Initialize} as first call right before the TTT2 fileloader
+-- loads the vskin and language files.
 -- @hook
 -- @register
 -- @realm shared
@@ -27,6 +28,21 @@ function GM:TTT2Initialize()
 	hudelements.OnLoaded()
 
 	DefaultEquipment = GetDefaultEquipment()
+end
+
+---
+-- @hook
+-- @realm shared
+function GM:TTT2FinishedLoading()
+
+end
+
+---
+-- Called after everything in the @{GM:Initialize} hook is called.
+-- @hook
+-- @realm shared
+function GM:PostInitialize()
+
 end
 
 ---
@@ -266,5 +282,21 @@ end
 -- @hook
 -- @realm shared
 function GM:TTT2PostDoorSetup(doorsTable)
+
+end
+
+-- Called after all roles were loaded, @{ROLE:Preinitialize} and @{ROLE:Initialie} were called
+-- and their convars were set up.
+-- @hook
+-- @realm shared
+function GM:TTT2RolesLoaded()
+
+end
+
+-- Called after all roles were loaded, @{ROLE:Preinitialize} and @{ROLE:Initialie} were called
+-- and their convars were set up.
+-- @hook
+-- @realm shared
+function GM:TTT2BaseRoleInit()
 
 end

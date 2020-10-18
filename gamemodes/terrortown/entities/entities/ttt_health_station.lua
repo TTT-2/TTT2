@@ -77,6 +77,19 @@ local healsound = Sound("items/medshot4.wav")
 local failsound = Sound("items/medshotno1.wav")
 local last_sound_time = 0
 
+---
+-- This hook that is called on the use of this entity, but only if the player
+-- can be healed.
+-- @param Player ply The player that is healed
+-- @param Entity ent The healthstation entity that is used
+-- @param number healed The amount of health receivde in this tick
+-- @return boolean Return false to cancel the heal tick
+-- @hook
+-- @realm server
+function GM:TTTPlayerUsedHealthStation(ply, ent, healed)
+
+end
+
 function ENT:GiveHealth(ply, max_heal)
 	if self:GetStoredHealth() > 0 then
 		max_heal = max_heal or self.MaxHeal
@@ -87,9 +100,12 @@ function ENT:GiveHealth(ply, max_heal)
 			local healed = self:TakeFromStorage(math.min(max_heal, dmg))
 			local new = math.min(ply:GetMaxHealth(), ply:Health() + healed)
 
+			if hook.Run("TTTPlayerUsedHealthStation", ply, self, healed) == false then
+				return false
+			end
+
 			ply:SetHealth(new)
 
-			hook.Run("TTTPlayerUsedHealthStation", ply, self, healed)
 
 			if last_sound_time + 2 < CurTime() then
 				self:EmitSound(healsound)
