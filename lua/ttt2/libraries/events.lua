@@ -301,7 +301,7 @@ if CLIENT then
 			newEvent:SetScoreTable(eventData.score)
 			newEvent:SetPlayersTable(eventData.players)
 
-			events.list[#events.list + 1] = newEvent
+			events.list[i] = newEvent
 		end
 
 		-- set old deprecated event table
