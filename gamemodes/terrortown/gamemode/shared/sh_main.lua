@@ -16,7 +16,12 @@ function GM:TTT2Initialize()
 	-- load all roles
 	roles.OnLoaded()
 
+	---
+	-- @realm shared
 	hook.Run("TTT2RolesLoaded")
+
+	---
+	-- @realm shared
 	hook.Run("TTT2BaseRoleInit")
 
 	-- load all HUDs
@@ -86,6 +91,8 @@ function GM:Move(ply, moveData)
 	if ply.sprintMultiplier and (ply.sprintProgress or 0) > 0 then
 		local sprintMultiplierModifier = {1}
 
+		---
+		-- @realm shared
 		hook.Run("TTT2PlayerSprintMultiplier", ply, sprintMultiplierModifier)
 
 		mul = mul * ply.sprintMultiplier * sprintMultiplierModifier[1]

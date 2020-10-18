@@ -253,6 +253,8 @@ function SWEP:SecondaryAttack()
 	local ply = tr.Entity
 
 	if tr.Hit and IsValid(ply) and ply:IsPlayer() and (owner:EyePos() - tr.HitPos):Length() < 100 then
+		---
+		-- @realm shared
 		if SERVER and not ply:IsFrozen() and not hook.Run("TTT2PlayerPreventPush", owner, ply) then
 			local pushvel = tr.Normal * cv_crowbar_pushforce:GetFloat()
 			pushvel.z = math.Clamp(pushvel.z, 50, 100) -- limit the upward force to prevent launching

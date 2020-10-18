@@ -180,6 +180,8 @@ if SERVER then
 
 		door_list.doors = doors
 
+		---
+		-- @realm server
 		hook.Run("TTT2PostDoorSetup", doors)
 
 		local amountDoors = #doors
@@ -206,6 +208,8 @@ else -- CLIENT
 
 		door_list.doors = doors
 
+		---
+		-- @realm client
 		hook.Run("TTT2PostDoorSetup", doors)
 	end)
 end
@@ -522,6 +526,8 @@ if SERVER then
 
 		-- handle the entity input types
 		if name == "lock" then
+			---
+			-- @realm server
 			local shouldCancel = hook.Run("TTT2BlockDoorLock", ent, activator, caller)
 
 			if shouldCancel then
@@ -539,6 +545,8 @@ if SERVER then
 				ent:SetNWBool("ttt2_door_locked", ent:GetInternalVariable("m_bLocked") or false)
 			end)
 		elseif name == "unlock" then
+			---
+			-- @realm server
 			local shouldCancel = hook.Run("TTT2BlockDoorUnlock", ent, activator, caller)
 
 			if shouldCancel then
@@ -561,6 +569,8 @@ if SERVER then
 				return true
 			end
 
+			---
+			-- @realm server
 			local shouldCancel = hook.Run("TTT2BlockDoorClose", ent, activator, caller)
 
 			if shouldCancel then
@@ -574,6 +584,8 @@ if SERVER then
 			end
 
 		elseif name == "use" and not ent:IsDoorOpen() then
+			---
+			-- @realm server
 			local shouldCancel = hook.Run("TTT2BlockDoorOpen", ent, activator, caller)
 
 			if shouldCancel then

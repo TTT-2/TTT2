@@ -87,6 +87,8 @@ else -- SERVER
 
 		local state = #args == 1 and tobool(args[1])
 
+		---
+		-- @realm server
 		if hook.Run("TTTToggleDisguiser", ply, state) then return end
 
 		ply:SetNWBool("disguised", state)

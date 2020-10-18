@@ -307,7 +307,9 @@ function SWEP:AddPlayerSample(corpse, killer)
 
 		DamageLog("SAMPLE:\t " .. owner:Nick() .. " retrieved DNA of " .. (IsValid(killer) and killer:Nick() or "<disconnected>") .. " from corpse of " .. (IsValid(corpse) and CORPSE.GetPlayerNick(corpse) or "<invalid>"))
 
-		hook.Call("TTTFoundDNA", GAMEMODE, owner, killer, corpse)
+		---
+		-- @realm shared
+		hook.Run("TTTFoundDNA", owner, killer, corpse)
 
 		self:Report(true, "dna_killer")
 	end
@@ -345,6 +347,8 @@ function SWEP:AddItemSample(ent)
 
 			DamageLog("SAMPLE:\t " .. owner:Nick() .. " retrieved DNA of " .. (IsValid(p) and p:Nick() or "<disconnected>") .. " from " .. ent:GetClass())
 
+			---
+			-- @realm shared
 			hook.Run("TTTFoundDNA", owner, p, ent)
 
 			self:Report(true, "dna_object")

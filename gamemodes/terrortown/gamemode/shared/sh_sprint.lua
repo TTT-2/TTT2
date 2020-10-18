@@ -168,11 +168,15 @@ function UpdateSprint()
 		local modifier = {1} -- Multiple hooking support
 
 		if not ply.isSprinting or not wantsToMove then
+			---
+			-- @realm shared
 			hook.Run("TTT2StaminaRegen", ply, modifier)
 
 			ply.sprintProgress = math.min((ply.oldSprintProgress or 0) + FrameTime() * modifier[1] * GetGlobalFloat("ttt2_sprint_stamina_regeneration"), 1)
 			ply.oldSprintProgress = ply.sprintProgress
 		elseif wantsToMove then
+			---
+			-- @realm shared
 			hook.Run("TTT2StaminaDrain", ply, modifier)
 
 			ply.sprintProgress = math.max((ply.oldSprintProgress or 0) - FrameTime() * modifier[1] * GetGlobalFloat("ttt2_sprint_stamina_consumption"), 0)

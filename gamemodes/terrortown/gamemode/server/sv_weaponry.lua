@@ -141,6 +141,8 @@ local function GetLoadoutWeapons(subrole)
 
 	loadout_weapons[subrole] = tmpLoadoutWeps
 
+	---
+	-- @realm server
 	hook.Run("TTT2ModifyDefaultLoadout", loadout_weapons, subrole)
 
 	return loadout_weapons[subrole]
@@ -269,6 +271,8 @@ local function GetLoadoutItems(subrole)
 
 	loadout_items[subrole] = tmpLoadoutItems
 
+	---
+	-- @realm server
 	hook.Run("TTT2ModifyDefaultLoadout", loadout_items, subrole)
 
 	return loadout_items[subrole]
@@ -385,7 +389,7 @@ end
 ---
 -- Called to give @{Player}s the default set of @{Weapon}s.
 -- @note This function may not work in your custom gamemode if you have overridden your
--- @{GM:PlayerSpawn} and you do not use self.BaseClass.PlayerSpawn or @{hook.Call}.
+-- @{GM:PlayerSpawn} and you do not use self.BaseClass.PlayerSpawn or @{hook.Run}.
 -- @param Player ply @{Player} to give @{Weapon}s to
 -- @note Note that this is called both when a @{Player} spawns and when a round starts
 -- @hook
@@ -473,6 +477,8 @@ function GM:UpdatePlayerLoadouts()
 	local plys = player.GetAll()
 
 	for i = 1, #plys do
+		---
+		-- @realm server
 		hook.Run("PlayerLoadout", plys[i], false)
 	end
 end
@@ -493,6 +499,8 @@ local function DropActiveAmmo(ply)
 
 	local hook_data = {wep:Clip1()}
 
+	---
+	-- @realm server
 	if hook.Run("TTT2DropAmmo", ply, hook_data) == false then
 		LANG.Msg(ply, "drop_ammo_prevented", nil, MSG_CHAT_WARN)
 

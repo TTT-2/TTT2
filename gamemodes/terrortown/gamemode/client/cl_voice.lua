@@ -29,6 +29,8 @@ g_VoicePanelList = nil
 local function VoiceTryEnable()
 	local client = LocalPlayer()
 
+	---
+	-- @realm client
 	if hook.Run("TTT2CanUseVoiceChat", client, false) == false then
 		return false
 	end
@@ -56,6 +58,8 @@ end
 local function VoiceTeamTryEnable()
 	local client = LocalPlayer()
 
+	---
+	-- @realm client
 	if hook.Run("TTT2CanUseVoiceChat", client, true) == false then
 		return false
 	end
@@ -195,6 +199,8 @@ function GM:PlayerStartVoice(ply)
 		pnl.Color = DETECTIVE.color
 	end
 
+	---
+	-- @realm client
 	pnl.Color = hook.Run("TTT2ModifyVoiceChatColor", ply) or pnl.Color
 
 	PlayerVoicePanels[ply] = pnl

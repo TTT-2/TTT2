@@ -34,6 +34,8 @@ function ROLE:IsSelectable(avoidHook)
 		or (GetConVar("ttt_newroles_enabled"):GetBool() or self == DETECTIVE)
 		and not self.notSelectable
 		and GetConVar("ttt_" .. self.name .. "_enabled"):GetBool()
+		---
+		-- @realm server
 		and (avoidHook or not hook.Run("TTT2RoleNotSelectable", self))
 end
 

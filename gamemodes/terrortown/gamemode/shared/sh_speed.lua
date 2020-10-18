@@ -26,6 +26,9 @@ function SPEED:HandleSpeedCalculation(ply, moveData)
 	end
 
 	local speedMultiplierModifier = {1}
+
+	---
+	-- @realm shared
 	local returnMultiplier = hook.Run("TTTPlayerSpeedModifier", ply, isSlowed, moveData, speedMultiplierModifier) or 1
 
 	local oldval = ply:GetSpeedMultiplier()

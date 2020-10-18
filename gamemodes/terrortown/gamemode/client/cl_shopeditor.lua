@@ -45,6 +45,8 @@ function ShopEditor.GetEquipmentForRoleAll()
 		bobs_blacklisted = true
 	}
 
+	---
+	-- @realm client
 	hook.Run("TTT2ModifyShopEditorIgnoreEquip", eject) -- possibility to modify from externally
 
 	local itms = items.GetList()

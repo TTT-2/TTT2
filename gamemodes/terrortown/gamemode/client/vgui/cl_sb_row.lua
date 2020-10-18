@@ -129,8 +129,10 @@ function PANEL:Init()
 		self:AddColumn(GetTranslation("sb_karma"), _func4)
 	end
 
+	---
 	-- Let hooks add their custom columns
-	hook.Call("TTTScoreboardColumns", nil, self)
+	-- @realm client
+	hook.Run("TTTScoreboardColumns", self)
 
 	for i = 1, #self.cols do
 		self.cols[i]:SetMouseInputEnabled(false)
@@ -287,7 +289,9 @@ end
 
 local function ColorForPlayer(ply)
 	if IsValid(ply) then
-		local c = hook.Call("TTTScoreboardColorForPlayer", GAMEMODE, ply)
+		---
+		-- @realm client
+		local c = hook.Run("TTTScoreboardColorForPlayer", ply)
 
 		-- verify that we got a proper color
 		if c and istable(c) and c.r and c.b and c.g and c.a then
@@ -315,7 +319,10 @@ function PANEL:Paint(width, height)
 	--	end
 
 	local ply = self.Player
-	local c = hook.Call("TTTScoreboardRowColorForPlayer", GAMEMODE, ply)
+
+	---
+	-- @realm client
+	local c = hook.Run("TTTScoreboardRowColorForPlayer", ply)
 
 	surface.SetDrawColor(clr(c))
 	surface.DrawRect(0, 0, width, SB_ROW_HEIGHT)
@@ -659,7 +666,9 @@ function PANEL:DoRightClick()
 	local menu = DermaMenu()
 	menu.Player = self:GetPlayer()
 
-	local close = hook.Call("TTTScoreboardMenu", nil, menu)
+	---
+	-- @realm client
+	local close = hook.Run("TTTScoreboardMenu", menu)
 	if close then
 		menu:Remove()
 

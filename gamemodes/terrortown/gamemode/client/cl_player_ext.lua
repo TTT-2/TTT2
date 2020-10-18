@@ -184,6 +184,8 @@ function GM:SetupMove(ply, mv, cmd)
 	net.Start("TTT2SetPlayerReady")
 	net.SendToServer()
 
+	---
+	-- @realm shared
 	hook.Run("TTT2PlayerReady", ply)
 
 	-- check if a resolution change happened while
@@ -192,6 +194,8 @@ function GM:SetupMove(ply, mv, cmd)
 	oldScrH = appearance.GetLastHeight()
 
 	if oldScrH ~= ScrH() or oldScrW ~= ScrW() then
+		---
+		-- @realm client
 		hook.Run("OnScreenSizeChanged", oldScrW, oldScrH)
 	end
 end

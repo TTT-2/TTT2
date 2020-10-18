@@ -238,7 +238,9 @@ function roleselection.GetSelectablePlayers(plys)
 	for i = 1, #plys do
 		local ply = plys[i]
 
-		-- everyone on the spec team is in specmode
+		---
+		-- Everyone on the spec team is in specmode
+		-- @realm server
 		if not ply:GetForceSpec() and not hook.Run("TTT2DisableRoleSelection", ply) then
 			tmp[#tmp + 1] = ply
 		end
@@ -394,6 +396,8 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 
 	local layeredBaseRolesTbl = table.Copy(roleselection.baseroleLayers) -- layered roles list, the order defines the pick order. Just one role per layer is picked. Before a role is picked, the given layer is cleared (checked if the given roles are still selectable). Insert a table as a "or" list
 
+	---
+	-- @realm server
 	hook.Run("TTT2ModifyLayeredBaseRoles", layeredBaseRolesTbl, availableBaseRolesTbl)
 
 	local baseroleLoopTbl = { -- just contains available / selectable baseroles
@@ -439,6 +443,8 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 
 	local layeredSubRolesTbl = table.Copy(roleselection.subroleLayers) -- layered roles list, the order defines the pick order. Just one role per layer is picked. Before a role is picked, the given layer is cleared (checked if the given roles are still selectable). Insert a table as a "or" list
 
+	---
+	-- @realm server
 	hook.Run("TTT2ModifyLayeredSubRoles", layeredSubRolesTbl, availableSubRolesTbl)
 
 	-- now we need to select the subroles
@@ -487,6 +493,8 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 		end
 	end
 
+	---
+	-- @realm server
 	hook.Run("TTT2ModifySelectableRoles", selectableRoles)
 
 	roleselection.selectableRoles = selectableRoles
@@ -591,6 +599,8 @@ local function SelectForcedRoles(plys, selectableRoles)
 			roleselection.finalRoles[ply] = subrole
 			curCount = curCount + 1
 
+			---
+			-- @realm server
 			hook.Run("TTT2ReceivedForcedRole", ply, subrole)
 
 			selectedPlys[ply] = true

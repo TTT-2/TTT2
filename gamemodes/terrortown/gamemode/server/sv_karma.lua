@@ -154,7 +154,9 @@ end
 -- @param Player victim
 -- @realm server
 function KARMA.GivePenalty(ply, penalty, victim)
-	if not hook.Call("TTTKarmaGivePenalty", nil, ply, penalty, victim) then
+	---
+	-- @realm server
+	if not hook.Run("TTTKarmaGivePenalty", ply, penalty, victim) then
 		ply:SetLiveKarma(math.max(ply:GetLiveKarma() - penalty, 0))
 	end
 end
@@ -205,6 +207,8 @@ local function WasAvoidable(attacker, victim, dmginfo)
 	local infl = dmginfo:GetInflictor()
 
 	if attacker:IsInTeam(victim) and IsValid(infl) and infl.Avoidable ~= false then
+		---
+		-- @realm server
 		local ret = hook.Run("TTT2KarmaPenaltyMultiplier", attacker, victim, dmginfo)
 		if ret then
 			return ret
@@ -516,7 +520,9 @@ local reason = "Karma too low"
 -- @param Player ply
 -- @realm server
 function KARMA.CheckAutoKick(ply)
-	if ply:GetBaseKarma() > config.kicklevel:GetInt() or hook.Call("TTTKarmaLow", GAMEMODE, ply) == false then return end
+	---
+	-- @realm server
+	if ply:GetBaseKarma() > config.kicklevel:GetInt() or hook.Run("TTTKarmaLow", ply) == false then return end
 
 	ServerLog(ply:Nick() .. " autokicked/banned for low karma.\n")
 

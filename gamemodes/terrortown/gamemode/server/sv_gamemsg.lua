@@ -77,6 +77,9 @@ end
 -- Teamchat
 local function RoleChatMsg(sender, msg)
 	local tm = sender:GetTeam()
+
+	---
+	-- @realm server
 	if tm == TEAM_NONE or sender:GetSubRoleData().disabledTeamChat or TEAMS[tm].alone or hook.Run("TTT2AvoidTeamChat", sender, tm, msg) == false then return end
 
 	net.Start("TTT_RoleChat")
@@ -270,6 +273,8 @@ function GM:PlayerCanSeePlayersChat(text, teamOnly, reader, sender)
 		and not sender:GetSubRoleData().unknownTeam
 		and not sender:GetSubRoleData().disabledTeamChat
 		and not reader:GetSubRoleData().disabledTeamChatRecv
+		---
+		-- @realm server
 		and hook.Run("TTT2CanSeeChat", reader, sender, teamOnly) ~= true
 	) or sTeam and lTeam then -- If the sender and reader are spectators
 		return true
@@ -364,6 +369,8 @@ function GM:PlayerSay(ply, text, teamOnly)
 
 			return ""
 		elseif not teamOnly and not team_spec then
+			---
+			-- @realm server
 			if ply:GetSubRoleData().disabledGeneralChat or hook.Run("TTT2AvoidGeneralChat", ply, text) == false then
 				return ""
 			end
@@ -491,7 +498,9 @@ local function ttt_radio_send(ply, cmd, args)
 		name = LANG.NameParam(msg_target)
 	end
 
-	if hook.Call("TTTPlayerRadioCommand", GAMEMODE, ply, msg_name, msg_target) then return end
+	---
+	-- @realm server
+	if hook.Run("TTTPlayerRadioCommand", ply, msg_name, msg_target) then return end
 
 	net.Start("TTT_RadioMsg")
 	net.WriteEntity(ply)

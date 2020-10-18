@@ -151,6 +151,8 @@ function HELPSCRN:ShowMainMenu()
 
 	InternalModifyHelpMainMenu(helpData)
 
+	---
+	-- @realm client
 	hook.Run("TTT2ModifyHelpMainMenu", helpData)
 
 	local menuesNormal = helpData:GetVisibleNormalMenues()
@@ -206,6 +208,8 @@ function HELPSCRN:BuildContentArea()
 
 	if not IsValid(parent) then return end
 
+	---
+	-- @realm client
 	if hook.Run("TTT2OnHelpSubMenuClear", parent, self.currentMenuId, self.lastMenuData, self.menuData) == false then return end
 
 	parent:Clear()
@@ -297,6 +301,8 @@ function HELPSCRN:ShowSubMenu(data)
 
 	InternalModifyHelpSubMenu(helpData, data.id)
 
+	---
+	-- @realm client
 	hook.Run("TTT2ModifyHelpSubMenu", helpData, data.id)
 
 	-- cache reference to last active button

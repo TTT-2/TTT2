@@ -146,6 +146,8 @@ local function GetDataForRadar(ply, ent)
 			subrole = ROLE_INNOCENT
 		end
 	else
+		---
+		-- @realm server
 		subrole, team = hook.Run("TTT2ModifyRadarRole", ply, ent)
 
 		if not subrole then

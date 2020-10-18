@@ -106,7 +106,9 @@ function GM:PlayerCanHearPlayersVoice(listener, speaker)
 		return false, false
 	end
 
+	---
 	-- custom post-settings
+	-- @realm server
 	local can_hear, is_locational = hook.Run("TTT2CanHearVoiceChat", listener, speaker, not isGlobalVoice)
 
 	if can_hear ~= nil then
@@ -157,6 +159,9 @@ local function RoleGlobalVoice(ply, isGlobal)
 	if not IsValid(ply) then return end
 
 	ply[ply:GetTeam() .. "_gvoice"] = isGlobal
+
+	---
+	-- @realm server
 	ply.blockVoice = hook.Run("TTT2CanUseVoiceChat", ply, not isGlobal) == false
 
 	SendRoleVoiceState(ply)

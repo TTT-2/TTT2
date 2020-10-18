@@ -116,6 +116,8 @@ function ENT:GiveHealth(ply, max_heal)
 
 			ply:SetHealth(new)
 
+			---
+			-- @realm shared
 			hook.Run("TTTPlayerUsedHealthStation", ply, self, healed)
 
 			if last_sound_time + 2 < CurTime() then

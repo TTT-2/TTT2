@@ -134,8 +134,17 @@ function GM:PlayerSpawn(ply)
 	ply:UnSpectate()
 
 	-- ye olde hooks
+
+	---
+	-- @realm server
 	hook.Run("PlayerLoadout", ply, false)
+
+	---
+	-- @realm server
 	hook.Run("PlayerSetModel", ply)
+
+	---
+	-- @realm server
 	hook.Run("TTTPlayerSetColor", ply)
 
 	ply:SetupHands()
@@ -224,7 +233,7 @@ end
 -- Called whenever a @{Player} spawns and must choose a model.
 -- A good place to assign a model to a @{Player}.
 -- @note This function may not work in your custom gamemode if you have overridden
--- your @{GM:PlayerSpawn} and you do not use self.BaseClass.PlayerSpawn or @{hook.Call}.
+-- your @{GM:PlayerSpawn} and you do not use self.BaseClass.PlayerSpawn or @{hook.Run}.
 -- @param Player ply The @{Player} being chosen
 -- @hook
 -- @realm server
@@ -580,6 +589,8 @@ local function CheckCreditAward(victim, attacker)
 
 	if not IsValid(attacker) or not attacker:IsPlayer() or not attacker:IsActive() then return end
 
+	---
+	-- @realm server
 	local ret = hook.Run("TTT2CheckCreditAward", victim, attacker)
 	if ret == false then return end
 
@@ -829,6 +840,8 @@ function GM:PlayerDeath(victim, infl, attacker)
 	net.Start("TTT_PlayerDied")
 	net.Send(victim)
 
+	---
+	-- @realm server
 	if HasteMode() and GetRoundState() == ROUND_ACTIVE and not hook.Run("TTT2ShouldSkipHaste", victim, attacker) then
 		IncRoundEnd(GetConVar("ttt_haste_minutes_per_death"):GetFloat() * 60)
 	end
@@ -837,6 +850,8 @@ function GM:PlayerDeath(victim, infl, attacker)
 		victim.killerSpec = attacker
 	end
 
+	---
+	-- @realm server
 	hook.Run("TTT2PostPlayerDeath", victim, infl, attacker)
 end
 
@@ -882,6 +897,8 @@ function GM:PostPlayerDeath(ply)
 
 		ply:SpawnForRound(true)
 
+		---
+		-- @realm server
 		hook.Run("PlayerLoadout", ply, false)
 	end)
 end
@@ -1193,6 +1210,8 @@ function GM:EntityTakeDamage(ent, dmginfo)
 
 	local att = dmginfo:GetAttacker()
 
+	---
+	-- @realm server
 	if not hook.Run("AllowPVP") then
 		-- if player vs player damage, or if damage versus a prop, then zero
 		if ent:IsExplosive() or ent:IsPlayer() and IsValid(att) and att:IsPlayer() then
@@ -1200,6 +1219,8 @@ function GM:EntityTakeDamage(ent, dmginfo)
 			dmginfo:SetDamage(0)
 		end
 	elseif ent:IsPlayer() then
+		---
+		-- @realm server
 		hook.Run("PlayerTakeDamage", ent, dmginfo:GetInflictor(), att, dmginfo:GetDamage(), dmginfo)
 	elseif ent:IsExplosive() then
 		-- When a barrel hits a player, that player damages the barrel because

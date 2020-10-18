@@ -249,7 +249,9 @@ end
 function GM:HUDDrawTargetID()
 	local client = LocalPlayer()
 
-	if hook.Call("HUDShouldDraw", GAMEMODE, "TTTPropSpec") then
+	---
+	-- @realm client
+	if hook.Run("HUDShouldDraw", "TTTPropSpec") then
 		DrawPropSpecLabels(client)
 	end
 
@@ -288,6 +290,8 @@ function GM:HUDDrawTargetID()
 	-- only add onscreen infos when the entity isn't the local player
 	if ent == client then return end
 
+	---
+	-- @realm client
 	local changedEnt = hook.Run("TTTModifyTargetedEntity", ent, distance)
 
 	if changedEnt then
@@ -341,8 +345,10 @@ function GM:HUDDrawTargetID()
 	HUDDrawTargetIDDoors(tData)
 	HUDDrawTargetIDDNAScanner(tData)
 
+	---
 	-- now run a hook that can be used by addon devs that changes the appearance
 	-- of the targetid
+	-- @realm client
 	hook.Run("TTTRenderEntityInfo", tData)
 
 	-- draws an outline around the entity if defined

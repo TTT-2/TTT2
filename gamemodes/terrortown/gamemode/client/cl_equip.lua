@@ -780,6 +780,8 @@ function TraitorMenuPopup()
 		dsheet:AddSheet(GetTranslation("reroll_name"), dtransfer, "vgui/ttt/equip/reroll.png", false, false, GetTranslation("equip_tooltip_reroll"))
 	end
 
+	---
+	-- @realm client
 	hook.Run("TTTEquipmentTabs", dsheet)
 
 	-- couple panelselect with info
@@ -994,7 +996,9 @@ local function ReceiveBoughtItem()
 		item:Bought(LocalPlayer())
 	end
 
+	---
 	-- I can imagine custom equipment wanting this, so making a hook
+	-- @realm client
 	hook.Run("TTTBoughtItem", item ~= nil, (item and item.oldId or nil) or id)
 end
 net.Receive("TTT_BoughtItem", ReceiveBoughtItem)
@@ -1026,6 +1030,8 @@ function GM:OnContextMenuOpen()
 		return
 	end
 
+	---
+	-- @realm client
 	if hook.Run("TTT2PreventAccessShop", client) then return end
 
 	if IsValid(eqframe) then

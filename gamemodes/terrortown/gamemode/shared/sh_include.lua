@@ -139,6 +139,8 @@ if SERVER then
 	table.Merge(TTTFiles, tmp)
 end
 
+---
+-- @realm shared
 hook.Run("TTT2ModifyFiles", TTTFiles)
 
 if SERVER then

@@ -112,6 +112,8 @@ net.Receive("TTT2ToggleTButton", function(len, ply)
 
 	if not IsValid(ply) or not IsValid(ent) or not ply:IsAdmin() then return end
 
+	---
+	-- @realm server
 	local use, message = hook.Run("TTTCanToggleTraitorButton", ent, ply)
 
 	if not use then
@@ -131,6 +133,8 @@ local function ActivateTButton(ply, ent)
 
 	if not ent.PlayerRoleCanUse or not ent:PlayerRoleCanUse(ply) or not ent.TraitorUse then return end
 
+	---
+	-- @realm server
 	local use, message = hook.Run("TTTCanUseTraitorButton", ent, ply)
 
 	if not use then
@@ -287,6 +291,8 @@ function ENT:TraitorUse(ply)
 		self:SetNextUseTime(CurTime() + self:GetDelay())
 	end
 
+	---
+	-- @realm server
 	hook.Run("TTTTraitorButtonActivated", self, ply)
 
 	return true

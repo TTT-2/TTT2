@@ -366,6 +366,8 @@ function SWEP:AllowPickup(target)
 		and target.CanPickup ~= false
 		and (target:GetClass() ~= "prop_ragdoll" or GetGlobalBool("ttt_ragdoll_carrying"))
 		and (not target:IsWeapon() or GetGlobalBool("ttt_weapon_carrying"))
+		---
+		-- @realm shared
 		and not hook.Run("TTT2PlayerPreventPickupEnt", ply, target)
 end
 

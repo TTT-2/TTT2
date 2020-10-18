@@ -101,6 +101,8 @@ local function IdentifyBody(ply, rag)
 		return false
 	end
 
+	---
+	-- @realm server
 	if not hook.Run("TTTCanIdentifyCorpse", ply, rag) then return end
 
 	local finder = ply:Nick()
@@ -117,6 +119,8 @@ local function IdentifyBody(ply, rag)
 			return
 		end
 
+		---
+		-- @realm server
 		if deadply and not deadply:Alive() and hook.Run("TTT2ConfirmPlayer", deadply, ply, rag) ~= false then
 			deadply:ConfirmPlayer(true)
 
@@ -125,8 +129,12 @@ local function IdentifyBody(ply, rag)
 			SCORE:HandleBodyFound(ply, deadply)
 		end
 
+		---
+		-- @realm server
 		hook.Run("TTTBodyFound", ply, deadply, rag)
 
+		---
+		-- @realm server
 		if hook.Run("TTT2SetCorpseFound", deadply, ply, rag) ~= false then
 			CORPSE.SetFound(rag, true)
 		end
@@ -239,6 +247,8 @@ local function ttt_call_detective(ply, cmd, args)
 		if CORPSE.GetFound(rag, false) then
 			local plyTable = GetRoleChatFilter(ROLE_DETECTIVE, true)
 
+			---
+			-- @realm server
 			hook.Run("TTT2ModifyCorpseCallRadarRecipients", plyTable, rag, ply)
 
 			-- show indicator in radar to detectives
@@ -336,6 +346,8 @@ function CORPSE.ShowSearch(ply, rag, isCovert, isLongRange)
 		return
 	end
 
+	---
+	-- @realm server
 	if not hook.Run("TTTCanSearchCorpse", ply, rag, isCovert, isLongRange) then return end
 
 	-- init a heap of data we'll be sending
@@ -616,6 +628,8 @@ function CORPSE.Create(ply, attacker, dmginfo)
 		v:Mul(0.2)
 	end
 
+	---
+	-- @realm server
 	hook.Run("TTT2ModifyRagdollVelocity", ply, rag, v)
 
 	for i = 0, num do
@@ -646,6 +660,8 @@ function CORPSE.Create(ply, attacker, dmginfo)
 		end)
 	end
 
+	---
+	-- @realm server
 	hook.Run("TTTOnCorpseCreated", rag, ply)
 
 	return rag -- we'll be speccing this

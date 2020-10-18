@@ -998,6 +998,8 @@ if SERVER then
 
 		if fallback ~= roleData.name then return end -- TODO why? remove and replace SHOP_UNSET with index of the current role
 
+		---
+		-- @realm server
 		hook.Run("TTT2LoadSingleShopEquipment", roleData)
 
 		SYNC_EQUIP = SYNC_EQUIP or {}

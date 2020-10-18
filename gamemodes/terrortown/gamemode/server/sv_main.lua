@@ -287,8 +287,12 @@ function GM:Initialize()
 	MsgN("Trouble In Terrorist Town 2 gamemode initializing...")
 	ShowVersion()
 
+	---
+	-- @realm shared
 	hook.Run("TTT2Initialize")
 
+	---
+	-- @realm shared
 	hook.Run("TTT2FinishedLoading")
 
 	-- check for language files to mark them as downloadable for clients
@@ -366,6 +370,8 @@ function GM:Initialize()
 		ErrorNoHalt("TTT2 WARNING: CS:S does not appear to be mounted by GMod. Things may break in strange ways. Server admin? Check the TTT readme for help.\n")
 	end
 
+	---
+	-- @realm shared
 	hook.Run("PostInitialize")
 end
 
@@ -414,6 +420,8 @@ function GM:InitPostEntity()
 
 	MsgN("[TTT2][INFO] Client post-init...")
 
+	---
+	-- @realm shared
 	hook.Run("TTTInitPostEntity")
 
 	items.MigrateLegacyItems()
@@ -500,10 +508,16 @@ function GM:InitPostEntity()
 	-- initialize fallback shops
 	InitFallbackShops()
 
+	---
+	-- @realm server
 	hook.Run("PostInitPostEntity")
 
+	---
+	-- @realm server
 	hook.Run("InitFallbackShops")
 
+	---
+	-- @realm server
 	hook.Run("LoadedFallbackShops")
 
 	-- initialize the equipment
@@ -571,6 +585,8 @@ function GM:SyncGlobals()
 
 	SetGlobalBool("ttt2_confirm_team", confirm_team:GetBool())
 
+	---
+	-- @realm server
 	hook.Run("TTT2SyncGlobals")
 end
 
@@ -783,7 +799,13 @@ local function WinChecker()
 	if CurTime() > GetGlobalFloat("ttt_round_end", 0) then
 		EndRound(WIN_TIMELIMIT)
 	elseif not ttt_dbgwin:GetBool() then
-		win = hook.Run("TTT2PreWinChecker") or hook.Call("TTTCheckForWin", GAMEMODE)
+		---
+		-- @realm server
+		win = hook.Run("TTT2PreWinChecker")
+
+		---
+		-- @realm server
+		win = win or hook.Run("TTTCheckForWin")
 
 		if win == WIN_NONE then return end
 
@@ -811,7 +833,9 @@ local function NameChangeKick()
 			continue
 		end
 
-		if not ply.has_spawned or ply.spawn_nick == ply:Nick() or hook.Call("TTTNameChangeKick", GAMEMODE, ply) then continue end
+		---
+		-- @realm server
+		if not ply.has_spawned or ply.spawn_nick == ply:Nick() or hook.Run("TTTNameChangeKick", ply) then continue end
 
 		local t = namechangebtime:GetInt()
 		local msg = "Changed name during a round"
@@ -888,6 +912,9 @@ function GM:PostCleanupMap()
 	ents.TTT.FixParentedPostCleanup()
 
 	entityOutputs.SetUp()
+
+	---
+	-- @realm server
 	hook.Run("TTT2PostCleanupMap")
 
 	door.SetUp()
@@ -1008,7 +1035,9 @@ function PrepareRound()
 	-- Check playercount
 	if CheckForAbort() then return end
 
-	local delay_round, delay_length = hook.Call("TTTDelayRoundStartForVote", GAMEMODE)
+	---
+	-- @realm server
+	local delay_round, delay_length = hook.Run("TTTDelayRoundStartForVote")
 
 	if delay_round then
 		delay_length = delay_length or 30
@@ -1042,7 +1071,10 @@ function PrepareRound()
 
 	-- New look. Random if no forced model set.
 	GAMEMODE.playermodel = GAMEMODE.force_plymodel == "" and GetRandomPlayerModel() or GAMEMODE.force_plymodel
-	GAMEMODE.playercolor = hook.Call("TTTPlayerColor", GAMEMODE, GAMEMODE.playermodel)
+
+	---
+	-- @realm server
+	GAMEMODE.playercolor = hook.Run("TTTPlayerColor", GAMEMODE.playermodel)
 
 	if CheckForAbort() then return end
 
@@ -1105,8 +1137,10 @@ function PrepareRound()
 		ply:SendRevivalReason(nil)
 	end
 
+	---
 	-- Tell hooks and map we started prep
-	hook.Call("TTTPrepareRound", GAMEMODE)
+	-- @realm server
+	hook.Run("TTTPrepareRound")
 
 	ents.TTT.TriggerRoundStateOutputs(ROUND_PREP)
 end
@@ -1137,6 +1171,8 @@ function TellTraitorsAboutTraitors()
 
 		local tmp = table.Copy(traitornicks)
 
+		---
+		-- @realm server
 		local shouldShow = hook.Run("TTT2TellTraitors", tmp, v)
 
 		if shouldShow == false or tmp == nil or #tmp == 0 then continue end
@@ -1327,7 +1363,9 @@ function BeginRound()
 		ply:SetActiveInRound(ply:Alive() and ply:IsTerror())
 	end
 
-	hook.Call("TTTBeginRound", GAMEMODE)
+	---
+	-- @realm server
+	hook.Run("TTTBeginRound")
 
 	ents.TTT.TriggerRoundStateOutputs(ROUND_BEGIN)
 end
@@ -1385,6 +1423,8 @@ function CheckForMapSwitch()
 		timer.Stop("end2prep")
 		SetRoundEnd(CurTime())
 
+		---
+		-- @realm server
 		hook.Run("TTT2LoadNextMap", nextmap, rounds_left, time_left)
 	else
 		LANG.Msg("limit_left", {num = rounds_left, time = math.ceil(time_left / 60)})
@@ -1440,10 +1480,12 @@ function EndRound(result)
 	-- send the clients the round log, players will be shown the report
 	SCORE:StreamToClients()
 
+	---
 	-- server plugins might want to start a map vote here or something
 	-- these hooks are not used by TTT internally
 	-- possible incompatibility for other addons
-	hook.Call("TTTEndRound", GAMEMODE, result)
+	-- @realm server
+	hook.Run("TTTEndRound", result)
 
 	ents.TTT.TriggerRoundStateOutputs(ROUND_POST, result)
 end
@@ -1492,6 +1534,8 @@ function GM:TTTCheckForWin()
 		end
 	end
 
+	---
+	-- @realm server
 	hook.Run("TTT2ModifyWinningAlives", alive)
 
 	local checkedTeams = {}

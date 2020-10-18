@@ -130,6 +130,8 @@ end
 -- Sets the default amount of credits
 -- @realm server
 function plymeta:SetDefaultCredits()
+	---
+	-- @realm server
 	if hook.Run("TTT2SetDefaultCredits", self) then return end
 
 	if not self:IsShopper() then
@@ -154,6 +156,8 @@ function plymeta:SetDefaultCredits()
 		c = c + (ConVarExists("ttt_credits_alonebonus") and GetConVar("ttt_credits_alonebonus"):GetFloat() or 0)
 	end
 
+	---
+	-- @realm server
 	self:SetCredits(math.ceil(hook.Run("TTT2ModifyDefaultTraitorCredits", self, c) or c))
 end
 
@@ -598,9 +602,14 @@ end
 -- @param boolean dead_only If dead_only is
 -- true, only spawns if player is dead, else just makes sure he is healed.
 -- @return boolean
--- @realm shared
+-- @realm server
 function plymeta:SpawnForRound(dead_only)
-	hook.Call("PlayerSetModel", GAMEMODE, self)
+	---
+	-- @realm server
+	hook.Run("PlayerSetModel", self)
+
+	---
+	-- @realm server
 	hook.Run("TTTPlayerSetColor", self)
 
 	-- wrong alive status and not a willing spec who unforced after prep started
@@ -844,6 +853,8 @@ function plymeta:Revive(delay, OnRevive, DoCheck, needsCorpse, blockRound, OnFai
 			self:SetPos(spawnPos)
 			self:SetEyeAngles(spawnEyeAngle or Angle(0, 0, 0))
 
+			---
+			-- @realm server
 			hook.Run("PlayerLoadout", self, true)
 
 			self:SetCredits(CORPSE.GetCredits(corpse, 0))
@@ -1268,6 +1279,8 @@ end
 function plymeta:CanPickupWeapon(wep, forcePickup, dropBlockingWeapon)
 	self.forcedPickup = forcePickup
 
+	---
+	-- @realm server
 	local ret, errCode = hook.Run("PlayerCanPickupWeapon", self, wep, dropBlockingWeapon)
 
 	self.forcedPickup = false
@@ -1410,6 +1423,8 @@ local function SetPlayerReady(_, ply)
 	-- Send full state update to client
 	ttt2net.SendFullStateUpdate(ply)
 
+	---
+	-- @realm server
 	hook.Run("TTT2PlayerReady", ply)
 end
 net.Receive("TTT2SetPlayerReady", SetPlayerReady)

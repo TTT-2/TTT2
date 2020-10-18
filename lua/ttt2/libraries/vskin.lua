@@ -74,7 +74,9 @@ function vskin.UpdatedVSkin(oldSkinName, skinName)
 	-- run SKIN function to update color table
 	derma.GetSkinTable()["ttt2_default"]:UpdatedVSkin()
 
-	-- run hook for other addons to use
+	---
+	-- Run hook for other addons to use
+	-- @realm client
 	hook.Run("TTT2UpdatedVSkin", oldSkinName, skinName)
 end
 

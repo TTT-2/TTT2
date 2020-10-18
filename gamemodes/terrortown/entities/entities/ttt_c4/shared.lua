@@ -278,7 +278,9 @@ local c4boom = Sound("c4.explode")
 -- @param table tr Trace Structure
 -- @realm shared
 function ENT:Explode(tr)
-	hook.Call("TTTC4Explode", nil, self)
+	---
+	-- @realm shared
+	hook.Run("TTTC4Explode", self)
 
 	if SERVER then
 		self:SetNoDraw(true)
@@ -627,14 +629,18 @@ if SERVER then
 
 				bomb:Arm(ply, time)
 
-				hook.Call("TTTC4Arm", nil, bomb, ply)
+				---
+				-- @realm server
+				hook.Run("TTTC4Arm", bomb, ply)
 			end
 		end
 	end
 	concommand.Add("ttt_c4_config", ReceiveC4Config)
 
 	local function SendDisarmResult(ply, bomb, result)
-		hook.Call("TTTC4Disarm", nil, bomb, result, ply)
+		---
+		-- @realm server
+		hook.Run("TTTC4Disarm", bomb, result, ply)
 
 		net.Start("TTT_C4DisarmResult")
 		net.WriteEntity(bomb)
@@ -686,7 +692,9 @@ if SERVER then
 			else
 				local prints = bomb.fingerprints or {}
 
-				hook.Call("TTTC4Pickup", nil, bomb, ply)
+				---
+				-- @realm server
+				hook.Run("TTTC4Pickup", bomb, ply)
 
 				-- picks up weapon, switches if possible and needed, returns weapon if successful
 				local wep = ply:SafePickupWeaponClass("weapon_ttt_c4", true)
@@ -722,7 +730,9 @@ if SERVER then
 				-- spark to show onlookers we destroyed this bomb
 				util.EquipmentDestroyed(bomb:GetPos())
 
-				hook.Call("TTTC4Destroyed", nil, bomb, ply)
+				---
+				-- @realm server
+				hook.Run("TTTC4Destroyed", bomb, ply)
 
 				bomb:Remove()
 			end

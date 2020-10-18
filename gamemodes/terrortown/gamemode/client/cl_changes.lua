@@ -801,7 +801,9 @@ function CreateChanges()
 		</ul>
 	]], os.time({year = 2020, month = 09, day = 28}))
 
+	---
 	-- run hook for other addons to add their changelog as well
+	-- @realm client
 	hook.Run("TTT2AddChange", changes, currentVersion)
 end
 

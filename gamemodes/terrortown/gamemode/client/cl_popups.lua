@@ -13,6 +13,9 @@ local function GetTextForPlayer(ply)
 
 	if ply:GetTeam() ~= TEAM_TRAITOR then
 		local fallback = GetGlobalString("ttt_" .. roleData.abbr .. "_shop_fallback")
+
+		---
+		-- @realm client
 		if fallback == SHOP_DISABLED or hook.Run("TTT2PreventAccessShop", ply) then
 			return GetTranslation("info_popup_" .. roleData.name)
 		else
@@ -39,6 +42,9 @@ local function GetTextForPlayer(ply)
 			traitorlist = table.concat(traitorlist)
 
 			local fallback = GetGlobalString("ttt_" .. roleData.abbr .. "_shop_fallback")
+
+			---
+			-- @realm client
 			if fallback == SHOP_DISABLED or hook.Run("TTT2PreventAccessShop", ply) then
 				return GetTranslation("info_popup_" .. roleData.name, {traitorlist = traitorlist})
 			else
@@ -46,6 +52,9 @@ local function GetTextForPlayer(ply)
 			end
 		else
 			local fallback = GetGlobalString("ttt_" .. roleData.abbr .. "_shop_fallback")
+
+			---
+			-- @realm client
 			if fallback == SHOP_DISABLED or hook.Run("TTT2PreventAccessShop", ply) then
 				return GetTranslation("info_popup_" .. roleData.name .. "_alone")
 			else

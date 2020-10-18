@@ -63,7 +63,9 @@ function ScoreGroup(ply)
 		return -1
 	end
 
-	local group = hook.Call("TTTScoreGroup", nil, ply)
+	---
+	-- @realm client
+	local group = hook.Run("TTTScoreGroup", ply)
 
 	if group then -- If that hook gave us a group, use it
 		return group
@@ -204,7 +206,9 @@ function PANEL:Init()
 		self.ply_groups[GROUP_FOUND] = t
 	end
 
-	hook.Call("TTTScoreGroups", nil, self.ply_frame:GetCanvas(), self.ply_groups)
+	---
+	-- @realm client
+	hook.Run("TTTScoreGroups", self.ply_frame:GetCanvas(), self.ply_groups)
 
 	-- the various score column headers
 	self.cols = {}
@@ -224,8 +228,10 @@ function PANEL:Init()
 	self:AddFakeColumn(GetTranslation("equip_spec_name"), nil, nil, "name")
 	self:AddFakeColumn(GetTranslation("col_roles"), nil, nil, "role")
 
+	---
 	-- Let hooks add their column headers (via AddColumn() or AddFakeColumn())
-	hook.Call("TTTScoreboardColumns", nil, self)
+	-- @realm client
+	hook.Run("TTTScoreboardColumns", self)
 
 	self:UpdateScoreboard()
 	self:StartUpdateTimer()

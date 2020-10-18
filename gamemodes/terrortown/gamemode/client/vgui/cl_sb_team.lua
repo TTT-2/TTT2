@@ -114,6 +114,8 @@ end
 function PANEL:AddPlayerRow(ply)
 	if ScoreGroup(ply) ~= self.group or self.rows[ply] then return end
 
+	---
+	-- @realm client
 	hook.Run("TTT2ScoreboardAddPlayerRow", ply)
 
 	local row = vgui.Create("TTTScorePlayerRow", self)

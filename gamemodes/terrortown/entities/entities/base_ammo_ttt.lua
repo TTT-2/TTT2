@@ -72,7 +72,9 @@ function ENT:PlayerCanPickup(ply)
 		return false
 	end
 
-	local result = hook.Call("TTTCanPickupAmmo", nil, ply, self)
+	---
+	-- @realm shared
+	local result = hook.Run("TTTCanPickupAmmo", ply, self)
 	if result then
 		return result
 	end

@@ -307,6 +307,8 @@ if SERVER then
 	function entmeta:SafeDestroyDoor(ply, pushForce, surpressPair)
 		if self.isDestroyed or not self:PlayerCanOpenDoor() or not door.IsValidNormal(self:GetClass()) then return end
 
+		---
+		-- @realm server
 		if hook.Run("TTT2BlockDoorDestruction", self, ply) then return end
 
 		-- if door is destroyed, spawn a prop in the world
@@ -356,6 +358,8 @@ if SERVER then
 
 			doorProp:GetPhysicsObject():ApplyForceCenter(pushForce or Vector(0, 0, 0))
 
+			---
+			-- @realm server
 			hook.Run("TTT2DoorDestroyed", doorProp, ply)
 		end)
 

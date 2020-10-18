@@ -86,6 +86,8 @@ function SCORE:HandleKill(victim, attacker, dmginfo)
 		e.att.t = attacker:GetTeam()
 	end
 
+	---
+	-- @realm server
 	hook.Run("TTT2ModifyScoringEvent", e, {
 			victim = victim,
 			attacker = attacker,
