@@ -45,11 +45,11 @@ function entityOutputs.RegisterHook(hookName)
 
 	entityOutputs.hooks[hookName] = true
 
-	---
-	-- @ignore
 	hook.Add(hookName .. "_Internal", hookName .. "_name", function()
 		local activator, caller = ACTIVATOR, CALLER
 
+		---
+		-- @ignore
 		hook.Run(hookName, caller, activator)
 	end)
 end
