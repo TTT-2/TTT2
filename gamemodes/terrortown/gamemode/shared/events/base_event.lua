@@ -5,17 +5,27 @@ EVENT.players = {}
 
 ---
 -- Sets the event data table to the event.
--- @param table event The event data table that is about to be added
+-- @param table event The event data table that should be added
 -- @internal
 -- @realm shared
 function EVENT:SetEventTable(event)
 	self.event = event
 end
 
+---
+-- Sets the score data table to the event.
+-- @param table event The score data table that should be added
+-- @internal
+-- @realm shared
 function EVENT:SetScoreTable(score)
 	self.score = score
 end
 
+---
+-- Sets the affected players data table to the event.
+-- @param table event The affected players data table that should be added
+-- @internal
+-- @realm shared
 function EVENT:SetPlayersTable(players)
 	self.players = players
 end
@@ -23,8 +33,7 @@ end
 ---
 -- Sets the score data table to the event.
 -- @param string ply64 The steamID64 of the affected player
--- @param table score The score data table that is about to be added
--- @internal
+-- @param table score The score data table that should be added
 -- @realm shared
 function EVENT:SetPlayerScore(ply64, score)
 	if not ply64 or not score then return end
@@ -43,18 +52,37 @@ function EVENT:GetDeprecatedFormat(event)
 
 end
 
+---
+-- Checks whether the given player has scored in this event or not.
+-- @param string ply64 The steamID64 of the player that should be checked
+-- @return boolean Returns true if the player has a score table, they could still have received 0 points
+-- @realm shared
 function EVENT:HasPlayerScore(ply64)
 	return self.score[ply64] ~= nil
 end
 
+---
+-- Checks if this event has score at all.
+-- @return boolean Returns true if there is score added in this event
+-- @realm server
 function EVENT:HasScore()
 	return self.score ~= {}
 end
 
+---
+-- Returns a list of all player steamID64s whom have received score in this event.
+-- @return table A table of all the steamID64s
+-- @realm shared
 function EVENT:GetScoredPlayers()
 	return table.GetKeys(self.score)
 end
 
+---
+-- Returns the complete score for the given player in this event. This takes care of
+-- events that give score for different things.
+-- @param string ply64 The steamID64 of the player that should be checked
+-- @return number The amount of score gained by this player in this event
+-- @realm shared
 function EVENT:GetSummedPlayerScore(ply64)
 	if not self:HasPlayerScore(ply64) then
 		return 0
@@ -69,10 +97,19 @@ function EVENT:GetSummedPlayerScore(ply64)
 	return scoreSum
 end
 
+---
+-- Returns a list of all player steamID64s who were affected by this event.
+-- @return table A table of steamID64s
+-- @realm shared
 function EVENT:GetAffectedPlayer()
 	return self.players
 end
 
+---
+-- Checks if a given player was was affected by this event.
+-- @param string ply64 The steamID64 of the player that should be checked
+-- @return boolean Returns true if the player was affected by this event.
+-- @realm shared
 function EVENT:HasAffectedPlayer(ply64)
 	return table.HasValue(self.players, ply64)
 end

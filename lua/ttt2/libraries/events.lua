@@ -113,6 +113,13 @@ function events.Reset()
 	events.list = {}
 end
 
+---
+-- Returns an event list that is sorted per player and event. This means that the first
+-- layer of this table consists of the player steamIDs and the second layer of the
+-- event identifiers. The third layer is an idexed list with the references to the events
+-- that satisfy the data from the first two layers.
+-- @return table A table with the reordered events
+-- @realm shared
 function events.SortByPlayerAndEvent()
 	local eventList = events.list
 	local sortedList = {}
@@ -137,6 +144,12 @@ function events.SortByPlayerAndEvent()
 	return sortedList
 end
 
+---
+-- Returns a table with the player steamID64 as indexes and the score
+-- for this specific player.
+-- @note Players with zero score this round will not be included in this list.
+-- @return table A table with the score per player
+-- @realm shared
 function events.GetTotalPlayerScores()
 	local eventList = events.list
 	local scoreList = {}
@@ -158,6 +171,12 @@ function events.GetTotalPlayerScores()
 	return scoreList
 end
 
+---
+-- Returns a table with the player steamID64 as indexes and a number of deaths
+-- for this specific player.
+-- @note Players with zero deaths this round will not be included in this list.
+-- @return table A table with the amounts of deaths per player
+-- @realm shared
 function events.GetTotalPlayerDeaths()
 	local eventList = events.list
 	local deathList = {}
@@ -243,6 +262,11 @@ if SERVER then
 		net.SendStream("TTT2_EventReport", eventStreamData)
 	end
 
+	---
+	-- This function is called in @{GM:TTTEndRound} and updates the scores and kills
+	-- of every player in the scoreboard.
+	-- @internal
+	-- @realm server
 	function events.UpdateScoreboard()
 		local scores = events.GetTotalPlayerScores()
 		local deaths = events.GetTotalPlayerDeaths()
