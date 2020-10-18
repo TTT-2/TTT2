@@ -393,12 +393,13 @@ function ShopEditor.CreateRolesList(frame, w, h, rls, onClick, defaultRoleData)
 		dlist:AddPanel(ic)
 
 		local oldFn = ic.OnMousePressed
+
 		ic.OnMousePressed = function(slf, mcode)
 			if mcode == MOUSE_LEFT then
-				onClick(self)
+				onClick(slf)
 			end
 
-			oldFn(self)
+			oldFn(slf)
 		end
 	end
 
