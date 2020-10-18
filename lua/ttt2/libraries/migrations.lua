@@ -29,7 +29,6 @@ function migration.Add(identifier, version, upQuery, downQuery)
 	if istable(checkResult) then return end -- migration was already executed
 
 	if checkResult == false then
-		print("checkResult: " .. sql.LastError())
 		return false
 	end
 
@@ -41,14 +40,12 @@ function migration.Add(identifier, version, upQuery, downQuery)
 						.. sql.SQLStr(os.time()) .. ")"
 
 	if sql.Query(masterQuery) == false then
-		print("masterResult: " .. sql.LastError())
 		return false
 	end
 
 	sql.Begin()
 	if sql.Query(upQuery) == false then
-		print("upresult: " .. sql.LastError())
-		sql.Query("Rollback;")
+		sql.Rollback()
 		return false
 	end
 	sql.Commit()
@@ -58,7 +55,6 @@ function migration.Add(identifier, version, upQuery, downQuery)
 							.. " AND \"version\"=" .. sql.SQLStr(version)
 
 	if sql.Query(setExecutedQuery) == false then
-		print("setexecutedresult: " .. sql.LastError())
 		return false
 	end
 
