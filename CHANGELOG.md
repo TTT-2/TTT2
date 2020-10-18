@@ -14,6 +14,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added Drag&Drop role layering VGUI, accessible with the console command `ttt2_edit_rolelayering`
 - Updated Simplified Chinese localization (by @TheOnly8Z)
 - Updated Italian localization (by @ThePlatynumGhost)
+- Added `orm` library to simplify database access
 
 ### Changed
 
@@ -24,6 +25,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Cleaned up draw function files
 - Changed several functions' scopes
 - Added minimal docu to every datastructure
+- Removed C4 defuse restriction for teammates
 
 ### Fixed
 
