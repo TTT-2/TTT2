@@ -203,7 +203,7 @@ if SERVER then
 	-- @realm server
 	function events.Trigger(name, ...)
 		if not events.Exist(name) then
-			ErrorNoHalt("ERROR: An event with the name '" .. tostring(name) .. "' does not exist.\n")
+			ErrorNoHalt("[TTT2] ERROR: An event with the name '" .. tostring(name) .. "' does not exist.\n")
 
 			return
 		end
