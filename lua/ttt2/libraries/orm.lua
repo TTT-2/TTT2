@@ -32,6 +32,10 @@ function orm.Make(tableName, force)
 	local primaryKey = sql.GetPrimaryKey(tableName)
 	local dataStructure = sql.GetTableColumns(tableName)
 
+	if not primaryKey or not dataStructure then
+		ErrorNoHalt("[ORM] An sql error occurred while retrieving the metadata of the following databasetable: " .. tableName)
+	end
+
 	local model = {}
 	model._tableName = tableName
 	model._dataStructure = dataStructure
@@ -39,7 +43,7 @@ function orm.Make(tableName, force)
 	model.New = ORMMODEL.New
 	model.Where = ORMMODEL.Where
 
-	if not primaryKey then
+	if #primaryKey == 0 then
 		return model
 	end
 

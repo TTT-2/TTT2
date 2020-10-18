@@ -28,14 +28,12 @@ end
 ---
 -- Returns the primarykey column names of the specified table in order of their index.
 -- @param string tableName The name of the table to search.
--- @return table|nil|boolean Returns a table of the primarykey columns, nil if no columns are found and false in case of an error.
+-- @return table|nil Returns a table of the primarykey columns and nil in case of an error.
 -- @realm shared
 function sql.GetPrimaryKey(tableName)
 	local result = sql.Query("PRAGMA table_info(" .. sql.SQLIdent(tableName) .. ")")
 
-	if not result then
-		return result
-	end
+	if result == false then	return end
 
 	local primaryKeys = {}
 
@@ -53,14 +51,12 @@ end
 ---
 -- Returns the column names of the specified table.
 -- @param string tableName The name of the table to search.
--- @return table|nil|boolean Returns a table of the column names, nil if no columns are found and false in case of an error.
+-- @return table|nil Returns a table of the column names and nil in case of an error.
 -- @realm shared
 function sql.GetTableColumns(tableName)
 	local result = sql.Query("PRAGMA table_info(" .. sql.SQLIdent(tableName) .. ")")
 
-	if not result then
-		return result
-	end
+	if result == false then	return end
 
 	local columnNames = {}
 
