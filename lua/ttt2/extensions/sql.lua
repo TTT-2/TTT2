@@ -33,7 +33,7 @@ end
 function sql.GetPrimaryKey(tableName)
 	local result = sql.Query("PRAGMA table_info(" .. sql.SQLIdent(tableName) .. ")")
 
-	if result == false then	return end
+	if result == false then return end
 
 	local primaryKeys = {}
 
@@ -56,7 +56,7 @@ end
 function sql.GetTableColumns(tableName)
 	local result = sql.Query("PRAGMA table_info(" .. sql.SQLIdent(tableName) .. ")")
 
-	if result == false then	return end
+	if result == false then return end
 
 	local columnNames = {}
 
