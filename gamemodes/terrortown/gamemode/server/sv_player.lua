@@ -136,7 +136,7 @@ function GM:PlayerSpawn(ply)
 	if ply:IsActive() then
 		-- a function to handle the rolespecific stuff that should be done on
 		-- rolechange and respawn (while a round is active)
-		roles.GetByIndex(ply:GetSubRole()):GiveRoleLoadout(ply, false)
+		ply:GetSubRoleData():GiveRoleLoadout(ply, false)
 
 		events.Trigger(EVENT_RESPAWN, ply)
 	else
