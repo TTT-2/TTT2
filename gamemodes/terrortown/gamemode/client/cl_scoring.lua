@@ -262,8 +262,6 @@ function CLSCORE:BuildScorePanel(dpanel)
 		end
 	end
 
-	PrintTable(self.EventsNew)
-
 	for ply64, eventTypesTable in pairs(self.EventsNew) do
 		local alive = true
 		local kills = 0
@@ -276,7 +274,7 @@ function CLSCORE:BuildScorePanel(dpanel)
 			for i = 1, #eventTable do
 				local event = eventTable[i]
 
-				if type == EVENT_BONUS then
+				if type == EVENT_FINISH then
 					if event:HasAffectedPlayer(ply64) then
 						alive = event.event.alive
 					end

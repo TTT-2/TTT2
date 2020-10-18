@@ -26,7 +26,7 @@ end
 -- @param table score The score data table that is about to be added
 -- @internal
 -- @realm shared
-function EVENT:SetScore(ply64, score)
+function EVENT:SetPlayerScore(ply64, score)
 	if not ply64 or not score then return end
 
 	self.score[ply64] = score

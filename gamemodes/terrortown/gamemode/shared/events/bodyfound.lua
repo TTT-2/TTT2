@@ -31,7 +31,7 @@ if SERVER then
 	function EVENT:Score(event)
 		local finder = event.finder
 
-		self:SetScore(finder.sid64, {
+		self:SetPlayerScore(finder.sid64, {
 			score = roles.GetByIndex(finder.role).scoreBodyFoundMuliplier
 		})
 	end
