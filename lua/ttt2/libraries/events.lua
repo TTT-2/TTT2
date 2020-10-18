@@ -158,6 +158,23 @@ function events.GetTotalPlayerScores()
 	return scoreList
 end
 
+function events.GetTotalPlayerDeaths()
+	local eventList = events.list
+	local deathList = {}
+
+	for i = 1, #eventList do
+		local event = eventList[i]
+
+		if event.type ~= EVENT_KILL then continue end
+
+		local victim64 = event.event.victim.sid64
+
+		deathList[victim64] = (deathList[victim64] or 0) + 1
+	end
+
+	return deathList
+end
+
 ---
 -- Generates an event list in the deprecated format. Only contains
 -- events that were present in default TTT. Is sorted by time.
@@ -228,13 +245,22 @@ if SERVER then
 
 	function events.UpdateScores()
 		local scores = events.GetTotalPlayerScores()
+		local deaths = events.GetTotalPlayerDeaths()
 
-		for sid64, score in pairs(scores) do
-			ply = player.GetBySteamID64(sid64)
+		for ply64, score in pairs(scores) do
+			ply = player.GetBySteamID64(ply64)
 
 			if not IsValid(ply) or not ply:ShouldScore() then continue end
 
 			ply:AddFrags(score)
+		end
+
+		for ply64, death in pairs(deaths) do
+			ply = player.GetBySteamID64(ply64)
+
+			if not IsValid(ply) or not ply:ShouldScore() then continue end
+
+			ply:AddDeaths(death)
 		end
 	end
 
