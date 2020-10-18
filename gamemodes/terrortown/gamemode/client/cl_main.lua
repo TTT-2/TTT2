@@ -16,8 +16,6 @@ surface.CreateFont("DefaultBold", {font = "Tahoma", size = 13, weight = 1000})
 surface.CreateFont("TabLarge", {font = "Tahoma", size = 13, weight = 700, shadow = true, antialias = false})
 surface.CreateFont("Trebuchet22", {font = "Trebuchet MS", size = 22, weight = 900})
 
-ttt_include("cl_fonts")
-
 ttt_include("sh_init")
 
 ttt_include("sh_cvar_handler")
@@ -26,6 +24,7 @@ ttt_include("sh_network_sync")
 ttt_include("sh_sprint")
 ttt_include("sh_main")
 ttt_include("sh_shopeditor")
+ttt_include("sh_rolelayering")
 ttt_include("sh_scoring")
 ttt_include("sh_corpse")
 ttt_include("sh_player_ext")
