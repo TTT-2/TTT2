@@ -284,7 +284,7 @@ function CLSCORE:BuildScorePanel(dpanel)
 					points_team = points_team + event:GetSummedPlayerScore(ply64)
 				end
 
-				if type == EVENT_KILL and event.event.attacker.sid64 == ply64 then
+				if type == EVENT_KILL and event.event.attacker and event.event.attacker.sid64 == ply64 then
 					if event.event.type == KILL_NORMAL then
 						kills = kills + 1
 					elseif event.event.type == KILL_TEAM then
