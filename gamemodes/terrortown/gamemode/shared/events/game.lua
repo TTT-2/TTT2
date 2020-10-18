@@ -1,4 +1,4 @@
--- @ignore
+--- @ignore
 
 if CLIENT then
 	EVENT.icon = Material("")

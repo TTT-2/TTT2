@@ -1,3 +1,4 @@
+---
 -- @class EVENT
 
 local tableCount = table.Count
@@ -8,7 +9,7 @@ local tableAdd = table.Add
 EVENT.type = "base_event"
 EVENT.event = {}
 EVENT.score = {}
-EVENT.players = {}
+EVENT.plys = {}
 
 ---
 -- Sets the event data table to the event.
@@ -34,16 +35,17 @@ end
 -- @internal
 -- @realm shared
 function EVENT:SetPlayersTable(players)
-	self.players = players
+	self.plys = players
 end
 
 ---
--- Sets the score data table to the event.
+-- Sets the score data table to the event. If the score is nil, the existing score
+-- will be removed for this player.
 -- @param string ply64 The steamID64 of the affected player
--- @param table score The score data table that should be added
+-- @param[opt] table score The score data table that should be set
 -- @realm shared
 function EVENT:SetPlayerScore(ply64, score)
-	if not ply64 or not score then return end
+	if not ply64 then return end
 
 	self.score[ply64] = score
 end
@@ -52,7 +54,7 @@ end
 -- Returns the event data in the deprecated format. Shouldn't be used, is used
 -- internally.
 -- @param table event The event data table that should be transformed
--- @return table The event table in the deprecated format
+-- @return nil|table The event table in the deprecated format
 -- @internal
 -- @realm shared
 function EVENT:GetDeprecatedFormat(event)
@@ -88,7 +90,7 @@ end
 -- Returns the complete score for the given player in this event. This takes care of
 -- events that give score for different things.
 -- @param string ply64 The steamID64 of the player that should be checked
--- @return number The amount of score gained by this player in this event
+-- @return[default=0] number The amount of score gained by this player in this event
 -- @realm shared
 function EVENT:GetSummedPlayerScore(ply64)
 	if not self:HasPlayerScore(ply64) then
@@ -109,7 +111,7 @@ end
 -- @return table A table of steamID64s
 -- @realm shared
 function EVENT:GetAffectedPlayer()
-	return self.players
+	return self.plys
 end
 
 ---
@@ -118,16 +120,16 @@ end
 -- @return boolean Returns true if the player was affected by this event.
 -- @realm shared
 function EVENT:HasAffectedPlayer(ply64)
-	return tableHasValue(self.players, ply64)
+	return tableHasValue(self.plys, ply64)
 end
 
 if SERVER then
 	---
 	-- Adds players that are affected by this event.
-	-- @param string vararg A variable amount of player steamID64
+	-- @param string ... A variable amount of player steamID64
 	-- @realm server
 	function EVENT:AddAffectedPlayers(...)
-		tableAdd(self.players, {...})
+		tableAdd(self.plys, {...})
 	end
 
 	---
@@ -169,14 +171,14 @@ if SERVER then
 			type = self.type,
 			event = self.event,
 			score = self.score,
-			players = self.players
+			plys = self.plys
 		}
 	end
 
 	---
 	-- The main function of an event. It contains all the event handling.
 	-- This function should be overwritten but not not called.
-	-- @param vararg A variable amount of arguments passed to this event
+	-- @param any ... A variable amount of arguments passed to this event
 	-- @internal
 	-- @realm server
 	function EVENT:Trigger(...)

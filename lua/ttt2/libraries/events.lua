@@ -19,8 +19,8 @@ EVENT = {}
 ---
 -- Copies any missing data from base table to the target table
 -- @param table t target table
--- @param table base base (fallback) table
--- @return table t target table
+-- @param table base (fallback) table
+-- @return table target table
 -- @realm shared
 local function TableInherit(t, base)
 	if t.base == t.type then
@@ -222,7 +222,7 @@ if SERVER then
 	---
 	-- Triggers an event, adds it to a managed list and starts the score calculation for this event.
 	-- @param string name The name identifer of the event
-	-- @param varag The arguments that should be passed to the event, see the @{EVENT:Trigger} function
+	-- @param any ... The arguments that should be passed to the event, see the @{EVENT:Trigger} function
 	-- @realm server
 	function events.Trigger(name, ...)
 		if not events.Exist(name) then
@@ -313,9 +313,7 @@ if SERVER then
 	function GM:TTT2AddedEvent(type, event)
 
 	end
-end
-
-if CLIENT then
+else --CLIENT
 	net.ReceiveStream("TTT2_EventReport", function(eventStreamData)
 		events.Reset()
 
@@ -325,7 +323,7 @@ if CLIENT then
 			local newEvent = events.Create(eventData.type)
 			newEvent:SetEventTable(eventData.event)
 			newEvent:SetScoreTable(eventData.score)
-			newEvent:SetPlayersTable(eventData.players)
+			newEvent:SetPlayersTable(eventData.plys)
 
 			events.list[i] = newEvent
 		end
