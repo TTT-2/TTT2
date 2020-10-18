@@ -243,7 +243,7 @@ if SERVER then
 		net.SendStream("TTT2_EventReport", eventStreamData)
 	end
 
-	function events.UpdateScores()
+	function events.UpdateScoreboard()
 		local scores = events.GetTotalPlayerScores()
 		local deaths = events.GetTotalPlayerDeaths()
 
