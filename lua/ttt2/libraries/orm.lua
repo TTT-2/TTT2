@@ -97,7 +97,7 @@ end
 
 ---
 -- Retrieves a specific object by their primarykey from the database.
--- @param number|string|table primaryValue The value(s) of the primarykey to search for.
+-- @param string|table primaryValue The value(s) of the primarykey to search for.
 -- @note In the case of multiple columns in the primarykey you have to specify the corresponding values in the same order.
 -- @return ORMOBJECT|nil Returns the table of the found object or nil in case of an error.
 -- @realm shared
