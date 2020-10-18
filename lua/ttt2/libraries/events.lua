@@ -10,11 +10,10 @@ end
 local tableCopy = table.Copy
 
 local eventTypes = {}
+local oldEvent = nil
 
 events = events or {}
 events.list = events.list or {}
-
-EVENT = {}
 
 ---
 -- Copies any missing data from base table to the target table
@@ -61,6 +60,27 @@ function events.Initialize(path)
 
 	-- reset EVENT table
 	EVENT = {}
+end
+
+---
+-- Sets up the event table while also backupping the existing EVENT
+-- variable to keep compatibility to other addons that might use this
+-- variable name as well.
+-- @internal
+-- @realm shared
+function events.InitVariables()
+	oldEvent = EVENT
+
+	EVENT = {}
+end
+
+---
+-- Resets the old EVENT to the cached version to keep compatibility to other addons
+-- that might use this variable name as well.
+-- @internal
+-- @realm shared
+function events.DeinitVariables()
+	EVENT = oldEvent
 end
 
 ---
@@ -208,7 +228,7 @@ function events.GetDeprecatedEventList()
 
 	for i = 1, #events.list do
 		local event = events.list[i]
-		local deprecatedEventData = event:GetDeprecatedFormat(event.event)
+		local deprecatedEventData = event:GetDeprecatedFormat()
 
 		if not deprecatedEventData then continue end
 
@@ -239,7 +259,7 @@ if SERVER then
 		events.list[#events.list + 1] = newEvent
 
 		-- add to deprecated score list
-		local deprecatedEventData = newEvent:GetDeprecatedFormat(newEvent.event)
+		local deprecatedEventData = newEvent:GetDeprecatedFormat()
 
 		if deprecatedEventData then
 			SCORE:AddEvent(deprecatedEventData)
@@ -337,14 +357,31 @@ else --CLIENT
 end
 
 -- load the events itself
-fileloader.LoadFolder("terrortown/gamemode/shared/events/", false, SHARED_FILE, function(path)
-	events.Initialize(path)
+fileloader.LoadFolder(
+	"terrortown/gamemode/shared/events/",
+	false, -- deepsearch
+	SHARED_FILE,
+	function(path)
+		events.Initialize(path)
 
-	MsgN("Added TTT2 event file: ", path)
-end)
+		MsgN("Added TTT2 event file: ", path)
+	end,
+	function() -- pre folder loaded
+		events.InitVariables()
+	end
+)
 
-fileloader.LoadFolder("terrortown/events/", false, SHARED_FILE, function(path)
-	events.Initialize(path)
+fileloader.LoadFolder(
+	"terrortown/events/",
+	false,
+	SHARED_FILE,
+	function(path)
+		events.Initialize(path)
 
-	MsgN("Added TTT2 event file: ", path)
-end)
+		MsgN("Added TTT2 event file: ", path)
+	end,
+	nil,
+	function() -- post folder loaded
+		events.DeinitVariables()
+	end
+)

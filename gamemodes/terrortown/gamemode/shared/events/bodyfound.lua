@@ -28,7 +28,8 @@ if SERVER then
 		})
 	end
 
-	function EVENT:Score(event)
+	function EVENT:CalculateScore()
+		local event = self.event
 		local finder = event.finder
 
 		self:SetPlayerScore(finder.sid64, {
@@ -37,7 +38,9 @@ if SERVER then
 	end
 end
 
-function EVENT:GetDeprecatedFormat(event)
+function EVENT:GetDeprecatedFormat()
+	local event = self.event
+
 	if event.roundState ~= ROUND_ACTIVE then return end
 
 	local finder = event.finder

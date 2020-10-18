@@ -31,7 +31,8 @@ if SERVER then
 	end
 end
 
-function EVENT:Score(event)
+function EVENT:CalculateScore()
+	local event = self.event
 	local plys = event.plys
 	local wintype = event.wintype
 	local alive = {}
@@ -81,7 +82,9 @@ function EVENT:Score(event)
 	end
 end
 
-function EVENT:GetDeprecatedFormat(event)
+function EVENT:GetDeprecatedFormat()
+	local event = self.event
+
 	if event.roundState ~= ROUND_ACTIVE then return end
 
 	return {

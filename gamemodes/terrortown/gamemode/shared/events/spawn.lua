@@ -16,7 +16,10 @@ if SERVER then
 	end
 end
 
-function EVENT:GetDeprecatedFormat(event)
+function EVENT:GetDeprecatedFormat()
+	local event = self.event
+
+	-- this will be readded with the new roundendscreen
 	--if event.roundState ~= ROUND_ACTIVE then return end
 
 	return {

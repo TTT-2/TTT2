@@ -53,11 +53,12 @@ end
 ---
 -- Returns the event data in the deprecated format. Shouldn't be used, is used
 -- internally.
--- @param table event The event data table that should be transformed
+-- @note This function should be overwritten but not not called.
+-- @note The event table can be accessed via `self.event`.
 -- @return nil|table The event table in the deprecated format
 -- @internal
 -- @realm shared
-function EVENT:GetDeprecatedFormat(event)
+function EVENT:GetDeprecatedFormat()
 
 end
 
@@ -155,7 +156,7 @@ if SERVER then
 
 		-- after the event is added, it should be passed on to the
 		-- scoring function to directly calculate the score
-		self:Score(self.event)
+		self:CalculateScore()
 
 		return true
 	end
@@ -177,7 +178,7 @@ if SERVER then
 
 	---
 	-- The main function of an event. It contains all the event handling.
-	-- This function should be overwritten but not not called.
+	-- @note This function should be overwritten but not not called.
 	-- @param any ... A variable amount of arguments passed to this event
 	-- @internal
 	-- @realm server
@@ -188,11 +189,11 @@ if SERVER then
 	---
 	-- This function calculates the score gained for this event. It should be
 	-- overwritte if the event should yield a score.
-	-- This function should be overwritten but not not called.
-	-- @param table event The event data previously added
+	-- @note This function should be overwritten but not not called.
+	-- @note The event table can be accessed via `self.event`.
 	-- @internal
 	-- @realm server
-	function EVENT:Score(event)
+	function EVENT:CalculateScore()
 
 	end
 end

@@ -71,7 +71,9 @@ if SERVER then
 		return self:Add(event)
 	end
 
-	function EVENT:Score(event)
+	function EVENT:CalculateScore()
+		local event = self.event
+
 		-- the event is only counted if it happened while the round was active
 		if event.roundState ~= ROUND_ACTIVE then return end
 
@@ -102,7 +104,9 @@ if SERVER then
 	end
 end
 
-function EVENT:GetDeprecatedFormat(event)
+function EVENT:GetDeprecatedFormat()
+	local event = self.event
+
 	if event.roundState ~= ROUND_ACTIVE then return end
 
 	local attacker = event.attacker
