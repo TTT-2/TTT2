@@ -262,7 +262,6 @@ L.item_disg_desc = [[
 
 -- C4
 L.c4_hint = "{usekey}を押して起動もしくは解除する."
-L.c4_no_disarm = "他のTraitorのC4は彼らが死ぬまで解除できません."
 L.c4_disarm_warn = "あなたが設置したC4爆弾は解除されました."
 L.c4_armed = "あなたは首尾よく爆弾を起動しました."
 L.c4_disarmed = "あなたは爆弾を上手い事解除しました."

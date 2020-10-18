@@ -262,7 +262,6 @@ L.item_disg_desc = [[
 
 -- C4
 L.c4_hint = "按下 {usekey} 来安放或拆除C4。"
-L.c4_no_disarm = "在其他叛徒死前，你无法拆除他的C4。"
 L.c4_disarm_warn = "你所安放的C4已被拆除。"
 L.c4_armed = "C4安放成功。"
 L.c4_disarmed = "你成功拆除了C4。"
