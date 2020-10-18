@@ -20,7 +20,7 @@ local ORMOBJECT = {}
 -- Returns an object relational model according to the specified databasetable. Does nothing if no databasetable with the given name exists.
 -- @param string tableName The name of the table in the database to create a model for.
 -- @param[opt] boolean force If set to `true` the function will not return a cached version of the model.
--- @return ORMMODEL The model of the database table.
+-- @return ORMMODEL|nil Returns the model of the database table or nil if the database table does not exist.
 -- @realm shared
 function orm.Make(tableName, force)
 	if IsValid(cachedModels[tableName]) and not force then
@@ -75,10 +75,12 @@ end
 
 ---
 -- Retrieves all saved objects of the model from the database.
--- @return table Returns an array of all found objects.
+-- @return table|nil Returns an array of all found objects or nil in case of an error.
 -- @realm shared
 function ORMMODEL:All()
 	local objects = sql.Query("SELECT * FROM " .. sql.SQLIdent(self._tableName))
+
+	if objects == false then return end
 
 	if not self._primaryKey then
 		return objects
@@ -90,14 +92,14 @@ function ORMMODEL:All()
 		objects[i].Refresh = self.Refresh
 	end
 
-	return objects
+	return objects or {}
 end
 
 ---
 -- Retrieves a specific object by their primarykey from the database.
 -- @param number|string|table primaryValue The value(s) of the primarykey to search for.
 -- @note In the case of multiple columns in the primarykey you have to specify the corresponding values in the same order.
--- @return ORMOBJECT|boolean|nil Returns the table of the found object. Returns `false` if the number of supplied primaryvalues does not match the number of elements in the primarykey. Returns `nil` if no object is found.
+-- @return ORMOBJECT|nil Returns the table of the found objector nil in case of an error.
 -- @realm shared
 function ORMMODEL:Find(primaryValue)
 	local where = {}
@@ -115,14 +117,14 @@ function ORMMODEL:Find(primaryValue)
 	else
 		ErrorNoHalt("[ORM] Number of primaryvalues does not match number of primarykeys!")
 
-		return false
+		return
 	end
 
 	local result = sql.QueryRow("SELECT * FROM " .. sql.SQLIdent(self._tableName) .. " WHERE " .. where)
 
-	if result then
-		return self:New(result)
-	end
+	if result == false then return end
+
+	return result and self:New(result) or {}
 end
 
 ---
@@ -157,7 +159,7 @@ end
 ---
 -- Retrieves all saved objects of the model with the given filters from the database.
 -- @param table filters An array of filters. Each filter should contain a `column`, `op`, `value` and `concat`(if it is not the last filter).
--- @return table Returns an array of all found objects.
+-- @return table|nil Returns an array of all found objects or nil in case of an error.
 -- @realm shared
 function ORMMODEL:Where(filters)
 	local query = "SELECT * FROM " .. sql.SQLIdent(self._tableName) .. " WHERE "
@@ -175,6 +177,8 @@ function ORMMODEL:Where(filters)
 
 	local objects = sql.Query(query)
 
+	if objects == false then return end
+
 	if not self._primaryKey then
 		return objects
 	end
@@ -185,7 +189,7 @@ function ORMMODEL:Where(filters)
 		objects[i].Refresh = ORMOBJECT.Refresh
 	end
 
-	return objects
+	return objects or {}
 end
 
 ---
@@ -193,7 +197,7 @@ end
 
 ---
 -- Deletes the given object from the database storage.
--- @return nil|boolean Returns false if an error occurred, nil otherwise.
+-- @return boolean Returns true if the object was successfully deleted, false otherwise.
 -- @realm shared
 function ORMOBJECT:Delete()
 	local where = {}
@@ -205,12 +209,14 @@ function ORMOBJECT:Delete()
 
 	where = table.concat(where, " AND ")
 
-	return sql.Query("DELETE FROM " .. sql.SQLIdent(self._tableName) .. " WHERE " .. where)
+	local query = "DELETE FROM " .. sql.SQLIdent(self._tableName) .. " WHERE " .. where
+
+	return sql.Query(query) == nil
 end
 
 ---
 -- Saves the data of the given object to the database storage.
--- @return boolean|nil Returns false if an error occurred, nil otherwise.
+-- @return boolean Returns true if the object was successfully saved to the database, false otherwise.
 -- @realm shared
 function ORMOBJECT:Save()
 	local query = "INSERT INTO " .. sql.SQLIdent(self._tableName) .. "("
@@ -225,7 +231,7 @@ function ORMOBJECT:Save()
 
 	query = query .. self._columnList .. ") VALUES(" .. valueList .. ") ON CONFLICT(" .. self._primaryKeyList .. ") DO UPDATE SET(" .. self._columnList .. ")=(" .. valueList .. ");"
 
-	return sql.Query(query)
+	return sql.Query(query) == nil
 end
 
 ---
