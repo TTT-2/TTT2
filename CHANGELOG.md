@@ -15,7 +15,6 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Updated Simplified Chinese localization (by @TheOnly8Z)
 - Updated Italian localization (by @ThePlatynumGhost)
 - Added `orm` library to simplify database access
-- Added a hook 'TTT2ModifyObservingEntity' that is called before the targetid gets drawn
 
 ### Changed
 
@@ -25,6 +24,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - TargetID text is now scaled with the global scale factor
 - Cleaned up draw function files
 - Removed C4 defuse restriction for teammates
+- Refactored `GM:HUDDrawTargetID` for the use of a shared FindAlongRay-Function
 
 ### Fixed
 

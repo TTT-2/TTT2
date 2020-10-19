@@ -239,49 +239,16 @@ function GM:HUDDrawTargetID()
 	if hook.Call("HUDShouldDraw", GAMEMODE, "TTTPropSpec") then
 		DrawPropSpecLabels(client)
 	end
-
-	local ply = client
-
-	-- now run a hook that can be used by addon devs that changes the observing player
-	-- for the targetid
-	hook.Run("TTT2ModifyObservingEntity", ply)
-
-	local startpos = ply:EyePos()
-	local endpos = ply:GetAimVector()
-
-	endpos:Mul(MAX_TRACE_LENGTH)
-	endpos:Add(startpos)
-
+	
 	local ent, unchangedEnt, distance
+	local startpos = client:EyePos()
+	local direction = client:GetAimVector()
+	local filter = client:GetObserverMode() == OBS_MODE_IN_EYE and {client, client:GetObserverTarget()} or client
 
-	-- if the user is looking at a traitor button, it should always be handled with priority
-	if TBHUD.focus_but and IsValid(TBHUD.focus_but.ent) and (TBHUD.focus_but.access or TBHUD.focus_but.admin) and TBHUD.focus_stick >= CurTime() then
-		ent = TBHUD.focus_but.ent
-
-		distance = startpos:Distance(ent:GetPos())
-	else
-		--change filter to be able to show a player themself
-		local trace = util.TraceLine({
-			start = startpos,
-			endpos = endpos,
-			mask = MASK_SHOT,
-			filter = (ply ~= client and {}) or client:GetObserverMode() == OBS_MODE_IN_EYE and {client, client:GetObserverTarget()} or client
-		})
-
-		-- this is the entity the player is looking at right now
-		ent = trace.Entity
-
-		distance = trace.StartPos:Distance(trace.HitPos)
-	end
-
-	-- if a vehicle, we identify the driver instead
-	if IsValid(ent) and IsValid(ent:GetNWEntity("ttt_driver", nil)) then
-		ent = ent:GetNWEntity("ttt_driver", nil)
-	end
+	ent, distance = FindEntityAlongView(startpos, direction, filter)
 
 	-- only add onscreen infos when the entity isn't the local player
-	-- maybe being able to show themself?!
-	--if ent == client then return end
+	if ent == client then return end
 
 	local changedEnt = hook.Run("TTTModifyTargetedEntity", ent, distance)
 
@@ -467,15 +434,6 @@ function GM:HUDDrawTargetID()
 end
 
 ---
--- Change the observing Entity used for targetID.
--- @param Entity ent The used entity for calculating the view
--- @hook
--- @realm client
-function GM:TTT2ModifyObservingEntity(ent)
-
-end
-
----
 -- Add targetID info to a focused entity.
 -- @param @{TARGET_DATA} tData The @{TARGET_DATA} data object which contains all information
 -- @hook
@@ -510,6 +468,41 @@ local key_params = {
 	usekey = Key("+use", "USE"),
 	walkkey = Key("+walk", "WALK")
 }
+
+-- handle finding Entities with a ray
+function FindEntityAlongView(pos, dir, filter)
+	local endpos = dir
+	endpos:Mul(MAX_TRACE_LENGTH)
+	endpos:Add(pos)
+
+	local ent, distance
+
+	-- if the user is looking at a traitor button, it should always be handled with priority
+	if TBHUD.focus_but and IsValid(TBHUD.focus_but.ent) and (TBHUD.focus_but.access or TBHUD.focus_but.admin) and TBHUD.focus_stick >= CurTime() then
+		ent = TBHUD.focus_but.ent
+
+		distance = pos:Distance(ent:GetPos())
+	else
+		local trace = util.TraceLine({
+			start = pos,
+			endpos = endpos,
+			mask = MASK_SHOT,
+			filter = filter
+		})
+
+		-- this is the entity the player is looking at right now
+		ent = trace.Entity
+
+		distance = trace.StartPos:Distance(trace.HitPos)
+		
+		-- if a vehicle, we identify the driver instead
+		if IsValid(ent) and IsValid(ent:GetNWEntity("ttt_driver", nil)) then
+			ent = ent:GetNWEntity("ttt_driver", nil)
+		end
+	end
+
+	return ent, distance
+end
 
 -- handle looking with DNA Scanner
 function HUDDrawTargetIDDNAScanner(tData)
