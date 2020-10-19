@@ -65,7 +65,9 @@ function CLSCORE:CreatePanel()
 
 	-- GENERATE MENU CONTENT
 	local menuTbl = {}
-	local panelData = ROUNDEND_MENU_DATA:BindData(menuTbl)
+	local panelData = menuDataHandler.CreateNewRoundendMenu()
+
+	panelData:BindData(menuTbl)
 
 	InternalModifyRoundendMenu(panelData)
 
@@ -252,3 +254,28 @@ end
 concommand.Add("scp", function()
 	CLSCORE:Toggle()
 end)
+
+-- compatibbility for now
+CLSCORE.EventDisplay = {}
+
+---
+-- Tell CLSCORE how to display an event. See @{file/cl_scoring_events.lua} for examples.
+-- @param number event_id
+-- @param table event_fns The event table @{function}s. Pass an empty table to keep an event from showing up.
+-- @realm client
+-- @module CLSCORE
+function CLSCORE.DeclareEventDisplay(event_id, event_fns)
+	if not event_fns or not istable(event_fns) then
+		error(string.format("Event %d display: no display functions found.", event_id), 2)
+	end
+
+	if not event_fns.text then
+		error(string.format("Event %d display: no text display function found.", event_id), 2)
+	end
+
+	if not event_fns.icon then
+		error(string.format("Event %d display: no icon and tooltip display function found.", event_id), 2)
+	end
+
+	CLSCORE.EventDisplay[event_id] = event_fns
+end

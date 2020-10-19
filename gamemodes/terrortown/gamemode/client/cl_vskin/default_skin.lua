@@ -260,6 +260,9 @@ function SKIN:PaintSubMenuButtonTTT2(panel, w, h)
 	local colorBar = colors.background
 	local colorText = utilGetChangedColor(colors.default, 75)
 	local shift = 0
+	local pad = mathRound(0.3 * h)
+	local hasIcon = panel:HasIcon()
+	local sizeIcon = h - 2 * pad
 
 	if panel.Depressed or panel:IsSelected() or panel:GetToggle() then
 		colorBackground = utilGetActiveColor(ColorAlpha(colors.accent, 50))
@@ -279,10 +282,14 @@ function SKIN:PaintSubMenuButtonTTT2(panel, w, h)
 	drawBox(0, 0, sizes.border, h, colorBar)
 	drawBox(sizes.border, 0, w - sizes.border, h, colorBackground)
 
+	if hasIcon then
+		drawFilteredShadowedTexture(pad + sizes.border, pad + shift, sizeIcon, sizeIcon, panel:GetIcon(), colorText.a, colorText)
+	end
+
 	drawSimpleText(
 		TryT(panel:GetTitle()),
 		panel:GetTitleFont(),
-		sizes.border + 20,
+		sizes.border + pad + (hasIcon and (sizeIcon + pad) or pad),
 		0.5 * h + shift,
 		colorText,
 		TEXT_ALIGN_LEFT,

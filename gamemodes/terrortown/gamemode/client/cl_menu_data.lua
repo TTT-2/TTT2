@@ -2,9 +2,41 @@
 -- @desc A collection of objects that are passed in the menu populate hooks.
 -- @author Mineotopia
 
-HELP_MENU_DATA = {}
+menuDataHandler = {}
 
+local HELP_MENU_DATA = {}
 local HELP_MENU_DATA_OBJECT = {}
+local HELP_SUB_MENU_DATA = {}
+local HELP_SUB_MENU_DATA_OBJECT = {}
+local ROUNDEND_MENU_DATA = {}
+local ROUNDEND_MENU_DATA_OBJECT = {}
+
+---
+-- Registers and returns a new help menu data object
+-- @return HELP_MENU_DATA A new instance of help menu data
+-- @realm client
+-- @internal
+function menuDataHandler.CreateNewHelpMenu()
+	return table.Copy(HELP_MENU_DATA)
+end
+
+---
+-- Registers and returns a new help sub menu data object
+-- @return HELP_MENU_DATA A new instance of help sub menu data
+-- @realm client
+-- @internal
+function menuDataHandler.CreateNewHelpSubMenu()
+	return table.Copy(HELP_SUB_MENU_DATA)
+end
+
+---
+-- Registers and returns a new roundend menu data object
+-- @return HELP_MENU_DATA A new instance of roundend menu data
+-- @realm client
+-- @internal
+function menuDataHandler.CreateNewRoundendMenu()
+	return table.Copy(ROUNDEND_MENU_DATA)
+end
 
 ---
 -- Binds data table to the @{HELP_MENU_DATA} object
@@ -14,8 +46,6 @@ local HELP_MENU_DATA_OBJECT = {}
 -- @realm client
 function HELP_MENU_DATA:BindData(menuTbl)
 	self.menuTbl = menuTbl or {}
-
-	return self
 end
 
 ---
@@ -37,7 +67,7 @@ end
 ---
 -- Checks if a menu with the given ID is already registered
 -- @param string id The unique menu identifier
--- @return boolean Returns if the identifier is already used
+-- @return boolean Return true if the identifier is already used
 -- @realm client
 function HELP_MENU_DATA:Exists(id)
 	for i = 1, #self.menuTbl do
@@ -135,8 +165,8 @@ function HELP_MENU_DATA_OBJECT:AdminOnly(adminOnly)
 end
 
 ---
--- Sets a callback function that can be used to descide at a
--- later point if a menu should be shown
+-- Sets a callback function that is called to check
+-- if a menu should be shown
 -- @param function fn The callback function
 -- @realm client
 function HELP_MENU_DATA_OBJECT:RegisterShouldShowCallback(fn)
@@ -152,11 +182,6 @@ function HELP_MENU_DATA_OBJECT:RegisterOnClickCallback(fn)
 	self.onClickFn = fn
 end
 
-
-HELP_SUB_MENU_DATA = {}
-
-local HELP_SUB_MENU_DATA_OBJECT = {}
-
 ---
 -- Binds data table to the @{HELP_SUB_MENU_DATA} object
 -- @param table data The data table with all navigation points
@@ -165,8 +190,6 @@ local HELP_SUB_MENU_DATA_OBJECT = {}
 -- @realm client
 function HELP_SUB_MENU_DATA:BindData(menuTbl)
 	self.menuTbl = menuTbl or {}
-
-	return self
 end
 
 ---
@@ -188,7 +211,7 @@ end
 ---
 -- Checks if a submenu with the given ID is already registered
 -- @param string id The unique submenu identifier
--- @return boolean Returns if the identifier is already used
+-- @return boolean Return true if the identifier is already used
 -- @realm client
 function HELP_SUB_MENU_DATA:Exists(id)
 	for i = 1, #self.menuTbl do
@@ -227,8 +250,8 @@ end
 
 ---
 -- Callback function that is used to call code to populate
--- the button panel of a submenu, this panel is only created if
--- this callback function is set
+-- the button panel of a submenu
+-- @note The mentioned panel is only created if this callback function is set
 -- @param function fn The callback function
 -- @realm client
 function HELP_SUB_MENU_DATA_OBJECT:PopulateButtonPanel(fn)
@@ -236,8 +259,8 @@ function HELP_SUB_MENU_DATA_OBJECT:PopulateButtonPanel(fn)
 end
 
 ---
--- Sets a callback function that can be used to descide at a
--- later point if a submenu should be shown
+-- Sets a callback function that is called to check
+-- if a submenu should be shown
 -- @param function fn The callback function
 -- @realm client
 function HELP_SUB_MENU_DATA_OBJECT:RegisterShouldShowCallback(fn)
@@ -253,21 +276,13 @@ function HELP_SUB_MENU_DATA_OBJECT:RegisterOnClickCallback(fn)
 	self.onClickFn = fn
 end
 
-
-ROUNDEND_MENU_DATA = {}
-
-local ROUNDEND_MENU_DATA_OBJECT = {}
-
 ---
 -- Binds data table to the @{ROUNDEND_MENU_DATA} object
 -- @param table data The data table with all submenues
--- @return @{ROUNDEND_MENU_DATA} The object to be used in the hook to populate the menu
 -- @internal
 -- @realm client
 function ROUNDEND_MENU_DATA:BindData(menuTbl)
 	self.menuTbl = menuTbl or {}
-
-	return self
 end
 
 ---

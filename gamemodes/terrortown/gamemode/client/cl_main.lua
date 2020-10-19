@@ -44,6 +44,7 @@ ttt_include("vgui__cl_progressbar")
 ttt_include("vgui__cl_scrolllabel")
 
 ttt_include("cl_vskin__default_skin")
+ttt_include("cl_vskin__vgui__dpanel")
 ttt_include("cl_vskin__vgui__dframe")
 ttt_include("cl_vskin__vgui__dmenubutton")
 ttt_include("cl_vskin__vgui__dsubmenubutton")

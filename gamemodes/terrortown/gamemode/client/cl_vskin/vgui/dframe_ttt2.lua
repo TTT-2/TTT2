@@ -227,6 +227,14 @@ function PANEL:ShowCloseButton(bShow)
 	self.btnClose:SetVisible(bShow)
 end
 
+function PANEL:CloseButtonClickOverride(fn)
+	if not IsValid(self.btnClose) or not isfunction(fn) then return end
+
+	self.btnClose.DoClick = function(button)
+		fn(button)
+	end
+end
+
 function PANEL:ShowBackButton(bShow)
 	self.btnBack:SetVisible(bShow)
 end
