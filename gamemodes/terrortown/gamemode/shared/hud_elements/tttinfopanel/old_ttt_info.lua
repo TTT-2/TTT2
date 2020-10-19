@@ -47,6 +47,32 @@ if CLIENT then
 		BaseClass.PerformLayout(self)
 	end
 
+	---
+	-- Draws the old role icon
+	-- @param number x
+	-- @param number y
+	-- @param number w width
+	-- @param number h height
+	-- @param Material icon the role icon
+	-- @param Color color
+	-- @realm client
+	local function DrawOldRoleIcon(x, y, w, h, icon, color)
+		local base_mat = Material("vgui/ttt/dynamic/base")
+		local base_overlay = Material("vgui/ttt/dynamic/base_overlay")
+
+		surface.SetDrawColor(color.r, color.g, color.b, color.a)
+		surface.SetMaterial(base_mat)
+		surface.DrawTexturedRect(x, y, w, h)
+
+		surface.SetDrawColor(color.r, color.g, color.b, color.a)
+		surface.SetMaterial(base_overlay)
+		surface.DrawTexturedRect(x, y, w, h)
+
+		surface.SetDrawColor(255, 255, 255, 255)
+		surface.SetMaterial(icon)
+		surface.DrawTexturedRect(x, y, w, h)
+	end
+
 	function HUDELEMENT:Draw()
 		local client = LocalPlayer()
 		local L = GetLang()
@@ -121,10 +147,7 @@ if CLIENT then
 					local t = TEAMS[team]
 
 					if t.iconMaterial then
-						local c = t.color or COLOR_BLACK
-						local tx = x + tmp + smargin
-
-						DrawOldRoleIcon(tx, traitor_y, bgheight, bgheight, t.iconMaterial, c)
+						DrawOldRoleIcon(x + tmp + smargin, traitor_y, bgheight, bgheight, t.iconMaterial, t.color or COLOR_BLACK)
 					end
 				end
 			end

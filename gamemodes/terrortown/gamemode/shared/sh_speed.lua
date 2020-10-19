@@ -93,6 +93,9 @@ if CLIENT then
 end
 
 ---
+-- @class Player
+
+---
 -- Returns the current player speed modifier
 -- @return number The speed modifier
 -- @realm shared

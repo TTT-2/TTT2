@@ -74,6 +74,83 @@ end)
 -- SERVERSIDE ARMOR FUNCTIONS
 
 ---
+-- Sets the initial @{Player} Armor, called in @{GM:TTTBeginRound} after (dumb) players
+-- are respawned. Therefore no armor has to be reset and it is safe that the player
+-- receives their armor.
+-- @realm server
+-- @internal
+function ARMOR:InitPlayerArmor()
+	local plys = player.GetAll()
+
+	for i = 1, #plys do
+		local ply = plys[i]
+
+		if not ply:IsTerror() then continue end
+
+		ply:GiveArmor(self.cv.armor_on_spawn:GetInt())
+	end
+end
+
+---
+-- Handles the @{ARMOR} of a @{Player}, called by @{GM:PlayerTakeDamage}
+-- @param Player ply The @{Player} taking damage
+-- @param Entity infl The inflictor
+-- @param Player|Entity att The attacker
+-- @param number amount Amount of damage
+-- @param DamageInfo dmginfo Damage info
+-- @realm server
+-- @internal
+function ARMOR:HandlePlayerTakeDamage(ply, infl, att, amount, dmginfo)
+	local armor = ply:GetArmor()
+
+	-- normal damage handling when no armor is available
+	if armor == 0 then return end
+
+	-- handle if headshots should be ignored by the armor
+	if ply:LastHitGroup() == HITGROUP_HEAD and not self.cv.item_armor_block_headshots:GetBool() then return end
+
+	-- handle different damage type factors, only these four damage types are valid
+	if not dmginfo:IsDamageType(DMG_BULLET) and not dmginfo:IsDamageType(DMG_CLUB)
+		and not dmginfo:IsDamageType(DMG_BURN) and not dmginfo:IsDamageType(DMG_BLAST)
+	then return end
+
+	-- handle if blast damage should be ignored by the armor
+	if dmginfo:IsDamageType(DMG_BLAST) and not self.cv.item_armor_block_blastdmg:GetBool() then return end
+
+	-- fallback for players who prefer the vanilla armor
+	if self.cv.armor_classic:GetBool() then
+		-- classic armor only shields from bullet/crowbar damage
+		if dmginfo:IsDamageType(DMG_BULLET) or dmginfo:IsDamageType(DMG_CLUB) then
+			dmginfo:ScaleDamage(0.7)
+		end
+
+		return
+	end
+
+	-- calculate damage
+	local damage = dmginfo:GetDamage()
+
+	self.cv.armor_factor = self.cv.armor_damage_block_pct:GetFloat()
+	self.cv.health_factor = self.cv.armor_damage_health_pct:GetFloat()
+
+	if ply:ArmorIsReinforced() then
+		self.cv.health_factor = self.cv.health_factor - 0.15
+	end
+
+	local armorDamage = self.cv.armor_factor * damage
+
+	ply:DecreaseArmorValue(armorDamage)
+
+	-- The armor offset is used to catch the damage that should be taken,
+	-- if the armor is not strong enough to take that many hitpoints.
+	-- It is zero as long as the armor is able to take the damage.
+	dmginfo:SetDamage(self.cv.health_factor * damage - math.min(armor - armorDamage, 0))
+end
+
+---
+-- @class Player
+
+---
 -- Sets the @{ARMOR} to a specific value that is capped by the maximum armor value.
 -- @param number armor The new armor to be set
 -- @realm server
@@ -160,78 +237,4 @@ end
 function plymeta:ResetArmor()
 	self:SetArmor(0)
 	self:SetMaxArmor(0)
-end
-
----
--- Sets the initial @{Player} Armor, called in @{GM:TTTBeginRound} after (dumb) players
--- are respawned. Therefore no armor has to be reset and it is safe that the player
--- receives their armor.
--- @realm server
--- @internal
-function ARMOR:InitPlayerArmor()
-	local plys = player.GetAll()
-
-	for i = 1, #plys do
-		local ply = plys[i]
-
-		if not ply:IsTerror() then continue end
-
-		ply:GiveArmor(self.cv.armor_on_spawn:GetInt())
-	end
-end
-
----
--- Handles the @{ARMOR} of a @{Player}, called by @{GM:PlayerTakeDamage}
--- @param Player ply The @{Player} taking damage
--- @param Entity infl The inflictor
--- @param Player|Entity att The attacker
--- @param number amount Amount of damage
--- @param DamageInfo dmginfo Damage info
--- @realm server
--- @internal
-function ARMOR:HandlePlayerTakeDamage(ply, infl, att, amount, dmginfo)
-	local armor = ply:GetArmor()
-
-	-- normal damage handling when no armor is available
-	if armor == 0 then return end
-
-	-- handle if headshots should be ignored by the armor
-	if ply:LastHitGroup() == HITGROUP_HEAD and not self.cv.item_armor_block_headshots:GetBool() then return end
-
-	-- handle different damage type factors, only these four damage types are valid
-	if not dmginfo:IsDamageType(DMG_BULLET) and not dmginfo:IsDamageType(DMG_CLUB)
-		and not dmginfo:IsDamageType(DMG_BURN) and not dmginfo:IsDamageType(DMG_BLAST)
-	then return end
-
-	-- handle if blast damage should be ignored by the armor
-	if dmginfo:IsDamageType(DMG_BLAST) and not self.cv.item_armor_block_blastdmg:GetBool() then return end
-
-	-- fallback for players who prefer the vanilla armor
-	if self.cv.armor_classic:GetBool() then
-		-- classic armor only shields from bullet/crowbar damage
-		if dmginfo:IsDamageType(DMG_BULLET) or dmginfo:IsDamageType(DMG_CLUB) then
-			dmginfo:ScaleDamage(0.7)
-		end
-
-		return
-	end
-
-	-- calculate damage
-	local damage = dmginfo:GetDamage()
-
-	self.cv.armor_factor = self.cv.armor_damage_block_pct:GetFloat()
-	self.cv.health_factor = self.cv.armor_damage_health_pct:GetFloat()
-
-	if ply:ArmorIsReinforced() then
-		self.cv.health_factor = self.cv.health_factor - 0.15
-	end
-
-	local armorDamage = self.cv.armor_factor * damage
-
-	ply:DecreaseArmorValue(armorDamage)
-
-	-- The armor offset is used to catch the damage that should be taken,
-	-- if the armor is not strong enough to take that many hitpoints.
-	-- It is zero as long as the armor is able to take the damage.
-	dmginfo:SetDamage(self.cv.health_factor * damage - math.min(armor - armorDamage, 0))
 end

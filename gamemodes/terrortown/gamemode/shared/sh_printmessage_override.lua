@@ -8,15 +8,6 @@
 
 local plymeta = assert(FindMetaTable("Player"), "FAILED TO FIND PLAYER TABLE")
 
----
--- Displays a message either in their chat, console, or center of the screen.
--- @param number type The type of the message that should be displayed on then screen of the player (see <a href="https://wiki.facepunch.com/gmod/Enums/HUD">Enums/HUD</a>)
--- @param string message Message to be displayed on the screen on the player
--- @realm shared
-function plymeta:PrintMessage(type, message)
-	PrintMessage(type, message, self)
-end
-
 if SERVER then
 	---
 	-- Displays a message in the chat, console, or center of screen of every player / the defined players.
@@ -48,4 +39,16 @@ else -- CLIENT
 			EPOP:AddMessage(message, nil, 6, nil, true)
 		end
 	end
+end
+
+---
+-- @class Player
+
+---
+-- Displays a message either in their chat, console, or center of the screen.
+-- @param number type The type of the message that should be displayed on then screen of the player (see <a href="https://wiki.facepunch.com/gmod/Enums/HUD">Enums/HUD</a>)
+-- @param string message Message to be displayed on the screen on the player
+-- @realm shared
+function plymeta:PrintMessage(type, message)
+	PrintMessage(type, message, self)
 end

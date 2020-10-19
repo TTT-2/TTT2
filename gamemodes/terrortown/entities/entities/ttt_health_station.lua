@@ -83,7 +83,7 @@ function ENT:AddToStorage(amount)
 end
 
 ---
--- @param amount
+-- @param number amount
 -- @return number
 -- @realm shared
 function ENT:TakeFromStorage(amount)

@@ -857,6 +857,9 @@ function ttt2net.SyncWithNWVar(path, meta, nwent, nwkey)
 end
 
 ---
+-- @class Player
+
+---
 -- Player extensions
 -- Some simple functions on the player class, to simplify the use of this system.
 -- They will automatically set the metadata.

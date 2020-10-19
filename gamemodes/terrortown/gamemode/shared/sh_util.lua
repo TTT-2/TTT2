@@ -159,6 +159,9 @@ end
 util.Capitalize = string.Capitalize
 
 ---
+-- @module none
+
+---
 -- Color unpacking
 -- @param Color color
 -- @return number red value of the given color
@@ -187,6 +190,9 @@ function AccessorFuncDT(tbl, varname, name)
 		end
 	end
 end
+
+---
+-- @module util
 
 ---
 -- Darkens a given @{Color} value
@@ -404,6 +410,9 @@ end
 local gsub = string.gsub
 
 ---
+-- @module string
+
+---
 -- Simple string interpolation:
 -- string.Interp("{killer} killed {victim}", {killer = "Bob", victim = "Joe"})
 -- returns "Bob killed Joe"
@@ -415,6 +424,9 @@ local gsub = string.gsub
 function string.Interp(str, tbl)
 	return gsub(str, "{(%w+)}", tbl)
 end
+
+---
+-- @module none
 
 ---
 -- Short helper for input.LookupBinding, returns capitalised key or a default
@@ -430,20 +442,6 @@ function Key(binding, default)
 	end
 
 	return string.upper(b)
-end
-
-local exp = math.exp
-
----
--- Equivalent to ExponentialDecay from Source's mathlib.
--- Convenient for falloff curves.
--- @param number halflife
--- @param number dt
--- @return number
--- @realm shared
-function math.ExponentialDecay(halflife, dt)
-	-- ln(0.5) = -0.69..
-	return exp((-0.69314718 / halflife) * dt)
 end
 
 ---
@@ -483,6 +481,26 @@ end
 function IsRagdoll(ent)
 	return ent and IsValid(ent) and ent:GetClass() == "prop_ragdoll"
 end
+
+local exp = math.exp
+
+---
+-- @module math
+
+---
+-- Equivalent to ExponentialDecay from Source's mathlib.
+-- Convenient for falloff curves.
+-- @param number halflife
+-- @param number dt
+-- @return number
+-- @realm shared
+function math.ExponentialDecay(halflife, dt)
+	-- ln(0.5) = -0.69..
+	return exp((-0.69314718 / halflife) * dt)
+end
+
+---
+-- @module util
 
 local band = bit.band
 

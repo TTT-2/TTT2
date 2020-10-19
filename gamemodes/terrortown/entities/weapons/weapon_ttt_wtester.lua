@@ -543,12 +543,14 @@ else -- CLIENT
 		if not IsValid(target) or not GetGlobalBool("ttt2_dna_radar") then
 			RADAR.samples = {}
 			RADAR.samples_count = 0
+
 			self.RadarPos = nil
 
 			return
 		end
 
 		self.RadarPos = target:LocalToWorld(target:OBBCenter())
+
 		RADAR.samples = {{pos = self.RadarPos}}
 		RADAR.samples_count = 1
 	end

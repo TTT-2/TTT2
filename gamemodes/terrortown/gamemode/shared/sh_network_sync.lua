@@ -14,6 +14,9 @@ ttt2net.NETMSG_REQUEST_FULL_STATE_UPDATE = "TTT2_NET_REQUEST_FULL_STATE_UPDATE"
 ttt2net.NET_STREAM_FULL_STATE_UPDATE = "TTT2_NET_STREAM_FULL_STATE_UPDATE"
 
 ---
+-- @class Player
+
+---
 -- Player extensions
 -- Some simple functions on the player class, to simplify the use of this system.
 local plymeta = assert(FindMetaTable("Player"), "[TTT2NET] FAILED TO FIND PLAYER TABLE")

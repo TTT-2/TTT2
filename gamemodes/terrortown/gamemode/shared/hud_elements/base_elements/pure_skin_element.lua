@@ -32,9 +32,7 @@ if CLIENT then
 	-- @param number a alpha of line's color
 	-- @realm client
 	function HUDELEMENT:DrawLines(x, y, w, h, a)
-		a = a or 255
-
-		DrawHUDElementLines(x, y, w, h, a)
+		DrawHUDElementLines(x, y, w, h, a or 255)
 	end
 
 	---

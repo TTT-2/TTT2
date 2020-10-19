@@ -210,7 +210,7 @@ function LANG.GetLanguageTable(lang_name)
 
 	local cpy = table.Copy(LANG.Strings[lang_name])
 
-	SetFallback(cpy)
+	LANG.SetFallback(cpy)
 
 	return cpy
 end
@@ -219,7 +219,7 @@ end
 -- Initializes a fallback table for a given language table
 -- @param table tbl
 -- @realm client
-function SetFallback(tbl)
+function LANG.SetFallback(tbl)
 	-- languages may deal with this themselves, or may already have the fallback
 	local m = getmetatable(tbl)
 
@@ -251,7 +251,7 @@ function LANG.SetActiveLanguage(lang_name)
 		cached_active = LANG.Strings[lang_name]
 
 		-- set the default lang as fallback, if it hasn't yet
-		SetFallback(cached_active)
+		LANG.SetFallback(cached_active)
 
 		-- some interface elements will want to know so they can update themselves
 		if old_name ~= lang_name then
