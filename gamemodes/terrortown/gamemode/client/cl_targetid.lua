@@ -239,7 +239,7 @@ function GM:HUDDrawTargetID()
 	if hook.Call("HUDShouldDraw", GAMEMODE, "TTTPropSpec") then
 		DrawPropSpecLabels(client)
 	end
-	
+
 	local ent, unchangedEnt, distance
 	local startpos = client:EyePos()
 	local direction = client:GetAimVector()
@@ -494,7 +494,7 @@ function FindEntityAlongView(pos, dir, filter)
 		ent = trace.Entity
 
 		distance = trace.StartPos:Distance(trace.HitPos)
-		
+
 		-- if a vehicle, we identify the driver instead
 		if IsValid(ent) and IsValid(ent:GetNWEntity("ttt_driver", nil)) then
 			ent = ent:GetNWEntity("ttt_driver", nil)
