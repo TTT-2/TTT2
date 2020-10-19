@@ -1210,7 +1210,8 @@ function GM:EntityTakeDamage(ent, dmginfo)
 	end
 
 	--Call a second Hook after Damage got processed to output the real Damage that has been dealt
-	return hook.Run("TTT2PostEntityTakeDamage", ent, dmginfo)
+	local tmpdmginfo =  table.Copy(dmginfo)
+	hook.Run("TTT2PostEntityTakeDamage", ent, tmpdmginfo)
 end
 
 ---
@@ -1483,10 +1484,9 @@ function GM:PlayerShouldTaunt(ply, act)
 end
 
 ---
--- Called by @{GM:EntityTakeDamage} after damage output was changed due to internal events. You can modify all parts of the damage info in this hook again.
+-- Called by @{GM:EntityTakeDamage} after damage output was changed due to internal events. The damage info is read only.
 -- @param Entity ent The @{Entity} taking damage
 -- @param DamageInfo dmginfo The damage info
--- @return boolean Return true to completely block the damage event
 -- @hook
 -- @realm server
 -- @local
