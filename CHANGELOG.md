@@ -11,8 +11,10 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Introduced a global scale factor based on screen resolution to scale HUD elements accordingly
 - Added automatical scale factor change on resolution change that works even if the resolution was changed while TTT2 wasn't loaded
 - Added `drawsc` library featuring scalable draw functions
+- Added Drag&Drop role layering VGUI, accessible with the console command `ttt2_edit_rolelayering`
 - Updated Simplified Chinese localization (by @TheOnly8Z)
 - Updated Italian localization (by @ThePlatynumGhost)
+- Added `orm` library to simplify database access
 
 ### Changed
 
@@ -21,6 +23,11 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Inverted some convars to have a uniform "Enable feature X", not a mixture of enable and disable
 - TargetID text is now scaled with the global scale factor
 - Cleaned up draw function files
+- Removed C4 defuse restriction for teammates
+
+### Fixed
+
+- Fixed weapon pickup bug, where weapons would not get dropped but stayed in inventory
 
 ## [v0.7.4b](https://github.com/TTT-2/TTT2/tree/v0.7.4b) (2020-09-28)
 
@@ -36,6 +43,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - The weapon pickup system has been improved to increase stability and remove edge cases in temporary weapon teleportation
 - Updated Spanish translation (by @DennisWolfgang)
+- Fixed subrole selection (issues happened with max_roles enabled, etc.). Subroles are now directly connected with their related baseroles
 
 ### Fixed
 
