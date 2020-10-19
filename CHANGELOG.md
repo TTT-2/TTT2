@@ -19,6 +19,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Changed
 
 - the F1 menu is completely overhauled
+- the Roundend menu is completely overhauled
 - Cleaned up language files, they are now identical on a line by line comparison
 - Inverted some convars to have a uniform "Enable feature X", not a mixture of enable and disable
 - TargetID text is now scaled with the global scale factor
@@ -34,18 +35,6 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Added
 
 - Added ConVar to toggle double-click buying
-- Added a new vgui system
-  - introduced new development interfaces to easily create menues and settings for addons
-- Introduced a global scale factor
-  - based on a 1080p resolution and automatically adjusted to the current screen resolution (i.e. a 4k display has a default scale factor of 2)
-  - used by the HUD
-- Added automatical scale factor change on resolution change that works even if the resolution was changed while TTT2 wasn't loaded
-
-### Changed
-
-- the F1 menu is completely overhauled
-- Cleaned up language files, they are now identical on a line by line comparison
-- Inverted some convars to have a uniform "Enable feature X", not a mixture of enable and disable
 - Added Japanese translation (by @Westoon)
 - Added `table.ExtractRandomEntry(tbl, filterFn)` function
 - Added a team indicator in front of every name in the scoreboard (just known teams will be displayed)
