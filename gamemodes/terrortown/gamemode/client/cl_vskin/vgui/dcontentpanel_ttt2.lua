@@ -1,12 +1,11 @@
 local PANEL = {}
 
-AccessorFunc(PANEL, "m_bBackground",		"PaintBackground",	FORCE_BOOL)
-AccessorFunc(PANEL, "m_bBackground",		"DrawBackground",	FORCE_BOOL) -- deprecated
-AccessorFunc(PANEL, "m_bIsMenuComponent",	"IsMenu",			FORCE_BOOL)
-AccessorFunc(PANEL, "m_bDisableTabbing",	"TabbingDisabled",	FORCE_BOOL)
+AccessorFunc(PANEL, "m_bBackground", "PaintBackground", FORCE_BOOL)
+AccessorFunc(PANEL, "m_bBackground", "DrawBackground", FORCE_BOOL) -- deprecated
+AccessorFunc(PANEL, "m_bIsMenuComponent", "IsMenu", FORCE_BOOL)
+AccessorFunc(PANEL, "m_bDisableTabbing", "TabbingDisabled", FORCE_BOOL)
 
-AccessorFunc(PANEL, "m_bDisabled",	"Disabled")
-AccessorFunc(PANEL, "m_bgColor",	"BackgroundColor")
+AccessorFunc(PANEL, "m_bgColor", "BackgroundColor")
 
 Derma_Hook(PANEL, "Paint", "Paint", "Panel")
 Derma_Hook(PANEL, "ApplySchemeSettings", "Scheme", "Panel")
@@ -26,24 +25,20 @@ function PANEL:Paint(w, h)
 	return false
 end
 
-function PANEL:SetDisabled(bDisabled)
-	self.m_bDisabled = bDisabled
+function PANEL:SetEnabled(bEnabled)
+	self.m_bEnabled = not bEnabled
 
-	if bDisabled then
-		self:SetAlpha(75)
-		self:SetMouseInputEnabled(false)
-	else
+	if bEnabled then
 		self:SetAlpha(255)
 		self:SetMouseInputEnabled(true)
+	else
+		self:SetAlpha(75)
+		self:SetMouseInputEnabled(false)
 	end
 end
 
-function PANEL:SetEnabled(bEnabled)
-	self:SetDisabled(not bEnabled)
-end
-
 function PANEL:IsEnabled()
-	return not self:GetDisabled()
+	return self.m_bEnabled
 end
 
 function PANEL:OnMousePressed(mousecode)
@@ -63,12 +58,9 @@ function PANEL:OnMouseReleased(mousecode)
 	if self:EndBoxSelection() then return end
 
 	self:MouseCapture(false)
-
-	if self:DragMouseRelease(mousecode) then
-		return
-	end
 end
 
+-- overwrites the base function with an empty function
 function PANEL:UpdateColours()
 
 end

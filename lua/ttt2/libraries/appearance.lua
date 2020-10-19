@@ -4,7 +4,7 @@
 
 AddCSLuaFile()
 
--- the rest of the appearce library is client only
+-- the rest of the appearance library is client only
 if SERVER then return end
 
 local cv_last_width = CreateConVar("ttt2_resolution_last_width", 1920, {FCVAR_ARCHIVE})
@@ -17,8 +17,18 @@ local cv_global_color_g = CreateConVar("ttt2_global_color_g", "160", {FCVAR_ARCH
 local cv_global_color_b = CreateConVar("ttt2_global_color_b", "160", {FCVAR_ARCHIVE})
 local cv_global_color_a = CreateConVar("ttt2_global_color_a", "160", {FCVAR_ARCHIVE})
 
+local function SetCachedColor()
+	appearance.focusColor = Color(
+		cv_global_color_r:GetInt(),
+		cv_global_color_g:GetInt(),
+		cv_global_color_b:GetInt(),
+		cv_global_color_a:GetInt()
+	)
+end
+
 appearance = appearance or {}
 appearance.callbacks = {}
+appearance.focusColor = nil
 
 ---
 -- This function should be called when the resolution is updated. It
@@ -61,8 +71,10 @@ function appearance.SetGlobalScale(scale)
 
 	cv_scale:SetFloat(scale)
 
-	for i = 1, #appearance.callbacks do
-		appearance.callbacks[i](oldScale, scale)
+	local appearanceCallbacks = appearance.callbacks
+
+	for i = 1, #appearanceCallbacks do
+		appearanceCallbacks[i](oldScale, scale)
 	end
 end
 
@@ -75,7 +87,7 @@ end
 
 ---
 -- Returns the default global scale based on the current
--- screen resolution
+-- screen resolution in reference to a 1080p based design
 -- @return number The scale as a floating point value
 function appearance.GetDefaultGlobalScale()
 	return math.Round(ScrW() / 1920, 1)
@@ -84,6 +96,8 @@ end
 ---
 -- Registers a callback function that is called once the scale
 -- is changed
+-- @param function fn The callback function 
+-- @realm client
 function appearance.RegisterScaleChangeCallback(fn)
 	if not isfunction(fn) or table.HasValue(appearance.callbacks, fn) then return end
 
@@ -106,16 +120,28 @@ end
 -- @return Color The current focus color
 -- @realm client
 function appearance.GetFocusColor()
-	return Color(
-		cv_global_color_r:GetInt(),
-		cv_global_color_g:GetInt(),
-		cv_global_color_b:GetInt(),
-		cv_global_color_a:GetInt()
-	)
+	if not IsColor(appearance.focusColor) then
+		SetCachedColor()
+	end
+
+	return appearance.focusColor
 end
 
+cvars.AddChangeCallback(cv_global_color_r:GetName(), function(cv, old, new)
+	SetCachedColor()
+end)
+cvars.AddChangeCallback(cv_global_color_g:GetName(), function(cv, old, new)
+	SetCachedColor()
+end)
+cvars.AddChangeCallback(cv_global_color_b:GetName(), function(cv, old, new)
+	SetCachedColor()
+end)
+cvars.AddChangeCallback(cv_global_color_a:GetName(), function(cv, old, new)
+	SetCachedColor()
+end)
+
 ---
--- Sets if the global focus color or the dyanamic color should
+-- Sets if the global focus color or the dynamic color should
 -- be used
 -- @param boolean state The new use state
 -- @realm client

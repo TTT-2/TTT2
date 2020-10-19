@@ -262,7 +262,6 @@ L.item_disg_desc = [[
 
 -- C4
 L.c4_hint = "{usekey}を押して起動もしくは解除する."
-L.c4_no_disarm = "他のTraitorのC4は彼らが死ぬまで解除できません."
 L.c4_disarm_warn = "あなたが設置したC4爆弾は解除されました."
 L.c4_armed = "あなたは首尾よく爆弾を起動しました."
 L.c4_disarmed = "あなたは爆弾を上手い事解除しました."
@@ -1279,3 +1278,8 @@ L.binoc_help_sec = "ズームレベルを変更."
 L.vis_help_pri = "Visualizerを落とす."
 
 L.decoy_help_pri = "Decoyを設置する."
+
+-- 2020-08-07
+--L.pickup_error_spec = "You cannot pick this up as a spectator."
+--L.pickup_error_owns = "You cannot pick this up because you already have this weapon."
+--L.pickup_error_noslot = "You cannot pick this up because you have no free slot available."

@@ -262,7 +262,6 @@ Toggle in the Disguise tab of this menu or press Numpad Enter.]]
 
 -- C4
 L.c4_hint = "Press {usekey} to arm or disarm."
-L.c4_no_disarm = "You cannot disarm another Traitor's C4 unless they are dead."
 L.c4_disarm_warn = "A C4 explosive you planted has been disarmed."
 L.c4_armed = "You have successfully armed the bomb."
 L.c4_disarmed = "You have successfully disarmed the bomb."
@@ -1216,7 +1215,7 @@ L.header_roleselection = "Enable Role Assignment"
 L.header_hud_administration = "Select Default and Forced HUDs"
 L.header_hud_enabled = "Enable/Disable HUDs"
 
-L.button_menu_back = "back"
+L.button_menu_back = "Back"
 L.button_none = "None"
 L.button_press_key = "Press a key"
 L.button_save = "Save"

@@ -8,7 +8,7 @@ ENT.Base = "base_point"
 
 local IsValid = IsValid
 
-local ROLE_ANY = 3
+ROLE_ANY = ROLE_ANY or 3
 
 ENT.Role = ROLE_ANY
 

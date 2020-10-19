@@ -72,7 +72,7 @@ end
 -- @param number oldScrH The old screen height
 -- @hook
 -- @ref https://wiki.facepunch.com/gmod/GM:OnScreenSizeChanged
--- @ream client
+-- @realm client
 function GM:OnScreenSizeChanged(oldScrW, oldScrH)
 	-- resolution has changed, update resolution in appearance
 	-- to handle dynamic resolution changes
@@ -150,7 +150,7 @@ end
 
 ---
 -- Sets the @{HUD} (if possible)
--- @note This will fail if the @{HUD} is not available or is
+-- @note This will fail silently if the @{HUD} is not available or is
 -- restricted by the server
 -- @param string name The name of the HUD
 -- @realm client
@@ -172,6 +172,7 @@ function HUDManager.ResetHUD()
 	if not hud then return end
 
 	hud:Reset()
+	hud:SaveData()
 end
 
 ---

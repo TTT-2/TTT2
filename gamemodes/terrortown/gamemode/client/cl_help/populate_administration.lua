@@ -1,7 +1,7 @@
 local materialIcon = Material("vgui/ttt/vskin/helpscreen/administration")
 
 local function PopulateHUDPanel(parent)
-	local form = CreateForm(parent, "header_hud_administration")
+	local form = CreateTTT2Form(parent, "header_hud_administration")
 
 	local restrictedHUDs = ttt2net.GetGlobal({"hud_manager", "restrictedHUDs"})
 	local hudList = huds.GetList()
@@ -9,8 +9,8 @@ local function PopulateHUDPanel(parent)
 	local validHUDsRestriction = {[1] = "None"}
 
 	for i = 1, #hudList do
-		validHUDsDefault[#validHUDsDefault + 1] = hudList[i].id
-		validHUDsRestriction[#validHUDsRestriction + 1] = hudList[i].id
+		validHUDsDefault[i] = hudList[i].id
+		validHUDsRestriction[i + 1] = hudList[i].id
 	end
 
 	form:MakeHelp({
@@ -45,7 +45,7 @@ local function PopulateHUDPanel(parent)
 		end
 	})
 
-	local form2 = CreateForm(parent, "header_hud_enabled")
+	local form2 = CreateTTT2Form(parent, "header_hud_enabled")
 
 	form2:MakeHelp({
 		label = "help_hud_enabled_desc"

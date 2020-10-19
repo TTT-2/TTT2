@@ -1,4 +1,3 @@
-
 local PANEL = {}
 
 AccessorFunc(PANEL, "Padding", "Padding")
@@ -26,7 +25,6 @@ function PANEL:Init()
 	self:SetPaintBackgroundEnabled(false)
 	self:SetPaintBorderEnabled(false)
 	self:SetPaintBackground(false)
-
 end
 
 function PANEL:AddItem(pnl)
@@ -104,7 +102,6 @@ function PANEL:PerformLayoutInternal()
 	if tall ~= self.pnlCanvas:GetTall() then
 		self.vBar:SetScroll(self.vBar:GetScroll())
 	end
-
 end
 
 function PANEL:PerformLayout()

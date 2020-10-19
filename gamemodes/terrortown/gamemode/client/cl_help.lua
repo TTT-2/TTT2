@@ -42,7 +42,7 @@ local mainMenuAdminOrder = {
 }
 
 -- Populate the main menu
-local function InternalModifyMainMenu(helpData)
+local function InternalModifyHelpMainMenu(helpData)
 	for i = 1, #mainMenuOrder do
 		local id = mainMenuOrder[i]
 
@@ -51,12 +51,13 @@ local function InternalModifyMainMenu(helpData)
 
 	for i = 1, #mainMenuAdminOrder do
 		local id = mainMenuAdminOrder[i]
+
 		HELPSCRN.populate[id](helpData, id)
 	end
 end
 
 -- Populate the sub menues
-local function InternalModifySubMenu(helpData, menuId)
+local function InternalModifyHelpSubMenu(helpData, menuId)
 	if not HELPSCRN.subPopulate[menuId] then return end
 
 	HELPSCRN.subPopulate[menuId](helpData, menuId)
@@ -72,12 +73,12 @@ HELPSCRN.parent = HELPSCRN.parent or nil
 HELPSCRN.menuData = HELPSCRN.menuData or nil
 HELPSCRN.menuFrame = HELPSCRN.menuFrame or nil
 
-HELPSCRN.pad = 5
+HELPSCRN.padding = 5
 
 -- define sizes
 local width, height = 1100, 700
 local cols = 3
-local widthMainMenuButton = math.Round((width - 2 * HELPSCRN.pad * (cols + 1)) / cols)
+local widthMainMenuButton = math.Round((width - 2 * HELPSCRN.padding * (cols + 1)) / cols)
 local heightMainMenuButton = 120
 
 local widthNav, heightNav = 300, 700
@@ -114,7 +115,7 @@ function HELPSCRN:ShowMainMenu()
 	local frame = self.menuFrame
 
 	-- IF MENU ELEMENT DOES NOT ALREADY EXIST, CREATE IT
-	if IsValid(frame) and not frame:IsFrameHidden() then
+	if IsValid(frame) then
 		frame:ClearFrame(nil, nil, "help_title")
 	else
 		frame = vguihandler.GenerateFrame(width, height, "help_title", true)
@@ -123,7 +124,7 @@ function HELPSCRN:ShowMainMenu()
 	self.menuFrame = frame
 
 	-- INIT MAIN MENU SPECIFIC STUFF
-	frame:SetPadding(self.pad, self.pad, self.pad, self.pad)
+	frame:SetPadding(self.padding, self.padding, self.padding, self.padding)
 
 	-- MARK AS MAIN MENU
 	self.currentMenuId = MAIN_MENU
@@ -135,16 +136,18 @@ function HELPSCRN:ShowMainMenu()
 	-- SPLIT FRAME INTO A GRID LAYOUT
 	local dsettings = vgui.Create("DIconLayout", scrollPanel)
 	dsettings:Dock(FILL)
-	dsettings:SetSpaceX(self.pad)
-	dsettings:SetSpaceY(self.pad)
+	dsettings:SetSpaceX(self.padding)
+	dsettings:SetSpaceY(self.padding)
 
 	-- GENERATE MENU CONTENT
 	local menuTbl = {}
-	local helpData = HELP_MENU_DATA:BindData(menuTbl)
+	local helpData = menuDataHandler.CreateNewHelpMenu()
 
-	InternalModifyMainMenu(helpData)
+	helpData:BindData(menuTbl)
 
-	hook.Run("TTT2ModifyMainMenu", helpData)
+	InternalModifyHelpMainMenu(helpData)
+
+	hook.Run("TTT2ModifyHelpMainMenu", helpData)
 
 	local menuesNormal = helpData:GetVisibleNormalMenues()
 	local menuesAdmin = helpData:GetVisibleAdminMenues()
@@ -163,11 +166,16 @@ function HELPSCRN:ShowMainMenu()
 	AddMenuButtons(menuesAdmin, dsettings)
 end
 
+HELPSCRN.Show = HELPSCRN.ShowMainMenu
+
 ---
--- Returns the name of the currently opened menu
--- @return string The id of the opened menu
+-- Returns the name of the currently opened menu, returns nil if no menu is opened
+-- @return string The id of the opened menu or nil
 -- @realm client
 function HELPSCRN:GetOpenMenu()
+	-- `self.menuData.id` is not reset on close of the menu, therefore it has to be
+	-- checked if a menu is open at all. This is done by checking if `self.currentMenuId ~= nil`
+	-- since this variable is set to `nil` once the menu is closed
 	return self.currentMenuId and self.menuData.id
 end
 
@@ -186,14 +194,16 @@ end
 -- Builds the content area, the data has to be set previously
 -- @realm client
 function HELPSCRN:BuildContentArea()
-	if not IsValid(self.parent) then return end
+	local parent = self.parent
 
-	if hook.Run("TTT2OnSubmenuClear", self.parent, self.currentMenuId, self.lastMenuData, self.menuData) == false then return end
+	if not IsValid(parent) then return end
 
-	self.parent:Clear()
+	if hook.Run("TTT2OnHelpSubMenuClear", parent, self.currentMenuId, self.lastMenuData, self.menuData) == false then return end
 
-	local width2, height2 = self.parent:GetSize()
-	local _, paddingTop, _, paddingBottom = self.parent:GetDockPadding()
+	parent:Clear()
+
+	local width2, height2 = parent:GetSize()
+	local _, paddingTop, _, paddingBottom = parent:GetDockPadding()
 
 	-- CALCULATE SIZE BASED ON EXISTENCE OF BUTTON PANEL
 	if isfunction(self.menuData.populateButtonFn) then
@@ -201,7 +211,7 @@ function HELPSCRN:BuildContentArea()
 	end
 
 	-- ADD CONTENT BOX AND CONTENT
-	local contentAreaScroll = vgui.Create("DScrollPanelTTT2", self.parent)
+	local contentAreaScroll = vgui.Create("DScrollPanelTTT2", parent)
 	contentAreaScroll:SetVerticalScrollbarEnabled(true)
 	contentAreaScroll:SetSize(width2, height2 - paddingTop - paddingBottom)
 	contentAreaScroll:Dock(TOP)
@@ -212,7 +222,7 @@ function HELPSCRN:BuildContentArea()
 
 	-- ADD BUTTON BOX AND BUTTONS
 	if isfunction(self.menuData.populateButtonFn) then
-		local buttonArea = vgui.Create("DButtonPanelTTT2", self.parent)
+		local buttonArea = vgui.Create("DButtonPanelTTT2", parent)
 		buttonArea:SetSize(width2, heightButtonPanel)
 		buttonArea:Dock(BOTTOM)
 
@@ -228,7 +238,7 @@ function HELPSCRN:ShowSubMenu(data)
 	local frame = self.menuFrame
 
 	-- IF MENU ELEMENT DOES NOT ALREADY EXIST, CREATE IT
-	if IsValid(frame) and not frame:IsFrameHidden() then
+	if IsValid(frame) then
 		frame:ClearFrame(nil, nil, data.title or data.id)
 	else
 		frame = vguihandler.GenerateFrame(width, height, data.title or data.id)
@@ -263,21 +273,23 @@ function HELPSCRN:ShowSubMenu(data)
 	-- SPLIT NAV AREA INTO A GRID LAYOUT
 	local navAreaScrollGrid = vgui.Create("DIconLayout", navAreaScroll)
 	navAreaScrollGrid:Dock(FILL)
-	navAreaScrollGrid:SetSpaceY(self.pad)
+	navAreaScrollGrid:SetSpaceY(self.padding)
 
 	local contentArea = vgui.Create("DContentPanelTTT2", frame)
 	contentArea:SetSize(widthContent, heightContent - vskin.GetHeaderHeight() - vskin.GetBorderSize())
 	contentArea:SetPos(widthNav, 0)
-	contentArea:DockPadding(self.pad, self.pad, self.pad, self.pad)
+	contentArea:DockPadding(self.padding, self.padding, self.padding, self.padding)
 	contentArea:Dock(TOP)
 
 	-- GENERATE MENU CONTENT
 	local menuTbl = {}
-	local helpData = HELP_SUB_MENU_DATA:BindData(menuTbl)
+	local helpData = menuDataHandler.CreateNewHelpSubMenu()
 
-	InternalModifySubMenu(helpData, data.id)
+	helpData:BindData(menuTbl)
 
-	hook.Run("TTT2ModifySubMenu", helpData, data.id)
+	InternalModifyHelpSubMenu(helpData, data.id)
+
+	hook.Run("TTT2ModifyHelpSubMenu", helpData, data.id)
 
 	-- cache reference to last active button
 	local lastActive
@@ -288,29 +300,26 @@ function HELPSCRN:ShowSubMenu(data)
 		labelNoContent:SetSize(widthContent - 40, 50)
 		labelNoContent:SetFont("DermaTTT2Title")
 		labelNoContent:SetPos(20, 0)
-	end
+	else
+		for i = 1, #menuTbl do
+			local subData = menuTbl[i]
 
-	for i = 1, #menuTbl do
-		local subData = menuTbl[i]
+			local settingsButton = navAreaScrollGrid:Add("DSubMenuButtonTTT2")
+			settingsButton:SetSize(widthNavButton, heightNavButton)
+			settingsButton:SetTitle(subData.title or subData.id)
 
-		local settingsButton = navAreaScrollGrid:Add("DSubMenuButtonTTT2")
-		settingsButton:SetSize(widthNavButton, heightNavButton)
-		settingsButton:SetTitle(subData.title or subData.id)
+			settingsButton.DoClick = function(slf)
+				HELPSCRN:SetupContentArea(contentArea, menuTbl[i])
+				HELPSCRN:BuildContentArea()
 
-		settingsButton.DoClick = function(slf)
-			HELPSCRN:SetupContentArea(contentArea, menuTbl[i])
-			HELPSCRN:BuildContentArea()
+				-- handle the set/unset of active buttons for the draw process
+				lastActive:SetActive(false)
+				slf:SetActive()
 
-			-- handle the set/unset of active buttons for the draw process
-			lastActive:SetActive(false)
-			slf:SetActive()
-
-			lastActive = slf
+				lastActive = slf
+			end
 		end
-	end
 
-	-- autoselect first entry
-	if #menuTbl >= 1 then
 		HELPSCRN:SetupContentArea(contentArea, menuTbl[1])
 		HELPSCRN:BuildContentArea()
 
@@ -327,6 +336,15 @@ function HELPSCRN:ShowSubMenu(data)
 
 		HELPSCRN:BuildContentArea()
 	end
+end
+
+---
+-- Unhides the helpscreen if it was hidden.
+-- @realm client
+function HELPSCRN:Unhide()
+	if not self.menuFrame or not self.menuFrame:IsFrameHidden() then return end
+
+	self.menuFrame:ShowFrame()
 end
 
 local function ShowTTTHelp(ply, cmd, args)
@@ -359,6 +377,25 @@ concommand.Add("ttt_helpscreen", ShowTTTHelp)
 -- @param table menuData The menu data of the menu that will be opened
 -- @hook
 -- @realm client
-function GM:TTT2OnSubmenuClear(parent, currentMenuId, lastMenuData, menuData)
+function GM:TTT2OnHelpSubMenuClear(parent, currentMenuId, lastMenuData, menuData)
+
+end
+
+---
+-- A hook that is used to popuplate and modify the contents of the main help menu.
+-- @param HELP_MENU_DATA helpData A reference to the menu data object
+-- @hook
+-- @realm client
+function GM:TTT2ModifyHelpMainMenu(helpData)
+
+end
+
+---
+-- A hook that is used to popuplate and modify the contents of the sub help menu.
+-- @param HELP_MENU_DATA helpData A reference to the sub menu data object
+-- @param string menuId The id of the currently opened menu
+-- @hook
+-- @realm client
+function GM:TTT2ModifyHelpSubMenu(helpData, menuId)
 
 end

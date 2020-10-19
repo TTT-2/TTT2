@@ -1,4 +1,3 @@
-
 local PANEL = {}
 
 AccessorFunc(PANEL, "m_fDefaultValue", "DefaultValue")
@@ -43,6 +42,7 @@ function PANEL:Init()
 
 			return
 		end
+
 		self.Slider:OnMousePressed(mcode)
 	end
 
@@ -161,6 +161,7 @@ function PANEL:ValueChanged(val)
 	self:OnValueChanged(val)
 end
 
+-- overwrites the base function with an empty function
 function PANEL:OnValueChanged(val)
 
 end

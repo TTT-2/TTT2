@@ -1,7 +1,7 @@
 local materialIcon = Material("vgui/ttt/vskin/helpscreen/appearance")
 
 local function PopulateGeneralPanel(parent)
-	local form = CreateForm(parent, "header_global_color")
+	local form = CreateTTT2Form(parent, "header_global_color")
 
 	form:MakeHelp({
 		label = "help_color_desc"
@@ -111,7 +111,7 @@ local function PopulateHUDSwitcherPanelSettings(parent, currentHUD)
 end
 
 local function PopulateHUDSwitcherPanel(parent)
-	local form = CreateForm(parent, "header_hud_select")
+	local form = CreateTTT2Form(parent, "header_hud_select")
 
 	local currentHUDName = HUDManager.GetHUD()
 	local currentHUD = huds.GetStored(currentHUDName)
@@ -151,7 +151,7 @@ local function PopulateHUDSwitcherPanel(parent)
 		default = ttt2net.GetGlobal({"hud_manager", "defaultHUD"})
 	})
 
-	PopulateHUDSwitcherPanelSettings(CreateForm(parent, "header_hud_customize"), currentHUD)
+	PopulateHUDSwitcherPanelSettings(CreateTTT2Form(parent, "header_hud_customize"), currentHUD)
 
 	-- REGISTER UNHIDE FUNCTION TO STOP HUD EDITOR
 	HELPSCRN.menuFrame.OnShow = function(slf)
@@ -161,7 +161,7 @@ local function PopulateHUDSwitcherPanel(parent)
 	end
 end
 
-hook.Add("TTT2HUDUpdated", "UpdateHUDSwitcherData", function(name)
+hook.Add("TTT2HUDUpdated", "UpdateHUDSwitcherData", function()
 	if HELPSCRN:GetOpenMenu() ~= "ttt2_appearance_hud_switcher" then return end
 
 	-- rebuild the content area so that data is refreshed
@@ -170,7 +170,7 @@ hook.Add("TTT2HUDUpdated", "UpdateHUDSwitcherData", function(name)
 end)
 
 local function PopulateVSkinPanel(parent)
-	local form = CreateForm(parent, "header_vskin_select")
+	local form = CreateTTT2Form(parent, "header_vskin_select")
 
 	form:MakeHelp({
 		label = "help_vskin_info"
@@ -206,7 +206,7 @@ local function PopulateVSkinPanel(parent)
 end
 
 local function PopulateTargetIDPanel(parent)
-	local form = CreateForm(parent, "header_targetid")
+	local form = CreateTTT2Form(parent, "header_targetid")
 
 	form:MakeHelp({
 		label = "help_targetid_info"
@@ -219,7 +219,7 @@ local function PopulateTargetIDPanel(parent)
 end
 
 local function PopulateShopPanel(parent)
-	local form = CreateForm(parent, "header_shop_settings")
+	local form = CreateTTT2Form(parent, "header_shop_settings")
 
 	form:MakeHelp({
 		label = "help_shop_key_desc"
@@ -231,7 +231,7 @@ local function PopulateShopPanel(parent)
 	})
 
 	if GetConVar("ttt_bem_allow_change"):GetBool() then
-		local form2 = CreateForm(parent, "header_shop_layout")
+		local form2 = CreateTTT2Form(parent, "header_shop_layout")
 
 		form2:MakeSlider({
 			label = "label_shop_num_col",
@@ -258,7 +258,7 @@ local function PopulateShopPanel(parent)
 		})
 	end
 
-	local form3 = CreateForm(parent, "header_shop_marker")
+	local form3 = CreateTTT2Form(parent, "header_shop_marker")
 
 	form3:MakeCheckBox({
 		label = "label_shop_show_slot",
@@ -277,7 +277,7 @@ local function PopulateShopPanel(parent)
 end
 
 local function PopulateCrosshairPanel(parent)
-	local form = CreateForm(parent, "header_crosshair_settings")
+	local form = CreateTTT2Form(parent, "header_crosshair_settings")
 
 	-- store the reference to the checkbox in a variable
 	-- because the other settings are enabled based on
@@ -385,7 +385,7 @@ local function PopulateCrosshairPanel(parent)
 end
 
 local function PopulateDamagePanel(parent)
-	local form = CreateForm(parent, "header_damage_indicator")
+	local form = CreateTTT2Form(parent, "header_damage_indicator")
 
 	form:MakeHelp({
 		label = "help_damage_indicator_desc"
@@ -435,7 +435,7 @@ local function PopulateDamagePanel(parent)
 end
 
 local function PopulatePerformancePanel(parent)
-	local form = CreateForm(parent, "header_performance_settings")
+	local form = CreateTTT2Form(parent, "header_performance_settings")
 
 	form:MakeCheckBox({
 		label = "label_performance_halo_enable",
@@ -454,7 +454,7 @@ local function PopulatePerformancePanel(parent)
 end
 
 local function PopulateInterfacePanel(parent)
-	local form = CreateForm(parent, "header_interface_settings")
+	local form = CreateTTT2Form(parent, "header_interface_settings")
 
 	form:MakeCheckBox({
 		label = "label_interface_tips_enable",

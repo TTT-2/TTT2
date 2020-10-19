@@ -29,44 +29,36 @@ end
 
 function PANEL:Clear()
 	self:SetText("")
-	self.Choices = {}
-	self.Data = {}
-	self.ChoiceIcons = {}
+	self.choices = {}
+	self.data = {}
+	self.choiceIcons = {}
 	self.selected = nil
 
-	if self.Menu then
-		self.Menu:Remove()
-		self.Menu = nil
+	if self.menu then
+		self.menu:Remove()
+		self.menu = nil
 	end
 end
 
 function PANEL:GetOptionText(id)
-	return self.Choices[id]
+	return self.choices[id]
 end
 
 function PANEL:GetOptionId(name)
-	return table.KeyFromValue(self.Choices, name) or 1
+	return table.KeyFromValue(self.choices, name) or 1
 end
 
 function PANEL:GetOptionData(id)
-	return self.Data[id]
+	return self.data[id]
 end
 
 function PANEL:GetOptionTextByData(data)
-	for id, dat in pairs(self.Data) do
-		if dat ~= data then continue end
+	for id, dat in pairs(self.data) do
+		if dat ~= data and dat ~= tonumber(data) then continue end
 
 		return self:GetOptionText(id)
 	end
 
-	-- Try interpreting it as a number
-	for id, dat in pairs(self.Data) do
-		if dat ~= tonumber(data) then continue end
-
-		return self:GetOptionText(id)
-	end
-
-	-- In case we fail
 	return data
 end
 
@@ -77,31 +69,23 @@ function PANEL:PerformLayout()
 end
 
 function PANEL:ChooseOption(value, index)
-	if self.Menu then
-		self.Menu:Remove()
-		self.Menu = nil
+	if self.menu then
+		self.menu:Remove()
+		self.menu = nil
 	end
 
 	self:SetText(value)
 
-	-- This should really be the here, but it is too late now and
-	-- convar changes are handled differently by different child
-	-- elements
-	-- self:ConVarChanged(self.Data[index])
 	self.selected = index
-	self:OnSelect(index, value, self.Data[index])
+	self:OnSelect(index, value, self.data[index])
 end
 
 function PANEL:ChooseOptionId(index)
-	local name = self:GetOptionText(index)
-
-	self:ChooseOption(name, index)
+	self:ChooseOption(self:GetOptionText(index), index)
 end
 
 function PANEL:ChooseOptionName(name)
-	local index = self:GetOptionId(name)
-
-	self:ChooseOption(name, index)
+	self:ChooseOption(name, self:GetOptionId(name))
 end
 
 function PANEL:GetSelectedId()
@@ -119,14 +103,16 @@ function PANEL:OnSelect(index, value, data)
 end
 
 function PANEL:AddChoice(value, data, select, icon)
-	local i = table.insert(self.Choices, value)
+	local i = #self.choices + 1
+
+	self.choices[i] = value
 
 	if data then
-		self.Data[i] = data
+		self.data[i] = data
 	end
 
 	if icon then
-		self.ChoiceIcons[i] = icon
+		self.choiceIcons[i] = icon
 	end
 
 	if select then
@@ -137,72 +123,76 @@ function PANEL:AddChoice(value, data, select, icon)
 end
 
 function PANEL:IsMenuOpen()
-	return IsValid(self.Menu) and self.Menu:IsVisible()
+	return IsValid(self.menu) and self.menu:IsVisible()
 end
 
 function PANEL:OpenMenu(pControlOpener)
-	if pControlOpener and pControlOpener == self.TextEntry then
-		return
-	end
+	if pControlOpener and pControlOpener == self.TextEntry then return end
 
 	-- Don't do anything if there aren't any options..
-	if #self.Choices == 0 then return end
+	if #self.choices == 0 then return end
 
 	-- If the menu still exists and hasn't been deleted
 	-- then just close it and don't open a new one.
-	if IsValid(self.Menu) then
-		self.Menu:Remove()
-		self.Menu = nil
+	if self.menu then
+		self.menu:Remove()
+		self.menu = nil
 	end
 
-	self.Menu = DermaMenu(false, self)
+	self.menu = DermaMenu(false, self)
 
 	if self:GetSortItems() then
 		local sorted = {}
 
-		for k, v in pairs(self.Choices) do
-			local val = tostring(v) --tonumber(v) || v -- This would make nicer number sorting, but SortedPairsByMemberValue doesn't seem to like number-string mixing
-			if string.len(val) > 1 and not tonumber(val) and val:StartWith("#") then
+		for i = 1, #self.choices do
+			local choice = self.choices[i]
+			local val = tostring(choice)
+
+			if string.len(val) > 1 and val:StartWith("#") then
 				val = language.GetPhrase(val:sub(2))
 			end
 
-			table.insert(sorted, {id = k, data = v, label = val})
+			sorted[#sorted + 1] = {
+				id = i,
+				data = choice,
+				label = val
+			}
 		end
 
 		for k, v in SortedPairsByMemberValue(sorted, "label") do
-			local option = self.Menu:AddOption(v.data, function()
+			local option = self.menu:AddOption(v.data, function()
 				self:ChooseOption(v.data, v.id)
 			end)
 
-			if self.ChoiceIcons[v.id] then
-				option:SetIcon(self.ChoiceIcons[v.id])
+			if self.choiceIcons[v.id] then
+				option:SetIcon(self.choiceIcons[v.id])
 			end
 		end
 	else
-		for k, v in pairs(self.Choices) do
-			local option = self.Menu:AddOption(v, function()
-				self:ChooseOption(v, k)
+		for i = 1, #self.choices do
+			local choice = self.choices[i]
+			local option = self.menu:AddOption(choice, function()
+				self:ChooseOption(choice, i)
 			end)
 
-			if self.ChoiceIcons[k] then
-				option:SetIcon(self.ChoiceIcons[k])
+			if self.choiceIcons[i] then
+				option:SetIcon(self.choiceIcons[i])
 			end
 		end
 	end
 
 	local x, y = self:LocalToScreen(0, self:GetTall())
 
-	self.Menu:SetMinimumWidth(self:GetWide())
-	self.Menu:Open(x, y, false, self)
+	self.menu:SetMinimumWidth(self:GetWide())
+	self.menu:Open(x, y, false, self)
 end
 
 function PANEL:CloseMenu()
-	if not IsValid(self.Menu) then return end
+	if not IsValid(self.menu) then return end
 
-	self.Menu:Remove()
+	self.menu:Remove()
 end
 
--- This really should use a convar change hook
 function PANEL:CheckConVarChanges()
 	if not self.m_strConVar then return end
 
