@@ -1209,8 +1209,7 @@ function GM:EntityTakeDamage(ent, dmginfo)
 		dmginfo:SetDamage(0)
 	end
 
-	--Call a second Hook after Damage got processed, to output the real Damage that has been dealt
-	--Can you use return like this, so that hooks to "TTT2PostEntityTakeDamage" could also return true or false to block the damage event afterwards
+	--Call a second Hook after Damage got processed to output the real Damage that has been dealt
 	return hook.Run("TTT2PostEntityTakeDamage", ent, dmginfo)
 end
 
@@ -1488,7 +1487,7 @@ end
 -- @param Entity ent The @{Entity} taking damage
 -- @param CTakeDamageInfo dmginfo Damage info
 -- @return boolean Return true to completely block the damage event
--- @note e.g. no damage during prep, etc
+-- @note e.g. no damage if a value after Karma calculation is too low, etc
 -- @hook
 -- @realm server
 -- @local
