@@ -1485,9 +1485,8 @@ end
 ---
 -- Called by @{GM:EntityTakeDamage} after damage output was changed due to internal events. You can modify all parts of the damage info in this hook again.
 -- @param Entity ent The @{Entity} taking damage
--- @param CTakeDamageInfo dmginfo Damage info
+-- @param DamageInfo dmginfo The damage info
 -- @return boolean Return true to completely block the damage event
--- @note e.g. no damage if a value after Karma calculation is too low, etc
 -- @hook
 -- @realm server
 -- @local
