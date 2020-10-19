@@ -720,14 +720,21 @@ function SKIN:PaintVerticalBorderedBoxTTT2(panel, w, h)
 	drawBox(w - 1, 0, 1, h, ColorAlpha(colors.default, 200))
 end
 
-local function DrawButtonRoundEnd(w, h, panel, radius, leftSide, colorBackground, colorForeground, colorText, shift)
-	if leftSide then
-		drawRoundedBoxEx(radius, 0, 0, w, h, colorBackground, true, false, true, false)
-		drawRoundedBox(radius, 2, 2, w - 3, h - 4, colorForeground)
-	else
-		drawRoundedBoxEx(radius, 0, 0, w, h, colorBackground, false, true, false, true)
-		drawRoundedBox(radius, 1, 2, w - 3, h - 4, colorForeground)
+function SKIN:PaintButtonRoundEndLeftTTT2(panel, w, h)
+	local colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 220)
+	local colorForeground = colors.accent
+	local shift = 0
+
+	if panel.Depressed or panel:IsSelected() or panel:GetToggle() then
+		shift = 1
+	elseif panel.Hovered then
+		colorForeground = colors.accentHover
+	elseif not panel.isActive then
+		colorForeground = colors.handle
 	end
+
+	drawRoundedBoxEx(sizes.cornerRadius, 0, 0, w, h, colors.content, true, false, true, false)
+	drawRoundedBox(sizes.cornerRadius, 2, 2, w - 3, h - 4, colorForeground)
 
 	drawSimpleText(
 		TryT(panel:GetText()),
@@ -740,59 +747,38 @@ local function DrawButtonRoundEnd(w, h, panel, radius, leftSide, colorBackground
 	)
 end
 
-function SKIN:PaintButtonRoundEndLeftTTT2(panel, w, h)
-	if panel.Depressed or panel:IsSelected() or panel:GetToggle() then
-		local colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 220)
-
-		return DrawButtonRoundEnd(w, h, panel, sizes.cornerRadius, true, colors.content, colors.accent, colorText, 1)
-	end
-
-	if panel.Hovered then
-		local colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 220)
-
-		return DrawButtonRoundEnd(w, h, panel, sizes.cornerRadius, true, colors.content, colors.accentHover, colorText, 0)
-	end
-
-	if not panel.isActive then
-		local colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 220)
-
-		return DrawButtonRoundEnd(w, h, panel, sizes.cornerRadius, true, colors.content, colors.handle, colorText, 0)
-	end
-
-	local colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 220)
-
-	return DrawButtonRoundEnd(w, h, panel, sizes.cornerRadius, true, colors.content, colors.accent, colorText, 0)
-end
-
 function SKIN:PaintButtonRoundEndRightTTT2(panel, w, h)
-	if panel.Depressed or panel:IsSelected() or panel:GetToggle() then
-		local colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 220)
-
-		return DrawButtonRoundEnd(w, h, panel, sizes.cornerRadius, false, colors.content, colors.accent, colorText, 1)
-	end
-
-	if panel.Hovered then
-		local colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 220)
-
-		return DrawButtonRoundEnd(w, h, panel, sizes.cornerRadius, false, colors.content, colors.accentHover, colorText, 0)
-	end
-
-	if not panel.isActive then
-		local colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 220)
-
-		return DrawButtonRoundEnd(w, h, panel, sizes.cornerRadius, false, colors.content, colors.handle, colorText, 0)
-	end
-
 	local colorText = ColorAlpha(utilGetDefaultColor(colors.accent), 220)
+	local colorForeground = colors.accent
+	local shift = 0
 
-	return DrawButtonRoundEnd(w, h, panel, sizes.cornerRadius, false, colors.content, colors.accent, colorText, 0)
+	if panel.Depressed or panel:IsSelected() or panel:GetToggle() then
+		shift = 1
+	elseif panel.Hovered then
+		colorForeground = colors.accentHover
+	elseif not panel.isActive then
+		colorForeground = colors.handle
+	end
+
+	drawRoundedBoxEx(sizes.cornerRadius, 0, 0, w, h, colors.content, false, true, false, true)
+		drawRoundedBox(sizes.cornerRadius, 1, 2, w - 3, h - 4, colorForeground)
+
+	drawSimpleText(
+		TryT(panel:GetText()),
+		panel:GetFont(),
+		0.5 * w,
+		0.5 * h + shift,
+		colorText,
+		TEXT_ALIGN_CENTER,
+		TEXT_ALIGN_CENTER
+	)
 end
 
 function SKIN:PaintTooltipTTT2(panel, w, h)
+	local colorLine = ColorAlpha(colors.default, 100)
+
 	local sizeArrow = panel.sizeArrow
 	local sizeRhombus = 2 * sizeArrow
-
-	local colorLine = ColorAlpha(colors.default, 100)
 
 	drawBox(0, sizeArrow, w, h - sizeArrow, colorLine)
 	drawFilteredTexture(sizeArrow, 0, sizeRhombus, sizeRhombus, materialRhombus, colorLine.a, colorLine)
