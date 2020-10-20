@@ -262,7 +262,6 @@ Przełącz w zakładce Przebrania w tym menu lub kliknij Enter na Numpadzie.]]
 
 -- C4
 L.c4_hint = "Kliknij {usekey}, by uzbroić lub rozbroić."
-L.c4_no_disarm = "Nie możesz rozbroić C4 innego zdrajcy, dopóki on żyje."
 L.c4_disarm_warn = "C4, które uzbroiłeś, zostało rozbrojone."
 L.c4_armed = "Pomyślnie uzbroiłeś bombę."
 L.c4_disarmed = "Pomyślnie rozbroiłeś bombę."

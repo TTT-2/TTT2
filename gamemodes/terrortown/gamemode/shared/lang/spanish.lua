@@ -262,7 +262,6 @@ Actívalo en la pestaña disfraz de este menú o presiona el numpad Enter.]]
 
 -- C4
 L.c4_hint = "Presiona {usekey} para activar o desactivar."
-L.c4_no_disarm = "No puedes desactivar el C4 de otro traidor a menos que esté muerto."
 L.c4_disarm_warn = "Un C4 que has plantado fue desactivado."
 L.c4_armed = "Has activado la bomba correctamente."
 L.c4_disarmed = "Has desactivado la bomba correctamente."
