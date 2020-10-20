@@ -1,5 +1,3 @@
---- @ignore
-
 local draw = draw
 local math = math
 local string = string
@@ -26,10 +24,14 @@ if CLIENT then
 		minsize = {w = HUDELEMENT.maxwidth, h = HUDELEMENT.maxheight}
 	}
 
+	---
+	-- @ignore
 	function HUDELEMENT:Initialize()
 		BaseClass.Initialize(self)
 	end
 
+	---
+	-- @ignore
 	function HUDELEMENT:GetDefaults()
 		const_defaults["size"] = {w = self.maxwidth, h = self.maxheight}
 		const_defaults["minsize"] = {w = self.maxwidth, h = self.maxheight}
@@ -38,6 +40,8 @@ if CLIENT then
 		return const_defaults
 	end
 
+	---
+	-- @ignore
 	function HUDELEMENT:PerformLayout()
 		local pos = self:GetPos()
 
@@ -49,30 +53,32 @@ if CLIENT then
 
 	---
 	-- Draws the old role icon
-	-- @param number x
-	-- @param number y
-	-- @param number w width
-	-- @param number h height
-	-- @param Material icon the role icon
-	-- @param Color color
+	-- @param number xPos
+	-- @param number yPos
+	-- @param number wSize width
+	-- @param number hSize height
+	-- @param Material iconMat the role icon
+	-- @param Color col
 	-- @realm client
-	local function DrawOldRoleIcon(x, y, w, h, icon, color)
+	local function DrawOldRoleIcon(xPos, yPos, wSize, hSize, iconMat, col)
 		local base_mat = Material("vgui/ttt/dynamic/base")
 		local base_overlay = Material("vgui/ttt/dynamic/base_overlay")
 
-		surface.SetDrawColor(color.r, color.g, color.b, color.a)
+		surface.SetDrawColor(col.r, col.g, col.b, col.a)
 		surface.SetMaterial(base_mat)
-		surface.DrawTexturedRect(x, y, w, h)
+		surface.DrawTexturedRect(xPos, yPos, wSize, hSize)
 
-		surface.SetDrawColor(color.r, color.g, color.b, color.a)
+		surface.SetDrawColor(col.r, col.g, col.b, col.a)
 		surface.SetMaterial(base_overlay)
-		surface.DrawTexturedRect(x, y, w, h)
+		surface.DrawTexturedRect(xPos, yPos, wSize, hSize)
 
 		surface.SetDrawColor(255, 255, 255, 255)
-		surface.SetMaterial(icon)
-		surface.DrawTexturedRect(x, y, w, h)
+		surface.SetMaterial(iconMat)
+		surface.DrawTexturedRect(xPos, yPos, wSize, hSize)
 	end
 
+	---
+	-- @ignore
 	function HUDELEMENT:Draw()
 		local client = LocalPlayer()
 		local L = GetLang()
@@ -116,9 +122,9 @@ if CLIENT then
 
 			-- sprint bar
 			local sbh = 8 -- spring bar height
+
 			if GetGlobalBool("ttt2_sprint_enabled", true) then
-				local sprint_y = ammo_y + bar_height + 5
-				self:PaintBar(x + margin, sprint_y, bar_width, sbh, self.sprint_colors, client.sprintProgress)
+				self:PaintBar(x + margin, ammo_y + bar_height + 5, bar_width, sbh, self.sprint_colors, client.sprintProgress)
 			end
 
 			local hastewidth = self.hastewidth

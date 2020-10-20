@@ -56,7 +56,6 @@ if CLIENT then
 		BaseClass.PerformLayout(self)
 	end
 
-	--- @ignore
 	function HUDELEMENT:DrawMarker(x, y, size, color)
 		local thickness = 2 * self.scale
 		local margin = 3 * self.scale
@@ -83,7 +82,6 @@ if CLIENT then
 
 		return 255
 	end
-
 
 	function HUDELEMENT:Draw()
 		local client = LocalPlayer()

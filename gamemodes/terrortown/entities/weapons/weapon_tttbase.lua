@@ -449,7 +449,7 @@ if CLIENT then
 	---
 	-- @realm client
 	function SWEP:CalcViewModel()
-		if not CLIENT or not IsFirstTimePredicted() then return end
+		if not IsFirstTimePredicted() then return end
 
 		self.bIron = self:GetIronsights()
 		self.fIronTime = self:GetIronsightsTime()
@@ -916,7 +916,9 @@ end
 -- @see https://wiki.facepunch.com/gmod/WEAPON:Think
 -- @realm shared
 function SWEP:Think()
-	self:CalcViewModel()
+	if CLIENT then
+		self:CalcViewModel()
+	end
 end
 
 if CLIENT then
