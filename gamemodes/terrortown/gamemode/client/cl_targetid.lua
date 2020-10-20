@@ -28,8 +28,6 @@ surface.CreateAdvancedFont("TargetID_Description", {font = "Trebuchet24", size =
 -- keep this font for compatibility reasons
 surface.CreateFont("TargetIDSmall2", {font = "TargetID", size = 16, weight = 1000})
 
-local MAX_TRACE_LENGTH = math.sqrt(3) * 32768
-
 -- cache colors
 local colorBlacktrans = Color(0, 0, 0, 180)
 local colorKeyBack = Color(0, 0, 0, 150)
@@ -245,7 +243,7 @@ function GM:HUDDrawTargetID()
 	local direction = client:GetAimVector()
 	local filter = client:GetObserverMode() == OBS_MODE_IN_EYE and {client, client:GetObserverTarget()} or client
 
-	ent, distance = FindEntityAlongView(startpos, direction, filter)
+	ent, distance = targetid.FindEntityAlongView(startpos, direction, filter)
 
 	-- only add onscreen infos when the entity isn't the local player
 	if ent == client then return end
@@ -468,48 +466,6 @@ local key_params = {
 	usekey = Key("+use", "USE"),
 	walkkey = Key("+walk", "WALK")
 }
-
----
--- handle finding Entities with a ray
--- @note This finds the next Entity, that doesn't get filtered out and can get hit by a bullet, from a position in a direction.
---
--- @param vector pos Position of Ray Origin.
--- @param vector dir Direction of the Ray. Should be normalized.
--- @param table filter List of all @{Entity}s that should be filtered out.
--- @realm client
-function FindEntityAlongView(pos, dir, filter)
-	local endpos = dir
-	endpos:Mul(MAX_TRACE_LENGTH)
-	endpos:Add(pos)
-
-	local ent, distance
-
-	-- if the user is looking at a traitor button, it should always be handled with priority
-	if TBHUD.focus_but and IsValid(TBHUD.focus_but.ent) and (TBHUD.focus_but.access or TBHUD.focus_but.admin) and TBHUD.focus_stick >= CurTime() then
-		ent = TBHUD.focus_but.ent
-
-		distance = pos:Distance(ent:GetPos())
-	else
-		local trace = util.TraceLine({
-			start = pos,
-			endpos = endpos,
-			mask = MASK_SHOT,
-			filter = filter
-		})
-
-		-- this is the entity the player is looking at right now
-		ent = trace.Entity
-
-		distance = trace.StartPos:Distance(trace.HitPos)
-
-		-- if a vehicle, we identify the driver instead
-		if IsValid(ent) and IsValid(ent:GetNWEntity("ttt_driver", nil)) then
-			ent = ent:GetNWEntity("ttt_driver", nil)
-		end
-	end
-
-	return ent, distance
-end
 
 -- handle looking with DNA Scanner
 function HUDDrawTargetIDDNAScanner(tData)
