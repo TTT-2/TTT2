@@ -469,7 +469,14 @@ local key_params = {
 	walkkey = Key("+walk", "WALK")
 }
 
+---
 -- handle finding Entities with a ray
+-- @note This finds the next Entity, that doesn't get filtered out and can get hit by a bullet, from a position in a direction.
+--
+-- @param vector pos Position of Ray Origin.
+-- @param vector dir Direction of the Ray. Should be normalized.
+-- @param table filter List of all @{Entity}s that should be filtered out.
+-- @realm client
 function FindEntityAlongView(pos, dir, filter)
 	local endpos = dir
 	endpos:Mul(MAX_TRACE_LENGTH)
