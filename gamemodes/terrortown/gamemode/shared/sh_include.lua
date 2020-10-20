@@ -9,7 +9,6 @@ TTTFiles = {
 	cl_damage_indicator = {file = "cl_damage_indicator.lua", on = "client"},
 	cl_equip = {file = "cl_equip.lua", on = "client"},
 	cl_eventpopup = {file = "cl_eventpopup.lua", on = "client"},
-	cl_fonts = {file = "cl_fonts.lua", on = "client"},
 	cl_help_data = {file = "cl_help_data.lua", on = "client"},
 	cl_help = {file = "cl_help.lua", on = "client"},
 	cl_hud_editor = {file = "cl_hud_editor.lua", on = "client"},
