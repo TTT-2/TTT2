@@ -531,13 +531,14 @@ end
 --
 -- @param table plys The players that should receive roles.
 -- @param table selectableRoles The list of filtered selectable @{ROLE}s
--- @param table selectedForcedRoles The list with number of forced @{ROLE}s
 -- @return table List of players, that received a forced role.
+-- @return table List with a count of forced @{ROLE}s
 -- @realm server
 -- @internal
-local function SelectForcedRoles(plys, selectableRoles, selectedForcedRoles)
+local function SelectForcedRoles(plys, selectableRoles)
 	local transformed = {}
 	local selectedPlys = {}
+	local selectedForcedRoles = {}
 
 	-- filter and restructure the forcedRoles table
 	for id, subrole in pairs(roleselection.forcedRoles) do
@@ -586,7 +587,7 @@ local function SelectForcedRoles(plys, selectableRoles, selectedForcedRoles)
 
 	roleselection.forcedRoles = {}
 
-	return selectedPlys
+	return selectedPlys, selectedForcedRoles
 end
 
 ---
@@ -676,8 +677,7 @@ function roleselection.SelectRoles(plys, maxPlys)
 	local selectableRoles = roleselection.GetSelectableRolesList(maxPlys, allAvailableRoles) -- update roleselection.selectableRoles table
 
 	-- Select forced roles at first
-	local selectedForcedRoles = {}
-	local selectedForcedPlys = SelectForcedRoles(plys, selectableRoles, selectedForcedRoles) -- this updates roleselection.finalRoles table and returns a key based list of selected players
+	local selectedForcedPlys, selectedForcedRoles = SelectForcedRoles(plys, selectableRoles) -- this updates roleselection.finalRoles table and returns a key based list of selected players and a list with the count of forced Roles
 
 	-- We need to remove already selected players
 	local plysFirstPass, plysSecondPass = {}, {} -- modified player table
