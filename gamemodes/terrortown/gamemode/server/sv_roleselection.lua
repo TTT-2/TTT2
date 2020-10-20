@@ -531,10 +531,11 @@ end
 --
 -- @param table plys The players that should receive roles.
 -- @param table selectableRoles The list of filtered selectable @{ROLE}s
+-- @param table selectedForcedRoles The list with number of forced @{ROLE}s
 -- @return table List of players, that received a forced role.
 -- @realm server
 -- @internal
-local function SelectForcedRoles(plys, selectableRoles)
+local function SelectForcedRoles(plys, selectableRoles, selectedForcedRoles)
 	local transformed = {}
 	local selectedPlys = {}
 
@@ -578,6 +579,9 @@ local function SelectForcedRoles(plys, selectableRoles)
 
 			selectedPlys[ply] = true
 		end
+
+		-- assigning the amount of forced players per subrole
+		selectedForcedRoles[subrole] = curCount
 	end
 
 	roleselection.forcedRoles = {}
@@ -672,7 +676,8 @@ function roleselection.SelectRoles(plys, maxPlys)
 	local selectableRoles = roleselection.GetSelectableRolesList(maxPlys, allAvailableRoles) -- update roleselection.selectableRoles table
 
 	-- Select forced roles at first
-	local selectedForcedPlys = SelectForcedRoles(plys, selectableRoles) -- this updates roleselection.finalRoles table and returns a key based list of selected players
+	local selectedForcedRoles = {}
+	local selectedForcedPlys = SelectForcedRoles(plys, selectableRoles, selectedForcedRoles) -- this updates roleselection.finalRoles table and returns a key based list of selected players
 
 	-- We need to remove already selected players
 	local plysFirstPass, plysSecondPass = {}, {} -- modified player table
@@ -712,7 +717,13 @@ function roleselection.SelectRoles(plys, maxPlys)
 
 			if not roleData:IsBaseRole() or not selectableRoles[subrole] then continue end
 
-			local baseRolePlys = SelectBaseRolePlayers(plysFirstPass, subrole, selectableRoles[subrole])
+			local amount = selectableRoles[subrole]
+
+			if selectedForcedRoles[subrole] then
+				amount = amount - selectedForcedRoles[subrole]
+			end
+
+			local baseRolePlys = SelectBaseRolePlayers(plysFirstPass, subrole, amount)
 
 			-- upgrade innos and players without any role later
 			if subrole ~= ROLE_INNOCENT then
