@@ -473,8 +473,9 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 	hook.Run("TTT2ModifySelectableRoles", selectableRoles)
 
 	roleselection.selectableRoles = selectableRoles
+	local tmpSelectableRoles = table.Copy(selectableRoles)
 
-	return selectableRoles
+	return tmpSelectableRoles
 end
 
 ---
@@ -488,7 +489,6 @@ end
 local function SetSubRoles(plys, availableRoles, selectableRoles)
 	local plysAmount = #plys
 	local availableRolesAmount = #availableRoles
-	local tmpSelectableRoles = table.Copy(selectableRoles)
 
 	while plysAmount > 0 and availableRolesAmount > 0 do
 		local pick = math.random(plysAmount)
@@ -497,7 +497,7 @@ local function SetSubRoles(plys, availableRoles, selectableRoles)
 		local rolePick = math.random(availableRolesAmount)
 		local subrole = availableRoles[rolePick]
 		local roleData = roles.GetByIndex(subrole)
-		local roleCount = tmpSelectableRoles[subrole]
+		local roleCount = selectableRoles[subrole]
 
 		local minKarmaCVar = GetConVar("ttt_" .. roleData.name .. "_karma_min")
 		local minKarma = minKarmaCVar and minKarmaCVar:GetInt() or 0
@@ -515,7 +515,7 @@ local function SetSubRoles(plys, availableRoles, selectableRoles)
 			plysAmount = plysAmount - 1
 			roleCount = roleCount - 1
 
-			tmpSelectableRoles[subrole] = roleCount -- update the available roles
+			selectableRoles[subrole] = roleCount -- update the available roles
 
 			if roleCount < 1 then
 				table.remove(availableRoles, rolePick)
@@ -531,14 +531,13 @@ end
 --
 -- @param table plys The players that should receive roles.
 -- @param table selectableRoles The list of filtered selectable @{ROLE}s
+-- @note Subtracts amount of Roles, that have been forced, from input selectableRoles
 -- @return table List of players, that received a forced role.
--- @return table List with a count of forced @{ROLE}s
 -- @realm server
 -- @internal
 local function SelectForcedRoles(plys, selectableRoles)
 	local transformed = {}
 	local selectedPlys = {}
-	local selectedForcedRoles = {}
 
 	-- filter and restructure the forcedRoles table
 	for id, subrole in pairs(roleselection.forcedRoles) do
@@ -581,13 +580,19 @@ local function SelectForcedRoles(plys, selectableRoles)
 			selectedPlys[ply] = true
 		end
 
-		-- assigning the amount of forced players per subrole
-		selectedForcedRoles[subrole] = curCount
+		-- decreasing the amount of available roles
+		selectableRoles[subrole] = selectableRoles[subrole] - curCount
+
+		-- now decrease amount of the baserole if this is only a subrole
+		local baserole = roles.GetByIndex(subrole).baserole
+		if baserole and baserole ~= subrole then
+			selectableRoles[baserole] = selectableRoles[baserole] - curCount
+		end
 	end
 
 	roleselection.forcedRoles = {}
 
-	return selectedPlys, selectedForcedRoles
+	return selectedPlys
 end
 
 ---
@@ -604,7 +609,7 @@ local function UpgradeRoles(plys, subrole, selectableRoles)
 
 	-- now upgrade this role if there are other subroles
 	for sub in pairs(selectableRoles) do
-		if roles.GetByIndex(sub).baserole == subrole then
+		if selectableRoles[sub] >= 1 and roles.GetByIndex(sub).baserole == subrole then
 			availableRoles[#availableRoles + 1] = sub
 		end
 	end
@@ -674,10 +679,10 @@ function roleselection.SelectRoles(plys, maxPlys)
 	if maxPlys < 2 then return end -- we don't need to select anything if there is just one player
 
 	local allAvailableRoles = roleselection.GetAllSelectableRolesList(maxPlys)
-	local selectableRoles = roleselection.GetSelectableRolesList(maxPlys, allAvailableRoles) -- update roleselection.selectableRoles table
+	local selectableRoles = roleselection.GetSelectableRolesList(maxPlys, allAvailableRoles) -- update roleselection.selectableRoles table and returns a copy of that
 
 	-- Select forced roles at first
-	local selectedForcedPlys, selectedForcedRoles = SelectForcedRoles(plys, selectableRoles) -- this updates roleselection.finalRoles table and returns a key based list of selected players and a list with the count of forced Roles
+	local selectedForcedPlys = SelectForcedRoles(plys, selectableRoles) -- this updates roleselection.finalRoles table and returns a key based list of selected players
 
 	-- We need to remove already selected players
 	local plysFirstPass, plysSecondPass = {}, {} -- modified player table
@@ -717,13 +722,7 @@ function roleselection.SelectRoles(plys, maxPlys)
 
 			if not roleData:IsBaseRole() or not selectableRoles[subrole] then continue end
 
-			local amount = selectableRoles[subrole]
-
-			if selectedForcedRoles[subrole] then
-				amount = amount - selectedForcedRoles[subrole]
-			end
-
-			local baseRolePlys = SelectBaseRolePlayers(plysFirstPass, subrole, amount)
+			local baseRolePlys = SelectBaseRolePlayers(plysFirstPass, subrole, selectableRoles[subrole])
 
 			-- upgrade innos and players without any role later
 			if subrole ~= ROLE_INNOCENT then
