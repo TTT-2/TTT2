@@ -11,10 +11,6 @@ DEFINE_BASECLASS(base)
 HUDELEMENT.Base = base
 
 if CLIENT then
-	---
-	-- @realm client
-	local hudTeamicon = CreateConVar("ttt2_base_hud_teamicon", "1", FCVAR_ARCHIVE)
-
 	local x = 0
 	local y = 0
 
@@ -130,7 +126,7 @@ if CLIENT then
 			local hastewidth = self.hastewidth
 			local bgheight = self.bgheight
 			local smargin = self.smargin
-			local tmp = width - hastewidth - (hudTeamicon:GetBool() and bgheight or 0) - smargin * 2
+			local tmp = width - hastewidth - bgheight - smargin * 2
 
 			-- Draw the current role
 			local round_state = GAMEMODE.round_state
@@ -146,15 +142,13 @@ if CLIENT then
 			self:ShadowedText(text, "TraitorState", x + tmp * 0.5, traitor_y, COLOR_WHITE, TEXT_ALIGN_CENTER)
 
 			-- Draw team icon
-			if hudTeamicon:GetBool() then
-				local team = client:GetTeam()
+			local team = client:GetTeam()
 
-				if team ~= TEAM_NONE and round_state == ROUND_ACTIVE and not TEAMS[team].alone then
-					local t = TEAMS[team]
+			if team ~= TEAM_NONE and round_state == ROUND_ACTIVE and not TEAMS[team].alone then
+				local t = TEAMS[team]
 
-					if t.iconMaterial then
-						DrawOldRoleIcon(x + tmp + smargin, traitor_y, bgheight, bgheight, t.iconMaterial, t.color or COLOR_BLACK)
-					end
+				if t.iconMaterial then
+					DrawOldRoleIcon(x + tmp + smargin, traitor_y, bgheight, bgheight, t.iconMaterial, t.color or COLOR_BLACK)
 				end
 			end
 

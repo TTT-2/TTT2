@@ -17,10 +17,6 @@ if CLIENT then
 	-- @realm client
 	local hudWidth = CreateConVar("ttt2_base_hud_width", "0", FCVAR_ARCHIVE)
 
-	---
-	-- @realm client
-	local hudTeamicon = CreateConVar("ttt2_base_hud_teamicon", "1", FCVAR_ARCHIVE)
-
 	-- Color presets
 	HUDELEMENT.bg_colors = {
 		background_main = Color(0, 0, 10, 200),
@@ -147,7 +143,7 @@ if CLIENT then
 	function HUDELEMENT:DrawBg(x, y, width, height, client)
 		-- Traitor area sizes
 		local th = self.bgheight
-		local tw = width - self.hastewidth - (hudTeamicon:GetBool() and self.bgheight or 0) - self.smargin * 2 -- bgheight = team icon
+		local tw = width - self.hastewidth - self.bgheight - self.smargin * 2 -- bgheight = team icon
 
 		-- Adjust for these
 		y = y - th
