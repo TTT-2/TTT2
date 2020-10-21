@@ -5,8 +5,8 @@ ParT = LANG.GetParamTranslation
 TryT = LANG.TryTranslation
 
 key_params = {
-    usekey = Key("+use", "USE"),
-    walkkey = Key("+walk", "WALK")
+	usekey = Key("+use", "USE"),
+	walkkey = Key("+walk", "WALK")
 }
 
 -- Global to local variables
