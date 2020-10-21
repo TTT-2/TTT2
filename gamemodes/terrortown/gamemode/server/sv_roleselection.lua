@@ -324,7 +324,7 @@ end
 -- @realm server
 function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 	if roleselection.selectableRoles then
-		return roleselection.selectableRoles
+		return table.Copy(roleselection.selectableRoles)
 	end
 
 	-- yea it begins
@@ -473,9 +473,8 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 	hook.Run("TTT2ModifySelectableRoles", selectableRoles)
 
 	roleselection.selectableRoles = selectableRoles
-	local tmpSelectableRoles = table.Copy(selectableRoles)
 
-	return tmpSelectableRoles
+	return table.Copy(selectableRoles)
 end
 
 ---
