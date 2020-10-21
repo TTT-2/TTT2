@@ -1,5 +1,13 @@
 ---
 --
+-- Global temporary replacements for targetid.lua
+ParT = LANG.GetParamTranslation
+TryT = LANG.TryTranslation
+
+key_params = {
+    usekey = Key("+use", "USE"),
+    walkkey = Key("+walk", "WALK")
+}
 
 -- Global to local variables
 local util = util

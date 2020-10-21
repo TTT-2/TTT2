@@ -8,16 +8,25 @@ if SERVER then
     return
 end
 
+targetid = targetid or {}
+
 -- Global to local variables
-local ParT = LANG.GetParamTranslation
-local TryT = LANG.TryTranslation
+--local ParT = LANG.GetParamTranslation
+--local TryT = LANG.TryTranslation
 
 -- Variables for calculations
 local MAX_TRACE_LENGTH = math.sqrt(3) * 32768
 
+--[[ Key Parameters for doors
+local key_params = {
+    usekey = Key("+use", "USE"),
+    walkkey = Key("+walk", "WALK")
+}
+--]]
+
 -- Convars for targetid
-local cvDeteOnlyConfirm = GetConVar("ttt2_confirm_detective_only")
-local cvDeteOnlyInspect = GetConVar("ttt2_inspect_detective_only")
+ local cvDeteOnlyConfirm = GetConVar("ttt2_confirm_detective_only")
+ local cvDeteOnlyInspect = GetConVar("ttt2_inspect_detective_only")
 
 -- Materials for targetid
 local materialTButton = Material("vgui/ttt/tid/tid_big_tbutton_pointer")
@@ -32,8 +41,7 @@ local materialAutoClose = Material("vgui/ttt/tid/tid_auto_close")
 local materialDoor = Material("vgui/ttt/tid/tid_big_door")
 local materialDestructible = Material("vgui/ttt/tid/tid_destructible")
 local materialDNATargetID = Material("vgui/ttt/dnascanner/dna_hud")
-
-targetid = targetid or {}
+--
 
 ---
 -- This function handles finding Entities by casting a ray from a point in a direction, filtering out certain entities
@@ -79,12 +87,6 @@ function targetid.FindEntityAlongView(pos, dir, filter)
 
     return ent, distance
 end
-
--- Key Parameters for doors
-local key_params = {
-    usekey = Key("+use", "USE"),
-    walkkey = Key("+walk", "WALK")
-}
 
 ---
 -- This function handles looking at traitor buttons and adds a description
