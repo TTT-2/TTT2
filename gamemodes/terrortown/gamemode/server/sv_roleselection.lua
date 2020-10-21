@@ -581,12 +581,20 @@ local function SelectForcedRoles(plys, selectableRoles)
 		end
 
 		-- decreasing the amount of available roles
-		selectableRoles[subrole] = selectableRoles[subrole] - curCount
+		local roleAmount = selectableRoles[subrole] - curCount
+		selectableRoles[subrole] = roleAmount
+		if roleAmount < 1 then
+			selectableRoles[subrole] = nil
+		end
 
 		-- now decrease amount of the baserole if this is only a subrole
 		local baserole = roles.GetByIndex(subrole).baserole
 		if baserole and baserole ~= subrole then
-			selectableRoles[baserole] = selectableRoles[baserole] - curCount
+			roleAmount = selectableRoles[baserole] - curCount
+			selectableRoles[baserole] = roleAmount
+			if roleAmount < 1 then
+				selectableRoles[baserole] = nil
+			end
 		end
 	end
 
@@ -609,7 +617,7 @@ local function UpgradeRoles(plys, subrole, selectableRoles)
 
 	-- now upgrade this role if there are other subroles
 	for sub in pairs(selectableRoles) do
-		if selectableRoles[sub] >= 1 and roles.GetByIndex(sub).baserole == subrole then
+		if roles.GetByIndex(sub).baserole == subrole then
 			availableRoles[#availableRoles + 1] = sub
 		end
 	end
