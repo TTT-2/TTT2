@@ -531,7 +531,7 @@ end
 --
 -- @param table plys The players that should receive roles.
 -- @param table selectableRoles The list of filtered selectable @{ROLE}s
--- @note Subtracts amount of Roles, that have been forced, from input selectableRoles
+-- @note Deducts amount of Roles, that have been forced, from input selectableRoles
 -- @return table List of players, that received a forced role.
 -- @realm server
 -- @internal
