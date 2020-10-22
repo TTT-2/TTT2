@@ -1,12 +1,15 @@
 ---
 -- A database schema migration library
 -- @author Histalek
+-- @module migrations
 
 if SERVER then
 	AddCSLuaFile()
 end
 
 migration = migration or {}
+
+local sql = sql
 
 if not sql.TableExists("migration_master") then
 	sql.Query("CREATE TABLE \"migration_master\" ( \"identifier\" TEXT, \"version\" INTEGER, \"up\" TEXT, \"down\" TEXT, \"created_at\" TEXT, \"executed_at\" TEXT, PRIMARY KEY(\"identifier\",\"version\"));")
@@ -45,7 +48,7 @@ function migration.Add(identifier, version, upQuery, downQuery)
 
 	sql.Begin()
 	if sql.Query(upQuery) == false then
-		sql.Rollback()
+		sql.Query("Rollback;")
 		return false
 	end
 	sql.Commit()
@@ -71,7 +74,7 @@ end
 ---
 -- Reverts all run migrations with the given identifier.
 -- @param string identifier The identifier for which all migrations should be reverted.
--- @return boolean|nil Returns `true` if at least one migration was reverted, `nil` if no migrations was reverted and `false` in case of an error.
+-- @return boolean|nil Returns `true` if at least one migration was reverted, `nil` if no migration was reverted and `false` in case of an error.
 function migration.RevertAll(identifier)
 end
 
