@@ -1,13 +1,5 @@
 ---
---
--- Global temporary replacements for targetid.lua
-ParT = LANG.GetParamTranslation
-TryT = LANG.TryTranslation
-
-key_params = {
-	usekey = Key("+use", "USE"),
-	walkkey = Key("+walk", "WALK")
-}
+-- @author Mineotopia
 
 -- Global to local variables
 local util = util
@@ -19,6 +11,10 @@ local math = math
 local table = table
 local IsValid = IsValid
 local hook = hook
+local targetid = targetid
+
+-- Temporary fix of TargetID Variable Initialization
+targetid.initialize()
 
 -- Convars for targetid
 local cvMinimalisticTid = CreateClientConVar("ttt_minimal_targetid", "0", FCVAR_ARCHIVE)

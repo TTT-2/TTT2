@@ -11,18 +11,15 @@ end
 targetid = targetid or {}
 
 -- Global to local variables
---local ParT = LANG.GetParamTranslation
---local TryT = LANG.TryTranslation
+local bIsInitialized = false
+local ParT
+local TryT
 
 -- Variables for calculations
 local MAX_TRACE_LENGTH = math.sqrt(3) * 32768
 
---[[ Key Parameters for doors
-local key_params = {
-    usekey = Key("+use", "USE"),
-    walkkey = Key("+walk", "WALK")
-}
---]]
+-- Key Parameters for doors
+local key_params = {}
 
 -- Convars for targetid
  local cvDeteOnlyConfirm = GetConVar("ttt2_confirm_detective_only")
@@ -41,7 +38,20 @@ local materialAutoClose = Material("vgui/ttt/tid/tid_auto_close")
 local materialDoor = Material("vgui/ttt/tid/tid_big_door")
 local materialDestructible = Material("vgui/ttt/tid/tid_destructible")
 local materialDNATargetID = Material("vgui/ttt/dnascanner/dna_hud")
---
+
+---
+-- This function is a temporary fix for local variables in use of other libraries, that are not yet initialized
+function targetid.initialize()
+    if not bIsInitialized then
+        bIsInitialized = true
+        ParT = LANG.GetParamTranslation
+        TryT = LANG.TryTranslation
+        key_params = {
+            usekey = Key("+use", "USE"),
+            walkkey = Key("+walk", "WALK")
+        }
+    end
+end
 
 ---
 -- This function handles finding Entities by casting a ray from a point in a direction, filtering out certain entities
