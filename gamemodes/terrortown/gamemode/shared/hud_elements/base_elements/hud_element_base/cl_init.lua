@@ -7,7 +7,7 @@
 local surface = surface
 local table = table
 local draw = draw
-local SQL = SQL
+local sql = sql
 local hudelements = hudelements
 local math = math
 
@@ -693,7 +693,7 @@ end
 -- Saves the current savingkey values (position, size)
 -- @realm client
 function HUDELEMENT:SaveData()
-	SQL.Save("ttt2_hudelements", self.id, self, self:GetSavingKeys())
+	sql.Save("ttt2_hudelements", self.id, self, self:GetSavingKeys())
 end
 
 ---
@@ -704,10 +704,10 @@ function HUDELEMENT:LoadData()
 	local loadedData = {}
 
 	-- load and initialize the elements data from database
-	if SQL.CreateSqlTable("ttt2_hudelements", skeys) then
-		local loaded = SQL.Load("ttt2_hudelements", self.id, loadedData, skeys)
+	if sql.CreateSqlTable("ttt2_hudelements", skeys) then
+		local loaded = sql.Load("ttt2_hudelements", self.id, loadedData, skeys)
 		if not loaded then
-			SQL.Init("ttt2_hudelements", self.id, self, skeys)
+			sql.Init("ttt2_hudelements", self.id, self, skeys)
 		end
 	end
 

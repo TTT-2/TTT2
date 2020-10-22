@@ -425,17 +425,17 @@ function GM:InitPostEntity()
 	local sweps = weapons.GetList()
 
 	-- load and initialize all SWEPs and all ITEMs from database
-	if SQL.CreateSqlTable("ttt2_items", ShopEditor.savingKeys) then
+	if sql.CreateSqlTable("ttt2_items", ShopEditor.savingKeys) then
 		for i = 1, #itms do
 			local eq = itms[i]
 
 			ShopEditor.InitDefaultData(eq)
 
 			local name = GetEquipmentFileName(WEPS.GetClass(eq))
-			local loaded, changed = SQL.Load("ttt2_items", name, eq, ShopEditor.savingKeys)
+			local loaded, changed = sql.Load("ttt2_items", name, eq, ShopEditor.savingKeys)
 
 			if not loaded then
-				SQL.Init("ttt2_items", name, eq, ShopEditor.savingKeys)
+				sql.Init("ttt2_items", name, eq, ShopEditor.savingKeys)
 			elseif changed then
 				CHANGED_EQUIPMENT[#CHANGED_EQUIPMENT + 1] = {name, eq}
 			end
@@ -447,10 +447,10 @@ function GM:InitPostEntity()
 			ShopEditor.InitDefaultData(wep)
 
 			local name = GetEquipmentFileName(WEPS.GetClass(wep))
-			local loaded, changed = SQL.Load("ttt2_items", name, wep, ShopEditor.savingKeys)
+			local loaded, changed = sql.Load("ttt2_items", name, wep, ShopEditor.savingKeys)
 
 			if not loaded then
-				SQL.Init("ttt2_items", name, wep, ShopEditor.savingKeys)
+				sql.Init("ttt2_items", name, wep, ShopEditor.savingKeys)
 			elseif changed then
 				CHANGED_EQUIPMENT[#CHANGED_EQUIPMENT + 1] = {name, wep}
 			end

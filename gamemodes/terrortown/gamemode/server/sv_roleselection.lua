@@ -47,7 +47,7 @@ roleselection.savingKeys = {
 -- Loads every layer from the SQL database
 -- @realm server
 function roleselection.LoadLayers()
-	if not SQL.CreateSqlTable(roleselection.sqltable, roleselection.savingKeys) then return end
+	if not sql.CreateSqlTable(roleselection.sqltable, roleselection.savingKeys) then return end
 
 	local roleList = roles.GetList()
 
@@ -58,7 +58,7 @@ function roleselection.LoadLayers()
 			depth = 0
 		}
 
-		local loaded, changed = SQL.Load(roleselection.sqltable, roleData.name, dataTable, roleselection.savingKeys)
+		local loaded, changed = sql.Load(roleselection.sqltable, roleData.name, dataTable, roleselection.savingKeys)
 
 		if not loaded then
 			-- automatically put the Detective into the first layer if the layering system is initialized the first time
@@ -71,7 +71,7 @@ function roleselection.LoadLayers()
 				roleselection.baseroleLayers[1][1] = roleData.index
 			end
 
-			SQL.Init(roleselection.sqltable, roleData.name, dataTable, roleselection.savingKeys)
+			sql.Init(roleselection.sqltable, roleData.name, dataTable, roleselection.savingKeys)
 		elseif changed then
 			if dataTable.layer == 0 or dataTable.depth == 0 then continue end -- if (0, 0), exclude from layering
 
@@ -166,7 +166,7 @@ function roleselection.SaveLayers()
 	for i = 1, #roleList do
 		local roleData = roleList[i]
 
-		SQL.Save(roleselection.sqltable, roleData.name, dataTable[roleData.index] or {}, roleselection.savingKeys)
+		sql.Save(roleselection.sqltable, roleData.name, dataTable[roleData.index] or {}, roleselection.savingKeys)
 	end
 end
 

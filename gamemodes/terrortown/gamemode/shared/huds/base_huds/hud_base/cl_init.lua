@@ -365,7 +365,7 @@ end
 -- @realm client
 function HUD:SaveData()
 	-- save data for the HUD
-	SQL.Save("ttt2_huds", self.id, self, self:GetSavingKeys())
+	sql.Save("ttt2_huds", self.id, self, self:GetSavingKeys())
 
 	local elems = self:GetElements()
 
@@ -390,11 +390,11 @@ function HUD:LoadData()
 	local skeys = self:GetSavingKeys()
 
 	-- load and initialize all HUD data from database
-	if SQL.CreateSqlTable("ttt2_huds", skeys) then
-		local loaded = SQL.Load("ttt2_huds", self.id, self, skeys)
+	if sql.CreateSqlTable("ttt2_huds", skeys) then
+		local loaded = sql.Load("ttt2_huds", self.id, self, skeys)
 
 		if not loaded then
-			SQL.Init("ttt2_huds", self.id, self, skeys)
+			sql.Init("ttt2_huds", self.id, self, skeys)
 		end
 	end
 
