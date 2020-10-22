@@ -483,9 +483,10 @@ end
 -- @param table plys The players that should receive roles.
 -- @param table availableRoles The list of roles, that are available.
 -- @param table selectableRoles The list of filtered selectable @{ROLE}s
+-- @param table selectedForcedRoles The List with a count of forced @{ROLE}s
 -- @realm server
 -- @internal
-local function SetSubRoles(plys, availableRoles, selectableRoles)
+local function SetSubRoles(plys, availableRoles, selectableRoles, selectedForcedRoles)
 	local plysAmount = #plys
 	local availableRolesAmount = #availableRoles
 	local tmpSelectableRoles = table.Copy(selectableRoles)
@@ -498,6 +499,9 @@ local function SetSubRoles(plys, availableRoles, selectableRoles)
 		local subrole = availableRoles[rolePick]
 		local roleData = roles.GetByIndex(subrole)
 		local roleCount = tmpSelectableRoles[subrole]
+		if selectedForcedRoles[subrole] then
+			roleCount = roleCount - selectedForcedRoles[subrole]
+		end
 
 		local minKarmaCVar = GetConVar("ttt_" .. roleData.name .. "_karma_min")
 		local minKarma = minKarmaCVar and minKarmaCVar:GetInt() or 0
@@ -581,8 +585,14 @@ local function SelectForcedRoles(plys, selectableRoles)
 			selectedPlys[ply] = true
 		end
 
-		-- assigning the amount of forced players per subrole
+		-- assigning the amount of forced players per role
 		selectedForcedRoles[subrole] = curCount
+
+		-- now assign amount of forced players per baserole if this is only a subrole
+		local baserole = roles.GetByIndex(subrole).baserole
+		if baserole and baserole ~= subrole then
+			selectedForcedRoles[baserole] = curCount
+		end
 	end
 
 	roleselection.forcedRoles = {}
@@ -597,19 +607,25 @@ end
 -- @param table plys The players that should receive roles.
 -- @param number subrole The @{ROLE} index of the considered role.
 -- @param table selectableRoles The list of filtered selectable @{ROLE}s
+-- @param table selectedForcedRoles The List with a count of forced @{ROLE}s
 -- @realm server
 -- @internal
-local function UpgradeRoles(plys, subrole, selectableRoles)
+local function UpgradeRoles(plys, subrole, selectableRoles, selectedForcedRoles)
 	local availableRoles = {}
+	local roleAmount = 0
 
 	-- now upgrade this role if there are other subroles
 	for sub in pairs(selectableRoles) do
-		if roles.GetByIndex(sub).baserole == subrole then
+		roleAmount = selectableRoles[sub]
+		if selectedForcedRoles[sub] then
+			roleAmount = roleAmount - selectedForcedRoles[sub]
+		end
+		if roles.GetByIndex(sub).baserole == subrole and roleAmount > 0 then
 			availableRoles[#availableRoles + 1] = sub
 		end
 	end
 
-	SetSubRoles(plys, availableRoles, selectableRoles)
+	SetSubRoles(plys, availableRoles, selectableRoles, selectedForcedRoles)
 end
 
 ---
@@ -727,7 +743,7 @@ function roleselection.SelectRoles(plys, maxPlys)
 
 			-- upgrade innos and players without any role later
 			if subrole ~= ROLE_INNOCENT then
-				UpgradeRoles(baseRolePlys, subrole, selectableRoles)
+				UpgradeRoles(baseRolePlys, subrole, selectableRoles, selectedForcedRoles)
 			end
 		end
 
@@ -743,7 +759,7 @@ function roleselection.SelectRoles(plys, maxPlys)
 			innos[#innos + 1] = ply
 		end
 
-		UpgradeRoles(innos, ROLE_INNOCENT, selectableRoles)
+		UpgradeRoles(innos, ROLE_INNOCENT, selectableRoles, selectedForcedRoles)
 	end
 
 	GAMEMODE.LastRole = {}
