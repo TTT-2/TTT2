@@ -591,7 +591,7 @@ local function SelectForcedRoles(plys, selectableRoles)
 		-- now assign amount of forced players per baserole if this is only a subrole
 		local baserole = roles.GetByIndex(subrole).baserole
 		if baserole and baserole ~= subrole then
-			selectedForcedRoles[baserole] = curCount
+			selectedForcedRoles[baserole] = selectedForcedRoles[baseRole] + curCount
 		end
 	end
 
