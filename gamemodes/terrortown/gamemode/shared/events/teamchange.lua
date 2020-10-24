@@ -1,13 +1,13 @@
 --- @ignore
 
 if CLIENT then
-	EVENT.icon = Material("")
+	EVENT.icon = nil
 	EVENT.description = "desc_event_teamchange"
 end
 
 if SERVER then
 	function EVENT:Trigger(ply, oldTeam, newTeam)
-		self:AddAffectedPlayers(ply:SteamID64())
+		self:AddAffectedPlayers({ply:SteamID64()})
 
 		return self:Add({
 			nick = ply:Nick(),
@@ -16,8 +16,4 @@ if SERVER then
 			newTeam = newTeam
 		})
 	end
-end
-
-function EVENT:Serialize()
-
 end

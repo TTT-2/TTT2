@@ -124,13 +124,23 @@ function EVENT:HasAffectedPlayer(ply64)
 	return tableHasValue(self.plys, ply64)
 end
 
+---
+-- Used to convert the event data into a printable format.
+-- @note This function should be overwritten but not not called.
+-- @return nil|string The serialized string
+-- @internal
+-- @realm shared
+function EVENT:Serialize()
+
+end
+
 if SERVER then
 	---
 	-- Adds players that are affected by this event.
-	-- @param string ... A variable amount of player steamID64
+	-- @param table plys A table of player steamID64
 	-- @realm server
-	function EVENT:AddAffectedPlayers(...)
-		tableAdd(self.plys, {...})
+	function EVENT:AddAffectedPlayers(plys)
+		tableAdd(self.plys, plys)
 	end
 
 	---

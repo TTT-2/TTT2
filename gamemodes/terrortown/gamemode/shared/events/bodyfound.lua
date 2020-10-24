@@ -1,13 +1,13 @@
 --- @ignore
 
 if CLIENT then
-	EVENT.icon = Material("")
+	EVENT.icon = nil
 	EVENT.description = "desc_event_bodyfound"
 end
 
 if SERVER then
 	function EVENT:Trigger(finder, rag)
-		self:AddAffectedPlayers(finder:SteamID64(), CORPSE.GetPlayerSID64(rag))
+		self:AddAffectedPlayers({finder:SteamID64(), CORPSE.GetPlayerSID64(rag)})
 
 		return self:Add({
 			finder = {
@@ -55,8 +55,4 @@ function EVENT:GetDeprecatedFormat()
 		tm = finder.team,
 		b = found.nick
 	}
-end
-
-function EVENT:Serialize()
-
 end

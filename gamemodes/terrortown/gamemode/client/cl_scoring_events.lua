@@ -157,8 +157,6 @@ local function KillText(e)
 end
 
 function ScoringEventSetup()
-	print("test event availability: ", tostring(EVENT_FINISH))
-
 	-- Round end event
 	Event(EVENT_FINISH, {
 		text = function(e)

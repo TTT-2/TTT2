@@ -1,7 +1,7 @@
 --- @ignore
 
 if CLIENT then
-	EVENT.icon = Material("")
+	EVENT.icon = nil
 	EVENT.description = "desc_event_game_state"
 end
 
@@ -23,8 +23,4 @@ function EVENT:GetDeprecatedFormat()
 		t = event.time / 1000,
 		state = event.newstate
 	}
-end
-
-function EVENT:Serialize()
-
 end

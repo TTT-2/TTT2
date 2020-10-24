@@ -1,13 +1,13 @@
 --- @ignore
 
 if CLIENT then
-	EVENT.icon = Material("")
+	EVENT.icon = nil
 	EVENT.description = "desc_event_game_creditfound"
 end
 
 if SERVER then
 	function EVENT:Trigger(finder, rag, credits)
-		self:AddAffectedPlayers(finder:SteamID64(), CORPSE.GetPlayerSID64(rag))
+		self:AddAffectedPlayers({finder:SteamID64(), CORPSE.GetPlayerSID64(rag)})
 
 		return self:Add({
 			finder = {
@@ -40,8 +40,4 @@ function EVENT:GetDeprecatedFormat()
 		b = event.found.nick,
 		cr = event.found.credits
 	}
-end
-
-function EVENT:Serialize()
-
 end

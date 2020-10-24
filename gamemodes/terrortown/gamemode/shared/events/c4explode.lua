@@ -1,13 +1,13 @@
 --- @ignore
 
 if CLIENT then
-	EVENT.icon = Material("")
+	EVENT.icon = nil
 	EVENT.description = "desc_event_c4_explode"
 end
 
 if SERVER then
 	function EVENT:Trigger(owner)
-		self:AddAffectedPlayers(owner:SteamID64())
+		self:AddAffectedPlayers({owner:SteamID64()})
 
 		return self:Add({
 			nick = owner:Nick(),
@@ -28,8 +28,4 @@ function EVENT:GetDeprecatedFormat()
 		t = event.time / 1000,
 		ni = event.nick,
 	}
-end
-
-function EVENT:Serialize()
-
 end

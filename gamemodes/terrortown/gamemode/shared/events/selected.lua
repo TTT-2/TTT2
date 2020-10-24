@@ -1,7 +1,7 @@
 --- @ignore
 
 if CLIENT then
-	EVENT.icon = Material("")
+	EVENT.icon = nil
 	EVENT.description = "desc_event_selected"
 end
 
@@ -23,7 +23,7 @@ if SERVER then
 				team = ply:GetTeam()
 			}
 
-			self:AddAffectedPlayers(ply:SteamID64())
+			self:AddAffectedPlayers({ply:SteamID64()})
 		end
 
 		return self:Add(event)
@@ -58,8 +58,4 @@ function EVENT:GetDeprecatedFormat()
 		rt = eventRoles,
 		tms = eventTeams
 	}
-end
-
-function EVENT:Serialize()
-
 end

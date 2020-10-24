@@ -1,13 +1,13 @@
 --- @ignore
 
 if CLIENT then
-	EVENT.icon = Material("")
+	EVENT.icon = nil
 	EVENT.description = "desc_event_spawn"
 end
 
 if SERVER then
 	function EVENT:Trigger(ply)
-		self:AddAffectedPlayers(ply:SteamID64())
+		self:AddAffectedPlayers({ply:SteamID64()})
 
 		return self:Add({
 			nick = ply:Nick(),
@@ -28,8 +28,4 @@ function EVENT:GetDeprecatedFormat()
 		ni = event.nick,
 		sid64 = event.sid64
 	}
-end
-
-function EVENT:Serialize()
-
 end

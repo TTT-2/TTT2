@@ -1,7 +1,7 @@
 --- @ignore
 
 if CLIENT then
-	EVENT.icon = Material("")
+	EVENT.icon = nil
 	EVENT.description = "desc_event_kill"
 end
 
@@ -9,7 +9,7 @@ if SERVER then
 	function EVENT:Trigger(victim, attacker, dmgInfo)
 		if not IsValid(victim) or not victim:IsPlayer() then return end
 
-		self:AddAffectedPlayers(victim:SteamID64())
+		self:AddAffectedPlayers({victim:SteamID64()})
 
 		local event = {
 			victim = {
@@ -35,7 +35,7 @@ if SERVER then
 				team = attacker:GetTeam()
 			}
 
-			self:AddAffectedPlayers(attacker:SteamID64())
+			self:AddAffectedPlayers({attacker:SteamID64()})
 
 			-- set death type
 			if event.attacker.sid64 == event.victim.sid64 then
@@ -136,8 +136,4 @@ function EVENT:GetDeprecatedFormat()
 			n = dmg.name
 		}
 	}
-end
-
-function EVENT:Serialize()
-
 end
