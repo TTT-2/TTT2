@@ -114,6 +114,10 @@ function plymeta:SetRole(subrole, team, forceHooks)
 
 	if oldSubrole ~= subrole or forceHooks then
 		hook.Run("TTT2UpdateSubrole", self, oldSubrole, subrole)
+
+		if SERVER then
+			events.Trigger(EVENT_ROLECHANGE, self, oldSubrole, subrole)
+		end
 	end
 
 	if oldTeam ~= newTeam or forceHooks then
@@ -267,6 +271,10 @@ function plymeta:UpdateTeam(team)
 
 	if oldTeam ~= newTeam then
 		hook.Run("TTT2UpdateTeam", self, oldTeam, newTeam)
+
+		if SERVER then
+			events.Trigger(EVENT_TEAMCHANGE, self, oldTeam, newTeam)
+		end
 	end
 end
 

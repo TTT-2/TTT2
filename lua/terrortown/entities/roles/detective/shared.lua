@@ -10,8 +10,9 @@ function ROLE:PreInitialize()
 	self.defaultTeam = TEAM_INNOCENT
 	self.defaultEquipment = SPECIAL_EQUIPMENT
 
-	self.scoreKillsMultiplier = 1
-	self.scoreTeamKillsMultiplier = -8
+	self.score.killsMultiplier = 8
+	self.score.teamKillsMultiplier = -8
+	self.score.bodyFoundMuliplier = 3
 	self.fallbackTable = {}
 	self.unknownTeam = true
 
