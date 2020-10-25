@@ -294,6 +294,18 @@ function GM:InitPostEntity()
 end
 
 ---
+-- Called after the gamemode has loaded
+-- @hook
+-- @realm client
+-- @ref https://wiki.facepunch.com/gmod/GM:PostGamemodeLoaded
+-- @local
+function GM:PostGamemodeLoaded()
+	events.OnLoaded()
+
+	ScoringEventSetup()
+end
+
+---
 -- Called when gamemode has been reloaded by auto refresh.
 -- @hook
 -- @realm shared
@@ -303,8 +315,11 @@ function GM:OnReloaded()
 	vguihandler.Rebuild()
 
 	local skinName = vskin.GetVSkinName()
-
 	vskin.UpdatedVSkin(skinName, skinName)
+
+	events.OnLoaded()
+
+	ScoringEventSetup()
 end
 
 ---
