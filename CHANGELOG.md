@@ -14,6 +14,9 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added Drag&Drop role layering VGUI, accessible with the console command `ttt2_edit_rolelayering`
 - Updated Simplified Chinese localization (by @TheOnly8Z)
 - Updated Italian localization (by @ThePlatynumGhost)
+- Added a new event system
+  - added a cancelable hook `TTT2OnTriggeredEvent` that is called once an event is about to be added
+  - added a hook `TTT2AddedEvent` that is called after an event was added
 - Added `orm` library to simplify database access
 
 ### Changed
@@ -24,6 +27,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - TargetID text is now scaled with the global scale factor
 - Cleaned up draw function files
 - Removed C4 defuse restriction for teammates
+- Moved role specific score variables into the role base
 - Refactored `GM:HUDDrawTargetID` for the use of a shared FindAlongRay-Function
 
 ### Fixed

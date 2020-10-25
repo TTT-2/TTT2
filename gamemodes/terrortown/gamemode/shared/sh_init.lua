@@ -446,18 +446,6 @@ if CLIENT then
 	end
 end
 
--- Game event log defs
-EVENT_KILL = 1
-EVENT_SPAWN = 2
-EVENT_GAME = 3
-EVENT_FINISH = 4
-EVENT_SELECTED = 5
-EVENT_BODYFOUND = 6
-EVENT_C4PLANT = 7
-EVENT_C4EXPLODE = 8
-EVENT_CREDITFOUND = 9
-EVENT_C4DISARM = 10
-
 WIN_NONE = WIN_NONE or 1
 WIN_TRAITOR = WIN_TRAITOR or 2
 WIN_INNOCENT = WIN_INNOCENT or 3
@@ -486,6 +474,7 @@ KILL_NORMAL = 0
 KILL_SUICIDE = 1
 KILL_FALL = 2
 KILL_BURN = 3
+KILL_TEAM = 4
 
 -- Entity types a crowbar might open
 OPEN_NO = 0
@@ -543,6 +532,7 @@ include("ttt2/libraries/fileloader.lua")
 include("ttt2/libraries/door.lua")
 include("ttt2/libraries/orm.lua")
 include("ttt2/libraries/thermalvision.lua")
+include("ttt2/libraries/events.lua")
 include("ttt2/libraries/targetid.lua")
 
 
