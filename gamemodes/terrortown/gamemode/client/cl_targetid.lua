@@ -14,7 +14,7 @@ local hook = hook
 local targetid = targetid
 
 -- Temporary fix of TargetID Variable Initialization
-targetid.initialize()
+targetid.Initialize()
 
 -- Convars for targetid
 local cvMinimalisticTid = CreateClientConVar("ttt_minimal_targetid", "0", FCVAR_ARCHIVE)
