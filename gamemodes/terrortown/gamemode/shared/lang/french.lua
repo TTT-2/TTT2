@@ -245,16 +245,19 @@ L.item_weapon     = "Arme"
 L.item_armor      = "Armure"
 L.item_armor_desc = [[
 Rréduit les dommages causés par les balles, les flammes et les explosions. Diminue avec le temps.
+
 Il peut être acheté plusieurs fois. Après avoir atteint une valeur d'armure spécifique, l'armure devient plus résistante.]]
 
 L.item_radar      = "Radar"
 L.item_radar_desc = [[
 Vous laisse scanner des formes de vies.
+
 Commence des scans automatiques dès que vous l'achetez. Configurez-le dans l'onglet Radar de ce menu.]]
 
 L.item_disg       = "Déguisement"
 L.item_disg_desc  = [[
 Cache votre ID. Évite de paraître comme la dernière personne vue avant de mourir.
+
 Activer/Desactiver le déguisement vers l'onglet Déguisement de ce menu ou appuyez sur Numpad Enter.]]
 
 -- C4
@@ -293,6 +296,7 @@ L.vis_help_pri    = "{primaryfire} pour jeter l'appareil activé."
 
 L.vis_desc        = [[
 Dispositif de visualisation de scène de crime.
+
 Analyse un corps pour montrer commentla victime a été tuée, mais seulement s'il est mort d'un coup de feu.]]
 
 -- Decoy
@@ -312,6 +316,7 @@ L.defuser_help    = "{primaryfire} désamorce le C4 ciblé."
 
 L.defuser_desc    = [[
 Désamorce instantanément un explosif C4.
+
 Usages illimités. Le C4 sera plus visible si vous avez ça sur vous.]]
 
 -- Flare gun
@@ -319,6 +324,7 @@ L.flare_name      = "Pistolet de détresse"
 
 L.flare_desc      = [[
 Peut être utilisé pour brûler les corps pourqu'ils ne soient pas trouvés. Munitions limitées
+
 Brûler un corps fait un son distinct.]]
 
 -- Health station
@@ -329,6 +335,7 @@ L.hstation_help   = "{primaryfire} place la Station de Soins."
 
 L.hstation_desc   = [[
 Soigne les personnes qui l'utilise.
+
 Recharge lente. Tout le monde peut l'utiliser, et elle peut être endommagée. Peut être vérifiée pour les échantillons ADN de ses utilisateurs.]]
 
 -- Knife
@@ -337,11 +344,13 @@ L.knife_thrown    = "Couteau lancé"
 
 L.knife_desc      = [[
 Tue les cibles blessées sur le champ et sans faire de bruit, mais à usage unique.
+
 Peut être lancé avec l'alt-fire.]]
 
 -- Poltergeist
 L.polter_desc     = [[
 Plante des pousseurs sur des objets pour les pousser violemment.
+
 Ces éclats d'énergie peuvent frapper les gens à proximité.]]
 
 -- Radio
@@ -350,6 +359,7 @@ L.radio_help_pri  = "{primaryfire} place la Radio."
 
 L.radio_desc      = [[
 Joue des sons pour distraire ou tromper.
+
 Placez la radio quelque part, ensuite jouez des sons depuis l'onglet Radio dans ce menu.]]
 
 -- Silenced pistol
@@ -357,6 +367,7 @@ L.sipistol_name   = "Pistolet Silencieux"
 
 L.sipistol_desc   = [[
 Pistolet bas bruit, utilise des munitions de pistolet normales.
+
 Les victimes ne crieront pas quand tuées.]]
 
 -- Newton launcher
@@ -364,6 +375,7 @@ L.newton_name     = "Lanceur de Newton"
 
 L.newton_desc     = [[
 Pousse les gens à une distance de sécurité.
+
 Munitions illimitées, mais lent à tirer.]]
 
 -- Binoculars
@@ -371,11 +383,13 @@ L.binoc_name      = "Binocles"
 
 L.binoc_desc      = [[
 Zoomer sur des corps et les identifier de loin.
+
 Usages illimités, mais l'identification prend quelques secondes.]]
 
 -- UMP
 L.ump_desc        = [[
 SMG expérimental qui désoriente les cibles.
+
 Utilise les munitions normales de SMG.]]
 
 -- ADN scanner
@@ -392,6 +406,7 @@ L.dna_gone        = "Pas d'ADN par ici."
 
 L.dna_desc        = [[
 Collectez des échantillons ADN d'objets et utilisez-les pour trouvez le propriétaire de cet ADN.
+
 Essayez-le sur des corps tout frais pour récupérer l'ADN du tueur pour le traquer.]]
 
 -- Magneto stick
@@ -425,6 +440,7 @@ L.tele_help_sec   = "{secondaryfire} marque la position actuelle."
 
 L.tele_desc       = [[
 Teleporte vers un lieu marqué.
+
 La téléportation fait du bruit, et le nombre d'utilisations est limité.]]
 
 -- Ammo names, shown when picked up
@@ -492,24 +508,30 @@ L.punch_malus  = "Votre bon score a augmenté votre limite frappe-o-metre de {nu
 L.info_popup_innocent = [[
 Vous êtes un Terroriste Innocent ! Mais il y a des Traitres qui traînent...
 À qui pouvez-vous faire confiance, et qui cherche à vous remplir de balles  ?
+
 Surveillez vos arrières, et bossez avec vos camarades pour vous sortir d'ici en vie !]]
 
 L.info_popup_detective = [[
 Vous êtes un Détective ! Terroriste QG vous a donné des ressources spéciales pour trouver les Traitres.
 Utilisez-les pour aider les innocent à survire, mais attention :
 les traitres chercheront à vous tuer en premier !
+
 Appuyez sur {menukey} pour recevoir votre équipement !]]
 
 L.info_popup_traitor_alone = [[
 Vous êtes un TRAITRE ! Vous n'avez pas d'amis traitres ce round.
+
 Tuez tous les autres pour gagner !
+
 Appuyez sur {menukey} pour recevoir votre équipement !]]
 
 L.info_popup_traitor = [[
 Vous êtes un TRAITRE ! Travaillez avec vos amis traitres pour tuer tout le monde.
 Mais faites attention, ou votre trahison pourrait sortir au grand jour...
+
 Voici vos camarades :
 {traitorlist}
+
 Appuyez sur {menukey} pour recevoir votre équipement !]]
 
 --- Various other text
@@ -517,6 +539,7 @@ L.name_kick = "Un joueur a été automatiquement expulsé pour avoir changé son
 
 L.idle_popup = [[
 Vous avez étiez absent {num} secondes et a donc été mis dans le mode Spectateur uniquement. Dans ce mode, vous n'apparaîtrez pas quand un nouveau round démarre.
+
 Vous pouvez Rejoindre/Quitter ce mode quand vous voulez en appuyant sur {helpkey} et en décochant la case adéquat dans l'onglet Options. Vous pouvez aussi choisir de le désactiver maintenant.]]
 
 L.idle_popup_close = "Ne rien faire"
@@ -995,7 +1018,7 @@ L.target_switch_weapon_nospace = "Il n'y a pas de slot d'inventaire disponible p
 L.target_switch_drop_weapon_info = "Lâcher {name} du slot {slot}"
 L.target_switch_drop_weapon_info_noslot = "Il n'y a pas d'arme a lâcher  dans ce slot {slot}"
 
-L.corpse_searched_by_detective = "Ce cadavre a été fouillé par un detective"
+L.corpse_searched_by_detective = "Ce cadavre a été fouillé par un détective"
 L.corpse_too_far_away = "Ce cadavre est trop loin."
 
 L.radio_pickup_wrong_team = "Vous ne pouvez pas prendre la radio d'une autre team."
@@ -1057,8 +1080,8 @@ L.menu_gameplay_title = "Gameplay"
 L.menu_addons_title = "Addons"
 L.menu_legacy_title = "Legacy Addons"
 L.menu_administration_title = "Administration"
-L.menu_equipment_title = "Edit Equipment"
-L.menu_shops_title = "Edit Shops"
+L.menu_equipment_title = "Édité l'équipement"
+L.menu_shops_title = "Édité les Shops"
 
 L.menu_changelog_description = "Une liste de changements et de corrections dans les versions récentes"
 L.menu_guide_description = "Vous aide à démarrer avec TTT2 et vous explique certaines choses sur le gameplay, les rôles et d'autres choses"
@@ -1086,10 +1109,10 @@ L.submenu_appearance_vskin_title = "VSkin"
 L.submenu_appearance_targetid_title = "TargetID"
 L.submenu_appearance_shop_title = "Shop Settings"
 L.submenu_appearance_crosshair_title = "Réticule"
-L.submenu_appearance_dmgindicator_title = "Damage Indicator"
+L.submenu_appearance_dmgindicator_title = "Indicateur de dégats"
 L.submenu_appearance_performance_title = "Performance"
 L.submenu_appearance_interface_title = "Interface"
-L.submenu_appearance_miscellaneous_title = "Misellaneous"
+L.submenu_appearance_miscellaneous_title = "Autre"
 
 L.submenu_gameplay_general_title = "Général"
 L.submenu_gameplay_avoidroles_title = "Blacklistage de role"
@@ -1221,7 +1244,7 @@ L.item_no_drown_damage_desc = [[Vous immunise contre les dégâts dus à la noya
 -- 2020-04-21
 L.dna_tid_possible = "Scan possible"
 L.dna_tid_impossible = "Scan impossible"
-L.dna_screen_ready = "No DNA"
+L.dna_screen_ready = "Pas d'ADN"
 L.dna_screen_match = "Match"
 
 -- 2020-04-30
@@ -1232,7 +1255,7 @@ L.hud_revival_title = "Temps restant avant réanimation:"
 L.hud_revival_time = "{time}s"
 
 -- 2020-05-03
-L.door_destructible = "Door is destructible ({health}HP)"
+L.door_destructible = "La porte est destructible ({health}HP)"
 
 -- 2020-05-28
 L.confirm_detective_only = "Seuls les détectives peuvent confirmer les corps"
