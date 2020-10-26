@@ -563,7 +563,7 @@ local function SelectForcedRoles(plys, selectableRoles)
 		-- if it's not a selectable role, continue
 		if not roleCount then continue end
 
-		local curCount = 0
+		local curCount = (selectedForcedRoles[subrole] or 0)
 		local amount = #forcedPlys
 
 		for i = 1, amount do
@@ -592,7 +592,7 @@ local function SelectForcedRoles(plys, selectableRoles)
 		-- now assign amount of forced players per baserole if this is only a subrole
 		if not roles.GetByIndex(subrole):IsBaseRole() then
 			local baserole = roles.GetByIndex(subrole).baserole
-			selectedForcedRoles[baserole] = (selectedForcedRoles[baseRole] or 0) + curCount
+			selectedForcedRoles[baserole] = (selectedForcedRoles[baserole] or 0) + curCount
 		end
 	end
 
