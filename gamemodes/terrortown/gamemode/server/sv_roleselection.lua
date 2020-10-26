@@ -563,6 +563,24 @@ local function SelectForcedRoles(plys, selectableRoles)
 		-- if it's not a selectable role, continue
 		if not roleCount then continue end
 
+		local isBaseRole = roles.GetByIndex(subrole):IsBaseRole()
+		local baserole = nil
+
+		--Consider maximum number of roles, that are available to the corresponding baserole
+		if not isBaseRole then
+			baserole = roles.GetByIndex(subrole).baserole
+
+			local baseroleCount = selectableRoles[baserole] - (selectedForcedRoles[baserole] or 0)
+
+			-- take the minimum of baseroles or subroles, if baseroles are available, else continue
+			if baseroleCount > 0 then
+				roleCount = math.min(baseroleCount, roleCount)
+			else
+				continue
+			end
+		end
+
+		-- Consider number of roles, that were forced by other subroles
 		local curCount = (selectedForcedRoles[subrole] or 0)
 		local amount = #forcedPlys
 
@@ -590,8 +608,7 @@ local function SelectForcedRoles(plys, selectableRoles)
 		selectedForcedRoles[subrole] = curCount
 
 		-- now assign amount of forced players per baserole if this is only a subrole
-		if not roles.GetByIndex(subrole):IsBaseRole() then
-			local baserole = roles.GetByIndex(subrole).baserole
+		if not isBaseRole then
 			selectedForcedRoles[baserole] = (selectedForcedRoles[baserole] or 0) + curCount
 		end
 	end
