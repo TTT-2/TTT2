@@ -233,9 +233,6 @@ function GM:HUDDrawTargetID()
 
 	ent, distance = targetid.FindEntityAlongView(startpos, direction, filter)
 
-	-- only add onscreen infos when the entity isn't the local player
-	if ent == client then return end
-
 	local changedEnt = hook.Run("TTTModifyTargetedEntity", ent, distance)
 
 	if changedEnt then

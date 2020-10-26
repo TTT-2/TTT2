@@ -2,9 +2,11 @@
 -- @module TargetID
 -- @desc Handling operations to display the TargetID
 -- @author Mineotopia
+-- @author ZenBreaker
 
 if SERVER then
     AddCSLuaFile()
+
     return
 end
 
@@ -12,8 +14,7 @@ targetid = targetid or {}
 
 -- Global to local variables
 local bIsInitialized = false
-local ParT
-local TryT
+local ParT, TryT
 
 -- Variables for calculations
 local MAX_TRACE_LENGTH = math.sqrt(3) * 32768
@@ -22,8 +23,8 @@ local MAX_TRACE_LENGTH = math.sqrt(3) * 32768
 local key_params = {}
 
 -- Convars for targetid
- local cvDeteOnlyConfirm = GetConVar("ttt2_confirm_detective_only")
- local cvDeteOnlyInspect = GetConVar("ttt2_inspect_detective_only")
+local cvDeteOnlyConfirm = GetConVar("ttt2_confirm_detective_only")
+local cvDeteOnlyInspect = GetConVar("ttt2_inspect_detective_only")
 
 -- Materials for targetid
 local materialTButton = Material("vgui/ttt/tid/tid_big_tbutton_pointer")
@@ -41,16 +42,16 @@ local materialDNATargetID = Material("vgui/ttt/dnascanner/dna_hud")
 
 ---
 -- This function is a temporary fix for local variables in use of other libraries, that are not yet initialized
-function targetid.initialize()
-    if not bIsInitialized then
-        bIsInitialized = true
-        ParT = LANG.GetParamTranslation
-        TryT = LANG.TryTranslation
-        key_params = {
-            usekey = Key("+use", "USE"),
-            walkkey = Key("+walk", "WALK")
-        }
-    end
+function targetid.Initialize()
+    if bIsInitialized then return end
+
+    bIsInitialized = true
+    ParT = LANG.GetParamTranslation
+    TryT = LANG.TryTranslation
+    key_params = {
+        usekey = Key("+use", "USE"),
+        walkkey = Key("+walk", "WALK")
+    }
 end
 
 ---
