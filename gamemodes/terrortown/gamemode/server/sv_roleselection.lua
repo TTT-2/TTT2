@@ -499,6 +499,7 @@ local function SetSubRoles(plys, availableRoles, selectableRoles, selectedForced
 		local subrole = availableRoles[rolePick]
 		local roleData = roles.GetByIndex(subrole)
 		local roleCount = tmpSelectableRoles[subrole]
+
 		if selectedForcedRoles[subrole] then
 			roleCount = roleCount - selectedForcedRoles[subrole]
 		end
@@ -589,8 +590,8 @@ local function SelectForcedRoles(plys, selectableRoles)
 		selectedForcedRoles[subrole] = curCount
 
 		-- now assign amount of forced players per baserole if this is only a subrole
-		local baserole = roles.GetByIndex(subrole).baserole
-		if baserole and baserole ~= subrole then
+		if not roles.GetByIndex(subrole):IsBaseRole() then
+			local baserole = roles.GetByIndex(subrole).baserole
 			selectedForcedRoles[baserole] = (selectedForcedRoles[baseRole] or 0) + curCount
 		end
 	end
@@ -616,11 +617,15 @@ local function UpgradeRoles(plys, subrole, selectableRoles, selectedForcedRoles)
 
 	-- now upgrade this role if there are other subroles
 	for sub in pairs(selectableRoles) do
+		if roles.GetByIndex(sub).baserole ~= subrole then continue end
+
 		roleAmount = selectableRoles[sub]
+
 		if selectedForcedRoles[sub] then
 			roleAmount = roleAmount - selectedForcedRoles[sub]
 		end
-		if roles.GetByIndex(sub).baserole == subrole and roleAmount > 0 then
+
+		if roleAmount > 0 then
 			availableRoles[#availableRoles + 1] = sub
 		end
 	end
