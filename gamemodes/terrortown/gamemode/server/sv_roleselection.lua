@@ -563,12 +563,13 @@ local function SelectForcedRoles(plys, selectableRoles)
 		-- if it's not a selectable role, continue
 		if not roleCount then continue end
 
-		local isBaseRole = roles.GetByIndex(subrole):IsBaseRole()
+		local curRole = roles.GetByIndex(subrole)
+		local isBaseRole = curRole:IsBaseRole()
 		local baserole = nil
 
 		--Consider maximum number of roles, that are available to the corresponding baserole
 		if not isBaseRole then
-			baserole = roles.GetByIndex(subrole).baserole
+			baserole = curRole.baserole
 
 			local baseroleCount = selectableRoles[baserole] - (selectedForcedRoles[baserole] or 0)
 
