@@ -196,29 +196,6 @@ function events.GetTotalPlayerScores()
 end
 
 ---
--- Returns a table with the player steamID64 as indexes and a number of deaths
--- for this specific player.
--- @note Players with zero deaths this round will not be included in this list.
--- @return table A table with the amounts of deaths per player
--- @realm shared
-function events.GetTotalPlayerDeaths()
-	local eventList = events.list
-	local deathList = {}
-
-	for i = 1, #eventList do
-		local event = eventList[i]
-
-		if event.type ~= EVENT_KILL then continue end
-
-		local victim64 = event.event.victim.sid64
-
-		deathList[victim64] = (deathList[victim64] or 0) + 1
-	end
-
-	return deathList
-end
-
----
 -- Generates an event list in the deprecated format. Only contains
 -- events that were present in default TTT. Is sorted by time.
 -- @return table The deprecated event list
@@ -291,7 +268,7 @@ if SERVER then
 	-- @realm server
 	function events.UpdateScoreboard()
 		local scores = events.GetTotalPlayerScores()
-		local deaths = events.GetTotalPlayerDeaths()
+		local deaths = eventdata.GetTotalPlayerDeaths()
 
 		for ply64, score in pairs(scores) do
 			ply = player.GetBySteamID64(ply64)
