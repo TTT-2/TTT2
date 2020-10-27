@@ -532,18 +532,39 @@ local function SetSubRoles(plys, availableRoles, selectableRoles, selectedForced
 end
 
 ---
+-- Ensure, that baseroles of hardforced subroles are accounted for (eg. received by ULX etc).
+--
+-- @return table List with a count of forced @{ROLE}s
+-- @realm server
+-- @internal
+local function GetHardForcedBaseRoles()
+	local selectedForcedRoles = {}
+
+	for ply, subrole in pairs(roleselection.finalRoles) do
+		if IsValid(ply) then
+			local curRole = roles.GetByIndex(subrole)
+			local isBaseRole = curRole:IsBaseRole()
+
+			-- assign amount of forced players per baserole if this is only a subrole
+			if not isBaseRole then
+				local baserole = curRole.baserole
+				selectedForcedRoles[baserole] = (selectedForcedRoles[baserole] or 0) + 1
+			end
+		end
+	end
+	return selectedForcedRoles
+end
+
+---
 -- Ensure, that players receive their forced role (eg. received by ULX etc).
 --
 -- @param table plys The players that should receive roles.
 -- @param table selectableRoles The list of filtered selectable @{ROLE}s
--- @return table List of players, that received a forced role.
--- @return table List with a count of forced @{ROLE}s
+-- @param table selectedForcedRoles The List of forced @{ROLE}s
 -- @realm server
 -- @internal
-local function SelectForcedRoles(plys, selectableRoles)
+local function SelectForcedRoles(plys, selectableRoles, selectedForcedRoles)
 	local transformed = {}
-	local selectedPlys = {}
-	local selectedForcedRoles = {}
 
 	-- filter and restructure the forcedRoles table
 	for id, subrole in pairs(roleselection.forcedRoles) do
@@ -601,8 +622,6 @@ local function SelectForcedRoles(plys, selectableRoles)
 			curCount = curCount + 1
 
 			hook.Run("TTT2ReceivedForcedRole", ply, subrole)
-
-			selectedPlys[ply] = true
 		end
 
 		-- assigning the amount of forced players per role
@@ -616,7 +635,7 @@ local function SelectForcedRoles(plys, selectableRoles)
 
 	roleselection.forcedRoles = {}
 
-	return selectedPlys, selectedForcedRoles
+	return selectedForcedRoles
 end
 
 ---
@@ -716,7 +735,8 @@ function roleselection.SelectRoles(plys, maxPlys)
 	local selectableRoles = roleselection.GetSelectableRolesList(maxPlys, allAvailableRoles) -- update roleselection.selectableRoles table
 
 	-- Select forced roles at first
-	local selectedForcedPlys, selectedForcedRoles = SelectForcedRoles(plys, selectableRoles) -- this updates roleselection.finalRoles table and returns a key based list of selected players and a list with the count of forced Roles
+	local selectedForcedRoles = GetHardForcedBaseRoles() -- this gets the amount of baseroles that are taken by subroles 
+	SelectForcedRoles(plys, selectableRoles, selectedForcedRoles) -- this updates roleselection.finalRoles table and the list of forced Roles
 
 	-- We need to remove already selected players
 	local plysFirstPass, plysSecondPass = {}, {} -- modified player table
@@ -724,7 +744,7 @@ function roleselection.SelectRoles(plys, maxPlys)
 	for i = 1, #plys do
 		local ply = plys[i]
 
-		if selectedForcedPlys[ply] then continue end
+		if roleselection.finalRoles[ply] then continue end
 
 		local pos = #plysFirstPass + 1
 
@@ -740,7 +760,7 @@ function roleselection.SelectRoles(plys, maxPlys)
 			[2] = ROLE_INNOCENT
 		}
 
-		-- insert selectable roles into the list. The order doesn't matter, players are choosen randomly and the roles are already filtered and limited
+		-- insert selectable roles into the list. The order doesn't matter, players are chosen randomly and the roles are already filtered and limited
 		for subrole in pairs(selectableRoles) do
 			if subrole == ROLE_TRAITOR or subrole == ROLE_INNOCENT then continue end
 
