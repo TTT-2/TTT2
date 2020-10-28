@@ -18,6 +18,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - added a cancelable hook `TTT2OnTriggeredEvent` that is called once an event is about to be added
   - added a hook `TTT2AddedEvent` that is called after an event was added
 - Added `orm` library to simplify database access
+- Added French translation (by @MisterClems)
 
 ### Changed
 
