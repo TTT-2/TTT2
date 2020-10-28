@@ -634,8 +634,6 @@ local function SelectForcedRoles(plys, selectableRoles, selectedForcedRoles)
 	end
 
 	roleselection.forcedRoles = {}
-
-	return selectedForcedRoles
 end
 
 ---
