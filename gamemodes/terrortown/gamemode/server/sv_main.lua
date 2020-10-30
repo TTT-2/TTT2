@@ -472,7 +472,7 @@ function GM:InitPostEntity()
 
 		CreateEquipment(wep) -- init weapons
 
-		wep.CanBuy = {}	-- reset normal weapons equipment
+		wep.CanBuy = {} -- reset normal weapons equipment
 	end
 
 	-- init hudelements fns
@@ -531,7 +531,16 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:PostGamemodeLoaded
 -- @local
 function GM:PostGamemodeLoaded()
+	events.OnLoaded()
+end
 
+---
+-- Called when gamemode has been reloaded by auto refresh.
+-- @hook
+-- @realm shared
+-- @ref https://wiki.facepunch.com/gmod/GM:OnReloaded
+function GM:OnReloaded()
+	events.OnLoaded()
 end
 
 ---
@@ -700,7 +709,7 @@ end
 function SetRoundState(state)
 	GAMEMODE.round_state = state
 
-	SCORE:RoundStateChange(state)
+	events.Trigger(EVENT_GAME, state)
 
 	SendRoundState(state)
 end
@@ -1056,7 +1065,7 @@ function PrepareRound()
 	GAMEMODE.AwardedCredits = false
 	GAMEMODE.AwardedCreditsDead = 0
 
-	SCORE:Reset()
+	events.Reset()
 
 	-- Update damage scaling
 	KARMA.RoundBegin()
@@ -1318,8 +1327,6 @@ function BeginRound()
 	timer.Simple(1, SendFullStateUpdate)
 	timer.Simple(10, SendFullStateUpdate)
 
-	SCORE:HandleSelection() -- log traitors and detectives
-
 	-- Give the StateUpdate messages ample time to arrive
 	timer.Simple(1.5, TellTraitorsAboutTraitors)
 	timer.Simple(2.5, ShowRoundStartPopup)
@@ -1339,6 +1346,8 @@ function BeginRound()
 	SetRoundState(ROUND_ACTIVE)
 	LANG.Msg("round_started")
 	ServerLog("Round proper has begun...\n")
+
+	events.Trigger(EVENT_SELECTED)
 
 	GAMEMODE:UpdatePlayerLoadouts() -- needs to happen when round_active
 
@@ -1431,7 +1440,8 @@ end
 function EndRound(result)
 	PrintResultMessage(result)
 
-	-- first handle round end
+	events.Trigger(EVENT_FINISH, result)
+
 	SetRoundState(ROUND_POST)
 
 	local ptime = math.max(5, posttime:GetInt())
@@ -1461,16 +1471,10 @@ function EndRound(result)
 
 	KARMA.RoundEnd()
 
-	-- now handle potentially error prone scoring stuff
-
-	-- register an end of round event
-	SCORE:RoundComplete(result)
-
-	-- update player scores
-	SCORE:ApplyEventLogScores(result)
+	events.UpdateScoreboard()
 
 	-- send the clients the round log, players will be shown the report
-	SCORE:StreamToClients()
+	events.StreamToClients()
 
 	---
 	-- server plugins might want to start a map vote here or something

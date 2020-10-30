@@ -149,15 +149,17 @@ function GM:PlayerSpawn(ply)
 
 	ply:SetupHands()
 
-	SCORE:HandleSpawn(ply)
-
 	ply:SetLastSpawnPosition(ply:GetPos())
 	ply:SetLastDeathPosition(nil)
 
-	-- a function to handle the rolespecific stuff that should be done on
-	-- rolechange and respawn (while a round is active)
 	if ply:IsActive() then
-		roles.GetByIndex(ply:GetSubRole()):GiveRoleLoadout(ply, false)
+		-- a function to handle the rolespecific stuff that should be done on
+		-- rolechange and respawn (while a round is active)
+		ply:GetSubRoleData():GiveRoleLoadout(ply, false)
+
+		events.Trigger(EVENT_RESPAWN, ply)
+	else
+		events.Trigger(EVENT_SPAWN, ply)
 	end
 end
 
@@ -731,7 +733,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
 
 	-- Score only when there is a round active.
 	if GetRoundState() == ROUND_ACTIVE then
-		SCORE:HandleKill(ply, attacker, dmginfo)
+		events.Trigger(EVENT_KILL, ply, attacker, dmginfo)
 
 		if IsValid(attacker) and attacker:IsPlayer() then
 			attacker:RecordKill(ply)
