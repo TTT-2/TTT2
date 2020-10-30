@@ -552,6 +552,7 @@ local function GetHardForcedBaseRoles()
 			end
 		end
 	end
+
 	return selectedForcedRoles
 end
 
@@ -588,22 +589,20 @@ local function SelectForcedRoles(plys, selectableRoles, selectedForcedRoles)
 		local isBaseRole = curRole:IsBaseRole()
 		local baserole = nil
 
-		--Consider maximum number of roles, that are available to the corresponding baserole
+		-- Consider maximum number of roles, that are available to the corresponding baserole
 		if not isBaseRole then
 			baserole = curRole.baserole
 
 			local baseroleCount = selectableRoles[baserole] - (selectedForcedRoles[baserole] or 0)
 
 			-- take the minimum of baseroles or subroles, if baseroles are available, else continue
-			if baseroleCount > 0 then
-				roleCount = math.min(baseroleCount, roleCount)
-			else
-				continue
-			end
+			if baseroleCount < 1 then continue end
+
+			roleCount = math.min(baseroleCount, roleCount)
 		end
 
 		-- Consider number of roles, that were forced by other subroles
-		local curCount = (selectedForcedRoles[subrole] or 0)
+		local curCount = selectedForcedRoles[subrole] or 0
 		local amount = #forcedPlys
 
 		for i = 1, amount do
