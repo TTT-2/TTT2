@@ -673,12 +673,16 @@ end
 --
 -- @realm server
 -- @internal
-local function updateFinalRoles()
+local function UpdateFinalRoles()
+	local tbl = {}
+
 	for ply, subrole in pairs(roleselection.finalRoles) do
-		if not IsValid(ply) then
-			table.remove(roleselection.finalRoles, ply)
+		if IsValid(ply) then
+			tbl[ply] = subrole
 		end
 	end
+
+	roleselection.finalRoles = tbl
 end
 
 ---
@@ -745,7 +749,7 @@ function roleselection.SelectRoles(plys, maxPlys)
 	local allAvailableRoles = roleselection.GetAllSelectableRolesList(maxPlys)
 	local selectableRoles = roleselection.GetSelectableRolesList(maxPlys, allAvailableRoles) -- update roleselection.selectableRoles table
 
-	updateFinalRoles() -- Update the roleselection.finalRoles table by removing all invalid players
+	UpdateFinalRoles() -- Update the roleselection.finalRoles table by removing all invalid players
 
 	-- Select forced roles at first
 	local selectedForcedRoles = SelectForcedRoles(plys, selectableRoles) -- this updates roleselection.finalRoles table with forced players
