@@ -3,11 +3,6 @@
 -- compatbility bridge to old addons.
 -- @module SCORE
 
-local table = table
-local pairs = pairs
-local IsValid = IsValid
-local hook = hook
-
 SCORE = SCORE or {}
 SCORE.Events = SCORE.Events or {}
 
