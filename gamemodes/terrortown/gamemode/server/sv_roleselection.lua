@@ -541,15 +541,13 @@ local function GetHardForcedBaseRoles()
 	local selectedForcedRoles = {}
 
 	for ply, subrole in pairs(roleselection.finalRoles) do
-		if IsValid(ply) then
-			local curRole = roles.GetByIndex(subrole)
-			local isBaseRole = curRole:IsBaseRole()
+		local curRole = roles.GetByIndex(subrole)
+		local isBaseRole = curRole:IsBaseRole()
 
-			-- assign amount of forced players per baserole if this is only a subrole
-			if not isBaseRole then
-				local baserole = curRole.baserole
-				selectedForcedRoles[baserole] = (selectedForcedRoles[baserole] or 0) + 1
-			end
+		-- assign amount of forced players per baserole if this is only a subrole
+		if not isBaseRole then
+			local baserole = curRole.baserole
+			selectedForcedRoles[baserole] = (selectedForcedRoles[baserole] or 0) + 1
 		end
 	end
 
@@ -561,10 +559,10 @@ end
 --
 -- @param table plys The players that should receive roles.
 -- @param table selectableRoles The list of filtered selectable @{ROLE}s
--- @param table selectedForcedRoles The List of forced @{ROLE}s
+-- @return table List with a count of forced @{ROLE}s
 -- @realm server
 -- @internal
-local function SelectForcedRoles(plys, selectableRoles, selectedForcedRoles)
+local function SelectForcedRoles(plys, selectableRoles)
 	local transformed = {}
 
 	-- filter and restructure the forcedRoles table
@@ -578,6 +576,8 @@ local function SelectForcedRoles(plys, selectableRoles, selectedForcedRoles)
 			transformed[subrole][#transformed[subrole] + 1] = ply
 		end
 	end
+
+	local selectedForcedRoles = GetHardForcedBaseRoles() -- this gets the hardforced amount of baseroles that are taken by subroles 
 
 	for subrole, forcedPlys in pairs(transformed) do
 		local roleCount = selectableRoles[subrole]
@@ -631,8 +631,9 @@ local function SelectForcedRoles(plys, selectableRoles, selectedForcedRoles)
 			selectedForcedRoles[baserole] = (selectedForcedRoles[baserole] or 0) + curCount
 		end
 	end
-
 	roleselection.forcedRoles = {}
+
+	return selectedForcedRoles
 end
 
 ---
@@ -665,6 +666,19 @@ local function UpgradeRoles(plys, subrole, selectableRoles, selectedForcedRoles)
 	end
 
 	SetSubRoles(plys, availableRoles, selectableRoles, selectedForcedRoles)
+end
+
+---
+-- Update the roleselection.finalRoles table by removing all invalid players
+--
+-- @realm server
+-- @internal
+local function updateFinalRoles()
+	for ply, subrole in pairs(roleselection.finalRoles) do
+		if not IsValid(ply) then
+			table.remove(roleselection.finalRoles, ply)
+		end
+	end
 end
 
 ---
@@ -731,9 +745,10 @@ function roleselection.SelectRoles(plys, maxPlys)
 	local allAvailableRoles = roleselection.GetAllSelectableRolesList(maxPlys)
 	local selectableRoles = roleselection.GetSelectableRolesList(maxPlys, allAvailableRoles) -- update roleselection.selectableRoles table
 
+	updateFinalRoles() -- Update the roleselection.finalRoles table by removing all invalid players
+
 	-- Select forced roles at first
-	local selectedForcedRoles = GetHardForcedBaseRoles() -- this gets the amount of baseroles that are taken by subroles 
-	SelectForcedRoles(plys, selectableRoles, selectedForcedRoles) -- this updates roleselection.finalRoles table and the list of forced Roles
+	local selectedForcedRoles = SelectForcedRoles(plys, selectableRoles) -- this updates roleselection.finalRoles table with forced players
 
 	-- We need to remove already selected players
 	local plysFirstPass, plysSecondPass = {}, {} -- modified player table
