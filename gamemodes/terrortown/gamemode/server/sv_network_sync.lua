@@ -607,7 +607,7 @@ end
 -- This will send a data update to either the specified client/list of clients or all known initialized clients.
 --
 -- @param any path The path to send the update for
--- @param[opt] Player|table client The client/list of clients or nil to send this to all knwon clients
+-- @param[opt] Player|table client The client/list of clients or nil to send this to all known clients
 -- @realm server
 function ttt2net.SendDataUpdate(path, client)
 	local tmpPath

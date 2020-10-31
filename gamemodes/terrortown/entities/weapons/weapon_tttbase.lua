@@ -684,7 +684,7 @@ if SERVER then
 	-- does not occur when a drop happens for some reason. Hence this thing.
 	-- @realm server
 	function SWEP:PreDrop()
-		if CLIENT or not IsValid(self:GetOwner()) or self.Primary.Ammo == "none" then return end
+		if not IsValid(self:GetOwner()) or self.Primary.Ammo == "none" then return end
 
 		local ammo = self:Ammo1()
 

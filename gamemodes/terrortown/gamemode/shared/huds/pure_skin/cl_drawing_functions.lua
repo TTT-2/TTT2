@@ -1,4 +1,5 @@
 ---
+-- @class HUD
 -- pure_skin HUD base class.
 -- @section pure_skin
 

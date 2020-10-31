@@ -175,7 +175,7 @@ end
 ---
 -- Gives a specific @{ITEM} (if possible)
 -- @param string cls
--- @return ITEM or nil
+-- @return ITEM|nil
 -- @realm server
 -- @internal
 function plymeta:AddEquipmentItem(cls)
@@ -473,7 +473,7 @@ end
 ---
 -- Gives an @{ITEM} to a @{Player} and returns whether it was successful
 -- @param string cls
--- @return ITEM or nil
+-- @return ITEM|nil
 -- @realm server
 function plymeta:GiveEquipmentItem(cls)
 	if not cls then return end

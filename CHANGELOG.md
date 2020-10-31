@@ -28,7 +28,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - TargetID text is now scaled with the global scale factor
 - Cleaned up draw function files
 - Changed several functions' scopes
-- Added minimal docu to every datastructure
+- Added minimal documentation to every datastructure
 - Removed C4 defuse restriction for teammates
 - Moved role specific score variables into the role base
 

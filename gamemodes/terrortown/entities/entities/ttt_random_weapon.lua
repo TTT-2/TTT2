@@ -1,7 +1,7 @@
 ---
 -- @class ENT
 -- @desc Dummy ent that just spawns a random TTT weapon and kills itself
--- @section RandomWeapon
+-- @section ttt_random_weapon
 
 local IsValid = IsValid
 local math = math

@@ -176,7 +176,9 @@ SWITCHMODE_NOSPACE = 3
 -- A simple handler to get the weapon blocking a new weapon from beeing picked up
 -- @param Player ply The player that should receive the newly added weapon (in the inventory)
 -- @param Weapon wep The new weapon that should be added to the player inventory
--- @return Weapon, boolean The blocking weapon, active weapon?, switchmode
+-- @return Weapon The blocking weapon
+-- @return boolean Is the thrown weapon the currently active weapon
+-- @return boolean The switchmode
 -- @realm shared
 function GetBlockingWeapon(ply, wep)
 	-- start the drop weapon check by checking the active weapon
