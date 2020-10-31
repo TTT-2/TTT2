@@ -382,20 +382,6 @@ function CountTraitors()
 	return #GetTraitors()
 end
 
----
--- Randomizes a @{table}
--- @param table t
--- @realm shared
-function table.Randomize(t)
-	local out = {}
-
-	while #t > 0 do
-		out[#out + 1] = table.remove(t, math.random(#t))
-	end
-
-	t = out
-end
-
 -- TODO move to client file
 if CLIENT then
 	local SafeTranslate

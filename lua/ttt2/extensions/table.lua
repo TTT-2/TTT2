@@ -15,6 +15,20 @@ local tremove = table.remove
 local isfunction = isfunction
 
 ---
+-- Randomizes a @{table}
+-- @param table t
+-- @realm shared
+function table.Randomize(t)
+	local out = {}
+
+	while #t > 0 do
+		out[#out + 1] = table.remove(t, math.random(#t))
+	end
+
+	t = out
+end
+
+---
 -- Get the value from a table with a path that is given as a table of indexes.
 -- The method will try to traverse the dataTable and return the value or
 -- it will return nil, if a key (even a subpath) is not defined.
