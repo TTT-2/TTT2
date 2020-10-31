@@ -682,7 +682,7 @@ end
 -- @note This automatically synces with every connected @{Player}
 --
 -- @param[opt] table plys list of @{Player}s. `nil` to calculate automatically (all players)
--- @param[opt] number maxPlys amount of maximum @{Player}s. `nil` to calculate automatically
+-- @param[optchain] number maxPlys amount of maximum @{Player}s. `nil` to calculate automatically
 -- @realm server
 function roleselection.SelectRoles(plys, maxPlys)
 	roleselection.selectableRoles = nil -- reset to enable recalculation
