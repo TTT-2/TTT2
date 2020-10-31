@@ -17,3 +17,6 @@ CreateConVar("ttt_bem_sv_rows", 5, SERVER and {FCVAR_ARCHIVE, FCVAR_REPLICATED} 
 ---
 -- @realm shared
 CreateConVar("ttt_bem_sv_size", 64, SERVER and {FCVAR_ARCHIVE, FCVAR_REPLICATED} or FCVAR_REPLICATED, "Sets the item size in the Traitor/Detective menu's item list (serverside)")
+
+-- add Favourites DB functions
+AddCSLuaFile("favorites_db.lua")
