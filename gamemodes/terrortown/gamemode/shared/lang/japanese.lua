@@ -1278,3 +1278,8 @@ L.binoc_help_sec = "ズームレベルを変更."
 L.vis_help_pri = "Visualizerを落とす."
 
 L.decoy_help_pri = "Decoyを設置する."
+
+-- 2020-08-07
+L.pickup_error_spec = "あなたは観戦者なのでこれを拾うことはできません."
+L.pickup_error_owns = "あなたはすでにこの武器を所持しているため拾えません."
+L.pickup_error_noslot = "あなたはスロットに空きがないためこれは拾えません."
