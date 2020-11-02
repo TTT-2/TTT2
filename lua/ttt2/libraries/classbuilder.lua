@@ -16,6 +16,18 @@ local isfunction = isfunction
 
 classbuilder = classbuilder or {}
 
+---
+-- Builds a class from a file in a given scope. Uses the @{fileloader} to load files from a folder
+-- that are loaded as classes. Supports inheriting from base class.
+-- @note Has to be run on both server and client for client and shared files.
+-- @param string path The absolute path to search in, has to end with `/`
+-- @param[default=SHARED_FILE] number realm The realm where the file should be included
+-- @param string scope The scope where the new class will be registered, for example `ITEM`
+-- @param[opt] function OnInitialization This callback function is called on initialization of the class
+-- @param[default=false] boolean shouldInherit Set this to true if this class should inherit from its base
+-- @oaram[opt] function SpecialCheck A function that makes a special check, inheritance is blocked if false is returned
+-- @return table Returns a table of all the created classes
+-- @realm shared
 function classbuilder.BuildFromFolder(path, realm, scope, OnInitialization, shouldInherit, SpecialCheck)
 	-- In case this function is run on the server but the class should only exist
 	-- ono the client, this function should work only as a proxy.
