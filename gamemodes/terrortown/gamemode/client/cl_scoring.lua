@@ -214,20 +214,37 @@ end
 
 ---
 -- Initializes the score @{Panel}
--- @param table events The list of events
+-- @param table eventTable The list of eventTable
 -- @realm client
 -- @internal
-function CLSCORE:Init(events)
+function CLSCORE:Init(eventTable)
+	self.events = eventTable
+	self.eventsSorted = events.SortByPlayerAndEvent()
 
+	-- now iterate over the event table to get an instant access
+	-- to the important data
+	for i = 1, #eventTable do
+		local event = eventTable[i]
+
+		if event == EVENT_SELECTED then
+			self.playerInitialRoles = event.plys
+		elseif event == EVENT_FINISH then
+			self.playerFinalRoles = event.plys
+			self.wintype = event.wintype
+		end
+	end
 end
 
 ---
 -- Resets the old score @{Panel}, initializes a new one and displays it to the local @{Player}
--- @param table events A list of events that should be reported
+-- @param table eventTable A list of eventTable that should be reported
 -- @realm client
 -- @internal
-function CLSCORE:ReportEvents(events)
+function CLSCORE:ReportEvents(eventTable)
+	self:Reset()
 
+	self:Init(eventTable)
+	self:ShowPanel()
 end
 
 ---

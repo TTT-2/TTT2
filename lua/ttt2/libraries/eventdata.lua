@@ -16,7 +16,7 @@ eventdata = eventdata or {}
 -- @note Players with zero deaths this round will not be included in this list.
 -- @return table A table with the amounts of deaths per player
 -- @realm shared
-function eventdata.GetTotalPlayerDeaths()
+function eventdata.GetPlayerTotalDeaths()
 	local eventList = events.list
 	local deathList = {}
 
@@ -33,10 +33,36 @@ function eventdata.GetTotalPlayerDeaths()
 	return deathList
 end
 
+---
+-- Returns a table with all players that were present at the beginning of the
+-- round while also providing their team and their role at this time.
+-- @return table A table with the nick, sid64, role and team of each player
+-- @realm shared
 function eventdata.GetPlayerBeginRoles()
+	local eventList = events.list
 
+	for i = 1, #eventList do
+		local event = eventList[i]
+
+		if event.type ~= EVENT_SELECTED then continue end
+
+		return event.plys
+	end
 end
 
+---
+-- Returns a table with all players that were present at the end of the
+-- round while also providing their team and their role at this time.
+-- @return table A table with the nick, sid64, alive, role and team of each player
+-- @realm shared
 function eventdata.GetPlayerEndRoles()
+	local eventList = events.list
 
+	for i = 1, #eventList do
+		local event = eventList[i]
+
+		if event.type ~= EVENT_FINISH then continue end
+
+		return event.plys
+	end
 end
