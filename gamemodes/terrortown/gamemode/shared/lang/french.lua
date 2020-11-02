@@ -1059,7 +1059,7 @@ L.door_close = "Appuyez sur [{usekey}] pour fermer la porte."
 L.door_locked = "Cette porte est verrouillé"
 
 -- 2020-02-11
-L.automoved_to_spec = "(AUTOMATED MESSAGE) Vous avez été transféré dans la team Spectateur parce vous était inactif/AFK."
+L.automoved_to_spec = "(AUTOMATED MESSAGE) Vous avez été transféré dans la team Spectateur car vous était inactif/AFK."
 L.mute_team = "{team} muet."
 
 -- 2020-02-16
