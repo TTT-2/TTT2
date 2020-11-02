@@ -286,6 +286,8 @@ eventTypes = classbuilder.BuildFromFolder(
 		class.base = class.base or "base_event"
 
 		_G["EVENT_" .. string.upper(name)] = name
+
+		MsgN("Added TTT2 event file: ", path)
 	end,
 	true, -- should inherit
 	function(t, base) -- special inheritance check
@@ -302,6 +304,8 @@ table.Merge(eventTypes, classbuilder.BuildFromFolder(
 		class.base = class.base or "base_event"
 
 		_G["EVENT_" .. string.upper(name)] = name
+
+		MsgN("Added TTT2 event file: ", path)
 	end,
 	true, -- should inherit
 	function(t, base) -- special inheritance check

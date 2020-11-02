@@ -268,7 +268,8 @@ end
 
 ---
 -- Copies any missing data from base table to the target table.
--- @param table t target table
+-- @note This function will not create a new table. It modifies the existing table.
+-- @param table t The target table that will be modified
 -- @param table base The (fallback) base table
 -- @param[opt] function SpecialCheck A function that makes a special check,
 -- inheritance is blocked if false is returned
