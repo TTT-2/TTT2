@@ -265,3 +265,29 @@ function table.ExtractRandomEntry(tbl, filterFn)
 		end
 	end
 end
+
+---
+-- Copies any missing data from base table to the target table.
+-- @param table t target table
+-- @param table base The (fallback) base table
+-- @param[opt] function SpecialCheck A function that makes a special check,
+-- inheritance is blocked if false is returned
+-- @return table The modified target table
+-- @realm shared
+function table.DeepInherit(t, base, SpecialCheck)
+	if not base or isfunction(SpecialCheck) and not SpecialCheck(t, base) then
+		return t
+	end
+
+	for k, v in pairs(base) do
+		if t[k] == nil then
+			t[k] = v
+		elseif k ~= "BaseClass" and istable(t[k]) then
+			table.Inherit(t[k], v, SpecialCheck)
+		end
+	end
+
+	t.BaseClass = base
+
+	return t
+end

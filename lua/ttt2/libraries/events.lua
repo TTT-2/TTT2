@@ -10,89 +10,10 @@ end
 local tableCopy = table.Copy
 
 local eventTypes = {}
-local oldEvent = nil
 
 events = events or {}
 events.list = events.list or {}
 
----
--- Copies any missing data from base table to the target table
--- @param table t target table
--- @param table base (fallback) table
--- @return table target table
--- @realm shared
-local function TableInherit(t, base)
-	if t.base == t.type then
-		return t
-	end
-
-	for k, v in pairs(base) do
-		if t[k] == nil then
-			t[k] = v
-		elseif k ~= "BaseClass" and istable(t[k]) then
-			TableInherit(t[k], v)
-		end
-	end
-
-	t.BaseClass = base
-
-	return t
-end
-
----
--- This function is called once an event is loaded from disc.
--- @param string path The path to the event file
--- @internal
--- @realm shared
-function events.Initialize(path)
-	local pathArray = string.Split(path, "/")
-	local name = string.lower(string.sub(pathArray[#pathArray], 0, -5))
-
-	-- event table is set in fileloader and can now be inserted in the table
-	local newEvent = tableCopy(EVENT)
-	newEvent.type = name
-	newEvent.base = newEvent.base or "base_event"
-
-	eventTypes[name] = newEvent
-
-	-- store a global identifier for this event
-	_G["EVENT_" .. string.upper(name)] = name
-
-	-- reset EVENT table
-	EVENT = {}
-end
-
----
--- Sets up the event table while also backupping the existing EVENT
--- variable to keep compatibility to other addons that might use this
--- variable name as well.
--- @internal
--- @realm shared
-function events.InitVariables()
-	oldEvent = EVENT
-
-	EVENT = {}
-end
-
----
--- Resets the old EVENT to the cached version to keep compatibility to other addons
--- that might use this variable name as well.
--- @internal
--- @realm shared
-function events.DeinitVariables()
-	EVENT = oldEvent
-end
-
----
--- Initialialized the events after everything is loaded. This included the
--- inheritance from their base classes.
--- @internal
--- @realm shared
-function events.OnLoaded()
-	for index, event in pairs(eventTypes) do
-		eventTypes[index] = TableInherit(event, events.Get(event.base))
-	end
-end
 
 ---
 -- Returns a table of all available events.
@@ -356,32 +277,34 @@ else --CLIENT
 	end)
 end
 
--- load the events itself
-fileloader.LoadFolder(
+eventTypes = classbuilder.BuildFromFolder(
 	"terrortown/gamemode/shared/events/",
-	false, -- deepsearch
 	SHARED_FILE,
-	function(path)
-		events.Initialize(path)
+	"EVENT", -- class scope
+	function(class, path, name) -- on class loaded
+		class.type = name
+		class.base = class.base or "base_event"
 
-		MsgN("Added TTT2 event file: ", path)
+		_G["EVENT_" .. string.upper(name)] = name
 	end,
-	function() -- pre folder loaded
-		events.InitVariables()
+	true, -- should inherit
+	function(t, base) -- special inheritance check
+		return t.base ~= t.type
 	end
 )
 
-fileloader.LoadFolder(
+table.Merge(eventTypes, classbuilder.BuildFromFolder(
 	"terrortown/events/",
-	false,
 	SHARED_FILE,
-	function(path)
-		events.Initialize(path)
+	"EVENT", -- class scope
+	function(class, path, name) -- on class loaded
+		class.type = name
+		class.base = class.base or "base_event"
 
-		MsgN("Added TTT2 event file: ", path)
+		_G["EVENT_" .. string.upper(name)] = name
 	end,
-	nil,
-	function() -- post folder loaded
-		events.DeinitVariables()
+	true, -- should inherit
+	function(t, base) -- special inheritance check
+		return t.base ~= t.type
 	end
-)
+))

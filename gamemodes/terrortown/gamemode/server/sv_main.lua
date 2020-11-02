@@ -430,25 +430,6 @@ function GM:InitPostEntity()
 end
 
 ---
--- Called after the gamemode has loaded
--- @hook
--- @realm server
--- @ref https://wiki.facepunch.com/gmod/GM:PostGamemodeLoaded
--- @local
-function GM:PostGamemodeLoaded()
-	events.OnLoaded()
-end
-
----
--- Called when gamemode has been reloaded by auto refresh.
--- @hook
--- @realm shared
--- @ref https://wiki.facepunch.com/gmod/GM:OnReloaded
-function GM:OnReloaded()
-	events.OnLoaded()
-end
-
----
 -- Called when a map I/O event occurs.
 -- @param Entity ent Entity that receives the input
 -- @param string input The input name. Is not guaranteed to be a valid input on the entity.

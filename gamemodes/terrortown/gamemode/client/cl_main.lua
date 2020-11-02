@@ -300,8 +300,6 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:PostGamemodeLoaded
 -- @local
 function GM:PostGamemodeLoaded()
-	events.OnLoaded()
-
 	ScoringEventSetup()
 end
 
@@ -316,8 +314,6 @@ function GM:OnReloaded()
 
 	local skinName = vskin.GetVSkinName()
 	vskin.UpdatedVSkin(skinName, skinName)
-
-	events.OnLoaded()
 
 	ScoringEventSetup()
 end
