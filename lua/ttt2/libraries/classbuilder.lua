@@ -25,7 +25,7 @@ classbuilder = classbuilder or {}
 -- @param string scope The scope where the new class will be registered, for example `ITEM`
 -- @param[opt] function OnInitialization This callback function is called on initialization of the class
 -- @param[default=false] boolean shouldInherit Set this to true if this class should inherit from its base
--- @oaram[opt] function SpecialCheck A function that makes a special check, inheritance is blocked if false is returned
+-- @param[opt] function SpecialCheck A function that makes a special check, inheritance is blocked if false is returned
 -- @return table Returns a table of all the created classes
 -- @realm shared
 function classbuilder.BuildFromFolder(path, realm, scope, OnInitialization, shouldInherit, SpecialCheck)
