@@ -2,6 +2,9 @@
 
 local L = LANG.CreateLanguage("german")
 
+-- compatibility language name that will be removed soon
+L.__alias = "deutsch"
+
 L.lang_name = "Deutsch (German)"
 
 -- General text used in various places

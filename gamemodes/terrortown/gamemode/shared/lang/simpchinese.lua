@@ -2,6 +2,9 @@
 
 local L = LANG.CreateLanguage("simpchinese")
 
+-- compatibility language name that will be removed soon
+L.__alias = "简体中文"
+
 L.lang_name = "简体中文 (Simplified Chinese)"
 
 -- General text used in various places

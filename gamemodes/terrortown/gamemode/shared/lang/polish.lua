@@ -2,6 +2,9 @@
 
 local L = LANG.CreateLanguage("polish")
 
+-- compatibility language name that will be removed soon
+L.__alias = "polski"
+
 L.lang_name = "Polski (Polish)"
 
 -- General text used in various places

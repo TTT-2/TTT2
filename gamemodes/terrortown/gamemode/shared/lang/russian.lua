@@ -2,6 +2,9 @@
 
 local L = LANG.CreateLanguage("russsian")
 
+-- compatibility language name that will be removed soon
+L.__alias = "Русский"
+
 L.lang_name = "Русский (Russian)"
 
 -- General text used in various places

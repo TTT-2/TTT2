@@ -2,6 +2,9 @@
 
 local L = LANG.CreateLanguage("italian")
 
+-- compatibility language name that will be removed soon
+L.__alias = "italiano"
+
 L.lang_name = "Italiano (Italian)"
 
 -- General text used in various places

@@ -2,6 +2,9 @@
 
 local L = LANG.CreateLanguage("japanese")
 
+-- compatibility language name that will be removed soon
+L.__alias = "日本語"
+
 L.lang_name = "日本語 (Japanese)"
 
 -- General text used in various places

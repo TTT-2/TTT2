@@ -2,6 +2,9 @@
 
 local L = LANG.CreateLanguage("french")
 
+-- compatibility language name that will be removed soon
+L.__alias = "francais"
+
 L.lang_name = "Francais (French)"
 
 --- General text used in various places

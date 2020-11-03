@@ -2,6 +2,9 @@
 
 local L = LANG.GetLanguageTableReference("spanish")
 
+-- compatibility language name that will be removed soon
+L.__alias = "Español"
+
 L.lang_name = "Español (Spanish)"
 
 -- General text used in various places

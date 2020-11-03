@@ -65,7 +65,7 @@ end
 -- @return string the inserted string_name parameter
 -- @realm client
 function LANG.AddToLanguage(lang_name, string_name, string_text)
-	lang_name = lang_name and string.lower(lang_name) or nil
+	lang_name = lang_name and LANG.GetNameFromAlias(string.lower(lang_name)) or nil
 
 	if not LANG.IsLanguage(lang_name) then
 		ErrorNoHalt(Format("Failed to add '%s' to language '%s': language does not exist.\n", tostring(string_name), tostring(lang_name)))
@@ -177,12 +177,33 @@ function LANG.GetUnsafeLanguageTable()
 end
 
 ---
--- Returns the reference to a language table if it exists
--- @param string name string key identifier for the language
+-- Caused by a recent rename of the language names, old addons loos compatibility.
+-- To prevent annoyance, a compatibiliy mode is introduced.
+-- @param string lang_name string key identifier for the language
+-- @return string The lang name in the new format
+-- @internal
+-- @realm client
+function LANG.GetNameFromAlias(lang_name)
+	if LANG.IsLanguage(lang_name) then
+		return lang_name
+	end
+
+	for name, tbl in pairs(LANG.Strings) do
+		if tbl.__alias == lang_name then
+			MsgN("[DEPRECATION WARNING]: Language name identifier deprecated, please switch from '" .. lang_name .. "' to '" .. name .. "'.")
+
+			return name
+		end
+	end
+end
+
+---
+-- Returns the reference to a language table if it exists.
+-- @param string lang_name string key identifier for the language
 -- @return nil|table
 -- @realm client
 function LANG.GetUnsafeNamed(lang_name)
-	lang_name = lang_name and string.lower(lang_name) or nil
+	lang_name = lang_name and LANG.GetNameFromAlias(string.lower(lang_name)) or nil
 
 	if not LANG.IsLanguage(lang_name) then
 		ErrorNoHalt(Format("Failed to get '%s': language does not exist.\n", tostring(lang_name)))
@@ -194,12 +215,12 @@ function LANG.GetUnsafeNamed(lang_name)
 end
 
 ---
--- Returns the reference to a language table if it exists, creates a new language if it did not exist
--- @param string name string key identifier for the language
+-- Returns the reference to a language table if it exists, creates a new language if it did not exist.
+-- @param string lang_name string key identifier for the language
 -- @return nil|table
 -- @realm client
 function LANG.GetLanguageTableReference(lang_name)
-	lang_name = lang_name and string.lower(lang_name) or nil
+	lang_name = lang_name and LANG.GetNameFromAlias(string.lower(lang_name)) or nil
 
 	if not LANG.IsLanguage(lang_name) then
 		LANG.CreateLanguage(lang_name)
@@ -209,13 +230,13 @@ function LANG.GetLanguageTableReference(lang_name)
 end
 
 ---
--- Returns a copy of a selected language table
+-- Returns a copy of a selected language table.
 -- @note Safe and slow access, not sure if it's ever useful.
 -- @param string lang_name the language name
 -- @return table
 -- @realm client
 function LANG.GetLanguageTable(lang_name)
-	lang_name = lang_name or LANG.ActiveLanguage
+	lang_name = LANG.GetNameFromAlias(string.lower(lang_name)) or LANG.ActiveLanguage
 
 	local cpy = table.Copy(LANG.Strings[lang_name])
 
@@ -225,7 +246,7 @@ function LANG.GetLanguageTable(lang_name)
 end
 
 ---
--- Initializes a fallback table for a given language table
+-- Initializes a fallback table for a given language table.
 -- @param table tbl
 -- @realm client
 function SetFallback(tbl)
