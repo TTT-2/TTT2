@@ -1,16 +1,40 @@
+---
+-- @class PANEL
+-- @section DContentPanelTTT2
+
 local PANEL = {}
 
+---
+-- @accessor boolean
+-- @realm client
 AccessorFunc(PANEL, "m_bBackground", "PaintBackground", FORCE_BOOL)
+
+---
+-- @accessor boolean
+-- @realm client
 AccessorFunc(PANEL, "m_bBackground", "DrawBackground", FORCE_BOOL) -- deprecated
+
+---
+-- @accessor boolean
+-- @realm client
 AccessorFunc(PANEL, "m_bIsMenuComponent", "IsMenu", FORCE_BOOL)
+
+---
+-- @accessor boolean
+-- @realm client
 AccessorFunc(PANEL, "m_bDisableTabbing", "TabbingDisabled", FORCE_BOOL)
 
+---
+-- @accessor Color
+-- @realm client
 AccessorFunc(PANEL, "m_bgColor", "BackgroundColor")
 
 Derma_Hook(PANEL, "Paint", "Paint", "Panel")
 Derma_Hook(PANEL, "ApplySchemeSettings", "Scheme", "Panel")
 Derma_Hook(PANEL, "PerformLayout", "Layout", "Panel")
 
+---
+-- @ignore
 function PANEL:Init()
 	self:SetPaintBackground(true)
 
@@ -19,12 +43,17 @@ function PANEL:Init()
 	self:SetPaintBorderEnabled(false)
 end
 
+---
+-- @ignore
 function PANEL:Paint(w, h)
 	derma.SkinHook("Paint", "ContentPanelTTT2", self, w, h)
 
 	return false
 end
 
+---
+-- @param boolean bEnabled
+-- @realm client
 function PANEL:SetEnabled(bEnabled)
 	self.m_bEnabled = not bEnabled
 
@@ -37,11 +66,17 @@ function PANEL:SetEnabled(bEnabled)
 	end
 end
 
+---
+-- @return boolean
+-- @realm client
 function PANEL:IsEnabled()
 	return self.m_bEnabled
 end
 
-function PANEL:OnMousePressed(mousecode)
+---
+-- @param number mcode
+-- @realm client
+function PANEL:OnMousePressed(mcode)
 	if self:IsSelectionCanvas() and not dragndrop.IsDragging() then
 		self:StartBoxSelection()
 
@@ -50,17 +85,22 @@ function PANEL:OnMousePressed(mousecode)
 
 	if self:IsDraggable() then
 		self:MouseCapture(true)
-		self:DragMousePress(mousecode)
+		self:DragMousePress(mcode)
 	end
 end
 
-function PANEL:OnMouseReleased(mousecode)
+---
+-- @param number mcode
+-- @realm client
+function PANEL:OnMouseReleased(mcode)
 	if self:EndBoxSelection() then return end
 
 	self:MouseCapture(false)
 end
 
+---
 -- overwrites the base function with an empty function
+-- @realm client
 function PANEL:UpdateColours()
 
 end

@@ -1,6 +1,5 @@
 ---
 -- @class PANEL
--- @realm client
 -- @section DNumSliderWang
 
 local math = math
@@ -10,25 +9,17 @@ local vgui = vgui
 local PANEL = {}
 
 ---
--- @function GetDefaultValue()
--- @return number
---
----
--- @function SetDefaultValue(i)
--- @param number i
----
+-- @accessor number
+-- @realm client
 AccessorFunc(PANEL, "m_fDefaultValue", "DefaultValue")
 
 ---
--- @function GetAutoFocus()
--- @return boolean
---
----
--- @function SetAutoFocus(bool)
--- @param boolean bool
----
+-- @accessor boolean
+-- @realm client
 AccessorFunc(PANEL, "m_autoFocus", "AutoFocus")
 
+---
+-- @ignore
 function PANEL:Init()
 	self.TextArea = self:Add("DNumberWang", self)
 	self.TextArea:Dock(RIGHT)
@@ -39,24 +30,26 @@ function PANEL:Init()
 	end
 
 	local oldOnGetFocus = self.TextArea.OnGetFocus
-	function self.TextArea:OnGetFocus()
-		if self:GetParent():GetAutoFocus() then
-			self:GetParent():GetParent():SetKeyboardInputEnabled(true)
+
+	self.TextArea.OnGetFocus = function(slf)
+		if slf:GetParent():GetAutoFocus() then
+			slf:GetParent():GetParent():SetKeyboardInputEnabled(true)
 		end
 
 		if isfunction(oldOnGetFocus) then
-			oldOnGetFocus(self)
+			oldOnGetFocus(slf)
 		end
 	end
 
 	local oldOnLoseGocus = self.TextArea.OnLoseFocus
-	function self.TextArea:OnLoseFocus()
-		if self:GetParent():GetAutoFocus() then
-			self:GetParent():GetParent():SetKeyboardInputEnabled(false)
+
+	self.TextArea.OnLoseFocus = function(slf)
+		if slf:GetParent():GetAutoFocus() then
+			slf:GetParent():GetParent():SetKeyboardInputEnabled(false)
 		end
 
 		if isfunction(oldOnLoseGocus) then
-			oldOnLoseGocus(self)
+			oldOnLoseGocus(slf)
 		end
 	end
 
@@ -112,6 +105,7 @@ end
 ---
 -- @param number min
 -- @param number max
+-- @realm client
 function PANEL:SetMinMax(min, max)
 	self.Scratch:SetMin(tonumber(min))
 	self.Scratch:SetMax(tonumber(max))
@@ -122,26 +116,35 @@ function PANEL:SetMinMax(min, max)
 	self:UpdateNotches()
 end
 
-function PANEL:SetDark(b)
-	self.Label:SetDark(b)
+---
+-- @param boolean bool
+-- @realm client
+function PANEL:SetDark(bool)
+	self.Label:SetDark(bool)
 end
 
 ---
 -- @return number
+-- @realm client
 function PANEL:GetMin()
 	return self.Scratch:GetMin()
 end
 
 ---
 -- @return number
+-- @realm client
 function PANEL:GetMax()
 	return self.Scratch:GetMax()
 end
 
+---
+-- @realm client
 function PANEL:GetRange()
 	return self:GetMax() - self:GetMin()
 end
 
+---
+-- @realm client
 function PANEL:ResetToDefaultValue()
 	if not self:GetDefaultValue() then return end
 
@@ -150,6 +153,7 @@ end
 
 ---
 -- @param number min
+-- @realm client
 function PANEL:SetMin(min)
 	if not min then
 		min = 0
@@ -163,6 +167,7 @@ end
 
 ---
 -- @param number max
+-- @realm client
 function PANEL:SetMax(max)
 	if not max then
 		max = 0
@@ -174,6 +179,9 @@ function PANEL:SetMax(max)
 	self:UpdateNotches()
 end
 
+---
+-- @param number val
+-- @realm client
 function PANEL:SetValue(val)
 	val = math.Clamp(tonumber(val) or 0, self:GetMin(), self:GetMax())
 
@@ -187,10 +195,14 @@ end
 
 ---
 -- @return number float value
+-- @realm client
 function PANEL:GetValue()
 	return self.Scratch:GetFloatValue()
 end
 
+---
+-- @param number d
+-- @realm client
 function PANEL:SetDecimals(d)
 	self.Scratch:SetDecimals(d)
 	self.TextArea:SetDecimals(d)
@@ -201,22 +213,27 @@ end
 
 ---
 -- @return number decimal value
+-- @realm client
 function PANEL:GetDecimals()
 	return self.Scratch:GetDecimals()
 end
 
 ---
 -- @return boolean Are we currently changing the value?
+-- @realm client
 function PANEL:IsEditing()
 	return self.Scratch:IsEditing() or self.TextArea:IsEditing() or self.Slider:IsEditing()
 end
 
 ---
 -- @return boolean Are we currently hover the value?
+-- @realm client
 function PANEL:IsHovered()
 	return self.Scratch:IsHovered() or self.TextArea:IsHovered() or self.Slider:IsHovered() or vgui.GetHoveredPanel() == self
 end
 
+---
+-- @ignore
 function PANEL:PerformLayout()
 	self.Label:SetWide(self:GetWide() / 2.4)
 end
@@ -224,6 +241,7 @@ end
 ---
 -- @param string cvar the convar
 -- @ref https://wiki.garrysmod.com/page/Panel/SetConVar
+-- @realm client
 function PANEL:SetConVar(cvar)
 	self.Scratch:SetConVar(cvar)
 	self.TextArea:SetConVar(cvar)
@@ -232,6 +250,7 @@ end
 ---
 -- @param string text
 -- @see PANEL:SetText
+-- @realm client
 function PANEL:SetText(text)
 	self.Label:SetText(text)
 end
@@ -239,12 +258,14 @@ end
 ---
 -- @return string
 -- @see PANEL:SetText
+-- @realm client
 function PANEL:GetText()
 	return self.Label:GetText()
 end
 
 ---
 -- @param any val
+-- @realm client
 function PANEL:ValueChanged(val)
 	val = math.Clamp(tonumber(val) or 0, self:GetMin(), self:GetMax())
 
@@ -259,6 +280,7 @@ end
 
 ---
 -- @param any val
+-- @realm client
 function PANEL:OnValueChanged(val)
 	-- For override
 end
@@ -268,6 +290,7 @@ end
 -- @param number y
 -- @return number fraction A value between 0 and 1
 -- @return number the given y
+-- @realm client
 function PANEL:TranslateSliderValues(x, y)
 	self:SetValue(self.Scratch:GetMin() + x * self.Scratch:GetRange())
 
@@ -276,10 +299,13 @@ end
 
 ---
 -- @return Panel
+-- @realm client
 function PANEL:GetTextArea()
 	return self.TextArea
 end
 
+---
+-- @realm client
 function PANEL:UpdateNotches()
 	local range = self:GetRange()
 
@@ -292,6 +318,8 @@ function PANEL:UpdateNotches()
 	end
 end
 
+---
+-- @ignore
 function PANEL:GenerateExample(ClassName, PropertySheet, Width, Height)
 	local ctrl = vgui.Create(ClassName)
 	ctrl:SetWide(200)

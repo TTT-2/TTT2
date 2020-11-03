@@ -3,10 +3,13 @@
 -- adds a secondary function that draws based on the global scale factor
 -- which is based on a 1920x1080p resolution
 -- @author Mineotopia
+-- @module drawsc
 
-AddCSLuaFile()
+if SERVER then
+	AddCSLuaFile()
 
-if SERVER then return end
+	return
+end
 
 local GetGlobalScale = appearance.GetGlobalScale
 
@@ -31,8 +34,8 @@ drawsc = {}
 -- @param number y The y position of the outlined box
 -- @param number w The width of the outlined box
 -- @param number h The height of the outlined box
--- @param [default=1] number t The thickness of the outline
--- @param [default=Color(255,255,255,255)] Color color The color of the line
+-- @param[default=1] number t The thickness of the outline
+-- @param[default=Color(255, 255, 255, 255)] Color color The color of the line
 -- @2D
 -- @realm client
 function drawsc.OutlinedBox(x, y, w, h, t, color)
@@ -48,8 +51,8 @@ end
 -- @param number y The y position of the rectangle
 -- @param number w The width of the rectangle
 -- @param number h The height of the rectangle
--- @param [default=1]number t The thickness of the line
--- @param [default=Color(255,255,255,255)]Color color The color of the line
+-- @param[default=1] number t The thickness of the line
+-- @param[default=Color(255, 255, 255, 255)] Color color The color of the line
 -- @2D
 -- @realm client
 function drawsc.OutlinedShadowedBox(x, y, w, h, t, color)
@@ -65,7 +68,7 @@ end
 -- @param number y The y position to start the box
 -- @param number w The width of the box
 -- @param number h The height of the box
--- @param [default=Color(255,255,255,255)]Color color The color of the box
+-- @param[default=Color(255, 255, 255, 255)] Color color The color of the box
 -- @2D
 -- @realm client
 function drawsc.Box(x, y, w, h, color)
@@ -81,7 +84,7 @@ end
 -- @param number y The y position to start the box
 -- @param number w The width of the box
 -- @param number h The height of the box
--- @param [default=Color(255,255,255,255)]Color color The color of the box
+-- @param[default=Color(255, 255, 255, 255)] Color color The color of the box
 -- @2D
 -- @realm client
 function drawsc.ShadowedBox(x, y, w, h, color)
@@ -96,7 +99,7 @@ end
 -- @param number x The center x position to start the circle
 -- @param number y The center y position to start the circle
 -- @param number r The radius of the circle
--- @param [default=Color(255,255,255,255)]Color color The color of the circle
+-- @param[default=Color(255, 255, 255, 255)] Color color The color of the circle
 -- @2D
 -- @realm client
 function drawsc.OutlinedCircle(x, y, r, color)
@@ -111,7 +114,7 @@ end
 -- @param number x The center x position to start the circle
 -- @param number y The center y position to start the circle
 -- @param number r The radius of the circle
--- @param [default=Color(255,255,255,255)]Color color The color of the circle
+-- @param[default=Color(255, 255, 255, 255)] Color color The color of the circle
 -- @2D
 -- @realm client
 function drawsc.OutlinedShadowedCircle(x, y, r, color)
@@ -128,8 +131,8 @@ end
 -- @param number w width The width
 -- @param number h height The height
 -- @param Material material The material
--- @param [default=255]number alpha The opacity of the material
--- @param [default=Color(255,255,255,255)]Color col the alpha value will be ignored
+-- @param[default=255] number alpha The opacity of the material
+-- @param[default=Color(255, 255, 255, 255)] Color col the alpha value will be ignored
 -- @2D
 -- @realm client
 function drawsc.FilteredTexture(x, y, w, h, material, alpha, color)
@@ -146,8 +149,8 @@ end
 -- @param number w width The width
 -- @param number h height The height
 -- @param Material material The material
--- @param [default=255]number alpha The opacity of the material
--- @param [default=Color(255,255,255,255)]Color col the alpha value will be ignored
+-- @param[default=255] number alpha The opacity of the material
+-- @param[default=Color(255, 255, 255, 255)] Color col the alpha value will be ignored
 -- @2D
 -- @realm client
 function drawsc.FilteredShadowedTexture(x, y, w, h, material, alpha, color)
@@ -160,7 +163,7 @@ end
 -- Draws an advanced text (scalable)
 -- @note The size is scaled by the global scale factor
 -- @param string text The text to be drawn
--- @param [default="DefaultBold"] string font The font. See @{surface.CreateAdvancedFont} to create your own. The original font should be always created, see @{surface.CreateFont}.
+-- @param[default="DefaultBold"] string font The font. See @{surface.CreateAdvancedFont} to create your own. The original font should be always created, see @{surface.CreateFont}.
 -- @param number x The x coordinate
 -- @param number y The y coordinate
 -- @param Color color The color of the text. Uses the Color structure.
@@ -168,7 +171,6 @@ end
 -- <a href="https://wiki.garrysmod.com/page/Enums/TEXT_ALIGN">TEXT_ALIGN_Enums</a>.
 -- @param number yalign The alignment of the y coordinate using
 -- <a href="https://wiki.garrysmod.com/page/Enums/TEXT_ALIGN">TEXT_ALIGN_Enums</a>.
--- @param boolean shadow whether there should be a shadow of the text
 -- @2D
 -- @realm client
 function drawsc.AdvancedText(text, font, x, y, color, xalign, yalign)
@@ -181,7 +183,7 @@ end
 -- Draws an advanced text (scalable) with a drop shadow
 -- @note The size is scaled by the global scale factor
 -- @param string text The text to be drawn
--- @param [default="DefaultBold"] string font The font. See @{surface.CreateAdvancedFont} to create your own. The original font should be always created, see @{surface.CreateFont}.
+-- @param[default="DefaultBold"] string font The font. See @{surface.CreateAdvancedFont} to create your own. The original font should be always created, see @{surface.CreateFont}.
 -- @param number x The x coordinate
 -- @param number y The y coordinate
 -- @param Color color The color of the text. Uses the Color structure.
@@ -189,7 +191,6 @@ end
 -- <a href="https://wiki.garrysmod.com/page/Enums/TEXT_ALIGN">TEXT_ALIGN_Enums</a>.
 -- @param number yalign The alignment of the y coordinate using
 -- <a href="https://wiki.garrysmod.com/page/Enums/TEXT_ALIGN">TEXT_ALIGN_Enums</a>.
--- @param boolean shadow whether there should be a shadow of the text
 -- @2D
 -- @realm client
 function drawsc.AdvancedShadowedText(text, font, x, y, color, xalign, yalign)

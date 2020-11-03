@@ -1,7 +1,7 @@
 ---
--- @section Decal
--- @desc Outsourced the decal releavant stuff to its own file
+-- Outsourced the decal releavant stuff to its own file
 -- @author Mineotopia
+-- @section Decal
 
 ---
 -- Here comes some special decal handling. GMOD does not allow you to remove
@@ -18,6 +18,9 @@ if CLIENT then
 	local decals = {}
 
 	---
+	-- @module util
+
+	---
 	-- Adds a new decal with an unique id that can be removed with this id
 	-- @param number id The unique id of this specific decal
 	-- @param string name The name of this decal type to be rendered
@@ -25,7 +28,7 @@ if CLIENT then
 	-- @param Vector endpos The end of the trace
 	-- @param[opt] Entity filter If set, the decal will not be able to be placed on given entity. Can also be a table of entities
 	-- @return string The unique id of the decal
-	-- @realm shared
+	-- @realm client
 	function util.DecalRemovable(id, name, startpos, endpos, filter)
 		-- make sure each name is unique
 		if decals[id] then
@@ -99,8 +102,11 @@ if SERVER then
 	local gameAddDecal = util.OverwriteFunction("game.AddDecal")
 
 	---
+	-- @module game
+
+	---
 	-- Registers a new decal. When called on the server, the decal is registered on both client and server.
-	-- Warning: This functions has to be either run on both server and client, or inside a hook that is called
+	-- @warning This functions has to be either run on both server and client, or inside a hook that is called
 	-- after all files are loaded, e.g. @{GM:Initialize}
 	-- @param string decalName The name of the decal
 	-- @param string decalName The material to be used for the decal. May also be a list of material names,
@@ -116,6 +122,9 @@ if SERVER then
 		net.WriteTable(materialName)
 		net.Broadcast()
 	end
+
+	---
+	-- @module util
 
 	---
 	-- Adds a new decal with an unique id that can be removed with this id
@@ -186,6 +195,7 @@ end
 -- @param Vector startpos The start of the trace
 -- @param Vector endpos The end of the trace
 -- @param[opt] Entity filter If set, the decal will not be able to be placed on given entity. Warning: Must be a table on the server
+-- @param table playerlist A list of @{Player}s that should receive the decals
 -- @return string The unique id of the decal
 -- @realm shared
 function util.Decal(name, startpos, endpos, filter, playerlist)

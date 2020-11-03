@@ -1,6 +1,7 @@
 ---
--- @desc A collection of objects that are passed in the menu populate hooks.
+-- A collection of objects that are passed in the menu populate hooks.
 -- @author Mineotopia
+-- @module menuDataHandler
 
 menuDataHandler = {}
 
@@ -28,9 +29,12 @@ function menuDataHandler.CreateNewHelpSubMenu()
 end
 
 ---
+-- @class HELP_MENU_DATA
+
+---
 -- Binds data table to the @{HELP_MENU_DATA} object
 -- @param table data The data table with all submenues
--- @return @{HELP_MENU_DATA} The object to be used in the hook to populate the menu
+-- @return HELP_MENU_DATA The object to be used in the hook to populate the menu
 -- @internal
 -- @realm client
 function HELP_MENU_DATA:BindData(menuTbl)
@@ -122,6 +126,9 @@ function HELP_MENU_DATA:GetVisibleAdminMenues()
 end
 
 ---
+-- @class HELP_MENU_DATA_OBJECT
+
+---
 -- Sets the title of a menu element
 -- @param string title The name, can be a language identifier
 -- @realm client
@@ -172,6 +179,9 @@ function HELP_MENU_DATA_OBJECT:RegisterOnClickCallback(fn)
 end
 
 ---
+-- @class HELP_SUB_MENU_DATA
+
+---
 -- Binds data table to the @{HELP_SUB_MENU_DATA} object
 -- @param table data The data table with all navigation points
 -- @return @{HELP_SUB_MENU_DATA} The object to be used in the hook
@@ -211,6 +221,9 @@ function HELP_SUB_MENU_DATA:Exists(id)
 
 	return false
 end
+
+---
+-- @class HELP_SUB_MENU_DATA_OBJECT
 
 ---
 -- Sets the title of a submenu element

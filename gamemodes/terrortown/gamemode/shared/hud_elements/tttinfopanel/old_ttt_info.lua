@@ -11,8 +11,6 @@ DEFINE_BASECLASS(base)
 HUDELEMENT.Base = base
 
 if CLIENT then
-	local hudTeamicon = CreateClientConVar("ttt2_base_hud_teamicon", "1")
-
 	local x = 0
 	local y = 0
 
@@ -22,10 +20,14 @@ if CLIENT then
 		minsize = {w = HUDELEMENT.maxwidth, h = HUDELEMENT.maxheight}
 	}
 
+	---
+	-- @ignore
 	function HUDELEMENT:Initialize()
 		BaseClass.Initialize(self)
 	end
 
+	---
+	-- @ignore
 	function HUDELEMENT:GetDefaults()
 		const_defaults["size"] = {w = self.maxwidth, h = self.maxheight}
 		const_defaults["minsize"] = {w = self.maxwidth, h = self.maxheight}
@@ -34,6 +36,8 @@ if CLIENT then
 		return const_defaults
 	end
 
+	---
+	-- @ignore
 	function HUDELEMENT:PerformLayout()
 		local pos = self:GetPos()
 
@@ -43,6 +47,34 @@ if CLIENT then
 		BaseClass.PerformLayout(self)
 	end
 
+	---
+	-- Draws the old role icon
+	-- @param number xPos
+	-- @param number yPos
+	-- @param number wSize width
+	-- @param number hSize height
+	-- @param Material iconMat the role icon
+	-- @param Color col
+	-- @realm client
+	local function DrawOldRoleIcon(xPos, yPos, wSize, hSize, iconMat, col)
+		local base_mat = Material("vgui/ttt/dynamic/base")
+		local base_overlay = Material("vgui/ttt/dynamic/base_overlay")
+
+		surface.SetDrawColor(col.r, col.g, col.b, col.a)
+		surface.SetMaterial(base_mat)
+		surface.DrawTexturedRect(xPos, yPos, wSize, hSize)
+
+		surface.SetDrawColor(col.r, col.g, col.b, col.a)
+		surface.SetMaterial(base_overlay)
+		surface.DrawTexturedRect(xPos, yPos, wSize, hSize)
+
+		surface.SetDrawColor(255, 255, 255, 255)
+		surface.SetMaterial(iconMat)
+		surface.DrawTexturedRect(xPos, yPos, wSize, hSize)
+	end
+
+	---
+	-- @ignore
 	function HUDELEMENT:Draw()
 		local client = LocalPlayer()
 		local L = GetLang()
@@ -86,15 +118,15 @@ if CLIENT then
 
 			-- sprint bar
 			local sbh = 8 -- spring bar height
+
 			if GetGlobalBool("ttt2_sprint_enabled", true) then
-				local sprint_y = ammo_y + bar_height + 5
-				self:PaintBar(x + margin, sprint_y, bar_width, sbh, self.sprint_colors, client.sprintProgress)
+				self:PaintBar(x + margin, ammo_y + bar_height + 5, bar_width, sbh, self.sprint_colors, client.sprintProgress)
 			end
 
 			local hastewidth = self.hastewidth
 			local bgheight = self.bgheight
 			local smargin = self.smargin
-			local tmp = width - hastewidth - (hudTeamicon:GetBool() and bgheight or 0) - smargin * 2
+			local tmp = width - hastewidth - bgheight - smargin * 2
 
 			-- Draw the current role
 			local round_state = GAMEMODE.round_state
@@ -110,18 +142,13 @@ if CLIENT then
 			self:ShadowedText(text, "TraitorState", x + tmp * 0.5, traitor_y, COLOR_WHITE, TEXT_ALIGN_CENTER)
 
 			-- Draw team icon
-			if hudTeamicon:GetBool() then
-				local team = client:GetTeam()
+			local team = client:GetTeam()
 
-				if team ~= TEAM_NONE and round_state == ROUND_ACTIVE and not TEAMS[team].alone then
-					local t = TEAMS[team]
+			if team ~= TEAM_NONE and round_state == ROUND_ACTIVE and not TEAMS[team].alone then
+				local t = TEAMS[team]
 
-					if t.iconMaterial then
-						local c = t.color or COLOR_BLACK
-						local tx = x + tmp + smargin
-
-						DrawOldRoleIcon(tx, traitor_y, bgheight, bgheight, t.iconMaterial, c)
-					end
+				if t.iconMaterial then
+					DrawOldRoleIcon(x + tmp + smargin, traitor_y, bgheight, bgheight, t.iconMaterial, t.color or COLOR_BLACK)
 				end
 			end
 

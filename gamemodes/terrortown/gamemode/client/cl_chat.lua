@@ -1,6 +1,7 @@
 ---
+-- radio commands, text chat stuff
 -- @section chat_manager
--- @desc radio commands, text chat stuff
+
 DEFINE_BASECLASS("gamemode_base")
 
 local GetTranslation = LANG.GetTranslation
@@ -85,7 +86,11 @@ function GM:ChatText(idx, name, text, type)
 	return BaseClass.ChatText(self, idx, name, text, type)
 end
 
+---
 -- Detectives have a blue name, in both chat and radio messages
+-- @param Player ply
+-- @param string text
+-- @realm client
 function AddDetectiveText(ply, text)
 	chat.AddText(DETECTIVE.color, ply:Nick(), COLOR_WHITE, ": " .. text)
 end

@@ -1,10 +1,19 @@
+---
+-- @class SWEP
+-- @section weapon_zm_improvised
+
 local cv_crowbar_unlocks
 local cv_crowbar_pushforce
 
 if SERVER then
 	AddCSLuaFile()
 
+	---
+	-- @realm server
 	cv_crowbar_unlocks = CreateConVar("ttt_crowbar_unlocks", "1", FCVAR_ARCHIVE)
+
+	---
+	-- @realm server
 	cv_crowbar_pushforce = CreateConVar("ttt_crowbar_pushforce", "395", FCVAR_NOTIFY)
 end
 
@@ -83,6 +92,7 @@ end
 -- Will open door AND return what it did
 -- @param Entity hitEnt
 -- @return number Entity types a crowbar might open
+-- @realm shared
 function SWEP:OpenEnt(hitEnt)
 	-- Get ready for some prototype-quality code, all ye who read this
 	if SERVER and cv_crowbar_unlocks:GetBool() then
@@ -124,6 +134,8 @@ function SWEP:OpenEnt(hitEnt)
 	end
 end
 
+---
+-- @ignore
 function SWEP:PrimaryAttack()
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 
@@ -224,6 +236,8 @@ function SWEP:PrimaryAttack()
 	end
 end
 
+---
+-- @ignore
 function SWEP:SecondaryAttack()
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 	self:SetNextSecondaryFire(CurTime() + 0.1)
@@ -239,6 +253,8 @@ function SWEP:SecondaryAttack()
 	local ply = tr.Entity
 
 	if tr.Hit and IsValid(ply) and ply:IsPlayer() and (owner:EyePos() - tr.HitPos):Length() < 100 then
+		---
+		-- @realm shared
 		if SERVER and not ply:IsFrozen() and not hook.Run("TTT2PlayerPreventPush", owner, ply) then
 			local pushvel = tr.Normal * cv_crowbar_pushforce:GetFloat()
 			pushvel.z = math.Clamp(pushvel.z, 50, 100) -- limit the upward force to prevent launching
@@ -264,6 +280,8 @@ function SWEP:SecondaryAttack()
 	end
 end
 
+---
+-- @ignore
 function SWEP:OnDrop()
 	self:Remove()
 end

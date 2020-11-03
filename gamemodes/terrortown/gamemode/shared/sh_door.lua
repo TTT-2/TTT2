@@ -1,13 +1,10 @@
 ---
--- @module Entity
+-- Shared extensions to entity table
 -- @author Mineotopia
 -- @ref https://wiki.facepunch.com/gmod/Entity
--- @desc shared extensions to entity table
+-- @class Entity
 
 local entmeta = assert(FindMetaTable("Entity"), "FAILED TO FIND ENTITY TABLE")
-
-local cvDoorHealth = CreateConVar("ttt2_doors_health", "100", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-local cvDoorPropHealth = CreateConVar("ttt2_doors_prop_health", "50", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 -- builds a data string based on a player and the previous data string
 local function GetDataString(ply, data)
@@ -129,6 +126,14 @@ function entmeta:GetFastSyncedHealth()
 end
 
 if SERVER then
+	---
+	-- @realm server
+	local cvDoorHealth = CreateConVar("ttt2_doors_health", "100", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+	---
+	-- @realm server
+	local cvDoorPropHealth = CreateConVar("ttt2_doors_prop_health", "50", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
 	---
 	-- Locks a door.
 	-- @param[opt] Player ply The player that will be passed through as the activator
@@ -302,6 +307,8 @@ if SERVER then
 	function entmeta:SafeDestroyDoor(ply, pushForce, surpressPair)
 		if self.isDestroyed or not self:PlayerCanOpenDoor() or not door.IsValidNormal(self:GetClass()) then return end
 
+		---
+		-- @realm server
 		if hook.Run("TTT2BlockDoorDestruction", self, ply) then return end
 
 		-- if door is destroyed, spawn a prop in the world
@@ -351,6 +358,8 @@ if SERVER then
 
 			doorProp:GetPhysicsObject():ApplyForceCenter(pushForce or Vector(0, 0, 0))
 
+			---
+			-- @realm server
 			hook.Run("TTT2DoorDestroyed", doorProp, ply)
 		end)
 

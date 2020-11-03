@@ -6,8 +6,10 @@ local os = os
 local hook = hook
 local table = table
 
--- internal
-local changesVersion = CreateClientConVar("changes_version", "v0.0.0.0")
+---
+-- @realm client
+-- @internal
+local changesVersion = CreateConVar("changes_version", "v0.0.0.0", FCVAR_ARCHIVE)
 
 local changes, currentVersion
 
@@ -15,7 +17,7 @@ local changes, currentVersion
 -- Adds a change into the changes list
 -- @param string version
 -- @param string text
--- @param number[default=nil] date the date when this update got released
+-- @param[opt] number date the date when this update got released
 -- @realm client
 function AddChange(version, text, date)
 	changes = changes or {}
@@ -799,10 +801,14 @@ function CreateChanges()
 		</ul>
 	]], os.time({year = 2020, month = 09, day = 28}))
 
+	---
 	-- run hook for other addons to add their changelog as well
+	-- @realm client
 	hook.Run("TTT2AddChange", changes, currentVersion)
 end
 
+---
+-- @realm client
 function GetSortedChanges()
 	CreateChanges()
 
