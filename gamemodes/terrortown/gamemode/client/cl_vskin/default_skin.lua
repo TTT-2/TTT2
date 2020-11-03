@@ -8,6 +8,7 @@ local SKIN = {
 }
 
 local TryT = LANG.TryTranslation
+local ParT = LANG.GetParamTranslation
 
 local utilGetDefaultColor = util.GetDefaultColor
 local utilGetChangedColor = util.GetChangedColor
@@ -546,14 +547,14 @@ function SKIN:PaintHelpLabelTTT2(panel, w, h)
 	drawBox(0, 0, w, h, colors.helpBox)
 	drawBox(0, 0, 4, h, colors.helpBar)
 
-	local textTranslated = TryT(panel:GetText())
+	local textTranslated = ParT(panel:GetText(), panel:GetParams())
 	local textWrapped = drawGetWrappedText(
 		textTranslated,
 		w - 2 * panel.paddingX,
 		panel:GetFont()
 	)
 
-	local _, heightText = drawGetTextSize(textTranslated, panel:GetFont())
+	local _, heightText = drawGetTextSize("", panel:GetFont())
 	local posY = panel.paddingY
 
 	for i = 1, #textWrapped do

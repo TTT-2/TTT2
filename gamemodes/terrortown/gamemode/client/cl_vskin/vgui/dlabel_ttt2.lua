@@ -47,21 +47,12 @@ function PANEL:SetFont(strFont)
 	self:ApplySchemeSettings()
 end
 
-function PANEL:SetTextColor(clr)
-	self.m_colText = clr
-	self:UpdateFGColor()
+function PANEL:SetParams(params)
+	self.params = params
 end
 
-function PANEL:GetColor()
-	return self.m_colText or self.m_colTextStyle
-end
-
-function PANEL:UpdateFGColor()
-	local col = self:GetTextColor() or self:GetTextStyleColor()
-
-	if not col then return end
-
-	self:SetFGColor(col.r, col.g, col.b, col.a)
+function PANEL:GetParams()
+	return self.params or {}
 end
 
 function PANEL:Toggle()
@@ -85,26 +76,8 @@ function PANEL:GetDisabled()
 	return not self:IsEnabled()
 end
 
-function PANEL:UpdateColours(skin)
-	if self:GetBright() then
-		return self:SetTextStyleColor(skin.Colours.Label.Bright)
-	end
-
-	if self:GetDark() then
-		return self:SetTextStyleColor(skin.Colours.Label.Dark)
-	end
-
-	if self:GetHighlight() then
-		return self:SetTextStyleColor(skin.Colours.Label.Highlight)
-	end
-
-	return self:SetTextStyleColor(skin.Colours.Label.Default)
-end
-
 function PANEL:ApplySchemeSettings()
-	self:UpdateColours(self:GetSkin())
 
-	self:UpdateFGColor()
 end
 
 function PANEL:Think()
@@ -253,4 +226,4 @@ function PANEL:DoDoubleClickInternal()
 
 end
 
-derma.DefineControl("DLabelTTT2", "A Label", PANEL, "Label")
+derma.DefineControl("DLabelTTT2", "A Label", PANEL, "DLabel")

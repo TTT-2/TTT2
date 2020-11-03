@@ -1285,3 +1285,7 @@ L.pickup_error_noslot = "Du verfügst über keinen freien Slot, um diese Waffe a
 
 -- 2020-11-02
 L.lang_server_default = "Server Standard"
+L.help_lang_info = [[
+Diese Übersetzung ist {coverage}% vollständig, wenn man die englische Übersetzung als Referenz betrachtet.
+
+Beachte, dass diese Übersetzungen Communitybasiert sind. Helfe mit, wenn Du Fehler oder fehlende Übersetzungen findest.]]

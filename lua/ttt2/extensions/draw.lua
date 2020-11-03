@@ -364,27 +364,7 @@ function draw.AdvancedText(text, font, x, y, color, xalign, yalign, shadow, scal
 	end
 end
 
----
--- Returns a list of lines to wrap the text matching the given width
--- @param string text The text that should be wrapped
--- @param number width The maximal width that the text is allowed to have
--- @param [default="DefaultBold"]string font The font that should be used here
--- @param number scale The UI scale factor
--- @return table A table with the broken up lines
--- @realm client
-function draw.GetWrappedText(text, width, font, scale)
-	-- Oh joy, I get to write my own wrapping function. Thanks Lua!
-	-- Splits a string into a table of strings that are under the given width.
-
-	scale = scale or 1.0
-	width = width / scale
-
-	if not text then
-		return {}, 0, 0
-	end
-
-	surface.SetFont(font or "DefaultBold")
-
+local function InternalGetWrappedText(text, width, scale)
 	-- Any wrapping required?
 	local w, h = surface.GetTextSize(text)
 
@@ -437,9 +417,46 @@ function draw.GetWrappedText(text, width, font, scale)
 	return lines, length * scale, line_h * lns * scale
 end
 
+---
+-- Returns a list of lines to wrap the text matching the given width. Also breaks the string
+-- at new line characters.
+-- @param string text The text that should be wrapped
+-- @param number width The maximal width that the text is allowed to have
+-- @param[default="DefaultBold"] string font The font that should be used here
+-- @param[default=1.0] number scale The UI scale factor
+-- @return table A table with the broken up lines
+-- @return number The width of the longest line
+-- @return number The height of all lines
+-- @realm client
+function draw.GetWrappedText(text, width, font, scale)
+	scale = scale or 1.0
+	width = width / scale
+
+	if not text then
+		return {}, 0, 0
+	end
+
+	surface.SetFont(font or "DefaultBold")
+
+	local lines = string.Explode("\n", text)
+	local returnLines = {}
+	local returnWidth = 0
+	local returnHeight = 0
+
+	for i = 1, #lines do
+		local newLines, newWidth, newHeight = InternalGetWrappedText(lines[i], width, scale)
+
+		table.Add(returnLines, newLines)
+		returnWidth = math.max(returnWidth, newWidth)
+		returnHeight = returnHeight + newHeight
+	end
+
+	return returnLines, returnWidth, returnHeight
+end
+
 -- Returns the size of a inserted string
 -- @param string text The text that the length should be calculated
--- @param [default="DefaultBold"] string font The font ID
+-- @param[default="DefaultBold"] string font The font ID
 -- @warning This function changes the font to the passed font
 -- @return number, number w, h The size of the given text
 -- @2D

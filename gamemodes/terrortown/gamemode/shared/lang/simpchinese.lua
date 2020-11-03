@@ -2,7 +2,7 @@
 
 local L = LANG.CreateLanguage("simpchinese")
 
-l.lang_name = "简体中文 (Simplified Chinese)"
+L.lang_name = "简体中文 (Simplified Chinese)"
 
 -- General text used in various places
 L.traitor = "叛徒"
@@ -1285,3 +1285,7 @@ L.pickup_error_noslot = "你没有对应空槽位，无法捡起这个"
 
 -- 2020-11-02
 --L.lang_server_default = "Server Default"
+--L.help_lang_info = [[
+--This translation is {coverage}% complete with the english language taken as a default reference.
+
+--Keep in mind that these translations are community based. Feel free to contribute if there is something missing or incorrect.]]

@@ -11,6 +11,7 @@ local function PopulateLanguagePanel(parent)
 		convar = "ttt_language",
 		OnChange = function(slf, index, value, rawdata)
 			vguihandler.InvalidateVSkin()
+			vguihandler.Rebuild()
 		end
 	})
 
@@ -20,6 +21,11 @@ local function PopulateLanguagePanel(parent)
 	for _, lang in pairs(LANG.GetLanguages()) do
 		dlang:AddChoice(GetTranslatedLanguageName(lang), lang)
 	end
+
+	form:MakeHelp({
+		label = "help_lang_info",
+		params = {coverage = math.Round(100 * LANG.GetDefaultCoverage(LANG.GetActiveLanguageName()), 1)}
+	})
 end
 
 HELPSCRN.populate["ttt2_language"] = function(helpData, id)

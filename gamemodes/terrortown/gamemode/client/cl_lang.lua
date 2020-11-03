@@ -465,6 +465,26 @@ function LANG.ProcessMsg(name, params, mode)
 	LANG.ShowStyledMsg(text, LANG.GetStyle(name, mode))
 end
 
+---
+-- Returns the percentage of the coverage of the given language compared to the
+-- default language (english).
+-- @param string lang_name The name of the language is question
+-- @return number The percentage of the coverage
+-- @realm client
+function LANG.GetDefaultCoverage(lang_name)
+	local englishTbl = LANG.Strings[LANG.DefaultLanguage]
+
+	return table.GetEqualEntriesAmount(LANG.Strings[lang_name], englishTbl) / table.Count(englishTbl)
+end
+
+---
+-- Returns the identifier of the currently active language.
+-- @return string The name of the active language
+-- @realm client
+function LANG.GetActiveLanguageName()
+	return GetConVar("ttt_language"):GetString()
+end
+
 -- Message style declarations
 
 -- Rather than having a big list of LANG.SetStyle calls, we specify it the other

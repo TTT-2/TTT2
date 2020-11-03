@@ -238,9 +238,13 @@ function PANEL:MakeComboBox(data)
 			RunConsoleCommand(slf.m_strConVar, tostring(rawdata or value))
 		end
 
-		if isfunction(data.OnChange) then
-			data.OnChange(slf, index, value, rawdata)
-		end
+		-- run the callback function in the next frame since it takes
+		-- one frame to update the convar if one is set.
+		timer.Simple(0, function()
+			if data and isfunction(data.OnChange) then
+				data.OnChange(slf, index, value, rawdata)
+			end
+		end)
 	end
 
 	right:SetConVar(data.convar)
@@ -340,6 +344,7 @@ function PANEL:MakeHelp(data)
 	local left = vgui.Create("DLabelTTT2", self)
 
 	left:SetText(data.label)
+	left:SetParams(data.params)
 	left:SetContentAlignment(7)
 	left:SetAutoStretchVertical(true)
 
@@ -354,14 +359,14 @@ function PANEL:MakeHelp(data)
 
 	-- make sure the height is based on the amount of text inside
 	left.PerformLayout = function(slf, w, h)
-		local textTranslated = LANG.TryTranslation(slf:GetText())
+		local textTranslated = LANG.GetParamTranslation(slf:GetText(), slf:GetParams())
 
 		local textWrapped = draw.GetWrappedText(
 			textTranslated,
 			w - 2 * slf.paddingX,
 			slf:GetFont()
 		)
-		local _, heightText = draw.GetTextSize(textTranslated, slf:GetFont())
+		local _, heightText = draw.GetTextSize("", slf:GetFont())
 
 		slf:SetSize(w, heightText * #textWrapped + 2 * slf.paddingY)
 	end

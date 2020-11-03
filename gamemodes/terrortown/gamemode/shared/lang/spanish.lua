@@ -1285,3 +1285,7 @@ L.pickup_error_noslot = "No puedes recoger esto porque no tienes un espacio disp
 
 -- 2020-11-02
 --L.lang_server_default = "Server Default"
+--L.help_lang_info = [[
+--This translation is {coverage}% complete with the english language taken as a default reference.
+
+--Keep in mind that these translations are community based. Feel free to contribute if there is something missing or incorrect.]]
