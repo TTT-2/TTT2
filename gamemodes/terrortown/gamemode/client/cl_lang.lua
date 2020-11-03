@@ -331,7 +331,7 @@ end
 ---
 -- Returns whether the given language is a valid language (already exists)
 -- @param string langName The language name
--- @return table the language table, same as @{LANG.GetUnsafeNamed}, but without
+-- @return table The language table, same as @{LANG.GetUnsafeNamed}, but without
 -- @{nil} check and without automatic string lowering
 -- @realm client
 function LANG.IsLanguage(langName)
