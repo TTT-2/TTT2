@@ -19,6 +19,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - added a hook `TTT2AddedEvent` that is called after an event was added
 - Added `orm` library to simplify database access
 - Added French translation (by @MisterClems)
+- Added a few table module functions
+- Added a few LANG module functions
 
 ### Changed
 
@@ -29,6 +31,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Cleaned up draw function files
 - Removed C4 defuse restriction for teammates
 - Moved role specific score variables into the role base
+- Changed the language identifiers to generic english names
 
 ### Fixed
 
