@@ -116,7 +116,6 @@ L.radar_charging = "Twój radar nadal się ładuje!"
 -- Transfer tab in equipment menu
 L.xfer_name = "Transfer"
 L.xfer_menutitle = "Transferuj kredyty"
-L.xfer_no_credits = "Nie masz żądnych kredytów do dania!"
 L.xfer_send = "Wyślij kredyty"
 L.xfer_help = "Możesz tylko wysłać kredyty do graczy w roli {role}."
 
@@ -291,8 +290,6 @@ L.c4_status_disarmed = "ROZBROJONA"
 -- Visualizer
 L.vis_name = "Wizualizer"
 L.vis_hint = "Kliknij {usekey} by podnieść (tylko Detektywi)."
-
-L.vis_help_pri = "{primaryfire} upuszcza aktywowane urządzenie."
 
 L.vis_desc = [[
 Wizualizator chwili zabójstwa.

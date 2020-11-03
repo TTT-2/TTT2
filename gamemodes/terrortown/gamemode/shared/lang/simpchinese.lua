@@ -116,7 +116,6 @@ L.radar_charging = "你的雷达还在充电中！"
 -- Transfer tab in equipment menu
 L.xfer_name = "转移"
 L.xfer_menutitle = "转移积分"
-L.xfer_no_credits = "你没有积分了"
 L.xfer_send = "发送积分"
 L.xfer_help = "你只能发送积分给 {role} 玩家。"
 
@@ -291,8 +290,6 @@ L.c4_status_disarmed = "拆除"
 -- Visualizer
 L.vis_name = "显像器"
 L.vis_hint = "按下 {usekey} 键捡起它（仅限侦探）。"
-
-L.vis_help_pri = " {primaryfire} 扔出已启动的仪器。"
 
 L.vis_desc = [[
 可让犯罪现场显像化的仪器。

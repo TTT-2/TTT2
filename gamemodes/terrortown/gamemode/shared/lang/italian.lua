@@ -116,7 +116,6 @@ L.radar_charging = "Il tuo Radar si sta ancora caricando!"
 -- Transfer tab in equipment menu
 L.xfer_name = "Trasferimento"
 L.xfer_menutitle = "Trasferisci crediti"
-L.xfer_no_credits = "Non hai crediti da donare!"
 L.xfer_send = "Dai un credito"
 L.xfer_help = "Può trasferire i crediti solo ai compagni {role}."
 
@@ -291,8 +290,6 @@ L.c4_status_disarmed = "DISINNESCATA"
 -- Visualizer
 L.vis_name = "Visualizzatore"
 L.vis_hint = "Premi {usekey} per raccoglierlo (solo Detective)."
-
-L.vis_help_pri = "{primaryfire} fa cadere il dispositivo attivo."
 
 L.vis_desc = [[
 Dispositivo per visualizzare una scena del crimine.

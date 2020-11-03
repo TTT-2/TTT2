@@ -116,7 +116,6 @@ L.radar_charging = "Dein Radar lädt immer noch auf!"
 -- Transfer tab in equipment menu
 L.xfer_name = "Transfer"
 L.xfer_menutitle = "Credits transferieren"
-L.xfer_no_credits = "Du kannst keine Credits abgeben!"
 L.xfer_send = "Sende einen Credit"
 L.xfer_help = "Du kannst Credits nur an weitere {role} senden."
 
@@ -291,8 +290,6 @@ L.c4_status_disarmed = "ENTSCHÄRFT"
 -- Visualizer
 L.vis_name = "Visualisierer"
 L.vis_hint = "Drücke {usekey} zum Aufheben (nur Detektive)."
-
-L.vis_help_pri = "{primaryfire} lässt das aktivierte Gerät fallen."
 
 L.vis_desc = [[
 Tatort-Visualisierungs-Gerät.

@@ -116,7 +116,6 @@ L.radar_charging = "Radarはまだチャージしています!"
 -- Transfer tab in equipment menu
 L.xfer_name = "譲渡"
 L.xfer_menutitle = "クレジット譲渡."
-L.xfer_no_credits = "あなたはあげられるだけのクレジットを持っていません."
 L.xfer_send = "クレジットを送る."
 L.xfer_help = "あなたは仲間の{role}にクレジットを渡すことだけできます."
 
@@ -291,8 +290,6 @@ L.c4_status_disarmed = "解除済み"
 -- Visualizer
 L.vis_name = "Visualizer(可視化装置)"
 L.vis_hint = "{usekey}を押して拾う(Detectiveのみ)."
-
-L.vis_help_pri = "{primaryfire}で起動したデバイスを落とす."
 
 L.vis_desc = [[
 犯行シーンを可視化するデバイスです.

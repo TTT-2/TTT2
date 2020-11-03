@@ -116,7 +116,6 @@ L.radar_charging = "Радар всё ещё заряжается!"
 -- Transfer tab in equipment menu
 L.xfer_name = "Передача"
 L.xfer_menutitle = "Передача кредитов"
-L.xfer_no_credits = "У вас нет кредитов!"
 L.xfer_send = "Передать кредит"
 L.xfer_help = "Вы можете передавать кредиты только игрокам в роли {role}."
 
@@ -291,8 +290,6 @@ L.c4_status_disarmed = "ОБЕЗВРЕ-\nЖЕНА"
 -- Visualizer
 L.vis_name = "Визуализатор"
 L.vis_hint = "Нажмите {usekey}, чтобы подобрать. (только для детективов)"
-
-L.vis_help_pri = "{primaryfire}: бросить активированное устройство."
 
 L.vis_desc = [[
 Устройство, визуализирующее сцену преступления.
