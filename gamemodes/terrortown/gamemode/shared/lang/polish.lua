@@ -2,7 +2,9 @@
 
 local L = LANG.CreateLanguage("pl")
 
--- compatibility language name that will be removed soon
+-- Compatibility language name that might be removed soon.
+-- the alias name is based on the original TTT language name:
+-- - does not exist -
 L.__alias = "polski"
 
 L.lang_name = "Polski (Polish)"

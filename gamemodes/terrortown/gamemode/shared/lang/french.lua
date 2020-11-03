@@ -2,8 +2,10 @@
 
 local L = LANG.CreateLanguage("fr")
 
--- compatibility language name that will be removed soon
-L.__alias = "francais"
+-- Compatibility language name that might be removed soon.
+-- the alias name is based on the original TTT language name:
+-- https://github.com/Facepunch/garrysmod/blob/master/garrysmod/gamemodes/terrortown/gamemode/lang/french.lua
+L.__alias = "français"
 
 L.lang_name = "Francais (French)"
 

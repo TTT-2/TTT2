@@ -2,7 +2,9 @@
 
 local L = LANG.CreateLanguage("ru")
 
--- compatibility language name that will be removed soon
+-- Compatibility language name that might be removed soon.
+-- the alias name is based on the original TTT language name:
+-- https://github.com/Facepunch/garrysmod/blob/master/garrysmod/gamemodes/terrortown/gamemode/lang/russian.lua
 L.__alias = "Русский"
 
 L.lang_name = "Русский (Russian)"

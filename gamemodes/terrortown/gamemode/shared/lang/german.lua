@@ -2,7 +2,9 @@
 
 local L = LANG.CreateLanguage("de")
 
--- compatibility language name that will be removed soon
+-- Compatibility language name that might be removed soon.
+-- the alias name is based on the original TTT language name:
+-- https://github.com/Facepunch/garrysmod/blob/master/garrysmod/gamemodes/terrortown/gamemode/lang/german.lua
 L.__alias = "deutsch"
 
 L.lang_name = "Deutsch (German)"

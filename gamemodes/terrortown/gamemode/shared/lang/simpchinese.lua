@@ -2,7 +2,9 @@
 
 local L = LANG.CreateLanguage("zh_Hans")
 
--- compatibility language name that will be removed soon
+-- Compatibility language name that might be removed soon.
+-- the alias name is based on the original TTT language name:
+-- https://github.com/Facepunch/garrysmod/blob/master/garrysmod/gamemodes/terrortown/gamemode/lang/simpchinese.lua
 L.__alias = "简体中文"
 
 L.lang_name = "简体中文 (Simplified Chinese)"
