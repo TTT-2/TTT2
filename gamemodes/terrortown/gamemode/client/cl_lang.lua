@@ -13,69 +13,69 @@ local table = table
 local pairs = pairs
 local CreateConVar = CreateConVar
 
-local ttt_language = CreateConVar("ttt_language", "auto", FCVAR_ARCHIVE)
+local cv_ttt_language = CreateConVar("cv_ttt_language", "auto", FCVAR_ARCHIVE)
 
 LANG.DefaultLanguage = "english"
 LANG.ActiveLanguage = LANG.DefaultLanguage
 
 LANG.ServerLanguage = "english"
 
-local cached_default = {}
-local cached_active = {}
+local cachedDefault = {}
+local cachedActive = {}
 
-local warn_color = Color(255, 70, 45)
+local colorWarn = Color(255, 70, 45)
 
 ---
 -- Creates a new language
--- @param string lang_name the new language name
+-- @param string langName the new language name
 -- @return table initialized language table that should be extended with translated @{string}s
 -- @realm client
-function LANG.CreateLanguage(lang_name)
-	if not lang_name then return end
+function LANG.CreateLanguage(langName)
+	if not langName then return end
 
-	lang_name = string.lower(lang_name)
+	langName = string.lower(langName)
 
-	if not LANG.IsLanguage(lang_name) then
+	if not LANG.IsLanguage(langName) then
 		-- Empty string is very convenient to have, so init with that.
-		LANG.Strings[lang_name] = {[""] = ""}
+		LANG.Strings[langName] = {[""] = ""}
 	end
 
-	if lang_name == LANG.DefaultLanguage then
-		cached_default = LANG.Strings[lang_name]
+	if langName == LANG.DefaultLanguage then
+		cachedDefault = LANG.Strings[langName]
 
 		-- when a string is not found in the active or the default language, an
 		-- error message is shown
-		setmetatable(LANG.Strings[lang_name], {
+		setmetatable(LANG.Strings[langName], {
 			__index = function(tbl, name)
 				return Format("[ERROR: Translation of %s not found]", name), false
 			end
 		})
 	end
 
-	return LANG.Strings[lang_name]
+	return LANG.Strings[langName]
 end
 
 ---
 -- Adds a string to a language.
 -- @note Should not be used in a language file, only for
 -- adding strings elsewhere, such as a SWEP script.
--- @param string lang_name the new language name
--- @param string string_name the string key identifier for the translated @{string}
--- @param string string_text the translated @{string} text
--- @return string the inserted string_name parameter
+-- @param string langName the new language name
+-- @param string stringName the string key identifier for the translated @{string}
+-- @param string stringText the translated @{string} text
+-- @return string the inserted stringName parameter
 -- @realm client
-function LANG.AddToLanguage(lang_name, string_name, string_text)
-	lang_name = lang_name and LANG.GetNameFromAlias(string.lower(lang_name)) or nil
+function LANG.AddToLanguage(langName, stringName, stringText)
+	langName = langName and LANG.GetNameFromAlias(string.lower(langName)) or nil
 
-	if not LANG.IsLanguage(lang_name) then
-		ErrorNoHalt(Format("Failed to add '%s' to language '%s': language does not exist.\n", tostring(string_name), tostring(lang_name)))
+	if not LANG.IsLanguage(langName) then
+		ErrorNoHalt(Format("Failed to add '%s' to language '%s': language does not exist.\n", tostring(stringName), tostring(langName)))
 
-		return string_name
+		return stringName
 	end
 
-	LANG.Strings[lang_name][string_name] = string_text
+	LANG.Strings[langName][stringName] = stringText
 
-	return string_name
+	return stringName
 end
 
 ---
@@ -85,7 +85,7 @@ end
 -- @return nil|string
 -- @realm client
 function LANG.GetTranslation(name)
-	return cached_active[name]
+	return cachedActive[name]
 end
 
 ---
@@ -97,7 +97,7 @@ end
 -- @return nil|string
 -- @realm client
 function LANG.GetRawTranslation(name)
-	return rawget(cached_active, name) or rawget(cached_default, name)
+	return rawget(cachedActive, name) or rawget(cachedDefault, name)
 end
 
 -- A common idiom
@@ -126,7 +126,7 @@ local interp = string.Interp
 -- @see LANG.GetPTranslation
 function LANG.GetParamTranslation(name, params)
 	-- remove the second return variable by caching it
-	local trans = interp(cached_active[name], params)
+	local trans = interp(cachedActive[name], params)
 
 	return trans
 end
@@ -146,22 +146,22 @@ LANG.GetPTranslation = LANG.GetParamTranslation
 ---
 -- Returns the translated @{string} text of a given language (if available)
 -- @param string name string key identifier for the translated @{string}
--- @param string lang_name the language name
+-- @param string langName the language name
 -- @return nil|string
 -- @realm client
-function LANG.GetTranslationFromLanguage(name, lang_name)
-	lang_name = lang_name and string.lower(lang_name) or nil
+function LANG.GetTranslationFromLanguage(name, langName)
+	langName = langName and string.lower(langName) or nil
 
-	return rawget(LANG.Strings[lang_name], name)
+	return rawget(LANG.Strings[langName], name)
 end
 
 ---
 -- Returns the translated name of the given language.
--- @param string lang_name The identifier of the language
+-- @param string langName The identifier of the language
 -- @return string The translated name of the language
 -- @realm client
-function LANG.GetTranslatedLanguageName(lang_name)
-	return LANG.GetTranslationFromLanguage("lang_name", lang_name) or ""
+function LANG.GetTranslatedLanguageName(langName)
+	return LANG.GetTranslationFromLanguage("lang_name", langName) or ""
 end
 
 ---
@@ -173,24 +173,24 @@ end
 -- @return table
 -- @realm client
 function LANG.GetUnsafeLanguageTable()
-	return cached_active
+	return cachedActive
 end
 
 ---
 -- Caused by a recent rename of the language names, old addons loos compatibility.
 -- To prevent annoyance, a compatibiliy mode is introduced.
--- @param string lang_name string key identifier for the language
+-- @param string langName string key identifier for the language
 -- @return string The lang name in the new format
 -- @internal
 -- @realm client
-function LANG.GetNameFromAlias(lang_name)
-	if LANG.IsLanguage(lang_name) then
-		return lang_name
+function LANG.GetNameFromAlias(langName)
+	if LANG.IsLanguage(langName) then
+		return langName
 	end
 
 	for name, tbl in pairs(LANG.Strings) do
-		if tbl.__alias == lang_name then
-			MsgN("[DEPRECATION WARNING]: Language name identifier deprecated, please switch from '" .. lang_name .. "' to '" .. name .. "'.")
+		if tbl.__alias == langName then
+			MsgN("[DEPRECATION WARNING]: Language name identifier deprecated, please switch from '" .. langName .. "' to '" .. name .. "'.")
 
 			return name
 		end
@@ -199,46 +199,46 @@ end
 
 ---
 -- Returns the reference to a language table if it exists.
--- @param string lang_name string key identifier for the language
+-- @param string langName string key identifier for the language
 -- @return nil|table
 -- @realm client
-function LANG.GetUnsafeNamed(lang_name)
-	lang_name = lang_name and LANG.GetNameFromAlias(string.lower(lang_name)) or nil
+function LANG.GetUnsafeNamed(langName)
+	langName = langName and LANG.GetNameFromAlias(string.lower(langName)) or nil
 
-	if not LANG.IsLanguage(lang_name) then
-		ErrorNoHalt(Format("Failed to get '%s': language does not exist.\n", tostring(lang_name)))
+	if not LANG.IsLanguage(langName) then
+		ErrorNoHalt(Format("Failed to get '%s': language does not exist.\n", tostring(langName)))
 
 		return
 	end
 
-	return LANG.Strings[lang_name]
+	return LANG.Strings[langName]
 end
 
 ---
 -- Returns the reference to a language table if it exists, creates a new language if it did not exist.
--- @param string lang_name string key identifier for the language
+-- @param string langName string key identifier for the language
 -- @return nil|table
 -- @realm client
-function LANG.GetLanguageTableReference(lang_name)
-	lang_name = lang_name and LANG.GetNameFromAlias(string.lower(lang_name)) or nil
+function LANG.GetLanguageTableReference(langName)
+	langName = langName and LANG.GetNameFromAlias(string.lower(langName)) or nil
 
-	if not LANG.IsLanguage(lang_name) then
-		LANG.CreateLanguage(lang_name)
+	if not LANG.IsLanguage(langName) then
+		LANG.CreateLanguage(langName)
 	end
 
-	return LANG.Strings[lang_name]
+	return LANG.Strings[langName]
 end
 
 ---
 -- Returns a copy of a selected language table.
 -- @note Safe and slow access, not sure if it's ever useful.
--- @param string lang_name the language name
+-- @param string langName the language name
 -- @return table
 -- @realm client
-function LANG.GetLanguageTable(lang_name)
-	lang_name = LANG.GetNameFromAlias(string.lower(lang_name)) or LANG.ActiveLanguage
+function LANG.GetLanguageTable(langName)
+	langName = LANG.GetNameFromAlias(string.lower(langName)) or LANG.ActiveLanguage
 
-	local cpy = table.Copy(LANG.Strings[lang_name])
+	local cpy = table.Copy(LANG.Strings[langName])
 
 	SetFallback(cpy)
 
@@ -261,37 +261,37 @@ function SetFallback(tbl)
 	-- allows fallback to occur even when consumer code directly accesses the
 	-- lang table for speed (eg. in a rendering hook).
 	setmetatable(tbl, {
-		__index = cached_default
+		__index = cachedDefault
 	})
 end
 
 ---
 -- Switches the active language
--- @param string lang_name the new language name
+-- @param string langName the new language name
 -- @realm client
-function LANG.SetActiveLanguage(lang_name)
-	lang_name = lang_name and string.lower(lang_name) or nil
+function LANG.SetActiveLanguage(langName)
+	langName = langName and string.lower(langName) or nil
 
-	if LANG.IsLanguage(lang_name) then
+	if LANG.IsLanguage(langName) then
 		local old_name = LANG.ActiveLanguage
 
-		LANG.ActiveLanguage = lang_name
+		LANG.ActiveLanguage = langName
 
 		-- cache ref to table to avoid hopping through LANG and Strings every time
-		cached_active = LANG.Strings[lang_name]
+		cachedActive = LANG.Strings[langName]
 
 		-- set the default lang as fallback, if it hasn't yet
-		SetFallback(cached_active)
+		SetFallback(cachedActive)
 
 		-- some interface elements will want to know so they can update themselves
-		if old_name ~= lang_name then
-			hook.Call("TTTLanguageChanged", GAMEMODE, old_name, lang_name)
+		if old_name ~= langName then
+			hook.Call("TTTLanguageChanged", GAMEMODE, old_name, langName)
 		end
 	else
-		MsgN(Format("The language '%s' does not exist on this server. Falling back to English...", lang_name))
+		MsgN(Format("The language '%s' does not exist on this server. Falling back to English...", langName))
 
 		-- fall back to default if possible
-		if lang_name ~= LANG.DefaultLanguage then
+		if langName ~= LANG.DefaultLanguage then
 			LANG.SetActiveLanguage(LANG.DefaultLanguage)
 		end
 	end
@@ -302,38 +302,38 @@ end
 -- @realm client
 -- @internal
 function LANG.Init()
-	local lang_name = ttt_language and ttt_language:GetString() or LANG.ServerLanguage
+	local langName = cv_ttt_language and cv_ttt_language:GetString() or LANG.ServerLanguage
 
 	-- if we want to use the server language, we'll be switching to it as soon as
 	-- we hear from the server which one it is, for now use default
-	if LANG.IsServerDefault(lang_name) then
-		lang_name = LANG.ServerLanguage
+	if LANG.IsServerDefault(langName) then
+		langName = LANG.ServerLanguage
 	end
 
-	LANG.SetActiveLanguage(lang_name)
+	LANG.SetActiveLanguage(langName)
 end
 
 ---
 -- Returns whether the given language name is the default server language
--- @param string lang_name the language name
+-- @param string langName the language name
 -- @return boolean
 -- @realm client
-function LANG.IsServerDefault(lang_name)
-	lang_name = string.lower(lang_name)
+function LANG.IsServerDefault(langName)
+	langName = string.lower(langName)
 
-	return lang_name == "server default" or lang_name == "auto"
+	return langName == "server default" or langName == "auto"
 end
 
 ---
 -- Returns whether the given language is a valid language (already exists)
--- @param string lang_name the language name
+-- @param string langName the language name
 -- @return table the language table, same as @{LANG.GetUnsafeNamed}, but without
 -- @{nil} check and without automatic string lowering
 -- @realm client
-function LANG.IsLanguage(lang_name)
-	if not lang_name then return end
+function LANG.IsLanguage(langName)
+	if not langName then return end
 
-	return LANG.Strings[string.lower(lang_name)] ~= nil
+	return LANG.Strings[string.lower(langName)] ~= nil
 end
 
 local function LanguageChanged(cv, old, new)
@@ -345,7 +345,7 @@ local function LanguageChanged(cv, old, new)
 		LANG.SetActiveLanguage(new)
 	end
 end
-cvars.AddChangeCallback("ttt_language", LanguageChanged)
+cvars.AddChangeCallback("cv_ttt_language", LanguageChanged)
 
 local function ForceReload()
 	LANG.SetActiveLanguage("english")
@@ -377,7 +377,7 @@ LANG.Styles = {
 	end,
 
 	[MSG_MSTACK_WARN] = function(text)
-		MSTACK:AddColoredBgMessage(text, warn_color)
+		MSTACK:AddColoredBgMessage(text, colorWarn)
 
 		print("[TTT2] Warn:	" .. text)
 	end,
@@ -393,7 +393,7 @@ LANG.Styles = {
 	end,
 
 	[MSG_CHAT_WARN] = function(text)
-		chat.AddText(warn_color, text)
+		chat.AddText(colorWarn, text)
 	end,
 
 	[MSG_CHAT_PLAIN] = chat.AddText,
@@ -489,13 +489,13 @@ end
 ---
 -- Returns the percentage of the coverage of the given language compared to the
 -- default language (english).
--- @param string lang_name The name of the language is question
+-- @param string langName The name of the language is question
 -- @return number The percentage of the coverage
 -- @realm client
-function LANG.GetDefaultCoverage(lang_name)
+function LANG.GetDefaultCoverage(langName)
 	local englishTbl = LANG.Strings[LANG.DefaultLanguage]
 
-	return table.GetEqualEntriesAmount(LANG.Strings[lang_name], englishTbl) / table.Count(englishTbl)
+	return table.GetEqualEntriesAmount(LANG.Strings[langName], englishTbl) / table.Count(englishTbl)
 end
 
 ---
@@ -503,7 +503,7 @@ end
 -- @return string The name of the active language
 -- @realm client
 function LANG.GetActiveLanguageName()
-	return GetConVar("ttt_language"):GetString()
+	return cv_ttt_language:GetString()
 end
 
 -- Message style declarations
