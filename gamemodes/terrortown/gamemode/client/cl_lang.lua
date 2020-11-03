@@ -148,7 +148,7 @@ LANG.GetPTranslation = LANG.GetParamTranslation
 ---
 -- Returns the translated @{string} text of a given language (if available)
 -- @param string name string key identifier for the translated @{string}
--- @param string langName the language name
+-- @param string langName The language name
 -- @return nil|string
 -- @realm client
 function LANG.GetTranslationFromLanguage(name, langName)
