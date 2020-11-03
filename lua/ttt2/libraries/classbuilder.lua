@@ -74,7 +74,7 @@ function classbuilder.BuildFromFolder(path, realm, scope, OnInitialization, shou
 
 			if isfunction(SpecialCheck) and not SpecialCheck(class, base) then continue end
 
-			classTable[name] = tableDeepInherit(class, base, SpecialCheck)
+			classTable[name] = tableDeepInherit(class, base)
 		end
 	end
 
