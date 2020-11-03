@@ -236,7 +236,7 @@ end
 ---
 -- Returns a copy of a selected language table.
 -- @note Safe and slow access, not sure if it's ever useful.
--- @param string langName the language name
+-- @param string langName The language name
 -- @return table
 -- @realm client
 function LANG.GetLanguageTable(langName)
