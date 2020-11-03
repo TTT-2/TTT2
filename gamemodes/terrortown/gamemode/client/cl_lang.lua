@@ -271,7 +271,7 @@ end
 
 ---
 -- Switches the active language
--- @param string langName the new language name
+-- @param string langName The new language name
 -- @realm client
 function LANG.SetActiveLanguage(langName)
 	langName = langName and string.lower(langName) or nil
