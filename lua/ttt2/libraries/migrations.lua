@@ -22,6 +22,7 @@ end
 -- @param string upQuery The sqlQuery to execute.
 -- @param string downQuery The sqlQuery used to revert the `upQuery`.
 -- @return boolean|nil Returns `true` if the migration succeeded, `nil` if the migration was already executed and `false` in case of an error.
+-- @realm shared
 function migration.Add(identifier, version, upQuery, downQuery)
 
 	local checkQuery = "SELECT \"executed_at\" FROM \"migration_master\""
@@ -68,6 +69,7 @@ end
 -- Runs all unrun migrations with the given identifier.
 -- @param string identifier The identifier for which all migrations should be run.
 -- @return boolean|nil Returns `true` if at least one migration was run, `nil` if all migrations were already run and `false` in case of an error.
+-- @realm shared
 function migration.MigrateAll(identifier)
 end
 
@@ -75,6 +77,7 @@ end
 -- Reverts all run migrations with the given identifier.
 -- @param string identifier The identifier for which all migrations should be reverted.
 -- @return boolean|nil Returns `true` if at least one migration was reverted, `nil` if no migration was reverted and `false` in case of an error.
+-- @realm shared
 function migration.RevertAll(identifier)
 end
 
@@ -83,5 +86,6 @@ end
 -- @param string identifier The identifier for the migrations which should be set.
 -- @param number version The desired version of the databaseschema.
 -- @return boolean|nil Returns `true` if at least one migration was run or reverted, `nil` if no migrations were run or reverted and `false` in case of an error.
+-- @realm shared
 function migration.MigrateToVersion(identifier, version)
 end
