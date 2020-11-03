@@ -18,10 +18,11 @@ local function Borkify(word)
 end
 
 local realised = false
+
 -- Upon selection, borkify every english string.
 -- Even with all the string manipulation this only takes a few ms.
 local function LanguageChanged(old, new)
-	if realised or new ~= "swedish chef" then return end
+	if realised or new ~= "swedish_chef" then return end
 
 	local eng = LANG.GetUnsafeNamed("english")
 

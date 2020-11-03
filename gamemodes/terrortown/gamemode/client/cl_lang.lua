@@ -150,7 +150,18 @@ LANG.GetPTranslation = LANG.GetParamTranslation
 -- @return nil|string
 -- @realm client
 function LANG.GetTranslationFromLanguage(name, lang_name)
+	lang_name = lang_name and string.lower(lang_name) or nil
+
 	return rawget(LANG.Strings[lang_name], name)
+end
+
+---
+-- Returns the translated name of the given language.
+-- @param string lang_name The identifier of the language
+-- @return string The translated name of the language
+-- @realm client
+function LANG.GetTranslatedLanguageName(lang_name)
+	return LANG.GetTranslationFromLanguage("lang_name", lang_name) or ""
 end
 
 ---
