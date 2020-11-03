@@ -59,10 +59,10 @@ end
 -- Adds a string to a language.
 -- @note Should not be used in a language file, only for
 -- adding strings elsewhere, such as a SWEP script.
--- @param string langName the new language name
--- @param string stringName the string key identifier for the translated @{string}
--- @param string stringText the translated @{string} text
--- @return string the inserted stringName parameter
+-- @param string langName The new language name
+-- @param string stringName The string key identifier for the translated @{string}
+-- @param string stringText The translated @{string} text
+-- @return string The inserted stringName parameter
 -- @realm client
 function LANG.AddToLanguage(langName, stringName, stringText)
 	langName = LANG.GetNameFromAlias(langName)
