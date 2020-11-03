@@ -24,9 +24,9 @@ jobs:
 
     - name: Download & extract glualint
       run: |
-        wget -c https://github.com/TTT-2/NeoDoc/releases/download/v0.1/NeoDoc-v${NEODOC_VERSION}.zip -O neodoc.zip
-        unzip -u neodoc.zip
-        rm neodoc.zip
+        wget -c https://github.com/FPtje/GLuaFixer/releases/download/${GLUALINT_VERSION}/glualint-${GLUALINT_VERSION}-linux.zip -O glualint.zip
+        unzip -u glualint.zip
+        rm glualint.zip
 
     - name: Check code with glualint
       run: ./glualint .
@@ -43,9 +43,9 @@ jobs:
 
     - name: Download & extract neodoc
       run: |
-        wget -c https://github.com/FPtje/GLuaFixer/releases/download/${GLUALINT_VERSION}/glualint-${GLUALINT_VERSION}-linux.zip -O glualint.zip
-        unzip -u glualint.zip
-        rm glualint.zip
+        wget -c https://github.com/TTT-2/NeoDoc/releases/download/v0.1/NeoDoc-v${NEODOC_VERSION}.zip -O neodoc.zip
+        unzip -u neodoc.zip
+        rm neodoc.zip
 
     - name: Check code with neodoc
-      run: ./neodoc . /tmp
+      run: mono neodoc.exe . /tmp
