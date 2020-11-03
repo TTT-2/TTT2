@@ -271,12 +271,10 @@ end
 -- @note This function will not create a new table. It modifies the existing table.
 -- @param table t The target table that will be modified
 -- @param table base The (fallback) base table
--- @param[opt] function SpecialCheck A function that makes a special check,
--- inheritance is blocked if false is returned
 -- @return table The modified target table
 -- @realm shared
-function table.DeepInherit(t, base, SpecialCheck)
-	if not base or isfunction(SpecialCheck) and not SpecialCheck(t, base) then
+function table.DeepInherit(t, base)
+	if not base then
 		return t
 	end
 
