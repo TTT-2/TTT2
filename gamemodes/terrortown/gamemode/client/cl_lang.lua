@@ -179,7 +179,7 @@ end
 ---
 -- Caused by a recent rename of the language names, old addons loos compatibility.
 -- To prevent annoyance, a compatibiliy mode is introduced.
--- @param string langName string key identifier for the language
+-- @param string langName string key The identifier for the language
 -- @return string The lang name in the new format
 -- @internal
 -- @realm client
@@ -203,7 +203,7 @@ end
 
 ---
 -- Returns the reference to a language table if it exists.
--- @param string langName string key identifier for the language
+-- @param string langName string key The identifier for the language
 -- @return nil|table
 -- @realm client
 function LANG.GetUnsafeNamed(langName)
@@ -220,7 +220,7 @@ end
 
 ---
 -- Returns the reference to a language table if it exists, creates a new language if it did not exist.
--- @param string langName string key identifier for the language
+-- @param string langName string key The identifier for the language
 -- @return nil|table
 -- @realm client
 function LANG.GetLanguageTableReference(langName)
