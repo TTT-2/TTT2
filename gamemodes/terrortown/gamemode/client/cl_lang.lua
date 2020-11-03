@@ -177,10 +177,10 @@ function LANG.GetUnsafeLanguageTable()
 end
 
 ---
--- Caused by a recent rename of the language names, old addons loos compatibility.
--- To prevent annoyance, a compatibiliy mode is introduced.
+-- Caused by a recent rename of the language names, old addons lost compatibility.
+-- To prevent annoyance, a compatibility mode is introduced.
 -- @param string langName The string key identifier of the language
--- @return string The lang name in the new format
+-- @return string The language name in the new format
 -- @internal
 -- @realm client
 function LANG.GetNameFromAlias(langName)
