@@ -1,6 +1,8 @@
 -- Polish language strings
 
-local L = LANG.CreateLanguage("Polski")
+local L = LANG.CreateLanguage("polish")
+
+L.lang_name = "Polski (Polish)"
 
 -- General text used in various places
 L.traitor = "Zdrajca"

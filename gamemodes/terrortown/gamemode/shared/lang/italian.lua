@@ -1,6 +1,8 @@
 -- Italian language strings (by AL24 & THEPLATYNUMGHOST)
 
-local L = LANG.CreateLanguage("Italiano")
+local L = LANG.CreateLanguage("italian")
+
+L.lang_name = "Italiano (Italian)"
 
 -- General text used in various places
 L.traitor = "Traditore"

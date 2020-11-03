@@ -1,6 +1,8 @@
 ---- French language strings
 
-local L = LANG.CreateLanguage("French")
+local L = LANG.CreateLanguage("french")
+
+L.lang_name = "Francais (French)"
 
 --- General text used in various places
 L.traitor = "Traitre"

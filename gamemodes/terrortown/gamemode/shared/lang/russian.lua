@@ -1,6 +1,8 @@
 -- Russian language strings
 
-local L = LANG.CreateLanguage("Русский")
+local L = LANG.CreateLanguage("russsian")
+
+L.lang_name = "Русский (Russian)"
 
 -- General text used in various places
 L.traitor = "Предатель"

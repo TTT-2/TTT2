@@ -1,6 +1,8 @@
 -- Spanish language strings
 
-local L = LANG.GetLanguageTableReference("Español")
+local L = LANG.GetLanguageTableReference("spanish")
+
+L.lang_name = "Español (Spanish)"
 
 -- General text used in various places
 L.traitor = "Traidor"
