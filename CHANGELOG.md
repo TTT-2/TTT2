@@ -29,6 +29,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Inverted some convars to have a uniform "Enable feature X", not a mixture of enable and disable
 - TargetID text is now scaled with the global scale factor
 - Cleaned up draw function files
+- Changed several functions' scopes
+- Added minimal documentation to every datastructure
 - Removed C4 defuse restriction for teammates
 - Moved role specific score variables into the role base
 - Changed the language identifiers to generic english names

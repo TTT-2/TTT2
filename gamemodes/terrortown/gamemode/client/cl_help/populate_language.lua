@@ -4,7 +4,7 @@ local GetTranslatedLanguageName = LANG.GetTranslatedLanguageName
 local TryT = LANG.TryTranslation
 
 local function PopulateLanguagePanel(parent)
-	local form = CreateTTT2Form(parent, "header_language")
+	local form = vgui.CreateTTT2Form(parent, "header_language")
 
 	local dlang = form:MakeComboBox({
 		label = "label_language_set",

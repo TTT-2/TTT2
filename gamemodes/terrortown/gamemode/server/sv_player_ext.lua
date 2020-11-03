@@ -1,6 +1,7 @@
 ---
--- @module Player
--- @desc serverside extensions to player table
+-- @class Player
+
+-- serverside extensions to player table
 
 local net = net
 local table = table
@@ -67,53 +68,22 @@ function plymeta:SetBaseKarma(k)
 end
 
 ---
--- @function plymeta:GetLiveKarma()
--- @desc The live karma starts equal to the base karma, but is updated "live" as the
+-- @accessor number The live karma starts equal to the base karma, but is updated "live" as the
 -- player damages/kills others. When another player damages/kills this one, the
 -- live karma is used to determine his karma penalty.
--- @return number
 -- @realm server
--- @see plymeta:SetLiveKarma
----
--- @function plymeta:SetLiveKarma(live_karma)
--- @desc The live karma starts equal to the base karma, but is updated "live" as the
--- player damages/kills others. When another player damages/kills this one, the
--- live karma is used to determine his karma penalty.
--- @param number live_karma
--- @realm server
--- @see plymeta:GetLiveKarma
 AccessorFunc(plymeta, "live_karma", "LiveKarma", FORCE_NUMBER)
 
 ---
--- @function plymeta:GetDamageFactor()
--- @desc The damage factor scales how much damage the player deals, so if it is .9
+-- @accessor number The damage factor scales how much damage the player deals, so if it is .9
 -- then the player only deals 90% of his original damage.
--- @return number
 -- @realm server
--- @see plymeta:SetDamageFactor
----
--- @function plymeta:SetDamageFactor(dmg_factor)
--- @desc The damage factor scales how much damage the player deals, so if it is .9
--- then the player only deals 90% of his original damage.
--- @param number dmg_factor
--- @realm server
--- @see plymeta:GetDamageFactor
 AccessorFunc(plymeta, "dmg_factor", "DamageFactor", FORCE_NUMBER)
 
 ---
--- @function plymeta:GetCleanRound()
--- @desc If a player does not damage team members in a round, he has a "clean" round
+-- @accessor boolean If a player does not damage team members in a round, he has a "clean" round
 -- and gets a bonus for it.
--- @return boolean
 -- @realm server
--- @see plymeta:SetCleanRound
----
--- @function plymeta:SetCleanRound(clean_round)
--- @desc If a player does not damage team members in a round, he has a "clean" round
--- and gets a bonus for it.
--- @param boolean clean_round
--- @realm server
--- @see plymeta:GetCleanRound
 AccessorFunc(plymeta, "clean_round", "CleanRound", FORCE_BOOL)
 
 ---
@@ -160,6 +130,8 @@ end
 -- Sets the default amount of credits
 -- @realm server
 function plymeta:SetDefaultCredits()
+	---
+	-- @realm server
 	if hook.Run("TTT2SetDefaultCredits", self) then return end
 
 	if not self:IsShopper() then
@@ -184,6 +156,8 @@ function plymeta:SetDefaultCredits()
 		c = c + (ConVarExists("ttt_credits_alonebonus") and GetConVar("ttt_credits_alonebonus"):GetFloat() or 0)
 	end
 
+	---
+	-- @realm server
 	self:SetCredits(math.ceil(hook.Run("TTT2ModifyDefaultTraitorCredits", self, c) or c))
 end
 
@@ -201,7 +175,7 @@ end
 ---
 -- Gives a specific @{ITEM} (if possible)
 -- @param string cls
--- @return @{ITEM} or nil
+-- @return ITEM|nil
 -- @realm server
 -- @internal
 function plymeta:AddEquipmentItem(cls)
@@ -326,7 +300,7 @@ end
 -- if this equipment is limited
 -- @param string cls
 -- @realm server
--- @see plymeta:RemoveBought
+-- @see Player:RemoveBought
 function plymeta:AddBought(cls)
 	self.bought = self.bought or {}
 	self.bought[#self.bought + 1] = tostring(cls)
@@ -359,7 +333,7 @@ end
 -- if this equipment is limited
 -- @param string cls
 -- @realm server
--- @see plymeta:AddBought
+-- @see Player:AddBought
 function plymeta:RemoveBought(cls)
 	local key
 
@@ -499,7 +473,7 @@ end
 ---
 -- Gives an @{ITEM} to a @{Player} and returns whether it was successful
 -- @param string cls
--- @return @{ITEM} or nil
+-- @return ITEM|nil
 -- @realm server
 function plymeta:GiveEquipmentItem(cls)
 	if not cls then return end
@@ -541,6 +515,7 @@ end
 ---
 -- This is doing nothing, it's just a function to avoid incompatibility
 -- @note Please remove this call and use the TTTPlayerSpeedModifier hook in both CLIENT and SERVER states
+-- @param any slowed
 -- @deprecated
 -- @realm server
 function plymeta:SetSpeed(slowed)
@@ -558,7 +533,7 @@ end
 
 ---
 -- Sends the last words based on the DamageInfo
--- @param CTakeDamageInfo dmginfo
+-- @param DamageInfo dmginfo
 -- @realm server
 function plymeta:SendLastWords(dmginfo)
 	-- Use a pseudo unique id to prevent people from abusing the concmd
@@ -627,9 +602,14 @@ end
 -- @param boolean dead_only If dead_only is
 -- true, only spawns if player is dead, else just makes sure he is healed.
 -- @return boolean
--- realm shared
+-- @realm server
 function plymeta:SpawnForRound(dead_only)
-	hook.Call("PlayerSetModel", GAMEMODE, self)
+	---
+	-- @realm server
+	hook.Run("PlayerSetModel", self)
+
+	---
+	-- @realm server
 	hook.Run("TTTPlayerSetColor", self)
 
 	-- wrong alive status and not a willing spec who unforced after prep started
@@ -873,6 +853,8 @@ function plymeta:Revive(delay, OnRevive, DoCheck, needsCorpse, blockRound, OnFai
 			self:SetPos(spawnPos)
 			self:SetEyeAngles(spawnEyeAngle or Angle(0, 0, 0))
 
+			---
+			-- @realm server
 			hook.Run("PlayerLoadout", self, true)
 
 			self:SetCredits(CORPSE.GetCredits(corpse, 0))
@@ -1187,7 +1169,7 @@ end
 -- On the server, we just send the client a message that the player is
 -- performing a gesture. This allows the client to decide whether it should
 -- play, depending on eg. a cvar.
--- @param ACT[https://wiki.garrysmod.com/page/Enums/ACT] act The activity (ACT) or sequence that should be played
+-- @param ACT act The @{ACT} or sequence that should be played
 -- @realm server
 function plymeta:AnimPerformGesture(act)
 	if not act then return end
@@ -1238,6 +1220,10 @@ local plymeta_old_Give = plymeta.Give
 -- The extension is needed to set a flag prior to picking up weapons.
 -- This flag is used to distinguish between weapons picked up by walking
 -- over them and weapons picked up by ply:Give()
+-- @param string weaponClassName
+-- @param boolean bNoAmmo
+-- @return Weapon
+-- @realm server
 function plymeta:Give(weaponClassName, bNoAmmo)
 	self.forcedPickup = true
 
@@ -1287,12 +1273,14 @@ end
 -- @param Weapon wep The weapon object
 -- @param nil|boolean forcePickup is there a forced pickup to ignore the cv_auto_pickup cvar?
 -- @param nil|boolean dropBlockingWeapon should the weapon stored in the same slot be dropped
--- @returns boolean return of the PlayerCanPickupWeapon hook
+-- @return boolean return of the PlayerCanPickupWeapon hook
 -- @return number errorCode that appeared. For the error, give a look into the specific hook
 -- @realm server
 function plymeta:CanPickupWeapon(wep, forcePickup, dropBlockingWeapon)
 	self.forcedPickup = forcePickup
 
+	---
+	-- @realm server
 	local ret, errCode = hook.Run("PlayerCanPickupWeapon", self, wep, dropBlockingWeapon)
 
 	self.forcedPickup = false
@@ -1305,7 +1293,7 @@ end
 -- @param string wepCls The weapon object classname
 -- @param nil|boolean forcePickup is there a forced pickup to ignore the cv_auto_pickup cvar?
 -- @param nil|boolean dropBlockingWeapon should the weapon stored in the same slot be dropped
--- @returns boolean
+-- @return boolean
 -- @realm server
 function plymeta:CanPickupWeaponClass(wepCls, forcePickup, dropBlockingWeapon)
 	local wep = ents.Create(wepCls)
@@ -1321,7 +1309,7 @@ end
 -- @param nil|boolean forcePickup Should the pickup been forced (ignores the cv_auto_pickup cvar)
 -- @param[default=false] nil|boolean dropBlockingWeapon Should the currently selecten weapon be dropped
 -- @param nil|boolean shouldAutoSelect Should this weapon be autoselected after equip, if not set this value is set by player keypress
--- @returns Weapon if successful, nil if not
+-- @return Weapon if successful, nil if not
 -- @realm server
 function plymeta:SafePickupWeapon(wep, ammoOnly, forcePickup, dropBlockingWeapon, shouldAutoSelect)
 	if not IsValid(wep) then
@@ -1396,7 +1384,7 @@ end
 -- @param string wepCls The weapon class
 -- @param[default=false] boolean dropBlockingWeapon Should the currently selecten weapon be dropped
 -- @param boolean shouldAutoSelect Should this weapon be autoselected after equip, if not set this value is set by player keypress
--- @returns Weapon if successful, nil if not
+-- @return Weapon if successful, nil if not
 -- @realm server
 function plymeta:SafePickupWeaponClass(wepCls, dropBlockingWeapon, shouldAutoSelect)
 	-- if the variable is not set, set it fitting to the keypress
@@ -1435,6 +1423,8 @@ local function SetPlayerReady(_, ply)
 	-- Send full state update to client
 	ttt2net.SendFullStateUpdate(ply)
 
+	---
+	-- @realm server
 	hook.Run("TTT2PlayerReady", ply)
 end
 net.Receive("TTT2SetPlayerReady", SetPlayerReady)

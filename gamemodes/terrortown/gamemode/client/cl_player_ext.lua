@@ -9,7 +9,7 @@ end
 
 ---
 -- Applies a animation gesture
--- @param ACT[https://wiki.garrysmod.com/page/Enums/ACT] act The activity (ACT) or sequence that should be played
+-- @param ACT act The @{ACT} or sequence that should be played
 -- @param number weight The weight this slot should be set to. Value must be ranging from 0 to 1.
 -- @realm client
 -- @see https://wiki.garrysmod.com/page/Player/AnimRestartGesture
@@ -71,12 +71,14 @@ for _i = 1, #gestTbl do
 	act_runner[a] = MakeSimpleRunner(a)
 end
 
+---
+-- @realm client
 local cv_ttt_show_gestures = CreateConVar("ttt_show_gestures", "1", FCVAR_ARCHIVE)
 
 ---
 -- Perform the gesture using the GestureRunner system. If custom_runner is
 -- non-nil, it will be used instead of the default runner for the act.
--- @param ACT[https://wiki.garrysmod.com/page/Enums/ACT] act The activity (ACT) or sequence that should be played
+-- @param ACT act The @{ACT} or sequence that should be played
 -- @param table custom_runner
 -- @return boolean success?
 -- @realm client
@@ -168,7 +170,7 @@ net.Receive("TTT2TargetPlayer", TargetPlayer)
 -- SetupMove is called before the engine process movements. This allows us
 -- to override the players movement.
 -- @param Player ply The @{Player} that sets up its movement
--- @param CMoveData mv The move data to override/use
+-- @param MoveData mv The move data to override/use
 -- @param CUserCmd cmd The command data
 -- @hook
 -- @realm client
@@ -182,6 +184,8 @@ function GM:SetupMove(ply, mv, cmd)
 	net.Start("TTT2SetPlayerReady")
 	net.SendToServer()
 
+	---
+	-- @realm shared
 	hook.Run("TTT2PlayerReady", ply)
 
 	-- check if a resolution change happened while
@@ -190,6 +194,8 @@ function GM:SetupMove(ply, mv, cmd)
 	oldScrH = appearance.GetLastHeight()
 
 	if oldScrH ~= ScrH() or oldScrW ~= ScrW() then
+		---
+		-- @realm client
 		hook.Run("OnScreenSizeChanged", oldScrW, oldScrH)
 	end
 end

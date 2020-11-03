@@ -2,6 +2,7 @@
 -- This is the <code>huds</code> module
 -- @author Alf21
 -- @author saibotk
+-- @module huds
 
 module("huds", package.seeall)
 
@@ -94,7 +95,7 @@ end
 ---
 -- Get an hud by name (a copy)
 -- @param string name hud name
--- @param[opt] ?table retTbl this table will be modified and returned. If nil, a new table will be created.
+-- @param[opt] table retTbl this table will be modified and returned. If nil, a new table will be created.
 -- @return table returns the modified retTbl or the new hud table
 -- @realm shared
 function Get(name, retTbl)

@@ -1,3 +1,7 @@
+---
+-- @class SWEP
+-- @section weapon_ttt_binoculars
+
 if SERVER then
 	AddCSLuaFile()
 end
@@ -54,6 +58,8 @@ SWEP.ZoomLevels = {
 
 SWEP.ProcessingDelay = 5
 
+---
+-- @ignore
 function SWEP:SetupDataTables()
 	self:DTVar("Bool", 0, "processing")
 	self:DTVar("Float", 0, "start_time")
@@ -62,7 +68,8 @@ function SWEP:SetupDataTables()
 	return self.BaseClass.SetupDataTables(self)
 end
 
-
+---
+-- @ignore
 function SWEP:PrimaryAttack()
 	self:SetNextPrimaryFire(CurTime() + 0.1)
 
@@ -78,6 +85,8 @@ end
 
 local click = Sound("weapons/sniper/sniper_zoomin.wav")
 
+---
+-- @ignore
 function SWEP:SecondaryAttack()
 	self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
 
@@ -91,6 +100,8 @@ function SWEP:SecondaryAttack()
 	self.dt.start_time = 0
 end
 
+---
+-- @ignore
 function SWEP:SetZoomLevel(level)
 	if CLIENT then return end
 
@@ -102,6 +113,8 @@ function SWEP:SetZoomLevel(level)
 	owner:DrawViewModel(false)
 end
 
+---
+-- @ignore
 function SWEP:CycleZoom()
 	self.dt.zoom = self.dt.zoom + 1
 
@@ -112,6 +125,8 @@ function SWEP:CycleZoom()
 	self:SetZoomLevel(self.dt.zoom)
 end
 
+---
+-- @ignore
 function SWEP:PreDrop()
 	self:SetZoomLevel(1)
 
@@ -120,6 +135,8 @@ function SWEP:PreDrop()
 	return self.BaseClass.PreDrop(self)
 end
 
+---
+-- @ignore
 function SWEP:Holster()
 	self:SetZoomLevel(1)
 
@@ -128,6 +145,8 @@ function SWEP:Holster()
 	return true
 end
 
+---
+-- @ignore
 function SWEP:Deploy()
 	if SERVER and IsValid(self:GetOwner()) then
 		self:GetOwner():DrawViewModel(false)
@@ -138,10 +157,15 @@ function SWEP:Deploy()
 	return true
 end
 
+---
+-- @ignore
 function SWEP:Reload()
 	return false
 end
 
+---
+-- @return boolean
+-- @realm shared
 function SWEP:IsTargetingCorpse()
 	local tr = self:GetOwner():GetEyeTrace(MASK_SHOT)
 	local ent = tr.Entity
@@ -151,6 +175,8 @@ end
 
 local confirm = Sound("npc/turret_floor/click1.wav")
 
+---
+-- @realm shared
 function SWEP:IdentifyCorpse()
 	local owner = self:GetOwner()
 
@@ -163,6 +189,8 @@ function SWEP:IdentifyCorpse()
 	end
 end
 
+---
+-- @ignore
 function SWEP:Think()
 	BaseClass.Think(self)
 
@@ -193,6 +221,8 @@ if CLIENT then
 
 	local cv_thickness
 
+	---
+	-- @ignore
 	function SWEP:OnRemove()
 		local owner = self:GetOwner()
 
@@ -201,6 +231,8 @@ if CLIENT then
 		RunConsoleCommand("lastinv")
 	end
 
+	---
+	-- @ignore
 	function SWEP:Initialize()
 		self:AddTTT2HUDHelp("binoc_help_pri", "binoc_help_sec")
 		cv_thickness = GetConVar("ttt_crosshair_thickness")
@@ -208,12 +240,16 @@ if CLIENT then
 		return self.BaseClass.Initialize(self)
 	end
 
+	---
+	-- @ignore
 	function SWEP:DrawWorldModel()
 		if IsValid(self:GetOwner()) then return end
 
 		self:DrawModel()
 	end
 
+	---
+	-- @ignore
 	function SWEP:AdjustMouseSensitivity()
 		if self.dt.zoom > 0 then
 			return 1 / self.dt.zoom
@@ -245,6 +281,8 @@ if CLIENT then
 		)
 	end)
 
+	---
+	-- @ignore
 	function SWEP:DrawHUD()
 		self:DrawHelp()
 

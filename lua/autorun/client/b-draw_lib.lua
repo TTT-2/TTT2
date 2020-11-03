@@ -1,18 +1,18 @@
 if engine.ActiveGamemode() ~= "terrortown" then return end
 
 ---
--- @module draw
--- @author Bull
--- @author Alf21
---
--- @desc A Simple Garry's mod drawing library
+-- A Simple Garry's mod drawing library
 -- Copyright (C) 2016 Bull [STEAM_0:0:42437032] [76561198045139792]
 -- Freely acquirable at https://github.com/bull29/b_draw-lib
 -- You can use this anywhere for any purpose as long as you acredit the work to the original author with this notice.
 -- Optionally, if you choose to use this within your own software, it would be much appreciated if you could inform me of it.
 -- I love to see what people have done with my code! :)
---
 -- This code got fixed and modified by the TTT2 dev group, ty for the lib @Bull !
+--
+-- @author Bull
+-- @author Alf21
+--
+-- @module draw
 
 file.CreateDir("downloaded_assets")
 
@@ -79,6 +79,7 @@ end
 -- when an avatar is found it will be cached
 -- @param string id64 the steamid64
 -- @param string size the avatar's size, this can be <code>small</code>, <code>medium</code> or <code>large</code>
+-- @realm client
 function draw.CacheAvatar(id64, size)
 	FetchAvatarAsset(id64, size)
 end
@@ -93,6 +94,7 @@ end
 -- @param Color color
 -- @param Angle angle
 -- @param boolean cornerorigin if it is set to <code>true</code>, the WebImage will be centered based on the x- and y-coordinate
+-- @realm client
 local function DrawImage(material, x, y, width, height, color, angle, cornerorigin)
 	color = color or white
 
@@ -120,6 +122,7 @@ end
 -- @param Color color
 -- @param Angle angle
 -- @param boolean cornerorigin if it is set to <code>true</code>, the WebImage will be centered based on the x- and y-coordinate
+-- @realm client
 function draw.WebImage(url, x, y, width, height, color, angle, cornerorigin)
 	DrawImage(FetchAsset(url) or _error, x, y, width, height, color, angle, cornerorigin)
 end
@@ -132,6 +135,7 @@ end
 -- @param number xrep
 -- @param number yrep
 -- @param Color color
+-- @realm client
 function draw.SeamlessWebImage(url, parentwidth, parentheight, xrep, yrep, color)
 	color = color or white
 
@@ -148,7 +152,6 @@ end
 -- Draws a SteamAvatar while caching it before
 -- @param string id64 the steamid64
 -- @param string size the avatar's size, this can be <code>small</code>, <code>medium</code> or <code>large</code>
--- @param string url the url to the WebImage
 -- @param number x
 -- @param number y
 -- @param number width
@@ -156,6 +159,7 @@ end
 -- @param Color color
 -- @param Angle angle
 -- @param boolean cornerorigin if it is set to <code>true</code>, the WebImage will be centered based on the x- and y-coordinate
+-- @realm client
 function draw.SteamAvatar(id64, size, x, y, width, height, color, angle, cornerorigin)
 	DrawImage(FetchAvatarAsset(id64, size) or _default_avatar, x, y, width, height, color, angle, cornerorigin)
 end
@@ -166,6 +170,7 @@ end
 -- @param string id64 the steamid64
 -- @param string size the avatar's size, this can be <code>small</code>, <code>medium</code> or <code>large</code>
 -- @return Material
+-- @realm client
 function draw.GetAvatarMaterial(id64, size)
 	return FetchAvatarAsset(id64, size) or _default_avatar
 end

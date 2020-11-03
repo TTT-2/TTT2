@@ -1,11 +1,17 @@
 ---
 -- net stream extension
 -- @author saibotk
-
-AddCSLuaFile()
+-- @module net
 
 -- Stream network message name constant
 local NETMSG_STREAM = "TTT2_NET_STREAM"
+
+if SERVER then
+	AddCSLuaFile()
+
+	-- Add the network string for streaming data
+	util.AddNetworkString(NETMSG_STREAM)
+end
 
 -- Size to split the network stream at (currently a bit lower than the max value, just to have some buffer)
 net.STREAM_FRAGMENTATION_SIZE = 65400
@@ -14,19 +20,14 @@ net.STREAM_FRAGMENTATION_SIZE = 65400
 net.stream_cache = {}
 net.stream_callbacks = {}
 
--- Add the network string for streaming data
-if SERVER then
-	util.AddNetworkString(NETMSG_STREAM)
-end
-
 ---
 -- Initiates a stream message, usually for data that can be longer than
 -- the 64kb limit of a single net message. This will split up the data and send them in
 -- smaller fragments. The data will be converted (with sPON) to an encoded string during this process.
 --
--- @param string messageId a unique message id similar to the network strings
--- @param table data the data table to send, this will be reconstructed at the client.
--- @param table|player|nil client SERVERSIDE only! Optional, use it to send a stream to a single client or a group of clients.
+-- @param string messageId A unique message id similar to the network strings
+-- @param table data The data table to send, this will be reconstructed at the client.
+-- @param[opt] table|player client SERVERSIDE only! Optional, use it to send a stream to a single client or a group of clients.
 -- @realm shared
 function net.SendStream(messageId, data, client)
 	local encodedString = pon.encode(data)

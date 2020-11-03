@@ -11,13 +11,17 @@ local MAX_DROWN_TIME = 8
 ---
 -- Initializes TTT2
 -- @hook
--- @register
 -- @realm shared
 function GM:TTT2Initialize()
 	-- load all roles
 	roles.OnLoaded()
 
+	---
+	-- @realm shared
 	hook.Run("TTT2RolesLoaded")
+
+	---
+	-- @realm shared
 	hook.Run("TTT2BaseRoleInit")
 
 	-- load all HUDs
@@ -44,9 +48,20 @@ function GM:CreateTeams()
 end
 
 ---
--- Kill footsteps on player and client
+-- Kill footsteps on player and client.
+-- Called whenever a player steps. Return true to mute the normal sound.
+-- @note This hook is called on all clients.
+-- @param Player ply The stepping player
+-- @param Vector pos The position of the step
+-- @param number foot Foot that is stepped. 0 for left, 1 for right
+-- @param string sound Sound that is going to play
+-- @param number volume Volume of the footstep
+-- @param RecipientFilter rf The Recipient filter of players who can hear the footstep
+-- @return[default=true] boolean Prevent default step sound
+-- @predicted
 -- @hook
 -- @realm shared
+-- @ref https://wiki.facepunch.com/gmod/GM:PlayerFootstep
 function GM:PlayerFootstep(ply, pos, foot, sound, volume, rf)
 	if IsValid(ply) and (ply:Crouching() or ply:GetMaxSpeed() < 150 or ply:IsSpec()) then
 		-- do not play anything, just prevent normal sounds from playing
@@ -59,10 +74,15 @@ end
 -- You shouldn't adjust the player's position in any way in the move hook. This is due to
 -- prediction errors, the netcode might run the move hook multiple times as packets arrive late.
 -- Therefore you should only adjust the movedata construct in this hook.
+-- Generally you shouldn't have to use this hook - if you want to make a custom move type you should look at the drive system.
+-- This hook is called after @{GM:PlayerTick}.
+-- See <a href="https://wiki.facepunch.com/gmod/Game_Movement">Game Movement</a> for an explanation on the move system.
 -- @param Player ply The player
--- @param CMoveData moveData Movement information
+-- @param MoveData moveData Movement information
+-- @predicted
 -- @hook
 -- @realm shared
+-- @ref https://wiki.facepunch.com/gmod/GM:Move
 function GM:Move(ply, moveData)
 	SPEED:HandleSpeedCalculation(ply, moveData)
 
@@ -71,6 +91,8 @@ function GM:Move(ply, moveData)
 	if ply.sprintMultiplier and (ply.sprintProgress or 0) > 0 then
 		local sprintMultiplierModifier = {1}
 
+		---
+		-- @realm shared
 		hook.Run("TTT2PlayerSprintMultiplier", ply, sprintMultiplierModifier)
 
 		mul = mul * ply.sprintMultiplier * sprintMultiplierModifier[1]
@@ -107,11 +129,13 @@ local ttt_playercolors = {
 local ttt_playercolors_all_count = #ttt_playercolors.all
 local ttt_playercolors_serious_count = #ttt_playercolors.serious
 
-local colormode = CreateConVar("ttt_playercolor_mode", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+---
+-- @realm shared
+local colormode = CreateConVar("ttt_playercolor_mode", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
 
 ---
+-- @param string model The selected (default) playermodel
 -- @hook
--- @register
 -- @realm shared
 function GM:TTTPlayerColor(model)
 	local mode = colormode:GetInt()
@@ -130,8 +154,14 @@ function GM:TTTPlayerColor(model)
 end
 
 ---
+-- Called every frame on client and server.
+-- This will be the same as @{GM:Tick} on the server when there is no lag,
+-- but will only be called once every processed server frame during lag.
+-- See @{GM:Tick} for a hook that runs every tick on both the client and server.
+-- @note This hook WILL NOT run if the server is empty, unless you set the @{ConVar} `sv_hibernate_think` to `1`
 -- @hook
 -- @realm shared
+-- @ref https://wiki.facepunch.com/gmod/GM:Think
 function GM:Think()
 	UpdateSprint()
 
@@ -144,8 +174,11 @@ end
 local tm, ply, plys
 
 ---
+-- Called every server tick. Serverside, this is similar to @{GM:Think}.
+-- @note This hook WILL NOT run if the server is empty, unless you set the @{ConVar} `sv_hibernate_think` to `1`
 -- @hook
 -- @realm shared
+-- @ref https://wiki.facepunch.com/gmod/GM:Tick
 function GM:Tick()
 	local client = CLIENT and LocalPlayer()
 

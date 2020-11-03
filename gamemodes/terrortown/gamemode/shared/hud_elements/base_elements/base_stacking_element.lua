@@ -1,5 +1,5 @@
 ---
--- @module HUDELEMENT
+-- @class HUDELEMENT
 -- @section base_stacking_element
 
 local base = "dynamic_hud_element"

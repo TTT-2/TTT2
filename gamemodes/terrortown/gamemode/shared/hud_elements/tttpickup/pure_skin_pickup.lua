@@ -1,3 +1,5 @@
+--- @ignore
+
 local draw = draw
 local surface = surface
 local math = math

@@ -1,15 +1,25 @@
+---
+-- @class PANEL
+-- @section DBinderTTT2
 
 local PANEL = {}
 
+---
+-- @accessor number
+-- @realm client
 AccessorFunc(PANEL, "m_iSelectedNumber", "SelectedNumber")
 
 Derma_Install_Convar_Functions(PANEL)
 
+---
+-- @ignore
 function PANEL:Init()
 	self:SetSelectedNumber(0)
 	self:SetSize(60, 30)
 end
 
+---
+-- @realm client
 function PANEL:UpdateText()
 	local str = input.GetKeyName(self:GetSelectedNumber())
 
@@ -22,6 +32,8 @@ function PANEL:UpdateText()
 	self:SetText(str)
 end
 
+---
+-- @realm client
 function PANEL:DoClick()
 	self:SetText("button_press_key")
 
@@ -30,11 +42,16 @@ function PANEL:DoClick()
 	self.trapping = true
 end
 
+---
+-- @realm client
 function PANEL:DoRightClick()
 	self:SetText("button_none")
 	self:SetValue(0)
 end
 
+---
+-- @param number iNum
+-- @realm client
 function PANEL:SetSelectedNumber(iNum)
 	self.m_iSelectedNumber = iNum
 	self:ConVarChanged(iNum)
@@ -42,6 +59,8 @@ function PANEL:SetSelectedNumber(iNum)
 	self:OnChange(iNum)
 end
 
+---
+-- @ignore
 function PANEL:Think()
 	if input.IsKeyTrapping() and self.trapping then
 		local code = input.CheckKeyTrapping()
@@ -61,14 +80,22 @@ function PANEL:Think()
 	self:ConVarNumberThink()
 end
 
+---
+-- @param number iNumValue
+-- @realm client
 function PANEL:SetValue(iNumValue)
 	self:SetSelectedNumber(iNumValue)
 end
 
+---
+-- @return number
+-- @realm client
 function PANEL:GetValue()
 	return self:GetSelectedNumber()
 end
 
+---
+-- @realm client
 function PANEL:OnChange()
 
 end

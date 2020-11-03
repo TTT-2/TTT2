@@ -1,6 +1,5 @@
 ---
--- @section Utils
--- @desc Random stuff
+-- @module util
 
 if not util then return end
 
@@ -17,7 +16,7 @@ local VectorRand = VectorRand
 ---
 -- Attempts to get the weapon used from a DamageInfo instance needed because the
 -- GetAmmoType value is useless and inflictor isn't properly set (yet)
--- @param CTakeDamageInfo dmg
+-- @param DamageInfo dmg
 -- @return Weapon
 -- @realm shared
 function util.WeaponFromDamage(dmg)
@@ -136,6 +135,9 @@ function util.GetNextAlivePlayer(ply)
 end
 
 ---
+-- @module string
+
+---
 -- Uppercases the first character only
 -- @param string str
 -- @return string
@@ -145,13 +147,19 @@ function string.Capitalize(str)
 end
 
 ---
--- @function util.Capitalize(str)
--- @desc Uppercases the first character only
+-- @module util
+
+---
+-- Uppercases the first character only
 -- @param string str
 -- @return string
 -- @realm shared
 -- @see string.Capitalize
+-- @function util.Capitalize(str)
 util.Capitalize = string.Capitalize
+
+---
+-- @module none
 
 ---
 -- Color unpacking
@@ -182,6 +190,9 @@ function AccessorFuncDT(tbl, varname, name)
 		end
 	end
 end
+
+---
+-- @module util
 
 ---
 -- Darkens a given @{Color} value
@@ -305,7 +316,7 @@ end
 ---
 -- Something hurt us, start bleeding for a bit depending on the amount
 -- @param Entity ent
--- @param CTakeDamageInfo dmg
+-- @param DamageInfo dmg
 -- @param number t times
 -- @realm shared
 -- @todo improve description
@@ -327,6 +338,10 @@ function util.StartBleeding(ent, dmg, t)
 	end)
 end
 
+---
+-- Stops the bleeding effect
+-- @param Entity ent
+-- @realm shared
 function util.StopBleeding(ent)
 	timer.Remove("bleed" .. ent:EntIndex())
 end
@@ -349,7 +364,7 @@ end
 ---
 -- Useful default behaviour for semi-modal DFrames
 -- @param Panel pnl
--- @param KEY[https://wiki.garrysmod.com/page/Enums/BUTTON_CODE] kc key
+-- @param KEY kc key
 -- @realm shared
 -- @todo improve description
 function util.BasicKeyHandler(pnl, kc)
@@ -377,6 +392,7 @@ end
 ---
 -- Just a noop @{function} that is doing NOTHING
 -- @realm shared
+-- @see util.passthrough
 function util.noop()
 
 end
@@ -394,6 +410,9 @@ end
 local gsub = string.gsub
 
 ---
+-- @module string
+
+---
 -- Simple string interpolation:
 -- string.Interp("{killer} killed {victim}", {killer = "Bob", victim = "Joe"})
 -- returns "Bob killed Joe"
@@ -405,6 +424,9 @@ local gsub = string.gsub
 function string.Interp(str, tbl)
 	return gsub(str, "{(%w+)}", tbl)
 end
+
+---
+-- @module none
 
 ---
 -- Short helper for input.LookupBinding, returns capitalised key or a default
@@ -420,20 +442,6 @@ function Key(binding, default)
 	end
 
 	return string.upper(b)
-end
-
-local exp = math.exp
-
----
--- Equivalent to ExponentialDecay from Source's mathlib.
--- Convenient for falloff curves.
--- @param number halflife
--- @param number dt
--- @return number
--- @realm shared
-function math.ExponentialDecay(halflife, dt)
-	-- ln(0.5) = -0.69..
-	return exp((-0.69314718 / halflife) * dt)
 end
 
 ---
@@ -474,6 +482,26 @@ function IsRagdoll(ent)
 	return ent and IsValid(ent) and ent:GetClass() == "prop_ragdoll"
 end
 
+local exp = math.exp
+
+---
+-- @module math
+
+---
+-- Equivalent to ExponentialDecay from Source's mathlib.
+-- Convenient for falloff curves.
+-- @param number halflife
+-- @param number dt
+-- @return number
+-- @realm shared
+function math.ExponentialDecay(halflife, dt)
+	-- ln(0.5) = -0.69..
+	return exp((-0.69314718 / halflife) * dt)
+end
+
+---
+-- @module util
+
 local band = bit.band
 
 ---
@@ -504,7 +532,7 @@ if CLIENT then
 	-- @param table scrpos table with x and y attributes
 	-- @return boolean
 	-- @realm client
-	function IsOffScreen(scrpos)
+	function util.IsOffScreen(scrpos)
 		return not scrpos.visible or scrpos.x < 0 or scrpos.y < 0 or scrpos.x > ScrW() or scrpos.y > ScrH()
 	end
 
@@ -594,6 +622,8 @@ end
 -- Like @{string.FormatTime} but simpler (and working), always a string, no hour support
 -- @param number seconds
 -- @param string fmt the <a href="https://wiki.garrysmod.com/page/string/format">format</a>
+-- @return string
+-- @realm shared
 function util.SimpleTime(seconds, fmt)
 	if not seconds then
 		seconds = 0

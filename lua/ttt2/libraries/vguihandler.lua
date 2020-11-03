@@ -1,11 +1,13 @@
 ---
 -- A vgui handler
 -- @author Mineotopia
+-- @module vguihandler
 
-AddCSLuaFile()
+if SERVER then
+	AddCSLuaFile()
 
--- the rest of the vguihandler library is client only
-if SERVER then return end
+	return -- the rest of the vguihandler library is client only
+end
 
 local table = table
 
@@ -25,6 +27,7 @@ vguihandler = vguihandler or {
 -- @param number h The height of the panel
 -- @param string title The title of the panel
 -- @return @{Panel} The created/cleared DFrameTTT2 object
+-- @realm client
 function vguihandler.GenerateFrame(w, h, title)
 	local frame = vgui.Create("DFrameTTT2")
 
@@ -100,7 +103,6 @@ end
 ---
 -- Should be called when a specific vskin variable is changed
 -- so that the complete vgui element is redone
--- @param string name The name of the changed setting
 -- @internal
 -- @realm client
 function vguihandler.InvalidateVSkin()

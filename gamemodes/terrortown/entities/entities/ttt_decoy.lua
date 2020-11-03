@@ -1,5 +1,9 @@
--- Decoy sending out a radar blip and redirecting DNA scans. Based on old beacon
+---
+-- @class ENT
+-- @desc Decoy sending out a radar blip and redirecting DNA scans. Based on old beacon
 -- code.
+-- @section ttt_decoy
+
 if SERVER then
 	AddCSLuaFile()
 end
@@ -9,6 +13,8 @@ ENT.Model = Model("models/props_lab/reciever01b.mdl")
 ENT.CanHavePrints = false
 ENT.CanUseKey = true
 
+---
+-- @realm shared
 function ENT:Initialize()
 	self:SetModel(self.Model)
 
@@ -40,6 +46,9 @@ function ENT:Initialize()
 	end
 end
 
+---
+-- @param Player activator
+-- @realm shared
 function ENT:UseOverride(activator)
 	if not IsValid(activator) or self:GetNWString("decoy_owner_team", "none") ~= activator:GetTeam() then return end
 
@@ -57,6 +66,9 @@ end
 
 local zapsound = Sound("npc/assassin/ball_zap1.wav")
 
+---
+-- @param DamageInfo dmginfo
+-- @realm shared
 function ENT:OnTakeDamage(dmginfo)
 	self:TakePhysicsDamage(dmginfo)
 	self:SetHealth(self:Health() - dmginfo:GetDamage())
@@ -76,6 +88,8 @@ function ENT:OnTakeDamage(dmginfo)
 	end
 end
 
+---
+-- @realm shared
 function ENT:OnRemove()
 	if not IsValid(self:GetOwner()) then return end
 

@@ -2,6 +2,7 @@
 -- addonChecker to detect known incompatabilities.
 -- @author saibotk
 -- @author Mineotopia
+-- @module addonChecker
 
 ADDON_INCOMPATIBLE = 0
 ADDON_OUTDATED = 1

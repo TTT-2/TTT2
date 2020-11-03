@@ -1,18 +1,19 @@
 ---
--- @module LANG
--- @desc Clientside language stuff
+-- Clientside language stuff
 -- @note Need to build custom tables of strings. Can't use language.Add as there is no
 -- way to access the translated string in Lua. Identifiers only get translated
 -- when Source/gmod print them. By using our own table and our own lookup, we
 -- have far more control. Maybe it's slower, but maybe not, we aren't scanning
 -- strings for "#identifiers" after all.
+-- @module LANG
 
 LANG.Strings = {}
 
 local table = table
 local pairs = pairs
-local CreateConVar = CreateConVar
 
+---
+-- @realm client
 local cv_ttt_language = CreateConVar("ttt_language", "auto", FCVAR_ARCHIVE)
 
 LANG.DefaultLanguage = "english"
@@ -132,15 +133,16 @@ function LANG.GetParamTranslation(name, params)
 end
 
 ---
--- @function LANG.GetPTranslation(name, params)
--- @desc Returns the translated @{string} text (if available).<br />String
+-- Returns the translated @{string} text (if available).<br />String
 -- <a href="http://lua-users.org/wiki/StringInterpolation">interpolation</a> is allowed<br />
 -- Parameterised version, performs string interpolation. Slower than
 -- @{LANG.GetTranslation}.
 -- @param string name string key identifier for the translated @{string}
+-- @param any params
 -- @return nil|string
 -- @realm client
 -- @see LANG.GetParamTranslation
+-- @function LANG.GetPTranslation(name, params)
 LANG.GetPTranslation = LANG.GetParamTranslation
 
 ---
@@ -244,7 +246,7 @@ function LANG.GetLanguageTable(langName)
 
 	local cpy = table.Copy(LANG.Strings[langName])
 
-	SetFallback(cpy)
+	LANG.SetFallback(cpy)
 
 	return cpy
 end
@@ -253,7 +255,7 @@ end
 -- Initializes a fallback table for a given language table.
 -- @param table tbl
 -- @realm client
-function SetFallback(tbl)
+function LANG.SetFallback(tbl)
 	-- languages may deal with this themselves, or may already have the fallback
 	local m = getmetatable(tbl)
 
@@ -277,7 +279,7 @@ function LANG.SetActiveLanguage(langName)
 	langName = langName and string.lower(langName) or nil
 
 	if LANG.IsLanguage(langName) then
-		local old_name = LANG.ActiveLanguage
+		local oldName = LANG.ActiveLanguage
 
 		LANG.ActiveLanguage = langName
 
@@ -285,11 +287,13 @@ function LANG.SetActiveLanguage(langName)
 		cachedActive = LANG.Strings[langName]
 
 		-- set the default lang as fallback, if it hasn't yet
-		SetFallback(cachedActive)
+		LANG.SetFallback(cached_active)
 
 		-- some interface elements will want to know so they can update themselves
-		if old_name ~= langName then
-			hook.Call("TTTLanguageChanged", GAMEMODE, old_name, langName)
+		if oldName ~= langName then
+			---
+			-- @realm client
+			hook.Run("TTTLanguageChanged", oldName, langName)
 		end
 	else
 		MsgN(Format("The language '%s' does not exist on this server. Falling back to English...", langName))
@@ -421,6 +425,7 @@ LANG.MsgStyle = {}
 ---
 -- Access of message styles
 -- @param string name style name
+-- @param number mode The print mode
 -- @return function style table
 -- @realm client
 function LANG.GetStyle(name, mode)
@@ -464,6 +469,7 @@ end
 -- Styles a previously translated message
 -- @param string name the requested translation identifier (key)
 -- @param table params
+-- @param number mode The print mode
 -- @realm client
 function LANG.ProcessMsg(name, params, mode)
 	local raw = LANG.TryTranslation(name)
@@ -525,7 +531,7 @@ end
 -- Styles of custom SWEP messages and such should use LANG.SetStyle in their
 -- script. The SWEP stuff here might be moved out to the SWEPS too.
 
--- TODO the remaining messages here are moved to their fitting ents as soon as 
+-- TODO the remaining messages here are moved to their fitting ents as soon as
 -- we move them all into our main repo
 
 local styledmessages = {

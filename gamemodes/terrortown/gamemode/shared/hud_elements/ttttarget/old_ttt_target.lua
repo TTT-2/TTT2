@@ -1,3 +1,5 @@
+--- @ignore
+
 local base = "old_ttt_element"
 
 DEFINE_BASECLASS(base)

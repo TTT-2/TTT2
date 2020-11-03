@@ -1,11 +1,13 @@
 ---
 -- draw extension functions
 -- @author Mineotopia
+-- @module draw
 
-AddCSLuaFile()
+if SERVER then
+	AddCSLuaFile()
 
--- the rest of the draw library is client only
-if SERVER then return end
+	return -- the rest of the draw library is client only
+end
 
 local render = render
 local surface = surface
@@ -94,8 +96,8 @@ local drawBox = draw.Box
 -- @param number y The y position to start the box
 -- @param number w The width of the box
 -- @param number h The height of the box
--- @param Color[default=Color(255,255,255,255)] color The color of the box
--- @param number[default=1.0] scale A scaling factor that is used for the shadows
+-- @param[default=Color(255, 255, 255, 255)] Color color The color of the box
+-- @param[default=1.0] number scale A scaling factor that is used for the shadows
 -- @2D
 -- @realm client
 function draw.ShadowedBox(x, y, w, h, color, scale)

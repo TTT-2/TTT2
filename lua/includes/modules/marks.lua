@@ -4,6 +4,7 @@
 -- @author Alf21
 -- TODO make marksList sequential
 -- TODO improve storing of list sizes
+-- @module marks
 
 local render = render
 local table = table
