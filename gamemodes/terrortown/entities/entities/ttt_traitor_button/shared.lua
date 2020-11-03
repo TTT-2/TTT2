@@ -1,7 +1,11 @@
---- Special button usable from range if your role has access to it
-
+---
+-- @class ENT
+-- @desc Special button usable from range if your role has access to it
+-- @section ttt_traitor_button
 
 if SERVER then
+	---
+	-- @realm server
 	local cv_tbutton = CreateConVar("ttt2_tbutton_admin_show", "0", {FCVAR_ARCHIVE, FCVAR_NOTIFY}, "Always show the buttons to admins in range", 0, 1)
 
 	hook.Add("TTT2SyncGlobals", "AddTButtonGlobals", function()
@@ -29,6 +33,8 @@ end
 ENT.Type = "anim"
 ENT.Base = "base_anim"
 
+---
+-- @realm shared
 function ENT:SetupDataTables()
 	self:NetworkVar("Float", 0, "Delay")
 	self:NetworkVar("Float", 1, "NextUseTime")
@@ -39,6 +45,9 @@ function ENT:SetupDataTables()
 	self:NetworkVar("Int", 0, "UsableRange", {KeyName = "UsableRange"})
 end
 
+---
+-- @return boolean
+-- @realm shared
 function ENT:IsUsable()
 	return not self:GetLocked() and self:GetNextUseTime() < CurTime()
 end

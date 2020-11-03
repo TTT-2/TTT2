@@ -1,8 +1,7 @@
 ---
 -- @class PANEL
--- @realm client
--- @section ScrollLabel
 -- @desc why can't the default label scroll? welcome to gmod
+-- @section ScrollLabel
 
 PANEL = {}
 
@@ -10,6 +9,8 @@ local timer = timer
 local IsValid = IsValid
 local vgui = vgui
 
+---
+-- @ignore
 function PANEL:Init()
 	self.Label = vgui.Create("DLabel", self)
 	self.Label:SetPos(0, 0)
@@ -19,12 +20,14 @@ end
 
 ---
 -- @return string
+-- @realm client
 function PANEL:GetLabel()
 	return self.Label
 end
 
 ---
 -- @param number dlta
+-- @realm client
 function PANEL:OnMouseWheeled(dlta)
 	if not self.Scroll then return end
 
@@ -33,11 +36,16 @@ function PANEL:OnMouseWheeled(dlta)
 	self:InvalidateLayout()
 end
 
+---
+-- @param boolean st
+-- @realm client
 function PANEL:SetScrollEnabled(st)
 	self.Scroll:SetEnabled(st)
 end
 
+---
 -- enable/disable scrollbar depending on content size
+-- @realm client
 function PANEL:UpdateScrollState()
 	if not self.Scroll then return end
 
@@ -53,6 +61,9 @@ function PANEL:UpdateScrollState()
 	self:InvalidateLayout(true)
 end
 
+---
+-- @param string txt
+-- @realm client
 function PANEL:SetText(txt)
 	if not self.Label then return end
 
@@ -74,6 +85,8 @@ function PANEL:SetText(txt)
 	end)
 end
 
+---
+-- @ignore
 function PANEL:PerformLayout()
 	if not self.Scroll then return end
 

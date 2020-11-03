@@ -1,6 +1,6 @@
 ---
+-- Key overrides for TTT specific keyboard functions
 -- @section key_manager
--- @desc Key overrides for TTT specific keyboard functions
 
 local IsValid = IsValid
 local UpdateInputSprint = UpdateInputSprint

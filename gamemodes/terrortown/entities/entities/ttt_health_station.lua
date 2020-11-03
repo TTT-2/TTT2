@@ -1,4 +1,8 @@
----- Health dispenser
+---
+-- @class ENT
+-- @desc Health dispenser
+-- @section ttt_health_station
+
 if SERVER then
 	AddCSLuaFile()
 else -- CLIENT
@@ -21,13 +25,24 @@ ENT.NextHeal = 0
 ENT.HealRate = 1
 ENT.HealFreq = 0.2
 
+---
+-- @accessor number
+-- @realm shared
 AccessorFuncDT(ENT, "StoredHealth", "StoredHealth")
+
+---
+-- @accessor Player
+-- @realm shared
 AccessorFunc(ENT, "Placer", "Placer")
 
+---
+-- @realm shared
 function ENT:SetupDataTables()
 	self:DTVar("Int", 0, "StoredHealth")
 end
 
+---
+-- @realm shared
 function ENT:Initialize()
 	self:SetModel(self.Model)
 
@@ -60,10 +75,17 @@ function ENT:Initialize()
 	self.fingerprints = {}
 end
 
+---
+-- @param number amount
+-- @realm shared
 function ENT:AddToStorage(amount)
 	self:SetStoredHealth(math.min(self.MaxStored, self:GetStoredHealth() + amount))
 end
 
+---
+-- @param number amount
+-- @return number
+-- @realm shared
 function ENT:TakeFromStorage(amount)
 	-- if we only have 5 healthpts in store, that is the amount we heal
 	amount = math.min(amount, self:GetStoredHealth())
@@ -90,6 +112,11 @@ function GM:TTTPlayerUsedHealthStation(ply, ent, healed)
 
 end
 
+---
+-- @param Player ply
+-- @param number max_heal
+-- @return boolean
+-- @realm shared
 function ENT:GiveHealth(ply, max_heal)
 	if self:GetStoredHealth() > 0 then
 		max_heal = max_heal or self.MaxHeal
@@ -106,6 +133,9 @@ function ENT:GiveHealth(ply, max_heal)
 
 			ply:SetHealth(new)
 
+			---
+			-- @realm shared
+			hook.Run("TTTPlayerUsedHealthStation", ply, self, healed)
 
 			if last_sound_time + 2 < CurTime() then
 				self:EmitSound(healsound)
@@ -128,6 +158,9 @@ function ENT:GiveHealth(ply, max_heal)
 	return false
 end
 
+---
+-- @param Player ply
+-- @realm shared
 function ENT:Use(ply)
 	if not IsValid(ply) or not ply:IsPlayer() or not ply:IsActive() then return end
 
@@ -143,6 +176,8 @@ if SERVER then
 	-- recharge
 	local nextcharge = 0
 
+	---
+	-- @realm server
 	function ENT:Think()
 		if nextcharge > CurTime() then return end
 
@@ -151,9 +186,14 @@ if SERVER then
 		nextcharge = CurTime() + self.RechargeFreq
 	end
 
-	local ttt_damage_own_healthstation = CreateConVar("ttt_damage_own_healthstation", "0") -- 0 as detective cannot damage their own health station
+	---
+	-- @realm server
+	local ttt_damage_own_healthstation = CreateConVar("ttt_damage_own_healthstation", "0", FCVAR_NONE, "0 as detective cannot damage their own health station")
 
+	---
 	-- traditional equipment destruction effects
+	-- @param DamageInfo dmginfo
+	-- @realm server
 	function ENT:OnTakeDamage(dmginfo)
 		if dmginfo:GetAttacker() == self:GetPlacer() and not ttt_damage_own_healthstation:GetBool() then return end
 
@@ -177,7 +217,7 @@ if SERVER then
 			LANG.Msg(self:GetPlacer(), "hstation_broken")
 		end
 	end
-else
+else -- CLIENT
 	local TryT = LANG.TryTranslation
 	local ParT = LANG.GetParamTranslation
 

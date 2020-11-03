@@ -1,6 +1,7 @@
 ---
 -- A file loading library for a custom ttt2 file loader
 -- @author Mineotopia
+-- @module fileloader
 
 if SERVER then
 	AddCSLuaFile()
@@ -22,12 +23,18 @@ fileloader = fileloader or {}
 -- @param[default=false] boolean deepsearch If true, files are searched one level down inside all available subfolders
 -- @param[default=SHARED_FILE] number realm The realm where the file should be included
 -- @param[opt] function callback A function that is called after the file is included
+-- @param[opt] function preFolderCallback A function that is called before the load of the given folder is started
+-- @param[opt] function postFolderCallback A function that is called after the load of the given folder is finished
 -- @realm shared
-function fileloader.LoadFolder(path, deepsearch, realm, callback)
+function fileloader.LoadFolder(path, deepsearch, realm, callback, preFolderCallback, postFolderCallback)
 	deepsearch = deepsearch or false
 	realm = realm or SHARED_FILE
 
 	local file_paths = {}
+
+	if isfunction(preFolderCallback) then
+		preFolderCallback(path, deepsearch, realm)
+	end
 
 	if deepsearch then
 		local _, sub_folders = fileFind(path .. "*", "LUA")
@@ -76,5 +83,9 @@ function fileloader.LoadFolder(path, deepsearch, realm, callback)
 		if isfunction(callback) then
 			callback(file_path, path, deepsearch, realm)
 		end
+	end
+
+	if isfunction(postFolderCallback) then
+		postFolderCallback(file_paths, path, deepsearch, realm)
 	end
 end

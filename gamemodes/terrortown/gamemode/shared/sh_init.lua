@@ -112,10 +112,9 @@ TEAMS = TEAMS or {
 
 ACTIVEROLES = ACTIVEROLES or {}
 
-CreateConVar("ttt_detective_enabled", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-CreateConVar("ttt_newroles_enabled", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
-local ttt2_custom_models = CreateConVar("ttt2_custom_models", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+---
+-- @realm shared
+local ttt2_custom_models = CreateConVar("ttt2_custom_models", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
 
 SHOP_DISABLED = "DISABLED"
 SHOP_UNSET = "UNSET"
@@ -137,6 +136,7 @@ end
 
 ---
 -- Sorts a
+-- @param table tbl
 -- @return table
 -- @see roles.GetList
 -- @realm shared
@@ -240,6 +240,7 @@ if SERVER then
 
 	---
 	-- Checks whether a role is able to get selected (and maybe assigned to a @{Player}) if the round starts
+	-- @param ROLE roleData
 	-- @param boolean avoidHook should the @{hook.TTT2RoleNotSelectable} hook be ignored?
 	-- @return boolean
 	-- @realm server
@@ -381,19 +382,6 @@ function CountTraitors()
 	return #GetTraitors()
 end
 
----
--- Randomizes a @{table}
--- @realm shared
-function table.Randomize(t)
-	local out = {}
-
-	while #t > 0 do
-		out[#out + 1] = table.remove(t, math.random(#t))
-	end
-
-	t = out
-end
-
 -- TODO move to client file
 if CLIENT then
 	local SafeTranslate
@@ -446,18 +434,6 @@ if CLIENT then
 	end
 end
 
--- Game event log defs
-EVENT_KILL = 1
-EVENT_SPAWN = 2
-EVENT_GAME = 3
-EVENT_FINISH = 4
-EVENT_SELECTED = 5
-EVENT_BODYFOUND = 6
-EVENT_C4PLANT = 7
-EVENT_C4EXPLODE = 8
-EVENT_CREDITFOUND = 9
-EVENT_C4DISARM = 10
-
 WIN_NONE = WIN_NONE or 1
 WIN_TRAITOR = WIN_TRAITOR or 2
 WIN_INNOCENT = WIN_INNOCENT or 3
@@ -486,6 +462,7 @@ KILL_NORMAL = 0
 KILL_SUICIDE = 1
 KILL_FALL = 2
 KILL_BURN = 3
+KILL_TEAM = 4
 
 -- Entity types a crowbar might open
 OPEN_NO = 0
@@ -543,6 +520,7 @@ include("ttt2/libraries/fileloader.lua")
 include("ttt2/libraries/door.lua")
 include("ttt2/libraries/orm.lua")
 include("ttt2/libraries/thermalvision.lua")
+include("ttt2/libraries/events.lua")
 
 
 -- include ttt required files
@@ -653,7 +631,7 @@ TEAMBUYTABLE = TEAMBUYTABLE or {}
 ---
 -- Checks whether an equipment is buyable
 -- @param table tbl equipment table
--- @param @{Player} player
+-- @param Player player
 -- @return boolean
 -- @return string text as an icon
 -- @return string result or error

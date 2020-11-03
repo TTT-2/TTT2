@@ -1,7 +1,7 @@
 local materialIcon = Material("vgui/ttt/vskin/helpscreen/gameplay")
 
 local function PopulateGeneralPanel(parent)
-	local form = CreateTTT2Form(parent, "header_gameplay_settings")
+	local form = vgui.CreateTTT2Form(parent, "header_gameplay_settings")
 
 	form:MakeCheckBox({
 		label = "label_gameplay_specmode",
@@ -41,7 +41,7 @@ local function PopulateGeneralPanel(parent)
 end
 
 local function PopulateRolesPanel(parent)
-	local form = CreateTTT2Form(parent, "header_roleselection")
+	local form = vgui.CreateTTT2Form(parent, "header_roleselection")
 
 	local roles = roles.GetList()
 

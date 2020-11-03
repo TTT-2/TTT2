@@ -1,3 +1,7 @@
+---
+-- @class SWEP
+-- @section weapon_ttt_knife
+
 if SERVER then
 	AddCSLuaFile()
 end
@@ -50,6 +54,8 @@ SWEP.IsSilent = true
 -- Pull out faster than standard guns
 SWEP.DeploySpeed = 2
 
+---
+-- @ignore
 function SWEP:PrimaryAttack()
 	local owner = self:GetOwner()
 
@@ -132,6 +138,11 @@ function SWEP:PrimaryAttack()
 	owner:LagCompensation(false)
 end
 
+---
+-- @param table tr Trace
+-- @param Vector spod
+-- @param Vector sdest
+-- @realm shared
 function SWEP:StabKill(tr, spos, sdest)
 	local owner = self:GetOwner()
 	local target = tr.Entity
@@ -229,6 +240,8 @@ function SWEP:StabKill(tr, spos, sdest)
 	self:Remove()
 end
 
+---
+-- @ignore
 function SWEP:SecondaryAttack()
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 	self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
@@ -286,16 +299,24 @@ function SWEP:SecondaryAttack()
 	self:Remove()
 end
 
-function SWEP:Equip()
-	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay * 1.5)
-	self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay * 1.5)
+if SERVER then
+	---
+	-- @ignore
+	function SWEP:Equip()
+		self:SetNextPrimaryFire(CurTime() + self.Primary.Delay * 1.5)
+		self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay * 1.5)
+	end
+
+	---
+	-- @ignore
+	function SWEP:PreDrop()
+		-- for consistency, dropped knife should not have DNA/prints
+		self.fingerprints = {}
+	end
 end
 
-function SWEP:PreDrop()
-	-- for consistency, dropped knife should not have DNA/prints
-	self.fingerprints = {}
-end
-
+---
+-- @ignore
 function SWEP:OnRemove()
 	if SERVER then return end
 

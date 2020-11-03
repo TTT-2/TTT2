@@ -1,6 +1,6 @@
 ---
--- @section stop_manager
--- @desc Credit transfer tab for equipment menu
+-- Credit transfer tab for equipment menu
+-- @section shop_reroll
 
 local GetTranslation = LANG.GetTranslation
 local GetParamTranslation = LANG.GetParamTranslation

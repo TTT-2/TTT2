@@ -62,68 +62,145 @@ local pairs = pairs
 local timer = timer
 local util = util
 local IsValid = IsValid
-local CreateConVar = CreateConVar
 local hook = hook
 
+---
+-- @realm server
 local roundtime = CreateConVar("ttt_roundtime_minutes", "10", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+---
+-- @realm server
 local preptime = CreateConVar("ttt_preptime_seconds", "30", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+---
+-- @realm server
 local posttime = CreateConVar("ttt_posttime_seconds", "30", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+---
+-- @realm server
 local firstpreptime = CreateConVar("ttt_firstpreptime", "60", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
+---
+-- @realm server
 local ttt_haste = CreateConVar("ttt_haste", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+---
+-- @realm server
 local haste_starting = CreateConVar("ttt_haste_starting_minutes", "5", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
+---
+-- @realm server
 CreateConVar("ttt_haste_minutes_per_death", "0.5", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
+---
+-- @realm server
 local spawnwaveint = CreateConVar("ttt_spawn_wave_interval", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
--- Traitor credits
+-- Credits
+
+---
+-- @realm server
 CreateConVar("ttt_credits_starting", "2", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+---
+-- @realm server
 CreateConVar("ttt_credits_award_pct", "0.35", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+---
+-- @realm server
 CreateConVar("ttt_credits_award_size", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+---
+-- @realm server
 CreateConVar("ttt_credits_award_repeat", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+---
+-- @realm server
 CreateConVar("ttt_credits_detectivekill", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
+---
+-- @realm server
 CreateConVar("ttt_credits_alonebonus", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
-CreateConVar("ttt_use_weapon_spawn_scripts", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-CreateConVar("ttt_weapon_spawn_count", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
+---
+-- @realm server
 local round_limit = CreateConVar("ttt_round_limit", "6", SERVER and {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED} or FCVAR_REPLICATED)
+
+---
+-- @realm server
 local time_limit = CreateConVar("ttt_time_limit_minutes", "75", SERVER and {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED} or FCVAR_REPLICATED)
 
+---
+-- @realm server
 local idle_enabled = CreateConVar("ttt_idle", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+---
+-- @realm server
 local idle_time = CreateConVar("ttt_idle_limit", "180", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
+---
+-- @realm server
 local voice_drain = CreateConVar("ttt_voice_drain", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+---
+-- @realm server
 local voice_drain_normal = CreateConVar("ttt_voice_drain_normal", "0.2", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+---
+-- @realm server
 local voice_drain_admin = CreateConVar("ttt_voice_drain_admin", "0.05", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+---
+-- @realm server
 local voice_drain_recharge = CreateConVar("ttt_voice_drain_recharge", "0.05", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
+---
+-- @realm server
 local namechangekick = CreateConVar("ttt_namechange_kick", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+---
+-- @realm server
 local namechangebtime = CreateConVar("ttt_namechange_bantime", "10", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
+---
+-- @realm server
 local ttt_detective = CreateConVar("ttt_sherlock_mode", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+---
+-- @realm server
 local ttt_minply = CreateConVar("ttt_minimum_players", "2", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
--- respawn if dead in preparing time
-CreateConVar("ttt2_prep_respawn", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+---
+-- @realm server
+CreateConVar("ttt2_prep_respawn", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Respawn if dead in preparing time")
 
+---
+-- @realm server
 local map_switch_delay = CreateConVar("ttt2_map_switch_delay", "15", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Time that passes before the map is changed after the last round ends or the timer runs out", 0)
 
--- toggle whether ragdolls should be confirmed in DetectiveMode() without clicking on "confirm" espacially
+---
+-- @realm server
 CreateConVar("ttt_identify_body_woconfirm", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Toggles whether ragdolls should be confirmed in DetectiveMode() without clicking on confirm espacially")
 
--- show team of confirmed player
-local confirm_team = CreateConVar("ttt2_confirm_team", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+---
+-- @realm server
+local confirm_team = CreateConVar("ttt2_confirm_team", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Show team of confirmed player")
 
--- confirm players in kill list
-CreateConVar("ttt2_confirm_killlist", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+---
+-- @realm server
+CreateConVar("ttt2_confirm_killlist", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Confirm players in kill list")
 
+---
+-- @realm server
 CreateConVar("ttt_enforce_playermodel", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Whether or not to enforce terrorist playermodels. Set to 0 for compatibility with Enhanced Playermodel Selector")
 
--- debuggery
+---
+-- @realm server
 local ttt_dbgwin = CreateConVar("ttt_debug_preventwin", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+---
+-- @realm server
+local ttt_newroles_enabled = CreateConVar("ttt_newroles_enabled", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 -- Pool some network names.
 util.AddNetworkString("TTT_RoundState")
@@ -202,8 +279,12 @@ function GM:Initialize()
 	MsgN("Trouble In Terrorist Town 2 gamemode initializing...")
 	ShowVersion()
 
+	---
+	-- @realm shared
 	hook.Run("TTT2Initialize")
 
+	---
+	-- @realm shared
 	hook.Run("TTT2FinishedLoading")
 
 	-- check for language files to mark them as downloadable for clients
@@ -281,6 +362,8 @@ function GM:Initialize()
 		ErrorNoHalt("TTT2 WARNING: CS:S does not appear to be mounted by GMod. Things may break in strange ways. Server admin? Check the TTT readme for help.\n")
 	end
 
+	---
+	-- @realm shared
 	hook.Run("PostInitialize")
 end
 
@@ -329,6 +412,8 @@ function GM:InitPostEntity()
 
 	MsgN("[TTT2][INFO] Client post-init...")
 
+	---
+	-- @realm shared
 	hook.Run("TTTInitPostEntity")
 
 	items.MigrateLegacyItems()
@@ -340,17 +425,17 @@ function GM:InitPostEntity()
 	local sweps = weapons.GetList()
 
 	-- load and initialize all SWEPs and all ITEMs from database
-	if SQL.CreateSqlTable("ttt2_items", ShopEditor.savingKeys) then
+	if sql.CreateSqlTable("ttt2_items", ShopEditor.savingKeys) then
 		for i = 1, #itms do
 			local eq = itms[i]
 
 			ShopEditor.InitDefaultData(eq)
 
 			local name = GetEquipmentFileName(WEPS.GetClass(eq))
-			local loaded, changed = SQL.Load("ttt2_items", name, eq, ShopEditor.savingKeys)
+			local loaded, changed = sql.Load("ttt2_items", name, eq, ShopEditor.savingKeys)
 
 			if not loaded then
-				SQL.Init("ttt2_items", name, eq, ShopEditor.savingKeys)
+				sql.Init("ttt2_items", name, eq, ShopEditor.savingKeys)
 			elseif changed then
 				CHANGED_EQUIPMENT[#CHANGED_EQUIPMENT + 1] = {name, eq}
 			end
@@ -362,10 +447,10 @@ function GM:InitPostEntity()
 			ShopEditor.InitDefaultData(wep)
 
 			local name = GetEquipmentFileName(WEPS.GetClass(wep))
-			local loaded, changed = SQL.Load("ttt2_items", name, wep, ShopEditor.savingKeys)
+			local loaded, changed = sql.Load("ttt2_items", name, wep, ShopEditor.savingKeys)
 
 			if not loaded then
-				SQL.Init("ttt2_items", name, wep, ShopEditor.savingKeys)
+				sql.Init("ttt2_items", name, wep, ShopEditor.savingKeys)
 			elseif changed then
 				CHANGED_EQUIPMENT[#CHANGED_EQUIPMENT + 1] = {name, wep}
 			end
@@ -387,7 +472,7 @@ function GM:InitPostEntity()
 
 		CreateEquipment(wep) -- init weapons
 
-		wep.CanBuy = {}	-- reset normal weapons equipment
+		wep.CanBuy = {} -- reset normal weapons equipment
 	end
 
 	-- init hudelements fns
@@ -399,6 +484,10 @@ function GM:InitPostEntity()
 		if not hudelem.togglable then continue end
 
 		local nm = "ttt2_elem_toggled_" .. hudelem.id
+
+		---
+		-- @name ttt2_elem_toggled_[HUDELEMENT_NAME]
+		-- @realm server
 		local ret = CreateConVar(nm, "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 		SetGlobalBool(nm, ret:GetBool())
@@ -411,10 +500,16 @@ function GM:InitPostEntity()
 	-- initialize fallback shops
 	InitFallbackShops()
 
+	---
+	-- @realm server
 	hook.Run("PostInitPostEntity")
 
+	---
+	-- @realm server
 	hook.Run("InitFallbackShops")
 
+	---
+	-- @realm server
 	hook.Run("LoadedFallbackShops")
 
 	-- initialize the equipment
@@ -436,7 +531,16 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:PostGamemodeLoaded
 -- @local
 function GM:PostGamemodeLoaded()
+	events.OnLoaded()
+end
 
+---
+-- Called when gamemode has been reloaded by auto refresh.
+-- @hook
+-- @realm server
+-- @ref https://wiki.facepunch.com/gmod/GM:OnReloaded
+function GM:OnReloaded()
+	events.OnLoaded()
 end
 
 ---
@@ -482,6 +586,8 @@ function GM:SyncGlobals()
 
 	SetGlobalBool("ttt2_confirm_team", confirm_team:GetBool())
 
+	---
+	-- @realm server
 	hook.Run("TTT2SyncGlobals")
 end
 
@@ -603,7 +709,7 @@ end
 function SetRoundState(state)
 	GAMEMODE.round_state = state
 
-	SCORE:RoundStateChange(state)
+	events.Trigger(EVENT_GAME, state)
 
 	SendRoundState(state)
 end
@@ -694,7 +800,13 @@ local function WinChecker()
 	if CurTime() > GetGlobalFloat("ttt_round_end", 0) then
 		EndRound(WIN_TIMELIMIT)
 	elseif not ttt_dbgwin:GetBool() then
-		win = hook.Run("TTT2PreWinChecker") or hook.Call("TTTCheckForWin", GAMEMODE)
+		---
+		-- @realm server
+		win = hook.Run("TTT2PreWinChecker")
+
+		---
+		-- @realm server
+		win = win or hook.Run("TTTCheckForWin")
 
 		if win == WIN_NONE then return end
 
@@ -722,7 +834,9 @@ local function NameChangeKick()
 			continue
 		end
 
-		if not ply.has_spawned or ply.spawn_nick == ply:Nick() or hook.Call("TTTNameChangeKick", GAMEMODE, ply) then continue end
+		---
+		-- @realm server
+		if not ply.has_spawned or ply.spawn_nick == ply:Nick() or hook.Run("TTTNameChangeKick", ply) then continue end
 
 		local t = namechangebtime:GetInt()
 		local msg = "Changed name during a round"
@@ -799,6 +913,9 @@ function GM:PostCleanupMap()
 	ents.TTT.FixParentedPostCleanup()
 
 	entityOutputs.SetUp()
+
+	---
+	-- @realm server
 	hook.Run("TTT2PostCleanupMap")
 
 	door.SetUp()
@@ -919,7 +1036,9 @@ function PrepareRound()
 	-- Check playercount
 	if CheckForAbort() then return end
 
-	local delay_round, delay_length = hook.Call("TTTDelayRoundStartForVote", GAMEMODE)
+	---
+	-- @realm server
+	local delay_round, delay_length = hook.Run("TTTDelayRoundStartForVote")
 
 	if delay_round then
 		delay_length = delay_length or 30
@@ -946,14 +1065,17 @@ function PrepareRound()
 	GAMEMODE.AwardedCredits = false
 	GAMEMODE.AwardedCreditsDead = 0
 
-	SCORE:Reset()
+	events.Reset()
 
 	-- Update damage scaling
 	KARMA.RoundBegin()
 
 	-- New look. Random if no forced model set.
 	GAMEMODE.playermodel = GAMEMODE.force_plymodel == "" and GetRandomPlayerModel() or GAMEMODE.force_plymodel
-	GAMEMODE.playercolor = hook.Call("TTTPlayerColor", GAMEMODE, GAMEMODE.playermodel)
+
+	---
+	-- @realm server
+	GAMEMODE.playercolor = hook.Run("TTTPlayerColor", GAMEMODE.playermodel)
 
 	if CheckForAbort() then return end
 
@@ -1016,8 +1138,10 @@ function PrepareRound()
 		ply:SendRevivalReason(nil)
 	end
 
+	---
 	-- Tell hooks and map we started prep
-	hook.Call("TTTPrepareRound", GAMEMODE)
+	-- @realm server
+	hook.Run("TTTPrepareRound")
 
 	ents.TTT.TriggerRoundStateOutputs(ROUND_PREP)
 end
@@ -1048,6 +1172,8 @@ function TellTraitorsAboutTraitors()
 
 		local tmp = table.Copy(traitornicks)
 
+		---
+		-- @realm server
 		local shouldShow = hook.Run("TTT2TellTraitors", tmp, v)
 
 		if shouldShow == false or tmp == nil or #tmp == 0 then continue end
@@ -1201,8 +1327,6 @@ function BeginRound()
 	timer.Simple(1, SendFullStateUpdate)
 	timer.Simple(10, SendFullStateUpdate)
 
-	SCORE:HandleSelection() -- log traitors and detectives
-
 	-- Give the StateUpdate messages ample time to arrive
 	timer.Simple(1.5, TellTraitorsAboutTraitors)
 	timer.Simple(2.5, ShowRoundStartPopup)
@@ -1223,6 +1347,8 @@ function BeginRound()
 	LANG.Msg("round_started")
 	ServerLog("Round proper has begun...\n")
 
+	events.Trigger(EVENT_SELECTED)
+
 	GAMEMODE:UpdatePlayerLoadouts() -- needs to happen when round_active
 
 	ARMOR:InitPlayerArmor()
@@ -1238,7 +1364,9 @@ function BeginRound()
 		ply:SetActiveInRound(ply:Alive() and ply:IsTerror())
 	end
 
-	hook.Call("TTTBeginRound", GAMEMODE)
+	---
+	-- @realm server
+	hook.Run("TTTBeginRound")
 
 	ents.TTT.TriggerRoundStateOutputs(ROUND_BEGIN)
 end
@@ -1296,6 +1424,8 @@ function CheckForMapSwitch()
 		timer.Stop("end2prep")
 		SetRoundEnd(CurTime())
 
+		---
+		-- @realm server
 		hook.Run("TTT2LoadNextMap", nextmap, rounds_left, time_left)
 	else
 		LANG.Msg("limit_left", {num = rounds_left, time = math.ceil(time_left / 60)})
@@ -1304,12 +1434,14 @@ end
 
 ---
 -- This @{function} calls @{GM:TTTEndRound} and is used to end the round
+-- @param string result The winning team / result / condition
 -- @realm server
 -- @internal
 function EndRound(result)
 	PrintResultMessage(result)
 
-	-- first handle round end
+	events.Trigger(EVENT_FINISH, result)
+
 	SetRoundState(ROUND_POST)
 
 	local ptime = math.max(5, posttime:GetInt())
@@ -1339,21 +1471,17 @@ function EndRound(result)
 
 	KARMA.RoundEnd()
 
-	-- now handle potentially error prone scoring stuff
-
-	-- register an end of round event
-	SCORE:RoundComplete(result)
-
-	-- update player scores
-	SCORE:ApplyEventLogScores(result)
+	events.UpdateScoreboard()
 
 	-- send the clients the round log, players will be shown the report
-	SCORE:StreamToClients()
+	events.StreamToClients()
 
+	---
 	-- server plugins might want to start a map vote here or something
 	-- these hooks are not used by TTT internally
 	-- possible incompatibility for other addons
-	hook.Call("TTTEndRound", GAMEMODE, result)
+	-- @realm server
+	hook.Run("TTTEndRound", result)
 
 	ents.TTT.TriggerRoundStateOutputs(ROUND_POST, result)
 end
@@ -1378,9 +1506,7 @@ end
 -- @hook
 -- @realm server
 function GM:TTTCheckForWin()
-	ttt_dbgwin = ttt_dbgwin or CreateConVar("ttt_debug_preventwin", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
-	if ttt_dbgwin:GetBool() then
+	if not ttt_dbgwin or ttt_dbgwin:GetBool() then
 		return WIN_NONE
 	end
 
@@ -1404,6 +1530,8 @@ function GM:TTTCheckForWin()
 		end
 	end
 
+	---
+	-- @realm server
 	hook.Run("TTT2ModifyWinningAlives", alive)
 
 	local checkedTeams = {}
@@ -1474,9 +1602,9 @@ concommand.Add("ttt_version", ShowVersion)
 local function ttt_toggle_newroles(ply)
 	if not ply:IsAdmin() then return end
 
-	local b = not GetConVar("ttt_newroles_enabled"):GetBool()
+	local b = not ttt_newroles_enabled:GetBool()
 
-	RunConsoleCommand("ttt_newroles_enabled", b and "1" or "0")
+	ttt_newroles_enabled:SetBool(b)
 
 	local word = "enabled"
 

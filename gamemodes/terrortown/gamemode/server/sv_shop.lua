@@ -133,10 +133,14 @@ local function OrderEquipment(ply, cls)
 		return
 	end
 
-	-- keep compatibility with old addons
+	---
+	-- @note Keep compatibility with old addons
+	-- @realm server
 	if not hook.Run("TTTCanOrderEquipment", ply, idOrCls, isItem) then return end
 
-	-- add our own hook with more consistent class parameter and some more information
+	---
+	-- @note Add our own hook with more consistent class parameter and some more information
+	-- @realm server
 	local allow, ignoreCost, message = hook.Run("TTT2CanOrderEquipment", ply, cls, isItem, credits)
 
 	if message then
@@ -182,10 +186,14 @@ local function OrderEquipment(ply, cls)
 		RerollShop(ply)
 	end
 
-	-- keep compatibility with old addons
+	---
+	-- @note Keep compatibility with old addons
+	-- @realm server
 	hook.Run("TTTOrderedEquipment", ply, idOrCls, isItem)
 
-	-- add our own hook with more consistent class parameter
+	---
+	-- @note Add our own hook with more consistent class parameter
+	-- @realm server
 	hook.Run("TTT2OrderedEquipment", ply, cls, isItem, credits, ignoreCost or false)
 end
 

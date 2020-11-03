@@ -1,6 +1,6 @@
 ---
--- @module ShopEditor
 -- @author Alf21
+-- @module ShopEditor
 
 ShopEditor = ShopEditor or {}
 ShopEditor.savingKeys = {

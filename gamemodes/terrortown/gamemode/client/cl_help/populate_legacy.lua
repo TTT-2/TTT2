@@ -59,6 +59,8 @@ local function GetLegacyTabs()
 	elemStore:Clear()
 	elemStore:ResetItems()
 
+	---
+	-- @realm client
 	hook.Run("TTTSettingsTabs", elemStore)
 
 	return elemStore:GetItems()
@@ -68,6 +70,8 @@ end
 local function CheckForLegacyTabs()
 	local dtabs = vgui.Create("DPropertySheet")
 
+	---
+	-- @realm client
 	hook.Run("TTTSettingsTabs", dtabs)
 
 	local amount = #dtabs:GetItems()

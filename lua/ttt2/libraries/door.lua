@@ -1,7 +1,7 @@
 ---
--- @module door
+-- A bunch of functions that handle all doors found on a map
 -- @author Mineotopia
--- @desc A bunch of functions that handle all doors found on a map
+-- @module door
 
 if SERVER then
 	AddCSLuaFile()
@@ -9,10 +9,19 @@ if SERVER then
 	util.AddNetworkString("TTT2SyncDoorEntities")
 end
 
+---
+-- @realm client
 local cvDestructableDoorForced = CreateConVar("ttt2_doors_force_pairs", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+---
+-- @realm client
 local cvDestructableDoor = CreateConVar("ttt2_doors_destructible", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+---
+-- @realm client
 local cvDestructableDoorLocked = CreateConVar("ttt2_doors_locked_indestructible", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
+---
 -- DOOR SPAWNFLAG ENUMS
 -- @ref https://developer.valvesoftware.com/wiki/prop_door_rotating
 -- @ref https://developer.valvesoftware.com/wiki/func_door
@@ -171,6 +180,8 @@ if SERVER then
 
 		door_list.doors = doors
 
+		---
+		-- @realm server
 		hook.Run("TTT2PostDoorSetup", doors)
 
 		local amountDoors = #doors
@@ -185,9 +196,7 @@ if SERVER then
 
 		net.Broadcast()
 	end
-end
-
-if CLIENT then
+else -- CLIENT
 	net.Receive("TTT2SyncDoorEntities", function()
 		local amount = net.ReadUInt(16)
 
@@ -199,6 +208,8 @@ if CLIENT then
 
 		door_list.doors = doors
 
+		---
+		-- @realm client
 		hook.Run("TTT2PostDoorSetup", doors)
 	end)
 end
@@ -403,7 +414,7 @@ if SERVER then
 	-- Handles the damage of doors that are still in the wall.
 	-- Called in @{GM:EntityTakeDamage}.
 	-- @param Entity ent The entity that is damaged
-	-- @param CTakeDamageInfo dmginfo The damage info object
+	-- @param DamageInfo dmginfo The damage info object
 	-- @param[default=false] boolean surpressPair Should the call of the other door (if in a pair) be omitted?
 	-- @internal
 	-- @realm server
@@ -434,7 +445,7 @@ if SERVER then
 	-- Handles the damage of doors that are lying as props on the ground.
 	-- Called in @{GM:EntityTakeDamage}.
 	-- @param Entity ent The entity that is damages
-	-- @param CTakeDamageInfo dmginfo The damage info object
+	-- @param DamageInfo dmginfo The damage info object
 	-- @internal
 	-- @realm server
 	function door.HandlePropDamage(ent, dmginfo)
@@ -515,6 +526,8 @@ if SERVER then
 
 		-- handle the entity input types
 		if name == "lock" then
+			---
+			-- @realm server
 			local shouldCancel = hook.Run("TTT2BlockDoorLock", ent, activator, caller)
 
 			if shouldCancel then
@@ -532,6 +545,8 @@ if SERVER then
 				ent:SetNWBool("ttt2_door_locked", ent:GetInternalVariable("m_bLocked") or false)
 			end)
 		elseif name == "unlock" then
+			---
+			-- @realm server
 			local shouldCancel = hook.Run("TTT2BlockDoorUnlock", ent, activator, caller)
 
 			if shouldCancel then
@@ -554,6 +569,8 @@ if SERVER then
 				return true
 			end
 
+			---
+			-- @realm server
 			local shouldCancel = hook.Run("TTT2BlockDoorClose", ent, activator, caller)
 
 			if shouldCancel then
@@ -567,6 +584,8 @@ if SERVER then
 			end
 
 		elseif name == "use" and not ent:IsDoorOpen() then
+			---
+			-- @realm server
 			local shouldCancel = hook.Run("TTT2BlockDoorOpen", ent, activator, caller)
 
 			if shouldCancel then
@@ -580,10 +599,9 @@ if SERVER then
 			end
 		end
 	end
-end
 
--- HOOKS AND STUFF
-if SERVER then
+	-- HOOKS AND STUFF
+
 	---
 	-- This hook is called after the door started opening.
 	-- @param Entity doorEntity The door entity

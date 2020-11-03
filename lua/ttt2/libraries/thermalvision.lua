@@ -2,6 +2,7 @@
 -- This is the <code>thermalvision</code> library.
 -- It offers the possibility of rendering entities giving them the typical thermal vision look
 -- @author LeBroomer
+-- @module thermalvision
 
 local render = render
 local table = table
@@ -197,14 +198,14 @@ else
 		for i = 1, thermalvisionListSize do
 			for j = 1, entsSize do
 				if thermalvisionList[i].ent == ents[j] then
-					--for now only setting it to nil 
+					--for now only setting it to nil
 					thermalvisionList[i] = nil
 					break
 				end
 			end
 		end
 
-		--cleanup table by 
+		--cleanup table by
 		table.RemoveEmptyEntries(thermalvisionList, thermalvisionListSize)
 
 		thermalvisionList = {}
@@ -249,7 +250,7 @@ else
 
 	---
 	-- Enables/disables rendering the background in the thermalvision typical blue tone
-	-- @param bool enabled whether or not the background should get colored
+	-- @param boolean enabled whether or not the background should get colored
 	-- @realm client
 	function thermalvision.SetBackgroundColoring(enabled)
 		bgColoring = enabled

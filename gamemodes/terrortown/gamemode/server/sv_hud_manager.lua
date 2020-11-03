@@ -1,5 +1,5 @@
 ---
--- @section hud_manager
+-- @module HUDManager
 
 util.AddNetworkString("TTT2RequestHUD")
 util.AddNetworkString("TTT2ReceiveHUD")

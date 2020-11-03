@@ -1,7 +1,7 @@
 ---
--- @section player_manager
+-- Player spawning/dying
 -- @todo rework
--- @desc Player spawning/dying
+-- @section player_manager
 
 local math = math
 local player = player
@@ -9,10 +9,20 @@ local net = net
 local IsValid = IsValid
 local hook = hook
 
+---
+-- @realm server
 local ttt_bots_are_spectators = CreateConVar("ttt_bots_are_spectators", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+---
+-- @realm server
 local ttt_dyingshot = CreateConVar("ttt_dyingshot", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
+---
+-- @realm server
 CreateConVar("ttt_killer_dna_range", "550", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+---
+-- @realm server
 CreateConVar("ttt_killer_dna_basetime", "100", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 util.AddNetworkString("ttt2_damage_received")
@@ -124,21 +134,32 @@ function GM:PlayerSpawn(ply)
 	ply:UnSpectate()
 
 	-- ye olde hooks
+
+	---
+	-- @realm server
 	hook.Run("PlayerLoadout", ply, false)
+
+	---
+	-- @realm server
 	hook.Run("PlayerSetModel", ply)
+
+	---
+	-- @realm server
 	hook.Run("TTTPlayerSetColor", ply)
 
 	ply:SetupHands()
 
-	SCORE:HandleSpawn(ply)
-
 	ply:SetLastSpawnPosition(ply:GetPos())
 	ply:SetLastDeathPosition(nil)
 
-	-- a function to handle the rolespecific stuff that should be done on
-	-- rolechange and respawn (while a round is active)
 	if ply:IsActive() then
-		roles.GetByIndex(ply:GetSubRole()):GiveRoleLoadout(ply, false)
+		-- a function to handle the rolespecific stuff that should be done on
+		-- rolechange and respawn (while a round is active)
+		ply:GetSubRoleData():GiveRoleLoadout(ply, false)
+
+		events.Trigger(EVENT_RESPAWN, ply)
+	else
+		events.Trigger(EVENT_SPAWN, ply)
 	end
 end
 
@@ -214,7 +235,7 @@ end
 -- Called whenever a @{Player} spawns and must choose a model.
 -- A good place to assign a model to a @{Player}.
 -- @note This function may not work in your custom gamemode if you have overridden
--- your @{GM:PlayerSpawn} and you do not use self.BaseClass.PlayerSpawn or @{hook.Call}.
+-- your @{GM:PlayerSpawn} and you do not use self.BaseClass.PlayerSpawn or @{hook.Run}.
 -- @param Player ply The @{Player} being chosen
 -- @hook
 -- @realm server
@@ -570,6 +591,8 @@ local function CheckCreditAward(victim, attacker)
 
 	if not IsValid(attacker) or not attacker:IsPlayer() or not attacker:IsActive() then return end
 
+	---
+	-- @realm server
 	local ret = hook.Run("TTT2CheckCreditAward", victim, attacker)
 	if ret == false then return end
 
@@ -659,7 +682,7 @@ end
 -- @note @{Player:Alive} returns true when this is called
 -- @param Player ply
 -- @param Player|Entity attacker @{Player} or @{Entity} that killed the @{Player}
--- @param CTakeDamageInfo dmginfo
+-- @param DamageInfo dmginfo
 -- @hook
 -- @realm server
 -- @ref https://wiki.facepunch.com/gmod/GM:DoPlayerDeath
@@ -710,7 +733,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
 
 	-- Score only when there is a round active.
 	if GetRoundState() == ROUND_ACTIVE then
-		SCORE:HandleKill(ply, attacker, dmginfo)
+		events.Trigger(EVENT_KILL, ply, attacker, dmginfo)
 
 		if IsValid(attacker) and attacker:IsPlayer() then
 			attacker:RecordKill(ply)
@@ -819,6 +842,8 @@ function GM:PlayerDeath(victim, infl, attacker)
 	net.Start("TTT_PlayerDied")
 	net.Send(victim)
 
+	---
+	-- @realm server
 	if HasteMode() and GetRoundState() == ROUND_ACTIVE and not hook.Run("TTT2ShouldSkipHaste", victim, attacker) then
 		IncRoundEnd(GetConVar("ttt_haste_minutes_per_death"):GetFloat() * 60)
 	end
@@ -827,6 +852,8 @@ function GM:PlayerDeath(victim, infl, attacker)
 		victim.killerSpec = attacker
 	end
 
+	---
+	-- @realm server
 	hook.Run("TTT2PostPlayerDeath", victim, infl, attacker)
 end
 
@@ -872,6 +899,8 @@ function GM:PostPlayerDeath(ply)
 
 		ply:SpawnForRound(true)
 
+		---
+		-- @realm server
 		hook.Run("PlayerLoadout", ply, false)
 	end)
 end
@@ -953,19 +982,19 @@ function GM:SpectatorThink(ply)
 end
 
 ---
--- @function GM:PlayerDeathThink(ply)
--- @desc Called whenever a @{Player} is a forced spectator, in each server @{GM:Tick}
+-- Called whenever a @{Player} is a forced spectator, in each server @{GM:Tick}
 -- @param Player ply
 -- @hook
 -- @realm server
 -- @see GM:SpectatorThink
+-- @function GM:PlayerDeathThink(ply)
 GM.PlayerDeathThink = GM.SpectatorThink
 
 ---
 -- Called when a @{Player} has been hit by a trace and damaged (such as from a bullet).
 -- Returning true overrides the damage handling and prevents @{GM:ScalePlayerDamage} from being called.
 -- @param Player ply The @{Player} that has been hit
--- @param CTakeDamageInfo dmginfo The damage info of the bullet
+-- @param DamageInfo dmginfo The damage info of the bullet
 -- @param Vector dir Normalized vector direction of the bullet's path
 -- @param table trace The trace of the bullet's path, see
 -- <a href="https://wiki.garrysmod.com/page/Structures/TraceResult">TraceResult structure</a>
@@ -987,7 +1016,7 @@ end
 ---
 -- Called when a @{Player} has been hurt by an explosion. Override to disable default sound effect.
 -- @param Player ply @{Player} who has been hurt
--- @param CTakeDamageInfo dmginfo Damage info from explsion
+-- @param DamageInfo dmginfo Damage info from explsion
 -- @hook
 -- @realm server
 -- @ref https://wiki.facepunch.com/gmod/GM:OnDamagedByExplosion
@@ -1003,7 +1032,7 @@ end
 -- @param Player ply The @{Player} taking damage
 -- @param number hitgroup The hitgroup where the @{Player} took damage. See
 -- <a href="https://wiki.garrysmod.com/page/Enums/HITGROUP">HITGROUP_Enums</a>
--- @param CTakeDamageInfo dmginfo The damage info
+-- @param DamageInfo dmginfo The damage info
 -- @return boolean Return true to prevent damage that this hook is called for, stop blood particle effects and blood decals.<br />
 -- It is possible to return true only on client ( This will work only in multiplayer ) to stop the effects but still take damage.
 -- @hook
@@ -1150,6 +1179,8 @@ function GM:OnPlayerHitGround(ply, in_water, on_floater, speed)
 	end
 end
 
+---
+-- @realm server
 local ttt_postdm = CreateConVar("ttt_postround_dm", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
@@ -1166,7 +1197,7 @@ end
 ---
 -- Called when an entity takes damage. You can modify all parts of the damage info in this hook.
 -- @param Entity ent The @{Entity} taking damage
--- @param CTakeDamageInfo dmginfo Damage info
+-- @param DamageInfo dmginfo Damage info
 -- @return boolean Return true to completely block the damage event
 -- @note e.g. no damage during prep, etc
 -- @hook
@@ -1181,6 +1212,8 @@ function GM:EntityTakeDamage(ent, dmginfo)
 
 	local att = dmginfo:GetAttacker()
 
+	---
+	-- @realm server
 	if not hook.Run("AllowPVP") then
 		-- if player vs player damage, or if damage versus a prop, then zero
 		if ent:IsExplosive() or ent:IsPlayer() and IsValid(att) and att:IsPlayer() then
@@ -1188,6 +1221,8 @@ function GM:EntityTakeDamage(ent, dmginfo)
 			dmginfo:SetDamage(0)
 		end
 	elseif ent:IsPlayer() then
+		---
+		-- @realm server
 		hook.Run("PlayerTakeDamage", ent, dmginfo:GetInflictor(), att, dmginfo:GetDamage(), dmginfo)
 	elseif ent:IsExplosive() then
 		-- When a barrel hits a player, that player damages the barrel because
@@ -1215,7 +1250,7 @@ end
 -- @param Entity infl the inflictor
 -- @param Player|Entity att the attacker
 -- @param number amount amount of damage
--- @param CTakeDamageInfo dmginfo Damage info
+-- @param DamageInfo dmginfo Damage info
 -- @hook
 -- @realm server
 -- @ref https://wiki.facepunch.com/gmod/GM:EntityTakeDamage

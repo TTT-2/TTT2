@@ -1,6 +1,17 @@
-HUD.voicePaint = function(s, w, h)
-	if not IsValid(s.ply) then return end
+---
+-- HUD base class.
+-- @class HUD
+-- @section pure_skin
 
-	DrawHUDElementBg(0, 0, w, h, s.Color)
+---
+-- This overwrites the default popup drawing function
+-- @param Panel pnl source panel
+-- @param number w width
+-- @param number h height
+-- @realm client
+function HUD.VoicePaint(pnl, w, h)
+	if not IsValid(pnl.ply) then return end
+
+	DrawHUDElementBg(0, 0, w, h, pnl.Color)
 	DrawHUDElementLines(0, 0, w, h)
 end

@@ -5,6 +5,30 @@
 
 ROLE.isAbstract = true
 
+ROLE.score = {
+	-- The multiplier that is used to calculate the score penalty
+	-- that is added if this role kills a teammember.
+	teamKillsMultiplier = 0,
+
+	-- The multiplier that is used to calculate the gained score
+	-- by killing someone from a different team.
+	killsMultiplier = 0,
+
+	-- The amount of score points gained by confirming a body.
+	bodyFoundMuliplier = 1,
+
+	-- The amount of score points gained by surviving a round.
+	surviveBonusMultiplier = 0,
+
+	-- The amount of score points gained by beeing alive if the
+	-- round ended with nobody winning, ususally a negative number.
+	timelimitMultiplier = 0,
+
+	-- the amount of points gained by killing yourself. Should be a
+	-- negative number for most roles.
+	suicideMultiplier = -1
+}
+
 ---
 -- This function is called before initializing a @{ROLE}, but after all
 -- global variables like "ROLE_TRAITOR" have been initialized.

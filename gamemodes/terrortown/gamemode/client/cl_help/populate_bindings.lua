@@ -3,7 +3,7 @@ local materialIcon = Material("vgui/ttt/vskin/helpscreen/bindings")
 local function AddBindingCategory(category, parent)
 	local client = LocalPlayer()
 
-	local form = CreateTTT2Form(parent, category)
+	local form = vgui.CreateTTT2Form(parent, category)
 
 	local bindings = bind.GetSettingsBindings()
 
