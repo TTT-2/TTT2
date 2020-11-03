@@ -1,6 +1,6 @@
 -- Italian language strings (by AL24 & THEPLATYNUMGHOST)
 
-local L = LANG.CreateLanguage("italian")
+local L = LANG.CreateLanguage("it")
 
 -- compatibility language name that will be removed soon
 L.__alias = "italiano"

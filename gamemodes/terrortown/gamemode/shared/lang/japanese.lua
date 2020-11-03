@@ -1,6 +1,6 @@
 -- Japanese language strings
 
-local L = LANG.CreateLanguage("japanese")
+local L = LANG.CreateLanguage("ja")
 
 -- compatibility language name that will be removed soon
 L.__alias = "日本語"

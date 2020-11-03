@@ -1,6 +1,6 @@
 -- Simplified Chinese language strings
 
-local L = LANG.CreateLanguage("simpchinese")
+local L = LANG.CreateLanguage("zh_Hans")
 
 -- compatibility language name that will be removed soon
 L.__alias = "简体中文"

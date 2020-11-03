@@ -1,6 +1,6 @@
 -- English language strings
 
-local L = LANG.CreateLanguage("english")
+local L = LANG.CreateLanguage("en")
 
 -- compatibility language name that will be removed soon
 L.__alias = "english"

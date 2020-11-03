@@ -1,6 +1,6 @@
 -- Polish language strings
 
-local L = LANG.CreateLanguage("polish")
+local L = LANG.CreateLanguage("pl")
 
 -- compatibility language name that will be removed soon
 L.__alias = "polski"

@@ -1,6 +1,6 @@
 -- Spanish language strings
 
-local L = LANG.GetLanguageTableReference("spanish")
+local L = LANG.GetLanguageTableReference("es")
 
 -- compatibility language name that will be removed soon
 L.__alias = "Español"
