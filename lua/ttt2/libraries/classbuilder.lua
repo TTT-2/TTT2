@@ -70,6 +70,8 @@ function classbuilder.BuildFromFolder(path, realm, scope, OnInitialization, shou
 	-- class if enabled.
 	if shouldInherit then
 		for name, class in pairs(classTable) do
+			if not class.base then continue end
+
 			local base = classTable[class.base]
 
 			if isfunction(SpecialCheck) and not SpecialCheck(class, base) then continue end

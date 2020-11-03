@@ -279,6 +279,10 @@ else --CLIENT
 	end)
 end
 
+local function ShouldInherit(t, base)
+	return t.base ~= t.type
+end
+
 eventTypes = classbuilder.BuildFromFolder(
 	"terrortown/gamemode/shared/events/",
 	SHARED_FILE,
@@ -292,9 +296,7 @@ eventTypes = classbuilder.BuildFromFolder(
 		MsgN("Added TTT2 event file: ", path)
 	end,
 	true, -- should inherit
-	function(t, base) -- special inheritance check
-		return t.base ~= t.type
-	end
+	ShouldInherit -- special inheritance check
 )
 
 table.Merge(eventTypes, classbuilder.BuildFromFolder(
@@ -310,7 +312,5 @@ table.Merge(eventTypes, classbuilder.BuildFromFolder(
 		MsgN("Added TTT2 event file: ", path)
 	end,
 	true, -- should inherit
-	function(t, base) -- special inheritance check
-		return t.base ~= t.type
-	end
+	ShouldInherit -- special inheritance check
 ))

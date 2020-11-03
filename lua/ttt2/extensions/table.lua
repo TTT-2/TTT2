@@ -303,7 +303,7 @@ function table.DeepInherit(t, base)
 		if t[k] == nil then
 			t[k] = v
 		elseif k ~= "BaseClass" and istable(t[k]) then
-			table.Inherit(t[k], v, SpecialCheck)
+			table.DeepInherit(t[k], v)
 		end
 	end
 
