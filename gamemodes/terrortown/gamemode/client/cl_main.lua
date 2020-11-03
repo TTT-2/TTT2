@@ -324,7 +324,7 @@ end
 ---
 -- Called when gamemode has been reloaded by auto refresh.
 -- @hook
--- @realm shared
+-- @realm client
 -- @ref https://wiki.facepunch.com/gmod/GM:OnReloaded
 function GM:OnReloaded()
 	-- rebuild menues on game reload

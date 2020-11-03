@@ -156,6 +156,9 @@ local function KillText(e)
 	return PT(txt, params)
 end
 
+---
+-- Setup the default scoring @{EVENT}s
+-- @realm client
 function ScoringEventSetup()
 	-- Round end event
 	Event(EVENT_FINISH, {

@@ -537,7 +537,7 @@ end
 ---
 -- Called when gamemode has been reloaded by auto refresh.
 -- @hook
--- @realm shared
+-- @realm server
 -- @ref https://wiki.facepunch.com/gmod/GM:OnReloaded
 function GM:OnReloaded()
 	events.OnLoaded()

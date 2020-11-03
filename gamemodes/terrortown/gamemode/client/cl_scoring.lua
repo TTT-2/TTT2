@@ -697,6 +697,7 @@ end
 
 ---
 -- Initializes the score @{Panel}
+-- @param table deprecatedEvents
 -- @param table events The list of events
 -- @realm client
 -- @internal
@@ -728,6 +729,7 @@ end
 ---
 -- Resets the old score @{Panel}, Initializes a new one
 -- and displays it to the local @{Player}
+-- @param table deprecatedEvents
 -- @param table events
 -- @realm client
 -- @internal

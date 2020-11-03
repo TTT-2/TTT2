@@ -680,7 +680,7 @@ end
 -- Returns the death time (@{CurTime()}) of the ragdoll's player.
 -- @param Entity rag The ragdoll
 -- @return number The death time, 0 if the ragdol is not valid
--- realm server
+-- @realm server
 function CORPSE.GetPlayerDeathTime(rag)
 	return rag.time or 0
 end
