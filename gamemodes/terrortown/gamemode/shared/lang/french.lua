@@ -1282,3 +1282,6 @@ L.decoy_help_pri = "Planter le leurre."
 L.pickup_error_spec = "Vous ne pouvez pas prendre cela en tant que spectateur."
 L.pickup_error_owns = "Vous ne pouvez pas prendre ça parce que vous avez déjà cette arme."
 L.pickup_error_noslot = "Vous ne pouvez pas prendre cela car vous n'avez pas de slot libre."
+
+-- 2020-11-02
+--L.lang_server_default = "Server Default"

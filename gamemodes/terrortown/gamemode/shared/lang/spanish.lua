@@ -1282,3 +1282,6 @@ L.decoy_help_pri = "Colocar el señuelo."
 L.pickup_error_spec = "No puedes recoger esto como espectador."
 L.pickup_error_owns = "No puedes recoger esto porque ya lo tienes en el inventario."
 L.pickup_error_noslot = "No puedes recoger esto porque no tienes un espacio disponible en el inventario."
+
+-- 2020-11-02
+--L.lang_server_default = "Server Default"

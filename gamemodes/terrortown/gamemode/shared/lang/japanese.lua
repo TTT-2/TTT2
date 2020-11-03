@@ -1282,3 +1282,6 @@ L.decoy_help_pri = "Decoyを設置する."
 L.pickup_error_spec = "あなたは観戦者なのでこれを拾うことはできません."
 L.pickup_error_owns = "あなたはすでにこの武器を所持しているため拾えません."
 L.pickup_error_noslot = "あなたはスロットに空きがないためこれは拾えません."
+
+-- 2020-11-02
+--L.lang_server_default = "Server Default"

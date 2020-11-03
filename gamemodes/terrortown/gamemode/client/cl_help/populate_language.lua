@@ -1,5 +1,8 @@
 local materialIcon = Material("vgui/ttt/vskin/helpscreen/language")
 
+local GetTranslatedLanguageName = LANG.GetTranslatedLanguageName
+local TryT = LANG.TryTranslation
+
 local function PopulateLanguagePanel(parent)
 	local form = CreateTTT2Form(parent, "header_language")
 
@@ -12,10 +15,10 @@ local function PopulateLanguagePanel(parent)
 	})
 
 	-- since these are no simple strings, the choices have to be added manually
-	dlang:AddChoice("Server default", "auto")
+	dlang:AddChoice(TryT("lang_server_default"), "auto")
 
 	for _, lang in pairs(LANG.GetLanguages()) do
-		dlang:AddChoice(string.Capitalize(lang), lang)
+		dlang:AddChoice(GetTranslatedLanguageName(lang), lang)
 	end
 end
 

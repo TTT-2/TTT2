@@ -1282,3 +1282,6 @@ L.decoy_help_pri = "安放诱饵。"
 L.pickup_error_spec = "作为观察者你无法捡起这个。"
 L.pickup_error_owns = "你已经有这个武器，无法再次捡起"
 L.pickup_error_noslot = "你没有对应空槽位，无法捡起这个"
+
+-- 2020-11-02
+--L.lang_server_default = "Server Default"

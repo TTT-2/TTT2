@@ -1282,3 +1282,6 @@ L.decoy_help_pri = "Piazza un esca."
 L.pickup_error_spec = "Non puoi prendere questo da spettatore."
 L.pickup_error_owns = "Non puoi prendere questo perché tu hai già quest'arma."
 L.pickup_error_noslot = "Non puoi prendere questo perchè non hai nessuno slot libero."
+
+-- 2020-11-02
+--L.lang_server_default = "Server Default"
