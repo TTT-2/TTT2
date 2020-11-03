@@ -319,7 +319,7 @@ end
 
 ---
 -- Returns whether the given language name is the default server language
--- @param string langName the language name
+-- @param string langName The language name
 -- @return boolean
 -- @realm client
 function LANG.IsServerDefault(langName)
