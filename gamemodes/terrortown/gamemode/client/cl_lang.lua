@@ -13,7 +13,7 @@ local table = table
 local pairs = pairs
 local CreateConVar = CreateConVar
 
-local cv_ttt_language = CreateConVar("cv_ttt_language", "auto", FCVAR_ARCHIVE)
+local cv_ttt_language = CreateConVar("ttt_language", "auto", FCVAR_ARCHIVE)
 
 LANG.DefaultLanguage = "english"
 LANG.ActiveLanguage = LANG.DefaultLanguage
@@ -65,7 +65,7 @@ end
 -- @return string the inserted stringName parameter
 -- @realm client
 function LANG.AddToLanguage(langName, stringName, stringText)
-	langName = langName and LANG.GetNameFromAlias(string.lower(langName)) or nil
+	langName = LANG.GetNameFromAlias(langName)
 
 	if not LANG.IsLanguage(langName) then
 		ErrorNoHalt(Format("Failed to add '%s' to language '%s': language does not exist.\n", tostring(stringName), tostring(langName)))
@@ -184,17 +184,21 @@ end
 -- @internal
 -- @realm client
 function LANG.GetNameFromAlias(langName)
+	langName = langName and string.lower(langName) or nil
+
 	if LANG.IsLanguage(langName) then
 		return langName
 	end
 
 	for name, tbl in pairs(LANG.Strings) do
-		if tbl.__alias == langName then
+		if tbl.__alias and string.lower(tbl.__alias) == langName then
 			MsgN("[DEPRECATION WARNING]: Language name identifier deprecated, please switch from '" .. langName .. "' to '" .. name .. "'.")
 
 			return name
 		end
 	end
+
+	return langName
 end
 
 ---
@@ -203,7 +207,7 @@ end
 -- @return nil|table
 -- @realm client
 function LANG.GetUnsafeNamed(langName)
-	langName = langName and LANG.GetNameFromAlias(string.lower(langName)) or nil
+	langName = LANG.GetNameFromAlias(langName)
 
 	if not LANG.IsLanguage(langName) then
 		ErrorNoHalt(Format("Failed to get '%s': language does not exist.\n", tostring(langName)))
@@ -220,7 +224,7 @@ end
 -- @return nil|table
 -- @realm client
 function LANG.GetLanguageTableReference(langName)
-	langName = langName and LANG.GetNameFromAlias(string.lower(langName)) or nil
+	langName = LANG.GetNameFromAlias(langName)
 
 	if not LANG.IsLanguage(langName) then
 		LANG.CreateLanguage(langName)
@@ -236,7 +240,7 @@ end
 -- @return table
 -- @realm client
 function LANG.GetLanguageTable(langName)
-	langName = LANG.GetNameFromAlias(string.lower(langName)) or LANG.ActiveLanguage
+	langName = LANG.GetNameFromAlias(langName) or LANG.ActiveLanguage
 
 	local cpy = table.Copy(LANG.Strings[langName])
 
@@ -345,7 +349,7 @@ local function LanguageChanged(cv, old, new)
 		LANG.SetActiveLanguage(new)
 	end
 end
-cvars.AddChangeCallback("cv_ttt_language", LanguageChanged)
+cvars.AddChangeCallback("ttt_language", LanguageChanged)
 
 local function ForceReload()
 	LANG.SetActiveLanguage("english")
@@ -493,6 +497,11 @@ end
 -- @return number The percentage of the coverage
 -- @realm client
 function LANG.GetDefaultCoverage(langName)
+	-- if language is set to auto, get server default
+	if langName == "auto" then
+		langName = LANG.ServerLanguage
+	end
+
 	local englishTbl = LANG.Strings[LANG.DefaultLanguage]
 
 	return table.GetEqualEntriesAmount(LANG.Strings[langName], englishTbl) / table.Count(englishTbl)

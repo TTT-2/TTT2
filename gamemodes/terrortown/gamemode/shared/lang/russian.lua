@@ -1,6 +1,6 @@
 -- Russian language strings
 
-local L = LANG.CreateLanguage("russsian")
+local L = LANG.CreateLanguage("russian")
 
 -- compatibility language name that will be removed soon
 L.__alias = "Русский"
