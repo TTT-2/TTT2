@@ -1,14 +1,30 @@
+---
+-- @class PANEL
+-- @section DScrollPanelTTT2
+
 local PANEL = {}
 
+---
+-- @accessor number
+-- @realm client
 AccessorFunc(PANEL, "Padding", "Padding")
+
+---
+-- @accessor Panel
+-- @realm client
 AccessorFunc(PANEL, "pnlCanvas", "Canvas")
 
+---
+-- @ignore
 function PANEL:Init()
 	self.pnlCanvas = vgui.Create("Panel", self)
+
 	self.pnlCanvas.OnMousePressed = function(slf, code)
 		slf:GetParent():OnMousePressed(code)
 	end
+
 	self.pnlCanvas:SetMouseInputEnabled(true)
+
 	self.pnlCanvas.PerformLayout = function(pnl)
 		self:PerformLayoutInternal()
 		self:InvalidateParent()
@@ -27,30 +43,42 @@ function PANEL:Init()
 	self:SetPaintBackground(false)
 end
 
+---
+-- @param Panel pnl
+-- @realm client
 function PANEL:AddItem(pnl)
 	pnl:SetParent(self:GetCanvas())
 end
 
+---
+-- @param Panel child
+-- @realm client
 function PANEL:OnChildAdded(child)
 	self:AddItem(child)
 end
 
+---
+-- @ignore
 function PANEL:SizeToContents()
 	self:SetSize(self.pnlCanvas:GetSize())
 end
 
+---
+-- @return Panel
+-- @realm client
 function PANEL:GetVBar()
 	return self.vBar
 end
 
-function PANEL:GetCanvas()
-	return self.pnlCanvas
-end
-
+---
+-- @return number
+-- @realm client
 function PANEL:InnerWidth()
 	return self:GetCanvas():GetWide()
 end
 
+---
+-- @realm client
 function PANEL:Rebuild()
 	self:GetCanvas():SizeToChildren(false, true)
 
@@ -59,14 +87,24 @@ function PANEL:Rebuild()
 	end
 end
 
+---
+-- @param number dlta
+-- @return any
+-- @realm client
 function PANEL:OnMouseWheeled(dlta)
 	return self.vBar:OnMouseWheeled(dlta)
 end
 
+---
+-- @param number iOffset
+-- @realm client
 function PANEL:OnVScroll(iOffset)
 	self.pnlCanvas:SetPos(0, iOffset)
 end
 
+---
+-- @param Panel panel
+-- @realm client
 function PANEL:ScrollToChild(panel)
 	self:InvalidateLayout(true)
 
@@ -79,6 +117,8 @@ function PANEL:ScrollToChild(panel)
 	self.vBar:AnimateTo(y, 0.5, 0, 0.5)
 end
 
+---
+-- @ignore
 function PANEL:PerformLayoutInternal()
 	local tall = self.pnlCanvas:GetTall()
 	local wide = self:GetWide()
@@ -104,10 +144,15 @@ function PANEL:PerformLayoutInternal()
 	end
 end
 
+---
+-- @ignore
 function PANEL:PerformLayout()
 	self:PerformLayoutInternal()
 end
 
+---
+-- @return boolean
+-- @realm client
 function PANEL:Clear()
 	return self.pnlCanvas:Clear()
 end

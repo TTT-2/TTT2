@@ -1,14 +1,31 @@
+---
+-- @class PANEL
+-- @section DFormTTT2
+
 local PANEL = {}
 
 DEFINE_BASECLASS("DCollapsibleCategoryTTT2")
 
+---
+-- @accessor boolean
+-- @realm client
 AccessorFunc(PANEL, "m_bSizeToContents", "AutoSize", FORCE_BOOL)
+
+---
+-- @accessor number
+-- @realm client
 AccessorFunc(PANEL, "m_iSpacing", "Spacing")
+
+---
+-- @accessor number
+-- @realm client
 AccessorFunc(PANEL, "m_Padding", "Padding")
 
 local materialReset = Material("vgui/ttt/vskin/icon_reset")
 local materialDisable = Material("vgui/ttt/vskin/icon_disable")
 
+---
+-- @ignore
 function PANEL:Init()
 	self.items = {}
 
@@ -21,10 +38,15 @@ function PANEL:Init()
 	self:SetKeyboardInputEnabled(true)
 end
 
+---
+-- @param string name
+-- @realm client
 function PANEL:SetName(name)
 	self:SetLabel(name)
 end
 
+---
+-- @realm client
 function PANEL:Clear()
 	for i = 1, #self.items do
 		local item = self.items[i]
@@ -37,6 +59,11 @@ function PANEL:Clear()
 	self.items = {}
 end
 
+---
+-- @param Panel left
+-- @param Panel right
+-- @param Panel reset
+-- @realm client
 function PANEL:AddItem(left, right, reset)
 	self:InvalidateLayout()
 
@@ -69,7 +96,9 @@ function PANEL:AddItem(left, right, reset)
 	self.items[#self.items + 1] = panel
 end
 
+---
 -- overwrites the base function with an empty function
+-- @realm client
 function PANEL:Rebuild()
 
 end
@@ -96,7 +125,7 @@ end
 ---
 -- Adds a checkbox to the form
 -- @param table data The data for the checkbox
--- @return @{Panel} The created checkbox
+-- @return Panel The created checkbox
 -- @realm client
 function PANEL:MakeCheckBox(data)
 	local left = vgui.Create("DCheckBoxLabelTTT2", self)
@@ -142,7 +171,7 @@ end
 ---
 -- Adds a slider to the form
 -- @param table data The data for the slider
--- @return @{Panel} The created slider
+-- @return Panel The created slider
 -- @realm client
 function PANEL:MakeSlider(data)
 	local left = vgui.Create("DLabelTTT2", self)
@@ -206,7 +235,8 @@ end
 ---
 -- Adds a combobox to the form
 -- @param table data The data for the combobox
--- @return @{Panel}, @{Panel} The created combobox, The created label
+-- @return Panel The created combobox
+-- @return Panel The created label
 -- @realm client
 function PANEL:MakeComboBox(data)
 	local left = vgui.Create("DLabelTTT2", self)
@@ -276,7 +306,8 @@ end
 ---
 -- Adds a binder to the form
 -- @param table data The data for the binder
--- @return @{Panel}, @{Panel} The created binder, The created label
+-- @return Panel The created binder
+-- @return Panel The created label
 -- @realm client
 function PANEL:MakeBinder(data)
 	local left = vgui.Create("DLabelTTT2", self)
@@ -334,7 +365,7 @@ end
 ---
 -- Adds a helpbox to the form
 -- @param table data The data for the helpbox
--- @return @{Panel} The created helpbox
+-- @return Panel The created helpbox
 -- @realm client
 function PANEL:MakeHelp(data)
 	local left = vgui.Create("DLabelTTT2", self)
@@ -375,7 +406,8 @@ end
 
 -- Adds a colormixer to the form
 -- @param table data The data for the colormixer
--- @return @{Panel}, @{Panel} The created colormixer, The created label
+-- @return Panel The created colormixer
+-- @return Panel The created label
 -- @realm client
 function PANEL:MakeColorMixer(data)
 	local left = vgui.Create("DLabelTTT2", self)
@@ -443,11 +475,12 @@ derma.DefineControl("DFormTTT2", "", PANEL, "DCollapsibleCategoryTTT2")
 
 ---
 -- Creates a collapsable form used for menu sections
--- @param @{Panel} parent The parent panel
+-- @param Panel parent The parent panel
 -- @param string name The name of the collapsable form,
 -- can be a language identifier
+-- @return Panel The created collapsable form
 -- @realm client
-function CreateTTT2Form(parent, name)
+function vgui.CreateTTT2Form(parent, name)
 	local form = vgui.Create("DFormTTT2", parent)
 
 	form:SetName(name)

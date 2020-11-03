@@ -1,3 +1,5 @@
+--- @ignore
+
 local base = "pure_skin_element"
 
 DEFINE_BASECLASS(base)
@@ -80,7 +82,6 @@ if CLIENT then
 
 		return 255
 	end
-
 
 	function HUDELEMENT:Draw()
 		local client = LocalPlayer()

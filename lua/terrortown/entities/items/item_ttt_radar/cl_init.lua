@@ -1,6 +1,6 @@
 ---
--- @module RADAR
--- @desc radar rendering
+-- Radar rendering
+-- @class RADAR
 
 local surface = surface
 local math = math
@@ -77,32 +77,25 @@ function RADAR.CacheEnts()
 end
 
 ---
--- Called if the radar is equipped
--- @param Player ply
--- @hook
--- @internal
--- @realm client
+-- @ignore
 function ITEM:Equip(ply)
 	RunConsoleCommand("ttt_radar_scan")
 end
 
 ---
--- Draws a counter next to the item icon
--- @hook
--- @internal
--- @realm client
+-- @ignore
 function ITEM:DrawInfo()
 	return math.ceil(math.max(0, (LocalPlayer().radarTime or 30) - (CurTime() - RADAR.startTime)))
 end
 
 local function DrawTarget(tgt, size, offset, no_shrink)
 	local scrpos = tgt.pos:ToScreen() -- sweet
-	local sz = (IsOffScreen(scrpos) and not no_shrink) and (size * 0.5) or size
+	local sz = (util.IsOffScreen(scrpos) and not no_shrink) and (size * 0.5) or size
 
 	scrpos.x = math.Clamp(scrpos.x, sz, ScrW() - sz)
 	scrpos.y = math.Clamp(scrpos.y, sz, ScrH() - sz)
 
-	if IsOffScreen(scrpos) then return end
+	if util.IsOffScreen(scrpos) then return end
 
 	surface.DrawTexturedRect(scrpos.x - sz, scrpos.y - sz, sz * 2, sz * 2)
 
@@ -135,6 +128,7 @@ end
 
 ---
 -- Draws the indicator on the screen
+-- @param Player client
 -- @hook
 -- @internal
 -- @realm client
@@ -290,6 +284,9 @@ net.Receive("TTT2RadarUpdateTime", ReceiveRadarTime)
 
 ---
 -- Creates the settings menu
+-- @param Panel parent
+-- @param Panel frame
+-- @return Panel the dform
 -- @internal
 -- @realm client
 function RADAR.CreateMenu(parent, frame)

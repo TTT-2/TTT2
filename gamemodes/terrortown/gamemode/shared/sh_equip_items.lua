@@ -1,7 +1,7 @@
 ---
--- section Equipment
--- @desc This table is used by the client to show items in the equipment menu, and by
+-- This table is used by the client to show items in the equipment menu, and by
 -- the server to check if a certain role is allowed to buy a certain item.local math = math
+-- @section Equipment
 
 local table = table
 local net = net
@@ -210,7 +210,7 @@ if CLIENT then
 
 	---
 	-- Returns a list of equipment that is available for a @{ROLE}
-	-- param Player ply
+	-- @param Player ply
 	-- @param number subrole id of @{ROLE}
 	-- @param[opt] boolean noModification whether the modified equipment (e.g. randomshop) table should be returned or the original one
 	-- @internal
@@ -302,10 +302,24 @@ end
 -- Search if an item is in the equipment table of a given subrole, and return it if
 -- it exists, else return nil.
 if SERVER then
+	---
+	-- @realm server
 	local random_shops = CreateConVar("ttt2_random_shops", "0", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_SERVER_CAN_EXECUTE}, "Set to 0 to disable")
+
+	---
+	-- @realm server
 	local random_team_shops = CreateConVar("ttt2_random_team_shops", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_SERVER_CAN_EXECUTE}, "Set to 0 to disable")
+
+	---
+	-- @realm server
 	local random_shop_reroll = CreateConVar("ttt2_random_shop_reroll", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_SERVER_CAN_EXECUTE}, "Set to 0 to disable")
+
+	---
+	-- @realm server
 	local random_shop_reroll_cost = CreateConVar("ttt2_random_shop_reroll_cost", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_SERVER_CAN_EXECUTE}, "Credit cost per reroll")
+
+	---
+	-- @realm server
 	local random_shop_reroll_per_buy = CreateConVar("ttt2_random_shop_reroll_per_buy", "0", {FCVAR_ARCHIVE, FCVAR_NOTIFY, FCVAR_SERVER_CAN_EXECUTE}, "Should the random shop reroll after every purchase")
 
 	util.AddNetworkString("TTT2SyncRandomShops")
@@ -600,7 +614,7 @@ if SERVER then
 
 		SyncRandomShops({ply})
 	end)
-else
+else -- CLIENT
 	local buff = ""
 
 	local function TTT2SyncRandomShops(len)
@@ -984,6 +998,8 @@ if SERVER then
 
 		if fallback ~= roleData.name then return end -- TODO why? remove and replace SHOP_UNSET with index of the current role
 
+		---
+		-- @realm server
 		hook.Run("TTT2LoadSingleShopEquipment", roleData)
 
 		SYNC_EQUIP = SYNC_EQUIP or {}

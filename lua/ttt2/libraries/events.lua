@@ -186,7 +186,9 @@ if SERVER then
 			SCORE:AddEvent(deprecatedEventData)
 		end
 
+		---
 		-- run a hook with the newly added event
+		-- @realm server
 		hook.Run("TTT2AddedEvent", name, newEvent)
 	end
 

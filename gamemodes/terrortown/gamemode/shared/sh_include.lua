@@ -138,6 +138,8 @@ if SERVER then
 	table.Merge(TTTFiles, tmp)
 end
 
+---
+-- @realm shared
 hook.Run("TTT2ModifyFiles", TTTFiles)
 
 if SERVER then
@@ -148,6 +150,10 @@ if SERVER then
 	end
 end
 
+---
+-- Include a registered overwritable TTT2 file
+-- @param string filename The registered filename-pseudo, but not the path
+-- @realm shared
 function ttt_include(filename)
 	local fd = TTTFiles[filename]
 

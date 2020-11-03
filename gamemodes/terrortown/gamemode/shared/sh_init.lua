@@ -112,10 +112,9 @@ TEAMS = TEAMS or {
 
 ACTIVEROLES = ACTIVEROLES or {}
 
-CreateConVar("ttt_detective_enabled", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-CreateConVar("ttt_newroles_enabled", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-
-local ttt2_custom_models = CreateConVar("ttt2_custom_models", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+---
+-- @realm shared
+local ttt2_custom_models = CreateConVar("ttt2_custom_models", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
 
 SHOP_DISABLED = "DISABLED"
 SHOP_UNSET = "UNSET"
@@ -137,6 +136,7 @@ end
 
 ---
 -- Sorts a
+-- @param table tbl
 -- @return table
 -- @see roles.GetList
 -- @realm shared
@@ -240,6 +240,7 @@ if SERVER then
 
 	---
 	-- Checks whether a role is able to get selected (and maybe assigned to a @{Player}) if the round starts
+	-- @param ROLE roleData
 	-- @param boolean avoidHook should the @{hook.TTT2RoleNotSelectable} hook be ignored?
 	-- @return boolean
 	-- @realm server
@@ -379,19 +380,6 @@ end
 -- @deprecated
 function CountTraitors()
 	return #GetTraitors()
-end
-
----
--- Randomizes a @{table}
--- @realm shared
-function table.Randomize(t)
-	local out = {}
-
-	while #t > 0 do
-		out[#out + 1] = table.remove(t, math.random(#t))
-	end
-
-	t = out
 end
 
 -- TODO move to client file
@@ -644,7 +632,7 @@ TEAMBUYTABLE = TEAMBUYTABLE or {}
 ---
 -- Checks whether an equipment is buyable
 -- @param table tbl equipment table
--- @param @{Player} player
+-- @param Player player
 -- @return boolean
 -- @return string text as an icon
 -- @return string result or error

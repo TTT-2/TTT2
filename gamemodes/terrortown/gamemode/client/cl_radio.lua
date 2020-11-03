@@ -1,6 +1,6 @@
 ---
+-- Modified with https://github.com/Exho1/TTT-ScoreboardTagging/blob/master/lua/client/ttt_scoreboardradiocmd.lua
 -- @class RADIO
--- @desc modified with https://github.com/Exho1/TTT-ScoreboardTagging/blob/master/lua/client/ttt_scoreboardradiocmd.lua
 
 local GetTranslation = LANG.GetTranslation
 local GetPTranslation = LANG.GetParamTranslation
@@ -212,7 +212,6 @@ end
 -- Makes a target printable
 -- @param string|Player|Entity target
 -- @return nil|string
--- @module RADIO
 -- @realm client
 function RADIO.ToPrintable(target)
 	if isstring(target) then
@@ -276,6 +275,8 @@ local function RadioCommand(ply, cmd, arg)
 		return
 	end
 
+	---
+	-- @realm client
 	if hook.Run("TTT2ClientRadioCommand", cmd) then
 		print("ttt_radio, execution prevented by a hook")
 

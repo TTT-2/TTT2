@@ -1,6 +1,6 @@
 ---
+-- Server and client both need this for scoring event logs
 -- @section Scoring
--- @desc Server and client both need this for scoring event logs
 
 local pairs = pairs
 local IsValid = IsValid

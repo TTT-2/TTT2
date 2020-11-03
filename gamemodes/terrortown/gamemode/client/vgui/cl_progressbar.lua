@@ -1,53 +1,34 @@
 ---
 -- @class PANEL
--- @realm client
--- @section TTTProgressBar
 -- @desc Version of DProgressBar I can mess around with
+-- @section TTTProgressBar
 
 local PANEL = {}
 local surface = surface
 local vgui = vgui
 
 ---
--- @function GetMin()
--- @return number
---
----
--- @function SetMin(i)
--- @param number i
----
+-- @accessor number
+-- @realm client
 AccessorFunc(PANEL, "m_iMin", "Min")
 
 ---
--- @function GetMax()
--- @return number
---
----
--- @function SetMax(i)
--- @param number i
----
+-- @accessor number
+-- @realm client
 AccessorFunc(PANEL, "m_iMax", "Max")
 
 ---
--- @function GetValue()
--- @return number
---
----
--- @function SetValue(i)
--- @param number i
----
+-- @accessor number
+-- @realm client
 AccessorFunc(PANEL, "m_iValue", "Value")
 
 ---
--- @function GetColor()
--- @return Color
---
----
--- @function SetColor(color)
--- @param Color color
----
+-- @accessor Color
+-- @realm client
 AccessorFunc(PANEL, "m_Color", "Color")
 
+---
+-- @ignore
 function PANEL:Init()
 	self.Label = vgui.Create("DLabel", self)
 	self.Label:SetFont("DefaultSmall")
@@ -59,6 +40,8 @@ function PANEL:Init()
 	self:SetColor(Color(50, 205, 255, 255))
 end
 
+---
+-- @realm client
 function PANEL:LabelAsPercentage()
 	self.m_bLabelAsPercentage = true
 
@@ -67,6 +50,7 @@ end
 
 ---
 -- @param number i
+-- @realm client
 function PANEL:SetMin(i)
 	self.m_iMin = i
 
@@ -75,6 +59,7 @@ end
 
 ---
 -- @param number i
+-- @realm client
 function PANEL:SetMax(i)
 	self.m_iMax = i
 
@@ -83,12 +68,15 @@ end
 
 ---
 -- @param number i
+-- @realm client
 function PANEL:SetValue(i)
 	self.m_iValue = i
 
 	self:UpdateText()
 end
 
+---
+-- @realm client
 function PANEL:UpdateText()
 	if not self.m_iMax or not self.m_iMin or not self.m_iValue then return end
 
@@ -109,12 +97,16 @@ function PANEL:UpdateText()
 	end
 end
 
+---
+-- @ignore
 function PANEL:PerformLayout()
 	self.Label:SizeToContents()
 	self.Label:AlignRight(5)
 	self.Label:CenterVertical()
 end
 
+---
+-- @ignore
 function PANEL:Paint()
 	local fDelta = 0
 

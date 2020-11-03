@@ -1,6 +1,6 @@
 ---
+-- A much requested darker scoreboard
 -- @section scoreboard_manager
--- @desc a much requested darker scoreboard
 
 ttt_include("vgui__cl_sb_main")
 
@@ -74,10 +74,10 @@ end
 -- Called every frame to render the scoreboard.<br />
 -- It is recommended to use Derma and VGUI for this job instead of this hook.
 -- Called right after @{GM:HUDPaint}.
+-- @note Called every frame to render the scoreboard.
 -- @2D
 -- @hook
 -- @realm client
--- @ref Called every frame to render the scoreboard.
 -- @local
 function GM:HUDDrawScoreBoard()
 	-- replaced by panel version

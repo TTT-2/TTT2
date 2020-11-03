@@ -1,5 +1,5 @@
 ---
--- @module HUDELEMENT
+-- @class HUDELEMENT
 -- @section pure_skin_element
 
 local surface = surface
@@ -32,9 +32,7 @@ if CLIENT then
 	-- @param number a alpha of line's color
 	-- @realm client
 	function HUDELEMENT:DrawLines(x, y, w, h, a)
-		a = a or 255
-
-		DrawHUDElementLines(x, y, w, h, a)
+		DrawHUDElementLines(x, y, w, h, a or 255)
 	end
 
 	---
@@ -70,10 +68,10 @@ if CLIENT then
 
 	---
 	-- Returns @{Color} white OR black based on the bgcolor
-	-- Deprecated: Please us util.GetDefaultColor(color) instead
 	-- @param Color bgcolor background color
 	-- @realm client
-	-- @deprectated
+	-- @deprecated
+	-- @see util.GetDefaultColor
 	function HUDELEMENT:GetDefaultFontColor(bgcolor)
 		return util.GetDefaultColor(bgcolor)
 	end
