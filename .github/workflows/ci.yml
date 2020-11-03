@@ -48,4 +48,4 @@ jobs:
         rm neodoc.zip
 
     - name: Check code with neodoc
-      run: mono neodoc.exe . /tmp
+      run: mono NeoDoc.exe . /tmp
