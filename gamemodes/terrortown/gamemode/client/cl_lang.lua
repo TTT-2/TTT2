@@ -491,10 +491,10 @@ function LANG.ProcessMsg(name, params, mode)
 end
 
 ---
--- Returns the percentage of the coverage of the given language compared to the
+-- Returns the coverage in percent of the given language compared to the
 -- default language (english).
--- @param string langName The name of the language is question
--- @return number The percentage of the coverage
+-- @param string langName The name of the language in question
+-- @return number The coverage in percent
 -- @realm client
 function LANG.GetDefaultCoverage(langName)
 	-- if language is set to auto, get server default
