@@ -1,6 +1,6 @@
 -- Simplified Chinese language strings
 
-local L = LANG.CreateLanguage("zh_Hans")
+local L = LANG.CreateLanguage("zh_hans")
 
 -- Compatibility language name that might be removed soon.
 -- the alias name is based on the original TTT language name:
