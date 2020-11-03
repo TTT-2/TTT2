@@ -27,7 +27,7 @@ local colorWarn = Color(255, 70, 45)
 
 ---
 -- Creates a new language
--- @param string langName the new language name
+-- @param string langName The new language name
 -- @return table initialized language table that should be extended with translated @{string}s
 -- @realm client
 function LANG.CreateLanguage(langName)
