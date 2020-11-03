@@ -1291,4 +1291,4 @@ L.lang_server_default = "Server Standard"
 L.help_lang_info = [[
 Diese Übersetzung ist {coverage}% vollständig, wenn man die englische Übersetzung als Referenz betrachtet.
 
-Beachte, dass diese Übersetzungen Communitybasiert sind. Helfe mit, wenn Du Fehler oder fehlende Übersetzungen findest.]]
+Beachte, dass diese Übersetzungen Communitybasiert sind. Hilf mit, wenn Du Fehler oder fehlende Übersetzungen findest.]]
