@@ -399,7 +399,7 @@ function ENT:IsDetectiveNear()
 	return false
 end
 
-local beep = Sound("weapons/c4/c4_beep1.wav")
+local soundBeep = Sound("weapons/c4/c4_beep1.wav")
 local MAX_MOVE_RANGE = 1000000 -- sq of 1000
 
 ---
@@ -461,7 +461,7 @@ function ENT:Think()
 		end
 
 		if SERVER then
-			sound.Play(beep, self:GetPos(), amp, 100)
+			sound.Play(soundBeep, self:GetPos(), amp, 100)
 		end
 
 		local btime = (etime - CurTime()) / 30
@@ -478,7 +478,7 @@ function ENT:Defusable()
 	return self:GetArmed()
 end
 
--- Timer configuration handlign
+-- Timer configuration handling
 
 if SERVER then
 	---
