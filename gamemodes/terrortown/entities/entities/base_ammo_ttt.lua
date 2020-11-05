@@ -146,9 +146,11 @@ function ENT:Touch(ply)
 	self:Remove()
 end
 
--- Hack to force ammo to physwake
 if SERVER then
 	---
+	-- This Think hook is used to hack to force ammo to physwake because it can't be done
+	-- in init. If it is done in init, the entities will fall through the world on the client
+	-- but not on the server. This leads to inconsistencies between server and client.
 	-- @realm server
 	function ENT:Think()
 		if self.firstThinkDone then return end
