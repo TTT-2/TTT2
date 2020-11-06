@@ -31,10 +31,14 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added minimal documentation to every datastructure
 - Removed C4 defuse restriction for teammates
 - Moved role specific score variables into the role base
+- Changed `TTTCanPickupAmmo` hook, return `false` to cancel pickup
+- Changed `TTTPlayerUsedHealthStation` hook, return `false` to cancel health regeneration tick
+- Changed all C4 hooks to be cancelable
 
 ### Fixed
 
 - Fixed weapon pickup bug, where weapons would not get dropped but stayed in inventory
+- Fixed defuser only working for detectives
 
 ## [v0.7.4b](https://github.com/TTT-2/TTT2/tree/v0.7.4b) (2020-09-28)
 

@@ -159,7 +159,7 @@ if SERVER then
 
 		self.firstThinkDone = true
 
-		-- Immediately unhook the Think, save cycles. The firstThinkDone thing is
+		-- Immediately unhook the Think to save cycles. The firstThinkDone thing is
 		-- just there in case it still Thinks somehow in the future.
 		self.Think = nil
 	end
@@ -170,6 +170,8 @@ if SERVER then
 	-- @param Player ply The player that attempts to pick up the entity
 	-- @param Entity ent The ammo entity that is about to be picked up
 	-- @return boolean Return false to cancel the pickup event
+	-- @hook
+	-- @realm server
 	function GAMEMODE:TTTCanPickupAmmo(ply, ent)
 
 	end
