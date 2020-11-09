@@ -310,6 +310,38 @@ function GM:TTT2PostCleanupMap()
 end
 
 ---
+-- This hook is run inside @{GM:InitPostEntity} prior to the initialiazation of items,
+-- @hook
+-- @realm shared
+function GM:TTTInitPostEntity()
+
+end
+
+---
+-- This hook is run inside @{GM:InitPostEntity} after all items are initialized.
+-- @hook
+-- @realm shared
+function GM:PostInitPostEntity()
+
+end
+
+---
+-- This hook is run on the initialization of the fallback shops.
+-- @hook
+-- @realm shared
+function GM:InitFallbackShops()
+
+end
+
+---
+-- This hook is run after the initialization of the fallback shops.
+-- @hook
+-- @realm shared
+function GM:LoadedFallbackShops()
+
+end
+
+---
 -- Called right after all doors are initialized on the map.
 -- @param table doorsTable A table with the newly registered door entities
 -- @hook

@@ -178,3 +178,13 @@ local function IdlePopup()
 	dframe:MakePopup()
 end
 concommand.Add("ttt_cl_idlepopup", IdlePopup)
+
+---
+-- This cancelable hook can be used to prevent the access to a player's equipment shop.
+-- @param Player ply The player that tries to access their shop
+-- @return boolean Return true to prevent shop access
+-- @hook
+-- @realm client
+function GM:TTT2PreventAccessShop(ply)
+
+end
