@@ -60,3 +60,13 @@ function ROLE:GetAvailableRoleCount(ply_count)
 	-- make sure there is at least 1 of the role
 	return math.Clamp(role_count, 1, maxAmount)
 end
+
+---
+-- Use this hook to make a role inselectable.
+-- @param ROLE roleData The role data of the role that is considered for selection
+-- @return nil|boolean Return true to cancel selection
+-- @hook
+-- @realm server
+function GM:TTT2RoleNotSelectable(roleData)
+
+end

@@ -194,3 +194,14 @@ function HUDELEMENT:Draw()
 		self:DrawLines(self.pos.x, self.pos.y, self.size.w, self.size.h, self.basecolor.a)
 	end
 end
+
+---
+-- This hook is used to modify the color of the dot seen in the miniscoreboard.
+-- @param Player ply The player whose dot color should be changed
+-- @param Color col The originally intended color
+-- @return nil|Color The new color for the dot
+-- @hook
+-- @realm client
+function GM:TTT2ModifyMiniscoreboardColor(ply, col)
+
+end
