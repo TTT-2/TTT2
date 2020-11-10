@@ -152,7 +152,7 @@ end
 -- @param number t
 -- @return number
 -- @realm shared
-function ENT.safeWiresForTime(t)
+function ENT.SafeWiresForTime(t)
 	local m = t / 60
 
 	if m > 4 then
@@ -578,7 +578,7 @@ if SERVER then
 		end
 
 		-- random selection process, lot like traitor selection
-		local safe_count = self.safeWiresForTime(time)
+		local safe_count = self.SafeWiresForTime(time)
 		local picked = 0
 
 		while picked < safe_count do
