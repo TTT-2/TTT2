@@ -1119,7 +1119,7 @@ end
 ---
 -- Cancelable hook to prevent the usage of the shop on the client.
 -- @param Player ply The player that tries to access the shop
--- @return boolean Return true co cancel shop usage
+-- @return boolean Return true to prevent shop access
 -- @hook
 -- @realm client
 function GM:TTT2PreventAccessShop(ply)

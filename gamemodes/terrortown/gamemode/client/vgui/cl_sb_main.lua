@@ -607,6 +607,8 @@ vgui.Register("TTTPlayerFrame", PANEL, "Panel")
 -- These correspond to the four groups in the scoreboard of living, dead but not found, confirmed dead, and spectators.
 -- @param Player ply The player whose score group should be modified
 -- @return nil|number The scoregroup, it must be one of: GROUP_TERROR, GROUP_NOTFOUND, GROUP_FOUND, or GROUP_SPEC
+-- @hook
+-- @realm client
 function GM:TTTScoreGroup(ply)
 
 end
