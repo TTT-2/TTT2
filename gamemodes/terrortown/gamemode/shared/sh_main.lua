@@ -321,7 +321,7 @@ function GM:TTT2PostCleanupMap()
 end
 
 ---
--- This hook is run inside @{GM:InitPostEntity} prior to the initialiazation of items,
+-- This hook is run inside @{GM:InitPostEntity} prior to the initialization of items,
 -- @hook
 -- @realm shared
 function GM:TTTInitPostEntity()
@@ -361,7 +361,7 @@ function GM:TTT2PostDoorSetup(doorsTable)
 
 end
 
--- Called after all roles were loaded, @{ROLE:Preinitialize} and @{ROLE:Initialie} were called
+-- Called after all roles were loaded, @{ROLE:Preinitialize} and @{ROLE:Initialize} were called
 -- and their convars were set up.
 -- @hook
 -- @realm shared
@@ -369,7 +369,7 @@ function GM:TTT2RolesLoaded()
 
 end
 
--- Called after all roles were loaded, @{ROLE:Preinitialize} and @{ROLE:Initialie} were called
+-- Called after all roles were loaded, @{ROLE:Preinitialize} and @{ROLE:Initialize} were called
 -- and their convars were set up.
 -- @hook
 -- @realm shared

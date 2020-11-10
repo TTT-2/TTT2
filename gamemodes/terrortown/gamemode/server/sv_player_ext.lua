@@ -1444,7 +1444,7 @@ end
 -- Hook that is used to modify the default credits of a traitor.
 -- @param Player ply The player whose credits should be changed
 -- @param number credits The amount of credits the player would normally receive
--- @return nil|number THe amound of credits the player should receive
+-- @return nil|number The amound of credits the player should receive
 -- @hook
 -- @realm server
 function GM:TTT2ModifyDefaultTraitorCredits(ply, credits)

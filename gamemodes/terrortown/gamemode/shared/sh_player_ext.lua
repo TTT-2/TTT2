@@ -1059,7 +1059,7 @@ end
 
 ---
 -- A hook that is called on the change of a role. It is called once for the old role
--- and once for the new role if some creteria are met.
+-- and once for the new role if some criteria are met.
 -- @param ROLE roleData The roledata of the rolechange
 -- @param boolean isNewRole True if it is the new role, false if it is the old role
 -- @hook
@@ -1102,7 +1102,7 @@ function GM:TTT2UpdateTeam(ply, oldTeam, newTeam)
 end
 
 ---
--- This hook is called (mostly on rolechanges) when the player's role color.
+-- This hook is called (mostly on rolechanges) when the player's role color
 -- is set and can be used to modify the color.
 -- @param Player ply The player whose role color is set
 -- @param Color clr The color that should be used
@@ -1114,7 +1114,7 @@ function GM:TTT2ModifyRoleColor(ply, clr)
 end
 
 ---
--- This hook is called (mostly on rolechanges) when the player's darkened role color.
+-- This hook is called (mostly on rolechanges) when the player's darkened role color
 -- is set and can be used to modify the color.
 -- @param Player ply The player whose role color is set
 -- @param Color clr The color that should be used
@@ -1126,7 +1126,7 @@ function GM:TTT2ModifyRoleDkColor(ply, clr)
 end
 
 ---
--- This hook is called (mostly on rolechanges) when the player's lightened role color.
+-- This hook is called (mostly on rolechanges) when the player's lightened role color
 -- is set and can be used to modify the color.
 -- @param Player ply The player whose role color is set
 -- @param Color clr The color that should be used
@@ -1138,7 +1138,7 @@ function GM:TTT2ModifyRoleLtColor(ply, clr)
 end
 
 ---
--- This hook is called (mostly on rolechanges) when the player's background role color.
+-- This hook is called (mostly on rolechanges) when the player's background role color
 -- is set and can be used to modify the color.
 -- @param Player ply The player whose role color is set
 -- @param Color clr The color that should be used

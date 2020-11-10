@@ -570,7 +570,7 @@ end
 -- @param Player attacker The player who attacked someone and should receive a penalty
 -- @param number penalty The size of the penalty
 -- @param Player victim The player that was attacked
--- @return nil|boolean Return true to block the giveb penalty
+-- @return nil|boolean Return true to block the given penalty
 -- @hook
 -- @realm server
 function GM:TTTKarmaGivePenalty(attacker, penalty, victim)
@@ -578,7 +578,7 @@ function GM:TTTKarmaGivePenalty(attacker, penalty, victim)
 end
 
 ---
--- Modify the karma penelty multiplier.
+-- Modify the karma penalty multiplier.
 -- @param Player attacker The player who attacked someone and should receive a penalty
 -- @param Player victim The player that was attacked
 -- @param DamageInfo dmginfo The damage info from the attack
@@ -595,7 +595,7 @@ end
 -- @note Karma is checked at the end of a round, so if their karma continues to be low,
 -- this hook will be called after every round.
 -- @param Player ply The player who is about to be kicked
--- @return nil|boolean Return false to prevent the player from beeing kicked
+-- @return nil|boolean Return false to prevent the player from being kicked
 -- @hook
 -- @realm server
 function GM:TTTKarmaLow(ply)

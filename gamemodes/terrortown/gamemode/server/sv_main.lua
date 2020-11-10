@@ -1534,7 +1534,7 @@ function GM:TTT2SyncGlobals()
 end
 
 ---
--- This hook is run before @{GM:TTTCheckForWin} and should be used for custom windonditions in
+-- This hook is run before @{GM:TTTCheckForWin} and should be used for custom winconditions in
 -- roles. Because this hook will prevent the default hook from being run if a result is returned.
 -- @return nil|string The team identifier of the winning team
 -- @hook
@@ -1545,7 +1545,7 @@ end
 
 ---
 -- Called after a player changed their nickname.
--- @param Player ply The playe who changed their name
+-- @param Player ply The player who changed their name
 -- @return nil|boolean Return true to prevent the kick of the player
 -- @hook
 -- @realm server
@@ -1578,9 +1578,9 @@ end
 ---
 -- Called if CheckForMapSwitch has determined that a map change should happen.
 -- @note Can be used for custom map voting system. Just hook this and return true to override.
--- @param string nextmap next map that would be loaded according to the file that is set by the mapcyclefile convar
--- @param number roundsLeft number of rounds left before the next map switch
--- @param number timeLeft time left before the next map switch in seconds
+-- @param string nextmap Next map that would be loaded according to the file that is set by the mapcyclefile convar
+-- @param number roundsLeft Number of rounds left before the next map switch
+-- @param number timeLeft Time left before the next map switch in seconds
 -- @hook
 -- @realm server
 function GM:TTT2LoadNextMap(nextmap, roundsLeft, timeLeft)
@@ -1596,8 +1596,8 @@ end
 ---
 -- Adds a delay before the round begings. This is called before @{GM:TTTPrepareRound}.
 -- @note Can be used for custom voting systems
--- @return[default=false] boolean whether there should be a delay
--- @return[default=nil] number delay in seconds
+-- @return[default=false] boolean Whether there should be a delay
+-- @return[default=nil] number Delay in seconds
 -- @hook
 -- @realm server
 function GM:TTTDelayRoundStartForVote()

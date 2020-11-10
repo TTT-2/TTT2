@@ -735,7 +735,7 @@ cvars.AddChangeCallback(crowbar_delay:GetName(), ChangeShoveDelay, "TTT2CrowbarS
 hook.Add("TTT2Initialize", "TTT2ChangeMeleesSecondaryDelay", ChangeShoveDelay)
 
 ---
--- Use this hoko to modify the default laodout of a role.
+-- Use this hook to modify the default loadout of a role.
 -- @note It is recommended to use the function @{ROLE:GiveRoleLoadout} to give a role
 -- the loadout if you are the creator of the role yourself.
 -- @param table loadout A table with @{ITEM}s or @{WEAPON}s that can be modified
@@ -747,8 +747,8 @@ function GM:TTT2ModifyDefaultLoadout(loadout, role)
 end
 
 ---
--- Used to modfiy or block the amount of ammo dropped.
--- @param Player ply The player that tries to block ammo
+-- Used to modifiy or block the amount of ammo dropped.
+-- @param Player ply The player that tries to drop ammo
 -- @param table amountTbl The table where the amount is stored, it can be modified
 -- @return nil|boolean Return false to prevent the drop of the ammo
 -- @hook
