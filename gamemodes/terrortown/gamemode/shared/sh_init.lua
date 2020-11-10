@@ -503,10 +503,12 @@ require("outline")
 include("includes/modules/pon.lua")
 
 -- include extensions
+include("ttt2/extensions/math.lua")
 include("ttt2/extensions/net.lua")
 include("ttt2/extensions/sql.lua")
 include("ttt2/extensions/string.lua")
 include("ttt2/extensions/table.lua")
+include("ttt2/extensions/util.lua")
 include("ttt2/extensions/surface.lua")
 include("ttt2/extensions/draw.lua")
 
@@ -522,10 +524,10 @@ include("ttt2/libraries/door.lua")
 include("ttt2/libraries/orm.lua")
 include("ttt2/libraries/thermalvision.lua")
 include("ttt2/libraries/events.lua")
+include("ttt2/libraries/none.lua")
 
 
 -- include ttt required files
-ttt_include("sh_util")
 ttt_include("sh_decal")
 ttt_include("sh_lang")
 ttt_include("sh_sql")

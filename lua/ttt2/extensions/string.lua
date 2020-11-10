@@ -7,6 +7,10 @@ if SERVER then
 	AddCSLuaFile()
 end
 
+local stringGSub = string.gsub
+local stringUpper = string.upper
+local stringSub = string.sub
+
 ---
 -- Split a string into smaller strings.
 -- This will split a given string in parts, with a maximum size of the given splitSize.
@@ -40,4 +44,26 @@ function string.SplitAtSize(str, splitSize)
 	end
 
 	return result
+end
+
+---
+-- Uppercases the first character only
+-- @param string str
+-- @return string
+-- @realm shared
+function string.Capitalize(str)
+	return stringUpper(stringSub(str, 1, 1)) .. stringSub(str, 2)
+end
+
+---
+-- Simple string interpolation:
+-- string.Interp("{killer} killed {victim}", {killer = "Bob", victim = "Joe"})
+-- returns "Bob killed Joe"
+-- No spaces or special chars in parameter name, just alphanumerics.
+-- @param string str
+-- @param table tbl
+-- @return string
+-- @realm shared
+function string.Interp(str, tbl)
+	return stringGSub(str, "{(%w+)}", tbl)
 end
