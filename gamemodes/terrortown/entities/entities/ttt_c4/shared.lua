@@ -754,6 +754,8 @@ if SERVER then
 			or bomb:GetArmed() or bomb:GetPos():Distance(ply:GetPos()) > 256
 		then return end
 
+		---
+		-- @realm server
 		local result, message = hook.Run("TTTC4Destroyed", bomb, ply)
 
 		if result == false then
@@ -772,7 +774,7 @@ if SERVER then
 	concommand.Add("ttt_c4_destroy", ReceiveC4Destroy)
 
 	---
-	-- This hook when the C4 is about to be armed.
+	-- This hook is run when the C4 is about to be armed.
 	-- @param Entity bomb The C4 bomb entity
 	-- @param Player ply The player that armed the C4
 	-- @return boolean Return false to cancel arming
@@ -785,7 +787,7 @@ if SERVER then
 	end
 
 	---
-	-- This hook when the C4 is about to be disarmed.
+	-- This hook is run when the C4 is about to be disarmed.
 	-- @param Entity bomb The C4 bomb entity
 	-- @param boolean result The disarming attempt result
 	-- @param Player ply The player that armed the C4
@@ -799,7 +801,7 @@ if SERVER then
 	end
 
 	---
-	-- This hook when the C4 is about to be picked up.
+	-- This hook is run when the C4 is about to be picked up.
 	-- @param Entity bomb The C4 bomb entity
 	-- @param Player ply The player that tries to picl up the C4
 	-- @return boolean Return false to cancel the pickup
@@ -812,7 +814,7 @@ if SERVER then
 	end
 
 	---
-	-- This hook when the C4 is about to be armed.
+	-- This hook is run when the C4 is about to be armed.
 	-- @param Entity bomb The C4 bomb entity
 	-- @param Player ply The player that tries to destroy the C4
 	-- @return boolean Return false to cancel the destruction
