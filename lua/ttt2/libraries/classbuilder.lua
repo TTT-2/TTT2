@@ -7,11 +7,9 @@ if SERVER then
 	AddCSLuaFile()
 end
 
-local tableCopy = table.Copy
 local tableDeepInherit = table.DeepInherit
 local stringSplit = string.Split
 local stringLower = string.lower
-local stringSub = string.sub
 local isfunction = isfunction
 
 classbuilder = classbuilder or {}
@@ -50,10 +48,10 @@ function classbuilder.BuildFromFolder(path, realm, scope, OnInitialization, shou
 	fileloader.LoadFolder(path, false, realm, function(filePath)
 		-- get the filename from the file path
 		local pathArray = stringSplit(filePath, "/")
-		local name = stringLower(stringSub(pathArray[#pathArray], 0, -5))
+		local name = stringLower(util.GetFileName(pathArray[#pathArray]))
 
 		-- copy the table from the loaded class file
-		classTable[name] = tableCopy(_G[scope])
+		classTable[name] = _G[scope]
 
 		-- reset the scope for the next class
 		_G[scope] = {}
