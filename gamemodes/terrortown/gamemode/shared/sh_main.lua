@@ -186,6 +186,17 @@ function GM:Think()
 	end
 end
 
+---
+-- Used to modify the player sprint speed modifier.
+-- @note This hook is predicted, it therefore hat to be run on the server and the client.
+-- @param Player ply The player whose sprint speed should be changed
+-- @param table sprintMultiplierModifier The modieable table with the sprint speed multiplier
+-- @hook
+-- @realm server
+function GM:TTT2PlayerSprintMultiplier(ply, sprintMultiplierModifier)
+
+end
+
 -- Drowning and such
 local tm, ply, plys
 
