@@ -563,3 +563,41 @@ function KARMA.PrintAll(printfn)
 		))
 	end
 end
+
+---
+-- A cancelable hook to prevent the penalty given to a player if they
+-- attack some victim.
+-- @param Player attacker The player who attacked someone and should receive a penalty
+-- @param number penalty The size of the penalty
+-- @param Player victim The player that was attacked
+-- @return nil|boolean Return true to block the giveb penalty
+-- @hook
+-- @realm server
+function GM:TTTKarmaGivePenalty(attacker, penalty, victim)
+
+end
+
+---
+-- Modify the karma penelty multiplier.
+-- @param Player attacker The player who attacked someone and should receive a penalty
+-- @param Player victim The player that was attacked
+-- @param DamageInfo dmginfo The damage info from the attack
+-- @return nil|number Return the karma multiplier
+-- @hook
+-- @realm server
+function GM:TTT2KarmaPenaltyMultiplier(attacker, victim, dmginfo)
+
+end
+
+---
+-- Called when a player is about to be kicked/banned because their karma has gone below
+-- the the autokick/ban level specified in the server's configuration.
+-- @note Karma is checked at the end of a round, so if their karma continues to be low,
+-- this hook will be called after every round.
+-- @param Player ply The player who is about to be kicked
+-- @return nil|boolean Return false to prevent the player from beeing kicked
+-- @hook
+-- @realm server
+function GM:TTTKarmaLow(ply)
+
+end
