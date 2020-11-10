@@ -211,18 +211,6 @@ local function ConCommandOrderEquipment(ply, cmd, args)
 end
 concommand.Add("ttt_order_equipment", ConCommandOrderEquipment)
 
----
--- Called whenever a @{Player} toggles the disguiser state
--- @note Can be used to prevent players from using this button.
--- @param Player ply
--- @param boolean state
--- @return boolean return true to prevent using this button.
--- @hook
--- @realm server
-function GM:TTTToggleDisguiser(ply, state)
-
-end
-
 local function CheatCredits(ply)
 	if not IsValid(ply) then return end
 
