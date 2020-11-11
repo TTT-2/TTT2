@@ -34,10 +34,6 @@ local cvEnableSpectatorsoutline = CreateConVar("ttt2_cvEnableSpectatorsoutline",
 -- @realm client
 local cvEnableOverheadicons = CreateConVar("ttt2_cvEnableOverheadicons", "1", {FCVAR_ARCHIVE, FCVAR_USERINFO})
 
-local cvDeteOnlyConfirm = GetConVar("ttt2_confirm_detective_only")
-local cvDeteOnlyInspect = GetConVar("ttt2_inspect_detective_only")
-
-
 surface.CreateAdvancedFont("TargetID_Key", {font = "Trebuchet24", size = 26, weight = 900})
 surface.CreateAdvancedFont("TargetID_Title", {font = "Trebuchet24", size = 20, weight = 900})
 surface.CreateAdvancedFont("TargetID_Subtitle", {font = "Trebuchet24", size = 17, weight = 300})
