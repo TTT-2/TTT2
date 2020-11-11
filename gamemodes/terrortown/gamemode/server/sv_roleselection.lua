@@ -9,7 +9,6 @@ local table = table
 local player = player
 local pairs = pairs
 local IsValid = IsValid
-local CreateConVar = CreateConVar
 local hook = hook
 
 roleselection.forcedRoles = {}
@@ -19,11 +18,23 @@ roleselection.baseroleLayers = {}
 roleselection.subroleLayers = {}
 
 -- Convars
-roleselection.cv = {}
-roleselection.cv.ttt_max_roles = CreateConVar("ttt_max_roles", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different roles")
-roleselection.cv.ttt_max_roles_pct =  CreateConVar("ttt_max_roles_pct", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different roles based on player amount. ttt_max_roles needs to be 0")
-roleselection.cv.ttt_max_baseroles = CreateConVar("ttt_max_baseroles", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different baseroles")
-roleselection.cv.ttt_max_baseroles_pct = CreateConVar("ttt_max_baseroles_pct", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different baseroles based on player amount. ttt_max_baseroles needs to be 0")
+roleselection.cv = {
+	---
+	-- @realm server
+	ttt_max_roles = CreateConVar("ttt_max_roles", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different roles"),
+
+	---
+	-- @realm server
+	ttt_max_roles_pct =  CreateConVar("ttt_max_roles_pct", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different roles based on player amount. ttt_max_roles needs to be 0"),
+
+	---
+	-- @realm server
+	ttt_max_baseroles = CreateConVar("ttt_max_baseroles", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different baseroles"),
+
+	---
+	-- @realm server
+	ttt_max_baseroles_pct = CreateConVar("ttt_max_baseroles_pct", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Maximum amount of different baseroles based on player amount. ttt_max_baseroles needs to be 0")
+}
 
 -- saving and loading
 roleselection.sqltable = "ttt2_roleselection"
@@ -32,8 +43,11 @@ roleselection.savingKeys = {
 	depth = {typ = "number", bits = ROLE_BITS, default = 0}
 }
 
+---
+-- Loads every layer from the SQL database
+-- @realm server
 function roleselection.LoadLayers()
-	if not SQL.CreateSqlTable(roleselection.sqltable, roleselection.savingKeys) then return end
+	if not sql.CreateSqlTable(roleselection.sqltable, roleselection.savingKeys) then return end
 
 	local roleList = roles.GetList()
 
@@ -44,7 +58,7 @@ function roleselection.LoadLayers()
 			depth = 0
 		}
 
-		local loaded, changed = SQL.Load(roleselection.sqltable, roleData.name, dataTable, roleselection.savingKeys)
+		local loaded, changed = sql.Load(roleselection.sqltable, roleData.name, dataTable, roleselection.savingKeys)
 
 		if not loaded then
 			-- automatically put the Detective into the first layer if the layering system is initialized the first time
@@ -57,7 +71,7 @@ function roleselection.LoadLayers()
 				roleselection.baseroleLayers[1][1] = roleData.index
 			end
 
-			SQL.Init(roleselection.sqltable, roleData.name, dataTable, roleselection.savingKeys)
+			sql.Init(roleselection.sqltable, roleData.name, dataTable, roleselection.savingKeys)
 		elseif changed then
 			if dataTable.layer == 0 or dataTable.depth == 0 then continue end -- if (0, 0), exclude from layering
 
@@ -114,6 +128,9 @@ function roleselection.LoadLayers()
 	roleselection.subroleLayers = validTbl
 end
 
+---
+-- Saves every layer into the SQL database
+-- @realm server
 function roleselection.SaveLayers()
 	local dataTable = {}
 
@@ -149,7 +166,7 @@ function roleselection.SaveLayers()
 	for i = 1, #roleList do
 		local roleData = roleList[i]
 
-		SQL.Save(roleselection.sqltable, roleData.name, dataTable[roleData.index] or {}, roleselection.savingKeys)
+		sql.Save(roleselection.sqltable, roleData.name, dataTable[roleData.index] or {}, roleselection.savingKeys)
 	end
 end
 
@@ -221,7 +238,9 @@ function roleselection.GetSelectablePlayers(plys)
 	for i = 1, #plys do
 		local ply = plys[i]
 
-		-- everyone on the spec team is in specmode
+		---
+		-- Everyone on the spec team is in specmode
+		-- @realm server
 		if not ply:GetForceSpec() and not hook.Run("TTT2DisableRoleSelection", ply) then
 			tmp[#tmp + 1] = ply
 		end
@@ -377,6 +396,8 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 
 	local layeredBaseRolesTbl = table.Copy(roleselection.baseroleLayers) -- layered roles list, the order defines the pick order. Just one role per layer is picked. Before a role is picked, the given layer is cleared (checked if the given roles are still selectable). Insert a table as a "or" list
 
+	---
+	-- @realm server
 	hook.Run("TTT2ModifyLayeredBaseRoles", layeredBaseRolesTbl, availableBaseRolesTbl)
 
 	local baseroleLoopTbl = { -- just contains available / selectable baseroles
@@ -422,6 +443,8 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 
 	local layeredSubRolesTbl = table.Copy(roleselection.subroleLayers) -- layered roles list, the order defines the pick order. Just one role per layer is picked. Before a role is picked, the given layer is cleared (checked if the given roles are still selectable). Insert a table as a "or" list
 
+	---
+	-- @realm server
 	hook.Run("TTT2ModifyLayeredSubRoles", layeredSubRolesTbl, availableSubRolesTbl)
 
 	-- now we need to select the subroles
@@ -470,6 +493,8 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 		end
 	end
 
+	---
+	-- @realm server
 	hook.Run("TTT2ModifySelectableRoles", selectableRoles)
 
 	roleselection.selectableRoles = selectableRoles
@@ -620,6 +645,8 @@ local function SelectForcedRoles(plys, selectableRoles)
 			roleselection.finalRoles[ply] = subrole
 			curCount = curCount + 1
 
+			---
+			-- @realm server
 			hook.Run("TTT2ReceivedForcedRole", ply, subrole)
 		end
 
@@ -732,8 +759,8 @@ end
 -- Select selectable @{ROLE}s for a given list of @{Player}s
 -- @note This automatically synces with every connected @{Player}
 --
--- @param ?table plys list of @{Player}s. `nil` to calculate automatically
--- @param ?number maxPlys amount of maximum @{Player}s. `nil` to calculate automatically
+-- @param[opt] table plys list of @{Player}s. `nil` to calculate automatically (all players)
+-- @param[optchain] number maxPlys amount of maximum @{Player}s. `nil` to calculate automatically
 -- @realm server
 function roleselection.SelectRoles(plys, maxPlys)
 	roleselection.selectableRoles = nil -- reset to enable recalculation

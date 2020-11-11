@@ -1,14 +1,24 @@
 ---
 -- A handler for the skin colors
 -- @author Mineotopia
+-- @module skin
 
-AddCSLuaFile()
+if SERVER then
+	AddCSLuaFile()
 
--- the rest of the vskin library is client only
-if SERVER then return end
+	return -- the rest of the vskin library is client only
+end
 
+---
+-- @realm client
 local cv_selectedVSkin = CreateConVar("ttt2_selected_vskin", "dark_ttt2", {FCVAR_ARCHIVE})
+
+---
+-- @realm client
 local cv_blurVSkin = CreateConVar("ttt2_vskin_blur", 1, {FCVAR_ARCHIVE})
+
+---
+-- @realm client
 local cv_colorVSkin = CreateConVar("ttt2_vskin_color", 1, {FCVAR_ARCHIVE})
 
 vskin = vskin or {}
@@ -56,15 +66,17 @@ end
 ---
 -- This function is called after the skin is changed. It updates the color and
 -- sizes caching, while also calling @{GM:TTT2UpdatedVSkin}
--- @params string oldSkinName The old skin name
--- @params string skinName The new skin name
+-- @param string oldSkinName The old skin name
+-- @param string skinName The new skin name
 -- @realm client
 -- @internal
 function vskin.UpdatedVSkin(oldSkinName, skinName)
 	-- run SKIN function to update color table
 	derma.GetSkinTable()["ttt2_default"]:UpdatedVSkin()
 
-	-- run hook for other addons to use
+	---
+	-- Run hook for other addons to use
+	-- @realm client
 	hook.Run("TTT2UpdatedVSkin", oldSkinName, skinName)
 end
 
@@ -100,7 +112,7 @@ end
 
 ---
 -- Sets the background blur state.
--- @param [default=true] boolean state
+-- @param[default=true] boolean state
 -- @realm client
 function vskin.SetBlurBackground(state)
 	cv_blurVSkin:SetBool(state == nil and true or state)
@@ -117,7 +129,7 @@ end
 
 ---
 -- Sets the background color state.
--- @param [default=true] boolean state
+-- @param[default=true] boolean state
 -- @realm client
 function vskin.SetColorBackground(state)
 	cv_colorVSkin:SetBool(state == nil and true or state)
@@ -134,7 +146,7 @@ end
 
 ---
 -- Returns the background color of the currently selected vskin.
--- @return [default=Color(255, 255, 255, 255)] Color The background color
+-- @return[default=Color(255, 255, 255, 255)] Color The background color
 -- @realm client
 function vskin.GetBackgroundColor()
 	local vskinObject = vskin.skins[vskin.GetVSkinName()]
@@ -148,7 +160,7 @@ end
 
 ---
 -- Returns the accent color of the currently selected vskin.
--- @return [default=Color(255, 255, 255, 255)] Color The accent color
+-- @return[default=Color(255, 255, 255, 255)] Color The accent color
 -- @realm client
 function vskin.GetAccentColor()
 	local vskinObject = vskin.skins[vskin.GetVSkinName()]
@@ -162,7 +174,7 @@ end
 
 ---
 -- Returns the dark accent color of the currently selected vskin.
--- @return [default=Color(255, 255, 255, 255)] Color The dark accent color
+-- @return[default=Color(255, 255, 255, 255)] Color The dark accent color
 -- @realm client
 function vskin.GetDarkAccentColor()
 	local vskinObject = vskin.skins[vskin.GetVSkinName()]
@@ -176,7 +188,7 @@ end
 
 ---
 -- Returns the scrollbar color of the currently selected vskin.
--- @return [default=Color(255, 255, 255, 255)] Color The scrollbar color
+-- @return[default=Color(255, 255, 255, 255)] Color The scrollbar color
 -- @realm client
 function vskin.GetScrollbarColor()
 	local vskinObject = vskin.skins[vskin.GetVSkinName()]
@@ -190,7 +202,7 @@ end
 
 ---
 -- Returns the screen color of the currently selected vskin.
--- @return [default=Color(255, 255, 255, 255)] Color The scrollbar color
+-- @return[default=Color(255, 255, 255, 255)] Color The scrollbar color
 -- @realm client
 function vskin.GetScreenColor()
 	local vskinObject = vskin.skins[vskin.GetVSkinName()]
@@ -204,7 +216,7 @@ end
 
 ---
 -- Returns the shadow color of the currently selected vskin.
--- @return [default=Color(255, 255, 255, 255)] Color The shadow color
+-- @return[default=Color(255, 255, 255, 255)] Color The shadow color
 -- @realm client
 function vskin.GetShadowColor()
 	local vskinObject = vskin.skins[vskin.GetVSkinName()]
@@ -218,7 +230,7 @@ end
 
 ---
 -- Returns the title text color of the currently selected vskin.
--- @return [default=Color(255, 255, 255, 255)] Color The title text color
+-- @return[default=Color(255, 255, 255, 255)] Color The title text color
 -- @realm client
 function vskin.GetTitleTextColor()
 	local vskinObject = vskin.skins[vskin.GetVSkinName()]
@@ -232,7 +244,7 @@ end
 
 ---
 -- Returns the shadow size of the currently selected vskin.
--- @return [default=5] number The shadow size
+-- @return[default=5] number The shadow size
 -- @realm client
 function vskin.GetShadowSize()
 	local vskinObject = vskin.skins[vskin.GetVSkinName()]
@@ -246,7 +258,7 @@ end
 
 ---
 -- Returns the header height of the currently selected vskin.
--- @return [default=45] number The header height
+-- @return[default=45] number The header height
 -- @realm client
 function vskin.GetHeaderHeight()
 	local vskinObject = vskin.skins[vskin.GetVSkinName()]
@@ -260,7 +272,7 @@ end
 
 ---
 -- Returns the collapsable height of the currently selected vskin.
--- @return [default=45] number The collapsable height
+-- @return[default=45] number The collapsable height
 -- @realm client
 function vskin.GetCollapsableHeight()
 	local vskinObject = vskin.skins[vskin.GetVSkinName()]
@@ -274,7 +286,7 @@ end
 
 ---
 -- Returns the border size of the currently selected vskin.
--- @return [default=3] number The border size
+-- @return[default=3] number The border size
 -- @realm client
 function vskin.GetBorderSize()
 	local vskinObject = vskin.skins[vskin.GetVSkinName()]
@@ -288,7 +300,7 @@ end
 
 ---
 -- Returns the corner radius of the currently selected vskin.
--- @return [default=6] number The corner radius
+-- @return[default=6] number The corner radius
 -- @realm client
 function vskin.GetCornerRadius()
 	local vskinObject = vskin.skins[vskin.GetVSkinName()]

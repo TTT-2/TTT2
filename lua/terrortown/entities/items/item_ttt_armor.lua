@@ -14,14 +14,18 @@ ITEM.oldId = EQUIP_ARMOR or 1
 ITEM.limited = false
 
 if SERVER then
+	---
+	-- @ignore
 	function ITEM:Equip(buyer)
 		buyer:GiveArmor(GetConVar("ttt_item_armor_value"):GetInt())
 	end
 
+	---
+	-- @ignore
 	function ITEM:Reset(buyer)
 		buyer:RemoveArmor(GetConVar("ttt_item_armor_value"):GetInt())
 	end
-else
+else -- CLIENT
 	-- HANDLE ITEM CLASSIC MODE
 	hook.Add("TTTBeginRound", "ttt2_base_register_armor_text", function()
 		if not GetGlobalBool("ttt_armor_classic") then return end

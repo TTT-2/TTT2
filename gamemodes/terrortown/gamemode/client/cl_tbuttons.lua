@@ -1,6 +1,6 @@
 ---
+-- Display of and interaction with ttt_traitor_button
 -- @class TBHUD
--- @desc Display of and interaction with ttt_traitor_button
 
 local surface = surface
 local pairs = pairs
@@ -163,7 +163,7 @@ function TBHUD:Draw(client)
 		pos = ent:GetPos()
 		scrpos = pos:ToScreen()
 
-		if IsOffScreen(scrpos) or not ent:IsUsable() then continue end
+		if util.IsOffScreen(scrpos) or not ent:IsUsable() then continue end
 
 		local usableRange = ent:GetUsableRange()
 

@@ -1,3 +1,6 @@
+---
+-- @class SPEED
+
 local plymeta = assert(FindMetaTable("Player"), "FAILED TO FIND ENTITY TABLE")
 
 SPEED = SPEED or {}
@@ -5,7 +8,7 @@ SPEED = SPEED or {}
 ---
 -- Handles the speed calculation based on the @{GM:TTTPlayerSpeedModifier} hook
 -- @param Player ply The player whose speed should be changed
--- @param CMoveData moveData The move data
+-- @param MoveData moveData The move data
 -- @internal
 -- @realm shared
 function SPEED:HandleSpeedCalculation(ply, moveData)
@@ -23,6 +26,9 @@ function SPEED:HandleSpeedCalculation(ply, moveData)
 	end
 
 	local speedMultiplierModifier = {1}
+
+	---
+	-- @realm shared
 	local returnMultiplier = hook.Run("TTTPlayerSpeedModifier", ply, isSlowed, moveData, speedMultiplierModifier) or 1
 
 	local oldval = ply:GetSpeedMultiplier()
@@ -49,7 +55,7 @@ end
 -- @note This hook is predicted and should be therefore added on both server and client.
 -- @param Player ply The player whose speed should be modified
 -- @param boolean isSlowed Is true if the player uses iron sights
--- @param CMoveData moveData The move data
+-- @param MoveData moveData The move data
 -- @param table speedMultiplierModifier The speed modifier table. Modify the first table entry to change the player speed
 -- @return[deprecated] number The deprecated way of changing the player speed
 -- @hook
@@ -85,6 +91,9 @@ if CLIENT then
 		})
 	end
 end
+
+---
+-- @class Player
 
 ---
 -- Returns the current player speed modifier

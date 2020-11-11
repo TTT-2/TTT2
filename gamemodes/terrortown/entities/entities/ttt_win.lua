@@ -1,7 +1,6 @@
 ---
 -- @class ENT
--- @realm shared
--- @section Win
+-- @section ttt_win
 
 ENT.Type = "point"
 ENT.Base = "base_point"
@@ -13,6 +12,7 @@ local string = string
 -- @param Entity|Player activator
 -- @param Entity|Player caller
 -- @return[default=true] boolean
+-- @realm shared
 function ENT:AcceptInput(name, activator, caller)
 	if name == "TraitorWin" then
 		GAMEMODE:MapTriggeredEnd(WIN_TRAITOR)

@@ -1,8 +1,7 @@
 ---
 -- @class ENT
--- @realm shared
--- @section RandomWeapon
 -- @desc Dummy ent that just spawns a random TTT weapon and kills itself
+-- @section ttt_random_weapon
 
 local IsValid = IsValid
 local math = math
@@ -16,6 +15,7 @@ ENT.AutoAmmo = 0
 ---
 -- @param string key
 -- @param string|number value
+-- @realm shared
 function ENT:KeyValue(key, value)
 	if key == "auto_ammo" then
 		self.AutoAmmo = tonumber(value)
@@ -23,7 +23,7 @@ function ENT:KeyValue(key, value)
 end
 
 ---
---
+-- @realm shared
 function ENT:Initialize()
 	local weps = ents.TTT.GetSpawnableSWEPs()
 	if weps then

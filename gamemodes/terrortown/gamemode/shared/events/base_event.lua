@@ -156,8 +156,10 @@ if SERVER then
 		event.time = math.Round((CurTime() - GAMEMODE.RoundStartTime) * 1000, 0)
 		event.roundState = GetRoundState()
 
-		-- call hook that a new event is about to be added, can be canceled or
+		---
+		-- Call hook that a new event is about to be added, can be canceled or
 		-- modified from that hook
+		-- @realm server
 		if hook.Run("TTT2OnTriggeredEvent", self.type, event) == false then
 			return false
 		end

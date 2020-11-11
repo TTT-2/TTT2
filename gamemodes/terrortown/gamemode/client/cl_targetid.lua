@@ -13,10 +13,22 @@ local table = table
 local IsValid = IsValid
 local hook = hook
 
-local cvMinimalisticTid = CreateClientConVar("ttt_minimal_targetid", "0", FCVAR_ARCHIVE)
-local cvDrawHalo = CreateClientConVar("ttt_entity_draw_halo", "1", true, false)
-local cvEnableSpectatorsoutline = CreateClientConVar("ttt2_cvEnableSpectatorsoutline", "1", true, true)
-local cvEnableOverheadicons = CreateClientConVar("ttt2_cvEnableOverheadicons", "1", true, true)
+---
+-- @realm client
+local cvMinimalisticTid = CreateConVar("ttt_minimal_targetid", "0", FCVAR_ARCHIVE)
+
+---
+-- @realm client
+local cvDrawHalo = CreateConVar("ttt_entity_draw_halo", "1", FCVAR_ARCHIVE)
+
+---
+-- @realm client
+local cvEnableSpectatorsoutline = CreateConVar("ttt2_cvEnableSpectatorsoutline", "1", {FCVAR_ARCHIVE, FCVAR_USERINFO})
+
+---
+-- @realm client
+local cvEnableOverheadicons = CreateConVar("ttt2_cvEnableOverheadicons", "1", {FCVAR_ARCHIVE, FCVAR_USERINFO})
+
 local cvDeteOnlyConfirm = GetConVar("ttt2_confirm_detective_only")
 local cvDeteOnlyInspect = GetConVar("ttt2_inspect_detective_only")
 
@@ -71,7 +83,6 @@ end
 -- @param table hint
 -- @hook
 -- @realm client
--- @ref
 -- @local
 function GM:AddClassHint(cls, hint)
 	ClassHint[cls] = table.Copy(hint)
@@ -80,7 +91,9 @@ end
 ---
 -- Function that handles the drawing of the overhead roleicons, it does not check whether
 -- the icon should be drawn or not, that has to be handled prior to calling this function
--- @param @{PLAYER} ply The player to receive an overhead icon
+-- @param Player ply The player to receive an overhead icon
+-- @param Material ricon
+-- @param Color rcolor
 -- @realm client
 function DrawOverheadRoleIcon(ply, ricon, rcolor)
 	local client = LocalPlayer()
@@ -217,7 +230,7 @@ local function DrawPropSpecLabels(client)
 			scrpos = scrpos:ToScreen()
 		end
 
-		if scrpos == nil or IsOffScreen(scrpos) then continue end
+		if scrpos == nil or util.IsOffScreen(scrpos) then continue end
 
 		text = ply:Nick()
 		w = surface.GetTextSize(text)
@@ -236,7 +249,9 @@ end
 function GM:HUDDrawTargetID()
 	local client = LocalPlayer()
 
-	if hook.Call("HUDShouldDraw", GAMEMODE, "TTTPropSpec") then
+	---
+	-- @realm client
+	if hook.Run("HUDShouldDraw", "TTTPropSpec") then
 		DrawPropSpecLabels(client)
 	end
 
@@ -275,6 +290,8 @@ function GM:HUDDrawTargetID()
 	-- only add onscreen infos when the entity isn't the local player
 	if ent == client then return end
 
+	---
+	-- @realm client
 	local changedEnt = hook.Run("TTTModifyTargetedEntity", ent, distance)
 
 	if changedEnt then
@@ -328,8 +345,10 @@ function GM:HUDDrawTargetID()
 	HUDDrawTargetIDDoors(tData)
 	HUDDrawTargetIDDNAScanner(tData)
 
+	---
 	-- now run a hook that can be used by addon devs that changes the appearance
 	-- of the targetid
+	-- @realm client
 	hook.Run("TTTRenderEntityInfo", tData)
 
 	-- draws an outline around the entity if defined
@@ -460,7 +479,7 @@ end
 
 ---
 -- Add targetID info to a focused entity.
--- @param @{TARGET_DATA} tData The @{TARGET_DATA} data object which contains all information
+-- @param TARGET_DATA tData The @{TARGET_DATA} data object which contains all information
 -- @hook
 -- @realm client
 function GM:TTTRenderEntityInfo(tData)
@@ -494,7 +513,10 @@ local key_params = {
 	walkkey = Key("+walk", "WALK")
 }
 
--- handle looking with DNA Scanner
+---
+-- Handle looking with DNA Scanner
+-- @param TARGET_DATA tData
+-- @realm client
 function HUDDrawTargetIDDNAScanner(tData)
 	local client = LocalPlayer()
 	local ent = tData:GetEntity()
@@ -516,7 +538,10 @@ function HUDDrawTargetIDDNAScanner(tData)
 	end
 end
 
--- handle looking at doors
+---
+-- Handle looking at doors
+-- @param TARGET_DATA tData
+-- @realm client
 function HUDDrawTargetIDDoors(tData)
 	local client = LocalPlayer()
 	local ent = tData:GetEntity()
@@ -573,7 +598,10 @@ function HUDDrawTargetIDDoors(tData)
 	end
 end
 
+---
 -- handle looking at traitor buttons
+-- @param TARGET_DATA tData
+-- @realm client
 function HUDDrawTargetIDTButtons(tData)
 	local client = LocalPlayer()
 	local ent = tData:GetEntity()
@@ -683,7 +711,10 @@ function HUDDrawTargetIDTButtons(tData)
 	)
 end
 
+---
 -- handle looking at weapons
+-- @param TARGET_DATA tData
+-- @realm client
 function HUDDrawTargetIDWeapons(tData)
 	local client = LocalPlayer()
 	local ent = tData:GetEntity()
@@ -764,7 +795,10 @@ function HUDDrawTargetIDWeapons(tData)
 	end
 end
 
+---
 -- handle looking at players
+-- @param TARGET_DATA tData
+-- @realm client
 function HUDDrawTargetIDPlayers(tData)
 	local client = LocalPlayer()
 	local ent = tData:GetEntity()
@@ -853,7 +887,10 @@ function HUDDrawTargetIDPlayers(tData)
 	end
 end
 
+---
 -- handle looking ragdolls
+-- @param TARGET_DATA tData
+-- @realm client
 function HUDDrawTargetIDRagdolls(tData)
 	local client = LocalPlayer()
 	local ent = tData:GetEntity()

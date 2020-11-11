@@ -1,8 +1,7 @@
 ---
 -- @class ENT
--- @realm shared
--- @section BaseAmmo
 -- @desc Ammo override base
+-- @section BaseAmmo
 
 if SERVER then
 	AddCSLuaFile()
@@ -22,6 +21,7 @@ ENT.Model = Model("models/items/boxsrounds.mdl")
 
 ---
 -- bw compat
+-- @realm shared
 function ENT:RealInit()
 
 end
@@ -30,6 +30,7 @@ end
 -- Some subclasses want to do stuff before/after initing (eg. setting color)
 -- Using self.BaseClass gave weird problems, so stuff has been moved into a fn
 -- Subclasses can easily call this whenever they want to
+-- @realm shared
 function ENT:Initialize()
 	self:SetModel(self.Model)
 
@@ -64,12 +65,16 @@ end
 -- Pseudo-clone of SDK's UTIL_ItemCanBeTouchedByPlayer
 -- aims to prevent picking stuff up through fences and stuff
 -- @param Player ply
+-- @return boolean
+-- @realm shared
 function ENT:PlayerCanPickup(ply)
 	if ply == self:GetOwner() then
 		return false
 	end
 
-	local result = hook.Call("TTTCanPickupAmmo", nil, ply, self)
+	---
+	-- @realm shared
+	local result = hook.Run("TTTCanPickupAmmo", ply, self)
 	if result then
 		return result
 	end
@@ -93,6 +98,7 @@ end
 ---
 -- @param Player ply
 -- @return boolean
+-- @realm shared
 function ENT:CheckForWeapon(ply)
 	if not self.CachedWeapons then
 		-- create a cache of what weapon classes use this ammo
@@ -130,6 +136,7 @@ end
 
 ---
 -- @param Entity ent
+-- @realm shared
 function ENT:Touch(ent)
 	if SERVER and not self.tickRemoval and ent:IsValid() and ent:IsPlayer() and self:CheckForWeapon(ent) and self:PlayerCanPickup(ent) then
 		local ammo = ent:GetAmmoCount(self.AmmoType)

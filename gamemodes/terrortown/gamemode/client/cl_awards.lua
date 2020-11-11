@@ -1,8 +1,8 @@
 ---
--- @module AWARDS
--- @desc Award/highlight generator functions take the events and the scores as
+-- Award/highlight generator functions take the events and the scores as
 -- produced by SCORING/CLSCORING and return a table if successful, or nil if
 -- not and another one should be tried.
+-- @module AWARDS
 
 -- some globals we'll use a lot
 local table = table
@@ -338,9 +338,8 @@ Headshots = AWARDS.Headshots -- just for compatibility
 
 ---
 -- @param table events
--- @param table scores
--- @param table players list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
--- @param table traitors list of @{Player}s with key = steamid64 and value = nickname of the @{Player}
+-- @param number ammotype
+-- @return table
 -- @realm client
 function AWARDS.UsedAmmoMost(events, ammotype)
 	local user = {}

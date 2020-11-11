@@ -1,4 +1,7 @@
----- Radio equipment playing distraction sounds
+---
+-- @class ENT
+-- @desc Radio equipment playing distraction sounds
+-- @section ttt_radio
 
 if SERVER then
 	AddCSLuaFile()
@@ -16,6 +19,8 @@ ENT.CanHavePrints = false
 ENT.SoundLimit = 5
 ENT.SoundDelay = 0.5
 
+---
+-- @realm shared
 function ENT:Initialize()
 	self:SetModel(self.Model)
 
@@ -48,6 +53,9 @@ function ENT:Initialize()
 	self.fingerprints = {}
 end
 
+---
+-- @param Player activator
+-- @realm shared
 function ENT:UseOverride(activator)
 	if IsValid(activator) and activator:IsPlayer() and activator:GetTeam() == self:GetOwner():GetTeam() then
 		local prints = self.fingerprints or {}
@@ -69,6 +77,9 @@ end
 
 local zapsound = Sound("npc/assassin/ball_zap1.wav")
 
+---
+-- @param DamageInfo dmginfo
+-- @realm shared
 function ENT:OnTakeDamage(dmginfo)
 	self:TakePhysicsDamage(dmginfo)
 	self:SetHealth(self:Health() - dmginfo:GetDamage())
@@ -89,6 +100,8 @@ function ENT:OnTakeDamage(dmginfo)
 end
 
 if CLIENT then
+	---
+	-- @realm client
 	function ENT:OnRemove()
 		local client = LocalPlayer()
 
@@ -98,6 +111,9 @@ if CLIENT then
 	end
 end
 
+---
+-- @param Sound snd
+-- @realm shared
 function ENT:AddSound(snd)
 	if #self.SoundQueue < self.SoundLimit then
 		self.SoundQueue[#self.SoundQueue + 1] = snd
@@ -196,6 +212,11 @@ local gunsounds = {
 	}
 }
 
+---
+-- @param Sound snd
+-- @param number ampl
+-- @param boolean last
+-- @realm shared
 function ENT:PlayDelayedSound(snd, ampl, last)
 	-- maybe we can get destroyed while a timer is still up
 	if not IsValid(self) then return end
@@ -209,6 +230,9 @@ function ENT:PlayDelayedSound(snd, ampl, last)
 	self.Playing = not last
 end
 
+---
+-- @param Sound snd
+-- @realm shared
 function ENT:PlaySound(snd)
 	local pos = self:GetPos()
 	local slf = self
@@ -259,6 +283,8 @@ end
 
 local nextplay = 0
 
+---
+-- @realm shared
 function ENT:Think()
 	if CurTime() <= nextplay or #self.SoundQueue <= 0 then return end
 

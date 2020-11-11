@@ -13,8 +13,8 @@
 -- for the same players to another client Y (eg. to let him know of his traitor team members). While doing that, the server still knows what each client
 -- currently knows and can adjust to that.
 --
--- @module ttt2net
 -- @author saibotk
+-- @module ttt2net
 
 -- Only send to clients, that already requested a full state update,
 -- which indirectly shows that they are ready to receive and are not
@@ -44,6 +44,7 @@ util.AddNetworkString(ttt2net.NETMSG_REQUEST_FULL_STATE_UPDATE)
 -- @param table|nil meta The metadata for the path (or empty to use an existing metadata entry)
 -- @param Entity nwent The entity on which we set the value
 -- @param string nwkey The key of the NWVar
+-- @realm server
 -- @internal
 local function SyncNWVarWithPath(path, meta, nwent, nwkey)
 	local tmpPath
@@ -76,7 +77,8 @@ end
 --
 -- @param table meta1 first meta table
 -- @param table meta2 second meta table
--- @return bool Returns true if they are equal false if not
+-- @return boolean Returns true if they are equal false if not
+-- @realm server
 function ttt2net.NetworkMetaDataTableEqual(meta1, meta2)
 	if meta1 == nil and meta2 == nil then
 		return true
@@ -97,8 +99,9 @@ end
 -- This will also automatically synchronize the new metadata information to the clients (only if it differs from before).
 -- @note Setting the metadata will also set the data to nil on its path (only if it is a different meta data object than before).
 --
--- @param any|table path The path that this meta data is associated with
--- @param table|nil metadata The metadata table
+-- @param any path The path that this meta data is associated with
+-- @param[opt] table metadata The metadata table
+-- @realm server
 function ttt2net.SetMetaData(path, metadata)
 	local tmpPath
 
@@ -129,8 +132,9 @@ end
 -- This will set the metadata for a specific path and prepend the path with the "global" keyword.
 -- For more information look at {@ttt2net.SetMetaData}.
 --
--- @param any|table path The path this meta data is associated with (already includes the "global" keyword)
--- @param table|nil metadata The metadata table
+-- @param any path The path this meta data is associated with (already includes the "global" keyword)
+-- @param[opt] table metadata The metadata table
+-- @realm server
 function ttt2net.SetMetaDataGlobal(path, metadata)
 	local tmpPath
 
@@ -151,8 +155,10 @@ end
 -- This will set the metadata for a specific path on a player and prepend needed keywords.
 -- For more information look at {@ttt2net.SetMetaData}.
 --
--- @param any|table path The path this meta data is associated with (already includes the needed keywords)
--- @param table|nil metadata The metadata table
+-- @param any path The path this meta data is associated with (already includes the needed keywords)
+-- @param nil|table metadata The metadata table
+-- @param Player ply The player
+-- @realm server
 function ttt2net.SetMetaDataOnPlayer(path, metadata, ply)
 	local tmpPath
 
@@ -181,10 +187,11 @@ end
 -- @note This will only update / synchronize the new value, if the value is not the same as the old one!
 -- @note For data of the type "table", you will have to create a new table object (eg. with table.copy) to tell the system that this is different and has to be synced. Also changing the table, will not automatically resynchronize it with the clients, you have to also use this function again to "set" it.
 --
--- @param any|table path The path to set the data for
+-- @param any path The path to set the data for
 -- @param table|nil meta The metadata for the path (or empty to use an existing metadata entry)
 -- @param any value The value to save
--- @param Entity|nil client The client/entity to set this value for (overrides the default value)
+-- @param[opt] Entity client The client/entity to set this value for (overrides the default value)
+-- @realm server
 function ttt2net.Set(path, meta, value, client)
 	local tmpPath
 	local clientId = client and client:EntIndex() or nil
@@ -241,6 +248,7 @@ end
 -- This will also automatically sync the new value to the clients that previously had an override value.
 --
 -- @param table path The path to clear out all overrides on.
+-- @realm server
 function ttt2net.RemoveOverrides(path)
 	local tmpPath
 
@@ -297,6 +305,7 @@ end
 -- it will do the same as {@ttt2net.RemoveOverrides}.
 --
 -- @param table path The path to clear out all overrides on.
+-- @realm server
 function ttt2net.RemoveOverridesGlobal(path)
 	local tmpPath
 
@@ -319,6 +328,8 @@ end
 -- it will do the same as {@ttt2net.RemoveOverrides}.
 --
 -- @param table path The path to clear out all overrides on.
+-- @param Player ply The player
+-- @realm server
 function ttt2net.RemoveOverridesOnPlayer(path, ply)
 	local tmpPath
 
@@ -341,9 +352,10 @@ end
 -- When no client parameter is given, this will return the default value, otherwise
 -- it will return the override value or nil, when no override is found.
 --
--- @param any|table path The path to get the value from
--- @param Entity|nil client The client/entity to get the value for
+-- @param any path The path to get the value from
+-- @param[opt] Entity client The client/entity to get the value for
 -- @return any|nil The value found at the given path
+-- @realm server
 function ttt2net.Get(path, client)
 	local clientId = client and client:EntIndex() or nil
 	local tmpPath
@@ -366,9 +378,10 @@ end
 -- When no client parameter is given, this will return the default value, otherwise
 -- it will first look for an override value and only return the default value, when no override is found.
 --
--- @param any|table path The path to get the value from
--- @param Entity|nil client The client/entity to get the value for
+-- @param any path The path to get the value from
+-- @param[opt] Entity client The client/entity to get the value for
 -- @return any|nil The value that a client knows
+-- @realm server
 function ttt2net.GetWithOverride(path, client)
 	local tmpPath
 
@@ -401,9 +414,10 @@ end
 -- Returns the currently saved value for a given path.
 -- This will do the same as {@ttt2net.Get} but will first prepend the "global" keyword to the path.
 --
--- @param any|table path The path to get the value from
--- @param Entity|nil client The client/entity to get the value for
+-- @param any path The path to get the value from
+-- @param[opt] Entity client The client/entity to get the value for
 -- @return any|nil The value for the given path
+-- @realm server
 function ttt2net.GetGlobal(path, client)
 	local tmpPath
 
@@ -424,10 +438,11 @@ end
 -- This is used to set a value in the data table for a specific path and works the same as {@ttt2net.Set},
 -- but it will prepend the "global" keyword to the path.
 --
--- @param any|table path The path to set the data for
+-- @param any path The path to set the data for
 -- @param table|nil meta The metadata for the path
 -- @param any value The value to save
--- @param Entity|nil client The client/entity to set this value for (overrides the default value)
+-- @param[opt] Entity client The client/entity to set this value for (overrides the default value)
+-- @realm server
 function ttt2net.SetGlobal(path, meta, value, client)
 	local tmpPath
 
@@ -448,11 +463,12 @@ end
 -- This is used to set a value in the data table for a specific path on a specific player/entity and works the same as {@ttt2net.Set},
 -- but it will prepend the needed keywords to the path.
 --
--- @param any|table path The path to set the data for
+-- @param any path The path to set the data for
 -- @param table|nil meta The metadata for the path
 -- @param any value The value to save
 -- @param Entity ply The player/entity that this data is associated to
--- @param Entity|nil client The client/entity to set this value for (as an override for the default value)
+-- @param[opt] Entity client The client/entity to set this value for (as an override for the default value)
+-- @realm server
 function ttt2net.SetOnPlayer(path, meta, value, ply, client)
 	local tmpPath
 
@@ -474,10 +490,11 @@ end
 -- Returns the currently saved value for a given path on a specific player.
 -- This will do the same as {@ttt2net.Get} but will first prepend the needed keywords to the path.
 --
--- @param any|table path The path to get the value from
+-- @param any path The path to get the value from
 -- @param Entity ply The client/entity to save the value on
--- @param Entity|nil client The client/entity to get the value for
+-- @param[opt] Entity client The client/entity to get the value for
 -- @return any|nil The value for the given path
+-- @realm server
 function ttt2net.GetOnPlayer(path, ply, client)
 	local tmpPath
 
@@ -497,6 +514,7 @@ end
 
 ---
 -- Prints out all ttt2net related tables, for debugging purposes.
+-- @realm server
 function ttt2net.Debug()
 	print("[TTT2NET] Debug:")
 	print("Initialized clients:")
@@ -513,7 +531,8 @@ end
 -- This will send a metadata update for the specified path to all
 -- initialized clients.
 --
--- @param any|table path The path to send a metadata update for
+-- @param any path The path to send a metadata update for
+-- @realm server
 function ttt2net.SendMetaDataUpdate(path)
 	local tmpPath
 
@@ -545,7 +564,8 @@ end
 --
 -- @param Entity client The client/entity to clear all overrides for
 -- @param table curTable This is the current metadata table. This should start with the complete metadata table, otherwise the path has to be adjusted, see the description.
--- @param table|nil path The current path to the curTable based on the root of the data table
+-- @param[opt] table path The current path to the curTable based on the root of the data table
+-- @realm server
 function ttt2net.RemoveOverridesForClient(client, curTable, path)
 	local tmpPath = not istable(path) and { path } or path and table.Copy(path) or {}
 
@@ -570,6 +590,7 @@ end
 -- This will reset all known data for a client and remove all entries related to this client.
 --
 -- @param Entity client The client to remove
+-- @realm server
 function ttt2net.ResetClient(client)
 	assert(IsEntity(client), "[TTT2NET] ResetClient() client is not a valid Entity!")
 
@@ -585,8 +606,9 @@ end
 ---
 -- This will send a data update to either the specified client/list of clients or all known initialized clients.
 --
--- @param any|table path The path to send the update for
--- @param Player|table|nil client The client/list of clients or nil to send this to all knwon clients
+-- @param any path The path to send the update for
+-- @param[opt] Player|table client The client/list of clients or nil to send this to all known clients
+-- @realm server
 function ttt2net.SendDataUpdate(path, client)
 	local tmpPath
 
@@ -630,7 +652,8 @@ end
 --
 -- @param Entity client The client/entity to get the data for
 -- @param table curTable This is the current metadata table. This should start with the complete metadata table, otherwise the path has to be adjusted, see the description.
--- @param table|nil path The current path to the curTable based on the root of the data table
+-- @param[opt] table path The current path to the curTable based on the root of the data table
+-- @realm server
 function ttt2net.DataTableWithOverrides(client, curTable, path)
 	local tmpPath = not istable(path) and { path } or path and table.Copy(path) or {}
 	local newTable = table.Copy(curTable)
@@ -660,7 +683,8 @@ end
 -- This will send the metadata table and the specific data table (with respect to the overrides) to the clients.
 -- @note This will also set all reveivers as initialized.
 --
--- @param Player|table|nil client The client/list of clients or nil for all known clients, to send the update to
+-- @param[opt] Player|table client The client/list of clients or nil for all known clients, to send the update to
+-- @realm server
 function ttt2net.SendFullStateUpdate(client)
 	-- Wrap the given receivers to a table
 	local receivers = istable(client) and client or client and { client } or initialized_clients
@@ -688,6 +712,7 @@ end
 --
 -- @param number len The length of the network message
 -- @param Player client the client that made the request
+-- @realm server
 -- @internal
 local function ClientRequestFullStateUpdate(len, client)
 	print("[TTT2NET] Client " .. (client:Nick() or "unknown") .. " requested a full state update.")
@@ -700,6 +725,7 @@ net.Receive(ttt2net.NETMSG_REQUEST_FULL_STATE_UPDATE, ClientRequestFullStateUpda
 -- This is used to write a path table to the current network message.
 --
 -- @param table path The path table to send
+-- @realm server
 function ttt2net.NetWritePath(path)
 	net.WriteString(pon.encode(path))
 end
@@ -708,6 +734,7 @@ end
 -- This is used to write a metadata table to the current network message.
 --
 -- @param table metadata The metadata to send
+-- @realm server
 function ttt2net.NetWriteMetaData(metadata)
 	local isMetadataNil = metadata == nil
 
@@ -730,7 +757,8 @@ end
 -- @note When using the type "table", the table will be converted to a string with the "pon" library and you have to beware of the maximum net message size, so you are limited in the maximum table size, that can be sent.
 --
 -- @param table metadata The metadata for the given value
--- @param any|nil val The value to send, can also be nil
+-- @param[opt] any val The value to send, can also be nil
+-- @realm server
 function ttt2net.NetWriteData(metadata, val)
 	-- Check if the value is nil, to also allow setting a value to nil
 	local isValNil = val == nil
@@ -771,10 +799,11 @@ end
 -- @note This will always sync the default value for the path, and ignore any overrides for specific clients, as NWVars cannot be set for each client.
 -- @note The metadata type "table" is not supported, and should not be used with this function.
 --
--- @param any|table path The path to sync the nwvar with
+-- @param any path The path to sync the nwvar with
 -- @param table|nil meta The metadata
 -- @param Entity nwent The entity that this NWVar is saved on
 -- @param string nwkey The key of the NWVar
+-- @realm server
 function ttt2net.SyncWithNWVar(path, meta, nwent, nwkey)
 	local tmpPath
 
@@ -828,6 +857,9 @@ function ttt2net.SyncWithNWVar(path, meta, nwent, nwkey)
 end
 
 ---
+-- @class Player
+
+---
 -- Player extensions
 -- Some simple functions on the player class, to simplify the use of this system.
 -- They will automatically set the metadata.
@@ -837,8 +869,9 @@ local plymeta = assert(FindMetaTable("Player"), "[TTT2NET] FAILED TO FIND PLAYER
 ---
 -- Sets a bool value at the given path on the player.
 --
--- @param any|table path The path to set the value for
--- @param bool|nil value The value to set
+-- @param any path The path to set the value for
+-- @param[opt] boolean value The value to set
+-- @realm server
 function plymeta:TTT2NETSetBool(path, value)
 	ttt2net.SetOnPlayer(path, { type = "bool" }, value, self)
 end
@@ -846,9 +879,10 @@ end
 ---
 -- Sets an int value at the given path on the player.
 --
--- @param any|table path The path to set the value for
--- @param int|nil value The value to set
--- @param int|nil bits The bits that this int needs to be stored (optional, otherwise a default of 32 is used)
+-- @param any path The path to set the value for
+-- @param[opt] number value The value to set
+-- @param[optchain] number bits The bits that this int needs to be stored (optional, otherwise a default of 32 is used)
+-- @realm server
 function plymeta:TTT2NETSetInt(path, value, bits)
 	ttt2net.SetOnPlayer(path, {
 		type = "int",
@@ -859,9 +893,10 @@ end
 ---
 -- Sets an unsigned int value at the given path on the player.
 --
--- @param any|table path The path to set the value for
--- @param uint|nil value The value to set
--- @param int|nil bits The bits that this int needs to be stored (optional, otherwise a default of 32 is used)
+-- @param any path The path to set the value for
+-- @param[opt] number value The value (unsigned int) to set
+-- @param[optchain] number bits The bits that this int needs to be stored (optional, otherwise a default of 32 is used)
+-- @realm server
 function plymeta:TTT2NETSetUInt(path, value, bits)
 	ttt2net.SetOnPlayer(path, {
 		type = "int",
@@ -873,8 +908,9 @@ end
 ---
 -- Sets a float value at the given path on the player.
 --
--- @param any|table path The path to set the value for
--- @param float|nil value The value to set
+-- @param any path The path to set the value for
+-- @param[opt] float value The value to set
+-- @realm server
 function plymeta:TTT2NETSetFloat(path, value)
 	ttt2net.SetOnPlayer(path, { type = "float" }, value, self)
 end
@@ -882,8 +918,9 @@ end
 ---
 -- Sets a string value at the given path on the player.
 --
--- @param any|table path The path to set the value for
--- @param string|nil value The value to set
+-- @param any path The path to set the value for
+-- @param[opt] string value The value to set
+-- @realm server
 function plymeta:TTT2NETSetString(path, value)
 	ttt2net.SetOnPlayer(path, { type = "string" }, value, self)
 end
