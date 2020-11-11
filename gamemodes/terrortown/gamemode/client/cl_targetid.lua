@@ -13,7 +13,7 @@ local IsValid = IsValid
 local hook = hook
 local targetid = targetid
 
--- Temporary fix of TargetID Variable Initialization
+-- Make sure local TargetID Variables are initialized
 targetid.Initialize()
 
 -- Convars for targetid

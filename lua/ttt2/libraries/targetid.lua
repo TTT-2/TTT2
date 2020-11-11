@@ -41,7 +41,11 @@ local materialDestructible = Material("vgui/ttt/tid/tid_destructible")
 local materialDNATargetID = Material("vgui/ttt/dnascanner/dna_hud")
 
 ---
--- This function is a temporary fix for local variables in use of other libraries, that are not yet initialized
+-- This function makes sure local variables, which use other libraries that are not yet initialized, are initialized later.
+-- It gets called after all libraries are included and `cl_targetid.lua` gets included.
+-- @note You don't need to call this if you want to use this library. It already gets called by `cl_targetid.lua`
+-- @realm client
+-- @local
 function targetid.Initialize()
     if bIsInitialized then return end
 
@@ -230,11 +234,11 @@ function targetid.HUDDrawTargetIDWeapons(tData)
 
     local weapon_name
 
-    if not ent.GetPrintName then
-        weapon_name = ent:GetPrintName() or ent.PrintName or ent:GetClass() or "..."
-    else
-        weapon_name = ent.PrintName or ent:GetClass() or "..."
+    if ent.GetPrintName then
+        weapon_name = ent:GetPrintName()
     end
+
+    weapon_name = weapon_name or ent.PrintName or ent:GetClass() or "..."
 
     -- enable targetID rendering
     tData:EnableText()

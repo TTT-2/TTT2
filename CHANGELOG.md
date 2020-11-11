@@ -28,7 +28,6 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Cleaned up draw function files
 - Removed C4 defuse restriction for teammates
 - Moved role specific score variables into the role base
-- Refactored `GM:HUDDrawTargetID` for the use of a shared FindAlongRay-Function
 
 ### Fixed
 
@@ -43,6 +42,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added `table.ExtractRandomEntry(tbl, filterFn)` function
 - Added a team indicator in front of every name in the scoreboard (just known teams will be displayed)
 - Added a hook `TTT2ModifyCorpseCallRadarRecipients` that is called once "call detective" is pressed
+- Added a `targetid` library, that can be used to draw TargetIDs for entities
 
 ### Changed
 
