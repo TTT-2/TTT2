@@ -5,9 +5,9 @@
 -- @author ZenBreaker
 
 if SERVER then
-    AddCSLuaFile()
+	AddCSLuaFile()
 
-    return
+	return
 end
 
 targetid = targetid or {}
@@ -47,15 +47,15 @@ local materialDNATargetID = Material("vgui/ttt/dnascanner/dna_hud")
 -- @realm client
 -- @local
 function targetid.Initialize()
-    if bIsInitialized then return end
+	if bIsInitialized then return end
 
-    bIsInitialized = true
-    ParT = LANG.GetParamTranslation
-    TryT = LANG.TryTranslation
-    key_params = {
-        usekey = Key("+use", "USE"),
-        walkkey = Key("+walk", "WALK")
-    }
+	bIsInitialized = true
+	ParT = LANG.GetParamTranslation
+	TryT = LANG.TryTranslation
+	key_params = {
+		usekey = Key("+use", "USE"),
+		walkkey = Key("+walk", "WALK")
+	}
 end
 
 ---
@@ -70,37 +70,37 @@ end
 -- @return number The Distance between the Origin and the Entity
 -- @realm client
 function targetid.FindEntityAlongView(pos, dir, filter)
-    local endpos = dir
-    endpos:Mul(MAX_TRACE_LENGTH)
-    endpos:Add(pos)
+	local endpos = dir
+	endpos:Mul(MAX_TRACE_LENGTH)
+	endpos:Add(pos)
 
-    local ent, distance
+	local ent, distance
 
-    -- if the user is looking at a traitor button, it should always be handled with priority
-    if TBHUD.focus_but and IsValid(TBHUD.focus_but.ent) and (TBHUD.focus_but.access or TBHUD.focus_but.admin) and TBHUD.focus_stick >= CurTime() then
-        ent = TBHUD.focus_but.ent
+	-- if the user is looking at a traitor button, it should always be handled with priority
+	if TBHUD.focus_but and IsValid(TBHUD.focus_but.ent) and (TBHUD.focus_but.access or TBHUD.focus_but.admin) and TBHUD.focus_stick >= CurTime() then
+		ent = TBHUD.focus_but.ent
 
-        distance = pos:Distance(ent:GetPos())
-    else
-        local trace = util.TraceLine({
-            start = pos,
-            endpos = endpos,
-            mask = MASK_SHOT,
-            filter = filter
-        })
+		distance = pos:Distance(ent:GetPos())
+	else
+		local trace = util.TraceLine({
+			start = pos,
+			endpos = endpos,
+			mask = MASK_SHOT,
+			filter = filter
+		})
 
-        -- this is the entity the player is looking at right now
-        ent = trace.Entity
+		-- this is the entity the player is looking at right now
+		ent = trace.Entity
 
-        distance = trace.StartPos:Distance(trace.HitPos)
+		distance = trace.StartPos:Distance(trace.HitPos)
 
-        -- if a vehicle, we identify the driver instead
-        if IsValid(ent) and IsValid(ent:GetNWEntity("ttt_driver", nil)) then
-            ent = ent:GetNWEntity("ttt_driver", nil)
-        end
-    end
+		-- if a vehicle, we identify the driver instead
+		if IsValid(ent) and IsValid(ent:GetNWEntity("ttt_driver", nil)) then
+			ent = ent:GetNWEntity("ttt_driver", nil)
+		end
+	end
 
-    return ent, distance
+	return ent, distance
 end
 
 ---
@@ -108,112 +108,112 @@ end
 -- @param TARGET_DATA tData The object to be used in the hook
 -- @realm client
 function targetid.HUDDrawTargetIDTButtons(tData)
-    local client = LocalPlayer()
-    local ent = tData:GetEntity()
+	local client = LocalPlayer()
+	local ent = tData:GetEntity()
 
-    local admin_mode = GetGlobalBool("ttt2_tbutton_admin_show", false)
+	local admin_mode = GetGlobalBool("ttt2_tbutton_admin_show", false)
 
-    if not IsValid(client) or not client:IsTerror() or not client:Alive()
-        or not IsValid(ent) or ent:GetClass() ~= "ttt_traitor_button" or tData:GetEntityDistance() > ent:GetUsableRange() then
-        return
-    end
+	if not IsValid(client) or not client:IsTerror() or not client:Alive()
+		or not IsValid(ent) or ent:GetClass() ~= "ttt_traitor_button" or tData:GetEntityDistance() > ent:GetUsableRange() then
+		return
+	end
 
-    -- enable targetID rendering
-    tData:EnableText()
+	-- enable targetID rendering
+	tData:EnableText()
 
-    -- set the title of the traitor button
-    tData:SetTitle(ent:GetDescription() == "?" and "Traitor Button" or TryT(ent:GetDescription()))
+	-- set the title of the traitor button
+	tData:SetTitle(ent:GetDescription() == "?" and "Traitor Button" or TryT(ent:GetDescription()))
 
-    -- set the subtitle and icon depending on the currently used mode
-    if TBHUD.focus_but.admin and not TBHUD.focus_but.access then
-        tData:AddIcon(
-            materialTButton,
-            COLOR_LGRAY
-        )
+	-- set the subtitle and icon depending on the currently used mode
+	if TBHUD.focus_but.admin and not TBHUD.focus_but.access then
+		tData:AddIcon(
+			materialTButton,
+			COLOR_LGRAY
+		)
 
-        tData:SetSubtitle(TryT("tbut_help_admin"))
-    else
-        tData:SetKey(input.GetKeyCode(key_params.usekey))
+		tData:SetSubtitle(TryT("tbut_help_admin"))
+	else
+		tData:SetKey(input.GetKeyCode(key_params.usekey))
 
-        tData:SetSubtitle(ParT("tbut_help", key_params))
-    end
+		tData:SetSubtitle(ParT("tbut_help", key_params))
+	end
 
-    -- add description time with some general info about this specific traitor button
-    if ent:GetDelay() < 0 then
-        tData:AddDescriptionLine(
-            TryT("tbut_single"),
-            client:GetRoleColor()
-        )
-    elseif ent:GetDelay() == 0 then
-        tData:AddDescriptionLine(
-            TryT("tbut_reuse"),
-            client:GetRoleColor()
-        )
-    else
-        tData:AddDescriptionLine(
-            ParT("tbut_retime", {num = ent:GetDelay()}),
-            client:GetRoleColor()
-        )
-    end
+	-- add description time with some general info about this specific traitor button
+	if ent:GetDelay() < 0 then
+		tData:AddDescriptionLine(
+			TryT("tbut_single"),
+			client:GetRoleColor()
+		)
+	elseif ent:GetDelay() == 0 then
+		tData:AddDescriptionLine(
+			TryT("tbut_reuse"),
+			client:GetRoleColor()
+		)
+	else
+		tData:AddDescriptionLine(
+			ParT("tbut_retime", {num = ent:GetDelay()}),
+			client:GetRoleColor()
+		)
+	end
 
-    -- only add more information if in admin mode
-    if not admin_mode or not client:IsAdmin() then return end
+	-- only add more information if in admin mode
+	if not admin_mode or not client:IsAdmin() then return end
 
-    local but = TBHUD.focus_but
+	local but = TBHUD.focus_but
 
-    tData:AddDescriptionLine() -- adding empty line
+	tData:AddDescriptionLine() -- adding empty line
 
-    tData:AddDescriptionLine(
-        "ADMIN AREA:",
-        COLOR_WHITE
-    )
+	tData:AddDescriptionLine(
+		"ADMIN AREA:",
+		COLOR_WHITE
+	)
 
-    tData:AddDescriptionLine(
-        ParT("tbut_role_toggle", {usekey = key_params.usekey, walkkey = key_params.walkkey, role = client:GetRoleString()}),
-        COLOR_WHITE
-    )
+	tData:AddDescriptionLine(
+		ParT("tbut_role_toggle", {usekey = key_params.usekey, walkkey = key_params.walkkey, role = client:GetRoleString()}),
+		COLOR_WHITE
+	)
 
-    tData:AddDescriptionLine(
-        ParT("tbut_team_toggle", {usekey = key_params.usekey, walkkey = key_params.walkkey, team = client:GetTeam():gsub("^%l", string.upper)}),
-        COLOR_WHITE
-    )
+	tData:AddDescriptionLine(
+		ParT("tbut_team_toggle", {usekey = key_params.usekey, walkkey = key_params.walkkey, team = client:GetTeam():gsub("^%l", string.upper)}),
+		COLOR_WHITE
+	)
 
-    tData:AddDescriptionLine() -- adding empty line
+	tData:AddDescriptionLine() -- adding empty line
 
-    tData:AddDescriptionLine(
-        TryT("tbut_current_config"),
-        COLOR_WHITE
-    )
+	tData:AddDescriptionLine(
+		TryT("tbut_current_config"),
+		COLOR_WHITE
+	)
 
-    local l_role = but.overrideRole == nil and "tbut_default" or but.overrideRole and "tbut_allow" or "tbut_prohib"
-    local l_team = but.overrideTeam == nil and "tbut_default" or but.overrideTeam and "tbut_allow" or "tbut_prohib"
+	local l_role = but.overrideRole == nil and "tbut_default" or but.overrideRole and "tbut_allow" or "tbut_prohib"
+	local l_team = but.overrideTeam == nil and "tbut_default" or but.overrideTeam and "tbut_allow" or "tbut_prohib"
 
-    tData:AddDescriptionLine(
-        ParT("tbut_role_config", {current = TryT(l_role)}) .. ", " .. ParT("tbut_team_config", {current = TryT(l_team)}),
-        COLOR_LGRAY
-    )
+	tData:AddDescriptionLine(
+		ParT("tbut_role_config", {current = TryT(l_role)}) .. ", " .. ParT("tbut_team_config", {current = TryT(l_team)}),
+		COLOR_LGRAY
+	)
 
-    tData:AddDescriptionLine(
-        TryT("tbut_intended_config"),
-        COLOR_WHITE
-    )
+	tData:AddDescriptionLine(
+		TryT("tbut_intended_config"),
+		COLOR_WHITE
+	)
 
-    local l_roleIntend = but.roleIntend == "none" and "tbut_default" or but.roleIntend
-    local l_teamIntend = but.teamIntend == TEAM_NONE and "tbut_default" or but.teamIntend
+	local l_roleIntend = but.roleIntend == "none" and "tbut_default" or but.roleIntend
+	local l_teamIntend = but.teamIntend == TEAM_NONE and "tbut_default" or but.teamIntend
 
-    tData:AddDescriptionLine(
-        ParT("tbut_role_config", {current = LANG.GetRawTranslation(l_roleIntend) or l_roleIntend}) .. ", " .. ParT("tbut_team_config", {current = LANG.GetRawTranslation(l_teamIntend) or l_teamIntend}),
-        COLOR_LGRAY
-    )
+	tData:AddDescriptionLine(
+		ParT("tbut_role_config", {current = LANG.GetRawTranslation(l_roleIntend) or l_roleIntend}) .. ", " .. ParT("tbut_team_config", {current = LANG.GetRawTranslation(l_teamIntend) or l_teamIntend}),
+		COLOR_LGRAY
+	)
 
-    if not TBHUD.focus_but.admin or TBHUD.focus_but.access then return end
+	if not TBHUD.focus_but.admin or TBHUD.focus_but.access then return end
 
-    tData:AddDescriptionLine() -- adding empty line
+	tData:AddDescriptionLine() -- adding empty line
 
-    tData:AddDescriptionLine(
-        ParT("tbut_admin_mode_only", {cv = "ttt2_tbutton_admin_show"}),
-        COLOR_ORANGE
-    )
+	tData:AddDescriptionLine(
+		ParT("tbut_admin_mode_only", {cv = "ttt2_tbutton_admin_show"}),
+		COLOR_ORANGE
+	)
 end
 
 ---
@@ -221,83 +221,83 @@ end
 -- @param TARGET_DATA tData The object to be used in the hook
 -- @realm client
 function targetid.HUDDrawTargetIDWeapons(tData)
-    local client = LocalPlayer()
-    local ent = tData:GetEntity()
+	local client = LocalPlayer()
+	local ent = tData:GetEntity()
 
-    if not IsValid(client) or not client:IsTerror() or not client:Alive()
-    or not IsValid(ent) or tData:GetEntityDistance() > 100 or not ent:IsWeapon() then
-        return
-    end
+	if not IsValid(client) or not client:IsTerror() or not client:Alive()
+	or not IsValid(ent) or tData:GetEntityDistance() > 100 or not ent:IsWeapon() then
+		return
+	end
 
-    local dropWeapon, isActiveWeapon, switchMode = GetBlockingWeapon(client, ent)
-    local kind_pickup_wep = MakeKindValid(ent.Kind)
+	local dropWeapon, isActiveWeapon, switchMode = GetBlockingWeapon(client, ent)
+	local kind_pickup_wep = MakeKindValid(ent.Kind)
 
-    local weapon_name
+	local weapon_name
 
-    if ent.GetPrintName then
-        weapon_name = ent:GetPrintName()
-    end
+	if ent.GetPrintName then
+		weapon_name = ent:GetPrintName()
+	end
 
-    weapon_name = weapon_name or ent.PrintName or ent:GetClass() or "..."
+	weapon_name = weapon_name or ent.PrintName or ent:GetClass() or "..."
 
-    -- enable targetID rendering
-    tData:EnableText()
-    tData:EnableOutline()
-    tData:SetOutlineColor(client:GetRoleColor())
+	-- enable targetID rendering
+	tData:EnableText()
+	tData:EnableOutline()
+	tData:SetOutlineColor(client:GetRoleColor())
 
-    -- general info
-    tData:SetKey(bind.Find("ttt2_weaponswitch"))
+	-- general info
+	tData:SetKey(bind.Find("ttt2_weaponswitch"))
 
-    tData:SetTitle(TryT(weapon_name) .. " [" .. ParT("target_slot_info", {slot = kind_pickup_wep}) .. "]")
+	tData:SetTitle(TryT(weapon_name) .. " [" .. ParT("target_slot_info", {slot = kind_pickup_wep}) .. "]")
 
-    local key_params_wep = {
-        usekey = string.upper(input.GetKeyName(bind.Find("ttt2_weaponswitch"))),
-        walkkey = Key("+walk", "WALK")
-    }
+	local key_params_wep = {
+		usekey = string.upper(input.GetKeyName(bind.Find("ttt2_weaponswitch"))),
+		walkkey = Key("+walk", "WALK")
+	}
 
-    -- set subtitle depending on the switchmode
-    if switchMode == SWITCHMODE_PICKUP then
-        tData:SetSubtitle(ParT("target_pickup_weapon", key_params_wep) .. (not isActiveWeapon and ParT("target_pickup_weapon_hidden", key_params_wep) or ""))
-    elseif switchMode == SWITCHMODE_SWITCH then
-        tData:SetSubtitle(ParT("target_switch_weapon", key_params_wep) .. (not isActiveWeapon and ParT("target_switch_weapon_hidden", key_params_wep) or ""))
-    elseif switchMode == SWITCHMODE_FULLINV then
-        tData:SetSubtitle(TryT("target_switch_weapon_nospace"))
-    end
+	-- set subtitle depending on the switchmode
+	if switchMode == SWITCHMODE_PICKUP then
+		tData:SetSubtitle(ParT("target_pickup_weapon", key_params_wep) .. (not isActiveWeapon and ParT("target_pickup_weapon_hidden", key_params_wep) or ""))
+	elseif switchMode == SWITCHMODE_SWITCH then
+		tData:SetSubtitle(ParT("target_switch_weapon", key_params_wep) .. (not isActiveWeapon and ParT("target_switch_weapon_hidden", key_params_wep) or ""))
+	elseif switchMode == SWITCHMODE_FULLINV then
+		tData:SetSubtitle(TryT("target_switch_weapon_nospace"))
+	end
 
-    -- add additional dropping info if weapon is switched
-    if switchMode == SWITCHMODE_SWITCH then
-        local dropWepKind = MakeKindValid(dropWeapon.Kind)
-        local dropWeapon_name
+	-- add additional dropping info if weapon is switched
+	if switchMode == SWITCHMODE_SWITCH then
+		local dropWepKind = MakeKindValid(dropWeapon.Kind)
+		local dropWeapon_name
 
-        if not dropWeapon.GetPrintName then
-            dropWeapon_name = dropWeapon:GetPrintName() or dropWeapon.PrintName or dropWeapon:GetClass() or "..."
-        else
-            dropWeapon_name = dropWeapon.PrintName or dropWeapon:GetClass() or "..."
-        end
+		if not dropWeapon.GetPrintName then
+			dropWeapon_name = dropWeapon:GetPrintName() or dropWeapon.PrintName or dropWeapon:GetClass() or "..."
+		else
+			dropWeapon_name = dropWeapon.PrintName or dropWeapon:GetClass() or "..."
+		end
 
-        tData:AddDescriptionLine(
-            ParT("target_switch_drop_weapon_info", {slot = dropWepKind, name = TryT(dropWeapon_name)}),
-            COLOR_ORANGE
-        )
-    end
+		tData:AddDescriptionLine(
+			ParT("target_switch_drop_weapon_info", {slot = dropWepKind, name = TryT(dropWeapon_name)}),
+			COLOR_ORANGE
+		)
+	end
 
-    -- add info about full inventory
-    if switchMode == SWITCHMODE_FULLINV then
-        local dropWepKind = MakeKindValid(ent.Kind)
+	-- add info about full inventory
+	if switchMode == SWITCHMODE_FULLINV then
+		local dropWepKind = MakeKindValid(ent.Kind)
 
-        tData:AddDescriptionLine(
-            ParT("target_switch_drop_weapon_info_noslot", {slot = dropWepKind}),
-            COLOR_ORANGE
-        )
-    end
+		tData:AddDescriptionLine(
+			ParT("target_switch_drop_weapon_info_noslot", {slot = dropWepKind}),
+			COLOR_ORANGE
+		)
+	end
 
-    -- add info if your weapon can not be dropped
-    if switchMode == SWITCHMODE_NOSPACE then
-        tData:AddDescriptionLine(
-            TryT("drop_no_room"),
-            COLOR_ORANGE
-        )
-    end
+	-- add info if your weapon can not be dropped
+	if switchMode == SWITCHMODE_NOSPACE then
+		tData:AddDescriptionLine(
+			TryT("drop_no_room"),
+			COLOR_ORANGE
+		)
+	end
 end
 
 ---
@@ -305,91 +305,91 @@ end
 -- @param TARGET_DATA tData The object to be used in the hook
 -- @realm client
 function targetid.HUDDrawTargetIDPlayers(tData)
-    local client = LocalPlayer()
-    local ent = tData:GetEntity()
-    local obsTgt = client:GetObserverTarget()
+	local client = LocalPlayer()
+	local ent = tData:GetEntity()
+	local obsTgt = client:GetObserverTarget()
 
-    -- has to be a player
-    if not ent:IsPlayer() then return end
+	-- has to be a player
+	if not ent:IsPlayer() then return end
 
-    local disguised = ent:GetNWBool("disguised", false)
+	local disguised = ent:GetNWBool("disguised", false)
 
-    -- oof TTT, why so hacky?! Sets last seen player. Dear reader I don't like this as well, but it has to stay that way
-    -- for compatibility reasons. At least it is uncluttered now!
-    client.last_id = disguised and nil or ent
+	-- oof TTT, why so hacky?! Sets last seen player. Dear reader I don't like this as well, but it has to stay that way
+	-- for compatibility reasons. At least it is uncluttered now!
+	client.last_id = disguised and nil or ent
 
-    -- do not show information when observing a player
-    if client:IsSpec() and IsValid(obsTgt) and ent == obsTgt then return end
+	-- do not show information when observing a player
+	if client:IsSpec() and IsValid(obsTgt) and ent == obsTgt then return end
 
-    -- disguised players are not shown to normal players, except: same team, unknown team or to spectators
-    if disguised and not (client:IsInTeam(ent) and not client:GetSubRoleData().unknownTeam or client:IsSpec()) then return end
+	-- disguised players are not shown to normal players, except: same team, unknown team or to spectators
+	if disguised and not (client:IsInTeam(ent) and not client:GetSubRoleData().unknownTeam or client:IsSpec()) then return end
 
-    -- show the role of a player if it is known to the client
-    local rstate = GetRoundState()
-    local target_role
+	-- show the role of a player if it is known to the client
+	local rstate = GetRoundState()
+	local target_role
 
-    -- TODO: this detective check has to be removed from here and be replaced with a general role flag
-    if ent.GetSubRole and (rstate > ROUND_PREP and ent:IsDetective() or rstate == ROUND_ACTIVE and ent:IsSpecial()) then
-        target_role = ent:GetSubRoleData()
-    end
+	-- TODO: this detective check has to be removed from here and be replaced with a general role flag
+	if ent.GetSubRole and (rstate > ROUND_PREP and ent:IsDetective() or rstate == ROUND_ACTIVE and ent:IsSpecial()) then
+		target_role = ent:GetSubRoleData()
+	end
 
-    -- add glowing ring around crosshair when role is known
-    if target_role then
-        local icon_size = 64
+	-- add glowing ring around crosshair when role is known
+	if target_role then
+		local icon_size = 64
 
-        draw.FilteredTexture(math.Round(0.5 * (ScrW() - icon_size)), math.Round(0.5 * (ScrH() - icon_size)), icon_size, icon_size, materialRing, 200, target_role.color)
-    end
+		draw.FilteredTexture(math.Round(0.5 * (ScrW() - icon_size)), math.Round(0.5 * (ScrH() - icon_size)), icon_size, icon_size, materialRing, 200, target_role.color)
+	end
 
-    -- enable targetID rendering
-    tData:EnableText()
+	-- enable targetID rendering
+	tData:EnableText()
 
-    -- add title and subtitle to the focused ent
-    local h_string, h_color = util.HealthToString(ent:Health(), ent:GetMaxHealth())
+	-- add title and subtitle to the focused ent
+	local h_string, h_color = util.HealthToString(ent:Health(), ent:GetMaxHealth())
 
-    tData:SetTitle(
-        ent:Nick() .. " " .. (disguised and TryT("target_disg") or ""),
-        disguised and COLOR_ORANGE or nil,
-        disguised and {materialDisguised}
-    )
+	tData:SetTitle(
+		ent:Nick() .. " " .. (disguised and TryT("target_disg") or ""),
+		disguised and COLOR_ORANGE or nil,
+		disguised and {materialDisguised}
+	)
 
-    tData:SetSubtitle(
-        TryT(h_string),
-        h_color
-    )
+	tData:SetSubtitle(
+		TryT(h_string),
+		h_color
+	)
 
-    -- add icon to the element
-    tData:AddIcon(
-        target_role and target_role.iconMaterial or materialRoleUnknown,
-        target_role and ent:GetRoleColor() or COLOR_SLATEGRAY
-    )
+	-- add icon to the element
+	tData:AddIcon(
+		target_role and target_role.iconMaterial or materialRoleUnknown,
+		target_role and ent:GetRoleColor() or COLOR_SLATEGRAY
+	)
 
-    -- add karma string if karma is enabled
-    if KARMA.IsEnabled() then
-        local k_string, k_color = util.KarmaToString(ent:GetBaseKarma())
+	-- add karma string if karma is enabled
+	if KARMA.IsEnabled() then
+		local k_string, k_color = util.KarmaToString(ent:GetBaseKarma())
 
-        tData:AddDescriptionLine(
-            TryT(k_string),
-            k_color
-        )
-    end
+		tData:AddDescriptionLine(
+			TryT(k_string),
+			k_color
+		)
+	end
 
-    -- add scoreboard tags if tag is set
-    if ent.sb_tag and ent.sb_tag.txt then
-        tData:AddDescriptionLine(
-            TryT(ent.sb_tag.txt),
-            ent.sb_tag.color
-        )
-    end
+	-- add scoreboard tags if tag is set
+	if ent.sb_tag and ent.sb_tag.txt then
+		tData:AddDescriptionLine(
+			TryT(ent.sb_tag.txt),
+			ent.sb_tag.color
+		)
+	end
 
-    -- add hints to the player
-    local hint = ent.TargetIDHint
+	-- add hints to the player
+	local hint = ent.TargetIDHint
 
-    if hint and hint.hint then
-        tData:AddDescriptionLine(
-            hint.fmt(ent, hint.hint),
-            COLOR_LGRAY
-        )
-    end
+	if hint and hint.hint then
+		tData:AddDescriptionLine(
+			hint.fmt(ent, hint.hint),
+			COLOR_LGRAY
+		)
+	end
 end
 
 ---
@@ -397,83 +397,83 @@ end
 -- @param TARGET_DATA tData The object to be used in the hook
 -- @realm client
 function targetid.HUDDrawTargetIDRagdolls(tData)
-    local client = LocalPlayer()
-    local ent = tData:GetEntity()
-    local c_wep = client:GetActiveWeapon()
+	local client = LocalPlayer()
+	local ent = tData:GetEntity()
+	local c_wep = client:GetActiveWeapon()
 
-    -- has to be a ragdoll
-    if not IsValid(ent) or ent:GetClass() ~= "prop_ragdoll" then return end
+	-- has to be a ragdoll
+	if not IsValid(ent) or ent:GetClass() ~= "prop_ragdoll" then return end
 
-    -- only show this if the ragdoll has a nick, else it could be a mattress
-    if not CORPSE.GetPlayerNick(ent, false) then return end
+	-- only show this if the ragdoll has a nick, else it could be a mattress
+	if not CORPSE.GetPlayerNick(ent, false) then return end
 
-    local corpse_found = CORPSE.GetFound(ent, false) or not DetectiveMode()
-    local role_found = corpse_found and ent.search_result and ent.search_result.role
-    local binoculars_useable = IsValid(c_wep) and c_wep:GetClass() == "weapon_ttt_binoculars" or false
-    local role = roles.GetByIndex(role_found and ent.search_result.role or 1)
+	local corpse_found = CORPSE.GetFound(ent, false) or not DetectiveMode()
+	local role_found = corpse_found and ent.search_result and ent.search_result.role
+	local binoculars_useable = IsValid(c_wep) and c_wep:GetClass() == "weapon_ttt_binoculars" or false
+	local role = roles.GetByIndex(role_found and ent.search_result.role or 1)
 
-    -- enable targetID rendering
-    tData:EnableText()
-    tData:EnableOutline(tData:GetEntityDistance() <= 100)
-    tData:SetOutlineColor(COLOR_YELLOW)
+	-- enable targetID rendering
+	tData:EnableText()
+	tData:EnableOutline(tData:GetEntityDistance() <= 100)
+	tData:SetOutlineColor(COLOR_YELLOW)
 
-    -- add title and subtitle to the focused ent
-    tData:SetTitle(
-        corpse_found and CORPSE.GetPlayerNick(ent, "A Terrorist") or TryT("target_unid"),
-        role_found and COLOR_WHITE or COLOR_YELLOW
-    )
+	-- add title and subtitle to the focused ent
+	tData:SetTitle(
+		corpse_found and CORPSE.GetPlayerNick(ent, "A Terrorist") or TryT("target_unid"),
+		role_found and COLOR_WHITE or COLOR_YELLOW
+	)
 
-    if tData:GetEntityDistance() <= 100 then
-        if cvDeteOnlyInspect:GetBool() and client:GetBaseRole() ~= ROLE_DETECTIVE then
-            if client:IsActive() and client:IsShopper() and CORPSE.GetCredits(ent, 0) > 0 then
-                tData:SetSubtitle(ParT("corpse_hint_inspect_only_credits", key_params))
-            else
-                tData:SetSubtitle(TryT("corpse_hint_no_inspect"))
-            end
-        elseif cvDeteOnlyConfirm:GetBool() and client:GetBaseRole() ~= ROLE_DETECTIVE then
-            tData:SetSubtitle(ParT("corpse_hint_inspect_only", key_params))
-        else
-            tData:SetSubtitle(ParT("corpse_hint", key_params))
-        end
-    elseif binoculars_useable then
-        tData:SetSubtitle(ParT("corpse_binoculars", {key = Key("+attack", "ATTACK")}))
-    else
-        tData:SetSubtitle(TryT("corpse_too_far_away"))
-    end
+	if tData:GetEntityDistance() <= 100 then
+		if cvDeteOnlyInspect:GetBool() and client:GetBaseRole() ~= ROLE_DETECTIVE then
+			if client:IsActive() and client:IsShopper() and CORPSE.GetCredits(ent, 0) > 0 then
+				tData:SetSubtitle(ParT("corpse_hint_inspect_only_credits", key_params))
+			else
+				tData:SetSubtitle(TryT("corpse_hint_no_inspect"))
+			end
+		elseif cvDeteOnlyConfirm:GetBool() and client:GetBaseRole() ~= ROLE_DETECTIVE then
+			tData:SetSubtitle(ParT("corpse_hint_inspect_only", key_params))
+		else
+			tData:SetSubtitle(ParT("corpse_hint", key_params))
+		end
+	elseif binoculars_useable then
+		tData:SetSubtitle(ParT("corpse_binoculars", {key = Key("+attack", "ATTACK")}))
+	else
+		tData:SetSubtitle(TryT("corpse_too_far_away"))
+	end
 
-    -- add icon to the element
-    tData:AddIcon(
-        role_found and role.iconMaterial or materialCorpse,
-        role_found and role.color or COLOR_YELLOW
-    )
+	-- add icon to the element
+	tData:AddIcon(
+		role_found and role.iconMaterial or materialCorpse,
+		role_found and role.color or COLOR_YELLOW
+	)
 
-    -- add hints to the corpse
-    local hint = ent.TargetIDHint
+	-- add hints to the corpse
+	local hint = ent.TargetIDHint
 
-    if hint and hint.hint then
-        tData:AddDescriptionLine(
-            hint.fmt(ent, hint.hint),
-            COLOR_LGRAY
-        )
-    end
+	if hint and hint.hint then
+		tData:AddDescriptionLine(
+			hint.fmt(ent, hint.hint),
+			COLOR_LGRAY
+		)
+	end
 
-    -- add info if searched by detectives
-    if ent.search_result and ent.search_result.detective_search and client:IsDetective() then
-        tData:AddDescriptionLine(
-            TryT("corpse_searched_by_detective"),
-            DETECTIVE.ltcolor,
-            {materialDetective}
-        )
-    end
+	-- add info if searched by detectives
+	if ent.search_result and ent.search_result.detective_search and client:IsDetective() then
+		tData:AddDescriptionLine(
+			TryT("corpse_searched_by_detective"),
+			DETECTIVE.ltcolor,
+			{materialDetective}
+		)
+	end
 
-    -- add credits info when corpse has credits
-    if client:IsActive() and client:IsShopper() and CORPSE.GetCredits(ent, 0) > 0 then
-        tData:AddDescriptionLine(
-            TryT("target_credits"),
-            COLOR_YELLOW,
-            {materialCredits}
-        )
-    end
+	-- add credits info when corpse has credits
+	if client:IsActive() and client:IsShopper() and CORPSE.GetCredits(ent, 0) > 0 then
+		tData:AddDescriptionLine(
+			TryT("target_credits"),
+			COLOR_YELLOW,
+			{materialCredits}
+		)
+	end
 end
 
 
@@ -482,59 +482,59 @@ end
 -- @param TARGET_DATA tData The object to be used in the hook
 -- @realm client
 function targetid.HUDDrawTargetIDDoors(tData)
-    local client = LocalPlayer()
-    local ent = tData:GetEntity()
+	local client = LocalPlayer()
+	local ent = tData:GetEntity()
 
-    if not IsValid(client) or not client:IsTerror() or not client:Alive()
-    or not IsValid(ent) or not ent:IsDoor() or not ent:PlayerCanOpenDoor() or tData:GetEntityDistance() > 90 then
-        return
-    end
+	if not IsValid(client) or not client:IsTerror() or not client:Alive()
+	or not IsValid(ent) or not ent:IsDoor() or not ent:PlayerCanOpenDoor() or tData:GetEntityDistance() > 90 then
+		return
+	end
 
-    -- enable targetID rendering
-    tData:EnableText()
+	-- enable targetID rendering
+	tData:EnableText()
 
-    tData:SetTitle(TryT("name_door"))
+	tData:SetTitle(TryT("name_door"))
 
-    if ent:UseOpensDoor() and not ent:TouchOpensDoor() then
-        if ent:DoorAutoCloses() then
-            tData:SetSubtitle(ParT("door_open", key_params))
-        else
-            tData:SetSubtitle(ent:IsDoorOpen() and ParT("door_close", key_params) or ParT("door_open", key_params))
-        end
+	if ent:UseOpensDoor() and not ent:TouchOpensDoor() then
+		if ent:DoorAutoCloses() then
+			tData:SetSubtitle(ParT("door_open", key_params))
+		else
+			tData:SetSubtitle(ent:IsDoorOpen() and ParT("door_close", key_params) or ParT("door_open", key_params))
+		end
 
-        tData:SetKey(input.GetKeyCode(key_params.usekey))
-    elseif not ent:UseOpensDoor() and ent:TouchOpensDoor() then
-        tData:SetSubtitle(TryT("door_open_touch"))
-        tData:AddIcon(
-            materialDoor,
-            COLOR_LGRAY
-        )
-    else
-        tData:SetSubtitle(ParT("door_open_touch_and_use", key_params))
-        tData:SetKey(input.GetKeyCode(key_params.usekey))
-    end
+		tData:SetKey(input.GetKeyCode(key_params.usekey))
+	elseif not ent:UseOpensDoor() and ent:TouchOpensDoor() then
+		tData:SetSubtitle(TryT("door_open_touch"))
+		tData:AddIcon(
+			materialDoor,
+			COLOR_LGRAY
+		)
+	else
+		tData:SetSubtitle(ParT("door_open_touch_and_use", key_params))
+		tData:SetKey(input.GetKeyCode(key_params.usekey))
+	end
 
-    if ent:IsDoorLocked() then
-        tData:AddDescriptionLine(
-            TryT("door_locked"),
-            COLOR_ORANGE,
-            {materialLocked}
-        )
-    elseif ent:DoorAutoCloses() then
-        tData:AddDescriptionLine(
-            TryT("door_auto_closes"),
-            COLOR_SLATEGRAY,
-            {materialAutoClose}
-        )
-    end
+	if ent:IsDoorLocked() then
+		tData:AddDescriptionLine(
+			TryT("door_locked"),
+			COLOR_ORANGE,
+			{materialLocked}
+		)
+	elseif ent:DoorAutoCloses() then
+		tData:AddDescriptionLine(
+			TryT("door_auto_closes"),
+			COLOR_SLATEGRAY,
+			{materialAutoClose}
+		)
+	end
 
-    if ent:DoorIsDestructible() then
-        tData:AddDescriptionLine(
-            ParT("door_destructible", {health = ent:GetFastSyncedHealth()}),
-            COLOR_LBROWN,
-            {materialDestructible}
-        )
-    end
+	if ent:DoorIsDestructible() then
+		tData:AddDescriptionLine(
+			ParT("door_destructible", {health = ent:GetFastSyncedHealth()}),
+			COLOR_LBROWN,
+			{materialDestructible}
+		)
+	end
 end
 
 ---
@@ -542,22 +542,22 @@ end
 -- @param TARGET_DATA tData The object to be used in the hook
 -- @realm client
 function targetid.HUDDrawTargetIDDNAScanner(tData)
-    local client = LocalPlayer()
-    local ent = tData:GetEntity()
+	local client = LocalPlayer()
+	local ent = tData:GetEntity()
 
-    if not IsValid(client:GetActiveWeapon()) or client:GetActiveWeapon():GetClass() ~= "weapon_ttt_wtester"
-        or tData:GetEntityDistance() > 400 or not IsValid(ent) then return end
+	if not IsValid(client:GetActiveWeapon()) or client:GetActiveWeapon():GetClass() ~= "weapon_ttt_wtester"
+		or tData:GetEntityDistance() > 400 or not IsValid(ent) then return end
 
-    -- add an empty line if there's already data in the description area
-    if tData:GetAmountDescriptionLines() > 0 then
-        tData:AddDescriptionLine()
-    end
+	-- add an empty line if there's already data in the description area
+	if tData:GetAmountDescriptionLines() > 0 then
+		tData:AddDescriptionLine()
+	end
 
-    if ent:IsWeapon() or ent.CanHavePrints or ent:GetNWBool("HasPrints", false)
-        or ent:GetClass() == "prop_ragdoll" and CORPSE.GetPlayerNick(ent, false)
-    then
-        tData:AddDescriptionLine(TryT("dna_tid_possible"), COLOR_GREEN, {materialDNATargetID})
-    else
-        tData:AddDescriptionLine(TryT("dna_tid_impossible"), COLOR_RED, {materialDNATargetID})
-    end
+	if ent:IsWeapon() or ent.CanHavePrints or ent:GetNWBool("HasPrints", false)
+		or ent:GetClass() == "prop_ragdoll" and CORPSE.GetPlayerNick(ent, false)
+	then
+		tData:AddDescriptionLine(TryT("dna_tid_possible"), COLOR_GREEN, {materialDNATargetID})
+	else
+		tData:AddDescriptionLine(TryT("dna_tid_impossible"), COLOR_RED, {materialDNATargetID})
+	end
 end
