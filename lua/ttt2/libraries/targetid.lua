@@ -105,7 +105,7 @@ end
 
 ---
 -- This function handles looking at traitor buttons and adds a description
--- @param @{TARGET_DATA} tData The object to be used in the hook
+-- @param TARGET_DATA tData The object to be used in the hook
 -- @realm client
 function targetid.HUDDrawTargetIDTButtons(tData)
     local client = LocalPlayer()
@@ -218,7 +218,7 @@ end
 
 ---
 -- This function handles looking at weapons and adds specific descriptions
--- @param @{TARGET_DATA} tData The object to be used in the hook
+-- @param TARGET_DATA tData The object to be used in the hook
 -- @realm client
 function targetid.HUDDrawTargetIDWeapons(tData)
     local client = LocalPlayer()
@@ -302,7 +302,7 @@ end
 
 ---
 -- This function handles looking at players and adds specific descriptions
--- @param @{TARGET_DATA} tData The object to be used in the hook
+-- @param TARGET_DATA tData The object to be used in the hook
 -- @realm client
 function targetid.HUDDrawTargetIDPlayers(tData)
     local client = LocalPlayer()
@@ -394,7 +394,7 @@ end
 
 ---
 -- This function handles looking at ragdolls and adds specific descriptions
--- @param @{TARGET_DATA} tData The object to be used in the hook
+-- @param TARGET_DATA tData The object to be used in the hook
 -- @realm client
 function targetid.HUDDrawTargetIDRagdolls(tData)
     local client = LocalPlayer()
@@ -479,7 +479,7 @@ end
 
 ---
 -- This function handles looking at doors and adds specific descriptions
--- @param @{TARGET_DATA} tData The object to be used in the hook
+-- @param TARGET_DATA tData The object to be used in the hook
 -- @realm client
 function targetid.HUDDrawTargetIDDoors(tData)
     local client = LocalPlayer()
@@ -539,7 +539,7 @@ end
 
 ---
 -- This function handles looking with a DNA Scanner and adds specific descriptions
--- @param @{TARGET_DATA} tData The object to be used in the hook
+-- @param TARGET_DATA tData The object to be used in the hook
 -- @realm client
 function targetid.HUDDrawTargetIDDNAScanner(tData)
     local client = LocalPlayer()
