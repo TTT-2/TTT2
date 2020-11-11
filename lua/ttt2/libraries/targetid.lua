@@ -77,7 +77,9 @@ function targetid.FindEntityAlongView(pos, dir, filter)
 	local ent, distance
 
 	-- if the user is looking at a traitor button, it should always be handled with priority
-	if TBHUD.focus_but and IsValid(TBHUD.focus_but.ent) and (TBHUD.focus_but.access or TBHUD.focus_but.admin) and TBHUD.focus_stick >= CurTime() then
+	if TBHUD.focus_but and IsValid(TBHUD.focus_but.ent)
+		and (TBHUD.focus_but.access or TBHUD.focus_but.admin) and TBHUD.focus_stick >= CurTime()
+	then
 		ent = TBHUD.focus_but.ent
 
 		distance = pos:Distance(ent:GetPos())
@@ -114,9 +116,9 @@ function targetid.HUDDrawTargetIDTButtons(tData)
 	local admin_mode = GetGlobalBool("ttt2_tbutton_admin_show", false)
 
 	if not IsValid(client) or not client:IsTerror() or not client:Alive()
-		or not IsValid(ent) or ent:GetClass() ~= "ttt_traitor_button" or tData:GetEntityDistance() > ent:GetUsableRange() then
-		return
-	end
+		or not IsValid(ent) or ent:GetClass() ~= "ttt_traitor_button"
+		or tData:GetEntityDistance() > ent:GetUsableRange()
+	then return end
 
 	-- enable targetID rendering
 	tData:EnableText()
