@@ -1,6 +1,6 @@
 ---
+-- Game Report
 -- @class CLSCORE
--- @desc Game report
 
 ttt_include("cl_awards")
 
@@ -108,7 +108,6 @@ end
 -- @param number event_id
 -- @param table event_fns The event table @{function}s. Pass an empty table to keep an event from showing up.
 -- @realm client
--- @module CLSCORE
 function CLSCORE.DeclareEventDisplay(event_id, event_fns)
 	if not event_fns or not istable(event_fns) then
 		error(string.format("Event %d display: no display functions found.", event_id), 2)
@@ -381,7 +380,6 @@ end
 
 ---
 -- Creates the highlights @{Panel}
---
 -- @param Panel dpanel
 -- @param table title
 -- @param number starttime
@@ -482,7 +480,6 @@ end
 
 ---
 -- Converts the wintype into a title object to be used with @{CLSCORE:BuildHilitePanel}.
---
 -- @internal
 -- @realm client
 -- @param string|number wintype
@@ -700,6 +697,7 @@ end
 
 ---
 -- Initializes the score @{Panel}
+-- @param table deprecatedEvents
 -- @param table events The list of events
 -- @realm client
 -- @internal
@@ -731,6 +729,8 @@ end
 ---
 -- Resets the old score @{Panel}, Initializes a new one
 -- and displays it to the local @{Player}
+-- @param table deprecatedEvents
+-- @param table events
 -- @realm client
 -- @internal
 function CLSCORE:ReportEvents(deprecatedEvents, events)

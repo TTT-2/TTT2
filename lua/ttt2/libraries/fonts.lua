@@ -2,10 +2,13 @@
 -- font library functions
 -- adds support for advanced fonts (fonts with mipmapping)
 -- @author Mineotopia, LeBroomer
+-- @module fonts
 
-AddCSLuaFile()
+if SERVER then
+	AddCSLuaFile()
 
-if SERVER then return end
+	return
+end
 
 local surface = surface
 local mathMax = math.max
@@ -45,7 +48,7 @@ end
 ---
 -- Adds a font to the font list.
 -- @param string name The name of the font
--- @param [default=13]number baseSize The basesize of this font
+-- @param[default=13] number baseSize The basesize of this font
 -- @param table fontData
 -- @internal
 -- @realm client

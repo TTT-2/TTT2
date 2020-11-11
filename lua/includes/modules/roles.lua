@@ -2,6 +2,7 @@
 -- This is the <code>roles</code> module.
 -- @author Alf21
 -- @author saibotk
+-- @module roles
 
 module("roles", package.seeall)
 
@@ -83,56 +84,91 @@ local function SetupData(roleData)
 
 	-- shared
 	if not roleData.notSelectable then
-		if conVarData.togglable then
-			CreateClientConVar("ttt_avoid_" .. roleData.name, "0", true, true)
-		end
+		if CLIENT then
+			if conVarData.togglable then
+				---
+				-- @realm client
+				CreateConVar("ttt_avoid_" .. roleData.name, "0", {FCVAR_ARCHIVE, FCVAR_USERINFO})
+			end
+		else -- SERVER
+			---
+			-- @realm server
+			CreateConVar("ttt_" .. roleData.name .. "_pct", tostring(conVarData.pct or 1), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
-		CreateConVar("ttt_" .. roleData.name .. "_pct", tostring(conVarData.pct or 1), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-		CreateConVar("ttt_" .. roleData.name .. "_max", tostring(conVarData.maximum or 1), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-		CreateConVar("ttt_" .. roleData.name .. "_min_players", tostring(conVarData.minPlayers or 1), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+			---
+			-- @realm server
+			CreateConVar("ttt_" .. roleData.name .. "_max", tostring(conVarData.maximum or 1), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
-		if conVarData.minKarma then
-			CreateConVar("ttt_" .. roleData.name .. "_karma_min", tostring(conVarData.minKarma), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-		end
+			---
+			-- @realm server
+			CreateConVar("ttt_" .. roleData.name .. "_min_players", tostring(conVarData.minPlayers or 1), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
-		if not roleData.builtin then
-			CreateConVar("ttt_" .. roleData.name .. "_random", tostring(conVarData.random or 100), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+			if conVarData.minKarma then
+				---
+				-- @realm server
+				CreateConVar("ttt_" .. roleData.name .. "_karma_min", tostring(conVarData.minKarma), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+			end
 
-			CreateConVar("ttt_" .. roleData.name .. "_enabled", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+			if not roleData.builtin then
+				---
+				-- @realm server
+				CreateConVar("ttt_" .. roleData.name .. "_random", tostring(conVarData.random or 100), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+				---
+				-- @realm server
+				CreateConVar("ttt_" .. roleData.name .. "_enabled", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+			end
 		end
 	end
 
+	---
+	-- @realm shared
 	CreateConVar("ttt_" .. roleData.name .. "_traitor_button", tostring(conVarData.traitorButton or 0), SERVER and {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED} or FCVAR_REPLICATED)
 
-	CreateConVar("ttt_" .. roleData.abbr .. "_credits_starting", tostring(conVarData.credits or 0), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-	CreateConVar("ttt_" .. roleData.abbr .. "_credits_traitorkill", tostring(conVarData.creditsTraitorKill or 0), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-	CreateConVar("ttt_" .. roleData.abbr .. "_credits_traitordead", tostring(conVarData.creditsTraitorDead or 0), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+	if SERVER then
+		---
+		-- @realm server
+		CreateConVar("ttt_" .. roleData.abbr .. "_credits_starting", tostring(conVarData.credits or 0), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
-	local shopFallbackValue
+		---
+		-- @realm server
+		CreateConVar("ttt_" .. roleData.abbr .. "_credits_traitorkill", tostring(conVarData.creditsTraitorKill or 0), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
-	if not conVarData.shopFallback and roleData.fallbackTable then
-		shopFallbackValue = SHOP_UNSET
-	else
-		shopFallbackValue = conVarData.shopFallback and tostring(conVarData.shopFallback) or SHOP_DISABLED
-	end
+		---
+		-- @realm server
+		CreateConVar("ttt_" .. roleData.abbr .. "_credits_traitordead", tostring(conVarData.creditsTraitorDead or 0), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
-	SetGlobalString("ttt_" .. roleData.abbr .. "_shop_fallback", CreateConVar("ttt_" .. roleData.abbr .. "_shop_fallback", shopFallbackValue, {FCVAR_NOTIFY, FCVAR_ARCHIVE}):GetString())
+		local shopFallbackValue
 
-	if conVarData.traitorKill then
-		CreateConVar("ttt_credits_" .. roleData.name .. "kill", tostring(conVarData.traitorKill), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+		if not conVarData.shopFallback and roleData.fallbackTable then
+			shopFallbackValue = SHOP_UNSET
+		else
+			shopFallbackValue = conVarData.shopFallback and tostring(conVarData.shopFallback) or SHOP_DISABLED
+		end
+
+		---
+		-- @realm server
+		SetGlobalString("ttt_" .. roleData.abbr .. "_shop_fallback", CreateConVar("ttt_" .. roleData.abbr .. "_shop_fallback", shopFallbackValue, {FCVAR_NOTIFY, FCVAR_ARCHIVE}):GetString())
+
+		if conVarData.traitorKill then
+			---
+			-- @realm server
+			CreateConVar("ttt_credits_" .. roleData.name .. "kill", tostring(conVarData.traitorKill), {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+		end
+	else -- CLIENT
+		roleData.icon = roleData.icon or ("vgui/ttt/dynamic/roles/icon_" .. roleData.abbr)
+
+		-- set a roledata icon material to prevent creating new materials each frame
+		roleData.iconMaterial = Material(roleData.icon)
+
+		-- set default colors
+		roleData.dkcolor = util.ColorDarken(roleData.color, 30)
+		roleData.ltcolor = util.ColorLighten(roleData.color, 30)
+		roleData.bgcolor = util.ColorComplementary(roleData.color)
 	end
 
 	-- set fallback data if not already exists
 	roleData.defaultTeam = roleData.defaultTeam or TEAM_NONE -- fix defaultTeam
-	roleData.icon = roleData.icon or ("vgui/ttt/dynamic/roles/icon_" .. roleData.abbr)
-
-	-- set a roledata icon material to prevent creating new materials each frame
-	roleData.iconMaterial = Material(roleData.icon)
-
-	-- set default colors
-	roleData.dkcolor = util.ColorDarken(roleData.color, 30)
-	roleData.ltcolor = util.ColorLighten(roleData.color, 30)
-	roleData.bgcolor = util.ColorComplementary(roleData.color)
 
 	print("[TTT2][ROLE] Added '" .. roleData.name .. "' role (index: " .. roleData.index .. ")")
 end
@@ -168,6 +204,7 @@ end
 ---
 -- All scripts have been loaded...
 -- @local
+-- @realm shared
 function OnLoaded()
 
 	--
@@ -203,7 +240,7 @@ end
 ---
 -- Get a role by name (a copy)
 -- @param string name role name
--- @param[opt] ?table retTbl this table will be modified and returned. If nil, a new table will be created.
+-- @param[opt] table retTbl this table will be modified and returned. If nil, a new table will be created.
 -- @return table returns the modified retTbl or the new role table
 -- @realm shared
 function Get(name, retTbl)
@@ -477,7 +514,7 @@ end
 
 ---
 -- Connects a SubRole with its BaseRole.
--- @notice This will also set the defaultTeam variable to the BaseRole's team.
+-- @note This will also set the defaultTeam variable to the BaseRole's team.
 -- @param ROLE roleTable the role table (of the SubRole)
 -- @param ROLE baserole the BaseRole
 -- @realm shared

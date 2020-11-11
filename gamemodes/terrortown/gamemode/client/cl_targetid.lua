@@ -13,14 +13,30 @@ local IsValid = IsValid
 local hook = hook
 local targetid = targetid
 
+---
 -- Make sure local TargetID Variables are initialized
+--@realm client
 targetid.Initialize()
 
--- Convars for targetid
-local cvMinimalisticTid = CreateClientConVar("ttt_minimal_targetid", "0", FCVAR_ARCHIVE)
-local cvDrawHalo = CreateClientConVar("ttt_entity_draw_halo", "1", true, false)
-local cvEnableSpectatorsoutline = CreateClientConVar("ttt2_cvEnableSpectatorsoutline", "1", true, true)
-local cvEnableOverheadicons = CreateClientConVar("ttt2_cvEnableOverheadicons", "1", true, true)
+---
+-- @realm client
+local cvMinimalisticTid = CreateConVar("ttt_minimal_targetid", "0", FCVAR_ARCHIVE)
+
+---
+-- @realm client
+local cvDrawHalo = CreateConVar("ttt_entity_draw_halo", "1", FCVAR_ARCHIVE)
+
+---
+-- @realm client
+local cvEnableSpectatorsoutline = CreateConVar("ttt2_cvEnableSpectatorsoutline", "1", {FCVAR_ARCHIVE, FCVAR_USERINFO})
+
+---
+-- @realm client
+local cvEnableOverheadicons = CreateConVar("ttt2_cvEnableOverheadicons", "1", {FCVAR_ARCHIVE, FCVAR_USERINFO})
+
+local cvDeteOnlyConfirm = GetConVar("ttt2_confirm_detective_only")
+local cvDeteOnlyInspect = GetConVar("ttt2_inspect_detective_only")
+
 
 surface.CreateAdvancedFont("TargetID_Key", {font = "Trebuchet24", size = 26, weight = 900})
 surface.CreateAdvancedFont("TargetID_Title", {font = "Trebuchet24", size = 20, weight = 900})
@@ -57,7 +73,6 @@ end
 -- @param table hint
 -- @hook
 -- @realm client
--- @ref
 -- @local
 function GM:AddClassHint(cls, hint)
 	ClassHint[cls] = table.Copy(hint)
@@ -66,7 +81,9 @@ end
 ---
 -- Function that handles the drawing of the overhead roleicons, it does not check whether
 -- the icon should be drawn or not, that has to be handled prior to calling this function
--- @param @{PLAYER} ply The player to receive an overhead icon
+-- @param Player ply The player to receive an overhead icon
+-- @param Material ricon
+-- @param Color rcolor
 -- @realm client
 function DrawOverheadRoleIcon(ply, ricon, rcolor)
 	local client = LocalPlayer()
@@ -203,7 +220,7 @@ local function DrawPropSpecLabels(client)
 			scrpos = scrpos:ToScreen()
 		end
 
-		if scrpos == nil or IsOffScreen(scrpos) then continue end
+		if scrpos == nil or util.IsOffScreen(scrpos) then continue end
 
 		text = ply:Nick()
 		w = surface.GetTextSize(text)
@@ -222,7 +239,9 @@ end
 function GM:HUDDrawTargetID()
 	local client = LocalPlayer()
 
-	if hook.Call("HUDShouldDraw", GAMEMODE, "TTTPropSpec") then
+	---
+	-- @realm client
+	if hook.Run("HUDShouldDraw", "TTTPropSpec") then
 		DrawPropSpecLabels(client)
 	end
 
@@ -233,6 +252,8 @@ function GM:HUDDrawTargetID()
 
 	ent, distance = targetid.FindEntityAlongView(startpos, direction, filter)
 
+	---
+	-- @realm client
 	local changedEnt = hook.Run("TTTModifyTargetedEntity", ent, distance)
 
 	if changedEnt then
@@ -253,8 +274,10 @@ function GM:HUDDrawTargetID()
 	targetid.HUDDrawTargetIDDoors(tData)
 	targetid.HUDDrawTargetIDDNAScanner(tData)
 
+	---
 	-- now run a hook that can be used by addon devs that changes the appearance
 	-- of the targetid
+	-- @realm client
 	hook.Run("TTTRenderEntityInfo", tData)
 
 	local data = tData.data
@@ -388,7 +411,7 @@ end
 
 ---
 -- Add targetID info to a focused entity.
--- @param @{TARGET_DATA} tData The @{TARGET_DATA} data object which contains all information
+-- @param TARGET_DATA tData The @{TARGET_DATA} data object which contains all information
 -- @hook
 -- @realm client
 function GM:TTTRenderEntityInfo(tData)

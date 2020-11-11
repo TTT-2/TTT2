@@ -1,10 +1,13 @@
 ---
 -- surface extension
 -- @author Mineotopia, LeBroomer
+-- @module surface
 
-AddCSLuaFile()
+if SERVER then
+	AddCSLuaFile()
 
-if SERVER then return end
+	return
+end
 
 ---
 -- Registers an advanced text (scalable)

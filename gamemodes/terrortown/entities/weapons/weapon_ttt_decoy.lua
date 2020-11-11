@@ -1,3 +1,7 @@
+---
+-- @class SWEP
+-- @section weapon_ttt_decoy
+
 if SERVER then
 	AddCSLuaFile()
 else -- CLIENT
@@ -43,10 +47,14 @@ SWEP.WeaponID = AMMO_DECOY
 SWEP.AllowDrop = false
 SWEP.NoSights = true
 
+---
+-- @ignore
 function SWEP:OnDrop()
 	self:Remove()
 end
 
+---
+-- @ignore
 function SWEP:PrimaryAttack()
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 
@@ -55,6 +63,8 @@ function SWEP:PrimaryAttack()
 	end
 end
 
+---
+-- @ignore
 function SWEP:SecondaryAttack()
 	self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
 
@@ -65,7 +75,9 @@ end
 
 local throwsound = Sound("Weapon_SLAM.SatchelThrow")
 
+---
 -- Drop is disabled to prevent traitors from placing the decoy in unreachable places.
+-- @realm shared
 function SWEP:DecoyDrop()
 	if SERVER then
 		local ply = self:GetOwner()
@@ -105,6 +117,8 @@ function SWEP:DecoyDrop()
 end
 
 if SERVER then
+	---
+	-- @realm server
 	function SWEP:DecoyStick()
 		local ply = self:GetOwner()
 
@@ -163,6 +177,9 @@ if SERVER then
 	end)
 end
 
+---
+-- @param Entity decoy
+-- @realm shared
 function SWEP:PlacedDecoy(decoy)
 	self:GetOwner().decoy = decoy
 
@@ -175,17 +192,23 @@ function SWEP:PlacedDecoy(decoy)
 	end
 end
 
+---
+-- @ignore
 function SWEP:Reload()
 	return false
 end
 
 if CLIENT then
+	---
+	-- @ignore
 	function SWEP:OnRemove()
 		if not IsValid(self:GetOwner()) or self:GetOwner() ~= LocalPlayer() or not self:GetOwner():Alive() then return end
 
 		RunConsoleCommand("lastinv")
 	end
 
+	---
+	-- @ignore
 	function SWEP:Initialize()
 		self:AddTTT2HUDHelp("decoy_help_pri")
 
@@ -193,18 +216,24 @@ if CLIENT then
 	end
 end
 
+---
+-- @ignore
 function SWEP:Deploy()
 	self:GetOwner():DrawViewModel(false)
 
 	return true
 end
 
+---
+-- @ignore
 function SWEP:DrawWorldModel()
 	if IsValid(self:GetOwner()) then return end
 
 	self:DrawModel()
 end
 
+---
+-- @ignore
 function SWEP:DrawWorldModelTranslucent()
 
 end

@@ -1,7 +1,7 @@
 ---
--- @section voice_manager
--- @desc Mute players when we are about to run map cleanup, because it might cause
+-- Mute players when we are about to run map cleanup, because it might cause
 -- net buffer overflows on clients.
+-- @section voice_manager
 
 local mute_all = false
 
@@ -19,7 +19,13 @@ end
 
 -- Communication control
 local sv_voiceenable = GetConVar("sv_voiceenable")
+
+---
+-- @realm server
 local cv_ttt_limit_spectator_voice = CreateConVar("ttt_limit_spectator_voice", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+---
+-- @realm server
 local loc_voice = CreateConVar("ttt_locational_voice", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 hook.Add("TTT2SyncGlobals", "AddVoiceGlobals", function()
@@ -100,7 +106,9 @@ function GM:PlayerCanHearPlayersVoice(listener, speaker)
 		return false, false
 	end
 
+	---
 	-- custom post-settings
+	-- @realm server
 	local can_hear, is_locational = hook.Run("TTT2CanHearVoiceChat", listener, speaker, not isGlobalVoice)
 
 	if can_hear ~= nil then
@@ -151,6 +159,9 @@ local function RoleGlobalVoice(ply, isGlobal)
 	if not IsValid(ply) then return end
 
 	ply[ply:GetTeam() .. "_gvoice"] = isGlobal
+
+	---
+	-- @realm server
 	ply.blockVoice = hook.Run("TTT2CanUseVoiceChat", ply, not isGlobal) == false
 
 	SendRoleVoiceState(ply)

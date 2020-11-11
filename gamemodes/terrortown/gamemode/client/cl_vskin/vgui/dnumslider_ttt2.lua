@@ -1,7 +1,16 @@
+---
+-- @class PANEL
+-- @section DNumSliderTTT2
+
 local PANEL = {}
 
+---
+-- @accessor any
+-- @realm client
 AccessorFunc(PANEL, "m_fDefaultValue", "DefaultValue")
 
+---
+-- @ignore
 function PANEL:Init()
 	self.TextArea = self:Add("DTextEntry")
 	self.TextArea:Dock(RIGHT)
@@ -63,42 +72,66 @@ function PANEL:Init()
 	self:SetValue(0.5)
 end
 
+---
+-- @param number min
+-- @param number max
+-- @realm client
 function PANEL:SetMinMax(min, max)
 	self:SetMin(tonumber(min))
 	self:SetMax(tonumber(max))
 	self:UpdateNotches()
 end
 
+---
+-- @return[default=0] number
+-- @realm client
 function PANEL:GetMin()
 	return self.m_numMin or 0
 end
 
+---
+-- @return[default=0] number
+-- @realm client
 function PANEL:GetMax()
 	return self.m_numMax or 0
 end
 
+---
+-- @return[default=0] number
+-- @realm client
 function PANEL:GetRange()
 	return self:GetMax() - self:GetMin()
 end
 
+---
+-- @realm client
 function PANEL:ResetToDefaultValue()
 	if not self:GetDefaultValue() then return end
 
 	self:SetValue(self:GetDefaultValue())
 end
 
+---
+-- @param number min
+-- @realm client
 function PANEL:SetMin(min)
 	self.m_numMin = tonumber(min) or 0
 
 	self:UpdateNotches()
 end
 
+---
+-- @param number max
+-- @realm client
 function PANEL:SetMax(max)
 	self.m_numMax = tonumber(max) or 0
 
 	self:UpdateNotches()
 end
 
+---
+-- @param any val
+-- @realm client
 function PANEL:SetValue(val)
 	if not val then return end
 
@@ -116,10 +149,16 @@ function PANEL:SetValue(val)
 	end
 end
 
+---
+-- @return any
+-- @realm client
 function PANEL:GetValue()
 	return self.m_fValue or 0
 end
 
+---
+-- @param number d
+-- @realm client
 function PANEL:SetDecimals(d)
 	self.m_iDecimals = d
 
@@ -127,18 +166,30 @@ function PANEL:SetDecimals(d)
 	self:ValueChanged(self:GetValue()) -- Update the text
 end
 
+---
+-- @return number
+-- @realm client
 function PANEL:GetDecimals()
 	return self.m_iDecimals or 0
 end
 
+---
+-- @return boolean
+-- @realm client
 function PANEL:IsEditing()
 	return self.TextArea:IsEditing() or self.Slider:IsEditing()
 end
 
+---
+-- @return boolean
+-- @realm client
 function PANEL:IsHovered()
 	return self.TextArea:IsHovered() or self.Slider:IsHovered() or vgui.GetHoveredPanel() == self
 end
 
+---
+-- @param string cvar
+-- @realm client
 function PANEL:SetConVar(cvar)
 	if not cvar or cvar == "" then return end
 
@@ -147,6 +198,9 @@ function PANEL:SetConVar(cvar)
 	self:SetValue(self.conVar:GetFloat())
 end
 
+---
+-- @param any val
+-- @realm client
 function PANEL:ValueChanged(val)
 	val = math.Clamp(tonumber(val) or 0, self:GetMin(), self:GetMax())
 
@@ -161,21 +215,36 @@ function PANEL:ValueChanged(val)
 	self:OnValueChanged(val)
 end
 
+---
 -- overwrites the base function with an empty function
+-- @param any val
+-- @realm client
 function PANEL:OnValueChanged(val)
 
 end
 
+---
+-- @param number x
+-- @param number y
+-- @return number fraction
+-- @return number y The given y (second param)
+-- @realm client
 function PANEL:TranslateSliderValues(x, y)
 	self:SetValue(self:GetMin() + (x * self:GetRange()))
 
 	return self:GetFraction(), y
 end
 
+---
+-- @return Panel
+-- @realm client
 function PANEL:GetTextArea()
 	return self.TextArea
 end
 
+---
+-- @return nil|boolean
+-- @realm client
 function PANEL:UpdateNotches()
 	local range = self:GetRange()
 
@@ -188,14 +257,16 @@ function PANEL:UpdateNotches()
 	end
 end
 
-function PANEL:GetRange()
-	return self:GetMax() - self:GetMin()
-end
-
+---
+-- @return number
+-- @realm client
 function PANEL:GetFraction()
 	return (self:GetValue() - self:GetMin()) / self:GetRange()
 end
 
+---
+-- @return string
+-- @realm client
 function PANEL:GetTextValue()
 	local iDecimals = self:GetDecimals()
 
@@ -206,6 +277,9 @@ function PANEL:GetTextValue()
 	return Format("%." .. iDecimals .. "f", self:GetValue())
 end
 
+---
+-- @param boolean b
+-- @realm client
 function PANEL:SetEnabled(b)
 	self.TextArea:SetEnabled(b)
 	self.Slider:SetEnabled(b)

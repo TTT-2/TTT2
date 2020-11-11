@@ -1,7 +1,9 @@
 ---
 -- @module HUDManager
 
-local current_hud_cvar = CreateClientConVar("ttt2_current_hud", ttt2net.GetGlobal({"hud_manager", "defaultHUD"}) or "pure_skin", true, true)
+---
+-- @realm client
+local current_hud_cvar = CreateConVar("ttt2_current_hud", ttt2net.GetGlobal({"hud_manager", "defaultHUD"}) or "pure_skin", {FCVAR_ARCHIVE, FCVAR_USERINFO})
 
 local current_hud_table = nil
 
@@ -29,25 +31,37 @@ end
 function GM:HUDPaint()
 	local client = LocalPlayer()
 
-	if hook.Call("HUDShouldDraw", GAMEMODE, "TTTTargetID") then
-		hook.Call("HUDDrawTargetID", GAMEMODE)
+	---
+	-- @realm client
+	if hook.Run("HUDShouldDraw", "TTTTargetID") then
+		---
+		-- @realm client
+		hook.Run("HUDDrawTargetID")
 	end
 
-	if hook.Call("HUDShouldDraw", GAMEMODE, "TTT2HUD") then
+	---
+	-- @realm client
+	if hook.Run("HUDShouldDraw", "TTT2HUD") then
 		HUDManager.DrawHUD()
 	end
 
 	if not client:Alive() or client:Team() == TEAM_SPEC then return end
 
-	if hook.Call("HUDShouldDraw", GAMEMODE, "TTTRadar") then
+	---
+	-- @realm client
+	if hook.Run("HUDShouldDraw", "TTTRadar") then
 		RADAR:Draw(client)
 	end
 
-	if hook.Call("HUDShouldDraw", GAMEMODE, "TTTTButton") then
+	---
+	-- @realm client
+	if hook.Run("HUDShouldDraw", "TTTTButton") then
 		TBHUD:Draw(client)
 	end
 
-	if hook.Call("HUDShouldDraw", GAMEMODE, "TTTVoice") then
+	---
+	-- @realm client
+	if hook.Run("HUDShouldDraw", "TTTVoice") then
 		VOICE.Draw(client)
 	end
 end
@@ -130,7 +144,9 @@ local function UpdateHUD(name)
 	hudEl:Initialize()
 	hudEl:LoadData()
 
-	-- call all listeners
+	---
+	-- Call all listeners
+	-- @realm client
 	hook.Run("TTT2HUDUpdated", name)
 end
 

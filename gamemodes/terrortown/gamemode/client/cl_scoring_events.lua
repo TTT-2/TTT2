@@ -1,5 +1,4 @@
 ---
--- @section scoring_manager
 -- @desc Event display information for Event Log in the Round Report
 -- @usage
 -- Declare a *unique* event identifier in a shared file, eg.
@@ -19,6 +18,7 @@
 -- })
 -- @note Note that custom events don't have to be in this file, just any file that is
 -- loaded on the client.
+-- @section scoring_manager
 
 -- Translation helpers + Shorter name, using it lots
 local T = LANG.GetTranslation
@@ -156,6 +156,9 @@ local function KillText(e)
 	return PT(txt, params)
 end
 
+---
+-- Setup the default scoring @{EVENT}s
+-- @realm client
 function ScoringEventSetup()
 	-- Round end event
 	Event(EVENT_FINISH, {

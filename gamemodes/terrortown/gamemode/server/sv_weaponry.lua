@@ -15,8 +15,16 @@ local hook = hook
 
 local IsEquipment = WEPS.IsEquipment
 
+---
+-- @realm server
 local cv_auto_pickup = CreateConVar("ttt_weapon_autopickup", "1", {FCVAR_ARCHIVE, FCVAR_NOTIFY})
+
+---
+-- @realm server
 local cv_ttt_detective_hats = CreateConVar("ttt_detective_hats", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+---
+-- @realm server
 local crowbar_delay = CreateConVar("ttt2_crowbar_shove_delay", "1.0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 ---
@@ -133,6 +141,8 @@ local function GetLoadoutWeapons(subrole)
 
 	loadout_weapons[subrole] = tmpLoadoutWeps
 
+	---
+	-- @realm server
 	hook.Run("TTT2ModifyDefaultLoadout", loadout_weapons, subrole)
 
 	return loadout_weapons[subrole]
@@ -261,6 +271,8 @@ local function GetLoadoutItems(subrole)
 
 	loadout_items[subrole] = tmpLoadoutItems
 
+	---
+	-- @realm server
 	hook.Run("TTT2ModifyDefaultLoadout", loadout_items, subrole)
 
 	return loadout_items[subrole]
@@ -377,7 +389,7 @@ end
 ---
 -- Called to give @{Player}s the default set of @{Weapon}s.
 -- @note This function may not work in your custom gamemode if you have overridden your
--- @{GM:PlayerSpawn} and you do not use self.BaseClass.PlayerSpawn or @{hook.Call}.
+-- @{GM:PlayerSpawn} and you do not use self.BaseClass.PlayerSpawn or @{hook.Run}.
 -- @param Player ply @{Player} to give @{Weapon}s to
 -- @note Note that this is called both when a @{Player} spawns and when a round starts
 -- @hook
@@ -465,45 +477,9 @@ function GM:UpdatePlayerLoadouts()
 	local plys = player.GetAll()
 
 	for i = 1, #plys do
+		---
+		-- @realm server
 		hook.Run("PlayerLoadout", plys[i], false)
-	end
-end
-
----
--- Weapon dropping
-
----
--- Called whenever a @{Player} drops a @{Weapon}, e.g. on death
--- @param Player ply The player whose weapon is about to be dropped
--- @param Weapon wep The weapon that is about to be dropped
--- @param boolean deathDrop Set to true if this is a drop on death
--- @param boolean keepSelection If set to true the current selection is kept if not dropped
--- @realm server
--- @module WEPS
-function WEPS.DropNotifiedWeapon(ply, wep, deathDrop, keepSelection)
-	if not IsValid(ply) or not IsValid(wep) then return end
-
-	-- Hack to tell the weapon it's about to be dropped and should do what it
-	-- must right now
-	if wep.PreDrop then
-		wep:PreDrop(deathDrop)
-	end
-
-	-- PreDrop might destroy weapon
-	if not IsValid(wep) then return end
-
-	-- Tag this weapon as dropped, so that if it's a special weapon we do not
-	-- auto-pickup when nearby.
-	wep.IsDropped = true
-
-	ply:DropWeapon(wep)
-
-	wep:PhysWake()
-
-	-- After dropping a weapon, always switch to holstered, so that traitors
-	-- will never accidentally pull out a traitor weapon
-	if not keepSelection then
-		ply:SelectWeapon("weapon_ttt_unarmed")
 	end
 end
 
@@ -523,6 +499,8 @@ local function DropActiveAmmo(ply)
 
 	local hook_data = {wep:Clip1()}
 
+	---
+	-- @realm server
 	if hook.Run("TTT2DropAmmo", ply, hook_data) == false then
 		LANG.Msg(ply, "drop_ammo_prevented", nil, MSG_CHAT_WARN)
 
@@ -665,11 +643,47 @@ function GM:EntityRemoved(ent)
 end
 
 ---
+-- @module WEPS
+
+---
+-- Called whenever a @{Player} drops a @{Weapon}, e.g. on death
+-- @param Player ply The player whose weapon is about to be dropped
+-- @param Weapon wep The weapon that is about to be dropped
+-- @param boolean deathDrop Set to true if this is a drop on death
+-- @param boolean keepSelection If set to true the current selection is kept if not dropped
+-- @realm server
+function WEPS.DropNotifiedWeapon(ply, wep, deathDrop, keepSelection)
+	if not IsValid(ply) or not IsValid(wep) then return end
+
+	-- Hack to tell the weapon it's about to be dropped and should do what it
+	-- must right now
+	if wep.PreDrop then
+		wep:PreDrop(deathDrop)
+	end
+
+	-- PreDrop might destroy weapon
+	if not IsValid(wep) then return end
+
+	-- Tag this weapon as dropped, so that if it's a special weapon we do not
+	-- auto-pickup when nearby.
+	wep.IsDropped = true
+
+	ply:DropWeapon(wep)
+
+	wep:PhysWake()
+
+	-- After dropping a weapon, always switch to holstered, so that traitors
+	-- will never accidentally pull out a traitor weapon
+	if not keepSelection then
+		ply:SelectWeapon("weapon_ttt_unarmed")
+	end
+end
+
+---
 -- Forces a @{Model} pre-cache for each @{Weapon}
 -- @note non-cheat developer commands can reveal precaching the first time equipment
 -- is bought, so trigger it at the start of a round instead
 -- @realm server
--- @module WEPS
 function WEPS.ForcePrecache()
 	local weps = weapons.GetList()
 
@@ -686,6 +700,10 @@ function WEPS.ForcePrecache()
 	end
 end
 
+---
+-- @param string cls
+-- @return boolean
+-- @realm server
 function WEPS.IsInstalled(cls)
 	local weps = weapons.GetList()
 
@@ -698,7 +716,7 @@ function WEPS.IsInstalled(cls)
 	return false
 end
 
---manipulate shove attack for all crowbar alikes
+-- manipulate shove attack for all crowbar alikes
 local function ChangeShoveDelay()
 	local weps = weapons.GetList()
 
@@ -712,10 +730,6 @@ local function ChangeShoveDelay()
 	end
 end
 
-cvars.AddChangeCallback(crowbar_delay:GetName(), function(name, old, new)
-	ChangeShoveDelay()
-end, "TTT2CrowbarShoveDelay")
+cvars.AddChangeCallback(crowbar_delay:GetName(), ChangeShoveDelay, "TTT2CrowbarShoveDelay")
 
-hook.Add("TTT2Initialize", "TTT2ChangeMeleesSecondaryDelay", function()
-	ChangeShoveDelay()
-end)
+hook.Add("TTT2Initialize", "TTT2ChangeMeleesSecondaryDelay", ChangeShoveDelay)

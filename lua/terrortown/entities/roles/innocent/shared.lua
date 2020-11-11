@@ -2,6 +2,8 @@ ROLE.Base = "ttt_role_base"
 
 ROLE.index = ROLE_INNOCENT
 
+---
+-- @ignore
 function ROLE:PreInitialize()
 	self.color = Color(80, 173, 59, 255)
 
@@ -17,13 +19,12 @@ function ROLE:PreInitialize()
 end
 
 if SERVER then
+	---
+	-- @realm server
 	local ttt_min_inno_pct = CreateConVar("ttt_min_inno_pct", "0.47", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Minimum multiplicator for each player to calculate the minimum amount of innocents")
 
 	---
-	-- Returns the available amount of this role based on the given amount of available players
-	-- @param number ply_count amount of available players
-	-- @return number selectable amount of this role
-	-- @realm server
+	-- @ignore
 	function ROLE:GetAvailableRoleCount(ply_count)
 		return math.floor(ply_count * ttt_min_inno_pct:GetFloat())
 	end

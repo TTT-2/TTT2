@@ -1,6 +1,6 @@
 ---
 -- HUD base class.
--- @module HUD
+-- @class HUD
 -- @section scalable_hud
 
 local base = "hud_base"

@@ -1,33 +1,81 @@
 ---
+-- Karma system stuff
 -- @module KARMA
--- @desc Karma system stuff
 
-KARMA = {}
-
--- ply steamid -> karma table for disconnected players who might reconnect
-KARMA.RememberedPlayers = {}
+KARMA = {
+	RememberedPlayers = {} -- ply steamid -> karma table for disconnected players who might reconnect
+}
 
 -- Convars, more convenient access than GetConVar
-KARMA.cv = {}
-KARMA.cv.enabled = CreateConVar("ttt_karma", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-KARMA.cv.strict = CreateConVar("ttt_karma_strict", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-KARMA.cv.starting = CreateConVar("ttt_karma_starting", "1000", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-KARMA.cv.max = CreateConVar("ttt_karma_max", "1000", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-KARMA.cv.ratio = CreateConVar("ttt_karma_ratio", "0.001", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-KARMA.cv.killpenalty = CreateConVar("ttt_karma_kill_penalty", "15", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-KARMA.cv.roundheal = CreateConVar("ttt_karma_round_increment", "5", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-KARMA.cv.clean = CreateConVar("ttt_karma_clean_bonus", "30", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-KARMA.cv.tbonus = CreateConVar("ttt_karma_traitorkill_bonus", "40", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-KARMA.cv.tratio = CreateConVar("ttt_karma_traitordmg_ratio", "0.0003", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-KARMA.cv.debug = CreateConVar("ttt_karma_debugspam", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+KARMA.cv = {
+	---
+	-- @realm server
+	enabled = CreateConVar("ttt_karma", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}),
 
-KARMA.cv.persist = CreateConVar("ttt_karma_persist", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-KARMA.cv.falloff = CreateConVar("ttt_karma_clean_half", "0.25", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+	---
+	-- @realm server
+	strict = CreateConVar("ttt_karma_strict", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}),
 
-KARMA.cv.autokick = CreateConVar("ttt_karma_low_autokick", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-KARMA.cv.kicklevel = CreateConVar("ttt_karma_low_amount", "450", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-KARMA.cv.autoban = CreateConVar("ttt_karma_low_ban", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-KARMA.cv.bantime = CreateConVar("ttt_karma_low_ban_minutes", "60", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+	---
+	-- @realm server
+	starting = CreateConVar("ttt_karma_starting", "1000", {FCVAR_NOTIFY, FCVAR_ARCHIVE}),
+
+	---
+	-- @realm server
+	max = CreateConVar("ttt_karma_max", "1000", {FCVAR_NOTIFY, FCVAR_ARCHIVE}),
+
+	---
+	-- @realm server
+	ratio = CreateConVar("ttt_karma_ratio", "0.001", {FCVAR_NOTIFY, FCVAR_ARCHIVE}),
+
+	---
+	-- @realm server
+	killpenalty = CreateConVar("ttt_karma_kill_penalty", "15", {FCVAR_NOTIFY, FCVAR_ARCHIVE}),
+
+	---
+	-- @realm server
+	roundheal = CreateConVar("ttt_karma_round_increment", "5", {FCVAR_NOTIFY, FCVAR_ARCHIVE}),
+
+	---
+	-- @realm server
+	clean = CreateConVar("ttt_karma_clean_bonus", "30", {FCVAR_NOTIFY, FCVAR_ARCHIVE}),
+
+	---
+	-- @realm server
+	tbonus = CreateConVar("ttt_karma_traitorkill_bonus", "40", {FCVAR_NOTIFY, FCVAR_ARCHIVE}),
+
+	---
+	-- @realm server
+	tratio = CreateConVar("ttt_karma_traitordmg_ratio", "0.0003", {FCVAR_NOTIFY, FCVAR_ARCHIVE}),
+
+	---
+	-- @realm server
+	debug = CreateConVar("ttt_karma_debugspam", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}),
+
+	---
+	-- @realm server
+	persist = CreateConVar("ttt_karma_persist", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}),
+
+	---
+	-- @realm server
+	falloff = CreateConVar("ttt_karma_clean_half", "0.25", {FCVAR_NOTIFY, FCVAR_ARCHIVE}),
+
+	---
+	-- @realm server
+	autokick = CreateConVar("ttt_karma_low_autokick", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}),
+
+	---
+	-- @realm server
+	kicklevel = CreateConVar("ttt_karma_low_amount", "450", {FCVAR_NOTIFY, FCVAR_ARCHIVE}),
+
+	---
+	-- @realm server
+	autoban = CreateConVar("ttt_karma_low_ban", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}),
+
+	---
+	-- @realm server
+	bantime = CreateConVar("ttt_karma_low_ban_minutes", "60", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+}
 
 local config = KARMA.cv
 
@@ -106,7 +154,9 @@ end
 -- @param Player victim
 -- @realm server
 function KARMA.GivePenalty(ply, penalty, victim)
-	if not hook.Call("TTTKarmaGivePenalty", nil, ply, penalty, victim) then
+	---
+	-- @realm server
+	if not hook.Run("TTTKarmaGivePenalty", ply, penalty, victim) then
 		ply:SetLiveKarma(math.max(ply:GetLiveKarma() - penalty, 0))
 	end
 end
@@ -157,6 +207,8 @@ local function WasAvoidable(attacker, victim, dmginfo)
 	local infl = dmginfo:GetInflictor()
 
 	if attacker:IsInTeam(victim) and IsValid(infl) and infl.Avoidable ~= false then
+		---
+		-- @realm server
 		local ret = hook.Run("TTT2KarmaPenaltyMultiplier", attacker, victim, dmginfo)
 		if ret then
 			return ret
@@ -178,7 +230,7 @@ end
 -- damage factor of the attacker.
 -- @param Player attacker
 -- @param Player victim
--- @param CTakeDamageInfo dmginfo
+-- @param DamageInfo dmginfo
 -- @realm server
 function KARMA.Hurt(attacker, victim, dmginfo)
 	if attacker == victim or not IsValid(attacker) or not IsValid(victim) or not attacker:IsPlayer() or not victim:IsPlayer() or dmginfo:GetDamage() <= 0 then return end
@@ -213,7 +265,7 @@ end
 -- Handle karma change due to one player killing another.
 -- @param Player attacker
 -- @param Player victim
--- @param CTakeDamageInfo dmginfo
+-- @param DamageInfo dmginfo
 -- @realm server
 function KARMA.Killed(attacker, victim, dmginfo)
 	if attacker == victim or not IsValid(attacker) or not IsValid(victim) or not victim:IsPlayer() or not attacker:IsPlayer() then return end
@@ -468,7 +520,9 @@ local reason = "Karma too low"
 -- @param Player ply
 -- @realm server
 function KARMA.CheckAutoKick(ply)
-	if ply:GetBaseKarma() > config.kicklevel:GetInt() or hook.Call("TTTKarmaLow", GAMEMODE, ply) == false then return end
+	---
+	-- @realm server
+	if ply:GetBaseKarma() > config.kicklevel:GetInt() or hook.Run("TTTKarmaLow", ply) == false then return end
 
 	ServerLog(ply:Nick() .. " autokicked/banned for low karma.\n")
 

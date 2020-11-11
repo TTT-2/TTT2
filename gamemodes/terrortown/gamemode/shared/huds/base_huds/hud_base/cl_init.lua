@@ -1,6 +1,6 @@
 ---
 -- HUD base class.
--- @module HUD
+-- @class HUD
 -- @author saibotk
 -- @author LeBroomer
 
@@ -284,7 +284,9 @@ end
 -- @param table elem
 -- @realm client
 function HUD:DrawElemAndChildren(elem)
-	if not elem.initialized or not elem.type or not hook.Call("HUDShouldDraw", GAMEMODE, elem.type) or not self:ShouldShow(elem.type) or not elem:ShouldDraw() then return end
+	---
+	-- @realm client
+	if not elem.initialized or not elem.type or not hook.Run("HUDShouldDraw", elem.type) or not self:ShouldShow(elem.type) or not elem:ShouldDraw() then return end
 
 	local children = elem:GetChildren()
 
@@ -363,7 +365,7 @@ end
 -- @realm client
 function HUD:SaveData()
 	-- save data for the HUD
-	SQL.Save("ttt2_huds", self.id, self, self:GetSavingKeys())
+	sql.Save("ttt2_huds", self.id, self, self:GetSavingKeys())
 
 	local elems = self:GetElements()
 
@@ -388,11 +390,11 @@ function HUD:LoadData()
 	local skeys = self:GetSavingKeys()
 
 	-- load and initialize all HUD data from database
-	if SQL.CreateSqlTable("ttt2_huds", skeys) then
-		local loaded = SQL.Load("ttt2_huds", self.id, self, skeys)
+	if sql.CreateSqlTable("ttt2_huds", skeys) then
+		local loaded = sql.Load("ttt2_huds", self.id, self, skeys)
 
 		if not loaded then
-			SQL.Init("ttt2_huds", self.id, self, skeys)
+			sql.Init("ttt2_huds", self.id, self, skeys)
 		end
 	end
 
