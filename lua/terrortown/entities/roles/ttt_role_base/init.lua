@@ -62,7 +62,7 @@ function ROLE:GetAvailableRoleCount(ply_count)
 end
 
 ---
--- Use this hook to make a role inselectable.
+-- Use this hook to make a role nonselectable.
 -- @param ROLE roleData The role data of the role that is considered for selection
 -- @return nil|boolean Return true to cancel selection
 -- @hook

@@ -9,6 +9,8 @@ local table = table
 local net = net
 local IsValid = IsValid
 
+local defuserNearRadius = 90000
+
 if SERVER then
 	AddCSLuaFile("cl_init.lua")
 	AddCSLuaFile("shared.lua")
@@ -396,7 +398,7 @@ function ENT:IsDefuserInRange()
 		diff = center - ply:GetPos()
 		d = diff:Dot(diff)
 
-		if d < 90000 and ply:HasWeapon("weapon_ttt_defuser") then
+		if d < defuserNearRadius and ply:HasWeapon("weapon_ttt_defuser") then
 			return true
 		end
 	end
