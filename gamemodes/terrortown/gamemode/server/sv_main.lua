@@ -1566,9 +1566,9 @@ function GM:TTT2TellTraitors(traitorNicks, ply)
 end
 
 ---
--- Can be used to modify the table of the player that are alive. This hook is
+-- Can be used to modify the table of teams with alive players. This hook is
 -- used in the default win condition.
--- @param table alives The table of the teams of the players that are alive
+-- @param table alives The table of teams which have at least one player still alive
 -- @hook
 -- @realm server
 function GM:TTT2ModifyWinningAlives(alives)
