@@ -28,7 +28,7 @@ classbuilder = classbuilder or {}
 -- @realm shared
 function classbuilder.BuildFromFolder(path, realm, scope, OnInitialization, shouldInherit, SpecialCheck)
 	-- In case this function is run on the server but the class should only exist
-	-- ono the client, this function should work only as a proxy.
+	-- on the client, this function should work only as a proxy.
 	if SERVER and realm == CLIENT_FILE then
 		fileloader.LoadFolder(path, false, realm)
 
