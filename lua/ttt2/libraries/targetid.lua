@@ -78,8 +78,7 @@ function targetid.FindEntityAlongView(pos, dir, filter)
 
 	-- if the user is looking at a traitor button, it should always be handled with priority
 	if TBHUD.focus_but and IsValid(TBHUD.focus_but.ent)
-		and (TBHUD.focus_but.access or TBHUD.focus_but.admin) and TBHUD.focus_stick >= CurTime()
-	then
+	and (TBHUD.focus_but.access or TBHUD.focus_but.admin) and TBHUD.focus_stick >= CurTime() then
 		ent = TBHUD.focus_but.ent
 		return ent, pos:Distance(ent:GetPos())
 	end
@@ -113,9 +112,10 @@ function targetid.HUDDrawTargetIDTButtons(tData)
 	local admin_mode = GetGlobalBool("ttt2_tbutton_admin_show", false)
 
 	if not IsValid(client) or not client:IsTerror() or not client:Alive()
-		or not IsValid(ent) or ent:GetClass() ~= "ttt_traitor_button"
-		or tData:GetEntityDistance() > ent:GetUsableRange()
-	then return end
+	or not IsValid(ent) or ent:GetClass() ~= "ttt_traitor_button"
+	or tData:GetEntityDistance() > ent:GetUsableRange() then
+		return
+	end
 
 	-- enable targetID rendering
 	tData:EnableText()
@@ -268,11 +268,11 @@ function targetid.HUDDrawTargetIDWeapons(tData)
 		local dropWepKind = MakeKindValid(dropWeapon.Kind)
 		local dropWeapon_name
 
-		if not dropWeapon.GetPrintName then
-			dropWeapon_name = dropWeapon:GetPrintName() or dropWeapon.PrintName or dropWeapon:GetClass() or "..."
-		else
-			dropWeapon_name = dropWeapon.PrintName or dropWeapon:GetClass() or "..."
+		if dropWeapon.GetPrintName then
+			dropWeapon_name = dropWeapon:GetPrintName()
 		end
+
+		dropWeapon_name = dropWeapon_name or dropWeapon.PrintName or dropWeapon:GetClass() or "..."
 
 		tData:AddDescriptionLine(
 			ParT("target_switch_drop_weapon_info", {slot = dropWepKind, name = TryT(dropWeapon_name)}),
@@ -282,10 +282,8 @@ function targetid.HUDDrawTargetIDWeapons(tData)
 
 	-- add info about full inventory
 	if switchMode == SWITCHMODE_FULLINV then
-		local dropWepKind = MakeKindValid(ent.Kind)
-
 		tData:AddDescriptionLine(
-			ParT("target_switch_drop_weapon_info_noslot", {slot = dropWepKind}),
+			ParT("target_switch_drop_weapon_info_noslot", {slot = MakeKindValid(ent.Kind)}),
 			COLOR_ORANGE
 		)
 	end
@@ -346,9 +344,9 @@ function targetid.HUDDrawTargetIDPlayers(tData)
 	local h_string, h_color = util.HealthToString(ent:Health(), ent:GetMaxHealth())
 
 	tData:SetTitle(
-		ent:Nick() .. " " .. (disguised and TryT("target_disg") or ""),
+		ent:Nick() .. (disguised and (" " .. TryT("target_disg")) or ""),
 		disguised and COLOR_ORANGE or nil,
-		disguised and {materialDisguised}
+		disguised and {materialDisguised} or nil
 	)
 
 	tData:SetSubtitle(
@@ -409,7 +407,7 @@ function targetid.HUDDrawTargetIDRagdolls(tData)
 	local corpse_found = CORPSE.GetFound(ent, false) or not DetectiveMode()
 	local role_found = corpse_found and ent.search_result and ent.search_result.role
 	local binoculars_useable = IsValid(c_wep) and c_wep:GetClass() == "weapon_ttt_binoculars" or false
-	local role = roles.GetByIndex(role_found and ent.search_result.role or 1)
+	local roleData = roles.GetByIndex(role_found and ent.search_result.role or ROLE_INNOCENT)
 
 	-- enable targetID rendering
 	tData:EnableText()
@@ -418,7 +416,7 @@ function targetid.HUDDrawTargetIDRagdolls(tData)
 
 	-- add title and subtitle to the focused ent
 	tData:SetTitle(
-		corpse_found and CORPSE.GetPlayerNick(ent, "A Terrorist") or TryT("target_unid"),
+		corpse_found and CORPSE.GetPlayerNick(ent, TryT("target_unknown")) or TryT("target_unid"),
 		role_found and COLOR_WHITE or COLOR_YELLOW
 	)
 
@@ -442,8 +440,8 @@ function targetid.HUDDrawTargetIDRagdolls(tData)
 
 	-- add icon to the element
 	tData:AddIcon(
-		role_found and role.iconMaterial or materialCorpse,
-		role_found and role.color or COLOR_YELLOW
+		role_found and roleData.iconMaterial or materialCorpse,
+		role_found and roleData.color or COLOR_YELLOW
 	)
 
 	-- add hints to the corpse
@@ -545,7 +543,9 @@ function targetid.HUDDrawTargetIDDNAScanner(tData)
 	local ent = tData:GetEntity()
 
 	if not IsValid(client:GetActiveWeapon()) or client:GetActiveWeapon():GetClass() ~= "weapon_ttt_wtester"
-		or tData:GetEntityDistance() > 400 or not IsValid(ent) then return end
+	or tData:GetEntityDistance() > 400 or not IsValid(ent) then
+		return
+	end
 
 	-- add an empty line if there's already data in the description area
 	if tData:GetAmountDescriptionLines() > 0 then
@@ -553,8 +553,7 @@ function targetid.HUDDrawTargetIDDNAScanner(tData)
 	end
 
 	if ent:IsWeapon() or ent.CanHavePrints or ent:GetNWBool("HasPrints", false)
-		or ent:GetClass() == "prop_ragdoll" and CORPSE.GetPlayerNick(ent, false)
-	then
+	or ent:GetClass() == "prop_ragdoll" and CORPSE.GetPlayerNick(ent, false) then
 		tData:AddDescriptionLine(TryT("dna_tid_possible"), COLOR_GREEN, {materialDNATargetID})
 	else
 		tData:AddDescriptionLine(TryT("dna_tid_impossible"), COLOR_RED, {materialDNATargetID})
