@@ -325,8 +325,7 @@ function targetid.HUDDrawTargetIDPlayers(tData)
 	local rstate = GetRoundState()
 	local target_role
 
-	-- TODO: this detective check has to be removed from here and be replaced with a general role flag
-	if ent.GetSubRole and (rstate > ROUND_PREP and ent:IsDetective() or rstate == ROUND_ACTIVE and ent:IsSpecial()) then
+	if ent.GetSubRole and rstate == ROUND_ACTIVE and ent:IsSpecial() then
 		target_role = ent:GetSubRoleData()
 	end
 
