@@ -1,5 +1,5 @@
 # TTT2 - Trouble in Terrorist Town 2 (Advanced Update)
-[![Build Status](https://ci.neoxult.de/buildStatus/icon?job=TTT2%20Api%20Docs%20Deploy%2Fmaster)](https://ci.neoxult.de/job/TTT2%20Api%20Docs%20Deploy/job/master/)
+![CI](https://github.com/TTT-2/TTT2/workflows/CI/badge.svg?branch=master) 
 [![Steam Subscriptions](https://img.shields.io/steam/subscriptions/1357204556)](https://steamcommunity.com/sharedfiles/filedetails/?id=1357204556) 
 [![Steam Downloads](https://img.shields.io/steam/downloads/1357204556)](https://steamcommunity.com/sharedfiles/filedetails/?id=1357204556) 
 [![Discord](https://img.shields.io/discord/442107660955942932)](https://discord.gg/9njYXGY)
