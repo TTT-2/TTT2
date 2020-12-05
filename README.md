@@ -6,8 +6,6 @@
 
 **This is still a beta version. Bugs are expected and a documentation is available [here](https://docs.ttt2.neoxult.de/). [Please report bugs and suggestions here](https://github.com/TTT-2/TTT2/issues)! Please make sure to check out [the FAQ page](https://docs.ttt2.neoxult.de/troubleshooting/) before asking the same questions each and every day.**
 
-[![https://i.imgur.com/09Uhv8H.gif](https://i.imgur.com/09Uhv8H.gif)](https://steamcommunity.com/sharedfiles/filedetails/?id=1357204556)
-  
 * Discord: [https://discord.gg/Npcbb4W](https://discord.gg/Npcbb4W)
 * Design-Guidelines: [https://github.com/TTT-2/TTT2/blob/master/DESIGNGUIDELINES.md](https://github.com/TTT-2/TTT2/blob/master/DESIGNGUIDELINES.md)
 * Documentation: [https://docs.ttt2.neoxult.de/](https://docs.ttt2.neoxult.de/) (WIP)
@@ -22,10 +20,7 @@ TTT2 (TTT 2.0) was the next logical step after TTT was such a massive success. I
 
 We know that TTT lives from its huge community and all its great addons. Because of this, **compatibility** is one of the highest priorities. Almost every item that works with TTT also works well with TTT2. There are a few minor exceptions though. Addons that modify the hud, eg. Octagonal HUD, will not work with TTT2. If you plan on creating a new HUD for TTT2, you have to use the way more powerful hud system from TTT2. Additionally addons that rely on roles may not work as intended with the newly added roles. 
   
-Additionally there's a compatibility checker, that prints a list of incompatible or outdated addons in the server console that looks like this:
-
-[![https://cdn.discordapp.com/attachments/495532865191411714/557222547683409931/unknown.png](https://cdn.discordapp.com/attachments/495532865191411714/557222547683409931/unknown.png)](https://cdn.discordapp.com/attachments/495532865191411714/557222547683409931/unknown.png).
-  
+Additionally there's a compatibility checker, that prints a list of incompatible or outdated addons in the server console. More on this in our documentation  [here](https://docs.ttt2.neoxult.de/troubleshooting/#addon-checker).  
 **Hint:** You do not need addons like “Better Equipment Menu”, “Drowning Indicator” or “TTT Sprint”, because features like these are included in TTT2 by default.  
   
 ## NEW GAMEMODES
