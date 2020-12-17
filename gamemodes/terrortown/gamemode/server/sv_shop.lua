@@ -17,7 +17,7 @@ end
 -- Called whenever a @{Player} tries to order an @{ITEM} or @{Weapon}.
 -- @param Player ply The player that attempts to buy something
 -- @param string id id of the @{ITEM} or @{Weapon}, old id for @{ITEM} and class for @{Weapon}
--- @param bool isItem True if item, false if weapon
+-- @param boolean isItem True if item, false if weapon
 -- @return[default=true] boolean return true to allow buying of an equipment item, false to disallow
 -- @hook
 -- @realm server
@@ -29,7 +29,7 @@ end
 -- Called whenever a @{Player} tries to order an @{ITEM} or @{Weapon}.
 -- @param Player ply The player that attempts to buy something
 -- @param string cls The class of the @{ITEM} or @{Weapon}
--- @param bool isItem True if item, false if weapon
+-- @param boolean isItem True if item, false if weapon
 -- @param number credits The purchase price of the @{ITEM} or @{Weapon}
 -- @return boolean Return false to block buying of an equipment item
 -- @return boolean Return true to make the purchase free
@@ -44,7 +44,7 @@ end
 -- Called whenever a @{Player} ordered an @{ITEM} or @{Weapon}.
 -- @param Player ply The player that bought something
 -- @param string id id of the @{ITEM} or @{Weapon}, old id for @{ITEM} and class for @{Weapon}
--- @param bool isItem True if item, false if weapon
+-- @param boolean isItem True if item, false if weapon
 -- @hook
 -- @realm server
 function GM:TTTOrderedEquipment(ply, id, isItem)
@@ -55,7 +55,7 @@ end
 -- Called whenever a @{Player} ordered an @{ITEM} or @{Weapon}.
 -- @param Player ply The player that bought something
 -- @param string cls The class of the @{ITEM} or @{Weapon}
--- @param bool isItem True if item, false if weapon
+-- @param boolean isItem True if item, false if weapon
 -- @param number credits The purchase price of the @{ITEM} or @{Weapon}
 -- @param boolean ignoreCost True if the cost was ignored and received for free
 -- @hook

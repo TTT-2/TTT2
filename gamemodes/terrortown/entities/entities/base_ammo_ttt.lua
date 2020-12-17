@@ -148,7 +148,7 @@ end
 
 if SERVER then
 	---
-	-- This Think hook is used to hack to force ammo to physwake because it can't be done
+	-- This Think hook is used as a hack to force ammo to physwake, because it can't be done
 	-- in init. If it is done in init, the entities will fall through the world on the client
 	-- but not on the server. This leads to inconsistencies between server and client.
 	-- @realm server
@@ -165,7 +165,7 @@ if SERVER then
 	end
 
 	---
-	-- Hook that is called when a weapon entity is about to be picked up. With this hook
+	-- Hook that is called when an ammo entity is about to be picked up. With this hook
 	-- the pickup can be canceled. It is called after all previous checks have passed.
 	-- @param Player ply The player that attempts to pick up the entity
 	-- @param Entity ent The ammo entity that is about to be picked up

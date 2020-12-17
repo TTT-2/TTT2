@@ -1514,11 +1514,7 @@ local function ttt_toggle_newroles(ply)
 
 	ttt_newroles_enabled:SetBool(b)
 
-	local word = "enabled"
-
-	if not b then
-		word = "disabled"
-	end
+	local word = b and "enabled" or "disabled"
 
 	ply:PrintMessage(HUD_PRINTNOTIFY, "You " .. word .. " the new roles for TTT!")
 end
