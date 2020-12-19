@@ -7,6 +7,52 @@ local IsColor = IsColor
 TARGET_DATA = {}
 
 ---
+-- Initializes the @{TARGET_DATA} object
+-- @param entity ent The focused Entity
+-- @param entity unchangedEnt The original focused Entity if focus was changed by the hook
+-- @param number distance The distance to the focused Entity
+-- @return @{TARGET_DATA} The object to be used in the hook
+-- @internal
+-- @realm client
+function TARGET_DATA:Initialize(ent, unchangedEnt, distance)
+	-- combine data into a table to read them inside a hook
+	local data = {
+		ent = ent,
+		unchangedEnt = unchangedEnt,
+		distance = distance
+	}
+
+	-- preset a table of values that can be changed with a hook
+	local params = {
+		drawInfo = nil,
+		drawOutline = nil,
+		outlineColor = COLOR_WHITE,
+		displayInfo = {
+			key = nil,
+			icon = {},
+			title = {
+				icons = {},
+				text = "",
+				color = COLOR_WHITE
+			},
+			subtitle = {
+				icons = {},
+				text = "",
+				color = COLOR_LLGRAY
+			},
+			desc = {}
+		},
+		refPosition = {
+			x = math.Round(0.5 * ScrW() / appearance.GetGlobalScale(), 0),
+			y = math.Round(0.5 * ScrH() / appearance.GetGlobalScale(), 0) + 42
+		}
+	}
+
+	return TARGET_DATA:BindTarget(data, params)
+end
+
+
+---
 -- Binds two target data tables to the @{TARGET_DATA} object
 -- @param table data The data table about the focused entity
 -- @param table params The default table with the params that should be modified by the hook

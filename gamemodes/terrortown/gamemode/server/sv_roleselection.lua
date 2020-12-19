@@ -508,9 +508,10 @@ end
 -- @param table plys The players that should receive roles.
 -- @param table availableRoles The list of roles, that are available.
 -- @param table selectableRoles The list of filtered selectable @{ROLE}s
+-- @param table selectedForcedRoles The List with a count of forced @{ROLE}s
 -- @realm server
 -- @internal
-local function SetSubRoles(plys, availableRoles, selectableRoles)
+local function SetSubRoles(plys, availableRoles, selectableRoles, selectedForcedRoles)
 	local plysAmount = #plys
 	local availableRolesAmount = #availableRoles
 	local tmpSelectableRoles = table.Copy(selectableRoles)
@@ -523,6 +524,10 @@ local function SetSubRoles(plys, availableRoles, selectableRoles)
 		local subrole = availableRoles[rolePick]
 		local roleData = roles.GetByIndex(subrole)
 		local roleCount = tmpSelectableRoles[subrole]
+
+		if selectedForcedRoles[subrole] then
+			roleCount = roleCount - selectedForcedRoles[subrole]
+		end
 
 		local minKarmaCVar = GetConVar("ttt_" .. roleData.name .. "_karma_min")
 		local minKarma = minKarmaCVar and minKarmaCVar:GetInt() or 0
@@ -552,16 +557,38 @@ local function SetSubRoles(plys, availableRoles, selectableRoles)
 end
 
 ---
+-- Ensure, that baseroles of hardforced subroles are accounted for (eg. received by ULX etc).
+--
+-- @return table List with a count of forced @{ROLE}s
+-- @realm server
+-- @internal
+local function GetHardForcedBaseRoles()
+	local selectedForcedRoles = {}
+
+	for ply, subrole in pairs(roleselection.finalRoles) do
+		local curRole = roles.GetByIndex(subrole)
+		local isBaseRole = curRole:IsBaseRole()
+
+		-- assign amount of forced players per baserole if this is only a subrole
+		if not isBaseRole then
+			local baserole = curRole.baserole
+			selectedForcedRoles[baserole] = (selectedForcedRoles[baserole] or 0) + 1
+		end
+	end
+
+	return selectedForcedRoles
+end
+
+---
 -- Ensure, that players receive their forced role (eg. received by ULX etc).
 --
 -- @param table plys The players that should receive roles.
 -- @param table selectableRoles The list of filtered selectable @{ROLE}s
--- @return table List of players, that received a forced role.
+-- @return table List with a count of forced @{ROLE}s
 -- @realm server
 -- @internal
 local function SelectForcedRoles(plys, selectableRoles)
 	local transformed = {}
-	local selectedPlys = {}
 
 	-- filter and restructure the forcedRoles table
 	for id, subrole in pairs(roleselection.forcedRoles) do
@@ -575,13 +602,32 @@ local function SelectForcedRoles(plys, selectableRoles)
 		end
 	end
 
+	local selectedForcedRoles = GetHardForcedBaseRoles() -- this gets the hardforced amount of baseroles that are taken by subroles 
+
 	for subrole, forcedPlys in pairs(transformed) do
 		local roleCount = selectableRoles[subrole]
 
 		-- if it's not a selectable role, continue
 		if not roleCount then continue end
 
-		local curCount = 0
+		local curRole = roles.GetByIndex(subrole)
+		local isBaseRole = curRole:IsBaseRole()
+		local baserole = nil
+
+		-- Consider maximum number of roles, that are available to the corresponding baserole
+		if not isBaseRole then
+			baserole = curRole.baserole
+
+			local baseroleCount = selectableRoles[baserole] - (selectedForcedRoles[baserole] or 0)
+
+			-- take the minimum of baseroles or subroles, if baseroles are available, else continue
+			if baseroleCount < 1 then continue end
+
+			roleCount = math.min(baseroleCount, roleCount)
+		end
+
+		-- Consider number of roles, that were forced by other subroles
+		local curCount = selectedForcedRoles[subrole] or 0
 		local amount = #forcedPlys
 
 		for i = 1, amount do
@@ -602,14 +648,19 @@ local function SelectForcedRoles(plys, selectableRoles)
 			---
 			-- @realm server
 			hook.Run("TTT2ReceivedForcedRole", ply, subrole)
+		end
 
-			selectedPlys[ply] = true
+		-- assigning the amount of forced players per role
+		selectedForcedRoles[subrole] = curCount
+
+		-- now assign amount of forced players per baserole if this is only a subrole
+		if not isBaseRole then
+			selectedForcedRoles[baserole] = (selectedForcedRoles[baserole] or 0) + curCount
 		end
 	end
-
 	roleselection.forcedRoles = {}
 
-	return selectedPlys
+	return selectedForcedRoles
 end
 
 ---
@@ -619,19 +670,46 @@ end
 -- @param table plys The players that should receive roles.
 -- @param number subrole The @{ROLE} index of the considered role.
 -- @param table selectableRoles The list of filtered selectable @{ROLE}s
+-- @param table selectedForcedRoles The List with a count of forced @{ROLE}s
 -- @realm server
 -- @internal
-local function UpgradeRoles(plys, subrole, selectableRoles)
+local function UpgradeRoles(plys, subrole, selectableRoles, selectedForcedRoles)
 	local availableRoles = {}
+	local roleAmount = 0
 
 	-- now upgrade this role if there are other subroles
 	for sub in pairs(selectableRoles) do
-		if roles.GetByIndex(sub).baserole == subrole then
+		if roles.GetByIndex(sub).baserole ~= subrole then continue end
+
+		roleAmount = selectableRoles[sub]
+
+		if selectedForcedRoles[sub] then
+			roleAmount = roleAmount - selectedForcedRoles[sub]
+		end
+
+		if roleAmount > 0 then
 			availableRoles[#availableRoles + 1] = sub
 		end
 	end
 
-	SetSubRoles(plys, availableRoles, selectableRoles)
+	SetSubRoles(plys, availableRoles, selectableRoles, selectedForcedRoles)
+end
+
+---
+-- Update the roleselection.finalRoles table by removing all invalid players
+--
+-- @realm server
+-- @internal
+local function UpdateFinalRoles()
+	local tbl = {}
+
+	for ply, subrole in pairs(roleselection.finalRoles) do
+		if IsValid(ply) then
+			tbl[ply] = subrole
+		end
+	end
+
+	roleselection.finalRoles = tbl
 end
 
 ---
@@ -698,8 +776,10 @@ function roleselection.SelectRoles(plys, maxPlys)
 	local allAvailableRoles = roleselection.GetAllSelectableRolesList(maxPlys)
 	local selectableRoles = roleselection.GetSelectableRolesList(maxPlys, allAvailableRoles) -- update roleselection.selectableRoles table
 
+	UpdateFinalRoles() -- Update the roleselection.finalRoles table by removing all invalid players
+
 	-- Select forced roles at first
-	local selectedForcedPlys = SelectForcedRoles(plys, selectableRoles) -- this updates roleselection.finalRoles table and returns a key based list of selected players
+	local selectedForcedRoles = SelectForcedRoles(plys, selectableRoles) -- this updates roleselection.finalRoles table with forced players
 
 	-- We need to remove already selected players
 	local plysFirstPass, plysSecondPass = {}, {} -- modified player table
@@ -707,7 +787,7 @@ function roleselection.SelectRoles(plys, maxPlys)
 	for i = 1, #plys do
 		local ply = plys[i]
 
-		if selectedForcedPlys[ply] then continue end
+		if roleselection.finalRoles[ply] then continue end
 
 		local pos = #plysFirstPass + 1
 
@@ -723,7 +803,7 @@ function roleselection.SelectRoles(plys, maxPlys)
 			[2] = ROLE_INNOCENT
 		}
 
-		-- insert selectable roles into the list. The order doesn't matter, players are choosen randomly and the roles are already filtered and limited
+		-- insert selectable roles into the list. The order doesn't matter, players are chosen randomly and the roles are already filtered and limited
 		for subrole in pairs(selectableRoles) do
 			if subrole == ROLE_TRAITOR or subrole == ROLE_INNOCENT then continue end
 
@@ -739,11 +819,17 @@ function roleselection.SelectRoles(plys, maxPlys)
 
 			if not roleData:IsBaseRole() or not selectableRoles[subrole] then continue end
 
-			local baseRolePlys = SelectBaseRolePlayers(plysFirstPass, subrole, selectableRoles[subrole])
+			local amount = selectableRoles[subrole]
+
+			if selectedForcedRoles[subrole] then
+				amount = amount - selectedForcedRoles[subrole]
+			end
+
+			local baseRolePlys = SelectBaseRolePlayers(plysFirstPass, subrole, amount)
 
 			-- upgrade innos and players without any role later
 			if subrole ~= ROLE_INNOCENT then
-				UpgradeRoles(baseRolePlys, subrole, selectableRoles)
+				UpgradeRoles(baseRolePlys, subrole, selectableRoles, selectedForcedRoles)
 			end
 		end
 
@@ -759,7 +845,7 @@ function roleselection.SelectRoles(plys, maxPlys)
 			innos[#innos + 1] = ply
 		end
 
-		UpgradeRoles(innos, ROLE_INNOCENT, selectableRoles)
+		UpgradeRoles(innos, ROLE_INNOCENT, selectableRoles, selectedForcedRoles)
 	end
 
 	GAMEMODE.LastRole = {}
