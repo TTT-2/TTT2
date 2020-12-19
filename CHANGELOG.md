@@ -37,6 +37,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Fixed
 
 - Fixed weapon pickup bug, where weapons would not get dropped but stayed in inventory
+- Fixed a roleselection bug, where forced roles would not be deducted from the available roles
 
 ## [v0.7.4b](https://github.com/TTT-2/TTT2/tree/v0.7.4b) (2020-09-28)
 
@@ -47,6 +48,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added `table.ExtractRandomEntry(tbl, filterFn)` function
 - Added a team indicator in front of every name in the scoreboard (just known teams will be displayed)
 - Added a hook `TTT2ModifyCorpseCallRadarRecipients` that is called once "call detective" is pressed
+- Added a `targetid` library, that can be used to draw TargetIDs for entities
 
 ### Changed
 

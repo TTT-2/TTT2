@@ -525,7 +525,7 @@ include("ttt2/libraries/orm.lua")
 include("ttt2/libraries/thermalvision.lua")
 include("ttt2/libraries/events.lua")
 include("ttt2/libraries/none.lua")
-
+include("ttt2/libraries/targetid.lua")
 
 -- include ttt required files
 ttt_include("sh_decal")

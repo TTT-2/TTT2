@@ -483,6 +483,7 @@ L.corpse_hint = "Press [{usekey}] to search. [{walkkey} + {usekey}] to search co
 
 L.target_disg = "(disguised)"
 L.target_unid = "Unidentified body"
+L.target_unknown = "A Terrorist"
 
 L.target_credits = "Search to receive unspent credits"
 
