@@ -315,4 +315,26 @@ end
 -- @realm shared
 function table.GetEqualEntriesAmount(tbl, reference)
 	return #table.GetEqualEntryKeys(tbl, reference)
+-- Copies any missing data from base table to the target table.
+-- @note This function will not create a new table. It modifies the existing table.
+-- @param table t The target table that will be modified
+-- @param table base The (fallback) base table
+-- @return table The modified target table
+-- @realm shared
+function table.DeepInherit(t, base)
+	if not base then
+		return t
+	end
+
+	for k, v in pairs(base) do
+		if t[k] == nil then
+			t[k] = v
+		elseif k ~= "BaseClass" and istable(t[k]) then
+			table.DeepInherit(t[k], v)
+		end
+	end
+
+	t.BaseClass = base
+
+	return t
 end
