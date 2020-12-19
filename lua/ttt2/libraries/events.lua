@@ -283,18 +283,20 @@ local function ShouldInherit(t, base)
 	return t.base ~= t.type
 end
 
+local function OnInitialization(class, path, name)
+	class.type = name
+	class.base = class.base or "base_event"
+
+	_G["EVENT_" .. string.upper(name)] = name
+
+	MsgN("Added TTT2 event file: ", path)
+end
+
 eventTypes = classbuilder.BuildFromFolder(
 	"terrortown/gamemode/shared/events/",
 	SHARED_FILE,
 	"EVENT", -- class scope
-	function(class, path, name) -- on class loaded
-		class.type = name
-		class.base = class.base or "base_event"
-
-		_G["EVENT_" .. string.upper(name)] = name
-
-		MsgN("Added TTT2 event file: ", path)
-	end,
+	OnInitialization, -- on class loaded
 	true, -- should inherit
 	ShouldInherit -- special inheritance check
 )
@@ -303,14 +305,7 @@ table.Merge(eventTypes, classbuilder.BuildFromFolder(
 	"terrortown/events/",
 	SHARED_FILE,
 	"EVENT", -- class scope
-	function(class, path, name) -- on class loaded
-		class.type = name
-		class.base = class.base or "base_event"
-
-		_G["EVENT_" .. string.upper(name)] = name
-
-		MsgN("Added TTT2 event file: ", path)
-	end,
+	OnInitialization, -- on class loaded
 	true, -- should inherit
 	ShouldInherit -- special inheritance check
 ))
