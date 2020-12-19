@@ -19,6 +19,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - added a hook `TTT2AddedEvent` that is called after an event was added
 - Added `orm` library to simplify database access
 - Added French translation (by @MisterClems)
+- Added a `targetid` library, that can be used to draw TargetIDs for entities
 
 ### Changed
 
@@ -46,7 +47,6 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added `table.ExtractRandomEntry(tbl, filterFn)` function
 - Added a team indicator in front of every name in the scoreboard (just known teams will be displayed)
 - Added a hook `TTT2ModifyCorpseCallRadarRecipients` that is called once "call detective" is pressed
-- Added a `targetid` library, that can be used to draw TargetIDs for entities
 
 ### Changed
 
