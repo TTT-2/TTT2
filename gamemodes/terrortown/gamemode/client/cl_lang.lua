@@ -181,6 +181,7 @@ end
 ---
 -- Caused by a recent rename of the language names, old addons lost compatibility.
 -- To prevent annoyance, a compatibility mode is introduced.
+-- @note Returns provided langName if no alias was found.
 -- @param string langName The string key identifier of the language
 -- @return string|nil The language name in the new format
 -- @internal
