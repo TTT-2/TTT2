@@ -19,6 +19,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - added a hook `TTT2AddedEvent` that is called after an event was added
 - Added `orm` library to simplify database access
 - Added French translation (by @MisterClems)
+- Added a new classbuilder that can be used to create classes from files
 
 ### Changed
 
@@ -31,6 +32,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added minimal documentation to every datastructure
 - Removed C4 defuse restriction for teammates
 - Moved role specific score variables into the role base
+- moved functions from sh_util into their respective library files
 
 ### Fixed
 
