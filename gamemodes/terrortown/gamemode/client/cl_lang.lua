@@ -152,9 +152,9 @@ LANG.GetPTranslation = LANG.GetParamTranslation
 -- @return nil|string
 -- @realm client
 function LANG.GetTranslationFromLanguage(name, langName)
-	langName = langName and string.lower(langName) or nil
+	if langName == nil then return end
 
-	return rawget(LANG.Strings[langName], name)
+	return rawget(LANG.Strings[string.lower(langName)], name)
 end
 
 ---
@@ -182,11 +182,13 @@ end
 -- Caused by a recent rename of the language names, old addons lost compatibility.
 -- To prevent annoyance, a compatibility mode is introduced.
 -- @param string langName The string key identifier of the language
--- @return string The language name in the new format
+-- @return string|nil The language name in the new format
 -- @internal
 -- @realm client
 function LANG.GetNameFromAlias(langName)
-	langName = langName and string.lower(langName) or nil
+	if langName == nil then return end
+
+	langName = string.lower(langName)
 
 	if LANG.IsLanguage(langName) then
 		return langName
@@ -276,7 +278,9 @@ end
 -- @param string langName The new language name
 -- @realm client
 function LANG.SetActiveLanguage(langName)
-	langName = langName and string.lower(langName) or nil
+	if langName == nil then return end
+
+	langName = string.lower(langName)
 
 	if LANG.IsLanguage(langName) then
 		local oldName = LANG.ActiveLanguage
