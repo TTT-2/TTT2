@@ -12,13 +12,16 @@ local dhelp
 local dform
 local selected_sid
 
-local function UpdateTransferSubmitButton(dsubmit, dhelp, dform, selected_sid)
+local function UpdateTransferSubmitButton()
 	local client = LocalPlayer()
 	if client:GetCredits() <= 0 then
 		dhelp:SetText(GetTranslation("xfer_no_credits"))
 		dsubmit:SetDisabled(true)
 	elseif selected_sid then
 		local ply = player.GetBySteamID64(selected_sid)
+
+		---
+		-- @realm client
 		local allow, msg = hook.Run("TTT2CanTransferCredits", client, ply, CREDITS_PER_XFER)
 
 		if allow == false then
@@ -35,7 +38,7 @@ end
 
 net.Receive("TTT2CreditTransferUpdate", function()
 	--Called after the server performs a successful transfer of credits.
-	UpdateTransferSubmitButton(dsubmit, dhelp, dform, selected_sid)
+	UpdateTransferSubmitButton()
 end)
 
 ---
@@ -67,7 +70,7 @@ function CreateTransferMenu(parent)
 			selected_sid = data
 
 			--Upon selecting the player, determine if a transfer can be made to them.
-			UpdateTransferSubmitButton(dsubmit, dhelp, dform, selected_sid)
+			UpdateTransferSubmitButton()
 		end
 	end
 

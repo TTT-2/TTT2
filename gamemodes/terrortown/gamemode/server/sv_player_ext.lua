@@ -760,9 +760,9 @@ function plymeta:CanSelectRole(roleData, choice_count, role_count)
 	) and (choice_count <= role_count or not self:GetAvoidRole(roleData.index))
 end
 
---
+---
 -- Function taken from Trouble in Terrorist Town Commands (https://github.com/bender180/Trouble-in-Terrorist-Town-ULX-Commands)
---
+-- @realm server
 function plymeta:FindCorpse()
 	local ragdolls = ents.FindByClass("prop_ragdoll")
 

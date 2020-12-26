@@ -223,6 +223,8 @@ local function TransferCredits(ply, cmd, args)
 
 	if credits == 0 then return end
 
+	---
+	-- @realm server
 	local allow, _ = hook.Run("TTT2CanTransferCredits", ply, target, credits)
 	if allow == false then return end
 
