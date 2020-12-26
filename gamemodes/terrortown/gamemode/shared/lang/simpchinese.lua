@@ -118,7 +118,6 @@ L.xfer_name = "转移"
 L.xfer_menutitle = "转移积分"
 L.xfer_no_credits = "你没有积分了"
 L.xfer_send = "发送积分"
-L.xfer_help = "你只能发送积分给 {role} 玩家。"
 
 L.xfer_no_recip = "接收者无效，发送失败。"
 L.xfer_no_credits = "积分不足，无法转移"

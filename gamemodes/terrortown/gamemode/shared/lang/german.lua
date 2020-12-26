@@ -118,7 +118,6 @@ L.xfer_name = "Transfer"
 L.xfer_menutitle = "Credits transferieren"
 L.xfer_no_credits = "Du kannst keine Credits abgeben!"
 L.xfer_send = "Sende einen Credit"
-L.xfer_help = "Du kannst Credits nur an weitere {role} senden."
 
 L.xfer_no_recip = "Der Empfänger ist ungültig, Credit-Transfer abgebrochen."
 L.xfer_no_credits = "Ungenügend Credits für einen Transfer."

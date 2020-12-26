@@ -1,6 +1,8 @@
 ---
 -- @section shop
 
+util.AddNetworkString("TTT2CreditTransferUpdate")
+
 local function RerollShop(ply)
 	if GetGlobalBool("ttt2_random_team_shops") then
 		ResetRandomShopsForRole(ply:GetSubRole(), GetGlobalInt("ttt2_random_shops"), true)
@@ -221,13 +223,23 @@ local function TransferCredits(ply, cmd, args)
 
 	if credits == 0 then return end
 
-	local allow = hook.Run("TTT2CanTransferCredits", ply, target, credits)
-
+	local allow, _ = hook.Run("TTT2CanTransferCredits", ply, target, credits)
 	if allow == false then return end
 
 	ply:SubtractCredits(credits)
-	target:AddCredits(credits)
+	if target:Alive() then
+		target:AddCredits(credits)
+	else
+		-- The would be recipient is dead, which the sender may not know.
+		-- Instead attempt to send the credits to the target's corpse, where they can be picked up.
+		local rag = target:FindCorpse()
+		if IsValid(rag) then
+			CORPSE.SetCredits(rag, CORPSE.GetCredits(rag, 0) + credits)
+		end
+	end
 
+	net.Start("TTT2CreditTransferUpdate")
+	net.Send(ply)
 	LANG.Msg(ply, "xfer_success", {player = target:Nick()}, MSG_MSTACK_ROLE)
 	LANG.Msg(target, "xfer_received", {player = ply:Nick(), num = credits}, MSG_MSTACK_ROLE)
 end
