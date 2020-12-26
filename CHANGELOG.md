@@ -14,6 +14,13 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added Drag&Drop role layering VGUI, accessible with the console command `ttt2_edit_rolelayering`
 - Updated Simplified Chinese localization (by @TheOnly8Z)
 - Updated Italian localization (by @ThePlatynumGhost)
+- Added a new event system
+  - added a cancelable hook `TTT2OnTriggeredEvent` that is called once an event is about to be added
+  - added a hook `TTT2AddedEvent` that is called after an event was added
+- Added `orm` library to simplify database access
+- Added French translation (by @MisterClems)
+- Added a new classbuilder that can be used to create classes from files
+- Added a `targetid` library, that can be used to draw TargetIDs for entities
 - Added a hook `TTT2CanTransferCredits` that is called before credits are transferred
 - Credits can now be transferred across teams and from roles whom the recipient does not know
 
@@ -24,10 +31,16 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Inverted some convars to have a uniform "Enable feature X", not a mixture of enable and disable
 - TargetID text is now scaled with the global scale factor
 - Cleaned up draw function files
+- Changed several functions' scopes
+- Added minimal documentation to every datastructure
+- Removed C4 defuse restriction for teammates
+- Moved role specific score variables into the role base
+- moved functions from sh_util into their respective library files
 
 ### Fixed
 
 - Fixed weapon pickup bug, where weapons would not get dropped but stayed in inventory
+- Fixed a roleselection bug, where forced roles would not be deducted from the available roles
 
 ## [v0.7.4b](https://github.com/TTT-2/TTT2/tree/v0.7.4b) (2020-09-28)
 

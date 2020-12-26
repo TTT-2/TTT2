@@ -262,7 +262,6 @@ Toggle in the Disguise tab of this menu or press Numpad Enter.]]
 
 -- C4
 L.c4_hint = "Press {usekey} to arm or disarm."
-L.c4_no_disarm = "You cannot disarm another Traitor's C4 unless they are dead."
 L.c4_disarm_warn = "A C4 explosive you planted has been disarmed."
 L.c4_armed = "You have successfully armed the bomb."
 L.c4_disarmed = "You have successfully disarmed the bomb."
@@ -484,6 +483,7 @@ L.corpse_hint = "Press [{usekey}] to search. [{walkkey} + {usekey}] to search co
 
 L.target_disg = "(disguised)"
 L.target_unid = "Unidentified body"
+L.target_unknown = "A Terrorist"
 
 L.target_credits = "Search to receive unspent credits"
 

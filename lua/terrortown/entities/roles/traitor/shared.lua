@@ -2,6 +2,8 @@ ROLE.Base = "ttt_role_base"
 
 ROLE.index = ROLE_TRAITOR
 
+---
+-- @ignore
 function ROLE:PreInitialize()
 	self.color = Color(209, 43, 39, 255)
 
@@ -11,9 +13,11 @@ function ROLE:PreInitialize()
 
 	self.defaultTeam = TEAM_TRAITOR
 	self.defaultEquipment = TRAITOR_EQUIPMENT
-	self.surviveBonus = 0.5
-	self.scoreKillsMultiplier = 5
-	self.scoreTeamKillsMultiplier = -16
+	self.score.surviveBonusMultiplier = 0.5
+	self.score.timelimitMultiplier = -0.5
+	self.score.killsMultiplier = 2
+	self.score.teamKillsMultiplier = -16
+	self.score.bodyFoundMuliplier = 0
 	self.fallbackTable = {}
 
 	-- conVarData

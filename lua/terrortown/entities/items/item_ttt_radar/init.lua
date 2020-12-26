@@ -1,4 +1,6 @@
--- just server file
+---
+-- @class ITEM
+-- @section RADAR
 
 local math = math
 
@@ -12,8 +14,8 @@ local cv_radarCharge
 util.AddNetworkString("TTT2RadarUpdateAutoScan")
 util.AddNetworkString("TTT2RadarUpdateTime")
 
-RADAR = RADAR or {}
-
+---
+-- @ignore
 function ITEM:Initialize()
 	cv_radarCharge = GetConVar("ttt2_radar_charge_time")
 end
@@ -27,6 +29,11 @@ local function UpdateTimeOnPlayer(ply)
 	net.WriteUInt(ply.radarTime, 8)
 	net.Send(ply)
 end
+
+---
+-- @class RADAR
+
+RADAR = RADAR or {}
 
 ---
 -- Triggers a new radar scan. Fails if the radar is still charging.
@@ -120,8 +127,8 @@ concommand.Add("ttt_radar_scan", RADAR.TriggerRadarScan)
 -- This hook can be used to modify the radar dots of players.
 -- @param Player ply The player that receives the radar information
 -- @param Player target The Player whose info should be changed
--- @return number The modified role
--- @return string The modified team
+-- @return nil|number The modified role
+-- @return nil|string The modified team
 -- @hook
 -- @realm server
 function GM:TTT2ModifyRadarRole(ply, target)
@@ -139,6 +146,8 @@ local function GetDataForRadar(ply, ent)
 			subrole = ROLE_INNOCENT
 		end
 	else
+		---
+		-- @realm server
 		subrole, team = hook.Run("TTT2ModifyRadarRole", ply, ent)
 
 		if not subrole then
@@ -159,6 +168,7 @@ end
 -- @param Vector pos The position of the radar point
 -- @param[opt] Entity ent The entity that is used for this radar point
 -- @param[opt] Color color A color for this radar point, this overwrites the normal color
+-- @return table
 -- @realm server
 function RADAR.CreateTargetTable(ply, pos, ent, color)
 	local subrole, team = GetDataForRadar(ply, ent)
@@ -218,6 +228,9 @@ net.Receive("TTT2RadarUpdateAutoScan", function(_, ply)
 	ply.radarDoesNotRepeat = not net.ReadBool()
 end)
 
+---
+-- @class Player
+
 local plymeta = assert(FindMetaTable("Player"), "FAILED TO FIND PLAYER TABLE")
 
 ---
@@ -230,7 +243,6 @@ end
 
 ---
 -- Sets the radar time interval to the role or convar default, lets the current scan run out before it is changed.
--- @param number time The radar time interval
 -- @realm server
 function plymeta:ResetRadarTime()
 	self.radarTime = self:GetSubRoleData().radarTime or cv_radarCharge:GetInt()

@@ -1,3 +1,5 @@
+--- @ignore
+
 local string = string
 local GetLang = LANG.GetUnsafeLanguageTable
 local interp = string.Interp

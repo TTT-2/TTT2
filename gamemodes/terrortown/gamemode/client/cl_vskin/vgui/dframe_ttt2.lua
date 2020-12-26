@@ -1,17 +1,56 @@
+---
+-- @class PANEL
+-- @section DFrameTTT2
+
 local PANEL = {}
 
+---
+-- @accessor boolean
+-- @realm client
 AccessorFunc(PANEL, "m_bIsMenuComponent", "IsMenu", FORCE_BOOL)
+
+---
+-- @accessor boolean
+-- @realm client
 AccessorFunc(PANEL, "m_bDraggable", "Draggable", FORCE_BOOL)
+
+---
+-- @accessor boolean
+-- @realm client
 AccessorFunc(PANEL, "m_bSizable", "Sizable", FORCE_BOOL)
+
+---
+-- @accessor boolean
+-- @realm client
 AccessorFunc(PANEL, "m_bScreenLock", "ScreenLock", FORCE_BOOL)
+
+---
+-- @accessor boolean
+-- @realm client
 AccessorFunc(PANEL, "m_bDeleteOnClose", "DeleteOnClose", FORCE_BOOL)
+
+---
+-- @accessor boolean
+-- @realm client
 AccessorFunc(PANEL, "m_bPaintShadow", "PaintShadow", FORCE_BOOL)
 
+---
+-- @accessor number
+-- @realm client
 AccessorFunc(PANEL, "m_iMinWidth", "MinWidth", FORCE_NUMBER)
+
+---
+-- @accessor number
+-- @realm client
 AccessorFunc(PANEL, "m_iMinHeight", "MinHeight", FORCE_NUMBER)
 
+---
+-- @accessor boolean
+-- @realm client
 AccessorFunc(PANEL, "m_bBackgroundBlur", "BackgroundBlur", FORCE_BOOL)
 
+---
+-- @ignore
 function PANEL:Init()
 	self:SetFocusTopLevel(true)
 	self:SetPaintShadow(true)
@@ -164,6 +203,9 @@ function PANEL:OnClear()
 
 end
 
+---
+-- Initializes the buttons
+-- @realm client
 function PANEL:InitButtons()
 	-- add close button
 	self.btnClose = vgui.Create("DButton", self)
@@ -192,22 +234,40 @@ function PANEL:InitButtons()
 	end
 end
 
+---
+-- @param string strTitle
+-- @realm client
 function PANEL:SetTitle(strTitle)
 	self.title.text = strTitle
 end
 
+---
+-- @return string
+-- @realm client
 function PANEL:GetTitle()
 	return self.title.text
 end
 
+---
+-- @param string fontName
+-- @realm client
 function PANEL:SetTitleFont(fontName)
 	self.title.font = fontName
 end
 
+---
+-- @return string
+-- @realm client
 function PANEL:GetTitleFont()
 	return self.title.font
 end
 
+---
+-- @param number left
+-- @param number top
+-- @param number right
+-- @param number bottom
+-- @realm client
 function PANEL:SetPadding(left, top, right, bottom)
 	self.padding = {
 		left = left,
@@ -219,20 +279,28 @@ function PANEL:SetPadding(left, top, right, bottom)
 	self:UpdatePadding()
 end
 
+---
+-- @realm client
 function PANEL:UpdatePadding()
 	self:DockPadding(self.padding.left, vskin.GetHeaderHeight() + vskin.GetBorderSize() + self.padding.top, self.padding.right, self.padding.bottom)
 end
 
+---
+-- @param boolean bShow
+-- @realm client
 function PANEL:ShowCloseButton(bShow)
 	self.btnClose:SetVisible(bShow)
 end
 
+---
+-- @param boolean bShow
+-- @realm client
 function PANEL:ShowBackButton(bShow)
 	self.btnBack:SetVisible(bShow)
 end
 
---- 
--- Sets a callback function that is called when 
+---
+-- Sets a callback function that is called when
 -- when the back button is clicked
 -- @param function fn The callback function
 -- @realm client
@@ -240,6 +308,8 @@ function PANEL:RegisterBackFunction(fn)
 	self.btnBack.DoClick = fn
 end
 
+---
+-- @realm client
 function PANEL:Close()
 	self:SetVisible(false)
 
@@ -250,17 +320,24 @@ function PANEL:Close()
 	self:OnClose()
 end
 
+---
 -- overwrites the base function with an empty function
+-- @realm client
 function PANEL:OnClose()
 
 end
 
+---
+-- @realm client
 function PANEL:Center()
 	self:InvalidateLayout(true)
 	self:CenterVertical()
 	self:CenterHorizontal()
 end
 
+---
+-- @return boolean
+-- @realm client
 function PANEL:IsActive()
 	if self:HasFocus() or vgui.FocusedHasParent(self) then
 		return true
@@ -269,6 +346,8 @@ function PANEL:IsActive()
 	return false
 end
 
+---
+-- @ignore
 function PANEL:Think()
 	local scrW = ScrW()
 	local scrH = ScrH()
@@ -333,6 +412,8 @@ function PANEL:Think()
 	end
 end
 
+---
+-- @ignore
 function PANEL:Paint(w, h)
 	if self.m_bBackgroundBlur then
 		Derma_DrawBackgroundBlur(self, self.m_fCreateTime)
@@ -343,6 +424,8 @@ function PANEL:Paint(w, h)
 	return true
 end
 
+---
+-- @realm client
 function PANEL:OnMousePressed()
 	local screenX, screenY = self:LocalToScreen(0, 0)
 
@@ -367,12 +450,17 @@ function PANEL:OnMousePressed()
 	end
 end
 
+---
+-- @realm client
 function PANEL:OnMouseReleased()
 	self.dragging = nil
 	self.sizing = nil
+
 	self:MouseCapture(false)
 end
 
+---
+-- @ignore
 function PANEL:PerformLayout()
 	local size = vskin.GetHeaderHeight()
 

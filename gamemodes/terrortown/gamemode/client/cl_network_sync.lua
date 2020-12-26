@@ -17,8 +17,9 @@ local data_listeners = {}
 -- Get the current value of a specific path. This path starts at the root of the data_storage table and thus does not include the
 -- "global"/"players" key to descend into these subtrees.
 --
--- @param any|table path The path to get the value from (this is the absolute path from the root so "global"/"players" etc is not yet included)
+-- @param any path The path to get the value from (this is the absolute path from the root so "global"/"players" etc is not yet included)
 -- @return any The value at the given path or nil if the path does not exist, the value is actually nil or there is no metadata entry for the path
+-- @realm client
 function ttt2net.Get(path)
 	local tmpPath
 
@@ -36,12 +37,13 @@ function ttt2net.Get(path)
 end
 
 ---
--- The same as {@ttt2net.Get} but this will take care of prepending the key
+-- The same as @{ttt2net.Get} but this will take care of prepending the key
 -- to access the global values. Global values are generally accessible synced values,
 -- that the server sends to its clients.
 --
--- @param any|table path The path to get the value from (no need to prepend a "global" as this will be done already)
+-- @param any path The path to get the value from (no need to prepend a "global" as this will be done already)
 -- @return any The value at the given path or nil if the path does not exist, the value is actually nil or there is no metadata entry for the path
+-- @realm client
 function ttt2net.GetGlobal(path)
 	local tmpPath
 
@@ -59,13 +61,14 @@ function ttt2net.GetGlobal(path)
 end
 
 ---
--- The same as {@ttt2net.Get} but this will take care of prepending the key to access the player specific values.
+-- The same as @{ttt2net.Get} but this will take care of prepending the key to access the player specific values.
 -- Player specific values are synced values on player entities (can be thought of as data per player that this client knows of),
 -- that the server sends to its clients.
 --
--- @param any|table path The path to get the value from (no need to prepend a "players" etc. as this will be done already)
+-- @param any path The path to get the value from (no need to prepend a "players" etc. as this will be done already)
 -- @param Entity The player from which we want to get the data
 -- @return any The value at the given path or nil if the path does not exist, the value is actually nil or there is no metadata entry for the path
+-- @realm client
 function ttt2net.GetOnPlayer(path, ply)
 	local tmpPath
 
@@ -85,6 +88,7 @@ end
 
 ---
 -- Prints out all ttt2net related tables, for debugging purposes.
+-- @realm client
 function ttt2net.Debug()
 	print("[TTT2NET] Debug:")
 	print("Registered listeners:")
@@ -101,6 +105,7 @@ end
 -- @note This may lead to some listeners being called multiple times, when an entry changes that is in a deeper path. It will be called for each metadata object that is below its registered path.a
 --
 -- @internal
+-- @realm client
 local function CallCallbacksOnTree(oldData, curPath)
 	local tmpPath = not istable(curPath) and { curPath } or table.Copy(curPath) or {}
 	local curNode = table.GetWithPath(data_store_metadata, tmpPath)
@@ -132,6 +137,7 @@ end
 --
 -- @param table result This is the table that was received from the stream message
 -- @internal
+-- @realm client
 local function ReceiveFullStateUpdate(result)
 	-- Temporarily save the old tables, to use let the update callbacks know of the previous value
 	local oldData = data_store
@@ -152,6 +158,7 @@ net.ReceiveStream(ttt2net.NET_STREAM_FULL_STATE_UPDATE, ReceiveFullStateUpdate)
 -- Also this will trigger all registered listeners, as the data was reset.
 --
 -- @internal
+-- @realm client
 local function ReceiveMetaDataUpdate()
 	local path = ttt2net.NetReadPath()
 	local metadata = ttt2net.NetReadMetaData()
@@ -176,6 +183,7 @@ net.Receive(ttt2net.NETMSG_META_UPDATE, ReceiveMetaDataUpdate)
 -- path.
 --
 -- @internal
+-- @realm client
 local function ReceiveDataUpdate()
 	local path = ttt2net.NetReadPath()
 
@@ -200,9 +208,10 @@ net.Receive(ttt2net.NETMSG_DATA_UPDATE, ReceiveDataUpdate)
 -- This will call all registered listeners for a specific path.
 -- The function will exit if oldval and newval are the same.
 --
--- @param any|table path The path that this update was executed on
+-- @param any path The path that this update was executed on
 -- @param any oldval The old value, before the update
 -- @param any newval The new value, after the update
+-- @realm client
 function ttt2net.CallOnUpdate(path, oldval, newval)
 	-- Skip if the value did not change
 	if oldval == newval then return end
@@ -244,6 +253,7 @@ end
 
 ---
 -- Request a full state update from the server.
+-- @realm client
 function ttt2net.RequestFullStateUpdate()
 	net.Start(ttt2net.NETMSG_REQUEST_FULL_STATE_UPDATE)
 	net.SendToServer()
@@ -253,6 +263,7 @@ end
 -- Reads a path table from the current network message.
 --
 -- @return table The path table
+-- @realm client
 function ttt2net.NetReadPath()
 	local result = net.ReadString()
 
@@ -263,6 +274,7 @@ end
 -- Reads a meta data table from the current network message.
 --
 -- @return table The metadata table
+-- @realm client
 function ttt2net.NetReadMetaData()
 	-- If the null flag is set, then return null
 	if net.ReadBool() then return end
@@ -285,6 +297,7 @@ end
 --
 -- @param table metadata The meta data table for the data that is expected
 -- @return any The data that was read
+-- @realm client
 function ttt2net.NetReadData(metadata)
 	-- If the null flag is set, then return null
 	if net.ReadBool() then return end
@@ -312,6 +325,7 @@ end
 --
 -- @param the path to watch for changes
 -- @param function func
+-- @realm client
 function ttt2net.OnUpdate(path, func)
 	assert(isfunction(func), "[TTT2NET] OnUpdate called with an invalid function.")
 
@@ -343,8 +357,9 @@ end
 ---
 -- This will register a callback for updates to a global data entry.
 --
--- @param any|table path The path to register the callback on
+-- @param any path The path to register the callback on
 -- @param function func The callback function that should be executed
+-- @realm client
 function ttt2net.OnUpdateGlobal(path, func)
 	local tmpPath
 
@@ -364,9 +379,10 @@ end
 ---
 -- This will register a callback for updates to a player specific data entry.
 --
--- @param any|table path The path to register the callback on
+-- @param any path The path to register the callback on
 -- @param Entity ply The player that this data entry is from
 -- @param function func The callback function that should be executed
+-- @realm client
 function ttt2net.OnUpdateOnPlayer(path, ply, func)
 	local tmpPath
 

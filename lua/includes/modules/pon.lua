@@ -1,3 +1,6 @@
+---
+-- @module pon
+
 --[[
 DEVELOPMENTAL VERSION;
 VERSION 1.2.2
@@ -32,7 +35,9 @@ Changes (@saibotk):
  - Removed unused variables / rename to avoid shadowing other variables
 ]]
 
-AddCSLuaFile()
+if SERVER then
+	AddCSLuaFile()
+end
 
 local pon = {}
 _G.pon = pon
@@ -196,6 +201,9 @@ do
 	do
 		local concat = table.concat
 
+		---
+		-- @param table tbl
+		-- @realm shared
 		function pon.encode(tbl)
 			local finalOutput = {}
 			cacheSize = 0
@@ -406,6 +414,9 @@ do
 	-- NIL
 	decode['?'] = function(self, index, str, cache) return index + 1, nil end
 
+	---
+	-- @param any data
+	-- @realm shared
 	function pon.decode(data)
 		local _, res = decode[sub(data, 1, 1)](decode, 2, data, {})
 

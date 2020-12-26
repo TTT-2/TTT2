@@ -1,20 +1,44 @@
 ---
 -- A global appearance handler
 -- @author Mineotopia
+-- @module appearance
 
-AddCSLuaFile()
+if SERVER then
+	AddCSLuaFile()
 
--- the rest of the appearance library is client only
-if SERVER then return end
+	return -- the rest of the appearance library is client only
+end
 
+---
+-- @realm client
 local cv_last_width = CreateConVar("ttt2_resolution_last_width", 1920, {FCVAR_ARCHIVE})
+
+---
+-- @realm client
 local cv_last_height = CreateConVar("ttt2_resolution_last_height", 1080, {FCVAR_ARCHIVE})
+
+---
+-- @realm client
 local cv_scale = CreateConVar("ttt2_resolution_scale", 1.0, {FCVAR_ARCHIVE})
 
+---
+-- @realm client
 local cv_use_global_color = CreateConVar("ttt2_use_global_color", 0, {FCVAR_ARCHIVE})
+
+---
+-- @realm client
 local cv_global_color_r = CreateConVar("ttt2_global_color_r", "30", {FCVAR_ARCHIVE})
+
+---
+-- @realm client
 local cv_global_color_g = CreateConVar("ttt2_global_color_g", "160", {FCVAR_ARCHIVE})
+
+---
+-- @realm client
 local cv_global_color_b = CreateConVar("ttt2_global_color_b", "160", {FCVAR_ARCHIVE})
+
+---
+-- @realm client
 local cv_global_color_a = CreateConVar("ttt2_global_color_a", "160", {FCVAR_ARCHIVE})
 
 local function SetCachedColor()
@@ -81,6 +105,7 @@ end
 ---
 -- This function returns the current global scale
 -- @return number The scale as a floating point value
+-- @realm client
 function appearance.GetGlobalScale()
 	return cv_scale:GetFloat() or 1.0
 end
@@ -89,6 +114,7 @@ end
 -- Returns the default global scale based on the current
 -- screen resolution in reference to a 1080p based design
 -- @return number The scale as a floating point value
+-- @realm client
 function appearance.GetDefaultGlobalScale()
 	return math.Round(ScrW() / 1920, 1)
 end
@@ -96,7 +122,7 @@ end
 ---
 -- Registers a callback function that is called once the scale
 -- is changed
--- @param function fn The callback function 
+-- @param function fn The callback function
 -- @realm client
 function appearance.RegisterScaleChangeCallback(fn)
 	if not isfunction(fn) or table.HasValue(appearance.callbacks, fn) then return end

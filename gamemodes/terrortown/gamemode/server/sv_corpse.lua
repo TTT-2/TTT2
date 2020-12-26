@@ -1,6 +1,6 @@
 ---
+-- Corpse functions
 -- @module CORPSE
--- @desc Corpse functions
 
 -- namespaced because we have no ragdoll metatable
 CORPSE = {}
@@ -13,11 +13,14 @@ local timer = timer
 local util = util
 local IsValid = IsValid
 local ConVarExists = ConVarExists
-local CreateConVar = CreateConVar
 local hook = hook
 
--- If detective mode, announce when someone's body is found
-local cvBodyfound = CreateConVar("ttt_announce_body_found", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+---
+-- @realm server
+local cvBodyfound = CreateConVar("ttt_announce_body_found", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "If detective mode, announce when someone's body is found")
+
+---
+-- @realm server
 local cvRagCollide = CreateConVar("ttt_ragdoll_collide", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
 
 local cvDeteOnlyConfirm = GetConVar("ttt2_confirm_detective_only")
@@ -77,7 +80,6 @@ end
 -- @param Entity corpse
 -- @return[default=true] boolean
 -- @hook
--- @register
 -- @realm server
 function GM:TTTCanIdentifyCorpse(ply, corpse)
 	return true
@@ -99,6 +101,8 @@ local function IdentifyBody(ply, rag)
 		return false
 	end
 
+	---
+	-- @realm server
 	if not hook.Run("TTTCanIdentifyCorpse", ply, rag) then return end
 
 	local finder = ply:Nick()
@@ -115,16 +119,22 @@ local function IdentifyBody(ply, rag)
 			return
 		end
 
+		---
+		-- @realm server
 		if deadply and not deadply:Alive() and hook.Run("TTT2ConfirmPlayer", deadply, ply, rag) ~= false then
 			deadply:ConfirmPlayer(true)
 
 			SendPlayerToEveryone(deadply)
-
-			SCORE:HandleBodyFound(ply, deadply)
 		end
 
+		events.Trigger(EVENT_BODYFOUND, ply, rag)
+
+		---
+		-- @realm server
 		hook.Run("TTTBodyFound", ply, deadply, rag)
 
+		---
+		-- @realm server
 		if hook.Run("TTT2SetCorpseFound", deadply, ply, rag) ~= false then
 			CORPSE.SetFound(rag, true)
 		end
@@ -237,6 +247,8 @@ local function ttt_call_detective(ply, cmd, args)
 		if CORPSE.GetFound(rag, false) then
 			local plyTable = GetRoleChatFilter(ROLE_DETECTIVE, true)
 
+			---
+			-- @realm server
 			hook.Run("TTT2ModifyCorpseCallRadarRecipients", plyTable, rag, ply)
 
 			-- show indicator in radar to detectives
@@ -286,7 +298,6 @@ end
 -- @param boolean isLongRange
 -- @return[default=true] boolean
 -- @hook
--- @register
 -- @realm server
 function GM:TTTCanSearchCorpse(ply, corpse, isCovert, isLongRange)
 	return true
@@ -308,7 +319,7 @@ local function GiveFoundCredits(ply, rag, isLongRange)
 
 	ServerLog(ply:Nick() .. " took " .. credits .. " credits from the body of " .. corpseNick .. "\n")
 
-	SCORE:HandleCreditFound(ply, corpseNick, credits)
+	events.Trigger(EVENT_CREDITFOUND, ply, rag, credits)
 end
 
 ---
@@ -335,6 +346,8 @@ function CORPSE.ShowSearch(ply, rag, isCovert, isLongRange)
 		return
 	end
 
+	---
+	-- @realm server
 	if not hook.Run("TTTCanSearchCorpse", ply, rag, isCovert, isLongRange) then return end
 
 	-- init a heap of data we'll be sending
@@ -454,7 +467,7 @@ end
 -- else returns nil
 -- @param Player victim
 -- @param Player attacker
--- @param CTakeDamageInfo dmg
+-- @param DamageInfo dmg
 -- @return table sample
 -- @realm server
 local function GetKillerSample(victim, attacker, dmg)
@@ -551,7 +564,7 @@ realdamageinfo = 0
 -- Creates client or server ragdoll depending on settings
 -- @param Player ply
 -- @param Player attacker
--- @param CTakeDamageInfo dmginfo
+-- @param DamageInfo dmginfo
 -- @return Entity the CORPSE
 -- @realm server
 function CORPSE.Create(ply, attacker, dmginfo)
@@ -615,6 +628,8 @@ function CORPSE.Create(ply, attacker, dmginfo)
 		v:Mul(0.2)
 	end
 
+	---
+	-- @realm server
 	hook.Run("TTT2ModifyRagdollVelocity", ply, rag, v)
 
 	for i = 0, num do
@@ -645,6 +660,8 @@ function CORPSE.Create(ply, attacker, dmginfo)
 		end)
 	end
 
+	---
+	-- @realm server
 	hook.Run("TTTOnCorpseCreated", rag, ply)
 
 	return rag -- we'll be speccing this
@@ -657,6 +674,42 @@ end
 -- @realm server
 function CORPSE.WasHeadshot(rag)
 	return IsValid(rag) and rag.was_headshot
+end
+
+---
+-- Returns the death time (@{CurTime()}) of the ragdoll's player.
+-- @param Entity rag The ragdoll
+-- @return number The death time, 0 if the ragdol is not valid
+-- @realm server
+function CORPSE.GetPlayerDeathTime(rag)
+	return rag.time or 0
+end
+
+---
+-- Returns the SteamID64 of a ragdoll's player.
+-- @param Entity rag The ragdoll
+-- @return string The SteamID64, "" if the ragdol is not valid
+-- @realm server
+function CORPSE.GetPlayerSID64(rag)
+	return rag.sid64 or ""
+end
+
+---
+-- Returns the role of the ragdoll's player.
+-- @param Entity rag The ragdoll
+-- @return number The role, @{ROLE_INNOCENT} if the ragdol is not valid
+-- @realm server
+function CORPSE.GetPlayerRole(rag)
+	return rag.was_role or ROLE_INNOCENT
+end
+
+---
+-- Returns the team of the ragdoll's player.
+-- @param Entity rag The ragdoll
+-- @return string The team, @{TEAM_INNOCENT} if the ragdol is not valid
+-- @realm server
+function CORPSE.GetPlayerTeam(rag)
+	return rag.was_team or TEAM_INNOCENT
 end
 
 hook.Add("ShouldCollide", "TTT2RagdollCollide", function(ent1, ent2)

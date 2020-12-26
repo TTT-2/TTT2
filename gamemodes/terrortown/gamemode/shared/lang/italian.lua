@@ -262,7 +262,6 @@ Disabilitalo nella finestra Travestimento di questo menù o premi Numpad Enter.]
 
 -- C4
 L.c4_hint = "Premi {usekey} per innescare o disinnescare."
-L.c4_no_disarm = "Non puoi disinnescare il C4 di un altro Traditore almeno che non sia morto."
 L.c4_disarm_warn = "Un C4 che hai piazzato è stato disinnescato."
 L.c4_armed = "Hai innescato la bomba con successo."
 L.c4_disarmed = "Hai disinnescato la bomba con successo."

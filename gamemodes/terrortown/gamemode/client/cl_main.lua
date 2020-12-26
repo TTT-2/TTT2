@@ -8,7 +8,6 @@ local timer = timer
 local util = util
 local IsValid = IsValid
 local surface = surface
-local CreateConVar = CreateConVar
 local hook = hook
 
 -- Define GM12 fonts for compatibility
@@ -112,8 +111,9 @@ end)
 -- all files are loaded
 local TryT = LANG.TryTranslation
 
--- optional sound cues on round start and end
-local ttt_cl_soundcues = CreateConVar("ttt_cl_soundcues", "0", FCVAR_ARCHIVE)
+---
+-- @realm client
+local ttt_cl_soundcues = CreateConVar("ttt_cl_soundcues", "0", FCVAR_ARCHIVE, "Optional sound cues on round start and end")
 
 local cues = {
 	Sound("ttt/thump01e.mp3"),
@@ -135,6 +135,8 @@ end
 function GM:Initialize()
 	MsgN("TTT2 Client initializing...")
 
+	---
+	-- @realm client
 	hook.Run("TTT2Initialize")
 
 	self.round_state = ROUND_WAIT
@@ -173,8 +175,12 @@ function GM:Initialize()
 
 	vskin.UpdatedVSkin(skinName, skinName)
 
+	---
+	-- @realm client
 	hook.Run("TTT2FinishedLoading")
 
+	---
+	-- @realm client
 	hook.Run("PostInitialize")
 end
 
@@ -185,6 +191,8 @@ end
 -- @ref https://wiki.facepunch.com/gmod/GM:PostCleanupMap
 -- @local
 function GM:PostCleanupMap()
+	---
+	-- @realm client
 	hook.Run("TTT2PostCleanupMap")
 end
 
@@ -202,6 +210,8 @@ end
 function GM:InitPostEntity()
 	MsgN("TTT Client post-init...")
 
+	---
+	-- @realm client
 	hook.Run("TTTInitPostEntity")
 
 	items.MigrateLegacyItems()
@@ -251,10 +261,16 @@ function GM:InitPostEntity()
 	-- initialize fallback shops
 	InitFallbackShops()
 
+	---
+	-- @realm client
 	hook.Run("PostInitPostEntity")
 
+	---
+	-- @realm client
 	hook.Run("InitFallbackShops")
 
+	---
+	-- @realm client
 	hook.Run("LoadedFallbackShops")
 
 	net.Start("TTT2SyncShopsWithServer")
@@ -294,17 +310,28 @@ function GM:InitPostEntity()
 end
 
 ---
+-- Called after the gamemode has loaded
+-- @hook
+-- @realm client
+-- @ref https://wiki.facepunch.com/gmod/GM:PostGamemodeLoaded
+-- @local
+function GM:PostGamemodeLoaded()
+	ScoringEventSetup()
+end
+
+---
 -- Called when gamemode has been reloaded by auto refresh.
 -- @hook
--- @realm shared
+-- @realm client
 -- @ref https://wiki.facepunch.com/gmod/GM:OnReloaded
 function GM:OnReloaded()
 	-- rebuild menues on game reload
 	vguihandler.Rebuild()
 
 	local skinName = vskin.GetVSkinName()
-
 	vskin.UpdatedVSkin(skinName, skinName)
+
+	ScoringEventSetup()
 end
 
 ---
@@ -384,12 +411,18 @@ local function RoundStateChange(o, n)
 	-- be called with for example o = WAIT and n = POST, for newly connecting
 	-- players, which hooking code may not expect
 	if n == ROUND_PREP then
-		-- can enter PREP from any phase due to ttt_roundrestart
-		hook.Call("TTTPrepareRound", GAMEMODE)
+		---
+		-- Can enter PREP from any phase due to ttt_roundrestart
+		-- @realm shared
+		hook.Run("TTTPrepareRound")
 	elseif o == ROUND_PREP and n == ROUND_ACTIVE then
-		hook.Call("TTTBeginRound", GAMEMODE)
+		---
+		-- @realm shared
+		hook.Run("TTTBeginRound")
 	elseif o == ROUND_ACTIVE and n == ROUND_POST then
-		hook.Call("TTTEndRound", GAMEMODE)
+		---
+		-- @realm shared
+		hook.Run("TTTEndRound")
 	end
 
 	-- whatever round state we get, clear out the voice flags
@@ -806,5 +839,7 @@ net.Receive("TTT2PlayerAuthedShared", function(len)
 	draw.CacheAvatar(steamid64, "medium")
 	draw.CacheAvatar(steamid64, "large")
 
+	---
+	-- @realm shared
 	hook.Run("TTT2PlayerAuthed", steamid64, name)
 end)

@@ -9,7 +9,6 @@ TTTFiles = {
 	cl_damage_indicator = {file = "cl_damage_indicator.lua", on = "client"},
 	cl_equip = {file = "cl_equip.lua", on = "client"},
 	cl_eventpopup = {file = "cl_eventpopup.lua", on = "client"},
-	cl_fonts = {file = "cl_fonts.lua", on = "client"},
 	cl_help_data = {file = "cl_help_data.lua", on = "client"},
 	cl_help = {file = "cl_help.lua", on = "client"},
 	cl_hud_editor = {file = "cl_hud_editor.lua", on = "client"},
@@ -64,7 +63,6 @@ TTTFiles = {
 	sh_shopeditor = {file = "sh_shopeditor.lua", on = "shared"},
 	sh_sql = {file = "sh_sql.lua", on = "shared"},
 	sh_sprint = {file = "sh_sprint.lua", on = "shared"},
-	sh_util = {file = "sh_util.lua", on = "shared"},
 	sh_voice = {file = "sh_voice.lua", on = "shared"},
 	sh_speed = {file = "sh_speed.lua", on = "shared"},
 	sh_weaponry = {file = "sh_weaponry.lua", on = "shared"},
@@ -139,6 +137,8 @@ if SERVER then
 	table.Merge(TTTFiles, tmp)
 end
 
+---
+-- @realm shared
 hook.Run("TTT2ModifyFiles", TTTFiles)
 
 if SERVER then
@@ -149,6 +149,10 @@ if SERVER then
 	end
 end
 
+---
+-- Include a registered overwritable TTT2 file
+-- @param string filename The registered filename-pseudo, but not the path
+-- @realm shared
 function ttt_include(filename)
 	local fd = TTTFiles[filename]
 

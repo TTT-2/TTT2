@@ -17,7 +17,7 @@ end
 -- Called whenever a @{Player} tries to order an @{ITEM} or @{Weapon}
 -- @param Player ply
 -- @param string id id of the @{ITEM} or @{Weapon}, old id for @{ITEM} and class for @{Weapon}
--- @param bool is_item is id an @{ITEM} or @{Weapon}
+-- @param boolean is_item is id an @{ITEM} or @{Weapon}
 -- @return[default=true] boolean return true to allow buying of an equipment item, false to disallow
 -- @hook
 -- @realm server
@@ -94,10 +94,14 @@ local function OrderEquipment(ply, cls)
 		return
 	end
 
-	-- keep compatibility with old addons
+	---
+	-- @note Keep compatibility with old addons
+	-- @realm server
 	if not hook.Run("TTTCanOrderEquipment", ply, idOrCls, is_item) then return end
 
-	-- add our own hook with more consistent class parameter and some more information
+	---
+	-- @note Add our own hook with more consistent class parameter and some more information
+	-- @realm server
 	local allow, ignoreCost, message = hook.Run("TTT2CanOrderEquipment", ply, cls, is_item, credits)
 
 	if message then
@@ -143,10 +147,14 @@ local function OrderEquipment(ply, cls)
 		RerollShop(ply)
 	end
 
-	-- keep compatibility with old addons
+	---
+	-- @note Keep compatibility with old addons
+	-- @realm server
 	hook.Run("TTTOrderedEquipment", ply, idOrCls, is_item)
 
-	-- add our own hook with more consistent class parameter
+	---
+	-- @note Add our own hook with more consistent class parameter
+	-- @realm server
 	hook.Run("TTT2OrderedEquipment", ply, cls, is_item, credits, ignoreCost or false)
 end
 

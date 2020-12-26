@@ -1,7 +1,6 @@
 ---
--- disguiser @{ITEM}
+-- Disguiser @{ITEM}
 -- @module DISGUISE
--- @see ITEM
 
 DISGUISE = CLIENT and {}
 
@@ -80,9 +79,7 @@ if CLIENT then
 		end,
 		nil, "header_bindings_ttt2", "label_bind_disguiser", KEY_PAD_ENTER)
 	end)
-end
-
-if SERVER then
+else -- SERVER
 	local function SetDisguise(ply, cmd, args)
 		if not IsValid(ply) or not ply:IsActive() and ply:HasTeam(TEAM_TRAITOR) then return end
 
@@ -90,6 +87,8 @@ if SERVER then
 
 		local state = #args == 1 and tobool(args[1])
 
+		---
+		-- @realm server
 		if hook.Run("TTTToggleDisguiser", ply, state) then return end
 
 		ply:SetNWBool("disguised", state)

@@ -1,5 +1,5 @@
 ---
--- @realm client
+-- @class PANEL
 -- @section SimpleRoleIcon
 
 local math = math
@@ -11,15 +11,12 @@ local matHover = Material("vgui/spawnmenu/hover")
 local PANEL = {}
 
 ---
--- @function GetIconSize()
--- @return number
---
----
--- @function SetIconSize(i)
--- @param number i
----
+-- @accessor number
+-- @realm client
 AccessorFunc(PANEL, "m_iIconSize", "IconSize")
 
+---
+-- @ignore
 function PANEL:Init()
 	self.Icon = vgui.Create("DRoleImage", self)
 	self.Icon:SetMouseInputEnabled(false)
@@ -32,6 +29,7 @@ end
 
 ---
 -- @param number mcode mouse key / code
+-- @realm client
 function PANEL:OnMousePressed(mcode)
 	if mcode == MOUSE_LEFT then
 		self:DoClick()
@@ -40,18 +38,26 @@ function PANEL:OnMousePressed(mcode)
 	end
 end
 
+---
+-- @realm client
 function PANEL:OnMouseReleased()
 
 end
 
+---
+-- @realm client
 function PANEL:DoClick()
 
 end
 
+---
+-- @realm client
 function PANEL:OpenMenu()
 
 end
 
+---
+-- @ignore
 function PANEL:ApplySchemeSettings()
 
 end
@@ -61,6 +67,7 @@ local oldPaintOver = PANEL.PaintOver
 ---
 -- @param number w width
 -- @param number h height
+-- @realm client
 function PANEL:PaintOver(w, h)
 	if self.toggled then
 		surface.SetDrawColor(0, 200, 0, 255)
@@ -74,17 +81,23 @@ function PANEL:PaintOver(w, h)
 	end
 end
 
+---
+-- @realm client
 function PANEL:OnCursorEntered()
 	self.PaintOverOld = self.PaintOver
 	self.PaintOver = self.PaintOverHovered
 end
 
+---
+-- @realm client
 function PANEL:OnCursorExited()
 	if self.PaintOver == self.PaintOverHovered then
 		self.PaintOver = self.PaintOverOld
 	end
 end
 
+---
+-- @realm client
 function PANEL:PaintOverHovered()
 	if self.animPress:Active() or self.toggled then return end
 
@@ -94,6 +107,8 @@ function PANEL:PaintOverHovered()
 	self:DrawTexturedRect()
 end
 
+---
+-- @ignore
 function PANEL:PerformLayout()
 	if self.animPress:Active() then return end
 
@@ -104,20 +119,27 @@ end
 
 ---
 -- @param Material icon
+-- @realm client
 function PANEL:SetIcon(icon)
 	self.Icon:SetImage(icon)
 end
 
 ---
 -- @return Material
+-- @realm client
 function PANEL:GetIcon()
 	return self.Icon:GetImage()
 end
 
+---
+-- @param Color c
+-- @realm client
 function PANEL:SetIconColor(c)
 	self.Icon:SetImageColor(c)
 end
 
+---
+-- @ignore
 function PANEL:Think()
 	self.animPress:Run()
 end
@@ -126,6 +148,7 @@ end
 -- @param table anim
 -- @param number delta
 -- @param table data
+-- @realm client
 function PANEL:PressedAnim(anim, delta, data)
 	if anim.Started then return end
 
@@ -142,6 +165,7 @@ end
 
 ---
 -- @param boolean b
+-- @realm client
 function PANEL:Toggle(b)
 	self.toggled = b
 end

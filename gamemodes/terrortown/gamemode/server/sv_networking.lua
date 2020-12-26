@@ -1,6 +1,6 @@
 ---
+-- Role state communication
 -- @section networking
--- @desc Role state communication
 
 TTT2NETTABLE = {}
 
@@ -48,6 +48,8 @@ function SendRoleListMessage(subrole, team, sids, ply_or_rf)
 					if p:GetSubRoleData().disableSync
 					and rs == ROUND_ACTIVE
 					and not p:RoleKnown()
+					---
+					-- @realm server
 					and not hook.Run("TTT2OverrideDisabledSync", ply, p)
 					then continue end
 
@@ -229,7 +231,10 @@ function SendFullStateUpdate()
 			end
 		end
 
-		hook.Run("TTT2SpecialRoleSyncing", ply, tmp) -- maybe some networking for custom roles or role hacking
+		---
+		-- maybe some networking for custom roles or role hacking
+		-- @realm server
+		hook.Run("TTT2SpecialRoleSyncing", ply, tmp)
 
 		syncTbl[ply] = {}
 
@@ -320,7 +325,10 @@ local function ttt_request_rolelist(ply)
 			end
 		end
 
-		hook.Run("TTT2SpecialRoleSyncing", ply, tmp) -- maybe some networking for custom roles or role hacking
+		---
+		-- maybe some networking for custom roles or role hacking
+		-- @realm server
+		hook.Run("TTT2SpecialRoleSyncing", ply, tmp)
 
 		local tbl = {}
 

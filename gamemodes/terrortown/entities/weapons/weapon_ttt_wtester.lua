@@ -1,3 +1,7 @@
+---
+-- @class SWEP
+-- @section weapon_ttt_wtester
+
 if SERVER then
 	AddCSLuaFile()
 end
@@ -30,9 +34,18 @@ else
 	util.AddNetworkString("TTT2ScannerUpdate")
 
 	-- ConVar syncing
-	local dna_mode = CreateConVar("ttt2_dna_radar", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-	local dna_slots = CreateConVar("ttt2_dna_scanner_slots", "4", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
-	local dna_radar_cd = CreateConVar("ttt2_dna_radar_cooldown", "5.0", {FCVAR_NOTIFY, FCVAR_ARCHIVE})
+
+	---
+	-- @realm server
+	local dna_mode = CreateConVar("ttt2_dna_radar", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Toggles the DNA Scanner functionality")
+
+	---
+	-- @realm server
+	local dna_slots = CreateConVar("ttt2_dna_scanner_slots", "4", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Defines the maximum amount of DNA slots")
+
+	---
+	-- @realm server
+	local dna_radar_cd = CreateConVar("ttt2_dna_radar_cooldown", "5.0", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Defines the cooldown in seconds")
 
 	hook.Add("TTT2SyncGlobals", "TTT2SyncDNAScannerGlobals", function()
 		SetGlobalBool(dna_mode:GetName(), dna_mode:GetBool())
@@ -97,6 +110,8 @@ local dna_screen_fail = Material("models/ttt2_dna_scanner/screen/fail")
 local dna_screen_arrow = Material("models/ttt2_dna_scanner/screen/arrow")
 local dna_screen_circle = Material("models/ttt2_dna_scanner/screen/circle")
 
+---
+-- @ignore
 function SWEP:Initialize()
 	if CLIENT then
 		-- Create render target
@@ -123,6 +138,8 @@ function SWEP:Initialize()
 	return self.BaseClass.Initialize(self)
 end
 
+---
+-- @ignore
 function SWEP:PrimaryAttack()
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 
@@ -152,6 +169,8 @@ function SWEP:PrimaryAttack()
 	end
 end
 
+---
+-- @ignore
 function SWEP:SecondaryAttack()
 	if not IsFirstTimePredicted() then return end
 
@@ -164,12 +183,19 @@ function SWEP:SecondaryAttack()
 	end
 end
 
+---
+-- @ignore
 function SWEP:Reload()
 	if not IsFirstTimePredicted() then return end
 
 	self:RemoveSample()
 end
 
+---
+-- @param boolean successful
+-- @param string msg
+-- @param boolean oldFound
+-- @realm shared
 function SWEP:Report(successful, msg, oldFound)
 	if msg then
 		LANG.Msg(self:GetOwner(), msg, nil, MSG_MSTACK_ROLE)
@@ -187,6 +213,9 @@ function SWEP:Report(successful, msg, oldFound)
 	net.Send(self:GetOwner())
 end
 
+---
+-- @param Entity ent
+-- @realm shared
 function SWEP:GatherDNA(ent)
 	if not IsValid(ent) or ent:IsPlayer() then
 		self:Report(false)
@@ -203,6 +232,9 @@ function SWEP:GatherDNA(ent)
 	end
 end
 
+---
+-- @param Entity ent
+-- @realm shared
 function SWEP:GatherRagdollSample(ent)
 	local sample = ent.killer_sample or {t = 0, killer = nil}
 	local ply = sample.killer
@@ -227,6 +259,9 @@ function SWEP:GatherRagdollSample(ent)
 	end
 end
 
+---
+-- @param Entity ent
+-- @realm shared
 function SWEP:GatherObjectSample(ent)
 	if ent:GetClass() == "ttt_c4" and ent:GetArmed() then
 		self:Report(false, "dna_armed")
@@ -247,6 +282,10 @@ local function firstFreeIndex(tbl, max, best)
 	end
 end
 
+---
+-- @param Entity corpse
+-- @param Player killer
+-- @realm shared
 function SWEP:AddPlayerSample(corpse, killer)
 	if table.Count(self.ItemSamples) >= GetGlobalBool("ttt2_dna_scanner_slots") then
 		self:Report(false, "dna_limit")
@@ -268,12 +307,17 @@ function SWEP:AddPlayerSample(corpse, killer)
 
 		DamageLog("SAMPLE:\t " .. owner:Nick() .. " retrieved DNA of " .. (IsValid(killer) and killer:Nick() or "<disconnected>") .. " from corpse of " .. (IsValid(corpse) and CORPSE.GetPlayerNick(corpse) or "<invalid>"))
 
-		hook.Call("TTTFoundDNA", GAMEMODE, owner, killer, corpse)
+		---
+		-- @realm shared
+		hook.Run("TTTFoundDNA", owner, killer, corpse)
 
 		self:Report(true, "dna_killer")
 	end
 end
 
+---
+-- @param Entity ent
+-- @realm shared
 function SWEP:AddItemSample(ent)
 	if table.Count(self.ItemSamples) >= GetGlobalBool("ttt2_dna_scanner_slots") then
 		self:Report(false, "dna_limit")
@@ -303,6 +347,8 @@ function SWEP:AddItemSample(ent)
 
 			DamageLog("SAMPLE:\t " .. owner:Nick() .. " retrieved DNA of " .. (IsValid(p) and p:Nick() or "<disconnected>") .. " from " .. ent:GetClass())
 
+			---
+			-- @realm shared
 			hook.Run("TTTFoundDNA", owner, p, ent)
 
 			self:Report(true, "dna_object")
@@ -314,6 +360,8 @@ function SWEP:AddItemSample(ent)
 	self:Report(false, "dna_notfound")
 end
 
+---
+-- @realm shared
 function SWEP:RemoveSample()
 	local idx = self.ActiveSample
 
@@ -330,6 +378,8 @@ function SWEP:RemoveSample()
 	end
 end
 
+---
+-- @realm shared
 function SWEP:PassiveThink()
 	if not IsValid(self:GetOwner()) then return end
 
@@ -352,6 +402,10 @@ function SWEP:PassiveThink()
 end
 
 if SERVER then
+	---
+	-- @param Player ply
+	-- @return Player
+	-- @realm server
 	function SWEP:GetScanTarget(ply)
 		if not IsValid(ply) then return end
 
@@ -368,6 +422,8 @@ if SERVER then
 		return ply
 	end
 
+	---
+	-- @realm server
 	function SWEP:UpdateTargets()
 		for i = 1, GetGlobalBool("ttt2_dna_scanner_slots") do
 			local ply = self.ItemSamples[i]
@@ -386,7 +442,7 @@ if SERVER then
 			end
 		end
 	end
-else
+else -- CLIENT
 	local TryT = LANG.TryTranslation
 	local screen_bgcolor = Color(220, 220, 220, 255)
 	local screen_fontcolor = Color(144, 210, 235, 255)
@@ -401,6 +457,8 @@ else
 		surface.DrawTexturedRectRotated(x + newx, y + newy, w, h, rot)
 	end
 
+	---
+	-- @realm client
 	function SWEP:FillScannerScreen()
 		if self.scannerScreenTex == nil then return end
 
@@ -457,32 +515,42 @@ else
 		render.PopRenderTarget()
 	end
 
+	---
+	-- @ignore
 	function SWEP:PreDrawViewModel()
 		self:FillScannerScreen()
 		self:GetOwner():GetViewModel():SetSubMaterial(0, "!scanner_screen_mat")
 	end
 
+	---
+	-- @ignore
 	function SWEP:PostDrawViewModel()
 		self:GetOwner():GetViewModel():SetSubMaterial(0, nil)
 	end
 
+	---
+	-- @ignore
 	function SWEP:DrawWorldModel()
 		self:FillScannerScreen()
 		self:DrawModel()
 	end
 
+	---
+	-- @realm client
 	function SWEP:RadarScan()
 		local target = self.ItemSamples[self.ActiveSample]
 
 		if not IsValid(target) or not GetGlobalBool("ttt2_dna_radar") then
 			RADAR.samples = {}
 			RADAR.samples_count = 0
+
 			self.RadarPos = nil
 
 			return
 		end
 
 		self.RadarPos = target:LocalToWorld(target:OBBCenter())
+
 		RADAR.samples = {{pos = self.RadarPos}}
 		RADAR.samples_count = 1
 	end

@@ -1,6 +1,6 @@
 ---
+-- Replaces old and boring ents with new and shiny SENTs
 -- @module ents.TTT
--- @desc Replace old and boring ents with new and shiny SENTs
 
 ents.TTT = {}
 
@@ -8,9 +8,13 @@ local math = math
 local pairs = pairs
 local util = util
 local IsValid = IsValid
-local CreateConVar = CreateConVar
 
+---
+-- @realm server
 local use_weapon_spawn_scripts = CreateConVar("ttt_use_weapon_spawn_scripts", "1")
+
+---
+-- @realm server
 local weapon_spawn_count = CreateConVar("ttt_weapon_spawn_count", "0")
 
 local function ReplaceSingle(ent, newname)
