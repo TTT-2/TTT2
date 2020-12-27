@@ -224,6 +224,12 @@ local function TransferCredits(ply, cmd, args)
 	if credits == 0 then return end
 
 	---
+	-- Called to check if a transaction between two players is allowed.
+	-- @param Player that wants to send credits
+	-- @param Player that would receive the credits
+	-- @param Number of credits that would be transferred
+	-- @return[default=nil] Boolean which disallows a transaction when false
+	-- @return[default=nil] String for the client which offers info related to the transaction
 	-- @realm server
 	local allow, _ = hook.Run("TTT2CanTransferCredits", ply, target, credits)
 	if allow == false then return end
