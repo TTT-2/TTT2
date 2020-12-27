@@ -42,10 +42,8 @@ local function UpdateTransferSubmitButton()
 	end
 end
 
-net.Receive("TTT2CreditTransferUpdate", function()
-	--Called after the server performs a successful transfer of credits.
-	UpdateTransferSubmitButton()
-end)
+--Called after the server performs a successful transfer of credits.
+net.Receive("TTT2CreditTransferUpdate", UpdateTransferSubmitButton)
 
 ---
 -- Creates the credit transfer menu
