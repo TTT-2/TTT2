@@ -7,7 +7,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 ### Added
 
 - Added a new vgui system
-  - introduced new development interfaces to easily create menues and settings for addons
+  - Introduced new development interfaces to easily create menues and settings for addons
 - Introduced a global scale factor based on screen resolution to scale HUD elements accordingly
 - Added automatical scale factor change on resolution change that works even if the resolution was changed while TTT2 wasn't loaded
 - Added `drawsc` library featuring scalable draw functions
@@ -15,8 +15,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Updated Simplified Chinese localization (by @TheOnly8Z)
 - Updated Italian localization (by @ThePlatynumGhost)
 - Added a new event system
-  - added a cancelable hook `TTT2OnTriggeredEvent` that is called once an event is about to be added
-  - added a hook `TTT2AddedEvent` that is called after an event was added
+  - Added a cancelable hook `TTT2OnTriggeredEvent` that is called once an event is about to be added
+  - Added a hook `TTT2AddedEvent` that is called after an event was added
 - Added `orm` library to simplify database access
 - Added French translation (by @MisterClems)
 - Added a new classbuilder that can be used to create classes from files
@@ -24,7 +24,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 ### Changed
 
-- the F1 menu is completely overhauled
+- The F1 menu is completely overhauled
 - Cleaned up language files, they are now identical on a line by line comparison
 - Inverted some convars to have a uniform "Enable feature X", not a mixture of enable and disable
 - TargetID text is now scaled with the global scale factor
@@ -33,7 +33,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added minimal documentation to every datastructure
 - Removed C4 defuse restriction for teammates
 - Moved role specific score variables into the role base
-- moved functions from sh_util into their respective library files
+- Moved functions from sh_util into their respective library files
+- Updated the list of troublesome addons used by the addonchecker
 
 ### Fixed
 
