@@ -12,7 +12,22 @@ local dhelp
 local dform
 local selected_sid
 
+---
+-- Called to check if a transaction between two players is allowed.
+-- @param Player sender that wants to send credits
+-- @param Player recipient that would receive the credits
+-- @param Number credits_per_xfer that would be transferred
+-- @return[default=nil] boolean which disallows a transaction when false
+-- @return[default=nil] string for the client which offers info related to the transaction
+-- @hook
+-- @realm client
+function TTT2CanTransferCredits(sender, recipient, credits_per_xfer)
+
+end
+
 local function UpdateTransferSubmitButton()
+	if not IsValid(dhelp) or not IsValid(dsubmit) then return
+
 	local client = LocalPlayer()
 	if client:GetCredits() <= 0 then
 		dhelp:SetText(GetTranslation("xfer_no_credits"))
@@ -21,12 +36,6 @@ local function UpdateTransferSubmitButton()
 		local ply = player.GetBySteamID64(selected_sid)
 
 		---
-		-- Called to check if a transaction between two players is allowed.
-		-- @param Player that wants to send credits
-		-- @param Player that would receive the credits
-		-- @param Number of credits that would be transferred
-		-- @return[default=nil] Boolean which disallows a transaction when false
-		-- @return[default=nil] String for the client which offers info related to the transaction
 		-- @realm client
 		local allow, msg = hook.Run("TTT2CanTransferCredits", client, ply, CREDITS_PER_XFER)
 
