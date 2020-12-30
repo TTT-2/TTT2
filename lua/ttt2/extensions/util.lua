@@ -20,7 +20,7 @@ local playerGetAll = player.GetAll
 local stringSplit = string.Split
 local tableConcat = table.concat
 local weaponsGetStored = weapons.GetStored
-local sentsGetStored = sentsGetStored
+local sentsGetStored = scripted_ents.GetStored
 local sentsGet = scripted_ents.Get
 
 local mathMax = math.max
