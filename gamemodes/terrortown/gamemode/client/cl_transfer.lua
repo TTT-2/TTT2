@@ -26,7 +26,7 @@ function TTT2CanTransferCredits(sender, recipient, credits_per_xfer)
 end
 
 local function UpdateTransferSubmitButton()
-	if not IsValid(dhelp) or not IsValid(dsubmit) then return
+	if not IsValid(dhelp) or not IsValid(dsubmit) then return end
 
 	local client = LocalPlayer()
 	if client:GetCredits() <= 0 then
