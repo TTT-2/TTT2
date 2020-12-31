@@ -315,6 +315,8 @@ end
 -- @realm shared
 function table.GetEqualEntriesAmount(tbl, reference)
 	return #table.GetEqualEntryKeys(tbl, reference)
+end
+
 -- Copies any missing data from base table to the target table.
 -- @note This function will not create a new table. It modifies the existing table.
 -- @param table t The target table that will be modified
