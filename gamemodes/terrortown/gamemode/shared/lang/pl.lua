@@ -1,6 +1,13 @@
 -- Polish language strings
 
-local L = LANG.CreateLanguage("Polski")
+local L = LANG.CreateLanguage("pl")
+
+-- Compatibility language name that might be removed soon.
+-- the alias name is based on the original TTT language name:
+-- - does not exist -
+L.__alias = "polski"
+
+L.lang_name = "Polski (Polish)"
 
 -- General text used in various places
 L.traitor = "Zdrajca"
@@ -116,7 +123,6 @@ L.radar_charging = "Twój radar nadal się ładuje!"
 -- Transfer tab in equipment menu
 L.xfer_name = "Transfer"
 L.xfer_menutitle = "Transferuj kredyty"
-L.xfer_no_credits = "Nie masz żądnych kredytów do dania!"
 L.xfer_send = "Wyślij kredyty"
 L.xfer_help = "Możesz tylko wysłać kredyty do graczy w roli {role}."
 
@@ -291,8 +297,6 @@ L.c4_status_disarmed = "ROZBROJONA"
 -- Visualizer
 L.vis_name = "Wizualizer"
 L.vis_hint = "Kliknij {usekey} by podnieść (tylko Detektywi)."
-
-L.vis_help_pri = "{primaryfire} upuszcza aktywowane urządzenie."
 
 L.vis_desc = [[
 Wizualizator chwili zabójstwa.
@@ -1283,3 +1287,10 @@ L.button_close = "Zamknij"
 --L.pickup_error_spec = "You cannot pick this up as a spectator."
 --L.pickup_error_owns = "You cannot pick this up because you already have this weapon."
 --L.pickup_error_noslot = "You cannot pick this up because you have no free slot available."
+
+-- 2020-11-02
+--L.lang_server_default = "Server Default"
+--L.help_lang_info = [[
+--This translation is {coverage}% complete with the english language taken as a default reference.
+
+--Keep in mind that these translations are community based. Feel free to contribute if there is something missing or incorrect.]]

@@ -1,6 +1,13 @@
 -- German language strings
 
-local L = LANG.CreateLanguage("Deutsch")
+local L = LANG.CreateLanguage("de")
+
+-- Compatibility language name that might be removed soon.
+-- the alias name is based on the original TTT language name:
+-- https://github.com/Facepunch/garrysmod/blob/master/garrysmod/gamemodes/terrortown/gamemode/lang/german.lua
+L.__alias = "deutsch"
+
+L.lang_name = "Deutsch (German)"
 
 -- General text used in various places
 L.traitor = "Verräter"
@@ -116,7 +123,6 @@ L.radar_charging = "Dein Radar lädt immer noch auf!"
 -- Transfer tab in equipment menu
 L.xfer_name = "Transfer"
 L.xfer_menutitle = "Credits transferieren"
-L.xfer_no_credits = "Du kannst keine Credits abgeben!"
 L.xfer_send = "Sende einen Credit"
 L.xfer_help = "Du kannst Credits nur an weitere {role} senden."
 
@@ -291,8 +297,6 @@ L.c4_status_disarmed = "ENTSCHÄRFT"
 -- Visualizer
 L.vis_name = "Visualisierer"
 L.vis_hint = "Drücke {usekey} zum Aufheben (nur Detektive)."
-
-L.vis_help_pri = "{primaryfire} lässt das aktivierte Gerät fallen."
 
 L.vis_desc = [[
 Tatort-Visualisierungs-Gerät.
@@ -1283,3 +1287,10 @@ L.decoy_help_pri = "Platziere die Attrappe."
 L.pickup_error_spec = "Du kannst eine Waffe als Zuschauer nicht aufheben."
 L.pickup_error_owns = "Du kannst diese Waffe nicht aufheben, weil du die gleiche Waffe bereits trägst."
 L.pickup_error_noslot = "Du verfügst über keinen freien Slot, um diese Waffe aufzuheben."
+
+-- 2020-11-02
+L.lang_server_default = "Server Standard"
+L.help_lang_info = [[
+Diese Übersetzung ist {coverage}% vollständig, wenn man die englische Übersetzung als Referenz betrachtet.
+
+Beachte, dass diese Übersetzungen Communitybasiert sind. Hilf mit, wenn Du Fehler oder fehlende Übersetzungen findest.]]

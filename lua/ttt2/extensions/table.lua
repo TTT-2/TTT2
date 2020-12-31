@@ -288,6 +288,35 @@ function table.ExtractRandomEntry(tbl, filterFn)
 end
 
 ---
+-- Returns an indexed table of indexes that exist in both tables.
+-- @note This function is most suitable for string indexed tables.
+-- @param table tbl The table to iterate over
+-- @param table reference The reference table to compare against
+-- @return table A table with the keys that exist in both tables
+-- @realm shared
+function table.GetEqualEntryKeys(tbl, reference)
+	local equalTbl = {}
+
+	for index in pairs(tbl) do
+		if not reference[index] then continue end
+
+		equalTbl[#equalTbl + 1] = index
+	end
+
+	return equalTbl
+end
+
+---
+-- Returns the amount of table entries that exist in both tables.
+-- @note This function is most suitable for string indexed tables.
+-- @param table tbl The table to iterate over
+-- @param table reference The reference table to compare against
+-- @return number The amount of indexes that exist in both tables
+-- @realm shared
+function table.GetEqualEntriesAmount(tbl, reference)
+	return #table.GetEqualEntryKeys(tbl, reference)
+end
+
 -- Copies any missing data from base table to the target table.
 -- @note This function will not create a new table. It modifies the existing table.
 -- @param table t The target table that will be modified

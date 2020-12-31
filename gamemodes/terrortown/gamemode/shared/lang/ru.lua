@@ -1,6 +1,13 @@
 -- Russian language strings
 
-local L = LANG.CreateLanguage("Русский")
+local L = LANG.CreateLanguage("ru")
+
+-- Compatibility language name that might be removed soon.
+-- the alias name is based on the original TTT language name:
+-- https://github.com/Facepunch/garrysmod/blob/master/garrysmod/gamemodes/terrortown/gamemode/lang/russian.lua
+L.__alias = "Русский"
+
+L.lang_name = "Русский (Russian)"
 
 -- General text used in various places
 L.traitor = "Предатель"
@@ -116,7 +123,6 @@ L.radar_charging = "Радар всё ещё заряжается!"
 -- Transfer tab in equipment menu
 L.xfer_name = "Передача"
 L.xfer_menutitle = "Передача кредитов"
-L.xfer_no_credits = "У вас нет кредитов!"
 L.xfer_send = "Передать кредит"
 L.xfer_help = "Вы можете передавать кредиты только игрокам в роли {role}."
 
@@ -291,8 +297,6 @@ L.c4_status_disarmed = "ОБЕЗВРЕ-\nЖЕНА"
 -- Visualizer
 L.vis_name = "Визуализатор"
 L.vis_hint = "Нажмите {usekey}, чтобы подобрать. (только для детективов)"
-
-L.vis_help_pri = "{primaryfire}: бросить активированное устройство."
 
 L.vis_desc = [[
 Устройство, визуализирующее сцену преступления.
@@ -1283,3 +1287,10 @@ L.button_save = "Сохранить"
 --L.pickup_error_spec = "You cannot pick this up as a spectator."
 --L.pickup_error_owns = "You cannot pick this up because you already have this weapon."
 --L.pickup_error_noslot = "You cannot pick this up because you have no free slot available."
+
+-- 2020-11-02
+--L.lang_server_default = "Server Default"
+--L.help_lang_info = [[
+--This translation is {coverage}% complete with the english language taken as a default reference.
+
+--Keep in mind that these translations are community based. Feel free to contribute if there is something missing or incorrect.]]

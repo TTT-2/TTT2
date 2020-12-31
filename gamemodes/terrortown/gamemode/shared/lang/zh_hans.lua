@@ -1,6 +1,13 @@
 -- Simplified Chinese language strings
 
-local L = LANG.CreateLanguage("简体中文")
+local L = LANG.CreateLanguage("zh_hans")
+
+-- Compatibility language name that might be removed soon.
+-- the alias name is based on the original TTT language name:
+-- https://github.com/Facepunch/garrysmod/blob/master/garrysmod/gamemodes/terrortown/gamemode/lang/simpchinese.lua
+L.__alias = "简体中文"
+
+L.lang_name = "简体中文 (Simplified Chinese)"
 
 -- General text used in various places
 L.traitor = "叛徒"
@@ -116,7 +123,6 @@ L.radar_charging = "你的雷达还在充电中！"
 -- Transfer tab in equipment menu
 L.xfer_name = "转移"
 L.xfer_menutitle = "转移积分"
-L.xfer_no_credits = "你没有积分了"
 L.xfer_send = "发送积分"
 L.xfer_help = "你只能发送积分给 {role} 玩家。"
 
@@ -291,8 +297,6 @@ L.c4_status_disarmed = "拆除"
 -- Visualizer
 L.vis_name = "显像器"
 L.vis_hint = "按下 {usekey} 键捡起它（仅限侦探）。"
-
-L.vis_help_pri = " {primaryfire} 扔出已启动的仪器。"
 
 L.vis_desc = [[
 可让犯罪现场显像化的仪器。
@@ -1283,3 +1287,10 @@ L.decoy_help_pri = "安放诱饵。"
 L.pickup_error_spec = "作为观察者你无法捡起这个。"
 L.pickup_error_owns = "你已经有这个武器，无法再次捡起"
 L.pickup_error_noslot = "你没有对应空槽位，无法捡起这个"
+
+-- 2020-11-02
+--L.lang_server_default = "Server Default"
+--L.help_lang_info = [[
+--This translation is {coverage}% complete with the english language taken as a default reference.
+
+--Keep in mind that these translations are community based. Feel free to contribute if there is something missing or incorrect.]]

@@ -103,29 +103,17 @@ function PANEL:SetFont(strFont)
 end
 
 ---
--- @param Color clr
+-- Sets the param table used for the param translation.
+-- @param table params
 -- @realm client
-function PANEL:SetTextColor(clr)
-	self.m_colText = clr
-
-	self:UpdateFGColor()
-end
-
----
--- @return Color
--- @realm client
-function PANEL:GetColor()
-	return self.m_colText or self.m_colTextStyle
+function PANEL:SetParams(params)
+	self.params = params
 end
 
 ---
 -- @realm client
-function PANEL:UpdateFGColor()
-	local col = self:GetTextColor() or self:GetTextStyleColor()
-
-	if not col then return end
-
-	self:SetFGColor(col.r, col.g, col.b, col.a)
+function PANEL:GetParams()
+	return self.params or {}
 end
 
 ---
@@ -161,31 +149,9 @@ function PANEL:GetDisabled()
 end
 
 ---
--- @param table skin
--- @return Color
 -- @realm client
-function PANEL:UpdateColours(skin)
-	if self:GetBright() then
-		return self:SetTextStyleColor(skin.Colours.Label.Bright)
-	end
-
-	if self:GetDark() then
-		return self:SetTextStyleColor(skin.Colours.Label.Dark)
-	end
-
-	if self:GetHighlight() then
-		return self:SetTextStyleColor(skin.Colours.Label.Highlight)
-	end
-
-	return self:SetTextStyleColor(skin.Colours.Label.Default)
-end
-
----
--- @ignore
 function PANEL:ApplySchemeSettings()
-	self:UpdateColours(self:GetSkin())
 
-	self:UpdateFGColor()
 end
 
 ---
@@ -362,4 +328,4 @@ function PANEL:DoDoubleClickInternal()
 
 end
 
-derma.DefineControl("DLabelTTT2", "A Label", PANEL, "Label")
+derma.DefineControl("DLabelTTT2", "A Label", PANEL, "DLabel")

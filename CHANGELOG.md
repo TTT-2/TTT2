@@ -19,6 +19,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
   - Added a hook `TTT2AddedEvent` that is called after an event was added
 - Added `orm` library to simplify database access
 - Added French translation (by @MisterClems)
+- Added a few table module functions
+- Added a few LANG module functions
 - Added a new classbuilder that can be used to create classes from files
 - Added a `targetid` library, that can be used to draw TargetIDs for entities
 
@@ -33,6 +35,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added minimal documentation to every datastructure
 - Removed C4 defuse restriction for teammates
 - Moved role specific score variables into the role base
+- Changed the language identifiers to generic english names
+- moved functions from sh_util into their respective library files
 - Moved functions from sh_util into their respective library files
 - Updated the list of troublesome addons used by the addonchecker
 

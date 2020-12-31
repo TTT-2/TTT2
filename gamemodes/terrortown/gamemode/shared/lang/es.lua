@@ -1,6 +1,13 @@
 -- Spanish language strings
 
-local L = LANG.GetLanguageTableReference("Español")
+local L = LANG.GetLanguageTableReference("es")
+
+-- Compatibility language name that might be removed soon.
+-- the alias name is based on the original TTT language name:
+-- https://github.com/Facepunch/garrysmod/blob/master/garrysmod/gamemodes/terrortown/gamemode/lang/spanish.lua
+L.__alias = "Español"
+
+L.lang_name = "Español (Spanish)"
 
 -- General text used in various places
 L.traitor = "Traidor"
@@ -116,7 +123,6 @@ L.radar_charging = "¡Tu radar todavia se está cargando!"
 -- Transfer tab in equipment menu
 L.xfer_name = "Transferir"
 L.xfer_menutitle = "Transferir créditos"
-L.xfer_no_credits = "¡No tienes créditos suficientes!"
 L.xfer_send = "Envía un crédito"
 L.xfer_help = "Sólo puedes enviar créditos a tu compañero {role}."
 
@@ -291,8 +297,6 @@ L.c4_status_disarmed = "DESACTIVADA"
 -- Visualizer
 L.vis_name = "Visualizador"
 L.vis_hint = "Pulsa {usekey} para recogerlo (Sólo detectives)."
-
-L.vis_short_desc = "Visualiza la escena del crimen si la víctima murió por una herida de bala"
 
 L.vis_desc = [[
 Dispositivo para visualizar crímenes.
@@ -1283,3 +1287,10 @@ L.decoy_help_pri = "Colocar el señuelo."
 L.pickup_error_spec = "No puedes recoger esto como espectador."
 L.pickup_error_owns = "No puedes recoger esto porque ya lo tienes en el inventario."
 L.pickup_error_noslot = "No puedes recoger esto porque no tienes un espacio disponible en el inventario."
+
+-- 2020-11-02
+--L.lang_server_default = "Server Default"
+--L.help_lang_info = [[
+--This translation is {coverage}% complete with the english language taken as a default reference.
+
+--Keep in mind that these translations are community based. Feel free to contribute if there is something missing or incorrect.]]
