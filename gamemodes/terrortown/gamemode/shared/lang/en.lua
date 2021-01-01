@@ -1,6 +1,13 @@
 -- English language strings
 
-local L = LANG.CreateLanguage("English")
+local L = LANG.CreateLanguage("en")
+
+-- Compatibility language name that might be removed soon.
+-- the alias name is based on the original TTT language name:
+-- https://github.com/Facepunch/garrysmod/blob/master/garrysmod/gamemodes/terrortown/gamemode/lang/english.lua
+L.__alias = "english"
+
+L.lang_name = "English (English)"
 
 -- General text used in various places
 L.traitor = "Traitor"
@@ -116,7 +123,6 @@ L.radar_charging = "Your Radar is still charging!"
 -- Transfer tab in equipment menu
 L.xfer_name = "Transfer"
 L.xfer_menutitle = "Transfer credits"
-L.xfer_no_credits = "You have no credits to give!"
 L.xfer_send = "Send a credit"
 
 L.xfer_no_recip = "Recipient not valid, credit transfer aborted."
@@ -290,8 +296,6 @@ L.c4_status_disarmed = "DISARMED"
 -- Visualizer
 L.vis_name = "Visualizer"
 L.vis_hint = "Press {usekey} to pick up (Detectives only)."
-
-L.vis_help_pri = "{primaryfire} drops the activated device."
 
 L.vis_desc = [[
 Crime scene visualization device.
@@ -1283,3 +1287,10 @@ L.decoy_help_pri = "Plant the Decoy."
 L.pickup_error_spec = "You cannot pick this up as a spectator."
 L.pickup_error_owns = "You cannot pick this up because you already have this weapon."
 L.pickup_error_noslot = "You cannot pick this up because you have no free slot available."
+
+-- 2020-11-02
+L.lang_server_default = "Server Default"
+L.help_lang_info = [[
+This translation is {coverage}% complete with the english language taken as a default reference.
+
+Keep in mind that these translations are community based. Feel free to contribute if there is something missing or incorrect.]]

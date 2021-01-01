@@ -1,7 +1,9 @@
 -- Test/gimmick lang
 -- Not an example of how you should translate something. See english.lua for that.
 
-local L = LANG.CreateLanguage("Swedish chef")
+local L = LANG.CreateLanguage("swedish_chef")
+
+L.lang_name = "Swedish Chef (Bork)"
 
 local gsub = string.gsub
 
@@ -16,10 +18,11 @@ local function Borkify(word)
 end
 
 local realised = false
+
 -- Upon selection, borkify every english string.
 -- Even with all the string manipulation this only takes a few ms.
 local function LanguageChanged(old, new)
-	if realised or new ~= "swedish chef" then return end
+	if realised or new ~= "swedish_chef" then return end
 
 	local eng = LANG.GetUnsafeNamed("english")
 

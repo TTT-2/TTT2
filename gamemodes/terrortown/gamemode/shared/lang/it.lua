@@ -1,6 +1,13 @@
 -- Italian language strings (by AL24 & THEPLATYNUMGHOST)
 
-local L = LANG.CreateLanguage("Italiano")
+local L = LANG.CreateLanguage("it")
+
+-- Compatibility language name that might be removed soon.
+-- the alias name is based on the original TTT language name:
+-- https://github.com/Facepunch/garrysmod/blob/master/garrysmod/gamemodes/terrortown/gamemode/lang/italian.lua
+L.__alias = "italiano"
+
+L.lang_name = "Italiano (Italian)"
 
 -- General text used in various places
 L.traitor = "Traditore"
@@ -116,7 +123,6 @@ L.radar_charging = "Il tuo Radar si sta ancora caricando!"
 -- Transfer tab in equipment menu
 L.xfer_name = "Trasferimento"
 L.xfer_menutitle = "Trasferisci crediti"
-L.xfer_no_credits = "Non hai crediti da donare!"
 L.xfer_send = "Dai un credito"
 
 L.xfer_no_recip = "Bersaglio non valido, trasferimento dei crediti annullato."
@@ -290,8 +296,6 @@ L.c4_status_disarmed = "DISINNESCATA"
 -- Visualizer
 L.vis_name = "Visualizzatore"
 L.vis_hint = "Premi {usekey} per raccoglierlo (solo Detective)."
-
-L.vis_help_pri = "{primaryfire} fa cadere il dispositivo attivo."
 
 L.vis_desc = [[
 Dispositivo per visualizzare una scena del crimine.
@@ -1282,3 +1286,10 @@ L.decoy_help_pri = "Piazza un esca."
 L.pickup_error_spec = "Non puoi prendere questo da spettatore."
 L.pickup_error_owns = "Non puoi prendere questo perché tu hai già quest'arma."
 L.pickup_error_noslot = "Non puoi prendere questo perchè non hai nessuno slot libero."
+
+-- 2020-11-02
+--L.lang_server_default = "Server Default"
+--L.help_lang_info = [[
+--This translation is {coverage}% complete with the english language taken as a default reference.
+
+--Keep in mind that these translations are community based. Feel free to contribute if there is something missing or incorrect.]]
