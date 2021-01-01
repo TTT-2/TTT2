@@ -292,7 +292,7 @@ function LANG.SetActiveLanguage(langName)
 		cachedActive = LANG.Strings[langName]
 
 		-- set the default lang as fallback, if it hasn't yet
-		LANG.SetFallback(cached_active)
+		LANG.SetFallback(cachedActive)
 
 		-- some interface elements will want to know so they can update themselves
 		if oldName ~= langName then
