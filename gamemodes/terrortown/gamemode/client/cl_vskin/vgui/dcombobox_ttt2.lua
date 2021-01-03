@@ -158,7 +158,7 @@ end
 -- @param string icon
 -- @return number index
 -- @realm client
-function PANEL:AddChoice(value, data, _, icon)
+function PANEL:AddChoice(value, data, select, icon)
 	local i = #self.choices + 1
 
 	self.choices[i] = value
