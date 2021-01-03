@@ -305,7 +305,7 @@ local function RadioCommand(ply, cmd, arg)
 
 		if msg.cmd ~= msg_type then continue end
 
-		local eng = LANG.GetTranslationFromLanguage(msg.text, "english")
+		local eng = LANG.GetTranslationFromLanguage(msg.text, "en")
 		local _tmp = {player = RADIO.ToPrintable(target)}
 
 		text = msg.format and string.Interp(eng, _tmp) or eng

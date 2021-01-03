@@ -24,7 +24,7 @@ local realised = false
 local function LanguageChanged(old, new)
 	if realised or new ~= "swedish_chef" then return end
 
-	local eng = LANG.GetUnsafeNamed("english")
+	local eng = LANG.GetUnsafeNamed("en")
 
 	for k, v in pairs(eng) do
 		L[k] = gsub(v, "[{}%w]+", Borkify)
@@ -39,6 +39,6 @@ local GetFrom = LANG.GetTranslationFromLanguage
 
 setmetatable(L, {
 	__index = function(_, k)
-		return gsub(GetFrom(k, "english") or "bork", "[{}%w]+", "BORK")
+		return gsub(GetFrom(k, "en") or "bork", "[{}%w]+", "BORK")
 	end
 })

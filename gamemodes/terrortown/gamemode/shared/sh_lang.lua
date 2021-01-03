@@ -112,7 +112,7 @@ if SERVER then
 
 	---
 	-- @realm server
-	local cv_ttt_lang_serverdefault = CreateConVar("ttt_lang_serverdefault", "english", FCVAR_ARCHIVE)
+	local cv_ttt_lang_serverdefault = CreateConVar("ttt_lang_serverdefault", "en", FCVAR_ARCHIVE)
 
 	local function ServerLangRequest(ply, cmd, args)
 		if not IsValid(ply) then return end
@@ -150,7 +150,7 @@ else -- CLIENT
 	local function RecvServerLang()
 		local lang_name = net.ReadString()
 
-		lang_name = lang_name and string.lower(lang_name)
+		lang_name = LANG.GetNameFromAlias(lang_name)
 
 		if LANG.Strings[lang_name] then
 			if LANG.IsServerDefault(GetConVar("ttt_language"):GetString()) then
