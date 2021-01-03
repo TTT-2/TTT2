@@ -154,7 +154,7 @@ end
 ---
 -- @param string value
 -- @param any data
--- @param any _ (unused)
+-- @param any select
 -- @param string icon
 -- @return number index
 -- @realm client
