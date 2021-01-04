@@ -14,6 +14,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added Drag&Drop role layering VGUI, accessible with the console command `ttt2_edit_rolelayering`
 - Updated Simplified Chinese localization (by @TheOnly8Z)
 - Updated Italian localization (by @ThePlatynumGhost)
+- Updated Russian localization (by @scientistnt)
 - Added a new event system
   - Added a cancelable hook `TTT2OnTriggeredEvent` that is called once an event is about to be added
   - Added a hook `TTT2AddedEvent` that is called after an event was added
