@@ -1119,7 +1119,7 @@ L.submenu_appearance_interface_title = "Интерфейс"
 L.submenu_appearance_miscellaneous_title = "Разное"
 
 L.submenu_gameplay_general_title = "Общее"
-L.submenu_gameplay_avoidroles_title = "Избегать роли"
+L.submenu_gameplay_avoidroles_title = "Избегать особые роли"
 
 L.submenu_administration_hud_title = "Настройки интерфейса"
 L.submenu_administration_random_shop = "Случайный магазин"
