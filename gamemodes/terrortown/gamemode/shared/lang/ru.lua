@@ -1217,7 +1217,7 @@ L.header_interface_settings = "Настройки интерфейса"
 L.header_gameplay_settings = "Настройки игры"
 L.header_roleselection = "Включить назначение ролей"
 L.header_hud_administration = "Выбрать интерфейс по умолчанию"
-L.header_hud_enabled = "Включить/выключить интерфейс"
+L.header_hud_enabled = "Включить/выключить интерфейсы"
 
 L.button_menu_back = "назад"
 L.button_none = "Ничего"
@@ -1269,7 +1269,7 @@ L.corpse_hint_inspect_only = "Нажмите [{usekey}], чтобы осмотр
 L.corpse_hint_inspect_only_credits = "Нажмите [{usekey}], чтобы получить кредиты. Только детективы могут осмотреть это тело."
 
 -- 2020-06-04
-L.label_bind_disguiser = "Переключить маскировку"
+L.label_bind_disguiser = "Переключить Маскировку"
 
 -- 2020-06-24
 L.dna_help_primary = "Собрать образец ДНК"
@@ -1281,7 +1281,7 @@ L.binoc_help_sec = "Изменить масштаб."
 
 L.vis_help_pri = "Сбросить активированный девайс."
 
-L.decoy_help_pri = "Заложить приманку."
+L.decoy_help_pri = "Заложить Приманку."
 
 -- 2020-08-07
 L.pickup_error_spec = "Вы не можете подобрать это за наблюдателя."
