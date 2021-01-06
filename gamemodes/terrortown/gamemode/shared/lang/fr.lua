@@ -154,7 +154,7 @@ L.radio_button_steps = "Bruits de pas"
 L.intro_help = "Si vous êtes nouveau, appuyez sur F1 pour lire les instructions !"
 
 -- Radiocommands/quickchat
-L.quick_title = "Touches de tchat-rapide"
+L.quick_title = "Touches de Tchat-rapide"
 
 L.quick_yes = "Oui."
 L.quick_no = "Non."
@@ -273,7 +273,7 @@ L.c4_armed = "Vous avez amorcé le C4 avec succès."
 L.c4_disarmed = "Vous avez désamorcé le C4 avec succès."
 L.c4_no_room = "Vous n'avez pas la place pour ce C4."
 
-L.c4_desc = "Explosif puissant à retardement.Utiliser avec précaution."
+L.c4_desc = "Explosif surpuissant à retardement.Utiliser avec précaution."
 
 L.c4_arm = "Amorcer le C4"
 L.c4_arm_timer = "Minuteur"
@@ -402,7 +402,7 @@ L.dna_identify = "Le corps doit être identifié pour récupérer l'ADN du tueur
 L.dna_notfound = "Pas d'échantillon ADN trouvé sur la cible."
 L.dna_limit = "Limite de stockage atteint. Retirez les vieux échantillons pour en ajouter de nouveaux."
 L.dna_decayed = "L'échantillon ADN du tueur s'est décomposé."
-L.dna_killer = "Échantillon ADN du tueur récupéré du corps !"
+L.dna_killer = "Échantillon ADN du tueur récupéré sur le corps !"
 L.dna_no_killer = "L'ADN n'a pas pu être récupérée (le tueur s'est déconnecté ?)."
 L.dna_armed = "La bombe est amorcée ! Désamorcez-la d'abord !"
 L.dna_object = "Vous avez collecté {num} échantillon(s) d'ADN sur cet objet."
