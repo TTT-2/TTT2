@@ -729,7 +729,7 @@ L.ev_c4_disarm1 = "{player} a désamorcé le C4 planté par {owner}"
 L.ev_c4_disarm2 = "{player} a échoué au désamorçage du C4 planté par {owner}"
 L.ev_credit = "{finder} a trouvé {num} crédit(s) sur le corps de {player}"
 
-L.ev_start = "Les round a commencé"
+L.ev_start = "Le round a commencé"
 L.ev_win_traitor = "Les traitres remportent la victoire !"
 L.ev_win_inno = "Les innocents remportent la victoire !"
 L.ev_win_time = "Les traitres ont manqué de temps et ont perdu !"
