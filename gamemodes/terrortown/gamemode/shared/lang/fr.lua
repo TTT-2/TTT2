@@ -90,7 +90,7 @@ L.equip_carry_own = "Vous portez déjà cet objet."
 L.equip_carry_slot = "Vous avez déjà une arme dans l’emplacement {slot}."
 L.equip_carry_minplayers = "Il n'y a pas assez de joueurs sur le serveur pour activer cette arme."
 
-L.equip_help_stock = "Certains objets ne peuvent être acheter qu'une fois par round."
+L.equip_help_stock = "Certains objets ne peuvent être acheté qu'une fois par round."
 L.equip_stock_deny = "Cet objet n'est plus en stock."
 L.equip_stock_ok = "Cet objet est en stock."
 
