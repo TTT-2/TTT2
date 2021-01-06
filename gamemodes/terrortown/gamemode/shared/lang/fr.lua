@@ -1103,7 +1103,7 @@ L.submenu_guide_gameplay_title = "Jouabilité"
 L.submenu_guide_roles_title = "Rôles"
 L.submenu_guide_equipment_title = "Équipement"
 
-L.submenu_bindings_bindings_title = "Commandes"
+L.submenu_bindings_bindings_title = "Configuration des touches"
 
 L.submenu_language_language_title = "Langue"
 
