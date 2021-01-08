@@ -1120,8 +1120,7 @@ L.submenu_appearance_interface_title = "Interface"
 L.submenu_appearance_miscellaneous_title = "Misellaneous"
 
 L.submenu_gameplay_general_title = "General"
-L.submenu_gameplay_
-L.roles_title = "Avoid role selection"
+L.submenu_gameplay_roles_title = "Avoid role selection"
 
 L.submenu_administration_hud_title = "HUD settings"
 L.submenu_administration_random_shop = "Random shop"
