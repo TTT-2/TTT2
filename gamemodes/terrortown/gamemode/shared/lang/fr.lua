@@ -10,17 +10,17 @@ L.__alias = "français"
 L.lang_name = "Français (French)"
 
 --- General text used in various places
-L.traitor = "TRAITRE"
-L.detective = "DÉTECTIVE"
-L.innocent = "INNOCENT"
+L.traitor = "Traitre"
+L.detective = "Détective"
+L.innocent = "Innocent"
 L.last_words = "Derniers mots"
 
 L.terrorists = "Terroristes"
 L.spectators = "Spectateurs"
 
 L.noteam = "Pas de Team"
-L.innocents = "Innocents"
-L.traitors = "Traitres"
+L.innocents = "Team des Innocents"
+L.traitors = "Team des Traitres"
 
 --- Round statut messages
 L.round_minplayers = "Pas assez de joueurs pour commencer un nouveau round..."
@@ -184,7 +184,7 @@ L.search_nick = "C'est le corps de {player}."
 
 L.search_role_traitor = "C'était un Traitre!"
 L.search_role_det = "C'était un Détective."
-L.search_role_inno = "C'était un Terroriste innocent."
+L.search_role_inno = "C'était un Terroriste Innocent."
 
 L.search_words = "Quelque chose vous dit que quelques unes des dernières paroles de cette personne étaient : '{lastwords}'"
 L.search_armor = "Il avait une armure non-standard."
@@ -273,7 +273,7 @@ L.c4_armed = "Vous avez amorcé le C4 avec succès."
 L.c4_disarmed = "Vous avez désamorcé le C4 avec succès."
 L.c4_no_room = "Vous n'avez pas la place pour ce C4."
 
-L.c4_desc = "Explosif surpuissant à retardement.Utiliser avec précaution."
+L.c4_desc = "Explosif surpuissant à retardement.Utiliser le avec précaution."
 
 L.c4_arm = "Amorcer le C4"
 L.c4_arm_timer = "Minuteur"
@@ -315,7 +315,7 @@ L.decoy_desc = [[
 Montre un faux signe sur le radar des autres team ,et font que leur scanner ADN montre la position du Leurre s'il cherche le vôtre.]]
 
 -- Defuser
-L.defuser_name = "Kit de dÉsamorçage"
+L.defuser_name = "Kit de désamorçage"
 L.defuser_help = "{primaryfire} désamorce le C4 ciblé."
 
 L.defuser_desc = [[
@@ -324,7 +324,7 @@ Désamorce instantanément un explosif C4.
 Usages illimités. Le C4 sera plus visible si vous avez ça sur vous.]]
 
 -- Flare gun
-L.flare_name = "Pistolet de dÉtresse"
+L.flare_name = "Pistolet de détresse"
 
 L.flare_desc = [[
 Peut être utilisé pour brûler les corps pourqu'ils ne soient pas trouvés. Munitions limitées
@@ -418,14 +418,14 @@ L.magnet_name = "Magneto-stick"
 L.magnet_help = "{primaryfire} pour attacher le corps sur cette surface."
 
 -- Grenades and misc
-L.grenade_smoke = "Grenade fumigÈne"
+L.grenade_smoke = "Grenade fumigène"
 L.grenade_fire = "Grenade incendiaire"
 
 L.unarmed_name = "Sans arme"
 L.crowbar_name = "Pied de biche"
 L.pistol_name = "Pistolet"
 L.rifle_name = "Fusil de sniper"
-L.shotgun_name = "Fusil À pompe"
+L.shotgun_name = "Fusil à pompe"
 
 -- Teleporter
 L.tele_name = "Téléporteur"
@@ -451,7 +451,7 @@ La téléportation fait du bruit, et le nombre d'utilisations est limité.]]
 L.ammo_pistol = "Munitions de 9mm"
 
 L.ammo_smg1 = "Munitions de SMG"
-L.ammo_buckshot = "Munitions de fusil À pompe"
+L.ammo_buckshot = "Munitions de fusil à pompe"
 L.ammo_357 = "Munitions de fusil"
 L.ammo_alyxgun = "Munitions de Deagle"
 L.ammo_ar2altfire = "Munitions du pistolet de détresse"
@@ -459,9 +459,9 @@ L.ammo_gravity = "Munitions du Poltergeist"
 
 -- Round statut
 L.round_wait = "En attente"
-L.round_prep = "PrÉparation"
+L.round_prep = "Préparation"
 L.round_active = "En cours"
-L.round_post = "TerminÉ"
+L.round_post = "Terminé"
 
 -- Health, ammo and time area
 L.overtime = "PROLONGATIONS"
@@ -1088,7 +1088,7 @@ L.menu_equipment_title = "Édité l'équipement"
 L.menu_shops_title = "Édité les Shops"
 
 L.menu_changelog_description = "Liste des changements et des corrections dans les versions récentes"
-L.menu_guide_description = "Vous aide à démarrer TTT2 et vous explique certaines notion sur le gameplay, les rôles et d'autres choses"
+L.menu_guide_description = "Vous aide à démarrer TTT2 et vous explique certaines notions sur le gameplay, les rôles et d'autres choses"
 L.menu_bindings_description = "Configurer les caractéristiques spécifiques de TTT2 et de ses addons"
 L.menu_language_description = "Sélectionnez la langue du jeu"
 L.menu_appearance_description = "Modifier l'apparence et la performance de votre UI"
@@ -1201,21 +1201,21 @@ L.label_menu_not_populated = "Ce sous-menu ne contient aucun contenu."
 
 L.header_bindings_ttt2 = "Configuration des touches TTT2"
 L.header_bindings_other = "Autre touches"
-L.header_language = "ParamÈtres de langue"
-L.header_global_color = "SÉlection de couleur"
-L.header_hud_select = "SÉlectionner un HUD"
+L.header_language = "Paramètres de langue"
+L.header_global_color = "Sélection de couleur"
+L.header_hud_select = "Sélectionner un HUD"
 L.header_hud_customize = "Personnaliser le HUD"
-L.header_vskin_select = "SÉlectionner et personnaliser le VSkin"
+L.header_vskin_select = "Sélectionner et personnaliser le VSkin"
 L.header_targetid = "Paramètres TargetID"
-L.header_shop_settings = "ParamÈtres du shop d'Équipement"
+L.header_shop_settings = "Paramètres du shop d'Équipement"
 L.header_shop_layout = "Mise en page de la liste des objets"
-L.header_shop_marker = "ParamÈtres des marqueurs d'objet"
-L.header_crosshair_settings = "RÉglages du rÉticule"
-L.header_damage_indicator = "ParamÈtres de l'indicateurs de dÉgats"
-L.header_performance_settings = "ParamÈtres de performance"
-L.header_interface_settings = "ParamÈtres de l'interface"
-L.header_gameplay_settings = "ParamÈtres de jeu"
-L.header_roleselection = "Activez/Desactiver l'attribution de certains rÔles"
+L.header_shop_marker = "Paramètres des marqueurs d'objet"
+L.header_crosshair_settings = "Réglages du réticule"
+L.header_damage_indicator = "Paramètres de l'indicateurs de dégats"
+L.header_performance_settings = "Paramètres de performance"
+L.header_interface_settings = "Paramètres de l'interface"
+L.header_gameplay_settings = "Paramètres de jeu"
+L.header_roleselection = "Activez/Desactiver l'attribution de certains rôles"
 L.header_hud_administration = "Sélectionnez le HUDs par Défaut et Obligatoire"
 L.header_hud_enabled = "Activer/Désactiver HUDs"
 
@@ -1223,7 +1223,7 @@ L.button_menu_back = "Retour"
 L.button_none = "Aucun"
 L.button_press_key = "Appuyez sur une touche"
 L.button_save = "Sauvegarder"
-L.button_reset = "RÉinitialiser"
+L.button_reset = "Réinitialiser"
 L.button_close = "Fermer"
 L.button_hud_editor = "Éditeur d'HUD"
 
