@@ -124,7 +124,6 @@ L.radar_charging = "¡Tu radar todavia se está cargando!"
 L.xfer_name = "Transferir"
 L.xfer_menutitle = "Transferir créditos"
 L.xfer_send = "Envía un crédito"
-L.xfer_help = "Sólo puedes enviar créditos a tu compañero {role}."
 
 L.xfer_no_recip = "Receptor no válido, transferencia cancelada."
 L.xfer_no_credits = "Créditos insuficientes."

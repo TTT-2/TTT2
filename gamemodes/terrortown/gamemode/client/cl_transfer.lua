@@ -2,8 +2,57 @@
 -- Credit transfer tab for equipment menu
 -- @section credit_transfer
 
+--Constants and Wrappers
 local GetTranslation = LANG.GetTranslation
-local player = player
+local CREDITS_PER_XFER = 1
+
+--Globals (Due to server to client communication)
+local dsubmit
+local dhelp
+local dform
+local selected_sid
+
+---
+-- Called to check if a transaction between two players is allowed.
+-- @param Player sender that wants to send credits
+-- @param Player recipient that would receive the credits
+-- @param Number credits_per_xfer that would be transferred
+-- @return[default=nil] boolean which disallows a transaction when false
+-- @return[default=nil] string for the client which offers info related to the transaction
+-- @hook
+-- @realm client
+function TTT2CanTransferCredits(sender, recipient, credits_per_xfer)
+
+end
+
+local function UpdateTransferSubmitButton()
+	if not IsValid(dhelp) or not IsValid(dsubmit) then return end
+
+	local client = LocalPlayer()
+	if client:GetCredits() <= 0 then
+		dhelp:SetText(GetTranslation("xfer_no_credits"))
+		dsubmit:SetDisabled(true)
+	elseif selected_sid then
+		local ply = player.GetBySteamID64(selected_sid)
+
+		---
+		-- @realm client
+		local allow, msg = hook.Run("TTT2CanTransferCredits", client, ply, CREDITS_PER_XFER)
+
+		if allow == false then
+			dsubmit:SetDisabled(true)
+		else
+			dsubmit:SetDisabled(false)
+		end
+
+		if isstring(msg) then
+			dhelp:SetText(msg)
+		end
+	end
+end
+
+--Called after the server performs a successful transfer of credits.
+net.Receive("TTT2CreditTransferUpdate", UpdateTransferSubmitButton)
 
 ---
 -- Creates the credit transfer menu
@@ -13,32 +62,28 @@ local player = player
 function CreateTransferMenu(parent)
 	local client = LocalPlayer()
 
-	local dform = vgui.Create("DForm", parent)
+	dform = vgui.Create("DForm", parent)
 	dform:SetName(GetTranslation("xfer_menutitle"))
 	dform:StretchToParent(0, 0, 0, 0)
 	dform:SetAutoSize(false)
 
-	if client:GetCredits() <= 0 then
-		dform:Help(GetTranslation("xfer_no_credits"))
-
-		return dform
-	end
-
 	local bw, bh = 100, 20
 
-	local dsubmit = vgui.Create("DButton", dform)
+	dsubmit = vgui.Create("DButton", dform)
 	dsubmit:SetSize(bw, bh)
 	dsubmit:SetDisabled(true)
 	dsubmit:SetText(GetTranslation("xfer_send"))
 
-	local selected_sid
+	--Add the help button. Change its text dynamically to match the situation.
+	dhelp = dform:Help("")
 
 	local dpick = vgui.Create("DComboBox", dform)
 	dpick.OnSelect = function(s, idx, val, data)
 		if data then
 			selected_sid = data
 
-			dsubmit:SetDisabled(false)
+			--Upon selecting the player, determine if a transfer can be made to them.
+			UpdateTransferSubmitButton()
 		end
 	end
 
@@ -49,9 +94,12 @@ function CreateTransferMenu(parent)
 
 	for i = 1, #plys do
 		local ply = plys[i]
+		local sid = ply:SteamID64()
 
-		if ply ~= client and ply:IsActive() and (not ply:GetSubRoleData().unknownTeam or ply:IsRole(ROLE_DETECTIVE) and client:IsRole(ROLE_DETECTIVE)) and ply:IsInTeam(client) then
-			dpick:AddChoice(ply:Nick(), ply:SteamID64())
+		--SteamID64() returns nil for bots on the client, and so credits can't be transferred to them.
+		--Transfers can be made to players who have died (as the sender may not know if they're alive), but can't be made to spectators who joined in the middle of a match.
+		if ply ~= client and (ply:IsTerror() or ply:IsDeadTerror()) and sid then
+			dpick:AddChoice(ply:Nick(), sid)
 		end
 	end
 
@@ -62,22 +110,12 @@ function CreateTransferMenu(parent)
 
 	dsubmit.DoClick = function(s)
 		if selected_sid then
-			RunConsoleCommand("ttt_transfer_credits", selected_sid, "1")
-		end
-	end
-
-	dsubmit.Think = function(s)
-		if client:GetCredits() < 1 then
-			s:SetDisabled(true)
+			RunConsoleCommand("ttt_transfer_credits", selected_sid, CREDITS_PER_XFER)
 		end
 	end
 
 	dform:AddItem(dpick)
 	dform:AddItem(dsubmit)
-
-	local tm = client:GetTeam()
-
-	dform:Help(LANG.GetParamTranslation("xfer_help", {role = GetTranslation(tm)}))
 
 	return dform
 end

@@ -124,7 +124,6 @@ L.radar_charging = "Il tuo Radar si sta ancora caricando!"
 L.xfer_name = "Trasferimento"
 L.xfer_menutitle = "Trasferisci crediti"
 L.xfer_send = "Dai un credito"
-L.xfer_help = "Può trasferire i crediti solo ai compagni {role}."
 
 L.xfer_no_recip = "Bersaglio non valido, trasferimento dei crediti annullato."
 L.xfer_no_credits = "Crediti insufficienti per il trasferimento."
