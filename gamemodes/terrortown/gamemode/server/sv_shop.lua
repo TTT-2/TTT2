@@ -1,6 +1,8 @@
 ---
 -- @section shop
 
+util.AddNetworkString("TTT2CreditTransferUpdate")
+
 local function RerollShop(ply)
 	if GetGlobalBool("ttt2_random_team_shops") then
 		ResetRandomShopsForRole(ply:GetSubRole(), GetGlobalInt("ttt2_random_shops"), true)
@@ -191,6 +193,19 @@ local function CheatCredits(ply)
 end
 concommand.Add("ttt_cheat_credits", CheatCredits, nil, nil, FCVAR_CHEAT)
 
+---
+-- Called to check if a transaction between two players is allowed.
+-- @param Player sender that wants to send credits
+-- @param Player recipient that would receive the credits
+-- @param Number credits_per_xfer that would be transferred
+-- @return[default=nil] boolean which disallows a transaction when false
+-- @return[default=nil] string for the client which offers info related to the transaction
+-- @hook
+-- @realm server
+function TTT2CanTransferCredits(sender, recipient, credits_per_xfer)
+
+end
+
 local function TransferCredits(ply, cmd, args)
 	if not IsValid(ply) then return end
 
@@ -221,9 +236,25 @@ local function TransferCredits(ply, cmd, args)
 
 	if credits == 0 then return end
 
-	ply:SubtractCredits(credits)
-	target:AddCredits(credits)
+	---
+	-- @realm server
+	local allow, _ = hook.Run("TTT2CanTransferCredits", ply, target, credits)
+	if allow == false then return end
 
+	ply:SubtractCredits(credits)
+	if target:IsTerror() and target:Alive() then
+		target:AddCredits(credits)
+	else
+		-- The would be recipient is dead, which the sender may not know.
+		-- Instead attempt to send the credits to the target's corpse, where they can be picked up.
+		local rag = target:FindCorpse()
+		if IsValid(rag) then
+			CORPSE.SetCredits(rag, CORPSE.GetCredits(rag, 0) + credits)
+		end
+	end
+
+	net.Start("TTT2CreditTransferUpdate")
+	net.Send(ply)
 	LANG.Msg(ply, "xfer_success", {player = target:Nick()}, MSG_MSTACK_ROLE)
 	LANG.Msg(target, "xfer_received", {player = ply:Nick(), num = credits}, MSG_MSTACK_ROLE)
 end

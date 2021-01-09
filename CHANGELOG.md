@@ -21,6 +21,8 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 - Added a few LANG module functions
 - Added a new classbuilder that can be used to create classes from files
 - Added a `targetid` library, that can be used to draw TargetIDs for entities
+- Added a hook `TTT2CanTransferCredits` that is called before credits are transferred
+- Credits can now be transferred across teams and from roles whom the recipient does not know
 
 ### Changed
 
