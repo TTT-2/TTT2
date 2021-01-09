@@ -281,7 +281,7 @@ end
 function LANG.SetActiveLanguage(langName)
 	if langName == nil then return end
 
-	langName = string.lower(langName)
+	langName = LANG.GetNameFromAlias(langName)
 
 	if LANG.IsLanguage(langName) then
 		local oldName = LANG.ActiveLanguage
@@ -292,7 +292,7 @@ function LANG.SetActiveLanguage(langName)
 		cachedActive = LANG.Strings[langName]
 
 		-- set the default lang as fallback, if it hasn't yet
-		LANG.SetFallback(cached_active)
+		LANG.SetFallback(cachedActive)
 
 		-- some interface elements will want to know so they can update themselves
 		if oldName ~= langName then
@@ -361,7 +361,7 @@ end
 cvars.AddChangeCallback("ttt_language", LanguageChanged)
 
 local function ForceReload()
-	LANG.SetActiveLanguage("english")
+	LANG.SetActiveLanguage(LANG.DefaultLanguage)
 end
 concommand.Add("ttt_reloadlang", ForceReload)
 
@@ -514,6 +514,8 @@ function LANG.GetDefaultCoverage(langName)
 	end
 
 	local englishTbl = LANG.Strings[LANG.DefaultLanguage]
+
+	langName = LANG.GetNameFromAlias(langName)
 
 	return table.GetEqualEntriesAmount(LANG.Strings[langName], englishTbl) / table.Count(englishTbl)
 end
