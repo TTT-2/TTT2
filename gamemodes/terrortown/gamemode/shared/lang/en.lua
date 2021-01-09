@@ -1293,4 +1293,4 @@ L.lang_server_default = "Server Default"
 L.help_lang_info = [[
 This translation is {coverage}% complete with the english language taken as a default reference.
 
-Keep in mind that these translations are community-based. Feel free to contribute if something is missing or incorrect.]]
+Keep in mind that these translations are made by the community. Feel free to contribute if something is missing or incorrect.]]
