@@ -760,16 +760,16 @@ function plymeta:CanSelectRole(roleData, choice_count, role_count)
 	) and (choice_count <= role_count or not self:GetAvoidRole(roleData.index))
 end
 
---
+---
 -- Function taken from Trouble in Terrorist Town Commands (https://github.com/bender180/Trouble-in-Terrorist-Town-ULX-Commands)
---
-local function FindCorpse(ply)
+-- @realm server
+function plymeta:FindCorpse()
 	local ragdolls = ents.FindByClass("prop_ragdoll")
 
 	for i = 1, #ragdolls do
 		local ent = ragdolls[i]
 
-		if ent.uqid == ply:UniqueID() and IsValid(ent) then
+		if ent.uqid == self:UniqueID() and IsValid(ent) then
 			return ent or false
 		end
 	end
@@ -822,7 +822,7 @@ function plymeta:Revive(delay, OnRevive, DoCheck, needsCorpse, blockRound, OnFai
 		self:SendRevivalReason(nil)
 
 		if not isfunction(DoCheck) or DoCheck(self) then
-			local corpse = FindCorpse(self)
+			local corpse = self:FindCorpse()
 
 			if needsCorpse and (not IsValid(corpse) or corpse:IsOnFire()) then
 				OnReviveFailed(self, "message_revival_failed_missing_body")
