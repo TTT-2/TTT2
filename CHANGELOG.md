@@ -46,6 +46,7 @@ All notable changes to TTT2 will be documented here. Inspired by [keep a changel
 
 - Fixed weapon pickup bug, where weapons would not get dropped but stayed in inventory
 - Fixed a roleselection bug, where forced roles would not be deducted from the available roles
+- Fixed a roleselection bug, where only one special baserole was selected
 
 ## [v0.7.4b](https://github.com/TTT-2/TTT2/tree/v0.7.4b) (2020-09-28)
 

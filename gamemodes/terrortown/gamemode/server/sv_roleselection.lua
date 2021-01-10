@@ -386,6 +386,10 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 			availableBaseRolesTbl[availableBaseRolesAmount] = subrole
 		end
 	end
+	print("\nAll Available Subroles:")
+	PrintTable(availableSubRolesTbl)
+	print("\nAll Available BaseRoles:")
+	PrintTable(availableBaseRolesTbl)
 
 	local selectableRoles = {
 		[ROLE_TRAITOR] = rolesAmountList[ROLE_TRAITOR],
@@ -396,9 +400,16 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 
 	local layeredBaseRolesTbl = table.Copy(roleselection.baseroleLayers) -- layered roles list, the order defines the pick order. Just one role per layer is picked. Before a role is picked, the given layer is cleared (checked if the given roles are still selectable). Insert a table as a "or" list
 
+	print("\nLayerd BaseRoles before hook:")
+	PrintTable(layeredBaseRolesTbl)
 	---
 	-- @realm server
 	hook.Run("TTT2ModifyLayeredBaseRoles", layeredBaseRolesTbl, availableBaseRolesTbl)
+
+	print("\nLayerd BaseRoles after hook:")
+	PrintTable(layeredBaseRolesTbl)
+	print("\nAll Available BaseRoles after Hook:")
+	PrintTable(availableBaseRolesTbl)
 
 	local baseroleLoopTbl = { -- just contains available / selectable baseroles
 		ROLE_TRAITOR,
@@ -774,7 +785,11 @@ function roleselection.SelectRoles(plys, maxPlys)
 	if maxPlys < 2 then return end -- we don't need to select anything if there is just one player
 
 	local allAvailableRoles = roleselection.GetAllSelectableRolesList(maxPlys)
+	print("\nAll Available Roles:")
+	PrintTable(allAvailableRoles)
 	local selectableRoles = roleselection.GetSelectableRolesList(maxPlys, allAvailableRoles) -- update roleselection.selectableRoles table
+	print("\nAll Selectable Roles:")
+	PrintTable(selectableRoles)
 
 	UpdateFinalRoles() -- Update the roleselection.finalRoles table by removing all invalid players
 
@@ -809,6 +824,8 @@ function roleselection.SelectRoles(plys, maxPlys)
 
 			list[#list + 1] = subrole
 		end
+		print("\nAll Roles for Distribution:")
+		PrintTable(list)
 
 		-- Check all base roles, and assign players where possible.
 		-- After that, this will also try to upgrade the selected players, to any applicable subrole, that might replace the baserole.
