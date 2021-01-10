@@ -1108,7 +1108,7 @@ L.submenu_language_language_title = "Язык"
 
 L.submenu_appearance_general_title = "Общее"
 L.submenu_appearance_hudswitcher_title = "Смена интерфейса"
---L.submenu_appearance_vskin_title = "VSkin"
+L.submenu_appearance_vskin_title = "Скин интерфейса"
 L.submenu_appearance_targetid_title = "Информация о цели"
 L.submenu_appearance_shop_title = "Настройки магазина"
 L.submenu_appearance_crosshair_title = "Прицел"
@@ -1245,8 +1245,8 @@ L.item_no_drown_damage = "Иммунитет к урону от утоплени
 L.item_no_drown_damage_desc = [[Делает вас неуязвимым к урону от утопления.]]
 
 -- 2020-04-21
-L.dna_tid_possible = "Сканирование возможно"
-L.dna_tid_impossible = "Сканирование невозможно"
+L.dna_tid_possible = "Сканирование возможно."
+L.dna_tid_impossible = "Сканирование невозможно."
 L.dna_screen_ready = "Нет ДНК"
 L.dna_screen_match = "Совпадение"
 
