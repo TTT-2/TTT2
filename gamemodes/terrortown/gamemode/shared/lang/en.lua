@@ -1246,8 +1246,8 @@ L.item_no_drown_damage = "No Drowning Damage"
 L.item_no_drown_damage_desc = [[Makes you immune to drowning damage.]]
 
 -- 2020-04-21
-L.dna_tid_possible = "Scan possible"
-L.dna_tid_impossible = "No scan possible"
+L.dna_tid_possible = "Scan possible."
+L.dna_tid_impossible = "No scan possible."
 L.dna_screen_ready = "No DNA"
 L.dna_screen_match = "Match"
 
