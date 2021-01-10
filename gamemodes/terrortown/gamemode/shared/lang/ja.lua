@@ -124,7 +124,6 @@ L.radar_charging = "Radarはまだチャージしています!"
 L.xfer_name = "譲渡"
 L.xfer_menutitle = "クレジット譲渡."
 L.xfer_send = "クレジットを送る."
-L.xfer_help = "あなたは仲間の{role}にクレジットを渡すことだけできます."
 
 L.xfer_no_recip = "受取人が妥当ではないのでクレジットの移動は中断しました."
 L.xfer_no_credits = "渡すクレジットが不足しています."
