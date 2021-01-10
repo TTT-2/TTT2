@@ -1119,10 +1119,10 @@ L.submenu_appearance_interface_title = "Interface"
 L.submenu_appearance_miscellaneous_title = "Misellaneous"
 
 L.submenu_gameplay_general_title = "General"
-L.submenu_gameplay_roles_title = "Avoid role selection"
+L.submenu_gameplay_avoidroles_title = "Avoid Role Selection"
 
-L.submenu_administration_hud_title = "HUD settings"
-L.submenu_administration_random_shop = "Random shop"
+L.submenu_administration_hud_title = "HUD Settings"
+L.submenu_administration_random_shop = "Random Shop"
 
 L.help_color_desc = "If this setting is enabled, you can choose a global color that will be used for the targetID outline and the crosshair."
 L.help_scale_factor = "This scale factor influences all UI elements (HUD, VGUI, and TargetID). It is automatically updated if the screen resolution is changed. Changing this value will reset the HUD!"
@@ -1215,7 +1215,7 @@ L.header_damage_indicator = "Damage Indicator Settings"
 L.header_performance_settings = "Performance Settings"
 L.header_interface_settings = "Interface Settings"
 L.header_gameplay_settings = "Gameplay Settings"
-L.header_roleselection = "Select avoiding roles"
+L.header_roleselection = "Select Avoiding Roles"
 L.header_hud_administration = "Select Default and Forced HUDs"
 L.header_hud_enabled = "Enable/Disable HUDs"
 
@@ -1263,7 +1263,7 @@ L.door_destructible = "This door is destructible ({health}HP)."
 
 -- 2020-05-28
 L.confirm_detective_only = "Only detectives can confirm bodies."
-L.inspect_detective_only = "Only detectives can inspect bodies."
+L.inspect_detective_only = "Only detectives can search bodies."
 L.corpse_hint_no_inspect = "Only detectives can search this body."
 L.corpse_hint_inspect_only = "Press [{usekey}] to search. Only detectives can confirm the body."
 L.corpse_hint_inspect_only_credits = "Press [{usekey}] to receive credits. Only detectives can search this body."
