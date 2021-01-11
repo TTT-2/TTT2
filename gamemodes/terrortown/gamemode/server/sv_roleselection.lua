@@ -386,10 +386,6 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 			availableBaseRolesTbl[availableBaseRolesAmount] = subrole
 		end
 	end
-	print("\nAll Available Subroles:")
-	PrintTable(availableSubRolesTbl)
-	print("\nAll Available BaseRoles:")
-	PrintTable(availableBaseRolesTbl)
 
 	local selectableRoles = {
 		[ROLE_TRAITOR] = rolesAmountList[ROLE_TRAITOR],
@@ -400,16 +396,9 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 
 	local layeredBaseRolesTbl = table.Copy(roleselection.baseroleLayers) -- layered roles list, the order defines the pick order. Just one role per layer is picked. Before a role is picked, the given layer is cleared (checked if the given roles are still selectable). Insert a table as a "or" list
 
-	print("\nLayerd BaseRoles before hook:")
-	PrintTable(layeredBaseRolesTbl)
 	---
 	-- @realm server
 	hook.Run("TTT2ModifyLayeredBaseRoles", layeredBaseRolesTbl, availableBaseRolesTbl)
-
-	print("\nLayerd BaseRoles after hook:")
-	PrintTable(layeredBaseRolesTbl)
-	print("\nAll Available BaseRoles after Hook:")
-	PrintTable(availableBaseRolesTbl)
 
 	local baseroleLoopTbl = { -- just contains available / selectable baseroles
 		ROLE_TRAITOR,
@@ -425,20 +414,24 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 
 		-- if there are still defined layer
 		if #layeredBaseRolesTbl >= i then
-			local cleanedLayerTbl = CleanupAvailableRolesLayerTbl(availableBaseRolesTbl, layeredBaseRolesTbl[i]) -- clean the currently indexed layer (so that it just includes selectable roles), because we working with predefined layers that probably includes roles that aren't selectable with the current amount of players, etc.
+			for j = i , #layeredBaseRolesTbl do
+				local cleanedLayerTbl = CleanupAvailableRolesLayerTbl(availableBaseRolesTbl, layeredBaseRolesTbl[i]) -- clean the currently indexed layer (so that it just includes selectable roles), because we working with predefined layers that probably includes roles that aren't selectable with the current amount of players, etc.
 
-			-- if there is no selectable role left in the current layer
-			if #cleanedLayerTbl < 1 then
-				table.remove(layeredBaseRolesTbl, i) -- remove the current layer
+				-- if there is no selectable role left in the current layer
+				if #cleanedLayerTbl < 1 then
+					table.remove(layeredBaseRolesTbl, i) -- remove the current layer
 
-				-- redo the current loop with the same index
-				i = i - 1
+					-- redo the inner loop with the same index i
+					continue
+				end
 
-				continue
+				subrole = cleanedLayerTbl[math.random(#cleanedLayerTbl)]
+				break;
 			end
+		end
 
-			subrole = cleanedLayerTbl[math.random(#cleanedLayerTbl)]
-		else -- if no subrole was selected (no layer left or no layer defined)
+		-- if no subrole was selected (no layer left or no layer defined)
+		if not subrole then
 			local rnd = math.random(#availableBaseRolesTbl)
 			subrole = availableBaseRolesTbl[rnd]
 
@@ -446,6 +439,7 @@ function roleselection.GetSelectableRolesList(maxPlys, rolesAmountList)
 		end
 
 		selectableRoles[subrole] = rolesAmountList[subrole]
+
 		baseroleLoopTbl[#baseroleLoopTbl + 1] = subrole
 
 		curRoles = curRoles + 1
@@ -785,11 +779,7 @@ function roleselection.SelectRoles(plys, maxPlys)
 	if maxPlys < 2 then return end -- we don't need to select anything if there is just one player
 
 	local allAvailableRoles = roleselection.GetAllSelectableRolesList(maxPlys)
-	print("\nAll Available Roles:")
-	PrintTable(allAvailableRoles)
 	local selectableRoles = roleselection.GetSelectableRolesList(maxPlys, allAvailableRoles) -- update roleselection.selectableRoles table
-	print("\nAll Selectable Roles:")
-	PrintTable(selectableRoles)
 
 	UpdateFinalRoles() -- Update the roleselection.finalRoles table by removing all invalid players
 
@@ -824,8 +814,6 @@ function roleselection.SelectRoles(plys, maxPlys)
 
 			list[#list + 1] = subrole
 		end
-		print("\nAll Roles for Distribution:")
-		PrintTable(list)
 
 		-- Check all base roles, and assign players where possible.
 		-- After that, this will also try to upgrade the selected players, to any applicable subrole, that might replace the baserole.
